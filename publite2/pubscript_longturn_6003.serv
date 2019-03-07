@@ -1,9 +1,8 @@
 #LongTurn game #19
 
-cmdlevel ctrl first
 
-rulesetdir mpplus
 
+set rulesetdir mpplus
 set minplayers 0
 set maxplayers 60
 set aifill 60
@@ -66,6 +65,11 @@ set restrictinfra "ENABLED"
 #scientific
 set endspaceship DISABLED
 
+<<<<<<< HEAD
+=======
+cmdlevel ctrl first
+
+>>>>>>> 9188ad52b2... Update pubscript_longturn_6003.serv
 metamessage FREECIVWEB Game XIX | 1 turn per day | 60 players | MP+ ruleset | 24000 tiles | Join now!
 
 cmdlevel basic
