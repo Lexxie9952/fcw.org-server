@@ -39,7 +39,7 @@ if [ "$5" = "longturn" ]; then
 
   grep -q '^#\s*autoreload\s*$' "pubscript_${6}.serv"
   if [ $? -eq 0 ]; then
-    lastsave=$(ls -t "${savesdir}/*.sav*" | head -n 1)
+    lastsave=$(ls -t "${savesdir}" | grep '\.sav' | head -n 1)
     if [ -n "${lastsave}" ]; then
       addArgs --file "${lastsave%.*}"
     fi
