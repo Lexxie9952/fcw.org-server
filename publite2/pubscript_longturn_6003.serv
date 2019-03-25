@@ -50,7 +50,7 @@ set huts 0
 set startunits=ccccwwwwxx
 set dispersion 2
 set trading_city disabled
-set rapturedelay 2
+set rapturedelay 1
 set revolen 1
 set endturn 365
 set contactturns 0
