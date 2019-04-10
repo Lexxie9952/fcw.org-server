@@ -133,7 +133,6 @@ main_intro_file    = "misc/intro"
 ; tag is used).
 files =
   "amplio2/terrain1.spec",
-  "amplio2/maglev.spec",
   "amplio2/terrain2.spec",
   "amplio2/hills.spec",
   "amplio2/mountains.spec",
@@ -143,6 +142,8 @@ files =
   "amplio2/upkeep.spec",
   "amplio2/activities.spec",
   "amplio2/fog.spec",
+  "amplio2/maglev.spec",
+  "amplio2/canal.spec",
   "misc/small.spec",
   "misc/events.spec",
   "misc/governments.spec",
@@ -303,6 +304,7 @@ styles =
       "road.rail",     "RoadAllSeparate"
       "road.maglev",   "RoadAllSeparate"
       "road.river",    "River"
+      "road.canal",    "River"
       "tx.irrigation", "Cardinals"
       "tx.farmland",   "Cardinals"
       "tx.mine",       "Single1"
