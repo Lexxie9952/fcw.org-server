@@ -74,7 +74,7 @@ function civclient_init()
 
   var action = $.getUrlVar('action');
   game_type = $.getUrlVar('type');
-  if (game_type == null) {
+  if (game_type != 'pbem' && game_type != 'singleplayer' && game_type != 'multiplayer' && game_type != 'longturn') {
     if (action == null || action == 'multi') {
       swal({
              title: "Unknown game type",
