@@ -1,0 +1,16 @@
+# LOCATION:pbem/settings.ini
+[Config]
+smtp_login =andreas.rosdal@gmail.com
+smtp_password =XOWvY7rEbqVnZ2JR
+smtp_host =smtp-relay.sendinblue.com
+smtp_port =587
+smtp_sender = Freeciv-web <no-reply@play.freecivweb.org>
+
+mysql_user = freeciv
+mysql_database = freeciv_web
+mysql_password = Trinidad42
+
+savegame_directory = /var/lib/tomcat8/webapps/data/savegames/pbem/
+ranklog_directory = /var/lib/tomcat8/webapps/data/ranklogs/
+
+host = play.freecivweb.org

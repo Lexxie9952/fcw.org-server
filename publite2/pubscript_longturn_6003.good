@@ -1,0 +1,64 @@
+#LongTurn Web XVIII
+#autoreload
+
+cmdlevel ctrl first
+
+rulesetdir multiplayer
+
+set minplayers 0
+set maxplayers 60
+set aifill 60
+set timeout 82800
+set first_timeout 165600
+set nationset all
+set compresstype xs
+set allowtake=""
+set autotoggle false
+set unitwaittime=36000
+set netwait 150
+set nettimeout 120
+set pingtime 30
+set pingtimeout 240
+set maxconnectionsperhost 500
+set threaded_save enabled
+set scorelog disabled
+set saveturns=1
+set autosaves=TURN|TIMER
+set savefrequency 60
+metaconnection persistent
+set ec_chat=enabled
+set ec_info=enabled 
+set ec_max_size=5000
+set ec_turns=9
+
+#geological
+set mapsize FULLSIZE
+set size 18
+set topology WRAPX
+set generator RANDOM
+set startpos DEFAULT
+set landmass 60
+set specials 250
+
+#sociological
+set startunits=ccccwwwwxxs
+set dispersion 0
+set trading_city disabled
+set rapturedelay 2
+set revolen 1
+set endturn 365
+
+#military
+set borders "ENABLED"
+set diplomacy "HUMAN"
+set foggedborders enabled
+set airliftingstyle "FROM_ALLIES|DEST_UNLIMITED"
+set victories ALLIED
+
+#scientific
+set sciencebox 80
+set endspaceship DISABLED
+
+metamessage FREECIVWEB Game XVIII | 1 turn per day | 60 players | 15000 tiles | 60% Land | Join now!
+
+cmdlevel basic

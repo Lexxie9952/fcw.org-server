@@ -1,0 +1,72 @@
+#THIS_IS_A_TEST
+#autoreload
+
+cmdlevel ctrl first
+
+rulesetdir mpplus
+
+set minplayers 0
+set maxplayers 6
+set aifill 6
+set timeout 82800
+set first_timeout 168000
+set nationset all
+set compresstype xs
+set allowtake=""
+set autotoggle false
+set unitwaittime=36000
+set netwait 150
+set nettimeout 120
+set pingtime 30
+set pingtimeout 240
+set maxconnectionsperhost 500
+set threaded_save enabled
+set scorelog enabled
+set saveturns=1
+set autosaves=TURN
+metaconnection persistent
+set ec_chat=enabled
+set ec_info=enabled 
+set ec_max_size=5000
+set ec_turns=7
+
+#economic
+set gold 100
+
+#geological
+set mapsize XYSIZE
+set xsize 19
+set ysize 13
+set topology WRAPX
+set generator RANDOM
+set startpos DEFAULT
+set landmass 64
+set specials 350 
+set alltemperate "ENABLED"
+set separatepoles "DISABLED"
+set tinyisles "DISABLED"
+set huts 0
+
+#sociological
+set startunits=ccccwwwwxx
+set dispersion 2
+set trading_city disabled
+set rapturedelay 2
+set revolen 1
+set endturn 365
+set contactturns 0
+set barbarians "DISABLED"
+
+#military
+set borders "SEE_INSIDE"
+set diplomacy "HUMAN"
+set foggedborders enabled
+set airliftingstyle "FROM_ALLIES|TO_ALLIES|DEST_UNLIMITED"
+set victories ALLIED
+set restrictinfra "ENABLED"
+#scientific
+set endspaceship DISABLED
+
+metamessage THIS IS NOT A GAME. IT IS A DEVELOPER TEST.
+
+cmdlevel basic
