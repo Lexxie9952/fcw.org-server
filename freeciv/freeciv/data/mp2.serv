@@ -1,0 +1,6 @@
+# Server commands to make multiplayer-evo Freeciv rules
+#
+
+rulesetdir mp2
+
+# changed game settings are defined in game.ruleset

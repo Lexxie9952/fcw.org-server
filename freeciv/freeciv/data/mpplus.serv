@@ -1,0 +1,6 @@
+# Server commands to make multiplayer-plus Freeciv rules
+#
+
+rulesetdir mpplus
+
+# changed game settings are defined in game.ruleset
