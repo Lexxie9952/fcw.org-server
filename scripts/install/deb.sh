@@ -46,6 +46,7 @@ dependencies="\
   python3-setuptools \
   python3-wheel \
   sed \
+  swapspace \
   tar \
   unzip \
   webp \

@@ -29,6 +29,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	  config.vm.network :forwarded_port, guest: 80, host: 80, host_ip: "127.0.0.1"
 	  config.vm.network :forwarded_port, guest: 443, host: 443, host_ip: "127.0.0.1"
   else 
+      config.vm.network :private_network, ip: "10.11.12.13"
 	  config.vm.network :forwarded_port, guest: 80, host: 8080, host_ip: "127.0.0.1"
 	  config.vm.network :forwarded_port, guest: 443, host: 8443, host_ip: "127.0.0.1"
   end
@@ -49,7 +50,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       mem = `wmic computersystem Get TotalPhysicalMemory`.split[1].to_i / 1024
     end
 
-    mem = 2 * mem / 1024 / 3
+    mem = mem / 1024 / 2
     v.customize ["modifyvm", :id, "--memory", mem.floor]
 
     # Disable serial port. It is unnecessary, and may cause error on Win10
@@ -57,8 +58,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.customize ["modifyvm", :id, "--uartmode1", "disconnected"]
   end
 
-  config.vm.synced_folder "./", "/vagrant"
-
+  if Vagrant::Util::Platform.windows?      
+      config.vm.synced_folder "./", "/vagrant"
+  else 
+      config.vm.synced_folder "./", "/vagrant", type: "nfs",
+      mount_options: ['rw', 'vers=3', 'tcp', 'nolock'],
+      linux__nfs_options: ['rw','no_subtree_check','all_squash','async']
+  end
+  
   config.vm.boot_timeout = 100000
 
   # There are problems with the default configuration of a DNS stub in some

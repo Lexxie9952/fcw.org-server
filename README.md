@@ -104,7 +104,16 @@ sudo apt-get install vagrant
  ```
 
   This will build, compile, install and run Freeciv-web on the virtual server image. Wait for the installation process to complete, watching for any error messages in the logs.
-
+  
+  NOTE:
+  Vagrant is now configured to run with NFS on Linux and Mac, which speeds it up by 10-100 times. This should run 
+  out of the box for Mac OS X 10.5+ as well as Linux. If you are having problems on Linux, you might need to execute
+  the following commands:
+  ```bash
+ sudo apt-get install nfs-kernel-server nfs-common portmap
+  ```
+  on Debian based systems or their equivalents.
+  
 4. Test Freeciv-web by pointing your browser to http://localhost if you run Windows or http://localhost:8080 if you run Linux or macOS.
 
 To log in to your Vagrant server, run the command: 
