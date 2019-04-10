@@ -20,6 +20,7 @@ import argparse
 import configparser
 from PIL import Image
 from PIL import ImageDraw
+from PIL import PILLOW_VERSION
 import json
 
 parser = argparse.ArgumentParser(
@@ -34,7 +35,6 @@ freeciv_dir = args.freeciv
 verbose = args.verbose
 
 freeciv_data_dir = path.join(freeciv_dir, "data")
-
 gfxdir = freeciv_data_dir
 
 misc_files = [
@@ -73,6 +73,8 @@ spec_files = {
     "upkeep.spec",
     "veterancy.spec",
     "water.spec",
+    "canal.spec",
+    "maglev.spec"
   ],
   "trident" : [
     "auto_ll.spec",
@@ -130,7 +132,7 @@ tileset_height = 1030;
 tileset_width = 1800;
 
 dither_types = ["t.l0.desert1", "t.l0.plains1", "t.l0.grassland1", "t.l0.forest1", "t.l0.jungle1", "t.l0.hills1", "t.l0.mountains1", "t.l0.tundra1", "t.l0.swamp1"];
-print("Freeciv-img-extract running with PIL " + Image.VERSION);
+print("Freeciv-img-extract running with PIL " + PILLOW_VERSION);
 tileset = Image.new('RGBA', (tileset_width, tileset_height), (0, 0, 0, 0));
 mask_image = None;
 dither_mask = None;
