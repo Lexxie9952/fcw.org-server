@@ -298,6 +298,13 @@ mkdir -p "${basedir}/freeciv-web/src/derived/webapp" && \
   -o "${basedir}/freeciv-web/src/derived/webapp" \
   -d "${TOMCAT_HOME}/webapps/data" || \
   handle_error 6 "Failed to synchronize freeciv project"
+  
+if [ "${FCW_INSTALL_MODE}" = TEST ]; then
+  echo "==== Removing Google authorization in longturn games ===="
+  cd "${basedir}"/scripts && \
+  ./flip-google-authorization.sh || \
+  handle_error 8 "Patching failed!"  
+fi
 
 cd "${basedir}"/freeciv-web && \
   ./build.sh -B || \

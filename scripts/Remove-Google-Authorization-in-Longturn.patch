@@ -1,0 +1,82 @@
+From 96a1911e682fa18adb4dd17e54e0f24eb5f5e711 Mon Sep 17 00:00:00 2001
+From: Yolo <yoloswag6@protonmail.com>
+Date: Wed, 27 Mar 2019 01:03:26 +0100
+Subject: [PATCH] Remove Google Authorization in Longturn
+
+---
+ freeciv-proxy/freeciv-proxy.py                |  5 +----
+ .../src/main/webapp/javascript/clinet.js      |  5 -----
+ .../src/main/webapp/javascript/pregame.js     | 19 +++++++++++++------
+ 3 files changed, 14 insertions(+), 15 deletions(-)
+ 
+diff --git a/freeciv-proxy/freeciv-proxy.py b/freeciv-proxy/freeciv-proxy.py
+index 7e59ccf8f6..dbac87f81d 100755
+--- a/freeciv-proxy/freeciv-proxy.py
++++ b/freeciv-proxy/freeciv-proxy.py
+@@ -152,10 +152,7 @@ class WSHandler(websocket.WebSocketHandler):
+             return "password"
+         query = ("select count(*) from servers where port=%(port)s and type='longturn'")
+         cursor.execute(query, {'port': self.civserverport})
+-        if cursor.fetchall()[0][0] > 0:
+-            return "google"
+-        else:
+-            return "password"
++        return "password"
+ 
+     def check_user_password(self, cursor, username, password):
+         query = ("select secure_hashed_password, CAST(ENCRYPT(%(pwd)s, secure_hashed_password) AS CHAR), activated from auth where lower(username)=lower(%(usr)s)")
+diff --git a/freeciv-web/src/main/webapp/javascript/clinet.js b/freeciv-web/src/main/webapp/javascript/clinet.js
+index 962c8f70ee..4c2558cf60 100644
+--- a/freeciv-web/src/main/webapp/javascript/clinet.js
++++ b/freeciv-web/src/main/webapp/javascript/clinet.js
+@@ -151,11 +151,6 @@ function check_websocket_ready()
+       sha_password = encodeURIComponent(shaObj.getHash("HEX"));
+     }
+ 
+-    if (is_longturn() && google_user_token == null) {
+-      swal("Login failed.");
+-      return;
+-    }
+-
+     var login_message = {"pid":4, "username" : username,
+     "capability": freeciv_version, "version_label": "-dev",
+     "major_version" : 2, "minor_version" : 5, "patch_version" : 99,
+diff --git a/freeciv-web/src/main/webapp/javascript/pregame.js b/freeciv-web/src/main/webapp/javascript/pregame.js
+index 69a3bd4019..f1075d8192 100644
+--- a/freeciv-web/src/main/webapp/javascript/pregame.js
++++ b/freeciv-web/src/main/webapp/javascript/pregame.js
+@@ -1321,8 +1321,19 @@ function show_longturn_intro_dialog() {
+           }
+         }
+       },
+-      buttons: []
+-
++      buttons: [
++        {
++          text : "Join game",
++          click : function() {
++                    if (is_touch_device() || is_small_screen()) {
++                      BigScreen.toggle();
++                    }
++          dialog_close_trigger = "button";
++          validate_username_callback();
++        },
++        icons : { primary: "ui-icon-gear" }
++        }
++      ]
+     });
+ 
+   if (is_small_screen()) {
+@@ -1358,10 +1369,6 @@ function validate_username_callback()
+    url: "/validate_user?userstring=" + check_username,
+    success: function(data, textStatus, request){
+       if (data == "user_does_not_exist") {
+-        if (is_longturn()) {
+-          show_new_user_account_dialog();
+-          return;
+-        }
+ 
+         if (validate_username()) {
+           network_init();
+-- 
+2.17.1
