@@ -152,7 +152,7 @@ function update_player_info_pregame_real()
 {
   var id;
   /* Don't render the player list if this is an ongoing longturn game */
-  if (C_S_PREPARING == client_state() && !is_ongoing_longturn()) {
+  if (C_S_PREPARING == client_state() && (!is_ongoing_longturn() || is_loaded_game())) {
     var player_html = "";
     for (id in players) {
       var player = players[id];
@@ -281,9 +281,11 @@ function draw_random_nation_ongoing_longturn(player_nations)
 ****************************************************************************/
 function pick_nation_ongoing_longturn()
 {
-    $("#start_game_button").hide();
     $("#pick_nation_button").hide();
-    pick_nation(null);
+    if (!is_loaded_game()) {
+      $("#start_game_button").hide();
+      pick_nation(null);
+    }
 }
 
 /****************************************************************************

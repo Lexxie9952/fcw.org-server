@@ -670,3 +670,14 @@ function is_ongoing_longturn()
 {
   return is_longturn() && game_info['turn'] > 0;
 }
+
+/**************************************************************************
+ Is this a loaded game? Make sure to call after the "you are logged in as"
+ message.
+*************************************************************************/
+function is_loaded_game()
+{
+  var chatbox_text = get_chatbox_text();
+  return chatbox_text !== null && chatbox_text.indexOf("Load complete") != -1;
+}
+

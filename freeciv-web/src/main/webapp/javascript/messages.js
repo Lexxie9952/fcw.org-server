@@ -134,6 +134,7 @@ function add_chatbox_text(packet)
     if (text.length >= max_chat_message_length) return;
 
     if (packet['event'] === E_CHAT_MSG) {
+      if (text.indexOf("You are logged in as") != -1 || text.indexOf("Load complete") != -1) return;
       packet['event'] = reclassify_chat_message(text);
     }
 
