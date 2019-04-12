@@ -71,7 +71,6 @@ target/
 *.class
 tornado*
 resin*
-freeciv-web.project
 models.zip
 freeciv-web/src/main/webapp/build.txt
 */__pycache__/*
