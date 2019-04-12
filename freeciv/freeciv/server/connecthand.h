@@ -48,4 +48,6 @@ bool connection_delegate_restore(struct connection *pconn);
 
 void connection_close_server(struct connection *pconn, const char *reason);
 
+void attach_longturn_player(struct connection *pc, struct player *pplayer);
+
 #endif /* FC__CONNECTHAND_H */

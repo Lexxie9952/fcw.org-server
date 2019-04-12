@@ -1949,6 +1949,7 @@ bool server_packet_input(struct connection *pconn, void *packet, int type)
       || type == PACKET_CONN_PONG
       || type == PACKET_CLIENT_HEARTBEAT
       || type == PACKET_SAVE_SCENARIO
+      || type == PACKET_ONGOING_LONGTURN_NATION_SELECT_REQ
       || is_client_edit_packet(type)) {
 
     /* Except for PACKET_EDIT_MODE (used to set edit mode), check
@@ -2204,6 +2205,40 @@ void handle_nation_select_req(struct connection *pc, int player_no,
 
   (void) player_set_nation(pplayer, new_nation);
   send_player_info_c(pplayer, game.est_connections);
+}
+
+/**************************************************************//**
+  Handle a joining player's nation choice in FreecivWeb Longturn Games
+******************************************************************/
+
+void handle_ongoing_longturn_nation_select_req(struct connection *pc,
+                                       Nation_type_id nation_no,
+                                       bool is_male, int style)
+{
+  struct conn_list *dest = pc->self;
+  struct nation_type *new_nation;
+  struct player *pplayer;
+  new_nation = nation_by_number(nation_no);    
+
+  pplayer = find_uncontrolled_player();
+  if (pplayer) {
+    /* Nation and style at -1 mean the player has
+       selected to randomise his nation, in which
+       case we simply go with the AI's nation */
+    if (style >= 0 && style < game.control.num_styles
+        && new_nation != NO_NATION_SELECTED) {
+
+      pplayer->is_male = is_male;
+      pplayer->style = style_by_number(style);
+      (void) player_set_nation(pplayer, new_nation);
+    }
+
+    attach_longturn_player(pc, pplayer);
+  }
+  else {
+    notify_conn(dest, NULL, E_CONNECTION, ftc_server,
+        _("Unable to join LongTurn game. The game is probably full."));
+  }
 }
 
 /**********************************************************************//**
@@ -3255,9 +3290,9 @@ static void srv_ready(void)
       players_iterate(pplayer) {
         if (is_ai(pplayer)) {
           set_as_human(pplayer);
-	  server_player_set_name(pplayer, "New Available Player ");
-	}
-      } players_iterate_end;	    
+     server_player_set_name(pplayer, "New Available Player ");
+   }
+      } players_iterate_end;       
     }
   }
 

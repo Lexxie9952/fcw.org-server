@@ -2334,3 +2334,9 @@ end
 PACKET_INFO_TEXT_MESSAGE = 290; sc, dsend
   STRING message[MAX_LEN_MSG];
 end
+
+PACKET_ONGOING_LONGTURN_NATION_SELECT_REQ = 291; cs, handle-per-conn, dsend
+  NATION nation_no;
+  BOOL is_male;
+  UINT8 style;
+end

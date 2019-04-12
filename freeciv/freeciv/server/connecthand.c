@@ -110,7 +110,7 @@ static void restore_access_level(struct connection *pconn)
 /************************************************************************//**
   Give techs for the late joiners in freeciv-web longturn game.
 ****************************************************************************/
-static void do_longturn_tech_latejoiner_effect(struct player *pplayer)
+void do_longturn_tech_latejoiner_effect(struct player *pplayer)
 {
   struct research *presearch;
   
@@ -128,13 +128,33 @@ static void do_longturn_tech_latejoiner_effect(struct player *pplayer)
     players_iterate(aplayer) {
       if (TECH_KNOWN == research_invention_state(research_get(aplayer), ptech)) {
         if (mod <= ++num_players) {
-          found_new_tech(presearch, ptech, FALSE, TRUE);		
-	  break;
+          found_new_tech(presearch, ptech, FALSE, TRUE);       
+     break;
         }
       }
     } players_iterate_end;
   } advance_index_iterate_end;
 
+}
+
+/**********************************************************************//**
+  Attach a joining connection to an available player and give them bonuses
+  to offset their late joining.
+**************************************************************************/
+void attach_longturn_player(struct connection *pc, struct player *pplayer)
+{
+    set_as_human(pplayer);
+
+    pplayer->economic.gold += game.info.turn * 10; 
+    if (pplayer->economic.gold > 700) { 
+      pplayer->economic.gold = 700; 
+    }
+
+    pplayer->economic.science = 60;
+    pplayer->economic.tax = 40;
+
+    connection_attach(pc, pplayer, FALSE);
+    do_longturn_tech_latejoiner_effect(pplayer);
 }
 
 /**********************************************************************//**
@@ -290,16 +310,15 @@ void establish_new_connection(struct connection *pconn)
     if (is_longturn()) {
       pplayer = find_uncontrolled_player();
       if (pplayer) {
-        /* Make it human! */
-        set_as_human(pplayer);
-        pplayer->economic.gold += game.info.turn * 10; if (pplayer->economic.gold > 700) pplayer->economic.gold = 700;
-        pplayer->economic.science = 60;
-        pplayer->economic.tax = 40;
-        connection_attach(pconn, pplayer, FALSE);
-        do_longturn_tech_latejoiner_effect(pplayer);
-      } else {
+        if (pplayer->is_alive && pplayer->nturns_idle > 12
+        && !pplayer->unassigned_user && !player_delegation_active(pplayer)
+        && strlen(pplayer->server.delegate_to) == 0) {
+          attach_longturn_player(pconn, pplayer);
+        }
+      }
+      else {
         notify_conn(dest, NULL, E_CONNECTION, ftc_server,
-           _("Unable to join LongTurn game. The game is probably full."));
+            _("Unable to join LongTurn game. The game is probably full."));
       }
     }
 
@@ -614,8 +633,12 @@ struct player *find_uncontrolled_player(void)
         return played;
       }
     } else {
-      if (((!played->is_connected && !played->was_created && played->unassigned_user && played->is_alive) 
-          || (played->is_alive && played->nturns_idle > 12 )) && !player_delegation_active(played) && strlen(played->server.delegate_to) == 0) {
+      if (((!played->is_connected && !played->was_created 
+      && played->unassigned_user && played->is_alive)
+      || (!played->unassigned_user && played->is_alive
+      && played->nturns_idle > 12 )) 
+      && !player_delegation_active(played) 
+      && strlen(played->server.delegate_to) == 0) {
         return played;
       }
     }
