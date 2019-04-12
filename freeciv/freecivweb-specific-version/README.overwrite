@@ -1,7 +1,0 @@
-From freeciv-web/freeciv/overwrite:
-
-This tree is copied over freeciv-web/freeciv/freeciv after having downloaded and patched the freeciv server, and before rebuilding it.
-
-Though patches in freeciv-web/freeciv/patches are preferred for code, it's a bit cumbersome for data, especially images.
-
-Please keep it to the minimum.
