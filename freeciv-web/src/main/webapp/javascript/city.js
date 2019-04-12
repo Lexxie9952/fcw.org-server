@@ -403,13 +403,15 @@ function show_city_dialog(pcity)
   for (var i = 0; i < 4; i++) {      
       if (pcity['ppl_' + citizen_types[i]][FEELING_FINAL] > 0) {
         sprite = get_specialist_image_sprite("citizen." + citizen_types[i] + "_" + (Math.floor(i / 2)));                      
-        rapture_citizen_html += "<div style='margin-right:auto;'><div style='float:left;background: transparent url("
+        rapture_citizen_html += "<div class='city_dialog_rapture_citizen' style='margin-right:auto;' title='"+citizen_types[i].charAt(0).toUpperCase() + citizen_types[i].slice(1)+" citizens'><div style='float:left;background: transparent url("
         + sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'>"
         +"</div><div style='float:left;height: "+sprite['height']+"px;margin-left:2px;'>"+pcity['ppl_' + citizen_types[i]][FEELING_FINAL]+"</div></div>";
       }
   }
    
   $('#rapture_citizen_panel').html(rapture_citizen_html);  
+  
+  $('.city_dialog_rapture_citizen').tooltip({position: { my:"center bottom", at: "center top-4"}});  
    
   var city_surplus_colour = "#000000";
   var city_surplus_sign = "";
@@ -427,6 +429,7 @@ function show_city_dialog(pcity)
             
   $('#rapture_food').html(rapture_food_status_html);
   $('#rapture_status').html("<div style='font-weight:bold;padding-bottom:9px;'>"+get_city_state(pcity)+"</div>");
+  $('#rapture_status').tooltip({tooltipClass: "wider-tooltip" , position: { my:"center bottom", at: "center top-3"}}); 
   
   $('#disbandable_city').off();
   $('#disbandable_city').prop('checked',
@@ -1914,6 +1917,8 @@ function city_worklist_task_remove()
 function update_city_screen()
 {
   if (observing) return;
+  
+  $('#cities_title').html("Your Cities"+" ("+Object.keys(cities).length+")");
 
   var sortList = [];
   var headers = $('#city_table thead th');
@@ -1931,12 +1936,10 @@ function update_city_screen()
   var citizen_types = ["unhappy","content","happy"]
   var sprite;
   var city_list_citizen_html = "";
-  var citizen_icon_padding_right = 20;
   
   for (var i = 0; i < 3; i++) {
     sprite = get_specialist_image_sprite("citizen." + citizen_types[i] + "_1");
-    city_list_citizen_html = "<th style='padding-right:"+citizen_icon_padding_right+"px;'><div style='background: transparent url("+ sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'></div></th>" + city_list_citizen_html
-    citizen_icon_padding_right = 0;
+    city_list_citizen_html = "<th id='city_list_citizen_"+ citizen_types[i]+"' class='' style='padding-right:0px;' title=''><div style='background: transparent url("+ sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'></div></th>" + city_list_citizen_html
   }
   
   var city_list_html = "<table class='tablesorter' id='city_table' border=0 cellspacing=0>"
@@ -1975,6 +1978,11 @@ function update_city_screen()
 
   city_list_html += "</tbody></table>";
   $("#cities_list").html(city_list_html);
+  
+  $('#city_list_citizen_unhappy').css("padding-right", "20px");
+  $('#city_list_citizen_unhappy').tooltip({content: "Unhappy + angry citizens", position: { my:"center bottom", at: "center top+10"}});
+  $('#city_list_citizen_content').tooltip({content: "Content citizens", position: { my:"center bottom", at: "center top+10"}});
+  $('#city_list_citizen_happy').tooltip({content: "Happy citizens", position: { my:"center bottom", at: "center top+10"}});
 
   if (count == 0) {
     $("#city_table").html("You have no cities. Build new cities with the Settlers unit.");

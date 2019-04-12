@@ -827,6 +827,10 @@ button {
     white-space: pre-line;
 }
 
+.wider-tooltip {
+    max-width:800px;
+}
+
 .no-close .ui-dialog-titlebar-close {
   display: none 
 }
