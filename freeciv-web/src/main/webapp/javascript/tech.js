@@ -918,6 +918,14 @@ function get_current_bulbs_output_text(cbo)
   if (cbo.pooled) {
     text = text + " (" + (cbo.team_bulbs - cbo.team_upkeep) + " team total)";
   }
+  
+  if (cbo.team_bulbs > 0 && client.conn.playing['researching_cost'] != 0) {
+    var turns_left = Math.ceil((client.conn.playing['researching_cost'] - client.conn.playing['bulbs_researched']) / cbo.team_bulbs);
+    var turns_left_plural = (turns_left > 1) ? " turns)" : " turn)";
+    var turns_left_text = " ("+turns_left+turns_left_plural;
+    text = text + turns_left_text;
+  }
+  
   return text;
 }
 
