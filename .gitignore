@@ -80,3 +80,4 @@ tests/screenshot*.png
 .freeciv_index
 .idea
 *.iml
+*.db

@@ -46,8 +46,9 @@ flags =
     _("Paratroopers"), _("Can be paradropped from a friendly city or suitable base.")
     _("Marines"), _("Can launch attack from non-native tiles.")
     _("Expellable"), _("Can be peacefully expelled from foreign tiles.")
-     _("AirProtector"), _("Is Unreachable AND can protect its tile from units unable to attack this unit.")
+    _("AirProtector"), _("Is Unreachable AND can protect its tile from units unable to attack this unit.")
     _("CantReachAir"), _("Unable to attack air units.")
+    _("NeverProtects"), _("Does not protect other units on its tile.")
   }
 
 ; Names for custom unit class flags. There can be up to 8 of these.
@@ -242,6 +243,16 @@ min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
 flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
+
+; This class is for air units that are unreachable but do not protect a stack.
+[unitclass_airpillage]
+; /* TRANS: Unit class: used adjectivally */
+name          = _("?unitclass:AirPillage")
+min_speed     = 1
+hp_loss_pct   = 0
+hut_behavior  = "Frighten"
+flags         = "Unreachable", "DoesntOccupyTile", "Airliftable", "CanPillage"
+
 
 ; /*
 ; HACK: server 3.09 does not yet allow specifying which Unreachable units protect stacks and which do not. That led
@@ -457,6 +468,9 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;                 do so even if has better odds when defending against it
 ;                 then when attacking it. Applies when the autoattack server
 ;                 setting is enabled.
+; "NeverProtects" = doesn't protect reachable units on its tile from enemy
+;                 attackers, even if the unreachableprotects server setting
+;                 is enabled and the unit class is unreachable
 ;
 ; Following actions require extra fields:
 ;  "Attack"
@@ -1576,7 +1590,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "Sea", "Balloon"
+targets       = "Air", "AirProtect", "AirPillage", "Sea", "Balloon"
 bonuses       =
    { "flag", "type", "value"
      "AirAttacker", "DefenseDivider", 2
@@ -1652,7 +1666,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "Unbribable", "HasNoZOC"
+flags         = "Unbribable", "HasNoZOC", "NeverProtects"
 roles         = ""
 helptext      = _("\
 Balloons are the first air unit. They have excellent\
@@ -1666,7 +1680,7 @@ Balloons are the first air unit. They have excellent\
 name          = _("Fighter")
 class         = "AirProtect"
 tech_req      = "Flight"
-obsolete_by   = "Stealth Fighter"
+obsolete_by   = "Jet Fighter"
 graphic       = "u.fighter"
 graphic_alt   = "-"
 sound_move    = "m_fighter"
@@ -1687,13 +1701,12 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "Missile", "Balloon"
+targets       = "Air", "AirProtect", "AirPillage", "Missile", "Balloon"
 bonuses       =
    { "flag", "type", "value"
      "Helicopter",   "DefenseDivider",    1
      "Helicopter",   "Firepower1",        1
      "Marines",      "DefenseMultiplier", 1
-     "CantReachAir", "DefenseMultiplier", 100   
    }
 flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape", "AirProtector"
 veteran_names =
@@ -1715,7 +1728,7 @@ Fighters are your first offensive Air units. They can\
 name          = _("Escort Fighter")
 class         = "AirProtect"
 tech_req      = "Radio"
-obsolete_by   = "Stealth Fighter"
+obsolete_by   = "Jet Fighter"
 graphic       = "u.escort_fighter"
 graphic_alt   = "u.fighter"
 sound_move    = "m_fighter"
@@ -1736,13 +1749,12 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "Missile", "Balloon"
+targets       = "Air", "AirProtect", "AirPillage", "Missile", "Balloon"
 bonuses       =
    { "flag", "type", "value"
      "Helicopter", "DefenseDivider", 1
      "Helicopter", "Firepower1", 1
      "Marines", "DefenseMultiplier", 1    
-     "CantReachAir", "DefenseMultiplier", 100      
    }
 flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape", "AirProtector"
 veteran_names =
@@ -1766,7 +1778,7 @@ Escort Fighters are larger and carry more fuel for\
 name          = _("Medium Bomber")
 class         = "Air"
 tech_req      = "Radio"
-obsolete_by   = "Stealth Bomber"
+obsolete_by   = "Jet Bomber"
 graphic       = "u.medium_bomber"
 graphic_alt   = "u.bomber"
 sound_move    = "m_bomber"
@@ -1792,7 +1804,7 @@ bonuses       =
    { "flag", "type", "value"
      "Marines", "DefenseMultiplier", 2    
    }
-flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape", "CantReachAir"
+flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape", "CantReachAir", "NeverProtects"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -1817,9 +1829,9 @@ TIP: Getting bombed is very noticeable to an enemy, and taken very\
 name          = _("Heavy Bomber")
 class         = "Air"
 tech_req      = "Advanced Flight"
-obsolete_by   = "Stealth Bomber"
-graphic       = "u.bomber"
-graphic_alt   = "-"
+obsolete_by   = "Jet Bomber"
+graphic       = "u.bomber_o"
+graphic_alt   = "u.bomber"
 sound_move    = "m_bomber"
 sound_move_alt = "m_generic"
 sound_fight   = "f_bomber"
@@ -1843,7 +1855,7 @@ bonuses       =
    { "flag", "type", "value"
      "Marines", "DefenseMultiplier", 2    
    }
-flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape", "CantReachAir"
+flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape", "CantReachAir", "NeverProtects"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -1889,7 +1901,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "HasNoZOC", "Unbribable", "Expellable"
+flags         = "HasNoZOC", "Unbribable", "Expellable", "NeverProtects"
 roles         = ""
 helptext      = _("\
 The AWACS (Airborne Warning and Control System) is an airplane with an \
@@ -1945,6 +1957,111 @@ The Helicopter is a very powerful unit, as it can both fly and\
 Helicopters can transport a Marines or AAA unit.\
 ")
 
+[unit_jet_fighter]
+name          = _("Jet Fighter")
+class         = "AirProtect"
+tech_req      = "Space Flight"
+obsolete_by   = "None"
+graphic       = "u.jet_fighter"
+graphic_alt   = "-"
+sound_move    = "m_stealth_fighter"
+sound_move_alt = "m_generic"
+sound_fight   = "f_stealth_fighter"
+sound_fight_alt = "f_generic"
+build_cost    = 70
+pop_cost      = 0
+attack        = 6
+defense       = 5
+hitpoints     = 20
+firepower     = 2
+move_rate     = 24
+vision_radius_sq = 12
+transport_cap = 0
+fuel          = 1
+uk_happy      = 0
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+targets       = "Air", "AirProtect", "AirPillage", "Missile", "Balloon"
+bonuses       =
+   { "flag", "type", "value"
+     "Helicopter", "DefenseDivider", 1
+     "Helicopter", "Firepower1", 1
+     "Marines", "DefenseMultiplier", 1     
+   }
+flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape", "AirProtector"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:ace")
+veteran_raise_chance = 40, 25, 16, 0
+veteran_work_raise_chance = 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200
+veteran_move_bonus = 0, 0, 0, 0
+roles         = ""
+helptext      = _("\
+Jet Fighters have improved attack and defense, plus a higher movement\
+ radius. Their cost and high defence make them viable even after more\
+ expensive more advanced fighters become available.\
+")
+
+[unit_jet_bomber]
+name          = _("Jet Bomber")
+class         = "AirPillage"                    ; to-do: AirPillage class so it can pillage.
+tech_req      = "Space Flight"           ; Later: Jet Propulsion reqs Rocketery/Robotics
+obsolete_by   = "None"                   ; not upgradeable; to-do: heavy bomber obsoletes to this, not stealth
+graphic       = "u.jet_bomber_o"
+graphic_alt   = "u.jet_bomber"
+sound_move    = "m_bomber"
+sound_move_alt = "m_generic"
+sound_fight   = "f_bomber"
+sound_fight_alt = "f_generic"
+build_cost    = 140
+pop_cost      = 0
+attack        = 15
+defense       = 1
+hitpoints     = 20
+firepower     = 2
+move_rate     = 18
+vision_radius_sq = 12
+transport_cap = 0
+fuel          = 3
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+targets       = "Balloon"
+bonuses       =
+   { "flag", "type", "value"
+     "Marines", "DefenseMultiplier", 6        ; needs new class so it can do CanPillage
+   }
+flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape", "CantReachAir", "NeverProtects"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:ace")
+veteran_raise_chance = 40, 25, 16, 0
+veteran_work_raise_chance = 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200
+veteran_move_bonus = 0, 0, 0, 0
+roles         = ""
+helptext      = _("\
+Jet Bombers are high-altitude long-range air units that are good for\
+ hitting distant targets. They have three turns of fuel, meaning they\
+ can be airborne for two turn-changes. Their impressive range makes\
+ them serviceable after more advanced Bombers become available.\
+ Defenseless to Fighter types, they are difficult to safely escort,\
+ and have challenges in finding safe flight paths.\
+ Jet Bombers can carry very heavy payloads, allowing carpet-bombing to\
+ pillage enemy tiles from the air.\
+"), _("\
+TIP: Getting bombed is very noticeable to an enemy, and taken very\
+ seriously. Make sure you choose targets far from any air defences,\
+ or be sure to bring adequate escort protection.\
+")
+
 [unit_stealth_fighter]
 name          = _("Stealth Fighter")
 class         = "AirProtect"
@@ -1970,13 +2087,12 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "Missile", "Balloon"
+targets       = "Air", "AirProtect", "AirPillage", "Missile", "Balloon"
 bonuses       =
    { "flag", "type", "value"
      "Helicopter", "DefenseDivider", 1
      "Helicopter", "Firepower1", 1
-     "Marines", "DefenseMultiplier", 1    
-     "CantReachAir", "DefenseMultiplier", 100       
+     "Marines", "DefenseMultiplier", 1     
    }
 vision_layer  = "Stealth"
 flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape", "AirProtector"
@@ -2001,8 +2117,8 @@ name          = _("Stealth Bomber")
 class         = "Air"
 tech_req      = "Stealth"
 obsolete_by   = "None"
-graphic       = "u.stealth_bomber"
-graphic_alt   = "-"
+graphic       = "u.stealth_bomber_o"
+graphic_alt   = "u.stealth_bomber"
 sound_move    = "m_stealth_bomber"
 sound_move_alt = "m_generic"
 sound_fight   = "f_stealth_bomber"
@@ -2028,7 +2144,7 @@ bonuses       =
    }
 vision_layer  = "Stealth"
 flags         = "FieldUnit", "AirAttacker",
-                "HasNoZOC", "Unbribable", "CanEscape", "CantReachAir"
+                "HasNoZOC", "Unbribable", "CanEscape", "CantReachAir", "NeverProtects"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -2384,7 +2500,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "Missile", "Helicopter", "Balloon", "Submarine"
+targets       = "Air", "AirProtect", "AirPillage", "Missile", "Helicopter", "Balloon", "Submarine"
 cargo         = "Missile"
 bonuses       =
    { "flag", "type", "value"
@@ -2410,8 +2526,8 @@ name          = _("Battleship")
 class         = "Sea"
 tech_req      = "Refining"
 obsolete_by   = "None"
-graphic       = "u.battleship"
-graphic_alt   = "-"
+graphic       = "u.battleship_o"
+graphic_alt   = "u.battleship"
 sound_move    = "m_battleship"
 sound_move_alt = "m_generic"
 sound_fight   = "f_battleship"
@@ -2514,7 +2630,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Submarine"
-cargo         = "Air", "Missile", "Helicopter"
+cargo         = "Air", "AirProtect", "AirPillage", "Missile", "Helicopter"
 bonuses       =
    { "flag", "type", "value"
      "Marines", "DefenseMultiplier", 1    

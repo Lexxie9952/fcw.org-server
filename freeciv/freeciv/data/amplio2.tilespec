@@ -133,6 +133,7 @@ main_intro_file    = "misc/intro"
 ; tag is used).
 files =
   "amplio2/terrain1.spec",
+  "amplio2/maglev.spec",
   "amplio2/terrain2.spec",
   "amplio2/hills.spec",
   "amplio2/mountains.spec",
@@ -142,13 +143,13 @@ files =
   "amplio2/upkeep.spec",
   "amplio2/activities.spec",
   "amplio2/fog.spec",
-  "amplio2/maglev.spec",
   "amplio2/canal.spec",
   "misc/small.spec",
   "misc/events.spec",
   "misc/governments.spec",
   "misc/specialists.spec",
   "amplio2/units.spec",
+  "amplio2/units_oversize.spec",
   "amplio2/veterancy.spec",
   "misc/flags-large.spec",
   "misc/buildings-large.spec",

@@ -8,34 +8,37 @@ options = "+Freeciv-spec-Devel-2015-Mar-25"
 artists = "
   Special thanks to Brendon Oram (Yautja) for the frame!
 
+  Lexxie9952
+  b.marco_polos_embassy
+  b.great_library
+  b.lighthouse
+  b.michelangelos_chapel
+  b.isaac_newtons_college
+  b.pyramids
+  b.copernicus_observatory
+  b.hanging_gardens
+  b.temple_of_artemis
+  b.leonardos_workshop
+  b.magellans_expedition
+  b.womens_suffrage
+  b.king_richards_crusade
+  b.great_wall
+
   Daniel Markstedt
   b.darwins_voyage
-  b.king_richards_crusade
-  b.leonardos_workshop
-  b.marco_polos_embassy
-  b.womens_suffrage
 
   Frederic Rodrigo
   b.colossus
   b.cure_for_cancer
-  b.great_library
-  b.lighthouse
   b.shakespeares_theatre
   b.united_nations
 
   Daniel Markstedt & Frederic Rodrigo
-  b.copernicus_observatory
-  b.isaac_newtons_college
   b.js_bachs_cathedral
-  b.magellans_expedition
-  b.michelangelos_chapel
 
   Paul Zastoupil
   b.asmiths_trading_co
   b.sun_tzus_war_academy
-
-  Feler404
-  b.pyramids
 
   Hajor
   b.seti_program
@@ -43,14 +46,11 @@ artists = "
   PD images
   b.apollo_program
   b.eiffel_tower
-  b.great_wall
-  b.hanging_gardens
   b.hoover_dam
   b.manhattan_project
   b.oracle
   b.statue_of_liberty
   b.statue_of_zeus
-  b.temple_of_artemis
   b.mausoleum
 "
 
