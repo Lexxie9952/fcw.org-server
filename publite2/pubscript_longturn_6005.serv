@@ -1,28 +1,30 @@
-#LongTurn game #19
+#LongTurn Game Z
+#autoreload
 
 cmdlevel ctrl first
 
-set rulesetdir mpplus
+rulesetdir mp2
 
 set minplayers 0
-set maxplayers 60
-set aifill 60
-set timeout 82800
-set first_timeout 259200
+set maxplayers 15
+set aifill 15
+set timeout 45000
+set first_timeout 90000
 set nationset all
 set compresstype xs
 set allowtake=""
 set autotoggle false
-set unitwaittime=36000
+set unitwaittime=9000
 set netwait 150
 set nettimeout 120
 set pingtime 30
 set pingtimeout 240
 set maxconnectionsperhost 500
 set threaded_save enabled
-set scorelog enabled
+set scorelog disabled
 set saveturns=1
-set autosaves=TURN
+set autosaves=TURN|TIMER
+set savefrequency 60
 metaconnection persistent
 set ec_chat=enabled
 set ec_info=enabled 
@@ -30,32 +32,31 @@ set ec_max_size=5000
 set ec_turns=7
 
 #economic
-set gold 100
+set gold 500
 
 #geological
-set mapsize XYSIZE
-set xsize 190
-set ysize 133
 set topology WRAPX
 set generator RANDOM
 set startpos DEFAULT
-set landmass 64
+set landmass 65
 set specials 350 
 set alltemperate "ENABLED"
-separatepoles "DISABLED"
+set separatepoles "DISABLED"
 set tinyisles "DISABLED"
+set huts 0
 
 #sociological
-set startunits=ccccwwwwxx
-set dispersion 2
+set startunits=ccccccwwwwwwxxx
+set dispersion 3
 set trading_city disabled
-set rapturedelay 2
+set rapturedelay 1
 set revolen 1
 set endturn 365
 set contactturns 0
+set barbarians "DISABLED"
 
 #military
-set borders "ENABLED"
+set borders "SEE_INSIDE"
 set diplomacy "HUMAN"
 set foggedborders enabled
 set airliftingstyle "FROM_ALLIES|TO_ALLIES|DEST_UNLIMITED"
@@ -64,5 +65,6 @@ set restrictinfra "ENABLED"
 #scientific
 set endspaceship DISABLED
 
+metamessage FREECIVWEB Game Z | 2 turns per day | 15 players | MP2 ruleset | Pre-Release Test
 
-metamessage not in use - future game.
+cmdlevel basic

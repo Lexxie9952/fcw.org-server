@@ -81,3 +81,7 @@ tests/screenshot*.png
 .idea
 *.iml
 *.db
+freeciv/freeciv/server/freeciv-web
+Makefile
+Makefile.in
+nohup.out

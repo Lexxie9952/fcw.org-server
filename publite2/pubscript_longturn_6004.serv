@@ -1,14 +1,15 @@
 #LongTurn game #19
+#autoreload
 
 cmdlevel ctrl first
 
-set rulesetdir mpplus
+rulesetdir mpplus
 
 set minplayers 0
 set maxplayers 60
 set aifill 60
 set timeout 82800
-set first_timeout 259200
+set first_timeout 168000
 set nationset all
 set compresstype xs
 set allowtake=""
@@ -20,9 +21,10 @@ set pingtime 30
 set pingtimeout 240
 set maxconnectionsperhost 500
 set threaded_save enabled
-set scorelog enabled
+set scorelog disabled
 set saveturns=1
-set autosaves=TURN
+set autosaves=TURN|TIMER
+set savefrequency 60
 metaconnection persistent
 set ec_chat=enabled
 set ec_info=enabled 
@@ -42,20 +44,22 @@ set startpos DEFAULT
 set landmass 64
 set specials 350 
 set alltemperate "ENABLED"
-separatepoles "DISABLED"
+set separatepoles "DISABLED"
 set tinyisles "DISABLED"
+set huts 0
 
 #sociological
 set startunits=ccccwwwwxx
 set dispersion 2
 set trading_city disabled
-set rapturedelay 2
+set rapturedelay 1
 set revolen 1
 set endturn 365
 set contactturns 0
+set barbarians "DISABLED"
 
 #military
-set borders "ENABLED"
+set borders "SEE_INSIDE"
 set diplomacy "HUMAN"
 set foggedborders enabled
 set airliftingstyle "FROM_ALLIES|TO_ALLIES|DEST_UNLIMITED"
@@ -64,5 +68,6 @@ set restrictinfra "ENABLED"
 #scientific
 set endspaceship DISABLED
 
+metamessage FREECIVWEB Game XIX | 1 turn per day | 60 players | MP+ ruleset | 24000 tiles | Join now!
 
-metamessage not in use - future game.
+cmdlevel basic

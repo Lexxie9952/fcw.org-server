@@ -53,7 +53,7 @@ export FREECIV_SAVE_PATH=${savesdir};
 rm -f "/var/lib/tomcat8/webapps/data/scorelogs/score-${2}.log"
 
 # Start Freeciv-proxy in background
-../freeciv-proxy/start-freeciv-proxy.sh "${3}" &
+../freeciv-proxy/start-freeciv-proxy.sh "${3}" >> "../logs/freeciv-proxy-loop.log" 2>&1 &
 
 # Start Freeciv C server
 proxy_pid=$! && 
