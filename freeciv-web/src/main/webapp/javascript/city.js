@@ -1916,9 +1916,7 @@ function city_worklist_task_remove()
 **************************************************************************/
 function update_city_screen()
 {
-  if (observing) return;
-  
-  $('#cities_title').html("Your Cities"+" ("+Object.keys(cities).length+")");
+  if (observing) return;  
 
   var sortList = [];
   var headers = $('#city_table thead th');
@@ -1976,6 +1974,7 @@ function update_city_screen()
     }
   }
 
+  $('#cities_title').html("Your Cities ("+count+")");
   city_list_html += "</tbody></table>";
   $("#cities_list").html(city_list_html);
   
