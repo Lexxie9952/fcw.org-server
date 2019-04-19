@@ -112,6 +112,6 @@ tiles = { "row", "column", "tag"
   3,  0, "u.well_digger"		; [Lexxie]
   3,  1, "u.balloon"            ; [Lexxie]
   3,  2, "u.missile_destroyer"  ; [Lexxie]
-  3,  4, "u.jet_bomber"         ; [Lexxie]
+;  3,  4, "u.jet_bomber"         ; [Lexxie]
   3,  8, "u.jet_fighter"        ; [Nemo] & [AHS] & [Lexxie]
 }
