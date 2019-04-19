@@ -691,6 +691,7 @@ target_reqs    =
       "UnitFlag", "Capturable", "Local", TRUE
       "CityTile", "Center", "Local", FALSE
       "Terrain", "Mountains", "Local", FALSE
+      "MaxUnitsOnTile", "1", "Local", TRUE
     }
 
 ;/*    
@@ -764,6 +765,7 @@ target_reqs    =
       "UnitClass",     "Air",   "Local", FALSE                  ;LAND UNITS CAN'T EXPEL AWACS
       "UnitState",     "OnDomesticTile", "Local",  FALSE
       "Terrain",       "Mountains",      "Local",  FALSE         ;Can't expel people hiding in the mountains
+       "MaxUnitsOnTile", "1", "Local", TRUE
     }
 
 ;Air expel: must be be air-to-air expelling from an aggressor air unit.
@@ -786,6 +788,7 @@ target_reqs    =
       "UnitFlag",      "Expellable",     "Local", TRUE   ;Has to be 1-expellable and 2-an air unit, in order for an air-expeller...
       "UnitClass",     "Air",            "Local", TRUE   ;...to be able to do border police action           
       "UnitState",     "OnDomesticTile", "Local", FALSE
+      "MaxUnitsOnTile", "1", "Local", TRUE
     }
 
 [actionenabler_nuke]
@@ -1537,5 +1540,5 @@ set =
       "tinyisles", FALSE, FALSE
       "topology", "WRAPX|ISO", FALSE
       "trading_city", "DISABLED", FALSE
-      "unreachableprotects", "DISABLED", TRUE
+      "unreachableprotects", "ENABLED", FALSE
     }

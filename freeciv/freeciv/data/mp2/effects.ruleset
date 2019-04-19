@@ -2740,9 +2740,17 @@ reqs	=
 type    = "Move_Bonus"
 value	= 1
 reqs	=
-    { "type", "name", "range"
-      "Building", "Genghis Khan's Equestrian School", "Player"
+    { "type", "name", "range", "present"
+      "Building", "Genghis Khan's Equestrian School", "Player", TRUE
       "UnitFlag", "Horse", "Local", TRUE 
+    }
+[effect_genghis_khans_equestrian_school2]
+type    = "Move_Bonus"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Genghis Khan's Equestrian School", "Player", TRUE
+      "UnitType", "Explorer", "Local", TRUE 
     }
 
 [effect_lighthouse]

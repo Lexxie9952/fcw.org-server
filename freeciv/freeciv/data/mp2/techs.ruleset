@@ -793,11 +793,11 @@ cost = 7680
 [advance_stealth]
 name     = _("Stealth")
 req1     = "Superconductors"
-req2     = "Advanced Flight"
+req2     = "Space Flight"
 flags    = ""
 graphic     = "a.stealth"
 graphic_alt = "-"
-cost = 8940
+cost = 11920
 
 [advance_steam_engine]
 name     = _("Steam Engine")

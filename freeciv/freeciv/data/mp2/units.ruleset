@@ -29,9 +29,9 @@ flags =
   { "name", "helptxt"
     _("Airbase")
     _("Transform")
-    _("AirAttacker"), _("Very bad at attacking AEGIS.")
-    _("Horse"), _("Attack value halved when attacking Pikemen.")
-    _("FootSoldier"), _("Attack value halved when attacking Knights.")
+    _("AirAttacker"), _("AEGIS Cruiser has a 3x defense bonus against this unit.")
+    _("Horse"), _("Attack value halved when attacking Pikemen.\ Knights defend at 3 when attacked by this unit.")
+    _("FootSoldier"), _("Knights defend at 2 when attacked by this unit.")
     _("Helicopter"), _("Defends very badly against Fighters.")
     _("Submarine"), _("Attack value reduced against some ships.")
     _("Unbribable")
@@ -48,7 +48,7 @@ flags =
     _("Expellable"), _("Can be peacefully expelled from foreign tiles.")
     _("AirProtector"), _("Is Unreachable AND can protect its tile from units unable to attack this unit.")
     _("CantReachAir"), _("Unable to attack air units.")
-    _("NeverProtects"), _("Does not protect other units on its tile.")
+ ;   _("NeverProtects"), _("Does not protect other units on its tile.")   ; UNCOMMENT THIS IF NOT USING SCL'S PATCH FOR THIS FLAG
   }
 
 ; Names for custom unit class flags. There can be up to 8 of these.
@@ -244,7 +244,7 @@ hp_loss_pct   = 0
 hut_behavior  = "Frighten"
 flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 
-; This class is for air units that are unreachable but do not protect a stack.
+; This class is for air units that can pillage terrain (i.e. Jet Bomber)
 [unitclass_airpillage]
 ; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:AirPillage")
@@ -253,28 +253,17 @@ hp_loss_pct   = 0
 hut_behavior  = "Frighten"
 flags         = "Unreachable", "DoesntOccupyTile", "Airliftable", "CanPillage"
 
-
-; /*
-; HACK: server 3.09 does not yet allow specifying which Unreachable units protect stacks and which do not. That led
-; to ridiculous exploits like bombers, awacs, or balloons protecting a stack. The AirProtect unit class is part of 
-; a VERY UGLY yet 100% effective solution that allows specifying some air units to be Unreachable but ignored, while 
-; others are Unreachable yet able to provide "unreachableprotects" ground support. 
-; -------------------
-; AirProtect UnitClass is for units with "pseudo-unreachable-protects" -- a huge defence bonus to achieve the same
-; effect. That is, they are "Unreachable" by means of a massive defence bonus. Making this separate class allows 
-; other units to be Unreachable but not unreachable-protected (Bombers, AWACS, Sub, Balloon). All units in this class
-; need: (1) The unit flag "AirProtector" (for documentation generation purposes only), (2) A large DefenseMultiplier
-; against "CantReachAir" coded into each unit in the class, (3) EVERY unit that can't reach air units needs the
-; "CantReachAir" flag coded into its unit flags.  NOTE: For Classic compatibility, a 100x DefenseMultiplier works
-; great. To tune these units to be less of a "pure exploit", a smaller multiplier could be used.
-; */
+; This class is for air units that can also protect a stack.
+; (Fighters) -- technically a separate AirProtect class is not needed, but
+; Fighters also have Border Police abilities, and a separate class
+; facilitates future adjustments and balancing in an isolated class.
 [unitclass_air_protect]
 ; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:AirProtect")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
-flags         = "DoesntOccupyTile", "Airliftable", "BorderPolice"
+flags         = "Unreachable", "DoesntOccupyTile", "Airliftable", "BorderPolice"
 
 [unitclass_balloon]
 ; /* TRANS: Unit class: used adjectivally */
@@ -1830,7 +1819,7 @@ name          = _("Heavy Bomber")
 class         = "Air"
 tech_req      = "Advanced Flight"
 obsolete_by   = "Jet Bomber"
-graphic       = "u.bomber_o"
+graphic       = "u.bomber"
 graphic_alt   = "u.bomber"
 sound_move    = "m_bomber"
 sound_move_alt = "m_generic"
@@ -1963,7 +1952,7 @@ class         = "AirProtect"
 tech_req      = "Space Flight"
 obsolete_by   = "None"
 graphic       = "u.jet_fighter"
-graphic_alt   = "-"
+graphic_alt   = "u.stealth_fighter"
 sound_move    = "m_stealth_fighter"
 sound_move_alt = "m_generic"
 sound_fight   = "f_stealth_fighter"
@@ -2001,9 +1990,7 @@ veteran_power_fact = 100, 150, 175, 200
 veteran_move_bonus = 0, 0, 0, 0
 roles         = ""
 helptext      = _("\
-Jet Fighters have improved attack and defense, plus a higher movement\
- radius. Their cost and high defence make them viable even after more\
- expensive more advanced fighters become available.\
+Jet Fighters upgrade the Fighter with improved attack and defense, plus a higher movement radius.\
 ")
 
 [unit_jet_bomber]
@@ -2011,8 +1998,8 @@ name          = _("Jet Bomber")
 class         = "AirPillage"                    ; to-do: AirPillage class so it can pillage.
 tech_req      = "Space Flight"           ; Later: Jet Propulsion reqs Rocketery/Robotics
 obsolete_by   = "None"                   ; not upgradeable; to-do: heavy bomber obsoletes to this, not stealth
-graphic       = "u.jet_bomber_o"
-graphic_alt   = "u.jet_bomber"
+graphic       = "u.jet_bomber"
+graphic_alt   = "u.stealth_bomber"
 sound_move    = "m_bomber"
 sound_move_alt = "m_generic"
 sound_fight   = "f_bomber"
@@ -2117,7 +2104,7 @@ name          = _("Stealth Bomber")
 class         = "Air"
 tech_req      = "Stealth"
 obsolete_by   = "None"
-graphic       = "u.stealth_bomber_o"
+graphic       = "u.stealth_bomber"
 graphic_alt   = "u.stealth_bomber"
 sound_move    = "m_stealth_bomber"
 sound_move_alt = "m_generic"
@@ -2469,8 +2456,7 @@ roles         = "Hunter"
 helptext      = _("\
 An modern Destroyer with more firepower. It shares all\
  the same roles as its ancestor.\
- Compared to the AEGIS Cruiser, a 2x defence against Air\
- and Missile units is weaker, but gives it a chance.\
+ 2x defence against Air and Missile units.\
  2x ASW defence gives a 38% chance defending vs Submarines.\
  A Missile Destroyer may carry one Cruise Missile.\
 ")
@@ -2504,7 +2490,7 @@ targets       = "Air", "AirProtect", "AirPillage", "Missile", "Helicopter", "Bal
 cargo         = "Missile"
 bonuses       =
    { "flag", "type", "value"
-     "AirAttacker", "DefenseMultiplier", 4
+     "AirAttacker", "DefenseMultiplier", 2
      "Submarine", "DefenseMultiplier", 1
      "Marines", "DefenseMultiplier", 1    
    }
@@ -2513,12 +2499,11 @@ roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
 The AEGIS Cruiser is an upgraded Cruiser equipped with\
  an advanced missile system, advanced radar\
- and vision, and a defense bonus against Submarines.\
+ and vision, and a 2x defense bonus against Submarines.\
  An AEGIS Cruiser may also carry two Cruise Missiles.\
 "), _("\
-TIP: This unit's vision and 5x anti-air defences make it\
- excellent for guarding an area, scouting, and\
- providing air defence to escorted ships.\
+TIP: This unit's vision and 3x anti-air defence are\
+ excellent for scouting and for escorting other ships.\
 ")
 
 [unit_battleship]
@@ -2526,7 +2511,7 @@ name          = _("Battleship")
 class         = "Sea"
 tech_req      = "Refining"
 obsolete_by   = "None"
-graphic       = "u.battleship_o"
+graphic       = "u.battleship"
 graphic_alt   = "u.battleship"
 sound_move    = "m_battleship"
 sound_move_alt = "m_generic"
@@ -2592,7 +2577,7 @@ bonuses       =
    { "flag", "type", "value"
      "Submarine", "DefenseMultiplier", 1
    }
-flags         = "BadCityDefender", "Provoking", "Only_Native_Attack", "Submarine", "CanEscape", "CantReachAir"
+flags         = "NeverProtects", "BadCityDefender", "Provoking", "Only_Native_Attack", "Submarine", "CanEscape", "CantReachAir"
 roles         = "Hunter"
 helptext      = _("\
 Submarines have strong offensive power but weak\
