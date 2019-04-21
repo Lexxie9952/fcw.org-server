@@ -685,6 +685,7 @@ actor_reqs    =
 ;     "DiplRel", "War", "Local", TRUE             ;NAH 
       "MinMoveFrags", "1", "Local", TRUE
       "DiplRel", "Foreign", "Local", TRUE
+      "DiplRel", "Alliance", "Local", FALSE
     }
 target_reqs    =
     { "type",   "name", "range", "present"

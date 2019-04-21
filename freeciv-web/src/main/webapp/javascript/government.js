@@ -188,6 +188,15 @@ function government_max_rate(govt_id)
   } else if (govt_id == 5) {
     //Democracy
     return 100;
+  } else if (govt_id == 6) {
+      //Fundamentalism
+      return 80;
+  } else if (govt_id == 7) {
+        //Tribalism
+        return 60;
+  } else if (govt_id == 8) {
+    //Federation
+    return 90;
   } else {
     // this should not happen
     return 100;

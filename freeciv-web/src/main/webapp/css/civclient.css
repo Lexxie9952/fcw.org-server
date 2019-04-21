@@ -765,6 +765,23 @@ button {
   background-image: url(/images/gov.monarchy.png) !important; 
 }
 
+.Fundamentalism {
+  background-image: url(/images/gov.fundamentalism.png) !important; 
+}
+
+.Tribalism {
+  background-image: url(/images/gov.tribalism.png) !important; 
+}
+
+.Federation {
+  background-image: url(/images/gov.federation.png) !important; 
+}
+
+.lowered_gov
+{
+  vertical-align: middle;
+}
+
 .flag_self {
   float: left;
   width: 140px;

@@ -68,6 +68,21 @@ function civ_population(playerno) {
   return numberWithCommas(population * 1000);
 }
 
+/**************************************************************************
+The "real" population info no one ever told - total number of actual citizens
+**************************************************************************/
+function city_size_sum(playerno) {
+  var population = 0;
+
+  for (var city_id in cities) {
+    var pcity = cities[city_id];
+    if (playerno == pcity['owner']) {
+      population += pcity['size'];
+    }
+  }
+  return population;   // TO DO: return population.toLocaleString(); -- if we want separators for when it goes over 1k
+}
+
 
 /**************************************************************************
   ...
@@ -89,9 +104,29 @@ function update_game_status_panel() {
       net_income = "+" + pplayer['expected_income'];
     }
 
-    if (!is_small_screen()) status_html += "<b>" + nations[pplayer['nation']]['adjective'] + "</b> &nbsp;&nbsp; <i class='fa fa-child' aria-hidden='true' title='Population'></i>: ";
-    if (!is_small_screen()) status_html += "<b>" + civ_population(client.conn.playing.playerno) + "</b>  &nbsp;&nbsp;";
-    if (!is_small_screen()) status_html += "<i class='fa fa-clock-o' aria-hidden='true' title='Year (turn)'></i>: <b>" + get_year_string() + "</b> &nbsp;&nbsp;";
+    if (!is_small_screen()) status_html += "<b>" + nations[pplayer['nation']]['adjective'] + "</b> &nbsp;";
+    
+/*************** Government type mini-icon that's clickable for revolution */
+    if (!is_small_screen()) {
+
+      status_html += "<span style='cursor:pointer;' onclick='javascript:show_revolution_dialog()'>";
+      
+      if (client.conn.playing['government'] == 0) status_html += "<img class='lowered_gov' src='/images/gov.anarchy.png' title='Anarchy'>";
+      else if (client.conn.playing['government'] == 1) status_html += "<img class='lowered_gov' src='/images/gov.despotism.png' title='Despotism'>";
+      else if (client.conn.playing['government'] == 2) status_html += "<img class='lowered_gov' src='/images/gov.monarchy.png' title='Monarchy'>";
+      else if (client.conn.playing['government'] == 3) status_html += "<img class='lowered_gov' src='/images/gov.communism.png' title='Communism'>";
+      else if (client.conn.playing['government'] == 4) status_html += "<img class='lowered_gov' src='/images/gov.republic.png' title='Republic'>";
+      else if (client.conn.playing['government'] == 5) status_html += "<img class='lowered_gov' src='/images/gov.democracy.png' title='Democracy'>";
+      else if (client.conn.playing['government'] == 6) status_html += "<img class='lowered_gov' src='/images/gov.fundamentalism.png' title='Fundamentalism'>";
+      else if (client.conn.playing['government'] == 7) status_html += "<img class='lowered_gov' src='/images/gov.tribalism.png' title='Tribalism'>";
+      else if (client.conn.playing['government'] == 8) status_html += "<img class='lowered_gov' src='/images/gov.federation.png' title='Federation'>";
+    }
+    status_html += "</span>";
+
+    if (!is_small_screen()) status_html += "<span style='cursor:pointer;' onclick='javascript:request_report(2)'>"; // type 2 is demographics
+    if (!is_small_screen()) status_html += "&nbsp; <i class='fa fa-child' aria-hidden='true' title='City Size Sum'></i>: ";
+    if (!is_small_screen()) status_html += "<b>" + city_size_sum(client.conn.playing.playerno) + "</b>  &nbsp;&nbsp;";
+    if (!is_small_screen()) status_html += "<i class='fa fa-clock-o' aria-hidden='true' title='Year (turn)'></i>: <b>" + get_year_string() + "</b> &nbsp;&nbsp;</span>";
     status_html += "<i class='fa fa-money' aria-hidden='true' title='Gold (net income)'></i>: ";
     if (pplayer['expected_income'] >= 0) {
       status_html += "<b title='Gold (net income)'>";
@@ -101,7 +136,8 @@ function update_game_status_panel() {
     status_html += pplayer['gold'] + " (" + net_income + ")</b>  &nbsp;&nbsp;";
     status_html += "<span style='cursor:pointer;' onclick='javascript:show_tax_rates_dialog();'><i class='fa fa-btc' aria-hidden='true' title='Tax rate'></i>: <b>" + tax + "</b>% ";
     status_html += "<i class='fa fa-music' aria-hidden='true' title='Luxury rate'></i>: <b>" + lux + "</b>% ";
-    status_html += "<i class='fa fa-flask' aria-hidden='true' title='Science rate'></i>: <b>" + sci + "</b>%</span> ";
+    status_html += "<i class='fa fa-flask' aria-hidden='true' title='Science rate'></i>: <b>" + sci + "</b>% &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> ";
+  
   } else if (server_settings != null && server_settings['metamessage'] != null) {
     status_html += server_settings['metamessage']['val']
                    + " Observing - ";
