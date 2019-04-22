@@ -1343,7 +1343,7 @@ reqs           =
     { "type", "name", "range", "present", "quiet"
       "Tech", "Construction", "Player", TRUE, FALSE
       "TerrainClass", "Land", "Local", TRUE, FALSE
-      "UnitFlag", "Settlers", "Local", TRUE, FALSE
+      "UnitFlag", "CanFortress", "Local", TRUE, FALSE
       "CityTile", "Center", "Local", FALSE, TRUE
     }
 build_time     = 3
@@ -1458,7 +1458,7 @@ rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 reqs           =
     { "type", "name", "range"
-      "UnitFlag", "Settlers", "Local"
+      "UnitFlag", "CanRoad", "Local"
       "TerrainClass", "Land", "Local"
     }
 build_time     = 0
@@ -1492,7 +1492,7 @@ reqs           =
     { "type", "name", "range"
       "Tech", "Railroad", "Player"
       "Extra", "Road", "Local"
-      "UnitFlag", "Settlers", "Local"
+      "UnitFlag", "CanRoad", "Local"
       "TerrainClass", "Land", "Local"
     }
 build_time     = 3
@@ -1530,7 +1530,7 @@ reqs           =
     { "type", "name", "range", "present", "quiet"
       "Tech", "Superconductors", "Player", TRUE, FALSE
 ;      "Extra", "Railroad", "Local", TRUE, FALSE           
-      "UnitFlag", "Settlers", "Local", TRUE, FALSE        
+      "UnitFlag", "CanRoad", "Local", TRUE, FALSE        
 ;      "UnitClass", "Sea", "Local", FALSE, TRUE
 ;      "TerrainClass", "Land", "Local", TRUE, FALSE
     }

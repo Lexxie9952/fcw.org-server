@@ -315,7 +315,7 @@ ui_name_join_city = _("%sAdd to City%s")
 ui_name_explode_nuclear = _("Explode %sNuclear%s")
 
 ; /* TRANS: Destroy _City (100% chance of success). */
-;ui_name_destroy_city = _("Destroy %sCity%s")                 ;ready to be enable if we think of how it's not OP imbalancing
+;ui_name_destroy_city = _("Destroy %sCity%s")                 ;ready to be enabled if we think of how
 
 ; /* TRANS: Set _Home City (100% chance of success). */
 ui_name_home_city = _("Set %sHome City%s")
@@ -980,6 +980,7 @@ action        = "Irrigate TF"
 actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitType",      "Legion",       "Local",   FALSE
     }
 
 [actionenabler_mine_tf]
@@ -987,6 +988,7 @@ action        = "Mine TF"
 actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitType",      "Legion",       "Local",   FALSE
     }
  
 [actionenabler_pillage]
@@ -1007,29 +1009,34 @@ actor_reqs    =
 [actionenabler_road]
 action        = "Road"
 actor_reqs    =
-    { "type",          "name",         "range"
-      "UnitFlag",      "Settlers",     "Local"
+    { "type",          "name",         "range",   "present"
+      "UnitFlag",      "Settlers",     "Local",   TRUE
+      "UnitType",      "Legion",       "Local",   FALSE
     }
 
-[actionenabler_canal]
+; Legions can make roads if not in domestic territory.
+[actionenabler_legion_road]
 action        = "Road"
 actor_reqs    =
-    { "type",          "name",         "range"
-      "UnitFlag",      "Settlers",     "Local"
+    { "type",          "name",       "range",   "present"
+      "UnitFlag",      "Settlers",   "Local",   TRUE
+      "UnitType",      "Legion",     "Local",   TRUE
+      "UnitState",     "OnDomesticTile", "Local",  FALSE
     }
 
 [actionenabler_base]
 action        = "Build Base"
 actor_reqs    =
     { "type",          "name",         "range"
-      "UnitFlag",      "Settlers",     "Local"
+      "UnitFlag",      "CanFortress",     "Local"
     }
  
 [actionenabler_mining]
 action        = "Build Mine"
 actor_reqs    =
-    { "type",          "name",         "range"
-      "UnitFlag",      "Settlers",     "Local"
+    { "type",          "name",         "range",   "present"
+      "UnitFlag",      "Settlers",     "Local",   TRUE
+      "UnitType",      "Legion",       "Local",   FALSE
     }
 target_reqs    =
     { "type",        "name", "range", "present"
@@ -1039,9 +1046,10 @@ target_reqs    =
 [actionenabler_desert_oil]
 action        = "Build Mine"
 actor_reqs    =
-    { "type",     "name",         "range"
-      "UnitFlag", "Settlers",     "Local"
-      "Tech",     "Construction", "Player"
+    { "type",          "name",         "range",   "present"
+      "UnitFlag",      "Settlers",     "Local",   TRUE
+      "UnitType",      "Legion",       "Local",   FALSE
+      "Tech",     "Construction", "Player", TRUE
     }
 target_reqs    =
     { "type",    "name",         "range"
@@ -1051,9 +1059,10 @@ target_reqs    =
 [actionenabler_glacier_oil]
 action        = "Build Mine"
 actor_reqs    =
-    { "type",     "name",     "range"
-      "UnitFlag", "Settlers", "Local"
-      "Tech",     "Refining", "Player"
+    { "type",          "name",         "range",   "present"
+      "UnitFlag",      "Settlers",     "Local",   TRUE
+      "UnitType",      "Legion",       "Local",   FALSE
+      "Tech",     "Refining", "Player", TRUE
     }
 target_reqs    =
     { "type",    "name",     "range"
@@ -1066,6 +1075,7 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
+      "UnitType",      "Legion",       "Local",   FALSE
     }
 target_reqs    =
     { "type",        "name",     "range", "present"
@@ -1077,6 +1087,7 @@ action        = "Build Irrigation"
 actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitType",      "Legion",       "Local",   FALSE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
     }
 target_reqs    =
@@ -1090,6 +1101,7 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
+      "UnitType",      "Legion",       "Local",   FALSE
     }
 target_reqs    =
     { "type",    "name",       "range", "present"

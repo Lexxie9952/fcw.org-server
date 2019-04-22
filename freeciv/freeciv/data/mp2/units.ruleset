@@ -29,7 +29,9 @@ flags =
   { "name", "helptxt"
     _("Airbase")
     _("Transform")
-    _("AirAttacker"), _("AEGIS Cruiser has a 3x defense bonus against this unit.")
+     _("CanRoad")
+    _("CanFortress")
+    _("AirAttacker"), _("AEGIS Cruiser has 3x defense against this unit.")
     _("Horse"), _("Attack value halved when attacking Pikemen.\ Knights defend at 3 when attacked by this unit.")
     _("FootSoldier"), _("Knights defend at 2 when attacked by this unit.")
     _("Helicopter"), _("Defends very badly against Fighters.")
@@ -543,7 +545,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 1
 uk_gold       = 0
-flags         = "Settlers", "Infra", "NonMil", "HasNoZOC", "AddToCity", "Cities", "Cant_Fortify", "Expellable"
+flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "AddToCity", "Cities", "Cant_Fortify", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0
@@ -612,8 +614,8 @@ TIP: If you lack nearby water, make a Well-Digger in a city that can\
 "), _("\
 FURTHER HELP: \
  A Well-Digger can irrigate any Low-Land tile (not Hills or Mountains), or dig a well\
- (a river) on any tile. To dig a well requires Change Extra Target to River and then\
- selecting Build Road. (You will know if it succeeded if the activity icon resembles\
+ (a river) on any tile. To dig a well simply instruct the well-digger to \
+ Build Road. (You will know if it succeeded if the activity icon resembles\
  a shovel.) A Despotic city will need at least +2 Food and +2 Production\
  to support a Well-Digger. THE WELL-DIGGER WILL NOT WORK IF: 1) He is outside your borders.\
  2) He dies off from the city not having enough surplus for his upkeep, 3) You discovered\
@@ -647,7 +649,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "Settlers", "Infra", "NonMil", "HasNoZOC", "Airbase", "Cant_Fortify", "Capturable", "Expellable"
+flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "Airbase", "Cant_Fortify", "Capturable", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0
@@ -690,7 +692,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "Settlers", "Infra", "NonMil", "HasNoZOC", "Transform", "Airbase", "Cant_Fortify", "Expellable"
+flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "Transform", "Airbase", "Cant_Fortify", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0
@@ -834,7 +836,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "FootSoldier", "Capturer", "CantReachAir"
+flags         = "FootSoldier", "Settlers", "Infra", "CanRoad", "CanFortress", "Capturer", "CantReachAir"
 roles         = "DefendOk", "DefendOkStartUnit", "Hut", "BarbarianBuild", "BarbarianSea"
 helptext      = _("\
 Legions are heavily armed and well disciplined infantry\
@@ -1348,8 +1350,8 @@ roles         = "AttackFastStartUnit", "HutTech", "BarbarianTech",
                 "BarbarianBuildTech", "BarbarianSeaTech", "Hunter"
 helptext      = _("\
 Knights are mounted and heavily armored warriors. They defend at \
-D:3 against other mounted units. They defend at D:2 against every \
-type of foot soldier unit. They defend at D:1 against everything \
+D:3 against mounted units. They defend at D:2 against \
+foot soldier units. They defend at D:1 against everything \
 else. Their noble status allows them to attack cities without population reduction.\
 ")
 
@@ -1926,6 +1928,12 @@ uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon"
 cargo         = "LandAirSea"
+bonuses       =
+   { "flag", "type", "value"
+     "NeverProtects", "DefenseMultiplier", 4     ; PATCH - CLOSES A HOLE WHERE BOMBERS WERE TOO EASILY ABLE 
+                                                 ; TO WIPE OUT HELICOPTERS by exploiting the fact the ruleset has
+                                                 ; them programmed as reachable so they can be attacked by land.
+   }
 flags         = "FieldUnit", "Helicopter", "AirAttacker", "Unbribable"
 veteran_names =
   _("?vet_rank:green"),
@@ -1938,8 +1946,8 @@ veteran_power_fact = 100, 150, 175, 200
 veteran_move_bonus = 0, 0, 0, 0
 roles         = ""
 helptext      = _("\
-The Helicopter is a very powerful unit, as it can fly far then attack \
- targets, and even conquer cities.  Be careful, because Helicopters lose\
+The Helicopter is a very powerful unit, as it can fly far and attack \
+ multiple targets, and even conquer cities.  Be careful, because Helicopters lose\
  a small amount of health for every turn not spent in a city or airbase\
  or Carrier, and they may be attacked by ground units.\
 "), _("\
@@ -2616,7 +2624,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Submarine"
-cargo         = "Air", "AirProtect", "AirPillage", "Missile", "Helicopter"
+cargo         = "Air", "AirProtect", "AirPillage", "Missile", "Helicopter", "Balloon", "LandAirSea"
 bonuses       =
    { "flag", "type", "value"
      "Marines", "DefenseMultiplier", 1    
@@ -2625,7 +2633,7 @@ flags         = "BadCityDefender", "Only_Native_Attack", "Provoking", "CanEscape
 roles         = ""
 helptext      = _("\
 The Carrier is a mobile airport that can carry aircraft,\
- helicopters, and missiles.\
+ helicopters, balloons, AAA, marines, and missiles.\
 "), _("\
 TIP:  Guard Carriers with a handful of fast-moving ships and a\
  battleship, as losing a fully-equipped Carrier is VERY\
