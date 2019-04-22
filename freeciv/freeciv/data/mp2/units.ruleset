@@ -1347,10 +1347,10 @@ flags         = "Horse", "Capturer", "CantReachAir"
 roles         = "AttackFastStartUnit", "HutTech", "BarbarianTech",
                 "BarbarianBuildTech", "BarbarianSeaTech", "Hunter"
 helptext      = _("\
-Knights are mounted and heavily armored warriors whose \
-bonuses are such that they defend at 2 against foot units \
-and at 3 against other mounted units.  Their noble status \
-allows them to attack cities without population reduction.\
+Knights are mounted and heavily armored warriors. They defend at \
+D:3 against other mounted units. They defend at D:2 against every \
+type of foot soldier unit. They defend at D:1 against everything \
+else. Their noble status allows them to attack cities without population reduction.\
 ")
 
 [unit_dragoons]
@@ -1806,8 +1806,8 @@ veteran_move_bonus = 0, 0, 0, 0
 roles         = ""
 helptext      = _("\
 Medium Bombers are specialized airborne units that are good for\
- eliminating moderately strong ground targets. They may not\
- attack other airborne units.\
+ eliminating moderately strong ground targets, or multiple weaker \
+ targets with multiple attacks. They may not attack other airborne units.\
 "), _("\
 TIP: Getting bombed is very noticeable to an enemy, and taken very\
  seriously. Make sure you choose targets far from air defences,\
@@ -1857,8 +1857,8 @@ veteran_move_bonus = 0, 0, 0, 0
 roles         = ""
 helptext      = _("\
 Heavy Bombers are specialized airborne units that are good for\
- eliminating strong and well-defended ground targets. They may not\
- attack other airborne units.\
+ eliminating strong and well-defended ground targets, or multiple\
+ weaker targets with multiple attacks. They can't attack airborne units.\
 "), _("\
 TIP: Getting bombed is very noticeable to an enemy, and taken very\
  seriously. Make sure you choose targets far from any air defences,\
@@ -1938,12 +1938,12 @@ veteran_power_fact = 100, 150, 175, 200
 veteran_move_bonus = 0, 0, 0, 0
 roles         = ""
 helptext      = _("\
-The Helicopter is a very powerful unit, as it can both fly and\
- conquer cities.  Care must be exercised, because Helicopters lose a\
- small amount of health for every turn not spent in a city or airbase\
+The Helicopter is a very powerful unit, as it can fly far then attack \
+ targets, and even conquer cities.  Be careful, because Helicopters lose\
+ a small amount of health for every turn not spent in a city or airbase\
  or Carrier, and they may be attacked by ground units.\
 "), _("\
-Helicopters can transport a Marines or AAA unit.\
+Helicopters can transport one Marines or AAA unit.\
 ")
 
 [unit_jet_fighter]
@@ -2036,7 +2036,8 @@ veteran_move_bonus = 0, 0, 0, 0
 roles         = ""
 helptext      = _("\
 Jet Bombers are high-altitude long-range air units that are good for\
- hitting distant targets. They have three turns of fuel, meaning they\
+ hitting distant targets. They can attack multiple targets per turn.\
+ They have three turns of fuel, meaning they\
  can be airborne for two turn-changes. Their impressive range makes\
  them serviceable after more advanced Bombers become available.\
  Defenseless to Fighter types, they are difficult to safely escort,\
@@ -2143,7 +2144,7 @@ veteran_power_fact = 100, 150, 175, 200
 veteran_move_bonus = 0, 0, 0, 0
 roles         = ""
 helptext      = _("\
-An improved Bomber, with improved attack and a higher movement\
+The strongest Bomber, with improved attack and a higher movement\
  radius. Stealth Bombers can't be seen unless adjacent to an\
  enemy, and may slip through the air to return home on the same\
  turn.\
