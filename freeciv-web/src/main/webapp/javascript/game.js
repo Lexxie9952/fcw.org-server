@@ -124,7 +124,7 @@ function update_game_status_panel() {
     status_html += "</span>";
 
     if (!is_small_screen()) status_html += "<span style='cursor:pointer;' onclick='javascript:request_report(2)'>"; // type 2 is demographics
-    if (!is_small_screen()) status_html += "&nbsp; <i class='fa fa-child' aria-hidden='true' title='City Size Sum'></i>: ";
+    if (!is_small_screen()) status_html += "&nbsp; <i class='fa fa-child' aria-hidden='true' title='Total Size of all Cities'></i>: ";
     if (!is_small_screen()) status_html += "<b>" + city_size_sum(client.conn.playing.playerno) + "</b>  &nbsp;&nbsp;";
     if (!is_small_screen()) status_html += "<i class='fa fa-clock-o' aria-hidden='true' title='Year (turn)'></i>: <b>" + get_year_string() + "</b> &nbsp;&nbsp;</span>";
     status_html += "<i class='fa fa-money' aria-hidden='true' title='Gold (net income)'></i>: ";
