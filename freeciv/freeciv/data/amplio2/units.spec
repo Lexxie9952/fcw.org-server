@@ -50,7 +50,7 @@ pixel_border = 1
 tiles = { "row", "column", "tag"
 				; Scenario League tags in brackets
   0,  0, "u.armor"		; [Nemo] & [Lexxie]
-  0,  1, "u.howitzer"		; [Nemo] & [Lexxie]
+;  0,  1, "u.howitzer"		; [Nemo] & [Lexxie]      ;moved to units_oversize.spec
   3,  5, "u.battleship"		; [Lexxie]
   0,  3, "u.bomber"		; [GB]
   0,  4, "u.cannon"		; [Lexxie]
@@ -112,6 +112,6 @@ tiles = { "row", "column", "tag"
   3,  0, "u.well_digger"		; [Lexxie]
   3,  1, "u.balloon"            ; [Lexxie]
   3,  2, "u.missile_destroyer"  ; [Lexxie]
-;  3,  4, "u.jet_bomber"         ; [Lexxie]
+;  3,  4, "u.jet_bomber"         ; [Lexxie]                       ;moved to units_oversize.spec
   3,  8, "u.jet_fighter"        ; [Nemo] & [AHS] & [Lexxie]
 }

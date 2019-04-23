@@ -48,5 +48,6 @@ dy = 48
 pixel_border = 1
 
 tiles = { "row", "column", "tag"
+  0,  1, "u.howitzer"       ; [Nemo]+[Lexxie]
   0,  3, "u.jet_bomber"     ; [Lexxie]
 }
