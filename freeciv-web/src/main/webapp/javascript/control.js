@@ -131,7 +131,7 @@ function control_init()
     pregame_settings();
   });
 
-  $("#tech_canvas").click(function(event) {
+  $("#tech_canvas").mousedown(function(event) {
      tech_mapview_mouse_click(event);
    });
 
