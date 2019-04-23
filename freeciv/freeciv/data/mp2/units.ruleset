@@ -235,7 +235,7 @@ flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative"
 name          = _("?unitclass:Helicopter")
 min_speed     = 1
 hp_loss_pct   = 10
-flags         = "CanOccupyCity", "CollectRansom", "Airliftable"
+flags         = "Unreachable", "CanOccupyCity", "CollectRansom", "Airliftable"
 
 ; This class is for air units that are unreachable but do not protect a stack.
 [unitclass_air]
@@ -941,7 +941,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon"
+targets       = "Balloon", "Helicopter"
 flags         = "Fanatic", "FootSoldier", "Capturer", "CantReachAir"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
@@ -976,7 +976,7 @@ uk_happy      = 1
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon"
+targets       = "Balloon", "Helicopter"
 flags         = "IgTer", "IgZOC", "NoHome", "FootSoldier", "Capturer", "CantReachAir"
 roles         = "DefendGood", "DefendGoodStartUnit", "Partisan", "BarbarianTech"
 helptext      = _("\
@@ -1019,7 +1019,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon"
+targets       = "Balloon", "Helicopter"
 flags         = "IgTer", "FootSoldier", "Capturer", "CantReachAir"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
@@ -1053,7 +1053,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon"
+targets       = "Balloon", "Helicopter"
 flags         = "FootSoldier", "Capturer", "CantReachAir"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
@@ -1089,7 +1089,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter", "Land", "Sea"
 disembarks    = "Helicopter", "Land", "Sea"
-targets       = "Sea", "Air", "AirProtect", "Balloon"
+targets       = "Sea", "Air", "AirProtect", "Balloon", "Helicopter"
 flags         = "Marines", "FootSoldier", "BeachLander", "Capturer"
 veteran_names =
   _("?vet_rank:green"),
@@ -1137,7 +1137,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon"
+targets       = "Balloon", "Helicopter"
 flags         = "Paratroopers", "FootSoldier", "Capturer", "CantReachAir"
 roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
@@ -1177,7 +1177,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon"
+targets       = "Balloon", "Helicopter"
 flags         = "CantReachAir"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
@@ -1381,8 +1381,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 flags         = "Horse", "Capturer", "CantReachAir"
-roles         = "AttackFastStartUnit", "BarbarianBuildTech", "BarbarianSeaTech",
-                "Hunter"
+roles         = "AttackFastStartUnit", "BarbarianBuildTech", "BarbarianSeaTech", "Hunter"
 helptext      = _("\
 Dragoons are mounted warriors carrying early firearms.\
  Being the first highly mobile gunpowder unit, they are\
@@ -1414,7 +1413,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon"
+targets       = "Balloon", "Helicopter"
 flags         = "Capturer", "CantReachAir"
 roles         = "AttackFastStartUnit", "Hunter"
 helptext      = _("\
@@ -1446,7 +1445,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon"
+targets       = "Balloon", "Helicopter"
 flags         = "CantReachAir"
 roles         = "AttackFastStartUnit", "Hunter"
 helptext      = _("\
@@ -1547,7 +1546,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon"
+targets       = "Balloon", "Helicopter"
 flags         = "CantReachAir"
 roles         = "AttackStrongStartUnit"
 helptext      = _("\
@@ -1581,7 +1580,9 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "AirProtect", "AirPillage", "Sea", "Balloon"
+embarks       = "Helicopter"
+disembarks    = "Helicopter"
+targets       = "Air", "AirProtect", "AirPillage", "Sea", "Balloon", "Helicopter"
 bonuses       =
    { "flag", "type", "value"
      "AirAttacker", "DefenseDivider", 2
@@ -1623,7 +1624,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon"
+targets       = "Balloon", "Helicopter"
 flags         = "CantReachAir"
 roles         = "AttackStrongStartUnit"
 helptext      = _("\
@@ -1646,7 +1647,7 @@ sound_fight_alt = "f_generic"
 build_cost    = 30
 pop_cost      = 0
 attack        = 0
-defense       = 1
+defense       = 0
 hitpoints     = 10
 firepower     = 1
 move_rate     = 5
@@ -1660,11 +1661,14 @@ uk_gold       = 0
 flags         = "Unbribable", "HasNoZOC", "NeverProtects"
 roles         = ""
 helptext      = _("\
-Balloons are the first air unit. They have excellent\
- scouting abilities: great vision and\
- unreachable by units prior to Riflemen. Balloons can't\
+Balloons are the first air unit. They are excellent for\
+ scouting. They have great vision and are unreachable by\
+ units prior to Riflemen and Ironclads. Balloons can't\
  travel over mountains. They may remain in the air for one\
- turn before needing to land in a city, fortress, or airbase.\
+ extra turn before needing to land in a city, fortress, or\
+ airbase. Though this unit is unreachable by more primitive\
+ land and sea units, it does not prevent them from attacking\
+ other units on the same tile.\
 ")
 
 [unit_fighter]
@@ -1692,7 +1696,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "AirProtect", "AirPillage", "Missile", "Balloon"
+targets       = "Air", "AirProtect", "AirPillage", "Missile", "Balloon", "Helicopter"
 bonuses       =
    { "flag", "type", "value"
      "Helicopter",   "DefenseDivider",    1
@@ -1740,7 +1744,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "AirProtect", "AirPillage", "Missile", "Balloon"
+targets       = "Air", "AirProtect", "AirPillage", "Missile", "Balloon", "Helicopter"
 bonuses       =
    { "flag", "type", "value"
      "Helicopter", "DefenseDivider", 1
@@ -1915,7 +1919,7 @@ sound_fight_alt = "f_generic"
 build_cost    = 100
 pop_cost      = 0
 attack        = 10
-defense       = 3
+defense       = 5
 hitpoints     = 20
 firepower     = 2
 move_rate     = 12
@@ -1926,14 +1930,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon"
+targets       = "Balloon", "Helicopter"
 cargo         = "LandAirSea"
-bonuses       =
-   { "flag", "type", "value"
-     "NeverProtects", "DefenseMultiplier", 4     ; PATCH - CLOSES A HOLE WHERE BOMBERS WERE TOO EASILY ABLE 
-                                                 ; TO WIPE OUT HELICOPTERS by exploiting the fact the ruleset has
-                                                 ; them programmed as reachable so they can be attacked by land.
-   }
 flags         = "FieldUnit", "Helicopter", "AirAttacker", "Unbribable"
 veteran_names =
   _("?vet_rank:green"),
@@ -1949,7 +1947,8 @@ helptext      = _("\
 The Helicopter is a very powerful unit, as it can fly far and attack \
  multiple targets, and even conquer cities.  Be careful, because Helicopters lose\
  a small amount of health for every turn not spent in a city or airbase\
- or Carrier, and they may be attacked by ground units.\
+ or Carrier.  Helicopters can be attacked by ground units from Riflemen onward.\
+ They can be attacked by sea units from Ironclad onward.\
 "), _("\
 Helicopters can transport one Marines or AAA unit.\
 ")
@@ -1979,7 +1978,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "AirProtect", "AirPillage", "Missile", "Balloon"
+targets       = "Air", "AirProtect", "AirPillage", "Missile", "Balloon", "Helicopter"
 bonuses       =
    { "flag", "type", "value"
      "Helicopter", "DefenseDivider", 1
@@ -2026,7 +2025,6 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon"
 bonuses       =
    { "flag", "type", "value"
      "Marines", "DefenseMultiplier", 6        ; needs new class so it can do CanPillage
@@ -2083,7 +2081,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "AirProtect", "AirPillage", "Missile", "Balloon"
+targets       = "Air", "AirProtect", "AirPillage", "Missile", "Balloon", "Helicopter"
 bonuses       =
    { "flag", "type", "value"
      "Helicopter", "DefenseDivider", 1
@@ -2285,7 +2283,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Submarine"
+targets       = "Submarine"
 cargo         = "Land", "LandNoKill", "LandAirSea"
 bonuses       =
    { "flag", "type", "value"
@@ -2325,7 +2323,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Submarine"
+targets       = "Balloon", "Submarine", "Helicopter"
 bonuses       =
    { "flag", "type", "value"
      "Marines", "DefenseMultiplier", 1    
@@ -2364,7 +2362,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Submarine"
+targets       = "Balloon", "Submarine", "Helicopter"
 bonuses       =
    { "flag", "type", "value"
      "Submarine", "DefenseMultiplier", 3
@@ -2408,7 +2406,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Submarine"
+targets       = "Balloon", "Submarine", "Helicopter"
 bonuses       =
    { "flag", "type", "value"
      "Submarine", "DefenseMultiplier", 1
@@ -2452,7 +2450,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Submarine"
+targets       = "Balloon", "Submarine", "Helicopter"
 cargo         = "Missile"
 bonuses       =
    { "flag", "type", "value"
@@ -2540,7 +2538,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Submarine"
+targets       = "Balloon", "Submarine", "Helicopter"
 bonuses       =
    { "flag", "type", "value"
      "Submarine", "DefenseMultiplier", 1
@@ -2623,7 +2621,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Submarine"
+targets       = "Balloon", "Submarine", "Helicopter"
 cargo         = "Air", "AirProtect", "AirPillage", "Missile", "Helicopter", "Balloon", "LandAirSea"
 bonuses       =
    { "flag", "type", "value"
@@ -2704,7 +2702,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon"
+targets       = "Balloon", "Helicopter"
 flags         = "FieldUnit", "OneAttack", "AirAttacker", "HasNoZOC", "Unbribable", "CantReachAir"
 roles         = ""
 helptext      = _("\
