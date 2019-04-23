@@ -170,6 +170,8 @@ function init_tech_screen()
     $("#tech_progress_box").css("padding-left", "10px");
   }
 
+  $("#mouse_info_box").html("<div title='Left click sets your current research or goal depending on whether the tech is immediately researchable. Middle click sets any tech as your goal. Right scrolls the tech canvas.' style='background: transparent url(/images/info-hover.png);width:86px;height:30px;'></div>")
+  $("#mouse_info_box").tooltip();
   is_tech_tree_init = true;
   clicked_tech_id = null;
 }
@@ -480,21 +482,21 @@ function send_player_tech_goal(tech_id)
 function tech_mapview_mouse_click(e)
 {
 
-  var rightclick;
+  var mouse_button;
   if (!e) var e = window.event;
   if (e.which) {
-    rightclick = (e.which == 3);
+    mouse_button = e.which
   } else if (e.button) {
-    rightclick = (e.button == 2);
+    mouse_button = e.button + 1
   }
 
-  if (rightclick) {
+  if (mouse_button == 3) {
     if (mouse_x > $(window).width() / 2) {
-      $("#technologies").scrollLeft($("#technologies").scrollLeft() + 150);
+      $("#technologies").scrollLeft($("#technologies").scrollLeft() + mouse_x);
     } else {
-        $("#technologies").scrollLeft($("#technologies").scrollLeft() - 150);
+        $("#technologies").scrollLeft($("#technologies").scrollLeft() - mouse_y);
     }
-    return;
+   return;
   }
 
    if (tech_canvas != null) {
@@ -515,7 +517,8 @@ function tech_mapview_mouse_click(e)
 
       if (tech_mouse_x > x && tech_mouse_x < x + tech_item_width
           && tech_mouse_y > y && tech_mouse_y < y + tech_item_height) {
-        if (player_invention_state(client.conn.playing, ptech['id']) == TECH_PREREQS_KNOWN) {
+        if (mouse_button == 2) send_player_tech_goal(ptech['id']);        
+        else if (player_invention_state(client.conn.playing, ptech['id']) == TECH_PREREQS_KNOWN) {
           send_player_research(ptech['id']);
         } else if (player_invention_state(client.conn.playing, ptech['id']) == TECH_UNKNOWN) {
           send_player_tech_goal(ptech['id']);
