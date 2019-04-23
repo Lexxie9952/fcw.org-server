@@ -170,7 +170,7 @@ function init_tech_screen()
     $("#tech_progress_box").css("padding-left", "10px");
   }
 
-  $("#mouse_info_box").html("<div title='Left click sets your current research or goal depending on whether the tech is immediately researchable. Middle click sets any tech as your goal. Right scrolls the tech canvas.' style='background: transparent url(/images/info-hover.png);width:86px;height:30px;'></div>")
+  $("#mouse_info_box").html("<div title='Left click sets your current research or goal depending on whether the tech is immediately researchable.\nMiddle click sets any tech as your goal.\nRight click scrolls the tech canvas.' style='background: transparent url(/images/info-hover.png);width:86px;height:30px;'></div>")
   $("#mouse_info_box").tooltip();
   is_tech_tree_init = true;
   clicked_tech_id = null;
