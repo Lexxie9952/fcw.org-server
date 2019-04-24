@@ -312,6 +312,7 @@ function pick_nation(player_id)
             else player_nations[players[id]['nation']] = true;
         }
     }
+    if (Object.keys(players).length == Object.keys(player_nations).length) return; // No free slots, don't show the dialog.
   }
 
   var nations_html = "<div id='nation_heading'><span>Select nation for " + player_name + ":</span> <br>"
