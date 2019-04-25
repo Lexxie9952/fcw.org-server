@@ -215,7 +215,7 @@ function government_max_rate(govt_id)
 **************************************************************************/
 function can_player_get_gov(govt_id)
 {
-  return (player_has_wonder(client.conn.playing.playerno, 63) //hack for statue of liberty
+  return (player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_STATUE_OF_LIBERTY_NAME)) //hack for statue of liberty
           || are_reqs_active(client.conn.playing,
                       null,
                       null,

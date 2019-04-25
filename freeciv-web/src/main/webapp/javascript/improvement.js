@@ -22,6 +22,7 @@
 // IDs are dynamic based on ruleset
 const B_AIRPORT_NAME = 'Airport';
 const B_PALACE_NAME = 'Palace';
+const B_STATUE_OF_LIBERTY_NAME = "Statue of Liberty";
 
 var B_LAST = MAX_NUM_BUILDINGS;
 
