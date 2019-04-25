@@ -1650,13 +1650,14 @@ Counts as having a Cathedral in all of your cities.\
  the number of unhappy citizens made content.\
 ")
 
-[building_mausoleum_of_mausolos]
+;this is wonder #61
+[building_mausoleum_of_mausolos]     
 name		= _("Mausoleum of Mausolos")
 genus		= "SmallWonder"
 reqs	=
     { "type", "name", "range", "present", "quiet"
       "Tech", "Ceremonial Burial", "Player", TRUE, FALSE
-      "Building", "Temple of Artemis", "Player", FALSE, TRUE
+      "Building", "Mausoleum of Mausolos", "Player", FALSE, TRUE
     }
 graphic         = "b.mausoleum"
 graphic_alt     = "b.oracle"
@@ -1675,61 +1676,6 @@ With this wonder, City Walls and Courthouses each make one unhappy\
  aggression. Also, none of the owner's cities can be incited to revolt.\
  The discovery of Radio makes the Mausoleum obsolete.\
 ")
-
-[building_statue_of_zeus]
-name		= _("Statue of Zeus")
-genus		= "SmallWonder"
-reqs	=
-    { "type", "name", "range", "present", "quiet"
-      "Tech", "Polytheism", "Player", TRUE, FALSE
-      "Building", "Statue of Zeus", "Player", FALSE, TRUE
-    }
-graphic         = "b.statue_of_zeus"
-graphic_alt     = "b.oracle"
-obsolete_by	=
-    { "type", "name", "range", "survives"
-      "Tech", "Tactics", "Player", FALSE
-    }
-build_cost	= 100
-upkeep		= 0
-sabotage	= 0
-sound		= "w_oracle"
-sound_alt	= "w_generic"
-helptext	= _("\
-The powerful Zeus gives order and organization to both city and nation.\
- One citizen is made content about military activity in every city in\
- your nation. In the city the statue is located, it makes one citizen\
- happy and provides free upkeep to 4 units.\
- The discovery of Tactics makes the Statue of Zeus obsolete.\
-")
-
-[building_temple_of_artemis]
-name		= _("Temple of Artemis")
-genus		= "SmallWonder"
-reqs	=
-    { "type", "name", "range", "present", "quiet"
-      "Tech", "Mysticism",  "Player", TRUE, FALSE
-      "Building", "Temple", "City",   TRUE, FALSE
-      "Building", "Temple of Artemis", "Player", FALSE, TRUE
-
-    }
-graphic         = "b.temple_of_artemis"
-graphic_alt     = "b.oracle"
-obsolete_by	=
-    { "type", "name", "range", "survives"
-      "Tech", "Computers", "Player", FALSE
-    }
-build_cost	= 250
-upkeep		= 0
-sabotage	= 0
-sound		= "w_oracle"
-sound_alt	= "w_generic"
-helptext	= _("\
-The bounteous Artemis bestows to all cities with Temples a small yet\
- multitudinous benediction: +1 each to production, luxury, science, and gold.\
- Requires a Temple in the city where it will be built. The discovery of Computers\
- makes the Temple of Artemis obsolete.")
-
 
 [building_oracle]
 name		= _("Oracle")
@@ -1780,30 +1726,6 @@ Every city will gain +25% to its food storage when population changes.\
 in addition, the city with the Pyramids can rapture when celebrating.\
 ")
 
-[building_internet]
-name		= _("The Internet")
-genus		= "SmallWonder"
- reqs	=
-     { "type",     "name",         "range",  "present", "quiet"
-       "Tech",     "Computers",    "Player", TRUE,      FALSE
-       "Building", "The Internet", "Player", FALSE,     TRUE
-     }
-graphic	= "b.internet"
-graphic_alt	= "b.seti_program"
-obsolete_by	=
-    { "type", "name", "range"
-    }
-build_cost	= 600
-upkeep		= 0
-sabotage	= 0
-sound		= "w_internet"
-sound_alt	= "w_generic"
-; /* xgettext:no-c-format */
-helptext	= _("\
-Adds to science production in all your cities with\
- a Research Lab, 100% of base output.\
-")
-
 [building_shakespeares_theatre]
 name            = _("Shakespeare's Theater")
 rule_name       = "Shakespeare's Theatre"       ; en_GB used originally
@@ -1828,7 +1750,8 @@ Makes all angry and unhappy citizens content in the city where it\
  is located, including citizens unhappy about military activity.\
 ")
 
-[building_statue_of_liberty]
+;this should be wonder #65 if we counted correctly and need it for the "statue hack" to determine if player can get gov.
+[building_statue_of_liberty]  
 name		= _("Statue of Liberty")
 genus		= "SmallWonder"
 reqs	=
@@ -1850,6 +1773,56 @@ helptext	= _("\
 Allows you to instantly change government, including governments\
  not yet researched by your civilization, and without\
  the transition period of Anarchy.\
+")
+
+[building_statue_of_zeus]
+name		= _("Statue of Zeus")
+genus		= "SmallWonder"
+reqs	=
+    { "type", "name", "range", "present", "quiet"
+      "Tech", "Polytheism", "Player", TRUE, FALSE
+      "Building", "Statue of Zeus", "Player", FALSE, TRUE
+    }
+graphic         = "b.statue_of_zeus"
+graphic_alt     = "b.oracle"
+obsolete_by	=
+    { "type", "name", "range", "survives"
+      "Tech", "Tactics", "Player", FALSE
+    }
+build_cost	= 100
+upkeep		= 0
+sabotage	= 0
+sound		= "w_oracle"
+sound_alt	= "w_generic"
+helptext	= _("\
+The powerful Zeus gives order and organization to both city and nation.\
+ One citizen is made content about military activity in every city in\
+ your nation. In the city the statue is located, it makes one citizen\
+ happy and provides free upkeep to 4 units.\
+ The discovery of Tactics makes the Statue of Zeus obsolete.\
+")
+
+[building_supreme_court]
+name		= _("Supreme Court")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",          "range",  "present", "quiet"
+      "Tech",     "Literacy",      "Player", TRUE,      FALSE
+      "Building", "Supreme Court", "Player", FALSE,     TRUE
+    }
+graphic	= "b.great_library"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 200
+upkeep		= 0
+sabotage	= 0
+sound		= "w_great_library"
+sound_alt	= "w_generic"
+; /* xgettext:no-c-format */
+helptext	= _("\
+The Supreme Court acts as a Courthouse in every city. \
 ")
 
 [building_sun_tzus_war_academy]
@@ -1878,27 +1851,55 @@ All your new military land units produced in cities in your nation\
  Obsolete by: Mobile Warfare.\
 ")
 
-[building_supreme_court]
-name		= _("Supreme Court")
+[building_temple_of_artemis]
+name		= _("Temple of Artemis")
 genus		= "SmallWonder"
 reqs	=
-    { "type",     "name",          "range",  "present", "quiet"
-      "Tech",     "Literacy",      "Player", TRUE,      FALSE
-      "Building", "Supreme Court", "Player", FALSE,     TRUE
+    { "type", "name", "range", "present", "quiet"
+      "Tech", "Mysticism",  "Player", TRUE, FALSE
+      "Building", "Temple", "City",   TRUE, FALSE
+      "Building", "Temple of Artemis", "Player", FALSE, TRUE
+
     }
-graphic	= "b.great_library"
-graphic_alt	= "-"
+graphic         = "b.temple_of_artemis"
+graphic_alt     = "b.oracle"
+obsolete_by	=
+    { "type", "name", "range", "survives"
+      "Tech", "Computers", "Player", FALSE
+    }
+build_cost	= 250
+upkeep		= 0
+sabotage	= 0
+sound		= "w_oracle"
+sound_alt	= "w_generic"
+helptext	= _("\
+The bounteous Artemis bestows to all cities with Temples a small yet\
+ multitudinous benediction: +1 each to production, luxury, science, and gold.\
+ Requires a Temple in the city where it will be built. The discovery of Computers\
+ makes the Temple of Artemis obsolete.")
+
+[building_internet]
+name		= _("The Internet")
+genus		= "SmallWonder"
+ reqs	=
+     { "type",     "name",         "range",  "present", "quiet"
+       "Tech",     "Computers",    "Player", TRUE,      FALSE
+       "Building", "The Internet", "Player", FALSE,     TRUE
+     }
+graphic	= "b.internet"
+graphic_alt	= "b.seti_program"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 200
+build_cost	= 600
 upkeep		= 0
 sabotage	= 0
-sound		= "w_great_library"
+sound		= "w_internet"
 sound_alt	= "w_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
-The Supreme Court acts as a Courthouse in every city. \
+Adds to science production in all your cities with\
+ a Research Lab, 100% of base output.\
 ")
 
 [building_united_nations]
