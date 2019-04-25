@@ -170,7 +170,7 @@ function init_tech_screen()
     $("#tech_progress_box").css("padding-left", "10px");
   }
 
-  $("#mouse_info_box").html("<div title='Left click sets your current research or goal depending on whether the tech is immediately researchable.\nMiddle click sets any tech as your goal.\nRight click scrolls the tech canvas.' style='background: transparent url(/images/info-hover.png);width:86px;height:30px;'></div>")
+  $("#mouse_info_box").html("<div title='Right-click:   scroll screen.\n\nMiddle-click:  set Future Goal' style='background: transparent url(/images/info-hover.png);width:86px;height:30px;'></div>")
   $("#mouse_info_box").tooltip();
   is_tech_tree_init = true;
   clicked_tech_id = null;
@@ -377,10 +377,10 @@ function update_tech_screen()
 
   var research_goal_text = "No research target selected.<br>Please select a technology now";
   if (techs[client.conn.playing['researching']] != null) {
-    research_goal_text = "Researching: " + techs[client.conn.playing['researching']]['name'];
+    research_goal_text = "Current Research: " + techs[client.conn.playing['researching']]['name'];
   }
   if (techs[client.conn.playing['tech_goal']] != null) {
-    research_goal_text = research_goal_text + "<br>Research Goal: "
+    research_goal_text = research_goal_text + "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Future Goal: "
         + techs[client.conn.playing['tech_goal']]['name'];
   }
   $("#tech_goal_box").html(research_goal_text);
