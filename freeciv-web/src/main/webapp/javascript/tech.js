@@ -492,9 +492,9 @@ function tech_mapview_mouse_click(e)
 
   if (mouse_button == 3) {
     if (mouse_x > $(window).width() / 2) {
-      $("#technologies").scrollLeft($("#technologies").scrollLeft() + mouse_x);
+      $("#technologies").scrollLeft($("#technologies").scrollLeft() + mouse_x/2);
     } else {
-        $("#technologies").scrollLeft($("#technologies").scrollLeft() - ($("#technologies").width()-mouse_x-12)) // Should be the width of the scrollbar
+        $("#technologies").scrollLeft($("#technologies").scrollLeft() - ($("#technologies").width()-mouse_x-12)/2) // Should be the width of the scrollbar
     }
    return;
   }
