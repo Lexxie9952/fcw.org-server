@@ -170,7 +170,7 @@ function init_tech_screen()
     $("#tech_progress_box").css("padding-left", "10px");
   }
 
-  $("#mouse_info_box").html("<div title='Right-click:   scroll screen.\n\nMiddle-click:  set Future Goal' style='background: transparent url(/images/info-hover.png);width:86px;height:30px;'></div>")
+  $("#mouse_info_box").html("<div title='Right-click:   Scrolls the screen.\nMiddle-click:  Sets the Future Goal.' style='background: transparent url(/images/info-hover.png);width:86px;height:30px;'></div>")
   $("#mouse_info_box").tooltip();
   is_tech_tree_init = true;
   clicked_tech_id = null;
@@ -494,7 +494,7 @@ function tech_mapview_mouse_click(e)
     if (mouse_x > $(window).width() / 2) {
       $("#technologies").scrollLeft($("#technologies").scrollLeft() + mouse_x);
     } else {
-        $("#technologies").scrollLeft($("#technologies").scrollLeft() - mouse_y);
+        $("#technologies").scrollLeft($("#technologies").scrollLeft() - ($("#technologies").width()-mouse_x-12)) // Should be the width of the scrollbar
     }
    return;
   }
