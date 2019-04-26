@@ -21,7 +21,7 @@ var message_log = new EventAggregator(update_chatbox, 125,
                                       EventAggregator.DP_ALL, 1000, 0);
 var previous_scroll = 0;
 var current_message_dialog_state = null;
-var max_chat_message_length = 350;
+var max_chat_message_length = 500;
 
 /**************************************************************************
  ...
