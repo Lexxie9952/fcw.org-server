@@ -506,13 +506,13 @@ function show_send_private_message_dialog()
   $("#dialog").remove();
   $("<div id='dialog'></div>").appendTo("div#game_page");
 
-  var intro_html = "Message: <input id='private_message_text' type='text' size='50' maxlength='80'>";
+  var intro_html = "Message: <textarea id='private_message_text' type='text' rows='6' columns='60' maxlength='350'>";
   $("#dialog").html(intro_html);
   $("#dialog").attr("title", "Send private message to " + name);
   $("#dialog").dialog({
 			bgiframe: true,
 			modal: true,
-			width: is_small_screen() ? "80%" : "40%",
+			width: is_small_screen() ? "80%" : "50%",
 			buttons:
 			{
 				"Send" : function() {
