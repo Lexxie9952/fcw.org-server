@@ -181,6 +181,11 @@ button {
   font-size: 85%;
 }
 
+.blue_clickable {
+  color: #3498DB  
+  text-decoration:underline;
+}
+
 #manual_non_helptext_facts {
   -moz-column-width: 20em;
   -webkit-column-width: 20em;

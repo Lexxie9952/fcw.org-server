@@ -25,6 +25,8 @@ var city_trade_routes = {};
 var goods = {};
 
 var active_city = null;
+var inactive_city = null;   // active_city's twin, to prevent request_city_buy from needing active_city which then forces city_dialog to pop up.
+
 var worklist_dialog_active = false;
 var production_selection = [];
 var worklist_selection = [];
@@ -171,7 +173,7 @@ function show_city_dialog(pcity)
   if (!is_small_screen()) {
     dialog_buttons = $.extend(dialog_buttons,
       {
-       "Previous city" : function() {
+       "Previous city (P)" : function() {
          previous_city();
        },
        "Next city (N)" : function() {
@@ -661,12 +663,36 @@ function city_turns_to_build(pcity, target, include_shield_stock)
   }
 }
 
+
+
+/**************************************************************************
+Send buy command for a non-active city. (Called from city list or elsewhere
+**************************************************************************/
+function request_city_id_buy(city_id)
+{
+  active_city = null;   // this function called without an active city, make sure it stays that way
+
+  inactive_city = cities[city_id];  // lets request_city_buy() know which city wants to buy
+
+  request_city_buy();
+
+  //inactive_city = null;   //reset to null
+}
+
 /**************************************************************************
  Show buy production in city dialog
 **************************************************************************/
 function request_city_buy()
 {
-  var pcity = active_city;
+  var pcity = null;
+
+  if (active_city == null) {
+    pcity = inactive_city; // if active_city was null this function was called from city list without an active_city
+  }
+  else {
+    pcity = active_city;
+  }
+
   var pplayer = client.conn.playing;
 
   // reset dialog page.
@@ -722,16 +748,23 @@ function request_city_buy()
   $("#dialog").dialog('open');
 }
 
-
 /**************************************************************************
  Buy whatever is being built in the city.
 **************************************************************************/
 function send_city_buy()
 {
+   //active_city is if player in a city dialog
+   //inactive_city is if a player bought from the list without activating the city
+
   if (active_city != null) {
     var packet = {"pid" : packet_city_buy, "city_id" : active_city['id']};
     send_request(JSON.stringify(packet));
   }
+  else if (inactive_city != null) {
+    var packet = {"pid" : packet_city_buy, "city_id" : inactive_city['id']};
+    send_request(JSON.stringify(packet));
+  }
+  else show_dialog_message("Please Report bug:", "send_city_buy() in city.js has no active or inactive city specified. Code:767");
 }
 
 /**************************************************************************
@@ -1942,25 +1975,52 @@ function update_city_screen()
   
   var city_list_html = "<table class='tablesorter' id='city_table' border=0 cellspacing=0>"
         + "<thead><tr><th>Name</th><th>Population</th><th>Size</th>"+city_list_citizen_html+"<th style='padding-right:40px'>State</th>"
-        + "<th style='padding-right:0px'>Surplus<br>Food/Prod/Trade</th><th style='padding-right:0px'>Economy<br>Gold/Luxury/Science</th>"
-        + "<th>Grows In</th><th>Granary</th><th>Producing</th></tr></thead><tbody>";
+        + "<th title='Food/Production/Trade output' style=padding-right:0px'>Food/Prod/<br>Trade</th><th title='Gold/Luxury/Science output' style='padding-right:0px'>Gold/<br>Lux/Sci</th>"
+        + "<th>Grows In</th><th>Granary</th><th title='Click to Buy'>Producing</th><th title='Click to Buy'>Done - Buy Cost</th></tr></thead><tbody>";
         
   var count = 0;
   var unhappy_angry_people;
+
   for (var city_id in cities){
-    var pcity = cities[city_id];
+     // shortcut for replacing <td> tags with clickable <td> tags that take to city dialogue:
+    var pcity = cities[city_id]
+
+    var td_click_html = "<td onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'>";
+    var td_buy_html =   "<td color='blue' onclick='javascript:request_city_id_buy("+ pcity['id'] + ");'>";
+
+
     if (client.conn.playing != null && city_owner(pcity) != null && city_owner(pcity).playerno == client.conn.playing.playerno) {
       count++; 
       var prod_type = get_city_production_type(pcity);
       var turns_to_complete_str;
-      if (get_city_production_time(pcity) == FC_INFINITY) {
-        turns_to_complete_str = "-"; //client does not know how long production will take yet.
-      } else {
-        turns_to_complete_str = get_city_production_time(pcity) + " turns";
+      var progress_string;          // accumulated shields/total shields
+
+    turns_to_complete = get_city_production_time(pcity);
+    if (get_city_production_time(pcity) == FC_INFINITY) {
+        turns_to_complete_str = "never"; //client does not know how long production will take yet.
+        progress_string = get_production_progress(pcity);
+        //progress_string = "NIL";
+      }
+      else {
+        if (turns_to_complete != 1) turns_to_complete_str = turns_to_complete + " turns";
+        else turns_to_complete_str = "<b>1 turn</b>";
+
+        progress_string = get_production_progress(pcity);
       }
       
       unhappy_angry_people = pcity['ppl_unhappy'][FEELING_FINAL]+pcity['ppl_angry'][FEELING_FINAL]
 
+      city_list_html += "<tr class='cities_row' id='cities_list_" + pcity['id'] + "'>"+td_click_html
+              + pcity['name'] + "</td>"+td_click_html + numberWithCommas(city_population(pcity)*1000) + "</td>"+td_click_html + pcity['size'] + "</td>"
+              + "</td>"+td_click_html + pcity['ppl_happy'][FEELING_FINAL]+"</td>"+td_click_html + pcity['ppl_content'][FEELING_FINAL]+"</td>"
+              + td_click_html+unhappy_angry_people+"</td>"+td_click_html + get_city_state(pcity) + "</td>"+td_click_html + pcity['surplus'][O_FOOD] + "/"              
+              + pcity['surplus'][O_SHIELD] + "/" + pcity['surplus'][O_TRADE] + "</td>" + td_click_html + pcity['prod'][O_GOLD] + "/" 
+              + pcity['prod'][O_LUXURY] + "/" + pcity['prod'][O_SCIENCE] + td_click_html + city_turns_to_growth_text(pcity) + "</td>"
+              + td_click_html+ + pcity['food_stock'] + "/" + pcity['granary_size'] + "</td>"+td_buy_html +"<u>"+prod_type['name']+"</u> &nbsp; - &nbsp; "+turns_to_complete_str+"</td>"
+              + td_buy_html+ progress_string + " &nbsp; -  &nbsp; <u>"+pcity['buy_cost']+"g</u></td>"
+      city_list_html += "</tr>";
+
+/* old code that worked - DELETE THIS AFTER NEW CODE IS PROVED FOR SEVERAL MONTHS TO WORK
       city_list_html += "<tr class='cities_row' id='cities_list_" + pcity['id'] + "' onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'><td>"
               + pcity['name'] + "</td><td>" + numberWithCommas(city_population(pcity)*1000) + "</td><td>" + pcity['size'] + "</td>"
               + "</td><td>"+pcity['ppl_happy'][FEELING_FINAL]+"</td><td>"+pcity['ppl_content'][FEELING_FINAL]+"</td>"
@@ -1968,9 +2028,9 @@ function update_city_screen()
               + pcity['surplus'][O_SHIELD] + "/" + pcity['surplus'][O_TRADE] + "</td>" + "<td>" + pcity['prod'][O_GOLD] + "/" 
               + pcity['prod'][O_LUXURY] + "/" + pcity['prod'][O_SCIENCE] + "<td>" + city_turns_to_growth_text(pcity) + "</td>"
               + "<td>" + pcity['food_stock'] + "/" + pcity['granary_size'] + "</td><td>" + prod_type['name'] + " (" + turns_to_complete_str + ")</td>"
-
-
       city_list_html += "</tr>";
+*/
+
     }
   }
 
@@ -2035,6 +2095,16 @@ function city_keyboard_listener(ev)
 
   if (active_city != null) {
      switch (keyboard_key) {
+       case 'P':
+         previous_city();
+         ev.stopPropagation();
+         break;
+
+       case 'W':         // patterned off CTRL-W
+         close_city_dialog();
+         ev.stopPropagation();
+         break;
+
        case 'N':
          next_city();
          ev.stopPropagation();
