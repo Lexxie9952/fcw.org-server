@@ -1986,7 +1986,7 @@ function update_city_screen()
     var pcity = cities[city_id]
 
     var td_click_html = "<td onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'>";
-    var td_buy_html =   "<td color='blue' onclick='javascript:request_city_id_buy("+ pcity['id'] + ");'>";
+    var td_buy_html =   "<td onclick='javascript:request_city_id_buy("+ pcity['id'] + ");'>";
 
 
     if (client.conn.playing != null && city_owner(pcity) != null && city_owner(pcity).playerno == client.conn.playing.playerno) {
