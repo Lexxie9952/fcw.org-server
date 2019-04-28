@@ -114,4 +114,5 @@ tiles = { "row", "column", "tag"
   3,  2, "u.missile_destroyer"  ; [Lexxie]
 ;  3,  4, "u.jet_bomber"         ; [Lexxie]                       ;moved to units_oversize.spec
   3,  8, "u.jet_fighter"        ; [Nemo] & [AHS] & [Lexxie]
+  3,  6, "u.atom_bomb"          ; Lexxie  
 }
