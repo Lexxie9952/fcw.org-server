@@ -663,7 +663,17 @@ function city_turns_to_build(pcity, target, include_shield_stock)
   }
 }
 
-
+/**************************************************************************
+Clicking on what a city is producing from the city list activates that city
+  and sets the tab to the prod tab
+**************************************************************************/
+function city_change_prod(city_id)
+{
+  active_city = city_id;
+  
+  city_tab_index = 1;   // 1 is the city production screen
+  show_city_dialog_by_id(active_city);  // show the production screen
+}
 
 /**************************************************************************
 Send buy command for a non-active city. (Called from city list or elsewhere
@@ -671,11 +681,8 @@ Send buy command for a non-active city. (Called from city list or elsewhere
 function request_city_id_buy(city_id)
 {
   active_city = null;   // this function called without an active city, make sure it stays that way
-
   inactive_city = cities[city_id];  // lets request_city_buy() know which city wants to buy
-
   request_city_buy();
-
   //inactive_city = null;   //reset to null
 }
 
@@ -1976,10 +1983,15 @@ function update_city_screen()
   var city_list_html = "<table class='tablesorter' id='city_table' border=0 cellspacing=0>"
         + "<thead><tr><th>Name</th><th>Population</th><th>Size</th>"+city_list_citizen_html+"<th style='padding-right:40px'>State</th>"
         + "<th title='Food/Production/Trade output' style=padding-right:0px'>Food/Prod/<br>Trade</th><th title='Gold/Luxury/Science output' style='padding-right:0px'>Gold/<br>Lux/Sci</th>"
-        + "<th>Grows In</th><th>Granary</th><th title='Click to Buy'>Producing</th><th title='Click to Buy'>Done - Buy Cost</th></tr></thead><tbody>";
+        + "<th>Grows In</th><th>Granary</th><th title='Click to change'>Producing</th>"
+        + "<th title='Turns to finish &nbsp;&nbsp; Prod completed/needed'>Turns &nbsp;&nbsp; Progress</th><th title='Click to buy'>Cost</th>"
+        + "</tr></thead><tbody>";
         
   var count = 0;
-  var unhappy_angry_people;
+  var happy_people, content_people, unhappy_angry_people;
+  var city_fpt, city_gls;   // food prod trade, gold luxury science
+  var city_growth, city_food_stock;   // grows in x turns, how much is in grain storage
+  var city_granary_size, city_buy_cost;   // grain needed to grow, cost to buy city's production
 
   for (var city_id in cities){
      // shortcut for replacing <td> tags with clickable <td> tags that take to city dialogue:
@@ -1987,50 +1999,57 @@ function update_city_screen()
 
     var td_click_html = "<td onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'>";
     var td_buy_html =   "<td onclick='javascript:request_city_id_buy("+ pcity['id'] + ");'>";
-
+    var td_change_prod_html = "<td onclick='javascript:city_change_prod("+ pcity['id'] + ");'>";
 
     if (client.conn.playing != null && city_owner(pcity) != null && city_owner(pcity).playerno == client.conn.playing.playerno) {
       count++; 
       var prod_type = get_city_production_type(pcity);
       var turns_to_complete_str;
-      var progress_string;          // accumulated shields/total shields
+      var progress_string;          // accumulated shields/total shields needed
 
-    turns_to_complete = get_city_production_time(pcity);
-    if (get_city_production_time(pcity) == FC_INFINITY) {
-        turns_to_complete_str = "never"; //client does not know how long production will take yet.
-        progress_string = get_production_progress(pcity);
-        //progress_string = "NIL";
-      }
-      else {
-        if (turns_to_complete != 1) turns_to_complete_str = turns_to_complete + " turns";
-        else turns_to_complete_str = "<b>1 turn</b>";
-
-        progress_string = get_production_progress(pcity);
-      }
+      // max city size of 40 generates numbers with 9 characters max, pad the string with 10 so the numbers align better:
+      var population_string = numberWithCommas(city_population(pcity)*1000).toString().padStart(10, ' ').replace(/\s/g, '&nbsp;&nbsp;');
+      // max city size is 2 digits, so pad a space to create right alignment:
+      var city_size_string = pcity['size'].toString().padStart(2, ' ').replace(/\s/g, '&nbsp;&nbsp;');
       
-      unhappy_angry_people = pcity['ppl_unhappy'][FEELING_FINAL]+pcity['ppl_angry'][FEELING_FINAL]
+      turns_to_complete = get_city_production_time(pcity);
+      if (get_city_production_time(pcity) == FC_INFINITY) {
+          turns_to_complete_str = "-"; //client does not know how long production will take yet.
+        } else {
+          turns_to_complete_str = turns_to_complete.toString().padStart(3, ' ').replace(/\s/g, '&nbsp;&nbsp;');
 
-      city_list_html += "<tr class='cities_row' id='cities_list_" + pcity['id'] + "'>"+td_click_html
-              + pcity['name'] + "</td>"+td_click_html + numberWithCommas(city_population(pcity)*1000) + "</td>"+td_click_html + pcity['size'] + "</td>"
-              + "</td>"+td_click_html + pcity['ppl_happy'][FEELING_FINAL]+"</td>"+td_click_html + pcity['ppl_content'][FEELING_FINAL]+"</td>"
-              + td_click_html+unhappy_angry_people+"</td>"+td_click_html + get_city_state(pcity) + "</td>"+td_click_html + pcity['surplus'][O_FOOD] + "/"              
-              + pcity['surplus'][O_SHIELD] + "/" + pcity['surplus'][O_TRADE] + "</td>" + td_click_html + pcity['prod'][O_GOLD] + "/" 
-              + pcity['prod'][O_LUXURY] + "/" + pcity['prod'][O_SCIENCE] + td_click_html + city_turns_to_growth_text(pcity) + "</td>"
-              + td_click_html+ + pcity['food_stock'] + "/" + pcity['granary_size'] + "</td>"+td_buy_html +"<u>"+prod_type['name']+"</u> &nbsp; - &nbsp; "+turns_to_complete_str+"</td>"
-              + td_buy_html+ progress_string + " &nbsp; -  &nbsp; <u>"+pcity['buy_cost']+"g</u></td>"
-      city_list_html += "</tr>";
+          if (turns_to_complete == 1) turns_to_complete_str = "<b>"+turns_to_complete_str+"</b>";  // bold to indicate finishing at TC 
+        }
 
-/* old code that worked - DELETE THIS AFTER NEW CODE IS PROVED FOR SEVERAL MONTHS TO WORK
-      city_list_html += "<tr class='cities_row' id='cities_list_" + pcity['id'] + "' onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'><td>"
-              + pcity['name'] + "</td><td>" + numberWithCommas(city_population(pcity)*1000) + "</td><td>" + pcity['size'] + "</td>"
-              + "</td><td>"+pcity['ppl_happy'][FEELING_FINAL]+"</td><td>"+pcity['ppl_content'][FEELING_FINAL]+"</td>"
-              + "<td>"+unhappy_angry_people+"</td><td>" + get_city_state(pcity) + "</td><td>" + pcity['surplus'][O_FOOD] + "/"              
-              + pcity['surplus'][O_SHIELD] + "/" + pcity['surplus'][O_TRADE] + "</td>" + "<td>" + pcity['prod'][O_GOLD] + "/" 
-              + pcity['prod'][O_LUXURY] + "/" + pcity['prod'][O_SCIENCE] + "<td>" + city_turns_to_growth_text(pcity) + "</td>"
-              + "<td>" + pcity['food_stock'] + "/" + pcity['granary_size'] + "</td><td>" + prod_type['name'] + " (" + turns_to_complete_str + ")</td>"
-      city_list_html += "</tr>";
-*/
+        progress_string = get_production_progress(pcity).toString().padStart(7, ' ').replace(/\s/g, '&nbsp;&nbsp;'); // these are up to 7 long: 123/567
 
+        happy_people = pcity['ppl_happy'][FEELING_FINAL];
+        content_people = pcity['ppl_content'][FEELING_FINAL];
+        unhappy_angry_people = pcity['ppl_unhappy'][FEELING_FINAL]+pcity['ppl_angry'][FEELING_FINAL];
+
+        city_fpt = pcity['surplus'][O_FOOD]+"/"
+                 + pcity['surplus'][O_SHIELD]+"/"
+                 + pcity['surplus'][O_TRADE]; 
+
+        city_gls = pcity['prod'][O_GOLD]+"/" 
+                 + pcity['prod'][O_LUXURY]+"/"
+                 + pcity['prod'][O_SCIENCE]; 
+
+        city_growth = city_turns_to_growth_text(pcity);
+        city_growth = city_growth.padStart(9, ' ').replace(/\s/g, '&nbsp;&nbsp;');   
+        city_food_stock = pcity['food_stock'].toString().padStart(3, ' ').replace(/\s/g, '&nbsp;&nbsp;');   //up to 3 digits
+        city_granary_size = pcity['granary_size'].toString().padStart(3, ' ').replace(/\s/g, '&nbsp;&nbsp;');   //up to 3 digits
+        city_buy_cost = "<u>"+pcity['buy_cost'];
+          city_buy_cost = city_buy_cost.toString().padStart(7, ' ').replace(/\s/g, '&nbsp;&nbsp;') + "</u>" // buy cost is up to 4 digits + 3 for "<u>"
+
+        city_list_html += "<tr class='cities_row' id='cities_list_" + pcity['id'] + "'>"+td_click_html
+                + pcity['name'] + "</td>"+td_click_html + population_string + "</td>"+td_click_html + city_size_string + "</td>"
+                + "</td>"+td_click_html + happy_people+"</td>"+td_click_html + content_people+"</td>"
+                + td_click_html+unhappy_angry_people+"</td>"+td_click_html + get_city_state(pcity) + "</td>"+td_click_html 
+                + city_fpt + "</td>" + td_click_html + city_gls + td_click_html + city_growth + "</td>"
+                + td_click_html+ city_food_stock + "/" + city_granary_size + "</td>"+td_change_prod_html +"<u>"+prod_type['name']+"</u> "+"</td>"
+                + td_click_html+turns_to_complete_str+" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "+progress_string +"</td>"+td_buy_html+city_buy_cost+"</td>"
+        city_list_html += "</tr>";
     }
   }
 
