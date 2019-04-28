@@ -2014,7 +2014,8 @@ function update_city_screen()
       
       turns_to_complete = get_city_production_time(pcity);
       if (get_city_production_time(pcity) == FC_INFINITY) {
-          turns_to_complete_str = "-"; //client does not know how long production will take yet.
+          turns_to_complete_str = "---";   //client does not know how long production will take yet.
+          turns_to_complete_str = turns_to_complete_str.padStart(4, ' ').replace(/\s/g, '&nbsp;&nbsp;'); 
         } else {
           turns_to_complete_str = turns_to_complete.toString().padStart(3, ' ').replace(/\s/g, '&nbsp;&nbsp;');
 
