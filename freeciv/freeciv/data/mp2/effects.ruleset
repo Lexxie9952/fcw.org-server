@@ -839,7 +839,7 @@ reqs	=
       "NationGroup", "Barbarian", "Player", FALSE
     }
 
-[effect_airport]
+[effect_airport_v0]
 type    = "Veteran_Build"
 value	= 1
 reqs	=
@@ -849,7 +849,7 @@ reqs	=
       "UnitFlag", "NonMil", "Local", FALSE
       "UnitFlag", "NoVeteran", "Local", FALSE
     }
-[effect_airport_0aa]
+[effect_airport_v1]
 type    = "Veteran_Build"
 value	= 1
 reqs	=
@@ -859,7 +859,17 @@ reqs	=
       "UnitFlag", "NonMil", "Local", FALSE
       "UnitFlag", "NoVeteran", "Local", FALSE
     }
-[effect_airport_0a]
+[effect_airport_v2]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Airport", "City", TRUE
+      "UnitClass", "AirPillage", "Local", TRUE
+      "UnitFlag", "NonMil", "Local", FALSE
+      "UnitFlag", "NoVeteran", "Local", FALSE
+    }
+[effect_airport_v3]
 type    = "Veteran_Build"
 value	= 1
 reqs	=
@@ -869,8 +879,7 @@ reqs	=
       "UnitFlag", "NonMil", "Local", FALSE
       "UnitFlag", "NoVeteran", "Local", FALSE
     }
-
-[effect_airport_0b]
+[effect_airport_v4]
 type    = "Veteran_Build"
 value	= 1
 reqs	=
@@ -881,7 +890,7 @@ reqs	=
       "UnitFlag", "NoVeteran", "Local", FALSE
     }
 
-[effect_airport_1]
+[effect_airport_h1]
 type    = "HP_Regen"
 value	= 100
 reqs	=
@@ -889,7 +898,7 @@ reqs	=
       "Building", "Airport", "City"
       "UnitClass", "Air", "Local"
     }
-[effect_airport_1aa]
+[effect_airport_h2]
 type    = "HP_Regen"
 value	= 100
 reqs	=
@@ -897,8 +906,15 @@ reqs	=
       "Building", "Airport", "City"
       "UnitClass", "AirProtect", "Local"
     }
-    
-[effect_airport_1a]
+[effect_airport_h3]
+type    = "HP_Regen"
+value	= 100
+reqs	=
+    { "type", "name", "range"
+      "Building", "Airport", "City"
+      "UnitClass", "AirPillage", "Local"
+    }
+[effect_airport_h4]
 type    = "HP_Regen"
 value	= 100
 reqs	=
@@ -906,7 +922,6 @@ reqs	=
       "Building", "Airport", "City"
       "UnitClass", "Helicopter", "Local"
     }
-
 [effect_airport_2]
 type    = "Airlift"
 value	= 1

@@ -1323,6 +1323,7 @@ set =
       "landmass", 63, FALSE 
       "minplayers", 0, FALSE
       "nationset", "all", FALSE 
+      "nuclearwinter_percent", 20, FALSE
       "revolen", 1, FALSE
       "separatepoles", FALSE, FALSE
       "specials", 350, FALSE

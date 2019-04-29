@@ -31,6 +31,7 @@ flags =
     _("Transform")
      _("CanRoad")
     _("CanFortress")
+    _("Bombarder")
     _("AirAttacker"), _("AEGIS Cruiser has 3x defense against this unit.")
     _("Horse"), _("Attack value halved when attacking Pikemen.\ Knights defend at 3 when attacked by this unit.")
     _("FootSoldier"), _("Knights defend at 2 when attacked by this unit.")
@@ -161,6 +162,14 @@ min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
 flags         = "Missile", "Unreachable", "DoesntOccupyTile", "Airliftable"
+
+; missile flag not class, indicates suicide explosion and possibly other things.
+[unitclass_bomb]
+name          = _("?unitclass:Bomb")
+min_speed     = 1
+hp_loss_pct   = 0
+hut_behavior  = "Frighten"
+flags         = "Unreachable", "DoesntOccupyTile", "Airliftable", "Missile" 
 
 [unitclass_land]
 ; /* TRANS: Unit class: used adjectivally */
@@ -1604,8 +1613,8 @@ name          = _("Howitzer")
 class         = "Land"
 tech_req      = "Robotics"
 obsolete_by   = "None"
-graphic       = "u.howitzer"
-graphic_alt   = "-"
+graphic       = "u.howitzer_o"
+graphic_alt   = "u.howitzer"
 sound_move    = "m_howitzer"
 sound_move_alt = "m_generic"
 sound_fight   = "f_howitzer"
@@ -1839,13 +1848,14 @@ hitpoints     = 20
 firepower     = 2
 move_rate     = 16
 vision_radius_sq = 12
-transport_cap = 0
+transport_cap = 1
 fuel          = 2
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon"
+cargo         = "Bomb"
 bonuses       =
    { "flag", "type", "value"
      "Marines", "DefenseMultiplier", 2    
@@ -1865,6 +1875,60 @@ helptext      = _("\
 Heavy Bombers are specialized airborne units that are good for\
  eliminating strong and well-defended ground targets, or multiple\
  weaker targets with multiple attacks. They can't attack airborne units.\
+ May carry one Bomb.\
+"), _("\
+TIP: Getting bombed is very noticeable to an enemy, and taken very\
+ seriously. Make sure you choose targets far from any air defences,\
+ or be sure to bring adequate escort protection.\
+")
+
+[unit_ultra_heavy_bomber]
+name          = _("Heavy Bomber II")
+class         = "Air"
+tech_req      = "Rocketry"
+obsolete_by   = "Jet Bomber"
+graphic       = "u.ultra_heavy_bomber_o"
+graphic_alt   = "u.bomber"
+sound_move    = "m_bomber"
+sound_move_alt = "m_generic"
+sound_fight   = "f_bomber"
+sound_fight_alt = "f_generic"
+build_cost    = 135
+pop_cost      = 0
+attack        = 13
+defense       = 4
+hitpoints     = 20
+firepower     = 2
+move_rate     = 20
+vision_radius_sq = 12
+transport_cap = 2
+fuel          = 2
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+targets       = "Balloon"
+cargo         = "Bomb"
+bombard_rate = 10
+bonuses       =
+   { "flag", "type", "value"
+     "Marines", "DefenseMultiplier", 2    
+   }
+flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape", "CantReachAir", "NeverProtects"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:ace")
+veteran_raise_chance = 40, 25, 16, 0
+veteran_work_raise_chance = 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200
+veteran_move_bonus = 0, 0, 0, 0
+roles         = ""
+helptext      = _("\
+Heavy Bomber II offers only slight improvement in attack, but higher altitude 
+ offers considerable improvement in defense. Its most notable feature,\
+ however, is its considerably greater range. May carry two Bombs.\
 "), _("\
 TIP: Getting bombed is very noticeable to an enemy, and taken very\
  seriously. Make sure you choose targets far from any air defences,\
@@ -2002,11 +2066,11 @@ Jet Fighters upgrade the Fighter with improved attack and defense, plus a higher
 
 [unit_jet_bomber]
 name          = _("Jet Bomber")
-class         = "AirPillage"                    ; to-do: AirPillage class so it can pillage.
-tech_req      = "Space Flight"           ; Later: Jet Propulsion reqs Rocketery/Robotics
-obsolete_by   = "None"                   ; not upgradeable; to-do: heavy bomber obsoletes to this, not stealth
-graphic       = "u.jet_bomber"
-graphic_alt   = "u.stealth_bomber"
+class         = "AirPillage"                   
+tech_req      = "Space Flight"           
+obsolete_by   = "None"                   
+graphic       = "u.jet_bomber_o"
+graphic_alt   = "u.bomber"
 sound_move    = "m_bomber"
 sound_move_alt = "m_generic"
 sound_fight   = "f_bomber"
@@ -2019,7 +2083,7 @@ hitpoints     = 20
 firepower     = 2
 move_rate     = 18
 vision_radius_sq = 12
-transport_cap = 0
+transport_cap = 3
 fuel          = 3
 uk_happy      = 1
 uk_shield     = 1
@@ -2027,8 +2091,9 @@ uk_food       = 0
 uk_gold       = 0
 bonuses       =
    { "flag", "type", "value"
-     "Marines", "DefenseMultiplier", 6        ; needs new class so it can do CanPillage
+     "Marines", "DefenseMultiplier", 6        
    }
+cargo         = "Bomb"
 flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape", "CantReachAir", "NeverProtects"
 veteran_names =
   _("?vet_rank:green"),
@@ -2050,6 +2115,7 @@ Jet Bombers are high-altitude long-range air units that are good for\
  and have challenges in finding safe flight paths.\
  Jet Bombers can carry very heavy payloads, allowing carpet-bombing to\
  pillage enemy tiles from the air.\
+ May carry three Bombs.\
 "), _("\
 TIP: Getting bombed is very noticeable to an enemy, and taken very\
  seriously. Make sure you choose targets far from any air defences,\
@@ -2111,7 +2177,7 @@ name          = _("Stealth Bomber")
 class         = "Air"
 tech_req      = "Stealth"
 obsolete_by   = "None"
-graphic       = "u.stealth_bomber"
+graphic       = "u.stealth_bomber_o"
 graphic_alt   = "u.stealth_bomber"
 sound_move    = "m_stealth_bomber"
 sound_move_alt = "m_generic"
@@ -2125,7 +2191,7 @@ hitpoints     = 20
 firepower     = 2
 move_rate     = 24 
 vision_radius_sq = 12
-transport_cap = 0
+transport_cap = 2
 fuel          = 2
 uk_happy      = 1
 uk_shield     = 1
@@ -2137,6 +2203,7 @@ bonuses       =
      "Marines", "DefenseMultiplier", 2    
    }
 vision_layer  = "Stealth"
+cargo         = "Bomb"
 flags         = "FieldUnit", "AirAttacker",
                 "HasNoZOC", "Unbribable", "CanEscape", "CantReachAir", "NeverProtects"
 veteran_names =
@@ -2153,7 +2220,7 @@ helptext      = _("\
 The strongest Bomber, with improved attack and a higher movement\
  radius. Stealth Bombers can't be seen unless adjacent to an\
  enemy, and may slip through the air to return home on the same\
- turn.\
+ turn. May carry two Bombs.\
 ")
 
 [unit_trireme]
@@ -2713,10 +2780,62 @@ TIP:  A handful of these can successfully keep the waters around\
  your treasured homeland free of enemy ships.\
 ")
 
+[unit_atom_bomb]
+name          = _("Atom Bomb")
+class         = "Bomb"
+tech_req      = "Nuclear Fission"
+obsolete_by   = "None"
+graphic       = "u.atom_bomb"
+graphic_alt   = "-"
+sound_move    = "m_nuclear"
+sound_move_alt = "m_generic"
+sound_fight   = "f_nuclear"
+sound_fight_alt = "f_generic"
+build_cost    = 150
+pop_cost      = 0
+attack        = 99
+defense       = 0
+hitpoints     = 10
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 0
+transport_cap = 0
+fuel          = 1
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+disembarks    = "Air", "AirPillage"
+flags         = "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable", "AirAttacker", "Unreachable"
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 0
+roles         = ""
+helptext      = _("\
+You can build Atom Bombs when you have Nuclear Fission, and\
+ the Manhattan Project wonder has been built by any player.\
+"), _("\
+Careful logistics are needed for a Bomber to drop an Atom Bomb and survive the\
+ blast. A Bomber may 'drop' the bomb within two tiles of\
+ its location. First, 'drop' the bomb by making it leave the aircraft\
+ to an adjacent tile. Next, fly the Bomber out of range. Finally, attack\
+ the target or execute a Detonate command by pressing D twice.\
+ On impact, the blast will destroy any unit in an area 3 tiles wide\
+ (3x3 squares for rectangular grids), including friendly units.\
+ Any city within the blast area loses half its population, and\
+ land tiles within the blast area are subject to nuclear fallout.\
+"), _("\
+Nuclear fallout reduces tile output and increases the risk of global\
+ nuclear winter; see the help on Fallout.\
+")
+
 [unit_nuclear]
 name          = _("Nuclear")
 class         = "Missile"
-tech_req      = "Rocketry"
+tech_req      = "Space Flight"
 obsolete_by   = "None"
 graphic       = "u.nuclear"
 graphic_alt   = "-"

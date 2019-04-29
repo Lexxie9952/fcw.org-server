@@ -695,22 +695,19 @@ target_reqs    =
       "MaxUnitsOnTile", "1", "Local", TRUE
     }
 
-;/*    
-;
-;[actionenabler_bombard]
-;action = "Bombard"
-;actor_reqs    =
-;    { "type",         "name",        "range", "present"
-;      "UnitFlag",     "Bombarder",   "Local", TRUE
-;      "UnitState",    "Transported", "Local", FALSE
-;      "MinMoveFrags", "1",           "Local", TRUE
-;      "DiplRel",      "War",         "Local", TRUE
-;   }
-;target_reqs    =
-;    { "type",   "name", "range", "present"
-;      "TerrainClass", "Oceanic", "Local", FALSE
-;    }
-;*/
+[actionenabler_bombard]
+action = "Bombard"
+actor_reqs    =
+    { "type",         "name",        "range", "present"
+      "UnitFlag",     "Bombarder",   "Local", TRUE
+      "UnitState",    "Transported", "Local", FALSE
+      "MinMoveFrags", "1",           "Local", TRUE
+      "DiplRel",      "War",         "Local", TRUE
+   }
+target_reqs    =
+    { "type",   "name", "range", "present"
+      "TerrainClass", "Oceanic", "Local", FALSE
+    }
 
 [actionenabler_build_city_pioneer]
 action = "Found City"
@@ -766,7 +763,7 @@ target_reqs    =
       "UnitClass",     "Air",   "Local", FALSE                  ;LAND UNITS CAN'T EXPEL AWACS
       "UnitState",     "OnDomesticTile", "Local",  FALSE
       "Terrain",       "Mountains",      "Local",  FALSE         ;Can't expel people hiding in the mountains
-       "MaxUnitsOnTile", "1", "Local", TRUE
+      "MaxUnitsOnTile", "1", "Local", TRUE
     }
 
 ;Air expel: must be be air-to-air expelling from an aggressor air unit.
@@ -1544,6 +1541,7 @@ set =
       "landmass", 63, FALSE 
       "minplayers", 0, FALSE
       "nationset", "all", FALSE 
+      "nuclearwinter_percent", 20, FALSE
       "revolen", 1, FALSE
       "separatepoles", FALSE, FALSE
       "specials", 350, FALSE
@@ -1551,7 +1549,7 @@ set =
       "startunits", "cccwwwxxa", FALSE
       "techpenalty", 0, FALSE
       "tinyisles", FALSE, FALSE
-      "topology", "WRAPX|ISO", FALSE
+      "topology", "WRAPX", FALSE
       "trading_city", "DISABLED", FALSE
       "unreachableprotects", "ENABLED", FALSE
     }
