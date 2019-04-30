@@ -169,7 +169,7 @@ name          = _("?unitclass:Bomb")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
-flags         = "Unreachable", "DoesntOccupyTile", "Airliftable", "Missile" 
+flags         = "Unreachable", "DoesntOccupyTile", "Airliftable" 
 
 [unitclass_land]
 ; /* TRANS: Unit class: used adjectivally */
@@ -2806,7 +2806,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 disembarks    = "Air", "AirPillage"
-flags         = "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable", "AirAttacker", "Unreachable"
+flags         = "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable", "AirAttacker"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0
