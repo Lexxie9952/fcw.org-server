@@ -1454,8 +1454,10 @@ function city_worklist_dialog(pcity)
   }
 
   var headline = prod_img_html + "<div id='prod_descr'>" 
-    + (is_small_screen() ? " " : " Production: ") 
+    + (is_small_screen() ? " " : " Producing: ") 
     + (prod_type != null ? prod_type['type']['name'] : "None");
+
+  headline += " &nbsp; (" + get_production_progress(pcity) + ")";
 
   if (turns_to_complete != FC_INFINITY) {
     headline += ", turns: " + turns_to_complete;
