@@ -762,7 +762,7 @@ target_reqs    =
       "UnitFlag",      "Expellable",     "Local", TRUE
       "UnitClass",     "Air",   "Local", FALSE                  ;LAND UNITS CAN'T EXPEL AWACS
       "UnitState",     "OnDomesticTile", "Local",  FALSE
-      "Terrain",       "Mountains",      "Local",  FALSE         ;Can't expel people hiding in the mountains
+      "Terrain",       "Mountains",      "Local",  FALSE        ;Can't expel people hiding in the mountains
       "MaxUnitsOnTile", "1", "Local", TRUE
     }
 
