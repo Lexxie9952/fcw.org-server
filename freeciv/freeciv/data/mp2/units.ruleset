@@ -1883,7 +1883,7 @@ TIP: Getting bombed is very noticeable to an enemy, and taken very\
 ")
 
 [unit_ultra_heavy_bomber]
-name          = _("Heavy Bomber II")
+name          = _("Strategic Bomber")
 class         = "Air"
 tech_req      = "Rocketry"
 obsolete_by   = "Jet Bomber"
@@ -1926,7 +1926,7 @@ veteran_power_fact = 100, 150, 175, 200
 veteran_move_bonus = 0, 0, 0, 0
 roles         = ""
 helptext      = _("\
-Heavy Bomber II offers only slight improvement in attack, but higher altitude 
+The Strategic Bomber offers only slight improvement in attack, but higher altitude 
  offers considerable improvement in defense. Its most notable feature,\
  however, is its considerably greater range. May carry two Bombs.\
 "), _("\
