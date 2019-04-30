@@ -1293,7 +1293,7 @@ sound		= "w_great_library"
 sound_alt	= "w_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
-Reduces corruption by 50% in all your cities.\
+Gives the same effect as a Courthouse in all your cities.\
 ")
 
 [building_great_wall]
