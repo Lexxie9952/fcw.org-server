@@ -201,9 +201,6 @@ function government_max_rate(govt_id)
     // this should not happen
     return 100;
   }
-
-
-
 }
 
 /**************************************************************************

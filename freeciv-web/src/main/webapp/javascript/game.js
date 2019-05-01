@@ -77,7 +77,7 @@ function city_size_sum(playerno) {
   for (var city_id in cities) {
     var pcity = cities[city_id];
     if (playerno == pcity['owner']) {
-      population += pcity['size'];
+      population += (pcity['size']+1);  // +1 because size 1 cities have 2 citizens
     }
   }
   return population;   // TO DO: return population.toLocaleString(); -- if we want separators for when it goes over 1k
@@ -124,7 +124,7 @@ function update_game_status_panel() {
     status_html += "</span>";
 
     if (!is_small_screen()) status_html += "<span style='cursor:pointer;' onclick='javascript:request_report(2)'>"; // type 2 is demographics
-    if (!is_small_screen()) status_html += "&nbsp; <i class='fa fa-child' aria-hidden='true' title='Total Size of all Cities'></i>: ";
+    if (!is_small_screen()) status_html += "&nbsp; <i class='fa fa-child' aria-hidden='true' title='Total Citizens in all Cities'></i>: ";
     if (!is_small_screen()) status_html += "<b>" + city_size_sum(client.conn.playing.playerno) + "</b>  &nbsp;&nbsp;";
     if (!is_small_screen()) status_html += "<i class='fa fa-clock-o' aria-hidden='true' title='Year (turn)'></i>: <b>" + get_year_string() + "</b> &nbsp;&nbsp;</span>";
     status_html += "<i class='fa fa-money' aria-hidden='true' title='Gold (net income)'></i>: ";
