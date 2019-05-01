@@ -1667,7 +1667,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "Unbribable", "HasNoZOC", "NeverProtects"
+flags         = "Unbribable", "HasNoZOC", "NeverProtects", "NonMil"
 roles         = ""
 helptext      = _("\
 Balloons are the first air unit. They are excellent for\
