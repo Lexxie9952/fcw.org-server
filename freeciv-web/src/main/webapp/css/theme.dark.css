@@ -9,16 +9,20 @@
 	text-align: left;
 	background-color: #000;
 	border-spacing: 0;
+	border-width: 0;          /* added by Lexxie to experiment */
 }
 
 /* header */
 .tablesorter-dark th,
 .tablesorter-dark thead td {
 	padding: 4px;
+	padding: 4x 0px;                                 /* added by Lexxie to experiment */
 	font: bold 12px/20px Arial, Sans-serif;
 	color: #fff;
 	background-color: #000;
 	border-collapse: collapse;
+	border-spacing: 0;        /* added by Lexxie to experiment */
+	border-width: 0;          /* added by Lexxie to experiment */
 }
 .tablesorter-dark thead th {
 	border-bottom: #333 2px solid;
@@ -26,27 +30,38 @@
 .tablesorter-dark .header,
 .tablesorter-dark .tablesorter-header {
 	padding: 4px 20px 4px 20px;
+	padding: 4px 0px 4px 0px;    /* added by Lexxie to experiment */
+	
 	cursor: pointer;
+
+	/*																							removed by Lexxie to experiment 
 	background-image: url(data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw==);
-    background-position: -5px;
+
+  background-position: -5px;
 	background-repeat: no-repeat;
+		*/
 }
 .tablesorter-dark thead .headerSortUp,
 .tablesorter-dark thead .tablesorter-headerSortUp,
 .tablesorter-dark thead .tablesorter-headerAsc {
+	/*																																	removed by Lexxie to experiment
 	background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAAP///////yH5BAEAAAEALAAAAAAVAAQAAAINjI8Bya2wnINUMopZAQA7);
+	*/
 	border-bottom: #888 1px solid;
 }
 .tablesorter-dark thead .headerSortDown,
 .tablesorter-dark thead .tablesorter-headerSortDown,
 .tablesorter-dark thead .tablesorter-headerDesc {
+	/*           																																removed by Lexxie to experiment
 	background-image: url(data:image/gif;base64,R0lGODlhFQAEAIAAAP///////yH5BAEAAAEALAAAAAAVAAQAAAINjB+gC+jP2ptn0WskLQA7);
+	*/
 	border-bottom: #888 1px solid;
 }
 .tablesorter-dark thead .sorter-false {
 	background-image: none;
 	cursor: default;
 	padding: 4px;
+	padding: 4px 0px;             /* added by Lexxie to experiment */
 }
 
 /* tfoot */
@@ -61,7 +76,8 @@
 
 /* tbody */
 .tablesorter-dark td {
-	padding: 4px;
+/*	padding: 4px;								removed by Lexxie to experiment */
+	padding: 4px 0px;
 	background-color: #000;
 	border-bottom: #333 1px solid;
 	color: #ccc;
@@ -140,8 +156,9 @@ caption {
 	/*** *********************************************** ***/
 	/*** change this padding to modify the thickness     ***/
 	/*** of the closed filter row (height = padding x 2) ***/
-	padding: 2px;
+/*	padding: 2px;                                              removed by Lexxie to experiment */
 	/*** *********************************************** ***/
+	padding: 2px 0px;         /* added by Lexxie to experiment */
 	margin: 0;
 	line-height: 0;
 	cursor: pointer;
@@ -164,6 +181,8 @@ caption {
 	height: auto;
 	margin: 4px;
 	padding: 4px;
+	margin: 2px 0px;
+	padding: 4px 0px;                            /* added by Lexxie to experiment */
 	background-color: #111;
 	border: 1px solid #222;
 	color: #ddd;
