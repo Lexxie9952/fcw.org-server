@@ -1837,11 +1837,15 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 'T':
       key_unit_unload();
     break;
-
+      
     case 'C':
       if (ctrl) {
         show_citybar = !show_citybar;
-      } else if (current_focus.length > 0) {
+      } /* else if (alt) {
+        set_default_mapview_inactive();
+        update_city_screen();
+        $("#tabs-cities").show();  */ // This didn't work for alt-c to do cities tab, need to figure it out later
+        else if (current_focus.length > 0) {
         auto_center_on_focus_unit();
       }
     break;

@@ -186,6 +186,103 @@ button {
   text-decoration:underline;
 }
 
+/* used for "/" to contrast with numbers which they divide */
+.contrast_text {
+  color: #f8faff;
+  font-weight: 700;
+}
+.non_priority {     /* not all text should be bright-white, if it is less critical or informative */
+  color: #d4cfb9;
+}
+.hint_of_green {
+  color: #c4e9c4;
+  text-align: right;
+  padding-top: 0 px;
+  padding-right: 0 px;
+  max-width: 2em;
+  margin-right: -2px;
+}
+.hint_of_blue {
+  color: #d6d6f1;
+  text-align: right;
+  padding-top: 0 px;
+  padding-right: 0 px;
+  max-width: 2em;
+  margin-right: -2px;
+}
+.hint_of_orange {
+  color: #ffecc7;
+  text-align: right;
+  padding-top: 0 px;
+  padding-right: 0 px;
+  max-width: 2em;
+  margin-right: -2px;
+}
+.negative_text {
+  color: #c55c55;
+  padding-top: 0 px;
+  padding-right: 0 px;
+  max-width: 2em;
+  margin-right: -2px;
+}
+.food_text {
+  color: #9bff7d;
+  padding-top: 0 px;
+  padding-right: 0 px;
+  max-width: 2em;
+  margin-right: 0px;
+}
+.negative_food_text {
+  color: #c55c55;
+  padding-top: 0 px;
+  padding-right: 0 px;
+  max-width: 3em;
+  margin-right: 0px;
+}
+.prod_text {
+  color: #ffffff;
+  padding-top: 0 px;
+  padding-right: 0 px;
+  max-width: 2em;
+  margin-right: 0px;
+}
+.trade_text {
+  color: #fdff7d;
+  padding-top: 0 px;
+  padding-right: 0 px;
+  max-width: 2em;
+  margin-right: 0px;
+}
+.gold_text {
+  color: #ffd52c; 
+  padding-top: 0 px;
+  padding-right: 0 px;
+  max-width: 2em;
+  margin-right: 0px;
+}
+.lux_text {
+  color: #e2c5ee;
+  padding-top: 0 px;
+  padding-right: 0 px;
+  max-width: 2em;
+  margin-right: 0px;
+}
+.sci_text {
+  color: #98fff3;
+  padding-top: 0 px;
+  padding-right: 0 px;
+  max-width: 2em;
+  margin-right: 0px;
+}
+
+
+/* numbers align digits in ISO accounting format */
+.number_element {
+  text-align: right;
+  padding-left: 0em;
+  color: #beb38f;
+}
+
 #manual_non_helptext_facts {
   -moz-column-width: 20em;
   -webkit-column-width: 20em;
@@ -913,7 +1010,8 @@ button {
 }
 
 .cities_row td {
-    padding-left: 20px
+    padding-left: 20px;
+    padding-left: 0px;        /* added by Lexxie to experiment */ 
 }
 
 #wiki_dialog {
@@ -1103,3 +1201,30 @@ li.tech-both::before {
   margin-left: 0;
   right: .2em;
 }
+
+.row_right {
+  text-align: right;
+}
+
+/* these were going to be used in city.js but weren't i don't think, they could be deleted */
+.halfsize-img {
+  width: 50%;
+  height: auto;
+  overflow: hidden;
+  text-align: left;
+  vertical-align: top;
+  white-space: pre-line;
+  margin: -5px;
+  padding: 0px;
+  transform: scale(0.5);
+  float:left;
+  max-height: 24px;
+  border-width: 0px;
+  border-style: none;
+}
+
+.quartersize-image {
+  width: 25%;
+  height: auto;
+}
+

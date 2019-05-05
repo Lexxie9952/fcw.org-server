@@ -255,7 +255,7 @@ function show_city_dialog(pcity)
                        + "Change in: " + city_turns_to_growth_text(pcity));
 
   var prod_type = get_city_production_type_sprite(pcity);
-  $("#city_production_overview").html("Producing: " + (prod_type != null ? prod_type['type']['name'] : "None"));
+  $("#city_production_overview").html("<b>" + (prod_type != null ? prod_type['type']['name']+"</b>" : "None</b>"));
 
   turns_to_complete = get_city_production_time(pcity);
 
@@ -534,7 +534,7 @@ function get_production_progress(pcity)
 
   if (pcity['production_kind'] == VUT_UTYPE) {
     var punit_type = unit_types[pcity['production_value']];
-    return pcity['shield_stock'] + "/"
+    return pcity['shield_stock'] + " / "
            + universal_build_shield_cost(pcity, punit_type);
   }
 
@@ -543,7 +543,7 @@ function get_production_progress(pcity)
     if (improvement['name'] == "Coinage") {
       return " ";
     }
-    return  pcity['shield_stock'] + "/"
+    return  pcity['shield_stock'] + " / "
             + universal_build_shield_cost(pcity, improvement);
   }
 
@@ -1028,9 +1028,13 @@ function city_turns_to_growth_text(pcity)
   if (turns == 0) {
     return "blocked";
   } else if (turns > 1000000) {
-    return "never";
-  } else if (turns < 0) {
+    return " ";
+  } else if (turns == -1) {
+    return "<b>* Starving in 1 turn</b>";  // plural to singular and bold message for starvation crisis
+  } else if (turns < -1) {
     return "Starving in " + Math.abs(turns) + " turns";
+  } else if (turns ==1) {
+    return "<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 turn</b>";
   } else {
     return turns + " turns";
   }
@@ -1454,8 +1458,9 @@ function city_worklist_dialog(pcity)
   }
 
   var headline = prod_img_html + "<div id='prod_descr'>" 
-    + (is_small_screen() ? " " : " Producing: ") 
-    + (prod_type != null ? prod_type['type']['name'] : "None");
+    + (is_small_screen() ? "<b>" : "<b>") 
+    + (prod_type != null ? prod_type['type']['name'] : "None")
+    + "</b>";
 
   headline += " &nbsp; (" + get_production_progress(pcity) + ")";
 
@@ -1969,39 +1974,53 @@ function update_city_screen()
     sortList.push([cell.cellIndex, 1]);
   });
 
-  var happy_citizen_sprite = get_specialist_image_sprite("citizen.happy_1")  
-  var content_citizen_sprite = get_specialist_image_sprite("citizen.content_1")
-  var unhappy_citizen_sprite = get_specialist_image_sprite("citizen.unhappy_0")
-
   var citizen_types = ["unhappy","content","happy"]
   var sprite;
   var city_list_citizen_html = "";
-  
+  var updown_sort_arrows = "<img class='lowered_gov' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='>";
+  // Used for generating micro-icon of current prooduction:
+  var prod_sprite;
+  var prod_img_html;
+  // Generate table header for happy,content,unhappy citizen icons:
   for (var i = 0; i < 3; i++) {
     sprite = get_specialist_image_sprite("citizen." + citizen_types[i] + "_1");
-    city_list_citizen_html = "<th id='city_list_citizen_"+ citizen_types[i]+"' class='' style='padding-right:0px;' title=''><div style='background: transparent url("+ sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'></div></th>" + city_list_citizen_html
+    city_list_citizen_html = "<th id='city_list_citizen_"+ citizen_types[i]+"' class='' style='padding-right:0px; margin-right:-3px;' title=''><div style='float:right; background: transparent url("
+    + sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'></div></th>" 
+    + city_list_citizen_html
   }
-  
-  var city_list_html = "<table class='tablesorter' id='city_table' border=0 cellspacing=0>"
-        + "<thead><tr><th>Name</th><th>Population</th><th>Size</th>"+city_list_citizen_html+"<th style='padding-right:40px'>State</th>"
-        + "<th title='Food/Production/Trade output' style=padding-right:0px'>Food/Prod/<br>Trade</th><th title='Gold/Luxury/Science output' style='padding-right:0px'>Gold/<br>Lux/Sci</th>"
-        + "<th>Grows In</th><th>Granary</th><th title='Click to change'>Producing</th>"
-        + "<th title='Turns to finish &nbsp;&nbsp; Prod completed/needed'>Turns &nbsp;&nbsp; Progress</th><th title='Click to buy'>Cost</th>"
+
+  var city_list_html = "<table class='tablesorter-dark' id='city_table' style='border=0px;border-spacing=0;padding=0;'>"
+        + "<thead><tr><th style='text-align:right;'>Name"+updown_sort_arrows+"</th><th style='text-align:right;'>Size"+updown_sort_arrows+"</th>"+city_list_citizen_html
+        + "<th style='text-align:right;'>State<img class='lowered_gov' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='> </th>"
+        + "<th id='food' title='Food surplus' class='food_text' style='text-align:right;padding-right:0px'><img style='margin-right:-6px; margin-top:-3px;' class='lowered_gov' src='/images/wheat.png'></th>"
+        + "<th title='Production surplus (shields)' class='prod_text' style='text-align:right;padding-right:0px'> <img class='lowered_gov' src='/images/shield14x18.png'></th>"
+        + "<th title='Trade' class='trade_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/trade.png'></th>"
+        + "<th title='Gold' class='gold_text' style='text-align:right;padding-right:0px;'><img style='margin-left:50px;' class='lowered_gov' src='/images/gold.png'></th>"
+        + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='lowered_gov' src='/images/lux.png'></th>"
+        + "<th title='Science (bulbs)' class='sci_text' style='text-align:right'><img class='lowered_gov' src='/images/sci.png'></th>"
+        + "<th style='text-align:right;'>Grows In"+updown_sort_arrows+"</th><th style='text-align:right;'>Granary"
+              +updown_sort_arrows+"</th><th style='text-align:right;' title='Click to change'>Producing"+updown_sort_arrows+"</th>"
+        + "<th style='text-align:right;' title='Turns to finish &nbsp;&nbsp; Prod completed/needed'>Turns"+updown_sort_arrows
+              +"&nbsp; Progress</th><th style='text-align:right;' title='Click to buy'>Cost"+updown_sort_arrows+"</th>"
         + "</tr></thead><tbody>";
         
   var count = 0;
   var happy_people, content_people, unhappy_angry_people;
-  var city_fpt, city_gls;   // food prod trade, gold luxury science
-  var city_growth, city_food_stock;   // grows in x turns, how much is in grain storage
+  var city_food, city_prod, city_trade;
+  var city_gold, city_lux, city_sci; 
+  var city_growth, city_food_stock;       // grows in x turns, how much is in grain storage
   var city_granary_size, city_buy_cost;   // grain needed to grow, cost to buy city's production
+  var city_state; 
+  var adjust_oversize = "";               // for style-injecting margin/alignment adjustment on oversize city production images
 
   for (var city_id in cities){
      // shortcut for replacing <td> tags with clickable <td> tags that take to city dialogue:
     var pcity = cities[city_id]
 
-    var td_click_html = "<td onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'>";
-    var td_buy_html =   "<td onclick='javascript:request_city_id_buy("+ pcity['id'] + ");'>";
-    var td_change_prod_html = "<td onclick='javascript:city_change_prod("+ pcity['id'] + ");'>";
+    var td_click_html = "<td style='padding-right:1em; text-align:right;' onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'>";
+    var td_click2_html = "<td style='text-align:right;' onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'>";
+    var td_buy_html =   "<td style='padding-right:1em; text-align:right;' onclick='javascript:request_city_id_buy("+ pcity['id'] + ");'>";
+    var td_change_prod_html = "<td style='text-align:right;' onclick='javascript:city_change_prod("+ pcity['id'] + ");'>";
 
     if (client.conn.playing != null && city_owner(pcity) != null && city_owner(pcity).playerno == client.conn.playing.playerno) {
       count++; 
@@ -2010,48 +2029,129 @@ function update_city_screen()
       var progress_string;          // accumulated shields/total shields needed
 
       // max city size of 40 generates numbers with 9 characters max, pad the string with 10 so the numbers align better:
-      var population_string = numberWithCommas(city_population(pcity)*1000).toString().padStart(10, ' ').replace(/\s/g, '&nbsp;&nbsp;');
+     // var population_string = "<span class='number_element'>"+numberWithCommas(city_population(pcity)*1000)+"</span>";
       // max city size is 2 digits, so pad a space to create right alignment:
-      var city_size_string = pcity['size'].toString().padStart(2, ' ').replace(/\s/g, '&nbsp;&nbsp;');
+      var city_size_string = "<span class='non_priority'>"+pcity['size'].toString().padStart(2, ' ').replace(/\s/g, '&nbsp;&nbsp;')+"</span>";
       
       turns_to_complete = get_city_production_time(pcity);
       if (get_city_production_time(pcity) == FC_INFINITY) {
-          turns_to_complete_str = "---";   //client does not know how long production will take yet.
-          turns_to_complete_str = turns_to_complete_str.padStart(4, ' ').replace(/\s/g, '&nbsp;&nbsp;'); 
+          turns_to_complete_str = "<span class='non_priority'>&nbsp;&nbsp; </span>";   //client does not know how long production will take yet.
         } else {
-          turns_to_complete_str = turns_to_complete.toString().padStart(3, ' ').replace(/\s/g, '&nbsp;&nbsp;');
+          turns_to_complete_str = "<span class='non_priority'>"+turns_to_complete.toString().padStart(3, ' ').replace(/\s/g, '&nbsp;&nbsp;')+"</span>";
 
-          if (turns_to_complete == 1) turns_to_complete_str = "<b>"+turns_to_complete_str+"</b>";  // bold to indicate finishing at TC 
+          if (turns_to_complete == 1) turns_to_complete_str = "<b>next</b>";  // bold to indicate finishing at TC 
         }
 
-        progress_string = get_production_progress(pcity).toString().padStart(7, ' ').replace(/\s/g, '&nbsp;&nbsp;'); // these are up to 7 long: 123/567
+        // construct coloured and formatted x/y shield progress string where x=shields invested and y=total shield cost:
+        var purchase;
+        var shields_invested = pcity['shield_stock'];
+        if (pcity['production_kind'] == VUT_UTYPE) {
+          purchase = unit_types[pcity['production_value']];
+        } else if (pcity['production_kind'] == VUT_IMPROVEMENT) {
+          purchase = improvements[pcity['production_value']];
+        }
+        if (purchase['name']=="Coinage") progress_string=" ";
+        else {
+          progress_string=shields_invested.toString().padStart(3, ' ').replace(/\s/g, '&nbsp;&nbsp;'); // invested shields max 3 digits
+          progress_string=progress_string + "<span class='contrast_text'>/</span>";
 
-        happy_people = pcity['ppl_happy'][FEELING_FINAL];
-        content_people = pcity['ppl_content'][FEELING_FINAL];
+          progress_string=progress_string + universal_build_shield_cost(pcity, purchase).toString().padStart(3, ' ').replace(/\s/g, '&nbsp;&nbsp;'); // invested shields max 3 digits
+          progress_string="<span class='non_priority'>"+progress_string+"</span>"
+        }
+        
+        happy_people   = "<span class='hint_of_green'>"+pcity['ppl_happy'][FEELING_FINAL]+"</span>";
+        content_people = "<span class='hint_of_blue'>" +pcity['ppl_content'][FEELING_FINAL]+"</span>";
         unhappy_angry_people = pcity['ppl_unhappy'][FEELING_FINAL]+pcity['ppl_angry'][FEELING_FINAL];
+        unhappy_angry_people = "<span class='hint_of_orange'>"+unhappy_angry_people+"</span>";
 
-        city_fpt = pcity['surplus'][O_FOOD]+"/"
-                 + pcity['surplus'][O_SHIELD]+"/"
-                 + pcity['surplus'][O_TRADE]; 
+        // PEACE, CELEBRATING, OR DISORDER:
+        city_state = get_city_state(pcity);
+        if (city_state == 'Celebrating') {
+          city_state = "<span class='hint_of_green'>"+city_state+"</span>";
+        } else if (city_state = 'Peace') {
+          city_state = "<span class='non_priority'>"+city_state+"</span>";
+        } else { // disorder 
+          city_state = "<span class='negative_text'>"+city_state+"</span>";
+        }
 
-        city_gls = pcity['prod'][O_GOLD]+"/" 
-                 + pcity['prod'][O_LUXURY]+"/"
-                 + pcity['prod'][O_SCIENCE]; 
+        // FPT
+        var food_check = pcity['surplus'][O_FOOD];
+        if (food_check > 0) {
+          city_food = "<td style='text-align:right;' class='food_text' onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'>"
+          + "<span class='food_text'>" + pcity['surplus'][O_FOOD]+"</span>" + "</td>";
+        } else if (food_check == 0) {
+          city_food = "<td style='text-align:right;' class='food_text' onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'>"
+          + " "+ "</td>";      // showing nothing is more informative to the eye than showing a numeral.
+        } else if (food_check < 0) {
+          city_food = "<td style='text-align:right;' class='negative_food_text' onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'>"
+          + "<span class='negative_food_text'>" + pcity['surplus'][O_FOOD]+"</span>" + "</td>";
+        }
+        city_prod = "<td style='text-align:right;' class='prod_text' onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'>"
+          + "<span class='prod_text'>" + pcity['surplus'][O_SHIELD]+"</span>" + "</td>";
+        city_trade= "<td style='text-align:right;' class='trade_text' onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'>"
+          + "<span class='trade_text'>" + pcity['surplus'][O_TRADE]+"</span>" + "</td>";
+        
+         // GLS
+        city_gold= "<td style='text-align:right;' class='gold_text' onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'>"
+          + "<span class='gold_text'>" + pcity['prod'][O_GOLD] +"</span>" +  "</td>"
+        city_lux = "<td style='text-align:right;' class='lux_text' onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'>"
+          + "<span class='lux_text'>" + pcity['prod'][O_LUXURY] +"</span>" +  "</td>";
+        city_sci = "<td style='text-align:right;' class='sci_text' onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'>"
+          + "<span class='sci_text'>" + pcity['prod'][O_SCIENCE] + "</span>" + "</td>";
 
+        // Calculate turns to grow or --- if not growing
         city_growth = city_turns_to_growth_text(pcity);
-        city_growth = city_growth.padStart(9, ' ').replace(/\s/g, '&nbsp;&nbsp;');   
-        city_food_stock = pcity['food_stock'].toString().padStart(3, ' ').replace(/\s/g, '&nbsp;&nbsp;');   //up to 3 digits
-        city_granary_size = pcity['granary_size'].toString().padStart(3, ' ').replace(/\s/g, '&nbsp;&nbsp;');   //up to 3 digits
-        city_buy_cost = "<u>"+pcity['buy_cost'];
-          city_buy_cost = city_buy_cost.toString().padStart(7, ' ').replace(/\s/g, '&nbsp;&nbsp;') + "</u>" // buy cost is up to 4 digits + 3 for "<u>"
+        if (city_growth.startsWith("<b>")) {
+          city_growth = city_growth.padStart(9, ' ').replace(/\s/g, '&nbsp;&nbsp;');   // keep bright white if Starving in 1 (which we know because it comes back with <b>)
+        } else { 
+          city_growth="<span class='non_priority'>" + city_growth.padStart(9, ' ').replace(/\s/g, '&nbsp;&nbsp;') + "</span>"; 
+        }
 
-        city_list_html += "<tr class='cities_row' id='cities_list_" + pcity['id'] + "'>"+td_click_html
-                + pcity['name'] + "</td>"+td_click_html + population_string + "</td>"+td_click_html + city_size_string + "</td>"
-                + "</td>"+td_click_html + happy_people+"</td>"+td_click_html + content_people+"</td>"
-                + td_click_html+unhappy_angry_people+"</td>"+td_click_html + get_city_state(pcity) + "</td>"+td_click_html 
-                + city_fpt + "</td>" + td_click_html + city_gls + td_click_html + city_growth + "</td>"
-                + td_click_html+ city_food_stock + "/" + city_granary_size + "</td>"+td_change_prod_html +"<u>"+prod_type['name']+"</u> "+"</td>"
-                + td_click_html+turns_to_complete_str+" &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "+progress_string +"</td>"+td_buy_html+city_buy_cost+"</td>"
+        city_food_stock = "<span class='non_priority'>" + pcity['food_stock'].toString().padStart(3, ' ').replace(/\s/g, '&nbsp;&nbsp;') +"</span>";   //up to 3 digits
+
+        city_granary_size = "<span class='non_priority'>" + pcity['granary_size'].toString().padStart(3, ' ').replace(/\s/g, '&nbsp;&nbsp;')+"</span>";   //up to 3 digits
+        
+        // Generate and align buy cost with link to buy, or blank if can't be bought because no shields remain.
+        if (pcity['buy_cost'] == 0) {
+          city_buy_cost = " ";   // blank is less visual noise than a 0.
+        } else city_buy_cost = "<u>"+pcity['buy_cost'];
+          city_buy_cost = city_buy_cost.toString().padStart(7, ' ').replace(/\s/g, '&nbsp;&nbsp;') + "</u>" // buy cost is up to 4 digits + 3 for "<u>"
+          city_buy_cost = "<div style='padding-right:12px;'>" + city_buy_cost + "</div>" // last column not forced to very edge of screen
+
+          // Generate micro-sprite for production  
+        prod_sprite = get_city_production_type_sprite(pcity);
+        prod_img_html = "";
+        if (prod_sprite != null) { 
+          sprite = prod_sprite['sprite'];
+          
+          adjust_oversize = (sprite['width']>64) ? "margin-right:-32px;" : "";  // "oversize" images are 32 pixels wider so need alignment
+          
+          prod_img_html = "<div style='max-height:24px; float:right; padding-left:0px padding-right:0px; content-align:right; margin-top:-14px;"
+                  + adjust_oversize+"'>"
+                  + "<div style='float:right; content-align:right;"
+                  + "background: transparent url("
+                  + sprite['image-src']
+                  + ");transform: scale(0.625); background-position:-" + sprite['tileset-x'] + "px -" + (sprite['tileset-y'])
+                  + "px;  width: " + (sprite['width']) + "px;height: " + (sprite['height']) + "px;"
+                  + " content-align: right;"
+                  + "vertical-align:top; float:right;'>"
+                  +"</div></div>";
+        }   
+
+        city_list_html += "<tr class='cities_row' id='cities_list_" + pcity['id'] + "'>"
+                + td_click_html + pcity['name'] + "</td>"
+                + td_click_html + city_size_string + "</td>"
+                + td_click2_html + happy_people+"</td>"
+                + td_click2_html + content_people+"</td>"
+                + td_click2_html + unhappy_angry_people+"</td>"
+                + td_click_html + city_state + "</td>"
+                + city_food + city_prod + city_trade
+                + city_gold + city_lux + city_sci
+                + td_click_html + city_growth + "</td>"
+                + td_click_html+ city_food_stock + "<span class='contrast_text'>/</span>" + city_granary_size + "</td>"
+                + td_change_prod_html +"&nbsp;&nbsp;<u>"+prod_type['name']+"</u> "+prod_img_html+"</td>"
+                + td_click_html+turns_to_complete_str+" &nbsp;&nbsp;&nbsp;&nbsp; "+progress_string +"</td>"
+                + td_buy_html+city_buy_cost+"</td>"
         city_list_html += "</tr>";
     }
   }
@@ -2060,7 +2160,7 @@ function update_city_screen()
   city_list_html += "</tbody></table>";
   $("#cities_list").html(city_list_html);
   
-  $('#city_list_citizen_unhappy').css("padding-right", "20px");
+  //$('#city_list_citizen_unhappy').css("padding-right", "20px");
   $('#city_list_citizen_unhappy').tooltip({content: "Unhappy + angry citizens", position: { my:"center bottom", at: "center top+10"}});
   $('#city_list_citizen_content').tooltip({content: "Content citizens", position: { my:"center bottom", at: "center top+10"}});
   $('#city_list_citizen_happy').tooltip({content: "Happy citizens", position: { my:"center bottom", at: "center top+10"}});
