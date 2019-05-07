@@ -137,6 +137,18 @@ function show_city_dialog_by_id(pcity_id)
   show_city_dialog(cities[pcity_id]);
 }
 
+// used to lower font for improvements with a long word in them
+function findLongestWord(str) {
+  var strSplit = str.split(' ');
+  var longestWord = 0;
+  for(var i = 0; i < strSplit.length; i++){
+    if(strSplit[i].length > longestWord){
+	longestWord = strSplit[i].length;
+     }
+  }
+  return longestWord;
+}
+
 /**************************************************************************
  Show the city dialog, by loading a Handlebars template, and filling it
  with data about the city.
@@ -265,6 +277,9 @@ function show_city_dialog(pcity)
     $("#city_production_turns_overview").html("-");
   }
 
+  var reduction_pct;
+  var longest_word;
+  var long_name_font_reducer = "";
   var improvements_html = "";
   for (var z = 0; z < ruleset_control.num_impr_types; z ++) {
     if (pcity['improvements'] != null && pcity['improvements'].isSet(z)) {
@@ -273,6 +288,15 @@ function show_city_dialog(pcity)
          console.log("Missing sprite for improvement " + z);
          continue;
        }
+       // Reduce font size for city improvements with long names so they don't overwrite each other.
+       // Also move long names 6px left to use unused margin space.
+       long_name_font_reducer = "<div>"; // Default to a plain div with no style adjustment.
+       longest_word = findLongestWord(improvements[z]['name']); // Find longest word in city improvement name
+       if (improvements[z]['name'].length==10) longest_word = 10; // Two word names 10 long don't get new line, so treat like 1 word.
+       reduction_pct = 100-(longest_word-7)*5;    // For words over 7 in length, reduce font 5% for each letter over 7 length.
+       if (reduction_pct<70) reduction_pct = 70;  // Maximum 30% reduction in size.
+       // Now generate the special style adjustment for longer names, to reduce the font size and adjust margin:
+       if (longest_word>7) long_name_font_reducer ="<div style='margin-left:-6px; font-size:"+reduction_pct+"%;'>";
 
       improvements_html = improvements_html +
        "<div id='city_improvement_element'><div style='background: transparent url("
@@ -281,7 +305,7 @@ function show_city_dialog(pcity)
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
            + "title=\"" + improvements[z]['helptext'] + "\" "
 	   + "onclick='city_sell_improvement(" + z + ");'>"
-           +"</div>" + improvements[z]['name'] + "</div>";
+           +"</div>"+ long_name_font_reducer+improvements[z]['name']+"</div>" + "</div>";
     }
   }
   $("#city_improvements_list").html(improvements_html);
