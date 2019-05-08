@@ -25,7 +25,7 @@
 
 var reqtree = {
 "2": {"x":0, "y":0}, // Alphabet
-"10": {"x":0, "y":69}, // Ceremonial Burial
+"10": {"x":0, "y":123}, // Ceremonial Burial
 "63": {"x":0, "y":183}, // Pottery
 "46": {"x":0, "y":300}, // Masonry
 "35": {"x":0, "y":417}, // Horseback Riding
@@ -33,15 +33,15 @@ var reqtree = {
 "86": {"x":0, "y":651}, // Warrior Code
 "87": {"x":416, "y":0}, // Writing
 "13": {"x":416, "y":79}, // Code of Laws
-"55": {"x":416, "y":167}, // Mysticism
-"48": {"x":416, "y":246}, // Mathematics
+"55": {"x":416, "y":154}, // Mysticism
+"48": {"x":416, "y":248}, // Mathematics
 "45": {"x":416, "y":322}, // Map Making
 "62": {"x":416, "y":395}, // Polytheism   (changed manually)
 "81": {"x":416, "y":456}, // The Wheel
 "20": {"x":416, "y":532}, // Currency
 "38": {"x":416, "y":635}, // Iron Working
 "42": {"x":667, "y":38}, // Literacy
-"84": {"x":667, "y":126}, // Trade
+"84": {"x":667, "y":113}, // Trade
 "53": {"x":667, "y":202}, // Monarchy
 "4": {"x":667, "y":290}, // Astronomy
 "72": {"x":667, "y":369}, // Seafaring
@@ -54,49 +54,49 @@ var reqtree = {
 "8": {"x":918, "y":658}, // Bridge Building  (changed manually)
 "7": {"x":1169, "y":6}, // Banking
 "49": {"x":1169, "y":85}, // Medicine
-"85": {"x":1169, "y":173}, // University
+"85": {"x":1169, "y":177}, // University
 "60": {"x":1169, "y":249}, // Physics (fixed manually)
 "54": {"x":1169, "y":310}, // Monotheism
 "37": {"x":1169, "y":386}, // Invention
 "12": {"x":1169, "y":605}, // Chivalry
-"22": {"x":1420, "y":20}, // Economics
-"11": {"x":1420, "y":104}, // Chemistry
-"21": {"x":1420, "y":133}, // Democracy
-"83": {"x":1420, "y":210}, // Theory of Gravity
+"22": {"x":1420, "y":6}, // Economics
+"11": {"x":1420, "y":106}, // Chemistry
+"21": {"x":1420, "y":174}, // Democracy
+"83": {"x":1420, "y":235}, // Theory of Gravity
 "75": {"x":1420, "y":307}, // Steam Engine
 "71": {"x":1420, "y":384}, // Sanitation
 "44": {"x":1420, "y":458}, // Magnetism
 "82": {"x":1420, "y":535}, // Theology
 "34": {"x":1420, "y":612}, // Gunpowder
-"5": {"x":1753, "y":100}, // Atomic Theory (fixed manually)
-"28": {"x":1753, "y":238}, // Explosives
-"65": {"x":1753, "y":383}, // Railroad
+"5": {"x":1753, "y":85}, // Atomic Theory (fixed manually)
+"28": {"x":1753, "y":221}, // Explosives
+"65": {"x":1753, "y":303}, // Railroad
 "50": {"x":1753, "y":471}, // Metallurgy
 "41": {"x":1753, "y":620}, // Leadership
-"36": {"x":1938, "y":170}, // Industrialization
-"23": {"x":1938, "y":429}, // Electricity
-"18": {"x":1938, "y":508}, // Conscription
-"79": {"x":2271, "y":42}, // The Corporation
-"16": {"x":2271, "y":133}, // Communism
-"76": {"x":2271, "y":300}, // Steel
+"36": {"x":1958, "y":175}, // Industrialization
+"23": {"x":1958, "y":409}, // Electricity
+"18": {"x":1958, "y":563}, // Conscription
+"79": {"x":2271, "y":47}, // The Corporation
+"16": {"x":2271, "y":138}, // Communism
+"76": {"x":2271, "y":312}, // Steel
 "68": {"x":2271, "y":491}, // Refrigeration
-"78": {"x":2271, "y":570}, // Tactics
+"78": {"x":2271, "y":658}, // Tactics
 "32": {"x":2543, "y":2}, // Genetic Engineering
 "67": {"x":2543, "y":93}, // Refining
-"27": {"x":2543, "y":172}, // Espionage
+"27": {"x":2543, "y":236}, // Espionage
 "24": {"x":2543, "y":352}, // Electronics
 "33": {"x":2543, "y":428}, // Guerilla Warfare
 "43": {"x":2543, "y":504}, // Machine Tools
-"3": {"x":2543, "y":616}, // Amphibious Warfare
+"3": {"x":2543, "y":658}, // Amphibious Warfare
 "15": {"x":2794, "y":185}, // Combustion
 "51": {"x":2794, "y":472}, // Miniaturization
-"6": {"x":2977, "y":233}, // Automobile
-"30": {"x":2977, "y":309}, // Flight
-"47": {"x":3228, "y":170}, // Mass Production
-"52": {"x":3228, "y":420}, // Mobile Warfare
-"64": {"x":3228, "y":496}, // Radio
-"66": {"x":3479, "y":101}, // Recycling
-"57": {"x":3479, "y":193}, // Nuclear Fission
+"6": {"x":3000, "y":233}, // Automobile
+"30": {"x":3000, "y":309}, // Flight
+"47": {"x":3228, "y":130}, // Mass Production
+"52": {"x":3228, "y":430}, // Mobile Warfare
+"64": {"x":3228, "y":539}, // Radio
+"66": {"x":3479, "y":50}, // Recycling
+"57": {"x":3479, "y":143}, // Nuclear Fission
 "39": {"x":3479, "y":270}, // Labor Union
 "17": {"x":3479, "y":346}, // Computers
 "1": {"x":3479, "y":516}, // Advanced Flight
@@ -305,95 +305,95 @@ var reqtree_civ2civ3 = {
 
 
 
-// Mp plus and Mp-evo ruleset.
+// Mp plus and Mp-evo (mp2) ruleset.
 
 var reqtree_mpplus = {
-    "2": {"x":0, "y":0}, // Alphabet 
-    "10": {"x":0, "y":78}, // Ceremonial Burial 
-    "64": {"x":0, "y":204}, // Pottery 
-    "47": {"x":0, "y":330}, // Masonry 
-    "36": {"x":0, "y":456}, // Horseback Riding 
-    "9": {"x":0, "y":582}, // Bronze Working 
-    "87": {"x":0, "y":708}, // Warrior Code 
-    "88": {"x":416, "y":0}, // Writing 
-    "13": {"x":416, "y":82}, // Code of Laws 
-    "56": {"x":416, "y":174}, // Mysticism 
-    "49": {"x":416, "y":256}, // Mathematics 
-    "46": {"x":416, "y":338}, // Map Making 
-    "63": {"x":416, "y":430}, // Polytheism 
-    "82": {"x":416, "y":522}, // The Wheel 
-    "20": {"x":416, "y":604}, // Currency 
-    "39": {"x":416, "y":706}, // Iron Working 
-    "43": {"x":667, "y":41}, // Literacy 
-    "85": {"x":667, "y":136}, // Trade 
-    "54": {"x":667, "y":220}, // Monarchy 
-    "4": {"x":667, "y":304}, // Astronomy 
-    "73": {"x":667, "y":388}, // Seafaring 
-    "19": {"x":667, "y":570}, // Construction 
-    "81": {"x":918, "y":31}, // The Republic 
-    "60": {"x":918, "y":164}, // Philosophy 
-    "57": {"x":918, "y":346}, // Navigation 
-    "25": {"x":918, "y":466}, // Engineering 
-    "29": {"x":918, "y":550}, // Feudalism 
-    "8": {"x":918, "y":698}, // Bridge Building 
-    "7": {"x":1169, "y":6}, // Banking 
-    "50": {"x":1169, "y":90}, // Medicine 
-    "86": {"x":1169, "y":186}, // University 
-    "38": {"x":1169, "y":339}, // Invention 
-    "61": {"x":1169, "y":423}, // Physics fixed manually
-    "55": {"x":1169, "y":483}, // Monotheism fixed manually
-    "12": {"x":1169, "y":642}, // Chivalry 
-    "22": {"x":1502, "y":16}, // Economics fixed manually
-    "11": {"x":1502, "y":108}, // Chemistry fixed manually
-    "21": {"x":1502, "y":165}, // Democracy fixed manually
-    "84": {"x":1502, "y":232}, // Theory of Gravity fixed manually
-    "76": {"x":1502, "y":330}, // Steam Engine 
+    "2": {"x":0, "y":0},       // Alphabet 
+    "10": {"x":0, "y":174},     // Ceremonial Burial 
+    "64": {"x":0, "y":248},    // Pottery 
+    "47": {"x":0, "y":347},    // Masonry 
+    "36": {"x":0, "y":446},    // Horseback Riding 
+    "9": {"x":0, "y":582},     // Bronze Working 
+    "87": {"x":0, "y":708},    // Warrior Code 
+    "88": {"x":416, "y":0},    // Writing 
+    "13": {"x":416, "y":82},   // Code of Laws 
+    "56": {"x":416, "y":145},  // Mysticism 
+    "49": {"x":416, "y":258},  // Mathematics 
+    "46": {"x":416, "y":347},  // Map Making 
+    "63": {"x":416, "y":426},  // Polytheism 
+    "82": {"x":416, "y":524},  // The Wheel 
+    "20": {"x":416, "y":604},  // Currency 
+    "39": {"x":416, "y":706},  // Iron Working 
+    "43": {"x":667, "y":1},    // Literacy 
+    "85": {"x":667, "y":106},  // Trade 
+    "54": {"x":667, "y":197},  // Monarchy 
+    "4": {"x":667, "y":299},   // Astronomy 
+    "73": {"x":667, "y":388},  // Seafaring 
+    "19": {"x":667, "y":539},  // Construction 
+    "81": {"x":918, "y":1},    // The Republic 
+    "60": {"x":918, "y":145},  // Philosophy 
+    "57": {"x":918, "y":350},  // Navigation 
+    "25": {"x":918, "y":461},  // Engineering 
+    "29": {"x":918, "y":553},  // Feudalism 
+    "8": {"x":918, "y":693},   // Bridge Building 
+    "7": {"x":1169, "y":14},    // Banking 
+    "50": {"x":1169, "y":86},  // Medicine 
+    "86": {"x":1169, "y":195}, // University 
+    "38": {"x":1169, "y":319}, // Invention 
+    "61": {"x":1169, "y":418}, // Physics 
+    "55": {"x":1169, "y":526}, // Monotheism 
+    "12": {"x":1169, "y":696}, // Chivalry 
+    "22": {"x":1502, "y":1},   // Economics 
+    "11": {"x":1502, "y":108}, // Chemistry
+    "21": {"x":1502, "y":176}, // Democracy 
+    "84": {"x":1502, "y":239}, // Theory of Gravity
+    "76": {"x":1502, "y":342}, // Steam Engine 
     "72": {"x":1502, "y":412}, // Sanitation 
-    "35": {"x":1502, "y":494}, // Gunpowder 
-    "45": {"x":1502, "y":576}, // Magnetism 
+    "35": {"x":1502, "y":500}, // Gunpowder 
+    "45": {"x":1502, "y":596}, // Magnetism 
     "83": {"x":1502, "y":658}, // Theology 
-    "5": {"x":1835, "y":195}, // Atomic Theory fixed manually
-    "28": {"x":1835, "y":268}, // Explosives fixed manually
-    "51": {"x":1835, "y":384}, // Metallurgy 
-    "66": {"x":1835, "y":477}, // Railroad 
-    "42": {"x":1835, "y":651}, // Leadership 
-    "37": {"x":2041, "y":174}, // Industrialization 
-    "23": {"x":2041, "y":446}, // Electricity 
-    "18": {"x":2041, "y":530}, // Conscription 
-    "80": {"x":2374, "y":33}, // The Corporation 
-    "16": {"x":2374, "y":129}, // Communism 
-    "77": {"x":2374, "y":325}, // Steel fixed manually
-    "69": {"x":2374, "y":497}, // Refrigeration 
-    "31": {"x":2374, "y":581}, // Fundamentalism 
-    "79": {"x":2374, "y":665}, // Tactics 
-    "33": {"x":2646, "y":1}, // Genetic Engineering 
-    "68": {"x":2646, "y":97}, // Refining 
-    "27": {"x":2646, "y":181}, // Espionage 
-    "24": {"x":2646, "y":384}, // Electronics 
-    "34": {"x":2646, "y":468}, // Guerilla Warfare 
-    "44": {"x":2646, "y":552}, // Machine Tools 
-    "3": {"x":2646, "y":699}, // Amphibious Warfare 
+    "5": {"x":1835, "y":75},   // Atomic Theory 
+    "28": {"x":1835, "y":282}, // Explosives 
+    "51": {"x":1835, "y":389}, // Metallurgy 
+    "66": {"x":1835, "y":484}, // Railroad 
+    "42": {"x":1835, "y":698}, // Leadership 
+    "37": {"x":2096, "y":335}, // Industrialization 
+    "23": {"x":2096, "y":416}, // Electricity 
+    "18": {"x":2096, "y":526}, // Conscription 
+    "80": {"x":2374, "y":35},  // The Corporation 
+    "16": {"x":2374, "y":145}, // Communism 
+    "77": {"x":2374, "y":325}, // Steel
+    "69": {"x":2374, "y":514}, // Refrigeration 
+    "31": {"x":2374, "y":600}, // Fundamentalism 
+    "79": {"x":2374, "y":699}, // Tactics 
+    "33": {"x":2646, "y":1},   // Genetic Engineering 
+    "68": {"x":2646, "y":113}, // Refining 
+    "27": {"x":2646, "y":242}, // Espionage 
+    "24": {"x":2646, "y":344}, // Electronics 
+    "34": {"x":2646, "y":475}, // Guerilla Warfare 
+    "44": {"x":2646, "y":586}, // Machine Tools 
+    "3": {"x":2646, "y":699},  // Amphibious Warfare 
     "15": {"x":2904, "y":188}, // Combustion 
     "52": {"x":2904, "y":516}, // Miniaturization 
-    "6": {"x":3116, "y":249}, // Automobile 
-    "30": {"x":3116, "y":333}, // Flight 
+    "6": {"x":3116, "y":249},  // Automobile 
+    "30": {"x":3116, "y":336}, // Flight 
     "48": {"x":3367, "y":181}, // Mass Production 
-    "53": {"x":3367, "y":481}, // Mobile Warfare 
-    "65": {"x":3367, "y":565}, // Radio 
-    "67": {"x":3618, "y":72}, // Recycling 
-    "58": {"x":3618, "y":156}, // Nuclear Fission 
-    "40": {"x":3618, "y":286}, // Labor Union 
-    "17": {"x":3618, "y":370}, // Computers 
-    "1": {"x":3618, "y":589}, // Advanced Flight 
+    "53": {"x":3367, "y":486}, // Mobile Warfare 
+    "65": {"x":3367, "y":696}, // Radio 
+    "67": {"x":3618, "y":1},   // Recycling 
+    "58": {"x":3618, "y":89},  // Nuclear Fission 
+    "40": {"x":3618, "y":319}, // Labor Union 
+    "17": {"x":3618, "y":398}, // Computers 
+    "1": {"x":3618, "y":589},  // Advanced Flight 
     "59": {"x":3951, "y":208}, // Nuclear Power 
     "70": {"x":3951, "y":425}, // Robotics 
     "71": {"x":3951, "y":511}, // Rocketry 
     "14": {"x":3951, "y":595}, // Combined Arms 
-    "74": {"x":4367, "y":314}, // Space Flight 
-    "41": {"x":4367, "y":410}, // Laser 
-    "62": {"x":4618, "y":109}, // Plastics 
+    "74": {"x":4367, "y":234}, // Space Flight 
+    "41": {"x":4367, "y":435}, // Laser 
+    "62": {"x":4618, "y":1},   // Plastics 
     "26": {"x":4618, "y":193}, // Environmentalism 
-    "78": {"x":4618, "y":410}, // Superconductors 
+    "78": {"x":4618, "y":526}, // Superconductors 
     "32": {"x":4856, "y":410}, // Fusion Power 
     "75": {"x":4856, "y":526}, // Stealth 
     };

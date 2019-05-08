@@ -75,7 +75,7 @@ var  A_NEVER = null;
 var tech_canvas = null;
 var tech_canvas_ctx = null;
 
-var tech_item_width = 208;
+var tech_item_width = 222;
 var tech_item_height = 52;
 var maxleft = 0;
 var clicked_tech_id = null;
@@ -183,6 +183,7 @@ function update_tech_tree()
 {
   var hy = 24;
   var hx = 48 + 160;
+  hx = tech_item_width;
 
   tech_canvas_ctx.clearRect(0, 0, 5824, 726);
 
@@ -201,7 +202,20 @@ function update_tech_tree()
       var dx = Math.floor(reqtree[rid+'']['x'] * tech_xscale);  //scale in X direction.
       var dy = reqtree[rid+'']['y'];
 
-      tech_canvas_ctx.strokeStyle = 'rgba(70, 70, 70, 0.8)';
+      // Alternating line colour sequence, each tech gets a different line colour to differentiate.
+      var sequence = 1+Math.round(dy/55)+Math.round(dx/45);      // Create a "seed" that bumps up as we span the canvas vertically and horizontally
+      sequence = sequence - (sequence-sequence%9);               // This creates a colour number from 0-8 out of our "seed"
+     
+      if (sequence == 8) tech_canvas_ctx.strokeStyle =      'rgba(10, 20, 192, 0.8)';        // strong blue
+      else if (sequence == 7) tech_canvas_ctx.strokeStyle = 'rgba(61, 136, 167, 0.8)';       // teal
+      else if (sequence == 6) tech_canvas_ctx.strokeStyle = 'rgba(105, 70, 145, 0.8)';       // concord grape
+      else if (sequence == 5) tech_canvas_ctx.strokeStyle = 'rgba(95, 120, 255, 0.8)';       // sky
+      else if (sequence == 4) tech_canvas_ctx.strokeStyle = 'rgba(190, 230, 240, 0.8)';      // faded light-cyan-grey
+      else if (sequence == 3) tech_canvas_ctx.strokeStyle = 'rgba(30, 80, 80, 0.8)';         // faded sea-grey
+      else if (sequence == 2) tech_canvas_ctx.strokeStyle = 'rgba(10, 10, 30, 0.8)';         // midnight
+      else if (sequence == 1) tech_canvas_ctx.strokeStyle = 'rgba(220, 220, 220, 0.8)';      // dim white
+      else tech_canvas_ctx.strokeStyle =                    'rgba(108, 70, 38, 0.85)';       // pumpkin
+
       tech_canvas_ctx.lineWidth = 3;
 
       tech_canvas_ctx.beginPath();
@@ -209,7 +223,12 @@ function update_tech_tree()
       tech_canvas_ctx.lineTo(dx + hx, dy + hy);
       tech_canvas_ctx.stroke();
 
-
+      // draw a node (helps indicate which line-colour is the real required tech: because we see a coloured node for it )
+      var radius = 2;
+      tech_canvas_ctx.lineWidth = 4;
+      tech_canvas_ctx.beginPath();
+      tech_canvas_ctx.arc(dx + hx+radius+2, dy + hy, radius, 0, 2 * Math.PI, false);  
+      tech_canvas_ctx.stroke();
     }
 
   }
