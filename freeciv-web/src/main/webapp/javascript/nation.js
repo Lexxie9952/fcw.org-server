@@ -281,9 +281,9 @@ function select_a_nation()
   }
 
   if (can_client_control()
-      && both_alive_and_different
-      && pplayer['team'] != client.conn.playing['team']
-      && client.conn.playing['gives_shared_vision'].isSet(player_id)) {
+      && both_alive_and_different) {
+      // && pplayer['team'] != client.conn.playing['team']) {               // HACK: one of these was disabling delegates from revoking vision.
+      // && client.conn.playing['gives_shared_vision'].isSet(player_id)) {  /* TO DO: restore disabled button but allow delegates to use it.
     $('#withdraw_vision_button').button("enable");
   } else {
     $('#withdraw_vision_button').button("disable");
