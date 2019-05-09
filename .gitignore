@@ -16,7 +16,6 @@
 *.wav
 *_gen.c
 *_gen.h
-*.serv
 *humbs*.db
 *~
 .#*
