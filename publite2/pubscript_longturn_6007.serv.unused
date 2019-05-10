@@ -1,0 +1,76 @@
+#LongTurn Game #20
+#autoreload
+
+cmdlevel ctrl first
+
+rulesetdir mpplus
+
+set minplayers 0
+set maxplayers 60
+set aifill 60
+set timeout 82800
+set first_timeout 168000
+set nationset all
+set compresstype xs
+set allowtake=""
+set autotoggle false
+set unitwaittime=36000
+set netwait 150
+set nettimeout 120
+set pingtime 30
+set pingtimeout 240
+set maxconnectionsperhost 500
+set threaded_save enabled
+set scorelog disabled
+set saveturns=1
+set autosaves=TURN|TIMER
+set savefrequency 60
+metaconnection persistent
+set ec_chat=enabled
+set ec_info=enabled 
+set ec_max_size=5000
+set ec_turns=7
+
+#economic
+set gold 75
+
+#geological
+set mapsize XYSIZE
+set xsize 200
+set ysize 100
+set topology WRAPX
+set generator RANDOM
+set startpos DEFAULT
+set landmass 78
+set specials 350 
+set alltemperate "ENABLED"
+set separatepoles "ENABLED"
+set tinyisles "DISABLED"
+set huts 0
+
+#sociological
+set startunits=cccwwwxx
+set dispersion 2
+set trading_city disabled
+set rapturedelay 1
+set revolentype FIXED
+set revolen 1
+set endturn 365
+set contactturns 0
+set barbarians DISABLED
+set onsetbarbs 30
+
+#military
+set borders "SEE_INSIDE"
+set diplomacy "HUMAN"
+set foggedborders enabled
+set airliftingstyle "FROM_ALLIES|TO_ALLIES|DEST_UNLIMITED"
+set victories ALLIED
+set restrictinfra "ENABLED"
+#scientific
+set endspaceship DISABLED
+
+
+metamessage FREECIVWEB Game 20 | 1 turn per day | 60 players | MP+ ruleset | 78% land | Join now!
+
+cmdlevel basic
