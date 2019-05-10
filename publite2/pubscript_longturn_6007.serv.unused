@@ -9,7 +9,7 @@ set minplayers 0
 set maxplayers 60
 set aifill 60
 set timeout 82800
-set first_timeout 168000
+set first_timeout 259200
 set nationset all
 set compresstype xs
 set allowtake=""
