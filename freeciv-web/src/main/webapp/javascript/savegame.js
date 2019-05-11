@@ -28,7 +28,7 @@ var scenarios = [
   {"img":"/images/japan.png", "description":"Japan - Medium (88x100)", "savegame":"japan"},
   {"img":"/images/italy.png", "description":"Italy - Medium (100x100)", "savegame":"italy"},
   {"img":"/images/america.png", "description":"North America - 116x100 map of North America", "savegame":"north_america"},
-  {"img":"/images/british.png", "description":"British Aisles - Medium (85x80)", "savegame":"british-isles"},
+  {"img":"/images/british.png", "description":"British Isles - Medium (85x80)", "savegame":"british-isles"},
   {"img":"/images/hagworld.png", "description":"The World - Classic-style 120x60 map of the Earth", "savegame":"hagworld"},
   {"img":"/images/europe.png", "description":"Very large map of Europe, 200x100", "savegame":"europe"}
 ];
