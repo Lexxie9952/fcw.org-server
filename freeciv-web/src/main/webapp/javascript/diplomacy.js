@@ -156,7 +156,10 @@ function cancel_meeting(counterpart)
 **************************************************************************/
 function cleanup_diplomacy_dialog(counterpart_id)
 {
-  $("#diplomacy_dialog_" + counterpart_id).remove();
+  var diplomacy_dialog = "diplomacy_dialog_" + counterpart_id
+  $("#"+diplomacy_dialog).empty();
+  $("#"+diplomacy_dialog).remove();
+  $("#dialog-extend-fixed-container > [aria-describedby="+diplomacy_dialog+"]").remove(); //Take care of the minimised version, if there is one
 }
 
 /**************************************************************************
@@ -303,9 +306,6 @@ function create_diplomacy_dialog(counterpart, template) {
   var pplayer = client.conn.playing;
   var counterpart_id = counterpart['playerno'];
 
-  // reset diplomacy_dialog div.
-  // TODO: check whether this is still needed
-  cleanup_diplomacy_dialog(counterpart_id);
   $("#game_page").append(template({
     self: meeting_template_data(pplayer, counterpart),
     counterpart: meeting_template_data(counterpart, pplayer)
@@ -315,8 +315,9 @@ function create_diplomacy_dialog(counterpart, template) {
 		 + " of the " + nations[counterpart['nation']]['adjective'];
 
   var diplomacy_dialog = $("#diplomacy_dialog_" + counterpart_id);
-  diplomacy_dialog.attr("title", title);
+
   diplomacy_dialog.dialog({
+            title: title,
 			bgiframe: true,
 			modal: false,
 			width: is_small_screen() ? "90%" : "50%",
@@ -340,8 +341,7 @@ function create_diplomacy_dialog(counterpart, template) {
              "restore" : "ui-icon-bullet"
            }});
 
-  diplomacy_dialog.dialog('open');
-
+  
   var nation = nations[pplayer['nation']];
   if (nation['customized']) {
     meeting_paint_custom_flag(nation, document.getElementById('flag_self_' + counterpart_id));
