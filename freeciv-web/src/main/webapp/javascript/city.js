@@ -2019,7 +2019,8 @@ function update_city_screen()
         + "<th id='food' title='Food surplus' class='food_text' style='text-align:right;padding-right:0px'><img style='margin-right:-6px; margin-top:-3px;' class='lowered_gov' src='/images/wheat.png'></th>"
         + "<th title='Production surplus (shields)' class='prod_text' style='text-align:right;padding-right:0px'> <img class='lowered_gov' src='/images/shield14x18.png'></th>"
         + "<th title='Trade' class='trade_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/trade.png'></th>"
-        + "<th title='Gold' class='gold_text' style='text-align:right;padding-right:0px;'><img style='margin-left:50px;' class='lowered_gov' src='/images/gold.png'></th>"
+        + "<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>"
+        + "<th title='Gold' class='gold_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/gold.png'></th>"
         + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='lowered_gov' src='/images/lux.png'></th>"
         + "<th title='Science (bulbs)' class='sci_text' style='text-align:right'><img class='lowered_gov' src='/images/sci.png'></th>"
         + "<th style='text-align:right;'>Grows In"+updown_sort_arrows+"</th><th style='text-align:right;'>Granary"
@@ -2165,7 +2166,6 @@ function update_city_screen()
                   + "vertical-align:top; float:right;'>"
                   +"</div></div>";
         }   
-
         city_list_html += "<tr class='cities_row' id='cities_list_" + pcity['id'] + "'>"
                 + td_click_html + pcity['name'] + "</td>"
                 + td_click_html + city_size_string + "</td>"
@@ -2174,6 +2174,7 @@ function update_city_screen()
                 + td_click2_html + unhappy_angry_people+"</td>"
                 + td_click_html + city_state + "</td>"
                 + city_food + city_prod + city_trade
+                + td_click_html + "</td>"
                 + city_gold + city_lux + city_sci
                 + td_click_html + city_growth + "</td>"
                 + td_click_html+ city_food_stock + "<span class='contrast_text'>/</span>" + city_granary_size + "</td>"
