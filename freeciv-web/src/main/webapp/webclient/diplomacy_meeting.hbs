@@ -20,11 +20,11 @@
         {{#if this.title}}
           <li><div>{{this.title}}</div>
           <ul>{{#each this.clauses}}
-            <li><div><a href='#' onclick='create_clause_req({{../../counterpart.pid}}, {{../../player.pid}}, {{this.type}}, {{this.value}});'>{{this.name}}</a></div></li>
+            <li><div onclick='create_clause_req({{../../counterpart.pid}}, {{../../player.pid}}, {{this.type}}, {{this.value}});'><a href='#'>{{this.name}}</a></div></li>
           {{/each}}</ul>
           </li>
         {{else}}
-          <li><div><a href='#' onclick='create_clause_req({{../counterpart.pid}}, {{../player.pid}}, {{this.type}}, {{this.value}});'>{{this.name}}</a></div></li>
+          <li><div onclick='create_clause_req({{../counterpart.pid}}, {{../player.pid}}, {{this.type}}, {{this.value}});'><a href='#'>{{this.name}}</a></div></li>
         {{/if}}
       {{/each}}</ul>
     </div>
