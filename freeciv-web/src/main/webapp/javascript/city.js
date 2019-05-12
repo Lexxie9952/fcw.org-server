@@ -2015,7 +2015,7 @@ function update_city_screen()
 
   var city_list_html = "<table class='tablesorter-dark' id='city_table' style='border=0px;border-spacing=0;padding=0;'>"
         + "<thead><tr><th style='text-align:right;'>Name"+updown_sort_arrows+"</th><th style='text-align:right;'>Size"+updown_sort_arrows+"</th>"+city_list_citizen_html
-        + "<th style='text-align:right;'>State<img class='lowered_gov' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='> </th>"
+        + "<th style='text-align:right;' title='Text: Current state. Color: Next turn state'>State<img class='lowered_gov' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='></img> </th>"
         + "<th id='food' title='Food surplus' class='food_text' style='text-align:right;padding-right:0px'><img style='margin-right:-6px; margin-top:-3px;' class='lowered_gov' src='/images/wheat.png'></th>"
         + "<th title='Production surplus (shields)' class='prod_text' style='text-align:right;padding-right:0px'> <img class='lowered_gov' src='/images/shield14x18.png'></th>"
         + "<th title='Trade' class='trade_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/trade.png'></th>"
@@ -2083,21 +2083,25 @@ function update_city_screen()
           progress_string="<span class='non_priority'>"+progress_string+"</span>"
         }
         
-        happy_people   = "<span class='hint_of_green'>"+pcity['ppl_happy'][FEELING_FINAL]+"</span>";
-        content_people = "<span class='hint_of_blue'>" +pcity['ppl_content'][FEELING_FINAL]+"</span>";
+        happy_people   = pcity['ppl_happy'][FEELING_FINAL];
+        content_people = pcity['ppl_content'][FEELING_FINAL];
         unhappy_angry_people = pcity['ppl_unhappy'][FEELING_FINAL]+pcity['ppl_angry'][FEELING_FINAL];
-        unhappy_angry_people = "<span class='hint_of_orange'>"+unhappy_angry_people+"</span>";
-
+    
         // PEACE, CELEBRATING, OR DISORDER:
-        city_state = get_city_state(pcity);
-        if (city_state == 'Celebrating') {
-          city_state = "<span class='hint_of_green'>"+city_state+"</span>";
-        } else if (city_state = 'Peace') {
-          city_state = "<span class='non_priority'>"+city_state+"</span>";
-        } else { // disorder 
-          city_state = "<span class='negative_text'>"+city_state+"</span>";
-        }
-
+        city_state = get_city_state(pcity)+"</span>";
+     
+        // Color code for upcoming state under current configuration of tiles/luxury rate/improvements/deployed units:
+        if (happy_people >= pcity['size']*0.4999 && unhappy_angry_people==0 && pcity['size']>2)  
+          city_state = "<span class='hint_of_green'>"+city_state;    // half or more happy, no unhappy = city will (continue to) celebrate, green code.
+        else if (unhappy_angry_people > happy_people)                  
+          city_state = "<span class='negative_text'>"+city_state;    // more unhappy than happy = disorder, red code
+        else
+          city_state = "<span class='non_priority'>"+city_state;     // state of peace is all other conditions = regular text 
+         
+        happy_people   = "<span class='hint_of_green'>"+happy_people+"</span>";
+        content_people = "<span class='hint_of_blue'>" +content_people+"</span>";
+        unhappy_angry_people = "<span class='hint_of_orange'>"+unhappy_angry_people+"</span>";  
+   
         // FPT
         var food_check = pcity['surplus'][O_FOOD];
         if (food_check > 0) {
