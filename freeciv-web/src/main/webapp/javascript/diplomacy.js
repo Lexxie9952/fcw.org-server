@@ -221,7 +221,8 @@ function remove_clause(remove_clause_obj)
     var check_clause = clause_list[i];
     if (counterpart_id == check_clause['counterpart']
 	&& remove_clause_obj['giver'] == check_clause['giver']
-        && remove_clause_obj['type'] == check_clause['type']) {
+        && remove_clause_obj['type'] == check_clause['type']
+        && remove_clause_obj['value'] == check_clause['value']) {
 
       clause_list.splice(i, 1);
       break;
