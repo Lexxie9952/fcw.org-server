@@ -640,7 +640,7 @@ req2     = "Electronics"
 flags    = ""
 graphic     = "a.nuclear_power"
 graphic_alt = "-"
-helptext = _("Gives sea units one extra move.")
+helptext = _("Gives sea units two extra moves.")
 cost = 5650
 
 [advance_philosophy]
