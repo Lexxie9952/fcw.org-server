@@ -86,3 +86,5 @@ freeciv/freeciv/server/freeciv-web
 Makefile
 Makefile.in
 nohup.out
+
+freeciv/freeciv/data/\.DS_Store
