@@ -539,8 +539,26 @@ function tech_mapview_mouse_click(e)
           && tech_mouse_y > y && tech_mouse_y < y + tech_item_height) {
         if (mouse_button == 2) send_player_tech_goal(ptech['id']);        
         else if (player_invention_state(client.conn.playing, ptech['id']) == TECH_PREREQS_KNOWN) {
-          send_player_research(ptech['id']);
-        } else if (player_invention_state(client.conn.playing, ptech['id']) == TECH_UNKNOWN) {
+          var adjusted_tech_cost = Math.max(1, Math.floor(ptech['cost']*game_info['sciencebox']/100.0))
+          if (client.conn.playing['bulbs_researched'] >= adjusted_tech_cost) {
+            var swal_tech_id = ptech['id'];
+            swal({
+                title: 'Research '+ptech['name']+'?',
+                text: 'Spend leftover bulbs to research '+ptech['name']+'?',
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes',
+                cancelButtonText: 'No'
+            },
+            function(){
+                send_player_research(swal_tech_id);
+            });
+          }
+          else send_player_research(ptech['id']);
+        }
+        else if (player_invention_state(client.conn.playing, ptech['id']) == TECH_UNKNOWN) {
           send_player_tech_goal(ptech['id']);
         }
         clicked_tech_id = ptech['id'];
