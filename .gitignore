@@ -87,3 +87,12 @@ freeciv/freeciv/server/freeciv-web
 Makefile
 Makefile.in
 nohup.out
+<<<<<<< Updated upstream
+=======
+
+freeciv/freeciv/data/\.DS_Store
+
+freeciv-web/src/main/\.DS_Store
+
+freeciv-web/src/main/webapp/\.DS_Store
+>>>>>>> Stashed changes

@@ -54,11 +54,14 @@ tiles = { "row", "column", "tag"
   0, 1, "unit.vet_2"
   0, 2, "unit.vet_3"
   0, 3, "unit.vet_4"
-  0, 4, "unit.vet_5"
-  0, 5, "unit.vet_6"
-  0, 6, "unit.vet_7"
-  0, 7, "unit.vet_8"
-  0, 8, "unit.vet_9"
+; The final levels are moved down from vet-7,8 since those are unused and unreached
+; and these graphics better represent the final levels of promotion:
+  0, 7, "unit.vet_5"
+  0, 8, "unit.vet_6"
+; These levels were move to vet-7+, since they appear to never be used:
+  0, 4, "unit.vet_7"
+  0, 5, "unit.vet_8"
+  0, 6, "unit.vet_9"
 
   0,  9, "unit.tired"
   0, 10, "unit.lowfuel"

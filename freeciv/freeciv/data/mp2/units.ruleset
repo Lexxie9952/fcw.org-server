@@ -69,23 +69,23 @@ class_flags =
 
 [veteran_system]
 ; What are the names of the levels?
-veteran_names = _("green"), _("veteran"), _("hardened"), _("elite")
+veteran_names = _("green"), _("veteran"), _("hardened"), _("elite"), _("crack"), _("master"), _("champion")
 
 ; The percentage chance of increasing level through combat
-veteran_raise_chance = 50, 33, 20, 0
+veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
 
 ; The percentage chance of a settler/engineer increasing level through
 ; performing useful work (per turn)
-veteran_work_raise_chance = 0, 0, 0, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 
 ; Power factors are as a percentage.
 ; +50% is represented by 150
-veteran_power_fact = 100, 150, 175, 200
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 
 ; The additional number of movement points granted for different veteran
 ; levels. These are fractional move points as defined by move_fragments in
 ; terrain.ruleset.
-veteran_move_bonus = 0, 0, 0, 0
+veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 
 ; /* <-- avoid gettext warnings
 ;
@@ -1104,11 +1104,14 @@ veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
   _("?vet_rank:hardened"),
+  _("?vet_rank:Ranger"),
+  _("?vet_rank:Commando"),
+  _("?vet_rank:Green Beret"),
   _("?vet_rank:Navy SEAL")
-veteran_raise_chance = 60, 50, 40, 0
-veteran_work_raise_chance = 0, 0, 0, 0
-veteran_power_fact = 100, 150, 175, 250
-veteran_move_bonus = 0, 0, 0, 0
+veteran_raise_chance = 60, 50, 40, 30, 20, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
+veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = "DefendOk", "DefendOkStartUnit", "BarbarianSeaTech"
 helptext      = _("\
 Marines are infantry who are experts at amphibious war. \
@@ -1717,11 +1720,14 @@ veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
   _("?vet_rank:hardened"),
-  _("?vet_rank:ace")
-veteran_raise_chance = 40, 25, 16, 0
-veteran_work_raise_chance = 0, 0, 0, 0
-veteran_power_fact = 100, 150, 175, 200
-veteran_move_bonus = 0, 0, 0, 0
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:ace"),
+  _("?vet_rank:top gun")
+veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
 Fighters are your first offensive Air units. They can\
@@ -1765,11 +1771,14 @@ veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
   _("?vet_rank:hardened"),
-  _("?vet_rank:ace")
-veteran_raise_chance = 50, 33, 20, 0
-veteran_work_raise_chance = 0, 0, 0, 0
-veteran_power_fact = 100, 150, 175, 200
-veteran_move_bonus = 0, 0, 0, 0
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:ace"),
+  _("?vet_rank:top gun")
+veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
 Escort Fighters are larger and carry more fuel for\
@@ -1813,11 +1822,14 @@ veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
   _("?vet_rank:hardened"),
-  _("?vet_rank:ace")
-veteran_raise_chance = 40, 25, 16, 0
-veteran_work_raise_chance = 0, 0, 0, 0
-veteran_power_fact = 100, 150, 175, 200
-veteran_move_bonus = 0, 0, 0, 0
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:ace"),
+  _("?vet_rank:top gun")
+veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
 Medium Bombers are specialized airborne units that are good for\
@@ -1865,11 +1877,14 @@ veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
   _("?vet_rank:hardened"),
-  _("?vet_rank:ace")
-veteran_raise_chance = 40, 25, 16, 0
-veteran_work_raise_chance = 0, 0, 0, 0
-veteran_power_fact = 100, 150, 175, 200
-veteran_move_bonus = 0, 0, 0, 0
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:ace"),
+  _("?vet_rank:top gun")
+veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
 Heavy Bombers are specialized airborne units that are good for\
@@ -1919,11 +1934,14 @@ veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
   _("?vet_rank:hardened"),
-  _("?vet_rank:ace")
-veteran_raise_chance = 40, 25, 16, 0
-veteran_work_raise_chance = 0, 0, 0, 0
-veteran_power_fact = 100, 150, 175, 200
-veteran_move_bonus = 0, 0, 0, 0
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:ace"),
+  _("?vet_rank:top gun")
+veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
 The Strategic Bomber offers only slight improvement in attack, but higher altitude 
@@ -2001,11 +2019,14 @@ veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
   _("?vet_rank:hardened"),
-  _("?vet_rank:ace")
-veteran_raise_chance = 40, 25, 16, 0
-veteran_work_raise_chance = 0, 0, 0, 0
-veteran_power_fact = 100, 150, 175, 200
-veteran_move_bonus = 0, 0, 0, 0
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:ace"),
+  _("?vet_rank:top gun")
+veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
 The Helicopter is a very powerful unit, as it can fly far and attack \
@@ -2054,11 +2075,14 @@ veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
   _("?vet_rank:hardened"),
-  _("?vet_rank:ace")
-veteran_raise_chance = 40, 25, 16, 0
-veteran_work_raise_chance = 0, 0, 0, 0
-veteran_power_fact = 100, 150, 175, 200
-veteran_move_bonus = 0, 0, 0, 0
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:ace"),
+  _("?vet_rank:top gun")
+veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
 Jet Fighters upgrade the Fighter with improved attack and defense, plus a higher movement radius.\
@@ -2099,11 +2123,14 @@ veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
   _("?vet_rank:hardened"),
-  _("?vet_rank:ace")
-veteran_raise_chance = 40, 25, 16, 0
-veteran_work_raise_chance = 0, 0, 0, 0
-veteran_power_fact = 100, 150, 175, 200
-veteran_move_bonus = 0, 0, 0, 0
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:ace"),
+  _("?vet_rank:top gun")
+veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
 Jet Bombers are high-altitude long-range air units that are good for\
@@ -2160,11 +2187,14 @@ veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
   _("?vet_rank:hardened"),
-  _("?vet_rank:ace")
-veteran_raise_chance = 40, 25, 16, 0
-veteran_work_raise_chance = 0, 0, 0, 0
-veteran_power_fact = 100, 150, 175, 200
-veteran_move_bonus = 0, 0, 0, 0
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:ace"),
+  _("?vet_rank:top gun")
+veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
 An improved Fighter, with improved attack and a higher movement\
@@ -2210,11 +2240,14 @@ veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
   _("?vet_rank:hardened"),
-  _("?vet_rank:ace")
-veteran_raise_chance = 40, 25, 16, 0
-veteran_work_raise_chance = 0, 0, 0, 0
-veteran_power_fact = 100, 150, 175, 200
-veteran_move_bonus = 0, 0, 0, 0
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:ace"),
+  _("?vet_rank:top gun")
+veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
 The strongest Bomber, with improved attack and a higher movement\
@@ -2916,83 +2949,68 @@ uk_food       = 0
 uk_gold       = 0
 flags         = "Diplomat", "IgZOC", "NonMil", "HasNoZOC", "Provoking", "Expellable"
 veteran_names =
-; /* TRANS: diplomatic rank. */
   _("?diplomatic_rank:attaché"),
-; /* TRANS: diplomatic rank */
   _("?diplomatic_rank:secretary"),
-; /* TRANS: diplomatic rank */
   _("?diplomatic_rank:envoy"),
-; /* TRANS: diplomatic rank */
-  _("?diplomatic_rank:ambassador")
-veteran_raise_chance = 50, 33, 20, 0
-veteran_work_raise_chance = 0, 0, 0, 0
-veteran_power_fact = 100, 105, 110, 115
-veteran_move_bonus = 0, 0, 0, 0
+  _("?diplomatic_rank:ambassador"),
+  _("?diplomatic_rank:emissary"),
+  _("?diplomatic_rank:statesman"),
+  _("?diplomatic_rank:plenipotentiary")
+
+veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 105, 110, 115, 120, 125, 130
+veteran_move_bonus = 0, 0, 0, 0, 0, 0, 0
 roles         = "DiplomatStartUnit"
 helptext      = _("\
-A Diplomat is an official that carries your dispatches and\
- is authorized to deal with foreign dignitaries. He may\
- also undertake various covert operations with the intent of\
- harming your opponents; Diplomats in your own cities defend\
- them against such actions.\
+A Diplomat deals with foreign dignitaries. He may\
+ undertake various covert operations to\
+ harm opponents. Diplomats inside cities defend\
+ against such actions.\
 "), _("\
-Many covert actions may be attempted even in peacetime, but the more\
- aggressive actions will be discovered and cause diplomatic incidents,\
+Many covert actions may be attempted in peacetime, but\
+ may cause diplomatic incidents,\
  which can allow Republics and Democracies to break treaties.\
 "), _("\
 If a foreign unit is alone on a tile, you may attempt to bribe it\
- with your Diplomat. By paying a sum of gold the unit will immediately\
- become yours; the exact sum depends on the status of the unit and\
- that of the civilization owning it. However, units belonging to\
- Democratic governments cannot be bribed. Bribery when not at war\
- will cause a diplomatic incident.\
+ with your Diplomat. The unit immediately\
+ becomes yours: the cost depends on unit status and\
+ the civilization owning it. Bribery creates a diplomatic incident.\
 "), _("\
-Diplomats can also perform a number of actions in another player's\
- city, although each Diplomat may attempt only one action. Most of\
- these actions have a chance of failure. Also, any enemy Diplomats or\
- Spies in the city will oppose hostile actions, as will the enemy Leader\
- in games with leaders; in this case, either your unit or the defending\
- unit will die (if you go up against the Leader you will always die). If\
- the defending unit dies, you lose one movement point and may try again.\
+Diplomats can act on another player's\
+ city.  Most actions have a chance of failure. Diplomats and\
+ Spies in the city defend against these actions. In this case, one of the\
+ units will die. If\
+ the attacker wins, it may try the action again if it has moves left.\
 "), _("\
-The actions available to Diplomats in a city are:\
+A Diplomat can:\
 "), _("\
- - \"Establish Embassy\": This action always succeeds, and gives\
- permanent contact with the city's owner, as well as intelligence\
- on their tax rates and technology.\
+ - \"Establish Embassy\": Gives\
+ permanent contact with the city's owner, tax rates, technology, and foreign relations.\
 "), _("\
- - \"Investigate City\": Your unit attempts to report detailed\
- information about the city: its status, what buildings and units are\
- within, and what it is currently producing.\
+ - \"Investigate City\": Attempts to acquire detailed\
+ information about the city.\
 "), _("\
- - \"Sabotage City\": Your unit attempts either to disrupt all the\
- city's work so far towards its current project, or to destroy an\
- existing building in the city, at random. Once built, Palaces and\
- Wonders cannot be sabotaged, and attempts to sabotage City Walls\
- or any building in a capital each halve the chance of success.\
- Sabotage may only be attempted when openly at war.\
+ - \"Sabotage City\": Attempts to disrupt\
+ city production or destroy a\
+ random building. Existing Palaces and\
+ Wonders cannot be sabotaged. Attempts to sabotage City Walls\
+ or capitals have half the chance of success.\
+ Sabotage may only be attempted during war.\
 "), _("\
- - \"Steal Technology\": Your unit attempts to learn the secrets of a\
- random technology known to the city's owner but not to you. Technology\
- may only be stolen once from a given enemy city by Diplomats. This\
- action may be attempted even when not at war, but will cause a\
+ - \"Steal Technology\": Attempts to steal a\
+ random technology. Technology\
+ may only be stolen once from a particular city by Diplomats. This\
+ action may be attempted in peace or war and causes a\
  diplomatic incident.\
 "), _("\
- - \"Incite a Revolt\": In return for gold a foreign city will change\
- allegiance and join your empire, bringing along all nearby units that\
- call it home, but reducing its size by 1. Units in other cities\
- remain in the enemy's control, but units outside cities are lost to\
- both players. The exact sum depends on the status of the city and\
- that of the civilization that owns it. It is not possible to incite\
- a rebellion in a capital, or in any city governed by a democracy.\
- Incitement may be attempted in peacetime, but will cause a\
- diplomatic incident.\
+ - \"Incite a Revolt\": For a high cost, a foreign city will change\
+ allegiance and join your empire, also acquiring the units the\
+ city supports. Units in other cities\
+ remain in the enemy's control. Units outside cities are disbanded. It is not possible to incite\
+ a capital or any city in a Democracy.\
 "), _("\
-In some game strategies, hordes of Diplomats can be used to wreak\
- havoc on the enemy.  Little wonder that Diplomats are often\
- viewed with suspicion and fear!\
-"), _("\
-Diplomats built under a Communist government will start at the first\
+Diplomats built under Communism start at the first\
  veteran level (secretary).\
 ")
 
@@ -3024,45 +3042,43 @@ uk_gold       = 0
 flags         = "Diplomat", "IgZOC", "NonMil", "HasNoZOC", "Spy",
                 "Provoking", "Expellable"
 veteran_names =
-; /* TRANS: Spy veteran level */
   _("?spy_level:informant"),
-; /* TRANS: Spy veteran level */
   _("?spy_level:handler"),
-; /* TRANS: Spy veteran level */
   _("?spy_level:agent"),
-; /* TRANS: Spy veteran level */
+  _("?spy_level:operative"),
+  _("?spy_level:secret agent"),
+  _("?spy_level:neutralizer"),
   _("?spy_level:spymaster")
-veteran_raise_chance = 50, 33, 20, 0
-veteran_work_raise_chance = 0, 0, 0, 0
-veteran_power_fact = 100, 105, 110, 115
+  
+veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 105, 110, 115, 120, 125, 130
 veteran_move_bonus = 0, 0, 0, 0
 roles         = "DiplomatStartUnit"
 helptext      = _("\
 A Spy is more skilled in the arts of espionage than her Diplomat predecessor.\
 "), _("\
-She can perform all the functions of the Diplomat; refer to the Diplomat\
- entry for more details. Unlike a Diplomat, a Spy may also survive an\
- operation in a foreign city and become more experienced as a result.\
- Spies are also more effective than Diplomats at defending cities\
- against foreign Diplomats and Spies.\
+She can perform all the functions of the Diplomat.\
+ Unlike a Diplomat, a Spy may survive an\
+ operation and become more experienced.\
+ Spies are more effective at defending cities.\
 "), _("\
-A Spy can also be used to:\n\
- - sabotage an enemy unit (reducing its hit points to half), if it is\
- alone on a tile and the players are at war;\n\
- - poison the water supply of an enemy city (reducing the population\
- by one);\n\
- - steal specific technology (with a reduced chance of success);\n\
- - steal further technologies from a city which has already been\
- stolen from (although cities become more resistant each time they\
- are stolen from);\n\
- - sabotage predetermined city targets (with a reduced chance of\
- success).\
+A Spy can be used to:\n\
+ - sabotage an enemy unit if it is\
+ alone on a tile (reduces hit points to half)\n\
+ - poison a city's water supply of an enemy city (-1 population)\n\
+ - steal specific technology (reduced chance of success)\n\
+ - steal map fragments\n\
+ - steal technologies from a city which has already been\
+ stolen from (cities are more resistant each time they\
+ are stolen from)\n\
+ - sabotage specific city targets (reduced chance success).\
 "), _("\
-A Spy that survives the more aggressive actions (sabotage, theft,\
- inciting rebellion, and poisoning) escapes to the safety of the\
+A Spy that survives sabotage, theft,\
+ inciting rebellion, and poisoning, will escape to the safety of the\
  nearest friendly city.\
 "), _("\
-Spies built under a Communist government will start at the first\
+Spies built under a Communist government start at the first\
  veteran level (handler).\
 ")
 
