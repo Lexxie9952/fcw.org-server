@@ -544,8 +544,9 @@ function tech_mapview_mouse_click(e)
             var swal_tech_id = ptech['id'];
             swal({
                 title: 'Research '+ptech['name']+'?',
-                text: 'Spend leftover bulbs to research '+ptech['name']+'?',
+                text: 'You will immediately discover '+ptech['name']+'.',
                 type: 'info',
+                background: '#a19886',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
