@@ -1119,8 +1119,8 @@ They are the most capable foot unit in the game and are \
 heavily armed with a variety of powerful weaponry. \
 "), _("\
 Marines can attack any Land, Air, or Sea unit from anywhere, \
-including from Transports and Helicopters. Marines promoted to \
-three veteran levels become Navy SEALS with strong capacity for \
+including from Transports and Helicopters. Marines promoted \
+to three veteran levels and beyond become commandos suitable for \
 special ops.\
 ")
 
@@ -2031,7 +2031,7 @@ roles         = ""
 helptext      = _("\
 The Helicopter is a very powerful unit, as it can fly far and attack \
  multiple targets, and even conquer cities.  Be careful, because Helicopters lose\
- a small amount of health for every turn not spent in a city or airbase\
+ a small amount of health for every turn not spent in a city, fortress, airbase\
  or Carrier.  Helicopters can be attacked by ground units from Riflemen onward.\
  They can be attacked by sea units from Ironclad onward.\
 "), _("\
@@ -3053,7 +3053,7 @@ veteran_names =
 veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 105, 110, 115, 120, 125, 130
-veteran_move_bonus = 0, 0, 0, 0
+veteran_move_bonus = 0, 0, 0, 0, 0, 0, 0
 roles         = "DiplomatStartUnit"
 helptext      = _("\
 A Spy is more skilled in the arts of espionage than her Diplomat predecessor.\
