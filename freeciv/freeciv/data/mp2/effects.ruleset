@@ -1362,7 +1362,6 @@ value	= 20
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Courthouse", "City", TRUE
-      "Action", "Sabotage City", "Local", TRUE
     }
 
 ;Courthouse improves chances against hostile diplomats by 20% - These effects REQUIRE 3.0
@@ -2541,8 +2540,7 @@ type	= "Spy_Resistant"
 value	= 20
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Courthouse", "City", TRUE
-      "Action", "Sabotage City", "Local", TRUE
+      "Building", "Surpeme Court", "Player", TRUE
     }
 
 ;Courthouse improves chances against hostile diplomats by 20% - These effects REQUIRE 3.0
