@@ -2540,7 +2540,7 @@ type	= "Spy_Resistant"
 value	= 20
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Surpeme Court", "Player", TRUE
+      "Building", "Supreme Court", "Player", TRUE
     }
 
 ;Courthouse improves chances against hostile diplomats by 20% - These effects REQUIRE 3.0
