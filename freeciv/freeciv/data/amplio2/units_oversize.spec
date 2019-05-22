@@ -52,4 +52,5 @@ tiles = { "row", "column", "tag"
   0,  1, "u.howitzer_o"       ; [Nemo], Lexxie
   0,  2, "u.ultra_heavy_bomber_o"     ; Lexxie
   0,  3, "u.jet_bomber_o"             ; Lexxie
+  0,  4, "u.heavy_bomber_o"           ; GB, Lexxie
 }

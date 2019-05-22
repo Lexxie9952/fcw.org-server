@@ -434,11 +434,15 @@ function show_city_dialog(pcity)
         +"</div><div style='float:left;height: "+sprite['height']+"px;margin-left:2px;'>"+pcity['ppl_' + citizen_types[i]][FEELING_FINAL]+"</div></div>";
       }
   }
-   
-  $('#rapture_citizen_panel').html(rapture_citizen_html);  
   
-  $('.city_dialog_rapture_citizen').tooltip({position: { my:"center bottom", at: "center top-4"}});  
-   
+  // HACK: Cities size 27+ overwrite this panel and it wouldn't allow clicking specialists... this hack just eliminates the panel if it's 27+ size
+  // TO DO:  Move the rapture_citizen_panel somewhere else so you can still always see it.
+  if (pcity['size'] < 27)
+  {
+    $('#rapture_citizen_panel').html(rapture_citizen_html);  
+    $('.city_dialog_rapture_citizen').tooltip({position: { my:"center bottom", at: "center top-4"}});  
+  }  else rapture_citizen_html = "";
+
   var city_surplus_colour = "#000000";
   var city_surplus_sign = "";
   
@@ -448,7 +452,7 @@ function show_city_dialog(pcity)
   }
 
   else if (pcity['surplus'][O_FOOD] < 0) {
-      city_surplus_colour = "#FF0000";
+      city_surplus_colour = "#AC002F";
   }
   
   var rapture_food_status_html = "<div><div style='float:left;background: transparent url(/images/wheat.png);width:20px;height:20px;'></div><div style='margin-left:4px;float:left;color:"+city_surplus_colour+";'</div>"+city_surplus_sign+pcity['surplus'][O_FOOD]+"</div></div>"
