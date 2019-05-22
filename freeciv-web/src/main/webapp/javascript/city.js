@@ -435,14 +435,10 @@ function show_city_dialog(pcity)
       }
   }
   
-  // HACK: Cities size 27+ overwrite this panel and it wouldn't allow clicking specialists... this hack just eliminates the panel if it's 27+ size
-  // TO DO:  Move the rapture_citizen_panel somewhere else so you can still always see it.
-  if (pcity['size'] < 27)
-  {
-    $('#rapture_citizen_panel').html(rapture_citizen_html);  
-    $('.city_dialog_rapture_citizen').tooltip({position: { my:"center bottom", at: "center top-4"}});  
-  }  else rapture_citizen_html = "";
-
+  $('#rapture_citizen_panel').html(rapture_citizen_html);
+  
+  $('.city_dialog_rapture_citizen').tooltip({position: { my:"center bottom", at: "center top-4"}});  
+  
   var city_surplus_colour = "#000000";
   var city_surplus_sign = "";
   
@@ -460,6 +456,8 @@ function show_city_dialog(pcity)
   $('#rapture_food').html(rapture_food_status_html);
   $('#rapture_status').html("<div style='font-weight:bold;padding-bottom:9px;'>"+get_city_state(pcity)+"</div>");
   $('#rapture_status').tooltip({tooltipClass: "wider-tooltip" , position: { my:"center bottom", at: "center top-3"}}); 
+  
+  if (pcity['size'] >= 27) $("#city_canvas_top_div").width(pcity['size']*15-30); // Fix the specialist panel overlapping with the citizen amounts panel for bigger cities 
   
   $('#disbandable_city').off();
   $('#disbandable_city').prop('checked',
@@ -1991,7 +1989,7 @@ function city_worklist_task_remove()
 **************************************************************************/
 function update_city_screen()
 {
-  if (observing) return;  
+  if (observing) return;
 
   var sortList = [];
   var headers = $('#city_table thead th');
