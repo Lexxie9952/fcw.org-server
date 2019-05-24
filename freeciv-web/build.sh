@@ -1,7 +1,8 @@
 #!/bin/bash
-# builds Freeciv-web and copies the war file to Tomcat.
+# builds Freeciv-web, copies the war file to Tomcat and builds the selected rulesets.
 
 BATCH_MODE=""
+RULESETS=(mpplus mp2)
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -33,3 +34,9 @@ echo "maven package"
 mvn ${BATCH_MODE} flyway:migrate package && \
 echo "Copying target/freeciv-web.war to ${TOMCATDIR}/webapps" && \
   cp target/freeciv-web.war "${TOMCATDIR}/webapps/"
+  
+printf "\nUpdating rulesets\n"
+   for r in ${RULESETS[@]}; do
+      echo "Copying $r"
+      bash ../scripts/copy-ruleset.sh $r      
+   done
