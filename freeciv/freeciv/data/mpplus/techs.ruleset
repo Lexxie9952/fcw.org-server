@@ -515,7 +515,7 @@ req2     = "Physics"
 flags    = ""
 graphic     = "a.magnetism"
 graphic_alt = "-"
-cost = 1035
+cost = 950
 
 [advance_map_making]
 name     = _("Map Making")
@@ -619,6 +619,7 @@ req2     = "Astronomy"
 flags    = ""
 graphic     = "a.navigation"
 graphic_alt = "-"
+cost = 226
 
 [advance_nuclear_fission]
 name     = _("Nuclear Fission")
@@ -657,6 +658,7 @@ req2     = "Navigation"
 flags    = ""
 graphic     = "a.physics"
 graphic_alt = "-"
+cost = 468
 
 [advance_plastics]
 name     = _("Plastics")

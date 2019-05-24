@@ -661,7 +661,7 @@ req2     = "Navigation"
 flags    = ""
 graphic     = "a.physics"
 graphic_alt = "-"
-cost = 364
+cost = 468
 
 [advance_plastics]
 name     = _("Plastics")
