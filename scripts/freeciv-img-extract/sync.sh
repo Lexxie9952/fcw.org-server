@@ -1,5 +1,18 @@
 #!/bin/bash
 
+#Names of the countries whose flags should not be converted to .png
+#(because we have manually drawn correct .png versions):    
+
+SCRIPT_DIRECTORY=`dirname $0`
+readarray BAD_FLAG_ARRAY < $SCRIPT_DIRECTORY/bad_flag_list.txt
+
+elementIn () {
+  local e match="$1"
+  shift
+  for e; do [[ "$e" == "$match" ]] && return 0; done
+  return 1
+}
+
 resolve() { echo "$(cd "$1" >/dev/null && pwd)"; }
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -33,10 +46,15 @@ cp "${TEMP_DIR}"/tileset_spec_*.js "${SPEC_DEST}" &&
 echo "converting flag .svg files to .png and .webp ..." &&
 (for svgfile in $(find "${FREECIV_DIR}"/data/flags/*.svg); do
   name="$(basename "$svgfile")"
-  pngfile="${FLAG_DEST}/${name/%.svg/-web.png}"
-  convert -density 90 -resize 180 "$svgfile" "${pngfile}" ||
-    >&2 echo "  ERROR converting ${svgfile} to ${pngfile}"
-  [[ -f "${pngfile}" ]] && cwebp -quiet -lossless "${pngfile}" -o "${pngfile/%.png/.webp}" ||
-    >&2 echo "  ERROR packing ${pngfile} to ${pngfile/%.png/.webp}"
+  name="${name//.svg}"
+  if ! elementIn "$name" "${BAD_FLAG_ARRAY[@]}" ; then
+    pngfile="${FLAG_DEST}/${name}-web.png"
+    convert -density 90 -resize 180 "$svgfile" "${pngfile}" ||
+        >&2 echo "  ERROR converting ${svgfile} to ${pngfile}"
+    [[ -f "${pngfile}" ]] && cwebp -quiet -lossless "${pngfile}" -o "${pngfile/%.png/.webp}" ||
+        >&2 echo "  ERROR packing ${pngfile} to ${pngfile/%.png/.webp}"
+  else
+    echo "not converting ${name} to .png - it's on the ignore list"
+  fi
 done) &&
 echo "Freeciv-img-extract done." || (>&2 echo "Freeciv-img-extract failed!" && exit 1)
