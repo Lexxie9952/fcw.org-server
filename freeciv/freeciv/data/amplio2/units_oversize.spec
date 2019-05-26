@@ -6,14 +6,7 @@ options = "+Freeciv-spec-Devel-2015-Mar-25"
 
 [info]
 
-; Apolyton Tileset created by CapTVK with thanks to the Apolyton Civ2
-; Scenario League.
-
-; Special thanks go to:
-; Alex Mor and Captain Nemo for their excellent graphics work
-; in the scenarios 2194 days war, Red Front, 2nd front and other misc graphics. 
-; Fairline for his huge collection of original Civ2 unit spanning centuries
-; Bebro for his collection of mediveal units and ships
+;84 x 48 images give an extra 20 horizontal pixels for "oversize" images.
 
 artists = "
     Lexxie9952 [Lexxie]
@@ -43,7 +36,7 @@ gfx = "amplio2/units_oversize"
 
 x_top_left = 1
 y_top_left = 1
-dx = 96
+dx = 84
 dy = 48
 pixel_border = 1
 
