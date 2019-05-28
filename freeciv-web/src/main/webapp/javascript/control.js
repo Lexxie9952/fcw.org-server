@@ -3210,7 +3210,6 @@ function update_active_units_dialog()
     var newheight = 75 + normal_tile_height;
 
     if (punits.length>8) {  // 9 or more units:  switch to large side-panel style (Lexxie) 
-    {
       newwidth = 32 + 5 * (width + 10);  // Large panel gets row of 5 units
       newheight = newheight * Math.ceil( punits.length/5 );   // one row for every 5 units, rounded up of course
     }  
