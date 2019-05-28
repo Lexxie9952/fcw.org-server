@@ -3179,8 +3179,8 @@ function update_active_units_dialog()
     unit_info_html += "<span title='Attack'>A:" + ptype['attack_strength']   // make terser titles to avoid cramped clutter (Lexxie)
     + "</span> <span title='Defense'>D:" + ptype['defense_strength']
     + "</span> <span title='Firepower'>FP:" + ptype['firepower']
-    + "</span> <span title='Health'>HP:<b>"
-    + aunit['hp'] + "</b> / " + ptype['hp'] + "</span>";
+    + "</span> <span title='Health'>H:<b>"
+    + aunit['hp'] + "</b>/" + ptype['hp'] + "</span>";
     if (aunit['veteran'] > 0) {
       unit_info_html += " <span title='Vet-level'>V:" + aunit['veteran'] + "</span>";
     }
