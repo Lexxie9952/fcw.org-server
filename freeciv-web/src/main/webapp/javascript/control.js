@@ -3150,19 +3150,20 @@ function update_active_units_dialog()
 
     unit_info_html += "<div id='unit_info_div' class='" + (active ? "current_focus_unit" : "")
            + "'><div id='unit_info_image' onclick='set_unit_focus_and_redraw(units[" + punit['id'] + "])' "
-	   + " style='background: transparent url("
+	   + " style='margin-right:1px; background: transparent url(" 
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
-           + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'"
-           + "'></div></div>";
-    width = sprite['width'];
+           + "px;  width:64px;height: " + sprite['height'] + "px;'"   // force everything to 64x46 including oversize units (Lexxie)
+//         + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'"   previous line
+           + "'></div></div>";                                 // changed margin-right to 1px, was defaulting to 5px (Lexxie)
+    width = 64; // = sprite['width'];    // they are all 64 except oversize which we want to FORCE to 64 anyway to avoid buggy display (Lexxie)
   }
 
   if (current_focus.length == 1) {
     /* show info about the active focus unit. */
     var aunit = current_focus[0];
     var ptype = unit_type(aunit);
-    unit_info_html += "<div id='active_unit_info' title='" + ptype['helptext'] + "'>";
+    unit_info_html += "<div id='active_unit_info' title=''>";            // removed helptext, it was bugging the panel (Lexxie)
 
     if (client.conn.playing != null && current_focus[0]['owner'] != client.conn.playing.playerno) {
       unit_info_html += "<b>" + nations[players[current_focus[0]['owner']]['nation']]['adjective'] + "</b> ";
@@ -3175,17 +3176,21 @@ function update_active_units_dialog()
     if (current_focus[0]['owner'] == client.conn.playing.playerno) {
       unit_info_html += "<span>" + get_unit_moves_left(aunit) + "</span> ";
     }
-    unit_info_html += "<br><span title='Attack strength'>A:" + ptype['attack_strength']
-    + "</span> <span title='Defense strength'>D:" + ptype['defense_strength']
-    + "</span> <span title='Firepower'>F:" + ptype['firepower']
-    + "</span> <span title='Health points'>H:"
+    unit_info_html += "<br><span title='Attack'>A:" + ptype['attack_strength']   // make terser titles to avoid cramped clutter (Lexxie)
+    + "</span> <span title='Defense'>D:" + ptype['defense_strength']
+    + "</span> <span title='Firepower'>FP:" + ptype['firepower']
+    + "</span> <span title='Health'>HP:"
     + aunit['hp'] + "/" + ptype['hp'] + "</span>";
     if (aunit['veteran'] > 0) {
-      unit_info_html += " <span>Veteran: " + aunit['veteran'] + "</span>";
+      unit_info_html += " <span title='Vet-level'>V:" + aunit['veteran'] + "</span>";
     }
     if (ptype['transport_capacity'] > 0) {
-      unit_info_html += " <span>Transport: " + ptype['transport_capacity'] + "</span>";
+      unit_info_html += " <span title='Cargo Cap.'>C:" + ptype['transport_capacity'] + "</span>";
     }
+    if (ptype['fuel'] > 0) {
+      unit_info_html += " <span title='Fuel Left'>Fuel:" + aunit['fuel'] + "</span>";  // Fuel remaining (Lexxie)
+    }  
+    
 
     unit_info_html += "</div>";
   } else if (current_focus.length >= 1 && client.conn.playing != null && current_focus[0]['owner'] != client.conn.playing.playerno) {
@@ -3200,12 +3205,18 @@ function update_active_units_dialog()
 
   if (current_focus.length > 0) {
     /* reposition and resize unit dialog. */
-    var newwidth = 32 + punits.length * (width + 10);
+    var newwidth = 32 + punits.length * (width + 10);   // TO DO: change +10 ??? pixel space is precious!! (Lexxie)
     if (newwidth < 140) newwidth = 140;
     var newheight = 75 + normal_tile_height;
+
+    if (punits.length>8) {  // 9 or more units:  switch to large side-panel style (Lexxie) 
+    {
+      newwidth = 32 + 5 * (width + 10);  // Large panel gets row of 5 units
+      newheight = newheight * Math.ceil( punits.length/5 );   // one row for every 5 units, rounded up of course
+    }  
     $("#game_unit_panel").parent().show();
     $("#game_unit_panel").parent().width(newwidth);
-    $("#game_unit_panel").parent().height(newheight);
+    $("#game_unit_panel").parent().height(newheight+6);  // third line of text is rare but needs 5 more px to not be clipped off (Lexxie)
     $("#game_unit_panel").parent().css("left", ($( window ).width() - newwidth) + "px");
     $("#game_unit_panel").parent().css("top", ($( window ).height() - newheight - 30) + "px");
     $("#game_unit_panel").parent().css("background", "rgba(50,50,40,0.5)");
