@@ -3176,18 +3176,18 @@ function update_active_units_dialog()
     if (current_focus[0]['owner'] == client.conn.playing.playerno) {
       unit_info_html += "<span>" + get_unit_moves_left(aunit) + "</span> ";
     }
-    unit_info_html += "<br><span title='Attack'>A:" + ptype['attack_strength']   // make terser titles to avoid cramped clutter (Lexxie)
+    unit_info_html += "<span title='Attack'>A:" + ptype['attack_strength']   // make terser titles to avoid cramped clutter (Lexxie)
     + "</span> <span title='Defense'>D:" + ptype['defense_strength']
     + "</span> <span title='Firepower'>FP:" + ptype['firepower']
-    + "</span> <span title='Health'>HP:"
-    + aunit['hp'] + "/" + ptype['hp'] + "</span>";
+    + "</span> <span title='Health'>HP:<b>"
+    + aunit['hp'] + "</b> / " + ptype['hp'] + "</span>";
     if (aunit['veteran'] > 0) {
       unit_info_html += " <span title='Vet-level'>V:" + aunit['veteran'] + "</span>";
     }
     if (ptype['transport_capacity'] > 0) {
       unit_info_html += " <span title='Cargo Cap.'>C:" + ptype['transport_capacity'] + "</span>";
     }
-    if (ptype['fuel'] > 0) {
+    if ( (ptype['fuel']>0) && (current_focus[0]['owner']==client.conn.playing.playerno) ) {
       unit_info_html += " <span title='Fuel Left'>Fuel:" + aunit['fuel'] + "</span>";  // Fuel remaining (Lexxie)
     }  
     
@@ -3205,14 +3205,16 @@ function update_active_units_dialog()
 
   if (current_focus.length > 0) {
     /* reposition and resize unit dialog. */
-    var newwidth = 32 + punits.length * (width + 10);   // TO DO: change +10 ??? pixel space is precious!! (Lexxie)
+    var newwidth = 32 + punits.length * (width + 1) + 9;   
+//    var newwidth = 32 + punits.length * (width + 10);   // old line above--right panel padding was increasing +10 for every unit in panel
     if (newwidth < 140) newwidth = 140;
     var newheight = 75 + normal_tile_height;
 
     if (punits.length>8) {  // 9 or more units:  switch to large side-panel style (Lexxie) 
-      newwidth = 32 + 5 * (width + 10);  // Large panel gets row of 5 units
-      newheight = newheight * Math.ceil( punits.length/5 );   // one row for every 5 units, rounded up of course
-    }  
+      newwidth = 32 + 5 * (width + 1) + 9;  // Large panel gets row of 5 units
+//      newwidth = 32 + 5 * (width + 10);  // formerly was this, but panel padding on right got more for each unit in the panel
+      newheight = normal_tile_height * Math.ceil( punits.length/5 ) +75;   // one row for every 5 units, rounded up of course
+    }
     $("#game_unit_panel").parent().show();
     $("#game_unit_panel").parent().width(newwidth);
     $("#game_unit_panel").parent().height(newheight+6);  // third line of text is rare but needs 5 more px to not be clipped off (Lexxie)
