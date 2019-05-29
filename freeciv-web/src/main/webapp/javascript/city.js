@@ -2155,7 +2155,7 @@ function update_city_screen()
         if (prod_sprite != null) { 
           sprite = prod_sprite['sprite'];
           
-          adjust_oversize = (sprite['width']>64) ? "margin-right:-32px;" : "";  // "oversize" images are 32 pixels wider so need alignment
+          adjust_oversize = (sprite['width']>64) ? "margin-right:-20px;" : "";  // "oversize" images are 20 pixels wider so need alignment
           
           prod_img_html = "<div style='max-height:24px; float:right; padding-left:0px padding-right:0px; content-align:right; margin-top:-14px;"
                   + adjust_oversize+"'>"
