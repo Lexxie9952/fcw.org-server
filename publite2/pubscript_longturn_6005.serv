@@ -8,7 +8,7 @@ rulesetdir mp2
 set minplayers 0
 set maxplayers 15
 set aifill 15
-set timeout 45000
+set timeout 82800
 set first_timeout 90000
 set nationset all
 set compresstype xs
