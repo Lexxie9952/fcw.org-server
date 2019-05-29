@@ -173,7 +173,7 @@ function get_unit_moves_left(punit)
     return 0;
   }
 
-  return "Moves:<b>" + move_points_text(punit['movesleft']) + "</b>";
+  return "Moves:" + move_points_text(punit['movesleft']) + "";
 }
 
 /**************************************************************************
