@@ -64,7 +64,7 @@ var unit_activity_offset_y = 25;
 
 // offset the units by this amount when drawing units
 var unit_offset_x = 16;
-var unit_offset_y = 18;
+var unit_offset_y = 10;
 
 // Enable citybar
 var is_full_citybar = 1;
