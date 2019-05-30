@@ -3181,7 +3181,7 @@ function update_active_units_dialog()
     + "</b></span></span> <span title='Defense'>D:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['defense_strength']
     + "</b></span></span> <span title='Firepower'>FP:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['firepower']
     + "</b></span></span> <span title='Health'>H:<span style='color:wheat;font-size:110%;'><b>"
-    + aunit['hp'] + "</b></span><span style='color:gainsboro;font-size:85%;'>/" + ptype['hp'] + "</span></span>";
+    + aunit['hp'] + "</b></span></span>"; //<span style='color:gainsboro;font-size:85%;'>/" + ptype['hp'] + "</span></span>";
     if (aunit['veteran'] > 0) {
       unit_info_html += " <span title='Vet-level'>V:<span style='color:gainsboro;font-size:100%;'><b>" + aunit['veteran'] + "</b></span></span>";
     }
@@ -3203,7 +3203,7 @@ function update_active_units_dialog()
       else if (fuel_left>0.50) fuel_color =  "<span style='color:orangered;font-size:100%;'><b>";        
       else  fuel_color = "<span style='color:red;font-size:100%;'><b>";
 
-      unit_info_html += " <span title='Fuel Left'>Fuel:" + fuel_color + fuel_left.toFixed(2) + "</b></span></span>";  // Fuel remaining (Lexxie)
+      unit_info_html += " <span title='Fuel Left'>Fuel:" + fuel_color + fuel_left.toFixed(fuel_left<1?2:1) + "</b></span></span>";  // Fuel remaining (Lexxie)
     }  
     
 
