@@ -333,6 +333,8 @@ function generate_help_text(key)
 	    + render_sprite(get_technology_image_sprite(tech)) + "<br>"
 	    + get_advances_text(tech['id']);
     msg += "<br><br>";
+    msg += "<div id='helptext'><p>" + tech['helptext'] + "</p></div>";
+
     msg += wiki_on_item_button(tech['name']);
   } else if (key == "help_gen_ruleset") {
     msg = helpdata_format_current_ruleset();
