@@ -666,7 +666,7 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
         dx -= 12; dy += 5;
         break;
     case "Jet Fighter":
-        dx -= 1; dy += 2;
+        dx += 2; dy += 3;
         break;
     case "Marines":
         dx += 2; dy += 2;
