@@ -3174,36 +3174,36 @@ function update_active_units_dialog()
       unit_info_html += " " + get_unit_homecity_name(aunit) + " ";
     }
     if (current_focus[0]['owner'] == client.conn.playing.playerno) {
-      unit_info_html += "<span style='color:white'>Moves:<span style='color:darkkhaki;font-size:100%;'>" + move_points_text(aunit['movesleft']) + "</span></span> ";
+      unit_info_html += "<span style='color:white'>Moves:<span style='color:khaki;font-size:110%;'><b>" + move_points_text(aunit['movesleft']) + "</b></span></span> ";
 //      unit_info_html += "<span style='color:aqua'>" + get_unit_moves_left(aunit) + "</span> ";
     }
-    unit_info_html += "<span title='Attack'>A:" + ptype['attack_strength']   // make terser titles to avoid cramped clutter (Lexxie)
-    + "</span> <span title='Defense'>D:" + ptype['defense_strength']
-    + "</span> <span title='Firepower'>FP:" + ptype['firepower']
-    + "</span> <span title='Health'>H:<b>"
-    + aunit['hp'] + "</b>/" + ptype['hp'] + "</span>";
+    unit_info_html += "<span title='Attack'>A:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['attack_strength']   // make terser titles to avoid cramped clutter (Lexxie)
+    + "</b></span></span> <span title='Defense'>D:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['defense_strength']
+    + "</b></span></span> <span title='Firepower'>FP:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['firepower']
+    + "</b></span></span> <span title='Health'>H:<span style='color:wheat;font-size:110%;'><b>"
+    + aunit['hp'] + "</b></span><span style='color:gainsboro;font-size:85%;'>/" + ptype['hp'] + "</span></span>";
     if (aunit['veteran'] > 0) {
-      unit_info_html += " <span title='Vet-level'>V:" + aunit['veteran'] + "</span>";
+      unit_info_html += " <span title='Vet-level'>V:<span style='color:gainsboro;font-size:100%;'><b>" + aunit['veteran'] + "</b></span></span>";
     }
     if (ptype['transport_capacity'] > 0) {
-      unit_info_html += " <span title='Cargo Cap.'>C:" + ptype['transport_capacity'] + "</span>";
+      unit_info_html += " <span title='Cargo Cap.'>C:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['transport_capacity'] + "</b></span></span>";
     }
     // Actual fuel remaining is: (turns_of_fuel-1) + moves_left/moves_rate
     if ( (ptype['fuel']>0) && (current_focus[0]['owner']==client.conn.playing.playerno) ) {
       var fuel_left = (aunit['fuel']-1) + aunit['movesleft']/ptype['move_rate'];
       var fuel_color = "";
-      if (aunit['movesleft']==0) fuel_color = "<span style='color:gainsboro;font-size:100%;'>";    // no moves left, fuel indicator is dimmed down
-      else if (fuel_left>2.001) fuel_color = "<span style='color:deepskyblue;font-size:100%;'>";   // more than 2 turns of fuel = blue skies ahead
-      else if (fuel_left>1.001) fuel_color = "<span style='color:darkturquoise;font-size:100%;'>"; // more than 1 turn  of fuel = blue skies ahead
-      else if (fuel_left>0.85) fuel_color = "<span style='color:lawngreen;font-size:100%;'>";      // full turn of fuel = green
-      else if (fuel_left>0.67) fuel_color = "<span style='color:greenyellow;font-size:100%;'>";    // most moves = green-yellow
-      else if (fuel_left>0.63) fuel_color = "<span style='color:yellow;font-size:100%;'>";         // getting close to half fuel used = yellow 
-      else if (fuel_left>0.59) fuel_color = "<span style='color:gold;font-size:100%;'>";         
-      else if (fuel_left>0.55) fuel_color = "<span style='color:orange;font-size:100%;'>";         
-      else if (fuel_left>0.50) fuel_color =  "<span style='color:orangered;font-size:100%;'>";        
-      else  fuel_color = "<span style='color:red'>";
+      if (aunit['movesleft']==0) fuel_color = "<span style='color:gainsboro;font-size:100%;'><b>";    // no moves left, fuel indicator is dimmed down
+      else if (fuel_left>2.001) fuel_color = "<span style='color:deepskyblue;font-size:100%;'><b>";   // more than 2 turns of fuel = blue skies ahead
+      else if (fuel_left>1.001) fuel_color = "<span style='color:darkturquoise;font-size:100%;'><b>"; // more than 1 turn  of fuel = blue skies ahead
+      else if (fuel_left>0.85) fuel_color = "<span style='color:lawngreen;font-size:100%;'><b>";      // full turn of fuel = green
+      else if (fuel_left>0.67) fuel_color = "<span style='color:greenyellow;font-size:100%;'><b>";    // most moves = green-yellow
+      else if (fuel_left>0.63) fuel_color = "<span style='color:yellow;font-size:100%;'><b>";         // getting close to half fuel used = yellow 
+      else if (fuel_left>0.59) fuel_color = "<span style='color:gold;font-size:100%;'><b>";         
+      else if (fuel_left>0.55) fuel_color = "<span style='color:orange;font-size:100%;'><b>";         
+      else if (fuel_left>0.50) fuel_color =  "<span style='color:orangered;font-size:100%;'><b>";        
+      else  fuel_color = "<span style='color:red;font-size:100%;'><b>";
 
-      unit_info_html += " <span title='Fuel Left'>Fuel:" + fuel_color + fuel_left.toFixed(2) + "</span></span>";  // Fuel remaining (Lexxie)
+      unit_info_html += " <span title='Fuel Left'>Fuel:" + fuel_color + fuel_left.toFixed(2) + "</b></span></span>";  // Fuel remaining (Lexxie)
     }  
     
 
