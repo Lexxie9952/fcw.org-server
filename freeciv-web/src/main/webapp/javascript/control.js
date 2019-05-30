@@ -3203,7 +3203,8 @@ function update_active_units_dialog()
       else if (fuel_left>0.50) fuel_color =  "<span style='color:orangered;font-size:100%;'><b>";        
       else  fuel_color = "<span style='color:red;font-size:100%;'><b>";
 
-      unit_info_html += " <span title='Fuel Left'>Fuel:" + fuel_color + fuel_left.toFixed(fuel_left<1?2:1) + "</b></span></span>";  // Fuel remaining (Lexxie)
+      if (aunit['movesleft']==0 && fuel_left<1.0001) { fuel_left="";} // no moves and exactly 1 or less fuel are special cases like airlift/refueling/etc where we don't need to show fuel 
+      else unit_info_html += " <span title='Fuel Left'>Fuel:" + fuel_color + fuel_left.toFixed(fuel_left<1?2:1) + "</b></span></span>";  // Fuel remaining (Lexxie)
     }  
     
 
