@@ -349,24 +349,24 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
        explosion_anim_map[ptile['index']] =  explode_step - 1;
        if (explode_step > 20) {
          sprite_array.push({"key" : "explode.unit_0",
-           "offset_x" : city_offset_x,
-           "offset_y" : city_offset_y});
+           "offset_x" : unit_offset_x,
+           "offset_y" : unit_offset_y});
        } else if (explode_step > 15) {
          sprite_array.push({"key" : "explode.unit_1",
-           "offset_x" : city_offset_x,
-           "offset_y" : city_offset_y});
+           "offset_x" : unit_offset_x,
+           "offset_y" : unit_offset_y});
        } else if (explode_step > 10) {
          sprite_array.push({"key" : "explode.unit_2",
-           "offset_x" : city_offset_x,
-           "offset_y" : city_offset_y});
+           "offset_x" : unit_offset_x,
+           "offset_y" : unit_offset_y});
        } else if (explode_step > 5) {
          sprite_array.push({"key" : "explode.unit_3",
-           "offset_x" : city_offset_x,
-           "offset_y" : city_offset_y});
+           "offset_x" : unit_offset_x,
+           "offset_y" : unit_offset_y});
        } else if (explode_step > 0) {
          sprite_array.push({"key" : "explode.unit_4",
-           "offset_x" : city_offset_x,
-           "offset_y" : city_offset_y});
+           "offset_x" : unit_offset_x,
+           "offset_y" : unit_offset_y});
        } else {
          delete explosion_anim_map[ptile['index']];
        }
@@ -619,7 +619,8 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
 
   var unit_offset = get_unit_anim_offset(punit);
 
-  var dx,dy; // pixel offsets for drawing unit sprite. Note: dy is how much to move UP (subtract)
+  var dx = unit_offset_x + unit_offset_adj_x;  // offsets for where to draw units on the tile.
+  var dy = unit_offset_y + unit_offset_adj_y; 
 
   // This section allows custom offset adjustments for any particular unit, notably oversize unit placement
   // TO DO: some rulesets don't use same sprites or oversize images, so, we should make a list of offsets associated
@@ -630,55 +631,55 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
 
   switch(ptype['name']) {
     case "AEGIS Cruiser":
-        dx = unit_offset_x-2; dy = unit_offset_y-4;
+        dx -= 2; dy -= 4;
         break;
     case "Archer":                     
-        dx = unit_offset_x+1; dy = unit_offset_y;
+        dx += 1; 
         break;
     case "Battleship":
-        dx = unit_offset_x-5; dy = unit_offset_y-4;
+        dx -= 5; dy -= 4;
         break;
     case "Chariot":
-        dx = unit_offset_x-2; dy = unit_offset_y;
+        dx -= 2; 
         break;        
     case "Engineer":                     
-        dx = unit_offset_x-1; dy = unit_offset_y-2;
+        dx -= 1; dy -= 2;
         break;
     case "Fighter":
-        dx = unit_offset_x-3; dy = unit_offset_y-3;
+        dx -= 3; dy -= 3;
         break;    
     case "Horsemen":
-        dx = unit_offset_x-3; dy = unit_offset_y+2;
+        dx -= 3; dy += 2;
         break;
     case "Howitzer":
-        dx = unit_offset_x-8; dy = unit_offset_y+2;
+        dx -= 8; dy += 2;
         break;
     case "Jet Bomber":
-        dx = unit_offset_x-5; dy = unit_offset_y+2;
+        dx -= 10; dy += 5;
         break;
     case "Jet Fighter":
-        dx = unit_offset_x-1; dy = unit_offset_y+2;
+        dx -= 1; dy += 2;
         break;
     case "Marines":
-        dx = unit_offset_x+2; dy = unit_offset_y+2;
+        dx += 2; dy += 2;
         break;
     case "Mech. Inf.":
-        dx = unit_offset_x+1; dy = unit_offset_y+1;
+        dx += 1; dy += 1;
         break;
     case "Musketeer":
-        dx = unit_offset_x+1; dy = unit_offset_y+1;
+        dx += 1; dy += 1;
         break;
     case "Pikemen":
-        dx = unit_offset_x; dy = unit_offset_y+2;
+        dx += 1; dy += 2;
         break;
     case "Submarine":
-        dx = unit_offset_x-3; dy = unit_offset_y-4;
+        dx -= 3; dy -= 4;
         break;
     case "Transport":
-        dx = unit_offset_x-2; dy = unit_offset_y-2;
+        dx -= 3; dy -= 1;
         break;
     case "Worker":                     
-        dx = unit_offset_x+1; dy = unit_offset_y-1;
+        dx += 1; dy -= 1;
         break;
     default:
       dx = unit_offset_x; dy = unit_offset_y;
