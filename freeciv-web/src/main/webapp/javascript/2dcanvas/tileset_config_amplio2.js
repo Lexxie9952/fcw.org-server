@@ -50,6 +50,7 @@ var roadstyle = 0;
 var fogstyle = 2;
 var darkness_style = 4;
 
+// OFFSETS FOR SPRITE PLACEMENTS ON MAP --------------------------------------------
 // offset the flags by this amount when drawing units
 var unit_flag_offset_x = 25;
 var unit_flag_offset_y = 16;
@@ -64,7 +65,11 @@ var unit_activity_offset_y = 25;
 
 // offset the units by this amount when drawing units
 var unit_offset_x = 16;
-var unit_offset_y = 10;
+var unit_offset_y = 11;
+
+// offset for drawing cities on tiles
+var city_offset_x = 25;
+var city_offset_y = 14;
 
 // Enable citybar
 var is_full_citybar = 1;
@@ -79,7 +84,7 @@ var tilelabel_offset_x = 0;
 
 var dither_offset_x = [normal_tile_width/2, 0, normal_tile_width/2, 0];
 var dither_offset_y = [0, normal_tile_height/2, normal_tile_height/2, 0];
-
+// ------------------------------------------------------------------------------------
 var ts_layer = [];
 
 //[layer0]
