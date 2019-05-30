@@ -69,7 +69,7 @@ var unit_offset_y = 11;
 
 // offset for drawing cities on tiles
 var city_offset_x = 25;
-var city_offset_y = 14;
+var city_offset_y = 18;
 
 // Enable citybar
 var is_full_citybar = 1;

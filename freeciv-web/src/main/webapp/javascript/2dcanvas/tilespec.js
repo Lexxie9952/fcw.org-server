@@ -615,6 +615,8 @@ function check_sprite_type(sprite_type)
 **************************************************************************/
 function fill_unit_sprite_array(punit, stacked, backdrop)
 {
+  var ptype = unit_type(punit);
+
   var unit_offset = get_unit_anim_offset(punit);
 
   var dx,dy; // pixel offsets for drawing unit sprite. Note: dy is how much to move UP (subtract)
@@ -623,7 +625,10 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
   // TO DO: some rulesets don't use same sprites or oversize images, so, we should make a list of offsets associated
   // to the actual graphic. This is long overdue for dealing with the dirty reality of a 64x48 sprite needing to fit in   
   // an even larger area than the 96x48 tile area, and with different shaped units needing optimal adjustment for placements.
-  switch(punit['name']) {
+
+
+
+  switch(ptype['name']) {
     case "AEGIS Cruiser":
         dx = unit_offset_x-2; dy = unit_offset_y-4;
         break;
