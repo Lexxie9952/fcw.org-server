@@ -683,6 +683,9 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
     case "Submarine":
         dx -= 3; dy -= 4;
         break;
+    case "Stealth Bomber":
+        dx -= 18; dy -= -10;  
+        break;
     case "Stealth Fighter":
         dx -= 2; dy -= 1;
         break;
