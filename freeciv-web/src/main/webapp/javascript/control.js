@@ -3187,8 +3187,11 @@ function update_active_units_dialog()
     if (ptype['transport_capacity'] > 0) {
       unit_info_html += " <span title='Cargo Cap.'>C:" + ptype['transport_capacity'] + "</span>";
     }
+    // Actual fuel remaining is: (turns_of_fuel-1) + moves_left/moves_rate
     if ( (ptype['fuel']>0) && (current_focus[0]['owner']==client.conn.playing.playerno) ) {
-      unit_info_html += " <span title='Fuel Left'>Fuel:" + aunit['fuel'] + "</span>";  // Fuel remaining (Lexxie)
+      var fuel_left = (aunit['fuel']-1 + punit['movesleft']/ptype['move_rate']).toFixed(2);
+      
+      unit_info_html += " <span title='Fuel Left'>Fuel:" + fuel_left + "</span>";  // Fuel remaining (Lexxie)
     }  
     
 

@@ -641,24 +641,29 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
         break;
     case "Chariot":
         dx -= 2; 
-        break;        
+        break; 
+    case "Caravel":
+        dx -= 3; dy-= 3; 
+        break;         
     case "Engineer":                     
         dx -= 1; dy -= 2;
         break;
+    case "Explorer":                     
+        dx -= 2; dy += 2;    
     case "Fighter":
-        dx -= 3; dy -= 3;
+        dx -= 11; dy -= 4;
         break;    
     case "Horsemen":
         dx -= 3; dy += 2;
         break;
     case "Howitzer":
-        dx -= 8; dy += 2;
+        dx -= 9; dy += 1;
         break;
     case "Ironclad":
-        dx -= 3; dy -= 4;
+        dx -= 4; dy -= 5;
         break;
     case "Jet Bomber":
-        dx -= 11; dy += 5;
+        dx -= 12; dy += 5;
         break;
     case "Jet Fighter":
         dx -= 1; dy += 2;
@@ -677,6 +682,9 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
         break;
     case "Submarine":
         dx -= 3; dy -= 4;
+        break;
+    case "Stealth Fighter":
+        dx -= 2; dy -= 1;
         break;
     case "Transport":
         dx -= 3; dy -= 1;
