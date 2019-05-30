@@ -3189,9 +3189,8 @@ function update_active_units_dialog()
     }
     // Actual fuel remaining is: (turns_of_fuel-1) + moves_left/moves_rate
     if ( (ptype['fuel']>0) && (current_focus[0]['owner']==client.conn.playing.playerno) ) {
-      var fuel_left = (aunit['fuel']-1 + punit['movesleft']/ptype['move_rate']).toFixed(2);
-      
-      unit_info_html += " <span title='Fuel Left'>Fuel:" + fuel_left + "</span>";  // Fuel remaining (Lexxie)
+      var fuel_left = (aunit['fuel']-1) + aunit['movesleft']/ptype['move_rate'];
+      unit_info_html += " <span title='Fuel Left'>Fuel:" + fuel_left.toFixed(2) + "</span>";  // Fuel remaining (Lexxie)
     }  
     
 
