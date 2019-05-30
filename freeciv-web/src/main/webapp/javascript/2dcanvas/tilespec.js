@@ -654,8 +654,11 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
     case "Howitzer":
         dx -= 8; dy += 2;
         break;
+    case "Ironclad":
+        dx -= 3; dy -= 4;
+        break;
     case "Jet Bomber":
-        dx -= 10; dy += 5;
+        dx -= 11; dy += 5;
         break;
     case "Jet Fighter":
         dx -= 1; dy += 2;

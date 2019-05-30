@@ -64,12 +64,12 @@ var unit_activity_offset_x = 55;
 var unit_activity_offset_y = 25;
 
 // offset the units by this amount when drawing units
-var unit_offset_x = 19;
-var unit_offset_y = 14;
+var unit_offset_x = 25;          //19
+var unit_offset_y = 18;          //14    
 
 // since more than just units are using unit_offset for placement, these 2 vars are the specific adjustments for UNITS ONLY
-var unit_offset_adj_x = -3;
-var unit_offset_adj_y = -3;
+var unit_offset_adj_x = -9;      //-3
+var unit_offset_adj_y = -7;      //-3 
 
 // Enable citybar
 var is_full_citybar = 1;
