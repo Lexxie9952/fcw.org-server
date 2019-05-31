@@ -3150,7 +3150,7 @@ function update_active_units_dialog()
 
     unit_info_html += "<div id='unit_info_div' class='" + (active ? "current_focus_unit'" : "' style='background-color:rgba(15, 0, 0, 0.55);'")
            + "><div id='unit_info_image' onclick='set_unit_focus_and_redraw(units[" + punit['id'] + "])' "
-	   + " style='margin-right:1px; background: transparent url(" 
+	   + " style='margin-right:1px; width:64px; height:46px; background: transparent url(" 
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
            + "px;  width:100%;height:auto;"   // force everything to 64x46 including oversize units (Lexxie)
