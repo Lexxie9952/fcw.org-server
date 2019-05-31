@@ -3153,7 +3153,7 @@ function update_active_units_dialog()
 	   + " style='margin-right:1px; background: transparent url(" 
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
-           + "px;  object-fit:contain; object-position:50% 50%; width:64px;height: " + sprite['height'] + "px;'"   // force everything to 64x46 including oversize units (Lexxie)
+           + "px;  width:64px;height: " + sprite['height'] + "px;'"   // force everything to 64x46 including oversize units (Lexxie)
 //         + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'"   previous line
            + "'></div></div>";                                 // changed margin-right to 1px, was defaulting to 5px (Lexxie)
     width = 64; // = sprite['width'];    // they are all 64 except oversize which we want to FORCE to 64 anyway to avoid buggy display (Lexxie)
