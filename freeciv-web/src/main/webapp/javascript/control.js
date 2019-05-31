@@ -3153,7 +3153,8 @@ function update_active_units_dialog()
 	   + " style='margin-right:1px; background: transparent url(" 
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
-           + "px;  width:64px;height: " + sprite['height'] + "px;'"   // force everything to 64x46 including oversize units (Lexxie)
+           + "px;  width:64px;height:auto;"   // force everything to 64x46 including oversize units (Lexxie)
+//           + "px;  width:64px;height: " + sprite['height'] + "px;'"   // force everything to 64x46 including oversize units (Lexxie)
 //         + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'"   previous line
            + "'></div></div>";                                 // changed margin-right to 1px, was defaulting to 5px (Lexxie)
     width = 64; // = sprite['width'];    // they are all 64 except oversize which we want to FORCE to 64 anyway to avoid buggy display (Lexxie)
@@ -3200,7 +3201,7 @@ function update_active_units_dialog()
       else if (fuel_left>0.63) fuel_color = "<span style='color:yellow;font-size:100%;'><b>";         // getting close to half fuel used = yellow 
       else if (fuel_left>0.59) fuel_color = "<span style='color:gold;font-size:100%;'><b>";         
       else if (fuel_left>0.55) fuel_color = "<span style='color:orange;font-size:100%;'><b>";         
-      else if (fuel_left>0.50) fuel_color =  "<span style='color:orangered;font-size:100%;'><b>";        
+      else if (fuel_left>0.50) fuel_color = "<span style='color:orangered;font-size:100%;'><b>";        
       else  fuel_color = "<span style='color:red;font-size:100%;'><b>";
 
       if (aunit['movesleft']==0 && fuel_left<1.0001) { fuel_left="";} // no moves and exactly 1 or less fuel are special cases like airlift/refueling/etc where we don't need to show fuel 
