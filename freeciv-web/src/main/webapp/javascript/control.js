@@ -3147,14 +3147,14 @@ function update_active_units_dialog()
     var punit = punits[i];
     var sprite = get_unit_image_sprite(punit);
     var active = (current_focus.length > 1 || current_focus[0]['id'] == punit['id']);
+    var trans_scale = 64/sprite['width'];  // scale oversize images to standard 64px width
 
     unit_info_html += "<div id='unit_info_div' class='" + (active ? "current_focus_unit'" : "' style='background-color:rgba(15, 0, 0, 0.55);'")
            + "><div id='unit_info_image' onclick='set_unit_focus_and_redraw(units[" + punit['id'] + "])' "
-	   + " style='margin-right:1px; width:64px; height:46px; background: transparent url(" 
+	   + " style='margin-right:1px; background: transparent url(" 
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
-           + "px;  width:100%;height:auto;"   // force everything to 64x46 including oversize units (Lexxie)
-//           + "px;  width:64px;height: " + sprite['height'] + "px;'"   // force everything to 64x46 including oversize units (Lexxie)
+           + "px;  transform: scale("+trans_scale+"); width:64px;height: " + sprite['height'] + "px;'"   // force everything to 64x46 including oversize units (Lexxie)
 //         + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'"   previous line
            + "'></div></div>";                                 // changed margin-right to 1px, was defaulting to 5px (Lexxie)
     width = 64; // = sprite['width'];    // they are all 64 except oversize which we want to FORCE to 64 anyway to avoid buggy display (Lexxie)
