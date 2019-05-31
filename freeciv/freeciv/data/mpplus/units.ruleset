@@ -823,11 +823,11 @@ vision_radius_sq = 2
 transport_cap = 0
 fuel          = 0
 uk_happy      = 1
-uk_shield     = 1
+uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "IgTer", "IgZOC"
-roles         = "DefendGood", "NoHome", "DefendGoodStartUnit", "Partisan", "BarbarianTech"
+flags         = "IgTer", "IgZOC", "NoHome"
+roles         = "DefendGood", "DefendGoodStartUnit", "Partisan", "BarbarianTech"
 helptext      = _("\
 Partisans are guerilla fighters who are experts\
  at using the terrain to their advantage.  Like the Explorer\

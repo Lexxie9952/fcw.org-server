@@ -8,7 +8,7 @@
 ; use your new customized file.
 
 [datafile]
-description="Multiplayer technology data for Freeciv"
+description="Multiplayer-Evolution technology data for Freeciv"
 options="+Freeciv-ruleset-Devel-2017.Jan.02 web-compatible"
 format_version=20
 
@@ -164,7 +164,7 @@ req1     = "Combustion"
 req2     = "Steel"
 graphic     = "a.automobile"
 graphic_alt = "-"
-helptext = _("Increases the population's contribution to pollution.")
+helptext = _("Obsoletes Leonardo's Workshop, Colossus. Increases population pollution 25%.")
 cost = 4230
 
 [advance_banking]
@@ -218,6 +218,7 @@ req2     = "Horseback Riding"
 flags    = ""
 graphic     = "a.chivalry"
 graphic_alt = "-"
+helptext = _("Obsoletes Horsemen and Chariots.")
 cost = 226
 
 [advance_code_of_laws]
@@ -253,7 +254,7 @@ req2     = "Industrialization"
 flags    = ""
 graphic     = "a.communism"
 graphic_alt = "-"
-helptext = _("Reduces the effect of Cathedrals.")
+helptext = _("Reduces the effect of Cathedrals & Michelangelo's Chapel.")
 
 [advance_computers]
 name     = _("Computers")
@@ -262,6 +263,7 @@ req2     = "Miniaturization"
 flags    = ""
 graphic     = "a.computers"
 graphic_alt = "-"
+helptext = _("Obsoletes Temple of Artemis.")
 cost = 5650
 
 [advance_conscription]
@@ -271,6 +273,7 @@ req2     = "Metallurgy"
 flags    = ""
 graphic     = "a.conscription"
 graphic_alt = "-"
+helptext = _("Obsoletes Musketeers.")
 cost = 1890
 
 [advance_construction]
@@ -281,9 +284,8 @@ flags    = ""
 graphic     = "a.construction"
 graphic_alt = "-"
 helptext = _("\
-Allows Settlers, Workers and Engineers to build fortresses, and to \
-build oil wells on Desert tiles.\
-")
+Allows Settlers, Workers and Engineers to build fortresses, and \
+build Oil Wells on Desert tiles.")
 
 [advance_currency]
 name     = _("Currency")
@@ -318,7 +320,7 @@ req2     = "Magnetism"
 flags    = ""
 graphic     = "a.electricity"
 graphic_alt = "-"
-helptext = _("Improves the effect of Amphitheaters.")
+helptext = _("Adds +1 to the effect of Amphitheaters. Obsoletes Ironclad.")
 cost = 2220
 
 [advance_electronics]
@@ -338,8 +340,7 @@ flags    = ""
 graphic     = "a.engineering"
 graphic_alt = "-"
 helptext = _("\
-Allows Settlers, Workers and Engineers to dig canals.\
-")
+Allows Settlers, Workers and Engineers to dig canals.")
 
 [advance_environmentalism]
 name     = _("Environmentalism")
@@ -359,6 +360,7 @@ req2     = "Democracy"
 flags    = ""
 graphic     = "a.espionage"
 graphic_alt = "-"
+helptext = _("Obsoletes Diplomat.")
 cost = 2900
 
 [advance_explosives]
@@ -368,6 +370,7 @@ req2     = "Chemistry"
 flags    = ""
 graphic     = "a.explosives"
 graphic_alt = "-"
+helptext = _("Obsoletes Workers.")
 cost = 1560
 
 [advance_feudalism]
@@ -421,6 +424,7 @@ req2     = "Tactics"
 flags    = ""
 graphic     = "a.guerilla_warfare"
 graphic_alt = "-"
+helptext = _("Obsoletes Explorer.")
 cost = 3985
 
 [advance_gunpowder]
@@ -431,6 +435,7 @@ flags    = ""
 graphic     = "a.gunpowder"
 graphic_alt = "-"
 cost = 800
+helptext = _("Obsoletes Barracks, Warriors, Phalanx, Legion, Archers, Pikemen.")
 
 [advance_horseback_riding]
 name     = _("Horseback Riding")
@@ -457,7 +462,7 @@ req2     = "Literacy"
 flags    = ""
 graphic     = "a.invention"
 graphic_alt = "-"
-helptext = _("Increases units' vision when in fortresses.")
+helptext = _("Increases Fortress vision +2.")
 
 [advance_iron_working]
 name     = _("Iron Working")
@@ -492,6 +497,7 @@ req2     = "Gunpowder"
 flags    = ""
 graphic     = "a.leadership"
 graphic_alt = "-"
+helptext = _("Obsoletes Horsemen, Chariot, Elephant, Knight, Crusader.")
 cost = 1250
 
 [advance_literacy]
@@ -509,6 +515,7 @@ req2     = "Tactics"
 flags    = ""
 graphic     = "a.machine_tools"
 graphic_alt = "-"
+helptext = _("Obsoletes Cannon, Great Wall.")
 cost = 3985
 
 [advance_magnetism]
@@ -518,6 +525,7 @@ req2     = "Physics"
 flags    = ""
 graphic     = "a.magnetism"
 graphic_alt = "-"
+helptext = _("Obsoletes Caravel.")
 cost = 950
 
 [advance_map_making]
@@ -544,7 +552,7 @@ req1     = "Automobile"
 req2     = "The Corporation"
 graphic     = "a.mass_production"
 graphic_alt = "-"
-helptext = _("Increases the population's contribution to pollution.")
+helptext = _("Increases population pollution 25%.")
 cost = 4680
 
 [advance_mathematics]
@@ -570,7 +578,8 @@ req2     = "University"
 flags    = ""
 graphic     = "a.metallurgy"
 graphic_alt = "-"
-cost = 1340
+chelptext = _("Obsoletes Catapult.")
+ost = 1340
 
 [advance_miniaturization]
 name     = _("Miniaturization")
@@ -579,6 +588,7 @@ req2     = "Electronics"
 flags    = ""
 graphic     = "a.miniaturization"
 graphic_alt = "-"
+helptext = _("Obsoletes Lighthouse.")
 cost = 4490
 
 [advance_mobile_warfare]
@@ -588,6 +598,7 @@ req2     = "Tactics"
 flags    = ""
 graphic     = "a.mobile_warfare"
 graphic_alt = "-"
+helptext = _("Obsoletes Barracks II, Cavalry, Sun Tzu's War Academy, Genghis Khan's Equestrian School.")
 cost = 5650
 
 [advance_monarchy]
@@ -604,6 +615,7 @@ req1     = "Philosophy"
 req2     = "Polytheism"
 flags    = ""
 graphic     = "a.monotheism"
+helptext = _("Obsoletes Elephants.")
 graphic_alt = "-"
 
 [advance_mysticism]
@@ -622,6 +634,7 @@ req2     = "Astronomy"
 flags    = ""
 graphic     = "a.navigation"
 graphic_alt = "-"
+helptext = _("Obsoletes Trireme.")
 cost = 226
 
 [advance_nuclear_fission]
@@ -669,7 +682,7 @@ req1     = "Refining"
 req2     = "Space Flight"
 graphic     = "a.plastics"
 graphic_alt = "-"
-helptext = _("Increases the population's contribution to pollution.")
+helptext = _("Increases population pollution 25%.")
 cost = 7860
 
 [advance_polytheism]
@@ -696,7 +709,7 @@ req2     = "Electricity"
 flags    = ""
 graphic     = "a.radio"
 graphic_alt = "-"
-helptext = _("Allows Workers and Engineers to build airbases and buoys.")
+helptext = _("Allows Workers and Engineers to build airbases and buoys. Obsoletes Mausoleum.")
 cost = 5430
 
 [advance_railroad]
@@ -707,8 +720,8 @@ flags    = ""
 graphic     = "a.railroad"
 graphic_alt = "-"
 helptext = _("\
-Allows Settlers, Workers and Engineers to upgrade roads to railroads.\
-")
+Allows Settlers, Workers and Engineers to upgrade roads to railroads. \
+Obsoletes Hanging Gardens.")
 cost = 1820
 
 [advance_recycling]
@@ -729,8 +742,7 @@ graphic     = "a.refining"
 graphic_alt = "-"
 helptext = _("\
 Allows Settlers, Workers and Engineers to build oil wells on \
-Glacier tiles.\
-")
+Glacier tiles.")
 cost = 3630
 
 [advance_refrigeration]
@@ -741,9 +753,7 @@ flags    = ""
 graphic     = "a.refrigeration"
 graphic_alt = "-"
 helptext = _("\
-Allows Settlers, Workers and Engineers to upgrade irrigation systems \
-to farmland.\
-")
+Allows Settlers, Workers and Engineers to upgrade irrigation systems to farmland.")
 cost = 2775
 
 [advance_robotics]
@@ -753,6 +763,7 @@ req2     = "Computers"
 flags    = ""
 graphic     = "a.robotics"
 graphic_alt = "-"
+helptext = _("Obsoletes Artillery, King Richard's Crusade.")
 cost = 7860
 
 [advance_rocketry]
@@ -762,6 +773,7 @@ req2     = "Electronics"
 flags    = ""
 graphic     = "a.rocketry"
 graphic_alt = "-"
+helptext = _("Obsoletes Destroyer, Cruiser.")
 cost = 7040
 
 [advance_sanitation]
@@ -806,6 +818,7 @@ req2     = "Invention"
 flags    = ""
 graphic     = "a.steam_engine"
 graphic_alt = "-"
+helptext = _("Obsoletes Frigate.")
 cost = 1240
 
 [advance_steel]
@@ -825,10 +838,7 @@ flags    = ""
 graphic     = "a.superconductors"
 graphic_alt = "-"
 cost = 5950
-helptext = _("\
-Allows Settlers, Workers and Engineers to upgrade railroads \
-with Maglev.\
-")
+helptext = _("Allows Settlers, Workers and Engineers to upgrade railroads with Maglev.")
 
 [advance_tactics]
 name     = _("Tactics")
@@ -837,6 +847,7 @@ req2     = "Leadership"
 flags    = ""
 graphic     = "a.tactics"
 graphic_alt = "-"
+helptext = _("Obsoletes Dragoons, Statue of Zeus.")
 cost = 2530
 
 [advance_the_corporation]
@@ -846,6 +857,7 @@ req2     = "Industrialization"
 flags    = ""
 graphic     = "a.the_corporation"
 graphic_alt = "-"
+helptext = _("Obsoletes Caravan.")
 cost = 2900
 
 [advance_the_republic]
@@ -871,7 +883,7 @@ req2     = "Monotheism"
 flags    = ""
 graphic     = "a.theology"
 graphic_alt = "-"
-helptext = _("Improves the effect of Cathedrals.")
+helptext = _("Obsoletes Oracle. Adds +1 to the effect of Cathedrals & Michelangelo's Chapel.")
 cost = 725
 
 [advance_theory_of_gravity]
@@ -920,6 +932,7 @@ graphic_alt = "-"
 ; a game is reloaded, a player can`t rebuild
 ; the "Darwin's Voyage" small wonder and get
 ; two free advances again.
+; THIS RULESET DOES NOT USE OLD DARWIN'S VOYAGE BEHAVIOUR OR THEORY OF EVOLUTION.
 [advance_theory_of_evolution]
 name     = _("Theory of Evolution")
 req1     = "None"

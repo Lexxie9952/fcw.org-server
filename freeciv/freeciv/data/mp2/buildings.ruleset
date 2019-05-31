@@ -1375,8 +1375,8 @@ sound		= "w_great_wall"
 sound_alt	= "w_generic"
 helptext	= _("\
 Gives a City Wall in all your cities. This has no effect\
-when City Walls are already present.  This Wonder is made\
-obsolete when you discover Machine Tools.\
+ when City Walls are already present.  This Wonder is made\
+ obsolete when you discover Machine Tools.\
 ")
 
 [building_hanging_gardens]
