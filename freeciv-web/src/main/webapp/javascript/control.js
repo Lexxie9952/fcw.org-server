@@ -3153,7 +3153,7 @@ function update_active_units_dialog()
 	   + " style='margin-right:1px; background: transparent url(" 
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
-           + "px;  width:64px;height:auto;"   // force everything to 64x46 including oversize units (Lexxie)
+           + "px;  width:100%;height:auto;"   // force everything to 64x46 including oversize units (Lexxie)
 //           + "px;  width:64px;height: " + sprite['height'] + "px;'"   // force everything to 64x46 including oversize units (Lexxie)
 //         + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'"   previous line
            + "'></div></div>";                                 // changed margin-right to 1px, was defaulting to 5px (Lexxie)
