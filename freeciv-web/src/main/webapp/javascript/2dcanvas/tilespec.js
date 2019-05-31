@@ -678,8 +678,11 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
         dx += 1; dy += 1;
         break;
     case "Pikemen":
-        dx += 1; dy += 2;
+        dx += 1; dy += 3;
         break;
+    case "Riflemen":
+        dx -= 5; dy -= 3;
+        break;        
     case "Submarine":
         dx -= 3; dy -= 4;
         break;
