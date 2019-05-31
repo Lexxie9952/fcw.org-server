@@ -462,16 +462,16 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = "CitiesStartUnit"
 helptext      = _("\
-Settlers are one of the key units in the game, as they are your main\
+Settlers are a key unit: they are your only\
  means of founding new cities.\
 "), _("\
 Settlers can also perform most of the same terrain alterations as\
  Workers (but cannot build Airbases or Buoys).\
 "), _("\
-Upkeep for Settlers is in food as well as production, and a Settler\
+Upkeep for Settlers costs food as well as production. A Settler\
  can die if its supporting city runs out of food. Settlers in a\
- Republic or Democracy require twice as much food per turn, and in\
- Fundamentalist societies, three times as much.\
+ Republic or Democracy require twice as much food per turn, and\
+ three times as much in Fundamentalism.\
 ")
 
 [unit_worker]
@@ -508,11 +508,13 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = "Settlers", "WorkerStartUnit"
 helptext      = _("\
-Workers have the ability to improve terrain tiles. See the help on \
-Terrain and Terrain Alterations for the effects of their actions.\
+Workers can improve terrain tiles. See the help on \
+Terrain and Terrain Alterations for details.\
 "), _("\
-Workers can build airbases and buoys, which Settlers cannot. \
-Workers must be on board a ship to build buoys.\
+After discovering \
+discovering Construction, Workers can build Fortresses and Oil Wells. \
+Workers can build Airbases and Buoys, which Settlers cannot. \
+Workers must be on board a ship to build Buoys.\
 ")
 
 [unit_engineers]
@@ -549,20 +551,20 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = "Settlers", "WorkerStartUnit"
 helptext      = _("\
-Engineers are similar to Workers, but they work twice as fast and\
- move twice as fast. Engineers may also perform major terrain\
- transformations which are beyond the capabilities of Workers and\
- Settlers, such as converting Tundra into Desert, or even Ocean into\
- Swamp in some circumstances (when on board an ocean-going vessel,\
- on a tile surrounded by sufficient existing land). See the\
+Engineers are similar to Workers, but move and work twice as\
+ fast. Unlike Workers, Engineers can perform terrain Transformation,\
+ such as converting Desert to Plains,\
+ or Ocean to Swamp (when on a ship on an Ocean tile\
+ which borders enough existing land). See the\
  Terrain Alterations section for more details.\
 "), _("\
 TIP 1:  Upgrade Workers to Engineers when possible, as Engineers\
  require the same resources as ordinary Workers.\
+TIP 1:  Upgrade Workers to Engineers when possible.\
 "), _("\
 TIP 2:  If you manage to build Leonardo's Workshop, research\
- Explosives before the Workshop becomes obsolete.  This way,\
- your Workers units will be upgraded for free.\
+ Explosives before the Workshop becomes obsolete, so that\
+ your Workers will get upgraded for free.\
 ")
 
 [unit_warriors]
@@ -724,8 +726,9 @@ bonuses       =
 flags         = ""
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
-Equipped with long pikes, Pikemen replaces Phalanx\
- as the preferred city defender.\
+Equipped with long pikes and a 2x defence bonus against\
+ mounted units, Pikemen replace the Phalanx as the\
+ preferred city defender.\
 ")
 
 [unit_musketeers]
@@ -759,7 +762,8 @@ roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild", "HutTech",
 helptext      = _("\
 Musketeers are infantry equipped with early\
  firearms and replace Pikemen as the preferred\
- city defender.\
+ city defender. They replace Archers and Legions\
+ as offensive foot soldiers.\
 ")
 
 [unit_fanatics]
@@ -866,7 +870,8 @@ flags         = "IgTer"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
 Alpine Troops are highly mobile units as well as\
- excellent defenders.\
+ excellent defenders.  Similar to an Explorer, they\
+ treat every land tile as if it had a road on it.\
 ")
 
 [unit_riflemen]
@@ -897,8 +902,9 @@ uk_gold       = 0
 flags         = ""
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
-Riflemen are World War-era infantry, very good\
- at defending your cities.\
+Riflemen are World War-era infantry. They are good\
+ at defending cities and have decent attack\
+ capabilities.\
 ")
 
 [unit_marines]
@@ -926,10 +932,12 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "Marines"
+flags         = "Marines", "BeachLander"
 roles         = "DefendOk", "DefendOkStartUnit", "BarbarianSeaTech"
 helptext      = _("\
 Marines are infantry who are experts at marine warfare.\
+ They can attack from on board a transport ship, and land\
+ on shore by expending only one movement point.\
 ")
 
 [unit_paratroopers]
@@ -1195,6 +1203,8 @@ roles         = "AttackFastStartUnit", "BarbarianBuildTech", "BarbarianSeaTech",
                 "Hunter"
 helptext      = _("\
 Dragoons are mounted warriors carrying early firearms.\
+ Being the first highly mobile gunpowder unit, they are\
+ formidable for offensive campaigns.\
 ")
 
 [unit_cavalry]
@@ -1366,8 +1376,8 @@ name          = _("Howitzer")
 class         = "Land"
 tech_req      = "Robotics"
 obsolete_by   = "None"
-graphic       = "u.howitzer"
-graphic_alt   = "-"
+graphic       = "u.howitzer_o"
+graphic_alt   = "u.howitzer"
 sound_move    = "m_howitzer"
 sound_move_alt = "m_generic"
 sound_fight   = "f_howitzer"
@@ -1437,8 +1447,8 @@ name          = _("Bomber")
 class         = "Air"
 tech_req      = "Advanced Flight"
 obsolete_by   = "Stealth Bomber"
-graphic       = "u.bomber"
-graphic_alt   = "-"
+graphic       = "u.heavy_bomber_o"
+graphic_alt   = "u.bomber"
 sound_move    = "m_bomber"
 sound_move_alt = "m_generic"
 sound_fight   = "f_bomber"
@@ -1544,8 +1554,8 @@ name          = _("Stealth Bomber")
 class         = "Air"
 tech_req      = "Stealth"
 obsolete_by   = "None"
-graphic       = "u.stealth_bomber"
-graphic_alt   = "-"
+graphic       = "u.stealth_bomber_o"
+graphic_alt   = "u.stealth_bomber"
 sound_move    = "m_stealth_bomber"
 sound_move_alt = "m_generic"
 sound_fight   = "f_stealth_bomber"
@@ -1804,7 +1814,11 @@ uk_gold       = 0
 flags         = "BadCityDefender"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
-The Cruiser is a strong offensive boat unit.\
+The Cruiser is a large surface warship with equally strong\
+ offensive and defensive capabilities.\
+"), _("\
+A Cruiser's main duties are offensive strikes against\
+ weaker ships and to protecting other ships.\
 ")
 
 [unit_aegis_cruiser]
@@ -1849,7 +1863,7 @@ class         = "Sea"
 tech_req      = "Automobile"
 obsolete_by   = "None"
 graphic       = "u.battleship"
-graphic_alt   = "-"
+graphic_alt   = "u.battleship"
 sound_move    = "m_battleship"
 sound_move_alt = "m_generic"
 sound_fight   = "f_battleship"
@@ -1906,9 +1920,14 @@ flags         = "BadCityDefender", "Provoking",
 	        "Only_Native_Attack"
 roles         = "Hunter"
 helptext      = _("\
-Traveling under the surface of the ocean, Submarines have\
- a very high strategic value, but a weak defense if caught\
- off guard.\
+Traveling under the surface of the sea, Submarines have\
+ high strategic value, but weak defense if caught\
+ off guard. They have the ability to carry Nuclear\
+ and Cruise Missiles.\
+"), _("\
+TIP:  Against stronger ships, Submarines enjoy superior\ 
+ attrition rates when they attack in numbers. They are also\
+ excellent at hit-and-run to scare away unwanted sea traffic.\
 ")
 
 [unit_carrier]
@@ -1940,7 +1959,8 @@ cargo         = "Air", "Missile", "Helicopter"
 flags         = "BadCityDefender", "Only_Native_Attack", "Provoking"
 roles         = ""
 helptext      = _("\
-The Carrier is a mobile airport.\
+The Carrier is a mobile airport that can carry aircraft,\
+ helicopters, and missiles.\
 "), _("\
 TIP:  Guard Carriers with a handful of fast-moving ships and a\
  battleship, as losing a fully-equipped Carrier is VERY\
@@ -1978,6 +1998,7 @@ roles         = "Ferryboat", "FerryStartUnit"
 helptext      = _("\
 The Transport cannot attack on its own but\
  may defend itself when under attack.\
+ Marines can directly attack from a Transport.\
 ")
 
 [unit_cruise_missile]
@@ -2113,69 +2134,55 @@ veteran_power_fact = 100, 105, 110, 115
 veteran_move_bonus = 0, 0, 0, 0
 roles         = "DiplomatStartUnit"
 helptext      = _("\
-A Diplomat is an official that carries your dispatches and\
- is authorized to deal with foreign dignitaries. He may\
- also undertake various covert operations with the intent of\
- harming your opponents; Diplomats in your own cities defend\
- them against such actions.\
+A Diplomat deals with foreign dignitaries. He may\
+ undertake various covert operations to\
+ harm opponents. Diplomats inside cities defend\
+ against such actions.\
 "), _("\
-Many covert actions may be attempted even in peacetime, but the more\
- aggressive actions will be discovered and cause diplomatic incidents,\
+Many covert actions may be attempted in peacetime, but\
+ may cause diplomatic incidents,\
  which can allow Republics and Democracies to break treaties.\
 "), _("\
 If a foreign unit is alone on a tile, you may attempt to bribe it\
- with your Diplomat. By paying a sum of gold the unit will immediately\
- become yours; the exact sum depends on the status of the unit and\
- that of the civilization owning it. However, units belonging to\
- Democratic governments cannot be bribed. Bribery when not at war\
- will cause a diplomatic incident.\
+ with your Diplomat. The unit immediately\
+ becomes yours: the cost depends on unit status and\
+ the civilization owning it. Bribery creates a diplomatic incident.\
 "), _("\
-Diplomats can also perform a number of actions in another player's\
- city, although each Diplomat may attempt only one action. Most of\
- these actions have a chance of failure. Also, any enemy Diplomats or\
- Spies in the city will oppose hostile actions, as will the enemy Leader\
- in games with leaders; in this case, either your unit or the defending\
- unit will die (if you go up against the Leader you will always die). If\
- the defending unit dies, you lose one movement point and may try again.\
+Diplomats can act on another player's\
+ city.  Most actions have a chance of failure. Diplomats and\
+ Spies in the city defend against these actions. In this case, one of the\
+ units will die. If\
+ the attacker wins, it may try the action again if it has moves left.\
 "), _("\
-The actions available to Diplomats in a city are:\
+A Diplomat can:\
 "), _("\
- - \"Establish Embassy\": This action always succeeds, and gives\
- permanent contact with the city's owner, as well as intelligence\
- on their tax rates and technology.\
+ - \"Establish Embassy\": Gives\
+ permanent contact with the city's owner, tax rates, technology, and foreign relations.\
 "), _("\
- - \"Investigate City\": Your unit attempts to report detailed\
- information about the city: its status, what buildings and units are\
- within, and what it is currently producing.\
+ - \"Investigate City\": Attempts to acquire detailed\
+ information about the city.\
 "), _("\
- - \"Sabotage City\": Your unit attempts either to disrupt all the\
- city's work so far towards its current project, or to destroy an\
- existing building in the city, at random. Once built, Palaces and\
- Wonders cannot be sabotaged, and attempts to sabotage City Walls\
- or any building in a capital each halve the chance of success.\
- Sabotage may only be attempted when openly at war.\
-"), _("\
- - \"Steal Technology\": Your unit attempts to learn the secrets of a\
- random technology known to the city's owner but not to you. Technology\
- may only be stolen once from a given enemy city by Diplomats. This\
- action may be attempted even when not at war, but will cause a\
+ - \"Sabotage City\": Attempts to disrupt\
+ city production or destroy a\
+ random building. Existing Palaces and\
+ Wonders cannot be sabotaged. Attempts to sabotage City Walls\
+ or capitals have half the chance of success.\
+ Sabotage may only be attempted during war.\
+ "), _("\
+
+ - \"Steal Technology\": Attempts to steal a\
+ random technology. Technology\
+ may only be stolen once from a particular city by Diplomats. This\
+ action may be attempted in peace or war and causes a\
  diplomatic incident.\
 "), _("\
- - \"Incite a Revolt\": In return for gold a foreign city will change\
- allegiance and join your empire, bringing along all nearby units that\
- call it home, but reducing its size by 1. Units in other cities\
- remain in the enemy's control, but units outside cities are lost to\
- both players. The exact sum depends on the status of the city and\
- that of the civilization that owns it. It is not possible to incite\
- a rebellion in a capital, or in any city governed by a democracy.\
- Incitement may be attempted in peacetime, but will cause a\
- diplomatic incident.\
+ - \"Incite a Revolt\": For a high cost, a foreign city will change\
+ allegiance and join your empire, also acquiring the units the\
+ city supports. Units in other cities\
+ remain in the enemy's control. Units outside cities are disbanded. It is not possible to incite\
+ a capital or any city in a Democracy.\
 "), _("\
-In some game strategies, hordes of Diplomats can be used to wreak\
- havoc on the enemy.  Little wonder that Diplomats are often\
- viewed with suspicion and fear!\
-"), _("\
-Diplomats built under a Communist government will start at the first\
+Diplomats built under Communism start at the first\
  veteran level (secretary).\
 ")
 
@@ -2223,29 +2230,26 @@ roles         = "DiplomatStartUnit"
 helptext      = _("\
 A Spy is more skilled in the arts of espionage than her Diplomat predecessor.\
 "), _("\
-She can perform all the functions of the Diplomat; refer to the Diplomat\
- entry for more details. Unlike a Diplomat, a Spy may also survive an\
- operation in a foreign city and become more experienced as a result.\
- Spies are also more effective than Diplomats at defending cities\
- against foreign Diplomats and Spies.\
+She can perform all the functions of the Diplomat.\
+ Unlike a Diplomat, a Spy may survive an\
+ operation and become more experienced.\
+ Spies are more effective at defending cities.\
 "), _("\
-A Spy can also be used to:\n\
- - sabotage an enemy unit (reducing its hit points to half), if it is\
- alone on a tile and the players are at war;\n\
- - poison the water supply of an enemy city (reducing the population\
- by one);\n\
- - steal specific technology (with a reduced chance of success);\n\
- - steal further technologies from a city which has already been\
- stolen from (although cities become more resistant each time they\
- are stolen from);\n\
- - sabotage predetermined city targets (with a reduced chance of\
- success).\
+A Spy can be used to:\n\
+ - sabotage an enemy unit if it is\
+ alone on a tile (reduces hit points to half)\n\
+ - poison a city's water supply of an enemy city (-1 population)\n\
+ - steal specific technology (reduced chance of success)\n\
+ - steal technologies from a city which has already been\
+ stolen from (cities are more resistant each time they\
+ are stolen from)\n\
+ - sabotage specific city targets (reduced chance success).\
 "), _("\
-A Spy that survives the more aggressive actions (sabotage, theft,\
- inciting rebellion, and poisoning) escapes to the safety of the\
+A Spy that survives sabotage, theft,\
+ inciting rebellion, and poisoning, will escape to the safety of the\
  nearest friendly city.\
 "), _("\
-Spies built under a Communist government will start at the first\
+Spies built under a Communist government start at the first\
  veteran level (handler).\
 ")
 
@@ -2349,7 +2353,9 @@ flags         = "IgTer", "IgZOC", "NonMil", "HasNoZOC"
 roles         = "Explorer", "ExplorerStartUnit"
 helptext      = _("\
 Explorers are brave individuals that are very useful for\
- mapping unknown territory.\
+ mapping unknown territory. They can slip through ZoC,\
+ have no unit upkeep, and move over any tile as if it\
+ had a road.
 ")
 
 [unit_leader]
