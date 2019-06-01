@@ -634,7 +634,7 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
         dx -= 2; dy -= 4;
         break;
     case "Alpine Troops":                     
-        dx -= 6; dy-=3;
+        dx -= 3; dy-=1;
         break;
     case "Archer":                     
         dx += 1; 
@@ -647,12 +647,15 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
         break; 
     case "Caravel":
         dx -= 3; dy-= 3; 
-        break;         
+        break;  
+    case "Caravel":
+        dx -= 1; dy-= 1; 
+    break;         
     case "Engineer":                     
-        dx -= 1; dy -= 2;
+        dx -= 3; dy -= 4;
         break;
     case "Explorer":                     
-        dx -= 2; dy += 2;    
+        dx -= 1; dy += 3;    
     case "Fighter":
         dx -= 11; dy -= 4;
         break;    
@@ -677,9 +680,9 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
     case "Mech. Inf.":
         dx += 1; dy += 1;
         break;
-    //case "Musketeer":
-    //    dx += 0; dy += 0;
-    //    break;
+    case "Musketeer":
+        dx -= 1; dy -= 1;
+        break;
     case "Pikemen":
         dx += 1; dy += 3;
         break;
@@ -699,7 +702,7 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
         dx -= 3; dy -= 1;
         break;
     case "Worker":                     
-        dx += 0; dy -= 2;
+        dx -= 2; dy -= 4;
         break;
     default:
       dx = unit_offset_x; dy = unit_offset_y;
