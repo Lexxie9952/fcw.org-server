@@ -680,7 +680,7 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
     case "Mech. Inf.":
         dx += 1; dy += 1;
         break;
-    case "Musketeer":
+    case "Musketeers":
         dx -= 1; dy -= 1;
         break;
     case "Pikemen":
@@ -689,7 +689,7 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
     case "Riflemen":
         dx -= 4; dy -= 2;
         break; 
-    case "Settler":
+    case "Settlers":
         dx -= 3; dy -= 2;
         break;       
     case "Submarine":
@@ -704,8 +704,8 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
     case "Transport":
         dx -= 3; dy -= 1;
         break;
-    case "Worker":                     
-        dx -= 4; dy -= 6;
+    case "Workers":                     
+        dx -= 2; dy -= 2;
         break;
     default:
       dx = unit_offset_x; dy = unit_offset_y;
