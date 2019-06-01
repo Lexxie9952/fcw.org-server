@@ -622,12 +622,10 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
   var dx = unit_offset_x + unit_offset_adj_x;  // offsets for where to draw units on the tile.
   var dy = unit_offset_y + unit_offset_adj_y; 
 
-  // This section allows custom offset adjustments for any particular unit, notably oversize unit placement
-  // TO DO: some rulesets don't use same sprites or oversize images, so, we should make a list of offsets associated
-  // to the actual graphic. This is long overdue for dealing with the dirty reality of a 64x48 sprite needing to fit in   
-  // an even larger area than the 96x48 tile area, and with different shaped units needing optimal adjustment for placements.
-
-
+  // This section allows custom offset adjustments for any particular unit. This helps with the
+  // fact a 64x48 sprite can occupy parts of an area larger than the 96x48 tile area, and the fact
+  // that sprites have distinct shapes and sizes. 
+  // TO DO: We should load a list of offsets associated to the actual graphic, read from a file.
 
   switch(ptype['name']) {
     case "AEGIS Cruiser":
@@ -648,9 +646,6 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
     case "Caravel":
         dx -= 3; dy-= 3; 
         break;  
-    case "Caravan":
-        dx -= 1; dy-= 1; 
-    break;         
     case "Engineers":                     
         dx -= 3; dy -= 4;
         break;
@@ -660,7 +655,7 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
         dx -= 11; dy -= 4;
         break;    
     case "Horsemen":
-        dx -= 4; dy += 1;
+        dx -= 5; dy += 0;
         break;
     case "Howitzer":
         dx -= 9; dy += 1;
@@ -704,11 +699,11 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
     case "Transport":
         dx -= 3; dy -= 1;
         break;
-    case "Workers":                     
-        dx -= 1; dy -= 1;
-        break;
+    //case "Workers":                     
+    //   dx -= 0; dy -= 1;
+    //    break;
     default:
-      dx = unit_offset_x; dy = unit_offset_y;
+      // do nothing, dx and dy already set higher up.
   }
 
   var result = [ get_unit_nation_flag_sprite(punit),
