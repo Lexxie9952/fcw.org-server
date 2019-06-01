@@ -633,6 +633,9 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
     case "AEGIS Cruiser":
         dx -= 2; dy -= 4;
         break;
+    case "Alpine Troops":                     
+        dx -= 6; dy-=3;
+        break;
     case "Archer":                     
         dx += 1; 
         break;
@@ -674,14 +677,14 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
     case "Mech. Inf.":
         dx += 1; dy += 1;
         break;
-    case "Musketeer":
-        dx += 1; dy += 1;
-        break;
+    //case "Musketeer":
+    //    dx += 0; dy += 0;
+    //    break;
     case "Pikemen":
         dx += 1; dy += 3;
         break;
     case "Riflemen":
-        dx -= 5; dy -= 3;
+        dx -= 4; dy -= 2;
         break;        
     case "Submarine":
         dx -= 3; dy -= 4;
@@ -696,7 +699,7 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
         dx -= 3; dy -= 1;
         break;
     case "Worker":                     
-        dx += 1; dy -= 1;
+        dx += 0; dy -= 2;
         break;
     default:
       dx = unit_offset_x; dy = unit_offset_y;

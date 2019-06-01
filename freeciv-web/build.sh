@@ -2,7 +2,7 @@
 # builds Freeciv-web, copies the war file to Tomcat and builds the selected rulesets.
 
 BATCH_MODE=""
-RULESETS=(mpplus mp2)
+RULESETS=(mpplus mp2 classic multiplayer)
 
 while [[ $# -gt 0 ]]; do
   case $1 in
