@@ -648,10 +648,10 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
     case "Caravel":
         dx -= 3; dy-= 3; 
         break;  
-    case "Caravel":
+    case "Caravan":
         dx -= 1; dy-= 1; 
     break;         
-    case "Engineer":                     
+    case "Engineers":                     
         dx -= 3; dy -= 4;
         break;
     case "Explorer":                     
@@ -705,7 +705,7 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
         dx -= 3; dy -= 1;
         break;
     case "Workers":                     
-        dx -= 2; dy -= 2;
+        dx -= 1; dy -= 1;
         break;
     default:
       dx = unit_offset_x; dy = unit_offset_y;
