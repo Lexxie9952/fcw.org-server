@@ -234,6 +234,9 @@ function control_init()
   if (!is_touch_device()) {
     $("#game_unit_orders_default").tooltip();
   }
+  // Make containers drawn over the map not block clicks below, as most of the container is invisible:
+  $("#game_unit_orders_default").css("pointer-events", "none");////
+  $("game_status_panel_bottom").css("pointer-events", "none");////
 
   $("#overview_map").click(function(e) {
     var x = e.pageX - $(this).offset().left;
@@ -1107,6 +1110,9 @@ function update_unit_order_commands()
   }
   $(".context-menu-list").css("z-index", 5000);
 
+  $("#game_units_orders_default").css("pointer-events", "none"); //// container not clickable, force children to be clickable
+  $("#game_units_orders_default").children().css("pointer-events", "auto"); //// container not clickable, force children to be clickable
+
   return unit_actions;
 }
 
@@ -1254,7 +1260,11 @@ function set_unit_focus_and_redraw(punit)
   auto_center_on_focus_unit();
   update_active_units_dialog();
   update_unit_order_commands();
-  if (current_focus.length > 0 && $("#game_unit_orders_default").length > 0 && !cardboard_vr_enabled) $("#game_unit_orders_default").show();
+  if (current_focus.length > 0 && $("#game_unit_orders_default").length > 0 && !cardboard_vr_enabled) {
+    $("#game_units_orders_default").css("pointer-events", "none"); //// container not clickable, force children to be clickable
+    $("#game_units_orders_default").children().css("pointer-events", "auto"); //// container not clickable, force children to be clickable
+    $("#game_unit_orders_default").show();
+  }
 }
 
 /**************************************************************************

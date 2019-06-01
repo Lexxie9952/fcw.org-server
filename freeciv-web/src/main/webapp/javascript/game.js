@@ -154,8 +154,9 @@ function update_game_status_panel() {
     if ($("#game_status_panel_bottom").length) {
       $("#game_status_panel_top").hide();
       $("#game_status_panel_bottom").show();
-      $("#game_status_panel_bottom").css("width", $(window).width());
+      $("#game_status_panel_bottom").css({"width": $(window).width(),"pointer-events":"none" }); ////
       $("#game_status_panel_bottom").html(status_html);
+      $("#game_status_panel_bottom").children().css("pointer-events", "auto"); //// children clickable, container not
     }
   }
 

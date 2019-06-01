@@ -86,7 +86,7 @@ function init_overview()
                       if (new_height > max_overview_height) new_height = max_overview_height;
                       $('#overview_map').width(new_width);
                       $('#overview_map').height(new_height);
-                      $(".overview_dialog").position({my: 'right top', at: 'right top', of: window, within: $("#tabs-map"), collision: 'flipfit'});
+                      $(".overview_dialog").position({my: 'left bottom', at: 'left bottom', of: window, within: $("#tabs-map")});
                     },
                   "icons" : {
                     "minimize" : "ui-icon-circle-minus",
@@ -107,7 +107,7 @@ function init_overview()
   if (new_height > max_overview_height) new_height = max_overview_height;
   $('#overview_map').width(new_width);
   $('#overview_map').height(new_height);
-  $(".overview_dialog").position({my: 'right top', at: 'right top', of: window, within: $("#tabs-map"), collision: 'flipfit'});
+  $(".overview_dialog").position({my: 'left bottom', at: 'left bottom', of: window, within: $("#tabs-map")});
 
   $('#overview_map').on('dragstart', function(event) { event.preventDefault(); });
 }
