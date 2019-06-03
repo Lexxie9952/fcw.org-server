@@ -1731,7 +1731,6 @@ Every city will gain +25% to its food storage when population changes.\
  In addition, the city with the Pyramids can rapture when celebrating.\
  This Wonder does not become obsolete.\
 ")
-")
 
 [building_shakespeares_theatre]
 name            = _("Shakespeare's Theater")
