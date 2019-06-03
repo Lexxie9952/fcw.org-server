@@ -2,7 +2,7 @@
 # builds Freeciv-web, copies the war file to Tomcat and builds the selected rulesets.
 
 BATCH_MODE=""
-RULESETS=(mpplus mp2 classic multiplayer)
+RULESETS=(mpplus mp2 classic multiplayer mp2sandbox)
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -44,6 +44,6 @@ printf "\nUpdating rulesets\n"
 printf "\nRe-generating manuals\n"
    for r in ${RULESETS[@]}; do
       echo "Generating help manual for $r"
-      bash cd ~/freeciv-web/freeciv-web/src/derived/webapp/man
-      bash ~/freeciv-web/freeciv/freeciv/tools/freeciv-manual -r $r      
+      cd ~/freeciv-web/freeciv-web/src/derived/webapp/man
+      ~/freeciv-web/freeciv/freeciv/tools/freeciv-manual -r $r      
    done
