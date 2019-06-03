@@ -156,7 +156,8 @@ function update_game_status_panel() {
       $("#game_status_panel_bottom").show();
       $("#game_status_panel_bottom").css({"width": $(window).width(),"pointer-events":"none" }); ////
       $("#game_status_panel_bottom").html(status_html);
-      $("#game_status_panel_bottom").children().css("pointer-events", "auto"); //// children clickable, container not
+      //// these changes in control.js and game.js made container not clickable but children unclickable also
+      //$("#game_status_panel_bottom").children().css("pointer-events", "auto"); //// children clickable, container not
     }
   }
 
