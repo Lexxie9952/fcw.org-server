@@ -40,3 +40,10 @@ printf "\nUpdating rulesets\n"
       echo "Copying $r"
       bash ../scripts/copy-ruleset.sh $r      
    done
+
+printf "\nRe-generating manuals\n"
+   for r in ${RULESETS[@]}; do
+      echo "Generating help manual for $r"
+      bash cd ~/freeciv-web/freeciv-web/src/derived/webapp/man
+      bash ~/freeciv-web/freeciv/freeciv/tools/freeciv-manual -r $r      
+   done
