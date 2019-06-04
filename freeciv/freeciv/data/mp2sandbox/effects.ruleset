@@ -126,38 +126,6 @@ reqs    =
       "OutputType", "gold", "Local"
     }
 
-
-; Vision benefit from fortress watchtowers
-[effect_fortress_vision]
-type    = "Unit_Vision_Radius_Sq"
-value   = 8   
-reqs    =
-    { "type", "name", "range"
-      "Extra", "Fortress", "tile"
-      "Tech", "Invention", "Player"
-      "UnitClass", "Land", "Local"
-    }
-
-[effect_fortress_vision_1]   ;Marines, AAA
-type    = "Unit_Vision_Radius_Sq"
-value   = 8
-reqs    =
-    { "type", "name", "range"
-      "Extra", "Fortress", "tile"
-      "Tech", "Invention", "Player"
-      "UnitClass", "LandAirSea", "Local"
-    }
-    
-[effect_fortress_vision_2]     ;Knights
-type    = "Unit_Vision_Radius_Sq"
-value   = 8
-reqs    =
-    { "type", "name", "range"
-      "Extra", "Fortress", "tile"
-      "Tech", "Invention", "Player"
-      "UnitClass", "LandNoKill", "Local"
-    }
-
 ; Vision benefit from mountains (for every land unit)
 [effect_mountains_vision]
 type    = "Unit_Vision_Radius_Sq"
@@ -188,6 +156,90 @@ reqs    =
 [effect_upkeep_tech_free]
 type    = "Tech_Upkeep_Free"
 value   = 3
+
+; *********************************** BASES *******************************
+
+; **** FORT *****
+[effect_fort_defense]
+type    = "Defend_Bonus"
+value   = 33
+reqs    =
+    { "type",      "name",         "range", "present"
+      "Extra",     "Fort",         "Local", TRUE
+      "UnitClass", "Helicopter",   "Local", FALSE ;these classes and types do not activate the defense bonus
+      "UnitClass", "Air",          "Local", FALSE
+      "UnitClass", "AirPillage",   "Local", FALSE
+      "UnitClass", "AirProtect",   "Local", FALSE
+      "UnitClass", "Missile",      "Local", FALSE
+      "UnitType",  "Armor",        "Local", FALSE
+    }
+; Fort HP regen
+[effect_fort_hp_regen]
+type    = "HP_Regen"
+value   = 10
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Fort", "Tile"
+      "UnitClass", "Land", "Local"
+    }
+[effect_fort_hp_regen_1]
+type    = "HP_Regen"
+value   = 10
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Fort", "Tile"
+      "UnitClass", "LandAirSea", "Local"
+    }
+[effect_fort_hp_regen_2]
+type    = "HP_Regen"
+value   = 10
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Fort", "Tile"
+      "UnitClass", "LandNoKill", "Local"
+    }
+
+; **** FORTRESS ****
+; Cumulative with fort
+; 50 + 50 = 100
+[effect_fortress_defense]
+type    = "Defend_Bonus"
+value   = 50
+reqs    =
+    { "type", "name", "range", "present"
+      "Extra", "Fortress", "Local", TRUE
+    }
+
+; Vision benefit from fortress watchtowers
+[effect_fortress_vision]
+type    = "Unit_Vision_Radius_Sq"
+value   = 8   
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Fortress", "tile"
+      "Tech", "Invention", "Player"
+      "UnitClass", "Land", "Local"
+    }
+    
+[effect_fortress_vision_1]   ;Marines, AAA
+type    = "Unit_Vision_Radius_Sq"
+value   = 8
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Fortress", "tile"
+      "Tech", "Invention", "Player"
+      "UnitClass", "LandAirSea", "Local"
+    }
+    
+[effect_fortress_vision_2]     ;Knights
+type    = "Unit_Vision_Radius_Sq"
+value   = 8
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Fortress", "tile"
+      "Tech", "Invention", "Player"
+      "UnitClass", "LandNoKill", "Local"
+    }
 
 ; Fortress HP regen
 [effect_fortress_hp_regen]
@@ -222,6 +274,7 @@ reqs    =
       "Extra", "Fortress", "Tile"
       "UnitClass", "Helicopter", "Local"
     }
+
 [effect_airbase_hp_regen]
 type    = "HP_Regen"
 value   = 25
@@ -2068,6 +2121,7 @@ reqs	=
     { "type", "name", "range"
       "Building", "SAM Battery", "City"
       "UnitClass", "Air", "Local"
+      "UnitType", "Stealth Bomber", "Local", FALSE
     }
 [effect_sam_battery_1]
 type    = "Defend_Bonus"
@@ -2076,6 +2130,23 @@ reqs	=
     { "type", "name", "range"
       "Building", "SAM Battery", "City"
       "UnitClass", "AirProtect", "Local"
+      "UnitType", "Stealth Fighter", "Local", FALSE
+    }
+[effect_sam_battery_stealth_bomber]
+type    = "Defend_Bonus"
+value	= 25
+reqs	=
+    { "type", "name", "range"
+      "Building", "SAM Battery", "City"
+      "UnitType", "Stealth Bomber", "Local", TRUE
+    }    
+[effect_sam_battery_stealth_fighter]
+type    = "Defend_Bonus"
+value	= 25
+reqs	=
+    { "type", "name", "range"
+      "Building", "SAM Battery", "City"
+      "UnitType", "Stealth Fighter", "Local", TRUE
     }
 
 [effect_sdi_defense]

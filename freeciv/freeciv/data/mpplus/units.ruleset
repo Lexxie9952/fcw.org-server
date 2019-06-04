@@ -1469,7 +1469,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "FieldUnit", "Unbribable", "OneAttack", "AirAttacker", "HasNoZOC"
+flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC"
 roles         = ""
 helptext      = _("\
 Bombers are specialized airborne units that may\
@@ -1503,7 +1503,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "FieldUnit", "OneAttack", "Helicopter", "AirAttacker", "Unbribable"
+flags         = "FieldUnit", "Helicopter", "AirAttacker", "Unbribable"
 roles         = ""
 helptext      = _("\
 The Helicopter is a very powerful unit, as it can both fly and\
@@ -1577,7 +1577,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 vision_layer  = "Stealth"
-flags         = "FieldUnit", "OneAttack", "AirAttacker",
+flags         = "FieldUnit", "AirAttacker",
                 "HasNoZOC", "Unbribable"
 roles         = ""
 helptext      = _("\

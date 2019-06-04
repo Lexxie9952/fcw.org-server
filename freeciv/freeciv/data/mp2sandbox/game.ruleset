@@ -965,11 +965,20 @@ actor_reqs    =
       "MinMoveFrags",  "1",            "Local", TRUE
     }
 
-[actionenabler_transform_terrain]
+[actionenabler_transform_terrain_outside_city]
 action        = "Transform Terrain"
 actor_reqs    =
-    { "type",          "name",         "range"
-      "UnitFlag",      "Transform",    "Local"
+    { "type",      "name",      "range", "present"
+      "UnitFlag",  "Transform", "Local", TRUE
+      "CityTile",  "Center",    "Local", FALSE
+    }
+[actionenabler_transform_terrain_inside_city] ;can't change grass to hills inside a city
+action        = "Transform Terrain"
+actor_reqs    =
+    { "type",      "name",      "range", "present"
+      "UnitFlag",  "Transform", "Local", TRUE
+      "CityTile",  "Center",    "Local", TRUE
+      "Terrain",   "Grassland", "Local", FALSE
     }
 
 [actionenabler_irrigate_tf]
@@ -977,17 +986,28 @@ action        = "Irrigate TF"
 actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitType",      "Legion",       "Local",   FALSE
+      "UnitType",      "Legion",       "Local", FALSE
     }
 
-[actionenabler_mine_tf]
+[actionenabler_mine_tf_outside_city]
 action        = "Mine TF"
 actor_reqs    =
-    { "type",          "name",         "range", "present"
-      "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitType",      "Legion",       "Local",   FALSE
+    { "type",          "name",     "range", "present"
+      "UnitFlag",      "Settlers", "Local", TRUE
+      "UnitType",      "Legion",   "Local", FALSE 
+      "CityTile",      "Center",   "Local", FALSE
     }
- 
+[actionenabler_mine_tf_inside_city] ;you can't plant a forest in an existing city
+action        = "Mine TF"
+actor_reqs    =
+    { "type",          "name",      "range", "present"
+      "UnitFlag",      "Settlers",  "Local", TRUE
+      "UnitType",      "Legion",    "Local", FALSE 
+      "CityTile",      "Center",    "Local", TRUE
+      "Terrain",       "Grassland", "Local", FALSE
+      "Terrain",       "Plains",    "Local", FALSE
+    }
+
 [actionenabler_pillage]
 action        = "Pillage"
 actor_reqs    =

@@ -1289,7 +1289,6 @@ reqs           =
 build_time     = 0
 removal_time   = 0
 conflicts      = "Mine", "Oil Well"
-; /* xgettext:no-c-format */
 helptext       = _("\
 Once Refrigeration is known, irrigation systems can be upgraded to \
 farmland by irrigating them a second time; if the city working the tile \
@@ -1356,9 +1355,7 @@ Fortresses improve defense for land units outside cities. Among other \
 effects, a land unit remaining in a fortress for a whole turn without \
 moving recovers a quarter of its hit points. With Invention, fortresses \
 gain watchtowers from which land units can see further afield.\
-"),
-; /* xgettext:no-c-format */
-_("\
+"), _("\
 Diplomatic units get a 25% defense bonus in diplomatic fights.\
 ")
 
@@ -1572,7 +1569,6 @@ build_time = 2
 removal_time = 0
 flags          = "NativeTile"
 native_to      = "Land", "LandNoKill", "LandAirSea", "Trireme", "RiverShip"
-; /* xgettext:no-c-format */
 helptext       = _("\
 Any land terrain type may have a River on it.  A River adds 1\
  trade to the resources produced by that tile.  It also increases a tile's\

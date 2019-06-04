@@ -834,7 +834,8 @@ sound		= "b_sam_battery"
 sound_alt	= "b_generic"
 helptext	= _("\
 Doubles the defense of all units inside the city when attacked by\
- aircraft (not including helicopters or missiles).\
+ aircraft (not including helicopters or missiles). Stealth\
+ aircraft's detection evasion reduces the bonus to 25%.\
 ")
 
 [building_sdi_defense]

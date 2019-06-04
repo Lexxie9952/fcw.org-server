@@ -670,10 +670,10 @@ helptext      = _("\
 Workers can improve terrain tiles. See the help on \
 Terrain and Terrain Alterations for details.\
 "), _("\
-After discovering Engineering, Workers can build Canals. After \
-discovering Construction, Workers can build Fortresses and Oil Wells. \
-Workers can build Airbases and Buoys, which Settlers cannot. \
-Workers must be on board a ship to build Buoys.\
+After discovering Masonry, Workers can build Forts. After Construction, they can build\
+ Fortresses and Oil Wells. After Engineering, they can build Canals. After Radio,\
+ they can build Airbases and Buoys, which Settlers cannot. Workers must be onboard a\
+ ship to build Buoys.\
 ")
 
 [unit_engineers]
@@ -710,19 +710,15 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = "Settlers", "WorkerStartUnit"
 helptext      = _("\
-Engineers are similar to Workers, but move and work twice as\
- fast. Unlike Workers, Engineers can perform terrain Transformation,\
- such as converting Desert to Plains,\
- or Ocean to Swamp (when on a ship on an Ocean tile\
- which borders enough existing land). See the\
- Terrain Alterations section for more details.\
- After discovering Engineering, this unit can build canals.\
+Engineers can do everything that Workers can, but they move and work twice as fast.\
+ Unlike Workers, Engineers can perform terrain Transformation, such as converting\
+ Desert to Plains or Ocean to Swamp (must be on a ship on an Ocean tile bordering\
+ 3 land tiles). See the Terrain Alterations section for more details.\
 "), _("\
 TIP 1:  Upgrade Workers to Engineers when possible.\
 "), _("\
-TIP 2:  If you manage to build Leonardo's Workshop, research\
- Explosives before the Workshop becomes obsolete, so that\
- your Workers will get upgraded for free.\
+TIP 2:  If you manage to build Leonardo's Workshop, research Explosives before the\
+ Workshop becomes obsolete, so that your Workers will get upgraded for free.\
 ")
 
 [unit_warriors]
@@ -2197,9 +2193,10 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
-An improved Fighter, with improved attack and a higher movement\
+The most advanced Fighter, with improved attack and a higher movement\
  radius. Stealth Fighters can't be seen unless directly adjacent\
- to an enemy.\
+ to an enemy. Stealth evasion reduces effectiveness of SAM Batteries to\
+ a 25% bonus.\
 ")
 
 [unit_stealth_bomber]
@@ -2215,7 +2212,7 @@ sound_fight   = "f_stealth_bomber"
 sound_fight_alt = "f_generic"
 build_cost    = 160
 pop_cost      = 0
-attack        = 18
+attack        = 19 
 defense       = 5
 hitpoints     = 20
 firepower     = 2
@@ -2253,7 +2250,8 @@ helptext      = _("\
 The strongest Bomber, with improved attack and a higher movement\
  radius. Stealth Bombers can't be seen unless adjacent to an\
  enemy, and may slip through the air to return home on the same\
- turn. May carry two Bombs.\
+ turn. Stealth evasion reduces effectiveness of SAM Batteries to\
+ a 25% bonus. May carry two Bombs.\
 ")
 
 [unit_trireme]
@@ -2803,7 +2801,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter"
-flags         = "FieldUnit", "OneAttack", "AirAttacker", "HasNoZOC", "Unbribable", "CantReachAir"
+flags         = "NeverProtects", "FieldUnit", "OneAttack", "AirAttacker", "HasNoZOC", "Unbribable", "CantReachAir"
 roles         = ""
 helptext      = _("\
 The Cruise Missile is a long-distance missile\
@@ -2839,7 +2837,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 disembarks    = "Air", "AirPillage"
-flags         = "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable", "AirAttacker"
+flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable", "AirAttacker"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0
@@ -2890,7 +2888,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable"
+flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0

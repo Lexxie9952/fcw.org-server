@@ -468,7 +468,7 @@ graphic_alt          = "-"
 identifier           = "f"
 class                = "Land"
 movement_cost        = 2
-defense_bonus        = 50
+defense_bonus        = 33
 food                 = 1
 shield               = 2
 trade                = 0
@@ -727,7 +727,7 @@ graphic_alt          = "-"
 identifier           = "s"
 class                = "Land"
 movement_cost        = 2
-defense_bonus        = 50
+defense_bonus        = 33
 food                 = 1
 shield               = 0
 trade                = 0
@@ -1289,7 +1289,6 @@ reqs           =
 build_time     = 0
 removal_time   = 0
 conflicts      = "Mine", "Oil Well"
-; /* xgettext:no-c-format */
 helptext       = _("\
 Once Refrigeration is known, irrigation systems can be upgraded to \
 farmland by irrigating them a second time; if the city working the tile \
@@ -1327,6 +1326,38 @@ changes into desert, tundra, and ice, and lakes and oceans freeze.\
 Settlers, Workers, and Engineers can clean up nuclear fallout.\
 ")
 
+; ***************************** BASES ****************************************
+
+[extra_fort]
+name           = _("Fort")
+category       = "Infra"
+causes         = "Base"
+rmcauses       = "Pillage"
+graphic        = "base.outpost"
+graphic_alt    = "base.fortress"
+activity_gfx   = "unit.outpost"
+act_gfx_alt    = "unit.fortress"
+act_gfx_alt2   = "-"
+rmact_gfx      = "None"
+rmact_gfx_alt  = "-"
+reqs           =
+    { "type", "name", "range", "present", "quiet"
+      "Tech", "Masonry", "Player", TRUE, FALSE
+      "TerrainClass", "Land", "Local", TRUE, FALSE
+      "UnitFlag", "CanFortress", "Local", TRUE, FALSE
+      "CityTile", "Center", "Local", FALSE, TRUE
+    }
+build_time     = 2
+removal_time   = 0
+native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter", "Balloon"
+hidden_by      = "Fortress"
+flags          = "NativeTile", "Refuel", "NoStackDeath"
+helptext       = _("\
+Forts are rapidly built fortifications which give Land units +33% defense\
+ against Land and Sea units. Defending units are lost one at a time instead\
+ of the entire stack dying. A fort is necessary to start building a fortress.\
+")
+
 [extra_fortress]
 name           = _("Fortress")
 category       = "Infra"
@@ -1341,24 +1372,24 @@ rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 reqs           =
     { "type", "name", "range", "present", "quiet"
+      "Extra", "Fort", "Local", TRUE, FALSE
       "Tech", "Construction", "Player", TRUE, FALSE
       "TerrainClass", "Land", "Local", TRUE, FALSE
       "UnitFlag", "CanFortress", "Local", TRUE, FALSE
       "CityTile", "Center", "Local", FALSE, TRUE
     }
-build_time     = 3
+build_time     = 5
 removal_time   = 0
 defense_bonus  = 100
 native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter", "Balloon"
-flags          = "Refuel", "NoStackDeath"
+flags          = "NativeTile", "Refuel", "NoStackDeath"
 helptext       = _("\
-Fortresses improve defense for land units outside cities. Among other \
-effects, a land unit remaining in a fortress for a whole turn without \
-moving recovers a quarter of its hit points. With Invention, fortresses \
-gain watchtowers from which land units can see further afield.\
-"),
-; /* xgettext:no-c-format */
-_("\
+Fortresses are improvements built on top of Forts which greatly improve defense.\
+ A Land unit remaining in a fortress for a whole turn without moving recovers a\
+ quarter of its hit points. With Invention, fortresses gain watchtowers from which\
+ land units can see further afield.\
+"), _("\
+Units in a Fortress die one at a time instead of the entire stack being lost.\
 Diplomatic units get a 25% defense bonus in diplomatic fights.\
 ")
 
@@ -1561,7 +1592,7 @@ rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 buildable      = TRUE
 generated      = TRUE
-defense_bonus  = 50
+defense_bonus  = 33
 reqs           =
     { "type", "name", "range", "present"
       "TerrainClass", "Land", "Local", TRUE
@@ -1572,7 +1603,6 @@ build_time = 2
 removal_time = 0
 flags          = "NativeTile"
 native_to      = "Land", "LandNoKill", "LandAirSea", "Trireme", "RiverShip"
-; /* xgettext:no-c-format */
 helptext       = _("\
 Any land terrain type may have a River on it.  A River adds 1\
  trade to the resources produced by that tile.  It also increases a tile's\
