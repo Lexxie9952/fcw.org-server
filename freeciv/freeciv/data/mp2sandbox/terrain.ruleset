@@ -1356,6 +1356,9 @@ helptext       = _("\
 Forts are rapidly built fortifications which give Land units +33% defense\
  against Land and Sea units. Defending units are lost one at a time instead\
  of the entire stack dying. A fort is necessary to start building a fortress.\
+"), _("
+TIP: Forts make great outposts for keeping watch on your borders. Be careful--\
+an unmanned Fort can be claimed by a foreign unit. 
 ")
 
 [extra_fortress]

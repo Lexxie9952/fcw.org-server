@@ -341,6 +341,11 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
         * unit is handled separately, inside get_drawable_unit(). */
         sprite_array = sprite_array.concat(fill_unit_sprite_array(punit, stacked, backdrop));
 
+        ////1
+        // Front walls of Forts and Fortresses are drawn one tile at a time immediately after a unit is drawn on that tile,
+        // this will obviously put the front wall over the unit on that tile, but prevent front walls on other tiles from 
+        // improperly occluding units on other tiles.
+        sprite_array = sprite_array.concat(fill_layer3_sprite_array(ptile, pcity));
     }
 
     /* show explosion animation on current tile.*/
@@ -381,12 +386,14 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
 
       break;
 
+    ////1
+    /* don't draw front walls of Forts and Fortresses as separate layer, it improperly occludes units on other tiles  
     case LAYER_SPECIAL3:
       if (ptile != null) {
         sprite_array = sprite_array.concat(fill_layer3_sprite_array(ptile, pcity));
       }
       break;
-
+    */
     case LAYER_TILELABEL:
       if (ptile != null && ptile['label'] != null && ptile['label'].length > 0) {
         sprite_array.push(get_tile_label_text(ptile));
