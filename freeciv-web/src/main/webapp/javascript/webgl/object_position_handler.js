@@ -409,7 +409,7 @@ function update_tile_extras(ptile) {
   update_tile_extra_update_model(EXTRA_RUINS, "Ruins", ptile);
   update_tile_extra_update_model(EXTRA_AIRBASE, "Airbase", ptile);
   // some rulesets won't have EXTRA_FORT defined, so check it's defined too:
-  if (typeof EXTRA_FORT === 'undefined') update_tile_extra_update_model(EXTRA_FORT, "Fort", ptile);/////
+  if (typeof EXTRA_FORT !== 'undefined') update_tile_extra_update_model(EXTRA_FORT, "Fort", ptile);/////
   update_tile_extra_update_model(EXTRA_FORTRESS, "Fortress", ptile);
 
   // Render tile specials (extras). Fish and whales are 3D models, the rest are 2D sprites from the 2D version.

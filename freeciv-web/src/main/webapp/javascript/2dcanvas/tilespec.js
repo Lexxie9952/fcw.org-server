@@ -1546,7 +1546,7 @@ function fill_layer1_sprite_array(ptile, pcity)
     }
     // We can only draw the Fort if there's not a Fortress (which hides it):
     // But we also have to check if it's defined because some rulesets don't define it
-    else if (typeof EXTRA_FORT === 'undefined')  { 
+    else if (typeof EXTRA_FORT !== 'undefined')  { 
       if (tile_has_extra(ptile, EXTRA_FORT)) {   
         result_sprites.push({"key" : "base.outpost_bg",
                              "offset_y" : -normal_tile_height / 2});
@@ -1600,7 +1600,7 @@ function fill_layer3_sprite_array(ptile, pcity) ///// this should be drawn simul
     }
     // We can only draw the Fort if there's not a Fortress (which hides it)
     // but first we also check if it's defined because some rulesets don't have it:
-    else if (typeof EXTRA_FORT === 'undefined')  { 
+    else if (typeof EXTRA_FORT !== 'undefined')  { 
       if (tile_has_extra(ptile, EXTRA_FORT)) {   
         result_sprites.push({"key" : "base.outpost_fg",
                            "offset_y" : -normal_tile_height / 2});

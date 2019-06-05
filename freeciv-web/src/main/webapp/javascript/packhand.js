@@ -536,7 +536,7 @@ function handle_ruleset_control(packet)
     if (ename == "Railroad") delete window["EXTRA_RAIL"];
     else if (ename == "Oil Well") delete window["EXTRA_OIL_WELL"];
     else if (ename == "Minor Tribe Village") delete window["EXTRA_HUT"];
-    else if (typeof EXTRA_FORT === 'undefined') { //makes sure it's defined first
+    else if (typeof EXTRA_FORT !== 'undefined') { //makes sure it's defined first
       if (ename == "Fort") delete window["EXTRA_FORT"]; ///// 
     } 
   }
@@ -1517,7 +1517,7 @@ function handle_ruleset_extra(packet)
 
   window["EXTRA_" + packet['name'].toUpperCase()] = packet['id'];
 
-  if (typeof EXTRA_FORT === 'undefined') { //makes sure it's defined first
+  if (typeof EXTRA_FORT !== 'undefined') { //makes sure it's defined first
      //some rulesets don't have this extra so this checks if it's defined first
     if (packet['name'] == "Fort") window["EXTRA_FORT"] = packet['id']; /////
   } 
