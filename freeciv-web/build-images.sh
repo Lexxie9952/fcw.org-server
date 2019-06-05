@@ -18,4 +18,5 @@ WEBAPP_DIR="${DIR}/target/freeciv-web"
 
 printf "\nRebuilding FCW images...\n"
 ~/freeciv-web/scripts/freeciv-img-extract/sync.sh -f ~/freeciv-web/freeciv/freeciv -o ~/freeciv-web/freeciv-web/src/derived/webapp      
+printf "\n.******* REMINDER: ./build.sh required to incorporate new images into active website. *******\n"
    
