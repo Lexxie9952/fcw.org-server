@@ -1544,6 +1544,11 @@ function fill_layer1_sprite_array(ptile, pcity)
       result_sprites.push({"key" : "base.fortress_bg",
                            "offset_y" : -normal_tile_height / 2});
     }
+    // We can only draw the Fort if there's not a Fortress (which hides it):
+    else if (tile_has_extra(ptile, EXTRA_FORT)) {   
+      result_sprites.push({"key" : "base.outpost_bg",
+                           "offset_y" : -normal_tile_height / 2});
+    }
   }
 
   return result_sprites;
@@ -1579,7 +1584,8 @@ function fill_layer2_sprite_array(ptile, pcity)
 /****************************************************************************
   ...
 ****************************************************************************/
-function fill_layer3_sprite_array(ptile, pcity)
+function fill_layer3_sprite_array(ptile, pcity) ///// this should be drawn simultaneous and immediately AFTER the unit is drawn, tile after tile
+                                                   // in order to avoid buggy overdraw. when forts and units are side by side on tiles.
 {
   var result_sprites = [];
 
@@ -1587,6 +1593,11 @@ function fill_layer3_sprite_array(ptile, pcity)
   if (pcity == null) {
     if (tile_has_extra(ptile, EXTRA_FORTRESS)) {
       result_sprites.push({"key" : "base.fortress_fg",
+                           "offset_y" : -normal_tile_height / 2});
+    }
+    // We can only draw the Fort if there's not a Fortress (which hides it):
+    else if (tile_has_extra(ptile, EXTRA_FORT)) {   
+      result_sprites.push({"key" : "base.outpost_fg",
                            "offset_y" : -normal_tile_height / 2});
     }
   }

@@ -991,7 +991,14 @@ function update_unit_order_commands()
         $("#order_irrigate").hide();
         $("#order_build_farmland").hide();
       }
-      if (player_invention_state(client.conn.playing, tech_id_by_name('Construction')) == TECH_KNOWN) {
+    
+      ///// mp2 rules allow building Forts (Masonry) as pre-req before Fortress (Construction):
+      if (ruleset_control['name'] == "Multiplayer-Evolution ruleset") {
+        if (player_invention_state(client.conn.playing, tech_id_by_name('Masonry')) == TECH_KNOWN) {
+          unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
+        }
+      } else if (player_invention_state(client.conn.playing, tech_id_by_name('Construction')) == TECH_KNOWN) {
+        // every other ruleset needs Construction to unlock building Fortresses:
         unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
       }
 
@@ -2064,6 +2071,8 @@ function handle_context_menu_callback(key)
     case "fortress":
       key_unit_fortress();
       break;
+    case "fort": /////
+      key_unit_fortress();
 
     case "airbase":
       key_unit_airbase();
