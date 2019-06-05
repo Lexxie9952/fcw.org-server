@@ -201,10 +201,10 @@ reqs    =
 
 ; **** FORTRESS ****
 ; Cumulative with fort
-; 50 + 50 = 100
+; 33 + 67 = 100
 [effect_fortress_defense]
 type    = "Defend_Bonus"
-value   = 50
+value   = 67
 reqs    =
     { "type", "name", "range", "present"
       "Extra", "Fortress", "Local", TRUE

@@ -1921,6 +1921,12 @@ rmact_gfx_alt  = "-"
 ;
 ; */ <-- avoid gettext warnings
 
+[base_fort]
+extra          = "Fort"
+gui_type       = "Fortress"
+border_sq      = 1
+vision_main_sq = 4
+
 [base_fortress]
 extra          = "Fortress"
 gui_type       = "Fortress"
