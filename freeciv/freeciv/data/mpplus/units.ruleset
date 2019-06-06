@@ -40,6 +40,7 @@ flags =
     _("Infra"), _("Can build infrastructure.")
     _("Paratroopers"), _("Can be paradropped from a friendly city or suitable base.")
     _("Marines"), _("Can launch attack from non-native tiles.")
+ ;   _("NeverProtects"), _("Does not protect other units on its tile.")   ; UNCOMMENT THIS IF NOT USING SCL'S PATCH FOR THIS FLAG
   }
 
 ; Names for custom unit class flags. There can be up to 8 of these.
@@ -1469,7 +1470,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC"
+flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "NeverProtects"
 roles         = ""
 helptext      = _("\
 Bombers are specialized airborne units that may\
@@ -1578,7 +1579,7 @@ uk_food       = 0
 uk_gold       = 0
 vision_layer  = "Stealth"
 flags         = "FieldUnit", "AirAttacker",
-                "HasNoZOC", "Unbribable"
+                "HasNoZOC", "Unbribable", "NeverProtects"
 roles         = ""
 helptext      = _("\
 An improved Bomber, with improved attack and a higher movement\
