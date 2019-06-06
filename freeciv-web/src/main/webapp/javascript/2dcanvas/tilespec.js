@@ -311,12 +311,10 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
     case LAYER_CITY1:
       if (pcity != null) {
         sprite_array.push(get_city_sprite(pcity));
-	if (pcity['unhappy']) {
+	      if (pcity['unhappy']) {
           sprite_array.push({"key" : "city.disorder"});
-	}
+	      }
       }
-
-
     break;
 
     case LAYER_SPECIAL2:
@@ -340,13 +338,13 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
         /* TODO: Special case for drawing the selection rectangle.  The blinking
         * unit is handled separately, inside get_drawable_unit(). */
         sprite_array = sprite_array.concat(fill_unit_sprite_array(punit, stacked, backdrop));
+      }
+      ////1
+      // Front walls of Forts and Fortresses are drawn one tile at a time immediately after a unit is drawn on that tile,
+      // this will obviously put the front wall over the unit on that tile, but prevent front walls on other tiles from 
+      // improperly occluding units on other tiles.
+      sprite_array = sprite_array.concat(fill_layer3_sprite_array(ptile, pcity));
 
-        ////1
-        // Front walls of Forts and Fortresses are drawn one tile at a time immediately after a unit is drawn on that tile,
-        // this will obviously put the front wall over the unit on that tile, but prevent front walls on other tiles from 
-        // improperly occluding units on other tiles.
-        sprite_array = sprite_array.concat(fill_layer3_sprite_array(ptile, pcity));
-    }
 
     /* show explosion animation on current tile.*/
      if (ptile != null && explosion_anim_map[ptile['index']] != null) {
