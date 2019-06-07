@@ -243,8 +243,9 @@ reqs    =
 
 ; Fortress HP regen
 [effect_fortress_hp_regen]
+; Cumulative with fort: 10+15=25
 type    = "HP_Regen"
-value   = 25
+value   = 15
 reqs    =
     { "type", "name", "range"
       "Extra", "Fortress", "Tile"
@@ -252,7 +253,7 @@ reqs    =
     }
 [effect_fortress_hp_regen_1]
 type    = "HP_Regen"
-value   = 25
+value   = 15
 reqs    =
     { "type", "name", "range"
       "Extra", "Fortress", "Tile"
@@ -260,7 +261,7 @@ reqs    =
     }
 [effect_fortress_hp_regen_2]
 type    = "HP_Regen"
-value   = 25
+value   = 15
 reqs    =
     { "type", "name", "range"
       "Extra", "Fortress", "Tile"
@@ -268,7 +269,7 @@ reqs    =
     }
 [effect_fortress_hp_regen_3]
 type    = "HP_Regen"
-value   = 25
+value   = 25  ;25 because not cumulative with Fort
 reqs    =
     { "type", "name", "range"
       "Extra", "Fortress", "Tile"

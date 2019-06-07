@@ -641,6 +641,9 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
     case "Archer":                     
         dx += 1; 
         break;
+    case "AWACS":                     
+        dx += 4; dy+=3; 
+        break;    
     case "Battleship":
         dx -= 5; dy -= 4;
         break;
