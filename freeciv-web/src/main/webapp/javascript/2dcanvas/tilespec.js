@@ -1102,7 +1102,7 @@ function get_city_sprite(pcity)
     tag = city_rule['graphic_alt'] + "_" + city_walls + "_" + size;
   }
 
-  // the numbers -2 and -25 are where we adjust offsets:
+  // the numbers -4 and -24 are where we adjust offsets:
   return {"key" :  tag, "offset_x": -4, "offset_y" : -24};
 }
 

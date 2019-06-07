@@ -1443,7 +1443,7 @@ function city_worklist_dialog(pcity)
         "" : " cannot_build_item")
      + "' data-wlitem='" + j + "' "
      + " title=\"" + universal['helptext'] + "\">"
-     + "<td><div class='production_list_item_sub' style=' background: transparent url("
+     + "<td><div class='production_list_item_sub' ondblclick='city_add_to_worklist();' style=' background: transparent url("
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'"
