@@ -104,16 +104,24 @@ function update_game_status_panel() {
       net_income = "+" + pplayer['expected_income'];
     }
 
-      // PUT FLAG TO LEFT OF NATION NAME
+    // PUT FLAG TO LEFT OF NATION NAME
     if (!is_small_screen()) {
-      //get player's first city
-      for (var city_id in cities){
-        var flagcity = cities[city_id];
-        break;
+      var thecity, flagcity="";
+      var playerno = client.conn.playing.playerno;
+
+      // Get player's first city:
+      for (var city_id in cities) {
+        var thecity = cities[city_id];
+        if (playerno == thecity['owner']) {
+          var flagcity = thecity;
+          break;
+        }
       }
-      var city_flag = get_city_flag_sprite(flagcity);
-      var status_flag_sprite = sprites[city_flag['key']];
-      status_html += "<span style='cursor:pointer;'><img class='lowered_gov' src='"+status_flag_sprite['image-src']+"'></span>";
+      if (flagcity != "") { // if we got a city for the player we can show their flag
+        var city_flag = get_city_flag_sprite(flagcity);
+        var status_flag_sprite = sprites[city_flag['key']];
+        status_html += "<span style='cursor:pointer;'><img class='lowered_gov' src='"+status_flag_sprite['image-src']+"'></span>";
+      } 
     }
     
 
