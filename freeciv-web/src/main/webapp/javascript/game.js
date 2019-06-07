@@ -112,7 +112,7 @@ function update_game_status_panel() {
   
       var civ_flag = "";
       if (!pnation['customized']) {
-        civ_flag += "<img class='lowered_gov' src='/images/flags/" + tag + "-web" + get_tileset_file_extention() + "' width='60'>";
+        civ_flag += "<img src='/images/flags/" + tag + "-web" + get_tileset_file_extention() + "' width='45'>";
         status_html += "<span style='cursor:pointer;'>"+civ_flag+"</span>";
       } 
     }
