@@ -104,6 +104,19 @@ function update_game_status_panel() {
       net_income = "+" + pplayer['expected_income'];
     }
 
+      // PUT FLAG TO LEFT OF NATION NAME
+    if (!is_small_screen()) {
+      //get player's first city
+      for (var city_id in cities){
+        var flagcity = cities[city_id];
+        break;
+      }
+      var city_flag = get_city_flag_sprite(flagcity);
+      var status_flag_sprite = sprites[city_flag['key']];
+      status_html += "<span style='cursor:pointer;'><img class='lowered_gov' src='"+status_flag_sprite['image-src']+"'></span>";
+    }
+    
+
     if (!is_small_screen()) status_html += "<b>" + nations[pplayer['nation']]['adjective'] + "</b> &nbsp;";
     
 /*************** Government type mini-icon that's clickable for revolution */
