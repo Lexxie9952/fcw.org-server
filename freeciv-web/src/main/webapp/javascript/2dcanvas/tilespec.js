@@ -1102,7 +1102,7 @@ function get_city_sprite(pcity)
     tag = city_rule['graphic_alt'] + "_" + city_walls + "_" + size;
   }
 
-  return {"key" :  tag, "offset_x": 0+city_offset_x, "offset_y" : 0-city_offset_y};
+  return {"key" :  tag, "offset_x": city_offset_x, "offset_y" : -35};
 }
 
 
