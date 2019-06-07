@@ -72,8 +72,8 @@ var unit_offset_adj_x = -9;      //-3
 var unit_offset_adj_y = -7;      //-3 
 
 // new vars for adjusting city tile position only:
-var city_offset_x = 7;
-var city_offset_y = 35; 
+var city_offset_x = -1;
+var city_offset_y = 24; 
 
 // Enable citybar
 var is_full_citybar = 1;
