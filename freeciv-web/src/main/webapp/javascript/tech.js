@@ -170,8 +170,10 @@ function init_tech_screen()
     $("#tech_progress_box").css("padding-left", "10px");
   }
 
-  $("#mouse_info_box").html("<div title='Right-click:   Scrolls the screen.\nMiddle-click:  Sets the Future Goal.' style='background: transparent url(/images/info-hover.png);width:86px;height:30px;'></div>")
-  $("#mouse_info_box").tooltip();
+  if (!is_small_screen()) { 
+    $("#mouse_info_box").html("<div title='Right-click:   Scrolls the screen.\nMiddle-click:  Sets the Future Goal.' style='background: transparent url(/images/info-hover.png);width:86px;height:30px;'></div>")
+    $("#mouse_info_box").tooltip();
+  }
   is_tech_tree_init = true;
   clicked_tech_id = null;
 }
