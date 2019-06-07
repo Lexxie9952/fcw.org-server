@@ -1103,7 +1103,7 @@ function get_city_sprite(pcity)
   }
 
   // the numbers -2 and -25 are where we adjust offsets:
-  return {"key" :  tag, "offset_x": -2, "offset_y" : -25};
+  return {"key" :  tag, "offset_x": -4, "offset_y" : -24};
 }
 
 
