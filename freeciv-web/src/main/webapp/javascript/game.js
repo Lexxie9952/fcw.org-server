@@ -106,25 +106,17 @@ function update_game_status_panel() {
 
     // PUT FLAG TO LEFT OF NATION NAME
     if (!is_small_screen()) {
-      var thecity, flagcity="";
-      var playerno = client.conn.playing.playerno;
-
-      // Get player's first city:
-      for (var city_id in cities) {
-        var thecity = cities[city_id];
-        if (playerno == thecity['owner']) {
-          var flagcity = thecity;
-          break;
-        }
-      }
-      if (flagcity != "") { // if we got a city for the player we can show their flag
-        var city_flag = get_city_flag_sprite(flagcity);
-        var status_flag_sprite = sprites[city_flag['key']];
-        status_html += "<span style='cursor:pointer;'><img class='lowered_gov' src='"+status_flag_sprite['image-src']+"'></span>";
+      var pplayer = client.conn.playing;
+      var pnation = nations[pplayer['nation']];
+      var tag = pnation['graphic_str'];
+  
+      var civ_flag = "";
+      if (!pnation['customized']) {
+        civ_flag += "<img class='lowered_gov' src='/images/flags/" + tag + "-web" + get_tileset_file_extention() + "' width='60'>";
+        status_html += "<span style='cursor:pointer;'>"+civ_flag+"</span>";
       } 
     }
     
-
     if (!is_small_screen()) status_html += "<b>" + nations[pplayer['nation']]['adjective'] + "</b> &nbsp;";
     
 /*************** Government type mini-icon that's clickable for revolution */
