@@ -85,7 +85,8 @@ function play_combat_sound(unit)
     play_sound(soundset[ptype['sound_fight']]);
   } else if (soundset[ptype['sound_fight_alt']] != null) {
     play_sound(soundset[ptype['sound_fight_alt']]);
-  }
+    console.error("Combat sound not found, played alt-sound instead.");
+  } else console.error("Combat sound for unit not found.");
 
 
 }
@@ -96,7 +97,10 @@ function play_combat_sound(unit)
 function play_sound(sound_file) 
 {
   try {
-    if (!sounds_enabled || !(document.createElement('audio').canPlayType) || Audio == null) return;
+    if (!sounds_enabled || !(document.createElement('audio').canPlayType) || Audio == null) {
+      console.error("function play_sound() was called but failed to play.")
+      return;
+    }
     var audio = new Audio(sound_path + sound_file);
     var promise = audio.play();
     if (promise != null) {
