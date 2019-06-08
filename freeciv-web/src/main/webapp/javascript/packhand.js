@@ -626,7 +626,7 @@ function handle_nuke_tile_info(packet)
   } else {
     ptile['nuke'] = 60;
   }
-  play_sound('LrgExpl.ogg');
+  play_sound('nuclear_distant.ogg');
 
 }
 
