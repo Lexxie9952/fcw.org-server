@@ -831,9 +831,11 @@ function handle_unit_combat_info(packet)
   } else {
     if (attacker_hp == 0 && is_unit_visible(attacker)) {
       explosion_anim_map[attacker['tile']] = 25;
+      play_combat_sound(defender); //attacker lost, player defender combat sound
     }
     if (defender_hp == 0 && is_unit_visible(defender)) {
       explosion_anim_map[defender['tile']] = 25;
+      play_combat_sound(attacker); //defender lost, player attacker combat sound
     }
   }
 
