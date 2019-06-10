@@ -647,13 +647,13 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
     case "Battleship":
         dx -= 5; dy -= 4;
         break;
-    case "Carrier":
-        dx -= 3; dy -= 3;
-        break;
     case "Chariot":
         dx -= 2; 
         break; 
     case "Caravel":
+    case "Carrier":
+    case "Destroyer":
+    case "Missile Destroyer":
         dx -= 3; dy-= 3; 
         break;  
     case "Engineers":                     
@@ -684,9 +684,6 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
         break;
     case "Mech. Inf.":
         dx += 1; dy += 1;
-        break;
-    case "Missile Destroyer":
-        dx -= 3; dy -= 3;
         break;
     case "Musketeers":
         dx -= 1; dy -= 1;
