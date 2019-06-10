@@ -157,7 +157,7 @@ function update_game_status_panel() {
     status_html += "Turn: <b>" + game_info['turn'] + "</b>  ";
   }
 
-  if ($(window).width() - sum_width() > 800) {
+  if ($(window).width() - sum_width() > 740) {   // was 800 but 740 is the space available on standard screen and it's adequate
     if ($("#game_status_panel_top").length) {
       $("#game_status_panel_top").show();
       $("#game_status_panel_bottom").hide();

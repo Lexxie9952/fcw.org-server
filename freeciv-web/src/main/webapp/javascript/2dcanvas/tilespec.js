@@ -633,7 +633,7 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
 
   switch(ptype['name']) {
     case "AEGIS Cruiser":
-        dx -= 2; dy -= 4;
+        dx -= 3; dy -= 6;
         break;
     case "Alpine Troops":                     
         dx -= 3; dy-=1;
@@ -646,6 +646,9 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
         break;    
     case "Battleship":
         dx -= 5; dy -= 4;
+        break;
+    case "Carrier":
+        dx -= 3; dy -= 3;
         break;
     case "Chariot":
         dx -= 2; 
@@ -681,6 +684,9 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
         break;
     case "Mech. Inf.":
         dx += 1; dy += 1;
+        break;
+    case "Missile Destroyer":
+        dx -= 3; dy -= 3;
         break;
     case "Musketeers":
         dx -= 1; dy -= 1;
