@@ -19,6 +19,7 @@ button {
   border-width:0;
   display:block;
   padding:0px;
+  margin-right:0px;
 }
 
 #freeciv_logo {
