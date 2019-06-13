@@ -54,6 +54,15 @@ format_version=20
 ;    }
 ; */ <-- avoid gettext warnings
 
+; Combat_rounds for ancient ships
+[effect_combat_rounds_riverships]
+type    = "Combat_Rounds"
+value   = 15
+reqs	=
+    { "type", "name", "range", "present"
+      "UnitClass", "RiverShip", "Local", TRUE
+    }
+
 ; Cheating AI effects are in separate file
 *include "default/ai_effects.ruleset"
 

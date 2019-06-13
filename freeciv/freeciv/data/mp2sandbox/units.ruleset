@@ -1648,8 +1648,8 @@ tech_req      = "Chemistry"
 obsolete_by   = "None"
 graphic       = "u.balloon"
 graphic_alt   = "u.trireme"
-sound_move    = "m_trireme"
-sound_move_alt = "m_generic"
+sound_move    = "m_balloon"
+sound_move_alt = "m_trireme"
 sound_fight   = "f_warrior"
 sound_fight_alt = "f_generic"
 build_cost    = 30
@@ -2257,18 +2257,99 @@ The strongest Bomber, with improved attack and a higher movement\
 [unit_trireme]
 name          = _("Trireme")
 class         = "Trireme"
-tech_req      = "Map Making"
-obsolete_by   = "Caravel"
+tech_req      = "Alphabet"
+obsolete_by   = "Galley"
 graphic       = "u.trireme"
 graphic_alt   = "-"
 sound_move    = "m_trireme"
 sound_move_alt = "m_generic"
 sound_fight   = "f_trireme"
 sound_fight_alt = "f_generic"
-build_cost    = 30
+build_cost    = 20
 pop_cost      = 0
 attack        = 1
 defense       = 1
+hitpoints     = 10
+firepower     = 1
+move_rate     = 6
+vision_radius_sq = 4
+transport_cap = 2
+fuel          = 2
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+cargo         = "Land", "LandNoKill", "LandAirSea"
+flags         = "BadCityDefender", "Provoking", "CantReachAir", "HelpWonder", "TradeRoute", "Coast"
+roles         = "Ferryboat", "FerryStartUnit"
+helptext      = _("\
+The Trireme is the first naval unit. While its combat abilities are basic,\
+ it has multipurpose use for exploration, transport, and commerce--similar\
+ to a Caravan, it may at any time help to build a Wonder, enter a\
+ marketplace, or establish a Traderoute. While it may venture out into deep\
+ ocean, there is risk when it enters unknown waters: it must end every second\
+ turn on coastline, or else it will be lost at sea. Triremes can travel on rivers.\
+"), _("
+Like most ancient sea units, when it initiates combat there will be 15 rounds\
+  of combat and 15 total hitpoints lost between both units. This may or may not\
+  result in the loss of one of the units. This tends to favor ships who are\
+  accompanied by other ships.\
+")
+
+[unit_longboat]
+name          = _("Longboat")
+class         = "RiverShip"
+tech_req      = "Map Making"
+obsolete_by   = "Caravel"
+graphic       = "u.longboat"
+graphic_alt   = "-"
+sound_move    = "m_longboat"
+sound_move_alt = "m_trireme"
+sound_fight   = "f_trireme"
+sound_fight_alt = "f_generic"
+build_cost    = 25
+pop_cost      = 0
+attack        = 2
+defense       = 1
+hitpoints     = 10
+firepower     = 1
+move_rate     = 6
+vision_radius_sq = 4
+transport_cap = 1
+fuel          = 0
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+cargo         = "Land", "LandNoKill", "LandAirSea"
+flags         = "BadCityDefender", "Provoking", "CantReachAir"
+roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
+helptext      = _("\
+The Longboat is an offensive naval unit. It can attack at sea and bring\
+ one land unit to shore, making it useful for conducting ancient sea\
+ campaigns. Longboats can travel on rivers.\
+"), _("
+Like most ancient sea units, when it initiates combat there will be 15 rounds\
+  of combat and 15 total hitpoints lost between both units. This may or may not\
+  result in the loss of one of the units. This tends to favor ships who are\
+  accompanied by other ships.\
+")
+
+[unit_galley]
+name          = _("Galley")
+class         = "RiverShip"
+tech_req      = "Seafaring"
+obsolete_by   = "Caravel"
+graphic       = "u.galley"
+graphic_alt   = "-"
+sound_move    = "m_galley"
+sound_move_alt = "m_trireme"
+sound_fight   = "f_trireme"
+sound_fight_alt = "f_generic"
+build_cost    = 30
+pop_cost      = 0
+attack        = 2
+defense       = 2
 hitpoints     = 10
 firepower     = 1
 move_rate     = 6
@@ -2280,13 +2361,90 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea"
-flags         = "BadCityDefender", "Provoking", "CantReachAir"
-roles         = "Ferryboat", "FerryStartUnit"
+flags         = "BadCityDefender", "Provoking", "CantReachAir", "HelpWonder", "Traderoute"
+roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
-The Trireme is your first boat unit. It can act\
- as a transport ship and has rudimentary offensive\
- capabilities, but may not enter deep ocean tiles.\
- Triremes can travel on rivers.\
+The Galley is an all-purpose sea unit. It has decent offense, defense,\
+ and transport ability. It has the same commerce abilities as the\ 
+ Trireme it replaces. Galleys can travel on rivers.\
+"), _("
+Like most ancient sea units, when it initiates combat there will be 15 rounds\
+  of combat and 15 total hitpoints lost between both units. This may or may not\
+  result in the loss of one of the units. This tends to favor ships who are\
+  accompanied by other ships.\
+")
+
+[unit_war_galley]
+name          = _("War Galley")
+class         = "RiverShip"
+tech_req      = "Astronomy"
+obsolete_by   = "Caravel"
+graphic       = "u.war_galley"
+graphic_alt   = "-"
+sound_move    = "m_war_galley"
+sound_move_alt = "m_trireme"
+sound_fight   = "f_trireme"
+sound_fight_alt = "f_generic"
+build_cost    = 35
+pop_cost      = 0
+attack        = 3
+defense       = 3
+hitpoints     = 10
+firepower     = 1
+move_rate     = 7
+vision_radius_sq = 4
+transport_cap = 3
+fuel          = 0
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+cargo         = "Land", "LandNoKill", "LandAirSea"
+flags         = "BadCityDefender", "Provoking", "CantReachAir"
+roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
+helptext      = _("\
+The War Galley has improved offense, defense, speed and cargo capacity over\
+ the Galley, but it lacks commerce abilities. War Galleys can travel on rivers.\
+"), _("
+Like most ancient sea units, when it initiates combat there will be 15 rounds\
+  of combat and 15 total hitpoints lost between both units. This may or may not\
+  result in the loss of one of the units. This tends to favor ships who are\
+  accompanied by other ships.\
+")
+
+[unit_ram_ship]
+name          = _("Ram Ship")
+class         = "Sea"
+tech_req      = "Engineering"
+obsolete_by   = "Caravel"
+graphic       = "u.ram_ship"
+graphic_alt   = "-"
+sound_move    = "m_ram_ship"
+sound_move_alt = "m_trireme"
+sound_fight   = "f_ram_ship"
+sound_fight_alt = "f_catapult"
+build_cost    = 35
+pop_cost      = 0
+attack        = 4
+defense       = 2
+hitpoints     = 10
+firepower     = 1
+move_rate     = 6
+vision_radius_sq = 2
+transport_cap = 0
+fuel          = 0
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+cargo         = "Land", "LandNoKill", "LandAirSea"
+flags         = "BadCityDefender", "Provoking", "CantReachAir"
+roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
+helptext      = _("\
+The Ram Ship is an offensive weapon with only one purpose: destroying other\
+ ships. It has poor vision, no transport or commerce ability, and may not\
+ travel on rivers. Unlike other early ships, there\
+ will always be a winner and a loser when it initiates an attack.\
 ")
 
 [unit_caravel]
@@ -2302,11 +2460,11 @@ sound_fight   = "f_caravel"
 sound_fight_alt = "f_generic"
 build_cost    = 40
 pop_cost      = 0
-attack        = 2
-defense       = 1
+attack        = 4
+defense       = 4
 hitpoints     = 10
 firepower     = 1
-move_rate     = 6
+move_rate     = 7
 vision_radius_sq = 4
 transport_cap = 3
 fuel          = 0
@@ -2315,11 +2473,18 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea"
-flags         = "BadCityDefender", "Provoking", "CantReachAir"
+flags         = "BadCityDefender", "Provoking", "CantReachAir", "Traderoute", "HelpWonder"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
-The Caravel replaces the Trireme and can enter\
- any ocean tile. Caravels can travel on rivers.\
+The Caravel represents a signifcant naval advance in combat, speed, range,\ 
+ and transport capability. Its utility in all the above replaces many\
+ ancient sea units. Caravels provide the commerce ability of the earlier\
+ Galley. Caravels can travel on rivers.\
+"), _("
+Like most ancient sea units, when it initiates combat there will be 15 rounds\
+  of combat and 15 total hitpoints lost between both units. This may or may not\
+  result in the loss of one of the units. This tends to favor ships who are\
+  accompanied by other ships.\
 ")
 
 [unit_galleon]

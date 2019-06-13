@@ -632,6 +632,26 @@ target_reqs    =
       "MaxUnitsOnTile", "1", "Local", TRUE
     }
 
+[actionenabler_traderoute]
+action = "Establish Trade Route"
+actor_reqs    =
+    { "type",   "name", "range", "present"
+      "UnitFlag", "TradeRoute", "Local", TRUE
+      "MinMoveFrags", "1", "Local", TRUE
+    }
+
+[actionenabler_marketplace]
+action = "Enter Marketplace"
+actor_reqs    =
+    { "type",   "name", "range", "present"
+      "UnitFlag", "TradeRoute", "Local", TRUE
+      "MinMoveFrags", "1", "Local", TRUE
+    }
+target_reqs  =
+    { "type",     "name",        "range"
+      "Building", "Marketplace", "City"
+    }
+
 [actionenabler_help_build_wonder]
 action = "Help Wonder"
 actor_reqs    =
@@ -1319,16 +1339,16 @@ negative_label = _("BC")
 [trade]
 settings =
   { "type",       "pct", "cancelling", "bonus"
-    "National",   0,     "Cancel",     "Both"
-    "NationalIC", 0,     "Cancel",     "Both"
-    "IN",         0,     "Cancel",     "Both"
-    "INIC",       0,     "Cancel",     "Both"
-    "Ally",       0,     "Cancel",     "Both"
-    "AllyIC",     0,     "Cancel",     "Both"
-    "Enemy",      0,     "Cancel",     "Both"
-    "EnemyIC",    0,     "Cancel",     "Both"
-    "Team",       0,     "Cancel",     "Both"
-    "TeamIC",     0,     "Cancel",     "Both"
+    "National",   0,     "Cancel",     "None"
+    "NationalIC", 0,     "Cancel",     "None"
+    "IN",         5,     "Cancel",     "None"
+    "INIC",       5,     "Cancel",     "None"
+    "Ally",       5,     "Cancel",     "None"
+    "AllyIC",     5,     "Cancel",     "None"
+    "Enemy",      5,     "Cancel",     "None"
+    "EnemyIC",    5,     "Cancel",     "None"
+    "Team",       5,     "Cancel",     "None"
+    "TeamIC",     5,     "Cancel",     "None"
   }
 
 ; When are goods for the trade route chosen.
