@@ -2324,7 +2324,7 @@ uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "Provoking", "CantReachAir"
-roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
+roles         = "Ferryboat", "FerryStartUnit"
 helptext      = _("\
 The Longboat is an offensive naval unit. It can attack at sea and bring\
  one land unit to shore, making it useful for conducting ancient sea\
