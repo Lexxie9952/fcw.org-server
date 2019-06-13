@@ -2439,8 +2439,8 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea"
-flags         = "BadCityDefender", "Provoking", "CantReachAir"
-roles         = "Ferryboat", "FerryStartUnit"
+flags         = "BadCityDefender", "Provoking", "CantReachAir", "Only_Native_Attack"
+roles         = "Hunter"
 helptext      = _("\
 The Ram Ship is an offensive weapon with only one purpose: destroying other\
  ships. It has poor vision, no transport or commerce ability, and may not\
