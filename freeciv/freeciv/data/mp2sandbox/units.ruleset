@@ -2477,7 +2477,7 @@ cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "Provoking", "CantReachAir", "Traderoute", "HelpWonder"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
-The Caravel represents a signifcant naval advance in combat, speed, range,\ 
+The Caravel represents a significant naval advance in combat, speed, range,\ 
  and transport capability. Its utility in all the above replaces many\
  ancient sea units. Caravels provide the commerce ability of the earlier\
  Galley. Caravels can travel on rivers.\
