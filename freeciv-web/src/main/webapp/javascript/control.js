@@ -1784,24 +1784,8 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       key_unit_auto_settle();
     break;
 
-    case 'L':
-      if (shift) {
-        key_unit_airlift();
-      } else {
-        key_unit_load();
-      }
-    break;
-
     case 'W':
       key_unit_wait();
-    break;
-
-    case 'J':
-      if (shift) {
-        key_unit_idle();
-      } else {
-        key_unit_noorders();
-      }
     break;
 
     case 'R':
@@ -1822,13 +1806,6 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       }
     break;
 
-    case 'I':
-      key_unit_irrigate();
-    break;
-
-    case 'U':
-      key_unit_upgrade();
-    break;
 
     case 'S':
       if (!ctrl) {
@@ -1844,13 +1821,50 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       }
     break;
 
-    case 'M':
-      key_unit_mine();
+    // ALT + UIO / JKL / M,. simulates keypad for devices that don't have it, if alt not held
+    // execute the primary command for these keys:
+    case 'U': 
+      if (alt) key_unit_move(DIR8_WEST);  // alt+U=7
+      else key_unit_upgrade();
     break;
-
+    case 'I':
+      if (alt) key_unit_move(DIR8_NORTHWEST); // alt+I=8
+      else key_unit_irrigate();
+    break;
     case 'O':
-      key_unit_transform();
+      if (alt) key_unit_move(DIR8_NORTH);  // alt+O=9
+      else key_unit_transform();
     break;
+    case 'J':
+      if (shift) {
+        key_unit_idle();
+      }
+      else if (alt) key_unit_move(DIR8_SOUTHWEST); // alt+J=4
+      else {
+        key_unit_noorders();
+      }
+    break;
+    case 'L':
+      if (shift) {
+        key_unit_airlift();
+      } else if (alt) key_unit_move(DIR8_NORTHEAST); // alt+L=6 
+      else {
+        key_unit_load();
+      }
+    break;
+    case 'M':
+      if (alt) key_unit_move(DIR8_SOUTH);  // alt+M=1
+      else key_unit_mine();
+    break;
+    case ',':
+      if (alt) key_unit_move(DIR8_SOUTHEAST);  // alt+,=2
+      else key_unit_mine();
+    break;
+    case '.':
+      if (alt) key_unit_move(DIR8_EAST);  // alt+.=
+      else key_unit_mine();
+    break;
+    // the block of code above contains virtual keypad ^^  
 
     case 'T':
       key_unit_unload();
