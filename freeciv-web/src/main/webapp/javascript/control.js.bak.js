@@ -1460,75 +1460,12 @@ function do_map_click(ptile, qtype, first_time_called)
         punit = current_focus[s];
         /* Get the path the server sent using PACKET_GOTO_PATH. */
         var goto_path = goto_request_map[punit['id'] + "," + ptile['x'] + "," + ptile['y']];
-       
-        // This is where we would normally check if the goto_path is null for unit s, and do a continue to move on to the next unit.
-        // However, we might have a null path because of the GO TO BUG, in which case we allow a click on an adjacent
-        // tile to simulate an arrow key to legally perform the action.  This will also handle the case for arrow-key override
-        // on units that Go To won't move until next turn because they have less than full moves and are at a fueling station.
+        if (goto_path == null) {
+          continue;
+        }
 
         /* The tile the unit currently is standing on. */
         var old_tile = index_to_tile(punit['tile']);
-
-        // DO NOT create a GO TO for an adjacent tile, but circumvent it by simulating arrow key press:
-        // This is necessary because "go to" adjacent tile has bugs and sometimes disallows it, preventing 
-        // people on touch devices, etc., from being able to do legal manual movements to adjacent tiles:
-        var tile_dx = ptile['x'] - old_tile['x']; 
-        var tile_dy = ptile['y'] - old_tile['y'];
-        if (Math.abs(tile_dx)<=1 && Math.abs(tile_dy) <=1) // less than one tile away in x AND y will simulating hitting an arrow instead:
-        {
-          switch (tile_dy) 
-          {
-            case 0: // neither north nor south:
-              switch (tile_dx)
-              {
-                case 0:     // clicked same tile, do nothing.
-                break;
-
-                case -1:    // west
-                  key_unit_move_focus_index(DIR8_WEST,s); 
-                break;
-
-                case 1:    // east
-                  key_unit_move_focus_index(DIR8_EAST,s); 
-                break;  
-              }
-            case 1: // south directions:
-              switch (tile_dx)
-              {
-                case 0:     //south
-                  key_unit_move_focus_index(DIR8_SOUTH,s);
-                break;
-
-                case -1:    // southwest
-                  key_unit_move_focus_index(DIR8_SOUTHWEST,s); 
-                break;
-
-                case 1:    // southeast
-                  key_unit_move_focus_index(DIR8_SOUTHEAST,s); 
-                break;
-              }
-            case -1: // north directions
-              switch (tile_dx)
-              {
-                case 0:     
-                  key_unit_move_focus_index(DIR8_NORTH,s);
-                break;
-
-                case -1:    
-                  key_unit_move_focus_index(DIR8_NORTHWEST,s); 
-                break;
-
-                case 1:    
-                  key_unit_move_focus_index(DIR8_NORTHEAST,s); 
-                break;
-              }
-          }
-          continue;  // we did our override and simulated an arrow keypress. no need for other handling, just go on to the next unit
-        }
-        // user did not click adjacent tile, so make sure it's not a null goto_path before handling the goto
-        if (goto_path == null) {
-          continue;  // null goto_path, do not give this unit a goto command, go on to the next unit
-        }
 
         /* Create an order to move along the path. */
         packet = {
@@ -1868,6 +1805,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         key_unit_fortify();
       }
     break;
+
 
     case 'S':
       if (!ctrl) {
@@ -2983,61 +2921,12 @@ function(){
 }
 
 /**************************************************************************
- Move the unit in focus in the specified direction.
+ Moved the unit in focus in the specified direction.
 **************************************************************************/
 function key_unit_move(dir)
 {
-  // this function could simply be set to call
-  // function key_unit_move_focus_index(dir, 0), since they are identical
-  // and this function just hard-codes 0 for the unit in focus
-
   if (current_focus.length > 0) {
     var punit = current_focus[0];
-    if (punit == null) {
-      return;
-    }
-
-    var ptile = index_to_tile(punit['tile']);
-    if (ptile == null) {
-      return;
-    }
-
-    var newtile = mapstep(ptile, dir);
-    if (newtile == null) {
-      return;
-    }
-
-    /* Send the order to move using the orders system. */
-    var packet = {
-      "pid"      : packet_unit_orders,
-      "unit_id"  : punit['id'],
-      "src_tile" : ptile['index'],
-      "length"   : 1,
-      "repeat"   : false,
-      "vigilant" : false,
-      "orders"   : [ORDER_ACTION_MOVE],
-      "dir"      : [dir],
-      "activity" : [ACTIVITY_LAST],
-      "target"   : [0],
-      "extra"    : [EXTRA_NONE],
-      "action"   : [ACTION_COUNT],
-      "dest_tile": newtile['index']
-    };
-
-    send_request(JSON.stringify(packet));
-    unit_move_sound_play(punit);
-  }
-
-  deactivate_goto(true);
-}
-
-/**************************************************************************
- Move the unit s in the focused/selected stack in the specified direction.
-**************************************************************************/
-function key_unit_move_focus_index(dir, s)
-{
-  if (current_focus.length > 0 /* && current_focus.length >=s << don't know if this is necessary */) {
-    var punit = current_focus[s];
     if (punit == null) {
       return;
     }
