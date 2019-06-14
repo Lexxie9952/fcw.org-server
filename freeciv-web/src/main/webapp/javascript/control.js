@@ -1856,6 +1856,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       if (alt) key_unit_move(DIR8_SOUTH);  // alt+M=1
       else key_unit_mine();
     break;
+    /* these were moved lower to keycode 188,190 for Mac compatibility:
     case ',':
       if (alt) key_unit_move(DIR8_SOUTHEAST);  // alt+,=2
       else key_unit_mine();
@@ -1865,6 +1866,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       else key_unit_mine();
     break;
     // the block of code above contains virtual keypad ^^  
+    */
 
     case 'T':
       key_unit_unload();
@@ -1908,11 +1910,15 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
 
     case 40: // 2
     case 98:
+    case 188:
+      if (key_code==188 && !alt) break; //188 moves only if alt held down:
       key_unit_move(DIR8_SOUTHEAST);
       break;
 
     case 34: // 3
     case 99:
+    case 190:
+      if (key_code==190 && !alt) break; //190 moves only if alt held down:
       key_unit_move(DIR8_EAST);
       break;
 
