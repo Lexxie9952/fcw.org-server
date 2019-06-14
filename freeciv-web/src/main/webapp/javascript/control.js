@@ -1474,8 +1474,10 @@ function do_map_click(ptile, qtype, first_time_called)
         // people on touch devices, etc., from being able to do legal manual movements to adjacent tiles:
         var tile_dx = ptile['x'] - old_tile['x']; 
         var tile_dy = ptile['y'] - old_tile['y'];
+        console.log("tile_dx:"+tile_dx+"   tile_dy:"+tile_dy+"... is it true? "+(Math.abs(tile_dx)<=1 && Math.abs(tile_dy) <=1))
         if (Math.abs(tile_dx)<=1 && Math.abs(tile_dy) <=1) // less than one tile away in x AND y will simulating hitting an arrow instead:
         {
+          console.log("Attempting a GO TO to an adjacent tile.")
           switch (tile_dy) 
           {
             case 0: // neither north nor south:
@@ -1525,6 +1527,8 @@ function do_map_click(ptile, qtype, first_time_called)
           }
           continue;  // we did our override and simulated an arrow keypress. no need for other handling, just go on to the next unit
         }
+        console.log("Attempting a GO TO to a non-adjacent tile.")
+          
         // user did not click adjacent tile, so make sure it's not a null goto_path before handling the goto
         if (goto_path == null) {
           continue;  // null goto_path, do not give this unit a goto command, go on to the next unit
