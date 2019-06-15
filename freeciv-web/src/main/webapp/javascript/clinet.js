@@ -39,16 +39,10 @@ var ping_timer = null;
 function network_init_manual_hack(civserverport_manual, username_manual,
                                   savegame)
 {
-  civserverport = civserverport_manual;
-  username = username_manual;
-
-  websocket_init();
-
-  if (savegame != null) {
-    wait_for_text("You are logged in as", function () {
-      load_game_real(savegame);
-    });
-  }
+    $.ajax({
+        type: 'POST',
+        url: "/validate_twit?username="+username_manual+"&type=manual_hack&port="+civserverport_manual,
+    });    
 }
 
 /****************************************************************************

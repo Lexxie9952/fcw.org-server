@@ -151,6 +151,11 @@ public class DbManager {
 		return "INSERT INTO auth (username, email, secure_hashed_password, activated, ip) " //
 				+ "VALUES (?, ?, ?, ?, ?)";
 	}
+	
+    public static String getQueryInsertCheater() {
+		return "INSERT INTO cheaters (username, ip, type, port, stamp) " //
+				+ "VALUES (?, ?, ?, ?, NOW())";
+	}
 
 	public static String getQuerySelectRecentServerStats() {
 		return " SELECT COUNT(*) AS count " //
@@ -182,9 +187,15 @@ public class DbManager {
 	}
 
 	public static String getQuerySelectGoogleUser() {
-		return " SELECT subject, activated, username " //
+		return " SELECT subject, activated, username" //
         + " FROM google_auth " //
         + " WHERE LOWER(username) = LOWER(?) OR subject = ? ";
+	}
+	
+    public static String getGoogleUserIp() {
+		return " SELECT username, ip" //
+        + " FROM google_auth " //
+        + " WHERE LOWER(username) = LOWER(?)";
 	}
 
 	public static String getQueryInsertGoogleUser() {

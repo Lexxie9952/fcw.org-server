@@ -170,23 +170,27 @@ function init_options_dialog()
   } else {
     $('#speech_enabled_setting').attr('disabled', true);
   }
+ 
+  if (!is_longturn()) {
+    if (renderer == RENDERER_WEBGL) {
+        $("#switch_renderer_button").html("Use 2D HTML5 graphics");
+        $("#renderer_help").html("Switch to 2D isometric graphics.")
+    } else {
+        $("#switch_renderer_button").html("Use 3D WebGL graphics");
+        $("#renderer_help").html("Use 3D WebGL graphics. Make sure your computer<br> supports 3D WebGL graphics.")
+        $("#update_model_button").hide();
+    }
 
-
-  if (renderer == RENDERER_WEBGL) {
-    $("#switch_renderer_button").html("Use 2D HTML5 graphics");
-    $("#renderer_help").html("Switch to 2D isometric graphics.")
-  } else {
-    $("#switch_renderer_button").html("Use 3D WebGL graphics");
-    $("#renderer_help").html("Use 3D WebGL graphics. Make sure your computer<br> supports 3D WebGL graphics.")
-    $("#update_model_button").hide();
-  }
-
-  if (!Detector.webgl) {
-    $("#switch_renderer_button").hide();
-    $("#renderer_help").html("3D WebGL not supported.")
+    if (!Detector.webgl) {
+        $("#switch_renderer_button").hide();
+        $("#renderer_help").html("3D WebGL not supported.")
+    }
   }
 
   if (is_longturn()) {
+    $("#update_model_button").hide();
+    $("#switch_renderer_button").hide();
+    $("#renderer_help").hide();
     $("#save_button").hide();
     $("#timeout_setting_div").hide();
     $("#title_setting_div").hide();

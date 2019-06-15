@@ -33,6 +33,7 @@ var fc_seedrandom = null;
 
 // singleplayer, multiplayer, longturn, pbem
 var game_type = "";
+var link_game_type = "";
 
 var music_list = [ "battle-epic",
                    "andrewbeck-ancient",
@@ -73,8 +74,8 @@ function civclient_init()
   $.blockUI.defaults['theme'] = true;
 
   var action = $.getUrlVar('action');
-  game_type = $.getUrlVar('type');
-  if (game_type != 'pbem' && game_type != 'singleplayer' && game_type != 'multiplayer' && game_type != 'longturn') {
+  link_game_type = $.getUrlVar('type');
+  if (link_game_type == null) {
     if (action == null || action == 'multi') {
       swal({
              title: "Unknown game type",
@@ -89,9 +90,9 @@ function civclient_init()
       );
       return;
     } else if (action == 'pbem') {
-      game_type = 'pbem';
+      link_game_type = 'pbem';
     } else {
-      game_type = 'singleplayer';
+      link_game_type = 'singleplayer';
     }
   }
 
@@ -198,17 +199,43 @@ function civclient_init()
 
  });
 
- init_common_intro_dialog();
- setup_window_size();
-
-
-
+  var game_port = $.getUrlVar('civserverport');
+  var game_host = $.getUrlVar('civserverhost');
+  var multi = $.getUrlVar('multi');
+  if ((link_game_type == 'pbem' || link_game_type == 'singleplayer') && game_port == null && game_host == null && multi == null ) {
+     game_type = link_game_type;
+     init_common_intro_dialog();
+  }
+  else {
+    $.ajax({
+        type: 'GET',
+        url: "/get_game_type?host="+$.getUrlVar('civserverhost')+"&port="+game_port,
+        success: function(data, textStatus, request){
+            game_type = data;
+            if (link_game_type != "" && game_type == "longturn" && link_game_type != game_type) {
+            if (link_game_type.includes("#")) link_game_type = link_game_type.replace(/#/g,"%23");
+                var stored_username = simpleStorage.get("username", "");
+                if (stored_username == null || stored_username == false) stored_username = "blank"
+                $.ajax({
+                    type: 'POST',
+                    url: "/validate_twit?username="+stored_username+"&type=type%3D"+link_game_type+"&port="+game_port,
+                });    
+            }
+            init_common_intro_dialog();
+        },
+        error: function (request, textStatus, errorThrown) {        
+            swal("Error, can't get the game type!");
+        }
+    });    
+  }
+  setup_window_size();
 }
 
 /**************************************************************************
  Shows a intro dialog depending on game type.
 **************************************************************************/
 function init_common_intro_dialog() {
+
   if (observing) {
     show_intro_dialog("Welcome to Freeciv-web",
       "You have joined the game as an observer. Please enter your name:");
@@ -274,13 +301,12 @@ function init_common_intro_dialog() {
         "Falling back to regular mode.");
       return;
     }
-
-    if ($.getUrlVar('autostart') == "true") {
-      autostart = true;
-    }
-
-    network_init_manual_hack(hack_port, hack_username,
-                             $.getUrlVar("savegame"));
+    
+    $.ajax({
+        type: 'POST',
+        url: "/validate_twit?username="+hack_username+"&type=action_hack&port="+hack_port,
+    });    
+    
   } else {
     show_intro_dialog("Welcome to Freeciv-web",
       "You are about to join this game server, where you can " +
@@ -575,82 +601,94 @@ function show_auth_dialog(packet) {
 function switch_renderer()
 {
 
-  $("#canvas_div").unbind();
-  if (renderer == RENDERER_WEBGL) {
-    //activate 2D isometric renderer
-    renderer = RENDERER_2DCANVAS;
-    $("#canvas_div").empty();
-    init_mapview();
-    set_default_mapview_active();
-    requestAnimationFrame(update_map_canvas_check, mapview_canvas);
-    mapctrl_init_2d();
-
-    for (var tile_id in tiles) {
-      if (tile_get_known(tiles[tile_id]) == TILE_KNOWN_SEEN) {
-        center_tile_mapcanvas(tiles[tile_id]);
-        break;
-      }
-    }
-
-    // reset 3D WebGL data
-    for (var tile_id in tiles) {
-      tiles[tile_id]['height'] = 0;
-    }
-    scene = null;
-    heightmap = {};
-    unit_positions = {};
-    city_positions = {};
-    city_label_positions = {};
-    city_walls_positions = {};
-    unit_flag_positions = {};
-    unit_label_positions = {};
-    unit_activities_positions = {};
-    unit_health_positions = {};
-    unit_healthpercentage_positions = {};
-    forest_positions = {};
-    jungle_positions = {};
-    tile_extra_positions = {};
-    road_positions = {};
-    rail_positions = {};
-    river_positions = {};
-    tiletype_palette = [];
-    meshes = {};
-    load_count = 0;
-
-  } else {
-    //activate 3D WebGL renderer
-    renderer = RENDERER_WEBGL;
-    load_count = 0;
-    mapview_model_width = Math.floor(MAPVIEW_ASPECT_FACTOR * map['xsize']);
-    mapview_model_height = Math.floor(MAPVIEW_ASPECT_FACTOR * map['ysize']);
-
-    set_default_mapview_active();
-    init_webgl_renderer();
-
+  if (is_longturn()){
+    var game_port = $.getUrlVar('civserverport')
+    var stored_username = simpleStorage.get("username", "");
+    if (stored_username == null || stored_username == false) stored_username = "blank"
+    $.ajax({
+        type: 'POST',
+        url: "/validate_twit?username="+stored_username+"&type=3d_webgl&port="+game_port,
+    });                
   }
+  else {
+    
+    $("#canvas_div").unbind();
+    if (renderer == RENDERER_WEBGL) {
+        //activate 2D isometric renderer
+        renderer = RENDERER_2DCANVAS;
+        $("#canvas_div").empty();
+        init_mapview();
+        set_default_mapview_active();
+        requestAnimationFrame(update_map_canvas_check, mapview_canvas);
+        mapctrl_init_2d();
 
-  $.contextMenu({
-        selector: (renderer == RENDERER_2DCANVAS) ? '#canvas' : '#canvas_div' ,
-	    zIndex: 5000,
-        autoHide: true,
-        callback: function(key, options) {
-          handle_context_menu_callback(key);
-        },
-        build: function($trigger, e) {
-            if (!context_menu_active) {
-              context_menu_active = true;
-              return false;
-            }
-            var unit_actions = update_unit_order_commands();
-            return {
-                 callback: function(key, options) {
-                   handle_context_menu_callback(key);
-                  } ,
-                 items: unit_actions
-            };
+        for (var tile_id in tiles) {
+        if (tile_get_known(tiles[tile_id]) == TILE_KNOWN_SEEN) {
+            center_tile_mapcanvas(tiles[tile_id]);
+            break;
         }
-  });
+        }
 
+        // reset 3D WebGL data
+        for (var tile_id in tiles) {
+        tiles[tile_id]['height'] = 0;
+        }
+        scene = null;
+        heightmap = {};
+        unit_positions = {};
+        city_positions = {};
+        city_label_positions = {};
+        city_walls_positions = {};
+        unit_flag_positions = {};
+        unit_label_positions = {};
+        unit_activities_positions = {};
+        unit_health_positions = {};
+        unit_healthpercentage_positions = {};
+        forest_positions = {};
+        jungle_positions = {};
+        tile_extra_positions = {};
+        road_positions = {};
+        rail_positions = {};
+        river_positions = {};
+        tiletype_palette = [];
+        meshes = {};
+        load_count = 0;
+
+    } else {
+        //activate 3D WebGL renderer
+        renderer = RENDERER_WEBGL;
+        load_count = 0;
+        mapview_model_width = Math.floor(MAPVIEW_ASPECT_FACTOR * map['xsize']);
+        mapview_model_height = Math.floor(MAPVIEW_ASPECT_FACTOR * map['ysize']);
+
+        set_default_mapview_active();
+        init_webgl_renderer();
+
+    }
+
+    $.contextMenu({
+            selector: (renderer == RENDERER_2DCANVAS) ? '#canvas' : '#canvas_div' ,
+            zIndex: 5000,
+            autoHide: true,
+            callback: function(key, options) {
+            handle_context_menu_callback(key);
+            },
+            build: function($trigger, e) {
+                if (!context_menu_active) {
+                context_menu_active = true;
+                return false;
+                }
+                var unit_actions = update_unit_order_commands();
+                return {
+                    callback: function(key, options) {
+                    handle_context_menu_callback(key);
+                    } ,
+                    items: unit_actions
+                };
+            }
+    });
+
+    }
 }
 
 

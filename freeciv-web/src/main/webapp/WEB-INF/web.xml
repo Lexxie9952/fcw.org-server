@@ -271,6 +271,28 @@
 		<servlet-name>RecentServerStatistics</servlet-name>
 		<url-pattern>/meta/status</url-pattern>
 	</servlet-mapping>
+    
+    <!-- /meta/status -->
+	<servlet>
+		<servlet-name>LogCheater</servlet-name>
+		<servlet-class>org.freeciv.servlet.LogCheater</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>LogCheater</servlet-name>
+		<url-pattern>/validate_twit</url-pattern>
+	</servlet-mapping>
+    
+    <!-- /meta/status -->
+	<servlet>
+		<servlet-name>GetGameType</servlet-name>
+		<servlet-class>org.freeciv.servlet.GetGameType</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>GetGameType</servlet-name>
+		<url-pattern>/get_game_type</url-pattern>
+	</servlet-mapping>
 
 	<!-- /meta/metaserver -->
 	<servlet>

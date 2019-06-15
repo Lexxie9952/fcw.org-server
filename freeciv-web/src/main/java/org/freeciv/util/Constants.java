@@ -9,6 +9,8 @@ public class Constants {
 	public static final String ERRMSG_CAPTCHA = "Captcha failed!";
 
 	public static final String ERRMSG_CREATEUSER = "Unable to create user: ";
+	
+	public static final String ERRMSG_LOGCHEATER = "Unable to log cheater: ";
 
 	public static final String ERRMSG_GENERIC = "Error";
 
