@@ -1454,6 +1454,7 @@ function do_map_click(ptile, qtype, first_time_called)
   pcity = tile_city(ptile);
 
   if (goto_active) {
+    console.log("GO TO IS ACTIVE!");
     if (current_focus.length > 0) {
       // send goto order for all units in focus. 
       for (var s = 0; s < current_focus.length; s++) {
@@ -1474,7 +1475,7 @@ function do_map_click(ptile, qtype, first_time_called)
         // people on touch devices, etc., from being able to do legal manual movements to adjacent tiles:
         var tile_dx = ptile['x'] - old_tile['x']; 
         var tile_dy = ptile['y'] - old_tile['y'];
-        console.log("tile_dx:"+tile_dx+"   tile_dy:"+tile_dy+"... is it true? "+(Math.abs(tile_dx)<=1 && Math.abs(tile_dy) <=1))
+        console.log("dx:"+tile_dx+", dy:"+tile_dy);
         if (Math.abs(tile_dx)<=1 && Math.abs(tile_dy) <=1) // less than one tile away in x AND y will simulating hitting an arrow instead:
         {
           console.log("Attempting a GO TO to an adjacent tile.")
@@ -2991,6 +2992,7 @@ function(){
 **************************************************************************/
 function key_unit_move(dir)
 {
+  console.log("Function key unit_move called. direction="+dir);
   // this function could simply be set to call
   // function key_unit_move_focus_index(dir, 0), since they are identical
   // and this function just hard-codes 0 for the unit in focus
@@ -3040,6 +3042,7 @@ function key_unit_move(dir)
 **************************************************************************/
 function key_unit_move_focus_index(dir, s)
 {
+  console.log("Function key unit_move called. direction="+dir);
   if (current_focus.length > 0 /* && current_focus.length >=s << don't know if this is necessary */) {
     var punit = current_focus[s];
     if (punit == null) {
