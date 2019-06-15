@@ -1495,6 +1495,7 @@ function do_map_click(ptile, qtype, first_time_called)
                   key_unit_move_focus_index(DIR8_EAST,s); 
                 break;  
               }
+              break;
             case 1: // south directions:
               switch (tile_dx)
               {
@@ -1510,6 +1511,7 @@ function do_map_click(ptile, qtype, first_time_called)
                   key_unit_move_focus_index(DIR8_SOUTHEAST,s); 
                 break;
               }
+              break;
             case -1: // north directions
               switch (tile_dx)
               {
@@ -1525,6 +1527,7 @@ function do_map_click(ptile, qtype, first_time_called)
                   key_unit_move_focus_index(DIR8_NORTHEAST,s); 
                 break;
               }
+              break;
           }
           continue;  // we did our override and simulated an arrow keypress. no need for other handling, just go on to the next unit
         }
