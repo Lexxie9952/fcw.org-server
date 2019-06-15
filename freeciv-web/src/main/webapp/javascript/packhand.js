@@ -844,8 +844,8 @@ function handle_unit_combat_info(packet)
       play_combat_sound(attacker); //way to indicate no losses until we get a special sound for this case
       
       // it was not sending a message after battle, so inject one here:
-      var special_messages = [""];
-      special_messages[0] = "A valiant battle with no winner! Attacker retains "+attacker_hp+"hp. Defender retains "+defender_hp+"hp.";
+      var special_messages = ["A valiant battle with no winner! Attacker retains "+attacker_hp+"hp. Defender retains "+defender_hp+"hp."];
+      
       update_chatbox(special_messages);   // this function wants an array
       // hack -- it doesn't redraw the map/unit to show its new health status, but sentry appears the only way to get the new info
       // TO DO -- figure out a real way to get updated info and redraw for both units
