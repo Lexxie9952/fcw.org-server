@@ -838,7 +838,7 @@ function handle_unit_combat_info(packet)
         play_combat_sound(attacker); //defender lost, player attacker combat sound
       }
       // special new case in some rulesets: both units survive due to combat rounds/bombardment/etc.
-      if (defender_hp > 0 && is_unit_visible(defender) && attacker_hp > 0 && is_unit_visible(attacker))
+      if (defender_hp > 0 && attacker_hp > 0 && (is_unit_visible(attacker) || is_unit_visible(defender) ) ) 
       {
         play_combat_sound(defender); //play both sounds even though neither lost -- seems the only
         play_combat_sound(attacker); //way to indicate no losses until we get a special sound for this case
@@ -847,10 +847,12 @@ function handle_unit_combat_info(packet)
         var special_message = "A valiant battle with no winner! Attacker retains "+attacker_hp+"hp. Defender retains "+defender_hp+"hp.";
 
         var scrollDiv = get_chatbox_msg_list();
-
+        console.log("About to attempt message injection for battle with no winner.")
         if (scrollDiv != null) {
+        console.log("Attempting message for battle with no winner.")
+
           var item = document.createElement('li');
-          item.className = fc_e_events[messages[i].event][E_I_NAME];
+          item.className = "";
           item.innerHTML = special_message;
         
           scrollDiv.appendChild(item);
