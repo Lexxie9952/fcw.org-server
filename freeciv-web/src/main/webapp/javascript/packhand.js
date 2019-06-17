@@ -840,23 +840,27 @@ function handle_unit_combat_info(packet)
       // special new case in some rulesets: both units survive due to combat rounds/bombardment/etc.
       if (defender_hp > 0 && attacker_hp > 0 && (is_unit_visible(attacker) || is_unit_visible(defender) ) ) 
       {
-        play_combat_sound(defender); //play both sounds even though neither lost -- seems the only
-        play_combat_sound(attacker); //way to indicate no losses until we get a special sound for this case
+        play_combat_sound(attacker); 
+        setTimeout(function() {  play_combat_sound(defender); }, 1000); //1 second delay for defender sound
         
+        update_tile_unit(attacker);   // force a redraw, was not happening
+        update_tile_unit(defender);
+        update_map_canvas_full();
+
         // it was not sending a message after battle, so inject one here:
-        var special_message = "A valiant battle with no winner! Attacker retains "+attacker_hp+"hp. Defender retains "+defender_hp+"hp.";
-
+        var defend_unit = nations[players[unit_owner(defender)]['nation']]['adjective'] + " " + unit_types[defender['type']];
+        var attack_unit = "Your " + unit_types[attacker['type']];
+        var special_message = "A valiant battle with no winner! "+attack_unit+" retains "+attacker_hp+"hp while reducing the "
+                            + defend_unit+" to "+defender_hp+"hp.";
+        
         var scrollDiv = get_chatbox_msg_list();
-        console.log("About to attempt message injection for battle with no winner.")
         if (scrollDiv != null) {
-        console.log("Attempting message for battle with no winner.")
-
           var item = document.createElement('li');
           item.className = "";
           item.innerHTML = special_message;
         
           scrollDiv.appendChild(item);
-          setTimeout(() => $('#freeciv_custom_scrollbar_div').mCustomScrollbar('scrollTo', 'bottom'), 250);
+          setTimeout(() => $('#freeciv_custom_scrollbar_div').mCustomScrollbar('scrollTo', 'bottom'), 200);
         }
       }
     } 
