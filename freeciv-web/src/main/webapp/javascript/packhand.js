@@ -841,7 +841,7 @@ function handle_unit_combat_info(packet)
       if (defender_hp > 0 && attacker_hp > 0 && (is_unit_visible(attacker) || is_unit_visible(defender) ) ) 
       {
         play_combat_sound(attacker); 
-        setTimeout(function() {  play_combat_sound(defender); }, 1000); //1 second delay for defender sound
+        play_combat_sound(defender); 
         
         update_tile_unit(attacker);   // force a redraw, was not happening
         update_tile_unit(defender);
