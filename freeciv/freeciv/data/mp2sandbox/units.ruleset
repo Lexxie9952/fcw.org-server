@@ -1678,7 +1678,11 @@ Balloons are the first air unit. They are excellent for\
  airbase. Though this unit is unreachable by more primitive\
  land and sea units, it does not prevent them from attacking\
  other units on the same tile.\
+"), _("
+NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel.\
+ This restriction can by overridden by commanding it to move to adjacent tiles.\
 ")
+
 
 [unit_fighter]
 name          = _("Fighter")
@@ -1729,6 +1733,9 @@ roles         = ""
 helptext      = _("\
 Fighters are your first offensive Air units. They can\
  move anywhere and attack any unit (except Submarines.)\
+"), _("
+NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel.\
+ This restriction can by overridden by commanding it to move to adjacent tiles.\
 ")
 
 [unit_escort_fighter]
@@ -1782,6 +1789,9 @@ Escort Fighters are larger and carry more fuel for\
  escorting bombers, and they can absorb more damage.\
  Less maneuverable, they don't attack as well as standard\
  fighters, but they can return home on the next turn.\
+"), _("
+NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel.\
+ This restriction can by overridden by commanding it to move to adjacent tiles.\
 ")
 
 [unit_medium_bomber]
@@ -1836,6 +1846,9 @@ Medium Bombers are specialized airborne units that are good for\
 TIP: Getting bombed is very noticeable to an enemy, and taken very\
  seriously. Make sure you choose targets far from air defences,\
  or be sure to bring adequate escort protection.\
+"), _("
+NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel.\
+ This restriction can by overridden by commanding it to move to adjacent tiles.\
 ")
 
 [unit_bomber]
@@ -1892,6 +1905,9 @@ Heavy Bombers are specialized airborne units that are good for\
 TIP: Getting bombed is very noticeable to an enemy, and taken very\
  seriously. Make sure you choose targets far from any air defences,\
  or be sure to bring adequate escort protection.\
+"), _("
+NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel.\
+ This restriction can by overridden by commanding it to move to adjacent tiles.\
 ")
 
 [unit_ultra_heavy_bomber]
@@ -1948,6 +1964,9 @@ The Strategic Bomber offers only slight improvement in attack, but higher altitu
 TIP: Getting bombed is very noticeable to an enemy, and taken very\
  seriously. Make sure you choose targets far from any air defences,\
  or be sure to bring adequate escort protection.\
+"), _("
+NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel.\
+ This restriction can by overridden by commanding it to move to adjacent tiles.\
 ")
 
 [unit_awacs]
@@ -1981,6 +2000,9 @@ helptext      = _("\
 The AWACS (Airborne Warning and Control System) is an airplane with an \
 advanced radar that can determine the location of enemy units over a \
 wide area.\
+"), _("
+NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel.\
+ This restriction can by overridden by commanding it to move to adjacent tiles.\
 ")
 
 [unit_helicopter]
@@ -2083,6 +2105,9 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
 Jet Fighters upgrade the Fighter with improved attack and defense, plus a higher movement radius.\
+"), _("
+NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel.\
+ This restriction can by overridden by commanding it to move to adjacent tiles.\
 ")
 
 [unit_jet_bomber]
@@ -2144,6 +2169,9 @@ Jet Bombers are high-altitude long-range air units that are good for\
 TIP: Getting bombed is very noticeable to an enemy, and taken very\
  seriously. Make sure you choose targets far from any air defences,\
  or be sure to bring adequate escort protection.\
+"), _("
+NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel.\
+ This restriction can by overridden by commanding it to move to adjacent tiles.\
 ")
 
 [unit_stealth_fighter]
@@ -2198,6 +2226,9 @@ The most advanced Fighter, with improved attack and a higher movement\
  radius. Stealth Fighters can't be seen unless directly adjacent\
  to an enemy. Stealth evasion reduces effectiveness of SAM Batteries to\
  a 25% bonus.\
+"), _("
+NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel.\
+ This restriction can by overridden by commanding it to move to adjacent tiles.\
 ")
 
 [unit_stealth_bomber]
@@ -2253,6 +2284,9 @@ The strongest Bomber, with improved attack and a higher movement\
  enemy, and may slip through the air to return home on the same\
  turn. Stealth evasion reduces effectiveness of SAM Batteries to\
  a 25% bonus. May carry two Bombs.\
+"), _("
+NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel.\
+ This restriction can by overridden by commanding it to move to adjacent tiles.\
 ")
 
 [unit_trireme]
@@ -2276,7 +2310,7 @@ move_rate     = 6
 vision_radius_sq = 4
 transport_cap = 2
 fuel          = 2
-uk_happy      = 1
+uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
@@ -2289,12 +2323,14 @@ The Trireme is the first naval unit. While its combat abilities are basic,\
  to a Caravan, it may at any time help to build a Wonder, enter a\
  marketplace, or establish a Traderoute. While it may venture out into deep\
  ocean, there is risk when it enters unknown waters: it must end every second\
- turn on coastline, or else it will be lost at sea. Triremes can travel on rivers.\
+ turn on river, coastline, or city, or else it will be lost at sea.\
 "), _("
 Like most ancient sea units, when it initiates combat there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
-  result in the loss of one of the units. This tends to favor ships who are\
-  accompanied by other ships.\
+  result in the loss of one of the units.\
+"), _("
+NOTE: GO TO orders prevent accidental loss of the unit at sea, but can be overly\
+ restrictive. You can override this by commanding it to move to adjacent tiles.\
 ")
 
 [unit_longboat]
@@ -2332,8 +2368,7 @@ The Longboat is an offensive naval unit. It can attack at sea and bring\
 "), _("
 Like most ancient sea units, when it initiates combat there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
-  result in the loss of one of the units. This tends to favor ships who are\
-  accompanied by other ships.\
+  result in the loss of one of the units.\
 ")
 
 [unit_galley]
@@ -2357,7 +2392,7 @@ move_rate     = 6
 vision_radius_sq = 4
 transport_cap = 2
 fuel          = 0
-uk_happy      = 1
+uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
@@ -2371,8 +2406,7 @@ The Galley is an all-purpose sea unit. It has decent offense, defense,\
 "), _("
 Like most ancient sea units, when it initiates combat there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
-  result in the loss of one of the units. This tends to favor ships who are\
-  accompanied by other ships.\
+  result in the loss of one of the units.\
 ")
 
 [unit_war_galley]
@@ -2409,8 +2443,7 @@ The War Galley has improved offense, defense, speed and cargo capacity over\
 "), _("
 Like most ancient sea units, when it initiates combat there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
-  result in the loss of one of the units. This tends to favor ships who are\
-  accompanied by other ships.\
+  result in the loss of one of the units.\
 ")
 
 [unit_ram_ship]
@@ -2431,7 +2464,7 @@ defense       = 2
 hitpoints     = 10
 firepower     = 1
 move_rate     = 6
-vision_radius_sq = 2
+vision_radius_sq = 1
 transport_cap = 0
 fuel          = 0
 uk_happy      = 1
@@ -2444,8 +2477,10 @@ roles         = "Hunter"
 helptext      = _("\
 The Ram Ship is an offensive weapon with only one purpose: destroying other\
  ships. It has poor vision, no transport or commerce ability, and may not\
- travel on rivers. Unlike other early ships, there\
- will always be a winner and a loser when it initiates an attack.\
+ travel on rivers. Unlike other early ships, there will always be a winner\
+ and a loser when a Ram Ship attacks. Ram Ships make good counterstrike\
+ defense for nations not heavily invested into sea techs, as well as the more\
+ obvious role of a 'heavy-first-hitter' when larger fleets engage in battle.\
 ")
 
 [unit_caravel]
@@ -2484,8 +2519,7 @@ The Caravel represents a significant naval advance in combat, speed, range,\
 "), _("
 Like most ancient sea units, when it initiates combat there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
-  result in the loss of one of the units. This tends to favor ships who are\
-  accompanied by other ships.\
+  result in the loss of one of the units.\
 ")
 
 [unit_galleon]
@@ -2518,8 +2552,12 @@ cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "Provoking", "CanEscape", "CantReachAir"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
-The Galleon is a lightly armed transport ship that can\
+The Galleon is an armed transport ship that can\
  carry up to 4 land units. Galleons can travel on rivers.\
+"), _("
+Like most older sea units, when it initiates combat there will be 15 rounds\
+  of combat and 15 total hitpoints lost between both units. This may or may not\
+  result in the loss of one of the units.\
 ")
 
 [unit_frigate]
@@ -2556,10 +2594,12 @@ bonuses       =
 flags         = "BadCityDefender", "Provoking", "CanEscape", "CantReachAir"
 roles         = "Hunter"
 helptext      = _("\
-The Frigate is a highly versatile boat unit,\
- that is both a strong offensive unit as well\
- as a decent transport ship. Frigates can travel\
+The Frigate is a versatile and powerful ship\
+ that is a strong offensive unit and\
+ a decent transport ship. Frigates can travel\
  on rivers.\
+"), _("
+From Frigates onward, all battles end with a single victor.\
 ")
 
 [unit_ironclad]
@@ -2597,7 +2637,7 @@ roles         = "Hunter"
 helptext      = _("\
 The Ironclad is an armored ship that is\
  much more sturdy than the Frigate but\
- loses the transport capability and the\
+ loses transport capability and the\
  ability to navigate rivers.\
 ")
 
@@ -2679,7 +2719,7 @@ bonuses       =
 flags         = "BadCityDefender", "CanEscape", "CantReachAir"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
-The Cruiser is a large surface warship with equally strong\
+The Cruiser is a large yet quick surface warship with equally strong\
  offensive and defensive capabilities. 2x ASW defence\
  allows it to survive a single Submarine attack\
  more often than not.\
@@ -2772,6 +2812,8 @@ The AEGIS Cruiser is an upgraded Cruiser equipped with\
  an advanced missile system, advanced radar\
  and vision, and a 2x defense bonus against Submarines.\
  An AEGIS Cruiser may also carry two Cruise Missiles.\
+ It is the only ship which can make proactive attacks\
+ against Air and Missile units.\
 "), _("\
 TIP: This unit's vision and 3x anti-air defence are\
  excellent for scouting and for escorting other ships.\
@@ -2812,7 +2854,7 @@ flags         = "BadCityDefender", "CanEscape", "CantReachAir"
 roles         = ""
 helptext      = _("\
 The Battleship is the supreme naval unit with\
- excellent offensive and defensive values. They\
+ excellent offensive and defensive strength. They\
  have a bonus defending against Submarines.\
 ")
 
@@ -3015,13 +3057,13 @@ helptext      = _("\
 You can build Atom Bombs when you have Nuclear Fission, and\
  the Manhattan Project wonder has been built by any player.\
 "), _("\
-Careful logistics are needed for a Bomber to drop an Atom Bomb and survive the\
+Care is needed for a Bomber to drop an Atom Bomb and survive the\
  blast. A Bomber may 'drop' the bomb within two tiles of\
- its location. First, 'drop' the bomb by making it leave the aircraft\
- to an adjacent tile. Next, fly the Bomber out of range. Finally, attack\
+ its location. First, 'drop' the bomb by making it leave the aircraft.\
+ Next, fly the Bomber out of range. Finally, attack\
  the target or execute a Detonate command by pressing D twice.\
- On impact, the blast will destroy any unit in an area 3 tiles wide\
- (3x3 squares for rectangular grids), including friendly units.\
+ On impact, the blast will destroy any unit in a 3x3 area,\
+ including friendly units.\
  Any city within the blast area loses half its population, and\
  land tiles within the blast area are subject to nuclear fallout.\
 "), _("\
@@ -3063,27 +3105,23 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = ""
 helptext      = _("\
-You can build Nuclear units when you have the required advance, and\
- the Manhattan Project wonder has been built by any player.\
+You can build Nuclear missiles when you have the required tech and\
+ the Manhattan Project has been built by any player.\
 "), _("\
-On impact, the blast will destroy any unit in an area 3 tiles wide\
- (3x3 squares for rectangular grids), including friendly units.\
+On impact, the blast will destroy any unit in a\
+ 3x3 area, including friendly units.\
  Any city within the blast area loses half its population, and\
  land tiles within the blast area are subject to nuclear fallout.\
 "), _("\
 Nuclear fallout reduces tile output and increases the risk of global\
  nuclear winter; see the help on Fallout.\
 "), _("\
-TIP 1:  Nuking the ocean will not generate fallout, and is a most\
- effective (but expensive!!) way of getting rid of enemy\
- ships.\
+Ocean tiles are not subject to Fallout.\
 "), _("\
-TIP 2:  You may be involved in a situation where you've invaded an\
- enemy country en masse, but the enemy cities are too strong.\
- Before using a Nuclear unit, assemble a gang of Settlers, Workers,\
- and/or Engineers next to the city and have them ready to fix\
- the fallout on the same turn it occurs!  This minimizes the\
- chance of nuclear winter.  Eco-friendly nukes!\
+TIP: Before using a Nuclear unit, assemble a gang of \
+ Engineers next to the city and have them ready to fix\
+ the fallout on the same turn. This reduces the\
+ chance of nuclear winter.\
 ")
 
 [unit_diplomat]
@@ -3127,52 +3165,39 @@ veteran_power_fact = 100, 105, 110, 115, 120, 125, 130
 veteran_move_bonus = 0, 0, 0, 0, 0, 0, 0
 roles         = "DiplomatStartUnit"
 helptext      = _("\
-A Diplomat deals with foreign dignitaries. He may\
- undertake various covert operations to\
- harm opponents. Diplomats inside cities defend\
- against such actions.\
+A Diplomat deals with foreign dignitaries or he may undertake covert operations to\
+ harm opponents. Diplomats inside cities defend against such actions.\
 "), _("\
-Many covert actions may be attempted in peacetime, but\
- may cause diplomatic incidents,\
- which can allow Republics and Democracies to break treaties.\
+Many covert actions may be attempted in peacetime, but may cause diplomatic incidents,\
+ possibly allowing Republics and Democracies to break treaties.\
 "), _("\
-If a foreign unit is alone on a tile, you may attempt to bribe it\
- with your Diplomat. The unit immediately\
- becomes yours: the cost depends on unit status and\
+If a foreign unit is alone on a tile, you may attempt to bribe it with your Diplomat.\
+ The unit immediately becomes yours: the cost depends on unit status and\
  the civilization owning it. Bribery creates a diplomatic incident.\
 "), _("\
-Diplomats can act on another player's\
- city.  Most actions have a chance of failure. Diplomats and\
- Spies in the city defend against these actions. In this case, one of the\
- units will die. If\
- the attacker wins, it may try the action again if it has moves left.\
+Diplomats can act on foreign cities. Most actions have a chance of failure. If Diplomats &\
+ Spies aree in the city, they will defend against the action and one of the units will\
+ die. If the attacker wins, it may try the action again if it has moves.\
 "), _("\
 A Diplomat can:\
 "), _("\
  - \"Establish Embassy\": Gives\
- permanent contact with the city's owner, tax rates, technology, and foreign relations.\
+ permanent information on a nation's treasury, tax rates, technology, & foreign relations.\
 "), _("\
- - \"Investigate City\": Attempts to acquire detailed\
- information about the city.\
+ - \"Investigate City\": Acquires detailed information about the city.\
 "), _("\
- - \"Sabotage City\": Attempts to disrupt\
- city production or destroy a\
- random building. Existing Palaces and\
- Wonders cannot be sabotaged. Attempts to sabotage City Walls\
- or capitals have half the chance of success.\
- Sabotage may only be attempted during war.\
+ - \"Sabotage City\": Attempts to disrupt production or destroy a random building. Palaces and\
+  completed Wonders can't be sabotaged. Attempts to sabotage City Walls or capital cities have\
+  half the chance of success. Sabotage may only be attempted during war.\
 "), _("\
- - \"Steal Technology\": Attempts to steal a\
- random technology. Technology\
- may only be stolen once from a particular city by Diplomats. This\
- action may be attempted in peace or war and causes a\
- diplomatic incident.\
+ - \"Steal Technology\": Attempts to steal a random technology. Technology\
+  may only be stolen once from a particular city by Diplomats. This\
+  action may be attempted in peace or war and causes a diplomatic incident.\
 "), _("\
- - \"Incite a Revolt\": For a high cost, a foreign city will change\
- allegiance and join your empire, also acquiring the units the\
- city supports. Units in other cities\
- remain in the enemy's control. Units outside cities are disbanded. It is not possible to incite\
- a capital or any city in a Democracy.\
+ - \"Incite a Revolt\": For an almost impossible cost, it is in theory possible\
+  to bribe an entire city to join your empire, also acquiring the units the\
+  city supports. Units in other cities remain in the enemy's control. Units outside\
+  cities are disbanded. It is not possible to incite a capital or any city in a Democracy.\
 "), _("\
 Diplomats built under Communism start at the first\
  veteran level (secretary).\

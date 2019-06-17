@@ -61,6 +61,7 @@ value   = 15
 reqs	=
     { "type", "name", "range", "present"
       "UnitClass", "RiverShip", "Local", TRUE
+      "UnitType", "Frigate", "Local", FALSE
     }
 
 ; Cheating AI effects are in separate file
@@ -1500,7 +1501,6 @@ reqs	=
       "Action", "Targeted Steal Tech Escape Expected", "Local", TRUE
     }
 
-
 [effect_incite_cost_empty_courthouse]
 type = "Incite_Cost_Pct"
 value = 100
@@ -1525,6 +1525,7 @@ reqs	=
     { "type", "name", "range", "present"
       "MaxUnitsOnTile", "0", "Local", TRUE
       "Building", "Courthouse", "City", FALSE
+      "Building", "Supreme Court", "Player", FALSE
     }
 
 [effect_factory]
@@ -2594,9 +2595,17 @@ type    = "Incite_Cost_Pct"
 value	= 300
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player"
+      "Building", "Supreme Court", "Player", TRUE
       "MaxUnitsOnTile", "0", "Local", FALSE
     }
+[effect_incite_cost_empty_supremecourt]
+type = "Incite_Cost_Pct"
+value = 100
+reqs	=
+    { "type", "name", "range", "present"
+      "MaxUnitsOnTile", "0", "Local", TRUE
+      "Building", "Supreme Court", "Player", TRUE
+    }   
 
 [effect_supreme_court_upkeep]         ; Law and order provides +1 upkeep
 type    = "Unit_Upkeep_Free_Per_City"
@@ -3046,7 +3055,7 @@ reqs    =
       "Building", "Mausoleum of Mausolos", "Player", TRUE
     }
 
-;Supreme Court counts as Courthouse in every city.
+;Mausoleum respects that Supreme Court counts as Courthouse in every city.
 [effect_mausoleum_of_mausolos_2a]
 type    = "Make_Content"
 value   = 1
