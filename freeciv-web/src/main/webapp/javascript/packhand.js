@@ -849,8 +849,8 @@ function handle_unit_combat_info(packet)
 
         // it was not sending a message after battle, so inject one here:
         var unit_nation = players[defender['owner']]['nation'];
-        var defend_unit = nations[unit_nation]['adjective'] + " " + unit_types[defender['type']]; 
-        var attack_unit = "Your " + unit_types[attacker['type']];
+        var defend_unit = nations[unit_nation]['adjective'] + " " + unit_types[defender['type']]['name'];
+        var attack_unit = "Your " + unit_types[attacker['type']]['name'];
         var special_message = "A valiant battle with no winner! "+attack_unit+" retains "+attacker_hp+"hp while reducing the "
                             + defend_unit+" to "+defender_hp+"hp.";
         
