@@ -845,10 +845,11 @@ function handle_unit_combat_info(packet)
         
         update_tile_unit(attacker);   // force a redraw, was not happening
         update_tile_unit(defender);
-        update_map_canvas_full();
+        //update_map_canvas_full();
 
         // it was not sending a message after battle, so inject one here:
-        var defend_unit = nations[players[unit_owner(defender)]['nation']]['adjective'] + " " + unit_types[defender['type']];
+        var unit_nation = players[defender['owner']]['nation'];
+        var defend_unit = nations[unit_nation]['adjective'] + " " + unit_types[defender['type']]; 
         var attack_unit = "Your " + unit_types[attacker['type']];
         var special_message = "A valiant battle with no winner! "+attack_unit+" retains "+attacker_hp+"hp while reducing the "
                             + defend_unit+" to "+defender_hp+"hp.";
