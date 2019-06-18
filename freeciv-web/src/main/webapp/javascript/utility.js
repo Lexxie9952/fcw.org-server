@@ -175,9 +175,17 @@ function seconds_to_human_time(input_seconds) {
   var hours   = Math.floor(input_seconds / 3600);
   var minutes = Math.floor((input_seconds - (hours * 3600)) / 60);
   var seconds = input_seconds - (hours * 3600) - (minutes * 60);
-  if (hours > 0) return hours+'h '+minutes+'m ';
-  if (hours == 0 && minutes > 0) return minutes+'m '+seconds + 's';
-  if (hours == 0 && minutes == 0) return seconds + 's';
+  if ( !is_small_screen() )   {    // big screen, display full XXh YYm:
+    if (hours > 0) return hours+'h '+minutes+'m ';
+    else if (hours == 0 && minutes > 0) return minutes+'m '+seconds + 's';
+    else if (hours == 0 && minutes == 0) return seconds + 's';
+  } else {              // more compact for mobile:
+    if (hours > 0) return hours+'.'+Math.floor( (minutes*10) / 60)+'h';    //23h 59m shows as 23.9h
+    else if (hours == 0 && minutes > 9) return minutes+'m';                //10m 32s shows as 10m
+    else return minutes+':'+seconds;                                       //9m 59s shows as 9:59
+  }
+  
+
 }
 
 /**************************************************************************

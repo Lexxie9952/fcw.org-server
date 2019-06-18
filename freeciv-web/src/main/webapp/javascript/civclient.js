@@ -420,15 +420,20 @@ function is_server()
 function update_timeout()
 {
   var now = new Date().getTime();
+
+  var is_small = is_small_screen();
+
   if (game_info != null
       && current_turn_timeout() != null && current_turn_timeout() > 0) {
     var remaining = Math.floor(seconds_to_phasedone - ((now - seconds_to_phasedone_sync) / 1000));
 
     if (remaining >= 0 && turn_change_elapsed == 0) {
-      if (is_small_screen() && !is_longturn()) {
+      if (is_small && !is_longturn()) {
         $("#turn_done_button").button("option", "label", "Turn " + remaining);
         $("#turn_done_button .ui-button-text").css("padding", "3px");
-      } else {
+      } else if (is_small) {  // small screen && longturn:
+        $("#turn_done_button").button("option", "label", "" + seconds_to_human_time(remaining) + ""); //timer only, don't cover tabs
+      } else {                          // big screen && longturn:   
         $("#turn_done_button").button("option", "label", "Turn Done (" + seconds_to_human_time(remaining) + ")");
       }
       if (!is_touch_device()) $("#turn_done_button").tooltip({ disabled: false });
