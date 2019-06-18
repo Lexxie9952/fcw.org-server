@@ -275,6 +275,9 @@ ui_name_incite_city = _("Incite a %sRevolt%s")
 ; /* TRANS: Incite a _Revolt and Escape (3% chance of success). */
 ui_name_incite_city_escape = _("Incite a Re%svolt and Escape%s")
 
+; /* TRANS: Establish Trade _Route (100% chance of success). */
+ui_name_establish_trade_route = _("Establish Trade %sRoute%s")
+
 ; /* TRANS: Establish _Embassy (100% chance of success). */
 ui_name_establish_embassy = _("Establish %sEmbassy%s")
 
@@ -1350,14 +1353,14 @@ settings =
   { "type",       "pct", "cancelling", "bonus"
     "National",   0,     "Cancel",     "None"
     "NationalIC", 0,     "Cancel",     "None"
-    "IN",         5,     "Cancel",     "None"
-    "INIC",       5,     "Cancel",     "None"
-    "Ally",       5,     "Cancel",     "None"
-    "AllyIC",     5,     "Cancel",     "None"
-    "Enemy",      5,     "Cancel",     "None"
-    "EnemyIC",    5,     "Cancel",     "None"
-    "Team",       5,     "Cancel",     "None"
-    "TeamIC",     5,     "Cancel",     "None"
+    "IN",         100,     "Cancel",     "None"
+    "INIC",       100,     "Cancel",     "None"
+    "Ally",       100,     "Cancel",     "None"
+    "AllyIC",     100,     "Cancel",     "None"
+    "Enemy",      100,     "Cancel",     "None"
+    "EnemyIC",    100,     "Cancel",     "None"
+    "Team",       100,     "Cancel",     "None"
+    "TeamIC",     100,     "Cancel",     "None"
   }
 
 ; When are goods for the trade route chosen.

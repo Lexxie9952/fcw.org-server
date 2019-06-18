@@ -2360,7 +2360,7 @@ uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "Provoking", "CantReachAir"
-roles         = "Ferryboat", "FerryStartUnit"
+roles         = "Ferryboat", "Hunter"
 helptext      = _("\
 The Longboat is an offensive naval unit. It can attack at sea and bring\
  one land unit to shore, making it useful for conducting ancient sea\
@@ -2436,7 +2436,7 @@ uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "Provoking", "CantReachAir"
-roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
+roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat", "Hunter"
 helptext      = _("\
 The War Galley has improved offense, defense, speed and cargo capacity over\
  the Galley, but it lacks commerce abilities. War Galleys can travel on rivers.\
@@ -2510,7 +2510,7 @@ uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "Provoking", "CantReachAir", "Traderoute", "HelpWonder"
-roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
+roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat", "Hunter"
 helptext      = _("\
 The Caravel represents a significant naval advance in combat, speed, range,\ 
  and transport capability. Its utility in all the above replaces many\
@@ -2717,7 +2717,7 @@ bonuses       =
      "Marines", "DefenseMultiplier", 1    
    }
 flags         = "BadCityDefender", "CanEscape", "CantReachAir"
-roles         = "DefendGood", "DefendGoodStartUnit"
+roles         = "DefendOk", "Hunter"
 helptext      = _("\
 The Cruiser is a large yet quick surface warship with equally strong\
  offensive and defensive capabilities. 2x ASW defence\
@@ -2806,7 +2806,7 @@ bonuses       =
      "Marines", "DefenseMultiplier", 1    
    }
 flags         = "BadCityDefender", "CanEscape"
-roles         = "DefendGood", "DefendGoodStartUnit"
+roles         = "DefendOk", "Hunter"
 helptext      = _("\
 The AEGIS Cruiser is an upgraded Cruiser equipped with\
  an advanced missile system, advanced radar\

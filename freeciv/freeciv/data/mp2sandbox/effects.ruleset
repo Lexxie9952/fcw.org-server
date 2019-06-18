@@ -167,6 +167,40 @@ reqs    =
 type    = "Tech_Upkeep_Free"
 value   = 3
 
+; ******************* TRADE ********************
+
+[effect_trade_routes]
+type    = "Max_Trade_Routes"
+value   = 3
+
+;pow(2, value/1000) -> Base = 50% 
+[effect_base_trade_revenue_reduce]
+type    = "Trade_Revenue_Bonus"
+value   = -1000
+
+;Total = 25%
+[effect_railroad_trade_revenue_reduce]
+type    = "Trade_Revenue_Bonus"
+value   = -1000
+reqs    =
+    { "type", "name", "range"
+      "Tech", "Railroad", "Player"
+    }
+
+[effect_enter_marketplace_bonus_reduction]
+type	= "Trade_Revenue_Bonus"
+value	= -1585
+reqs	=
+    { "type", "name", "range"
+      "Action", "Enter Marketplace", "Local"
+    }
+
+; Fudge factor to more closely approximate Civ2 behavior. (Civ2 is
+; really very different -- this just fakes it a little better)
+[effect_bonus_fudge_factor]
+type	= "Trade_Revenue_Bonus"
+value	= 1585
+
 ; *********************************** BASES *******************************
 
 ; **** FORT *****
