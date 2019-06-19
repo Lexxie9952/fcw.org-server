@@ -68,6 +68,11 @@ function webglOnDocumentMouseUp( e ) {
   var rightclick = false;
   var middleclick = false;
 
+  // all the right possibilities for de-activating this weren't being caught, so
+  // we are simplifying it to any mouse up de-activating it.
+  mapview_mouse_movement = false;
+
+
   if (!e) var e = window.event;
   if (e.which) {
     rightclick = (e.which == 3);
@@ -81,7 +86,10 @@ function webglOnDocumentMouseUp( e ) {
   if (ptile == null) return;
 
   if (rightclick) {
-    /* right click to recenter. */
+    map_select_active = false;
+    map_select_check = false;
+    mapview_mouse_movement = false;    /* right click to recenter. */
+    
     if (!map_select_active || !map_select_setting_enabled) {
       context_menu_active = true;
       save_map_return_position(); // map position change events save former location for user return with spacebar key
@@ -90,10 +98,6 @@ function webglOnDocumentMouseUp( e ) {
       context_menu_active = false;
       //map_select_units(mouse_x, mouse_y);
     }
-    map_select_active = false;
-    map_select_check = false;
-    mapview_mouse_movement = false;
-
   } else if (!rightclick && !middleclick) {
     /* Left mouse button*/
     do_map_click(ptile, SELECT_POPUP, true);
@@ -110,10 +114,14 @@ function webglOnDocumentMouseUp( e ) {
  ***************************************************************************/
 function save_map_return_position(tile_to_save)
 {
+  // position changing should turn these off
+  map_select_active = false;
+  map_select_check = false;
+  mapview_mouse_movement = false;
+
   /* these vars are in control.js
      recent_saved_tile - the tile that will later become the position to return to
      last_saved_tile   - the former recent_saved_tile that will be refocused on */
-
   last_saved_tile = recent_saved_tile; // push recent_saved_tile to last_saved_tile, it's now the tile that will be recentered
   recent_saved_tile = tile_to_save;    // now assign a new recent_saved_tile to newest position, so it can be remembered for 
                                        // the next change in position.
@@ -142,13 +150,27 @@ function webglOnDocumentMouseDown(e) {
     var ptile = webgl_canvas_pos_to_tile(e.clientX, e.clientY - $("#canvas_div").offset().top);
     set_mouse_touch_started_on_unit(ptile);
     check_mouse_drag_unit(ptile);
+
+    // New test candidate code to replace the commented block below:
+    if (!mouse_touch_started_on_unit) {
+      mapview_mouse_movement = true;
+      //mapview_mouse_movement = true;
+      touch_start_x = mouse_x;
+      touch_start_y = mouse_y;
+    }
+    /* used to be coded this way, which checks something is true before setting mapview_mouse_movement=true, 
+       but then does it anyway, which seems an obvious mistake, and anyway, it was buggy and happening 
+       sometimes when you didn't want it, and then wouldn't come out of it, so we're trying the above to see
+       how it goes 
     if (!mouse_touch_started_on_unit) mapview_mouse_movement = true;
-    mapview_mouse_movement = true;
-    touch_start_x = mouse_x;
-    touch_start_y = mouse_y;
+      mapview_mouse_movement = true;
+      touch_start_x = mouse_x;
+      touch_start_y = mouse_y;
+    } */
 
   } else if (middleclick || e['altKey']) {
     popit();
+    mapview_mouse_movement = false;
     return false;
   } else if (rightclick && !map_select_active && is_right_mouse_selection_supported()) {
     /* The context menu blocks the right click mouse up event on some
