@@ -137,13 +137,15 @@ function show_city_dialog_by_id(pcity_id)
   show_city_dialog(cities[pcity_id]);
 }
 
-// used to lower font for improvements with a long word in them
+/**************************************************************************
+  Used to lower font for improvements with a long word in them
+**************************************************************************/
 function findLongestWord(str) {
   var strSplit = str.split(' ');
   var longestWord = 0;
   for(var i = 0; i < strSplit.length; i++){
     if(strSplit[i].length > longestWord){
-	longestWord = strSplit[i].length;
+	     longestWord = strSplit[i].length;
      }
   }
   return longestWord;
@@ -257,6 +259,9 @@ function show_city_dialog(pcity)
   var orig_renderer = renderer;
   renderer = RENDERER_2DCANVAS;
   set_city_mapview_active();
+
+  // Center map on area around city for when they leave the city
+  save_map_return_position(city_tile(pcity)); //save tile locations for spacebar return position function
   center_tile_mapcanvas(city_tile(pcity));
   update_map_canvas(0, 0, mapview['store_width'], mapview['store_height']);
   renderer = orig_renderer;

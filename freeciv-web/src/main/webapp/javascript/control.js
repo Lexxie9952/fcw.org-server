@@ -27,6 +27,10 @@ var unitpanel_active = false;
 var allow_right_click = false;
 var mapview_mouse_movement = false;
 
+// Last map viewing location, allows user to return to it with <space> key.
+var last_saved_tile = null;
+var recent_saved_tile = null;
+
 var current_focus = [];
 var goto_active = false;
 var paradrop_active = false;
@@ -1265,6 +1269,11 @@ function set_unit_focus_and_redraw(punit)
     if (renderer == RENDERER_WEBGL) update_unit_position(index_to_tile(punit['tile']));
   }
 
+  //spacebar to return to last location:
+  //our recent tile position gets put as last_ so we can return to it, and we get 
+  //a new recent tile as the new tile we are centering on:
+  last_saved_tile = recent_saved_tile;
+  recent_saved_tile = index_to_tile(punit['tile']);
   auto_center_on_focus_unit();
   update_active_units_dialog();
   update_unit_order_commands();
@@ -1307,6 +1316,24 @@ function auto_center_on_focus_unit()
     center_tile_mapcanvas(ptile);
     update_unit_position(ptile);
   }
+}
+
+/**************************************************************************
+Center on the focus unit, if off-screen and auto_center_on_unit is true.
+**************************************************************************/
+function auto_center_last_location()
+{
+  if (active_city != null) return; /* don't change focus while city dialog is active.*/
+
+  if (last_saved_tile==null) return;  // no saved location or it was reset
+
+  center_tile_mapcanvas(last_saved_tile);
+
+  // returning to a tile is itself a reposition event, simply swap last_ and recent_ tile 
+  // in this case so it will advance "forward" back to the tile it came from:
+  var temp = last_saved_tile;
+  last_saved_tile=recent_saved_tile;
+  recent_saved_tile = temp; 
 }
 
 /****************************************************************************
@@ -1430,6 +1457,8 @@ function order_wants_direction(order, act_id, ptile) {
 
 /**************************************************************************
  Handles everything when the user clicked a tile
+ If it's months after June 2019 and you still see console.log in here,
+ please remove it.
 **************************************************************************/
 function do_map_click(ptile, qtype, first_time_called)
 {
@@ -1707,7 +1736,7 @@ function do_map_click(ptile, qtype, first_time_called)
           }
         } else if (!goto_active) {
           show_city_dialog(pcity);
-	    }
+	      }
       }
       return;
     }
@@ -2017,11 +2046,8 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       key_unit_move(DIR8_NORTH);
       break;
 
-    case 27:
-      //Esc
-
+    case 27:      //Esc
       deactivate_goto(false);
-
       /* Abort started multiple unit selection. */
       map_select_active = false;
       map_select_check = false;
@@ -2041,16 +2067,20 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       action_tgt_sel_active = false;
       break;
 
-    case 32: // space, will clear selection and goto.
-      current_focus = [];
-      if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
-      goto_active = false;
-      $("#canvas_div").css("cursor", "default");
-      goto_request_map = {};
-      goto_turns_request_map = {};
-      clear_goto_tiles();
-      update_active_units_dialog();
-
+    // shift-space, return to previous map position
+    // space, will clear selection and goto.
+    case 32: 
+      if (shift) auto_center_last_location();
+      else {
+        current_focus = [];
+        if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
+        goto_active = false;
+        $("#canvas_div").css("cursor", "default");
+        goto_request_map = {};
+        goto_turns_request_map = {};
+        clear_goto_tiles();
+        update_active_units_dialog();
+      }
       break;
 
     case 107:

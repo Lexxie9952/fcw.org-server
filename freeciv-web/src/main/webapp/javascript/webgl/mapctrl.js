@@ -84,6 +84,7 @@ function webglOnDocumentMouseUp( e ) {
     /* right click to recenter. */
     if (!map_select_active || !map_select_setting_enabled) {
       context_menu_active = true;
+      save_map_return_position(); // map position change events save former location for user return with spacebar key
       webgl_recenter_button_pressed(ptile);
     } else {
       context_menu_active = false;
@@ -101,6 +102,21 @@ function webglOnDocumentMouseUp( e ) {
   }
   e.preventDefault();
   keyboard_input = true;
+}
+
+/****************************************************************************
+   Call this function when change of map view position events happen: record
+   the former position to which the user will later want to return (spacebar) 
+ ***************************************************************************/
+function save_map_return_position(tile_to_save)
+{
+  /* these vars are in control.js
+     recent_saved_tile - the tile that will later become the position to return to
+     last_saved_tile   - the former recent_saved_tile that will be refocused on */
+
+  last_saved_tile = recent_saved_tile; // push recent_saved_tile to last_saved_tile, it's now the tile that will be recentered
+  recent_saved_tile = tile_to_save;    // now assign a new recent_saved_tile to newest position, so it can be remembered for 
+                                       // the next change in position.
 }
 
 /****************************************************************************
