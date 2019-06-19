@@ -394,6 +394,8 @@ function overview_clicked (x, y)
 
   var ptile = map_pos_to_tile(x1, y1);
   if (ptile != null) {
+    //reposition events save the position to return to with shift-spacebar
+    save_map_return_position(ptile);
     center_tile_mapcanvas(ptile);
   }
 

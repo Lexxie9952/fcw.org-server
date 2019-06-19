@@ -27,7 +27,7 @@ var unitpanel_active = false;
 var allow_right_click = false;
 var mapview_mouse_movement = false;
 
-// Last map viewing location, allows user to return to it with <space> key.
+// Last map viewing location, allows user to return to it with shift-spacebar.
 var last_saved_tile = null;
 var recent_saved_tile = null;
 
@@ -1269,7 +1269,7 @@ function set_unit_focus_and_redraw(punit)
     if (renderer == RENDERER_WEBGL) update_unit_position(index_to_tile(punit['tile']));
   }
 
-  //spacebar to return to last location:
+  //shift-spacebar to return to last location:
   //our recent tile position gets put as last_ so we can return to it, and we get 
   //a new recent tile as the new tile we are centering on:
   last_saved_tile = recent_saved_tile;

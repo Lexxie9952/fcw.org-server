@@ -92,7 +92,7 @@ function webglOnDocumentMouseUp( e ) {
     
     if (!map_select_active || !map_select_setting_enabled) {
       context_menu_active = true;
-      save_map_return_position(); // map position change events save former location for user return with spacebar key
+      save_map_return_position(); // map position change events save former location for user return with shift-spacebar
       webgl_recenter_button_pressed(ptile);
     } else {
       context_menu_active = false;
@@ -110,7 +110,7 @@ function webglOnDocumentMouseUp( e ) {
 
 /****************************************************************************
    Call this function when change of map view position events happen: record
-   the former position to which the user will later want to return (spacebar) 
+   the former position to which the user will later want to return (shift-spacebar) 
  ***************************************************************************/
 function save_map_return_position(tile_to_save)
 {

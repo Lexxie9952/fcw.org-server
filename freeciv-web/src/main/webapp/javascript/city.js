@@ -261,7 +261,7 @@ function show_city_dialog(pcity)
   set_city_mapview_active();
 
   // Center map on area around city for when they leave the city
-  save_map_return_position(city_tile(pcity)); //save tile locations for spacebar return position function
+  save_map_return_position(city_tile(pcity)); //save tile locations for shift-spacebar return position function
   center_tile_mapcanvas(city_tile(pcity));
   update_map_canvas(0, 0, mapview['store_width'], mapview['store_height']);
   renderer = orig_renderer;
