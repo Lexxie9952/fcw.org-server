@@ -1323,8 +1323,12 @@ Center on the focus unit, if off-screen and auto_center_on_unit is true.
 **************************************************************************/
 function auto_center_last_location()
 {
+  // Be safe and get out of all select/move modes:
+  map_select_active = false;
+  map_select_check = false;
+  mapview_mouse_movement = false;
+  
   if (active_city != null) return; /* don't change focus while city dialog is active.*/
-
   if (last_saved_tile==null) return;  // no saved location or it was reset
 
   center_tile_mapcanvas(last_saved_tile);
@@ -2080,6 +2084,11 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         goto_turns_request_map = {};
         clear_goto_tiles();
         update_active_units_dialog();
+
+        // clear out of every other select mode, too
+        map_select_active = false;
+        map_select_check = false;
+        mapview_mouse_movement = false;
       }
       break;
 

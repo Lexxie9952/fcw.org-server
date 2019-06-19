@@ -134,6 +134,9 @@ function webglOnDocumentMouseDown(e) {
   var rightclick = false;
   var middleclick = false;
 
+  // default to turning it off unless conditions met below
+  mapview_mouse_movement = false;
+
   if (!e) var e = window.event;
   if (e.which) {
     rightclick = (e.which == 3);
