@@ -1600,6 +1600,8 @@ set =
       "startunits", "cccwwwxxa", FALSE
       "techpenalty", 0, FALSE
       "tinyisles", FALSE, FALSE
+      "trademindist", 12, FALSE
+      "trade_revenue_style", "SIMPLE", FALSE   ;"simple" formula based on average trade in both cities (sans distance etc.)
       "topology", "WRAPX", FALSE
       "trading_city", "DISABLED", FALSE
       "unreachableprotects", "ENABLED", FALSE
