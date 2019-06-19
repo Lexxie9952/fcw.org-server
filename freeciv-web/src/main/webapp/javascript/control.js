@@ -1289,8 +1289,10 @@ function set_unit_focus_and_redraw(punit)
 **************************************************************************/
 function set_unit_focus_and_activate(punit)
 {
-  set_unit_focus_and_redraw(punit);
-  request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
+  if (punit != null) { 
+    set_unit_focus_and_redraw(punit);
+    request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
+  }
 }
 
 /**************************************************************************
