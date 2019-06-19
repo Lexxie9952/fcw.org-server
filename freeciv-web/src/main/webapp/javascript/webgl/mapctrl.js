@@ -323,6 +323,8 @@ function webgl_mapview_touch_move(e)
 **************************************************************************/
 function webgl_recenter_button_pressed(ptile)
 {
+  mapview_mouse_movement = false;
+
   if (can_client_change_view() && ptile != null) {
     var sunit = find_visible_unit(ptile);
     if (!client_is_observer() && sunit != null
@@ -345,6 +347,8 @@ function webgl_recenter_button_pressed(ptile)
 **************************************************************************/
 function webgl_action_button_pressed(canvas_x, canvas_y, qtype)
 {
+  mapview_mouse_movement = false;
+
   var ptile = webgl_canvas_pos_to_tile(canvas_x, canvas_y);
 
   if (can_client_change_view() && ptile != null) {
