@@ -1273,7 +1273,7 @@ function set_unit_focus_and_redraw(punit)
   //our recent tile position gets put as last_ so we can return to it, and we get 
   //a new recent tile as the new tile we are centering on:
   last_saved_tile = recent_saved_tile;
-  recent_saved_tile = index_to_tile(punit['tile']);
+  if (punit != null) recent_saved_tile = index_to_tile(punit['tile']);
   auto_center_on_focus_unit();
   update_active_units_dialog();
   update_unit_order_commands();
