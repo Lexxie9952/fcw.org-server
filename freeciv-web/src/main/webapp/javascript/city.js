@@ -1244,7 +1244,7 @@ function city_change_specialist(city_id, from_specialist_id)
   var city_message = {"pid": packet_city_change_specialist,
                       "city_id" : city_id,
                       "from" : from_specialist_id,
-                      "to" : (from_specialist_id + 1) % 3};
+                      "to" : (from_specialist_id + 1) % specialists.length}; // was %3, assuming the ruleset had 3 specialists.
   send_request(JSON.stringify(city_message));
 }
 
