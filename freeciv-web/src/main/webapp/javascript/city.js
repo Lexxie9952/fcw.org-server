@@ -1241,20 +1241,22 @@ function get_city_tile_map_for_pos(x, y)
 **************************************************************************/
 function city_change_specialist(city_id, from_specialist_id)
 {
-  if (ruleset_control['name'] != "Multiplayer-Evolution ruleset")
-  {
+  if (ruleset_control['name'] != "Multiplayer-Evolution ruleset") {
     var city_message = {"pid": packet_city_change_specialist,
     "city_id" : city_id,
     "from" : from_specialist_id,
     "to" : (from_specialist_id + 1) % 3}; 
-    send_request(JSON.stringify(city_message));
+    send_request(JSON.stringify(city_message)); 
   }
-  else
+  else  // mp2 has 6 specialists
   {
+    to_specialist_id = from_specialist_id + 1;
+    if (to_specialist_id == 6) to_specialist_id = 0;
+    
     var city_message = {"pid": packet_city_change_specialist,
     "city_id" : city_id,
     "from" : from_specialist_id,
-    "to" : (from_specialist_id + 1) % 5}; // mp2 has 5 specialists
+    "to" : to_specialist_id}; 
   } 
 }
 
