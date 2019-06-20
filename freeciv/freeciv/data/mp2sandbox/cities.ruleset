@@ -55,7 +55,7 @@ reqs		=
 ; Nothing
     }
 helptext        = _("\
-Each entertainer produces two luxury points for their city per turn. \
+Each Entertainer produces two luxury points for their city per turn. \
 See the section on Happiness for the effects of luxury points.\
 ")
 
@@ -69,7 +69,7 @@ reqs		=
 ; Nothing
     }
 helptext        = _("\
-Each scientist adds three points to your empire's research output \
+Each Scientist adds three points to your empire's research output \
 per turn.\
 ")
 
@@ -86,6 +86,58 @@ helptext        = _("\
 Each tax collector produces three extra gold for your treasury \
 per turn.\
 ")
+
+
+[specialist_laborer]
+name            = _("Laborer")
+; (The original specialist names in the classic ruleset and derivatives were
+; not designed to be user-visible.)
+rule_name       = "laborer"
+short_name	= _("?Laborer:L")
+graphic         = "specialist.worker"
+reqs		=
+    { "type", "name", "range"
+; Nothing
+    }
+helptext        = _("\
+Each Laborer produces one production point for their city per turn. \
+")
+
+[specialist_merchant]
+name            = _("Merchant")
+; (The original specialist names in the classic ruleset and derivatives were
+; not designed to be user-visible.)
+rule_name       = "merchant"
+short_name	= _("?Merchant:M")
+graphic         = "specialist.merchant"
+reqs		=
+    { "type", "name", "range"
+; Nothing
+    }
+helptext        = _("\
+Each Merchant produces three trade points for their city per turn.\
+ Trade will then be partioned by your nation's tax rates into\
+ Gold, Science, and Luxury.\
+")
+
+[specialist_farmer]
+name            = _("Farmer")
+; (The original specialist names in the classic ruleset and derivatives were
+; not designed to be user-visible.)
+rule_name       = "farmer"
+short_name	= _("?Farmer:F")
+graphic         = "specialist.farmer"
+reqs		=
+    { "type", "name", "range"
+; Nothing
+    }
+helptext        = _("\
+Each Farmer provides one food for their city per turn. Yet each\
+ citizen consumes 2F/turn. Thus assigning a farmer may be useful\
+ for a citizen who otherwise produces no food.\
+")
+
+
 
 [parameters]
 add_to_size_limit  = 8		; cities >= this cannot be added to.

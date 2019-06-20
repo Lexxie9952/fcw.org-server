@@ -136,6 +136,35 @@ reqs    =
       "OutputType", "gold", "Local"
     }
 
+[effect_merchant]
+type    = "Specialist_Output"
+value   = 3
+reqs    =
+    { "type", "name", "range"
+      "Specialist", "merchant", "Local"
+      "OutputType", "trade", "Local"
+    }
+
+[effect_laborer]
+type    = "Specialist_Output"
+value   = 1
+reqs    =
+    { "type", "name", "range"
+      "Specialist", "laborer", "Local"
+      "OutputType", "shield", "Local"
+    }
+
+[effect_farmer]
+type    = "Specialist_Output"
+value   = 1
+reqs    =
+    { "type", "name", "range"
+      "Specialist", "farmer", "Local"
+      "OutputType", "food", "Local"
+    }
+
+
+
 ; Vision benefit from mountains (for every land unit)
 [effect_mountains_vision]
 type    = "Unit_Vision_Radius_Sq"
