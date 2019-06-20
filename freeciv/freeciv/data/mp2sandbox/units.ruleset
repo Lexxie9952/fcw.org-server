@@ -29,7 +29,7 @@ flags =
   { "name", "helptxt"
     _("Airbase")
     _("Transform")
-     _("CanRoad")
+    _("CanRoad")
     _("CanFortress")
     _("Bombarder")
     _("AirAttacker"), _("AEGIS Cruiser has 3x defense against this unit.")
@@ -45,6 +45,7 @@ flags =
     _("Cities")
     _("AddToCity")
     _("Nuclear")
+    _("Missile")
     _("Well-Digger"), _("Can dig a well and irrigate tiles with no water.")
     _("Infra"), _("Can build infrastructure.")
     _("Paratroopers"), _("Can be paradropped from a friendly city or suitable base.")
@@ -1433,7 +1434,7 @@ Cavalry are mounted and highly trained soldiers.\
 name          = _("Armor")
 class         = "Land"
 tech_req      = "Mobile Warfare"
-obsolete_by   = "None"
+obsolete_by   = "Armor II"
 graphic       = "u.armor"
 graphic_alt   = "-"
 sound_move    = "m_armor"
@@ -1461,6 +1462,45 @@ helptext      = _("\
 Armors are motorized war wagons that are faster,\
  stronger, and can take more damage than any\
  mounted unit.\
+")
+
+[unit_armor_ii]
+name          = _("Armor II")
+class         = "Land"
+tech_req      = "Plastics"
+obsolete_by   = "None"
+graphic       = "u.armor_ii"
+graphic_alt   = "-"
+sound_move    = "m_armor_ii"
+sound_move_alt = "m_armor"
+sound_fight   = "f_armor_ii"
+sound_fight_alt = "f_armor"
+build_cost    = 80
+pop_cost      = 0
+attack        = 16
+defense       = 6
+hitpoints     = 30
+firepower     = 1
+move_rate     = 6
+vision_radius_sq = 4
+transport_cap = 0
+fuel          = 0
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+targets       = "Balloon", "Helicopter"
+bonuses       =
+   { "flag", "type", "value"
+     "Missile",      "DefenseMultiplier", 1
+   }
+flags         = "CantReachAir"
+roles         = "AttackFastStartUnit", "Hunter"
+helptext      = _("\
+Armor II has composite armor and strong weaponry upgrades. Forts\
+ and Fortresses gain no bonus against its ability to break\ 
+ through fortifications. Anti-missile armor gives a 2x bonus against\
+ Missiles.\ 
 ")
 
 [unit_catapult]
@@ -3009,7 +3049,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter"
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "AirAttacker", "HasNoZOC", "Unbribable", "CantReachAir"
+flags         = "NeverProtects", "FieldUnit", "OneAttack", "AirAttacker", "HasNoZOC", "Unbribable", "CantReachAir", "Missile"
 roles         = ""
 helptext      = _("\
 The Cruise Missile is a long-distance missile\

@@ -216,6 +216,7 @@ reqs    =
       "UnitClass", "AirProtect",   "Local", FALSE
       "UnitClass", "Missile",      "Local", FALSE
       "UnitType",  "Armor",        "Local", FALSE
+      "UnitType",  "Armor II",     "Local", FALSE 
     }
 ; Fort HP regen
 [effect_fort_hp_regen]
@@ -252,6 +253,7 @@ value   = 67
 reqs    =
     { "type", "name", "range", "present"
       "Extra", "Fortress", "Local", TRUE
+      "UnitType", "Armor II", "Local", FALSE 
     }
 
 ; Vision benefit from fortress watchtowers

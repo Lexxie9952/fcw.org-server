@@ -113,9 +113,10 @@ tiles = { "row", "column", "tag"
   3,  2, "u.missile_destroyer" ; [Lexxie]
   3,  3, "u.war_galley"       ; unknown + Lexxie
   3,  4, "u.longboat"         ; Lexxie
-  ;3,  5, "u.battleship"      ; Lexxie
+; 3,  5, "u.battleship"      ; Lexxie
   3,  6, "u.atom_bomb"        ; Lexxie  
   3,  7, "u.galley"           ; Lexxie
   3,  8, "u.jet_fighter"      ; [Nemo] & [AHS] & [Lexxie]
   3,  9, "u.ram_ship"         ; Lexxie
+  3, 10, "u.armor_ii"         ; Wahazar & Lexxie
 }
