@@ -145,12 +145,12 @@ reqs    =
       "OutputType", "trade", "Local"
     }
 
-[effect_laborer]
+[effect_worker]
 type    = "Specialist_Output"
 value   = 1
 reqs    =
     { "type", "name", "range"
-      "Specialist", "laborer", "Local"
+      "Specialist", "worker", "Local"
       "OutputType", "shield", "Local"
     }
 

@@ -88,8 +88,8 @@ per turn.\
 ")
 
 
-[specialist_laborer]
-name            = _("Laborer")
+[specialist_worker]
+name            = _("Worker")
 ; (The original specialist names in the classic ruleset and derivatives were
 ; not designed to be user-visible.)
 rule_name       = "worker"
