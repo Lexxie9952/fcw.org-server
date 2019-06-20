@@ -92,7 +92,7 @@ per turn.\
 name            = _("Laborer")
 ; (The original specialist names in the classic ruleset and derivatives were
 ; not designed to be user-visible.)
-rule_name       = "laborer"
+rule_name       = "worker"
 short_name	= _("?Laborer:L")
 graphic         = "specialist.worker"
 reqs		=
