@@ -1918,7 +1918,7 @@ name		= _("Tesla's Laboratory")
 genus		= "SmallWonder"
 reqs	=
     { "type",     "name",                "range",  "present", "quiet"
-      "Tech",     "Invention",           "Player", TRUE,      FALSE
+      "Tech",     "Electricity",           "Player", TRUE,      FALSE
       "Building", "Tesla's Laboratory", "Player", FALSE,     TRUE
     }
 graphic	= "b.teslas_laboratory"
