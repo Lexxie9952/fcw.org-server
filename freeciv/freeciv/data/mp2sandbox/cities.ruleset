@@ -87,6 +87,23 @@ Each tax collector produces three extra gold for your treasury \
 per turn.\
 ")
 
+[specialist_police]
+name            = _("Policemen")
+rule_name       = "police"
+short_name	= _("?Police:P")
+graphic         = "specialist.police"
+reqs		=
+    { "type", "name", "range"
+; Nothing
+    }
+helptext        = _("\
+A policeman serves the same as troops\
+ in governments affected by martial law. They\
+ support domestic diplomats and spies against enemies'\
+ diplomats and spies for a 15% bonus. Hostile diplomatic\
+ actions have a 20% penalty.\ 
+")
+
 [specialist_worker]
 name            = _("Laborer")
 ; (The original specialist names in the classic ruleset and derivatives were
@@ -132,7 +149,7 @@ reqs		=
     }
 helptext        = _("\
 Each Farmer provides one food for their city per turn. Yet each\
- citizen consumes 2F/turn. Thus assigning a farmer may be useful\
+ citizen consumes 2 food/turn. Assigning a farmer may be useful\
  for a citizen who otherwise produces no food.\
 ")
 

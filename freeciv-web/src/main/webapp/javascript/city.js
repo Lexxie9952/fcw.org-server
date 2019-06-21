@@ -1249,11 +1249,13 @@ function city_change_specialist(city_id, from_specialist_id)
     "from" : from_specialist_id,
     "to" : (from_specialist_id + 1) % 3}; 
   }
-  else  // mp2 has 6 specialists
+  else  // mp2 has 7 specialists
   {
     var to_specialist_id = from_specialist_id + 1;
-    if (to_specialist_id == 6) to_specialist_id = 0;
-    
+    // TO DO: the last 3 specialists have zero effect without Adam Smith Wonder,
+    // Check for Adam Smith and if player lacks it, recycle it at ==4 instead of ==7.
+    if (to_specialist_id == 7) to_specialist_id = 0;
+
     city_message = {"pid": packet_city_change_specialist,
     "city_id" : city_id,
     "from" : from_specialist_id,
