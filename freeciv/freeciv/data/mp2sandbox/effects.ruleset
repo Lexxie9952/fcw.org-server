@@ -138,7 +138,7 @@ reqs    =
 
 [effect_merchant]
 type    = "Specialist_Output"
-value   = 3
+value   = 2
 reqs    =
     { "type", "name", "range"
       "Specialist", "merchant", "Local"
