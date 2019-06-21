@@ -1913,6 +1913,29 @@ Adds to science production in all your cities with\
  This Wonder does not become obsolete.\
 ")
 
+[building_teslas_laboratory]
+name		= _("Tesla's Laboratory")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",                "range",  "present", "quiet"
+      "Tech",     "Invention",           "Player", TRUE,      FALSE
+      "Building", "Tesla's Laboratory", "Player", FALSE,     TRUE
+    }
+graphic	= "b.teslas_laboratory"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 200
+upkeep		= 0
+sabotage	= 0
+sound		= "w_teslas_laboratory"
+sound_alt	= "w_generic"
+helptext	= _("\
+Upgrades one obsolete unit per turn.  This Wonder\
+ does not become obsolete.\
+")
+
 [building_united_nations]
 name		= _("United Nations")
 genus		= "GreatWonder"

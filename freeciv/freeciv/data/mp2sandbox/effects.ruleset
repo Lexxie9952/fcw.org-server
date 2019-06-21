@@ -3264,6 +3264,15 @@ reqs    =
       "OutputType", "Science", "Local"
     }
 
+
+[effect_teslas_laboratory]
+type    = "Upgrade_Unit"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Building", "Tesla's Laboratory", "Player"
+    }    
+
 [effect_oracle]
 type    = "Make_Content"
 value	= 2

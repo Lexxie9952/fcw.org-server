@@ -9,21 +9,26 @@ artists = "
   Special thanks to Brendon Oram (Yautja) for the frame!
 
   Lexxie9952
-  b.marco_polos_embassy
+  b.eiffel_tower
   b.great_library
-  b.lighthouse
-  b.michelangelos_chapel
+  b.great_wall
   b.isaac_newtons_college
+  b.js_bachs_cathedral
+  b.king_richards_crusade
+  b.lighthouse
+  b.marco_polos_embassy
+  b.mausoleum
+  b.michelangelos_chapel
   b.pyramids
   b.copernicus_observatory
   b.hanging_gardens
-  b.temple_of_artemis
   b.leonardos_workshop
   b.magellans_expedition
+  b.statue_of_liberty
+  b.temple_of_artemis
+  b.teslas_laboratory
   b.womens_suffrage
-  b.king_richards_crusade
-  b.great_wall
-
+ 
   Daniel Markstedt
   b.darwins_voyage
 
@@ -32,9 +37,6 @@ artists = "
   b.cure_for_cancer
   b.shakespeares_theatre
   b.united_nations
-
-  Daniel Markstedt & Frederic Rodrigo
-  b.js_bachs_cathedral
 
   Paul Zastoupil
   b.asmiths_trading_co
@@ -45,13 +47,10 @@ artists = "
 
   PD images
   b.apollo_program
-  b.eiffel_tower
   b.hoover_dam
   b.manhattan_project
-  b.oracle
-  b.statue_of_liberty
+  b.oracle, embossed by Lexxie
   b.statue_of_zeus
-  b.mausoleum
 "
 
 [extra]
@@ -88,6 +87,7 @@ sprites =
 		"b.statue_of_liberty", "wonders/statue_of_liberty"
                 "b.statue_of_zeus", "wonders/statue_of_zeus"
 		"b.sun_tzus_war_academy", "wonders/sun_tzus_war_academy"
+                "b.teslas_laboratory", "wonders/teslas_laboratory"
                 "b.temple_of_artemis", "wonders/temple_of_artemis"
 		"b.united_nations", "wonders/united_nations"
 		"b.womens_suffrage", "wonders/womens_suffrage"
