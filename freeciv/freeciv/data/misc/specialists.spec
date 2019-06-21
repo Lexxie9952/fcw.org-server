@@ -29,6 +29,8 @@ tiles = { "row", "column", "tag"
   0,  3, "specialist.scientist_1"
   0,  4, "specialist.taxman_0"
   0,  5, "specialist.taxman_1"
+  0,  12,"specialist.police_0"  ;put out of place because sprite sheet order is hard-coded as the cycling order and this belongs before the others
+  0,  13,"specialist.police_1"  ;some things are hard-coded to expect two alternating images 
   0,  6, "specialist.worker_0"
   0,  7, "specialist.worker_1"
   0,  8, "specialist.farmer_0"
