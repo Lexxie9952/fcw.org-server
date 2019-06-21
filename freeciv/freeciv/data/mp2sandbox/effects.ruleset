@@ -148,32 +148,32 @@ reqs	=
       "Specialist", "police", "Local"
     }
 [effect_police_1]
-type    = "Martial_Law_Each"
-value   = 1
+type    = "Force_Content"
+value	= 1
 reqs	=
     { "type",       "name",      "range"
       "Specialist", "police", "Local"
       "Gov", "Anarchy", "Player"
     }
 [effect_police_2]
-type    = "Martial_Law_Each"
-value   = 1
+type    = "Force_Content"
+value	= 1
 reqs	=
     { "type",       "name",      "range"
       "Specialist", "police", "Local"
       "Gov", "Despotism", "Player"
     }
 [effect_police_3]
-type    = "Martial_Law_Each"
-value   = 1
+type    = "Force_Content"
+value	= 1
 reqs	=
     { "type",       "name",      "range"
       "Specialist", "police", "Local"
       "Gov", "Monarchy", "Player"
     }
 [effect_police_4]
-type    = "Martial_Law_Each"
-value   = 2
+type    = "Force_Content"
+value	= 2
 reqs	=
     { "type",       "name",      "range"
       "Specialist", "police", "Local"
