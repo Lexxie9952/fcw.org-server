@@ -87,9 +87,8 @@ Each tax collector produces three extra gold for your treasury \
 per turn.\
 ")
 
-
 [specialist_worker]
-name            = _("Worker")
+name            = _("Laborer")
 ; (The original specialist names in the classic ruleset and derivatives were
 ; not designed to be user-visible.)
 rule_name       = "worker"
@@ -115,7 +114,7 @@ reqs		=
 ; Nothing
     }
 helptext        = _("\
-Each Merchant produces three trade points for their city per turn.\
+Each Merchant produces two trade points for their city per turn.\
  Trade will then be partioned by your nation's tax rates into\
  Gold, Science, and Luxury.\
 ")

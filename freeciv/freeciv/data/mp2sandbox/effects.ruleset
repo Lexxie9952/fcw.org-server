@@ -143,6 +143,7 @@ reqs    =
     { "type", "name", "range"
       "Specialist", "merchant", "Local"
       "OutputType", "trade", "Local"
+      "Building", "A.Smith's Trading Co.", "Player"
     }
 
 [effect_worker]
@@ -152,6 +153,7 @@ reqs    =
     { "type", "name", "range"
       "Specialist", "worker", "Local"
       "OutputType", "shield", "Local"
+      "Building", "A.Smith's Trading Co.", "Player"
     }
 
 [effect_farmer]
@@ -161,6 +163,7 @@ reqs    =
     { "type", "name", "range"
       "Specialist", "farmer", "Local"
       "OutputType", "food", "Local"
+      "Building", "A.Smith's Trading Co.", "Player"
     }
 
 

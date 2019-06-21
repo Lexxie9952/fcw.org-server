@@ -1178,7 +1178,25 @@ sound		= "w_asmiths_trading_co"
 sound_alt	= "w_generic"
 helptext	= _("\
 City improvements with upkeep of 1 gold become free\
- of upkeep for all your cities. This wonder is never obsolete.\
+ of upkeep for all your cities. In addition, this Wonder\
+ allows three more specialists who are generally of\
+ lower value than the standard three. However, they can provide an\
+ economist with the ability to flexibly tune output.\
+"), _("
+Each Laborer produces one production point for their city per turn.\
+ That is, a Laborer gives the same output as a blank mountain tile.\
+"), _("
+Each Merchant produces two trade points for their city per turn.\
+ Trade will then be distributed according to your national tax rates into\
+ Gold, Science, and Luxury. A Merchant can be thought of as giving\
+ output similar to a road/river Desert tile.\
+"), _("
+Each Farmer provides one food for their city per turn. Yet each\
+ citizen consumes 2 food per turn. Assigning a farmer can only be useful\
+ for a citizen who otherwise produces no food. A Farmer gives\
+ the same output as a blank hill or swamp tile.\
+"), _("
+ This wonder is never obsolete.\
 ")
 
 [building_colossus]
