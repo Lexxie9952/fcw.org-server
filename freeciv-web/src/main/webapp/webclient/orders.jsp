@@ -51,6 +51,9 @@
     <a href="#" onclick="key_unit_canal();"><img src="/images/orders/canal.png" name="canal_button" alt="" border="0" width="30" height="30"></a>
   </div>
 
+  <div id="order_well" class="order_button" title="Dig well">
+    <a href="#" onclick="key_unit_well();"><img src="/images/orders/well.png" name="well_button" alt="" border="0" width="30" height="30"></a>
+  </div>
 
   <div id="order_mine" class="order_button" title="Build mine (M)">
     <a href="#" onclick="key_unit_mine();"><img src="/images/orders/mine_default.png" name="mine_button" alt="" border="0" width="30" height="30"></a>

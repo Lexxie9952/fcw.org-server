@@ -881,6 +881,7 @@ function update_unit_order_commands()
 
   $("#order_maglev").hide();
   $("#order_canal").hide();
+  $("#order_well").hide();
 
   for (i = 0; i < funits.length; i++) {
     punit = funits[i];
@@ -1027,6 +1028,11 @@ function update_unit_order_commands()
     if (can_build_canal(punit, ptile)) {
       $("#order_canal").show();
       unit_actions["canal"] = {name: "Build canal"};
+    }
+
+    if (can_build_well(punit, ptile)) {
+      $("#order_well").show();
+      unit_actions["well"] = {name: "Dig well"};
     }
 
     /* Practically all unit types can currently perform some action. */
@@ -2175,6 +2181,10 @@ function handle_context_menu_callback(key)
       key_unit_canal();
       break;
 
+    case "well":
+      key_unit_well();
+      break;  
+
     case "mine":
       key_unit_mine();  // and plant forest
       break;
@@ -2721,7 +2731,36 @@ function key_unit_mine()
 
 
 /**************************************************************************
- Check whether a unit can build a canal in a tile.
+ Check whether a unit can build a "well" (river) on a tile.
+**************************************************************************/
+function can_build_well(punit, ptile)
+{
+  return ( (punit != null && ptile != null)
+      &&  (!tile_has_extra(ptile, EXTRA_RIVER))
+      &&  (unit_types[punit['type']]['name'] == "Well-Digger")
+      // TODO: &&  (tile custom flag low land)
+      &&  (player_invention_state(client.conn.playing, tech_id_by_name('Pottery')) != TECH_KNOWN)
+      &&  (player_invention_state(client.conn.playing, tech_id_by_name('Alphabet')) != TECH_KNOWN)
+         );
+}
+/**************************************************************************
+ Tell the unit(s) in focus to build a "well" (river)
+**************************************************************************/
+function key_unit_well()
+{
+  const funits = get_units_in_focus();
+  for (var i = 0; i < funits.length; i++) {
+    const punit = funits[i];
+    const ptile = index_to_tile(punit['tile']);
+    if (can_build_well(punit, ptile)) {
+      request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['River']['id']);
+    }
+  }
+  setTimeout(update_unit_focus, 700);
+}
+
+/**************************************************************************
+ Check whether a unit can build a canal on a tile.
 **************************************************************************/
 function can_build_canal(punit, ptile)
 {
