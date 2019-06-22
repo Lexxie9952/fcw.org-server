@@ -1262,7 +1262,7 @@ function city_change_specialist(city_id, from_specialist_id)
     } else {
       if (to_specialist_id == 3) to_specialist_id = 0;
     } 
-    
+
     city_message = {"pid": packet_city_change_specialist,
     "city_id" : city_id,
     "from" : from_specialist_id,
@@ -1472,7 +1472,8 @@ function city_worklist_dialog(pcity)
         "" : " cannot_build_item")
      + "' data-wlitem='" + j + "' "
      + " title=\"" + universal['helptext'] + "\">"
-     + "<td><div class='production_list_item_sub' ondblclick='city_add_to_worklist();' style=' background: transparent url("
+     + "<td><div class='production_list_item_sub' ondblclick='city_add_to_worklist();' onclick='check_city_prod_click(event);' "
+           + "style=' background: transparent url("
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'"
@@ -1827,6 +1828,14 @@ function city_change_production()
   }
 }
 
+/**************************************************************************
+... Check if CTRL is pressed when clicking on city prod. list. If so, 
+    instantly change active production to this item.
+**************************************************************************/
+function check_city_prod_click(ev)
+{
+  if (ev.ctrlKey) city_change_production();
+}
 
 /**************************************************************************
 ...
