@@ -1243,24 +1243,31 @@ function city_change_specialist(city_id, from_specialist_id)
 {
   var city_message;
 
+  // Standard case: cycle through 3 specialists if not mp2 rules:
   if (ruleset_control['name'] != "Multiplayer-Evolution ruleset") {
     city_message = {"pid": packet_city_change_specialist,
     "city_id" : city_id,
     "from" : from_specialist_id,
     "to" : (from_specialist_id + 1) % 3}; 
   }
-  else  // mp2 has 7 specialists
-  {
+  else  // mp2 has 6 specialists accessible under specific conditions
+  {     // unfortuantely this has to be hard-coded because the server lets you select "dead" specialists who don't meet reqs
     var to_specialist_id = from_specialist_id + 1;
-    // TO DO: the last 3 specialists have zero effect without Adam Smith Wonder,
-    // Check for Adam Smith and if player lacks it, recycle it at ==4 instead of ==7.
-    if (to_specialist_id == 7) to_specialist_id = 0;
+    
+    // The first 3 specialists are universally accessible. Specialists 4-6 are unlocked 
+    // only if the player has the Adam Smith wonder. Cycle through 3 specialists UNLESS
+    // the player has Adam Smith, otherwise cycle through 6:
+    if ( player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_ADAM_SMITH_NAME)) ) 
+      if (to_specialist_id == 6) to_specialist_id = 0;
+    else 
+      if (to_specialist_id == 3) to_specialist_id = 0;
 
     city_message = {"pid": packet_city_change_specialist,
     "city_id" : city_id,
     "from" : from_specialist_id,
     "to" : to_specialist_id}; 
   }
+
   send_request(JSON.stringify(city_message)); 
 }
 
