@@ -1835,25 +1835,15 @@ function city_change_production()
 }
 
 /**************************************************************************
-... this function appears to have never been called, we'll leave it dead
-for a while and see if anything breaks
-**************************************************************************
-function city_add_to_worklist(ev)
+... 
+*************************************************************************/
+function city_add_to_worklist()
 {
-  console.log("city_add_to_worklist(ev) called with ev=="+ev);
-  // if ctrl-key pressed (or cmd-key on Mac), change current production:
-  if (ev.ctrlKey || ev.metaKey ) {
-    city_change_production();
-    return;
-  }
-
-  // otherwise add to worklist
   if (production_selection.length > 0) {
     active_city['worklist'] = active_city['worklist'].concat(production_selection);
     send_city_worklist(active_city['id']);
   }
 }
-*/
 
 /**************************************************************************
  Handles dblclick-issued removal
