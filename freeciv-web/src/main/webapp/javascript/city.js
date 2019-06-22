@@ -1472,7 +1472,8 @@ function city_worklist_dialog(pcity)
         "" : " cannot_build_item")
      + "' data-wlitem='" + j + "' "
      + " title=\"" + universal['helptext'] + "\">"
-     + "<td><div class='production_list_item_sub' ondblclick='city_add_to_worklist(event);'' "
+     + "<td><div class='production_list_item_sub' "
+        // +"ondblclick='city_add_to_worklist(event);'' " // it seems this was superfluous since generate_production_list adds it to each item
            + "style=' background: transparent url("
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
@@ -1625,9 +1626,14 @@ function populate_worklist_production_choices(pcity)
       prod_items.filter(sel.join(",")).addClass("ui-selected");
     }
 
-    $(".kindvalue_item").dblclick(function() {
+    $(".kindvalue_item").dblclick(function(e) {
       var value = parseFloat($(this).data('value'));
       var kind = parseFloat($(this).data('kind'));
+      
+      if (e.ctrlKey || e.metaKey ) {
+        city_change_production();
+        return;
+      }
       send_city_worklist_add(pcity['id'], kind, value);
     });
   } else {
@@ -1829,8 +1835,9 @@ function city_change_production()
 }
 
 /**************************************************************************
-...
-**************************************************************************/
+... this function appears to have never been called, we'll leave it dead
+for a while and see if anything breaks
+**************************************************************************
 function city_add_to_worklist(ev)
 {
   console.log("city_add_to_worklist(ev) called with ev=="+ev);
@@ -1846,6 +1853,7 @@ function city_add_to_worklist(ev)
     send_city_worklist(active_city['id']);
   }
 }
+*/
 
 /**************************************************************************
  Handles dblclick-issued removal
