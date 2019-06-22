@@ -838,9 +838,7 @@ function handle_unit_combat_info(packet)
       var defender_nation = players[defender['owner']]['nation'];
       var attacker_nation = players[attacker['owner']]['nation'];
       var player_is_combatant = (player_nation==nations[defender_nation]['adjective'] || player_nation==nations[attacker_nation]['adjective']);
-      var attacker_visible = is_unit_visible(attacker);
-      var defender_visible = is_unit_visible(defender);
-      var combatant_visible = (attacker_visible || defender_visible) ? 1 : 0;
+      var combatant_visible = (is_unit_visible(attacker) || is_unit_visible(defender));
 
       // When an attacker loses, play sound for defender if: a combatant is visible OR the player was involved in the battle. 
       if (attacker_hp == 0 && (combatant_visible || player_is_combatant) )  {
@@ -849,7 +847,7 @@ function handle_unit_combat_info(packet)
       }
       // When a defender loses, play sound for attacker if: a combatant is visible OR the player was involved in the battle.
       if (defender_hp == 0  && (combatant_visible || player_is_combatant) ) {
-        if (combatant_visibile) explosion_anim_map[defender['tile']] = 25;
+        if (combatant_visible) explosion_anim_map[defender['tile']] = 25;
         play_combat_sound(attacker); //defender lost, player attacker combat sound
       }
       // When both units survive due to combat rounds/bombardment/etc.
