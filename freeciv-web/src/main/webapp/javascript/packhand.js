@@ -829,7 +829,11 @@ function handle_unit_combat_info(packet)
     if (attacker_hp == 0) animate_explosion_on_tile(attacker['tile'], 0);
     if (defender_hp == 0) animate_explosion_on_tile(defender['tile'], 0);
     // TO DO: WEBGL is missing out on all this below, which we should put in after it's final
-  } else {
+  } 
+  
+  else {
+      var pplayer = players[client.conn.playing['playerno']];
+    
       var player_nation = nations[pplayer['nation']]['adjective'];
       var defender_nation = players[defender['owner']]['nation'];
       var attacker_nation = players[attacker['owner']]['nation'];
