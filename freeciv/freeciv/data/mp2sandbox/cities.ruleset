@@ -87,23 +87,6 @@ Each tax collector produces three extra gold for your treasury \
 per turn.\
 ")
 
-[specialist_police]
-name            = _("Policemen")
-rule_name       = "police"
-short_name	= _("?Police:P")
-graphic         = "specialist.police"
-reqs		=
-    { "type", "name", "range"
-; Nothing
-    }
-helptext        = _("\
-A policeman serves the same as troops\
- in governments affected by martial law. They\
- support domestic diplomats and spies against enemies'\
- diplomats and spies for a 15% bonus. Hostile diplomatic\
- actions have a 20% penalty.\ 
-")
-
 [specialist_worker]
 name            = _("Laborer")
 ; (The original specialist names in the classic ruleset and derivatives were
