@@ -828,19 +828,28 @@ function handle_unit_combat_info(packet)
   if (renderer == RENDERER_WEBGL) {
     if (attacker_hp == 0) animate_explosion_on_tile(attacker['tile'], 0);
     if (defender_hp == 0) animate_explosion_on_tile(defender['tile'], 0);
+    // TO DO: WEBGL is missing out on all this below, which we should put in after it's final
   } else {
-      // We used to play the sound only if the unit being killed were visible. But for every rare case
-      // where the unit is not visible for some reason, it still seemed preferable to hear the sound. 
-      if (attacker_hp == 0 /* && is_unit_visible(attacker) */) {
-       explosion_anim_map[attacker['tile']] = 25;
-       play_combat_sound(defender); //attacker lost, player defender combat sound
+      var player_nation = nations[pplayer['nation']]['adjective'];
+      var defender_nation = players[defender['owner']]['nation'];
+      var attacker_nation = players[attacker['owner']]['nation'];
+      var player_is_combatant = (player_nation==nations[defender_nation]['adjective'] || player_nation==nations[attacker_nation]['adjective']);
+      var attacker_visible = is_unit_visible(attacker);
+      var defender_visible = is_unit_visibile(defender);
+      var combatant_visible = attacker_visible || defender_visible;
+
+      // When an attacker loses, play sound for defender if: a combatant is visible OR the player was involved in the battle. 
+      if (attacker_hp == 0 && (combatant_visible || player_is_combatant) )  {
+        if (combatant_visible) explosion_anim_map[attacker['tile']] = 25;
+        play_combat_sound(defender); //attacker lost, player defender combat sound
       }
-      if (defender_hp == 0 /* && is_unit_visible(defender) */) {
-        explosion_anim_map[defender['tile']] = 25;
+      // When a defender loses, play sound for attacker if: a combatant is visible OR the player was involved in the battle.
+      if (defender_hp == 0  && (combatant_visible || player_is_combatant) ) {
+        if (combatant_visibile) explosion_anim_map[defender['tile']] = 25;
         play_combat_sound(attacker); //defender lost, player attacker combat sound
       }
-      // special new case in some rulesets: both units survive due to combat rounds/bombardment/etc.
-      if (defender_hp > 0 && attacker_hp > 0 /* && ((is_unit_visible(attacker) || is_unit_visible(defender))*/  ) 
+      // When both units survive due to combat rounds/bombardment/etc.
+      if (defender_hp > 0 && attacker_hp > 0 && (combatant_visible || player_is_combatant) ) 
       {
         play_combat_sound(attacker); 
         play_combat_sound(defender); 
@@ -849,12 +858,19 @@ function handle_unit_combat_info(packet)
         update_tile_unit(defender);
         //update_map_canvas_full();
 
-        // it was not sending a message after battle, so inject one here:
-        var unit_nation = players[defender['owner']]['nation'];
-        var defend_unit = nations[unit_nation]['adjective'] + " " + unit_types[defender['type']]['name'];
-        var attack_unit = "Your " + unit_types[attacker['type']]['name'];
-        var special_message = "A valiant battle with no winner! "+attack_unit+" retains "+attacker_hp+"hp while reducing the "
-                            + defend_unit+" to "+defender_hp+"hp.";
+        // Construct the names of the defender unit: e.g., "Your Cannon", "French Cavalry", etc.
+        var defend_unit = "the " + nations[defender_nation]['adjective'];
+        if (nations[defender_nation]['adjective']==player_nation) defend_unit = "your";
+        defend_unit = defend_unit + " " + unit_types[defender['type']]['name'];
+        // Construct name of attacker unit:
+        var attack_unit = "the " + nations[attacker_nation]['adjective']; 
+        if (nations[attacker_nation]['adjective']==player_nation) attack_unit = "your";
+        attack_unit = attack_unit + " " + unit_types[attacker['type']]['name'];
+
+        // It was not sending a message after battle, so inject one here:
+        var special_message = "A valiant battle with no winner: "+attack_unit+" survived with "+attacker_hp+"hp while reducing "
+                            + defend_unit+" to "+defender_hp+"hp.";  
+        // TO DO: special message is clickable like the others, taking you to the map location it happened.                    
         
         var scrollDiv = get_chatbox_msg_list();
         if (scrollDiv != null) {
