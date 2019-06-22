@@ -1257,11 +1257,12 @@ function city_change_specialist(city_id, from_specialist_id)
     // The first 3 specialists are universally accessible. Specialists 4-6 are unlocked 
     // only if the player has the Adam Smith wonder. Cycle through 3 specialists UNLESS
     // the player has Adam Smith, otherwise cycle through 6:
-    if ( player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_ADAM_SMITH_NAME)) ) 
+    if ( player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_ADAM_SMITH_NAME)) ) {
       if (to_specialist_id == 6) to_specialist_id = 0;
-    else 
+    } else {
       if (to_specialist_id == 3) to_specialist_id = 0;
-
+    } 
+    
     city_message = {"pid": packet_city_change_specialist,
     "city_id" : city_id,
     "from" : from_specialist_id,
