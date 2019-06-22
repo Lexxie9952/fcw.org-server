@@ -829,21 +829,23 @@ function handle_unit_combat_info(packet)
     if (attacker_hp == 0) animate_explosion_on_tile(attacker['tile'], 0);
     if (defender_hp == 0) animate_explosion_on_tile(defender['tile'], 0);
   } else {
-      if (attacker_hp == 0 && is_unit_visible(attacker)) {
+      // We used to play the sound only if the unit being killed were visible. But for every rare case
+      // where the unit is not visible for some reason, it still seemed preferable to hear the sound. 
+      if (attacker_hp == 0 /* && is_unit_visible(attacker) */) {
        explosion_anim_map[attacker['tile']] = 25;
        play_combat_sound(defender); //attacker lost, player defender combat sound
       }
-      if (defender_hp == 0 && is_unit_visible(defender)) {
+      if (defender_hp == 0 /* && is_unit_visible(defender) */) {
         explosion_anim_map[defender['tile']] = 25;
         play_combat_sound(attacker); //defender lost, player attacker combat sound
       }
       // special new case in some rulesets: both units survive due to combat rounds/bombardment/etc.
-      if (defender_hp > 0 && attacker_hp > 0 && (is_unit_visible(attacker) || is_unit_visible(defender) ) ) 
+      if (defender_hp > 0 && attacker_hp > 0 /* && ((is_unit_visible(attacker) || is_unit_visible(defender))*/  ) 
       {
         play_combat_sound(attacker); 
         play_combat_sound(defender); 
         
-        update_tile_unit(attacker);   // force a redraw, was not happening
+        update_tile_unit(attacker);   // force a redraw, TO DO: this doesn't work yet.
         update_tile_unit(defender);
         //update_map_canvas_full();
 
