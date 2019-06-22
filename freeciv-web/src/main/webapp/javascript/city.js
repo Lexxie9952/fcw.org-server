@@ -1472,7 +1472,7 @@ function city_worklist_dialog(pcity)
         "" : " cannot_build_item")
      + "' data-wlitem='" + j + "' "
      + " title=\"" + universal['helptext'] + "\">"
-     + "<td><div class='production_list_item_sub' ondblclick='city_add_to_worklist();' onclick='check_city_prod_click(event);' "
+     + "<td><div class='production_list_item_sub' ondblclick='city_add_to_worklist(event);'' "
            + "style=' background: transparent url("
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
@@ -1829,19 +1829,18 @@ function city_change_production()
 }
 
 /**************************************************************************
-... Check if CTRL is pressed when clicking on city prod. list. If so, 
-    instantly change active production to this item.
-**************************************************************************/
-function check_city_prod_click(ev)
-{
-  if (ev.ctrlKey) city_change_production();
-}
-
-/**************************************************************************
 ...
 **************************************************************************/
-function city_add_to_worklist()
+function city_add_to_worklist(ev)
 {
+  console.log("city_add_to_worklist(ev) called with ev=="+ev);
+  // if ctrl-key pressed (or cmd-key on Mac), change current production:
+  if (ev.ctrlKey || ev.metaKey ) {
+    city_change_production();
+    return;
+  }
+
+  // otherwise add to worklist
   if (production_selection.length > 0) {
     active_city['worklist'] = active_city['worklist'].concat(production_selection);
     send_city_worklist(active_city['id']);
