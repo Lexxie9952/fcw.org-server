@@ -840,7 +840,7 @@ function handle_unit_combat_info(packet)
       var player_is_combatant = (player_nation==nations[defender_nation]['adjective'] || player_nation==nations[attacker_nation]['adjective']);
       var attacker_visible = is_unit_visible(attacker);
       var defender_visible = is_unit_visible(defender);
-      var combatant_visible = attacker_visible || defender_visible;
+      var combatant_visible = (attacker_visible || defender_visible) ? 1 : 0;
 
       // When an attacker loses, play sound for defender if: a combatant is visible OR the player was involved in the battle. 
       if (attacker_hp == 0 && (combatant_visible || player_is_combatant) )  {
