@@ -889,6 +889,7 @@ function update_unit_order_commands()
   $("#order_road").hide();  //mp2 legion can road
   $("#order_railroad").hide();
   $("#order_mine").hide();
+  $("#order_fortify").hide();  //inserted: not all non-Settlers can fortify (air/sea)
   $("#order_irrigate").hide(); //mp2 well-digger can irrigate
   $("#order_build_farmland").hide();
   $("#order_auto_settlers").hide();
