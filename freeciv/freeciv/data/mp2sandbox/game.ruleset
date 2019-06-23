@@ -278,6 +278,9 @@ ui_name_incite_city_escape = _("Incite a Re%svolt and Escape%s")
 ; /* TRANS: Establish Trade _Route (100% chance of success). */
 ui_name_establish_trade_route = _("Establish Trade %sRoute%s")
 
+; /* TRANS: Enter _Marketplace (100% chance of success). */
+ui_name_enter_marketplace = _("Enter %sMarketplace%s")
+
 ; /* TRANS: Establish _Embassy (100% chance of success). */
 ui_name_establish_embassy = _("Establish %sEmbassy%s")
 
@@ -1160,8 +1163,9 @@ target_reqs    =
 [actionenabler_irrigate_welldigger]
 action        = "Build Irrigation"
 actor_reqs    =
-     { "type",     "name",        "range"
-       "UnitFlag", "Well-Digger", "Local"
+     { "type",     "name",        "range", "present"
+       "UnitFlag", "Settlers",    "Local", TRUE
+       "UnitFlag", "Well-Digger", "Local", TRUE
      }
 target_reqs    =
      { "type",    "name", "range", "present"
