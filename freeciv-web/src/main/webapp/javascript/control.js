@@ -1153,6 +1153,8 @@ function update_unit_order_commands()
       NO ORDERS added to line of code below, and button here
       $("#order_wait").show();
       CANCEL ORDERS added to line of code below, and button here
+
+      auto-attack
   */
 
   unit_actions = $.extend(unit_actions, {
