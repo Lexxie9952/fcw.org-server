@@ -23,6 +23,7 @@ description_file = "mp2/README.mp2"
 
 [about]
 ; Ruleset name
+; DO NOT CHANGE, FCW unfortunately has to hard-code certain special cases for this.
 name = _("Multiplayer-Evolution ruleset")
 
 ; There`s no separate versioning in rulesets part of main freeciv distribution
