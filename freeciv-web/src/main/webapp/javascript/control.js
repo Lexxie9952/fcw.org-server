@@ -882,6 +882,7 @@ function update_unit_order_commands()
   $("#order_maglev").hide();
   $("#order_canal").hide();
   $("#order_well").hide();
+  $("#order_fortress").hide();
 
   for (i = 0; i < funits.length; i++) {
     punit = funits[i];
@@ -920,6 +921,28 @@ function update_unit_order_commands()
     if (ptile == null) continue;
     pcity = tile_city(ptile);
 
+    // mp2 rules allow Legions to build Forts and road on non-domestic tiles-------------
+    // this is very hacky, we should look at how other clients are coding these things
+    if (ruleset_control['name'] == "Multiplayer-Evolution ruleset" && ptype['name'] == "Legion") {
+      
+      // Forts:
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Masonry')) == TECH_KNOWN) {
+        unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
+        $("#order_fortress").show();           
+      } // TO DO: add fort button also
+      
+      // Roads:
+      if (!tile_has_extra(ptile, EXTRA_ROAD)) { // TO DO, check if ptile is non-domestic
+        if (tile_has_extra(ptile, EXTRA_RIVER) && player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) == TECH_UNKNOWN)
+          $("#order_road").hide(); // can't build road on river if bridge-building not known
+        else {
+          $("#order_road").show();
+          unit_actions["road"] = {name: "Build road (R)"};
+        }
+      }
+    } //-------------------------
+
+    // TO DO:  this should be checking for the FLAG "Settlers" in the ptype which indicates who can do the follow build/road/mine/etc. actions:
     if (ptype['name'] == "Settlers" || ptype['name'] == "Workers"
         || ptype['name'] == "Engineers") {
 
@@ -1001,10 +1024,14 @@ function update_unit_order_commands()
       if (ruleset_control['name'] == "Multiplayer-Evolution ruleset") {
         if (player_invention_state(client.conn.playing, tech_id_by_name('Masonry')) == TECH_KNOWN) {
           unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
+          $("#order_fortress").show();
         }
-      } else if (player_invention_state(client.conn.playing, tech_id_by_name('Construction')) == TECH_KNOWN) {
+      }
+      // non-mp2 default case:
+      else if (player_invention_state(client.conn.playing, tech_id_by_name('Construction')) == TECH_KNOWN) {
         // every other ruleset needs Construction to unlock building Fortresses:
         unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
+        $("#order_fortress").show();
       }
 
       if (player_invention_state(client.conn.playing, tech_id_by_name('Radio')) == TECH_KNOWN) {
@@ -2212,7 +2239,7 @@ function handle_context_menu_callback(key)
     case "fortress":
       key_unit_fortress();
       break;
-    case "fort": /////
+    case "fort": 
       key_unit_fortress();
 
     case "airbase":
@@ -2728,7 +2755,6 @@ function key_unit_mine()
   }
   setTimeout(update_unit_focus, 700);
 }
-
 
 /**************************************************************************
  Check whether a unit can build a "well" (river) on a tile.

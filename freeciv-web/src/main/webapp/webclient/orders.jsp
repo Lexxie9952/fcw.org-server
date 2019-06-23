@@ -55,6 +55,10 @@
     <a href="#" onclick="key_unit_well();"><img src="/images/orders/well.png" name="well_button" alt="" border="0" width="30" height="30"></a>
   </div>
 
+  <div id="order_fortress" class="order_button" title="Build Fort (Shift-F)">
+    <a href="#" onclick="key_unit_fortress();"><img src="/images/orders/fortress.png" name="fortress_button" alt="" border="0" width="30" height="30"></a>
+  </div>
+
   <div id="order_mine" class="order_button" title="Build mine (M)">
     <a href="#" onclick="key_unit_mine();"><img src="/images/orders/mine_default.png" name="mine_button" alt="" border="0" width="30" height="30"></a>
   </div>
