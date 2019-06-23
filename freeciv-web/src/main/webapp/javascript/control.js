@@ -883,6 +883,17 @@ function update_unit_order_commands()
   $("#order_canal").hide();
   $("#order_well").hide();
   $("#order_fortress").hide();
+  // These were in the "else", when unit is not Settler-type. But were hiding
+  // some legitimate abilities of other units.  Instead, just default 
+  // them as off and see if the checks below turn them back on:
+  $("#order_road").hide();  //mp2 legion can road
+  $("#order_railroad").hide();
+  $("#order_mine").hide();
+  $("#order_irrigate").hide(); //mp2 well-digger can irrigate
+  $("#order_build_farmland").hide();
+  $("#order_auto_settlers").hide();
+  $("#order_pollution").hide();
+  $("#order_forest_remove").hide(); //inserted this: it was showing chop forest for every unit type
 
   for (i = 0; i < funits.length; i++) {
     punit = funits[i];
@@ -929,7 +940,7 @@ function update_unit_order_commands()
       if (player_invention_state(client.conn.playing, tech_id_by_name('Masonry')) == TECH_KNOWN) {
         unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
         $("#order_fortress").show();           
-      } // TO DO: add fort button also
+      } 
       
       // Roads:
       if (!tile_has_extra(ptile, EXTRA_ROAD)) { // TO DO, check if ptile is non-domestic
@@ -1014,7 +1025,7 @@ function update_unit_order_commands()
         $("#order_irrigate").hide();
         $("#order_forest_remove").hide();
         unit_actions["irrigation"] = {name: "Build farmland (I)"};
-      } else {
+      } else {    
         $("#order_forest_remove").hide();
         $("#order_irrigate").hide();
         $("#order_build_farmland").hide();
@@ -1038,17 +1049,10 @@ function update_unit_order_commands()
         unit_actions["airbase"] = {name: string_unqualify(terrain_control['gui_type_base1']) + " (E)"};
       }
 
-    } else {
-      $("#order_road").hide();
-      $("#order_railroad").hide();
-      $("#order_mine").hide();
-      $("#order_irrigate").hide();
-      $("#order_build_farmland").hide();
-      $("#order_fortify").show();
-      $("#order_auto_settlers").hide();
-      $("#order_sentry").show();
+    } else {   // Handle all things non-Settler types may have in common here:
+      if (utype_can_do_action(ptype, ACTION_FORTIFY)) $("#order_fortify").show();  
+      $("#order_sentry").show();  // TO DO?: air units and new triremes can't sentry outside a fueling tile      
       $("#order_explore").show();
-      $("#order_pollution").hide();
       unit_actions["fortify"] = {name: "Fortify (F)"};
     }
 
@@ -1057,9 +1061,11 @@ function update_unit_order_commands()
       unit_actions["canal"] = {name: "Build canal"};
     }
 
-    if (can_build_well(punit, ptile)) {
+    if (can_build_well(punit, ptile)) {   // Well-Digger
       $("#order_well").show();
       unit_actions["well"] = {name: "Dig well"};
+      $("#order_irrigate").show();  // can also irrigate any tile it can dig a well
+      unit_actions["irrigation"] = {name: "Irrigation (I)"};
     }
 
     /* Practically all unit types can currently perform some action. */
@@ -1142,6 +1148,12 @@ function update_unit_order_commands()
       unit_actions["noorders"] = {name: "No orders (J)"};
     }
   }
+
+  /* TO DO at this spot:
+      NO ORDERS added to line of code below, and button here
+      $("#order_wait").show();
+      CANCEL ORDERS added to line of code below, and button here
+  */
 
   unit_actions = $.extend(unit_actions, {
             "sentry": {name: "Sentry (S)"},
@@ -2761,10 +2773,13 @@ function key_unit_mine()
 **************************************************************************/
 function can_build_well(punit, ptile)
 {
+  var is_lowland = (tile_terrain(ptile)['name'] != 'Hills' 
+                   && tile_terrain(ptile)['name'] != 'Mountains');
+
   return ( (punit != null && ptile != null)
       &&  (!tile_has_extra(ptile, EXTRA_RIVER))
       &&  (unit_types[punit['type']]['name'] == "Well-Digger")
-      // TODO: &&  (tile custom flag low land)
+      &&  (is_lowland)
       &&  (player_invention_state(client.conn.playing, tech_id_by_name('Pottery')) != TECH_KNOWN)
       &&  (player_invention_state(client.conn.playing, tech_id_by_name('Alphabet')) != TECH_KNOWN)
          );
@@ -2790,11 +2805,14 @@ function key_unit_well()
 **************************************************************************/
 function can_build_canal(punit, ptile)
 {
+  var is_lowland = (tile_terrain(ptile)['name'] != 'Hills' 
+                   && tile_terrain(ptile)['name'] != 'Mountains');
+
   return ((typeof EXTRA_CANAL !== "undefined")
       &&  (punit != null && ptile != null)
       &&  (!tile_has_extra(ptile, EXTRA_CANAL))
       &&  (unit_can_do_action(punit, ACTION_ROAD))
-      // TODO: &&  (tile custom flag low land)
+      && (is_lowland) 
       &&  (player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN)
          );
 }
