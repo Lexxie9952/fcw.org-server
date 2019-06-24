@@ -879,6 +879,9 @@ function update_unit_order_commands()
     }
   }
 
+  // TO DO: tile_terrain(ptile) is called far too often below, let's just call it once up here and assign it
+  // to a var.
+
   $("#order_maglev").hide();
   $("#order_canal").hide();
   $("#order_well").hide();
@@ -894,7 +897,17 @@ function update_unit_order_commands()
   $("#order_build_farmland").hide();
   $("#order_auto_settlers").hide();
   $("#order_pollution").hide();
-  $("#order_forest_remove").hide(); //inserted this: it was showing chop forest for every unit type
+  $("#order_forest_remove").hide(); 
+  $("#order_plant_forest").hide();
+
+  $("#order_noorders").hide();
+  $("#order_cancel_orders").hide();
+  $("#order_wait").hide();
+  $("#order_sentry").show();    // you can almost always sentry, handle any exception below
+  $("#order_load").hide();
+  $("#order_unload").hide();
+  $("#order_airlift").hide();
+  
 
   for (i = 0; i < funits.length; i++) {
     punit = funits[i];
@@ -988,10 +1001,9 @@ function update_unit_order_commands()
       }
 
       $("#order_fortify").hide();
-      $("#order_sentry").hide();
       $("#order_explore").hide();
       $("#order_auto_settlers").show();
-      $("#order_pollution").show();
+      $("#order_pollution").show();    //TO DO: show this if there's pollution
       if (tile_terrain(ptile)['name'] == 'Hills' || tile_terrain(ptile)['name'] == 'Mountains') {
         $("#order_mine").show();
         unit_actions["mine"] =  {name: "Mine (M)"};
@@ -1008,19 +1020,22 @@ function update_unit_order_commands()
         $("#order_pollution").hide();
       }
 
+      if (tile_terrain(ptile)['name'] == 'Grassland' || tile_terrain(ptile)['name'] == 'Plains' 
+         || tile_terrain(ptile)['name'] == 'Swamp' || tile_terrain(ptile)['name'] == 'Jungle')    { 
+            unit_actions["mine"] = {name: "Plant forest (M)"};
+            $("#order_plant_forest").show();          
+      }
+
       if (tile_terrain(ptile)['name'] == "Forest") {
         $("#order_forest_remove").show();
         $("#order_irrigate").hide();
         $("#order_build_farmland").hide();
 	    unit_actions["forest"] = {name: "Cut down forest (I)"};
-      } else if (!tile_has_extra(ptile, EXTRA_IRRIGATION)) {
+      } else if (!tile_has_extra(ptile, EXTRA_IRRIGATION) && (tile_terrain(ptile)['name'] != 'Mountains')) {
         $("#order_irrigate").show();
         $("#order_forest_remove").hide();
         $("#order_build_farmland").hide();
         unit_actions["irrigation"] = {name: "Irrigation (I)"};
-        if (tile_terrain(ptile)['name'] != 'Hills' && tile_terrain(ptile)['name'] != 'Mountains') {
-          unit_actions["mine"] = {name: "Plant forest (M)"};
-        }
       } else if (!tile_has_extra(ptile, EXTRA_FARMLAND) && player_invention_state(client.conn.playing, tech_id_by_name('Refrigeration')) == TECH_KNOWN) {
         $("#order_build_farmland").show();
         $("#order_irrigate").hide();
@@ -1062,12 +1077,22 @@ function update_unit_order_commands()
       unit_actions["canal"] = {name: "Build canal"};
     }
 
-    if (can_build_well(punit, ptile)) {   // Well-Digger
-      $("#order_well").show();
-      unit_actions["well"] = {name: "Dig well"};
-      $("#order_irrigate").show();  // can also irrigate any tile it can dig a well
-      unit_actions["irrigation"] = {name: "Irrigation (I)"};
-    }
+    // Well-Digger-----------------------
+    if (unit_types[punit['type']]['name'] == "Well-Digger") {
+
+      if (can_build_well(punit, ptile)) {   // Well-Digger
+        $("#order_well").show();
+        unit_actions["well"] = {name: "Dig well"};
+      }
+
+      var is_lowland = (tile_terrain(ptile)['name'] != 'Hills' 
+                   && tile_terrain(ptile)['name'] != 'Mountains');
+
+      if (is_lowland && (!tile_has_extra(ptile, EXTRA_IRRIGATION)) ) {             
+        $("#order_irrigate").show();  // can irrigate any lowland tile
+        unit_actions["irrigation"] = {name: "Irrigation (I)"};
+      }
+    } //---------------------
 
     /* Practically all unit types can currently perform some action. */
     unit_actions["action_selection"] = {name: "Do... (D)"};
@@ -1111,6 +1136,7 @@ function update_unit_order_commands()
 
     if (pcity != null && city_has_building(pcity, improvement_id_by_name(B_AIRPORT_NAME))) {
       unit_actions["airlift"] = {name: "Airlift (Shift-L)"};
+      $("#order_airlift").show();
     }
 
     if (pcity != null && ptype != null && unit_types[ptype['obsoleted_by']] != null && can_player_build_unit_direct(client.conn.playing, unit_types[ptype['obsoleted_by']])) {
@@ -1127,7 +1153,10 @@ function update_unit_order_commands()
         var tunit = units_on_tile[r];
         if (tunit['id'] == punit['id']) continue;
         var ntype = unit_type(tunit);
-        if (ntype['transport_capacity'] > 0) unit_actions["unit_load"] = {name: "Load on transport (L)"};
+        if (ntype['transport_capacity'] > 0) {
+           unit_actions["unit_load"] = {name: "Load on transport (L)"};
+           $("#order_load").show();
+        }
       }
     }
 
@@ -1138,24 +1167,26 @@ function update_unit_order_commands()
         var tunit = units_on_tile[r];
         if (tunit['transported']) {
           unit_actions["unit_show_cargo"] = {name: "Activate cargo units"};
-          if (pcity != null) unit_actions["unit_unload"] = {name: "Unload units from transport (T)"};
+          if (pcity != null) {
+            unit_actions["unit_unload"] = {name: "Unload units from transport (T)"};
+            $("#order_unload").show();
+          }
         }
       }
     }
 
     if (punit.activity != ACTIVITY_IDLE || punit.ai || punit.has_orders) {
       unit_actions["idle"] = {name: "Cancel orders (Shift-J)"};
+      $("#order_cancel_orders").show();
     } else {
       unit_actions["noorders"] = {name: "No orders (J)"};
+      $("#order_noorders").show();
+      $("#order_wait").show();
     }
   }
 
   /* TO DO at this spot:
-      NO ORDERS added to line of code below, and button here
-      $("#order_wait").show();
-      CANCEL ORDERS added to line of code below, and button here
-
-      auto-attack
+      auto-attack ?   show cargo button ?  
   */
 
   unit_actions = $.extend(unit_actions, {
