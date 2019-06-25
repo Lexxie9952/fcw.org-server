@@ -166,9 +166,11 @@ function update_game_status_panel() {
   } else {
     if ($("#game_status_panel_bottom").length) {
       $("#game_status_panel_top").hide();
-      $("#game_status_panel_bottom").show();
-      $("#game_status_panel_bottom").css({"width": $(window).width(),"pointer-events":"none" }); ////
-      $("#game_status_panel_bottom").html(status_html);
+      if (show_order_buttons) {
+         $("#game_status_panel_bottom").show();  //if show_order_buttons==0 all lower panels are OFF to maximize map space
+         $("#game_status_panel_bottom").css({"width": $(window).width(),"pointer-events":"none" }); ////
+         $("#game_status_panel_bottom").html(status_html);
+      }
       //// these changes in control.js and game.js made container not clickable but children unclickable also
       //$("#game_status_panel_bottom").children().css("pointer-events", "auto"); //// children clickable, container not
     }

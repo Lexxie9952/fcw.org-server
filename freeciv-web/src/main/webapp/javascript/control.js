@@ -880,7 +880,9 @@ function button_less_orders()
 **************************************************************************/
 function button_hide_paenls()
 {
-  //insert hide code here.
+  show_order_buttons = 0;
+  $("#game_unit_orders_default").hide();
+  $("game_status_panel_bottom").hide();
 }
 
 /**************************************************************************
@@ -909,23 +911,21 @@ function update_unit_order_commands()
 
   switch (show_order_buttons) {
     case 0:                 // hide lower all panels
-      // do nothing, panels are hidden
+      $("#game_unit_orders_default").hide();
+      $("game_status_panel_bottom").hide();
     break;
 
     case 1:         // common/frequently used orders only
-      $("#order_more").show();  // show option to see all order
+      $("#order_more").show();  
       $("#order_less").hide();
-
       $("#order_disband").hide();
-
     break;
 
     case 2:         // all legal orders buttons
       $("#order_less").show();
-      $("#order_more").hide(); // show option to collapse to frequent/common orders only
-
+      $("#order_more").hide(); 
       $("#order_disband").show();
-      break;
+    break;
   }
 
   $("#order_maglev").hide();
@@ -949,7 +949,7 @@ function update_unit_order_commands()
   $("#order_noorders").hide();
   $("#order_cancel_orders").hide();
   $("#order_wait").hide();
-  $("#order_sentry").show();    // you can almost always sentry, handle any exception below
+  $("#order_sentry").hide();    
   $("#order_load").hide();
   $("#order_unload").hide();
   $("#order_activate_cargo").hide();
@@ -980,6 +980,7 @@ function update_unit_order_commands()
 
     if (ptype['name'] == "Explorer") {
       unit_actions["explore"] = {name: "Auto explore (X)"};
+      $("#order_explore").show(); //frequent only for explorer unit
     }
 
   }
@@ -1017,6 +1018,16 @@ function update_unit_order_commands()
       }
     } //-------------------------
 
+    // Figure out default of whether pillage is legal and show it, before applying special rules later
+    if (!client_is_observer() && client.conn.playing != null
+         && get_what_can_unit_pillage_from(punit, ptile).length > 0
+         && (pcity == null || city_owner_player_id(pcity) !== client.conn.playing.playerno)) {
+            $("#order_pillage").show();
+            unit_actions["pillage"] = {name: "Pillage (Shift-P)"};
+    } else {
+            $("#order_pillage").hide();
+    }
+
     // TO DO:  this should be checking for the FLAG "Settlers" in the ptype which indicates who can do the follow build/road/mine/etc. actions:
     if (ptype['name'] == "Settlers" || ptype['name'] == "Workers"
         || ptype['name'] == "Engineers") {
@@ -1025,6 +1036,8 @@ function update_unit_order_commands()
       if (ptype['name'] == "Workers") unit_actions["autosettlers"] = {name: "Auto workers (A)"};
       if (ptype['name'] == "Engineers") unit_actions["autosettlers"] = {name: "Auto engineers (A)"};
 
+      if (show_order_buttons==1) $("#order_pillage").hide(); // not frequently used order for settler types
+   
       if (!tile_has_extra(ptile, EXTRA_ROAD)) {
         $("#order_road").show();
         $("#order_railroad").hide();
@@ -1051,8 +1064,9 @@ function update_unit_order_commands()
       }
 
       $("#order_fortify").hide();
-      $("#order_explore").hide();
-      $("#order_auto_settlers").show();
+      if (show_order_buttons==1) $("#order_explore").hide(); // not frequently used button
+      if (show_order_buttons==2) $("#order_sentry").show(); // not frequently used for settler types
+      if (show_order_buttons==2) $("#order_auto_settlers").show(); // not frequently used button
       $("#order_pollution").show();    //TO DO: show this if there's pollution
       if (terrain_name == 'Hills' || terrain_name == 'Mountains') {
         $("#order_mine").show();
@@ -1073,11 +1087,11 @@ function update_unit_order_commands()
       if (terrain_name == 'Grassland' || terrain_name == 'Plains' 
          || terrain_name == 'Swamp' || terrain_name == 'Jungle')    { 
             unit_actions["mine"] = {name: "Plant forest (M)"};
-            $("#order_plant_forest").show();          
+            if (show_order_buttons==2) $("#order_plant_forest").show();  //not frequently used button        
       }
 
       if (terrain_name == "Forest") {
-        $("#order_forest_remove").show();
+        if (show_order_buttons==2) $("#order_forest_remove").show(); // not frequently used button
         $("#order_irrigate").hide();
         $("#order_build_farmland").hide();
 	    unit_actions["forest"] = {name: "Cut down forest (I)"};
@@ -1118,12 +1132,13 @@ function update_unit_order_commands()
     } else {   // Handle all things non-Settler types may have in common here:
       if (utype_can_do_action(ptype, ACTION_FORTIFY)) $("#order_fortify").show();  
       $("#order_sentry").show();  // TO DO?: air units and new triremes can't sentry outside a fueling tile      
-      $("#order_explore").show();
       unit_actions["fortify"] = {name: "Fortify (F)"};
     }
 
+    if (show_order_buttons==2) $("#order_explore").show(); //not frequently used for most units
+
     if (can_build_canal(punit, ptile)) {
-      $("#order_canal").show();
+      if (show_order_buttons==2) $("#order_canal").show(); // not frequently used button
       unit_actions["canal"] = {name: "Build canal"};
     }
 
@@ -1148,7 +1163,7 @@ function update_unit_order_commands()
     unit_actions["action_selection"] = {name: "Do... (D)"};
 
     if (utype_can_do_action(ptype, ACTION_TRANSFORM_TERRAIN)) {
-      $("#order_transform").show();
+      if (show_order_buttons==2) $("#order_transform").show(); //not frequently used button
       unit_actions["transform"] = {name: "Transform terrain (O)"};
     } else {
       $("#order_transform").hide();
@@ -1166,15 +1181,6 @@ function update_unit_order_commands()
       unit_actions["paradrop"] = {name: "Paradrop"};
     } else {
       $("#order_paradrop").hide();
-    }
-
-    if (!client_is_observer() && client.conn.playing != null
-        && get_what_can_unit_pillage_from(punit, ptile).length > 0
-        && (pcity == null || city_owner_player_id(pcity) !== client.conn.playing.playerno)) {
-      $("#order_pillage").show();
-      unit_actions["pillage"] = {name: "Pillage (Shift-P)"};
-    } else {
-      $("#order_pillage").hide();
     }
 
     if (pcity == null || punit['homecity'] === 0 || punit['homecity'] === pcity['id']) {
@@ -1228,7 +1234,7 @@ function update_unit_order_commands()
 
     if (punit.activity != ACTIVITY_IDLE || punit.ai || punit.has_orders) {
       unit_actions["idle"] = {name: "Cancel orders (Shift-J)"};
-      $("#order_cancel_orders").show();
+      if (show_order_buttons==2) $("#order_cancel_orders").show();  //not frequently used order
     } else {
       unit_actions["noorders"] = {name: "No orders (J)"};
       $("#order_noorders").show();
@@ -1407,7 +1413,7 @@ function set_unit_focus_and_redraw(punit)
   auto_center_on_focus_unit();
   update_active_units_dialog();
   update_unit_order_commands();
-  if (current_focus.length > 0 && $("#game_unit_orders_default").length > 0 && !cardboard_vr_enabled) {
+  if (current_focus.length > 0 && $("#game_unit_orders_default").length > 0 && !cardboard_vr_enabled && show_order_buttons ) {
     //$("#game_units_orders_default").css("pointer-events", "none"); //// these changes in control.js and game.js made container not clickable but children unclickable also
     //$("#game_units_orders_default").children().css("pointer-events", "auto"); //// container not clickable, force children to be clickable
     $("#game_unit_orders_default").show();
