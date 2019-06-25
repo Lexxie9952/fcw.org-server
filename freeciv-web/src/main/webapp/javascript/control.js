@@ -878,7 +878,7 @@ function button_less_orders()
 /**************************************************************************
  Hides orders button panel and status panel to show more clickable map
 **************************************************************************/
-function button_hide_paenls()
+function button_hide_panels()
 {
   show_order_buttons = 0;
   $("#game_unit_orders_default").hide();
@@ -994,6 +994,7 @@ function update_unit_order_commands()
     punit = funits[i];
     ptype = unit_type(punit);
     ptile = index_to_tile(punit['tile']);
+    terrain_name = tile_terrain(ptile)['name'];
     if (ptile == null) continue;
     pcity = tile_city(ptile);
 
@@ -1028,6 +1029,17 @@ function update_unit_order_commands()
             $("#order_pillage").hide();
     }
 
+    // Whether to show "no orders" or "cancel orders", default, before applying special rules later
+    if (punit.activity != ACTIVITY_IDLE || punit.ai || punit.has_orders) {
+      unit_actions["idle"] = {name: "Cancel orders (Shift-J)"};
+      if (show_order_buttons==2) $("#order_cancel_orders").show();  //not frequently used order
+    } else {
+      unit_actions["noorders"] = {name: "No orders (J)"};
+      $("#order_noorders").show();
+      $("#order_wait").show();
+    }
+
+    // All Settler types have similar types or orders and rules for whether to show those orders:
     // TO DO:  this should be checking for the FLAG "Settlers" in the ptype which indicates who can do the follow build/road/mine/etc. actions:
     if (ptype['name'] == "Settlers" || ptype['name'] == "Workers"
         || ptype['name'] == "Engineers") {
@@ -1037,7 +1049,8 @@ function update_unit_order_commands()
       if (ptype['name'] == "Engineers") unit_actions["autosettlers"] = {name: "Auto engineers (A)"};
 
       if (show_order_buttons==1) $("#order_pillage").hide(); // not frequently used order for settler types
-   
+      if (show_order_buttons==1) $("#order_noorders").hide();  //not frequently used order
+
       if (!tile_has_extra(ptile, EXTRA_ROAD)) {
         $("#order_road").show();
         $("#order_railroad").hide();
@@ -1145,6 +1158,8 @@ function update_unit_order_commands()
     // Well-Digger-----------------------
     if (unit_types[punit['type']]['name'] == "Well-Digger") {
 
+      if (show_order_buttons==1) $("#order_sentry").hide(); //not frequently used button        
+
       if (can_build_well(punit, ptile)) {   // Well-Digger
         $("#order_well").show();
         unit_actions["well"] = {name: "Dig well"};
@@ -1230,15 +1245,6 @@ function update_unit_order_commands()
           } else $("#order_activate_cargo").show(); //if no option to unload, show option to activate or 'wake' units
         }
       }
-    }
-
-    if (punit.activity != ACTIVITY_IDLE || punit.ai || punit.has_orders) {
-      unit_actions["idle"] = {name: "Cancel orders (Shift-J)"};
-      if (show_order_buttons==2) $("#order_cancel_orders").show();  //not frequently used order
-    } else {
-      unit_actions["noorders"] = {name: "No orders (J)"};
-      $("#order_noorders").show();
-      $("#order_wait").show();
     }
   }
 
