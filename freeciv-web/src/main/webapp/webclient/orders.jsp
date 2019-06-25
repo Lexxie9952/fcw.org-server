@@ -122,6 +122,18 @@
   <div id="order_sentry" class="order_button" title="Sentry (S)">
     <a href="#" onclick="key_unit_sentry();"><img src="/images/orders/sentry_default.png" name="sentry_button" alt="" border="0" width="30" height="30"></a>
   </div>
+  
+  <div id="order_more" class="order_button" title="Show all orders">
+    <a href="#" onclick="button_more_orders();"><img src="/images/orders/more_button.png" name="more_button" alt="" border="0" width="30" height="30"></a>
+  </div>
+
+  <div id="order_less" class="order_button" title="Show common orders only">
+    <a href="#" onclick="button_less_orders();"><img src="/images/orders/less_button.png" name="less_button" alt="" border="0" width="30" height="30"></a>
+  </div>
+
+  <div id="order_hide" class="order_button" title="Hide orders/status panel">
+    <a href="#" onclick="button_hide_panels();"><img src="/images/orders/hide_button.png" name="hide_button" alt="" border="0" width="30" height="30"></a>
+  </div>
 
 </div>
 

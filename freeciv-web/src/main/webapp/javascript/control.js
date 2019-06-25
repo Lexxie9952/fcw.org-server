@@ -17,6 +17,7 @@
 
 ***********************************************************************/
 
+var show_order_buttons = 1;  // 1=most common, 2=all orders, 3=hide panels
 
 var mouse_x;
 var mouse_y;
@@ -857,6 +858,32 @@ function advance_unit_focus()
 }
 
 /**************************************************************************
+ Expands orders buttons panel to show all possible orders
+**************************************************************************/
+function button_more_orders()
+{
+  show_order_buttons = 2;
+  update_unit_order_commands();
+}
+
+/**************************************************************************
+ Collapses orders buttons panel to show only frequent/common orders
+**************************************************************************/
+function button_less_orders()
+{
+  show_order_buttons = 1;
+  update_unit_order_commands();
+}
+
+/**************************************************************************
+ Hides orders button panel and status panel to show more clickable map
+**************************************************************************/
+function button_hide_paenls()
+{
+  //insert hide code here.
+}
+
+/**************************************************************************
  Enables and disables the correct units commands for the unit in focus.
 **************************************************************************/
 function update_unit_order_commands()
@@ -879,8 +906,27 @@ function update_unit_order_commands()
     }
   }
 
-  // TO DO: tile_terrain(ptile) is called far too often below, let's just call it once up here and assign it
-  // to a var.
+
+  switch (show_order_buttons) {
+    case 0:                 // hide lower all panels
+      // do nothing, panels are hidden
+    break;
+
+    case 1:         // common/frequently used orders only
+      $("#order_more").show();  // show option to see all order
+      $("#order_less").hide();
+
+      $("#order_disband").hide();
+
+    break;
+
+    case 2:         // all legal orders buttons
+      $("#order_less").show();
+      $("#order_more").hide(); // show option to collapse to frequent/common orders only
+
+      $("#order_disband").show();
+      break;
+  }
 
   $("#order_maglev").hide();
   $("#order_canal").hide();
