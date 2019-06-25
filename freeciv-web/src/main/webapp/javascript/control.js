@@ -909,10 +909,13 @@ function update_unit_order_commands()
   $("#order_airlift").hide();
   
 
+  var terrain_name;
+  
   for (i = 0; i < funits.length; i++) {
     punit = funits[i];
     ptype = unit_type(punit);
     ptile = index_to_tile(punit['tile']);
+    terrain_name = tile_terrain(ptile)['name'];
     if (ptile == null) continue;
     pcity = tile_city(ptile);
 
@@ -1004,7 +1007,7 @@ function update_unit_order_commands()
       $("#order_explore").hide();
       $("#order_auto_settlers").show();
       $("#order_pollution").show();    //TO DO: show this if there's pollution
-      if (tile_terrain(ptile)['name'] == 'Hills' || tile_terrain(ptile)['name'] == 'Mountains') {
+      if (terrain_name == 'Hills' || terrain_name == 'Mountains') {
         $("#order_mine").show();
         unit_actions["mine"] =  {name: "Mine (M)"};
       }
@@ -1020,18 +1023,18 @@ function update_unit_order_commands()
         $("#order_pollution").hide();
       }
 
-      if (tile_terrain(ptile)['name'] == 'Grassland' || tile_terrain(ptile)['name'] == 'Plains' 
-         || tile_terrain(ptile)['name'] == 'Swamp' || tile_terrain(ptile)['name'] == 'Jungle')    { 
+      if (terrain_name == 'Grassland' || terrain_name == 'Plains' 
+         || terrain_name == 'Swamp' || terrain_name == 'Jungle')    { 
             unit_actions["mine"] = {name: "Plant forest (M)"};
             $("#order_plant_forest").show();          
       }
 
-      if (tile_terrain(ptile)['name'] == "Forest") {
+      if (terrain_name == "Forest") {
         $("#order_forest_remove").show();
         $("#order_irrigate").hide();
         $("#order_build_farmland").hide();
 	    unit_actions["forest"] = {name: "Cut down forest (I)"};
-      } else if (!tile_has_extra(ptile, EXTRA_IRRIGATION) && (tile_terrain(ptile)['name'] != 'Mountains')) {
+      } else if (!tile_has_extra(ptile, EXTRA_IRRIGATION) && (terrain_name != 'Mountains')) {
         $("#order_irrigate").show();
         $("#order_forest_remove").hide();
         $("#order_build_farmland").hide();
@@ -1085,8 +1088,8 @@ function update_unit_order_commands()
         unit_actions["well"] = {name: "Dig well"};
       }
 
-      var is_lowland = (tile_terrain(ptile)['name'] != 'Hills' 
-                   && tile_terrain(ptile)['name'] != 'Mountains');
+      var is_lowland = (terrain_name != 'Hills' 
+                   && terrain_name != 'Mountains');
 
       if (is_lowland && (!tile_has_extra(ptile, EXTRA_IRRIGATION)) ) {             
         $("#order_irrigate").show();  // can irrigate any lowland tile
