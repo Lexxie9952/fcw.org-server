@@ -942,6 +942,7 @@ function update_unit_order_commands()
   $("#order_irrigate").hide(); 
   $("#order_build_farmland").hide();
   $("#order_auto_settlers").hide();
+  $("#order_explore").hide();    
   $("#order_pollution").hide();
   $("#order_forest_remove").hide(); 
   $("#order_plant_forest").hide();
@@ -1158,7 +1159,10 @@ function update_unit_order_commands()
     // Well-Digger-----------------------
     if (unit_types[punit['type']]['name'] == "Well-Digger") {
 
-      if (show_order_buttons==1) $("#order_sentry").hide(); //not frequently used button        
+      if (show_order_buttons==1) {
+        $("#order_sentry").hide(); //not frequently used buttons 
+        $("#order_noorders").hide();
+      }
 
       if (can_build_well(punit, ptile)) {   // Well-Digger
         $("#order_well").show();
