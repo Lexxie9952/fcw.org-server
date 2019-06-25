@@ -906,6 +906,7 @@ function update_unit_order_commands()
   $("#order_sentry").show();    // you can almost always sentry, handle any exception below
   $("#order_load").hide();
   $("#order_unload").hide();
+  $("#order_activate_cargo").hide();
   $("#order_airlift").hide();
   
 
@@ -1170,10 +1171,11 @@ function update_unit_order_commands()
         var tunit = units_on_tile[r];
         if (tunit['transported']) {
           unit_actions["unit_show_cargo"] = {name: "Activate cargo units"};
+
           if (pcity != null) {
             unit_actions["unit_unload"] = {name: "Unload units from transport (T)"};
             $("#order_unload").show();
-          }
+          } else $("#order_activate_cargo").show(); //if no option to unload, show option to activate or 'wake' units
         }
       }
     }

@@ -83,8 +83,12 @@
     <a href="#" onclick="key_unit_load();"><img src="/images/orders/load.png" name="load_button" alt="" border="0" width="30" height="30"></a>
   </div>
 
-  <div id="order_unload" class="order_button" title="Unload units(T)">
+  <div id="order_unload" class="order_button" title="Unload units (T)">
     <a href="#" onclick="key_unit_unload();"><img src="/images/orders/unload.png" name="unload_button" alt="" border="0" width="30" height="30"></a>
+  </div>
+
+  <div id="order_activate_cargo" class="order_button" title="Activate cargo units">
+    <a href="#" onclick="key_unit_show_cargo();"><img src="/images/orders/unload.png" name="show_cargo_button" alt="" border="0" width="30" height="30"></a>
   </div>
 
   <div id="order_paradrop" class="order_button" title="Paradrop">
