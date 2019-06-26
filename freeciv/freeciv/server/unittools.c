@@ -2766,7 +2766,7 @@ bool do_airline(struct unit *punit, struct city *pdest_city)
   if (!(game.info.airlifting_style & AIRLIFTING_UNLIMITED_DEST)) {
     pdest_city->airlift--;
     send_city_info(city_owner(pdest_city), pdest_city);
-  }
+  }  
 
   return TRUE;
 }

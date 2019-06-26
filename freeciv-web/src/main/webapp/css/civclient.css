@@ -138,7 +138,7 @@ button {
 
 #city_dialog_info {
   float: left;
-  padding: 0 10px 10px 10px;
+  padding: 0 10px 9px 10px;
 }
 
 #city_button_pane {
@@ -534,6 +534,12 @@ button {
   padding-bottom:10px;
   display: flex;
   flex-direction: row-reverse;
+}
+
+#city_airlift_capacity {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .blockUI h1 {

@@ -461,6 +461,7 @@ end
 # The variables in the packet are listed in alphabetical order.
 PACKET_GAME_INFO = 16; sc, is-info
   UINT8 add_to_size_limit;
+  UINT8 airlift_dest_divisor;
   PLAYER aifill;
   PERSISTENT_READY persistent_ready;
   AIRLIFTING_STYLE airlifting_style;

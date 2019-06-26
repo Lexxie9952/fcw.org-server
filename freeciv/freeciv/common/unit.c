@@ -70,6 +70,7 @@ enum unit_airlift_result
   const struct city *psrc_city = tile_city(unit_tile(punit));
   const struct player *punit_owner;
   enum unit_airlift_result ok_result = AR_OK;
+  int airlift_dest_condition;
 
   if (0 == punit->moves_left
       && !utype_may_act_move_frags(unit_type_get(punit),
@@ -128,7 +129,8 @@ enum unit_airlift_result
 
   if (NULL == restriction || city_owner(psrc_city) == restriction) {
     /* We know for sure whether or not src can airlift this turn. */
-    if (0 >= psrc_city->airlift) {
+    if (city_airlift_max(psrc_city) <= 0 || (!(game.info.airlifting_style
+        & AIRLIFTING_UNLIMITED_SRC) && psrc_city->airlift <= 0)) {
       /* The source cannot airlift for this turn (maybe already airlifted
        * or no airport).
        *
@@ -145,8 +147,12 @@ enum unit_airlift_result
 
   if (pdest_city) {
     if (NULL == restriction || city_owner(pdest_city) == restriction) {
-      if (0 >= pdest_city->airlift
-          && !(game.info.airlifting_style & AIRLIFTING_UNLIMITED_DEST)) {
+      airlift_dest_condition = (game.info.airlift_dest_divisor > 0)
+      ? city_airlift_max(pdest_city) - floor(((float)city_size_get(pdest_city)
+      / game.info.airlift_dest_divisor)+0.5) : 0;
+      if (city_airlift_max(pdest_city) <= 0 || (!(game.info.airlifting_style
+          & AIRLIFTING_UNLIMITED_DEST) && pdest_city->airlift
+          <= airlift_dest_condition)) {  
         /* The destination cannot support airlifted units for this turn
          * (maybe already airlifed or no airport).
          * See also do_airline() in server/unittools.h. */

@@ -1920,7 +1920,8 @@ action_hard_reqs_actor(const action_id wanted_action,
         return TRI_MAYBE;
       }
 
-      if (0 >= psrc_city->airlift) {
+      if (city_airlift_max(psrc_city) <= 0 || (!(game.info.airlifting_style
+        & AIRLIFTING_UNLIMITED_SRC) && psrc_city->airlift <= 0)) {
         /* The source cannot airlift for this turn (maybe already airlifted
          * or no airport).
          *

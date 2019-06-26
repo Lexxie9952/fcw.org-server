@@ -2433,6 +2433,15 @@ static struct setting settings[] = {
                  "(DEST_UNLIMITED): note that airlifting to a city doesn't "
                  "reduce the airlifted counter, and doesn't need any."),
               NULL, NULL, airliftingstyle_name, GAME_DEFAULT_AIRLIFTINGSTYLE)
+  
+  GEN_INT("airliftdestdivisor", game.info.airlift_dest_divisor,
+          SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL,
+          ALLOW_NONE, ALLOW_BASIC, N_("Airlifting destination divisor"),
+          N_("This sets the limit on the units a city can receive via "
+             "airlift to its population divided by this number. "
+             "When set to 0, the setting is toggled off."),
+          NULL, NULL, NULL, GAME_MIN_AIRLIFT_DEST_DIVISOR,
+          GAME_MAX_AIRLIFT_DEST_DIVISOR, GAME_DEFAULT_AIRLIFT_DEST_DIVISOR)
 
   GEN_INT("diplchance", game.server.diplchance,
           SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL,

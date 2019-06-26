@@ -281,6 +281,43 @@ function show_city_dialog(pcity)
   } else {
     $("#city_production_turns_overview").html("-");
   }
+  
+  /*if (turns_to_complete != FC_INFINITY) {
+    $("#city_production_turns_overview").html(turns_to_complete + " turns &nbsp;&nbsp;(" + get_production_progress(pcity) + ")");
+  } else {
+    $("#city_production_turns_overview").html("-");
+  }*/
+    
+  if (city_has_building(pcity, improvement_id_by_name(B_AIRPORT_NAME))) {     
+     $("#city_dialog_info").css("padding-bottom","3px");
+     var airlift_send_text;
+     var airlift_font_size = '1em;'
+     if ((game_info['airlifting_style'] > 3 && game_info['airlifting_style'] < 8) || (game_info['airlifting_style'] > 11)) {
+        airlift_send_text = "&infin;";      
+        airlift_font_size = '2em;'
+     }
+     else
+     {
+        airlift_send_text = Math.max(0,pcity["airlift"])+"/"+effects[1][0]["effect_value"]
+     }
+     var city_airlift_capacity_html = '<div id="airlift_send_capacity" title="Airlift send capacity"><div style="float:left"><img src="/images/orders/airlift.png" height="26" width="26"></div><div style="font-size:'+airlift_font_size+'float:left;height:26px;line-height:26px;margin-left:1px">'+airlift_send_text+'</div></div>';
+     if (game_info['airlift_dest_divisor'] > 0) {
+         airlift_font_size = '1em;'
+         var airlift_receive_text;  
+         if (game_info['airlifting_style'] > 7) {
+            airlift_receive_text = "&infin;";   
+            airlift_font_size = '2em;'
+         }
+         else {
+            var airlift_receive_max_capacity = Math.round(pcity['size'] / game_info['airlift_dest_divisor']);
+            airlift_receive_text = Math.max(0,pcity["airlift"] + airlift_receive_max_capacity - effects[1][0]['effect_value'])+"/"+airlift_receive_max_capacity;             
+         }
+         city_airlift_capacity_html += '<div id="airlift_receive_capacity" title="Airlift receive capacity"><div style="float:left;"><img src="/images/airlift-dest.png" height="26" width="26"></div><div style="font-size:'+airlift_font_size+'float:left;height:26px;line-height:26px;margin-left:1px">'+airlift_receive_text+'</div></div>';
+     }   
+     $("#city_airlift_capacity").html(city_airlift_capacity_html);
+     $("#airlift_send_capacity").tooltip();
+     $("#airlift_receive_capacity").tooltip();
+  }
 
   var reduction_pct;
   var longest_word;

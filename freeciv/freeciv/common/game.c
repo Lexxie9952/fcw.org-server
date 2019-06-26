@@ -258,6 +258,7 @@ static void game_defaults(bool keep_ruleset_value)
 
   /* The info packet. */
   game.info.aifill           = GAME_DEFAULT_AIFILL;
+  game.info.airlift_dest_divisor = GAME_DEFAULT_AIRLIFT_DEST_DIVISOR;
   game.info.airlifting_style = GAME_DEFAULT_AIRLIFTINGSTYLE;
   game.info.angrycitizen     = GAME_DEFAULT_ANGRYCITIZEN;
   game.info.borders          = GAME_DEFAULT_BORDERS;
