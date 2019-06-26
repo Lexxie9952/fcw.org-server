@@ -1635,6 +1635,7 @@ function do_map_click(ptile, qtype, first_time_called)
   var sunits = tile_units(ptile);
   pcity = tile_city(ptile);
 
+  // HANDLE GOTO ACTIVE CLICKS ------------------------------------------------------------------------------------------------
   if (goto_active) {
     console.log("GO TO IS ACTIVE!");
     if (current_focus.length > 0) {
@@ -1842,7 +1843,8 @@ function do_map_click(ptile, qtype, first_time_called)
     deactivate_goto(true);
     update_unit_focus();
 
-  } else if (paradrop_active && current_focus.length > 0) {
+  }  // END OF GO TO HANDLING ----------------------------------------------------------------------------------------------
+   else if (paradrop_active && current_focus.length > 0) {
     punit = current_focus[0];
     packet = {
       "pid"         : packet_unit_do_action,
@@ -1891,7 +1893,7 @@ function do_map_click(ptile, qtype, first_time_called)
           show_city_dialog(pcity);
 	      }
       }
-      return;
+      // return;  this prevented clicking an allied city to select your units
     }
 
     if (sunits != null && sunits.length == 0) {
