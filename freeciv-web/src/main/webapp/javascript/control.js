@@ -939,7 +939,8 @@ function update_unit_order_commands()
   $("#order_railroad").hide();
   $("#order_mine").hide();
   $("#order_fortify").hide();  // not all non-Settlers can fortify (air/sea)
-  $("#order_irrigate").hide(); 
+  $("#order_irrigate").hide();
+  $("#order_transform").hide(); 
   $("#order_build_farmland").hide();
   $("#order_auto_settlers").hide();
   $("#order_explore").hide();    
