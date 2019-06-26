@@ -1052,13 +1052,6 @@ reqs	=
       "Building", "Airport", "City"
       "UnitClass", "Helicopter", "Local"
     }
-[effect_airport_2]
-type    = "Airlift"
-value	= 1
-reqs	=
-    { "type", "name", "range"
-      "Building", "Airport", "City"
-    }
 
 ; Base max city size of 8
 [effect_aqueduct_size]
@@ -2377,6 +2370,18 @@ reqs	=
       "Extra", "Road", "Local"
       "Building", "Super Highways", "City"
       "OutputType", "Trade", "Local"
+    }
+
+// Super Highways increase logistical effeciency to
+// get more use out of an airport in size 12+ city.
+[effect_super_highways_airlift_facilitation]
+type    = "Airlift"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Building", "Super Highways", "City"
+      "Building", "Airport", "City"
+      "Building", "Sewer System", "City"
     }
 
 [effect_mine]
