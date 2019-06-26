@@ -62,7 +62,7 @@ function unit_move_sound_play(unit)
 
   // PARTIAL MOVE SOUNDS.  Some units are loud and/or often move one tile at a time. 
   // Use "partial move sounds" to avoid annoyance:
-  if ( punit['movesleft'] < ptype['move_rate'] )  { 
+  if ( unit['movesleft'] < ptype['move_rate'] )  { 
     switch(ptype['name']) {
       case "Medium Bomber":
       case "Heavy Bomber": 
