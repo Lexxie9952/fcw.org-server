@@ -58,8 +58,31 @@ function unit_move_sound_play(unit)
   }
 
   var ptype = unit_type(unit);
-  if (soundset[ptype['sound_move']] != null) {
-    play_sound(soundset[ptype['sound_move']]);
+  move_sound = soundset[ptype['sound_move']];  
+
+  // PARTIAL MOVE SOUNDS.  Some units are loud and/or often move one tile at a time. 
+  // Use "partial move sounds" to avoid annoyance:
+  if ( punit['movesleft'] < ptype['move_rate'] )  { 
+    switch(ptype['name']) {
+      case "Medium Bomber":
+      case "Heavy Bomber": 
+      case "Strategic Bomber": 
+      case "Bomber":
+        move_sound = "pm_prop_bombers.ogg"; 
+        break;
+
+      case "Fighter":  
+      case "Escort Fighter":
+        move_sound = "pm_prop_fighters.ogg";
+        break;
+
+      // TO DO:  Helicopter, Armor, Jet aircraft, Cruise Missile, Nuclear 
+    }
+  }
+
+  // PLAY MOVE SOUND
+  if (move_sound != null) {
+    play_sound(move_sound);
   } else if (soundset[ptype['sound_move_alt']] != null) {
     play_sound(soundset[ptype['sound_move_alt']]);
   }
