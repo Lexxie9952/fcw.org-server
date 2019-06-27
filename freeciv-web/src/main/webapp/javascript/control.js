@@ -1881,17 +1881,19 @@ function do_map_click(ptile, qtype, first_time_called)
   } else {
     if (pcity != null) { //if city clicked
       if (pcity['owner'] == client.conn.playing.playerno) { //if city is your own
+        console.log("Clicked our own city.");
         if (sunits != null && sunits.length > 0 //if units inside
             && sunits[0]['activity'] == ACTIVITY_IDLE //if unit idle/selectable
             && sunits[0]['owner'] == client.conn.playing.playerno ) {  // if foreign-allied occupant we don't want to select the unit, which
-                                                                       // would have no context menu or way to get into your own city                
+                                                                       // would have no context menu or way to get into your own city           
           set_unit_focus_and_redraw(sunits[0]);
           if (renderer == RENDERER_2DCANVAS) {
             $("#canvas").contextMenu();
           } else {
             $("#canvas_div").contextMenu();
           }
-          console.log("Clicked our own city which had idle units inside, attempting to focus on the units.");
+          console.log("Clicked our own city which had idle units inside, and a domestic unit was in focus as sunit[0],"+
+                      " so attempting to focus on the units.");
           return; // move the commented-out return from below up here
         } else if (!goto_active) { //if GOTO active then the click is a move command, not a show city command
             // the case below only happens if clicking a city with foreign unit inside while not issuing a GOTO move command.
@@ -1922,14 +1924,31 @@ function do_map_click(ptile, qtype, first_time_called)
       set_unit_focus_and_redraw(null);
 
     } else if (sunits != null && sunits.length > 0 ) {
-      if (sunits[0]['owner'] == client.conn.playing.playerno) {
+      // test that one of the units belongs to owner
+      var player_has_own_unit_present = false;
+      var own_unit_index = -1; // -1 means player has none of own units present 
+
+      for (var u = 0; u < sunits.length; u++) {
+        if (sunits[u]['owner'] == client.conn.playing.playerno) 
+          {
+            own_unit_index = u; //player wants to select his own unit first, not a foreign unit
+            player_has_own_unit_present = true;
+          }
+      }
+
+      //if (sunits[0]['owner'] == client.conn.playing.playerno) {   // if sunits[1..length] was player's own unit, we couldn't select
+      if (player_has_own_unit_present) {
         if (sunits.length == 1) {
           /* A single unit has been clicked with the mouse. */
           var unit = sunits[0];
           set_unit_focus_and_activate(unit);
         } else {
           /* more than one unit is on the selected tile. */
-          set_unit_focus_and_redraw(sunits[0]);
+          if (own_unit_index>=0) set_unit_focus_and_redraw(sunits[own_unit_index]);
+          else {
+            set_unit_focus_and_redraw(sunits[0]); //this shouldn't happen but, select first unit[0] if player doesn't have own unit.
+            console.log("Logic fault: player has own unit supposedly present but we're selecting sunit[0] instead.")
+          }
           update_active_units_dialog();
         }
 
@@ -1939,7 +1958,8 @@ function do_map_click(ptile, qtype, first_time_called)
           } else {
             $("#canvas_div").contextMenu();
           }
-	    }
+        }
+          
       } else if (pcity == null) {
         // clicked on a tile with units owned by other players.
         current_focus = sunits;
