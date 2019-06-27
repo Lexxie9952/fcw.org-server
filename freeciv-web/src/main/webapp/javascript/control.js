@@ -1879,21 +1879,42 @@ function do_map_click(ptile, qtype, first_time_called)
     request_unit_act_sel_vs(ptile);
     action_tgt_sel_active = false;
   } else {
-    if (pcity != null) {
-      if (pcity['owner'] == client.conn.playing.playerno) {
-        if (sunits != null && sunits.length > 0
-            && sunits[0]['activity'] == ACTIVITY_IDLE) {
+    if (pcity != null) { //if city clicked
+      if (pcity['owner'] == client.conn.playing.playerno) { //if city is your own
+        if (sunits != null && sunits.length > 0 //if units inside
+            && sunits[0]['activity'] == ACTIVITY_IDLE //if unit idle/selectable
+            && sunits[0]['owner'] == client.conn.playing.playerno ) {  // if foreign-allied occupant we don't want to select the unit, which
+                                                                       // would have no context menu or way to get into your own city                
           set_unit_focus_and_redraw(sunits[0]);
           if (renderer == RENDERER_2DCANVAS) {
             $("#canvas").contextMenu();
           } else {
             $("#canvas_div").contextMenu();
           }
-        } else if (!goto_active) {
-          show_city_dialog(pcity);
-	      }
+          console.log("Clicked our own city which had idle units inside, attempting to focus on the units.");
+          return; // move the commented-out return from below up here
+        } else if (!goto_active) { //if GOTO active then the click is a move command, not a show city command
+            // the case below only happens if clicking a city with foreign unit inside while not issuing a GOTO move command.
+            // It seems redundant--but we make a code-slot for changing how this case is handled.
+            if (sunits[0]['owner'] != client.conn.playing.playerno) {
+              show_city_dialog(pcity); // show the city rather than select a foreign unit that would block clicking our own city
+              return; // move the commented-out return from below up here
+            } else {  
+                // we clicked on our own city without an active unit and were not doing a GOTO, so show the city
+                show_city_dialog(pcity);
+               return; // move the commented-out return from below up here
+            }
+          }
+          console.log("Clicked our own city but we didn't select a unit, it wasn't a GOTO move order click,"+
+                      " and for some reason we're still not showing the city dialog.");
+          return;  
       }
-      return;  //this prevented clicking an allied city to select your units
+      console.log("Clicked a non-domestic city. Not showing dialog.  goto_active=="+goto_active);
+      //return;  //this return-command only happened if clicking a foreign city, bypassing all ability below to click your 
+      //own unit on a tile that's not your city (such as, a foreign city)
+
+      // special case: goto was active and foreign city was clicked, it would have done a return before.
+      // TO DO: test if go to on a foreign allied city still works !
     }
 
     if (sunits != null && sunits.length == 0) {
