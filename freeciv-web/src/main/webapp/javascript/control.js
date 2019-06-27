@@ -1893,7 +1893,7 @@ function do_map_click(ptile, qtype, first_time_called)
           show_city_dialog(pcity);
 	      }
       }
-      // return;  this prevented clicking an allied city to select your units
+      return;  //this prevented clicking an allied city to select your units
     }
 
     if (sunits != null && sunits.length == 0) {
