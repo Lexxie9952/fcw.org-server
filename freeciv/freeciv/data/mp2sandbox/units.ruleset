@@ -2073,7 +2073,7 @@ uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter"
 cargo         = "LandAirSea"
-flags         = "FieldUnit", "Helicopter", "AirAttacker", "Unbribable"
+flags         = "Helicopter", "AirAttacker", "Unbribable"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
