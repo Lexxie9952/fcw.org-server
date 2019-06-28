@@ -643,7 +643,6 @@ function generate_production_list()
   var production_list = [];
   for (var unit_type_id in unit_types) {
     var punit_type = unit_types[unit_type_id];
-    var align_pad = (punit_type['attack_strength']<10 ? "&nbsp;" : "");
 
     /* FIXME: web client doesn't support unit flags yet, so this is a hack: */
     if (punit_type['name'] == "Barbarian Leader" || punit_type['name'] == "Leader") continue;
@@ -653,7 +652,7 @@ function generate_production_list()
 	                    "helptext" : punit_type['helptext'],
                             "rule_name" : punit_type['rule_name'],
                             "build_cost" : punit_type['build_cost'],
-                            "unit_details" : align_pad+"A<b>"+punit_type['attack_strength'] + "</b> " 
+                            "unit_details" : "A<b>"+punit_type['attack_strength'] + "</b> " 
                                              + "D<b>"+punit_type['defense_strength'] + "</b> " 
                                              + "F<b>"+punit_type['firepower'] + "</b> "
 // breaks rules with different move frags:  + punit_type['move_rate'] / 3 + ", "
@@ -1640,7 +1639,7 @@ function city_worklist_dialog(pcity)
 function populate_worklist_production_choices(pcity)    
 {
   var production_list = generate_production_list();
-  var production_html = "<table class='worklist_table'><tr><td>Type</td><td>Name</td><td>Info</td><td>Cost</td></tr>";
+  var production_html = "<table class='worklist_table'><tr><td>Type</td><td>Name</td><td style='padding-right:30px; text-align:right'>Info</td><td>Cost</td></tr>";
   for (var a = 0; a < production_list.length; a++) {
     var sprite = production_list[a]['sprite'];
     if (sprite == null) {
@@ -1663,10 +1662,14 @@ function populate_worklist_production_choices(pcity)
        + "<td class='prod_choice_name'>" + production_list[a]['text'] + "</td>";       
        
        if (kind == VUT_UTYPE) {
-          production_html += "<td title='Attack/Defence/Firepower, Hitpoints' class='prod_choice_info'>" + production_list[a]['unit_details'] + "</td>";
+          production_html += "<td title='Attack/Defence/Firepower, Hitpoints' class='prod_choice_info' "
+          + "style='padding-right:30px; text-align:right'>" 
+          + production_list[a]['unit_details'] + "</td>";
        }
        else if (kind == VUT_IMPROVEMENT) {
-          production_html += "<td title='Upkeep' class='prod_choice_info'>" + production_list[a]['unit_details'] + "</td>";
+          production_html += "<td title='Upkeep' class='prod_choice_info' " 
+          + "style='padding-right:30px; text-align:right'>" 
+          + production_list[a]['unit_details'] + "</td>";
        }
           production_html += "<td class='prod_choice_cost'>" + production_list[a]['build_cost'] + "</td></tr>";
      }
