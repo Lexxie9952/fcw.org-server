@@ -652,8 +652,8 @@ function generate_production_list()
 	                    "helptext" : punit_type['helptext'],
                             "rule_name" : punit_type['rule_name'],
                             "build_cost" : punit_type['build_cost'],
-                            "unit_details" : "A<b>"+punit_type['attack_strength'] + "</b>" 
-                                             + "D<b>"+punit_type['defense_strength'] + "</b>" 
+                            "unit_details" : "A<b>"+punit_type['attack_strength'] + "</b> " 
+                                             + "D<b>"+punit_type['defense_strength'] + "</b> " 
                                              + "F<b>"+punit_type['firepower'] + "</b> "
 // breaks rules with different move frags:  + punit_type['move_rate'] / 3 + ", "
                                              + "H<b>"+punit_type['hp']+"</b>",

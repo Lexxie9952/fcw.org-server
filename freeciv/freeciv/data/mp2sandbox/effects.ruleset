@@ -2380,8 +2380,8 @@ reqs	=
       "OutputType", "Trade", "Local"
     }
 
-// Super Highways increase logistical effeciency to
-// get more use out of an airport in size 12+ city.
+; Super Highways increase logistical efficiency to
+; get more use out of an airport in size 12+ city.
 [effect_super_highways_airlift_facilitation]
 type    = "Airlift"
 value	= 1
