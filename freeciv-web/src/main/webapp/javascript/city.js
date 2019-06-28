@@ -362,7 +362,7 @@ function show_city_dialog(pcity)
          console.log("Missing sprite for " + punit);
          continue;
        }
-
+      //Unit sprite for present unit 
       present_units_html = present_units_html +
        "<div class='game_unit_list_item' title='" + get_unit_city_info(punit)
            + "' style='cursor:pointer;cursor:hand; background: transparent url("
@@ -371,6 +371,17 @@ function show_city_dialog(pcity)
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
            + " onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'"
            +"></div>";
+      // Include a national shield for FOREIGN units:      
+      if (punit['owner'] != client.conn.playing.playerno) {  
+        var shield_sprite = get_unit_nation_flag_sprite(punit);
+        if (shield_sprite == null) console.log("Missing national shield sprite for " + punit);
+        
+        present_units_html = present_units_html + "<div style='z-index:2; position:absolute; background: transparent url("
+          + shield_sprite['image-src'] +
+          ");background-position:-" + shield_sprite['tileset-x'] + "px -" + shield_sprite['tileset-y']
+          + "px;  width: " + shield_sprite['width'] + "px;height: " + shield_sprite['height'] + "px;float:left; '" 
+          +"></div>";
+      }     
     }
     $("#city_present_units_list").html(present_units_html);
   }
