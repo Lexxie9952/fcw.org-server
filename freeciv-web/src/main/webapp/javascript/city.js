@@ -159,6 +159,7 @@ function show_city_dialog(pcity)
 {
   var turns_to_complete;
   var sprite;
+  var shield_sprite;
   var punit;
 
   if (active_city != pcity || active_city == null) {
@@ -364,24 +365,28 @@ function show_city_dialog(pcity)
        }
       //Unit sprite for present unit 
       present_units_html = present_units_html +
-       "<div class='game_unit_list_item' title='" + get_unit_city_info(punit)
+       "<div><span class='game_unit_list_item' title='" + get_unit_city_info(punit)
            + "' style='cursor:pointer;cursor:hand; background: transparent url("
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
            + " onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'"
-           +"></div>";
+           +"></span>";
       // Include a national shield for FOREIGN units:      
-      if (punit['owner'] != client.conn.playing.playerno) {  
-        var shield_sprite = get_unit_nation_flag_sprite(punit);
+      if (punit['owner'] != client.conn.playing.playerno) { 
+        console.log("Foreign unit present."); 
+        shield_sprite = get_unit_nation_flag_sprite(punit);
+        console.log("Attempted to obtain national shield sprite."); 
+        
         if (shield_sprite == null) console.log("Missing national shield sprite for " + punit);
         
-        present_units_html = present_units_html + "<div style='z-index:2; position:absolute; background: transparent url("
+        present_units_html = present_units_html + "<span style='z-index:2; position:absolute; background: transparent url("
           + shield_sprite['image-src'] +
           ");background-position:-" + shield_sprite['tileset-x'] + "px -" + shield_sprite['tileset-y']
           + "px;  width: " + shield_sprite['width'] + "px;height: " + shield_sprite['height'] + "px;float:left; '" 
-          +"></div>";
-      }     
+          +"></span>";
+      }
+      present_units_html += "</div>";
     }
     $("#city_present_units_list").html(present_units_html);
   }

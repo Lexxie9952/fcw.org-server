@@ -923,6 +923,8 @@ function get_unit_nation_flag_sprite(punit)
   var nation = nations[nation_id];
   var unit_offset = get_unit_anim_offset(punit);
 
+  console.log("Attempted to get a flag sprite for nation=="+nation);
+
   return {"key" : "f.shield." + nation['graphic_str'],
           "offset_x" : unit_flag_offset_x + unit_offset['x'],
           "offset_y" : - unit_flag_offset_y + unit_offset['y']};
