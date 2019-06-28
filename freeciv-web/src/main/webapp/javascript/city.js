@@ -654,21 +654,27 @@ function generate_production_list()
                             "build_cost" : punit_type['build_cost'],
                             "unit_details" : punit_type['attack_strength'] + ", " 
                                              + punit_type['defense_strength'] + ", " 
-                                             + punit_type['firepower'],
+                                             + punit_type['firepower'] + ", "
+                                             + punit_type['move_rate'] / 3 + ", "
+                                             + punit_type['hp'],
                             "sprite" : get_unit_type_image_sprite(punit_type)});
   }
 
   for (var improvement_id in improvements) {
     var pimprovement = improvements[improvement_id];
       var build_cost = pimprovement['build_cost'];
-      if (pimprovement['name'] == "Coinage") build_cost = "-";
+      var building_details = pimprovement['upkeep'];
+      if (pimprovement['name'] == "Coinage") {
+          build_cost = "-";
+          building_details = "-";          
+      }
       production_list.push({"kind": VUT_IMPROVEMENT,
                             "value" : pimprovement['id'],
                             "text" : pimprovement['name'],
 	                    "helptext" : pimprovement['helptext'],
                             "rule_name" : pimprovement['rule_name'],
                             "build_cost" : build_cost,
-                            "unit_details" : "-",
+                            "unit_details" : building_details,
                             "sprite" : get_improvement_image_sprite(pimprovement) });
   }
   return production_list;
@@ -1630,10 +1636,10 @@ function city_worklist_dialog(pcity)
 /**************************************************************************
  Update the production choices.
 **************************************************************************/
-function populate_worklist_production_choices(pcity)
+function populate_worklist_production_choices(pcity)    
 {
   var production_list = generate_production_list();
-  var production_html = "<table class='worklist_table'><tr><td>Type</td><td>Name</td><td title='Attack/Defense/Firepower'>Info</td><td>Cost</td></tr>";
+  var production_html = "<table class='worklist_table'><tr><td>Type</td><td>Name</td><td>Info</td><td>Cost</td></tr>";
   for (var a = 0; a < production_list.length; a++) {
     var sprite = production_list[a]['sprite'];
     if (sprite == null) {
@@ -1653,15 +1659,22 @@ function populate_worklist_production_choices(pcity)
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'"
            +"></div></td>"
-       + "<td class='prod_choice_name'>" + production_list[a]['text'] + "</td>"
-       + "<td class='prod_choice_name'>" + production_list[a]['unit_details'] + "</td>"
-       + "<td class='prod_choice_cost'>" + production_list[a]['build_cost'] + "</td></tr>";
+       + "<td class='prod_choice_name'>" + production_list[a]['text'] + "</td>";       
+       
+       if (kind == VUT_UTYPE) {
+          production_html += "<td title='Attack, defence, firepower, moves, hitpoints' class='prod_choice_info'>" + production_list[a]['unit_details'] + "</td>";
+       }
+       else if (kind == VUT_IMPROVEMENT) {
+          production_html += "<td title='Upkeep' class='prod_choice_info'>" + production_list[a]['unit_details'] + "</td>";
+       }
+          production_html += "<td class='prod_choice_cost'>" + production_list[a]['build_cost'] + "</td></tr>";
      }
   }
   production_html += "</table>";
 
   $("#worklist_production_choices").html(production_html);
   $("#worklist_production_choices .production_list_item_sub").tooltip();
+  $("#worklist_production_choices .prod_choice_info").tooltip();
 
   if (!is_touch_device()) {
     $("#worklist_production_choices .worklist_table").selectable({
