@@ -643,7 +643,7 @@ function generate_production_list()
   var production_list = [];
   for (var unit_type_id in unit_types) {
     var punit_type = unit_types[unit_type_id];
-    var align_pad = (punit_type['attack_strength']<10 ? " " : "");
+    var align_pad = (punit_type['attack_strength']<10 ? "&nbsp;" : "");
 
     /* FIXME: web client doesn't support unit flags yet, so this is a hack: */
     if (punit_type['name'] == "Barbarian Leader" || punit_type['name'] == "Leader") continue;
