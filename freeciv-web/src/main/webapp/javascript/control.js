@@ -1936,7 +1936,7 @@ function do_map_click(ptile, qtype, first_time_called)
           }
       }
 
-      //if (sunits[0]['owner'] == client.conn.playing.playerno) {   // if sunits[1..length] was player's own unit, we couldn't select
+      //if (sunits[0]['owner'] == client.conn.playing.playerno) {   // if player had a unit index >0, we couldn't click the stack
       if (player_has_own_unit_present) {
         if (sunits.length == 1) {
           /* A single unit has been clicked with the mouse. */

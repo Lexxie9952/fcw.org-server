@@ -103,7 +103,7 @@ function play_combat_sound(unit)
   }
 
   if (soundset == null) {
-    console.error("soundset not found.");
+    console.error("Soundset not found.");
     return;
   }
 
@@ -112,8 +112,8 @@ function play_combat_sound(unit)
     play_sound(soundset[ptype['sound_fight']]);
   } else if (soundset[ptype['sound_fight_alt']] != null) {
     play_sound(soundset[ptype['sound_fight_alt']]);
-    console.error("Combat sound not found, played alt-sound instead.");
-  } else console.error("Combat sound for unit not found.");
+    console.error("Combat sound not found for "+unit_types[unit['type']]['name']+", played alt-sound instead.");
+  } else console.error("No Combat sound or alt sound for "+unit_types[unit['type']]['name']+" found.");
 }
 
 /**************************************************************************
