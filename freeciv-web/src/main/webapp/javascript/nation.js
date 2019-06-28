@@ -37,6 +37,15 @@ function update_nation_screen()
 	  + "<th>Nation:</th><th class='nation_attitude'>Attitude</th><th>Score</th><th>AI/Human</th><th>Alive?</th>"
 	  + "<th>Diplomatic state</th><th>Embassy</th><th>Shared vision</th><th class='nation_team'>Team</th><th>State</th></tr></thead><tbody class='nation_table_body'>";
 
+  var sortList = [];
+  var headers = $('#nation_table thead th');
+  headers.filter('.tablesorter-headerAsc').each(function (i, cell) {
+    sortList.push([cell.cellIndex, 0]);
+  });
+  headers.filter('.tablesorter-headerDesc').each(function (i, cell) {
+    sortList.push([cell.cellIndex, 1]);
+  });
+
   for (var player_id in players) {
     var pplayer = players[player_id];
     if (pplayer['nation'] == -1) continue;
@@ -142,7 +151,7 @@ function update_nation_screen()
     }
   }
 
-  $("#nation_table").tablesorter({theme: "dark", sortList: [[2,0]] });
+  $("#nation_table").tablesorter({theme: "dark", sortList: sortList });
   if (is_small_screen()) {
     $("#nations").height( mapview['height'] - 150);
     $("#nations").width( mapview['width']);
