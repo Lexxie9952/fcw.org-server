@@ -652,11 +652,11 @@ function generate_production_list()
 	                    "helptext" : punit_type['helptext'],
                             "rule_name" : punit_type['rule_name'],
                             "build_cost" : punit_type['build_cost'],
-                            "unit_details" : punit_type['attack_strength'] + ", " 
-                                             + punit_type['defense_strength'] + ", " 
-                                             + punit_type['firepower'] + ", "
-                                             + punit_type['move_rate'] / 3 + ", "
-                                             + punit_type['hp'],
+                            "unit_details" : "A<b>"+punit_type['attack_strength'] + "</b>" 
+                                             + "D<b>"+punit_type['defense_strength'] + "</b>" 
+                                             + "F<b>"+punit_type['firepower'] + "</b> "
+// breaks rules with different move frags:  + punit_type['move_rate'] / 3 + ", "
+                                             + "H<b>"+punit_type['hp']+"</b>",
                             "sprite" : get_unit_type_image_sprite(punit_type)});
   }
 
@@ -1662,7 +1662,7 @@ function populate_worklist_production_choices(pcity)
        + "<td class='prod_choice_name'>" + production_list[a]['text'] + "</td>";       
        
        if (kind == VUT_UTYPE) {
-          production_html += "<td title='Attack, defence, firepower, moves, hitpoints' class='prod_choice_info'>" + production_list[a]['unit_details'] + "</td>";
+          production_html += "<td title='Attack/Defence/Firepower, Hitpoints' class='prod_choice_info'>" + production_list[a]['unit_details'] + "</td>";
        }
        else if (kind == VUT_IMPROVEMENT) {
           production_html += "<td title='Upkeep' class='prod_choice_info'>" + production_list[a]['unit_details'] + "</td>";
