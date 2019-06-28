@@ -643,6 +643,7 @@ function generate_production_list()
   var production_list = [];
   for (var unit_type_id in unit_types) {
     var punit_type = unit_types[unit_type_id];
+    var align_pad = (punit_type['attack_strength']<10 ? " " : "");
 
     /* FIXME: web client doesn't support unit flags yet, so this is a hack: */
     if (punit_type['name'] == "Barbarian Leader" || punit_type['name'] == "Leader") continue;
@@ -652,7 +653,7 @@ function generate_production_list()
 	                    "helptext" : punit_type['helptext'],
                             "rule_name" : punit_type['rule_name'],
                             "build_cost" : punit_type['build_cost'],
-                            "unit_details" : "A<b>"+punit_type['attack_strength'] + "</b> " 
+                            "unit_details" : align_pad+"A<b>"+punit_type['attack_strength'] + "</b> " 
                                              + "D<b>"+punit_type['defense_strength'] + "</b> " 
                                              + "F<b>"+punit_type['firepower'] + "</b> "
 // breaks rules with different move frags:  + punit_type['move_rate'] / 3 + ", "
