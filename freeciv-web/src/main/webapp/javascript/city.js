@@ -363,34 +363,49 @@ function show_city_dialog(pcity)
          console.log("Missing sprite for " + punit);
          continue;
        }
-      //Unit sprite for present unit 
-      present_units_html = present_units_html +
-       "<div class='game_unit_list_item' title='" + get_unit_city_info(punit)
-           + "' style='cursor:pointer;cursor:hand; background: transparent url("
-           + sprite['image-src'] +
-           ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
-           + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
-           + " onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'"
-           +"></div>";
-      /*   if re-incorporating this make sure to put a span inside the div above and try making them both the same class.  
-      // Include a national shield for FOREIGN units:      
-      if (punit['owner'] != client.conn.playing.playerno) { 
-        console.log("Foreign unit present."); 
-        shield_sprite = get_unit_nation_flag_sprite(punit);
-        console.log("Attempted to obtain national shield sprite."); 
-                
-        if (shield_sprite == null) console.log("Missing national shield sprite for " + punit);
-        
-        present_units_html = present_units_html + "<span style='z-index:2; position:absolute; background: transparent url("
-          + shield_sprite['image-src'] +
-          ");background-position:-" + shield_sprite['tileset-x'] + "px -" + shield_sprite['tileset-y']
-          + "px;  width: " + shield_sprite['width'] + "px;height: " + shield_sprite['height'] + "px;float:left; '" 
-          +"></span>";
+        //Unit sprite for present domestic unit:
+        if (punit['owner'] == client.conn.playing.playerno) { 
+          present_units_html = present_units_html +
+          "<div class='game_unit_list_item' title='" + get_unit_city_info(punit)
+              + "' style='cursor:pointer;cursor:hand; background: transparent url("
+              + sprite['image-src'] +
+              ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
+              + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
+              + " onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'"
+              +"></div>";
+        } else { // foreign unit gets a flag drawn on it too
+          console.log("Unit present."); 
+          var tag = nations[players[punit['owner']]['nation']]['graphic_str'] 
+          
+          var civ_flag_url = "";
+          
+          if (!nations[players[punit['owner']]['nation']]['customized'] ) {
+            civ_flag_url += "/images/flags/" + tag + "-web" + get_tileset_file_extention();
+            
+              // flag
+              present_units_html = present_units_html +
+              "<div class='game_unit_list_item' title='" + nations[players[punit['owner']]['nation']]['adjective'] 
+                  + "' style='cursor:pointer;cursor:hand; background: transparent url("
+                  + civ_flag_url 
+                  + "); background-size:contain; width:21px; height:14px; float:left; ' "
+                  + "onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'"
+                  +"></div>";
+              
+              // unit  
+              present_units_html = present_units_html +
+              "<div class='game_unit_list_item' title='" + get_unit_city_info(punit)
+                  + "' style='cursor:pointer;cursor:hand; background: transparent url("
+                  + sprite['image-src'] +
+                  ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
+                  + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; margin-left:-21px; martin-top:-14px;'"
+                  + " onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'"
+                  +"></div>";
+          }
+        }
       }
-      present_units_html += "</div>";*/
+      $("#city_present_units_list").html(present_units_html);
     }
-    $("#city_present_units_list").html(present_units_html);
-  }
+  
 
   var sunits = get_supported_units(pcity);
   if (sunits != null) {
