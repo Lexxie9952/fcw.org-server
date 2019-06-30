@@ -273,7 +273,7 @@ function canvas_put_select_rectangle(canvas_context, canvas_x, canvas_y, width, 
 **************************************************************************/
 function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
 
-  var text = decodeURIComponent(city['name']).toUpperCase() + (city['airlift']>0 ? " ·"+city['airlift']+"·" : "");
+  var text = decodeURIComponent(city['name']).toUpperCase() + (city['airlift']>0 ? " |"+city['airlift']+"|" : "");
   var size = city['size'];
   var color = nations[city_owner(city)['nation']]['color'];
   var prod_type = get_city_production_type(city);
