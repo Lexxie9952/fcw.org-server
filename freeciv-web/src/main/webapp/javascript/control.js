@@ -3612,13 +3612,13 @@ function update_active_units_dialog()
       unit_info_html += " " + get_unit_homecity_name(aunit) + " ";
     }
     if (current_focus[0]['owner'] == client.conn.playing.playerno) {
-      unit_info_html += "<span style='color:white'>Moves:<span style='color:lime;font-size:110%;'><b>" + move_points_text(aunit['movesleft']) + "</b></span></span> ";
+      unit_info_html += "<span style='color:white'>Moves:<span style='color:lightgreen;font-size:110%;'><b>" + move_points_text(aunit['movesleft']) + "</b></span></span> ";
 //      unit_info_html += "<span style='color:aqua'>" + get_unit_moves_left(aunit) + "</span> ";
     }
     unit_info_html += "<span title='Attack'>A:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['attack_strength']   // make terser titles to avoid cramped clutter (Lexxie)
     + "</b></span></span> <span title='Defense'>D:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['defense_strength']
     + "</b></span></span> <span title='Firepower'>FP:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['firepower']
-    + "</b></span></span> <span title='Health'>H:<span style='color:deeppink;font-size:110%;'><b>"
+    + "</b></span></span> <span title='Health'>H:<span style='color:lightpink;font-size:110%;'><b>"
     + aunit['hp'] + "</b></span></span>"; //<span style='color:gainsboro;font-size:85%;'>/" + ptype['hp'] + "</span></span>";
     if (aunit['veteran'] > 0) {
       unit_info_html += " <span title='Vet-level'>V:<span style='color:gainsboro;font-size:100%;'><b>" + aunit['veteran'] + "</b></span></span>";
