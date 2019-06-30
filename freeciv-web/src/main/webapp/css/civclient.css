@@ -490,7 +490,7 @@ button {
 #unit_info_image {
   cursor:pointer; 
   float: left; 
-  margin-right: 5px;  
+  margin-right: 2px;  
 }
 
 #city_production_overview {
@@ -985,7 +985,7 @@ button {
 }
 
 .current_focus_unit {
-  border: 2px solid white;
+  border: 1px solid white;
   background-color: rgba(240,240,240,0.5);
  
 }
