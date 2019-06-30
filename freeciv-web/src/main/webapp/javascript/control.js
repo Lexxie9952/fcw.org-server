@@ -956,6 +956,7 @@ function update_unit_order_commands()
   $("#order_unload").hide();
   $("#order_activate_cargo").hide();
   $("#order_airlift").hide();
+  $("#order_airlift_disabled").hide();
   
 
   var terrain_name;
@@ -1211,8 +1212,14 @@ function update_unit_order_commands()
     }
 
     if (pcity != null && city_has_building(pcity, improvement_id_by_name(B_AIRPORT_NAME))) {
-      unit_actions["airlift"] = {name: "Airlift (Shift-L)"};
-      $("#order_airlift").show();
+      if (pcity["airlift"]>0) {
+        unit_actions["airlift"] = {name: "Airlift (Shift-L)"};
+        $("#order_airlift").show();
+        //$("#order_airlift_disabled").hide();
+      } else {
+        //$("#order_airlift").hide();
+        $("#order_airlift_disabled").show();
+      }      
     }
 
     if (pcity != null && ptype != null && unit_types[ptype['obsoleted_by']] != null && can_player_build_unit_direct(client.conn.playing, unit_types[ptype['obsoleted_by']])) {

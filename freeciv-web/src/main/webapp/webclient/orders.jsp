@@ -7,6 +7,10 @@
     <a href="#" onclick="key_unit_airlift();"><img src="/images/orders/airlift.png" name="airlift_button" alt="" border="0" width="30" height="30"></a>
   </div>  
 
+  <div id="order_airlift_disabled" class="order_button" title="0 Airlifts left">
+    <a href="#" onclick="key_unit_airlift();"><img src="/images/orders/airlift_disabled.png" name="airlift_button" alt="" border="0" width="30" height="30"></a>
+  </div>  
+
   <div id="order_well" class="order_button" title="Dig well">
     <a href="#" onclick="key_unit_well();"><img src="/images/orders/well.png" name="well_button" alt="" border="0" width="30" height="30"></a>
   </div>
