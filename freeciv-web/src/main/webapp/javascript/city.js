@@ -59,6 +59,7 @@ var city_screen_updater = new EventAggregator(update_city_screen, 250,
 var city_tile_map = null;
 
 var opt_show_unreachable_items = false;
+var opt_show_improvements_only = false;
 
 /**************************************************************************
  ...
@@ -1566,15 +1567,28 @@ function city_worklist_dialog(pcity)
   $('#show_unreachable_items').click(function() {
     opt_show_unreachable_items = !opt_show_unreachable_items;
     $('#show_unreachable_items').prop('checked', opt_show_unreachable_items);
-    // TODO: properly update the selection only when needed,
-    //       instead of always emptying it.
+    // TODO: properly update the selection only when needed, instead of always emptying it.
     if (production_selection.length !== 0) {
       production_selection = [];
       update_worklist_actions();
     }
     populate_worklist_production_choices(pcity);
   });
+
+  $('#show_improvements_only').off('click');
+  $('#show_improvements_only').click(function() {
+    opt_show_improvements_only = !opt_show_improvements_only;
+    $('#show_improvements_only').prop('checked', opt_show_improvements_only);
+    // TODO: properly update the selection only when needed, instead of always emptying it.
+    if (production_selection.length !== 0) {
+      production_selection = [];
+      update_worklist_actions();
+    }
+    populate_worklist_production_choices(pcity);
+  });
+
   $('#show_unreachable_items').prop('checked', opt_show_unreachable_items);
+  $('#show_improvements_only').prop('checked', opt_show_improvements_only);
 
   worklist_dialog_active = true;
   var turns_to_complete = get_city_production_time(pcity);
@@ -1664,6 +1678,9 @@ function populate_worklist_production_choices(pcity)
     var kind = production_list[a]['kind'];
     var value = production_list[a]['value'];
     var can_build = can_city_build_now(pcity, kind, value);
+
+    // Don't show units if user clicked option to only show improvements
+    if (kind == VUT_UTYPE && opt_show_improvements_only) continue;
 
     if (can_build || opt_show_unreachable_items) {
       production_html += "<tr class='prod_choice_list_item kindvalue_item"
