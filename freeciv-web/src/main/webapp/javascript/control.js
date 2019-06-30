@@ -3659,16 +3659,25 @@ function update_active_units_dialog()
 
   if (current_focus.length > 0) {
     /* reposition and resize unit dialog. */
-    var newwidth = 32 + punits.length * (width + 1) + 9;   
-//    var newwidth = 32 + punits.length * (width + 10);   // old line above--right panel padding was increasing +10 for every unit in panel
+    var newwidth = 32 + punits.length * (width+1) + 9;  // width+1 can be modified if number of units is creating inconsistency in horizontal padding
     if (newwidth < 140) newwidth = 140;
     var newheight = 75 + normal_tile_height;
-
-    if (punits.length>8) {  // 9 or more units:  switch to large side-panel style (Lexxie) 
-      newwidth = 32 + 5 * (width + 1) + 9 + 4;  // Large panel gets row of 5 units
-//      newwidth = 32 + 5 * (width + 10);  // formerly was this, but panel padding on right got more for each unit in the panel
-      newheight = normal_tile_height * Math.ceil( punits.length/5 ) +75;   // one row for every 5 units, rounded up of course
-    }
+    
+    // if 9 or more units, switch to large side-panel style with multiple rows and columns:
+    if (punits.length>8) {   
+      var columns = 5;      // start with 5 columns and only go higher if needed
+      var vertical_room = window.innerHeight - 45 /*window header area*/ - 28 /* unusable bottom area*/ - 24; /* unusable upper area of unit panel*/
+      var max_rows = Math.floor(vertical_room/50); // max. # of unit rows in game_unit_panel. 50=48+2 (unit vertical size+top/bottom border px)
+      var max_units = columns * max_rows; //max number of units we can fit with 5 columns
+      // check if 5 columns isn't enough to fit all units in the panel:
+      if (punits.length > max_units) {  // if 5 columns isn't enough, then each column can display max_rows more units:
+        columns += Math.ceil( (punits.length-max_units)/max_rows );
+        console.log("Ultra-large unit panel created. Vertical_room="+vertical_room+" max_rows="+max_rows+" columns="+columns);
+        console.log(".. max_units="+max_units+" selected_units="+punits.length);
+      }
+      newwidth = 32 + columns*(width+1) + 9 + 4;  // Large panel gets row of 5 units
+      newheight = normal_tile_height * Math.ceil( punits.length/columns ) +75;   // one row for every 5+ units, rounded up of course
+    } 
     $("#game_unit_panel").parent().show();
     $("#game_unit_panel").parent().width(newwidth);
     $("#game_unit_panel").parent().height(newheight+6);  // third line of text is rare but needs 5 more px to not be clipped off (Lexxie)
