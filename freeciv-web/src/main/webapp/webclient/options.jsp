@@ -47,11 +47,20 @@
     <b>Play sounds:</b> <input type='checkbox' name='play_sounds_setting' id='play_sounds_setting' checked>
   </div>
 </td>
+
 <td>
   <div class="main_menu_buttons">
     <b>Speech messages:</b> <input type='checkbox' name='speech_enabled_setting' id='speech_enabled_setting'>
   </div>
 </td>
+</tr>
+
+<tr>
+  <td>
+    <div class="main_menu_buttons">
+      <b>Show city airlift capacity:</b> <input type='checkbox' name='airlift_setting' id='airlift_setting' checked>
+    </div>
+  </td>
 </tr>
 
 <tr>

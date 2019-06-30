@@ -47,7 +47,7 @@ var fullscreen_mode = FALSE;
 
 var solid_color_behind_units = FALSE;
 var sound_bell_at_new_turn = FALSE;
-var  smooth_move_unit_msec = 30;
+var smooth_move_unit_msec = 30;
 var smooth_center_slide_msec = 200;
 var do_combat_animation = TRUE;
 var ai_manual_turn_done = TRUE;
@@ -74,6 +74,7 @@ var update_city_text_in_refresh_tile = TRUE;
 
 var draw_city_outlines = TRUE;
 var draw_city_output = FALSE;
+var draw_city_airlift_counter = FALSE;
 var draw_map_grid = FALSE;
 var draw_city_names = TRUE;
 var draw_city_growth = TRUE;
@@ -170,7 +171,16 @@ function init_options_dialog()
   } else {
     $('#speech_enabled_setting').attr('disabled', true);
   }
- 
+
+
+  $('#airlift_setting').prop('checked', draw_city_airlift_counter);
+
+  $('#airlift_setting').change(function() {
+    draw_city_airlift_counter = this.checked;
+    simpleStorage.set('sndFX', draw_city_airlift_counter);
+  });
+
+  
   if (!is_longturn()) {
     if (renderer == RENDERER_WEBGL) {
         $("#switch_renderer_button").html("Use 2D HTML5 graphics");

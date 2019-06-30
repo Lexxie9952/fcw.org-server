@@ -2150,6 +2150,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       if (shift) {
         key_unit_airlift();
       } else if (alt) key_unit_move(DIR8_NORTHEAST); // alt+L=6 
+      else if (ctrl) draw_city_airlift_counter = !draw_city_airlift_counter;
       else {
         key_unit_load();
       }
