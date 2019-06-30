@@ -511,7 +511,7 @@ function update_map_canvas_check()
     if (e.name == 'NS_ERROR_NOT_AVAILABLE') {
       setTimeout(update_map_canvas_check, 100);
     } else {
-      throw e;
+      // throw e;  Speed up and REMOVE:  This was going off constantly, to report [Violation] 'requestAnimationFrame' handler took x ms
     }
   }
 }
