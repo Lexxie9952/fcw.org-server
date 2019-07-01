@@ -1903,7 +1903,7 @@ function do_map_click(ptile, qtype, first_time_called)
 
   } else {
     if (pcity != null) { //if city clicked
-      if (pcity['owner'] == client.conn.playing.playerno) { //if city is your own
+      if (pcity['owner'] == client.conn.playing.playerno && !mouse_click_mod_key['shiftKey']) { //if city is your own
         console.log("Clicked our own city.");
         if (sunits != null && sunits.length > 0 //if units inside
             && sunits[0]['activity'] == ACTIVITY_IDLE //if unit idle/selectable
@@ -1935,7 +1935,7 @@ function do_map_click(ptile, qtype, first_time_called)
                       " and for some reason we're still not showing the city dialog.");
           return;  
       }
-      console.log("Clicked a non-domestic city. Not showing dialog.  goto_active=="+goto_active);
+      console.log("Clicked a non-domestic city or shift-clicked domestic. Not showing dialog.  goto_active=="+goto_active);
       //return;  //this return-command only happened if clicking a foreign city, bypassing all ability below to click your 
       //own unit on a tile that's not your city (such as, a foreign city)
 
