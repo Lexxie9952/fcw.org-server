@@ -1625,6 +1625,8 @@ function do_map_click(ptile, qtype, first_time_called)
   var punit;
   var packet;
   var pcity;
+  var player_has_own_unit_present = false;
+
   if (ptile == null || client_is_observer()) return;
 
   if (current_focus.length > 0 && current_focus[0]['tile'] == ptile['index']) {
@@ -1944,7 +1946,6 @@ function do_map_click(ptile, qtype, first_time_called)
       // Check that one of the units belongs to player:
       console.log("Clicked on tile with units present and doing a check for owner units. shiftKey=="+mouse_click_mod_key['shiftKey']);                          
 
-      var player_has_own_unit_present = false;
       var own_unit_index = -1; // -1 means player has none of own units present 
 
       for (var u = 0; u < sunits.length; u++) {
