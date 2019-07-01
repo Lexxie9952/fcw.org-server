@@ -1627,34 +1627,34 @@ function do_map_click(ptile, qtype, first_time_called)
   var pcity;
   var player_has_own_unit_present = false;
 
-  console.log("FUNCTION CALLED:  do_map_click()");
+  //console.log("FUNCTION CALLED:  do_map_click()");
 
   if (ptile == null || client_is_observer()) return;
 
-  console.log("  d_m_c: current_focus.length at this point is "+current_focus.length);
+  //console.log("  d_m_c: current_focus.length at this point is "+current_focus.length);
   //console.log("   d_m_c: current_focus[0] location is: "+tiles[current_focus[0]['tile']]['x']+","+tiles[current_focus[0]['tile']]['y']);
 
   if (current_focus.length > 0 && current_focus[0]['tile'] == ptile['index']) {
     /* clicked on unit at the same tile, then deactivate goto and show context menu. */
     if (goto_active && !is_touch_device()) {
       deactivate_goto(false);
-      console.log("do_map_click made it to POINT 1");
+      //console.log("do_map_click made it to POINT 1");
     }
     if (renderer == RENDERER_2DCANVAS && !mouse_click_mod_key['shiftKey']) {
       // normal left-click unit (not shift-click), show context menu
       $("#canvas").contextMenu();
-      console.log("do_map_click made it to POINT 2");
+      //console.log("do_map_click made it to POINT 2");
     } else if (!mouse_click_mod_key['shiftKey']) {
       // same as above but different block for handling 3d
       $("#canvas_div").contextMenu();
-      console.log("do_map_click made it to POINT 3");
+      //console.log("do_map_click made it to POINT 3");
     }
     if (!mouse_click_mod_key['shiftKey']) return; //our work is done here unless we did a shift-click
   }
   var sunits = tile_units(ptile);
   pcity = tile_city(ptile);
 
-  console.log("do_map_click made it to POINT 5");
+  //console.log("do_map_click made it to POINT 5");
 
   // HANDLE GOTO ACTIVE CLICKS ------------------------------------------------------------------------------------------------
   if (goto_active) {
@@ -1679,7 +1679,7 @@ function do_map_click(ptile, qtype, first_time_called)
         // people on touch devices, etc., from being able to do legal manual movements to adjacent tiles:
         var tile_dx = ptile['x'] - old_tile['x']; 
         var tile_dy = ptile['y'] - old_tile['y'];
-        console.log("dx:"+tile_dx+", dy:"+tile_dy);
+        //console.log("dx:"+tile_dx+", dy:"+tile_dy);
         if (Math.abs(tile_dx)<=1 && Math.abs(tile_dy) <=1) // less than one tile away in x AND y will simulating hitting an arrow instead:
         {
           console.log("Attempting a GO TO to an adjacent tile.")
@@ -1897,14 +1897,14 @@ function do_map_click(ptile, qtype, first_time_called)
     airlift_active = false;
 
   } else if (action_tgt_sel_active && current_focus.length > 0) {
-    console.log("action_tgt_sel_active, calling request_unit_act_sel_vs(ptile)");
+    //console.log("action_tgt_sel_active, calling request_unit_act_sel_vs(ptile)");
     request_unit_act_sel_vs(ptile);
     action_tgt_sel_active = false;
 
   } else {
     if (pcity != null) { //if city clicked
       if (pcity['owner'] == client.conn.playing.playerno && !mouse_click_mod_key['shiftKey']) { //if city is your own
-        console.log("Clicked our own city.");
+        //console.log("Clicked our own city.");
         if (sunits != null && sunits.length > 0 //if units inside
             && sunits[0]['activity'] == ACTIVITY_IDLE //if unit idle/selectable
             && sunits[0]['owner'] == client.conn.playing.playerno  // if foreign-allied occupant we don't want to select the unit 
@@ -1916,8 +1916,8 @@ function do_map_click(ptile, qtype, first_time_called)
           } else {
             $("#canvas_div").contextMenu();
           }
-          console.log("Clicked our own city which had idle units inside, and a domestic unit was in focus as sunit[0],"+
-                      " so attempting to focus on the units.");
+          //console.log("Clicked our own city which had idle units inside, and a domestic unit was in focus as sunit[0],"+
+          //            " so attempting to focus on the units.");
           return; // move the commented-out return from below up here
         } else if (!goto_active) { //if GOTO active then the click is a move command, not a show city command
             // the case below only happens if clicking a city with foreign unit inside while not issuing a GOTO move command.
@@ -1943,20 +1943,20 @@ function do_map_click(ptile, qtype, first_time_called)
       // TO DO: test if go to on a foreign allied city still works !
     }
 
-    console.log("Click resulted in arriving at this stage, past city checks and handling.");
+    //console.log("Click resulted in arriving at this stage, past city checks and handling.");
 
     if (sunits != null && sunits.length == 0) {
       // Clicked on a tile with no units:
         // Normal left-click on no unit: unselect units and reset.
         // Shift+left-click on no unit: 'add nothing' to current selection, i.e., do nothing.
       if (!mouse_click_mod_key['shiftKey']) {
-        console.log("Clicked on blank tile with shiftKey=="+mouse_click_mod_key['shiftKey']);                          
+        //console.log("Clicked on blank tile with shiftKey=="+mouse_click_mod_key['shiftKey']);                          
         set_unit_focus_and_redraw(null);
       }
     } else if (sunits != null && sunits.length > 0 ) {
       // Clicked on a tile with units:
       // Check that one of the units belongs to player:
-      console.log("Clicked on tile with units present and doing a check for owner units. shiftKey=="+mouse_click_mod_key['shiftKey']);                          
+      //console.log("Clicked on tile with units present and doing a check for owner units. shiftKey=="+mouse_click_mod_key['shiftKey']);                          
 
       var own_unit_index = -1; // -1 means player has none of own units present 
 
@@ -1967,26 +1967,26 @@ function do_map_click(ptile, qtype, first_time_called)
             player_has_own_unit_present = true;
           }
       }
-      console.log("  player has units present=="+player_has_own_unit_present);                          
+      //console.log("  player has units present=="+player_has_own_unit_present);                          
 
       //if (sunits[0]['owner'] == client.conn.playing.playerno) {   // if player had a unit index >0, we couldn't click the stack
       if (player_has_own_unit_present) {
 
-        console.log("  in block to handle if player has units present");                          
+        //console.log("  in block to handle if player has units present");                          
 
         // Shift-click means the user wants to add the units in this stack to selected units:
         if (mouse_click_mod_key['shiftKey'])  { 
           //var selected_units = [];  // container for all units on tile that player owns
-          console.log("Attempting to add owner's present units to current_focus, .length=="+current_focus.length);                          
+          //console.log("Attempting to add owner's present units to current_focus, .length=="+current_focus.length);                          
 
 				  for (var i = 0; i < sunits.length; i++) {
             var clicked_unit = sunits[i];
-            console.log("  ...sunit["+i+"]...");
+            //console.log("  ...sunit["+i+"]...");
             if (clicked_unit['owner'] == client.conn.playing.playerno) 
             {
               //selected_units.push(clicked_unit);
-              current_focus.push(clicked_unit);	//do we need to check if unit is already in current_focus before adding it?
-              console.log("Pushing a unit to current_focus.");                          
+              current_focus.push(clicked_unit);	
+              //console.log("Pushing a unit to current_focus.");                          
             }
           }         
           update_active_units_dialog();
@@ -1995,18 +1995,18 @@ function do_map_click(ptile, qtype, first_time_called)
         else if (sunits.length == 1) { //normal left-click on a single unit: change focus onto this unit
           /* A single unit has been clicked with the mouse. */
           var unit = sunits[0];
-          console.log("*** We did not enter shift-click code block and are handling sunits.length==1");
+          //console.log("*** We did not enter shift-click code block and are handling sunits.length==1");
           set_unit_focus_and_activate(unit);
         } else { /* more than one unit is on the selected left-clicked tile. */
             if (own_unit_index>=0) {
               set_unit_focus_and_redraw(sunits[own_unit_index]);
-              console.log("*** We did not enter shift-click code block and are focusing on sunits["+own_unit_index);
+              //console.log("*** We did not enter shift-click code block and are focusing on sunits["+own_unit_index);
             }
             else {
               set_unit_focus_and_redraw(sunits[0]); //this shouldn't happen but, select first unit[0] if player doesn't have own unit.
               console.log("Logic fault: player has own unit supposedly present but we're selecting sunit[0] instead.")
             }
-          console.log("About to update_active_units_dialog()");  
+          //console.log("About to update_active_units_dialog()");  
           update_active_units_dialog();
         }
 
@@ -2021,7 +2021,7 @@ function do_map_click(ptile, qtype, first_time_called)
       } else if (pcity == null && !mouse_click_mod_key['shiftKey']) {
         // clicked on a tile with units exclusively owned by other players.
         // (if shift was held we simply do nothing since they can't be added to selected units)
-        console.log("Clicked a non-city without any of our own units and without shift-key.");
+        //console.log("Clicked a non-city without any of our own units and without shift-key.");
         current_focus = sunits;
         $("#game_unit_orders_default").hide();
         update_active_units_dialog();
@@ -3325,7 +3325,7 @@ function(){
 **************************************************************************/
 function key_unit_move(dir)
 {
-  console.log("Function key unit_move called. direction="+dir);
+  //console.log("Function key unit_move called. direction="+dir);
   // this function could simply be set to call
   // function key_unit_move_focus_index(dir, 0), since they are identical
   // and this function just hard-codes 0 for the unit in focus
@@ -3375,7 +3375,7 @@ function key_unit_move(dir)
 **************************************************************************/
 function key_unit_move_focus_index(dir, s)
 {
-  console.log("Function key unit_move called. direction="+dir);
+  //console.log("Function key unit_move called. direction="+dir);
   if (current_focus.length > 0 /* && current_focus.length >=s << don't know if this is necessary */) {
     var punit = current_focus[s];
     if (punit == null) {
