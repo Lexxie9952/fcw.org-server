@@ -1176,7 +1176,7 @@ function show_intro_dialog(title, message) {
   } else if ($.getUrlVar('action') == "multi") {
     join_game_customize_text = "Join Game";
   } else {
-    join_game_customize_text = "Customize Game";
+    join_game_customize_text = "Customize/Load";
   }
 
   $("#dialog").attr("title", title);
