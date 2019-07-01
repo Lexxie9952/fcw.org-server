@@ -1632,7 +1632,7 @@ function do_map_click(ptile, qtype, first_time_called)
   if (ptile == null || client_is_observer()) return;
 
   console.log("  current_focus.length at this point is "+current_focus.length);
-  console.log("   current_focus[0] location is: "+tiles[current_focus['tile']]['x']+","+tiles[current_focus['tile']]['y']);
+  console.log("   current_focus[0] location is: "+tiles[current_focus[0]['tile']]['x']+","+tiles[current_focus[0]['tile']]['y']);
 
   if (current_focus.length > 0 && current_focus[0]['tile'] == ptile['index']) {
     /* clicked on unit at the same tile, then deactivate goto and show context menu. */
