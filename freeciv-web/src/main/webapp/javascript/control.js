@@ -1891,8 +1891,9 @@ function do_map_click(ptile, qtype, first_time_called)
         console.log("Clicked our own city.");
         if (sunits != null && sunits.length > 0 //if units inside
             && sunits[0]['activity'] == ACTIVITY_IDLE //if unit idle/selectable
-            && sunits[0]['owner'] == client.conn.playing.playerno ) {  // if foreign-allied occupant we don't want to select the unit, which
-                                                                       // would have no context menu or way to get into your own city           
+            && sunits[0]['owner'] == client.conn.playing.playerno  // if foreign-allied occupant we don't want to select the unit 
+            && sunits[0]['movesleft'] > 0) { // if no moves left we'd rather go inside city
+                                                        
           set_unit_focus_and_redraw(sunits[0]);
           if (renderer == RENDERER_2DCANVAS) {
             $("#canvas").contextMenu();
