@@ -1883,8 +1883,10 @@ function do_map_click(ptile, qtype, first_time_called)
     airlift_active = false;
 
   } else if (action_tgt_sel_active && current_focus.length > 0) {
+    console.log("action_tgt_sel_active, calling request_unit_act_sel_vs(ptile)");
     request_unit_act_sel_vs(ptile);
     action_tgt_sel_active = false;
+
   } else {
     if (pcity != null) { //if city clicked
       if (pcity['owner'] == client.conn.playing.playerno) { //if city is your own
@@ -1927,15 +1929,21 @@ function do_map_click(ptile, qtype, first_time_called)
       // TO DO: test if go to on a foreign allied city still works !
     }
 
+    console.log("Click resulted in arriving at this stage, past city checks and handling.");
+
     if (sunits != null && sunits.length == 0) {
       // Clicked on a tile with no units:
         // Normal left-click on no unit: unselect units and reset.
         // Shift+left-click on no unit: 'add nothing' to current selection, i.e., do nothing.
-      if (!mouse_click_mod_key['shiftKey'])
+      if (!mouse_click_mod_key['shiftKey']) {
+        console.log("Clicked on blank tile with shiftKey=="+mouse_click_mod_key['shiftKey']);                          
         set_unit_focus_and_redraw(null);
+      }
     } else if (sunits != null && sunits.length > 0 ) {
       // Clicked on a tile with units:
       // Check that one of the units belongs to player:
+      console.log("Clicked on tile with units present and doing a check for owner units. shiftKey=="+mouse_click_mod_key['shiftKey']);                          
+
       var player_has_own_unit_present = false;
       var own_unit_index = -1; // -1 means player has none of own units present 
 
@@ -1946,11 +1954,12 @@ function do_map_click(ptile, qtype, first_time_called)
             player_has_own_unit_present = true;
           }
       }
+      console.log("  player has units present=="+player_has_units_present);                          
 
       //if (sunits[0]['owner'] == client.conn.playing.playerno) {   // if player had a unit index >0, we couldn't click the stack
       if (player_has_own_unit_present) {
 
-        console.log("Clicked on tile where player owns units and shiftKey=="+mouse_click_mod_key['shiftKey']);                          
+        console.log("  in block to handle if player has units present");                          
 
         // Shift-click means the user wants to add the units in this stack to selected units:
         if (mouse_click_mod_key['shiftKey'])  { 
@@ -1967,19 +1976,23 @@ function do_map_click(ptile, qtype, first_time_called)
             }
           }         
           update_active_units_dialog();
-        }
-
+        } 
         // User did a normal click, so just change selected focus:
         else if (sunits.length == 1) { //normal left-click on a single unit: change focus onto this unit
           /* A single unit has been clicked with the mouse. */
           var unit = sunits[0];
+          console.log("*** We did not enter shift-click code block and are handling sunits.length==1");
           set_unit_focus_and_activate(unit);
         } else { /* more than one unit is on the selected left-clicked tile. */
-            if (own_unit_index>=0) set_unit_focus_and_redraw(sunits[own_unit_index]);
+            if (own_unit_index>=0) {
+              set_unit_focus_and_redraw(sunits[own_unit_index]);
+              console.log("*** We did not enter shift-click code block and are focusing on sunits["+own_unit_index);
+            }
             else {
               set_unit_focus_and_redraw(sunits[0]); //this shouldn't happen but, select first unit[0] if player doesn't have own unit.
               console.log("Logic fault: player has own unit supposedly present but we're selecting sunit[0] instead.")
             }
+          console.log("About to update_active_units_dialog()");  
           update_active_units_dialog();
         }
 
@@ -1994,6 +2007,7 @@ function do_map_click(ptile, qtype, first_time_called)
       } else if (pcity == null && !mouse_click_mod_key['shiftKey']) {
         // clicked on a tile with units exclusively owned by other players.
         // (if shift was held we simply do nothing since they can't be added to selected units)
+        console.log("Clicked a non-city without any of our own units and without shift-key.");
         current_focus = sunits;
         $("#game_unit_orders_default").hide();
         update_active_units_dialog();
