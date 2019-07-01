@@ -28,6 +28,7 @@ var map_select_active = false;
 var map_select_x;
 var map_select_y;
 var mouse_touch_started_on_unit = false;
+var mouse_click_mod_key = null;
 
 /****************************************************************************
   Init 2D mapctrl
@@ -54,6 +55,9 @@ function mapview_mouse_click(e)
 {
   var rightclick = false;
   var middleclick = false;
+
+  mouse_click_mod_key = e;  // this needs to be saved for later determination
+                            // of shift- or ctrl- clicks for various actions
 
   if (!e) e = window.event;
   if (e.which) {
@@ -93,6 +97,9 @@ function mapview_mouse_down(e)
   var rightclick = false;
   var middleclick = false;
 
+  mouse_click_mod_key = e;  // this needs to be saved for later determination
+                            // of shift- or ctrl- clicks for various actions
+
   if (!e) e = window.event;
   if (e.which) {
     rightclick = (e.which == 3);
@@ -113,6 +120,7 @@ function mapview_mouse_down(e)
 
   } else if (middleclick || e['altKey']) {
     popit();
+    // TO DO: include longpress here for touch devices
     return false;
   } else if (rightclick && !map_select_active && is_right_mouse_selection_supported()) {
     map_select_check = true;
