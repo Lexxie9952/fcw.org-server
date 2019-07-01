@@ -907,6 +907,8 @@ function get_border_line_sprites(ptile)
       var pnation = nations[players[ptile['owner']]['nation']];
       result.push({"key" : "border", "dir" : dir,
                    "color": pnation['color']});
+
+      console.log(pnation['color']);             
     }
   }
 
