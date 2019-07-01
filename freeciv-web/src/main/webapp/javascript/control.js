@@ -1955,7 +1955,7 @@ function do_map_click(ptile, qtype, first_time_called)
             player_has_own_unit_present = true;
           }
       }
-      console.log("  player has units present=="+player_has_own_units_present);                          
+      console.log("  player has units present=="+player_has_own_unit_present);                          
 
       //if (sunits[0]['owner'] == client.conn.playing.playerno) {   // if player had a unit index >0, we couldn't click the stack
       if (player_has_own_unit_present) {
