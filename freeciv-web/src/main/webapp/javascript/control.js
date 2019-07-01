@@ -1953,8 +1953,10 @@ function do_map_click(ptile, qtype, first_time_called)
         // Shift-click means the user wants to add the units in this stack to selected units:
         if (mouse_click_mod_key['shiftKey'])  { 
           //var selected_units = [];  // container for all units on tile that player owns
+          console.log("Clicked on tile where player owns units and e.shiftKey=="+e['shiftKey']);                          
+
 				  for (var i = 0; i < sunits.length; i++) {
-      		  //var clicked_unit = sunits[i];
+      		  var clicked_unit = sunits[i];
             if (clicked_unit['owner'] == client.conn.playing.playerno) 
               //selected_units.push(clicked_unit);
               current_focus.push(clicked_unit);	//do we need to check if unit is already in current_focus before adding it?

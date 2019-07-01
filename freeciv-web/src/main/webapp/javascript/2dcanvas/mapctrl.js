@@ -59,6 +59,8 @@ function mapview_mouse_click(e)
   mouse_click_mod_key = e;  // this needs to be saved for later determination
                             // of shift- or ctrl- clicks for various actions
 
+  console.log("Saved mouse_click_mod_key on mouse up, e.shiftKey=="+e['shiftKey']);                          
+
   if (!e) e = window.event;
   if (e.which) {
     rightclick = (e.which == 3);
@@ -99,6 +101,8 @@ function mapview_mouse_down(e)
 
   mouse_click_mod_key = e;  // this needs to be saved for later determination
                             // of shift- or ctrl- clicks for various actions
+
+  console.log("Saved mouse_click_mod_key on mouse up, e.shiftKey=="+e['shiftKey']);                          
 
   if (!e) e = window.event;
   if (e.which) {
