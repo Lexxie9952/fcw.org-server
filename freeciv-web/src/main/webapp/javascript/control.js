@@ -1637,15 +1637,16 @@ function do_map_click(ptile, qtype, first_time_called)
       deactivate_goto(false);
       console.log("do_map_click made it to POINT 1");
     }
-    if (renderer == RENDERER_2DCANVAS) {
+    if (renderer == RENDERER_2DCANVAS && !mouse_click_mod_key['shiftKey']) {
+      // normal left-click unit (not shift-click), show context menu
       $("#canvas").contextMenu();
       console.log("do_map_click made it to POINT 2");
-    } else {
+    } else if (!mouse_click_mod_key['shiftKey']) {
+      // same as above but different block for handling 3d
       $("#canvas_div").contextMenu();
       console.log("do_map_click made it to POINT 3");
     }
-    console.log("do_map_click made it to POINT 4");
-    return;
+    if (!mouse_click_mod_key['shiftKey']) return; //our work is done here unless we did a shift-click
   }
   var sunits = tile_units(ptile);
   pcity = tile_city(ptile);
