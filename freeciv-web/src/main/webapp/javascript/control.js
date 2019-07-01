@@ -1635,16 +1635,22 @@ function do_map_click(ptile, qtype, first_time_called)
     /* clicked on unit at the same tile, then deactivate goto and show context menu. */
     if (goto_active && !is_touch_device()) {
       deactivate_goto(false);
+      console.log("do_map_click made it to POINT 1");
     }
     if (renderer == RENDERER_2DCANVAS) {
       $("#canvas").contextMenu();
+      console.log("do_map_click made it to POINT 2");
     } else {
       $("#canvas_div").contextMenu();
+      console.log("do_map_click made it to POINT 3");
     }
+    console.log("do_map_click made it to POINT 4");
     return;
   }
   var sunits = tile_units(ptile);
   pcity = tile_city(ptile);
+
+  console.log("do_map_click made it to POINT 5");
 
   // HANDLE GOTO ACTIVE CLICKS ------------------------------------------------------------------------------------------------
   if (goto_active) {
