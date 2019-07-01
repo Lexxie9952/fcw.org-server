@@ -1928,11 +1928,14 @@ function do_map_click(ptile, qtype, first_time_called)
     }
 
     if (sunits != null && sunits.length == 0) {
-      /* Clicked on a tile with no units. */
-      set_unit_focus_and_redraw(null);
-
+      // Clicked on a tile with no units:
+        // Normal left-click on no unit: unselect units and reset.
+        // Shift+left-click on no unit: 'add nothing' to current selection, i.e., do nothing.
+      if (!mouse_click_mod_key['shiftKey'])
+        set_unit_focus_and_redraw(null);
     } else if (sunits != null && sunits.length > 0 ) {
-      // test that one of the units belongs to owner
+      // Clicked on a tile with units:
+      // Check that one of the units belongs to player:
       var player_has_own_unit_present = false;
       var own_unit_index = -1; // -1 means player has none of own units present 
 
@@ -1946,17 +1949,30 @@ function do_map_click(ptile, qtype, first_time_called)
 
       //if (sunits[0]['owner'] == client.conn.playing.playerno) {   // if player had a unit index >0, we couldn't click the stack
       if (player_has_own_unit_present) {
-        if (sunits.length == 1) {
+       
+        // Shift-click means the user wants to add the units in this stack to selected units:
+        if (mouse_click_mod_key['shiftKey'])  { 
+          //var selected_units = [];  // container for all units on tile that player owns
+				  for (var i = 0; i < sunits.length; i++) {
+      		  //var clicked_unit = sunits[i];
+            if (clicked_unit['owner'] == client.conn.playing.playerno) 
+              //selected_units.push(clicked_unit);
+              current_focus.push(clicked_unit);	//do we need to check if unit is already in current_focus before adding it?
+          }         
+          update_active_units_dialog();
+        }
+
+        // User did a normal click, so just change selected focus:
+        else if (sunits.length == 1) { //normal left-click on a single unit: change focus onto this unit
           /* A single unit has been clicked with the mouse. */
           var unit = sunits[0];
           set_unit_focus_and_activate(unit);
-        } else {
-          /* more than one unit is on the selected tile. */
-          if (own_unit_index>=0) set_unit_focus_and_redraw(sunits[own_unit_index]);
-          else {
-            set_unit_focus_and_redraw(sunits[0]); //this shouldn't happen but, select first unit[0] if player doesn't have own unit.
-            console.log("Logic fault: player has own unit supposedly present but we're selecting sunit[0] instead.")
-          }
+        } else { /* more than one unit is on the selected left-clicked tile. */
+            if (own_unit_index>=0) set_unit_focus_and_redraw(sunits[own_unit_index]);
+            else {
+              set_unit_focus_and_redraw(sunits[0]); //this shouldn't happen but, select first unit[0] if player doesn't have own unit.
+              console.log("Logic fault: player has own unit supposedly present but we're selecting sunit[0] instead.")
+            }
           update_active_units_dialog();
         }
 
@@ -1968,8 +1984,9 @@ function do_map_click(ptile, qtype, first_time_called)
           }
         }
           
-      } else if (pcity == null) {
-        // clicked on a tile with units owned by other players.
+      } else if (pcity == null && !mouse_click_mod_key['shiftKey']) {
+        // clicked on a tile with units exclusively owned by other players.
+        // (if shift was held we simply do nothing since they can't be added to selected units)
         current_focus = sunits;
         $("#game_unit_orders_default").hide();
         update_active_units_dialog();
