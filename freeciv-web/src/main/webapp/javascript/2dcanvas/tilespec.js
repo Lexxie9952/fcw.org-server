@@ -907,8 +907,6 @@ function get_border_line_sprites(ptile)
       var pnation = nations[players[ptile['owner']]['nation']];
       result.push({"key" : "border", "dir" : dir,
                    "color": pnation['color']});
-      
-      console.log(pnation['color']);             
     }
   }
 
@@ -928,9 +926,12 @@ function get_grid_line_sprites(ptile)
     var dir = cardinal_tileset_dirs[i];
     var checktile = mapstep(ptile, dir);
 
-    if (checktile != null)
-      result.push({"key" : "border", "dir" : dir,
-                      "color": "rgba(0,0,0,0.34)" });
+    if (checktile != null) {
+      if (terrains[ptile['terrain']]['name'] == "Deep Ocean")
+        result.push({"key" : "border", "dir" : dir, "color": "rgba(0,0,0,1.0)" });  //stronger contrast on deep ocean
+      else
+        result.push({"key" : "border", "dir" : dir, "color": "rgba(0,0,0,0.34)" });
+    }
   }
 
   return result;
