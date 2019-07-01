@@ -905,8 +905,10 @@ function get_border_line_sprites(ptile)
         && ptile['owner'] != 255 /* 255 is a special constant indicating that the tile is not owned by anyone. */
         && players[ptile['owner']] != null) {
       var pnation = nations[players[ptile['owner']]['nation']];
+      //result.push({"key" : "border", "dir" : dir,
+      //             "color": pnation['color']});
       result.push({"key" : "border", "dir" : dir,
-                   "color": pnation['color']});
+                      "color": "rgb(0,0,0)" });
 
       console.log(pnation['color']);             
     }
