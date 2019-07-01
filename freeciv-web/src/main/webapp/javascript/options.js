@@ -181,6 +181,14 @@ function init_options_dialog()
   });
 
   
+  $('#draw_map_grid').prop('checked', draw_map_grid);
+
+  $('#draw_map_grid').change(function() {
+    draw_map_grid = this.checked;
+    simpleStorage.set('sndFX', draw_map_grid);
+  });
+
+  
   if (!is_longturn()) {
     if (renderer == RENDERER_WEBGL) {
         $("#switch_renderer_button").html("Use 2D HTML5 graphics");

@@ -56,6 +56,11 @@
 </tr>
 
 <tr>
+    <td>
+        <div class="main_menu_buttons">
+          <b>Draw map grid:</b> <input type='checkbox' name='draw_map_grid' id='draw_map_grid' checked>
+        </div>
+      </td>
   <td>
     <div class="main_menu_buttons">
       <b>Show city airlift capacity:</b> <input type='checkbox' name='airlift_setting' id='airlift_setting' checked>

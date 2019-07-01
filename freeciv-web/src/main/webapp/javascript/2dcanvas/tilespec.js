@@ -303,6 +303,8 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
                               tileset_extra_id_graphic_tag(EXTRA_FALLOUT)});
         }
 
+        if (draw_map_grid) sprite_array.concat(get_grid_line_sprites(ptile)); 
+
         sprite_array = sprite_array.concat(get_border_line_sprites(ptile));
 
       }
@@ -906,6 +908,25 @@ function get_border_line_sprites(ptile)
       result.push({"key" : "border", "dir" : dir,
                    "color": pnation['color']});
     }
+  }
+
+  return result;
+}
+
+/**********************************************************************
+...ADD_SPRITE_SIMPLE(t->sprites.grid.main[pedge->type] used in gtk client
+***********************************************************************/
+function get_grid_line_sprites(ptile)
+{
+  var result = [];
+
+  // first test run, just draw the player's border on every tile
+
+  for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
+    var dir = cardinal_tileset_dirs[i];
+    var pnation = nations[players[ptile['owner']]['nation']];
+    result.push({"key" : "border", "dir" : dir,
+                    "color": pnation['color']});
   }
 
   return result;
