@@ -59,8 +59,10 @@ function mapview_mouse_click(e)
   mouse_click_mod_key = e;  // this needs to be saved for later determination
                             // of shift- or ctrl- clicks for various actions
 
-  console.log("Saved mouse_click_mod_key on mouse up, e.shiftKey=="+e['shiftKey']);                          
 
+  console.log("       mouse up: current_focus.length at this point is "+current_focus.length);
+  console.log("         mouse up: current_focus[0] location is: "+tiles[current_focus[0]['tile']]['x']+","+tiles[current_focus[0]['tile']]['y']);
+                        
   if (!e) e = window.event;
   if (e.which) {
     rightclick = (e.which == 3);
@@ -88,6 +90,10 @@ function mapview_mouse_click(e)
     /* Left mouse button*/
     console.log("Left mouse button UP event.");
     action_button_pressed(mouse_x, mouse_y, SELECT_POPUP);
+    console.log("Back inside mouse up function, after action_button_pressed called");
+    console.log("       mouse up2: current_focus.length at this point is "+current_focus.length);
+    console.log("         mouse up2: current_focus[0] location is: "+tiles[current_focus[0]['tile']]['x']+","+tiles[current_focus[0]['tile']]['y']);
+  
     mapview_mouse_movement = false;
     update_mouse_cursor();
   }
@@ -106,7 +112,8 @@ function mapview_mouse_down(e)
   mouse_click_mod_key = e;  // this needs to be saved for later determination
                             // of shift- or ctrl- clicks for various actions
 
-  console.log("Saved mouse_click_mod_key on mouse down, e.shiftKey=="+e['shiftKey']);                          
+  console.log("  mouse down: current_focus.length at this point is "+current_focus.length);
+  console.log("   mouse down: current_focus[0] location is: "+tiles[current_focus[0]['tile']]['x']+","+tiles[current_focus[0]['tile']]['y']);
 
   if (!e) e = window.event;
   if (e.which) {
@@ -119,12 +126,16 @@ function mapview_mouse_down(e)
 
   if (!rightclick && !middleclick) {
     /* Left mouse button is down */
-    console.log("  Left mouse button DOWN.");
+    console.log("Left mouse button DOWN.");
     if (goto_active) return;
     console.log("    About to call set_mouse_touch_started_on_unit(x,y)");
     set_mouse_touch_started_on_unit(canvas_pos_to_tile(mouse_x, mouse_y));
+    console.log("       mouse down2: current_focus.length at this point is "+current_focus.length);
+    console.log("         mouse down2: current_focus[0] location is: "+tiles[current_focus[0]['tile']]['x']+","+tiles[current_focus[0]['tile']]['y']);
     console.log("    About to call check_mouse_drag_unit");
     check_mouse_drag_unit(canvas_pos_to_tile(mouse_x, mouse_y));
+    console.log("       mouse down3: current_focus.length at this point is "+current_focus.length);
+    console.log("         mouse down3: current_focus[0] location is: "+tiles[current_focus[0]['tile']]['x']+","+tiles[current_focus[0]['tile']]['y']);
     if (!mouse_touch_started_on_unit) mapview_mouse_movement = true;
     touch_start_x = mouse_x;
     touch_start_y = mouse_y;
@@ -241,6 +252,8 @@ function action_button_pressed(canvas_x, canvas_y, qtype)
   var ptile = canvas_pos_to_tile(canvas_x, canvas_y);
 
   console.log("FUNCTION CALLED:  action_button_pressed()");
+  console.log("       abp: current_focus.length at this point is "+current_focus.length);
+  console.log("         abp: current_focus[0] location is: "+tiles[current_focus[0]['tile']]['x']+","+tiles[current_focus[0]['tile']]['y']);
 
   if (can_client_change_view() && ptile != null) {
     /* FIXME: Some actions here will need to check can_client_issue_orders.
@@ -248,6 +261,9 @@ function action_button_pressed(canvas_x, canvas_y, qtype)
     console.log("  action_button_pressed about to call do_map_click()");
 
      do_map_click(ptile, qtype, true);
+     console.log("       abp2: current_focus.length at this point is "+current_focus.length);
+     console.log("         abp2: current_focus[0] location is: "+tiles[current_focus[0]['tile']]['x']+","+tiles[current_focus[0]['tile']]['y']);
+   
   } else console.log("  action_button_pressed didn't want to call do_map_click()");
 
 }
