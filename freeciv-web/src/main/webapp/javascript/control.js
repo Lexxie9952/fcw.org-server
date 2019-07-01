@@ -1631,7 +1631,9 @@ function do_map_click(ptile, qtype, first_time_called)
 
   if (ptile == null || client_is_observer()) return;
 
-  if (current_focus.length > 0 && current_focus[0]['tile'] == ptile['index']) {
+  console.log("  current_focus.length at this point is "+current_focus.length);
+
+  if (current_focus.length > 0 && current_focus[0]['tile'] == ptile['index'] && !mouse_click_mod_key['shiftKey']) {
     /* clicked on unit at the same tile, then deactivate goto and show context menu. */
     if (goto_active && !is_touch_device()) {
       deactivate_goto(false);
