@@ -924,7 +924,7 @@ function get_grid_line_sprites(ptile)
 
   for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
     var dir = cardinal_tileset_dirs[i];
-    var pnation = nations[players[0]['nation']];
+    var pnation = nations[players[client.conn.playing.playerno]['nation']];
     result.push({"key" : "border", "dir" : dir,
                     "color": pnation['color']});
   }
