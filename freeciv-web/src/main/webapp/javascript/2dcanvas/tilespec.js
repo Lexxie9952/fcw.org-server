@@ -303,9 +303,9 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
                               tileset_extra_id_graphic_tag(EXTRA_FALLOUT)});
         }
 
-        /*if (draw_map_grid)*/ sprite_array.concat(get_grid_line_sprites(ptile)); 
+        if (draw_map_grid) sprite_array = sprite_array.concat(get_grid_line_sprites(ptile)); 
 
-        //sprite_array = sprite_array.concat(get_border_line_sprites(ptile));
+        sprite_array = sprite_array.concat(get_border_line_sprites(ptile));
 
       }
     break;
