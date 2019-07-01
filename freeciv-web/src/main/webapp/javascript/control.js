@@ -1632,6 +1632,7 @@ function do_map_click(ptile, qtype, first_time_called)
   if (ptile == null || client_is_observer()) return;
 
   console.log("  current_focus.length at this point is "+current_focus.length);
+  console.log("   current_focus[0] location is: "+tiles[current_focus['tile']]['x']+","+tiles[current_focus['tile']]['y']);
 
   if (current_focus.length > 0 && current_focus[0]['tile'] == ptile['index']) {
     /* clicked on unit at the same tile, then deactivate goto and show context menu. */
@@ -1976,10 +1977,11 @@ function do_map_click(ptile, qtype, first_time_called)
         // Shift-click means the user wants to add the units in this stack to selected units:
         if (mouse_click_mod_key['shiftKey'])  { 
           //var selected_units = [];  // container for all units on tile that player owns
-          console.log("Attempting to add owner's present units to selected units.");                          
+          console.log("Attempting to add owner's present units to current_focus, .length=="+current_focus.length);                          
 
 				  for (var i = 0; i < sunits.length; i++) {
-      		  var clicked_unit = sunits[i];
+            var clicked_unit = sunits[i];
+            console.log("  ...sunit["+i+"]...");
             if (clicked_unit['owner'] == client.conn.playing.playerno) 
             {
               //selected_units.push(clicked_unit);
