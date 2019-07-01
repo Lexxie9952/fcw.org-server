@@ -72,9 +72,12 @@ function mapview_mouse_click(e)
   if (rightclick) {
     /* right click to recenter. */
     if (!map_select_active || !map_select_setting_enabled) {
+      console.log("Right click UP event. context_menu_active to true, calling recenter_button_pressed(x,y)");
       context_menu_active = true;
       recenter_button_pressed(mouse_x, mouse_y);
     } else {
+      console.log("Right click UP event. context_menu_active to false, calling map_select_units()");
+
       context_menu_active = false;
       map_select_units(mouse_x, mouse_y);
     }
@@ -83,6 +86,7 @@ function mapview_mouse_click(e)
 
   } else if (!middleclick) {
     /* Left mouse button*/
+    console.log("Left mouse button UP event.");
     action_button_pressed(mouse_x, mouse_y, SELECT_POPUP);
     mapview_mouse_movement = false;
     update_mouse_cursor();
@@ -102,7 +106,7 @@ function mapview_mouse_down(e)
   mouse_click_mod_key = e;  // this needs to be saved for later determination
                             // of shift- or ctrl- clicks for various actions
 
-  console.log("Saved mouse_click_mod_key on mouse up, e.shiftKey=="+e['shiftKey']);                          
+  console.log("Saved mouse_click_mod_key on mouse down, e.shiftKey=="+e['shiftKey']);                          
 
   if (!e) e = window.event;
   if (e.which) {
@@ -115,8 +119,11 @@ function mapview_mouse_down(e)
 
   if (!rightclick && !middleclick) {
     /* Left mouse button is down */
+    console.log("  Left mouse button DOWN.");
     if (goto_active) return;
+    console.log("    About to call set_mouse_touch_started_on_unit(x,y)");
     set_mouse_touch_started_on_unit(canvas_pos_to_tile(mouse_x, mouse_y));
+    console.log("    About to call check_mouse_drag_unit");
     check_mouse_drag_unit(canvas_pos_to_tile(mouse_x, mouse_y));
     if (!mouse_touch_started_on_unit) mapview_mouse_movement = true;
     touch_start_x = mouse_x;
@@ -233,11 +240,16 @@ function action_button_pressed(canvas_x, canvas_y, qtype)
 {
   var ptile = canvas_pos_to_tile(canvas_x, canvas_y);
 
+  console.log("FUNCTION CALLED:  action_button_pressed()");
+
   if (can_client_change_view() && ptile != null) {
     /* FIXME: Some actions here will need to check can_client_issue_orders.
      * But all we can check is the lowest common requirement. */
-    do_map_click(ptile, qtype, true);
-  }
+    console.log("  action_button_pressed about to call do_map_click()");
+
+     do_map_click(ptile, qtype, true);
+  } else console.log("  action_button_pressed didn't want to call do_map_click()");
+
 }
 
 
