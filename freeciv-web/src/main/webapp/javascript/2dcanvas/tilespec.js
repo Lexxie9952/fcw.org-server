@@ -930,7 +930,7 @@ function get_grid_line_sprites(ptile)
 
     if (checktile != null)
       result.push({"key" : "border", "dir" : dir,
-                      "color": "rgba(0,0,0,0.2)" });
+                      "color": "rgba(0,0,0,0.34)" });
   }
 
   return result;
