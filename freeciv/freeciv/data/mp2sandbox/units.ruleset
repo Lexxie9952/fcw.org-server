@@ -625,14 +625,12 @@ TIP: If you lack nearby water, make a Well-Digger in a city that can\
 "), _("\
 FURTHER HELP: \
  A Well-Digger can irrigate any Low-Land tile (not Hills or Mountains), or dig a well\
- (a river) on any tile. To dig a well simply instruct the well-digger to \
- Build Road. (You will know if it succeeded if the activity icon resembles\
- a shovel.) A Despotic city will need at least +2 Food and +2 Production\
- to support a Well-Digger. THE WELL-DIGGER WILL NOT WORK IF: 1) He is outside your borders.\
- 2) He dies off from the city not having enough surplus for his upkeep, 3) You discovered\
- Alphabet or Pottery. This is not a careless unit to fool around with. It requires careful\
- thought and is carefully designed to only be useful to a nation with no water, in its first\
- turns of existence.\
+ (a river) on any tile. (Digging a well can be done inside the orders menu or with the orders buttons.)\
+ A Despotic city will need at least +2 Food and +2 Production to support a Well-Digger. THE WELL-DIGGER\
+ WILL NOT WORK IF: * 1) He is outside your borders. * 2) He dies off from the city not having enough\
+ surplus for his upkeep, * 3) You discovered Alphabet or Pottery. This is not a unit to fool around\
+ with, as the high upkeep can set you permanently behind other nations. Careful thought is required.\
+ WARNING: This unit is ONLY beneficial to a nation with no water, in its first turns of existence.\
 ")
 
 [unit_worker]
