@@ -928,9 +928,9 @@ function get_grid_line_sprites(ptile)
 
     if (checktile != null) {
       if (terrains[ptile['terrain']]['name'] == "Deep Ocean")
-        result.push({"key" : "border", "dir" : dir, "color": "rgba(60,40,0,1.0)" });  //stronger contrast on deep ocean
+        result.push({"key" : "border", "dir" : dir, "color": "rgba(70,40,0,1.0)" });  //stronger contrast on deep ocean
       else
-        result.push({"key" : "border", "dir" : dir, "color": "rgba(0,0,0,0.34)" });
+        result.push({"key" : "border", "dir" : dir, "color": "rgba(0,0,0,0.35)" });
     }
   }
 
