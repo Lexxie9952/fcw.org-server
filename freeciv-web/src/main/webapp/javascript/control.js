@@ -2817,18 +2817,24 @@ function key_select_same_type_on_continent()
     var ptile = index_to_tile(punit['tile']);
     var ptype = punit['type'];
 
+    console.log(unit_types[ptype]['name']+" selected on continent "+ptile['continent']);
+
     current_focus = [];  // clear focus to start adding new units to selection
      
     // check every unit in the world
     for (var i=0; i<units.length; i++) {
       var aunit = units[i]; 
+      console.log("Checking unit "+i+", which is a "+unit_types[aunit['type']]['name']+" on continent "+tiles[aunit['tile']]['continent'] );
       // if unit belong to player
       if ( aunit['owner'] == client.conn.playing.playerno ) {
+          console.log("...owner check passed.");
           // ...and unit is on same continent as original unit  
           if ( tiles[aunit['tile']]['continent'] == ptile['continent'] ) {
+              console.log("......continent check passed.");
               // ...and unit is of same type as original unit
-              if ( unit_types[units[i]['type']]['name'] == unit_types[ptype]['name'] ) {
+              if ( unit_types[aunit['type']]['name'] == unit_types[ptype]['name'] ) {
                 // add to current selection
+                console.log(".........type check passed.");
                 current_focus.push(units[i]);
               }
             }
