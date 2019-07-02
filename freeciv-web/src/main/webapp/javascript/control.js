@@ -2218,6 +2218,8 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 'V':
       if (shift) {
         key_select_same_type_units_on_tile();
+      } else if (alt) {
+        key_select_different_units_on_tile();
       } else {
         key_select_all_units_on_tile();
       }
@@ -2764,6 +2766,33 @@ function key_select_same_type_units_on_tile()
     punits = tile_units(ptile);
     for (var i=1; i<punits.length; i++) { // start at [1] so [0] isn't added twice
       if ( unit_types[punits[i]['type']]['name'] == unit_types[ptype]['name'] ) {
+          // make sure it's not already in selection before adding it to selection:
+          var index = current_focus.findIndex(x => x.id==punits[i].id);
+          if (index === -1) { //index == -1 means it's not in selection, so we add it:
+            current_focus.push(punits[i]);
+          } 
+      }
+    }
+    update_active_units_dialog();
+  }
+}
+
+/**************************************************************************
+Select all other units of DIFFERENT type on this tile
+**************************************************************************/
+function key_select_different_units_on_tile()
+{
+  console.log("key_select_same_type_units_on_tile");
+
+  var punits = [];
+  if (current_focus[0] != null) {
+    punit = current_focus[0];
+    ptile = index_to_tile(punit['tile']);
+    ptype = punit['type'];
+
+    punits = tile_units(ptile);
+    for (var i=1; i<punits.length; i++) { // start at [1] so [0] isn't added twice
+      if ( unit_types[punits[i]['type']]['name'] != unit_types[ptype]['name'] ) {
           // make sure it's not already in selection before adding it to selection:
           var index = current_focus.findIndex(x => x.id==punits[i].id);
           if (index === -1) { //index == -1 means it's not in selection, so we add it:
