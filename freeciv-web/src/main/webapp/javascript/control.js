@@ -2218,7 +2218,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 'V':
       if (shift) {
         key_select_same_type_units_on_tile();
-      } else if (ctrl) {
+      } else if (alt) {
         key_select_different_units_on_tile();
       } else {
         key_select_all_units_on_tile();
@@ -2787,6 +2787,7 @@ function key_select_different_units_on_tile()
   var punits = [];
   if (current_focus[0] != null) {
     punit = current_focus[0];
+    current_focus = []; // since we're selecting everything BUT this, it has to unselect too
     ptile = index_to_tile(punit['tile']);
     ptype = punit['type'];
 
