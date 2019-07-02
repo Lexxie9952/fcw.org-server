@@ -2201,7 +2201,10 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       if (shift) {
         key_unit_pillage();
       } else {
-        key_unit_pollution();
+          if (current_focus.length>0) {
+            if (unit_types[current_focus[0]['type']]['name'] == "Paratroopers") key_unit_paradrop();
+            else key_unit_pollution();
+          }
       }
     break;
 
