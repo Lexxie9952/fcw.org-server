@@ -2836,7 +2836,7 @@ function key_select_same_type_on_continent()
               if ( unit_types[aunit['type']]['name'] == unit_types[ptype]['name'] ) {
                 // add to current selection
                 console.log(".........type check passed.");
-                current_focus.push(units[i]);
+                current_focus.push(units[unit_id]);
               }
             }
           } 
