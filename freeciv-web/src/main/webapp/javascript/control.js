@@ -1425,7 +1425,21 @@ function click_unit_in_panel(e, punit)
         console.log("Unit panel unit added to current_focus.");
       } else console.log("Unit panel unit not added to current_focus because already there.");                        
     }
-    update_active_units_dialog();
+    // though doing the exact same thing as single-click, shift-click was losing the other units in the panel, so
+    // try to emulate everything else it does, as a test to get those units displayed in the panel even though 
+    // not in focus:
+    if (renderer == RENDERER_WEBGL) update_unit_position ( index_to_tile(punit['tile']));
+    auto_center_on_focus_unit();
+
+    update_active_units_dialog(); //previously only doing this but it lost unselected units in the panel
+    
+    // added these lines below to emulate same code as non-shift-click which doesn't lose units in the panel:
+    update_unit_order_commands();
+    if (current_focus.length > 0 && $("#game_unit_orders_default").length > 0 && !cardboard_vr_enabled && show_order_buttons ) {
+      //$("#game_units_orders_default").css("pointer-events", "none"); //// these changes in control.js and game.js made container not clickable but children unclickable also
+      //$("#game_units_orders_default").children().css("pointer-events", "auto"); //// container not clickable, force children to be clickable
+      $("#game_unit_orders_default").show();
+    }
   } else set_unit_focus_and_redraw(punit);
 }
 
