@@ -2820,7 +2820,8 @@ function key_select_same_type_on_continent()
     console.log(unit_types[ptype]['name']+" selected on continent "+ptile['continent']);
 
     current_focus = [];  // clear focus to start adding new units to selection
-     
+    
+    console.log(units.length+" is units.length");
     // check every unit in the world
     for (var i=0; i<units.length; i++) {
       var aunit = units[i]; 
