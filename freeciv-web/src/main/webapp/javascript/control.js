@@ -2743,6 +2743,7 @@ function key_select_all_units_on_tile()
     ptile = index_to_tile(current_focus[0]['tile']);
     punits = tile_units(ptile);
     current_focus = punits;
+    update_active_units_dialog();
   }
 }
 
@@ -2763,6 +2764,7 @@ function key_select_same_type_units_on_tile()
           current_focus.push(punits[i]);          
         } 
     }
+    update_active_units_dialog();
   }
 }
 
