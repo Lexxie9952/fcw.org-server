@@ -1967,7 +1967,7 @@ function do_map_click(ptile, qtype, first_time_called)
             player_has_own_unit_present = true;
           }
       }
-      //console.log("  player has units present=="+player_has_own_unit_present);                          
+       //console.log("  player has units present=="+player_has_own_unit_present);                          
 
       //if (sunits[0]['owner'] == client.conn.playing.playerno) {   // if player had a unit index >0, we couldn't click the stack
       if (player_has_own_unit_present) {
@@ -1982,15 +1982,18 @@ function do_map_click(ptile, qtype, first_time_called)
 				  for (var i = 0; i < sunits.length; i++) {
             var clicked_unit = sunits[i];
             //console.log("  ...sunit["+i+"]...");
-            if (clicked_unit['owner'] == client.conn.playing.playerno) 
+            if (clicked_unit['owner'] == client.conn.playing.playerno) // only add our own units to selection
             {
-              //selected_units.push(clicked_unit);
-              current_focus.push(clicked_unit);	
-              //console.log("Pushing a unit to current_focus.");                          
+              // First we must check if unit is already in selection:
+              var index = current_focus.findIndex(x => x.id==clicked_unit.id);
+              if (index === -1) { //index == -1 means it's not in selection, so we add it:
+                current_focus.push(clicked_unit); 
+                console.log("Unit added to current_focus.");
+              } else console.log("Unit not added to current_focus because already there.");                        
             }
           }         
           update_active_units_dialog();
-        } 
+        }
         // User did a normal click, so just change selected focus:
         else if (sunits.length == 1) { //normal left-click on a single unit: change focus onto this unit
           /* A single unit has been clicked with the mouse. */
@@ -2014,10 +2017,10 @@ function do_map_click(ptile, qtype, first_time_called)
           if (renderer == RENDERER_2DCANVAS) {
             $("#canvas").contextMenu();
           } else {
-            $("#canvas_div").contextMenu();
+              $("#canvas_div").contextMenu();
           }
         }
-          
+
       } else if (pcity == null && !mouse_click_mod_key['shiftKey']) {
         // clicked on a tile with units exclusively owned by other players.
         // (if shift was held we simply do nothing since they can't be added to selected units)
