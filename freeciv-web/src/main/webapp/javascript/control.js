@@ -2738,6 +2738,7 @@ function key_unit_unload()
 **************************************************************************/
 function key_select_all_units_on_tile()
 {
+  console.log("key_select_all_units_on_tile");
   var punits = [];
   if (current_focus != null) {
     ptile = index_to_tile(current_focus[0]['tile']);
@@ -2752,16 +2753,21 @@ Select all other units of same TYPE on this tile
 **************************************************************************/
 function key_select_same_type_units_on_tile()
 {
+  console.log("key_select_same_type_units_on_tile");
+
   var punits = [];
-  if (current_focus != null) {
-    ptile = index_to_tile(current_focus[0]['tile']);
-    ptype = current_focus[0]['type'];
+  if (current_focus[0] != null) {
+    punit = current_focus[0];
+    ptile = index_to_tile(punit['tile']);
+    ptype = punit['type'];
+    
     punits = tile_units(ptile);
     for (var i=1; i<punits.length; i++) { // start at [1] so [0] isn't added twice
       
       var index = current_focus.findIndex(x => x.id==punits[i].id);
       if (index === -1) { //index == -1 means it's not in selection, so we add it:
-          current_focus.push(punits[i]);          
+          current_focus.push(punits[i]);
+          console.log("We thought a "+unit_types[punits[i]['type']]['name']+"is a "+unit_types[ptype]['name']+" and added it.");          
         } 
     }
     update_active_units_dialog();
