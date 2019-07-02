@@ -2760,15 +2760,16 @@ function key_select_same_type_units_on_tile()
     punit = current_focus[0];
     ptile = index_to_tile(punit['tile']);
     ptype = punit['type'];
-    
+
     punits = tile_units(ptile);
     for (var i=1; i<punits.length; i++) { // start at [1] so [0] isn't added twice
-      
-      var index = current_focus.findIndex(x => x.id==punits[i].id);
-      if (index === -1) { //index == -1 means it's not in selection, so we add it:
-          current_focus.push(punits[i]);
-          console.log("We thought a "+unit_types[punits[i]['type']]['name']+"is a "+unit_types[ptype]['name']+" and added it.");          
-        } 
+      if ( unit_types[punits[i]['type']]['name'] != unit_types[ptype]['name'] ) {
+          // make sure it's not already in selection before adding it to selection:
+          var index = current_focus.findIndex(x => x.id==punits[i].id);
+          if (index === -1) { //index == -1 means it's not in selection, so we add it:
+            current_focus.push(punits[i]);
+          } 
+      }
     }
     update_active_units_dialog();
   }
