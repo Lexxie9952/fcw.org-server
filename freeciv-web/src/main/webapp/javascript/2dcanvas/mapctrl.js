@@ -61,7 +61,6 @@ function mapview_mouse_click(e)
   mouse_click_mod_key = e;  // this needs to be saved for later determination
                             // of shift- or ctrl- clicks for various actions
 
-
   //console.log("       mouse up: current_focus.length at this point is "+current_focus.length);
   //console.log("         mouse up: current_focus[0] location is: "+tiles[current_focus[0]['tile']]['x']+","+tiles[current_focus[0]['tile']]['y']);
                         
@@ -77,15 +76,18 @@ function mapview_mouse_click(e)
   // double tap on touch device simulates middle click
   if (is_touch_device() && !rightclick && !middleclick)
   {
+    console.log("is_touch_device true, doing dblclick checks");
     dblclick_count ++;
     if(!dblclick_timeout) {
       dblclick_timeout = setTimeout( function() {
-          timeout = undefined;
+          dblclick_timeout = undefined;
+          console.log("timeout=="+dblclick_timeout+" count=="+dblclick_count);
           if (dblclick_count>=2) middleclick=true;
       }, 250);
     }
     else dblclick_count = 0;
-  }
+  } console.log("is_touch_device false, skipped dblclick checks");
+    
 
   if (rightclick) {
     /* right click to recenter. */
