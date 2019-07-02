@@ -1414,6 +1414,8 @@ function set_unit_focus(punit)
 *************************************************************************/
 function click_unit_in_panel(e, punit)
 {
+  console.log("click_unit_in_panel 1:  current_focus.length=="+current_focus.length);
+
   // If shift-clicking, add this unit to the selected units
   if (e.shiftKey) {
     if (punit['owner'] == client.conn.playing.playerno) // only add our own unit to selection
@@ -1425,22 +1427,29 @@ function click_unit_in_panel(e, punit)
         console.log("Unit panel unit added to current_focus.");
       } else console.log("Unit panel unit not added to current_focus because already there.");                        
     }
+    console.log("click_unit_in_panel 2:  current_focus.length=="+current_focus.length);
+
     // though doing the exact same thing as single-click, shift-click was losing the other units in the panel, so
     // try to emulate everything else it does, as a test to get those units displayed in the panel even though 
     // not in focus:
     if (renderer == RENDERER_WEBGL) update_unit_position ( index_to_tile(punit['tile']));
     auto_center_on_focus_unit();
+    console.log("click_unit_in_panel 3:  current_focus.length=="+current_focus.length);
 
     update_active_units_dialog(); //previously only doing this but it lost unselected units in the panel
-    
+    console.log("click_unit_in_panel 4:  current_focus.length=="+current_focus.length);
+
     // added these lines below to emulate same code as non-shift-click which doesn't lose units in the panel:
     update_unit_order_commands();
+    console.log("click_unit_in_panel 5:  current_focus.length=="+current_focus.length);
+
     if (current_focus.length > 0 && $("#game_unit_orders_default").length > 0 && !cardboard_vr_enabled && show_order_buttons ) {
       //$("#game_units_orders_default").css("pointer-events", "none"); //// these changes in control.js and game.js made container not clickable but children unclickable also
       //$("#game_units_orders_default").children().css("pointer-events", "auto"); //// container not clickable, force children to be clickable
       $("#game_unit_orders_default").show();
     }
   } else set_unit_focus_and_redraw(punit);
+  console.log("click_unit_in_panel 6:  current_focus.length=="+current_focus.length);
 }
 
 /**************************************************************************
@@ -3669,28 +3678,41 @@ function update_active_units_dialog()
       punits.push(kunit);
     }
   } else if (current_focus.length > 1) {
-      // former code block only did command below, but you could only shift click one unit in the panel and lose focus from all the rest:
-      punits = current_focus;  // Add selected units to panel for starters
-  
-      // All code below is for shift-click compatibility, show other non-selected units on tile also similar to 
-      // code block above for current_focus.length==1 :
+      //solve the mystery of why shift-clicking one unit in the panel adds them all to current_focus.length:
+      console.log("uaud1: current_focus.length=="+current_focus.length);
+      
+      //Former code-block only did: punits=current_focus. You could only shift-click one panel-unit then lost all the rest from the panel:
       ptile = index_to_tile(current_focus[0]['tile']);
-      // Add every other unit on the tile to the panel UNLESS it's already selected (i.e. exists in current_focus array of units)
+      
+      for (var i = 0; i < current_focus.length; i++) {
+         punits.push(current_focus[i]);  // Add selected units to panel for starters
+      }
       var tmpunits = tile_units(ptile);
+      // Add every other unit on the tile to the panel UNLESS it's already selected (i.e. exists in current_focus array of units)
       for (var i = 0; i < tmpunits.length; i++) {
-
         var index = punits.findIndex(x => x.id==tmpunits[i].id);
         if (index === -1) { //index == -1 means it's not in selection, so we add it:
           punits.push(tmpunits[i]);          
         } 
       }
+      //solve the mystery of why shift-clicking one unit in the panel adds them all to current_focus.length:
+      console.log("uaud2: current_focus.length=="+current_focus.length);
     }
 
   for (var i = 0; i < punits.length; i++) {
     var punit = punits[i];
     var sprite = get_unit_image_sprite(punit);
-    var active = (current_focus.length > 1 || current_focus[0]['id'] == punit['id']);
+    var active = false;
 
+    // if punit is in current_focus, it's active:
+    var index = current_focus.findIndex(x => x.id==punit.id);
+    if (index === -1) { //index == -1 means it's not in current_focus:
+      active = false;           
+    } else active = true;
+
+    // FORMER CODE: var active was set to always on if we had more than 1 unit selected??????????
+    //var active = (current_focus.length > 1 || current_focus[0]['id'] == punit['id']);
+   
     unit_info_html += "<div id='unit_info_div' class='" + (active ? "current_focus_unit'" : "' style='background-color:rgba(15, 0, 0, 0.55);'")
            + "><div id='unit_info_image' onclick='click_unit_in_panel(event, units[" + punit['id'] + "])' "
 	   + " style='margin-right:1px; background: transparent url(" 
@@ -3804,6 +3826,7 @@ function update_active_units_dialog()
     $("#game_unit_panel").parent().hide();
   }
   $("#active_unit_info").tooltip();
+  console.log("uaud3: current_focus.length=="+current_focus.length);
 }
 
 /**************************************************************************
