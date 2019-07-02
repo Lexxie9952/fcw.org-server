@@ -28,7 +28,7 @@ var map_select_active = false;
 var map_select_x;
 var map_select_y;
 var mouse_touch_started_on_unit = false;
-var mouse_click_mod_key = null;
+var mouse_click_mod_key = {shiftKey:false};
 
 /****************************************************************************
   Init 2D mapctrl
