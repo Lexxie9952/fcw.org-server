@@ -1423,8 +1423,9 @@ function click_unit_in_panel(e, punit)
       if (index === -1) { //index == -1 means it's not in selection, so we add it:
         current_focus.push(punit); 
         console.log("Unit panel unit added to current_focus.");
-      } else console.log("Unit paneul unit not added to current_focus because already there.");                        
+      } else console.log("Unit panel unit not added to current_focus because already there.");                        
     }
+    update_active_units_dialog();
   } else set_unit_focus_and_redraw(punit);
 }
 
