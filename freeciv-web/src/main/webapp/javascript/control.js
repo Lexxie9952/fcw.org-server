@@ -2234,8 +2234,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 'X':
         if (shift) { //shift-x = select all units of same type on same continent
           key_select_same_type_on_continent();
-        }
-      key_unit_auto_explore();
+        } else key_unit_auto_explore();
     break;
     
     // ALT + UIO / JKL / M,. simulates keypad for devices that don't have it, if alt not held
@@ -2817,25 +2816,25 @@ function key_select_same_type_on_continent()
     var ptile = index_to_tile(punit['tile']);
     var ptype = punit['type'];
 
-    console.log(unit_types[ptype]['name']+" selected on continent "+ptile['continent']);
+    //console.log(unit_types[ptype]['name']+" selected on continent "+ptile['continent']);
 
     current_focus = [];  // clear focus to start adding new units to selection
     
-    console.log(units.length+" is units.length");
+    //console.log(units.length+" is units.length");
     // check every unit in the world
     for (var unit_id in units) {
       var aunit = units[unit_id]; 
-      console.log("Checking unit "+unit_id+", which is a "+unit_types[aunit['type']]['name']+" on continent "+tiles[aunit['tile']]['continent'] );
+      //console.log("Checking unit "+unit_id+", which is a "+unit_types[aunit['type']]['name']+" on continent "+tiles[aunit['tile']]['continent'] );
       // if unit belong to player
       if ( aunit['owner'] == client.conn.playing.playerno ) {
-          console.log("...owner check passed.");
+          //console.log("...owner check passed.");
           // ...and unit is on same continent as original unit  
           if ( tiles[aunit['tile']]['continent'] == ptile['continent'] ) {
-              console.log("......continent check passed.");
+              //console.log("......continent check passed.");
               // ...and unit is of same type as original unit
               if ( unit_types[aunit['type']]['name'] == unit_types[ptype]['name'] ) {
                 // add to current selection
-                console.log(".........type check passed.");
+                //console.log(".........type check passed.");
                 current_focus.push(units[unit_id]);
               }
             }
