@@ -2823,9 +2823,9 @@ function key_select_same_type_on_continent()
     
     console.log(units.length+" is units.length");
     // check every unit in the world
-    for (var i=0; i<units.length; i++) {
-      var aunit = units[i]; 
-      console.log("Checking unit "+i+", which is a "+unit_types[aunit['type']]['name']+" on continent "+tiles[aunit['tile']]['continent'] );
+    for (var unit_id in units) {
+      var aunit = units[unit_id]; 
+      console.log("Checking unit "+unit_id+", which is a "+unit_types[aunit['type']]['name']+" on continent "+tiles[aunit['tile']]['continent'] );
       // if unit belong to player
       if ( aunit['owner'] == client.conn.playing.playerno ) {
           console.log("...owner check passed.");
