@@ -2232,6 +2232,9 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'X':
+        if (shift) { //shift-x = select all units of same type on same continent
+          key_select_same_type_on_continent();
+        }
       key_unit_auto_explore();
     break;
     
@@ -2742,11 +2745,10 @@ function key_unit_unload()
 **************************************************************************/
 function key_select_all_units_on_tile()
 {
-  console.log("key_select_all_units_on_tile");
   var punits = [];
   if (current_focus != null) {
-    ptile = index_to_tile(current_focus[0]['tile']);
-    punits = tile_units(ptile);
+    var ptile = index_to_tile(current_focus[0]['tile']);
+    var punits = tile_units(ptile);
     current_focus = punits;
     update_active_units_dialog();
   }
@@ -2757,13 +2759,11 @@ Select all other units of same TYPE on this tile
 **************************************************************************/
 function key_select_same_type_units_on_tile()
 {
-  console.log("key_select_same_type_units_on_tile");
-
   var punits = [];
   if (current_focus[0] != null) {
-    punit = current_focus[0];
-    ptile = index_to_tile(punit['tile']);
-    ptype = punit['type'];
+    var punit = current_focus[0];
+    var ptile = index_to_tile(punit['tile']);
+    var ptype = punit['type'];
 
     punits = tile_units(ptile);
     for (var i=1; i<punits.length; i++) { // start at [1] so [0] isn't added twice
@@ -2784,14 +2784,12 @@ Select all other units of DIFFERENT type on this tile
 **************************************************************************/
 function key_select_different_units_on_tile()
 {
-  console.log("key_select_same_type_units_on_tile");
-
   var punits = [];
   if (current_focus[0] != null) {
-    punit = current_focus[0];
+    var punit = current_focus[0];
     current_focus = []; // since we're selecting everything BUT this, it has to unselect too
-    ptile = index_to_tile(punit['tile']);
-    ptype = punit['type'];
+    var ptile = index_to_tile(punit['tile']);
+    var ptype = punit['type'];
 
     punits = tile_units(ptile);
     for (var i=1; i<punits.length; i++) { // start at [1] so [0] isn't added twice
@@ -2805,6 +2803,39 @@ function key_select_different_units_on_tile()
     }
     update_active_units_dialog();
   }
+}
+
+/**************************************************************************
+Select all units of same type on same continent
+**************************************************************************/
+function key_select_same_type_on_continent()
+{
+  console.log("key_select_same_type_on_continent");
+
+  if (current_focus[0] != null) {
+    var punit = current_focus[0];
+    var ptile = index_to_tile(punit['tile']);
+    var ptype = punit['type'];
+
+    current_focus = [];  // clear focus to start adding new units to selection
+     
+    // check every unit in the world
+    for (var i=0; i<units.length; i++) {
+      var aunit = units[i]; 
+      // if unit belong to player
+      if ( aunit['owner'] == client.conn.playing.playerno ) {
+          // ...and unit is on same continent as original unit  
+          if ( tiles[aunit['tile']]['continent'] == ptile['continent'] ) {
+              // ...and unit is of same type as original unit
+              if ( unit_types[units[i]['type']]['name'] == unit_types[ptype]['name'] ) {
+                // add to current selection
+                current_focus.push(units[i]);
+              }
+            }
+          } 
+      }
+    }
+    update_active_units_dialog();
 }
 
 /**************************************************************************
