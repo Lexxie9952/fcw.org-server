@@ -2133,36 +2133,34 @@ function
 map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
 {
   switch (keyboard_key) {
+    case 'A':
+      key_unit_auto_settle();
+    break;
+    
     case 'B':
       request_unit_build_city();
     break;
 
-    case 'G':
-      if (current_focus.length > 0) {
-        activate_goto();
+    case 'C':
+      if (ctrl) {
+        show_citybar = !show_citybar;
+      }   /* else if (alt) {
+        set_default_mapview_inactive();
+        update_city_screen();
+        $("#tabs-cities").show();  */ // This didn't work for alt-c to do cities tab, need to figure it out later
+        else if (current_focus.length > 0) {
+        auto_center_on_focus_unit();
       }
     break;
-
-    case 'H':
-      key_unit_homecity();
+  
+    case 'D':
+      if (shift) {
+        key_unit_disband();
+      } else if (!(alt || ctrl)) {
+        key_unit_action_select();
+      }
     break;
-
-    case 'X':
-      key_unit_auto_explore();
-    break;
-
-    case 'A':
-      key_unit_auto_settle();
-    break;
-
-    case 'W':
-      key_unit_wait();
-    break;
-
-    case 'R':
-      key_unit_road();
-    break;
-
+    
     case 'E':
       if (shift) {
         key_unit_airbase();
@@ -2177,9 +2175,21 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       }
     break;
 
-    case 'S':
-      if (!ctrl) {
-        key_unit_sentry();
+    case 'G':
+      if (current_focus.length > 0) {
+        activate_goto();
+      }
+    break;
+
+    case 'H':
+      key_unit_homecity();
+    break;
+
+    case 'N':
+      if (shift) {
+        key_unit_nuke();
+      } else {
+        key_unit_fallout();
       }
     break;
 
@@ -2191,6 +2201,36 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       }
     break;
 
+    case 'R':
+      key_unit_road();
+    break;
+
+    case 'S':
+      if (!ctrl) {
+        key_unit_sentry();
+      }
+    break;
+
+    case 'T':
+      key_unit_unload();
+    break;
+
+    case 'V':
+      if (shift) {
+        key_select_same_type_units_on_tile();
+      } else {
+        key_select_all_units_on_tile();
+      }
+    break;
+
+    case 'W':
+      key_unit_wait();
+    break;
+
+    case 'X':
+      key_unit_auto_explore();
+    break;
+    
     // ALT + UIO / JKL / M,. simulates keypad for devices that don't have it, if alt not held
     // execute the primary command for these keys:
     case 'U': 
@@ -2238,39 +2278,6 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
     // the block of code above contains virtual keypad ^^  
     */
-
-    case 'T':
-      key_unit_unload();
-    break;
-      
-    case 'C':
-      if (ctrl) {
-        show_citybar = !show_citybar;
-      } /* else if (alt) {
-        set_default_mapview_inactive();
-        update_city_screen();
-        $("#tabs-cities").show();  */ // This didn't work for alt-c to do cities tab, need to figure it out later
-        else if (current_focus.length > 0) {
-        auto_center_on_focus_unit();
-      }
-    break;
-
-    case 'N':
-      if (shift) {
-        key_unit_nuke();
-      } else {
-        key_unit_fallout();
-      }
-    break;
-
-    case 'D':
-      if (shift) {
-        key_unit_disband();
-      } else if (!(alt || ctrl)) {
-        key_unit_action_select();
-      }
-    break;
-
   }
 
   switch (key_code) {
@@ -2724,6 +2731,39 @@ function key_unit_unload()
     }
   }
   setTimeout(advance_unit_focus, 700);
+}
+
+/**************************************************************************
+ Select all other units on tile with currently selected unit. 
+**************************************************************************/
+function key_select_all_units_on_tile()
+{
+  var punits = [];
+  if (current_focus != null) {
+    ptile = index_to_tile(current_focus[0]['tile']);
+    punits = tile_units(ptile);
+    current_focus = punits;
+  }
+}
+
+/**************************************************************************
+Select all other units of same TYPE on this tile
+**************************************************************************/
+function key_select_same_type_units_on_tile()
+{
+  var punits = [];
+  if (current_focus != null) {
+    ptile = index_to_tile(current_focus[0]['tile']);
+    ptype = current_focus[0]['type'];
+    punits = tile_units(ptile);
+    for (var i=1; i<punits.length; i++) { // start at [1] so [0] isn't added twice
+      
+      var index = current_focus.findIndex(x => x.id==punits[i].id);
+      if (index === -1) { //index == -1 means it's not in selection, so we add it:
+          current_focus.push(punits[i]);          
+        } 
+    }
+  }
 }
 
 /**************************************************************************
