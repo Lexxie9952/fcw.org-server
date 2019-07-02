@@ -2146,11 +2146,13 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 'C':
       if (ctrl) {
         show_citybar = !show_citybar;
-      }   /* else if (alt) {
+      } else if (alt) {
         set_default_mapview_inactive();
         update_city_screen();
-        $("#tabs-cities").show();  */ // This didn't work for alt-c to do cities tab, need to figure it out later
-        else if (current_focus.length > 0) {
+        $("#tabs-cities").show();
+      } else if (shift) {
+        key_select_same_global_type(true); //true=same continent only
+      } else if (current_focus.length > 0) {
         auto_center_on_focus_unit();
       }
     break;
@@ -2233,7 +2235,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
 
     case 'X':
         if (shift) { //shift-x = select all units of same type on same continent
-          key_select_same_type_on_continent();
+          key_select_same_global_type(false); // false=same continent only
         } else key_unit_auto_explore();
     break;
     
@@ -2805,9 +2807,9 @@ function key_select_different_units_on_tile()
 }
 
 /**************************************************************************
-Select all units of same type on same continent
+Select all units of same type either globally or on same continent
 **************************************************************************/
-function key_select_same_type_on_continent()
+function key_select_same_global_type(continent_only)
 {
   console.log("key_select_same_type_on_continent");
 
@@ -2829,7 +2831,7 @@ function key_select_same_type_on_continent()
       if ( aunit['owner'] == client.conn.playing.playerno ) {
           //console.log("...owner check passed.");
           // ...and unit is on same continent as original unit  
-          if ( tiles[aunit['tile']]['continent'] == ptile['continent'] ) {
+          if ( (tiles[aunit['tile']]['continent']==ptile['continent']) || !continent_only ) {
               //console.log("......continent check passed.");
               // ...and unit is of same type as original unit
               if ( unit_types[aunit['type']]['name'] == unit_types[ptype]['name'] ) {
