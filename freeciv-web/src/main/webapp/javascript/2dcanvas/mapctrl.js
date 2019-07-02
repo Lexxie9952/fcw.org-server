@@ -29,6 +29,8 @@ var map_select_x;
 var map_select_y;
 var mouse_touch_started_on_unit = false;
 var mouse_click_mod_key = {shiftKey:false};
+var dblclick_count = 0;
+var dblclick_timeout = 0;
 
 /****************************************************************************
   Init 2D mapctrl
@@ -71,6 +73,20 @@ function mapview_mouse_click(e)
     rightclick = (e.button == 2);
     middleclick = (e.button == 1 || e.button == 4);
   }
+
+  // double tap on touch device simulates middle click
+  if (is_touch_device() && !rightclick && !middleclick)
+  {
+    dblclick_count ++;
+    if(!dblclick_timeout) {
+      dblclick_timeout = setTimeout( function() {
+          timeout = undefined;
+          if (dblclick_count>=2) middleclick=true;
+      }, 250);
+    }
+    else dblclick_count = 0;
+  }
+
   if (rightclick) {
     /* right click to recenter. */
     if (!map_select_active || !map_select_setting_enabled) {
