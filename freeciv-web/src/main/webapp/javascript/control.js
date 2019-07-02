@@ -1409,6 +1409,26 @@ function set_unit_focus(punit)
 }
 
 /**************************************************************************
+ Called when clicking a unit in the units panel prior to calling 
+ set_unit_focus_and_redraw, so that we can check for a shift-click first
+*************************************************************************/
+function click_unit_in_panel(e, punit)
+{
+  // If shift-clicking, add this unit to the selected units
+  if (e.shiftKey) {
+    if (punit['owner'] == client.conn.playing.playerno) // only add our own unit to selection
+    {
+      // First we must check if unit is already in selection:
+      var index = current_focus.findIndex(x => x.id==punit.id);
+      if (index === -1) { //index == -1 means it's not in selection, so we add it:
+        current_focus.push(punit); 
+        console.log("Unit panel unit added to current_focus.");
+      } else console.log("Unit paneul unit not added to current_focus because already there.");                        
+    }
+  } else set_unit_focus_and_redraw(punit);
+}
+
+/**************************************************************************
  See set_unit_focus()
 **************************************************************************/
 function set_unit_focus_and_redraw(punit)
@@ -3643,13 +3663,23 @@ function update_active_units_dialog()
     var active = (current_focus.length > 1 || current_focus[0]['id'] == punit['id']);
 
     unit_info_html += "<div id='unit_info_div' class='" + (active ? "current_focus_unit'" : "' style='background-color:rgba(15, 0, 0, 0.55);'")
-           + "><div id='unit_info_image' onclick='set_unit_focus_and_redraw(units[" + punit['id'] + "])' "
+           + "><div id='unit_info_image' onclick='click_unit_in_panel(event, units[" + punit['id'] + "])' "
 	   + " style='margin-right:1px; background: transparent url(" 
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
            + "px; width:64px;height:48px;'"   // force everything to 64x48 including oversize units (Lexxie)
 //         + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'"   previous line
            + "'></div></div>";                                 // changed margin-right to 1px, was defaulting to 5px (Lexxie)
+
+/* FORMER CODE BEFORE SHIFT-CLICK
+    unit_info_html += "<div id='unit_info_div' class='" + (active ? "current_focus_unit'" : "' style='background-color:rgba(15, 0, 0, 0.55);'")
+           + "><div id='unit_info_image' onclick='set_unit_focus_and_redraw(units[" + punit['id'] + "])' "
+	   + " style='margin-right:1px; background: transparent url(" 
+           + sprite['image-src'] +
+           ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
+           + "px; width:64px;height:48px;'"   // force everything to 64x48 including oversize units (Lexxie)
+//         + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'"   previous line
+           + "'></div></div>";                                 // changed margin-right to 1px, was defaulting to 5px (Lexxie)*/
     width = 64; // = sprite['width'];    // they are all 64 except oversize which we want to FORCE to 64 anyway to avoid buggy display (Lexxie)
   }
 
