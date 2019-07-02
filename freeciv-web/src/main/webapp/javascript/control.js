@@ -1663,6 +1663,8 @@ function do_map_click(ptile, qtype, first_time_called)
   var pcity;
   var player_has_own_unit_present = false;
 
+  console.log("dmc called.");
+
   if (ptile == null || client_is_observer()) return;
 
   if (current_focus.length > 0 && current_focus[0]['tile'] == ptile['index']) {
