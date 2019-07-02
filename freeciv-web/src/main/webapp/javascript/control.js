@@ -2218,7 +2218,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 'V':
       if (shift) {
         key_select_same_type_units_on_tile();
-      } else if (alt) {
+      } else if (ctrl) {
         key_select_different_units_on_tile();
       } else {
         key_select_all_units_on_tile();
