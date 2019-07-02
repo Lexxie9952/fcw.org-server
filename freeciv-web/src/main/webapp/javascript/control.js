@@ -3669,8 +3669,22 @@ function update_active_units_dialog()
       punits.push(kunit);
     }
   } else if (current_focus.length > 1) {
-    punits = current_focus;
-  }
+      // former code block only did command below, but you could only shift click one unit in the panel and lose focus from all the rest:
+      punits = current_focus;  // Add selected units to panel for starters
+  
+      // All code below is for shift-click compatibility, show other non-selected units on tile also similar to 
+      // code block above for current_focus.length==1 :
+      ptile = index_to_tile(current_focus[0]['tile']);
+      // Add every other unit on the tile to the panel UNLESS it's already selected (i.e. exists in current_focus array of units)
+      var tmpunits = tile_units(ptile);
+      for (var i = 0; i < tmpunits.length; i++) {
+
+        var index = punits.findIndex(x => x.id==tmpunits[i].id);
+        if (index === -1) { //index == -1 means it's not in selection, so we add it:
+          punits.push(tmpunits[i]);          
+        } 
+      }
+    }
 
   for (var i = 0; i < punits.length; i++) {
     var punit = punits[i];
