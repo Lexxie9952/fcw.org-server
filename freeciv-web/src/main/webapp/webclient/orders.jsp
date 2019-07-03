@@ -95,7 +95,7 @@
     <a href="#" onclick="key_unit_show_cargo();"><img src="/images/orders/unload.png" name="show_cargo_button" alt="" border="0" width="30" height="30"></a>
   </div>
 
-  <div id="order_paradrop" class="order_button" title="Paradrop">
+  <div id="order_paradrop" class="order_button" title="Paradrop (P)">
     <a href="#" onclick="key_unit_paradrop();"><img src="/images/orders/paradrop.png" name="paradrop_button" alt="" border="0" width="30" height="30"></a>
   </div>
 

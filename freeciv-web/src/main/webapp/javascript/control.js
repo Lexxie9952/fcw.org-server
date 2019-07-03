@@ -1199,7 +1199,7 @@ function update_unit_order_commands()
 
     if (utype_can_do_action(ptype, ACTION_PARADROP)) {
       $("#order_paradrop").show();
-      unit_actions["paradrop"] = {name: "Paradrop"};
+      unit_actions["paradrop"] = {name: "Paradrop (P)"};
     } else {
       $("#order_paradrop").hide();
     }
