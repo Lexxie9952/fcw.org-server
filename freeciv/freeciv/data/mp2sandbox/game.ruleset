@@ -1580,7 +1580,7 @@ set =
       "pingtime", 30, FALSE
       "pingtimeout", 240, FALSE
       "restrictinfra", "ENABLED", FALSE
-      "alltemperate", TRUE, FALSE
+      "alltemperate", FALSE, FALSE
       "aifill", 6, FALSE
       "airliftingstyle", "FROM_ALLIES|TO_ALLIES", FALSE
       "contactturns", 0, FALSE

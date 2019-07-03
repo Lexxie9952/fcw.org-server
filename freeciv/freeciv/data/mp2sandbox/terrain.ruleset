@@ -600,20 +600,20 @@ class                = "Land"
 movement_cost        = 2
 defense_bonus        = 50
 food                 = 1
-shield               = 0
+shield               = 1
 trade                = 0
-resources            = "Gems", "Fruit"
+resources            = "Gems", "Fruit", "Rubber"
 road_trade_incr_pct  = 0
 base_time            = 1
 road_time            = 4
 irrigation_result    = "Grassland"
 irrigation_food_incr = 0
-irrigation_time      = 15
+irrigation_time      = 8
 mining_result        = "Forest"
 mining_shield_incr   = 0
-mining_time          = 15
+mining_time          = 10
 transform_result     = "Plains"
-transform_time       = 24
+transform_time       = 12
 pillage_time         = 1
 clean_pollution_time = 3
 clean_fallout_time   = 3
@@ -776,8 +776,8 @@ defense_bonus        = 0
 food                 = 1
 shield               = 0
 trade                = 0
-resources            = "Game", "Furs"
-road_trade_incr_pct  = 0
+resources            = "Game", "Furs", "Gold"
+road_trade_incr_pct  = 100
 base_time            = 1
 road_time            = 2
 irrigation_result    = "yes"
@@ -831,7 +831,7 @@ Tundra are broad, cold regions, fit for some agriculture and little\
 extra       = "Gold"
 identifier  = "$"
 trade       = 8
-# glacier, hills, mountains.
+# mountains, tundra
 
 [resource_iron]
 extra       = "Iron"
@@ -843,15 +843,16 @@ shield      = 3
 extra       = "Game"
 identifier  = "e"
 food        = 2
-shield      = 1
+shield      = 2
 # tundra.
 
 [resource_furs]
 extra       = "Furs"
 identifier  = "u"
 food        = 1
+shield      = 1
 trade       = 3
-# tundra-only (beaver pelts).
+# tundra
 
 [resource_coal]
 extra       = "Coal"
@@ -868,14 +869,20 @@ food        = 2
 [resource_fruit]
 extra       = "Fruit"
 identifier  = "f"
-food        = 3
-trade       = 1
+food        = 4
+trade       = 2
 # jungle.
 
 [resource_gems]
 extra       = "Gems"
 identifier  = "g"
-trade       = 4
+trade       = 5
+# jungle.
+
+[resource_rubber]
+extra       = "Rubber"
+identifier  = "^"
+shield       = 2
 # jungle.
 
 ; "h" reserved for strategic horses
@@ -930,13 +937,13 @@ identifier  = "i"
 food        = 1
 shield      = 1
 trade       = 4
-# glacier (seals => walrus).
+# glacier 
 
 [resource_silk]
 extra       = "Silk"
 identifier  = "s"
 trade       = 3
-# forest, wooded.
+# forest
 
 [resource_spice]
 extra       = "Spice"
@@ -1743,6 +1750,19 @@ causes         = "Resource"
 ;rmcauses       = ""
 graphic        = "ts.gems"
 graphic_alt    = "-"
+activity_gfx   = "None"
+act_gfx_alt    = "-"
+act_gfx_alt2   = "-"
+rmact_gfx      = "None"
+rmact_gfx_alt  = "-"
+
+[extra_rubber]
+name           = _("Rubber")
+category       = "Resource"
+causes         = "Resource"
+;rmcauses       = ""
+graphic        = "ts.rubber"
+graphic_alt    = "ts.peat"
 activity_gfx   = "None"
 act_gfx_alt    = "-"
 act_gfx_alt2   = "-"

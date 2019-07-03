@@ -267,7 +267,8 @@ A Cathedral makes 3 unhappy citizens content in a city, making it\
  increases the effect of a Cathedral, making an additional unhappy\
  citizen content.  The discovery of Communism lessens the effect of\
  a Cathedral, reducing by one the number of unhappy citizens made\
- content.\
+ content. This building has no additional effect if your nation possesses\
+ Michelangelo's Chapel.\
 ")
 
 [building_city_walls]
@@ -1849,8 +1850,7 @@ sound		= "w_great_library"
 sound_alt	= "w_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
-The Supreme Court acts as a Courthouse in every city.\
- This Wonder does not become obsolete.\
+The Supreme Court gives the same effect as an extra Courthouse in all your cities. This Wonder is never obsolete.\
 ")
 
 [building_sun_tzus_war_academy]
