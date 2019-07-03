@@ -161,6 +161,7 @@ function init_options_dialog()
   $('#play_sounds_setting').change(function() {
     sounds_enabled = this.checked;
     simpleStorage.set('sndFX', sounds_enabled);
+    console.log("sounds_enabled just got changed to "+sounds_enabled)
   });
 
   if (is_speech_supported()) {
@@ -180,7 +181,7 @@ function init_options_dialog()
     simpleStorage.set('sndFX', draw_city_airlift_counter);
   });
 
-  
+
   $('#draw_map_grid').prop('checked', draw_map_grid);
 
   $('#draw_map_grid').change(function() {

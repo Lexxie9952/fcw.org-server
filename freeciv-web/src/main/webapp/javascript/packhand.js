@@ -48,7 +48,7 @@ function handle_ruleset_terrain(packet)
 {
   /* FIXME: These two hacks are there since Freeciv-web doesn't support rendering Lake and Glacier correctly. */
   if (packet['name'] == "Lake") packet['graphic_str'] = packet['graphic_alt'];
-  //if (packet['name'] == "Glacier") packet['graphic_str'] = "tundra";
+  if (packet['name'] == "Glacier") packet['graphic_str'] = "tundra";
   terrains[packet['id']] = packet;
 }
 
