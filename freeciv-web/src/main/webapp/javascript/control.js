@@ -1084,9 +1084,15 @@ function update_unit_order_commands()
       if (show_order_buttons==2) $("#order_sentry").show(); // not frequently used for settler types
       if (show_order_buttons==2) $("#order_auto_settlers").show(); // not frequently used button
       $("#order_pollution").show();    //TO DO: show this if there's pollution
-      if (terrain_name == 'Hills' || terrain_name == 'Mountains' && !tile_has_extra(ptile, EXTRA_MINE)) {
+      if ( (terrain_name == 'Hills' || terrain_name == 'Mountains') && !tile_has_extra(ptile, EXTRA_MINE)) {
         $("#order_mine").show();
         unit_actions["mine"] =  {name: "Mine (M)"};
+      } else if (terrain_name == "Desert" && !tile_has_extra(ptile, EXTRA_OIL_WELL)) {
+        $("#order_mine").show();
+        unit_actions["mine"] =  {name: "Make Oil Well (M)"};
+      } else if (terrain_name == 'Grassland' || terrain_name == 'Plains' || terrain_name == 'Swamp' || terrain_name == 'Jungle') { 
+         unit_actions["mine"] = {name: "Plant forest (M)"};
+         if (show_order_buttons==2) $("#order_plant_forest").show();  //not frequently used button        
       }
 
       if (tile_has_extra(ptile, EXTRA_FALLOUT)) {
@@ -1098,12 +1104,6 @@ function update_unit_order_commands()
 	    unit_actions["pollution"] = {name: "Remove pollution (P)"};
       } else {
         $("#order_pollution").hide();
-      }
-
-      if (terrain_name == 'Grassland' || terrain_name == 'Plains' 
-         || terrain_name == 'Swamp' || terrain_name == 'Jungle')    { 
-            unit_actions["mine"] = {name: "Plant forest (M)"};
-            if (show_order_buttons==2) $("#order_plant_forest").show();  //not frequently used button        
       }
 
       if (terrain_name == "Forest") {
