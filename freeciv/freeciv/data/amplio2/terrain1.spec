@@ -80,6 +80,7 @@ tiles = { "row", "column", "tag"
 
  8,  2, "ts.gems"
  8,  4, "ts.fruit"
+ 8,  6, "ts.rubber"
 
  9,  2, "ts.fish"
  9,  4, "ts.whales"
