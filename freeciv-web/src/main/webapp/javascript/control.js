@@ -947,6 +947,8 @@ function update_unit_order_commands()
   $("#order_pollution").hide();
   $("#order_forest_remove").hide(); 
   $("#order_plant_forest").hide();
+  $("#order_oil_well").hide();
+  $("#order_make_swamp").hide();
 
   $("#order_noorders").hide();
   $("#order_cancel_orders").hide();
@@ -1035,7 +1037,7 @@ function update_unit_order_commands()
     // Whether to show "no orders" or "cancel orders", default, before applying special rules later
     if (punit.activity != ACTIVITY_IDLE || punit.ai || punit.has_orders) {
       unit_actions["idle"] = {name: "Cancel orders (Shift-J)"};
-      if (show_order_buttons==2) $("#order_cancel_orders").show();  //not frequently used order
+      $("#order_cancel_orders").show();  
     } else {
       unit_actions["noorders"] = {name: "No orders (J)"};
       $("#order_noorders").show();
@@ -1088,11 +1090,14 @@ function update_unit_order_commands()
         $("#order_mine").show();
         unit_actions["mine"] =  {name: "Mine (M)"};
       } else if (terrain_name == "Desert" && !tile_has_extra(ptile, EXTRA_OIL_WELL)) {
-        $("#order_mine").show();
-        unit_actions["mine"] =  {name: "Make Oil Well (M)"};
+          $("#order_oil_well").show();
+          unit_actions["mine"] =  {name: "Make Oil Well (M)"};
       } else if (terrain_name == 'Grassland' || terrain_name == 'Plains' || terrain_name == 'Swamp' || terrain_name == 'Jungle') { 
-         unit_actions["mine"] = {name: "Plant forest (M)"};
-         if (show_order_buttons==2) $("#order_plant_forest").show();  //not frequently used button        
+          unit_actions["mine"] = {name: "Plant forest (M)"};
+          if (show_order_buttons==2) $("#order_plant_forest").show();  //not frequently used button        
+      } else if (terrain_name == 'Forest') {
+          unit_actions["mine"] = {name: "Make swamp (M)"};
+          if (show_order_buttons==2) $("#order_make_swamp").show();  //not frequently used button        
       }
 
       if (tile_has_extra(ptile, EXTRA_FALLOUT)) {

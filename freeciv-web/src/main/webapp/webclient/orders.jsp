@@ -47,6 +47,18 @@
     <a href="#" onclick="key_unit_mine();"><img src="/images/orders/mine_default.png" name="mine_button" alt="" border="0" width="30" height="30"></a>
   </div>
 
+  <div id="order_oil_well" class="order_button" title="Make Oil Well (M)">
+      <a href="#" onclick="key_unit_mine();"><img src="/images/orders/oil_well.png" name="oil_well_button" alt="" border="0" width="30" height="30"></a>
+  </div>
+  
+  <div id="order_plant_forest" class="order_button" title="Plant forest (M)" >
+      <a href="#" onclick="key_unit_mine();"><img src="/images/orders/forest_add_default.png" name="plant_forest_button" alt="" border="0" width="30" height="30"></a>
+  </div>
+  
+  <div id="order_make_swamp" class="order_button" title="Make swamp (M)" >
+      <a href="#" onclick="key_unit_mine();"><img src="/images/orders/swamp.png" name="make_swamp_button" alt="" border="0" width="30" height="30"></a>
+  </div>
+  
   <div id="order_pillage" class="order_button" title="Pillage (Shift-P)">
     <a href="#" onclick="key_unit_pillage();"><img src="/images/orders/pillage.png" name="pillage_button" alt="" border="0" width="30" height="30"></a>
   </div>
@@ -57,10 +69,6 @@
     
   <div id="order_auto_settlers" class="order_button" title="Auto-build terrain improvements (A)">
     <a href="#" onclick="key_unit_auto_settle();"><img src="/images/orders/auto_settlers_default.png" name="auto_settlers_button" alt="" border="0" width="30" height="30"></a>
-  </div>
-
-  <div id="order_plant_forest" class="order_button" title="Plant forest (M)" >
-    <a href="#" onclick="key_unit_irrigate();"><img src="/images/orders/forest_add_default.png" name="plant_forest_button" alt="" border="0" width="30" height="30"></a>
   </div>
 
   <div id="order_forest_remove" class="order_button" title="Cut down forest (I)" >
