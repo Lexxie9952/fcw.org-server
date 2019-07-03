@@ -76,7 +76,7 @@
     </td>
     <td>
         <div class="main_menu_buttons">
-            <input type='checkbox' name='map_drag_enabled' id='map_drag_enabled' checked><b>Enable map draggingk</b> 
+            <input type='checkbox' name='map_drag_enabled' id='map_drag_enabled' checked><b>Enable map dragging</b> 
         </div>
     </td>
 </tr>
