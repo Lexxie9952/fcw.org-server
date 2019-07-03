@@ -132,17 +132,16 @@ function mapview_mouse_down(e)
     //console.log("       mouse down2: current_focus.length at this point is "+current_focus.length);
     //console.log("         mouse down2: current_focus[0] location is: "+tiles[current_focus[0]['tile']]['x']+","+tiles[current_focus[0]['tile']]['y']);
     //console.log("    About to call check_mouse_drag_unit");
-    // After exhaustive debugging, it was determined that the following function breaks shift-clicking to add units to selection:
-    if (!mouse_click_mod_key['shiftKey']) check_mouse_drag_unit(canvas_pos_to_tile(mouse_x, mouse_y));
-    //console.log("       mouse down3: current_focus.length at this point is "+current_focus.length);
-    //console.log("         mouse down3: current_focus[0] location is: "+tiles[current_focus[0]['tile']]['x']+","+tiles[current_focus[0]['tile']]['y']);
-    if (!mouse_touch_started_on_unit) mapview_mouse_movement = true;
+    // After exhaustive debugging, it was determined that check_mouse_drag_unit breaks shift-clicking
+    if (!mouse_click_mod_key['shiftKey']) {
+      check_mouse_drag_unit(canvas_pos_to_tile(mouse_x, mouse_y));
+      if (!mouse_touch_started_on_unit && map_drag_enabled) mapview_mouse_movement = true;
+    }
     touch_start_x = mouse_x;
     touch_start_y = mouse_y;
-
   } else if (middleclick || e['altKey']) {
     popit();
-    // TO DO: include longpress here for touch devices
+    // TO DO: include longpress here for touch devices to get tile info
     return false;
   } else if (rightclick && !map_select_active && is_right_mouse_selection_supported()) {
     map_select_check = true;

@@ -194,6 +194,12 @@ function civclient_init()
   unit_click_menu = simpleStorage.get('unitclickmenu');
   if (unit_click_menu == null) 
     unit_click_menu = true;  // Default case
+
+  map_drag_enabled = simpleStorage.get('mapdrag');
+  if (map_drag_enabled == null) 
+    map_drag_enabled = true;  // Default case
+  
+    
   // -------------------------------------------------------------------------------- 
   
  

@@ -40,6 +40,7 @@ var default_sound_plugin_name = "";
 
 var sounds_enabled = true;
 var unit_click_menu = true;  // whether to show context menu on left-clicking a unit
+var map_drag_enabled = true; // whether double tap and drag will move the map
 
 var save_options_on_exit = TRUE;
 var fullscreen_mode = FALSE;
@@ -188,12 +189,19 @@ function init_options_dialog()
     draw_map_grid = this.checked;
     simpleStorage.set('mapgrid', draw_map_grid);
   });
-  
+
   // UNIT CLICK GIVES CONTEXT MENU
   $('#unit_click_menu').prop('checked', unit_click_menu);
   $('#unit_click_menu').change(function() {
     unit_click_menu = this.checked;
     simpleStorage.set('unitclickmenu', unit_click_menu);
+  });
+
+  // MAP DRAG ENABLED
+  $('#map_drag_enabled').prop('checked', unit_click_menu);
+  $('#map_drag_enabled').change(function() {
+    unit_click_menu = this.checked;
+    simpleStorage.set('mapdrag', unit_click_menu);
   });
 
   
