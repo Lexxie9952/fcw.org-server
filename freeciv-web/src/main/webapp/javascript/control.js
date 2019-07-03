@@ -1116,7 +1116,7 @@ function update_unit_order_commands()
         $("#order_forest_remove").hide();
         $("#order_build_farmland").hide();
         unit_actions["irrigation"] = {name: "Irrigation (I)"};
-      } else if (!tile_has_extra(ptile, EXTRA_FARMLAND) && player_invention_state(client.conn.playing, tech_id_by_name('Refrigeration')) == TECH_KNOWN) {
+      } else if (tile_has_extra(ptile, EXTRA_IRRIGATION) && !tile_has_extra(ptile, EXTRA_FARMLAND) && player_invention_state(client.conn.playing, tech_id_by_name('Refrigeration')) == TECH_KNOWN) {
         $("#order_build_farmland").show();
         $("#order_irrigate").hide();
         $("#order_forest_remove").hide();
