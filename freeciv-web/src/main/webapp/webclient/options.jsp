@@ -69,6 +69,15 @@
 </tr>
 
 <tr>
+    <td>
+        <div class="main_menu_buttons">
+            <input type='checkbox' name='unit_click_menu' id='unit_click_menu' checked><b>Orders menu on unit click</b> 
+        </div>
+    </td>
+</tr>
+
+
+<tr>
 <td>
 <div class="main_menu_buttons">
   <button id="save_button" type="button" class="button setting_button" onClick="save_game();" title="Saves your current game so you can continue later. Press Ctrl+S to quick save the game.">Save Game (Ctrl+S)</button>

@@ -172,9 +172,8 @@ function civclient_init()
 
   $(".button").button();
 
-  console.log("Prior to simpleStorage assignemt, sounds_enabled set to "+sounds_enabled);
+  // SAVED USER PREFS CHECKBOX OPTIONS: ---------------------------------------------
   sounds_enabled = simpleStorage.get('sndFX');
-  console.log("sounds_enabled set to "+sounds_enabled);
   if (sounds_enabled == null) {
     // Default to true, except when known to be problematic.
     if (platform.name == 'Safari') {
@@ -182,8 +181,23 @@ function civclient_init()
     } else {
       sounds_enabled = true;
     }
-    console.log("After init, sounds_enabled set to "+sounds_enabled);
   }
+ 
+  draw_city_airlift_counter = simpleStorage.get('airlift');
+  if (draw_city_airlift_counter == null) 
+    draw_city_airlift_counter = false;  // Default case
+
+  draw_map_grid = simpleStorage.get('mapgrid');
+  if (draw_map_grid == null) 
+    draw_map_grid = false;  // Default case
+
+  unit_click_menu = simpleStorage.get('unitclickmenu');
+  if (unit_click_menu == null) 
+    unit_click_menu = true;  // Default case
+  // -------------------------------------------------------------------------------- 
+  
+ 
+  
 
   /* Initialze audio.js music player */
   audiojs.events.ready(function() {

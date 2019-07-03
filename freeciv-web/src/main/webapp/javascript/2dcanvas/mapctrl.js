@@ -60,7 +60,7 @@ function mapview_mouse_click(e)
 
   mouse_click_mod_key = e;  // this needs to be saved for later determination
                             // of shift- or ctrl- clicks for various actions
-                            
+
   //console.log("       mouse up: current_focus.length at this point is "+current_focus.length);
   //console.log("         mouse up: current_focus[0] location is: "+tiles[current_focus[0]['tile']]['x']+","+tiles[current_focus[0]['tile']]['y']);
                         
@@ -76,12 +76,9 @@ function mapview_mouse_click(e)
   if (rightclick) {
     /* right click to recenter. */
     if (!map_select_active || !map_select_setting_enabled) {
-      console.log("Right click UP event. context_menu_active to true, calling recenter_button_pressed(x,y)");
       context_menu_active = true;
       recenter_button_pressed(mouse_x, mouse_y);
     } else {
-      console.log("Right click UP event. context_menu_active to false, calling map_select_units()");
-
       context_menu_active = false;
       map_select_units(mouse_x, mouse_y);
     }

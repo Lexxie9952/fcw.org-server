@@ -39,6 +39,7 @@ var default_sound_set_name = "stdsounds";
 var default_sound_plugin_name = "";
 
 var sounds_enabled = true;
+var unit_click_menu = true;  // whether to show context menu on left-clicking a unit
 
 var save_options_on_exit = TRUE;
 var fullscreen_mode = FALSE;
@@ -156,14 +157,15 @@ function init_options_dialog()
 
   $(".setting_button").tooltip();
 
+  // SOUNDS
   $('#play_sounds_setting').prop('checked', sounds_enabled);
-
   $('#play_sounds_setting').change(function() {
     sounds_enabled = this.checked;
     simpleStorage.set('sndFX', sounds_enabled);
     console.log("sounds_enabled just got changed to "+sounds_enabled)
   });
 
+  // SPEECH
   if (is_speech_supported()) {
     $('#speech_enabled_setting').prop('checked', speech_enabled);
     $('#speech_enabled_setting').change(function() {
@@ -173,20 +175,25 @@ function init_options_dialog()
     $('#speech_enabled_setting').attr('disabled', true);
   }
 
-
+  // CITY AIRLIFT COUNTER
   $('#airlift_setting').prop('checked', draw_city_airlift_counter);
-
   $('#airlift_setting').change(function() {
     draw_city_airlift_counter = this.checked;
-    simpleStorage.set('sndFX', draw_city_airlift_counter);
+    simpleStorage.set('airlift', draw_city_airlift_counter);
   });
 
-
+  // DRAW MAP GRID
   $('#draw_map_grid').prop('checked', draw_map_grid);
-
   $('#draw_map_grid').change(function() {
     draw_map_grid = this.checked;
-    simpleStorage.set('sndFX', draw_map_grid);
+    simpleStorage.set('mapgrid', draw_map_grid);
+  });
+  
+  // UNIT CLICK GIVES CONTEXT MENU
+  $('#unit_click_menu').prop('checked', unit_click_menu);
+  $('#unit_click_menu').change(function() {
+    unit_click_menu = this.checked;
+    simpleStorage.set('unitclickmenu', unit_click_menu);
   });
 
   
