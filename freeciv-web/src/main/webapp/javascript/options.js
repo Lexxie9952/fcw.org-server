@@ -198,10 +198,10 @@ function init_options_dialog()
   });
 
   // MAP DRAG ENABLED
-  $('#map_drag_enabled').prop('checked', unit_click_menu);
+  $('#map_drag_enabled').prop('checked', map_drag_enabled);
   $('#map_drag_enabled').change(function() {
-    unit_click_menu = this.checked;
-    simpleStorage.set('mapdrag', unit_click_menu);
+    map_drag_enabled = this.checked;
+    simpleStorage.set('mapdrag', map_drag_enabled);
   });
 
   
