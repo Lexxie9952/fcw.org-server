@@ -171,7 +171,7 @@ function init_tech_screen()
   }
 
   if (!is_small_screen()) { 
-    $("#mouse_info_box").html("<div style='position:absolute;' title='Right-click:   Scrolls the screen.\nMiddle-click:  Sets the Future Goal.' style='background: transparent url(/images/info-hover.png);width:86px;height:30px;'></div>")
+    $("#mouse_info_box").html("<div style='margin-right:-1px; margin-left:-1px;' title='Right-click:   Scrolls the screen.\nMiddle-click:  Sets the Future Goal.' style='background: transparent url(/images/info-hover.png);width:86px;height:30px;'></div>")
     $("#mouse_info_box").tooltip();
   }
   is_tech_tree_init = true;
@@ -841,7 +841,7 @@ function update_tech_dialog_cursor()
         } else {
           tech_canvas.style.cursor = "not-allowed";
         }
-        $("#tech_result_text").html("<span id='tech_advance_helptext' style='font-size:90%;'>" + get_advances_text(ptech['id']) + "</span>");
+        $("#tech_result_text").html("<span style='margin-left:-1px; margin-right:-1px;' id='tech_advance_helptext' style='font-size:88%;'>" + get_advances_text(ptech['id']) + "</span>");
         $("#tech_advance_helptext").tooltip({ disabled: false });
       }
     }
