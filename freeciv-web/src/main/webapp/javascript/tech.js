@@ -843,7 +843,7 @@ function update_tech_dialog_cursor()
         }
         var fs;
         if ( ptech['name']=="Space Flight" || ptech['name']=="Rocketry") fs="80%;"; else fs="90%;"; //hack to fit 2 techs on 768px screens 
-        $("#tech_result_text").html("<span style='margin-left:-6px; margin-right:-86px; font-size:"+fs+"' id='tech_advance_helptext'>" + get_advances_text(ptech['id']) + "</span>");
+        $("#tech_result_text").html("<span style='margin-left:-4px; font-size:"+fs+"' id='tech_advance_helptext'>" + get_advances_text(ptech['id']) + "</span>");
         $("#tech_advance_helptext").tooltip({ disabled: false });
       }
     }
