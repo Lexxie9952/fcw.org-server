@@ -19,7 +19,7 @@
 
 var sound_path = "/sounds/";
 var sound_traffic_counter = 0; // how many play_sounds called within timeframe=soundelayer milliseconds
-var sound_traffic_max = 2;     // maximum of 2 sounds played with x milliseconds period
+var sound_traffic_max = 4;     // maximum of 2 sounds played with x milliseconds period
 var sound_delayer = 150;       // timeframe in which a max of sound_traffic_max sound events can be played
 var sound_delay_timestamp = null; // timestamp for measuring sound_delayer
 
@@ -134,11 +134,10 @@ function play_sound(sound_file)
     sound_traffic_counter = 0;
   }
 
-  // SOUND EVENT TRAFFIC POLICE: --------------------------------------------------------------------
+  // SOUND EVENT TRAFFIC POLICE: -------------------------------------------------------------------
   // The number of play_sounds called per second must be limited or it creates a DOMexception
   // and permanently shuts off sound on some browsers:
-  console.log("** STARTED play_sound('"+sound_file+"') WITH (counter:"+sound_traffic_counter+"), "
-              +current_time-sound_delay_timestamp+"ms after last sound.");
+  console.log("** STARTED play_sound("+sound_file+") WITH (counter:"+sound_traffic_counter+"), "+(current_time-sound_delay_timestamp)+"ms after last sound.");
 
   // Check if previous timestamp expired and reset it if yes
   if (current_time - sound_delay_timestamp > sound_delayer) {
@@ -150,8 +149,7 @@ function play_sound(sound_file)
 
   // check if attempting to play MORE sounds within the allowed time span and abort if so:
   if (sound_traffic_counter > sound_traffic_max) {
-    console.log("  >> Aborted play_sound('"+sound_file+"') due to (counter:"+sound_traffic_counter
-                +") > (max_allowed:"+sound_traffic_max+") within "+sound_delayer+"ms");
+    console.log("  >> Aborted play_sound('"+sound_file+"') due to (counter:"+sound_traffic_counter+") > (max_allowed:"+sound_traffic_max+") within "+sound_delayer+"ms");
     return;
   }
   //-----------------------------------------------------------------------------------------------
