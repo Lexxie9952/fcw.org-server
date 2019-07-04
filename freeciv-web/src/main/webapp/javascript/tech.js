@@ -457,13 +457,13 @@ function get_advances_text(tech_id)
   const ptech = techs[tech_id];
 
   return tech_span(ptech.name, null, null) + ' (' + Math.floor(ptech.cost) + ')'
-    + format_list_with_intro(' allows',
+    + format_list_with_intro(' enables',
       [
-        format_list_with_intro('building unit', get_units_from_tech(tech_id)
+        format_list_with_intro('', get_units_from_tech(tech_id)
           .map(unit => tech_span(unit.name, unit.id, null, unit.helptext))),
-        format_list_with_intro('building', get_improvements_from_tech(tech_id)
+        format_list_with_intro('; ', get_improvements_from_tech(tech_id)
           .map(impr => tech_span(impr.name, null, impr.id, impr.helptext))),
-        format_list_with_intro('researching', Object.keys(techs)
+        format_list_with_intro('; ', Object.keys(techs)
           .filter(is_valid_and_required)
           .map(tid => techs[tid])
           .map(tech => tech_span(tech.name, null, null)))
