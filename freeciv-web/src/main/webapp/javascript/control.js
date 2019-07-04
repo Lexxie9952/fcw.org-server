@@ -1665,15 +1665,18 @@ function do_map_click(ptile, qtype, first_time_called)
 {
   var punit;
   var packet;
-  var pcity;
+  var pcity = tile_city(ptile);
   var player_has_own_unit_present = false;
 
   console.log("do_map_click called.");
 
   // User can safely finish dragging and releasing on ANY tile without incurring an action.
   if (mapview_mouse_movement==true) {
-    console.log("returning because mapview mouse move is true")
-    return; // mapctrl.js:mapview_mouse_click(e) will proceed to toggle to false shortly hereafter
+     if (pcity == null) {
+        // TODO: if we are REALLY in mapview_mouse_movement instead of the current method of pseudo-setting it on
+        // then leaving it on instead of setting it false, also do a return here so we don't look inside the city
+        return; // mapctrl.js:mapview_mouse_click(e) will proceed to toggle to false shortly hereafter
+      }
   }
     
   if (ptile == null || client_is_observer()) return;
@@ -1693,7 +1696,7 @@ function do_map_click(ptile, qtype, first_time_called)
     if (!mouse_click_mod_key['shiftKey']) return; //our work is done here unless we did a shift-click
   }
   var sunits = tile_units(ptile);
-  pcity = tile_city(ptile);
+  //pcity = tile_city(ptile); assigned higher above because needed earlier
 
   // HANDLE GOTO ACTIVE CLICKS ------------------------------------------------------------------------------------------------
   if (goto_active) {
