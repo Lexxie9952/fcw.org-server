@@ -26,7 +26,18 @@ var prev_mouse_y;
 var keyboard_input = true;
 var unitpanel_active = false;
 var allow_right_click = false;
-var mapview_mouse_movement = false;
+
+// this var may be true BEFORE entering map-drag mode, since it gets prematurely set to true
+// while expecting to be set to false right after, if the right conditions aren't met; however,
+// that breaks do_map_click() being able to make sure we're not in map-drag mode so it can
+// know the difference between a real tile click and 'false click' that was the result of 
+// simply releasing/leaving map-drag mode:
+var mapview_mouse_movement = false;  
+// since the var above is co-dependent to other timed mechanical processes, this var below 
+// properly represents when the user is REALLY in map-drag mode: it's ONLY true when the
+// cursor has really changed into mapdrag mode and we're REALLY in it. It's always false when 
+// we are not in map-drag mode and don't have the map-drag cursor:
+var real_mouse_move_mode = true;
 
 // Last map viewing location, allows user to return to it with shift-spacebar.
 var last_saved_tile = null;
@@ -378,6 +389,7 @@ function update_mouse_cursor()
 {
   if (tech_dialog_active && !is_touch_device()) {
     update_tech_dialog_cursor();
+    real_mouse_move_mode = false;  // since this code returns before we set it false (below), make sure it's false
     return;
   }
 
@@ -388,7 +400,12 @@ function update_mouse_cursor()
     ptile = webgl_canvas_pos_to_tile(mouse_x, mouse_y);
   }
 
-  if (ptile == null) return;
+  if (ptile == null) return; /* TO DO: this is the only way this function returns without forcing real_mouse_move_mode=false, presumably because
+                                if we're outside the map area, we don't change a thing for what mode is on inside that area. However, if there are
+                                problems with mouse_move_mode because of this, then we should force real_mouse_move_mode to false at very beginning
+                                of this function */
+
+  real_mouse_move_mode = false;  // Every time the cursor changes is when this var changes, so we know for SURE when we're in real map-drag mode
 
   var punit = find_visible_unit(ptile);
   var pcity = tile_city(ptile);
@@ -396,6 +413,8 @@ function update_mouse_cursor()
   if (mapview_mouse_movement && !goto_active) {
     /* show move map cursor */
     $("#canvas_div").css("cursor", "move");
+    // unlike the var mapview_mouse_movement, the only time this var is true is when we're really in that mode and cursor is set to it
+    real_mouse_move_mode = true;   
   } else if (goto_active && current_goto_turns != null) {
     /* show goto cursor */
     $("#canvas_div").css("cursor", "crosshair");
@@ -1668,16 +1687,21 @@ function do_map_click(ptile, qtype, first_time_called)
   var pcity = tile_city(ptile);
   var player_has_own_unit_present = false;
 
-  console.log("do_map_click called.");
+  //console.log("do_map_click called.");
 
   // User can safely finish dragging and releasing on ANY tile without incurring an action.
+  if (real_mouse_move_mode == true) return; // user is probably releasing/exiting map-drag mode so do NOT do code below which thinks it's a map click
+
+  /* The code below was a working "bandage" to fix the "mapview_mouse_movement bug" generating do_map_clicks when exiting that mode.
+     However, it had the minor flaw that if you exited that mode over a city, it would think you are clicking on that 
+     city and eventually trigger show_city_dialog(). the code above was put in 3.July.2019 to replace it.
   if (mapview_mouse_movement==true) {
      if (pcity == null) {
         // TODO: if we are REALLY in mapview_mouse_movement instead of the current method of pseudo-setting it on
         // then leaving it on instead of setting it false, also do a return here so we don't look inside the city
         return; // mapctrl.js:mapview_mouse_click(e) will proceed to toggle to false shortly hereafter
       }
-  }
+  }*/
     
   if (ptile == null || client_is_observer()) return;
 
