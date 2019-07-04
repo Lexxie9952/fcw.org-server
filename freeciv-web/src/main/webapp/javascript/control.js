@@ -1668,7 +1668,10 @@ function do_map_click(ptile, qtype, first_time_called)
   var pcity;
   var player_has_own_unit_present = false;
 
-  console.log("dmc called.");
+  console.log("do_map_click called.");
+
+  // User can safely finish dragging and releasing on ANY tile without incurring an action.
+  if (mapview_mouse_movement==true) return; // mapctrl.js:mapview_mouse_click(e) will proceed to toggle to false shortly hereafter
 
   if (ptile == null || client_is_observer()) return;
 
