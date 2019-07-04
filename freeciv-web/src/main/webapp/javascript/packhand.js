@@ -843,12 +843,16 @@ function handle_unit_combat_info(packet)
       // When an attacker loses, play sound for defender if: a combatant is visible OR the player was involved in the battle. 
       if (attacker_hp == 0 && (combatant_visible || player_is_combatant) )  {
         if (combatant_visible) explosion_anim_map[attacker['tile']] = 25;
-        play_combat_sound(defender); //attacker lost, player defender combat sound
+
+        if (!combat_sound_special_case(attacker,attacker_hp,defender) ) // this function lets us program special cases sounds
+          play_combat_sound(defender); //attacker lost, player defender combat sound
       }
       // When a defender loses, play sound for attacker if: a combatant is visible OR the player was involved in the battle.
       if (defender_hp == 0  && (combatant_visible || player_is_combatant) ) {
         if (combatant_visible) explosion_anim_map[defender['tile']] = 25;
-        play_combat_sound(attacker); //defender lost, player attacker combat sound
+        
+        if (!combat_sound_special_case(attacker,attacker_hp,defender) ) // this function lets us program special cases sounds
+          play_combat_sound(attacker); //defender lost, player attacker combat sound
       }
       // When both units survive due to combat rounds/bombardment/etc.
       if (defender_hp > 0 && attacker_hp > 0 && (combatant_visible || player_is_combatant) ) 

@@ -121,6 +121,42 @@ function play_combat_sound(unit)
 }
 
 /**************************************************************************
+ Handle special cases sound effects, Returns false if not a special case,
+ so it knows to play normal sound. Also, can send a "lie" that it's false
+ to trigger normal sound AND one other sound specified in here.
+**************************************************************************/
+function combat_sound_special_case(attacker,attacker_hp,defender)
+{
+  // Destroyer vs. Submarine put in as test case:
+
+  // Sub attacked destroyer and lost, make depth charge sound
+  if (unit_types[attacker['type']]['name'] == "Submarine"
+     && unit_types[defender['type']]['name'] == "Destroyer"
+     && attacker_hp == 0) {
+     
+       play_sound("depth-charge.ogg") 
+       return true;
+     }
+  // Destroyer attacked Sub and won, make depth charge sound
+  if (unit_types[defender['type']]['name'] == "Submarine"
+     && unit_types[attacker['type']]['name'] == "Destroyer"
+     && attacker_hp > 0) {
+     
+       play_sound("depth-charge.ogg") 
+       return true;
+     }
+
+   // IDEAS: pikemen vs. horseback unit: plays sound of horse dying and returns false so pikemen attack sound happens concurrent
+   // Fighter vs fighter, return false but include a "crash and burn" sound
+   // Balloon dies, return false with balloon pop/hiss/crash sound
+   // Sea unit dies, a "glub glub" sinking sound played concurrent
+   // Air units die, "crash and burn" sound
+   // Foot unit death sound.
+     
+  return false; // no special case, play normal combat sound for victor
+}
+
+/**************************************************************************
  Plays a sound file based on a gived filename.
 **************************************************************************/
 function play_sound(sound_file) 
