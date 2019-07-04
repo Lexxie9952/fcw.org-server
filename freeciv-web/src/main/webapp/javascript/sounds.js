@@ -19,7 +19,7 @@
 
 var sound_path = "/sounds/";
 var sound_traffic_counter = 0; // how many play_sounds called within timeframe=soundelayer milliseconds
-var sound_traffic_max = 4;     // maximum of 2 sounds played with x milliseconds period
+var sound_traffic_max = 3;     // maximum of 3 sounds played within x milliseconds period
 var sound_delayer = 150;       // timeframe in which a max of sound_traffic_max sound events can be played
 var sound_delay_timestamp = null; // timestamp for measuring sound_delayer
 
