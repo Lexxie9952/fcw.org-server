@@ -272,7 +272,26 @@ function canvas_put_select_rectangle(canvas_context, canvas_x, canvas_y, width, 
 **************************************************************************/
 function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
 
-  var airlift_text = ( (city['airlift']>0 && draw_city_airlift_counter) ? " |"+city['airlift']+"|" : "");
+  var airlift_text = "";
+  if (game_info['airlift_dest_divisor'] == 0) {
+    // standard case, no airliftdestdivisor, just show source airlifts if it has them:
+    airlift_text = ( ( (city['airlift']>0) && draw_city_airlift_counter) ? " |"+city['airlift']+"|" : "");
+  } else { // airliftdestdivsor > 0 which means #destination-airlifts is a separate counter to show: 
+    var airlift_receive_text;  
+    var airlift_receive_max_capacity = Math.round(city['size'] / game_info['airlift_dest_divisor']);
+
+    if (game_info['airlifting_style'] > 7) airlift_receive_text = "&infin;"; // DEST_UNLIMITED IS INFINITE
+    // else destination airlifts allowed = population of city / airliftdivisor, rounded to nearest whole number:   
+    else airlift_receive_text = Math.max(0,city["airlift"] + airlift_receive_max_capacity - effects[1][0]['effect_value']);             
+    
+    airlift_text = ( ( (city['airlift']>0  
+                        || airlift_receive_text=="&infin;" 
+                        || airlift_receive_text != "0")
+                        && draw_city_airlift_counter) 
+                     ? " |"+city['airlift']+":"+airlift_receive_text+"|"
+                     : "" );
+  }
+
   var text = decodeURIComponent(city['name']).toUpperCase() + airlift_text;
   var size = city['size'];
   var color = nations[city_owner(city)['nation']]['color'];

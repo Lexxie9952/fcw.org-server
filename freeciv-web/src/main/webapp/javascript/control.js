@@ -850,6 +850,8 @@ function advance_unit_focus()
   }
 
   if (candidate != null) {
+    goto_active = false;  // turn Go-To off if jumping focus to a new unit
+                          // TO DO: update mouse cursor function call too?
     set_unit_focus_and_redraw(candidate);
   } else {
     /* Couldn't center on a unit, then try to center on a city... */
@@ -1221,7 +1223,7 @@ function update_unit_order_commands()
       $("#order_nuke").hide();
     }
 
-    if (utype_can_do_action(ptype, ACTION_PARADROP)) {
+    if (utype_can_do_action(ptype, ACTION_PARADROP) && punit['movesleft']>0) {
       $("#order_paradrop").show();
       unit_actions["paradrop"] = {name: "Paradrop (P)"};
     } else {
@@ -1236,7 +1238,7 @@ function update_unit_order_commands()
     }
 
     if (pcity != null && city_has_building(pcity, improvement_id_by_name(B_AIRPORT_NAME))) {
-      if (pcity["airlift"]>0) {
+      if (pcity["airlift"]>0 && punit['movesleft']>0) {
         unit_actions["airlift"] = {name: "Airlift (Shift-L)"};
         $("#order_airlift").show();
         //$("#order_airlift_disabled").hide();
