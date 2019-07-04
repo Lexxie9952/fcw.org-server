@@ -461,9 +461,9 @@ function get_advances_text(tech_id)
       [
         format_list_with_intro('', get_units_from_tech(tech_id)
           .map(unit => tech_span(unit.name, unit.id, null, unit.helptext))),
-        format_list_with_intro('; ', get_improvements_from_tech(tech_id)
+        format_list_with_intro('', get_improvements_from_tech(tech_id)
           .map(impr => tech_span(impr.name, null, impr.id, impr.helptext))),
-        format_list_with_intro('; ', Object.keys(techs)
+        format_list_with_intro('', Object.keys(techs)
           .filter(is_valid_and_required)
           .map(tid => techs[tid])
           .map(tech => tech_span(tech.name, null, null)))
@@ -841,7 +841,7 @@ function update_tech_dialog_cursor()
         } else {
           tech_canvas.style.cursor = "not-allowed";
         }
-        $("#tech_result_text").html("<span id='tech_advance_helptext'>" + get_advances_text(ptech['id']) + "</span>");
+        $("#tech_result_text").html("<span id='tech_advance_helptext' style='font-size:90%;'>" + get_advances_text(ptech['id']) + "</span>");
         $("#tech_advance_helptext").tooltip({ disabled: false });
       }
     }
