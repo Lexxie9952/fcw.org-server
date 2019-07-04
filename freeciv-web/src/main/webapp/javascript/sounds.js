@@ -19,7 +19,7 @@
 
 var sound_path = "/sounds/";
 var sound_traffic_counter = 0; // how many play_sounds called within timeframe=soundelayer milliseconds
-var sound_traffic_max = 3;     // maximum of 3 sounds played within x milliseconds period
+var sound_traffic_max = 10;     // maximum of 10 sounds played within x milliseconds period
 var sound_delayer = 150;       // timeframe in which a max of sound_traffic_max sound events can be played
 var sound_delay_timestamp = null; // timestamp for measuring sound_delayer
 
@@ -91,7 +91,6 @@ function unit_move_sound_play(unit)
   } else if (soundset[ptype['sound_move_alt']] != null) {
     play_sound(soundset[ptype['sound_move_alt']]);
   }
-
 }
 
 /**************************************************************************
@@ -154,8 +153,6 @@ function play_sound(sound_file)
   }
   //-----------------------------------------------------------------------------------------------
 
-
-
   try {
     if (!sounds_enabled || !(document.createElement('audio').canPlayType) || Audio == null) {
       console.error("function play_sound() was called but failed to play.")
@@ -177,11 +174,11 @@ function play_sound(sound_file)
 **************************************************************************/
 function sound_error_handler(err)
 {
-  sounds_enabled = false;
+  //sounds_enabled = false;  this was turning off sounds whenever player moved multiple units
   if (window.trackJs) {
     trackJs.console.log(err);
     trackJs.track("Sound problem");
   } else {
-    console.log(err);
+    console.log("sounds.js sound_error_handler(err) triggered with err=="+err);
   }
 }
