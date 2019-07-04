@@ -171,7 +171,7 @@ function init_tech_screen()
   }
 
   if (!is_small_screen()) { 
-    $("#mouse_info_box").html("<div title='Right-click:   Scrolls the screen.\nMiddle-click:  Sets the Future Goal.' style='background: transparent url(/images/info-hover.png);margin-right:-10px;margin-bottom:-10px;transform:scaleX(0.7);transform:scaleY(0.8);width:86px;height:30px;'></div>")
+    $("#mouse_info_box").html("<div title='Right-click:   Scrolls the screen.\nMiddle-click:  Sets the Future Goal.' style='background: transparent url(/images/info-hover.png);margin-right:-10px;margin-bottom:-10px;transform:scaleX(0.6);transform:scaleY(0.8);width:86px;height:30px;'></div>")
     $("#mouse_info_box").tooltip();
   }
   is_tech_tree_init = true;
@@ -842,8 +842,8 @@ function update_tech_dialog_cursor()
           tech_canvas.style.cursor = "not-allowed";
         }
         var fs;
-        if ( ptech['name']=="Space Flight" || ptech['name']=="Rocketry") fs="80%;"; else fs="90%;" //hack to fit 2 techs on 768px screens 
-        $("#tech_result_text").html("<span style='margin-left:-6px; margin-right:-86px;' id='tech_advance_helptext' style='font-size:"+fs+"'>" + get_advances_text(ptech['id']) + "</span>");
+        if ( ptech['name']=="Space Flight" || ptech['name']=="Rocketry") fs="80%;"; else fs="90%;"; //hack to fit 2 techs on 768px screens 
+        $("#tech_result_text").html("<span style='margin-left:-6px; margin-right:-86px; font-size:"+fs+"' id='tech_advance_helptext'>" + get_advances_text(ptech['id']) + "</span>");
         $("#tech_advance_helptext").tooltip({ disabled: false });
       }
     }
