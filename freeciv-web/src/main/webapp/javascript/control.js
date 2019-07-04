@@ -851,7 +851,7 @@ function advance_unit_focus()
 
   if (candidate != null) {
     goto_active = false;  // turn Go-To off if jumping focus to a new unit
-                          // TO DO: update mouse cursor function call too?
+    clear_goto_tiles();   // TO DO: update mouse cursor function call too?
     set_unit_focus_and_redraw(candidate);
   } else {
     /* Couldn't center on a unit, then try to center on a city... */
