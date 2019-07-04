@@ -171,7 +171,7 @@ function init_tech_screen()
   }
 
   if (!is_small_screen()) { 
-    $("#mouse_info_box").html("<div title='Right-click:   Scrolls the screen.\nMiddle-click:  Sets the Future Goal.' style='background: transparent url(/images/info-hover.png);width:86px;height:30px;'></div>")
+    $("#mouse_info_box").html("<div style='position:relative;'><div style='position:absolute;' title='Right-click:   Scrolls the screen.\nMiddle-click:  Sets the Future Goal.' style='background: transparent url(/images/info-hover.png);width:86px;height:30px;'></div></div>")
     $("#mouse_info_box").tooltip();
   }
   is_tech_tree_init = true;
