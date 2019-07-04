@@ -1671,8 +1671,11 @@ function do_map_click(ptile, qtype, first_time_called)
   console.log("do_map_click called.");
 
   // User can safely finish dragging and releasing on ANY tile without incurring an action.
-  if (mapview_mouse_movement==true) return; // mapctrl.js:mapview_mouse_click(e) will proceed to toggle to false shortly hereafter
-
+  if (mapview_mouse_movement==true) {
+    console.log("returning because mapview mouse move is true")
+    return; // mapctrl.js:mapview_mouse_click(e) will proceed to toggle to false shortly hereafter
+  }
+    
   if (ptile == null || client_is_observer()) return;
 
   if (current_focus.length > 0 && current_focus[0]['tile'] == ptile['index']) {
