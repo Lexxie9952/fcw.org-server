@@ -782,6 +782,7 @@ actor_reqs    =
     { "type",          "name",           "range", "present"
       "UnitClassFlag", "BorderPolice",   "Local",  TRUE
       "UnitClass",     "Air",            "Local",  FALSE
+      "UnitClass",     "AirProtect"      "Local",  FALSE
       "UnitFlag",      "NonMil",         "Local",  FALSE      ;Non-Military land class can't expel
       "UnitType",      "Warriors",       "Local",  FALSE      ;Warriors are too weak to expel
       "UnitState",     "OnDomesticTile", "Local",  TRUE
@@ -1583,6 +1584,7 @@ set =
       "alltemperate", FALSE, FALSE
       "aifill", 6, FALSE
       "airliftingstyle", "FROM_ALLIES|TO_ALLIES", FALSE
+      "airliftdestdivisor", 3, FALSE
       "contactturns", 0, FALSE
       "barbarians", "DISABLED", FALSE
       "borders", "SEE_INSIDE", FALSE
