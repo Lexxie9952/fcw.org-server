@@ -223,7 +223,9 @@ value	= 1585 ;experimental, trying to make Enter Marketplace a separate one-time
 reqs	=
     { "type", "name", "range"
       "Action", "Enter Marketplace", "Local"
-    }
+    } 
+;TO-DO: pay x more than gold value of vessel entering marketplace, with ROI being somewhat inferior to most 
+;investments but hinting toward same order of magnitude.
 
 ; Fudge factor to more closely approximate Civ2 behavior. (Civ2 is
 ; really very different -- this just fakes it a little better)

@@ -1358,14 +1358,14 @@ settings =
   { "type",       "pct", "cancelling", "bonus"
     "National",   0,       "Cancel",   "None"
     "NationalIC", 0,       "Cancel",   "None"
-    "IN",         100,     "Cancel",   "Gold"
-    "INIC",       100,     "Cancel",   "Gold"
-    "Ally",       100,     "Cancel",   "Gold"
-    "AllyIC",     100,     "Cancel",   "Gold"
-    "Enemy",      100,     "Cancel",   "Gold"
-    "EnemyIC",    100,     "Cancel",   "Gold"
-    "Team",       100,     "Cancel",   "Gold"
-    "TeamIC",     100,     "Cancel",   "Gold"
+    "IN",         40,      "Cancel",   "Gold"
+    "INIC",       40,      "Cancel",   "Gold"
+    "Ally",       40,      "Cancel",   "Gold"
+    "AllyIC",     40,      "Cancel",   "Gold"
+    "Enemy",      40,      "Cancel",   "Gold"
+    "EnemyIC",    40,      "Cancel",   "Gold"
+    "Team",       40,      "Cancel",   "Gold"
+    "TeamIC",     40,      "Cancel",   "Gold"
   }
 
 ; When are goods for the trade route chosen.
