@@ -853,11 +853,11 @@ function advance_unit_focus()
   if (candidate != null) {
     goto_active = false;  // turn Go-To off if jumping focus to a new unit
     clear_goto_tiles();   // TO DO: update mouse cursor function call too?
-    if (current_focus.length>0) last_focus = current_focus[0]; // save last selected unit for command that returns to it
+    save_last_unit_focus();
     set_unit_focus_and_redraw(candidate);
   } else {
     /* Couldn't center on a unit, then try to center on a city... */
-    if (current_focus.length>0) last_focus = current_focus[0]; // save last selected unit for command that returns to it
+    save_last_unit_focus();
     current_focus = []; /* Reset focus units. */
     if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
     update_active_units_dialog();
@@ -1426,8 +1426,8 @@ function unit_distance_compare(unit_a, unit_b)
 **************************************************************************/
 function set_unit_focus(punit)
 {
-  if (current_focus.length>0) last_focus = current_focus[0]; // save last selected unit for command that returns to it
-    
+  save_last_unit_focus();
+
   current_focus = [];
   if (punit == null) {
     current_focus = [];
@@ -1480,8 +1480,8 @@ function click_unit_in_panel(e, punit)
 **************************************************************************/
 function set_unit_focus_and_redraw(punit)
 {
-  if (current_focus.length>0) last_focus = current_focus[0]; // save last selected unit for command that returns to it
-    
+  save_last_unit_focus();    
+  
   current_focus = [];
 
   if (punit == null) {
@@ -2086,8 +2086,8 @@ function do_map_click(ptile, qtype, first_time_called)
       } else if (pcity == null && !mouse_click_mod_key['shiftKey']) {
         // clicked on a tile with units exclusively owned by other players.
         // (if shift was held we simply do nothing since they can't be added to selected units)
-        if (current_focus.length>0) last_focus = current_focus[0]; // save last selected unit for command that returns to it
-    
+        save_last_unit_focus();
+            
         current_focus = sunits;
         $("#game_unit_orders_default").hide();
         update_active_units_dialog();
@@ -2648,6 +2648,17 @@ function activate_goto()
 }
 
 /**************************************************************************
+  Save last focus unit for user-commmand to return to it 
+**************************************************************************/
+function save_last_unit_focus();
+{
+  if (current_focus = null) return;
+
+  if (current_focus.length>0) last_focus = current_focus[0]; // save last selected unit for command that returns to it
+}
+
+
+/**************************************************************************
   Activate a goto and specify what to do once there.
 **************************************************************************/
 function activate_goto_last(last_order, last_action)
@@ -2819,8 +2830,8 @@ function key_select_all_units_on_tile()
     var ptile = index_to_tile(current_focus[0]['tile']);
     var punits = tile_units(ptile);
     
-    if (current_focus.length>0) last_focus = current_focus[0]; // save last selected unit for command that returns to it
-    
+    save_last_unit_focus();
+
     current_focus = punits;
     update_active_units_dialog();
   }
@@ -2860,7 +2871,7 @@ function key_select_different_units_on_tile()
   if (current_focus[0] != null) {
     var punit = current_focus[0];
     
-    if (current_focus.length>0) last_focus = current_focus[0]; // save last selected unit for command that returns to it
+    save_last_unit_focus();    
     
     current_focus = []; // since we're selecting everything BUT this, it has to unselect too
     var ptile = index_to_tile(punit['tile']);
@@ -2894,8 +2905,8 @@ function key_select_same_global_type(continent_only)
 
     //console.log(unit_types[ptype]['name']+" selected on continent "+ptile['continent']);
 
-    if (current_focus.length>0) last_focus = current_focus[0]; // save last selected unit for command that returns to it
-    
+    save_last_unit_focus();
+
     current_focus = [];  // clear focus to start adding new units to selection
     
     //console.log(units.length+" is units.length");
@@ -2935,8 +2946,8 @@ function key_unit_show_cargo()
     units_on_tile = tile_units(ptile);
   }
   
-  if (current_focus.length>0) last_focus = current_focus[0]; // save last selected unit for command that returns to it
-    
+  save_last_unit_focus();    
+  
   current_focus = [];
   for (var i = 0; i < units_on_tile.length; i++) {
     var punit = units_on_tile[i];
