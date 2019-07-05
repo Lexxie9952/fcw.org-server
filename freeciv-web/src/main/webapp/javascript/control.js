@@ -43,7 +43,8 @@ var real_mouse_move_mode = true;
 var last_saved_tile = null;
 var recent_saved_tile = null;
 
-var current_focus = [];
+var current_focus = [];   // unit(s) in current focus selection
+var last_focus = null;    // last unit in focus before focus change
 var goto_active = false;
 var paradrop_active = false;
 var airlift_active = false;
@@ -852,9 +853,11 @@ function advance_unit_focus()
   if (candidate != null) {
     goto_active = false;  // turn Go-To off if jumping focus to a new unit
     clear_goto_tiles();   // TO DO: update mouse cursor function call too?
+    if (current_focus.length>0) last_focus = current_focus[0]; // save last selected unit for command that returns to it
     set_unit_focus_and_redraw(candidate);
   } else {
     /* Couldn't center on a unit, then try to center on a city... */
+    if (current_focus.length>0) last_focus = current_focus[0]; // save last selected unit for command that returns to it
     current_focus = []; /* Reset focus units. */
     if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
     update_active_units_dialog();
@@ -1423,6 +1426,8 @@ function unit_distance_compare(unit_a, unit_b)
 **************************************************************************/
 function set_unit_focus(punit)
 {
+  if (current_focus.length>0) last_focus = current_focus[0]; // save last selected unit for command that returns to it
+    
   current_focus = [];
   if (punit == null) {
     current_focus = [];
@@ -1475,6 +1480,8 @@ function click_unit_in_panel(e, punit)
 **************************************************************************/
 function set_unit_focus_and_redraw(punit)
 {
+  if (current_focus.length>0) last_focus = current_focus[0]; // save last selected unit for command that returns to it
+    
   current_focus = [];
 
   if (punit == null) {
@@ -2079,6 +2086,8 @@ function do_map_click(ptile, qtype, first_time_called)
       } else if (pcity == null && !mouse_click_mod_key['shiftKey']) {
         // clicked on a tile with units exclusively owned by other players.
         // (if shift was held we simply do nothing since they can't be added to selected units)
+        if (current_focus.length>0) last_focus = current_focus[0]; // save last selected unit for command that returns to it
+    
         current_focus = sunits;
         $("#game_unit_orders_default").hide();
         update_active_units_dialog();
@@ -2337,10 +2346,24 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       key_unit_move(DIR8_SOUTH);
       break;
 
-    case 40: // 2
+
+
+    case 40: // 2 (or down arrow key)
     case 98:
-    case 188:
-      if (key_code==188 && !alt) break; //188 moves only if alt held down:
+    case 188:  // , key
+      if (key_code==188 && shift) {  // The "<"" key selects last unit 
+        current_focus = null;
+        if (last_focus != null) {
+          current_focus.push(last_focus);
+          auto_center_on_focus_unit();
+          update_active_units_dialog();
+          update_unit_order_commands();
+        }
+
+      }
+      // if alt not pressed then ignore , key
+      if (key_code==188 && !alt) break; // alt , is a virtual numpad arrow
+      
       key_unit_move(DIR8_SOUTHEAST);
       break;
 
@@ -2402,6 +2425,8 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 32: 
       if (shift) auto_center_last_location();
       else {
+        if (current_focus.length>0) last_focus = current_focus[0]; // save last selected unit for command that returns to it
+    
         current_focus = [];
         if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
         goto_active = false;
@@ -2793,6 +2818,9 @@ function key_select_all_units_on_tile()
   if (current_focus != null) {
     var ptile = index_to_tile(current_focus[0]['tile']);
     var punits = tile_units(ptile);
+    
+    if (current_focus.length>0) last_focus = current_focus[0]; // save last selected unit for command that returns to it
+    
     current_focus = punits;
     update_active_units_dialog();
   }
@@ -2831,6 +2859,9 @@ function key_select_different_units_on_tile()
   var punits = [];
   if (current_focus[0] != null) {
     var punit = current_focus[0];
+    
+    if (current_focus.length>0) last_focus = current_focus[0]; // save last selected unit for command that returns to it
+    
     current_focus = []; // since we're selecting everything BUT this, it has to unselect too
     var ptile = index_to_tile(punit['tile']);
     var ptype = punit['type'];
@@ -2863,6 +2894,8 @@ function key_select_same_global_type(continent_only)
 
     //console.log(unit_types[ptype]['name']+" selected on continent "+ptile['continent']);
 
+    if (current_focus.length>0) last_focus = current_focus[0]; // save last selected unit for command that returns to it
+    
     current_focus = [];  // clear focus to start adding new units to selection
     
     //console.log(units.length+" is units.length");
@@ -2901,7 +2934,9 @@ function key_unit_show_cargo()
     var ptile = index_to_tile(punit['tile']);
     units_on_tile = tile_units(ptile);
   }
-
+  
+  if (current_focus.length>0) last_focus = current_focus[0]; // save last selected unit for command that returns to it
+    
   current_focus = [];
   for (var i = 0; i < units_on_tile.length; i++) {
     var punit = units_on_tile[i];
