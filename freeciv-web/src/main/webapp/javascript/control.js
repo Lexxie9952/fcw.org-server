@@ -2352,10 +2352,14 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 98:
     case 188:  // , key
       if (key_code==188 && shift) {  // The "<"" key selects last unit 
+        // we have to save last_focus before we use it so we do a little shell game
+        var penultimate_focus = last_focus;
+        save_last_unit_focus();
+
         current_focus = [];
-        if (last_focus != null) {
+        if (penultimate_focus != null) {
           //current_focus.push(last_focus);
-          set_unit_focus_and_redraw(last_focus);
+          set_unit_focus_and_redraw(penultimate_focus);
         }
 
       }
