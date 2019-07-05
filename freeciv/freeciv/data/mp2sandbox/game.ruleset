@@ -175,7 +175,7 @@ total_factor = 100       ; TF   = 100 (effectively makes 100x cost at capital an
 ;nationality factor      ; NF   native=1.0, was_conquered=0.67, originally_belonged_to_inciter=0.5
 base_incite_cost = 700   ; BIC  =700 (the cost of a size 1 domestic city at a distance of 32 with no improvements. no units of its own,
 ;                                not occupied by other units, no local or national incite bonuses, a bankrupt treasury, prior to going to 1400 for 2x 
-                                 content bonus.
+;                     content bonus.
 ;city is content         ; CON 
 ;city is celebrating     ; CEL 
 ;incite defence bonuses  ; BONUS  -50% empty + 300% occupied+courthouse OR + 100% empty+courthouse + supreme_court applies courthouse bonuses again
@@ -216,7 +216,7 @@ will_never = "Nuclear"
 [actions]
 ; If force_trade_route is set to TRUE it is illegal for an actor unit to
 ; enter the marketplace of a city if it can establish a trade route to it
-; in stead.
+; instead.
 force_trade_route = FALSE
 
 ; If force_capture_units is set to TRUE it is illegal for an actor unit to
