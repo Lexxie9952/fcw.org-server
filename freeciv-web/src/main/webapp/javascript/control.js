@@ -2196,9 +2196,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       if (ctrl) {
         show_citybar = !show_citybar;
       } else if (alt) {
-        set_default_mapview_inactive();
-        update_city_screen();
-        $("#tabs-cities").show();
+        $('#tabs-cities').trigger("click");
       } else if (shift) {
         key_select_same_global_type(true); //true=same continent only
       } else if (current_focus.length > 0) {
