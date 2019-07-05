@@ -2195,8 +2195,8 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 'C':
       if (ctrl) {
         show_citybar = !show_citybar;
-      } else if (alt) {
-        $('#tabs-cities').trigger("click");
+      } else if (alt) {  // also key-code 115 for F4
+        $('#ui-id-4').trigger("click"); // cities tab, assuming position 4!
       } else if (shift) {
         key_select_same_global_type(true); //true=same continent only
       } else if (current_focus.length > 0) {
@@ -2396,6 +2396,10 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 105:
       key_unit_move(DIR8_NORTH);
       break;
+
+    case 115: // F4 (Cities):
+      $('#ui-id-4').trigger("click"); // cities tab, assuming position 4!
+      break;  
 
     case 27:      //Esc
       deactivate_goto(false);
