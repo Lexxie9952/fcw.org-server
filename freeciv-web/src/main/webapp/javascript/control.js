@@ -1242,7 +1242,7 @@ function update_unit_order_commands()
 
     if (pcity != null && city_has_building(pcity, improvement_id_by_name(B_AIRPORT_NAME))) {
       if (pcity["airlift"]>0 && punit['movesleft']>0) {
-        unit_actions["airlift"] = {name: "Airlift (Shift-L)"};
+        unit_actions["airlift"] = {name: "<span><img src="+"'/images/airlift-dest.png' height='20' width='20'>Airlift (Shift-L)</span>"};
         $("#order_airlift").show();
         //$("#order_airlift_disabled").hide();
       } else {
@@ -2345,8 +2345,6 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 97:
       key_unit_move(DIR8_SOUTH);
       break;
-
-
 
     case 40: // 2 (or down arrow key)
     case 98:
