@@ -279,7 +279,8 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
       if (game_info['airlift_dest_divisor'] == 0) {
         // standard case, no airliftdestdivisor, just show source airlifts if it has them:
         airlift_text = ( city['airlift']>0 ? " |"+city['airlift']+"|" : "");
-      } else { // airliftdestdivsor > 0 which means #destination-airlifts is a separate counter to show: 
+      } else if (city_has_building(city, improvement_id_by_name(B_AIRPORT_NAME))) {  
+        // We get here if city has airport && airliftdestdivsor > 0. This means destination-airlifts has a separate counter
         var airlift_receive_text;  
         var airlift_receive_max_capacity = Math.round(city['size'] / game_info['airlift_dest_divisor']);
 
