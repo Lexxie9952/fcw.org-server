@@ -218,7 +218,7 @@ req2     = "Horseback Riding"
 flags    = ""
 graphic     = "a.chivalry"
 graphic_alt = "-"
-helptext = _("Obsoletes Horsemen, Chariot.")
+helptext = _("Obsoletes Horsemen and Chariots.")
 cost = 226
 
 [advance_code_of_laws]
@@ -282,8 +282,9 @@ req2     = "Currency"
 flags    = ""
 graphic     = "a.construction"
 graphic_alt = "-"
-helptext = _("Allows Settlers, Workers and Engineers to build fortresses, and to \
-build oil wells on Desert tiles.")
+helptext = _("\
+Allows Settlers, Workers and Engineers to build fortresses, and \
+build Oil Wells on Desert tiles.")
 
 [advance_currency]
 name     = _("Currency")
@@ -345,8 +346,9 @@ req2     = "Space Flight"
 flags    = ""
 graphic     = "a.environmentalism"
 graphic_alt = "-"
-helptext = _("Having this advance decreases pollution in all your cities by 50%.")
-cost = 8040
+helptext = _("Having this advance decreases pollution\
+ in all your cities by 50%.")
+ cost = 8040
 
 [advance_espionage]
 name     = _("Espionage")
@@ -594,8 +596,7 @@ req2     = "Tactics"
 flags    = ""
 graphic     = "a.mobile_warfare"
 graphic_alt = "-"
-helptext = _("Obsoletes Barracks II, Sun Tzu's War Academy, Cavalry.\
-")
+helptext = _("Obsoletes Barracks II, Sun Tzu's War Academy, Cavalry.")
 cost = 5650
 
 [advance_monarchy]
@@ -612,8 +613,7 @@ req1     = "Philosophy"
 req2     = "Polytheism"
 flags    = ""
 graphic     = "a.monotheism"
-helptext = _("Obsoletes Elephant.\
-")
+helptext = _("Obsoletes Elephants.")
 graphic_alt = "-"
 
 [advance_mysticism]
@@ -633,7 +633,6 @@ flags    = ""
 graphic     = "a.navigation"
 graphic_alt = "-"
 helptext = _("Obsoletes Trireme.")
-cost = 226
 
 [advance_nuclear_fission]
 name     = _("Nuclear Fission")
@@ -664,6 +663,7 @@ graphic_alt = "-"
 helptext = _("When you research this technology before 400 BC and\
  before knowing Industrialization or Electricity or\
  Conscription, you get one other immediate technology advance.")
+ cost = 276
 
 [advance_physics]
 name     = _("Physics")
@@ -672,7 +672,6 @@ req2     = "Navigation"
 flags    = ""
 graphic     = "a.physics"
 graphic_alt = "-"
-cost = 468
 
 [advance_plastics]
 name     = _("Plastics")
@@ -717,8 +716,8 @@ req2     = "Bridge Building"
 flags    = ""
 graphic     = "a.railroad"
 graphic_alt = "-"
-helptext = _("Allows Settlers, Workers and Engineers to upgrade roads to railroads. \
-Obsoletes Hanging Gardens.")
+helptext = _("\
+Allows Settlers, Workers and Engineers to upgrade roads to railroads. \Obsoletes Hanging Gardens.")
 cost = 1820
 
 [advance_recycling]
@@ -737,7 +736,8 @@ req2     = "The Corporation"
 flags    = ""
 graphic     = "a.refining"
 graphic_alt = "-"
-helptext = _("Allows Settlers, Workers and Engineers to build oil wells on \
+helptext = _("\
+Allows Settlers, Workers and Engineers to build oil wells on \
 Glacier tiles.")
 cost = 3630
 
@@ -748,8 +748,8 @@ req2     = "Electricity"
 flags    = ""
 graphic     = "a.refrigeration"
 graphic_alt = "-"
-helptext = _("Allows Settlers, Workers and Engineers to upgrade irrigation systems \
-to farmland.")
+helptext = _("\
+Allows Settlers, Workers and Engineers to upgrade irrigation systems to farmland.")
 cost = 2775
 
 [advance_robotics]
@@ -928,7 +928,7 @@ graphic_alt = "-"
 ; a game is reloaded, a player can`t rebuild
 ; the "Darwin's Voyage" small wonder and get
 ; two free advances again.
-;THIS RULESET DOES NOT USE THEORY OF EVOLUTION OR OLD DARWIN'S VOYAGE.
+; THIS RULESET DOES NOT USE OLD DARWIN'S VOYAGE BEHAVIOUR OR THEORY OF EVOLUTION.
 [advance_theory_of_evolution]
 name     = _("Theory of Evolution")
 req1     = "None"

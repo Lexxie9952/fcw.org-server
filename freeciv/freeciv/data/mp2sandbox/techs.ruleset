@@ -452,7 +452,7 @@ req1     = "Railroad"
 req2     = "Banking"
 graphic     = "a.industrialization"
 graphic_alt = "-"
-helptext = _("Population will start contributing to pollution.")
+helptext = _("Population will start contributing to pollution. Obsoletes Galleon.")
 cost = 2330
 
 [advance_invention]
@@ -578,8 +578,8 @@ req2     = "University"
 flags    = ""
 graphic     = "a.metallurgy"
 graphic_alt = "-"
-chelptext = _("Obsoletes Catapult.")
-ost = 1340
+helptext = _("Obsoletes Catapult.")
+cost = 1340
 
 [advance_miniaturization]
 name     = _("Miniaturization")
@@ -635,7 +635,6 @@ flags    = ""
 graphic     = "a.navigation"
 graphic_alt = "-"
 helptext = _("Obsoletes Trireme.")
-cost = 226
 
 [advance_nuclear_fission]
 name     = _("Nuclear Fission")
@@ -666,6 +665,7 @@ graphic_alt = "-"
 helptext = _("When you research this technology before 400 BC and\
  before knowing Industrialization or Electricity or\
  Conscription, you get one other immediate technology advance.")
+ cost = 276
 
 [advance_physics]
 name     = _("Physics")
@@ -674,7 +674,6 @@ req2     = "Navigation"
 flags    = ""
 graphic     = "a.physics"
 graphic_alt = "-"
-cost = 468
 
 [advance_plastics]
 name     = _("Plastics")

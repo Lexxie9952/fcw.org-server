@@ -1486,16 +1486,50 @@ reqs	=
       "Building", "Courthouse", "City", TRUE
     }    
 
-;Courthouse improves chances against hostile diplomats by 20% - These effects REQUIRE 3.0
 [effect_courthouse_spy_resistance]
 type	= "Spy_Resistant"
-value	= 20
+value	= 15      ;50-15=35% success rate 
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Courthouse", "City", TRUE
     }
 
-;Courthouse improves chances against hostile diplomats by 20% - These effects REQUIRE 3.0
+[effect_courthouse_theft_resistance]
+type	= "Action_Odds_Pct"
+value	= -35 ;80-35=45% success rate 
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Steal Tech", "Local", TRUE
+    }
+
+[effect_courthouse_hostile_diplomat_7]
+type	= "Action_Odds_Pct"
+value	= -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Steal Tech Escape Expected", "Local", TRUE
+    }
+
+[effect_courthouse_hostile_diplomat_8]
+type	= "Action_Odds_Pct"
+value	= -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Targeted Steal Tech", "Local", TRUE
+    }
+
+[effect_courthouse_hostile_diplomat_9]
+type	= "Action_Odds_Pct"
+value	= -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Targeted Steal Tech Escape Expected", "Local", TRUE
+    }
+
 [effect_courthouse_hostile_diplomat_1]
 type	= "Action_Odds_Pct"
 value	= -20
@@ -1530,42 +1564,6 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Courthouse", "City", TRUE
       "Action", "Targeted Sabotage City Escape", "Local", TRUE
-    }
-
-[effect_courthouse_hostile_diplomat_5]
-type	= "Action_Odds_Pct"
-value	= -20
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Courthouse", "City", TRUE
-      "Action", "Steal Tech", "Local", TRUE
-    }
-
-[effect_courthouse_hostile_diplomat_7]
-type	= "Action_Odds_Pct"
-value	= -20
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Courthouse", "City", TRUE
-      "Action", "Steal Tech Escape Expected", "Local", TRUE
-    }
-
-[effect_courthouse_hostile_diplomat_8]
-type	= "Action_Odds_Pct"
-value	= -20
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Courthouse", "City", TRUE
-      "Action", "Targeted Steal Tech", "Local", TRUE
-    }
-
-[effect_courthouse_hostile_diplomat_9]
-type	= "Action_Odds_Pct"
-value	= -20
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Courthouse", "City", TRUE
-      "Action", "Targeted Steal Tech Escape Expected", "Local", TRUE
     }
 
 [effect_incite_cost_empty_courthouse]
@@ -1995,7 +1993,6 @@ reqs	=
       "Building", "Police Station", "City", TRUE
       "Building", "Women's Suffrage", "Player", FALSE
     }
-
 [effect_police_station_1]
 type    = "Make_Content_Mil"
 value	= 4
@@ -2004,6 +2001,21 @@ reqs	=
       "Gov", "Democracy", "Player", TRUE
       "Building", "Police Station", "City", TRUE
       "Building", "Women's Suffrage", "Player", FALSE
+    }
+[effect_police_station_spy_resistant]
+type	= "Spy_Resistant"
+value	= 10  
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Police Station", "City", TRUE 
+    }
+[effect_police_station_theft_resistant]
+type	= "Action_Odds_Pct"
+value	= -10  
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Police Station", "City", TRUE 
+      "Action", "Steal Tech", "Local", TRUE
     }
 
 [effect_port_facility]
@@ -2703,16 +2715,75 @@ reqs	=
       "Building", "Supreme Court", "Player"
     }    
 
-;Courthouse improves chances against hostile diplomats by 20% - These effects REQUIRE 3.0
-[effect_supreme_court_spy_resistance]
+;35% success on spy-attack-spy with one court effect, 25% with both:
+;35% hostile diplomatic combat success rate with only 1 of Courthouse / Supreme Court 
+[effect_only_supreme_court_spy_resistance]
 type	= "Spy_Resistant"
-value	= 20
+value	= 15 ;50%-15%=35% success rate 
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Supreme Court", "Player", TRUE
+      "Building", "Courthouse", "City", FALSE 
+    }
+;25% hostile diplomatic combat success rate with both Supreme Court + Courthouse 
+[effect_only_supreme_court_spy_resistance_stacked]
+type	= "Spy_Resistant"
+value	= 10 ;10+15 for Courthouse = 25%. 50%-25%=25% success rate 
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Supreme Court", "Player", TRUE
+      "Building", "Courthouse", "City", TRUE 
     }
 
-;Courthouse improves chances against hostile diplomats by 20% - These effects REQUIRE 3.0
+;45% success on theft with one court, 35% with both courts:
+[effect_supreme_court_only_steal_tech]
+type	= "Action_Odds_Pct"
+value	= -35 ; 80% base rate - 35% = 45% final rate 
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Supreme Court", "Player", TRUE
+      "Building", "Courthouse", "City", FALSE 
+      "Action", "Steal Tech", "Local", TRUE
+    }
+[effect_supreme_court_only_steal_tech_stacked]
+type	= "Action_Odds_Pct"
+value	= -10 ; 45% base rate after courthouse - 10% = 35% final rate 
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Supreme Court", "Player", TRUE
+      "Building", "Courthouse", "City", TRUE 
+      "Action", "Steal Tech", "Local", TRUE
+    }
+
+[effect_supreme_court_hostile_diplomat_7]
+type	= "Action_Odds_Pct"
+value	= -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Supreme Court", "Player"
+      "Action", "Steal Tech Escape Expected", "Local", TRUE
+    }
+
+[effect_supreme_court_hostile_diplomat_8]
+type	= "Action_Odds_Pct"
+value	= -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Supreme Court", "Player"
+      "Action", "Targeted Steal Tech", "Local", TRUE
+    }
+
+[effect_supreme_court_hostile_diplomat_9]
+type	= "Action_Odds_Pct"
+value	= -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Supreme Court", "Player"
+      "Action", "Targeted Steal Tech Escape Expected", "Local", TRUE
+    }
+
+
+
 [effect_supreme_court_hostile_diplomat_1]
 type	= "Action_Odds_Pct"
 value	= -20
@@ -2747,42 +2818,6 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Supreme Court", "Player"
       "Action", "Targeted Sabotage City Escape", "Local", TRUE
-    }
-
-[effect_supreme_court_hostile_diplomat_5]
-type	= "Action_Odds_Pct"
-value	= -20
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player"
-      "Action", "Steal Tech", "Local", TRUE
-    }
-
-[effect_supreme_court_hostile_diplomat_7]
-type	= "Action_Odds_Pct"
-value	= -20
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player"
-      "Action", "Steal Tech Escape Expected", "Local", TRUE
-    }
-
-[effect_supreme_court_hostile_diplomat_8]
-type	= "Action_Odds_Pct"
-value	= -20
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player"
-      "Action", "Targeted Steal Tech", "Local", TRUE
-    }
-
-[effect_supreme_court_hostile_diplomat_9]
-type	= "Action_Odds_Pct"
-value	= -20
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player"
-      "Action", "Targeted Steal Tech Escape Expected", "Local", TRUE
     }
 
 [effect_great_wall]

@@ -339,11 +339,15 @@ sound		= "b_courthouse"
 sound_alt	= "b_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
-Reduces the corruption and waste in a city by half, (60% rounded down)\
+Reduces the corruption and waste in a city by half, (60% rounded down.)\
  Revolt cost of the city is double if empty and quadruple if occupied.\
- Provides law and order to support +1 unit free of upkeep.  Removes\
- tile corruption penalties under all governments.  Increases protection\
- from hostile diplomatic actions by +20%. \
+ Provides law and order to support +1 unit free of upkeep. Removes\
+ tile corruption penalties under all governments.\
+"), _("\
+Protects your diplomatic units against hostile diplomatic units by 15%,\
+ lowering pre-modified success rate to 35%. Protects your city from the\
+ basic 'Steal Tech' action by 35%, lowering success rate to 45%. Increases\
+ protection from all other hostile diplomatic actions by 20%.\
 "), _("\
 Under a Democracy, a Courthouse also makes 1 unhappy citizen content\
  (unless that citizen is unhappy about military activity).\
@@ -700,10 +704,9 @@ sabotage	= 100
 sound		= "b_police_station"
 sound_alt	= "b_generic"
 helptext	= _("\
-Reduces the unhappiness caused by aggressively deployed military\
- units owned by the city by -4 under Democracy and -2 under Republic\
- -- in other words, it neutralizes the unhappiness caused by two\
- military units. This improvement has no effect under other governments.\
+Neutralizes the unhappiness caused by two military units. Assists domestic diplomatic\
+ units against hostile diplomatic attacks with a 10% bonus. Decreases the chance of\
+ the basic 'Steal Tech' action by 10%.\
 ")
 
 [building_port_facility]
@@ -1081,7 +1084,7 @@ sound		= "b_supermarket"
 sound_alt	= "b_generic"
 helptext	= _("\
 Increases the food resources by +100% on each farmland tile which\
- is being used around the city. The city centre tile receives a\
+ is being used around the city. An irrigable city centre tile receives a\
  +50% bonus immediately, but can't receive a benefit from farmland.\
  Farmland tiles are those which have been irrigated a second time.\
 ")
@@ -1850,7 +1853,10 @@ sound		= "w_great_library"
 sound_alt	= "w_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
-The Supreme Court gives the same effect as an extra Courthouse in all your cities. This Wonder is never obsolete.\
+The Supreme Court gives the same effect as an extra Courthouse in all your cities.\
+ However, if a Courthouse is already present, the additional bonus is reduced to 10%\
+ for both diplomatic combat and the basic 'Steal Tech' action. Please see the entry\
+ on Courthouse for all effects and bonuses. This Wonder is never obsolete.\
 ")
 
 [building_sun_tzus_war_academy]
@@ -1875,7 +1881,7 @@ sound_alt	= "w_generic"
 helptext	= _("\
 All your new military land units produced in cities in your nation\
  start with an additional veteran level (this is cumulative with any\
- Barracks building in a city; with both, units are created as Hardened).\
+ Barracks in a city: with both, units are created as Hardened).\
  Obsolete by: Mobile Warfare.\
 ")
 
@@ -1997,12 +2003,11 @@ sabotage	= 0
 sound		= "w_womens_suffrage"
 sound_alt	= "w_generic"
 helptext	= _("\
-Counts as a Police Station in every city in your nation.\
- (That is, for each city, it reduces the unhappiness caused by\
- aggressively deployed military units owned by that city by 4 under\
- Democracy and 2 under Republic -- in other words, it neutralizes\
- the unhappiness caused by two military units per city. This wonder\
- has no effect under other governments.)\
+In the capacity of reducing Military Unhappiness, this Wonder counts as a\
+ Police Station in every city in your nation. (It neutralizes the\
+ unhappiness caused by two military units.) This Wonder has no other\
+ effect. It does not confer bonuses against hostile diplomats like a Police\
+ Station. It gives no bonus to cities which already have a Police Station.\
  This Wonder does not become obsolete.\
 ")
 

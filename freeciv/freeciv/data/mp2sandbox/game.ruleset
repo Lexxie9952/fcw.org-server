@@ -173,9 +173,9 @@ illness_pollution_factor = 50
 total_factor = 100       ; TF   = 100 (effectively makes 100x cost at capital and 1x cost at DIST=32)
 ;city_size_adjusted      ; SZ  (happy*2 + content*1 + unhappy*0 - angry*2)
 ;nationality factor      ; NF   native=1.0, was_conquered=0.67, originally_belonged_to_inciter=0.5
-base_incite_cost = 1000  ; BIC  =1000 (the cost of a size 1 domestic city at a distance of 32 with no improvements. no units of its own,
-;                                occupied by other units, no local or national incite bonuses, and a bankrupt treasury, prior to getting 2x bonus
-;                                for being content.
+base_incite_cost = 700   ; BIC  =700 (the cost of a size 1 domestic city at a distance of 32 with no improvements. no units of its own,
+;                                not occupied by other units, no local or national incite bonuses, a bankrupt treasury, prior to going to 1400 for 2x 
+                                 content bonus.
 ;city is content         ; CON 
 ;city is celebrating     ; CEL 
 ;incite defence bonuses  ; BONUS  -50% empty + 300% occupied+courthouse OR + 100% empty+courthouse + supreme_court applies courthouse bonuses again
