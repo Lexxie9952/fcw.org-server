@@ -2652,7 +2652,7 @@ function activate_goto()
 **************************************************************************/
 function save_last_unit_focus()
 {
-  if (current_focus = null) return;
+  if (current_focus == null) return;
 
   if (current_focus.length>0) last_focus = current_focus[0]; // save last selected unit for command that returns to it
 }
