@@ -1242,7 +1242,7 @@ function update_unit_order_commands()
 
     if (pcity != null && city_has_building(pcity, improvement_id_by_name(B_AIRPORT_NAME))) {
       if (pcity["airlift"]>0 && punit['movesleft']>0) {
-        unit_actions["airlift"] = {name: "<span><img src="+"'/images/airlift-dest.png' height='20' width='20'>Airlift (Shift-L)</span>"};
+        unit_actions["airlift"] = {name: "Airlift (Shift-L)"};
         $("#order_airlift").show();
         //$("#order_airlift_disabled").hide();
       } else {
