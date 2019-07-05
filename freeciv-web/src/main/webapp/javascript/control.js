@@ -2352,12 +2352,10 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 98:
     case 188:  // , key
       if (key_code==188 && shift) {  // The "<"" key selects last unit 
-        current_focus = null;
+        current_focus = [];
         if (last_focus != null) {
-          current_focus.push(last_focus);
-          auto_center_on_focus_unit();
-          update_active_units_dialog();
-          update_unit_order_commands();
+          //current_focus.push(last_focus);
+          set_unit_focus_and_redraw(last_focus);
         }
 
       }
