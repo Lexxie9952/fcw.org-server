@@ -2087,7 +2087,7 @@ function do_map_click(ptile, qtype, first_time_called)
         // clicked on a tile with units exclusively owned by other players.
         // (if shift was held we simply do nothing since they can't be added to selected units)
         save_last_unit_focus();
-            
+
         current_focus = sunits;
         $("#game_unit_orders_default").hide();
         update_active_units_dialog();
@@ -2425,8 +2425,8 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 32: 
       if (shift) auto_center_last_location();
       else {
-        if (current_focus.length>0) last_focus = current_focus[0]; // save last selected unit for command that returns to it
-    
+        save_last_unit_focus();    
+        
         current_focus = [];
         if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
         goto_active = false;
@@ -2650,7 +2650,7 @@ function activate_goto()
 /**************************************************************************
   Save last focus unit for user-commmand to return to it 
 **************************************************************************/
-function save_last_unit_focus();
+function save_last_unit_focus()
 {
   if (current_focus = null) return;
 
