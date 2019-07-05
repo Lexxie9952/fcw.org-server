@@ -219,7 +219,7 @@ reqs    =
 
 [effect_enter_marketplace_bonus_reduction]
 type	= "Trade_Revenue_Bonus"
-value	= -1585
+value	= 1585 ;experimental, trying to make Enter Marketplace a separate one-time ROI mechanic with meaning
 reqs	=
     { "type", "name", "range"
       "Action", "Enter Marketplace", "Local"

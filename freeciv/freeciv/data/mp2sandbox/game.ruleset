@@ -1356,16 +1356,16 @@ negative_label = _("BC")
 [trade]
 settings =
   { "type",       "pct", "cancelling", "bonus"
-    "National",   0,     "Cancel",     "None"
-    "NationalIC", 0,     "Cancel",     "None"
-    "IN",         100,     "Cancel",     "None"
-    "INIC",       100,     "Cancel",     "None"
-    "Ally",       100,     "Cancel",     "None"
-    "AllyIC",     100,     "Cancel",     "None"
-    "Enemy",      100,     "Cancel",     "None"
-    "EnemyIC",    100,     "Cancel",     "None"
-    "Team",       100,     "Cancel",     "None"
-    "TeamIC",     100,     "Cancel",     "None"
+    "National",   0,       "Cancel",   "None"
+    "NationalIC", 0,       "Cancel",   "None"
+    "IN",         100,     "Cancel",   "Gold"
+    "INIC",       100,     "Cancel",   "Gold"
+    "Ally",       100,     "Cancel",   "Gold"
+    "AllyIC",     100,     "Cancel",   "Gold"
+    "Enemy",      100,     "Cancel",   "Gold"
+    "EnemyIC",    100,     "Cancel",   "Gold"
+    "Team",       100,     "Cancel",   "Gold"
+    "TeamIC",     100,     "Cancel",   "Gold"
   }
 
 ; When are goods for the trade route chosen.
