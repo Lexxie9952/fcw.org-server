@@ -274,21 +274,23 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
 
   // City Airlift Counter prefs:
   var airlift_text = "";
-  if (city['owner'] == client.conn.playing.playerno && draw_city_airlift_counter==true ) {
-    if (game_info['airlift_dest_divisor'] == 0) {
-      // standard case, no airliftdestdivisor, just show source airlifts if it has them:
-      airlift_text = ( city['airlift']>0 ? " |"+city['airlift']+"|" : "");
-    } else { // airliftdestdivsor > 0 which means #destination-airlifts is a separate counter to show: 
-      var airlift_receive_text;  
-      var airlift_receive_max_capacity = Math.round(city['size'] / game_info['airlift_dest_divisor']);
+  if (!client_is_observer()) {  
+    if (city['owner'] == client.conn.playing.playerno && draw_city_airlift_counter==true ) {
+      if (game_info['airlift_dest_divisor'] == 0) {
+        // standard case, no airliftdestdivisor, just show source airlifts if it has them:
+        airlift_text = ( city['airlift']>0 ? " |"+city['airlift']+"|" : "");
+      } else { // airliftdestdivsor > 0 which means #destination-airlifts is a separate counter to show: 
+        var airlift_receive_text;  
+        var airlift_receive_max_capacity = Math.round(city['size'] / game_info['airlift_dest_divisor']);
 
-      if (game_info['airlifting_style'] > 7) airlift_receive_text = "&infin;"; // DEST_UNLIMITED IS INFINITE
-      // else destination airlifts allowed = population of city / airliftdivisor, rounded to nearest whole number:   
-      else airlift_receive_text = Math.max(0,city["airlift"] + airlift_receive_max_capacity - effects[1][0]['effect_value']);             
-      
-      airlift_text = (city['airlift']>0  ||  airlift_receive_text=="&infin;"  ||  airlift_receive_text != "0")  
-                      ? " |" + city['airlift'] + ":" + airlift_receive_text + "|"
-                      : "";
+        if (game_info['airlifting_style'] > 7) airlift_receive_text = "&infin;"; // DEST_UNLIMITED IS INFINITE
+        // else destination airlifts allowed = population of city / airliftdivisor, rounded to nearest whole number:   
+        else airlift_receive_text = Math.max(0,city["airlift"] + airlift_receive_max_capacity - effects[1][0]['effect_value']);             
+        
+        airlift_text = (city['airlift']>0  ||  airlift_receive_text=="&infin;"  ||  airlift_receive_text != "0")  
+                        ? " |" + city['airlift'] + ":" + airlift_receive_text + "|"
+                        : "";
+      }
     }
   }
 
