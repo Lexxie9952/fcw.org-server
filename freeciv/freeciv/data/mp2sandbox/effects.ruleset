@@ -201,7 +201,7 @@ value   = 3
 
 [effect_trade_routes]
 type    = "Max_Trade_Routes"
-value   = 3
+value   = 2
 
 ;pow(2, value/1000) -> Base = 50% 
 [effect_base_trade_revenue_reduce]
@@ -219,7 +219,7 @@ reqs    =
 
 [effect_enter_marketplace_bonus_reduction]
 type	= "Trade_Revenue_Bonus"
-value	= 1585 ;experimental, trying to make Enter Marketplace a separate one-time ROI mechanic with meaning
+value	= 1 ;experimental, trying to make Enter Marketplace a separate one-time ROI mechanic with meaning
 reqs	=
     { "type", "name", "range"
       "Action", "Enter Marketplace", "Local"
