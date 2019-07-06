@@ -1361,9 +1361,9 @@ native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter", "Balloon"
 hidden_by      = "Fortress"
 flags          = "NativeTile", "NoStackDeath", "Refuel"
 helptext       = _("\
-Forts are rapidly built fortifications which give Land units +33% defense\
- against Land and Sea units. Defending units are lost one at a time instead\
- of the entire stack dying. A fort is necessary to start building a fortress.\
+Forts are rapidly built fortifications which give Land and Helicopter units +33%\
+ defense against Land and Sea units. Defending units are lost one at a time instead\
+ of the entire stack dying. A Fort is necessary to start building a Fortress.\
 "), _("
 TIP: Forts make great outposts for keeping watch on your borders. Be careful--\
 an unmanned Fort can be claimed by a foreign unit. 
@@ -1395,10 +1395,10 @@ defense_bonus  = 100
 native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter", "Balloon"
 flags          = "NativeTile", "Refuel", "NoStackDeath"
 helptext       = _("\
-Fortresses are improvements built on top of Forts which greatly improve defense.\
- A Land unit remaining in a fortress for a whole turn without moving recovers a\
- quarter of its hit points. With Invention, fortresses gain watchtowers from which\
- land units can see further afield.\
+Fortresses are improvements built on top of Forts, greatly improving defense.\
+ A Land unit remaining in a Fortress for a whole turn without moving recovers a\
+ quarter of its hit points. With Invention, Fortresses gain watchtowers from which\
+ land units can see farther.\
 "), _("\
 Units in a Fortress die one at a time instead of the entire stack being lost.\
 Diplomatic units get a 25% defense bonus in diplomatic fights.\
