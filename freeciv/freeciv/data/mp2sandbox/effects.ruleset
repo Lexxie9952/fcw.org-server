@@ -386,7 +386,7 @@ value	= 100 ;cancels out equivalent defence bonus for being out in the field
 reqs	=
     { "type", "name", "range", "present"
       "UnitClass", "AirProtect", "Local", TRUE
-      "Extra", "Fortress", "Local", TRUE
+      "Extra", "Airbase", "Local", TRUE
       "UnitType", "Marines", "Local", TRUE
     }
 [effect_marines_vs_air_city_fix] 
@@ -394,7 +394,7 @@ type    = "Attack_Bonus"
 value	= 200 ;cancels out equivalent defence bonus for being out in the field
 reqs	=
     { "type", "name", "range", "present"
-      "UnitClass", "AirProtect", "Local", TRUE
+      "UnitClass", "Air", "Local", TRUE
       "CityTile", "Center", "Local", TRUE
       "UnitType", "Marines", "Local", TRUE
     }
@@ -403,8 +403,8 @@ type    = "Attack_Bonus"
 value	= 200 ;cancels out equivalent defence bonus for being out in the field
 reqs	=
     { "type", "name", "range", "present"
-      "UnitClass", "AirProtect", "Local", TRUE
-      "Extra", "Fortress", "Local", TRUE
+      "UnitClass", "Air", "Local", TRUE
+      "Extra", "Airbase", "Local", TRUE
       "UnitType", "Marines", "Local", TRUE
     }
 [effect_marines_city_fix] 

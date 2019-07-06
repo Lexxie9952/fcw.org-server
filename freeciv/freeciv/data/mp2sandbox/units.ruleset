@@ -2174,10 +2174,6 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-bonuses       =
-   { "flag", "type", "value"
-     "Marines", "DefenseMultiplier", 6        
-   }
 cargo         = "Bomb"
 flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape", "CantReachAir", "NeverProtects"
 veteran_names =
