@@ -1114,10 +1114,11 @@ Marines are infantry who are experts at amphibious war. \
 They are the most capable foot unit in the game and are \
 heavily armed with a variety of powerful weaponry. \
 "), _("\
-Marines can attack any Land, Air, or Sea unit from anywhere, \
+Marines can attack any most Air and Sea units from anywhere, \
 including from Transports and Helicopters. Marines promoted \
 to three veteran levels and beyond become commandos suitable for \
-special ops.\
+special ops. Marines can't attack Submarines, Missiles, Jet Bombers,\
+or Stealth aircraft.\
 ")
 
 [unit_paratroopers]
@@ -2844,7 +2845,7 @@ bonuses       =
      "Marines", "DefenseMultiplier", 1    
    }
 flags         = "BadCityDefender", "CanEscape"
-roles         = "DefendOk", "Hunter"
+roles         = "Hunter"
 helptext      = _("\
 The AEGIS Cruiser is an upgraded Cruiser equipped with\
  an advanced missile system, advanced radar\
