@@ -1391,7 +1391,9 @@ reqs           =
     }
 build_time     = 5
 removal_time   = 0
-defense_bonus  = 100
+;defense_bonus  = 100 ; fort under it gives a bonus to some units, so we 
+;have to use effects to give the bonus to achieve layered bonuses for different
+;unit types.
 native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter", "Balloon"
 flags          = "NativeTile", "Refuel", "NoStackDeath"
 helptext       = _("\
