@@ -507,9 +507,9 @@ static const struct sset_val_name *airliftingstyle_name(int bit)
   NAME_CASE(AIRLIFTING_ALLIED_DEST, "TO_ALLIES",
             N_("Allows units to be airlifted to allied cities"));
   NAME_CASE(AIRLIFTING_UNLIMITED_SRC, "SRC_UNLIMITED",
-            N_("Unlimited units from source city"));
+            N_("Unlimited units from source city with an airport"));
   NAME_CASE(AIRLIFTING_UNLIMITED_DEST, "DEST_UNLIMITED",
-            N_("Unlimited units to destination city"));
+            N_("Unlimited units to destination city with an airport"));
   }
   return NULL;
 }
@@ -2426,12 +2426,10 @@ static struct setting settings[] = {
                  "(FROM_ALLIES).\n"
                  "- \"Allows units to be airlifted to allied cities\" "
                  "(TO_ALLIES).\n"
-                 "- \"Unlimited units from source city\" (SRC_UNLIMITED): "
-                 "note that airlifting from a city doesn't reduce the "
-                 "airlifted counter, but still needs at least 1.\n"
-                 "- \"Unlimited units to destination city\" "
-                 "(DEST_UNLIMITED): note that airlifting to a city doesn't "
-                 "reduce the airlifted counter, and doesn't need any."),
+                "- \"Unlimited units from a source city with an airport\" "
+                 "(SRC_UNLIMITED).\n"
+                 "- \"Unlimited units to a destination city with an airport\" "
+                 "(DEST_UNLIMITED).\n"),
               NULL, NULL, airliftingstyle_name, GAME_DEFAULT_AIRLIFTINGSTYLE)
   
   GEN_INT("airliftdestdivisor", game.info.airlift_dest_divisor,
