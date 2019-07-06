@@ -904,7 +904,7 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 320
+build_cost	= 140
 upkeep		= 4
 sabotage	= 100
 sound		= "b_solar_plant"
