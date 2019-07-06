@@ -1357,9 +1357,15 @@ reqs           =
     }
 build_time     = 4
 removal_time   = 0
-native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter", "Balloon"
+native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter", "Balloon", "AirProtect"
 hidden_by      = "Fortress"
-flags          = "NativeTile", "Refuel", "NoStackDeath"
+flags          = "NativeTile", "NoStackDeath"  ;, "Refuel"
+;NOTE: effect_fortress_regen should give 25% of 20HP to helicopter, +1hp for being stationary
+;thus a fortress should give +6hp -2hp for not being in refuel spot or +4hp/turn. Healing 67% 
+;as fast as an airbase. MEANWHILE, removing the refuel flag allows us to make Forts native 
+;to AirProtect so that they can't prevent attacks on forts. This is debatable issue of 
+;Fort with no Killstack but not Airprotected vs no fort, Killstack and Airprotect, but 
+;many times fighters over forts have come up as a dynamic. 
 helptext       = _("\
 Forts are rapidly built fortifications which give Land units +33% defense\
  against Land and Sea units. Defending units are lost one at a time instead\
