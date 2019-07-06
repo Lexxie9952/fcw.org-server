@@ -363,6 +363,61 @@ reqs    =
       "Extra", "Airbase", "Tile"
       "UnitClass", "Helicopter", "Local"
     }
+; *****************************************************************
+; Marines can attack unreachable air and sea at a penalty. However,
+; we can't make them attack worse than a Riflemen during a normal
+; case of attacking a ship or Fighter inside a city or airbase.
+; This section nullifies all the penalties they get for being
+; able to attack unreachable units, if those units are in a native
+; base or city, resulting in normal behaviour for when attacking
+; a city or airbase.
+[effect_marines_vs_airprotect_city_fix] 
+type    = "Attack_Bonus"
+value	= 100 ;cancels out equivalent defence bonus for being out in the field
+reqs	=
+    { "type", "name", "range", "present"
+      "UnitClass", "AirProtect", "Local", TRUE
+      "CityTile", "Center", "Local", TRUE
+      "UnitType", "Marines", "Local", TRUE
+    }
+[effect_marines_vs_airprotect_airbase_fix] 
+type    = "Attack_Bonus"
+value	= 100 ;cancels out equivalent defence bonus for being out in the field
+reqs	=
+    { "type", "name", "range", "present"
+      "UnitClass", "AirProtect", "Local", TRUE
+      "Extra", "Fortress", "Local", TRUE
+      "UnitType", "Marines", "Local", TRUE
+    }
+[effect_marines_vs_air_city_fix] 
+type    = "Attack_Bonus"
+value	= 200 ;cancels out equivalent defence bonus for being out in the field
+reqs	=
+    { "type", "name", "range", "present"
+      "UnitClass", "AirProtect", "Local", TRUE
+      "CityTile", "Center", "Local", TRUE
+      "UnitType", "Marines", "Local", TRUE
+    }
+[effect_marines_vs_air_airbase_fix] 
+type    = "Attack_Bonus"
+value	= 200 ;cancels out equivalent defence bonus for being out in the field
+reqs	=
+    { "type", "name", "range", "present"
+      "UnitClass", "AirProtect", "Local", TRUE
+      "Extra", "Fortress", "Local", TRUE
+      "UnitType", "Marines", "Local", TRUE
+    }
+[effect_marines_city_fix] 
+type    = "Attack_Bonus"
+value	= 100 ;cancels out equivalent defence bonus sea units against marines when out at sea 
+reqs	=
+    { "type", "name", "range", "present"
+      "UnitClass", "Sea", "Local", TRUE
+      "CityTile", "Center", "Local", TRUE
+      "UnitType", "Marines", "Local", TRUE
+    }
+; ********************************************************
+
 
 ; Base vision range - radius of vision is sqrt(5) = 2.24
 [effect_city_vision]
@@ -2860,7 +2915,7 @@ reqs	=
       "Building", "Great Wall", "Player", TRUE
       "UnitClass", "LandAirSea", "Local", TRUE
       "CityTile", "Center", "Local", TRUE
-       "UnitType", "Howitzer", "Local", FALSE
+      "UnitType", "Howitzer", "Local", FALSE
     }
 
 [effect_great_wall_1]
