@@ -652,6 +652,7 @@ action = "Establish Trade Route"
 actor_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "TradeRoute", "Local", TRUE
+      "Tech", "Trade", "Player", TRUE
       "MinMoveFrags", "1", "Local", TRUE
     }
 
@@ -660,6 +661,7 @@ action = "Enter Marketplace"
 actor_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "TradeRoute", "Local", TRUE
+      "Tech", "Trade", "Player", TRUE
       "MinMoveFrags", "1", "Local", TRUE
     }
 target_reqs  =
@@ -672,6 +674,7 @@ action = "Help Wonder"
 actor_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "HelpWonder", "Local", TRUE
+      "Tech", "Trade", "Player", TRUE
 ;      "DiplRel", "Foreign", "Local", FALSE
     }
 target_reqs    =
@@ -684,6 +687,7 @@ action = "Help Wonder"
 actor_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "HelpWonder", "Local", TRUE
+      "Tech", "Trade", "Player", TRUE
 ;      "DiplRel", "Foreign", "Local", FALSE
     }
 target_reqs    =
@@ -1358,14 +1362,14 @@ settings =
   { "type",       "pct", "cancelling", "bonus"
     "National",   0,       "Cancel",   "None"
     "NationalIC", 0,       "Cancel",   "None"
-    "IN",         40,      "Cancel",   "Gold"
-    "INIC",       40,      "Cancel",   "Gold"
-    "Ally",       40,      "Cancel",   "Gold"
-    "AllyIC",     40,      "Cancel",   "Gold"
-    "Enemy",      40,      "Cancel",   "Gold"
-    "EnemyIC",    40,      "Cancel",   "Gold"
-    "Team",       40,      "Cancel",   "Gold"
-    "TeamIC",     40,      "Cancel",   "Gold"
+    "IN",         35,      "Cancel",   "Gold"
+    "INIC",       35,      "Cancel",   "Gold"
+    "Ally",       35,      "Cancel",   "Gold"
+    "AllyIC",     35,      "Cancel",   "Gold"
+    "Enemy",      35,      "Cancel",   "Gold"
+    "EnemyIC",    35,      "Cancel",   "Gold"
+    "Team",       35,      "Cancel",   "Gold"
+    "TeamIC",     35,      "Cancel",   "Gold"
   }
 
 ; When are goods for the trade route chosen.

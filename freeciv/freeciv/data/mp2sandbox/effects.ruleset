@@ -201,7 +201,7 @@ value   = 3
 
 [effect_trade_routes]
 type    = "Max_Trade_Routes"
-value   = 2
+value   = 1
 
 ;pow(2, value/1000) -> Base = 50% 
 [effect_base_trade_revenue_reduce]
@@ -217,9 +217,12 @@ reqs    =
       "Tech", "Railroad", "Player"
     }
 
-[effect_enter_marketplace_bonus_reduction]
+;If you don't acquire ongoing trade revenue from a trade route,
+;a DECREASE in one-time bonus made NO SENSE AT ALL,
+;Now it's a one time bonus with potentially slight ROI.
+[effect_enter_marketplace_bonus_increase]
 type	= "Trade_Revenue_Bonus"
-value	= 1 ;experimental, trying to make Enter Marketplace a separate one-time ROI mechanic with meaning
+value	= 2100 
 reqs	=
     { "type", "name", "range"
       "Action", "Enter Marketplace", "Local"
@@ -227,11 +230,9 @@ reqs	=
 ;TO-DO: pay x more than gold value of vessel entering marketplace, with ROI being somewhat inferior to most 
 ;investments but hinting toward same order of magnitude.
 
-; Fudge factor to more closely approximate Civ2 behavior. (Civ2 is
-; really very different -- this just fakes it a little better)
-[effect_bonus_fudge_factor]
+[effect_establish_traderoute_bonus]
 type	= "Trade_Revenue_Bonus"
-value	= 1585
+value	= -2500 
 
 ; *********************************** BASES *******************************
 
