@@ -53,7 +53,9 @@ flags =
     _("Expellable"), _("Can be peacefully expelled from foreign tiles.")
     _("AirProtector"), _("Is Unreachable AND can protect its tile from units unable to attack this unit.")
     _("CantReachAir"), _("Unable to attack air units.")
- ;   _("NeverProtects"), _("Does not protect other units on its tile.")   ; UNCOMMENT THIS IF NOT USING SCL'S PATCH FOR THIS FLAG
+    _("FortBuster"), _("Defending Forts get no bonus. +33% attack bonus vs. the 2x defense of a Fortress.")
+    _("FortressBuster"), _("Defending Fortresses get no bonus.")
+;;;   _("NeverProtects"), _("Does not protect other units on its tile.")   ; UNCOMMENT THIS IF NOT USING SCL'S PATCH FOR THIS FLAG
   }
 
 ; Names for custom unit class flags. There can be up to 8 of these.
@@ -1455,7 +1457,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter"
-flags         = "CantReachAir"
+flags         = "CantReachAir", "FortBuster"
 roles         = "AttackFastStartUnit", "Hunter"
 helptext      = _("\
 Armors are motorized war wagons that are faster,\
@@ -1493,7 +1495,7 @@ bonuses       =
    { "flag", "type", "value"
      "Missile",      "DefenseMultiplier", 1
    }
-flags         = "CantReachAir"
+flags         = "CantReachAir", "FortressBuster"
 roles         = "AttackFastStartUnit", "Hunter"
 helptext      = _("\
 Armor II has composite armor and strong weaponry upgrades. Forts\

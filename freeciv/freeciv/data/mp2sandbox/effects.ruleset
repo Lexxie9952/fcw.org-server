@@ -242,14 +242,15 @@ type    = "Defend_Bonus"
 value   = 33
 reqs    =
     { "type",      "name",         "range", "present"
-      "Extra",     "Fort",         "Local", TRUE
-      "UnitClass", "Helicopter",   "Local", FALSE ;these classes and types do not activate the defense bonus
-      "UnitClass", "Air",          "Local", FALSE
-      "UnitClass", "AirPillage",   "Local", FALSE
-      "UnitClass", "AirProtect",   "Local", FALSE
-      "UnitClass", "Missile",      "Local", FALSE
-      "UnitType",  "Armor",        "Local", FALSE
-      "UnitType",  "Armor II",     "Local", FALSE 
+      "Extra",     "Fort",         "Local", TRUE  
+      "Extra",     "Fortress",     "Local", FALSE ; Fortress calculated separately even if a fort is under it.
+      "UnitClass", "Helicopter",   "Local", FALSE ; ... these attackers do not activate Fort defense bonus
+      "UnitClass", "Air",          "Local", FALSE ; ...   "       "      "  "      "      "    "       "
+      "UnitClass", "AirPillage",   "Local", FALSE ; ...   "       "      "  "      "      "    "       "
+      "UnitClass", "AirProtect",   "Local", FALSE ; ...   "       "      "  "      "      "    "       "
+      "UnitClass", "Missile",      "Local", FALSE ; ...   "       "      "  "      "      "    "       "
+      "UnitType",  "Armor",        "Local", FALSE ; ...   "       "      "  "      "      "    "       "
+      "UnitType",  "Armor II",     "Local", FALSE ; ...   "       "      "  "      "      "    "       "
     }
 ; Fort HP regen
 [effect_fort_hp_regen]
@@ -277,17 +278,31 @@ reqs    =
       "UnitClass", "LandNoKill", "Local"
     }
 
-; **** FORTRESS ****
-; Cumulative with fort
-; 33 + 67 = 100
-[effect_fortress_defense]
+; **** FORTRESS **************************************************************
+
+; Adjust the 1.67xdefense_bonus in terrain.ruleset for some attackers: 
+; ****************************************************************************
+[effect_fortress_nonfortbuster]
 type    = "Defend_Bonus"
-value   = 67
+value   = 20 ;increase 1.67x to 2x except when defending against FortBuster types. 
+;note: 1.20*1.67=2.0 (this bonus is multiplied in after terrain defense_bonus was multiplied)
 reqs    =
     { "type", "name", "range", "present"
       "Extra", "Fortress", "Local", TRUE
-      "UnitType", "Armor II", "Local", FALSE 
+      "UnitFlag", "FortBuster", "Local", FALSE
+      "UnitFlag", "FortressBuster", "Local", FALSE 
+      "UnitFlag", "AirAttacker", "Local", FALSE
     }
+[effect_fortressbuster]
+type    = "Attack_Bonus"
+value   = 67 ;Cancel defender's 1.67x with attacker getting 1.67x 
+reqs    =
+    { "type", "name", "range", "present"
+      "Extra", "Fortress", "Local", TRUE
+      "UnitFlag", "FortressBuster", "Local", TRUE 
+    }    
+
+; ****** ^^ defense_bonus_correctives ^^ *************************************
 
 ; Vision benefit from fortress watchtowers
 [effect_fortress_vision]
@@ -364,58 +379,55 @@ reqs    =
       "UnitClass", "Helicopter", "Local"
     }
 ; *****************************************************************
-; Marines can attack unreachable air and sea at a penalty. However,
-; we can't make them attack worse than a Riflemen during a normal
-; case of attacking a ship or Fighter inside a city or airbase.
-; This section nullifies all the penalties they get for being
-; able to attack unreachable units, if those units are in a native
-; base or city, resulting in normal behaviour for when attacking
-; a city or airbase.
-[effect_marines_vs_airprotect_city_fix] 
-type    = "Attack_Bonus"
-value	= 100 ;cancels out equivalent defence bonus for being out in the field
-reqs	=
-    { "type", "name", "range", "present"
-      "UnitClass", "AirProtect", "Local", TRUE
-      "CityTile", "Center", "Local", TRUE
-      "UnitType", "Marines", "Local", TRUE
-    }
-[effect_marines_vs_airprotect_airbase_fix] 
-type    = "Attack_Bonus"
-value	= 100 ;cancels out equivalent defence bonus for being out in the field
-reqs	=
-    { "type", "name", "range", "present"
-      "UnitClass", "AirProtect", "Local", TRUE
-      "Extra", "Airbase", "Local", TRUE
-      "UnitType", "Marines", "Local", TRUE
-    }
-[effect_marines_vs_air_city_fix] 
-type    = "Attack_Bonus"
-value	= 200 ;cancels out equivalent defence bonus for being out in the field
-reqs	=
-    { "type", "name", "range", "present"
-      "UnitClass", "Air", "Local", TRUE
-      "CityTile", "Center", "Local", TRUE
-      "UnitType", "Marines", "Local", TRUE
-    }
-[effect_marines_vs_air_airbase_fix] 
-type    = "Attack_Bonus"
-value	= 200 ;cancels out equivalent defence bonus for being out in the field
-reqs	=
-    { "type", "name", "range", "present"
-      "UnitClass", "Air", "Local", TRUE
-      "Extra", "Airbase", "Local", TRUE
-      "UnitType", "Marines", "Local", TRUE
-    }
-[effect_marines_city_fix] 
-type    = "Attack_Bonus"
-value	= 100 ;cancels out equivalent defence bonus sea units against marines when out at sea 
-reqs	=
-    { "type", "name", "range", "present"
-      "UnitClass", "Sea", "Local", TRUE
-      "CityTile", "Center", "Local", TRUE
-      "UnitType", "Marines", "Local", TRUE
-    }
+; Marines can attack unreachable air and sea at a -50% penalty. However,
+; when air is reachable by ALL land units, Marines should not be the
+; only land unit which suffers a penalty. These effects cancel the penalties 
+; in those situations. This awaits 3.x release of reqs for target/defender unit.
+;[effect_marines_vs_airprotect_city_fix] 
+;type    = "Attack_Bonus"
+;value	= 100 ;cancels out equivalent defence bonus for being out in the field
+;reqs	=
+;    { "type", "name", "range", "present"
+;      ;"TargetUnitClass", "AirProtect", "Local", TRUE
+;      "CityTile", "Center", "Local", TRUE
+;      "UnitType", "Marines", "Local", TRUE
+;    }
+;[effect_marines_vs_airprotect_airbase_fix] 
+;type    = "Attack_Bonus"
+;value	= 100 ;cancels out equivalent defence bonus for being out in the field
+;reqs	=
+;    { "type", "name", "range", "present"
+;      "TargetUnitClass", "AirProtect", "Local", TRUE
+;      "Extra", "Airbase", "Local", TRUE
+;      "UnitType", "Marines", "Local", TRUE
+;    }
+;[effect_marines_vs_air_city_fix] ; prop-engine Bombers
+;type    = "Attack_Bonus"
+;value	= 200 ;cancels out equivalent defence bonus for being out in the field
+;reqs	=
+;    { "type", "name", "range", "present"
+;      "UnitClass", "Air", "Local", TRUE
+;      "CityTile", "Center", "Local", TRUE
+;      "UnitType", "Marines", "Local", TRUE
+;    }
+;[effect_marines_vs_air_airbase_fix] ; prop-engine Bombers
+;type    = "Attack_Bonus"
+;value	= 200 ;cancels out equivalent defence bonus for being out in the field
+;reqs	=
+;    { "type", "name", "range", "present"
+;      "UnitClass", "Air", "Local", TRUE
+;      "Extra", "Airbase", "Local", TRUE
+;      "UnitType", "Marines", "Local", TRUE
+;    }
+;[effect_marines_city_fix] 
+;type    = "Attack_Bonus"
+;value	= 100 ;cancels out equivalent defence bonus sea units against marines when out at sea 
+;reqs	=
+;    { "type", "name", "range", "present"
+;      "UnitClass", "Sea", "Local", TRUE
+;      "CityTile", "Center", "Local", TRUE
+;      "UnitType", "Marines", "Local", TRUE
+;    }
 ; ********************************************************
 
 
