@@ -3175,7 +3175,7 @@ function key_unit_pillage()
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     var tgt = get_what_can_unit_pillage_from(punit, null);
-    console.log("Unit can pillage "+tgt.length+" targets: "+target);
+    if (tgt) console.log("Unit can pillage "+tgt.length+" targets: "+tgt);
     if (tgt.length > 0) {
       if (tgt.length == 1) {
         request_new_unit_activity(punit, ACTIVITY_PILLAGE, EXTRA_NONE);

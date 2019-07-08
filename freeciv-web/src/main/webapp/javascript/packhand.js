@@ -886,6 +886,7 @@ function handle_unit_combat_info(packet)
         
           scrollDiv.appendChild(item);
           setTimeout(() => $('#freeciv_custom_scrollbar_div').mCustomScrollbar('scrollTo', 'bottom'), 200);
+          setTimeout(update_unit_focus, 700);  // remove this if unit redraw still doesn't work
         }
       }
     } 
