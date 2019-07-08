@@ -1964,7 +1964,6 @@ border_sq      = 4
 vision_main_sq = 4
 flags          = "NoAggressive"
 
-
 [base_airbase]
 extra          = "Airbase"
 gui_type       = "Airbase"

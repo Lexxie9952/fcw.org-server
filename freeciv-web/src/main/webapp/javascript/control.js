@@ -932,7 +932,6 @@ function update_unit_order_commands()
     }
   }
 
-
   switch (show_order_buttons) {
     case 0:                 // hide lower all panels
       $("#game_unit_orders_default").hide();
@@ -956,10 +955,7 @@ function update_unit_order_commands()
   $("#order_canal").hide();
   $("#order_well").hide();
   $("#order_fortress").hide();
-  // These were in the "else", when unit is not Settler-type. But were hiding
-  // some legitimate abilities of other units.  Instead, just default 
-  // them as off and see if the checks below turn them back on:
-  $("#order_road").hide();  //mp2 legion can road
+  $("#order_road").hide();  
   $("#order_railroad").hide();
   $("#order_mine").hide();
   $("#order_fortify").hide();  // not all non-Settlers can fortify (air/sea)
@@ -1032,10 +1028,16 @@ function update_unit_order_commands()
     if (ruleset_control['name'] == "Multiplayer-Evolution ruleset" && ptype['name'] == "Legion") {
       
       // Forts:
-      if (player_invention_state(client.conn.playing, tech_id_by_name('Masonry')) == TECH_KNOWN) {
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Masonry')) == TECH_KNOWN
+          && !tile_has_extra(ptile, EXTRA_FORT) ) {  // Show Fort button if Masonry and no Fort
+          unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
+          $("#order_fortress").show();           
+        }
+      // otherwise, Construction + no Fortress on tile = Show Fortress orders:
+      else if (!tile_has_extra(ptile, EXTRA_FORTRESS) && player_invention_state(client.conn.playing, tech_id_by_name('Construction')) == TECH_KNOWN) {
         unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
-        $("#order_fortress").show();           
-      } 
+        $("#order_fortress").show();
+      }
       
       // Roads:
       if (!tile_has_extra(ptile, EXTRA_ROAD)) { // TO DO, check if ptile is non-domestic
@@ -1158,14 +1160,14 @@ function update_unit_order_commands()
     
       ///// mp2 rules allow building Forts (Masonry) as pre-req before Fortress (Construction):
       if (ruleset_control['name'] == "Multiplayer-Evolution ruleset") {
-        if (player_invention_state(client.conn.playing, tech_id_by_name('Masonry')) == TECH_KNOWN) {
-          unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
-          $("#order_fortress").show();
+        // Masonry + No Fort on tile = show order to make Fort
+        if (player_invention_state(client.conn.playing, tech_id_by_name('Masonry')) == TECH_KNOWN && !tile_has_extra(ptile, EXTRA_FORT) ) {
+              unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
+              $("#order_fortress").show();
         }
-      }
-      // non-mp2 default case:
-      else if (player_invention_state(client.conn.playing, tech_id_by_name('Construction')) == TECH_KNOWN) {
-        // every other ruleset needs Construction to unlock building Fortresses:
+      } 
+      // Construction + no Fortress on tile = show order to make Fortress:
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Construction')) == TECH_KNOWN && !tile_has_extra(ptile, EXTRA_FORTRESS)) {
         unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
         $("#order_fortress").show();
       }
