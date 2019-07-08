@@ -1397,15 +1397,14 @@ reqs           =
     }
 build_time     = 5
 removal_time   = 0
-defense_bonus  = 67 ;minimum defense bonus is +67%, some units will get another +33% in effects    
-;different levels  tof bonuses in fort and fortress
+defense_bonus  = 67
 native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter", "Balloon"
 flags          = "NativeTile", "Refuel", "NoStackDeath"
 helptext       = _("\
 Fortresses are improvements built on top of Forts which greatly improve defense.\
  A Land unit remaining in a fortress for a whole turn without moving recovers a\
  quarter of its hit points. With Invention, fortresses gain watchtowers from which\
- land units can see further afield.\
+ land units can see farther.\
 "), _("\
 Units in a Fortress die one at a time instead of the entire stack being lost.\
 Diplomatic units get a 25% defense bonus in diplomatic fights.\
@@ -1955,14 +1954,16 @@ rmact_gfx_alt  = "-"
 [base_fort]
 extra          = "Fort"
 gui_type       = "Fortress"
-border_sq      = 1
+border_sq      = -1
 vision_main_sq = 4
 
 [base_fortress]
 extra          = "Fortress"
 gui_type       = "Fortress"
-border_sq      = 5
+border_sq      = 4
+vision_main_sq = 4
 flags          = "NoAggressive"
+
 
 [base_airbase]
 extra          = "Airbase"
