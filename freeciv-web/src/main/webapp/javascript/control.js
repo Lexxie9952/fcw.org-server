@@ -3175,6 +3175,7 @@ function key_unit_pillage()
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     var tgt = get_what_can_unit_pillage_from(punit, null);
+    console.log("Unit can pillage "+tgt.length+" targets: "+target);
     if (tgt.length > 0) {
       if (tgt.length == 1) {
         request_new_unit_activity(punit, ACTIVITY_PILLAGE, EXTRA_NONE);
@@ -3441,6 +3442,7 @@ function request_new_unit_activity(punit, activity, target)
   request_unit_cancel_orders(punit);
   var packet = {"pid" : packet_unit_change_activity, "unit_id" : punit['id'],
                 "activity" : activity, "target" : target };
+  console.log("Sending action request: "+JSON.stringify(packet));
   send_request(JSON.stringify(packet));
 }
 
