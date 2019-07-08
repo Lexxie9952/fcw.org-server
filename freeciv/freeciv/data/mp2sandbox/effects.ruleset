@@ -285,7 +285,7 @@ reqs    =
 [effect_fortress_nonfortbuster]
 type    = "Defend_Bonus"
 value   = 20 ;increase 1.67x to 2x except when defending against FortBuster types. 
-;note: 1.20*1.67=2.0 (this bonus is multiplied in after terrain defense_bonus was multiplied)
+;note: 1.20*1.67=2.0 (this bonus is multiplied after terrain defense_bonus was multiplied)
 reqs    =
     { "type", "name", "range", "present"
       "Extra", "Fortress", "Local", TRUE
