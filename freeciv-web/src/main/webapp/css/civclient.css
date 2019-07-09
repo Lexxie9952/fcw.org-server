@@ -987,7 +987,18 @@ button {
 .current_focus_unit {
   border: 1px solid white;
   background-color: rgba(240,240,240,0.5);
- 
+}
+.transported_focus_unit {
+  border: 1px solid skyblue;
+  background-color: rgba(180,240,255,0.5);
+}
+.nonfocus_unit {
+  border: 1px solid white;
+  background-color: rgba(15,0,0,0.55);
+}
+.transported_nonfocus_unit {
+    border: 1px solid skyblue;
+    background-color: rgba(0, 90, 145, 0.75);
 }
 
 #active_unit_info {

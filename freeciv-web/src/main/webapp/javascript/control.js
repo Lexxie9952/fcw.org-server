@@ -3888,9 +3888,17 @@ function update_active_units_dialog()
 
     // FORMER CODE: var active was set to always on if we had more than 1 unit selected??????????
     //var active = (current_focus.length > 1 || current_focus[0]['id'] == punit['id']);
-   
-    unit_info_html += "<div id='unit_info_div' class='" + (active ? "current_focus_unit'" : "' style='background-color:rgba(15, 0, 0, 0.55);'")
-           + "><div id='unit_info_image' onclick='click_unit_in_panel(event, units[" + punit['id'] + "])' "
+
+    // set the css background based on selected and/or transported cargo
+    var display_background_css;
+    if (active) { // selected units are highlighted, and slightly bluish if on a transport
+      display_background_css = (punit['transported'] && punit['transported_by']>0) ? "transported_focus_unit" : "current_focus_unit";
+    } else {      // non-selected units have dark transparent background, also slightly blue if on a transport
+      display_background_css = (punit['transported'] && punit['transported_by']>0) ? "transported_nonfocus_unit" : "nonfocus_unit";
+    }
+
+    unit_info_html += "<div id='unit_info_div' class='" + display_background_css
+     + "'><div id='unit_info_image' onclick='click_unit_in_panel(event, units[" + punit['id'] + "])' "
 	   + " style='margin-right:1px; background: transparent url(" 
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
@@ -3937,8 +3945,12 @@ function update_active_units_dialog()
       unit_info_html += " <span title='Vet-level'>V:<span style='color:gainsboro;font-size:100%;'><b>" + aunit['veteran'] + "</b></span></span>";
     }
     if (ptype['transport_capacity'] > 0) {
-      unit_info_html += " <span title='Cargo Cap.'>C:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['transport_capacity'] + "</b></span></span>";
+      unit_info_html += " <span title='T"+aunit['id']+" Cargo Cap.'>C:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['transport_capacity'] + "</b></span></span>";
     }
+    if (aunit['transported'] && aunit['transported_by']>0) {
+      unit_info_html += " <span style='color:skyblue'><b>ON:</b>T"+aunit['transported_by']+"</span>";
+    }
+    
     // Actual fuel remaining is: (turns_of_fuel-1) + moves_left/moves_rate
     if ( (ptype['fuel']>0) && (current_focus[0]['owner']==client.conn.playing.playerno) ) {
       var fuel_left = (aunit['fuel']-1) + aunit['movesleft']/ptype['move_rate'];
