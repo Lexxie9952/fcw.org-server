@@ -1256,27 +1256,17 @@ function update_unit_order_commands()
     // Upgrade unit
     if (pcity != null && ptype != null && unit_types[ptype['obsoleted_by']] != null && can_player_build_unit_direct(client.conn.playing, unit_types[ptype['obsoleted_by']])) {
       var upgrade_type = unit_types[ptype['obsoleted_by']];
-
+      
       // Looking for most advanced unit we're allowed to upgrade it into:
-      console.log( "1. About to check " + unit_types[upgrade_type['obsoleted_by']]['name'] );
+      console.log( "1. Upgrading to " + unit_types[upgrade_type['name']]+" is allowed. Proceeding to check more.");
 
-      /*
-      while ( unit_types[upgrade_type['obsoleted_by']] != null ) {
-        console.log("..."+unit_types[upgrade_type['obsoleted_by']]['name']+"It wasn't null, about to check if we're allowed to upgrade now:");
+      
+      while ( upgrade_type != null && unit_types[upgrade_type['obsoleted_by']] != null ) {
+        console.log("..."+unit_types[upgrade_type['obsoleted_by']]['name']+" wasn't null, about to check if we're allowed to upgrade now:");
         if ( can_player_build_unit_direct(client.conn.playing, unit_types[upgrade_type['obsoleted_by']]) ) {
           upgrade_type = unit_types[upgrade_type['obsoleted_by']];
-          console.log("   ...We're allowed, proceeding...")
         }
-        else break;
-      }*/
-
-      while ( can_player_build_unit_direct(client.conn.playing, unit_types[upgrade_type['obsoleted_by']]) ) {
-        console.log("..."+unit_types[upgrade_type['obsoleted_by']]['name']+"It wasn't null, about to check if we're allowed to upgrade now:");
-        if ( can_player_build_unit_direct(client.conn.playing, unit_types[upgrade_type['obsoleted_by']]) ) {
-          upgrade_type = unit_types[upgrade_type['obsoleted_by']];
-          console.log("   ...We're allowed, proceeding...")
-        }
-        else { console.log("We stopped like we should."); break; }
+          else { console.log("We stopped like we should."); break; }
       }
 
       var upgrade_name = upgrade_type['name'];
