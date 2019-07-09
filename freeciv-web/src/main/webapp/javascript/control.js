@@ -1260,8 +1260,9 @@ function update_unit_order_commands()
       unit_actions["explore"] = {name: "Auto explore (X)"};
     }
 
-    // Load unit on transport
-    if (pcity != null) {
+    // Display order to load unit on transport, if: (A) on a city or river && (B) tile has a transport && (C) unit not already loaded:
+    if ( ( (pcity != null) || tile_has_extra(ptile, EXTRA_RIVER)) 
+          && !punit['transported'] ) { 
       var units_on_tile = tile_units(ptile);
       for (var r = 0; r < units_on_tile.length; r++) {
         var tunit = units_on_tile[r];
