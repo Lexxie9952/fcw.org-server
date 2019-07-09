@@ -1258,11 +1258,12 @@ function update_unit_order_commands()
       var upgrade_type = unit_types[ptype['obsoleted_by']];
 
       // Looking for most advanced unit we're allowed to upgrade it into:
-      console.log("1. About to check "+upgrade_type['obsoleted_by']);
+      console.log( "1. About to check " + unit_types[upgrade_type['obsoleted_by']]['name'] );
+
       while ( unit_types[upgrade_type['obsoleted_by']] != null ) {
-        console.log("...It wasn't null, about to check if we're allowed to upgrade now:")
-        if ( can_player_build_unit_direct(client.conn.playing, upgrade_type['obsoleted_by']) ) {
-          upgrade_type = upgrade_type['obsoleted_by'];
+        console.log("..."+unit_types[upgrade_type['obsoleted_by']]['name']+"It wasn't null, about to check if we're allowed to upgrade now:");
+        if ( can_player_build_unit_direct(client.conn.playing, unit_types[upgrade_type['obsoleted_by']]) ) {
+          upgrade_type = unit_types[upgrade_type['obsoleted_by']];
           console.log("   ...We're allowed, proceeding...")
         }
         else break;
