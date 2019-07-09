@@ -204,6 +204,13 @@ function init_options_dialog()
     simpleStorage.set('mapdrag', map_drag_enabled);
   });
 
+  // AUTO ATTACK
+  $('#auto_attack').prop('checked', auto_attack);
+  $('#auto_attack').change(function() {
+    auto_attack = this.checked;
+    //simpleStorage.set('autoattack', map_drag_enabled); // probably best to not store this to next session
+  });
+
   
   if (!is_longturn()) {
     if (renderer == RENDERER_WEBGL) {

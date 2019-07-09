@@ -81,6 +81,14 @@
     </td>
 </tr>
 
+<tr>
+    <td>
+        <div class="main_menu_buttons">
+            <input type='checkbox' name='auto_attack' id='auto_attack'><b>Auto-attack</b> 
+        </div>
+    </td>
+</tr>
+
 
 <tr>
 <td>
