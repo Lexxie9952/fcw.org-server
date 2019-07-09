@@ -1258,14 +1258,18 @@ function update_unit_order_commands()
       var upgrade_type = unit_types[ptype['obsoleted_by']];
 
       // Looking for most advanced unit we're allowed to upgrade it into:
-      while ( upgrade_type['obsoleted_by'] != null ) {
-        if ( can_player_build_unit_direct(client.conn.playing, upgrade_type['obsoleted_by']) ) 
+      console.log("1. About to check "+upgrade_type['obsoleted_by']);
+      while ( unit_types[upgrade_type['obsoleted_by']] != null ) {
+        console.log("...It wasn't null, about to check if we're allowed to upgrade now:")
+        if ( can_player_build_unit_direct(client.conn.playing, upgrade_type['obsoleted_by']) ) {
           upgrade_type = upgrade_type['obsoleted_by'];
+          console.log("   ...We're allowed, proceeding...")
+        }
         else break;
       }
 
       var upgrade_name = upgrade_type['name'];
-      var upgrade_cost = upgrade_type['build_cost'] - ptype['build_cost']/2;  //subtract half the shield cost of upgrade unit
+      var upgrade_cost = Math.floor( upgrade_type['build_cost'] - ptype['build_cost']/2 );  //subtract half the shield cost of upgrade unit
    
       // upgrade cost = 2*T + (T*T)/20, where T = shield_cost_of_new unit - (shield_cost_of_old unit / 2)
       upgrade_cost = 2*upgrade_cost + (upgrade_cost*upgrade_cost)/20;
