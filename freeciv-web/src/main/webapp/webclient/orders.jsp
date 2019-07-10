@@ -3,6 +3,10 @@
     <a href="#" onclick="activate_goto();"><img src="/images/orders/goto_default.png" name="goto_button" alt="" border="0" width="30" height="30"></a>
   </div>
 
+  <div id="order_upgrade" class="order_button" title="Upgrade unit (U)">
+      <a href="#" onclick="key_unit_upgrade();"><img src="/images/orders/upgrade.png" name="upgrade_button" alt="" border="0" width="30" height="30"></a>
+  </div>  
+
   <div id="order_airlift" class="order_button" title="Airlift (Shift-L)">
     <a href="#" onclick="key_unit_airlift();"><img src="/images/orders/airlift.png" name="airlift_button" alt="" border="0" width="30" height="30"></a>
   </div>  

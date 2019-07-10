@@ -951,6 +951,7 @@ function update_unit_order_commands()
     break;
   }
 
+  $("#order_upgrade").hide();
   $("#order_maglev").hide();
   $("#order_canal").hide();
   $("#order_well").hide();
@@ -1256,26 +1257,22 @@ function update_unit_order_commands()
     // Upgrade unit
     if (pcity != null && ptype != null && unit_types[ptype['obsoleted_by']] != null && can_player_build_unit_direct(client.conn.playing, unit_types[ptype['obsoleted_by']])) {
       var upgrade_type = unit_types[ptype['obsoleted_by']];
-      
-      // Looking for most advanced unit we're allowed to upgrade it into:
-      console.log( "1. Upgrading to " + unit_types[upgrade_type['name']]+" is allowed. Proceeding to check more.");
-
-      
+      // Look for most advanced unit we're allowed to upgrade it into:
+      //console.log( "1. Upgrading to " + upgrade_type['name']+" is allowed. Proceeding to check more.");
       while ( upgrade_type != null && unit_types[upgrade_type['obsoleted_by']] != null ) {
-        console.log("..."+unit_types[upgrade_type['obsoleted_by']]['name']+" wasn't null, about to check if we're allowed to upgrade now:");
+        //console.log("..."+unit_types[upgrade_type['obsoleted_by']]['name']+" wasn't null, about to check if we're allowed to upgrade now:");
         if ( can_player_build_unit_direct(client.conn.playing, unit_types[upgrade_type['obsoleted_by']]) ) {
           upgrade_type = unit_types[upgrade_type['obsoleted_by']];
         }
-          else { console.log("We stopped like we should."); break; }
       }
-
       var upgrade_name = upgrade_type['name'];
-      var upgrade_cost = Math.floor( upgrade_type['build_cost'] - ptype['build_cost']/2 );  //subtract half the shield cost of upgrade unit
-   
+      var upgrade_cost = Math.floor(upgrade_type['build_cost'] - ptype['build_cost']/2);  //subtract half the shield cost of upgrade unit
       // upgrade cost = 2*T + (T*T)/20, where T = shield_cost_of_new unit - (shield_cost_of_old unit / 2)
-      upgrade_cost = 2*upgrade_cost + (upgrade_cost*upgrade_cost)/20;
+      upgrade_cost = 2*upgrade_cost + Math.floor( (upgrade_cost*upgrade_cost)/20 );
       
       unit_actions["upgrade"] =  {name: "Upgrade to "+upgrade_name+" for "+upgrade_cost+" (U)"};
+      $("#order_upgrade").attr("title", "Upgrade to "+upgrade_name+" for "+upgrade_cost+" (U)");
+      $("#order_upgrade").show();
     }
 
     if (ptype != null && ptype['name'] != "Explorer") {
