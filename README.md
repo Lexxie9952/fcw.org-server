@@ -173,26 +173,6 @@ Start and stop Freeciv-web with the following commands:
 
 All software components in Freeciv-web will log to the /logs sub-directory of the Freeciv-web installation.
 
-
-### Running Freeciv-web on Docker
-
-Freeciv-web can easily be built and run from Docker using `docker-compose`.
-
- 1. Make sure you have both [Docker](https://www.docker.com/get-started) and [Docker Compose](https://docs.docker.com/compose/install/) installed.
-
- 2. Run the following from the freeciv-web directory:
-
-    ```sh
-    docker-compose up -d
-    ```
-
- 3. Connect to docker via host machine using standard browser
-
-http://localhost/
-
-Enjoy. The overall dockerfile and required changes to scripts needs some further improvements.
-
-
 Freeciv-Web continuous integration on Travis CI 
 -----------------------------------------------
 Freeciv-Web is built on Travis CI on every commit. This is the current build status: [![Build Status](https://api.travis-ci.org/freeciv/freeciv-web.png)](https://travis-ci.org/freeciv/freeciv-web)
