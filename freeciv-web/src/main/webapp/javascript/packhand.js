@@ -860,8 +860,6 @@ function handle_unit_combat_info(packet)
         play_combat_sound(attacker); 
         play_combat_sound(defender); 
         
-        update_tile_unit(attacker);   // force a redraw, TO DO: this doesn't work yet.
-        update_tile_unit(defender);
         //update_map_canvas_full();
 
         // Construct the names of the defender unit: e.g., "Your Cannon", "French Cavalry", etc.
@@ -872,12 +870,22 @@ function handle_unit_combat_info(packet)
         var attack_unit = "the " + nations[attacker_nation]['adjective']; 
         if (nations[attacker_nation]['adjective']==player_nation) attack_unit = "your";
         attack_unit = attack_unit + " " + unit_types[attacker['type']]['name'];
-
+        
         // It was not sending a message after battle, so inject one here:
         var special_message = "A valiant battle with no winner: "+attack_unit+" survived with "+attacker_hp+"hp while reducing "
                             + defend_unit+" to "+defender_hp+"hp.";  
+        
+        // might need to replace true with "true" since it's string inside a packet:                    
+        if (packet['make_att_veteran']==true && attack_unit.substring(0,4)=="your") 
+          special_message += "From the battle experience, "+attack_unit+" gained a veteran level!"
+        else if (packet['make_def_veteran']==true && defend_unit.substring(0,4)=="your") 
+          special_message += "From the battle experience, "+defend_unit+" gained a veteran level!" 
+        
         // TO DO: special message is clickable like the others, taking you to the map location it happened.                    
         
+        // Everything below is a hack for the fact we aren't correctly intercepting and processing packets for battle results
+        // sent by the server, when those battles involved combat_rounds and did not result in a unit dying:
+        // --------------------------------------------------------------------------------------------------------------------
         var scrollDiv = get_chatbox_msg_list();
         if (scrollDiv != null) {
           var item = document.createElement('li');
@@ -886,7 +894,20 @@ function handle_unit_combat_info(packet)
         
           scrollDiv.appendChild(item);
           setTimeout(() => $('#freeciv_custom_scrollbar_div').mCustomScrollbar('scrollTo', 'bottom'), 200);
+
+          // New packet style coming back for a no-victory battle wasn't getting interpreted and redrawn
+          // We will hard-code in here the new unit infos so redraw will work:
+          units[packet['attacker_unit_id']]['hp'] = attacker_hp;
+          units[packet['defender_unit_id']]['hp'] = defender_hp;
+          
+          //attempt forced redraw:
+          update_tile_unit(units[packet['attacker_unit_id']]);   
+          update_tile_unit(units[packet['defender_unit_id']]);
+          auto_center_on_focus_unit();
+          update_active_units_dialog();
+          update_unit_order_commands();
           setTimeout(update_unit_focus, 700);  // remove this if unit redraw still doesn't work
+          // --------------------------------------------------------------------------------------------------------------------
         }
       }
     } 
