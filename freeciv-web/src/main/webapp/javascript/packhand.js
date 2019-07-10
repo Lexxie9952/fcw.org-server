@@ -925,7 +925,7 @@ function handle_unit_combat_info(packet)
           auto_center_on_focus_unit();
           update_active_units_dialog();
           update_unit_order_commands();
-          setTimeout(update_unit_focus, 700);  // remove this if unit redraw still doesn't work
+          //setTimeout(update_unit_focus, 700);  // remove this if unit redraw still doesn't work
           // --------------------------------------------------------------------------------------------------------------------
         }
       }
