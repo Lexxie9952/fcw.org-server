@@ -932,9 +932,6 @@ function handle_unit_combat_info(packet)
     } 
 }
 
-
-
-
 /**************************************************************************
   Handle the requested follow up question about an action
 **************************************************************************/

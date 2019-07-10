@@ -3464,7 +3464,7 @@ function request_new_unit_activity(punit, activity, target)
   request_unit_cancel_orders(punit);
   var packet = {"pid" : packet_unit_change_activity, "unit_id" : punit['id'],
                 "activity" : activity, "target" : target };
-  console.log("Sending action request: "+JSON.stringify(packet));
+  if (DEBUG_LOG_PACKETS) console.log("Sending action request: "+JSON.stringify(packet));
   send_request(JSON.stringify(packet));
 }
 

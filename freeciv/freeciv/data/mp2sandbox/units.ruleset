@@ -3333,7 +3333,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "HelpWonder", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable"
+flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable"
 roles         = ""
 helptext      = _("\
 A Caravan carries goods or material to help build wonders in your\
@@ -3372,7 +3372,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "HelpWonder", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable"
+flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable"
 roles         = ""
 helptext      = _("\
 The Freight unit replaces the Caravan, and moves at twice the speed.\
