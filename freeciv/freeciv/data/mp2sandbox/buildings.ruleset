@@ -1646,8 +1646,11 @@ sound		= "w_marco_polos_embassy"
 sound_alt	= "w_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
-Increases trade output by 40% in all your cities.\
- This Wonder does not become obsolete.\
+This Wonder increases Trade, the very lifeblood of your\
+ economy's gold income, science output, and luxury for\
+ for happiness. With this Wonder, Net Trade increases +40% over\
+ base trade in all your cities. (Each city's total trade\
+ increases by 40%.) 
 ")
 
 [building_michelangelos_chapel]

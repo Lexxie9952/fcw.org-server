@@ -222,7 +222,7 @@ reqs    =
 ;Now it's a one time bonus with potentially slight ROI.
 [effect_enter_marketplace_bonus_increase]
 type	= "Trade_Revenue_Bonus"
-value	= 2100 
+value	= 2000 
 reqs	=
     { "type", "name", "range"
       "Action", "Enter Marketplace", "Local"
@@ -232,7 +232,11 @@ reqs	=
 
 [effect_establish_traderoute_bonus]
 type	= "Trade_Revenue_Bonus"
-value	= -2500 
+value	= -2400 
+;this -2400 should go into base effect above 
+;then reqs action = "Establish Trade Route" can be an increase to counter both the -2400 subtracted above then to 
+;further tune upward any one time bonus to what it needs to be. reqs can look at unit type also to compensate higher cost 
+;of making certain units, since route-creating units now vary from 20 shields to 50 shields in cost. 
 
 ; *********************************** BASES *******************************
 

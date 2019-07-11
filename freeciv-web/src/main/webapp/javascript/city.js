@@ -1474,14 +1474,14 @@ function show_city_traderoutes()
 
     good = goods[routes[i]['goods']];
     if (good == null) {
-      console.log("Missing good type " + routes[i]['goods']);
+      console.log("Missing goods type " + routes[i]['goods']);
       good = {'name': "Unknown"};
     }
 
     tcity = cities[tcity_id];
     if (tcity == null) continue;
     msg += good['name'] + " trade with " + tcity['name'];
-    msg += " gives " + routes[i]['value'] + " gold each turn." + "<br>";
+    msg += " gives +" + routes[i]['value'] + " base trade each turn." + "<br>";
   }
 
   if (msg == "") {

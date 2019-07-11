@@ -1366,8 +1366,8 @@ settings =
     "INIC",       35,      "Cancel",   "Gold"
     "Ally",       35,      "Cancel",   "Gold"
     "AllyIC",     35,      "Cancel",   "Gold"
-    "Enemy",      35,      "Cancel",   "Gold"
-    "EnemyIC",    35,      "Cancel",   "Gold"
+    "Enemy",      0,       "Cancel",   "Gold"
+    "EnemyIC",    0,       "Cancel",   "Gold"
     "Team",       35,      "Cancel",   "Gold"
     "TeamIC",     35,      "Cancel",   "Gold"
   }
