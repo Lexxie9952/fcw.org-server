@@ -346,6 +346,7 @@ function init_common_intro_dialog() {
 **************************************************************************/
 function close_dialog_message() {
   $("#generic_dialog").dialog('close');
+  $(this).off("keypress");
 }
 
 function closing_dialog_message() {
@@ -385,26 +386,11 @@ function show_dialog_message(title, message) {
                      "restore" : "ui-icon-bullet"
                    }});
 
-  $(document).keypress(function(e){
-    alert("0-keycode: "+e.keyCode);
-    if (e.which == 87 || e.keyCode == 87 || window.event.keyCode == 87) {
-        alert('0-W pressed');
-        close_dialog_message();
-    };
-  });
-
+  // W is universal key to get out of anything and back to map                 
   $(this).keypress(function(e){
-    alert("1-keycode: "+e.keyCode);
-    if (e.which == 87 || e.keyCode == 87 || window.event.keyCode == 87) {
-        alert('1-W pressed');
-        close_dialog_message();
-    };
-  });
-  // give all pop-ups a 'W' hotkey to close 
-  $("generic_dialog").keypress(function(e){
-    alert("keycode: "+e.keyCode);
-    if (e.which == 87 || e.keyCode == 87 || window.event.keyCode == 87) {
-      alert('W pressed');
+    alert("(this).keypress(e) event that was tied to dialog, keycode: "+e.keyCode);
+    if (e.which == 119 || e.keyCode == 119 || window.event.keyCode == 119) {
+        //alert('1-W pressed');
         close_dialog_message();
     };
   });
