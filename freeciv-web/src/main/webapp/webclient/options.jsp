@@ -61,19 +61,6 @@
             <input type='checkbox' name='draw_map_grid' id='draw_map_grid' checked><b>Draw map grid</b> 
         </div>
       </td>
-  <td>
-    <div class="main_menu_buttons">
-        <input type='checkbox' name='airlift_setting' id='airlift_setting' checked><b>Show city airlift capacity</b>
-    </div>
-  </td>
-</tr>
-
-<tr>
-    <td>
-        <div class="main_menu_buttons">
-            <input type='checkbox' name='unit_click_menu' id='unit_click_menu' checked><b>Orders menu on unit click</b> 
-        </div>
-    </td>
     <td>
         <div class="main_menu_buttons">
             <input type='checkbox' name='map_drag_enabled' id='map_drag_enabled' checked><b>Enable map dragging</b> 
@@ -83,11 +70,26 @@
 
 <tr>
     <td>
+        <div title='Whether left-click gives pop-up orders menu' class="main_menu_buttons">
+            <input type='checkbox' name='unit_click_menu' id='unit_click_menu' checked><b>Click Unit for Menu</b> 
+        </div>
+    </td>
+    <td>
+        <div class="main_menu_buttons">
+            <input type='checkbox' name='show_order_buttons' id='show_order_buttons' checked><b>Show Orders Buttons</b> 
+        </div>
+    </td>
+</tr>
+
+<tr>
+    <td>
         <div class="main_menu_buttons">
             <input type='checkbox' name='auto_attack' id='auto_attack'><b>Auto-attack</b> 
         </div>
+    </td>
+    <td>
         <div class="main_menu_buttons">
-            <input type='checkbox' name='show_order_buttons' id='show_order_buttons' checked><b>Show Orders Buttons</b> 
+            <input type='checkbox' name='airlift_setting' id='airlift_setting' checked><b>Show city airlift capacity</b>
         </div>
     </td>
 </tr>

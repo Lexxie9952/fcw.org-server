@@ -214,14 +214,24 @@ function init_options_dialog()
 
    // SHOW ORDER BUTTONS
    $('#show_order_buttons').prop('checked', show_order_option);
-   
-   if (show_order_option==true) show_order_buttons=1; // 1=frequent, 2 is verbose/complete mode
-   else show_order_buttons = 0;
-
+   if (show_order_option==true) {
+      show_order_buttons=1; // 1=frequent, 2 is verbose/complete mode
+      $("#game_unit_orders_default").show();
+   }
+   else { 
+      show_order_buttons = 0;
+      $("#game_unit_orders_default").hide();
+    }
    $('#show_order_buttons').change(function() {
      show_order_option = this.checked;
-     if (show_order_option==true) show_order_buttons=1;
-     else show_order_buttons = 0;
+     if (show_order_option==true) {
+       show_order_buttons=2;
+       $("#game_unit_orders_default").show();
+     }
+     else {
+       show_order_buttons = 0;
+       $("#game_unit_orders_default").hide();
+     }
      simpleStorage.set('showorderbuttons', show_order_option); 
    });
   
