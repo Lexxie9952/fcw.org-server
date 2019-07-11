@@ -385,26 +385,35 @@ function show_dialog_message(title, message) {
                      "restore" : "ui-icon-bullet"
                    }});
 
-  $("#generic_dialog").dialog('open');
-  $("#game_text_input").blur();
+  $(document).keypress(function(e){
+    alert("0-keycode: "+e.keyCode);
+    if (e.which == 87 || e.keyCode == 87 || window.event.keyCode == 87) {
+        alert('0-W pressed');
+        close_dialog_message();
+    };
+  });
 
-  // give all pop-ups a 'W' hotkey to close 
-  
   $(this).keypress(function(e){
+    alert("1-keycode: "+e.keyCode);
     if (e.which == 87 || e.keyCode == 87 || window.event.keyCode == 87) {
         alert('1-W pressed');
         close_dialog_message();
     };
   });
-  
-  
+  // give all pop-ups a 'W' hotkey to close 
   $("generic_dialog").keypress(function(e){
+    alert("keycode: "+e.keyCode);
     if (e.which == 87 || e.keyCode == 87 || window.event.keyCode == 87) {
       alert('W pressed');
         close_dialog_message();
     };
   });
 
+
+  $("#generic_dialog").dialog('open');
+  $("#game_text_input").blur();
+
+  
   // automatically close dialog after 32 seconds, because sometimes the dialog can't be closed manually.
   dialog_message_close_task = setTimeout(close_dialog_message, 32000);
 
