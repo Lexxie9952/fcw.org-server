@@ -2783,7 +2783,9 @@ function key_unit_auto_explore()
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_EXPLORE, EXTRA_NONE);
+    unit_move_sound_play(punit);
   }
+
   setTimeout(update_unit_focus, 700);
 }
 
