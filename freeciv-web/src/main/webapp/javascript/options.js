@@ -212,12 +212,13 @@ function init_options_dialog()
   });
 
    // SHOW ORDER BUTTONS
-   $('#show_order_buttons').prop('checked', show_order_buttons);
-   if (show_order_buttons==true) show_order_buttons=1;
+   var temp=true;
+   $('#show_order_buttons').prop('checked', temp);
+   if (temp==true) show_order_buttons=1;
    $('#show_order_buttons').change(function() {
-     show_order_buttons = this.checked;
-     if (show_order_buttons==true) show_order_buttons=1;
-     simpleStorage.set('show_order_buttons', show_order_buttons != false ? true : false); 
+     temp = this.checked;
+     if (temp==true) show_order_buttons=1;
+     simpleStorage.set('show_order_buttons', show_order_buttons==0 ? false : true); 
    });
   
   if (!is_longturn()) {
