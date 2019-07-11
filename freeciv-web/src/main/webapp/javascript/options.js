@@ -212,7 +212,6 @@ function init_options_dialog()
     //simpleStorage.set('autoattack', map_drag_enabled); // probably best to not store this to next session
   });
 
-  /*
    // SHOW ORDER BUTTONS
    $('#show_order_buttons').prop('checked', show_order_option);
    if (show_order_option==true) {
@@ -234,7 +233,7 @@ function init_options_dialog()
        $("#game_unit_orders_default").hide();
      }
      simpleStorage.set('showorderbuttons', show_order_option); 
-   });*/
+   });
   
   if (!is_longturn()) {
     if (renderer == RENDERER_WEBGL) {

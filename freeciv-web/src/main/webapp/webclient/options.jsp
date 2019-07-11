@@ -74,12 +74,11 @@
             <input type='checkbox' name='unit_click_menu' id='unit_click_menu' checked><b>Click Unit for Menu</b> 
         </div>
     </td>
-    <%-- This is a JSP comment    <td> --%>
-   <%--     <div class="main_menu_buttons"> --%>
-    <%--        <input type='checkbox' name='show_order_buttons' id='show_order_buttons' checked><b>Show Orders Buttons</b> --%> 
-  <%--      </div> --%>
-  <%--  </td>  --%>
-  
+     <td> 
+        <div class="main_menu_buttons">
+            <input type='checkbox' name='show_order_buttons' id='show_order_buttons' checked><b>Show Orders Buttons</b>  
+        </div>
+    </td>
 </tr>
 
 <tr>
