@@ -1269,13 +1269,16 @@ function update_unit_order_commands()
           console.log("   ..."+unit_types[upgrade_type['obsoleted_by']]['name']+" came back as upgrade to "+upgrade_type['name']+". Checking legality of upgrade:");
      
           if ( can_player_build_unit_direct(client.conn.playing, unit_types[upgrade_type['obsoleted_by']]) ) {
-            console.log("      ...")+"can_player_build_unit_direct(player,unit_type) reported this is a legal upgrade.";
+            console.log("      ...can_player_build_unit_direct(player,unit_type) reported this is a legal upgrade.");
             upgrade_type = unit_types[upgrade_type['obsoleted_by']];
             console.log("          ...current upgrade target changed to: "+upgrade_type['name']);
+          } else {
+            console.log("Exiting upgrade loop due to "+unit_types[upgrade_type['obsoleted_by']]['name']+" not a legal upgrade.");
+            break; // This type is illegal to upgrade to, stop checking for higher upgrades.
           }
         } // WARNING: crusader>dragoon>cavalry had created an endless while loop. A logic flaw may be lurking. Finite loop of 7 times is failsafe.
       }
-      console.log("EXITING upgrade target check.");
+      console.log("EXITED upgrade target check.");
       var upgrade_name = upgrade_type['name'];
       var upgrade_cost = Math.floor(upgrade_type['build_cost'] - ptype['build_cost']/2);  //subtract half the shield cost of upgrade unit
       // upgrade cost = 2*T + (T*T)/20, where T = shield_cost_of_new unit - (shield_cost_of_old unit / 2)
