@@ -388,8 +388,15 @@ function show_dialog_message(title, message) {
   $("#generic_dialog").dialog('open');
   $("#game_text_input").blur();
 
-  // automatically close dialog after 24 seconds, because sometimes the dialog can't be closed manually.
-  dialog_message_close_task = setTimeout(close_dialog_message, 24000);
+  // give all pop-ups a 'W' hotkey to close 
+  $("generic_dialog").keypress(function(e){
+    if (e.which == 87 || e.keyCode == 87 || window.event.keyCode == 87) {
+      $('#generic_dialog').dialog('close');
+    };
+  });
+
+  // automatically close dialog after 32 seconds, because sometimes the dialog can't be closed manually.
+  dialog_message_close_task = setTimeout(close_dialog_message, 32000);
 
   $('#generic_dialog').css("max-height", "450px");
 
