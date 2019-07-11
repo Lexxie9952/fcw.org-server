@@ -41,6 +41,7 @@ var default_sound_plugin_name = "";
 var sounds_enabled = true;
 var unit_click_menu = true;  // whether to show context menu on left-clicking a unit
 var map_drag_enabled = true; // whether double tap and drag will move the map
+var show_order_option = true; // corresponds to the checkbox
 
 var save_options_on_exit = TRUE;
 var fullscreen_mode = FALSE;
@@ -212,13 +213,12 @@ function init_options_dialog()
   });
 
    // SHOW ORDER BUTTONS
-   var temp=true;
-   $('#show_order_buttons').prop('checked', temp);
-   if (temp==true) show_order_buttons=1;
+   $('#show_order_buttons').prop('checked', show_order_option);
+   if (show_order_option==true) show_order_buttons=1; // 1=frequent, 2 is verbose/complete mode
    $('#show_order_buttons').change(function() {
-     temp = this.checked;
-     if (temp==true) show_order_buttons=1;
-     simpleStorage.set('show_order_buttons', show_order_buttons==0 ? false : true); 
+     show_order_option = this.checked;
+     if (show_order_option==true) show_order_buttons=1;
+     simpleStorage.set('showorderbuttons', show_order_option); 
    });
   
   if (!is_longturn()) {
