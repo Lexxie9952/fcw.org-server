@@ -346,7 +346,7 @@ function init_common_intro_dialog() {
 **************************************************************************/
 function close_dialog_message() {
   $("#generic_dialog").dialog('close');
-  $(this).off("keypress");
+//  $(this).off("keypress");
 }
 
 function closing_dialog_message() {
@@ -386,6 +386,7 @@ function show_dialog_message(title, message) {
                      "restore" : "ui-icon-bullet"
                    }});
 
+                   /*
   // W is universal key to get out of anything and back to map                 
   $(this).keypress(function(e){
     //alert("(this).keypress(e) event that was tied to dialog, keycode: "+e.keyCode);
@@ -394,7 +395,7 @@ function show_dialog_message(title, message) {
         close_dialog_message();
     };
   });
-
+*/
 
   $("#generic_dialog").dialog('open');
   $("#game_text_input").blur();
