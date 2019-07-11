@@ -1261,7 +1261,7 @@ function update_unit_order_commands()
       
       // Look for most advanced unit we're allowed to upgrade it into:
       //    7 checks is failsafe: 5 is max in existing rules: Horsemen > Knight > Dragoon > Cavalry > Armor > Armor II
-      for (var upgrade_counter = 1; upgrade_counter++; upgrade_counter <= 7) 
+      for (var upgrade_counter = 1; upgrade_counter<=7; upgrade_counter++) 
       {
         console.log("   "+upgrade_counter+". upgrading to " + upgrade_type['name']+" is allowed. Checking for higher upgrade...");
 
