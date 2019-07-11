@@ -389,9 +389,19 @@ function show_dialog_message(title, message) {
   $("#game_text_input").blur();
 
   // give all pop-ups a 'W' hotkey to close 
+  
+  $(this).keypress(function(e){
+    if (e.which == 87 || e.keyCode == 87 || window.event.keyCode == 87) {
+        alert('1-W pressed');
+        close_dialog_message();
+    };
+  });
+  
+  
   $("generic_dialog").keypress(function(e){
     if (e.which == 87 || e.keyCode == 87 || window.event.keyCode == 87) {
-      $('#generic_dialog').dialog('close');
+      alert('W pressed');
+        close_dialog_message();
     };
   });
 
