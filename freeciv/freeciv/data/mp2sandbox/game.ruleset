@@ -1362,14 +1362,14 @@ settings =
   { "type",       "pct", "cancelling", "bonus"
     "National",   0,       "Cancel",   "None"
     "NationalIC", 0,       "Cancel",   "None"
-    "IN",         35,      "Cancel",   "Gold"
-    "INIC",       35,      "Cancel",   "Gold"
-    "Ally",       35,      "Cancel",   "Gold"
-    "AllyIC",     35,      "Cancel",   "Gold"
-    "Enemy",      0,       "Cancel",   "Gold"
-    "EnemyIC",    0,       "Cancel",   "Gold"
-    "Team",       35,      "Cancel",   "Gold"
-    "TeamIC",     35,      "Cancel",   "Gold"
+    "IN",         35,      "Inactive",   "Gold"
+    "INIC",       35,      "Inactive",   "Gold"
+    "Ally",       35,      "Inactive",   "Gold"
+    "AllyIC",     35,      "Inactive",   "Gold"
+    "Enemy",      0,       "Inactive",   "Gold"
+    "EnemyIC",    0,       "Inactive",   "Gold"
+    "Team",       35,      "Inactive",   "Gold"
+    "TeamIC",     35,      "Inactive",   "Gold"
   }
 
 ; When are goods for the trade route chosen.
@@ -1592,7 +1592,7 @@ set =
       "contactturns", 0, FALSE
       "barbarians", "DISABLED", FALSE
       "borders", "SEE_INSIDE", FALSE
-      "diplomacy", "HUMAN", FALSE
+      "diplomacy", "ALL", FALSE
       "dispersion", 2, FALSE
       "endturn", 365, FALSE
       "foggedborders", TRUE, FALSE
