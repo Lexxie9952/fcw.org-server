@@ -1254,31 +1254,28 @@ function update_unit_order_commands()
       }      
     }
 
-    // Upgrade unit
+    // Upgrade unit: 1. Check if possible, 2. Check if upgrade unit can itself be upgraded. 3. Calculate upgrade cost. 4. Display orders with cost included.
     if (pcity != null && ptype != null && unit_types[ptype['obsoleted_by']] != null && can_player_build_unit_direct(client.conn.playing, unit_types[ptype['obsoleted_by']])) {
-      console.log(ptype['name']+" is allowed AT LEAST ONE upgrade. Beginning loop to check for higher upgrades.");
+      //console.log(ptype['name']+" is allowed AT LEAST ONE upgrade. Beginning loop to check for higher upgrades.");
       var upgrade_type = unit_types[ptype['obsoleted_by']];
       
       // Look for most advanced unit we're allowed to upgrade it into:
       //    7 checks is failsafe: 5 is max in existing rules: Horsemen > Knight > Dragoon > Cavalry > Armor > Armor II
       for (var upgrade_counter = 1; upgrade_counter<=7; upgrade_counter++) 
-      {
-        console.log("   "+upgrade_counter+". upgrading to " + upgrade_type['name']+" is allowed. Checking for higher upgrade...");
-
+      { //console.log("   "+upgrade_counter+". upgrading to " + upgrade_type['name']+" is allowed. Checking for higher upgrade...");
         if ( upgrade_type != null && unit_types[upgrade_type['obsoleted_by']] != null ) {
-          console.log("   ..."+unit_types[upgrade_type['obsoleted_by']]['name']+" came back as upgrade to "+upgrade_type['name']+". Checking legality of upgrade:");
-     
+          //console.log("   ..."+unit_types[upgrade_type['obsoleted_by']]['name']+" came back as upgrade to "+upgrade_type['name']+". Checking legality of upgrade:");
           if ( can_player_build_unit_direct(client.conn.playing, unit_types[upgrade_type['obsoleted_by']]) ) {
-            console.log("      ...can_player_build_unit_direct(player,unit_type) reported this is a legal upgrade.");
+            //console.log("      ...can_player_build_unit_direct(player,unit_type) reported this is a legal upgrade.");
             upgrade_type = unit_types[upgrade_type['obsoleted_by']];
-            console.log("          ...current upgrade target changed to: "+upgrade_type['name']);
+            //console.log("          ...current upgrade target changed to: "+upgrade_type['name']);
           } else {
-            console.log("Exiting upgrade loop due to "+unit_types[upgrade_type['obsoleted_by']]['name']+" not a legal upgrade.");
+            //console.log("Exiting upgrade loop due to "+unit_types[upgrade_type['obsoleted_by']]['name']+" not a legal upgrade.");
             break; // This type is illegal to upgrade to, stop checking for higher upgrades.
           }
-        } // WARNING: crusader>dragoon>cavalry had created an endless while loop. A logic flaw may be lurking. Finite loop of 7 times is failsafe.
+        }
       }
-      console.log("EXITED upgrade target check.");
+      //console.log("EXITED upgrade target check.");
       var upgrade_name = upgrade_type['name'];
       var upgrade_cost = Math.floor(upgrade_type['build_cost'] - ptype['build_cost']/2);  //subtract half the shield cost of upgrade unit
       // upgrade cost = 2*T + (T*T)/20, where T = shield_cost_of_new unit - (shield_cost_of_old unit / 2)
@@ -1287,7 +1284,6 @@ function update_unit_order_commands()
       unit_actions["upgrade"] =  {name: "Upgrade to "+upgrade_name+" for "+upgrade_cost+" (U)"};
       $("#order_upgrade").attr("title", "Upgrade to "+upgrade_name+" for "+upgrade_cost+" (U)");
       $("#order_upgrade").show();
-      console.log("FINISHED check to show upgrade orders.");
     }
 
     if (ptype != null && ptype['name'] != "Explorer") {
