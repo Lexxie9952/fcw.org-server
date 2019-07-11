@@ -1259,12 +1259,13 @@ function update_unit_order_commands()
       var upgrade_type = unit_types[ptype['obsoleted_by']];
       // Look for most advanced unit we're allowed to upgrade it into:
       //console.log( "1. Upgrading to " + upgrade_type['name']+" is allowed. Proceeding to check more.");
-      while ( upgrade_type != null && unit_types[upgrade_type['obsoleted_by']] != null ) {
+//      while ( upgrade_type != null && unit_types[upgrade_type['obsoleted_by']] != null ) {
         //console.log("..."+unit_types[upgrade_type['obsoleted_by']]['name']+" wasn't null, about to check if we're allowed to upgrade now:");
-        if ( can_player_build_unit_direct(client.conn.playing, unit_types[upgrade_type['obsoleted_by']]) ) {
-          upgrade_type = unit_types[upgrade_type['obsoleted_by']];
-        }
-      }
+//        if ( can_player_build_unit_direct(client.conn.playing, unit_types[upgrade_type['obsoleted_by']]) ) {
+//          upgrade_type = unit_types[upgrade_type['obsoleted_by']];
+//        }
+//      }   // crusader > cavalry created endless loop, fix later
+
       var upgrade_name = upgrade_type['name'];
       var upgrade_cost = Math.floor(upgrade_type['build_cost'] - ptype['build_cost']/2);  //subtract half the shield cost of upgrade unit
       // upgrade cost = 2*T + (T*T)/20, where T = shield_cost_of_new unit - (shield_cost_of_old unit / 2)
