@@ -2181,13 +2181,13 @@ civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         quicksave();
       }
     break;
-
+/*
     // close any/all tabs/windows and go back to map
     case 'W':
       if (!alt && !ctrl && !shift) {
         $('#ui-id-1').trigger("click"); 
       }  
-
+*/
     case 'Q':
       if (alt) civclient_benchmark(0);
     break;
