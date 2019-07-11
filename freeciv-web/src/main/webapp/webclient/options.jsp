@@ -86,6 +86,9 @@
         <div class="main_menu_buttons">
             <input type='checkbox' name='auto_attack' id='auto_attack'><b>Auto-attack</b> 
         </div>
+        <div class="main_menu_buttons">
+            <input type='checkbox' name='show_order_buttons' id='show_order_buttons'><b>Show Orders Buttons</b> 
+        </div>
     </td>
 </tr>
 

@@ -211,6 +211,14 @@ function init_options_dialog()
     //simpleStorage.set('autoattack', map_drag_enabled); // probably best to not store this to next session
   });
 
+   // SHOW ORDER BUTTONS
+   $('#show_order_buttons').prop('checked', show_order_buttons);
+   if (show_order_buttons==true) show_order_buttons=1;
+   $('#show_order_buttons').change(function() {
+     show_order_buttons = this.checked;
+     if (show_order_buttons==true) show_order_buttons=1;
+     simpleStorage.set('show_order_buttons', show_order_buttons != false ? true : false); 
+   });
   
   if (!is_longturn()) {
     if (renderer == RENDERER_WEBGL) {
