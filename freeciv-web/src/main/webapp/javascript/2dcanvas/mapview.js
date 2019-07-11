@@ -274,7 +274,7 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
 
   // City Airlift Counter prefs:
   var airlift_text = "";
-  if (!client_is_observer()) {
+  if (client.conn.playing != null && !client_is_observer()) {
     if (city['owner'] == client.conn.playing.playerno && draw_city_airlift_counter==true ) {
       if (game_info['airlift_dest_divisor'] == 0) {
         // standard case, no airliftdestdivisor, just show source airlifts if it has them:
