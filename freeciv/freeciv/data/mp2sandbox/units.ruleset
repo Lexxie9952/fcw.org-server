@@ -814,14 +814,14 @@ uk_gold       = 0
 flags         = "FootSoldier", "Capturer", "CantReachAir", "Bombarder"
 roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
-Archers fight with bows and arrows and have a good offensive\
- value as well as decent defense. Rather than engage a single\
- unit to the death, an Archer also can do Ranged Attacks:\
- this distributes an attack lightly and evenly\
- across all enemy units on the tile, but with only one round\
- of combat. This makes Archers tactically useful for softening enemy\
- encampments. (Cities and Fortresses provide defenders cover\
- from ranged arrow attacks, and may not be bombarded.)\
+Archers fight with bows and arrows. They have good offensive ability and decent\
+ defense.\
+"), _("\
+Rather than engage a single unit to the death, Archers can also do a Ranged Attack with no risk\
+ of retaliatory damage: a single round of arrows is fired over all enemy units on the tile,\
+ causing 1hp of damage to any units who are hit before finding cover. This is useful for softening\
+ enemies prior to full battle engagement, or for deterring the approach to strategic locations.\
+ (Ranged Attack is not possible on Cities or Fortresses; they provide cover from incoming arrows.)\
 ")
 bombard_rate = 1
 
@@ -2372,14 +2372,14 @@ The Trireme is the first naval unit. While its combat abilities are basic,\
 "), _("
  A Trireme can venture out into deep ocean, but there is risk when it enters\
  unknown waters: it must end every second turn on river, coastline, or a city,\
- or else it will be lost at sea.\
+ or else it will be lost at sea. Triremes can travel on rivers.\
 "), _("
 Like most ancient sea units, when it initiates combat there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
   result in the loss of one of the units.\
 "), _("
-NOTE: GO TO orders prevent accidental loss of the unit at sea, but can be overly\
- restrictive. You can override this by commanding it to move to adjacent tiles.\
+NOTE: GO TO orders prevent accidental loss of the unit at sea, but are overly\
+ restrictive. You should override this by commanding it to move to adjacent tiles.\
 ")
 
 [unit_longboat]
@@ -2475,7 +2475,7 @@ attack        = 3
 defense       = 3
 hitpoints     = 10
 firepower     = 1
-move_rate     = 7
+move_rate     = 6
 vision_radius_sq = 4
 transport_cap = 3
 fuel          = 0
@@ -2487,8 +2487,8 @@ cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "Provoking", "CantReachAir"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat", "Hunter"
 helptext      = _("\
-The War Galley has improved offense, defense, speed and cargo capacity over\
- the Galley, but it lacks commerce abilities. War Galleys can travel on rivers.\
+The War Galley has improved offense, defense, and cargo capacity over the\
+ Galley, but it lacks commerce abilities. War Galleys can travel on rivers.\
 "), _("
 Like most ancient sea units, when it initiates combat there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
@@ -3391,7 +3391,7 @@ uk_gold       = 0
 flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable"
 roles         = ""
 helptext      = _("\
-The Freight unit replaces the Caravan as the basic Commerce unit on Land. It and moves at\
+The Freight unit replaces the Caravan as the basic Commerce unit on Land. It moves at\
  twice the speed. Each Freight used to build a wonder will add 50 shields. Please read\
  the entry on Caravan for other details of what Commerce units may do.\
 ")
