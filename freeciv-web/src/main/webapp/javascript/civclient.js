@@ -221,6 +221,8 @@ function civclient_init()
 
  });
 
+  if (link_game_type == 'singleplayer#') link_game_type = 'singleplayer';
+
   var game_port = $.getUrlVar('civserverport');
   var game_host = $.getUrlVar('civserverhost');
   var multi = $.getUrlVar('multi');
