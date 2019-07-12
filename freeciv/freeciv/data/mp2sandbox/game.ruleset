@@ -251,6 +251,10 @@ bombard_max_range = 1
 ; the following character as a mnemonic in its graphical toolkit.
 ; The second %s marks where extra details should be inserted.
 
+
+; /* TRANS: _Bombard (100% chance of success). */
+ui_name_bombard = _("%sBombard%s")
+
 ; /* TRANS: _Poison City (3% chance of success). */
 ui_name_poison_city_escape = _("%sPoison City%s")
 
@@ -733,7 +737,10 @@ target_reqs    =
       "MaxUnitsOnTile", "1", "Local", TRUE
     }
 
-[actionenabler_bombard]
+;Archers can strafe/soften every unit on a tile for one 
+;round of combat only, iff it is not a city, fortress,
+;or sea tile:
+[actionenabler_archer_bombard] ;****
 action = "Bombard"
 actor_reqs    =
     { "type",         "name",        "range", "present"
@@ -744,7 +751,9 @@ actor_reqs    =
    }
 target_reqs    =
     { "type",   "name", "range", "present"
-      "TerrainClass", "Oceanic", "Local", FALSE
+      "CityTile", "Center",   "Local", FALSE
+      "Extra",    "Fortress", "Local", FALSE
+      "TerrainClass",  "Oceanic",  "Local", FALSE
     }
 
 [actionenabler_build_city_pioneer]

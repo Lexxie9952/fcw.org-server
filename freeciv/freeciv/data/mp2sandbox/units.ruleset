@@ -811,12 +811,20 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "FootSoldier", "Capturer","CantReachAir"
+flags         = "FootSoldier", "Capturer", "CantReachAir", "Bombarder"
 roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
 Archers fight with bows and arrows and have a good offensive\
- value as well as decent defense.\
+ value as well as decent defense. Rather than engage a single\
+ unit to the death, an Archer also has the ability to bombard:\
+ this distributes its attack lightly and evenly\
+ across all enemy units on the tile, but with only one round\
+ of combat. This makes Archers tactically useful for softening enemy\
+ encampments. (Cities and Fortresses provide defenders cover\
+ from ranged arrow attacks, and may not be bombarded.)\
 ")
+bombard_rate = 1
+
 
 [unit_legion]
 name          = _("Legion")

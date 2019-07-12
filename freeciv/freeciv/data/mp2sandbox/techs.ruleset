@@ -174,6 +174,7 @@ req2     = "The Republic"
 flags    = ""
 graphic     = "a.banking"
 graphic_alt = "-"
+cost = 364
 
 [advance_bridge_building]
 name     = _("Bridge Building")
@@ -570,6 +571,7 @@ req2     = "Trade"
 flags    = ""
 graphic     = "a.medicine"
 graphic_alt = "-"
+cost = 468
 
 [advance_metallurgy]
 name     = _("Metallurgy")
@@ -617,6 +619,7 @@ flags    = ""
 graphic     = "a.monotheism"
 helptext = _("Obsoletes Elephants.")
 graphic_alt = "-"
+cost = 415
 
 [advance_mysticism]
 name     = _("Mysticism")
@@ -634,7 +637,8 @@ req2     = "Astronomy"
 flags    = ""
 graphic     = "a.navigation"
 graphic_alt = "-"
-helptext = _("Obsoletes Trireme.")
+helptext = _("Obsoletes Galley, Longboat, War Galley, Ram Ship.")
+cost = 486
 
 [advance_nuclear_fission]
 name     = _("Nuclear Fission")
@@ -790,6 +794,7 @@ req1     = "Pottery"
 req2     = "Map Making"
 flags    = ""
 graphic     = "a.seafaring"
+helptext = _("Obsoletes Trireme.")
 graphic_alt = "-"
 
 [advance_space_flight]
@@ -909,6 +914,7 @@ req2     = "Philosophy"
 flags    = ""
 graphic     = "a.university"
 graphic_alt = "-"
+cost = 415
 
 [advance_warrior_code]
 name     = _("Warrior Code")
