@@ -253,7 +253,7 @@ bombard_max_range = 1
 
 
 ; /* TRANS: _Bombard (100% chance of success). */
-ui_name_bombard = _("%sBombard%s")
+ui_name_bombard = _("Range%sd Attack%s")
 
 ; /* TRANS: _Poison City (3% chance of success). */
 ui_name_poison_city_escape = _("%sPoison City%s")

@@ -723,8 +723,9 @@ flags    = ""
 graphic     = "a.railroad"
 graphic_alt = "-"
 helptext = _("\
-Allows Settlers, Workers and Engineers to upgrade roads to railroads. \
-Obsoletes Hanging Gardens.")
+Allows Settlers, Workers and Engineers to upgrade roads to railroads.\
+ Reduces revenue from Traderoutes and Enter Marketplace by approximately\
+ one quarter. Obsoletes Hanging Gardens.")
 cost = 1820
 
 [advance_recycling]

@@ -816,8 +816,8 @@ roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
 Archers fight with bows and arrows and have a good offensive\
  value as well as decent defense. Rather than engage a single\
- unit to the death, an Archer also has the ability to bombard:\
- this distributes its attack lightly and evenly\
+ unit to the death, an Archer also can do Ranged Attacks:\
+ this distributes an attack lightly and evenly\
  across all enemy units on the tile, but with only one round\
  of combat. This makes Archers tactically useful for softening enemy\
  encampments. (Cities and Fortresses provide defenders cover\
@@ -854,8 +854,10 @@ uk_gold       = 0
 flags         = "FootSoldier", "Settlers", "Infra", "CanRoad", "CanFortress", "Capturer", "CantReachAir"
 roles         = "DefendOk", "DefendOkStartUnit", "Hut", "BarbarianBuild", "BarbarianSea"
 helptext      = _("\
-Legions are heavily armed and well disciplined infantry\
- units with an excellent offensive value.\
+Legions are heavily armed and well disciplined infantry units with excellent offensive value.\
+ They are famous and feared for their engineering abilities, and can make Forts and Fortresses\
+ with the required technology. They can also make Roads and Bridges outside of domestic national\
+ territory.\
 ")
 
 [unit_pikemen]
@@ -2364,11 +2366,13 @@ flags         = "BadCityDefender", "Provoking", "CantReachAir", "HelpWonder", "T
 roles         = "Ferryboat", "FerryStartUnit"
 helptext      = _("\
 The Trireme is the first naval unit. While its combat abilities are basic,\
- it has multipurpose use for exploration, transport, and commerce--similar\
- to a Caravan, it may at any time help to build a Wonder, enter a\
- marketplace, or establish a Traderoute. While it may venture out into deep\
- ocean, there is risk when it enters unknown waters: it must end every second\
- turn on river, coastline, or city, or else it will be lost at sea.\
+ it has multipurpose use for exploration, transport, and commerce--like the\
+ Caravan, it is a Commerce unit. Please read the entry on Caravan for info\
+ on what all Commerce units may do.\
+"), _("
+ A Trireme can venture out into deep ocean, but there is risk when it enters\
+ unknown waters: it must end every second turn on river, coastline, or a city,\
+ or else it will be lost at sea.\
 "), _("
 Like most ancient sea units, when it initiates combat there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
@@ -2445,11 +2449,11 @@ cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "Provoking", "CantReachAir", "HelpWonder", "Traderoute"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
-The Galley is an all-purpose sea unit. It has decent offense, defense,\
- and transport ability. It has the same commerce abilities as the\ 
- Trireme it replaces. Galleys can travel on rivers.\
+The Galley is an all-purpose sea unit and upgrade over the Trireme. It has no limits at sea,\
+ decent offense and defense, and transport ability. It is also a Commerce unit. Please read\
+ the entry on Caravan for info on what all Commerce units may do. Galleys can travel on rivers.\
 "), _("
-Like most ancient sea units, when it initiates combat there will be 15 rounds\
+Like most ancient sea units, when it initiates an attack, there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
   result in the loss of one of the units.\
 ")
@@ -2557,12 +2561,11 @@ cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "Provoking", "CantReachAir", "Traderoute", "HelpWonder"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat", "Hunter"
 helptext      = _("\
-The Caravel represents a significant naval advance in combat, speed, range,\ 
- and transport capability. Its utility in all the above replaces many\
- ancient sea units. Caravels provide the commerce ability of the earlier\
- Galley. Caravels can travel on rivers.\
+The Caravel represents a significant naval advance in combat, speed, range, and transport\ 
+ capability. Its utility in all the above replaces many ancient sea units. Caravels provide\
+ the commerce ability of the earlier Galley. Caravels can travel on rivers.\
 "), _("
-Like most ancient sea units, when it initiates combat there will be 15 rounds\
+Like most ancient sea units, when it initiates an attack, there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
   result in the loss of one of the units.\
 ")
@@ -2938,12 +2941,10 @@ bonuses       =
 flags         = "NeverProtects", "BadCityDefender", "Provoking", "Only_Native_Attack", "Submarine", "CanEscape", "CantReachAir"
 roles         = "Hunter"
 helptext      = _("\
-Submarines have strong offensive power but weak\
- defense if caught off guard. They can carry Nuclear\
+Submarines have strong offensive power but weak defense if caught off guard. They can carry Nuclear\
  and Cruise Missiles.\
 "), _("\
-TIP:  Against stronger ships, Submarines enjoy superior\ 
- attrition rates when they attack in numbers. They are also\
+TIP:  Against stronger ships, Submarines enjoy superior attrition rates when they attack in numbers. They are also\
  excellent at hit-and-run to scare away unwanted sea traffic.\
 ")
 
@@ -3344,15 +3345,22 @@ uk_gold       = 0
 flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable"
 roles         = ""
 helptext      = _("\
-A Caravan carries goods or material to help build wonders in your\
- cities.\
+The Caravan is one of five Commerce units in the game. All Commerce units can\
+ do the following:\
 "), _("\
-Every Caravan that is used to build a wonder will add 30 shields\
- towards the production of the wonder.\
+1. Carry goods and material to help build Wonders in your cities. The Commerce\
+ unit adds its own build-cost toward the production of the Wonder.\  
 "), _("\
-TIP:  You can stockpile a stack of Caravans in advance and bring\
- them all into a city where you have started to build a wonder,\
- and finish it in only one turn!\
+2. Establish a Traderoute between its Home city and one foreign city, if not at war.\
+ This increases net trade in both cities, relative to their combined trade. Traderoutes\
+ become inactive during war but re-activate if diplomatic status improves.\ 
+"), _("\
+3. In foreign cities with the Marketplace improvement, Commerce units can 'Enter\
+ Marketplace' to sell goods. If both cities have high aggregate trade, this\
+ yields a higher return on investment than Coinage.\
+"), _("\
+TIP: You can stockpile Commerce units and bring them all into a city where you have\
+ started to build a wonder, and finish it in only one turn!\
 ")
 
 [unit_freight]
@@ -3383,8 +3391,9 @@ uk_gold       = 0
 flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable"
 roles         = ""
 helptext      = _("\
-The Freight unit replaces the Caravan, and moves at twice the speed.\
- Each Freight used to build a wonder will add 50 shields.\
+The Freight unit replaces the Caravan as the basic Commerce unit on Land. It and moves at\
+ twice the speed. Each Freight used to build a wonder will add 50 shields. Please read\
+ the entry on Caravan for other details of what Commerce units may do.\
 ")
 
 [unit_explorer]
