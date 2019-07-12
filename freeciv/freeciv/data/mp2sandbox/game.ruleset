@@ -679,7 +679,7 @@ actor_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "HelpWonder", "Local", TRUE
       "Tech", "Trade", "Player", TRUE
-;      "DiplRel", "Foreign", "Local", FALSE
+      "DiplRel", "War", "Local", FALSE
     }
 target_reqs    =
     { "type",   "name", "range"
@@ -692,7 +692,7 @@ actor_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "HelpWonder", "Local", TRUE
       "Tech", "Trade", "Player", TRUE
-;      "DiplRel", "Foreign", "Local", FALSE
+      "DiplRel", "War", "Local", FALSE
     }
 target_reqs    =
     { "type",   "name", "range", "present"

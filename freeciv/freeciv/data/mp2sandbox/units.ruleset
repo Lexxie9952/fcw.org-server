@@ -1704,14 +1704,14 @@ sound_move    = "m_balloon"
 sound_move_alt = "m_trireme"
 sound_fight   = "f_warrior"
 sound_fight_alt = "f_generic"
-build_cost    = 30
+build_cost    = 25
 pop_cost      = 0
 attack        = 0
 defense       = 0
 hitpoints     = 10
 firepower     = 1
 move_rate     = 5
-vision_radius_sq = 15
+vision_radius_sq = 17
 transport_cap = 0
 fuel          = 2
 uk_happy      = 0
@@ -2101,7 +2101,7 @@ roles         = ""
 helptext      = _("\
 The Helicopter is a very powerful unit, as it can fly far and attack \
  multiple targets, and even conquer cities.  Be careful, because Helicopters lose\
- a small amount of health for every turn not spent in a city, fortress, airbase\
+ a small amount of health for every turn not spent in a city, fort, fortress, airbase\
  or Carrier.  Helicopters can be attacked by ground units from Riflemen onward.\
  They can be attacked by sea units from Ironclad onward.\
 "), _("\
@@ -2583,8 +2583,8 @@ sound_fight   = "f_galleon"
 sound_fight_alt = "f_generic"
 build_cost    = 40
 pop_cost      = 0
-attack        = 1
-defense       = 2
+attack        = 2
+defense       = 3
 hitpoints     = 20
 firepower     = 1
 move_rate     = 8
@@ -2622,7 +2622,7 @@ sound_fight_alt = "f_generic"
 build_cost    = 50
 pop_cost      = 0
 attack        = 4
-defense       = 2
+defense       = 3
 hitpoints     = 20
 firepower     = 1
 move_rate     = 8
