@@ -3129,20 +3129,13 @@ A Diplomat may perform official or covert actions.\
 "), _("\
 Most covert actions may be done in peacetime, but cause incidents which may\
  let a Senate break treaties. If a diplomatic unit is in the\
- city, it will defend, and a unit will die. Diplomats can:\
-"), _("\
- - \"Bribe\": Unit must be alone. Cost varies with type, health, distance from home.
-"), _("\
- - \"Establish Embassy\": Gives permanent info on treasury, taxes, tech, & foreign relations.\
-  Enables dealmaking.\
-"), _("\
- - \"Investigate City\": City info.\
-"), _("\
- - \"Sabotage City\": Destroy production or a random building.\
-"), _("\
- - \"Steal Tech\": A random tech may be stolen, creating an incident.\
-"), _("\
- - \"Incite Revolt\": Bribe an entire city to join your empire and acquire the units the city supports.\
+ city, it will defend, and a unit will die. Diplomats can:\n\
+ - Bribe: Unit must be alone. Cost varies with type, health, distance from home.\n\
+ - Establish Embassy: Enables dealmaking & gives permanent info on gold, taxes, tech, foreign relations.\n\
+ - Investigate City: City info.\n\
+ - Sabotage City: Destroy production or a random building.\n\
+ - Steal Tech: A random tech may be stolen, creating an incident.\n\
+ - Incite Revolt: Bribe an entire city to join your empire and acquire the units the city supports.\n\
 "), _("\
 Many rules alter odds & legality. Read the manual on Diplomacy.\
  Diplomats built under Communism start at the first vet level.\
