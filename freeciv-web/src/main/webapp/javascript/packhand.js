@@ -900,9 +900,8 @@ function handle_unit_combat_info(packet)
         if (scrollDiv != null) {
           var item = document.createElement('li');
           item.className = "e_unit_win_att";
-          item.innerHTML = "<span class='chatbox_text_tileinfo' onclick='center_tile_id("+attacker['tile']+");'>"+"</span>";
-          special_message;
-        
+          item.innerHTML = "<span class='chatbox_text_tileinfo' onclick='center_tile_id("+attacker['tile']+");'>"+special_message+"</span>";
+
           scrollDiv.appendChild(item);
           setTimeout(() => $('#freeciv_custom_scrollbar_div').mCustomScrollbar('scrollTo', 'bottom'), 200);
 
