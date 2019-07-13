@@ -876,9 +876,6 @@ function handle_unit_combat_info(packet)
         if (nations[attacker_nation]['adjective']==player_nation) attack_unit = "your";
         attack_unit = attack_unit + " " + unit_types[attacker['type']]['name'];
         
-      //  <li class="">A valiant battle with no winner: <l tgt="tile" x="15" y="24">your Archers</l> survived with 10hp while reducing the Hungarian Phalanx to 10hp.</li>
-      // <font color="#FFFFFF">Your attacking Knights succeeded against the Aragonese <l tgt="tile" x="14" y="27">Pikemen</l>!</font> 
-       
         // It was not sending a message after battle, so inject one here:
         var special_message = "A valiant battle with no winner: <l tgt=\"tile\" x=\""+tile_x+"\" y=\""+tile_y+"\">"+attack_unit+"</l> survived with "+attacker_hp+"hp while reducing "
                             + defend_unit+" to "+defender_hp+"hp.";  
