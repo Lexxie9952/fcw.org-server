@@ -874,8 +874,9 @@ function handle_unit_combat_info(packet)
         if (nations[attacker_nation]['adjective']==player_nation) attack_unit = "your";
         attack_unit = attack_unit + " " + unit_types[attacker['type']]['name'];
         
+        <l tgt="tile" x="15" y="22">Galley</l>
         // It was not sending a message after battle, so inject one here:
-        var special_message = "A valiant battle with no winner: "+attack_unit+" survived with "+attacker_hp+"hp while reducing "
+        var special_message = "A valiant battle with no winner: <l tgt=\"tile\" x=\""+attacker['tile']['x']+"\" y=\""+attacker['tile']['y']+"\">"+attack_unit+"</l> survived with "+attacker_hp+"hp while reducing "
                             + defend_unit+" to "+defender_hp+"hp.";  
         
         // might need to replace true with "true" since it's string inside a packet:                    
