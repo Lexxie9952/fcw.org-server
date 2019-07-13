@@ -828,7 +828,7 @@ function handle_unit_combat_info(packet)
   var attacker_hp = packet['attacker_hp'];
   var defender_hp = packet['defender_hp'];
   var tile_x = attacker['tile']['x'];
-  var tily_y = attacker['tile']['y'];
+  var tile_y = attacker['tile']['y'];
 
   if (renderer == RENDERER_WEBGL) {
     if (attacker_hp == 0) animate_explosion_on_tile(attacker['tile'], 0);
