@@ -111,6 +111,7 @@ class metachecker():
                    new_server.start()
                    port += 1
                    self.longturn.add(script)
+                   print("Adding a longturn game with the port of"+str(port)+", metaport of"+str(metaport)+" and filename of "+str(script))
                    break
 
               while (self.single < self.server_capacity_single
