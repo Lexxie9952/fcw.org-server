@@ -902,7 +902,7 @@ function handle_unit_combat_info(packet)
           item.className = "e_unit_win_att";
           item.innerHTML = "<span class='chatbox_text_tileinfo' onclick='center_tile_id("+attacker['tile']+");'>"+special_message+"</span>";
 
-          scrollDiv.appendChild(item);
+          scrollDiv.appendChild(item); 
           setTimeout(() => $('#freeciv_custom_scrollbar_div').mCustomScrollbar('scrollTo', 'bottom'), 200);
 
           // New packet style coming back for a no-victory battle wasn't getting interpreted and redrawn
