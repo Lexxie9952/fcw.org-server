@@ -827,6 +827,8 @@ function handle_unit_combat_info(packet)
   var defender = units[packet['defender_unit_id']];
   var attacker_hp = packet['attacker_hp'];
   var defender_hp = packet['defender_hp'];
+  var tile_x = tiles[attacker['tile']]['x'];
+  var tile_y = tiles[attacker['tile']]['y'];
 
   if (renderer == RENDERER_WEBGL) {
     if (attacker_hp == 0) animate_explosion_on_tile(attacker['tile'], 0);
@@ -875,7 +877,7 @@ function handle_unit_combat_info(packet)
         attack_unit = attack_unit + " " + unit_types[attacker['type']]['name'];
         
         // It was not sending a message after battle, so inject one here:
-        var special_message = "A valiant battle with no winner: "+attack_unit+" survived with "+attacker_hp+"hp while reducing "
+        var special_message = "A valiant battle with no winner: <l tgt=\"tile\" x=\""+tile_x+"\" y=\""+tile_y+"\">"+attack_unit+"</l> survived with "+attacker_hp+"hp while reducing "
                             + defend_unit+" to "+defender_hp+"hp.";  
         
         // might need to replace true with "true" since it's string inside a packet:                    
@@ -894,10 +896,10 @@ function handle_unit_combat_info(packet)
         var scrollDiv = get_chatbox_msg_list();
         if (scrollDiv != null) {
           var item = document.createElement('li');
-          item.className = "";
-          item.innerHTML = special_message;
-        
-          scrollDiv.appendChild(item);
+          item.className = "e_unit_win_att";
+          item.innerHTML = "<span class='chatbox_text_tileinfo' onclick='center_tile_id("+attacker['tile']+");'>"+special_message+"</span>";
+
+          scrollDiv.appendChild(item); 
           setTimeout(() => $('#freeciv_custom_scrollbar_div').mCustomScrollbar('scrollTo', 'bottom'), 200);
 
           // New packet style coming back for a no-victory battle wasn't getting interpreted and redrawn
