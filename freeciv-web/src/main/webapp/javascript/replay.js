@@ -45,7 +45,8 @@ function add_replay_frame()
 {
   if (!replay_enabled) return;
 
-  if ($("#overview_map").length > 0 && $("#overview_map").width() > 0 && $("#overview_map").height() > 0) {
+  if ($("#overview_map").length > 0 && $("#overview_map").width() > 0 && $("#overview_map").height() > 0
+            && $("#overview_img").width() > 0 && $("#overview_img").height() > 0 ) {
     replay_gif.addFrame(document.getElementById("overview_img"), {delay: 1000, copy: true});
   }
 
