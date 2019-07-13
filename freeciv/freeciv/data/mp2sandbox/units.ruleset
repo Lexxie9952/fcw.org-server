@@ -615,24 +615,18 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = "AttackFastStartUnit"       ;this role taken over for well-digger
 helptext      = _("\
-THE WELL-DIGGER'S ONLY PURPOSE IS TO FIX A BAD START WITH NO NEARBY\
- WATER. As a unique unit, you can only make one. This unit\
- can 'dig a well' to irrigate any Low Land tile INSIDE your borders,\
- but only before you know Alphabet or Pottery. Upkeep\
- is 2F+5P+2G. (Despotism has 3 Upkeep free per city.)\
+The Well-Digger's ONLY PURPOSE is to fix a bad start with no nearby water.\
+ You can only make one. Upkeep is 2F+5P+2G.\
 "), _("\
-TIP: If you lack nearby water, make a Well-Digger in a city that can\
- support 2 food and 2 shields upkeep. Irrigate a tile or two, then disband to avoid\
- costly upkeep.\
+QUICK HELP: If you lack nearby water, make a Well-Digger in a city that can\
+ support 2 food and 2 shields upkeep. Dig a well, then disband.\
 "), _("\
-FURTHER HELP: \
- A Well-Digger can irrigate any Low-Land tile (not Hills or Mountains), or dig a well\
- (a river) on any tile. (Digging a well can be done inside the orders menu or with the orders buttons.)\
- A Despotic city will need at least +2 Food and +2 Production to support a Well-Digger. THE WELL-DIGGER\
- WILL NOT WORK IF: * 1) He is outside your borders. * 2) He dies off from the city not having enough\
- surplus for his upkeep, * 3) You discovered Alphabet or Pottery. This is not a unit to fool around\
- with, as the high upkeep can set you permanently behind other nations. Careful thought is required.\
- WARNING: This unit is ONLY beneficial to a nation with no water, in its first turns of existence.\
+ This unit can irrigate any tile except Hills/Mountains, or dig a 'well' on any tile.\
+ A Despotic city needs +2 Food +2 Prod for upkeep. A Well-Digger WILL NOT WORK:\
+ 1. Outside your borders. 2. If it dies from not enough upkeep.\
+ 3. You learn Alphabet or Pottery. >> Don't fool around: high upkeep will\
+ permanently hinder you. This unit is beneficial only if you lack water\
+ in the first turns of play.\
 ")
 
 [unit_worker]
@@ -669,13 +663,11 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = "Settlers", "WorkerStartUnit"
 helptext      = _("\
-Workers can improve terrain tiles. See the help on \
-Terrain and Terrain Alterations for details.\
+Workers can improve terrain tiles. See the manual on Terrain for details.\
 "), _("\
-After discovering Masonry, Workers can build Forts. After Construction, they can build\
- Fortresses and Oil Wells. After Engineering, they can build Canals. After Radio,\
- they can build Airbases and Buoys, which Settlers cannot. Workers must be onboard a\
- ship to build Buoys.\
+Masonry lets Workers build Forts. Construction lets them build Fortresses and\
+ Oil Wells. Engineering let them build Canals. Radio lets them build Airbases\
+ and Buoys, which Settlers cannot. Workers must be onboard a ship to build Buoys.\
 ")
 
 [unit_engineers]
@@ -713,13 +705,11 @@ veteran_move_bonus = 0
 roles         = "Settlers", "WorkerStartUnit"
 helptext      = _("\
 Engineers can do everything that Workers can, but they move and work twice as fast.\
- Unlike Workers, Engineers can perform terrain Transformation, such as converting\
- Desert to Plains or Ocean to Swamp (must be on a ship on an Ocean tile bordering\
- 3 land tiles). See the Terrain Alterations section for more details.\
+ Unlike Workers, Engineers can do Transformation, such as converting\
+ Desert to Plains, or Ocean to Swamp (must be on a ship on a tile bordering\
+ 3 land tiles). See manual on Terrain for more details.\
 "), _("\
-TIP 1:  Upgrade Workers to Engineers when possible.\
-"), _("\
-TIP 2:  If you manage to build Leonardo's Workshop, research Explosives before the\
+TIP: If you manage to build Leonardo's Workshop, research Explosives before the\
  Workshop becomes obsolete, so that your Workers will get upgraded for free.\
 ")
 
@@ -751,8 +741,8 @@ uk_gold       = 0
 flags         = "FootSoldier", "CantReachAir"
 roles         = "DefendOk", "DefendOkStartUnit", "FirstBuild"
 helptext      = _("\
-This unit may be built from the start of the game.  It is the\
- weakest offensive unit.\
+This unit may be built from the start of the game. It is the weakest military unit,\
+ but it's also cheap.\
 ")
 
 [unit_phalanx]
@@ -783,7 +773,8 @@ uk_gold       = 0
 flags         = "FootSoldier", "CantReachAir"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
-The Phalanx is armored infantry, suitable for defending your cities.\
+The Phalanx is armored infantry, suitable for defending your cities. It offers good value\
+ for defending.\
 ")
 
 [unit_archers]
@@ -814,13 +805,12 @@ uk_gold       = 0
 flags         = "FootSoldier", "Capturer", "CantReachAir", "Bombarder"
 roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
-Archers fight with bows and arrows. They have good offensive ability and decent\
- defense.\
+Archers fight with bows and arrows. They have good offense and decent defense.\
 "), _("\
 Rather than engage a single unit to the death, Archers can also do a Ranged Attack with no risk\
- of retaliatory damage: a single round of arrows is fired over all enemy units on the tile,\
- causing 1hp of damage to any units who are hit before finding cover. This is useful for softening\
- enemies prior to full battle engagement, or for deterring the approach to strategic locations.\
+ of retaliatory damage: a single volley of arrows is fired over all enemy units on the tile,\
+ causing 1hp of damage to any units who are hit. This is useful for softening\
+ enemies prior battle, or for deterring an approach to strategic locations.\
  (Ranged Attack is not possible on Cities or Fortresses; they provide cover from incoming arrows.)\
 ")
 bombard_rate = 1
@@ -997,18 +987,16 @@ targets       = "Balloon", "Helicopter"
 flags         = "IgTer", "IgZOC", "NoHome", "FootSoldier", "Capturer", "CantReachAir"
 roles         = "DefendGood", "DefendGoodStartUnit", "Partisan", "BarbarianTech"
 helptext      = _("\
-Partisans are guerilla fighters who are experts\
- at using the terrain to their advantage.  Like the Explorer\
- that they upgrade, they can slip through ZOC and live off\
- the land with no upkeep.\
+Partisans are guerilla fighters who can use the terrain to their advantage.  Like the Explorer\
+ that they upgrade, they can slip through ZOC and live off the land with no upkeep.\
 "), _("\
 A number of Partisans are granted free when an enemy conquers your\
  city -- they automatically assume defensive positions in the\
  surrounding countryside -- but only under these conditions:\n\
  - Guerilla Warfare must be known by at least one player.\n\
- - You must be the player who originally built the city.\n\
- - You must know about Communism and Gunpowder.\n\
- - You must run either a Democracy or a Communist government.\
+ - The city was originally built by you.\n\
+ - You know Communism and Gunpowder.\n\
+ - You must be Democracy or Communist.\
 ")
 
 [unit_alpine_troops]
@@ -1296,7 +1284,7 @@ uk_gold       = 0
 flags         = "Horse", "Capturer", "CantReachAir"
 roles         = "AttackFastStartUnit"
 helptext      = _("\
-Elephants are towering animals trained for war. Their mobility and excellent\
+Elephants are towering animals trained for war. Their mobility and formidable\
  attack strength make them excellent for first offensive engagements, but\
  they defend poorly against most units.\
 ")
@@ -1682,8 +1670,7 @@ targets       = "Balloon", "Helicopter"
 flags         = "CantReachAir"
 roles         = "AttackStrongStartUnit"
 helptext      = _("\
-Howitzers are upgraded Artillery with improved attack strength and significant increase\ 
- in mobility. They can fire over city walls, ignoring their effect.\
+Howitzers are upgraded Artillery with improved attack strength and significant increase in mobility. They can fire over city walls, ignoring their effect.\
 ")
 
 [unit_balloon]
@@ -1722,7 +1709,7 @@ Balloons are the first air unit, and have no combat capability. However, in some
  sea units, a Balloon does not prevent the units under it from being attacked.\
 "), _("
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
- this restriction can by overridden by commanding it to move to adjacent tiles.\
+ this restriction can by overridden by ordering moves to adjacent tiles.\
 ")
 
 
@@ -1774,7 +1761,8 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
 Fighters are the first offensive Air units. Their superior mobility and firepower alter\
- the very nature of warfare. They can move anywhere and attack any unit (except Submarines.)\
+ the very nature of warfare. They can move anywhere and attack any unit (except Submarines\
+ and Jet Bombers.)\
 "), _("
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
  this restriction can by overridden by commanding attacks and movements to adjacent tiles.\
@@ -1834,7 +1822,7 @@ Escort Fighters are larger fighters which carry more fuel for longer missions.\
  makes them good for longer-range missions on unsuspecting weaker targets.\
 "), _("
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own\
- risk, this restriction can by overridden by commanding it to move to adjacent tiles.\
+ risk, this restriction can by overridden by ordering moves to adjacent tiles.\
 ")
 
 [unit_medium_bomber]
@@ -1885,11 +1873,8 @@ helptext      = _("\
 Medium Bombers are specialized airborne units that are good for eliminating moderately strong\
  ground targets, or multiple weaker targets. They may not attack other airborne units.\
 "), _("\
-TIP: Getting bombed is very noticeable to an enemy, and taken very seriously. Make sure you\
- choose targets far from air defences, or be sure to bring adequate escort protection.\
-"), _("
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
- this restriction can by overridden by commanding it to move to adjacent tiles.\
+ this restriction can by overridden by ordering moves to adjacent tiles.\
 ")
 
 [unit_bomber]
@@ -1941,11 +1926,8 @@ helptext      = _("\
 Heavy Bombers are specialized airborne units that are good for eliminating strong and well-defended\
  ground targets, or multiple weaker targets. They can't attack airborne units. May carry one Bomb.\
 "), _("\
-TIP: Getting bombed is very noticeable to an enemy, and taken very seriously. Make sure you choose\
- targets far from any air defences, or be sure to bring adequate escort protection.\
-"), _("
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
- this restriction can by overridden by commanding it to move to adjacent tiles.\
+ this restriction can by overridden by ordering moves to adjacent tiles.\
 ")
 
 [unit_ultra_heavy_bomber]
@@ -1997,11 +1979,8 @@ helptext      = _("\
 The Strategic Bomber offers slight improvement in attack, but higher altitude offers advantages in\
  defense. Its most notable feature is its considerably greater range. May carry two Bombs.\
 "), _("\
-TIP: Getting bombed is very noticeable to an enemy, and taken very seriously. Make sure you choose targets\
- far from any air defences, or be sure to bring adequate escort protection.\
-"), _("
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
- this restriction can by overridden by commanding it to move to adjacent tiles.\
+ this restriction can by overridden by ordering moves to adjacent tiles.\
 ")
 
 [unit_awacs]
@@ -2036,7 +2015,7 @@ The AWACS (Airborne Warning and Control System) is an airplane with an advanced 
  the location of enemy units over a wide area.\
 "), _("
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
- this restriction can by overridden by commanding it to move to adjacent tiles.\
+ this restriction can by overridden by ordering moves to adjacent tiles.\
 ")
 
 [unit_helicopter]
@@ -2140,7 +2119,7 @@ helptext      = _("\
 Jet Fighters upgrade the Fighter with improved attack and defense, and greater range.\
 "), _("
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
- this restriction can by overridden by commanding it to move to adjacent tiles.\
+ this restriction can by overridden by order moves to adjacent tiles.\
 ")
 
 [unit_jet_bomber]
@@ -2192,7 +2171,7 @@ Jet Bombers are stratospheric long-range air units, good for hitting distant tar
  the ability to pillage enemy tiles from the air. May carry three Bombs.\ 
 "), _("\
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
- this restriction can by overridden by commanding it to move to adjacent tiles.\
+ this restriction can by overridden by ordering moves to adjacent tiles.\
 ")
 
 [unit_stealth_fighter]
@@ -2247,7 +2226,7 @@ The most advanced Fighter, with improved attack and longer range. Stealth Fighte
  to an enemy. Stealth evasion reduces effectiveness of SAM Batteries to a 25% bonus.\
 "), _("
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
- this restriction can by overridden by commanding it to move to adjacent tiles.\
+ this restriction can by overridden by ordering moves to adjacent tiles.\
 ")
 
 [unit_stealth_bomber]
@@ -2302,7 +2281,7 @@ The deadliest Bomber, with improved attack and speed. Stealth Bombers can't be s
  enemy. Stealth evasion reduces effectiveness of SAM Batteries to a 25% bonus. May carry two Bombs.\
 "), _("
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
- this restriction can by overridden by commanding it to move to adjacent tiles.\
+ this restriction can by overridden by ordering moves to adjacent tiles.\
 ")
 
 [unit_trireme]
@@ -2347,7 +2326,7 @@ Like most ancient sea units, when it initiates combat there will be 15 rounds\
   result in the loss of one of the units.\
 "), _("
 NOTE: GO TO orders prevent accidental loss of the unit at sea, but are overly\
- restrictive. You should override this by commanding it to move to adjacent tiles.\
+ restrictive. You should override this by ordering moves to adjacent tiles.\
 ")
 
 [unit_longboat]
