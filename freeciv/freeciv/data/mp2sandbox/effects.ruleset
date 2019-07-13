@@ -2412,29 +2412,30 @@ reqs	=
       "Building", "Space Structural", "City"
     }
 
-[effect_plastics_slowdown]
-type    = "Slow_Down_Timeline"
-value   = 1
-reqs    =
-    { "type", "name", "range", "survives"
-      "Tech", "Plastics", "World", TRUE
-    }
+;Timeline is already way behind and too slow, REMOVE:
+;[effect_plastics_slowdown]
+;type    = "Slow_Down_Timeline"
+;value   = 1
+;reqs    =
+;    { "type", "name", "range", "survives"
+;      "Tech", "Plastics", "World", TRUE
+;    }
 
-[effect_superconductor_slowdown]
-type    = "Slow_Down_Timeline"
-value   = 1
-reqs    =
-    { "type", "name", "range", "survives"
-      "Tech", "Superconductors", "World", TRUE
-    }
+;[effect_superconductor_slowdown]
+;type    = "Slow_Down_Timeline"
+;value   = 1
+;reqs    =
+;    { "type", "name", "range", "survives"
+;      "Tech", "Superconductors", "World", TRUE
+;    }
 
-[effect_spaceflight_slowdown]
-type    = "Slow_Down_Timeline"
-value   = 1
-reqs    =
-    { "type", "name", "range", "survives"
-      "Tech", "Space Flight", "World", TRUE
-    }
+;[effect_spaceflight_slowdown]
+;type    = "Slow_Down_Timeline"
+;value   = 1
+;reqs    =
+;    { "type", "name", "range", "survives"
+;      "Tech", "Space Flight", "World", TRUE
+;    }
 
 [effect_stock_exchange]
 type    = "Output_Bonus"
@@ -3616,33 +3617,33 @@ reqs    =
 
 [effect_calendar_base]
 type    = "Turn_Years"
-value   = 50
+value   = 100
 
-; 50 - 25 = 25
+; 100 - 50 = 50
 [effect_calendar_1]
 type    = "Turn_Years"
-value   = -25
-reqs    =
-    { "type", "name", "range"
-      "MinYear", "-1000", "World"
-    }
-
-; 25 - 5 = 20
-[effect_calendar_2]
-type    = "Turn_Years"
-value   = -5
+value   = -50
 reqs    =
     { "type", "name", "range"
       "MinYear", "0", "World"
     }
 
-; 20 - 10 = 10
-[effect_calendar_3]
+; 50 - 25 = 25
+[effect_calendar_2]
 type    = "Turn_Years"
-value   = -10
+value   = -25
 reqs    =
     { "type", "name", "range"
       "MinYear", "1000", "World"
+    }
+
+; 25 - 15 = 10
+[effect_calendar_3]
+type    = "Turn_Years"
+value   = -15
+reqs    =
+    { "type", "name", "range"
+      "MinYear", "1800", "World"
     }
 
 ; 10 - 5 = 5
@@ -3651,7 +3652,7 @@ type    = "Turn_Years"
 value   = -5
 reqs    =
     { "type", "name", "range"
-      "MinYear", "1500", "World"
+      "MinYear", "1900", "World"
     }
 
 ; 5 - 3 = 2
@@ -3660,7 +3661,7 @@ type    = "Turn_Years"
 value   = -3
 reqs    =
     { "type", "name", "range"
-      "MinYear", "1750", "World"
+      "MinYear", "1950", "World"
     }
 
 ; 2 - 1 = 1
@@ -3669,7 +3670,7 @@ type    = "Turn_Years"
 value   = -1
 reqs    =
     { "type", "name", "range"
-      "MinYear", "1900", "World"
+      "MinYear", "2012", "World"
     }
 
 [effect_tech_cost_base]
