@@ -1279,30 +1279,6 @@ This stunning technological achievement makes two content citizens\
  activity), making each content then happy. This wonder is never obsolete.\
 ")
 
-[building_darwins_voyage]
-name		= _("Voyage of Darwin")
-genus		= "SmallWonder"
-reqs	=
-    { "type",     "name",            "range",  "present", "quiet"
-      "Tech",     "Railroad",        "Player", TRUE,      FALSE
-      "Building", "Voyage of Darwin", "Player", FALSE,     TRUE
-    }
-graphic	= "b.darwins_voyage"
-graphic_alt	= "-"
-obsolete_by	=
-    { "type", "name", "range"
-    }
-build_cost	= 200
-upkeep		= 0
-sabotage	= 0
-sound		= "w_darwins_voyage"
-sound_alt	= "w_generic"
-helptext	= _("\
-Each tile in and around the city where this wonder is built that is\
- already generating some trade produces one extra trade resource.\
- This Wonder is never obsolete.\
-")
-
 [building_eiffel_tower]
 name		= _("Eiffel Tower")
 genus		= "SmallWonder"
@@ -1915,6 +1891,29 @@ The bounteous Artemis bestows to all cities with Temples a small yet\
  Requires a Temple in the city where it will be built. The discovery of Computers\
  makes the Temple of Artemis obsolete.")
 
+[building_teslas_laboratory]
+name		= _("Tesla's Laboratory")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",                "range",  "present", "quiet"
+      "Tech",     "Electricity",           "Player", TRUE,      FALSE
+      "Building", "Tesla's Laboratory", "Player", FALSE,     TRUE
+    }
+graphic	= "b.teslas_laboratory"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 200
+upkeep		= 0
+sabotage	= 0
+sound		= "w_teslas_laboratory"
+sound_alt	= "w_generic"
+helptext	= _("\
+Upgrades one obsolete unit per turn.  This Wonder\
+ does not become obsolete.\
+")
+
 [building_internet]
 name		= _("The Internet")
 genus		= "SmallWonder"
@@ -1940,29 +1939,6 @@ Adds to science production in all your cities with\
  This Wonder does not become obsolete.\
 ")
 
-[building_teslas_laboratory]
-name		= _("Tesla's Laboratory")
-genus		= "SmallWonder"
-reqs	=
-    { "type",     "name",                "range",  "present", "quiet"
-      "Tech",     "Electricity",           "Player", TRUE,      FALSE
-      "Building", "Tesla's Laboratory", "Player", FALSE,     TRUE
-    }
-graphic	= "b.teslas_laboratory"
-graphic_alt	= "-"
-obsolete_by	=
-    { "type", "name", "range"
-    }
-build_cost	= 200
-upkeep		= 0
-sabotage	= 0
-sound		= "w_teslas_laboratory"
-sound_alt	= "w_generic"
-helptext	= _("\
-Upgrades one obsolete unit per turn.  This Wonder\
- does not become obsolete.\
-")
-
 [building_united_nations]
 name		= _("United Nations")
 genus		= "GreatWonder"
@@ -1985,6 +1961,30 @@ Creates a world senate that may prevent declarations of\
  war in some circumstances. If any player's city is in revolt\
  for more than two turns, that player's government falls.\
  This Wonder does not become obsolete.\
+")
+
+[building_voyage_of_darwin]
+name		= _("Voyage of Darwin")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",            "range",  "present", "quiet"
+      "Tech",     "Railroad",        "Player", TRUE,      FALSE
+      "Building", "Voyage of Darwin", "Player", FALSE,     TRUE
+    }
+graphic	= "b.darwins_voyage"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 200
+upkeep		= 0
+sabotage	= 0
+sound		= "w_darwins_voyage"
+sound_alt	= "w_generic"
+helptext	= _("\
+Each tile in and around the city where this wonder is built that is\
+ already generating some trade produces one extra trade resource.\
+ This Wonder is never obsolete.\
 ")
 
 [building_womens_suffrage]
