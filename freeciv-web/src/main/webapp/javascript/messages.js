@@ -148,7 +148,12 @@ function add_chatbox_text(packet)
       // Check for incoming private message:           
       var check_im = text.replace(/#A020F0/g, '#F020FF');
       if (check_im != text) {         // if different, there was a private message
-         play_sound("iphone1.ogg");
+        if (packet['turn'] != null) {
+          // Message might have come after they logged out last turn, so exclude 
+          // notification sounds for anything 2 turns ago or longer:
+          if (packet['turn'] > game_info['turn']-2) play_sound("iphone1.ogg");
+        }
+         
          text=check_im; // now update the text var so the changed colour code goes in the message_log  
       }
     }
