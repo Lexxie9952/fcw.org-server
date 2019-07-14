@@ -215,14 +215,17 @@ function show_new_game_message()
     setTimeout(check_queued_tech_gained_dialog, 2500);
 
   } else if (is_longturn()) {
-    message = "Welcome " + username + "! This is a One Turn per Day game, where you play one " +
-    "turn every day. Click the Turn Done button when you are done with your turn. To play your next " +
-    "turn in this One Turn per Day game, you can bookmark this page and use that link to play your next turn. "+
-    "You can also find this game by going to " + window.location.host + " and clicking on the One Turn per Day button. "+
-    "Good luck, have fun and see you again tomorrow!";
+    message = "Welcome " + username + "! This is a Longturn game, where you play one turn per day. " +
+    "Just do your moves, and come back tomorrow when the timer advances to the next turn! You may " +
+    "bookmark this page to return. You can also find the game again at " + window.location.host + ".<br> "+
+    "<font color='#90FFFF'>Freeciv is a game of diplomacy. Your nation is encouraged to talk to other nations. "+
+    "Please join the <a href='https://discord.gg/Zj8UQSN' target='_new'>community Discord chat server</a>. "+
+    "Players are responsible for following the #rules posted there. Be polite; please keep in-game talk "+
+    "related to the game; do not post spam to offsite links if you wish to remain in the game.</font> Good luck, have fun!"; 
 
   } else if (is_small_screen()) {
     message = "Welcome " + username + "! You lead a great civilization. Your task is to conquer the world!\n" +
+      "Please join the <a href='https://discord.gg/Zj8UQSN' target='_new'>community Discord chat server</a> "+
       "Click on units for giving them orders, and drag units on the map to move them.\n" +
       "Good luck, and have a lot of fun!";
 
@@ -238,6 +241,7 @@ function show_new_game_message()
       "a city. Click on units to get a list of available orders. \n" +
       "To move your units around, carefully drag the units to the \n" +
       "place you want it to go.\n" +
+      "Please join the <a href='https://discord.gg/Zj8UQSN' target='_new'>community Discord chat server</a>.\n"+
       "Good luck, and have a lot of fun!";
 
     } else {
@@ -247,6 +251,7 @@ function show_new_game_message()
       "and using your settlers to find a good place to build\n" +
       "a city. Right-click with the mouse on your units for a list of available \n" +
       "orders such as move, explore, build cities and attack. \n" +
+      "Please join the <a href='https://discord.gg/Zj8UQSN' target='_new'>community Discord chat server</a>.\n"+
       "Good luck, and have a lot of fun!";
 
     }
