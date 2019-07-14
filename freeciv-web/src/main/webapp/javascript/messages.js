@@ -146,10 +146,10 @@ function add_chatbox_text(packet)
                  .replace(/#551166/g, '#AA88FF');
 
       // Check for incoming private message:           
-      var check_im = text;
-      if (check_im != text.replace(/#A020F0/g, '#F020FF')) //private messages are colour coded thus
-      {
-         play_sound("iphone1.ogg");  
+      var check_im = text.replace(/#A020F0/g, '#F020FF');
+      if (check_im != text) {         // if different, there was a private message
+         play_sound("iphone1.ogg");
+         text=check_im; // now update the text var so the changed colour code goes in the message_log  
       }
     }
 
