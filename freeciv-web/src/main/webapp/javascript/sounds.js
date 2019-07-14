@@ -172,7 +172,7 @@ function play_sound(sound_file)
   // SOUND EVENT TRAFFIC POLICE: -------------------------------------------------------------------
   // The number of play_sounds called per second must be limited or it creates a DOMexception
   // and permanently shuts off sound on some browsers:
-  console.log("** STARTED play_sound("+sound_file+") WITH (counter:"+sound_traffic_counter+"), "+(current_time-sound_delay_timestamp)+"ms after last sound.");
+  //console.log("** STARTED play_sound("+sound_file+") WITH (counter:"+sound_traffic_counter+"), "+(current_time-sound_delay_timestamp)+"ms after last sound.");
 
   // Check if previous timestamp expired and reset it if yes
   if (current_time - sound_delay_timestamp > sound_delayer) {

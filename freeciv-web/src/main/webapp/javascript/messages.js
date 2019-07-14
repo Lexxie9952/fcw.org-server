@@ -143,8 +143,14 @@ function add_chatbox_text(packet)
     } else {
       text = text.replace(/#0000FF/g, '#5555FF')
                  .replace(/#006400/g, '#00AA00')
-                 .replace(/#551166/g, '#AA88FF')
-                 .replace(/#A020F0/g, '#F020FF');
+                 .replace(/#551166/g, '#AA88FF');
+
+      // Check for incoming private message:           
+      var check_im = text;
+      if (check_im != text.replace(/#A020F0/g, '#F020FF')) //private messages are colour coded thus
+      {
+         play_sound("iphone1.ogg");  
+      }
     }
 
     packet['message'] = text;
