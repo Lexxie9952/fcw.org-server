@@ -219,7 +219,7 @@ function show_new_game_message()
     "Just do your moves, and come back tomorrow when the timer advances to the next turn! You may " +
     "bookmark this page to return. You can also find the game again at " + window.location.host + ".<br> "+
     "<font color='#90FFFF'>Freeciv is a game of diplomacy. Your nation is encouraged to talk to other nations. "+
-    "Please join the <a href='https://discord.gg/Zj8UQSN' target='_new'>community Discord chat server</a>. "+
+    "Please click to join the <a href='https://discord.gg/Zj8UQSN' target='_new'>community Discord chat server</a>. "+
     "Players are responsible for following the #rules posted there. Be polite; please keep in-game talk "+
     "related to the game; do not post spam to offsite links if you wish to remain in the game.</font> Good luck, have fun!"; 
 
