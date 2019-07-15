@@ -1331,6 +1331,18 @@ reqs	=
       "UnitClass", "LandNoKill", "Local", TRUE
     }
 
+;prolongs time-window relevance of amphibious invasions later in game
+[effect_triple_training_marines]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Barracks III", "City", TRUE
+      "Building", "Port Facility", "City", TRUE
+      "Building", "Airport", "City", TRUE
+      "UnitType", "Marines", "Local", TRUE
+    }
+
 [effect_cathedral]
 type    = "Make_Content"
 value	= 3
