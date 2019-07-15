@@ -169,15 +169,24 @@ illness_trade_infection = 0
 illness_pollution_factor = 50
 
 [incite_cost]
-; city_incite_cost = total_factor * (city_size) * (base_incite_cost
-;                      + (units_cost) * unit_factor
-;                      + (improvements_cost) * improvement_factor)
-;                    / ((distance to capital) * 100)
+; city_incite_cost = { [TF * SZ * NF * (BIC+owner_gold) * (2*CON) * (2*CEL) * (BONUS)] + (UF*UC) + (IF*IC) } / (3*DIST)
 ; See city_incite_cost() for more details
-base_incite_cost = 10000
-improvement_factor = 1
-unit_factor = 2
-total_factor = 10000
+total_factor = 100       ; TF   = 100 (effectively makes 100x cost at capital and 1x cost at DIST=32)
+;city_size_adjusted      ; SZ  (happy*2 + content*1 + unhappy*0 - angry*2)
+;nationality factor      ; NF   native=1.0, was_conquered=0.67, originally_belonged_to_inciter=0.5
+base_incite_cost = 700   ; BIC  =700 (the cost of a size 1 domestic city at a distance of 32 with no improvements. no units of its own,
+;                                not occupied by other units, no local or national incite bonuses, a bankrupt treasury, prior to going to 1400 for 2x 
+;                     content bonus.
+;city is content         ; CON 
+;city is celebrating     ; CEL 
+;incite defence bonuses  ; BONUS  -50% empty + 300% occupied+courthouse OR + 100% empty+courthouse + supreme_court applies courthouse bonuses again
+;                        ;        +∞ = democracy/mausoleum/palace/ecclesiastical palace  
+;city is celebrating     ; CEL
+;total unit shield cost  ; UC 
+;total improvements cost ; IC
+;distance to capital     ; DIST  (max distance penalty=32 tiles)
+improvement_factor = 2   ; IF   =   2
+unit_factor = 3          ; UF   =   3
 
 [global_unit_options]
 ; Shore landing style
@@ -208,7 +217,7 @@ will_never = "Nuclear"
 [actions]
 ; If force_trade_route is set to TRUE it is illegal for an actor unit to
 ; enter the marketplace of a city if it can establish a trade route to it
-; in stead.
+; instead.
 force_trade_route = FALSE
 
 ; If force_capture_units is set to TRUE it is illegal for an actor unit to
@@ -243,6 +252,10 @@ bombard_max_range = 1
 ; the following character as a mnemonic in its graphical toolkit.
 ; The second %s marks where extra details should be inserted.
 
+
+; /* TRANS: _Bombard (100% chance of success). */
+ui_name_bombard = _("Range%sd Attack%s")
+
 ; /* TRANS: _Poison City (3% chance of success). */
 ui_name_poison_city_escape = _("%sPoison City%s")
 
@@ -266,6 +279,12 @@ ui_name_incite_city = _("Incite a %sRevolt%s")
 
 ; /* TRANS: Incite a _Revolt and Escape (3% chance of success). */
 ui_name_incite_city_escape = _("Incite a Re%svolt and Escape%s")
+
+; /* TRANS: Establish Trade _Route (100% chance of success). */
+ui_name_establish_trade_route = _("Establish Trade %sRoute%s")
+
+; /* TRANS: Enter _Marketplace (100% chance of success). */
+ui_name_enter_marketplace = _("Enter %sMarketplace%s")
 
 ; /* TRANS: Establish _Embassy (100% chance of success). */
 ui_name_establish_embassy = _("Establish %sEmbassy%s")
@@ -514,7 +533,6 @@ target_reqs  =
       "NationGroup", "Barbarian", "Player", FALSE
     }
 
-
 [actionenabler_steal_tech_random]
 action = "Steal Tech"
 actor_reqs    =
@@ -634,12 +652,37 @@ target_reqs    =
       "MaxUnitsOnTile", "1", "Local", TRUE
     }
 
+[actionenabler_traderoute]
+action = "Establish Trade Route"
+actor_reqs    =
+    { "type",   "name", "range", "present"
+      "UnitFlag", "TradeRoute", "Local", TRUE
+      "Tech", "Trade", "Player", TRUE
+      "MinMoveFrags", "1", "Local", TRUE
+;     "DiplRel", "War", "Local", FALSE  ; allows establishing during war then awaiting diplomatic relation to activate trade income.
+    }
+
+[actionenabler_marketplace]
+action = "Enter Marketplace"
+actor_reqs    =
+    { "type",   "name", "range", "present"
+      "UnitFlag", "TradeRoute", "Local", TRUE
+      "Tech", "Trade", "Player", TRUE
+      "MinMoveFrags", "1", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
+target_reqs  =
+    { "type",     "name",        "range"
+      "Building", "Marketplace", "City"
+    }
+
 [actionenabler_help_build_wonder]
 action = "Help Wonder"
 actor_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "HelpWonder", "Local", TRUE
-;      "DiplRel", "Foreign", "Local", FALSE
+      "Tech", "Trade", "Player", TRUE
+      "DiplRel", "War", "Local", FALSE
     }
 target_reqs    =
     { "type",   "name", "range"
@@ -651,7 +694,8 @@ action = "Help Wonder"
 actor_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "HelpWonder", "Local", TRUE
-;      "DiplRel", "Foreign", "Local", FALSE
+      "Tech", "Trade", "Player", TRUE
+      "DiplRel", "War", "Local", FALSE
     }
 target_reqs    =
     { "type",   "name", "range", "present"
@@ -696,7 +740,10 @@ target_reqs    =
       "MaxUnitsOnTile", "1", "Local", TRUE
     }
 
-[actionenabler_bombard]
+;Archers can strafe/soften every unit on a tile for one 
+;round of combat only, iff it is not a city, fortress,
+;or sea tile:
+[actionenabler_archer_bombard] ;****
 action = "Bombard"
 actor_reqs    =
     { "type",         "name",        "range", "present"
@@ -707,7 +754,9 @@ actor_reqs    =
    }
 target_reqs    =
     { "type",   "name", "range", "present"
-      "TerrainClass", "Oceanic", "Local", FALSE
+      "CityTile", "Center",   "Local", FALSE
+      "Extra",    "Fortress", "Local", FALSE
+      "TerrainClass",  "Oceanic",  "Local", FALSE
     }
 
 [actionenabler_build_city_pioneer]
@@ -733,6 +782,16 @@ actor_reqs    =
       "DiplRel", "Foreign", "Local", FALSE
     }
 
+[actionenabler_build_city_fort]
+action = "Found City"
+actor_reqs    =
+    { "type",   "name", "range", "present"
+      "UnitFlag", "Cities", "Local", TRUE
+      "UnitState", "OnLivableTile", "Local", TRUE
+      "MinMoveFrags", "1", "Local", TRUE
+      "Extra", "Fort", "Local", TRUE
+    }
+
 [actionenabler_join_city]
 action = "Join City"
 actor_reqs    =
@@ -749,6 +808,7 @@ actor_reqs    =
     { "type",          "name",           "range", "present"
       "UnitClassFlag", "BorderPolice",   "Local",  TRUE
       "UnitClass",     "Air",            "Local",  FALSE
+      "UnitClass",     "AirProtect",     "Local",  FALSE
       "UnitFlag",      "NonMil",         "Local",  FALSE      ;Non-Military land class can't expel
       "UnitType",      "Warriors",       "Local",  FALSE      ;Warriors are too weak to expel
       "UnitState",     "OnDomesticTile", "Local",  TRUE
@@ -966,11 +1026,20 @@ actor_reqs    =
       "MinMoveFrags",  "1",            "Local", TRUE
     }
 
-[actionenabler_transform_terrain]
+[actionenabler_transform_terrain_outside_city]
 action        = "Transform Terrain"
 actor_reqs    =
-    { "type",          "name",         "range"
-      "UnitFlag",      "Transform",    "Local"
+    { "type",      "name",      "range", "present"
+      "UnitFlag",  "Transform", "Local", TRUE
+      "CityTile",  "Center",    "Local", FALSE
+    }
+[actionenabler_transform_terrain_inside_city] ;can't change grass to hills inside a city
+action        = "Transform Terrain"
+actor_reqs    =
+    { "type",      "name",      "range", "present"
+      "UnitFlag",  "Transform", "Local", TRUE
+      "CityTile",  "Center",    "Local", TRUE
+      "Terrain",   "Grassland", "Local", FALSE
     }
 
 [actionenabler_irrigate_tf]
@@ -978,17 +1047,28 @@ action        = "Irrigate TF"
 actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitType",      "Legion",       "Local",   FALSE
+      "UnitType",      "Legion",       "Local", FALSE
     }
 
-[actionenabler_mine_tf]
+[actionenabler_mine_tf_outside_city]
 action        = "Mine TF"
 actor_reqs    =
-    { "type",          "name",         "range", "present"
-      "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitType",      "Legion",       "Local",   FALSE
+    { "type",          "name",     "range", "present"
+      "UnitFlag",      "Settlers", "Local", TRUE
+      "UnitType",      "Legion",   "Local", FALSE 
+      "CityTile",      "Center",   "Local", FALSE
     }
- 
+[actionenabler_mine_tf_inside_city] ;you can't plant a forest in an existing city
+action        = "Mine TF"
+actor_reqs    =
+    { "type",          "name",      "range", "present"
+      "UnitFlag",      "Settlers",  "Local", TRUE
+      "UnitType",      "Legion",    "Local", FALSE 
+      "CityTile",      "Center",    "Local", TRUE
+      "Terrain",       "Grassland", "Local", FALSE
+      "Terrain",       "Plains",    "Local", FALSE
+    }
+
 [actionenabler_pillage]
 action        = "Pillage"
 actor_reqs    =
@@ -1110,8 +1190,9 @@ target_reqs    =
 [actionenabler_irrigate_welldigger]
 action        = "Build Irrigation"
 actor_reqs    =
-     { "type",     "name",        "range"
-       "UnitFlag", "Well-Digger", "Local"
+     { "type",     "name",        "range", "present"
+       "UnitFlag", "Settlers",    "Local", TRUE
+       "UnitFlag", "Well-Digger", "Local", TRUE
      }
 target_reqs    =
      { "type",    "name", "range", "present"
@@ -1301,16 +1382,16 @@ negative_label = _("BC")
 [trade]
 settings =
   { "type",       "pct", "cancelling", "bonus"
-    "National",   0,     "Cancel",     "Both"
-    "NationalIC", 0,     "Cancel",     "Both"
-    "IN",         0,     "Cancel",     "Both"
-    "INIC",       0,     "Cancel",     "Both"
-    "Ally",       0,     "Cancel",     "Both"
-    "AllyIC",     0,     "Cancel",     "Both"
-    "Enemy",      0,     "Cancel",     "Both"
-    "EnemyIC",    0,     "Cancel",     "Both"
-    "Team",       0,     "Cancel",     "Both"
-    "TeamIC",     0,     "Cancel",     "Both"
+    "National",   0,       "Cancel",   "None"
+    "NationalIC", 0,       "Cancel",   "None"
+    "IN",         35,      "Inactive",   "Gold"
+    "INIC",       35,      "Inactive",   "Gold"
+    "Ally",       35,      "Inactive",   "Gold"
+    "AllyIC",     35,      "Inactive",   "Gold"
+    "Enemy",      0,       "Inactive",   "Gold"
+    "EnemyIC",    0,       "Inactive",   "Gold"
+    "Team",       35,      "Inactive",   "Gold"
+    "TeamIC",     35,      "Inactive",   "Gold"
   }
 
 ; When are goods for the trade route chosen.
@@ -1526,13 +1607,14 @@ set =
       "pingtime", 30, FALSE
       "pingtimeout", 240, FALSE
       "restrictinfra", "ENABLED", FALSE
-      "alltemperate", TRUE, FALSE
+      "alltemperate", FALSE, FALSE
       "aifill", 6, FALSE
       "airliftingstyle", "FROM_ALLIES|TO_ALLIES", FALSE
+      "airliftdestdivisor", 3, FALSE
       "contactturns", 0, FALSE
       "barbarians", "DISABLED", FALSE
       "borders", "SEE_INSIDE", FALSE
-      "diplomacy", "HUMAN", FALSE
+      "diplomacy", "ALL", FALSE
       "dispersion", 2, FALSE
       "endturn", 365, FALSE
       "foggedborders", TRUE, FALSE
@@ -1550,6 +1632,8 @@ set =
       "startunits", "cccwwwxxa", FALSE
       "techpenalty", 0, FALSE
       "tinyisles", FALSE, FALSE
+      "trademindist", 12, FALSE
+      "trade_revenue_style", "SIMPLE", FALSE   ;"simple" formula based on average trade in both cities (sans distance etc.)
       "topology", "WRAPX", FALSE
       "trading_city", "DISABLED", FALSE
       "unreachableprotects", "ENABLED", FALSE

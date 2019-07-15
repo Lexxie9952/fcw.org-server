@@ -1118,6 +1118,10 @@ Unlike other land units, Marines can attack most Air and Sea units, though at a\
   onboard a Transport or Helicopter. Marines promoted to three veteran levels and\
   beyond become commandos suitable for special ops. (Marines can't attack Submarines,\
   Missiles, Jet Bombers, or Stealth aircraft.)\
+"), _("\
+Marines built in a city with an Airport, Port Facility, and Barracks III gain extra\
+ training for their role of land/air/sea multipurpose warfare. They will be produced\
+ at the second veteran level (hardened.)
 ")
 
 [unit_paratroopers]

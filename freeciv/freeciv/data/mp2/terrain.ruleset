@@ -359,7 +359,7 @@ warmer_wetter_result = "no"
 warmer_drier_result  = "no"
 cooler_wetter_result = "no"
 cooler_drier_result  = "no"
-native_to            = "Sea", "Air", "Balloon", "Missile", "Helicopter", "RiverShip", "Submarine", "AirProtect", "AirPillage", "Bomb"
+native_to            =  "Trireme", "Sea", "Air", "Balloon", "Missile", "Helicopter", "RiverShip", "Submarine", "AirProtect", "AirPillage", "Bomb"
 flags                = "NoCities", "NoPollution", "UnsafeCoast", "NoZoc", "NoFortify"
 property_ocean_depth = 87
 color.r              = 0
@@ -468,7 +468,7 @@ graphic_alt          = "-"
 identifier           = "f"
 class                = "Land"
 movement_cost        = 2
-defense_bonus        = 50
+defense_bonus        = 33
 food                 = 1
 shield               = 2
 trade                = 0
@@ -600,20 +600,20 @@ class                = "Land"
 movement_cost        = 2
 defense_bonus        = 50
 food                 = 1
-shield               = 0
+shield               = 1
 trade                = 0
-resources            = "Gems", "Fruit"
+resources            = "Gems", "Fruit", "Rubber"
 road_trade_incr_pct  = 0
 base_time            = 1
 road_time            = 4
 irrigation_result    = "Grassland"
 irrigation_food_incr = 0
-irrigation_time      = 15
+irrigation_time      = 8
 mining_result        = "Forest"
 mining_shield_incr   = 0
-mining_time          = 15
+mining_time          = 10
 transform_result     = "Plains"
-transform_time       = 24
+transform_time       = 12
 pillage_time         = 1
 clean_pollution_time = 3
 clean_fallout_time   = 3
@@ -727,7 +727,7 @@ graphic_alt          = "-"
 identifier           = "s"
 class                = "Land"
 movement_cost        = 2
-defense_bonus        = 50
+defense_bonus        = 33
 food                 = 1
 shield               = 0
 trade                = 0
@@ -776,8 +776,8 @@ defense_bonus        = 0
 food                 = 1
 shield               = 0
 trade                = 0
-resources            = "Game", "Furs"
-road_trade_incr_pct  = 0
+resources            = "Game", "Furs", "Gold"
+road_trade_incr_pct  = 100
 base_time            = 1
 road_time            = 2
 irrigation_result    = "yes"
@@ -831,7 +831,7 @@ Tundra are broad, cold regions, fit for some agriculture and little\
 extra       = "Gold"
 identifier  = "$"
 trade       = 8
-# glacier, hills, mountains.
+# mountains, tundra
 
 [resource_iron]
 extra       = "Iron"
@@ -843,15 +843,16 @@ shield      = 3
 extra       = "Game"
 identifier  = "e"
 food        = 2
-shield      = 1
+shield      = 2
 # tundra.
 
 [resource_furs]
 extra       = "Furs"
 identifier  = "u"
 food        = 1
+shield      = 1
 trade       = 3
-# tundra-only (beaver pelts).
+# tundra
 
 [resource_coal]
 extra       = "Coal"
@@ -868,14 +869,21 @@ food        = 2
 [resource_fruit]
 extra       = "Fruit"
 identifier  = "f"
-food        = 3
-trade       = 1
+food        = 4
+trade       = 2
 # jungle.
 
 [resource_gems]
 extra       = "Gems"
 identifier  = "g"
-trade       = 4
+trade       = 5
+# jungle.
+
+[resource_rubber]
+extra       = "Rubber"
+identifier  = "^"
+shield       = 2
+trade        = 1
 # jungle.
 
 ; "h" reserved for strategic horses
@@ -930,13 +938,13 @@ identifier  = "i"
 food        = 1
 shield      = 1
 trade       = 4
-# glacier (seals => walrus).
+# glacier 
 
 [resource_silk]
 extra       = "Silk"
 identifier  = "s"
 trade       = 3
-# forest, wooded.
+# forest
 
 [resource_spice]
 extra       = "Spice"
@@ -970,7 +978,7 @@ shield      = 3 ; glacier used to have 4
 [extraui]
 
 ; Player visible names of the base gui types.
-ui_name_base_fortress = _("?gui_type:Build Fortress/Buoy")
+ui_name_base_fortress = _("?gui_type:Build Fort/Fortress/Buoy")
 ui_name_base_airbase = _("?gui_type:Build Airbase")
 
 ; /* <-- avoid gettext warnings
@@ -1326,6 +1334,47 @@ changes into desert, tundra, and ice, and lakes and oceans freeze.\
 Settlers, Workers, and Engineers can clean up nuclear fallout.\
 ")
 
+; ***************************** BASES ****************************************
+
+[extra_fort]
+name           = _("Fort")
+category       = "Infra"
+causes         = "Base"
+rmcauses       = "Pillage"
+graphic        = "base.outpost"
+graphic_alt    = "base.fortress"
+activity_gfx   = "unit.outpost"
+act_gfx_alt    = "unit.fortress"
+act_gfx_alt2   = "-"
+rmact_gfx      = "None"
+rmact_gfx_alt  = "-"
+reqs           =
+    { "type", "name", "range", "present", "quiet"
+      "Tech", "Masonry", "Player", TRUE, FALSE
+      "TerrainClass", "Land", "Local", TRUE, FALSE
+      "UnitFlag", "CanFortress", "Local", TRUE, FALSE
+      "CityTile", "Center", "Local", FALSE, TRUE
+    }
+build_time     = 4
+removal_time   = 0
+native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter", "Balloon", "AirProtect"
+hidden_by      = "Fortress"
+flags          = "NativeTile", "NoStackDeath"  ;, "Refuel"
+;NOTE: effect_fortress_regen should give 25% of 20HP to helicopter, +1hp for being stationary
+;thus a fortress should give +6hp -2hp for not being in refuel spot or +4hp/turn. Healing 67% 
+;as fast as an airbase. MEANWHILE, removing the refuel flag allows us to make Forts native 
+;to AirProtect so that they can't prevent attacks on forts. This is debatable issue of 
+;Fort with no Killstack but not Airprotected vs no fort, Killstack and Airprotect, but 
+;many times fighters over forts have come up as a dynamic. 
+helptext       = _("\
+Forts are rapidly built fortifications which give Land units +33% defense\
+ against Land and Sea units. Defending units are lost one at a time instead\
+ of the entire stack dying. A fort is necessary to start building a fortress.\
+"), _("
+TIP: Forts make great outposts for keeping watch on your borders. Be careful--\
+an unmanned Fort can be claimed by a foreign unit. 
+")
+
 [extra_fortress]
 name           = _("Fortress")
 category       = "Infra"
@@ -1340,22 +1389,24 @@ rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 reqs           =
     { "type", "name", "range", "present", "quiet"
+      "Extra", "Fort", "Local", TRUE, FALSE
       "Tech", "Construction", "Player", TRUE, FALSE
       "TerrainClass", "Land", "Local", TRUE, FALSE
       "UnitFlag", "CanFortress", "Local", TRUE, FALSE
       "CityTile", "Center", "Local", FALSE, TRUE
     }
-build_time     = 3
+build_time     = 5
 removal_time   = 0
-defense_bonus  = 100
+defense_bonus  = 67
 native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter", "Balloon"
-flags          = "Refuel", "NoStackDeath"
+flags          = "NativeTile", "Refuel", "NoStackDeath"
 helptext       = _("\
-Fortresses improve defense for land units outside cities. Among other \
-effects, a land unit remaining in a fortress for a whole turn without \
-moving recovers a quarter of its hit points. With Invention, fortresses \
-gain watchtowers from which land units can see further afield.\
+Fortresses are improvements built on top of Forts which greatly improve defense.\
+ A Land unit remaining in a fortress for a whole turn without moving recovers a\
+ quarter of its hit points. With Invention, fortresses gain watchtowers from which\
+ land units can see farther.\
 "), _("\
+Units in a Fortress die one at a time instead of the entire stack being lost.\
 Diplomatic units get a 25% defense bonus in diplomatic fights.\
 ")
 
@@ -1558,7 +1609,7 @@ rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 buildable      = TRUE
 generated      = TRUE
-defense_bonus  = 50
+defense_bonus  = 33
 reqs           =
     { "type", "name", "range", "present"
       "TerrainClass", "Land", "Local", TRUE
@@ -1706,6 +1757,19 @@ causes         = "Resource"
 ;rmcauses       = ""
 graphic        = "ts.gems"
 graphic_alt    = "-"
+activity_gfx   = "None"
+act_gfx_alt    = "-"
+act_gfx_alt2   = "-"
+rmact_gfx      = "None"
+rmact_gfx_alt  = "-"
+
+[extra_rubber]
+name           = _("Rubber")
+category       = "Resource"
+causes         = "Resource"
+;rmcauses       = ""
+graphic        = "ts.rubber"
+graphic_alt    = "ts.peat"
 activity_gfx   = "None"
 act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
@@ -1887,10 +1951,17 @@ rmact_gfx_alt  = "-"
 ;
 ; */ <-- avoid gettext warnings
 
+[base_fort]
+extra          = "Fort"
+gui_type       = "Fortress"
+border_sq      = -1
+vision_main_sq = 4
+
 [base_fortress]
 extra          = "Fortress"
 gui_type       = "Fortress"
-border_sq      = 5
+border_sq      = 4
+vision_main_sq = 4
 flags          = "NoAggressive"
 
 [base_airbase]

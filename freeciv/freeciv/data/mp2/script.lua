@@ -26,7 +26,7 @@ function history_turn_notifications(turn, year)
 
   if turn == 85 then
   -- Philosophy no longer gives advances after 400BC
-    notify.all("Philosophers around the world mourn the execution of Socrates. Philosophy no longer gives a bonus advance.")
+    notify.all("Philosophers around the world mourn the execution of Giordano Bruno. Philosophy no longer gives a bonus advance.")
     philosophy_possible = 0
   end
   

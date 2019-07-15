@@ -174,6 +174,7 @@ req2     = "The Republic"
 flags    = ""
 graphic     = "a.banking"
 graphic_alt = "-"
+cost = 364
 
 [advance_bridge_building]
 name     = _("Bridge Building")
@@ -452,7 +453,7 @@ req1     = "Railroad"
 req2     = "Banking"
 graphic     = "a.industrialization"
 graphic_alt = "-"
-helptext = _("Population will start contributing to pollution.")
+helptext = _("Population will start contributing to pollution. Obsoletes Galleon.")
 cost = 2330
 
 [advance_invention]
@@ -570,6 +571,7 @@ req2     = "Trade"
 flags    = ""
 graphic     = "a.medicine"
 graphic_alt = "-"
+cost = 468
 
 [advance_metallurgy]
 name     = _("Metallurgy")
@@ -578,8 +580,8 @@ req2     = "University"
 flags    = ""
 graphic     = "a.metallurgy"
 graphic_alt = "-"
-chelptext = _("Obsoletes Catapult.")
-ost = 1340
+helptext = _("Obsoletes Catapult.")
+cost = 1340
 
 [advance_miniaturization]
 name     = _("Miniaturization")
@@ -617,6 +619,7 @@ flags    = ""
 graphic     = "a.monotheism"
 helptext = _("Obsoletes Elephants.")
 graphic_alt = "-"
+cost = 415
 
 [advance_mysticism]
 name     = _("Mysticism")
@@ -634,8 +637,8 @@ req2     = "Astronomy"
 flags    = ""
 graphic     = "a.navigation"
 graphic_alt = "-"
-helptext = _("Obsoletes Trireme.")
-cost = 226
+helptext = _("Obsoletes Galley, Longboat, War Galley, Ram Ship.")
+cost = 486
 
 [advance_nuclear_fission]
 name     = _("Nuclear Fission")
@@ -666,6 +669,7 @@ graphic_alt = "-"
 helptext = _("When you research this technology before 400 BC and\
  before knowing Industrialization or Electricity or\
  Conscription, you get one other immediate technology advance.")
+ cost = 276
 
 [advance_physics]
 name     = _("Physics")
@@ -674,7 +678,6 @@ req2     = "Navigation"
 flags    = ""
 graphic     = "a.physics"
 graphic_alt = "-"
-cost = 468
 
 [advance_plastics]
 name     = _("Plastics")
@@ -720,8 +723,9 @@ flags    = ""
 graphic     = "a.railroad"
 graphic_alt = "-"
 helptext = _("\
-Allows Settlers, Workers and Engineers to upgrade roads to railroads. \
-Obsoletes Hanging Gardens.")
+Allows Settlers, Workers and Engineers to upgrade roads to railroads.\
+ Reduces revenue from Traderoutes and Enter Marketplace by approximately\
+ one quarter. Obsoletes Hanging Gardens.")
 cost = 1820
 
 [advance_recycling]
@@ -791,6 +795,7 @@ req1     = "Pottery"
 req2     = "Map Making"
 flags    = ""
 graphic     = "a.seafaring"
+helptext = _("Obsoletes Trireme.")
 graphic_alt = "-"
 
 [advance_space_flight]
@@ -910,6 +915,7 @@ req2     = "Philosophy"
 flags    = ""
 graphic     = "a.university"
 graphic_alt = "-"
+cost = 415
 
 [advance_warrior_code]
 name     = _("Warrior Code")

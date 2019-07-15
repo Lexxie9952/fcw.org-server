@@ -54,6 +54,16 @@ format_version=20
 ;    }
 ; */ <-- avoid gettext warnings
 
+; Combat_rounds for ancient ships
+[effect_combat_rounds_riverships]
+type    = "Combat_Rounds"
+value   = 15
+reqs	=
+    { "type", "name", "range", "present"
+      "UnitClass", "RiverShip", "Local", TRUE
+      "UnitType", "Frigate", "Local", FALSE
+    }
+
 ; Cheating AI effects are in separate file
 *include "default/ai_effects.ruleset"
 
@@ -98,7 +108,6 @@ reqs    =
     }
 
 ; Specialist output bonuses
-
 [effect_elvis]
 type    = "Specialist_Output"
 value   = 2
@@ -127,35 +136,34 @@ reqs    =
     }
 
 
-; Vision benefit from fortress watchtowers
-[effect_fortress_vision]
-type    = "Unit_Vision_Radius_Sq"
-value   = 8   
+[effect_merchant]
+type    = "Specialist_Output"
+value   = 2
 reqs    =
     { "type", "name", "range"
-      "Extra", "Fortress", "tile"
-      "Tech", "Invention", "Player"
-      "UnitClass", "Land", "Local"
+      "Specialist", "merchant", "Local"
+      "OutputType", "trade", "Local"
+      "Building", "A.Smith's Trading Co.", "Player"
     }
 
-[effect_fortress_vision_1]   ;Marines, AAA
-type    = "Unit_Vision_Radius_Sq"
-value   = 8
+[effect_worker]
+type    = "Specialist_Output"
+value   = 1
 reqs    =
     { "type", "name", "range"
-      "Extra", "Fortress", "tile"
-      "Tech", "Invention", "Player"
-      "UnitClass", "LandAirSea", "Local"
+      "Specialist", "worker", "Local"
+      "OutputType", "shield", "Local"
+      "Building", "A.Smith's Trading Co.", "Player"
     }
-    
-[effect_fortress_vision_2]     ;Knights
-type    = "Unit_Vision_Radius_Sq"
-value   = 8
+
+[effect_farmer]
+type    = "Specialist_Output"
+value   = 1
 reqs    =
     { "type", "name", "range"
-      "Extra", "Fortress", "tile"
-      "Tech", "Invention", "Player"
-      "UnitClass", "LandNoKill", "Local"
+      "Specialist", "farmer", "Local"
+      "OutputType", "food", "Local"
+      "Building", "A.Smith's Trading Co.", "Player"
     }
 
 ; Vision benefit from mountains (for every land unit)
@@ -189,10 +197,153 @@ reqs    =
 type    = "Tech_Upkeep_Free"
 value   = 3
 
+; ******************* TRADE ********************
+
+[effect_trade_routes]
+type    = "Max_Trade_Routes"
+value   = 1
+
+;pow(2, value/1000) -> Base = 50% 
+[effect_base_trade_revenue_reduce]
+type    = "Trade_Revenue_Bonus"
+value   = -1000
+
+;Total = 25%
+[effect_railroad_trade_revenue_reduce]
+type    = "Trade_Revenue_Bonus"
+value   = -1000
+reqs    =
+    { "type", "name", "range"
+      "Tech", "Railroad", "Player"
+    }
+
+;If you don't acquire ongoing trade revenue from a trade route,
+;a DECREASE in one-time bonus made NO SENSE AT ALL,
+;Now it's a one time bonus with potentially slight ROI.
+[effect_enter_marketplace_bonus_increase]
+type	= "Trade_Revenue_Bonus"
+value	= 2000 
+reqs	=
+    { "type", "name", "range"
+      "Action", "Enter Marketplace", "Local"
+    } 
+;TO-DO: pay x more than gold value of vessel entering marketplace, with ROI being somewhat inferior to most 
+;investments but hinting toward same order of magnitude.
+
+[effect_establish_traderoute_bonus]
+type	= "Trade_Revenue_Bonus"
+value	= -2400 
+;this -2400 should go into base effect above 
+;then reqs action = "Establish Trade Route" can be an increase to counter both the -2400 subtracted above then to 
+;further tune upward any one time bonus to what it needs to be. reqs can look at unit type also to compensate higher cost 
+;of making certain units, since route-creating units now vary from 20 shields to 50 shields in cost. 
+
+; *********************************** BASES *******************************
+
+; **** FORT *****
+[effect_fort_defense]
+type    = "Defend_Bonus"
+value   = 33
+reqs    =
+    { "type",      "name",         "range", "present"
+      "Extra",     "Fort",         "Local", TRUE  
+      "Extra",     "Fortress",     "Local", FALSE ; Fortress calculated separately even if a fort is under it.
+      "UnitClass", "Helicopter",   "Local", FALSE ; ... these attackers do not activate Fort defense bonus
+      "UnitClass", "Air",          "Local", FALSE ; ...   "       "      "  "      "      "    "       "
+      "UnitClass", "AirPillage",   "Local", FALSE ; ...   "       "      "  "      "      "    "       "
+      "UnitClass", "AirProtect",   "Local", FALSE ; ...   "       "      "  "      "      "    "       "
+      "UnitClass", "Missile",      "Local", FALSE ; ...   "       "      "  "      "      "    "       "
+      "UnitType",  "Armor",        "Local", FALSE ; ...   "       "      "  "      "      "    "       "
+      "UnitType",  "Armor II",     "Local", FALSE ; ...   "       "      "  "      "      "    "       "
+    }
+; Fort HP regen
+[effect_fort_hp_regen]
+type    = "HP_Regen"
+value   = 10
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Fort", "Tile"
+      "UnitClass", "Land", "Local"
+    }
+[effect_fort_hp_regen_1]
+type    = "HP_Regen"
+value   = 10
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Fort", "Tile"
+      "UnitClass", "LandAirSea", "Local"
+    }
+[effect_fort_hp_regen_2]
+type    = "HP_Regen"
+value   = 10
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Fort", "Tile"
+      "UnitClass", "LandNoKill", "Local"
+    }
+
+; **** FORTRESS **************************************************************
+
+; Adjust the 1.67xdefense_bonus in terrain.ruleset for some attackers: 
+; ****************************************************************************
+[effect_fortress_nonfortbuster]
+type    = "Defend_Bonus"
+value   = 20 ;increase 1.67x to 2x except when defending against FortBuster types. 
+;note: 1.20*1.67=2.0 (this bonus is multiplied after terrain defense_bonus was multiplied)
+reqs    =
+    { "type", "name", "range", "present"
+      "Extra", "Fortress", "Local", TRUE
+      "UnitFlag", "FortBuster", "Local", FALSE
+      "UnitFlag", "FortressBuster", "Local", FALSE 
+      "UnitFlag", "AirAttacker", "Local", FALSE
+    }
+[effect_fortressbuster]
+type    = "Attack_Bonus"
+value   = 67 ;Cancel defender's 1.67x with attacker getting 1.67x 
+reqs    =
+    { "type", "name", "range", "present"
+      "Extra", "Fortress", "Local", TRUE
+      "UnitFlag", "FortressBuster", "Local", TRUE 
+    }    
+
+; ****** ^^ defense_bonus_correctives ^^ *************************************
+
+; Vision benefit from fortress watchtowers
+[effect_fortress_vision]
+type    = "Unit_Vision_Radius_Sq"
+value   = 8   
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Fortress", "tile"
+      "Tech", "Invention", "Player"
+      "UnitClass", "Land", "Local"
+    }
+    
+[effect_fortress_vision_1]   ;Marines, AAA
+type    = "Unit_Vision_Radius_Sq"
+value   = 8
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Fortress", "tile"
+      "Tech", "Invention", "Player"
+      "UnitClass", "LandAirSea", "Local"
+    }
+    
+[effect_fortress_vision_2]     ;Knights
+type    = "Unit_Vision_Radius_Sq"
+value   = 8
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Fortress", "tile"
+      "Tech", "Invention", "Player"
+      "UnitClass", "LandNoKill", "Local"
+    }
+
 ; Fortress HP regen
 [effect_fortress_hp_regen]
+; Cumulative with fort: 10+15=25
 type    = "HP_Regen"
-value   = 25
+value   = 15
 reqs    =
     { "type", "name", "range"
       "Extra", "Fortress", "Tile"
@@ -200,7 +351,7 @@ reqs    =
     }
 [effect_fortress_hp_regen_1]
 type    = "HP_Regen"
-value   = 25
+value   = 15
 reqs    =
     { "type", "name", "range"
       "Extra", "Fortress", "Tile"
@@ -208,7 +359,7 @@ reqs    =
     }
 [effect_fortress_hp_regen_2]
 type    = "HP_Regen"
-value   = 25
+value   = 15
 reqs    =
     { "type", "name", "range"
       "Extra", "Fortress", "Tile"
@@ -216,12 +367,13 @@ reqs    =
     }
 [effect_fortress_hp_regen_3]
 type    = "HP_Regen"
-value   = 25
+value   = 25  ;25 because not cumulative with Fort
 reqs    =
     { "type", "name", "range"
       "Extra", "Fortress", "Tile"
       "UnitClass", "Helicopter", "Local"
     }
+
 [effect_airbase_hp_regen]
 type    = "HP_Regen"
 value   = 25
@@ -230,6 +382,58 @@ reqs    =
       "Extra", "Airbase", "Tile"
       "UnitClass", "Helicopter", "Local"
     }
+; *****************************************************************
+; Marines can attack unreachable air and sea at a -50% penalty. However,
+; when air is reachable by ALL land units, Marines should not be the
+; only land unit which suffers a penalty. These effects cancel the penalties 
+; in those situations. This awaits 3.x release of reqs for target/defender unit.
+;[effect_marines_vs_airprotect_city_fix] 
+;type    = "Attack_Bonus"
+;value	= 100 ;cancels out equivalent defence bonus for being out in the field
+;reqs	=
+;    { "type", "name", "range", "present"
+;      ;"TargetUnitClass", "AirProtect", "Local", TRUE
+;      "CityTile", "Center", "Local", TRUE
+;      "UnitType", "Marines", "Local", TRUE
+;    }
+;[effect_marines_vs_airprotect_airbase_fix] 
+;type    = "Attack_Bonus"
+;value	= 100 ;cancels out equivalent defence bonus for being out in the field
+;reqs	=
+;    { "type", "name", "range", "present"
+;      "TargetUnitClass", "AirProtect", "Local", TRUE
+;      "Extra", "Airbase", "Local", TRUE
+;      "UnitType", "Marines", "Local", TRUE
+;    }
+;[effect_marines_vs_air_city_fix] ; prop-engine Bombers
+;type    = "Attack_Bonus"
+;value	= 200 ;cancels out equivalent defence bonus for being out in the field
+;reqs	=
+;    { "type", "name", "range", "present"
+;      "UnitClass", "Air", "Local", TRUE
+;      "CityTile", "Center", "Local", TRUE
+;      "UnitType", "Marines", "Local", TRUE
+;    }
+;[effect_marines_vs_air_airbase_fix] ; prop-engine Bombers
+;type    = "Attack_Bonus"
+;value	= 200 ;cancels out equivalent defence bonus for being out in the field
+;reqs	=
+;    { "type", "name", "range", "present"
+;      "UnitClass", "Air", "Local", TRUE
+;      "Extra", "Airbase", "Local", TRUE
+;      "UnitType", "Marines", "Local", TRUE
+;    }
+;[effect_marines_city_fix] 
+;type    = "Attack_Bonus"
+;value	= 100 ;cancels out equivalent defence bonus sea units against marines when out at sea 
+;reqs	=
+;    { "type", "name", "range", "present"
+;      "UnitClass", "Sea", "Local", TRUE
+;      "CityTile", "Center", "Local", TRUE
+;      "UnitType", "Marines", "Local", TRUE
+;    }
+; ********************************************************
+
 
 ; Base vision range - radius of vision is sqrt(5) = 2.24
 [effect_city_vision]
@@ -839,6 +1043,14 @@ reqs	=
       "NationGroup", "Barbarian", "Player", FALSE
     }
 
+[effect_airport_2]
+type    = "Airlift"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Building", "Airport", "City"
+    }
+    
 [effect_airport_v0]
 type    = "Veteran_Build"
 value	= 1
@@ -921,13 +1133,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "Airport", "City"
       "UnitClass", "Helicopter", "Local"
-    }
-[effect_airport_2]
-type    = "Airlift"
-value	= 1
-reqs	=
-    { "type", "name", "range"
-      "Building", "Airport", "City"
     }
 
 ; Base max city size of 8
@@ -1124,6 +1329,18 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Barracks III", "City", TRUE
       "UnitClass", "LandNoKill", "Local", TRUE
+    }
+
+;prolongs time-window relevance of amphibious invasions later in game
+[effect_triple_training_marines]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Barracks III", "City", TRUE
+      "Building", "Port Facility", "City", TRUE
+      "Building", "Airport", "City", TRUE
+      "UnitType", "Marines", "Local", TRUE
     }
 
 [effect_cathedral]
@@ -1355,16 +1572,50 @@ reqs	=
       "Building", "Courthouse", "City", TRUE
     }    
 
-;Courthouse improves chances against hostile diplomats by 20% - These effects REQUIRE 3.0
 [effect_courthouse_spy_resistance]
 type	= "Spy_Resistant"
-value	= 20
+value	= 15      ;50-15=35% success rate 
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Courthouse", "City", TRUE
     }
 
-;Courthouse improves chances against hostile diplomats by 20% - These effects REQUIRE 3.0
+[effect_courthouse_theft_resistance]
+type	= "Action_Odds_Pct"
+value	= -35 ;80-35=45% success rate 
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Steal Tech", "Local", TRUE
+    }
+
+[effect_courthouse_hostile_diplomat_7]
+type	= "Action_Odds_Pct"
+value	= -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Steal Tech Escape Expected", "Local", TRUE
+    }
+
+[effect_courthouse_hostile_diplomat_8]
+type	= "Action_Odds_Pct"
+value	= -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Targeted Steal Tech", "Local", TRUE
+    }
+
+[effect_courthouse_hostile_diplomat_9]
+type	= "Action_Odds_Pct"
+value	= -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Targeted Steal Tech Escape Expected", "Local", TRUE
+    }
+
 [effect_courthouse_hostile_diplomat_1]
 type	= "Action_Odds_Pct"
 value	= -20
@@ -1401,43 +1652,6 @@ reqs	=
       "Action", "Targeted Sabotage City Escape", "Local", TRUE
     }
 
-[effect_courthouse_hostile_diplomat_5]
-type	= "Action_Odds_Pct"
-value	= -20
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Courthouse", "City", TRUE
-      "Action", "Steal Tech", "Local", TRUE
-    }
-
-[effect_courthouse_hostile_diplomat_7]
-type	= "Action_Odds_Pct"
-value	= -20
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Courthouse", "City", TRUE
-      "Action", "Steal Tech Escape Expected", "Local", TRUE
-    }
-
-[effect_courthouse_hostile_diplomat_8]
-type	= "Action_Odds_Pct"
-value	= -20
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Courthouse", "City", TRUE
-      "Action", "Targeted Steal Tech", "Local", TRUE
-    }
-
-[effect_courthouse_hostile_diplomat_9]
-type	= "Action_Odds_Pct"
-value	= -20
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Courthouse", "City", TRUE
-      "Action", "Targeted Steal Tech Escape Expected", "Local", TRUE
-    }
-
-
 [effect_incite_cost_empty_courthouse]
 type = "Incite_Cost_Pct"
 value = 100
@@ -1462,6 +1676,7 @@ reqs	=
     { "type", "name", "range", "present"
       "MaxUnitsOnTile", "0", "Local", TRUE
       "Building", "Courthouse", "City", FALSE
+      "Building", "Supreme Court", "Player", FALSE
     }
 
 [effect_factory]
@@ -1864,7 +2079,6 @@ reqs	=
       "Building", "Police Station", "City", TRUE
       "Building", "Women's Suffrage", "Player", FALSE
     }
-
 [effect_police_station_1]
 type    = "Make_Content_Mil"
 value	= 4
@@ -1873,6 +2087,21 @@ reqs	=
       "Gov", "Democracy", "Player", TRUE
       "Building", "Police Station", "City", TRUE
       "Building", "Women's Suffrage", "Player", FALSE
+    }
+[effect_police_station_spy_resistant]
+type	= "Spy_Resistant"
+value	= 10  
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Police Station", "City", TRUE 
+    }
+[effect_police_station_theft_resistant]
+type	= "Action_Odds_Pct"
+value	= -10  
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Police Station", "City", TRUE 
+      "Action", "Steal Tech", "Local", TRUE
     }
 
 [effect_port_facility]
@@ -2068,6 +2297,7 @@ reqs	=
     { "type", "name", "range"
       "Building", "SAM Battery", "City"
       "UnitClass", "Air", "Local"
+      "UnitType", "Stealth Bomber", "Local", FALSE
     }
 [effect_sam_battery_1]
 type    = "Defend_Bonus"
@@ -2076,6 +2306,23 @@ reqs	=
     { "type", "name", "range"
       "Building", "SAM Battery", "City"
       "UnitClass", "AirProtect", "Local"
+      "UnitType", "Stealth Fighter", "Local", FALSE
+    }
+[effect_sam_battery_stealth_bomber]
+type    = "Defend_Bonus"
+value	= 25
+reqs	=
+    { "type", "name", "range"
+      "Building", "SAM Battery", "City"
+      "UnitType", "Stealth Bomber", "Local", TRUE
+    }    
+[effect_sam_battery_stealth_fighter]
+type    = "Defend_Bonus"
+value	= 25
+reqs	=
+    { "type", "name", "range"
+      "Building", "SAM Battery", "City"
+      "UnitType", "Stealth Fighter", "Local", TRUE
     }
 
 [effect_sdi_defense]
@@ -2177,29 +2424,30 @@ reqs	=
       "Building", "Space Structural", "City"
     }
 
-[effect_plastics_slowdown]
-type    = "Slow_Down_Timeline"
-value   = 1
-reqs    =
-    { "type", "name", "range", "survives"
-      "Tech", "Plastics", "World", TRUE
-    }
+;Timeline is already way behind and too slow, REMOVE:
+;[effect_plastics_slowdown]
+;type    = "Slow_Down_Timeline"
+;value   = 1
+;reqs    =
+;    { "type", "name", "range", "survives"
+;      "Tech", "Plastics", "World", TRUE
+;    }
 
-[effect_superconductor_slowdown]
-type    = "Slow_Down_Timeline"
-value   = 1
-reqs    =
-    { "type", "name", "range", "survives"
-      "Tech", "Superconductors", "World", TRUE
-    }
+;[effect_superconductor_slowdown]
+;type    = "Slow_Down_Timeline"
+;value   = 1
+;reqs    =
+;    { "type", "name", "range", "survives"
+;      "Tech", "Superconductors", "World", TRUE
+;    }
 
-[effect_spaceflight_slowdown]
-type    = "Slow_Down_Timeline"
-value   = 1
-reqs    =
-    { "type", "name", "range", "survives"
-      "Tech", "Space Flight", "World", TRUE
-    }
+;[effect_spaceflight_slowdown]
+;type    = "Slow_Down_Timeline"
+;value   = 1
+;reqs    =
+;    { "type", "name", "range", "survives"
+;      "Tech", "Space Flight", "World", TRUE
+;    }
 
 [effect_stock_exchange]
 type    = "Output_Bonus"
@@ -2229,6 +2477,18 @@ reqs	=
       "Extra", "Road", "Local"
       "Building", "Super Highways", "City"
       "OutputType", "Trade", "Local"
+    }
+
+; Super Highways increase logistical efficiency to
+; get more use out of an airport in size 12+ city.
+[effect_super_highways_airlift_facilitation]
+type    = "Airlift"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Building", "Super Highways", "City"
+      "Building", "Airport", "City"
+      "Building", "Sewer System", "City"
     }
 
 [effect_mine]
@@ -2513,9 +2773,17 @@ type    = "Incite_Cost_Pct"
 value	= 300
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player"
+      "Building", "Supreme Court", "Player", TRUE
       "MaxUnitsOnTile", "0", "Local", FALSE
     }
+[effect_incite_cost_empty_supremecourt]
+type = "Incite_Cost_Pct"
+value = 100
+reqs	=
+    { "type", "name", "range", "present"
+      "MaxUnitsOnTile", "0", "Local", TRUE
+      "Building", "Supreme Court", "Player", TRUE
+    }   
 
 [effect_supreme_court_upkeep]         ; Law and order provides +1 upkeep
 type    = "Unit_Upkeep_Free_Per_City"
@@ -2534,16 +2802,75 @@ reqs	=
       "Building", "Supreme Court", "Player"
     }    
 
-;Courthouse improves chances against hostile diplomats by 20% - These effects REQUIRE 3.0
-[effect_supreme_court_spy_resistance]
+;35% success on spy-attack-spy with one court effect, 25% with both:
+;35% hostile diplomatic combat success rate with only 1 of Courthouse / Supreme Court 
+[effect_only_supreme_court_spy_resistance]
 type	= "Spy_Resistant"
-value	= 20
+value	= 15 ;50%-15%=35% success rate 
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Supreme Court", "Player", TRUE
+      "Building", "Courthouse", "City", FALSE 
+    }
+;25% hostile diplomatic combat success rate with both Supreme Court + Courthouse 
+[effect_only_supreme_court_spy_resistance_stacked]
+type	= "Spy_Resistant"
+value	= 10 ;10+15 for Courthouse = 25%. 50%-25%=25% success rate 
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Supreme Court", "Player", TRUE
+      "Building", "Courthouse", "City", TRUE 
     }
 
-;Courthouse improves chances against hostile diplomats by 20% - These effects REQUIRE 3.0
+;45% success on theft with one court, 35% with both courts:
+[effect_supreme_court_only_steal_tech]
+type	= "Action_Odds_Pct"
+value	= -35 ; 80% base rate - 35% = 45% final rate 
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Supreme Court", "Player", TRUE
+      "Building", "Courthouse", "City", FALSE 
+      "Action", "Steal Tech", "Local", TRUE
+    }
+[effect_supreme_court_only_steal_tech_stacked]
+type	= "Action_Odds_Pct"
+value	= -10 ; 45% base rate after courthouse - 10% = 35% final rate 
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Supreme Court", "Player", TRUE
+      "Building", "Courthouse", "City", TRUE 
+      "Action", "Steal Tech", "Local", TRUE
+    }
+
+[effect_supreme_court_hostile_diplomat_7]
+type	= "Action_Odds_Pct"
+value	= -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Supreme Court", "Player"
+      "Action", "Steal Tech Escape Expected", "Local", TRUE
+    }
+
+[effect_supreme_court_hostile_diplomat_8]
+type	= "Action_Odds_Pct"
+value	= -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Supreme Court", "Player"
+      "Action", "Targeted Steal Tech", "Local", TRUE
+    }
+
+[effect_supreme_court_hostile_diplomat_9]
+type	= "Action_Odds_Pct"
+value	= -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Supreme Court", "Player"
+      "Action", "Targeted Steal Tech Escape Expected", "Local", TRUE
+    }
+
+
+
 [effect_supreme_court_hostile_diplomat_1]
 type	= "Action_Odds_Pct"
 value	= -20
@@ -2578,42 +2905,6 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Supreme Court", "Player"
       "Action", "Targeted Sabotage City Escape", "Local", TRUE
-    }
-
-[effect_supreme_court_hostile_diplomat_5]
-type	= "Action_Odds_Pct"
-value	= -20
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player"
-      "Action", "Steal Tech", "Local", TRUE
-    }
-
-[effect_supreme_court_hostile_diplomat_7]
-type	= "Action_Odds_Pct"
-value	= -20
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player"
-      "Action", "Steal Tech Escape Expected", "Local", TRUE
-    }
-
-[effect_supreme_court_hostile_diplomat_8]
-type	= "Action_Odds_Pct"
-value	= -20
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player"
-      "Action", "Targeted Steal Tech", "Local", TRUE
-    }
-
-[effect_supreme_court_hostile_diplomat_9]
-type	= "Action_Odds_Pct"
-value	= -20
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player"
-      "Action", "Targeted Steal Tech Escape Expected", "Local", TRUE
     }
 
 [effect_great_wall]
@@ -2653,7 +2944,7 @@ reqs	=
       "Building", "Great Wall", "Player", TRUE
       "UnitClass", "LandAirSea", "Local", TRUE
       "CityTile", "Center", "Local", TRUE
-       "UnitType", "Howitzer", "Local", FALSE
+      "UnitType", "Howitzer", "Local", FALSE
     }
 
 [effect_great_wall_1]
@@ -2965,7 +3256,7 @@ reqs    =
       "Building", "Mausoleum of Mausolos", "Player", TRUE
     }
 
-;Supreme Court counts as Courthouse in every city.
+;Mausoleum respects that Supreme Court counts as Courthouse in every city.
 [effect_mausoleum_of_mausolos_2a]
 type    = "Make_Content"
 value   = 1
@@ -3108,6 +3399,15 @@ reqs    =
       "CityTile", "Center", "Local"
       "OutputType", "Science", "Local"
     }
+
+
+[effect_teslas_laboratory]
+type    = "Upgrade_Unit"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Building", "Tesla's Laboratory", "Player"
+    }    
 
 [effect_oracle]
 type    = "Make_Content"
@@ -3329,33 +3629,33 @@ reqs    =
 
 [effect_calendar_base]
 type    = "Turn_Years"
-value   = 50
+value   = 100
 
-; 50 - 25 = 25
+; 100 - 50 = 50
 [effect_calendar_1]
 type    = "Turn_Years"
-value   = -25
-reqs    =
-    { "type", "name", "range"
-      "MinYear", "-1000", "World"
-    }
-
-; 25 - 5 = 20
-[effect_calendar_2]
-type    = "Turn_Years"
-value   = -5
+value   = -50
 reqs    =
     { "type", "name", "range"
       "MinYear", "0", "World"
     }
 
-; 20 - 10 = 10
-[effect_calendar_3]
+; 50 - 25 = 25
+[effect_calendar_2]
 type    = "Turn_Years"
-value   = -10
+value   = -25
 reqs    =
     { "type", "name", "range"
       "MinYear", "1000", "World"
+    }
+
+; 25 - 15 = 10
+[effect_calendar_3]
+type    = "Turn_Years"
+value   = -15
+reqs    =
+    { "type", "name", "range"
+      "MinYear", "1800", "World"
     }
 
 ; 10 - 5 = 5
@@ -3364,7 +3664,7 @@ type    = "Turn_Years"
 value   = -5
 reqs    =
     { "type", "name", "range"
-      "MinYear", "1500", "World"
+      "MinYear", "1900", "World"
     }
 
 ; 5 - 3 = 2
@@ -3373,7 +3673,7 @@ type    = "Turn_Years"
 value   = -3
 reqs    =
     { "type", "name", "range"
-      "MinYear", "1750", "World"
+      "MinYear", "1950", "World"
     }
 
 ; 2 - 1 = 1
@@ -3382,7 +3682,7 @@ type    = "Turn_Years"
 value   = -1
 reqs    =
     { "type", "name", "range"
-      "MinYear", "1900", "World"
+      "MinYear", "2012", "World"
     }
 
 [effect_tech_cost_base]
