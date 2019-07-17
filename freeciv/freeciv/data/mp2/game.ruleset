@@ -1172,6 +1172,19 @@ target_reqs    =
     { "type",    "name",     "range", "present"
       "Extra",   "River",    "CAdjacent", TRUE
     }
+
+[actionenabler_irrigate_src_oasis]
+action        = "Build Irrigation"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitType",      "Legion",       "Local",   FALSE
+      "UnitFlag",      "Well-Digger",  "Local", FALSE
+    }
+target_reqs    =
+    { "type",    "name",     "range", "present"
+      "Extra",   "Oasis",    "CAdjacent", TRUE
+    }    
  
 [actionenabler_irrigate_src_irrigation]
 action        = "Build Irrigation"

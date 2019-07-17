@@ -1061,8 +1061,8 @@ sabotage	= 100
 sound		= "b_super_highways"
 sound_alt	= "b_generic"
 helptext	= _("\
-Increases trade by +50% on all tiles with roads or\
- railroads (rounded down.)\
+Increases trade by +50% on all tiles with roads, railroads, or MagLev (rounded down.) Improves transportation\
+ logistics to a city's Airport and confers +1 airlift capacity to cities over size 12.\ 
 ")
 
 [building_supermarket]
