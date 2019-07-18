@@ -1980,7 +1980,7 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
-The Strategic Bomber offers slight improvement in attack, but higher altitude offers advantages in\
+The Strategic Bomber offers a small improvement in attack. Higher altitude offers a notable advantage in\
  defense. Its most notable feature is its considerably greater range. May carry two Bombs.\
 "), _("\
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
