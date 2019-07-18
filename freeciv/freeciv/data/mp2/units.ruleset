@@ -1633,7 +1633,7 @@ disembarks    = "Helicopter"
 targets       = "Air", "AirProtect", "AirPillage", "Sea", "Balloon", "Helicopter"
 bonuses       =
    { "flag", "type", "value"
-     "AirAttacker", "DefenseDivider", 2
+     "AirAttacker", "DefenseDivider", 3
      "AirAttacker", "DefenseMultiplier", 3
    }
 flags         = ""
@@ -1641,8 +1641,8 @@ roles         = ""
 helptext      = _("\
 Anti-Aircraft Artillery (AAA) are light-weight guns which can attack almost anything from anywhere.\
  They are primarily used to give ground units a better chance of defending against aircraft.\
- They are also capable of proactively attacking nearby aircraft. Against Air units they have 3x\
- attack and 4x defence. (AAA can't attack Submarines, Missiles, Jet Bombers, or Stealth aircraft.)\
+ They are also capable of proactively attacking nearby aircraft. Against Air units they have 4x\
+ bonus. (AAA can't attack Submarines, Missiles, Jet Bombers, or Stealth aircraft.)\
 ")
 
 [unit_howitzer]
