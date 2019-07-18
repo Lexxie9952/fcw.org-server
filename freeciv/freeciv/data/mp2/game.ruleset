@@ -252,6 +252,8 @@ bombard_max_range = 1
 ; the following character as a mnemonic in its graphical toolkit.
 ; The second %s marks where extra details should be inserted.
 
+ /* TRANS: _Deploy (3% chance of success). */
+ui_name_convert_unit = _("Convert to %Queen or King%s")
 
 ; /* TRANS: _Bombard (100% chance of success). */
 ui_name_bombard = _("Range%sd Attack%s")
@@ -410,6 +412,13 @@ ui_name_conquer_city = _("%sConquer City%s")
 ; satisfied.
 ;
 ; */ <-- avoid gettext warnings
+
+[actionenabler_convert_leader]
+action = "Convert Unit"
+actor_reqs    =
+    { "type",     "name",       "range"
+      "UnitFlag", "GameLoss",   "Local"
+    }
 
 [actionenabler_sabotage_city]
 action = "Sabotage City"
@@ -859,7 +868,7 @@ actor_reqs    =
       "UnitFlag", "Nuclear", "Local", TRUE
     }
 
-;DESTROY CITY - original reqs are in sandbox rules
+;DESTROY CITY
 ; The GameLoss unit requirement makes sending units on a suicide mission to
 ; capture and destroy cities deep inside enemy terrain national suicide.
 ; The risk of moving a GameLoss unit to the target city increases the cost
@@ -875,21 +884,21 @@ actor_reqs    =
 ;
 ; TODO: create an international incident (set the Casus_Belli_Success
 ; effect value to 1000) if "Destroy City" still is overpowered.
-;
-;[actionenabler_scorched_earth]
-;action = "Destroy City"
-;actor_reqs    =
-;    { "type",         "name",          "range", "present"
-;      "UnitClass",    "Land",         "Local", TRUE
-;      "UnitFlag",     "NonMil",       "Local", FALSE
-;;;;      "DiplRel",      "Foreign",      "Local", FALSE
-;      "MinMoveFrags", "1",             "Local", TRUE
-;      "UnitState",    "OnLivableTile", "Local", TRUE
-;    }
-;target_reqs =
-;    {  "type",         "name",          "range", "present"
-;       "MaxUnitsonTile","0",            "Local", TRUE
-;    }
+[actionenabler_scorched_earth]
+action = "Destroy City"
+actor_reqs    =
+    { "type",         "name",          "range", "present"
+      "UnitFlag",     "GameLoss",      "Local", TRUE
+      "DiplRel",      "Foreign",    "Local", FALSE
+      "MinMoveFrags", "1",             "Local", TRUE
+      "UnitState",    "OnLivableTile", "Local", TRUE
+    }
+target_reqs =
+    {  "type",         "name",          "range", "present"
+       "MaxUnitsonTile","0",            "Local", TRUE
+    }
+
+
 
 ;UPGRADE
 [actionenabler_attack_native]

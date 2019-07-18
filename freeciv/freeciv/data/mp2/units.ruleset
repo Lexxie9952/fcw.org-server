@@ -3335,6 +3335,49 @@ hitpoints     = 20
 firepower     = 1
 move_rate     = 4
 vision_radius_sq = 8
+convert_to    = "Queen"
+transport_cap = 0
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+flags         = "IgZOC", "NonMil", "HasNoZOC", "NoBuild", "NoHome", "SuperSpy", 
+                "EvacuateFirst", "Unbribable", "GameLoss", "Unique",
+                "Provoking"
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 0
+roles         = "KingStartUnit"
+helptext      = _("\
+This is you. If you lose this unit, you lose the game. So don't.\
+"), _("\
+Won't unleash barbarians from huts.\
+")
+
+[unit_queen]
+name          = _("?unit:Queen")
+class         = "Land"
+tech_req      = "None"
+obsolete_by   = "None"
+graphic       = "u.queen"
+graphic_alt   = "u.leader"
+sound_move    = "m_leader"
+sound_move_alt = "m_generic"
+sound_fight   = "f_leader"
+sound_fight_alt = "f_generic"
+build_cost    = 10
+pop_cost      = 0
+attack        = 0
+defense       = 2
+hitpoints     = 20
+firepower     = 1
+move_rate     = 4
+vision_radius_sq = 8
+convert_to    = "Leader"
 transport_cap = 0
 fuel          = 0
 uk_happy      = 0
