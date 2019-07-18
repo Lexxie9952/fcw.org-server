@@ -2513,7 +2513,7 @@ flags         = "BadCityDefender", "Provoking", "CantReachAir", "Traderoute", "H
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat", "Hunter"
 helptext      = _("\
 The Caravel represents a significant naval advance in combat, speed, range, and transport capability. Its utility in all the above replaces many ancient sea units. Caravels provide\
- the commerce ability of the earlier Galley. Caravels can travel on rivers.\
+ most of the commerce abilities of the earlier Galley, but cannot build Wonders. Caravels can travel on rivers.\
 "), _("
 Like most ancient sea units, when it initiates an attack, there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\

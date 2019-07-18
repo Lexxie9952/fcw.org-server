@@ -683,6 +683,7 @@ actor_reqs    =
       "UnitFlag", "HelpWonder", "Local", TRUE
       "Tech", "Trade", "Player", TRUE
       "DiplRel", "War", "Local", FALSE
+      "UnitType", "Caravel", "Local", FALSE 
     }
 target_reqs    =
     { "type",   "name", "range"
@@ -696,6 +697,7 @@ actor_reqs    =
       "UnitFlag", "HelpWonder", "Local", TRUE
       "Tech", "Trade", "Player", TRUE
       "DiplRel", "War", "Local", FALSE
+      "UnitType", "Caravel", "Local", FALSE
     }
 target_reqs    =
     { "type",   "name", "range", "present"
