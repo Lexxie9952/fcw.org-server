@@ -252,7 +252,7 @@ bombard_max_range = 1
 ; the following character as a mnemonic in its graphical toolkit.
 ; The second %s marks where extra details should be inserted.
 
- /* TRANS: _Deploy (3% chance of success). */
+; /* TRANS: _Deploy (3% chance of success). */
 ui_name_convert_unit = _("Convert to %Queen or King%s")
 
 ; /* TRANS: _Bombard (100% chance of success). */
