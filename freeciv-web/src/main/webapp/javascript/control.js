@@ -1326,13 +1326,13 @@ function update_unit_order_commands()
       auto-attack ?   show cargo button ?  
   */
 
- if (current_focus.length > 1) {
+ var num_tile_units = tile_units(ptile);
+ if (num_tile_units.length >= 2) {
     unit_actions = $.extend(unit_actions, {
       "select_all_tile": {name: "Select all on tile (V)"},
       "select_all_type": {name: "Select same type (Shift-V)"}
       });
-      console.log("Was enough units on tile.");
- } else console.log("Wasn't enough units on tile to show options.");
+ } 
 
   unit_actions = $.extend(unit_actions, {
             "sentry": {name: "Sentry (S)"},
