@@ -1326,6 +1326,13 @@ function update_unit_order_commands()
       auto-attack ?   show cargo button ?  
   */
 
+ if (current_focus.length > 1) {
+    unit_actions = $.extend(unit_actions, {
+      "select_all_tile": {name: "Select all on tile (V)"},
+      "select_all_type": {name: "Select same type (Shift-V)"}
+      });
+ }
+
   unit_actions = $.extend(unit_actions, {
             "sentry": {name: "Sentry (S)"},
             "wait": {name: "Wait (W)"},
@@ -2533,6 +2540,14 @@ function handle_context_menu_callback(key)
     case "build":
       request_unit_build_city();
       break;
+
+    case "select_all_type":
+      key_select_same_type_units_on_tile();
+      break;
+
+    case "select_all_tile":
+      key_select_all_units_on_tile();
+      break;  
 
     case "tile_info":
       var ptile = find_a_focus_unit_tile_to_center_on();
