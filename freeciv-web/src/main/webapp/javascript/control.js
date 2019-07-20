@@ -2478,6 +2478,8 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         update_active_units_dialog();
 
         // clear out of every other select mode, too
+        paradrop_active = false;
+        airlift_active = false;
         map_select_active = false;
         map_select_check = false;
         mapview_mouse_movement = false;
