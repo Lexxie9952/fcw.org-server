@@ -127,6 +127,8 @@ function mapview_mouse_down(e)
     /* Left mouse button is down */
     //console.log("Left mouse button DOWN.");
     if (goto_active) return;
+    if (paradrop_active) return; // left-clicking on your own unit in paradrop mode was selecting it, in spite of 
+                                 // action_button_pressed and do_map_click checking for paradrop_active; test for fix.      
     //console.log("    About to call set_mouse_touch_started_on_unit(x,y)");
     set_mouse_touch_started_on_unit(canvas_pos_to_tile(mouse_x, mouse_y));
     //console.log("       mouse down2: current_focus.length at this point is "+current_focus.length);
