@@ -1771,7 +1771,7 @@ function do_map_click(ptile, qtype, first_time_called)
 
   if (current_focus.length > 0 && current_focus[0]['tile'] == ptile['index']) {
     /* clicked on unit at the same tile, then deactivate goto and show context menu. */
-    if (goto_active && !is_touch_device() && goto_last_action != ACTION_NUKE) { //(allow clicking same tile when giving a Nuke order.)
+    if (goto_active && !is_touch_device()) { //(allow clicking same tile when giving a Nuke order.)
       deactivate_goto(false);
     }
     if (renderer == RENDERER_2DCANVAS && !mouse_click_mod_key['shiftKey'] && unit_click_menu) { // shouldn't need last && if it's clicking unit on same tile
@@ -1812,7 +1812,8 @@ function do_map_click(ptile, qtype, first_time_called)
         //console.log("dx:"+tile_dx+", dy:"+tile_dy);
         // less than one tile away in x AND y will override sending a GO TO and simulate hitting an arrow instead:
         if (Math.abs(tile_dx)<=1 && Math.abs(tile_dy) <=1 && goto_last_action != ACTION_NUKE) /* TO DO: overriding GO TO is a hack to fix GO TO bug
-             and we needed to not override ACTION_NUKE. We could look at for == -1 OR ==ACTION_COUNT instead */
+             and we needed to not override ACTION_NUKE. We could use (goto_last_action==-1 OR ==ACTION_COUNT) to allow other last_actions, but it
+             risks relying on those to be set that way*/
         {
           console.log("Attempting a GO TO to an adjacent tile.")
           switch (tile_dy) 
@@ -1870,7 +1871,7 @@ function do_map_click(ptile, qtype, first_time_called)
         console.log("Attempting a GO TO to a non-adjacent tile.")
           
         // user did not click adjacent tile, so make sure it's not a null goto_path before handling the goto
-        if (goto_path == null && goto_last_action != ACTION_NUKE) { // Exception: nuke order allows specifying occupied tile to nuke. 
+        if (goto_path == null) { // Exception: nuke order allows specifying occupied tile to nuke. 
           continue;  // null goto_path, do not give this unit a goto command, go on to the next unit
         }
 
@@ -3203,10 +3204,10 @@ function key_unit_pollution()
 function key_unit_nuke()
 {
   /* The last order of the goto is the nuclear detonation. */
-  message_log.update({
-    event: E_BEGINNER_HELP,
-    message: "** WARNING!! ** Unit will detonate upon arrival:<br>Click target to nuke."
-  });
+  message_log.update({event: E_BEGINNER_HELP,message: "** WARNING!! ** Unit will detonate upon arrival.<br>Specify target location OR..."});
+  if (!is_touch_device())
+    message_log.update({event: E_BEGINNER_HELP,message: "...Hit 'D' twice to detonate current location.<br>"});
+
   activate_goto_last(ORDER_PERFORM_ACTION, ACTION_NUKE);
 }
 
