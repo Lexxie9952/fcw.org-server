@@ -1870,7 +1870,7 @@ function do_map_click(ptile, qtype, first_time_called)
         console.log("Attempting a GO TO to a non-adjacent tile.")
           
         // user did not click adjacent tile, so make sure it's not a null goto_path before handling the goto
-        if (goto_path == null) {
+        if (goto_path == null && goto_last_action != ACTION_NUKE) { // Exception: nuke order allows specifying occupied tile to nuke. 
           continue;  // null goto_path, do not give this unit a goto command, go on to the next unit
         }
 
