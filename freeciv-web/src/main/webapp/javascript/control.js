@@ -1763,7 +1763,7 @@ function do_map_click(ptile, qtype, first_time_called)
     if (renderer == RENDERER_2DCANVAS && !mouse_click_mod_key['shiftKey'] && unit_click_menu) {
       // normal left-click unit (not shift-click), show context menu unless user has set unit_click_menu=OFF in prefs
       $("#canvas").contextMenu();
-    } else if (!mouse_click_mod_key['shiftKey'] && unit_click_menu) {
+    } else if (!mouse_click_mod_key['shiftKey'] /*&& unit_click_menu*/) { // shouldn't need last && if it's clicking unit on same tile
       // same as above but different block for handling 3d
       $("#canvas_div").contextMenu();
     }
