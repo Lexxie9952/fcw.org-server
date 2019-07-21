@@ -135,7 +135,6 @@ reqs    =
       "OutputType", "gold", "Local"
     }
 
-
 [effect_merchant]
 type    = "Specialist_Output"
 value   = 2
@@ -145,6 +144,15 @@ reqs    =
       "OutputType", "trade", "Local"
       "Building", "A.Smith's Trading Co.", "Player"
     }
+[effect_merchant2]
+type    = "Specialist_Output"
+value   = 1
+reqs    =
+    { "type", "name", "range"
+      "Specialist", "merchant", "Local"
+      "OutputType", "gold", "Local"
+      "Building", "A.Smith's Trading Co.", "Player"
+    }    
 
 [effect_worker]
 type    = "Specialist_Output"
