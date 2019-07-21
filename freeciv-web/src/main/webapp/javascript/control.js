@@ -922,14 +922,17 @@ function update_unit_order_commands()
   var ptile;
   var unit_actions = {};
   var funits = get_units_in_focus();
-  for (i = 0; i < funits.length; i++) {
-    punit = funits[i];
-    ptile = index_to_tile(punit['tile']);
-    if (ptile == null) continue;
-    pcity = tile_city(ptile);
 
-    if (pcity != null) {
-      unit_actions["show_city"] = {name: "Show city"};
+  if (funits!=null) {  
+    for (i = 0; i < funits.length; i++) {
+      punit = funits[i];
+      ptile = index_to_tile(punit['tile']);
+      if (ptile == null) continue;
+      pcity = tile_city(ptile);
+
+      if (pcity != null) {
+        unit_actions["show_city"] = {name: "Show city"};
+      }
     }
   }
 
@@ -982,7 +985,9 @@ function update_unit_order_commands()
   $("#order_airlift").hide();
   $("#order_airlift_disabled").hide();
   
-
+  if (funits==null)  // we shouldn't even be here
+    return;
+    
   var terrain_name;
   
   for (i = 0; i < funits.length; i++) {
