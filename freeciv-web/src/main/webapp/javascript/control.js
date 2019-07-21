@@ -1311,12 +1311,12 @@ function update_unit_order_commands()
       for (var r = 0; r < units_on_tile.length; r++) {
         var tunit = units_on_tile[r];
         if (tunit['transported']) {
-          unit_actions["unit_show_cargo"] = {name: "Activate cargo units"};
+          unit_actions["unit_show_cargo"] = {name: "Activate cargo units (shift-U)"};
 
           if (pcity != null) {
             unit_actions["unit_unload"] = {name: "Unload units from transport (T)"};
             $("#order_unload").show();
-          } else $("#order_activate_cargo").show(); //if no option to unload, show option to activate or 'wake' units
+          } else $("#order_activate_cargo").show(); // if no option to unload, show option to activate or 'wake' units
         }
       }
     }
