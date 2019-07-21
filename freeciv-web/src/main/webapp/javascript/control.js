@@ -2245,7 +2245,7 @@ civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       break;     
 
   case 117:    // F6 Tech / Research
-      $('#tech-tab-item').trigger("click");
+      show_tech_info_dialog();
       break; 
 
   case 122:    // F11 Prefs (Options)
