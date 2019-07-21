@@ -18,7 +18,7 @@
 ***********************************************************************/
 
 
-var longpresstimer = 0;
+var doubletaptimer = 0;
 var touch_start_x;
 var touch_start_y;
 
@@ -59,12 +59,6 @@ function mapview_mouse_click(e)
   var rightclick = false;
   var middleclick = false;
 
-  var time_elapsed = Date.now()-longpresstimer;
-  if (time_elapsed > 4000) { // failsafe, filter out > 4s presses
-    time_elasped = 0;
-    longpresstimer=0;
-  }
-
   mouse_click_mod_key = e;  // this needs to be saved for later determination
                             // of shift- or ctrl- clicks for various actions
 
@@ -93,17 +87,11 @@ function mapview_mouse_click(e)
     map_select_check = false;
 
   } else if (!middleclick) {
-    /* Left mouse button*/
-    console.log("Left mouse button UP event "+time_elapsed+" after button DOWN");
-    
-    if (/*is_small_screen() &&*/ time_elapsed>1000 && !mapview_mouse_movement) { // TO DO: remove /* */ after testing
-      popit();  // longpress on mobile gives tileinfo
-    } else {
       action_button_pressed(mouse_x, mouse_y, SELECT_POPUP);
       //console.log("Back inside mouse up function, after action_button_pressed called");
       //console.log("       mouse up2: current_focus.length at this point is "+current_focus.length);
       //console.log("         mouse up2: current_focus[0] location is: "+tiles[current_focus[0]['tile']]['x']+","+tiles[current_focus[0]['tile']]['y']);
-    }
+    
     mapview_mouse_movement = false;
     update_mouse_cursor();
   }
@@ -117,8 +105,6 @@ function mapview_mouse_down(e)
 {
   var rightclick = false;
   var middleclick = false;
-
-  longpresstimer = Date.now();
 
   mouse_click_mod_key = e;  // this needs to be saved for later determination
                             // of shift- or ctrl- clicks for various actions
@@ -179,8 +165,14 @@ function mapview_touch_start(e)
   touch_start_x = e.originalEvent.touches[0].pageX - $('#canvas').position().left;
   touch_start_y = e.originalEvent.touches[0].pageY - $('#canvas').position().top;
   var ptile = canvas_pos_to_tile(touch_start_x, touch_start_y);
+
+  var time_elapsed = Date.now()-doubletaptimer;
+  if (time_elapsed < 250)
+    popit();
+
   set_mouse_touch_started_on_unit(ptile);
 
+  doubletaptimer = Date.now();
 }
 
 /****************************************************************************
