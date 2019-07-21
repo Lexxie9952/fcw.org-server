@@ -3280,7 +3280,7 @@ function key_unit_fallout()
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_FALLOUT, EXTRA_NONE);
   }
-  update_unit_focus();
+  setTimeout(update_unit_focus, 700);
 }
 
 /**************************************************************************
