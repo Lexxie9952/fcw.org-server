@@ -3126,7 +3126,7 @@ function key_unit_sentry()
     var punit = funits[i];
 
     // Hack to fix 3.09 server can't sentry fuel-Triremes on shore/river. Remove if FC server fixed:
-    if (get_unit_class_name(punit) == "Trireme") 
+    if (get_unit_class_name(punit) == "Trireme") {
       if (punit['fuel']>0) { 
          var pcity = tile_city(index_to_tile(punit['tile']));
          if (pcity == null) {
@@ -3134,8 +3134,8 @@ function key_unit_sentry()
          } 
          else request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE); 
       } 
-
-      else request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
+    }
+    else request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
   }
   setTimeout(update_unit_focus, 700);
 }
