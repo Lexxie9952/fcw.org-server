@@ -2217,11 +2217,45 @@ civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         show_debug_info();
       }
     break;
+  }
 
-    default:
-      if (key_code == 13 && shift && C_S_RUNNING == client_state()) {
+  switch (key_code)
+  {
+    case 13:
+      if (shift && C_S_RUNNING == client_state()) {
         send_end_turn();
       }
+      break;
+
+  // Function Key hotkeys ------------------------ 
+  case 112:    // F1 Map view
+      $('#ui-id-1').trigger("click"); 
+      break;
+
+  case 113:    // F2 Government 
+      $('#ui-id-2').trigger("click"); 
+      break;
+
+  case 114:    // F3 Nations
+      $('#ui-id-3').trigger("click");
+      break; 
+
+  case 115:    // F4 (Cities):
+      $('#ui-id-4').trigger("click"); // cities tab, assuming position 4!
+      break;     
+
+  case 117:    // F6 Tech / Research
+      $('#tech-tab-item').trigger("click");
+      break; 
+
+  case 122:    // F11 Prefs (Options)
+      $('#ui-id-5').trigger("click");
+      break; 
+
+  case 123:    // F12 Docs / Help 
+      $('#ui-id-7').trigger("click");
+      break; 
+  //----------------------------------------------    
   }
 }
 
@@ -2452,37 +2486,6 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 105:
       key_unit_move(DIR8_NORTH);
       break;
-
-    // Function Key hotkeys ------------------------ 
-    case 112:   // F1 Map view
-        $('#ui-id-1').trigger("click"); 
-        break;
-    
-    case 113:    // F2 Government 
-        $('#ui-id-2').trigger("click"); 
-        break;
-
-    case 114:    // F3 Nations
-        $('#ui-id-3').trigger("click");
-        break; 
-
-    case 115: // F4 (Cities):
-        $('#ui-id-4').trigger("click"); // cities tab, assuming position 4!
-        break;     
-
-    case 117:    // F6 Tech / Research
-        $('#tech-tab-item').trigger("click");
-        break; 
-
-    case 122:    // F11 Prefs (Options)
-        $('#ui-id-5').trigger("click");
-        break; 
-
-    case 123:    // F12 Docs / Help 
-        $('#ui-id-7').trigger("click");
-        break; 
-    //----------------------------------------------
- 
 
     case 27:      //Esc
       deactivate_goto(false);
