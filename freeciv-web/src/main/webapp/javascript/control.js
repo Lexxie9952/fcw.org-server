@@ -2203,9 +2203,10 @@ civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
 
     // close any/all tabs/windows and go back to map
     case 'W':
-      if (!alt && !ctrl && !shift) {
+      if (!alt && !ctrl && !shift) { // also key_code 112 (F1)
         $('#ui-id-1').trigger("click"); 
       }  
+    break;  
 
     case 'Q':
       if (alt) civclient_benchmark(0);
@@ -2221,6 +2222,32 @@ civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       if (key_code == 13 && shift && C_S_RUNNING == client_state()) {
         send_end_turn();
       }
+  }
+  switch (key_code) {  // F1 same as 'W'
+    
+    case 112:   // F1 Map view
+        $('#ui-id-1').trigger("click"); 
+        break;
+    
+    case 113:    // F2 Government 
+        $('#ui-id-2').trigger("click"); 
+        break;
+
+    case 114:    // F3 Nations
+        $('#ui-id-3').trigger("click");
+        break; 
+    
+    case 117:    // F6 Tech / Research
+        $('#tech-tab-item').trigger("click");
+        break; 
+
+    case 122:    // F11 Prefs (Options)
+        $('#ui-id-5').trigger("click");
+        break; 
+
+    case 123:    // F12 Docs / Help 
+        $('#ui-id-7').trigger("click");
+        break; 
   }
 }
 
@@ -2274,7 +2301,10 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'G':
-      if (current_focus.length > 0) {
+      if (ctrl) {
+        draw_map_grid = !draw_map_grid;
+        simpleStorage.set('mapgrid', draw_map_grid); 
+      } else if (current_focus.length > 0) {
         activate_goto();
       }
     break;
@@ -2303,7 +2333,9 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'R':
-      key_unit_road();
+      if (shift) {
+        show_revolution_dialog();
+      } else key_unit_road();
     break;
 
     case 'S':
@@ -2313,7 +2345,9 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'T':
-      key_unit_unload();
+      if (shift) {
+        show_tax_rates_dialog();
+      } else key_unit_unload();
     break;
 
     case 'V':
@@ -2340,6 +2374,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     // execute the primary command for these keys:
     case 'U': 
       if (alt) key_unit_move(DIR8_WEST);  // alt+U=7
+      else if (shift) key_unit_show_cargo();
       else key_unit_upgrade();
     break;
     case 'I':
