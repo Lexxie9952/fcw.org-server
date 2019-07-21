@@ -1771,7 +1771,7 @@ function do_map_click(ptile, qtype, first_time_called)
 
   if (current_focus.length > 0 && current_focus[0]['tile'] == ptile['index']) {
     /* clicked on unit at the same tile, then deactivate goto and show context menu. */
-    if (goto_active && !is_touch_device()) {
+    if (goto_active && !is_touch_device() && goto_last_action != ACTION_NUKE) { //(allow clicking same tile when giving a Nuke order.)
       deactivate_goto(false);
     }
     if (renderer == RENDERER_2DCANVAS && !mouse_click_mod_key['shiftKey'] && unit_click_menu) { // shouldn't need last && if it's clicking unit on same tile
