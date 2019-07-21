@@ -18,6 +18,7 @@
 ***********************************************************************/
 
 
+var longpresstimer = 0;
 var touch_start_x;
 var touch_start_y;
 
@@ -58,6 +59,8 @@ function mapview_mouse_click(e)
   var rightclick = false;
   var middleclick = false;
 
+  var time_elasped = date.getTime()-longpresstimer;
+
   mouse_click_mod_key = e;  // this needs to be saved for later determination
                             // of shift- or ctrl- clicks for various actions
 
@@ -87,17 +90,20 @@ function mapview_mouse_click(e)
 
   } else if (!middleclick) {
     /* Left mouse button*/
-    //console.log("Left mouse button UP event.");
-    action_button_pressed(mouse_x, mouse_y, SELECT_POPUP);
-    //console.log("Back inside mouse up function, after action_button_pressed called");
-    //console.log("       mouse up2: current_focus.length at this point is "+current_focus.length);
-    //console.log("         mouse up2: current_focus[0] location is: "+tiles[current_focus[0]['tile']]['x']+","+tiles[current_focus[0]['tile']]['y']);
-  
+    console.log("Left mouse button UP event "+time_elapsed+" after button DOWN");
+    
+    if (/*is_small_screen() &&*/ time_elasped>1000) { // TO DO: remove /* */ after testing
+      popit();  // longpress on mobile gives tileinfo
+    } else {
+      action_button_pressed(mouse_x, mouse_y, SELECT_POPUP);
+      //console.log("Back inside mouse up function, after action_button_pressed called");
+      //console.log("       mouse up2: current_focus.length at this point is "+current_focus.length);
+      //console.log("         mouse up2: current_focus[0] location is: "+tiles[current_focus[0]['tile']]['x']+","+tiles[current_focus[0]['tile']]['y']);
+    }
     mapview_mouse_movement = false;
     update_mouse_cursor();
   }
   keyboard_input = true;
-
 }
 
 /****************************************************************************
@@ -107,6 +113,8 @@ function mapview_mouse_down(e)
 {
   var rightclick = false;
   var middleclick = false;
+
+  longpresstimer = date.getTime();
 
   mouse_click_mod_key = e;  // this needs to be saved for later determination
                             // of shift- or ctrl- clicks for various actions
@@ -143,7 +151,6 @@ function mapview_mouse_down(e)
     touch_start_y = mouse_y;
   } else if (middleclick || e['altKey']) {
     popit();
-    // TO DO: include longpress here for touch devices to get tile info
     return false;
   } else if (rightclick && !map_select_active && is_right_mouse_selection_supported()) {
     map_select_check = true;
