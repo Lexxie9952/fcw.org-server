@@ -1335,8 +1335,8 @@ function city_change_specialist(event, city_id, from_specialist_id)
     // the player has Adam Smith, otherwise cycle through 6. 
     if ( player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_ADAM_SMITH_NAME)) ) {
       if (to_specialist_id == 6) to_specialist_id = 0;
-      // Hitting CTRL-key optionally bypasses the 3 extra specialists:
-      //if (event.ctrlKey && to_specialist_id >=3) to_specialist_id = 0;
+      // Hitting CTRL, ALT, or COMMAND-key optionally bypasses the 3 extra specialists:
+      if ((event.ctrlKey||event.altKey||eventt.metaKey) && to_specialist_id >=3) to_specialist_id = 0;
     } else {
       if (to_specialist_id == 3) to_specialist_id = 0;
     } 
