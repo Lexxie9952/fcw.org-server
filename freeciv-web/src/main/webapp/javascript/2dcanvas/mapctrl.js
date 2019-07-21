@@ -59,7 +59,7 @@ function mapview_mouse_click(e)
   var rightclick = false;
   var middleclick = false;
 
-  var time_elasped = date.getTime()-longpresstimer;
+  var time_elasped = Date.now()-longpresstimer;
 
   mouse_click_mod_key = e;  // this needs to be saved for later determination
                             // of shift- or ctrl- clicks for various actions
@@ -114,7 +114,7 @@ function mapview_mouse_down(e)
   var rightclick = false;
   var middleclick = false;
 
-  longpresstimer = date.getTime();
+  longpresstimer = Date.now();
 
   mouse_click_mod_key = e;  // this needs to be saved for later determination
                             // of shift- or ctrl- clicks for various actions
