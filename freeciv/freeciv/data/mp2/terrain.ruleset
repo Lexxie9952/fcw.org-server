@@ -1316,7 +1316,7 @@ activity_gfx   = "None"
 act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "unit.fallout"
-rmact_gfx_alt  = "-"
+rmact_gfx_alt  = "unit.pollution"
 reqs           =
     { "type", "name", "range", "present", "quiet"
       "TerrainFlag", "NoPollution", "Local", FALSE, TRUE
