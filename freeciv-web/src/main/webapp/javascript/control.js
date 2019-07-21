@@ -3125,11 +3125,11 @@ function key_unit_sentry()
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
 
-    // Hack to fix 3.09 server can't sentry Triremes on shore/river. Remove if FC server fixed:
-    if (ruleset_control['name'] == "Multiplayer-Evolution ruleset") 
-      if (get_unit_class_name(punit) == "Trireme") { 
+    // Hack to fix 3.09 server can't sentry fuel-Triremes on shore/river. Remove if FC server fixed:
+    if (get_unit_class_name(punit) == "Trireme") 
+      if (punit['fuel']>0) { 
          var pcity = tile_city(index_to_tile(punit['tile']));
-         if (pcity != null) {
+         if (pcity == null) {
            key_unit_noorders();
          } 
          else request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE); 
