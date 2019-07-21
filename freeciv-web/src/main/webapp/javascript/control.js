@@ -1,5 +1,5 @@
 /**********************************************************************
-    || 
+    || \
     Freeciv-web - the web version of Freeciv. http://play.freeciv.org/
     Copyright (C) 2009-2015  The Freeciv-web project
 
@@ -1810,7 +1810,9 @@ function do_map_click(ptile, qtype, first_time_called)
         var tile_dx = ptile['x'] - old_tile['x']; 
         var tile_dy = ptile['y'] - old_tile['y'];
         //console.log("dx:"+tile_dx+", dy:"+tile_dy);
-        if (Math.abs(tile_dx)<=1 && Math.abs(tile_dy) <=1) // less than one tile away in x AND y will simulating hitting an arrow instead:
+        // less than one tile away in x AND y will override sending a GO TO and simulate hitting an arrow instead:
+        if (Math.abs(tile_dx)<=1 && Math.abs(tile_dy) <=1 && goto_last_action != ACTION_NUKE) /* TO DO: overriding GO TO is a hack to fix GO TO bug
+             and we needed to not override ACTION_NUKE. We could look at for == -1 OR ==ACTION_COUNT instead */
         {
           console.log("Attempting a GO TO to an adjacent tile.")
           switch (tile_dy) 
@@ -3201,6 +3203,10 @@ function key_unit_pollution()
 function key_unit_nuke()
 {
   /* The last order of the goto is the nuclear detonation. */
+  message_log.update({
+    event: E_BEGINNER_HELP,
+    message: "** WARNING!! ** Unit will detonate upon arrival:<br>Click target to nuke."
+  });
   activate_goto_last(ORDER_PERFORM_ACTION, ACTION_NUKE);
 }
 
