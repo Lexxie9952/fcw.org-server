@@ -3125,10 +3125,13 @@ function key_unit_sentry()
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     // Hack to fix 3.09 server can't sentry triremes, remove when fc server fixed:
-    if (get_unit_class_name(punit) == "Trireme" && ruleset_control['name'] == "Multiplayer-Evolution ruleset") {
-      key_unit_noorders();
+    /*if (ruleset_control['name'] == "Multiplayer-Evolution ruleset") 
+      if (get_unit_class_name(punit) == "Trireme") {
+        if (get_unit_class_name(punit) == "Trireme") {
+
+        key_unit_noorders();
       return;
-    } else request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
+        } else */request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
   }
   setTimeout(update_unit_focus, 700);
 }
