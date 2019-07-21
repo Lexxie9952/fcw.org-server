@@ -987,7 +987,7 @@ function update_unit_order_commands()
   
   if (funits==null)  // we shouldn't even be here
     return;
-    
+
   var terrain_name;
   
   for (i = 0; i < funits.length; i++) {
@@ -1338,13 +1338,15 @@ function update_unit_order_commands()
       auto-attack ?   show cargo button ?  
   */
 
- var num_tile_units = tile_units(ptile);
- if (num_tile_units.length >= 2) {
-    unit_actions = $.extend(unit_actions, {
-      "select_all_tile": {name: "Select all on tile (V)"},
-      "select_all_type": {name: "Select same type (Shift-V)"}
-      });
- } 
+  var num_tile_units = tile_units(ptile);
+  if (num_tile_units != null) {
+    if (num_tile_units.length >= 2) {
+      unit_actions = $.extend(unit_actions, {
+        "select_all_tile": {name: "Select all on tile (V)"},
+        "select_all_type": {name: "Select same type (Shift-V)"}
+        });
+    } 
+  }
 
   unit_actions = $.extend(unit_actions, {
             "sentry": {name: "Sentry (S)"},
