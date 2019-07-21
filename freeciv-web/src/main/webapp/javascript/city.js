@@ -491,7 +491,7 @@ function show_city_dialog(pcity)
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
-           + " onclick='city_change_specialist(" + pcity['id'] + "," + specialists[u]['id'] + ");'"
+           + " onclick='city_change_specialist(event, " + pcity['id'] + "," + specialists[u]['id'] + ");'"
            +" title='" + spec_type_name + " (click to change)'></div>";
 
     }
@@ -1315,7 +1315,7 @@ function get_city_tile_map_for_pos(x, y)
 /**************************************************************************
 ...
 **************************************************************************/
-function city_change_specialist(city_id, from_specialist_id)
+function city_change_specialist(event, city_id, from_specialist_id)
 {
   var city_message;
 
@@ -1345,7 +1345,14 @@ function city_change_specialist(city_id, from_specialist_id)
     "to" : to_specialist_id}; 
   }
 
-  send_request(JSON.stringify(city_message)); 
+  send_request(JSON.stringify(city_message));
+  
+  // shift-click: change all specialists of this type 
+  if (event.shiftKey) { // for every specialist of this type, send another packet.
+    for (var s=1; s<cities[city_id].specialists[from_specialist_id]; s++) { // start at s=1, because we already sent one packet
+      send_request(JSON.stringify(city_message));
+     }
+  }
 }
 
 
