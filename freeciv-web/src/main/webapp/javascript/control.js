@@ -3124,7 +3124,10 @@ function key_unit_sentry()
   var funits = get_units_in_focus();
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
-    request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
+    // Hack to fix 3.09 server can't sentry triremes, remove when fc server fixed:
+    if (get_unit_class_name(punit) == "Trireme" && ruleset_control['name'] == "Multiplayer-Evolution ruleset") {
+      key_unit_idle();
+    } else request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
   }
   setTimeout(update_unit_focus, 700);
 }
@@ -3204,9 +3207,9 @@ function key_unit_pollution()
 function key_unit_nuke()
 {
   /* The last order of the goto is the nuclear detonation. */
-  message_log.update({event: E_BEGINNER_HELP,message: "** WARNING!! ** Unit will detonate upon arrival.<br>Specify target location OR..."});
+  message_log.update({event: E_BEGINNER_HELP,message: "** WARNING!! ** Unit will detonate upon arrival. Specify target location..."});
   if (!is_touch_device())
-    message_log.update({event: E_BEGINNER_HELP,message: "...Hit 'D' twice to detonate current location.<br>"});
+    message_log.update({event: E_BEGINNER_HELP,message: "...or hit 'D' twice to detonate current location.<br>"});
 
   activate_goto_last(ORDER_PERFORM_ACTION, ACTION_NUKE);
 }
