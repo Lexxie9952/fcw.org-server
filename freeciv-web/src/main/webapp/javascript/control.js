@@ -1312,16 +1312,18 @@ function update_unit_order_commands()
 
     // Unload unit from transport
     var units_on_tile = tile_units(ptile);
-    if (ptype['transport_capacity'] > 0 && units_on_tile.length >= 2) {
-      for (var r = 0; r < units_on_tile.length; r++) {
-        var tunit = units_on_tile[r];
-        if (tunit['transported']) {
-          unit_actions["unit_show_cargo"] = {name: "Activate cargo units (shift-U)"};
+    if (units_on_tile) { 
+      if (ptype['transport_capacity'] > 0 && units_on_tile.length >= 2) {
+        for (var r = 0; r < units_on_tile.length; r++) {
+          var tunit = units_on_tile[r];
+          if (tunit['transported']) {
+            unit_actions["unit_show_cargo"] = {name: "Activate cargo units (shift-U)"};
 
-          if (pcity != null) {
-            unit_actions["unit_unload"] = {name: "Unload units from transport (T)"};
-            $("#order_unload").show();
-          } else $("#order_activate_cargo").show(); // if no option to unload, show option to activate or 'wake' units
+            if (pcity != null) {
+              unit_actions["unit_unload"] = {name: "Unload units from transport (T)"};
+              $("#order_unload").show();
+            } else $("#order_activate_cargo").show(); // if no option to unload, show option to activate or 'wake' units
+          }
         }
       }
     }

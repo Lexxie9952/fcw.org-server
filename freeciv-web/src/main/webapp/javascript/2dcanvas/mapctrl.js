@@ -60,6 +60,10 @@ function mapview_mouse_click(e)
   var middleclick = false;
 
   var time_elapsed = Date.now()-longpresstimer;
+  if (time_elapsed > 4000) { // failsafe, filter out > 4s presses
+    time_elasped = 0;
+    longpresstimer=0;
+  }
 
   mouse_click_mod_key = e;  // this needs to be saved for later determination
                             // of shift- or ctrl- clicks for various actions
@@ -92,7 +96,7 @@ function mapview_mouse_click(e)
     /* Left mouse button*/
     console.log("Left mouse button UP event "+time_elapsed+" after button DOWN");
     
-    if (/*is_small_screen() &&*/ time_elapsed>1000) { // TO DO: remove /* */ after testing
+    if (/*is_small_screen() &&*/ time_elapsed>1000 && !mapview_mouse_movement) { // TO DO: remove /* */ after testing
       popit();  // longpress on mobile gives tileinfo
     } else {
       action_button_pressed(mouse_x, mouse_y, SELECT_POPUP);
