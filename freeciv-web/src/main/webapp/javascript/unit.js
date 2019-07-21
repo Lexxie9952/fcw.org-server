@@ -485,3 +485,12 @@ function get_what_can_unit_pillage_from(punit, ptile)
   return targets;
 }
 
+/**************************************************************************
+ Returns the unit class name of a particular unit,
+    stripped of the ?unitclass: prefix in front
+**************************************************************************/
+function get_unit_class_name(punit)
+{
+  var unit_class = unit_classes[unit_types[punit.type].unit_class_id];
+  return unit_class['name'].replace("?unitclass:","");
+}

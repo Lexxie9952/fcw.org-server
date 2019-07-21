@@ -1,4 +1,5 @@
 /**********************************************************************
+    || 
     Freeciv-web - the web version of Freeciv. http://play.freeciv.org/
     Copyright (C) 2009-2015  The Freeciv-web project
 
@@ -1290,15 +1291,19 @@ function update_unit_order_commands()
       unit_actions["explore"] = {name: "Auto explore (X)"};
     }
 
+    
     // Display order to load unit on transport, if: (A) on a city or river && (B) tile has a transport && (C) unit not already loaded:
+        // **** TO DO: fix flawed logic, a fighter can get on a carrier if not on city/river, marines on helicopter, etc.
+    var uclass = get_unit_class_name(punit);  // Ships are never cargo, so don't show the Load order for a ship:
+    var never_transportable = (uclass=="Sea" || uclass=="RiverShip" || uclass=="Submarine" || uclass=="Trireme");  
     if ( ( (pcity != null) || tile_has_extra(ptile, EXTRA_RIVER)) 
-          && !punit['transported'] ) { 
+          && !punit['transported'] && !never_transportable) { 
       var units_on_tile = tile_units(ptile);
       for (var r = 0; r < units_on_tile.length; r++) {
         var tunit = units_on_tile[r];
         if (tunit['id'] == punit['id']) continue;
         var ntype = unit_type(tunit);
-        if (ntype['transport_capacity'] > 0) {
+        if (ntype['transport_capacity'] > 0) {   // **** TO DO: && can_carry_unit(ntype,punit) --e.g., fighter can't load on a trireme
            unit_actions["unit_load"] = {name: "Load on transport (L)"};
            $("#order_load").show();
         }
