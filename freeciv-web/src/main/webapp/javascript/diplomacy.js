@@ -307,9 +307,17 @@ function create_diplomacy_dialog(counterpart, template) {
   var pplayer = client.conn.playing;
   var counterpart_id = counterpart['playerno'];
 
+  var embassy_meeting;
+  // Whether meeting via embassy
+  if (!( ruleset_control['name'] == "Multiplayer-Plus ruleset"
+      || ruleset_control['name'] == "Multiplayer-Evolution ruleset" )) 
+       embassy_meeting = true;
+  else embassy_meeting = pplayer.real_embassy[counterpart['playerno']];     
+  console.log("Embassy meeting == "+embassy_meeting);
+
   $("#game_page").append(template({
-    self: meeting_template_data(pplayer, counterpart),
-    counterpart: meeting_template_data(counterpart, pplayer)
+    self: meeting_template_data(embassy_meeting, pplayer, counterpart),
+    counterpart: meeting_template_data(embassy_meeting, counterpart, pplayer)
   }));
 
   var title = "Diplomacy: " + counterpart['name']
@@ -342,7 +350,6 @@ function create_diplomacy_dialog(counterpart, template) {
              "restore" : "ui-icon-bullet"
            }});
 
-  
   var nation = nations[pplayer['nation']];
   if (nation['customized']) {
     meeting_paint_custom_flag(nation, document.getElementById('flag_self_' + counterpart_id));
@@ -355,7 +362,7 @@ function create_diplomacy_dialog(counterpart, template) {
   create_clauses_menu($('#hierarchy_self_' + counterpart_id));
   create_clauses_menu($('#hierarchy_counterpart_' + counterpart_id));
 
-  if (game_info.trading_gold && clause_infos[CLAUSE_GOLD]['enabled']) {
+  if (game_info.trading_gold && embassy_meeting && clause_infos[CLAUSE_GOLD]['enabled']) {
     $("#self_gold_" + counterpart_id).attr({
        "max" : pplayer['gold'],
        "min" : 0
@@ -467,7 +474,7 @@ function meeting_gold_change_req(counterpart_id, giver, gold)
 /**************************************************************************
  Build data object for the dialog template.
 **************************************************************************/
-function meeting_template_data(giver, taker)
+function meeting_template_data(embassy_meeting, giver, taker)
 {
   var data = {};
   var nation = nations[giver['nation']];
@@ -483,17 +490,17 @@ function meeting_template_data(giver, taker)
   var all_clauses = [];
 
   var clauses = [];
-  if (clause_infos[CLAUSE_MAP]['enabled']) {
+  if (embassy_meeting && clause_infos[CLAUSE_MAP]['enabled']) {
     clauses.push({type: CLAUSE_MAP, value: 1, name: 'World-map'});
   }
-  if (clause_infos[CLAUSE_SEAMAP]['enabled']) {
+  if (embassy_meeting && clause_infos[CLAUSE_SEAMAP]['enabled']) {
     clauses.push({type: CLAUSE_SEAMAP, value: 1, name: 'Sea-map'});
   }
   if (clauses.length > 0) {
     all_clauses.push({title: 'Maps...', clauses: clauses});
   }
 
-  if (game_info.trading_tech && clause_infos[CLAUSE_ADVANCE]['enabled']) {
+  if (embassy_meeting && game_info.trading_tech && clause_infos[CLAUSE_ADVANCE]['enabled']) {
     clauses = [];
     for (var tech_id in techs) {
       if (player_invention_state(giver, tech_id) == TECH_KNOWN
@@ -511,7 +518,7 @@ function meeting_template_data(giver, taker)
     }
   }
 
-  if (game_info.trading_city && !is_longturn()
+  if (embassy_meeting && game_info.trading_city // && !is_longturn() -- no need for hard-coded control:use game settings
       && clause_infos[CLAUSE_CITY]['enabled']) {
     clauses = [];
     for (var city_id in cities) {
@@ -530,10 +537,10 @@ function meeting_template_data(giver, taker)
     }
   }
 
-  if (clause_infos[CLAUSE_VISION]['enabled']) {
+  if (embassy_meeting && clause_infos[CLAUSE_VISION]['enabled']) {
     all_clauses.push({type: CLAUSE_VISION, value: 1, name: 'Give shared vision'});
   }
-  if (clause_infos[CLAUSE_EMBASSY]['enabled']) {
+  if (embassy_meeting && clause_infos[CLAUSE_EMBASSY]['enabled']) {
     all_clauses.push({type: CLAUSE_EMBASSY, value: 1, name: 'Give embassy'});
   }
 
@@ -545,7 +552,7 @@ function meeting_template_data(giver, taker)
     if (clause_infos[CLAUSE_PEACE]['enabled']) {
       clauses.push({type: CLAUSE_PEACE, value: 1, name: 'Peace'});
     }
-    if (clause_infos[CLAUSE_ALLIANCE]['enabled']) {
+    if (embassy_meeting && clause_infos[CLAUSE_ALLIANCE]['enabled']) {
       clauses.push({type: CLAUSE_ALLIANCE, value: 1, name: 'Alliance'});
     }
     if (clauses.length > 0) {

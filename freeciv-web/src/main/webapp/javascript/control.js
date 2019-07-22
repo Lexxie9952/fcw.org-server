@@ -822,6 +822,11 @@ function update_unit_focus()
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
 
+    /* This SHOULD nuke the advance_focus after GOTO with moves still left bug, but may
+     * have consequences. Yet it's ready to uncomment and test when we can get a replicated save game for testing.
+    if (punit['movesleft'] > 0 && punit['activity'] == ACTIVITY_IDLE) return;
+    */
+
     if (punit['movesleft'] > 0
 	  && punit['done_moving'] == false
 	  && punit['ai'] == false
@@ -1812,10 +1817,11 @@ function do_map_click(ptile, qtype, first_time_called)
         //console.log("dx:"+tile_dx+", dy:"+tile_dy);
         // less than one tile away in x AND y will override sending a GO TO and simulate hitting an arrow instead:
         if (Math.abs(tile_dx)<=1 && Math.abs(tile_dy) <=1 && goto_last_action != ACTION_NUKE) /* TO DO: overriding GO TO is a hack to fix GO TO bug
-             and we needed to not override ACTION_NUKE. We could use (goto_last_action==-1 OR ==ACTION_COUNT) to allow other last_actions, but it
-             risks relying on those to be set that way*/
+             and we needed to not override ACTION_NUKE. We could isntead check (goto_last_action==-1 OR ==ACTION_COUNT), which would allow other 
+             goto_last_actions to be added later (go to tile and build city, etc.) but this wasn't done for now because we don't want to deal with 
+             the risks of relying on -1 or ACTION_COUNT to always be set properly in every single case*/
         {
-          console.log("Attempting a GO TO to an adjacent tile.")
+          console.log("GO TO overridden because adjacent tile.")
           switch (tile_dy) 
           {
             case 0: // neither north nor south:
@@ -3250,7 +3256,7 @@ function key_unit_upgrade()
     };
     send_request(JSON.stringify(packet));
   }
-  update_unit_focus();
+  setTimeout(update_unit_focus, 700);
 }
 
 /**************************************************************************
