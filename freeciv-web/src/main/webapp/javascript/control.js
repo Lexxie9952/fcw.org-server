@@ -3214,12 +3214,19 @@ function key_unit_pollution()
 **************************************************************************/
 function key_unit_nuke()
 {
-  /* The last order of the goto is the nuclear detonation. */
-  message_log.update({event: E_BEGINNER_HELP,message: "** WARNING!! ** Unit will detonate upon arrival. Specify target location..."});
-  if (!is_touch_device())
-    message_log.update({event: E_BEGINNER_HELP,message: "...or hit 'D' twice to detonate current location.<br>"});
+  var funits = get_units_in_focus();
+  if (funits==null) return;
+  
+  var punit = funits[0];
+  if (unit_can_do_action(punit, ACTION_NUKE)) {
+    /* The last order of the goto is the nuclear detonation. */
+    message_log.update({event: E_BEGINNER_HELP,message: "** WARNING!! ** Unit will detonate upon arrival. Choose target location..."});
+    if (!is_touch_device())
+      message_log.update({event: E_BEGINNER_HELP,message: "...or hit 'D' twice to detonate current location.<br>"});
 
-  activate_goto_last(ORDER_PERFORM_ACTION, ACTION_NUKE);
+    activate_goto_last(ORDER_PERFORM_ACTION, ACTION_NUKE);
+  }
+  
 }
 
 /**************************************************************************
