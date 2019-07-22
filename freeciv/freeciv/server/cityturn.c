@@ -778,6 +778,8 @@ bool city_reduce_size(struct city *pcity, citizens pop_loss,
 
   /* Update citizens. */
   citizens_update(pcity, NULL);
+  // https://www.hostedredmine.com/attachments/290980/0005-Freeze-citizen-assignments-in-update_city_activity-u.patch?utf8=✓&type=sbs
+  // patch on older version that froze worker outputs
 
   /* Update number of people in each feelings category.
    * This also updates the city radius if needed. */
@@ -815,6 +817,7 @@ bool city_reduce_size(struct city *pcity, citizens pop_loss,
 
   return TRUE;
 }
+
 
 /**********************************************************************//**
   Repair the city population without affecting city size.

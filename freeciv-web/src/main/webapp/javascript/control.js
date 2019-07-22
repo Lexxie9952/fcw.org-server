@@ -1301,7 +1301,7 @@ function update_unit_order_commands()
         // **** TO DO: fix flawed logic, a fighter can get on a carrier if not on city/river, marines on helicopter, etc.
     var uclass = get_unit_class_name(punit);  // Ships are never cargo, so don't show the Load order for a ship:
     var never_transportable = (uclass=="Sea" || uclass=="RiverShip" || uclass=="Submarine" || uclass=="Trireme");  
-    if ( ( (pcity != null) || tile_has_extra(ptile, EXTRA_RIVER)) 
+    if ( /*( (pcity != null) || tile_has_extra(ptile, EXTRA_RIVER)) */ true //removed city/river check because carriers/helicopters
           && !punit['transported'] && !never_transportable) { 
       var units_on_tile = tile_units(ptile);
       for (var r = 0; r < units_on_tile.length; r++) {
