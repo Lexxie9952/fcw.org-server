@@ -1638,6 +1638,7 @@ set =
       "contactturns", 0, FALSE
       "barbarians", "DISABLED", FALSE
       "borders", "SEE_INSIDE", FALSE
+      "contactturns", 10, FALSE
       "diplomacy", "ALL", FALSE
       "dispersion", 2, FALSE
       "endturn", 365, FALSE
