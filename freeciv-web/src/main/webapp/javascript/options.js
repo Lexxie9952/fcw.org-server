@@ -279,11 +279,29 @@ function init_options_dialog()
 
 function change_graphic_theme()
 {
-    var widget_headers = document.getElementsByClassName('col1');
-    for(i = 0; i < widget_headers.length; i++) {
-      widget_headers[i].style.background = '#cb842e url("/images/themes/greek/ui-widget-header.png") 50% 50% repeat-x;';
-    }
+  $('.city_panel').toggleClass('greek1');
+  $('#city_right_panel').toggleClass('greek1');
+
+  $('#city_present_units').toggleClass('greek2');
+  $('#city_supported_units').toggleClass('greek2');
+  $('#city_improvements').toggleClass('greek2');
+  $('.diplomacy_messages').toggleClass('greek2');
+  $('#tech_info_box').toggleClass('greek2');
+  $('.tablesorter-dark').toggleClass('greek2');
+
+  $('.help_submenu').toggleClass('greek3');
+  $('#help_menu').toggleClass('greek3');
+  $('#tabs-hel.manual_doc').toggleClass('greek3');
+  $('#technologies').toggleClass('greek3');
+
+  $('.ui-widget-content').toggleClass('greek4');
+
+  $('.ui-widget-header').toggleClass('greek5');
+
+  $('.chatbox_dialog').toggleClass('greek6');
+  $('.ui-dialog-titlebar').toggleClass('greek6');
   
+  $('#freeciv_logo').toggleClass('greek7');
 }
 
 /*
@@ -332,31 +350,5 @@ background-image: url('/images/bg.jpg');
   background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;  
 
 */
-
-function cssrules() {
-  var rules = {};
-  for (var i=0; i<document.styleSheets.length; ++i) {
-      var cssRules = document.styleSheets[i].cssRules;
-      for (var j=0; j<cssRules.length; ++j)
-          rules[cssRules[j].selectorText] = cssRules[j];
-  }
-  return rules;
-}
-function css_getclass(name) {
-  var rules = cssrules();
-  if (!rules.hasOwnProperty(name))
-      throw 'TODO: deal_with_notfound_case';
-  return rules[name];
-}
-
-function css_setclass(name, property, value) {
-  var rules = cssrules();
-  if (!rules.hasOwnProperty(name))
-      throw 'TODO: deal_with_notfound_case';
-  return rules[name];
-}
-
-
-
 
 

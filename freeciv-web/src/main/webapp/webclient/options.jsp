@@ -97,10 +97,10 @@
   <td>
     <div>&nbsp;&nbsp;&nbsp;&nbsp;<b>Graphic Theme:</b><br>
       <select name="graphic_theme" id="graphic_theme">
-        <OPTION Value="themes/faroese/"    >Faroese (Civ6)</OPTION>
-        <OPTION Value="themes/greek/"      >Greek</OPTION>
-        <OPTION Value="themes/mesopotamia/">Mesopotomia (original)</OPTION>
-        <OPTION Value="themes/persian/"    >Persian</OPTION>
+        <OPTION Value="faroese"    >Faroese (Civ6)</OPTION>
+        <OPTION Value="greek"      >Greek</OPTION>
+        <OPTION Value="mesopotamia">Mesopotomia (original)</OPTION>
+        <OPTION Value="persian"    >Persian</OPTION>
       </select>
     </div>
   </td>
