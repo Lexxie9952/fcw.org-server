@@ -36,7 +36,12 @@ function game_init()
   unit_types = {};
   connections = {};
   client.conn = {};
+  // for some reason it wasn't automatically setting these like the other simpleStorage vars,
+  // so we have to put it in here:
+  graphic_theme_path = simpleStorage.get('grtheme');
+  if (!graphic_theme_path) graphic_theme_path = "themes/greek/";
 
+  // TO DO: make then call a dynamic CSS changer here, and also in the change() function in options.js
 }
 
 function game_find_city_by_number(id)

@@ -239,20 +239,15 @@ function init_options_dialog()
    });
 
    // Graphic Theme
-   graphic_theme_path = simpleStorage.get('grtheme');
-   if (!graphic_theme_path) graphic_theme_path = "themes/greek/";
-   
+   //graphic_theme_path = simpleStorage.get('grtheme');
+   //if (!graphic_theme_path) graphic_theme_path = "themes/greek/";
+
    console.log("0-Init. Path = "+graphic_theme_path+"  Selection="+graphic_theme_selection);
    $('#graphic_theme').val(graphic_theme_path).prop('selected', true);
-     // superfluous ??? graphic_theme_path = $('#graphic_theme').val();
-     graphic_theme_selection = $('#graphic_theme option:selected').text();
      console.log("1-Init. Path = "+graphic_theme_path+"  Selection="+graphic_theme_selection);
 
    $('#graphic_theme').change(function() {
      graphic_theme_path = $('#graphic_theme').val();
-     graphic_theme_selection = $('#graphic_theme option:selected' ).text();
-
-     console.log("Dropdown changed. Path = "+graphic_theme_path+"  Selection="+graphic_theme_selection);
      simpleStorage.set('grtheme', graphic_theme_path); 
    });
 
