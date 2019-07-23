@@ -240,8 +240,9 @@ function init_options_dialog()
 
    // Graphic Theme
    
+   console.log("0-Init. Path = "+graphic_theme_path+"  Selection="+graphic_theme_selection);
    $('#graphic_theme').val(graphic_theme_path).prop('selected', true);
-     graphic_theme_path = $('#graphic_theme').val();
+     // superfluous ??? graphic_theme_path = $('#graphic_theme').val();
      graphic_theme_selection = $('#graphic_theme option:selected').text();
      console.log("1-Init. Path = "+graphic_theme_path+"  Selection="+graphic_theme_selection);
 
