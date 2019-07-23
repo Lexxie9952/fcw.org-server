@@ -240,22 +240,17 @@ function init_options_dialog()
 
    // Graphic Theme
    
-   /*old*/$('#graphic_theme').val(graphic_theme_path).prop('selected', true);
+   $('#graphic_theme').val(graphic_theme_path).prop('selected', true);
      graphic_theme_path = $('#graphic_theme').val();
      graphic_theme_selection = $('#graphic_theme option:selected').text();
      console.log("1-Init. Path = "+graphic_theme_path+"  Selection="+graphic_theme_selection);
-
-   $('#graphic_theme option[value='+graphic_theme_path+']').prop('selected',true);
-      graphic_theme_path = $('#graphic_theme').val();
-      graphic_theme_selection = $('#graphic_theme option:selected').text();
-      console.log("2-Init. Path = "+graphic_theme_path+"  Selection="+graphic_theme_selection);
 
    $('#graphic_theme').change(function() {
      graphic_theme_path = $('#graphic_theme').val();
      graphic_theme_selection = $('#graphic_theme option:selected' ).text();
 
      console.log("Dropdown changed. Path = "+graphic_theme_path+"  Selection="+graphic_theme_selection);
-     simpleStorage.set('grtheme', graphic_theme_selection); 
+     simpleStorage.set('grtheme', graphic_theme_path); 
    });
 
   if (!is_longturn()) {
