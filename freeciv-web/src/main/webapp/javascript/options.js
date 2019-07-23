@@ -29,7 +29,6 @@ var server_settings = {};
 
 /** Defaults for options normally on command line **/
 
-var graphic_theme_selection;
 var graphic_theme_path;
 
 var default_user_name = "";
@@ -239,12 +238,11 @@ function init_options_dialog()
    });
 
    // Graphic Theme
-   //graphic_theme_path = simpleStorage.get('grtheme');
-   //if (!graphic_theme_path) graphic_theme_path = "themes/greek/";
-
-   console.log("0-Init. Path = "+graphic_theme_path+"  Selection="+graphic_theme_selection);
+   graphic_theme_path = simpleStorage.get('grtheme');
+   if (!graphic_theme_path) graphic_theme_path = "themes/greek/";
+     console.log("0-Init. Path = "+graphic_theme_path);
    $('#graphic_theme').val(graphic_theme_path).prop('selected', true);
-     console.log("1-Init. Path = "+graphic_theme_path+"  Selection="+graphic_theme_selection);
+     console.log("1-Init. Path = "+graphic_theme_path);
 
    $('#graphic_theme').change(function() {
      graphic_theme_path = $('#graphic_theme').val();
