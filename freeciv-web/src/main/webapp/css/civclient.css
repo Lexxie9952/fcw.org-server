@@ -1227,6 +1227,57 @@ li.tech-both::before {
   height: auto;
 }
 
+
+/* Theme dependent classes, grouped by same background property ************/
+
+/* FAROESE */
+.faroese1 {
+  background: url("/images/themes/faroese/bg.jpg") repeat scroll 0 0 #222222;
+}
+.faroese2 {
+  background: url("/images/themes/faroese/bg.jpg") repeat scroll 0 0 ;
+}
+.faroese3 {
+  background: url("/images/themes/faroese/bg.jpg");
+}
+.faroese4 {
+  background: url("/images/themes/faroese/bg.jpg") repeat scroll 50% 50%;
+}
+.faroese5 {
+  background: #cb842e url("/images/themes/faroese/ui-widget-header.png") 50% 50% repeat-x;
+}
+.faroese6 {
+  background: #cb842e url("/images/themes/faroese/ui-widget-header.png") 100% 50% repeat-x;
+}
+.faroese7 {
+  background: #444444 url(/images/themes/faroese/freeciv-web-logo.png);
+}
+
+/* GREEK */
+.greek1 {
+  background: url("/images/themes/greek/bg.jpg") repeat scroll 0 0 #222222;
+}
+.greek2 {
+  background: url("/images/themes/greek/bg.jpg") repeat scroll 0 0 ;
+}
+.greek3 {
+  background: url("/images/themes/greek/bg.jpg");
+}
+.greek4 {
+  background: url("/images/themes/greek/bg.jpg") repeat scroll 50% 50%;
+}
+.greek5 {
+  background: #cb842e url("/images/themes/greek/ui-widget-header.png") 50% 50% repeat-x;
+}
+.greek6 {
+  background: #cb842e url("/images/themes/greek/ui-widget-header.png") 100% 50% repeat-x;
+}
+.greek7 {
+  background: #444444 url(/images/themes/greek/freeciv-web-logo.png);
+}
+
+
+
 /*  These get put in chatbox classes, meaning we can define colours, fonts, indent, collapsing, all kinds of stuff 
     In addition, these could be intercepted and their names used as playsounds, where, if playsound not found, it just does nothing.
 

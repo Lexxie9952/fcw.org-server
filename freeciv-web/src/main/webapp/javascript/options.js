@@ -279,31 +279,30 @@ function init_options_dialog()
 
 function change_graphic_theme()
 {
-  /*
-  $('.city_panel').toggleClass('greek1');
-  $('#city_right_panel').toggleClass('greek1');
+  $('.city_panel').toggleClass(graphic_theme_path+'1');
+  $('#city_right_panel').toggleClass(graphic_theme_path+'1');
 
-  $('#city_present_units').toggleClass('greek2');
-  $('#city_supported_units').toggleClass('greek2');
-  $('#city_improvements').toggleClass('greek2');
-  $('.diplomacy_messages').toggleClass('greek2');
-  $('#tech_info_box').toggleClass('greek2');
-  $('.tablesorter-dark').toggleClass('greek2');
+  $('#city_present_units').toggleClass(graphic_theme_path+'2');
+  $('#city_supported_units').toggleClass(graphic_theme_path+'2');
+  $('#city_improvements').toggleClass(graphic_theme_path+'2');
+  $('.diplomacy_messages').toggleClass(graphic_theme_path+'2');
+  $('#tech_info_box').toggleClass(graphic_theme_path+'2');
+  $('.tablesorter-dark').toggleClass(graphic_theme_path+'2');
 
-  $('.help_submenu').toggleClass('greek3');
-  $('#help_menu').toggleClass('greek3');
-  $('#tabs-hel.manual_doc').toggleClass('greek3');
-  $('#technologies').toggleClass('greek3');
+  $('.help_submenu').toggleClass(graphic_theme_path+'3');
+  $('#help_menu').toggleClass(graphic_theme_path+'3');
+  $('#tabs-hel.manual_doc').toggleClass(graphic_theme_path+'3');
+  $('#technologies').toggleClass(graphic_theme_path+'3');
 
-  $('.ui-widget-content').toggleClass('greek4');
+  $('.ui-widget-content').toggleClass(graphic_theme_path+'4');
 
-  $('.ui-widget-header').toggleClass('greek5');
+  $('.ui-widget-header').toggleClass(graphic_theme_path+'5');
 
-  $('.chatbox_dialog').toggleClass('greek6');
-  $('.ui-dialog-titlebar').toggleClass('greek6');
+  $('.chatbox_dialog').toggleClass(graphic_theme_path+'6');
+  $('.ui-dialog-titlebar').toggleClass(graphic_theme_path+'6');
   
-  $('#freeciv_logo').toggleClass('greek7');
-  */
+  $('#freeciv_logo').toggleClass(graphic_theme_path+'7');
+  
 }
 
 /*
