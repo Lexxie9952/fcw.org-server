@@ -1237,7 +1237,7 @@ li.tech-both::before {
 
 /*5*/
 .ui-widget-header {
-  background: #cb842e url("/images/themes/greek/ui-widget-header.png") 50% 50% repeat-x;
+  background: #cb842e url("/images/ui-widget-header.png") 50% 50% repeat-x;
 } /* theme classes 5 */
 .greek5 {
   background: #cb842e url("/images/themes/greek/ui-widget-header.png") 50% 50% repeat-x;
@@ -1245,7 +1245,7 @@ li.tech-both::before {
 
 /*6*/
 .chatbox_dialog .ui-dialog-titlebar {
-  background: #cb842e url("/images/themes/greek/ui-widget-header.png") 100% 50% repeat-x;
+  background: #cb842e url("/images//ui-widget-header.png") 100% 50% repeat-x;
 } /* theme classes 6 */
 .greek6 {
   background: #cb842e url("/images/themes/greek/ui-widget-header.png") 100% 50% repeat-x;
