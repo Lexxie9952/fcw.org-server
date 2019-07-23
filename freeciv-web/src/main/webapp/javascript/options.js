@@ -240,9 +240,9 @@ function init_options_dialog()
    // Graphic Theme
    graphic_theme_path = simpleStorage.get('grtheme');
    if (!graphic_theme_path) graphic_theme_path = "themes/greek/";
-     console.log("0-Init. Path = "+graphic_theme_path);
+     console.log("Theme Path = "+graphic_theme_path);
    $('#graphic_theme').val(graphic_theme_path).prop('selected', true);
-     console.log("1-Init. Path = "+graphic_theme_path);
+     console.log("1-Theme Path = "+graphic_theme_path);
 
    $('#graphic_theme').change(function() {
      graphic_theme_path = $('#graphic_theme').val();
@@ -279,13 +279,14 @@ function init_options_dialog()
 
 function change_graphic_theme()
 {
+  console.log("Switching theme to: "+graphic_theme_path);
   $('.city_panel').toggleClass(graphic_theme_path+'1');
   $('#city_right_panel').toggleClass(graphic_theme_path+'1');
 
   $('#city_present_units').toggleClass(graphic_theme_path+'2');
   $('#city_supported_units').toggleClass(graphic_theme_path+'2');
   $('#city_improvements').toggleClass(graphic_theme_path+'2');
-  $('.diplomacy_messages').toggleClass(graphic_theme_path+'2');
+  //$('.diplomacy_messages').toggleClass(graphic_theme_path+'2');
   $('#tech_info_box').toggleClass(graphic_theme_path+'2');
   $('.tablesorter-dark').toggleClass(graphic_theme_path+'2');
 
@@ -294,11 +295,11 @@ function change_graphic_theme()
   $('#tabs-hel.manual_doc').toggleClass(graphic_theme_path+'3');
   $('#technologies').toggleClass(graphic_theme_path+'3');
 
-  $('.ui-widget-content').toggleClass(graphic_theme_path+'4');
+  //$('.ui-widget-content').toggleClass(graphic_theme_path+'4');
 
   $('.ui-widget-header').toggleClass(graphic_theme_path+'5');
 
-  $('.chatbox_dialog').toggleClass(graphic_theme_path+'6');
+  //$('.chatbox_dialog').toggleClass(graphic_theme_path+'6');
   $('.ui-dialog-titlebar').toggleClass(graphic_theme_path+'6');
   
   $('#freeciv_logo').toggleClass(graphic_theme_path+'7');
