@@ -93,6 +93,19 @@
         </div>
     </td>
 </tr>
+<tr>
+  <td>
+    <div>
+      <select name="graphic_theme" id="graphic_theme">
+        <OPTION Value="themes/faroese/"    >Faroese        (Civ6)</OPTION>
+        <OPTION Value="themes/greek/"      >Greek                </OPTION>
+        <OPTION Value="themes/mesopotamia/">Mespotomia (original)</OPTION>
+        <OPTION Value="themes/persian/"    >Persian              </OPTION>
+        
+      </select>
+    </div>
+  </td>
+</tr>
 
 
 <tr>
