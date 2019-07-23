@@ -420,7 +420,26 @@ button {
 .ui-dialog .ui-dialog-content {
   position: static;
 }
-
+#city_present_units, #city_supported_units {
+  float: left;
+  height: 105px;
+  overflow: auto; 
+  background:  url("/images/bg-dark.jpg") repeat scroll 0 0 ; 
+  border: 1px solid #444444;
+  padding: 6px;
+  margin: 5px;
+  min-width: 300px;
+}
+#city_improvements {
+  float: left;
+  height: 105px;
+  overflow: auto; 
+  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ; 
+  border: 1px solid #444444;
+  padding: 6px;
+  margin: 5px;
+  min-width: 280px;
+}
 #city_improvements_title, #city_present_units_title, #city_supported_units_title {
   font-size: 90%;
   font-weight: bold;
@@ -1208,73 +1227,6 @@ li.tech-both::before {
   height: auto;
 }
 
-/* Theme dependent classes, grouped by same background property ************/
-/*1*/
-
-.greek1 {
-  background: url("/images/themes/greek/bg.jpg") repeat scroll 0 0 #222222;
-}
-
-/*2*/
-#city_present_units, #city_supported_units {
-  float: left;
-  height: 105px;
-  overflow: auto; 
-  background:  url("/images/bg-dark.jpg") repeat scroll 0 0 ; 
-  border: 1px solid #444444;
-  padding: 6px;
-  margin: 5px;
-  min-width: 300px;
-}
-#city_improvements {
-  float: left;
-  height: 105px;
-  overflow: auto; 
-  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ; 
-  border: 1px solid #444444;
-  padding: 6px;
-  margin: 5px;
-  min-width: 280px;
-}
-
-
-
-.greek2 {
-  background: url("/images/themes/greek/bg.jpg") repeat scroll 0 0 ;
-}
-
-/*3*/
-
-.greek3 {
-  background: url("/images/themes/greek/bg.jpg");
-}
-
-/*4*/
-.greek4 {
-  background: url("/images/themes/greek/bg.jpg") repeat scroll 50% 50%;
-}
-
-/*5*/
-
-
-
-
-
-.greek5 {
-  background: #cb842e url("/images/themes/greek/ui-widget-header.png") 50% 50% repeat-x;
-}
-
-/*6*/
-
-.greek6 {
-  background: #cb842e url("/images/themes/greek/ui-widget-header.png") 100% 50% repeat-x;
-}
-
-/*7*/
-
-.greek7 {
-  background: #444444 url(/images/themes/greek/freeciv-web-logo.png);
-}
 /*  These get put in chatbox classes, meaning we can define colours, fonts, indent, collapsing, all kinds of stuff 
     In addition, these could be intercepted and their names used as playsounds, where, if playsound not found, it just does nothing.
 
