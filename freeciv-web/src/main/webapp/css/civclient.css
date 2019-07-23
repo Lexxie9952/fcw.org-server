@@ -22,6 +22,14 @@ button {
   margin-right:0px;
 }
 
+#freeciv_logo {
+  float:left; 
+  background: #444444 url(/images/freeciv-web-logo.png);
+  width: 138px; 
+  height: 35px; 
+  margin-right: 10px;
+}
+
 #game_logo {
   width: 100%;
   height: 50px;
@@ -137,6 +145,17 @@ button {
   margin: 20px;
   float: left;
 }
+.city_panel {
+  background: url("/images/bg.jpg") repeat scroll 0 0 #222222;
+  padding-right: 30px;
+  margin-top: 20px;
+}
+#city_right_panel {
+  float: right; 
+  width: 55%;
+  background: url("/images/bg.jpg") repeat scroll 0 0 #222222;
+  height: 533px;
+} /* theme classes 1 */
 
 #city_improvements_panel {
   clear: left;
@@ -295,6 +314,25 @@ button {
 }
 
 /* Research dialog. */
+#technologies {
+  clear: left;
+  position: relative; 
+  overflow: auto; 
+  width: 100%;
+  background-image: url('/images/bg.jpg');
+} /* theme classes 3 */
+
+#tech_info_box {
+  float: left; 
+  border: 1px solid rgb(153, 153, 153); 
+  width: 100%;
+  min-height: 40px; 
+  padding: 4px; 
+  margin: 2px; 
+  margin-left: 0px; 
+  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ; 
+  color: white;
+}
 
 #tech_goal_box {
   float: left;
@@ -365,6 +403,9 @@ button {
   overflow: hidden;
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
+.ui-widget-content {
+  background: url("/images/bg.jpg") repeat scroll 50% 50%;
+} /* theme classes 4 */
 
 #game_status_panel_top {
   float: right;
@@ -427,6 +468,9 @@ button {
   padding-top: 10px;
 }
 
+.ui-widget-header {
+  background: #cb842e url("/images/ui-widget-header.png") 50% 50% repeat-x;
+} /* theme classes 5 */
 .ui-dialog .ui-dialog-title {
   float: none;
 }
@@ -476,6 +520,11 @@ button {
   font-size: 18px;
 }
 
+.tablesorter-dark {
+  font: 115% sans-serif;
+  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ; 
+  color: white;
+} /* theme classes 2 */
 
 .tablesorter-dark thead th {
   font: 110% sans-serif;
@@ -602,10 +651,26 @@ button {
   margin: 5px;
   float: right;
 }
-
+#help_menu {
+  float: left;
+  background-image: url('/images/bg.jpg');
+  color: black;
+}
 #help_info_page {
   float: left;
   padding-left: 25px;
+}
+.help_submenu {
+  max-height:  600px;
+  overflow: auto;
+  min-width: 320px;
+  background-image: url('/images/bg.jpg');
+  color: black;
+}
+
+#tabs-hel.manual_doc {
+  background-image: url('/images/bg.jpg');
+  color: black;
 }
 
 #tabs-hel.manual_doc a {
@@ -732,6 +797,9 @@ button {
   height: 15px;
   overflow: hidden;
 }
+.chatbox_dialog .ui-dialog-titlebar {
+  background: #cb842e url("/images//ui-widget-header.png") 100% 50% repeat-x;
+} /* theme classes 6 */
 
 .ui-widget-content a {
   color: #f8ff8a;
@@ -1033,7 +1101,15 @@ li.tech-both::before {
 }
 
 /* Diplomacy dialog. */
-
+.diplomacy_messages {
+  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;
+  min-height: 120px;
+  max-height: 200px;
+  overflow: auto;
+  border: 1px solid #555555;
+  width: 100%;
+  font-size: 130%;
+}
 .diplomacy_messages a {
   color: white;
 }
@@ -1134,17 +1210,7 @@ li.tech-both::before {
 
 /* Theme dependent classes, grouped by same background property ************/
 /*1*/
-.city_panel {
-  background: url("/images/bg.jpg") repeat scroll 0 0 #222222;
-  padding-right: 30px;
-  margin-top: 20px;
-}
-#city_right_panel {
-  float: right; 
-  width: 55%;
-  background: url("/images/bg.jpg") repeat scroll 0 0 #222222;
-  height: 533px;
-} /* theme classes 1 */
+
 .greek1 {
   background: url("/images/themes/greek/bg.jpg") repeat scroll 0 0 #222222;
 }
@@ -1170,95 +1236,42 @@ li.tech-both::before {
   margin: 5px;
   min-width: 280px;
 }
-.diplomacy_messages {
-  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;
-  min-height: 120px;
-  max-height: 200px;
-  overflow: auto;
-  border: 1px solid #555555;
-  width: 100%;
-  font-size: 130%;
-}
-#tech_info_box {
-  float: left; 
-  border: 1px solid rgb(153, 153, 153); 
-  width: 100%;
-  min-height: 40px; 
-  padding: 4px; 
-  margin: 2px; 
-  margin-left: 0px; 
-  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ; 
-  color: white;
-}
-.tablesorter-dark {
-  font: 115% sans-serif;
-  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ; 
-  color: white;
-} /* theme classes 2 */
+
+
+
 .greek2 {
   background: url("/images/themes/greek/bg.jpg") repeat scroll 0 0 ;
 }
 
 /*3*/
-.help_submenu {
-  max-height:  600px;
-  overflow: auto;
-  min-width: 320px;
-  background-image: url('/images/bg.jpg');
-  color: black;
-}
-#help_menu {
-  float: left;
-  background-image: url('/images/bg.jpg');
-  color: black;
-}
-#tabs-hel.manual_doc {
-  background-image: url('/images/bg.jpg');
-  color: black;
-}
-#technologies {
-  clear: left;
-  position: relative; 
-  overflow: auto; 
-  width: 100%;
-  background-image: url('/images/bg.jpg');
-} /* theme classes 3 */
+
 .greek3 {
   background: url("/images/themes/greek/bg.jpg");
 }
 
 /*4*/
-.ui-widget-content {
-  background: url("/images/bg.jpg") repeat scroll 50% 50%;
-} /* theme classes 4 */
 .greek4 {
   background: url("/images/themes/greek/bg.jpg") repeat scroll 50% 50%;
 }
 
 /*5*/
-.ui-widget-header {
-  background: #cb842e url("/images/ui-widget-header.png") 50% 50% repeat-x;
-} /* theme classes 5 */
+
+
+
+
+
 .greek5 {
   background: #cb842e url("/images/themes/greek/ui-widget-header.png") 50% 50% repeat-x;
 }
 
 /*6*/
-.chatbox_dialog .ui-dialog-titlebar {
-  background: #cb842e url("/images//ui-widget-header.png") 100% 50% repeat-x;
-} /* theme classes 6 */
+
 .greek6 {
   background: #cb842e url("/images/themes/greek/ui-widget-header.png") 100% 50% repeat-x;
 }
 
 /*7*/
-#freeciv_logo {
-  float:left; 
-  background: #444444 url(/images/freeciv-web-logo.png);
-  width: 138px; 
-  height: 35px; 
-  margin-right: 10px;
-} /* theme classes 7 */
+
 .greek7 {
   background: #444444 url(/images/themes/greek/freeciv-web-logo.png);
 }
