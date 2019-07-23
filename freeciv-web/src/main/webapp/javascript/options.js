@@ -279,6 +279,7 @@ function init_options_dialog()
 
 function change_graphic_theme()
 {
+  /*
   $('.city_panel').toggleClass('greek1');
   $('#city_right_panel').toggleClass('greek1');
 
@@ -302,6 +303,7 @@ function change_graphic_theme()
   $('.ui-dialog-titlebar').toggleClass('greek6');
   
   $('#freeciv_logo').toggleClass('greek7');
+  */
 }
 
 /*
