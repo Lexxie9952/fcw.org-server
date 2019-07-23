@@ -279,10 +279,11 @@ function init_options_dialog()
 
 function change_graphic_theme()
 {
-  console.log("About to change background, was: "+css_getclass('.ui-widget-header').style.background);
-  css_getclass('.ui-widget-header').style.background="url('/images/themes/greek/ui-widget-header.png') 50% 50% repeat-x;";
-  console.log("Changed to: "+css_getclass('.ui-widget-header').style.background);
-
+    var widget_headers = document.getElementsByClassName('col1');
+    for(i = 0; i < widget_headers.length; i++) {
+      widget_headers[i].style.background = '#cb842e url("/images/themes/greek/ui-widget-header.png") 50% 50% repeat-x;';
+    }
+  
 }
 
 /*
@@ -348,6 +349,12 @@ function css_getclass(name) {
   return rules[name];
 }
 
+function css_setclass(name, property, value) {
+  var rules = cssrules();
+  if (!rules.hasOwnProperty(name))
+      throw 'TODO: deal_with_notfound_case';
+  return rules[name];
+}
 
 
 
