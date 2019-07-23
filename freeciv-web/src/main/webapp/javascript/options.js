@@ -250,6 +250,8 @@ function init_options_dialog()
      change_graphic_theme();
    });
 
+   $('#graphic_theme').change();
+
   if (!is_longturn()) {
     if (renderer == RENDERER_WEBGL) {
         $("#switch_renderer_button").html("Use 2D HTML5 graphics");
