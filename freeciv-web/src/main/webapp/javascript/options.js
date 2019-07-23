@@ -29,8 +29,8 @@ var server_settings = {};
 
 /** Defaults for options normally on command line **/
 
-var graphic_theme_selection = "Greek"
-var graphic_theme_path = "themes/greek/";
+var graphic_theme_selection;
+var graphic_theme_path;
 
 var default_user_name = "";
 var default_server_host = "localhost";
