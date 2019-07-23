@@ -239,7 +239,7 @@ function init_options_dialog()
    });
 
    // Graphic Theme
-   $('#graphic_theme').val(graphic_theme_selection);
+   $('#graphic_theme').val(graphic_theme_selection).prop('selected', true);
    graphic_theme_path = $('#graphic_theme').val();
    console.log("Init. Path = "+graphic_theme_path+"  Selection="+graphic_theme_selection);
 
