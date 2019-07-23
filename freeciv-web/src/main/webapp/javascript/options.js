@@ -332,6 +332,21 @@ background-image: url('/images/bg.jpg');
 
 */
 
+function cssrules() {
+  var rules = {};
+  for (var i=0; i<document.styleSheets.length; ++i) {
+      var cssRules = document.styleSheets[i].cssRules;
+      for (var j=0; j<cssRules.length; ++j)
+          rules[cssRules[j].selectorText] = cssRules[j];
+  }
+  return rules;
+}
+function css_getclass(name) {
+  var rules = cssrules();
+  if (!rules.hasOwnProperty(name))
+      throw 'TODO: deal_with_notfound_case';
+  return rules[name];
+}
 
 
 
