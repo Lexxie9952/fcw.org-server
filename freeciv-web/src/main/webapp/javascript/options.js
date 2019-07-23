@@ -29,6 +29,8 @@ var server_settings = {};
 
 /** Defaults for options normally on command line **/
 
+var graphic_theme_path = "themes/faorese/";
+
 var default_user_name = "";
 var default_server_host = "localhost";
 //var  default_server_port = DEFAULT_SOCK_PORT;
@@ -234,7 +236,15 @@ function init_options_dialog()
      }
      simpleStorage.set('showorderbuttons', show_order_option); 
    });
-  
+
+   // Graphic Theme
+   $('#graphic_theme').val(graphic_theme_path);
+   $('#graphic_theme').change(function() {
+     graphic_theme_path = $('#graphic_theme').val();
+     console.log("Theme = "+graphic_theme_path);
+     simpleStorage.set('grtheme', graphic_theme_path); 
+  });
+
   if (!is_longturn()) {
     if (renderer == RENDERER_WEBGL) {
         $("#switch_renderer_button").html("Use 2D HTML5 graphics");
