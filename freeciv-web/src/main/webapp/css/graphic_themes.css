@@ -1,0 +1,22 @@
+/* Theme dependent classes, grouped by same background property ************/
+.greek1 {
+  background: url("/images/themes/greek/bg.jpg") repeat scroll 0 0 #222222;
+}
+.greek2 {
+  background: url("/images/themes/greek/bg.jpg") repeat scroll 0 0 ;
+}
+.greek3 {
+  background: url("/images/themes/greek/bg.jpg");
+}
+.greek4 {
+  background: url("/images/themes/greek/bg.jpg") repeat scroll 50% 50%;
+}
+.greek5 {
+  background: #cb842e url("/images/themes/greek/ui-widget-header.png") 50% 50% repeat-x;
+}
+.greek6 {
+  background: #cb842e url("/images/themes/greek/ui-widget-header.png") 100% 50% repeat-x;
+}
+.greek7 {
+  background: #444444 url(/images/themes/greek/freeciv-web-logo.png);
+}
