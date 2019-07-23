@@ -247,6 +247,7 @@ function init_options_dialog()
    $('#graphic_theme').change(function() {
      graphic_theme_path = $('#graphic_theme').val();
      simpleStorage.set('grtheme', graphic_theme_path); 
+     change_graphic_theme();
    });
 
   if (!is_longturn()) {
@@ -274,5 +275,66 @@ function init_options_dialog()
     $("#title_setting_div").hide();
     $("#surrender_button").hide();
   }
+}
+
+function change_graphic_theme()
+{
+  console.log("About to change background, was: "+css_getclass('.ui-widget-header').style.background);
+  css_getclass('.ui-widget-header').style.background="url('/images/themes/greek/ui-widget-header.png') 50% 50% repeat-x;";
+  console.log("Changed to: "+css_getclass('.ui-widget-header').style.background);
 
 }
+
+/*
+.ui-widget-header {
+  background: #cb842e url("/images/ui-widget-header.png") 50% 50% repeat-x;
+
+.ui-widget-content {
+  background: url("/images/bg.jpg") repeat scroll 50% 50%;
+
+.chatbox_dialog .ui-dialog-titlebar {
+  background: #cb842e url("/images/ui-widget-header.png") 100% 50% repeat-x;
+
+
+.tablesorter-dark {
+  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;  
+
+
+.city_panel {
+  background: url("/images/bg.jpg") repeat scroll 0 0 #222222;
+
+#help_menu {
+background-image: url('/images/bg.jpg');
+
+.help_submenu {
+  background-image: url('/images/bg.jpg');
+
+#tabs-hel.manual_doc {
+  background-image: url('/images/bg.jpg');
+
+  #city_right_panel {
+  background: url("/images/bg.jpg") repeat scroll 0 0 #222222;
+
+#technologies {
+  background-image: url('/images/bg.jpg');
+
+#tech_info_box {
+  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ; 
+
+#city_present_units, #city_supported_units {
+  background:  url("/images/bg-dark.jpg") repeat scroll 0 0 ;
+
+#city_improvements {
+  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ; 
+
+.diplomacy_messages {
+  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;  
+
+*/
+
+
+
+
+
+
+
