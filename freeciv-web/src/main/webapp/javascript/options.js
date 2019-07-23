@@ -239,6 +239,8 @@ function init_options_dialog()
    });
 
    // Graphic Theme
+   graphic_theme_path = simpleStorage.get('grtheme');
+   if (!graphic_theme_path) graphic_theme_path = "themes/greek/";
    
    console.log("0-Init. Path = "+graphic_theme_path+"  Selection="+graphic_theme_selection);
    $('#graphic_theme').val(graphic_theme_path).prop('selected', true);
