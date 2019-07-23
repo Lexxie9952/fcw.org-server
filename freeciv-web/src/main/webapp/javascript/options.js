@@ -279,30 +279,33 @@ function init_options_dialog()
 
 function change_graphic_theme()
 {
+  var clearall = "faroese greek mesopotamia persian";
+
+
   console.log("Switching theme to: "+graphic_theme_path);
-  $('.city_panel').toggleClass(graphic_theme_path+'1');
-  $('#city_right_panel').toggleClass(graphic_theme_path+'1');
+  $('.city_panel').removeClass(clearall).toggleClass(graphic_theme_path+'1');
+  $('#city_right_panel').removeClass(clearall).toggleClass(graphic_theme_path+'1');
 
-  $('#city_present_units').toggleClass(graphic_theme_path+'2');
-  $('#city_supported_units').toggleClass(graphic_theme_path+'2');
-  $('#city_improvements').toggleClass(graphic_theme_path+'2');
-  //$('.diplomacy_messages').toggleClass(graphic_theme_path+'2');
-  $('#tech_info_box').toggleClass(graphic_theme_path+'2');
-  $('.tablesorter-dark').toggleClass(graphic_theme_path+'2');
+  $('#city_present_units').removeClass(clearall).toggleClass(graphic_theme_path+'2');
+  $('#city_supported_units').removeClass(clearall).toggleClass(graphic_theme_path+'2');
+  $('#city_improvements').removeClass(clearall).toggleClass(graphic_theme_path+'2');
+  $('.diplomacy_messages').removeClass(clearall).toggleClass(graphic_theme_path+'2');
+  $('#tech_info_box').removeClass(clearall).toggleClass(graphic_theme_path+'2');
+  $('.tablesorter-dark').removeClass(clearall).toggleClass(graphic_theme_path+'2');
 
-  $('.help_submenu').toggleClass(graphic_theme_path+'3');
-  $('#help_menu').toggleClass(graphic_theme_path+'3');
-  $('#tabs-hel.manual_doc').toggleClass(graphic_theme_path+'3');
-  $('#technologies').toggleClass(graphic_theme_path+'3');
+  $('.help_submenu').removeClass(clearall).toggleClass(graphic_theme_path+'3');
+  $('#help_menu').removeClass(clearall).toggleClass(graphic_theme_path+'3');
+  $('#tabs-hel.manual_doc').removeClass(clearall).toggleClass(graphic_theme_path+'3');
+  $('#technologies').removeClass(clearall).toggleClass(graphic_theme_path+'3');
 
-  //$('.ui-widget-content').toggleClass(graphic_theme_path+'4');
+  $('.ui-widget-content').removeClass(clearall).toggleClass(graphic_theme_path+'4');
 
-  $('.ui-widget-header').toggleClass(graphic_theme_path+'5');
+  $('.ui-widget-header').removeClass(clearall).toggleClass(graphic_theme_path+'5');
 
-  //$('.chatbox_dialog').toggleClass(graphic_theme_path+'6');
-  $('.ui-dialog-titlebar').toggleClass(graphic_theme_path+'6');
+  $('.chatbox_dialog').removeClass(clearall).toggleClass(graphic_theme_path+'6');
+  $('.ui-dialog-titlebar').removeClass(clearall).toggleClass(graphic_theme_path+'6');
   
-  $('#freeciv_logo').toggleClass(graphic_theme_path+'7');
+  $('#freeciv_logo').removeClass(clearall).toggleClass(graphic_theme_path+'7');
   
 }
 
