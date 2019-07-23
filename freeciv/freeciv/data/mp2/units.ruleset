@@ -2323,7 +2323,8 @@ The Trireme is the first naval unit. Its combat abilities are basic, but\
 "), _("
  A Trireme can venture into deep ocean, but there is risk when it enters\
  unknown waters: it must end every second turn on river, coastline, or a city,\
- or else be lost at sea. Triremes can travel on rivers.\
+ or else be lost at sea. Triremes can travel and attack on rivers, but can't\
+ attack the shore from sea.\
 "), _("
 Like most ancient sea units, when it initiates combat there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
@@ -2362,9 +2363,9 @@ cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "Provoking", "CantReachAir"
 roles         = "Ferryboat", "Hunter"
 helptext      = _("\
-The Longboat is an offensive naval unit. It can attack at sea and bring\
- one land unit to shore, making it useful for conducting ancient sea\
- campaigns. Longboats can travel on rivers.\
+The Longboat is a warship. It can attack at sea, attack the shore from sea, and bring\
+ one land unit to shore, making it useful for conducting ancient sea campaigns. Longboats\
+ can travel on rivers.\
 "), _("
 Like most ancient sea units, when it initiates combat there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
@@ -2397,12 +2398,13 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea"
-flags         = "BadCityDefender", "Provoking", "CantReachAir", "HelpWonder", "Traderoute"
+flags         = "BadCityDefender", "Provoking", "CantReachAir", "HelpWonder", "Traderoute", "Only_Native_Attack"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
 The Galley is an all-purpose sea unit and upgrade over the Trireme. It has no limits at sea,\
- decent offense and defense, and transport ability. It is also a Commerce unit. Please read\
- the entry on Caravan for info on what all Commerce units may do. Galleys can travel on rivers.\
+ decent offense and defense, and can transport. It is also a Commerce unit. Please read\
+ the entry on Caravan for info on what all Commerce units may do. Galleys can travel and attack\
+ on rivers. Galleys cannot attack the shore from the sea.\
 "), _("
 Like most ancient sea units, when it initiates an attack, there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
@@ -2438,8 +2440,9 @@ cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "Provoking", "CantReachAir"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat", "Hunter"
 helptext      = _("\
-The War Galley has improved offense, defense, and cargo capacity over the\
- Galley, but it lacks commerce abilities. War Galleys can travel on rivers.\
+The War Galley has improved offense, defense, and cargo capacity over the Galley,\
+ but it lacks commerce abilities. War Galleys can travel and attack on rivers, and\
+ do shore attacks from the sea.\
 "), _("
 Like most ancient sea units, when it initiates combat there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
@@ -2481,6 +2484,7 @@ The Ram Ship is an offensive weapon with only one purpose: destroying other\
  and a loser when a Ram Ship attacks. Ram Ships make good counterstrike\
  defense for nations not heavily invested into sea techs, as well as the more\
  obvious role of a 'heavy-first-hitter' when larger fleets engage in battle.\
+ Ram Ships can't make shore attacks from the sea.\
 ")
 
 [unit_caravel]
@@ -2512,8 +2516,8 @@ cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "Provoking", "CantReachAir", "Traderoute", "HelpWonder"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat", "Hunter"
 helptext      = _("\
-The Caravel represents a significant naval advance in combat, speed, range, and transport capability. Its utility in all the above replaces many ancient sea units. Caravels provide\
- most of the commerce abilities of the earlier Galley, but cannot build Wonders. Caravels can travel on rivers.\
+The Caravel is a significant advance in combat, speed, range, and transport capability. It replaces many ancient sea units. Caravels provide\
+ most of the commerce abilities of the earlier Galley, but cannot build Wonders. Caravels can travel and attack on rivers, or make shore attacks from sea.\
 "), _("
 Like most ancient sea units, when it initiates an attack, there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
@@ -2550,7 +2554,8 @@ cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "Provoking", "CanEscape", "CantReachAir"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
-The Galleon is a heavily armed transport ship that can carry up to 4 land units. Galleons can travel on rivers.\
+The Galleon is a heavily armed transport ship that can carry up to 4 land units. Galleons can travel and attack on rivers,\
+ or make shore attacks from sea.\
 "), _("
 Like most older sea units, when it initiates combat there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
@@ -2592,7 +2597,8 @@ flags         = "BadCityDefender", "Provoking", "CanEscape", "CantReachAir"
 roles         = "Hunter"
 helptext      = _("\
 The Frigate is a versatile and powerful ship that is both a superior offensive unit and\
- a decent transport ship. Frigates can travel on rivers.\
+ a decent transport ship. Frigates can travel and attack on rivers, or make shore attacks\
+ from sea.\
 "), _("
 From Frigates onward, all sea attacks end with a single victor.\
 ")
@@ -2631,7 +2637,8 @@ flags         = "BadCityDefender", "CanEscape", "CantReachAir"
 roles         = "Hunter"
 helptext      = _("\
 The Ironclad is an armored ship that is much more sturdy than the Frigate but\
- loses transport capability and the ability to navigate rivers.\
+ loses transport capability and the ability to navigate rivers. From the Ironclad\
+ onward, warships are formidable in the role of hitting shore targets from sea.\ 
 ")
 
 [unit_destroyer]
@@ -2879,6 +2886,8 @@ flags         = "NeverProtects", "BadCityDefender", "Provoking", "Only_Native_At
 roles         = "Hunter"
 helptext      = _("\
 Submarines have strong offensive power but weak defense if caught off guard. They can carry Nuclear Missiles and Cruise Missiles.\
+ Submarines' ability to submerge makes them unreachable by air units. However, the do not protect surface ships on their tile from\
+ air attackers. Unlike warships, Submarines can't attack units on shore.\ 
 "), _("\
 TIP:  Against stronger ships, Submarines enjoy superior attrition rates when they attack in numbers. They are also\
  excellent at hit-and-run to scare away unwanted sea traffic.\
@@ -2918,7 +2927,8 @@ bonuses       =
 flags         = "BadCityDefender", "Only_Native_Attack", "Provoking", "CanEscape", "CantReachAir"
 roles         = ""
 helptext      = _("\
-The Carrier is a mobile airport that can carry all Air units, Helicopters, AAA, Marines, and Missiles.\
+The Carrier is a mobile airport that can carry Air units, Helicopters, AAA, Marines, and Missiles.\
+ Unlike most other ships, Carriers can't attack units on shore.\
 "), _("\
 TIP:  Guard Carriers with a handful of fast-moving ships and a Battleship, as losing a fully-equipped Carrier is\
  painfully expensive.\
