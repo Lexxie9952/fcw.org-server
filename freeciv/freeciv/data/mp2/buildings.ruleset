@@ -240,7 +240,10 @@ With a Barracks III, each new land unit built in a city will\
  defense strengths are increased by 50%.  Also, damaged land units\
  which stay in town for one full turn without moving are completely\
  restored.\
-")
+"), _("\
+When combined with an Airport and Port Facility, Marines built in the city\
+ will automatically have Hardened V2 status.\
+") 
 
 [building_cathedral]
 name		= _("Cathedral")

@@ -2012,7 +2012,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "HasNoZOC", "Unbribable", "Expellable", "NeverProtects"
+flags         = "HasNoZOC", "Unbribable", "Expellable", "NeverProtects", "CanEscape"
 roles         = ""
 helptext      = _("\
 The AWACS (Airborne Warning and Control System) is an airplane with an advanced radar that can determine\
@@ -2050,7 +2050,7 @@ uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter"
 cargo         = "LandAirSea"
-flags         = "Helicopter", "AirAttacker", "Unbribable"
+flags         = "Helicopter", "AirAttacker", "Unbribable", "CanEscape"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -2560,6 +2560,8 @@ The Galleon is a heavily armed transport ship that can carry up to 4 land units.
 Like most older sea units, when it initiates combat there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
   result in the loss of one of the units.\
+"), _("
+Galleons can Stack-Escape: a 50% chance to escape a killed stack if they have more remaining move points than the attacker.\
 ")
 
 [unit_frigate]
@@ -2601,6 +2603,7 @@ The Frigate is a versatile and powerful ship that is both a superior offensive u
  from sea.\
 "), _("
 From Frigates onward, all sea attacks end with a single victor.\
+ Frigates can Stack-Escape: a 50% chance to escape a killed stack if they have more remaining move points than the attacker.\
 ")
 
 [unit_ironclad]
@@ -2639,6 +2642,8 @@ helptext      = _("\
 The Ironclad is an armored ship that is much more sturdy than the Frigate but\
  loses transport capability and the ability to navigate rivers. From the Ironclad\
  onward, warships are formidable in the role of hitting shore targets from sea.\ 
+"), _("
+Ironclads and all modern ships can Stack-Escape: a 50% chance to escape a killed stack if they have more remaining move points than the attacker.\
 ")
 
 [unit_destroyer]
