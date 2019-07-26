@@ -255,9 +255,6 @@ bombard_max_range = 1
 ; /* TRANS: _Deploy (3% chance of success). */
 ui_name_convert_unit = _("Convert to %Queen or King%s")
 
-; /* TRANS: _Bombard (100% chance of success). */
-ui_name_bombard = _("Range%sd Attack%s")
-
 ; /* TRANS: _Poison City (3% chance of success). */
 ui_name_poison_city_escape = _("%sPoison City%s")
 
@@ -353,6 +350,9 @@ ui_name_airlift_unit = _("%sAirlift to City%s")
 
 ; /* TRANS: _Attack (100% chance of success). */
 ui_name_attack = _("%sAttack%s")
+
+; /* TRANS: _Bombard (100% chance of success). */
+ui_name_bombard = _("Range%sd Attack%s")
 
 ;UPGRADE
 ; /* TRANS: _Explode Missile (100% chance of success). */

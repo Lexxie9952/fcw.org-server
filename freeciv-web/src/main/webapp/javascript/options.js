@@ -281,6 +281,8 @@ function init_options_dialog()
 
 function change_graphic_theme()
 {
+  return;
+  /*
   var clearall = "faroese greek mesopotamia persian";
 
 
@@ -308,7 +310,7 @@ function change_graphic_theme()
   $('.ui-dialog-titlebar').removeClass(clearall).toggleClass(graphic_theme_path+'6');
   
   $('#freeciv_logo').removeClass(clearall).toggleClass(graphic_theme_path+'7');
-  
+  */
 }
 
 /*
