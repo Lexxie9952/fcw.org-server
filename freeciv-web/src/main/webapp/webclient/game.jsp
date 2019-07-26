@@ -38,9 +38,9 @@
 			<div id="tabs-cities">
 				<jsp:include page="cities.jsp" flush="false"/>
 			</div>
-			<div id="tabs-chat">
-				<jsp:include page="chat.jsp" flush="false"/>
-			</div>
+	<%--		<div id="tabs-chat"> --%>
+	<%--				<jsp:include page="chat.jsp" flush="false"/> --%>
+	<%--		</div> --%>
 
 			<div id="tabs-hel" class="manual_doc">
 			</div>
