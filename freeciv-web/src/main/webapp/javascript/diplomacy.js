@@ -312,7 +312,8 @@ function create_diplomacy_dialog(counterpart, template) {
   if (!( ruleset_control['name'] == "Multiplayer-Plus ruleset"
       || ruleset_control['name'] == "Multiplayer-Evolution ruleset" )) 
        embassy_meeting = true;
-  else embassy_meeting = pplayer.real_embassy[counterpart['playerno']];     
+  else embassy_meeting = pplayer.real_embassy[counterpart['playerno']] 
+       || counterpart.real_embassy[pplayer['playerno']];     
   console.log("Embassy meeting == "+embassy_meeting);
 
   $("#game_page").append(template({
