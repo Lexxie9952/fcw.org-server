@@ -2320,7 +2320,7 @@ helptext      = _("\
 The Trireme is the first naval unit. Its combat abilities are basic, but\
  it has multipurpose use for exploration, transport. It is also a Commerce unit.\
  Please read the entry on Caravan for info on what all Commerce units may do.\n\
-"), _("
+ Triremes do not cause unhappiness."), _("
  A Trireme can venture into deep ocean, but there is risk when it enters\
  unknown waters: it must end every second turn on river, coastline, or a city,\
  or else be lost at sea. Triremes can travel and attack on rivers, but can't\
@@ -2404,7 +2404,7 @@ helptext      = _("\
 The Galley is an all-purpose sea unit and upgrade over the Trireme. It has no limits at sea,\
  decent offense and defense, and can transport. It is also a Commerce unit. Please read\
  the entry on Caravan for info on what all Commerce units may do. Galleys can travel and attack\
- on rivers. Galleys cannot attack the shore from the sea.\
+ on rivers. Galleys cannot attack the shore from the sea. Galleys do not cause unhappiness.\
 "), _("
 Like most ancient sea units, when it initiates an attack, there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
