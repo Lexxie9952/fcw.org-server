@@ -3,7 +3,6 @@
 
 RULESETS=(mpplus mp2 classic multiplayer mp2sandbox)
 TOPDIR="$( cd ../"$( dirname "${BASH_SOURCE[0]}" )" > /dev/null && pwd )"
-echo $TOPDIR
 
 printf "\nUpdating rulesets\n"
    for r in ${RULESETS[@]}; do
