@@ -42,8 +42,8 @@ printf "\nUpdating rulesets\n"
    done
 
 printf "\nRe-generating manuals\n"
+   cd src/derived/webapp/man
    for r in ${RULESETS[@]}; do
-      echo "Generating help manual for $r"
-      cd ~/freeciv-web/freeciv-web/src/derived/webapp/man
-      ~/freeciv-web/freeciv/freeciv/tools/freeciv-manual -r $r      
+      echo "Generating help manual for $r"    
+       ${TOPDIR}/freeciv/freeciv/tools/freeciv-manual -r $r
    done
