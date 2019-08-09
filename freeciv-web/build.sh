@@ -2,8 +2,8 @@
 # builds Freeciv-web, copies the war file to Tomcat and builds the selected rulesets.
 
 BATCH_MODE=""
-RULESETS=(mpplus mp2 classic multiplayer mp2sandbox)
 
+#Build site:
 while [[ $# -gt 0 ]]; do
   case $1 in
     -B) BATCH_MODE="-B"; shift;;
@@ -34,16 +34,3 @@ echo "maven package"
 mvn ${BATCH_MODE} flyway:migrate package && \
 echo "Copying target/freeciv-web.war to ${TOMCATDIR}/webapps" && \
   cp target/freeciv-web.war "${TOMCATDIR}/webapps/"
-  
-printf "\nUpdating rulesets\n"
-   for r in ${RULESETS[@]}; do
-      echo "Copying $r"
-      bash ../scripts/copy-ruleset.sh $r      
-   done
-
-printf "\nRe-generating manuals\n"
-   cd src/derived/webapp/man
-   for r in ${RULESETS[@]}; do
-      echo "Generating help manual for $r"    
-       ${TOPDIR}/freeciv/freeciv/tools/freeciv-manual -r $r
-   done
