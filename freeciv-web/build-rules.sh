@@ -10,8 +10,7 @@ printf "\nUpdating rulesets\n"
    done
 
 printf "\nRe-generating manuals\n"
-   cd src/derived/webapp/man
    for r in ${RULESETS[@]}; do
       echo "Generating help manual for $r"    
-      ../freeciv/freeciv/tools/freeciv-manual -r $r      
+      ../freeciv/freeciv/tools/freeciv-manual -r $r
    done
