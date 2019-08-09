@@ -1460,18 +1460,47 @@ function find_best_focus_candidate(accept_current)
 **************************************************************************/
 function unit_distance_compare(unit_a, unit_b)
 {
-  if (unit_a == null || unit_b == null) return 0;
+  if (unit_a == null || unit_b == null) {
+    if (unit_a != null) return -1;
+    if (unit_b != null) return 1;
+    return 0;
+  }
+
   var ptile_a = index_to_tile(unit_a['tile']);
   var ptile_b = index_to_tile(unit_b['tile']);
 
-  if (ptile_a == null || ptile_b == null) return 0;
+  if (ptile_a == null || ptile_b == null) {
+    if (ptile_a != null) return -1;
+    if (ptile_b != null) return 1;
+    return 0;
+  }
 
   if (ptile_a['x'] == ptile_b['x'] && ptile_a['y'] == ptile_b['y']) {
     return 0;
-  } else if (ptile_a['x'] > ptile_b['x'] || ptile_a['y'] > ptile_b['y']) {
-    return 1;
   } else {
-    return -1;
+
+    // Use the first focused unit as center
+    var i_focus = 0;
+    var ref_tile = null;
+    while (i_focus < current_focus.length
+           && (ref_tile = tiles[current_focus[i_focus].tile]) == null) {
+      i_focus++;
+    }
+
+    // Or the canvas center if no unit is focused
+    if (ref_tile == null) {
+      ref_tile = canvas_pos_to_tile(mapview.width/2, mapview.height/2);
+    }
+
+    var ref_a = map_distance_vector(ref_tile, ptile_a);
+    var ref_b = map_distance_vector(ref_tile, ptile_b);
+    ref_a = map_vector_to_distance(ref_a[0], ref_a[1]);
+    ref_b = map_vector_to_distance(ref_b[0], ref_b[1]);
+    if (ref_a != ref_b) return ref_a - ref_b;
+
+    // Same distance, just use any stable criteria
+    if (ptile_a.x != ptile_b.x) return ptile_a.x - ptile_b.x;
+    return ptile_a.y - ptile_b.y;
   }
 }
 
