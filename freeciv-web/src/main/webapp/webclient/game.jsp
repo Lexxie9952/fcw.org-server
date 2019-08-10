@@ -11,7 +11,7 @@
 				<li id="players_tab" style="margin-right:0px;"><a href="#tabs-nat"><i class="fa fa-flag" aria-hidden="true"></i> Nations</a></li>
 				<li id="cities_tab" style="margin-right:0px;"><a href="#tabs-cities"><i class="fa fa-fort-awesome" aria-hidden="true"></i> Cities</a></li>
 				<li id="opt_tab" style="margin-right:0px;"><a href="#tabs-opt"><i class="fa fa-cogs" aria-hidden="true"></i> Prefs</a></li>
-				<li id="chat_tab" style="margin-right:0px;"><a href="#tabs-chat"><i class="fa fa-commenting-o" aria-hidden="true"></i> Chat</a></li>
+	<%--			<li id="chat_tab" style="margin-right:0px;"><a href="#tabs-chat"><i class="fa fa-commenting-o" aria-hidden="true"></i> Chat</a></li> --%>
 				<li id="hel_tab" style="margin-right:0px;"><a href="#tabs-hel"><i class="fa fa-book" aria-hidden="true"></i> Docs</a></li>
 
 

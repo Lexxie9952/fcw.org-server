@@ -232,11 +232,12 @@ function control_init()
     set_default_mapview_inactive();
   });
 
+  /*
   $("#chat_tab").click(function(event) {
     set_default_mapview_inactive();
     $("#tabs-chat").show();
 
-  });
+  }); */
 
 
   $("#hel_tab").click(function(event) {
