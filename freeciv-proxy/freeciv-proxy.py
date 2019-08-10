@@ -143,19 +143,9 @@ class WSHandler(websocket.WebSocketHandler):
         cnx.close()
       return False
 
-    # Returns the auth method for this game
-    # Right now this is:
-    # - Google account for otpd if a client key is defined
-    # - password for any other case
+    # HAXXORZ now we only ask for the normal password
     def get_game_auth_method(self, cursor):
-        if google_signin is None or len(google_signin.strip()) == 0:
-            return "password"
-        query = ("select count(*) from servers where port=%(port)s and type='longturn'")
-        cursor.execute(query, {'port': self.civserverport})
-        if cursor.fetchall()[0][0] > 0:
-            return "google"
-        else:
-            return "password"
+        return "password"
 
     def check_user_password(self, cursor, username, password):
         query = ("select secure_hashed_password, CAST(ENCRYPT(%(pwd)s, secure_hashed_password) AS CHAR), activated from auth where lower(username)=lower(%(usr)s)")
