@@ -1324,19 +1324,8 @@ function show_longturn_intro_dialog() {
           }
         }
       },
-      buttons: [
-        {
-          text : "Join game",
-          click : function() {
-                    if (is_touch_device() || is_small_screen()) {
-                      BigScreen.toggle();
-                    }
-          dialog_close_trigger = "button";
-          validate_username_callback();
-        },
-        icons : { primary: "ui-icon-gear" }
-        }
-      ]
+      buttons: []
+
     });
 
   if (is_small_screen()) {
@@ -1372,6 +1361,10 @@ function validate_username_callback()
    url: "/validate_user?userstring=" + check_username,
    success: function(data, textStatus, request){
       if (data == "user_does_not_exist") {
+        if (is_longturn()) {
+          show_new_user_account_dialog();
+          return;
+        }
 
         if (validate_username()) {
           network_init();
