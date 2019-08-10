@@ -1332,5 +1332,5 @@ set =
       "startunits", "cccwwwxx", FALSE
       "techpenalty", 0, FALSE
       "tinyisles", FALSE, FALSE
-      "topology", "WRAPX|ISO", FALSE
+      "topology", "WRAPX", FALSE
     }

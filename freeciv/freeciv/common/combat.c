@@ -155,7 +155,9 @@ enum unit_attack_result unit_attack_unit_at_tile_result(const struct unit *punit
 /*******************************************************************//**
   When unreachable_protects setting is TRUE:
   To attack a stack, unit must be able to attack every unit there (not
-  including transported units and UTYF_NEVER_PROTECTS units).
+  including transported units and UTYF_NEVER_PROTECTS defender units.)
+  (UTYF_NEVER_BLOCKED attacker units only require one reachable unit
+  on the stack.)
 ************************************************************************/
 static enum unit_attack_result unit_attack_all_at_tile_result(const struct unit *punit,
                                                               const struct tile *ptile)
@@ -163,28 +165,39 @@ static enum unit_attack_result unit_attack_all_at_tile_result(const struct unit 
   bool any_reachable_unit = FALSE;
 
   unit_list_iterate(ptile->units, aunit) {
-    /* HACK: we don't count transported units here.  This prevents some
-     * bugs like a submarine carrying a cruise missile being invulnerable
-     * to other sea units.  However from a gameplay perspective it's a hack,
-     * since players can load and unload their units manually to protect
-     * their transporters. */
+    /* We don't count transported units. This prevents bugs
+     * like a Carrier carrying a Fighter being invulnerable. */
     if (!unit_transported(aunit)) {
         enum unit_attack_result result;
 
         result = unit_attack_unit_at_tile_result(punit, aunit, ptile);
-        if (result == ATT_UNREACHABLE && unit_has_type_flag(aunit,
-                                                  UTYF_NEVER_PROTECTS)) {
-          /* Doesn't prevent us from attacking other units on the tile */
+        /* Check for NeverProtects and NeverBlocked exceptions for an 
+           unreachable unit. Continue iteration IFF it's an exception */
+
+/*
+        notify_conn(NULL, NULL, E_SETTING, ftc_any,
+                _("Attack attempt! NEVER_BLOCKED=="
+                  "'%d'"), unit_has_type_flag(punit, UTYF_NEVER_BLOCKED));
+*/
+        if (result == ATT_UNREACHABLE 
+            && ( unit_has_type_flag(aunit, UTYF_NEVER_PROTECTS)
+                 || unit_has_type_flag(punit, UTYF_NEVER_BLOCKED) ) ) {
+          /* Unreachable but NOT prevented from attacking other units */
           continue;
+        /* If defender was not an "unreachable exception", then we 
+           report cases of an illegal attack and quit */   
         } else if (result != ATT_OK) {
           return result;
         }
+        /* We only arrive here if ATT_OK, meaning that at least 
+           one of the units was reachable */  
         any_reachable_unit = TRUE;
       }
   } unit_list_iterate_end;
 
-  /* If there are only unreachable, UTYF_NEVER_PROTECTS units, we still have
-   * to return ATT_UNREACHABLE. */
+  /* If there are only unreachable units, we have to return 
+     ATT_UNREACHABLE, regardless of a UTYF_NEVER_BLOCKED attacker or 
+     a UTYF_NEVER_PROTECTS defenders. */
   return any_reachable_unit ? ATT_OK : ATT_UNREACHABLE;
 }
 

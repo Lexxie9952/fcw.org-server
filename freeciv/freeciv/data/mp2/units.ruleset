@@ -28,23 +28,24 @@ format_version=20
 flags =
   { "name", "helptxt"
     _("Airbase")
-    _("Transform")
-    _("CanRoad")
-    _("CanFortress")
-    _("Bombarder")
+    _("Transform"), _("Can do advanced Terrain transformations.")
+    _("CanRoad"), _("Able to build Roads.")
+    _("CanFortress"), _("Can build Forts and Fortresses")
+    _("Bombarder"), _("Can safely conduct Ranged Attacks.")
     _("AirAttacker"), _("AEGIS Cruiser has 3x defense against this unit.")
-    _("Horse"), _("Attack value halved when attacking Pikemen.\ Knights defend at 3 when attacked by this unit.")
+    _("Horse"), _("Attack value halved when attacking Pikemen.\n\
+* Knights defend at 3 when attacked by this unit.")
     _("FootSoldier"), _("Knights defend at 2 when attacked by this unit.")
     _("Helicopter"), _("Defends very badly against Fighters.")
     _("Submarine"), _("Attack value reduced against some ships.")
-    _("Unbribable")
-    _("TradeRoute"), _("Can establish trade routes (must travel to target city).")
-    _("HelpWonder")
+    _("Unbribable"), _("Can't be bribed.")
+    _("TradeRoute"), _("Can establish a foreign trade route (must travel to target city).")
+    _("HelpWonder"), _("Can help build a Wonder in any non-hostile city.")
     _("Capturer"),   _("Can capture some enemy units.")
     _("Capturable"), _("Can be captured by some enemy units.")
     _("Cities")
     _("AddToCity")
-    _("Nuclear")
+    _("Nuclear"), _("Can perform a Nuclear Detonation obliterating all adjacent tiles.")
     _("Missile")
     _("Well-Digger"), _("Can dig a well and irrigate tiles with no water.")
     _("Infra"), _("Can build infrastructure.")
@@ -56,6 +57,7 @@ flags =
     _("FortBuster"), _("Defending Forts get no bonus. +33% attack bonus vs. the 2x defense of a Fortress.")
     _("FortressBuster"), _("Defending Fortresses get no bonus.")
 ;;;   _("NeverProtects"), _("Does not protect other units on its tile.")   ; UNCOMMENT THIS IF NOT USING SCL'S PATCH FOR THIS FLAG
+;;;   _("NeverBlocked"), _("Bypasses unreachable units when attacking a tile.")   ; UNCOMMENT THIS IF NOT USING LEXXIE'S PATCH FOR THIS FLAG
   }
 
 ; Names for custom unit class flags. There can be up to 8 of these.
@@ -474,6 +476,9 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;                 setting is enabled.
 ; "NeverProtects" = doesn't protect reachable units on its tile from enemy
 ;                 attackers, even if the unreachableprotects server setting
+;                 is enabled and the unit class is unreachable
+; "NeverBlocked" = isn't blocked by unreachable units on targeted tile,
+;                  even if the unreachableprotects server setting
 ;                 is enabled and the unit class is unreachable
 ;
 ; Following actions require extra fields:
@@ -1094,8 +1099,8 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter", "Land", "Sea"
 disembarks    = "Helicopter", "Land", "Sea"
-targets       = "Sea", "Air", "AirProtect", "Balloon", "Helicopter"
-flags         = "Marines", "FootSoldier", "BeachLander", "Capturer"
+targets       = "Sea", "Balloon", "Helicopter"
+flags         = "Marines", "FootSoldier", "BeachLander", "Capturer", "NeverBlocked"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -1113,11 +1118,11 @@ helptext      = _("\
 Marines are infantry who are experts at amphibious war. They are the strongest\
  foot unit in the game, and are heavily armed with a variety of powerful weaponry.\
 "), _("\
-Unlike other land units, Marines can attack most Air and Sea units, though at a\
-  penalty. Their attacks ignore terrain restrictions, and they can also attack from\
-  onboard a Transport or Helicopter. Marines promoted to three veteran levels and\
-  beyond become commandos suitable for special ops. (Marines can't attack Submarines,\
-  Missiles, Jet Bombers, or Stealth aircraft.)\
+Unlike other land units, Marines can attack most Sea units (at a penalty),\
+ and unreachable air units can't prevent them from attacking reachable targets.\
+ Their attacks ignore terrain restrictions, and they can also attack from\
+ onboard a Transport or Helicopter. Marines promoted to three veteran levels and\
+ beyond become commandos suitable for special ops.\
 "), _("\
 Marines built in a city with an Airport, Port Facility, and Barracks III gain extra\
  training for their role of land/air/sea multipurpose warfare. They will be produced\
@@ -1496,13 +1501,15 @@ bonuses       =
    { "flag", "type", "value"
      "Missile",      "DefenseMultiplier", 1
    }
-flags         = "CantReachAir", "FortressBuster"
+flags         = "CantReachAir", "FortressBuster", "NeverBlocked"
 roles         = "AttackFastStartUnit", "Hunter"
 helptext      = _("\
-Armor II is the ultra-modern upgrade to Armor. It gains composite armor and advanced\
- weaponry. Forts and Fortresses gain no bonus against its ability to break through\
- fortifications. Composite materials are not only harder for missiles to sense, but\
- offer superior resistance to impact. This yields a 2x defense bonus against Missiles.\ 
+Armor II is the ultra-modern upgrade to Armor. It has high tech composite armor, advanced\
+ weaponry, and electronic countermeasures (ECM). Forts and Fortresses gain no bonus against\
+ its ability to blast and break through fortifications. Composite materials with ECM are harder\
+ for missiles to sense and offer resistance to explosive impacts: this yields 2x defense\
+ against Missiles. Unlike most land units, Armor II can attack reachable units regardless\
+ of whether unreachable units are protecting the tile.\ 
 ")
 
 [unit_catapult]
@@ -1747,7 +1754,6 @@ bonuses       =
    { "flag", "type", "value"
      "Helicopter",   "DefenseDivider",    1
      "Helicopter",   "Firepower1",        1
-     "Marines",      "DefenseMultiplier", 1
    }
 flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape", "AirProtector"
 veteran_names =
@@ -1802,7 +1808,6 @@ bonuses       =
    { "flag", "type", "value"
      "Helicopter", "DefenseDivider", 1
      "Helicopter", "Firepower1", 1
-     "Marines", "DefenseMultiplier", 1    
    }
 flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape", "AirProtector"
 veteran_names =
@@ -1857,7 +1862,6 @@ uk_gold       = 0
 targets       = "Balloon"
 bonuses       =
    { "flag", "type", "value"
-     "Marines", "DefenseMultiplier", 2    
    }
 flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape", "CantReachAir", "NeverProtects"
 veteran_names =
@@ -1910,7 +1914,6 @@ targets       = "Balloon"
 cargo         = "Bomb"
 bonuses       =
    { "flag", "type", "value"
-     "Marines", "DefenseMultiplier", 2    
    }
 flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape", "CantReachAir", "NeverProtects"
 veteran_names =
@@ -1963,7 +1966,6 @@ targets       = "Balloon"
 cargo         = "Bomb"
 bonuses       =
    { "flag", "type", "value"
-     "Marines", "DefenseMultiplier", 2    
    }
 flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape", "CantReachAir", "NeverProtects"
 veteran_names =
@@ -2103,7 +2105,6 @@ bonuses       =
    { "flag", "type", "value"
      "Helicopter", "DefenseDivider", 1
      "Helicopter", "Firepower1", 1
-     "Marines", "DefenseMultiplier", 1     
    }
 flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape", "AirProtector"
 veteran_names =
@@ -2170,7 +2171,7 @@ helptext      = _("\
 Jet Bombers are stratospheric long-range air units, good for hitting distant targets. They can attack\
  multiple targets per turn. They have three turns of fuel: they can be airborne during two turn-changes.\
  Their impressive range makes them remain useful after Stealth Bombers become available. Their stratospheric\
- altitude renders them unreachable to propeller-based fighters and Marines. This comes at the cost\
+ altitude renders them unreachable to propeller-based fighters and AAA. This comes at the cost\
  of being defenseless to modern Fighter types. Jet Bombers carry heavy payloads, allowing carpet-bombing:\
  the ability to pillage enemy tiles from the air. May carry three Bombs.\ 
 "), _("\
@@ -2208,7 +2209,6 @@ bonuses       =
    { "flag", "type", "value"
      "Helicopter", "DefenseDivider", 1
      "Helicopter", "Firepower1", 1
-     "Marines", "DefenseMultiplier", 1     
    }
 vision_layer  = "Stealth"
 flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape", "AirProtector"
@@ -2261,7 +2261,6 @@ uk_gold       = 0
 targets       = "Balloon"
 bonuses       =
    { "flag", "type", "value"
-     "Marines", "DefenseMultiplier", 2    
    }
 vision_layer  = "Stealth"
 cargo         = "Bomb"
@@ -3002,13 +3001,14 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter"
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "AirAttacker", "HasNoZOC", "Unbribable", "CantReachAir", "Missile"
+flags         = "NeverProtects", "FieldUnit", "OneAttack", "AirAttacker", "HasNoZOC", "Unbribable", "CantReachAir", "Missile", "NeverBlocked"
 roles         = ""
 helptext      = _("\
-The Cruise Missile is a long-distance missile that can strike deep into enemy territory.\
-"), _("\
-TIP:  A handful of these can successfully keep the waters around\
- your treasured homeland free of enemy ships.\
+The Cruise Missile is a long-distance missile that can strike deep into enemy territory. Though\
+ it can't hit Air units, they can't prevent it from hitting all reachable surface units on Land\
+ and Sea. You can transport a Cruise Missile to new locations, but be sure to end its turn at a\ 
+ proper city, airbase, or on a unit capable of transporting it. Cruise Missiles can be carried\
+ by Submarines, Missile Destroyers, AEGIS Cruisers, and Carriers.\
 ")
 
 [unit_atom_bomb]
@@ -3036,8 +3036,9 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+targets       = "Balloon", "Helicopter", "Submarine"
 disembarks    = "Air", "AirPillage"
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable", "AirAttacker"
+flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable", "AirAttacker", "NeverBlocked"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0
@@ -3050,7 +3051,7 @@ You can build Atom Bombs when you have Nuclear Fission, and the Manhattan Projec
 "), _("\
 Care is needed for a Bomber to drop an Atom Bomb and survive the blast. A Bomber may drop the bomb within two tiles of\
  its location. First, 'drop' the bomb by making it leave the aircraft. Next, fly the Bomber out of range. Finally, attack\
- the target or execute a Detonate command by pressing D twice. On impact, the blast will destroy any unit in a 3x3 area,\
+ the target or execute a Detonate command by pressing D twice. On impact, the blast will destroy all units in a 3x3 area,\
  including friendly units. Any city within the blast area loses half its population. Land tiles within the blast area\
  are subject to nuclear fallout.\
 "), _("\
@@ -3082,7 +3083,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable"
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Submarine"
+flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable", "NeverBlocked"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0

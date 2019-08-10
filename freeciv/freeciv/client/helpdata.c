@@ -1849,7 +1849,12 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
                  _("* Can only be built with %s as government.\n"),
                  government_name_translation(utype->need_government));
   }
-
+  
+  if (utype_has_flag(utype, UTYF_NEVER_BLOCKED)) {
+    CATLSTR(buf, bufsz,
+      _("* Can bypass unreachable units and attack reachable "
+              "units on the same tile.\n"));
+  }
   if (utype_has_flag(utype, UTYF_CANESCAPE)) {
     CATLSTR(buf, bufsz, _("* Can escape once stack defender is lost.\n"));
   }
