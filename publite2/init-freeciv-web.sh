@@ -39,9 +39,9 @@ if [ "$5" = "pbem" ]; then
 fi
 
 savesdir=${1}
-savesubdir=${6%".serv"}
 if [ "$5" = "longturn" ]; then
-  savesdir="${savesdir}/lt/$savesubdir"
+  savesubdir=${6%".serv"}
+  savesdir="${savesdir}lt/$savesubdir"
   mkdir -p "${savesdir}"
 
   grep -q '^#\s*autoreload\s*$' "${6}"
