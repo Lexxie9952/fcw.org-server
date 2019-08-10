@@ -1,5 +1,5 @@
 cmdlevel ctrl first
-set rulesetdir mpplus
+rulesetdir mpplus
 set topology WRAPX
 set nationset all
 set compresstype xz

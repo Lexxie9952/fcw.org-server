@@ -25,7 +25,13 @@ addArgs --Announce none
 addArgs --exit-on-end
 addArgs --meta --keep --Metaserver "http://${4}"
 addArgs --type "${5}"
-addArgs --read "pubscript_${6}.serv"
+
+if [ "$5" = "longturn" ]; then
+  addArgs --read "${6}"
+else
+  addArgs --read "pubscript_${6}.serv"
+fi
+
 addArgs --log "../logs/freeciv-web-log-${2}.log"
 
 if [ "$5" = "pbem" ]; then
@@ -33,11 +39,12 @@ if [ "$5" = "pbem" ]; then
 fi
 
 savesdir=${1}
+savesubdir=${6%".serv"}
 if [ "$5" = "longturn" ]; then
-  savesdir="${savesdir}/lt/${6}"
+  savesdir="${savesdir}/lt/$savesubdir"
   mkdir -p "${savesdir}"
 
-  grep -q '^#\s*autoreload\s*$' "pubscript_${6}.serv"
+  grep -q '^#\s*autoreload\s*$' "${6}"
   if [ $? -eq 0 ]; then
     lastsave=$(ls -t "${savesdir}" | grep '\.sav' | head -n 1)
     if [ -n "${lastsave}" ]; then

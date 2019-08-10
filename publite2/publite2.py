@@ -62,7 +62,7 @@ class metachecker():
       self.server_limit = int(settings.get("Resource usage", "server_limit",
                                            fallback = 250))
       self.savesdir = settings.get("Config", "save_directory",
-                                   fallback = "/var/lib/tomcat8/webapps/data/savegames/")
+                                   fallback = "/var/lib/tomcat8/webapps/data/savegames")
 
       self.check_count = 0;
       self.total = 0;
@@ -92,6 +92,17 @@ class metachecker():
               self.single = int(meta_status[2]);
               self.multi = int(meta_status[3]);
               self.pbem = int(meta_status[4]);
+              
+              #Check if every server on our list is still alive. If not, remove it
+              #so it can be restarted in the future.
+              new_server_list = self.server_list
+              for index, server in enumerate(self.server_list):
+                  if not server.is_alive():
+                     del new_server_list[index]
+                     if server.gametype == "longturn":
+                         self.longturn.remove(server.scripttype)                         
+                     
+              self.server_list = new_server_list
 
               fork_bomb_preventer = (self.total == 0 and self.server_limit < len(self.server_list))
               if fork_bomb_preventer:
@@ -100,18 +111,14 @@ class metachecker():
                       + " metaserver it has found none.");
 
               # start LongTurn games, one per pass
-              lt_scripts = glob.glob('pubscript_longturn_*.serv')
-              self.longturn.intersection_update(lt_scripts)
+              lt_scripts = glob.glob('LT*.serv')
               for script in lt_scripts:
                 if script not in self.longturn:
-                   # script[10:-5] is the magic needed for now because
-                   # init-freeciv-web adds its own 'pubscript_' and '.serv'
-                   new_server = Civlauncher("longturn", script[10:-5], port, metahost + ":" + str(metaport) + metapath, self.savesdir)
+                   new_server = Civlauncher("longturn", script, port, metahost + ":" + str(metaport) + metapath, self.savesdir)
                    self.server_list.append(new_server)
                    new_server.start()
                    port += 1
                    self.longturn.add(script)
-                   print("Adding a longturn game with the port of"+str(port)+", metaport of"+str(metaport)+" and filename of "+str(script))
                    break
 
               while (self.single < self.server_capacity_single
