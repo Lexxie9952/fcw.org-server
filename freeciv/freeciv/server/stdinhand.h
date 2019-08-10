@@ -31,6 +31,7 @@ void cmd_reply(enum command_id cmd, struct connection *caller,
                fc__attribute((__format__ (__printf__, 4, 5)));
 
 bool handle_stdin_input(struct connection *caller, char *str);
+bool is_supercow(struct connection * caller);
 void set_ai_level_direct(struct player *pplayer, enum ai_level level);
 bool read_init_script(struct connection *caller, char *script_filename,
                       bool from_cmdline, bool check);
@@ -51,6 +52,8 @@ enum rfc_status create_command_pregame(const char *name,
 bool load_command(struct connection *caller,
                   const char *filename, bool check, bool cmdline_load);
 bool start_command(struct connection *caller, bool check, bool notify);
+
+bool observe_command(struct connection *caller, char *str, bool check, bool supercow);
 
 void toggle_ai_player_direct(struct connection *caller,
                              struct player *pplayer);

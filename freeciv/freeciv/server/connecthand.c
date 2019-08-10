@@ -49,6 +49,7 @@
 #include "srv_main.h"
 #include "stdinhand.h"
 #include "voting.h"
+#include "stdinhand.h"
 
 #include "astring.h"
 #include "research.h"
@@ -308,20 +309,24 @@ void establish_new_connection(struct connection *pconn)
                 pconn->username);
 
     if (is_longturn()) {
-      pplayer = find_uncontrolled_player();
-      if (pplayer) {
-        if (pplayer->is_alive && pplayer->nturns_idle > 12
-        && !pplayer->unassigned_user && !player_delegation_active(pplayer)
-        && strlen(pplayer->server.delegate_to) == 0) {
-          attach_longturn_player(pconn, pplayer);
-        }
+      if (is_supercow(pconn)) {
+         observe_command(pconn,"",false,true);
       }
       else {
-        notify_conn(dest, NULL, E_CONNECTION, ftc_server,
-            _("Unable to join LongTurn game. The game is probably full."));
+        pplayer = find_uncontrolled_player();
+        if (pplayer) {
+            if (pplayer->is_alive && pplayer->nturns_idle > 12
+            && !pplayer->unassigned_user && !player_delegation_active(pplayer)
+            && strlen(pplayer->server.delegate_to) == 0) {
+            attach_longturn_player(pconn, pplayer);
+            }
+        }
+        else {
+            notify_conn(dest, NULL, E_CONNECTION, ftc_server,
+                _("Unable to join LongTurn game. The game is probably full."));
+        }
       }
     }
-
   } else {
     notify_conn(dest, NULL, E_CONNECTION, ftc_server,
 		_("You are logged in as '%s' connected to %s."),

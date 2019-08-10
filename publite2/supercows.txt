@@ -1,0 +1,7 @@
+# This is a list of gamemasters/administrators that can observe longturn games.
+# Always keep this list in the format of Nickname:Game port, see the below commented out example. The capitalisation 
+# of the nicknames doesn't matter. The lines can't have anything else except for the nickname, colon and the port,
+# otherwise you could cause serious issues, though any spaces will get removed and don't matter. 
+# Do NOT for some reason put 1000 characters on one line in this file or you will make everyone admin.
+#
+#Rhue:6003

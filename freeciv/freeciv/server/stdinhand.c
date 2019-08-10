@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <ctype.h>
 
 #ifdef FREECIV_HAVE_LIBREADLINE
 #include <readline/readline.h>
@@ -37,6 +38,7 @@
 #include "support.h"            /* fc__attribute, bool type, etc. */
 #include "timing.h"
 #include "section_file.h"
+#include "shared.h"
 
 /* common */
 #include "capability.h"
@@ -3190,7 +3192,7 @@ static bool is_allowed_to_take(struct player *pplayer, bool will_obs,
   (see connection_detach()). The console and those with ALLOW_HACK can
   use the two-argument command and force others to observe.
 **************************************************************************/
-static bool observe_command(struct connection *caller, char *str, bool check)
+bool observe_command(struct connection *caller, char *str, bool check, bool supercow)
 {
   int i = 0, ntokens = 0;
   char buf[MAX_LEN_CONSOLE_LINE], *arg[2], msg[MAX_LEN_MSG];  
@@ -3251,8 +3253,8 @@ static bool observe_command(struct connection *caller, char *str, bool check)
 
   /******** PART II: do the observing ********/
 
-  /* check allowtake for permission */
-  if (!is_allowed_to_take(pplayer, TRUE, msg, sizeof(msg))) {
+  /* check allowtake for permission */  
+  if (!supercow && !is_allowed_to_take(pplayer, TRUE, msg, sizeof(msg))) {
     cmd_reply(CMD_OBSERVE, caller, C_FAIL, "%s", msg);
     goto end;
   }
@@ -3310,7 +3312,7 @@ static bool observe_command(struct connection *caller, char *str, bool check)
   } 
 
   /* attach pconn to new player as an observer or as global observer */
-  if ((res = connection_attach(pconn, pplayer, TRUE))) {
+  if ((res = connection_attach(pconn, pplayer, TRUE)) && !supercow) {
     if (pplayer) {
       cmd_reply(CMD_OBSERVE, caller, C_OK, _("%s now observes %s"),
                 pconn->username,
@@ -4145,6 +4147,63 @@ bool handle_stdin_input(struct connection *caller, char *str)
 }
 
 /**********************************************************************//**
+ Check if the connection is on the supercow list (admins and gamemasters
+ who can observe longturn games)
+**************************************************************************/
+bool is_supercow(struct connection * caller)
+{    
+    FILE *supercow_list;    
+    char line[1000];
+    char *split_line;
+    char *supercow_list_name;
+    char caller_name[MAX_LEN_NAME];
+    char *pos;
+    int port;
+    
+    strcpy(caller_name, caller->username);
+    if (!is_longturn() || caller->playing) {
+      return FALSE;
+    }
+    
+    supercow_list = fopen("supercows.txt", "r");     
+    if (!supercow_list) {
+      return FALSE;
+    }
+    
+    for(int i = 0; caller_name[i]; i++){
+       *caller_name = fc_tolower(*caller_name);
+    }
+    
+    while (fgets(line, 1000, supercow_list)) {
+      if ((pos=strchr(line, '#')) != NULL) {
+        continue;
+      }
+      
+      remove_leading_trailing_spaces(line);
+      if ((pos=strchr(line, '\n')) != NULL) {
+        *pos = '\0';
+      }
+      
+      split_line = strtok(line, ":");
+      supercow_list_name = split_line;
+        
+      for(int i = 0; supercow_list_name[i]; i++){
+        *supercow_list_name = fc_tolower(*supercow_list_name);
+      }
+      
+      split_line = strtok(NULL, ":");
+      
+      if (strcmp(caller_name, supercow_list_name) == 0 
+          && str_to_int(split_line,&port) && port == srvarg.port) {
+        fclose(supercow_list);
+        return TRUE;
+      }
+    }
+    fclose(supercow_list);
+    return FALSE;
+}
+
+/**********************************************************************//**
   Handle "command input", which could really come from stdin on console,
   or from client chat command, or read from file with -r, etc.
   caller == NULL means console, str is the input, which may optionally
@@ -4380,7 +4439,7 @@ static bool handle_stdin_input_real(struct connection *caller, char *str,
   case CMD_TAKE:
     return take_command(caller, arg, check);
   case CMD_OBSERVE:
-    return observe_command(caller, arg, check);
+    return observe_command(caller, arg, check, is_supercow(caller));
   case CMD_DETACH:
     return detach_command(caller, arg, check);
   case CMD_CREATE:
