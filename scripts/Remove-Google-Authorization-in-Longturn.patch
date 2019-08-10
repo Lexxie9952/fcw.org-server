@@ -1,22 +1,32 @@
-From 96a1911e682fa18adb4dd17e54e0f24eb5f5e711 Mon Sep 17 00:00:00 2001
-From: Yolo <yoloswag6@protonmail.com>
-Date: Wed, 27 Mar 2019 01:03:26 +0100
-Subject: [PATCH] Remove Google Authorization in Longturn
+From e7244f474dc4fb7ea4a14db5d2169778858cb9ea Mon Sep 17 00:00:00 2001
+From: Rhue <yoloswag6@protonmail.com>
+Date: Sat, 10 Aug 2019 13:06:42 +0200
+Subject: [PATCH] Remove google auth
 
 ---
- freeciv-proxy/freeciv-proxy.py                |  5 +----
+ freeciv-proxy/freeciv-proxy.py                | 14 ++------------
  .../src/main/webapp/javascript/clinet.js      |  5 -----
  .../src/main/webapp/javascript/pregame.js     | 19 +++++++++++++------
- 3 files changed, 14 insertions(+), 15 deletions(-)
- 
+ 3 files changed, 15 insertions(+), 23 deletions(-)
+
 diff --git a/freeciv-proxy/freeciv-proxy.py b/freeciv-proxy/freeciv-proxy.py
-index 7e59ccf8f6..dbac87f81d 100755
+index 7e59ccf8..8b2659f2 100755
 --- a/freeciv-proxy/freeciv-proxy.py
 +++ b/freeciv-proxy/freeciv-proxy.py
-@@ -152,10 +152,7 @@ class WSHandler(websocket.WebSocketHandler):
-             return "password"
-         query = ("select count(*) from servers where port=%(port)s and type='longturn'")
-         cursor.execute(query, {'port': self.civserverport})
+@@ -143,19 +143,9 @@ class WSHandler(websocket.WebSocketHandler):
+         cnx.close()
+       return False
+ 
+-    # Returns the auth method for this game
+-    # Right now this is:
+-    # - Google account for otpd if a client key is defined
+-    # - password for any other case
++    # HAXXORZ now we only ask for the normal password
+     def get_game_auth_method(self, cursor):
+-        if google_signin is None or len(google_signin.strip()) == 0:
+-            return "password"
+-        query = ("select count(*) from servers where port=%(port)s and type='longturn'")
+-        cursor.execute(query, {'port': self.civserverport})
 -        if cursor.fetchall()[0][0] > 0:
 -            return "google"
 -        else:
@@ -26,10 +36,10 @@ index 7e59ccf8f6..dbac87f81d 100755
      def check_user_password(self, cursor, username, password):
          query = ("select secure_hashed_password, CAST(ENCRYPT(%(pwd)s, secure_hashed_password) AS CHAR), activated from auth where lower(username)=lower(%(usr)s)")
 diff --git a/freeciv-web/src/main/webapp/javascript/clinet.js b/freeciv-web/src/main/webapp/javascript/clinet.js
-index 962c8f70ee..4c2558cf60 100644
+index 3f87497c..b13dd2bc 100644
 --- a/freeciv-web/src/main/webapp/javascript/clinet.js
 +++ b/freeciv-web/src/main/webapp/javascript/clinet.js
-@@ -151,11 +151,6 @@ function check_websocket_ready()
+@@ -145,11 +145,6 @@ function check_websocket_ready()
        sha_password = encodeURIComponent(shaObj.getHash("HEX"));
      }
  
@@ -42,10 +52,10 @@ index 962c8f70ee..4c2558cf60 100644
      "capability": freeciv_version, "version_label": "-dev",
      "major_version" : 2, "minor_version" : 5, "patch_version" : 99,
 diff --git a/freeciv-web/src/main/webapp/javascript/pregame.js b/freeciv-web/src/main/webapp/javascript/pregame.js
-index 69a3bd4019..f1075d8192 100644
+index b07e725d..84173cc4 100644
 --- a/freeciv-web/src/main/webapp/javascript/pregame.js
 +++ b/freeciv-web/src/main/webapp/javascript/pregame.js
-@@ -1321,8 +1321,19 @@ function show_longturn_intro_dialog() {
+@@ -1324,8 +1324,19 @@ function show_longturn_intro_dialog() {
            }
          }
        },
@@ -67,7 +77,7 @@ index 69a3bd4019..f1075d8192 100644
      });
  
    if (is_small_screen()) {
-@@ -1358,10 +1369,6 @@ function validate_username_callback()
+@@ -1361,10 +1372,6 @@ function validate_username_callback()
     url: "/validate_user?userstring=" + check_username,
     success: function(data, textStatus, request){
        if (data == "user_does_not_exist") {
@@ -80,3 +90,4 @@ index 69a3bd4019..f1075d8192 100644
            network_init();
 -- 
 2.17.1
+
