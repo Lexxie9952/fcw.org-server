@@ -71,7 +71,7 @@ static void form_chat_name(struct connection *pconn, char *buffer, size_t len)
   if (!pplayer
       || pconn->observer
       || strcmp(player_name(pplayer), ANON_PLAYER_NAME) == 0) {
-    fc_snprintf(buffer, len, "(%s)", pconn->username);
+    fc_snprintf(buffer, len, "%s (observer)", pconn->username);
   } else {
     fc_snprintf(buffer, len, "%s", player_name(pplayer));
   }
@@ -142,11 +142,11 @@ static void chat_msg_to_conn(struct connection *sender,
   form_chat_name(sender, sender_name, sizeof(sender_name));
 
   send_chat_msg(sender, sender, ftc_chat_private,
-                "->*%s* %s", dest_name, msg);
+                "->*%s*: %s", dest_name, msg);
 
   if (sender != dest) {
     send_chat_msg(dest, sender, ftc_chat_private,
-                  "*%s* %s", sender_name, msg);
+                  "*%s*: %s", sender_name, msg);
   }
 }
 
@@ -181,17 +181,17 @@ static void chat_msg_to_player(struct connection *sender,
 
   /* Repeat the message for the sender. */
   send_chat_msg(sender, sender, ftc_chat_private,
-                "->{%s} %s", player_name(pdest), msg);
+                "->{%s}: %s", player_name(pdest), msg);
 
   /* Send the message to destination. */
   if (NULL != dest && dest != sender) {
     send_chat_msg(dest, sender, ftc_chat_private,
-                  "{%s} %s", sender_name, msg);
+                  "{%s}: %s", sender_name, msg);
   }
 
   /* Send the message to player observers. */
   package_chat_msg(&packet, sender, ftc_chat_private,
-                   "{%s -> %s} %s", sender_name, player_name(pdest), msg);
+                   "{%s -> %s}: %s", sender_name, player_name(pdest), msg);
   conn_list_iterate(pdest->connections, pconn) {
     if (pconn != dest
         && pconn != sender
@@ -279,14 +279,31 @@ static void chat_msg_to_global_observers(struct connection *sender,
 **************************************************************************/
 static void chat_msg_to_all(struct connection *sender, char *msg)
 {
-  struct packet_chat_msg packet;
+  struct packet_chat_msg packet;  
   char sender_name[MAX_LEN_CHAT_NAME];
-
+  char adjusted_msg[MAX_LEN_CHAT_NAME+MAX_LEN_MSG+1000];
+  char *pos;
+  const char server_parenthesis = '(';
+  char *format = "%s: %s";
+  
+  sz_strlcpy(adjusted_msg, msg);  
+  pos = strstr(adjusted_msg, "(server)");
   msg = skip_leading_spaces(msg);
-  form_chat_name(sender, sender_name, sizeof(sender_name));
-
+  form_chat_name(sender, sender_name, sizeof(sender_name));  
+  
+  /* Supercow server message functionality */
+  
+  if (pos && msg[0] == server_parenthesis && is_supercow(sender)) {
+      sender_name[0] = '\0';
+      format = "%s%s";
+      strcpy(adjusted_msg, msg);
+      strtok(adjusted_msg, ")");
+      msg = strtok(NULL, ")");
+      msg = skip_leading_spaces(msg);
+  }
+  
   package_chat_msg(&packet, sender, ftc_chat_public,
-                   "<%s> %s", sender_name, msg);
+                 format, sender_name, msg);
   con_write(C_COMMENT, "%s", packet.message);
   lsend_packet_chat_msg(game.est_connections, &packet);
 
@@ -321,7 +338,7 @@ void handle_chat_msg_req(struct connection *pconn, const char *message)
 {
   char real_message[MAX_LEN_MSG], *cp;
   bool double_colon;
-
+  
   sz_strlcpy(real_message, message);
 
   /* This loop to prevent players from sending multiple lines which can

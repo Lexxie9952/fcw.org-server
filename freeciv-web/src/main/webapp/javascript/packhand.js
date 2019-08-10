@@ -201,9 +201,8 @@ function handle_tile_info(packet)
 
 /* 100% complete */
 function handle_chat_msg(packet)
-{
+{  
   var message = packet['message'];
-  var conn_id = packet['conn_id'];
   var event = packet['event'];
   var ptile = packet['tile'];
 
@@ -214,11 +213,7 @@ function handle_chat_msg(packet)
     packet['event'] = E_UNDEFINED;
   }
 
-  if (connections[conn_id] != null) {
-    if (!is_longturn()) {
-      message = "<b>" + connections[conn_id]['username'] + ":</b>" + message;
-    }
-  } else if (packet['event'] == E_SCRIPT) {
+  if (packet['event'] == E_SCRIPT) {
     var regxp = /\n/gi;
     message = message.replace(regxp, "<br>\n");
     show_dialog_message("Message for you:", message);
