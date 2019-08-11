@@ -213,20 +213,22 @@ function handle_chat_msg(packet)
     packet['event'] = E_UNDEFINED;
   }
 
-  if (packet['event'] == E_SCRIPT) {
-    var regxp = /\n/gi;
-    message = message.replace(regxp, "<br>\n");
-    show_dialog_message("Message for you:", message);
-    return;
-  } else {
-    if (message.indexOf("/metamessage") != -1) return;  //don't spam message dialog on game start.
-    if (message.indexOf("Metaserver message string") != -1) return;  //don't spam message dialog on game start.
+  if (connections[conn_id] == null) {
+    if (packet['event'] == E_SCRIPT) {
+        var regxp = /\n/gi;
+        message = message.replace(regxp, "<br>\n");
+        show_dialog_message("Message for you:", message);
+        return;
+    } else {
+        if (message.indexOf("/metamessage") != -1) return;  //don't spam message dialog on game start.
+        if (message.indexOf("Metaserver message string") != -1) return;  //don't spam message dialog on game start.
 
-    if (ptile != null && ptile > 0) {
-       message = "<span class='chatbox_text_tileinfo' "
-           + "onclick='center_tile_id(" + ptile + ");'>" + message + "</span>";
-    }
+        if (ptile != null && ptile > 0) {
+        message = "<span class='chatbox_text_tileinfo' "
+            + "onclick='center_tile_id(" + ptile + ");'>" + message + "</span>";
+        }
     if (is_speech_supported()) speak(message);
+    }
   }
 
   packet['message'] = message;
