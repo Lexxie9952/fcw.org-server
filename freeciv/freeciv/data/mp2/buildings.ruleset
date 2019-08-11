@@ -1313,6 +1313,7 @@ reqs	=
     { "type",         "name",       "range",    "present", "quiet"
       "Tech",         "Horseback Riding", "Player",   TRUE,      FALSE
       "Building",     "Genghis Khan's Equestrian School", "Player",   FALSE,     TRUE
+      "Building",     "Barracks", "City", TRUE, FALSE 
     }
 graphic	= "b.genghis_khans_equestrian_school"
 graphic_alt	= "b.sun_tzus_war_academy"
@@ -1327,7 +1328,8 @@ sound		= "w_sun_tzus_war_academy"
 sound_alt	= "w_generic"
 helptext	= _("\
 Gives mounted units 1 additional movement point. Does not work\
- on Cavalry. Obsolete by: Mobile Warfare.\
+ on Cavalry. Must be built in a city with Barracks I (not II).\
+ Obsolete by: Mobile Warfare.\
 ")
 
 [building_gibraltar_fortress]
