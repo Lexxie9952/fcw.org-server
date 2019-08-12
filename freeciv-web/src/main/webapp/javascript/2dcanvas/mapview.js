@@ -272,30 +272,36 @@ function canvas_put_select_rectangle(canvas_context, canvas_x, canvas_y, width, 
 **************************************************************************/
 function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
 
-  // City Airlift Counter prefs:
+  // City Airlift Counter:
   var airlift_text = "";
+  const SRC_UNLIMITED = 4;   // bit value for SRC_UNLIMITED airliftingstyle
+  const DEST_UNLIMITED = 8;  // bit value for DEST_UNLIMITED airliftingstyle
+  const infinity_symbol = "%E2%88%9E";
+  // source capacity = airlift counter (unless SRC_UNLIMITED==true, in which case it's infinite)
+  var src_capacity = (game_info['airlifting_style'] & SRC_UNLIMITED) ? infinity_symbol : city['airlift'];
+
   if (client.conn.playing != null && !client_is_observer()) {
     if (city['owner'] == client.conn.playing.playerno && draw_city_airlift_counter==true ) {
-      if (game_info['airlift_dest_divisor'] == 0) {
-        // standard case, no airliftdestdivisor, just show source airlifts if it has them:
-        airlift_text = ( city['airlift']>0 ? " |"+city['airlift']+"|" : "");
+      if (game_info['airlift_dest_divisor'] == 0) { // if no dest_divisor, there is one counter for both source and dest
+        // show source airlifts if it has them, otherwise keep the label blank:
+        airlift_text = ( city['airlift']>0 ? " |"+src_capacity+"|" : "");
       } else if (city_has_building(city, improvement_id_by_name(B_AIRPORT_NAME))) {  
         // We get here if city has airport && airliftdestdivsor > 0. This means destination-airlifts has a separate counter
         var airlift_receive_text;  
         var airlift_receive_max_capacity = Math.round(city['size'] / game_info['airlift_dest_divisor']);
 
-        if (game_info['airlifting_style'] > 7) airlift_receive_text = "%E2%88%9E"; // DEST_UNLIMITED IS INFINITY==%E2%88%9E  
+        if (game_info['airlifting_style'] & DEST_UNLIMITED) airlift_receive_text = infinity_symbol;  
         // else destination airlifts allowed = population of city / airliftdivisor, rounded to nearest whole number:   
         else airlift_receive_text = Math.max(0,city["airlift"] + airlift_receive_max_capacity - effects[1][0]['effect_value']);             
         
-        airlift_text = (city['airlift']>0  ||  airlift_receive_text=="%E2%88%9E"  ||  airlift_receive_text != "0")  
-                        ? " |" + city['airlift'] + ":" + airlift_receive_text + "|"
+        airlift_text = (city['airlift']>0  ||  airlift_receive_text==infinity_symbol  || src_capacity==infinity_symbol || airlift_receive_text != "0")  
+                        ? " |" + src_capacity + ":" + airlift_receive_text + "|"
                         : "";  
       }
     }
   }
 
-  var text = decodeURIComponent(city['name']+ airlift_text).toUpperCase();
+  var text = decodeURIComponent(city['name'] + airlift_text).toUpperCase();
 
   var size = city['size'];
   var color = nations[city_owner(city)['nation']]['color'];
