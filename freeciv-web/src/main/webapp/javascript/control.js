@@ -2865,6 +2865,9 @@ function deactivate_goto(will_advance_unit_focus)
 
   // update focus to next unit after 600ms.
   if (will_advance_unit_focus) setTimeout(update_unit_focus, 600);
+  /* if leaving goto mode but not advancing, restore unit dialog to
+     display unit stats instead of 'turns for goto' */
+  else update_active_units_dialog(); 
 
 
 }
@@ -4099,29 +4102,33 @@ function update_active_units_dialog()
       unit_info_html += "<b>" + nations[players[current_focus[0]['owner']]['nation']]['adjective'] + "</b> ";
     }
 
-    unit_info_html += "<b>" + ptype['name'] + "</b>: ";
+    if (ptype['transport_capacity'] > 0) 
+      unit_info_html += "<b>" + ptype['name'] + "</b> <font title='Transport ID' style='font-size:90%' color='#C8E8FF'>#"+aunit['id']+"</font>"
+    else
+      unit_info_html += "<b>" + ptype['name'] + "</b>";
+
     if (get_unit_homecity_name(aunit) != null) {
-      unit_info_html += " " + get_unit_homecity_name(aunit) + " ";
+      unit_info_html += ": " + get_unit_homecity_name(aunit) + " ";
     }
     if (current_focus[0]['owner'] == client.conn.playing.playerno) {
-      unit_info_html += "<span style='color:white'>Moves:<span style='color:lightgreen;font-size:110%;'><b>" + move_points_text(aunit['movesleft']) + "</b></span></span> ";
+      unit_info_html += "<span style='color:white'>Moves:<span style='color:lightgreen;font-size:120%;'><b>" + move_points_text(aunit['movesleft']) + "</b></span></span> ";
 //      unit_info_html += "<span style='color:aqua'>" + get_unit_moves_left(aunit) + "</span> ";
     }
     unit_info_html += "<span title='Attack'>A:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['attack_strength']   // make terser titles to avoid cramped clutter (Lexxie)
     + "</b></span></span> <span title='Defense'>D:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['defense_strength']
     + "</b></span></span> <span title='Firepower'>FP:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['firepower']
-    + "</b></span></span> <span title='Health'>H:<span style='color:lightpink;font-size:110%;'><b>"
+    + "</b></span></span> <span title='Health'>H:<span style='color:lightpink;font-size:120%;'><b>"
     + aunit['hp'] + "</b></span></span>"; //<span style='color:gainsboro;font-size:85%;'>/" + ptype['hp'] + "</span></span>";
     if (aunit['veteran'] > 0) {
       unit_info_html += " <span title='Vet-level'>V:<span style='color:gainsboro;font-size:100%;'><b>" + aunit['veteran'] + "</b></span></span>";
     }
     if (ptype['transport_capacity'] > 0) {
-      unit_info_html += " <span title='T"+aunit['id']+" Cargo Cap.'>C:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['transport_capacity'] + "</b></span></span>";
+      unit_info_html += " <span title='Cargo Capacity'>C:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['transport_capacity'] + "</b></span></span>";
     }
     if (aunit['transported'] && aunit['transported_by']>0) {
-      unit_info_html += " <span style='color:skyblue'><b>ON:</b>T"+aunit['transported_by']+"</span>";
+      unit_info_html += " <span title='Transporter ID' style='color:lightskyblue'><b>On </b>#"+aunit['transported_by']+"</span>";
     }
-    
+
     // Actual fuel remaining is: (turns_of_fuel-1) + moves_left/moves_rate
     if ( (ptype['fuel']>0) && (current_focus[0]['owner']==client.conn.playing.playerno) ) {
       var fuel_left = (aunit['fuel']-1) + aunit['movesleft']/ptype['move_rate'];

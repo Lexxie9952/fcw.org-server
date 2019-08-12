@@ -1008,7 +1008,7 @@ function get_unit_veteran_sprite(punit)
 }
 
 /**********************************************************************
-  ...
+  ...resequenced in order of frequency
 ***********************************************************************/
 function get_unit_activity_sprite(punit)
 {
@@ -1016,16 +1016,43 @@ function get_unit_activity_sprite(punit)
   var act_tgt  = punit['activity_tgt'];
 
   switch (activity) {
-    case ACTIVITY_POLLUTION:
-      return {"key" : "unit.pollution",
-          "offset_x" : unit_activity_offset_x,
-          "offset_y" : - unit_activity_offset_y};
+    case ACTIVITY_GEN_ROAD:
+      return {"key" : tileset_extra_id_activity_graphic_tag(act_tgt),
+              "offset_x" : unit_activity_offset_x,
+              "offset_y" : - unit_activity_offset_y};
 
-     case ACTIVITY_FALLOUT:
-        return {"key" : "unit.fallout",
+    case ACTIVITY_IRRIGATE:
+        return {"key" : -1 == act_tgt ?
+                          "unit.irrigate" :
+                          tileset_extra_id_activity_graphic_tag(act_tgt),
+                "offset_x" : unit_activity_offset_x,
+                "offset_y" : - unit_activity_offset_y};
+
+    case ACTIVITY_GOTO:
+        return {"key" : "unit.goto",
             "offset_x" : unit_activity_offset_x,
             "offset_y" : - unit_activity_offset_y};
-        
+            
+    case ACTIVITY_FORTIFYING:
+        return {"key" : "unit.fortifying",
+            "offset_x" : unit_activity_offset_x,
+            "offset_y" : - unit_activity_offset_y};
+
+    case ACTIVITY_SENTRY:
+        if (punit['transported']) { // show if unit is "cargo-sentry"
+          return {"key" : "unit.cargo",
+            "offset_x" : unit_activity_offset_x,
+            "offset_y" : - unit_activity_offset_y};
+        } 
+        return {"key" : "unit.sentry",
+            "offset_x" : unit_activity_offset_x,
+            "offset_y" : - unit_activity_offset_y};
+          
+    case ACTIVITY_FORTIFIED:
+        return {"key" : "unit.fortified",
+            "offset_x" : unit_activity_offset_x,
+            "offset_y" : - unit_activity_offset_y};
+
     case ACTIVITY_MINE:
       return {"key"      : -1 == act_tgt ?
                              "unit.plant" :
@@ -1033,35 +1060,13 @@ function get_unit_activity_sprite(punit)
               "offset_x" : unit_activity_offset_x,
               "offset_y" : - unit_activity_offset_y};
 
-    case ACTIVITY_IRRIGATE:
-      return {"key" : -1 == act_tgt ?
-                        "unit.irrigate" :
-                        tileset_extra_id_activity_graphic_tag(act_tgt),
-              "offset_x" : unit_activity_offset_x,
-              "offset_y" : - unit_activity_offset_y};
-
-    case ACTIVITY_FORTIFIED:
-      return {"key" : "unit.fortified",
-          "offset_x" : unit_activity_offset_x,
-          "offset_y" : - unit_activity_offset_y};
-
     case ACTIVITY_BASE:
       return {"key" : tileset_extra_id_activity_graphic_tag(act_tgt),
               "offset_x" : unit_activity_offset_x,
               "offset_y" : - unit_activity_offset_y};
 
-    case ACTIVITY_SENTRY:
-      return {"key" : "unit.sentry",
-          "offset_x" : unit_activity_offset_x,
-          "offset_y" : - unit_activity_offset_y};
-
     case ACTIVITY_PILLAGE:
       return {"key" : "unit.pillage",
-          "offset_x" : unit_activity_offset_x,
-          "offset_y" : - unit_activity_offset_y};
-
-    case ACTIVITY_GOTO:
-      return {"key" : "unit.goto",
           "offset_x" : unit_activity_offset_x,
           "offset_y" : - unit_activity_offset_y};
 
@@ -1075,20 +1080,20 @@ function get_unit_activity_sprite(punit)
           "offset_x" : unit_activity_offset_x,
           "offset_y" : - unit_activity_offset_y};
 
-    case ACTIVITY_FORTIFYING:
-      return {"key" : "unit.fortifying",
+    case ACTIVITY_POLLUTION:
+        return {"key" : "unit.pollution",
+            "offset_x" : unit_activity_offset_x,
+            "offset_y" : - unit_activity_offset_y};
+  
+    case ACTIVITY_FALLOUT:
+      return {"key" : "unit.fallout",
           "offset_x" : unit_activity_offset_x,
           "offset_y" : - unit_activity_offset_y};
-
-    case ACTIVITY_GEN_ROAD:
-      return {"key" : tileset_extra_id_activity_graphic_tag(act_tgt),
-              "offset_x" : unit_activity_offset_x,
-              "offset_y" : - unit_activity_offset_y};
 
     case ACTIVITY_CONVERT:
-      return {"key" : "unit.convert",
-          "offset_x" : unit_activity_offset_x,
-          "offset_y" : - unit_activity_offset_y};
+        return {"key" : "unit.convert",
+            "offset_x" : unit_activity_offset_x,
+            "offset_y" : - unit_activity_offset_y};
   }
 
   if (unit_has_goto(punit)) {
