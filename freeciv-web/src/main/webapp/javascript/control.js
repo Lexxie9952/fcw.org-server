@@ -284,6 +284,12 @@ function control_init()
   /* prevents keyboard input from changing tabs. */
   $('#tabs>ul>li').off('keydown');
   $('#tabs>div').off('keydown');
+
+  // don't show orders buttons to observers:
+  if (client_is_observer()) {
+    $("#game_unit_orders_default").hide();
+    $("#game_unit_orders_settlers").hide();
+  }
 }
 
 /****************************************************************************
