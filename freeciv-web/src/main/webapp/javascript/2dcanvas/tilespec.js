@@ -1012,6 +1012,14 @@ function get_unit_veteran_sprite(punit)
 ***********************************************************************/
 function get_unit_activity_sprite(punit)
 {
+  // Special case: idle/sentry units on transport will show themselves
+  // as "cargo" even though server has no ACTIVITY_CODE for it:
+  if (punit['transported']) {
+  return {"key" : "unit.cargo",
+    "offset_x" : unit_activity_offset_x,
+    "offset_y" : - unit_activity_offset_y};
+  } 
+
   var activity = punit['activity'];
   var act_tgt  = punit['activity_tgt'];
 
@@ -1039,11 +1047,6 @@ function get_unit_activity_sprite(punit)
             "offset_y" : - unit_activity_offset_y};
 
     case ACTIVITY_SENTRY:
-        if (punit['transported']) { // show if unit is "cargo-sentry"
-          return {"key" : "unit.cargo",
-            "offset_x" : unit_activity_offset_x,
-            "offset_y" : - unit_activity_offset_y};
-        } 
         return {"key" : "unit.sentry",
             "offset_x" : unit_activity_offset_x,
             "offset_y" : - unit_activity_offset_y};
