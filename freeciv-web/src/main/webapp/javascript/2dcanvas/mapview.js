@@ -284,18 +284,19 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
         var airlift_receive_text;  
         var airlift_receive_max_capacity = Math.round(city['size'] / game_info['airlift_dest_divisor']);
 
-        if (game_info['airlifting_style'] > 7) airlift_receive_text = "&infin;"; // DEST_UNLIMITED IS INFINITE
+        if (game_info['airlifting_style'] > 7) airlift_receive_text = "%E2%88%9E"; // DEST_UNLIMITED IS INFINITY==%E2%88%9E  
         // else destination airlifts allowed = population of city / airliftdivisor, rounded to nearest whole number:   
         else airlift_receive_text = Math.max(0,city["airlift"] + airlift_receive_max_capacity - effects[1][0]['effect_value']);             
         
-        airlift_text = (city['airlift']>0  ||  airlift_receive_text=="&infin;"  ||  airlift_receive_text != "0")  
+        airlift_text = (city['airlift']>0  ||  airlift_receive_text=="%E2%88%9E"  ||  airlift_receive_text != "0")  
                         ? " |" + city['airlift'] + ":" + airlift_receive_text + "|"
                         : "";  
       }
     }
   }
 
-  var text = decodeURIComponent(city['name']).toUpperCase() + airlift_text;
+  var text = decodeURIComponent(city['name']+ airlift_text).toUpperCase();
+
   var size = city['size'];
   var color = nations[city_owner(city)['nation']]['color'];
   var prod_type = get_city_production_type(city);
