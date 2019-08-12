@@ -204,6 +204,7 @@ function handle_chat_msg(packet)
 {  
   var message = packet['message'];
   var event = packet['event'];
+  var conn_id = packet['conn_id'];
   var ptile = packet['tile'];
 
   if (message == null) return;
