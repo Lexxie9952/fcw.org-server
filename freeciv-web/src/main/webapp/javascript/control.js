@@ -921,6 +921,9 @@ function button_hide_panels()
 **************************************************************************/
 function update_unit_order_commands()
 {
+  // don't show orders buttons for observers
+  if (client_is_observer()) return; 
+  
   var i, r;
   var punit;
   var ptype;
