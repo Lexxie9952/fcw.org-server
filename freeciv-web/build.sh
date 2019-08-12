@@ -34,3 +34,7 @@ echo "maven package"
 mvn ${BATCH_MODE} flyway:migrate package && \
 echo "Copying target/freeciv-web.war to ${TOMCATDIR}/webapps" && \
   cp target/freeciv-web.war "${TOMCATDIR}/webapps/"
+
+# let user know when it's finished
+echo $'\a'
+
