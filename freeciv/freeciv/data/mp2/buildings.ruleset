@@ -264,14 +264,10 @@ sabotage	= 100
 sound		= "b_cathedral"
 sound_alt	= "b_generic"
 helptext	= _("\
-A Cathedral makes 3 unhappy citizens content in a city, making it\
- easier to maintain order in that city; however, it does not affect\
- citizens made unhappy by military activity.  The discovery of Theology\
- increases the effect of a Cathedral, making an additional unhappy\
- citizen content.  The discovery of Communism lessens the effect of\
- a Cathedral, reducing by one the number of unhappy citizens made\
- content. This building has no additional effect if your nation possesses\
- Michelangelo's Chapel.\
+A Cathedral makes 3 unhappy citizens content in a city; however, it does not affect\
+ citizens made unhappy by military activity. The discovery of Theology increases the\
+ effect by +1. The discovery of Communism reduces the effect by -1. This building has\
+ no effect if your nation possesses Michelangelo's Chapel.\
 ")
 
 [building_city_walls]
@@ -293,11 +289,11 @@ sabotage	= 50
 sound		= "b_city_walls"
 sound_alt	= "b_generic"
 helptext	= _("\
-City Walls enhance the 1.5x bonus for Land units in a city to 3x, effectively\
- doubling the strength of Land units against attacks from other Land units and also\
- Helicopters. City Walls are ineffective against Air units, Sea units, Missiles, and Howitzers,\
- in which case the normal 1.5x bonus is given. City Walls prevent population loss\
- when a defending unit is destroyed by a Land unit.\
+City Walls increase the 1.5x bonus for Land units in a city to 3x, effectively\
+ doubling the strength of Land units against attacks from other Land units (and\
+ Helicopters.) City Walls are ineffective against Air units, Sea units, Missiles,\
+ and Howitzers; in which case the normal 1.5x bonus is given. City Walls prevent\
+ population loss when a defending unit is destroyed by a Land unit.\
 ")
 
 [building_coastal_defense]
@@ -342,18 +338,18 @@ sound		= "b_courthouse"
 sound_alt	= "b_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
-Reduces the corruption and waste in a city by half, (60% rounded down.)\
- Revolt cost of the city is double if empty and quadruple if occupied.\
- Provides law and order to support +1 unit free of upkeep. Removes\
- tile corruption penalties under all governments.\
+Reduces corruption in a city by roughly half (60% but rounded down.)\
+ Provides law and order to support +1 unit free of upkeep. Eliminates\
+ 'tile corruption' under Anarchy and Despotism.\
 "), _("\
-Protects your diplomatic units against hostile diplomatic units by 15%,\
- lowering pre-modified success rate to 35%. Protects your city from the\
- basic 'Steal Tech' action by 35%, lowering success rate to 45%. Increases\
- protection from all other hostile diplomatic actions by 20%.\
+Diplomatic attacks on your diplomatic units are 15% less effective.\
+ (50%-15%=35%). The basic 'Steal Tech' action is 35% less effective.\
+ (80%-35%=45%). All other hostile diplomatic actions are 20% less effective.\
 "), _("\
-Under a Democracy, a Courthouse also makes 1 unhappy citizen content\
- (unless that citizen is unhappy about military activity).\
+In a Democracy, a Courthouse makes 1 unhappy citizen content (unless that\
+ citizen is unhappy about military activity).\
+"), _("\
+Cost to incite revolt in the city is 2x if empty and 4x if occupied.\
 ")
 
 [building_factory]
@@ -611,7 +607,7 @@ sabotage	= 100
 sound		= "b_offshore_platform"
 sound_alt	= "b_generic"
 helptext	= _("\
-Adds 1 extra shield resource on all Oceanic tiles worked by a city.  The\
+Adds 1 extra production to all Oceanic tiles worked by a city.  The\
  city needs to be coastal to build this improvement.\
 ")
 
@@ -676,12 +672,11 @@ sabotage	= 0
 sound		= "b_palace"
 sound_alt	= "b_generic"
 helptext	= _("\
-Makes a city the ecclesiastical capital, that acts as a second center \
-of government.\
+Makes a city the religious capital that acts as a second center of government.\
 "), _("\
-This building is a second Palace and confers all effects of a Palace,\
- including reduction of corruption based on which capital a city is\
- closest to. Under Despotism, the city containing the Palace gains a\
+This building is a second Palace and gives all effects of a Palace,\
+ including reduction of corruption, which is based on which capital a city\
+ is closest to. Under Despotism, the city containing the Palace gains a\
  +75% gold bonus. Under Monarchy, a +50% gold bonus. \
 "), _("\
 The city where this Palace is located cannot be incited to revolt,\
@@ -1184,24 +1179,17 @@ sabotage	= 0
 sound		= "w_asmiths_trading_co"
 sound_alt	= "w_generic"
 helptext	= _("\
-City improvements with upkeep of 1 gold become free\
- of upkeep for all your cities. In addition, this Wonder\
- allows three more specialists who are generally of\
- lower value than the standard three. However, they can provide an\
- economist with the ability to flexibly tune output.\
+In all your cities, Buildings with upkeep of 1 gold become free.\
+ This Wonder also allows three new specialists:\
 "), _("
-Each Laborer produces one production point for their city per turn.\
- That is, a Laborer gives the same output as a blank mountain tile.\
+  * Each Laborer produces one production point for their city per turn;\
+ the same as an unmined mountain.\
 "), _("
-Each Merchant produces two trade points for their city per turn.\
- Trade will then be distributed according to your national tax rates into\
- Gold, Science, and Luxury. A Merchant can be thought of as giving\
- output similar to a 0/0/2 tile.\
+  * Each Merchant produces one gold and two trade points per turn.\
+ Trade is then distributed by your national tax rates.\
 "), _("
-Each Farmer provides one food for their city per turn. Yet each\
- citizen consumes 2 food per turn. Assigning a farmer can only be useful\
- for a citizen who otherwise produces no food. A Farmer gives\
- the same output as a blank hill or swamp tile.\
+  * Each Farmer provides one food for their city per turn;\
+ the same output as a blank hill or swamp.\
 "), _("
  This wonder is never obsolete.\
 ")
@@ -1226,10 +1214,11 @@ sabotage	= 0
 sound		= "w_colossus"
 sound_alt	= "w_generic"
 helptext	= _("\
-Each tile in and around the city where this wonder is built that is\
- already generating some trade produces one extra trade resource.\
- Obsolete by: Automobile.\
+In the city where this wonder is built, +1 trade is added to every tile\
+ that generates trade on its own.\
+ This Wonder is never obsolete.\
 ")
+
 
 [building_copernicus_observatory]
 name		= _("Copernicus' Observatory")
@@ -1327,9 +1316,8 @@ sabotage	= 0
 sound		= "w_sun_tzus_war_academy"
 sound_alt	= "w_generic"
 helptext	= _("\
-Gives mounted units 1 additional movement point. Does not work\
- on Cavalry. Must be built in a city with Barracks I (not II).\
- Obsolete by: Mobile Warfare.\
+Gives all mounted units +1 movement point, except for Cavalry. Must be\
+ built in a city with Barracks I (not II). Obsolete by: Mobile Warfare.\
 ")
 
 [building_gibraltar_fortress]
@@ -1838,9 +1826,8 @@ sound_alt	= "w_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
 The Supreme Court gives the same effect as an extra Courthouse in all your cities.\
- However, if a Courthouse is already present, the additional bonus is reduced to 10%\
- for both diplomatic combat and the basic 'Steal Tech' action. Please see the entry\
- on Courthouse for all effects and bonuses. This Wonder is never obsolete.\
+ If a Courthouse is already present, the additional bonus for diplomatic combat and\
+ 'Steal Tech' is 10%. This Wonder is never obsolete.\
 ")
 
 [building_sun_tzus_war_academy]
@@ -1987,8 +1974,8 @@ sabotage	= 0
 sound		= "w_darwins_voyage"
 sound_alt	= "w_generic"
 helptext	= _("\
-Each tile in and around the city where this wonder is built that is\
- already generating some trade produces one extra trade resource.\
+In the city where this wonder is built, +1 trade is added to every tile\
+ that generates trade on its own.\
  This Wonder is never obsolete.\
 ")
 
