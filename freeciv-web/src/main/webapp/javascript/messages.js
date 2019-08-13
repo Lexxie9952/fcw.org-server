@@ -125,11 +125,14 @@ function reclassify_chat_message(text)
 function add_chatbox_text(packet)
 {
     var text = packet['message'];
+    var server_words = ['waiting on','Lost connection','Not enough','has been removed','has connected']
 
     if (text == null) return;
     if (!check_text_with_banlist(text)) return;
     if (is_longturn()) {
-      if (text.indexOf("waiting on") != -1 || text.indexOf("Lost connection") != -1 || text.indexOf("Not enough") != -1 || text.indexOf("has been removed") != -1 || text.indexOf("has connected") != -1) return;
+      for (server_word in server_words) {
+        if (text.indexOf(server_words[magic_word]) != 1) return;          
+      }      
     }
     if (text.length >= max_chat_message_length) return;
 
