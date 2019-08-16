@@ -720,7 +720,7 @@ function popup_steal_tech_selection_dialog(actor_unit, target_city,
   $("<div id='" + id + "'></div>").appendTo("div#game_page");
 
   /* Set dialog title */
-  $("#" + id).attr("title", "Select Tech to Steal");
+  $("#" + id).attr("title", "Pick Tech to Steal");
 
   /* List the alternatives */
   for (var tech_id in techs) {
@@ -840,7 +840,7 @@ function popup_sabotage_dialog(actor_unit, target_city, city_imprs, act_id)
   $("<div id='" + id + "'></div>").appendTo("div#game_page");
 
   /* Set dialog title */
-  $("#" + id).attr("title", "Select Sabotage Target");
+  $("#" + id).attr("title", "Pick Sabotage Target");
 
   /* List the alternatives */
   for (var i = 0; i < ruleset_control['num_impr_types']; i++) {
