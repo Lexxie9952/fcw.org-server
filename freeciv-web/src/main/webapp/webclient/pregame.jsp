@@ -4,10 +4,10 @@
 	<div id="pregame_buttons">
 		<div id="freeciv_logo" style="cursor:pointer;cursor:hand" onclick="window.open('/', '_new');">
 		</div>
-		<button id="start_game_button" type="button" class="button"><i class="fa fa-check-circle-o" aria-hidden="true"></i> <b>Start Game</b></button>
-		<button id="load_game_button" type="button" class="button"><i class="fa fa-file-o" aria-hidden="true"></i> Load Game</button>
-		<button id="pick_nation_button" type="button" class="button"><i class="fa fa-flag" aria-hidden="true"></i> Pick Nation</button>
-		<button id="pregame_settings_button" type="button" class="button"><i class="fa fa-cogs" aria-hidden="true"></i> Game Settings</button>
+		<button id="start_game_button" title="Start Game" type="button" class="button"><i class="fa fa-check-circle-o" aria-hidden="true"></i><b> Start</b></button>
+		<button id="load_game_button" title="Load a saved game" type="button" class="button"><i class="fa fa-file-o" aria-hidden="true"></i> Load</button>
+		<button id="pick_nation_button" title="Pick your nation" type="button" class="button"><i class="fa fa-flag" aria-hidden="true"></i> Nation</button>
+		<button id="pregame_settings_button" title="Game options" type="button" class="button"><i class="fa fa-cogs" aria-hidden="true"></i> Game</button>
 	</div>
 
   </div>
