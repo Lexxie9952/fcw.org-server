@@ -1,4 +1,8 @@
 <h1>Controls</h1>
+
+The current and complete list of Freeciv-web controls can be found here:
+<a href="https://freeciv.fandom.com/wiki/Hotkeys.mp" target="_blank">Freeciv-web complete command list</a>
+
 <h2>Unit command buttons</h2>
 <img src="/images/orders/goto_default.png">
 Goto
