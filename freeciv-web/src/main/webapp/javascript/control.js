@@ -28,17 +28,23 @@ var keyboard_input = true;
 var unitpanel_active = false;
 var allow_right_click = false;
 
-// this var may be true BEFORE entering map-drag mode, since it gets prematurely set to true
-// while expecting to be set to false right after, if the right conditions aren't met; however,
-// that breaks do_map_click() being able to make sure we're not in map-drag mode so it can
-// know the difference between a real tile click and 'false click' that was the result of 
-// simply releasing/leaving map-drag mode:
+// performance: is_touch_device() was being called many times per second
+var touch_device = null; // TO DO: replace all is_touch_device() function calls
+
+// ---------------------------------------------------------------------------------------
+// UI-state vars to handle mouse action behaviour:
+
+/* mapview_mouse_movement is a proto-state for potentially entering map-drag mode. It's set
+   to true BEFORE entering map-drag mode, then later might be set false if conditions for
+   entering map-drag aren't met. Thus it can't be relied on to know if we're in map_drag mode.  */
 var mapview_mouse_movement = false;  
-// since the var above is co-dependent to other timed mechanical processes, this var below 
-// properly represents when the user is REALLY in map-drag mode: it's ONLY true when the
-// cursor has really changed into mapdrag mode and we're REALLY in it. It's always false when 
-// we are not in map-drag mode and don't have the map-drag cursor:
-var real_mouse_move_mode = true;
+// real_mouse_move_mode always represents the true state of map-drag mode.
+var real_mouse_move_mode = false;
+// determines if unit clicked twice, which creates a context menu under some UI user prefs
+var last_unit_clicked = -1;
+// if a context menu is up, a click simply kills that menu instead of doing other mechanics  
+var came_from_context_menu = false; 
+// ----------------------------------------------------------------------------------------
 
 // Last map viewing location, allows user to return to it with shift-spacebar.
 var last_saved_tile = null;
@@ -46,7 +52,7 @@ var recent_saved_tile = null;
 
 var current_focus = [];   // unit(s) in current focus selection
 var last_focus = null;    // last unit in focus before focus change
-var goto_active = false;
+var goto_active = false;  // state for selecting goto target for a unit
 var paradrop_active = false;
 var airlift_active = false;
 var action_tgt_sel_active = false;
@@ -82,6 +88,8 @@ var end_turn_info_message_shown = false;
 ****************************************************************************/
 function control_init()
 {
+  touch_device = is_touch_device();
+
   if (renderer == RENDERER_2DCANVAS) {
     mapctrl_init_2d();
   } else {
@@ -93,7 +101,7 @@ function control_init()
   $(window).bind('orientationchange resize', orientation_changed);
 
   $("#turn_done_button").click(send_end_turn);
-  if (!is_touch_device()) $("#turn_done_button").tooltip();
+  if (!touch_device) $("#turn_done_button").tooltip();
 
   $("#freeciv_logo").click(function(event) {
     window.open('/', '_new');
@@ -185,9 +193,9 @@ function control_init()
         }
   };
 
-  if (!is_touch_device()) {
+  if (!touch_device) {
     context_options['position'] = function(opt, x, y){
-                                                if (is_touch_device()) return;
+                                                if (touch_device) return;
                                                 var new_top = mouse_y + $("#canvas_div").offset().top;
                                                 if (renderer == RENDERER_2DCANVAS) new_top = mouse_y + $("#canvas").offset().top;
                                                 opt.$menu.css({top: new_top , left: mouse_x});
@@ -250,7 +258,7 @@ function control_init()
       $("widgetbot").height($(window).height() - 100) ;
     });
 
-  if (!is_touch_device()) {
+  if (!touch_device) {
     $("#game_unit_orders_default").tooltip();
   }
   // Make containers drawn over the map not block clicks below, as most of the container is invisible:
@@ -311,7 +319,7 @@ function is_touch_device()
 ****************************************************************************/
 function blur_input_on_touchdevice() 
 {
-  if (is_touch_device() || is_small_screen()) {
+  if (touch_device || is_small_screen()) {
     $('input[type=text], textarea').blur();
   }
 }
@@ -396,12 +404,13 @@ function mouse_moved_cb(e)
 ****************************************************************************/
 function update_mouse_cursor()
 {
-  if (tech_dialog_active && !is_touch_device()) {
+  if (tech_dialog_active && !touch_device) {
     update_tech_dialog_cursor();
     real_mouse_move_mode = false;  // since this code returns before we set it false (below), make sure it's false
     return;
   }
 
+  //console.log("update_mouse_cursor() mmm:1 g_a:0, came_from_context_menu:"+came_from_context_menu);
   var ptile;
   if (renderer == RENDERER_2DCANVAS) {
     ptile = canvas_pos_to_tile(mouse_x, mouse_y);
@@ -419,11 +428,11 @@ function update_mouse_cursor()
   var punit = find_visible_unit(ptile);
   var pcity = tile_city(ptile);
 
-  if (mapview_mouse_movement && !goto_active) {
+  // Don't enter map drag mode when clicking to release context menu
+  if (mapview_mouse_movement && !goto_active && !came_from_context_menu) {
     /* show move map cursor */
     $("#canvas_div").css("cursor", "move");
-    // unlike the var mapview_mouse_movement, the only time this var is true is when we're really in that mode and cursor is set to it
-    real_mouse_move_mode = true;   
+    real_mouse_move_mode = true; 
   } else if (goto_active && current_goto_turns != null) {
     /* show goto cursor */
     $("#canvas_div").css("cursor", "crosshair");
@@ -741,7 +750,7 @@ function check_text_input(event,chatboxtextarea) {
     }
 
     $(chatboxtextarea).val('');
-    if (!is_touch_device()) $(chatboxtextarea).focus();
+    if (!touch_device) $(chatboxtextarea).focus();
     keyboard_input = true;
 
     if (message.length >= 4 && message === message.toUpperCase()) {
@@ -1369,11 +1378,13 @@ function update_unit_order_commands()
             "disband": {name: "Disband (Shift-D)"}
             });
 
-  if (is_touch_device()) {
+/* this code removed: it was inconsistently making context menu too large on mobile:
+  if (touch_device) {
     $(".context-menu-list").css("width", "600px");
     $(".context-menu-item").css("font-size", "220%");
   }
-  $(".context-menu-list").css("z-index", 5000);
+  $(".context-menu-list").css("z-index", 5000); */
+
 //// these changes in control.js and game.js made container not clickable but children unclickable also
   //$("#game_units_orders_default").css("pointer-events", "none"); //// container not clickable, force children to be clickable
   //$("#game_units_orders_default").children().css("pointer-events", "auto"); //// container not clickable, force children to be clickable
@@ -1785,8 +1796,6 @@ function order_wants_direction(order, act_id, ptile) {
 
 /**************************************************************************
  Handles everything when the user clicked a tile
- If it's months after June 2019 and you still see console.log in here,
- please remove it.
 **************************************************************************/
 function do_map_click(ptile, qtype, first_time_called)
 {
@@ -1795,44 +1804,62 @@ function do_map_click(ptile, qtype, first_time_called)
   var pcity = tile_city(ptile);
   var player_has_own_unit_present = false;
 
-  //console.log("do_map_click called.");
+  //console.log("do_map_click(...) called.");
 
-  // User can safely finish dragging and releasing on ANY tile without incurring an action.
-  if (real_mouse_move_mode == true) return; // user is probably releasing/exiting map-drag mode so do NOT do code below which thinks it's a map click
-
-  /* The code below was a working "bandage" to fix the "mapview_mouse_movement bug" generating do_map_clicks when exiting that mode.
-     However, it had the minor flaw that if you exited that mode over a city, it would think you are clicking on that 
-     city and eventually trigger show_city_dialog(). the code above was put in 3.July.2019 to replace it.
-  if (mapview_mouse_movement==true) {
-     if (pcity == null) {
-        // TODO: if we are REALLY in mapview_mouse_movement instead of the current method of pseudo-setting it on
-        // then leaving it on instead of setting it false, also do a return here so we don't look inside the city
-        return; // mapctrl.js:mapview_mouse_click(e) will proceed to toggle to false shortly hereafter
-      }
-  }*/
+  // User can safely finish dragging map and releasing on ANY tile without incurring an action.
+  if (real_mouse_move_mode == true) return; 
     
   if (ptile == null || client_is_observer()) return;
 
   if (current_focus.length > 0 && current_focus[0]['tile'] == ptile['index']) {
     /* clicked on unit at the same tile, then deactivate goto and show context menu. */
-    if (goto_active && !is_touch_device()) { //(allow clicking same tile when giving a Nuke order.)
+    if (goto_active && !touch_device) { //(allow clicking same tile when giving a Nuke order.)
       deactivate_goto(false);
-    }
-    if (renderer == RENDERER_2DCANVAS && !mouse_click_mod_key['shiftKey'] && unit_click_menu) { // shouldn't need last && if it's clicking unit on same tile
-      // normal left-click unit (not shift-click), show context menu unless user has set unit_click_menu=OFF in prefs
-      $("#canvas").contextMenu();
+    } 
+    if (renderer == RENDERER_2DCANVAS) {  
+      if (!mouse_click_mod_key['shiftKey']) { // normal left-click
+        /* CONDITIONS FOR SHOWING A CONTEXT MENU:
+           Automatic context menu when clicking unit set by 'unit_click_menu' user PREF.
+           If unit in a city, always show context menu, so that "show city" is an option.
+           PREF user_click_menu==false controls clicking unit TWICE for context menu, via 'last_unit_clicked' */
+
+        if (pcity || unit_click_menu || last_unit_clicked == current_focus[0]['id']) {
+          $("#canvas").contextMenu();
+
+          if (touch_device || !touch_device) { // We may differentiate behaviour for touch_device later
+            // -2 is transition state for refresh, needed to allow clicking unit again to get rid of the context_menu
+            last_unit_clicked = -2;
+            // this flag indicates the next click will do nothing but destroy context_menu:
+            came_from_context_menu = true; 
+          }
+        } 
+      }
     } else if (!mouse_click_mod_key['shiftKey'] && unit_click_menu) { 
-      // same as above but different block for handling 3d
+      // 3D handling of above. TO DO: test/integrate same 2D functionality above for 3D if appropriate
       $("#canvas_div").contextMenu();
     }
-    if (!mouse_click_mod_key['shiftKey']) return; //our work is done here unless we did a shift-click
+    if (!mouse_click_mod_key['shiftKey']) {
+      // Record the clicked unit to enable seeing if a unit is clicked twice.  
+      // 3 STATES: -1:Fresh, unit_id:last unit clicked is stored, -2:last unit was already clicked twice
+      last_unit_clicked = (last_unit_clicked == -2) ? -1 : current_focus[0]['id'];  
+      return; //our work is done here unless we did a shift-click
+    }  
   }
   var sunits = tile_units(ptile);
-  //pcity = tile_city(ptile); assigned higher above because needed earlier
-
+  // We got here if we didn't left click a unit, so refresh last_unit_clicked to avoid false double-clicks if they go back to it
+  last_unit_clicked = -1;
+  
+  // This catches the cases where another action released the context_menu without a user click
+  // for example, cancelled attacks, no action possible, etc. 
+  if (!$(".context-menu-list").is(":visible"))
+  {
+    came_from_context_menu = false;
+    // special logic to set mapview_mouse_movement here?
+  } 
+    
   // HANDLE GOTO ACTIVE CLICKS ------------------------------------------------------------------------------------------------
   if (goto_active) {
-    console.log("GO TO IS ACTIVE!");
+    // console.log("GO TO IS ACTIVE!");
     if (current_focus.length > 0) {
       // send goto order for all units in focus. 
       for (var s = 0; s < current_focus.length; s++) {
@@ -1913,7 +1940,7 @@ function do_map_click(ptile, qtype, first_time_called)
           }
           continue;  // we did our override and simulated an arrow keypress. no need for other handling, just go on to the next unit
         }
-        console.log("Attempting a GO TO to a non-adjacent tile.")
+        //console.log("Attempting a GO TO to a non-adjacent tile.")
           
         // user did not click adjacent tile, so make sure it's not a null goto_path before handling the goto
         if (goto_path == null) { // Exception: nuke order allows specifying occupied tile to nuke. 
@@ -2023,7 +2050,7 @@ function do_map_click(ptile, qtype, first_time_called)
       }
       clear_goto_tiles();
 
-    } else if (is_touch_device()) {
+    } else if (touch_device) {
       /* this is to handle the case where a mobile touch device user chooses
       GOTO from the context menu or clicks the goto icon. Then the goto path
       has to be requested first, and then do_map_click will be called again
@@ -2059,7 +2086,7 @@ function do_map_click(ptile, qtype, first_time_called)
 
   } else if (airlift_active && current_focus.length > 0) {
     punit = current_focus[0];
-    pcity = tile_city(ptile);
+    pcity = tile_city(ptile); // TO DO: remove? we set pcity at top
     if (pcity != null) {
       packet = {
         "pid"         : packet_unit_do_action,
@@ -2178,7 +2205,7 @@ function do_map_click(ptile, qtype, first_time_called)
           update_active_units_dialog();
         }
 
-        if (is_touch_device()) {
+        if (touch_device) {
           if (renderer == RENDERER_2DCANVAS) {
             $("#canvas").contextMenu();
           } else {
@@ -2793,7 +2820,7 @@ function handle_context_menu_callback(key)
       }
       break;
   }
-  if (key != "goto" && is_touch_device()) {
+  if (key != "goto" && touch_device) {
     deactivate_goto(false);
   }
 }
@@ -2824,6 +2851,7 @@ function save_last_unit_focus()
 function activate_goto_last(last_order, last_action)
 {
   goto_active = true;
+
   $("#canvas_div").css("cursor", "crosshair");
 
   /* Set what the unit should do on arrival. */
@@ -2832,7 +2860,7 @@ function activate_goto_last(last_order, last_action)
 
   if (current_focus.length > 0) {
     if (intro_click_description) {
-      if (is_touch_device()) {
+      if (touch_device) {
         message_log.update({
           event: E_BEGINNER_HELP,
           message: "Carefully drag unit to the tile you want it to go to."
@@ -2889,7 +2917,7 @@ function send_end_turn()
   if (game_info == null) return;
 
   $("#turn_done_button").button( "option", "disabled", true);
-  if (!is_touch_device()) $("#turn_done_button").tooltip({ disabled: true });
+  if (!touch_device) $("#turn_done_button").tooltip({ disabled: true });
   var packet = {"pid" : packet_player_phase_done, "turn" : game_info['turn']};
   send_request(JSON.stringify(packet));
   update_turn_change_timer();
@@ -3061,7 +3089,7 @@ Select all units of same type either globally or on same continent
 **************************************************************************/
 function key_select_same_global_type(continent_only)
 {
-  console.log("key_select_same_type_on_continent");
+  //console.log("key_select_same_type_on_continent");
 
   if (current_focus[0] != null) {
     var punit = current_focus[0];
@@ -3269,7 +3297,7 @@ function key_unit_nuke()
   if (unit_can_do_action(punit, ACTION_NUKE)) {
     /* The last order of the goto is the nuclear detonation. */
     message_log.update({event: E_BEGINNER_HELP,message: "** WARNING!! ** Unit will detonate upon arrival. Choose target location..."});
-    if (!is_touch_device())
+    if (!touch_device)
       message_log.update({event: E_BEGINNER_HELP,message: "...or hit 'D' twice to detonate current location.<br>"});
 
     activate_goto_last(ORDER_PERFORM_ACTION, ACTION_NUKE);
@@ -4184,8 +4212,8 @@ function update_active_units_dialog()
       // check if 5 columns isn't enough to fit all units in the panel:
       if (punits.length > max_units) {  // if 5 columns isn't enough, then each column can display max_rows more units:
         columns += Math.ceil( (punits.length-max_units)/max_rows );
-        console.log("Ultra-large unit panel created. Vertical_room="+vertical_room+" max_rows="+max_rows+" columns="+columns);
-        console.log(".. max_units="+max_units+" selected_units="+punits.length);
+        //console.log("Ultra-large unit panel created. Vertical_room="+vertical_room+" max_rows="+max_rows+" columns="+columns);
+        //console.log(".. max_units="+max_units+" selected_units="+punits.length);
       }
       newwidth = 32 + columns*(width+1) + 9 + 4;  // Large panel gets row of 5 units
       newheight = normal_tile_height * Math.ceil( punits.length/columns ) +75;   // one row for every 5+ units, rounded up of course
@@ -4230,7 +4258,10 @@ function check_mouse_drag_unit(ptile)
   if (sunit != null) {
     if (client.conn.playing != null && sunit['owner'] == client.conn.playing.playerno) {
       set_unit_focus(sunit);
-      activate_goto();
+
+      if (!$(".context-menu-list").is(":visible"))
+        // clicking a unit with a context menu up just releases the menu, doesn't activate goto:
+        activate_goto();
     }
   }
 

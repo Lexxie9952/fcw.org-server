@@ -59,11 +59,9 @@ function mapview_mouse_click(e)
   var rightclick = false;
   var middleclick = false;
 
-  mouse_click_mod_key = e;  // this needs to be saved for later determination
-                            // of shift- or ctrl- clicks for various actions
+  mouse_click_mod_key = e;  // stored to remember if shift- or ctrl- click
 
-  //console.log("       mouse up: current_focus.length at this point is "+current_focus.length);
-  //console.log("         mouse up: current_focus[0] location is: "+tiles[current_focus[0]['tile']]['x']+","+tiles[current_focus[0]['tile']]['y']);
+  //console.log("mapview_mouse_click called for mouse UP.");
                         
   if (!e) e = window.event;
   if (e.which) {
@@ -88,9 +86,6 @@ function mapview_mouse_click(e)
 
   } else if (!middleclick) {
       action_button_pressed(mouse_x, mouse_y, SELECT_POPUP);
-      //console.log("Back inside mouse up function, after action_button_pressed called");
-      //console.log("       mouse up2: current_focus.length at this point is "+current_focus.length);
-      //console.log("         mouse up2: current_focus[0] location is: "+tiles[current_focus[0]['tile']]['x']+","+tiles[current_focus[0]['tile']]['y']);
     
     mapview_mouse_movement = false;
     update_mouse_cursor();
@@ -103,14 +98,40 @@ function mapview_mouse_click(e)
 ****************************************************************************/
 function mapview_mouse_down(e)
 {
+  //console.log("mapview_mouse_down called for mouse DOWN.");
+
+  if (touch_device)
+  {
+    // TO DO: we can put alternate behaviour for touch devices here
+    if ($(".context-menu-list").is(":visible"))
+    {
+      mouse_touch_started_on_unit = false; 
+      context_menu_active = true; 
+      came_from_context_menu = false;
+      mapview_mouse_movement = false;
+      real_mouse_move_mode = false;
+      return; // leave to avoid triggering a mouse event
+    }
+  }
+  else if ($(".context-menu-list").is(":visible")) // Context menu click-to-leave functionality for non-touch devices  
+  { /* Any mouse-down event during an active context menu will:
+        -Release/kill the context menu
+        -Not activate other types of mouse mechanics or special states
+        -Reset all mouse/UI states to a fresh clean condition
+    */
+    mouse_touch_started_on_unit = false; 
+    context_menu_active = true; 
+    came_from_context_menu = false;
+    mapview_mouse_movement = false;
+    real_mouse_move_mode = false;
+    //last_unit_clicked = -1;  ??? optional
+    return; // leave to avoid triggering a mouse-drag event
+  } 
+
   var rightclick = false;
   var middleclick = false;
 
-  mouse_click_mod_key = e;  // this needs to be saved for later determination
-                            // of shift- or ctrl- clicks for various actions
-
-  //console.log("  mouse down: current_focus.length at this point is "+current_focus.length);
-  //console.log("   mouse down: current_focus[0] location is: "+tiles[current_focus[0]['tile']]['x']+","+tiles[current_focus[0]['tile']]['y']);
+  mouse_click_mod_key = e;  // stored to remember if shift- or ctrl- click
 
   if (!e) e = window.event;
   if (e.which) {
@@ -127,15 +148,14 @@ function mapview_mouse_down(e)
     if (goto_active) return;
     if (paradrop_active) return; // left-clicking on your own unit in paradrop mode was selecting it, in spite of 
                                  // action_button_pressed and do_map_click checking for paradrop_active; test for fix.      
-    //console.log("    About to call set_mouse_touch_started_on_unit(x,y)");
     set_mouse_touch_started_on_unit(canvas_pos_to_tile(mouse_x, mouse_y));
-    //console.log("       mouse down2: current_focus.length at this point is "+current_focus.length);
-    //console.log("         mouse down2: current_focus[0] location is: "+tiles[current_focus[0]['tile']]['x']+","+tiles[current_focus[0]['tile']]['y']);
-    //console.log("    About to call check_mouse_drag_unit");
     // After exhaustive debugging, it was determined that check_mouse_drag_unit breaks shift-clicking
     if (!mouse_click_mod_key['shiftKey']) {
       check_mouse_drag_unit(canvas_pos_to_tile(mouse_x, mouse_y));
-      if (!mouse_touch_started_on_unit && map_drag_enabled) mapview_mouse_movement = true;
+      // initial condition for possibly starting map drag mode
+      if (!mouse_touch_started_on_unit && map_drag_enabled && !came_from_context_menu) {
+         mapview_mouse_movement = true; // if you clicked out of a context menu, don't do map drag
+      }
     }
     touch_start_x = mouse_x;
     touch_start_y = mouse_y;
@@ -148,8 +168,7 @@ function mapview_mouse_down(e)
     map_select_y = mouse_y;
     map_select_check_started = new Date().getTime();
 
-    /* The context menu blocks the right click mouse up event on some
-     * browsers. */
+    // The context menu blocks the right-click mouse up event on some browsers. 
     context_menu_active = false;
   }
 }
@@ -160,6 +179,7 @@ function mapview_mouse_down(e)
 ****************************************************************************/
 function mapview_touch_start(e)
 {
+  //console.log("mapview_touch_start(e)");
   e.preventDefault();
 
   touch_start_x = e.originalEvent.touches[0].pageX - $('#canvas').position().left;
@@ -181,6 +201,7 @@ function mapview_touch_start(e)
 ****************************************************************************/
 function mapview_touch_end(e)
 {
+  //console.log("mapview_touch_end(e)");
   action_button_pressed(touch_start_x, touch_start_y, SELECT_POPUP);
 }
 
@@ -253,6 +274,7 @@ function city_mapview_mouse_click(e)
 **************************************************************************/
 function action_button_pressed(canvas_x, canvas_y, qtype)
 {
+  //console.log("action_button_pressed(..))")
   var ptile = canvas_pos_to_tile(canvas_x, canvas_y);
 
   //console.log("FUNCTION CALLED:  action_button_pressed()");
@@ -267,7 +289,6 @@ function action_button_pressed(canvas_x, canvas_y, qtype)
      do_map_click(ptile, qtype, true);
      //console.log("       abp2: current_focus.length at this point is "+current_focus.length);
      //console.log("         abp2: current_focus[0] location is: "+tiles[current_focus[0]['tile']]['x']+","+tiles[current_focus[0]['tile']]['y']);
-   
   } 
 
 }
