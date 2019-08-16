@@ -480,8 +480,8 @@ function popup_action_selection(actor_unit, action_probabilities,
       } });
 
   $(id).attr("title",
-             "Choose Your " + unit_types[actor_unit['type']]['name']
-             + "'s Strategy");
+             "Action for " + unit_types[actor_unit['type']]['name']
+             + ":");
   $(id).dialog({
       bgiframe: true,
       modal: true,
@@ -538,7 +538,7 @@ function popup_bribe_dialog(actor_unit, target_unit, cost, act_id)
     }
   };
 
-  $(id).attr("title", "About that bribery you requested...");
+  $(id).attr("title", "Bribery Action");
 
   $(id).dialog({bgiframe: true,
                 modal: true,
@@ -603,7 +603,7 @@ function popup_incite_dialog(actor_unit, target_city, cost, act_id)
                                }
                              };
 
-  $(id).attr("title", "About that incite you requested...");
+  $(id).attr("title", "Incite Revolt");
 
   $(id).dialog({bgiframe: true,
                 modal: true,
@@ -720,7 +720,7 @@ function popup_steal_tech_selection_dialog(actor_unit, target_city,
   $("<div id='" + id + "'></div>").appendTo("div#game_page");
 
   /* Set dialog title */
-  $("#" + id).attr("title", "Select Advance to Steal");
+  $("#" + id).attr("title", "Select Tech to Steal");
 
   /* List the alternatives */
   for (var tech_id in techs) {
@@ -840,7 +840,7 @@ function popup_sabotage_dialog(actor_unit, target_city, city_imprs, act_id)
   $("<div id='" + id + "'></div>").appendTo("div#game_page");
 
   /* Set dialog title */
-  $("#" + id).attr("title", "Select Improvement to Sabotage");
+  $("#" + id).attr("title", "Select Sabotage Target");
 
   /* List the alternatives */
   for (var i = 0; i < ruleset_control['num_impr_types']; i++) {
