@@ -34,7 +34,7 @@
 </div>
 
 
-<div class="main_menu_buttons" id="timeout_setting_div">
+<div title="Length of turn" class="main_menu_buttons" id="timeout_setting_div">
   <b>Timeout (seconds per turn):</b> <input type='number' name='timeout_setting' id='timeout_setting' size='6' length='3' max='3600' step='1'>
   <span id="timeout_info"></span>
 </div>
@@ -43,13 +43,13 @@
 <table>
 <tr>
 <td>
-  <div class="main_menu_buttons">
+  <div title="Play sound effects for movement, combat, etc." class="main_menu_buttons">
       <input type='checkbox' name='play_sounds_setting' id='play_sounds_setting' checked><b>Play sounds</b>
   </div>
 </td>
 
 <td>
-  <div class="main_menu_buttons">
+  <div title="Computer generated speech for console messages" class="main_menu_buttons">
       <input type='checkbox' name='speech_enabled_setting' id='speech_enabled_setting'><b>Speech messages</b> 
   </div>
 </td>
@@ -57,12 +57,12 @@
 
 <tr>
     <td>
-        <div class="main_menu_buttons">
+        <div title="Draw grids over map tiles. (CTRL-G)" class="main_menu_buttons">
             <input type='checkbox' name='draw_map_grid' id='draw_map_grid' checked><b>Draw map grid</b> 
         </div>
       </td>
     <td>
-        <div class="main_menu_buttons">
+        <div title="Whether double-tap-drag moves the map canvas" class="main_menu_buttons">
             <input type='checkbox' name='map_drag_enabled' id='map_drag_enabled' checked><b>Enable map dragging</b> 
         </div>
     </td>
@@ -70,12 +70,12 @@
 
 <tr>
     <td>
-        <div title='Whether left-click gives pop-up orders menu' class="main_menu_buttons">
-            <input type='checkbox' name='unit_click_menu' id='unit_click_menu' checked><b>Click Unit for Menu</b> 
+        <div title='1 or 2 clicks for Unit pop-up orders menu. Suggested = mobile:1 PC:2' class="main_menu_buttons">
+            <input type='checkbox' name='unit_click_menu' id='unit_click_menu' checked><b>Unit Pop-up Menu: 1 click=&#x2611 2 clicks=&#x2610</b> 
         </div>
     </td>
      <td> 
-        <div class="main_menu_buttons">
+        <div title="Shortcut buttons for unit orders at bottom of screen" class="main_menu_buttons">
             <input type='checkbox' name='show_order_buttons' id='show_order_buttons' checked><b>Show Orders Buttons</b>  
         </div>
     </td>
@@ -83,12 +83,12 @@
 
 <tr>
     <td>
-        <div class="main_menu_buttons">
+        <div title="Units automatically attack without showing odds or asking confirmation." class="main_menu_buttons">
             <input type='checkbox' name='auto_attack' id='auto_attack'><b>Auto-attack</b> 
         </div>
     </td>
     <td>
-        <div class="main_menu_buttons">
+        <div title="Shows incoming/outgoing airlift capacity in city labels on the map." class="main_menu_buttons">
             <input type='checkbox' name='airlift_setting' id='airlift_setting' checked><b>Show city airlift capacity</b>
         </div>
     </td>
