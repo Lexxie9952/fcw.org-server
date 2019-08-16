@@ -218,7 +218,7 @@ function show_load_game_dialog_cb(savegames_data)
   $("<div id='dialog'></div>").appendTo("div#game_page");
 
   $("#dialog").html(saveHtml);
-  $("#dialog").attr("title", "Resume playing a saved game");
+  $("#dialog").attr("title", "Resume a saved game");
   $("#dialog").dialog({
 			bgiframe: true,
 			modal: true,
