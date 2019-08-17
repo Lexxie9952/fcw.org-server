@@ -633,21 +633,35 @@ function get_production_progress(pcity)
 {
   if (pcity == null) return " ";
 
-  if (pcity['production_kind'] == VUT_UTYPE) {
-    var punit_type = unit_types[pcity['production_value']];
-    return pcity['shield_stock'] + " / "
-           + universal_build_shield_cost(pcity, punit_type);
-  }
-
-  if (pcity['production_kind'] == VUT_IMPROVEMENT) {
-    var improvement = improvements[pcity['production_value']];
-    if (improvement['name'] == "Coinage") {
-      return " ";
+  if (touch_device)
+  {
+    if (pcity['production_kind'] == VUT_UTYPE) {
+      return "<span style='font-size:70%;'>(" + pcity['shield_stock'] + ")</span>";
     }
-    return  pcity['shield_stock'] + " / "
-            + universal_build_shield_cost(pcity, improvement);
-  }
 
+    if (pcity['production_kind'] == VUT_IMPROVEMENT) {
+      var improvement = improvements[pcity['production_value']];
+      if (improvement['name'] == "Coinage") {
+        return " ";
+      }
+      return "<span style='font-size:70%;'>(" + pcity['shield_stock'] + ")</span>";
+    }
+  } else {
+      if (pcity['production_kind'] == VUT_UTYPE) {
+        var punit_type = unit_types[pcity['production_value']];
+        return pcity['shield_stock'] + "/"
+              + universal_build_shield_cost(pcity, punit_type);
+      }
+
+      if (pcity['production_kind'] == VUT_IMPROVEMENT) {
+        var improvement = improvements[pcity['production_value']];
+        if (improvement['name'] == "Coinage") {
+          return " ";
+        }
+        return  pcity['shield_stock'] + "/"
+                + universal_build_shield_cost(pcity, improvement);
+      }
+  }
   return " ";
 }
 
@@ -661,19 +675,29 @@ function generate_production_list()
     var punit_type = unit_types[unit_type_id];
 
     /* FIXME: web client doesn't support unit flags yet, so this is a hack: */
-    if (punit_type['name'] == "Barbarian Leader" || punit_type['name'] == "Leader") continue;
+    if (punit_type['name'] == "Barbarian Leader" || punit_type['name'] == "Leader" || punit_type['name'] == "Queen") continue;
 
+    
+    if (is_small_screen())
+    {
       production_list.push({"kind": VUT_UTYPE, "value" : punit_type['id'],
-                            "text" : punit_type['name'],
-	                    "helptext" : punit_type['helptext'],
-                            "rule_name" : punit_type['rule_name'],
-                            "build_cost" : punit_type['build_cost'],
-                            "unit_details" : "A<b>"+punit_type['attack_strength'] + "</b> " 
-                                             + "D<b>"+punit_type['defense_strength'] + "</b> " 
-                                             + "F<b>"+punit_type['firepower'] + "</b> "
+                            "text": punit_type['name'],
+	                      "helptext": punit_type['helptext'],
+                         "sprite" : get_unit_type_image_sprite(punit_type)});
+
+    } else {
+      production_list.push({"kind": VUT_UTYPE, "value" : punit_type['id'],
+                            "text": punit_type['name'],
+	                      "helptext": punit_type['helptext'],
+                       "rule_name": punit_type['rule_name'],
+                      "build_cost": punit_type['build_cost'],
+                    "unit_details": "A<b>"+punit_type['attack_strength'] + "</b> " 
+                                  + "D<b>"+punit_type['defense_strength'] + "</b> " 
+                                  + "F<b>"+punit_type['firepower'] + "</b> "
 // breaks rules with different move frags:  + punit_type['move_rate'] / 3 + ", "
-                                             + "H<b>"+punit_type['hp']+"</b>",
-                            "sprite" : get_unit_type_image_sprite(punit_type)});
+                                  + "H<b>"+punit_type['hp']+"</b>",
+                          "sprite": get_unit_type_image_sprite(punit_type)});
+    }
   }
 
   for (var improvement_id in improvements) {
@@ -685,13 +709,13 @@ function generate_production_list()
           building_details = "-";          
       }
       production_list.push({"kind": VUT_IMPROVEMENT,
-                            "value" : pimprovement['id'],
-                            "text" : pimprovement['name'],
-	                    "helptext" : pimprovement['helptext'],
-                            "rule_name" : pimprovement['rule_name'],
-                            "build_cost" : build_cost,
-                            "unit_details" : building_details,
-                            "sprite" : get_improvement_image_sprite(pimprovement) });
+                           "value": pimprovement['id'],
+                            "text": pimprovement['name'],
+	                      "helptext": pimprovement['helptext'],
+                       "rule_name": pimprovement['rule_name'],
+                      "build_cost": build_cost,
+                    "unit_details": building_details,
+                          "sprite": get_improvement_image_sprite(pimprovement) });
   }
   return production_list;
 }
@@ -1613,22 +1637,27 @@ function city_worklist_dialog(pcity)
   }
 
   var headline = prod_img_html + "<div id='prod_descr'>" 
-    + (is_small_screen() ? "<b>" : "<b>") 
+    + (is_small_screen() ? "" : "<b>") 
     + (prod_type != null ? prod_type['type']['name'] : "None")
-    + "</b>";
+    + (is_small_screen() ? "" : "</b>"); 
+  
+  if (!is_small_screen() )  
+    headline += " &nbsp; (" + get_production_progress(pcity) + ")";
+  else
+    headline += " " + get_production_progress(pcity);
 
-  headline += " &nbsp; (" + get_production_progress(pcity) + ")";
-
-  if (turns_to_complete != FC_INFINITY) {
+  if (turns_to_complete != FC_INFINITY && !is_small_screen() ) {
     headline += ", turns: " + turns_to_complete;
   }
+
+  if (is_small_screen() ) headline = "<span style='font-size:70%;'>"+headline+"</span>";
 
   $("#worklist_dialog_headline").html(headline + "</div>");
 
   $(".production_list_item_sub").tooltip();
 
   if (is_touch_device()) {
-    $("#prod_buttons").html("<x-small>Click to change production, next clicks will add to worklist on mobile.</x-small>");
+    $("#prod_buttons").html("<x-small>1st&thinsp;tap:&thinsp;change. Next&thinsp;taps:&thinsp;add. Tap-tap:&thinsp;clear</x-small>");
   }
 
   $(".button").button();
@@ -1656,7 +1685,7 @@ function city_worklist_dialog(pcity)
     worklist_items.eq(worklist_selection[k]).addClass("ui-selected");
   }
 
-  if (!is_touch_device()) {
+  if (!touch_device) {
     $("#city_current_worklist .worklist_table").selectable({
        filter: "tr",
        selected: handle_current_worklist_select,
@@ -1676,6 +1705,8 @@ function city_worklist_dialog(pcity)
 **************************************************************************/
 function populate_worklist_production_choices(pcity)    
 {
+  var small = is_small_screen();
+
   var production_list = generate_production_list();
   var production_html = "<table class='worklist_table'><tr><td>Type</td><td>Name</td><td style='padding-right:30px; text-align:right'>Info</td><td>Cost</td></tr>";
   for (var a = 0; a < production_list.length; a++) {
@@ -1702,12 +1733,12 @@ function populate_worklist_production_choices(pcity)
            +"></div></td>"
        + "<td class='prod_choice_name'>" + production_list[a]['text'] + "</td>";       
        
-       if (kind == VUT_UTYPE) {
+       if (kind == VUT_UTYPE && !small) {
           production_html += "<td title='Attack/Defence/Firepower, Hitpoints' class='prod_choice_info' "
           + "style='padding-right:30px; text-align:right'>" 
           + production_list[a]['unit_details'] + "</td>";
        }
-       else if (kind == VUT_IMPROVEMENT) {
+       else if (kind == VUT_IMPROVEMENT && !small) {
           production_html += "<td title='Upkeep' class='prod_choice_info' " 
           + "style='padding-right:30px; text-align:right'>" 
           + production_list[a]['unit_details'] + "</td>";
@@ -1721,7 +1752,7 @@ function populate_worklist_production_choices(pcity)
   $("#worklist_production_choices .production_list_item_sub").tooltip();
   $("#worklist_production_choices .prod_choice_info").tooltip();
 
-  if (!is_touch_device()) {
+  if (!touch_device) {
     $("#worklist_production_choices .worklist_table").selectable({
        filter: "tr",
        selected: handle_worklist_select,
