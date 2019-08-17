@@ -4207,8 +4207,9 @@ function update_active_units_dialog()
     if (newwidth < 140) newwidth = 140;
     var newheight = 75 + normal_tile_height;
     
+    var max_units_per_row = is_small_screen() ? 5 : 8;
     // if 9 or more units, switch to large side-panel style with multiple rows and columns:
-    if (punits.length>8) {   
+    if (punits.length > max_units_per_row) {   
       var columns = 5;      // start with 5 columns and only go higher if needed
       var vertical_room = window.innerHeight - 45 /*window header area*/ - 28 /* unusable bottom area*/ - 24; /* unusable upper area of unit panel*/
       var max_rows = Math.floor(vertical_room/50); // max. # of unit rows in game_unit_panel. 50=48+2 (unit vertical size+top/bottom border px)
