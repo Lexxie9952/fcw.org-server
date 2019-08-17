@@ -47,6 +47,9 @@ function pregame_start_game()
   send_request(myJSONText);
 
   setup_window_size ();
+
+  if (is_small_screen())
+    show_fullscreen_window();
 }
 
 /****************************************************************************
