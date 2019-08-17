@@ -1038,10 +1038,10 @@ function update_unit_order_commands()
       unit_actions["explore"] = {name: "Auto explore (X)"};
       $("#order_explore").show(); //frequent only for explorer unit
     }
-
   }
 
   unit_actions = $.extend(unit_actions, {
+                   "exit": {name: "Exit Menu"},
                    "goto": {name: "Unit goto (G)"},
 	               "tile_info": {name: "Tile info"}
                  });
@@ -1382,8 +1382,8 @@ function update_unit_order_commands()
   if (touch_device) {
     $(".context-menu-list").css("width", "600px");
     $(".context-menu-item").css("font-size", "220%");
-  }
-  $(".context-menu-list").css("z-index", 5000); */
+  } */
+  $(".context-menu-list").css("z-index", 5000); 
 
 //// these changes in control.js and game.js made container not clickable but children unclickable also
   //$("#game_units_orders_default").css("pointer-events", "none"); //// container not clickable, force children to be clickable
@@ -1813,7 +1813,7 @@ function do_map_click(ptile, qtype, first_time_called)
 
   if (current_focus.length > 0 && current_focus[0]['tile'] == ptile['index']) {
     /* clicked on unit at the same tile, then deactivate goto and show context menu. */
-    if (goto_active && !touch_device) { //(allow clicking same tile when giving a Nuke order.)
+    if (goto_active /*&& !touch_device*/) { //(allow clicking same tile when giving a Nuke order.)
       deactivate_goto(false);
     } 
     if (renderer == RENDERER_2DCANVAS) {  
@@ -2666,6 +2666,10 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
 function handle_context_menu_callback(key)
 {
   switch (key) {
+    case "exit":
+      // touch device users get to escape from context menu
+      break;
+
     case "build":
       request_unit_build_city();
       break;
