@@ -131,7 +131,7 @@ function add_chatbox_text(packet)
     if (!check_text_with_banlist(text)) return;
     if (is_longturn()) {
       for (server_word in server_words) {
-        if (text.indexOf(server_words[server_word]) != 1) return;          
+        if (text.indexOf(server_words[server_word]) != -1) return;          
       }      
     }
     if (text.length >= max_chat_message_length) return;
