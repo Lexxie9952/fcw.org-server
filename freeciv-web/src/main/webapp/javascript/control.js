@@ -1040,12 +1040,12 @@ function update_unit_order_commands()
     }
   }
 
+  if (touch_device) unit_actions = $.extend(unit_actions, {"exit": {name: "Exit Menu"} } );
   unit_actions = $.extend(unit_actions, {
-                   "exit": {name: "Exit Menu"},
-                   "goto": {name: "Unit goto (G)"},
-	               "tile_info": {name: "Tile info"}
-                 });
-
+                "goto": {name: "Unit goto (G)"},
+	              "tile_info": {name: "Tile info"}
+              });
+ 
   for (i = 0; i < funits.length; i++) {
     punit = funits[i];
     ptype = unit_type(punit);
@@ -1561,8 +1561,10 @@ function click_unit_in_panel(e, punit)
     {
       // First we must check if unit is already in selection:
       var index = current_focus.findIndex(x => x.id==punit.id);
-      if (index === -1) { //index == -1 means it's not in selection, so we add it:
+      if (index === -1) { // -1 means it's not in selection, so we add it:
         current_focus.push(punit); 
+      } else { // if unit is already in selection, shift-clicking removes it from selection
+        current_focus.splice(index, 1);
       }                        
     }
 
@@ -2171,26 +2173,36 @@ function do_map_click(ptile, qtype, first_time_called)
       //if (sunits[0]['owner'] == client.conn.playing.playerno) {   // if player had a unit index >0, we couldn't click the stack
       if (player_has_own_unit_present) {
 
-        // Shift-click means the user wants to add the units in this stack to selected units:
-        if (mouse_click_mod_key['shiftKey'])  { 
-          //var selected_units = [];  // container for all units on tile that player owns
-          //console.log("Attempting to add owner's present units to current_focus, .length=="+current_focus.length);                          
+        // SHIFT CLICK HANDLING -----------------------------------------------------------------------------------------------
+        // Shift-click means the user wants to add the units in this stack to selected units, OR de-select if already selected:
+        if (mouse_click_mod_key['shiftKey'])  {
+          var preclick_current_focus_length = current_focus.length;
 
-				  for (var i = 0; i < sunits.length; i++) {
+				  for (var i = 0; i < sunits.length; i++) { // Process each unit on the shift-clicked tile
             var clicked_unit = sunits[i];
             if (clicked_unit['owner'] == client.conn.playing.playerno) // only add our own units to selection
             {
-              // First we must check if unit is already in selection:
+              // See if unit is already selected  
               var index = current_focus.findIndex(x => x.id==clicked_unit.id);
-              if (index === -1) { //index == -1 means it's not in selection, so we add it:
+              // Add unit to selection if it's not already selected:
+              if (index === -1) { // -1 means it's not in selection, so we add it:
                 current_focus.push(clicked_unit); 
-              }                       
+              } 
+              else { // Unit is already in selection. Shift-clicking removes it from selection.
+                // Allow left-clicking stack then shift-clicking to add rest of stack without de-selecting the first unit
+                // This ensures the whole stack is "on the same page" and not flip-flopping where you can never select/deselect
+                // the entire stack.
+                if (preclick_current_focus_length != 1)  
+                  current_focus.splice(index, 1);
+              } 
             }
           }         
           update_active_units_dialog();
         }
+        // END OF SHIFT-CLICK handling -----------------------------------------------------------------------------
+
         // User did a normal click, so just change selected focus:
-        else if (sunits.length == 1) { //normal left-click on a single unit: change focus onto this unit
+        else if (sunits.length == 1) { // Normal left-click on a single unit: change focus onto this unit
           /* A single unit has been clicked with the mouse. */
           var unit = sunits[0];
           set_unit_focus_and_activate(unit);
@@ -2215,9 +2227,7 @@ function do_map_click(ptile, qtype, first_time_called)
 
       } else if (pcity == null && !mouse_click_mod_key['shiftKey']) {
         // clicked on a tile with units exclusively owned by other players.
-        // (if shift was held we simply do nothing since they can't be added to selected units)
         save_last_unit_focus();
-
         current_focus = sunits;
         $("#game_unit_orders_default").hide();
         update_active_units_dialog();
