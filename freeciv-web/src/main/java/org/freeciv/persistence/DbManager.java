@@ -208,4 +208,26 @@ public class DbManager {
 		return " UPDATE google_auth SET ip = ? " //
 				+ " WHERE LOWER(username) = ? ";
 	}
+	
+	public static String extractGoogleIpLogListEntry() {
+        return "SELECT JSON_EXTRACT((SELECT ip_list FROM google_ip_log " //
+        + " WHERE username=?), "// 
+        + "$)";
+	}
+	
+	public static String getQueryGoogleIpLogList() {
+		return " SELECT ip_list FROM google_ip_log " //
+				+ " WHERE username = ?";
+	}
+	
+    public static String insertIpLogUser() {
+		return " INSERT INTO google_ip_log (username, ip_list) " //
+				+ " VALUES (?, ?)";
+	}
+	
+	public static String insertIpLogListEntry() {
+	    return " UPDATE google_ip_log SET ip_list = JSON_ARRAY_APPEND " //
+	            + " (ip_list, '$', ?) WHERE username = ?";
+    }
+    
 }

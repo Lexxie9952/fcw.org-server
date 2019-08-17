@@ -1,3 +1,4 @@
+
 /*******************************************************************************
  * Freeciv-web - the web version of Freeciv. http://play.freeciv.org/
  * Copyright (C) 2009-2017 The Freeciv-web project
@@ -36,6 +37,10 @@ import org.freeciv.persistence.DbManager;
 import org.freeciv.util.Constants;
 
 import javax.naming.*;
+
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Sign in with a Google Account
@@ -115,6 +120,12 @@ public class TokenSignin extends HttpServlet {
                         preparedStatement.setInt(4, 1);
                         preparedStatement.setString(5, ipAddress);
                         preparedStatement.executeUpdate();
+                        //New username in google_auth means a new username in the ip log
+                        query = DbManager.insertIpLogUser();
+                        preparedStatement = conn.prepareStatement(query);                        
+                        preparedStatement.setString(1, username.toLowerCase());
+                        preparedStatement.setString(2, "[\""+ipAddress+"\"]");
+                        preparedStatement.executeUpdate();                                                
                         response.getOutputStream().print("OK");
                     }
                 } else {
@@ -133,6 +144,39 @@ public class TokenSignin extends HttpServlet {
                             preparedStatement.setString(1, ipAddress);
                             preparedStatement.setString(2, username.toLowerCase());
                             preparedStatement.executeUpdate();
+                            //Do we have an entry for this user in the ip log?
+                            query = DbManager.getQueryGoogleIpLogList();
+                            preparedStatement = conn.prepareStatement(query);
+                            preparedStatement.setString(1, username.toLowerCase());
+                            ResultSet rs2 = preparedStatement.executeQuery();
+                            if (!rs2.next()) { 
+                               // New username in the ip log
+                               query = DbManager.insertIpLogUser();
+                               preparedStatement = conn.prepareStatement(query);
+                               preparedStatement.setString(1, username.toLowerCase());
+                               preparedStatement.setString(2, "[\""+ipAddress+"\"]");
+                               preparedStatement.executeUpdate();                               
+                            }
+                            else {
+                               preparedStatement.executeQuery();       
+                               query = DbManager.extractGoogleIpLogListEntry();
+                               preparedStatement.setString(1, username.toLowerCase());
+                               ResultSet rs3 = preparedStatement.executeQuery();
+                               if(rs3.next()){                               
+                                  String ipString = rs3.getString(1);
+                                  // Remove brackets, whitespaces and double quotes (all mysql artifacts)
+                                  ipString = ipString.replaceAll("^\\[|\"|\\s+|]$", "");
+                                  List<String> ipArray = new ArrayList<String>(Arrays.asList(ipString.split(",")));
+                                  //We don't want duplicate ip entries
+                                  if(!ipArray.contains(ipAddress)) {
+                                     query = DbManager.insertIpLogListEntry();
+                                     preparedStatement = conn.prepareStatement(query); 
+                                     preparedStatement.setString(1, ipAddress);
+                                     preparedStatement.setString(2, username.toLowerCase());
+                                     preparedStatement.executeUpdate();
+                                  }
+                               }                                                  
+                            } 
                         }
 
                     } else {
