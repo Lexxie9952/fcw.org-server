@@ -970,7 +970,7 @@ shield      = 3 ; glacier used to have 4
 [extraui]
 
 ; Player visible names of the base gui types.
-ui_name_base_fortress = _("?gui_type:Build Fortress/Buoy")
+ui_name_base_fortress = _("?gui_type:Build Fort/Buoy")
 ui_name_base_airbase = _("?gui_type:Build Airbase")
 
 ; /* <-- avoid gettext warnings
