@@ -1202,8 +1202,7 @@ function show_intro_dialog(title, message) {
           text : "Start Game",
           click : function() {
                      if (is_touch_device() || is_small_screen()) {
-                       // BigScreen.toggle(); was in full screen until the start button hit, this might have 
-                       // toggled back out. TEST
+                       BigScreen.toggle();  
                      }
           dialog_close_trigger = "button";
           autostart = true;
