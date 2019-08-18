@@ -165,9 +165,11 @@ function init_tech_screen()
     tech_canvas.width = Math.floor(tech_canvas.width * 0.6);
     tech_canvas.height = Math.floor(tech_canvas.height * 0.6);
     tech_canvas_ctx.scale(0.6,0.6);
+    $("#tech_info_box").css("font-size", "87%");
     $("#tech_result_text").css("font-size", "85%");
     $("#tech_color_help").css("font-size", "65%");
     $("#tech_progress_box").css("padding-left", "10px");
+    $("#tech_goal_box").css("font-size", "87%");
   }
 
   if (!is_small_screen()) { 
@@ -399,11 +401,14 @@ function update_tech_screen()
 
   var research_goal_text = "No research target selected.<br>Please select a technology now";
   if (techs[client.conn.playing['researching']] != null) {
-    research_goal_text = "Current Research: " + techs[client.conn.playing['researching']]['name'];
+    research_goal_text = touch_device ? "Current Research: " : "Research:"; 
+    research_goal_text += techs[client.conn.playing['researching']]['name'];
   }
   if (techs[client.conn.playing['tech_goal']] != null) {
-    research_goal_text = research_goal_text + "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Future Goal: "
-        + techs[client.conn.playing['tech_goal']]['name'];
+    if (!touch_device) research_goal_text += "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Future Goal: ";
+    else research_goal_text += "&nbsp;<font color='lightskyblue'>Future Goal:</font>"
+    
+    research_goal_text += techs[client.conn.playing['tech_goal']]['name'];
   }
   $("#tech_goal_box").html(research_goal_text);
 
@@ -418,6 +423,7 @@ function update_tech_screen()
   $("#progress_fg").css("width", pct_progress  + "%");
 
   if (clicked_tech_id != null) {
+    if (touch_device) $("#tech_results").css("margin-left","-22px");
     $("#tech_result_text").html("<span id='tech_advance_helptext'>" + get_advances_text(clicked_tech_id) + "</span>");
     $("#tech_advance_helptext").tooltip({ disabled: false });
   } else if (techs[client.conn.playing['researching']] != null) {
