@@ -35,6 +35,11 @@ var google_user_token = null;
 ****************************************************************************/
 function pregame_start_game()
 {
+  // This absolutely disgusting filthy dirty hack, successfully prevents the 
+  // keyboard from popping up on Mobile; even forcing an exit from fullscreen
+  // mode on Firefox Mobile and some other browsers.
+  if (is_touch_device()) $("#game_text_input").hide();
+
   if (client.conn['player_num'] == null) return;
 
   if (is_pbem() || is_hotseat()) {
@@ -47,6 +52,25 @@ function pregame_start_game()
   send_request(myJSONText);
 
   setup_window_size ();
+  // switching into game mode makes us lose part of our full screen, as tested
+  // on Android.  Make two delayed calls to allow everything to load, to toggle
+  // out and back in again, which removes the top status bar and gives us real
+  // full screen again.
+
+  /* Dirty hack testing saved in case we come back to more tests, but if it's
+     well past August 2019, you can delete this.
+  if (is_touch_device()) 
+  {
+    for (var i=0; i<=50; i++)
+    {
+      //setTimeout(function() { $("#game_text_input").blur(); }, i*200);
+    }
+    //setTimeout(function() { $("#fullscreen_button").click(); }, 10000);
+    //setTimeout(function() { $("#fullscreen_button").click(); }, 14000);
+
+    //setTimeout(function() { $("#game_text_input").show(); }, 8000);
+    //setTimeout(show_fullscreen_window, 11000);
+  } */
 }
 
 /****************************************************************************
