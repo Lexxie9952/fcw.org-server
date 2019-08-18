@@ -1025,24 +1025,24 @@ function update_unit_order_commands()
     if (utype_can_do_action(ptype, ACTION_FOUND_CITY)
         && pcity == null) {
       $("#order_build_city").show();
-      unit_actions["build"] = {name: "Build city (B)"};
+      unit_actions["build"] = {name: "Build City (B)"};
     } else if (utype_can_do_action(ptype, ACTION_JOIN_CITY)
                && pcity != null) {
       $("#order_build_city").show();
-      unit_actions["build"] = {name: "Join city (B)"};
+      unit_actions["build"] = {name: "Join City (B)"};
     } else {
       $("#order_build_city").hide();
     }
 
     if (ptype['name'] == "Explorer") {
-      unit_actions["explore"] = {name: "Auto explore (X)"};
+      unit_actions["explore"] = {name: "Auto Explore (X)"};
       $("#order_explore").show(); //frequent only for explorer unit
     }
   }
 
   if (touch_device) unit_actions = $.extend(unit_actions, {"exit": {name: "Exit Menu"} } );
   unit_actions = $.extend(unit_actions, {
-                "goto": {name: "Unit goto (G)"},
+                "goto": {name: "Goto (G)"},
 	              "tile_info": {name: "Tile info"}
               });
  
@@ -1076,7 +1076,7 @@ function update_unit_order_commands()
           $("#order_road").hide(); // can't build road on river if bridge-building not known
         else {
           $("#order_road").show();
-          unit_actions["road"] = {name: "Build road (R)"};
+          unit_actions["road"] = {name: "Road (R)"};
         }
       }
     } //-------------------------
@@ -1117,19 +1117,19 @@ function update_unit_order_commands()
         $("#order_road").show();
         $("#order_railroad").hide();
         if (!(tile_has_extra(ptile, EXTRA_RIVER) && player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) == TECH_UNKNOWN)) {
-	      unit_actions["road"] = {name: "Build road (R)"};
+	      unit_actions["road"] = {name: "Road (R)"};
 	    }
       } else if (player_invention_state(client.conn.playing, tech_id_by_name('Railroad')) == TECH_KNOWN
                  && tile_has_extra(ptile, EXTRA_ROAD)
                && !tile_has_extra(ptile, EXTRA_RAIL)) {
         $("#order_road").hide();
         $("#order_railroad").show();
-	    unit_actions['railroad'] = {name: "Build railroad (R)"};
+	    unit_actions['railroad'] = {name: "Railroad (R)"};
       } else if (can_build_maglev(punit, ptile)) {
         $("#order_road").hide();
         $("#order_railroad").hide();
         $("#order_maglev").show();
-        unit_actions['maglev'] = {name: "Build maglev (R)"};
+        unit_actions['maglev'] = {name: "MagLev (R)"};
       } else {
         $("#order_road").hide();
         $("#order_railroad").hide();
@@ -1146,24 +1146,25 @@ function update_unit_order_commands()
       if ( (terrain_name == 'Hills' || terrain_name == 'Mountains') && !tile_has_extra(ptile, EXTRA_MINE)) {
         $("#order_mine").show();
         unit_actions["mine"] =  {name: "Mine (M)"};
-      } else if (terrain_name == "Desert" && !tile_has_extra(ptile, EXTRA_OIL_WELL)) {
+      } else if (terrain_name == "Desert" && !tile_has_extra(ptile, EXTRA_OIL_WELL) 
+        && player_invention_state(client.conn.playing, tech_id_by_name('Construction'))!= TECH_UNKNOWN ) {
           $("#order_oil_well").show();
-          unit_actions["mine"] =  {name: "Make Oil Well (M)"};
+          unit_actions["mine"] =  {name: "Oil Well (M)"};
       } else if (terrain_name == 'Grassland' || terrain_name == 'Plains' || terrain_name == 'Swamp' || terrain_name == 'Jungle') { 
-          unit_actions["mine"] = {name: "Plant forest (M)"};
+          unit_actions["mine"] = {name: "plant Forest (M)"};
           if (show_order_buttons==2) $("#order_plant_forest").show();  //not frequently used button        
       } else if (terrain_name == 'Forest') {
-          unit_actions["mine"] = {name: "Make swamp (M)"};
+          unit_actions["mine"] = {name: "make Swamp (M)"};
           if (show_order_buttons==2) $("#order_make_swamp").show();  //not frequently used button        
       }
 
       if (tile_has_extra(ptile, EXTRA_FALLOUT)) {
-        unit_actions["fallout"] = {name: "Remove fallout (N)"};
+        unit_actions["fallout"] = {name: "clean Fallout (N)"};
       }
 
       if (tile_has_extra(ptile, EXTRA_POLLUTION)) {
         $("#order_pollution").show();
-	    unit_actions["pollution"] = {name: "Remove pollution (P)"};
+	    unit_actions["pollution"] = {name: "clean Pollution (P)"};
       } else {
         $("#order_pollution").hide();
       }
@@ -1172,7 +1173,7 @@ function update_unit_order_commands()
         if (show_order_buttons==2) $("#order_forest_remove").show(); // not frequently used button
         $("#order_irrigate").hide();
         $("#order_build_farmland").hide();
-	    unit_actions["forest"] = {name: "Cut down forest (I)"};
+	    unit_actions["forest"] = {name: "Chop Forest (I)"};
       } else if (!tile_has_extra(ptile, EXTRA_IRRIGATION) && (terrain_name != 'Mountains')) {
         $("#order_irrigate").show();
         $("#order_forest_remove").hide();
@@ -1182,7 +1183,7 @@ function update_unit_order_commands()
         $("#order_build_farmland").show();
         $("#order_irrigate").hide();
         $("#order_forest_remove").hide();
-        unit_actions["irrigation"] = {name: "Build farmland (I)"};
+        unit_actions["irrigation"] = {name: "Farmland (I)"};
       } else {    
         $("#order_forest_remove").hide();
         $("#order_irrigate").hide();
@@ -1214,12 +1215,14 @@ function update_unit_order_commands()
     }
 
     if (show_order_buttons==2) $("#order_explore").show(); //not frequently used for most units
-
-    if (can_build_canal(punit, ptile)) {
-      if (show_order_buttons==2) $("#order_canal").show(); // not frequently used button
-      unit_actions["canal"] = {name: "Build canal"};
+    
+    ///// mp2 rules allow building Canals:
+    if (ruleset_control['name'] == "Multiplayer-Evolution ruleset") {
+      if (can_build_canal(punit, ptile)) {
+        if (show_order_buttons==2) $("#order_canal").show(); // not frequently used button
+        unit_actions["canal"] = {name: "Canal"};
+      }
     }
-
     // Well-Digger-----------------------
     if (unit_types[punit['type']]['name'] == "Well-Digger") {
 
@@ -1230,7 +1233,7 @@ function update_unit_order_commands()
 
       if (can_build_well(punit, ptile)) {   // Well-Digger
         $("#order_well").show();
-        unit_actions["well"] = {name: "Dig well"};
+        unit_actions["well"] = {name: "dig Well"};
       }
 
       var is_lowland = (terrain_name != 'Hills' 
@@ -1270,7 +1273,7 @@ function update_unit_order_commands()
       $("#order_change_homecity").hide();
     } else if (pcity != null && punit['homecity'] != pcity['id']) {
       $("#order_change_homecity").show();
-      unit_actions["homecity"] = {name: "Change homecity of unit (H)"};
+      unit_actions["homecity"] = {name: "Homecity (H)"};
     }
 
     if (pcity != null && city_has_building(pcity, improvement_id_by_name(B_AIRPORT_NAME))) {
@@ -1346,10 +1349,10 @@ function update_unit_order_commands()
         for (var r = 0; r < units_on_tile.length; r++) {
           var tunit = units_on_tile[r];
           if (tunit['transported']) {
-            unit_actions["unit_show_cargo"] = {name: "Activate cargo units (shift-U)"};
+            unit_actions["unit_show_cargo"] = {name: "Select Cargo (Shift-U)"};
 
             if (pcity != null) {
-              unit_actions["unit_unload"] = {name: "Unload units from transport (T)"};
+              unit_actions["unit_unload"] = {name: "Unload Transport (T)"};
               $("#order_unload").show();
             } else $("#order_activate_cargo").show(); // if no option to unload, show option to activate or 'wake' units
           }
@@ -1364,8 +1367,8 @@ function update_unit_order_commands()
 
   var num_tile_units = tile_units(ptile);
   if (num_tile_units != null) {
-    if (num_tile_units.length >= 2) {
-      unit_actions = $.extend(unit_actions, {
+    if (num_tile_units.length >= 2 && !touch_device) { // Touch devices have no buttons or keys to issue multiple orders
+      unit_actions = $.extend(unit_actions, {          // and they lack screen space for longer context menus also
         "select_all_tile": {name: "Select all on tile (V)"},
         "select_all_type": {name: "Select same type (Shift-V)"}
         });
@@ -2297,6 +2300,9 @@ civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       if (ctrl) {
         the_event.preventDefault();
         quicksave();
+      }
+      else if (alt) {
+        show_fullscreen_window();
       }
     break;
 
