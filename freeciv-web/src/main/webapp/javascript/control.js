@@ -200,8 +200,8 @@ function control_init()
                                                 if (renderer == RENDERER_2DCANVAS) new_top = mouse_y + $("#canvas").offset().top;
                                                 opt.$menu.css({top: new_top , left: mouse_x});
                                               };
-  }
-
+  } 
+  
   $.contextMenu(context_options);
 
   $(window).on('unload', function(){
@@ -296,7 +296,6 @@ function control_init()
   // don't show orders buttons to observers:
   if (client_is_observer()) {
     $("#game_unit_orders_default").hide();
-    $("#game_unit_orders_settlers").hide();
   }
 }
 
@@ -864,13 +863,19 @@ function update_unit_focus()
 **************************************************************************/
 function advance_unit_focus()
 {
-  if (client_is_observer()) return;
+  if (client_is_observer())
+  {
+    return;
+  } 
 
   var candidate = find_best_focus_candidate(false);
 
   if (candidate == null) {
     candidate = find_best_focus_candidate(true);
   }
+
+  // remove state-blocking from leaving context menu
+  came_from_context_menu = false; 
 
   if (candidate != null) {
     goto_active = false;  // turn Go-To off if jumping focus to a new unit
@@ -885,7 +890,8 @@ function advance_unit_focus()
     update_active_units_dialog();
     $("#game_unit_orders_default").hide();
 
-    /* find a city to focus on if new game. consider removing this.  */
+    // Test removal
+    /* find a city to focus on if new game. consider removing this.  
     if (game_info['turn'] <= 1) {
       for (var city_id in cities) {
         var pcity = cities[city_id];
@@ -894,8 +900,13 @@ function advance_unit_focus()
           break;
         }
       }
+    }*/
+    if (touch_device)
+    {
+      $("#turn_done_button").button("option", "label", "<i class='fa fa-check-circle-o' style='color: green;'aria-hidden='true'></i>Done");
+    } else {
+        $("#turn_done_button").button("option", "label", "<i class='fa fa-check-circle-o' style='color: green;'aria-hidden='true'></i> Turn Done");
     }
-    $("#turn_done_button").button("option", "label", "<i class='fa fa-check-circle-o' style='color: green;'aria-hidden='true'></i> Turn Done");
     if (!end_turn_info_message_shown) {
       end_turn_info_message_shown = true;
       message_log.update({ event: E_BEGINNER_HELP, message: "All units have moved, click the \"Turn Done\" button to end your turn."});
@@ -937,8 +948,12 @@ function button_hide_panels()
 function update_unit_order_commands()
 {
   // don't show orders buttons for observers
-  if (client_is_observer()) return; 
-  
+  if (client_is_observer())
+  {
+    $("#game_unit_orders_default").hide();
+    return;
+  } 
+
   var i, r;
   var punit;
   var ptype;
@@ -959,6 +974,11 @@ function update_unit_order_commands()
       }
     }
   }
+  if (funits.length<1) {
+    // speed performance: hide and leave
+    $("#game_unit_orders_default").hide();
+    return;
+  }
 
   switch (show_order_buttons) {
     case 0:                 // hide lower all panels
@@ -967,12 +987,14 @@ function update_unit_order_commands()
     break;
 
     case 1:         // common/frequently used orders only
+      $("#game_unit_orders_default").show();
       $("#order_more").show();  
       $("#order_less").hide();
       $("#order_disband").hide();
     break;
 
     case 2:         // all legal orders buttons
+      $("#game_unit_orders_default").show();
       $("#order_less").show();
       $("#order_more").hide(); 
       $("#order_disband").show();
@@ -1124,7 +1146,7 @@ function update_unit_order_commands()
                && !tile_has_extra(ptile, EXTRA_RAIL)) {
         $("#order_road").hide();
         $("#order_railroad").show();
-	    unit_actions['railroad'] = {name: "Railroad (R)"};
+	      unit_actions['railroad'] = {name: "Railroad (R)"};
       } else if (can_build_maglev(punit, ptile)) {
         $("#order_road").hide();
         $("#order_railroad").hide();
@@ -1173,8 +1195,8 @@ function update_unit_order_commands()
         if (show_order_buttons==2) $("#order_forest_remove").show(); // not frequently used button
         $("#order_irrigate").hide();
         $("#order_build_farmland").hide();
-	    unit_actions["forest"] = {name: "Chop Forest (I)"};
-      } else if (!tile_has_extra(ptile, EXTRA_IRRIGATION) && (terrain_name != 'Mountains')) {
+	      unit_actions["forest"] = {name: "Chop Forest (I)"};
+      } else if (can_irrigate(punit, ptile)) {
         $("#order_irrigate").show();
         $("#order_forest_remove").hide();
         $("#order_build_farmland").hide();
@@ -1225,6 +1247,8 @@ function update_unit_order_commands()
     }
     // Well-Digger-----------------------
     if (unit_types[punit['type']]['name'] == "Well-Digger") {
+      $("#order_fortify").hide();
+      delete unit_actions["fortify"];
 
       if (show_order_buttons==1) {
         $("#order_sentry").hide(); //not frequently used buttons 
@@ -1239,7 +1263,7 @@ function update_unit_order_commands()
       var is_lowland = (terrain_name != 'Hills' 
                    && terrain_name != 'Mountains');
 
-      if (is_lowland && (!tile_has_extra(ptile, EXTRA_IRRIGATION)) ) {             
+      if (is_lowland && tile_owner(ptile)==punit['owner'] && can_irrigate(punit,ptile) ) {             
         $("#order_irrigate").show();  // can irrigate any lowland tile
         unit_actions["irrigation"] = {name: "Irrigation (I)"};
       }
@@ -2142,7 +2166,7 @@ function do_map_click(ptile, qtype, first_time_called)
                       " and for some reason we're still not showing the city dialog.");
           return;  
       }
-      console.log("Clicked a non-domestic city or shift-clicked domestic. Not showing dialog.  goto_active=="+goto_active);
+      //console.log("Clicked a non-domestic city or shift-clicked domestic. Not showing dialog.  goto_active=="+goto_active);
       //return;  //this return-command only happened if clicking a foreign city, bypassing all ability below to click your 
       //own unit on a tile that's not your city (such as, a foreign city)
 
@@ -2594,11 +2618,11 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
 
     case 27:      //Esc
       deactivate_goto(false);
-      /* Abort started multiple unit selection. */
+      /* Abort UI states */
       map_select_active = false;
       map_select_check = false;
       mapview_mouse_movement = false;
-
+      came_from_context_menu = false;
       /* Abort any context menu blocking. */
       context_menu_active = true;
       if (renderer == RENDERER_2DCANVAS) {
@@ -2629,12 +2653,13 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         clear_goto_tiles();
         update_active_units_dialog();
 
-        // clear out of every other select mode, too
+        // clear out of special UI-states, too
         paradrop_active = false;
         airlift_active = false;
         map_select_active = false;
         map_select_check = false;
         mapview_mouse_movement = false;
+        came_from_context_menu = false;
       }
       break;
 
@@ -2700,7 +2725,8 @@ function handle_context_menu_callback(key)
 
     case "tile_info":
       var ptile = find_a_focus_unit_tile_to_center_on();
-      if (ptile != null) popit_req(ptile);
+      if (ptile != null) popit_req(ptile);   
+      came_from_context_menu = false;  // reset UI-blocking state
       break;
 
     case "goto":
@@ -2838,6 +2864,7 @@ function handle_context_menu_callback(key)
       if (stile != null) {
         show_city_dialog(tile_city(stile));
       }
+      came_from_context_menu = false; // remove UI-blocking state.
       break;
   }
   if (key != "goto" && touch_device) {
@@ -3204,6 +3231,9 @@ function key_unit_noorders()
 **************************************************************************/
 function key_unit_idle()
 {
+  // unit will refocus on itself, so remove ui-blocking state
+  came_from_context_menu = false;
+
   var funits = get_units_in_focus();
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
@@ -3408,7 +3438,7 @@ function key_unit_pillage()
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     var tgt = get_what_can_unit_pillage_from(punit, null);
-    if (tgt) console.log("Unit can pillage "+tgt.length+" targets: "+tgt);
+    //if (tgt) console.log("Unit can pillage "+tgt.length+" targets: "+tgt);
     if (tgt.length > 0) {
       if (tgt.length == 1) {
         request_new_unit_activity(punit, ACTIVITY_PILLAGE, EXTRA_NONE);
@@ -3444,6 +3474,7 @@ function can_build_well(punit, ptile)
 
   return ( (punit != null && ptile != null)
       &&  (!tile_has_extra(ptile, EXTRA_RIVER))
+      &&  tile_owner(ptile) == punit['owner']
       &&  (unit_types[punit['type']]['name'] == "Well-Digger")
       &&  (is_lowland)
       &&  (player_invention_state(client.conn.playing, tech_id_by_name('Pottery')) != TECH_KNOWN)
@@ -3473,14 +3504,93 @@ function can_build_canal(punit, ptile)
 {
   var is_lowland = (tile_terrain(ptile)['name'] != 'Hills' 
                    && tile_terrain(ptile)['name'] != 'Mountains');
+  
+  var water_near = false;
+  
+  // check for water near:
+  for (var dir = 0; dir < 8; dir++) {
+    /* Check if there is adjacent ocean/deep ocean/lake */
+    var tile1 = mapstep(ptile, dir);
+    if (tile1 != null) {
+        if (terrains[tile1['terrain']]['name'] == "Lake"
+        || terrains[tile1['terrain']]['name'] == "Ocean"
+        || terrains[tile1['terrain']]['name'] == "Deep Ocean" ) {
+          water_near = true;        
+          break;
+        }
+    }
+  }               
 
   return ((typeof EXTRA_CANAL !== "undefined")
       &&  (punit != null && ptile != null)
       &&  (!tile_has_extra(ptile, EXTRA_CANAL))
       &&  (unit_can_do_action(punit, ACTION_ROAD))
       && (is_lowland) 
+      && (water_near)
       &&  (player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN)
          );
+}
+
+/**************************************************************************
+ Check whether a unit can literally "Irrigate" a tile: 
+   The "irrigate" command per se, NOT "chop forest" or "build farmland" 
+**************************************************************************/
+function can_irrigate(punit, ptile)
+{
+  // For performance, check simple things first and exit with results
+  if (punit == null || ptile == null)
+    return false;  
+  if (!unit_can_do_action(punit, ACTION_IRRIGATE))
+    return false;
+
+  // Can always change swamp/jungle to grass:
+  var terrain_name = tile_terrain(ptile)['name'];
+  if (terrain_name=="Swamp" || terrain_name=="Jungle")
+    return true; 
+  
+  // Check for non-irrigable terrain types:
+  var invalid_terrain = (terrain_name == 'Mountains' 
+                      || terrain_name == 'Lake'
+                      || terrain_name == 'Ocean'
+                      || terrain_name == 'Deep Ocean'
+                      || terrain_name == 'Forest' // Chop Forest command is different
+                      || terrain_name == 'Glacier'   
+                      );
+  invalid_terrain = invalid_terrain || tile_has_extra(ptile, EXTRA_IRRIGATION); // Farmland is separate command
+  if (invalid_terrain)
+    return false;
+
+  // Check central tile for water source:
+  var water_near = tile_has_extra(ptile, EXTRA_RIVER) // irrigation is also a water source but, it's already irrigated! ;)
+      || (tile_has_extra(ptile, EXTRA_OASIS) && ruleset_control['name'] == "Multiplayer-Evolution ruleset");
+  
+  // If no water on occupied tile, check cardinally adjacent:
+  if (!water_near) {
+    for (var dir = 1; dir < 7; dir++) {
+      if (dir==2 || dir==5)
+        continue; // only check cardinal dir 1,3,4,6 (N,W,E,S)
+      var cadj_tile = mapstep(ptile, dir);
+      terrain_name = tile_terrain(cadj_tile)['name'];
+      if (cadj_tile != null) {
+        if (terrain_name == "Lake"
+         || terrain_name == "Ocean"
+         || terrain_name == "Deep Ocean"
+         || tile_has_extra(cadj_tile, EXTRA_IRRIGATION) 
+         || tile_has_extra(cadj_tile, EXTRA_RIVER)              
+         || (tile_has_extra(cadj_tile, EXTRA_OASIS) && ruleset_control['name']=="Multiplayer-Evolution ruleset") ) { 
+            water_near = true;        
+            break; // one adjacent water is all that's needed
+        }
+      }
+    }
+  }
+  if (water_near) 
+    return true; 
+
+  if (unit_types[punit['type']]['name'] == "Well-Digger") 
+    return true; // met all requirements except water_near, which it doesn't need
+
+  return false;
 }
 
 /**************************************************************************
@@ -3526,7 +3636,10 @@ function key_unit_road()
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     var ptile = index_to_tile(punit['tile']);
-    if (!tile_has_extra(ptile, EXTRA_ROAD)) {
+
+    if (unit_types[punit['type']]['name'] == "Well-Digger")
+      request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['River']['id']);
+    else if (!tile_has_extra(ptile, EXTRA_ROAD)) {
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Road']['id']);
     } else if (!tile_has_extra(ptile, EXTRA_RAIL)) {
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Railroad']['id']);
@@ -4222,7 +4335,8 @@ function update_active_units_dialog()
     var newwidth = 32 + punits.length * (width+1) + 9;  // width+1 can be modified if number of units is creating inconsistency in horizontal padding
     if (newwidth < 140) newwidth = 140;
     var newheight = 75 + normal_tile_height;
-    
+
+
     var max_units_per_row = is_small_screen() ? 5 : 8;
     // if 9 or more units, switch to large side-panel style with multiple rows and columns:
     if (punits.length > max_units_per_row) {   
@@ -4237,7 +4351,7 @@ function update_active_units_dialog()
         //console.log(".. max_units="+max_units+" selected_units="+punits.length);
       }
       newwidth = 32 + columns*(width+1) + 9 + 4;  // Large panel gets row of 5 units
-      newheight = normal_tile_height * Math.ceil( punits.length/columns ) +75;   // one row for every 5+ units, rounded up of course
+      newheight = normal_tile_height * Math.ceil( punits.length/columns ) +75;  // one row for every 5+ units, rounded up of course
     } 
     $("#game_unit_panel").parent().show();
     $("#game_unit_panel").parent().width(newwidth);
