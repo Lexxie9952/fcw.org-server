@@ -465,7 +465,7 @@ function update_timeout()
 
     if (remaining >= 0 && turn_change_elapsed == 0) {
       if (is_small && !is_longturn()) {
-        $("#turn_done_button").button("option", "label", "Turn " + remaining);
+        $("#turn_done_button").button("option", "label", "T " + remaining);
         $("#turn_done_button .ui-button-text").css("padding", "3px");
       } else if (is_small) {  // small screen && longturn:
         $("#turn_done_button").button("option", "label", "" + seconds_to_human_time(remaining) + ""); //timer only, don't cover tabs
@@ -490,7 +490,10 @@ function update_turn_change_timer()
         + (last_turn_change_time - turn_change_elapsed) + ")");
   } else {
     turn_change_elapsed = 0;
-    $("#turn_done_button").button("option", "label", "Turn Done"); 
+    if (is_small_screen() )
+      $("#turn_done_button").button("option", "label", "Done");
+    else
+      $("#turn_done_button").button("option", "label", "Turn Done"); 
   }
 }
 

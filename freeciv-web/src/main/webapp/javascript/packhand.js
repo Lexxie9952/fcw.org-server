@@ -51,7 +51,7 @@ function handle_ruleset_terrain(packet)
 {
   /* FIXME: These two hacks are there since Freeciv-web doesn't support rendering Lake and Glacier correctly. */
   if (packet['name'] == "Lake") packet['graphic_str'] = packet['graphic_alt'];
-  if (packet['name'] == "Glacier") packet['graphic_str'] = "tundra";
+  //if (packet['name'] == "Glacier") packet['graphic_str'] = "tundra";
   terrains[packet['id']] = packet;
 }
 
@@ -1191,7 +1191,7 @@ function handle_begin_turn(packet)
   if (!observing) {
     $("#turn_done_button").button("option", "disabled", false);
     if (is_small_screen()) {
-      $("#turn_done_button").button("option", "label", "Turn Done");
+      $("#turn_done_button").button("option", "label", "Done");
     } else {
       $("#turn_done_button").button("option", "label", "Turn Done");
     }
