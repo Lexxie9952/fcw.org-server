@@ -224,6 +224,18 @@ function mapview_touch_move(e)
 
     mapview['gui_x0'] += diff_x;
     mapview['gui_y0'] += diff_y;
+
+    /* this would enable keeping unit selected for touch_device after map dragging
+       it currently has little use since
+         there is no way to give it an order if it's far away
+           it could still be used to drag a little to find a target for go to
+         it would be broken since it doesn't exit real_mouse_move_mode after dragging,
+           but we could fix that probably
+           
+    if (!mouse_touch_started_on_unit && !came_from_context_menu) {
+      mapview_mouse_movement = true; // if you clicked out of a context menu, don't do map drag
+   
+     } */
   }
 
   if (client.conn.playing == null) return;
@@ -274,7 +286,7 @@ function city_mapview_mouse_click(e)
 **************************************************************************/
 function action_button_pressed(canvas_x, canvas_y, qtype)
 {
-  //console.log("action_button_pressed(..))")
+   // console.log("action_button_pressed(..))")
   var ptile = canvas_pos_to_tile(canvas_x, canvas_y);
 
   //console.log("FUNCTION CALLED:  action_button_pressed()");
