@@ -1157,58 +1157,6 @@ target_reqs    =
     { "type",    "name",     "range"
       "Terrain", "Glacier",  "Local"
     }
- 
-[actionenabler_irrigate_src_ocean]
-action        = "Build Irrigation"
-actor_reqs    =
-    { "type",          "name",         "range", "present"
-      "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitFlag",      "Well-Digger",  "Local", FALSE
-      "UnitType",      "Legion",       "Local",   FALSE
-    }
-target_reqs    =
-    { "type",        "name",     "range", "present"
-      "TerrainClass", "Oceanic", "CAdjacent", TRUE
-    }
- 
-[actionenabler_irrigate_src_river]
-action        = "Build Irrigation"
-actor_reqs    =
-    { "type",          "name",         "range", "present"
-      "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitType",      "Legion",       "Local",   FALSE
-      "UnitFlag",      "Well-Digger",  "Local", FALSE
-    }
-target_reqs    =
-    { "type",    "name",     "range", "present"
-      "Extra",   "River",    "CAdjacent", TRUE
-    }
-
-[actionenabler_irrigate_src_oasis]
-action        = "Build Irrigation"
-actor_reqs    =
-    { "type",          "name",         "range", "present"
-      "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitType",      "Legion",       "Local",   FALSE
-      "UnitFlag",      "Well-Digger",  "Local", FALSE
-    }
-target_reqs    =
-    { "type",    "name",     "range", "present"
-      "Extra",   "Oasis",    "CAdjacent", TRUE
-    }    
- 
-[actionenabler_irrigate_src_irrigation]
-action        = "Build Irrigation"
-actor_reqs    =
-    { "type",          "name",         "range", "present"
-      "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitFlag",      "Well-Digger",  "Local", FALSE
-      "UnitType",      "Legion",       "Local",   FALSE
-    }
-target_reqs    =
-    { "type",    "name",       "range", "present"
-      "Extra",   "Irrigation", "CAdjacent", TRUE
-    }
 
 ;Well-Digger can irrigate before Pottery and Alphabet.
 [actionenabler_irrigate_welldigger]
@@ -1222,9 +1170,61 @@ target_reqs    =
      { "type",    "name", "range", "present"
        "TerrainFlag", "Low Land", "Local", TRUE
        "Tech", "Pottery", "Player", FALSE
-       "Tech", "Alphabet", "Player", FALSE
+       "Tech", "Alphabet","Player", FALSE
      }
+  
+[actionenabler_irrigate_src_ocean]
+action        = "Build Irrigation"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitFlag",      "Well-Digger",  "Local", FALSE
+      "UnitType",      "Legion",       "Local", FALSE
+    }
+target_reqs    =
+    { "type",        "name",     "range", "present"
+      "TerrainClass", "Oceanic", "CAdjacent", TRUE
+    }
  
+[actionenabler_irrigate_src_river]
+action        = "Build Irrigation"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitType",      "Legion",       "Local", FALSE
+      "UnitFlag",      "Well-Digger",  "Local", FALSE
+    }
+target_reqs    =
+    { "type",    "name",     "range", "present"
+      "Extra",   "River",    "CAdjacent", TRUE
+    }
+
+[actionenabler_irrigate_src_oasis]
+action        = "Build Irrigation"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitType",      "Legion",       "Local", FALSE
+      "UnitFlag",      "Well-Digger",  "Local", FALSE
+    }
+target_reqs    =
+    { "type",    "name",     "range", "present"
+      "Extra",   "Oasis",    "CAdjacent", TRUE
+    }    
+ 
+[actionenabler_irrigate_src_irrigation]
+action        = "Build Irrigation"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitFlag",      "Well-Digger",  "Local", FALSE
+      "UnitType",      "Legion",       "Local", FALSE
+    }
+target_reqs    =
+    { "type",    "name",       "range", "present"
+      "Extra",   "Irrigation", "CAdjacent", TRUE
+    }
+
 [borders]
 ; Base border radius from city.
 radius_sq_city = 17
