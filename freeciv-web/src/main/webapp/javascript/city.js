@@ -186,7 +186,8 @@ function show_city_dialog(pcity)
   show_city_traderoutes();
 
   var dialog_buttons = {};
-  if (!is_small_screen()) {
+
+  if (!is_small_screen() && !touch_device) {
     dialog_buttons = $.extend(dialog_buttons,
       {
        "Previous city (P)" : function() {
@@ -247,9 +248,10 @@ function show_city_dialog(pcity)
   } else {
     $("#city_tabs-4").remove();
     $(".extra_tabs_big").remove();
-    $("#city_stats").hide();
+    //$("#city_stats").hide();
     var units_element = $("#city_improvements_panel").detach();
     $('#city_units_tab').append(units_element);
+    $("#city_tabs").css( {"margin":"-21px", "margin-top":"-11px"} );
    }
 
   $("#city_tabs").tabs({ active: city_tab_index});
@@ -558,7 +560,31 @@ function show_city_dialog(pcity)
   });
 
   if (is_small_screen()) {
-   $(".ui-tabs-anchor").css("padding", "2px");
+    $(".ui-tabs-anchor").css("padding", "2px");
+    $("#city_panel_stats").css( {"width":"100%", "margin-top":"17px", "padding":"0px"} );
+    $("#city_panel_top").css( {"width":"100%"} );
+    // Continuous horizontal scrolling for mobile:
+    $("#city_improvements").css( {"width":"100%"} );
+    $("#city_improvements_title").css( {"width":"4096px"} );
+    $("#city_improvements_list").css( {"width":"4096px"} );
+    // Continuous horizontal scrolling for mobile:
+    $("#city_present_units").css( {"width":"100%"} );
+    $("#city_present_units_title").css( {"width":"4096px"} );
+    $("#city_present_units_list").css( {"width":"4096px"} );
+    // Continuous horizontal scrolling for mobile:
+    $("#city_supported_units").css( {"width":"100%"} );
+    $("#city_supported_units_title").css( {"width":"4096px"} );
+    $("#city_supported_units_list").css( {"width":"4096px"} );
+    // Position adjustment hack
+    $("#city_tabs-6").css( {"margin-top":"-20px", "padding":"0px"} );
+    $("#city_dialog_info").css( {"width":"110%", "padding":"0px"} );
+  }
+  // Either/OR, worked better on iPad:
+  if (is_small_screen() || touch_device) {
+    // City tab buttons lock to bottom of screen in landscape:
+    if(window.innerHeight < window.innerWidth) {
+      $('#city_tabs').css( {"position":"static"} );
+    }
   }
 }
 
