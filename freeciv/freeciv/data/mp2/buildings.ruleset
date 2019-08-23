@@ -83,7 +83,7 @@ Allows a city to produce veteran Air units, Helicopters, and Missiles.\
  without moving are completely repaired.\
 "), _("\
 Two cities with Airports can airlift units. Airlifting instantly transports\
- the unit from one city to another and will use all of the unit's movement\
+ the unit from one city to another and will use up all movement\
  points. A unit must have some movement points left to be airlifted.\
 ")
 
@@ -267,7 +267,7 @@ helptext	= _("\
 A Cathedral makes 3 unhappy citizens content in a city; however, it does not affect\
  citizens made unhappy by military activity. The discovery of Theology increases the\
  effect by +1. The discovery of Communism reduces the effect by -1. This building has\
- no effect if your nation possesses Michelangelo's Chapel.\
+ no effect if your nation possesses Michelangelos Chapel.\
 ")
 
 [building_city_walls]
@@ -340,10 +340,10 @@ sound_alt	= "b_generic"
 helptext	= _("\
 Reduces corruption in a city by roughly half (60% but rounded down.)\
  Provides law and order to support +1 unit free of upkeep. Eliminates\
- 'tile corruption' under Anarchy and Despotism.\
+ tile corruption under Anarchy and Despotism.\
 "), _("\
 Diplomatic attacks on your diplomatic units are 15% less effective.\
- (50%-15%=35%). The basic 'Steal Tech' action is 35% less effective.\
+ (50%-15%=35%). The basic Steal Tech action is 35% less effective.\
  (80%-35%=45%). All other hostile diplomatic actions are 20% less effective.\
 "), _("\
 In a Democracy, a Courthouse makes 1 unhappy citizen content (unless that\
@@ -636,10 +636,10 @@ Makes a city the capital of your nation.\
  Communism.) A Palace makes corruption and waste in your capital\
  half of what it would otherwise be.\
 "), _("\
-The cost of inciting a revolt depends on the city's distance from the\
- capital. The capital cannot be incited to revolt, and reduces enemy\
- agents' chance of defeating your agents by -50%. Attempts to sabotage your\
- capital's buildings are also reduced by 50%.\
+The cost of inciting a revolt depends on the distance of the city from the\
+ capital. The capital cannot be incited to revolt, and reduces the chance\
+ of enemy agents defeating your agents by 50%. Attempts to sabotage buildings\
+ in your capital are also reduced by 50%.\
 "), _("\
 Take good care of your capital, as its loss may result in your\
  empire plunging into civil war. Losing your current palace also\
@@ -704,7 +704,7 @@ sound_alt	= "b_generic"
 helptext	= _("\
 Neutralizes the unhappiness caused by two military units. Assists domestic diplomatic\
  units against hostile diplomatic attacks with a 10% bonus. Decreases the chance of\
- the basic 'Steal Tech' action by 10%.\
+ the basic Steal Tech action by 10%.\
 ")
 
 [building_port_facility]
@@ -836,8 +836,8 @@ sound		= "b_sam_battery"
 sound_alt	= "b_generic"
 helptext	= _("\
 Doubles the defense of all units inside the city when attacked by\
- aircraft (not including helicopters or missiles). Stealth\
- aircraft's detection evasion reduces the bonus to 25%.\
+ aircraft (not including helicopters or missiles). Stealthy\
+ detection evasion reduces the bonus to 25%.\
 ")
 
 [building_sdi_defense]
@@ -859,9 +859,9 @@ sound		= "b_sdi_defense"
 sound_alt	= "b_generic"
 helptext	= _("\
 Protects a city and its environs (up to 2 tiles away) from attacks\
- by other nations' Nuclear units. A Nuclear unit not owned by you or a\
- teammate will be shot down and have no effect.\
- Also, doubles defense for units in the city against non-nuclear missiles.\
+ by Nuclear units. A Nuclear unit not owned by you or a teammate will\
+ be shot down and have no effect. Also, doubles defense for units in\
+ the city against non-nuclear missiles.\
 ")
 
 [building_sewer_system]
@@ -940,9 +940,8 @@ sabotage	= 100
 sound		= "b_space_component"
 sound_alt	= "b_generic"
 helptext	= _("\
-Space Components can be differentiated into Propulsion and Fuel\
- Components.  Each pair of them reduces your spaceship's travel\
- time.  You can build up to 8 pairs.\
+Space Components can be differentiated into Propulsion and Fuel Components.\
+ Each pair of them reduces spaceship travel time.  You can build up to 8 pairs.\
 "), _("\
 Before you can build any spaceship parts, any nation must have built the\
  Apollo Program.\
@@ -1060,7 +1059,7 @@ sound		= "b_super_highways"
 sound_alt	= "b_generic"
 helptext	= _("\
 Increases trade by +50% on all tiles with roads, railroads, or MagLev (rounded down.) Improves transportation\
- logistics to a city's Airport and confers +1 airlift capacity to cities over size 12.\ 
+ logistics to an Airport, giving +1 airlift capacity to cities over size 12.\ 
 ")
 
 [building_supermarket]
@@ -1083,7 +1082,7 @@ sound_alt	= "b_generic"
 helptext	= _("\
 Increases the food resources by +100% on each farmland tile which\
  is being used around the city. An irrigable city centre tile receives a\
- +50% bonus immediately, but can't receive a benefit from farmland.\
+ +50% bonus immediately, but cannot receive a benefit from farmland.\
  Farmland tiles are those which have been irrigated a second time.\
 ")
 
@@ -1394,7 +1393,7 @@ Makes two content citizens happy in every city in your nation.\
  In the event where there are no content citizens to get the\
  effect of Hanging Gardens, the wonder applies to unhappy citizens\
  (including those unhappy about military activity), making each content\
- then happy.  Gives +2 luxury in the city where it's built.\
+ then happy.  Gives +2 luxury in the city where it is built.\
  Obsolete by: Railroad.\
 ")
 
@@ -1518,8 +1517,8 @@ sabotage	= 0
 sound		= "w_leonardos_workshop"
 sound_alt	= "w_generic"
 helptext	= _("\
-Upgrades two obsolete units per game turn.  The discovery\
- of Automobile will make Leonardo's Workshop obsolete.\
+Upgrades two obsolete units per game turn. Obsolete by:\
+ Automobile.\
 ")
 
 [building_lighthouse]
@@ -1615,11 +1614,8 @@ sound		= "w_marco_polos_embassy"
 sound_alt	= "w_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
-This Wonder increases Trade, the very lifeblood of your\
- economy's gold income, science output, and luxury for\
- for happiness. With this Wonder, Net Trade increases +40% over\
- base trade in all your cities. (Each city's total trade\
- increases by 40%.) 
+This Wonder increases Trade, the very lifeblood of your tax income, science output,\
+ and luxury for happiness. With this Wonder, Trade in each city increases by 40%.\ 
 ")
 
 [building_michelangelos_chapel]
@@ -1671,9 +1667,9 @@ sabotage	= 0
 sound		= "w_oracle"
 sound_alt	= "w_generic"
 helptext	= _("\
-With this wonder, City Walls and Courthouses each make one unhappy\
- citizen content in their city, unless that citizen is unhappy about\
- aggression. Also, none of the owner's cities can be incited to revolt.\
+With this wonder, City Walls and Courthouses each make one unhappy citizen\
+ content in their city, unless that citizen is unhappy about aggression.\
+ Also, no cities in the empire with this Wonder can be incited to revolt.\
  The discovery of Radio makes the Mausoleum obsolete.\
 ")
 
@@ -1949,9 +1945,8 @@ sabotage	= 0
 sound		= "w_united_nations"
 sound_alt	= "w_generic"
 helptext	= _("\
-Creates a world senate that may prevent declarations of\
- war in some circumstances. If any player's city is in revolt\
- for more than two turns, that player's government falls.\
+Creates a World Senate that may prevent declarations of war in some circumstances. If\
+ any city in the world is in revolt for more than two turns, its whole government falls.\
  This Wonder does not become obsolete.\
 ")
 
@@ -2023,7 +2018,6 @@ build_cost	= 999
 upkeep		= 0
 sabotage	= 0
 helptext	= _("\
-This is not a normal improvement.  Instead, setting a city's\
- production to Coinage means its shield production is\
- converted to tax output (money, coins!).\
+This is not a normal improvement. Setting production to Coinage converts\
+ normal output into tax output (money, coins!)\
 ")

@@ -620,13 +620,13 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = "AttackFastStartUnit"       ;this role taken over for well-digger
 helptext      = _("\
-The Well-Digger's ONLY PURPOSE is to fix a bad start with no nearby water.\
+The ONLY PURPOSE of this unit is to fix a bad start with no nearby water.\
  You can only make one. Upkeep is 2F+5P+2G.\
 "), _("\
 QUICK HELP: If you lack nearby water, make a Well-Digger in a city that can\
  support 2 food and 2 shields upkeep. Dig a well, then disband.\
 "), _("\
- This unit can irrigate any tile except Hills/Mountains, or dig a 'well' on any tile.\
+ This unit can irrigate any tile except Hills/Mountains, or dig a well on any tile.\
  A Despotic city needs +2 Food +2 Prod for upkeep. A Well-Digger WILL NOT WORK:\
  1. Outside your borders. 2. If it dies from not enough upkeep.\
  3. You learn Alphabet or Pottery. >> Don't fool around: high upkeep will\
@@ -714,7 +714,7 @@ Engineers can do everything that Workers can, but they move and work twice as fa
  Desert to Plains, or Ocean to Swamp (must be on a ship on a tile bordering\
  3 land tiles). See manual on Terrain for more details.\
 "), _("\
-TIP: If you manage to build Leonardo's Workshop, research Explosives before the\
+TIP: If you manage to build Leonardos Workshop, research Explosives before the\
  Workshop becomes obsolete, so that your Workers will get upgraded for free.\
 ")
 
@@ -1119,7 +1119,7 @@ Marines are infantry who are experts at amphibious war. They are the strongest\
  foot unit in the game, and are heavily armed with a variety of powerful weaponry.\
 "), _("\
 Unlike other land units, Marines can attack most Sea units (at a penalty),\
- and unreachable air units can't prevent them from attacking reachable targets.\
+ and unreachable air units cannot prevent them from attacking reachable targets.\
  Their attacks ignore terrain restrictions, and they can also attack from\
  onboard a Transport or Helicopter. Marines promoted to three veteran levels and\
  beyond become commandos suitable for special ops.\
@@ -1465,7 +1465,7 @@ targets       = "Balloon", "Helicopter"
 flags         = "CantReachAir", "FortBuster"
 roles         = "AttackFastStartUnit", "Hunter"
 helptext      = _("\
-Armor is modern warfare's mechanized equivalent of a Cavalry unit. They have high attack strength,\
+Armor is the mechanized equivalent of a Cavalry unit. They have high attack strength,\
  superb mobility, and the highest defense of any offensive unit. They are massive all-terrain\
  vehicles, well-suited for penetrating defensive fortifications: Units inside Forts get no defense\
  bonus against Armor. Units inside Fortresses get a reduced bonus of 1.67x instead of 2x.\
@@ -1649,7 +1649,7 @@ helptext      = _("\
 Anti-Aircraft Artillery (AAA) are light-weight guns which can attack almost anything from anywhere.\
  They are primarily used to give ground units a better chance of defending against aircraft.\
  They are also capable of proactively attacking nearby aircraft. Against Air units they have 4x\
- bonus. (AAA can't attack Submarines, Missiles, Jet Bombers, or Stealth aircraft.)\
+ bonus. (AAA cannot attack Submarines, Missiles, Jet Bombers, or Stealth aircraft.)\
 ")
 
 [unit_howitzer]
@@ -1714,7 +1714,7 @@ roles         = ""
 helptext      = _("\
 Balloons are the first air unit, and have no combat capability. However, in some situations\
  they may be useful for gathering intelligence around an upcoming battle area. They have\
- great vision and are unreachable by units prior to Riflemen and Ironclads. Balloons can't\
+ great vision and are unreachable by units prior to Riflemen and Ironclads. Balloons cannot\
  travel over mountains. They may remain in the air for one extra turn before needing to land\
  in a City, Fortress, or Airbase. Though this unit is unreachable by more primitive land and\
  sea units, a Balloon does not prevent the units under it from being attacked.\
@@ -1826,7 +1826,7 @@ roles         = ""
 helptext      = _("\
 Escort Fighters are larger fighters which carry more fuel for longer missions.\
  Higher mass and stronger construction allow them to absorb more damage. They\
- are well-suited for escorting bombers. Less maneuverable, they don't attack as\
+ are well-suited for escorting bombers. Less maneuverable, they do not attack as\
  well as standard fighters, but they can return home on the next turn. This\
  makes them good for longer-range missions on unsuspecting weaker targets.\
 "), _("
@@ -1931,7 +1931,7 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
 Heavy Bombers are specialized airborne units that are good for eliminating strong and well-defended\
- ground targets, or multiple weaker targets. They can't attack airborne units. May carry one Bomb.\
+ ground targets, or multiple weaker targets. They cannot attack airborne units. May carry one Bomb.\
 "), _("\
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
  this restriction can by overridden by ordering moves to adjacent tiles.\
@@ -2226,7 +2226,7 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
-The most advanced Fighter, with improved attack and longer range. Stealth Fighters can't be seen unless directly adjacent\
+The most advanced Fighter, with improved attack and longer range. Stealth Fighters cannot be seen unless directly adjacent\
  to an enemy. Stealth evasion reduces effectiveness of SAM Batteries to a 25% bonus.\
 "), _("
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
@@ -2280,8 +2280,8 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
-The deadliest Bomber, with improved attack and speed. Stealth Bombers can't be seen unless adjacent to an\
- enemy. Stealth evasion reduces effectiveness of SAM Batteries to a 25% bonus. May carry two Bombs.\
+The deadliest Bomber, with improved attack and speed. Stealth Bombers cannot be seen unless adjacent to\
+ an enemy. Stealth evasion reduces effectiveness of SAM Batteries to a 25% bonus. May carry two Bombs.\
 "), _("
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
  this restriction can by overridden by ordering moves to adjacent tiles.\
@@ -2322,7 +2322,7 @@ The Trireme is the first naval unit. Its combat abilities are basic, but\
  Triremes do not cause unhappiness."), _("
  A Trireme can venture into deep ocean, but there is risk when it enters\
  unknown waters: it must end every second turn on river, coastline, or a city,\
- or else be lost at sea. Triremes can travel and attack on rivers, but can't\
+ or else be lost at sea. Triremes can travel and attack on rivers, but cannot\
  attack the shore from sea.\
 "), _("
 Like most ancient sea units, when it initiates combat there will be 15 rounds\
@@ -2482,8 +2482,8 @@ The Ram Ship is an offensive weapon with only one purpose: destroying other\
  travel on rivers. Unlike other early ships, there will always be a winner\
  and a loser when a Ram Ship attacks. Ram Ships make good counterstrike\
  defense for nations not heavily invested into sea techs, as well as the more\
- obvious role of a 'heavy-first-hitter' when larger fleets engage in battle.\
- Ram Ships can't make shore attacks from the sea.\
+ obvious role of a heavy-first-hitter when larger fleets engage in battle.\
+ Ram Ships cannot make shore attacks from the sea.\
 ")
 
 [unit_caravel]
@@ -2679,8 +2679,8 @@ bonuses       =
 flags         = "BadCityDefender", "CanEscape", "CantReachAir"
 roles         = "Hunter"
 helptext      = _("\
-First of the modern ships to start building your modern navy.\
- Destroyers' main roles are fast scouting, seek-and-destroy,\
+Destroyers are the first of the modern ships to start building your\
+ modern navy. Their main roles are fast scouting, seek-and-destroy,\
  anti-submarine warfare, shore bombardment of lighter targets,\
  and supporting the needs of larger fleets for those abilities.\ 
  4x ASW defence gives a 35% chance defending vs Submarines.\
@@ -2726,7 +2726,7 @@ helptext      = _("\
 The Cruiser is a large and fast surface warship with equally strong offensive and defensive capabilities. 2x ASW defence allows it to survive a single Submarine attack\
  more often than not.\
 "), _("\
-A Cruiser's main duties are offensive strikes against lesser ships, and to absorb the first attack from attacking ships.\
+The main duties of the Cruiser are offensive strikes against lesser ships, and defending weaker ships from attackers.\
 ")
 
 [unit_missile_destroyer]
@@ -2813,8 +2813,8 @@ The AEGIS Cruiser is an upgraded Cruiser equipped with\
  It is the only ship which can make proactive attacks\
  against Air and Missile units.\
 "), _("\
-TIP: This unit's vision and 3x anti-air defence are\
- excellent for scouting and for escorting other ships.\
+TIP: Superior vision and 3x anti-air defence are\
+ excellent for scouting and escorting other ships.\
 ")
 
 [unit_battleship]
@@ -2889,9 +2889,9 @@ bonuses       =
 flags         = "NeverProtects", "BadCityDefender", "Provoking", "Only_Native_Attack", "Submarine", "CanEscape", "CantReachAir"
 roles         = "Hunter"
 helptext      = _("\
-Submarines have strong offensive power but weak defense if caught off guard. They can carry Nuclear Missiles and Cruise Missiles.\
- Submarines' ability to submerge makes them unreachable by air units. However, the do not protect surface ships on their tile from\
- air attackers. Unlike warships, Submarines can't attack units on shore.\ 
+Submarines have very strong offensive power but weak defense. They can carry Nuclear Missiles and Cruise Missiles.\
+ Their ability to submerge makes them unreachable by air units. However, the do not protect surface ships on their tile from\
+ air attackers. Unlike warships, Submarines cannot attack units on shore.\ 
 "), _("\
 TIP:  Against stronger ships, Submarines enjoy superior attrition rates when they attack in numbers. They are also\
  excellent at hit-and-run to scare away unwanted sea traffic.\
@@ -2932,7 +2932,7 @@ flags         = "BadCityDefender", "Only_Native_Attack", "Provoking", "CanEscape
 roles         = ""
 helptext      = _("\
 The Carrier is a mobile airport that can carry Air units, Helicopters, AAA, Marines, and Missiles.\
- Unlike most other ships, Carriers can't attack units on shore.\
+ Unlike most other ships, Carriers cannot attack units on shore.\
 "), _("\
 TIP:  Guard Carriers with a handful of fast-moving ships and a Battleship, as losing a fully-equipped Carrier is\
  painfully expensive.\
@@ -3004,8 +3004,8 @@ targets       = "Balloon", "Helicopter"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "AirAttacker", "HasNoZOC", "Unbribable", "CantReachAir", "Missile", "NeverBlocked"
 roles         = ""
 helptext      = _("\
-The Cruise Missile is a long-distance missile that can strike deep into enemy territory. Though\
- it can't hit Air units, they can't prevent it from hitting all reachable surface units on Land\
+The Cruise Missile is a long-distance missile that can strike deep into enemy territory. It cannot\
+ hit Air units, but Air units cannot prevent it from hitting all reachable surface units on Land\
  and Sea. You can transport a Cruise Missile to new locations, but be sure to end its turn at a\ 
  proper city, airbase, or on a unit capable of transporting it. Cruise Missiles can be carried\
  by Submarines, Missile Destroyers, AEGIS Cruisers, and Carriers.\
@@ -3050,7 +3050,7 @@ helptext      = _("\
 You can build Atom Bombs when you have Nuclear Fission, and the Manhattan Project wonder has been built by any player.\n\
 "), _("\
 Care is needed for a Bomber to drop an Atom Bomb and survive the blast. A Bomber may drop the bomb within two tiles of\
- its location. First, 'drop' the bomb by making it leave the aircraft. Next, fly the Bomber out of range. Finally, attack\
+ its location. First, drop the bomb by making it leave the aircraft. Next, fly the Bomber out of range. Finally, attack\
  the target or execute a Detonate command by pressing D twice. On impact, the blast will destroy all units in a 3x3 area,\
  including friendly units. Any city within the blast area loses half its population. Land tiles within the blast area\
  are subject to nuclear fallout.\
@@ -3261,8 +3261,8 @@ The Caravan is one of five Commerce units. All Commerce units can:\
  are inactive during war but commence trade generation if war ends. For minimum distance\
  between cities, /show trademindist. 
 "), _("\
-3. In foreign cities with a Marketplace, Commerce units can 'Enter\
- Marketplace' to sell goods. If both cities have high aggregate trade, this\
+3. In foreign cities with a Marketplace, Commerce units can Enter\
+ Marketplace to sell goods. If both cities have high aggregate trade, this\
  yields a higher return on investment than Coinage.\
 "), _("\
 TIP: You can stockpile Commerce units to finish a Wonder on the same turn you start it.\
@@ -3370,11 +3370,11 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = "KingStartUnit"
 helptext      = _("\
-This is you. If you lose this unit, you lose the game. So don't.\
+This is you. If you lose this unit, you lose the game.\
 "), _("\
-Won't unleash barbarians from huts.\
+Will not unleash barbarians from huts.\
 "), _("\
-You can use the DO command to correct your Leader's gender.\
+You can use the DO command to correct the gender of the Leader.\
 ")
 
 [unit_queen]
@@ -3414,12 +3414,12 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = "KingStartUnit"
 helptext      = _("\
-(Alternate form of 'Leader.' Behaves identically in-game.)\
- This is you. If you lose this unit, you lose the game. So don't.\
+(Alternate form of Leader. Behaves identically in-game.)\
+ This is you. If you lose this unit, you lose the game.\
 "), _("\
-Won't unleash barbarians from huts.\
+Will not unleash barbarians from huts.\
 "), _("\
-You can use the DO command to correct your Leader's gender.\
+You can use the DO command to correct the gender of the Leader.\
 ")
 
 
