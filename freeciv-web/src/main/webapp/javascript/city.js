@@ -203,20 +203,21 @@ function show_city_dialog(pcity)
          rename_city();
        }
      });
-   } else {
+     dialog_buttons = $.extend(dialog_buttons, {"Exit": close_city_dialog});
+  } else {
        dialog_buttons = $.extend(dialog_buttons,
          {
-          "Next" : function() {
+          ">>" : function() {
             next_city();
           },
           "Buy" : function() {
             request_city_buy();
           }
         });
+        dialog_buttons = $.extend(dialog_buttons, {"X": close_city_dialog});
    }
 
-   dialog_buttons = $.extend(dialog_buttons, {"Close": close_city_dialog});
-
+   
   $("#city_dialog").attr("title", decodeURIComponent(pcity['name'])
                          + " (" + pcity['size'] + ")");
   $("#city_dialog").dialog({
@@ -236,6 +237,14 @@ function show_city_dialog(pcity)
                      }});
 
   $("#city_dialog").dialog('widget').keydown(city_keyboard_listener);
+
+  /* We can potential adjust the button pane for Next/Buy/Exit here
+  $("#city_dialog").dialog('widget').children().css( {"margin-top":"20px", "padding":"0px", "visibility":"hidden"} ); */
+
+  if (is_small_screen()) { // Next/Buy/Close buttons, more compact for Mobile
+    $("#city_dialog").dialog('widget').children().children().children().css( {"padding-top":"2px", "padding-bottom":"3px", 
+        "padding-right":"6px", "padding-left":"6px", "margin-bottom":"3px", "margin-right":"0px" } );
+  }
   $("#city_dialog").dialog('open');
   $("#game_text_input").blur();
 

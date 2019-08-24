@@ -620,11 +620,11 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = "AttackFastStartUnit"       ;this role taken over for well-digger
 helptext      = _("\
-The ONLY PURPOSE of this unit is to fix a bad start with no nearby water.\
- You can only make one. Upkeep is 2F+5P+2G.\
+The only purpose of this unit is to fix a bad start with no nearby water.\
+ You can only make one. Please note the high upkeep.\
 "), _("\
-QUICK HELP: If you lack nearby water, make a Well-Digger in a city that can\
- support 2 food and 2 shields upkeep. Dig a well, then disband.\
+If you lack nearby water at game start, you can make a Well-Digger in a city that can\
+ support its upkeep. Dig a well, then disband.\
 "), _("\
  This unit can irrigate any tile except Hills/Mountains, or dig a well on any tile.\
  A Despotic city needs +2 Food +2 Prod for upkeep. A Well-Digger WILL NOT WORK:\
@@ -709,13 +709,13 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = "Settlers", "WorkerStartUnit"
 helptext      = _("\
-Engineers can do everything that Workers can, but they move and work twice as fast.\
- Unlike Workers, Engineers can do Transformation, such as converting\
- Desert to Plains, or Ocean to Swamp (must be on a ship on a tile bordering\
- 3 land tiles). See manual on Terrain for more details.\
+Engineers can do everything Workers can do, at twice the speed.\
+ Unlike Workers, Engineers can Transform, such as converting\
+ Desert to Plains. Converting Ocean to Swamp requires being on a ship\
+ on a tile bordering 3 land tiles.\
 "), _("\
-TIP: If you manage to build Leonardos Workshop, research Explosives before the\
- Workshop becomes obsolete, so that your Workers will get upgraded for free.\
+TIP: If you build Leonardos Workshop, research Explosives before it goes\
+ obsolete, so that you upgrade your Workers for free.\
 ")
 
 [unit_warriors]
@@ -816,7 +816,7 @@ Rather than engage a single unit to the death, Archers can also do a Ranged Atta
  of retaliatory damage: a single volley of arrows is fired over all enemy units on the tile,\
  causing 1hp of damage to any units who are hit. This is useful for softening\
  enemies prior to battle, or for deterring an approach to a strategic location.\
- (Ranged Attack is not possible on Cities or Fortresses; they provide cover from incoming arrows.)\
+ (Ranged Attack is not possible on Cities or Fortresses.)\
 ")
 bombard_rate = 1
 
@@ -849,7 +849,7 @@ uk_gold       = 0
 flags         = "FootSoldier", "Settlers", "Infra", "CanRoad", "CanFortress", "Capturer", "CantReachAir"
 roles         = "DefendOk", "DefendOkStartUnit", "Hut", "BarbarianBuild", "BarbarianSea"
 helptext      = _("\
-Legions are heavily armed and well disciplined infantry units with excellent offensive value.\
+Legions are heavily armed well disciplined soldiers with excellent offensive strength.\
  They are famous and feared for their engineering abilities, and can make Forts and Fortresses\
  with the required technology. They can also make Roads and Bridges outside of domestic national\
  territory.\
@@ -1115,18 +1115,16 @@ veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = "DefendOk", "DefendOkStartUnit", "BarbarianSeaTech"
 helptext      = _("\
-Marines are infantry who are experts at amphibious war. They are the strongest\
- foot unit in the game, and are heavily armed with a variety of powerful weaponry.\
+Marines are experts at amphibious war. They are the strongest\
+ foot unit in the game, and are armed with diverse powerful weaponry.\
 "), _("\
-Unlike other land units, Marines can attack most Sea units (at a penalty),\
- and unreachable air units cannot prevent them from attacking reachable targets.\
- Their attacks ignore terrain restrictions, and they can also attack from\
- onboard a Transport or Helicopter. Marines promoted to three veteran levels and\
- beyond become commandos suitable for special ops.\
+Unlike other land units, Marines can attack most Sea units (at a penalty).\
+ Unreachable Air units do not stop them from attacking reachable targets.\
+ They can attack from a Transport or Helicopter. Marines promoted to three\
+ veteran levels become commandos suitable for special ops.\
 "), _("\
-Marines built in a city with an Airport, Port Facility, and Barracks III gain extra\
- training for their role of land/air/sea multipurpose warfare. They will be produced\
- at the second veteran level (hardened.)
+Marines built in a city with an Airport, Port Facility, and Barracks III\
+ receive the second veteran level (hardened.)\
 ")
 
 [unit_paratroopers]
@@ -1158,12 +1156,12 @@ targets       = "Balloon", "Helicopter"
 flags         = "Paratroopers", "FootSoldier", "Capturer", "CantReachAir"
 roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
-Paratroopers are experts at airborne attacks. \
-From a friendly city or airbase, Paratroopers who have not expended any \
-movement points can paradrop directly to any tile in range, and be \
-immediately ready to act there. (Beware dropping into unseen territory, \
-as Paratroopers landing on a tile occupied by enemy units are easy \
-targets!)\
+Paratroopers are experts at airborne attacks.\
+ From a friendly city or airbase, Paratroopers who have not used any\
+ movem points can paradrop directly to any tile in range, and be\
+ immediately ready to act there. (Beware dropping into unseen territory,\
+ as Paratroopers landing on a tile occupied by enemy units are easy\
+ targets!)\
 ")
 paratroopers_range = 14
 paratroopers_mr_req = 1
@@ -1294,8 +1292,8 @@ flags         = "Horse", "Capturer", "CantReachAir"
 roles         = "AttackFastStartUnit"
 helptext      = _("\
 Elephants are towering animals trained for war. Their mobility and formidable\
- attack strength make them excellent for first offensive engagements, but\
- they defend poorly against most units.\
+ attack strength make them excellent for offensive engagements, but they\
+ defend poorly against most units.\
 ")
 
 [unit_crusaders]
@@ -1506,9 +1504,9 @@ roles         = "AttackFastStartUnit", "Hunter"
 helptext      = _("\
 Armor II is the ultra-modern upgrade to Armor. It has high tech composite armor, advanced\
  weaponry, and electronic countermeasures (ECM). Forts and Fortresses gain no bonus against\
- its ability to blast and break through fortifications. Composite materials with ECM are harder\
- for missiles to sense and offer resistance to explosive impacts: this yields 2x defense\
- against Missiles. Unlike most land units, Armor II can attack reachable units regardless\
+ its ability to blast and break through fortifications. ECM is harder for missiles to sense\
+ and composite armor offers high resistance to impact: this yields 2x defense against\
+ Missiles. Unlike most land units, Armor II can attack reachable units regardless\
  of whether unreachable units are protecting the tile.\ 
 ")
 
@@ -1540,9 +1538,9 @@ uk_gold       = 0
 flags         = "CantReachAir"
 roles         = "AttackStrongStartUnit"
 helptext      = _("\
-Catapults are large rock-throwing machines of war.\
- They are very strong attackers but equally weak\
- defenders and will need an escort to be effective.\
+Catapults are large rock-throwing war machines.\
+ They are strong attackers but equally weak\
+ defenders, and will need an escort to be effective.\
 ")
 
 [unit_cannon]
@@ -1606,8 +1604,8 @@ targets       = "Balloon", "Helicopter"
 flags         = "CantReachAir"
 roles         = "AttackStrongStartUnit"
 helptext      = _("\
-Artillery are a major upgrade to Cannons, with both higher attack strength and doubled firepower.\
- They are very strong attackers, but equally weak defenders. They need an escort to be effective.\
+Artillery are a major upgrade to Cannons, with higher attack strength and doubled firepower.\
+ They are very strong attackers, but weak defenders. They need an escort to be effective.\
 ")
 
 [unit_anti_aircraft]
@@ -1648,7 +1646,7 @@ roles         = ""
 helptext      = _("\
 Anti-Aircraft Artillery (AAA) are light-weight guns which can attack almost anything from anywhere.\
  They are primarily used to give ground units a better chance of defending against aircraft.\
- They are also capable of proactively attacking nearby aircraft. Against Air units they have 4x\
+ They are also capable of pro-actively attacking nearby aircraft. Against Air units they have 4x\
  bonus. (AAA cannot attack Submarines, Missiles, Jet Bombers, or Stealth aircraft.)\
 ")
 
@@ -1681,7 +1679,7 @@ targets       = "Balloon", "Helicopter"
 flags         = "CantReachAir"
 roles         = "AttackStrongStartUnit"
 helptext      = _("\
-Howitzers are upgraded Artillery with improved attack strength and significant increase in mobility. They can fire over city walls, ignoring their effect.\
+Howitzers are upgraded Artillery with significant increase in mobility and attack strength. They can fire over city walls, ignoring their effect.\
 ")
 
 [unit_balloon]
@@ -1712,12 +1710,11 @@ uk_gold       = 0
 flags         = "Unbribable", "HasNoZOC", "NeverProtects", "NonMil"
 roles         = ""
 helptext      = _("\
-Balloons are the first air unit, and have no combat capability. However, in some situations\
- they may be useful for gathering intelligence around an upcoming battle area. They have\
- great vision and are unreachable by units prior to Riflemen and Ironclads. Balloons cannot\
- travel over mountains. They may remain in the air for one extra turn before needing to land\
- in a City, Fortress, or Airbase. Though this unit is unreachable by more primitive land and\
- sea units, a Balloon does not prevent the units under it from being attacked.\
+Balloons are useful for gathering intelligence around an upcoming battle area. They have\
+ great vision and are unreachable by units prior to Riflemen and Ironclads. They can remain\
+ in the air for one extra turn before needing to land in a City, Fortress, or Airbase. It\
+ is unreachable by more primitive land and sea units, but does not block units under it from\
+ being attacked. Balloons cannot fly over mountains. \
 "), _("
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
  this restriction can by overridden by ordering moves to adjacent tiles.\
@@ -1771,11 +1768,11 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
 Fighters are the first offensive Air units. Their superior mobility and firepower alter\
- the very nature of warfare. They can move anywhere and attack any unit (except Submarines\
- and Jet Bombers.)\
+ the very nature of warfare. They can move anywhere and attack any unit (except Submarines,\
+ Missiles, and Jet Bombers.)\
 "), _("
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
- this restriction can by overridden by commanding attacks and movements to adjacent tiles.\
+ you can override this by ordering movements and attacks to adjacent tiles.\
 ")
 
 [unit_escort_fighter]
@@ -1824,11 +1821,11 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
-Escort Fighters are larger fighters which carry more fuel for longer missions.\
- Higher mass and stronger construction allow them to absorb more damage. They\
- are well-suited for escorting bombers. Less maneuverable, they do not attack as\
- well as standard fighters, but they can return home on the next turn. This\
- makes them good for longer-range missions on unsuspecting weaker targets.\
+Escort Fighters are larger fighters with more fuel capacity. Higher mass and\
+ stronger construction allow them to absorb more damage. They are well-suited\
+ for escorting bombers. Less maneuverable, they do not attack as well as standard\
+ fighters, but they can return home on the next turn. This makes them good for\
+ long range missions on unsuspecting weaker targets.\
 "), _("
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own\
  risk, this restriction can by overridden by ordering moves to adjacent tiles.\
@@ -1878,8 +1875,8 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
-Medium Bombers are specialized airborne units that are good for eliminating moderately strong\
- ground targets, or multiple weaker targets. They may not attack other airborne units.\
+Medium Bombers are good for eliminating moderately strong ground targets, or multiple weaker targets.\
+ They may not attack other Air units.\
 "), _("\
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
  this restriction can by overridden by ordering moves to adjacent tiles.\
@@ -1930,8 +1927,8 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
-Heavy Bombers are specialized airborne units that are good for eliminating strong and well-defended\
- ground targets, or multiple weaker targets. They cannot attack airborne units. May carry one Bomb.\
+Heavy Bombers are good for hitting strong and well-defended ground targets, or multiple weaker targets.\
+ They cannot attack Air units. May carry one Bomb.\
 "), _("\
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
  this restriction can by overridden by ordering moves to adjacent tiles.\
@@ -1982,8 +1979,8 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
-The Strategic Bomber offers a small improvement in attack. Higher altitude offers significant upgrade in\
- defense. Its most notable feature is its considerably greater range, with one more turn of fuel. May carry two Bombs.\
+The Strategic Bomber offers a small improvement in attack. Higher altitude offers a good upgrade in\
+ defense. It has considerably longer range, with one more turn of fuel. May carry two Bombs.\
 "), _("\
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
  this restriction can by overridden by ordering moves to adjacent tiles.\
@@ -2017,7 +2014,7 @@ uk_gold       = 0
 flags         = "HasNoZOC", "Unbribable", "Expellable", "NeverProtects", "CanEscape"
 roles         = ""
 helptext      = _("\
-The AWACS (Airborne Warning and Control System) is an airplane with an advanced radar that can determine\
+The AWACS has great fuel capacity for long range flights, and advanced radar that can determine\
  the location of enemy units over a wide area.\
 "), _("
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
@@ -2067,10 +2064,9 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
-The Helicopter is a powerful unit, as it has good range and can attack multiple targets, and even conquer\
- cities. Be careful, because Helicopters lose a small amount of health for every turn not spent in a City, Fort,\
- Fortress, Airbase or Carrier. Helicopters can be attacked by ground units from Riflemen onward. They can be\
- attacked by Sea units from Ironclad onward.\
+The Helicopter has good range and can attack multiple targets, and even conquer cities. Helicopters lose\
+ a small amount of health for every turn not spent in a City, Fort, Fortress, Airbase or Carrier. Helicopters\
+ can be attacked by ground units from Riflemen onward, or by Sea from Ironclad onward.\
 "), _("\
 Helicopters can transport one Marines or AAA unit.\
 ")
@@ -2124,7 +2120,7 @@ helptext      = _("\
 Jet Fighters upgrade the Fighter with improved attack and defense, and greater range.\
 "), _("
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
- this restriction can by overridden by order moves to adjacent tiles.\
+ this restriction can by overridden by ordering moves to adjacent tiles.\
 ")
 
 [unit_jet_bomber]
@@ -2168,12 +2164,10 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
-Jet Bombers are stratospheric long-range air units, good for hitting distant targets. They can attack\
- multiple targets per turn. They have three turns of fuel: they can be airborne during two turn-changes.\
- Their impressive range makes them remain useful after Stealth Bombers become available. Their stratospheric\
- altitude renders them unreachable to propeller-based fighters and AAA. This comes at the cost\
- of being defenseless to modern Fighter types. Jet Bombers carry heavy payloads, allowing carpet-bombing:\
- the ability to pillage enemy tiles from the air. May carry three Bombs.\ 
+Jet Bombers are stratospheric long-range air units, They have three turns of fuel, and can be airborne for two\
+ turn-changes. Their range makes them remain useful after Stealth Bombers are available. Stratospheric altitude\
+ makes them unreachable to propeller-based fighters and AAA. Jet Bombers carry heavy payloads for carpet-bombing:\
+ pillaging enemy tiles from the air. May carry three Bombs.\ 
 "), _("\
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
  this restriction can by overridden by ordering moves to adjacent tiles.\
@@ -2226,7 +2220,7 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
-The most advanced Fighter, with improved attack and longer range. Stealth Fighters cannot be seen unless directly adjacent\
+The most advanced Fighter, with improved attack and longer range. Stealth Fighters cannot be seen unless adjacent\
  to an enemy. Stealth evasion reduces effectiveness of SAM Batteries to a 25% bonus.\
 "), _("
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
@@ -2316,20 +2310,18 @@ cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "Provoking", "CantReachAir", "HelpWonder", "TradeRoute", "Coast"
 roles         = "Ferryboat", "FerryStartUnit"
 helptext      = _("\
-The Trireme is the first naval unit. Its combat abilities are basic, but\
- it has multipurpose use for exploration, transport. It is also a Commerce unit.\
- Please read the entry on Caravan for info on what all Commerce units may do.\n\
- Triremes do not cause unhappiness."), _("
- A Trireme can venture into deep ocean, but there is risk when it enters\
- unknown waters: it must end every second turn on river, coastline, or a city,\
- or else be lost at sea. Triremes can travel and attack on rivers, but cannot\
- attack the shore from sea.\
+The Trireme is useful for exploration, transport, and Commerce.\
+ See the entry on Caravan to read what Commerce units may do.\
+"), _("
+ A Trireme can enter Deep Ocean, but there is risk: it must end every second\
+ turn on river, coastline, or a city--or else be lost at sea. Triremes can travel\
+ and attack on rivers, but cannot attack the shore.\
 "), _("
 Like most ancient sea units, when it initiates combat there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
-  result in the loss of one of the units.\
+  result in the loss of one of the units. Triremes do not cause unhappiness.\
 "), _("
-NOTE: GO TO orders prevent accidental loss of the unit at sea, but are overly\
+NOTE: GO TO orders prevent accidental loss of the unit at sea, but are VERY\
  restrictive. You should override this by ordering moves to adjacent tiles.\
 ")
 
@@ -2362,11 +2354,10 @@ cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "Provoking", "CantReachAir"
 roles         = "Ferryboat", "Hunter"
 helptext      = _("\
-The Longboat is a warship. It can attack at sea, attack the shore from sea, and bring\
- one land unit to shore, making it useful for conducting ancient sea campaigns. Longboats\
- can travel on rivers.\
+The Longboat is a warship. It can attack at sea, attack the shore, and carry one land\
+ unit. It is useful for ancient sea campaigns. Longboats can travel on rivers.\
 "), _("
-Like most ancient sea units, when it initiates combat there will be 15 rounds\
+Like most early sea units, when it initiates combat there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
   result in the loss of one of the units.\
 ")
@@ -2400,12 +2391,12 @@ cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "Provoking", "CantReachAir", "HelpWonder", "Traderoute", "Only_Native_Attack"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
-The Galley is an all-purpose sea unit and upgrade over the Trireme. It has no limits at sea,\
- decent offense and defense, and can transport. It is also a Commerce unit. Please read\
- the entry on Caravan for info on what all Commerce units may do. Galleys can travel and attack\
- on rivers. Galleys cannot attack the shore from the sea. Galleys do not cause unhappiness.\
+The Galley is an all-purpose sea unit and upgrades the Trireme. It has decent\
+ combat strength, can transport, and is a Commerce unit. See the entry on Caravan\
+ to read what Commerce units may do. Galleys can travel and attack on rivers,\
+ but cannot attack the shore. Galleys do not cause unhappiness.\
 "), _("
-Like most ancient sea units, when it initiates an attack, there will be 15 rounds\
+Like most early sea units, when it initiates an attack, there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
   result in the loss of one of the units.\
 ")
@@ -2439,9 +2430,8 @@ cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "Provoking", "CantReachAir"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat", "Hunter"
 helptext      = _("\
-The War Galley has improved offense, defense, and cargo capacity over the Galley,\
- but it lacks commerce abilities. War Galleys can travel and attack on rivers, and\
- do shore attacks from the sea.\
+The War Galley has improved offense, defense, and cargo capacity, but lacks commerce\
+ ability. War Galleys can travel and attack on rivers, and do shore attacks from the sea.\
 "), _("
 Like most ancient sea units, when it initiates combat there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
@@ -2477,13 +2467,10 @@ cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "Provoking", "CantReachAir", "Only_Native_Attack"
 roles         = "Hunter"
 helptext      = _("\
-The Ram Ship is an offensive weapon with only one purpose: destroying other\
- ships. It has poor vision, no transport or commerce ability, and may not\
- travel on rivers. Unlike other early ships, there will always be a winner\
- and a loser when a Ram Ship attacks. Ram Ships make good counterstrike\
- defense for nations not heavily invested into sea techs, as well as the more\
- obvious role of a heavy-first-hitter when larger fleets engage in battle.\
- Ram Ships cannot make shore attacks from the sea.\
+The Ram Ship has one purpose: to destroy other ships. It has poor vision, no transport or\
+ commerce ability, and cannot travel rivers. Unlike other early ships, there will always be\
+ a winner and a loser when Ram Ships attack. They are good for first-strike, and are good\
+ counterstrike units for nations not invested into sea tech. Ram Ships cannot do shore attacks.\
 ")
 
 [unit_caravel]
@@ -2515,10 +2502,10 @@ cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "Provoking", "CantReachAir", "Traderoute", "HelpWonder"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat", "Hunter"
 helptext      = _("\
-The Caravel is a significant advance in combat, speed, range, and transport capability. It replaces many ancient sea units. Caravels provide\
- most of the commerce abilities of the earlier Galley, but cannot build Wonders. Caravels can travel and attack on rivers, or make shore attacks from sea.\
+Caravels upgrade older sea units, and are a big advance in combat, speed, range, and transport capacity. They have\
+ the commerce ability of the Galley, but cannot build Wonders. Caravels can travel and attack on rivers and do shore attacks.\
 "), _("
-Like most ancient sea units, when it initiates an attack, there will be 15 rounds\
+Like most early sea units, when it initiates an attack, there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
   result in the loss of one of the units.\
 ")
@@ -2554,13 +2541,13 @@ flags         = "BadCityDefender", "Provoking", "CanEscape", "CantReachAir"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
 The Galleon is a heavily armed transport ship that can carry up to 4 land units. Galleons can travel and attack on rivers,\
- or make shore attacks from sea.\
+ and also do shore attacks.\
 "), _("
-Like most older sea units, when it initiates combat there will be 15 rounds\
+Like most early sea units, when it initiates combat there will be 15 rounds\
   of combat and 15 total hitpoints lost between both units. This may or may not\
   result in the loss of one of the units.\
 "), _("
-Galleons can Stack-Escape: a 50% chance to escape a killed stack if they have more remaining move points than the attacker.\
+Galleons can Stack-Escape: a 50% chance to escape a killed stack if they have more remaining moves than the attacker.\
 ")
 
 [unit_frigate]
@@ -2640,7 +2627,7 @@ roles         = "Hunter"
 helptext      = _("\
 The Ironclad is an armored ship that is much more sturdy than the Frigate but\
  loses transport capability and the ability to navigate rivers. From the Ironclad\
- onward, warships are formidable in the role of hitting shore targets from sea.\ 
+ onward, warships are excellent at attacking shore targets.\ 
 "), _("
 Ironclads and all modern ships can Stack-Escape: a 50% chance to escape a killed stack if they have more remaining move points than the attacker.\
 ")
@@ -2679,14 +2666,11 @@ bonuses       =
 flags         = "BadCityDefender", "CanEscape", "CantReachAir"
 roles         = "Hunter"
 helptext      = _("\
-Destroyers are the first of the modern ships to start building your\
- modern navy. Their main roles are fast scouting, seek-and-destroy,\
+Destroyers are the first of the modern ships to start your modern\
+ navy. Their main roles are fast scouting, seek-and-destroy,\
  anti-submarine warfare, shore bombardment of lighter targets,\
- and supporting the needs of larger fleets for those abilities.\ 
- 4x ASW defence gives a 35% chance defending vs Submarines.\
-"), _("\
-TIP:  A very fast unit with good vision. Very useful for scouting\
- and hunting down enemy Transports and Submarines.\
+ and supporting the needs of larger fleets. 4x ASW defence gives a\
+ 35% chance defending vs Submarines.\
 ")
 
 [unit_cruiser]
@@ -2723,8 +2707,8 @@ bonuses       =
 flags         = "BadCityDefender", "CanEscape", "CantReachAir"
 roles         = "DefendOk", "Hunter"
 helptext      = _("\
-The Cruiser is a large and fast surface warship with equally strong offensive and defensive capabilities. 2x ASW defence allows it to survive a single Submarine attack\
- more often than not.\
+The Cruiser is a large and fast surface warship with equally strong offensive and defensive strength. More often than not, its\
+ 2x ASW defence allows it to survive a Submarine attack.\
 "), _("\
 The main duties of the Cruiser are offensive strikes against lesser ships, and defending weaker ships from attackers.\
 ")
@@ -2767,7 +2751,7 @@ roles         = "Hunter"
 helptext      = _("\
 A modern Destroyer with more firepower. It shares all the same roles as its ancestor.\
  2x defence against Air and Missile units. 2x ASW defence gives a 38% chance defending vs\
- Submarines. A Missile Destroyer may carry one Cruise Missile.\
+ Submarines. A Missile Destroyer may carry one Missile.\
 ")
 
 [unit_aegis_cruiser]
@@ -2806,15 +2790,11 @@ bonuses       =
 flags         = "BadCityDefender", "CanEscape"
 roles         = "Hunter"
 helptext      = _("\
-The AEGIS Cruiser is an upgraded Cruiser equipped with\
- an advanced missile system, advanced radar\
- and vision, and a 2x defense bonus against Submarines.\
- An AEGIS Cruiser may also carry two Cruise Missiles.\
- It is the only ship which can make proactive attacks\
- against Air and Missile units.\
+The AEGIS Cruiser is an upgraded Cruiser equipped with an advanced missile system. Radar\
+ gives superior vision and a 2x defense bonus against Submarines. It can carry two Missiles.\
+ It is the only ship that can attack Air and Missile units.\
 "), _("\
-TIP: Superior vision and 3x anti-air defence are\
- excellent for scouting and escorting other ships.\
+Superior vision and 3x anti-air defence make it excellent for scouting and escorting.\
 ")
 
 [unit_battleship]
@@ -2851,7 +2831,7 @@ bonuses       =
 flags         = "BadCityDefender", "CanEscape", "CantReachAir"
 roles         = ""
 helptext      = _("\
-The Battleship is the supreme naval unit with excellent offensive and defensive strength. They have a 2x bonus defending against Submarines.\
+The Battleship is the supreme naval unit with excellent offensive and defensive strength. It has a 2x defense bonus vs Submarines.\
 ")
 
 [unit_submarine]
@@ -2889,12 +2869,12 @@ bonuses       =
 flags         = "NeverProtects", "BadCityDefender", "Provoking", "Only_Native_Attack", "Submarine", "CanEscape", "CantReachAir"
 roles         = "Hunter"
 helptext      = _("\
-Submarines have very strong offensive power but weak defense. They can carry Nuclear Missiles and Cruise Missiles.\
- Their ability to submerge makes them unreachable by air units. However, the do not protect surface ships on their tile from\
- air attackers. Unlike warships, Submarines cannot attack units on shore.\ 
+Submarines are strong attackers but weak defenders. They can carry 8 Missiles.\
+ They are unreachable by Air units, but do not block air attackers from surface ships on\
+ their tile. Unlike warships, Submarines cannot attack units on shore.\ 
 "), _("\
-TIP:  Against stronger ships, Submarines enjoy superior attrition rates when they attack in numbers. They are also\
- excellent at hit-and-run to scare away unwanted sea traffic.\
+Submarines enjoy superior attrition rates when they attack in numbers. They are\
+ excellent at hit-and-run against weaker ships.\
 ")
 
 [unit_carrier]
@@ -2932,10 +2912,8 @@ flags         = "BadCityDefender", "Only_Native_Attack", "Provoking", "CanEscape
 roles         = ""
 helptext      = _("\
 The Carrier is a mobile airport that can carry Air units, Helicopters, AAA, Marines, and Missiles.\
- Unlike most other ships, Carriers cannot attack units on shore.\
 "), _("\
-TIP:  Guard Carriers with a handful of fast-moving ships and a Battleship, as losing a fully-equipped Carrier is\
- painfully expensive.\
+Carriers are very expensive and thus, usually protected by a fleet of scouts and ecorts.\
 ")
 
 [unit_transport]
@@ -3004,10 +2982,10 @@ targets       = "Balloon", "Helicopter"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "AirAttacker", "HasNoZOC", "Unbribable", "CantReachAir", "Missile", "NeverBlocked"
 roles         = ""
 helptext      = _("\
-The Cruise Missile is a long-distance missile that can strike deep into enemy territory. It cannot\
- hit Air units, but Air units cannot prevent it from hitting all reachable surface units on Land\
- and Sea. You can transport a Cruise Missile to new locations, but be sure to end its turn at a\ 
- proper city, airbase, or on a unit capable of transporting it. Cruise Missiles can be carried\
+The Cruise Missile can strike deep into enemy territory. It cannot attack\
+ Air units, but Air units never prevent it from hitting reachable surface units.\
+ You can transport a Cruise Missile to new locations, but be sure to end its turn at a\ 
+ city, airbase, or on a unit capable of transporting it. Cruise Missiles can be carried\
  by Submarines, Missile Destroyers, AEGIS Cruisers, and Carriers.\
 ")
 
@@ -3047,9 +3025,9 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = ""
 helptext      = _("\
-You can build Atom Bombs when you have Nuclear Fission, and the Manhattan Project wonder has been built by any player.\n\
+You can build Atom Bombs when you have Nuclear Fission, and the Manhattan Project has been built by any player.\n\
 "), _("\
-Care is needed for a Bomber to drop an Atom Bomb and survive the blast. A Bomber may drop the bomb within two tiles of\
+Care is needed for a Bomber to drop an Atom Bomb and survive the blast. A Bomber can drop the bomb within two tiles of\
  its location. First, drop the bomb by making it leave the aircraft. Next, fly the Bomber out of range. Finally, attack\
  the target or execute a Detonate command by pressing D twice. On impact, the blast will destroy all units in a 3x3 area,\
  including friendly units. Any city within the blast area loses half its population. Land tiles within the blast area\
@@ -3101,8 +3079,7 @@ On impact, the blast will destroy any unit in a 3x3 area, including friendly uni
 Nuclear fallout reduces tile output and increases the risk of global nuclear winter; see the help on Fallout. Ocean tiles are not\
  subject to Fallout.\
 "), _("\
-TIP: If you assemble a group of Engineers next to the target and have them ready to fix the fallout on the same turn, this reduces the\
- chance of nuclear winter.\
+If Fallout is cleaned by Engineers on the same turn it's created, this reduces the chance of nuclear winter.\
 ")
 
 [unit_diplomat]
@@ -3153,10 +3130,10 @@ Most covert actions may be done in peacetime, but cause incidents which may\
  city, it will defend, and a unit will die. Diplomats can:\n\
  - Bribe: Unit must be alone. Cost varies with type, health, distance from home.\n\
  - Establish Embassy: Enables dealmaking & gives permanent info on gold, taxes, tech, foreign relations.\n\
- - Investigate City: City info.\n\
+ - Investigate City.\n\
  - Sabotage City: Destroy production or a random building.\n\
  - Steal Tech: A random tech may be stolen, creating an incident.\n\
- - Incite Revolt: Bribe an entire city to join your empire and acquire the units the city supports.\n\
+ - Incite Revolt: Bribe a city to join your empire and acquire the units the city supports.\n\
 "), _("\
 Many rules alter odds & legality. Read the manual on Diplomacy.\
  Diplomats built under Communism start at the first vet level.\
@@ -3207,7 +3184,7 @@ helptext      = _("\
 A Spy is more skilled in espionage than a Diplomat.\
 "), _("\
 She can do anything a Diplomat can. Unlike a Diplomat, a Spy may survive an\
- operation and gain experience. Spies are more effective at defending cities.\
+ operation and gain experience. Spies defend cities better.\
 "), _("\
 A Spy can:\n\
  - sabotage a lone enemy unit (halves its hp)\n\
@@ -3251,21 +3228,19 @@ uk_gold       = 0
 flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable"
 roles         = ""
 helptext      = _("\
-The Caravan is one of five Commerce units. All Commerce units can:\
+The Caravan is one of five Commerce units. Commerce units can:\
 "), _("\
-1. Carry material to help build Wonders. The Commerce\
- unit adds its own build-cost to the production of the Wonder.\  
+1. Help build Wonders. The unit adds its own build-cost to the production of the Wonder.\  
 "), _("\
 2. Establish a Traderoute between its Home city and one foreign city, if not at war.\
- This increases net trade in both cities, relative to their combined trade. Traderoutes\
- are inactive during war but commence trade generation if war ends. For minimum distance\
- between cities, /show trademindist. 
+ Net trade increases in both cities, relative to their combined trade. Traderoutes\
+ are inactive during war but start trading again if war ends. For minimum distance\
+ between cities, type: /show trademindist 
 "), _("\
-3. In foreign cities with a Marketplace, Commerce units can Enter\
- Marketplace to sell goods. If both cities have high aggregate trade, this\
+3. In foreign cities with a Marketplace, Commerce units can Enter Marketplace to sell goods. If both cities have high aggregate trade, this\
  yields a higher return on investment than Coinage.\
 "), _("\
-TIP: You can stockpile Commerce units to finish a Wonder on the same turn you start it.\
+You can stockpile Commerce units to finish a Wonder on the same turn you start it.\
 ")
 
 [unit_freight]
@@ -3297,8 +3272,8 @@ flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capt
 roles         = ""
 helptext      = _("\
 The Freight unit replaces the Caravan as the basic Commerce unit on Land. It moves at\
- twice the speed. Each Freight used to build a wonder will add 50 shields. Please read\
- the entry on Caravan for details on what Commerce units may do.\
+ twice the speed. Each Freight used to build a wonder will add 50 shields. See the\
+ entry on Caravan to read what Commerce units may do.\
 ")
 
 [unit_explorer]
@@ -3329,8 +3304,8 @@ uk_gold       = 0
 flags         = "IgTer", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable"
 roles         = "Explorer", "ExplorerStartUnit"
 helptext      = _("\
-Explorers are brave individuals that can map unknown territory. They can slip through ZOC\
- and have no unit upkeep.\
+Explorers are brave individuals who map unknown territory. They can slip through enemy\
+ ZOC, and have no unit upkeep.\
 ")
 
 [unit_leader]
@@ -3374,7 +3349,7 @@ This is you. If you lose this unit, you lose the game.\
 "), _("\
 Will not unleash barbarians from huts.\
 "), _("\
-You can use the DO command to correct the gender of the Leader.\
+You can use the DO command to change the gender of the Leader.\
 ")
 
 [unit_queen]
@@ -3419,7 +3394,7 @@ helptext      = _("\
 "), _("\
 Will not unleash barbarians from huts.\
 "), _("\
-You can use the DO command to correct the gender of the Leader.\
+You can use the DO command to change the gender of the Leader.\
 ")
 
 
@@ -3464,5 +3439,3 @@ One Barbarian Leader appears every time there is a barbarian uprising\
 When a Barbarian Leader is killed on a tile without any defending units,\
  the 100 gold ransom is paid, but only to land units and helicopters.\
 ")
-
-
