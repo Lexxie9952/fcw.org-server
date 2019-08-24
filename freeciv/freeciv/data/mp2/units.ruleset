@@ -572,8 +572,7 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = "CitiesStartUnit"
 helptext      = _("\
-Settlers are a key unit: they are your only\
- means of founding new cities.\
+Settlers are your only means of founding new cities.\
 "), _("\
 Settlers can perform most of the terrain alterations as\
  Workers (but cannot build Airbases or Buoys).\
@@ -671,8 +670,8 @@ helptext      = _("\
 Workers can improve terrain tiles. See the manual on Terrain for details.\
 "), _("\
 Masonry lets Workers build Forts. Construction lets them build Fortresses and\
- Oil Wells. Engineering let them build Canals. Radio lets them build Airbases\
- and Buoys, which Settlers cannot. Workers must be onboard a ship to build Buoys.\
+ Oil Wells. Engineering lets them build Canals. Radio lets them build Airbases\
+ and Buoys, which Settlers cannot. Workers must be on a ship to build Buoys.\
 ")
 
 [unit_engineers]
@@ -1158,7 +1157,7 @@ roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
 Paratroopers are experts at airborne attacks.\
  From a friendly city or airbase, Paratroopers who have not used any\
- movem points can paradrop directly to any tile in range, and be\
+ move points can paradrop directly to any tile in range, and be\
  immediately ready to act there. (Beware dropping into unseen territory,\
  as Paratroopers landing on a tile occupied by enemy units are easy\
  targets!)\
@@ -1635,19 +1634,19 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter"
 disembarks    = "Helicopter"
-targets       = "Air", "AirProtect", "AirPillage", "Sea", "Balloon", "Helicopter"
+targets       = "Air", "AirProtect", "Sea", "Balloon", "Helicopter"
 bonuses       =
    { "flag", "type", "value"
      "AirAttacker", "DefenseDivider", 3
      "AirAttacker", "DefenseMultiplier", 3
    }
-flags         = ""
+flags         = "NeverBlocked"
 roles         = ""
 helptext      = _("\
 Anti-Aircraft Artillery (AAA) are light-weight guns which can attack almost anything from anywhere.\
  They are primarily used to give ground units a better chance of defending against aircraft.\
  They are also capable of pro-actively attacking nearby aircraft. Against Air units they have 4x\
- bonus. (AAA cannot attack Submarines, Missiles, Jet Bombers, or Stealth aircraft.)\
+ bonus. (AAA cannot attack Submarines, Missiles, or Jet Bombers.)\
 ")
 
 [unit_howitzer]
@@ -3014,7 +3013,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Helicopter", "Submarine"
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine"
 disembarks    = "Air", "AirPillage"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable", "AirAttacker", "NeverBlocked"
 ; No veteran levels (level name is never displayed)
@@ -3061,7 +3060,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Submarine"
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable", "NeverBlocked"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
