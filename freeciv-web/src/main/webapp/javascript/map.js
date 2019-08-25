@@ -314,6 +314,9 @@ function map_vector_to_distance(dx, dy)
 function map_distance_vector(tile0, tile1)
 {
   var half_world;
+
+  if (tile0 == null || tile1 == null) return [FC_INFINITY, FC_INFINITY];
+
   var dx = tile1.x - tile0.x;
   if (topo_has_flag(TF_WRAPX)) {
     half_world = Math.floor(map.xsize / 2);
