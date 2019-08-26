@@ -32,7 +32,7 @@
 					<li><a href="/game/list?v=play-by-email">Play by Email</a></li>
 				</ul>
 			</li>
-			<li><a href="https://www.patreon.com/freecivweb">Please Donate</a></li>
+			<li id="donate_link"><a href="https://www.patreon.com/freecivweb">Please Donate</a></li>
 			<li><a href="https://github.com/RhueOfL/fcw.org-server/">Development</a></li>
 			<%--<li class="dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="${pageContext.request.locale.language} ${pageContext.request.locale.country}">
