@@ -1,5 +1,10 @@
 function is_mobile_device()
 {
+  var ua = navigator.userAgent.toLowerCase();
+  var isAndroid = ua.indexOf("android") > -1;
+  if(isAndroid) return true;
+	
+	
   if($( window ).width() <= 600 || ('ontouchstart' in window) || 'onmsgesturechange' in window || window.DocumentTouch && document instanceof DocumentTouch) {
     return true;
   } else {
@@ -17,8 +22,9 @@ $(document).ready(function () {
 			//displayStore();
 
 			if (is_mobile_device()) {
-              $("#webgl_button").hide(); // WebGL doesn't work in the Android app, and generally poorly on mobile.
-              $(".lead").text("Freeciv is a Free and Open Source empire-building strategy game inspired by the history of human civilization.");  // shorted text for mobile screens.
+                          $("#webgl_button").hide(); // WebGL doesn't work in the Android app, and generally poorly on mobile.
+                          $(".lead").text("Freeciv is a Free and Open Source empire-building strategy game inspired by the history of human civilization.");  // shorted text for mobile screens.
+			  $("#donate_link").hide();
 			}
 
 			if (window.location.href == 'https://freecivweb.org/') window.location.href='https://www.freecivweb.org/';
