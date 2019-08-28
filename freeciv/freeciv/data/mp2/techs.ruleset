@@ -284,9 +284,7 @@ req2     = "Currency"
 flags    = ""
 graphic     = "a.construction"
 graphic_alt = "-"
-helptext = _("\
-Allows Settlers, Workers and Engineers to build fortresses, and \
-build Oil Wells on Desert tiles.")
+helptext = _("Lets Settlers, Workers & Engineers build Fortresses & Oil Wells.")
 
 [advance_currency]
 name     = _("Currency")
@@ -321,7 +319,7 @@ req2     = "Magnetism"
 flags    = ""
 graphic     = "a.electricity"
 graphic_alt = "-"
-helptext = _("Adds +1 to the effect of Amphitheaters. Obsoletes Ironclad.")
+helptext = _("Obsoletes Ironclad. Adds +1 to the effect of Amphitheaters.")
 cost = 2220
 
 [advance_electronics]
@@ -340,8 +338,7 @@ req2     = "Construction"
 flags    = ""
 graphic     = "a.engineering"
 graphic_alt = "-"
-helptext = _("\
-Allows Settlers, Workers and Engineers to dig canals.")
+helptext = _("Lets Settlers, Workers & Engineers dig canals.")
 
 [advance_environmentalism]
 name     = _("Environmentalism")
@@ -453,7 +450,7 @@ req1     = "Railroad"
 req2     = "Banking"
 graphic     = "a.industrialization"
 graphic_alt = "-"
-helptext = _("Population will start contributing to pollution. Obsoletes Galleon.")
+helptext = _("Obsoletes Galleon. Population starts making Pollution.")
 cost = 2330
 
 [advance_invention]
@@ -600,7 +597,7 @@ req2     = "Tactics"
 flags    = ""
 graphic     = "a.mobile_warfare"
 graphic_alt = "-"
-helptext = _("Obsoletes Barracks II, Cavalry, Sun Tzu's War Academy, Genghis Khan's Equestrian School.")
+helptext = _("Obsoletes Barracks II, Cavalry, Sun Tzu, Genghis Khan.")
 cost = 5650
 
 [advance_monarchy]
@@ -656,7 +653,7 @@ req2     = "Electronics"
 flags    = ""
 graphic     = "a.nuclear_power"
 graphic_alt = "-"
-helptext = _("Gives sea units two extra moves.")
+helptext = _("Gives sea units +2 moves.")
 cost = 5650
 
 [advance_philosophy]
@@ -666,9 +663,7 @@ req2     = "Literacy"
 flags    = ""
 graphic     = "a.philosophy"
 graphic_alt = "-"
-helptext = _("When you research this technology before 400 BC and\
- before knowing Industrialization or Electricity or\
- Conscription, you get one other immediate technology advance.")
+helptext = _("Gives bonus tech before 1600 AD & Industrialization/Electricity/Conscription.")
  cost = 276
 
 [advance_physics]
@@ -712,7 +707,7 @@ req2     = "Electricity"
 flags    = ""
 graphic     = "a.radio"
 graphic_alt = "-"
-helptext = _("Allows Workers and Engineers to build airbases and buoys. Obsoletes Mausoleum.")
+helptext = _("Obsoletes Mausoleum. Lets Workers & Engineers build airbases and buoys.")
 cost = 5430
 
 [advance_railroad]
@@ -722,10 +717,7 @@ req2     = "Bridge Building"
 flags    = ""
 graphic     = "a.railroad"
 graphic_alt = "-"
-helptext = _("\
-Allows Settlers, Workers and Engineers to upgrade roads to railroads.\
- Reduces revenue from Traderoutes and Enter Marketplace by approximately\
- one quarter. Obsoletes Hanging Gardens.")
+helptext = _("Obsoletes Hanging Gardens. Reduces Traderoute revenue ~25%. Lets Settlers, Workers & Engineers upgrade roads to railroads.")
 cost = 1820
 
 [advance_recycling]
@@ -744,9 +736,7 @@ req2     = "Steel"
 flags    = ""
 graphic     = "a.refining"
 graphic_alt = "-"
-helptext = _("\
-Allows Settlers, Workers and Engineers to build oil wells on \
-Glacier tiles.")
+helptext = _("Lets Settlers, Workers & Engineers build oil wells on Glaciers.")
 cost = 3630
 
 [advance_refrigeration]
@@ -756,8 +746,7 @@ req2     = "Electricity"
 flags    = ""
 graphic     = "a.refrigeration"
 graphic_alt = "-"
-helptext = _("\
-Allows Settlers, Workers and Engineers to upgrade irrigation systems to farmland.")
+helptext = _("Lets Settlers, Workers & Engineers upgrade Irrigation to Farmland.")
 cost = 2775
 
 [advance_robotics]
@@ -843,7 +832,7 @@ flags    = ""
 graphic     = "a.superconductors"
 graphic_alt = "-"
 cost = 5950
-helptext = _("Allows Settlers, Workers and Engineers to upgrade railroads with Maglev.")
+helptext = _("Lets Settlers, Workers & Engineers upgrade railroads to Maglev.")
 
 [advance_tactics]
 name     = _("Tactics")
@@ -947,5 +936,4 @@ root_req = "Theory of Evolution"
 flags    = ""
 graphic  = "b.darwins_voyage"
 graphic_alt = "-"
-helptext = _("This technology is only acquired the first\
- time you build Darwin's Voyage.")
+helptext = _("This technology is not researchable and has no effect.")
