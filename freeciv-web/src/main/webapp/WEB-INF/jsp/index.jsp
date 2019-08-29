@@ -326,7 +326,7 @@
 			</div>
 		</div> <!-- end Discord chat -->
 
-                <div class="row">
+                <%-- <div class="row">
                         <div class="col-md-12">
                                 <h2><fmt:message key="index-youtube"/></h2>
                         </div>
@@ -344,7 +344,7 @@
                         </div>
 
 
-				</div> <!-- end youtube -->
+				</div> <!-- end youtube -->  --%>
 
 
 		<div class="row">
