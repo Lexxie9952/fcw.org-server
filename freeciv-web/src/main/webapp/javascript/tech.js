@@ -29,6 +29,12 @@ var tech_dialog_active = false;
 var tech_xscale = 1.2;
 var wikipedia_url = "http://freeciv.fandom.com/wiki/";
 
+/* Allow checking if mouse was in a tech box for a certain time,
+ * to avoid hover triggers being too sensitive */
+var hover_tech_id = null;      // last tech hovered in
+var hover_tech_oldest_time = null;  // oldest timestamp for when it was there
+var hover_tech_delay = 130;         // how long it has to wait to trigger
+
 /* TECH_KNOWN is self-explanatory, TECH_PREREQS_KNOWN are those for which all
  * requirements are fulfilled; all others (including those which can never
  * be reached) are TECH_UNKNOWN */
@@ -422,12 +428,40 @@ function update_tech_screen()
 
   $("#progress_fg").css("width", pct_progress  + "%");
 
+  var is_wide_screen = $(window).width()<1590 ? false : true;
+
   if (clicked_tech_id != null) {
+    switch (techs[clicked_tech_id].name) {
+      case "Space Flight":
+      case "Automobile":
+      case "Rocketry":
+      case "Industrialization":
+        fs = "80%";
+        break;
+      default:
+        fs = "90%";
+    } //hack to fit some techs on 768px screens
+    var tech_help_text = techs[clicked_tech_id].helptext.replace(stripChar, "");  // splice out the └ that Chrome renders for end of line 
+
     if (touch_device) $("#tech_results").css("margin-left","-22px");
-    $("#tech_result_text").html("<span id='tech_advance_helptext'>" + get_advances_text(clicked_tech_id) + "</span>");
+    $("#tech_result_text").html("<span style='font-size:"+fs+"' title='"+tech_help_text+"' id='tech_advance_helptext'>" + get_advances_text(clicked_tech_id)
+        +" "+(is_wide_screen ? "" /*tech_help_text*/ : "") + "</span>");
     $("#tech_advance_helptext").tooltip({ disabled: false });
   } else if (techs[client.conn.playing['researching']] != null) {
-    $("#tech_result_text").html("<span id='tech_advance_helptext'>" + get_advances_text(client.conn.playing['researching']) + "</span>");
+    switch (techs[client.conn.playing['researching']].name) {
+      case "Space Flight":
+      case "Automobile":
+      case "Rocketry":
+      case "Industrialization":
+        fs = "80%";
+        break;
+      default:
+        fs = "90%";
+    } //hack to fit some techs on 768px screens
+    var research_help_text = techs[client.conn.playing['researching']].helptext.replace(stripChar, "");
+
+    $("#tech_result_text").html("<span style='font-size:"+fs+"' title='"+research_help_text+"' id='tech_advance_helptext'>" + get_advances_text(client.conn.playing['researching'])
+        +" "+(is_wide_screen ? "" /*research_help_text*/ : "") +"</span>");
     $("#tech_advance_helptext").tooltip({ disabled: false });
   }
 
@@ -466,9 +500,9 @@ function get_advances_text(tech_id)
     + format_list_with_intro(' enables',
       [
         format_list_with_intro('', get_units_from_tech(tech_id)
-          .map(unit => tech_span(unit.name, unit.id, null, unit.helptext))),
+          .map(unit => tech_span(unit.name, unit.id, null, unit.helptext.replace(stripChar, "")))),  // strip linebreak markers
         format_list_with_intro('', get_improvements_from_tech(tech_id)
-          .map(impr => tech_span(impr.name, null, impr.id, impr.helptext))),
+          .map(impr => tech_span(impr.name, null, impr.id, impr.helptext.replace(stripChar, "")))),
         format_list_with_intro('', Object.keys(techs)
           .filter(is_valid_and_required)
           .map(tid => techs[tid])
@@ -597,12 +631,12 @@ function get_tech_infobox_html(tech_id)
   var image_src = "/tileset/freeciv-web-tileset-" + tileset_name + "-" + i + get_tileset_file_extention() + "?ts=" + ts;
   if (is_small_screen()) {
     infobox_html += "<div class='specific_tech' onclick='send_player_research(" + tech_id + ");' title='"
-	   + get_advances_text(tech_id).replace(/(<([^>]+)>)/ig,"") + "'>"
+	   + get_advances_text(tech_id).replace(stripChar, "") + "'>"
 	   +  ptech['name']
 	   + "</div>";
   } else {
     infobox_html += "<div class='specific_tech' onclick='send_player_research(" + tech_id + ");' title='"
-	   + get_advances_text(tech_id).replace(/(<([^>]+)>)/ig,"") + "'>"
+	   + get_advances_text(tech_id).replace(stripChar, "") + "'>"
            + "<div class='tech_infobox_image' style='background: transparent url("
            + image_src
 	   + ");background-position:-" + tileset_x + "px -" + tileset_y
@@ -664,7 +698,7 @@ function show_tech_gained_dialog(tech_gained_id)
 
   var title = tech['name'] + " discovered!";
   var message = "The " + nations[pplayer['nation']]['adjective'] + " have discovered " + tech['name'] + ".<br>";
-  message += "<span id='tech_advance_helptext'>" + get_advances_text(tech_gained_id) + "</span>";
+  message += "<span id='tech_advance_helptext'>" + get_advances_text(tech_gained_id) +" "+/*techs[tech_gained_id].helptext.replace(stripChar, "") +*/ "</span>";
 
   var tech_choices = [];
   for (var next_tech_id in techs) {
@@ -768,20 +802,44 @@ function show_tech_info_dialog(tech_name, unit_type_id, improvement_id)
 
   if (unit_type_id != null) {
      var punit_type = unit_types[unit_type_id];
-     message += "<b>Unit info</b>: " + punit_type['helptext'] + "<br><br>"
-     + "Cost: " + punit_type['build_cost']
-     + "<br>Attack: " + punit_type['attack_strength']
-     + "<br>Defense: " + punit_type['defense_strength']
-     + "<br>Firepower: " + punit_type['firepower']
-     + "<br>Hitpoints: " + punit_type['hp']
-     + "<br>Moves: " + move_points_text(punit_type['move_rate'])
-     + "<br>Vision: " + punit_type['vision_radius_sq']
-     + "<br><br>";
+     message += "<b>Unit info</b>: " + punit_type['helptext'].replace(stripChar, "") + "<br>"
+     + "</b><br>Cost: <b>" + punit_type['build_cost']
+     + "</b><br>Attack: <b>" + punit_type['attack_strength']
+     + "</b><br>Defense: <b>" + punit_type['defense_strength']
+     + "</b><br>Firepower: <b>" + punit_type['firepower']
+     + "</b><br>Hitpoints: <b>" + punit_type['hp']
+     + "</b><br>Moves: <b>" + move_points_text(punit_type['move_rate'])
+     + "</b><br>Vision: <b>" + punit_type['vision_radius_sq']
+     + "</b><br><br>";
   }
 
-  if (improvement_id != null) message += "<b>Improvement info</b>: " + improvements[improvement_id]['helptext'] + "<br><br>";
+  if (improvement_id != null) message += "<b>Improvement info</b>: " + improvements[improvement_id]['helptext'].replace(stripChar, "") + "<br><br>";
 
   if (freeciv_wiki_docs[tech_name] != null) {
+    var tech_id = tech_id_by_name(tech_name);
+    const num = (value) => value === null ? 'null' : value;
+    const tech_span = (name, unit_id, impr_id, title) =>
+      `<span ${title ? `title='${title}'` : ''}`
+      + ` onclick='show_tech_info_dialog("${name}", ${num(unit_id)}, ${num(impr_id)})'>${name}</span>`;
+    const is_valid_and_required = (next_tech_id) =>
+      reqtree.hasOwnProperty(next_tech_id) && is_tech_req_for_tech(tech_id, next_tech_id);
+    const format_list_with_intro = (intro, list) =>
+      (list = list.filter(Boolean)).length ? (intro + ' ' + list.join(', ')) : '';
+
+    if (tech_id != null) {
+      message += "<b>"+tech_name+"</b>"+format_list_with_intro(' enables',
+      [
+        format_list_with_intro('', get_units_from_tech(tech_id)
+          .map(unit => tech_span(unit.name, unit.id, null, unit.helptext))),  
+        format_list_with_intro('', get_improvements_from_tech(tech_id)
+          .map(impr => tech_span(impr.name, null, impr.id, impr.helptext))),
+        format_list_with_intro('', Object.keys(techs)
+          .filter(is_valid_and_required)
+          .map(tid => techs[tid])
+          .map(tech => tech_span(tech.name, null, null)))
+      ]) + '.<br>';
+      message += techs[tech_id].helptext.replace(stripChar, "")+"<br><br>";
+    }
     message += "<b>Wikipedia on <a href='" + wikipedia_url
 	  + freeciv_wiki_docs[tech_name]['title']
 	  + "' target='_new' style='color: black;'>" + freeciv_wiki_docs[tech_name]['title']
@@ -838,6 +896,7 @@ function update_tech_dialog_cursor()
         y = y * 0.6;
       }
 
+      // We caught the cursor hovering inside a tech!
       if (tech_mouse_x > x && tech_mouse_x < x + tech_item_width
           && tech_mouse_y > y && tech_mouse_y < y + tech_item_height) {
         if (player_invention_state(client.conn.playing, ptech['id']) == TECH_PREREQS_KNOWN) {
@@ -847,9 +906,36 @@ function update_tech_dialog_cursor()
         } else {
           tech_canvas.style.cursor = "not-allowed";
         }
+
+        // Are we hovering in a new tech? If so, reset timestamp and leave
+        if (hover_tech_id != tech_id) {
+          hover_tech_id = tech_id;
+          hover_tech_oldest_time = Date.now();
+          return;
+        } else {// we've hovered here before, but is it long enough?
+          if (Date.now() - hover_tech_oldest_time < hover_tech_delay)
+          return; // not long enough
+        }
+
+        // We made it here, time to activate tech panel info based on where we have hovered:
         var fs;
-        if ( ptech['name']=="Space Flight" || ptech['name']=="Rocketry") fs="80%;"; else fs="90%;"; //hack to fit 2 techs on 768px screens 
-        $("#tech_result_text").html("<span style='margin-left:-4px; font-size:"+fs+"' id='tech_advance_helptext'>" + get_advances_text(ptech['id']) + "</span>");
+        switch (ptech['name']) {
+          case "Space Flight":
+          case "Automobile":
+          case "Rocketry":
+          case "Industrialization":
+            fs = "80%";
+            break;
+          default:
+            fs = "90%";
+        } //hack to fit some techs on 768px screens
+        //if ( ptech['name']=="Space Flight" || ptech['name']=="Automobile" || ptech['name']=="Rocketry") fs="80%;"; else fs="90%;"; //hack to fit 2 techs on 768px screens
+       
+        var is_wide_screen = $(window).width()<1590 ? false : true;
+        var tech_help_text = techs[ptech['id']].helptext.replace(stripChar, "");  // splice out the └ that Chrome renders for end of line 
+    
+        $("#tech_result_text").html("<span title='"+tech_help_text+"' style='margin-left:-4px; font-size:"+fs+"' id='tech_advance_helptext'>"+get_advances_text(ptech['id']) 
+          + "</span><span style='color: #ffd588; font-size:"+fs+"'>&nbsp;"+ (is_wide_screen ? tech_help_text : "") + "</span>");
         $("#tech_advance_helptext").tooltip({ disabled: false });
       }
     }

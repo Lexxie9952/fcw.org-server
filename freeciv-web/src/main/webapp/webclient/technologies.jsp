@@ -27,7 +27,7 @@
       </div>
 
     </div>
-  <div id="mouse_info_box" style='float:right;padding:8px;margin-right:9px;'></div>
+  <div id="mouse_info_box" style="float:right;padding:2px;margin-right:9px;margin-top:20px;position:absolute;right:0"></div>
   </div>
 
   <div id="technologies">
