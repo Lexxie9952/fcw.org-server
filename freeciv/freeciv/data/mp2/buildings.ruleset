@@ -1823,7 +1823,7 @@ sound_alt	= "w_generic"
 helptext	= _("\
 The Supreme Court gives the same effect as an extra Courthouse in all your cities.\
  If a Courthouse is already present, the additional bonus for diplomatic combat and\
- 'Steal Tech' is 10%. This Wonder is never obsolete.\
+ Steal Tech is 10%. This Wonder is never obsolete.\
 ")
 
 [building_sun_tzus_war_academy]

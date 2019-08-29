@@ -2912,7 +2912,7 @@ roles         = ""
 helptext      = _("\
 The Carrier is a mobile airport that can carry Air units, Helicopters, AAA, Marines, and Missiles.\
 "), _("\
-Carriers are very expensive and thus, usually protected by a fleet of scouts and ecorts.\
+Carriers are very expensive and thus, usually protected by a fleet of scouts and escorts.\
 ")
 
 [unit_transport]
