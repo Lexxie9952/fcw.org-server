@@ -358,7 +358,7 @@ function show_city_dialog(pcity)
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
-           + "title=\"" + improvements[z]['helptext'] + "\" "
+           + "title=\"" + improvements[z]['helptext'].replace(stripChar, "") + "\" "
 	   + "onclick='city_sell_improvement(" + z + ");'>"
            +"</div>"+ long_name_font_reducer+improvements[z]['name']+"</div>" + "</div>";
     }
@@ -718,7 +718,7 @@ function generate_production_list()
     {
       production_list.push({"kind": VUT_UTYPE, "value" : punit_type['id'],
                             "text": punit_type['name'],
-                        "helptext": punit_type['helptext'],
+                        "helptext": punit_type['helptext'].replace(stripChar, ""),
                         "rule_name": punit_type['rule_name'],
                         "build_cost": punit_type['build_cost'],
                         "unit_details": "A<b>"+punit_type['attack_strength']  
@@ -730,7 +730,7 @@ function generate_production_list()
     } else {
       production_list.push({"kind": VUT_UTYPE, "value" : punit_type['id'],
                             "text": punit_type['name'],
-	                      "helptext": punit_type['helptext'],
+	                      "helptext": punit_type['helptext'].replace(stripChar, ""),
                        "rule_name": punit_type['rule_name'],
                       "build_cost": punit_type['build_cost'],
                     "unit_details": "A<b>"+punit_type['attack_strength'] + "</b> " 
@@ -753,7 +753,7 @@ function generate_production_list()
       production_list.push({"kind": VUT_IMPROVEMENT,
                            "value": pimprovement['id'],
                             "text": pimprovement['name'],
-	                      "helptext": pimprovement['helptext'],
+	                      "helptext": pimprovement['helptext'].replace(stripChar, ""),
                        "rule_name": pimprovement['rule_name'],
                       "build_cost": build_cost,
                     "unit_details": building_details,
@@ -1592,7 +1592,7 @@ function city_worklist_dialog(pcity)
 	universals_list.push({"name" : pimpr['name'],
 		"kind" : kind,
 		"value" : value,
-		"helptext" : pimpr['helptext'],
+		"helptext" : pimpr['helptext'].replace(stripChar, ""),
 		"build_cost" : build_cost,
 		"sprite" : get_improvement_image_sprite(pimpr)});
       } else if (kind == VUT_UTYPE) {
@@ -1600,7 +1600,7 @@ function city_worklist_dialog(pcity)
         universals_list.push({"name" : putype['name'],
 		"kind" : kind,
 		"value" : value,
-		"helptext" : putype['helptext'],
+		"helptext" : putype['helptext'].replace(stripChar, ""),
 		"build_cost" : putype['build_cost'],
 		"sprite" : get_unit_type_image_sprite(putype)});
       } else {
