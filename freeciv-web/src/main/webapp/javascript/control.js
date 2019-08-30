@@ -1541,7 +1541,7 @@ function unit_distance_compare(unit_a, unit_b)
 
     // Or the canvas center if no unit is focused
     if (ref_tile == null) {
-      ref_tile = canvas_pos_to_tile(mapview.width/2, mapview.height/2);
+      ref_tile = canvas_pos_to_nearest_tile(mapview.width/2, mapview.height/2);
     }
 
     var ref_a = map_distance_vector(ref_tile, ptile_a);

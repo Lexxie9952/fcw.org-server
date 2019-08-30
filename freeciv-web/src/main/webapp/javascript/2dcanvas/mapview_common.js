@@ -473,6 +473,35 @@ function canvas_pos_to_tile(canvas_x, canvas_y)
 }
 
 /**************************************************************************
+  Finds the tile corresponding to pixel coordinates.  Returns that tile,
+  or the nearest one (for some definition of nearest that may change in
+  the future) if the position is off the map.
+**************************************************************************/
+function canvas_pos_to_nearest_tile(canvas_x, canvas_y)
+{
+  var map_x, map_y;
+
+   var r = base_canvas_to_map_pos(canvas_x, canvas_y);
+  map_x = r['map_x'];
+  map_y = r['map_y'];
+  if (topo_has_flag(TF_WRAPX)) {
+    map_x = FC_WRAP(map_x, map['xsize']);
+  } else if (map_x < 0) {
+    map_x = 0;
+  } else if (map_x >= map['xsize']) {
+    map_x = map['xsize'] - 1;
+  }
+  if (topo_has_flag(TF_WRAPY)) {
+    nat_y = FC_WRAP(nat_y, map['ysize']);
+  } else if (map_y < 0) {
+    map_y = 0;
+  } else if (map_y >= map['ysize']) {
+    map_y = map['ysize'] - 1;
+  }
+  return map_pos_to_tile(map_x, map_y);
+}
+
+/**************************************************************************
   Updates the entire mapview.
 **************************************************************************/
 function update_map_canvas_full()
