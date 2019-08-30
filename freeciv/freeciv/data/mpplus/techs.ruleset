@@ -420,7 +420,7 @@ req2     = "Tactics"
 flags    = ""
 graphic     = "a.guerilla_warfare"
 graphic_alt = "-"
-helptext = _("Obsoletes Explorer.")
+helptext = _("Obsoletes Explorer. Globally unlocks defensive partisans.")
 cost = 3985
 
 [advance_gunpowder]
