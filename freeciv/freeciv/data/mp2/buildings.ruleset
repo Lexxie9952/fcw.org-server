@@ -1615,7 +1615,8 @@ sound_alt	= "w_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
 This Wonder increases Trade, the very lifeblood of your tax income, science output,\
- and luxury for happiness. With this Wonder, Trade in each city increases by 40%.\ 
+ and luxury for happiness. With this Wonder, Trade in each city increases by 40%.\
+ This Wonder does not become obsolete.\
 ")
 
 [building_michelangelos_chapel]
@@ -1637,13 +1638,14 @@ sabotage	= 0
 sound		= "w_michelangelos_chapel"
 sound_alt	= "w_generic"
 helptext	= _("\
-Counts as having a Cathedral in all of your cities.\
+Counts as having a Cathedral in all cities.\
  This makes 3 unhappy citizens content in each city;\
  however, it does not affect citizens made unhappy by military activity.\
  The discovery of Theology increases the effect of a Cathedral,\
  making an additional unhappy citizen content. The discovery of\
  Communism lessens the effect of a Cathedral, reducing by one\
  the number of unhappy citizens made content.\
+ This Wonder does not become obsolete.\
 ")
 
 ;this is wonder #61

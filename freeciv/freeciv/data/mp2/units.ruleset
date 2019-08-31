@@ -211,7 +211,7 @@ flags         = "TerrainSpeed", "DamageSlows", "CanOccupyCity", "BuildAnywhere",
                 "TerrainDefense", "KillCitizen", "Airliftable", 
                 "AttackNonNative", "AttFromNonNative", "BorderPolice"
 helptext      = _("\
-  * Can attack air and sea targets.\
+  * Can attack from Ships and Helicopters.\
 ")
 
 [unitclass_sea]
@@ -620,10 +620,10 @@ veteran_move_bonus = 0
 roles         = "AttackFastStartUnit"       ;this role taken over for well-digger
 helptext      = _("\
 The only purpose of this unit is to fix a bad start with no nearby water.\
- You can only make one. Please note the high upkeep.\
+ You can only make one. It has very high upkeep.\
 "), _("\
-If you lack nearby water at game start, you can make a Well-Digger in a city that can\
- support its upkeep. Dig a well, then disband.\
+If you lack nearby water at game start, make a Well-Digger in a city that can\
+ support the upkeep. Irrigation is 2 turns; a well is 1 turn. Disband right after!\
 "), _("\
  This unit can irrigate any tile except Hills/Mountains, or dig a well on any tile.\
  A Despotic city needs +2 Food +2 Prod for upkeep. A Well-Digger WILL NOT WORK:\
@@ -746,7 +746,7 @@ flags         = "FootSoldier", "CantReachAir"
 roles         = "DefendOk", "DefendOkStartUnit", "FirstBuild"
 helptext      = _("\
 This unit may be built from the start of the game. It is the weakest military unit,\
- but it's also cheap.\
+ but is also cheap.\
 ")
 
 [unit_phalanx]
@@ -1089,7 +1089,7 @@ defense       = 5
 hitpoints     = 20
 firepower     = 1
 move_rate     = 2
-vision_radius_sq = 8  ; hard-coded the +4 extra for effect_physics_vision since it's a pre-req anyway
+vision_radius_sq = 8  ; hard-coded the +4 extra for effect_physics_vision since it is a pre-req anyway
 transport_cap = 0
 fuel          = 0
 uk_happy      = 1
@@ -3078,7 +3078,7 @@ On impact, the blast will destroy any unit in a 3x3 area, including friendly uni
 Nuclear fallout reduces tile output and increases the risk of global nuclear winter; see the help on Fallout. Ocean tiles are not\
  subject to Fallout.\
 "), _("\
-If Fallout is cleaned by Engineers on the same turn it's created, this reduces the chance of nuclear winter.\
+If Fallout is cleaned by Engineers on the same turn it appears, this reduces the chance of nuclear winter.\
 ")
 
 [unit_diplomat]
