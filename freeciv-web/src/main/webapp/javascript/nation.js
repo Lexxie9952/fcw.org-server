@@ -35,7 +35,7 @@ function update_nation_screen()
   var nation_list_html = "<table class='tablesorter' id='nation_table' width='95%' border=0 cellspacing=0 >"
 	  + "<thead><tr><th>Flag</th><th>Color</th><th>Player Name:</th>"
 	  + "<th>Nation:</th><th class='nation_attitude'>Attitude</th><th>Score</th><th>AI/Human</th><th>Alive?</th>"
-	  + "<th>Diplomatic state</th><th>Embassy</th><th>Shared vision</th><th class='nation_team'>Team</th><th>State</th></tr></thead><tbody class='nation_table_body'>";
+	  + "<th style='text-align:center'>Diplomatic state</th><th style='text-align:center'>Embassy</th><th>Shared vision</th><th class='nation_team'>Team</th><th>State</th></tr></thead><tbody class='nation_table_body'>";
 
   var sortList = [];
   var headers = $('#nation_table thead th');
@@ -73,13 +73,27 @@ function update_nation_screen()
           get_ai_level_text(pplayer) + " AI" : "Human") + "</td><td>"
 	   + (pplayer['is_alive'] ? "Alive" : "Dead") +  "</td>";
 
+    var contact_time=0;
     if (!client_is_observer() && client.conn.playing != null && diplstates[player_id] != null && player_id != client.conn.playing['playerno']) {
-      nation_list_html += "<td>" + get_diplstate_text(diplstates[player_id]) + "</td>";
+      contact_time = pplayer.diplstates[client.conn.playing.playerno].contact_turns_left; //set this here because it needs the same 'if'
+      
+      var pact_time = pplayer.diplstates[client.conn.playing.playerno].turns_left;
+      var dstate = get_diplstate_text(diplstates[player_id]);
+      if (dstate!="Ceasefire" && dstate!="Armistice") pact_time=0; // don't show unless it's a real timer on an expiring pact.
+      pact_time = (pact_time>0) ? ":<span title='Turns till pact expires' style='color:#f0d0c0'>"+pact_time+"</span>" : "";   // show turns left for diplstate or blank if n/a
+      nation_list_html += "<td style='text-align:center'>" + get_diplstate_text(diplstates[player_id])+pact_time+"</td>";
     } else {
-      nation_list_html += "<td>-</td>";
+      nation_list_html += "<td style='text-align:center'>-</td>";
     }
 
-    nation_list_html += "<td>" + get_embassy_text(player_id) + "</td>";
+    // Alternate text if no embassy, show contact_turns instead:
+    var embassy_status = get_embassy_text(player_id);
+    if (embassy_status == "None") {
+      if (contact_time>0) embassy_status = "<span title='Contact turns remaining' style='color:#c0c0c0'>("+contact_time+")</span>";
+    }
+    console.log(pplayer.name+" "+embassy_status);
+
+    nation_list_html += "<td style='text-align:center;'>" + embassy_status + "</td>";
 
     nation_list_html += "<td>"
     if (!client_is_observer() && client.conn.playing != null) {
