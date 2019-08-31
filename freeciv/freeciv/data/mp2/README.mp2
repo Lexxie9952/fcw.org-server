@@ -1,7 +1,16 @@
-----------------------------------------------------------------------
-                   Multiplayer-Evolution Ruleset
-                               (MP2)
-----------------------------------------------------------------------
+MP2: Multiplayer II Evolution ruleset
+-------------------------------------
+LINKS:
+<a href="https://freeciv.fandom.com/wiki/Multiplayer_II_Game_Manual" target="_blank">Full Game Manual</a>
+<a href="https://freeciv.fandom.com/wiki/Multiplayer_II_Summary" target="_blank">Multiplayer II Summary</a>
+<a href="https://freeciv.fandom.com/wiki/Design_Log.mp2" target="_blank">Design Log</a>
+...
+<a href="https://freeciv.fandom.com/wiki/Terrain.mp2#Terrain_Chart" target="_blank">Terrain</a>
+<a href="https://freeciv.fandom.com/wiki/Bases.mp2" target="_blank">Bases</a>
+<a href="https://freeciv.fandom.com/wiki/Combat.mp2" target="_blank">Combat</a>
+...
+<a href="https://freeciv.fandom.com/wiki/Defense_bonus_chart.mp2" target="_blank">Terrain+Base Defense Bonus Quick-Reference</a>
+<a href="https://freeciv.fandom.com/wiki/Hotkeys.mp" target="_blank">Hotkeys and Mouse Control</a>
 
 The Multiplayer-Evolution ruleset is a fully modernized ruleset to take advantage of cutting-edge advancements in Freeciv Server development. 
 Compared to original Multiplayer, the most notable changes will be new early-game sea units, new late-game air units, and the wholescale improvement
@@ -9,12 +18,9 @@ of balance and tactical possibility in late-game Air and Sea units. A large numb
 balance many other changes whose aim was to increase playability, strategic depth and creativity, realism, and overall richness.
 Enjoy!
 
-To access full details online, please visit:
-<a href="https://freeciv.fandom.com/wiki/Multiplayer_II_Summary" target="_blank">Multiplayer II Summary</a>
-
-
-Description of changes from Multiplayer 1.0 rules:
-
+-----------------------------
+Changes from Multiplayer 1.0:
+-----------------------------
 TECH
 1. Tech costs equalize pace of discovery for all game stages.
 2. Darwin's Voyage is now similar to Colossus. 
@@ -147,19 +153,6 @@ NEW FEATURES / GAME MECHANICS
 10. Maximum Granary food store capped at 70. Give some balance to non-rapture governments.
 11. Timeline changed to match technological pace of the game. No cannons in 100 BC !
 12. Incite cost changed. Goes from impossibly high to extremely high (but theoretically possible.)
-
-LINKS:
-<a href="https://freeciv.fandom.com/wiki/Multiplayer_II_Game_Manual" target="_blank">Full Game Manual</a>
-<a href="https://freeciv.fandom.com/wiki/Multiplayer_II_Summary" target="_blank">Multiplayer II Summary</a>
-<a href="https://freeciv.fandom.com/wiki/Design_Log.mp2" target="_blank">Design Log</a>
-...
-<a href="https://freeciv.fandom.com/wiki/Terrain.mp2#Terrain_Chart" target="_blank">Terrain</a>
-<a href="https://freeciv.fandom.com/wiki/Bases.mp2" target="_blank">Bases</a>
-<a href="https://freeciv.fandom.com/wiki/Combat.mp2" target="_blank">Combat</a>
-...
-<a href="https://freeciv.fandom.com/wiki/Defense_bonus_chart.mp2" target="_blank">Terrain+Base Defense Bonus Quick-Reference</a>
-<a href="https://freeciv.fandom.com/wiki/Hotkeys.mp" target="_blank">Hotkeys and Mouse Control</a>
-
 
 
 
