@@ -1914,11 +1914,28 @@ function do_map_click(ptile, qtype, first_time_called)
         var tile_dx = ptile['x'] - old_tile['x']; 
         var tile_dy = ptile['y'] - old_tile['y'];
         //console.log("dx:"+tile_dx+", dy:"+tile_dy);
-        // less than one tile away in x AND y will override sending a GO TO and simulate hitting an arrow instead:
-        if (Math.abs(tile_dx)<=1 && Math.abs(tile_dy) <=1 && goto_last_action != ACTION_NUKE) /* TO DO: overriding GO TO is a hack to fix GO TO bug
-             and we needed to not override ACTION_NUKE. We could isntead check (goto_last_action==-1 OR ==ACTION_COUNT), which would allow other 
-             goto_last_actions to be added later (go to tile and build city, etc.) but this wasn't done for now because we don't want to deal with 
-             the risks of relying on -1 or ACTION_COUNT to always be set properly in every single case*/
+        
+        /* Override server GOTO pathfinding bugs that report false illegal actions and thus disallow mobile device
+         *  users from making legal moves. There is no risk in the override attempting a manual move command to an adjacent 
+         *  tile in such cases, since it will simply not perform it if the server won't allow it. ;) */
+
+        /* Conditions for overriding GOTO with a simulated manual cursor move command: 
+         * ADJACENT:  tile distance dx<=1 AND dy<=1. 
+         * Not goto_active during a NUKE command, which is a GOTO with a goto_last_action for Nuking the target.
+         * goto_path.length must be 0, undefined, or 1;  if path is 2 or more to an adjacent tile, that means there is a legal path
+         * to the next tile, that uses less moves by going to another tile first (e.g. ste[ping onto a river before going to Forest river)
+         * in which case we wouldn't want to override it because (1) it HAS a legal path and (2) it's a superior path using less moves
+         */
+        //console.log("goto_path, goto_path.length == "+goto_path+", "+goto_path.length);  
+        if (  Math.abs(tile_dx)<=1 && Math.abs(tile_dy) <=1     // adjacent
+              && goto_last_action != ACTION_NUKE                // not a nuke command appended to a GOTO
+              && (goto_path.length <= 1 || goto_path.length == undefined)   // don't override path>=2 which has better legal way to get to adjacent tile
+           )                                                    // "illegal" adjacent goto attempts render goto_path.length == undefined
+
+             /* NOTE: instead of checking ACTION_NUKE we could check (goto_last_action==-1 OR ACTION_COUNT), which would allow other 
+              * goto_last_actions to be added later (go to tile and build city, etc.) but this wasn't done for now because we don't
+              * want to deal with the risks of relying on -1 or ACTION_COUNT to always be set properly in every single case
+              */
         {
           console.log("GO TO overridden because adjacent tile.")
           switch (tile_dy) 
