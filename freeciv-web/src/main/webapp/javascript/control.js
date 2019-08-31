@@ -3473,14 +3473,16 @@ function key_unit_mine()
 **************************************************************************/
 function can_build_well(punit, ptile)
 {
+  /* Wells don't need lowland, but we may consider changing it later.
   var is_lowland = (tile_terrain(ptile)['name'] != 'Hills' 
                    && tile_terrain(ptile)['name'] != 'Mountains');
+  */ 
 
   return ( (punit != null && ptile != null)
       &&  (!tile_has_extra(ptile, EXTRA_RIVER))
       &&  tile_owner(ptile) == punit['owner']
       &&  (unit_types[punit['type']]['name'] == "Well-Digger")
-      &&  (is_lowland)
+/*      &&  (is_lowland)  */
       &&  (player_invention_state(client.conn.playing, tech_id_by_name('Pottery')) != TECH_KNOWN)
       &&  (player_invention_state(client.conn.playing, tech_id_by_name('Alphabet')) != TECH_KNOWN)
          );
