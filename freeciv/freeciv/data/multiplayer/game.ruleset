@@ -1290,23 +1290,32 @@ names =
 [settings]
 set =
     { "name", "value", "lock"
-      "minplayers", 2, FALSE
+      "minplayers", 0, FALSE
       "generator", "ISLAND", FALSE
-      "topology", "WRAPX|WRAPY|ISO", FALSE
+      "topology", "WRAPX", FALSE
       "startpos", "SINGLE", FALSE
       "tinyisles", FALSE, FALSE
       "alltemperate", TRUE, FALSE
       "separatepoles", FALSE, FALSE
       "huts", 0, FALSE
-      "aifill", 0, FALSE
-      "dispersion", 0, FALSE
-      "diplomacy", "DISABLED", FALSE
-      "contactturns", 0, FALSE
+      "aifill", 6, FALSE
+      "airliftdestdivisor", 3, FALSE
+      "airliftingstyle", "FROM_ALLIES|TO_ALLIES", FALSE
+
+
+      "dispersion", 1, FALSE
+      "diplomacy", "ALL", FALSE
+      "contactturns", 10, FALSE
       "revolen", 2, FALSE
       "barbarians", "DISABLED", FALSE
       "techpenalty", 0, FALSE
-      "startunits", "cccwwwxxxx", FALSE
+      "startunits", "cccwwwxx", FALSE
       "specials", 350, FALSE
       "borders", "SEE_INSIDE", FALSE
       "foggedborders", TRUE, FALSE
+      "nationset", "all", FALSE 
+      "gold", 100, FALSE	
+
+     "unreachableprotects", "ENABLED", FALSE
+
     }
