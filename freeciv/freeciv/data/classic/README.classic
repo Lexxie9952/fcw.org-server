@@ -2,62 +2,36 @@
 Classic Ruleset
 ===============
 
+<a href="https://freeciv.fandom.com/wiki/Game_Manual" target="_blank">Classic Game Manual</a>
+<a href="https://freeciv.fandom.com/wiki/Terrain#Terrain_Catalog" target="_blank">Terrain</a>
+<a href="https://freeciv.fandom.com/wiki/Combat" target="_blank">Combat</a>
+<a href="https://freeciv.fandom.com/wiki/Government" target="_blank">Governments</a>
+<a href="https://freeciv.fandom.com/wiki/Economy" target="_blank">Economy</a>
+<a href="https://freeciv.fandom.com/wiki/Diplomacy" target="_blank">Diplomacy</a>
+
+<a href="https://freeciv.fandom.com/wiki/Hotkeys.mp" target="_blank">Hotkeys and Mouse Control</a>
+
+
 History
 -------
 
-Classic ruleset was freeciv's default ruleset until freeciv version 3.0,
-where it got replaced by civ2civ3 ruleset.
+Classic ruleset has a long history. It started deep in the past before Civilization II ever came out.
+After Civ2, Classic became a synthesis of three things. Civilization I, which it was built from, 
+new features in Civilization II that were better, a very few things from other Civ sources which were
+considered good, and a touch of salt and spice modifications to make it all work right together!
+The result is an experience of Classic Civilization that is somehow more "classic" than any of the 
+original games--in some people's view at least! 
 
+Nevertheless, time has moved on, and you are highly encouraged to try some other more modern rulesets
+for variations, such as:
 
-Main differences to civ2civ3 (the default)
-------------------------------------------
+Civ2Civ3 - A beginner level mix of Civ2 and Civ3 with a liberal amount of other changes.
 
-- The Republic and Democracy have rapture growth enabled
+Multiplayer+ - In many ways an even more Classic and much more refined version of classic Civilization, 
+ ... with many balance changes that it functions well even with massive multiplayer human conditions.
 
-- There's no Tribal, Fundamentalism, or Federation government types
+Multiplayer-Evolution (MP2) - The ultimate synthesis of Classic Civilization with modern features and 
+ ... advancements. All the best classical mechanics are kept, and only the best newer features and 
+ ... units are added. This preserves the hard-edged chess match of older Civ with the finer balance 
+ ... and portfolio of features, new units, and improvements, of years of evolution and playtesting.
 
-- Government values are different, see help of each government type
-
-- Settlers cost only one population
-
-- Domestic trade routes are supported
-
-- No unit pays upkeep in Gold
-
-- There's no Fort or Airstrip extras
-
-- There's no Tech Leakage
-
-- There's no Tech Upkeep
-
-- There's no Plague risk
-
-- Terrain outputs are different, see help for each terrain type
-
-- Wonders that need coastal city are available next to Lake tiles
-
-- There's no pollution on Oceanic terrains
-
-- City size does not affect defense bonuses
-
-- There's no Mausoleum of Mausolos, Statue of Zeus, or Temple of Artemis
-  wonders
-
-- Some wonders are made available from a different technology, see
-  help for each wonder
-
-- Engineers are always able to do all the terrain transformations,
-  there's no additional requirements for any of them
-
-- There's no Food Waste
-
-- There's no separate Wheeled units class, but all land units belong
-  to the same class
-
-- There's no units able to capture others
-
-- Air units cannot pillage
-
-- Helicopters cannot carry units
-
-- Nukes can always move at full speed

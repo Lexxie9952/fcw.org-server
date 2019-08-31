@@ -145,7 +145,7 @@ req2     = "Mathematics"
 flags    = ""
 graphic     = "a.astronomy"
 graphic_alt = "-"
-helptext = _("Increases units' vision when in fortresses.")
+helptext = _("+2 Fortress vision.")
 
 [advance_atomic_theory]
 name     = _("Atomic Theory")
@@ -178,7 +178,7 @@ req2     = "Construction"
 flags    = "Bridge"
 graphic     = "a.bridge_building"
 graphic_alt = "-"
-helptext = _("Allows roads to be built on river tiles.")
+helptext = _("Allows roads on rivers.")
 
 [advance_bronze_working]
 name     = _("Bronze Working")
@@ -268,10 +268,7 @@ req2     = "Iron Working"
 flags    = ""
 graphic     = "a.construction"
 graphic_alt = "-"
-helptext = _("\
-Allows Settlers, Migrants, Workers and Engineers to build forts and \
-fortresses.\
-")
+helptext = _("Allows Fort,  Fortress.")
 
 [advance_currency]
 name     = _("Currency")
@@ -304,10 +301,7 @@ req2     = "Theory of Gravity"
 flags    = ""
 graphic     = "a.electricity"
 graphic_alt = "-"
-helptext = _("\
-Allows irrigation without an adjacent water source, improves the \
-effect of Amphitheaters, and increases city vision radius.\
-")
+helptext = _("\Allows irrigation sans water. +Amphitheater effect. +City vision.")
 
 [advance_electronics]
 name     = _("Electronics")
@@ -340,6 +334,7 @@ req2     = "Democracy"
 flags    = ""
 graphic     = "a.espionage"
 graphic_alt = "-"
+helptext = _("Obsoletes Diplomat.")
 
 [advance_explosives]
 name     = _("Explosives")
@@ -372,7 +367,7 @@ req2     = "Labor Union"
 flags    = ""
 graphic     = "a.fusion_power"
 graphic_alt = "-"
-helptext = _("Makes it possible for Engineers to transform terrains.")
+helptext = _("Allows Engineers to transform terrain.")
 
 [advance_genetic_engineering]
 name     = _("Genetic Engineering")
@@ -419,7 +414,7 @@ req2     = "Literacy"
 flags    = ""
 graphic     = "a.invention"
 graphic_alt = "-"
-helptext = _("Halves the upgrade cost of your units.")
+helptext = _("-50% unit upgrade cost.")
 
 [advance_iron_working]
 name     = _("Iron Working")
@@ -516,11 +511,7 @@ req2     = "Trade"
 flags    = ""
 graphic     = "a.medicine"
 graphic_alt = "-"
-; /* xgettext:no-c-format */
-helptext = _("\
-Reduces the risk of plague in your cities by 30% of the base chance \
-(this is additive with the benefits of any buildings).\
-")
+helptext = _("-30% Plague odds.")
 
 [advance_metallurgy]
 name     = _("Metallurgy")
@@ -537,11 +528,7 @@ req2     = "Electronics"
 flags    = ""
 graphic     = "a.miniaturization"
 graphic_alt = "-"
-helptext = _("\
-Allows Settlers, Migrants, Workers, Engineers, and Transports to build \
-oil platforms on Deep Ocean, required to get the bonus from \
-Offshore Platforms.\
-")
+helptext = _("Allows Oil Platforms.")
 
 [advance_mobile_warfare]
 name     = _("Mobile Warfare")
@@ -599,7 +586,7 @@ req2     = "Miniaturization"
 flags    = ""
 graphic     = "a.nuclear_power"
 graphic_alt = "-"
-helptext = _("Gives sea units one extra move.")
+helptext = _("+1 move for Sea units.")
 
 [advance_philosophy]
 name     = _("Philosophy")
@@ -610,6 +597,7 @@ bonus_message = _("Great philosophers from all the world join \
 your civilization: you learn %s immediately.")
 graphic     = "a.philosophy"
 graphic_alt = "-"
+helptext = _("Gives a bonus tech.")
 
 [advance_physics]
 name     = _("Physics")
@@ -626,6 +614,7 @@ req2     = "Robotics"
 flags    = ""
 graphic     = "a.plastics"
 graphic_alt = "-"
+helptext = _("+25% population pollution.")
 
 [advance_polytheism]
 name     = _("Polytheism")
@@ -650,9 +639,7 @@ req2     = "Electronics"
 flags    = ""
 graphic     = "a.radio"
 graphic_alt = "-"
-helptext = _("\
-Allows Workers and Engineers to build airstrips, airbases and buoys.\
-")
+helptext = _("Allows Airbase, Buoy.")
 
 [advance_railroad]
 name     = _("?tech:Railroad")
@@ -661,14 +648,7 @@ req2     = "Metallurgy"
 flags    = ""
 graphic     = "a.railroad"
 graphic_alt = "-"
-helptext = _("\
-Allows Settlers, Migrants, Workers and Engineers to upgrade roads to \
-railroads.\
-"), _("\
-For Despotism or Tribal governments, cancels the penalty to worked \
-tiles with output greater than 2 (as if all your cities were always \
-celebrating).\
-")
+helptext = _("Obsoletes Hanging Gardens. Allows Railroads. Less Trade revenue.")
 
 [advance_recycling]
 name     = _("Recycling")
@@ -685,11 +665,7 @@ req2     = "Industrialization"
 flags    = ""
 graphic     = "a.refining"
 graphic_alt = "-"
-helptext = _("\
-Allows Settlers, Migrants, Workers and Engineers to upgrade \
-mines to oil wells on Desert and Glacier tiles, for an extra production \
-point.\
-")
+helptext = _("Allows Oil wells on Desert/Glacier.")
 
 [advance_refrigeration]
 name     = _("Refrigeration")
@@ -698,10 +674,7 @@ req2     = "Electricity"
 flags    = ""
 graphic     = "a.refrigeration"
 graphic_alt = "-"
-helptext = _("\
-Allows Settlers, Migrants, Workers and Engineers to upgrade \
-irrigation systems to farmland.\
-")
+helptext = _("Allows Farmland.")
 
 [advance_robotics]
 name     = _("Robotics")
@@ -775,10 +748,7 @@ req2     = "Laser"
 flags    = ""
 graphic     = "a.superconductors"
 graphic_alt = "-"
-helptext = _("\
-Allows Settlers, Migrants, Workers and Engineers to upgrade railroads \
-with maglev.\
-")
+helptext = _("Allows MagLev.")
 
 [advance_tactics]
 name     = _("Tactics")
@@ -795,10 +765,7 @@ req2     = "Industrialization"
 flags    = ""
 graphic     = "a.the_corporation"
 graphic_alt = "-"
-helptext = _("\
-Halves the corruption of trade related to distance from the capital \
-(or eliminates it for Federation governments).\
-")
+helptext = _("-50% corruption. -100% for Federation.")
 
 [advance_the_republic]
 name     = _("The Republic")
@@ -840,9 +807,7 @@ req2     = "Pottery"
 flags    = ""
 graphic     = "a.trade"
 graphic_alt = "-"
-helptext = _("\
-Halves the waste of production related to distance from the capital.\
-")
+helptext = _("-50% corruption.")
 
 [advance_university]
 name     = _("University")

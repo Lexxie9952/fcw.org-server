@@ -159,7 +159,7 @@ req1     = "Combustion"
 req2     = "Steel"
 graphic     = "a.automobile"
 graphic_alt = "-"
-helptext = _("Increases the population's contribution to pollution.")
+helptext = _("Obsoletes Leonardos Workshop. +25% population pollution.")
 
 [advance_banking]
 name     = _("Banking")
@@ -176,7 +176,7 @@ req2     = "Construction"
 flags    = "Bridge"
 graphic     = "a.bridge_building"
 graphic_alt = "-"
-helptext = _("Allows roads to be built on river tiles.")
+helptext = _("Allows roads on rivers.")
 
 [advance_bronze_working]
 name     = _("Bronze Working")
@@ -209,6 +209,7 @@ req2     = "Horseback Riding"
 flags    = ""
 graphic     = "a.chivalry"
 graphic_alt = "-"
+helptext = _("Obsoletes Horsemen, Chariots.")
 
 [advance_code_of_laws]
 name     = _("Code of Laws")
@@ -241,7 +242,7 @@ req2     = "Industrialization"
 flags    = ""
 graphic     = "a.communism"
 graphic_alt = "-"
-helptext = _("Reduces the effect of Cathedrals.")
+helptext = _("-1 Effect for Cathedral, Michelangelos Chapel.")
 
 [advance_computers]
 name     = _("Computers")
@@ -258,6 +259,7 @@ req2     = "Metallurgy"
 flags    = ""
 graphic     = "a.conscription"
 graphic_alt = "-"
+helptext = _("Obsoletes Musketeers.")
 
 [advance_construction]
 name     = _("Construction")
@@ -266,10 +268,7 @@ req2     = "Currency"
 flags    = ""
 graphic     = "a.construction"
 graphic_alt = "-"
-helptext = _("\
-Allows Settlers, Workers and Engineers to build fortresses, and to \
-build oil wells on Desert tiles.\
-")
+helptext = _("Allows Fortresses, Oil Wells.")
 
 [advance_currency]
 name     = _("Currency")
@@ -302,7 +301,7 @@ req2     = "Magnetism"
 flags    = ""
 graphic     = "a.electricity"
 graphic_alt = "-"
-helptext = _("Improves the effect of Amphitheaters.")
+helptext = _("Obsoletes Ironclad. +1 Effect for Amphitheaters.")
 
 [advance_electronics]
 name     = _("Electronics")
@@ -327,8 +326,7 @@ req2     = "Space Flight"
 flags    = ""
 graphic     = "a.environmentalism"
 graphic_alt = "-"
-helptext = _("Having this advance decreases pollution\
- in all your cities by 50%.")
+helptext = _("-50% Pollution in all cities.")
 
 [advance_espionage]
 name     = _("Espionage")
@@ -337,6 +335,7 @@ req2     = "Democracy"
 flags    = ""
 graphic     = "a.espionage"
 graphic_alt = "-"
+helptext = _("Obsoletes Diplomat.")
 
 [advance_explosives]
 name     = _("Explosives")
@@ -345,6 +344,7 @@ req2     = "Chemistry"
 flags    = ""
 graphic     = "a.explosives"
 graphic_alt = "-"
+helptext = _("Obsoletes Workers.")
 
 [advance_feudalism]
 name     = _("Feudalism")
@@ -361,6 +361,7 @@ req2     = "Theory of Gravity"
 flags    = "Build_Airborne"
 graphic     = "a.flight"
 graphic_alt = "-"
+helptext = _("Obsoletes Colossus.")
 
 [advance_fundamentalism]
 name     = _("Fundamentalism")
@@ -393,6 +394,7 @@ req2     = "Tactics"
 flags    = ""
 graphic     = "a.guerilla_warfare"
 graphic_alt = "-"
+helptext = _("Obsoletes Explorer. Globally unlocks defensive partisans.")
 
 [advance_gunpowder]
 name     = _("Gunpowder")
@@ -401,6 +403,7 @@ req2     = "Iron Working"
 flags    = ""
 graphic     = "a.gunpowder"
 graphic_alt = "-"
+helptext = _("Obsoletes Barracks, earlier foot soldiers.")
 
 [advance_horseback_riding]
 name     = _("Horseback Riding")
@@ -416,7 +419,7 @@ req1     = "Railroad"
 req2     = "Banking"
 graphic     = "a.industrialization"
 graphic_alt = "-"
-helptext = _("Population will start contributing to pollution.")
+helptext = _("Obsoletes Galleon. Population begins polluting.")
 
 [advance_invention]
 name     = _("Invention")
@@ -425,7 +428,7 @@ req2     = "Literacy"
 flags    = ""
 graphic     = "a.invention"
 graphic_alt = "-"
-helptext = _("Increases units' vision when in fortresses.")
+helptext = _("+2 Fortress vision.")
 
 [advance_iron_working]
 name     = _("Iron Working")
@@ -458,6 +461,7 @@ req2     = "Gunpowder"
 flags    = ""
 graphic     = "a.leadership"
 graphic_alt = "-"
+helptext = _("Obsoletes Horsemen, Chariot, Elephant, Knight, Crusader.")
 
 [advance_literacy]
 name     = _("Literacy")
@@ -474,6 +478,7 @@ req2     = "Tactics"
 flags    = ""
 graphic     = "a.machine_tools"
 graphic_alt = "-"
+helptext = _("Obsoletes Cannon.")
 
 [advance_magnetism]
 name     = _("Magnetism")
@@ -482,6 +487,7 @@ req2     = "Physics"
 flags    = ""
 graphic     = "a.magnetism"
 graphic_alt = "-"
+helptext = _("Obsoletes Caravel, Lighthouse.")
 
 [advance_map_making]
 name     = _("Map Making")
@@ -505,7 +511,7 @@ req1     = "Automobile"
 req2     = "The Corporation"
 graphic     = "a.mass_production"
 graphic_alt = "-"
-helptext = _("Increases the population's contribution to pollution.")
+helptext = _("+25% population pollution.")
 
 [advance_mathematics]
 name     = _("Mathematics")
@@ -530,6 +536,7 @@ req2     = "University"
 flags    = ""
 graphic     = "a.metallurgy"
 graphic_alt = "-"
+helptext = _("Obsoletes Catapult, Great Wall.")
 
 [advance_miniaturization]
 name     = _("Miniaturization")
@@ -546,6 +553,7 @@ req2     = "Tactics"
 flags    = ""
 graphic     = "a.mobile_warfare"
 graphic_alt = "-"
+helptext = _("Obsoletes Barracks II, Cavalry, Sun Tzu.")
 
 [advance_monarchy]
 name     = _("Monarchy")
@@ -562,6 +570,7 @@ req2     = "Polytheism"
 flags    = ""
 graphic     = "a.monotheism"
 graphic_alt = "-"
+helptext = _("Obsoletes Elephants.")
 
 [advance_mysticism]
 name     = _("Mysticism")
@@ -570,7 +579,7 @@ req2     = "None"
 flags    = ""
 graphic     = "a.mysticism"
 graphic_alt = "-"
-helptext = _("Improves the effect of Temples.")
+helptext = _("Doubles the effect of Temples.")
 
 [advance_navigation]
 name     = _("Navigation")
@@ -579,6 +588,7 @@ req2     = "Astronomy"
 flags    = ""
 graphic     = "a.navigation"
 graphic_alt = "-"
+helptext = _("Obsoletes Trireme.")
 
 [advance_nuclear_fission]
 name     = _("Nuclear Fission")
@@ -595,7 +605,7 @@ req2     = "Electronics"
 flags    = ""
 graphic     = "a.nuclear_power"
 graphic_alt = "-"
-helptext = _("Gives sea units one extra move.")
+helptext = _("+1 move for Sea units.")
 
 [advance_philosophy]
 name     = _("Philosophy")
@@ -604,8 +614,7 @@ req2     = "Literacy"
 flags    = ""
 graphic     = "a.philosophy"
 graphic_alt = "-"
-helptext = _("When you research this technology, you\
- also get one other immediate technology advance.")
+helptext = _("Gives a bonus tech.")
 
 [advance_physics]
 name     = _("Physics")
@@ -621,7 +630,7 @@ req1     = "Refining"
 req2     = "Space Flight"
 graphic     = "a.plastics"
 graphic_alt = "-"
-helptext = _("Increases the population's contribution to pollution.")
+helptext = _("+25% population pollution.")
 
 [advance_polytheism]
 name     = _("Polytheism")
@@ -646,7 +655,7 @@ req2     = "Electricity"
 flags    = ""
 graphic     = "a.radio"
 graphic_alt = "-"
-helptext = _("Allows Workers and Engineers to build airbases and buoys.")
+helptext = _("Allows Airbase, Buoy.")
 
 [advance_railroad]
 name     = _("?tech:Railroad")
@@ -655,9 +664,7 @@ req2     = "Bridge Building"
 flags    = ""
 graphic     = "a.railroad"
 graphic_alt = "-"
-helptext = _("\
-Allows Settlers, Workers and Engineers to upgrade roads to railroads.\
-")
+helptext = _("Obsoletes Hanging Gardens. Allows Railroads.")
 
 [advance_recycling]
 name     = _("Recycling")
@@ -674,10 +681,7 @@ req2     = "The Corporation"
 flags    = ""
 graphic     = "a.refining"
 graphic_alt = "-"
-helptext = _("\
-Allows Settlers, Workers and Engineers to build oil wells on \
-Glacier tiles.\
-")
+helptext = _("Allows Oil Wells on Glaciers.")
 
 [advance_refrigeration]
 name     = _("Refrigeration")
@@ -686,10 +690,7 @@ req2     = "Electricity"
 flags    = ""
 graphic     = "a.refrigeration"
 graphic_alt = "-"
-helptext = _("\
-Allows Settlers, Workers and Engineers to upgrade irrigation systems \
-to farmland.\
-")
+helptext = _("Allows Farmland.")
 
 [advance_robotics]
 name     = _("Robotics")
@@ -698,6 +699,7 @@ req2     = "Computers"
 flags    = ""
 graphic     = "a.robotics"
 graphic_alt = "-"
+helptext = _("Obsoletes Artillery, King Richards Crusade.")
 
 [advance_rocketry]
 name     = _("Rocketry")
@@ -706,6 +708,7 @@ req2     = "Electronics"
 flags    = ""
 graphic     = "a.rocketry"
 graphic_alt = "-"
+helptext = _("Obsoletes Cruiser.")
 
 [advance_sanitation]
 name     = _("Sanitation")
@@ -738,6 +741,7 @@ req2     = "Advanced Flight"
 flags    = ""
 graphic     = "a.stealth"
 graphic_alt = "-"
+helptext = _("Obsoletes Fighter, Bomber.")
 
 [advance_steam_engine]
 name     = _("Steam Engine")
@@ -746,6 +750,7 @@ req2     = "Invention"
 flags    = ""
 graphic     = "a.steam_engine"
 graphic_alt = "-"
+helptext = _("Obsoletes Frigate.")
 
 [advance_steel]
 name     = _("Steel")
@@ -770,6 +775,7 @@ req2     = "Leadership"
 flags    = ""
 graphic     = "a.tactics"
 graphic_alt = "-"
+helptext = _("Obsoletes Dragoons.")
 
 [advance_the_corporation]
 name     = _("The Corporation")
@@ -778,6 +784,7 @@ req2     = "Industrialization"
 flags    = ""
 graphic     = "a.the_corporation"
 graphic_alt = "-"
+helptext = _("Obsoletes Caravan.")
 
 [advance_the_republic]
 name     = _("The Republic")
@@ -802,7 +809,7 @@ req2     = "Monotheism"
 flags    = ""
 graphic     = "a.theology"
 graphic_alt = "-"
-helptext = _("Improves the effect of Cathedrals.")
+helptext = _("Obsoletes Oracle. +1 Effect on Cathedral, Michelangelos Chapel.")
 
 [advance_theory_of_gravity]
 name     = _("Theory of Gravity")
@@ -847,7 +854,7 @@ graphic_alt = "-"
 ; A placeholder tech used to ensure that when
 ; a game is reloaded, a player can`t rebuild
 ; the "Darwin's Voyage" small wonder and get
-; two free advances again.
+; a free advance again.
 [advance_theory_of_evolution]
 name     = _("Theory of Evolution")
 req1     = "None"
@@ -856,5 +863,5 @@ root_req = "Theory of Evolution"
 flags    = ""
 graphic  = "b.darwins_voyage"
 graphic_alt = "-"
-helptext = _("This technology is only acquired the first\
- time you build Darwin's Voyage.")
+helptext = _("This technology disallows building Darwin's Voyage.\
+ You can give it to someone else to prevent them from making it.")
