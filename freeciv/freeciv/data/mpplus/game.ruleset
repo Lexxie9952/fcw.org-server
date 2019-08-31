@@ -32,11 +32,8 @@ name = _("Multiplayer-Plus ruleset")
 ; /* TRANS: In the client, this is displayed alongside the contents of
 ;    README.multiplayer, which are not localized. */
 summary = _("\
-You are playing Freeciv with rules designed for massive multiplayer games. \
-The biggest differences from the classic ruleset are that trade routes \
-are disabled, and that most wonders can be built once by each player. \
-A description of the differences can be found in README.mpplus, or in the \
-detailed pdf in the mpplus ruleset directory.\
+You are playing with rules designed for massive multiplayer games. The biggest differences from\
+ the Classic game are that Trade routes are disabled, and most wonders can be built once by each player.\
 ")
 
 ; Detailed description

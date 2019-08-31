@@ -1,36 +1,46 @@
-----------------------------------------------------------------------
-                   Multiplayer-Plus Freeciv Ruleset
-----------------------------------------------------------------------
-
-The Multiplayer ruleset aimed to fix Classic ruleset balance
-for multi-player games. MP+ rectifies more issues that
+The Multiplayer ruleset aimed to fix Classic ruleset balance for multi-player games. Multiplayer+ rectifies more issues that
 were discovered in massive multi-player games.
 
-Please read the PDF in the mpplus directory for detailed 
-explanations of fixes and reasons for fixes.
+LINKS
+<a href="https://freeciv.fandom.com/wiki/Multiplayer%2B_Overview" target="_blank">MP+ Overview</a>
+<a href="https://freeciv.fandom.com/wiki/Multiplayer%2B_Design_Log" target="_blank">Detailed Changelog</a>
+<a href="https://freeciv.fandom.com/wiki/Terrain.mp#Terrain_Chart" target="_blank">Terrain</a>
+<a href="https://freeciv.fandom.com/wiki/Hotkeys.mp" target="_blank">Hotkeys and Mouse Control</a>
+
+The link below is a 100% accurate Game Manual EXCEPT for the changes listed immediately below it.
+<a href="https://freeciv.fandom.com/wiki/Multiplayer_Game_Manual" target="_blank">Multiplayer Game Manual</a>
 
 Changes from original Multiplayer rules:
 
+TECH
+1. Tech costs equalize pace of discovery for all game stages.
+2. No Philosophy bonus after Conscription, Industrialization, Electricity, or T85.
+3. Darwin's Voyage is now similar to Colossus.
+
+UNITS 
 1. Land units on Mountains get +1 vision.
 2. Illegal Action movement penalty removed.
 3. No bribe/sabotage on Air and Missile units.
+4. Air Units exert no ZoC over adjacent tiles.
+5. Fixed flaws in Air mechanics: 
+ ... a. Only Fighter-types protect a tile from attack by units which can't reach Air units.
+ ... b. OneAttack Flag deprecated in Bomber types and Helicopters.
+6. Restrictinfra=ON makes enemy rails act only like roads.
+7. Non-military Bribe cost fixed to work on all non-military units. 
+8. Submarine attack was incorrectly set as a Battleship. Restored to classic
+ ... Civ I/II strength. (A9 - was A12).
+9. Battleship:Cruisers:Destroyer movement set to 10:11:12.
 
-4. Tech costs equalize pace of discovery for all game stages.
-5. No Philosophy bonus after Conscription, Industrialization, Electricity, or T85.
-6. Darwin's Voyage is now similar to Colossus.
+WONDERS
+1. Lighthouse: +2 moves, +1 vision, obsolete by Miniaturization. Cost: 170 (was 200)
+2. Pyramid restored to Classic effect. +25% grain store in all cities when population changes. Cost: 160 (was 200)
+3. Copernicus' Observatory now costs 100 shields (was 200.)
 
-7. Lighthouse: +2 moves, +1 vision, obsolete by Miniaturization.
-8. Pyramid restored to Classic effect.
-9. Copernicus' Observatory costs 100 shields.
-10. Mass Transit: 60 shields, +2T. Recycling Center: 70 shields, +2P.
+BUILDINGS
+1. Mass Transit: Cost:60 +2 Trade. Upkeep:0 (was 4)
+2. Recycling Center: Cost:70 +2 Porduction. Upkeep:1 (was 4)
 
-11. Air Units exert no ZoC over adjacent tiles.
-12. Restrictinfra=ON makes enemy rails act only like roads.
-13. Non-military Bribe cost fixed to work on all non-military units. 
-
-14. Submarine attack was incorrectly set as a Battleship. Restored to classic
-    Civ I/II strength.
-15. Battleship:Cruisers:Destroyer movement set to 10:11:12.
-16. Swamp Transform reduced to 12 worker-turns: promotes fairness and naval participation
-    in continental games. 
+TERRAIN
+1. Swamp Transform reduced to 12 worker-turns. (Was 36): Promotes fairness for naval participation
+ ... in continental games. 
 

@@ -83,7 +83,7 @@ Allows a city to produce veteran Air units, Helicopters, and Missiles.\
  without moving are completely repaired.\
 "), _("\
 Two cities with Airports can airlift units. Airlifting instantly transports\
- the unit from one city to another and will use all of the unit's movement\
+ the unit from one city to another and will use up all movement\
  points. A unit must have some movement points left to be airlifted.\
 ")
 
@@ -181,11 +181,11 @@ sound		= "b_barracks_i"
 sound_alt	= "b_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
-With a Barracks, each new land unit built in a city will\
+With a Barracks I, each new land unit built in a city will\
  automatically have Veteran V1 status, which means that its attack and\
  defense strengths are increased by 50%.  Also, damaged land units\
  which stay in town for one full turn without moving are completely\
- healed.\
+ healed. Obsolete by: Gunpowder.\
 ")
 
 [building_barracks_ii]
@@ -209,11 +209,11 @@ sound		= "b_barracks_ii"
 sound_alt	= "b_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
-With a Barracks, each new land unit built in a city will\
+With a Barracks II, each new land unit built in a city will\
  automatically have Veteran V1 status, which means that its attack and\
  defense strengths are increased by 50%.  Also, damaged land units\
  which stay in town for one full turn without moving are completely\
- restored.\
+ restored. Obsolete by: Mobile Warfare.\
 ")
 
 [building_barracks_iii]
@@ -235,7 +235,7 @@ sound		= "b_barracks_iii"
 sound_alt	= "b_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
-With a Barracks, each new land unit built in a city will\
+With a Barracks III, each new land unit built in a city will\
  automatically have Veteran V1 status, which means that its attack and\
  defense strengths are increased by 50%.  Also, damaged land units\
  which stay in town for one full turn without moving are completely\
@@ -261,14 +261,10 @@ sabotage	= 100
 sound		= "b_cathedral"
 sound_alt	= "b_generic"
 helptext	= _("\
-A Cathedral makes 3 unhappy citizens content in a city, making it\
- easier to maintain order in that city; however, it does not affect\
- citizens made unhappy by military activity.  The discovery of Theology\
- increases the effect of a Cathedral, making an additional unhappy\
- citizen content.  The discovery of Communism lessens the effect of\
- a Cathedral, reducing by one the number of unhappy citizens made\
- content. This building has no additional effect if your nation possesses\
- Michelangelo's Chapel.\
+A Cathedral makes 3 unhappy citizens content in a city; however, it does not affect\
+ citizens made unhappy by military activity. The discovery of Theology increases the\
+ effect by +1. The discovery of Communism reduces the effect by -1. This building has\
+ no effect if your nation possesses Michelangelos Chapel.\
 ")
 
 [building_city_walls]
@@ -290,11 +286,11 @@ sabotage	= 50
 sound		= "b_city_walls"
 sound_alt	= "b_generic"
 helptext	= _("\
-City Walls enhance the 1.5x bonus for Land units in a city to 3x, effectively\
- doubling the strength of Land units against attacks from other Land units and also\
- Helicopters. They are ineffective against Air units, Sea units, Missiles, and Howitzers,\
- in which case they get their normal 1.5x bonus. City Walls prevent population loss\
- when a defending unit is destroyed by a Land unit.\
+City Walls increase the 1.5x bonus for Land units in a city to 3x, effectively\
+ doubling the strength of Land units against attacks from other Land units (and\
+ Helicopters.) City Walls are ineffective against Air units, Sea units, Missiles,\
+ and Howitzers; in which case the normal 1.5x bonus is given. City Walls prevent\
+ population loss when a defending unit is destroyed by a Land unit.\
 ")
 
 [building_coastal_defense]
@@ -316,7 +312,7 @@ sabotage	= 100
 sound		= "b_coastal_defense"
 sound_alt	= "b_generic"
 helptext	= _("\
-Doubles the defense strength of all units in a city, when defending against\
+Doubles the defense strength of all units in a city when defending against\
  against enemy ships.\
 ")
 
@@ -365,8 +361,8 @@ sound		= "b_factory"
 sound_alt	= "b_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
-Increases the shield production in a city by 50%. This increase may\
- also contribute significantly to pollution.\
+Increases the shield production in a city by +50%.  This increase may\
+ contribute to pollution.\
 ")
 
 [building_granary]
@@ -435,7 +431,6 @@ upkeep		= 4
 sabotage	= 100
 sound		= "b_hydro_plant"
 sound_alt	= "b_generic"
-; /* xgettext:no-c-format */
 helptext	= _("\
 For each Factory or Mfg. Plant in a city, a Hydro Plant adds +25% to\
  base production, and reduces pollution from production by -25%.\
@@ -602,7 +597,7 @@ sabotage	= 100
 sound		= "b_offshore_platform"
 sound_alt	= "b_generic"
 helptext	= _("\
-Adds 1 extra shield resource on all Oceanic tiles worked by a city.  The\
+Adds 1 extra production to all Oceanic tiles worked by a city.  The\
  city needs to be coastal to build this improvement.\
 ")
 
@@ -631,10 +626,10 @@ Makes a city the capital of your nation.\
  Communism.) A Palace makes corruption and waste in your capital\
  half of what it would otherwise be.\
 "), _("\
-The cost of inciting a revolt depends on the city's distance from the\
- capital. The capital cannot be incited to revolt, and reduces enemy\
- agents' chance of defeating your agents by -50%. Attempts to sabotage your\
- capital's buildings are also reduced by 50%.\
+The cost of inciting a revolt depends on the distance of the city from the\
+ capital. The capital cannot be incited to revolt, and reduces the chance\
+ of enemy agents defeating your agents by 50%. Attempts to sabotage buildings\
+ in your capital are also reduced by 50%.\
 "), _("\
 Take good care of your capital, as its loss may result in your\
  empire plunging into civil war. Losing your current palace also\
@@ -667,10 +662,7 @@ sabotage	= 100
 sound		= "b_police_station"
 sound_alt	= "b_generic"
 helptext	= _("\
-Reduces the unhappiness caused by aggressively deployed military\
- units owned by the city by -4 under Democracy and -2 under Republic\
- -- in other words, it neutralizes the unhappiness caused by two\
- military units. This improvement has no effect under other governments.\
+Neutralizes the unhappiness caused by two aggressively deployed military units.\
 ")
 
 [building_port_facility]
@@ -823,9 +815,9 @@ sound		= "b_sdi_defense"
 sound_alt	= "b_generic"
 helptext	= _("\
 Protects a city and its environs (up to 2 tiles away) from attacks\
- by other nations' Nuclear units. A Nuclear unit not owned by you or a\
- teammate will be shot down and have no effect.\
- Also, doubles defense for units in the city against non-nuclear missiles.\
+ by Nuclear units. A Nuclear unit not owned by you or a teammate will\
+ be shot down and have no effect. Also, doubles defense for units in\
+ the city against non-nuclear missiles.\
 ")
 
 [building_sewer_system]
@@ -904,11 +896,10 @@ sabotage	= 100
 sound		= "b_space_component"
 sound_alt	= "b_generic"
 helptext	= _("\
-Space Components can be differentiated into Propulsion and Fuel\
- Components.  Each pair of them reduces your spaceship's travel\
- time.  You can build up to 8 pairs.\
+Space Components can be differentiated into Propulsion and Fuel Components.\
+ Each pair of them reduces spaceship travel time.  You can build up to 8 pairs.\
 "), _("\
-Before you can build any spaceship parts, a nation must have built the\
+Before you can build any spaceship parts, any nation must have built the\
  Apollo Program.\
 ")
 
@@ -944,7 +935,7 @@ Space Modules are the most expensive parts of spaceships.  There\
 "), _("\
 You can build up to 4 Space Modules of each kind.\
 "), _("\
-Before you can build any spaceship parts, a nation must have built the\
+Before you can build any spaceship parts, any nation must have built the\
  Apollo Program.\
 ")
 
@@ -996,7 +987,7 @@ sound_alt	= "b_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
 In cities with a Bank, a Stock Exchange boosts tax and luxury\
- production by +50%.\
+ production by an additional +50%.\
 "), _("\
 *A Bank and Stock Exchange together boost\
  tax and luxury production by +100%.\
@@ -1047,7 +1038,7 @@ sound_alt	= "b_generic"
 helptext	= _("\
 Increases the food resources by +100% on each farmland tile which\
  is being used around the city. An irrigable city centre tile receives a\
- +50% bonus immediately, but can't receive a benefit from farmland.\
+ +50% bonus immediately, but cannot receive a benefit from farmland.\
  Farmland tiles are those which have been irrigated a second time.\
 ")
 
@@ -1143,8 +1134,8 @@ sabotage	= 0
 sound		= "w_asmiths_trading_co"
 sound_alt	= "w_generic"
 helptext	= _("\
-City improvements with upkeep of 1 gold become free\
- of upkeep for all your cities.\
+In all your cities, Buildings with upkeep of 1 gold become free.\
+ This wonder is never obsolete.\
 ")
 
 [building_colossus]
@@ -1167,10 +1158,11 @@ sabotage	= 0
 sound		= "w_colossus"
 sound_alt	= "w_generic"
 helptext	= _("\
-Each tile around the city where this wonder is built that is already\
- generating some trade will produce one extra trade resource.\
- Obsolete by: Flight.\
+In the city where this wonder is built, +1 trade is added to every tile\
+ that generates trade on its own.\
+  Obsolete by: Flight.\
 ")
+
 
 [building_copernicus_observatory]
 name		= _("Copernicus' Observatory")
@@ -1221,30 +1213,6 @@ This stunning technological achievement makes two content citizens\
  content citizens to benefit from this effect, the wonder\
  applies to unhappy citizens (including those unhappy about military\
  activity), making each content then happy. This wonder is never obsolete.\
-")
-
-[building_darwins_voyage]
-name		= _("Voyage of Darwin")
-genus		= "SmallWonder"
-reqs	=
-    { "type",     "name",            "range",  "present", "quiet"
-      "Tech",     "Railroad",        "Player", TRUE,      FALSE
-      "Building", "Voyage of Darwin", "Player", FALSE,     TRUE
-    }
-graphic	= "b.darwins_voyage"
-graphic_alt	= "-"
-obsolete_by	=
-    { "type", "name", "range"
-    }
-build_cost	= 200
-upkeep		= 0
-sabotage	= 0
-sound		= "w_darwins_voyage"
-sound_alt	= "w_generic"
-helptext	= _("\
-Each tile in and around the city where this wonder is built that is\
- already generating some trade produces one extra trade resource.\
- This Wonder is never obsolete.\
 ")
 
 [building_eiffel_tower]
@@ -1343,7 +1311,7 @@ Makes two content citizens happy in every city in your nation.\
  In the event where there are no content citizens to get the\
  effect of Hanging Gardens, the wonder applies to unhappy citizens\
  (including those unhappy about military activity), making each content\
- then happy.  Gives +2 luxury in the city where it's built.\
+ then happy.\
  Obsolete by: Railroad.\
 ")
 
@@ -1367,7 +1335,7 @@ sabotage	= 0
 sound		= "w_hoover_dam"
 sound_alt	= "w_generic"
 helptext	= _("\
-Works as if you had a Hydro Plant in all your cities.\
+Works exactly as a Hydro Plant in all your cities.\
  (This reduces pollution and increases the effects\
  of Factories and Mfg. Plants.)  This wonder is never obsolete.\
 ")
@@ -1467,8 +1435,8 @@ sabotage	= 0
 sound		= "w_leonardos_workshop"
 sound_alt	= "w_generic"
 helptext	= _("\
-Upgrades two obsolete units per game turn.  The discovery\
- of Automobile will make Leonardo's Workshop obsolete.\
+Upgrades two obsolete units per game turn. Obsolete by:\
+ Automobile.\
 ")
 
 [building_lighthouse]
@@ -1564,7 +1532,8 @@ sound		= "w_marco_polos_embassy"
 sound_alt	= "w_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
-Increases trade output by 40% in all your cities.\
+This Wonder increases Trade, the very lifeblood of your tax income, science output,\
+ and luxury for happiness. With this Wonder, Trade in each city increases by 40%.\ 
  This Wonder does not become obsolete.\
 ")
 
@@ -1646,31 +1615,6 @@ Every city will gain +25% to its food storage when population changes.\
  This Wonder does not become obsolete.\
 ")
 
-[building_internet]
-name		= _("The Internet")
-genus		= "SmallWonder"
- reqs	=
-     { "type",     "name",         "range",  "present", "quiet"
-       "Tech",     "Computers",    "Player", TRUE,      FALSE
-       "Building", "The Internet", "Player", FALSE,     TRUE
-     }
-graphic	= "b.internet"
-graphic_alt	= "b.seti_program"
-obsolete_by	=
-    { "type", "name", "range"
-    }
-build_cost	= 600
-upkeep		= 0
-sabotage	= 0
-sound		= "w_internet"
-sound_alt	= "w_generic"
-; /* xgettext:no-c-format */
-helptext	= _("\
-Adds to science production in all your cities with\
- a Research Lab, 100% of base output.\
- This Wonder does not become obsolete.\
-")
-
 [building_shakespeares_theatre]
 name            = _("Shakespeare's Theater")
 rule_name       = "Shakespeare's Theatre"       ; en_GB used originally
@@ -1743,8 +1687,33 @@ sound_alt	= "w_generic"
 helptext	= _("\
 All your new military land units produced in cities in your nation\
  start with an additional veteran level (this is cumulative with any\
- Barracks building in a city; with both, units are created as Hardened).\
+ Barracks in a city: with both, units are created as Hardened).\
  Obsolete by: Mobile Warfare.\
+")
+
+[building_internet]
+name		= _("The Internet")
+genus		= "SmallWonder"
+ reqs	=
+     { "type",     "name",         "range",  "present", "quiet"
+       "Tech",     "Computers",    "Player", TRUE,      FALSE
+       "Building", "The Internet", "Player", FALSE,     TRUE
+     }
+graphic	= "b.internet"
+graphic_alt	= "b.seti_program"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 600
+upkeep		= 0
+sabotage	= 0
+sound		= "w_internet"
+sound_alt	= "w_generic"
+; /* xgettext:no-c-format */
+helptext	= _("\
+Adds to science production in all your cities with\
+ a Research Lab, 100% of base output.\
+ This Wonder does not become obsolete.\
 ")
 
 [building_united_nations]
@@ -1765,10 +1734,33 @@ sabotage	= 0
 sound		= "w_united_nations"
 sound_alt	= "w_generic"
 helptext	= _("\
-Creates a world senate that may prevent declarations of\
- war in some circumstances. If any player's city is in revolt\
- for more than two turns, that player's government falls.\
+Creates a World Senate that may prevent declarations of war in some circumstances. If\
+ any city in the world is in revolt for more than two turns, its whole government falls.\
  This Wonder does not become obsolete.\
+")
+
+[building_darwins_voyage]
+name		= _("Voyage of Darwin")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",            "range",  "present", "quiet"
+      "Tech",     "Railroad",        "Player", TRUE,      FALSE
+      "Building", "Voyage of Darwin", "Player", FALSE,     TRUE
+    }
+graphic	= "b.darwins_voyage"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 200
+upkeep		= 0
+sabotage	= 0
+sound		= "w_darwins_voyage"
+sound_alt	= "w_generic"
+helptext	= _("\
+In the city where this wonder is built, +1 trade is added to every tile\
+ that generates trade on its own.\
+ This Wonder is never obsolete.\
 ")
 
 [building_womens_suffrage]
@@ -1790,12 +1782,10 @@ sabotage	= 0
 sound		= "w_womens_suffrage"
 sound_alt	= "w_generic"
 helptext	= _("\
-Counts as a Police Station in every city in your nation.\
- (That is, for each city, it reduces the unhappiness caused by\
- aggressively deployed military units owned by that city by 4 under\
- Democracy and 2 under Republic -- in other words, it neutralizes\
- the unhappiness caused by two military units per city. This wonder\
- has no effect under other governments.)\
+In the capacity of reducing Military Unhappiness, this Wonder counts as a\
+ Police Station in every city in your nation. (It neutralizes the\
+ unhappiness caused by two military units.) This Wonder has no other\
+ effect. It gives no bonus to cities which already have a Police Station.\
  This Wonder does not become obsolete.\
 ")
 
@@ -1816,7 +1806,6 @@ build_cost	= 999
 upkeep		= 0
 sabotage	= 0
 helptext	= _("\
-This is not a normal improvement.  Instead, setting a city's\
- production to Coinage means its shield production is\
- converted to tax output (money, coins!).\
+This is not a normal improvement. Setting production to Coinage converts\
+ normal output into tax output (money, coins!)\
 ")
