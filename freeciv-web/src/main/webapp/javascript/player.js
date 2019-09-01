@@ -182,7 +182,9 @@ function get_embassy_text(player_id)
   } else if (embassy_from) {
     return "They have embassy";
   } else {
-    return "None"
+    return "None"   // logic in nation.js depends on this exact wording if there is no embassy:
+                    // so if introducing changes, where there is no embassy and any other 
+                    // type of word comes back, alter nation.js also. 
   }
 
 }

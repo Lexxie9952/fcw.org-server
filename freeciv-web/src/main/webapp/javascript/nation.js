@@ -91,7 +91,6 @@ function update_nation_screen()
     if (embassy_status == "None") {
       if (contact_time>0) embassy_status = "<span title='Contact turns remaining' style='color:#c0c0c0'>("+contact_time+")</span>";
     }
-    console.log(pplayer.name+" "+embassy_status);
 
     nation_list_html += "<td style='text-align:center;'>" + embassy_status + "</td>";
 
@@ -416,14 +415,14 @@ function toggle_ai_clicked()
 **************************************************************************/
 function get_score_text(player)
 {
-
-  if (player['score'] > 0 || client_is_observer()
-      || (client.conn.playing != null && player['playerno'] == client.conn.playing['playerno'])) {
+  // show score if EMBASSY or OBSERVER or PLAYER==YOURSELF
+  if ( (player['score'] > 0 && get_embassy_text(player.playerno) != "None")
+       || client_is_observer()
+       || (client.conn.playing != null && player['playerno'] == client.conn.playing['playerno'])) {
     return player['score'];
   } else {
     return "?";
   }
-
 }
 
 /**************************************************************************
