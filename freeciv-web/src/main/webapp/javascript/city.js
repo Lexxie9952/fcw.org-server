@@ -305,7 +305,7 @@ function show_city_dialog(pcity)
      $("#city_dialog_info").css("padding-bottom","3px");
      var airlift_send_text;
      var airlift_font_size = '1em;'
-     if (game_info['airlifting_style'] & 4 != 0) {
+     if (game_info['airlifting_style'] & 4/* != 0 */) {
         airlift_send_text = "&infin;";      
         airlift_font_size = '2em;'
      }
@@ -317,7 +317,7 @@ function show_city_dialog(pcity)
      if (game_info['airlift_dest_divisor'] > 0) {
          airlift_font_size = '1em;'
          var airlift_receive_text;  
-         if (game_info['airlifting_style'] & 8 != 0) {
+         if (game_info['airlifting_style'] & 8 /* != 0 */) {
             airlift_receive_text = "&infin;";   
             airlift_font_size = '2em;'
          }
