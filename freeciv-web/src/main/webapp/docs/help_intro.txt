@@ -1,35 +1,30 @@
-<h1>The Freeciv Online Manual</h1>
-<img src='/static/images/frontpage-jumbotron.png' style="max-width: 40%;"><br><br>
+<h1>Freeciv In-Game Docs</h1>
+<img src='/static/images/frontpage-jumbotron.png' style="max-width: 50%;"><br><br>
 
+<b>This is the In-game Docs tab. Info Categories can be found on the left panel,</b>
+excellent for quick lookup.<br><br>
 
-Freeciv is an empire-building strategy game inspired by the history of human 
-civilization. You start in prehistory. Your mission is to lead your tribe  
-from the Stone Age to the Space Age, but there are other tribes...<br><br>
-Freeciv-web is the HTML5 web-browser version of <a href="http://www.freeciv.org" target="_new">Freeciv</a>. 
-Freeciv-web is free and open source software, released under the <a href="https://www.gnu.org/licenses/agpl-3.0.html" target='_new'>
-GNU Affero General Public License</a>. The Freeciv C server is released under the 
-<a href="https://www.gnu.org/licenses/gpl-2.0.html" target='_new'>GNU General
-Public License</a>. <br>
+<b>Full Game Manual</b>: Use <b>About Current Ruleset</b> on left.
+<br><br>
 
-The HTML5 and 3D WebGL versions of Freeciv-web was initially created by <a href='http://www.twitter.com/andreasrosdal' target='_new'>
-Andreas R&oslash;sdal</a>. A huge list of people have contributed to the Freeciv project, see the full 
-<a href='http://freeciv.wikia.com/wiki/People' target='_new'>credits for
-Freeciv</a>. Freeciv-web is always looking for game developers to help improve
-the game!
+Freeciv-web and the game you're playing now are only possible by <a href="https://www.patreon.com/freecivweb"
+target="_new">donations</a> from users.<br> <i><b>Please support this server by <a style='font-size:110%' href="https://www.patreon.com/freecivweb"
+target="_new">donating to Freeciv-Web now!</a></b></i>. Thanks!<br><br>
+
+<a title="Freeciv-Web Discord Chat Community" href="https://discord.gg/Zj8UQSN" target="_new">
+    <img src="http://icons.iconarchive.com/icons/papirus-team/papirus-apps/256/discord-icon.png" style="width:40px">
+</a>
+Freeciv-Web has <b><a href="https://discord.gg/Zj8UQSN" target="_new">Discord chat</a></b> -- ideal for learning and negotiating with human players.
 
 <br><br>
 
-Freeciv-web and the server you are playing this game on right now, is made
-possible by <a href="https://www.patreon.com/freecivweb"
-target="_new">donations</a> from users. <br>
-<i><b>Please support this volunteer effort by <a href="https://www.patreon.com/freecivweb"
-target="_new">donating to Freeciv-Web now!</a></b></i>. Thanks!
-
-<br><br>
-
-You can find more information about Freeciv here:
-
-<br><a href='https://freeciv.fandom.com/wiki/Game_Manual' target='_blank'>Game Manual</a><br>
 <a href='http://www.freeciv.org/wiki/' target='_new'>Freeciv Wiki</a><br>
 <a href='http://forum.freeciv.org/' target='_new'>Freeciv Forum</a><br>
 <a href='http://freeciv.wikia.com/wiki/Bug_Reporting' target='_new'>Bug Reporting</a><br>
+
+<div id='help_footer' style='position:absolute; bottom:0px; max-width:85%; height:80px;'>
+Freeciv-web is <a href="https://www.gnu.org/licenses/agpl-3.0.html" target='_new'>
+AGPL</a> software; the Server is <a href="https://www.gnu.org/licenses/gpl-2.0.html" target='_new'>GNU GPL</a> software.
+Freeciv-web was first created by <a href='http://www.twitter.com/andreasrosdal' target='_new'>Andreas R&oslash;sdal</a> but many have
+added to the project! We're looking for developers to improve the game! Come say hi on <a href="https://discord.gg/Zj8UQSN" target="_new">Discord</a>
+</div>

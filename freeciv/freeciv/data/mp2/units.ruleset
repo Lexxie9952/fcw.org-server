@@ -2583,7 +2583,7 @@ bonuses       =
 flags         = "BadCityDefender", "Provoking", "CanEscape", "CantReachAir"
 roles         = "Hunter"
 helptext      = _("\
-The Frigate is a versatile and powerful ship that is both a superior offensive unit and\
+The Frigate is a versatile and powerful ship that is a superior offensive unit and\
  a decent transport ship. Frigates can travel and attack on rivers, or make shore attacks\
  from sea.\
 "), _("
