@@ -1,21 +1,22 @@
 <h1>Freeciv In-Game Docs</h1>
 <img src='/static/images/frontpage-jumbotron.png' style="max-width: 50%;"><br><br>
 
-<b>This is the In-game Docs tab. Info Categories can be found on the left panel,</b>
-excellent for quick lookup.<br><br>
+This is a quick reference tab. <b>Info Categories</b> can be found on the <b>left panel</b>
+for quick lookup.<br><br>
 
-<b>Full Game Manual</b>: Use <b>About Current Ruleset</b> on left.
+<b>Full Game Manual</b> -- Use <b>About Current Ruleset</b> on left.
 <br><br>
 
 Freeciv-web and the game you're playing now are only possible by <a href="https://www.patreon.com/freecivweb"
 target="_new">donations</a> from users.<br> <i><b>Please support this server by <a style='font-size:110%' href="https://www.patreon.com/freecivweb"
-target="_new">donating to Freeciv-Web now!</a></b></i>. Thanks!<br><br>
+target="_new">donating to Freeciv-Web!</a></b></i>. Thanks!<br><br>
 
 <a title="Freeciv-Web Discord Chat Community" href="https://discord.gg/Zj8UQSN" target="_new">
     <img src="http://icons.iconarchive.com/icons/papirus-team/papirus-apps/256/discord-icon.png" style="width:40px">
 </a>
-Freeciv-Web has <b><a href="https://discord.gg/Zj8UQSN" target="_new">Discord chat</a></b> -- ideal for learning and negotiating with human players.
-
+Freeciv-Web has <b><a href="https://discord.gg/Zj8UQSN" target="_new">Discord chat</a></b> -- this is the preferred method to chat.<br> 
+It helps validate your in-game identity in multiplayer games.<br>Also posted there are <a href='https://discord.gg/p9M5RME' target='_new'>#rules</a> 
+to ensure fun, fair, friendly games. 
 <br><br>
 
 <a href='http://www.freeciv.org/wiki/' target='_new'>Freeciv Wiki</a><br>

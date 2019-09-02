@@ -6,7 +6,7 @@ set compresstype xz
 set maxplayers 32
 set allowtake H1Ah1adOo
 set autotoggle enabled
-set timeout 60
+set timeout 120
 set netwait 15
 set nettimeout 120
 set pingtime 30
@@ -18,5 +18,39 @@ set size 4
 set landm 50
 set minp 2
 set generator FAIR
+
+#economic
+set gold 100
+
+#geological
+set landmass 66
+set specials 350 
+set alltemperate "ENABLED"
+set separatepoles "ENABLED"
+set tinyisles "DISABLED"
+set huts 0
+
+#sociological
+set startunits=cccwwwxx
+set dispersion 2
+set trading_city enabled
+set rapturedelay 1
+set revolentype FIXED
+set revolen 1
+set contactturns 0
+set barbarians DISABLED
+set onsetbarbs 30
+
+#military
+set borders "SEE_INSIDE"
+set diplomacy "HUMAN"
+set foggedborders enabled
+set airliftingstyle "FROM_ALLIES|TO_ALLIES"
+set victories ALLIED
+set restrictinfra "ENABLED"
+
+#scientific
+set endspaceship ENABLED 
+
 metaconnection persistent
 metamessage New Freeciv-web Multiplayer Game
