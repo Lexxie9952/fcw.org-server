@@ -204,17 +204,17 @@ function show_city_dialog(pcity)
        }
      });
      dialog_buttons = $.extend(dialog_buttons, {"Exit": close_city_dialog});
-  } else {
+  } else {   // small screen control buttons
        dialog_buttons = $.extend(dialog_buttons,
          {
-          ">>" : function() {
+          "Next" : function() {
             next_city();
           },
           "Buy" : function() {
             request_city_buy();
           }
         });
-        dialog_buttons = $.extend(dialog_buttons, {"X": close_city_dialog});
+        dialog_buttons = $.extend(dialog_buttons, {"Exit": close_city_dialog});
    }
 
    
