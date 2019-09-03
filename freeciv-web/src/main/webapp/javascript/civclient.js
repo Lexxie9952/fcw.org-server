@@ -294,11 +294,9 @@ function init_common_intro_dialog() {
     if (is_longturn()) {
         setTimeout(show_longturn_intro_dialog, 300);
     } else {
-      var msg = "You are about to join this game server, where you can "  +
-                  "participate in a multiplayer game. You can customize the game " +
-                  "settings, and wait for the minimum number of players before " +
-                  "the game can start. ";
-      show_intro_dialog("Welcome to Freeciv-web", msg);
+      var msg =  "After you Join Game, click the <b>Game</b> button to select rules and settings.<br>" +
+                  "Wait for other players <b>before</b> clicking <b>Start</b>.";
+      show_intro_dialog("Multiplayer Game", msg);
     }
 
   } else if ($.getUrlVar('action') == "hack") {
@@ -332,14 +330,29 @@ function init_common_intro_dialog() {
     });    
     
   } else {
-    show_intro_dialog("Welcome to Freeciv-web",
-      "You are about to join this game server, where you can " +
-      "play a singleplayer game against the Freeciv AI. You can " +
-      "start the game directly by entering any name, or customize the game settings. " +
-      "Creating a user account is optional, but savegame support requires that you create a user account. (<a class='pwd_reset' href='#' style='color: #555555;'>Forgot password?</a>) Have fun! <br>" +
-      "Please enter your name: ");
-      $(".pwd_reset").click(forgot_pbem_password);
+    show_intro_dialog("Singleplayer vs. Freeciv AI",
+      "<br>Creating an account is optional. Saved games need an account."+
+      " (<a class='pwd_reset' href='#' style='color: #404A6F;'>Forgot password?</a>) Have fun! <br>");
+      $(".pwd_reset").click(forgot_pbem_password); 
   }
+  $("#pregame_message_area").html("<b>Game</b>: Select rules and game settings.<br>"+
+  "<b>Load</b>: Load saved game.<br>"+
+  "<b>Nation</b>: Pick nation.<br>"+
+  "<b>Start</b>: Do <u>after</u> you set rules and settings.<br><br>"+
+  ($.getUrlVar('action') != "multi" 
+     ? "<b>WARNING:</b> Default rules for Singleplayer are Classic (old).</b><br><br>"+
+     "<u>All rulesets are suitable for Singleplayer.</u><br><br>"+
+     "<b>NOTE:</b> Rulesets named 'Multiplayer' are simply the more modern rulesets that work well with any number of players.<br>"+
+     "You can play Singleplayer with a Multiplayer ruleset if you wish to improve for multiplayer games with other humans.<br>"+
+     "&nbsp;&bull; If you do this, try: &nbsp; <b>/set sciencebox 80</b> &nbsp; (or similar) to set a singleplayer research pace. <b>/help sciencebox</b> for more info.<br>"
+     : "<b>WARNING:</b> Default rules for Multiplayer are Multiplayer+.</b><br><br>"   ) +
+  
+  "Click <b>Game</b> button to select Game Version (ruleset).<br><br>"+
+  "Advanced: You can tune more settings with the command line.<br>"+
+  "&nbsp;&nbsp;&nbsp;To see all options: <b>/show all</b><br>"+
+  "&nbsp;&nbsp;&nbsp;Set option to ####: <b>/set</b> option_name ####<br>"+
+  "&nbsp;&nbsp;&nbsp;To see option help: <b>/help</b> option_name<br><br><br>"
+   );
 }
 
 

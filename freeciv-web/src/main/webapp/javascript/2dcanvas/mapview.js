@@ -30,7 +30,7 @@ var loaded_images = 0;
 
 var sprites_init = false;
 
-var canvas_text_font = "16px Georgia, serif"; // with canvas text support
+var canvas_text_font = "16px Helvetica, sans serif"; // with canvas text support
 
 var fullfog = [];
 
