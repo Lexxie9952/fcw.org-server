@@ -740,7 +740,7 @@ function pregame_settings()
       "<div id='pregame_settings_tabs-3'>" +
       "<table id='settings_table'>" +
         "<tr title='Font on map'><td>Font on map:</td>" +
-      "<td><input type='text' name='mapview_font' id='mapview_font' size='28' maxlength='42' value='16px Georgia, serif'></td></tr>" +
+      "<td><input type='text' name='mapview_font' id='mapview_font' size='28' maxlength='42' value='16px Helvetica, sans serif'></td></tr>" +
       "<tr id='speech_enabled'><td id='speech_label'></td>" +
         "<td><input type='checkbox' id='speech_setting'>Enable speech audio messages</td></tr>" +
       "<tr id='voice_row'><td id='voice_label'></td>" +
@@ -748,7 +748,7 @@ function pregame_settings()
         "</table>" +
       "</div>"
     ;
-  $(id).html(dhtml);
+  $(id).html(dhtml);  
 
   $(id).attr("title", "Game Settings");
   $(id).dialog({
@@ -945,7 +945,7 @@ function pregame_settings()
 
   /* Make the long ruleset description available in the pregame. The
    * ruleset's README isn't located at the player's computer. */
-  $('#ruleset_description').html(" description");
+  $('#ruleset_description').html(" <span title='Ruleset summary' style='color:#106070; cursor:help'><u>Rules Help</u></span>");
   $('#ruleset_description').click(show_ruleset_description_full);
 
   $('#ruleset').change(function() {
@@ -1195,12 +1195,16 @@ function show_intro_dialog(title, message) {
     $(".pwd_reset_2").click(forgot_pbem_password);
   }
   var join_game_customize_text = "";
+  var join_game_title_text = "";
   if ($.getUrlVar('action') == "load") {
     join_game_customize_text = "Load games";
+    join_game_title_text = "Load saved game or scenario";
   } else if ($.getUrlVar('action') == "multi") {
     join_game_customize_text = "Join Game";
+    join_game_title_text = "Join this active game";
   } else {
-    join_game_customize_text = "Customize/Load";
+    join_game_customize_text = "Start";
+    join_game_title_text = "Go to Game Launch area.";
   }
 
   $("#dialog").attr("title", title);
@@ -1222,8 +1226,11 @@ function show_intro_dialog(title, message) {
       },
       buttons:
       [
+        /* We can bring this button back but it requires a long explanation that it is a "QuickSTART" with no chance 
+         * to pick your nation, ruleset, map, or other settings. It is removed for now.
         {
           text : "Start Game",
+          title : "WARNING: Old rules. No chance to pick Nation, Map, number of players, or modern game version.",
           click : function() {
                      if (is_touch_device() || is_small_screen()) {
                        BigScreen.toggle();  
@@ -1233,9 +1240,10 @@ function show_intro_dialog(title, message) {
           validate_username_callback();
           },
           icons: { primary: "ui-icon-play" }
-        },
+        }, */
         {
           text : join_game_customize_text,
+          title : join_game_title_text,
           click : function() {
                     if (is_touch_device() || is_small_screen()) {
                       BigScreen.toggle();
@@ -1247,6 +1255,7 @@ function show_intro_dialog(title, message) {
         },
               {
                   text : "New user account",
+                  title : "An account is necessary if you want to save games or participate in Longturn multiplayer.",
                   click : function() {
                     show_new_user_account_dialog();
                 },
@@ -1256,10 +1265,12 @@ function show_intro_dialog(title, message) {
 
     });
 
+  /* This hid the former start button that is now commented out above.
   if (($.getUrlVar('action') == "load" || $.getUrlVar('action') == "multi" || $.getUrlVar('action') == "earthload")
          && $.getUrlVar('load') != "tutorial") {
     $(".ui-dialog-buttonset button").first().hide();
   }
+  */
 
   var stored_username = simpleStorage.get("username", "");
   var stored_password = simpleStorage.get("password", "");
