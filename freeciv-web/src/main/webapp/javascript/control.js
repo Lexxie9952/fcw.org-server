@@ -2399,11 +2399,11 @@ civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       $('#tech_tab_item').trigger("click");
       break; 
 
-  case 122:    // F11 Prefs (Options)
+  case 118:    // F7 Prefs (Options)
       $('#ui-id-5').trigger("click");
       break; 
 
-  case 123:    // F12 Docs / Help 
+  case 119:    // F8 Docs / Help 
       $('#ui-id-7').trigger("click");
       break; 
   //----------------------------------------------    

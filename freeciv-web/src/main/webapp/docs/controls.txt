@@ -126,8 +126,8 @@ double-tap drag: move unit
 f2: government tab 
 f3: nations tab (players)
 f6: tech tab (research)
-f11: prefs tab (settings/options)
-f12: docs tab (help)
+f7: prefs tab (settings/options)
+f8: docs tab (help)
 space: de-select units, exit GOTO mode
 shift-space: re-focus to previous map position 
 alt-c: show cities tab (also F4)
