@@ -3,120 +3,162 @@
 The current and complete list of Freeciv-web controls can be found here:
 <a href="https://freeciv.fandom.com/wiki/Hotkeys.mp" target="_blank">Freeciv-web complete command list</a>
 
-<h2>Unit command buttons</h2>
-<img src="/images/orders/goto_default.png">
-Goto
+<h2>Unit commands</h2>
+<img src="/images/orders/goto_default.png"> Goto (G) (Mouse Drag)
 
-<img src="/images/orders/sentry_default.png">
-Sentry unit
+<img src="/images/orders/sentry_default.png"> Sentry unit (S)
 
-<img src="/images/orders/irrigation.png">
-Build Irrigation
+<img src="/images/orders/fortify_default.png"> Fortify (F)
 
-<img src="/images/orders/rehome_default.png">
-Change unit homecity
+<img src="/images/orders/irrigate_default.png"> Build Irrigation (I)
 
-<img src="/images/orders/auto_explore_default.png">
-Auto explore
+<img src="/images/orders/irrigation.png"> Build Farmland (I)
 
-<img src="/images/orders/road_default.png">
-Build road
+<img src="/images/orders/forest_remove_default.png"> Chop Forest (I)
 
-<img src="/images/orders/auto_settlers_default.png">
-Auto settlers
+<img src="/images/orders/rehome_default.png"> Change unit Homecity (H)
 
-<img src="/images/orders/mine_default.png">
-Build mine
+<img src="/images/orders/wait.png"> Wait (W) (Focus on next unit)
 
-<img src="/images/orders/build_city_default.png">
-Build city
+<img src="/images/orders/road_default.png"> Build Road (R)
 
-<img src="/images/orders/no_orders.png">
-No orders
+<img src="/images/orders/railroad_default.png"> Build Railroad (R)
 
-<img src="/images/orders/nuke.png">
-Nuke
+<img src="/images/orders/maglev.png"> Build MagLev (R)
 
-<img src="/images/orders/disband_default.png">
-Disband unit
+<img src="/images/orders/canal.png"> Build Canal
 
-<img src="/images/orders/paradrop.png">
-Paradrop
+<img src="/images/orders/well.png"> Dig Well (R)
 
-<img src="/images/orders/patrol.png">
-Patrol
+<img src="/images/orders/auto_settlers_default.png"> Auto Workers (A)
 
-<img src="/images/orders/pillage.png">
-Pillage
+<img src="/images/orders/mine_default.png"> Build Mine (M)
 
-<img src="/images/orders/wait.png">
-Wait
+<img src="/images/orders/oil_well.png"> Build Oil Well (M)
 
-<img src="/images/orders/transform_default.png">
-Transform terrain
+<img src="/images/orders/swamp.png"> Make Swamp (M)
 
-<img src="/images/orders/pollution.png">
-Remove pollution
+<img src="/images/orders/forest_add_default.png"> Plant Forest (M)
 
-<img src="/images/orders/fortify_default.png">
-Fortify
+<img src="/images/orders/build_city_default.png"> Build city (B)
 
-<img src="/images/orders/railroad_default.png">
-Build railroad
+<img src="/images/orders/no_orders.png"> No orders (J)
 
-<img src="/images/orders/forest_add_default.png">
-Create forest
+<img src="/images/orders/cancel_orders.png"> Cancel orders (shift-J)
 
-<img src="/images/orders/forest_remove_default.png">
-Remove forest
+<img src="/images/orders/upgrade.png"> Upgrade unit (U)
+
+<img src="/images/orders/nuke.png"> select Nuke target (shift-N)
+
+<img src="/images/orders/disband_default.png"> Disband unit (shift-D)
+
+<img src="/images/orders/paradrop.png"> Paradrop (P)
+
+<img src="/images/orders/pillage.png"> Pillage (shift-P)
+
+<img src="/images/orders/transform_default.png"> Transform Terrain (O)
+
+<img src="/images/orders/pollution.png"> Remove Pollution (P)
+
+<img src="/images/orders/fortress.png"> Build Fort, Fortress (shift-F)
+
+<img src="/images/orders/load.png"> Load on Transport (L)
+
+<img src="/images/orders/unload.png"> Unload Transport (T) (in city)
+Unload & Activate Cargo units (shift-U) (outside city)
+
+<img src="/images/orders/airlift.png"> Airlift (shift-L)
+
+<img src="/images/orders/auto_explore_default.png"> Auto explore (X)
+
+<img src="/images/orders/less_button.png"> <img src="/images/orders/more_button.png"> Less/More (Common Orders/All Orders)
+
 
 <h2>Keyboard Shortcuts for Unit Orders:</h2>
   a: (a)uto-settler  (settler/worker units)
   b: (b)uild city  (settler units)
   c: (c)enter map on active unit
+  d: (d)o - select unit execution
+  E: build airbas(E)
   f: (f)ortify unit  (military units)
-  f: build (f)ortress  (settler/worker units)
+  F: build (F)ortress  (settler/worker units)
   g: (g)o to tile  (then left-click mouse to select target tile)
   h: set unit's (h)omecity  (to city on current tile)
   i: build (i)rrigation or convert terrain  (settler/worker units)
+  j: no orders - skip orders for this unit this turn 
+  J: cancel orders - clear current orders for this unit 
+  l: (l)oad unit as cargo onto transporting unit
   m: build (m)ine or convert terrain  (settler/worker units)
   n: clean (n)uclear fallout
   N: explode (N)uclear
   o: transf(o)rm terrain  (engineer unit)
   p: clean (p)ollution  (settler/worker units)
+  p: (p)aradrop (paratroopers only)
   P: (P)illage  (destroy terrain alteration)
   r: build (r)oad/railroad  (settler/worker units)
   s: (s)entry unit
   S: un(S)entry all units on tile
   L: unit go (t)o/airlift to city
   u: (u)nload unit from transporter
+  U: (u)nload, show, and activate all cargo units on transport 
+  v: select all units on same tile 
+  V: select all units of same TYPE on tile 
+alt-v: select all units NOT of this type on tile 
   x: unit auto e(x)plore
-
-
-<h2>Unit Selection:</h2>
+  X: select all units of same TYPE globally
   w: (w)ait: focus on next unit
+ESC: Exit GOTO mode/Drag mode/Drag
+
+<h2>Unit Movement:</h2> Numpad, Cursors:
+  1: move south-west (alt-.)
+  2: move south (alt-,)
+  3: move south-east (alt-m)
+  4: move west (alt-j)
+  6: move east (alt-l)
+  7: move north-west (alt-u)
+  8: move north (alt-i)
+  9: move north-east (alt-o)
+double-tap drag: move unit 
 
 
-<h2>Unit Movement:</h2>
-  1: move south-west
-  2: move south
-  3: move south-east
-  4: move west
-  6: move east
-  7: move north-west
-  8: move north
-  9: move north-east
+<h2>Other Keyboard Shortcuts:</h2>
+ w: return to map: close tab/window/pop-up (also F1)
+f2: government tab 
+f3: nations tab (players)
+f6: tech tab (research)
+f11: prefs tab (settings/options)
+f12: docs tab (help)
+space: de-select units, exit GOTO mode
+shift-space: re-focus to previous map position 
+alt-c: show cities tab (also F4)
+shift-c: select all same type units on (c)ontinent
+ctrl-c:  city labels on/off
+ctrl-g: map grid on/off
+ctrl-l:  show airlift counter on cities 
+shift-R: revolution: choose new government 
+alt-s: fullscreen mode (also F11)
+ctrl-s: save game
+shift-T: change tax rates
+shift-Return: Turn done
+
 
 <h2>Main Map (Mouse):</h2>
   Left-click on city:            Pop up city dialog
   Left-click on unit:            Select a single unit
-                                 (cancels any current activity if "clear
-                                 unit orders on selection" is set)
-  Center-click:  Show tile info
+Shift-click unit:                Add unit(s) on tile or panel to selection
+Shift-click specialist:          Change ALL specialists of this type 
+Ctrl-click specialist:           Cycle through primary 3 specialists (not secondary specialists)
+
   Right-click:                   Center tile in view
+  Right-click unit:              Unit Orders Menu (pop-up)
   Right-click-and-drag:          Select units by area
 
-  Spacebar:                      Clear selected units.
+  Middle-click:                  Show tile info  
+  Alt-right click                Show tile info (if mouse has no middle click)
+  Double-tap tile:               Show tile info (mobile/touch device only)
 
-  Shift-Return: Turn done
+  Double-tap map-and-drag:       Move the map 
+  Double-click:                  Add production selection to city worklist / queue 
+Ctrl-double-click:               Change current city production to already highlighted production selection
+
 
