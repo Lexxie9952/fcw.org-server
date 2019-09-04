@@ -3229,7 +3229,7 @@ roles         = ""
 helptext      = _("\
 The Caravan is one of five Commerce units. Commerce units can:\
 "), _("\
-1. Help build Wonders. The unit adds its own build-cost to the production of the Wonder.\  
+1. Help build Wonders in a city with whom you are not at war. The unit adds its own build-cost to the production of the Wonder.\  
 "), _("\
 2. Establish a Traderoute between its Home city and one foreign city, if not at war.\
  Net trade increases in both cities, relative to their combined trade. Traderoutes\

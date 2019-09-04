@@ -144,18 +144,26 @@ NEW FEATURES / GAME MECHANICS
  ... f. Enter Marketplace for one-time bonus can be done, possible to get better investment
  ...  ... than Coinage if and only if both cities are high trade.
 2. Diplomacy Fix: Cease-fire and Peace can be done without embassy if players' units have met in last 10 turns.
-3. Illegal Action movement penalty removed.
-4. The new Well-digger is a "patch" unit that gives fair balance to nations who have no nearby water.
-5. Caravans and Freight can help build Foreign Wonders. This increases diplomatic negotiation possibilities.
-6. Helicopters may use Fortresses as bases to rest and repair.
-7. Expelling: All land military except warriors can expel a non-military unit from your territory IF it is not on a mountain.
+3. Jungle,Tundra,Glacier, and their resources return to the game. Micro-rebalance so that "all-temperate" setting
+ ... is no longer necessary.
+4. Oasis is a water source for irrigation.
+5. Illegal Action movement penalty removed.
+6. Transform time from Swamp to Ocean is 12 worker-turns, not 36. (patches geographic balance and fairness)
+7. Transform time for Grass to Hills is 15 worker-turns, not 12. (balances some exploits)
+8. The new Well-digger is a "patch" unit that gives fair balance to nations who have no nearby water.
+9. Canals: Workers/Engineers can make Canals after Engineering: allows ships to pass through.
+10. Caravans and Freight can help build Foreign Wonders. This increases diplomatic negotiation possibilities.
+11. Helicopters may use Fortresses as bases to rest and repair.
+12. Expelling: All land military except warriors can expel a non-military unit from your territory IF it is not on a mountain.
  ... a. Fighter types can also expel an AWACS.  Units must be alone on the tile to be expelled.
-8. Capturing: Workers/Explorers/Caravans/Freight can be captured by a Foot soldier or Mounted soldier whose attack is 
+13. Capturing: Workers/Explorers/Caravans/Freight can be captured by a Foot soldier or Mounted soldier whose attack is 
  ... A3 or higher. But not if they are on Mountains or other units are on the tile.
-9. Steal Map Fragments - Diplomats and Spies can steal map fragments of the explored world map.
-10. Maximum Granary food store capped at 70. Give some balance to non-rapture governments.
-11. Timeline changed to match technological pace of the game. No cannons in 100 BC !
-12. Incite cost changed. Goes from impossibly high to extremely high (but theoretically possible.)
+14. Steal Map Fragments - Diplomats and Spies can steal map fragments of the explored world map.
+15. Maximum Granary food store capped at 70. Give some balance to non-rapture governments.
+16. Forest, Swamp, River 1.33x defense bonus (was 1.5). Can't transform City Centre to Forest or Hill.
+17. Fort added. Defense bonuses smoothed. See <a href="https://freeciv.fandom.com/wiki/Bases.mp2" target="_blank">Bases</a>
+18. Timeline changed to match technological pace of the game. No cannons in 100 BC !
+19. Incite cost changed. Goes from impossibly high to extremely high (but theoretically possible.)
 
 
 
