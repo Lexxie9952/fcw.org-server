@@ -445,6 +445,8 @@ actor_reqs    =
       "MinMoveFrags", "1",             "Local"
     }
 
+; ************************ ESTABLISH EMBASSY ***********************
+; normal establish embassy--if not at war 
 [actionenabler_establish_embassy]
 action       = "Establish Embassy Stay"
 actor_reqs    =
@@ -454,25 +456,62 @@ actor_reqs    =
       "MinMoveFrags", "1",             "Local", TRUE
       "DiplRel",      "Foreign",       "Local", TRUE
       "UnitFlag",     "Spy",           "Local", FALSE
+      "DiplRel",      "War",           "Local", FALSE 
     }
 target_reqs  =
     { "type",        "name",      "range",  "present"
       "NationGroup", "Barbarian", "Player", FALSE
     }
+;if at war, police station will block embassy: do a cease-fire first!
+[actionenabler_establish_embassy_war]
+action       = "Establish Embassy Stay"
+actor_reqs    =
+    { "type",         "name",          "range", "present"
+      "UnitFlag",     "Diplomat",      "Local", TRUE
+      "UnitState",    "OnLivableTile", "Local", TRUE
+      "MinMoveFrags", "1",             "Local", TRUE
+      "DiplRel",      "Foreign",       "Local", TRUE
+      "UnitFlag",     "Spy",           "Local", FALSE
+      "DiplRel",      "War",           "Local", TRUE 
+    }
+target_reqs  =
+    { "type",        "name",      "range",    "present"
+      "NationGroup", "Barbarian", "Player",    FALSE
+      "Building",    "Police Station", "City", FALSE  ; to do: when we can check for spy present to stop it
+    }
 
+; normal establish embassy--if not at war 
 [actionenabler_establish_embassy_spy]
 action       = "Establish Embassy"
 actor_reqs    =
-    { "type",         "name",          "range"
-      "UnitFlag",     "Spy",           "Local"
-      "UnitState",    "OnLivableTile", "Local"
-      "MinMoveFrags", "1",             "Local"
-      "DiplRel",      "Foreign",       "Local"
+    { "type",         "name",          "range", "present"
+      "UnitFlag",     "Spy",           "Local", TRUE
+      "UnitState",    "OnLivableTile", "Local", TRUE
+      "MinMoveFrags", "1",             "Local", TRUE
+      "DiplRel",      "Foreign",       "Local", TRUE
+      "DiplRel",      "War",           "Local", FALSE 
     }
 target_reqs  =
     { "type",        "name",      "range",  "present"
       "NationGroup", "Barbarian", "Player", FALSE
     }
+;if at war, police station will block embassy: do a cease-fire first!
+[actionenabler_establish_embassy_spy_war]
+action       = "Establish Embassy"
+actor_reqs    =
+    { "type",         "name",          "range", "present"
+      "UnitFlag",     "Spy",           "Local", TRUE
+      "UnitState",    "OnLivableTile", "Local", TRUE
+      "MinMoveFrags", "1",             "Local", TRUE
+      "DiplRel",      "Foreign",       "Local", TRUE
+      "DiplRel",      "War",           "Local", TRUE 
+    }
+target_reqs  =
+    { "type",        "name",      "range",  "present"
+      "NationGroup", "Barbarian", "Player", FALSE
+      "Building",    "Police Station", "City", FALSE  ; to do: when we can check for spy present to stop it
+    }
+; ***************************************************
 
 [actionenabler_investigate_city]
 action       = "Investigate City Spend Unit"
@@ -483,6 +522,10 @@ actor_reqs    =
       "MinMoveFrags", "1", "Local", TRUE
       "DiplRel", "Foreign", "Local", TRUE
       "UnitFlag", "Spy", "Local", FALSE
+    }
+target_reqs  =
+    { "type",        "name",      "range",  "present"
+      "NationGroup", "Barbarian", "Player", FALSE
     }
 
 [actionenabler_investigate_city_spy]

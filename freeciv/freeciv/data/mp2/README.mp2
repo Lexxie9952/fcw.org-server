@@ -121,6 +121,8 @@ BUILDINGS
 2. Granary cost 35 shields: slightly aids non-rapture governments.
 3. Mass Transit: 60 shields, +2T. Recycling Center: 70 shields, +2P. This fixed 2 totally broken buildings.
 4. Palace makes +1 happy to support capital having higher population.
+5. Police station adds 10% bonus against diplomatic combat and Steal Tech, and prevents enemies from establishing an
+ ... embassy without first agreeing to cease-fire, armistice, or peace.
 
 TERRAIN AND BASES 
 1. Tile resource “Gold” goes from 0/1/6 to 0/1/8. (Formerly it had the lowest F/P/T score of all resources.)

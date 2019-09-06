@@ -704,7 +704,8 @@ sound_alt	= "b_generic"
 helptext	= _("\
 Neutralizes the unhappiness caused by two military units. Assists domestic diplomatic\
  units against hostile diplomatic attacks with a 10% bonus. Decreases the chance of\
- the basic Steal Tech action by 10%.\
+ the basic Steal Tech action by 10%. Prevents enemies from establishing an embassy\
+ without first agreeing to cease-fire, armistice, or peace.\
 ")
 
 [building_port_facility]
