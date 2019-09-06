@@ -1,8 +1,9 @@
 <div id="intel_tabs">
   <ul>
-    <li><a href="#intel_tabs-overview">Overview</a></li>
+    <li><a href="#intel_tabs-overview">Nation</a></li>
     <li><a href="#intel_tabs-diplomacy">Diplomacy</a></li>
-    <li><a href="#intel_tabs-technology">Technology</a></li>
+    <li><a href="#intel_tabs-technology">Tech</a></li>
+    <li><a href="#intel_tabs-wonders">Wonders</a></li>
   </ul>
 
   <div id="intel_tabs-overview" class="inteldlg_tabs">
@@ -39,4 +40,12 @@
     {{/each}}</ul>
   </div> 
  
+  <div id="intel_tabs-wonders" class="inteldlg_tabs">
+    <ul>{{#each wndr}}
+    <li>{{name}}</li>
+    {{else}}
+    This exciting tribe does not seem to have any wonders.
+    {{/each}}</ul>
+  </div>
+
 </div>  

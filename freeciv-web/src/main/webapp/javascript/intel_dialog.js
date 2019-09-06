@@ -54,7 +54,7 @@ function show_intelligence_report_hearsay(pplayer)
   }
 
 
-  msg += "<br><br>Establishing an embassy will show a detailed intelligence report."
+  msg += "<br><br>Establishing an embassy enables a detailed intelligence report, treaties, and trade."
 
   show_dialog_message("Intelligence report for " + pplayer['name'],
       msg);
@@ -82,10 +82,21 @@ function show_intelligence_report_embassy(pplayer)
     luxury: pplayer['luxury'] + '%',
     researching: '(Unknown)',
     dipl: [],
-    tech: []
+    tech: [],
+    wndr: []
   };
 
-  // TODO: future techs
+  // WONDERS
+  for (var w=0; w < Object.keys(improvements).length; w++)  {        // check all wonders
+    if (players[pplayer.playerno].wonders[w] != 0  // player has wonder
+        && improvements[w].genus <= 2   ) {  // 0==great wonder, 1==small wonder, 2==normal improv.
+          intel_data['wndr'].push({
+            name: improvements[w].name
+          });
+    }
+  }
+
+  // TECHS.   TODO: future techs
   var research = research_get(pplayer);
   if (research !== undefined) {
     var researching = techs[research['researching']];
@@ -100,16 +111,18 @@ function show_intelligence_report_embassy(pplayer)
                      ? null
                      : research_get(client.conn.playing)['inventions'];
     for (var tech_id in techs) {
-      if (research['inventions'][tech_id] == TECH_KNOWN) {
+      if (research['inventions'][tech_id] == TECH_KNOWN 
+          || (myresearch != null && myresearch[tech_id] == TECH_KNOWN) ) {
         intel_data['tech'].push({
           name: techs[tech_id]['name'],
           who: (myresearch != null && myresearch[tech_id] == TECH_KNOWN)
-                           ? 'both' : 'them'
+                           ? (research['inventions'][tech_id] == TECH_KNOWN ? 'both' : 'me_only') : 'them'
         });
       }
     }
   }
 
+  // DIPLOMATIC STATES
   if (pplayer['diplstates'] !== undefined) {
     pplayer['diplstates'].forEach(function (st, i) {
       if (st['state'] !== DS_NO_CONTACT && i !== pplayer['playerno']) {
@@ -130,7 +143,7 @@ function show_intelligence_report_embassy(pplayer)
   $("#intel_dialog").dialog({
 			bgiframe: true,
 			modal: true,
-			title: "Foreign Intelligence: "
+			title: "Intel Report: "
                              + nations[pplayer['nation']]['adjective']
                              + " Empire",
                         width: "auto"
@@ -139,6 +152,5 @@ function show_intelligence_report_embassy(pplayer)
   $("#intel_dialog").dialog('open');
   $("#intel_tabs").tabs();
   $("#game_text_input").blur();
-
 }
 

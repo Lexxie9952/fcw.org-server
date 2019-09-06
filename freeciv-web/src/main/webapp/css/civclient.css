@@ -1066,6 +1066,12 @@ button {
 
 li.tech-them {
   font-weight: bold;
+  color: #001057;
+}
+
+li.tech-me_only {
+  color: #6f3333;
+  font-style: italic;
 }
 
 li.tech-them::before {
@@ -1079,6 +1085,15 @@ li.tech-both::before {
   position: absolute;
   left: 1em;
 }
+
+li.tech-me_only::before {
+  color: #800006;
+  font-weight: bold;
+  content: '\2613';
+  position: absolute;
+  left: 1em;
+}
+
 
 .e_next_year {
   border-top: 2px #555555 groove;
