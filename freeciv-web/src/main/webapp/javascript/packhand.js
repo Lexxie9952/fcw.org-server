@@ -1132,6 +1132,43 @@ function handle_page_msg(packet)
 
   /* Will come in follow up packets. */
   page_msg['message'] = "";
+
+  // If it's Wonders of the World Report we are responsible for adding Small Wonders client-side
+  if (packet.headline == "Wonders of the World") {
+    page_msg['message'] += handle_wonders_report(); 
+
+    if (packet['parts']==0) { // 0==no Great Wonders: must show a report dialog because no further parts arriving
+      show_dialog_message(page_msg['headline'], page_msg['message']);
+      page_msg = {}; /* Clear the message. */
+    }
+    else page_msg['message']+="<br><b><u>Great Wonders</u></b><br>"
+  }
+}
+
+/**************************************************************************
+  Finishes constructing Wonders Report (client-side needed for Small Wonders)
+**************************************************************************/
+function handle_wonders_report()
+{
+  // initialize wonder report table
+  var appended_message = "<div style='overflow:hidden;'><table><tr><th style='text-align:left;'><u>Small Wonders</u></th><th>#</th></tr>" ;
+
+  // counter for how many wonders we find out there in the world: 
+  var wonders = new Array(improvements.length);
+  
+  for (var w=0; w < Object.keys(improvements).length; w++)  {        // check all wonders
+    wonders[w] = 0;
+    for (var p=0; p < Object.keys(players).length; p++)              // look at all players
+    { 
+      if (players[p].wonders[w] != 0)                 // player has wonder
+        wonders[w]++;                                 // increment the count
+    }
+    if (wonders[w] > 0 && improvements[w].genus==1) // 1 is the genus code for small wonder
+    appended_message += "<tr><td>" + improvements[w].name+"</td><td><b>"+wonders[w] + "</b></td></tr>";
+  }
+  appended_message += "</table></div>";
+
+  return appended_message;
 }
 
 /**************************************************************************
@@ -1151,6 +1188,12 @@ function handle_page_msg_part(packet)
     var regxp = /\n/gi;
 
     page_msg['message'] = page_msg['message'].replace(regxp, "<br>\n");
+
+//    // Wonders of the World report requires client-side construction for the Small Wonders:
+//    if (packet.headline == "Wonders of the World") {
+//      page_msg['message'] += handle_wonders_report(); // small wonders are client-side created
+//    }
+
     show_dialog_message(page_msg['headline'], page_msg['message']);
 
     /* Clear the message. */
