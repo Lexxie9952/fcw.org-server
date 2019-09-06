@@ -1164,7 +1164,7 @@ function handle_wonders_report()
         wonders[w]++;                                 // increment the count
     }
     if (wonders[w] > 0 && improvements[w].genus==1) // 1 is the genus code for small wonder
-    appended_message += "<tr><td>" + improvements[w].name+"</td><td><b>"+wonders[w] + "</b></td></tr>";
+      appended_message += "<tr><td>" + improvements[w].name+"</td><td><b>"+wonders[w] + "</b></td></tr>";
   }
   appended_message += "</table></div>";
 
@@ -1188,11 +1188,6 @@ function handle_page_msg_part(packet)
     var regxp = /\n/gi;
 
     page_msg['message'] = page_msg['message'].replace(regxp, "<br>\n");
-
-//    // Wonders of the World report requires client-side construction for the Small Wonders:
-//    if (packet.headline == "Wonders of the World") {
-//      page_msg['message'] += handle_wonders_report(); // small wonders are client-side created
-//    }
 
     show_dialog_message(page_msg['headline'], page_msg['message']);
 

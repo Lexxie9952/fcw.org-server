@@ -89,7 +89,7 @@ function show_intelligence_report_embassy(pplayer)
   // WONDERS
   for (var w=0; w < Object.keys(improvements).length; w++)  {        // check all wonders
     if (players[pplayer.playerno].wonders[w] != 0  // player has wonder
-        && improvements[w].genus <= 2   ) {  // 0==great wonder, 1==small wonder, 2==normal improv.
+        && improvements[w].genus <= 1   ) {  // 0==great wonder, 1==small wonder, 2==normal improv.
           intel_data['wndr'].push({
             name: improvements[w].name
           });

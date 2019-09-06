@@ -523,10 +523,6 @@ actor_reqs    =
       "DiplRel", "Foreign", "Local", TRUE
       "UnitFlag", "Spy", "Local", FALSE
     }
-target_reqs  =
-    { "type",        "name",      "range",  "present"
-      "NationGroup", "Barbarian", "Player", FALSE
-    }
 
 [actionenabler_investigate_city_spy]
 action       = "Investigate City"
