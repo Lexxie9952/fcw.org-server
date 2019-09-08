@@ -33,6 +33,11 @@ var ping_last = new Date().getTime();
 var pingtime_check = 240000;
 var ping_timer = null;
 
+/* Tracking and knowing ping performance can be used later to adjust 
+ * setTimeout(..) delays to perform better on fast connections and 
+ * slow down enough for slow connections  */
+ var last_ping_measurement = 0;
+
 /**************************************************************************
   Initialize the network communication with the server manually.
 **************************************************************************/

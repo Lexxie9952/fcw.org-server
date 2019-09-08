@@ -1198,6 +1198,8 @@ function handle_page_msg_part(packet)
 
 function handle_conn_ping_info(packet)
 {
+  last_ping_measurement = packet['ping_time'][0] * 1000;
+   
   if (debug_active) {
     conn_ping_info = packet;
     debug_ping_list.push(packet['ping_time'][0] * 1000);
