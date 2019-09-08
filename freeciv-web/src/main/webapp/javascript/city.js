@@ -22,10 +22,17 @@ var cities = {};
 var city_rules = {};
 var city_trade_routes = {};
 
+/* saved state of checkboxes in city list that need to be restored if screen
+ * gets redrawn to show changes (after a buy or change prod event): */
+var city_checkbox_states= {};
+var master_checkbox = false;     // header checkbox for toggling all selections
+var retain_checkboxes_on_update = false; // whether next city list redraw retains cb's
+
 var goods = {};
 
 var active_city = null;
 var inactive_city = null;   // active_city's twin, to prevent request_city_buy from needing active_city which then forces city_dialog to pop up.
+var prod_selection_city =null;  // the city_id whose current production will be used to set the current production in all selected cities. 
 
 var worklist_dialog_active = false;
 var production_selection = [];
@@ -2013,10 +2020,15 @@ function send_city_worklist_add(city_id, kind, value)
 **************************************************************************/
 function city_change_production()
 {
+  //console.log("city_change_production() called")
   if (production_selection.length === 1) {
     send_city_change(active_city['id'], production_selection[0].kind,
                      production_selection[0].value);
   }
+  // default this prod selection for mass-selection change prod button:
+  set_mass_prod_city(active_city['id']);
+  save_city_checkbox_states();
+  retain_checkboxes_on_update = true;
 }
 
 /**************************************************************************
@@ -2211,6 +2223,8 @@ function update_city_screen()
 {
   if (observing) return;
 
+  //console.log("Update city screen.")
+
   var sortList = [];
   var headers = $('#city_table thead th');
   headers.filter('.tablesorter-headerAsc').each(function (i, cell) {
@@ -2236,7 +2250,8 @@ function update_city_screen()
   }
 
   var city_list_html = "<table class='tablesorter-dark' id='city_table' style='border=0px;border-spacing=0;padding=0;'>"
-        + "<thead><tr><th style='text-align:right;'>Name"+updown_sort_arrows+"</th><th style='text-align:right;'>Size"+updown_sort_arrows+"</th>"+city_list_citizen_html
+        + "<thead><tr>"
+        + "<th style='text-align:right;'>Name"+updown_sort_arrows+"</th><th style='text-align:right;'>Size"+updown_sort_arrows+"</th>"+city_list_citizen_html
         + "<th style='text-align:right;' title='Text: Current state. Color: Next turn state'>State<img class='lowered_gov' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='></img> </th>"
         + "<th id='food' title='Food surplus' class='food_text' style='text-align:right;padding-right:0px'><img style='margin-right:-6px; margin-top:-3px;' class='lowered_gov' src='/images/wheat.png'></th>"
         + "<th title='Production surplus (shields)' class='prod_text' style='text-align:right;padding-right:0px'> <img class='lowered_gov' src='/images/shield14x18.png'></th>"
@@ -2249,6 +2264,7 @@ function update_city_screen()
               +updown_sort_arrows+"</th><th style='text-align:right;' title='Click to change'>Producing"+updown_sort_arrows+"</th>"
         + "<th style='text-align:right;' title='Turns to finish &nbsp;&nbsp; Prod completed/needed'>Turns"+updown_sort_arrows
               +"&nbsp; Progress</th><th style='text-align:right;' title='Click to buy'>Cost"+updown_sort_arrows+"</th>"
+        + "<th style='text-align:left;'><input type='checkbox' id='master_checkbox' title='Toggle all cities' name='cbAll' value='false' onclick='toggle_city_row_selections();'></th>"
         + "</tr></thead><tbody>";
         
   var count = 0;
@@ -2267,7 +2283,7 @@ function update_city_screen()
     var td_click_html = "<td style='padding-right:1em; text-align:right;' onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'>";
     var td_click2_html = "<td style='text-align:right;' onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'>";
     var td_buy_html =   "<td style='padding-right:1em; text-align:right;' onclick='javascript:request_city_id_buy("+ pcity['id'] + ");'>";
-    var td_change_prod_html = "<td style='text-align:right;' onclick='javascript:city_change_prod("+ pcity['id'] + ");'>";
+    var td_change_prod_html = "<td title='Click to change' style='text-align:right;' onclick='javascript:city_change_prod("+ pcity['id'] + ");'>";
 
     if (client.conn.playing != null && city_owner(pcity) != null && city_owner(pcity).playerno == client.conn.playing.playerno) {
       count++; 
@@ -2367,9 +2383,9 @@ function update_city_screen()
           city_buy_cost = " ";   // blank is less visual noise than a 0.
         } else city_buy_cost = "<u>"+pcity['buy_cost'];
           city_buy_cost = city_buy_cost.toString().padStart(7, ' ').replace(/\s/g, '&nbsp;&nbsp;') + "</u>" // buy cost is up to 4 digits + 3 for "<u>"
-          city_buy_cost = "<div style='padding-right:12px;'>" + city_buy_cost + "</div>" // last column not forced to very edge of screen
+          city_buy_cost = "<div title='Click to buy' style='padding-right:12px;'>" + city_buy_cost + "</div>" // last column not forced to very edge of screen
 
-          // Generate micro-sprite for production  
+        // Generate micro-sprite for production  
         prod_sprite = get_city_production_type_sprite(pcity);
         prod_img_html = "";
         if (prod_sprite != null) { 
@@ -2377,7 +2393,7 @@ function update_city_screen()
           
           adjust_oversize = (sprite['width']>64) ? "margin-right:-20px;" : "";  // "oversize" images are 20 pixels wider so need alignment
           
-          prod_img_html = "<div style='max-height:24px; float:right; padding-left:0px padding-right:0px; content-align:right; margin-top:-14px;"
+          prod_img_html = "<div oncontextmenu='set_mass_prod_city("+pcity['id']+");' title='Right-click sets mass-selection target' style='max-height:24px; float:right; padding-left:0px padding-right:0px; content-align:right; margin-top:-14px;"
                   + adjust_oversize+"'>"
                   + "<div style='float:right; content-align:right;"
                   + "background: transparent url("
@@ -2403,11 +2419,17 @@ function update_city_screen()
                 + td_change_prod_html +"&nbsp;&nbsp;<u>"+prod_type['name']+"</u> "+prod_img_html+"</td>"
                 + td_click_html+turns_to_complete_str+" &nbsp;&nbsp;&nbsp;&nbsp; "+progress_string +"</td>"
                 + td_buy_html+city_buy_cost+"</td>"
+                + "<td style='text-align:left;'><input type='checkbox' oncontextmenu='set_mass_prod_city("+pcity['id']
+                    +");' id='cb"+pcity['id']+"' value=''></td>"
         city_list_html += "</tr>";
     }
   }
 
-  $('#cities_title').html("Your Cities ("+count+")");
+  $('#cities_title').html("Your Cities ("+count+")"
+    +" <span id='mass_production'></span>"
+    +" <button title='Change production in selected cities' class='button ui-button ui-corner-all ui-widget' style='padding:5px; margin:4px; font-size:70%; float:right;' onclick='mass_change_prod();'>Change &#x2611; to:</button>"
+    +" <button title='BUY in selected cities' class='button ui-button ui-corner-all ui-widget' style='padding:5px; margin:4px; font-size:70%; float:right;' onclick='buy_all_selected_cities();'>&#x2611; Buy selected</button>"
+  ); 
   city_list_html += "</tbody></table>";
   $("#cities_list").html(city_list_html);
   
@@ -2423,9 +2445,116 @@ function update_city_screen()
   $('#cities_scroll').css("height", $(window).height() - 200);
 
   $("#city_table").tablesorter({theme:"dark", sortList: sortList});
+ 
+  if (retain_checkboxes_on_update)
+  {
+    retain_checkboxes_on_update = false;
+    restore_city_checkboxes();
+  } // else console.log("  **** Did not perform checkbox update, retain flag was "+retain_checkboxes_on_update);
+  // Update display for current mass production selection:
+  set_mass_prod_city(prod_selection_city);
 }
 
-/**********************************************************************//**
+/**************************************************************************
+  Restores retained checkbox states if update_city_screen() refreshes
+  itself while viewing (e.g., bought something, changed production item)
+**************************************************************************/
+function restore_city_checkboxes()
+{
+  //console.log("Restoring checkboxes.");
+  // Restore checkbox state in individual city rows:
+  if (city_checkbox_states != null) {
+    for (var city_id in cities)  {
+      if (city_checkbox_states[city_id] == true) {
+        //console.log("  "+city_id+":"+cities[city_id].name+" == true.  (setting now)");
+        $("#cb"+city_id).prop('checked', true);
+      } 
+    }
+  }
+  // Restore checkbox state of "master" header checkbox
+  $("#master_checkbox").prop('checked', master_checkbox);
+}
+
+/**************************************************************************
+  Save all checkboxes in city list for restoring if screen updates.
+**************************************************************************/
+function save_city_checkbox_states()
+{
+  for (var city_id in cities)  {
+    if ($("#cb"+city_id).is(":checked")) {
+      city_checkbox_states[city_id] = true;
+    } else city_checkbox_states[city_id] = false;
+  }
+}
+
+/**************************************************************************
+  Toggle all checkboxes in city list for selecting cities
+**************************************************************************/
+function toggle_city_row_selections()
+{
+  for (var city_id in cities)  {
+    $("#cb"+city_id).prop('checked', !($("#cb"+city_id).is(":checked")) );
+  }
+  master_checkbox = $("#master_checkbox").is(":checked");
+}
+
+/**************************************************************************
+  Buys (or attempts to buy) every production item in every selected city.
+**************************************************************************/
+function buy_all_selected_cities()
+{
+  for (var city_id in cities)  {
+    if ($("#cb"+city_id).is(":checked")) {
+      var packet = {"pid" : packet_city_buy, "city_id" : cities[city_id].id};
+      send_request(JSON.stringify(packet));
+      city_checkbox_states[city_id] = true;
+    } else city_checkbox_states[city_id] = false;
+  }
+  retain_checkboxes_on_update = true;
+}
+
+/*************************************************************************
+  Changes production in all cities to be same as the selected city
+**************************************************************************/
+function mass_change_prod()
+{
+  //console.log("  mass_change_prod() called")
+  var c = prod_selection_city;  // the city to model for what all others should produce
+  for (var city_id in cities)  {
+    if ($("#cb"+city_id).is(":checked")) {     
+      send_city_change(cities[city_id].id, cities[c].production_kind,cities[c].production_value);
+      city_checkbox_states[city_id] = true;
+    } else city_checkbox_states[city_id] = false;
+  }  
+  retain_checkboxes_on_update = true;
+}
+
+/*************************************************************************
+  Sets prod_selection_city - this records which city's production
+  selection will be the "model" if the user does a mass-selection
+  production change
+**************************************************************************/
+function set_mass_prod_city(city_id)
+{
+  //console.log("  set_mass_prod_city() called")
+  prod_selection_city = city_id;
+  pcity = cities[city_id];
+  var prod_type = get_city_production_type_sprite(pcity);
+  var prod_img_html = "";
+  if (prod_type != null) { 
+    sprite = prod_type['sprite'];
+    prod_img_html = "<span title='" + (prod_type!=null ? "Selected cities will change production to: "+prod_type['type']['name'] : "") + "' style='background: transparent url("
+           + sprite['image-src']
+           + ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
+           + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px; float:right; transform:scale(0.7); cursor:pointer;' "
+           + "onclick='javascript:city_change_prod("+ pcity['id'] + ");'"
+           + ">"
+           +"</span>";
+  }
+  $("#mass_production").html(prod_img_html);
+}
+
+/**************************************************************************
   Return TRUE iff the city is unhappy.  An unhappy city will fall
   into disorder soon.
 **************************************************************************/
