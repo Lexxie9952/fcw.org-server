@@ -1185,37 +1185,25 @@ function previous_city()
 function city_sell_improvement(improvement_id)
 {
   city_sell_improvement_in(active_city['id'], improvement_id);
-  /*
-  if ('confirm' in window) {
-    var agree=confirm("Are you sure you want to sell this building?");
-    if (agree) {
-      var packet = {"pid" : packet_city_sell, "city_id" : active_city['id'],
-                  "build_id": improvement_id};
-      send_request(JSON.stringify(packet));
-    }
-  } else {
-    var packet = {"pid" : packet_city_sell, "city_id" : active_city['id'],
-                "build_id": improvement_id};
-    send_request(JSON.stringify(packet));
-  }*/
 }
 /**************************************************************************
-..Same as above but called from city list, so it needs to know what city
+..
 **************************************************************************/
 function city_sell_improvement_in(city_id, improvement_id)
 {
-  if ('confirm' in window) {
-    var agree=confirm("Are you sure you want to sell this building?");
-    if (agree) {
-      var packet = {"pid" : packet_city_sell, "city_id" : cities[city_id]['id'],
-                  "build_id": improvement_id};
-      send_request(JSON.stringify(packet));
-    }
-  } else {
-    var packet = {"pid" : packet_city_sell, "city_id" : cities[city_id]['id'],
-                "build_id": improvement_id};
-    send_request(JSON.stringify(packet));
-  }
+  swal({
+    title: "Sell Building",
+    text: "Sell "+improvements[improvement_id].name+" in "+cities[city_id]['name']+"?",
+    type: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#308030",
+    confirmButtonText: "SELL",
+    closeOnConfirm: true
+  }, function(){
+       var packet = {"pid" : packet_city_sell, "city_id" : cities[city_id]['id'],
+                    "build_id": improvement_id};
+        send_request(JSON.stringify(packet));
+    });
 }
 /**************************************************************************
   Create text describing city growth.
