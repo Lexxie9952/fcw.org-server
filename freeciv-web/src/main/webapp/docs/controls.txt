@@ -122,23 +122,19 @@ double-tap drag: move unit
 
 
 <h2>Other Keyboard Shortcuts:</h2>
- w: return to map: close tab/window/pop-up (also F1)
-f2: government tab 
-f3: nations tab (players)
-f6: tech tab (research)
-f7: prefs tab (settings/options)
-f8: docs tab (help)
+w: return to map: close tab/window/pop-up
 space: de-select units, exit GOTO mode
 shift-space: re-focus to previous map position 
-alt-c: show cities tab (also F4)
-shift-c: select all same type units on (c)ontinent
-ctrl-c:  city labels on/off
-ctrl-g: map grid on/off
-ctrl-l:  show airlift counter on cities 
+alt-C: show cities tab
+shift-C: select all same type units on (c)ontinent
+ctrl-C:  city labels on/off
+ctrl-G: map grid on/off
+ctrl-L:  show airlift counter on cities 
 shift-R: revolution: choose new government 
-alt-s: fullscreen mode (also F11)
-ctrl-s: save game
+alt-S: fullscreen mode
+ctrl-S: save game
 shift-T: change tax rates
+shift-W: show city tile production on map
 shift-Return: Turn done
 
 
