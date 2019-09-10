@@ -2525,7 +2525,9 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'W':
-      key_unit_wait();
+      if (shift) {
+        draw_city_output = !draw_city_output;
+      } else key_unit_wait();
     break;
 
     case 'X':

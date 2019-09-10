@@ -96,6 +96,19 @@
 
 <tr>
   <td>
+      <div title="Shows worked city tile output on main map. (SHIFT-W)" class="main_menu_buttons">
+          <input type='checkbox' name='draw_city_output' id='draw_city_output'><b>Show city tile output on map</b> 
+      </div>
+  </td>
+  <td>
+      <div>
+          
+      </div>
+  </td>
+</tr>
+
+<tr>
+  <td>
     <div class="main_menu_buttons">
       <button id="replay_button" type="button" class="button setting_button" onClick="show_replay();">Show game replay</button>
     </div>  

@@ -399,25 +399,47 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
       }
       break;
 
-    case LAYER_CITYBAR:
+    // This layer puts down worked tile info on main map THEN city label on top of that
+    case LAYER_CITYBAR: 
+      if (draw_city_output && active_city == null && ptile != null && ptile['worked']>0 ) {
+        var acity = cities[ptile['worked']];
+        if (acity['food_output'] != null)  //this checks it's not foreign city with null info
+        {
+          var ctile = city_tile(acity);
+          var d = map_distance_vector(ctile, ptile);
+          var idx = get_city_dxy_to_index(d[0], d[1], acity);
+  
+          var food_output = acity['food_output'].substring(idx, idx + 1);
+          var shield_output = acity['shield_output'].substring(idx, idx + 1);
+          var trade_output = acity['trade_output'].substring(idx, idx + 1);
+  
+          sprite_array.push(get_city_food_output_sprite(food_output));
+          sprite_array.push(get_city_shields_output_sprite(shield_output));
+          sprite_array.push(get_city_trade_output_sprite(trade_output));
+        }
+      }
+
+      // City Label shares this layer but goes on top
       if (pcity != null && show_citybar) {
         sprite_array.push(get_city_info_text(pcity));
       }
 
+      // This section is for drawing map inside the city
       if (active_city != null && ptile != null && ptile['worked'] != null
           && active_city['id'] == ptile['worked'] && active_city['food_output'] != null) {
         var ctile = city_tile(active_city);
         var d = map_distance_vector(ctile, ptile);
         var idx = get_city_dxy_to_index(d[0], d[1], active_city);
-	var food_output = active_city['food_output'].substring(idx, idx + 1);
-	var shield_output = active_city['shield_output'].substring(idx, idx + 1);
-	var trade_output = active_city['trade_output'].substring(idx, idx + 1);
+
+        var food_output = active_city['food_output'].substring(idx, idx + 1);
+        var shield_output = active_city['shield_output'].substring(idx, idx + 1);
+        var trade_output = active_city['trade_output'].substring(idx, idx + 1);
 
         sprite_array.push(get_city_food_output_sprite(food_output));
         sprite_array.push(get_city_shields_output_sprite(shield_output));
         sprite_array.push(get_city_trade_output_sprite(trade_output));
       } else if (active_city != null && ptile != null && ptile['worked'] != 0) {
-        sprite_array.push(get_city_invalid_worked_sprite());
+        sprite_array.push(get_city_invalid_worked_sprite()); // some other city is using this tile
       }
       break;
 
@@ -459,6 +481,8 @@ function fill_terrain_sprite_layer(layer_num, ptile, pterrain, tterrain_near)
 ****************************************************************************/
 function fill_terrain_sprite_array(l, ptile, pterrain, tterrain_near)
 {
+  // TERRIBLE HACK to replace unconfigured ice cliffs with coastal shore. TODO: something better
+  tile_types_setup["l0.arctic"].match_index[0]=2;
 
   if (tile_types_setup["l" + l + "." + pterrain['graphic_str']] == null) {
     //console.log("missing " + "l" + l + "." + pterrain['graphic_str']);

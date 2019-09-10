@@ -237,6 +237,13 @@ function init_options_dialog()
      simpleStorage.set('showorderbuttons', show_order_option); 
    });
 
+   // Draw city tile output on main map
+   $('#draw_city_output').prop('checked', draw_city_output);
+   $('#draw_city_output').change(function() {
+     draw_city_output = this.checked;
+     simpleStorage.set('draw_city_output', draw_city_output); 
+   });
+
    // Graphic Theme
    graphic_theme_path = simpleStorage.get('grtheme');
    if (!graphic_theme_path) graphic_theme_path = "themes/greek/";
