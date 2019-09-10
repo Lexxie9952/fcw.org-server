@@ -1247,7 +1247,7 @@ function get_city_dxy_to_index(dx, dy, pcity)
 {
   build_city_tile_map(pcity.city_radius_sq);
   var city_tile_map_index = dxy_to_center_index(dx, dy, city_tile_map.radius);
-  var ctile = city_tile(active_city);
+  var ctile = city_tile(pcity);
   return get_city_tile_map_for_pos(ctile.x, ctile.y)[city_tile_map_index];
 }
 
@@ -1718,6 +1718,7 @@ function city_worklist_dialog(pcity)
 
   $(".button").button();
 
+  // -----------------------------hacky
   var tab_h = $("#city_production_tab").height();
   $("#city_current_worklist").height(tab_h - 150);
   $("#worklist_production_choices").height(tab_h - 121);
@@ -1730,6 +1731,14 @@ function city_worklist_dialog(pcity)
   } else {
     $("#worklist_control").height(tab_h - 77);
   }
+  // Small screen in Landscape - adjustments 
+  /*
+  if (is_small_screen())
+    if ($(window).width() > $(window).height()) {
+      $("#city_current_worklist").css({"height":"auto"});
+      $("#worklist_production_choices").css({"height":"auto"});
+    }*/
+  //-------------------
 
   var worklist_items = $("#city_current_worklist .prod_choice_list_item");
   var max_selection = Math.min(MAX_LEN_WORKLIST, worklist_items.length);
@@ -2380,7 +2389,7 @@ function update_city_screen()
     + "<th id='food' title='Food surplus' class='food_text' style='text-align:right;padding-right:0px'><img style='margin-right:-6px; margin-top:-3px;' class='lowered_gov' src='/images/wheat.png'></th>"
     + "<th title='Production surplus (shields)' class='prod_text' style='text-align:right;padding-right:0px'> <img class='lowered_gov' src='/images/shield14x18.png'></th>"
     + "<th title='Trade' class='trade_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/trade.png'></th>"
-    + "<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>"
+    + "<th>&nbsp;&nbsp;&nbsp;&nbsp;</th>"
     + "<th title='Gold' class='gold_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/gold.png'></th>"
     + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='lowered_gov' src='/images/lux.png'></th>"
     + "<th title='Science (bulbs)' class='sci_text' style='text-align:right'><img class='lowered_gov' src='/images/sci.png'></th>"
@@ -2400,7 +2409,7 @@ function update_city_screen()
     + "<th id='food' title='Food surplus' class='food_text' style='text-align:right;padding-right:0px'><img style='margin-right:-6px; margin-top:-3px;' class='lowered_gov' src='/images/wheat.png'></th>"
     + "<th title='Production surplus (shields)' class='prod_text' style='text-align:right;padding-right:0px'> <img class='lowered_gov' src='/images/shield14x18.png'></th>"
     + "<th title='Trade' class='trade_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/trade.png'></th>"
-    + "<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>"
+    + "<th>&nbsp;&nbsp;&nbsp;</th>"
     + "<th title='Gold' class='gold_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/gold.png'></th>"
     + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='lowered_gov' src='/images/lux.png'></th>"
     + "<th title='Science (bulbs)' class='sci_text' style='text-align:right'><img class='lowered_gov' src='/images/sci.png'></th>"
@@ -2440,7 +2449,7 @@ function update_city_screen()
       // max city size of 40 generates numbers with 9 characters max, pad the string with 10 so the numbers align better:
      // var population_string = "<span class='number_element'>"+numberWithCommas(city_population(pcity)*1000)+"</span>";
       // max city size is 2 digits, so pad a space to create right alignment:
-      var city_size_string = "<span class='non_priority'>"+pcity['size'].toString().padStart(2, ' ').replace(/\s/g, '&nbsp;&nbsp;')+"</span>";
+      var city_size_string = "<span class='mobile_centre non_priority'>"+pcity['size'].toString().padStart(2, ' ').replace(/\s/g, '&nbsp;&nbsp;')+"</span>";
       
       turns_to_complete = get_city_production_time(pcity);
       if (get_city_production_time(pcity) == FC_INFINITY) {
@@ -2494,11 +2503,11 @@ function update_city_screen()
      
         // Color code for upcoming state under current configuration of tiles/luxury rate/improvements/deployed units:
         if (happy_people >= pcity['size']*0.4999 && unhappy_angry_people==0 && pcity['size']>2)  
-          city_state = "<span class='hint_of_green'>"+city_state;    // half or more happy, no unhappy = city will (continue to) celebrate, green code.
+          city_state = "<span class='mobile_centre hint_of_green'>"+city_state;    // half or more happy, no unhappy = city will (continue to) celebrate, green code.
         else if (unhappy_angry_people > happy_people)                  
-          city_state = "<span class='negative_text'>"+city_state;    // more unhappy than happy = disorder, red code
+          city_state = "<span class='mobile_centre negative_text'>"+city_state;    // more unhappy than happy = disorder, red code
         else
-          city_state = "<span class='non_priority'>"+city_state;     // state of peace is all other conditions = regular text 
+          city_state = "<span class='mobile_centre non_priority'>"+city_state;     // state of peace is all other conditions = regular text 
          
         happy_people   = "<span class='hint_of_green'>"+happy_people+"</span>";
         content_people = "<span class='hint_of_blue'>" +content_people+"</span>";
@@ -2548,7 +2557,8 @@ function update_city_screen()
         } else { // tiny screen, numerals only
           city_growth = pcity['granary_turns'];
           if (city_growth>1000) city_growth = " ";
-          else if (city_growth != 1 || city_growth != -1) city_growth="<span class='non_priority'>" + city_growth+ "</span>";
+          else if (city_growth != 1 && city_growth != -1) city_growth="<span class='mobile_centre non_priority'>" + city_growth + "</span>";
+          else city_growth="<span class='mobile_centre'>" + city_growth + "</span>";
         }
 
         if (wide_screen) {
@@ -2599,7 +2609,7 @@ function update_city_screen()
                 + td_click_html+ city_food_stock + "<span class='contrast_text'>/</span>" + city_granary_size + "</td>"
                 + td_change_prod_html +
                       (  wide_screen  ? ("&nbsp;&nbsp;<u>"+prod_type['name']+"</u> "+prod_img_html+"</td>") 
-                                      : ("<span style='color: rgba(0, 0, 0, 0);'>"+prod_type['name'].charAt(0)+"</span>"+prod_img_html+"</td>") ) //invisible first letter for column sorting
+                                      : ("<span style='font-size:1%; color: rgba(0, 0, 0, 0);'>"+prod_type['name'].charAt(0)+"</span>"+prod_img_html+"</td>") ) //invisible tiny first letter for column sorting
                 + td_click_html + 
                       (   wide_screen ? (turns_to_complete_str+" &nbsp;&nbsp;&nbsp;&nbsp; "+progress_string +"</td>")
                                       : (redux_screen ? progress_string+"</td>" 
@@ -2644,7 +2654,9 @@ function update_city_screen()
     $("#city_table_head").css({"font-size":"85%"});  
     $(".prod_img").css({"margin-top":"-19px"});  
     $(".tdc1").css({"padding-right":"0px"});  
-    $(".tdc2").css({"padding-right":"0px"});  
+    $(".tdc2").css({"padding-right":"0px"});
+    $(".mobile_centre").parent().css({"text-align":"center"});
+    $(".mobile_centre").css({"text-align":"center"});
   }
   else if (redux_screen) {
     $("#city_table").css({"zoom":"0.91", "-moz-transform":"0.91"});  // -9% scaling if screen is only slightly smaller
