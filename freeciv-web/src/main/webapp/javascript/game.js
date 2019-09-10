@@ -122,7 +122,7 @@ function update_game_status_panel() {
       } 
     }
     
-    if (!is_small_screen()) status_html += "<b>" + nations[pplayer['nation']]['adjective'] + "</b> &nbsp;";
+    if (!is_small_screen()) status_html += "<span style='cursor:default;'><b>" + nations[pplayer['nation']]['adjective'] + "</b></span> &nbsp;";
     
 /*************** Government type mini-icon that's clickable for revolution */
     if (!is_small_screen()) {
@@ -142,24 +142,27 @@ function update_game_status_panel() {
     status_html += "</span>";
 
     if (!is_small_screen()) status_html += "<span style='cursor:pointer;' onclick='javascript:request_report(2)'>"; // type 2 is demographics
-    if (!is_small_screen()) status_html += "&nbsp; <i class='fa fa-child' aria-hidden='true' title='Total Citizens in all Cities'></i>: ";
+    if (!is_small_screen()) status_html += "&nbsp; <i style='color:#ffc8c0' class='fa fa-child' aria-hidden='true' title='Total Citizens in all Cities'></i> ";
     if (!is_small_screen()) status_html += "<b>" + city_size_sum(client.conn.playing.playerno) + "</b>  &nbsp;&nbsp;";
-    if (!is_small_screen()) status_html += "<i class='fa fa-clock-o' aria-hidden='true' title='Year (turn)'></i>: <b>" + get_year_string() + "</b> &nbsp;&nbsp;</span>";
-    status_html += "<i class='fa fa-money' aria-hidden='true' title='Gold (net income)'></i>: ";
-    if (pplayer['expected_income'] >= 0) {
-      status_html += "<b title='Gold (net income)'>";
-    } else {
-      status_html += "<b class='negative_net_income' title='Gold (net income)'>";
-    }
-    status_html += pplayer['gold'] + " (" + net_income + ")</b>  &nbsp;&nbsp;";
-    status_html += "<span style='cursor:pointer;' onclick='javascript:show_tax_rates_dialog();'><i class='fa fa-btc' aria-hidden='true' title='Tax rate'></i>: <b>" + tax + "</b>% ";
-    status_html += "<i class='fa fa-music' aria-hidden='true' title='Luxury rate'></i>: <b>" + lux + "</b>% ";
-    status_html += "<i class='fa fa-flask' aria-hidden='true' title='Science rate'></i>: <b>" + sci + "</b>% &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> ";
+    if (!is_small_screen()) status_html += "<i style='color:#d8dff0' class='fa fa-clock-o' aria-hidden='true' title='Year (turn)'></i> <b>" + get_year_string() + "</b> &nbsp;&nbsp;</span>";
+    status_html += "<i style='color:#89c06a' class='fa fa-money' aria-hidden='true' title='Treasury'></i> ";
+   
+    var income_color = "<b";
+    // colour for positive/zero/negative income
+    if (pplayer['expected_income'] < 0) income_color += " class='negative_net_income' title='Deficit'";
+    else if (pplayer['expected_income'] > 0) income_color += " style='color:#89c06a' title='Income'"
+    
+    status_html += "<b style='color:#ffde80; cursor:default;' title='Gold'>"+pplayer['gold'] 
+    + "</b> "+income_color+" style='cursor:default;'>" + net_income + "</b>"+"  &nbsp;&nbsp;";
+    status_html += "<span style='cursor:pointer;' onclick='javascript:show_tax_rates_dialog();'><i style='color:#ebb445' class='fa fa-btc' aria-hidden='true' title='Tax rate'></i> <b style='color:#fff0d1'>" 
+    + tax + "</b><span style='color:#bcbcbc'>%</span> &nbsp;";
+    status_html += "<i style='color:#b087c5;' class='fa fa-music' aria-hidden='true' title='Luxury rate'></i> <b style='color:#f5e8ff'>" + lux + "</b><span style='color:#bcbcbc'>%</span> &nbsp;";
+    status_html += "<i style='color:#a8ccd7;'class='fa fa-flask' aria-hidden='true' title='Science rate'></i> <b style='color:#ebfaff'>" + sci + "</b><span style='color:#bcbcbc'>%</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> ";
   
   } else if (server_settings != null && server_settings['metamessage'] != null) {
     status_html += server_settings['metamessage']['val']
                    + " Observing - ";
-    status_html += "Turn: <b>" + game_info['turn'] + "</b>  ";
+    status_html += "Turn <b>" + game_info['turn'] + "</b>  ";
   }
 
   if ($(window).width() - sum_width() > 740) {   // was 800 but 740 is the space available on standard screen and it's adequate
@@ -201,15 +204,15 @@ function get_year_string()
   var year_string = "";
   if (game_info['year'] < 0) {
     year_string = Math.abs(game_info['year'])
-                  + calendar_info['negative_year_label'] + " ";
+                  + calendar_info['negative_year_label'];
   } else if (game_info['year'] >= 0) {
     year_string = game_info['year']
-                  + calendar_info['positive_year_label'] + " ";
+                  + calendar_info['positive_year_label'];
   }
   if (is_small_screen()) {
-    year_string += "(T:" + game_info['turn'] + ")";
+    year_string += " (T:" + game_info['turn'] + ")";
   } else {
-    year_string += "(Turn:" + game_info['turn'] + ")";
+    year_string += "&#x2014;Turn " + game_info['turn'];
   }
   return year_string;
 }
