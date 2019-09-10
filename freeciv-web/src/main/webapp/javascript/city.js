@@ -1184,6 +1184,8 @@ function previous_city()
 **************************************************************************/
 function city_sell_improvement(improvement_id)
 {
+  city_sell_improvement_in(active_city['id'], improvement_id);
+  /*
   if ('confirm' in window) {
     var agree=confirm("Are you sure you want to sell this building?");
     if (agree) {
@@ -1195,9 +1197,26 @@ function city_sell_improvement(improvement_id)
     var packet = {"pid" : packet_city_sell, "city_id" : active_city['id'],
                 "build_id": improvement_id};
     send_request(JSON.stringify(packet));
+  }*/
+}
+/**************************************************************************
+..Same as above but called from city list, so it needs to know what city
+**************************************************************************/
+function city_sell_improvement_in(city_id, improvement_id)
+{
+  if ('confirm' in window) {
+    var agree=confirm("Are you sure you want to sell this building?");
+    if (agree) {
+      var packet = {"pid" : packet_city_sell, "city_id" : cities[city_id]['id'],
+                  "build_id": improvement_id};
+      send_request(JSON.stringify(packet));
+    }
+  } else {
+    var packet = {"pid" : packet_city_sell, "city_id" : cities[city_id]['id'],
+                "build_id": improvement_id};
+    send_request(JSON.stringify(packet));
   }
 }
-
 /**************************************************************************
   Create text describing city growth.
 **************************************************************************/
@@ -2271,6 +2290,7 @@ function show_city_improvement_pane(city_id)
             ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
             + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left;' "
             + title_text 
+            + "oncontextmenu='city_sell_improvement_in(" +city_id+","+ z + ");' "
             + "onclick='change_city_prod_to(" +city_id+","+ z + ");'>"  
             +"</span></div>";
     }
