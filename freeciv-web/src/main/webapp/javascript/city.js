@@ -1097,7 +1097,7 @@ function city_name_dialog(suggested_name, unit_id) {
 				]
 		});
 
-  $("#city_name_req").attr('maxlength', MAX_LEN_NAME);
+  $("#city_name_req").attr('maxlength', "30");
 
   $("#city_name_dialog").dialog('open');
 
@@ -1509,7 +1509,7 @@ function rename_city()
 					}
 				]
 		});
-  $("#city_name_req").attr('maxlength', MAX_LEN_NAME);
+  $("#city_name_req").attr('maxlength', "30");
 
   $("#city_name_dialog").dialog('open');
 
