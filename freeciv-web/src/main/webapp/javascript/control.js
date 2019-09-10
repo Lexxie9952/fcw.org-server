@@ -1669,6 +1669,7 @@ function city_dialog_activate_unit(punit)
 {
   request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
   close_city_dialog();
+  $('#ui-id-1').trigger("click");   // ensures exit from city tab
   set_unit_focus_and_redraw(punit);
 }
 
