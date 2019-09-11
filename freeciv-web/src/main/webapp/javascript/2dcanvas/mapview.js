@@ -277,6 +277,12 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
   const SRC_UNLIMITED = 4;   // bit value for SRC_UNLIMITED airliftingstyle
   const DEST_UNLIMITED = 8;  // bit value for DEST_UNLIMITED airliftingstyle
   const infinity_symbol = "%E2%88%9E";
+  const left_div = "%E2%9D%AC";   // unicode <> dividers
+  const right_div = "%E2%9D%AD";
+  //const left_div = "%E2%A4%A3";   // hooked arrows
+  //const right_div = "%E2%A4%A5";  
+  const bullet = "%E2%88%99";     // bullet
+
   // source capacity = airlift counter (unless SRC_UNLIMITED==true, in which case it's infinite)
   var src_capacity = (game_info['airlifting_style'] & SRC_UNLIMITED) ? infinity_symbol : city['airlift'];
 
@@ -284,7 +290,7 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
     if (city['owner'] == client.conn.playing.playerno && draw_city_airlift_counter==true ) {
       if (game_info['airlift_dest_divisor'] == 0) { // if no dest_divisor, there is one counter for both source and dest
         // show source airlifts if it has them, otherwise keep the label blank:
-        airlift_text = ( city['airlift']>0 ? " |"+src_capacity+"|" : "");
+        airlift_text = ( city['airlift']>0 ? " "+left_div+src_capacity+right_div : "");
       } else if (city_has_building(city, improvement_id_by_name(B_AIRPORT_NAME))) {  
         // We get here if city has airport && airliftdestdivsor > 0. This means destination-airlifts has a separate counter
         var airlift_receive_text;  
@@ -295,22 +301,22 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
         else airlift_receive_text = Math.max(0,city["airlift"] + airlift_receive_max_capacity - effects[1][0]['effect_value']);             
         
         airlift_text = (city['airlift']>0  ||  airlift_receive_text==infinity_symbol  || src_capacity==infinity_symbol || airlift_receive_text != "0")  
-                        ? " |" + src_capacity + ":" + airlift_receive_text + "|"
+                        ? " "+left_div + src_capacity + bullet + airlift_receive_text + right_div  
                         : "";  
       }
     }
   }
 
   var text = decodeURIComponent(city['name'] + airlift_text).toUpperCase();
-
   var size = city['size'];
   var color = nations[city_owner(city)['nation']]['color'];
   var prod_type = get_city_production_type(city);
 
   var txt_measure = pcanvas.measureText(text);
+
   var size_measure = pcanvas.measureText(size);
   pcanvas.globalAlpha = 0.7;
-  pcanvas.fillStyle = "rgba(0, 0, 0, 0.5)";
+  pcanvas.fillStyle = "rgba(0, 0, 0, 0.55)";
   pcanvas.fillRect (canvas_x - Math.floor(txt_measure.width / 2) - 14, canvas_y - 17,
                     txt_measure.width + 20, 20);
 
@@ -350,13 +356,16 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
               canvas_y - 19, 28, 24);
   }
 
+  // shadow text
+  pcanvas.fillStyle = "rgba(40, 40, 40, 1)";
+  pcanvas.fillText(text, canvas_x - Math.floor(txt_measure.width / 2)     , canvas_y + 1);
   pcanvas.fillStyle = "rgba(0, 0, 0, 1)";
   pcanvas.fillText(size, canvas_x + Math.floor(txt_measure.width / 2) + 10, canvas_y + 1);
 
+  // white text on top of shadows
   pcanvas.fillStyle = "rgba(255, 255, 255, 1)";
   pcanvas.fillText(text, canvas_x - Math.floor(txt_measure.width / 2) - 2, canvas_y - 1);
   pcanvas.fillText(size, canvas_x + Math.floor(txt_measure.width / 2) + 8, canvas_y - 1);
-
 }
 
 /**************************************************************************
