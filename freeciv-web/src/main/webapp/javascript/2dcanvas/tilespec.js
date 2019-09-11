@@ -403,19 +403,21 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
     case LAYER_CITYBAR: 
       if (draw_city_output && active_city == null && ptile != null && ptile['worked']>0 ) {
         var acity = cities[ptile['worked']];
-        if (acity['food_output'] != null)  //this checks it's not foreign city with null info
-        {
-          var ctile = city_tile(acity);
-          var d = map_distance_vector(ctile, ptile);
-          var idx = get_city_dxy_to_index(d[0], d[1], acity);
-  
-          var food_output = acity['food_output'].substring(idx, idx + 1);
-          var shield_output = acity['shield_output'].substring(idx, idx + 1);
-          var trade_output = acity['trade_output'].substring(idx, idx + 1);
-  
-          sprite_array.push(get_city_food_output_sprite(food_output));
-          sprite_array.push(get_city_shields_output_sprite(shield_output));
-          sprite_array.push(get_city_trade_output_sprite(trade_output));
+        if (acity) {                         //might be undefined
+          if (acity['food_output'] != null)  //this checks it's not foreign city with null info
+          {
+            var ctile = city_tile(acity);
+            var d = map_distance_vector(ctile, ptile);
+            var idx = get_city_dxy_to_index(d[0], d[1], acity);
+    
+            var food_output = acity['food_output'].substring(idx, idx + 1);
+            var shield_output = acity['shield_output'].substring(idx, idx + 1);
+            var trade_output = acity['trade_output'].substring(idx, idx + 1);
+    
+            sprite_array.push(get_city_food_output_sprite(food_output));
+            sprite_array.push(get_city_shields_output_sprite(shield_output));
+            sprite_array.push(get_city_trade_output_sprite(trade_output));
+          }
         }
       }
 
