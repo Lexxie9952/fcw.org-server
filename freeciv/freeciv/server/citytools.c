@@ -2353,6 +2353,7 @@ void package_city(struct city *pcity, struct packet_city_info *packet,
   char trade_output_buf[MAX_NUM_ITEMS + 1];
   struct tile *pcenter = city_tile(pcity);
   int c = 0;
+  int trade_val;
 
   packet->id = pcity->id;
   packet->owner = player_number(city_owner(pcity));
@@ -2538,10 +2539,17 @@ void package_city(struct city *pcity, struct packet_city_info *packet,
 
     fc_snprintf(f, sizeof(f), "%d", city_tile_output_now(pcity, ptile, O_FOOD));
     fc_snprintf(s, sizeof(s), "%d", city_tile_output_now(pcity, ptile, O_SHIELD));
-    fc_snprintf(t, sizeof(t), "%d", city_tile_output_now(pcity, ptile, O_TRADE));
+    trade_val = city_tile_output_now(pcity, ptile, O_TRADE);
+    fc_snprintf(t, sizeof(t), "%d", trade_val);
+
     food_output_buf[c] = f[0];
     shield_output_buf[c] = s[0];
-    trade_output_buf[c] = t[0];
+    /* Trade values can exceed one digit: 
+     * convert values 10+ to letters A,B,C, etc... */
+    if (trade_val>9) {
+      trade_output_buf[c] = (char)(65+(trade_val-10));
+    } else trade_output_buf[c] = t[0];
+
 
     c += 1;
 

@@ -108,6 +108,21 @@ tiles = { "row", "column", "tag"
   6, 8, "city.t_trade_8"
   6, 9, "city.t_trade_9"
 
+; Server sends back a single numeral/char for tile output, previously limiting us to 0-9, 
+; which fails in cases like gold+river+colossus+democracy+superhighway (6+3)*1.5 = 13
+  7, 0, "city.t_trade_A"  ; 10
+  7, 1, "city.t_trade_B"  ; 11
+  7, 2, "city.t_trade_C"  ; 12
+  7, 3, "city.t_trade_D"  ; 13
+  7, 4, "city.t_trade_E"  ; 14
+  7, 5, "city.t_trade_F"  ; 15
+  7, 6, "city.t_trade_G"  ; 16
+  7, 7, "city.t_trade_H"  ; 17
+  7, 8, "city.t_trade_I"  ; 18
+  7, 9, "city.t_trade_J"  ; 19
+  7, 9, "city.t_trade_K"  ; 20
+  7, 9, "city.t_trade_L"  ; 21+
+
 ; Unit Extras(not activities)
 
   3, 10, "unit.connect"
