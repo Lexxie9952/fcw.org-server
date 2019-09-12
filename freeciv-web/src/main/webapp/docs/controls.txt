@@ -107,7 +107,8 @@ alt-v: select all units NOT of this type on tile
   x: unit auto e(x)plore
   X: select all units of same TYPE globally
   w: (w)ait: focus on next unit
-ESC: Exit GOTO mode/Drag mode/Drag
+ESC: <During GOTO>: Exit GOTO mode/Drag mode/Drag
+ESC: <In other tab>: Exit TAB, return to map.
 
 <h2>Unit Movement:</h2> Numpad, Cursors:
   1: move south-west (alt-.)
@@ -120,6 +121,12 @@ ESC: Exit GOTO mode/Drag mode/Drag
   9: move north-east (alt-o)
 double-tap drag: move unit 
 
+<h2>Cities List:</h2>
+hover over city name: show all buildings in Super Panel
+click Building in Super Panel: change production to Building in hovered city 
+right-click Building in Super Panel: sell Building in hovered city 
+shift-click Building in Super Panel: highlight ON/OFF all cities with this Building 
+space: de-selected all highlighted cities
 
 <h2>Other Keyboard Shortcuts:</h2>
 w: return to map: close tab/window/pop-up
@@ -136,7 +143,6 @@ ctrl-S: save game
 shift-T: change tax rates
 shift-W: show city tile production on map
 shift-Return: Turn done
-
 
 <h2>Main Map (Mouse):</h2>
   Left-click on city:            Pop up city dialog
