@@ -2335,6 +2335,7 @@ function global_keyboard_listener(ev)
       map_handle_key(keyboard_key, ev.keyCode, ev['ctrlKey'], ev['altKey'], ev['shiftKey'], ev);
     }
   }
+  
   civclient_handle_key(keyboard_key, ev.keyCode, ev['ctrlKey'],  ev['altKey'], ev['shiftKey'], ev);
 
   if (renderer == RENDERER_2DCANVAS) $("#canvas").contextMenu('hide');
@@ -2383,35 +2384,15 @@ civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       }
       break;
 
-  // Function Key hotkeys ------------------------ 
-  case 112:    // F1 Map view
+    case 27:
       $('#ui-id-1').trigger("click"); 
       break;
-
-  case 113:    // F2 Government 
-      $('#ui-id-2').trigger("click"); 
+      
+    case 32:
+      if ($("#tabs-cities").is(":visible")) {
+        highlight_rows_by_improvement(0, true); // Clear all highlighted rows.
+      }
       break;
-
-  case 114:    // F3 Nations
-      $('#ui-id-3').trigger("click");
-      break; 
-
-  case 115:    // F4 (Cities):
-      $('#ui-id-4').trigger("click"); // cities tab, assuming position 4!
-      break;     
-
-  case 117:    // F6 Tech / Research
-      $('#tech_tab_item').trigger("click");
-      break; 
-
-  case 118:    // F7 Prefs (Options)
-      $('#ui-id-5').trigger("click");
-      break; 
-
-  case 119:    // F8 Docs / Help 
-      $('#ui-id-7').trigger("click");
-      break; 
-  //----------------------------------------------    
   }
 }
 

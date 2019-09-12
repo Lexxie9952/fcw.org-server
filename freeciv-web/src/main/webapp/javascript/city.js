@@ -2288,7 +2288,7 @@ function show_city_improvement_pane(city_id)
             + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left;' "
             + title_text 
             + "oncontextmenu='city_sell_improvement_in(" +city_id+","+ z + ");' "
-            + "onclick='change_city_prod_to(" +city_id+","+ z + ");'>"  
+            + "onclick='change_city_prod_to(event," +city_id+","+ z + ");'>"  
             +"</span></div>";
     }
   }
@@ -2299,15 +2299,36 @@ function show_city_improvement_pane(city_id)
  Changes production in city_id to improvement type #z: clicked from improv
    panel in the city list screen
 **************************************************************************/
-function change_city_prod_to(city_id, z)
+function change_city_prod_to(event, city_id, z)
 {
+  if (event.shiftKey) {   //intercept shift-click and call the right function
+    highlight_rows_by_improvement(z, false);
+    return;
+  } 
   var pcity = cities[city_id];
-
   send_city_change(pcity['id'], VUT_IMPROVEMENT, z);
-  // default this prod selection for mass-selection change prod button:
-  set_mass_prod_city(pcity['id']);
+  set_mass_prod_city(pcity['id']); // default this prod selection for mass-selection 
   save_city_checkbox_states();
   retain_checkboxes_on_update = true;
+}
+
+/**************************************************************************
+ Toggles highlight for  production in city_id to improvement type #z: clicked from improv
+   panel in the city list screen
+**************************************************************************/
+function highlight_rows_by_improvement(z, clear)
+{ // clear==true means don't toggle, just clear them all
+  for (var city_id in cities) {
+    var pcity = cities[city_id]
+    if (client.conn.playing != null && city_owner(pcity) != null && city_owner(pcity).playerno == client.conn.playing.playerno) {      
+      // if city has improvement, toggle the highlighting:
+      if (clear || city_has_building(pcity, z)) {
+        if (clear || $("#cities_list_"+city_id).css("background-color") == "rgb(0, 0, 255)" ) {
+          $("#cities_list_"+city_id).css({"background-color":"rgba(0, 0, 0, 0)"}); 
+        } else $("#cities_list_"+city_id).css({"background-color":"rgb(0, 0, 255)"});  // TODO, insert a fake sort character to the name of the city?
+      }
+    }
+  }
 }
 
 /**************************************************************************
@@ -2432,6 +2453,7 @@ function update_city_screen()
      // shortcut for replacing <td> tags with clickable <td> tags that take to city dialogue:
     var pcity = cities[city_id]
 
+    // TO DO, don't make these for cities that won't even show up in the list, put under the if statement below that checks ownership
     var td_hover_html = wide_screen
       ? "<td class='tdc1' style='padding-right:1em; text-align:right;' onmouseover='show_city_improvement_pane("+pcity['id']+");' onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'>"
       : "<td class='tdc1' style='padding-right:1em; text-align:right;' onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'>";
@@ -2814,7 +2836,6 @@ function get_city_state(pcity)
   }
 }
 
-
 /**************************************************************************
  Callback to handle keyboard events for the city dialog.
 **************************************************************************/
@@ -2829,7 +2850,7 @@ function city_keyboard_listener(ev)
   var keyboard_key = String.fromCharCode(ev.keyCode);
 
   if (active_city != null) {
-     switch (keyboard_key) {
+    switch (keyboard_key) {
        case 'P':
          previous_city();
          ev.stopPropagation();
