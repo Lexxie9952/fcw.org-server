@@ -79,9 +79,10 @@ function update_nation_screen()
       
       var pact_time = pplayer.diplstates[client.conn.playing.playerno].turns_left;
       var dstate = get_diplstate_text(diplstates[player_id]);
+      if (dstate == "None") dstate = "<span style='font-size:1%; color:rgba(0,0,0,0);'>+</span>" + dstate; // sorting hack
       if (dstate!="Ceasefire" && dstate!="Armistice") pact_time=0; // don't show unless it's a real timer on an expiring pact.
       pact_time = (pact_time>0) ? ":<span title='Turns till pact expires' style='color:#f0d0c0'>"+pact_time+"</span>" : "";   // show turns left for diplstate or blank if n/a
-      nation_list_html += "<td style='text-align:center'>" + get_diplstate_text(diplstates[player_id])+pact_time+"</td>";
+      nation_list_html += "<td style='text-align:center'>" + dstate +pact_time+"</td>";
     } else {
       nation_list_html += "<td style='text-align:center'>-</td>";
     }
@@ -90,7 +91,7 @@ function update_nation_screen()
     var embassy_status = get_embassy_text(player_id);
     if (embassy_status == "None") {
       if (contact_time>0) embassy_status = "<span title='Contact turns remaining' style='color:#c0c0c0'>("+contact_time+")</span>";
-    }
+    } else embassy_status = "<span style='font-size:1%; color:rgba(0,0,0,0);'>z</span>" + embassy_status;  // sorting hack
 
     nation_list_html += "<td style='text-align:center;'>" + embassy_status + "</td>";
 

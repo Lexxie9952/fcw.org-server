@@ -2384,7 +2384,7 @@ function update_city_screen()
     //console.log("MODE: Reduced Standard")
     city_list_html = "<table class='tablesorter-dark' id='city_table' style='border=0px;border-spacing=0;padding=0;'>"
     + "<thead id='city_table_head'><tr>"
-    + "<th style='text-align:right;'>Name"+"</th><th style='text-align:right;'>Pop"+"</th>"+city_list_citizen_html
+    + "<th style='text-align:right;'>Name"+"</th><th style='text-align:center;'>Pop"+"</th>"+city_list_citizen_html
     + "<th style='text-align:right;' title='Text: Current state. Color: Next turn state'>Mood</th>"
     + "<th id='food' title='Food surplus' class='food_text' style='text-align:right;padding-right:0px'><img style='margin-right:-6px; margin-top:-3px;' class='lowered_gov' src='/images/wheat.png'></th>"
     + "<th title='Production surplus (shields)' class='prod_text' style='text-align:right;padding-right:0px'> <img class='lowered_gov' src='/images/shield14x18.png'></th>"
@@ -2396,7 +2396,7 @@ function update_city_screen()
     + "<th style='text-align:right;'>Grows"+"</th><th style='text-align:right;'>Grain"
           +"</th><th style='text-align:right;' title='Click to change'>Making"+"</th>"
     + "<th style='text-align:right;' title='Turns to finish &nbsp;&nbsp; Prod completed/needed'>"
-          +"Progress</th><th style='text-align:center;' title='Click to buy'>&nbsp;Cost"+"</th>"
+          +"Progress</th><th style='padding-right:1em; text-align:right;' title='Click to buy'>Cost"+"</th>"
     + "<th style='text-align:left;'><input type='checkbox' id='master_checkbox' title='Toggle all cities' name='cbAll' value='false' onclick='toggle_city_row_selections();'></th>"
     + "</tr></thead><tbody>";
   } else {  // small AND narrow screen - brutally cut non-crucial info
@@ -2404,7 +2404,7 @@ function update_city_screen()
     //console.log("MODE: Small Narrow")
     city_list_html = "<table class='tablesorter-dark' id='city_table' style='border=0px;border-spacing=0;padding=0;'>"
     + "<thead id='city_table_head'><tr>"
-    + "<th style='text-align:right;'>Name"+"</th><th style='text-align:right;'>Pop"+"</th>"+city_list_citizen_html
+    + "<th style='text-align:right;'>Name"+"</th><th style='text-align:center;'>Pop"+"</th>"+city_list_citizen_html
     + "<th style='text-align:right;' title='Text: Current state. Color: Next turn state'>Mood</th>"
     + "<th id='food' title='Food surplus' class='food_text' style='text-align:right;padding-right:0px'><img style='margin-right:-6px; margin-top:-3px;' class='lowered_gov' src='/images/wheat.png'></th>"
     + "<th title='Production surplus (shields)' class='prod_text' style='text-align:right;padding-right:0px'> <img class='lowered_gov' src='/images/shield14x18.png'></th>"
@@ -2449,18 +2449,24 @@ function update_city_screen()
       // max city size of 40 generates numbers with 9 characters max, pad the string with 10 so the numbers align better:
      // var population_string = "<span class='number_element'>"+numberWithCommas(city_population(pcity)*1000)+"</span>";
       // max city size is 2 digits, so pad a space to create right alignment:
-      var city_size_string = "<span class='mobile_centre non_priority'>"+pcity['size'].toString().padStart(2, ' ').replace(/\s/g, '&nbsp;&nbsp;')+"</span>";
-      
+      var city_size_string = "";
+      if (wide_screen)
+        city_size_string = "<span class='mobile_centre non_priority'>"+pcity['size'].toString().padStart(2, ' ').replace(/\s/g, '&nbsp;&nbsp;')+"</span>";
+      else  city_size_string = "<span class='mobile_centre redux_centre non_priority'>" + pcity['size'] + "</span>";
+
       turns_to_complete = get_city_production_time(pcity);
       if (get_city_production_time(pcity) == FC_INFINITY) {
           turns_to_complete_str = "<span class='non_priority'>&nbsp;&nbsp; </span>";   //client does not know how long production will take yet.
         } else {
-          if (!small_screen || !narrow_screen)
+          if (wide_screen)
             turns_to_complete_str = "<span class='non_priority'>"+turns_to_complete.toString().padStart(3, ' ').replace(/\s/g, '&nbsp;&nbsp;')+"</span>";
           else 
             turns_to_complete_str = "<span class='non_priority'>"+turns_to_complete+"</span>";
-
-          if (turns_to_complete == 1) turns_to_complete_str = "<b>next</b>";  // bold to indicate finishing at TC 
+          // bold to indicate finishing at TC.  invisible tiny 0 at start is a sorting hack
+          if (turns_to_complete == 1)
+            turns_to_complete_str = (wide_screen) 
+                                     ? "<span style='font-size:1%; color:rgba(0,0,0,0);'>0</span>"+"<b>next</b>"
+                                     : "<span style='font-size:1%; color:rgba(0,0,0,0);'>0</span>"+"<b>1</b>";   
         }
 
         // construct coloured and formatted x/y shield progress string where x=shields invested and y=total shield cost:
@@ -2549,9 +2555,9 @@ function update_city_screen()
         } else if (redux_screen) { // reduced standard screen
           city_growth = city_turns_to_growth_text(pcity);
           if (city_growth.startsWith("<b>")) {
-            city_growth = city_growth.padStart(9, ' ').replace(/\s/g, '&nbsp;&nbsp;');   // keep bright white if Starving in 1 (which we know because it comes back with <b>)
+            city_growth = city_growth.padStart(4, ' ').replace(/\s/g, '&nbsp;&nbsp;');   // keep bright white if Starving in 1 (which we know because it comes back with <b>)
           } else { 
-            city_growth="<span class='non_priority'>" + city_growth.padStart(9, ' ').replace(/\s/g, '&nbsp;&nbsp;') + "</span>"; 
+            city_growth="<span class='non_priority'>" + city_growth.padStart(4, ' ').replace(/\s/g, '&nbsp;&nbsp;') + "</span>"; 
           }
           city_growth = city_growth.replace("Starving&nbsp;&nbsp;in&nbsp;&nbsp;", "starves: ").replace("turns", "").replace("turn", "");
         } else { // tiny screen, numerals only
@@ -2572,9 +2578,15 @@ function update_city_screen()
         // Generate and align buy cost with link to buy, or blank if can't be bought because no shields remain.
         if (pcity['buy_cost'] == 0) {
           city_buy_cost = " ";   // blank is less visual noise than a 0.
-        } else city_buy_cost = "<u>"+pcity['buy_cost'];
+        } else if (wide_screen) {
+          city_buy_cost = "<u>"+pcity['buy_cost'];
           city_buy_cost = city_buy_cost.toString().padStart(7, ' ').replace(/\s/g, '&nbsp;&nbsp;') + "</u>" // buy cost is up to 4 digits + 3 for "<u>"
           city_buy_cost = "<div title='Click to buy' style='padding-right:12px;'>" + city_buy_cost + "</div>" // last column not forced to very edge of screen
+        } else {
+          city_buy_cost = "<u'>"+pcity['buy_cost']+"</u>" 
+          city_buy_cost = "<div style='text-align:right; title='Click to buy' style='padding-right:1em;'>" + city_buy_cost + "</div>" // last column not forced to very edge of screen
+        }
+
 
         // Generate micro-sprite for production  
         prod_sprite = get_city_production_type_sprite(pcity);
@@ -2612,7 +2624,7 @@ function update_city_screen()
                                       : ("<span style='font-size:1%; color: rgba(0, 0, 0, 0);'>"+prod_type['name'].charAt(0)+"</span>"+prod_img_html+"</td>") ) //invisible tiny first letter for column sorting
                 + td_click_html + 
                       (   wide_screen ? (turns_to_complete_str+" &nbsp;&nbsp;&nbsp;&nbsp; "+progress_string +"</td>")
-                                      : (redux_screen ? progress_string+"</td>" 
+                                      : (redux_screen ? "("+turns_to_complete_str+") "+progress_string+"</td>" 
                                                       : turns_to_complete_str.replace("turns", "")+"</td>")   )     
                 + ( (!tiny_screen) ? (td_buy_html+city_buy_cost+"</td>") : "" )
                 + ( !tiny_screen 
@@ -2662,7 +2674,9 @@ function update_city_screen()
     $("#city_table").css({"zoom":"0.91", "-moz-transform":"0.91"});  // -9% scaling if screen is only slightly smaller
     $("#city_table_head").css({"font-size":"95%"});  
     $(".tdc1").css({"padding-right":"0px"});  
-    $(".tdc2").css({"padding-right":"0px"});  
+    $(".tdc2").css({"padding-right":"0px"}); 
+    $(".redux_centre").parent().css({"text-align":"center"});
+    $(".redux_centre").css({"text-align":"center"}); 
   }
 
   if (retain_checkboxes_on_update)
