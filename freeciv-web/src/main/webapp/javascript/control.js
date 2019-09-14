@@ -1928,15 +1928,18 @@ function do_map_click(ptile, qtype, first_time_called)
          * to the next tile, that uses less moves by going to another tile first (e.g. ste[ping onto a river before going to Forest river)
          * in which case we wouldn't want to override it because (1) it HAS a legal path and (2) it's a superior path using less moves
          */
-        console.log("goto_path, goto_path.length == "+goto_path+", "+goto_path.length);
+        //console.log("goto_path, goto_path.length == "+goto_path+", "+goto_path.length);
 
         // True goto_path.length is 1 less for units with fuel, they "falsely" report it as +1 higher:
-        var true_goto_path_length = unit_types[punit['type']]['fuel'] == 0 ? goto_path.length : goto_path.length-1;
-        
+        var true_goto_path_length;
+        if (goto_path != null) 
+          true_goto_path_length = unit_types[punit['type']]['fuel'] == 0 ? goto_path.length : goto_path.length-1;
+        else true_goto_path_length = 0;
+
         if (  Math.abs(tile_dx)<=1 && Math.abs(tile_dy) <=1     // adjacent
               && goto_last_action != ACTION_NUKE                // not a nuke command appended to a GOTO
-              && (true_goto_path_length <= 1 || goto_path.length == undefined)   // don't override path>=2 which has better legal way to get to adjacent tile
-           )                                                    // "illegal" adjacent goto attempts render goto_path.length == undefined
+              && (true_goto_path_length <= 1)   // don't override path>=2 which has better legal way to get to adjacent tile
+           )                                    // "illegal" adjacent goto attempts render goto_path.length == undefined (true_goto_path_length will then be 0)
 
              /* NOTE: instead of checking ACTION_NUKE we could check (goto_last_action==-1 OR ACTION_COUNT), which would allow other 
               * goto_last_actions to be added later (go to tile and build city, etc.) but this wasn't done for now because we don't
