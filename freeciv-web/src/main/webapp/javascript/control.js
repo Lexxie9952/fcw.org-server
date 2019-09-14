@@ -2351,15 +2351,70 @@ function
 civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
 {
   switch (keyboard_key) {
+    case 'C':
+      if (alt) {
+        the_event.preventDefault();     // override possible browser shortcut
+        $('#ui-id-4').trigger("click"); // cities tab
+      }
+    break;   
+
+    case 'D':
+      if ((!shift) && (ctrl)) {
+        the_event.preventDefault(); // override possible browser shortcut
+        show_debug_info();
+      } 
+      else if (alt) $('#ui-id-6').trigger("click");  // docs tab
+    break;
+
+    case 'G':
+      if (alt) {
+        the_event.preventDefault(); // override possible browser shortcut
+        $('#ui-id-2').trigger("click"); // gov tab
+      }
+    break; 
+
+    case 'M':
+      if (alt) {
+        the_event.preventDefault(); // override possible browser shortcut
+        $('#ui-id-1').trigger("click"); // map tab  // reserved for messages tab later
+      }
+    break; 
+
+    case 'N':
+      if (alt) {
+        the_event.preventDefault(); // override possible browser shortcut
+        $('#ui-id-3').trigger("click"); // nations tab
+      }
+    break;   
+
+    case 'P':
+        if (alt) {
+          the_event.preventDefault(); // override possible browser shortcut
+          $('#ui-id-5').trigger("click"); // prefs tab
+        }
+      break;   
+  
+    case 'Q':
+      if (alt) civclient_benchmark(0);
+    break;
+
     case 'S':
       if (ctrl) {
-        the_event.preventDefault();
+        the_event.preventDefault(); // override possible browser shortcut
         quicksave();
       }
       else if (alt) {
+        the_event.preventDefault(); // override possible browser shortcut
         show_fullscreen_window();
       }
     break;
+
+    case 'T':
+      if (alt) {
+        the_event.preventDefault(); // override possible browser shortcut
+        $('#tech_tab_item').trigger("click"); // tech tab
+      }
+    break;   
 
     // close any/all tabs/windows and go back to map
     case 'W':
@@ -2367,16 +2422,6 @@ civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         $('#ui-id-1').trigger("click"); 
       }  
     break;  
-
-    case 'Q':
-      if (alt) civclient_benchmark(0);
-    break;
-
-    case 'D':
-      if ((!shift) && (alt || ctrl)) {
-        show_debug_info();
-      }
-    break;
   }
 
   switch (key_code)
@@ -2388,6 +2433,7 @@ civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       break;
 
     case 27:
+      the_event.preventDefault();
       $('#ui-id-1').trigger("click"); 
       break;
       
@@ -2417,8 +2463,6 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 'C':
       if (ctrl) {
         show_citybar = !show_citybar;
-      } else if (alt) {  // also key-code 115 for F4
-        $('#ui-id-4').trigger("click"); // cities tab, assuming position 4!
       } else if (shift) {
         key_select_same_global_type(true); //true=same continent only
       } else if (current_focus.length > 0) {
@@ -2450,6 +2494,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
 
     case 'G':
       if (ctrl) {
+        the_event.preventDefault(); // override possible browser shortcut
         draw_map_grid = !draw_map_grid;
         simpleStorage.set('mapgrid', draw_map_grid); 
       } else if (current_focus.length > 0) {
@@ -2473,10 +2518,10 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       if (shift) {
         key_unit_pillage();
       } else {
-          if (current_focus.length>0) {
-            if (unit_types[current_focus[0]['type']]['name'] == "Paratroopers") key_unit_paradrop();
-            else key_unit_pollution();
-          }
+        if (current_focus.length>0) {
+          if (unit_types[current_focus[0]['type']]['name'] == "Paratroopers") key_unit_paradrop();
+          else key_unit_pollution();
+        }
       }
     break;
 
@@ -2523,23 +2568,35 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     // ALT + UIO / JKL / M,. simulates keypad for devices that don't have it, if alt not held
     // execute the primary command for these keys:
     case 'U': 
-      if (alt) key_unit_move(DIR8_WEST);  // alt+U=7
+      if (alt) { 
+        the_event.preventDefault(); // override possible browser shortcut
+        key_unit_move(DIR8_WEST);  // alt+U=7
+      }
       else if (shift) key_unit_show_cargo();
       else key_unit_upgrade();
     break;
     case 'I':
-      if (alt) key_unit_move(DIR8_NORTHWEST); // alt+I=8
+      if (alt) {
+        the_event.preventDefault(); // override possible browser shortcut
+        key_unit_move(DIR8_NORTHWEST); // alt+I=8
+      }
       else key_unit_irrigate();
     break;
     case 'O':
-      if (alt) key_unit_move(DIR8_NORTH);  // alt+O=9
+      if (alt) {
+        the_event.preventDefault(); // override possible browser shortcut
+        key_unit_move(DIR8_NORTH);  // alt+O=9
+      }
       else key_unit_transform();
     break;
     case 'J':
       if (shift) {
         key_unit_idle();
       }
-      else if (alt) key_unit_move(DIR8_SOUTHWEST); // alt+J=4
+      else if (alt) {
+        the_event.preventDefault(); // override possible browser shortcut
+        key_unit_move(DIR8_SOUTHWEST); // alt+J=4
+      }
       else {
         key_unit_noorders();
       }
@@ -2548,23 +2605,27 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       if (shift) {
         key_unit_airlift();
       } else if (alt) key_unit_move(DIR8_NORTHEAST); // alt+L=6 
-      else if (ctrl) draw_city_airlift_counter = !draw_city_airlift_counter;
+      else if (ctrl) {
+        the_event.preventDefault(); // override possible browser shortcut
+        draw_city_airlift_counter = !draw_city_airlift_counter;
+      }
       else {
         key_unit_load();
       }
     break;
     case 'M':
-      if (alt) key_unit_move(DIR8_SOUTH);  // alt+M=1
+      if (alt) {
+        the_event.preventDefault(); // override possible browser shortcut
+        key_unit_move(DIR8_SOUTH);  // alt+M=1
+      }
       else key_unit_mine();
     break;
     /* these were moved lower to keycode 188,190 for Mac compatibility:
     case ',':
       if (alt) key_unit_move(DIR8_SOUTHEAST);  // alt+,=2
-      else key_unit_mine();
     break;
     case '.':
       if (alt) key_unit_move(DIR8_EAST);  // alt+.=
-      else key_unit_mine();
     break;
     // the block of code above contains virtual keypad ^^  
     */
@@ -2594,6 +2655,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       // if alt not pressed then ignore , key
       if (key_code==188 && !alt) break; // alt , is a virtual numpad arrow
       
+      the_event.preventDefault(); // override possible browser shortcut
       key_unit_move(DIR8_SOUTHEAST);
       break;
 
@@ -2601,6 +2663,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 99:
     case 190:
       if (key_code==190 && !alt) break; //190 moves only if alt held down:
+      the_event.preventDefault(); // override possible browser shortcut
       key_unit_move(DIR8_EAST);
       break;
 

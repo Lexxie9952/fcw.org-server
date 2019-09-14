@@ -132,7 +132,6 @@ space: de-selected all highlighted cities
 w: return to map: close tab/window/pop-up
 space: de-select units, exit GOTO mode
 shift-space: re-focus to previous map position 
-alt-C: show cities tab
 shift-C: select all same type units on (c)ontinent
 ctrl-C:  city labels on/off
 ctrl-G: map grid on/off
@@ -162,5 +161,16 @@ Ctrl-click specialist:           Cycle through primary 3 specialists (not second
   Double-tap map-and-drag:       Move the map 
   Double-click:                  Add production selection to city worklist / queue 
 Ctrl-double-click:               Change current city production to already highlighted production selection
+
+<h2>Tabs:</h2>
+alt-C: cities tab
+alt-D: docs tab
+alt-G: gov. tab
+alt-M: map tab 
+alt-N: nations tab 
+alt-P: prefs tab 
+alt-T: tech tab 
+W: escape window/tab/popup without exiting full screen
+
 
 
