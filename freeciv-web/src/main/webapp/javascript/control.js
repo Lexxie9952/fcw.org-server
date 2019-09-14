@@ -3647,9 +3647,10 @@ function can_irrigate(punit, ptile)
     for (var dir = 1; dir < 7; dir++) {
       if (dir==2 || dir==5)
         continue; // only check cardinal dir 1,3,4,6 (N,W,E,S)
+        
       var cadj_tile = mapstep(ptile, dir);
-      terrain_name = tile_terrain(cadj_tile)['name'];
       if (cadj_tile != null) {
+        terrain_name = tile_terrain(cadj_tile)['name'];
         if (terrain_name == "Lake"
          || terrain_name == "Ocean"
          || terrain_name == "Deep Ocean"

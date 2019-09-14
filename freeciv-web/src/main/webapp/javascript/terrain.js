@@ -36,7 +36,8 @@ function tile_set_terrain(ptile, pterrain)
 **************************************************************************/
 function tile_terrain(ptile)
 {
-  return terrains[ptile['terrain']];
+  if (ptile)
+    return terrains[ptile['terrain']];
 }
 
 /**************************************************************************
