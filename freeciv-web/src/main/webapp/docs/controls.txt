@@ -126,7 +126,8 @@ hover over city name: show all buildings in Super Panel
 click Building in Super Panel: change production to Building in hovered city 
 right-click Building in Super Panel: sell Building in hovered city 
 shift-click Building in Super Panel: highlight ON/OFF all cities with this Building 
-space: de-selected all highlighted cities
+ctrl-click Building in Super Panel: select/deselect all cities with this Building
+space: clear all all highlighted and selected cities
 
 <h2>Other Keyboard Shortcuts:</h2>
 w: return to map: close tab/window/pop-up

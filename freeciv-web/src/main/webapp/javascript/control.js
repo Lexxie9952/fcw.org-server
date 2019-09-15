@@ -2440,6 +2440,7 @@ civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 32:
       if ($("#tabs-cities").is(":visible")) {
         highlight_rows_by_improvement(0, true); // Clear all highlighted rows.
+        select_rows_by_improvement(0, true); // Clear all selected rows.
       }
       break;
   }
@@ -3647,7 +3648,7 @@ function can_irrigate(punit, ptile)
     for (var dir = 1; dir < 7; dir++) {
       if (dir==2 || dir==5)
         continue; // only check cardinal dir 1,3,4,6 (N,W,E,S)
-        
+
       var cadj_tile = mapstep(ptile, dir);
       if (cadj_tile != null) {
         terrain_name = tile_terrain(cadj_tile)['name'];

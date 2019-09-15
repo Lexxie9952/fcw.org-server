@@ -2304,7 +2304,10 @@ function change_city_prod_to(event, city_id, z)
   if (event.shiftKey) {   //intercept shift-click and call the right function
     highlight_rows_by_improvement(z, false);
     return;
-  } 
+  } else if (event.ctrlKey) {
+    select_rows_by_improvement(z, false);
+    return;
+  }
   var pcity = cities[city_id];
   send_city_change(pcity['id'], VUT_IMPROVEMENT, z);
   set_mass_prod_city(pcity['id']); // default this prod selection for mass-selection 
@@ -2313,8 +2316,8 @@ function change_city_prod_to(event, city_id, z)
 }
 
 /**************************************************************************
- Toggles highlight for  production in city_id to improvement type #z: clicked from improv
-   panel in the city list screen
+ Toggles highlighted city rows by improvement type #z: 
+   shift-clicked from Super PAnel in the city list screen
 **************************************************************************/
 function highlight_rows_by_improvement(z, clear)
 { // clear==true means don't toggle, just clear them all
@@ -2326,6 +2329,24 @@ function highlight_rows_by_improvement(z, clear)
         if (clear || $("#cities_list_"+city_id).css("background-color") == "rgb(0, 0, 255)" ) {
           $("#cities_list_"+city_id).css({"background-color":"rgba(0, 0, 0, 0)"}); 
         } else $("#cities_list_"+city_id).css({"background-color":"rgb(0, 0, 255)"});  // TODO, insert a fake sort character to the name of the city?
+      }
+    }
+  }
+}
+/**************************************************************************
+ Toggles selection checkboxes in city rows by improvement type #z: 
+   ctrl-clicked from Super PAnel in the city list screen
+**************************************************************************/
+function select_rows_by_improvement(z, clear)
+{ // clear==true means don't toggle, just clear them all
+  for (var city_id in cities) {
+    var pcity = cities[city_id]
+    if (client.conn.playing != null && city_owner(pcity) != null && city_owner(pcity).playerno == client.conn.playing.playerno) {      
+      // if city has improvement, toggle the checkbox
+      if (clear || city_has_building(pcity, z)) {
+        if (clear || $("#cb"+city_id).prop("checked") == true ) {
+          $("#cb"+city_id).prop("checked", false); 
+        } else $("#cb"+city_id).prop("checked", true);  
       }
     }
   }
@@ -2344,6 +2365,7 @@ function update_city_screen()
   var wide_screen = $(window).width()<1340 ? false : true;
   var narrow_screen = $(window).width()<1000 ? true : false;
   var small_screen = is_small_screen();
+  var landscape_screen = $(window).width() > $(window).height() ? true : false; 
   var tiny_screen=false, redux_screen=false;
   if (small_screen || narrow_screen) {
     tiny_screen = true; redux_screen=false; wide_screen = false;
@@ -2699,6 +2721,7 @@ function update_city_screen()
     $(".tdc2").css({"padding-right":"0px"}); 
     $(".redux_centre").parent().css({"text-align":"center"});
     $(".redux_centre").css({"text-align":"center"}); 
+  } else if (wide_screen) {
   }
 
   if (retain_checkboxes_on_update)
