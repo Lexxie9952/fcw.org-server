@@ -4302,6 +4302,16 @@ function update_active_units_dialog()
   for (var i = 0; i < punits.length; i++) {
     var punit = punits[i];
     var sprite = get_unit_image_sprite(punit);
+
+    // TO DO: This is caused sometimes after rebuild when not all images load properly. This is a hack to simply abort 
+    // making unit panel for this current unit in the stack, but probably we need a check after game load to see if all 
+    // graphics loaded, and a message to please refresh if they did not.
+    if (sprite == null) {
+      console.log("update_active_units_dialog() - aborting panel construction: Sprite not found for "+unit_type(punit)['name']);
+      console.log("RECOMMENDED:  refresh page so graphics will be loaded properly.");
+      continue;
+    }
+
     var active = false;
 
     // if punit is in current_focus, it's active:
