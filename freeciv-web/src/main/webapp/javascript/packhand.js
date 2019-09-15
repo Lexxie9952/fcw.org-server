@@ -835,9 +835,17 @@ function handle_unit_combat_info(packet)
   } 
   
   else {
-      var pplayer = players[client.conn.playing['playerno']];
-    
-      var player_nation = nations[pplayer['nation']]['adjective'];
+      // Might be null/false if observer
+      var pplayer = null;
+      var player_nation = null;
+
+      if (observing || client.conn.playing == null) {
+        // reserved extra 'observer' handling later
+      } else { // set up player info if it's a real player
+        pplayer = players[client.conn.playing['playerno']];
+        player_nation = nations[pplayer['nation']]['adjective'];
+      }
+
       var defender_nation = players[defender['owner']]['nation'];
       var attacker_nation = players[attacker['owner']]['nation'];
       var player_is_combatant = (player_nation==nations[defender_nation]['adjective'] || player_nation==nations[attacker_nation]['adjective']);
@@ -892,8 +900,8 @@ function handle_unit_combat_info(packet)
         // sent by the server, when those battles involved combat_rounds and did not result in a unit dying:
         // --------------------------------------------------------------------------------------------------------------------
         var scrollDiv = get_chatbox_msg_list();
-        if (scrollDiv != null) {
-          var item = document.createElement('li');
+        if (scrollDiv != null && player_is_combatant) {     // TO DO: not sure if 'hack fix' update on unit display is appropriate for non-combatant witnesses
+          var item = document.createElement('li');          // who might not have info/data on some of the units involved which are being changed here
           item.className = "e_unit_win_att";
           item.innerHTML = "<span class='chatbox_text_tileinfo' onclick='center_tile_id("+attacker['tile']+");'>"+special_message+"</span>";
 
@@ -1199,7 +1207,7 @@ function handle_page_msg_part(packet)
 function handle_conn_ping_info(packet)
 {
   last_ping_measurement = packet['ping_time'][0] * 1000;
-   
+
   if (debug_active) {
     conn_ping_info = packet;
     debug_ping_list.push(packet['ping_time'][0] * 1000);
