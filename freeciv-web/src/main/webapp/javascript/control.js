@@ -1932,7 +1932,7 @@ function do_map_click(ptile, qtype, first_time_called)
 
         // True goto_path.length is 1 less for units with fuel, they "falsely" report it as +1 higher:
         var true_goto_path_length;
-        if (goto_path != null) 
+        if (goto_path != null && goto_path.length != null) 
           true_goto_path_length = unit_types[punit['type']]['fuel'] == 0 ? goto_path.length : goto_path.length-1;
         else true_goto_path_length = 0;
 
@@ -3143,7 +3143,7 @@ function key_unit_unload()
 function key_select_all_units_on_tile()
 {
   var punits = [];
-  if (current_focus != null) {
+  if (current_focus != null && current_focus.length > 0) {
     var ptile = index_to_tile(current_focus[0]['tile']);
     var punits = tile_units(ptile);
     
@@ -3160,7 +3160,7 @@ Select all other units of same TYPE on this tile
 function key_select_same_type_units_on_tile()
 {
   var punits = [];
-  if (current_focus[0] != null) {
+  if (current_focus != null && current_focus.length>0) {
     var punit = current_focus[0];
     var ptile = index_to_tile(punit['tile']);
     var ptype = punit['type'];
@@ -3185,7 +3185,7 @@ Select all other units of DIFFERENT type on this tile
 function key_select_different_units_on_tile()
 {
   var punits = [];
-  if (current_focus[0] != null) {
+  if (current_focus != null && current_focus.length>0) {
     var punit = current_focus[0];
     
     save_last_unit_focus();    
@@ -3215,7 +3215,7 @@ function key_select_same_global_type(continent_only)
 {
   //console.log("key_select_same_type_on_continent");
 
-  if (current_focus[0] != null) {
+  if (current_focus != null && current_focus.length>0) {
     var punit = current_focus[0];
     var ptile = index_to_tile(punit['tile']);
     var ptype = punit['type'];
