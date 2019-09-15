@@ -268,7 +268,7 @@ function control_init()
   // Make containers drawn over the map not block clicks below, as most of the container is invisible:
   //// these changes in control.js and game.js made container not clickable but children unclickable also
   //$("#game_unit_orders_default").css("pointer-events", "none");////
-  //$("game_status_panel_bottom").css("pointer-events", "none");////
+  //$("#game_status_panel_bottom").css("pointer-events", "none");////
 
   $("#overview_map").click(function(e) {
     var x = e.pageX - $(this).offset().left;
@@ -943,7 +943,7 @@ function button_hide_panels()
 {
   show_order_buttons = 0;
   $("#game_unit_orders_default").hide();
-  $("game_status_panel_bottom").hide();
+  $("#game_status_panel_bottom").hide();
 }
 
 /**************************************************************************
@@ -987,7 +987,7 @@ function update_unit_order_commands()
   switch (show_order_buttons) {
     case 0:                 // hide lower all panels
       $("#game_unit_orders_default").hide();
-      $("game_status_panel_bottom").hide();
+      $("#game_status_panel_bottom").hide();
     break;
 
     case 1:         // common/frequently used orders only
