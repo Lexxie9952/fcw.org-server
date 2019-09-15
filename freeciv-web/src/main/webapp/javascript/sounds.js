@@ -212,6 +212,11 @@ function sound_error_handler(err)
 {
   //sounds_enabled = false;  this was turning off sounds whenever player moved multiple units
   if (window.trackJs) {
+
+    // Don't report an error caused by: browser restricts permissions on playing sounds
+    if (err != null && err['name'] != null && err['name']=="NotAllowedError")
+      return;
+
     trackJs.console.log(err);
     trackJs.track("Sound problem");
   } else {
