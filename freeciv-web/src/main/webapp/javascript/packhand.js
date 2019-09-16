@@ -234,6 +234,16 @@ function handle_chat_msg(packet)
 
   packet['message'] = message;
   add_chatbox_text(packet);
+
+  // Do sounds for special messages
+  //console.log("Event type = "+packet['event']);
+  if (packet['event']==1 || packet['event']==77) /* 1==E_CITY_LOST, 77==E_UNIT_WIN_ATT, there are in events.h and are the two
+  types of event that come back for cities being conquered by someone.*/
+  {
+    if (message.includes("; your lootings accumulate to ")) play_sound(soundset["e_conquer"]);
+    else if (message.includes("You have liberated ")) play_sound(soundset["e_liberate"]);
+    else if (message.includes(" gold from the city.")) play_sound(soundset["e_conquer"]);
+  }
 }
 
 /**************************************************************************
