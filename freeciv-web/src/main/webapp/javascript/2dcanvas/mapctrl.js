@@ -63,7 +63,7 @@ function mapview_mouse_click(e)
 
   //console.log("mapview_mouse_click called for mouse UP.");
                         
-  if (!e) e = window.event;
+  /* if (!e) e = window.event; internet explorer deprecated */
   if (e.which) {
     rightclick = (e.which == 3);
     middleclick = (e.which == 2);
@@ -133,7 +133,7 @@ function mapview_mouse_down(e)
 
   mouse_click_mod_key = e;  // stored to remember if shift- or ctrl- click
 
-  if (!e) e = window.event;
+  /* if (!e) e = window.event; INTERNET EXPLORER */
   if (e.which) {
     rightclick = (e.which == 3);
     middleclick = (e.which == 2);
@@ -264,7 +264,7 @@ function mapview_touch_move(e)
 function city_mapview_mouse_click(e)
 {
   var rightclick;
-  if (!e) e = window.event;
+  /* if (!e) e = window.event; INTERNET EXPLORER */
   if (e.which) {
     rightclick = (e.which == 3);
   } else if (e.button) {

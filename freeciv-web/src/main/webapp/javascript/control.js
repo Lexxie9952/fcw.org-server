@@ -336,9 +336,9 @@ function mouse_moved_cb(e)
 
   mouse_x = 0;
   mouse_y = 0;
-  if (!e) {
+  /* if (!e) {
     e = window.event;
-  }
+  } INTERNET EXPLORER deprecated */
   if (e.pageX || e.pageY) {
     mouse_x = e.pageX;
     mouse_y = e.pageY;
@@ -2329,7 +2329,7 @@ function global_keyboard_listener(ev)
 
   if (C_S_RUNNING != client_state()) return;
 
-  if (!ev) ev = window.event;
+  /* if (!ev) ev = window.event; INTERNET EXPLORER DEPRECATED */
   var keyboard_key = String.fromCharCode(ev.keyCode);
 
   if (0 === $("#tabs").tabs("option", "active")) {

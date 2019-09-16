@@ -2872,7 +2872,7 @@ function city_keyboard_listener(ev)
 
   if (C_S_RUNNING != client_state()) return;
 
-  if (!ev) ev = window.event;
+  /* if (!ev) ev = window.event; INTERNET EXPLORER DEPRECATED */
   var keyboard_key = String.fromCharCode(ev.keyCode);
 
   if (active_city != null) {

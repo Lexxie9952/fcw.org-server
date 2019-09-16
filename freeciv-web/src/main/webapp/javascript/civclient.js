@@ -405,7 +405,7 @@ function show_dialog_message(title, message) {
   // W is universal key to get out of anything and back to map                 
   $(this).keypress(function(e){
     //alert("(this).keypress(e) event that was tied to dialog, keycode: "+e.keyCode);
-    if (e.which == 119 || e.keyCode == 119 || (window.event != null && window.event.keyCode == 119)) {
+    if (e.which == 119 || e.keyCode == 119 /* IE8: || (window.event != null && window.event.keyCode == 119)*/) {
         //alert('1-W pressed');
         close_dialog_message();
     };

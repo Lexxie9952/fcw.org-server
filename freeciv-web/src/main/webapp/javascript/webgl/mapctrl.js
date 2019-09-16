@@ -73,7 +73,7 @@ function webglOnDocumentMouseUp( e ) {
   mapview_mouse_movement = false;
 
 
-  if (!e) var e = window.event;
+  /* if (!e) var e = window.event; internet explorer deprecated */
   if (e.which) {
     rightclick = (e.which == 3);
     middleclick = (e.which == 2);
@@ -137,7 +137,7 @@ function webglOnDocumentMouseDown(e) {
   // default to turning it off unless conditions met below
   mapview_mouse_movement = false;
 
-  if (!e) var e = window.event;
+  /* if (!e) var e = window.event; INTERNET EXPLORER, DEPRECATED */
   if (e.which) {
     rightclick = (e.which == 3);
     middleclick = (e.which == 2);

@@ -545,7 +545,7 @@ function tech_mapview_mouse_click(e)
 {
 
   var mouse_button;
-  if (!e) var e = window.event;
+  /* if (!e) var e = window.event; INTERNET EXPLORER DEPRECATED */
   if (e.which) {
     mouse_button = e.which
   } else if (e.button) {
