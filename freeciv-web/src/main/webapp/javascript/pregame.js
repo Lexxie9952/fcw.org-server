@@ -102,12 +102,51 @@ function observe()
 
   observing = !observing;
 }
+/****************************************************************************
+  IE doesn't work, so don't let start a game.
+****************************************************************************/
+function check_browser_compatibility()
+{
+  /* 
+    var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0; // Opera 8.0+
+    var isFirefox = typeof InstallTrigger !== 'undefined';  // Firefox 1.0+
+    // Safari 3.0+ "[object HTMLElementConstructor]" 
+    var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
+  */
+  var isIE = /*@cc_on!@*/false || !!document.documentMode;  // Internet Explorer 6-11
+  /*
+    var isEdge = !isIE && !!window.StyleMedia;   // Edge 20+
+    var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);  // Chrome 1 - 71
+    var isBlink = (isChrome || isOpera) && !!window.CSS;   // Blink engine detection
+  */
+  if (isIE) {
+    swal({   
+      title: "INCOMPATIBLE BROWSER",   
+      text: "Internet Explorer is not supported. Freeciv-Web is a game with video graphics that " +
+            "require a modern browser. Internet Explorer is obsolete, and was replaced " + 
+            "by Microsoft's Edge browser. We suggest downloading a modern browser and coming " + 
+            "back to play! Suggestions: Chrome, Opera, Firefox, Safari, Chromium, or Edge. " +
+            "Hope to see you soon!",
+      type: "warning",   showCancelButton: false,   
+      confirmButtonColor: "#DD6B55",   
+      confirmButtonText: "OK",   
+      closeOnConfirm: true }, 
+      function(){   
+        console.log("Incompatible browser: Internet Explorer.");
+        $(window).off('beforeunload'); // remove "do you really want to leave?" pop-up
+        window.location = 'https://www.google.com/chrome/';
+    });
+  }
+}
+
 
 /****************************************************************************
   Show information about the current game
 ****************************************************************************/
 function update_game_info_pregame()
 {
+  check_browser_compatibility();
+
   var game_info_html = "";
 
   if (C_S_PREPARING != client_state()) {
