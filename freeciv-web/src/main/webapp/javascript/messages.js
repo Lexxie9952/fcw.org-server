@@ -119,6 +119,18 @@ function reclassify_chat_message(text)
 }
 
 /**************************************************************************
+ This adds new text to the main message chatbox. This is allows the client
+ to produce messages independently of incoming packets (e.g., notifying
+  of changes to prefs, etc.)
+**************************************************************************/
+function add_client_message(message)
+{
+  var fake_packet = {"message": "<font color='#AFA8A8'>"+message+"</font>"};
+  fake_packet.event = E_CHAT_MSG;
+  add_chatbox_text(fake_packet);
+}
+
+/**************************************************************************
  This adds new text to the main message chatbox. See update_chatbox() which
  does the actual update to the screen.
 **************************************************************************/
@@ -144,12 +156,12 @@ function add_chatbox_text(packet)
     if (civclient_state <= C_S_PREPARING) {
       text = text.replace(/#FFFFFF/g, '#000000');
     } else {
-      text = text.replace(/#0000FF/g, '#5555FF')
-                 .replace(/#006400/g, '#00AA00')
+      text = text.replace(/#0000FF/g, '#5565FF')
+                 .replace(/#006400/g, '#40BA40')
                  .replace(/#551166/g, '#AA88FF');
 
       // Check for incoming private message:           
-      var check_im = text.replace(/#A020F0/g, '#F020FF');
+      var check_im = text.replace(/#A020F0/g, '#FF88B8');
       if (check_im != text) {         // if different, there was a private message
         if (packet['turn'] != null) {
           // Message might have come after they logged out last turn, so exclude 
