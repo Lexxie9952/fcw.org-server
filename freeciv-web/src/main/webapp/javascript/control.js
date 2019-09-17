@@ -2454,7 +2454,12 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
 {
   switch (keyboard_key) {
     case 'A':
-      key_unit_auto_settle();
+      if (shift) {
+        auto_attack = !auto_attack;
+        //simpleStorage.set('autoattack', auto_attack); //session only
+        console.log("shift-A pushed.");
+        add_client_message("Auto-attack set to "+(auto_attack ? "ON." : "OFF.")); 
+      } else key_unit_auto_settle();
     break;
     
     case 'B':
@@ -2671,6 +2676,19 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 37: // 4
     case 100:
       key_unit_move(DIR8_SOUTHWEST);
+      break;
+
+    case 12: // 5 (middle numpad key) -- also see shift-188 ("<") above
+        // Selects last unit 
+        // we have to save last_focus before we use it so we do a little shell game
+        var penultimate_focus = last_focus;
+        save_last_unit_focus();
+
+        current_focus = [];
+        if (penultimate_focus != null) {
+          //current_focus.push(last_focus);
+          set_unit_focus_and_redraw(penultimate_focus);
+        }
       break;
 
     case 39: // 6
