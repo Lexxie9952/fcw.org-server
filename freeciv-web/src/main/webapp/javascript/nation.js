@@ -32,10 +32,47 @@ function update_nation_screen()
   var no_humans = 0;
   var no_ais = 0;
 
-  var nation_list_html = "<table class='tablesorter' id='nation_table' width='95%' border=0 cellspacing=0 >"
-	  + "<thead><tr><th>Flag</th><th>Color</th><th>Player Name:</th>"
-	  + "<th>Nation:</th><th class='nation_attitude'>Attitude</th><th>Score</th><th>AI/Human</th><th>Alive?</th>"
-	  + "<th style='text-align:center'>Diplomatic state</th><th style='text-align:center'>Embassy</th><th>Shared vision</th><th class='nation_team'>Team</th><th>State</th></tr></thead><tbody class='nation_table_body'>";
+  // Carefully set up display mode controls:  wide, reduced standard, tiny:
+  var wide_screen = $(window).width()<1340 ? false : true;
+  var narrow_screen = $(window).width()<1000 ? true : false;
+  var small_screen = is_small_screen();
+  var landscape_screen = $(window).width() > $(window).height() ? true : false; 
+  var tiny_screen=false;
+  var redux_screen=false;  // mid-size screen
+  
+  // narrow screen triggers tiny screen (becase we need width for city rows)
+  // if small_screen and not landscape, that's also a tiny screen:
+  if (small_screen || narrow_screen) {
+      tiny_screen = true; redux_screen=false; wide_screen = false;
+  } else if (!wide_screen) {
+      if (narrow_screen) {
+        tiny_screen=true; redux_screen=true;  wide_screen = false;
+      }
+      else {
+        tiny_screen=false ;redux_screen=true; wide_screen = false;
+      }
+  }/*
+  console.log("Wide:   "+wide_screen);
+  console.log("Landscp:"+landscape_screen);
+  console.log("Redux:  "+redux_screen);
+  console.log("Small:  "+small_screen);
+  console.log("Narrow: "+narrow_screen);
+  console.log("Tiny:   "+tiny_screen);
+  console.log("Scrollx:"+scroll_narrow_x);*/
+
+  var header_titles = ["Flag", "Color", "Player Name", "Nation", "Attitude", "Score", "AI/Human", "Alive", "Diplomatic state", "Embassy", "Shared Vision", "Team", "State&nbsp;"];
+  if (redux_screen || tiny_screen)
+    header_titles = ["Flag", " ", "Name", "Nation", "Mood", "Score", "Type", "Alive", "Relation", "Embassy", "Vision", "Team", "State&nbsp;"];
+
+  var center_style = " style='text-align:center;'";
+
+  var nation_list_html = "<table class='tablesorter' id='nation_table' "+center_style+" width='95%' border=0 cellspacing=0 >"
+	  + "<thead><tr id='nation_header_row'><th>"+header_titles[0]+"</th><th>"+header_titles[1]+"</th><th style='text-align:left;'>"+header_titles[2]+"</th>"
+    + "<th"+center_style+">"+header_titles[3]+"</th><th "+center_style+"class='nation_attitude'>"+header_titles[4]+"</th><th"+center_style+">"
+    + header_titles[5]+"</th><th"+center_style+">"+header_titles[6]+"</th><th"+center_style+">"+header_titles[7]+"</th>"
+    + "<th"+center_style+">"+header_titles[8]+"</th><th"+center_style+">"+header_titles[9]+"</th><th"+center_style+">"+header_titles[10]
+    + "</th><th"+center_style+" class='nation_team'>"+header_titles[11]
+    +"</th><th style='text-align:right;'>"+header_titles[12]+"</th></tr></thead><tbody class='nation_table_body'>";
 
   var sortList = [];
   var headers = $('#nation_table thead th');
@@ -62,11 +99,12 @@ function update_nation_screen()
     nation_list_html += "<tr data-plrid='" + player_id + "' class='" + plr_class
 	   + "'><td>" + flag_html + "</td>";
     nation_list_html += "<td><div style='background-color: " + nations[pplayer['nation']]['color']
-           + "; margin: 5px; width: 25px; height: 25px;'>"
+           + "; margin: 4px; width: 20px; height: 20px;'>"
            + "</div></td>";
 
-    nation_list_html += "<td>" + pplayer['name'] + "</td><td title=\"" + nations[pplayer['nation']]['legend'] + "\">"
-           + nations[pplayer['nation']]['adjective']  + "</td>"
+    nation_list_html += "<td style='text-align:left;'>" + pplayer['name'] + "</td><td style='text-align:left;' title=\"" 
+          + nations[pplayer['nation']]['legend'] + "\">"
+          + nations[pplayer['nation']]['adjective']  + "</td>"
        + "<td class='nation_attitude'>" + col_love(pplayer) + "</td>"
        + "<td>" + get_score_text(pplayer) + "</td>"
        +"<td>" + (pplayer['flags'].isSet(PLRF_AI) ?
@@ -89,6 +127,11 @@ function update_nation_screen()
 
     // Alternate text if no embassy, show contact_turns instead:
     var embassy_status = get_embassy_text(player_id);
+    
+    // Abbreviate for smaller screen
+    if (redux_screen || tiny_screen)
+      embassy_status = embassy_status.replace(" embassy", ""); //e.g., "They have embassy" >> "They have"
+
     if (embassy_status == "None") {
       if (contact_time>0) embassy_status = "<span title='Contact turns remaining' style='color:#c0c0c0'>("+contact_time+")</span>";
     } else embassy_status = "<span style='font-size:1%; color:rgba(0,0,0,0);'>z</span>" + embassy_status;  // sorting hack
@@ -115,7 +158,8 @@ function update_nation_screen()
       pstate = "Done";
     } else if (!pplayer['flags'].isSet(PLRF_AI)
                && pplayer['nturns_idle'] > 1) {
-      pstate += "Idle for " + pplayer['nturns_idle'] + " turns";
+      if (tiny_screen || redux_screen) pstate += "idle  " + pplayer['nturns_idle'];
+      else pstate += "Idle for " + pplayer['nturns_idle'] + " turns";
     } else if (!pplayer['phase_done']
                && !pplayer['flags'].isSet(PLRF_AI)) {
       pstate = "Moving";
@@ -201,7 +245,20 @@ function update_nation_screen()
   if (is_longturn()) $(".nation_team").hide();
 
   $("#nation_table").tooltip();
-
+  
+  if (tiny_screen) {
+    //console.log("Resetting tiny")
+    $("#nation_table").css({"zoom":"0.6", "-moz-transform":"0.6"});  // -40% scaling if screen is small
+    $("#nation_header_row").css({"font-size":"90%"}); 
+    $("#nations_title").css({"zoom":"0.85", "-moz-transform":"0.85"});  // -40% scaling if screen is small
+    $("#nations_button_div").css({"zoom":"74%"});
+    $("#nations_label").css({"zoom":"85%"});     
+  }
+  else if (redux_screen) {
+    //console.log("Resetting redux")
+    $("#city_table").css({"zoom":"0.91", "-moz-transform":"0.91"});  // -9% scaling if screen is only slightly smaller
+    $("#nation_header_row").css({"font-size":"90%"});  
+  }
 }
 
 
@@ -422,7 +479,7 @@ function get_score_text(player)
        || (client.conn.playing != null && player['playerno'] == client.conn.playing['playerno'])) {
     return player['score'];
   } else {
-    return "?";
+    return " ";
   }
 }
 
