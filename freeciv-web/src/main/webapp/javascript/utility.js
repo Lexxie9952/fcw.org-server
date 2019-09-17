@@ -17,6 +17,14 @@
 
 ***********************************************************************/
 
+// if old browser lacks String.repeat, add it here:
+String.prototype.repeat = String.prototype.repeat || 
+function(n) {
+  if (n < 0) throw new RangeError("invalid count value");
+  if (n == 0) return "";
+  return new Array(n + 1).join(this.toString()) 
+};
+
 /****************************************************************************
  ...
 ****************************************************************************/
