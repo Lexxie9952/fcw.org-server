@@ -161,14 +161,14 @@ function init_options_dialog()
 
   $(".setting_button").tooltip();
 
+  // USER OPTIONS ------------------------------------------------------------------
+  // PERMANENT SAVE also requires adding to civclient_init() IN civclient.js
   // SOUNDS
   $('#play_sounds_setting').prop('checked', sounds_enabled);
   $('#play_sounds_setting').change(function() {
     sounds_enabled = this.checked;
     simpleStorage.set('sndFX', sounds_enabled);
-    console.log("sounds_enabled just got changed to "+sounds_enabled)
   });
-
   // SPEECH
   if (is_speech_supported()) {
     $('#speech_enabled_setting').prop('checked', speech_enabled);
@@ -178,93 +178,82 @@ function init_options_dialog()
   } else {
     $('#speech_enabled_setting').attr('disabled', true);
   }
-
-  // CITY AIRLIFT COUNTER
-  $('#airlift_setting').prop('checked', draw_city_airlift_counter);
-  $('#airlift_setting').change(function() {
-    draw_city_airlift_counter = this.checked;
-    simpleStorage.set('airlift', draw_city_airlift_counter);
-  });
-
   // DRAW MAP GRID
   $('#draw_map_grid').prop('checked', draw_map_grid);
   $('#draw_map_grid').change(function() {
     draw_map_grid = this.checked;
     simpleStorage.set('mapgrid', draw_map_grid);
   });
-
-  // UNIT CLICK GIVES CONTEXT MENU
-  $('#unit_click_menu').prop('checked', unit_click_menu);
-  $('#unit_click_menu').change(function() {
-    unit_click_menu = this.checked;
-    simpleStorage.set('unitclickmenu', unit_click_menu);
-  });
-
   // MAP DRAG ENABLED
   $('#map_drag_enabled').prop('checked', map_drag_enabled);
   $('#map_drag_enabled').change(function() {
     map_drag_enabled = this.checked;
     simpleStorage.set('mapdrag', map_drag_enabled);
   });
-
+  // UNIT CLICK GIVES CONTEXT MENU
+  $('#unit_click_menu').prop('checked', unit_click_menu);
+  $('#unit_click_menu').change(function() {
+    unit_click_menu = this.checked;
+    simpleStorage.set('unitclickmenu', unit_click_menu);
+  });
+  // SHOW ORDER BUTTONS
+  $('#show_order_buttons').prop('checked', show_order_option);
+  if (show_order_option==true) {
+    show_order_buttons=1; // 1=frequent, 2 is verbose/complete mode
+    $("#game_unit_orders_default").show();
+  }
+  else { 
+    show_order_buttons = 0;
+    $("#game_unit_orders_default").hide();
+  }
+  $('#show_order_buttons').change(function() {
+    show_order_option = this.checked;
+    if (show_order_option==true) {
+      show_order_buttons=2;
+      $("#game_unit_orders_default").show();
+    }
+    else {
+      show_order_buttons = 0;
+      $("#game_unit_orders_default").hide();
+    }
+    simpleStorage.set('showorderbuttons', show_order_option); 
+  });
   // AUTO ATTACK
   $('#auto_attack').prop('checked', auto_attack);
   $('#auto_attack').change(function() {
     auto_attack = this.checked;
-    //simpleStorage.set('autoattack', map_drag_enabled); // probably best to not store this to next session
+    //simpleStorage.set('autoattack', auto_attack); // don't store this to next session
   });
-
-   // SHOW ORDER BUTTONS
-   $('#show_order_buttons').prop('checked', show_order_option);
-   if (show_order_option==true) {
-      show_order_buttons=1; // 1=frequent, 2 is verbose/complete mode
-      $("#game_unit_orders_default").show();
-   }
-   else { 
-      show_order_buttons = 0;
-      $("#game_unit_orders_default").hide();
-    }
-   $('#show_order_buttons').change(function() {
-     show_order_option = this.checked;
-     if (show_order_option==true) {
-       show_order_buttons=2;
-       $("#game_unit_orders_default").show();
-     }
-     else {
-       show_order_buttons = 0;
-       $("#game_unit_orders_default").hide();
-     }
-     simpleStorage.set('showorderbuttons', show_order_option); 
-   });
-
-   // Leave a little horizontal room in tables like city_list to scroll
-   // and see more info, rather than compact to screen width with less info
-   $('#scroll_narrow_x').prop('checked', scroll_narrow_x);
-   $('#scroll_narrow_x').change(function() {
-    scroll_narrow_x = this.checked;
-     simpleStorage.set('scroll_narrow_x', scroll_narrow_x); 
-   });
-
-   // Draw city tile output on main map
+  // CITY AIRLIFT COUNTER
+  $('#airlift_setting').prop('checked', draw_city_airlift_counter);
+  $('#airlift_setting').change(function() {
+    draw_city_airlift_counter = this.checked;
+    simpleStorage.set('airlift', draw_city_airlift_counter);
+  });
+   // SHOW WORKED TILES ON MAP
    $('#draw_city_output').prop('checked', draw_city_output);
    $('#draw_city_output').change(function() {
      draw_city_output = this.checked;
-     simpleStorage.set('draw_city_output', draw_city_output); 
+     simpleStorage.set('drawTiles', draw_city_output); 
    });
-
+   // MOBILE: WIDER TABLE ROWS 
+   $('#scroll_narrow_x').prop('checked', scroll_narrow_x);
+   $('#scroll_narrow_x').change(function() {
+     scroll_narrow_x = this.checked;
+     simpleStorage.set('xScroll', scroll_narrow_x); 
+   });
    // Graphic Theme
    graphic_theme_path = simpleStorage.get('grtheme');
    if (!graphic_theme_path) graphic_theme_path = "themes/greek/";
      console.log("Theme Path = "+graphic_theme_path);
    $('#graphic_theme').val(graphic_theme_path).prop('selected', true);
      console.log("1-Theme Path = "+graphic_theme_path);
-
    $('#graphic_theme').change(function() {
      graphic_theme_path = $('#graphic_theme').val();
      simpleStorage.set('grtheme', graphic_theme_path); 
      change_graphic_theme();
    });
-
+   //----------------------------------------------------------------^^USER OPTIONS^^
    $('#graphic_theme').change();
 
   if (!is_longturn()) {

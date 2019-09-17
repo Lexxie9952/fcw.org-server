@@ -74,8 +74,9 @@ Unload & Activate Cargo units (shift-U) (outside city)
 <img src="/images/orders/less_button.png"> <img src="/images/orders/more_button.png"> Less/More (Common Orders/All Orders)
 
 
-<h2>Keyboard Shortcuts for Unit Orders:</h2>
+<h2>Keyboard Shortcuts for Units</h2>
   a: (a)uto-settler  (settler/worker units)
+  A: (A)uto-attack - attack when moving, without asking
   b: (b)uild city  (settler units)
   c: (c)enter map on active unit
   d: (d)o - select unit execution
@@ -115,6 +116,7 @@ ESC: <In other tab>: Exit TAB, return to map.
   2: move south (alt-,)
   3: move south-east (alt-m)
   4: move west (alt-j)
+  5: return focus to last focused unit (shift-<)
   6: move east (alt-l)
   7: move north-west (alt-u)
   8: move north (alt-i)
@@ -164,6 +166,7 @@ Ctrl-click specialist:           Cycle through primary 3 specialists (not second
 Ctrl-double-click:               Change current city production to already highlighted production selection
 
 <h2>Tabs:</h2>
+W: map tab; escape window/tab/popup without exiting full screen
 alt-C: cities tab
 alt-D: docs tab
 alt-G: gov. tab
@@ -171,7 +174,6 @@ alt-M: map tab
 alt-N: nations tab 
 alt-P: prefs tab 
 alt-T: tech tab 
-W: escape window/tab/popup without exiting full screen
 
 
 

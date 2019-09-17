@@ -50,7 +50,7 @@
 
 <td>
   <div title="Computer generated speech for console messages" class="main_menu_buttons">
-      <input type='checkbox' name='speech_enabled_setting' id='speech_enabled_setting'><b>Speech messages</b> 
+      <input type='checkbox' name='speech_enabled_setting' id='speech_enabled_setting'><b><font color="#0000c0">Speech messages</font></b> 
   </div>
 </td>
 </tr>
@@ -76,15 +76,15 @@
     </td>
      <td> 
         <div title="Shortcut buttons for unit orders at bottom of screen" class="main_menu_buttons">
-            <input type='checkbox' name='show_order_buttons' id='show_order_buttons' checked><b>Show Orders Buttons</b>  
+            <input type='checkbox' name='show_order_buttons' id='show_order_buttons' checked><b><font color="#0000c0">Show Orders Buttons</font></b>  
         </div>
     </td>
 </tr>
 
 <tr>
     <td>
-        <div title="Units automatically attack without showing odds or asking confirmation." class="main_menu_buttons">
-            <input type='checkbox' name='auto_attack' id='auto_attack'><b>Auto-attack</b> 
+        <div title="Units auto-attack without showing odds or asking confirmation. (SHIFT-A)" class="main_menu_buttons">
+            <input type='checkbox' name='auto_attack' id='auto_attack'><b><font color="#0000c0">Auto-attack</font></b> 
         </div>
     </td>
     <td>
