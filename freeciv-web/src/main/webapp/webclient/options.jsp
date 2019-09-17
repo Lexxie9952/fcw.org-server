@@ -97,13 +97,13 @@
 <tr>
   <td>
       <div title="Shows worked city tile output on main map. (SHIFT-W)" class="main_menu_buttons">
-          <input type='checkbox' name='draw_city_output' id='draw_city_output'><b>Show city tile output on map</b> 
+          <input type='checkbox' name='draw_city_output' id='draw_city_output'><b>Show worked tiles on map</b> 
       </div>
   </td>
   <td>
-      <div>
-          
-      </div>
+     <div title="Fits more info but may need scrolling" class="main_menu_buttons">
+       <input type='checkbox' name='scroll_narrow_x' id='scroll_narrow_x'><b>Mobile: wider table rows</b> 
+    </div>
   </td>
 </tr>
 

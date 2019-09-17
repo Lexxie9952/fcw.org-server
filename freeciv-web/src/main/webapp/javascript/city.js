@@ -2364,22 +2364,47 @@ function update_city_screen()
   //console.log("----------------------")
   //console.log("Update city screen.")
 
-  // Carefully set up 3 mode system:  wide, reduced standard, tiny:
+  // start at default width
+  $('#cities_scroll').css("width", "100%");
+
+  // -------------------------------------------------------------------
+  // Carefully set up display mode controls:  wide, reduced standard, tiny:
   var wide_screen = $(window).width()<1340 ? false : true;
   var narrow_screen = $(window).width()<1000 ? true : false;
   var small_screen = is_small_screen();
   var landscape_screen = $(window).width() > $(window).height() ? true : false; 
-  var tiny_screen=false, redux_screen=false;
-  if (small_screen || narrow_screen) {
-    tiny_screen = true; redux_screen=false; wide_screen = false;
-  } else if (!wide_screen)
-  {
-    redux_screen=true; tiny_screen=false; wide_screen = false;
-  }
-  //console.log("Wide:   "+wide_screen);
-  //console.log("Small:  "+small_screen);
-  //console.log("Narrow: "+narrow_screen);
+  var tiny_screen=false;
+  var redux_screen=false;  // mid-size screen
   
+  // narrow screen triggers tiny screen (becase we need width for city rows)
+  // if small_screen and not landscape, that's also a tiny screen:
+  if ( (small_screen) || (narrow_screen && !scroll_narrow_x)) {
+    /* Exception: scroll_narrow_x is option for users wanting horiz-scroll for
+     * more info. They get redux screen instead of tiny: */
+    if (scroll_narrow_x) {
+      tiny_screen = true; redux_screen=true; wide_screen = false;
+      if (scroll_narrow_x && narrow_screen && !landscape_screen) $('#cities_scroll').css("width", "110%");
+    } else {
+      tiny_screen = true; redux_screen=false; wide_screen = false;
+    }
+  } else if (!wide_screen) {
+      if (narrow_screen) {
+        redux_screen=true; tiny_screen=true; wide_screen = false;
+      }
+      else {
+        redux_screen=true; tiny_screen=false; wide_screen = false;
+      }
+  }
+  /*
+  console.log("Wide:   "+wide_screen);
+  console.log("Landscp:"+landscape_screen);
+  console.log("Redux:  "+redux_screen);
+  console.log("Small:  "+small_screen);
+  console.log("Narrow: "+narrow_screen);
+  console.log("Tiny:   "+tiny_screen);
+  console.log("Scrollx:"+scroll_narrow_x); */
+  // -------------------------------------------------------------------
+
   var sortList = [];
   var headers = $('#city_table thead th');
   headers.filter('.tablesorter-headerAsc').each(function (i, cell) {
@@ -2431,7 +2456,7 @@ function update_city_screen()
     city_list_html = "<table class='tablesorter-dark' id='city_table' style='border=0px;border-spacing=0;padding=0;'>"
     + "<thead id='city_table_head'><tr>"
     + "<th style='text-align:right;'>Name"+"</th><th style='text-align:center;'>Pop"+"</th>"+city_list_citizen_html
-    + "<th style='text-align:right;' title='Text: Current state. Color: Next turn state'>Mood</th>"
+    + "<th style='text-align:center;' title='Text: Current state. Color: Next turn state'>Mood</th>"
     + "<th id='food' title='Food surplus' class='food_text' style='text-align:right;padding-right:0px'><img style='margin-right:-6px; margin-top:-3px;' class='lowered_gov' src='/images/wheat.png'></th>"
     + "<th title='Production surplus (shields)' class='prod_text' style='text-align:right;padding-right:0px'> <img class='lowered_gov' src='/images/shield14x18.png'></th>"
     + "<th title='Trade' class='trade_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/trade.png'></th>"
@@ -2439,19 +2464,26 @@ function update_city_screen()
     + "<th title='Gold' class='gold_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/gold.png'></th>"
     + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='lowered_gov' src='/images/lux.png'></th>"
     + "<th title='Science (bulbs)' class='sci_text' style='text-align:right'><img class='lowered_gov' src='/images/sci.png'></th>"
-    + "<th style='text-align:right;'>Grows"+"</th><th style='text-align:right;'>Grain"
-          +"</th><th style='text-align:right;' title='Click to change'>Making"+"</th>"
+    /*+ "<th style='text-align:right;'>Grows"+"</th><th style='text-align:right;'>Grain"*/
+    + ( (!tiny_screen) ? ("<th style='text-align:right;'>Grows"+"</th><th style='text-align:right;'>Grain")
+                     : ("<th style='text-align:center;'>Grow"+"</th><th style='text-align:right;'>Food") )
+     /* +"</th><th style='text-align:right;' title='Click to change'>Making"+"</th>" */
+    + ( (!tiny_screen) ? ("</th><th style='text-align:right;' title='Click to change'>Making"+"</th>")
+                       : ("</th><th style='text-align:right;'>Build"+"</th>" ) )
     + "<th style='text-align:right;' title='Turns to finish &nbsp;&nbsp; Prod completed/needed'>"
-          +"Progress</th><th style='padding-right:1em; text-align:right;' title='Click to buy'>Cost"+"</th>"
-    + "<th style='text-align:left;'><input type='checkbox' id='master_checkbox' title='Toggle all cities' name='cbAll' value='false' onclick='toggle_city_row_selections();'></th>"
+    /*+ "Progress</th><th style='padding-right:1em; text-align:right;' title='Click to buy'>Cost"+"</th>"*/
+    + ( (!tiny_screen) ? ("Progress</th><th style='padding-right:1em; text-align:right;' title='Click to buy'>Cost"+"</th>")
+                       : ("in</th><th style='padding-right:1em; text-align:right;'>Cost"+"</th>") )
+    + ( (!tiny_screen) ? ("<th style='text-align:left;'><input type='checkbox' id='master_checkbox' title='Toggle all cities' name='cbAll' value='false' onclick='toggle_city_row_selections();'></th>")
+                     : "" )   // skip checkbox column for tiny redux mode
     + "</tr></thead><tbody>";
-  } else {  // small AND narrow screen - brutally cut non-crucial info
+  } else {  // tiny - brutally cut non-crucial info
     // -2 columns (selection box, cost). Economised: Sort arrows, Grows In>>grows, Granary>>Grain, Producing>>Output:Image only, Turns/Progress>>Turns
     //console.log("MODE: Small Narrow")
     city_list_html = "<table class='tablesorter-dark' id='city_table' style='border=0px;border-spacing=0;padding=0;'>"
     + "<thead id='city_table_head'><tr>"
     + "<th style='text-align:right;'>Name"+"</th><th style='text-align:center;'>Pop"+"</th>"+city_list_citizen_html
-    + "<th style='text-align:right;' title='Text: Current state. Color: Next turn state'>Mood</th>"
+    + "<th style='text-align:center;' title='Text: Current state. Color: Next turn state'>Mood</th>"
     + "<th id='food' title='Food surplus' class='food_text' style='text-align:right;padding-right:0px'><img style='margin-right:-6px; margin-top:-3px;' class='lowered_gov' src='/images/wheat.png'></th>"
     + "<th title='Production surplus (shields)' class='prod_text' style='text-align:right;padding-right:0px'> <img class='lowered_gov' src='/images/shield14x18.png'></th>"
     + "<th title='Trade' class='trade_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/trade.png'></th>"
@@ -2459,7 +2491,7 @@ function update_city_screen()
     + "<th title='Gold' class='gold_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/gold.png'></th>"
     + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='lowered_gov' src='/images/lux.png'></th>"
     + "<th title='Science (bulbs)' class='sci_text' style='text-align:right'><img class='lowered_gov' src='/images/sci.png'></th>"
-    + "<th style='text-align:right;'>Grow"+"</th><th style='text-align:right;'>Food"
+    + "<th style='text-align:center;'>Grow"+"</th><th style='text-align:right;'>Food"
           +"</th><th style='text-align:right;' title='Click to change'>Build"+"</th>"
     + "<th style='text-align:right;' title='Turns to finish &nbsp;&nbsp; Prod completed/needed'>in</th>"
     + "</tr></thead><tbody>";
@@ -2467,11 +2499,13 @@ function update_city_screen()
         
   var count = 0;
   var happy_people, content_people, unhappy_angry_people;
+  var city_name;
   var city_food, city_prod, city_trade;
   var city_gold, city_lux, city_sci; 
   var city_growth, city_food_stock;       // grows in x turns, how much is in grain storage
   var city_granary_size, city_buy_cost;   // grain needed to grow, cost to buy city's production
   var city_state; 
+  var shield_cost;
   var adjust_oversize = "";               // for style-injecting margin/alignment adjustment on oversize city production images
 
   for (var city_id in cities){
@@ -2498,7 +2532,7 @@ function update_city_screen()
       // max city size is 2 digits, so pad a space to create right alignment:
       var city_size_string = "";
       if (wide_screen)
-        city_size_string = "<span class='mobile_centre non_priority'>"+pcity['size'].toString().padStart(2, ' ').replace(/\s/g, '&nbsp;&nbsp;')+"</span>";
+        city_size_string = "<span class='mobile_centre non_priority'>"+pcity['size']+"</span>";
       else  city_size_string = "<span class='mobile_centre redux_centre non_priority'>" + pcity['size'] + "</span>";
 
       turns_to_complete = get_city_production_time(pcity);
@@ -2506,7 +2540,7 @@ function update_city_screen()
           turns_to_complete_str = "<span class='non_priority'>&nbsp;&nbsp; </span>";   //client does not know how long production will take yet.
         } else {
           if (wide_screen)
-            turns_to_complete_str = "<span class='non_priority'>"+turns_to_complete.toString().padStart(3, ' ').replace(/\s/g, '&nbsp;&nbsp;')+"</span>";
+            turns_to_complete_str = "<span class='non_priority'>"+turns_to_complete+"</span>";
           else 
             turns_to_complete_str = "<span class='non_priority'>"+turns_to_complete+"</span>";
           // bold to indicate finishing at TC.  invisible tiny 0 at start is a sorting hack
@@ -2526,11 +2560,19 @@ function update_city_screen()
         }
         if (purchase['name']=="Coinage") progress_string=" ";
         else {
-          progress_string=shields_invested.toString().padStart(3, ' ').replace(/\s/g, '&nbsp;&nbsp;'); // invested shields max 3 digits
-          progress_string=progress_string + "<span class='contrast_text'>/</span>";
+          shields_invested = shields_invested.toString();
+          // pad numbers <3 digits with one space for each missing digit, in order to align them:
+          if (shields_invested.length<3)
+              shields_invested = "&nbsp;&nbsp;".repeat(3-shields_invested.length) + shields_invested; 
+            
+          progress_string=shields_invested + "<span class='contrast_text'>/</span>";
 
-          progress_string=progress_string + universal_build_shield_cost(pcity, purchase).toString().padStart(3, ' ').replace(/\s/g, '&nbsp;&nbsp;'); // invested shields max 3 digits
-          progress_string="<span class='non_priority'>"+progress_string+"</span>"
+          shield_cost = universal_build_shield_cost(pcity, purchase).toString();
+          // pad numbers <3 digits with one space for each missing digit, in order to align them:
+          if (shield_cost.length<3)
+              shield_cost = "&nbsp;&nbsp;".repeat(3-shield_cost.length) + shield_cost; 
+
+          progress_string="<span class='non_priority'>"+progress_string+shield_cost+"</span>"
         }
         
         happy_people   = pcity['ppl_happy'][FEELING_FINAL];
@@ -2556,11 +2598,11 @@ function update_city_screen()
      
         // Color code for upcoming state under current configuration of tiles/luxury rate/improvements/deployed units:
         if (happy_people >= pcity['size']*0.4999 && unhappy_angry_people==0 && pcity['size']>2)  
-          city_state = "<span class='mobile_centre hint_of_green'>"+city_state;    // half or more happy, no unhappy = city will (continue to) celebrate, green code.
+          city_state = "<span class='redux_centre mobile_centre hint_of_green' style='text-align:center;'>"+city_state;    // half or more happy, no unhappy = city will (continue to) celebrate, green code.
         else if (unhappy_angry_people > happy_people)                  
-          city_state = "<span class='mobile_centre negative_text'>"+city_state;    // more unhappy than happy = disorder, red code
+          city_state = "<span class='redux_centre mobile_centre negative_text' style='text-align:center;'>"+city_state;    // more unhappy than happy = disorder, red code
         else
-          city_state = "<span class='mobile_centre non_priority'>"+city_state;     // state of peace is all other conditions = regular text 
+          city_state = "<span class='redux_centre mobile_centre non_priority' style='text-align:center;'>"+city_state;     // state of peace is all other conditions = regular text 
          
         happy_people   = "<span class='hint_of_green'>"+happy_people+"</span>";
         content_people = "<span class='hint_of_blue'>" +content_people+"</span>";
@@ -2592,48 +2634,44 @@ function update_city_screen()
           + "<span class='sci_text'>" + pcity['prod'][O_SCIENCE] + "</span>" + "</td>";
 
         // Calculate turns to grow or " " if not growing
-        if (wide_screen) { // wide screen
-          city_growth = city_turns_to_growth_text(pcity);
-          if (city_growth.startsWith("<b>")) {
-            city_growth = city_growth.padStart(9, ' ').replace(/\s/g, '&nbsp;&nbsp;');   // keep bright white if Starving in 1 (which we know because it comes back with <b>)
-          } else { 
-            city_growth="<span class='non_priority'>" + city_growth.padStart(9, ' ').replace(/\s/g, '&nbsp;&nbsp;') + "</span>"; 
-          }
-        } else if (redux_screen) { // reduced standard screen
-          city_growth = city_turns_to_growth_text(pcity);
-          if (city_growth.startsWith("<b>")) {
-            city_growth = city_growth.padStart(4, ' ').replace(/\s/g, '&nbsp;&nbsp;');   // keep bright white if Starving in 1 (which we know because it comes back with <b>)
-          } else { 
-            city_growth="<span class='non_priority'>" + city_growth.padStart(4, ' ').replace(/\s/g, '&nbsp;&nbsp;') + "</span>"; 
-          }
-          city_growth = city_growth.replace("Starving&nbsp;&nbsp;in&nbsp;&nbsp;", "starves: ").replace("turns", "").replace("turn", "");
-        } else { // tiny screen, numerals only
+        if (tiny_screen) { // tiny screen, numerals only
           city_growth = pcity['granary_turns'];
           if (city_growth>1000) city_growth = " ";
           else if (city_growth != 1 && city_growth != -1) city_growth="<span class='mobile_centre non_priority'>" + city_growth + "</span>";
           else city_growth="<span class='mobile_centre'>" + city_growth + "</span>";
-        }
+        } else { // (wide_screen || redux_screen) 
+          city_growth = city_turns_to_growth_text(pcity);
+          if (city_growth.startsWith("<b>")) {
+            // keep bright white if Starving in 1 (which we know because it comes back with <b>)
+          } else { 
+            city_growth="<span class='non_priority'>" + city_growth + "</span>"; 
+          }
+        } 
 
-        if (wide_screen) {
-          city_food_stock = "<span class='non_priority'>" + pcity['food_stock'].toString().padStart(3, ' ').replace(/\s/g, '&nbsp;&nbsp;') +"</span>";   //up to 3 digits
-          city_granary_size = "<span class='non_priority'>" + pcity['granary_size'].toString().padStart(3, ' ').replace(/\s/g, '&nbsp;&nbsp;')+"</span>";   //up to 3 digits
-        } else {
+        if (!wide_screen) {
           city_food_stock = "<span class='non_priority'>" + pcity['food_stock']+"</span>";   
           city_granary_size = "<span class='non_priority'>" + pcity['granary_size']+"</span>";   
-        }
+        } else { // (wide_screen) 
+          city_food_stock = "<span class='non_priority'>" + pcity['food_stock']+"</span>";   
+          city_granary_size = pcity['granary_size'].toString();
+          // insert a " " for every digit short of 3 digits, for alignment:
+          if (city_granary_size.length<3)
+            city_granary_size = "&nbsp;&nbsp;".repeat(3-city_granary_size.length) + city_granary_size;
 
+          city_granary_size = "<span class='non_priority'>" + city_granary_size+"</span>";
+        } 
+        
+        
         // Generate and align buy cost with link to buy, or blank if can't be bought because no shields remain.
         if (pcity['buy_cost'] == 0) {
           city_buy_cost = " ";   // blank is less visual noise than a 0.
         } else if (wide_screen) {
-          city_buy_cost = "<u>"+pcity['buy_cost'];
-          city_buy_cost = city_buy_cost.toString().padStart(7, ' ').replace(/\s/g, '&nbsp;&nbsp;') + "</u>" // buy cost is up to 4 digits + 3 for "<u>"
-          city_buy_cost = "<div title='Click to buy' style='padding-right:12px;'>" + city_buy_cost + "</div>" // last column not forced to very edge of screen
+          city_buy_cost = "<u>"+pcity['buy_cost']+"</u>";
+          city_buy_cost = "<div title='Click to buy' style='padding-right:10px;'>" + city_buy_cost + "</div>" // last column not forced to very edge of screen
         } else {
-          city_buy_cost = "<u'>"+pcity['buy_cost']+"</u>" 
+          city_buy_cost = "<u>"+pcity['buy_cost']+"</u>" 
           city_buy_cost = "<div style='text-align:right; title='Click to buy' style='padding-right:1em;'>" + city_buy_cost + "</div>" // last column not forced to very edge of screen
         }
-
 
         // Generate micro-sprite for production  
         prod_sprite = get_city_production_type_sprite(pcity);
@@ -2654,8 +2692,14 @@ function update_city_screen()
                   + "vertical-align:top; float:right;'>"
                   +"</div></div>";
         }   
+        
+        // tiny mobile: abbreviate city name to first 11 letters plus small "..."
+        city_name = ( (tiny_screen && pcity['name'].length>11) 
+              ? (pcity['name'].substring(0,10) + "<span style='font-size:66%;'>&#x22ef;</span></td>") 
+              : (pcity['name'] + "</td>") );
+        
         city_list_html += "<tr class='cities_row' id='cities_list_" + pcity['id'] + "'>"
-                + td_hover_html + pcity['name'] + "</td>"
+                + td_hover_html + city_name + "</td>" // tiny mobile: abbreviate city name to first 11 letters plus "..."
                 + td_click_html + city_size_string + "</td>"
                 + td_click2_html + happy_people+"</td>"
                 + td_click2_html + content_people+"</td>"
@@ -2671,9 +2715,9 @@ function update_city_screen()
                                       : ("<span style='font-size:1%; color: rgba(0, 0, 0, 0);'>"+prod_type['name'].charAt(0)+"</span>"+prod_img_html+"</td>") ) //invisible tiny first letter for column sorting
                 + td_click_html + 
                       (   wide_screen ? (turns_to_complete_str+" &nbsp;&nbsp;&nbsp;&nbsp; "+progress_string +"</td>")
-                                      : (redux_screen ? "("+turns_to_complete_str+") "+progress_string+"</td>" 
+                                      : (redux_screen && !tiny_screen ? "("+turns_to_complete_str+") "+progress_string+"</td>" 
                                                       : turns_to_complete_str.replace("turns", "")+"</td>")   )     
-                + ( (!tiny_screen) ? (td_buy_html+city_buy_cost+"</td>") : "" )
+                + ( (wide_screen || redux_screen) ? (td_buy_html+city_buy_cost+"</td>") : "" )
                 + ( !tiny_screen 
                     ? "<td style='text-align:left;'><input type='checkbox' oncontextmenu='set_mass_prod_city("+pcity['id']+");' id='cb"+pcity['id']+"' value=''></td>"          
                     : "" )

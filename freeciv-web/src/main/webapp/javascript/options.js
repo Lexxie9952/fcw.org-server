@@ -49,7 +49,7 @@ var save_options_on_exit = TRUE;
 var fullscreen_mode = FALSE;
 
 /** Local Options: **/
-
+var scroll_narrow_x = false;  // wider scrollable table rows for mobile to see more info
 var solid_color_behind_units = FALSE;
 var sound_bell_at_new_turn = FALSE;
 var smooth_move_unit_msec = 30;
@@ -235,6 +235,14 @@ function init_options_dialog()
        $("#game_unit_orders_default").hide();
      }
      simpleStorage.set('showorderbuttons', show_order_option); 
+   });
+
+   // Leave a little horizontal room in tables like city_list to scroll
+   // and see more info, rather than compact to screen width with less info
+   $('#scroll_narrow_x').prop('checked', scroll_narrow_x);
+   $('#scroll_narrow_x').change(function() {
+    scroll_narrow_x = this.checked;
+     simpleStorage.set('scroll_narrow_x', scroll_narrow_x); 
    });
 
    // Draw city tile output on main map
