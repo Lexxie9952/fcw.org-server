@@ -164,7 +164,7 @@ function update_nation_screen()
                && !pplayer['flags'].isSet(PLRF_AI)) {
       pstate = "Moving";
     }
-    nation_list_html += "<td style='text-align:right;' id='player_state_" + player_id + "'>" + pstate + "</td>";
+    nation_list_html += "<td style='text-align:right;' id='player_state_" + player_id + "'>" + pstate +"&nbsp;</td>";
     nation_list_html += "</tr>";
 
     if (!pplayer['flags'].isSet(PLRF_AI) && pplayer['is_alive'] && pplayer['nturns_idle'] <= 4) no_humans++;
