@@ -201,6 +201,7 @@ function play_sound(sound_file)
     }
 
   } catch(err) {
+    trackJs.console.log("Error playing sound_file="+sound_file);
     sound_error_handler(err);
   }
 }
