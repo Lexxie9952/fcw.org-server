@@ -16,8 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ***********************************************************************/
-
-
 var client = {};
 client.conn = {};
 
@@ -145,10 +143,10 @@ function civclient_init()
 
   motd_init();
 
-  /*
+  /* NOT NEEDED IF INTERNET EXPLORER WAS DEPRECATED
    * Interner Explorer doesn't support Array.indexOf
    * http://soledadpenades.com/2007/05/17/arrayindexof-in-internet-explorer/
-   */
+   
   if(!Array.indexOf){
 	    Array.prototype.indexOf = function(obj){
 	        for(var i=0; i<this.length; i++){
@@ -158,7 +156,7 @@ function civclient_init()
 	        }
 	        return -1;
 	    };
-  }
+  }  */
 
   $('#tabs').css("height", $(window).height());
   $("#tabs-map").height("auto");
@@ -183,28 +181,31 @@ function civclient_init()
     }
   }
  
-  draw_city_airlift_counter = simpleStorage.get('airlift');
-  if (draw_city_airlift_counter == null) 
-    draw_city_airlift_counter = false;  // Default case
-
   draw_map_grid = simpleStorage.get('mapgrid');
   if (draw_map_grid == null) 
     draw_map_grid = false;  // Default case
+
+  map_drag_enabled = simpleStorage.get('mapdrag');
+  if (map_drag_enabled == null) 
+    map_drag_enabled = true;  // Default case  
 
   unit_click_menu = simpleStorage.get('unitclickmenu');
   if (unit_click_menu == null) 
     unit_click_menu = true;  // Default case
 
-  map_drag_enabled = simpleStorage.get('mapdrag');
-  if (map_drag_enabled == null) 
-    map_drag_enabled = true;  // Default case
+  draw_city_airlift_counter = simpleStorage.get('airlift');
+  if (draw_city_airlift_counter == null) 
+    draw_city_airlift_counter = false;  // Default case
   
-    
+  draw_city_output = simpleStorage.get('drawTiles');
+  if (draw_city_output == null) 
+    draw_city_output = false;  // Default case
+
+  scroll_narrow_x = simpleStorage.get('xScroll');
+  if (scroll_narrow_x == null) 
+    scroll_narrow_x = false;  // Default case
   // -------------------------------------------------------------------------------- 
   
- 
-  
-
   /* Initialze audio.js music player */
   audiojs.events.ready(function() {
     var as = audiojs.createAll({
@@ -218,8 +219,7 @@ function civclient_init()
           }
         });
     audio = as[0];
-
- });
+  });
 
   if (link_game_type == 'singleplayer#') link_game_type = 'singleplayer';
 
@@ -355,7 +355,6 @@ function init_common_intro_dialog() {
    );
 }
 
-
 /**************************************************************************
  Closes a generic message dialog.
 **************************************************************************/
@@ -400,8 +399,7 @@ function show_dialog_message(title, message) {
                      "minimize" : "ui-icon-circle-minus",
                      "restore" : "ui-icon-bullet"
                    }});
-
-                   
+        
   // W is universal key to get out of anything and back to map                 
   $(this).keypress(function(e){
     //alert("(this).keypress(e) event that was tied to dialog, keycode: "+e.keyCode);
@@ -419,9 +417,7 @@ function show_dialog_message(title, message) {
   dialog_message_close_task = setTimeout(close_dialog_message, 32000);
 
   $('#generic_dialog').css("max-height", "450px");
-
 }
-
 
 /**************************************************************************
  ...
@@ -453,9 +449,6 @@ function is_username_valid_show(username) {
   }
   return true;
 }
-
-
-
 
 /* Webclient is always client. */
 function is_server()
@@ -561,7 +554,6 @@ function show_fullscreen_window()
   } else {
    show_dialog_message('Fullscreen', 'Press F11 for fullscreen mode.');
   }
-
 }
 
 /**************************************************************************
@@ -644,20 +636,14 @@ function show_auth_dialog(packet) {
 			}
 		});
 
-
   $("#dialog").dialog('open');
-
-
 }
-
-
 
 /****************************************************************************
  Change between 2D isometric and 3D WebGL renderer.
 ****************************************************************************/
 function switch_renderer()
 {
-
   if (is_longturn()){
     var game_port = $.getUrlVar('civserverport')
     var stored_username = simpleStorage.get("username", "");
@@ -747,8 +733,6 @@ function switch_renderer()
 
     }
 }
-
-
 
 /**************************************************************************
  Is this a LongTurn game?
