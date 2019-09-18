@@ -120,8 +120,8 @@ tiles = { "row", "column", "tag"
   7, 7, "city.t_trade_H"  ; 17
   7, 8, "city.t_trade_I"  ; 18
   7, 9, "city.t_trade_J"  ; 19
-  7, 9, "city.t_trade_K"  ; 20
-  7, 9, "city.t_trade_L"  ; 21+
+  7, 10, "city.t_trade_K"  ; 20
+  7, 11, "city.t_trade_L"  ; 21+
 
 ; Unit Extras(not activities)
 

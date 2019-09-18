@@ -27,7 +27,7 @@ tiles = { "row", "column", "tag"
 ;[HH][GS]
  0,  0, "base.airbase_mg"
  0,  1, "tx.airbase_full"
-;[HH]
+;[Lexxie+HH]
  0,  3, "base.fortress_fg"
  0,  4, "base.fortress_bg"
 ;[HH][GS]
@@ -39,6 +39,9 @@ tiles = { "row", "column", "tag"
 ;[HH][GS]
  1,  3, "base.outpost_fg"
  1,  4, "base.outpost_bg"
+;[Lexxie]
+ 1,  5, "base.navalbase_fg"
+ 1,  6, "base.navalbase_bg"
 ;[HH]
  0,  2, "cd.occupied",
       "city.european_occupied_0",
@@ -51,9 +54,9 @@ tiles = { "row", "column", "tag"
       "city.electricage_occupied_0",
       "city.modern_occupied_0",
       "city.postmodern_occupied_0"
-;[HH]
+;[HH+Lexxie]
  0,  5, "city.disorder"
 ;blank defaults
- 1,  5, "cd.city",
+ 0,  6, "cd.city",
       "cd.city_wall"
 }

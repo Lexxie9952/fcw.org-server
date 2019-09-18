@@ -199,6 +199,15 @@ reqs    =
       "Terrain",   "Mountains", "Local"
       "UnitClass", "LandNoKill",      "Local"
     }
+; Movement penalty for RiverShip who ended turn on river
+[effect_slower_rivers]
+type    = "Move_Bonus"
+value   = -1
+reqs    =
+    { "type", "name", "range", "present"
+      "UnitClass", "RiverShip", "Local", TRUE
+      "Extra", "River", "Local", TRUE
+    }
 
 ; basic free tech upkeep
 [effect_upkeep_tech_free]
