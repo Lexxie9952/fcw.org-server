@@ -153,9 +153,6 @@ function add_chatbox_text(packet)
       packet['event'] = reclassify_chat_message(text);
     }
 
-    var outgoing = text.substring(22,24) == "->" ? true : false;
-    if (outgoing) text = text.replace("->{", "{<font color='#c888ff'>You</font><font color='#ffffff'>&#x279E;</font>");
-
     if (civclient_state <= C_S_PREPARING) {
       text = text.replace(/#FFFFFF/g, '#000000');
     } else {
@@ -163,16 +160,28 @@ function add_chatbox_text(packet)
                  .replace(/#006400/g, '#209A20')
                  .replace(/#551166/g, '#AA88FF');
 
+      var real_time = true;
+      var outgoing = false; 
+  
+      // Fix historic messages for outgoing formatting
+      if (client.conn.playing != null && text.includes("{"+client.conn.playing.name+" -> ")) {
+        outgoing = true;
+        real_time = false;
+        text = text.replace("{"+client.conn.playing.name+" -> ", "{<font color='#c888ff'>You</font><font color='#ffffff'>&#x279E;</font>");
+      } else {
+        // Fix real-time messages for outgoing formatting
+        outgoing = text.substring(22,25) == "->{" ? true : false;
+        if (outgoing) text = text.replace("->{", "{<font color='#c888ff'>You</font><font color='#ffffff'>&#x279E;</font>");
+      }
+
       // Check for incoming private message:           
-      var check_im = outgoing ? text.replace(/#A020F0/g, '#ffb789') : text.replace(/#A020F0/g, '#ff87b7'); //ff87b9 formerly
+      var check_im = outgoing ? text.replace(/#A020F0/g, '#ffb789') : text.replace(/#A020F0/g, '#ff87b7');
       if (check_im != text) {         // if different, there was a private message
         if (packet['turn'] != null) {
-          // Message might have come after they logged out last turn, so exclude 
-          // notification sounds for anything 2 turns ago or longer:
-          if (packet['turn'] > game_info['turn']-2) play_sound("iphone1.ogg");
+          // Message may have come last turn after you logged out. Exclude earlier notification sounds:
+          if ((!outgoing || real_time) && packet['turn'] >= game_info['turn'] - 1) play_sound("iphone1.ogg");
         }
-         
-         text=check_im; // now update the text var so the changed colour code goes in the message_log  
+        text=check_im; // now update the text var so the changed colour code goes in the message_log  
       }
     }
 
