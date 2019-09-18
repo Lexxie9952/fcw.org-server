@@ -23,6 +23,7 @@ description_file = "mp2/README.mp2"
 
 [about]
 ; Ruleset name
+; DO NOT CHANGE, FCW unfortunately has to hard-code certain special cases for this.
 name = _("Multiplayer-Evolution ruleset")
 
 ; There`s no separate versioning in rulesets part of main freeciv distribution
@@ -31,13 +32,7 @@ name = _("Multiplayer-Evolution ruleset")
 ; Summary of the ruleset
 ; /* TRANS: In the client, this is displayed alongside the contents of
 ;    README.multiplayer, which are not localized. */
-summary = _("\
-You are playing Freeciv with rules designed for multiplayer gaming. \
-The biggest differences from the classic ruleset are that trade routes \
-are disabled, and that most wonders can be built once by each player. \
-A full description of the differences can be found in README.mp2.\
-Or search on the freeciv.wikia.com site.\
-")
+summary = _("")
 
 ; Detailed description
 ; When updating this, update also desciption_file in [ruledit] section to match
@@ -251,9 +246,8 @@ bombard_max_range = 1
 ; the following character as a mnemonic in its graphical toolkit.
 ; The second %s marks where extra details should be inserted.
 
-
-; /* TRANS: _Bombard (100% chance of success). */
-ui_name_bombard = _("Range%sd Attack%s")
+; /* TRANS: _Deploy (3% chance of success). */
+ui_name_convert_unit = _("Convert to %Queen or King%s")
 
 ; /* TRANS: _Poison City (3% chance of success). */
 ui_name_poison_city_escape = _("%sPoison City%s")
@@ -351,6 +345,9 @@ ui_name_airlift_unit = _("%sAirlift to City%s")
 ; /* TRANS: _Attack (100% chance of success). */
 ui_name_attack = _("%sAttack%s")
 
+; /* TRANS: _Bombard (100% chance of success). */
+ui_name_bombard = _("Range%sd Attack%s")
+
 ;UPGRADE
 ; /* TRANS: _Explode Missile (100% chance of success). */
 ;ui_name_suicide_attack = _("%sExplode Missile%s")
@@ -410,6 +407,13 @@ ui_name_conquer_city = _("%sConquer City%s")
 ;
 ; */ <-- avoid gettext warnings
 
+[actionenabler_convert_leader]
+action = "Convert Unit"
+actor_reqs    =
+    { "type",     "name",       "range"
+      "UnitFlag", "GameLoss",   "Local"
+    }
+
 [actionenabler_sabotage_city]
 action = "Sabotage City"
 actor_reqs    =
@@ -441,6 +445,8 @@ actor_reqs    =
       "MinMoveFrags", "1",             "Local"
     }
 
+; ************************ ESTABLISH EMBASSY ***********************
+; normal establish embassy--if not at war 
 [actionenabler_establish_embassy]
 action       = "Establish Embassy Stay"
 actor_reqs    =
@@ -450,25 +456,62 @@ actor_reqs    =
       "MinMoveFrags", "1",             "Local", TRUE
       "DiplRel",      "Foreign",       "Local", TRUE
       "UnitFlag",     "Spy",           "Local", FALSE
+      "DiplRel",      "War",           "Local", FALSE 
     }
 target_reqs  =
     { "type",        "name",      "range",  "present"
       "NationGroup", "Barbarian", "Player", FALSE
     }
+;if at war, police station will block embassy: do a cease-fire first!
+[actionenabler_establish_embassy_war]
+action       = "Establish Embassy Stay"
+actor_reqs    =
+    { "type",         "name",          "range", "present"
+      "UnitFlag",     "Diplomat",      "Local", TRUE
+      "UnitState",    "OnLivableTile", "Local", TRUE
+      "MinMoveFrags", "1",             "Local", TRUE
+      "DiplRel",      "Foreign",       "Local", TRUE
+      "UnitFlag",     "Spy",           "Local", FALSE
+      "DiplRel",      "War",           "Local", TRUE 
+    }
+target_reqs  =
+    { "type",        "name",      "range",    "present"
+      "NationGroup", "Barbarian", "Player",    FALSE
+      "Building",    "Police Station", "City", FALSE  ; to do: when we can check for spy present to stop it
+    }
 
+; normal establish embassy--if not at war 
 [actionenabler_establish_embassy_spy]
 action       = "Establish Embassy"
 actor_reqs    =
-    { "type",         "name",          "range"
-      "UnitFlag",     "Spy",           "Local"
-      "UnitState",    "OnLivableTile", "Local"
-      "MinMoveFrags", "1",             "Local"
-      "DiplRel",      "Foreign",       "Local"
+    { "type",         "name",          "range", "present"
+      "UnitFlag",     "Spy",           "Local", TRUE
+      "UnitState",    "OnLivableTile", "Local", TRUE
+      "MinMoveFrags", "1",             "Local", TRUE
+      "DiplRel",      "Foreign",       "Local", TRUE
+      "DiplRel",      "War",           "Local", FALSE 
     }
 target_reqs  =
     { "type",        "name",      "range",  "present"
       "NationGroup", "Barbarian", "Player", FALSE
     }
+;if at war, police station will block embassy: do a cease-fire first!
+[actionenabler_establish_embassy_spy_war]
+action       = "Establish Embassy"
+actor_reqs    =
+    { "type",         "name",          "range", "present"
+      "UnitFlag",     "Spy",           "Local", TRUE
+      "UnitState",    "OnLivableTile", "Local", TRUE
+      "MinMoveFrags", "1",             "Local", TRUE
+      "DiplRel",      "Foreign",       "Local", TRUE
+      "DiplRel",      "War",           "Local", TRUE 
+    }
+target_reqs  =
+    { "type",        "name",      "range",  "present"
+      "NationGroup", "Barbarian", "Player", FALSE
+      "Building",    "Police Station", "City", FALSE  ; to do: when we can check for spy present to stop it
+    }
+; ***************************************************
 
 [actionenabler_investigate_city]
 action       = "Investigate City Spend Unit"
@@ -658,6 +701,7 @@ actor_reqs    =
       "UnitFlag", "TradeRoute", "Local", TRUE
       "Tech", "Trade", "Player", TRUE
       "MinMoveFrags", "1", "Local", TRUE
+;     "DiplRel", "War", "Local", FALSE  ; allows establishing during war then awaiting diplomatic relation to activate trade income.
     }
 
 [actionenabler_marketplace]
@@ -667,6 +711,7 @@ actor_reqs    =
       "UnitFlag", "TradeRoute", "Local", TRUE
       "Tech", "Trade", "Player", TRUE
       "MinMoveFrags", "1", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
     }
 target_reqs  =
     { "type",     "name",        "range"
@@ -680,6 +725,7 @@ actor_reqs    =
       "UnitFlag", "HelpWonder", "Local", TRUE
       "Tech", "Trade", "Player", TRUE
       "DiplRel", "War", "Local", FALSE
+      "UnitType", "Caravel", "Local", FALSE 
     }
 target_reqs    =
     { "type",   "name", "range"
@@ -693,6 +739,7 @@ actor_reqs    =
       "UnitFlag", "HelpWonder", "Local", TRUE
       "Tech", "Trade", "Player", TRUE
       "DiplRel", "War", "Local", FALSE
+      "UnitType", "Caravel", "Local", FALSE
     }
 target_reqs    =
     { "type",   "name", "range", "present"
@@ -854,7 +901,7 @@ actor_reqs    =
       "UnitFlag", "Nuclear", "Local", TRUE
     }
 
-;DESTROY CITY - original reqs are in sandbox rules
+;DESTROY CITY
 ; The GameLoss unit requirement makes sending units on a suicide mission to
 ; capture and destroy cities deep inside enemy terrain national suicide.
 ; The risk of moving a GameLoss unit to the target city increases the cost
@@ -870,21 +917,21 @@ actor_reqs    =
 ;
 ; TODO: create an international incident (set the Casus_Belli_Success
 ; effect value to 1000) if "Destroy City" still is overpowered.
-;
-;[actionenabler_scorched_earth]
-;action = "Destroy City"
-;actor_reqs    =
-;    { "type",         "name",          "range", "present"
-;      "UnitClass",    "Land",         "Local", TRUE
-;      "UnitFlag",     "NonMil",       "Local", FALSE
-;;;;      "DiplRel",      "Foreign",      "Local", FALSE
-;      "MinMoveFrags", "1",             "Local", TRUE
-;      "UnitState",    "OnLivableTile", "Local", TRUE
-;    }
-;target_reqs =
-;    {  "type",         "name",          "range", "present"
-;       "MaxUnitsonTile","0",            "Local", TRUE
-;    }
+[actionenabler_scorched_earth]
+action = "Destroy City"
+actor_reqs    =
+    { "type",         "name",          "range", "present"
+      "UnitFlag",     "GameLoss",      "Local", TRUE
+      "DiplRel",      "Foreign",    "Local", FALSE
+      "MinMoveFrags", "1",             "Local", TRUE
+      "UnitState",    "OnLivableTile", "Local", TRUE
+    }
+target_reqs =
+    {  "type",         "name",          "range", "present"
+       "MaxUnitsonTile","0",            "Local", TRUE
+    }
+
+
 
 ;UPGRADE
 [actionenabler_attack_native]
@@ -1143,45 +1190,6 @@ target_reqs    =
     { "type",    "name",     "range"
       "Terrain", "Glacier",  "Local"
     }
- 
-[actionenabler_irrigate_src_ocean]
-action        = "Build Irrigation"
-actor_reqs    =
-    { "type",          "name",         "range", "present"
-      "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitFlag",      "Well-Digger",  "Local", FALSE
-      "UnitType",      "Legion",       "Local",   FALSE
-    }
-target_reqs    =
-    { "type",        "name",     "range", "present"
-      "TerrainClass", "Oceanic", "CAdjacent", TRUE
-    }
- 
-[actionenabler_irrigate_src_river]
-action        = "Build Irrigation"
-actor_reqs    =
-    { "type",          "name",         "range", "present"
-      "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitType",      "Legion",       "Local",   FALSE
-      "UnitFlag",      "Well-Digger",  "Local", FALSE
-    }
-target_reqs    =
-    { "type",    "name",     "range", "present"
-      "Extra",   "River",    "CAdjacent", TRUE
-    }
- 
-[actionenabler_irrigate_src_irrigation]
-action        = "Build Irrigation"
-actor_reqs    =
-    { "type",          "name",         "range", "present"
-      "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitFlag",      "Well-Digger",  "Local", FALSE
-      "UnitType",      "Legion",       "Local",   FALSE
-    }
-target_reqs    =
-    { "type",    "name",       "range", "present"
-      "Extra",   "Irrigation", "CAdjacent", TRUE
-    }
 
 ;Well-Digger can irrigate before Pottery and Alphabet.
 [actionenabler_irrigate_welldigger]
@@ -1195,9 +1203,61 @@ target_reqs    =
      { "type",    "name", "range", "present"
        "TerrainFlag", "Low Land", "Local", TRUE
        "Tech", "Pottery", "Player", FALSE
-       "Tech", "Alphabet", "Player", FALSE
+       "Tech", "Alphabet","Player", FALSE
      }
+  
+[actionenabler_irrigate_src_ocean]
+action        = "Build Irrigation"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitFlag",      "Well-Digger",  "Local", FALSE
+      "UnitType",      "Legion",       "Local", FALSE
+    }
+target_reqs    =
+    { "type",        "name",     "range", "present"
+      "TerrainClass", "Oceanic", "CAdjacent", TRUE
+    }
  
+[actionenabler_irrigate_src_river]
+action        = "Build Irrigation"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitType",      "Legion",       "Local", FALSE
+      "UnitFlag",      "Well-Digger",  "Local", FALSE
+    }
+target_reqs    =
+    { "type",    "name",     "range", "present"
+      "Extra",   "River",    "CAdjacent", TRUE
+    }
+
+[actionenabler_irrigate_src_oasis]
+action        = "Build Irrigation"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitType",      "Legion",       "Local", FALSE
+      "UnitFlag",      "Well-Digger",  "Local", FALSE
+    }
+target_reqs    =
+    { "type",    "name",     "range", "present"
+      "Extra",   "Oasis",    "CAdjacent", TRUE
+    }    
+ 
+[actionenabler_irrigate_src_irrigation]
+action        = "Build Irrigation"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitFlag",      "Well-Digger",  "Local", FALSE
+      "UnitType",      "Legion",       "Local", FALSE
+    }
+target_reqs    =
+    { "type",    "name",       "range", "present"
+      "Extra",   "Irrigation", "CAdjacent", TRUE
+    }
+
 [borders]
 ; Base border radius from city.
 radius_sq_city = 17
@@ -1608,9 +1668,9 @@ set =
       "aifill", 6, FALSE
       "airliftingstyle", "FROM_ALLIES|TO_ALLIES", FALSE
       "airliftdestdivisor", 3, FALSE
-      "contactturns", 0, FALSE
       "barbarians", "DISABLED", FALSE
       "borders", "SEE_INSIDE", FALSE
+      "contactturns", 10, FALSE
       "diplomacy", "ALL", FALSE
       "dispersion", 2, FALSE
       "endturn", 365, FALSE

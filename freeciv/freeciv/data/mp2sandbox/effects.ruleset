@@ -135,7 +135,6 @@ reqs    =
       "OutputType", "gold", "Local"
     }
 
-
 [effect_merchant]
 type    = "Specialist_Output"
 value   = 2
@@ -145,6 +144,15 @@ reqs    =
       "OutputType", "trade", "Local"
       "Building", "A.Smith's Trading Co.", "Player"
     }
+[effect_merchant2]
+type    = "Specialist_Output"
+value   = 1
+reqs    =
+    { "type", "name", "range"
+      "Specialist", "merchant", "Local"
+      "OutputType", "gold", "Local"
+      "Building", "A.Smith's Trading Co.", "Player"
+    }    
 
 [effect_worker]
 type    = "Specialist_Output"
@@ -216,6 +224,15 @@ reqs    =
     { "type", "name", "range"
       "Tech", "Railroad", "Player"
     }
+;Total = 25%
+[effect_flight_trade_revenue_reduce]
+type    = "Trade_Revenue_Bonus"
+value   = -1000
+reqs    =
+    { "type", "name", "range"
+      "Tech", "Flight", "Player"
+    }
+
 
 ;If you don't acquire ongoing trade revenue from a trade route,
 ;a DECREASE in one-time bonus made NO SENSE AT ALL,
@@ -3407,7 +3424,14 @@ value	= 1
 reqs	=
     { "type", "name", "range"
       "Building", "Tesla's Laboratory", "Player"
-    }    
+    }
+;[effect_tesla_laboratory2]  or do this for Mass Production?
+;type    = "Upgrade_Price_Pct"
+;value   = -20
+;reqs    =
+;    { "type", "name", "range"
+;      "Building", "Tesla's Laboratory", "Player"
+;    } 
 
 [effect_oracle]
 type    = "Make_Content"
