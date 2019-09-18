@@ -153,15 +153,18 @@ function add_chatbox_text(packet)
       packet['event'] = reclassify_chat_message(text);
     }
 
+    var outgoing = text.substring(22,24) == "->" ? true : false;
+    if (outgoing) text = text.replace("->{", "{<font color='#c888ff'>You</font><font color='#ffffff'>&#x279E;</font>");
+
     if (civclient_state <= C_S_PREPARING) {
       text = text.replace(/#FFFFFF/g, '#000000');
     } else {
       text = text.replace(/#0000FF/g, '#5565FF')
-                 .replace(/#006400/g, '#40BA40')
+                 .replace(/#006400/g, '#209A20')
                  .replace(/#551166/g, '#AA88FF');
 
       // Check for incoming private message:           
-      var check_im = text.replace(/#A020F0/g, '#FF88B8');
+      var check_im = outgoing ? text.replace(/#A020F0/g, '#ffb789') : text.replace(/#A020F0/g, '#ff87b7'); //ff87b9 formerly
       if (check_im != text) {         // if different, there was a private message
         if (packet['turn'] != null) {
           // Message might have come after they logged out last turn, so exclude 
@@ -220,6 +223,13 @@ function update_chatbox(messages)
     for (var i = 0; i < messages.length; i++) {
         var item = document.createElement('li');
         item.className = fc_e_events[messages[i].event][E_I_NAME];
+        
+        // Align outgoing messages. &#x279E is arrow for outgoings
+        if (messages[i].message.includes("&#x279E;")) {
+          item.style.textAlign = "right";
+          item.style.paddingLeft = "30px";
+        }
+
         item.innerHTML = messages[i].message;
         scrollDiv.appendChild(item);
     }
