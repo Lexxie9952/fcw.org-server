@@ -1628,9 +1628,14 @@ function fill_layer1_sprite_array(ptile, pcity)
         result_sprites.push({"key" : "base.outpost_bg",
                              "offset_y" : -normal_tile_height / 2});
       }
-    }
+    } /*
+    else if (typeof EXTRA_NAVALBASE !== 'undefined')  { 
+      if (tile_has_extra(ptile, EXTRA_NAVALBASE)) {   
+        result_sprites.push({"key" : "base.navalbase_bg",
+                              "offset_y" : -normal_tile_height / 2});
+      }
+    } */
   }
-
   return result_sprites;
 }
 
@@ -1682,7 +1687,13 @@ function fill_layer3_sprite_array(ptile, pcity) ///// this should be drawn simul
         result_sprites.push({"key" : "base.outpost_fg",
                            "offset_y" : -normal_tile_height / 2});
       }
-    }
+    } /*
+    else if (typeof EXTRA_NAVALBASE !== 'undefined')  { 
+      if (tile_has_extra(ptile, EXTRA_NAVALBASE)) {   
+        result_sprites.push({"key" : "base.navalbase_bg",
+                              "offset_y" : -normal_tile_height / 2});
+      }
+    } */
   }
 
   return result_sprites;
