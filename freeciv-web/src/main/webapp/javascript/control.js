@@ -111,7 +111,6 @@ function control_init()
     window.open('/', '_new');
     });
 
-
   $("#game_text_input").keydown(function(event) {
 	  return check_text_input(event, $("#game_text_input"));
   });
@@ -300,6 +299,13 @@ function control_init()
   // don't show orders buttons to observers:
   if (client_is_observer()) {
     $("#game_unit_orders_default").hide();
+  }
+
+  // User option, replace capital I with | in city names--users with bad I in sans font:
+  replace_capital_i = simpleStorage.get("capI");
+  if (replace_capital_i == null) {
+    replace_capital_i = false; 
+    simpleStorage.set('capI', replace_capital_i);
   }
 }
 
@@ -2583,8 +2589,13 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
     case 'I':
       if (alt) {
-        the_event.preventDefault(); // override possible browser shortcut
-        key_unit_move(DIR8_NORTHWEST); // alt+I=8
+        if (ctrl && shift) {  // toggle capital I fixer
+          replace_capital_i = !replace_capital_i; 
+          simpleStorage.set('capI', replace_capital_i);
+        } else {
+          the_event.preventDefault(); // override possible browser shortcut
+          key_unit_move(DIR8_NORTHWEST); // alt+I=8
+        }
       }
       else key_unit_irrigate();
     break;

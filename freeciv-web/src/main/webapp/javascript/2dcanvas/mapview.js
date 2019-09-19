@@ -308,6 +308,7 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
   }
 
   var text = decodeURIComponent(city['name'] + airlift_text).toUpperCase();
+  if (replace_capital_i) text = text.replace(/I/gi, "|");  // option to fix capital I for some bad windows sans fonts
   var size = city['size'];
   var color = nations[city_owner(city)['nation']]['color'];
   var prod_type = get_city_production_type(city);

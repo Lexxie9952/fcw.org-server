@@ -45,80 +45,81 @@ var unit_click_menu = true;  // whether to show context menu on left-clicking a 
 var map_drag_enabled = true; // whether double tap and drag will move the map
 var show_order_option = true; // corresponds to the checkbox
 
-var save_options_on_exit = TRUE;
-var fullscreen_mode = FALSE;
+var save_options_on_exit = true;
+var fullscreen_mode = false;
+var replace_capital_i = null; // option to fix bad capital I in some default sans fonts
 
 /** Local Options: **/
 var scroll_narrow_x = false;  // wider scrollable table rows for mobile to see more info
-var solid_color_behind_units = FALSE;
-var sound_bell_at_new_turn = FALSE;
+var solid_color_behind_units = false;
+var sound_bell_at_new_turn = false;
 var smooth_move_unit_msec = 30;
 var smooth_center_slide_msec = 200;
-var do_combat_animation = TRUE;
-var ai_manual_turn_done = TRUE;
-var auto_center_on_unit = TRUE;
-var auto_center_on_combat = FALSE;
-var auto_center_each_turn = TRUE;
-var wakeup_focus = TRUE;
-var goto_into_unknown = TRUE;
-var center_when_popup_city = TRUE;
-var concise_city_production = FALSE;
-var auto_turn_done = FALSE;
-var meta_accelerators = TRUE;
-var ask_city_name = TRUE;
-var popup_new_cities = TRUE;
+var do_combat_animation = true;
+var ai_manual_turn_done = true;
+var auto_center_on_unit = true;
+var auto_center_on_combat = false;
+var auto_center_each_turn = true;
+var wakeup_focus = true;
+var goto_into_unknown = true;
+var center_when_popup_city = true;
+var concise_city_production = false;
+var auto_turn_done = false;
+var meta_accelerators = true;
+var ask_city_name = true;
+var popup_new_cities = true;
 var popup_actor_arrival = true;
-var keyboardless_goto = TRUE;
-var enable_cursor_changes = TRUE;
-var separate_unit_selection = FALSE;
-var unit_selection_clears_orders = TRUE;
+var keyboardless_goto = true;
+var enable_cursor_changes = true;
+var separate_unit_selection = false;
+var unit_selection_clears_orders = true;
 var highlight_our_names = "yellow";
 
 /* This option is currently set by the client - not by the user. */
-var update_city_text_in_refresh_tile = TRUE;
+var update_city_text_in_refresh_tile = true;
 
-var draw_city_outlines = TRUE;
-var draw_city_output = FALSE;
-var draw_city_airlift_counter = FALSE;
-var draw_map_grid = FALSE;
-var draw_city_names = TRUE;
-var draw_city_growth = TRUE;
-var draw_city_productions = FALSE;
-var draw_city_buycost = FALSE;
-var draw_city_traderoutes = FALSE;
-var draw_terrain = TRUE;
-var draw_coastline = FALSE;
-var draw_roads_rails = TRUE;
-var draw_irrigation = TRUE;
-var draw_mines = TRUE;
-var draw_fortress_airbase = TRUE;
-var draw_huts = TRUE;
-var draw_resources = TRUE;
-var draw_pollution = TRUE;
-var draw_cities = TRUE;
-var draw_units = TRUE;
-var draw_focus_unit = FALSE;
-var draw_fog_of_war = TRUE;
-var draw_borders = TRUE;
-var draw_full_citybar = TRUE;
-var draw_unit_shields = TRUE;
-var player_dlg_show_dead_players = TRUE;
-var reqtree_show_icons = TRUE;
-var reqtree_curved_lines = FALSE;
+var draw_city_outlines = true;
+var draw_city_output = false;
+var draw_city_airlift_counter = false;
+var draw_map_grid = false;
+var draw_city_names = true;
+var draw_city_growth = true;
+var draw_city_productions = false;
+var draw_city_buycost = false;
+var draw_city_traderoutes = false;
+var draw_terrain = true;
+var draw_coastline = false;
+var draw_roads_rails = true;
+var draw_irrigation = true;
+var draw_mines = true;
+var draw_fortress_airbase = true;
+var draw_huts = true;
+var draw_resources = true;
+var draw_pollution = true;
+var draw_cities = true;
+var draw_units = true;
+var draw_focus_unit = false;
+var draw_fog_of_war = true;
+var draw_borders = true;
+var draw_full_citybar = true;
+var draw_unit_shields = true;
+var player_dlg_show_dead_players = true;
+var reqtree_show_icons = true;
+var reqtree_curved_lines = false;
 
 /* gui-gtk-2.0 client specific options. */
-var gui_gtk2_map_scrollbars = FALSE;
-var gui_gtk2_dialogs_on_top = TRUE;
-var gui_gtk2_show_task_icons = TRUE;
-var gui_gtk2_enable_tabs = TRUE;
-var gui_gtk2_better_fog = TRUE;
-var gui_gtk2_show_chat_message_time = FALSE;
-var gui_gtk2_split_bottom_notebook = FALSE;
-var gui_gtk2_new_messages_go_to_top = FALSE;
-var gui_gtk2_show_message_window_buttons = TRUE;
-var gui_gtk2_metaserver_tab_first = FALSE;
-var gui_gtk2_allied_chat_only = FALSE;
-var gui_gtk2_small_display_layout = FALSE;
+var gui_gtk2_map_scrollbars = false;
+var gui_gtk2_dialogs_on_top = true;
+var gui_gtk2_show_task_icons = true;
+var gui_gtk2_enable_tabs = true;
+var gui_gtk2_better_fog = true;
+var gui_gtk2_show_chat_message_time = false;
+var gui_gtk2_split_bottom_notebook = false;
+var gui_gtk2_new_messages_go_to_top = false;
+var gui_gtk2_show_message_window_buttons = true;
+var gui_gtk2_metaserver_tab_first = false;
+var gui_gtk2_allied_chat_only = false;
+var gui_gtk2_small_display_layout = false;
 
 function init_options_dialog()
 {
@@ -242,6 +243,7 @@ function init_options_dialog()
      scroll_narrow_x = this.checked;
      simpleStorage.set('xScroll', scroll_narrow_x); 
    });
+
    // Graphic Theme
    graphic_theme_path = simpleStorage.get('grtheme');
    if (!graphic_theme_path) graphic_theme_path = "themes/greek/";
