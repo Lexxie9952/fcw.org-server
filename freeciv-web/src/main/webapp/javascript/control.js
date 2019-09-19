@@ -54,6 +54,8 @@ var came_from_context_menu = false;
 var last_saved_tile = null;
 var recent_saved_tile = null;
 
+var selector_city = null; // city that will select a tile to work from map view
+
 var current_focus = [];   // unit(s) in current focus selection
 var last_focus = null;    // last unit in focus before focus change
 var goto_active = false;  // state for selecting goto target for a unit
@@ -1836,6 +1838,37 @@ function order_wants_direction(order, act_id, ptile) {
 }
 
 /**************************************************************************
+ Handles shift-ctrl click, which selects/releases a worked tile on the map.
+  i.e., this is the same as do_city_map_click() but from main map view.
+**************************************************************************/
+function worked_tile_click(ptile) 
+{
+  var work_city_id = ptile['worked'];
+
+  /* This is how selector_city gets set, when you click on a worked tile,
+   * the city working it becomes the new selector_city: */
+  if (work_city_id) selector_city = work_city_id; 
+
+  // Unworked tile and no selector_city = no action can be specified here.
+  if (!selector_city) return;
+
+  draw_city_output = true; // failsafe insurance: this mode should be on
+
+  var packet = null;
+
+  if (ptile['worked'] != 0) {
+    packet = {"pid"     : packet_city_make_specialist,
+              "city_id" : work_city_id,
+              "tile_id" : ptile['index']};
+  } else {
+    packet = {"pid"     : packet_city_make_worker,
+              "city_id" : selector_city,
+              "tile_id" : ptile['index']};
+  }
+  send_request(JSON.stringify(packet));
+}
+
+/**************************************************************************
  Handles everything when the user clicked a tile
 **************************************************************************/
 function do_map_click(ptile, qtype, first_time_called)
@@ -1851,6 +1884,12 @@ function do_map_click(ptile, qtype, first_time_called)
   if (real_mouse_move_mode == true) return; 
     
   if (ptile == null || client_is_observer()) return;
+
+  // handle shift-ctrl click
+  if (mouse_click_mod_key['shiftKey'] && mouse_click_mod_key['ctrlKey']) {
+    worked_tile_click(ptile);
+    return;
+  }
 
   if (current_focus.length > 0 && current_focus[0]['tile'] == ptile['index']) {
     /* clicked on unit at the same tile, then deactivate goto and show context menu. */
