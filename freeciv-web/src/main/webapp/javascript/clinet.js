@@ -223,6 +223,11 @@ function clinet_debug_collect()
 function ping_check()
 {
   var time_since_last_ping = new Date().getTime() - ping_last;
+
+  //240 second 'heartbeat' for pings is perfect for also storing last time on
+  //simpleStorage.set('lastOn'+6digitgamenumber, sounds_enabled);
+  //need to somehow get gamenumber out of it
+
   if (time_since_last_ping > pingtime_check) {
     console.log("Error: Missing PING message from server, "
                 + "indicates server connection problem.");

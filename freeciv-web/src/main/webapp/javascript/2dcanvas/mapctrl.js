@@ -73,8 +73,16 @@ function mapview_mouse_click(e)
   }
 
   if (rightclick) {
-    /* right click to recenter. */
-    if (!map_select_active || !map_select_setting_enabled) {
+
+    // Handle shift-right-click and ctrl-shift-right-click for copy/paste production target
+    if (mouse_click_mod_key.shiftKey && mouse_click_mod_key.ctrlKey && !mouse_click_mod_key.altKey) {
+      paste_tile_target_for_prod(mouse_x, mouse_y);
+    } else if (mouse_click_mod_key.shiftKey && !mouse_click_mod_key.ctrlKey && !mouse_click_mod_key.altKey) {
+      copy_tile_target_for_prod(mouse_x, mouse_y);  
+    }
+
+    /* right click to re-center. */
+    else if (!map_select_active || !map_select_setting_enabled) {
       context_menu_active = true;
       recenter_button_pressed(mouse_x, mouse_y);
     } else {
@@ -257,7 +265,6 @@ function mapview_touch_move(e)
 
 }
 
-
 /****************************************************************************
   This function is triggered when the mouse is clicked on the city canvas.
 ****************************************************************************/
@@ -274,10 +281,7 @@ function city_mapview_mouse_click(e)
   if (!rightclick) {
     city_action_button_pressed(mouse_x, mouse_y);
   }
-
-
 }
-
 
 /**************************************************************************
   Do some appropriate action when the "main" mouse button (usually

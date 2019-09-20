@@ -55,6 +55,7 @@ var last_saved_tile = null;
 var recent_saved_tile = null;
 
 var selector_city = null; // city that will select a tile to work from map view
+var city_paste_target = {}; // ctrl-shift-right-click for pasting city prod target into a city
 
 var current_focus = [];   // unit(s) in current focus selection
 var last_focus = null;    // last unit in focus before focus change
@@ -1838,6 +1839,94 @@ function order_wants_direction(order, act_id, ptile) {
 }
 
 /**************************************************************************
+ Handles shift-right click, which "copies" the unit_type on tile or 
+  current prod on city tile, for later "pasting" as the production of 
+  a clicked city tile.
+**************************************************************************/
+function copy_tile_target_for_prod(canvas_x, canvas_y)
+{
+  console.log("copy_tile_target_for_prod(..))")
+  var ptile = canvas_pos_to_tile(canvas_x, canvas_y);
+  if (ptile == null || client.conn.playing == null) return;
+
+  var pcity = tile_city(ptile);
+  var name = "Target unable to be";
+  
+  // We clicked a city tile that belongs to us. Copy its current production!
+  if (pcity != null && pcity['owner'] == client.conn.playing.playerno) {
+    
+    city_paste_target = {};  // reset any existing target;
+    // Copy what the city is producing into the "clipboard"
+    city_paste_target['production_kind'] = pcity['production_kind'];
+    city_paste_target['production_value'] = pcity['production_value'];
+    
+    if (pcity['production_kind'] == VUT_UTYPE)
+      name = unit_types[pcity['production_value']]['name'];
+    else if (pcity['production_kind'] == VUT_IMPROVEMENT) 
+      name = improvements[pcity['production_value']]['name'];
+    
+    add_client_message(name+" copied to clipboard.");
+  } else {
+    var sunits = tile_units(ptile);
+    var own_unit_index = -1; // -1 means player has none of own units present
+    var player_has_own_unit_present = false;
+
+    if (sunits != null && sunits.length > 0 ) {
+      // Clicked on a tile with units:
+      // Check that one of the units belongs to player:
+
+      var own_unit_index = -1; // -1 means player has none of own units present 
+
+      // Find the first unit that belongs to the player:
+      for (var u = 0; u < sunits.length; u++) {
+        if (sunits[u]['owner'] == client.conn.playing.playerno)            {
+          own_unit_index = u; //player wants to select his own unit first, not a foreign unit
+          player_has_own_unit_present = true;
+        }
+        if (player_has_own_unit_present) break;
+      }
+      
+      /* Copy player's first unit in stack; or else first non-player unit on tile
+       * if player doesn't have own unit */
+      var selected_index = own_unit_index == -1 ? 0 : own_unit_index;
+      city_paste_target['production_kind'] = VUT_UTYPE;
+      city_paste_target['production_value'] = sunits[selected_index]['type'];
+      name = unit_types[sunits[selected_index]['type']]['name'];
+      add_client_message(name+" copied to clipboard.");
+    }
+  }
+}
+
+/**************************************************************************
+ Handles ctrl-shift-right click, which "pastes" the copied production
+  target into a city's current production. 
+**************************************************************************/
+function paste_tile_target_for_prod(canvas_x, canvas_y)
+{
+  console.log("paste_tile_target_for_prod(..))")
+
+  // Do legality checks:
+  if (city_paste_target == null || client.conn.playing == null)
+    return;
+
+  var ptile = canvas_pos_to_tile(canvas_x, canvas_y);
+  if (ptile == null)
+    return;
+
+  var pcity = tile_city(ptile);
+  if (pcity == null || pcity['owner'] != client.conn.playing.playerno)
+    return;
+
+//  var name;
+//  if (city_paste_target['production_kind'] == VUT_UTYPE)
+//    name = unit_types[pcity['production_value']]['name'];
+//  else if (city_paste_target['production_kind'] == VUT_IMPROVEMENT) 
+//    name = improvements[pcity['production_value']]['name'];
+
+  send_city_change(pcity['id'], city_paste_target['production_kind'], city_paste_target['production_value']);
+}
+
+/**************************************************************************
  Handles shift-ctrl click, which selects/releases a worked tile on the map.
   i.e., this is the same as do_city_map_click() but from main map view.
 **************************************************************************/
@@ -1886,7 +1975,7 @@ function do_map_click(ptile, qtype, first_time_called)
   if (ptile == null || client_is_observer()) return;
 
   // handle shift-ctrl click
-  if (mouse_click_mod_key['shiftKey'] && mouse_click_mod_key['ctrlKey']) {
+  if (mouse_click_mod_key['shiftKey'] && mouse_click_mod_key['ctrlKey'] && !mouse_click_mod_key['altKey']) {
     worked_tile_click(ptile);
     return;
   }
@@ -1970,7 +2059,7 @@ function do_map_click(ptile, qtype, first_time_called)
          * ADJACENT:  tile distance dx<=1 AND dy<=1. 
          * Not goto_active during a NUKE command, which is a GOTO with a goto_last_action for Nuking the target.
          * goto_path.length must be 0, undefined, or 1;  if path is 2 or more to an adjacent tile, that means there is a legal path
-         * to the next tile, that uses less moves by going to another tile first (e.g. ste[ping onto a river before going to Forest river)
+         * to the next tile, that uses less moves by going to another tile first (e.g. stepping onto a river before going to Forest river)
          * in which case we wouldn't want to override it because (1) it HAS a legal path and (2) it's a superior path using less moves
          */
         //console.log("goto_path, goto_path.length == "+goto_path+", "+goto_path.length);
@@ -2636,7 +2725,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
           key_unit_move(DIR8_NORTHWEST); // alt+I=8
         }
       }
-      else key_unit_irrigate();
+      else if (!shift && !alt && !ctrl) key_unit_irrigate();
     break;
     case 'O':
       if (alt) {

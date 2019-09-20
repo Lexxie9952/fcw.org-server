@@ -152,10 +152,13 @@ shift-Return: Turn done
 Shift-click unit:                Add unit(s) on tile or panel to selection
 Shift-click specialist:          Change ALL specialists of this type 
 Ctrl-click specialist:           Cycle through primary 3 specialists (not secondary specialists)
+Ctrl-Shift click tile:           Select tile to be worked by city, on main map.
 
   Right-click:                   Center tile in view
   Right-click unit:              Unit Orders Menu (pop-up)
   Right-click-and-drag:          Select units by area
+Shift-Right-click:               Copy city's current production (or unit on map) to clipboard.
+Ctrl-Shift-Right-click:          Paste clipboard into city's current production target. 
 
   Middle-click:                  Show tile info  
   Alt-right click                Show tile info (if mouse has no middle click)
