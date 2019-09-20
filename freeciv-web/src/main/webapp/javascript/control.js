@@ -1845,7 +1845,7 @@ function order_wants_direction(order, act_id, ptile) {
 **************************************************************************/
 function copy_tile_target_for_prod(canvas_x, canvas_y)
 {
-  console.log("copy_tile_target_for_prod(..))")
+  //console.log("copy_tile_target_for_prod(..))")
   var ptile = canvas_pos_to_tile(canvas_x, canvas_y);
   if (ptile == null || client.conn.playing == null) return;
 
@@ -1885,7 +1885,7 @@ function copy_tile_target_for_prod(canvas_x, canvas_y)
         }
         if (player_has_own_unit_present) break;
       }
-      
+
       /* Copy player's first unit in stack; or else first non-player unit on tile
        * if player doesn't have own unit */
       var selected_index = own_unit_index == -1 ? 0 : own_unit_index;
@@ -1903,7 +1903,7 @@ function copy_tile_target_for_prod(canvas_x, canvas_y)
 **************************************************************************/
 function paste_tile_target_for_prod(canvas_x, canvas_y)
 {
-  console.log("paste_tile_target_for_prod(..))")
+  //console.log("paste_tile_target_for_prod(..))")
 
   // Do legality checks:
   if (city_paste_target == null || client.conn.playing == null)
@@ -1916,12 +1916,6 @@ function paste_tile_target_for_prod(canvas_x, canvas_y)
   var pcity = tile_city(ptile);
   if (pcity == null || pcity['owner'] != client.conn.playing.playerno)
     return;
-
-//  var name;
-//  if (city_paste_target['production_kind'] == VUT_UTYPE)
-//    name = unit_types[pcity['production_value']]['name'];
-//  else if (city_paste_target['production_kind'] == VUT_IMPROVEMENT) 
-//    name = improvements[pcity['production_value']]['name'];
 
   send_city_change(pcity['id'], city_paste_target['production_kind'], city_paste_target['production_value']);
 }
@@ -2895,6 +2889,11 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         mapview_mouse_movement = false;
         came_from_context_menu = false;
       }
+      break;
+
+    case 222:  // ' key = focus in chat window
+      the_event.preventDefault(); // don't put the ' in the input box
+      $("#game_text_input").focus();
       break;
 
     case 107:

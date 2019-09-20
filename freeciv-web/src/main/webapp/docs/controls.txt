@@ -145,6 +145,7 @@ ctrl-S: save game
 shift-T: change tax rates
 shift-W: show city tile production on map
 shift-Return: Turn done
+&apos; &nbsp; Focus on chat input area
 
 <h2>Main Map (Mouse):</h2>
   Left-click on city:            Pop up city dialog
