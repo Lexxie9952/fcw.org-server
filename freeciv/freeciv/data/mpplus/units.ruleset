@@ -41,6 +41,7 @@ flags =
     _("Paratroopers"), _("Can be paradropped from a friendly city or suitable base.")
     _("Marines"), _("Can launch attack from non-native tiles.")
  ;   _("NeverProtects"), _("Does not protect other units on its tile.")   ; UNCOMMENT THIS IF NOT USING SCL'S PATCH FOR THIS FLAG
+ ;;;   _("NeverBlocked"), _("Bypasses unreachable units when attacking a tile.")   ; UNCOMMENT THIS IF NOT USING LEXXIE'S PATCH FOR THIS FLAG
   }
 
 ; Names for custom unit class flags. There can be up to 8 of these.
@@ -370,6 +371,9 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                 setting is enabled.
 ; "NeverProtects" = doesn't protect reachable units on its tile from enemy
 ;                 attackers, even if the unreachableprotects server setting
+;                 is enabled and the unit class is unreachable
+; "NeverBlocked" = isn't blocked by unreachable units on targeted tile,
+;                  even if the unreachableprotects server setting
 ;                 is enabled and the unit class is unreachable
 ;
 ; Following actions require extra fields:
@@ -1441,8 +1445,12 @@ bonuses       =
 flags         = "AirAttacker", "Unbribable", "HasNoZOC"
 roles         = ""
 helptext      = _("\
-Fighters are your first airborne units. They can\
- move anywhere and attack any unit.\
+Fighters are the first offensive Air units. Their superior mobility and firepower alter\
+ the very nature of warfare. They can move anywhere and attack any unit (except Missiles.)\
+ Fighters and any other units on their tile are unreachable by Land and Sea units.\
+"), _("
+NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
+ you can override this by ordering movements and attacks to adjacent tiles.\
 ")
 
 [unit_bomber]
@@ -1473,9 +1481,12 @@ uk_gold       = 0
 flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "NeverProtects"
 roles         = ""
 helptext      = _("\
-Bombers are specialized airborne units that may\
- only attack ground targets, not other airborne\
- units.\
+Bombers are good for hitting strong and well-defended ground targets, or multiple weaker targets.\
+ They cannot attack Air units. While Bombers are unreachable by land units, they cannot block attacks on\
+  other units on the same tile.\
+"), _("\
+NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
+ this restriction can by overridden by ordering moves to adjacent tiles.\
 ")
 
 [unit_helicopter]
@@ -1548,8 +1559,12 @@ vision_layer  = "Stealth"
 flags         = "AirAttacker", "Unbribable", "HasNoZOC"
 roles         = ""
 helptext      = _("\
-An improved Fighter, with improved attack and a higher movement\
- radius.\
+The most advanced Fighter, with improved attack and longer range. Stealth Fighters cannot be seen unless adjacent\
+ to an enemy. They can move anywhere and attack any unit (except Missiles.)\
+ Stealth Fighters and any other units on their tile are unreachable by Land and Sea units.\\
+"), _("
+NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
+ this restriction can by overridden by ordering moves to adjacent tiles.\
 ")
 
 [unit_stealth_bomber]
@@ -1582,8 +1597,11 @@ flags         = "FieldUnit", "AirAttacker",
                 "HasNoZOC", "Unbribable", "NeverProtects"
 roles         = ""
 helptext      = _("\
-An improved Bomber, with improved attack and a higher movement\
- radius.\
+The deadliest Bomber, with improved attack and speed. Stealth Bombers cannot be seen unless adjacent to\
+ an enemy.\
+"), _("
+NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
+ this restriction can by overridden by ordering moves to adjacent tiles.\
 ")
 
 [unit_trireme]
@@ -1962,12 +1980,9 @@ cargo         = "Air", "Missile", "Helicopter"
 flags         = "BadCityDefender", "Only_Native_Attack", "Provoking"
 roles         = ""
 helptext      = _("\
-The Carrier is a mobile airport that can carry aircraft,\
- helicopters, and missiles.\
+The Carrier is a mobile airport that can carry Air units, Helicopters, and Missiles.\
 "), _("\
-TIP:  Guard Carriers with a handful of fast-moving ships and a\
- battleship, as losing a fully-equipped Carrier is VERY\
- painful and expensive.\
+Carriers are very expensive and thus, usually protected by a fleet of scouts and escorts.\
 ")
 
 [unit_transport]
@@ -2029,14 +2044,15 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "FieldUnit", "OneAttack", "AirAttacker", "HasNoZOC", "Unbribable", "NeverProtects"
+flags         = "FieldUnit", "OneAttack", "AirAttacker", "HasNoZOC", "Unbribable", "NeverProtects", "NeverBlocked"
 roles         = ""
 helptext      = _("\
-The Cruise Missile is a long-distance missile\
- that can strike deep into enemy territory.\
-"), _("\
-TIP:  A handful of these can successfully keep the waters around\
- your treasured homeland free of enemy ships.\
+The Cruise Missile can strike deep into enemy territory. It cannot attack\
+ Air units, but Air units never prevent it from hitting reachable surface units.\
+ You can transport a Cruise Missile to new locations, but be sure to end its turn at a\ 
+ city, airbase, or on a unit capable of transporting it. Cruise Missiles can be carried\
+ by Submarines and Carriers. The Cruise Missile is not reachable by other units, but can\
+ not block attacks on other units on its tile.
 ")
 
 [unit_nuclear]
@@ -2064,7 +2080,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable", "NeverProtects"
+flags         = "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable", "NeverProtects", "NeverBlocked"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0
@@ -2073,27 +2089,15 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = ""
 helptext      = _("\
-You can build Nuclear units when you have the required advance, and\
- the Manhattan Project wonder has been built by any player.\
+You can build Nuclear Missiles when you have the required tech and the Manhattan Project has been built by any player.\
 "), _("\
-On impact, the blast will destroy any unit in an area 3 tiles wide\
- (3x3 squares for rectangular grids), including friendly units.\
- Any city within the blast area loses half its population, and\
- land tiles within the blast area are subject to nuclear fallout.\
+On impact, the blast will destroy any unit in a 3x3 area, including friendly units. Any city within the blast area loses half its\
+ population, and land tiles within the blast area are subject to nuclear fallout.\
 "), _("\
-Nuclear fallout reduces tile output and increases the risk of global\
- nuclear winter; see the help on Fallout.\
+Nuclear fallout reduces tile output and increases the risk of global nuclear winter; see the help on Fallout. Ocean tiles are not\
+ subject to Fallout.\
 "), _("\
-TIP 1:  Nuking the ocean will not generate fallout, and is a most\
- effective (but expensive!!) way of getting rid of enemy\
- ships.\
-"), _("\
-TIP 2:  You may be involved in a situation where you've invaded an\
- enemy country en masse, but the enemy cities are too strong.\
- Before using a Nuclear unit, assemble a gang of Settlers, Workers,\
- and/or Engineers next to the city and have them ready to fix\
- the fallout on the same turn it occurs!  This minimizes the\
- chance of nuclear winter.  Eco-friendly nukes!\
+If Fallout is cleaned by Engineers on the same turn it appears, this reduces the chance of nuclear winter.\
 ")
 
 [unit_diplomat]
@@ -2137,56 +2141,20 @@ veteran_power_fact = 100, 105, 110, 115
 veteran_move_bonus = 0, 0, 0, 0
 roles         = "DiplomatStartUnit"
 helptext      = _("\
-A Diplomat deals with foreign dignitaries. He may\
- undertake various covert operations to\
- harm opponents. Diplomats inside cities defend\
- against such actions.\
+A Diplomat may perform official or covert actions.\
 "), _("\
-Many covert actions may be attempted in peacetime, but\
- may cause diplomatic incidents,\
- which can allow Republics and Democracies to break treaties.\
+Most covert actions may be done in peacetime, but cause incidents which may\
+ let a Senate break treaties. If a diplomatic unit is in the\
+ city, it will defend, and a unit will die. Diplomats can:\n\
+ - Bribe: Unit must be alone. Cost varies with type, health, distance from home.\n\
+ - Establish Embassy: Enables dealmaking & gives permanent info on gold, taxes, tech, foreign relations.\n\
+ - Investigate City.\n\
+ - Sabotage City: Destroy production or a random building.\n\
+ - Steal Tech: A random tech may be stolen, creating an incident.\n\
+ - Incite Revolt: Bribe a city to join your empire and acquire the units the city supports.\n\
 "), _("\
-If a foreign unit is alone on a tile, you may attempt to bribe it\
- with your Diplomat. The unit immediately\
- becomes yours: the cost depends on unit status and\
- the civilization owning it. Bribery creates a diplomatic incident.\
-"), _("\
-Diplomats can act on another player's\
- city.  Most actions have a chance of failure. Diplomats and\
- Spies in the city defend against these actions. In this case, one of the\
- units will die. If\
- the attacker wins, it may try the action again if it has moves left.\
-"), _("\
-A Diplomat can:\
-"), _("\
- - \"Establish Embassy\": Gives\
- permanent contact with the city's owner, tax rates, technology, and foreign relations.\
-"), _("\
- - \"Investigate City\": Attempts to acquire detailed\
- information about the city.\
-"), _("\
- - \"Sabotage City\": Attempts to disrupt\
- city production or destroy a\
- random building. Existing Palaces and\
- Wonders cannot be sabotaged. Attempts to sabotage City Walls\
- or capitals have half the chance of success.\
- Sabotage may only be attempted during war.\
- "), _("\
-
- - \"Steal Technology\": Attempts to steal a\
- random technology. Technology\
- may only be stolen once from a particular city by Diplomats. This\
- action may be attempted in peace or war and causes a\
- diplomatic incident.\
-"), _("\
- - \"Incite a Revolt\": For a high cost, a foreign city will change\
- allegiance and join your empire, also acquiring the units the\
- city supports. Units in other cities\
- remain in the enemy's control. Units outside cities are disbanded. It is not possible to incite\
- a capital or any city in a Democracy.\
-"), _("\
-Diplomats built under Communism start at the first\
- veteran level (secretary).\
+Many rules alter odds & legality. Read the manual on Diplomacy.\
+ Diplomats built under Communism start at the first vet level.\
 ")
 
 [unit_spy]
@@ -2231,29 +2199,22 @@ veteran_power_fact = 100, 105, 110, 115
 veteran_move_bonus = 0, 0, 0, 0
 roles         = "DiplomatStartUnit"
 helptext      = _("\
-A Spy is more skilled in the arts of espionage than her Diplomat predecessor.\
+A Spy is more skilled in espionage than a Diplomat.\
 "), _("\
-She can perform all the functions of the Diplomat.\
- Unlike a Diplomat, a Spy may survive an\
- operation and become more experienced.\
- Spies are more effective at defending cities.\
+She can do anything a Diplomat can. Unlike a Diplomat, a Spy may survive an\
+ operation and gain experience. Spies defend cities better.\
 "), _("\
-A Spy can be used to:\n\
- - sabotage an enemy unit if it is\
- alone on a tile (reduces hit points to half)\n\
- - poison a city's water supply of an enemy city (-1 population)\n\
+A Spy can:\n\
+ - sabotage a lone enemy unit (halves its hp)\n\
+ - poison city water supply (-1 population)\n\
  - steal specific technology (reduced chance of success)\n\
- - steal technologies from a city which has already been\
- stolen from (cities are more resistant each time they\
- are stolen from)\n\
- - sabotage specific city targets (reduced chance success).\
+ - steal tech from a city which was already stolen from (cities gain resistance each time)\n\
+ - sabotage specific targets (reduced odds).\
 "), _("\
-A Spy that survives sabotage, theft,\
- inciting rebellion, and poisoning, will escape to the safety of the\
- nearest friendly city.\
+A Spy that survives an op escapes to the safety of the nearest friendly city.\
 "), _("\
-Spies built under a Communist government start at the first\
- veteran level (handler).\
+Many rules alter odds & legality. Read the manual on Diplomacy.\
+ Spies built under Communism start at the first vet level.\
 ")
 
 [unit_caravan]
@@ -2472,7 +2433,10 @@ uk_gold       = 0
 flags         = "HasNoZOC", "Unbribable"
 roles         = ""
 helptext      = _("\
-The AWACS (Airborne Warning and Control System) is an airplane with an \
-advanced radar that can determine the location of enemy units over a \
-wide area.\
+The AWACS has great fuel capacity for long range flights, and advanced radar that can determine\
+ the location of enemy units over a wide area.\
+"), _("
+NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
+ this restriction can by overridden by ordering moves to adjacent tiles.\
 ")
+
