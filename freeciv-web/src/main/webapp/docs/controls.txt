@@ -158,6 +158,7 @@ Ctrl-Shift click tile:           Select tile to be worked by city, on main map.
   Right-click:                   Center tile in view
   Right-click unit:              Unit Orders Menu (pop-up)
   Right-click-and-drag:          Select units by area
+  Alt-click-and-drag:            Select units by area (same as above)
 Shift-Right-click:               Copy city's current production (or unit on map) to clipboard.
 Ctrl-Shift-Right-click:          Paste clipboard into city's current production target. 
 

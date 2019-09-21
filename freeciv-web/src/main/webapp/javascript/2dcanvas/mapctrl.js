@@ -85,7 +85,7 @@ function mapview_mouse_click(e)
     else if (!map_select_active || !map_select_setting_enabled) {
       context_menu_active = true;
       recenter_button_pressed(mouse_x, mouse_y);
-    } else {
+    } else { // map_select_active from right-click-drag: button release means select and clean up
       context_menu_active = false;
       map_select_units(mouse_x, mouse_y);
     }
@@ -93,10 +93,19 @@ function mapview_mouse_click(e)
     map_select_check = false;
 
   } else if (!middleclick) {
+    // map_select_active could be active from an alt-left-click
+    if (map_select_active) {   // button up = release from this mode, select all units in box
+      context_menu_active = false;
+      map_select_units(mouse_x, mouse_y);
+      map_select_active = false;
+      map_select_check = false;
+      mapview_mouse_movement = false;
+    } else {   // PROCESS NORMAL LEFT CLICK HERE
       action_button_pressed(mouse_x, mouse_y, SELECT_POPUP);
     
-    mapview_mouse_movement = false;
-    update_mouse_cursor();
+      mapview_mouse_movement = false;
+      update_mouse_cursor();
+    }
   }
   keyboard_input = true;
 }
@@ -150,8 +159,18 @@ function mapview_mouse_down(e)
     middleclick = (e.button == 1 || e.button == 4);
   }
 
-  if (!rightclick && !middleclick) {
-    /* Left mouse button is down */
+  if (!rightclick && !middleclick) { /* Left mouse button is down */
+    // Alt-click substitute for right-click drag for trackpad users:
+    if (e.altKey && !map_select_active && is_right_mouse_selection_supported()) {
+      map_select_check = true;
+      map_select_x = mouse_x;
+      map_select_y = mouse_y;
+      map_select_check_started = new Date().getTime();
+  
+      // The context menu blocks the right-click mouse up event on some browsers. 
+      context_menu_active = false;
+      return;
+    }
     //console.log("Left mouse button DOWN.");
     if (goto_active) return;
     if (paradrop_active) return; // left-clicking on your own unit in paradrop mode was selecting it, in spite of 
@@ -161,8 +180,12 @@ function mapview_mouse_down(e)
     if (!mouse_click_mod_key['shiftKey']) {
       check_mouse_drag_unit(canvas_pos_to_tile(mouse_x, mouse_y));
       // initial condition for possibly starting map drag mode
-      if (!mouse_touch_started_on_unit && map_drag_enabled && !came_from_context_menu) {
-         mapview_mouse_movement = true; // if you clicked out of a context menu, don't do map drag
+      if (!map_select_check // no map drag if we're in selection rectangle or leaving it 
+          && !mouse_touch_started_on_unit // no map drag if we're dragging a unit to move it
+          && map_drag_enabled             // can't drag if user disabled the mode
+          && !came_from_context_menu) {   // we don't start a drag if coming out of context menu
+         
+          mapview_mouse_movement = true; // if you clicked out of a context menu, don't do map drag
       }
     }
     touch_start_x = mouse_x;
