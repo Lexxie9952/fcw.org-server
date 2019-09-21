@@ -2985,7 +2985,8 @@ The Cruise Missile can strike deep into enemy territory. It cannot attack\
  Air units, but Air units never prevent it from hitting reachable surface units.\
  You can transport a Cruise Missile to new locations, but be sure to end its turn at a\ 
  city, airbase, or on a unit capable of transporting it. Cruise Missiles can be carried\
- by Submarines, Missile Destroyers, AEGIS Cruisers, and Carriers.\
+ by Submarines, Missile Destroyers, AEGIS Cruisers, and Carriers.  The Cruise Missile is\
+ not reachable by other units, but can not block attacks on other units on its tile.\
 ")
 
 [unit_atom_bomb]
@@ -3132,6 +3133,7 @@ Most covert actions may be done in peacetime, but cause incidents which may\
  - Investigate City.\n\
  - Sabotage City: Destroy production or a random building.\n\
  - Steal Tech: A random tech may be stolen, creating an incident.\n\
+ - Steal Map Fragments.\n\
  - Incite Revolt: Bribe a city to join your empire and acquire the units the city supports.\n\
 "), _("\
 Many rules alter odds & legality. Read the manual on Diplomacy.\
