@@ -2478,6 +2478,8 @@ function global_keyboard_listener(ev)
 function
 civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
 {
+  console.log("civclient_handle_key");
+
   switch (keyboard_key) {
     case 'C':
       if (alt) {
@@ -2562,7 +2564,7 @@ civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
 
     case 27:
       the_event.preventDefault();
-      $('#ui-id-1').trigger("click"); 
+      $('#ui-id-1').trigger("click");
       break;
       
     case 32:

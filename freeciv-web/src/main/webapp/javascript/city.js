@@ -2919,6 +2919,11 @@ function city_keyboard_listener(ev)
   /* if (!ev) ev = window.event; INTERNET EXPLORER DEPRECATED */
   var keyboard_key = String.fromCharCode(ev.keyCode);
 
+  if (ev.keyCode == 27) {
+    ev.stopPropagation();
+    close_city_dialog();
+  }
+
   if (active_city != null) {
     switch (keyboard_key) {
        case 'P':
@@ -2926,7 +2931,7 @@ function city_keyboard_listener(ev)
          ev.stopPropagation();
          break;
 
-       case 'W':         // patterned off CTRL-W
+       case 'W': // same command as ESC above (code 27)
          close_city_dialog();
          ev.stopPropagation();
          break;
@@ -2940,7 +2945,7 @@ function city_keyboard_listener(ev)
          request_city_buy();
          ev.stopPropagation();
          break;
-      }
+    }
   }
 }
 
