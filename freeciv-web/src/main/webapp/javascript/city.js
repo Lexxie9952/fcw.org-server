@@ -167,7 +167,7 @@ function show_city_dialog(pcity)
 {
   var turns_to_complete;
   var sprite;
-  var shield_sprite;
+  //var shield_sprite;
   var punit;
 
   if (active_city != pcity || active_city == null) {

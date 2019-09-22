@@ -961,7 +961,7 @@ function button_hide_panels()
 function update_unit_order_commands()
 {
   // don't show orders buttons for observers
-  if (client_is_observer())
+  if (client_is_observer() || client.conn.playing == null)
   {
     $("#game_unit_orders_default").hide();
     return;
@@ -1117,8 +1117,7 @@ function update_unit_order_commands()
     } //-------------------------
 
     // Figure out default of whether pillage is legal and show it, before applying special rules later
-    if (!client_is_observer() && client.conn.playing != null
-         && get_what_can_unit_pillage_from(punit, ptile).length > 0
+    if (get_what_can_unit_pillage_from(punit, ptile).length > 0
          && (pcity == null || city_owner_player_id(pcity) !== client.conn.playing.playerno)) {
             $("#order_pillage").show();
             unit_actions["pillage"] = {name: "Pillage (Shift-P)"};
@@ -1598,7 +1597,7 @@ function click_unit_in_panel(e, punit)
 {
   // If shift-clicking, add this unit to the selected units
   if (e.shiftKey) {
-    if (punit['owner'] == client.conn.playing.playerno) // only add our own unit to selection
+    if (client.conn.playing != null && punit['owner'] == client.conn.playing.playerno) // only add our own unit to selection
     {
       // First we must check if unit is already in selection:
       var index = current_focus.findIndex(x => x.id==punit.id);
@@ -1845,6 +1844,8 @@ function order_wants_direction(order, act_id, ptile) {
 **************************************************************************/
 function copy_tile_target_for_prod(canvas_x, canvas_y)
 {
+  if (client.conn.playing == null) return;
+
   //console.log("copy_tile_target_for_prod(..))")
   var ptile = canvas_pos_to_tile(canvas_x, canvas_y);
   if (ptile == null || client.conn.playing == null) return;
@@ -1903,6 +1904,7 @@ function copy_tile_target_for_prod(canvas_x, canvas_y)
 **************************************************************************/
 function paste_tile_target_for_prod(canvas_x, canvas_y)
 {
+  if (client.conn.playing == null) return;
   //console.log("paste_tile_target_for_prod(..))")
 
   // Do legality checks:
@@ -2478,8 +2480,6 @@ function global_keyboard_listener(ev)
 function
 civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
 {
-  console.log("civclient_handle_key");
-
   switch (keyboard_key) {
     case 'C':
       if (alt) {
@@ -4528,7 +4528,7 @@ function update_active_units_dialog()
     if (get_unit_homecity_name(aunit) != null) {
       unit_info_html += ": " + get_unit_homecity_name(aunit) + " ";
     }
-    if (current_focus[0]['owner'] == client.conn.playing.playerno) {
+    if (client.conn.playing != null && current_focus[0]['owner'] == client.conn.playing.playerno) {
       unit_info_html += "<span style='color:white'>Moves:<span style='color:lightgreen;font-size:120%;'><b>" + move_points_text(aunit['movesleft']) + "</b></span></span> ";
 //      unit_info_html += "<span style='color:aqua'>" + get_unit_moves_left(aunit) + "</span> ";
     }
@@ -4548,7 +4548,7 @@ function update_active_units_dialog()
     }
 
     // Actual fuel remaining is: (turns_of_fuel-1) + moves_left/moves_rate
-    if ( (ptype['fuel']>0) && (current_focus[0]['owner']==client.conn.playing.playerno) ) {
+    if ( client.conn.playing != null && (ptype['fuel']>0) && (current_focus[0]['owner']==client.conn.playing.playerno) ) {
       var fuel_left = (aunit['fuel']-1) + aunit['movesleft']/ptype['move_rate'];
       var fuel_color = "";
       if (aunit['movesleft']==0) fuel_color = "<span style='color:gainsboro;font-size:100%;'><b>";    // no moves left, fuel indicator is dimmed down
