@@ -404,23 +404,156 @@ function unittype_ids_alphabetic()
 function get_unit_city_info(punit)
 {
   var result = "";
+  var upkeep_mode;
+  const UNCLAIMED_LAND = 255;
+
+  // No need to show 3 upkeep types when 99% of games use rulesets that use only 1
+  switch (ruleset_control['name']) {
+    case "Classic ruleset":
+    case "Multiplayer ruleset":
+    case "Multiplayer-Plus ruleset":
+    case "Multiplayer-Evolution ruleset":
+      upkeep_mode=1; // Shields only.      
+      break;
+    default:
+      upkeep_mode=3; // F/P/G
+  }
 
   var ptype = unit_type(punit);
 
-  result += ptype['name'] + "\nFood/Shield/Gold: ";
+  // UNIT TYPE
+  result += ptype['name'];
 
-  if (punit['upkeep'] != null) {
-    result += punit['upkeep'][O_FOOD] + "/"
-           + punit['upkeep'][O_SHIELD] + "/"
-           + punit['upkeep'][O_GOLD];
+  // HOME CITY, IF ANY OR KNOWN:
+  if (get_unit_homecity_name(punit)) {
+    result += ": "+get_unit_homecity_name(punit);
+  
+    // UPKEEP only happens for home city units
+    if (upkeep_mode == 3) {
+      result += "\nFood/Shield/Gold: ";
+      if (punit['upkeep'] != null) {
+        result += punit['upkeep'][O_FOOD] + "/"
+              + punit['upkeep'][O_SHIELD] + "/"
+              + punit['upkeep'][O_GOLD];
+      }
+    } 
+    else if (upkeep_mode==1) {
+      result += "\nUpkeep: ";
+      if (punit['upkeep'] != null) 
+        result += punit['upkeep'][O_SHIELD];
+    }
+  } else if (client.conn.playing != null && punit['owner'] != client.conn.playing.playerno) {
+    // Foreign unit, we don't know home city but we do know nationality and player:
+    var player_id = punit['owner'];
+    var nation_id = players[player_id]['nation'];
+    result += ": "+nations[nation_id]['adjective'];
+    result += "\nLeader: "+players[player_id]['name']+"";
   }
 
-  result += "\n" + get_unit_moves_left(punit) + "\n";
-
-  if (get_unit_homecity_name(punit) != null) {
-    result += get_unit_homecity_name(punit);
+  // LOCATION 
+  result += "\nLocation: ";
+  var tile_id = punit['tile'];
+  var pcity = tile_city(tiles[punit['tile']]);
+  var coordinates = "{"+tiles[punit['tile']]['x']+","+tiles[punit['tile']]['y']+"}";
+  if (pcity) {
+    result += pcity['name']+" "+coordinates;
+  }
+  else if ( cities[tiles[punit['tile']]['worked']] )
+  {
+    if (cities[tiles[punit['tile']]['worked']]['name'])
+      result += coordinates + " near "+ cities[tiles[punit['tile']]['worked']]['name'];
+    else 
+      result += coordinates + " near unknown foreign city.";
+  } else {
+      result += coordinates;
+  }
+  // TERRITORY
+  if (client.conn.playing != null && punit['owner']==client.conn.playing.playerno) {
+    if (tiles[punit['tile']]['owner'] == UNCLAIMED_LAND) {
+      result += "\nTerritory: Unclaimed"
+    } // if not in a city, it's informative to tell you it's in your nation:
+    else if (!pcity && tiles[punit['tile']]['owner'] == client.conn.playing.playerno) { 
+      result += "\nTerritory: Homeland" 
+    }
+    else if (tiles[punit['tile']]['owner'] != client.conn.playing.playerno) {
+      var player_id = tiles[punit['tile']]['owner'];
+      var nation_id = players[player_id]['nation'];
+      result += "\nTerritory: "+nations[nation_id]['adjective'];
+      result += " ("+players[player_id]['name']+")";
+    }
   }
 
+  // ACTIVITY
+  switch (punit['activity']) {
+    case ACTIVITY_POLLUTION:
+      result += "\nActivity: CLEANING POLLUTION";
+      break;
+    case ACTIVITY_MINE:
+      result += "\nActivity: MINING";
+      break;
+    case ACTIVITY_IRRIGATE:
+      result += "\nActivity: IRRIGATING";
+      break;
+    case ACTIVITY_FORTIFIED:
+      result += "\nActivity: FORTIFIED";
+      break;
+    case ACTIVITY_FORTIFYING:
+      result += "\nActivity: FORTIFYING";
+      break;
+    case ACTIVITY_SENTRY:
+      result += "\nActivity: SENTRY";
+      break;
+    case ACTIVITY_PILLAGE:
+      result += "\nActivity: PILLAGE";
+      break;
+    case ACTIVITY_GOTO:
+      result += "\nActivity: GOTO";
+      break;
+    case ACTIVITY_EXPLORE:
+      result += "\nActivity: AUTO-EXPLORE";
+      break;
+    case ACTIVITY_TRANSFORM:
+      var ptile = tiles[punit['tile']]; 
+      result += "\nTRANSFORMING "+terrains[ptile['terrain']]['name'];
+      break;
+    case ACTIVITY_FALLOUT:
+      result += "\nActivity: CLEANING FALLOUT";
+      break;
+    case ACTIVITY_BASE:
+      result += "\nActivity: BUILDING BASE";
+      break;
+    case ACTIVITY_GEN_ROAD:
+      result += "\nActivity: BUILDING ROAD";
+      break;
+  }
+
+  result += "\n";  // Space for separating key stats
+
+  //VETERAN LEVEL
+  if (punit['veteran']) {    
+    if (ptype['veteran_levels'] > 0 ) // custom vet names
+    {
+      var special_name = ptype['veteran_name'][punit['veteran']];
+      var n = special_name.lastIndexOf(':'); // remove junk like ?vet_rank:name
+      var vet_name = special_name.substring(n + 1);
+    }
+    else { // standard vet names 
+      var vet_name = game_rules['veteran_name'][punit['veteran']];
+    }
+    vet_name = vet_name.charAt(0).toUpperCase() + vet_name.substring(1);
+    result += "\n" + vet_name + " " + "&starf;".repeat(punit['veteran']);
+  }
+    
+  // HEALTH
+  result += "\nHealth: " + punit['hp'] + "/" + ptype['hp'];
+
+  // MOVES LEFT
+  if (client.conn.playing != null && punit['owner'] == client.conn.playing.playerno)
+  { // ^ We don't know move points of non-domestic units (NaN), so only do domestic:
+    result += "\nMoves: " + move_points_text(punit['movesleft']);
+    // FUEL 
+    if (punit['fuel']) result += "\nFuel: "+punit['fuel'];
+  }  
   return result;
 }
 
