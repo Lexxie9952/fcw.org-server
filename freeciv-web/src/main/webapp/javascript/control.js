@@ -846,7 +846,6 @@ function update_unit_focus()
   /* iterate zero times for no units in focus,
    * otherwise quit for any of the conditions. */
   var funits = get_units_in_focus();
-  console.log("...funits.length="+funits.length)
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
 
