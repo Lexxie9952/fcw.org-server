@@ -843,27 +843,25 @@ function update_unit_focus()
 
   if (C_S_RUNNING != client_state()) return;
 
-
   /* iterate zero times for no units in focus,
    * otherwise quit for any of the conditions. */
   var funits = get_units_in_focus();
+  console.log("...funits.length="+funits.length)
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
 
-    /* This SHOULD nuke the advance_focus after GOTO with moves still left bug, but may
-     * have consequences. Yet it's ready to uncomment and test when we can get a replicated save game for testing.
-    if (punit['movesleft'] > 0 && punit['activity'] == ACTIVITY_IDLE) return;
-    */
-
+    // The final KILLER for the "advance_focus after GOTO with moves still left", if it appears again:
+    //if (punit['movesleft'] > 0 && came_from_goto_command) return;
+    //can pass this flag as true from the deactivate_goto(true) function if it received 'true'...
+    //this is already set up and requires no extra work but to pass that 'true' from there to here.
+    
     if (punit['movesleft'] > 0
-	  && punit['done_moving'] == false
-	  && punit['ai'] == false
-	  && punit['activity'] == ACTIVITY_IDLE) {
+        && punit['done_moving'] == false
+        && punit['ai'] == false
+        && punit['activity'] == ACTIVITY_IDLE) {
       return;
     }
-
   }
-
   advance_unit_focus();
 }
 
@@ -2256,7 +2254,7 @@ function do_map_click(ptile, qtype, first_time_called)
     }
 
     deactivate_goto(true);
-    update_unit_focus();
+    //update_unit_focus();  true in the line above advances unit focus after 700ms
 
   }  // END OF GO TO HANDLING ----------------------------------------------------------------------------------------------
    else if (paradrop_active && current_focus.length > 0) {
