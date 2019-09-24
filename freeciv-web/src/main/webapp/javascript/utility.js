@@ -208,3 +208,15 @@ function get_tileset_file_extention()
   }
 
 }
+
+/**************************************************************************
+ For the purposes of looking for server words in a string that mean it
+ should be handled differently.
+**************************************************************************/
+function is_any_word_in_string(string,words_array)
+{
+    for (var i = 0; i < words_array.length; i++) {
+      if (string.indexOf(words_array[i]) != -1) return true;
+    }
+    return false;
+}

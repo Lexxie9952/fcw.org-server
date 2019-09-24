@@ -39,9 +39,9 @@ function set_client_state(newstate)
 
     switch (civclient_state) {
     case C_S_RUNNING:
-      clear_chatbox();
       $.unblockUI();
       show_new_game_message();
+      insert_pregame_messages();
 
       set_client_page(PAGE_GAME);
       setup_window_size();
@@ -214,7 +214,10 @@ function show_new_game_message()
       "Click the end turn button to end your turn and let the next opponent play.";
     setTimeout(check_queued_tech_gained_dialog, 2500);
 
-  } else if (is_longturn()) {
+  } else if (client.conn.access_level == 5) {
+     return;
+  }
+  else if (is_longturn()) {
     message = "Welcome " + username + "! This is a Longturn game, where you play one turn per day. " +
     "Just do your moves, and come back tomorrow when the timer advances to the next turn! You may " +
     "bookmark this page to return. You can also find the game again at " + window.location.host + ".<br> "+

@@ -19,6 +19,7 @@
 var chatbox_active = true;
 var message_log = new EventAggregator(update_chatbox, 125,
                                       EventAggregator.DP_ALL, 1000, 0);
+var pregame_messages = [];
 var previous_scroll = 0;
 var current_message_dialog_state = null;
 var max_chat_message_length = 500;
@@ -142,14 +143,12 @@ function add_chatbox_text(packet)
     if (text == null) return;
     if (!check_text_with_banlist(text)) return;
     if (is_longturn()) {
-      for (server_word in server_words) {
-        if (text.indexOf(server_words[server_word]) != -1) return;          
-      }      
+        if (is_any_word_in_string(text,server_words)) return;
     }
     if (text.length >= max_chat_message_length) return;
 
     if (packet['event'] === E_CHAT_MSG) {
-      if (text.indexOf("You are logged in as") != -1 || text.indexOf("Load complete") != -1) return;
+      if (is_any_word_in_string(text,["You are logged in as", "Load complete"])) return;
       packet['event'] = reclassify_chat_message(text);
     }
 
@@ -210,6 +209,20 @@ function get_chatbox_msg_list()
 {
   return document.getElementById(civclient_state <= C_S_PREPARING ?
     'pregame_message_area' : 'game_message_area');
+}
+
+/**************************************************************************
+ Packages the chatbox messages on a page into an array for
+ sending to the message log and returns it.
+**************************************************************************/
+function get_chatbox_msg_array()
+{
+    var messages = [];
+    $(get_chatbox_msg_list().innerHTML).each(function() {
+        var event_number = window[this.className.toUpperCase()];
+        messages.push({ event: event_number, message: this.innerHTML });
+    });
+    return messages;
 }
 
 /**************************************************************************
@@ -290,6 +303,25 @@ function wait_for_text(text, runnable)
       wait_for_text(text, runnable);
     }, 100);
   }
-
 }
 
+/**************************************************************************
+  Workaround a client issue - messages were sent to the pregame chatbox
+  from the server and cleared when switching to in-game resulting in
+  missing text for people /observing or /taking players from pregame.
+  (This is different from people who already control a player in-game
+  and are automatically attached to it in pregame because of server
+  pecularities)
+**************************************************************************/
+function insert_pregame_messages(welcome_message)
+{
+    var bad_words = ["You are logged in as", "Load complete", "Welcome to the Freeciv version"];
+
+    for (var i = 0; i < pregame_messages.length; i++) {
+      var message_node = pregame_messages[i];
+      if (is_any_word_in_string(message_node.message,bad_words)) continue;
+      message_node.message = message_node.message.replace(/#000000/g, '#FFFFFF');
+      message_log.update(message_node)
+    }
+    pregame_messages = undefined;
+}

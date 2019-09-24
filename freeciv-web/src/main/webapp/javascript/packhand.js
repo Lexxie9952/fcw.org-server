@@ -493,6 +493,7 @@ function handle_calendar_info(packet)
 /* 30% complete */
 function handle_start_phase(packet)
 {
+  if (C_S_PREPARING == client_state()) pregame_messages = get_chatbox_msg_array();
   update_client_state(C_S_RUNNING);
 
   set_phase_start();
