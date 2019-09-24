@@ -2222,22 +2222,21 @@ void handle_ongoing_longturn_nation_select_req(struct connection *pc,
 
   pplayer = find_uncontrolled_player();
   if (pplayer) {
-    /* Nation and style at -1 mean the player has
-       selected to randomise his nation, in which
-       case we simply go with the AI's nation */
     if (style >= 0 && style < game.control.num_styles
         && new_nation != NO_NATION_SELECTED) {
-
       pplayer->is_male = is_male;
       pplayer->style = style_by_number(style);
       (void) player_set_nation(pplayer, new_nation);
+      attach_longturn_player(pc, pplayer);
     }
-
-    attach_longturn_player(pc, pplayer);
+    else{
+      notify_conn(dest, NULL, E_CONNECTION, ftc_server,
+        _("Unable to join the LongTurn game. There was a problem with picking your country."));        
+    }
   }
   else {
     notify_conn(dest, NULL, E_CONNECTION, ftc_server,
-        _("Unable to join LongTurn game. The game is probably full."));
+        _("Unable to join the LongTurn game. It is full."));
   }
 }
 
@@ -3667,4 +3666,61 @@ static struct rgbcolor *mapimg_server_plrcolor_get(int i)
 bool is_longturn(void)
 {
   return (fc_strcasecmp(game.server.meta_info.type, "longturn") == 0);
+}
+
+/**********************************************************************//**
+ Check if the connection is on the supercow list (admins and gamemasters
+ who get cmdlevel hack, can observe and take over players)
+**************************************************************************/
+bool is_supercow(struct connection * caller)
+{
+    FILE *supercow_list;
+    char line[1000];
+    char *split_line;
+    char *supercow_list_name;
+    char caller_name[MAX_LEN_NAME];
+    char *pos;
+    int port;
+
+    strcpy(caller_name, caller->username);
+    if (caller->playing) {
+      return FALSE;
+    }
+
+    supercow_list = fopen("supercows.txt", "r");
+    if (!supercow_list) {
+      return FALSE;
+    }
+
+    for(int i = 0; caller_name[i]; i++){
+       *caller_name = fc_tolower(*caller_name);
+    }
+
+    while (fgets(line, 1000, supercow_list)) {
+      if ((pos=strchr(line, '#')) != NULL) {
+        continue;
+      }
+
+      remove_leading_trailing_spaces(line);
+      if ((pos=strchr(line, '\n')) != NULL) {
+        *pos = '\0';
+      }
+
+      split_line = strtok(line, ":");
+      supercow_list_name = split_line;
+
+      for(int i = 0; supercow_list_name[i]; i++){
+        *supercow_list_name = fc_tolower(*supercow_list_name);
+      }
+
+      split_line = strtok(NULL, ":");
+
+      if (strcmp(caller_name, supercow_list_name) == 0
+          && str_to_int(split_line,&port) && port == srvarg.port) {
+        fclose(supercow_list);
+        return TRUE;
+      }
+    }
+    fclose(supercow_list);
+    return FALSE;
 }

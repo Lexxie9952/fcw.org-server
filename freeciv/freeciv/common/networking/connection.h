@@ -180,6 +180,7 @@ struct connection {
    * corresponding to this connection.
    */
   enum cmdlevel access_level;
+  bool supercow;
 
   enum gui_type client_gui;
 

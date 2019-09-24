@@ -1047,6 +1047,7 @@ int server_make_connection(int new_sock, const char *client_addr,
       pconn->observer = FALSE;
       pconn->playing = NULL;
       pconn->capability[0] = '\0';
+      pconn->supercow = FALSE;
       pconn->access_level = access_level_for_next_connection();
       pconn->notify_of_writable_data = NULL;
       pconn->server.currently_processed_request_id = 0;

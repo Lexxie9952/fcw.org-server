@@ -310,20 +310,16 @@ void establish_new_connection(struct connection *pconn)
 
     if (is_longturn()) {
       if (is_supercow(pconn)) {
-         observe_command(pconn,"",false,true);
+        pconn->supercow = TRUE;
+        conn_set_access(pconn, ALLOW_HACK, TRUE);
+        connection_attach_real(pconn, NULL, TRUE, TRUE);
+        notify_conn(dest, NULL, E_CONNECTION, ftc_server,
+		_("Welcome, Supercow. We've been expecting you."));
       }
       else {
-        pplayer = find_uncontrolled_player();
+        pplayer = find_uncontrolled_idle_player_longturn();
         if (pplayer) {
-            if (pplayer->is_alive && pplayer->nturns_idle > 12
-            && !pplayer->unassigned_user && !player_delegation_active(pplayer)
-            && strlen(pplayer->server.delegate_to) == 0) {
-            attach_longturn_player(pconn, pplayer);
-            }
-        }
-        else {
-            notify_conn(dest, NULL, E_CONNECTION, ftc_server,
-                _("Unable to join LongTurn game. The game is probably full."));
+          attach_longturn_player(pconn, pplayer);
         }
       }
     }
@@ -638,15 +634,28 @@ struct player *find_uncontrolled_player(void)
         return played;
       }
     } else {
-      if (((!played->is_connected && !played->was_created 
+      if ((!played->is_connected && !played->was_created
       && played->unassigned_user && played->is_alive)
       || (!played->unassigned_user && played->is_alive
-      && played->nturns_idle > 12 )) 
-      && !player_delegation_active(played) 
-      && strlen(played->server.delegate_to) == 0) {
+      && played->nturns_idle > 12 )) {
         return played;
       }
     }
+  } players_iterate_end;
+
+  return NULL;
+}
+
+/**********************************************************************//**
+  Search for the first uncontrolled idle player in longturn
+**************************************************************************/
+struct player *find_uncontrolled_idle_player_longturn(void)
+{
+  players_iterate(played) {
+      if (!played->unassigned_user && played->is_alive
+      && played->nturns_idle > 12) {
+        return played;
+      }
   } players_iterate_end;
 
   return NULL;
@@ -707,7 +716,9 @@ static bool connection_attach_real(struct connection *pconn,
       set_as_human(pplayer);
     }
 
-    sz_strlcpy(pplayer->username, pconn->username);
+    if (pconn && !pconn->supercow) {
+      sz_strlcpy(pplayer->username, pconn->username);
+    }
     pplayer->unassigned_user = FALSE;
     pplayer->user_turns = 0; /* reset for a new user */
     pplayer->is_connected = TRUE;
@@ -719,7 +730,7 @@ static bool connection_attach_real(struct connection *pconn,
       }
       (void) aifill(game.info.aifill);
     }
-    if (is_longturn()) {
+    if (is_longturn() && !pconn->supercow) {
       server_player_set_name(pplayer, pconn->username);
     }
 

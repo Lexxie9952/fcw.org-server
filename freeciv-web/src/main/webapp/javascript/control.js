@@ -769,11 +769,6 @@ function check_text_input(event,chatboxtextarea) {
       return; //disallow all uppercase messages.
     }
 
-    if (is_longturn() && C_S_RUNNING == client_state()
-      && message != null && message.indexOf(encode_message_text("/set")) != -1) {
-      return; // disallow changing settings in a running LongTurn game.
-    }
-
     if (message.length >= max_chat_message_length) {
       message_log.update({
         event: E_LOG_ERROR,

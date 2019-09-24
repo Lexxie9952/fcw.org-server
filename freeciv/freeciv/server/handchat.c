@@ -68,8 +68,9 @@ static void form_chat_name(struct connection *pconn, char *buffer, size_t len)
 {
   struct player *pplayer = pconn->playing;
 
-  if (!pplayer
-      || pconn->observer
+  if (pconn->supercow) {
+    fc_snprintf(buffer, len, "%s (gamemaster)", pconn->username);
+  } else if (!pplayer || pconn->observer
       || strcmp(player_name(pplayer), ANON_PLAYER_NAME) == 0) {
     fc_snprintf(buffer, len, "%s (observer)", pconn->username);
   } else {
@@ -281,29 +282,12 @@ static void chat_msg_to_all(struct connection *sender, char *msg)
 {
   struct packet_chat_msg packet;  
   char sender_name[MAX_LEN_CHAT_NAME];
-  char adjusted_msg[MAX_LEN_CHAT_NAME+MAX_LEN_MSG+1000];
-  char *pos;
-  const char server_parenthesis = '(';
-  char *format = "%s: %s";
   
-  sz_strlcpy(adjusted_msg, msg);  
-  pos = strstr(adjusted_msg, "(server)");
   msg = skip_leading_spaces(msg);
-  form_chat_name(sender, sender_name, sizeof(sender_name));  
-  
-  /* Supercow server message functionality */
-  
-  if (pos && msg[0] == server_parenthesis && is_supercow(sender)) {
-      sender_name[0] = '\0';
-      format = "%s%s";
-      strcpy(adjusted_msg, msg);
-      strtok(adjusted_msg, ")");
-      msg = strtok(NULL, ")");
-      msg = skip_leading_spaces(msg);
-  }
+  form_chat_name(sender, sender_name, sizeof(sender_name));
   
   package_chat_msg(&packet, sender, ftc_chat_public,
-                 format, sender_name, msg);
+                 "%s: %s", sender_name, msg);
   con_write(C_COMMENT, "%s", packet.message);
   lsend_packet_chat_msg(game.est_connections, &packet);
 

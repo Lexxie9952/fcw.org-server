@@ -344,7 +344,8 @@ static void cmd_reply_line(enum command_id cmd, struct connection *caller,
     con_write(rfc_status, "%s%s", prefix, line);
   }
 
-  if (rfc_status == C_OK) {
+  if ((rfc_status == C_OK && !caller)
+      || (rfc_status == C_OK && caller && !caller->supercow)) {
     struct packet_chat_msg packet;
 
     package_event(&packet, NULL, E_SETTING, ftc_server, "%s", line);
@@ -1854,11 +1855,20 @@ static bool explain_option(struct connection *caller, char *str, bool check)
 /**********************************************************************//**
   Send a message to all players
 **************************************************************************/
-static bool wall(char *str, bool check)
+static bool wall(char *str, bool check, bool prefix_message)
 {
   if (!check) {
-    notify_conn(NULL, NULL, E_MESSAGE_WALL, ftc_server_prompt,
-                _("Server Operator: %s"), str);
+        char * prefix = (prefix_message) ? "Server Operator: " : "";
+        struct packet_chat_msg packet;
+
+        package_event(&packet, NULL, E_SETTING, ftc_server,
+        "%s%s", prefix, str);
+
+        conn_list_iterate(game.est_connections, pconn) {
+          send_packet_chat_msg(pconn, &packet);
+        } conn_list_iterate_end;
+
+        event_cache_add_for_all(&packet);
   }
   return TRUE;
 }
@@ -3192,7 +3202,7 @@ static bool is_allowed_to_take(struct player *pplayer, bool will_obs,
   (see connection_detach()). The console and those with ALLOW_HACK can
   use the two-argument command and force others to observe.
 **************************************************************************/
-bool observe_command(struct connection *caller, char *str, bool check, bool supercow)
+bool observe_command(struct connection *caller, char *str, bool check)
 {
   int i = 0, ntokens = 0;
   char buf[MAX_LEN_CONSOLE_LINE], *arg[2], msg[MAX_LEN_MSG];  
@@ -3253,8 +3263,8 @@ bool observe_command(struct connection *caller, char *str, bool check, bool supe
 
   /******** PART II: do the observing ********/
 
-  /* check allowtake for permission */  
-  if (!supercow && !is_allowed_to_take(pplayer, TRUE, msg, sizeof(msg))) {
+  /* check allowtake for permission */
+  if (!caller->supercow && !is_allowed_to_take(pplayer, TRUE, msg, sizeof(msg))) {
     cmd_reply(CMD_OBSERVE, caller, C_FAIL, "%s", msg);
     goto end;
   }
@@ -3312,7 +3322,7 @@ bool observe_command(struct connection *caller, char *str, bool check, bool supe
   } 
 
   /* attach pconn to new player as an observer or as global observer */
-  if ((res = connection_attach(pconn, pplayer, TRUE)) && !supercow) {
+  if ((res = connection_attach(pconn, pplayer, TRUE))) {
     if (pplayer) {
       cmd_reply(CMD_OBSERVE, caller, C_OK, _("%s now observes %s"),
                 pconn->username,
@@ -3416,7 +3426,7 @@ static bool take_command(struct connection *caller, char *str, bool check)
   }
 
   /* check allowtake for permission */
-  if (!is_allowed_to_take(pplayer, FALSE, msg, sizeof(msg))) {
+  if (!caller->supercow && !is_allowed_to_take(pplayer, FALSE, msg, sizeof(msg))) {
     cmd_reply(CMD_TAKE, caller, C_FAIL, "%s", msg);
     goto end;
   }
@@ -3497,7 +3507,8 @@ static bool take_command(struct connection *caller, char *str, bool check)
     pplayer = pconn->playing; /* In case pplayer was NULL. */
 
     /* inform about the status before changes */
-    cmd_reply(CMD_TAKE, caller, C_OK, _("%s now controls %s (%s, %s)."),
+    if (!caller->supercow) {
+        cmd_reply(CMD_TAKE, caller, C_OK, _("%s now controls %s (%s, %s)."),
               pconn->username,
               player_name(pplayer),
               is_barbarian(pplayer)
@@ -3508,6 +3519,20 @@ static bool take_command(struct connection *caller, char *str, bool check)
               pplayer->is_alive
               ? _("Alive")
               : _("Dead"));
+    }
+    else {
+        struct packet_chat_msg packet;
+
+        package_event(&packet, NULL, E_SETTING, ftc_server,
+        "%s now controls %s (%s, %s).", pconn->username, player_name(pplayer),
+        is_barbarian(pplayer) ? _("Barbarian") : is_ai(pplayer) ? _("AI")
+        : _("Human"), pplayer->is_alive ? _("Alive") : _("Dead"));
+
+        conn_list_iterate(game.est_connections, pconn) {
+          send_packet_chat_msg(pconn, &packet);
+        } conn_list_iterate_end;
+        event_cache_add_for_all(&packet);
+    }
   } else {
     cmd_reply(CMD_TAKE, caller, C_FAIL,
               _("%s failed to attach to any player."),
@@ -3537,6 +3562,24 @@ static bool detach_command(struct connection *caller, char *str, bool check)
   struct connection *pconn = NULL;
   struct player *pplayer = NULL;
   bool res = FALSE;
+
+  if (is_longturn()) {
+    if (caller->supercow) {
+      cmd_reply(CMD_DETACH, caller, C_FAIL,
+                  _("Do NOT use this command. Instead, use /cut to "
+                    "permanently separate a player from his nation "
+                    "and prioritise them for being taken, /kick to "
+                    "disappear the nation from the nation list, set "
+                    "a lower priority on them being retaken and "
+                    "prevent them from reconnecting for some time, "
+                    "/remove to remove a nation from the game and "
+                    "/take to temporarily assume control of a player."));
+    } else {
+      cmd_reply(CMD_DETACH, caller, C_FAIL,
+                  _("You are not allowed to use this command."));
+    }
+      goto end;
+  }
 
   sz_strlcpy(buf, str);
   ntokens = get_tokens(buf, arg, 1, TOKEN_DELIMITERS);
@@ -4147,63 +4190,6 @@ bool handle_stdin_input(struct connection *caller, char *str)
 }
 
 /**********************************************************************//**
- Check if the connection is on the supercow list (admins and gamemasters
- who can observe longturn games)
-**************************************************************************/
-bool is_supercow(struct connection * caller)
-{    
-    FILE *supercow_list;    
-    char line[1000];
-    char *split_line;
-    char *supercow_list_name;
-    char caller_name[MAX_LEN_NAME];
-    char *pos;
-    int port;
-    
-    strcpy(caller_name, caller->username);
-    if (!is_longturn() || caller->playing) {
-      return FALSE;
-    }
-    
-    supercow_list = fopen("supercows.txt", "r");     
-    if (!supercow_list) {
-      return FALSE;
-    }
-    
-    for(int i = 0; caller_name[i]; i++){
-       *caller_name = fc_tolower(*caller_name);
-    }
-    
-    while (fgets(line, 1000, supercow_list)) {
-      if ((pos=strchr(line, '#')) != NULL) {
-        continue;
-      }
-      
-      remove_leading_trailing_spaces(line);
-      if ((pos=strchr(line, '\n')) != NULL) {
-        *pos = '\0';
-      }
-      
-      split_line = strtok(line, ":");
-      supercow_list_name = split_line;
-        
-      for(int i = 0; supercow_list_name[i]; i++){
-        *supercow_list_name = fc_tolower(*supercow_list_name);
-      }
-      
-      split_line = strtok(NULL, ":");
-      
-      if (strcmp(caller_name, supercow_list_name) == 0 
-          && str_to_int(split_line,&port) && port == srvarg.port) {
-        fclose(supercow_list);
-        return TRUE;
-      }
-    }
-    fclose(supercow_list);
-    return FALSE;
-}
-
-/**********************************************************************//**
   Handle "command input", which could really come from stdin on console,
   or from client chat command, or read from file with -r, etc.
   caller == NULL means console, str is the input, which may optionally
@@ -4309,7 +4295,7 @@ static bool handle_stdin_input_real(struct connection *caller, char *str,
     make_dir(savedir);
   }
 
-  if (conn_can_vote(caller, NULL) && level == ALLOW_CTRL
+  if (!is_longturn() && conn_can_vote(caller, NULL) && level == ALLOW_CTRL
       && conn_get_access(caller) == ALLOW_BASIC && !check
       && !vote_would_pass_immediately(caller, cmd)) {
     struct vote *vote;
@@ -4365,9 +4351,11 @@ static bool handle_stdin_input_real(struct connection *caller, char *str,
   }
 
   if (caller
-      && !((check || vote_would_pass_immediately(caller, cmd))
-           && conn_get_access(caller) >= ALLOW_BASIC
-           && level == ALLOW_CTRL)
+      && !((check || (vote_would_pass_immediately(caller, cmd)
+                     && !is_longturn()) || (is_longturn()
+                     && command_vote_percent(command_by_number(cmd)) == 0))
+            && conn_get_access(caller) >= ALLOW_BASIC
+            && level == ALLOW_CTRL)
       && conn_get_access(caller) < level) {
     cmd_reply(cmd, caller, C_FAIL,
 	      _("You are not allowed to use this command."));
@@ -4399,8 +4387,10 @@ static bool handle_stdin_input_real(struct connection *caller, char *str,
 
     if (NULL != echo_list) {
       if (caller) {
-        notify_conn(echo_list, NULL, E_SETTING, ftc_any,
-                    "%s: '%s %s'", caller->username, command, arg);
+        if (!caller->supercow) {
+          notify_conn(echo_list, NULL, E_SETTING, ftc_any,
+                      "%s: '%s %s'", caller->username, command, arg);
+        }
       } else {
         notify_conn(echo_list, NULL, E_SETTING, ftc_server_prompt,
                     "%s: '%s %s'", _("(server prompt)"), command, arg);
@@ -4439,7 +4429,7 @@ static bool handle_stdin_input_real(struct connection *caller, char *str,
   case CMD_TAKE:
     return take_command(caller, arg, check);
   case CMD_OBSERVE:
-    return observe_command(caller, arg, check, is_supercow(caller));
+    return observe_command(caller, arg, check);
   case CMD_DETACH:
     return detach_command(caller, arg, check);
   case CMD_CREATE:
@@ -4473,7 +4463,7 @@ static bool handle_stdin_input_real(struct connection *caller, char *str,
   case CMD_RULESETDIR:
     return set_rulesetdir(caller, arg, check, read_recursion);
   case CMD_WALL:
-    return wall(arg, check);
+    return wall(arg, check, !caller->supercow);
   case CMD_CONNECTMSG:
     return connectmsg_command(caller, arg, check);
   case CMD_VOTE:
@@ -6004,17 +5994,23 @@ static bool cut_client_connection(struct connection *caller, char *name,
 {
   enum m_pre_result match_result;
   struct connection *ptarget;
+  struct player *pplayer;
 
   ptarget = conn_by_user_prefix(name, &match_result);
 
   if (!ptarget) {
-    cmd_reply_no_such_conn(CMD_CUT, caller, name, match_result);
-    return FALSE;
+    if (caller->supercow) {
+      goto REMOVE_PLAYER;
+    }
+    else {
+      cmd_reply_no_such_conn(CMD_CUT, caller, name, match_result);
+      return FALSE;
+    }
   } else if (check) {
     return TRUE;
   }
 
-  if (conn_controls_player(ptarget)) {
+  if (!caller->supercow && conn_controls_player(ptarget)) {
     /* If we cut the connection, unassign the login name.*/
     sz_strlcpy(ptarget->playing->username, _(ANON_USER_NAME));
     ptarget->playing->unassigned_user = TRUE;
@@ -6024,9 +6020,26 @@ static bool cut_client_connection(struct connection *caller, char *name,
             _("Cutting connection %s."), ptarget->username);
   connection_close_server(ptarget, _("connection cut"));
 
+  if (caller->supercow) {
+
+    REMOVE_PLAYER:
+
+      pplayer = player_by_name_prefix(name, &match_result);
+
+      if (!pplayer) {
+        cmd_reply_no_such_player(CMD_CUT, caller, name, match_result);
+        return FALSE;
+      }
+
+      sz_strlcpy(pplayer->username, _(ANON_USER_NAME));
+      pplayer->unassigned_user = TRUE;
+      server_player_set_name(pplayer, "Kicked player");
+      player_delegation_set(pplayer, NULL);
+      send_player_info_c(pplayer, game.est_connections);
+  }
+
   return TRUE;
 }
-
 
 /**********************************************************************//**
   Utility for 'kick_hash' tables.
@@ -6094,18 +6107,24 @@ static bool kick_command(struct connection *caller, char *name, bool check)
 {
   char ipaddr[FC_MEMBER_SIZEOF(struct connection, server.ipaddr)];
   struct connection *pconn;
+  struct player *pplayer;
   enum m_pre_result match_result;
   time_t now;
 
   remove_leading_trailing_spaces(name);
   pconn = conn_by_user_prefix(name, &match_result);
   if (NULL == pconn) {
-    cmd_reply_no_such_conn(CMD_KICK, caller, name, match_result);
-    return FALSE;
+    if (caller->supercow) {
+      goto REMOVE_PLAYER;
+    }
+    else {
+      cmd_reply_no_such_conn(CMD_KICK, caller, name, match_result);
+      return FALSE;
+    }
   }
 
   if (NULL != caller && ALLOW_ADMIN > conn_get_access(caller)) {
-    const int MIN_UNIQUE_CONNS = 3;
+    const int MIN_UNIQUE_CONNS = (caller->supercow) ? 2 : 3;
     const char *unique_ipaddr[MIN_UNIQUE_CONNS];
     int i, num_unique_connections = 0;
 
@@ -6132,10 +6151,15 @@ static bool kick_command(struct connection *caller, char *name, bool check)
     } conn_list_iterate_end;
 
     if (MIN_UNIQUE_CONNS > num_unique_connections) {
-      cmd_reply(CMD_KICK, caller, C_FAIL,
-                _("There must be at least %d unique connections to the "
-                  "server for this command to be valid."), MIN_UNIQUE_CONNS);
-      return FALSE;
+      if (caller->supercow) {
+        goto REMOVE_PLAYER;
+      }
+      else {
+        cmd_reply(CMD_KICK, caller, C_FAIL,
+                  _("There must be at least %d unique connections to the "
+                    "server for this command to be valid."), MIN_UNIQUE_CONNS);
+        return FALSE;
+      }
     }
   }
 
@@ -6152,7 +6176,7 @@ static bool kick_command(struct connection *caller, char *name, bool check)
       continue;
     }
 
-    if (conn_controls_player(aconn)) {
+    if (!caller->supercow && conn_controls_player(aconn)) {
       /* Unassign the username. */
       sz_strlcpy(aconn->playing->username, _(ANON_USER_NAME));
       aconn->playing->unassigned_user = TRUE;
@@ -6163,9 +6187,29 @@ static bool kick_command(struct connection *caller, char *name, bool check)
     connection_close_server(aconn, _("kicked"));
   } conn_list_iterate_end;
 
+  if (caller->supercow) {
+
+    REMOVE_PLAYER:
+
+      pplayer = player_by_name_prefix(name, &match_result);
+
+      if (!pplayer) {
+        cmd_reply_no_such_player(CMD_KICK, caller, name, match_result);
+        return FALSE;
+      }
+
+      cmd_reply(CMD_KICK, caller, C_DISCONNECTED,
+        _("Changing %s to a New Available Player"), pplayer->username);
+      sz_strlcpy(pplayer->username, _(ANON_USER_NAME));
+      pplayer->nturns_idle = 0;
+      pplayer->unassigned_user = TRUE;
+      server_player_set_name(pplayer, "New Available Player");
+      player_delegation_set(pplayer, NULL);
+      send_player_info_c(pplayer, game.est_connections);
+  }
+
   return TRUE;
 }
-
 
 /**********************************************************************//**
   Show caller introductory help about the server. help_cmd is the command

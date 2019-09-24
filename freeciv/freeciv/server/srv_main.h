@@ -94,6 +94,7 @@ void srv_main(void);
 void server_quit(void);
 void save_game_auto(const char *save_reason, enum autosave_type type);
 bool is_longturn(void);
+bool is_supercow(struct connection * caller);
 
 enum server_states server_state(void);
 void set_server_state(enum server_states newstate);
