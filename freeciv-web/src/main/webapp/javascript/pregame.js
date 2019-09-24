@@ -375,7 +375,10 @@ function pick_nation(player_id)
             else player_nations[players[id]['nation']] = true;
         }
     }
-    if (Object.keys(players).length == Object.keys(player_nations).length) return; // No free slots, don't show the dialog.
+    if (Object.keys(players).length == Object.keys(player_nations).length) {
+       send_message("Unable to join the game, it is full.");
+       return;
+    }
   }
 
   var nations_html = "<div id='nation_heading'><span>Select nation for " + player_name + ":</span> <br>"
@@ -572,12 +575,11 @@ function submit_nation_choice_ongoing_longturn()
 {
   if (client.conn['player_num'] == null) return;
 
-  var style = -1
-
   if (chosen_nation != -1) {
-    style = nations[chosen_nation]['style'];
-    if (chosen_style != -1) style = chosen_style;  
+    if (chosen_style != -1) style = chosen_style;
+    else style = nations[chosen_nation]['style'];
   }
+  else return;
 
   var test_packet = {"pid" : packet_ongoing_longturn_nation_select_req, 
                    "nation_no" : chosen_nation,
