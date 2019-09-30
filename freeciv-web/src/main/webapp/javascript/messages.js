@@ -219,8 +219,10 @@ function get_chatbox_msg_array()
 {
     var messages = [];
     $(get_chatbox_msg_list().innerHTML).each(function() {
-        var event_number = window[this.className.toUpperCase()];
-        messages.push({ event: event_number, message: this.innerHTML });
+        if (this.nodeName == "LI") {
+          var event_number = window[this.className.toUpperCase()];
+          messages.push({ event: event_number, message: this.innerHTML });
+        }
     });
     return messages;
 }
