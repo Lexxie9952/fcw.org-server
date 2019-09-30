@@ -445,7 +445,7 @@ void send_all_known_tiles(struct conn_list *dest)
       conn_list_do_buffer(dest);
     }
 
-    send_tile_info(dest, ptile, !is_longturn());
+    send_tile_info(dest, ptile, is_longturn());
   } whole_map_iterate_end;
 
   conn_list_do_unbuffer(dest);
