@@ -362,6 +362,25 @@ function popup_action_selection(actor_unit, action_probabilities,
       if (actions[action_id]['tgt_kind'] == tgt_kind
           && action_prob_possible(
               action_probabilities[action_id])) {
+        //---------------------------------------------------------------------------------        
+        // This code disallows capture IFF:        
+        // Longturn && idle nation && human && unit isn't trespassing on player's territory
+        // TO DO: move this to C-server
+        if (action_id == ACTION_CAPTURE_UNITS && is_longturn() ) {
+          var sunits = tile_units(tiles[tgt_id]);
+          if (sunits && sunits.length==1) {
+            var player_id = sunits[0].owner;
+            // Disallow if idle and human:
+            if (players[player_id]['nturns_idle'] > 1 && !(players[player_id]['flags'].isSet(PLRF_AI))) {
+              // Disallow if idler is NOT trespassing on player's own territory: 
+              if (tiles[tgt_id].owner != client.conn.playing.playerno) {
+                add_client_message("Info: capture order unavailable on idle human player.");
+                continue; // disallow capture
+              }
+            }
+          }
+        }
+        //-------------------------------------------------------------------------------------
         buttons.push(create_act_sel_button(id, actor_unit['id'],
                                            tgt_id, sub_tgt_id, action_id,
                                            action_probabilities));
