@@ -17,16 +17,19 @@
 
 -- This flags whether philosophy awards a bonus advance, and gets set to off (0) after T85.
 philosophy_possible = 1
+game_turn = 0
 
 --Give players custom messages on certain years.  Currently at 400BC (T85), Philosophy expires. Let them know.
 function history_turn_notifications(turn, year)
+  game_turn = turn
+
   if turn > 78 and turn < 85 then
     notify.all("Philosophy will no longer award a bonus tech after turn 85.")
   end
 
   if turn == 85 then
   -- Philosophy no longer gives advances after 400BC
-    notify.all("Philosophers around the world mourn the execution of Giordano Bruno. Philosophy no longer gives a bonus advance.")
+    notify.all("<font color=#ffff00>Philosophers around the world mourn the execution of Giordano Bruno. Philosophy no longer gives a bonus advance.</font>")
     philosophy_possible = 0
   end
   
@@ -73,6 +76,21 @@ function tech_researched_handler(tech, player, how)
   end
 
   id = tech.id
+-- Report early Horseback riding.
+  if id == find.tech_type("Horseback Riding").id and how == "researched" then
+    if game_turn < 15 then
+      for c in player:cities_iterate() do 
+        if c:has_building(find.building_type("Palace")) then
+          notify.event(NIL, c.tile, E.TECH_GAIN,
+          _("<font color=#ffff00>Travellers tell stories of the amazing skills of the %s, who ride wild beasts near %s! (%i,%i)</font>"),
+          player.nation:plural_translation(), c.name, c.tile.x, c.tile.y )
+
+          notify.all( _("Tribesmen have learned to ride wild beasts near %s (%i,%i)"), c.name, c.tile.x, c.tile.y)
+        end
+      end  
+    end
+  end
+-------------------------
   if id == find.tech_type("Philosophy").id and how == "researched" then
 
     -- Check potential teammates.
@@ -123,12 +141,12 @@ function tech_researched_handler(tech, player, how)
       -- Notify the player. Include the tech names in a way that makes it
       -- look natural no matter if each tech is announced or not.
     notify.event(player, NIL, E.TECH_GAIN,
-                 _("Great philosophers from all the world join your civilization: you get the immediate advance %s."),
+                 _("<font color=#ffff00>Great philosophers from all the world join your civilization: you get the immediate advance %s.</font>"),
                  gained:name_translation())
 
     -- Notify research partners
     notify.research(player, false, E.TECH_GAIN,
-                    _("Great philosophers from all the world join the %s: you get the immediate advance %s."),
+                    _("<font color=#ffff00>Great philosophers from all the world join the %s: you get the immediate advance %s.</font>"),
                     player.nation:plural_translation(),
                     gained:name_translation())
 
@@ -136,7 +154,7 @@ function tech_researched_handler(tech, player, how)
     -- They should therefore be informed about the source here too.
     notify.research_embassies(player, E.TECH_EMBASSY,
             -- /* TRANS: first %s is leader or team name */
-            _("Great philosophers from all the world join %s: they get %s as an immediate advance."),
+            _("<font color=#ffff00>Great philosophers from all the world join %s: they get %s as an immediate advance.</font>"),
             player:research_name_translation(),
             gained:name_translation())
   end
