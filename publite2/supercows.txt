@@ -7,3 +7,8 @@
 # Any leading or trailing spaces will be removed from that message automatically. Make sure not to add : after (server)
 #
 #Rhue:6003
+Lexxie:6070
+Lexxie:6061
+Lexxie:6003
+FuzzyDunlop:6061
+Ericred:6003
