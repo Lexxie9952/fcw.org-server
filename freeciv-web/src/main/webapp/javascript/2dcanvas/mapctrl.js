@@ -81,8 +81,9 @@ function mapview_mouse_click(e)
       copy_tile_target_for_prod(mouse_x, mouse_y);  
     }
 
-    /* right click to re-center. */
-    else if (!map_select_active || !map_select_setting_enabled) {
+    /* right click to re-center or get context menu on unit. */
+    else if ( (!e.shiftKey && !e.altKey && !e.ctrlKey) // mod-keys don't trigger these actions
+           && (!map_select_active || !map_select_setting_enabled) ) { // in drag-select mode we don't it either
       context_menu_active = true;
       recenter_button_pressed(mouse_x, mouse_y);
     } else { // map_select_active from right-click-drag: button release means select and clean up
