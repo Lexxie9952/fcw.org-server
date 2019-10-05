@@ -3230,34 +3230,120 @@ function key_unit_auto_explore()
 function key_unit_load()
 {
   var funits = get_units_in_focus();
+
+  // Send command for each selected unit in focus:
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     var ptile = index_to_tile(punit['tile']);
     var transporter_unit_id = 0;
+    var transporter_units = [];
 
     var has_transport_unit = false;
     var units_on_tile = tile_units(ptile);
-    for (let r = 0; r < units_on_tile.length; r++) {
-      var tunit = units_on_tile[r];
+
+    var t,r,b, candidate, tunit, ntype;
+
+    // Make array of candidate transporter units:
+    for (t = 0; t < units_on_tile.length; t++) {
+      tunit = units_on_tile[t];
       if (tunit['id'] == punit['id']) continue;
-      var ntype = unit_type(tunit);
+      ntype = unit_type(tunit);
       if (ntype['transport_capacity'] > 0) {
-        has_transport_unit = true;
-        transporter_unit_id = tunit['id'];
+        // add candidate to list
+        transporter_units.push( {id: tunit['id'], capacity: ntype['transport_capacity'], moves: tunit['movesleft'], carrying: 0, full: false} );
       }
     }
 
-    if (has_transport_unit && transporter_unit_id > 0 && punit['tile'] > 0) {
-      var packet = {
-        "pid"         : packet_unit_load,
-        "cargo_id"    : punit['id'],
-        "transporter_id"   : transporter_unit_id,
-        "transporter_tile" : punit['tile']
-      };
-      send_request(JSON.stringify(packet));
+    // No candidate transporters found: abort
+    if (transporter_units.length < 1) return;
+
+    // if 2 or more candidates, give user a GUI choice what to load on:
+    if (transporter_units.length >= 2 /*&& funits.length == 1*/) {
+      // Count up how many on each transport candidate:
+      for (t = 0; t < units_on_tile.length; t++ ) {
+        tunit = units_on_tile[t];
+        // For each transported unit, adjust load for candidate transporters:
+        if (tunit['transported'] == true) {
+          candidate = transporter_units.findIndex(i => i.id === tunit['transported_by']);
+          if (candidate != null) transporter_units[candidate]['carrying'] += 1;  // increment load counter of transporter
+        }
+      }
+      // Make dialog popup with name of unit type/homecity-------------
+      var id = "";
+      var buttons = [];
+      id = "#load_unit_dialog_" + punit['id'];
+      $(id).remove();     // Reset dialog page. 
+      $("<div id='load_unit_dialog_" + punit['id'] + "'></div>").appendTo("div#game_page");
+
+      var home_city_name = "";
+      var home_city;
+      if (punit['homecity']) home_city = punit['homecity'];
+      if (home_city && cities[home_city] && cities[home_city]['name']) {
+        home_city_name = " from " + cities[home_city]['name'];
+      }
+      $(id).attr("title", "Load "+unit_type(punit)['name'] + home_city_name );
+      $(id).html("<b>M</b>:Moves <b>L</b>:Loaded <b>C</b>:Capacity<br>");
+      //--------------------------------------------------------------------
+      // Make buttons for each eligible transport it can load onto:
+      for (b = 0; b < transporter_units.length; b++ ) {
+         // edit: make button even if transport has no room - just disable it later
+         if (true /*|| transporter_units[b]['carrying'] < transporter_units[b]['capacity']*/) {
+          var actor = punit['id'];
+          var ttile = punit['tile'];
+          var dialog_num = i;
+          var dialog_id = id;
+          var last_dialog = funits.length;
+          
+          buttons.push(create_load_transport_button(actor, 
+                                                    ttile, 
+                                                    transporter_units[b]['id'],
+                                                    transporter_units[b]['moves'],
+                                                    transporter_units[b]['carrying'],
+                                                    transporter_units[b]['capacity'],
+                                                    dialog_id,
+                                                    dialog_num,
+                                                    last_dialog) ); 
+        }
+      }
+      buttons.push( create_a_close_button(dialog_id) );
+
+      // Display dialog:
+      $(id).dialog({bgiframe: true,
+        modal: true,
+        position: { my: ("center+" + (i*3) + " center+" + (i*3) ), at: "center" }, 
+        buttons: buttons,
+        height: "auto",
+        width: "auto"});
+      $(id).dialog('open');
+    }
+    // otherwise, only one transporter candidate, load automatically with no GUI input from user: 
+    else { 
+      for (r = 0; r < units_on_tile.length; r++) {
+        tunit = units_on_tile[r];
+        if (tunit['id'] == punit['id']) continue;
+        ntype = unit_type(tunit);
+        if (ntype['transport_capacity'] > 0) {
+          has_transport_unit = true;
+          transporter_unit_id = tunit['id'];
+        }
+      }
+
+      if (has_transport_unit && transporter_unit_id > 0 && punit['tile'] > 0) {
+        var packet = {
+          "pid"              : packet_unit_load,
+          "cargo_id"         : punit['id'],
+          "transporter_id"   : transporter_unit_id,
+          "transporter_tile" : punit['tile']
+        };
+        send_request(JSON.stringify(packet));
+        setTimeout(update_active_units_dialog, 600);
+      }
     }
   }
-  setTimeout(advance_unit_focus, 700);
+  // Don't advance focus if more than one dialog open, it would reset our focus units
+  // which we need for upcoming dialogs for each additional unit
+  if (funits.length<2)
+    setTimeout(advance_unit_focus, 700);
 }
 
 /**************************************************************************

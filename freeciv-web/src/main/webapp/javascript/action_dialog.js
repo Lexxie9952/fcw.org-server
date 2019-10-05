@@ -1014,7 +1014,6 @@ function list_potential_target_extras(act_unit, target_tile)
 
 /**************************************************************************
   Create a button that selects a target extra.
-
   Needed because of JavaScript's scoping rules.
 **************************************************************************/
 function create_select_tgt_extra_button(parent_id, actor_unit_id,
@@ -1059,6 +1058,59 @@ function create_select_tgt_extra_button(parent_id, actor_unit_id,
 
   /* The button is ready. */
   return button;
+}
+
+/**************************************************************************
+  Create a button that selects a transport to load on.
+  Needed because of JavaScript's scoping rules.
+**************************************************************************/
+function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapacity, dialog_id, dialog_num, last_dialog)
+{
+  // Mark and disable button if transport is at full capacity:
+  var full_capacity_text = "";
+  var disable = false;
+  if (tloaded  >= tcapacity) {
+    full_capacity_text = "**";
+    disable = true;
+  }
+
+  var load_button = {
+    text  : full_capacity_text 
+                + "T" + tid 
+                + " " + unit_type(units[tid])['name'] +":"
+                + " M:" + move_points_text(tmoves)
+                + " L:" + tloaded 
+                + " C:" + tcapacity
+                + full_capacity_text,
+    disabled :  disable,
+    click : function() {
+      var packet = {
+        "pid"              : packet_unit_load,
+        "cargo_id"         : actor,
+        "transporter_id"   : tid,
+        "transporter_tile" : ttile
+      };
+      send_request(JSON.stringify(packet));
+      setTimeout(update_active_units_dialog, 600);
+
+      // for very last dialog, click advances unit focus
+      if (dialog_num==last_dialog) setTimeout(advance_unit_focus, 700);
+
+      $(dialog_id).remove();
+    }
+  }
+  return load_button;
+}
+
+/**************************************************************************
+  Create a close button (for multiple cascading dialogs)
+  (such as multiple dialogs for multiple units each getting a dialog)
+  Needed because of JavaScript's scoping rules.
+**************************************************************************/
+function create_a_close_button(parent_id)
+{
+  var close_button = {text: "Cancel", click: function() {$(parent_id).dialog('close')}};
+  return close_button;
 }
 
 /**************************************************************************
