@@ -18,14 +18,14 @@
 -- This flags whether philosophy awards a bonus advance, and gets set to off (0) after T85.
 philosophy_possible = 1
 
---Give players custom messages on certain years.  Currently at 400BC (T85), Philosophy expires. Let them know.
+--Give players custom messages on certain years.  Currently at 1600AD (T85), Philosophy expires. Let them know.
 function history_turn_notifications(turn, year)
   if turn > 78 and turn < 85 then
     notify.all("Philosophy will no longer award a bonus tech after turn 85.")
   end
 
   if turn == 85 then
-  -- Philosophy no longer gives advances after 400BC
+  -- Philosophy no longer gives advances after 1600AD
     notify.all("Philosophers around the world mourn the execution of Giordano Bruno. Philosophy no longer gives a bonus advance.")
     philosophy_possible = 0
   end
@@ -90,7 +90,7 @@ function tech_researched_handler(tech, player, how)
     
     -- Philosophy does not give a bonus tech under certain conditions. Check for those conditions -------------------
     if philosophy_possible == 0 then
-      -- No Philosophy advance after turn 85 (400 BCE)
+      -- No Philosophy advance after turn 85 (1600 CE)
         return
       end
   
