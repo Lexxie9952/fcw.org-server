@@ -394,28 +394,21 @@ function handle_traderoute_info(packet)
 ****************************************************************************/
 function handle_player_info(packet)
 {
-  console.log("Packet 51 being processed.");
-
   /* Interpret player flags. */
   packet['flags'] = new BitVector(packet['flags']);
   packet['gives_shared_vision'] = new BitVector(packet['gives_shared_vision']);
 
   players[packet['playerno']] = $.extend(players[packet['playerno']], packet);
 
+  /*
   // if server has sent a nation color change:
   if (packet['color_red']) {
-    console.log("Color change command sent.");
-    if (packet['playerno']) {
-      if (players[packet['playerno']]) {
-        if (nations[players[packet['playerno']]['nation']]) { 
+    if (packet['playerno'] && players[packet['playerno']] && nations[players[packet['playerno']]['nation']])  { 
           var pplayer = players[packet['playerno']];
           var pcolor = "rgb("+packet['color_red']+","+packet['color_green']+","+packet['color_blue']+")";
-          console.log("Setting "+pplayer['name']+"'s nation to "+pcolor);
           nations[pplayer['nation']]['color'] = pcolor;
-        }
-      }
-    } else console.log("Color change sent but failed to qualify for resetting.");
-  } else console.log("Color change appears not to be have been sent.");
+    } 
+  } */
 }
 
 /************************************************************************//**
