@@ -402,7 +402,7 @@ function handle_player_info(packet)
 
   // if server has sent a nation color change:
   if (packet['color_red'] && packet['playerno'] && players[packet['playerno']] && nations[players[packet['playerno']]]) { 
-    nations[players[packet['playerno']]]['color'] = "rgb("+packet['color_red']+","+packet['color_green']+","+packet['color_blue']+")";
+    nations[players[packet['playerno']]]['nation']['color'] = "rgb("+packet['color_red']+","+packet['color_green']+","+packet['color_blue']+")";
   }
 }
 
