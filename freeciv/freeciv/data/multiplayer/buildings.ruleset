@@ -822,10 +822,11 @@ sound		= "b_sdi_defense"
 sound_alt	= "b_generic"
 helptext	= _("\
 Protects a city and its environs (up to 2 tiles away) from attacks\
- by other nations' Nuclear units. A Nuclear unit not owned by you or a\
- teammate which attacks a city with SDI Defense, or attacks a unit (or is\
- deliberately exploded) within range, is shot down and simply has no effect.\
- Also, doubles defense for units in the city against non-nuclear missiles.\
+ by Nuclear units. A Nuclear unit not owned by you or a teammate will\
+ be shot down and have no effect if it tries to detonate in this area.\
+ Nuclear units detonating outside this area will still affect all tiles\
+ adjacent to ground zero, including tiles within the protected area.\
+ SDI also doubles defense for units in the city against non-nuclear missiles.\
 ")
 
 [building_sewer_system]
