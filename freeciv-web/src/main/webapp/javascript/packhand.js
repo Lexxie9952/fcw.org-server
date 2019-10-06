@@ -405,11 +405,15 @@ function handle_player_info(packet)
   // if server has sent a nation color change:
   if (packet['color_red']) {
     console.log("Color change command sent.");
-    if (packet['playerno'] && players[packet['playerno']] && nations[players[packet['playerno']]]) { 
-      var pplayer = players[packet['playerno']];
-      var pcolor = "rgb("+packet['color_red']+","+packet['color_green']+","+packet['color_blue']+")";
-      console.log("Setting "+pplayer['name']+"'s nation to "+pcolor);
-      nations[pplayer['nation']]['color'] = pcolor;
+    if (packet['playerno']) {
+      if (players[packet['playerno']]) {
+        if (nations[players[packet['playerno']]['nation']]) { 
+          var pplayer = players[packet['playerno']];
+          var pcolor = "rgb("+packet['color_red']+","+packet['color_green']+","+packet['color_blue']+")";
+          console.log("Setting "+pplayer['name']+"'s nation to "+pcolor);
+          nations[pplayer['nation']]['color'] = pcolor;
+        }
+      }
     } else console.log("Color change sent but failed to qualify for resetting.");
   } else console.log("Color change appears not to be have been sent.");
 }
