@@ -973,7 +973,7 @@ button {
 }
 .transported_focus_unit {
   border: 1px solid skyblue;
-  background-color: rgba(154, 181, 255, 0.5);
+  background-color: rgba(110, 210, 255, 0.75);
 }
 .nonfocus_unit {
   border: 1px solid white;
