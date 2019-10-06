@@ -630,22 +630,18 @@ function get_tech_infobox_html(tech_id)
   var i = tileset[tag][4];
   var image_src = "/tileset/freeciv-web-tileset-" + tileset_name + "-" + i + get_tileset_file_extention() + "?ts=" + ts;
   if (is_small_screen()) {
-    infobox_html += "<div class='specific_tech' onclick='send_player_research(" + tech_id + ");' title='"
-	   + get_advances_text(tech_id).replace(stripChar, "") + "'>"
-	   +  ptech['name']
-	   + "</div>";
+    infobox_html += "<div class='specific_tech' style='transform: scale(1.0);' onclick='send_player_research(" + tech_id + ")'>"
+          +  ptech['name']
+          + "</div>";
   } else {
-    infobox_html += "<div class='specific_tech' onclick='send_player_research(" + tech_id + ");' title='"
-	   + get_advances_text(tech_id).replace(stripChar, "") + "'>"
+    infobox_html += "<div class='specific_tech' onclick='send_player_research(" + tech_id + ")'>"
            + "<div class='tech_infobox_image' style='background: transparent url("
            + image_src
-	   + ");background-position:-" + tileset_x + "px -" + tileset_y
-           + "px;  width: " + width + "px;height: " + height + "px;'"
-           + "'></div>"
-	   +  ptech['name']
-	   + "</div>";
+	         + "); background-position:-" + tileset_x + "px -" + tileset_y
+           + "px;  width: " + width + "px;height: " + height + "px;'></div>"
+	         +  get_advances_text(tech_id).replace(stripChar, "")
+           + "</div>";
   }
-
   return infobox_html;
 }
 
@@ -820,7 +816,7 @@ function show_tech_info_dialog(tech_name, unit_type_id, improvement_id)
     const num = (value) => value === null ? 'null' : value;
     const tech_span = (name, unit_id, impr_id, title) =>
       `<span ${title ? `title='${title}'` : ''}`
-      + ` onclick='show_tech_info_dialog("${name}", ${num(unit_id)}, ${num(impr_id)})'>${name}</span>`;
+      + ` onclick='show_tech_info_dialog("${name}", ${num(unit_id)}, ${num(impr_id)}")'</span>`;
     const is_valid_and_required = (next_tech_id) =>
       reqtree.hasOwnProperty(next_tech_id) && is_tech_req_for_tech(tech_id, next_tech_id);
     const format_list_with_intro = (intro, list) =>
