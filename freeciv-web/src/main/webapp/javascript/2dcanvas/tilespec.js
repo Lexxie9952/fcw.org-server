@@ -250,6 +250,7 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
       if (ptile != null) {
         var tterrain_near = tile_terrain_near(ptile);
         var pterrain = tile_terrain(ptile);
+        
         sprite_array = sprite_array.concat(fill_terrain_sprite_layer(2, ptile, pterrain, tterrain_near));
 
         sprite_array = sprite_array.concat(fill_irrigation_sprite_array(ptile, pcity));
@@ -264,6 +265,11 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
 
     case LAYER_SPECIAL1:
       if (ptile != null) {
+
+        // TEST: borders moved from last sub-layer of LAYER_SPECIAL1 to here:
+        //  it was drawing on top of resources, and seemed better here:
+        if (draw_map_grid) sprite_array = sprite_array.concat(get_grid_line_sprites(ptile)); 
+        sprite_array = sprite_array.concat(get_border_line_sprites(ptile));
 
         var river_sprite = get_tile_river_like_sprite(ptile, EXTRA_RIVER, "road.river");
         if (river_sprite != null) sprite_array.push(river_sprite);
@@ -302,10 +308,9 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
           sprite_array.push({"key" :
                               tileset_extra_id_graphic_tag(EXTRA_FALLOUT)});
         }
-
-        if (draw_map_grid) sprite_array = sprite_array.concat(get_grid_line_sprites(ptile)); 
-
-        sprite_array = sprite_array.concat(get_border_line_sprites(ptile));
+        // moved to first sub-layer above
+        //if (draw_map_grid) sprite_array = sprite_array.concat(get_grid_line_sprites(ptile)); 
+        //sprite_array = sprite_array.concat(get_border_line_sprites(ptile));
 
       }
     break;
@@ -341,7 +346,6 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
         * unit is handled separately, inside get_drawable_unit(). */
         sprite_array = sprite_array.concat(fill_unit_sprite_array(punit, stacked, backdrop));
      }
-     ////1
         // Front walls of Forts and Fortresses are drawn one tile at a time immediately after a unit is drawn on that tile,
         // this will obviously put the front wall over the unit on that tile, but prevent front walls on other tiles from 
         // improperly occluding units on other tiles.
@@ -743,11 +747,10 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
     default:
       // do nothing, dx and dy already set higher up.
   }
-
   var result = [ get_unit_nation_flag_sprite(punit),
            {"key" : tileset_unit_type_graphic_tag(unit_type(punit)),
             "offset_x": unit_offset['x'] + dx,
-	          "offset_y": unit_offset['y'] - dy} ];
+            "offset_y": unit_offset['y'] - dy} ];
   var activities = get_unit_activity_sprite(punit);
   if (activities != null) {
     activities['offset_x'] = activities['offset_x'] + unit_offset['x'];
@@ -841,8 +844,9 @@ function get_base_flag_sprite(ptile) {
   var nation = nations[nation_id];
   if (nation == null) return {};
   return {"key" : "f." + nation['graphic_str'],
-          "offset_x" : city_flag_offset_x,
-          "offset_y" : - city_flag_offset_y};
+          "offset_x" : buoy_flag_offset_x,
+          "offset_y" : - buoy_flag_offset_y,
+          "scale" : 0.60};
 }
 
 /**********************************************************************
@@ -954,7 +958,7 @@ function get_grid_line_sprites(ptile)
 
     if (checktile != null) {
       if (terrains[ptile['terrain']]['name'] == "Deep Ocean")
-        result.push({"key" : "border", "dir" : dir, "color": "rgba(70,40,0,1.0)" });  //stronger contrast on deep ocean
+        result.push({"key" : "border", "dir" : dir, "color": "rgba(66,57,47,1.0)" });  //stronger contrast on deep ocean
       else
         result.push({"key" : "border", "dir" : dir, "color": "rgba(0,0,0,0.35)" });
     }

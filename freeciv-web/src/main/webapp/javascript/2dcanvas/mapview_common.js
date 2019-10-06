@@ -436,6 +436,8 @@ function put_drawn_sprites(pcanvas, canvas_x, canvas_y, pdrawn, fog)
       mapview_put_goto_line(pcanvas, pdrawn[i]['goto_dir'], canvas_x, canvas_y);
     } else if (pdrawn[i]['key'] == "tile_label" ) {
       mapview_put_tile_label(pcanvas, pdrawn[i]['tile'], canvas_x + offset_x, canvas_y + offset_y);
+    } else if (pdrawn[i]['scale']) {
+      mapview_put_scaled_image(pcanvas, pdrawn[i]['key'], canvas_x + offset_x, canvas_y + offset_y, pdrawn[i]['scale']);
     } else {
       mapview_put_tile(pcanvas, pdrawn[i]['key'], canvas_x + offset_x, canvas_y + offset_y);
     }

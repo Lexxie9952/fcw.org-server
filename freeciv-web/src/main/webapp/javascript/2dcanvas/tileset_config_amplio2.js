@@ -60,6 +60,9 @@ var city_flag_offset_y = 9;
 var city_size_offset_x = 0;
 var city_size_offset_y = 20;
 
+var buoy_flag_offset_x = 24;
+var buoy_flag_offset_y = -4;
+
 var unit_activity_offset_x = 55;
 var unit_activity_offset_y = 25;
 

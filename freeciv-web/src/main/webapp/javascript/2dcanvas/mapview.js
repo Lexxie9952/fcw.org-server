@@ -241,7 +241,19 @@ function mapview_put_tile(pcanvas, tag, canvas_x, canvas_y) {
   }
 
   pcanvas.drawImage(sprites[tag], canvas_x, canvas_y);
+}
 
+/**************************************************************************
+  same as mapview_put_tile but scales the image drawn
+**************************************************************************/
+function mapview_put_scaled_image(pcanvas, tag, canvas_x, canvas_y, scale)
+{
+  if (sprites[tag] == null) {
+    //console.log("Missing sprite " + tag);
+    return;
+  }
+
+  pcanvas.drawImage(sprites[tag], canvas_x, canvas_y, sprites[tag].width * scale, sprites[tag].height * scale);
 }
 
 /****************************************************************************
