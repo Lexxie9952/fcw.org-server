@@ -400,7 +400,7 @@ function handle_player_info(packet)
 
   players[packet['playerno']] = $.extend(players[packet['playerno']], packet);
 
-  /*
+  
   // if server has sent a nation color change:
   if (packet['color_red']) {
     if (packet['playerno'] && players[packet['playerno']] && nations[players[packet['playerno']]['nation']])  { 
@@ -408,7 +408,7 @@ function handle_player_info(packet)
           var pcolor = "rgb("+packet['color_red']+","+packet['color_green']+","+packet['color_blue']+")";
           nations[pplayer['nation']]['color'] = pcolor;
     } 
-  } */
+  } 
 }
 
 /************************************************************************//**
