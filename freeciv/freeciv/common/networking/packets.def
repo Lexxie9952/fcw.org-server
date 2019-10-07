@@ -571,6 +571,8 @@ PACKET_GAME_INFO = 16; sc, is-info
   BOOL trading_gold;
   BOOL trading_tech;
   TURN turn;
+  BOOL universal_unload;
+  UINT32 unload_override;
   UINT32 warminglevel;
   YEAR year;
   BOOL year_0_hack;

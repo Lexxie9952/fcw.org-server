@@ -315,6 +315,9 @@ static void game_defaults(bool keep_ruleset_value)
   game.info.trading_gold     = GAME_DEFAULT_TRADING_GOLD;
   game.info.trading_tech     = GAME_DEFAULT_TRADING_TECH;
   game.info.turn             = 0;
+  // unloading from transport has same behaviour whether native or non-native tile:
+  game.info.universal_unload = GAME_DEFAULT_UNIVERSAL_UNLOAD; 
+  game.info.unload_override  = GAME_DEFAULT_UNLOAD_OVERRIDE;
   game.info.warminglevel     = 0; /* set later */
   game.info.year_0_hack      = FALSE;
   game.info.year             = GAME_START_YEAR;

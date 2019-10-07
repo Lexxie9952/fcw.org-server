@@ -2496,6 +2496,29 @@ static struct setting settings[] = {
               "will be restricted for enemy units."), NULL, NULL,
            GAME_DEFAULT_RESTRICTINFRA)
 
+  GEN_BOOL("universal_unload", game.info.universal_unload,
+           SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_RARE,
+           ALLOW_NONE, ALLOW_BASIC,
+           N_("Transported units unload the same regardless of tile nativity."),
+           N_("This makes all transported units affected by terrain speed "
+              "unload with the same behavior: unloading from native tiles "
+              "behaves the same as unloading from non-native. This limits "
+              "double-move issues in games which allow transporting "
+              "units on rivers, canals, rails, or other native tiles. Units "
+              "with the BeachLander flag aren't affected by this option."),
+           NULL, NULL, GAME_DEFAULT_UNIVERSAL_UNLOAD)
+  
+  GEN_INT("unload_override", game.info.unload_override,
+          SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_RARE,
+          ALLOW_NONE, ALLOW_BASIC,
+          N_("Move fragment cost for unloading units from native tiles."),
+          N_("When universal_unload is enabled, this option overrides the "
+            " move fragment cost that universal_unload adds, when transported "
+             "units unload from a native tile. If zero, this option is off."),
+          NULL, NULL, NULL,
+          GAME_MIN_UNLOAD_OVERRIDE, GAME_MAX_UNLOAD_OVERRIDE,
+          GAME_DEFAULT_UNLOAD_OVERRIDE)
+
   GEN_BOOL("unreachableprotects", game.info.unreachable_protects,
            SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_RARE,
            ALLOW_NONE, ALLOW_BASIC,

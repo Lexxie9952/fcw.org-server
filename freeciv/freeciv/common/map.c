@@ -772,6 +772,8 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
 {
   const struct unit_class *pclass = utype_class(punittype);
   int cost;
+  int penalty = 0; // unload penalty from game.info.unload_override
+
   bool cardinality_checked = FALSE;
   bool cardinal_move BAD_HEURISTIC_INIT(FALSE);
   bool ri;
@@ -808,6 +810,42 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
       return (utype_has_flag(punittype, UTYF_IGTER)
               ? MOVE_COST_IGTER : SINGLE_MOVE);
     }
+  }  /* if (on transport) && !(beach-lander) && !(in a city) && !(uclass_flag terrain_speed)
+      * && (from native tile)...Then:  We have a terrain limited (i.e. land) unit with no
+      * amphibious bonus, unloading from a transport, not in a city, and on a native tile,
+      * and offloading to a native tile. What does the combination of all these things mean?
+      * It means: fair consistency in unload behaviour would make it lose all moves_left.
+      * Note: the litmus test is terrain_speed movement: Terrain_speed becomes synonymous with
+      * "unloading is a terrestrial challenge". What this really targets is: unloading from a boat
+      * which floats on any kind of water should be equal. This patches a double-move flaw in
+      * freeciv that made everyone remove river-ships from their rulesets, and avoid making
+      * units like cargo trucks and trains.
+      *
+      * For compatibility to hypothetic rulesets that intended double-move behavior, this
+      * mechanic is only operative when game.info.universal_unload is enabled. If it's enabled,
+      * then game.info_unload_override can be used to further customise: it sets the move_frags
+      * spent when qualifying units unload from a native tile.   
+      */
+  else if (game.info.slow_invasions && game.info.universal_unload
+           && is_native_tile_to_class(pclass, t1)
+           /* check t2 nativity: this behaviour doesn't apply when loading
+            * on non-native transport */
+           && is_native_tile_to_class(pclass, t2)) {
+      if (punit != NULL) { // can't check a null unit
+        if (unit_transported(punit)
+            && tile_city(t1) == NULL
+            && !unit_has_type_flag(punit, UTYF_BEACH_LANDER)
+            && uclass_has_flag(pclass, UCF_TERRAIN_SPEED)) {
+
+            if (game.info.unload_override > 0) {
+              // unload_override = unit uses this amount of moves to unload 
+              penalty = game.info.unload_override; 
+            } else {
+              // no override = unit uses up all moves by unloading
+              return punit->moves_left;
+            }  
+        }
+      }
   }
 
   cost = tile_terrain(t2)->movement_cost * SINGLE_MOVE;
@@ -882,11 +920,11 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
                        || is_move_cardinal(nmap, t1, t2));
     }
     if (!cardinal_move) {
-      return (int) (cost * 1.41421356f);
+      return (int) (cost * 1.41421356f + penalty);
     }
   }
 
-  return cost;
+  return (cost + penalty);
 }
 
 /*******************************************************************//**
