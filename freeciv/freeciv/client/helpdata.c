@@ -2238,7 +2238,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
     /* BeachLander only matters when slow_invasions are enabled. */
     CATLSTR(buf, bufsz,
             _("* Won't lose all movement when moving from non-native "
-              "terrain to native terrain.\n"));
+              "terrain to native terrain, or unloading from transport.\n"));
   }
   if (!utype_is_consumed_by_action(action_by_number(ACTION_ATTACK), utype)
       && utype_has_flag(utype, UTYF_ONEATTACK)) {
@@ -2248,6 +2248,11 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
   if (utype_has_flag(utype, UTYF_CITYBUSTER)) {
     CATLSTR(buf, bufsz,
 	    _("* Gets double firepower when attacking cities.\n"));
+  }
+  if (utype_has_flag(utype, UTYF_BADCITYDEFENDER)) {
+    CATLSTR(buf, bufsz,
+	    _("* If attacked while in a city, firepower is set to 1 "
+		    " and firepower of attacker is doubled.\n"));
   }
   if (utype_has_flag(utype, UTYF_IGTER)) {
     cat_snprintf(buf, bufsz,
