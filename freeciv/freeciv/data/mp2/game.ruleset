@@ -1676,9 +1676,9 @@ set =
       "endturn", 365, FALSE
       "foggedborders", TRUE, FALSE
       "generator", "RANDOM", FALSE
-      "gold", 100, FALSE	
+      "gold", 100, FALSE
       "huts", 0, FALSE
-      "landmass", 63, FALSE 
+      "landmass", 63, FALSE
       "minplayers", 0, FALSE
       "nationset", "all", FALSE 
       "nuclearwinter_percent", 20, FALSE
@@ -1693,5 +1693,7 @@ set =
       "trade_revenue_style", "SIMPLE", FALSE   ;"simple" formula based on average trade in both cities (sans distance etc.)
       "topology", "WRAPX", FALSE
       "trading_city", "DISABLED", FALSE
+      "universal_unload", "ENABLED", FALSE
+      "unload_override", 0, FALSE    ;0=native unloading same as non-native. 1+ = move_fragment cost for unloading.
       "unreachableprotects", "ENABLED", FALSE
     }
