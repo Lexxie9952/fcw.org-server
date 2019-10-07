@@ -123,14 +123,6 @@ ESC: <In other tab>: Exit TAB, return to map.
   9: move north-east (alt-o)
 double-tap drag: move unit 
 
-<h2>Cities List:</h2>
-hover over city name: show all buildings in Super Panel
-click Building in Super Panel: change production to Building in hovered city 
-right-click Building in Super Panel: sell Building in hovered city 
-shift-click Building in Super Panel: highlight ON/OFF all cities with this Building 
-ctrl-click Building in Super Panel: select/deselect all cities with this Building
-space: clear all all highlighted and selected cities
-
 <h2>Other Keyboard Shortcuts:</h2>
 w: return to map: close tab/window/pop-up
 space: de-select units, exit GOTO mode
@@ -151,8 +143,6 @@ shift-Return: Turn done
   Left-click on city:            Pop up city dialog
   Left-click on unit:            Select a single unit
 Shift-click unit:                Add unit(s) on tile or panel to selection
-Shift-click specialist:          Change ALL specialists of this type 
-Ctrl-click specialist:           Cycle through primary 3 specialists (not secondary specialists)
 Ctrl-Shift click tile:           Select tile to be worked by city, on main map.
 
   Right-click:                   Center tile in view
@@ -167,8 +157,6 @@ Ctrl-Shift-Right-click:          Paste clipboard into city's current production 
   Double-tap tile:               Show tile info (mobile/touch device only)
 
   Double-tap map-and-drag:       Move the map 
-  Double-click:                  Add production selection to city worklist / queue 
-Ctrl-double-click:               Change current city production to already highlighted production selection
 
 <h2>Tabs:</h2>
 W: map tab; escape window/tab/popup without exiting full screen
@@ -180,5 +168,25 @@ alt-N: nations tab
 alt-P: prefs tab 
 alt-T: tech tab 
 
+<h2>Cities List:</h2>
+hover over city name: show all buildings in Super Panel
+click Building in Super Panel: change production to Building in hovered city 
+right-click Building in Super Panel: sell Building in hovered city 
+shift-click Building in Super Panel: highlight ON/OFF all cities with this Building 
+ctrl-click Building in Super Panel: select/deselect all cities with this Building
+space: clear all all highlighted and selected cities
 
+<h2>City Dialog:</h2>
+Shift-click specialist:          Change ALL specialists of this type 
+Ctrl-click specialist:           Cycle through primary 3 specialists (not secondary specialists)
+  Double-click:                  Add production selection to city worklist / queue 
+Ctrl-double-click:               Change current city production (selection my already be highlighted)
+ SPACE:                          Flip between Main View and Production View
+ up arrow or M or V:             Main View
+ down arrow or Q:                Production View (Queue)
+ O:                              city Options
+ left arrow:                     Previous View
+ right arrow:                    Next View
+ P:                              Preview City
+ N:                              Next City
 

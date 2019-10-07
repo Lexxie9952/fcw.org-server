@@ -2918,18 +2918,70 @@ function city_keyboard_listener(ev)
 
   /* if (!ev) ev = window.event; INTERNET EXPLORER DEPRECATED */
   var keyboard_key = String.fromCharCode(ev.keyCode);
-
-  if (ev.keyCode == 27) {
-    ev.stopPropagation();
-    close_city_dialog();
-  }
+  var key_code = ev.keyCode;
 
   if (active_city != null) {
+    switch (key_code) {
+      case 38: // 8/up arrow
+      case 104:
+        ev.stopImmediatePropagation();
+        setTimeout(function(){  
+          city_tab_index = 0;  // Main view screen
+          $("#city_tabs").tabs({ active: city_tab_index});
+        }, 300);
+        break;
+      case 40: // 2/down arrow
+      case 98:
+        ev.stopImmediatePropagation();
+        setTimeout(function(){  
+          city_tab_index = 1;  // Production screen
+          $("#city_tabs").tabs({ active: city_tab_index});
+        }, 300);
+        break;
+      case 27:
+          ev.stopPropagation();
+          close_city_dialog();
+          break;
+      case 32:
+          ev.stopPropagation();
+          // SPACE - flip-flop between production/main screen
+          // if not in one of those 2 screens, go to main screen
+          if (city_tab_index > 1) city_tab_index = 0;
+          else city_tab_index = 1-city_tab_index;  // flip production/main screen
+          $("#city_tabs").tabs({ active: city_tab_index});
+          break;
+        }
     switch (keyboard_key) {
        case 'P':
          previous_city();
          ev.stopPropagation();
          break;
+
+       case 'V':
+       case 'M':
+          city_tab_index = 0;  // Main screen / View
+          $("#city_tabs").tabs({ active: city_tab_index});
+          ev.stopPropagation();
+          break;
+    
+       case 'Q':
+         city_tab_index = 1;  // Production screen
+         $("#city_tabs").tabs({ active: city_tab_index});
+         ev.stopPropagation();
+         break;
+
+       case 'T':
+       case 'R':
+          city_tab_index = 2;  // Trade routes
+          $("#city_tabs").tabs({ active: city_tab_index});
+          ev.stopPropagation();
+          break;
+       
+       case 'O':
+          city_tab_index = 3;  // Options/Settings
+          $("#city_tabs").tabs({ active: city_tab_index});
+          ev.stopPropagation();
+          break;
 
        case 'W': // same command as ESC above (code 27)
          close_city_dialog();
