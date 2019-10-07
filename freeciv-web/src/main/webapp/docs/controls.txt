@@ -174,13 +174,14 @@ click Building in Super Panel: change production to Building in hovered city
 right-click Building in Super Panel: sell Building in hovered city 
 shift-click Building in Super Panel: highlight ON/OFF all cities with this Building 
 ctrl-click Building in Super Panel: select/deselect all cities with this Building
-space: clear all all highlighted and selected cities
+space: clear all highlighted and all selected cities
 
 <h2>City Dialog:</h2>
 Shift-click specialist:          Change ALL specialists of this type 
 Ctrl-click specialist:           Cycle through primary 3 specialists (not secondary specialists)
   Double-click:                  Add production selection to city worklist / queue 
-Ctrl-double-click:               Change current city production (selection my already be highlighted)
+Ctrl-double-click:               Change current city production (selection must already be highlighted)
+
  SPACE:                          Flip between Main View and Production View
  up arrow or M or V:             Main View
  down arrow or Q:                Production View (Queue)
