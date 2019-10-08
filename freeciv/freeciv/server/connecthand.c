@@ -320,6 +320,7 @@ void establish_new_connection(struct connection *pconn)
     if (is_longturn()) {
       if (pconn->supercow) {
         connection_attach_real(pconn, NULL, TRUE, TRUE);
+        notify_conn(dest, NULL, E_CONNECTION, ftc_server,
         _("Welcome, Supercow. We've been expecting you."));
       }
       else {
