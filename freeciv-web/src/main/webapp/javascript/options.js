@@ -243,6 +243,12 @@ function init_options_dialog()
      scroll_narrow_x = this.checked;
      simpleStorage.set('xScroll', scroll_narrow_x); 
    });
+    // FILL BORDERS 
+    $('#fill_borders').prop('checked', fill_national_border);
+    $('#fill_borders').change(function() {
+      fill_national_border = this.checked;
+      //simpleStorage.set('fill_borders', fill_national_border); 
+    });
 
    // Graphic Theme
    graphic_theme_path = simpleStorage.get('grtheme');

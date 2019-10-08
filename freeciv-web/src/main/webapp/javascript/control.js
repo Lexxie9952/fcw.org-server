@@ -920,6 +920,47 @@ function advance_unit_focus()
 }
 
 /**************************************************************************
+ This function may be called from packhand.c, via update_unit_focus(),
+ as a result of packets indicating change in activity for a unit. Also
+ called when user press the "Wait" command.
+
+ FIXME: Add feature to focus only units of a certain category.
+**************************************************************************/
+function advance_focus_inactive_units()
+{
+  var funits = get_units_in_focus();
+  for (var i = 0; i < funits.length; i++) {
+    var punit = funits[i];
+    waiting_units_list.push(punit['id']);
+  }
+
+  if (client_is_observer())
+  {
+    return;
+  } 
+
+  var candidate = find_inactive_focus_candidate();
+
+  // remove state-blocking from leaving context menu
+  came_from_context_menu = false; 
+
+  if (candidate != null) {
+    goto_active = false;  // turn Go-To off if jumping focus to a new unit
+    clear_goto_tiles();   // TO DO: update mouse cursor function call too?
+    save_last_unit_focus();
+    set_unit_focus_and_redraw(candidate);
+  } else {
+    /* Couldn't center on a unit, then try to center on a city... */
+    save_last_unit_focus();
+    current_focus = []; /* Reset focus units. */
+    waiting_units_list = []; /* Reset waiting units list */
+    if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
+    update_active_units_dialog();
+    $("#game_unit_orders_default").hide();
+  }
+}
+
+/**************************************************************************
  Expands orders buttons panel to show all possible orders
 **************************************************************************/
 function button_more_orders()
@@ -1507,6 +1548,41 @@ function find_best_focus_candidate(accept_current)
 
   return null;
 }
+
+/**************************************************************************
+ Find the nearest available unit for focus, excluding any current unit
+ in focus unless "accept_current" is TRUE.  If the current focus unit
+ is the only possible unit, or if there is no possible unit, returns NULL.
+**************************************************************************/
+function find_inactive_focus_candidate()
+{
+  var punit;
+  var i;
+  if (client_is_observer()) return null;
+
+  var sorted_units = [];
+  for (var unit_id in units) {
+    punit = units[unit_id];
+    if (client.conn.playing != null && punit['owner'] == client.conn.playing.playerno) {
+      sorted_units.push(punit);
+    }
+  }
+  sorted_units.sort(unit_distance_compare);
+
+  for (i = 0; i < sorted_units.length; i++) {
+    punit = sorted_units[i];
+    if ((!unit_is_in_focus(punit))
+       && client.conn.playing != null
+       && punit['owner'] == client.conn.playing.playerno
+       && waiting_units_list.indexOf(punit['id']) < 0
+       && (punit['activity'] != ACTIVITY_IDLE || punit['transported'] == true || punit['movesleft'] <= 0 || punit['done_moving'] == true)
+       && punit['ai'] == false) {
+         return punit;
+    }
+  }
+  return null;
+}
+
 
 /**************************************************************************
 ...
@@ -2579,13 +2655,14 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       if (shift) {
         auto_attack = !auto_attack;
         //simpleStorage.set('autoattack', auto_attack); //session only
-        console.log("shift-A pushed.");
         add_client_message("Auto-attack set to "+(auto_attack ? "ON." : "OFF.")); 
       } else key_unit_auto_settle();
     break;
     
     case 'B':
-      request_unit_build_city();
+      if (ctrl) {
+        fill_national_border = !fill_national_border;
+      } else request_unit_build_city();
     break;
 
     case 'C':
@@ -2795,6 +2872,10 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 34: // 3
     case 99:
     case 190:
+      if (key_code==190 && shift) {
+        advance_focus_inactive_units();
+      }
+
       if (key_code==190 && !alt) break; //190 moves only if alt held down:
       the_event.preventDefault(); // override possible browser shortcut
       key_unit_move(DIR8_EAST);

@@ -106,6 +106,15 @@
     </div>
   </td>
 </tr>
+<tr>
+  <td>
+      <div title="Fills territories with national colors (CTRL-B)" class="main_menu_buttons">
+          <input type='checkbox' name='fill_borders' id='fill_borders'><b><font color="#0000c0">Fill national boundaries</font></b> 
+      </div>
+  </td>
+  <td>
+  </td>
+</tr>
 
 <tr>
   <td>

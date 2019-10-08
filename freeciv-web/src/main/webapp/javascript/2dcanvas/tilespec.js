@@ -17,7 +17,7 @@
 
 ***********************************************************************/
 
-
+var fill_national_border = false; // option to draw solid territorial area
 var num_cardinal_tileset_dirs = 4;
 var cardinal_tileset_dirs = [DIR8_NORTH, DIR8_EAST, DIR8_SOUTH, DIR8_WEST];
 
@@ -252,6 +252,9 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
         var pterrain = tile_terrain(ptile);
         
         sprite_array = sprite_array.concat(fill_terrain_sprite_layer(2, ptile, pterrain, tterrain_near));
+  
+        if (fill_national_border) 
+          sprite_array = sprite_array.concat(get_border_line_sprites(ptile));
 
         sprite_array = sprite_array.concat(fill_irrigation_sprite_array(ptile, pcity));
       }
@@ -268,8 +271,9 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
 
         // TEST: borders moved from last sub-layer of LAYER_SPECIAL1 to here:
         //  it was drawing on top of resources, and seemed better here:
-        if (draw_map_grid) sprite_array = sprite_array.concat(get_grid_line_sprites(ptile)); 
-        sprite_array = sprite_array.concat(get_border_line_sprites(ptile));
+        if (draw_map_grid) sprite_array = sprite_array.concat(get_grid_line_sprites(ptile));
+        if (!fill_national_border) 
+          sprite_array = sprite_array.concat(get_border_line_sprites(ptile));
 
         var river_sprite = get_tile_river_like_sprite(ptile, EXTRA_RIVER, "road.river");
         if (river_sprite != null) sprite_array.push(river_sprite);
@@ -925,21 +929,32 @@ function get_border_line_sprites(ptile)
 {
   var result = [];
 
-  for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
-    var dir = cardinal_tileset_dirs[i];
-    var checktile = mapstep(ptile, dir);
+  // SPECIAL MODE: Filled in territory to show national area
+  if (fill_national_border
+    && ptile['owner'] != null
+    && ptile['owner'] != 255 /* 255 is a special constant indicating that the tile is not owned by anyone. */
+    && players[ptile['owner']] != null) {
+    
+    var pnation = nations[players[ptile['owner']]['nation']];
+    var bcolor = pnation['color'].replace(")", ",0.45)").replace("rgb", "rgba");
 
-    if (checktile != null && checktile['owner'] != null
-        && ptile['owner'] != null
-        && ptile['owner'] != checktile['owner']
-        && ptile['owner'] != 255 /* 255 is a special constant indicating that the tile is not owned by anyone. */
-        && players[ptile['owner']] != null) {
-      var pnation = nations[players[ptile['owner']]['nation']];
-      result.push({"key" : "border", "dir" : dir,
-                   "color": pnation['color']});
+    result.push({"key" : "territory", "offset_x" : 0, "offset_y" : 0, "color": bcolor});
+  } else {   // NORMAL MODE: NORMAL BORDERS
+    for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
+      var dir = cardinal_tileset_dirs[i];
+      var checktile = mapstep(ptile, dir);
+
+      if (checktile != null && checktile['owner'] != null
+          && ptile['owner'] != null
+          && ptile['owner'] != checktile['owner']
+          && ptile['owner'] != 255 /* 255 is a special constant indicating that the tile is not owned by anyone. */
+          && players[ptile['owner']] != null) {
+        var pnation = nations[players[ptile['owner']]['nation']];
+        result.push({"key" : "border", "dir" : dir,
+                    "color": pnation['color']});
+      }
     }
   }
-
   return result;
 }
 

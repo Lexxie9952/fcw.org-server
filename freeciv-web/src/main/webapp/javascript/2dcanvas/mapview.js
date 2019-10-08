@@ -243,6 +243,8 @@ function mapview_put_tile(pcanvas, tag, canvas_x, canvas_y) {
   pcanvas.drawImage(sprites[tag], canvas_x, canvas_y);
 }
 
+
+
 /**************************************************************************
   same as mapview_put_tile but scales the image drawn
 **************************************************************************/
@@ -420,6 +422,36 @@ function mapview_put_border_line(pcanvas, dir, color, canvas_x, canvas_y) {
   pcanvas.stroke();
 
 }
+
+/**************************************************************************
+  Renders the national border lines onto the canvas.
+**************************************************************************/
+function mapview_territory_fill(pcanvas, color, canvas_x, canvas_y) {
+  var x = canvas_x + 47;
+  var y = canvas_y + 25;
+
+  pcanvas.beginPath();
+  pcanvas.fillStyle = color;
+/*
+  pcanvas.moveTo(x, y - 2, x + (tileset_tile_width / 2));
+  pcanvas.lineTo(x + (tileset_tile_width / 2),  y + (tileset_tile_height / 2) - 2);
+  //pcanvas.moveTo(x - 3, y + tileset_tile_height - 3);
+  pcanvas.lineTo(x + (tileset_tile_width / 2) - 3,  y + (tileset_tile_height / 2) - 3);
+  //pcanvas.moveTo(x - (tileset_tile_width / 2) + 3, y + (tileset_tile_height / 2) - 3);
+  pcanvas.lineTo(x + 3,  y + tileset_tile_height - 3);
+  //pcanvas.moveTo(x - (tileset_tile_width / 2) + 3, y + (tileset_tile_height / 2) - 3);
+  pcanvas.lineTo(x + 3,  y - 3);*/
+
+  pcanvas.moveTo(x,  y + (tileset_tile_height / 2));
+  pcanvas.lineTo(x - (tileset_tile_width / 2),  y);
+  pcanvas.lineTo(x,  y - (tileset_tile_height / 2));
+  pcanvas.lineTo(x + (tileset_tile_width / 2),  y);
+  pcanvas.lineTo(x,  y + (tileset_tile_height / 2));
+
+  pcanvas.closePath();
+  pcanvas.fill();
+}
+
 
 /**************************************************************************
 ...
