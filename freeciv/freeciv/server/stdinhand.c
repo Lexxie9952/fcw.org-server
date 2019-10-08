@@ -2340,11 +2340,12 @@ static bool team_command(struct connection *caller, char *str, bool check)
   bool res = FALSE;
   struct team_slot *tslot;
 
-  if (game_was_started()) {
+/* Longturn needs ability to set up teams after game start */
+  if (game_was_started() && !is_longturn()) {
     cmd_reply(CMD_TEAM, caller, C_SYNTAX,
               _("Cannot change teams once game has begun."));
-    return FALSE;
-  }
+    return FALSE; 
+  } 
 
   if (str != NULL || strlen(str) > 0) {
     sz_strlcpy(buf, str);
