@@ -2661,6 +2661,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     
     case 'B':
       if (ctrl) {
+        the_event.stopPropagation();
         fill_national_border = !fill_national_border;
       } else request_unit_build_city();
     break;
