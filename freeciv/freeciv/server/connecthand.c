@@ -294,8 +294,17 @@ void establish_new_connection(struct connection *pconn)
       send_player_info_c(NULL, dest);
     }
   }
-
+  
   send_conn_info(game.est_connections, dest);
+  
+  if (is_longturn()) {
+    if (is_supercow(pconn)) {
+        pconn->supercow = TRUE;
+        conn_set_access(pconn, ALLOW_HACK, TRUE);
+        notify_conn(dest, NULL, E_CONNECTION, ftc_server,
+        _("Welcome, Supercow. We've been expecting you."));
+    }
+  }
 
   if (NULL == pplayer) {
     /* Else this has already been done in connection_attach_real(). */
@@ -309,12 +318,9 @@ void establish_new_connection(struct connection *pconn)
                 pconn->username);
 
     if (is_longturn()) {
-      if (is_supercow(pconn)) {
-        pconn->supercow = TRUE;
-        conn_set_access(pconn, ALLOW_HACK, TRUE);
+      if (pconn->supercow) {
         connection_attach_real(pconn, NULL, TRUE, TRUE);
-        notify_conn(dest, NULL, E_CONNECTION, ftc_server,
-		_("Welcome, Supercow. We've been expecting you."));
+        _("Welcome, Supercow. We've been expecting you."));
       }
       else {
         pplayer = find_uncontrolled_idle_player_longturn();

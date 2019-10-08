@@ -3682,8 +3682,7 @@ bool is_supercow(struct connection * caller)
     char *pos;
     int port;
 
-    strcpy(caller_name, caller->username);
-    if (caller->playing) {
+    if (caller->playing && 0 != server_state()) {
       return FALSE;
     }
 
@@ -3691,6 +3690,8 @@ bool is_supercow(struct connection * caller)
     if (!supercow_list) {
       return FALSE;
     }
+    
+    strcpy(caller_name, caller->username);
 
     for(int i = 0; caller_name[i]; i++){
        *caller_name = fc_tolower(*caller_name);
