@@ -3346,7 +3346,8 @@ function key_unit_load()
       if (ttype['transport_capacity'] > 0) {
         // add candidate to list
         if (!normal_ruleset || unit_could_possibly_load(punit, ptype, ttype, tclass)) {
-          transporter_units.push( {id: tunit['id'], capacity: ttype['transport_capacity'], moves: tunit['movesleft'], carrying: 0} );
+          transporter_units.push( {id: tunit['id'], capacity: ttype['transport_capacity'],
+              moves: (punit['owner'] == client.conn.playing.playerno ? tunit['movesleft'] : "?"), carrying: 0} );
         }
       }
     }
