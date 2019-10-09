@@ -245,6 +245,8 @@ function move_points_text(moves)
     result = Math.floor(moves / SINGLE_MOVE);
   }
 
+  if (isNaN(moves)) return "-";
+
   return result;
 }
 
