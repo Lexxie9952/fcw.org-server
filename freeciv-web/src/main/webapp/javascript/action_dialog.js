@@ -1079,7 +1079,7 @@ function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapac
     text  : full_capacity_text 
                 + "T" + tid 
                 + " " + unit_type(units[tid])['name'] +":"
-                + " M:" + move_points_text(tmoves)
+                + (tmoves != null ? (" M:" + move_points_text(tmoves)) : "ALLY")
                 + " L:" + tloaded 
                 + " C:" + tcapacity
                 + full_capacity_text,
