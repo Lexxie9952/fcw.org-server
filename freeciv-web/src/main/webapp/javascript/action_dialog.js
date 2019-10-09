@@ -1068,21 +1068,29 @@ function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapac
                                       dialog_id, dialog_num, last_dialog)
 {
   // Mark and disable button if transport is at full capacity:
-  var full_capacity_text = "";
   var disable = false;
   if (tloaded  >= tcapacity) {
-    full_capacity_text = "**";
+    tloaded = " <FULL>";
     disable = true;
+  } else tloaded = " L:"+tloaded;
+
+  var moves_text = move_points_text(tmoves);
+  if (moves_text == "-") {
+  // "-" means it was NaN/unknown because foreign, which means it's an ally on same tile
+    moves_text = " ALLY"
+  } else {
+    moves_text = " M:"+moves_text;
   }
 
+  var title_text = get_unit_city_info(units[tid]);
+
   var load_button = {
-    text  : full_capacity_text 
-                + "T" + tid 
+    title : title_text,
+    text  :     "T" + tid 
                 + " " + unit_type(units[tid])['name'] +":"
-                + " M:" + move_points_text(tmoves)
-                + " L:" + tloaded 
-                + " C:" + tcapacity
-                + full_capacity_text,
+                + moves_text
+                + tloaded 
+                + " C:" + tcapacity,
     disabled :  disable,
     click : function() {
       var packet = {
