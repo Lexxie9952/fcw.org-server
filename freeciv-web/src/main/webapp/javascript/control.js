@@ -495,7 +495,7 @@ function chat_context_get_recipients() {
     var pplayer = players[player_id];
     if (pplayer['flags'].isSet(PLRF_AI)) continue;
     if (!pplayer['is_alive']) continue;
-    if (is_longturn() && pplayer['name'].indexOf("New Available Player") != -1) continue;
+    if (is_longturn() && pplayer['name'].indexOf("NewAvailablePlayer") != -1) continue;
 
     var nation = nations[pplayer['nation']];
     if (nation == null) continue;

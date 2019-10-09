@@ -86,7 +86,7 @@ function update_nation_screen()
   for (var player_id in players) {
     var pplayer = players[player_id];
     if (pplayer['nation'] == -1) continue;
-    if (is_longturn() && (client.conn.access_level != 5) && pplayer['name'].indexOf("New Available Player") != -1) continue;
+    if (is_longturn() && (client.conn.access_level != 5) && pplayer['name'].indexOf("NewAvailablePlayer") != -1) continue;
     total_players++;
 
     var flag_html = "<canvas id='nation_dlg_flags_" + player_id + "' width='29' height='20' class='nation_flags'></canvas>";

@@ -6034,7 +6034,7 @@ static bool cut_client_connection(struct connection *caller, char *name,
 
       sz_strlcpy(pplayer->username, _(ANON_USER_NAME));
       pplayer->unassigned_user = TRUE;
-      server_player_set_name(pplayer, "Kicked player");
+      server_player_set_name(pplayer, "KickedPlayer");
       player_delegation_set(pplayer, NULL);
       send_player_info_c(pplayer, game.est_connections);
   }
@@ -6200,11 +6200,11 @@ static bool kick_command(struct connection *caller, char *name, bool check)
       }
 
       cmd_reply(CMD_KICK, caller, C_DISCONNECTED,
-        _("Changing %s to a New Available Player"), pplayer->username);
+        _("Changing %s to a NewAvailablePlayer"), pplayer->username);
       sz_strlcpy(pplayer->username, _(ANON_USER_NAME));
       pplayer->nturns_idle = 0;
       pplayer->unassigned_user = TRUE;
-      server_player_set_name(pplayer, "New Available Player");
+      server_player_set_name(pplayer, "NewAvailablePlayer");
       player_delegation_set(pplayer, NULL);
       send_player_info_c(pplayer, game.est_connections);
   }

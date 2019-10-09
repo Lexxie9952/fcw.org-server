@@ -175,7 +175,7 @@
 									</thead>
 									<tbody>
 										<c:forEach items="${players}" var="player">
-										    <c:if test="${fn:contains(player.name, 'New Available Player') == false}">
+										    <c:if test="${fn:contains(player.name, 'NewAvailablePlayer') == false}">
     											<tr>
     												<td>
     													<c:if test="${player.flag ne 'none'}">

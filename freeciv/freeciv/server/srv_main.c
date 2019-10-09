@@ -3289,7 +3289,7 @@ static void srv_ready(void)
       players_iterate(pplayer) {
         if (is_ai(pplayer)) {
           set_as_human(pplayer);
-          server_player_set_name(pplayer, "New Available Player ");
+          server_player_set_name(pplayer, "NewAvailablePlayer ");
           pplayer->unassigned_user = TRUE;
    }
       } players_iterate_end;       
