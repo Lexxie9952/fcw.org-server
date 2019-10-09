@@ -161,6 +161,13 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 ; "Airliftable"       = This Unit Class may be airlifted
 ; */ <-- avoid gettext warnings
 
+
+; **********************************************************************************
+; **********************************************************************************
+; WARNING: ANY CHANGES TO WHAT TYPES OR CLASSES CAN LOAD ONTO WHICH TRANSPORTS MAY 
+; REQUIRE CHANGES TO FCW function unit_could_possibly_load() in unit.js
+; **********************************************************************************
+; **********************************************************************************
 [unitclass_missile]
 ; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Missile")

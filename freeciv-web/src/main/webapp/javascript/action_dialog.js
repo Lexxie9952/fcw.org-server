@@ -1064,7 +1064,8 @@ function create_select_tgt_extra_button(parent_id, actor_unit_id,
   Create a button that selects a transport to load on.
   Needed because of JavaScript's scoping rules.
 **************************************************************************/
-function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapacity, dialog_id, dialog_num, last_dialog)
+function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapacity,
+                                      dialog_id, dialog_num, last_dialog)
 {
   // Mark and disable button if transport is at full capacity:
   var full_capacity_text = "";

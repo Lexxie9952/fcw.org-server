@@ -3311,31 +3311,45 @@ function key_unit_auto_explore()
 **************************************************************************/
 function key_unit_load()
 {
+  /* Client gets no info from server for which cargo is allowed on which
+   * transports. So we use pragmatic heuristics to generate a better list
+  // for 99.5% of the games played, which are in common rulesets */
+  var normal_ruleset = false;
+  if (ruleset_control['name'] == "Multiplayer-Evolution ruleset" 
+    || (ruleset_control['name'] == "Multiplayer-Plus ruleset")
+    || (ruleset_control['name'] == "Multiplayer ruleset")
+    || (ruleset_control['name'] == "Classic ruleset") ) {
+  
+      normal_ruleset = true;
+  }
+  //----------------------  
   var funits = get_units_in_focus();
 
   // Send command for each selected unit in focus:
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
+    var ptype = unit_type(punit);
     var ptile = index_to_tile(punit['tile']);
     var transporter_unit_id = 0;
     var transporter_units = [];
-
     var has_transport_unit = false;
     var units_on_tile = tile_units(ptile);
-
-    var t,r,b, candidate, tunit, ntype;
+    var t,r,b, candidate, tunit, ttype, tclass;
 
     // Make array of candidate transporter units:
     for (t = 0; t < units_on_tile.length; t++) {
       tunit = units_on_tile[t];
       if (tunit['id'] == punit['id']) continue;
-      ntype = unit_type(tunit);
-      if (ntype['transport_capacity'] > 0) {
+      ttype = unit_type(tunit);
+      tclass = unit_classes[ttype.unit_class_id];
+
+      if (ttype['transport_capacity'] > 0) {
         // add candidate to list
-        transporter_units.push( {id: tunit['id'], capacity: ntype['transport_capacity'], moves: tunit['movesleft'], carrying: 0, full: false} );
+        if (!normal_ruleset || unit_could_possibly_load(punit, ptype, ttype, tclass)) {
+          transporter_units.push( {id: tunit['id'], capacity: ttype['transport_capacity'], moves: tunit['movesleft'], carrying: 0} );
+        }
       }
     }
-
     // No candidate transporters found: abort
     if (transporter_units.length < 1) return;
 
@@ -3347,7 +3361,7 @@ function key_unit_load()
         // For each transported unit, adjust load for candidate transporters:
         if (tunit['transported'] == true) {
           candidate = transporter_units.findIndex(i => i.id === tunit['transported_by']);
-          if (candidate != null) transporter_units[candidate]['carrying'] += 1;  // increment load counter of transporter
+          if (candidate != -1) transporter_units[candidate]['carrying'] += 1;  // increment load counter of transporter
         }
       }
       // Make dialog popup with name of unit type/homecity-------------
@@ -3395,7 +3409,10 @@ function key_unit_load()
         position: { my: ("center+" + (i*3) + " center+" + (i*3) ), at: "center" }, 
         buttons: buttons,
         height: "auto",
-        width: "auto"});
+        zIndex: 9999,
+       /* width: "auto",*/
+        width: is_small_screen() ? $( window ).width() : "575",
+        fluid: true     });
       $(id).dialog('open');
     }
     // otherwise, only one transporter candidate, load automatically with no GUI input from user: 
@@ -3403,8 +3420,8 @@ function key_unit_load()
       for (r = 0; r < units_on_tile.length; r++) {
         tunit = units_on_tile[r];
         if (tunit['id'] == punit['id']) continue;
-        ntype = unit_type(tunit);
-        if (ntype['transport_capacity'] > 0) {
+        ttype = unit_type(tunit);
+        if (ttype['transport_capacity'] > 0) {
           has_transport_unit = true;
           transporter_unit_id = tunit['id'];
         }

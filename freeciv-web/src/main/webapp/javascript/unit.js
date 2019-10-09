@@ -165,6 +165,55 @@ function unit_can_do_action(punit, act_id)
 }
 
 /**************************************************************************
+  Returns FALSE iff we definitely know the unit can't load on this type
+  of transporter. Returning true only means we don't know if it can't:
+  The server won't tell us for sure. Knowing the unit CAN'T load is a 
+  pragmatic way to prevent long GUI lists of invalid transport candidates
+  to load onto. It generalises what's true for the mainstream rulesets.
+  It shouldn't ever be called for non-mainstream rulesets.
+**************************************************************************/
+function unit_could_possibly_load(punit, ptype, ttype, tclass)
+{
+  //console.log("Checking "+ptype.name+" onto "+ttype.name);
+  if (!punit || !ptype || !ttype || !tclass) return false;
+
+  var pclass = get_unit_class_name(punit);
+  //console.log("   pclass=="+pclass);
+
+  if (pclass == "Bomb" && !ttype.name.includes("Bomber")) return false;
+
+  if (pclass == "Missile") {
+    //console.log("  Missile CHECK ON: tclass.rulename =="+tclass.rule_name);
+    if (tclass.rule_name == "Trireme") return false;
+    if (tclass.rule_name == "RiverShip") return false;
+    if (ttype.name == "Transport") return false;
+    if (tclass.rule_name == "Air") return false;
+    if (tclass.rule_name == "AirPillage") return false;
+    if (tclass.rule_name == "Helicopter") return false;
+  }
+
+  if (pclass.startsWith("Land")) {   // Land, LandNoKill, LandAirSea
+    //console.log("  Land* CHECK ON: tclass.rulename =="+tclass.rule_name);
+    if (tclass.rule_name == "Submarine") return false;
+    if (tclass.rule_name == "Air") return false;
+    if (tclass.rule_name == "AirPillage") return false;
+    if (ttype.name == "AEGIS Cruiser") return false;
+    if (ttype.name == "Missile Destroyer") return false;
+  
+    if (pclass != "LandAirSea") {
+      if (ttype.name == "Carrier") return false;
+      if (tclass.rule_name == "Helicopter") return false;
+    }
+  }
+
+  if (pclass.startsWith("Air") || pclass == "Helicopter" || pclass == "Balloon") {
+    //console.log("  Air*/heli/balloon CHECK ON: tclass.rulename =="+tclass.rule_name);
+    if (ttype.name != "Carrier") return false;
+  }
+  //console.log("  ..."+ptype.name+" on "+ttype.name+" is LEGAL !");  
+  return true;
+}
+/**************************************************************************
   Returns a string saying how many moves a unit has left.
 **************************************************************************/
 function get_unit_moves_left(punit)
