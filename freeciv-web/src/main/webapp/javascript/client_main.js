@@ -416,6 +416,6 @@ function set_default_mapview_active()
   allow_right_click = false;
   keyboard_input = true;
 
-  $("#freeciv_custom_scrollbar_div").mCustomScrollbar("scrollTo", "bottom",{scrollInertia:0});
+  chatbox_scroll_to_bottom(false);
 }
 

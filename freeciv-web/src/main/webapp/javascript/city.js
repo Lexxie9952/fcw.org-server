@@ -2941,6 +2941,7 @@ function city_keyboard_listener(ev)
       case 27:
           ev.stopPropagation();
           close_city_dialog();
+          chatbox_scroll_to_bottom(false);
           break;
       case 32:
           ev.stopPropagation();
@@ -2986,6 +2987,7 @@ function city_keyboard_listener(ev)
        case 'W': // same command as ESC above (code 27)
          close_city_dialog();
          ev.stopPropagation();
+         chatbox_scroll_to_bottom(false);
          break;
 
        case 'N':

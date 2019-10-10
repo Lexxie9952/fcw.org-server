@@ -120,7 +120,7 @@ function reclassify_chat_message(text)
 }
 
 /**************************************************************************
- This adds new text to the main message chatbox. This is allows the client
+ This adds new text to the main message chatbox. This allows the client
  to produce messages independently of incoming packets (e.g., notifying
   of changes to prefs, etc.)
 **************************************************************************/
@@ -186,6 +186,8 @@ function add_chatbox_text(packet)
 
     packet['message'] = text;
     message_log.update(packet);
+
+    chatbox_scroll_to_bottom(true);
 }
 
 /**************************************************************************
@@ -199,7 +201,6 @@ function get_chatbox_text()
   } else {
     return null;
   }
-
 }
 
 /**************************************************************************
@@ -266,7 +267,18 @@ function update_chatbox(messages)
         message_log.update(messages[i]);
       }
   }
-  setTimeout(() => $('#freeciv_custom_scrollbar_div').mCustomScrollbar('scrollTo', 'bottom'), 100);
+  chatbox_scroll_to_bottom(true);
+}
+
+/**************************************************************************
+ Used to keep the chatbox scroll position fresh.
+**************************************************************************/
+function chatbox_scroll_to_bottom(slow_scroll) {
+
+  if (slow_scroll)
+    setTimeout(() => $('#freeciv_custom_scrollbar_div').mCustomScrollbar('scrollTo', 'bottom'), 200);
+  else
+    setTimeout(() => $("#freeciv_custom_scrollbar_div").mCustomScrollbar("scrollTo", "bottom",{scrollInertia:0}), 200);
 }
 
 /**************************************************************************

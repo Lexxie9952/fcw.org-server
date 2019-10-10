@@ -2617,7 +2617,8 @@ civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     // close any/all tabs/windows and go back to map
     case 'W':
       if (!alt && !ctrl && !shift) { // also key_code 112 (F1)
-        $('#ui-id-1').trigger("click"); 
+        $('#ui-id-1').trigger("click");
+        chatbox_scroll_to_bottom(false);
       }  
     break;  
   }

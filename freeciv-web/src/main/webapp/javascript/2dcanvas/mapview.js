@@ -214,6 +214,9 @@ function init_cache_sprites()
 **************************************************************************/
 function mapview_window_resized ()
 {
+  // prevent the glitch: window resizing caused scrolling up the chatbox
+  chatbox_scroll_to_bottom(false); 
+
   if (active_city != null || !resize_enabled) return;
   setup_window_size();
   if (renderer == RENDERER_2DCANVAS) update_map_canvas_full();

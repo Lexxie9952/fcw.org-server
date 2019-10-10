@@ -927,7 +927,7 @@ function handle_unit_combat_info(packet)
           item.innerHTML = "<span class='chatbox_text_tileinfo' onclick='center_tile_id("+attacker['tile']+");'>"+special_message+"</span>";
 
           scrollDiv.appendChild(item); 
-          setTimeout(() => $('#freeciv_custom_scrollbar_div').mCustomScrollbar('scrollTo', 'bottom'), 200);
+          chatbox_scroll_to_bottom(true);
 
           // New packet style coming back for a no-victory battle wasn't getting interpreted and redrawn
           // We will hard-code in here the new unit infos so redraw will work:
