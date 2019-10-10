@@ -1070,7 +1070,7 @@ function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapac
   // Mark and disable button if transport is at full capacity:
   var disable = false;
   if (tloaded  >= tcapacity) {
-    tloaded = " <FULL>";
+    tloaded = " FULL";
     disable = true;
   } else tloaded = " L:"+tloaded;
 

@@ -314,7 +314,6 @@ function create_diplomacy_dialog(counterpart, template) {
        embassy_meeting = true;
   else embassy_meeting = pplayer.real_embassy[counterpart['playerno']] 
        || counterpart.real_embassy[pplayer['playerno']];     
-  console.log("Embassy meeting == "+embassy_meeting);
 
   $("#game_page").append(template({
     self: meeting_template_data(embassy_meeting, pplayer, counterpart),
@@ -326,12 +325,17 @@ function create_diplomacy_dialog(counterpart, template) {
 
   var diplomacy_dialog = $("#diplomacy_dialog_" + counterpart_id);
 
+  // Set dialog height - (more height is better for fitting more clauses)
+  var dialog_height = 500; // 500 minimum
+  if ($(window).height()>550) dialog_height = $(window).height() - 50;
+  if (dialog_height > 600) dialog_height = 600;  
+
   diplomacy_dialog.dialog({
             title: title,
 			bgiframe: true,
 			modal: false,
 			width: is_small_screen() ? "90%" : "50%",
-			height: 500,
+			height: dialog_height,
 			buttons: {
 				"Accept treaty": function() {
 				    accept_treaty_req(counterpart_id);
