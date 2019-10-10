@@ -180,8 +180,15 @@ bool auth_handle_reply(struct connection *pconn, char *password)
 #ifdef FREECIV_WEB
   if (srvarg.server_password_enabled) {
     if (pconn->server.status == AS_ESTABLISHED) {
-      notify_conn(NULL, NULL, E_SETTING, ftc_server, 
-                  _("Server password already set."));
+      // Change existing password:
+      sz_strlcpy(srvarg.server_password, password);
+      // Remove password if a null password is sent:
+      if (strlen(password)==0) { 
+       srvarg.server_password_enabled = FALSE;
+       notify_conn(NULL, NULL, E_SETTING, ftc_server, 
+                  _("Server password removed."));
+      } else notify_conn(NULL, NULL, E_SETTING, ftc_server, 
+                       _("Server password changed to new value."));
     } else if (strncmp(srvarg.server_password, password, MAX_LEN_PASSWORD) == 0) {
       establish_new_connection(pconn);
     } else {
