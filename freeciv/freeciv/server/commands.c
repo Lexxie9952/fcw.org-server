@@ -238,6 +238,15 @@ static struct command commands[] = {
    NULL,
    CMD_ECHO_ALL, VCF_NONE, 50
   },
+  {"name",	ALLOW_CTRL,
+   /* TRANS: translate text between <> only */
+   N_("name <player> <new_name>"),
+   N_("Change a player's name."),
+   N_("Change the name of a player. Can assist Gamemaster in arranging "
+      "team game starting positions."),
+   NULL,
+   CMD_ECHO_ALL, VCF_NONE, 50
+  },
   {"rulesetdir", ALLOW_CTRL,
    /* TRANS: translate text between <> only */
    N_("rulesetdir <directory>"),

@@ -2401,6 +2401,60 @@ static bool team_command(struct connection *caller, char *str, bool check)
 }
 
 /**********************************************************************//**
+  Handle name command
+**************************************************************************/
+static bool name_command(struct connection *caller, char *str, bool check)
+{
+  struct player *pplayer;
+  enum m_pre_result match_result;
+  char buf[MAX_LEN_CONSOLE_LINE];
+  char *arg[2];
+  int ntokens = 0, i;
+  bool res = FALSE;
+  struct team_slot *tslot;
+
+  if (str != NULL || strlen(str) > 0) {
+    sz_strlcpy(buf, str);
+    ntokens = get_tokens(buf, arg, 2, TOKEN_DELIMITERS);
+  }
+  if (ntokens != 2) {
+    cmd_reply(CMD_NAME, caller, C_SYNTAX,
+              _("Undefined argument.  Usage:\n%s"),
+              command_synopsis(command_by_number(CMD_TEAM)));
+    goto cleanup;
+  }
+
+  pplayer = player_by_name_prefix(arg[0], &match_result);
+  if (pplayer == NULL) {
+    cmd_reply_no_such_player(CMD_TEAM, caller, arg[0], match_result);
+    goto cleanup;
+  }
+ 
+ /* TEST: allowing this to happen to see if late-joiners could control barbarians 
+  if (is_barbarian(pplayer)) {
+    cmd_reply(CMD_NAME, caller, C_SYNTAX, _("Cannot re-name a barbarian."));
+    goto cleanup;
+  }  */
+  if (!check) {
+    cmd_reply(CMD_NAME, caller, C_OK, _("Player %s renamed to %s."),
+              player_name(pplayer),
+              arg[1]);
+  }
+
+  if ( player_name(pplayer) != NULL) { 
+    sz_strlcpy(pplayer->name, arg[1]);
+    send_player_info_c(pplayer, NULL);
+    res = TRUE;
+  }
+
+  cleanup:
+  for (i = 0; i < ntokens; i++) {
+    free(arg[i]);
+  }
+  return res;
+}
+
+/**********************************************************************//**
   List all running votes. Moved from /vote command.
 **************************************************************************/
 static void show_votes(struct connection *caller)
@@ -4461,6 +4515,8 @@ static bool handle_stdin_input_real(struct connection *caller, char *str,
     return set_command(caller, arg, check);
   case CMD_TEAM:
     return team_command(caller, arg, check);
+  case CMD_NAME:
+    return name_command(caller, arg, check);
   case CMD_RULESETDIR:
     return set_rulesetdir(caller, arg, check, read_recursion);
   case CMD_WALL:
