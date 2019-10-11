@@ -297,7 +297,8 @@ void establish_new_connection(struct connection *pconn)
   
   send_conn_info(game.est_connections, dest);
   
-  if (is_longturn()) {
+  // Allow admin/gamemaster in other variants 
+  if (TRUE /*is_longturn()*/) {
     if (is_supercow(pconn)) {
         pconn->supercow = TRUE;
         conn_set_access(pconn, ALLOW_HACK, TRUE);
@@ -317,7 +318,7 @@ void establish_new_connection(struct connection *pconn)
 		_("You are logged in as '%s' connected to no player."),
                 pconn->username);
 
-    if (is_longturn()) {
+    if (TRUE /*is_longturn()*/) {
       if (pconn->supercow) {
         connection_attach_real(pconn, NULL, TRUE, TRUE);
         notify_conn(dest, NULL, E_CONNECTION, ftc_server,
