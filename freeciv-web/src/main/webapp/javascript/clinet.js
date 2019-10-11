@@ -55,7 +55,6 @@ function network_init_manual_hack(civserverport_manual, username_manual,
 ****************************************************************************/
 function network_init()
 {
-
   if (!("WebSocket" in window)) {
     swal("WebSockets not supported", "", "error");
     return;
@@ -163,7 +162,7 @@ function check_websocket_ready()
     "major_version" : 2, "minor_version" : 5, "patch_version" : 99,
     "port": civserverport,
     "password": google_user_token == null ? sha_password : google_user_token};
-    ws.send(JSON.stringify(login_message));
+    send_request(JSON.stringify(login_message));
 
     /* Leaving the page without saving can now be an issue. */
     $(window).bind('beforeunload', function(){

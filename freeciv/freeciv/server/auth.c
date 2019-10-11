@@ -80,6 +80,10 @@ bool auth_user(struct connection *pconn, char *username)
   if (srvarg.server_password_enabled) {
     char buffer[MAX_LEN_MSG];
     fc_snprintf(buffer, sizeof(buffer), _("Enter password for this private game:"));
+
+    // Store name for later or else user will be named C2, C3, etc.
+    sz_strlcpy(pconn->username, username);
+
     dsend_packet_authentication_req(pconn, AUTH_LOGIN_FIRST, buffer);
     pconn->server.auth_settime = time(NULL);
     return TRUE;      
