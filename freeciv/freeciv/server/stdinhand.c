@@ -1003,7 +1003,7 @@ enum rfc_status create_command_pregame(const char *name,
   }
 
   /* Search for first uncontrolled player */
-  pplayer = find_uncontrolled_player();
+  pplayer = find_uncontrolled_player(NULL);
 
   if (NULL == pplayer) {
     /* Check that we are not going over max players setting */
@@ -2443,6 +2443,10 @@ static bool name_command(struct connection *caller, char *str, bool check)
 
   if ( player_name(pplayer) != NULL) { 
     sz_strlcpy(pplayer->name, arg[1]);
+  //username and name are same in FCW  
+  #ifdef FREECIV_WEB
+    sz_strlcpy(pplayer->username, arg[1]);
+  #endif
     send_player_info_c(pplayer, NULL);
     res = TRUE;
   }
@@ -3459,7 +3463,7 @@ static bool take_command(struct connection *caller, char *str, bool check)
      * no free players at the moment. Later call to
      * connection_attach() will create new player for such NULL
      * cases. */
-    pplayer = find_uncontrolled_player();
+    pplayer = find_uncontrolled_player(NULL);
     if (pplayer) {
       /* Make it human! */
       set_as_human(pplayer);

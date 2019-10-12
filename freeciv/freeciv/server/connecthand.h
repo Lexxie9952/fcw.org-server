@@ -37,7 +37,7 @@ void lost_connection_to_client(struct connection *pconn);
 void send_conn_info(struct conn_list *src, struct conn_list *dest);
 void send_conn_info_remove(struct conn_list *src, struct conn_list *dest);
 
-struct player *find_uncontrolled_player(void);
+struct player *find_uncontrolled_player(struct connection *pconn);
 struct player *find_uncontrolled_idle_player_longturn(void);
 bool connection_attach(struct connection *pconn, struct player *pplayer,
                        bool observing);

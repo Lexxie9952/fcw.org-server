@@ -634,15 +634,39 @@ void send_conn_info_remove(struct conn_list *src, struct conn_list *dest)
 /**********************************************************************//**
   Search for first uncontrolled player
 **************************************************************************/
-struct player *find_uncontrolled_player(void)
+struct player *find_uncontrolled_player(struct connection *pconn)
 {
+/* TEAM GAME SETUP PATCH FOR GAMEMASTERS
+   This is perhaps not the best implementation. The problem was this:
+   for team games, not all players can be in prelaunch together. Therefore,
+   Gamemaster has to assign UNASSIGNED players to the names of the users 
+   who will eventually come. When players then joined for the first time, 
+   the players_iterate below this one was seeing the first unassigned 
+   player and overriding it, in spite of the fact the player->name was 
+   assigned to someone else. This players_iterate immediately below will 
+   intercept that first.  TO DO: is this the proper way to patch this? When 
+   a player logs in a second time it finds the player, but we are stuck here
+   the first time. Maybe the right way is for Gamemaster set up the player
+   the way it is on the second login, so this patch isn't needed. 
+  */
+    if (is_longturn() && pconn) {
+      players_iterate(played) {
+        // Hook new connection up to existing nation with same name
+        // (handles team game setups)
+        if (strcmp(pconn->username, played->name)==0) {
+          return played;
+        }
+      }
+  } players_iterate_end;
+  /* ^^ end of TEAM GAME SETUP PATCH ^^ */
+
   players_iterate(played) {
     if (!is_longturn()) {
       if (!played->is_connected && !played->was_created) {
         return played;
       }
     } else {
-      if ((!played->is_connected && !played->was_created
+      if ((!played->is_connected /* && !played->was_created let Gamemaster create new spots to join */
       && played->unassigned_user && played->is_alive)
       || (!played->unassigned_user && played->is_alive
       && played->nturns_idle > 12 )) {
@@ -697,7 +721,7 @@ static bool connection_attach_real(struct connection *pconn,
   if (!observing) {
     if (NULL == pplayer) {
       /* search for uncontrolled player */
-      pplayer = find_uncontrolled_player();
+      pplayer = find_uncontrolled_player(pconn);
 
       if (NULL == pplayer) {
         /* no uncontrolled player found */

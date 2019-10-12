@@ -2220,7 +2220,7 @@ void handle_ongoing_longturn_nation_select_req(struct connection *pc,
   struct player *pplayer;
   new_nation = nation_by_number(nation_no);    
 
-  pplayer = find_uncontrolled_player();
+  pplayer = find_uncontrolled_player(pc);
   if (pplayer) {
     if (style >= 0 && style < game.control.num_styles
         && new_nation != NO_NATION_SELECTED) {
