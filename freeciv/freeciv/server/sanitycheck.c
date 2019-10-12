@@ -532,7 +532,8 @@ static void check_players(const char *file, const char *function, int line)
           || state1->type == DS_ARMISTICE) {
         SANITY_CHECK(state1->turns_left == state2->turns_left);
       }
-      if (state1->type == DS_TEAM) {
+      // don't do for longturn team games, it assumes false things
+      if (state1->type == DS_TEAM && !is_longturn()) {
         SANITY_CHECK(players_on_same_team(pplayer, pplayer2));
         SANITY_CHECK(player_has_real_embassy(pplayer, pplayer2));
         SANITY_CHECK(player_has_real_embassy(pplayer2, pplayer));

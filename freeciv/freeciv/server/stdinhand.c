@@ -2340,6 +2340,8 @@ static bool team_command(struct connection *caller, char *str, bool check)
   bool res = FALSE;
   struct team_slot *tslot;
 
+  struct player_diplstate *diplstate;
+
 /* Longturn needs ability to set up teams after game start */
   if (game_was_started() && !is_longturn()) {
     cmd_reply(CMD_TEAM, caller, C_SYNTAX,
@@ -2392,6 +2394,27 @@ static bool team_command(struct connection *caller, char *str, bool check)
               team_slot_name_translation(tslot));
   }
   res = TRUE;
+
+  // Gamemaster can change teams after start;
+  // This requires manually setting diplstates here:
+  if (game_was_started() && is_longturn()) {
+    players_iterate(p1) {
+      players_iterate(p2) {
+        if (p1 != p2) {
+          if (players_on_same_team(p1,p2)) {
+            diplstate = player_diplstate_get(p1, p2);
+            diplstate->type = DS_TEAM;  // set to team
+            give_shared_vision(p1,p2);
+
+            cmd_reply(CMD_TEAM, caller, C_OK, _("   %s teamed with %s."),
+              player_name(p1), player_name(p2), diplstate->type);
+          }
+        }
+      } players_iterate_end;
+    } players_iterate_end;
+    send_player_info_c(pplayer, NULL);
+  }
+  
 
   cleanup:
   for (i = 0; i < ntokens; i++) {
