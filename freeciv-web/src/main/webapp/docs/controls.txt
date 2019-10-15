@@ -127,6 +127,7 @@ double-tap drag: move unit
 w: return to map: close tab/window/pop-up
 space: de-select units, exit GOTO mode
 shift-space: re-focus to previous map position
+ctrl-alt-space: paste smartlink to tile/unit under cursor
 ctrl-B: color-fill national territores
 shift-C: select all same type units on (c)ontinent
 ctrl-C:  city labels on/off
@@ -153,6 +154,7 @@ Ctrl-Shift click tile:           Select tile to be worked by city, on main map.
   Alt-click-and-drag:            Select units by area (same as above)
 Shift-Right-click:               Copy city's current production (or unit on map) to clipboard.
 Ctrl-Shift-Right-click:          Paste clipboard into city's current production target. 
+Ctrl-Alt-Right-click:            Paste into chat a smartlink to tile or unit under cursor
 
   Middle-click:                  Show tile info  
   Alt-right click                Show tile info (if mouse has no middle click)
