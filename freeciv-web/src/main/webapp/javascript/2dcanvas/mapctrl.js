@@ -79,6 +79,8 @@ function mapview_mouse_click(e)
       paste_tile_target_for_prod(mouse_x, mouse_y);
     } else if (mouse_click_mod_key.shiftKey && !mouse_click_mod_key.ctrlKey && !mouse_click_mod_key.altKey) {
       copy_tile_target_for_prod(mouse_x, mouse_y);  
+    } else if (mouse_click_mod_key.altKey && mouse_click_mod_key.ctrlKey) {
+      key_paste_link_under_cursor();  // paste a link to a unit or tile
     }
 
     /* right click to re-center or get context menu on unit. */
@@ -93,7 +95,7 @@ function mapview_mouse_click(e)
     map_select_active = false;
     map_select_check = false;
 
-  } else if (!middleclick) {
+  } else if (!middleclick) { // left-click
     // map_select_active could be active from an alt-left-click
     if (map_select_active) {   // button up = release from this mode, select all units in box
       context_menu_active = false;
@@ -162,7 +164,7 @@ function mapview_mouse_down(e)
 
   if (!rightclick && !middleclick) { /* Left mouse button is down */
     // Alt-click substitute for right-click drag for trackpad users:
-    if (e.altKey && !map_select_active && is_right_mouse_selection_supported()) {
+    if (e.altKey && /* !e.shiftKey && !e.ctrlKey && */ !map_select_active && is_right_mouse_selection_supported()) {
       map_select_check = true;
       map_select_x = mouse_x;
       map_select_y = mouse_y;
@@ -191,18 +193,28 @@ function mapview_mouse_down(e)
     }
     touch_start_x = mouse_x;
     touch_start_y = mouse_y;
-  } else if (middleclick || e['altKey']) {
-    popit();
-    return false;
-  } else if (rightclick && !map_select_active && is_right_mouse_selection_supported()) {
-    map_select_check = true;
-    map_select_x = mouse_x;
-    map_select_y = mouse_y;
-    map_select_check_started = new Date().getTime();
-
-    // The context menu blocks the right-click mouse up event on some browsers. 
+  } else if (rightclick && e.altKey && e.ctrlKey) {
+    // ctrl-alt-rightclick, which pastes link to chat
+    // this section just prevents other things like tile info or 
+    // context menu from happening
     context_menu_active = false;
-  }
+    return false;
+  } else if (middleclick || e['altKey']) {
+    if (!e['ctrlKey']) { 
+      popit();
+      context_menu_active = false;
+      return false;
+    } else if (rightclick && !map_select_active && is_right_mouse_selection_supported()) {
+      map_select_check = true;
+      map_select_x = mouse_x;
+      map_select_y = mouse_y;
+      map_select_check_started = new Date().getTime();
+  
+      // The context menu blocks the right-click mouse up event on some browsers. 
+      context_menu_active = false;
+    }
+  } 
+  
 }
 
 /****************************************************************************
@@ -285,8 +297,6 @@ function mapview_touch_move(e)
       }
     }
   }
-
-
 }
 
 /****************************************************************************

@@ -199,7 +199,10 @@ function handle_tile_info(packet)
   }
 }
 
-/* 100% complete */
+
+/**************************************************************************
+ 100% complete.
+**************************************************************************/
 function handle_chat_msg(packet)
 {  
   var message = packet['message'];
@@ -226,11 +229,14 @@ function handle_chat_msg(packet)
 
         if (ptile != null && ptile > 0) {
         message = "<span class='chatbox_text_tileinfo' "
-            + "onclick='center_tile_id(" + ptile + ");'>" + message + "</span>";
+            + "onclick='center_tile_id(" + ptile + ");'>" + message.replace("FFFFFF", "B0F0FF") + "</span>";
         }
+
     if (is_speech_supported()) speak(message);
     }
   }
+
+  if (message.includes("%%")) message = decode_user_hyperlinks(message);
 
   packet['message'] = message;
   add_chatbox_text(packet);
@@ -244,6 +250,83 @@ function handle_chat_msg(packet)
     else if (message.includes("You have liberated ")) play_sound(soundset["e_liberate"]);
     else if (message.includes(" gold from the city.")) play_sound(soundset["e_conquer"]);
   }
+}
+
+
+/**************************************************************************
+  Recenter the map to a tile and mark it with an explosion
+  TODO: replace with a flare or similar animation
+**************************************************************************/
+function recenter_flare_tile(tile_id)
+{
+  center_tile_id(tile_id);
+  explosion_anim_map[tile_id] = 25;
+}
+
+/**************************************************************************
+  Decodes tile and unit hyperlinks sent through chat
+**************************************************************************/
+function decode_user_hyperlinks(message)
+{
+  var ptile = null;
+  // EXTRACT ENCODED TILE LINKS
+  if (message.includes("%%tile")) {
+    var assert_escape = 0;
+    var tile_x, tile_y, tile_link;
+    var tile_extract, tile_id;
+    var pcity, city_name;
+        
+    while (message.includes("%%tile") && message.includes("~%")) {
+      if (assert_escape++ > 4) break; // insurance against badly constructed links
+
+      tile_extract = message.substring(0,message.indexOf("~%")+2).match("%%tile(.*)~%");
+      tile_id = tile_extract[1]; // string between %%tile and ~%
+    
+      if (tiles[tile_id] != null) { 
+        ptile = tiles[tile_id];
+        pcity = tile_city(ptile);
+        city_name = (pcity == null) ? "" : pcity.name+":";
+        tile_x = ptile.x;
+        tile_y = ptile.y;
+        tile_link = "<span class='chatbox_text_tileinfo' onclick='recenter_flare_tile("+tile_id+");'>"
+                      + "<font style='text-decoration: underline;' color='#1FDFFF'><l tgt='tile' x='"
+                      + tile_x + "' y='" + tile_y + "'>" + city_name +" (" + tile_x + "," + tile_y + ")";
+        message = message.replace( tile_extract[0], (tile_link + "</l></font></span>") );
+      }
+    }
+  }  // TO DO: Hover text the territory info, terrain type
+
+  // EXTRACT ENCODED UNIT LINK
+  if (message.includes("%%unit")) {
+    var assert_escape = 0;
+    var unit_link, unit_name;
+    var unit_extract, unit_id;
+
+    while (message.includes("%%unit") && message.includes("_%")) {
+      if (assert_escape++ > 4) break; // insurance against badly constructed links
+      unit_extract = message.substring(0,message.indexOf("_%")+2).match("%%unit(.*)_%");
+      unit_name = message.substring(message.indexOf("_%")+2,message.indexOf("~~"));
+      unit_name = message.match("_%(.*)~~");
+      if (unit_name==null) unit_name = ""
+      unit_id = unit_extract[1]; // String between %%unit and _%
+      
+      if (units[unit_id] != null) { 
+        punit = units[unit_id];
+        var hovertext = get_unit_city_info(punit);
+        unit_link = "<span class='chatbox_text_tileinfo' "
+                      + " title='"+hovertext+"'"
+                      + " onclick='set_unit_id_focus("+unit_id+");'>"
+                      + "<font style='text-decoration: underline;' color='#FFA865'>"
+                      + unit_name[1];
+        message = message.replace( unit_name[1]+"~~", "")
+        message = message.replace( unit_extract[0], (unit_link + "</font></span>") );
+      } else { // fog of war units can't link--use plain text
+          message = message.replace( "~~", "")
+          message = message.replace( unit_extract[0], "");
+      }
+    }
+  }
+  return message;
 }
 
 /**************************************************************************

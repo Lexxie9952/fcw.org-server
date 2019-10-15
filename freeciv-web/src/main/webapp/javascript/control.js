@@ -1633,6 +1633,17 @@ function unit_distance_compare(unit_a, unit_b)
   }
 }
 
+/**************************************************************************
+  Sets the focus unit directly. Uses id instead of a punit, so it can be 
+  embedded into html onclick()
+**************************************************************************/
+function set_unit_id_focus(id)
+{
+  if (units[id]) {
+    set_unit_focus(units[id]);
+    auto_center_on_focus_unit();
+  }
+}
 
 /**************************************************************************
   Sets the focus unit directly.  The unit given will be given the
@@ -2536,7 +2547,6 @@ function global_keyboard_listener(ev)
       map_handle_key(keyboard_key, ev.keyCode, ev['ctrlKey'], ev['altKey'], ev['shiftKey'], ev);
     }
   }
-  
   civclient_handle_key(keyboard_key, ev.keyCode, ev['ctrlKey'],  ev['altKey'], ev['shiftKey'], ev);
 
   if (renderer == RENDERER_2DCANVAS) $("#canvas").contextMenu('hide');
@@ -2637,9 +2647,11 @@ civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       break;
       
     case 32:
-      if ($("#tabs-cities").is(":visible")) {
-        highlight_rows_by_improvement(0, true); // Clear all highlighted rows.
-        select_rows_by_improvement(0, true); // Clear all selected rows.
+      if (!alt && !shift && !ctrl) {
+        if ($("#tabs-cities").is(":visible")) {
+          highlight_rows_by_improvement(0, true); // Clear all highlighted rows.
+          select_rows_by_improvement(0, true); // Clear all selected rows.
+        }
       }
       break;
   }
@@ -2946,7 +2958,10 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     // space, will clear selection and goto.
     case 32: 
       if (shift) auto_center_last_location();
-      else {
+      else if (ctrl && alt) {
+        the_event.preventDefault();
+        key_paste_link_under_cursor();
+      } else {
         save_last_unit_focus();    
         
         current_focus = [];
@@ -4404,6 +4419,47 @@ function key_unit_move_focus_index(dir, s)
 
   deactivate_goto(true);
 }
+
+/**************************************************************************
+ ...Paste encoded link to a tile or unit into chatbox input
+**************************************************************************/
+function key_paste_link_under_cursor()
+{
+  var ptile = canvas_pos_to_tile(mouse_x, mouse_y)
+  var pcity = tile_city(ptile);
+
+  //Check for a unit
+  //-----------------------------------------------------------------------
+  var sunits = tile_units(ptile);
+  var own_unit_index = -1; // -1 means player has none of own units present
+  var player_has_own_unit_present = false;
+
+  if (pcity == null && sunits != null && sunits.length > 0 ) {
+    // Check that one of the units belongs to player
+    var own_unit_index = -1; // -1 means player has none of own units present 
+
+    // Find the first unit that belongs to the player:
+    for (var u = 0; u < sunits.length; u++) {
+      if (sunits[u]['owner'] == client.conn.playing.playerno)            {
+        own_unit_index = u; //player wants to select his own unit first, not a foreign unit
+        player_has_own_unit_present = true;
+      }
+      if (player_has_own_unit_present) break;
+    }
+
+    /* Copy player's first unit in stack; or else first non-player unit on tile
+      * if player doesn't have own unit */
+    var selected_index = own_unit_index == -1 ? 0 : own_unit_index;
+    var name = unit_types[sunits[selected_index]['type']]['name'];
+    var nationality = nations[players[sunits[selected_index]['owner']]['nation']]['adjective'];
+    //add_client_message(name+" copied to clipboard.");
+    $("#game_text_input").val($("#game_text_input").val() + "%%unit"+sunits[selected_index]['id']+"_%"+nationality+" "+name+"~~ ");
+  } else {  // if no unit present, then give just a link to the tile: 
+    $("#game_text_input").val($("#game_text_input").val() + "%%tile"+ptile['index']+"~% ");
+  }
+  $("#game_text_input").focus();  // default user to be ready to hit Enter or continue typing
+}
+
 
 /**************************************************************************
  ...
