@@ -113,6 +113,9 @@
       </div>
   </td>
   <td>
+    <div title="Enables the Empire Tab (under development: use at own risk)" class="main_menu_buttons">
+        <input type='checkbox' name='show_empire' id='show_empire'><b>Show Empire Tab</b> 
+    </div>
   </td>
 </tr>
 

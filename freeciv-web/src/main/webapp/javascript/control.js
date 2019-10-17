@@ -219,6 +219,10 @@ function control_init()
     setTimeout(set_default_mapview_active, 5);
   });
 
+  $("#empire_tab").click(function(event) {
+    set_default_mapview_inactive();
+    update_empire_screen();
+  });
 
   $("#civ_tab").click(function(event) {
     set_default_mapview_inactive();
@@ -310,6 +314,13 @@ function control_init()
     replace_capital_i = false; 
     simpleStorage.set('capI', replace_capital_i);
   }
+
+  // REMOVE when out of development, it will always be shown then:
+  show_empire_tab = simpleStorage.get("showEmpire");
+  if (show_empire_tab)
+    $("#ui-id-2").show();
+  else 
+    $("#ui-id-2").hide();
 }
 
 /****************************************************************************
@@ -906,7 +917,7 @@ function advance_unit_focus()
         }
       }
     }*/
-    if (touch_device)
+    if (touch_device || is_small_screen())
     {
       $("#turn_done_button").button("option", "label", "<i class='fa fa-check-circle-o' style='color: green;'aria-hidden='true'></i>Done");
     } else {
@@ -2562,22 +2573,29 @@ civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 'C':
       if (alt) {
         the_event.preventDefault();     // override possible browser shortcut
-        $('#ui-id-4').trigger("click"); // cities tab
+        $('#ui-id-5').trigger("click"); // cities tab
       }
     break;   
 
-    case 'D':
+    case 'H':
       if ((!shift) && (ctrl)) {
         the_event.preventDefault(); // override possible browser shortcut
         show_debug_info();
       } 
-      else if (alt) $('#ui-id-6').trigger("click");  // docs tab
+      else if (alt) $('#ui-id-7').trigger("click");  // docs tab
     break;
+
+    case 'E':
+      if (alt) {
+        the_event.preventDefault(); // override possible browser shortcut
+        $('#ui-id-2').trigger("click"); // gov tab
+      }
+    break; 
 
     case 'G':
       if (alt) {
         the_event.preventDefault(); // override possible browser shortcut
-        $('#ui-id-2').trigger("click"); // gov tab
+        $('#ui-id-3').trigger("click"); // gov tab
       }
     break; 
 
@@ -2591,14 +2609,14 @@ civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 'N':
       if (alt) {
         the_event.preventDefault(); // override possible browser shortcut
-        $('#ui-id-3').trigger("click"); // nations tab
+        $('#ui-id-4').trigger("click"); // nations tab
       }
     break;   
 
     case 'P':
         if (alt) {
           the_event.preventDefault(); // override possible browser shortcut
-          $('#ui-id-5').trigger("click"); // prefs tab
+          $('#ui-id-6').trigger("click"); // prefs tab
         }
       break;   
   
@@ -4762,7 +4780,7 @@ function update_active_units_dialog()
 
     if (get_unit_homecity_name(aunit) != null) {
       unit_info_html += ": " + get_unit_homecity_name(aunit) + " ";
-    }
+    } else unit_info_html += " ";
     if (client.conn.playing != null && current_focus[0]['owner'] == client.conn.playing.playerno) {
       unit_info_html += "<span style='color:white'>Moves:<span style='color:lightgreen;font-size:120%;'><b>" + move_points_text(aunit['movesleft']) + "</b></span></span> ";
 //      unit_info_html += "<span style='color:aqua'>" + get_unit_moves_left(aunit) + "</span> ";

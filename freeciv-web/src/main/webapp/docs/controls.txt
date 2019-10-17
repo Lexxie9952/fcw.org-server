@@ -165,8 +165,9 @@ Ctrl-Alt-Right-click:            Paste into chat a smartlink to tile or unit und
 <h2>Tabs:</h2>
 W: map tab; escape window/tab/popup without exiting full screen
 alt-C: cities tab
-alt-D: docs tab
+alt-E: empire tab
 alt-G: gov. tab
+alt-H: help tab
 alt-M: map tab 
 alt-N: nations tab 
 alt-P: prefs tab 

@@ -97,6 +97,7 @@ function civclient_init()
   if (action == "observe") {
     observing = true;
     $("#civ_tab").remove();
+    $("#empire_tab").remove();
     $("#cities_tab").remove();
     $("#pregame_buttons").remove();
     $("#game_unit_orders_default").remove();
@@ -160,6 +161,7 @@ function civclient_init()
 
   $('#tabs').css("height", $(window).height());
   $("#tabs-map").height("auto");
+  $("#tabs-empire").height("auto");
   $("#tabs-civ").height("auto");
   $("#tabs-tec").height("auto");
   $("#tabs-nat").height("auto");
@@ -191,7 +193,10 @@ function civclient_init()
 
   unit_click_menu = simpleStorage.get('unitclickmenu');
   if (unit_click_menu == null) 
-    unit_click_menu = true;  // Default case
+    if (is_small_screen() || is_touch_device())
+      unit_click_menu = true;  // Default for mobile
+    else 
+      unit_click_menu = false;  // Default for PC
 
   draw_city_airlift_counter = simpleStorage.get('airlift');
   if (draw_city_airlift_counter == null) 
@@ -204,6 +209,12 @@ function civclient_init()
   scroll_narrow_x = simpleStorage.get('xScroll');
   if (scroll_narrow_x == null) 
     scroll_narrow_x = false;  // Default case
+
+  show_empire_tab = simpleStorage.get('showEmpire');
+  if (show_empire_tab == null) 
+    show_empire_tab = false;  // Default case
+
+
   // -------------------------------------------------------------------------------- 
   
   /* Initialze audio.js music player */

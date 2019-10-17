@@ -1041,6 +1041,33 @@ function get_unit_hp_sprite(punit)
           "offset_x" : unit_flag_offset_x + -25 + unit_offset['x'],
           "offset_y" : - unit_flag_offset_y - 15 + unit_offset['y']};
 }
+/****************************************************************************
+ constructs an html-usable sprite for a unit's hp
+****************************************************************************/
+function get_full_hp_sprite(punit)
+{
+  // Compute the sprite for the number of hitpoints left
+  var hp = punit['hp'];
+  var unit_type = unit_types[punit['type']];
+  var max_hp = unit_type['hp'];
+  var healthpercent = 10 * Math.floor((10 * hp) / max_hp);
+  var tag = "unit.hp_" + healthpercent;
+  
+  var tileset_x = tileset[tag][0];
+  var tileset_y = tileset[tag][1];
+  var width = tileset[tag][2];
+  var height = tileset[tag][3];
+  var i = tileset[tag][4];
+
+  return {"tag": "unit.hp_" + healthpercent,
+          "image-src" : "/tileset/freeciv-web-tileset-" + tileset_name + "-" + i + get_tileset_file_extention() + "?ts=" + ts,
+          "tileset-x" : tileset_x,
+          "tileset-y" : tileset_y,
+          "width" : width,
+          "height" : height
+          };        
+}
+
 
 /**********************************************************************
   ...

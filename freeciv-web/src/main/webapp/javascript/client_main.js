@@ -132,9 +132,16 @@ function setup_window_size ()
     $("#cities_tab").children().html("<i class='fa fa-fort-awesome' aria-hidden='true'></i>");
     $("#tech_tab").children().html("<i class='fa fa-flask' aria-hidden='true'></i>");
     $("#civ_tab").children().html("<i class='fa fa-university' aria-hidden='true'></i>");
+    $("#empire_tab").children().html("<i class='fa fa-rebel' aria-hidden='true'></i>");
     $("#hel_tab").children().html("<i class='fa fa-book' aria-hidden='true'></i>");
-    $("#chat_tab").children().html("<i class='fa fa-commenting-o' aria-hidden='true'></i>");
-
+//    $("#chat_tab").children().html("<i class='fa fa-commenting-o' aria-hidden='true'></i>");
+    $("#button_national_units").html("&#9823;");
+    $("#button_unit_homecity").html("&#x1F3E0;");
+    $("#button_unit_deployment").html("&#x2299;");
+    $("#button_city_buildings").html("&#x1F3E2;");
+    $("#button_empire_upkeep").html("&#x1f4b0;");
+    $("#button_empire_prod").html("&#x1F528;");
+    //$("#empire_mode.options").children().css({"padding-left":"5px", "padding-right":"5px"});
 
     $(".ui-tabs-anchor").css("padding", "7px");
     $(".overview_dialog").hide();
@@ -145,6 +152,15 @@ function setup_window_size ()
     if ($("#game_unit_orders_default").length > 0) $("#game_unit_orders_default").remove();
     if ($("#game_unit_orders_settlers").length > 0) $("#game_unit_orders_settlers").remove();
     $("#game_status_panel_bottom").css("font-size", "0.8em");
+  } else {  // handle case where small window is resized to large again 
+    $("#map_tab").children().html("<i class='fa fa-globe' aria-hidden='true'></i> Map");
+    $("#opt_tab").children().html("<i class='fa fa-cogs' aria-hidden='true'></i> Prefs");
+    $("#players_tab").children().html("<i class='fa fa-flag' aria-hidden='true'></i> Nations");
+    $("#cities_tab").children().html("<i class='fa fa-fort-awesome' aria-hidden='true'></i> Cities");
+    $("#tech_tab").children().html("<i class='fa fa-flask' aria-hidden='true'></i> Tech");
+    $("#civ_tab").children().html("<i class='fa fa-university' aria-hidden='true'></i> Gov.");
+    $("#empire_tab").children().html("<i class='fa fa-rebel' aria-hidden='true'></i> Empire");
+    $("#hel_tab").children().html("<i class='fa fa-book' aria-hidden='true'></i> Help");
   }
 
   if (overview_active) init_overview();

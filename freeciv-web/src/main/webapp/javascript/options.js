@@ -44,6 +44,7 @@ var sounds_enabled = true;
 var unit_click_menu = true;  // whether to show context menu on left-clicking a unit
 var map_drag_enabled = true; // whether double tap and drag will move the map
 var show_order_option = true; // corresponds to the checkbox
+var show_empire_tab = false;
 
 var save_options_on_exit = true;
 var fullscreen_mode = false;
@@ -248,6 +249,13 @@ function init_options_dialog()
     $('#fill_borders').change(function() {
       fill_national_border = this.checked;
       //simpleStorage.set('fill_borders', fill_national_border); 
+    });
+    // SHOW EMPIRE TAB 
+    $('#show_empire').prop('checked', show_empire_tab);
+    $('#show_empire').change(function() {
+      show_empire_tab = this.checked;
+      if (show_empire_tab) $("#ui-id-2").show(); else $("#ui-id-2").hide();
+      simpleStorage.set('showEmpire', show_empire_tab); 
     });
 
    // Graphic Theme
