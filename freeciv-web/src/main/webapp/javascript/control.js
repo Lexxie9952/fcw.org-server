@@ -2739,14 +2739,6 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       }
     break;
 
-    case 'M':
-      if (shift && !ctrl && !alt) {
-        show_unit_movepct = !show_unit_movepct;
-        if (show_unit_movepct) hp_bar_offset = -5;
-        else hp_bar_offset = 0;
-        //simpleStorage.set('showMoves', show_unit_movepct); 
-      }
-
     case 'H':
       key_unit_homecity();
     break;
@@ -2864,11 +2856,15 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       }
     break;
     case 'M':
-      if (alt) {
+      if (shift && !ctrl && !alt) {
+        show_unit_movepct = !show_unit_movepct;
+        if (show_unit_movepct) hp_bar_offset = -5;
+        else hp_bar_offset = 0;
+        //simpleStorage.set('showMoves', show_unit_movepct); 
+      } else if (alt) {
         the_event.preventDefault(); // override possible browser shortcut
         key_unit_move(DIR8_SOUTH);  // alt+M=1
-      }
-      else key_unit_mine();
+      } else key_unit_mine();
     break;
     /* these were moved lower to keycode 188,190 for Mac compatibility:
     case ',':
