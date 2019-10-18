@@ -2458,13 +2458,13 @@ reqs	=
 ;      "Tech", "Superconductors", "World", TRUE
 ;    }
 
-;[effect_spaceflight_slowdown]
-;type    = "Slow_Down_Timeline"
-;value   = 1
-;reqs    =
-;    { "type", "name", "range", "survives"
-;      "Tech", "Space Flight", "World", TRUE
-;    }
+[effect_spaceflight_slowdown]
+type    = "Turn_Years"
+value   = 1
+reqs    =
+    { "type", "name", "range", "survives"
+      "Tech", "Space Flight", "World", TRUE
+    }
 
 [effect_stock_exchange]
 type    = "Output_Bonus"
@@ -2628,6 +2628,14 @@ value	= 1
 reqs	=
     { "type", "name", "range", "survives"
       "Building", "Apollo Program", "Player", TRUE
+    }
+;1 year per turn after Apollo Program - calibrates spaceship time
+[effect_apollo_slowdown]
+type    = "Turn_Years"
+value   = 1 
+reqs    =
+    { "type", "name", "range", "survives"
+      "Building", "Apollo Program", "World", TRUE
     }
 
 

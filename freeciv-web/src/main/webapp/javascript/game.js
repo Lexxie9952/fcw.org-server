@@ -160,13 +160,13 @@ function update_game_status_panel() {
     status_html += "<i style='color:#a8ccd7;'class='fa fa-flask' aria-hidden='true' title='Science rate'></i> <b style='color:#ebfaff'>" + sci + "</b><span style='color:#bcbcbc'>%</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> ";
   
   } else if (server_settings != null && server_settings['metamessage'] != null) {    // Status message for gamemasters/admins/supercows:
-    status_html += "Observing - Turn <b>" + game_info['turn'] + "</b>  ";
+    status_html += "Observing - Turn <b>" + game_info['turn'] + "</b> -";
     var status_message = "";
     if (server_settings['metamessage']['val'].indexOf('|') != -1) {
       // extract the game identifier string out of the longer metamessage
       status_message = server_settings['metamessage']['val'].substr(0,server_settings['metamessage']['val'].indexOf('|')); 
     }
-    status_html += status_message + " &nbsp; &nbsp; &nbsp; ";  // pad to prevent turn done button overwrite.
+    status_html += status_message + " &nbsp; &nbsp; &nbsp; &nbsp; ";  // pad to prevent turn done button overwrite.
   }
 
   if ($(window).width() - sum_width() > 740) {   // was 800 but 740 is the space available on standard screen and it's adequate

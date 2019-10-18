@@ -1657,7 +1657,7 @@ reqs    =
     }
 
 [effect_spaceflight_slowdown]
-type    = "Slow_Down_Timeline"
+type    = "Turn_Years"
 value   = 1
 reqs    =
     { "type", "name", "range", "survives"
