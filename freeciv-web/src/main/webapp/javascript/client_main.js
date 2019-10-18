@@ -132,7 +132,7 @@ function setup_window_size ()
     $("#cities_tab").children().html("<i class='fa fa-fort-awesome' aria-hidden='true'></i>");
     $("#tech_tab").children().html("<i class='fa fa-flask' aria-hidden='true'></i>");
     $("#civ_tab").children().html("<i class='fa fa-university' aria-hidden='true'></i>");
-    $("#empire_tab").children().html("<i class='fa fa-rebel' aria-hidden='true'></i>");
+    $("#empire_tab").children().html("<i class='fa fa-binoculars' aria-hidden='true'></i>");
     $("#hel_tab").children().html("<i class='fa fa-book' aria-hidden='true'></i>");
 //    $("#chat_tab").children().html("<i class='fa fa-commenting-o' aria-hidden='true'></i>");
     $("#button_national_units").html("&#9823;");
@@ -159,7 +159,7 @@ function setup_window_size ()
     $("#cities_tab").children().html("<i class='fa fa-fort-awesome' aria-hidden='true'></i> Cities");
     $("#tech_tab").children().html("<i class='fa fa-flask' aria-hidden='true'></i> Tech");
     $("#civ_tab").children().html("<i class='fa fa-university' aria-hidden='true'></i> Gov.");
-    $("#empire_tab").children().html("<i class='fa fa-rebel' aria-hidden='true'></i> Empire");
+    $("#empire_tab").children().html("<i class='fa fa-binoculars' aria-hidden='true'></i> Empire");
     $("#hel_tab").children().html("<i class='fa fa-book' aria-hidden='true'></i> Help");
   }
 

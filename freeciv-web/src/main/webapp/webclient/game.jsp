@@ -6,7 +6,7 @@
 			<ul id="tabs_menu">
 			    <div id="freeciv_logo" ></div>
 				<li id="map_tab" style="margin-right:0px;"><a href="#tabs-map"><i class="fa fa-globe" aria-hidden="true"></i> Map</a></li>
-				<li id="empire_tab" style="margin-right:0px;"><a href="#tabs-empire"><i class="fa fa-rebel" aria-hidden="true"></i> Empire</a></li>
+				<li id="empire_tab" style="margin-right:0px;"><a href="#tabs-empire"><i class="fa fa-binoculars" aria-hidden="true"></i> Empire</a></li>
 				<li id="civ_tab" style="margin-right:0px;"><a href="#tabs-civ"><i class="fa fa-university" aria-hidden="true"></i> Gov.</a></li>
 				<li id="tech_tab" style="margin-right:0px;"><a id="tech_tab_item" href="#tabs-tec"><i class="fa fa-flask" aria-hidden="true"></i> Tech</a></li>
 				<li id="players_tab" style="margin-right:0px;"><a href="#tabs-nat"><i class="fa fa-flag" aria-hidden="true"></i> Nations</a></li>

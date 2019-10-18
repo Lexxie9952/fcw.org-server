@@ -1053,13 +1053,46 @@ function get_full_hp_sprite(punit)
   var healthpercent = 10 * Math.floor((10 * hp) / max_hp);
   var tag = "unit.hp_" + healthpercent;
   
+  return get_sprite_from_tag(tag);
+}
+/****************************************************************************
+ constructs an html-usable movepoint sprite for a unit's moves_left
+****************************************************************************/
+function get_full_mp_sprite(punit)
+{
+  // Compute the sprite for the number of moves left (we steal the hitpoint counter)
+  var mp = punit['movesleft'];
+  var unit_type = unit_types[punit['type']];
+  var max_mp = unit_type['move_rate'];
+  var movepercent = 10 * Math.floor((10 * mp) / max_mp);
+  if (movepercent>100) movepercent=100; // move bonuses can give numbers >100
+  var tag = "unit.hp_" + movepercent;   // hp tag servers for mp too
+  
+  return get_sprite_from_tag(tag);
+}
+/****************************************************************************
+ constructs an html-usable veteran icon sprite for a unit's veteran level
+****************************************************************************/
+function get_full_vet_sprite(punit)
+{
+  if (punit['veteran']>0) {
+    var tag = "unit.vet_" + punit['veteran'];
+    return get_sprite_from_tag(tag);
+  } else return null;
+}
+
+/****************************************************************************
+ gives an html-ready sprite from the tileset, by tag name
+****************************************************************************/
+function get_sprite_from_tag(tag)
+{
   var tileset_x = tileset[tag][0];
   var tileset_y = tileset[tag][1];
   var width = tileset[tag][2];
   var height = tileset[tag][3];
   var i = tileset[tag][4];
 
-  return {"tag": "unit.hp_" + healthpercent,
+  return {"tag": tag,
           "image-src" : "/tileset/freeciv-web-tileset-" + tileset_name + "-" + i + get_tileset_file_extention() + "?ts=" + ts,
           "tileset-x" : tileset_x,
           "tileset-y" : tileset_y,

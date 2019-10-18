@@ -1,4 +1,4 @@
-<div>
+<div id="empire_static">
 
     <div id="empire_mode_options" style="margin-top:-3px;"><span id="empire_prompt"><b>Empire:</b>&nbsp;&nbsp;</span>
        <button id="button_national_units" type="button" class="button tab_emulator_button" onClick="change_empire_mode(0);"
@@ -20,7 +20,7 @@
         title="Production in all cities" >&#x1F528;Production</button>
     </div>
     <hr style="margin-top:-5px;">
-    <h2 id="empire_title"></h2>
+    <h2 style="margin-top:0px; margin-bottom:0px;" id="empire_title"></h2>
     
     <div id="empire_mode_panel"></div>
 
