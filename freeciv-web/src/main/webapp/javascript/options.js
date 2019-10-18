@@ -45,6 +45,8 @@ var unit_click_menu = true;  // whether to show context menu on left-clicking a 
 var map_drag_enabled = true; // whether double tap and drag will move the map
 var show_order_option = true; // corresponds to the checkbox
 var show_empire_tab = false;
+var show_unit_movepct = false; // show move-point bar on map units
+var hp_bar_offset = 0;         // if mp bar is shown, offset to bump up hp bar
 
 var save_options_on_exit = true;
 var fullscreen_mode = false;
@@ -256,6 +258,14 @@ function init_options_dialog()
       show_empire_tab = this.checked;
       if (show_empire_tab) $("#ui-id-2").show(); else $("#ui-id-2").hide();
       simpleStorage.set('showEmpire', show_empire_tab); 
+    });
+    // Show Move Points % on units on map 
+    $('#show_unit_mp').prop('checked', show_unit_movepct);
+    $('#show_unit_mp').change(function() {
+      show_unit_movepct = this.checked;
+      if (show_unit_movepct) hp_bar_offset = -5;
+      else hp_bar_offset = 0;
+      //simpleStorage.set('showMoves', show_unit_movepct); 
     });
 
    // Graphic Theme

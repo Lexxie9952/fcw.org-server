@@ -2739,6 +2739,14 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       }
     break;
 
+    case 'M':
+      if (shift && !ctrl && !alt) {
+        show_unit_movepct = !show_unit_movepct;
+        if (show_unit_movepct) hp_bar_offset = -5;
+        else hp_bar_offset = 0;
+        //simpleStorage.set('showMoves', show_unit_movepct); 
+      }
+
     case 'H':
       key_unit_homecity();
     break;

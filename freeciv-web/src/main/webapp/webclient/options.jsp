@@ -118,6 +118,15 @@
     </div>
   </td>
 </tr>
+<tr>
+    <td>
+        <div title="Movement Point Percentage displayed on units on main map (SHIFT-M)" class="main_menu_buttons">
+            <input type='checkbox' name='show_unit_mp' id='show_unit_mp'><b><font color="#0000c0">Movement Point Display</font></b> 
+        </div>
+    </td>
+    <td>
+    </td>
+  </tr>
 
 <tr>
   <td>

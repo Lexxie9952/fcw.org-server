@@ -762,6 +762,7 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
     result.push(activities);
   }
 
+  if (show_unit_movepct && punit['movesleft']!=null) result.push(get_mp_sprite(punit));
   result.push(get_unit_hp_sprite(punit));
   if (stacked) result.push(get_unit_stack_sprite());
   if (punit['veteran'] > 0) result.push(get_unit_veteran_sprite(punit));
@@ -1036,8 +1037,27 @@ function get_unit_hp_sprite(punit)
   var healthpercent = 10 * Math.floor((10 * hp) / max_hp);
   var unit_offset = get_unit_anim_offset(punit);
 
+  // don't push up hp bar for foreign units for which we don't know movesleft
+  var bar_offset = (punit['movesleft']!=null) ? hp_bar_offset : 0;
 
   return {"key" : "unit.hp_" + healthpercent,
+          "offset_x" : unit_flag_offset_x + -25 + unit_offset['x'],
+          "offset_y" : - unit_flag_offset_y - 15 + bar_offset + unit_offset['y']};
+}
+/**********************************************************************
+  ...
+***********************************************************************/
+function get_mp_sprite(punit)
+{
+  // Compute the sprite for the number of moves left (we steal the hitpoint counter)
+  var mp = punit['movesleft'];
+  var unit_type = unit_types[punit['type']];
+  var max_mp = unit_type['move_rate'];
+  var movepercent = 10 * Math.floor((10 * mp) / max_mp);
+  if (movepercent>100) movepercent=100; // move bonuses can give numbers >100%
+  var unit_offset = get_unit_anim_offset(punit);
+
+  return {"key" : "unit.hp_" + movepercent,
           "offset_x" : unit_flag_offset_x + -25 + unit_offset['x'],
           "offset_y" : - unit_flag_offset_y - 15 + unit_offset['y']};
 }
