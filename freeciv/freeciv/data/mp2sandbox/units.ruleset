@@ -161,6 +161,13 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 ; "Airliftable"       = This Unit Class may be airlifted
 ; */ <-- avoid gettext warnings
 
+
+; **********************************************************************************
+; **********************************************************************************
+; WARNING: ANY CHANGES TO WHAT TYPES OR CLASSES CAN LOAD ONTO WHICH TRANSPORTS MAY 
+; REQUIRE CHANGES TO FCW function unit_could_possibly_load() in unit.js
+; **********************************************************************************
+; **********************************************************************************
 [unitclass_missile]
 ; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Missile")
@@ -619,17 +626,17 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = "AttackFastStartUnit"       ;this role taken over for well-digger
 helptext      = _("\
-The only purpose of this unit is to fix a bad start with no nearby water.\
- You can only make one. It has very high upkeep.\
+The only purpose of this unit is to fix unlucky starts with no nearby water.\
+ You can only make one. It has high upkeep.\
 "), _("\
-If you lack nearby water at game start, make a Well-Digger in a city that can\
- support the upkeep. Irrigation is 2 turns; a well is 1 turn. Disband right after!\
+If you start with no water, make a Well-Digger in a city that can\
+ support the upkeep, create a water source, then disband the unit.\
 "), _("\
- This unit can irrigate any tile except Hills/Mountains, or dig a well on any tile.\
- A Despotic city needs +2 Food +2 Prod for upkeep. A Well-Digger WILL NOT WORK:\
- 1. Outside your borders. 2. If it dies from not enough upkeep.\
- 3. You learn Alphabet or Pottery. >> Don't fool around: high upkeep will\
- permanently hinder you. This unit is beneficial only if you lack water\
+ For 10 turns, this unit can irrigate any tile except Hills/Mountains, or dig a\
+ well on any tile. A Despotic city needs +2 Food +2 Prod for upkeep. A Well-Digger\
+ WILL NOT WORK: 1. Outside your borders, 2. After Alphabet or Pottery, 3. After\
+ any player discovers Writing, 4. After 10 turns. >> Don't fool around: high upkeep\
+ will permanently hinder you. This unit is beneficial only if you lack water\
  in the first turns of play.\
 ")
 
@@ -1474,7 +1481,7 @@ class         = "Land"
 tech_req      = "Plastics"
 obsolete_by   = "None"
 graphic       = "u.armor_ii"
-graphic_alt   = "-"
+graphic_alt   = "u.armor"
 sound_move    = "m_armor_ii"
 sound_move_alt = "m_armor"
 sound_fight   = "f_armor_ii"
@@ -2330,7 +2337,7 @@ class         = "RiverShip"
 tech_req      = "Map Making"
 obsolete_by   = "Caravel"
 graphic       = "u.longboat"
-graphic_alt   = "-"
+graphic_alt   = "u.trireme"
 sound_move    = "m_longboat"
 sound_move_alt = "m_trireme"
 sound_fight   = "f_trireme"
@@ -2367,7 +2374,7 @@ class         = "RiverShip"
 tech_req      = "Seafaring"
 obsolete_by   = "Caravel"
 graphic       = "u.galley"
-graphic_alt   = "-"
+graphic_alt   = "u.trireme"
 sound_move    = "m_galley"
 sound_move_alt = "m_trireme"
 sound_fight   = "f_trireme"
@@ -2406,7 +2413,7 @@ class         = "RiverShip"
 tech_req      = "Astronomy"
 obsolete_by   = "Caravel"
 graphic       = "u.war_galley"
-graphic_alt   = "-"
+graphic_alt   = "u.trireme"
 sound_move    = "m_war_galley"
 sound_move_alt = "m_trireme"
 sound_fight   = "f_trireme"
@@ -2443,7 +2450,7 @@ class         = "Sea"
 tech_req      = "Engineering"
 obsolete_by   = "Caravel"
 graphic       = "u.ram_ship"
-graphic_alt   = "-"
+graphic_alt   = "u.trireme"
 sound_move    = "m_ram_ship"
 sound_move_alt = "m_trireme"
 sound_fight   = "f_ram_ship"
@@ -2478,7 +2485,7 @@ class         = "RiverShip"
 tech_req      = "Navigation"
 obsolete_by   = "Galleon"
 graphic       = "u.caravel"
-graphic_alt   = "-"
+graphic_alt   = "u.trireme"
 sound_move    = "m_caravel"
 sound_move_alt = "m_generic"
 sound_fight   = "f_caravel"
@@ -2985,7 +2992,8 @@ The Cruise Missile can strike deep into enemy territory. It cannot attack\
  Air units, but Air units never prevent it from hitting reachable surface units.\
  You can transport a Cruise Missile to new locations, but be sure to end its turn at a\ 
  city, airbase, or on a unit capable of transporting it. Cruise Missiles can be carried\
- by Submarines, Missile Destroyers, AEGIS Cruisers, and Carriers.\
+ by Submarines, Missile Destroyers, AEGIS Cruisers, and Carriers.  The Cruise Missile is\
+ not reachable by other units, but can not block attacks on other units on its tile.\
 ")
 
 [unit_atom_bomb]
@@ -2994,7 +3002,7 @@ class         = "Bomb"
 tech_req      = "Nuclear Fission"
 obsolete_by   = "None"
 graphic       = "u.atom_bomb"
-graphic_alt   = "-"
+graphic_alt   = "u.nuclear"
 sound_move    = "m_atomb_bomb"
 sound_move_alt = "m_generic"
 sound_fight   = "f_atomb_bomb"
@@ -3132,6 +3140,7 @@ Most covert actions may be done in peacetime, but cause incidents which may\
  - Investigate City.\n\
  - Sabotage City: Destroy production or a random building.\n\
  - Steal Tech: A random tech may be stolen, creating an incident.\n\
+  - Steal Map Fragments.\n\
  - Incite Revolt: Bribe a city to join your empire and acquire the units the city supports.\n\
 "), _("\
 Many rules alter odds & legality. Read the manual on Diplomacy.\

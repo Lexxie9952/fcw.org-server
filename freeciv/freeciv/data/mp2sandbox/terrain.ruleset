@@ -1650,7 +1650,10 @@ reqs           =
     { "type", "name", "range", "present"
       "TerrainClass", "Land", "Local", TRUE
       "Tech", "Pottery", "Player", FALSE
+      "Tech", "Alphabet","Player", FALSE
+      "Tech", "Writing", "World",  FALSE
       "UnitFlag", "Well-Digger", "Local", TRUE
+      "Age",      "10",          "Local", FALSE
     }
 build_time = 2
 removal_time = 0

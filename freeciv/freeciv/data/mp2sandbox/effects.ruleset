@@ -199,15 +199,6 @@ reqs    =
       "Terrain",   "Mountains", "Local"
       "UnitClass", "LandNoKill",      "Local"
     }
-; Movement penalty for RiverShip who ended turn on river
-[effect_slower_rivers]
-type    = "Move_Bonus"
-value   = -1
-reqs    =
-    { "type", "name", "range", "present"
-      "UnitClass", "RiverShip", "Local", TRUE
-      "Extra", "River", "Local", TRUE
-    }
 
 ; basic free tech upkeep
 [effect_upkeep_tech_free]
@@ -2540,6 +2531,33 @@ reqs    =
     { "type", "name", "range"
       "Extra", "Irrigation", "Local"
     }
+; Desert with river (and no Oasis) gets 1 extra food from irrigation (total 2)
+; ("Nile floods" effect)
+[effect_irrigation_2]
+type    = "Irrigation_Pct"
+value   = 100
+reqs    =
+  { "type", "name", "range", "present"
+  "Terrain", "Desert", "Local", TRUE
+  "Extra", "River", "Local", TRUE
+  "Extra", "Oasis", "Local", FALSE
+  "Extra", "Irrigation", "Local", TRUE
+  }
+; ...same for city centers
+[effect_irrigation_3]
+type    = "Irrigation_Pct"
+value   = 100
+reqs    =
+  { "type", "name", "range", "present"
+  "Terrain", "Desert", "Local", TRUE
+  "Extra", "River", "Local", TRUE
+  "Extra", "Oasis", "Local", FALSE
+  "CityTile", "Center", "Local", TRUE
+; "Extra", "Irrigation", "Local", FALSE
+  "TerrainAlter", "CanIrrigate", "Local", TRUE
+  "Extra", "Mine", "Local", FALSE
+  "Extra", "Oil Well", "Local", FALSE
+  }
 
 [effect_irrigation_center]
 type    = "Irrigation_Pct"

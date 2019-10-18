@@ -626,17 +626,17 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = "AttackFastStartUnit"       ;this role taken over for well-digger
 helptext      = _("\
-The only purpose of this unit is to fix a bad start with no nearby water.\
- You can only make one. It has very high upkeep.\
+The only purpose of this unit is to fix unlucky starts with no nearby water.\
+ You can only make one. It has high upkeep.\
 "), _("\
-If you lack nearby water at game start, make a Well-Digger in a city that can\
- support the upkeep. Irrigation is 2 turns; a well is 1 turn. Disband right after!\
+If you start with no water, make a Well-Digger in a city that can\
+ support the upkeep, create a water source, then disband the unit.\
 "), _("\
- This unit can irrigate any tile except Hills/Mountains, or dig a well on any tile.\
- A Despotic city needs +2 Food +2 Prod for upkeep. A Well-Digger WILL NOT WORK:\
- 1. Outside your borders. 2. If it dies from not enough upkeep.\
- 3. You learn Alphabet or Pottery. >> Don't fool around: high upkeep will\
- permanently hinder you. This unit is beneficial only if you lack water\
+ For 10 turns, this unit can irrigate any tile except Hills/Mountains, or dig a\
+ well on any tile. A Despotic city needs +2 Food +2 Prod for upkeep. A Well-Digger\
+ WILL NOT WORK: 1. Outside your borders, 2. After Alphabet or Pottery, 3. After\
+ any player discovers Writing, 4. After 10 turns. >> Don't fool around: high upkeep\
+ will permanently hinder you. This unit is beneficial only if you lack water\
  in the first turns of play.\
 ")
 

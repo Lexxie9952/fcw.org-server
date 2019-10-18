@@ -1198,12 +1198,14 @@ actor_reqs    =
      { "type",     "name",        "range", "present"
        "UnitFlag", "Settlers",    "Local", TRUE
        "UnitFlag", "Well-Digger", "Local", TRUE
+       "Age",      "10",          "Local", FALSE
      }
 target_reqs    =
      { "type",    "name", "range", "present"
        "TerrainFlag", "Low Land", "Local", TRUE
        "Tech", "Pottery", "Player", FALSE
        "Tech", "Alphabet","Player", FALSE
+       "Tech", "Writing", "World",  FALSE
      }
   
 [actionenabler_irrigate_src_ocean]
@@ -1684,6 +1686,7 @@ set =
       "nuclearwinter_percent", 20, FALSE
       "revolen", 1, FALSE
       "separatepoles", FALSE, FALSE
+;      "spaceship_travel_time", 225, FALSE      UNCOMMENT WHEN FEATURE GOES UP
       "specials", 350, FALSE
       "startpos", "SINGLE", FALSE
       "startunits", "cccwwwxxa", FALSE
