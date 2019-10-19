@@ -37,6 +37,17 @@ tiles = { "row", "column", "tag"
   0,  9, "unit.hp_10"
   0, 10, "unit.hp_0"
 
+  8,  0, "unit.hp_95"
+  8,  1, "unit.hp_85"
+  8,  2, "unit.hp_75"
+  8,  3, "unit.hp_65"
+  8,  4, "unit.hp_55"
+  8,  5, "unit.hp_45"
+  8,  6, "unit.hp_35"
+  8,  7, "unit.hp_25"
+  8,  8, "unit.hp_15"
+  8,  9, "unit.hp_5"
+
 ; Numbers: city size: (also used for goto)
 
 

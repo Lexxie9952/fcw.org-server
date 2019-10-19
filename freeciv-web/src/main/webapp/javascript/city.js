@@ -2954,50 +2954,50 @@ function city_keyboard_listener(ev)
         }
     switch (keyboard_key) {
        case 'P':
-         previous_city();
          ev.stopPropagation();
+         previous_city();
          break;
 
        case 'V':
        case 'M':
+          ev.stopPropagation();
           city_tab_index = 0;  // Main screen / View
           $("#city_tabs").tabs({ active: city_tab_index});
-          ev.stopPropagation();
           break;
     
        case 'Q':
+         ev.stopPropagation();
          city_tab_index = 1;  // Production screen
          $("#city_tabs").tabs({ active: city_tab_index});
-         ev.stopPropagation();
          break;
 
        case 'T':
        case 'R':
+          ev.stopPropagation();
           city_tab_index = 2;  // Trade routes
           $("#city_tabs").tabs({ active: city_tab_index});
-          ev.stopPropagation();
           break;
        
        case 'O':
+          ev.stopPropagation();
           city_tab_index = 3;  // Options/Settings
           $("#city_tabs").tabs({ active: city_tab_index});
-          ev.stopPropagation();
           break;
 
        case 'W': // same command as ESC above (code 27)
-         close_city_dialog();
          ev.stopPropagation();
+         close_city_dialog();
          chatbox_scroll_to_bottom(false);
          break;
 
        case 'N':
-         next_city();
-         ev.stopPropagation();
+          ev.stopPropagation();
+          next_city();
          break;
 
        case 'B':
-         request_city_buy();
-         ev.stopPropagation();
+          ev.stopPropagation();
+          request_city_buy();
          break;
     }
   }

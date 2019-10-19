@@ -1034,7 +1034,7 @@ function get_unit_hp_sprite(punit)
   var hp = punit['hp'];
   var unit_type = unit_types[punit['type']];
   var max_hp = unit_type['hp'];
-  var healthpercent = 10 * Math.floor((10 * hp) / max_hp);
+  var healthpercent = (10 * Math.floor((20 * hp) / max_hp))/2; //0-100 by 5's
   var unit_offset = get_unit_anim_offset(punit);
 
   // don't push up hp bar for foreign units for which we don't know movesleft
@@ -1053,7 +1053,7 @@ function get_mp_sprite(punit)
   var mp = punit['movesleft'];
   var unit_type = unit_types[punit['type']];
   var max_mp = unit_type['move_rate'];
-  var movepercent = 10 * Math.floor((10 * mp) / max_mp);
+  var movepercent = (10 * Math.floor((20 * mp) / max_mp))/2; //0-100 by 5's
   if (movepercent>100) movepercent=100; // move bonuses can give numbers >100%
   var unit_offset = get_unit_anim_offset(punit);
 
@@ -1070,7 +1070,7 @@ function get_full_hp_sprite(punit)
   var hp = punit['hp'];
   var unit_type = unit_types[punit['type']];
   var max_hp = unit_type['hp'];
-  var healthpercent = 10 * Math.floor((10 * hp) / max_hp);
+  var healthpercent = (10 * Math.floor((20 * hp) / max_hp))/2; //0-100 by 5's
   var tag = "unit.hp_" + healthpercent;
   
   return get_sprite_from_tag(tag);
@@ -1084,9 +1084,9 @@ function get_full_mp_sprite(punit)
   var mp = punit['movesleft'];
   var unit_type = unit_types[punit['type']];
   var max_mp = unit_type['move_rate'];
-  var movepercent = 10 * Math.floor((10 * mp) / max_mp);
+  var movepercent = (10 * Math.floor((20 * mp) / max_mp))/2; //0-100 by 5's
   if (movepercent>100) movepercent=100; // move bonuses can give numbers >100
-  var tag = "unit.hp_" + movepercent;   // hp tag servers for mp too
+  var tag = "unit.hp_" + movepercent;   // hp tag serves for mp too
   
   return get_sprite_from_tag(tag);
 }
