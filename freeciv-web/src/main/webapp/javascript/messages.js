@@ -48,8 +48,8 @@ function init_chatbox()
                      "maximizable" : true,
                      "closable" : false,
                      "minimize" : function(evt, dlg){ current_message_dialog_state = $("#game_chatbox_panel").dialogExtend("state") },
-                     "restore" : function(evt, dlg){ current_message_dialog_state = $("#game_chatbox_panel").dialogExtend("state") },
-                     "maximize" : function(evt, dlg){ current_message_dialog_state = $("#game_chatbox_panel").dialogExtend("state") },
+                     "restore" : function(evt, dlg){ current_message_dialog_state = $("#game_chatbox_panel").dialogExtend("state"); chatbox_scroll_to_bottom(false); },
+                     "maximize" : function(evt, dlg){ current_message_dialog_state = $("#game_chatbox_panel").dialogExtend("state"); chatbox_scroll_to_bottom(false); },
                      "icons" : {
                        "minimize" : "ui-icon-circle-minus",
                        "maximize" : "ui-icon-circle-plus",
