@@ -2555,7 +2555,7 @@ reqs    =
   "Extra", "River", "Local", TRUE
   "Extra", "Oasis", "Local", FALSE
   "CityTile", "Center", "Local", TRUE
-  "Extra", "Irrigation", "Local", FALSE
+;  "Extra", "Irrigation", "Local", FALSE
   "TerrainAlter", "CanIrrigate", "Local", TRUE
   "Extra", "Mine", "Local", FALSE
   "Extra", "Oil Well", "Local", FALSE
