@@ -182,6 +182,17 @@ function show_city_dialog(pcity)
 
   // reset dialog page.
   $("#city_dialog").remove();
+
+  /* TO DO: something like this to append to current tab?
+  var curTab = $("#tabs:not(.ui-tabs-hide)"),
+      curTabIndex = curTab.index(),
+      curTabID = curTab.prop("id");
+      $("<div id='city_dialog'></div>").appendTo(curTab);
+
+      see notes in close_city_dialog() for patch to prevent
+      closing city dialog from switching tabs for some reason
+  */
+
   $("<div id='city_dialog'></div>").appendTo("div#game_page");
 
   var city_data = {};
@@ -972,7 +983,17 @@ function send_city_change(city_id, kind, value)
 **************************************************************************/
 function close_city_dialog()
 {
+  /* Hack - this patches a problem that could be serious.
+   * $("#city_dialog").dialog('close'); was also switching tab, indicating
+   * some structural problem that could haunt things later. */
+  var active_tab = $("#tabs").tabs("option", "active");
+
   $("#city_dialog").dialog('close');
+
+  // FORCED disallow of changing active tab:
+  $("#tabs").tabs("option", "active", active_tab); 
+  if (active_tab != TAB_MAP)
+    set_default_mapview_inactive();
 }
 
 /**************************************************************************

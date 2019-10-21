@@ -26,6 +26,16 @@ var ruleset_description = null;
 
 var IDENTITY_NUMBER_ZERO = 0;
 
+// Define all tab placements here for centralised control.
+const TAB_MAP = 0,
+      TAB_EMPIRE = 1,
+      TAB_GOV = 2,
+      TAB_TECH = 3,
+      TAB_NATIONS = 4,
+      TAB_CITIES = 5,
+      TAB_PREFS = 6,
+      TAB_HELP = 7;
+
 function game_init()
 {
   map = {};

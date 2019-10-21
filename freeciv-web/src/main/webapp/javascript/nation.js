@@ -541,6 +541,11 @@ function aitoggle_player(player_name)
 **************************************************************************/
 function center_on_player()
 {
+  // This function is sometimes called from Nations Tab and should switch
+  // to map tab first.  
+  if ($("#tabs").tabs("option", "active") != TAB_MAP)
+    $("#tabs").tabs("option", "active", TAB_MAP);
+
   if (selected_player == -1) return;
 
     /* find a city to focus on. */
