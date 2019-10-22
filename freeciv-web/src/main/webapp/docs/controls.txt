@@ -185,8 +185,12 @@ space: clear all highlighted and all selected cities
 <h2>City Dialog:</h2>
 Shift-click specialist:          Change ALL specialists of this type 
 Ctrl-click specialist:           Cycle through primary 3 specialists (not secondary specialists)
-  Double-click:                  Add production selection to city worklist / queue 
+Click on current production:     Remove current production; move worklist up.                          
+  Double-click:                  Add production selection to city worklist / queue (or SHIFT-click)
+  Alt-click:                     Change current production to production selection
+  Alt-Shift-click                Insert current selection at top of production worklist   
 Ctrl-double-click:               Change current city production (selection must already be highlighted)
+
 
  SPACE:                          Flip between Main View and Production View
  up arrow or M or V:             Main View

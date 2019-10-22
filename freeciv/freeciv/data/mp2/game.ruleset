@@ -175,7 +175,6 @@ base_incite_cost = 700   ; BIC  =700 (the cost of a size 1 domestic city at a di
 ;city is celebrating     ; CEL 
 ;incite defence bonuses  ; BONUS  -50% empty + 300% occupied+courthouse OR + 100% empty+courthouse + supreme_court applies courthouse bonuses again
 ;                        ;        +∞ = democracy/mausoleum/palace/ecclesiastical palace  
-;city is celebrating     ; CEL
 ;total unit shield cost  ; UC 
 ;total improvements cost ; IC
 ;distance to capital     ; DIST  (max distance penalty=32 tiles)
