@@ -1100,6 +1100,27 @@ function get_full_vet_sprite(punit)
     return get_sprite_from_tag(tag);
   } else return null;
 }
+/**************************************************************************
+  Returns a <div> string that can be appended to an html string containing 
+    a unit sprite, that will place the vet level over it in the right place
+    and keep the image underneath clickable.
+**************************************************************************/
+function get_html_vet_sprite(punit)
+{
+    if (!punit['veteran'] || punit['veteran']<1) return "";
+
+    var vtype_sprite = {"type":null,"sprite":get_full_vet_sprite(punit)};
+    var vet_sprite = vtype_sprite['sprite'];
+
+    return "<div style='pointer-events: none; margin-left:-46px; margin-top:-24px; margin-right: -24px; float:left; content-align:left;"
+      + "background: transparent url("
+      + vet_sprite['image-src']
+      + ");transform: scale(1.0); background-position:-" + vet_sprite['tileset-x'] + "px -" + (vet_sprite['tileset-y'])
+      + "px;  width: " + (vet_sprite['width']) + "px;height: " + (vet_sprite['height']) + "px;"
+      + " content-align: left;"
+      + "vertical-align:top; float:left;'>"
+      + "</div>";
+}
 
 /****************************************************************************
  gives an html-ready sprite from the tileset, by tag name

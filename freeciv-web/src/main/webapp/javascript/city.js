@@ -435,6 +435,7 @@ function show_city_dialog(pcity)
                   +"></div>";
           }
         }
+        present_units_html = present_units_html + get_html_vet_sprite(punit);
       }
       $("#city_present_units_list").html(present_units_html);
     }
@@ -459,6 +460,7 @@ function show_city_dialog(pcity)
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
            + " onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'"
            +"></div>";
+      supported_units_html = supported_units_html + get_html_vet_sprite(punit);
     }
     $("#city_supported_units_list").html(supported_units_html);
   }

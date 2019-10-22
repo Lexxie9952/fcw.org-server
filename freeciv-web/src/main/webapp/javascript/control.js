@@ -2566,8 +2566,7 @@ function global_keyboard_listener(ev)
 /**************************************************************************
  Handles global keybindings.
 **************************************************************************/
-function
-civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
+function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
 {
   switch (keyboard_key) {
     case 'C':
@@ -4752,8 +4751,9 @@ function update_active_units_dialog()
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
            + "px; width:64px;height:48px;'"   // force everything to 64x48 including oversize units (Lexxie)
-//         + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'"   previous line
            + "'></div></div>";                                 // changed margin-right to 1px, was defaulting to 5px (Lexxie)
+
+    unit_info_html += get_html_vet_sprite(punit);
 
 /* FORMER CODE BEFORE SHIFT-CLICK
     unit_info_html += "<div id='unit_info_div' class='" + (active ? "current_focus_unit'" : "' style='background-color:rgba(15, 0, 0, 0.55);'")
