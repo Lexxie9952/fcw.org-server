@@ -79,7 +79,7 @@
   <div id="city_tabs-2">
     <div id="city_production_tab" class="citydlg_tabs">
       <div id='worklist_left'>
-        <div id='worklist_dialog_headline'></div>
+        <div id='worklist_dialog_headline' title="Click to remove from worklist. Remaining worklist will move up."></div>
         <div id='worklist_heading'>Queue:</div><div id='city_current_worklist'></div>
       </div>
       <div id='worklist_right'>
@@ -92,8 +92,10 @@
         <div id='worklist_production_choices'></div>
       </div>
       <div id='prod_buttons'>
-        <button type="button" class="button" onClick="city_change_production();" id="city_change_production_btn">Change Production</button>
-        <button type="button" class="button" onClick="city_add_to_worklist();" id="city_add_to_worklist_btn">Add to worklist</button>
+        <button type="button" class="button" onClick="city_change_production();" 
+         id="city_change_production_btn" title="or: ALT-click a selection above">Change Production</button>
+        <button type="button" class="button" onClick="city_add_to_worklist();"
+         id="city_add_to_worklist_btn" title="or, on selection above:\nSHIFT-click or DOUBLE-TAP to append,\nALT-SHIFT-click to insert above.">Add to worklist</button>
       </div>
       <div id="worklist_control">
         <button type="button" class="button" onClick="city_insert_in_worklist();" id="city_worklist_insert_btn" title="Insert before first selected task, or first in the list"><i class="fa fa-chevron-left fa-fw"></i></button>

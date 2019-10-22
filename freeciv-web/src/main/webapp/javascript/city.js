@@ -165,6 +165,7 @@ function findLongestWord(str) {
 **************************************************************************/
 function show_city_dialog(pcity)
 {
+  console.log("show_city_dialog() called.")
   var turns_to_complete;
   var sprite;
   //var shield_sprite;
@@ -286,6 +287,8 @@ function show_city_dialog(pcity)
   $(".citydlg_tabs").height(is_small_screen() ? $(window).height() - 110 : $(window).height() - 225);
 
   city_worklist_dialog(pcity);
+  $("#worklist_dialog_headline").unbind('click');
+  $("#worklist_dialog_headline").click(function(ev) { ev.stopImmediatePropagation(); city_remove_current_prod()} );
 
   var orig_renderer = renderer;
   renderer = RENDERER_2DCANVAS;
@@ -1733,6 +1736,8 @@ function city_worklist_dialog(pcity)
   if (is_small_screen() ) headline = "<span style='font-size:70%;'>"+headline+"</span>";
 
   $("#worklist_dialog_headline").html(headline + "</div>");
+  $("#worklist_dialog_headline").css({"title":"Click to:\n1.Remove from worklist and move remaining worklist up.\n"
+                                      +"2. If no worklist below, replace with highlighted selection from right.\n"});
 
   $(".production_list_item_sub").tooltip();
 
@@ -1913,6 +1918,18 @@ function handle_worklist_select(event, ui)
     production_selection.push(selected);
     update_worklist_actions();
   }
+ 
+ // alt click and shift-alt click
+ if (event.altKey && event.shiftKey) {
+  city_insert_in_worklist(); // shift-alt-click insert into first worklist position
+  worklist_selection = [];
+ }
+ else if (event.shiftKey) {
+  city_add_to_worklist(); // shift-alt-click insert into first worklist position
+ }
+ else if (event.altKey) {
+  city_change_production();  // alt-click change current prod
+ }
 }
 
 function handle_worklist_unselect(event, ui)
@@ -2060,7 +2077,6 @@ function send_city_worklist_add(city_id, kind, value)
 **************************************************************************/
 function city_change_production()
 {
-  //console.log("city_change_production() called")
   if (production_selection.length === 1) {
     send_city_change(active_city['id'], production_selection[0].kind,
                      production_selection[0].value);
@@ -2080,6 +2096,36 @@ function city_add_to_worklist()
     active_city['worklist'] = active_city['worklist'].concat(production_selection);
     send_city_worklist(active_city['id']);
   }
+}
+
+/**************************************************************************
+  Remove current production item from worklist (on double click)
+  ...requires there to be an item below it.
+*************************************************************************/
+function city_remove_current_prod()
+{
+  var wl = active_city['worklist'];
+
+  // if worklist items below, move them up
+  if (wl.length > 0) {
+    var next_item = wl[0];
+    // Change production to 'next up' in the worklist
+    send_city_change(active_city['id'], next_item.kind, next_item.value);
+
+    // Since it replaces current production, remove from worklist
+    wl.splice(worklist_selection[0], 1);
+
+    // Update
+    send_city_worklist(active_city['id']);
+  /*} else if (production_selection.length === 1) {
+    // otherwise, check for a selected item to replace it with
+    send_city_change(active_city['id'], production_selection[0].kind,
+                     production_selection[0].value); */
+  } else {
+    // reserved for double clicking it when no worklist below and not 
+    // alternate replacement is selected on list to the right.
+  }
+
 }
 
 /**************************************************************************
