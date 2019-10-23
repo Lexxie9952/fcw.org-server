@@ -1485,7 +1485,7 @@ function init_game_unit_panel()
   if (observing) return;
   unitpanel_active = true;
 
-  $("#game_unit_panel").attr("title", "Units");
+  //$("#game_unit_panel").attr("title", "Units");
   $("#game_unit_panel").dialog({
 			bgiframe: true,
 			modal: false,
@@ -4713,6 +4713,99 @@ function update_active_units_dialog()
       }
     }
 
+  // SORT THE PANEL UNITS  
+  //=================================================================================
+  // Sort panel units by 1-type,2-mp,3-hp,4-vet,5-id; transported units forced to end  
+  punits.sort(function(u1, u2) {
+    // transported units go to the back of the line
+    if (u1['transported']==true) return 1;
+    if (u2['transported']==true) return -1;
+
+    // sort by unit type first
+    if (u1['type'] < u2['type']) return -1;
+    if (u1['type'] > u2['type']) return 1;
+
+    // sort higher move points next
+    if (u1['movesleft'] > u2['movesleft']) return -1;
+    if (u1['movesleft'] < u2['movesleft']) return 1;
+
+    // sort hp next 
+    if (u1['hp'] > u2['hp']) return -1;
+    if (u1['hp'] < u2['hp']) return 1;
+
+    // sort vet last
+    if (u1['veteran'] > u2['veteran']) return -1;
+    if (u1['veteran'] < u2['veteran']) return 1;
+
+    // unit_id is tiebreaker: forces uniform sort no matter how stack is sorted on
+    // tile -- this prevents 'invisible re-sort' of unit panel where user can't
+    // see they clicked on a different unit of the same type because it sorts 
+    // to the same highlighted position as the previous highlighted unit
+    if (u1['id'] > u2['id']) return -1;
+    if (u1['id'] < u2['id']) return 1;
+
+    return 0;
+  });
+
+  // Cargo units were pushed to the back of the list. From the last position
+  // in the list, check if it's cargo. If it is, move it directly after the 
+  // transporter unit, exposing a new unit at the back of the list to check
+  // again, until: 1-it's not a cargo unit and we finished, or 2-we encounter
+  // a cargo unit that was already moved, meaning that the last unit in the 
+  // list was already processed and we can exit.
+  var fromIndex = punits.length-1; // last position in the list, 0-index
+  var already_moved = [];          // keeps track of cargo already processed
+  var exit_while = false;
+  var sanity_assert = 0;
+  //console.log("Unit panel array length = "+punits.length)
+
+  while (punits[fromIndex] && punits[fromIndex]['transported'] && exit_while==false) {
+    //if (sanity_assert<100) console.log("\nLoop iteration "+sanity_assert);
+    //console.log(unit_type(punits[fromIndex])['name']+"["+fromIndex+"] is transported by tunit:"+punits[fromIndex]['transported_by'])
+    var tunit_id = punits[fromIndex]['transported_by'];
+    sanity_assert ++;
+    var trIndex = 0;
+    if (sanity_assert>1000) {console.log("Unit panel sort could not break from loop."); break;}
+    // Look through all units for transporter unit of this cargo
+    for (trIndex=0; trIndex<punits.length; trIndex++) {
+      //console.log("   checking punits["+trIndex+"] which is unit_id:"+punits[trIndex]['id'])
+      // if punit[].id == tunit_id, we found the transporter
+      if (punits[trIndex]['id'] == tunit_id) {
+          //console.log("     punits["+trIndex+"] was a match!!")
+          var insertIndex = trIndex + 1;
+
+          // move transported unit directly after:
+          var element = punits.pop(); // remove and take last element from array
+          // insert copy of cargo right after its transporter unit:
+          //console.log("       insertpos="+(insertIndex)+" lastidx="+(fromIndex));
+          if (insertIndex >= fromIndex) {
+            //console.log("    "+insertIndex+">="+fromIndex+"=="+(insertIndex >= fromIndex));
+            //console.log("    pushing element back to last place in array.")
+            // can't splice to end of array
+            // if transporter is now at the end of array, we have to push instead of splice
+            punits.push(element); 
+          } else {
+            //console.log("    splicing element to position "+insertIndex);
+            punits.splice(insertIndex, 0, element); //trIndex+1 - right after transporter
+          }
+          //console.log(punits);
+          // If the last unit in the list is a cargo unit that was already moved 
+          // after its transport, we could get in an endless loop. Therefore, we 
+          // keep track of cargo that was already moved. If this cargo was already
+          // moved, we have completed the whole process and can exit out of it. 
+          if (already_moved.includes(element)) {
+            //console.log("********* already_moved contains the cargo unit, EXITING!")
+            exit_while=true;
+          } else {
+            //console.log("      pushing cargo unit to already_moved")
+            already_moved.push(element);
+          }
+          //break;  // can't be on two transports, stop looking for more transports
+      }
+    }
+  }
+  //=========================================================================================
+
   for (var i = 0; i < punits.length; i++) {
     var punit = punits[i];
     var sprite = get_unit_image_sprite(punit);
@@ -4721,6 +4814,7 @@ function update_active_units_dialog()
     // making unit panel for this current unit in the stack, but probably we need a check after game load to see if all 
     // graphics loaded, and a message to please refresh if they did not.
     if (sprite == null) {
+      add_client_message("Uncached graphics were not able before game start. Please refresh browser to reload site.");
       console.log("update_active_units_dialog() - aborting panel construction: Sprite not found for "+unit_type(punit)['name']);
       console.log("RECOMMENDED:  refresh page so graphics will be loaded properly.");
       continue;
@@ -4739,13 +4833,18 @@ function update_active_units_dialog()
 
     // set the css background based on selected and/or transported cargo
     var display_background_css;
+    var trans_help_title = "";
     if (active) { // selected units are highlighted, and slightly bluish if on a transport
       display_background_css = (punit['transported'] && punit['transported_by']>0) ? "transported_focus_unit" : "current_focus_unit";
     } else {      // non-selected units have dark transparent background, also slightly blue if on a transport
       display_background_css = (punit['transported'] && punit['transported_by']>0) ? "transported_nonfocus_unit" : "nonfocus_unit";
     }
 
-    unit_info_html += "<div id='unit_info_div' class='" + display_background_css
+    // hover title to give transport # and transported by
+    if (unit_type(punit)['transport_capacity']>0) trans_help_title += "T"+punit['id']+" &#010;"
+    if (punit['transported_by']) trans_help_title += "on "+punit['transported_by'];
+
+    unit_info_html += "<div id='unit_info_div' title='"+trans_help_title+"' class='" + display_background_css
      + "'><div id='unit_info_image' onclick='click_unit_in_panel(event, units[" + punit['id'] + "])' "
 	   + " style='margin-right:1px; background: transparent url(" 
            + sprite['image-src'] +
@@ -4754,6 +4853,8 @@ function update_active_units_dialog()
            + "'></div></div>";                                 // changed margin-right to 1px, was defaulting to 5px (Lexxie)
 
     unit_info_html += get_html_vet_sprite(punit);
+    //if (show_unit_movepct) unit_info_html += get_html_mp_sprite(punit, true);  // TO DO: showing both hp&mp messes up flow
+    unit_info_html += get_html_hp_sprite(punit, true);
 
 /* FORMER CODE BEFORE SHIFT-CLICK
     unit_info_html += "<div id='unit_info_div' class='" + (active ? "current_focus_unit'" : "' style='background-color:rgba(15, 0, 0, 0.55);'")

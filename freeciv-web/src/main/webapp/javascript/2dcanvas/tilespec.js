@@ -1075,6 +1075,32 @@ function get_full_hp_sprite(punit)
   
   return get_sprite_from_tag(tag);
 }
+/**************************************************************************
+  Returns a <div> string that can be appended to an html string containing 
+    a unit sprite, that will place the hp meter over it in the right
+    place and keep the image underneath clickable.
+**************************************************************************/
+function get_html_hp_sprite(punit, unit_panel_pos)
+{  
+  var htype_sprite = {"type":null,"sprite":get_full_hp_sprite(punit)};
+  var hp_sprite = htype_sprite['sprite'];
+
+  var left_adj = -90;
+  var top_adj  = -16;
+  if (unit_panel_pos) {
+    left_adj -= 12;
+    top_adj  += 1;
+  }
+
+return "<div style='pointer-events: none; margin-left:"+left_adj+"px; margin-top:"+top_adj+"px; margin-right: -96px; float:left; content-align:left;"
+  + "background: transparent url("
+  + hp_sprite['image-src']
+  + ");transform: scale(0.5); background-position:-" + hp_sprite['tileset-x'] + "px -" + (hp_sprite['tileset-y'])
+  + "px;  width: " + (hp_sprite['width']) + "px;height: " + (hp_sprite['height']) + "px;"
+  + " content-align: left;"
+  + "vertical-align:top; float:left;'>"
+  + "</div>";
+}
 /****************************************************************************
  constructs an html-usable movepoint sprite for a unit's moves_left
 ****************************************************************************/
@@ -1089,6 +1115,32 @@ function get_full_mp_sprite(punit)
   var tag = "unit.hp_" + movepercent;   // hp tag serves for mp too
   
   return get_sprite_from_tag(tag);
+}
+/**************************************************************************
+  Returns a <div> string that can be appended to an html string containing 
+    a unit sprite, that will place the movesleft meter over it in the right
+    place and keep the image underneath clickable.
+**************************************************************************/
+function get_html_mp_sprite(punit, unit_panel_pos)
+{
+  var mtype_sprite = {"type":null,"sprite":get_full_mp_sprite(punit)};
+  var mp_sprite = mtype_sprite['sprite'];
+
+  var left_adj = -90;
+  var top_adj  = -13;
+  if (unit_panel_pos) {
+    left_adj -= 12;
+    top_adj  += 1;
+  }
+
+  return "<div style='pointer-events: none; margin-left:"+left_adj+"; margin-top:"+top_adj+"px; margin-right: -64px; float:left; content-align:left;"
+    + "background: transparent url("
+    + mp_sprite['image-src']
+    + ");transform: scale(0.5); background-position:-" + mp_sprite['tileset-x'] + "px -" + (mp_sprite['tileset-y'])
+    + "px;  width: " + (mp_sprite['width']) + "px;height: " + (mp_sprite['height']) + "px;"
+    + " content-align: left;"
+    + "vertical-align:top; float:left;'>"
+    + "</div>";
 }
 /****************************************************************************
  constructs an html-usable veteran icon sprite for a unit's veteran level

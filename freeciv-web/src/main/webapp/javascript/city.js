@@ -436,6 +436,8 @@ function show_city_dialog(pcity)
           }
         }
         present_units_html = present_units_html + get_html_vet_sprite(punit);
+        //if (show_unit_movepct) present_units_html = present_units_html + get_html_mp_sprite(punit, false); // TO DO: showing both hp&mp messes up flow
+        present_units_html = present_units_html + get_html_hp_sprite(punit, false);
       }
       $("#city_present_units_list").html(present_units_html);
     }
