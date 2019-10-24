@@ -145,7 +145,25 @@ function setup_window_size ()
 
     $(".ui-tabs-anchor").css("padding", "7px");
     $(".overview_dialog").hide();
-    $(".ui-dialog-titlebar").hide();
+
+
+    $(".ui-dialog-titlebar").show();
+    //$(".ui-dialog-titlebar").hide(); // hide all dialog titlebars (unit panel, message box)
+    //$(".ui-dialog-titlebar").css({"height":"12px"}); // narrow titlebar
+    //$(".ui-dialog-titlebar").find("#ui-id-12").hide(); // remove title text
+    $(".ui-dialog-titlebar").find("#ui-id-12").parent().css({"background":"none","border-style":"none","height":"16px","width":"1px"}); // remove background image
+    $('#ui-id-12').parent().show();  // unhide messagebox title
+    $(".ui-dialog-titlebar").css({"font-size":"70%"});
+
+    /*
+    if (!minimized) {
+      $('.ui-icon-circle-plus').parent().hide();  //restore is not an option
+
+      expand all the way.
+    }
+    else {
+      call special minimise transform function
+    }  */
     $("#freeciv_logo").hide();
 
     overview_active = false;

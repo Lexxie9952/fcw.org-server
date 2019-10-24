@@ -17,6 +17,9 @@
 ***********************************************************************/
 
 var chatbox_active = true;
+var mobile_unread_messages = 0;
+//var restored_chatbox_height = null;
+//var restored_chatbox_width = null;
 var message_log = new EventAggregator(update_chatbox, 125,
                                       EventAggregator.DP_ALL, 1000, 0);
 var pregame_messages = [];
@@ -24,52 +27,151 @@ var previous_scroll = 0;
 var current_message_dialog_state = null;
 var max_chat_message_length = 500;
 
-/**************************************************************************
- ...
-**************************************************************************/
+
 function init_chatbox()
 {
-
   chatbox_active = true;
 
-  $("#game_chatbox_panel").attr("title", "Messages");
-  $("#game_chatbox_panel").dialog({
-			bgiframe: true,
-			modal: false,
-			width: "27%",
-			height: (is_small_screen() ? 100 : 200),
-			resizable: true,
-			dialogClass: 'chatbox_dialog no-close',
-			closeOnEscape: false,
-			position: {my: 'left bottom', at: 'left bottom', of: window, within: $("#game_page")},
-			close: function(event, ui) { chatbox_active = false;}
-		}).dialogExtend({
-                     "minimizable" : true,
-                     "maximizable" : true,
-                     "closable" : false,
-                     "minimize" : function(evt, dlg){ current_message_dialog_state = $("#game_chatbox_panel").dialogExtend("state") },
-                     "restore" : function(evt, dlg){ current_message_dialog_state = $("#game_chatbox_panel").dialogExtend("state"); chatbox_scroll_to_bottom(false); },
-                     "maximize" : function(evt, dlg){ current_message_dialog_state = $("#game_chatbox_panel").dialogExtend("state"); chatbox_scroll_to_bottom(false); },
-                     "icons" : {
-                       "minimize" : "ui-icon-circle-minus",
-                       "maximize" : "ui-icon-circle-plus",
-                       "restore" : "ui-icon-bullet"
-                     }});
+  $("#game_chatbox_panel").attr("title", "");
+  
+  if (is_small_screen()) {
+      $("#game_chatbox_panel").dialog({
+      id: "mobile_chat_dialog",
+      bgiframe: true,
+      modal: false,
+      opacity: "1.0",
+      width: $(window).width()-4,
+      height: $(window).height(),
+      resizable: true,
+      dialogClass: 'mobile_chatbox_dialog no-close',
+      closeOnEscape: false,
+      position: {my: 'left top', at: 'left top', of: window, within: $("#game_page")},
+      close: function(event, ui) { chatbox_active = false;}
+    }).dialogExtend({
+                      "minimizable" : true,
+                      "maximizable" : true,
+                      "closable" : false,
+                      // "draggable" : true,
+                      "minimize" : function(evt, dlg){ msg_minimize_mobile(evt,dlg); },
+                      "restore" : function(evt, dlg){ msg_restore_mobile(evt,dlg);   },
+                      "maximize" : function(evt, dlg){ msg_maximize_mobile(evt,dlg); },
+                      "icons" : {
+                        "minimize" : "ui-icon-circle-minus",
+                        "restore" : " ui-icon-pause",   // unused icon so we can hide it without affecting others
+                        "maximize" : "ui-icon-circle-plus",
+                      }});                      
+  } 
+  else {   // not small screen             
+      $("#game_chatbox_panel").dialog({
+          bgiframe: true,
+          modal: false,
+          width: "27%",
+          height: 200,
+          top: 43,
+          left: 2,
+          resizable: true,
+          dialogClass: 'chatbox_dialog no-close',
+          closeOnEscape: false,
+          position: {my: 'left bottom', at: 'left bottom', of: window, within: $("#game_page")},
+          close: function(event, ui) { chatbox_active = false;}
+        }).dialogExtend({
+                        "minimizable" : true,
+                        "maximizable" : true,
+                        "closable" : false,
+                        "minimize" : function(evt, dlg){msg_minimize(evt,dlg); },
+                        "restore" : function(evt, dlg){ msg_restore(evt,dlg);  },
+                        "maximize" : function(evt, dlg){ msg_maximize(evt,dlg);},
+                        "icons" : {
+                          "minimize" : "ui-icon-circle-minus",
+                          "maximize" : "ui-icon-circle-plus",
+                          "restore" : "ui-icon-bullet"
+                        }});           
+    }
+
   $("#game_chatbox_panel").dialog('open');
   $(".chatbox_dialog").css("top", "52px");
 
-
   if (is_small_screen()) {
-    $(".chatbox_dialog").css("left", "2px");
-    $(".chatbox_dialog").css("top", "40px");
-    $("#game_chatbox_panel").parent().css("max-height", "15%");
-    $("#game_chatbox_panel").parent().css("width", "95%");
-
-  }
+    $(".ui-icon-pause").parent().hide();       // no restore option: hide button
+    $(".ui-icon-circle-plus").parent().hide(); // hide maximize button on launch
+    $("#game_text_input").show();
+  } else $(".chatbox_dialog").css({"left":"2px", "top":"43px", "position":"fixed"});
 
   $("#freeciv_custom_scrollbar_div").mCustomScrollbar({theme:"3d"});
   if (current_message_dialog_state == "minimized") $("#game_chatbox_panel").dialogExtend("minimize");
+}
 
+/**************************************************************************
+ FUNCTIONS FOR MINIMIZING/RESTORING/MAXIMIZING CHAT BOX MESSAGE WINDOW
+  These are called by init_chatbox above but were were extracted so they
+  can be called separately, such as by clicking the new notification icon.
+**************************************************************************/
+function msg_minimize_mobile(evt, dlg) {
+  current_message_dialog_state = $("#game_chatbox_panel").dialogExtend("state");
+  $(".ui-icon-pause").parent().hide();   // no restore option: hide button
+  $(".ui-icon-circle-plus").parent().show();   // no restore option: hide button
+  $(".mobile_chatbox_dialog").css({"height":"24","width":"24"});
+}
+function msg_restore_mobile(evt, dlg) {
+  current_message_dialog_state = "minimized"; 
+  $(".mobile_chatbox_dialog").css({"height":"30","width":"80"});
+  chatbox_scroll_to_bottom(false);
+}
+function msg_maximize_mobile(evt,dlg) {
+  current_message_dialog_state = $("#game_chatbox_panel").dialogExtend("state");
+  $(".ui-icon-pause").parent().hide();   // no restore option: hide button
+  $(".ui-icon-circle-plus").parent().hide();   // no restore option: hide button
+  $("#game_text_input").show();
+  chatbox_scroll_to_bottom(false);
+  mobile_unread_messages = 0;
+  $("#ui-id-12").html(""); // clear unread message count
+}
+function msg_minimize(evt,dlg) {
+  $(".chatbox_dialog").css({"height":"25","width":110});
+  // if you maximize, minimize, then restore, then
+  // you have to minimize, maximize, then restore
+/*
+  // maximize>restore>minimize, keeps state fresh
+  if (current_message_dialog_state=="maximized") {
+    $(".chatbox_dialog .ui-icon-bullet").click();
+    current_message_dialog_state="minimized"
+    $(".chatbox_dialog .ui-icon-circle-minus").click();
+  }*/
+  current_message_dialog_state = $("#game_chatbox_panel").dialogExtend("state");
+  $(".chatbox_dialog").css({"left":"2px", "top":"8px", "position":"fixed"});
+}
+function msg_restore(evt,dlg) {
+  current_message_dialog_state = $("#game_chatbox_panel").dialogExtend("state"); 
+  mobile_unread_messages = 0;
+  $(".chatbox_dialog").css({"left":"2px", "top":"43px", "position":"fixed"});
+  $(".chatbox_dialog").css({"height":"200", "width":"27%"});
+  chatbox_scroll_to_bottom(false);
+  $("#ui-id-12").html(""); // clear unread message count  
+}
+function msg_maximize(evt,dlg) {
+  current_message_dialog_state = $("#game_chatbox_panel").dialogExtend("state"); 
+  mobile_unread_messages = 0;
+  chatbox_scroll_to_bottom(false);
+  $("#ui-id-12").html(""); // clear unread message count  
+}
+function toggle_msgbox()
+{ // TO DO: shortcut tap to access this from mobile
+  if (is_small_screen()) {
+    if (current_message_dialog_state == "minimized")
+     $(".message_chatbox.dialog .ui-icon-circle-plus").click();
+      //msg_maximize_mobile(null,null);
+    else 
+      $(".message_chatbox.dialog .ui-icon-circle-minus").click();
+      //msg_minimize_mobile(null,null);  
+  } 
+  else {  // currently only uses this on normal size screen:
+    if (current_message_dialog_state == "minimized")
+      $(".chatbox_dialog .ui-icon-bullet").click();
+      // msg_restore(null,null);
+    else 
+      $('.chatbox_dialog .ui-icon-circle-minus').click();
+    // msg_minimize(null,null);  
+  }
 }
 
 /**************************************************************************
@@ -137,6 +239,24 @@ function add_client_message(message)
 **************************************************************************/
 function add_chatbox_text(packet)
 {
+    // Keep a count of unread messages in chat window
+    // ----------------------------------------------
+    // mobile
+    if (is_small_screen()) {
+      if (current_message_dialog_state != "maximized") {
+        mobile_unread_messages ++;
+      } else mobile_unread_messages = 0;
+    } 
+    // large screen:
+    else if (current_message_dialog_state == "minimized") { 
+      mobile_unread_messages ++;
+      $(".ui-dialog-titlebar").find("#ui-id-12").html("<i class='fa fa-commenting-o' aria-hidden='true'></i><font color='#ff8080'> "+mobile_unread_messages+"</font>");
+    } else {
+      mobile_unread_messages = 0;
+      $("#ui-id-12").html("<i class='fa fa-commenting-o' aria-hidden='true'></i><font color='#ff8080'>");
+    } 
+    // -----------------------------------------------
+
     var text = packet['message'];
     var server_words = ['waiting on','Lost connection','Not enough','has been removed','has connected']
 

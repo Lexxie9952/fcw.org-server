@@ -108,6 +108,12 @@ function update_game_status_panel() {
 
   var status_html = "";
 
+  // unread message counter with toggle message window
+  status_html = "<span onclick='toggle_msgbox();' style='cursor: pointer;' title='Unread messages'><i class='fa fa-commenting-o' aria-hidden='true'></i>"
+              + "<font color='#ff8080'>&nbsp;<b>"
+              + ((mobile_unread_messages>0) ? mobile_unread_messages : "")
+              +"</b>&nbsp;&nbsp;&nbsp;</font></span>";
+
   if (client.conn.playing != null) {
     var pplayer = client.conn.playing;
     var tax = client.conn.playing['tax'];

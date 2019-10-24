@@ -504,6 +504,10 @@ button {
   background: rgba(0,0,0,0.75);
   background-color: rgba(0,0,0, 0.75);
 }
+.mobile_chatbox_dialog {
+  background: rgba(0,0,0,0.9);
+  background-color: rgba(0,0,0, 0.9);
+}
 
 #ui-dialog-title-game_chatbox_panel {
   margin-top: -5px;
