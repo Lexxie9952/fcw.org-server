@@ -111,9 +111,13 @@ function msg_minimize_mobile(evt, dlg) {
   $(".ui-icon-pause").parent().hide();   // no restore option: hide button
   $(".ui-icon-circle-plus").parent().show();   // no restore option: hide button
   $(".mobile_chatbox_dialog").css({"height":"24","width":"24"});
+  mobile_unread_messages = 0; // minimizing means one cam from viewing
 }
 function msg_restore_mobile(evt, dlg) {
-  current_message_dialog_state = "minimized"; 
+  // shouldn't ever be called, but reserved for future implementation of 
+  // "half screen" chat window
+  current_message_dialog_state = "normal"; 
+  mobile_unread_messages = 0;
   $(".mobile_chatbox_dialog").css({"height":"30","width":"80"});
   chatbox_scroll_to_bottom(false);
 }
@@ -139,6 +143,7 @@ function msg_minimize(evt,dlg) {
   }*/
   current_message_dialog_state = $("#game_chatbox_panel").dialogExtend("state");
   $(".chatbox_dialog").css({"left":"2px", "top":"8px", "position":"fixed"});
+  mobile_unread_messages = 0; // minimizing means one cam from viewing
 }
 function msg_restore(evt,dlg) {
   current_message_dialog_state = $("#game_chatbox_panel").dialogExtend("state"); 
