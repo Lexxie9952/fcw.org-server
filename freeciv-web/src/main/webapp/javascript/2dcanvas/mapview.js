@@ -320,7 +320,7 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
         
         airlift_text = (city['airlift']>0  ||  airlift_receive_text==infinity_symbol  || src_capacity==infinity_symbol || airlift_receive_text != "0")  
                         ? " "+left_div + src_capacity + bullet + airlift_receive_text + right_div  
-                        : "";  
+                        : " "+left_div + bullet + right_div ;  
       }
     }
   }
