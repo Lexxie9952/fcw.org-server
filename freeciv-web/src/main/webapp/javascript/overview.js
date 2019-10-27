@@ -22,6 +22,7 @@ var overviewTimerId = -1;
 var min_overview_width = 200;
 var max_overview_width = 300;
 var max_overview_height = 300;
+var overview_map_height = 140;
 
 var OVERVIEW_REFRESH;
 
@@ -55,7 +56,7 @@ function init_overview()
 
   overview_active = true;
 
-  $("#game_overview_panel").attr("title", "World map");
+  $("#game_overview_panel").attr("title", "");
   $("#game_overview_panel").dialog({
 			bgiframe: true,
 			modal: false,
@@ -72,9 +73,12 @@ function init_overview()
                   "closable" : false,
                   "minimize" : function(evt, dlg){
                       overview_current_state = $("#game_overview_panel").dialogExtend("state");
+                      $(".overview_dialog").css({"height":"8","width":65});
                     },
                   "maximize" : function(evt, dlg){
                       overview_current_state = $("#game_overview_panel").dialogExtend("state");
+                      $(".overview_dialog").css({"height":"auto","width":$(window).width()-4});
+
                       $('#overview_map').width($("#game_overview_panel").width() - 20);
                       $('#overview_map').height($("#game_overview_panel").height() - 20);
                     },
@@ -84,6 +88,8 @@ function init_overview()
                       if (new_width > max_overview_width) new_width = max_overview_width;
                       var new_height = OVERVIEW_TILE_SIZE * map['ysize'];
                       if (new_height > max_overview_height) new_height = max_overview_height;
+                      $(".overview_dialog").css({"height":(new_height+20),"width":(new_width+5)});
+
                       $('#overview_map').width(new_width);
                       $('#overview_map').height(new_height);
                       $(".overview_dialog").position({my: 'left bottom', at: 'left bottom', of: window, within: $("#tabs-map")});
@@ -110,7 +116,9 @@ function init_overview()
   $(".overview_dialog").position({my: 'left bottom', at: 'left bottom', of: window, within: $("#tabs-map")});
 
   $('#overview_map').on('dragstart', function(event) { event.preventDefault(); });
-}
+  // globe icon symbol
+  $("#game_overview_panel").parent().children().not("#game_overview_panel").children().get(0).innerHTML 
+    = "<div style='font-size:97%; vertical-align:top;'><i class='fa fa-globe' aria-hidden='true'></i></div>";}
 
 /****************************************************************************
   Redraw the overview map.

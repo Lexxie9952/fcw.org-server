@@ -1501,8 +1501,20 @@ function init_game_unit_panel()
 		}).dialogExtend({
              "minimizable" : true,
              "closable" : false,
-             "minimize" : function(evt, dlg){ game_unit_panel_state = $("#game_unit_panel").dialogExtend("state") },
-             "restore" : function(evt, dlg){ game_unit_panel_state = $("#game_unit_panel").dialogExtend("state") },
+             "minimize" : function(evt, dlg){ game_unit_panel_state = $("#game_unit_panel").dialogExtend("state") 
+                                              $(".unit_dialog").css("float","right");
+                                              $(".unit_dialog").css({"height":"25","width":25});
+              },
+             "restore" : function(evt, dlg){ game_unit_panel_state = $("#game_unit_panel").dialogExtend("state")
+                                              $(".unit_dialog").css({"height":"auto","width":"140"});
+                                              $(".unit_dialog").css("float","left");
+                                              $(".unit_dialog").css(
+                                                {"position":{my: 'right bottom', at: 'right bottom', of: window, within: $("#tabs-map")}});
+                                                update_active_units_dialog(); //update properly resets position
+
+                                              //$("#game_unit_panel").parent().css(
+                                              //    {"position":{my: 'right bottom', at: 'right bottom', of: window, within: $("#tabs-map")}});                           
+              },
              "icons" : {
                "minimize" : "ui-icon-circle-minus",
                "restore" : "ui-icon-bullet"
@@ -1511,6 +1523,11 @@ function init_game_unit_panel()
   $("#game_unit_panel").dialog('open');
   $("#game_unit_panel").parent().css("overflow", "hidden");
   if (game_unit_panel_state == "minimized") $("#game_unit_panel").dialogExtend("minimize");
+
+  $("#game_unit_panel").parent().children().not("#game_unit_panel").children().get(0).innerHTML 
+    = "<div style='font-size:90%; vertical-align:top;'>&#x265F;</div>";
+
+  update_active_units_dialog();
 }
 
 /**************************************************************************
@@ -4241,7 +4258,7 @@ function request_new_unit_activity(punit, activity, target)
   request_unit_cancel_orders(punit);
   var packet = {"pid" : packet_unit_change_activity, "unit_id" : punit['id'],
                 "activity" : activity, "target" : target };
-  if (DEBUG_LOG_PACKETS) console.log("Sending action request: "+JSON.stringify(packet));
+  //if (DEBUG_LOG_PACKETS) console.log("Sending action request: "+JSON.stringify(packet));
   send_request(JSON.stringify(packet));
 }
 
@@ -4566,11 +4583,18 @@ function check_request_goto_path()
 ****************************************************************************/
 function update_goto_path(goto_packet)
 {
+  // TO DO: we are coming here every time a unit is even clicked with no desire for goto
+  // this could be a bad performance drain and extra traffic to server. Hunt down why
+  // we come here unnecessarily and handle it.
+
   var punit = units[goto_packet['unit_id']];
   if (punit == null) return;
   var t0 = index_to_tile(punit['tile']);
   var ptile = t0;
   var goaltile = index_to_tile(goto_packet['dest']);
+
+  // don't bother check goto for same tile unit is on
+  if (ptile==goaltile) return;
 
   if (renderer == RENDERER_2DCANVAS) {
     for (var i = 0; i < goto_packet['dir'].length; i++) {
@@ -4685,7 +4709,7 @@ function update_active_units_dialog()
   var punits = [];
   var width = 0;
 
-  if (client_is_observer() || !unitpanel_active) return;
+  if (/*client_is_observer() ||*/ !unitpanel_active) return;
 
   if (current_focus.length == 1) {
     ptile = index_to_tile(current_focus[0]['tile']);
