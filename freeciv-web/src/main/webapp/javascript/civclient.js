@@ -214,6 +214,10 @@ function civclient_init()
   if (show_empire_tab == null) 
     show_empire_tab = false;  // Default case
 
+  var tmp = simpleStorage.get('chatDlg');
+  if (tmp != null)  {// don't overwrite object keys if not yet stored
+    restore_chatbox_vals = tmp;
+  }
 
   // -------------------------------------------------------------------------------- 
   
