@@ -302,6 +302,7 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
 
   // source capacity = airlift counter (unless SRC_UNLIMITED==true, in which case it's infinite)
   var src_capacity = (game_info['airlifting_style'] & SRC_UNLIMITED) ? infinity_symbol : city['airlift'];
+  if (src_capacity<0) src_capacity = 0;
 
   if (client.conn.playing != null && !client_is_observer()) {
     if (city['owner'] == client.conn.playing.playerno && draw_city_airlift_counter==true ) {
