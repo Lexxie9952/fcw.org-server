@@ -261,7 +261,8 @@ function unit_has_goto(punit)
     return false;
   }
 
-  return (punit['goto_tile'] != -1);
+  // check has_orders: cancelled orders on autoexplore leaves goto_tile set
+  return (punit['has_orders'] && punit['goto_tile'] != -1);
 }
 
 
