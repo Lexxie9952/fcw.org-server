@@ -3556,7 +3556,7 @@ function key_select_same_type_units_on_tile()
     var ptype = punit['type'];
 
     punits = tile_units(ptile);
-    for (var i=1; i<punits.length; i++) { // start at [1] so [0] isn't added twice
+    for (var i=0; i<punits.length; i++) {
       if ( unit_types[punits[i]['type']]['name'] == unit_types[ptype]['name'] ) {
           // make sure it's not already in selection before adding it to selection:
           var index = current_focus.findIndex(x => x.id==punits[i].id);
