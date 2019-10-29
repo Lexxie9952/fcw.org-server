@@ -5002,10 +5002,19 @@ function update_active_units_dialog()
   }
 
   if (current_focus.length > 0) {
-    /* reposition and resize unit dialog. */
-    var newwidth = 32 + punits.length * (width+1) + 9;  // width+1 can be modified if number of units is creating inconsistency in horizontal padding
+    /* reposition and resize unit panel. */
+    var newwidth = 32 + punits.length * (width+2) + 9;  // width+2 can be modified if number of units is creating inconsistency in horizontal padding
     if (newwidth < 140) newwidth = 140;
     var newheight = 75 + normal_tile_height;
+    if (!mobile_mode && punits.length > 1) {
+      newwidth  -= 8;
+      if (punits.length >2) {
+        newheight -= 13; // 3 units goes from max. 4 lines to max. 3 lines needed for unit info
+        if (punits.length >3) {
+          newheight -=13; // 2 lines are max needed.
+        }
+      }
+    }
 
     var max_units_per_row = mobile_mode ? 5 : 8;
     // if 9 or more units, switch to large side-panel style with multiple rows and columns:
@@ -5020,15 +5029,15 @@ function update_active_units_dialog()
         //console.log("Ultra-large unit panel created. Vertical_room="+vertical_room+" max_rows="+max_rows+" columns="+columns);
         //console.log(".. max_units="+max_units+" selected_units="+punits.length);
       }
-      newwidth = 32 + columns*(width+1) + 9 + 4;  // Large panel gets row of 5 units
-      newheight = normal_tile_height * Math.ceil( punits.length/columns ) + 75;  // one row for every 5+ units, rounded up of course
+      newwidth = 32 + columns*(width+2) + 1;  // Large panel gets row of 5 units
+      newheight = (normal_tile_height+1) * Math.ceil( punits.length/columns ) + 50;  // one row for every 5+ units, rounded up of course
     }
     unit_info_html += active_uinfo;
     $("#game_unit_info").html(unit_info_html);
     
     if (mobile_mode) newwidth -= 40;
-    if (mobile_mode && newwidth >= $(window).width()-50) {// move unit info to clear minimized mobile chat widget:
-      $("#active_unit_info").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+$("#active_unit_info").html());
+    if (mobile_mode && newwidth >= $(window).width()-40) {// move unit info to clear minimized mobile chat widget:
+      $("#active_unit_info").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+$("#active_unit_info").html());
     }
 
     $("#game_unit_panel").parent().show();
@@ -5046,7 +5055,7 @@ function update_active_units_dialog()
       $("#game_unit_panel").parent().width(newwidth);
       $("#game_unit_panel").parent().height(newheight+6);  // third line of text is rare but needs 5 more px to not be clipped off (Lexxie)
       $("#game_unit_panel").parent().css("left", ($(window).width() - newwidth) + "px");
-      $("#game_unit_panel").parent().css("top", ($(window).height() - newheight - 30) + "px");
+      $("#game_unit_panel").parent().css("top", ($(window).height() - newheight - 20) + "px");
       $("#game_unit_panel").parent().css("background", "rgba(50,50,40,0.5)");
     }
     
