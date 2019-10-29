@@ -64,6 +64,15 @@ function center_tile_mapcanvas_2d(ptile)
 function center_tile_id(ptile_id)
 {
   var ptile = tiles[ptile_id];
+
+  if (is_small_screen() && current_message_dialog_state == "maximized" 
+      && $("#tabs").tabs("option", "active") == TAB_MAP) {
+    // mobile chatbox is maximized over screen and calls this function 
+    // from clicking a link in the chatbox... minimize chatbox first
+    $('.mobile_chatbox_dialog .ui-icon-circle-minus').click();
+    // .click() calls internal minimizing things that we can't do
+  }
+
   center_tile_mapcanvas(ptile);
 }
 

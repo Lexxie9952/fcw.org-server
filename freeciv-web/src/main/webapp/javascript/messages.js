@@ -101,6 +101,7 @@ function init_chatbox()
 
   if (is_small_screen()) {
     $(".ui-icon-pause").parent().hide();       // no restore button in mobile: hide button
+    current_message_dialog_state = "maximized";
     $(".ui-icon-circle-plus").parent().hide(); // launches as maximized: hide max.button on launch
     $("#game_text_input").show();
   } else {

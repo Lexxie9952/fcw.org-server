@@ -4844,7 +4844,7 @@ function update_active_units_dialog()
     // making unit panel for this current unit in the stack, but probably we need a check after game load to see if all 
     // graphics loaded, and a message to please refresh if they did not.
     if (sprite == null) {
-      add_client_message("Uncached graphics were not able before game start. Please refresh browser to reload site.");
+      add_client_message("Uncached graphics didn't have time to load. Please refresh browser to reload site.");
       console.log("update_active_units_dialog() - aborting panel construction: Sprite not found for "+unit_type(punit)['name']);
       console.log("RECOMMENDED:  refresh page so graphics will be loaded properly.");
       continue;
@@ -4895,12 +4895,13 @@ function update_active_units_dialog()
     var aunit = current_focus[0];
     var ptype = unit_type(aunit);
 
-    active_uinfo += "<div id='active_unit_info' title=''>";            // removed helptext, it was bugging the panel (Lexxie)
+    active_uinfo += "<div id='active_unit_info' title=''>";
 
     // Construct unit name. Placement is different between mobile and normal screen:
     if (client.conn.playing != null && current_focus[0]['owner'] != client.conn.playing.playerno) {
       unit_name = nations[players[current_focus[0]['owner']]['nation']]['adjective'];
       if (!mobile_mode) unit_name = "<b>"+unit_name+"<b>";
+      else unit_name = "<span style='font-size:90%'>"+unit_name+"&nbsp;</span>";
     }
     if (ptype['transport_capacity'] > 0) {// Special text for transport units
       if (mobile_mode) { // mobile version of text
@@ -4920,7 +4921,7 @@ function update_active_units_dialog()
 
     if (get_unit_homecity_name(aunit) != null) {
       if (mobile_mode) { // mobile version of text
-        unit_name += "<span style='font-size:90%'>: " + get_unit_homecity_name(aunit) + "</span>&nbsp; ";
+        unit_name += "<span style='font-size:90%'>: " + get_unit_homecity_name(aunit) + "</span>";
       }
       else { // normal screen version of text
         unit_name += ": " + get_unit_homecity_name(aunit) + " ";
@@ -4933,13 +4934,13 @@ function update_active_units_dialog()
 
     if (client.conn.playing != null && current_focus[0]['owner'] == client.conn.playing.playerno) {
       if (mobile_mode) { // mobile version of text
-        active_uinfo += "<span style='color:white'> &nbsp; M:<span style='color:lightgreen;font-size:100%'><b>" + move_points_text(aunit['movesleft']) + "</b></span></span> ";
+        active_uinfo += "<span style='color:white'> &nbsp; M:<span style='color:lightgreen;font-size:110%'><b>" + move_points_text(aunit['movesleft']) + "</b></span></span>";
       } else { // normal non-mobile text:
         active_uinfo += "<span style='color:white'>Moves:<span style='color:lightgreen;font-size:120%;'><b>" + move_points_text(aunit['movesleft']) + "</b></span></span> ";
       }
     }
     if (mobile_mode) { // mobile version of text
-      active_uinfo += "<span>H:<span style='color:lightpink;font-size:100%'><b>"
+      active_uinfo += "<span>&nbsp;H:<span style='color:lightpink;font-size:110%'><b>"
       + aunit['hp'] + " </b> </span> </span>" + unit_name; // unit name after Moves and HP for mobile
     } else { // normal non-mobile text:
         active_uinfo += "<span title='Attack'>A:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['attack_strength']   // make terser titles to avoid cramped clutter (Lexxie)
@@ -5020,7 +5021,7 @@ function update_active_units_dialog()
         //console.log(".. max_units="+max_units+" selected_units="+punits.length);
       }
       newwidth = 32 + columns*(width+1) + 9 + 4;  // Large panel gets row of 5 units
-      newheight = normal_tile_height * Math.ceil( punits.length/columns ) +75;  // one row for every 5+ units, rounded up of course
+      newheight = normal_tile_height * Math.ceil( punits.length/columns ) + 75;  // one row for every 5+ units, rounded up of course
     }
     unit_info_html += active_uinfo;
     $("#game_unit_info").html(unit_info_html);
@@ -5034,12 +5035,12 @@ function update_active_units_dialog()
 
     if (mobile_mode) { // mobile sizing of panel
       $("#game_unit_panel").parent().width(newwidth);
-      $("#game_unit_panel").parent().height(90); // one row only
+      $("#game_unit_panel").parent().height(71); // one row only
       $("#game_unit_panel").parent().css("left", $(window).width() > newwidth 
                                                  ? (($( window ).width() - newwidth) + "px")
                                                  : "0px"
                                         );
-      $("#game_unit_panel").parent().css("top", ($(window).height() - 90) + "px");
+      $("#game_unit_panel").parent().css("top", ($(window).height() - 81) + "px");
       $("#game_unit_panel").parent().css("background", "rgba(50,50,40,0.95)");
     } else { // normal screen sizing of panel
       $("#game_unit_panel").parent().width(newwidth);
