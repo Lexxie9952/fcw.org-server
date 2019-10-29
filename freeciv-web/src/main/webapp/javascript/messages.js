@@ -95,7 +95,7 @@ function init_chatbox()
         $( "#game_chatbox_panel" ).parent().resize( function(e,ui) { chatbox_restore("save");chatbox_restore("load");});
     }
 
-  $( "#game_chatbox_panel" ).parent().css("z-index","10000"); // ensure it can always be opened/closed/never covered                                                         
+  $( "#game_chatbox_panel" ).parent().css("z-index","100"); // ensure it can always be opened/closed/never covered                                                         
   $("#game_chatbox_panel").dialog('open');
   $(".chatbox_dialog").css("top", "52px");
 

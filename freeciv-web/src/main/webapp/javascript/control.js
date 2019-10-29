@@ -1489,7 +1489,8 @@ function init_game_unit_panel()
   $("#game_unit_panel").dialog({
 			bgiframe: true,
 			modal: false,
-			width: "370px",
+      width: (is_small_screen() ? $(window).width() : "370px"), // Set mobile to full width continuous horizontal scroll
+      maxWidth: "100%",
 			height: "auto",
 			resizable: false,
 			closeOnEscape: false,
@@ -1519,6 +1520,9 @@ function init_game_unit_panel()
                "minimize" : "ui-icon-circle-minus",
                "restore" : "ui-icon-bullet"
              }});
+
+  // Set mobile to full width continuous horizontal scroll
+  if (is_small_screen()) $("#game_unit_panel").parent().css({"max-width":"100%"});
 
   $("#game_unit_panel").dialog('open');
   $("#game_unit_panel").parent().css("overflow", "hidden");
@@ -4708,6 +4712,8 @@ function update_active_units_dialog()
   var ptile = null;
   var punits = [];
   var width = 0;
+  var mobile_mode = is_small_screen();
+  var unit_name = ""; 
 
   if (/*client_is_observer() ||*/ !unitpanel_active) return;
 
@@ -4880,85 +4886,119 @@ function update_active_units_dialog()
     //if (show_unit_movepct) unit_info_html += get_html_mp_sprite(punit, true);  // TO DO: showing both hp&mp messes up flow
     unit_info_html += get_html_hp_sprite(punit, true);
 
-/* FORMER CODE BEFORE SHIFT-CLICK
-    unit_info_html += "<div id='unit_info_div' class='" + (active ? "current_focus_unit'" : "' style='background-color:rgba(15, 0, 0, 0.55);'")
-           + "><div id='unit_info_image' onclick='set_unit_focus_and_redraw(units[" + punit['id'] + "])' "
-	   + " style='margin-right:1px; background: transparent url(" 
-           + sprite['image-src'] +
-           ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
-           + "px; width:64px;height:48px;'"   // force everything to 64x48 including oversize units (Lexxie)
-//         + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'"   previous line
-           + "'></div></div>";                                 // changed margin-right to 1px, was defaulting to 5px (Lexxie)*/
-    width = 64; // = sprite['width'];    // they are all 64 except oversize which we want to FORCE to 64 anyway to avoid buggy display (Lexxie)
+    width = 64;
   }
 
+  var active_uinfo = "";
   if (current_focus.length == 1) {
     /* show info about the active focus unit. */
     var aunit = current_focus[0];
     var ptype = unit_type(aunit);
-    unit_info_html += "<div id='active_unit_info' title=''>";            // removed helptext, it was bugging the panel (Lexxie)
 
+    active_uinfo += "<div id='active_unit_info' title=''>";            // removed helptext, it was bugging the panel (Lexxie)
+
+    // Construct unit name. Placement is different between mobile and normal screen:
     if (client.conn.playing != null && current_focus[0]['owner'] != client.conn.playing.playerno) {
-      unit_info_html += "<b>" + nations[players[current_focus[0]['owner']]['nation']]['adjective'] + "</b> ";
+      unit_name = nations[players[current_focus[0]['owner']]['nation']]['adjective'];
+      if (!mobile_mode) unit_name = "<b>"+unit_name+"<b>";
     }
-
-    if (ptype['transport_capacity'] > 0) 
-      unit_info_html += "<b>" + ptype['name'] + "</b> <font title='Transport ID' style='font-size:90%' color='#C8E8FF'>#"+aunit['id']+"</font>"
-    else
-      unit_info_html += "<b>" + ptype['name'] + "</b>";
+    if (ptype['transport_capacity'] > 0) {// Special text for transport units
+      if (mobile_mode) { // mobile version of text
+        unit_name += "<span style='font-size:90%'>"+ptype['name'] + "<font color='#C8E8FF'>#"+aunit['id']+"</font></span>"
+      } else { // normal screen version of text
+        unit_name += "<b>" + ptype['name'] + "</b> <font title='Transport ID' style='font-size:90%' color='#C8E8FF'>#"+aunit['id']+"</font>"
+      }
+    }
+    else { // text for non-transport units
+      if (mobile_mode) { // mobile version of text
+        unit_name += "<span style='font-size:90%'>" + ptype['name'] + "</span>";
+      }
+      else  { // normal screen version of text
+        unit_name += "<b>" + ptype['name'] + "</b>";
+      }
+    }
 
     if (get_unit_homecity_name(aunit) != null) {
-      unit_info_html += ": " + get_unit_homecity_name(aunit) + " ";
-    } else unit_info_html += " ";
+      if (mobile_mode) { // mobile version of text
+        unit_name += "<span style='font-size:90%'>: " + get_unit_homecity_name(aunit) + "</span>&nbsp; ";
+      }
+      else { // normal screen version of text
+        unit_name += ": " + get_unit_homecity_name(aunit) + " ";
+      }
+    } else unit_name += " ";
+
+    // Type of unit comes first in normal screen mode, otherwise just Moves and Hit points for condensed screens
+    if (!mobile_mode)
+      active_uinfo += unit_name;
+
     if (client.conn.playing != null && current_focus[0]['owner'] == client.conn.playing.playerno) {
-      unit_info_html += "<span style='color:white'>Moves:<span style='color:lightgreen;font-size:120%;'><b>" + move_points_text(aunit['movesleft']) + "</b></span></span> ";
-//      unit_info_html += "<span style='color:aqua'>" + get_unit_moves_left(aunit) + "</span> ";
+      if (mobile_mode) { // mobile version of text
+        active_uinfo += "<span style='color:white'> &nbsp; M:<span style='color:lightgreen;font-size:100%'><b>" + move_points_text(aunit['movesleft']) + "</b></span></span> ";
+      } else { // normal non-mobile text:
+        active_uinfo += "<span style='color:white'>Moves:<span style='color:lightgreen;font-size:120%;'><b>" + move_points_text(aunit['movesleft']) + "</b></span></span> ";
+      }
     }
-    unit_info_html += "<span title='Attack'>A:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['attack_strength']   // make terser titles to avoid cramped clutter (Lexxie)
-    + "</b></span></span> <span title='Defense'>D:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['defense_strength']
-    + "</b></span></span> <span title='Firepower'>FP:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['firepower']
-    + "</b></span></span> <span title='Health'>H:<span style='color:lightpink;font-size:120%;'><b>"
-    + aunit['hp'] + "</b></span></span>"; //<span style='color:gainsboro;font-size:85%;'>/" + ptype['hp'] + "</span></span>";
+    if (mobile_mode) { // mobile version of text
+      active_uinfo += "<span>H:<span style='color:lightpink;font-size:100%'><b>"
+      + aunit['hp'] + " </b> </span> </span>" + unit_name; // unit name after Moves and HP for mobile
+    } else { // normal non-mobile text:
+        active_uinfo += "<span title='Attack'>A:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['attack_strength']   // make terser titles to avoid cramped clutter (Lexxie)
+        + "</b></span></span> <span title='Defense'>D:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['defense_strength']
+        + "</b></span></span> <span title='Firepower'>FP:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['firepower']
+        + "</b></span></span> <span title='Health'>H:<span style='color:lightpink;font-size:120%;'><b>"
+        + aunit['hp'] + "</b></span></span>"; //<span style='color:gainsboro;font-size:85%;'>/" + ptype['hp'] + "</span></span>";
+    }
     if (aunit['veteran'] > 0) {
-      unit_info_html += " <span title='Vet-level'>V:<span style='color:gainsboro;font-size:100%;'><b>" + aunit['veteran'] + "</b></span></span>";
+      if (mobile_mode) { // mobile version of text
+        //active_uinfo += " <span>V:<span style='color:gainsboro;font-size:100%;'><b>" + aunit['veteran'] + "</b></span></span>";
+      } else { // normal non-mobile text:
+        active_uinfo += " <span title='Vet-level'>V:<span style='color:gainsboro;font-size:100%;'><b>" + aunit['veteran'] + "</b></span></span>";
+      }
     }
     if (ptype['transport_capacity'] > 0) {
-      unit_info_html += " <span title='Cargo Capacity'>C:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['transport_capacity'] + "</b></span></span>";
+      if (mobile_mode) { // mobile version of text
+        //active_uinfo += " <span>C:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['transport_capacity'] + "</b></span></span>";
+      } else { // normal non-mobile text
+        active_uinfo += " <span title='Cargo Capacity'>C:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['transport_capacity'] + "</b></span></span>";
+      }
     }
     if (aunit['transported'] && aunit['transported_by']>0) {
-      unit_info_html += " <span title='Transporter ID' style='color:lightskyblue'><b>On </b>#"+aunit['transported_by']+"</span>";
+      active_uinfo += " <span title='Transporter ID' style='color:lightskyblue'><b>On </b>#"+aunit['transported_by']+"</span>";
     }
 
     // Actual fuel remaining is: (turns_of_fuel-1) + moves_left/moves_rate
     if ( client.conn.playing != null && (ptype['fuel']>0) && (current_focus[0]['owner']==client.conn.playing.playerno) ) {
       var fuel_left = (aunit['fuel']-1) + aunit['movesleft']/ptype['move_rate'];
       var fuel_color = "";
-      if (aunit['movesleft']==0) fuel_color = "<span style='color:gainsboro;font-size:100%;'><b>";    // no moves left, fuel indicator is dimmed down
-      else if (fuel_left>2.001) fuel_color = "<span style='color:deepskyblue;font-size:100%;'><b>";   // more than 2 turns of fuel = blue skies ahead
-      else if (fuel_left>1.001) fuel_color = "<span style='color:darkturquoise;font-size:100%;'><b>"; // more than 1 turn  of fuel = blue skies ahead
-      else if (fuel_left>0.85) fuel_color = "<span style='color:lawngreen;font-size:100%;'><b>";      // full turn of fuel = green
-      else if (fuel_left>0.67) fuel_color = "<span style='color:greenyellow;font-size:100%;'><b>";    // most moves = green-yellow
-      else if (fuel_left>0.63) fuel_color = "<span style='color:yellow;font-size:100%;'><b>";         // getting close to half fuel used = yellow 
-      else if (fuel_left>0.59) fuel_color = "<span style='color:gold;font-size:100%;'><b>";         
-      else if (fuel_left>0.55) fuel_color = "<span style='color:orange;font-size:100%;'><b>";         
-      else if (fuel_left>0.50) fuel_color = "<span style='color:orangered;font-size:100%;'><b>";        
-      else  fuel_color = "<span style='color:red;font-size:100%;'><b>";
+      var size_adj = mobile_mode ? "font-size:100%" : "font-size:100%;";
+      if (aunit['movesleft']==0) fuel_color = "<span style='color:gainsboro;"+size_adj+"'><b>";    // no moves left, fuel indicator is dimmed down
+      else if (fuel_left>2.001) fuel_color = "<span style='color:deepskyblue;"+size_adj+"'><b>";   // more than 2 turns of fuel = blue skies ahead
+      else if (fuel_left>1.001) fuel_color = "<span style='color:darkturquoise;"+size_adj+"'><b>"; // more than 1 turn  of fuel = blue skies ahead
+      else if (fuel_left>0.85) fuel_color = "<span style='color:lawngreen;"+size_adj+"'><b>";      // full turn of fuel = green
+      else if (fuel_left>0.67) fuel_color = "<span style='color:greenyellow;"+size_adj+"'><b>";    // most moves = green-yellow
+      else if (fuel_left>0.63) fuel_color = "<span style='color:yellow;"+size_adj+"'><b>";         // getting close to half fuel used = yellow 
+      else if (fuel_left>0.59) fuel_color = "<span style='color:gold;"+size_adj+"'><b>";         
+      else if (fuel_left>0.55) fuel_color = "<span style='color:orange;"+size_adj+"'><b>";         
+      else if (fuel_left>0.50) fuel_color = "<span style='color:orangered;"+size_adj+"'><b>";        
+      else  fuel_color = "<span style='color:red;"+size_adj+"'><b>";
 
       if (aunit['movesleft']==0 && fuel_left<1.0001) { fuel_left="";} // no moves and exactly 1 or less fuel are special cases like airlift/refueling/etc where we don't need to show fuel 
-      else unit_info_html += " <span title='Fuel Left'>Fuel:" + fuel_color + fuel_left.toFixed(fuel_left<1?2:1) + "</b></span></span>";  // Fuel remaining (Lexxie)
+      else {
+        if (mobile_mode) { // mobile version of text
+          active_uinfo += " <span>F:" + fuel_color + fuel_left.toFixed(fuel_left<1?2:1) + "</b></span></span>";  
+        } else { // normal non-mobile text
+          active_uinfo += " <span title='Fuel Left'>Fuel:" + fuel_color + fuel_left.toFixed(fuel_left<1?2:1) + "</b></span></span>";
+        }
+      }
     }  
-    
-
-    unit_info_html += "</div>";
+    active_uinfo += "</div>";
   } else if (current_focus.length >= 1 && client.conn.playing != null && current_focus[0]['owner'] != client.conn.playing.playerno) {
-    unit_info_html += "<div id='active_unit_info'>" + current_focus.length + " foreign units  (" +
+    active_uinfo += "<div id='active_unit_info'>" + current_focus.length + " foreign units  (" +
      nations[players[current_focus[0]['owner']]['nation']]['adjective']
      +")</div> ";
   } else if (current_focus.length > 1) {
-    unit_info_html += "<div id='active_unit_info'>" + current_focus.length + " units selected.</div> ";
+    active_uinfo += "<div id='active_unit_info'>" + current_focus.length + " units selected.</div> ";
   }
-
-  $("#game_unit_info").html(unit_info_html);
 
   if (current_focus.length > 0) {
     /* reposition and resize unit dialog. */
@@ -4966,8 +5006,7 @@ function update_active_units_dialog()
     if (newwidth < 140) newwidth = 140;
     var newheight = 75 + normal_tile_height;
 
-
-    var max_units_per_row = is_small_screen() ? 5 : 8;
+    var max_units_per_row = mobile_mode ? 5 : 8;
     // if 9 or more units, switch to large side-panel style with multiple rows and columns:
     if (punits.length > max_units_per_row) {   
       var columns = 5;      // start with 5 columns and only go higher if needed
@@ -4982,13 +5021,34 @@ function update_active_units_dialog()
       }
       newwidth = 32 + columns*(width+1) + 9 + 4;  // Large panel gets row of 5 units
       newheight = normal_tile_height * Math.ceil( punits.length/columns ) +75;  // one row for every 5+ units, rounded up of course
-    } 
+    }
+    unit_info_html += active_uinfo;
+    $("#game_unit_info").html(unit_info_html);
+    
+    if (mobile_mode) newwidth -= 40;
+    if (mobile_mode && newwidth >= $(window).width()-50) {// move unit info to clear minimized mobile chat widget:
+      $("#active_unit_info").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+$("#active_unit_info").html());
+    }
+
     $("#game_unit_panel").parent().show();
-    $("#game_unit_panel").parent().width(newwidth);
-    $("#game_unit_panel").parent().height(newheight+6);  // third line of text is rare but needs 5 more px to not be clipped off (Lexxie)
-    $("#game_unit_panel").parent().css("left", ($( window ).width() - newwidth) + "px");
-    $("#game_unit_panel").parent().css("top", ($( window ).height() - newheight - 30) + "px");
-    $("#game_unit_panel").parent().css("background", "rgba(50,50,40,0.5)");
+
+    if (mobile_mode) { // mobile sizing of panel
+      $("#game_unit_panel").parent().width(newwidth);
+      $("#game_unit_panel").parent().height(90); // one row only
+      $("#game_unit_panel").parent().css("left", $(window).width() > newwidth 
+                                                 ? (($( window ).width() - newwidth) + "px")
+                                                 : "0px"
+                                        );
+      $("#game_unit_panel").parent().css("top", ($(window).height() - 90) + "px");
+      $("#game_unit_panel").parent().css("background", "rgba(50,50,40,0.95)");
+    } else { // normal screen sizing of panel
+      $("#game_unit_panel").parent().width(newwidth);
+      $("#game_unit_panel").parent().height(newheight+6);  // third line of text is rare but needs 5 more px to not be clipped off (Lexxie)
+      $("#game_unit_panel").parent().css("left", ($(window).width() - newwidth) + "px");
+      $("#game_unit_panel").parent().css("top", ($(window).height() - newheight - 30) + "px");
+      $("#game_unit_panel").parent().css("background", "rgba(50,50,40,0.5)");
+    }
+    
     if (game_unit_panel_state == "minimized") $("#game_unit_panel").dialogExtend("minimize");
   } else {
     $("#game_unit_panel").parent().hide();

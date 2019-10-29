@@ -126,6 +126,12 @@ function setup_window_size ()
   $("#tabs-hel").hide();
 
   if (is_small_screen()) {
+    // Adjustments for mobile: spatial economy, fit
+    $("#turn_done_button").css({"padding-left":"7px", "padding-right":"7px", "padding-bottom":"8px"});
+    $("#tabs_menu").css("margin-left","-3px");
+    $(".ui-tabs-anchor").css("padding", "7px");
+    $("#freeciv_logo").hide();
+    // Remove text from tabs: icons only:
     $("#map_tab").children().html("<i class='fa fa-globe' aria-hidden='true'></i>");
     $("#opt_tab").children().html("<i class='fa fa-cogs' aria-hidden='true'></i>");
     $("#players_tab").children().html("<i class='fa fa-flag' aria-hidden='true'></i>");
@@ -134,41 +140,27 @@ function setup_window_size ()
     $("#civ_tab").children().html("<i class='fa fa-university' aria-hidden='true'></i>");
     $("#empire_tab").children().html("<i class='fa fa-binoculars' aria-hidden='true'></i>");
     $("#hel_tab").children().html("<i class='fa fa-book' aria-hidden='true'></i>");
-//    $("#chat_tab").children().html("<i class='fa fa-commenting-o' aria-hidden='true'></i>");
     $("#button_national_units").html("&#9823;");
     $("#button_unit_homecity").html("&#x1F3E0;");
     $("#button_unit_deployment").html("&#x2299;");
     $("#button_city_buildings").html("&#x1F3E2;");
     $("#button_empire_upkeep").html("&#x1f4b0;");
     $("#button_empire_prod").html("&#x1F528;");
-    //$("#empire_mode.options").children().css({"padding-left":"5px", "padding-right":"5px"});
-
-    $(".ui-tabs-anchor").css("padding", "7px");
-    $(".overview_dialog").hide();
-
-
-    $(".ui-dialog-titlebar").show();
-    //$(".ui-dialog-titlebar").hide(); // hide all dialog titlebars (unit panel, message box)
-    //$(".ui-dialog-titlebar").css({"height":"12px"}); // narrow titlebar
-    //$(".ui-dialog-titlebar").find("#ui-id-12").hide(); // remove title text
-    $(".ui-dialog-titlebar").find("#ui-id-12").parent().css({"background":"none","border-style":"none","height":"16px","width":"1px"}); // remove background image
-    $('#ui-id-12').parent().show();  // unhide messagebox title
-    $(".ui-dialog-titlebar").css({"font-size":"70%"});
-
-    /*
-    if (!minimized) {
-      $('.ui-icon-circle-plus').parent().hide();  //restore is not an option
-
-      expand all the way.
-    }
-    else {
-      call special minimise transform function
-    }  */
-    $("#freeciv_logo").hide();
-
-    overview_active = false;
+    // Remove mini-map
+    $(".overview_dialog").hide(); overview_active = false;
+    // Remove orders buttons
     if ($("#game_unit_orders_default").length > 0) $("#game_unit_orders_default").remove();
     if ($("#game_unit_orders_settlers").length > 0) $("#game_unit_orders_settlers").remove();
+    // Optimise space/fit in game unit panel:
+    $("#game_unit_panel").css({"transform":"scale(0.95)","float":"left","margin-top":"-12px","margin-left":"-22px","width":"100%;"});
+    $("#game_unit_info").css({"float":"left", "width":"2000%"}); // continuous horizontal drag-scroll panel
+    $("#help_footer").hide();
+
+    $(".ui-dialog-titlebar").show(); // patch:was hidden on mobile for more room, but minimize-disabling is worse
+    // TODO: find accurate #id method to do this, ui-id-12 is not for certain:
+    $(".ui-dialog-titlebar").find("#ui-id-12").parent().css({"background":"none","border-style":"none","height":"16px","width":"1px"}); // remove background image
+    $('#ui-id-12').parent().show();  // unhide messagebox title
+    $(".ui-dialog-titlebar").css({"font-size":"70%", "margin-left":"-3px"});
     $("#game_status_panel_bottom").css("font-size", "0.8em");
   } else {  // handle case where small window is resized to large again 
     $("#map_tab").children().html("<i class='fa fa-globe' aria-hidden='true'></i> Map");
@@ -440,6 +432,7 @@ function set_default_mapview_active()
 
   if (chatbox_active) {
     $("#game_chatbox_panel").parent().show();
+    $(".mobile_chatbox_dialog").show();
     if (current_message_dialog_state == "minimized") $("#game_chatbox_panel").dialogExtend("minimize");
   }
 

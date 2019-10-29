@@ -505,8 +505,10 @@ function set_default_mapview_inactive()
 {
   if (overview_active) $("#game_overview_panel").parent().hide();
   if (unitpanel_active) $("#game_unit_panel").parent().hide();
-  if (chatbox_active) $("#game_chatbox_panel").parent().hide();
-
+  if (chatbox_active) {
+    $("#game_chatbox_panel").parent().hide();
+    $(".mobile_chatbox_dialog").hide();
+  }
 }
 
 /**************************************************************************
