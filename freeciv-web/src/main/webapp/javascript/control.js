@@ -4494,11 +4494,14 @@ function key_paste_link_under_cursor()
     var selected_index = own_unit_index == -1 ? 0 : own_unit_index;
     var name = unit_types[sunits[selected_index]['type']]['name'];
     var nationality = nations[players[sunits[selected_index]['owner']]['nation']]['adjective'];
-    //add_client_message(name+" copied to clipboard.");
     $("#game_text_input").val($("#game_text_input").val() + "%%unit"+sunits[selected_index]['id']+"_%"+nationality+" "+name+"~~ ");
+    copy_string_to_clipboard("%%unit"+sunits[selected_index]['id']+"_%"+nationality+" "+name+"~~ ");
   } else {  // if no unit present, then give just a link to the tile: 
     $("#game_text_input").val($("#game_text_input").val() + "%%tile"+ptile['index']+"~% ");
+    copy_string_to_clipboard("%%tile"+ptile['index']+"~% ");
   }
+  add_client_message("Link copied to clipboard.");
+
   $("#game_text_input").focus();  // default user to be ready to hit Enter or continue typing
 }
 
