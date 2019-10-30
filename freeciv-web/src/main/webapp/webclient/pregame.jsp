@@ -14,9 +14,9 @@
   <div id="pregame_player_list"></div> 
   <div id="pregame_game_info"></div>
   <ol id="pregame_message_area"></ol>
-  <div id="pregame_chat_box">
+  <div id="pregame_chat_box" style="margin-bottom:20px">
     <i class="fa fa-commenting-o fa-2" aria-hidden="true" style="color: white; font-size: 160%;"></i>
-    <input id="pregame_text_input" type="text" name="text_input" value=">" />
+    <input id="pregame_text_input" style="width:80%" type="text" name="text_input" value=">" />
   </div>
 </div>
 
