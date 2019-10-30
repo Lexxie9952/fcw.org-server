@@ -1881,8 +1881,10 @@ sound_alt	= "w_generic"
 helptext	= _("\
 The bounteous Artemis bestows to all cities with Temples a small yet\
  multitudinous benediction: +1 each to production, luxury, science, and gold.\
- Requires a Temple in the city where it will be built. The discovery of Computers\
- makes the Temple of Artemis obsolete.")
+ Requires a Temple in the city where it will be built. (This wonder also\
+ recovers a lost shield in cities built on resources producing +1 shield:\
+ e.g., cities built on a grass-shield tile.) Obsolete by: Computers.\
+")
 
 [building_teslas_laboratory]
 name		= _("Tesla's Laboratory")
