@@ -3354,7 +3354,7 @@ reqs    =
       "CityTile", "Center", "Local"
       "OutputType", "Luxury", "Local"
     }
-
+;Note: this value already is 1 on city tiles on grass,swamp,hill,tundra
 [effect_temple_of_artemis_1]
 type    = "Output_Add_Tile"
 value   = 1
@@ -3365,8 +3365,7 @@ reqs    =
       "CityTile", "Center", "Local"
       "OutputType", "Shield", "Local"
     }
-
-;Patch -- we have to do another Output_Add_Tile to give the city its extra shield, if it was built on a +0 shield tile (grass/hills/jungle/swamp/tundra)
+;Give the city its extra shield if it was built on a 0 shield tile (grass/hills/swamp/tundra)
 [effect_temple_of_artemis_1a]
 type    = "Output_Add_Tile"
 value	= 1
@@ -3382,45 +3381,37 @@ reqs	=
 type    = "Output_Add_Tile"
 value	= 1
 reqs	=
-    { "type", "name", "range"
-      "Terrain", "Hills", "Local"
-      "Building", "Temple", "City"
-      "Building", "Temple of Artemis", "Player"
-      "CityTile", "Center", "Local"
-      "OutputType", "Shield", "Local"
-    }
-[effect_temple_of_artemis_1c]
-type    = "Output_Add_Tile"
-value	= 1
-reqs	=
-    { "type", "name", "range"
-      "Terrain", "Jungle", "Local"
-      "Building", "Temple", "City"
-      "Building", "Temple of Artemis", "Player"
-      "CityTile", "Center", "Local"
-      "OutputType", "Shield", "Local"
+    { "type", "name", "range", "present"
+      "Terrain", "Hills", "Local", TRUE
+      "Extra", "Coal", "Local", FALSE
+      "Building", "Temple", "City", TRUE
+      "Building", "Temple of Artemis", "Player", TRUE
+      "CityTile", "Center", "Local", TRUE
+      "OutputType", "Shield", "Local", TRUE
     }
 [effect_temple_of_artemis_1d]
 type    = "Output_Add_Tile"
 value	= 1
 reqs	=
-    { "type", "name", "range"
-      "Terrain", "Swamp", "Local"
-      "Building", "Temple", "City"
+    { "type", "name", "range", "present"
+      "Terrain", "Swamp", "Local", TRUE
+      "Extra", "Peat", "Local", FALSE
+      "Building", "Temple", "City", TRUE
       "Building", "Temple of Artemis", "Player"
-      "CityTile", "Center", "Local"
-      "OutputType", "Shield", "Local"
+      "CityTile", "Center", "Local", TRUE
+      "OutputType", "Shield", "Local", TRUE
     }
 [effect_temple_of_artemis_1e]
 type    = "Output_Add_Tile"
 value	= 1
 reqs	=
-    { "type", "name", "range"
-      "Terrain", "Tundra", "Local"
-      "Building", "Temple", "City"
-      "Building", "Temple of Artemis", "Player"
-      "CityTile", "Center", "Local"
-      "OutputType", "Shield", "Local"
+    { "type", "name", "range", "present"
+      "Terrain", "Tundra", "Local", TRUE
+      "Extra", "Game", "Local", FALSE
+      "Building", "Temple", "City", TRUE
+      "Building", "Temple of Artemis", "Player", TRUE
+      "CityTile", "Center", "Local", TRUE
+      "OutputType", "Shield", "Local", TRUE
     }
 
 [effect_temple_of_artemis_2]
