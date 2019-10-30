@@ -1104,7 +1104,7 @@ function city_name_dialog(suggested_name, unit_id) {
 				},{
 					text: "Ok",
 				        click: function() {
-						var name = $("#city_name_req").val();
+						var name = alphanumeric_cleaner($("#city_name_req").val());
 						if (name.length == 0 || name.length >= MAX_LEN_CITYNAME - 6
 						    || encodeURIComponent(name).length  >= MAX_LEN_CITYNAME - 6) {
 						  swal("City name is invalid. Please try a different shorter name.");
@@ -1134,7 +1134,12 @@ function city_name_dialog(suggested_name, unit_id) {
 
   $('#city_name_dialog').keyup(function(e) {
     if (e.keyCode == 13) {
-      var name = $("#city_name_req").val();
+      var name = alphanumeric_cleaner($("#city_name_req").val());
+      if (name.length == 0 || name.length >= MAX_LEN_CITYNAME - 6
+        || encodeURIComponent(name).length  >= MAX_LEN_CITYNAME - 6) {
+        swal("City name is invalid. Please try a different shorter name.");
+        return;
+      }
       var actor_unit = game_find_unit_by_number(unit_id);
       var packet = {"pid" : packet_unit_do_action,
                       "actor_id" : unit_id,
@@ -1153,7 +1158,12 @@ function city_name_dialog(suggested_name, unit_id) {
   keyboard_input=false;
 
   if (speech_recogntition_enabled || cardboard_vr_enabled) {
-    var name = $("#city_name_req").val();
+    var name = alphanumeric_cleaner($("#city_name_req").val());
+    if (name.length == 0 || name.length >= MAX_LEN_CITYNAME - 6
+      || encodeURIComponent(name).length  >= MAX_LEN_CITYNAME - 6) {
+      swal("City name is invalid. Please try a different shorter name.");
+      return;
+    }
     var actor_unit = game_find_unit_by_number(unit_id);
     var packet = {"pid" : packet_unit_do_action,
                       "actor_id" : unit_id,
@@ -1525,7 +1535,7 @@ function rename_city()
 				},{
 					text: "Ok",
 				        click: function() {
-						var name = $("#city_name_req").val();
+						var name = alphanumeric_cleaner($("#city_name_req").val());
 						if (name.length == 0 || name.length >= MAX_LEN_NAME - 4
 						    || encodeURIComponent(name).length  >= MAX_LEN_NAME - 4) {
 						  swal("City name is invalid");
@@ -1546,7 +1556,7 @@ function rename_city()
 
   $('#city_name_dialog').keyup(function(e) {
     if (e.keyCode == 13) {
-      var name = $("#city_name_req").val();
+      var name = alphanumeric_cleaner($("#city_name_req").val());
       var packet = {"pid" : packet_city_rename, "name" : encodeURIComponent(name), "city_id" : active_city['id'] };
       send_request(JSON.stringify(packet));
       $("#city_name_dialog").remove();

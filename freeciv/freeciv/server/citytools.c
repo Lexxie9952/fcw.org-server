@@ -418,7 +418,7 @@ bool is_allowed_city_name(struct player *pplayer, const char *cityname,
    *
    * We can even reach here for an AI player, if all the cities of the
    * original nation are exhausted and the backup nations have non-ascii
-   * names in them. */
+   * names in them. 
   if (!is_ascii_name(cityname)
       && (!pconn || pconn->access_level != ALLOW_HACK)) {
     if (error_buf) {
@@ -428,7 +428,7 @@ bool is_allowed_city_name(struct player *pplayer, const char *cityname,
                   cityname);
     }
     return FALSE;
-  }
+  }*/
 
 
   return TRUE;
