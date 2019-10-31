@@ -2338,7 +2338,7 @@ function do_map_click(ptile, qtype, first_time_called)
         }
         /* Send the order to move using the orders system. */
         send_request(JSON.stringify(packet));
-        if (punit['movesleft'] > 0) {
+        if (punit['movesleft'] > 0 && punit['owner'] == client.conn.playing.playerno) {
           unit_move_sound_play(punit);
         } else if (!has_movesleft_warning_been_shown) {
           has_movesleft_warning_been_shown = true;
@@ -3365,7 +3365,7 @@ function key_unit_auto_explore()
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_EXPLORE, EXTRA_NONE);
-    unit_move_sound_play(punit);
+    if (punit['movesleft'] > 0 && punit['owner'] == client.conn.playing.playerno) unit_move_sound_play(punit);
   }
 
   setTimeout(update_unit_focus, 700);
@@ -4415,7 +4415,7 @@ function key_unit_move(dir)
       "dest_tile": newtile['index']
     };
     send_request(JSON.stringify(packet));
-    unit_move_sound_play(punit);
+    if (punit['movesleft'] > 0 && punit['owner'] == client.conn.playing.playerno) unit_move_sound_play(punit);
   }
   deactivate_goto(true);
 }
@@ -4459,7 +4459,7 @@ function key_unit_move_focus_index(dir, s)
     };
 
     send_request(JSON.stringify(packet));
-    unit_move_sound_play(punit);
+    if (punit['movesleft'] > 0 && punit['owner'] == client.conn.playing.playerno) unit_move_sound_play(punit);
   }
 
   deactivate_goto(true);
