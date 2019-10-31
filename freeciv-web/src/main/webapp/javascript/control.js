@@ -5006,7 +5006,7 @@ function update_active_units_dialog()
 
   if (current_focus.length > 0) {
     /* reposition and resize unit panel. */
-    var newwidth = 32 + punits.length * (width+2) + 10;   // width+2 can be modified if number of units is creating inconsistency in horizontal padding
+    var newwidth = 32 + punits.length * (width+2) + 11;   // width+2 can be modified if number of units is creating inconsistency in horizontal padding
     if (newwidth < 140) newwidth = 140;
     var newheight = 75 + normal_tile_height;
     if (!mobile_mode && punits.length > 1) {
