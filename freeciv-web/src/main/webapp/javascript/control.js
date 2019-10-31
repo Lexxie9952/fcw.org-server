@@ -690,7 +690,9 @@ function set_chat_direction(player_id) {
 
   icon.attr("title", "Sending messages to " + player_name);
   chat_send_to = player_id;
-  $("#game_text_input").focus();
+  // Avoid auto-focus into chat for game launch or turning off specific chat target
+  if (player_id != null || player_name != "everybody")
+    $("#game_text_input").focus();
 }
 
 /****************************************************************************
@@ -3027,6 +3029,11 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
 
     case 222:  // ' key = focus in chat window
       the_event.preventDefault(); // don't put the ' in the input box
+
+      // Auto-restore chatbox if it's minimised
+      if (current_message_dialog_state == "minimized")
+        $(".chatbox_dialog .ui-icon-bullet").click();
+
       $("#game_text_input").focus();
       break;
 

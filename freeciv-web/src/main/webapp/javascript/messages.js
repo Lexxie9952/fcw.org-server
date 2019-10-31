@@ -110,7 +110,7 @@ function init_chatbox()
     else chatbox_restore("save"); // save initial settings for later restore after minimize/maximize
     // chat bubble icon in title bar
     $("#game_chatbox_panel").parent().children().not("#game_chatbox_panel").children().get(0).innerHTML 
-    = "<div style='font-size:80%; vertical-align:top;'><i class='fa fa-commenting-o' aria-hidden='true'></i></div>";
+      = "<div style='font-size:80%; vertical-align:top;'><i class='fa fa-commenting-o' aria-hidden='true'></i></div>";
   }
 
   $("#freeciv_custom_scrollbar_div").mCustomScrollbar({theme:"3d"});

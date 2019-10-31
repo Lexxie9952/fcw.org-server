@@ -140,7 +140,7 @@ ctrl-S: save game
 shift-T: change tax rates
 shift-W: show city tile production on map
 shift-Return: Turn done
-&apos; &nbsp; Focus on chat input area
+&apos; &nbsp; Focus on chat input area. (Restores if minimized)
 > &nbsp; Focus/find next dormant unit
 
 <h2>Main Map (Mouse):</h2>
