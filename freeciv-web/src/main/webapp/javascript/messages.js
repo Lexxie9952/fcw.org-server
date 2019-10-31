@@ -111,6 +111,7 @@ function init_chatbox()
     // chat bubble icon in title bar
     $("#game_chatbox_panel").parent().children().not("#game_chatbox_panel").children().get(0).innerHTML 
       = "<div style='font-size:80%; vertical-align:top;'><i class='fa fa-commenting-o' aria-hidden='true'></i></div>";
+    $("#game_text_input").blur();  // normal large screen, don't default focus into here on launch
   }
 
   $("#freeciv_custom_scrollbar_div").mCustomScrollbar({theme:"3d"});

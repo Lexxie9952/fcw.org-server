@@ -3854,6 +3854,7 @@ function key_unit_upgrade()
     };
     send_request(JSON.stringify(packet));
   }
+  setTimeout(update_active_units_dialog, 600);
   setTimeout(update_unit_focus, 700);
 }
 
@@ -4376,25 +4377,22 @@ function(){
 }
 
 /**************************************************************************
- Move the unit in focus in the specified direction.
+ Move the unit(s) in focus in the specified direction.
 **************************************************************************/
 function key_unit_move(dir)
 {
-  // this function could simply be set to call
-  // function key_unit_move_focus_index(dir, 0), since they are identical
-  // and this function just hard-codes 0 for the unit in focus
+  var funits = get_units_in_focus();
+  if (!funits || funits.length<1) return;
 
-  if (current_focus.length > 0) {
-    var punit = current_focus[0];
+  for (var i = 0; i < funits.length; i++) {
+    var punit = funits[i];
     if (punit == null) {
       return;
     }
-
     var ptile = index_to_tile(punit['tile']);
     if (ptile == null) {
       return;
     }
-
     var newtile = mapstep(ptile, dir);
     if (newtile == null) {
       return;
@@ -4416,11 +4414,9 @@ function key_unit_move(dir)
       "action"   : [ACTION_COUNT],
       "dest_tile": newtile['index']
     };
-
     send_request(JSON.stringify(packet));
     unit_move_sound_play(punit);
   }
-
   deactivate_goto(true);
 }
 
