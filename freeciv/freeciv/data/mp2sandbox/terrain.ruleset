@@ -1488,7 +1488,7 @@ reqs           =
     }
 build_time     = 11
 removal_time   = 3
-conflicts      = "Fort", "Fortress", "Airbase", "Canal", "Irrigation", "Mine", "Oil Well", "Farmland"
+conflicts      = "Fort", "Fortress", "Airbase", "Irrigation", "Mine", "Oil Well", "Farmland"
 defense_bonus  = 33
 native_to      = "Trireme", "RiverShip", "Sea", "Submarine", "Land", "LandAirSea", "LandNoKill"
 flags          = "NativeTile", "NoStackDeath", "Refuel"

@@ -174,8 +174,7 @@ base_incite_cost = 700   ; BIC  =700 (the cost of a size 1 domestic city at a di
 ;city is content         ; CON 
 ;city is celebrating     ; CEL 
 ;incite defence bonuses  ; BONUS  -50% empty + 300% occupied+courthouse OR + 100% empty+courthouse + supreme_court applies courthouse bonuses again
-;                        ;        +∞ = democracy/mausoleum/palace/ecclesiastical palace  
-;city is celebrating     ; CEL
+;                        ;        +∞ = democracy/mausoleum/palace/ecclesiastical palace 
 ;total unit shield cost  ; UC 
 ;total improvements cost ; IC
 ;distance to capital     ; DIST  (max distance penalty=32 tiles)
@@ -1678,15 +1677,15 @@ set =
       "endturn", 365, FALSE
       "foggedborders", TRUE, FALSE
       "generator", "RANDOM", FALSE
-      "gold", 100, FALSE	
+      "gold", 100, FALSE
       "huts", 0, FALSE
-      "landmass", 63, FALSE 
+      "landmass", 63, FALSE
       "minplayers", 0, FALSE
       "nationset", "all", FALSE 
       "nuclearwinter_percent", 20, FALSE
       "revolen", 1, FALSE
       "separatepoles", FALSE, FALSE
-      "spaceship_travel_time", 225, FALSE 
+;      "spaceship_travel_time", 225, FALSE      UNCOMMENT WHEN FEATURE GOES UP
       "specials", 350, FALSE
       "startpos", "SINGLE", FALSE
       "startunits", "cccwwwxxa", FALSE
