@@ -326,6 +326,11 @@ function decode_user_hyperlinks(message)
       }
     }
   }
+
+   // EXTRACT ENCODED DISCORD LINK
+   if (message.includes("%%Discord")) {
+        message = message.replace( "%%Discord", "<a href='https://discord.gg/Zj8UQSN' target='_new'>Freeciv-Web Discord Chat</a>")
+   }
   return message;
 }
 
