@@ -412,7 +412,14 @@ function update_chatbox(messages)
         message_log.update(messages[i]);
       }
   }
-  chatbox_scroll_to_bottom(true);
+  if (scrollDiv.id == "pregame_message_area") {
+    setTimeout(function() {
+      var elem = document.getElementById('pregame_message_area');
+      elem.scrollTop = elem.scrollHeight;
+    }, 350);
+  } else {
+    chatbox_scroll_to_bottom(true);
+  }
 }
 
 /**************************************************************************
