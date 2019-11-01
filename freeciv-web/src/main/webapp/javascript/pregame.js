@@ -376,7 +376,7 @@ function pick_nation(player_id)
         }
     }
     if (Object.keys(players).length == Object.keys(player_nations).length) {
-       send_message("Unable to join the game, it is full.");
+       add_client_message("Unable to join the game, it is full.");
        return;
     }
   }
