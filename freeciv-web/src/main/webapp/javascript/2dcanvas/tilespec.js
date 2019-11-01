@@ -1437,19 +1437,27 @@ function get_tile_river_like_sprite(ptile, extra, prefix)
   if (ptile == null) {
     return null;
   }
+  var extra2 = extra;   // 'synonymous' connective extra: extras can be connective to a twin type
+
+  // Make naval base and river synonymously connective to adjacent water and each other
+  if (typeof EXTRA_NAVALBASE !== 'undefined') {
+    if (extra == EXTRA_NAVALBASE)
+      extra2 = EXTRA_RIVER;
+    else if (extra == EXTRA_RIVER)
+      extra2 = EXTRA_NAVALBASE
+  }
 
   if (tile_has_extra(ptile, extra)) {
     var river_str = "";
     for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
       var dir = cardinal_tileset_dirs[i];
       var checktile = mapstep(ptile, dir);
-      if (checktile
-          && (tile_has_extra(checktile, extra) || is_ocean_tile(checktile))) {
+      if (checktile 
+          && (tile_has_extra(checktile, extra) || tile_has_extra(checktile, extra2) || is_ocean_tile(checktile))) {
         river_str = river_str + dir_get_tileset_name(dir) + "1";
       } else {
         river_str = river_str + dir_get_tileset_name(dir) + "0";
       }
-
     }
     return {"key" : prefix + "_s_" + river_str};
   }
@@ -1459,14 +1467,13 @@ function get_tile_river_like_sprite(ptile, extra, prefix)
     for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
       var dir = cardinal_tileset_dirs[i];
       var checktile = mapstep(ptile, dir);
-      if (checktile != null && tile_has_extra(checktile, extra)) {
+      if (checktile != null && (tile_has_extra(checktile, extra) || tile_has_extra(checktile, extra2)) ) {
         return {"key" : prefix + "_outlet_" + dir_get_tileset_name(dir)};
       }
     }
   }
 
   return null;
-
 }
 
 /****************************************************************************
@@ -1800,13 +1807,17 @@ function fill_layer1_sprite_array(ptile, pcity)
         result_sprites.push({"key" : "base.outpost_bg",
                              "offset_y" : -normal_tile_height / 2});
       }
-    } /*
-    else if (typeof EXTRA_NAVALBASE !== 'undefined')  { 
-      if (tile_has_extra(ptile, EXTRA_NAVALBASE)) {   
+    } 
+    if (typeof EXTRA_NAVALBASE !== 'undefined')  { 
+      if (tile_has_extra(ptile, EXTRA_NAVALBASE)) {
+        // draw river outlets to make connective channel exits to other nearby water
+        var river_sprite = get_tile_river_like_sprite(ptile, EXTRA_NAVALBASE, "road.river");
+        if (river_sprite != null) result_sprites.push(river_sprite);
+        
         result_sprites.push({"key" : "base.navalbase_bg",
                               "offset_y" : -normal_tile_height / 2});
       }
-    } */
+    } 
   }
   return result_sprites;
 }
@@ -1859,13 +1870,13 @@ function fill_layer3_sprite_array(ptile, pcity) ///// this should be drawn simul
         result_sprites.push({"key" : "base.outpost_fg",
                            "offset_y" : -normal_tile_height / 2});
       }
-    } /*
-    else if (typeof EXTRA_NAVALBASE !== 'undefined')  { 
-      if (tile_has_extra(ptile, EXTRA_NAVALBASE)) {   
-        result_sprites.push({"key" : "base.navalbase_bg",
+    } 
+    if (typeof EXTRA_NAVALBASE !== 'undefined')  { 
+      if (tile_has_extra(ptile, EXTRA_NAVALBASE)) {
+        result_sprites.push({"key" : "base.navalbase_fg",
                               "offset_y" : -normal_tile_height / 2});
       }
-    } */
+    } 
   }
 
   return result_sprites;

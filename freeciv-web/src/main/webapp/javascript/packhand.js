@@ -643,6 +643,8 @@ function handle_ruleset_control(packet)
     else if (ename == "Minor Tribe Village") delete window["EXTRA_HUT"];
     else if (typeof EXTRA_FORT !== 'undefined') { //makes sure it's defined first
       if (ename == "Fort") delete window["EXTRA_FORT"]; ///// 
+    } else if (typeof EXTRA_NAVALBASE !== 'undefined') {
+        if (ename =="Naval Base") delete window["EXTRA_NAVALBASE"]
     } 
   }
   extras = {};
@@ -654,11 +656,11 @@ function handle_ruleset_control(packet)
    * Some ruleset packets don't have handlers *yet*. Remember to clean up
    * when they are implemented:
    *   handle_ruleset_government_ruler_title
-   *   handle_ruleset_base
+   *   handle_ruleset_base        <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
    *   handle_ruleset_choices
    *   handle_ruleset_road
    *   handle_ruleset_disaster
-   *   handle_ruleset_extra_flag
+   *   handle_ruleset_extra_flag   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
    *   handle_ruleset_trade
    *   handle_ruleset_unit_bonus
    *   handle_ruleset_unit_flag
@@ -1765,6 +1767,12 @@ function handle_ruleset_extra(packet)
      //some rulesets don't have this extra so this checks if it's defined first
     if (packet['name'] == "Fort") window["EXTRA_FORT"] = packet['id']; /////
   } 
+  /*
+  if (typeof EXTRA_NAVALBASE !== 'undefined') { //makes sure it's defined first
+    if (packet['name'] == "Naval Base") window["EXTRA_NAVALBASE"] = packet['id']; /////
+  } */
+
+  if (packet['name'] == "Naval Base") window["EXTRA_NAVALBASE"] = packet['id']; /////
   if (packet['name'] == "Railroad") window["EXTRA_RAIL"] = packet['id'];
   if (packet['name'] == "Oil Well") window["EXTRA_OIL_WELL"] = packet['id'];
   if (packet['name'] == "Minor Tribe Village") window["EXTRA_HUT"] = packet['id'];
