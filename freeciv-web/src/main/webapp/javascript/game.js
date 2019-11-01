@@ -145,15 +145,18 @@ function update_game_status_panel() {
 
       status_html += "<span style='cursor:pointer;' onclick='javascript:show_revolution_dialog()'>";
       
-      if (client.conn.playing['government'] == 0) status_html += "<img class='lowered_gov' src='/images/gov.anarchy.png' title='Anarchy'>";
-      else if (client.conn.playing['government'] == 1) status_html += "<img class='lowered_gov' src='/images/gov.despotism.png' title='Despotism'>";
-      else if (client.conn.playing['government'] == 2) status_html += "<img class='lowered_gov' src='/images/gov.monarchy.png' title='Monarchy'>";
-      else if (client.conn.playing['government'] == 3) status_html += "<img class='lowered_gov' src='/images/gov.communism.png' title='Communism'>";
-      else if (client.conn.playing['government'] == 4) status_html += "<img class='lowered_gov' src='/images/gov.republic.png' title='Republic'>";
-      else if (client.conn.playing['government'] == 5) status_html += "<img class='lowered_gov' src='/images/gov.democracy.png' title='Democracy'>";
-      else if (client.conn.playing['government'] == 6) status_html += "<img class='lowered_gov' src='/images/gov.fundamentalism.png' title='Fundamentalism'>";
-      else if (client.conn.playing['government'] == 7) status_html += "<img class='lowered_gov' src='/images/gov.tribalism.png' title='Tribalism'>";
-      else if (client.conn.playing['government'] == 8) status_html += "<img class='lowered_gov' src='/images/gov.federation.png' title='Federation'>";
+      var gov_name = governments[client.conn.playing['government']]['name'];
+      
+      if (gov_name == "Anarchy") status_html += "<img class='lowered_gov' src='/images/gov.anarchy.png' title='Anarchy'>";
+      else if (gov_name == "Despotism") status_html += "<img class='lowered_gov' src='/images/gov.despotism.png' title='Despotism'>";
+      else if (gov_name == "Monarchy") status_html += "<img class='lowered_gov' src='/images/gov.monarchy.png' title='Monarchy'>";
+      else if (gov_name == "Communism") status_html += "<img class='lowered_gov' src='/images/gov.communism.png' title='Communism'>";
+      else if (gov_name == "Republic") status_html += "<img class='lowered_gov' src='/images/gov.republic.png' title='Republic'>";
+      else if (gov_name == "Democracy") status_html += "<img class='lowered_gov' src='/images/gov.democracy.png' title='Democracy'>";
+      else if (gov_name == "Fundamentalism") status_html += "<img class='lowered_gov' src='/images/gov.fundamentalism.png' title='Fundamentalism'>";
+      else if (gov_name.startsWith("Tribal")) status_html += "<img class='lowered_gov' src='/images/gov.tribalism.png' title='Tribalism'>";
+      else if (gov_name == "Federation") status_html += "<img class='lowered_gov' src='/images/gov.federation.png' title='Federation'>";
+      else status_html += "<img class='lowered_gov' src='/images/gov.despotism.png' title='"+gov_name+"'>"; // other gov/custom ruleset
     }
     status_html += "</span>";
 
