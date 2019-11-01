@@ -338,7 +338,7 @@ req2     = "Construction"
 flags    = ""
 graphic     = "a.engineering"
 graphic_alt = "-"
-helptext = _("Allows Canals.")
+helptext = _("Allows Canals and Naval Bases.")
 
 [advance_environmentalism]
 name     = _("Environmentalism")
@@ -460,7 +460,7 @@ req2     = "Literacy"
 flags    = ""
 graphic     = "a.invention"
 graphic_alt = "-"
-helptext = _("+2 Fortress vision.")
+helptext = _("+2 vision for Fortress and ships in Naval Base.")
 
 [advance_iron_working]
 name     = _("Iron Working")

@@ -677,8 +677,8 @@ helptext      = _("\
 Workers can improve terrain tiles. See the manual on Terrain for details.\
 "), _("\
 Masonry lets Workers build Forts. Construction lets them build Fortresses and\
- Oil Wells. Engineering lets them build Canals. Radio lets them build Airbases\
- and Buoys, which Settlers cannot. Workers must be on a ship to build Buoys.\
+ Oil Wells. Engineering lets them build Canals and Naval Bases. Radio lets them\
+ build Airbases and Buoys, which Settlers cannot. Workers must be on a ship to build Buoys.\
 ")
 
 [unit_engineers]
@@ -3140,7 +3140,7 @@ Most covert actions may be done in peacetime, but cause incidents which may\
  - Investigate City.\n\
  - Sabotage City: Destroy production or a random building.\n\
  - Steal Tech: A random tech may be stolen, creating an incident.\n\
-  - Steal Map Fragments.\n\
+ - Steal Map Fragments.\n\
  - Incite Revolt: Bribe a city to join your empire and acquire the units the city supports.\n\
 "), _("\
 Many rules alter odds & legality. Read the manual on Diplomacy.\

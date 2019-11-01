@@ -321,7 +321,7 @@ reqs    =
     { "type", "name", "range", "present"
       "Extra", "Fortress", "Local", TRUE
       "UnitFlag", "FortressBuster", "Local", TRUE 
-    }    
+    }
 
 ; ****** ^^ defense_bonus_correctives ^^ *************************************
 
@@ -335,7 +335,6 @@ reqs    =
       "Tech", "Invention", "Player"
       "UnitClass", "Land", "Local"
     }
-    
 [effect_fortress_vision_1]   ;Marines, AAA
 type    = "Unit_Vision_Radius_Sq"
 value   = 8
@@ -345,7 +344,6 @@ reqs    =
       "Tech", "Invention", "Player"
       "UnitClass", "LandAirSea", "Local"
     }
-    
 [effect_fortress_vision_2]     ;Knights
 type    = "Unit_Vision_Radius_Sq"
 value   = 8
@@ -399,58 +397,87 @@ reqs    =
       "Extra", "Airbase", "Tile"
       "UnitClass", "Helicopter", "Local"
     }
-; *****************************************************************
-; Marines can attack unreachable air and sea at a -50% penalty. However,
-; when air is reachable by ALL land units, Marines should not be the
-; only land unit which suffers a penalty. These effects cancel the penalties 
-; in those situations. This awaits 3.x release of reqs for target/defender unit.
-;[effect_marines_vs_airprotect_city_fix] 
-;type    = "Attack_Bonus"
-;value	= 100 ;cancels out equivalent defence bonus for being out in the field
-;reqs	=
-;    { "type", "name", "range", "present"
-;      ;"TargetUnitClass", "AirProtect", "Local", TRUE
-;      "CityTile", "Center", "Local", TRUE
-;      "UnitType", "Marines", "Local", TRUE
-;    }
-;[effect_marines_vs_airprotect_airbase_fix] 
-;type    = "Attack_Bonus"
-;value	= 100 ;cancels out equivalent defence bonus for being out in the field
-;reqs	=
-;    { "type", "name", "range", "present"
-;      "TargetUnitClass", "AirProtect", "Local", TRUE
-;      "Extra", "Airbase", "Local", TRUE
-;      "UnitType", "Marines", "Local", TRUE
-;    }
-;[effect_marines_vs_air_city_fix] ; prop-engine Bombers
-;type    = "Attack_Bonus"
-;value	= 200 ;cancels out equivalent defence bonus for being out in the field
-;reqs	=
-;    { "type", "name", "range", "present"
-;      "UnitClass", "Air", "Local", TRUE
-;      "CityTile", "Center", "Local", TRUE
-;      "UnitType", "Marines", "Local", TRUE
-;    }
-;[effect_marines_vs_air_airbase_fix] ; prop-engine Bombers
-;type    = "Attack_Bonus"
-;value	= 200 ;cancels out equivalent defence bonus for being out in the field
-;reqs	=
-;    { "type", "name", "range", "present"
-;      "UnitClass", "Air", "Local", TRUE
-;      "Extra", "Airbase", "Local", TRUE
-;      "UnitType", "Marines", "Local", TRUE
-;    }
-;[effect_marines_city_fix] 
-;type    = "Attack_Bonus"
-;value	= 100 ;cancels out equivalent defence bonus sea units against marines when out at sea 
-;reqs	=
-;    { "type", "name", "range", "present"
-;      "UnitClass", "Sea", "Local", TRUE
-;      "CityTile", "Center", "Local", TRUE
-;      "UnitType", "Marines", "Local", TRUE
-;    }
-; ********************************************************
+; ****************** NAVAL BASE ******************************
+[effect_navbase_vision]
+type    = "Unit_Vision_Radius_Sq"
+value   = 8   
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Naval Base", "tile"
+      "Tech", "Invention", "Player"
+      "UnitClass", "Trireme", "Local"
+    }
+[effect_navbase_vision1]
+type    = "Unit_Vision_Radius_Sq"
+value   = 8   
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Naval Base", "tile"
+      "Tech", "Invention", "Player"
+      "UnitClass", "RiverShip", "Local"
+    }
+[effect_navbase_vision2]
+type    = "Unit_Vision_Radius_Sq"
+value   = 8   
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Naval Base", "tile"
+      "Tech", "Invention", "Player"
+      "UnitClass", "Sea", "Local"
+    }
 
+; No 1.33 bonus for certain units
+[effect_navbase_fortbuster]
+type    = "Attack_Bonus"
+value   = 33 ;Cancel defender's 1.33x with attacker getting 1.33x 
+reqs    =
+    { "type", "name", "range", "present"
+      "Extra", "Fortress", "Local", TRUE
+      "UnitFlag", "FortBuster", "Local", TRUE 
+    }
+[effect_navbase_fortressbuster]
+type    = "Attack_Bonus"
+value   = 33 ;Cancel defender's 1.33x with attacker getting 1.33x 
+reqs    =
+    { "type", "name", "range", "present"
+      "Extra", "Fortress", "Local", TRUE
+      "UnitFlag", "FortressBuster", "Local", TRUE 
+    }
+
+; Naval Base HP regen
+[effect_navbase_hp_regen]
+type    = "HP_Regen"
+value   = 20
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Naval Base", "Tile"
+      "UnitClass", "Sea", "Local"
+    }
+[effect_navbase_hp_regen_1]
+type    = "HP_Regen"
+value   = 20
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Naval Base", "Tile"
+      "UnitClass", "RiverShip", "Local"
+    }
+[effect_navbase_hp_regen_2]
+type    = "HP_Regen"
+value   = 20
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Naval Base", "Tile"
+      "UnitClass", "Trireme", "Local"
+    }
+[effect_navbase_hp_regen_3]
+type    = "HP_Regen"
+value   = 20
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Naval Base", "Tile"
+      "UnitClass", "Submarine", "Local"
+    }
+; ***********************************************************
 
 ; Base vision range - radius of vision is sqrt(5) = 2.24
 [effect_city_vision]

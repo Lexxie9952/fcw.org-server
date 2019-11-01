@@ -1481,7 +1481,7 @@ rmact_gfx_alt  = "-"
 reqs           =
     { "type", "name", "range", "present", "quiet"
       "TerrainFlag", "Low Land", "Local", TRUE, FALSE
-      "TerrainClass", "Oceanic", "Adjacent", TRUE, FALSE
+      "TerrainClass", "Oceanic", "CAdjacent", TRUE, FALSE
       "Tech", "Engineering", "Player", TRUE, FALSE
       "UnitFlag", "CanFortress", "Local", TRUE, FALSE
       "CityTile", "Center", "Local", FALSE, TRUE
