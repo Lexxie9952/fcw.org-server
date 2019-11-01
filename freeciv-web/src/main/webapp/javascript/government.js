@@ -31,6 +31,19 @@ var REPORT_ACHIEVEMENTS = 3;
 **************************************************************************/
 function show_revolution_dialog()
 {
+  const revo_height = 680;  // default height of dialog for normal screen
+  var extended_height = 0;  // extended height for rulesets with lots of verbose titles and govs
+  var revo_width = "490";   // more govs means more verbose differentiation (e.g. civ2civ3)
+  var num_govs = Object.keys(governments).length;
+
+  if (num_govs > 7) {
+    extended_height = 48 * (num_govs - 7);
+    revo_width = "780"; // extra horizontal to accomodate more verbosity
+  }
+  if (revo_height + extended_height >= $(window).height()) {
+    extended_height = $(window).height() - revo_height - 4; 
+  }
+
   var id = "#revolution_dialog";
   $(id).remove();
   $("<div id='revolution_dialog'></div>").appendTo("div#game_page");
@@ -49,8 +62,8 @@ function show_revolution_dialog()
   $(id).dialog({
 			bgiframe: true,
 			modal: true,
-			width: is_small_screen() ? "99%" : "450",
-			height: is_small_screen() ? $(window).height() - 40 : 600,
+			width: is_small_screen() ? "99%" : revo_width,
+			height: is_small_screen() ? $(window).height() - 40 : (revo_height+extended_height),
 			  buttons: {
 				"Start revolution!" : function() {
 					start_revolution();
@@ -129,6 +142,11 @@ function update_govt_dialog()
 
   }
   $(".govt_button").tooltip();
+  $(".govt_button").tooltip({
+    open: function (event, ui) {
+        ui.tooltip.css({"max-width":"100%", "width":"88%", "margin-top":"55px", "margin-left":"-95px", "overflow":"visible"});
+    }
+});
 
 }
 

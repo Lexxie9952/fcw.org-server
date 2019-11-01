@@ -871,6 +871,11 @@ button {
   background-image: url(/images/gov.fundamentalism.png) !important; 
 }
 
+.Tribalism,
+.Tribal {
+  background-image: url(/images/gov.tribalism.png) !important; 
+}
+
 .Tribalism {
   background-image: url(/images/gov.tribalism.png) !important; 
 }
