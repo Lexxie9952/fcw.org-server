@@ -1796,18 +1796,6 @@ function fill_layer1_sprite_array(ptile, pcity)
 
   /* We don't draw the bases if there's a city */
   if (pcity == null) {
-    if (tile_has_extra(ptile, EXTRA_FORTRESS)) {
-      result_sprites.push({"key" : "base.fortress_bg",
-                           "offset_y" : -normal_tile_height / 2});
-    }
-    // We can only draw the Fort if there's not a Fortress (which hides it):
-    // But we also have to check if it's defined because some rulesets don't define it
-    else if (typeof EXTRA_FORT !== 'undefined')  { 
-      if (tile_has_extra(ptile, EXTRA_FORT)) {   
-        result_sprites.push({"key" : "base.outpost_bg",
-                             "offset_y" : -normal_tile_height / 2});
-      }
-    } 
     if (typeof EXTRA_NAVALBASE !== 'undefined')  { 
       if (tile_has_extra(ptile, EXTRA_NAVALBASE)) {
         // draw river outlets to make connective channel exits to other nearby water
@@ -1816,6 +1804,19 @@ function fill_layer1_sprite_array(ptile, pcity)
         
         result_sprites.push({"key" : "base.navalbase_bg",
                               "offset_y" : -normal_tile_height / 2});
+        return result_sprites;
+      }
+    }
+    if (tile_has_extra(ptile, EXTRA_FORTRESS)) {
+      result_sprites.push({"key" : "base.fortress_bg",
+                           "offset_y" : -normal_tile_height / 2});
+    }
+    // We can only draw the Fort if there's not a Naval Base or Fortress (which hide it):
+    // But we also have to check if it's defined because some rulesets don't define it
+    else if (typeof EXTRA_FORT !== 'undefined')  { 
+      if (tile_has_extra(ptile, EXTRA_FORT)) {   
+        result_sprites.push({"key" : "base.outpost_bg",
+                             "offset_y" : -normal_tile_height / 2});
       }
     } 
   }
@@ -1859,6 +1860,13 @@ function fill_layer3_sprite_array(ptile, pcity) ///// this should be drawn simul
 
   /* We don't draw the bases if there's a city */
   if (pcity == null) {
+    if (typeof EXTRA_NAVALBASE !== 'undefined')  { 
+      if (tile_has_extra(ptile, EXTRA_NAVALBASE)) {
+        result_sprites.push({"key" : "base.navalbase_fg",
+                              "offset_y" : -normal_tile_height / 2});
+        return result_sprites;
+      }
+    }
     if (tile_has_extra(ptile, EXTRA_FORTRESS)) {
       result_sprites.push({"key" : "base.fortress_fg",
                            "offset_y" : -normal_tile_height / 2});
@@ -1870,13 +1878,7 @@ function fill_layer3_sprite_array(ptile, pcity) ///// this should be drawn simul
         result_sprites.push({"key" : "base.outpost_fg",
                            "offset_y" : -normal_tile_height / 2});
       }
-    } 
-    if (typeof EXTRA_NAVALBASE !== 'undefined')  { 
-      if (tile_has_extra(ptile, EXTRA_NAVALBASE)) {
-        result_sprites.push({"key" : "base.navalbase_fg",
-                              "offset_y" : -normal_tile_height / 2});
-      }
-    } 
+    }  
   }
 
   return result_sprites;
