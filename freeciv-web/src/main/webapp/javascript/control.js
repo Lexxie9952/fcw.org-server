@@ -24,6 +24,9 @@
 var stripChar = new RegExp(String.fromCharCode(3), "g")
 var show_order_buttons = 1;  // 1=most common, 2=all orders, 3=hide panels
 
+const update_focus_delay = 500;
+const update_mouse_cursor_delay = 600;
+
 var mouse_x;
 var mouse_y;
 var prev_mouse_x;
@@ -1065,6 +1068,7 @@ function update_unit_order_commands()
   $("#order_canal").hide();
   $("#order_well").hide();
   $("#order_fortress").hide();
+  $("#order_navalbase").hide();
   $("#order_road").hide();  
   $("#order_railroad").hide();
   $("#order_mine").hide();
@@ -1183,8 +1187,7 @@ function update_unit_order_commands()
 
     // All Settler types have similar types or orders and rules for whether to show those orders:
     // TO DO:  this should be checking for the FLAG "Settlers" in the ptype which indicates who can do the follow build/road/mine/etc. actions:
-    if (ptype['name'] == "Settlers" || ptype['name'] == "Workers"
-        || ptype['name'] == "Engineers") {
+    if (ptype['name'] == "Settlers" || ptype['name'] == "Workers" || ptype['name'] == "Engineers") {
 
       if (ptype['name'] == "Settlers") unit_actions["autosettlers"] = {name: "Auto settler (A)"};
       if (ptype['name'] == "Workers") unit_actions["autosettlers"] = {name: "Auto workers (A)"};
@@ -1270,8 +1273,8 @@ function update_unit_order_commands()
         $("#order_irrigate").hide();
         $("#order_build_farmland").hide();
       }
-    
-      ///// mp2 rules allow building Forts (Masonry) as pre-req before Fortress (Construction):
+
+      // mp2 specific bases
       if (ruleset_control['name'] == "Multiplayer-Evolution ruleset") {
         // Masonry + No Fort on tile = show order to make Fort
         if (player_invention_state(client.conn.playing, tech_id_by_name('Masonry')) == TECH_KNOWN && !tile_has_extra(ptile, EXTRA_FORT) ) {
@@ -1283,7 +1286,14 @@ function update_unit_order_commands()
       if (player_invention_state(client.conn.playing, tech_id_by_name('Construction')) == TECH_KNOWN && !tile_has_extra(ptile, EXTRA_FORTRESS)) {
         unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
         $("#order_fortress").show();
-      }
+      } else // Naval Base
+      if ( typeof EXTRA_NAVALBASE !== 'undefined'
+           && player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN 
+           && can_build_naval_base(punit,ptile) ) {
+
+            unit_actions["navalbase"] = {name: "Naval Base (Shift-F)"};
+            if (show_order_buttons==2) $("#order_navalbase").show(); // not frequently used button
+      }   
 
       if (player_invention_state(client.conn.playing, tech_id_by_name('Radio')) == TECH_KNOWN) {
         unit_actions["airbase"] = {name: string_unqualify(terrain_control['gui_type_base1']) + " (E)"};
@@ -2369,7 +2379,7 @@ function do_map_click(ptile, qtype, first_time_called)
     }
 
     deactivate_goto(true);
-    //update_unit_focus();  true in the line above advances unit focus after 700ms
+    //update_unit_focus();  true in the line above advances unit focus after update_focus_delay # milliseconds
 
   }  // END OF GO TO HANDLING ----------------------------------------------------------------------------------------------
    else if (paradrop_active && current_focus.length > 0) {
@@ -2716,7 +2726,8 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       if (ctrl) {
         the_event.stopPropagation();
         fill_national_border = !fill_national_border;
-      } else request_unit_build_city();
+      }
+    else request_unit_build_city();
     break;
 
     case 'C':
@@ -3159,12 +3170,15 @@ function handle_context_menu_callback(key)
       key_unit_irrigate();
       break;
 
+    case "fort": 
     case "fortress":
       key_unit_fortress();
       break;
-    case "fort": 
-      key_unit_fortress();
 
+    case "navalbase":
+      key_unit_naval_base();
+      break;
+  
     case "airbase":
       key_unit_airbase();
       break;
@@ -3322,7 +3336,7 @@ function deactivate_goto(will_advance_unit_focus)
   goto_last_action = ACTION_COUNT;
 
   // update focus to next unit after 600ms.
-  if (will_advance_unit_focus) setTimeout(update_unit_focus, 600);
+  if (will_advance_unit_focus) setTimeout(update_unit_focus, update_focus_delay);
   /* if leaving goto mode but not advancing, restore unit dialog to
      display unit stats instead of 'turns for goto' */
   else update_active_units_dialog(); 
@@ -3368,7 +3382,7 @@ function key_unit_auto_explore()
     if (punit['movesleft'] > 0 && punit['owner'] == client.conn.playing.playerno) unit_move_sound_play(punit);
   }
 
-  setTimeout(update_unit_focus, 700);
+  setTimeout(update_unit_focus, update_focus_delay);
 }
 
 /**************************************************************************
@@ -3501,14 +3515,14 @@ function key_unit_load()
           "transporter_tile" : punit['tile']
         };
         send_request(JSON.stringify(packet));
-        setTimeout(update_active_units_dialog, 600);
+        setTimeout(update_active_units_dialog, update_focus_delay);
       }
     }
   }
   // Don't advance focus if more than one dialog open, it would reset our focus units
   // which we need for upcoming dialogs for each additional unit
   if (funits.length<2)
-    setTimeout(advance_unit_focus, 700);
+    setTimeout(advance_unit_focus, update_focus_delay);
 }
 
 /**************************************************************************
@@ -3535,7 +3549,7 @@ function key_unit_unload()
       send_request(JSON.stringify(packet));
     }
   }
-  setTimeout(advance_unit_focus, 700);
+  setTimeout(advance_unit_focus, update_focus_delay);
 }
 
 /**************************************************************************
@@ -3717,7 +3731,7 @@ function key_unit_idle()
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
   }
-  setTimeout(update_unit_focus, 700);
+  setTimeout(update_unit_focus, update_focus_delay);
 }
 
 /**************************************************************************
@@ -3741,7 +3755,7 @@ function key_unit_sentry()
     }
     else request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
   }
-  setTimeout(update_unit_focus, 700);
+  setTimeout(update_unit_focus, update_focus_delay);
 }
 
 /**************************************************************************
@@ -3754,7 +3768,7 @@ function key_unit_fortify()
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_FORTIFYING, EXTRA_NONE);
   }
-  setTimeout(update_unit_focus, 700);
+  setTimeout(update_unit_focus, update_focus_delay);
 }
 
 /**************************************************************************
@@ -3762,13 +3776,18 @@ function key_unit_fortify()
 **************************************************************************/
 function key_unit_fortress()
 {
+  var navbase_rules = (typeof EXTRA_NAVALBASE !== undefined);
+
   var funits = get_units_in_focus();
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
-    /* EXTRA_NONE -> server decides */
-    request_new_unit_activity(punit, ACTIVITY_BASE, EXTRA_NONE);
+    var ptile = tiles[punit['tile']]; 
+    var activity = EXTRA_NONE;     /* EXTRA_NONE -> server decides */
+    if (navbase_rules && tile_has_extra(ptile, EXTRA_FORTRESS)) activity=EXTRA_NAVALBASE;
+
+    request_new_unit_activity(punit, ACTIVITY_BASE, activity);
   }
-  setTimeout(update_unit_focus, 700);
+  setTimeout(update_unit_focus, update_focus_delay);
 }
 
 /**************************************************************************
@@ -3781,7 +3800,7 @@ function key_unit_airbase()
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_BASE, EXTRA_AIRBASE);
   }
-  setTimeout(update_unit_focus, 700);
+  setTimeout(update_unit_focus, update_focus_delay);
 }
 
 /**************************************************************************
@@ -3795,7 +3814,7 @@ function key_unit_irrigate()
     /* EXTRA_NONE -> server decides */
     request_new_unit_activity(punit, ACTIVITY_IRRIGATE, EXTRA_NONE);
   }
-  setTimeout(update_unit_focus, 700);
+  setTimeout(update_unit_focus, update_focus_delay);
 }
 
 /**************************************************************************
@@ -3808,7 +3827,7 @@ function key_unit_pollution()
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_POLLUTION, EXTRA_NONE);
   }
-  setTimeout(update_unit_focus, 700);
+  setTimeout(update_unit_focus, update_focus_delay);
 }
 
 
@@ -3854,8 +3873,8 @@ function key_unit_upgrade()
     };
     send_request(JSON.stringify(packet));
   }
-  setTimeout(update_active_units_dialog, 600);
-  setTimeout(update_unit_focus, 700);
+  setTimeout(update_active_units_dialog, update_focus_delay*.85);
+  setTimeout(update_unit_focus, update_focus_delay);
 }
 
 /**************************************************************************
@@ -3892,7 +3911,7 @@ function key_unit_fallout()
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_FALLOUT, EXTRA_NONE);
   }
-  setTimeout(update_unit_focus, 700);
+  setTimeout(update_unit_focus, update_focus_delay);
 }
 
 /**************************************************************************
@@ -3905,7 +3924,7 @@ function key_unit_transform()
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_TRANSFORM, EXTRA_NONE);
   }
-  setTimeout(update_unit_focus, 700);
+  setTimeout(update_unit_focus, update_focus_delay);
 }
 
 /**************************************************************************
@@ -3926,7 +3945,7 @@ function key_unit_pillage()
       }
     }
   }
-  setTimeout(update_unit_focus, 700);
+  setTimeout(update_unit_focus, update_focus_delay);
 }
 
 /**************************************************************************
@@ -3940,7 +3959,23 @@ function key_unit_mine()
     /* EXTRA_NONE -> server decides */
     request_new_unit_activity(punit, ACTIVITY_MINE, EXTRA_NONE);
   }
-  setTimeout(update_unit_focus, 700);
+  setTimeout(update_unit_focus, update_focus_delay);
+}
+
+/**************************************************************************
+ Check whether a unit can build a maglev in a tile.
+**************************************************************************/
+function can_build_maglev(punit, ptile)
+{
+  return ((typeof EXTRA_MAGLEV !== "undefined")
+      &&  (punit != null && ptile != null)
+      &&  (!tile_has_extra(ptile, EXTRA_MAGLEV))
+      &&  (tile_has_extra(ptile, EXTRA_RAIL))
+      &&  (unit_can_do_action(punit, ACTION_ROAD))
+      &&  (player_invention_state(client.conn.playing, tech_id_by_name('Superconductors')) == TECH_KNOWN)
+      &&  ((!tile_has_extra(ptile, EXTRA_RIVER))
+           || (player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) == TECH_KNOWN))
+         );
 }
 
 /**************************************************************************
@@ -3975,7 +4010,7 @@ function key_unit_well()
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['River']['id']);
     }
   }
-  setTimeout(update_unit_focus, 700);
+  setTimeout(update_unit_focus, update_focus_delay);
 }
 
 /**************************************************************************
@@ -4076,6 +4111,43 @@ function can_irrigate(punit, ptile)
 }
 
 /**************************************************************************
+ Check whether a unit can build a naval base on a tile.
+**************************************************************************/
+function can_build_naval_base(punit, ptile)
+{
+  if (!tile_has_extra(ptile, EXTRA_FORTRESS)) return false; 
+
+  var is_lowland = (tile_terrain(ptile)['name'] != 'Hills' 
+                   && tile_terrain(ptile)['name'] != 'Mountains');
+  
+  var water_near = false;
+  
+  /* Check if there is CAdjacent ocean/deep ocean/lake */
+  for (var dir = 1; dir < 7; dir++) {
+    if (dir==2 || dir==5)
+      continue; // only check cardinal dir 1,3,4,6 (N,W,E,S)
+    // check for water:
+    var tile1 = mapstep(ptile, dir);
+    if (tile1 != null) {
+        if (terrains[tile1['terrain']]['name'] == "Lake"
+        || terrains[tile1['terrain']]['name'] == "Ocean"
+        || terrains[tile1['terrain']]['name'] == "Deep Ocean" ) {
+          water_near = true;        
+          break;
+        }
+    }
+  }               
+
+  return ((typeof EXTRA_NAVALBASE !== "undefined")
+      &&  (punit != null && ptile != null)
+      &&  (unit_can_do_action(punit, ACTION_BASE))
+      && (is_lowland) 
+      && (water_near)
+      &&  (player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN)
+         );
+}
+
+/**************************************************************************
  Tell the units in focus to build canal.
 **************************************************************************/
 function key_unit_canal()
@@ -4090,23 +4162,41 @@ function key_unit_canal()
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Canal']['id']);
     }
   }
-  setTimeout(update_unit_focus, 700);
+  setTimeout(update_unit_focus, update_focus_delay);
 }
 
 /**************************************************************************
- Check whether a unit can build a maglev in a tile.
+ Tell the units in focus to build canal.
 **************************************************************************/
-function can_build_maglev(punit, ptile)
+function key_unit_naval_base()
 {
-  return ((typeof EXTRA_MAGLEV !== "undefined")
-      &&  (punit != null && ptile != null)
-      &&  (!tile_has_extra(ptile, EXTRA_MAGLEV))
-      &&  (tile_has_extra(ptile, EXTRA_RAIL))
-      &&  (unit_can_do_action(punit, ACTION_ROAD))
-      &&  (player_invention_state(client.conn.playing, tech_id_by_name('Superconductors')) == TECH_KNOWN)
-      &&  ((!tile_has_extra(ptile, EXTRA_RIVER))
-           || (player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) == TECH_KNOWN))
-         );
+  if (typeof EXTRA_NAVALBASE === "undefined") return;
+
+  /* Wonderful HACK:
+      FC 3.0 server checks if a conflicting action is being done on the tile 
+      BEFORE changing action; thus a unit can't change to a new action that
+      conflicts with the old action you try to replace (how genius!). Because
+      naval base conflicts with airbase,irrigation,and mine, it's often
+      falsely "illegal" to change your mind. Here we fix half the cases 
+      by canceling the current action first. */
+  const funits = get_units_in_focus();
+  for (var i = 0; i < funits.length; i++) {
+    const punit = funits[i];
+    request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
+  }
+
+
+  // Now send orders after brief delay to let the cancelled orders stick:
+  setTimeout( function() {
+    for (var i = 0; i < funits.length; i++) {
+      const punit = funits[i];
+      const ptile = index_to_tile(punit['tile']);
+      if (can_build_naval_base(punit, ptile)) {
+        request_new_unit_activity(punit, ACTIVITY_BASE, EXTRA_NAVALBASE);
+      }
+    }},     200);
+
+  setTimeout(update_unit_focus, update_focus_delay);
 }
 
 /**************************************************************************
@@ -4129,7 +4219,7 @@ function key_unit_road()
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Maglev']['id']);
     }
   }
-  setTimeout(update_unit_focus, 700);
+  setTimeout(update_unit_focus, update_focus_delay);
 }
 
 /**************************************************************************
@@ -4234,7 +4324,7 @@ function key_unit_auto_settle()
     var punit = funits[i];
     request_unit_autosettlers(punit);
   }
-  setTimeout(update_unit_focus, 700);
+  setTimeout(update_unit_focus, update_focus_delay);
 }
 
 
@@ -4370,8 +4460,8 @@ function(){
 
     send_request(JSON.stringify(packet));
   }
-  setTimeout(update_unit_focus, 700);
-  setTimeout(update_active_units_dialog, 800);
+  setTimeout(update_unit_focus, update_focus_delay);
+  setTimeout(update_active_units_dialog, update_focus_delay+100);
 });
 
 }
@@ -4557,7 +4647,7 @@ function request_goto_path(unit_id, dst_x, dst_y)
     send_request(JSON.stringify(packet));
     current_goto_turns = null;
     $("#unit_text_details").html("Choose unit goto");
-    setTimeout(update_mouse_cursor, 700);
+    setTimeout(update_mouse_cursor, update_mouse_cursor_delay);
   } else {
     update_goto_path(goto_request_map[unit_id + "," + dst_x + "," + dst_y]);
   }
