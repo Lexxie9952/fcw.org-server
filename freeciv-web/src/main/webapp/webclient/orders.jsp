@@ -15,7 +15,7 @@
     <a href="#" onclick="key_unit_airlift();"><img src="/images/orders/airlift_disabled.png" name="airlift_button" alt="" border="0" width="30" height="30"></a>
   </div>  
 
-  <div id="order_well" class="order_button" title="Dig well">
+  <div id="order_well" class="order_button" title="Dig well (R)">
     <a href="#" onclick="key_unit_well();"><img src="/images/orders/well.png" name="well_button" alt="" border="0" width="30" height="30"></a>
   </div>
 
@@ -85,6 +85,10 @@
 
   <div id="order_fortress" class="order_button" title="Build Fort (Shift-F)">
     <a href="#" onclick="key_unit_fortress();"><img src="/images/orders/fortress.png" name="fortress_button" alt="" border="0" width="30" height="30"></a>
+  </div>
+
+  <div id="order_navalbase" class="order_button" title="Build Naval Base (Shift-F)">
+    <a href="#" onclick="key_unit_naval_base();"><img src="/images/orders/navalbase.png" name="navbase_button" alt="" border="0" width="30" height="30"></a>
   </div>
 
   <div id="order_transform" class="order_button" title="Transform terrain (O)">
