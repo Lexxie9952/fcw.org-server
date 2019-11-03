@@ -29,7 +29,7 @@ function history_turn_notifications(turn, year)
 
   if turn == 85 then
   -- Philosophy no longer gives advances after 1600 AD
-    notify.all("<font color=#c00000>Philosophers around the world mourn the execution of Giordano Bruno. Philosophy no longer gives a bonus advance.</font>")
+    notify.all("<font color=#600000>Philosophers around the world mourn the execution of Giordano Bruno. Philosophy no longer gives a bonus advance.</font>")
     philosophy_possible = 0
   end
   
@@ -40,6 +40,7 @@ signal.connect("turn_begin", "history_turn_notifications")          --  ********
 -- Place Ruins at the location of the destroyed city.
 function city_destroyed_callback(city, loser, destroyer)
   city.tile:create_extra("Ruins", NIL)
+  city.tile:set_label(_("Ruins"))
   -- continue processing
   return false
 end
