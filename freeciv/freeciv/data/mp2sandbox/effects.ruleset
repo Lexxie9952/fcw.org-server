@@ -425,25 +425,6 @@ reqs    =
       "Tech", "Invention", "Player"
       "UnitClass", "Sea", "Local"
     }
-
-; No 1.33 bonus for certain units
-[effect_navbase_fortbuster]
-type    = "Attack_Bonus"
-value   = 33 ;Cancel defender's 1.33x with attacker getting 1.33x 
-reqs    =
-    { "type", "name", "range", "present"
-      "Extra", "Fortress", "Local", TRUE
-      "UnitFlag", "FortBuster", "Local", TRUE 
-    }
-[effect_navbase_fortressbuster]
-type    = "Attack_Bonus"
-value   = 33 ;Cancel defender's 1.33x with attacker getting 1.33x 
-reqs    =
-    { "type", "name", "range", "present"
-      "Extra", "Fortress", "Local", TRUE
-      "UnitFlag", "FortressBuster", "Local", TRUE 
-    }
-
 ; Naval Base HP regen
 [effect_navbase_hp_regen]
 type    = "HP_Regen"
@@ -514,6 +495,13 @@ value	= 99
 reqs	=
     { "type", "name", "range"
       "Gov", "Anarchy", "Player"
+    }
+[effect_upkeep_communism]
+type    = "Upkeep_Free"
+value   = 1
+reqs    =
+    { "type", "name", "range", "quiet"
+      "Gov", "Communism", "Player", TRUE
     }
 
 [effect_anarchy_upkeep_tech_free]
@@ -680,7 +668,7 @@ reqs   =
 
 [effect_upkeep_free_units_communism]
 type    = "Unit_Upkeep_Free_Per_City"
-value	= 3
+value	= 4
 reqs   =
     { "type", "name", "range"
       "Gov", "Communism", "Player"
@@ -835,7 +823,7 @@ reqs	=
 
 [effect_empire_size_step_5]
 type    = "Empire_Size_Step"
-value   = 12
+value   = 13
 reqs    =
     { "type",       "name",      "range"
       "Gov", "Fundamentalism", "Player"
@@ -2020,6 +2008,15 @@ reqs =
       "Building", "Palace", "City"
       "OutputType", "Shield", "Local"
     }
+[effect_palace_6a]
+type = "Output_Bonus"
+value  = 25
+reqs =
+    { "type", "name", "range"
+      "Gov", "Communism", "Player"
+      "Building", "Palace", "City"
+      "OutputType", "Shield", "Local"
+    }
 
 [effect_palace_7]
 type    = "Make_Happy"
@@ -2066,6 +2063,15 @@ reqs	=
       "Building", "Ecclesiastical Palace", "City"
     }
 
+[effect_ecclesiastical_palace_4]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Ecclesiastical Palace", "City", TRUE
+      "UnitType", "Fanatics", "Local", TRUE
+    }
+
 [effect_ecclesiastical_palace_gov_center]
 type    = "Gov_Center"
 value	= 1
@@ -2083,7 +2089,7 @@ reqs    =
       "Gov", "Despotism", "Player", TRUE, TRUE
       "Building", "Ecclesiastical Palace", "City", TRUE, FALSE
       "OutputType", "Gold", "Local", TRUE, FALSE
-      "Building", "Palace", "City", FALSE, FALSE
+;      "Building", "Palace", "City", FALSE, FALSE
     }
 
 [effect_ecclesiastical_palace_monarchy]
@@ -2094,7 +2100,17 @@ reqs    =
       "Gov", "Monarchy", "Player", TRUE, TRUE
       "Building", "Ecclesiastical Palace", "City", TRUE, FALSE
       "OutputType", "Gold", "Local", TRUE, FALSE
-      "Building", "Palace", "City", FALSE, FALSE
+;      "Building", "Palace", "City", FALSE, FALSE
+    }
+[effect_ecclesiastical_palace_fundamentalism]
+type    = "Output_Bonus"
+value   = 50
+reqs    =
+    { "type", "name", "range", "present", "quiet"
+      "Gov", "Fundamentalism", "Player", TRUE, TRUE
+      "Building", "Ecclesiastical Palace", "City", TRUE, FALSE
+      "OutputType", "Gold", "Local", TRUE, FALSE
+ ;     "Building", "Palace", "City", FALSE, FALSE
     }
 
 [effect_ecclesiastical_palace_culture]
@@ -2764,6 +2780,16 @@ reqs	=
     { "type", "name", "range"
       "Building", "A.Smith's Trading Co.", "Player"
     }
+;    
+;[effect_asmiths_communism]
+;type    = "Upkeep_Free"
+;value   = 2
+;reqs    =
+;    { "type", "name", "range", "quiet"
+;      "Building", "A.Smith's Trading Co.", "Player"
+;      "Gov", "Communism", "Player", TRUE
+;    }
+;
 
 [effect_colossus]
 type    = "Output_Inc_Tile"
@@ -3648,7 +3674,7 @@ reqs    =
 
 [effect_fundamentalism_unit_upkeep]
 type    = "Upkeep_Factor"
-value   = 2
+value   = 1
 reqs    =
     { "type", "name", "range"
       "Gov", "Fundamentalism", "Player"
@@ -3940,6 +3966,15 @@ reqs	=
       "DiplRel", "War", "Local", FALSE
     }
 
+[effect_incident_success_capture_unit]
+type	= "Casus_Belli_Success"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Capture Units", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
+
 [effect_incident_success_sabotage_unit]
 type	= "Casus_Belli_Success"
 value	= 1
@@ -4057,4 +4092,15 @@ reqs    =
       "type", "name", "range", "present"
       "UnitFlag", "Well-Digger", "Local", TRUE
       "Tech", "Pottery",  "Player", TRUE
+    }
+
+;Can't give orders to Proletarians unless communist.
+[effect_proletarian_movement]
+type    = "Move_Bonus"
+value	  = -2
+reqs    =
+    {
+      "type", "name", "range", "present"
+      "UnitType", "Proletarians", "Local", TRUE
+      "Gov", "Communism", "Player", FALSE
     }

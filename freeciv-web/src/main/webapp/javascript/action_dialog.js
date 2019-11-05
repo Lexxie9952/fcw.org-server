@@ -501,6 +501,18 @@ function popup_action_selection(actor_unit, action_probabilities,
   $(id).attr("title",
              "Action for " + unit_types[actor_unit['type']]['name']
              + ":");
+      
+  // THIS SECTION ALLOWS OVERRIDE NAMES for completely different types
+  // of so-called Bombard behaviours           
+  if (unit_types[actor_unit['type']]['name']=="Fanatics") {
+    for (button_id in buttons) {
+      if (buttons[button_id].text == "Ranged Attack (100%)") {
+        buttons[button_id].text = "Skirmish Assault (100%)"
+      }
+    }
+  }
+  //--------------------------------------------------------------------
+
   $(id).dialog({
       bgiframe: true,
       modal: true,

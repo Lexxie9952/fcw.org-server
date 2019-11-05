@@ -157,6 +157,14 @@ function update_govt_dialog()
 function start_revolution()
 {
   if (requested_gov != -1) {
+      for (var unit_id in units) {
+        punit = units[unit_id];
+        if (punit['owner'] == client.conn.playing.playerno) {
+          if (punit['activity']==ACTIVITY_CONVERT) {
+            request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
+          }
+        }    
+      }
     send_player_change_government(requested_gov);
     requested_gov = -1;
   }

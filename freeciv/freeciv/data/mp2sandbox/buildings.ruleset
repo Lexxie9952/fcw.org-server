@@ -631,12 +631,12 @@ sound		= "b_palace"
 sound_alt	= "b_generic"
 helptext	= _("\
 Makes a city the capital of your nation.\
- Corruption and waste in other cities is related to how far away\
- from the capital they are (except under Democracy or\
+ Corruption and waste in cities increases with distance\
+ from the capital (except under Democracy or\
  Communism.) A Palace makes corruption and waste in your capital\
  half of what it would otherwise be.\
 "), _("\
-The cost of inciting a revolt depends on the distance of the city from the\
+The cost of inciting a revolt decreases with distance from the\
  capital. The capital cannot be incited to revolt, and reduces the chance\
  of enemy agents defeating your agents by 50%. Attempts to sabotage buildings\
  in your capital are also reduced by 50%.\
@@ -650,8 +650,8 @@ If the capital is in a dangerous location, or a more central capital\
  by rebuilding it in another city.\
 "),
 _("\
-Under Despotism the city containing the palace gains a +75%\
- production bonus, and under Monarchy a +50% production bonus.\
+The city containing the Palace receives a production bonus of +75% under Despotism,\
+ +50% under Monarchy, and +25% under Communism.\
 ")
 
 [building_ecclesiastical_palace]
@@ -677,11 +677,14 @@ Makes a city the religious capital that acts as a second center of government.\
 This building is a second Palace and gives all effects of a Palace,\
  including reduction of corruption, which is based on which capital a city\
  is closest to. Under Despotism, the city containing the Palace gains a\
- +75% gold bonus. Under Monarchy, a +50% gold bonus. \
+ +75% gold bonus. Under Monarchy and Fundamentalism, a +50% gold bonus. \
 "), _("\
 The city where this Palace is located cannot be incited to revolt,\
  and enjoys a bonus when enemy agents try to evade your own agents\
  stationed in the city, or sabotage your buildings.\
+"), _("\
+Under Fundamentalism, Fanatics produced in the city with this building\
+ are inspired by fervorous faith to +1 higher veteran level.\
 ")
 
 [building_police_station]
@@ -1182,6 +1185,7 @@ sound		= "w_asmiths_trading_co"
 sound_alt	= "w_generic"
 helptext	= _("\
 In all your cities, Buildings with upkeep of 1 gold become free.\
+ (This bonus co-exists and accumulates with other upkeep bonuses.)\
  This Wonder also allows three new specialists:\
 "), _("
   * Each Laborer produces one production point for their city per turn;\

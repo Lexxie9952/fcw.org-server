@@ -5,6 +5,10 @@
 
   <div id="order_upgrade" class="order_button" title="Upgrade unit (U)">
       <a href="#" onclick="key_unit_upgrade();"><img src="/images/orders/upgrade.png" name="upgrade_button" alt="" border="0" width="30" height="30"></a>
+  </div>
+
+  <div id="order_convert" class="order_button" title="Convert unit (shift-O)">
+    <a href="#" onclick="key_unit_convert();"><img src="/images/orders/convert.png" name="convert_button" alt="" border="0" width="30" height="30"></a>
   </div>  
 
   <div id="order_airlift" class="order_button" title="Airlift (Shift-L)">

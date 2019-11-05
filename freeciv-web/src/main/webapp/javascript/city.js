@@ -596,6 +596,18 @@ function show_city_dialog(pcity)
 
   });
 
+  // HANDLE FOREIGN CITIZENS, APPEND AFTER UNIT PANELS
+  var foreigners_html = "<div id='city_foreigners'><br>Citizen nationality:";
+  if (pcity['nationalities_count']>0) { // foreigners present !
+    for (ethnicity in pcity['nation_id']) {
+      foreigners_html += " &bull; " + nations[ players[pcity['nation_id'][ethnicity]]['nation'] ]['adjective']
+                      + ": <b>" + pcity['nation_citizens'][ethnicity]+"</b>";
+    }
+    foreigners_html+="</div>"
+
+    $("#city_overview_tab").append(foreigners_html);
+  }
+
   if (is_small_screen()) {
     $(".ui-tabs-anchor").css("padding", "2px");
     $("#city_panel_stats").css( {"width":"100%", "margin-top":"17px", "padding":"0px"} );
@@ -739,7 +751,9 @@ function generate_production_list()
     var punit_type = unit_types[unit_type_id];
     
     /* FIXME: web client doesn't support unit flags yet, so this is a hack: */
-    if (punit_type['name'] == "Barbarian Leader" || punit_type['name'] == "Leader" || punit_type['name'] == "Queen") continue;
+    if (punit_type['name'] == "Barbarian Leader" || punit_type['name'] == "Leader" || punit_type['name'] == "Queen" 
+      || (punit_type['name'] == "Proletarians" && governments[players[client.conn.playing.playerno].government].name != "Communism"))
+       continue;
 
     
     if (is_small_screen())

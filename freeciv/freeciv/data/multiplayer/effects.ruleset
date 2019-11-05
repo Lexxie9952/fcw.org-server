@@ -2181,7 +2181,7 @@ reqs    =
 
 [effect_fundamentalism_unit_upkeep]
 type    = "Upkeep_Factor"
-value   = 2
+value   = 1
 reqs    =
     { "type", "name", "range"
       "Gov", "Fundamentalism", "Player"

@@ -130,14 +130,16 @@ ruler_male_title = _("Comrade %s")
 ruler_female_title = _("?female:Comrade %s")
 
 helptext = _("\
-A Communist government is based on the ideal that all people are\
- equal.  All goods are owned by the state, rather than by private\
- citizens.  Communism gives a balance between military and commercial\
- styles of government.\
+In Communism, all work, output, and goods are owned by the state.\
 "), _("\
-Under Communism, corruption does not vary by distance from\
- the capital; all cities (including the capital) have a modest amount\
- of corruption.\
+Corruption does not vary by distance from the capital;\
+ all cities have the same base level of corruption. Each city gets 4\
+ units free of upkeep. Buildings with 1 upkeep are free.\
+"), _("\
+Communist states can transfer Proletarians between cities to\
+ re-distribute population. Large numbers of Proletarians can be\
+ used to finish State projects. Also, Workers may be conscripted to\
+ Riflemen and vice versa.\
 ")
 
 ;------------------------------------------------------------------------
@@ -197,18 +199,18 @@ ruler_male_title = _("High Priest %s")
 ruler_female_title = _("High Priestess %s")
 
 helptext = _("\
-Fundamentalism is a form of government organized around a central\
- set of beliefs. The beliefs, usually religious in nature, form\
- a rigid guideline for actions and reactions of both the rulers\
+Fundamentalism is organized around central\
+ beliefs, usually religious. These form\
+ rigid guidelines for the actions of the rulers\
  and the people.\
 "), _("\
-In a fundamentalist society, the people and the rulers are entirely\
- devoted to their beliefs, and are usually willing to die to\
+The people are entirely\
+ devoted to their beliefs, and are often willing to die to\
  preserve them.\
 "), _("\
 Improvements that normally convert unhappy citizens to content\
- citizens, produce `tithes' (gold) equivalent to the number\
- of people they would convert, and require no maintenance.\
+ produce gold tithes equal to the number\
+ of citizens they would convert, and have no upkeep.\
 ")
 
 ; /* <-- avoid gettext warnings

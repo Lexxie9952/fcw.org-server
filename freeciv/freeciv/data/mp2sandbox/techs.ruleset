@@ -460,7 +460,7 @@ req2     = "Literacy"
 flags    = ""
 graphic     = "a.invention"
 graphic_alt = "-"
-helptext = _("+2 vision for Fortress and ships in Naval Base.")
+helptext = _("Increased vision for Fortress and ships in Naval Base.")
 
 [advance_iron_working]
 name     = _("Iron Working")

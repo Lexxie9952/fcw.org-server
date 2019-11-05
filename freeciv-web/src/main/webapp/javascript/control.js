@@ -306,10 +306,8 @@ function control_init()
   $('#tabs>ul>li').off('keydown');
   $('#tabs>div').off('keydown');
 
-  // don't show orders buttons to observers:
-  if (client_is_observer()) {
-    $("#game_unit_orders_default").hide();
-  }
+  // Default hidden; it turns itself on automatically if right conditions met.
+  $("#game_unit_orders_default").hide();
 
   // User option, replace capital I with | in city names--users with bad I in sans font:
   replace_capital_i = simpleStorage.get("capI");
@@ -1064,6 +1062,7 @@ function update_unit_order_commands()
   }
 
   $("#order_upgrade").hide();
+  $("#order_convert").hide();
   $("#order_maglev").hide();
   $("#order_canal").hide();
   $("#order_well").hide();
@@ -1110,10 +1109,12 @@ function update_unit_order_commands()
     if (utype_can_do_action(ptype, ACTION_FOUND_CITY)
         && pcity == null) {
       $("#order_build_city").show();
+      $("#order_build_city").attr('title', 'Build new city (B)');
       unit_actions["build"] = {name: "Build City (B)"};
     } else if (utype_can_do_action(ptype, ACTION_JOIN_CITY)
                && pcity != null) {
       $("#order_build_city").show();
+      $("#order_build_city").attr('title', 'Join city (B)');
       unit_actions["build"] = {name: "Join City (B)"};
     } else {
       $("#order_build_city").hide();
@@ -1121,7 +1122,17 @@ function update_unit_order_commands()
 
     if (ptype['name'] == "Explorer") {
       unit_actions["explore"] = {name: "Auto Explore (X)"};
-      $("#order_explore").show(); //frequent only for explorer unit
+      $("#order_explore").show();
+    }
+
+    // Conversion handling
+    if (ruleset_control['name']=="Multiplayer-Evolution ruleset" ) {
+      if ( (ptype['name']=="Leader" || ptype['name']=="Queen")
+          || ((governments[client.conn.playing['government']]['name']=="Communism" && ((ptype['name']=="Workers") || ptype['name']=="Riflemen"))) ) {
+         
+          $("#order_convert").show();
+          unit_actions["convert"] = {name: "Convert (shift-O)"};
+      }
     }
   }
 
@@ -1134,6 +1145,13 @@ function update_unit_order_commands()
   for (i = 0; i < funits.length; i++) {
     punit = funits[i];
     ptype = unit_type(punit);
+    var worker_type = false; // Handles civ2civ3 + mp2: these units have same orders as workers (join city already handled above):
+    if (ptype['name'] == "Workers" || ptype['name'] == "Migrants" 
+      || (ptype['name'] =="Proletarians" && governments[client.conn.playing['government']]['name']=="Communism")) {
+
+        worker_type = true;
+    }
+
     ptile = index_to_tile(punit['tile']);
     terrain_name = tile_terrain(ptile)['name'];
     if (ptile == null) continue;
@@ -1187,10 +1205,10 @@ function update_unit_order_commands()
 
     // All Settler types have similar types or orders and rules for whether to show those orders:
     // TO DO:  this should be checking for the FLAG "Settlers" in the ptype which indicates who can do the follow build/road/mine/etc. actions:
-    if (ptype['name'] == "Settlers" || ptype['name'] == "Workers" || ptype['name'] == "Engineers") {
+    if (ptype['name'] == "Settlers" || worker_type == true || ptype['name'] == "Engineers") {
 
       if (ptype['name'] == "Settlers") unit_actions["autosettlers"] = {name: "Auto settler (A)"};
-      if (ptype['name'] == "Workers") unit_actions["autosettlers"] = {name: "Auto workers (A)"};
+      if (worker_type == true) unit_actions["autosettlers"] = {name: "Auto workers (A)"};
       if (ptype['name'] == "Engineers") unit_actions["autosettlers"] = {name: "Auto engineers (A)"};
 
       if (show_order_buttons==1) $("#order_pillage").hide(); // not frequently used order for settler types
@@ -2861,6 +2879,8 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       if (alt) {
         the_event.preventDefault(); // override possible browser shortcut
         key_unit_move(DIR8_NORTH);  // alt+O=9
+      } else if (shift) {
+        key_unit_convert();
       }
       else key_unit_transform();
     break;
@@ -3227,6 +3247,10 @@ function handle_context_menu_callback(key)
       key_unit_upgrade();
       break;
 
+    case "convert":
+      key_unit_convert();
+      break;
+  
     case "disband":
       key_unit_disband();
       break;
@@ -3949,6 +3973,20 @@ function key_unit_pillage()
 }
 
 /**************************************************************************
+ Tell the units in focus to convert to other unit type.
+**************************************************************************/
+function key_unit_convert()
+{
+  var funits = get_units_in_focus();
+  for (var i = 0; i < funits.length; i++) {
+    var punit = funits[i];
+    /* EXTRA_NONE -> server decides */
+    request_new_unit_activity(punit, ACTIVITY_CONVERT, -1)
+  }
+  setTimeout(update_unit_focus, update_focus_delay);
+}
+
+/**************************************************************************
  Tell the units in focus to mine.
 **************************************************************************/
 function key_unit_mine()
@@ -4397,7 +4435,9 @@ function request_unit_build_city()
       }
 
       var ptype = unit_type(punit);
-      if (ptype['name'] == "Settlers" || ptype['name'] == "Engineers") {
+      // This was an incorrect check for what units can build/join a city. Let the server
+      // decide if it's legal.
+      if (true /*ptype['name'] == "Settlers" || ptype['name'] == "Engineers"*/) {
         var packet = null;
         var target_city = tile_city(index_to_tile(punit['tile']));
 
