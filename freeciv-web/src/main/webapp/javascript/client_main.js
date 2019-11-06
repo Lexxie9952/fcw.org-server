@@ -416,7 +416,7 @@ function set_default_mapview_active()
   }
 
   var active_tab = $('#tabs').tabs('option', 'active');
-  if (active_tab == 4) { // cities dialog is active
+  if (active_tab == TAB_CITIES) { // cities dialog is active
     return;
   }
 

@@ -147,7 +147,6 @@ function update_govt_dialog()
         ui.tooltip.css({"max-width":"100%", "width":"88%", "margin-top":"55px", "margin-left":"-95px", "overflow":"visible"});
     }
 });
-
 }
 
 
@@ -165,9 +164,57 @@ function start_revolution()
           }
         }    
       }
-    send_player_change_government(requested_gov);
-    requested_gov = -1;
+
+      var cur_gov = governments[client.conn.playing['government']];
+      if (do_worklists(cur_gov['name'], governments[requested_gov]['name']))
+        setTimeout(send_player_change_government(requested_gov),800);
+      else send_player_change_government(requested_gov);
+      requested_gov = -1;
   }
+}
+
+/**************************************************************************
+   ...
+**************************************************************************/
+function do_worklists(cur_gov, new_gov)
+{
+  var altered = false;
+
+  for (city_id in cities) {
+    var pcity=cities[city_id];
+    if (pcity['owner'] != client.conn.playing.playerno) continue;
+     
+    if (cur_gov == "Fundamentalism" && new_gov != "Fundamentalism") {
+      if (pcity['worklist'] != null && pcity['worklist'].length != 0) {
+        var before = pcity['worklist'].length;
+        pcity['worklist'] = pcity['worklist'].filter(list_item => !(list_item['kind']==VUT_UTYPE && unit_types[list_item['value']]['name'] == "Fanatics") );
+        if (before != pcity['worklist'].length) {send_city_worklist(pcity['id']);altered = true;}
+      }
+      if (pcity['production_kind']==VUT_UTYPE && unit_types[pcity['production_value']]['name'] == "Fanatics") {
+        altered=true;
+        if (pcity['worklist'] != null && pcity['worklist'].length) {
+          send_city_change(pcity['id'],pcity['worklist'][0]['kind'],pcity['worklist'][0]['value']);
+          pcity['worklist'].shift();
+          send_city_worklist(pcity['id']);
+        } else {send_city_change(pcity['id'], VUT_IMPROVEMENT, Object.keys(improvements).length-1);}
+      }
+    } else if (cur_gov == "Communism" && new_gov != "Communism") {
+      if (pcity['worklist'] != null && pcity['worklist'].length != 0) {
+        var before = pcity['worklist'].length;
+        pcity['worklist'] = pcity['worklist'].filter(list_item => !(list_item['kind']==VUT_UTYPE && unit_types[list_item['value']]['name'] == "Proletarians") );
+        if (before != pcity['worklist'].length) {send_city_worklist(pcity['id']);altered = true;}
+      }
+      if (pcity['production_kind']==VUT_UTYPE && unit_types[pcity['production_value']]['name'] == "Proletarians") {
+        altered=true;
+        if (pcity['worklist'] != null && pcity['worklist'].length) {
+          send_city_change(pcity['id'],pcity['worklist'][0]['kind'],pcity['worklist'][0]['value']);
+          pcity['worklist'].shift();
+          send_city_worklist(pcity['id']);
+        } else {send_city_change(pcity['id'], VUT_IMPROVEMENT, Object.keys(improvements).length-1);}
+      }
+    }
+  }  
+  return altered;
 }
 
 /**************************************************************************
