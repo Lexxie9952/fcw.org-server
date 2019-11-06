@@ -135,6 +135,7 @@ In Communism, all work, output, and goods are owned by the state.\
 Corruption does not vary by distance from the capital;\
  all cities have the same base level of corruption. Each city gets 4\
  units free of upkeep. Buildings with 1 upkeep are free.\
+ The capital city with Palace gets a +25% production bonus.\
 "), _("\
 Communist states can transfer Proletarians between cities to\
  re-distribute population. Large numbers of Proletarians can be\
