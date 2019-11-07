@@ -31,6 +31,9 @@ var retain_checkboxes_on_update = false; // whether next city list redraw retain
 var goods = {};
 
 var active_city = null;
+
+var closed_dialog_already = false; // differentiate user closing vs. triggered event closing of city dialog
+
 var inactive_city = null;   // active_city's twin, to prevent request_city_buy from needing active_city which then forces city_dialog to pop up.
 var prod_selection_city =null;  // the city_id whose current production will be used to set the current production in all selected cities. 
 
@@ -165,7 +168,9 @@ function findLongestWord(str) {
 **************************************************************************/
 function show_city_dialog(pcity)
 {
-  console.log("show_city_dialog() called.")
+  //console.log("show_city_dialog() called.")
+  //console.log("    caller is " + show_city_dialog.caller.toString().substring(0,35));
+
   var turns_to_complete;
   var sprite;
   //var shield_sprite;
@@ -177,22 +182,12 @@ function show_city_dialog(pcity)
     worklist_selection = [];
   }
 
-  if (active_city != null) close_city_dialog();
+  if (active_city != null) close_city_dialog_trigger();
   active_city = pcity;
   if (pcity == null) return;
 
   // reset dialog page.
   $("#city_dialog").remove();
-
-  /* TO DO: something like this to append to current tab?
-  var curTab = $("#tabs:not(.ui-tabs-hide)"),
-      curTabIndex = curTab.index(),
-      curTabID = curTab.prop("id");
-      $("<div id='city_dialog'></div>").appendTo(curTab);
-
-      see notes in close_city_dialog() for patch to prevent
-      closing city dialog from switching tabs for some reason
-  */
 
   $("<div id='city_dialog'></div>").appendTo("div#game_page");
 
@@ -222,7 +217,7 @@ function show_city_dialog(pcity)
          rename_city();
        }
      });
-     dialog_buttons = $.extend(dialog_buttons, {"Exit": close_city_dialog});
+     dialog_buttons = $.extend(dialog_buttons, {"Exit": close_city_dialog_trigger});
   } else {   // small screen control buttons
        dialog_buttons = $.extend(dialog_buttons,
          {
@@ -233,10 +228,9 @@ function show_city_dialog(pcity)
             request_city_buy();
           }
         });
-        dialog_buttons = $.extend(dialog_buttons, {"Exit": close_city_dialog});
+        dialog_buttons = $.extend(dialog_buttons, {"Exit": close_city_dialog_trigger});
    }
 
-   
   $("#city_dialog").attr("title", decodeURIComponent(pcity['name'])
                          + " (" + pcity['size'] + ")");
   $("#city_dialog").dialog({
@@ -244,7 +238,7 @@ function show_city_dialog(pcity)
 			modal: false,
 			width: is_small_screen() ? "98%" : "80%",
                         height: is_small_screen() ? $(window).height() + 10 : $(window).height() - 80,
-                        close : city_dialog_close_handler,
+                        close : close_city_dialog,
             buttons: dialog_buttons
                    }).dialogExtend({
                      "minimizable" : true,
@@ -1000,50 +994,39 @@ function send_city_change(city_id, kind, value)
 }
 
 /**************************************************************************
- Close dialog.
+ Does a simple close of the city dialog, which will trigger the
+  event-based close_city_dialog() further below
 **************************************************************************/
-function close_city_dialog()
+function close_city_dialog_trigger()
 {
-  /* Hack - this patches a problem that could be serious.
-   * $("#city_dialog").dialog('close'); was also switching tab, indicating
-   * some structural problem that could haunt things later. */
-  var active_tab = $("#tabs").tabs("option", "active");
-
+  closed_dialog_already = true;
   $("#city_dialog").dialog('close');
-
-  // FORCED disallow of changing active tab:
-  $("#tabs").tabs("option", "active", active_tab); 
-  if (active_tab != TAB_MAP)
-    set_default_mapview_inactive();
 }
 
 /**************************************************************************
- Clean up after closing the city dialog.
+ Close city dialog - shutdown and housekeeping: handle 4 different ways it
+  could close in 2 different tabs
 **************************************************************************/
-function city_dialog_close_handler()
+function close_city_dialog()
 {
-  set_default_mapview_active();
-  if (active_city != null) {
-    setup_window_size ();
+  if (closed_dialog_already == false) $("#city_dialog").dialog('close');
+  else closed_dialog_already = false; // reset value for next time.
+
+  var active_tab = $("#tabs").tabs("option", "active");
+  if (active_tab != TAB_MAP) {
+    keyboard_input=false;  // stops ESC from propagating up to 'double-ESC' out of cities tab
+    setTimeout(function(){keyboard_input=true},250); // turn back on when finished
+  }
+  else set_default_mapview_active();
+
+  worklist_dialog_active = false;
+  setup_window_size(); // Reset map to full size after it was a city worked tile map
+
+  if (active_city) {  // map will be centered on city that was being viewed
     center_tile_mapcanvas(city_tile(active_city));
     active_city = null;
-     /*
-      * TODO: this is just a hack to recover the background map.
-      *       setup_window_size will resize (and thus clean) the map canvas,
-      *       and this is now called when we show a city dialog while another
-      *       one is open, which is unexpectedly common, tracing the functions
-      *       shows two or three calls to show_city_dialog. Maybe one internal
-      *       from the client UI, the rest from info packets from the server.
-      *       Both those duplicate calls and the stopping of map updates due
-      *       to the 2D rendered being used to draw the minimap should go.
-      */
-    if (renderer == RENDERER_2DCANVAS) {
-      update_map_canvas_full();
-    }
-
-  }
-  keyboard_input=true;
-  worklist_dialog_active = false;
+    if (renderer == RENDERER_2DCANVAS) update_map_canvas_full();
+  } 
 }
 
 /**************************************************************************
@@ -3081,7 +3064,7 @@ function city_keyboard_listener(ev)
 
        case 'W': // same command as ESC above (code 27)
          ev.stopPropagation();
-         close_city_dialog();
+         close_city_dialog_trigger();
          chatbox_scroll_to_bottom(false);
          break;
 
