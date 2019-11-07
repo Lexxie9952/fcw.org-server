@@ -31,6 +31,7 @@ var mouse_x;
 var mouse_y;
 var prev_mouse_x;
 var prev_mouse_y;
+var prev_goto_tile;
 var keyboard_input = true;
 var unitpanel_active = false;
 var allow_right_click = false;
@@ -3290,6 +3291,8 @@ function handle_context_menu_callback(key)
 function activate_goto()
 {
   clear_goto_tiles();
+  // Clear state vars so it's ready to immediately path to cursor
+  prev_mouse_x = null;   prev_mouse_y = null;   prev_goto_tile = null;
   activate_goto_last(ORDER_LAST, ACTION_COUNT);
 }
 
@@ -3353,6 +3356,7 @@ function deactivate_goto(will_advance_unit_focus)
   $("#canvas_div").css("cursor", "default");
   goto_request_map = {};
   goto_turns_request_map = {};
+  prev_goto_tile = null;  // next goto is clear and fresh
   clear_goto_tiles();
 
   /* Clear the order this action would have performed. */
@@ -4679,6 +4683,8 @@ function process_diplomat_arrival(pdiplomat, target_tile_id)
 ****************************************************************************/
 function request_goto_path(unit_id, dst_x, dst_y)
 {
+  //console.log("   request_goto_path("+dst_x+","+dst_y+") is " + request_goto_path.caller);
+
   if (goto_request_map[unit_id + "," + dst_x + "," + dst_y] == null) {
     goto_request_map[unit_id + "," + dst_x + "," + dst_y] = true;
 
@@ -4698,24 +4704,30 @@ function request_goto_path(unit_id, dst_x, dst_y)
 ****************************************************************************/
 function check_request_goto_path()
 {
+  //console.log("   check_request_goto_path called by " + check_request_goto_path.caller);
+  var ptile;
+
   if (goto_active && current_focus.length > 0
-      && prev_mouse_x == mouse_x && prev_mouse_y == mouse_y) {
-    var ptile;
-    clear_goto_tiles();
+      && (prev_mouse_x != mouse_x || prev_mouse_y != mouse_y)) {
+     
     if (renderer == RENDERER_2DCANVAS) {
       ptile = canvas_pos_to_tile(mouse_x, mouse_y);
     } else {
       ptile = webgl_canvas_pos_to_tile(mouse_x, mouse_y);
     }
     if (ptile != null) {
-      /* Send request for goto_path to server. */
-      for (var i = 0; i < current_focus.length; i++) {
-        request_goto_path(current_focus[i]['id'], ptile['x'], ptile['y']);
+      if (ptile['tile'] != prev_goto_tile) {
+        clear_goto_tiles();
+        /* Send request for goto_path to server. */
+        for (var i = 0; i < current_focus.length; i++) {
+          request_goto_path(current_focus[i]['id'], ptile['x'], ptile['y']);
+        }
       }
     }
   }
   prev_mouse_x = mouse_x;
   prev_mouse_y = mouse_y;
+  if (ptile) prev_goto_tile = ptile['tile']; //need to reset this later
 }
 
 /****************************************************************************
@@ -4723,9 +4735,7 @@ function check_request_goto_path()
 ****************************************************************************/
 function update_goto_path(goto_packet)
 {
-  // TO DO: we are coming here every time a unit is even clicked with no desire for goto
-  // this could be a bad performance drain and extra traffic to server. Hunt down why
-  // we come here unnecessarily and handle it.
+  //console.log("   update_goto_path caller is " + update_goto_path.caller);
 
   var punit = units[goto_packet['unit_id']];
   if (punit == null) return;
@@ -4760,7 +4770,7 @@ function update_goto_path(goto_packet)
 	  = current_goto_turns;
 
   if (current_goto_turns != undefined) {
-    $("#active_unit_info").html("Turns for goto: " + current_goto_turns);
+    $("#active_unit_info").html("Path: "+goto_packet['length']+" tiles");
   }
   update_mouse_cursor();
 }

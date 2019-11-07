@@ -22,7 +22,7 @@ var mapview = {};
 var mapdeco_highlight_table = {};
 var mapdeco_crosshair_table = {};
 var last_redraw_time = 0;
-var MAPVIEW_REFRESH_INTERVAL = 10;
+var MAPVIEW_REFRESH_INTERVAL = 35;// don't even TRY to do more than 28fps, you'll just hurt yourself
 
 var mapview_slide = {};
 mapview_slide['active'] = false;

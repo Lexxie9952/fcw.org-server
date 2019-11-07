@@ -467,14 +467,46 @@ function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y) {
   var x1 = x0 + GOTO_DIR_DX[dir] * (tileset_tile_width / 2);
   var y1 = y0 + GOTO_DIR_DY[dir] * (tileset_tile_height / 2);
 
-  pcanvas.strokeStyle = 'rgba(0,168,255,0.9)';
-  pcanvas.lineWidth = 10;
+  //pcanvas.strokeStyle = 'rgba(0,168,255,1)';  //pcanvas.lineWidth = 10;
+
+  // Line edges
+  pcanvas.strokeStyle = 'rgba(0,10,40,.6)';
+  pcanvas.lineWidth = 8;
   pcanvas.lineCap = "round";
   pcanvas.beginPath();
   pcanvas.moveTo(x0, y0);
   pcanvas.lineTo(x1, y1);
   pcanvas.stroke();
-
+  // Main cyan line
+  pcanvas.strokeStyle = 'rgba(30,208,255,1)';
+  pcanvas.lineWidth = 6;
+  pcanvas.beginPath();
+  pcanvas.moveTo(x0, y0);
+  pcanvas.lineTo(x1, y1);
+  pcanvas.stroke();
+  // Waypoint circles
+  pcanvas.lineWidth = 14;
+  pcanvas.strokeStyle = 'rgba(2,26,45,1)';
+  pcanvas.beginPath();
+  pcanvas.moveTo(x0, y0);
+  pcanvas.lineTo(x0, y0);
+  pcanvas.stroke();
+  pcanvas.beginPath();
+  pcanvas.moveTo(x1, y1);
+  pcanvas.lineTo(x1, y1);
+  pcanvas.stroke();
+  // Waypoint inner dots
+  pcanvas.lineWidth = 4;
+  pcanvas.strokeStyle = 'rgba(197,243,255,1)';
+  pcanvas.lineCap = "square";
+  pcanvas.beginPath();
+  pcanvas.moveTo(x0, y0);
+  pcanvas.lineTo(x0, y0);
+  pcanvas.stroke();
+  pcanvas.beginPath();
+  pcanvas.moveTo(x1, y1);
+  pcanvas.lineTo(x1, y1);
+  pcanvas.stroke();
 }
 
 /**************************************************************************

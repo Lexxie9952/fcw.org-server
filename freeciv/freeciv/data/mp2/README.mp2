@@ -166,7 +166,7 @@ NEW FEATURES / GAME MECHANICS
 16. Maximum Granary food store capped at 70. Give some balance to non-rapture governments.
 17. Forest, Swamp, River 1.33x defense bonus (was 1.5). Can't transform City Centre to Forest or Hill.
 18. Fort added. Defense bonuses smoothed. See <a href="https://freeciv.fandom.com/wiki/Bases.mp2" target="_blank">Bases</a>
-19. Naval Base added. 1.33x defense for Land/Sea units (except against Armor.) +20% Healing.
+19. Naval Base added. Layers over Fortress. Gives 1.33x defense and +20% HP regeneration for ships.
 20. Timeline changed to match technological pace of the game. No cannons in 100 BC !
 21. Incite cost changed. Goes from impossibly high to extremely high (but theoretically possible: e.g., 120000 might go to 4500)
 
