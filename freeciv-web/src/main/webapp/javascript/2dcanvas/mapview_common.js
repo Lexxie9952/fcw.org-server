@@ -529,7 +529,7 @@ function update_map_canvas_full()
       update_map_slide();
     } else {
       update_map_canvas(0, 0, mapview['store_width'], mapview['store_height']);
-      check_request_goto_path();
+      if (goto_active) check_request_goto_path();
     }
 
     last_redraw_time = new Date().getTime();

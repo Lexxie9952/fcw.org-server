@@ -32,6 +32,11 @@ var mouse_y;
 var prev_mouse_x;
 var prev_mouse_y;
 var prev_goto_tile;
+/* # of times to force request_goto_path on the same tile: performance hack to prevent constant requests on the same tile.
+ * We used to constantly request_goto_path on the same tile because the first couple of times didn't give enough time to
+ * properly construct a clean path: */
+const FORCE_CHECKS_AGAIN = -3; 
+const LAST_FORCED_CHECK = -1;  // When FORCE_CHECKS_AGAIN++ arrives at this value, we stop requesting goto paths for the same tile
 var keyboard_input = true;
 var unitpanel_active = false;
 var allow_right_click = false;
@@ -4706,9 +4711,9 @@ function check_request_goto_path()
 {
   //console.log("   check_request_goto_path called by " + check_request_goto_path.caller);
   var ptile;
-
+  // TO DO: function only called if goto_active so we can remove check for that 
   if (goto_active && current_focus.length > 0
-      && (prev_mouse_x != mouse_x || prev_mouse_y != mouse_y)) {
+      && (prev_mouse_x != mouse_x || prev_mouse_y != mouse_y || prev_goto_tile<=LAST_FORCED_CHECK)) {
      
     if (renderer == RENDERER_2DCANVAS) {
       ptile = canvas_pos_to_tile(mouse_x, mouse_y);
@@ -4717,17 +4722,25 @@ function check_request_goto_path()
     }
     if (ptile != null) {
       if (ptile['tile'] != prev_goto_tile) {
-        clear_goto_tiles();
+        clear_goto_tiles(); // TO DO: goto tiles should not be in tiles[tild_id][goto_dir] which takes forever to clear, but their own array instead
         /* Send request for goto_path to server. */
         for (var i = 0; i < current_focus.length; i++) {
           request_goto_path(current_focus[i]['id'], ptile['x'], ptile['y']);
         }
       }
+      // We don't want to constantly request the same tile if it hasn't changed, but we used to do that because sometimes
+      // the first request_goto_path+clear_goto_tiles didn't have time(?) to clean old paths and construct a new path properly:
+      if (prev_goto_tile <= LAST_FORCED_CHECK) {
+        prev_goto_tile ++;
+        if (prev_goto_tile > LAST_FORCED_CHECK) {   
+          if (ptile) prev_goto_tile = ptile['tile']; // Flag to not make continuous server requests for the same tile.
+        }
+      } // FLAG to force request_goto_path more times to clean path redraw glitch.  FORCE_CHECKS_AGAIN can be tuned to -x which forces...
+      else prev_goto_tile = FORCE_CHECKS_AGAIN; // ... request_goto_path x more times before blocking requests on the same tile. 
     }
-  }
+  }                                          
   prev_mouse_x = mouse_x;
-  prev_mouse_y = mouse_y;
-  if (ptile) prev_goto_tile = ptile['tile']; //need to reset this later
+  prev_mouse_y = mouse_y;   
 }
 
 /****************************************************************************
