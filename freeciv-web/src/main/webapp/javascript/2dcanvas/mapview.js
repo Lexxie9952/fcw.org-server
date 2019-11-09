@@ -38,6 +38,10 @@ var GOTO_DIR_DX = [0, 1, 2, -1, 1, -2, -1, 0];
 var GOTO_DIR_DY = [-2, -1, 0, -1, 1, 0, 1, 2];
 var dashedSupport = false;
 
+// [0] line-edge borders, [1] main thick line, [2] tile way points, [3] inner way-point dot
+var goto_colors_active = ["0,10,40,1","30,208,255,1","2,26,45,1","197,243,255,1"]; //active goto path
+var goto_colors_info   = ["40,10,0,.91","255,208,30,.91","45,26,2,.91","255,243,197,.91"]; //tile/unit info
+
 /**************************************************************************
   ...
 **************************************************************************/
@@ -460,17 +464,18 @@ function mapview_territory_fill(pcanvas, color, canvas_x, canvas_y) {
 /**************************************************************************
 ...
 **************************************************************************/
-function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y) {
-
+function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y)
+{
   var x0 = canvas_x + (tileset_tile_width / 2);
   var y0 = canvas_y + (tileset_tile_height / 2);
   var x1 = x0 + GOTO_DIR_DX[dir] * (tileset_tile_width / 2);
   var y1 = y0 + GOTO_DIR_DY[dir] * (tileset_tile_height / 2);
 
-  //pcanvas.strokeStyle = 'rgba(0,168,255,1)';  //pcanvas.lineWidth = 10;
+  // Use colours according to active goto or tile/unit info
+  var colors = goto_active ? goto_colors_active : goto_colors_info; 
 
   // Line edges
-  pcanvas.strokeStyle = 'rgba(0,10,40,.6)';
+  pcanvas.strokeStyle = 'rgba('+colors[0]+')';
   pcanvas.lineWidth = 8;
   pcanvas.lineCap = "round";
   pcanvas.beginPath();
@@ -478,15 +483,15 @@ function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y) {
   pcanvas.lineTo(x1, y1);
   pcanvas.stroke();
   // Main cyan line
-  pcanvas.strokeStyle = 'rgba(30,208,255,1)';
+  pcanvas.strokeStyle = 'rgba('+colors[1]+')';
   pcanvas.lineWidth = 6;
   pcanvas.beginPath();
   pcanvas.moveTo(x0, y0);
   pcanvas.lineTo(x1, y1);
   pcanvas.stroke();
   // Waypoint circles
-  pcanvas.lineWidth = 14;
-  pcanvas.strokeStyle = 'rgba(2,26,45,1)';
+  pcanvas.lineWidth = 12;
+  pcanvas.strokeStyle = 'rgba('+colors[2]+')';
   pcanvas.beginPath();
   pcanvas.moveTo(x0, y0);
   pcanvas.lineTo(x0, y0);
@@ -497,7 +502,7 @@ function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y) {
   pcanvas.stroke();
   // Waypoint inner dots
   pcanvas.lineWidth = 4;
-  pcanvas.strokeStyle = 'rgba(197,243,255,1)';
+  pcanvas.strokeStyle = 'rgba('+colors[3]+')';
   pcanvas.lineCap = "square";
   pcanvas.beginPath();
   pcanvas.moveTo(x0, y0);

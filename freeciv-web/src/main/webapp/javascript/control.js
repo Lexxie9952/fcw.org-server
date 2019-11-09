@@ -35,7 +35,7 @@ var prev_goto_tile;
 /* # of times to force request_goto_path on the same tile: performance hack to prevent constant requests on the same tile.
  * We used to constantly request_goto_path on the same tile because the first couple of times didn't give enough time to
  * properly construct a clean path: */
-const FORCE_CHECKS_AGAIN = -3; 
+const FORCE_CHECKS_AGAIN = -4; 
 const LAST_FORCED_CHECK = -1;  // When FORCE_CHECKS_AGAIN++ arrives at this value, we stop requesting goto paths for the same tile
 var keyboard_input = true;
 var unitpanel_active = false;
@@ -4788,6 +4788,15 @@ function update_goto_path(goto_packet)
   update_mouse_cursor();
 }
 
+/****************************************************************************
+  Show the GOTO path for middle clicked units
+****************************************************************************/
+function show_goto_path(goto_packet)
+{
+  // separate function to potentially handle cases differently
+  update_goto_path(goto_packet);
+}
+
 
 
 /**************************************************************************
@@ -4847,6 +4856,19 @@ function popit_req(ptile)
   var packet = {"pid" : packet_info_text_req, "visible_unit" : punit_id,
                 "loc" : ptile['index'], "focus_unit": focus_unit_id};
   send_request(JSON.stringify(packet));
+
+  // IF middle-clicked a tile that: 1) has unit(s), 2) has GO TO orders; THEN: show the path(s)
+  if (punit_id) { // units are on tile
+    var tunits = tile_units(ptile);
+    for (u = 0; u < tunits.length; u++) {
+      if (tunits[u]['goto_tile'] != undefined) { // don't show foreign units: this key is undefined
+        var goto_tile_id = tunits[u]['goto_tile']; 
+        if (goto_tile_id > 0) {  // unit has go to orders
+          request_goto_path(tunits[u]['id'], tiles[goto_tile_id]['x'], tiles[goto_tile_id]['y']);
+        }
+      }
+    }
+  }
 }
 
 

@@ -1646,6 +1646,9 @@ function handle_goto_path(packet)
   if (goto_active) {
     update_goto_path(packet);
   }
+  else { // middle-click to show path for units on tile
+    show_goto_path(packet);
+  }
 }
 
 /**************************************************************************
