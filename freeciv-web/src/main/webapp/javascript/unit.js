@@ -477,6 +477,8 @@ function get_unit_city_info(punit)
   // UNIT TYPE
   result += ptype['name'];
 
+  if (ptype['transport_capacity']>0) result += " T"+punit['id']
+
   // HOME CITY, IF ANY OR KNOWN:
   if (get_unit_homecity_name(punit)) {
     result += ": "+get_unit_homecity_name(punit);
@@ -537,47 +539,63 @@ function get_unit_city_info(punit)
   }
 
   // ACTIVITY
-  switch (punit['activity']) {
-    case ACTIVITY_POLLUTION:
-      result += "\nActivity: CLEANING POLLUTION";
-      break;
-    case ACTIVITY_MINE:
-      result += "\nActivity: MINING";
-      break;
-    case ACTIVITY_IRRIGATE:
-      result += "\nActivity: IRRIGATING";
-      break;
-    case ACTIVITY_FORTIFIED:
-      result += "\nActivity: FORTIFIED";
-      break;
-    case ACTIVITY_FORTIFYING:
-      result += "\nActivity: FORTIFYING";
-      break;
-    case ACTIVITY_SENTRY:
-      result += "\nActivity: SENTRY";
-      break;
-    case ACTIVITY_PILLAGE:
-      result += "\nActivity: PILLAGE";
-      break;
-    case ACTIVITY_GOTO:
-      result += "\nActivity: GOTO";
-      break;
-    case ACTIVITY_EXPLORE:
-      result += "\nActivity: AUTO-EXPLORE";
-      break;
-    case ACTIVITY_TRANSFORM:
-      var ptile = tiles[punit['tile']]; 
-      result += "\nTRANSFORMING "+terrains[ptile['terrain']]['name'];
-      break;
-    case ACTIVITY_FALLOUT:
-      result += "\nActivity: CLEANING FALLOUT";
-      break;
-    case ACTIVITY_BASE:
-      result += "\nActivity: BUILDING BASE";
-      break;
-    case ACTIVITY_GEN_ROAD:
-      result += "\nActivity: BUILDING ROAD";
-      break;
+  // freeciv does not have CARGO state as an activity so we have to catch it here:
+  if (punit['transported_by'] != undefined && punit['transported_by'] > 0) {
+    result += "\nActivity: CARGO on T"+punit['transported_by'];
+  } else {  // All other cases have a unit.activity value:
+    switch (punit['activity']) {
+      case ACTIVITY_POLLUTION:
+        result += "\nActivity: CLEANING POLLUTION";
+        break;
+      case ACTIVITY_MINE:
+        result += "\nActivity: MINING";
+        break;
+      case ACTIVITY_IRRIGATE:
+        result += "\nActivity: IRRIGATING";
+        break;
+      case ACTIVITY_FORTIFIED:
+        result += "\nActivity: FORTIFIED";
+        break;
+      case ACTIVITY_FORTIFYING:
+        result += "\nActivity: FORTIFYING";
+        break;
+      case ACTIVITY_SENTRY:
+        result += "\nActivity: SENTRY";
+        break;
+      case ACTIVITY_PILLAGE:
+        result += "\nActivity: PILLAGE";
+        break;
+      case ACTIVITY_GOTO:
+        result += "\nActivity: GOTO";
+        break;
+      case ACTIVITY_EXPLORE:
+        result += "\nActivity: AUTO-EXPLORE";
+        break;
+      case ACTIVITY_TRANSFORM:
+        var ptile = tiles[punit['tile']]; 
+        result += "\nTRANSFORMING "+terrains[ptile['terrain']]['name'];
+        break;
+      case ACTIVITY_FALLOUT:
+        result += "\nActivity: CLEANING FALLOUT";
+        break;
+      case ACTIVITY_BASE:
+        result += "\nActivity: BUILDING BASE";
+        break;
+      case ACTIVITY_GEN_ROAD:
+        result += "\nActivity: BUILDING ROAD";
+        break;
+      case ACTIVITY_CONVERT:
+        result += "\nActivity: CONVERTING";
+    }
+  }
+  if (punit['goto_tile'] != undefined && punit['ai'] != undefined) {//FC doesn't track ACTIVITY_GOTO in all cases; catch it here
+     if (punit['ai']==true) {
+       result += "\nActivity: AUTO-WORKER";
+     } else if (punit['goto_tile']>-1) {
+       var xG = tiles[punit['goto_tile']]['x'];
+       var yG = tiles[punit['goto_tile']]['y'];
+       result += "\nActivity: GOTO ("+xG+","+yG+")";
+     }
   }
 
   result += "\n";  // Space for separating key stats

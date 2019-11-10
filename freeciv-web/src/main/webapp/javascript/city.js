@@ -432,8 +432,11 @@ function show_city_dialog(pcity)
         present_units_html = present_units_html + get_html_vet_sprite(punit);
         //if (show_unit_movepct) present_units_html = present_units_html + get_html_mp_sprite(punit, false); // TO DO: showing both hp&mp messes up flow
         present_units_html = present_units_html + get_html_hp_sprite(punit, false);
+        present_units_html = present_units_html + get_html_activity_sprite(punit);
       }
       $("#city_present_units_list").html(present_units_html);
+      // trick to compensate for removed scrollbar clipping the top:
+      $("#city_present_units_list").css({"margin-top":"-20px","padding-top":"20px"});
     }
   
 
@@ -456,9 +459,13 @@ function show_city_dialog(pcity)
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
            + " onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'"
            +"></div>";
-      supported_units_html = supported_units_html + get_html_vet_sprite(punit);
+      supported_units_html = supported_units_html + get_html_vet_sprite(punit)
+                                                  + get_html_hp_sprite(punit,false) 
+                                                  + get_html_activity_sprite(punit);
     }
     $("#city_supported_units_list").html(supported_units_html);
+    // trick to compensate for removed scrollbar clipping the top:
+    $("#city_supported_units_list").css({"margin-top":"-20px","padding-top":"20px"});
   }
   $(".game_unit_list_item").tooltip();
 

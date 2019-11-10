@@ -1173,6 +1173,34 @@ function get_html_vet_sprite(punit)
       + "vertical-align:top; float:left;'>"
       + "</div>";
 }
+/**************************************************************************
+  Returns a <div> string that can be appended to an html string containing 
+    a unit sprite, that will place the activity sprite over it in the
+    right place and keep the image underneath clickable.
+**************************************************************************/
+function get_html_activity_sprite(punit)
+{
+  var proto_sprite = get_unit_activity_sprite(punit);
+  if (proto_sprite) {
+    var atype_sprite = {"type":null,"sprite":get_sprite_from_tag(proto_sprite['key'])};
+    var action_sprite = atype_sprite['sprite'];
+
+    var ml = -25; var mr = -14; var mt = -14;
+    // ugly exception: this one is in tiles.spec and is 96x48 instead of 28x24
+    if (proto_sprite['key']=="unit.auto_settler") {  // 96-28-68. 68/2 = 34
+      ml -= 38; mr -= 30; mt = -9;
+    }
+    return "<div style='pointer-events: none; margin-left:"+ml+"px; margin-top:"+mt+"px; margin-right: "+mr+"px; float:left; content-align:left;"
+      + "background: transparent url("
+      + action_sprite['image-src']
+      + ");transform: scale(0.95); background-position:-" + action_sprite['tileset-x'] + "px -" + (action_sprite['tileset-y'])
+      + "px;  width: " + (action_sprite['width']) + "px;height: " + (action_sprite['height']) + "px;"
+      + " content-align: left;"
+      + "vertical-align:top; float:left;'>"
+      + "</div>";
+  }
+  return "";
+}
 
 /****************************************************************************
  gives an html-ready sprite from the tileset, by tag name

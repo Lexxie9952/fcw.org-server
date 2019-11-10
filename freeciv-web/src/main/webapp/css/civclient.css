@@ -6,6 +6,7 @@ body
   width: 100%;
 }
 
+
 button { 
   margin: .2em .2em .2em 0; 
   cursor: pointer; 
@@ -173,6 +174,19 @@ button {
   padding: 30px;
   overflow: auto;
 }
+
+/* scrollable but without scrollbars */
+.noscrollbars {
+  overflow-y: scroll; 
+  overflow-x: scroll;
+  scrollbar-width: none; /* Firefox */
+}
+.noscrollbars::-webkit-scrollbar { /* WebKit */
+  width: 0;
+  height: 0;
+}
+
+
 
 .helptext {
   white-space: pre-wrap;
