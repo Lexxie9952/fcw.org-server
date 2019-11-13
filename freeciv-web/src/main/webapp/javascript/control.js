@@ -280,10 +280,6 @@ function control_init()
   if (!touch_device) {
     $("#game_unit_orders_default").tooltip();
   }
-  // Make containers drawn over the map not block clicks below, as most of the container is invisible:
-  //// these changes in control.js and game.js made container not clickable but children unclickable also
-  //$("#game_unit_orders_default").css("pointer-events", "none");////
-  //$("#game_status_panel_bottom").css("pointer-events", "none");////
 
   $("#overview_map").click(function(e) {
     var x = e.pageX - $(this).offset().left;
@@ -909,6 +905,7 @@ function advance_unit_focus()
     set_unit_focus_and_redraw(candidate);
   } else {
     /* Couldn't center on a unit, then try to center on a city... */
+    deactivate_goto(false);
     save_last_unit_focus();
     current_focus = []; /* Reset focus units. */
     if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
@@ -971,6 +968,7 @@ function advance_focus_inactive_units()
     set_unit_focus_and_redraw(candidate);
   } else {
     /* Couldn't center on a unit, then try to center on a city... */
+    deactivate_goto(false);
     save_last_unit_focus();
     current_focus = []; /* Reset focus units. */
     waiting_units_list = []; /* Reset waiting units list */
@@ -3357,6 +3355,7 @@ function activate_goto_last(last_order, last_action)
 **************************************************************************/
 function deactivate_goto(will_advance_unit_focus)
 {
+  //console.log("deactivate_goto called!")
   goto_active = false;
   $("#canvas_div").css("cursor", "default");
   goto_request_map = {};
@@ -3414,7 +3413,7 @@ function key_unit_auto_explore()
     request_new_unit_activity(punit, ACTIVITY_EXPLORE, EXTRA_NONE);
     if (punit['movesleft'] > 0 && punit['owner'] == client.conn.playing.playerno) unit_move_sound_play(punit);
   }
-
+  deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
 }
 
@@ -3582,6 +3581,7 @@ function key_unit_unload()
       send_request(JSON.stringify(packet));
     }
   }
+  deactivate_goto(false);
   setTimeout(advance_unit_focus, update_focus_delay);
 }
 
@@ -3720,6 +3720,7 @@ function key_unit_show_cargo()
       current_focus.push(punit);
     }
   }
+  deactivate_goto(false);
   update_active_units_dialog();
   update_unit_order_commands();
 }
@@ -3734,6 +3735,7 @@ function key_unit_wait()
     var punit = funits[i];
     waiting_units_list.push(punit['id']);
   }
+  deactivate_goto(false);
   advance_unit_focus();
 }
 
@@ -3747,7 +3749,7 @@ function key_unit_noorders()
     var punit = funits[i];
     punit['done_moving'] = true;
   }
-
+  deactivate_goto(false);
   advance_unit_focus();
 }
 
@@ -3764,6 +3766,7 @@ function key_unit_idle()
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
   }
+  deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
 }
 
@@ -3788,6 +3791,7 @@ function key_unit_sentry()
     }
     else request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
   }
+  deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
 }
 
@@ -3801,6 +3805,7 @@ function key_unit_fortify()
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_FORTIFYING, EXTRA_NONE);
   }
+  deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
 }
 
@@ -3820,6 +3825,7 @@ function key_unit_fortress()
 
     request_new_unit_activity(punit, ACTIVITY_BASE, activity);
   }
+  deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
 }
 
@@ -3833,6 +3839,7 @@ function key_unit_airbase()
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_BASE, EXTRA_AIRBASE);
   }
+  deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
 }
 
@@ -3847,6 +3854,7 @@ function key_unit_irrigate()
     /* EXTRA_NONE -> server decides */
     request_new_unit_activity(punit, ACTIVITY_IRRIGATE, EXTRA_NONE);
   }
+  deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
 }
 
@@ -3860,6 +3868,7 @@ function key_unit_pollution()
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_POLLUTION, EXTRA_NONE);
   }
+  deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
 }
 
@@ -3882,7 +3891,6 @@ function key_unit_nuke()
 
     activate_goto_last(ORDER_PERFORM_ACTION, ACTION_NUKE);
   }
-  
 }
 
 /**************************************************************************
@@ -3906,6 +3914,7 @@ function key_unit_upgrade()
     };
     send_request(JSON.stringify(packet));
   }
+  deactivate_goto(false);
   setTimeout(update_active_units_dialog, update_focus_delay*.85);
   setTimeout(update_unit_focus, update_focus_delay);
 }
@@ -3944,6 +3953,7 @@ function key_unit_fallout()
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_FALLOUT, EXTRA_NONE);
   }
+  deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
 }
 
@@ -3957,6 +3967,7 @@ function key_unit_transform()
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_TRANSFORM, EXTRA_NONE);
   }
+  deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
 }
 
@@ -3978,6 +3989,7 @@ function key_unit_pillage()
       }
     }
   }
+  deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
 }
 
@@ -3992,6 +4004,7 @@ function key_unit_convert()
     /* EXTRA_NONE -> server decides */
     request_new_unit_activity(punit, ACTIVITY_CONVERT, -1)
   }
+  deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
 }
 
@@ -4006,6 +4019,7 @@ function key_unit_mine()
     /* EXTRA_NONE -> server decides */
     request_new_unit_activity(punit, ACTIVITY_MINE, EXTRA_NONE);
   }
+  deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
 }
 
@@ -4057,6 +4071,7 @@ function key_unit_well()
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['River']['id']);
     }
   }
+  deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
 }
 
@@ -4209,6 +4224,7 @@ function key_unit_canal()
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Canal']['id']);
     }
   }
+  deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
 }
 
@@ -4242,7 +4258,7 @@ function key_unit_naval_base()
         request_new_unit_activity(punit, ACTIVITY_BASE, EXTRA_NAVALBASE);
       }
     }},     200);
-
+  deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
 }
 
@@ -4266,6 +4282,7 @@ function key_unit_road()
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Maglev']['id']);
     }
   }
+  deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
 }
 
@@ -4292,6 +4309,7 @@ function key_unit_homecity()
       $("#order_change_homecity").hide();
     }
   }
+  deactivate_goto(false);
 }
 
 /**************************************************************************
@@ -4314,6 +4332,7 @@ function key_unit_action_select()
              + "Press 'd' again to act against own tile."
     });
   }
+  deactivate_goto(false);
 }
 
 /**************************************************************************
@@ -4372,6 +4391,7 @@ function key_unit_auto_settle()
     request_unit_autosettlers(punit);
   }
   setTimeout(update_unit_focus, update_focus_delay);
+  deactivate_goto(false);
 }
 
 
@@ -4485,34 +4505,34 @@ function key_unit_disband()
     confirmButtonText: "Yes, disband unit.",
     closeOnConfirm: true
 },
-function(){
-  var funits = get_units_in_focus();
-  for (var i = 0; i < funits.length; i++) {
-    var punit = funits[i];
-    var packet = null;
-    var target_city = tile_city(index_to_tile(punit['tile']));
+  function(){
+    var funits = get_units_in_focus();
+    for (var i = 0; i < funits.length; i++) {
+      var punit = funits[i];
+      var packet = null;
+      var target_city = tile_city(index_to_tile(punit['tile']));
 
-    /* Do Recycle Unit if located inside a city. */
-    /* FIXME: Only rulesets where the player can do Recycle Unit to all
-     * domestic and allied cities are supported here. */
-    packet = {
-      "pid"         : packet_unit_do_action,
-      "actor_id"    : punit['id'],
-      "target_id"   : (target_city == null ? punit['id']
-                                           : target_city['id']),
-      "extra_id"    : EXTRA_NONE,
-      "value"       : 0,
-      "name"        : "",
-      "action_type" : (target_city == null ? ACTION_DISBAND_UNIT
-                                           : ACTION_RECYCLE_UNIT)
-    };
+      /* Do Recycle Unit if located inside a city. */
+      /* FIXME: Only rulesets where the player can do Recycle Unit to all
+      * domestic and allied cities are supported here. */
+      packet = {
+        "pid"         : packet_unit_do_action,
+        "actor_id"    : punit['id'],
+        "target_id"   : (target_city == null ? punit['id']
+                                            : target_city['id']),
+        "extra_id"    : EXTRA_NONE,
+        "value"       : 0,
+        "name"        : "",
+        "action_type" : (target_city == null ? ACTION_DISBAND_UNIT
+                                            : ACTION_RECYCLE_UNIT)
+      };
 
-    send_request(JSON.stringify(packet));
-  }
-  setTimeout(update_unit_focus, update_focus_delay);
-  setTimeout(update_active_units_dialog, update_focus_delay+100);
-});
-
+      send_request(JSON.stringify(packet));
+    }
+    setTimeout(update_unit_focus, update_focus_delay);
+    setTimeout(update_active_units_dialog, update_focus_delay+100);
+  });
+  deactivate_goto(false);
 }
 
 /**************************************************************************
@@ -4709,7 +4729,7 @@ function request_goto_path(unit_id, dst_x, dst_y)
 ****************************************************************************/
 function check_request_goto_path()
 {
-  //console.log("   check_request_goto_path called by " + check_request_goto_path.caller);
+  //console.log("   check_request_goto_path called by " + check_request_goto_path.caller.toString().substring(1,35));
   var ptile;
   // TO DO: function only called if goto_active so we can remove check for that 
   if (goto_active && current_focus.length > 0
@@ -5026,8 +5046,8 @@ function update_active_units_dialog()
     // graphics loaded, and a message to please refresh if they did not.
     if (sprite == null) {
       add_client_message("Uncached graphics didn't have time to load. Please refresh browser to reload site.");
-      console.log("update_active_units_dialog() - aborting panel construction: Sprite not found for "+unit_type(punit)['name']);
-      console.log("RECOMMENDED:  refresh page so graphics will be loaded properly.");
+      alert("Warning - Graphical sprites couldn't load in time or do not match cache.\nPlease reload page to fix.\n\n"
+             +"If that doesn't work, wiping the browser cache for the site forces graphics to reset.");
       continue;
     }
 
