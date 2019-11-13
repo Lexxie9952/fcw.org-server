@@ -112,6 +112,7 @@ button {
   display: inline-block;
   height: 30px;
   width: 30px;
+  visibility:visible;
 }
 
 #turn_done_button_div {
@@ -311,6 +312,7 @@ button {
   position: absolute;
   text-align: center;
   width: 100%;
+  visibility:hidden;
 }
 
 #city_viewport {

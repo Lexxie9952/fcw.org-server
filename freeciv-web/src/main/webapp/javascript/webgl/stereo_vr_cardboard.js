@@ -46,7 +46,7 @@ function init_stereo_vr_cardboard(width, height)
   $(".unit_dialog").hide();
   unitpanel_active = false;
   $("#game_unit_orders_default").hide();
-  $("#game_unit_orders_settlers").hide();
+  //$("#game_unit_orders_settlers").hide(); vestigial element we removed
   $("#game_status_panel_bottom").hide();
 
 

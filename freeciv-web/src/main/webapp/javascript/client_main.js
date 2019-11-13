@@ -150,7 +150,7 @@ function setup_window_size ()
     $(".overview_dialog").hide(); overview_active = false;
     // Remove orders buttons
     if ($("#game_unit_orders_default").length > 0) $("#game_unit_orders_default").remove();
-    if ($("#game_unit_orders_settlers").length > 0) $("#game_unit_orders_settlers").remove();
+    // vestigial element we removed if ($("#game_unit_orders_settlers").length > 0) $("#game_unit_orders_settlers").remove();
     // Optimise space/fit in game unit panel:
     $("#game_unit_panel").css({"transform":"scale(0.95)","float":"left","margin-top":"-12px","margin-left":"-22px","width":"100%;"});
     $("#game_unit_info").css({"float":"left", "width":"2000%"}); // continuous horizontal drag-scroll panel
