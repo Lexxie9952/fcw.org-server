@@ -476,7 +476,7 @@ target_reqs  =
     { "type",        "name",      "range",  "present"
       "NationGroup", "Barbarian", "Player", FALSE
     }
-;if at war, police station will block embassy: do a cease-fire first!
+;if at war, police station/fundie will block embassy: do a cease-fire first!
 [actionenabler_establish_embassy_war]
 action       = "Establish Embassy Stay"
 actor_reqs    =
@@ -489,9 +489,10 @@ actor_reqs    =
       "DiplRel",      "War",           "Local", TRUE 
     }
 target_reqs  =
-    { "type",        "name",      "range",    "present"
-      "NationGroup", "Barbarian", "Player",    FALSE
-      "Building",    "Police Station", "City", FALSE  ; to do: when we can check for spy present to stop it
+    { "type",        "name",           "range",   "present"
+      "NationGroup", "Barbarian",      "Player",  FALSE
+      "Building",    "Police Station", "City",    FALSE ; to do: when we can check for spy present to stop it
+      "Gov",         "Fundamentalism", "Player",  FALSE
     }
 
 ; normal establish embassy--if not at war 
@@ -509,7 +510,7 @@ target_reqs  =
     { "type",        "name",      "range",  "present"
       "NationGroup", "Barbarian", "Player", FALSE
     }
-;if at war, police station will block embassy: do a cease-fire first!
+;if at war, police station or fundie will block embassy: do a cease-fire first!
 [actionenabler_establish_embassy_spy_war]
 action       = "Establish Embassy"
 actor_reqs    =
@@ -521,9 +522,10 @@ actor_reqs    =
       "DiplRel",      "War",           "Local", TRUE 
     }
 target_reqs  =
-    { "type",        "name",      "range",  "present"
-      "NationGroup", "Barbarian", "Player", FALSE
-      "Building",    "Police Station", "City", FALSE  ; to do: when we can check for spy present to stop it
+    { "type",        "name",          "range",    "present"
+      "NationGroup", "Barbarian",     "Player",   FALSE
+      "Building",    "Police Station", "City",    FALSE  ; to do: when we can check for spy present to stop it
+      "Gov",         "Fundamentalism", "Player",  FALSE
     }
 ; ***************************************************
 
@@ -878,6 +880,16 @@ action = "Join City"
 actor_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "AddToCity", "Local", TRUE
+      "DiplRel", "Foreign", "Local", FALSE
+      "MinMoveFrags", "1", "Local", TRUE
+    }
+
+[actionenabler_join_city_pilgrims_domestic]
+action = "Join City"
+actor_reqs    =
+    { "type",   "name", "range", "present"
+      "UnitFlag", "AddToCity", "Local", TRUE
+      "UnitType", "Pilgrims", "Local", TRUE
       "DiplRel", "Foreign", "Local", FALSE
       "MinMoveFrags", "1", "Local", TRUE
     }
@@ -1851,7 +1863,7 @@ set =
       "nuclearwinter_percent", 20, FALSE
       "revolen", 1, FALSE
       "separatepoles", FALSE, FALSE
-;      "spaceship_travel_time", 225, FALSE      UNCOMMENT WHEN FEATURE GOES UP
+      "spaceship_travel_time", 225, FALSE
       "specials", 350, FALSE
       "startpos", "SINGLE", FALSE
       "startunits", "cccwwwxxa", FALSE

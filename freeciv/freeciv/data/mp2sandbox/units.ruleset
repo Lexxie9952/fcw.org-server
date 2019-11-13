@@ -641,7 +641,7 @@ If you start with no water, make a Well-Digger in a city that can\
  in the first turns of play.\
 ")
 
-[unit_migrants]
+[unit_proletarians]
 name          = _("Proletarians")
 class         = "Land"
 tech_req      = "Communism"
@@ -683,6 +683,47 @@ Communist States can assign Proletarians from one city to another, which transfe
 Large numbers of Proletarians can be used to rapidly complete important State projects,\
  which you may organize into Five-turn Plans.\
 ")
+
+[unit_pilgrims]
+name          = _("Pilgrims")
+class         = "Land"
+tech_req      = "Fundamentalism"
+obsolete_by   = "None"
+graphic       = "u.pilgrims"
+graphic_alt   = "u.migrants"
+sound_move    = "m_worker"
+sound_move_alt = "m_generic"
+sound_fight   = "f_worker"
+sound_fight_alt = "f_generic"
+build_cost    = 10
+pop_cost      = 1
+attack        = 0
+defense       = 1
+hitpoints     = 20
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 4
+transport_cap = 0
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 2
+uk_gold       = 0
+flags         = "Fanatic", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable"
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 0
+helptext      = _("\
+Pilgrims are wayfaring migrants from Fundamentalist nations. Heeding the call\
+ of ecclesiastic authority, they migrate to where divine inspiration guides them.\
+"), _("\
+Pilgrims can move from one city to another to transfer population from city\
+ to city.\
+")
+
 
 [unit_worker]
 name          = _("?unit:Workers")
@@ -1775,7 +1816,7 @@ vision_radius_sq = 17
 transport_cap = 0
 fuel          = 2
 uk_happy      = 0
-uk_shield     = 1
+uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 flags         = "Unbribable", "HasNoZOC", "NeverProtects", "NonMil"
@@ -1783,9 +1824,10 @@ roles         = ""
 helptext      = _("\
 Balloons are useful for gathering intelligence around an upcoming battle area. They have\
  great vision and are unreachable by units prior to Riflemen and Ironclads. They can remain\
- in the air for one extra turn before needing to land in a City, Fortress, or Airbase. It\
- is unreachable by more primitive land and sea units, but does not block units under it from\
- being attacked. Balloons cannot fly over mountains. \
+ in the air for one extra turn before needing to land in a City, Fortress, or Airbase. They\
+ may also land to refuel on larger cargo ships with a carry capacity of 4 or higher. The\
+ Balloon is is unreachable by more primitive land and sea units, but does not block units\
+ under it from being attacked. Balloons cannot fly over mountains. \
 "), _("
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
  this restriction can by overridden by ordering moves to adjacent tiles.\
@@ -2607,11 +2649,11 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Submarine"
-cargo         = "Land", "LandNoKill", "LandAirSea"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon"
 flags         = "BadCityDefender", "Provoking", "CanEscape", "CantReachAir"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
-The Galleon is a heavily armed transport ship that can carry up to 4 land units. Galleons can travel and attack on rivers,\
+The Galleon is a heavily armed transport ship that can carry up to 4 units. Galleons can travel and attack on rivers,\
  and also do shore attacks.\
 "), _("
 Like most early sea units, when it initiates combat there will be 15 rounds\
@@ -2776,7 +2818,7 @@ bonuses       =
      "Marines", "DefenseMultiplier", 1    
    }
 flags         = "BadCityDefender", "CanEscape", "CantReachAir"
-roles         = "DefendOk", "Hunter"
+roles         = "Hunter"
 helptext      = _("\
 The Cruiser is a large and fast surface warship with equally strong offensive and defensive strength. More often than not, its\
  2x ASW defence allows it to survive a Submarine attack.\
@@ -3012,7 +3054,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon"
 bonuses       =
    { "flag", "type", "value"
      "Marines", "DefenseMultiplier", 1    
@@ -3021,7 +3063,9 @@ flags         = "BadCityDefender", "Provoking", "CanEscape"
 roles         = "Ferryboat", "FerryStartUnit"
 helptext      = _("\
 The Transport cannot attack on its own but may defend itself when under attack.\
- Marines and Anti-Aircraft Artillery can directly attack from a Transport.\
+ Marines and Anti-Aircraft Artillery can directly attack from a Transport. Its\
+ large cargo capacity of 8 units makes it a significant logistical upgrade in\
+ sea transportation.\
 ")
 
 [unit_cruise_missile]

@@ -651,7 +651,8 @@ If the capital is in a dangerous location, or a more central capital\
 "),
 _("\
 The city containing the Palace receives a production bonus of +75% under Despotism,\
- +50% under Monarchy, and +25% under Communism.\
+ +50% under Monarchy, and +25% under Communism. Under Fundamentalism, it receives\
+ a +50% gold bonus.\
 ")
 
 [building_ecclesiastical_palace]
