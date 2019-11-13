@@ -161,5 +161,5 @@
 
 </div>
 
-<!-- <div id="game_unit_orders_settlers" style="display: none;">  vestigial element we removed !--> 
+<div id="game_unit_orders_settlers" style="display: none;">
 </div>
