@@ -333,9 +333,9 @@ function create_diplomacy_dialog(counterpart, template) {
   diplomacy_dialog.dialog({
             title: title,
 			bgiframe: true,
-			modal: false,
-			width: is_small_screen() ? "90%" : "50%",
-			height: dialog_height,
+      modal: false,
+      width: is_small_screen() ? "90%" : "50%",
+      height: dialog_height,
 			buttons: {
 				"Accept treaty": function() {
 				    accept_treaty_req(counterpart_id);
@@ -350,6 +350,9 @@ function create_diplomacy_dialog(counterpart, template) {
 		}).dialogExtend({
            "minimizable" : true,
            "closable" : true,
+           "minimize" : function(evt, dlg){
+            unobstruct_minimized_dialog_continer(); // don't let wide container block clicks
+          },
            "icons" : {
              "minimize" : "ui-icon-circle-minus",
              "restore" : "ui-icon-bullet"

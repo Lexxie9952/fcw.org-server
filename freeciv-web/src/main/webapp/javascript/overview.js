@@ -74,6 +74,7 @@ function init_overview()
                   "minimize" : function(evt, dlg){
                       overview_current_state = $("#game_overview_panel").dialogExtend("state");
                       $(".overview_dialog").css({"height":"8","width":65});
+                      unobstruct_minimized_dialog_continer(); // don't let wide container block clicks
                     },
                   "maximize" : function(evt, dlg){
                       overview_current_state = $("#game_overview_panel").dialogExtend("state");

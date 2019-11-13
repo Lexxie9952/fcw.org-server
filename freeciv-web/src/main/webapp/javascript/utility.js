@@ -251,4 +251,19 @@ function alphanumeric_cleaner(text)
     return result;
 }
 
+/**************************************************************************
+  Minimized jquery #dialog-extend-fixed-container has undesirable 
+    behaviour of being z-index:9999 and screen-wide, blocking clicks on 
+    more important objects. A call to this function below can be put in the
+    inline declared minimize function where the dialog init_ is done, to
+    fix this issue.
+**************************************************************************/
+function unobstruct_minimized_dialog_continer()
+{ // Prevent screen-wide container from blocking clicks when minimized
+  // TO DO: this should really be put into jquery.dialogextend.js so we
+  // don't have to do it for every minimized container.
+  $("#dialog-extend-fixed-container").children().css("visibility","visible");
+  $("#dialog-extend-fixed-container").css("visibility","hidden");
+}
+
 
