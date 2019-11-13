@@ -188,9 +188,11 @@ function do_worklists(cur_gov, new_gov)
       if (pcity['worklist'] != null && pcity['worklist'].length != 0) {
         var before = pcity['worklist'].length;
         pcity['worklist'] = pcity['worklist'].filter(list_item => !(list_item['kind']==VUT_UTYPE && unit_types[list_item['value']]['name'] == "Fanatics") );
+        pcity['worklist'] = pcity['worklist'].filter(list_item => !(list_item['kind']==VUT_UTYPE && unit_types[list_item['value']]['name'] == "Pilgrims") );
         if (before != pcity['worklist'].length) {send_city_worklist(pcity['id']);altered = true;}
       }
-      if (pcity['production_kind']==VUT_UTYPE && unit_types[pcity['production_value']]['name'] == "Fanatics") {
+      if (pcity['production_kind']==VUT_UTYPE && (unit_types[pcity['production_value']]['name'] == "Fanatics"
+          || unit_types[pcity['production_value']]['name'] == "Pilgrims")) {
         altered=true;
         if (pcity['worklist'] != null && pcity['worklist'].length) {
           send_city_change(pcity['id'],pcity['worklist'][0]['kind'],pcity['worklist'][0]['value']);

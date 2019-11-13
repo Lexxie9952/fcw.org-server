@@ -753,7 +753,8 @@ function generate_production_list()
     
     /* FIXME: web client doesn't support unit flags yet, so this is a hack: */
     if (punit_type['name'] == "Barbarian Leader" || punit_type['name'] == "Leader" || punit_type['name'] == "Queen" 
-      || (punit_type['name'] == "Proletarians" && governments[players[client.conn.playing.playerno].government].name != "Communism"))
+      || (punit_type['name'] == "Proletarians" && governments[players[client.conn.playing.playerno].government].name != "Communism")
+      || (punit_type['name'] == "Pilgrims" && governments[players[client.conn.playing.playerno].government].name != "Fundamentalism") )
        continue;
 
     
