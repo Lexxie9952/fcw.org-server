@@ -897,10 +897,10 @@ Send buy command for a non-active city. (Called from city list or elsewhere
 **************************************************************************/
 function request_city_id_buy(city_id)
 {
-  active_city = null;   // this function called without an active city, make sure it stays that way
+  active_city = null;               // this function called without an active city, make sure it stays that way
   inactive_city = cities[city_id];  // lets request_city_buy() know which city wants to buy
   request_city_buy();
-  //inactive_city = null;   //reset to null
+  //inactive_city = null;           // reset to null
 }
 
 /**************************************************************************

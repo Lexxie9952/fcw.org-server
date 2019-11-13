@@ -2745,11 +2745,20 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
     
     case 'B':
-      if (ctrl) {
+      if (ctrl) {   //CTRL-B solid fill national borders 
         the_event.stopPropagation();
         fill_national_border = !fill_national_border;
       }
-    else request_unit_build_city();
+    else if (current_focus.length==1 &&   // check if single focused unit can found or join city
+    (utype_can_do_action(unit_type(current_focus[0]),ACTION_JOIN_CITY)
+    || utype_can_do_action(unit_type(current_focus[0]),ACTION_FOUND_CITY))) {
+    
+        request_unit_build_city();
+    } else {   // otherwise hover over city while hitting B sends instant-buy command to it 
+        var ptile = canvas_pos_to_tile(mouse_x, mouse_y); // get tile
+        var pcity = tile_city(ptile); // check if it's a city
+        if (pcity!=null) request_city_id_buy(pcity['id']); // send buy order
+    }
     break;
 
     case 'C':
@@ -5100,7 +5109,7 @@ function update_active_units_dialog()
 
     // Construct unit name. Placement is different between mobile and normal screen:
     if (client.conn.playing != null && current_focus[0]['owner'] != client.conn.playing.playerno) {
-      unit_name = nations[players[current_focus[0]['owner']]['nation']]['adjective'];
+      unit_name = nations[players[current_focus[0]['owner']]['nation']]['adjective']+" ";
       if (!mobile_mode) unit_name = "<b>"+unit_name+"<b>";
       else unit_name = "<span style='font-size:90%'>"+unit_name+"&nbsp;</span>";
     }

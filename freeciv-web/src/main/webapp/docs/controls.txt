@@ -124,6 +124,7 @@ ESC: <In other tab>: Exit TAB, return to map.
 double-tap drag: move unit 
 
 <h2>Other Keyboard Shortcuts:</h2>
+b: buy production in city under mouse cursor
 w: return to map: close tab/window/pop-up
 space: de-select units, exit GOTO mode
 shift-space: re-focus to previous map position
