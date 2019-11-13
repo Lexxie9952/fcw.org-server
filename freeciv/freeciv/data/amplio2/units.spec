@@ -120,5 +120,6 @@ tiles = { "row", "column", "tag"
   3,  9, "u.ram_ship"         ; Lexxie
   3, 10, "u.armor_ii"         ; Wahazar & Lexxie
   3, 14, "u.proletarian"	    ; Lexxie
+  3, 17, "u.pilgrims"		      ; Lexxie
   3, 18, "u.queen"            ; Lexxie 
 }
