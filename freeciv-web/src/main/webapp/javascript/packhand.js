@@ -269,6 +269,23 @@ function recenter_flare_tile(tile_id)
 function decode_user_hyperlinks(message)
 {
   var ptile = null;
+
+  // If we are here, then this message contains a link. If it is also going from oneself 
+  // to onself, it is probably a SafeLink. SafeLinks are forced to go to oneself only. 
+  // In any case, all links in messages going from oneself to oneself will be interpreted
+  // as such. Therefore, if this is the case, repackage the presentation of this message here:
+  if (client.conn.playing && client.conn.playing['name']) {
+    pname = client.conn.playing.name;
+    // Historic message from oneself to oneself
+    if (message.includes("{"+pname+" -> ")) {
+      message = message.replace("{"+pname+" -> "+pname+"}: ", "<font color='#AFA8A8'>{Private Link}: </font>");
+      message = message.replace("#A020F0","#FFFFFF"); //private msg colour triggers sound: remove
+    } else if (message.includes("->{"+pname+"}: ")) {  // Real-time message from oneself to oneself}
+      message = message.replace("->{"+pname+"}: ", "<font color='#AFA8A8'>{Private Link}: </font>");
+      message = message.replace("#A020F0","#FFFFFF"); //private msg colour triggers sound: remove
+    }
+  }
+
   // EXTRACT ENCODED TILE LINKS
   if (message.includes("%%tile")) {
     var assert_escape = 0;
@@ -312,6 +329,7 @@ function decode_user_hyperlinks(message)
       
       if (units[unit_id] != null) { 
         punit = units[unit_id];
+        var nationality = nations[players[punit['owner']]['nation']]['adjective'];
         var hovertext = get_unit_city_info(punit);
         unit_link = "<span class='chatbox_text_tileinfo' "
                       + " title='"+hovertext+"'"

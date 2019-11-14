@@ -704,6 +704,18 @@ function set_chat_direction(player_id) {
  the server message_escape.patch until it is removed.
 ****************************************************************************/
 function encode_message_text(message) {
+
+  // Safe links are encoded with %%% instead of %% (pasted safe links auto-send to self)
+  // Convert safe links to normal links and alter the message to be sent to self
+  if (message.includes("%%%tile") || message.includes("%%%unit")) {
+    message = message.replace(new RegExp("%%%tile", 'g'), "%%tile");
+    message = message.replace(new RegExp("%%%unit", 'g'), "%%unit");
+    // Any message with a safelink will automatically go to self:
+    if (client.conn.playing && client.conn.playing['name']) {
+      message = client.conn.playing['name'] +": " + message;
+    }
+  }
+
   message = message.replace(/^\s+|\s+$/g,"");
   message = message.replace(/&/g, "&amp;");
   message = message.replace(/'/g, "&apos;");
@@ -4667,10 +4679,10 @@ function key_paste_link_under_cursor()
     var name = unit_types[sunits[selected_index]['type']]['name'];
     var nationality = nations[players[sunits[selected_index]['owner']]['nation']]['adjective'];
     $("#game_text_input").val($("#game_text_input").val() + "%%unit"+sunits[selected_index]['id']+"_%"+nationality+" "+name+"~~ ");
-    copy_string_to_clipboard("%%unit"+sunits[selected_index]['id']+"_%"+nationality+" "+name+"~~ ");
+    copy_string_to_clipboard("%%%unit"+sunits[selected_index]['id']+"_%"+nationality+" "+name+"~~ "); // %%% instead of %% makes it sendable to oneself
   } else {  // if no unit present, then give just a link to the tile: 
     $("#game_text_input").val($("#game_text_input").val() + "%%tile"+ptile['index']+"~% ");
-    copy_string_to_clipboard("%%tile"+ptile['index']+"~% ");
+    copy_string_to_clipboard("%%%tile"+ptile['index']+"~% "); // %%% instead of %% makes it sendable to oneself
   }
   add_client_message("Link copied to clipboard.");
 
@@ -4865,6 +4877,11 @@ function popit()
 function popit_req(ptile)
 {
   if (ptile == null) return;
+
+  // copies tile string to clipboard for later pasting
+  // %%% instead of %% puts it in a format that will send the message privately
+  // to oneself
+  copy_string_to_clipboard("%%%"+"tile"+ptile['index']+"~%");
 
   if (tile_get_known(ptile) == TILE_KNOWN_UNSEEN) {
     show_dialog_message("Tile info", "Location: x:" + ptile['x'] + " y:" + ptile['y']);
