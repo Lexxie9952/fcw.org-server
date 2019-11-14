@@ -198,6 +198,7 @@ function show_city_dialog(pcity)
   $("#city_canvas").click(city_mapview_mouse_click);
 
   show_city_traderoutes();
+  show_city_happy_tab();
 
   var dialog_buttons = {};
 
@@ -263,17 +264,21 @@ function show_city_dialog(pcity)
 
   /* prepare city dialog for small screens. */
   if (!is_small_screen()) {
-    $("#city_tabs-5").remove();
-    $("#city_tabs-6").remove();
-    $(".extra_tabs_small").remove();
+    //$("#city_tabs-5").remove();     // whatever this tab was, it was removed
+    $("#city_tabs-6").remove();       // "Inside" tab for units, not needed on large screen.
+    $(".extra_tabs_small").remove();  // class identified for "Inside" tab for units, not needed on large screen.
     $("#mobile_cma_checkbox").remove();
   } else {
-    $("#city_tabs-4").remove();
-    $(".extra_tabs_big").remove();
-    //$("#city_stats").hide();
-    var units_element = $("#city_improvements_panel").detach();
-    $('#city_units_tab').append(units_element);
-    $("#city_tabs").css( {"margin":"-21px", "margin-top":"-11px"} );
+    //$("#city_tabs-4").remove();     // Options tab formerly removed; made inconsistent tab indices
+    //$(".extra_tabs_big").remove();  // Options tab formerly removed; disallowed disbanding s1 cities on mobile!
+    //$("#city_stats").hide();        // There was no need to hide city stats info after moving units to its own tab
+    var units_element = $("#city_improvements_panel").detach();  // Remove this from main tab and put it in "Inside" tab
+    $('#city_units_tab').append(units_element);  // "Inside" tab:units inside
+    $("#city_tabs").css( {"margin":"-21px", "margin-top":"-11px"} ); // Compact tabs for mobile fit
+    // Abbreviate tab title buttons to fit.
+    $("#ct0").html("Main");     $("#ct1").html("Prod");
+    $("#ct2").html("Routes");   $("#ct3").html("Option");
+    $("#ct4").html("Happy");    $("#ct5").html("Inside"); 
    }
 
   $("#city_tabs").tabs({ active: city_tab_index});
@@ -294,13 +299,18 @@ function show_city_dialog(pcity)
   update_map_canvas(0, 0, mapview['store_width'], mapview['store_height']);
   renderer = orig_renderer;
 
-  $("#city_size").html("Population: " + numberWithCommas(city_population(pcity)*1000) + "<br>"
+  var pop_string = is_small_screen() ? city_population(pcity)+"K" : numberWithCommas(city_population(pcity)*1000);
+  var change_string = is_small_screen() ? "Growth:" : "Change in: ";
+  $("#city_size").html("Population: "+ pop_string + "<br>"
                        + "Size: " + pcity['size'] + "<br>"
                        + "Granary: " + pcity['food_stock'] + "/" + pcity['granary_size'] + "<br>"
-                       + "Change in: " + city_turns_to_growth_text(pcity));
+                       + change_string + city_turns_to_growth_text(pcity));
 
   var prod_type = get_city_production_type_sprite(pcity);
-  $("#city_production_overview").html("<b>" + (prod_type != null ? prod_type['type']['name']+"</b>" : "None</b>"));
+  var prod_string = "<b>" + (prod_type != null ? prod_type['type']['name']+"</b>" : "None</b>");
+  if (is_small_screen() && prod_type != null && prod_type['type']['name'].length>18) 
+    prod_string = "<span style='font-size:90%'>" + prod_string + "</span>";
+  $("#city_production_overview").html(prod_string);
 
   turns_to_complete = get_city_production_time(pcity);
 
@@ -598,11 +608,13 @@ function show_city_dialog(pcity)
   });
 
   // HANDLE FOREIGN CITIZENS, APPEND AFTER UNIT PANELS
-  var foreigners_html = "<div id='city_foreigners'><br>Citizen nationality:";
+  var spacer = is_small_screen() ? "" : "<br>";
+  var foreigners_html = "<div id='city_foreigners'>"+spacer+"Citizen nationality:";
   if (pcity['nationalities_count']>0) { // foreigners present !
     for (ethnicity in pcity['nation_id']) {
+      var epop = pcity['nation_citizens'][ethnicity] == pcity['size'] ? "<font color='#005200''>ALL</font>" : pcity['nation_citizens'][ethnicity]; 
       foreigners_html += " &bull; " + nations[ players[pcity['nation_id'][ethnicity]]['nation'] ]['adjective']
-                      + ": <b>" + pcity['nation_citizens'][ethnicity]+"</b>";
+                      + ": <b>" + epop + "</b>";
     }
     foreigners_html+="</div>"
 
@@ -1257,17 +1269,18 @@ function city_sell_improvement_in(city_id, improvement_id)
 function city_turns_to_growth_text(pcity)
 {
   var turns = pcity['granary_turns'];
+  var small = is_small_screen();
 
   if (turns == 0) {
     return "blocked";
   } else if (turns > 1000000) {
     return " ";
   } else if (turns == -1) {
-    return "<b>* Starving in 1 turn</b>";  // plural to singular and bold message for starvation crisis
+    return small ? "<b>*starves in 1</b>" : "<b>* Starving in 1 turn</b>";  // plural to singular and bold message for starvation crisis
   } else if (turns < -1) {
-    return "Starving in " + Math.abs(turns) + " turns";
+    return small ? "starves in " + Math.abs(turns) : "Starving in " + Math.abs(turns) + " turns";
   } else if (turns ==1) {
-    return "<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 turn</b>";
+    return small ? "<b>&nbsp;1 turn</b>" : "<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 turn</b>";
   } else {
     return turns + " turns";
   }
@@ -1571,6 +1584,100 @@ function rename_city()
 }
 
 /**************************************************************************
+ Shows breakdown of citizen happiness by cause
+**************************************************************************/
+function show_city_happy_tab()
+{
+  if (active_city == null) {
+    /* No city to show. */
+    return;
+  }
+  const pcity = active_city;
+  var citizen_types = ["angry", "unhappy", "content", "happy"];
+  var causes = ["Cities","Luxury","Buildings","Nationality","Units","Wonders"];
+  var cause_titles = [
+      "The more cities a nation has, the harder it is to govern cities with higher population. This might cause unhappiness. Details depend on government type. See help on Governments.",
+      "Each city allots Luxury according to the national luxury rate, and also through Entertainers. Luxury can also be boosted indirectly by buildings such as Marketplaces.",
+      "Some types of buildings directly appease citizenry without giving Luxury; for example: Temples",
+      "In some rulesets, foreign nationals may be displeased if you are at war with their home nation.",
+      "In some governments, military units in the city can keep order by martial law. In other governments, units deployed abroad cause unhappiness.",
+      "Wonders and Palaces in the city may give bonus effects on happiness. Wonders elsewhere in the nation may give bonuses to all cities in the nation."
+  ];
+
+  var happy_tab_html = "<header><div style='font-size: 150%'><b>Citizen Happiness</b></div><br></header>";
+
+  happy_tab_html += "<table id='happy_table' style='border=3px;border-spacing=3;padding=30;'>"
+                  + "<thead id='happy_table_head'><tr>"
+                  + "<th style='text-align:left;'>Cause</th><th style='text-align:left;'>Citizens</th>"
+                  + "</tr></thead><tbody>";
+
+  for (cause in causes) {
+    // Cause text table cell with title
+    happy_tab_html += "<tr><td><div class='happy_cause_help' title='"+cause_titles[cause]+"'>";
+    happy_tab_html += causes[cause] + "</div></td>"
+    // Table cell of all the people
+    happy_tab_html += "<td><div>";
+
+    //---------------------------------
+    //Make a citizen sprite for each citizen based on mood type and specialist type
+    //---------------------------------
+
+      //MOODS
+      var citizen_html = "";
+      for (var s = 0; s < citizen_types.length; s++) {
+        if (pcity == null || pcity['ppl_' + citizen_types[s]].length<1 || pcity['ppl_' + citizen_types[s]] == null) continue;
+        if (pcity['ppl_' + citizen_types[s]] == null) continue;
+        for (var i = 0; i < pcity['ppl_' + citizen_types[s]][cause]; i ++) {
+          sprite = get_specialist_image_sprite("citizen." + citizen_types[s] + "_"
+            + (i % 2));
+            citizen_html = citizen_html +
+          "<div class='specialist_item' style='background: transparent url("
+              + sprite['image-src'] +
+              ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
+              + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
+              +" title='One " + citizen_types[s] + " citizen'></div>";
+        }
+      }
+
+      //SPECIALISTS
+      for (var u = 0; u < pcity['specialists_size']; u++) {
+        var spec_type_name = specialists[u]['plural_name'];
+        var spec_gfx_key = "specialist." + specialists[u]['rule_name'] + "_0";
+        for (var j = 0; j < pcity['specialists'][u]; j++) {
+          sprite = get_specialist_image_sprite(spec_gfx_key);
+          citizen_html = citizen_html +
+          "<div class='specialist_item' style='cursor:pointer;cursor:hand; background: transparent url("
+              + sprite['image-src'] +
+              ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
+              + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
+              + " onclick='city_change_specialist(event, " + pcity['id'] + "," + specialists[u]['id'] + ");'"
+              +" title='" + spec_type_name + " (click to change)'></div>";
+        }
+      }
+           
+      /* possible TO DO: this could be another table column that shows the total count for each mood
+      var rapture_citizen_html = "";
+                
+      for (var i = 0; i < 4; i++) {      
+          if (pcity['ppl_' + citizen_types[i]][cause] > 0) {
+            sprite = get_specialist_image_sprite("citizen." + citizen_types[i] + "_" + (Math.floor(i / 2)));                      
+            rapture_citizen_html += "<div class='city_dialog_rapture_citizen' style='margin-right:auto;' title='"+citizen_types[i].charAt(0).toUpperCase() + citizen_types[i].slice(1)+" citizens'><div style='float:left;background: transparent url("
+            + sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'>"
+            +"</div><div style='float:left;height: "+sprite['height']+"px;margin-left:2px;'>"+pcity['ppl_' + citizen_types[i]][cause]+"</div></div>";
+          }
+      }
+      */
+      //-------------------------------
+
+    happy_tab_html += citizen_html + "</div></td></tr>";
+  }
+
+  happy_tab_html += "</tbody></table>"
+  $("#city_happy_tab").html(happy_tab_html);
+  $(".happy_cause_help").tooltip();
+
+}
+/**************************************************************************
  Shows traderoutes of active city
 **************************************************************************/
 function show_city_traderoutes()
@@ -1625,7 +1732,7 @@ function show_city_traderoutes()
     msg += "if you want to learn more about trade and trade routes.)";
   }
 
-  $("#city_traderoutes_tab").html(msg);
+  $("#city_traderoutes_tab").html(msg);  
 }
 
 /**************************************************************************
