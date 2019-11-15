@@ -144,7 +144,7 @@ function update_govt_dialog()
   $(".govt_button").tooltip();
   $(".govt_button").tooltip({
     open: function (event, ui) {
-        ui.tooltip.css({"max-width":"100%", "width":"88%", "margin-top":"55px", "margin-left":"-95px", "overflow":"visible"});
+        ui.tooltip.css({"max-width":"100%", "width":"88%", "margin-top":"15px", "margin-left":"-95px", "overflow":"visible"});
     }
 });
 }
