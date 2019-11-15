@@ -460,13 +460,13 @@ function get_unit_city_info(punit)
   var upkeep_mode;
   const UNCLAIMED_LAND = 255;
 
-  // No need to show 3 upkeep types when 99% of games use rulesets that use only 1
+  // No need to show 3 upkeep types if ruleset doesn't use 3
   switch (ruleset_control['name']) {
     case "Classic ruleset":
     case "Multiplayer ruleset":
     case "Multiplayer-Plus ruleset":
     case "Multiplayer-Evolution ruleset":
-      upkeep_mode=1; // Shields only.      
+      upkeep_mode=1; // Shields and Food only     
       break;
     default:
       upkeep_mode=3; // F/P/G
@@ -485,17 +485,20 @@ function get_unit_city_info(punit)
   
     // UPKEEP only happens for home city units
     if (upkeep_mode == 3) {
-      result += "\nFood/Shield/Gold: ";
+      result += "\nFood/Gold/Shield: ";
       if (punit['upkeep'] != null) {
         result += punit['upkeep'][O_FOOD] + "/"
-              + punit['upkeep'][O_SHIELD] + "/"
-              + punit['upkeep'][O_GOLD];
+              + punit['upkeep'][O_GOLD] + "/"
+              + punit['upkeep'][O_SHIELD];
       }
     } 
     else if (upkeep_mode==1) {
       result += "\nUpkeep: ";
-      if (punit['upkeep'] != null) 
-        result += punit['upkeep'][O_SHIELD];
+      if (punit['upkeep'] != null) {
+        var food_string = punit['upkeep'][O_FOOD] ? punit['upkeep'][O_FOOD]+"f " : "";  
+        result += food_string + punit['upkeep'][O_SHIELD];
+        if (food_string) result+="s";
+      } 
     }
   } else if (client.conn.playing != null && punit['owner'] != client.conn.playing.playerno) {
     // Foreign unit, we don't know home city but we do know nationality and player:
