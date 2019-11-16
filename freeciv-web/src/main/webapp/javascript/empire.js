@@ -42,6 +42,7 @@ var SORT_VET    = 3;
 var DO_NO_SORT  = -1;
 var empire_sort_mode = SORT_NONE;
 
+empire_screen_updater = new EventAggregator(update_empire_screen, 1000, EventAggregator.DP_NONE, 1000, 4, 250);
 
 /**************************************************************************
  Updates the Empire tab when clicked. Does basic common setup, then based 
@@ -122,10 +123,259 @@ function update_empire_screen()
 function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
   landscape_screen,tiny_screen,redux_screen)
 {
-  $("#empire_title").html("Home City Units");
-  $("#empire_list").html("Upcoming feature.");
+  $("#empire_title").html("Unit Home Cites and Upkeep");
 
+  //$("#empire_static").css({"height":"100%", "width":"100%"})
+
+  // Set up panel functions for National Units
+  var panel_html = "<input type='checkbox' id='show_hp' title='Show hit points' name='cbHP' value='false' onclick='toggle_empire_show_hitpoints();'>HP"
+                  + "<input type='checkbox' id='show_mp' title='Show movement points' name='cbMP' value='false' onclick='toggle_empire_show_movepoints();'>Moves";
+  panel_html += "&nbsp;&nbsp;<button id='button_sorthp' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_sort_hp();'"
+              + "title='Sort units rows by Hitpoints' style='padding:5px; margin-bottom:2px;'>&#x2943HP</button>";
+  panel_html += "<button id='button_sortmp' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_sort_mp();'"
+  + "title='Sort unit rows by Moves Left' style='padding:5px; margin-bottom:2px;'>&#x2943Moves</button>";
+  panel_html += "<button id='button_sortvet' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_sort_vet();'"
+  + "title='Sort unit rows by Vet level' style='padding:5px; margin-bottom:2px;'>&#x2943Vet</button>";
+  $("#empire_mode_panel").html(panel_html);
+  $("#show_hp").prop("checked", empire_show_hitpoints);
+  $("#show_mp").prop("checked", empire_show_movesleft);
+
+  $('#empire_scroll').css({"height": $(window).height()-160, "overflow-y":"scroll", "overflow-x":"hidden" });
+
+  var sortList = [];
+  var headers = $('#empire_table thead th');
+  headers.filter('.tablesorter-headerAsc').each(function (i, cell) {
+    sortList.push([cell.cellIndex, 0]);
+  });
+  headers.filter('.tablesorter-headerDesc').each(function (i, cell) {
+    sortList.push([cell.cellIndex, 1]);
+  });
+
+  if (narrow_screen || tiny_screen) $("#empire_prompt").hide();
+  else $("#empire_prompt").show();
+
+  var updown_sort_arrows = "<img class='lowered_gov' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='>";
+
+  var empire_list_html = "";
+
+  if (true /*wide_screen*/)  // fully standard deluxe wide-screen mode, include all info
+  {
+    empire_list_html = "<table class='tablesorter-dark' id='empire_table' style='border=0px;border-spacing=0;padding=0;'>"
+        + "<thead id='empire_table_head'>"
+        + "<tr>"  // City coulumn
+        + "<th title='Sort by alphabetically' style='text-align:right; font-size:93%;'><span style='white-space:nowrap'>Home City"+updown_sort_arrows+"</span></th>"
+        // Upkeep columns
+        + "<th id='food_upkeep'   class='food_upkeep_column'   title='Sort FOOD UPKEEP'   style='text-align:center; font-size=90%; width:28px'><img style='margin-top:-3px;' class='lowered_gov' src='/images/wheat.png'></th>"
+        + "<th id='gold_upkeep'   class='gold_upkeep_column'   title='Sort GOLD UPKEEP'   style='text-align:center; font-size=90%; width:28px'><img class='lowered_gov' src='/images/gold.png'></th>"
+        + "<th id='shield_upkeep' class='shield_upkeep_column' title='Sort SHIELD UPKEEP' style='text-align:center; font-size=90%; width:28px'><img class='lowered_gov' src='/images/shield14x18.png'></th>"
+        // Units column
+        + "<th title='Home city units' style='padding-left:10px; font-size:93%;'>&nbsp;Units</th>"
+        + "</tr>"
+        + "</thead><tbody>";
+
+  } else if (redux_screen) // semi-standard rendition of the above with minor trimming
+  { // -1 column (selection box). Economised columns: Sort Arrows, Grows In>>Grows, Name of Production/Image >> Image only, Turns/Progress>>Progress
+    //console.log("MODE: Reduced Standard")
+  } else {  // tiny - brutally cut non-crucial info
+    // -2 columns (selection box, cost). Economised: Sort arrows, Grows In>>grows, Granary>>Grain, Producing>>Output:Image only, Turns/Progress>>Turns
+    //console.log("MODE: Small Narrow")
+  }
+  // First row for totals
+  empire_list_html += "<tr class='cities_row;' style='height:"+rheight+"px;'>"
+    + "<td style='font-size:85%; text-align:right; padding-right:10px;'>"
+    + "<span style='font-size:1%; color: rgba(0, 0, 0, 0);'>!</span>"  // tiny invisible ! will sort it to top of list
+    + "TOTAL UPKEEP</td>"
+    + "<td class='food_upkeep_column'   font-size:95%; style='text-align:right; padding-right:10px; color:#ced434; font-weight:520;' id='f_upkeep_total'> </td>"
+    + "<td class='gold_upkeep_column'   font-size:95%; style='text-align:right; padding-right:10px; color:#ffd52c; font-weight:520;' id='g_upkeep_total'> </td>"
+    + "<td class='shield_upkeep_column' font-size:95%; style='text-align:right; padding-right:10px; color:#ff4030; font-weight:520;' id='s_upkeep_total'> </td>"
+    + "<td style='padding-left:10px;'></tr>";
+
+  // SORT PLAYER UNITS BY TYPE
+  var adjust_oversize = ""; // for style-injecting margin/alignment adjustment on oversize unit images
+  var unit_row_html = "";
+  var city_count = 0; // number of cities (total rows)
+
+  /* Pre-sort units by type to avoid exponentially more iterations:
+    * If we are in sort mode, then we already created data and just want to resort it. Otherwise, 
+      we just arrived and need to refresh it, because units may have changed */
+  if (empire_sort_mode)  {
+    // do not refresh data: it was just re-sorted for re-display
+  } else {
+    units_sorted_by_type = [];
+    for (var unit_type_id in unit_types) {
+      units_sorted_by_type[unit_type_id] = []; // new blank array for each unit of this unit type
+    }
+    for (var unit_id in units) {  // pre-sort units belonging to player, by type, into this array
+      var sunit = units[unit_id];
+      if (client.conn.playing != null && unit_owner(sunit).playerno == client.conn.playing.playerno) {
+        units_sorted_by_type[sunit['type']].push(sunit);
+      }
+    }
+  }
+
+  var ptype_img_html = "";
+  var hit_point_html = "";
+  var moves_left_html = "";
+  var vet_badge_html = "";
+  var ukf = new Array(cities.length);
+  var ukg = new Array(cities.length);
+  var uks = new Array(cities.length);
+
+  // Go through each city and pluck out units by type so they're arranged by type
+  for (var city_id in cities) { //rows (cities)
+    var pcity = cities[city_id];
+
+    ukf[city_id] = 0;  // set counters at 0 before adding it up
+    ukg[city_id] = 0;  
+    uks[city_id] = 0;  
+    // Only process legal cities owned by player
+    if (client.conn.playing == null || city_owner(pcity) == null || city_owner(pcity).playerno != client.conn.playing.playerno) {
+      continue;
+    } else city_count++;
+
+    //TO DO, we can only adjust height later after we add a unit_count tally then would have to do a $().css("height",rheight)
+    
+    var rheight = 28 * Math.ceil( (/*unit_count*/11*40) /  ($(window).width()-140) );
+    unit_row_html = "<tr class='cities_row;' style='height:"+rheight+"px;'>";
+    unit_row_html += "<td style='cursor:pointer; font-size:85%; text-align:right; padding-right:10px;' onclick='javascript:show_city_dialog_by_id(" + pcity['id']+")' id='citycell"+city_id+"'>"+pcity['name']+"</td>";
+    unit_row_html += "<td class='food_upkeep_column'   style='font-size:95%; font-weight:520; text-align:right; padding-right:10px; color:#ced434;' id='f_upkeep"+city_id+"'> </td>";
+    unit_row_html += "<td class='gold_upkeep_column'   style='font-size:95%; font-weight:520; text-align:right; padding-right:10px; color:#ffd52c;' id='g_upkeep"+city_id+"'> </td>";
+    unit_row_html += "<td class='shield_upkeep_column' style='font-size:95%; font-weight:520; text-align:right; padding-right:10px; color:#ff4030;' id='s_upkeep"+city_id+"'> </td>";
+    unit_row_html += "<td style='padding-left:10px;' id='u"+city_id+"'>";
+
+    // Go through the player units pre-sorted by type, one type at a time
+    for (unit_type_id in units_sorted_by_type) {
+      for (var unit_index in units_sorted_by_type[unit_type_id]) { //row elements (individual units)
+        var punit = units_sorted_by_type[unit_type_id][unit_index];
+
+        if (punit['homecity'] != city_id) continue;  // Only add units belonging to this city.
+
+        // Tally upkeep for each unit supported by this city:
+        if (punit['upkeep'] != null) {
+          ukf[city_id] += parseInt(punit['upkeep'][O_FOOD],10);
+          ukg[city_id] += parseInt(punit['upkeep'][O_GOLD],10);
+          uks[city_id] += parseInt(punit['upkeep'][O_SHIELD],10);
+        }
+
+        var ptype = unit_type(punit);
+
+        // Generate micro-sprite   
+        var ptype_sprite = {"type":ptype,"sprite":get_unit_type_image_sprite(ptype)};
+        var hptype_sprite = {"type":ptype,"sprite":get_full_hp_sprite(punit)};
+        var mptype_sprite = {"type":ptype,"sprite":get_full_mp_sprite(punit)};
+        var vtype_sprite = {"type":ptype,"sprite":get_full_vet_sprite(punit)};
+
+        if (ptype_sprite != null) { 
+          sprite = ptype_sprite['sprite'];
+          var hp_sprite = hptype_sprite['sprite'];
+          var mp_sprite = mptype_sprite['sprite'];
+          var vet_sprite = vtype_sprite['sprite'];
+
+          adjust_oversize = (sprite['width']>64) ? -34 : -26;  // "oversize" images space differently
+          
+          ptype_img_html = "<span class='prod_img' title='"+get_unit_city_info(punit)+"' style='float:left; padding-left:0px padding-right:0px; content-align:right; margin-top:-8px;"
+                  + "margin-left:"+adjust_oversize+"px' margin-right:-4px; onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'>"
+                  + "<div style='float:left; content-align:left;"
+                  + "background: transparent url("
+                  + sprite['image-src']
+                  + ");transform: scale(0.625); background-position:-" + sprite['tileset-x'] + "px -" + (sprite['tileset-y'])
+                  + "px;  width: " + (sprite['width']) + "px;height: " + (sprite['height']) + "px;"
+                  + " content-align: left;"
+                  + "vertical-align:top; float:left;'>"
+                  + "</div>";
+
+          hit_point_html = "<div style='margin-left:-83px; margin-top:-10px; margin-right:-24px; float:left; content-align:left;"
+                  + "background: transparent url("
+                  + hp_sprite['image-src']
+                  + ");transform: scale(0.625); background-position:-" + hp_sprite['tileset-x'] + "px -" + (hp_sprite['tileset-y'])
+                  + "px;  width: " + (hp_sprite['width']) + "px;height: " + (hp_sprite['height']) + "px;"
+                  + " content-align: left;"
+                  + "vertical-align:top; float:left;'>"
+                  + "</div>";
+
+          moves_left_html = "<div style='margin-left:-83px; margin-top:-6px; margin-right:-24px; float:left; content-align:left;"
+                  + "background: transparent url("
+                  + mp_sprite['image-src']
+                  + ");transform: scale(0.625); background-position:-" + mp_sprite['tileset-x'] + "px -" + (mp_sprite['tileset-y'])
+                  + "px;  width: " + (mp_sprite['width']) + "px;height: " + (mp_sprite['height']) + "px;"
+                  + " content-align: left;"
+                  + "vertical-align:top; float:left;'>"
+                  + "</div>";
+
+          if (punit['veteran'] > 0) {
+            vet_badge_html = "<div style='margin-left:-50px; margin-top:-16px; margin-right: -24px; float:left; content-align:left;"
+                  + "background: transparent url("
+                  + vet_sprite['image-src']
+                  + ");transform: scale(0.7); background-position:-" + vet_sprite['tileset-x'] + "px -" + (vet_sprite['tileset-y'])
+                  + "px;  width: " + (vet_sprite['width']) + "px;height: " + (vet_sprite['height']) + "px;"
+                  + " content-align: left;"
+                  + "vertical-align:top; float:left;'>"
+                  + "</div>";
+          } else vet_badge_html = "";       
+        }
+        
+        if (empire_show_movesleft) ptype_img_html+=moves_left_html;
+        if (empire_show_hitpoints) ptype_img_html+=hit_point_html;
+        if (punit['veteran'] > 0) ptype_img_html+=vet_badge_html;
+        
+        unit_row_html += "<span id='u_img" + unit_type_id + "'>"+ptype_img_html+"</span>";
+      }
+    }
+    empire_list_html += (unit_row_html +"</td></tr>");      // Add the row
+  }
+
+  empire_list_html += "</tbody></table>";
+
+  $("#empire_list").html(empire_list_html);
+
+  // Inject the upkeep counts after we tally up the upkeep---------------
+  var sum_ukf=0;sum_ukg=0;sum_uks=0;
+  for (city_id in cities) {
+    // Only check cities the player owns
+    if (client.conn.playing == null || city_owner(cities[city_id]) == null || city_owner(cities[city_id]).playerno != client.conn.playing.playerno) {
+      continue;
+    }
+
+    sum_ukf += ukf[city_id];  // sum national upkeep totals
+    sum_ukg += ukg[city_id];
+    sum_uks += uks[city_id];
+
+    // only inject non-zero values: blank is easier to read than lots of 0's (and faster performance)
+    if (ukf[city_id] > 0) $("#f_upkeep"+city_id).html(ukf[city_id]);
+    if (ukg[city_id] > 0) $("#g_upkeep"+city_id).html(ukg[city_id]);
+    if (uks[city_id] > 0) $("#s_upkeep"+city_id).html(uks[city_id]);
+  }
+  // Inject total sums in special row for totals; if f/g are zero, eliminate the column
+  if (sum_ukf > 0) $("#f_upkeep_total").html(sum_ukf);
+  else $(".food_upkeep_column").remove();
+  if (sum_ukg > 0) $("#g_upkeep_total").html(sum_ukg);
+  else $(".gold_upkeep_column").remove();  
+  if (sum_uks > 0 || sum_ukf+sum_ukg==0) $("#s_upkeep_total").html(sum_uks);
+  // Remove empty shield upkeep column only if there's at least one other
+  // visible upkeep column; this way someone with no upkeep at all still 
+  // sees 0 sheild upkeep to know they have no upkeep at all:
+  else if (sum_ukf+sum_ukg>0) $(".shield_upkeep_column").remove();
+  //---------------------------------------------------------------------
+
+  if (city_count == 0) {                 // city count 
+    $("#empire_table").html("You have no cities.");
+  }
+
+  $("#empire_table").tablesorter({theme:"dark", sortList: sortList});
+
+  if (tiny_screen) {
+  }
+  else if (redux_screen) {
+  } else if (wide_screen) {
+  }
+/*
+  if (retain_checkboxes_on_update)
+  {
+    retain_checkboxes_on_update = false;
+    restore_empire_checkboxes();
+  } */
 }
+  
 /**************************************************************************
  Display Empire tab when it's in EMPIRE_UNIT_IN_CITY_MODE
 **************************************************************************/
