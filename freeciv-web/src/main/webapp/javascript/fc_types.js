@@ -230,3 +230,11 @@ var LAND_BARBARIAN = 1;
 var SEA_BARBARIAN = 2;
 var ANIMAL_BARBARIAN = 3;
 var LAND_AND_SEA_BARBARIAN = 4;
+
+/* improvement genera */
+// unknown if these exist elsewhere; but it's nasty to hard-code
+// plain numbers, so these definitions are solely for FCW client to use
+const GENUS_GREAT_WONDER = 0;
+const GENUS_SMALL_WONDER = 1; // genus <= GENUS_SMALL_WONDER means it's a wonder
+const GENUS_IMPROVEMENT = 2;
+const GENUS_COINAGE = 3;

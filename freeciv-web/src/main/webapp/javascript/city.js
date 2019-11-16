@@ -2449,7 +2449,7 @@ function show_city_improvement_pane(city_id)
   var title_text = "";
 
   for (var z = 0; z < ruleset_control.num_impr_types; z ++) {
-    if (pcity['improvements'] != null /*&& pcity['improvements'].isSet(z) if present*/ && improvements[z].genus==2  ) {
+    if (pcity['improvements'] != null /*&& pcity['improvements'].isSet(z) if present*/ && improvements[z].genus==GENUS_IMPROVEMENT) {
        sprite = get_improvement_image_sprite(improvements[z]);
        if (sprite == null) {
          console.log("Missing sprite for improvement " + z);
