@@ -447,9 +447,14 @@ function handle_web_city_info_addition(packet)
     update_city_position(index_to_tile(packet['tile']));
   }
 
-  /* Update the cities info tab */
-  city_screen_updater.update();
+  /* Update active tabs affected by this info */
   bulbs_output_updater.update();
+  var active_tab = $("#tabs").tabs("option", "active"); 
+  if (active_tab == TAB_CITIES) {
+    city_screen_updater.update();
+  } else if (active_tab == TAB_EMPIRE) {  
+    empire_screen_updater.update();  // TEST:is this the right way to update empire screen?
+  }
 }
 
 /* 99% complete
@@ -472,9 +477,14 @@ function handle_city_short_info(packet)
     update_city_position(index_to_tile(packet['tile']));
   }
 
-  /* Update the cities info tab */
-  city_screen_updater.update();
+  /* Update active tabs affected by this info */
   bulbs_output_updater.update();
+  var active_tab = $("#tabs").tabs("option", "active"); 
+  if (active_tab == TAB_CITIES) {
+    city_screen_updater.update();
+  } else if (active_tab == TAB_EMPIRE) {  
+    empire_screen_updater.update();  // TEST:is this the right way to update empire screen?
+  }
 }
 
 /**************************************************************************
@@ -515,6 +525,12 @@ function handle_player_info(packet)
           nations[pplayer['nation']]['color'] = pcolor;
     } 
   } */
+
+  /* Update active tabs affected by this info */
+  var active_tab = $("#tabs").tabs("option", "active"); 
+  if (active_tab == TAB_EMPIRE) {  
+    empire_screen_updater.update();  // TEST:is this the right way to update empire screen?
+  }  
 }
 
 /************************************************************************//**
@@ -868,13 +884,22 @@ function handle_unit_remove(packet)
 function handle_unit_info(packet)
 {
   handle_unit_packet_common(packet);
-
+  /* Update active tabs affected by this info */
+  var active_tab = $("#tabs").tabs("option", "active"); 
+  if (active_tab == TAB_EMPIRE) {  
+    empire_screen_updater.update();  // TEST:is this the right way to update empire screen?
+  }
 }
 
 /* 99% complete FIXME: does this loose information? */
 function handle_unit_short_info(packet)
 {
   handle_unit_packet_common(packet);
+  /* Update active tabs affected by this info */
+  var active_tab = $("#tabs").tabs("option", "active"); 
+  if (active_tab == TAB_EMPIRE) {  
+    empire_screen_updater.update();  // TEST:is this the right way to update empire screen?
+  }
 }
 
 /**************************************************************************
