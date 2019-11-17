@@ -178,7 +178,7 @@ alt-T: tech tab
 <h2>Cities List:</h2>
 hover over city name: show all buildings in Super Panel
 click Building in Super Panel: change production to Building in hovered city 
-right-click Building in Super Panel: sell Building in hovered city 
+right-click Building in Super Panel: buy/sell Building in hovered city; (adds to worklist if can't buy) 
 shift-click Building in Super Panel: highlight ON/OFF all cities with this Building 
 ctrl-click Building in Super Panel: select/deselect all cities with this Building
 space: clear all highlighted and all selected cities

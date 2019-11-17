@@ -71,6 +71,11 @@ var city_tile_map = null;
 var opt_show_unreachable_items = false;
 var opt_show_improvements_only = false;
 
+// refresh superpanel for this city when update_city_screen called:
+var active_superpanel_cityid = -1; 
+// don't reset the above var to -1 if waiting for user input on a dialog:
+var active_superpanel_dialog_refresh_delay = false;
+
 /**************************************************************************
  ...
 **************************************************************************/
@@ -912,6 +917,7 @@ function request_city_id_buy(city_id)
   active_city = null;               // this function called without an active city, make sure it stays that way
   inactive_city = cities[city_id];  // lets request_city_buy() know which city wants to buy
   request_city_buy();
+  active_superpanel_cityid = city_id; // keep superpanel active after city list redraw
   //inactive_city = null;           // reset to null
 }
 
@@ -1245,7 +1251,9 @@ function city_sell_improvement(improvement_id)
   city_sell_improvement_in(active_city['id'], improvement_id);
 }
 /**************************************************************************
-..
+ This can sell an improvement without an active city, such as from Cities
+ List. It's called from SuperPanel. It will redraw the improvement pane
+ several times to refresh after packet has triggered a redraw of the page.
 **************************************************************************/
 function city_sell_improvement_in(city_id, improvement_id)
 {
@@ -1261,6 +1269,7 @@ function city_sell_improvement_in(city_id, improvement_id)
        var packet = {"pid" : packet_city_sell, "city_id" : cities[city_id]['id'],
                     "build_id": improvement_id};
         send_request(JSON.stringify(packet));
+        active_superpanel_cityid = city_id;
     });
 }
 /**************************************************************************
@@ -2225,6 +2234,19 @@ function city_add_to_worklist()
 }
 
 /**************************************************************************
+  Adds improvement z to city's worklist: called from SuperPanel
+*************************************************************************/
+function city_add_improv_to_worklist(city_id, z)
+{
+  //console.log("city_add_improv_to_worklist("+cities[city_id]['name']+","+improvements[z]['name']+")");
+  send_city_worklist_add(city_id, 3, z); //3=worklist genus code for improvement
+
+  // Show confirmation message for adding to worklist.
+  swal("Sent order to add "+improvements[z]['name']+" to Worklist in "+cities[city_id]['name']);
+  active_superpanel_cityid = city_id;
+}
+
+/**************************************************************************
   Remove current production item from worklist (on double click)
   ...requires there to be an item below it.
 *************************************************************************/
@@ -2440,39 +2462,56 @@ function show_city_improvement_pane(city_id)
   var pcity = cities[city_id];
 
   var improvements_html = "";
-  var opacity = 1; 
+  var opacity = 1;
   var border = "";
-  var mag_factor = ($(window).width()-519)/2450;
+  var mag_factor = ($(window).width()-519)/2450;   //.57 on 1920p
+
   //console.log("width: "+$(window).width()+"mag factor:"+mag_factor);
   var magnification = "zoom:"+mag_factor+"; -moz-transform:"+mag_factor+";";
   var bg = "background:#335 ";
   var title_text = "";
-
-  for (var z = 0; z < ruleset_control.num_impr_types; z ++) {
+  var right_click_action = "oncontextmenu='city_sell_improvement_in(" +city_id+","+ z + ");' ";
+  var shift_click_text = "\n\nSHIFT-CLICK: Highlight ON/OFF cities with this building.\n\nCTRL-CLICK: &#x2611; select ON/OFF cities with this building.' ";
+    for (var z = 0; z < ruleset_control.num_impr_types; z ++) {
     if (pcity['improvements'] != null /*&& pcity['improvements'].isSet(z) if present*/ && improvements[z].genus==GENUS_IMPROVEMENT) {
        sprite = get_improvement_image_sprite(improvements[z]);
        if (sprite == null) {
-         console.log("Missing sprite for improvement " + z);
          continue;
        }
-
+       // Colour and text tags for current production and completion thereof:
+       var product_finished = false;
+       var verb = " is making ";
+       var is_city_making = (pcity['production_kind'] == VUT_IMPROVEMENT && pcity['production_value']==z);
+       if (is_city_making) { // colour code currently produced items which are bought/finished
+         var shields_invested = pcity['shield_stock'];
+         if (shields_invested>=improvements[z]['build_cost']) {
+           product_finished=true;
+           var verb = " is finishing ";
+         } 
+       }
+       
       // Set cell colour/opacity based on: if present / can build 
-      if (pcity['improvements'].isSet(z)) {
+      if (pcity['improvements'].isSet(z)) {     // city has improvement: white cell
         opacity = 1;
         border = "border:3px solid #000000;"
-        bg     = "background:#9986 ";
-        title_text = "title='" + improvements[z]['name'] + " is in "+pcity['name']+"' ";
+        bg     = "background:#FEED ";
+        title_text = "title='"+pcity['name']+":\n\nRIGHT-CLICK: Sell " + improvements[z]['name']+"."+shift_click_text;
+        right_click_action = "oncontextmenu='city_sell_improvement_in(" +city_id+","+ z + ");' ";
       } else {
-        if (!can_city_build_improvement_now(pcity, z)) {
-          opacity=0.19;
-          border = "border:3px solid #231a13;"  
-          bg =     "background:#7893 ";
-          title_text = "title='" + improvements[z]['name'] + " unavailable' ";   
-        } else {
-          opacity = 0.99;
-          border = "border:3px solid #000000;"  
-          bg =     "background:#145F ";
-          title_text = "title='" + improvements[z]['name'] + " for "+pcity['name']+"' ";   
+        if (!can_city_build_improvement_now(pcity, z)) {  // doesn't have and can't build: faded
+          opacity=0.35;
+          border = "border:3px solid #231A13;"  
+          bg =     "background:#9873 ";
+          title_text = "title='" + pcity['name']+": " + improvements[z]['name'] + " unavailable.\n\nRIGHT-CLICK: Add to worklist."+shift_click_text;
+          right_click_action = "oncontextmenu='city_add_improv_to_worklist(" +city_id+","+ z + ");' ";
+        } else {                  // doesn't have and CAN build - dark blue
+          opacity = 1;
+          border = (is_city_making ? (product_finished ? "border:3px solid #308000;" : "border:3px solid #80E0FF;") : "border:3px solid #000000;");  // highlight if current prod
+          bg =     (is_city_making ? (product_finished ? "background:#BFBE " : "background:#8D87 ") : "background:#147F ");
+          right_click_action = "oncontextmenu='city_change_prod_and_buy(null," +city_id+","+ z + ");' "
+          title_text = is_city_making 
+            ? ("title='"+pcity['name']+verb+improvements[z]['name']+".\n\nRIGHT_CLICK: Buy "+improvements[z]['name']+shift_click_text)
+            : ("title='"+pcity['name']+":\n\nCLICK: Change production\n\nRIGHT-CLICK: Buy "+improvements[z]['name']+shift_click_text);   
         }
       } 
       // Put improvement sprite in the cell:
@@ -2483,12 +2522,36 @@ function show_city_improvement_pane(city_id)
             ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
             + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left;' "
             + title_text 
-            + "oncontextmenu='city_sell_improvement_in(" +city_id+","+ z + ");' "
+            + right_click_action 
             + "onclick='change_city_prod_to(event," +city_id+","+ z + ");'>"  
             +"</span></div>";
     }
   }
   $("#city_improvements_hover_list").html(improvements_html);
+}
+/**************************************************************************
+ Changes production in city_id to improvement type #z THEN buys it
+   this function is called from a click from SuperPanel in the city list 
+**************************************************************************/
+function city_change_prod_and_buy(event, city_id, z)
+{/*
+  if (event) { 
+    if (event.ctrlKey) {
+      // TO-DO: slice this improvement from the production queue
+      return;
+    }
+  }*/
+
+  // First change production
+  change_city_prod_to(null, city_id, z);
+
+  // Delay to let first packet get on its way to server
+  setTimeout(function() {
+    request_city_id_buy(city_id);
+  }, 300);
+
+  active_superpanel_dialog_refresh_delay = true; //wait for user input before reset
+  active_superpanel_cityid = city_id; // keep panel up after refresh/update
 }
 
 /**************************************************************************
@@ -2497,18 +2560,23 @@ function show_city_improvement_pane(city_id)
 **************************************************************************/
 function change_city_prod_to(event, city_id, z)
 {
-  if (event.shiftKey) {   //intercept shift-click and call the right function
-    highlight_rows_by_improvement(z, false);
-    return;
-  } else if (event.ctrlKey) {
-    select_rows_by_improvement(z, false);
-    return;
+  if (event) {
+    if (event.shiftKey) {   //intercept shift-click and call the right function
+      highlight_rows_by_improvement(z, false);
+      return;
+    } else if (event.ctrlKey) {
+      select_rows_by_improvement(z, false);
+      return;
+    }
   }
   var pcity = cities[city_id];
   send_city_change(pcity['id'], VUT_IMPROVEMENT, z);
   set_mass_prod_city(pcity['id']); // default this prod selection for mass-selection 
   save_city_checkbox_states();
   retain_checkboxes_on_update = true;
+
+  active_superpanel_dialog_refresh_delay = true; //wait for user input before reset
+  active_superpanel_cityid = city_id; // keep panel up after refresh/update
 }
 
 /**************************************************************************
@@ -2971,6 +3039,19 @@ function update_city_screen()
   }
   // Update display for current mass production selection:
   set_mass_prod_city(prod_selection_city);
+
+  // Update an active SuperPanel if we had a refresh of screen after a 
+  // SuperPanel action:
+  if (active_superpanel_cityid > 0) {
+    show_city_improvement_pane(active_superpanel_cityid);
+    if (active_superpanel_dialog_refresh_delay==true)
+      // Don't reset state the first time if waiting for user input.
+      // By the time the next refresh comes, user will have answered 
+      // a dialog question (such as whether to buy/sell a building)
+      active_superpanel_dialog_refresh_delay = false;
+    else  
+      active_superpanel_cityid = -1; // deactive refresh mode.
+  }
 }
 
 /**************************************************************************
