@@ -26,6 +26,11 @@ var master_empire_checkbox;
 var empire_checkbox_states= {};
 var empire_show_hitpoints = false;
 var empire_show_movesleft = false;
+var empire_show_present_buildings = true;
+var empire_show_absent_buildings = false;
+var empire_show_wonders_only = false;
+
+var empire_bldg_tab_saved_mag = 0;
 
 var EMPIRE_UNIT_TYPE_MODE      = 0;
 var EMPIRE_UNIT_HOMECITY_MODE  = 1;
@@ -42,7 +47,7 @@ var SORT_VET    = 3;
 var DO_NO_SORT  = -1;
 var empire_sort_mode = SORT_NONE;
 
-empire_screen_updater = new EventAggregator(update_empire_screen, 1000, EventAggregator.DP_NONE, 1000, 4, 250);
+empire_screen_updater = new EventAggregator(update_empire_screen, 250, EventAggregator.DP_NONE, 250, 3, 250);
 
 /**************************************************************************
  Updates the Empire tab when clicked. Does basic common setup, then based 
@@ -422,7 +427,7 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
         + "<thead id='empire_table_head'>"
         + "<tr>"  
         // WEU
-        + "<th title='Defensive Strength in Warrior Equivalent Units: (1 Warrior = 1 WEU). Includes NO bonuses or penalties'><span style='text-align:center; color:#c8c8c8; font-size:85%; width:80px'>WEU</span></th>"
+        + "<th style='text-align:right;' title='Defensive Strength in Warrior Equivalent Units: (1 Warrior = 1 WEU). Includes NO bonuses or penalties'><span style='text-align:right; color:#c8c8c8; font-size:85%; width:80px'>WEU</span></th>"
         // City coulumn
         + "<th title='Sort alphabetically' style='text-align:right; font-size:93%;'><span style='white-space:nowrap'>City"+updown_sort_arrows+"</span></th>"
         // Units column
@@ -601,14 +606,198 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
     restore_empire_checkboxes();
   } */
 }
+
+/**************************************************************************
+  Magnification factor in EMPIRE_ECON_IMPROVEMENTS
+**************************************************************************/
+function emp_bldgs_mag_plus5(mag) {
+  empire_bldg_tab_saved_mag = mag * (100/99); update_empire_screen();
+  simpleStorage.set('bldgZoom', empire_bldg_tab_saved_mag);
+}
+function emp_bldgs_mag_less5(mag) {
+  empire_bldg_tab_saved_mag = mag * (99/100); update_empire_screen();
+  simpleStorage.set('bldgZoom', empire_bldg_tab_saved_mag);
+}
+function reset_mag(){empire_bldg_tab_saved_mag=0;simpleStorage.set('bldgZoom',0);}
 /**************************************************************************
  Display Empire tab when it's in EMPIRE_ECON_IMPROVEMENTS
 **************************************************************************/
 function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
   landscape_screen,tiny_screen,redux_screen)
 {
-  $("#empire_title").html("Economic Improvements and Infrastructure");
-  $("#empire_list").html("Upcoming feature.");
+  $("#empire_title").html("Building Improvements");
+  //$("#empire_static").css({"height":"100%", "width":"100%"})
+
+  var real_width = ($(window).width()-230); //window is approx 190 for city name and 35 for junk borders/scrollbars/etc.
+  //mag factor then becomes % of 66px needed to fit 38 buildings in the available space
+  var mag_factor = (real_width/38)/67;  //console.log("1. win.width: "+$(window).width()+"   mag factor:"+mag_factor);
+  // If user adjusted mag level before, use that instead
+  if (empire_bldg_tab_saved_mag>0) {   
+    mag_factor = empire_bldg_tab_saved_mag;
+  } else { // If fitting 38 buildings in 1 row makes them just too tiny, keep boosting mag by exact amount to add one extra row,
+           // until the building icons are no longer too tiny. "Too tiny" defined as mag:0.35
+    for (var n=1; n<100; n++) {       
+      if (mag_factor<.4) mag_factor = mag_factor * ((n+1)/n);  // if mag<0.4 it's too tiny, increase mag% enough for 1 more row
+      else break;
+    }
+    if (mag_factor<.4) mag_factor = .45;
+  }
+  //console.log("Final Mag Factor: "+mag_factor);
+  var magnification = "zoom:"+mag_factor+"; -moz-transform:"+mag_factor+";";
+
+  // Set up panel controls for Building display
+  var abs_chxbox = "Absent Buildings"; var pres_chxbox = "Present Builgings"; var wndr_chxbox = "Show Wonders only";
+  if (small_screen) { abs_chxbox = "Absent"; pres_chxbox = "Present"; wndr_chxbox = "Wonders"; }
+  var panel_html = "<input type='checkbox' id='show_pb' title='Show present buildings' name='cbPB' value='true' onclick='toggle_empire_show_present_buildings();'>"+pres_chxbox
+      + "<input type='checkbox' id='show_ab' title='Show absent buildings' name='cbAB' value='false' onclick='toggle_empire_show_absent_buildings();'>"+abs_chxbox
+      + "<input type='checkbox' id='show_wonders' title='Show wonders instead of buildings' name='cbSW' value='false' onclick='toggle_empire_show_wonders_only();'>"+wndr_chxbox
+      + "<input type='button' style='font-size:90%; padding:2px;' value='+1%' onclick='emp_bldgs_mag_plus5("+mag_factor+");'> "
+      + "<input type='button' style='font-size:90%; padding:2px;' value='-1%' onclick='emp_bldgs_mag_less5("+mag_factor+");'>Zoom ";
+      
+  $("#empire_mode_panel").html(panel_html);
+  $("#show_pb").prop("checked", empire_show_present_buildings);
+  $("#show_ab").prop("checked", empire_show_absent_buildings);
+  $("#show_wonders").prop("checked", empire_show_wonders_only);
+
+  $('#empire_scroll').css({"height": $(window).height()-160, "overflow-y":"scroll", "overflow-x":"hidden" });
+
+  var sortList = [];
+  var headers = $('#empire_table thead th');
+  headers.filter('.tablesorter-headerAsc').each(function (i, cell) {
+    sortList.push([cell.cellIndex, 0]);
+  });
+  headers.filter('.tablesorter-headerDesc').each(function (i, cell) {
+    sortList.push([cell.cellIndex, 1]);
+  });
+
+  if (narrow_screen || tiny_screen) $("#empire_prompt").hide();
+  else $("#empire_prompt").show();
+
+  var updown_sort_arrows = "<img class='lowered_gov' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='>";
+
+  var empire_list_html = "";
+
+  if (true /*wide_screen || redux_screen*/)  // fully standard deluxe wide-screen mode, include all info
+  {
+    empire_list_html = "<table class='tablesorter-dark' id='empire_table' style='border=0px;border-spacing=0;padding=0;'>"
+        + "<thead id='empire_table_head'>"
+        + "<tr>"  
+        // City coulumn
+        + "<th title='Sort alphabetically' style='text-align:right; font-size:93%;'><span style='white-space:nowrap'>City"+updown_sort_arrows+"</span></th>"
+        // Units column
+        + "<th style='padding-left:10px; font-size:93%;'>&nbsp;Buildings</th>"
+        + "</tr>"
+        + "</thead><tbody>";
+  }
+  var alt_click_method = "oncontextmenu";
+  if (small_screen) alt_click_method = "ondblclick";
+  
+  var improvements_html = "";
+  var city_count = 0; // number of cities (total rows)
+
+  // Go through each city
+  for (var city_id in cities) { 
+    var pcity = cities[city_id];
+
+    // Only process legal cities owned by player
+    if (client.conn.playing == null || city_owner(pcity) == null || city_owner(pcity).playerno != client.conn.playing.playerno) {
+      continue;
+    } else city_count++;
+
+    //TO DO, we can only adjust height later after we add a unit_count tally then would have to do a $().css("height",rheight)
+    var rheight = 28 * Math.ceil( (/*col_count*/22*40) / ($(window).width()-140) );
+    improvements_html = "<tr class='cities_row;' style='border-bottom: 3px solid #000; height:"+rheight+"px;'>";
+    improvements_html += "<td style='cursor:pointer; font-size:85%; text-align:right; padding-right:10px;' onclick='javascript:show_city_dialog_by_id(" 
+                      + pcity['id']+")' id='citycell"+city_id+"'>"+pcity['name']+"</td>";
+    improvements_html += "<td style='padding-left:10px;' id='u"+city_id+"'>";
+    // Go through the improvements one at a time and determine whether to show it
+    for (var z = 0; z < ruleset_control.num_impr_types-1 /*-1 don't show coinage*/; z ++) {
+      // Handle 3 different checkboxes for which improvements to show or not show-----------------------
+      // FILTER MODE: show only wonders or only improvements
+      var genus = improvements[z]['genus'];
+      var is_wonder = (genus <= GENUS_SMALL_WONDER ? true : false); //this detects both Great and Small wonders.
+      if (is_wonder != empire_show_wonders_only) continue;
+
+      var present = city_has_building(pcity, z);
+      var show_building = false;
+      if (present && empire_show_present_buildings) show_building=true;
+      if (!present && empire_show_absent_buildings) show_building=true;
+      // ------------------------------------------------------------------------------------------------
+
+      var sprite = get_improvement_image_sprite(improvements[z]);
+
+      // Set cell colour/opacity based on: if present / can build
+      var opacity = 1; 
+      var border = "";
+      var bg = "background:#335 ";
+      var title_text = "";
+      var right_click_action = alt_click_method+"='city_sell_improvement_in(" +city_id+","+ z + ");' ";
+       // Colour and text tags for current production and completion thereof:
+       var product_finished = false;
+       var verb = " is making ";
+       var is_city_making = (pcity['production_kind'] == VUT_IMPROVEMENT && pcity['production_value']==z);
+       if (is_city_making) { // colour code currently produced items which are bought/finished
+         var shields_invested = pcity['shield_stock'];
+         if (shields_invested>=improvements[z]['build_cost']) {
+           product_finished=true;
+           var verb = " is finishing ";
+         } 
+       }
+      
+      if (pcity['improvements'].isSet(z)) {  // city has improvement: white bg
+        opacity = 1;
+        border = "border:3px solid #000000;";
+        bg     = "background:#FEED ";
+        title_text = "title='"+pcity['name']+":\n\nRIGHT-CLICK: Sell " + improvements[z]['name']+".'";
+        right_click_action = alt_click_method+"='city_sell_improvement_in(" +city_id+","+ z + ");' ";
+      } else {
+        if (!can_city_build_improvement_now(pcity, z)) {  // city has improvement but CAN'T MAKE IT
+          opacity=0.19;
+          border = "border:3px solid #231a13;"  
+          bg =     "background:#F43F ";
+          title_text = "title='" + pcity['name']+": " + improvements[z]['name'] + " unavailable.\n\nRIGHT-CLICK: Add to worklist.'";
+          right_click_action = alt_click_method+"='city_add_improv_to_worklist(" +city_id+","+ z + ");' ";
+        } else {    // city has improvement AND CAN MAKE IT
+          opacity = 1;
+          border = (is_city_making ? (product_finished ? "border:3px solid #308000;" : "border:3px solid #80E0FF;") : "border:3px solid #000000;"); 
+          bg =     (is_city_making ? (product_finished ? "background:#BFBE " : "background:#8D87 ") : "background:#AD68 ");
+          right_click_action = alt_click_method+"='city_change_prod_and_buy(null," +city_id+","+ z + ");' "
+          title_text = is_city_making 
+            ? ("title='"+pcity['name']+verb+improvements[z]['name']+".\n\nRIGHT_CLICK: Buy "+improvements[z]['name']+"'")
+            : ("title='"+pcity['name']+":\n\nCLICK: Change production\n\nRIGHT-CLICK: Buy "+improvements[z]['name']+"'");   
+        }
+      }
+      if (!show_building) opacity = 0.21;  // we show a ghost ability to see grid.
+      if (is_city_making) opacity = 1;     // always show current production 
+      // Put improvement sprite in the cell:
+      improvements_html = improvements_html +
+        "<div style='padding:0px; opacity:"+opacity+"; "+magnification
+            +"' id='city_improvement_element'><span style='padding:0px; margin:0px; "+border+" "+bg+" url("
+            + sprite['image-src'] +
+            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
+            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left;' "
+            + title_text 
+            + right_click_action
+            + "onclick='change_city_prod_to(event," +city_id+","+ z + ");'>"  
+            +"</span></div>";
+    }
+    empire_list_html += (improvements_html +"</td></tr>");      // Add the row
+  }
+
+  empire_list_html += "</tbody></table>";
+
+  $("#empire_list").html(empire_list_html);
+  //---------------------------------------------------------------------
+  if (city_count == 0) {
+    $("#empire_table").html("You have no cities.");
+  }
+  $("#empire_table").tablesorter({theme:"dark", sortList: sortList});
+
+  if (tiny_screen) {
+  }
+  else if (redux_screen) {
+  } else if (wide_screen) {
+  }
 }
 /**************************************************************************
  Display Empire tab when it's in EMPIRE_ECON_UPKEEP
@@ -627,6 +816,45 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
 {
   $("#empire_title").html("National Production");
   $("#empire_list").html("Upcoming feature.");
+}
+
+/**************************************************************************
+ Toggle whether to show present buildings 
+**************************************************************************/
+function toggle_empire_show_present_buildings()
+{
+  empire_show_present_buildings = !empire_show_present_buildings;
+  $("#show_pb").prop("checked", empire_show_present_buildings);
+
+  empire_sort_mode = DO_NO_SORT;
+  update_empire_screen();
+  empire_sort_mode = SORT_NONE;
+}
+
+/**************************************************************************
+ Toggle whether to show absent buildings
+**************************************************************************/
+function toggle_empire_show_absent_buildings()
+{
+  empire_show_absent_buildings = !empire_show_absent_buildings;
+  $("#show_ab").prop("checked", empire_show_absent_buildings);
+
+  empire_sort_mode = DO_NO_SORT;
+  update_empire_screen();
+  empire_sort_mode = SORT_NONE;
+}
+
+/**************************************************************************
+ Toggle whether to show wonders instead of buildings
+**************************************************************************/
+function toggle_empire_show_wonders_only()
+{
+  empire_show_wonders_only = !empire_show_wonders_only;
+  $("#show_wonders").prop("checked", empire_show_wonders_only);
+
+  empire_sort_mode = DO_NO_SORT;
+  update_empire_screen();
+  empire_sort_mode = SORT_NONE;
 }
 
 /**************************************************************************
