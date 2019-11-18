@@ -11,13 +11,13 @@
         title="All units in cities" >&#x2299;City Deployment</button>
        
         <button id="button_city_buildings" type="button" class="button tab_emulator_button" onClick="change_empire_mode(3);"
-        title="All improvements in cities" >&#x1F3E2;Buildings</button>
+        title="All improvements in cities" >&#x1F3E2;National Buildings</button>
 
         <button id="button_empire_upkeep" type="button" class="button tab_emulator_button" onClick="change_empire_mode(4);"
-        title="Building upkeep in all cities" >&#x1f4b0;Upkeep</button>
+        title="Building upkeep in all cities" >&#x1f4b0;Building Upkeep</button>
 
         <button id="button_empire_prod" type="button" class="button tab_emulator_button" onClick="change_empire_mode(5);"
-        title="Production in all cities" >&#x1F528;Production</button>
+        title="Production in all cities" >&#x1F528;National Production</button>
     </div>
     <hr style="margin-top:-5px;">
     <h2 style="margin-top:0px; margin-bottom:0px;" id="empire_title"></h2>

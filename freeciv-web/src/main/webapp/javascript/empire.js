@@ -608,17 +608,28 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
 }
 
 /**************************************************************************
-  Magnification factor in EMPIRE_ECON_IMPROVEMENTS
+  Magnification factors for Empire tabs
 **************************************************************************/
-function emp_bldgs_mag_plus5(mag) {
+function emp_bldgs_mag_plus1(mag) {
   empire_bldg_tab_saved_mag = mag * (100/99); update_empire_screen();
   simpleStorage.set('bldgZoom', empire_bldg_tab_saved_mag);
 }
-function emp_bldgs_mag_less5(mag) {
+function emp_bldgs_mag_less1(mag) {
   empire_bldg_tab_saved_mag = mag * (99/100); update_empire_screen();
   simpleStorage.set('bldgZoom', empire_bldg_tab_saved_mag);
 }
-function reset_mag(){empire_bldg_tab_saved_mag=0;simpleStorage.set('bldgZoom',0);}
+function emp_upkp_mag_plus2(mag) {
+  empire_upkp_tab_saved_mag = mag * (101/99); update_empire_screen();
+  simpleStorage.set('upkpZoom', empire_upkp_tab_saved_mag);
+}
+function emp_upkp_mag_less2(mag) {
+  empire_upkp_tab_saved_mag = mag * (99/101); update_empire_screen();
+  simpleStorage.set('upkpZoom', empire_upkp_tab_saved_mag);
+}
+function reset_mag(){
+  empire_bldg_tab_saved_mag=0;  simpleStorage.set('bldgZoom',0);
+  empire_upkp_tab_saved_mag=0;  simpleStorage.set('upkpZoom',0);
+}
 /**************************************************************************
  Display Empire tab when it's in EMPIRE_ECON_IMPROVEMENTS
 **************************************************************************/
@@ -651,8 +662,8 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
   var panel_html = "<input type='checkbox' id='show_pb' title='Show present buildings' name='cbPB' value='true' onclick='toggle_empire_show_present_buildings();'>"+pres_chxbox
       + "<input type='checkbox' id='show_ab' title='Show absent buildings' name='cbAB' value='false' onclick='toggle_empire_show_absent_buildings();'>"+abs_chxbox
       + "<input type='checkbox' id='show_wonders' title='Show wonders instead of buildings' name='cbSW' value='false' onclick='toggle_empire_show_wonders_only();'>"+wndr_chxbox
-      + "<input type='button' style='font-size:90%; padding:2px;' value='+1%' onclick='emp_bldgs_mag_plus5("+mag_factor+");'> "
-      + "<input type='button' style='font-size:90%; padding:2px;' value='-1%' onclick='emp_bldgs_mag_less5("+mag_factor+");'>Zoom ";
+      + "<input type='button' style='font-size:90%; padding:2px;' value='+1%' onclick='emp_bldgs_mag_plus1("+mag_factor+");'> "
+      + "<input type='button' style='font-size:90%; padding:2px;' value='-1%' onclick='emp_bldgs_mag_less1("+mag_factor+");'>Zoom ";
       
   $("#empire_mode_panel").html(panel_html);
   $("#show_pb").prop("checked", empire_show_present_buildings);
@@ -800,13 +811,189 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
   }
 }
 /**************************************************************************
+  Compute any building upkeep bonuses from Wonders and Governments
+  TO DO: make this ruleset independent when the server gives us a way
+  to do this. 
+***************************************************************************/
+function get_player_building_upkeep_bonus()
+{
+  var bonus = 0;
+  const rules = ruleset_control['name'];
+  const gov = governments[client.conn.playing['government']]['name']
+  if ( player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_ADAM_SMITH_NAME)) ) {
+    bonus += 1;
+  }
+  if (rules=="Multiplayer-Evolution ruleset" 
+      || rules=="Civ2Civ3 ruleset"
+      || rules=="Sandbox ruleset"  ) {
+    if (gov=="Communism") {
+      bonus +=1
+    }
+  }
+  return bonus;
+}
+/**************************************************************************
  Display Empire tab when it's in EMPIRE_ECON_UPKEEP
 **************************************************************************/
 function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
   landscape_screen,tiny_screen,redux_screen)
 {
-  $("#empire_title").html("Economic Upkeep Report");
-  $("#empire_list").html("Upcoming feature.");
+  $("#empire_title").html("Building Upkeep");
+  //$("#empire_static").css({"height":"100%", "width":"100%"})
+
+  upkeep_gold_bonus = get_player_building_upkeep_bonus();
+
+  estimated_max_bldgs = 5 + 28 * (game_info['turn']/130);
+  if (estimated_max_bldgs>38) estimated_max_bldgs = 38;
+
+  var real_width = ($(window).width()-250); //window is approx 190 for city name and 35 for junk borders/scrollbars/etc.
+  //mag factor then becomes % of 66px needed to fit 38 buildings in the available space
+  var mag_factor = (real_width/estimated_max_bldgs)/67;  //console.log("1. win.width: "+$(window).width()+"   mag factor:"+mag_factor);
+  // If user adjusted mag level before, use that instead
+  if (empire_upkp_tab_saved_mag>0) {  
+    mag_factor = empire_upkp_tab_saved_mag;
+  } else { // If fitting 38 buildings in 1 row makes them just too tiny, keep boosting mag by exact amount to add one extra row,
+           // until the building icons are no longer too tiny. "Too tiny" defined as mag:0.35
+    for (var n=1; n<100; n++) {       
+      if (mag_factor<.4) mag_factor = mag_factor * ((n+1)/n);  // if mag<0.4 it's too tiny, increase mag% enough for 1 more row
+      else break;
+    }
+    if (mag_factor<.4) mag_factor = .45;
+    if (mag_factor>1) mag_factor = 1.0;
+  }
+  var magnification = "zoom:"+mag_factor+"; -moz-transform:"+mag_factor+";";
+
+  // Set up panel controls for Building display
+  
+  var panel_html =
+        "<input type='button' style='font-size:90%; padding:2px;' value='+2%' onclick='emp_upkp_mag_plus2("+mag_factor+");'> "
+      + "<input type='button' style='font-size:90%; padding:2px;' value='-2%' onclick='emp_upkp_mag_less2("+mag_factor+");'>Zoom ";
+  $("#empire_mode_panel").html(panel_html);
+
+  $('#empire_scroll').css({"height": $(window).height()-160, "overflow-y":"scroll", "overflow-x":"hidden" });
+
+  var sortList = [];
+  var headers = $('#empire_table thead th');
+  headers.filter('.tablesorter-headerAsc').each(function (i, cell) {
+    sortList.push([cell.cellIndex, 0]);
+  });
+  headers.filter('.tablesorter-headerDesc').each(function (i, cell) {
+    sortList.push([cell.cellIndex, 1]);
+  });
+
+  if (narrow_screen || tiny_screen) $("#empire_prompt").hide();
+  else $("#empire_prompt").show();
+
+  var updown_sort_arrows = "<img class='lowered_gov' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='>";
+
+  var empire_list_html = "";
+
+  if (true /*wide_screen || redux_screen*/)  // fully standard deluxe wide-screen mode, include all info
+  {
+    empire_list_html = "<table class='tablesorter-dark' id='empire_table' style='border=0px;border-spacing=0;padding=0;'>"
+        + "<thead id='empire_table_head'>"
+        + "<tr>"  
+        // City coulumn
+        + "<th title='Sort alphabetically' style='text-align:right; font-size:93%;'><span style='white-space:nowrap'>City"+updown_sort_arrows+"</span></th>"
+        + "<th id='gold_upkeep' class='gold_upkeep_column' title='Sort GOLD UPKEEP' style='text-align:center; width:28px'><img class='lowered_gov' src='/images/gold.png'></th>"
+        // Buildings column
+        + "<th style='padding-left:10px; font-size:93%;'>&nbsp;Buildings</th>"
+        + "</tr>"
+        + "</thead><tbody>";
+  }
+  // First row for total
+  empire_list_html += "<tr class='cities_row;' style='height:"+rheight+"px;'>"
+  + "<td style='font-size:85%; color:#d0d0d0; text-align:right; padding-right:10px;'>"
+  + "<span style='font-size:1%; color: rgba(0, 0, 0, 0);'>!</span>"  // tiny invisible ! will sort it to top of list
+  + "TOTAL UPKEEP</td>"
+  + "<td class='gold_upkeep_column'   font-size:95%; style='text-align:right; padding-right:10px; color:#ffd52c; font-weight:520;' id='g_upkeep_total'> </td>"
+  + "<td style='padding-left:10px;'></td></tr>";
+
+  var alt_click_method = "oncontextmenu";
+  if (small_screen) alt_click_method = "ondblclick";
+  
+  var improvements_html = "";
+  var city_count = 0; // number of cities (total rows)
+  let city_upkeep = new Array(cities.length);
+
+  // Go through each city
+  for (var city_id in cities) { 
+    var pcity = cities[city_id];
+    city_upkeep[city_id] = 0; // start counter
+    // Only process legal cities owned by player
+    if (client.conn.playing == null || city_owner(pcity) == null || city_owner(pcity).playerno != client.conn.playing.playerno) {
+      continue;
+    } else city_count++;
+
+    //TO DO, we can only adjust height later after we add a unit_count tally then would have to do a $().css("height",rheight)
+    var rheight = 28 * Math.ceil( (/*col_count*/22*40) / ($(window).width()-140) );
+    improvements_html = "<tr class='cities_row;' style='border-bottom: 3px solid #000; height:"+rheight+"px;'>";
+    improvements_html += "<td style='cursor:pointer; font-size:85%; text-align:right; padding-right:10px;' onclick='javascript:show_city_dialog_by_id(" 
+                      + pcity['id']+")' id='citycell"+city_id+"'>"+pcity['name']+"</td>";
+    improvements_html += "<td class='gold_upkeep_column' font-size:85%; style='text-align:right; padding-right:10px; color:#ffd52c; font-weight:520;' id='g_upkeep_total"+city_id+"'> </td>"
+    improvements_html += "<td style='padding-left:10px;' id='u"+city_id+"'>";
+
+    // Go through the improvements one at a time and determine whether to show it
+    for (var z = 0; z < ruleset_control.num_impr_types-1 /*-1 don't show coinage*/; z ++) {
+      var present = city_has_building(pcity, z);
+      var show_building = present;
+      if (!show_building) continue;
+      // ------------------------------------------------------------------------------------------------
+      var upkeep = improvements[z]['upkeep'];
+      if (upkeep<=upkeep_gold_bonus) upkeep = 0;  // Free upkeep effects
+      city_upkeep[city_id] += upkeep;
+      if (upkeep==0) upkeep = "";  // leave 0 upkeep blank
+      var sprite = get_improvement_image_sprite(improvements[z]);
+
+      // Set display vars
+      var opacity = 1;
+      const border = "border:1px solid #000000;";
+      var bg = upkeep>0 ? "background:#FEED " : "background:#FEED ";
+      var title_text = "title='"+pcity['name']+":\n\nRIGHT-CLICK: Sell " + improvements[z]['name']+".'";
+      var right_click_action = alt_click_method+"='city_sell_improvement_in(" +city_id+","+ z + ");' ";
+      // Put improvement sprite in the cell:
+      improvements_html = improvements_html +
+        "<div style='padding:0px; opacity:"+opacity+"; "+magnification
+            +"' id='city_improvement_element'><span style='padding:0px; margin:0px; "+border+" "+bg+" url("
+            + sprite['image-src'] +
+            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
+            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left;' "
+            + title_text 
+            + right_click_action
+            + "onclick='change_city_prod_to(event," +city_id+","+ z + ");'>"  
+            +"</span><span style='font-size:90%; color:#ffd52c'>"+upkeep+"</span></div>";
+    }
+    empire_list_html += (improvements_html +"</td></tr>");      // Add the row
+  }
+  empire_list_html += "</tbody></table>";
+  $("#empire_list").html(empire_list_html);
+
+  // Inject total gold upkeep after
+  var total_upkeep = 0;
+  for (city_id in cities) {
+    // Only check cities the player owns
+    if (client.conn.playing == null || city_owner(cities[city_id]) == null || city_owner(cities[city_id]).playerno != client.conn.playing.playerno) {
+      continue;
+    }
+    if (city_upkeep[city_id] > 0) {
+      total_upkeep += city_upkeep[city_id];
+      $("#g_upkeep_total"+city_id).html(city_upkeep[city_id]);
+      $("#g_upkeep_total"+city_id).prop("title", city_upkeep[city_id] + " gold upkeep for buildings in "+cities[city_id]['name']);
+    }
+  }
+  $("#g_upkeep_total").html(total_upkeep);
+  $("#g_upkeep_total").prop("title", " Total national upkeep");
+  //---------------------------------------------------------------------
+  if (city_count == 0) {
+    $("#empire_table").html("You have no cities.");
+  }
+  $("#empire_table").tablesorter({theme:"dark", sortList: sortList});
+
+  if (tiny_screen) {
+  }
+  else if (redux_screen) {
+  } else if (wide_screen) {
+  }
 }
 /**************************************************************************
  Display Empire tab when it's in EMPIRE_ECON_WORKLISTS

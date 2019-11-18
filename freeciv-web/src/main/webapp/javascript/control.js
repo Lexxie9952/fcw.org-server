@@ -322,6 +322,11 @@ function control_init()
     empire_bldg_tab_saved_mag = 0; 
     simpleStorage.set('bldgZoom', empire_bldg_tab_saved_mag);
   }
+  empire_upkp_tab_saved_mag = simpleStorage.get("upkpZoom");
+  if (empire_upkp_tab_saved_mag == null) {
+    empire_upkp_tab_saved_mag = 0; 
+    simpleStorage.set('upkpZoom', empire_upkp_tab_saved_mag);
+  }
 
   // REMOVE when out of development, it will always be shown then:
   show_empire_tab = simpleStorage.get("showEmpire");
