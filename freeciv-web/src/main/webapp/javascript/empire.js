@@ -17,9 +17,7 @@
 
 ***********************************************************************/
 
-
-
-// global so we can resort
+// Global so we can re-sort
 var units_sorted_by_type = [];
 
 var master_empire_checkbox;
@@ -30,7 +28,12 @@ var empire_show_present_buildings = true;
 var empire_show_absent_buildings = false;
 var empire_show_wonders_only = false;
 
-var empire_bldg_tab_saved_mag = 0;
+var empire_worklist_clipboard = [];
+
+// User defined zoom levels for some tabs
+var empire_bldg_tab_saved_mag  = 0; // 0= not user defined, computer decides
+var empire_upkp_tab_saved_mag  = 0;
+var empire_wklst_tab_saved_mag = 0;
 
 var EMPIRE_UNIT_TYPE_MODE      = 0;
 var EMPIRE_UNIT_HOMECITY_MODE  = 1;
@@ -129,6 +132,8 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
   landscape_screen,tiny_screen,redux_screen)
 {
   $("#empire_title").html("Unit Home Cites and Upkeep");
+  //if (small_screen) $("#empire_title").hide(); else $("#empire_title").show();
+  $("#empire_title").hide(); // no title, need room for panels
 
   //$("#empire_static").css({"height":"100%", "width":"100%"})
 
@@ -159,7 +164,7 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
   if (narrow_screen || tiny_screen) $("#empire_prompt").hide();
   else $("#empire_prompt").show();
 
-  var updown_sort_arrows = "<img class='lowered_gov' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='>";
+  const updown_sort_arrows = "<img class='lowered_gov' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='>";
 
   var empire_list_html = "";
 
@@ -373,12 +378,6 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
   else if (redux_screen) {
   } else if (wide_screen) {
   }
-/*
-  if (retain_checkboxes_on_update)
-  {
-    retain_checkboxes_on_update = false;
-    restore_empire_checkboxes();
-  } */
 }
   
 /**************************************************************************
@@ -388,6 +387,8 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
   landscape_screen,tiny_screen,redux_screen)
 {
   $("#empire_title").html("City Deployment");
+  if (small_screen) $("#empire_title").hide(); else $("#empire_title").show(); 
+
   //$("#empire_static").css({"height":"100%", "width":"100%"})
 
   // Set up panel functions for National Units
@@ -417,7 +418,7 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
   if (narrow_screen || tiny_screen) $("#empire_prompt").hide();
   else $("#empire_prompt").show();
 
-  var updown_sort_arrows = "<img class='lowered_gov' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='>";
+  const updown_sort_arrows = "<img class='lowered_gov' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='>";
 
   var empire_list_html = "";
 
@@ -599,16 +600,10 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
   else if (redux_screen) {
   } else if (wide_screen) {
   }
-/*
-  if (retain_checkboxes_on_update)
-  {
-    retain_checkboxes_on_update = false;
-    restore_empire_checkboxes();
-  } */
 }
 
 /**************************************************************************
-  Magnification factors for Empire tabs
+  User adjustment of Magnification factors for Empire tabs
 **************************************************************************/
 function emp_bldgs_mag_plus1(mag) {
   empire_bldg_tab_saved_mag = mag * (100/99); update_empire_screen();
@@ -626,9 +621,18 @@ function emp_upkp_mag_less2(mag) {
   empire_upkp_tab_saved_mag = mag * (99/101); update_empire_screen();
   simpleStorage.set('upkpZoom', empire_upkp_tab_saved_mag);
 }
+function emp_wklst_mag_plus2(mag) {
+  empire_wklst_tab_saved_mag = mag * (101/99); update_empire_screen();
+  simpleStorage.set('wklZoom', empire_wklst_tab_saved_mag);
+}
+function emp_wklst_mag_less2(mag) {
+  empire_wklst_tab_saved_mag = mag * (99/101); update_empire_screen();
+  simpleStorage.set('wklZoom', empire_wklst_tab_saved_mag);
+}
 function reset_mag(){
   empire_bldg_tab_saved_mag=0;  simpleStorage.set('bldgZoom',0);
   empire_upkp_tab_saved_mag=0;  simpleStorage.set('upkpZoom',0);
+  empire_wklst_tab_saved_mag=0; simpleStorage.set('wklZoom',0);
 }
 /**************************************************************************
  Display Empire tab when it's in EMPIRE_ECON_IMPROVEMENTS
@@ -636,7 +640,9 @@ function reset_mag(){
 function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
   landscape_screen,tiny_screen,redux_screen)
 {
-  $("#empire_title").html("Building Improvements");
+  $("#empire_title").html("National Buildings");
+  if (small_screen) $("#empire_title").hide(); else $("#empire_title").show(); 
+
   //$("#empire_static").css({"height":"100%", "width":"100%"})
 
   var real_width = ($(window).width()-230); //window is approx 190 for city name and 35 for junk borders/scrollbars/etc.
@@ -657,8 +663,8 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
   var magnification = "zoom:"+mag_factor+"; -moz-transform:"+mag_factor+";";
 
   // Set up panel controls for Building display
-  var abs_chxbox = "Absent Buildings"; var pres_chxbox = "Present Builgings"; var wndr_chxbox = "Show Wonders only";
-  if (small_screen) { abs_chxbox = "Absent"; pres_chxbox = "Present"; wndr_chxbox = "Wonders"; }
+  var abs_chxbox = "Absent Buildings"; var pres_chxbox = "Present Buildings"; var wndr_chxbox = "Wonders only &nbsp;";
+  if (small_screen) { abs_chxbox = "Absent"; pres_chxbox = "Present"; wndr_chxbox = "Wonders "; }
   var panel_html = "<input type='checkbox' id='show_pb' title='Show present buildings' name='cbPB' value='true' onclick='toggle_empire_show_present_buildings();'>"+pres_chxbox
       + "<input type='checkbox' id='show_ab' title='Show absent buildings' name='cbAB' value='false' onclick='toggle_empire_show_absent_buildings();'>"+abs_chxbox
       + "<input type='checkbox' id='show_wonders' title='Show wonders instead of buildings' name='cbSW' value='false' onclick='toggle_empire_show_wonders_only();'>"+wndr_chxbox
@@ -684,7 +690,7 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
   if (narrow_screen || tiny_screen) $("#empire_prompt").hide();
   else $("#empire_prompt").show();
 
-  var updown_sort_arrows = "<img class='lowered_gov' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='>";
+  const updown_sort_arrows = "<img class='lowered_gov' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='>";
 
   var empire_list_html = "";
 
@@ -714,7 +720,7 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
     if (client.conn.playing == null || city_owner(pcity) == null || city_owner(pcity).playerno != client.conn.playing.playerno) {
       continue;
     } else city_count++;
-
+    
     //TO DO, we can only adjust height later after we add a unit_count tally then would have to do a $().css("height",rheight)
     var rheight = 28 * Math.ceil( (/*col_count*/22*40) / ($(window).width()-140) );
     improvements_html = "<tr class='cities_row;' style='border-bottom: 3px solid #000; height:"+rheight+"px;'>";
@@ -764,7 +770,7 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
       } else {
         if (!can_city_build_improvement_now(pcity, z)) {  // city has improvement but CAN'T MAKE IT
           opacity=0.19;
-          border = "border:3px solid #231a13;"  
+          border = "border:3px solid #231a13;"
           bg =     "background:#F43F ";
           title_text = "title='" + pcity['name']+": " + improvements[z]['name'] + " unavailable.\n\nRIGHT-CLICK: Add to worklist.'";
           right_click_action = alt_click_method+"='city_add_improv_to_worklist(" +city_id+","+ z + ");' ";
@@ -811,16 +817,15 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
   }
 }
 /**************************************************************************
-  Compute any building upkeep bonuses from Wonders and Governments
-  TO DO: make this ruleset independent when the server gives us a way
-  to do this. 
+  Compute building upkeep bonuses from Wonders and Governments
+  TO DO: make this ruleset independent when the server gives us a way.
 ***************************************************************************/
 function get_player_building_upkeep_bonus()
 {
   var bonus = 0;
   const rules = ruleset_control['name'];
   const gov = governments[client.conn.playing['government']]['name']
-  if ( player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_ADAM_SMITH_NAME)) ) {
+  if (player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_ADAM_SMITH_NAME))) {
     bonus += 1;
   }
   if (rules=="Multiplayer-Evolution ruleset" 
@@ -839,6 +844,8 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
   landscape_screen,tiny_screen,redux_screen)
 {
   $("#empire_title").html("Building Upkeep");
+  if (small_screen) $("#empire_title").hide(); else $("#empire_title").show(); 
+
   //$("#empire_static").css({"height":"100%", "width":"100%"})
 
   upkeep_gold_bonus = get_player_building_upkeep_bonus();
@@ -864,10 +871,8 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
   var magnification = "zoom:"+mag_factor+"; -moz-transform:"+mag_factor+";";
 
   // Set up panel controls for Building display
-  
-  var panel_html =
-        "<input type='button' style='font-size:90%; padding:2px;' value='+2%' onclick='emp_upkp_mag_plus2("+mag_factor+");'> "
-      + "<input type='button' style='font-size:90%; padding:2px;' value='-2%' onclick='emp_upkp_mag_less2("+mag_factor+");'>Zoom ";
+  var panel_html = "<input type='button' style='font-size:90%; padding:2px;' value='+2%' onclick='emp_upkp_mag_plus2("+mag_factor+");'> "
+                 + "<input type='button' style='font-size:90%; padding:2px;' value='-2%' onclick='emp_upkp_mag_less2("+mag_factor+");'>Zoom ";
   $("#empire_mode_panel").html(panel_html);
 
   $('#empire_scroll').css({"height": $(window).height()-160, "overflow-y":"scroll", "overflow-x":"hidden" });
@@ -884,7 +889,7 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
   if (narrow_screen || tiny_screen) $("#empire_prompt").hide();
   else $("#empire_prompt").show();
 
-  var updown_sort_arrows = "<img class='lowered_gov' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='>";
+  const updown_sort_arrows = "<img class='lowered_gov' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='>";
 
   var empire_list_html = "";
 
@@ -996,15 +1001,488 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
   }
 }
 /**************************************************************************
+ Click an improvement in Empire Worklist Tab
+**************************************************************************/
+function redraw_improv_clipboard()
+{
+  var clipboard_html = "";
+  var bg = "background:#FEED ";
+  const border = "border:2px solid #FFFFFF;"
+  var mag_factor = ($(window).width()-70)/(67*39);
+  if (mag_factor > 1.0) mag_factor = 1.0;
+  else if (mag_factor < 0.3597) {
+    mag_factor *= 2;
+    if (mag_factor < 0.3597) mag_factor = 0.3597;
+  }
+  var magnification = "zoom:"+mag_factor+"; -moz-transform:"+mag_factor+";";
+  const title_text = "title='CLICK: Remove from clipboard' ";  // hover + cursor = move before/after?
+
+  for (var z = 0; z < empire_worklist_clipboard.length; z ++) {
+    if (empire_worklist_clipboard[z]['kind']==VUT_IMPROVEMENT) {
+      sprite = get_improvement_image_sprite(improvements[empire_worklist_clipboard[z]['value']]);
+      bg = "background:#EFFD ";  
+    } else {
+      sprite = get_unit_type_image_sprite(unit_types[empire_worklist_clipboard[z]['value']])
+      bg = "background:#EFFD ";  
+    }
+    if (sprite == null) continue;
+
+    var marginleft = z == 0 ? 10 : -1;
+      
+    var opacity = 1;
+    const click_action = "onclick='cut_improv_clipboard(event, " + z + ");' ";
+    // Put improvement sprite in the cell:
+    clipboard_html = clipboard_html +
+      "<div style='cursor:pointer; padding:0px; opacity:"+opacity+"; "+magnification
+          +"'><span style='padding:0px; margin:0px; margin-left:"+marginleft+"px; "+border+" "+bg+" url("
+          + sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -" 
+          + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: " 
+          + sprite['height'] + "px;float:left;' "
+          + title_text + click_action
+          +"</span></div>";
+  }
+  const plural = (empire_worklist_clipboard.length > 1) ? "s" : ""  
+  if (empire_worklist_clipboard.length > 0) clipboard_html += empire_worklist_clipboard.length+"&nbsp;item"+plural;
+  $("#empire_worklist_clipboard").html(clipboard_html);
+}
+/**************************************************************************
+ User clicked to remove an element from the clipboard.
+**************************************************************************/
+function cut_improv_clipboard(event, z)
+{
+  empire_worklist_clipboard.splice(z,1);
+  redraw_improv_clipboard();
+}
+
+/**************************************************************************
+ Click an improvement in Empire Worklist Tab
+**************************************************************************/
+function handle_improv_clipboard(event, kind, z)
+{
+  if (event.ctrlKey) {   // future command
+  }
+  else if (event.shiftKey) {   // append to clipboard
+    empire_worklist_clipboard.push({"kind": kind, "value": z});
+  }
+  else {                  // replace (copy to) clipboard 
+    empire_worklist_clipboard = [{"kind": kind, "value": z}];
+  }
+  redraw_improv_clipboard();
+}
+/**************************************************************************
  Display Empire tab when it's in EMPIRE_ECON_WORKLISTS
 **************************************************************************/
 function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
   landscape_screen,tiny_screen,redux_screen)
 {
   $("#empire_title").html("National Production");
-  $("#empire_list").html("Upcoming feature.");
+  //if (small_screen) $("#empire_title").hide(); else $("#empire_title").show(); 
+  $("#empire_title").hide(); // always hide: maximise panel space. 
+
+  // MAGNIFICATION ---------------------------------------------------------
+  var real_width = ($(window).width()-270);
+  //mag factor then becomes % of 66px needed to fit 38 buildings in the available space
+  var mag_factor = (real_width/8)/67;  //console.log("1. win.width: "+$(window).width()+"   mag factor:"+mag_factor);
+  // If user adjusted mag level before, use that instead
+  if (empire_wklst_tab_saved_mag>0) {  
+    mag_factor = empire_wklst_tab_saved_mag;
+  } else { // If fitting 38 buildings in 1 row makes them just too tiny, keep boosting mag by exact amount to add one extra row,
+           // until the building icons are no longer too tiny. "Too tiny" defined as mag:0.35
+    for (var n=1; n<100; n++) {       
+      if (mag_factor<.4) mag_factor = mag_factor * ((n+1)/n);  // if mag<0.4 it's too tiny, increase mag% enough for 1 more row
+      else break;
+    }
+    if (mag_factor<.4) mag_factor = .45;
+    if (mag_factor>1) mag_factor = 1.0;
+  } 
+  if (small_screen) mag_factor = 0.8;
+  var magnification = "zoom:"+mag_factor+"; -moz-transform:"+mag_factor+";";
+  // ---------------------------------------------------------------------
+  // SET UP SUPER PANELS
+  if (true /*wide_screen || redux_screen*/) // TO DO: mobile super panel will need serious restructuring
+  var panel_html = create_worklist_improv_div()
+                 + (small_screen ? "" : create_worklist_wonder_div() )    // should be wonder_mode ? wonder_div : improv_div for space economy
+                 + create_worklist_unit_div()
+                 + "<div><span>"
+             //    + "<input type='button' style='font-size:90%; padding:2px;' value='+2%' onclick='emp_wklst_mag_plus2("+mag_factor+");'>" 
+             //    + "<input type='button' style='font-size:90%; padding:2px;' value='-2%' onclick='emp_wklst_mag_less2("+mag_factor+");'>
+                 + "</span>"
+                 + "<span style='margin-top:3px' id='empire_worklist_clipboard'></span></div>";
+  $("#empire_mode_panel").html(panel_html);
+  redraw_improv_clipboard();
+  
+  // MAIN AREA -------------------------------------------------------------  
+  $('#empire_scroll').css({"height": $(window).height()-160, "overflow-y":"scroll", "overflow-x":"hidden" });
+
+  var sortList = [];
+  var headers = $('#empire_table thead th');
+  headers.filter('.tablesorter-headerAsc').each(function (i, cell) {
+    sortList.push([cell.cellIndex, 0]);
+  });
+  headers.filter('.tablesorter-headerDesc').each(function (i, cell) {
+    sortList.push([cell.cellIndex, 1]);
+  });
+
+  if (narrow_screen || tiny_screen) $("#empire_prompt").hide();
+  else $("#empire_prompt").show();
+
+  const updown_sort_arrows = "<img class='lowered_gov' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='>";
+
+  var empire_list_html = "";
+
+  if (true /*wide_screen || redux_screen*/)  // fully standard deluxe wide-screen mode, include all info
+  {
+    empire_list_html = "<table class='tablesorter-dark' id='empire_table' style='border=0px;border-spacing=0;padding=0;'>"
+        + "<thead id='empire_table_head'>"
+        + "<tr>"  
+        // City coulumn
+        + "<th title='Sort alphabetically' style='text-align:right; font-size:93%; width:10px;'><span style='white-space:nowrap'>City"+updown_sort_arrows+"</span></th>"
+        // Worklist column
+        + "<th style='padding-left:10px; font-size:93%;'>&nbsp;Worklist</th>"
+        + "</tr>"
+        + "</thead><tbody>";
+  }
+
+  // saved for later but currently not used
+  var alt_click_method = "oncontextmenu";
+  if (small_screen) alt_click_method = "ondblclick";
+  
+  var queue_html = "";
+  var city_count = 0; // number of cities (total rows)
+
+  // Go through each city
+  for (var city_id in cities) { 
+    var pcity = cities[city_id];
+    // Only process legal cities owned by player
+    if (client.conn.playing == null || city_owner(pcity) == null || city_owner(pcity).playerno != client.conn.playing.playerno) {
+      continue;
+    } else city_count++;
+
+    var rheight = 10; // set it short then let it expand it only as high as it needs
+    // Mobile users have to click empty row to append clipboard:
+    var empty_row_click = small_screen ? " onclick='mobile_emulate_shift_click(event, "+city_id+")'" : "";
+    queue_html = "<tr class='cities_row;' style='border-bottom: 3px solid #000; height:"+rheight+"px;'>";
+    queue_html += "<td style='cursor:pointer; font-size:85%; text-align:right; padding-right:10px;' onclick='javascript:show_city_dialog_by_id(" 
+                      + pcity['id']+")' id='citycell"+city_id+"'>"+pcity['name']+"</td>";
+    queue_html += "<td style='padding-left:10px;' id='WL"+city_id+"'"+empty_row_click+">";
+
+    // Go through the worklist
+    for (var z = -1; z < pcity['worklist'].length; z++) { // current prod is not in worklist array but separate, so start at -1
+      // Get item from current prod or future worklist---------
+      var prod_kind, prod_value;
+      if (z==-1) {
+        prod_kind  = pcity['production_kind'];
+        prod_value = pcity['production_value'];
+      } else {
+        //console.log("Checking city "+pcity['id']+" to grab worklist value")
+        prod_kind  = pcity['worklist'][z]['kind'];
+        prod_value = pcity['worklist'][z]['value'];
+      }
+      // Get sprite and tech_req status: ----------------------------------
+      var sprite, req_state;
+      if (prod_kind == VUT_IMPROVEMENT) {
+        sprite = get_improvement_image_sprite(improvements[prod_value]);
+        //console.log("Checking improvement#"+prod_value);
+        if (improvements[prod_value]['reqs_count']==0) {
+          req_state = TECH_KNOWN;  // no tech required so we pretend we know it
+        } else {
+           req_state = player_invention_state(client.conn.playing, improvements[prod_value]['reqs'][0]['value']);
+        }
+      }
+      else if (prod_kind == VUT_UTYPE) {
+        sprite = get_unit_type_image_sprite(unit_types[prod_value]);
+        req_state = player_invention_state(client.conn.playing, unit_types[prod_value]['tech_requirement']);
+      }
+      // ------------------------------------------------------------------
+      // Set display vars
+      const border = "border:2px solid #000000;";
+      var bg = req_state == TECH_KNOWN ? "background:#FEED " : "background:#A769 " 
+      const title_text = "title='CLICK: Remove\nCTRL-CLICK: Insert before\nSHIFT-CLICK: Add after'";
+      //var right_click_action = alt_click_method+"='handle_worklist_action(" +city_id+","+ z + ");' ";
+
+      // Put improvement sprite in the cell:
+      queue_html = queue_html +
+        "<div style='padding:0px; "+magnification
+            +"' id='worklist_element'><span style='padding:0px; margin:0px; "+border+" "+bg+" url("
+            + sprite['image-src'] +
+            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
+            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left;' "
+            + title_text 
+           // + right_click_action
+            + "onclick='handle_worklist_action(event,"+city_id+","+ z + ");' "  
+            +"</span></div>";
+    }
+    empire_list_html += (queue_html +"</td></tr>");      // Add the row
+  }
+  empire_list_html += "</tbody></table>";
+  $("#empire_list").html(empire_list_html);
+  //---------------------------------------------------------------------
+  if (city_count == 0) {
+    $("#empire_table").html("You have no cities.");
+  }
+  $("#empire_table").tablesorter({theme:"dark", sortList: sortList});
+
+  if (tiny_screen) {
+  }
+  else if (redux_screen) {
+  } else if (wide_screen) {
+  }
+}
+/**************************************************************************
+ Handle a worklist action click in Worklist tab 
+**************************************************************************/
+function handle_worklist_action(event,city_id, z)
+{
+  event.stopPropagation(); // prevent row click / item click from double firing
+      //console.log("handle_worklist_action("+cities[city_id]['name']+","+z+")")
+  active_city = cities[city_id];
+      //console.log("CURPROD.{kind:"+active_city.production_kind+",value:"+active_city.production_value+"}");
+      //console.log(active_city.worklist);
+  production_selection = empire_worklist_clipboard.slice();  // make a copy of clipboard
+  if (event.ctrlKey) {          // Paste clipboard BEFORE this item 
+    if (z!=-1) {
+      worklist_selection = [z];      
+      city_insert_in_worklist();
+    } else { //user clicked on cur_prod not worklist, we have to play a little shell game:
+      // Append current city prod into temp. clipboard at last position
+      console.log(production_selection)
+      const cur_prod = {"kind":active_city['production_kind'], "value":active_city['production_value']};
+      production_selection.push(cur_prod); 
+      console.log(production_selection)
+      // Insert new clipboard to top of worklist
+      worklist_selection = [0]; // have to reset
+      city_insert_in_worklist();
+      // Now just delete the current production item to shift it all up
+      worklist_selection = [0]; // have to reset
+      city_remove_current_prod();      
+    }
+  } else if (event.shiftKey) {  // Paste clipboard AFTER this item  
+    worklist_selection = [z+1];  // (+1 changes before to after)  
+    city_insert_in_worklist();
+  } else {                      // Remove city worklist item
+    if (z==-1) {
+      worklist_selection = [0]; // have to reset **************************************************** added mindlessly to test
+      city_remove_current_prod(); //user clicked on cur_prod not worklist
+    }
+    else {
+      worklist_selection = [z];   
+      city_worklist_task_remove();
+    }
+  }
+  //console.log("CURPROD.{kind:"+active_city.production_kind+",value:"+active_city.production_value+"}");
+  //console.log(active_city.worklist);
+  active_city = null;
+  return;
+}
+/**************************************************************************
+ Called when a mobile user taps a BLANK part of the row; does same thing
+ as shift-clicking the last item
+**************************************************************************/
+function mobile_emulate_shift_click(event, city_id)
+{
+  event.stopPropagation(); // prevent row click / item click from double firing
+  active_city = cities[city_id];
+  production_selection = empire_worklist_clipboard.slice();  // make a copy of clipboard
+
+  var z = active_city['worklist'].length-1; // pretend we clicked last item in clipboard
+  worklist_selection = [z+1];  // (+1 changes before to after)  
+  city_insert_in_worklist();
+  active_city = null;
 }
 
+/**************************************************************************
+ Super Panel for improvements in National Production/Worklist tab 
+**************************************************************************/
+function create_worklist_improv_div()
+{
+  var improvements_html = "";
+  var bg = "";
+  const border = "border:2px solid #000000;"
+  var mag_factor = ($(window).width()-70)/(67*39);
+  if (mag_factor > 1.0) mag_factor = 1.0;
+  else if (mag_factor < 0.3597) {
+    mag_factor *= 2;
+    if (mag_factor < 0.3597) mag_factor = 0.3597;
+  }
+  var magnification = "zoom:"+mag_factor+"; -moz-transform:"+mag_factor+";";
+  const constant_title = "CLICK: Copy to clipboard\n\nSHIFT-CLICK: Add to clipboard' ";
+
+  for (var z = 0; z < ruleset_control.num_impr_types; z ++) {
+    if (improvements[z].genus<=GENUS_SMALL_WONDER) continue; // filter out great/small wonders from this div
+
+    sprite = get_improvement_image_sprite(improvements[z]);
+    if (sprite == null) continue;
+
+    // Filter out obsolete buildings:
+    if (improvements[z]['obs_count'] > 0) {
+      if (player_invention_state(client.conn.playing, improvements[z]['obs_reqs'][0]['value']) == TECH_KNOWN) {
+        continue;
+      }
+    }
+    // Filter out buildings that are two techs or more away
+    if (improvements[z]['reqs'].length > 0) {
+      var req_state = player_invention_state(client.conn.playing, improvements[z]['reqs'][0]['value']);
+      if (req_state != TECH_KNOWN) {
+        if (req_state != TECH_PREREQS_KNOWN) continue; 
+      }
+    } 
+  
+    // Set cell colour/opacity based on player has tech_req
+    if (improvements[z]['reqs'].length > 0) {
+      if (player_invention_state(client.conn.playing, improvements[z]['reqs'][0]['value']) != TECH_KNOWN) {
+        bg = "background:#5003 ";
+        //opacity = 1;
+      }
+      else bg = "background:#EFF4 ";
+    } else bg = "background:#EFF4 ";  // some have no reqs
+    var title_text = "title='"+improvements[z]['name']+"\n\n"+constant_title;
+    var opacity = 1;
+    const click_action = "onclick='handle_improv_clipboard(event, "+VUT_IMPROVEMENT+","+ z + ");' "; // copy/add/remove to clipboard < >/<shift>/<ctrl>
+    // Put improvement sprite in the cell:
+    improvements_html = improvements_html +
+      "<div style='cursor:pointer; padding:0px; opacity:"+opacity+"; "+magnification
+          +"'><span style='padding:0px; margin:0px; margin-left:-1px; "+border+" "+bg+" url("
+          + sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -" 
+          + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: " 
+          + sprite['height'] + "px;float:left;' "
+          + title_text + click_action
+          +"</span></div>";
+  }
+  return improvements_html;
+}
+/**************************************************************************
+ Super Panel for wonders in National Production/Worklist tab 
+**************************************************************************/
+function create_worklist_wonder_div()
+{
+  var improvements_html = "";
+  var bg = "background:#0000 ";
+  const border = "border:2px solid #000000;"
+  var mag_factor = ($(window).width()-70)/(67*39);
+  if (mag_factor > 1.0) mag_factor = 1.0;
+  else if (mag_factor < 0.3597) {
+    mag_factor *= 2;
+    if (mag_factor < 0.3597) mag_factor = 0.3597;
+  }
+  var magnification = "zoom:"+mag_factor+"; -moz-transform:"+mag_factor+";";
+  const constant_title = "CLICK: Copy to clipboard\n\nSHIFT-CLICK: Add to clipboard' ";
+
+  // Create array of owned wonders now: 72 checks instead of 72x72=5184 checks
+  var owned_wonders = new Array(ruleset_control.num_impr_types).fill(0);
+  for (var w = 0; w < ruleset_control.num_impr_types; w++) {
+    owned_wonders[w] = player_has_wonder(client.conn.playing.playerno, w);
+  }
+
+  for (var z = 0; z < ruleset_control.num_impr_types; z ++) {
+    if (improvements[z].genus>GENUS_SMALL_WONDER) continue; // filter out everything except wonders
+    sprite = get_improvement_image_sprite(improvements[z]);
+    if (sprite == null) continue;
+    
+    // FILTER INAPPROPRIATE WONDERS FROM LIST --------------------------
+    // OWNED:
+    if (owned_wonders[z]) {
+      continue; // Filter out wonders already owned.
+    }
+    // OBSOLETE:
+    if (improvements[z]['obs_count'] > 0) {
+      if (player_invention_state(client.conn.playing, improvements[z]['obs_reqs'][0]['value']) == TECH_KNOWN) {
+        continue;
+      }
+    }
+    // UNREACHABLE and 2 techs away or more:  (TECHS_PREREQS_KNOWN is 1 away)
+    if (improvements[z]['reqs'].length > 0) {
+      if (player_invention_state(client.conn.playing, improvements[z]['reqs'][0]['value']) == TECH_UNKNOWN) {
+        continue;   
+      }
+    } //------------------------------------------------------------------
+    var title_text = "title='"+improvements[z]['name']+"\n\n"+constant_title;
+    const click_action = "onclick='handle_improv_clipboard(event, "+VUT_IMPROVEMENT+","+ z + ");' "; // copy/add/remove to clipboard < >/<shift>/<ctrl>
+    // Put improvement sprite in the cell:
+    improvements_html = improvements_html +
+      "<div style='cursor:pointer; opacity: 1.0; padding:0px; "+magnification
+          +"'><span style='padding:0px; margin:0px; margin-left:-1px; "+border+" "+bg+" url("
+          + sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -" 
+          + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: " 
+          + sprite['height'] + "px;float:left;' "
+          + title_text + click_action
+          +"</span></div>";
+  }
+  return improvements_html;
+}
+
+/**************************************************************************
+ Super Panel for units in National Production/Worklist tab 
+**************************************************************************/
+function create_worklist_unit_div()
+{
+  const cur_gov = governments[client.conn.playing['government']];
+  var units_html = "";
+  var bg = "";
+  const border = "border:2px solid #000000;"
+  var mag_factor = ($(window).width()-70)/(67*39);
+  if (mag_factor > 1.0) mag_factor = 1.0;
+  else if (mag_factor < 0.3597) {
+    mag_factor *= 2;
+    if (mag_factor < 0.3597) mag_factor = 0.3597;
+  }
+  var magnification = "zoom:"+mag_factor+"; -moz-transform:"+mag_factor+";";
+  const constant_title = "CLICK: Copy to clipboard\n\nSHIFT-CLICK: Add to clipboard' ";
+
+  for (var z = 0; z < ruleset_control.num_unit_types; z ++) {
+    // FILTER OUT INAPPROPRIATE UNITS FROM LIST------------------------------------------------
+    if (unit_types[z]['name'] == "Leader") continue;      
+    if (unit_types[z]['name'] == "Barbarian Leader") continue;     
+    if (unit_types[z]['name'] == "Fanatics" && cur_gov != "Fundamentalism") continue;
+    // if (unit_type[z] is unique && exists) continue; //TODO: if possible to check this
+    // RULESET SPECIFIC FILTER:
+    if (ruleset_control['name'] == "Multiplayer-Evolution ruleset" ) {
+      if (unit_types[z]['name'] == "Well-Digger") continue;
+      if (unit_types[z]['name'] == "Queen") continue;
+      if (unit_types[z]['name'] == "Pilgrims" && cur_gov != "Fundamentalism") continue;
+      if (unit_types[z]['name'] == "Proletarians" && cur_gov != "Communism") continue;
+    }
+    // OBSOLETE - See if we have the tech for the unit which obsoletes it:
+    const obs_by_type = unit_types[z]['obsoleted_by']; 
+    if (obs_by_type < ruleset_control.num_unit_types) {  // highest index+1 == flag for never obsolete
+      //console.log("Checking "+unit_types[z]['name'])
+      if (unit_types[obs_by_type]['tech_requirement']>0) {
+        if (player_invention_state(client.conn.playing, unit_types[obs_by_type]['tech_requirement']) == TECH_KNOWN) {
+          continue;
+        }
+      }
+    }
+    // FARTHER THAN ONE TECH AWAY:
+    var req_state = player_invention_state(client.conn.playing,unit_types[z]['tech_requirement']);
+    if (req_state != TECH_KNOWN) {
+        if (req_state != TECH_PREREQS_KNOWN) continue; 
+    } 
+    // -----------------------------------------------------------------------------------------
+    sprite = get_unit_type_image_sprite(unit_types[z]);
+    if (sprite == null) continue;
+  
+    // Set cell colour/opacity based on player has tech_req
+    if (unit_types[z]['tech_requirement'] > 0) {
+      if (req_state == TECH_PREREQS_KNOWN) {
+        bg = "background:#5003 ";
+        //opacity = 1;
+      }
+      else bg = "background:#EFF4 ";
+    } else bg = "background:#EFF4 ";  // some have no reqs
+      
+    var opacity = 1;
+    var title_text="title='"+unit_types[z]['name']+"\n\n"+constant_title;
+    const click_action = "onclick='handle_improv_clipboard(event, "+VUT_UTYPE+","+ z + ");' "; // copy/add/remove to clipboard < >/<shift>/<ctrl>
+    // Put improvement sprite in the cell:
+    units_html = units_html +
+      "<div style='cursor:pointer; padding:0px; opacity:"+opacity+"; "+magnification
+          +"'><span style='padding:0px; margin:0px; margin-left:-1px; "+border+" "+bg+" url("
+          + sprite['image-src'] + ");background-position:-" + sprite['tileset-x'] + "px -" 
+          + sprite['tileset-y'] + "px;  width: " + sprite['width'] + "px;height: " 
+          + sprite['height'] + "px;float:left;' "
+          + title_text + click_action
+          +"</span></div>";
+  }
+  return units_html;}
 /**************************************************************************
  Toggle whether to show present buildings 
 **************************************************************************/
@@ -1017,7 +1495,6 @@ function toggle_empire_show_present_buildings()
   update_empire_screen();
   empire_sort_mode = SORT_NONE;
 }
-
 /**************************************************************************
  Toggle whether to show absent buildings
 **************************************************************************/
@@ -1030,7 +1507,6 @@ function toggle_empire_show_absent_buildings()
   update_empire_screen();
   empire_sort_mode = SORT_NONE;
 }
-
 /**************************************************************************
  Toggle whether to show wonders instead of buildings
 **************************************************************************/
@@ -1043,7 +1519,6 @@ function toggle_empire_show_wonders_only()
   update_empire_screen();
   empire_sort_mode = SORT_NONE;
 }
-
 /**************************************************************************
  Toggle whether to show hitpoints on units in Empire tab, applies to all 
  modes which show units. 
@@ -1057,7 +1532,6 @@ function toggle_empire_show_hitpoints()
   update_empire_screen();
   empire_sort_mode = SORT_NONE;
 }
-
 /**************************************************************************
  Toggle whether to show hitpoints on units in Empire tab, applies to all 
  modes which show units. 
@@ -1071,7 +1545,6 @@ function toggle_empire_show_movepoints()
   update_empire_screen();
   empire_sort_mode = SORT_NONE;
 }
-
 /**************************************************************************
  Sort all unit rows in empire tab by Hit points 
 **************************************************************************/
@@ -1162,7 +1635,7 @@ function compare_vet_sort(u1, u2)
   // Equal in every way, just return 0
   return 0;
 }
-/*************************************************************************/
+
 
 /**************************************************************************
  Display Empire tab when it's in EMPIRE_UNIT_TYPE_MODE
@@ -1200,7 +1673,7 @@ function empire_unittype_screen(wide_screen,narrow_screen,small_screen,
   if (narrow_screen || tiny_screen) $("#empire_prompt").hide();
   else $("#empire_prompt").show();
 
-  var updown_sort_arrows = "<img class='lowered_gov' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='>";
+  const updown_sort_arrows = "<img class='lowered_gov' src='data:image/gif;base64,R0lGODlhFQAJAIAAAP///////yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw=='>";
 
   var empire_list_html = "";
 
@@ -1358,12 +1831,6 @@ function empire_unittype_screen(wide_screen,narrow_screen,small_screen,
   else if (redux_screen) {
   } else if (wide_screen) {
   }
-/*
-  if (retain_checkboxes_on_update)
-  {
-    retain_checkboxes_on_update = false;
-    restore_empire_checkboxes();
-  } */
 }
 
 /**************************************************************************
@@ -1373,47 +1840,6 @@ function change_empire_mode(mode_selected)
 {
   empire_mode = mode_selected;
   update_empire_screen();
-}
-
-/**************************************************************************
-  Restores retained checkbox states if update_empire_screen() refreshes
-  itself while viewing (e.g., bought something, changed production item)
-**************************************************************************/
-function restore_empire_checkboxes()
-{
-  // Restore checkbox state in individual city rows:
-  if (empire_checkbox_states != null) {
-    for (var row_id in empire)  {
-      if (empire_checkbox_states[row_id] == true) {
-        $("#cb"+row_id).prop('checked', true);
-      } 
-    }
-  }
-  // Restore checkbox state of "master" header checkbox
-  $("#master_checkbox").prop('checked', master_empire_checkbox);
-}
-
-/**************************************************************************
-  Save all checkboxes in city list for restoring if screen updates.
-**************************************************************************/
-function save_empire_checkbox_states()
-{
-  for (var row_id in empire)  {
-    if ($("#cb"+row_id).is(":checked")) {
-      empire_checkbox_states[city_id] = true;
-    } else empire_checkbox_states[city_id] = false;
-  }
-}
-
-/**************************************************************************
-  Toggle all checkboxes in empire list for selecting rows
-**************************************************************************/
-function toggle_empire_row_selections()
-{
-  for (var row_id in empire)  {
-    $("#cb"+row_id).prop('checked', !($("#cb"+row_id).is(":checked")) );
-  }
-  master_empire_checkbox = $("#master_empire_checkbox").is(":checked");
 }
 
 /**************************************************************************

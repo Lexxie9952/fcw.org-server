@@ -150,6 +150,8 @@ function is_capital(city) {
 **************************************************************************/
 function show_city_dialog_by_id(pcity_id)
 {
+  //console.log(" show_city_dialog_by_id  caller is " + show_city_dialog_by_id.caller);
+
   show_city_dialog(cities[pcity_id]);
 }
 
@@ -1800,7 +1802,6 @@ function city_worklist_dialog(pcity)
      + "' data-wlitem='" + j + "' "
      + " title=\"" + universal['helptext'] + "\">"
      + "<td><div class='production_list_item_sub' "
-        // +"ondblclick='city_add_to_worklist(event);'' " // it seems this was superfluous since generate_production_list adds it to each item
            + "style=' background: transparent url("
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
@@ -2273,7 +2274,6 @@ function city_remove_current_prod()
     // reserved for double clicking it when no worklist below and not 
     // alternate replacement is selected on list to the right.
   }
-
 }
 
 /**************************************************************************
