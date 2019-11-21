@@ -631,10 +631,10 @@ sound		= "b_palace"
 sound_alt	= "b_generic"
 helptext	= _("\
 Makes a city the capital of your nation.\
- Corruption and waste in cities increases with distance\
+ Corruption in cities increases with distance\
  from the capital (except under Democracy or\
- Communism.) A Palace makes corruption and waste in your capital\
- half of what it would otherwise be.\
+ Communism.) A Palace reduces corruption in your capital\
+ by roughly half.\
 "), _("\
 The cost of inciting a revolt decreases with distance from the\
  capital. The capital cannot be incited to revolt, and reduces the chance\

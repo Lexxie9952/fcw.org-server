@@ -699,7 +699,7 @@ build_cost    = 10
 pop_cost      = 1
 attack        = 0
 defense       = 1
-hitpoints     = 20
+hitpoints     = 10
 firepower     = 1
 move_rate     = 2
 vision_radius_sq = 4
@@ -717,11 +717,10 @@ veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
 helptext      = _("\
-Pilgrims are wayfaring migrants from Fundamentalist nations. Heeding the call\
- of ecclesiastic authority, they migrate to where divine inspiration guides them.\
-"), _("\
-Pilgrims can move from one city to another to transfer population from city\
- to city.\
+Pilgrims are wayfaring migrants from Fundamentalist nations. Like Fanatics, they\
+ they have no upkeep if as stay under a Fundamentalist government. Heeding the\
+ call of ecclesiastic authority, Pilgrims can be guided from one city to another in\
+ order to transfer population from city to city.\
 ")
 
 
@@ -2431,8 +2430,8 @@ The Trireme is useful for exploration, transport, and Commerce.\
  and attack on rivers, but cannot attack the shore.\
 "), _("
 Like most ancient sea units, when it initiates combat there will be 15 rounds\
-  of combat and 15 total hitpoints lost between both units. This may or may not\
-  result in the loss of one of the units. Triremes do not cause unhappiness.\
+ of combat and 15 total hitpoints lost between both units. This may or may not\
+ result in the loss of one of the units. Triremes do not cause unhappiness.\
 "), _("
 NOTE: GO TO orders prevent accidental loss of the unit at sea, but are VERY\
  restrictive. You should override this by ordering moves to adjacent tiles.\
