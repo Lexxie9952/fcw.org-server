@@ -1210,7 +1210,9 @@ function next_city()
 {
   if (!client.conn.playing) return;
 
-  city_screen_updater.fireNow();
+  update_city_screen(); // force an update, city_screen_updater doesn't fire 
+                        // if the city tab was never opened.
+  //city_screen_updater.fireNow(); for some reason this wasn't firing?
 
   var next_row = $('#cities_list_' + active_city['id']).next();
   if (next_row.length === 0) {
@@ -1231,7 +1233,9 @@ function previous_city()
 {
   if (!client.conn.playing) return;
 
-  city_screen_updater.fireNow();
+  update_city_screen(); // force an update, city_screen_updater doesn't fire 
+                        // if the city tab was never opened.
+  //city_screen_updater.fireNow(); for some reason this wasn't firing?
 
   var prev_row = $('#cities_list_' + active_city['id']).prev();
   if (prev_row.length === 0) {
