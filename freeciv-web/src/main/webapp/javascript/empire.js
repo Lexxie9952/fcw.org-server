@@ -132,8 +132,8 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
   landscape_screen,tiny_screen,redux_screen)
 {
   $("#empire_title").html("Unit Home Cites and Upkeep");
-  //if (small_screen) $("#empire_title").hide(); else $("#empire_title").show();
-  $("#empire_title").hide(); // no title, need room for panels
+  if (small_screen) $("#empire_title").hide();
+  else $("#empire_title").show();
 
   //$("#empire_static").css({"height":"100%", "width":"100%"})
 
@@ -1645,6 +1645,8 @@ function empire_unittype_screen(wide_screen,narrow_screen,small_screen,
 {
   //$("#empire_static").css({"height":"100%", "width":"100%"})
   $("#empire_title").html("National Units");
+  if (small_screen) $("#empire_title").hide();
+  else $("#empire_title").show();
 
   // Set up panel functions for National Units
   var panel_html = "<input type='checkbox' id='show_hp' title='Show hit points' name='cbHP' value='false' onclick='toggle_empire_show_hitpoints();'>HP"
