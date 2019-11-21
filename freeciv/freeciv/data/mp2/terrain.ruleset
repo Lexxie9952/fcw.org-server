@@ -1357,7 +1357,7 @@ reqs           =
 build_time     = 4
 removal_time   = 0
 native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter", "Balloon", "AirProtect"
-hidden_by      = "Fortress"
+hidden_by      = "Fortress", "Naval Base"
 flags          = "NativeTile", "NoStackDeath"  ;, "Refuel"
 ;NOTE: effect_fortress_regen should give 25% of 20HP to helicopter, +1hp for being stationary
 ;thus a fortress should give +6hp -2hp for not being in refuel spot or +4hp/turn. Healing 67% 
@@ -1398,6 +1398,7 @@ build_time     = 5
 removal_time   = 0
 defense_bonus  = 67
 native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter", "Balloon"
+hidden_by      = "Fortress", "Naval Base"
 flags          = "NativeTile", "Refuel", "NoStackDeath"
 helptext       = _("\
 Fortresses are improvements built on top of Forts which greatly improve defense.\
@@ -1466,6 +1467,43 @@ Buoys may be built in the ocean (by units on a sea-going vessel) to \
 allow their owner to see the surrounding tiles.\
 ")
 
+[extra_navalbase]
+name           = _("Naval Base")
+category       = "Infra"
+causes         = "Base"
+rmcauses       = "Pillage"
+graphic        = "base.navalbase"
+graphic_alt    = "base.fortress"
+activity_gfx   = "unit.navalbase"
+act_gfx_alt    = "unit.fortress"
+act_gfx_alt2   = "-"
+rmact_gfx      = "None"
+rmact_gfx_alt  = "-"
+reqs           =
+    { "type", "name", "range", "present", "quiet"
+      "Extra", "Fortress", "Local", TRUE, FALSE
+      "TerrainFlag", "Low Land", "Local", TRUE, FALSE
+      "TerrainClass", "Oceanic", "CAdjacent", TRUE, FALSE
+      "Tech", "Engineering", "Player", TRUE, FALSE
+      "UnitFlag", "CanFortress", "Local", TRUE, FALSE
+      "CityTile", "Center", "Local", FALSE, TRUE
+    }
+build_time     = 3
+removal_time   = 0
+conflicts      = "Airbase", "Irrigation", "Mine", "Oil Well", "Farmland"
+defense_bonus  = 33
+native_to      = "Trireme", "RiverShip", "Sea", "Submarine"
+flags          = "NativeTile", "NoStackDeath", "Refuel"
+helptext       = _("\
+Naval bases are coastal Fortresses with ocean access. They allow ships to enter and\ 
+ receive a 1.33x bonus from superior fortifications and defensive position. Naval\
+ Bases are built into Fortresses--all other units get the benefits of a Fortress.\
+"), _("
+NOTE: Naval bases are the only location where ships can be sure to avoid stack death without\
+ suffering a defense disadvantage. Besides the Fortress its built on top of, only road- and\
+ canal- type tile improvements can co-exist on the same tile.\ 
+")
+
 [extra_ruins]
 name           = _("Ruins")
 category       = "Bonus"
@@ -1511,7 +1549,7 @@ reqs           =
 build_time     = 0
 removal_time   = 0
 native_to      = "Land", "LandNoKill", "LandAirSea"
-hidden_by      = "Railroad", "Maglev"
+hidden_by      = "Railroad", "Maglev", "Naval Base"
 flags          = "AutoOnCityCenter"
 bridged_over   = "River"
 helptext       = _("\
@@ -1545,7 +1583,7 @@ reqs           =
 build_time     = 3
 removal_time   = 0
 native_to      = "Land", "LandNoKill", "LandAirSea"
-hidden_by      = "Maglev"
+hidden_by      = "Maglev", "Naval Base"
 flags          = "AutoOnCityCenter"
 bridged_over   = "River"
 helptext       = _("\
@@ -1584,6 +1622,7 @@ reqs           =
 build_time     = 3
 removal_time   = 0
 native_to      = "Land", "LandNoKill", "LandAirSea"
+hidden_by      = "Naval Base"
 flags          = "NativeTile", "AutoOnCityCenter"
 helptext       = _("\
 With Superconductors, you may build MAGnetic LEVitation tracks\
@@ -1974,6 +2013,15 @@ gui_type       = "Airbase"
 extra          = "Buoy"
 gui_type       = "Fortress"
 vision_main_sq = 5
+
+[base_navalbase]
+extra          = "Naval Base"
+gui_type       = "Airbase"
+border_sq      = 3
+vision_main_sq = 6
+vision_subs_sq = 4
+flags          = "NoAggressive"
+
 
 ; /* <-- avoid gettext warnings
 ;

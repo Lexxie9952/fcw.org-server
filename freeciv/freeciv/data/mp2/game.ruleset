@@ -174,7 +174,7 @@ base_incite_cost = 700   ; BIC  =700 (the cost of a size 1 domestic city at a di
 ;city is content         ; CON 
 ;city is celebrating     ; CEL 
 ;incite defence bonuses  ; BONUS  -50% empty + 300% occupied+courthouse OR + 100% empty+courthouse + supreme_court applies courthouse bonuses again
-;                        ;        +∞ = democracy/mausoleum/palace/ecclesiastical palace  
+;                        ;        +∞ = democracy/mausoleum/palace/ecclesiastical palace 
 ;total unit shield cost  ; UC 
 ;total improvements cost ; IC
 ;distance to capital     ; DIST  (max distance penalty=32 tiles)
@@ -246,7 +246,7 @@ bombard_max_range = 1
 ; The second %s marks where extra details should be inserted.
 
 ; /* TRANS: _Deploy (3% chance of success). */
-ui_name_convert_unit = _("Convert to %Queen or King%s")
+ui_name_convert_unit = _("%sConvert Unit%s")
 
 ; /* TRANS: _Poison City (3% chance of success). */
 ui_name_poison_city_escape = _("%sPoison City%s")
@@ -413,6 +413,21 @@ actor_reqs    =
       "UnitFlag", "GameLoss",   "Local"
     }
 
+[actionenabler_communist_rifles_to_plows]
+action = "Convert Unit"
+actor_reqs    =
+    { "type",     "name",       "range"
+      "UnitType", "Riflemen",   "Local"
+      "Gov",      "Communism", "Player"
+    }
+[actionenabler_communist_plows_to_rifles]
+action = "Convert Unit"
+actor_reqs    =
+    { "type",     "name",       "range"
+      "UnitType", "Workers",   "Local"
+      "Gov",      "Communism", "Player"
+    }
+
 [actionenabler_sabotage_city]
 action = "Sabotage City"
 actor_reqs    =
@@ -461,7 +476,7 @@ target_reqs  =
     { "type",        "name",      "range",  "present"
       "NationGroup", "Barbarian", "Player", FALSE
     }
-;if at war, police station will block embassy: do a cease-fire first!
+;if at war, police station/fundie will block embassy: do a cease-fire first!
 [actionenabler_establish_embassy_war]
 action       = "Establish Embassy Stay"
 actor_reqs    =
@@ -474,9 +489,10 @@ actor_reqs    =
       "DiplRel",      "War",           "Local", TRUE 
     }
 target_reqs  =
-    { "type",        "name",      "range",    "present"
-      "NationGroup", "Barbarian", "Player",    FALSE
-      "Building",    "Police Station", "City", FALSE  ; to do: when we can check for spy present to stop it
+    { "type",        "name",           "range",   "present"
+      "NationGroup", "Barbarian",      "Player",  FALSE
+      "Building",    "Police Station", "City",    FALSE ; to do: when we can check for spy present to stop it
+      "Gov",         "Fundamentalism", "Player",  FALSE
     }
 
 ; normal establish embassy--if not at war 
@@ -494,7 +510,7 @@ target_reqs  =
     { "type",        "name",      "range",  "present"
       "NationGroup", "Barbarian", "Player", FALSE
     }
-;if at war, police station will block embassy: do a cease-fire first!
+;if at war, police station or fundie will block embassy: do a cease-fire first!
 [actionenabler_establish_embassy_spy_war]
 action       = "Establish Embassy"
 actor_reqs    =
@@ -506,9 +522,10 @@ actor_reqs    =
       "DiplRel",      "War",           "Local", TRUE 
     }
 target_reqs  =
-    { "type",        "name",      "range",  "present"
-      "NationGroup", "Barbarian", "Player", FALSE
-      "Building",    "Police Station", "City", FALSE  ; to do: when we can check for spy present to stop it
+    { "type",        "name",          "range",    "present"
+      "NationGroup", "Barbarian",     "Player",   FALSE
+      "Building",    "Police Station", "City",    FALSE  ; to do: when we can check for spy present to stop it
+      "Gov",         "Fundamentalism", "Player",  FALSE
     }
 ; ***************************************************
 
@@ -791,6 +808,7 @@ action = "Bombard"
 actor_reqs    =
     { "type",         "name",        "range", "present"
       "UnitFlag",     "Bombarder",   "Local", TRUE
+      "UnitType",     "Archers",      "Local", TRUE
       "UnitState",    "Transported", "Local", FALSE
       "MinMoveFrags", "1",           "Local", TRUE
       "DiplRel",      "War",         "Local", TRUE
@@ -801,6 +819,28 @@ target_reqs    =
       "Extra",    "Fortress", "Local", FALSE
       "TerrainClass",  "Oceanic",  "Local", FALSE
     }
+
+;Fanatics can strafe/soften every unit on a tile for one 
+;round of combat only, iff it is in domestic territory.
+[actionenabler_fanatic_bombard] ;****
+action = "Bombard"
+actor_reqs    =
+    { "type",         "name",        "range", "present"
+      "UnitFlag",     "Bombarder",   "Local", TRUE
+      "UnitType",     "Fanatics",      "Local", TRUE
+      "UnitState",    "Transported", "Local", FALSE
+      "UnitState",    "OnDomesticTile", "Local",  TRUE
+      "MinMoveFrags", "1",           "Local", TRUE
+      "DiplRel",      "War",         "Local", TRUE
+      "Gov",          "Fundamentalism", "Player", TRUE
+   }
+target_reqs    =
+    { "type",   "name", "range", "present"
+      "CityTile", "Center",   "Local", FALSE
+      "Extra",    "Fortress", "Local", FALSE
+      "TerrainClass",  "Oceanic",  "Local", FALSE
+    }
+
 
 [actionenabler_build_city_pioneer]
 action = "Found City"
@@ -840,6 +880,16 @@ action = "Join City"
 actor_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "AddToCity", "Local", TRUE
+      "DiplRel", "Foreign", "Local", FALSE
+      "MinMoveFrags", "1", "Local", TRUE
+    }
+
+[actionenabler_join_city_pilgrims_domestic]
+action = "Join City"
+actor_reqs    =
+    { "type",   "name", "range", "present"
+      "UnitFlag", "AddToCity", "Local", TRUE
+      "UnitType", "Pilgrims", "Local", TRUE
       "DiplRel", "Foreign", "Local", FALSE
       "MinMoveFrags", "1", "Local", TRUE
     }
@@ -1091,15 +1141,34 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitType",      "Legion",       "Local", FALSE
+      "UnitType",      "Proletarians", "Local", FALSE
+    }
+[actionenabler_irrigate_tf_prole]
+action        = "Irrigate TF"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "Settlers",     "Local",  TRUE
+      "UnitType",      "Proletarians", "Local",  TRUE
+      "Gov",           "Communism",    "Player", TRUE
     }
 
 [actionenabler_mine_tf_outside_city]
 action        = "Mine TF"
 actor_reqs    =
-    { "type",          "name",     "range", "present"
-      "UnitFlag",      "Settlers", "Local", TRUE
-      "UnitType",      "Legion",   "Local", FALSE 
-      "CityTile",      "Center",   "Local", FALSE
+    { "type",          "name",        "range", "present"
+      "UnitFlag",      "Settlers",    "Local", TRUE
+      "UnitType",      "Legion",      "Local", FALSE 
+      "UnitType",      "Proletarians","Local", FALSE
+      "CityTile",      "Center",      "Local", FALSE
+    }
+[actionenabler_mine_tf_outside_city_prole]
+action        = "Mine TF"
+actor_reqs    =
+    { "type",          "name",        "range",  "present"
+      "UnitFlag",      "Settlers",    "Local",  TRUE
+      "UnitType",      "Proletarians","Local",  TRUE
+      "Gov",           "Communism",   "Player", TRUE
+      "CityTile",      "Center",      "Local",  FALSE
     }
 [actionenabler_mine_tf_inside_city] ;you can't plant a forest in an existing city
 action        = "Mine TF"
@@ -1107,6 +1176,7 @@ actor_reqs    =
     { "type",          "name",      "range", "present"
       "UnitFlag",      "Settlers",  "Local", TRUE
       "UnitType",      "Legion",    "Local", FALSE 
+      "UnitType",      "Proletarians", "Local", FALSE
       "CityTile",      "Center",    "Local", TRUE
       "Terrain",       "Grassland", "Local", FALSE
       "Terrain",       "Plains",    "Local", FALSE
@@ -1133,31 +1203,60 @@ actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitType",      "Legion",       "Local",   FALSE
+      "UnitType",      "Proletarians", "Local",   FALSE
     }
-
-; Legions can make roads if not in domestic territory.
+[actionenabler_road_prole]
+action        = "Road"
+actor_reqs    =
+    { "type",          "name",         "range",   "present"
+      "UnitFlag",      "Settlers",     "Local",   TRUE
+      "UnitType",      "Proletarians", "Local",   TRUE
+      "Gov",           "Communism",     "Player", TRUE
+    }
 [actionenabler_legion_road]
 action        = "Road"
 actor_reqs    =
-    { "type",          "name",       "range",   "present"
-      "UnitFlag",      "Settlers",   "Local",   TRUE
-      "UnitType",      "Legion",     "Local",   TRUE
-      "UnitState",     "OnDomesticTile", "Local",  FALSE
+    { "type",          "name",          "range",   "present"
+      "UnitFlag",      "Settlers",      "Local",   TRUE
+      "UnitType",      "Legion",        "Local",   TRUE
+      "UnitState",     "OnDomesticTile","Local",   FALSE
     }
 
 [actionenabler_base]
 action        = "Build Base"
 actor_reqs    =
-    { "type",          "name",         "range"
-      "UnitFlag",      "CanFortress",     "Local"
+    { "type",          "name",            "range", "present"
+      "UnitFlag",      "CanFortress",     "Local", TRUE
+      "UnitType",      "Proletarians",    "Local", FALSE
     }
- 
+[actionenabler_base_prole]
+action        = "Build Base"
+actor_reqs    =
+    { "type",          "name",            "range", "present"
+      "UnitFlag",      "CanFortress",     "Local",  TRUE
+      "UnitType",      "Proletarians",    "Local",  TRUE
+      "Gov",           "Communism",       "Player", TRUE
+     }
+
 [actionenabler_mining]
 action        = "Build Mine"
 actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitType",      "Legion",       "Local",   FALSE
+      "UnitType",      "Proletarians", "Local",   FALSE
+    }
+target_reqs    =
+    { "type",        "name", "range", "present"
+      "TerrainFlag", "Oil",  "Local", FALSE
+    }
+[actionenabler_mining_prole]
+action        = "Build Mine"
+actor_reqs    =
+    { "type",          "name",         "range",   "present"
+      "UnitFlag",      "Settlers",     "Local",   TRUE
+      "UnitType",      "Proletarians", "Local",   TRUE
+      "Gov",           "Communism",    "Player",  TRUE
     }
 target_reqs    =
     { "type",        "name", "range", "present"
@@ -1170,7 +1269,21 @@ actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitType",      "Legion",       "Local",   FALSE
-      "Tech",     "Construction", "Player", TRUE
+      "UnitType",      "Proletarians", "Local",   FALSE
+      "Tech",          "Construction", "Player",  TRUE
+    }
+target_reqs    =
+    { "type",    "name",         "range"
+      "Terrain", "Desert",       "Local"
+    }
+[actionenabler_desert_oil_prole]
+action        = "Build Mine"
+actor_reqs    =
+    { "type",          "name",         "range",   "present"
+      "UnitFlag",      "Settlers",     "Local",   TRUE
+      "UnitType",      "Proletarians", "Local",   TRUE
+      "Gov",           "Communism",    "Player",  TRUE
+      "Tech",          "Construction", "Player",  TRUE
     }
 target_reqs    =
     { "type",    "name",         "range"
@@ -1183,14 +1296,27 @@ actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitType",      "Legion",       "Local",   FALSE
-      "Tech",     "Refining", "Player", TRUE
+      "UnitType",      "Proletarians", "Local",   FALSE
+      "Tech",          "Refining",     "Player",  TRUE
+    }
+target_reqs    =
+    { "type",    "name",     "range"
+      "Terrain", "Glacier",  "Local"
+    }
+[actionenabler_glacier_oil_prole]
+action        = "Build Mine"
+actor_reqs    =
+    { "type",          "name",         "range",   "present"
+      "UnitFlag",      "Settlers",     "Local",   TRUE
+      "Gov",           "Communism",    "Player",  TRUE
+      "UnitType",      "Proletarians", "Local",   TRUE
+      "Tech",          "Refining",     "Player",  TRUE
     }
 target_reqs    =
     { "type",    "name",     "range"
       "Terrain", "Glacier",  "Local"
     }
 
-;Well-Digger can irrigate before Pottery and Alphabet.
 [actionenabler_irrigate_welldigger]
 action        = "Build Irrigation"
 actor_reqs    =
@@ -1214,6 +1340,19 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
       "UnitType",      "Legion",       "Local", FALSE
+      "UnitType",      "Proletarians", "Local", FALSE
+    }
+target_reqs    =
+    { "type",        "name",     "range", "present"
+      "TerrainClass", "Oceanic", "CAdjacent", TRUE
+    }
+[actionenabler_irrigate_src_ocean_prole]
+action        = "Build Irrigation"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitType",      "Proletarians", "Local", TRUE
+      "Gov",           "Communism",    "Player",TRUE
     }
 target_reqs    =
     { "type",        "name",     "range", "present"
@@ -1226,7 +1365,20 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitType",      "Legion",       "Local", FALSE
+      "UnitType",      "Proletarians", "Local", FALSE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
+    }
+target_reqs    =
+    { "type",    "name",     "range", "present"
+      "Extra",   "River",    "CAdjacent", TRUE
+    }
+[actionenabler_irrigate_src_river_prole]
+action        = "Build Irrigation"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitType",      "Proletarians", "Local", TRUE
+      "Gov",           "Communism",    "Player",TRUE
     }
 target_reqs    =
     { "type",    "name",     "range", "present"
@@ -1239,7 +1391,20 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitType",      "Legion",       "Local", FALSE
+      "UnitType",      "Proletarians", "Local", FALSE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
+    }
+target_reqs    =
+    { "type",    "name",     "range", "present"
+      "Extra",   "Oasis",    "CAdjacent", TRUE
+    }    
+[actionenabler_irrigate_src_oasis_prole]
+action        = "Build Irrigation"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitType",      "Proletarians", "Local", TRUE
+      "Gov",           "Communism",    "Player",TRUE
     }
 target_reqs    =
     { "type",    "name",     "range", "present"
@@ -1252,7 +1417,20 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
+      "UnitType",      "Proletarians", "Local", FALSE
       "UnitType",      "Legion",       "Local", FALSE
+    }
+target_reqs    =
+    { "type",    "name",       "range", "present"
+      "Extra",   "Irrigation", "CAdjacent", TRUE
+    }
+[actionenabler_irrigate_src_irrigation_prole]
+action        = "Build Irrigation"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitType",      "Proletarians", "Local", TRUE
+      "Gov",           "Communism",    "Player",TRUE
     }
 target_reqs    =
     { "type",    "name",       "range", "present"
@@ -1685,7 +1863,7 @@ set =
       "nuclearwinter_percent", 20, FALSE
       "revolen", 1, FALSE
       "separatepoles", FALSE, FALSE
-;      "spaceship_travel_time", 225, FALSE      UNCOMMENT WHEN FEATURE GOES UP
+      "spaceship_travel_time", 225, FALSE
       "specials", 350, FALSE
       "startpos", "SINGLE", FALSE
       "startunits", "cccwwwxxa", FALSE

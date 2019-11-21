@@ -49,6 +49,7 @@ flags =
     _("Missile")
     _("Well-Digger"), _("Can dig a well and irrigate tiles with no water.")
     _("Infra"), _("Can build infrastructure.")
+    _("Proletarian"), _("Controllable only by Communist governments.")
     _("Paratroopers"), _("Can be paradropped from a friendly city or suitable base.")
     _("Marines"), _("Can launch attack from non-native tiles.")
     _("Expellable"), _("Can be peacefully expelled from foreign tiles.")
@@ -69,7 +70,7 @@ flags =
 class_flags =
   { "name", "helptxt"
     _("Airliftable"), _("Can be airlifted if it has remaining moves.")
-    _("BorderPolice"), _("Can peacefully expel certain foreign units.")
+    _("BorderPolice"), _("Military units from this class can peacefully expel certain foreign units.")
     _("AttFromNonNative"), _("Can launch attack from non-native tiles.")
   }
 
@@ -586,8 +587,8 @@ Settlers can perform most of the terrain alterations as\
 "), _("\
 Upkeep for Settlers costs food as well as production. A Settler\
  can die if its supporting city runs out of food. Settlers in a\
- Republic or Democracy require twice as much food per turn, and\
- three times as much in Fundamentalism.\
+ Republic, Democracy, or Fundamentalist nation require twice as\
+ much food per turn.\
 ")
 
 ;A unique patch unit to provide fair starts regardless of lack of nearby water.
@@ -640,6 +641,89 @@ If you start with no water, make a Well-Digger in a city that can\
  in the first turns of play.\
 ")
 
+[unit_proletarians]
+name          = _("Proletarians")
+class         = "Land"
+tech_req      = "Communism"
+obsolete_by   = "None"
+graphic       = "u.proletarian"
+graphic_alt   = "u.migrants"
+sound_move    = "m_worker"
+sound_move_alt = "m_generic"
+sound_fight   = "f_worker"
+sound_fight_alt = "f_generic"
+build_cost    = 10
+pop_cost      = 1
+attack        = 0
+defense       = 1
+hitpoints     = 10
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 4
+transport_cap = 0
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 1
+uk_gold       = 0
+flags         = "Settlers", "Infra", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Airbase", "CanFortress", "CanRoad", "Proletarian"
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 1
+roles         = "Settlers"
+helptext      = _("\
+Proletarians can only be controlled by Communist governments.\
+"), _("\
+Communist States can assign Proletarians from one city to another, which transfers population\
+ from one to the other. They can also be ordered to the same tasks as Workers.\
+"), _("\
+Large numbers of Proletarians can be used to rapidly complete important State projects,\
+ which you may organize into Five-turn Plans.\
+")
+
+[unit_pilgrims]
+name          = _("Pilgrims")
+class         = "Land"
+tech_req      = "Fundamentalism"
+obsolete_by   = "None"
+graphic       = "u.pilgrims"
+graphic_alt   = "u.migrants"
+sound_move    = "m_worker"
+sound_move_alt = "m_generic"
+sound_fight   = "f_worker"
+sound_fight_alt = "f_generic"
+build_cost    = 10
+pop_cost      = 1
+attack        = 0
+defense       = 1
+hitpoints     = 10
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 4
+transport_cap = 0
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 2
+uk_gold       = 0
+flags         = "Fanatic", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable"
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 0
+helptext      = _("\
+Pilgrims are wayfaring migrants from Fundamentalist nations. Like Fanatics,\
+ they have no upkeep if under a Fundamentalist government. Heeding the call\
+ of ecclesiastic authority, Pilgrims can be guided from one city to another in\
+ order to transfer population from city to city.\
+")
+
+
 [unit_worker]
 name          = _("?unit:Workers")
 class         = "Land"
@@ -659,6 +743,8 @@ hitpoints     = 10
 firepower     = 1
 move_rate     = 2
 vision_radius_sq = 4
+convert_to    = "Riflemen"
+convert_time  = 2
 transport_cap = 0
 fuel          = 0
 uk_happy      = 0
@@ -667,18 +753,25 @@ uk_food       = 0
 uk_gold       = 0
 flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "Airbase", "Cant_Fortify", "Capturable", "Expellable"
 ; No veteran levels (level name is never displayed)
-veteran_names = _("green")
-veteran_raise_chance = 0
-veteran_work_raise_chance = 0
-veteran_power_fact = 100
-veteran_move_bonus = 0
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:army worker"),
+  _("?vet_rank:army engineer"),
+  _("?vet_rank:chief engineer")
+veteran_raise_chance = 0, 0, 0, 0
+veteran_work_raise_chance = 0, 0, 0, 0
+veteran_power_fact = 100, 100, 100, 100
+veteran_move_bonus = 0, 1, 1, 1
 roles         = "Settlers", "WorkerStartUnit"
 helptext      = _("\
 Workers can improve terrain tiles. See the manual on Terrain for details.\
 "), _("\
 Masonry lets Workers build Forts. Construction lets them build Fortresses and\
- Oil Wells. Engineering lets them build Canals. Radio lets them build Airbases\
- and Buoys, which Settlers cannot. Workers must be on a ship to build Buoys.\
+ Oil Wells. Engineering lets them build Canals and Naval Bases. Radio lets them\
+ build Airbases and Buoys, which Settlers cannot. Workers must be on a ship to build Buoys.\
+"), _("\
+Under Communism, Workers can be conscripted into Riflemen via the\
+  Convert order. And vice versa.\
 ")
 
 [unit_engineers]
@@ -960,14 +1053,21 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter"
-flags         = "Fanatic", "FootSoldier", "Capturer", "CantReachAir"
+flags         = "Fanatic", "FootSoldier", "Capturer", "CantReachAir", "Unbribable", "Bombarder"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
-Fanatics are warriors extremely devoted to a higher cause.\
+Fanatics are warriors extremely devoted to a higher cause. Their faith\
+ is strong and they cannot be bribed.\
 "), _("\
-Fundamentalist nations can maintain Fanatic units without\
- having to pay any shields for upkeep.\
+Fundamentalist nations can maintain Fanatic units without having to pay\
+ any shields for upkeep. Fanatics produced in a city with Ecclesiastical\
+ Palace are inspired by fervorous faith to +1 higher veteran level.\
+"), _("\
+Fanatics zealously defend their homeland, and can do surprise assaults\
+ and skirmishes to snipe and injure foreign occupants: Each invader\
+ on the tile will endure three combat rounds without defense.\
 ")
+bombard_rate = 3
 
 [unit_partisan]
 name          = _("Partisan")
@@ -1063,6 +1163,8 @@ hitpoints     = 20
 firepower     = 1
 move_rate     = 2
 vision_radius_sq = 4
+convert_to    = "Workers"
+convert_time  = 2
 transport_cap = 0
 fuel          = 0
 uk_happy      = 1
@@ -1073,9 +1175,12 @@ targets       = "Balloon", "Helicopter"
 flags         = "FootSoldier", "Capturer", "CantReachAir"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
-Riflemen are World War-era infantry, very good\
- at defending your cities, and with decent attack\
- capabilities.\
+Riflemen are World War-era infantry. They are good at defending cities and\
+ strategic Fortresses. From these safe locations they often are used for their\ 
+ decent attack capability.\ 
+"), _("\
+Under Communism, Riflemen can be de-commissioned into Workers via the\
+  Convert order. And vice versa.\
 ")
 
 [unit_marines]
@@ -1710,7 +1815,7 @@ vision_radius_sq = 17
 transport_cap = 0
 fuel          = 2
 uk_happy      = 0
-uk_shield     = 1
+uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 flags         = "Unbribable", "HasNoZOC", "NeverProtects", "NonMil"
@@ -1718,9 +1823,10 @@ roles         = ""
 helptext      = _("\
 Balloons are useful for gathering intelligence around an upcoming battle area. They have\
  great vision and are unreachable by units prior to Riflemen and Ironclads. They can remain\
- in the air for one extra turn before needing to land in a City, Fortress, or Airbase. It\
- is unreachable by more primitive land and sea units, but does not block units under it from\
- being attacked. Balloons cannot fly over mountains. \
+ in the air for one extra turn before needing to land in a City, Fortress, or Airbase. They\
+ may also land to refuel on larger cargo ships with a carry capacity of 4 or higher. The\
+ Balloon is is unreachable by more primitive land and sea units, but does not block units\
+ under it from being attacked. Balloons cannot fly over mountains. \
 "), _("
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
  this restriction can by overridden by ordering moves to adjacent tiles.\
@@ -2324,8 +2430,8 @@ The Trireme is useful for exploration, transport, and Commerce.\
  and attack on rivers, but cannot attack the shore.\
 "), _("
 Like most ancient sea units, when it initiates combat there will be 15 rounds\
-  of combat and 15 total hitpoints lost between both units. This may or may not\
-  result in the loss of one of the units. Triremes do not cause unhappiness.\
+ of combat and 15 total hitpoints lost between both units. This may or may not\
+ result in the loss of one of the units. Triremes do not cause unhappiness.\
 "), _("
 NOTE: GO TO orders prevent accidental loss of the unit at sea, but are VERY\
  restrictive. You should override this by ordering moves to adjacent tiles.\
@@ -2542,11 +2648,11 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Submarine"
-cargo         = "Land", "LandNoKill", "LandAirSea"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon"
 flags         = "BadCityDefender", "Provoking", "CanEscape", "CantReachAir"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
-The Galleon is a heavily armed transport ship that can carry up to 4 land units. Galleons can travel and attack on rivers,\
+The Galleon is a heavily armed transport ship that can carry up to 4 units. Galleons can travel and attack on rivers,\
  and also do shore attacks.\
 "), _("
 Like most early sea units, when it initiates combat there will be 15 rounds\
@@ -2711,7 +2817,7 @@ bonuses       =
      "Marines", "DefenseMultiplier", 1    
    }
 flags         = "BadCityDefender", "CanEscape", "CantReachAir"
-roles         = "DefendOk", "Hunter"
+roles         = "Hunter"
 helptext      = _("\
 The Cruiser is a large and fast surface warship with equally strong offensive and defensive strength. More often than not, its\
  2x ASW defence allows it to survive a Submarine attack.\
@@ -2947,7 +3053,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon"
 bonuses       =
    { "flag", "type", "value"
      "Marines", "DefenseMultiplier", 1    
@@ -2956,7 +3062,9 @@ flags         = "BadCityDefender", "Provoking", "CanEscape"
 roles         = "Ferryboat", "FerryStartUnit"
 helptext      = _("\
 The Transport cannot attack on its own but may defend itself when under attack.\
- Marines and Anti-Aircraft Artillery can directly attack from a Transport.\
+ Marines and Anti-Aircraft Artillery can directly attack from a Transport. Its\
+ large cargo capacity of 8 units makes it a significant logistical upgrade in\
+ sea transportation.\
 ")
 
 [unit_cruise_missile]

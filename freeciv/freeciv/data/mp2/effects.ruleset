@@ -71,6 +71,12 @@ reqs	=
 type    = "City_Unhappy_Size"
 value   = 4
 
+; Percent foreign citizens who are unhappy if at war
+; with their original nation
+[effect_angry_conquered]
+type    = "Enemy_Citizen_Unhappy_Pct"
+value   = 75
+
 ; Barbarian effects
 
 [effect_barb1]
@@ -321,7 +327,7 @@ reqs    =
     { "type", "name", "range", "present"
       "Extra", "Fortress", "Local", TRUE
       "UnitFlag", "FortressBuster", "Local", TRUE 
-    }    
+    }
 
 ; ****** ^^ defense_bonus_correctives ^^ *************************************
 
@@ -335,7 +341,6 @@ reqs    =
       "Tech", "Invention", "Player"
       "UnitClass", "Land", "Local"
     }
-    
 [effect_fortress_vision_1]   ;Marines, AAA
 type    = "Unit_Vision_Radius_Sq"
 value   = 8
@@ -345,7 +350,6 @@ reqs    =
       "Tech", "Invention", "Player"
       "UnitClass", "LandAirSea", "Local"
     }
-    
 [effect_fortress_vision_2]     ;Knights
 type    = "Unit_Vision_Radius_Sq"
 value   = 8
@@ -399,58 +403,68 @@ reqs    =
       "Extra", "Airbase", "Tile"
       "UnitClass", "Helicopter", "Local"
     }
-; *****************************************************************
-; Marines can attack unreachable air and sea at a -50% penalty. However,
-; when air is reachable by ALL land units, Marines should not be the
-; only land unit which suffers a penalty. These effects cancel the penalties 
-; in those situations. This awaits 3.x release of reqs for target/defender unit.
-;[effect_marines_vs_airprotect_city_fix] 
-;type    = "Attack_Bonus"
-;value	= 100 ;cancels out equivalent defence bonus for being out in the field
-;reqs	=
-;    { "type", "name", "range", "present"
-;      ;"TargetUnitClass", "AirProtect", "Local", TRUE
-;      "CityTile", "Center", "Local", TRUE
-;      "UnitType", "Marines", "Local", TRUE
-;    }
-;[effect_marines_vs_airprotect_airbase_fix] 
-;type    = "Attack_Bonus"
-;value	= 100 ;cancels out equivalent defence bonus for being out in the field
-;reqs	=
-;    { "type", "name", "range", "present"
-;      "TargetUnitClass", "AirProtect", "Local", TRUE
-;      "Extra", "Airbase", "Local", TRUE
-;      "UnitType", "Marines", "Local", TRUE
-;    }
-;[effect_marines_vs_air_city_fix] ; prop-engine Bombers
-;type    = "Attack_Bonus"
-;value	= 200 ;cancels out equivalent defence bonus for being out in the field
-;reqs	=
-;    { "type", "name", "range", "present"
-;      "UnitClass", "Air", "Local", TRUE
-;      "CityTile", "Center", "Local", TRUE
-;      "UnitType", "Marines", "Local", TRUE
-;    }
-;[effect_marines_vs_air_airbase_fix] ; prop-engine Bombers
-;type    = "Attack_Bonus"
-;value	= 200 ;cancels out equivalent defence bonus for being out in the field
-;reqs	=
-;    { "type", "name", "range", "present"
-;      "UnitClass", "Air", "Local", TRUE
-;      "Extra", "Airbase", "Local", TRUE
-;      "UnitType", "Marines", "Local", TRUE
-;    }
-;[effect_marines_city_fix] 
-;type    = "Attack_Bonus"
-;value	= 100 ;cancels out equivalent defence bonus sea units against marines when out at sea 
-;reqs	=
-;    { "type", "name", "range", "present"
-;      "UnitClass", "Sea", "Local", TRUE
-;      "CityTile", "Center", "Local", TRUE
-;      "UnitType", "Marines", "Local", TRUE
-;    }
-; ********************************************************
-
+; ****************** NAVAL BASE ******************************
+[effect_navbase_vision]
+type    = "Unit_Vision_Radius_Sq"
+value   = 8   
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Naval Base", "tile"
+      "Tech", "Invention", "Player"
+      "UnitClass", "Trireme", "Local"
+    }
+[effect_navbase_vision1]
+type    = "Unit_Vision_Radius_Sq"
+value   = 8   
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Naval Base", "tile"
+      "Tech", "Invention", "Player"
+      "UnitClass", "RiverShip", "Local"
+    }
+[effect_navbase_vision2]
+type    = "Unit_Vision_Radius_Sq"
+value   = 8   
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Naval Base", "tile"
+      "Tech", "Invention", "Player"
+      "UnitClass", "Sea", "Local"
+    }
+; Naval Base HP regen
+[effect_navbase_hp_regen]
+type    = "HP_Regen"
+value   = 20
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Naval Base", "Tile"
+      "UnitClass", "Sea", "Local"
+    }
+[effect_navbase_hp_regen_1]
+type    = "HP_Regen"
+value   = 20
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Naval Base", "Tile"
+      "UnitClass", "RiverShip", "Local"
+    }
+[effect_navbase_hp_regen_2]
+type    = "HP_Regen"
+value   = 20
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Naval Base", "Tile"
+      "UnitClass", "Trireme", "Local"
+    }
+[effect_navbase_hp_regen_3]
+type    = "HP_Regen"
+value   = 20
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Naval Base", "Tile"
+      "UnitClass", "Submarine", "Local"
+    }
+; ***********************************************************
 
 ; Base vision range - radius of vision is sqrt(5) = 2.24
 [effect_city_vision]
@@ -487,6 +501,13 @@ value	= 99
 reqs	=
     { "type", "name", "range"
       "Gov", "Anarchy", "Player"
+    }
+[effect_upkeep_communism]
+type    = "Upkeep_Free"
+value   = 1
+reqs    =
+    { "type", "name", "range", "quiet"
+      "Gov", "Communism", "Player", TRUE
     }
 
 [effect_anarchy_upkeep_tech_free]
@@ -653,7 +674,7 @@ reqs   =
 
 [effect_upkeep_free_units_communism]
 type    = "Unit_Upkeep_Free_Per_City"
-value	= 3
+value	= 4
 reqs   =
     { "type", "name", "range"
       "Gov", "Communism", "Player"
@@ -808,7 +829,7 @@ reqs	=
 
 [effect_empire_size_step_5]
 type    = "Empire_Size_Step"
-value   = 12
+value   = 15
 reqs    =
     { "type",       "name",      "range"
       "Gov", "Fundamentalism", "Player"
@@ -894,6 +915,14 @@ reqs	=
       "Gov", "Communism", "Player"
     }
 
+[effect_martial_law_each_4]
+type    = "Martial_Law_Each"
+value   = 1
+reqs	=
+    { "type",       "name",      "range"
+      "Gov", "Fundamentalism", "Player"
+    }
+
 [effect_martial_law_max_0]
 type    = "Martial_Law_Max"
 value   = 100
@@ -921,6 +950,14 @@ reqs	=
 [effect_martial_law_max_3]
 type    = "Martial_Law_Max"
 value   = 3
+reqs	=
+    { "type",       "name",      "range"
+      "Gov", "Communism", "Player"
+    }
+
+[effect_martial_law_max_4]
+type    = "Martial_Law_Max"
+value   = 2
 reqs	=
     { "type",       "name",      "range"
       "Gov", "Communism", "Player"
@@ -1993,6 +2030,15 @@ reqs =
       "Building", "Palace", "City"
       "OutputType", "Shield", "Local"
     }
+[effect_palace_6a]
+type = "Output_Bonus"
+value  = 25
+reqs =
+    { "type", "name", "range"
+      "Gov", "Communism", "Player"
+      "Building", "Palace", "City"
+      "OutputType", "Shield", "Local"
+    }
 
 [effect_palace_7]
 type    = "Make_Happy"
@@ -2000,6 +2046,16 @@ value	= 1
 reqs	=
     { "type", "name", "range"
       "Building", "Palace", "City"
+    }
+
+[effect_palace_fundamentalism]
+type    = "Output_Bonus"
+value   = 50
+reqs    =
+    { "type", "name", "range", "present", "quiet"
+      "Gov", "Fundamentalism", "Player", TRUE, TRUE
+      "Building", "Palace", "City", TRUE, FALSE
+      "OutputType", "Gold", "Local", TRUE, FALSE
     }
 
 [effect_ecclesiastical_palace]
@@ -2039,6 +2095,15 @@ reqs	=
       "Building", "Ecclesiastical Palace", "City"
     }
 
+[effect_ecclesiastical_palace_4]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Ecclesiastical Palace", "City", TRUE
+      "UnitType", "Fanatics", "Local", TRUE
+    }
+
 [effect_ecclesiastical_palace_gov_center]
 type    = "Gov_Center"
 value	= 1
@@ -2056,7 +2121,7 @@ reqs    =
       "Gov", "Despotism", "Player", TRUE, TRUE
       "Building", "Ecclesiastical Palace", "City", TRUE, FALSE
       "OutputType", "Gold", "Local", TRUE, FALSE
-      "Building", "Palace", "City", FALSE, FALSE
+;      "Building", "Palace", "City", FALSE, FALSE
     }
 
 [effect_ecclesiastical_palace_monarchy]
@@ -2067,7 +2132,17 @@ reqs    =
       "Gov", "Monarchy", "Player", TRUE, TRUE
       "Building", "Ecclesiastical Palace", "City", TRUE, FALSE
       "OutputType", "Gold", "Local", TRUE, FALSE
-      "Building", "Palace", "City", FALSE, FALSE
+;      "Building", "Palace", "City", FALSE, FALSE
+    }
+[effect_ecclesiastical_palace_fundamentalism]
+type    = "Output_Bonus"
+value   = 50
+reqs    =
+    { "type", "name", "range", "present", "quiet"
+      "Gov", "Fundamentalism", "Player", TRUE, TRUE
+      "Building", "Ecclesiastical Palace", "City", TRUE, FALSE
+      "OutputType", "Gold", "Local", TRUE, FALSE
+ ;     "Building", "Palace", "City", FALSE, FALSE
     }
 
 [effect_ecclesiastical_palace_culture]
@@ -2085,7 +2160,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "Ecclesiastical Palace", "City"
     }
-
 
 [effect_police_station]
 type    = "Make_Content_Mil"
@@ -2800,7 +2874,7 @@ type    = "Output_Waste_Pct"
 value	= 60
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player"
+      "Building", "Supreme Court", "Player", TRUE
       "OutputType", "Shield", "local", TRUE
     }
 
@@ -2892,7 +2966,7 @@ type	= "Action_Odds_Pct"
 value	= -20
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player"
+      "Building", "Supreme Court", "Player", TRUE
       "Action", "Steal Tech Escape Expected", "Local", TRUE
     }
 
@@ -2901,7 +2975,7 @@ type	= "Action_Odds_Pct"
 value	= -20
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player"
+      "Building", "Supreme Court", "Player", TRUE
       "Action", "Targeted Steal Tech", "Local", TRUE
     }
 
@@ -2910,18 +2984,16 @@ type	= "Action_Odds_Pct"
 value	= -20
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player"
+      "Building", "Supreme Court", "Player", TRUE
       "Action", "Targeted Steal Tech Escape Expected", "Local", TRUE
     }
-
-
 
 [effect_supreme_court_hostile_diplomat_1]
 type	= "Action_Odds_Pct"
 value	= -20
 reqs	=
     { "type", "name", "range", "present"
-       "Building", "Supreme Court", "Player"
+       "Building", "Supreme Court", "Player", TRUE
        "Action", "Sabotage City", "Local", TRUE
     }
 
@@ -2930,7 +3002,7 @@ type	= "Action_Odds_Pct"
 value	= -20
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player"
+      "Building", "Supreme Court", "Player", TRUE
       "Action", "Sabotage City Escape", "Local", TRUE
     }
 
@@ -2939,7 +3011,7 @@ type	= "Action_Odds_Pct"
 value	= -20
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player"
+      "Building", "Supreme Court", "Player", TRUE
       "Action", "Targeted Sabotage City", "Local", TRUE
     }
 
@@ -2948,7 +3020,7 @@ type	= "Action_Odds_Pct"
 value	= -20
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player"
+      "Building", "Supreme Court", "Player", TRUE
       "Action", "Targeted Sabotage City Escape", "Local", TRUE
     }
 
@@ -3601,27 +3673,28 @@ reqs    =
       "OutputType", "Trade", "Local"
     }
 
-[effect_waste_fundamentalism0]
-type    = "Output_Waste"
-value   = 2
-reqs    =
-    { "type", "name", "range"
-      "Gov", "Fundamentalism", "Player"
-      "OutputType", "Shield", "Local"
-    }
+;Shield waste is not a proper feature of mp rulesets
+;[effect_waste_fundamentalism0]
+;type    = "Output_Waste"
+;value   = 2
+;reqs    =
+;    { "type", "name", "range"
+;      "Gov", "Fundamentalism", "Player"
+;      "OutputType", "Shield", "Local"
+;    }
 
-[effect_waste_fundamentalism1]
-type    = "Output_Waste_By_Distance"
-value   = 100
-reqs    =
-    { "type", "name", "range"
-      "Gov", "Fundamentalism", "Player"
-      "OutputType", "Shield", "Local"
-    }
+;[effect_waste_fundamentalism1]
+;type    = "Output_Waste_By_Distance"
+;value   = 100
+;reqs    =
+;    { "type", "name", "range"
+;      "Gov", "Fundamentalism", "Player"
+;      "OutputType", "Shield", "Local"
+;    }
 
 [effect_fundamentalism_unit_upkeep]
 type    = "Upkeep_Factor"
-value   = 2
+value   = 1
 reqs    =
     { "type", "name", "range"
       "Gov", "Fundamentalism", "Player"
@@ -3652,6 +3725,39 @@ value   = 1
 reqs    = 
     { "type", "name", "range" 
       "Gov", "Fundamentalism", "Player" 
+    }
+
+[effect_sabotage_bonus_fundamentalism1]
+type	= "Action_Odds_Pct"
+value	= 10
+reqs	=
+    { "type", "name", "range", "present"
+      "Gov", "Fundamentalism", "Player", TRUE
+       "Action", "Sabotage City", "Local", TRUE
+    }
+[effect_sabotage_bonus_fundamentalism2]
+type	= "Action_Odds_Pct"
+value	= 10
+reqs	=
+    { "type", "name", "range", "present"
+      "Gov", "Fundamentalism", "Player", TRUE
+      "Action", "Sabotage City Escape", "Local", TRUE
+    }
+[effect_sabotage_bonus_fundamentalism3]
+type	= "Action_Odds_Pct"
+value	= 10
+reqs	=
+    { "type", "name", "range", "present"
+      "Gov", "Fundamentalism", "Player", TRUE
+      "Action", "Targeted Sabotage City", "Local", TRUE
+    }
+[effect_sabotage_bonus_fundamentalism4]
+type	= "Action_Odds_Pct"
+value	= 10
+reqs	=
+    { "type", "name", "range", "present"
+      "Gov", "Fundamentalism", "Player", TRUE
+      "Action", "Targeted Sabotage City Escape", "Local", TRUE
     }
 
 [effect_max_rates_fundamentalism]
@@ -3913,6 +4019,15 @@ reqs	=
       "DiplRel", "War", "Local", FALSE
     }
 
+[effect_incident_success_capture_unit]
+type	= "Casus_Belli_Success"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Capture Units", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
+
 [effect_incident_success_sabotage_unit]
 type	= "Casus_Belli_Success"
 value	= 1
@@ -4030,4 +4145,15 @@ reqs    =
       "type", "name", "range", "present"
       "UnitFlag", "Well-Digger", "Local", TRUE
       "Tech", "Pottery",  "Player", TRUE
+    }
+
+;Can't give orders to Proletarians unless communist.
+[effect_proletarian_movement]
+type    = "Move_Bonus"
+value	  = -2
+reqs    =
+    {
+      "type", "name", "range", "present"
+      "UnitType", "Proletarians", "Local", TRUE
+      "Gov", "Communism", "Player", FALSE
     }
