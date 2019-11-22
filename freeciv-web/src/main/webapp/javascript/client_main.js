@@ -410,6 +410,8 @@ function update_metamessage_game_running_status()
 **************************************************************************/
 function set_default_mapview_active()
 {
+  $("#warcalc_tab").hide();  // hide Odds tab
+
   if (renderer == RENDERER_2DCANVAS) {
     mapview_canvas_ctx = mapview_canvas.getContext("2d");
     mapview_canvas_ctx.font = canvas_text_font;

@@ -35,6 +35,7 @@ const TAB_MAP = 0,
       TAB_CITIES = 5,
       TAB_PREFS = 6,
       TAB_HELP = 7;
+      TAB_WARCALC = 8;
 
 function game_init()
 {

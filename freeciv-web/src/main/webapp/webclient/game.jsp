@@ -14,7 +14,7 @@
 				<li id="opt_tab" style="margin-right:0px;"><a href="#tabs-opt"><i class="fa fa-cogs" aria-hidden="true"></i> Prefs</a></li>
 	<%--			<li id="chat_tab" style="margin-right:0px;"><a href="#tabs-chat"><i class="fa fa-commenting-o" aria-hidden="true"></i> Chat</a></li> --%>
 				<li id="hel_tab" style="margin-right:0px;"><a href="#tabs-hel"><i class="fa fa-book" aria-hidden="true"></i> Help</a></li>
-
+				<li id="warcalc_tab" style="margin-right:0px;"><a href="#tabs-warcalc"> &#x1F3B2;Odds</a></li>
 
                 <div id="game_status_panel_top"></div>
 
@@ -51,6 +51,10 @@
 
 			<div id="tabs-opt">
 				<jsp:include page="options.jsp" flush="false"/>
+			</div>
+			
+			<div id="tabs-warcalc">
+					<jsp:include page="warcalc.jsp" flush="false"/>
 			</div>
 			
 		</div>

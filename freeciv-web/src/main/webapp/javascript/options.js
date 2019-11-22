@@ -45,6 +45,7 @@ var unit_click_menu = true;  // whether to show context menu on left-clicking a 
 var map_drag_enabled = true; // whether double tap and drag will move the map
 var show_order_option = true; // corresponds to the checkbox
 var show_empire_tab = false;
+var show_warcalc = false;
 var show_unit_movepct = false; // show move-point bar on map units
 var hp_bar_offset = 0;         // if mp bar is shown, offset to bump up hp bar
 
@@ -267,13 +268,27 @@ function init_options_dialog()
       else hp_bar_offset = 0;
       //simpleStorage.set('showMoves', show_unit_movepct); 
     });
+    // SHOW WARCALC TAB 
+    $('#show_warcalc').prop('checked', show_warcalc);
+    $('#show_warcalc').change(function() {
+      show_warcalc = this.checked;
+      if (show_warcalc) {
+        $("#warcalc_tab").show();
+        $("#ui-id-8").click();
+        // for now, keep checkbox off and ready to activate next time:
+        show_warcalc=false; // remove this if making a permanent option
+        setTimeout(function(){$("#show_warcalc").prop("checked", false);},100);
+      }
+      //else $("#ui-id-8").hide();
+      //simpleStorage.set('showCalc', show_warcalc); 
+    });
 
    // Graphic Theme
    graphic_theme_path = simpleStorage.get('grtheme');
    if (!graphic_theme_path) graphic_theme_path = "themes/greek/";
-     console.log("Theme Path = "+graphic_theme_path);
+     //console.log("Theme Path = "+graphic_theme_path);
    $('#graphic_theme').val(graphic_theme_path).prop('selected', true);
-     console.log("1-Theme Path = "+graphic_theme_path);
+     //console.log("1-Theme Path = "+graphic_theme_path);
    $('#graphic_theme').change(function() {
      graphic_theme_path = $('#graphic_theme').val();
      simpleStorage.set('grtheme', graphic_theme_path); 

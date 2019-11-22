@@ -162,6 +162,7 @@ function civclient_init()
   $('#tabs').css("height", $(window).height());
   $("#tabs-map").height("auto");
   $("#tabs-empire").height("auto");
+  $("#tabs-warcalc").height("auto");
   $("#tabs-civ").height("auto");
   $("#tabs-tec").height("auto");
   $("#tabs-nat").height("auto");
@@ -213,6 +214,10 @@ function civclient_init()
   show_empire_tab = simpleStorage.get('showEmpire');
   if (show_empire_tab == null) 
     show_empire_tab = false;  // Default case
+  
+/*show_warcalc = simpleStorage.get('showCalc');
+  if (show_warcalc == null) 
+    show_warcalc = false;  // Default case */
 
   var tmp = simpleStorage.get('chatDlg');
   if (tmp != null)  {// don't overwrite object keys if not yet stored

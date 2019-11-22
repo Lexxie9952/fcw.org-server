@@ -253,6 +253,11 @@ function control_init()
     update_city_screen();
   });
 
+  $("#warcalc_tab").click(function(event) {
+    set_default_mapview_inactive();
+    warcalc_screen();
+  });
+
   $("#opt_tab").click(function(event) {
     $("#tabs-hel").hide();
     init_options_dialog();
@@ -339,6 +344,9 @@ function control_init()
     $("#ui-id-2").show();
   else 
     $("#ui-id-2").hide();
+
+    // Hide odds tab
+  $("#ui-id-8").hide();
 }
 
 /****************************************************************************
@@ -1750,6 +1758,7 @@ function set_unit_id_focus(id)
 function set_unit_focus(punit)
 {
   save_last_unit_focus();
+  warcalc_set_default_vals();
 
   current_focus = [];
   if (punit == null) {
@@ -1805,7 +1814,7 @@ function click_unit_in_panel(e, punit)
 **************************************************************************/
 function set_unit_focus_and_redraw(punit)
 {
-  save_last_unit_focus();    
+  save_last_unit_focus();   
   
   current_focus = [];
 
@@ -1814,6 +1823,7 @@ function set_unit_focus_and_redraw(punit)
     if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
   } else {
     current_focus[0] = punit;
+    warcalc_set_default_vals(); // warcalc default vals as last clicked units
     if (renderer == RENDERER_WEBGL) update_unit_position(index_to_tile(punit['tile']));
   }
 
@@ -2589,6 +2599,7 @@ function do_map_click(ptile, qtype, first_time_called)
         // clicked on a tile with units exclusively owned by other players.
         save_last_unit_focus();
         current_focus = sunits;
+        warcalc_set_default_vals();  // feeds the warcalc with default values from current_focus[0]
         $("#game_unit_orders_default").hide();
         update_active_units_dialog();
       }
@@ -2657,7 +2668,7 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
         the_event.preventDefault();     // override possible browser shortcut
         $('#ui-id-5').trigger("click"); // cities tab
       }
-    break;   
+    break;
 
     case 'H':
       if ((!shift) && (ctrl)) {
@@ -2670,7 +2681,7 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
     case 'E':
       if (alt) {
         the_event.preventDefault(); // override possible browser shortcut
-        $('#ui-id-2').trigger("click"); // gov tab
+        $('#ui-id-2').trigger("click"); // empire tab
       }
     break; 
 
@@ -2729,7 +2740,10 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
       if (!alt && !ctrl && !shift) { // also key_code 112 (F1)
         $('#ui-id-1').trigger("click");
         chatbox_scroll_to_bottom(false);
-      }  
+      } else if (alt) {               // warcalc tab
+        $("#ui-id-8").trigger("click");
+        warcalc_screen();
+      }
     break;  
   }
 
@@ -2885,7 +2899,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 'W':
       if (shift) {
         draw_city_output = !draw_city_output;
-      } else key_unit_wait();
+      } else if (!alt && !ctrl) key_unit_wait();
     break;
 
     case 'X':
@@ -3759,6 +3773,7 @@ function key_unit_show_cargo()
   }
   deactivate_goto(false);
   update_active_units_dialog();
+  warcalc_set_default_vals();
   update_unit_order_commands();
 }
 

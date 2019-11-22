@@ -120,11 +120,14 @@
 </tr>
 <tr>
     <td>
-        <div title="Movement Point Percentage displayed on units on main map (SHIFT-M)" class="main_menu_buttons">
-            <input type='checkbox' name='show_unit_mp' id='show_unit_mp'><b><font color="#0000c0">Movement Point Display</font></b> 
-        </div>
+      <div title="Movement Point Percentage displayed on units on main map (SHIFT-M)" class="main_menu_buttons">
+          <input type='checkbox' name='show_unit_mp' id='show_unit_mp'><b><font color="#0000c0">Movement Point Display</font></b> 
+      </div>
     </td>
     <td>
+      <div title="Show Warcalc Odds (ALT-W)" class="main_menu_buttons">
+          <input type='checkbox' name='show_warcalc' id='show_warcalc'><b><font color="#0000c0">Show Warcalc Odds</font></b> 
+      </div>
     </td>
   </tr>
 
