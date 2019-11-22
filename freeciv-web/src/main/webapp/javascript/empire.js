@@ -1845,8 +1845,9 @@ function change_empire_mode(mode_selected)
 }
 
 /**************************************************************************
- Callback to handle keyboard events for the empire tab.
+ Callback to handle keyboard events for the empire tab: NOT IMPLEMENTED YET
 **************************************************************************/
+/*
 function empire_keyboard_listener(ev)
 {
   // Check if focus is in chat field, where these keyboard events are ignored.
@@ -1854,7 +1855,7 @@ function empire_keyboard_listener(ev)
 
   if (C_S_RUNNING != client_state()) return;
 
-  /* if (!ev) ev = window.event; INTERNET EXPLORER DEPRECATED */
+  // if (!ev) ev = window.event; INTERNET EXPLORER DEPRECATED 
   var keyboard_key = String.fromCharCode(ev.keyCode);
   var key_code = ev.keyCode;
 
@@ -1874,3 +1875,4 @@ function empire_keyboard_listener(ev)
       break;
   }
 }
+*/
