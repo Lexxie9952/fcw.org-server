@@ -1195,10 +1195,43 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
       }
       // ------------------------------------------------------------------
       // Set display vars
-      const border = "border:2px solid #000000;";
+      var border = "border:2px solid #000000;";
       var bg = req_state == TECH_KNOWN ? "background:#FEED " : "background:#A769 " 
-      const title_text = "title='CLICK: Remove\nCTRL-CLICK: Insert before\nSHIFT-CLICK: Add after'";
-      //var right_click_action = alt_click_method+"='handle_worklist_action(" +city_id+","+ z + ");' ";
+      var title_text =  "title='";
+      var right_click_action = "";
+
+      // Special handling of title and background for current production---------------
+      if (z==-1) { // -1 == current production (not future worklist)
+        var finish_turns = get_city_production_time(pcity); 
+        // Figure out if production is finished
+        var shields_invested = pcity['shield_stock'];
+        var shields_needed = -1;  // stays -1 only if Coinage
+        if (pcity['production_kind'] == VUT_UTYPE) {
+          const punit_type = unit_types[pcity['production_value']];
+          shields_needed = universal_build_shield_cost(pcity, punit_type);
+        }
+        if (pcity['production_kind'] == VUT_IMPROVEMENT) {
+          var improvement = improvements[pcity['production_value']];
+          if (improvement['name'] != "Coinage") {
+            shields_needed = universal_build_shield_cost(pcity, improvement)
+          }
+        }
+        title_text +=  finish_turns + " turns &nbsp;&nbsp;(" + get_production_progress(pcity) + ")\n\n"
+        if (shields_needed != -1) { // -1 == coinage
+          if (shields_invested>=shields_needed) { 
+            bg = "background:#BFBE ";
+            border = "border:2x solid 308000;"
+          } else {
+              title_text += "RIGHT-CLICK: Buy\n";
+              right_click_action = "oncontextmenu='request_city_id_buy("+pcity['id']+")'";  
+              if (finish_turns==1) {
+              bg = "background:#DFDD ";
+              border = "border:2x solid 002000;"
+            }
+          }
+        }
+      } // -----------------------------------------------------------------------------
+      title_text += "CLICK: Remove\nCTRL-CLICK: Insert before\nSHIFT-CLICK: Add after'";
 
       // Put improvement sprite in the cell:
       queue_html = queue_html +
@@ -1208,7 +1241,7 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
             ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
             + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left;' "
             + title_text 
-           // + right_click_action
+            + right_click_action
             + "onclick='handle_worklist_action(event,"+city_id+","+ z + ");' "  
             +"</span></div>";
     }
