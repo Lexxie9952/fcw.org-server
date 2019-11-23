@@ -198,6 +198,14 @@ input[type=number]::-webkit-outer-spin-button {
 input[type='number'] {
   -moz-appearance:textfield;
 }
+/*warcalc bonus adjusters*/
+.tiny_button
+{
+  padding: 2px;
+  margin: 0px;
+  border-radius: 3px 3px 3px 3px;
+  font-size:85%;
+}
 
 .helptext {
   white-space: pre-wrap;

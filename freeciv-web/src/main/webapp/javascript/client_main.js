@@ -140,6 +140,7 @@ function setup_window_size ()
     $("#civ_tab").children().html("<i class='fa fa-university' aria-hidden='true'></i>");
     $("#empire_tab").children().html("<i class='fa fa-binoculars' aria-hidden='true'></i>");
     $("#hel_tab").children().html("<i class='fa fa-book' aria-hidden='true'></i>");
+    $("#warcalc_tab").children().html("&#x1F3B2;")
     $("#button_national_units").html("&#9823;");
     $("#button_unit_homecity").html("&#x1F3E0;");
     $("#button_unit_deployment").html("&#x2299;");
