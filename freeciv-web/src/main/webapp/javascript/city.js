@@ -310,7 +310,7 @@ function show_city_dialog(pcity)
   var change_string = is_small_screen() ? "Growth:" : "Change in: ";
   $("#city_size").html("Population: "+ pop_string + "<br>"
                        + "Size: " + pcity['size'] + "<br>"
-                       + "Granary: " + pcity['food_stock'] + "/" + pcity['granary_size'] + "<br>"
+                       + "Grain: " + pcity['food_stock'] + "/" + pcity['granary_size'] + "<br>"
                        + change_string + city_turns_to_growth_text(pcity));
 
   var prod_type = get_city_production_type_sprite(pcity);

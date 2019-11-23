@@ -394,8 +394,8 @@ sound		= "b_granary"
 sound_alt	= "b_generic"
 helptext	= _("\
 The amount of stored food will be set to half full whenever a city\
- with a Granary shrinks or grows. This helps a city to grow faster\
- and more easily withstand famine.\
+ with a Granary 1) grows in size, or 2) loses size from starvation.\
+ This helps a city to grow faster and more easily withstand famine.\
 ")
 
 [building_harbour]
