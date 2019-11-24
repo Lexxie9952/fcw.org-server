@@ -21,6 +21,8 @@
 var techs = {};
 var techcoststyle1 = {};
 
+var bulb_output_text = "";
+
 var tech_canvas_text_font = "18px Arial";
 
 var is_tech_tree_init = false;
@@ -1059,7 +1061,8 @@ function get_current_bulbs_output_text(cbo)
     var turns_left_text = " ("+turns_left+turns_left_plural;
     text = text + turns_left_text;
   }
-  
+  // stored globally to avoid excessive recalculation for multiple uses
+  bulb_output_text = text; 
   return text;
 }
 
