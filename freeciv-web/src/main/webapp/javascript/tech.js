@@ -193,6 +193,7 @@ function init_tech_screen()
 **************************************************************************/
 function update_tech_tree()
 {
+  if (freeze) return;
   var hy = 24;
   var hx = 48 + 160;
   hx = tech_item_width;

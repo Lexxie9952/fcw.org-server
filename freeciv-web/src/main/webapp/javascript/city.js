@@ -2626,7 +2626,7 @@ function select_rows_by_improvement(z, clear)
 **************************************************************************/
 function update_city_screen()
 {
-  if (observing) return;
+  if (observing || freeze) return;
   //console.log("----------------------")
   //console.log("Update city screen.")
 

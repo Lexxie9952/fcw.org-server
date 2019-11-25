@@ -26,9 +26,12 @@ var sci;
 var lux;
 
 var maxrate = 80;
-var freeze = false;
+var freeze = false;  // this now freezes updating map,city,empire,and tech tab
 var government_list;
 var current_government;
+
+var rate_updater_interval;
+var rates_changed=false;
 
 
 /**************************************************************************
@@ -63,17 +66,38 @@ function show_tax_rates_dialog()
   $(id).attr("title", "Change your tax rates!");
   $(id).dialog({
 			bgiframe: true,
-			modal: true,
-			width: is_small_screen() ? "90%" : "40%",
+      modal: true,
+      width: is_small_screen() ? "90%" : "40%",
 			  buttons: {
-				"Close" : function() {
-					$("#rates_dialog").dialog('close');
+				"Done" : function() {
+          submit_player_rates();
+          close_rates_dialog();
 				}
 			  }
-
   });
 
   update_rates_dialog();
+  // Remove [X] to close, because it bypasses clean-up functions  
+  $(".ui-dialog-titlebar-close").hide();
+  freeze=true; // turn off updates to cities,empire,tech,map tabs
+
+  rate_updater_interval = setInterval(rate_refresh, 500);
+}
+
+/**************************************************************************
+  This is periodically called to submit and display rates, in order to 
+  avoid laggy overload and unneeded server packet sending/receiving
+**************************************************************************/
+function rate_refresh()
+{
+  // only submit rates if they changed
+  if (rates_changed) {
+    rates_changed = false;
+    submit_player_rates();
+  }
+  // this might be needed iff something else isn't updating for us, otherwise remove, needs a test <<<<<<<<<<<<<<<<<<<<<<<
+  update_net_income();
+  update_net_bulbs();
 }
 
 /**************************************************************************
@@ -168,8 +192,7 @@ function create_rates_dialog(tax, lux, sci, max)
 /**************************************************************************
   ...
 **************************************************************************/
-function
-update_rates_labels ()
+function update_rates_labels ()
 {
   tax = s_tax.getValue();
   lux = s_lux.getValue();
@@ -185,9 +208,6 @@ update_rates_labels ()
 **************************************************************************/
 function update_tax_rates ()
 {
-  if (freeze) return;
-  freeze = true;
-
   if (s_tax.getValue() % 10 != 0) s_tax.setValue(s_tax.getValue() - (s_tax.getValue() % 10));
   if (s_lux.getValue() % 10 != 0) s_lux.setValue(s_lux.getValue() - (s_lux.getValue() % 10));
   if (s_sci.getValue() % 10 != 0) s_sci.setValue(s_sci.getValue() - (s_sci.getValue() % 10));
@@ -208,7 +228,6 @@ function update_tax_rates ()
 
   if (tax + lux + sci  != 100) {
     s_tax.setValue(100 - lux - sci);
-    freeze = false;
     return;
   }
 
@@ -220,8 +239,8 @@ function update_tax_rates ()
   $("#lux_result").html(lux + "%");
   $("#sci_result").html(sci + "%");
 
-  freeze = false;
-  submit_player_rates();
+  rates_changed=true;
+  //submit_player_rates();
 }
 
 /**************************************************************************
@@ -229,9 +248,6 @@ function update_tax_rates ()
 **************************************************************************/
 function update_lux_rates ()
 {
-  if (freeze) return;
-  freeze = true;
-
   if (s_tax.getValue() % 10 != 0) s_tax.setValue(s_tax.getValue() - (s_tax.getValue() % 10));
   if (s_lux.getValue() % 10 != 0) s_lux.setValue(s_lux.getValue() - (s_lux.getValue() % 10));
   if (s_sci.getValue() % 10 != 0) s_sci.setValue(s_sci.getValue() - (s_sci.getValue() % 10));
@@ -252,7 +268,6 @@ function update_lux_rates ()
 
   if (tax + lux + sci  != 100) {
     s_lux.setValue(100 - tax - sci);
-    freeze = false;
     return;
   }
 
@@ -264,9 +279,8 @@ function update_lux_rates ()
   $("#lux_result").html(lux + "%");
   $("#sci_result").html(sci + "%");
 
-
-  freeze = false;
-  submit_player_rates();
+  rates_changed=true;
+  //submit_player_rates();
 }
 
 /**************************************************************************
@@ -274,9 +288,6 @@ function update_lux_rates ()
 **************************************************************************/
 function update_sci_rates ()
 {
-  if (freeze) return;
-  freeze = true;
-
   if (s_tax.getValue() % 10 != 0) s_tax.setValue(s_tax.getValue() - (s_tax.getValue() % 10));
   if (s_lux.getValue() % 10 != 0) s_lux.setValue(s_lux.getValue() - (s_lux.getValue() % 10));
   if (s_sci.getValue() % 10 != 0) s_sci.setValue(s_sci.getValue() - (s_sci.getValue() % 10));
@@ -297,7 +308,6 @@ function update_sci_rates ()
 
   if (tax + lux + sci  != 100) {
     s_sci.setValue(100 - lux - tax);
-    freeze = false;
     return;
   }
 
@@ -309,8 +319,20 @@ function update_sci_rates ()
   $("#lux_result").html(lux + "%");
   $("#sci_result").html(sci + "%");
 
-  freeze = false;
+  rates_changed=true;
+  //submit_player_rates();
+}
+
+/**************************************************************************
+  ...
+**************************************************************************/
+function close_rates_dialog()
+{
+  freeze=false;
   submit_player_rates();
+  clearInterval(rate_updater_interval);
+  rate_output_update=null;
+  $("#rates_dialog").dialog('close');
 }
 
 /**************************************************************************

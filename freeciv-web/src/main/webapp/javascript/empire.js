@@ -59,7 +59,7 @@ empire_screen_updater = new EventAggregator(update_empire_screen, 250, EventAggr
 **************************************************************************/
 function update_empire_screen()
 {
-  if (observing) return;
+  if (observing || freeze) return;
 
   // Do all the setup of width, buttons in top panel for switching mode, 
   // then call a separate function based on what mode we're in

@@ -542,6 +542,7 @@ function update_map_canvas_full()
 **************************************************************************/
 function update_map_canvas_check()
 {
+  if (freeze) return;  // prevent updating from lagging (current used for tax sliders only)
   var time = new Date().getTime() - last_redraw_time;
   if (time > MAPVIEW_REFRESH_INTERVAL && renderer == RENDERER_2DCANVAS) {
     update_map_canvas_full();
