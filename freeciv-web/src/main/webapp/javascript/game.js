@@ -177,7 +177,8 @@ function update_game_status_panel() {
     status_html += "<span style='cursor:pointer;' onclick='javascript:show_tax_rates_dialog();'><i style='color:#ebb445' class='fa fa-btc' aria-hidden='true' title='Tax rate'></i> <b style='color:#fff0d1'>" 
     + tax + "</b><span style='color:#bcbcbc'>%</span> &nbsp;";
     status_html += "<i style='color:#b087c5;' class='fa fa-music' aria-hidden='true' title='Luxury rate'></i> <b style='color:#f5e8ff'>" + lux + "</b><span style='color:#bcbcbc'>%</span> &nbsp;";
-    const sci_title = "Science:\n"+techs[client.conn.playing['researching']]['name']+"\n"+bulb_output_text;             
+    const sci_title = "Science:\n"+techs[client.conn.playing['researching']]['name']+"\n"
+                    + client.conn.playing['bulbs_researched'] + " / " + client.conn.playing['researching_cost'] +"\n" + bulb_output_text;             
     status_html += "<i style='color:#a8ccd7;'class='fa fa-flask' aria-hidden='true' title='"+sci_title+"'></i> <b style='color:#ebfaff'>" + sci + "</b><span style='color:#bcbcbc'>%</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> ";
   
   } else if (server_settings != null && server_settings['metamessage'] != null) {    // Status message for gamemasters/admins/supercows:
