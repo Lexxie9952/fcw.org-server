@@ -430,7 +430,7 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
       }
 
       // City Label shares this layer but goes on top
-      if (pcity != null && show_citybar) {
+      if (pcity != null && active_city==null && show_citybar) {
         sprite_array.push(get_city_info_text(pcity));
       }
 
