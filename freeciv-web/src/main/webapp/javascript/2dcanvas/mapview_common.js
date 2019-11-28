@@ -22,7 +22,9 @@ var mapview = {};
 var mapdeco_highlight_table = {};
 var mapdeco_crosshair_table = {};
 var last_redraw_time = 0;
-var MAPVIEW_REFRESH_INTERVAL = 35;// don't even TRY to do more than 28fps, you'll just hurt yourself
+
+var mapview_active = true;
+var MAPVIEW_REFRESH_INTERVAL = 35;
 
 var mapview_slide = {};
 mapview_slide['active'] = false;
@@ -32,6 +34,19 @@ mapview_slide['i'] = 0;
 mapview_slide['max'] = 100;
 mapview_slide['slide_time'] = 700;
 
+// Performance tuning variables ------------------------------------------
+// Search for /// to uncomment performance tuning code to enable tests
+//var dont_draw_special3 = true;//blocked special3 b4 we removed it totally
+// Adjustment of redraw/refresh interval to mean draw time
+var total_draws = 0;  // for measuring mean time
+var mean_time = 0;    // mean time to draw map
+var stop_checking = false; // set to true after mean was measured
+var calibrate_threshold = 1000000000; // stop adjusting interval after n redraws
+var t_elapsed; //global allows using dev console to check and tune more
+var layer_elapsed = [0,0,0,0,0,0,0,0,0,0,0,0];
+var layer_mean_time = [0,0,0,0,0,0,0,0,0,0,0,0];
+// minimum val above is 250 to calibrate for about one minute
+// -----------------------------------------------------------------------
 
 function mapdeco_init()
 {
@@ -274,10 +289,12 @@ function map_to_gui_pos(map_x, map_y)
 **************************************************************************/
 function update_map_canvas(canvas_x, canvas_y, width, height)
 {
-  var gui_x0, gui_y0;
-
-  gui_x0 = mapview['gui_x0'] + canvas_x;
-  gui_y0 = mapview['gui_y0'] + canvas_y;
+  /* ///
+  if (!stop_checking) {
+    var startTime = Date.now();
+  } */
+  var gui_x0 = mapview['gui_x0'] + canvas_x; 
+  var gui_y0 = mapview['gui_y0'] + canvas_y;
 
   /* Clear the area, if the mapview extends beyond map borders.
    *
@@ -301,7 +318,9 @@ function update_map_canvas(canvas_x, canvas_y, width, height)
 
   // mapview_layer_iterate
   for (var layer = 0; layer <= LAYER_COUNT; layer++) {
-
+    /*if (!stop_checking) {
+      var startLayer = Date.now();
+    }*/   ///
     // set layer-specific canvas properties here.
     if (layer == LAYER_SPECIAL1) {
       mapview_canvas_ctx.lineWidth = 2;
@@ -384,15 +403,49 @@ function update_map_canvas(canvas_x, canvas_y, width, height)
                           null, null, cx, cy, null);
         }
       }
-    }
+    } /* ///
+    if (!stop_checking) {
+      layer_elapsed[layer] = Date.now() - startLayer;
+    } */
   }
 
   if (map_select_active && map_select_setting_enabled) {
     canvas_put_select_rectangle(mapview_canvas_ctx, map_select_x, map_select_y, 
                                 mouse_x - map_select_x, mouse_y - map_select_y);
   }
-}
+/* ///
+  if (!stop_checking) {// adjust refresh interval to mean time for draw
+    total_draws++;
+    t_elapsed = Date.now() - startTime;
+    mean_time = ((mean_time * (total_draws-1)) + (t_elapsed)) / total_draws;
+    for (l=0; l<LAYER_COUNT; l++) {
+      layer_mean_time[l] = ((layer_mean_time[l] * (total_draws-1)) + (layer_elapsed[l])) / total_draws;
+    }
+    if (total_draws % 250 == 0) {
+      console.log(mean_time.toFixed(0)+"ms average map draw. N="+total_draws+". Last="+t_elapsed.toFixed(0));
+      var layer_report = "";
+      for (l=0; l<LAYER_COUNT; l++) {
+        layer_report += " L"+l+": "+layer_mean_time[l].toFixed(0)+" ";
+      }
+      console.log(layer_report);
+      MAPVIEW_REFRESH_INTERVAL = mean_time + 10; // 10ms more to not overload
 
+      if (total_draws>calibrate_threshold) {
+        stop_checking=true; // stop calibrating refresh interval to mean time
+        if (!is_longturn() && game_info['turn']<20) {
+          // short turn games will get much more load after known map expands
+          // (longturn user will be on for 1-2 turns max)
+          MAPVIEW_REFRESH_INTERVAL *= 2.2;
+          if (MAPVIEW_REFRESH_INTERVAL<40) MAPVIEW_REFRESH_INTERVAL=40;
+          else if (MAPVIEW_REFRESH_INTERVAL>140) MAPVIEW_REFRESH_INTERVAL=140;
+        }
+        console.log(MAPVIEW_REFRESH_INTERVAL+"ms refresh interval was permanently set for this session.");
+      } 
+    }
+  }
+  */
+
+}
 
 /**************************************************************************
   Draw some or all of a tile onto the canvas.
@@ -542,7 +595,7 @@ function update_map_canvas_full()
 **************************************************************************/
 function update_map_canvas_check()
 {
-  if (freeze) return;  // prevent updating from lagging (current used for tax sliders only)
+  if (mapview_active==false || freeze) return;  // (freeze currently used for tax sliders)
   var time = new Date().getTime() - last_redraw_time;
   if (time > MAPVIEW_REFRESH_INTERVAL && renderer == RENDERER_2DCANVAS) {
     update_map_canvas_full();

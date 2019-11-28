@@ -556,7 +556,7 @@ function set_default_mapview_inactive()
 function set_default_mapview_active()
 {
   mapview_active = true;
-  update_map_canvas_check(); // immediately refresh stale map and restart the interval to redraw map
+  //update_map_canvas_check(); // immediately refresh stale map and restart the interval to redraw map
 
   $("#warcalc_tab").hide();  // hide Odds tab
 
