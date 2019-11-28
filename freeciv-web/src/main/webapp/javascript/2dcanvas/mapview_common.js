@@ -23,7 +23,7 @@ var mapdeco_highlight_table = {};
 var mapdeco_crosshair_table = {};
 var last_redraw_time = 0;
 
-var mapview_active = true;
+//var mapview_active = true;
 var MAPVIEW_REFRESH_INTERVAL = 35;
 
 var mapview_slide = {};
@@ -595,7 +595,7 @@ function update_map_canvas_full()
 **************************************************************************/
 function update_map_canvas_check()
 {
-  if (mapview_active==false || freeze) return;  // (freeze currently used for tax sliders)
+  if (/*mapview_active==false ||*/ freeze) return;  // (freeze currently used for tax sliders)
   var time = new Date().getTime() - last_redraw_time;
   if (time > MAPVIEW_REFRESH_INTERVAL && renderer == RENDERER_2DCANVAS) {
     update_map_canvas_full();

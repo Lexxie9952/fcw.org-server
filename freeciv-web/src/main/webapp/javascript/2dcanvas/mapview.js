@@ -546,7 +546,7 @@ function set_default_mapview_inactive()
     $("#game_chatbox_panel").parent().hide();
     $(".mobile_chatbox_dialog").hide();
   }
-  mapview_active = false;
+  //mapview_active = false;
 }
 
 
@@ -555,7 +555,7 @@ function set_default_mapview_inactive()
 **************************************************************************/
 function set_default_mapview_active()
 {
-  mapview_active = true;
+  //mapview_active = true;
   //update_map_canvas_check(); // immediately refresh stale map and restart the interval to redraw map
 
   $("#warcalc_tab").hide();  // hide Odds tab
