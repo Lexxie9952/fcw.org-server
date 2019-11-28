@@ -948,7 +948,7 @@ function advance_unit_focus()
     $("#game_unit_orders_default").hide();
 
     // Test removal
-    // find a city to focus on if new game. consider removing this.  
+    /* find a city to focus on if new game. consider removing this.  
     if (game_info['turn'] <= 1) {
       for (var city_id in cities) {
         var pcity = cities[city_id];
@@ -957,7 +957,7 @@ function advance_unit_focus()
           break;
         }
       }
-    }
+    }*/
     if (touch_device || is_small_screen())
     {
       $("#turn_done_button").button("option", "label", "<i class='fa fa-check-circle-o' style='color: green;'aria-hidden='true'></i>Done");
