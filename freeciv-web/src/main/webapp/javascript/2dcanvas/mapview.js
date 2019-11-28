@@ -546,6 +546,54 @@ function set_default_mapview_inactive()
     $("#game_chatbox_panel").parent().hide();
     $(".mobile_chatbox_dialog").hide();
   }
+  mapview_active = false;
+}
+
+
+/**************************************************************************
+  ...
+**************************************************************************/
+function set_default_mapview_active()
+{
+  mapview_active = true;
+  update_map_canvas_check(); // immediately refresh stale map and restart the interval to redraw map
+
+  $("#warcalc_tab").hide();  // hide Odds tab
+
+  if (renderer == RENDERER_2DCANVAS) {
+    mapview_canvas_ctx = mapview_canvas.getContext("2d");
+    mapview_canvas_ctx.font = canvas_text_font;
+  }
+
+  var active_tab = $('#tabs').tabs('option', 'active');
+  if (active_tab == TAB_CITIES) { // cities dialog is active
+    return;
+  }
+
+  if (!is_small_screen() && overview_active) {
+    $("#game_overview_panel").parent().show();
+    $(".overview_dialog").position({my: 'left bottom', at: 'left bottom', of: window, within: $("#tabs-map")});
+    if (overview_current_state == "minimized") $("#game_overview_panel").dialogExtend("minimize");
+  }
+
+  if (unitpanel_active) {
+    update_active_units_dialog();
+  }
+
+  if (chatbox_active) {
+    $("#game_chatbox_panel").parent().show();
+    $(".mobile_chatbox_dialog").show();
+    if (current_message_dialog_state == "minimized") $("#game_chatbox_panel").dialogExtend("minimize");
+  }
+
+  $("#tabs").tabs("option", "active", 0);
+  $("#tabs-map").height("auto");
+
+  tech_dialog_active = false;
+  allow_right_click = false;
+  keyboard_input = true;
+
+  chatbox_scroll_to_bottom(false);
 }
 
 /**************************************************************************
