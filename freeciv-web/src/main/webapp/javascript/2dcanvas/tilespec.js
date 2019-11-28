@@ -491,8 +491,8 @@ function fill_terrain_sprite_layer(layer_num, ptile, pterrain, tterrain_near)
 ****************************************************************************/
 function fill_terrain_sprite_array(l, ptile, pterrain, tterrain_near)
 {
-  // TERRIBLE HACK to replace unconfigured ice cliffs with coastal shore. TODO: something better
-  tile_types_setup["l0.arctic"].match_index[0]=2;
+  // TERRIBLE HACK to replace unconfigured ice cliffs with coastal shore. moved to map_topology_init
+  // tile_types_setup["l0.arctic"].match_index[0]=2;
 
   if (tile_types_setup["l" + l + "." + pterrain['graphic_str']] == null) {
     //console.log("missing " + "l" + l + "." + pterrain['graphic_str']);
