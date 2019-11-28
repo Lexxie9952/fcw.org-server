@@ -1858,9 +1858,14 @@ function set_unit_focus_and_activate(punit)
 **************************************************************************/
 function city_dialog_activate_unit(punit)
 {
+  // ensure exit from city tab
+  $("#tabs").tabs("option", "active", TAB_MAP);
+  $("#tabs-map").height("auto");
+
+  close_city_dialog_trigger();
+
   request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
-  close_city_dialog();
-  $('#ui-id-1').trigger("click");   // ensures exit from city tab
+  //$('#ui-id-1').trigger("click");   // ensures exit from city tab
   set_unit_focus_and_redraw(punit);
 }
 
