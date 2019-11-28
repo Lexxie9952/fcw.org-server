@@ -1858,14 +1858,14 @@ function set_unit_focus_and_activate(punit)
 **************************************************************************/
 function city_dialog_activate_unit(punit)
 {
-  // ensure exit from city tab
-  $("#tabs").tabs("option", "active", TAB_MAP);
-  $("#tabs-map").height("auto");
-
-  close_city_dialog_trigger();
-
+  if (TAB_MAP === $("#tabs").tabs("option", "active")) {
+    close_city_dialog_trigger();
+  }
+  else {
+    $('#ui-id-1').trigger("click");   // ensures exit from city tab
+    close_city_dialog_trigger();
+  }
   request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
-  //$('#ui-id-1').trigger("click");   // ensures exit from city tab
   set_unit_focus_and_redraw(punit);
 }
 
@@ -2651,7 +2651,7 @@ function global_keyboard_listener(ev)
   /* if (!ev) ev = window.event; INTERNET EXPLORER DEPRECATED */
   var keyboard_key = String.fromCharCode(ev.keyCode);
 
-  if (0 === $("#tabs").tabs("option", "active")) {
+  if (TAB_MAP === $("#tabs").tabs("option", "active")) {
     // The Map tab is active
     if (find_active_dialog() == null) {
       map_handle_key(keyboard_key, ev.keyCode, ev['ctrlKey'], ev['altKey'], ev['shiftKey'], ev);
