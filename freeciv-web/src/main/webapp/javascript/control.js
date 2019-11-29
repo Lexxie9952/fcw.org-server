@@ -4521,9 +4521,7 @@ function request_unit_build_city()
       }
 
       var ptype = unit_type(punit);
-      // This was an incorrect check for what units can build/join a city. Let the server
-      // decide if it's legal.
-      if (true /*ptype['name'] == "Settlers" || ptype['name'] == "Engineers"*/) {
+      if (true /*reserved for leglity checking, we just let server disallow for now*/) {
         var packet = null;
         var target_city = tile_city(index_to_tile(punit['tile']));
 
@@ -4531,6 +4529,7 @@ function request_unit_build_city()
         if (target_city == null) {
           packet = {"pid" : packet_city_name_suggestion_req,
             "unit_id"     : punit['id'] };
+            send_request(JSON.stringify(packet));
         } else {
           packet = {"pid" : packet_unit_do_action,
             "actor_id"    : punit['id'],
@@ -4539,9 +4538,22 @@ function request_unit_build_city()
             "value"       : 0,
             "name"        : "",
             "action_type" : ACTION_JOIN_CITY };
-        }
 
-        send_request(JSON.stringify(packet));
+            swal({
+              title: 'Add '+ptype['name']+' to \n'+target_city['name']+'?',
+              text: 'Unit will add +1 population and expire.',
+              type: 'info',
+              background: '#a19886',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Yes',
+              cancelButtonText: 'No'
+          },
+          function(){
+             send_request(JSON.stringify(packet));
+          });
+        }
       }
     }
   }
