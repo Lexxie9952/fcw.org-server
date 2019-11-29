@@ -25,6 +25,10 @@ format_version=20
 ;                 as part of some sentences, so try to make it descriptive
 ;                 and sensible.
 ; helptxt       = displayed in the help for unit types with this flag (optional)
+; ************** ANTYHING WHICH CHANGES THE SEQUENCE OR NUMBER OF THE USER CUSTOM FLAGS BELOW SHOULD BE
+; ************** MADE COMPATIBLE BETWEEN MP+ AND MP2 RULESETS AND POSSIBLY CLASSIC AND CIV2CIV3 SO THAT
+; ************** THERE IS UNIFORMITY IN FCW CLIENT POSSIBLY CHECKING THESE RULESET SPECIFIC FLAGS FOR 
+; ************** SUPERIOR CLIENT BEHAVIOUR AND FEATURES:
 flags =
   { "name", "helptxt"
     _("Airbase")
@@ -44,7 +48,7 @@ flags =
     _("Capturer"),   _("Can capture some enemy units.")
     _("Capturable"), _("Can be captured by some enemy units.")
     _("Cities")
-    _("AddToCity")
+    _("AddToCity"), _("Can add itself to the population of a city.")
     _("Nuclear"), _("Can perform a Nuclear Detonation obliterating all adjacent tiles.")
     _("Missile")
     _("Well-Digger"), _("Can dig a well and irrigate tiles with no water.")
