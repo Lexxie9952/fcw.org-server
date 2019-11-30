@@ -703,10 +703,20 @@ function get_unit_class_name(punit)
 }
 
 /**************************************************************************
- Returns whether a unit has one of the UCF_ flags enumerated in fc_types.js
+ Returns whether a unit has one of the UCF_ flags (unit class) enumerated
+  in unittype.js
  *************************************************************************/
 function unit_has_class_flag(punit, flag)
 {
   var unit_class = unit_classes[unit_types[punit.type].unit_class_id];
   return unit_classes[unit_class['id']]['flags'].isSet(flag);
+}
+
+/**************************************************************************
+ Returns whether a unit has one of the UTYF_ flags (unit type) enumerated
+  in unittype.js
+ *************************************************************************/
+function unit_has_type_flag(punit, flag)
+{
+  return utype_has_flag(unit_types[punit.type], flag);
 }

@@ -206,9 +206,18 @@ function can_player_build_unit_direct(p, punittype)
 /**************************************************************************
 ...
 **************************************************************************/
-function utype_has_flag(ptype, flag)
+function utype_has_class_flag(ptype, flag)
 {
   return unit_classes[ptype['unit_class_id']]['flags'].isSet(flag);
+}
+/**************************************************************************
+...
+**************************************************************************/
+function utype_has_flag(ptype, flag)
+{
+  // returns whether unit_type has UTYF type flag
+  var bv = new BitVector(ptype['flags']);
+  return bv.isSet(flag);
 }
 
 /**************************************************************************
