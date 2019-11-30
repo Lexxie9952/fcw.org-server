@@ -36,14 +36,14 @@
                     <th>Firepower</th>
                 </tr>
                 <tr>
-                    <th>Attacker</th>
+                    <th title='Your own clicked unit is assumed as attacker.&#013;&#013;Only Veteran bonus is auto-calculated'>Attacker</th>
                     <td align="center"><input autocomplete="off" style="background-color:#ffd2c2; width:55%; text-align:center;" id="id_astr" name="astr" type="number" value=""></td>
                     <td align="center"><input autocomplete="off" style="background-color:#e4ffe4; width:55%; text-align:center;" id="id_ahp" name="ahp" type="number" value=""></td>
                     <td align="center"><input autocomplete="off" style="width:55%; text-align:center;" id="id_afp" name="afp" type="number" value="1"></td>
                 </tr>
                 
                 <tr>
-                    <th>Defender</th>
+                    <th title='Foreign clicked units are assumed as defender.&#013;&#013;Veteran, Terrain, and Fortify bonuses are included.&#013;&#013;Not included: Base, City improvements,&#013;BadCityDefender, Versus-Type.'>Defender</th>
                     <td align="center"><input autocomplete="off" style="background-color:#ffd2c2; width:55%; text-align:center;" id="id_dstr" name="dstr" type="number" value=""></td>
                     <td align="center"><input autocomplete="off" style="background-color:#e4ffe4; width:55%; text-align:center;" id="id_dhp" name="dhp" type="number" value=""></td>
                     <td align="center"><input autocomplete="off" style="width:55%; text-align:center;" id="id_dfp" name="dfp" type="number" value="1"></td>

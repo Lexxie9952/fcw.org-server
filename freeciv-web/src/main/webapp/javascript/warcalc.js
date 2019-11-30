@@ -49,15 +49,16 @@ function warcalc_set_default_vals()
 
   // Get veteran power factor for punit
   var power_fact = 100;
-  if (punit['veteran']) {
-    if (ptype['veteran_levels'] > 0) {
-      power_fact = ptype['power_fact'][punit['veteran']];
-    } else {
-      power_fact = game_rules['power_fact'][punit['veteran']];
-    }
-  }
+
   // assume a clicked player unit is being considered for an attacker
   if (punit['owner'] == client.conn.playing.playerno) {
+    if (punit['veteran']) {
+      if (ptype['veteran_levels'] > 0) {
+        power_fact = ptype['power_fact'][punit['veteran']];
+      } else {
+        power_fact = game_rules['power_fact'][punit['veteran']];
+      }
+    }
     my_hp  = punit['hp'];
     my_str = ptype['attack_strength'];
     my_fp  = ptype['firepower'];
@@ -68,7 +69,8 @@ function warcalc_set_default_vals()
   }
   // assume a clicked non-player unit is being considered for a defender
   else {
-    their_hp  = punit['hp']
+    power_fact = warcalc_get_defense_bonus(punit);
+    their_hp  = punit['hp'];
     their_str = ptype['defense_strength'];;
     their_fp  = ptype['firepower'];
 
@@ -79,6 +81,38 @@ function warcalc_set_default_vals()
 function trim_decimals(value)
 {
   return Math.round(parseFloat(value) * 100) / 100;
+}
+
+/**************************************************************************
+  Computes BASIC bonuses for defending units who don't know their 
+  attacker. That is: veteran, terrain, river.
+  NOT: Bases, City walls, Coastal Defense, Bonus against mounted, etc.
+  Value returned for bonus comes back x100 -- i.e., 1.5x=150
+*************************************************************************/
+function warcalc_get_defense_bonus(punit)
+{ 
+  var power_fact = 100;
+  if (punit['veteran']) {
+    var ptype = unit_types[punit['type']];
+    if (ptype['veteran_levels'] > 0) {
+      power_fact = ptype['power_fact'][punit['veteran']];
+    } else {
+      power_fact = game_rules['power_fact'][punit['veteran']];
+    }
+  }
+  if (unit_has_class_flag(punit, UCF_TERRAIN_DEFENSE)) {
+    var ptile = tiles[punit['tile']];
+    const terrain = terrains[ptile['terrain']];
+    power_fact *= (1+terrain['defense_bonus']/100);
+    if (tile_has_extra(ptile, EXTRA_RIVER))
+      power_fact *= (1+extras[EXTRA_RIVER]['defense_bonus']/100);
+  }
+  if (punit['activity']==ACTIVITY_FORTIFIED) {
+    if (!tile_city(ptile)) { // Units in a city get city bonus not fortify bonus
+      power_fact *= 1.5;  
+    }
+  }
+  return power_fact;
 }
 
 /**************************************************************************
