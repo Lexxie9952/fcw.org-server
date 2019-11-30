@@ -25,20 +25,130 @@ var U_NOT_OBSOLETED = null;
 
 var U_LAST = MAX_NUM_UNITS;
 
-var UCF_TERRAIN_SPEED = 0;
-var UCF_TERRAIN_DEFENSE = 1;
-var UCF_DAMAGE_SLOWS = 2;
-var UCF_CAN_OCCUPY_CITY = 3;
-var UCF_MISSILE = 4;
-var UCF_BUILD_ANYWHERE = 5;
-var UCF_UNREACHABLE = 6;
-var UCF_COLLECT_RANSOM = 7;
-var UCF_ZOC = 8;
-var UCF_CAN_FORTIFY = 9;
-var UCF_CAN_PILLAGE = 10;
-var UCF_DOESNT_OCCUPY_TILE = 11;
-var UCF_ATTACK_NON_NATIVE = 12;
-var UCF_KILLCITIZEN = 13;
+// Unit class flags:
+const UCF_TERRAIN_SPEED = 0;
+const UCF_TERRAIN_DEFENSE = 1;
+const UCF_DAMAGE_SLOWS = 2;
+const UCF_CAN_OCCUPY_CITY = 3;
+const UCF_MISSILE = 4;
+const UCF_BUILD_ANYWHERE = 5;
+const UCF_UNREACHABLE = 6;
+const UCF_COLLECT_RANSOM = 7;
+const UCF_ZOC = 8;
+const UCF_CAN_FORTIFY = 9;
+const UCF_CAN_PILLAGE = 10;
+const UCF_DOESNT_OCCUPY_TILE = 11;
+const UCF_ATTACK_NON_NATIVE = 12;
+const UCF_KILLCITIZEN = 13;
+const UCF_USER_FLAG_1 = 14;
+const UCF_USER_FLAG_2 = 15;
+const UCF_USER_FLAG_3 = 16;
+const UCF_USER_FLAG_4 = 17;
+const UCF_USER_FLAG_5 = 18;
+const UCF_USER_FLAG_6 = 19;
+const UCF_USER_FLAG_7 = 20;
+const UCF_USER_FLAG_8 = 21;
+// Custom unit class flags (MP2 sequence/order; TO DO: universalize/uniform order in other rules)
+const UCF_AIRLIFTABLE = UCF_USER_FLAG_1;
+const UCF_BORDERPOLICE = UCF_USER_FLAG_2;
+const UCF_ATTACK_FROM_NON_NATIVE = UCF_USER_FLAG_3;
+
+// Unit flags
+const UTYF_CANT_FORTIFY = 0;              /* Unable to Fortify */
+const UTYF_NOZOC = 1;                     /* Does not exert Zone of Control on enemy units */
+const UTYF_IGZOC = 2;                     /* Ignores Zone of Control exerted by enemy units */
+const UTYF_CIVILIAN = 3;                  /* Is a non-military unit */
+const UTYF_IGTER = 4;                     /* Ignores terrain movement speed, treating all terrain as roaded */
+const UTYF_ONEATTACK = 5;                 /* HEINOUS MISNOMER: Loses all movement points after making an attack */
+const UTYF_FIELDUNIT = 6;                 /* Causes unhappiness in some governments merely by existing. */
+const UTYF_PROVOKING = 7;                 /* SERVER autoattack: A unit will choose to attack this unit even if defending against it has better odds. */ 
+const UTYF_NEVER_PROTECTS = 8;            /* Overrides unreachable_protects server setting for defender */        
+const UTYF_SETTLERS = 9;                  /* Does not include ability to found cities */
+const UTYF_DIPLOMAT = 10;                 /* The most undocumented hard-coded mystery flag in Freeciv history */
+const UTYF_COAST_STRICT = 11;             /* Can't leave the coast */
+const UTYF_COAST = 12;                    /* Can 'refuel' at coast - meaningless if fuel value not set */ 
+const UTYF_SHIELD2GOLD = 13;              /* Upkeep can switch from shield to gold */
+const UTYF_SPY = 14;                      /* Strong in diplomatic battles */
+const UTYF_ONLY_NATIVE_ATTACK = 15;       /* Cannot attack vs non-native tiles even if class can */
+const UTYF_FANATIC = 16;                  /* Only Fundamentalist government can build these units. */
+const UTYF_GAMELOSS = 17;                 /* Losing this unit means losing the game */
+const UTYF_UNIQUE = 18;                   /* A player can only have one unit of this type */
+const UTYF_EVAC_FIRST = 19;               /* When a transport with this unit ist lost the game rescues this type first */
+const UTYF_SUPERSPY = 20;                 /* Always wins diplomatic contests */
+const UTYF_NOHOME = 21;                   /* Has no homecity, this no upkeep */
+const UTYF_NO_VETERAN = 22;               /* Cannot increase veteran level */
+const UTYF_CITYBUSTER = 23;               /* Gets double firepower against cities */
+const UTYF_NOBUILD = 24;                  /* Unit cannot be built (barb leader etc) */
+const UTYF_BADWALLATTACKER = 25;          /* Firepower set to 1 when EFT_DEFEND_BONUS applies (for example, land unit attacking city with walls) */
+const UTYF_BADCITYDEFENDER = 26;          /* Firepower set to 1 and attackers x2 when in city */
+const UTYF_BARBARIAN_ONLY = 27;           /* Only barbarians can build this unit */
+const UTYF_BEACH_LANDER = 28;             /* Unit won't lose all its movement when moving from non-native terrain to
+                                           * native terrain even if slow_invasions is turned on. Also exempt from UNIVERSAL_UNLOAD effects. */
+const UTYF_NEWCITY_GAMES_ONLY = 29;       /* Unit can't be built in scenarios where founding new cities is prevented. */
+const UTYF_CANESCAPE = 30;                /* 50% chance to escape when killstack occours if more moves remaining than attacker */
+const UTYF_CANKILLESCAPING = 31;          /* Can kill escaping units */
+const UTYF_NEVER_BLOCKED = 32;            /* Overrides unreachable_protects server setting for attacker */
+const UTYF_USER_FLAG_1 = 33;
+const UTYF_USER_FLAG_2 = 34;
+const UTYF_USER_FLAG_3 = 35;
+const UTYF_USER_FLAG_4 = 36;
+const UTYF_USER_FLAG_5 = 37;
+const UTYF_USER_FLAG_6 = 38;
+const UTYF_USER_FLAG_7 = 39;
+const UTYF_USER_FLAG_8 = 40;
+const UTYF_USER_FLAG_9 = 41;
+const UTYF_USER_FLAG_10 = 42;
+const UTYF_USER_FLAG_11 = 43;
+const UTYF_USER_FLAG_12 = 44;
+const UTYF_USER_FLAG_13 = 45;
+const UTYF_USER_FLAG_14 = 46;
+const UTYF_USER_FLAG_15 = 47;
+const UTYF_USER_FLAG_16 = 48;
+const UTYF_USER_FLAG_17 = 49;
+const UTYF_USER_FLAG_18 = 50;
+const UTYF_USER_FLAG_19 = 51;
+const UTYF_USER_FLAG_20 = 52;
+const UTYF_USER_FLAG_21 = 53;
+const UTYF_USER_FLAG_22 = 54;
+const UTYF_USER_FLAG_23 = 55;
+const UTYF_USER_FLAG_24 = 56;
+const UTYF_USER_FLAG_25 = 57;
+const UTYF_USER_FLAG_26 = 58;
+const UTYF_USER_FLAG_27 = 59;
+const UTYF_USER_FLAG_28 = 60;
+const UTYF_USER_FLAG_29 = 61;
+// ^^ ...these can be continued up to const UTYF_USER_FLAG_44 = 76;
+
+// Custom unit flags (MP2 sequence/order; TO DO: universalize/uniform order in other rules)
+const UTYF_AIRBASE = UTYF_USER_FLAG_1         // Can make Airbase
+const UTYF_TRANSFORM = UTYF_USER_FLAG_2       // Can do advanced Terrain transformations
+const UTYF_CANROAD = UTYF_USER_FLAG_3         // Able to build Roads
+const UTYF_CANFORTRESS = UTYF_USER_FLAG_4     // Can build Forts and Fortresses
+const UTYF_BOMBERDER = UTYF_USER_FLAG_5       // Can safely conduct Ranged Attacks
+const UTYF_AIRATTACKER = UTYF_USER_FLAG_6     // AEGIS Cruiser has defense bonus against this unit
+const UTYF_HORSE = UTYF_USER_FLAG_7           // Attack halue half vs. Pikemen. Knights defend at 3 against this unit
+const UTYF_FOOTSOLDIER = UTYF_USER_FLAG_8     // Knights defend at 2 when attacked by this unit
+const UTYF_HELICOPTER = UTYF_USER_FLAG_9      // Defends very badly against Fighters
+const UTYF_SUBMARINE = UTYF_USER_FLAG_10      // Attack value reduced against some ships
+const UTYF_UNBRIBABLE = UTYF_USER_FLAG_11     // Can't be bribed
+const UTYF_TRADEROUTE = UTYF_USER_FLAG_12     // Can establish trade routes
+const UTYF_HELPWONDER = UTYF_USER_FLAG_13     // Can help build a Wonder 
+const UTYF_CAPTURER = UTYF_USER_FLAG_14       // Can capture some enemy units
+const UTYF_CAPTURABLE = UTYF_USER_FLAG_15     // Can be captured by some enemy units
+const UTYF_CITIES = UTYF_USER_FLAG_16         // can build city?
+const UTYF_ADDTOCITY = UTYF_USER_FLAG_17      // Can add itself to the population of a city
+const UTYF_NUCLEAR = UTYF_USER_FLAG_18        // Can perform nuclear detonations
+const UTYF_MISSILE = UTYF_USER_FLAG_19        // Unit is a Missile     
+const UTYF_WELLDIGGER = UTYF_USER_FLAG_20     // Can dig a well and irrigate tiles with no water.
+const UTYF_INFRA = UTYF_USER_FLAG_21          // Can build infrastructure
+const UTYF_PROLETARIAN = UTYF_USER_FLAG_22    // Controllable only by communist governments
+const UTYF_PARATROOPERS = UTYF_USER_FLAG_23   // Can be paradropped from a friendly city or suitable base.
+const UTYF_MARINES = UTYF_USER_FLAG_24        // Can launch attack from non-native tiles
+const UTYF_EXPELLABLE = UTYF_USER_FLAG_25     // Can be peacefully expelled from foreign tiles.
+const UTYF_AIRPROTECTOR = UTYF_USER_FLAG_26   // Is Unreachable AND can protect its tile form units unable to attack this unit
+const UTYF_CANT_REACH_AIR = UTYF_USER_FLAG_27 // Unable to attack air units.
+const UTYF_FORTBUSTER = UTYF_USER_FLAG_28     // Defending Forts get no bonus. Has (33%) attack bonus vs. Fortresses
+const UTYF_FORTRESSBUSTER = UTYF_USER_FLAG_29 // Defending Fortresses get no bonus.
 
 /**********************************************************************//**
   Return true iff units of the given type can do the specified generalized
@@ -69,12 +179,12 @@ function can_player_build_unit_direct(p, punittype)
 {
 
 
-  /*if (utype_has_flag(punittype, F_NUCLEAR)
+  /*if (utype_has_flag(punittype, UTYF_NUCLEAR)
       && !get_player_bonus(p, EFT_ENABLE_NUKE) > 0) {
     return FALSE;
   }*/
 
-  /*if (utype_has_flag(punittype, F_NOBUILD)) {
+  /*if (utype_has_flag(punittype, UTYF_NOBUILD)) {
     return FALSE;
   }*/
 
@@ -91,6 +201,14 @@ function can_player_build_unit_direct(p, punittype)
   /* FIXME: add support for global advances, check for building reqs etc.*/
 
   return true;
+}
+
+/**************************************************************************
+...
+**************************************************************************/
+function utype_has_flag(ptype, flag)
+{
+  return unit_classes[ptype['unit_class_id']]['flags'].isSet(flag);
 }
 
 /**************************************************************************

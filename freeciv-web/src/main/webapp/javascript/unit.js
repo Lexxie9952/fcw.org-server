@@ -701,3 +701,12 @@ function get_unit_class_name(punit)
   var unit_class = unit_classes[unit_types[punit.type].unit_class_id];
   return unit_class['name'].replace("?unitclass:","");
 }
+
+/**************************************************************************
+ Returns whether a unit has one of the UCF_ flags enumerated in fc_types.js
+ *************************************************************************/
+function unit_has_class_flag(punit, flag)
+{
+  var unit_class = unit_classes[unit_types[punit.type].unit_class_id];
+  return unit_classes[unit_class['id']]['flags'].isSet(flag);
+}
