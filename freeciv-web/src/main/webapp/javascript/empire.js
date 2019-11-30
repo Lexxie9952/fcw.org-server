@@ -428,7 +428,10 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
         + "<thead id='empire_table_head'>"
         + "<tr>"  
         // WEU
-        + "<th style='text-align:right;' title='Defensive Strength in Warrior Equivalent Units: (1 Warrior = 1 WEU). Includes NO bonuses or penalties'><span style='text-align:right; color:#c8c8c8; font-size:85%; width:80px'>WEU</span></th>"
+        + "<th style='text-align:right;' title='Defense Strength in Warrior Equivalent Units (WEU).\n"
+          +"\nIncludes: Veteran, Terrain, Inside-city.\n"
+          +"\nLacks where the Attacker must be known:\n"
+          +"City Improvements, BadCityDefender, Versus Type.'><span style='text-align:right; color:#c8c8c8; font-size:85%; width:80px'>WEU</span></th>"
         // City coulumn
         + "<th title='Sort alphabetically' style='text-align:right; font-size:93%;'><span style='white-space:nowrap'>City"+updown_sort_arrows+"</span></th>"
         // Units column
@@ -501,7 +504,15 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
         var ptype = unit_type(punit);
 
         // Tally the HP * defense_strength for all units present in city
-        sumHPD[city_id] += (parseInt(punit['hp'],10) * parseInt(ptype['defense_strength'],10) * parseInt(ptype['firepower'],10));
+        // Get veteran power factor for punit
+        var power_fact = warcalc_get_defense_bonus(punit);
+        if (unit_has_class_flag(punit, UCF_TERRAIN_DEFENSE)) {
+          // HEURISTIC: currently all rulesets give city bonus of 1.5 only to 
+          // land units and land units are the only units with terrain bonuses.
+            power_fact *= 1.5;
+        }
+        sumHPD[city_id] += (power_fact/100)*(parseInt(punit['hp'],10) * parseInt(ptype['defense_strength'],10) * parseInt(ptype['firepower'],10));
+        //-------------------------------------------------------------------
 
         // Generate micro-sprite   
         var ptype_sprite = {"type":ptype,"sprite":get_unit_type_image_sprite(ptype)};
@@ -580,7 +591,7 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
     }
 
     if (sumHPD[city_id] > 0) {
-      var weu = Math.round(sumHPD[city_id]/10);
+      var weu = parseFloat((sumHPD[city_id]/10).toFixed(1));
       $("#sumHPD"+city_id).html(weu);
       $("#sumHPD"+city_id).prop("title", weu + " Warrior Equivalent Units");
     } else { // flag undefended in red
