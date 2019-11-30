@@ -1865,7 +1865,7 @@ function city_dialog_activate_unit(punit)
     $('#ui-id-1').trigger("click");   // ensures exit from city tab
     close_city_dialog_trigger();
   }
-  request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
+  //request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
   set_unit_focus_and_redraw(punit);
 }
 
