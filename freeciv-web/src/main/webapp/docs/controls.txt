@@ -84,6 +84,7 @@ Unload & Activate Cargo units (shift-U) (outside city)
   f: (f)ortify unit  (military units)
   F: build (F)ortress  (settler/worker units)
   g: (g)o to tile  (then left-click mouse to select target tile)
+  G: delayed (G)oto (at turn change, reqs: unit with less than full moves)
   h: set unit's (h)omecity  (to city on current tile)
   i: build (i)rrigation or convert terrain  (settler/worker units)
   j: no orders - skip orders for this unit this turn 
