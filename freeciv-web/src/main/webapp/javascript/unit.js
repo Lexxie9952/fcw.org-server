@@ -693,6 +693,26 @@ function get_what_can_unit_pillage_from(punit, ptile)
 }
 
 /**************************************************************************
+ Forces a unit to go along its goto path. 
+ current_focus[f_index]==which focused unit is getting the order
+function unit_forced_goto(goto_path, f_index) 
+{
+  var step_delay = 350; // milliseconds delay per step
+  var sounds_on = sounds_enabled; // store original state of sounds_enabled
+
+  for (step = 1; step < goto_path.length; step++) {
+    setTimeout(function(step) 
+              { sounds_enabled = (step==1) ? sounds_on : false;
+                key_unit_move_focus_index(goto_path['dir'][step], f_index);
+              }.bind(this, step), ((step-1)*step_delay));
+  }
+  setTimeout(function() {sounds_enabled = sounds_on;},step_delay*7)
+   // restore original state of sounds_enabled
+}
+**************************************************************************/
+
+
+/**************************************************************************
  Returns the unit class name of a particular unit,
     stripped of the ?unitclass: prefix in front
 **************************************************************************/

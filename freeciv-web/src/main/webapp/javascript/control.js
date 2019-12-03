@@ -69,6 +69,7 @@ var city_paste_target = {}; // ctrl-shift-right-click for pasting city prod targ
 var current_focus = [];   // unit(s) in current focus selection
 var last_focus = null;    // last unit in focus before focus change
 var goto_active = false;  // state for selecting goto target for a unit
+var delayed_goto_active = false; // modifies goto_active state to give delayed goto command
 var paradrop_active = false;
 var airlift_active = false;
 var action_tgt_sel_active = false;
@@ -935,6 +936,7 @@ function advance_unit_focus()
 
   if (candidate != null) {
     goto_active = false;  // turn Go-To off if jumping focus to a new unit
+    delayed_goto_active = false;
     clear_goto_tiles();   // TO DO: update mouse cursor function call too?
     save_last_unit_focus();
     set_unit_focus_and_redraw(candidate);
@@ -998,6 +1000,7 @@ function advance_focus_inactive_units()
 
   if (candidate != null) {
     goto_active = false;  // turn Go-To off if jumping focus to a new unit
+    delayed_goto_active = false;
     clear_goto_tiles();   // TO DO: update mouse cursor function call too?
     save_last_unit_focus();
     set_unit_focus_and_redraw(candidate);
@@ -1523,6 +1526,13 @@ function update_unit_order_commands()
         "select_all_type": {name: "Select same type (Shift-V)"}
         });
     } 
+  }
+
+  // Lite version of delayed GOTO allows it if unit doesn't have full move points.
+  if (is_longturn() && ptype['move_rate'] != punit['movesleft']) {
+    //if (!touch_device) // TODO: touch devices have completely different logic/mechanics for triggering a goto
+                       // was difficult to figure out how to integrate delayed GOTO into it:
+      unit_actions["delaygoto"] = {name: "delay Goto (shift-G)"};
   }
 
   unit_actions = $.extend(unit_actions, {
@@ -2220,6 +2230,23 @@ function do_map_click(ptile, qtype, first_time_called)
         /* Get the path the server sent using PACKET_GOTO_PATH. */
         var goto_path = goto_request_map[punit['id'] + "," + ptile['x'] + "," + ptile['y']];
        
+        if (goto_path) { // touch devices don't have a goto_path until they call this function twice. see: if (touch_device) below
+          // Client circumvents FC Server has buggy GOTO for units which have UTYF_COAST + fuel:
+          if (unit_has_type_flag(punit, UTYF_COAST) && punit['fuel']>0 && !delayed_goto_active && goto_path !== undefined) {
+            goto_path['dir'].shift();  // remove the first "refuel dir" on fuel units, so they don't freeze on refuel spots
+            goto_path['length']--;     // correct the path length for the removed -1 "refuel dir"
+          } else if (delayed_goto_active) {
+            if (unit_type(punit)['move_rate']==punit['movesleft']) {
+              add_client_message(unit_type(punit)['name']+" can't delay GOTO because it has full moves remaining.");
+              goto_path = null; // cancel it so it doesn't move this turn by mistake
+            }
+            else {
+              // Gives non-fuel units the -1 (refuel) dir so they can have a kind of delayed GOTO also
+              goto_path['dir'].unshift(-1);
+              goto_path['length']++;  // correct for the path having an extra -1 "refuel dir" in it
+            }
+          } 
+        }
         // This is where we would normally check if the goto_path is null for unit s, and do a continue to move on to the next unit.
         // However, we might have a null path because of the GO TO BUG, in which case we allow a click on an adjacent
         // tile to simulate an arrow key to legally perform the action.  This will also handle the case for arrow-key override
@@ -2236,16 +2263,16 @@ function do_map_click(ptile, qtype, first_time_called)
         //console.log("dx:"+tile_dx+", dy:"+tile_dy);
         
         /* Override server GOTO pathfinding bugs that report false illegal actions and thus disallow mobile device
-         *  users from making legal moves. There is no risk in the override attempting a manual move command to an adjacent 
-         *  tile in such cases, since it will simply not perform it if the server won't allow it. ;) */
+        *  users from making legal moves. There is no risk in the override attempting a manual move command to an adjacent 
+        *  tile in such cases, since it will simply not perform it if the server won't allow it. ;) */
 
         /* Conditions for overriding GOTO with a simulated manual cursor move command: 
-         * ADJACENT:  tile distance dx<=1 AND dy<=1. 
-         * Not goto_active during a NUKE command, which is a GOTO with a goto_last_action for Nuking the target.
-         * goto_path.length must be 0, undefined, or 1;  if path is 2 or more to an adjacent tile, that means there is a legal path
-         * to the next tile, that uses less moves by going to another tile first (e.g. stepping onto a river before going to Forest river)
-         * in which case we wouldn't want to override it because (1) it HAS a legal path and (2) it's a superior path using less moves
-         */
+        * ADJACENT:  tile distance dx<=1 AND dy<=1. 
+        * Not goto_active during a NUKE command, which is a GOTO with a goto_last_action for Nuking the target.
+        * goto_path.length must be 0, undefined, or 1;  if path is 2 or more to an adjacent tile, that means there is a legal path
+        * to the next tile, that uses less moves by going to another tile first (e.g. stepping onto a river before going to Forest river)
+        * in which case we wouldn't want to override it because (1) it HAS a legal path and (2) it's a superior path using less moves
+        */
         //console.log("goto_path, goto_path.length == "+goto_path+", "+goto_path.length);
 
         // True goto_path.length is 1 less for units with fuel, they "falsely" report it as +1 higher:
@@ -2257,9 +2284,9 @@ function do_map_click(ptile, qtype, first_time_called)
         if (  Math.abs(tile_dx)<=1 && Math.abs(tile_dy) <=1     // adjacent
               && goto_last_action != ACTION_NUKE                // not a nuke command appended to a GOTO
               && (true_goto_path_length <= 1)   // don't override path>=2 which has better legal way to get to adjacent tile
-           )                                    // "illegal" adjacent goto attempts render goto_path.length == undefined (true_goto_path_length will then be 0)
+          )                                    // "illegal" adjacent goto attempts render goto_path.length == undefined (true_goto_path_length will then be 0)
 
-             /* NOTE: instead of checking ACTION_NUKE we could check (goto_last_action==-1 OR ACTION_COUNT), which would allow other 
+            /* NOTE: instead of checking ACTION_NUKE we could check (goto_last_action==-1 OR ACTION_COUNT), which would allow other 
               * goto_last_actions to be added later (go to tile and build city, etc.) but this wasn't done for now because we don't
               * want to deal with the risks of relying on -1 or ACTION_COUNT to always be set properly in every single case
               */
@@ -2317,6 +2344,7 @@ function do_map_click(ptile, qtype, first_time_called)
           }
           continue;  // we did our override and simulated an arrow keypress. no need for other handling, just go on to the next unit
         }
+      
         //console.log("Attempting a GO TO to a non-adjacent tile.")
           
         // user did not click adjacent tile, so make sure it's not a null goto_path before handling the goto
@@ -2346,7 +2374,7 @@ function do_map_click(ptile, qtype, first_time_called)
         packet['extra'] = [];
         packet['action'] = [];
         for (var i = 0; i < goto_path['length']; i++) {
-          /* TODO: Have the server send the full orders in stead of just the
+          /* TODO: Have the server send the full orders instead of just the
            * dir part. Use that data in stead. */
 
           if (goto_path['dir'][i] == -1) {
@@ -2413,7 +2441,7 @@ function do_map_click(ptile, qtype, first_time_called)
         }
         /* Send the order to move using the orders system. */
         send_request(JSON.stringify(packet));
-        if (punit['movesleft'] > 0 && punit['owner'] == client.conn.playing.playerno) {
+        if (punit['movesleft'] > 0 && !delayed_goto_active && punit['owner'] == client.conn.playing.playerno) {
           unit_move_sound_play(punit);
         } else if (!has_movesleft_warning_been_shown) {
           has_movesleft_warning_been_shown = true;
@@ -2433,9 +2461,12 @@ function do_map_click(ptile, qtype, first_time_called)
       has to be requested first, and then do_map_click will be called again
       to issue the unit order based on the goto path. */
       if (current_focus.length > 0) {
+        console.log("touch device requesting goto path")
         request_goto_path(current_focus[0]['id'], ptile['x'], ptile['y']);
         if (first_time_called) {
+          console.log("inside first_time_called code")
           setTimeout(function(){
+            console.log("setting up virtual do_map_click")
             do_map_click(ptile, qtype, false);
           }, 250);
         }
@@ -2847,6 +2878,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         simpleStorage.set('mapgrid', draw_map_grid); 
       } else if (current_focus.length > 0) {
         activate_goto();
+        if (shift) delayed_goto_active = true;
       }
     break;
 
@@ -3102,6 +3134,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         current_focus = [];
         if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
         goto_active = false;
+        delayed_goto_active = false;
         $("#canvas_div").css("cursor", "default");
         goto_request_map = {};
         goto_turns_request_map = {};
@@ -3196,6 +3229,10 @@ function handle_context_menu_callback(key)
 
     case "goto":
       activate_goto();
+      break;
+    case "delaygoto":
+      activate_goto();
+      delayed_goto_active = true;
       break;
 
     case "explore":
@@ -3339,7 +3376,7 @@ function handle_context_menu_callback(key)
       came_from_context_menu = false; // remove UI-blocking state.
       break;
   }
-  if (key != "goto" && touch_device) {
+  if (key != "goto" && key != "delaygoto" && touch_device) {
     deactivate_goto(false);
   }
 }
@@ -3413,6 +3450,7 @@ function deactivate_goto(will_advance_unit_focus)
 {
   //console.log("deactivate_goto called!")
   goto_active = false;
+  delayed_goto_active = false;
   $("#canvas_div").css("cursor", "default");
   goto_request_map = {};
   goto_turns_request_map = {};
