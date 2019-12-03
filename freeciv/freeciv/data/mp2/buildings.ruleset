@@ -2005,9 +2005,8 @@ sabotage	= 0
 sound		= "w_womens_suffrage"
 sound_alt	= "w_generic"
 helptext	= _("\
-In the capacity of reducing Military Unhappiness, this Wonder counts as a\
- Police Station in every city in your nation. (It neutralizes the\
- unhappiness caused by two military units.) This Wonder has no other\
+In the capacity of reducing Military Unhappiness, this Wonder neutralizes the\
+ unhappiness caused by two military units. This Wonder has no other\
  effect. It does not confer bonuses against hostile diplomats like a Police\
  Station. It gives no bonus to cities which already have a Police Station.\
  This Wonder does not become obsolete.\
