@@ -2446,8 +2446,8 @@ Like most ancient sea units, when it initiates combat there will be 15 rounds\
  of combat and 15 total hitpoints lost between both units. This may or may not\
  result in the loss of one of the units. Triremes do not cause unhappiness.\
 "), _("
-NOTE: GO TO orders prevent accidental loss of the unit at sea, but are VERY\
- restrictive. You should override this by ordering moves to adjacent tiles.\
+NOTE: Triremes are VERY easy to lose if not kept near shore. Captains who aren't\
+ extremely careful to return to shore after one turn at sea are doomed!\
 ")
 
 [unit_longboat]
