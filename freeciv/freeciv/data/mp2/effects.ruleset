@@ -2399,6 +2399,15 @@ reqs	=
       "UnitClass", "AirProtect", "Local"
       "UnitType", "Stealth Fighter", "Local", FALSE
     }
+[effect_sam_battery_2]
+type    = "Defend_Bonus"
+value	= 100
+reqs	=
+    { "type", "name", "range"
+      "Building", "SAM Battery", "City"
+      "UnitClass", "AirPillage", "Local"
+      "UnitType", "Stealth Fighter", "Local", FALSE
+    }
 [effect_sam_battery_stealth_bomber]
 type    = "Defend_Bonus"
 value	= 25
