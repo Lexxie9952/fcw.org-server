@@ -132,9 +132,9 @@ function update_nation_screen()
     
     // Abbreviate for smaller screen
     if (redux_screen || tiny_screen)
-      embassy_status = embassy_status.replace(" embassy", ""); //e.g., "They have embassy" >> "They have"
+      embassy_status = embassy_status.replace(" embassy", "");  // e.g., "They have embassy" >> "They have"
 
-    if (embassy_status == "None") {
+    if (embassy_status == embassy_status_text[EMBASSY_NONE]) {
       if (contact_time>0) embassy_status = "<span title='Contact turns remaining' style='color:#c0c0c0'>("+contact_time+")</span>";
     } else embassy_status = "<span style='font-size:1%; color:rgba(0,0,0,0);'>z</span>" + embassy_status;  // sorting hack
 
@@ -475,8 +475,9 @@ function toggle_ai_clicked()
 **************************************************************************/
 function get_score_text(player)
 {
+  var embassy_status = get_embassy_text(player.playerno);
   // show score if EMBASSY or OBSERVER or PLAYER==YOURSELF
-  if ( (player['score'] > 0 && get_embassy_text(player.playerno) != "None")
+  if ( (player['score']>0 && embassy_status!=embassy_status_text[EMBASSY_NONE] && embassy_status!=embassy_status_text[EMBASSY_THEYHAVE])
        || client_is_observer()
        || (client.conn.playing != null && player['playerno'] == client.conn.playing['playerno'])) {
     return player['score'];

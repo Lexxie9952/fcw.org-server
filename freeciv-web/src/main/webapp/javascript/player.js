@@ -134,6 +134,9 @@ function player_number(player)
 **************************************************************************/
 function get_diplstate_text(state_id)
 {
+  // These exact strings are checked elsewhere in nation.js.  If altered, 
+  // just globalise an array diplstate_text[state_id] and use that instead
+  // of this function.
   if (DS_ARMISTICE == state_id) {
     return "Armistice";
   } else if (DS_WAR == state_id) {
@@ -155,8 +158,18 @@ function get_diplstate_text(state_id)
 }
 
 /**************************************************************************
-  ...
+  Returns a universally standard string representing embassy status 
+  between current player and foreign player_id player
 **************************************************************************/
+
+// These strings shouldn't be hard-coded because they are checked in different
+// parts of the code; changing in one place would create failures elsewhere.
+var embassy_status_text = ["None", "We have embassy", "They have embassy", "Both"];
+const EMBASSY_NONE    = 0;
+const EMBASSY_WEHAVE  = 1;
+const EMBASSY_THEYHAVE= 2;
+const EMBASSY_BOTH    = 3;
+
 function get_embassy_text(player_id)
 {
   const NO_INFO = "-";
@@ -176,15 +189,13 @@ function get_embassy_text(player_id)
   const embassy_from = them.real_embassy[my_id];
 
   if (embassy_with && embassy_from) {
-    return "Both";
+    return embassy_status_text[EMBASSY_BOTH];
   } else if (embassy_with) {
-    return "We have embassy";
+    return embassy_status_text[EMBASSY_WEHAVE];
   } else if (embassy_from) {
-    return "They have embassy";
+    return embassy_status_text[EMBASSY_THEYHAVE];
   } else {
-    return "None"   // logic in nation.js depends on this exact wording if there is no embassy:
-                    // so if introducing changes, where there is no embassy and any other 
-                    // type of word comes back, alter nation.js also. 
+    return embassy_status_text[EMBASSY_NONE];
   }
 
 }
