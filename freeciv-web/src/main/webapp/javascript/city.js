@@ -54,6 +54,9 @@ var FEELING_NATIONALITY = 3;  	/* after citizen nationality effects */
 var FEELING_MARTIAL = 4;	/* after units enforce martial order */
 var FEELING_FINAL = 5;		/* after wonders (final result) */
 
+var selected_specialist = -1; // which type of specialist to replace with clicking. -1=cycle 
+var show_specialist_pane = false;
+
 var MAX_LEN_WORKLIST = 64;
 
 var INCITE_IMPOSSIBLE_COST = (1000 * 1000 * 1000);
@@ -238,11 +241,49 @@ function show_city_dialog(pcity)
         });
         dialog_buttons = $.extend(dialog_buttons, {"Exit": close_city_dialog_trigger});
    }
-
-  $("#city_dialog").attr("title", decodeURIComponent(pcity['name'])
-                         + " (" + pcity['size'] + ")");
+  
+  // CREATE THE TITLE AND THE SPECIALIST CONTROL PANE IN THE TITLE (for large screens) --------------------------------------
+  var city_dialog_title = "<div><span style='float:left;margin-right:70px;'>"
+                        + decodeURIComponent(pcity['name']) + " (" + pcity['size'] + ")</span>";
+  if (!is_small_screen() && !observing && client.conn.playing.playerno == pcity['owner']) {
+    // Create specialist control pane in title bar.
+    var num_specialists = Object.keys(specialists).length;
+    if (ruleset_control['name'] == "Multiplayer-Evolution ruleset") {
+      // client has no way to check reqs for extended specialists
+      if ( !player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_ADAM_SMITH_NAME)) ) {
+        num_specialists = 3; // need A.Smith get access specialists 4-6
+      }
+    }
+    var specialist_control_html = "<div style='padding-top:4px;' id='SC_pane'>";
+    for (var u = 0; u < num_specialists; u++) {
+      var spec_type_name = specialists[u]['plural_name'];
+      var spec_gfx_key = "specialist." + specialists[u]['rule_name'] + "_0";
+      var border = (selected_specialist == u) ? specialist_border_select : specialist_border_normal; 
+      var htitle = (selected_specialist == u) ? ("Unselect "+spec_type_name)
+                                              : ("Assign "+spec_type_name);
+      sprite = get_specialist_image_sprite(spec_gfx_key);
+      specialist_control_html =  specialist_control_html +
+      "<span id='sp_t"+u+"' class='specialist_item' style='border-bottom:"+border+";margin-bottom:1px;cursor:"
+            + "pointer; background: transparent url(" + sprite['image-src'] + ");background-position:-" 
+            + sprite['tileset-x'] + "px -" + sprite['tileset-y'] + "px;  width: " + sprite['width'] 
+            + "px;height: " + sprite['height'] + "px;float:left; '" 
+            + " onclick='city_select_specialist(event, "+specialists[u]['id'] + ");'" 
+            +" title='"+htitle+"'></span>";
+    }
+    specialist_control_html += "</div>"
+    if (show_specialist_pane) {
+      city_dialog_title += specialist_control_html;
+    } else {
+      city_dialog_title += "<div id='scp_show' style='font-size:95%;cursor:copy;' title='Specialist Control Pane' "
+      +"onclick='toggle_specialist_control_pane();'"
+      +">&#x1F465;</div>";
+    }
+  } 
+  city_dialog_title += "</div>";
+  //----------------------------------------------------------------------------------------------------------------------
   $("#city_dialog").dialog({
-			bgiframe: true,
+      bgiframe: true,
+      titleIsHtml: true,
 			modal: false,
 			width: is_small_screen() ? "98%" : "80%",
                         height: is_small_screen() ? $(window).height() + 10 : $(window).height() - 80,
@@ -257,6 +298,8 @@ function show_city_dialog(pcity)
                        "restore" : "ui-icon-bullet"
                      }});
 
+  var dialogTitle = $('#city_dialog').closest('.ui-dialog').find('.ui-dialog-title');
+  dialogTitle.html(city_dialog_title);
   $("#city_dialog").dialog('widget').keydown(city_keyboard_listener);
 
   /* We can potential adjust the button pane for Next/Buy/Exit here
@@ -1468,31 +1511,77 @@ function get_city_tile_map_for_pos(x, y)
 }
 
 /**************************************************************************
-...
+  Toggles specialist control pane in city title bar.
+**************************************************************************/
+function toggle_specialist_control_pane()
+{
+  if (show_specialist_pane==false)  {
+    show_specialist_pane = !show_specialist_pane;
+    $("#scp_show").hide(); // hide indicator to open/show the pane since it's opening
+    show_city_dialog(active_city); // force update
+  } else {
+    selected_specialist = -1; // redundant safety for future use
+    show_specialist_pane = !show_specialist_pane;
+    $("#scp_show").show(); // show indicator to reopen/show the pane since it's opening
+    show_city_dialog(active_city);
+  }
+}
+/**************************************************************************
+ Select a certain type of specialist as the replacement type by clicking 
+  on the selector title panel.
+**************************************************************************/
+//
+var specialist_border_select = "2px solid #fff";
+var specialist_border_normal = "2px solid #000"; 
+//
+function city_select_specialist(event, to_specialist_id)
+{
+  const num_specialists = Object.keys(specialists).length;
+  var spec_type_name;
+
+  // Reset any selected/underlined specialist from previously 
+  for (i=0; i<num_specialists; i++) {
+    spec_type_name = specialists[i]['plural_name'];
+    $("#sp_t"+i).css({"border-bottom":specialist_border_normal});
+    $("#sp_t"+i).attr({"title":"Assign "+spec_type_name});
+  }
+  if (selected_specialist != to_specialist_id) {
+    selected_specialist = to_specialist_id;
+    spec_type_name = specialists[selected_specialist]['plural_name'];
+    $("#sp_t"+selected_specialist).css({"border-bottom":specialist_border_select});
+    $("#sp_t"+selected_specialist).attr({"title":"Unselect "+spec_type_name});
+  } else {
+    selected_specialist = -1; //clicking selected specialist will unselect it
+    toggle_specialist_control_pane();  // unselecting turns the pane off
+  }
+}
+/**************************************************************************
+ Change a specialist in a city to a different type by clicking on it.
 **************************************************************************/
 function city_change_specialist(event, city_id, from_specialist_id)
 {
   var city_message;
-
-  // Standard case: cycle through 3 specialists if not mp2 rules:
+  var to_specialist_id;
+  var num_specialists = Object.keys(specialists).length;
+  // Standard case: cycle through specialists if not mp2 rules:
   if (ruleset_control['name'] != "Multiplayer-Evolution ruleset") {
+    to_specialist_id = selected_specialist == -1 ? ((from_specialist_id + 1) % num_specialists) : selected_specialist;
     city_message = {"pid": packet_city_change_specialist,
     "city_id" : city_id,
     "from" : from_specialist_id,
-    "to" : (from_specialist_id + 1) % 3}; 
+    "to" : to_specialist_id}; 
   }
-  else  // mp2 has 6 specialists accessible under specific conditions
-  {     // unfortuantely this has to be hard-coded because the server lets you select "dead" specialists who don't meet reqs
-    var to_specialist_id = from_specialist_id + 1;
-    
+  else  // mp2 has specialists accessible under specific conditions
+  {     // unfortunately this has to be hard-coded because the server lets you select "dead" specialists who don't meet reqs
+    to_specialist_id = selected_specialist == -1 ? (from_specialist_id + 1) : selected_specialist;
     // The first 3 specialists are universally accessible. Specialists 4-6 are unlocked 
     // only if the player has the Adam Smith wonder. Cycle through 3 specialists UNLESS
     // the player has Adam Smith, otherwise cycle through 6. 
     if ( player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_ADAM_SMITH_NAME)) ) {
-      if (to_specialist_id == 6) to_specialist_id = 0;
+      if (to_specialist_id == num_specialists) to_specialist_id = 0;
       // Hitting CTRL, ALT, or COMMAND-key optionally bypasses the 3 extra specialists:
       if ((event.ctrlKey||event.altKey||event.metaKey) && to_specialist_id >=3) to_specialist_id = 0;
-    } else {
+    } else { // no Adam Smith, also just cycle first 3
       if (to_specialist_id == 3) to_specialist_id = 0;
     } 
 
