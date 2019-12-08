@@ -962,9 +962,9 @@ flags         = "FootSoldier", "Settlers", "Infra", "CanRoad", "CanFortress", "C
 roles         = "DefendOk", "DefendOkStartUnit", "Hut", "BarbarianBuild", "BarbarianSea"
 helptext      = _("\
 Legions are heavily armed well disciplined soldiers with excellent offensive strength.\
- They are famous and feared for their engineering abilities, and can make Forts and Fortresses\
- with the required technology. They can also make Roads and Bridges outside of domestic national\
- territory.\
+ They are famous and feared for their engineering abilities: with the required\
+ technology they can build Forts and Fortresses, make Roads inside them, and also build\
+ Roads outside national domestic territory.\
 ")
 
 [unit_pikemen]

@@ -418,7 +418,8 @@ action = "Convert Unit"
 actor_reqs    =
     { "type",     "name",       "range"
       "UnitType", "Riflemen",   "Local"
-      "Gov",      "Communism", "Player"
+      "Gov",      "Communism",  "Player"
+      "Tech",     "Communism",  "Player"
     }
 [actionenabler_communist_plows_to_rifles]
 action = "Convert Unit"
@@ -426,6 +427,7 @@ actor_reqs    =
     { "type",     "name",       "range"
       "UnitType", "Workers",   "Local"
       "Gov",      "Communism", "Player"
+      "Tech",     "Communism", "Player"
     }
 
 [actionenabler_sabotage_city]
@@ -1220,6 +1222,16 @@ actor_reqs    =
       "UnitFlag",      "Settlers",      "Local",   TRUE
       "UnitType",      "Legion",        "Local",   TRUE
       "UnitState",     "OnDomesticTile","Local",   FALSE
+    }
+; Don't force legions to road BEFORE making a fortress 
+; from fortress being "domestic national territory"
+[actionenabler_legion_road2]
+action        = "Road"
+actor_reqs    =
+    { "type",          "name",          "range",   "present"
+      "UnitFlag",      "Settlers",      "Local",   TRUE
+      "UnitType",      "Legion",        "Local",   TRUE
+      "Extra",         "Fort",          "Local",   TRUE
     }
 
 [actionenabler_base]
