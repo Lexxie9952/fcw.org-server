@@ -17,7 +17,10 @@
 
 ***********************************************************************/
 
-
+// Player income is calculated two ways. Sometimes the server gives it to us 
+// for free. When it doesn't, we need to calculate it in the client. This
+// keeps track of when our info for this is fresh from either source. 
+var income_needs_refresh = false;
 
 /* Freeciv Web Client.
    This file contains the handling-code for packets from the civserver.
@@ -455,6 +458,7 @@ function handle_web_city_info_addition(packet)
   } else if (active_tab == TAB_EMPIRE) {  
     empire_screen_updater.update();  // TEST:is this the right way to update empire screen?
   }
+  income_needs_refresh = true;
 }
 
 /* 99% complete
@@ -485,6 +489,7 @@ function handle_city_short_info(packet)
   } else if (active_tab == TAB_EMPIRE) {  
     empire_screen_updater.update();  // TEST:is this the right way to update empire screen?
   }
+  income_needs_refresh = true;
 }
 
 /**************************************************************************
@@ -530,7 +535,7 @@ function handle_player_info(packet)
   var active_tab = $("#tabs").tabs("option", "active"); 
   if (active_tab == TAB_EMPIRE) {  
     empire_screen_updater.update();  // TEST:is this the right way to update empire screen?
-  }  
+  }
 }
 
 /************************************************************************//**
@@ -547,6 +552,7 @@ function handle_web_player_info_addition(packet)
       client.conn.playing = players[packet['playerno']];
       update_game_status_panel();
       update_net_income();
+      income_needs_refresh = false;
     }
   }
   update_player_info_pregame();

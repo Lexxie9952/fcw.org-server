@@ -121,6 +121,7 @@ function update_game_status_panel() {
     var lux = client.conn.playing['luxury'];
     var sci = client.conn.playing['science'];
 
+    if (income_needs_refresh) city_force_income_update();
     var net_income = pplayer['expected_income'];
     if (pplayer['expected_income'] > 0) {
       net_income = "+" + pplayer['expected_income'];

@@ -173,6 +173,24 @@ function findLongestWord(str) {
 }
 
 /**************************************************************************
+ Server has web_player_info packet to update player income, but we don't
+  get updated after incoming city info packets. When we don't get the info
+  we can use this.
+**************************************************************************/
+function city_force_income_update()
+{
+  if (observing) return;
+
+  var income = 0;
+  for (cid in cities) {
+    if (cities[cid]['owner'] == client.conn.playing.playerno) {
+      income += cities[cid]['surplus'][O_GOLD];
+    }
+  }
+  client.conn.playing['expected_income'] = income;
+  income_needs_refresh = false;
+}
+/**************************************************************************
  Show the city dialog, by loading a Handlebars template, and filling it
  with data about the city.
 **************************************************************************/
