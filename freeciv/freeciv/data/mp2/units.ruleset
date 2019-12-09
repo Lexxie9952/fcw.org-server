@@ -631,7 +631,7 @@ uk_happy      = 0
 uk_shield     = 5
 uk_food       = 2
 uk_gold       = 2
-flags         = "Settlers", "Infra", "NonMil", "HasNoZOC", "Cant_Fortify", "Unique", "Well-Digger", "Expellable"
+flags         = "Settlers", "Infra", "NonMil", "HasNoZOC", "Cant_Fortify", "Unique", "Well-Digger", "Expellable", "Hut"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0
@@ -764,7 +764,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "Airbase", "Cant_Fortify", "Capturable", "Expellable"
+flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "Airbase", "Cant_Fortify", "Capturable", "Expellable", "Hut"
 ; No veteran levels (level name is never displayed)
 veteran_names =
   _("?vet_rank:green"),
@@ -855,7 +855,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "FootSoldier", "CantReachAir"
+flags         = "FootSoldier", "CantReachAir", "Hut"
 roles         = "DefendOk", "DefendOkStartUnit", "FirstBuild"
 helptext      = _("\
 This unit may be built from the start of the game. It is the weakest military unit,\
@@ -959,7 +959,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 flags         = "FootSoldier", "Settlers", "Infra", "CanRoad", "CanFortress", "Capturer", "CantReachAir"
-roles         = "DefendOk", "DefendOkStartUnit", "Hut", "BarbarianBuild", "BarbarianSea"
+roles         = "DefendOk", "DefendOkStartUnit", "BarbarianBuild", "BarbarianSea"
 helptext      = _("\
 Legions are heavily armed well disciplined soldiers with excellent offensive strength.\
  They are famous and feared for their engineering abilities: with the required\
@@ -1349,7 +1349,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 flags         = "Horse", "CantReachAir"
-roles         = "AttackFastStartUnit", "Hut", "Barbarian", "Hunter"
+roles         = "AttackFastStartUnit", "Barbarian", "Hunter"
 helptext      = _("\
 Horsemen are mounted warriors and an early shock-troop that can penetrate deep into\
  enemy territory.\
@@ -1381,7 +1381,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 flags         = "Horse", "Capturer", "CantReachAir"
-roles         = "AttackFastStartUnit", "Hut", "Hunter"
+roles         = "AttackFastStartUnit", "Hunter"
 helptext      = _("\
 Chariots are horse-pulled war wagons, stronger but more expensive than horsemen.\
 ")
