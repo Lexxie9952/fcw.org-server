@@ -1170,8 +1170,10 @@ function update_unit_order_commands()
     // Conversion handling
     if (ruleset_control['name']=="Multiplayer-Evolution ruleset" ) {
       if ( (ptype['name']=="Leader" || ptype['name']=="Queen")
-          || ((governments[client.conn.playing['government']]['name']=="Communism" && ((ptype['name']=="Workers") || ptype['name']=="Riflemen"))) ) {
-         
+          || ((governments[client.conn.playing['government']]['name']=="Communism" 
+               && ((ptype['name']=="Workers") || ptype['name']=="Riflemen"))
+               && player_invention_state(client.conn.playing, tech_id_by_name('Communism')) == TECH_KNOWN) ) {
+
           $("#order_convert").show();
           unit_actions["convert"] = {name: "Convert (shift-O)"};
       }
@@ -1216,7 +1218,7 @@ function update_unit_order_commands()
       }
       
       // Roads:
-      if (!tile_has_extra(ptile, EXTRA_ROAD)) { // TO DO, check if ptile is non-domestic
+      if (!tile_has_extra(ptile, EXTRA_ROAD)) { // TO DO, check if ptile is non-domestic (if it has no fort/ress)
         if (tile_has_extra(ptile, EXTRA_RIVER) && player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) == TECH_UNKNOWN)
           $("#order_road").hide(); // can't build road on river if bridge-building not known
         else {

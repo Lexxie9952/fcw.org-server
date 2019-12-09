@@ -783,7 +783,7 @@ Masonry lets Workers build Forts. Construction lets them build Fortresses and\
  Oil Wells. Engineering lets them build Canals and Naval Bases. Radio lets them\
  build Airbases and Buoys, which Settlers cannot. Workers must be on a ship to build Buoys.\
 "), _("\
-Under Communism, Workers can be conscripted into Riflemen via the\
+Communism tech allows Communist governments to conscript Workers into Riflemen via the\
   Convert order. And vice versa.\
 ")
 
@@ -963,8 +963,8 @@ roles         = "DefendOk", "DefendOkStartUnit", "Hut", "BarbarianBuild", "Barba
 helptext      = _("\
 Legions are heavily armed well disciplined soldiers with excellent offensive strength.\
  They are famous and feared for their engineering abilities: with the required\
- technology they can build Forts and Fortresses, make Roads inside them, and also build\
- Roads outside national domestic territory.\
+ technology they can build Forts and Fortresses. They can build Roads outside domestic\
+ national territory and inside Forts and Fortresses.\
 ")
 
 [unit_pikemen]
@@ -1189,11 +1189,10 @@ flags         = "FootSoldier", "Capturer", "CantReachAir"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
 Riflemen are World War-era infantry. They are good at defending cities and\
- strategic Fortresses. From these safe locations they often are used for their\ 
- decent attack capability.\ 
+ strategic Fortresses. They also have good attack capability.\ 
 "), _("\
-Under Communism, Riflemen can be de-commissioned into Workers via the\
-  Convert order. And vice versa.\
+Communism tech allows Communist governments to de-commission Riflemen into\
+ Workers via the Convert order. And vice versa.\
 ")
 
 [unit_marines]
