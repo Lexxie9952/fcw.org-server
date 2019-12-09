@@ -1770,7 +1770,9 @@ helptext      = _("\
 Anti-Aircraft Artillery (AAA) are light-weight guns which can attack almost anything from anywhere.\
  They are primarily used to give ground units a better chance of defending against aircraft.\
  They are also capable of pro-actively attacking nearby aircraft. Against Air units they have 4x\
- bonus. (AAA cannot attack Submarines, Missiles, or Jet Bombers.)\
+ bonus. (AAA cannot attack Submarines, Missiles, or Jet Bombers.) AAA are often employed by\
+ Marines forces and share the same bonuses: They can be transported by anything that can carry Marines,\
+ can attack from or to non-native tiles, and do not lose all moves when unloading.\ 
 ")
 
 [unit_howitzer]
