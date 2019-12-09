@@ -631,14 +631,14 @@ uk_happy      = 0
 uk_shield     = 5
 uk_food       = 2
 uk_gold       = 2
-flags         = "Settlers", "Infra", "NonMil", "HasNoZOC", "Cant_Fortify", "Unique", "Well-Digger", "Expellable", "Hut"
+flags         = "Settlers", "Infra", "NonMil", "HasNoZOC", "Cant_Fortify", "Unique", "Well-Digger", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
-roles         = "AttackFastStartUnit"       ;this role taken over for well-digger
+roles         = "AttackFastStartUnit"     ;this role taken over for well-digger
 helptext      = _("\
 The only purpose of this unit is to fix unlucky starts with no nearby water.\
  You can only make one. It has high upkeep.\
@@ -764,7 +764,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "Airbase", "Cant_Fortify", "Capturable", "Expellable", "Hut"
+flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "Airbase", "Cant_Fortify", "Capturable", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names =
   _("?vet_rank:green"),
@@ -855,8 +855,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "FootSoldier", "CantReachAir", "Hut"
-roles         = "DefendOk", "DefendOkStartUnit", "FirstBuild"
+flags         = "FootSoldier", "CantReachAir"
+roles         = "DefendOk", "DefendOkStartUnit", "FirstBuild", "Hut"
 helptext      = _("\
 This unit may be built from the start of the game. It is the weakest military unit,\
  but is also cheap.\
@@ -888,7 +888,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 flags         = "FootSoldier", "CantReachAir"
-roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
+roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild", "HutTech"
 helptext      = _("\
 The Phalanx is armored infantry, suitable for defending your cities. It offers good value\
  for defending.\
@@ -1030,7 +1030,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 flags         = "FootSoldier", "Capturer", "CantReachAir"
-roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild", "HutTech",
+roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild",
                 "BarbarianTech", "BarbarianBuildTech", "BarbarianSeaTech"
 helptext      = _("\
 Musketeers are infantry equipped with early\
@@ -1483,7 +1483,7 @@ bonuses       =
      "FootSoldier", "DefenseMultiplier", 1
    }
 flags         = "Horse", "Capturer", "CantReachAir"
-roles         = "AttackFastStartUnit", "HutTech", "BarbarianTech",
+roles         = "AttackFastStartUnit", "BarbarianTech",
                 "BarbarianBuildTech", "BarbarianSeaTech", "Hunter"
 helptext      = _("\
 Knights are heavily armored mounted warriors. They defend at D:3 against mounted units.\
