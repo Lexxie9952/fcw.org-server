@@ -960,7 +960,7 @@ type    = "Martial_Law_Max"
 value   = 2
 reqs	=
     { "type",       "name",      "range"
-      "Gov", "Communism", "Player"
+      "Gov", "Fundamentalism", "Player"
     }
 
 [effect_rapture_grow_0]
