@@ -12,13 +12,21 @@
                     <th></th>
                     <th></th>
                     <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
                 </tr>
                 <tr>
                     <th style="font-size:90%">Defend&nbsp;</th>
+                    <td align="center"><input class="tiny_button" type="button" value="x1.25" onClick="wc_D(1.25);"</td>
                     <td align="center"><input class="tiny_button" type="button" value="x1.33" onClick="wc_D(1.33);"</td>
                     <td align="center"><input class="tiny_button" type="button" value="x1.5&nbsp;" onClick="wc_D(1.50);"</td>
                     <td align="center"><input class="tiny_button" type="button" value="x1.67" onClick="wc_D(1.67);"</td>
+                    <td align="center"><input class="tiny_button" type="button" value="x1.75" onClick="wc_D(1.75);"</td>
                     <td align="center"><input class="tiny_button" type="button" value="&nbsp;&nbsp;x2&nbsp;&nbsp;" onClick="wc_D(2.00);"</td>
+                    <td align="center"><input class="tiny_button" type="button" value="x2.1&nbsp;" onClick="wc_D(2.1);"</td>
+                    <td align="center"><input class="tiny_button" type="button" value="x2.2&nbsp;" onClick="wc_D(2.2);"</td>
                     <td align="center"><input class="tiny_button" type="button" value="&nbsp;&nbsp;x3&nbsp;&nbsp;" onClick="wc_D(3.00);"</td>
                 </tr>
             </tbody>

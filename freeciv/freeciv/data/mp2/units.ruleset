@@ -1839,7 +1839,7 @@ Balloons are useful for gathering intelligence around an upcoming battle area. T
  great vision and are unreachable by units prior to Riflemen and Ironclads. They can remain\
  in the air for one extra turn before needing to land in a City, Fortress, or Airbase. They\
  may also land to refuel on larger cargo ships with a carry capacity of 4 or higher. The\
- Balloon is is unreachable by more primitive land and sea units, but does not block units\
+ Balloon is unreachable by more primitive land and sea units, but does not block units\
  under it from being attacked. Balloons cannot fly over mountains. \
 "), _("
 NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At your own risk,\
@@ -2060,7 +2060,7 @@ NOTE: GO TO orders prevent accidental loss of the unit from lack of fuel. At you
  this restriction can by overridden by ordering moves to adjacent tiles.\
 ")
 
-[unit_ultra_heavy_bomber]
+[unit_strategic_bomber]
 name          = _("Strategic Bomber")
 class         = "Air"
 tech_req      = "Rocketry"
