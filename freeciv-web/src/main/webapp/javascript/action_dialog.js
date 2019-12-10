@@ -515,7 +515,7 @@ function popup_action_selection(actor_unit, action_probabilities,
 
   $(id).dialog({
       bgiframe: true,
-      modal: true,
+     // modal: true,   // non-modal: allows player to see and witness large multi-unit battle with many dialogs
       dialogClass: "act_sel_dialog",
       width: "390",
       buttons: buttons });
