@@ -41,6 +41,13 @@ function show_tax_rates_dialog()
 {
   var id = "#rates_dialog";
   $(id).remove();
+  
+  // Having an active_city while adjusting rates degrades events/updates/refreshes
+  if (active_city) {
+    close_city_dialog_trigger();    
+    active_city = null;
+  }
+
   $("<div id='rates_dialog'></div>").appendTo("div#game_page");
 
   var dhtml = "<h2>Select tax, luxury and science rates</h2>"
@@ -67,6 +74,7 @@ function show_tax_rates_dialog()
   $(id).dialog({
 			bgiframe: true,
       modal: true,
+      dialogClass: 'rate_slider',
       width: is_small_screen() ? "90%" : "40%",
 			  buttons: {
 				"Done" : function() {
@@ -75,6 +83,8 @@ function show_tax_rates_dialog()
 				}
 			  }
   });
+
+  //$(".rate_slider").css("z-index", 201);
 
   update_rates_dialog();
   // Remove [X] to close, because it bypasses clean-up functions  
