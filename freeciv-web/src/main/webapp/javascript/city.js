@@ -1338,6 +1338,7 @@ function city_sell_improvement_in(city_id, improvement_id)
                     "build_id": improvement_id};
         send_request(JSON.stringify(packet));
         active_superpanel_cityid = city_id;
+        play_sound(soundset["e_imp_sold"]);
     });
 }
 /**************************************************************************
