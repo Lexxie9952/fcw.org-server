@@ -551,10 +551,19 @@ static void hard_code_actions(void)
       action_new(ACTION_SPY_TARGETED_SABOTAGE_CITY, ATK_CITY, ASTK_BUILDING,
                  TRUE, ACT_TGT_COMPL_MANDATORY, FALSE, TRUE,
                  0, 1, TRUE);
+  actions[ACTION_SPY_SABOTAGE_CITY_PRODUCTION] =
+      action_new(ACTION_SPY_SABOTAGE_CITY_PRODUCTION, ATK_CITY, ASTK_NONE,
+                 TRUE, ACT_TGT_COMPL_SIMPLE, FALSE, TRUE,
+                 0, 1, TRUE);
   actions[ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC] =
       action_new(ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC,
                  ATK_CITY, ASTK_BUILDING,
                  TRUE, ACT_TGT_COMPL_MANDATORY, FALSE, TRUE,
+                 0, 1, FALSE);
+  actions[ACTION_SPY_SABOTAGE_CITY_PRODUCTION_ESC] =
+      action_new(ACTION_SPY_SABOTAGE_CITY_PRODUCTION_ESC,
+                 ATK_CITY, ASTK_NONE,
+                 TRUE, ACT_TGT_COMPL_SIMPLE, FALSE, TRUE,
                  0, 1, FALSE);
   actions[ACTION_SPY_INCITE_CITY] =
       action_new(ACTION_SPY_INCITE_CITY, ATK_CITY, ASTK_NONE,
@@ -746,6 +755,10 @@ static void hard_code_actions(void)
   actions[ACTION_STRIKE_BUILDING] =
       action_new(ACTION_STRIKE_BUILDING, ATK_CITY, ASTK_BUILDING,
                  TRUE, ACT_TGT_COMPL_MANDATORY, FALSE, FALSE,
+                 1, 1, FALSE);
+  actions[ACTION_STRIKE_PRODUCTION] =
+      action_new(ACTION_STRIKE_PRODUCTION, ATK_CITY, ASTK_NONE,
+                 TRUE, ACT_TGT_COMPL_SIMPLE, FALSE, FALSE,
                  1, 1, FALSE);
   actions[ACTION_CONQUER_CITY] =
       action_new(ACTION_CONQUER_CITY, ATK_CITY, ASTK_NONE,
@@ -1110,6 +1123,8 @@ enum action_battle_kind action_get_battle_kind(const struct action *pact)
   case ACTION_SPY_SABOTAGE_CITY_ESC:
   case ACTION_SPY_TARGETED_SABOTAGE_CITY:
   case ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC:
+  case ACTION_SPY_SABOTAGE_CITY_PRODUCTION:
+  case ACTION_SPY_SABOTAGE_CITY_PRODUCTION_ESC:
   case ACTION_SPY_STEAL_TECH:
   case ACTION_SPY_STEAL_TECH_ESC:
   case ACTION_SPY_TARGETED_STEAL_TECH:
@@ -2077,6 +2092,8 @@ action_actor_utype_hard_reqs_ok(const action_id wanted_action,
   case ACTION_SPY_SABOTAGE_CITY_ESC:
   case ACTION_SPY_TARGETED_SABOTAGE_CITY:
   case ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC:
+  case ACTION_SPY_SABOTAGE_CITY_PRODUCTION:
+  case ACTION_SPY_SABOTAGE_CITY_PRODUCTION_ESC:
   case ACTION_SPY_STEAL_TECH:
   case ACTION_SPY_STEAL_TECH_ESC:
   case ACTION_SPY_TARGETED_STEAL_TECH:
@@ -2106,6 +2123,7 @@ action_actor_utype_hard_reqs_ok(const action_id wanted_action,
   case ACTION_PARADROP:
   case ACTION_AIRLIFT:
   case ACTION_STRIKE_BUILDING:
+  case ACTION_STRIKE_PRODUCTION:
   case ACTION_CONQUER_CITY:
   case ACTION_CONQUER_CITY2:
   case ACTION_HEAL_UNIT:
@@ -2260,6 +2278,8 @@ action_hard_reqs_actor(const action_id wanted_action,
   case ACTION_SPY_SABOTAGE_CITY_ESC:
   case ACTION_SPY_TARGETED_SABOTAGE_CITY:
   case ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC:
+  case ACTION_SPY_SABOTAGE_CITY_PRODUCTION:
+  case ACTION_SPY_SABOTAGE_CITY_PRODUCTION_ESC:
   case ACTION_SPY_STEAL_TECH:
   case ACTION_SPY_STEAL_TECH_ESC:
   case ACTION_SPY_TARGETED_STEAL_TECH:
@@ -2290,6 +2310,7 @@ action_hard_reqs_actor(const action_id wanted_action,
   case ACTION_ATTACK:
   case ACTION_SUICIDE_ATTACK:
   case ACTION_STRIKE_BUILDING:
+  case ACTION_STRIKE_PRODUCTION:
   case ACTION_CONQUER_CITY:
   case ACTION_CONQUER_CITY2:
   case ACTION_HEAL_UNIT:
@@ -3181,6 +3202,8 @@ case ACTION_CLEAN_POLLUTION:
   case ACTION_SPY_SABOTAGE_CITY_ESC:
   case ACTION_SPY_TARGETED_SABOTAGE_CITY:
   case ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC:
+  case ACTION_SPY_SABOTAGE_CITY_PRODUCTION:
+  case ACTION_SPY_SABOTAGE_CITY_PRODUCTION_ESC:
   case ACTION_SPY_STEAL_TECH:
   case ACTION_SPY_STEAL_TECH_ESC:
   case ACTION_SPY_INCITE_CITY:
@@ -3198,6 +3221,7 @@ case ACTION_CLEAN_POLLUTION:
   case ACTION_DISBAND_UNIT:
   case ACTION_CONVERT:
   case ACTION_STRIKE_BUILDING:
+  case ACTION_STRIKE_PRODUCTION:
     /* No known hard coded requirements. */
     break;
   case ACTION_COUNT:
@@ -4047,6 +4071,12 @@ action_prob(const action_id wanted_action,
   case ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC:
     /* TODO */
     break;
+  case ACTION_SPY_SABOTAGE_CITY_PRODUCTION:
+    /* TODO */
+    break;
+  case ACTION_SPY_SABOTAGE_CITY_PRODUCTION_ESC:
+    /* TODO */
+    break;
   case ACTION_SPY_INCITE_CITY:
     /* TODO */
     break;
@@ -4177,6 +4207,9 @@ action_prob(const action_id wanted_action,
     }
     break;
   case ACTION_STRIKE_BUILDING:
+    /* TODO */
+    break;
+  case ACTION_STRIKE_PRODUCTION:
     /* TODO */
     break;
   case ACTION_CONQUER_CITY:
@@ -5379,8 +5412,12 @@ const char *action_ui_name_ruleset_var_name(int act)
     return "ui_name_sabotage_city_escape";
   case ACTION_SPY_TARGETED_SABOTAGE_CITY:
     return "ui_name_targeted_sabotage_city";
+  case ACTION_SPY_SABOTAGE_CITY_PRODUCTION:
+    return "ui_name_sabotage_city_production";
   case ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC:
     return "ui_name_targeted_sabotage_city_escape";
+  case ACTION_SPY_SABOTAGE_CITY_PRODUCTION_ESC:
+    return "ui_name_sabotage_city_production_escape";
   case ACTION_SPY_INCITE_CITY:
     return "ui_name_incite_city";
   case ACTION_SPY_INCITE_CITY_ESC:
@@ -5455,6 +5492,8 @@ const char *action_ui_name_ruleset_var_name(int act)
     return "ui_name_suicide_attack";
   case ACTION_STRIKE_BUILDING:
     return "ui_name_surgical_strike_building";
+  case ACTION_STRIKE_PRODUCTION:
+    return "ui_name_surgical_strike_production";
   case ACTION_CONQUER_CITY:
     return "ui_name_conquer_city";
   case ACTION_CONQUER_CITY2:
@@ -5537,9 +5576,15 @@ const char *action_ui_name_default(int act)
   case ACTION_SPY_TARGETED_SABOTAGE_CITY:
     /* TRANS: Industria_l Sabotage (3% chance of success). */
     return N_("Industria%sl Sabotage%s");
+  case ACTION_SPY_SABOTAGE_CITY_PRODUCTION:
+    /* TRANS: Industria_l Sabotage Production (3% chance of success). */
+    return N_("Industria%sl Sabotage Production%s");
   case ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC:
     /* TRANS: Industria_l Sabotage and Escape (3% chance of success). */
     return N_("Industria%sl Sabotage and Escape%s");
+  case ACTION_SPY_SABOTAGE_CITY_PRODUCTION_ESC:
+    /* TRANS: Industria_l Sabotage Production and Escape (3% chance of success). */
+    return N_("Industria%sl Sabotage Production and Escape%s");
   case ACTION_SPY_INCITE_CITY:
     /* TRANS: Incite a Re_volt (3% chance of success). */
     return N_("Incite a Re%svolt%s");
@@ -5652,6 +5697,9 @@ const char *action_ui_name_default(int act)
   case ACTION_STRIKE_BUILDING:
     /* TRANS: Surgical Str_ike Building (100% chance of success). */
     return N_("Surgical Str%sike Building%s");
+  case ACTION_STRIKE_PRODUCTION:
+    /* TRANS: Surgical Str_ike Production (100% chance of success). */
+    return N_("Surgical Str%sike Production%s");
   case ACTION_CONQUER_CITY:
     /* TRANS: _Conquer City (100% chance of success). */
     return N_("%sConquer City%s");
