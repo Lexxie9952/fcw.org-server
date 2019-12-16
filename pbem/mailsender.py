@@ -65,8 +65,8 @@ class MailSender():
         smtp.starttls()
         smtp.ehlo()
         smtp.login(self.smtp_login, self.smtp_password);
-        smtp.sendmail(from_, to, mime_string)
-        smtp.quit()
+      smtp.sendmail(from_, to, mime_string)
+      smtp.quit()
     else:
       print("Test: this message would be sent: " + mime_string);
 
