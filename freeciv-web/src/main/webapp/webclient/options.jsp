@@ -129,7 +129,17 @@
           <input type='checkbox' name='show_warcalc' id='show_warcalc'><b><font color="#0000c0">Show Warcalc Odds</font></b> 
       </div>
     </td>
-  </tr>
+</tr>
+
+<tr>
+  <td>
+    <div title="Show compass in upper right corner of map" class="main_menu_buttons">
+        <input type='checkbox' name='show_compass' id='show_compass'><b><font color="#000000">Show Map Compass</font></b> 
+    </div>
+  </td>
+  <td>
+  </td>
+</tr>
 
 <tr>
   <td>

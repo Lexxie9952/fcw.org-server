@@ -219,6 +219,11 @@ function civclient_init()
   if (show_warcalc == null) 
     show_warcalc = false;  // Default case */
 
+  show_compass = simpleStorage.get('showCompass');
+  if (show_compass == null || show_compass == true) {
+    show_compass = true;  // Default case
+    $("#compass").show();
+  } else $("#compass").show();
   var tmp = simpleStorage.get('chatDlg');
   if (tmp != null)  {// don't overwrite object keys if not yet stored
     restore_chatbox_vals = tmp;

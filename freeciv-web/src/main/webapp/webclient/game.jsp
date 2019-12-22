@@ -20,8 +20,9 @@
 
 				<div id="turn_done_button_div">
             			  <button id="turn_done_button" type="button" 
-					  class="button" title="Ends your turn. (Shift+Enter)">Turn Done</button>
-                		</div>
+						class="button" title="Ends your turn. (Shift+Enter)">Turn Done</button>
+						<img id="compass" onClick="compass_click();" style="position:absolute; float:right; background-color:transparent;margin-top:-3px;margin-left:-100px; margin-right:3px;margin-top:40px" src="/images/iso-compass.png">
+        </div>
 			</ul>
 			
 			<div id="tabs-map" tabindex="-1">

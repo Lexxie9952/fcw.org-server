@@ -515,6 +515,14 @@ function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y)
 }
 
 /**************************************************************************
+  Hide compass temporarily if clicked (convenience measure)
+**************************************************************************/
+function compass_click()
+{
+  $("#compass").hide();
+}
+
+/**************************************************************************
   ...
 **************************************************************************/
 function set_city_mapview_active()
@@ -540,6 +548,8 @@ function set_city_mapview_active()
 **************************************************************************/
 function set_default_mapview_inactive()
 {
+  $("#compass").hide();
+
   if (overview_active) $("#game_overview_panel").parent().hide();
   if (unitpanel_active) $("#game_unit_panel").parent().hide();
   if (chatbox_active) {
@@ -559,6 +569,9 @@ function set_default_mapview_active()
   //update_map_canvas_check(); // immediately refresh stale map and restart the interval to redraw map
 
   $("#warcalc_tab").hide();  // hide Odds tab
+
+  if (show_compass) $("#compass").show();
+  else $("#compass").hide();
 
   if (renderer == RENDERER_2DCANVAS) {
     mapview_canvas_ctx = mapview_canvas.getContext("2d");

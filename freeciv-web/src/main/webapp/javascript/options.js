@@ -47,7 +47,8 @@ var show_order_option = true; // corresponds to the checkbox
 var show_empire_tab = false;
 var show_warcalc = false;
 var show_unit_movepct = false; // show move-point bar on map units
-var hp_bar_offset = 0;         // if mp bar is shown, offset to bump up hp bar
+var show_compass = true; // show compass on map
+var hp_bar_offset = 0;    // if mp bar is shown, offset to bump up hp bar
 
 var save_options_on_exit = true;
 var fullscreen_mode = false;
@@ -282,7 +283,14 @@ function init_options_dialog()
       //else $("#ui-id-8").hide();
       //simpleStorage.set('showCalc', show_warcalc); 
     });
-
+    // Show Map Compass 
+    $('#show_compass').prop('checked', show_compass);
+    $('#show_compass').change(function() {
+      show_compass = this.checked;
+      simpleStorage.set('showCompass', show_compass);
+      if (show_compass) $("#compass").show();
+      else $("#compass").hide();
+    });
    // Graphic Theme
    graphic_theme_path = simpleStorage.get('grtheme');
    if (!graphic_theme_path) graphic_theme_path = "themes/greek/";

@@ -1969,7 +1969,6 @@ reqs	=
       "Building", "Palace", "City"
       "OutputType", "Trade", "Local"
     }
-
 [effect_palace_1]
 type    = "Output_Waste_Pct"
 value	= 60
@@ -1978,7 +1977,6 @@ reqs	=
       "Building", "Palace", "City"
       "OutputType", "shield", "local"
     }
-
 [effect_palace_2]
 type    = "Spy_Resistant"
 value	= 50
@@ -1986,7 +1984,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "Palace", "City"
     }
-
 [effect_palace_2_sabotage]
 type    = "Building_Saboteur_Resistant"
 value	= 50
@@ -1994,7 +1991,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "Palace", "City"
     }
-
 [effect_palace_3]
 type    = "Capital_City"
 value	= 1
@@ -2002,7 +1998,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "Palace", "City"
     }
-
 [effect_palace_gov_center]
 type    = "Gov_Center"
 value	= 1
@@ -2010,7 +2005,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "Palace", "City"
     }
-
 [effect_palace_5]
 type = "Output_Bonus"
 value  = 75
@@ -2039,7 +2033,6 @@ reqs =
       "Building", "Palace", "City"
       "OutputType", "Shield", "Local"
     }
-
 [effect_palace_7]
 type    = "Make_Happy"
 value	= 1
@@ -2047,7 +2040,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "Palace", "City"
     }
-
 [effect_palace_fundamentalism]
 type    = "Output_Bonus"
 value   = 50
@@ -2067,7 +2059,6 @@ reqs    =
       "OutputType", "Trade", "Local", TRUE
       "Building", "Palace", "City", FALSE
     }
-
 [effect_ecclesiastical_palace_1]
 type    = "Output_Waste_Pct"
 value   = 60
@@ -2077,7 +2068,6 @@ reqs    =
       "OutputType", "Shield", "local", TRUE
       "Building", "Palace", "City", FALSE
     }
-
 [effect_ecclesiastical_palace_2]
 type    = "Spy_Resistant"
 value   = 50
@@ -2086,7 +2076,6 @@ reqs    =
       "Building", "Ecclesiastical Palace", "City", TRUE
       "Building", "Palace", "City", FALSE
     }
-
 [effect_ecclestiastical_palace_3]
 type    = "Make_Happy"
 value	= 1
@@ -2094,7 +2083,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "Ecclesiastical Palace", "City"
     }
-
 [effect_ecclesiastical_palace_4]
 type    = "Veteran_Build"
 value	= 1
@@ -2103,7 +2091,6 @@ reqs	=
       "Building", "Ecclesiastical Palace", "City", TRUE
       "UnitType", "Fanatics", "Local", TRUE
     }
-
 [effect_ecclesiastical_palace_gov_center]
 type    = "Gov_Center"
 value	= 1
@@ -2112,7 +2099,6 @@ reqs	=
       "Building", "Ecclesiastical Palace", "City", TRUE
       "Building", "Palace", "City", FALSE
     }
-
 [effect_ecclesiastical_palace_despotism]
 type    = "Output_Bonus"
 value   = 75
@@ -2123,7 +2109,6 @@ reqs    =
       "OutputType", "Gold", "Local", TRUE, FALSE
 ;      "Building", "Palace", "City", FALSE, FALSE
     }
-
 [effect_ecclesiastical_palace_monarchy]
 type    = "Output_Bonus"
 value   = 50
@@ -2140,6 +2125,16 @@ value   = 50
 reqs    =
     { "type", "name", "range", "present", "quiet"
       "Gov", "Fundamentalism", "Player", TRUE, TRUE
+      "Building", "Ecclesiastical Palace", "City", TRUE, FALSE
+      "OutputType", "Gold", "Local", TRUE, FALSE
+ ;     "Building", "Palace", "City", FALSE, FALSE
+    }
+[effect_ecclesiastical_palace_communism]
+type    = "Output_Bonus"
+value   = 25
+reqs    =
+    { "type", "name", "range", "present", "quiet"
+      "Gov", "Communism", "Player", TRUE, TRUE
       "Building", "Ecclesiastical Palace", "City", TRUE, FALSE
       "OutputType", "Gold", "Local", TRUE, FALSE
  ;     "Building", "Palace", "City", FALSE, FALSE
