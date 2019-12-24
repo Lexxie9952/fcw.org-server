@@ -1,2 +1,21 @@
 *	text=auto eol=lf
-
+*.png binary
+*.jpg binary
+*.blend binary
+*.mp3 binary
+*.ogg binary
+*.ttf binary
+*.glb binary
+*.xcf binary
+*.psd binary
+*.gif binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+*.icns binary
+*.blend1 binary
+*.JPG binary
+*.bz2 binary
+*.pdf binary
+*.ico binary
+*.eot binary
