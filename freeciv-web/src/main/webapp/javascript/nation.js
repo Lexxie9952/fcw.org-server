@@ -155,18 +155,8 @@ function update_nation_screen()
     nation_list_html += "</td>"
 
     nation_list_html += "<td class='nation_team'>" + (pplayer['team'] + 1) + "</td>";
-    var pstate = " ";
-    if (pplayer['phase_done'] && !pplayer['flags'].isSet(PLRF_AI)) {
-      pstate = "Done";
-    } else if (!pplayer['flags'].isSet(PLRF_AI)
-               && pplayer['nturns_idle'] > 1) {
-      if (tiny_screen || redux_screen) pstate += "idle  " + pplayer['nturns_idle'];
-      else pstate += "Idle for " + pplayer['nturns_idle'] + " turns";
-    } else if (!pplayer['phase_done']
-               && !pplayer['flags'].isSet(PLRF_AI)) {
-      pstate = "Moving";
-    }
-    nation_list_html += "<td style='text-align:right;' id='player_state_" + player_id + "'>" + pstate +"&nbsp;</td>";
+
+    nation_list_html += "<td style='text-align:right;' id='player_state_" + player_id + "'>" + get_turn_phase_state(pplayer) +"&nbsp;</td>";
     nation_list_html += "</tr>";
 
     if (!pplayer['flags'].isSet(PLRF_AI) && pplayer['is_alive'] && pplayer['nturns_idle'] <= 4) no_humans++;
@@ -237,7 +227,7 @@ function update_nation_screen()
     for (var player_id in players) {
       var pplayer = players[player_id];
       if (online_players[pplayer['username'].toLowerCase()]) {
-        $("#player_state_" + player_id).html("<span style='color: #00EE00;'><b>Online</b></span>");
+        $("#player_state_" + player_id).html("<span style='color: #00EE00;'><b>" + get_turn_phase_state(pplayer) + "</b>🌐</span>");
       }
     }
     $("#nation_table").trigger('update');
@@ -263,6 +253,25 @@ function update_nation_screen()
   }
 }
 
+/**************************************************************************
+ ...
+**************************************************************************/
+function get_turn_phase_state(pplayer)
+{
+    var pstate = " ";
+    if (pplayer['phase_done'] && !pplayer['flags'].isSet(PLRF_AI)) {
+      pstate = "Done";
+    } else if (!pplayer['flags'].isSet(PLRF_AI)
+               && pplayer['nturns_idle'] > 1) {
+      if (tiny_screen || redux_screen) pstate += "idle  " + pplayer['nturns_idle'];
+      else pstate += "Idle for " + pplayer['nturns_idle'] + " turns";
+    } else if (!pplayer['phase_done']
+               && !pplayer['flags'].isSet(PLRF_AI)) {
+      pstate = "Moving";
+    }
+
+    return pstate;
+}
 
 /**************************************************************************
  ...
