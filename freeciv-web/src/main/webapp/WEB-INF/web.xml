@@ -71,6 +71,17 @@
 		<servlet-name>GameList</servlet-name>
 		<url-pattern>/game/list</url-pattern>
 	</servlet-mapping>
+
+	<!-- /game/list/json -->
+	<servlet>
+		<servlet-name>GameListJson</servlet-name>
+		<servlet-class>org.freeciv.servlet.GameListJson</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>GameListJson</servlet-name>
+		<url-pattern>/game/list/json</url-pattern>
+	</servlet-mapping>
 	
 	<!-- /game/play-by-email/top -->
 	<servlet>
