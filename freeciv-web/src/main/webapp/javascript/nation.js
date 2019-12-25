@@ -227,7 +227,7 @@ function update_nation_screen()
     for (var player_id in players) {
       var pplayer = players[player_id];
       if (online_players[pplayer['username'].toLowerCase()]) {
-        $("#player_state_" + player_id).html("<span style='color: #00EE00;'><b>" + get_turn_phase_state(pplayer, tiny_screen, redux_screen) + "</b>🌐</span>");
+        $("#player_state_" + player_id).html("<span style='color: #00EE00;'><b>" + get_turn_phase_state(pplayer, tiny_screen, redux_screen) + "</b>&#x1f310;</span>");
       }
     }
     $("#nation_table").trigger('update');
