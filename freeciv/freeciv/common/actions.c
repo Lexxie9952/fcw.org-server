@@ -877,6 +877,30 @@ static void hard_code_actions(void)
                  ATK_UNITS, ASTK_NONE,
                  TRUE, ACT_TGT_COMPL_SIMPLE, FALSE, TRUE,
                  1, 1, FALSE);
+  actions[ACTION_USER_ACTION1] =
+      action_new(ACTION_USER_ACTION1,
+                 /* Overwritten by the ruleset */
+                 ATK_CITY,
+                 ASTK_NONE,
+                 TRUE, ACT_TGT_COMPL_SIMPLE, FALSE, TRUE,
+                 /* Overwritten by the ruleset */
+                 0, 1, FALSE);
+  actions[ACTION_USER_ACTION2] =
+      action_new(ACTION_USER_ACTION2,
+                 /* Overwritten by the ruleset */
+                 ATK_CITY,
+                 ASTK_NONE,
+                 TRUE, ACT_TGT_COMPL_SIMPLE, FALSE, TRUE,
+                 /* Overwritten by the ruleset */
+                 0, 1, FALSE);
+  actions[ACTION_USER_ACTION3] =
+      action_new(ACTION_USER_ACTION3,
+                 /* Overwritten by the ruleset */
+                 ATK_CITY,
+                 ASTK_NONE,
+                 TRUE, ACT_TGT_COMPL_SIMPLE, FALSE, TRUE,
+                 /* Overwritten by the ruleset */
+                 0, 1, FALSE);
 }
 
 /**********************************************************************//**
@@ -2167,6 +2191,9 @@ action_actor_utype_hard_reqs_ok(const action_id wanted_action,
   case ACTION_TRANSPORT_DISEMBARK1:
   case ACTION_TRANSPORT_DISEMBARK2:
   case ACTION_SPY_ATTACK:
+  case ACTION_USER_ACTION1:
+  case ACTION_USER_ACTION2:
+  case ACTION_USER_ACTION3:
     /* No hard unit type requirements. */
     break;
 
@@ -2360,6 +2387,9 @@ action_hard_reqs_actor(const action_id wanted_action,
   case ACTION_TRANSPORT_ALIGHT:
   case ACTION_TRANSPORT_UNLOAD:
   case ACTION_SPY_ATTACK:
+  case ACTION_USER_ACTION1:
+  case ACTION_USER_ACTION2:
+  case ACTION_USER_ACTION3:
     /* No hard unit requirements. */
     break;
 
@@ -3256,6 +3286,9 @@ case ACTION_CLEAN_POLLUTION:
   case ACTION_CONVERT:
   case ACTION_STRIKE_BUILDING:
   case ACTION_STRIKE_PRODUCTION:
+  case ACTION_USER_ACTION1:
+  case ACTION_USER_ACTION2:
+  case ACTION_USER_ACTION3:
     /* No known hard coded requirements. */
     break;
   case ACTION_COUNT:
@@ -4285,6 +4318,15 @@ action_prob(const action_id wanted_action,
     break;
   case ACTION_TRANSPORT_DISEMBARK1:
   case ACTION_TRANSPORT_DISEMBARK2:
+    /* TODO */
+    break;
+  case ACTION_USER_ACTION1:
+    /* TODO */
+    break;
+  case ACTION_USER_ACTION2:
+    /* TODO */
+    break;
+  case ACTION_USER_ACTION3:
     /* TODO */
     break;
   case ACTION_COUNT:
@@ -5580,6 +5622,12 @@ const char *action_ui_name_ruleset_var_name(int act)
     return "ui_name_transport_disembark_2";
   case ACTION_SPY_ATTACK:
     return "ui_name_spy_attack";  
+  case ACTION_USER_ACTION1:
+    return "ui_name_user_action_1";
+  case ACTION_USER_ACTION2:
+    return "ui_name_user_action_2";
+  case ACTION_USER_ACTION3:
+    return "ui_name_user_action_3";
   case ACTION_COUNT:
     break;
   }
@@ -5814,6 +5862,15 @@ const char *action_ui_name_default(int act)
   case ACTION_SPY_ATTACK:
     /* TRANS: _Eliminate Diplomat (100% chance of success). */
     return N_("%sEliminate Diplomat%s");    
+  case ACTION_USER_ACTION1:
+    /* TRANS: _User Action 1 (100% chance of success). */
+    return N_("%sUser Action 1%s");
+  case ACTION_USER_ACTION2:
+    /* TRANS: _User Action 2 (100% chance of success). */
+    return N_("%sUser Action 2%s");
+  case ACTION_USER_ACTION3:
+    /* TRANS: _User Action 3 (100% chance of success). */
+    return N_("%sUser Action 3%s");
   }
 
   return NULL;
