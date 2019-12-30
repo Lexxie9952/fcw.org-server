@@ -283,7 +283,7 @@ function add_chatbox_text(packet)
     else unread_messages = 0;
 
     var text = packet['message'];
-    var server_words = ['waiting on','Lost connection','Not enough','has been removed','has connected']
+    var server_words = ['waiting on','Lost connection','Not enough','has been removed','has connected','Anyone can now become game organizer']
 
     if (text == null) return;
     if (!check_text_with_banlist(text)) return;
