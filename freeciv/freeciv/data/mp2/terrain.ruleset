@@ -1354,7 +1354,7 @@ reqs           =
       "UnitFlag", "CanFortress", "Local", TRUE, FALSE
       "CityTile", "Center", "Local", FALSE, TRUE
     }
-build_time     = 4
+build_time     = 3
 removal_time   = 0
 native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter", "Balloon", "AirProtect"
 hidden_by      = "Fortress", "Naval Base"

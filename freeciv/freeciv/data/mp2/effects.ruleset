@@ -3430,7 +3430,9 @@ reqs    =
       "CityTile", "Center", "Local"
       "OutputType", "Luxury", "Local"
     }
-;Note: this value already is 1 on city tiles on grass,swamp,hill,tundra
+;Note: the city applies +1 to 0-shield city tiles on grass,swamp,hills,tundra
+;Thus this bonus negates the condition of getting that +1 and needs a 
+;compensating +1 further below
 [effect_temple_of_artemis_1]
 type    = "Output_Add_Tile"
 value   = 1
@@ -3441,7 +3443,9 @@ reqs    =
       "CityTile", "Center", "Local"
       "OutputType", "Shield", "Local"
     }
-;Give the city its extra shield if it was built on a 0 shield tile (grass/hills/swamp/tundra)
+;--------    
+;Give the city its extra shield if it was built on a 0-shield (grass/hills/swamp/tundra) 
+;tile or +1-shield resource (grass-shield,fur) 
 [effect_temple_of_artemis_1a]
 type    = "Output_Add_Tile"
 value	= 1
@@ -3459,7 +3463,8 @@ value	= 1
 reqs	=
     { "type", "name", "range", "present"
       "Terrain", "Hills", "Local", TRUE
-      "Extra", "Coal", "Local", FALSE
+      "Extra", "Coal", "Local", FALSE    ; only apply to 0 shield tile
+      "Extra", "Mine", "Local", FALSE    ; only apply to 0 shield tile
       "Building", "Temple", "City", TRUE
       "Building", "Temple of Artemis", "Player", TRUE
       "CityTile", "Center", "Local", TRUE
@@ -3471,7 +3476,7 @@ value	= 1
 reqs	=
     { "type", "name", "range", "present"
       "Terrain", "Swamp", "Local", TRUE
-      "Extra", "Peat", "Local", FALSE
+      "Extra", "Peat", "Local", FALSE     ; only apply to 0 shield tile
       "Building", "Temple", "City", TRUE
       "Building", "Temple of Artemis", "Player"
       "CityTile", "Center", "Local", TRUE
@@ -3483,12 +3488,13 @@ value	= 1
 reqs	=
     { "type", "name", "range", "present"
       "Terrain", "Tundra", "Local", TRUE
-      "Extra", "Game", "Local", FALSE
+      "Extra", "Game", "Local", FALSE   ; only apply to 0 shield tile
       "Building", "Temple", "City", TRUE
       "Building", "Temple of Artemis", "Player", TRUE
       "CityTile", "Center", "Local", TRUE
       "OutputType", "Shield", "Local", TRUE
     }
+;------
 
 [effect_temple_of_artemis_2]
 type    = "Output_Add_Tile"
