@@ -1114,21 +1114,18 @@ removal_time   = 0
 conflicts      = "Mine", "Oil Well"
 hidden_by      = "Farmland"
 helptext       = _("\
-Building an irrigation system on a suitable tile causes it to \
-produce one extra food each turn. This requires a nearby source of \
-water: an ocean, lake, or river tile, or another tile with an \
-irrigation system, must share an edge (not just a corner) with the \
-target tile. However, once irrigated, land remains so even if the \
-water source is removed.\
+Irrigating a suitable tile causes it to produce extra food each turn. Most\
+ tiles yield +1 extra food. A desert river that does not already benefit\
+ from an oasis will yield +2, or +3 if it is a city on a desert river.\
 "), _("\
-Building irrigation on a tile with a mine or oil well will destroy it.\
+Irrigating a tile with a mine or oil well will destroy it.\
 "), _("\
 City center tiles get their terrain's irrigation bonus automatically, \
 if there is no conflicting mine or oil well on the tile; however, \
 this does not make cities count as a water source for further \
 irrigation. Irrigation can be built on the city tile simply to allow \
-building further irrigation elsewhere, but will not give the tile any \
-further bonus.\
+irrigating elsewhere, but will not give the tile any further bonus \
+except in the case of a desert river (see above.)\
 ")
 
 [extra_mine]

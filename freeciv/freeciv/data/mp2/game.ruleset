@@ -419,14 +419,18 @@ actor_reqs    =
       "UnitType", "Riflemen",   "Local"
       "Gov",      "Communism",  "Player"
       "Tech",     "Communism",  "Player"
+      "Tech",     "Pottery",    "Player"
+      "UnitState","OnDomesticTile","Local"
     }
 [actionenabler_communist_plows_to_rifles]
 action = "Convert Unit"
 actor_reqs    =
-    { "type",     "name",       "range"
-      "UnitType", "Workers",   "Local"
-      "Gov",      "Communism", "Player"
-      "Tech",     "Communism", "Player"
+    { "type",     "name",         "range"
+      "UnitType", "Workers",      "Local"
+      "Gov",      "Communism",    "Player"
+      "Tech",     "Communism",    "Player"
+      "Tech",     "Conscription", "Player"
+      "UnitState","OnDomesticTile","Local"
     }
 
 [actionenabler_sabotage_city]
