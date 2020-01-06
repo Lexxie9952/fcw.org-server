@@ -1749,7 +1749,7 @@ function show_city_happy_tab()
       //MOODS
       var citizen_html = "";
       for (var s = 0; s < citizen_types.length; s++) {
-        if (pcity == null || pcity['ppl_' + citizen_types[s]].length<1 || pcity['ppl_' + citizen_types[s]] == null) continue;
+        if (pcity == null || !pcity['ppl_' + citizen_types[s]] || pcity['ppl_' + citizen_types[s]].length<1) continue;
         if (pcity['ppl_' + citizen_types[s]] == null) continue;
         for (var i = 0; i < pcity['ppl_' + citizen_types[s]][cause]; i ++) {
           sprite = get_specialist_image_sprite("citizen." + citizen_types[s] + "_"
