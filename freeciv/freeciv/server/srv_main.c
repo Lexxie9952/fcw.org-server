@@ -2060,7 +2060,9 @@ void check_for_full_turn_done(void)
   }
 
   phase_players_iterate(pplayer) {
-    if (!pplayer->phase_done && pplayer->is_alive) {
+  	/* Comparison to NewAvailablePlayer is a hacky way to deal with LongTurn, which creates
+  	non-connected to human players as placeholders waiting for real human players. */
+    if (!pplayer->phase_done && pplayer->is_alive && strncmp("NewAvailablePlayer", pplayer->name, 18) != 0) {
       if (pplayer->is_connected) {
         /* In all cases, we wait for any connected players. */
         return;
