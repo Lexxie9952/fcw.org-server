@@ -2060,7 +2060,8 @@ void check_for_full_turn_done(void)
   }
 
   phase_players_iterate(pplayer) {
-    if (!pplayer->phase_done && pplayer->is_alive) {
+    /* For non-fixed length turns, make sure longturn games advance in spite of dormant NewAvailablePlayers */
+    if (!pplayer->phase_done && pplayer->is_alive && strncmp("NewAvailablePlayer", pplayer->name, 18) != 0) {
       if (pplayer->is_connected) {
         /* In all cases, we wait for any connected players. */
         return;
