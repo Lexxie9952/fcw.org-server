@@ -168,8 +168,7 @@ illness_pollution_factor = 50
 total_factor = 100       ; TF   = 100 (effectively makes 100x cost at capital and 1x cost at DIST=32)
 ;city_size_adjusted      ; SZ  (happy*2 + content*1 + unhappy*0 - angry*2)
 ;nationality factor      ; NF   native=1.0, was_conquered=0.67, originally_belonged_to_inciter=0.5
-base_incite_cost = 700   ; BIC  =700 (the cost of a size 1 domestic city at a distance of 32 with no improvements. no units of its own,
-;                                not occupied by other units, no local or national incite bonuses, a bankrupt treasury, prior to going to 1400 for 2x 
+base_incite_cost = 1100   ; BIC  =1100 (base cost before modifiers) 
 ;                     content bonus.
 ;city is content         ; CON 
 ;city is celebrating     ; CEL 
@@ -418,14 +417,45 @@ action = "Convert Unit"
 actor_reqs    =
     { "type",     "name",       "range"
       "UnitType", "Riflemen",   "Local"
-      "Gov",      "Communism", "Player"
+      "Gov",      "Communism",  "Player"
+      "Tech",     "Communism",  "Player"
+      "Tech",     "Pottery",    "Player"
+      "UnitState","OnDomesticTile","Local"
     }
 [actionenabler_communist_plows_to_rifles]
 action = "Convert Unit"
 actor_reqs    =
-    { "type",     "name",       "range"
-      "UnitType", "Workers",   "Local"
-      "Gov",      "Communism", "Player"
+    { "type",     "name",         "range"
+      "UnitType", "Workers",      "Local"
+      "Gov",      "Communism",    "Player"
+      "Tech",     "Communism",    "Player"
+      "Tech",     "Conscription", "Player"
+      "UnitState","OnDomesticTile","Local"
+    }
+;**Mobile SAM is an upgrade to AAA but does not obsolete it,
+;  since AAA retains special uses. Instead, AAA can convert
+;  to Mobile SAM under special conditions.
+[actionenabler_convert_AAA_in_capital]
+action = "Convert Unit"
+actor_reqs    =
+    { "type",     "name",             "range"
+      "UnitType", "Anti-Aircraft Artillery", "Local"
+      "UnitState","OnDomesticTile",   "Local"
+      "CityTile", "Center",           "Local"
+      "Building", "Palace",           "City"
+      "Tech",     "Space Flight",     "Player"
+      "Age",      "10",               "Local"
+    }
+[actionenabler_convert_AAA_in_capital_2]
+action = "Convert Unit"
+actor_reqs    =
+    { "type",     "name",             "range"
+      "UnitType", "Anti-Aircraft Artillery", "Local"
+      "UnitState","OnDomesticTile",   "Local"
+      "CityTile", "Center",           "Local"
+      "Building", "Ecclesiastical Palace", "City"
+      "Tech",     "Space Flight",     "Player"
+      "Age",      "10",               "Local"
     }
 
 [actionenabler_sabotage_city]
@@ -720,6 +750,16 @@ actor_reqs    =
 ;     "DiplRel", "War", "Local", FALSE  ; allows establishing during war then awaiting diplomatic relation to activate trade income.
     }
 
+[actionenabler_traderoute_boat]
+action = "Establish Trade Route"
+actor_reqs    =
+    { "type",   "name", "range", "present"
+      "UnitFlag", "TradeRoute", "Local", TRUE
+      "MinMoveFrags", "1", "Local", TRUE
+      "UnitType", "Boat", "Local", TRUE
+;     "DiplRel", "War", "Local", FALSE  ; allows establishing during war then awaiting diplomatic relation to activate trade income.
+    }
+
 [actionenabler_marketplace]
 action = "Enter Marketplace"
 actor_reqs    =
@@ -760,8 +800,24 @@ actor_reqs    =
 target_reqs    =
     { "type",   "name", "range", "present"
       "BuildingGenus", "SmallWonder", "Local", TRUE
-;      "Building", "Palace", "Local", FALSE
+;     "Building", "Palace", "Local", FALSE
     }
+
+[actionenabler_help_build_wonder_boat]
+action = "Help Wonder"
+actor_reqs    =
+    { "type",   "name", "range", "present"
+      "UnitFlag", "HelpWonder", "Local", TRUE
+      "Tech", "Currency", "Player", TRUE
+      "DiplRel", "War", "Local", FALSE
+      "UnitType", "Boat", "Local", TRUE
+    }
+target_reqs    =
+    { "type",   "name", "range", "present"
+      "BuildingGenus", "SmallWonder", "Local", TRUE
+      "Building", "Palace", "Local", FALSE
+    }
+
 
 [actionenabler_recycle_unit]
 action = "Recycle Unit"
@@ -798,6 +854,8 @@ target_reqs    =
       "CityTile", "Center", "Local", FALSE
       "Terrain", "Mountains", "Local", FALSE
       "MaxUnitsOnTile", "1", "Local", TRUE
+      "Extra", "Fort", "Local", FALSE
+      "Extra", "Fortress", "Local", FALSE
     }
 
 ;Archers can strafe/soften every unit on a tile for one 
@@ -1159,6 +1217,7 @@ actor_reqs    =
       "UnitFlag",      "Settlers",    "Local", TRUE
       "UnitType",      "Legion",      "Local", FALSE 
       "UnitType",      "Proletarians","Local", FALSE
+      "UnitFlag",      "Well-Digger",  "Local", FALSE
       "CityTile",      "Center",      "Local", FALSE
     }
 [actionenabler_mine_tf_outside_city_prole]
@@ -1175,7 +1234,8 @@ action        = "Mine TF"
 actor_reqs    =
     { "type",          "name",      "range", "present"
       "UnitFlag",      "Settlers",  "Local", TRUE
-      "UnitType",      "Legion",    "Local", FALSE 
+      "UnitType",      "Legion",    "Local", FALSE
+      "UnitFlag",      "Well-Digger",  "Local", FALSE
       "UnitType",      "Proletarians", "Local", FALSE
       "CityTile",      "Center",    "Local", TRUE
       "Terrain",       "Grassland", "Local", FALSE
@@ -1221,6 +1281,16 @@ actor_reqs    =
       "UnitType",      "Legion",        "Local",   TRUE
       "UnitState",     "OnDomesticTile","Local",   FALSE
     }
+; Don't force legions to road BEFORE making a fortress 
+; from fortress being "domestic national territory"
+[actionenabler_legion_road2]
+action        = "Road"
+actor_reqs    =
+    { "type",          "name",          "range",   "present"
+      "UnitFlag",      "Settlers",      "Local",   TRUE
+      "UnitType",      "Legion",        "Local",   TRUE
+      "Extra",         "Fort",          "Local",   TRUE
+    }
 
 [actionenabler_base]
 action        = "Build Base"
@@ -1228,6 +1298,7 @@ actor_reqs    =
     { "type",          "name",            "range", "present"
       "UnitFlag",      "CanFortress",     "Local", TRUE
       "UnitType",      "Proletarians",    "Local", FALSE
+      "UnitFlag",      "Well-Digger",     "Local", FALSE
     }
 [actionenabler_base_prole]
 action        = "Build Base"
@@ -1243,6 +1314,7 @@ action        = "Build Mine"
 actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
+      "UnitFlag",      "Well-Digger",  "Local",   FALSE
       "UnitType",      "Legion",       "Local",   FALSE
       "UnitType",      "Proletarians", "Local",   FALSE
     }
@@ -1270,6 +1342,7 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitType",      "Legion",       "Local",   FALSE
       "UnitType",      "Proletarians", "Local",   FALSE
+      "UnitFlag",      "Well-Digger",  "Local",   FALSE
       "Tech",          "Construction", "Player",  TRUE
     }
 target_reqs    =
@@ -1297,6 +1370,7 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitType",      "Legion",       "Local",   FALSE
       "UnitType",      "Proletarians", "Local",   FALSE
+      "UnitFlag",      "Well-Digger",  "Local",   FALSE
       "Tech",          "Refining",     "Player",  TRUE
     }
 target_reqs    =

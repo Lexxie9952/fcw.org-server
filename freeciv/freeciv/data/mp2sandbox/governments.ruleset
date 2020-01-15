@@ -139,8 +139,10 @@ Corruption does not vary by distance from the capital;\
 "), _("\
 Communist states can transfer Proletarians between cities to\
  re-distribute population. Large numbers of Proletarians can be\
- used to finish State projects. Also, Workers may be conscripted to\
- Riflemen and vice versa.\
+ used to finish State projects. The Communism tech allows a\
+ Communist government to conscript Workers to Riflemen and vice
+ versa, if inside national territory and if possessing the necessary\
+ technologies.\
 ")
 
 ;------------------------------------------------------------------------

@@ -63,6 +63,13 @@ reqs	=
       "UnitClass", "RiverShip", "Local", TRUE
       "UnitType", "Frigate", "Local", FALSE
     }
+[effect_combat_rounds_trireme]
+type    = "Combat_Rounds"
+value   = 15
+reqs	=
+    { "type", "name", "range", "present"
+      "UnitType", "Trireme", "Local", TRUE
+    }
 
 ; Cheating AI effects are in separate file
 *include "default/ai_effects.ruleset"
@@ -960,7 +967,7 @@ type    = "Martial_Law_Max"
 value   = 2
 reqs	=
     { "type",       "name",      "range"
-      "Gov", "Communism", "Player"
+      "Gov", "Fundamentalism", "Player"
     }
 
 [effect_rapture_grow_0]
@@ -1969,7 +1976,6 @@ reqs	=
       "Building", "Palace", "City"
       "OutputType", "Trade", "Local"
     }
-
 [effect_palace_1]
 type    = "Output_Waste_Pct"
 value	= 60
@@ -1978,7 +1984,6 @@ reqs	=
       "Building", "Palace", "City"
       "OutputType", "shield", "local"
     }
-
 [effect_palace_2]
 type    = "Spy_Resistant"
 value	= 50
@@ -1986,7 +1991,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "Palace", "City"
     }
-
 [effect_palace_2_sabotage]
 type    = "Building_Saboteur_Resistant"
 value	= 50
@@ -1994,7 +1998,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "Palace", "City"
     }
-
 [effect_palace_3]
 type    = "Capital_City"
 value	= 1
@@ -2002,7 +2005,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "Palace", "City"
     }
-
 [effect_palace_gov_center]
 type    = "Gov_Center"
 value	= 1
@@ -2010,7 +2012,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "Palace", "City"
     }
-
 [effect_palace_5]
 type = "Output_Bonus"
 value  = 75
@@ -2039,7 +2040,6 @@ reqs =
       "Building", "Palace", "City"
       "OutputType", "Shield", "Local"
     }
-
 [effect_palace_7]
 type    = "Make_Happy"
 value	= 1
@@ -2047,7 +2047,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "Palace", "City"
     }
-
 [effect_palace_fundamentalism]
 type    = "Output_Bonus"
 value   = 50
@@ -2067,7 +2066,6 @@ reqs    =
       "OutputType", "Trade", "Local", TRUE
       "Building", "Palace", "City", FALSE
     }
-
 [effect_ecclesiastical_palace_1]
 type    = "Output_Waste_Pct"
 value   = 60
@@ -2077,7 +2075,6 @@ reqs    =
       "OutputType", "Shield", "local", TRUE
       "Building", "Palace", "City", FALSE
     }
-
 [effect_ecclesiastical_palace_2]
 type    = "Spy_Resistant"
 value   = 50
@@ -2086,7 +2083,6 @@ reqs    =
       "Building", "Ecclesiastical Palace", "City", TRUE
       "Building", "Palace", "City", FALSE
     }
-
 [effect_ecclestiastical_palace_3]
 type    = "Make_Happy"
 value	= 1
@@ -2094,7 +2090,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "Ecclesiastical Palace", "City"
     }
-
 [effect_ecclesiastical_palace_4]
 type    = "Veteran_Build"
 value	= 1
@@ -2103,7 +2098,6 @@ reqs	=
       "Building", "Ecclesiastical Palace", "City", TRUE
       "UnitType", "Fanatics", "Local", TRUE
     }
-
 [effect_ecclesiastical_palace_gov_center]
 type    = "Gov_Center"
 value	= 1
@@ -2112,7 +2106,6 @@ reqs	=
       "Building", "Ecclesiastical Palace", "City", TRUE
       "Building", "Palace", "City", FALSE
     }
-
 [effect_ecclesiastical_palace_despotism]
 type    = "Output_Bonus"
 value   = 75
@@ -2123,7 +2116,6 @@ reqs    =
       "OutputType", "Gold", "Local", TRUE, FALSE
 ;      "Building", "Palace", "City", FALSE, FALSE
     }
-
 [effect_ecclesiastical_palace_monarchy]
 type    = "Output_Bonus"
 value   = 50
@@ -2140,6 +2132,16 @@ value   = 50
 reqs    =
     { "type", "name", "range", "present", "quiet"
       "Gov", "Fundamentalism", "Player", TRUE, TRUE
+      "Building", "Ecclesiastical Palace", "City", TRUE, FALSE
+      "OutputType", "Gold", "Local", TRUE, FALSE
+ ;     "Building", "Palace", "City", FALSE, FALSE
+    }
+[effect_ecclesiastical_palace_communism]
+type    = "Output_Bonus"
+value   = 25
+reqs    =
+    { "type", "name", "range", "present", "quiet"
+      "Gov", "Communism", "Player", TRUE, TRUE
       "Building", "Ecclesiastical Palace", "City", TRUE, FALSE
       "OutputType", "Gold", "Local", TRUE, FALSE
  ;     "Building", "Palace", "City", FALSE, FALSE
@@ -2397,6 +2399,15 @@ reqs	=
     { "type", "name", "range"
       "Building", "SAM Battery", "City"
       "UnitClass", "AirProtect", "Local"
+      "UnitType", "Stealth Fighter", "Local", FALSE
+    }
+[effect_sam_battery_2]
+type    = "Defend_Bonus"
+value	= 100
+reqs	=
+    { "type", "name", "range"
+      "Building", "SAM Battery", "City"
+      "UnitClass", "AirPillage", "Local"
       "UnitType", "Stealth Fighter", "Local", FALSE
     }
 [effect_sam_battery_stealth_bomber]
@@ -3395,19 +3406,19 @@ reqs	=
 type    = "Make_Content_Mil_Per"
 value   = 1
 reqs    =
-    { "type", "name", "range"
-      "Building", "Statue of Zeus", "Player"
+    { "type", "name", "range", "present"
+      "Building", "Statue of Zeus", "Player", TRUE
+      "Tech", "Tactics", "Player", FALSE
     }
-
 [effect_statue_of_zeus_1]
 type    = "Unit_Upkeep_Free_Per_City"
 value   = 4
 reqs    =
-    { "type", "name", "range"
-      "Building", "Statue of Zeus", "City"
-      "OutputType", "Shield", "Local"
+    { "type", "name", "range", "present"
+      "Building", "Statue of Zeus", "City", TRUE
+       "Tech", "Tactics", "Player", FALSE
+       "OutputType", "Shield", "Local", TRUE
     }
-
 [effect_statue_of_zeus_2]
 type    = "Make_Happy"
 value   = 1
@@ -3426,7 +3437,9 @@ reqs    =
       "CityTile", "Center", "Local"
       "OutputType", "Luxury", "Local"
     }
-;Note: this value already is 1 on city tiles on grass,swamp,hill,tundra
+;Note: the city applies +1 to 0-shield city tiles on grass,swamp,hills,tundra
+;Thus this bonus negates the condition of getting that +1 and needs a 
+;compensating +1 further below
 [effect_temple_of_artemis_1]
 type    = "Output_Add_Tile"
 value   = 1
@@ -3437,7 +3450,9 @@ reqs    =
       "CityTile", "Center", "Local"
       "OutputType", "Shield", "Local"
     }
-;Give the city its extra shield if it was built on a 0 shield tile (grass/hills/swamp/tundra)
+;--------    
+;Give the city its extra shield if it was built on a 0-shield (grass/hills/swamp/tundra) 
+;tile or +1-shield resource (grass-shield,fur) 
 [effect_temple_of_artemis_1a]
 type    = "Output_Add_Tile"
 value	= 1
@@ -3455,7 +3470,8 @@ value	= 1
 reqs	=
     { "type", "name", "range", "present"
       "Terrain", "Hills", "Local", TRUE
-      "Extra", "Coal", "Local", FALSE
+      "Extra", "Coal", "Local", FALSE    ; only apply to 0 shield tile
+      "Extra", "Mine", "Local", FALSE    ; only apply to 0 shield tile
       "Building", "Temple", "City", TRUE
       "Building", "Temple of Artemis", "Player", TRUE
       "CityTile", "Center", "Local", TRUE
@@ -3467,7 +3483,7 @@ value	= 1
 reqs	=
     { "type", "name", "range", "present"
       "Terrain", "Swamp", "Local", TRUE
-      "Extra", "Peat", "Local", FALSE
+      "Extra", "Peat", "Local", FALSE     ; only apply to 0 shield tile
       "Building", "Temple", "City", TRUE
       "Building", "Temple of Artemis", "Player"
       "CityTile", "Center", "Local", TRUE
@@ -3479,12 +3495,13 @@ value	= 1
 reqs	=
     { "type", "name", "range", "present"
       "Terrain", "Tundra", "Local", TRUE
-      "Extra", "Game", "Local", FALSE
+      "Extra", "Game", "Local", FALSE   ; only apply to 0 shield tile
       "Building", "Temple", "City", TRUE
       "Building", "Temple of Artemis", "Player", TRUE
       "CityTile", "Center", "Local", TRUE
       "OutputType", "Shield", "Local", TRUE
     }
+;------
 
 [effect_temple_of_artemis_2]
 type    = "Output_Add_Tile"
