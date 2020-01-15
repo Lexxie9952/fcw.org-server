@@ -1167,16 +1167,26 @@ function update_unit_order_commands()
       $("#order_explore").show();
     }
 
-    // Conversion handling
+    // MP2 Unit Conversion handling
     if (ruleset_control['name']=="Multiplayer-Evolution ruleset" ) {
-      if ( (ptype['name']=="Leader" || ptype['name']=="Queen")
+      if (
+          // Player can convert their Leader between king/queen:
+          ptype['name']=="Leader" || ptype['name']=="Queen"
+          // Workers/Riflemen can convert between each other in Communism:
           || ((governments[client.conn.playing['government']]['name']=="Communism" 
                && ((ptype['name']=="Workers") || ptype['name']=="Riflemen"))
-               && player_invention_state(client.conn.playing, tech_id_by_name('Communism')) == TECH_KNOWN) ) {
-
-          $("#order_convert").show();
-          unit_actions["convert"] = {name: "Convert (shift-O)"};
-      }
+               && player_invention_state(client.conn.playing, tech_id_by_name('Communism')) == TECH_KNOWN)
+          // AAA can convert to Mobile SAM under qualifying conditions:
+          || ( ptype['name']=="Anti-Aircraft Artillery"                  
+               && pcity != null
+               && city_owner_player_id(pcity) == client.conn.playing.playerno 
+               && player_invention_state(client.conn.playing, tech_id_by_name('Space Flight')) == TECH_KNOWN
+               && ( city_has_building(pcity, improvement_id_by_name(B_PALACE_NAME)) || city_has_building(pcity, improvement_id_by_name(B_ECC_PALACE_NAME)) )
+             )
+          ) {
+              $("#order_convert").show();
+              unit_actions["convert"] = {name: "Convert (shift-O)"};
+            }
     }
   }
 

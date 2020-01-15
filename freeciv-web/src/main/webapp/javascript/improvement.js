@@ -22,6 +22,7 @@
 // IDs are dynamic based on ruleset
 const B_AIRPORT_NAME = 'Airport';
 const B_PALACE_NAME = 'Palace';
+const B_ECC_PALACE_NAME = 'Ecclesiastical Palace';
 const B_STATUE_OF_LIBERTY_NAME = "Statue of Liberty";
 const B_ADAM_SMITH_NAME = "A.Smith's Trading Co.";
 
