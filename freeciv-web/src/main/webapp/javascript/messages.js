@@ -278,10 +278,6 @@ function add_client_message(message)
 **************************************************************************/
 function add_chatbox_text(packet)
 {
-    // Keep a count of unread messages
-    if (current_message_dialog_state == "minimized") unread_messages ++;
-    else unread_messages = 0;
-
     var text = packet['message'];
     var server_words = ['waiting on','Lost connection','Not enough','has been removed','has connected','Anyone can now become game organizer']
 
@@ -297,6 +293,10 @@ function add_chatbox_text(packet)
       packet['event'] = reclassify_chat_message(text);
     }
 
+    // Increment unread messages IFF chat minimized and AFTER filtering ignored/unshown server messages (above)
+    if (current_message_dialog_state == "minimized") unread_messages ++;
+    else unread_messages = 0;
+    
     if (civclient_state <= C_S_PREPARING) {
       text = text.replace(/#FFFFFF/g, '#000000');
     } else {
