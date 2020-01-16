@@ -1796,7 +1796,6 @@ graphic         = "b.statue_of_zeus"
 graphic_alt     = "b.oracle"
 obsolete_by	=
     { "type", "name", "range", "survives"
-      "Tech", "Tactics", "Player", FALSE
     }
 build_cost	= 100
 upkeep		= 0
@@ -1807,8 +1806,8 @@ helptext	= _("\
 The powerful Zeus gives order and organization to both city and nation.\
  One citizen is made content about military activity in every city in\
  your nation. In the city the statue is located, it makes one citizen\
- happy and provides free upkeep to 4 units.\
- The discovery of Tactics makes the Statue of Zeus obsolete.\
+ happy and provides free upkeep to 4 units. Except for one permanent\
+ happy citizen, the discovery of Tactics makes the Statue of Zeus obsolete.\
 ")
 
 [building_supreme_court]

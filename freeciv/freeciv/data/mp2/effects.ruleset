@@ -63,6 +63,13 @@ reqs	=
       "UnitClass", "RiverShip", "Local", TRUE
       "UnitType", "Frigate", "Local", FALSE
     }
+[effect_combat_rounds_trireme]
+type    = "Combat_Rounds"
+value   = 15
+reqs	=
+    { "type", "name", "range", "present"
+      "UnitType", "Trireme", "Local", TRUE
+    }
 
 ; Cheating AI effects are in separate file
 *include "default/ai_effects.ruleset"
@@ -3399,19 +3406,19 @@ reqs	=
 type    = "Make_Content_Mil_Per"
 value   = 1
 reqs    =
-    { "type", "name", "range"
-      "Building", "Statue of Zeus", "Player"
+    { "type", "name", "range", "present"
+      "Building", "Statue of Zeus", "Player", TRUE
+      "Tech", "Tactics", "Player", FALSE
     }
-
 [effect_statue_of_zeus_1]
 type    = "Unit_Upkeep_Free_Per_City"
 value   = 4
 reqs    =
-    { "type", "name", "range"
-      "Building", "Statue of Zeus", "City"
-      "OutputType", "Shield", "Local"
+    { "type", "name", "range", "present"
+      "Building", "Statue of Zeus", "City", TRUE
+       "Tech", "Tactics", "Player", FALSE
+       "OutputType", "Shield", "Local", TRUE
     }
-
 [effect_statue_of_zeus_2]
 type    = "Make_Happy"
 value   = 1

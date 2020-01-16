@@ -883,7 +883,7 @@ trade       = 5
 extra       = "Rubber"
 identifier  = "^"
 shield       = 2
-trade        = 1
+trade        = 2
 # jungle.
 
 ; "h" reserved for strategic horses
@@ -1489,7 +1489,7 @@ build_time     = 3
 removal_time   = 0
 conflicts      = "Airbase", "Irrigation", "Mine", "Oil Well", "Farmland"
 defense_bonus  = 33
-native_to      = "Trireme", "RiverShip", "Sea", "Submarine"
+native_to      = "Trireme", "RiverShip", "Sea", "Submarine", "Balloon"
 flags          = "NativeTile", "NoStackDeath", "Refuel"
 helptext       = _("\
 Naval bases are coastal Fortresses with ocean access. They allow ships to enter and\ 
