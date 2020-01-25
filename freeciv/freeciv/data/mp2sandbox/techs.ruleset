@@ -518,8 +518,10 @@ cost = 3985
 
 [advance_magnetism]
 name     = _("Magnetism")
-req1     = "Iron Working"
-req2     = "Physics"
+;req1     = "Iron Working"
+;req2     = "Physics"
+req1     = "Navigation"
+req2     = "Invention"
 flags    = ""
 graphic     = "a.magnetism"
 graphic_alt = "-"
@@ -809,8 +811,10 @@ cost = 11920
 
 [advance_steam_engine]
 name     = _("Steam Engine")
+;req1     = "Physics"
+;req2     = "Invention"
 req1     = "Physics"
-req2     = "Invention"
+req2     = "University"
 flags    = ""
 graphic     = "a.steam_engine"
 graphic_alt = "-"
@@ -898,6 +902,7 @@ req2     = "Code of Laws"
 flags    = ""
 graphic     = "a.trade"
 graphic_alt = "-"
+helptext = _("Lets Commerce units make Wonders, Traderoutes.")
 
 [advance_university]
 name     = _("University")
