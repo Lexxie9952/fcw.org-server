@@ -658,6 +658,7 @@ The city containing the Palace receives a production bonus of +75% under Despoti
 [building_ecclesiastical_palace]
 name		= _("Ecclesiastical Palace")
 genus		= "SmallWonder"
+flags		= "SaveSmallWonder"
 reqs	=
     { "type", "name", "range"
       "Tech", "Mysticism", "Player"
