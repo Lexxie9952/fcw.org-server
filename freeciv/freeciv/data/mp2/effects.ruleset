@@ -82,7 +82,17 @@ value   = 4
 ; with their original nation
 [effect_angry_conquered]
 type    = "Enemy_Citizen_Unhappy_Pct"
-value   = 75
+value   = 34   ; handles proper rounding for 1/3
+
+
+;[effect_happy_foreigners]   ; major happy is only a test to see how the Nationality flag works in test games.
+;type    = "Make_Happy"
+;value   = 30
+;reqs  =
+;    { "type", "name", "range"
+;      "Nationality", "War", "City"
+;    }
+
 
 ; Barbarian effects
 
@@ -1404,6 +1414,7 @@ reqs	=
       "UnitType", "Marines", "Local", TRUE
     }
 
+;--- STANDARD CATHEDRAL sans Michelangelo ------------------------
 [effect_cathedral]
 type    = "Make_Content"
 value	= 3
@@ -1412,7 +1423,6 @@ reqs	=
       "Building", "Cathedral", "City", TRUE
       "Building", "Michelangelo's Chapel", "Player", FALSE
     }
-
 [effect_cathedral_1]
 type    = "Make_Content"
 value	= 1
@@ -1422,16 +1432,33 @@ reqs	=
       "Building", "Cathedral", "City", TRUE
       "Building", "Michelangelo's Chapel", "Player", FALSE
     }
-
 [effect_cathedral_2]
 type    = "Make_Content"
 value	= -1
 reqs	=
     { "type", "name", "range", "present"
-      "Tech", "Communism", "Player", TRUE
+      "Gov", "Communism", "Player", TRUE
       "Building", "Cathedral", "City", TRUE
       "Building", "Michelangelo's Chapel", "Player", FALSE
     }
+;--- ENHANCED CATHEDRAL with Michelangelo: ***
+[effect_cathedral_ma]
+type    = "Make_Happy"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Cathedral", "City", TRUE
+      "Building", "Michelangelo's Chapel", "Player", TRUE
+    }
+[effect_cathedral_ma2]
+type    = "Force_Content"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Cathedral", "City", TRUE
+      "Building", "Michelangelo's Chapel", "Player", TRUE
+    }
+;------------------------------------------------------------
 
 [effect_city_walls]
 type    = "Defend_Bonus"
@@ -3335,7 +3362,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "Michelangelo's Chapel", "Player"
     }
-
 [effect_michelangelos_chapel_1]
 type    = "Make_Content"
 value	= 1
@@ -3344,14 +3370,13 @@ reqs	=
       "Tech", "Theology", "Player"
       "Building", "Michelangelo's Chapel", "Player"
     }
-
 [effect_michelangelos_chapel_2]
 type    = "Make_Content"
 value	= -1
 reqs	=
     { "type", "name", "range"
-      "Tech", "Communism", "Player"
       "Building", "Michelangelo's Chapel", "Player"
+      "Gov", "Communism", "Player"
     }
 
 [effect_mausoleum_of_mausolos_1]

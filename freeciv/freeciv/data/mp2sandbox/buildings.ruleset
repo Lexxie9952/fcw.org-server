@@ -258,16 +258,16 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 80
+build_cost	= 75
 upkeep		= 3
 sabotage	= 100
 sound		= "b_cathedral"
 sound_alt	= "b_generic"
 helptext	= _("\
-A Cathedral makes 3 unhappy citizens content in a city; however, it does not affect\
- citizens made unhappy by military activity. The discovery of Theology increases the\
- effect by +1. The discovery of Communism reduces the effect by -1. This building has\
- no effect if your nation possesses Michelangelos Chapel.\
+A Cathedral makes 3 unhappy citizens content, but does not affect citizens\
+ made unhappy by military activity. Theology increases the effect by +1.\
+ Communist government decreases the effect by -1. (Michelangelos Chapel enhances\
+ the effect of Cathedrals by +1 happy citizen and +1 forced content citizen.)\
 ")
 
 [building_city_walls]
@@ -1646,14 +1646,15 @@ sabotage	= 0
 sound		= "w_michelangelos_chapel"
 sound_alt	= "w_generic"
 helptext	= _("\
-Counts as having a Cathedral in all cities.\
- This makes 3 unhappy citizens content in each city;\
- however, it does not affect citizens made unhappy by military activity.\
- The discovery of Theology increases the effect of a Cathedral,\
- making an additional unhappy citizen content. The discovery of\
- Communism lessens the effect of a Cathedral, reducing by one\
- the number of unhappy citizens made content.\
- This Wonder does not become obsolete.\
+This Wonder counts as a Cathedral in all cities which lack one.\
+ That is, it makes 3 unhappy citizens content in each city,\
+ but does not affect citizens unhappy about military activity.\
+ (Theology increases the effect by +1. Communist government\
+ reduces the effect by -1.)\
+"), _("
+In cities which already have a Cathedral, this Wonder enhances the\
+ effects of the Cathedral, adding +1 happy citizen and +1 forced content.\
+ This Wonder is never obsolete.\
 ")
 
 ;this is wonder #61
