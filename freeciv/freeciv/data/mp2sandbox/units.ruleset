@@ -2476,7 +2476,7 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea"
-flags         = "BadCityDefender", "CantReachAir", "HelpWonder", "TradeRoute", "CoastStrict"
+flags         = "BadCityDefender", "CantReachAir", "HelpWonder", "TradeRoute", "CoastStrict", "NonMil", "HasNoZOC"
 roles         = "Ferryboat", "FerryStartUnit"
 helptext      = _("\
 Boats were used pre-historically for exploration,\
@@ -3151,7 +3151,7 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon"
-flags         = "BadCityDefender", "HelpWonder", "Traderoute"
+flags         = "BadCityDefender", "HelpWonder", "Traderoute", "NonMil", "HasNoZOC"
 roles         = ""
 helptext      = _("\
 Cargo ships are Commerce units: they can establish Trade Routes and help\
