@@ -1622,7 +1622,7 @@ helptext      = _("\
 Armor II is the ultra-modern upgrade to Armor. It features high tech composite armor and\
  electronic countermeasures (ECM). Forts and Fortresses gain no bonus against\
  its ability to blast and break through fortifications. ECM and composite armor\
- yielding a 2x defense bonus against Missiles. Unlike most land units,\
+ give a 2x defense bonus against Missiles. Unlike most land units,\
  Armor II can attack reachable units regardless of whether unreachable units are protecting the tile.\ 
 ")
 
@@ -1654,9 +1654,9 @@ uk_gold       = 0
 flags         = "CantReachAir"
 roles         = "AttackStrongStartUnit"
 helptext      = _("\
-Catapults are large rock-throwing war machines.\
- They are strong attackers but equally weak\
- defenders, and will need an escort to be effective.\
+Catapults are war machines that hurl massive rocks to crush\
+ and break their targets. They are strong attackers but equally\
+ weak defenders, and will need an escort to be effective.\
 ")
 
 [unit_cannon]
@@ -1687,8 +1687,8 @@ uk_gold       = 0
 flags         = "CantReachAir"
 roles         = "AttackStrongStartUnit", "BarbarianTech", "BarbarianBuildTech"
 helptext      = _("\
-Cannons are large firearms that fire heavy projectiles. They are strong attackers but equally weak\
- defenders, so they need an escort to be effective.\
+Cannons are huge guns that fire heavy metallic projectiles. They are strong\
+ attackers but weak defenders, so they need an escort to be effective.\
 ")
 
 [unit_artillery]
@@ -1720,8 +1720,8 @@ targets       = "Balloon", "Helicopter"
 flags         = "CantReachAir"
 roles         = "AttackStrongStartUnit"
 helptext      = _("\
-Artillery are a major upgrade to Cannons, with higher attack strength and doubled firepower.\
- They are very strong attackers, but weak defenders. They need an escort to be effective.\
+Artillery are a major upgrade to Cannons, with doubled firepower. They are\
+ superb attackers but poor at defense. They need an escort to be effective.\
 ")
 
 [unit_anti_aircraft]
@@ -2369,6 +2369,7 @@ bonuses       =
      "Helicopter", "DefenseDivider", 1
      "Helicopter", "Firepower1", 1
      "AntiAir", "DefenseDividerPct", 25
+     "AntiAir", "DefenseMultiplierPct", 25
    }
 vision_layer  = "Stealth"
 flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape", "AirProtector"
@@ -2423,6 +2424,7 @@ targets       = "Balloon"
 bonuses       =
    { "flag", "type", "value"
       "AntiAir", "DefenseDividerPct", 25
+      "AntiAir", "DefenseMultiplierPct", 25
    }
 vision_layer  = "Stealth"
 cargo         = "Bomb"
@@ -2485,9 +2487,9 @@ Boats were used pre-historically for exploration,\
  near shore. Boats can carry one unit and do ancient\
  commerce: building Wonders or setting up Traderoutes\
  without Trade tech. Primitive bartering generates little\
- or no extra trade, but could help you advance faster or\
- set good relations with ancient neighbors. To build\
- Wonders with Boats, Currency is required.\
+ or no extra trade, but may help you advance faster or\
+ create relations with ancient neighbors. To build\
+ Wonders with Boats requires Currency.\
 ")
 
 [unit_trireme]
@@ -2998,12 +3000,12 @@ bonuses       =
 flags         = "BadCityDefender", "CanEscape", "AntiAir"
 roles         = "Hunter"
 helptext      = _("\
-The AEGIS Cruiser equipped with an Anti-Air missile system. Radar\
- gives superior vision and a 2x defense bonus against Submarines.\
+The AEGIS Cruiser has an Anti-Air missile system. Radar and sonar\
+ give superior vision and 2x defense bonus against Submarines.\
  The AEGIS can carry two Missiles, and is the only ship that can attack\
  Air and Missile units.\
 "), _("\
- Superior vision and 3x Anti-Air bonus are ideal for scouting and escorting.\
+ Excellent vision and 3x Anti-Air bonus are ideal for scouting and escorting.\
 ")
 
 [unit_battleship]
@@ -3363,13 +3365,10 @@ veteran_power_fact = 100, 105, 110, 115, 120, 125, 130
 veteran_move_bonus = 0, 0, 0, 0, 0, 0, 0
 roles         = "DiplomatStartUnit"
 helptext      = _("\
-A Diplomat performs official or covert actions. Covert\
- acts make incidents which let\
- Senates break treaties. Diplomats in cities defend\      
- such acts with combat. Diplomats can 1)Bribe a lone unit\
- 2)Establish embassy 3)Investigate City\
- 4)Sabotage production/buildings 5)Steal tech\
- 6)Steal maps 7)Incite city revolt.\n\
+A Diplomat performs official or covert actions. Covert acts make incidents\
+ which let Senates break treaties. Diplomats in cities defend such acts with\
+ combat. Diplomats can 1)Bribe a lone unit 2)Establish embassy 3)Investigate City\
+ 4)Sabotage production/buildings 5)Steal tech 6)Steal maps 7)Incite city revolt.\n\
 "), _("\
 Full rules for Diplomats are in the Manual.\
 ")
@@ -3416,7 +3415,7 @@ veteran_power_fact = 100, 105, 110, 115, 120, 125, 130
 veteran_move_bonus = 0, 0, 0, 0, 0, 0, 0
 roles         = "DiplomatStartUnit"
 helptext      = _("\
-Spies can do what a Diplomat can, and can also 1)Survive ops\
+Spies can do what a Diplomat can, and also 1)Survive ops\
  2)Sabotage lone units 3)Poison city water 4)Steal specific tech\
  5)Steal tech from cities more than once 6)Sabotage specific targets.\
 "), _("\
