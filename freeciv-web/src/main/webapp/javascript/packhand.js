@@ -1331,8 +1331,13 @@ function handle_wonders_report()
       if (players[p].wonders[w] != 0)                 // player has wonder
         wonders[w]++;                                 // increment the count
     }
-    if (wonders[w] > 0 && improvements[w].genus==1) // 1 is the genus code for small wonder
-      appended_message += "<tr><td>" + improvements[w].name+"</td><td><b>"+wonders[w] + "</b></td></tr>";
+    if (wonders[w] > 0 && improvements[w].genus==1)  { // 1 is the genus code for small wonder
+      var color_marker = "<span>";
+      if (player_has_wonder(client.conn.playing.playerno,w)) {
+        color_marker = "<span style='color: rgb(0,0,192);'>";
+      }
+      appended_message += "<tr><td>" + color_marker + improvements[w].name+"</span></td><td><b>"+wonders[w] + "</b></td></tr>";
+    }
   }
   appended_message += "</table></div>";
 
