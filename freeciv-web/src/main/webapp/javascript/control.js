@@ -2118,15 +2118,18 @@ function paste_tile_target_for_prod(canvas_x, canvas_y)
   //console.log("paste_tile_target_for_prod(..))")
 
   // Do legality checks:
-  if (city_paste_target == null || client.conn.playing == null)
+  if (!city_paste_target || client.conn.playing == null)
     return;
+
+  if (!city_paste_target['production_kind'] || !city_paste_target['production_value'])
+    return;  
 
   var ptile = canvas_pos_to_tile(canvas_x, canvas_y);
   if (ptile == null)
     return;
 
   var pcity = tile_city(ptile);
-  if (pcity == null || pcity['owner'] != client.conn.playing.playerno)
+  if (!pcity || pcity['owner'] != client.conn.playing.playerno)
     return;
 
   send_city_change(pcity['id'], city_paste_target['production_kind'], city_paste_target['production_value']);
