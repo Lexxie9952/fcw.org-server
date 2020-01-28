@@ -836,7 +836,7 @@ input[type='number'] {
 }
 
 .cannot_build_item {
-  background-color: rgba(255,63,63,0.5);
+  background-color: rgba(224,38,38,0.25);
 }
 
 .cannot_build_item.ui-selected {

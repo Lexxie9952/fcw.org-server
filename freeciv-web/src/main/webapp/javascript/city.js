@@ -2061,11 +2061,23 @@ function populate_worklist_production_choices(pcity)
     var kind = production_list[a]['kind'];
     var value = production_list[a]['value'];
     var can_build = can_city_build_now(pcity, kind, value);
+    var near_tech = false; // can build soon after tech discovery
 
     // Don't show units if user clicked option to only show improvements
     if (kind == VUT_UTYPE && opt_show_improvements_only) continue;
 
-    if (can_build || opt_show_unreachable_items) {
+    // Show choices for current research, so player can plan queue
+    if (techs[client.conn.playing['researching']]) { // player must be researching something
+      if (kind == VUT_IMPROVEMENT) {
+          if (improvements[value]['reqs'].length > 0 && client.conn.playing['researching'] ) {
+            if (improvements[value]['reqs'][0]['value'] == techs[client.conn.playing['researching']]['id']) near_tech = true;
+          }
+      } else if (kind == VUT_UTYPE) {
+        if (unit_types[value]['tech_requirement'] == techs[client.conn.playing['researching']]['id']) near_tech = true;
+      }
+    }
+  
+    if (can_build || near_tech || opt_show_unreachable_items) {
       production_html += "<tr class='prod_choice_list_item kindvalue_item"
        + (can_build ? "" : " cannot_build_item")
        + "' data-value='" + value + "' data-kind='" + kind + "'>"
