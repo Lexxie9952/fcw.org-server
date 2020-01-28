@@ -380,7 +380,7 @@ function select_a_nation()
     $('#withdraw_vision_button').button("disable");
   }
 
-  if (client_is_observer() ||
+  if (client_is_observer() || player_id == client.conn.playing['playerno'] ||
        (both_alive_and_different && diplstates[player_id] != DS_NO_CONTACT)) {
     $("#intelligence_report_button").button("enable");
   } else {

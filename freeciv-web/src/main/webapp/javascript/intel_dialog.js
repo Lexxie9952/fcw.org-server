@@ -28,6 +28,7 @@ function show_intelligence_report_dialog()
   var pplayer = players[selected_player];
 
   if (client_is_observer()
+      || selected_player == client.conn.playing['playerno']
       || client.conn.playing.real_embassy[selected_player]) {
     show_intelligence_report_embassy(pplayer);
   } else {
