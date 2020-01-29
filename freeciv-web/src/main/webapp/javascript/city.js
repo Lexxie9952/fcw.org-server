@@ -943,10 +943,10 @@ function can_city_queue_improvement(pcity, pimprove_id)
           // if the building req is already queued
           if (city_has_building_in_queue(pcity, improvements[pimprove_id]['reqs'][1]['value'])) {
             return true; // req for this building is in queue, so let player append this to queue
-          } else return false; // req for this building is not in queue
-        } else return true; // unlikely case of second req is not a building, err on the liberal side
-      } else return true; // player has tech for this building but no other reqs are needed
-    } else return false; // player lacked the tech
+          } // else return false; // req for this building is not in worklist
+        } // else return false; // second req is not a building (probably terrain req)
+      } // else return false; // can't build now and has tech = something else was wrong
+    } // else return false; // player lacked the tech
   }
   return false;
 }
@@ -2111,28 +2111,46 @@ function populate_worklist_production_choices(pcity)
     }
     var kind = production_list[a]['kind'];
     var value = production_list[a]['value'];
-    var can_build = can_city_build_now(pcity, kind, value);
-    // suppress improvements already in queue
-    if (can_build && kind==VUT_IMPROVEMENT && city_has_building_in_queue(pcity, value)) can_build=false;
-    var can_build_later = false; // can build soon (after tech discovery or making pre-req building)
 
     // Don't show units if user clicked option to only show improvements
     if (kind == VUT_UTYPE && opt_show_improvements_only) continue;
 
-    // Show choices that will be unlocked when achieving current research, so player can plan queue
-    if (techs[client.conn.playing['researching']]) { // player must be researching something
+    var can_build = can_city_build_now(pcity, kind, value);
+    // Suppress improvements already in queue (except Coinage)
+    if (can_build && kind==VUT_IMPROVEMENT 
+      && improvements[value]['name'] != "Coinage"
+      && city_has_building_in_queue(pcity, value)) can_build=false;
+
+    var can_build_later = false; // flag for items buildable after tech discovery or making a pre-req building
+
+    // Let player add illegal choices which are legal after discovering current research
+    if (!can_build && techs[client.conn.playing['researching']]) { // player must be researching something
       if (kind == VUT_IMPROVEMENT) {
         if (improvements[value]['reqs'].length > 0 && client.conn.playing['researching'] ) {
           if (improvements[value]['reqs'][0]['value'] == techs[client.conn.playing['researching']]['id']) {
-            if (!city_has_building_in_queue(pcity, value))
-              can_build_later = true;
+            if (!city_has_building_in_queue(pcity, value)) {
+              // check if there is second req blocking this (i.e. req for coastal/river)
+              if (improvements[value]['reqs'].length > 1) {
+                //second req type, 1==tech, 3==building, 14=coastal, 23=river adjacency
+                var req_type = improvements[value]['reqs'][1]['kind'];
+                if (req_type > 3) can_build_later = false; // forbid unusual reqs (avoid showing illegal choices)
+                else can_build_later = true;
+              } else can_build_later = true; // no second req, so show item
+            }
           } 
         }
       } else if (kind == VUT_UTYPE) {
-        if (unit_types[value]['tech_requirement'] == techs[client.conn.playing['researching']]['id']) can_build_later = true;
+        // player is researching the tech for the unit, so let them queue it
+        if (unit_types[value]['tech_requirement'] == techs[client.conn.playing['researching']]['id']) {
+          can_build_later = true;
+          // (hack: don't queue future sea units until we can check for landlocked vs. river/ocean adjacent cities)
+          var class_name = unit_classes[unit_types[value]['unit_class_id']]['name'].replace("?unitclass:","");
+          if (class_name == "Sea" || class_name == "RiverShip" || class_name == "Submarine" || class_name == "Trireme") 
+            can_build_later = false;
+        }
       }
     }
-    // Special case: tech reqs met but required building not present; add to list if pre-req building is in the worklist queue
+    // Special case: tech reqs met but required building not present; add to list if the pre-req building is in the worklist
     if (!can_build && kind == VUT_IMPROVEMENT) {
       if (can_city_queue_improvement(pcity, production_list[a]['value']))
         can_build_later = true;
@@ -2424,16 +2442,20 @@ function city_add_to_worklist()
   }
 }
 /**************************************************************************
- when adding/changing production, an improvement added to the list should
- be unselected because you never want to add same type multiple times
+ When adding/changing production, a building added to the list should
+ be unselected because you don't want to add same building multiple times.
+ Also because it will be removed from the list anyway.
 *************************************************************************/
 function unselect_improvements()
 {
     /* only units remain selected in right panel after adding to worklist,
-    * because you might want to add more of them. Improvements already
+    * because you might want to add more of them. Buildings already
     * queued should be removed: */
-   production_selection = production_selection.filter(function(value, index, arr){
-    if (arr[index].kind == VUT_UTYPE) return value; 
+   production_selection = production_selection.filter(function(element, index, arr){
+    if (arr[index].kind == VUT_UTYPE) return element;
+    // Coinage isn't a real building: it could go in multiple worklist slots
+    if (arr[index].kind == VUT_IMPROVEMENT && improvements[arr[index].value]['name'] == "Coinage")
+      return element;
   });
 }
 
