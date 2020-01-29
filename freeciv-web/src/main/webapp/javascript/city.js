@@ -917,8 +917,39 @@ function can_city_build_improvement_now(pcity, pimprove_id)
   return (pcity != null && pcity['can_build_improvement'] != null
           && pcity['can_build_improvement'][pimprove_id] == "1");
 }
+/**************************************************************************
+  Return: * true,  if a city can build an improvement now, 
+          * true,  if city can't build now but can add to queue, 
+          * false, if city can neither build now nor add to queue.
+**************************************************************************/
+function can_city_queue_improvement(pcity, pimprove_id)
+{
+  // City CAN'T queue what it already has:
+  if (city_has_building(pcity, pimprove_id)) return false;
+  // Don't show items already queued:
+  if (city_has_building_in_queue(pcity, pimprove_id)) return false;
+  // ...and it CAN queue what it's allowed to build now:
+  if (can_city_build_improvement_now(pcity, pimprove_id)) return true;
 
-
+  // OTHERWISE, City can queue IF it has the tech && pre-req building is in worklist:
+  // if building has reqs
+  if (improvements[pimprove_id]['reqs'].length > 0) {
+    // if player has required tech
+    if (player_invention_state(client.conn.playing, improvements[pimprove_id]['reqs'][0]['value']) == TECH_KNOWN) {
+      // if building has a second req 
+      if (improvements[pimprove_id]['reqs'].length > 1) {
+        // if second req is another building
+        if (improvements[pimprove_id]['reqs'][1]['kind'] == VUT_IMPROVEMENT) {
+          // if the building req is already queued
+          if (city_has_building_in_queue(pcity, improvements[pimprove_id]['reqs'][1]['value'])) {
+            return true; // req for this building is in queue, so let player append this to queue
+          } else return false; // req for this building is not in queue
+        } else return true; // unlikely case of second req is not a building, err on the liberal side
+      } else return true; // player has tech for this building but no other reqs are needed
+    } else return false; // player lacked the tech
+  }
+  return false;
+}
 /**************************************************************************
   Return whether given city can build given item.
 **************************************************************************/
@@ -929,8 +960,6 @@ function can_city_build_now(pcity, kind, value)
        ? can_city_build_unit_now(pcity, value)
        : can_city_build_improvement_now(pcity, value));
 }
-
-
 /**************************************************************************
   Return TRUE iff the city has this building in it.
 **************************************************************************/
@@ -938,6 +967,28 @@ function city_has_building(pcity, improvement_id)
 {
   return 0 <= improvement_id && improvement_id < ruleset_control.num_impr_types
     && pcity['improvements'] && pcity['improvements'].isSet(improvement_id);
+}
+/**************************************************************************
+  Return TRUE iff the city has this building in its production worklist
+**************************************************************************/
+function city_has_building_in_queue(pcity, improvement_id)
+{
+  // Go through each item in worklist looking for improvement
+  for (var z = -1; z < pcity['worklist'].length; z++) { // current prod is not in worklist array but separate, so start at -1
+    // Get item from current prod or future worklist---------
+    var prod_kind, prod_value;
+    if (z==-1) {
+      prod_kind  = pcity['production_kind'];
+      prod_value = pcity['production_value'];
+    } else {
+      //console.log("Checking city "+pcity['id']+" to grab worklist value")
+      prod_kind  = pcity['worklist'][z]['kind'];
+      prod_value = pcity['worklist'][z]['value'];
+    }
+    if (prod_kind == VUT_IMPROVEMENT && prod_value == improvement_id) 
+      return true;
+  }
+  return false;
 }
 
 
@@ -2061,23 +2112,33 @@ function populate_worklist_production_choices(pcity)
     var kind = production_list[a]['kind'];
     var value = production_list[a]['value'];
     var can_build = can_city_build_now(pcity, kind, value);
-    var near_tech = false; // can build soon after tech discovery
+    // suppress improvements already in queue
+    if (can_build && kind==VUT_IMPROVEMENT && city_has_building_in_queue(pcity, value)) can_build=false;
+    var can_build_later = false; // can build soon (after tech discovery or making pre-req building)
 
     // Don't show units if user clicked option to only show improvements
     if (kind == VUT_UTYPE && opt_show_improvements_only) continue;
 
-    // Show choices for current research, so player can plan queue
+    // Show choices that will be unlocked when achieving current research, so player can plan queue
     if (techs[client.conn.playing['researching']]) { // player must be researching something
       if (kind == VUT_IMPROVEMENT) {
-          if (improvements[value]['reqs'].length > 0 && client.conn.playing['researching'] ) {
-            if (improvements[value]['reqs'][0]['value'] == techs[client.conn.playing['researching']]['id']) near_tech = true;
-          }
+        if (improvements[value]['reqs'].length > 0 && client.conn.playing['researching'] ) {
+          if (improvements[value]['reqs'][0]['value'] == techs[client.conn.playing['researching']]['id']) {
+            if (!city_has_building_in_queue(pcity, value))
+              can_build_later = true;
+          } 
+        }
       } else if (kind == VUT_UTYPE) {
-        if (unit_types[value]['tech_requirement'] == techs[client.conn.playing['researching']]['id']) near_tech = true;
+        if (unit_types[value]['tech_requirement'] == techs[client.conn.playing['researching']]['id']) can_build_later = true;
       }
     }
+    // Special case: tech reqs met but required building not present; add to list if pre-req building is in the worklist queue
+    if (!can_build && kind == VUT_IMPROVEMENT) {
+      if (can_city_queue_improvement(pcity, production_list[a]['value']))
+        can_build_later = true;
+    }
   
-    if (can_build || near_tech || opt_show_unreachable_items) {
+    if (can_build || can_build_later || opt_show_unreachable_items) {
       production_html += "<tr class='prod_choice_list_item kindvalue_item"
        + (can_build ? "" : " cannot_build_item")
        + "' data-value='" + value + "' data-kind='" + kind + "'>"
@@ -2341,6 +2402,8 @@ function city_change_production()
   if (production_selection.length === 1) {
     send_city_change(active_city['id'], production_selection[0].kind,
                      production_selection[0].value);
+
+    unselect_improvements();
   }
   // default this prod selection for mass-selection change prod button:
   set_mass_prod_city(active_city['id']);
@@ -2356,7 +2419,22 @@ function city_add_to_worklist()
   if (production_selection.length > 0) {
     active_city['worklist'] = active_city['worklist'].concat(production_selection);
     send_city_worklist(active_city['id']);
+
+    unselect_improvements();
   }
+}
+/**************************************************************************
+ when adding/changing production, an improvement added to the list should
+ be unselected because you never want to add same type multiple times
+*************************************************************************/
+function unselect_improvements()
+{
+    /* only units remain selected in right panel after adding to worklist,
+    * because you might want to add more of them. Improvements already
+    * queued should be removed: */
+   production_selection = production_selection.filter(function(value, index, arr){
+    if (arr[index].kind == VUT_UTYPE) return value; 
+  });
 }
 
 /**************************************************************************
@@ -2454,6 +2532,8 @@ function city_insert_in_worklist()
   }
 
   send_city_worklist(active_city['id']);
+
+  unselect_improvements();
 }
 
 /**************************************************************************
@@ -2555,6 +2635,7 @@ function city_exchange_worklist_task()
   if (!same) {
     send_city_worklist(active_city['id']);
   }
+  unselect_improvements();
 }
 
 /**************************************************************************
