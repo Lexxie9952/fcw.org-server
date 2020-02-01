@@ -1060,6 +1060,19 @@ void handle_event(const char *featured_text, struct tile *ptile,
   text_tag_list_destroy(tags);
 }
 
+/*
+ * Andreas' packets
+ */
+void handle_info_text_message(const char *message)
+{
+  /* no-op */
+}
+
+void handle_goto_path(int unit_id, int length, const enum direction8 *dir, int dest, int turns)
+{
+  /* no-op */
+}
+
 /**********************************************************************//**
   Creates a struct packet_generic_message packet and injects it via
   handle_chat_msg.
