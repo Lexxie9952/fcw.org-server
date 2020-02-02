@@ -724,6 +724,9 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
     case "Musketeers":
         dx -= 1; dy -= 1;
         break;
+    case "Phalanx":                     
+        dx += 1; dy -= 2;
+        break;
     case "Pikemen":
         dx += 1; dy += 3;
         break;
@@ -745,9 +748,6 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
     case "Transport":
         dx -= 3; dy -= 1;
         break;
-    //case "Workers":                     
-    //   dx -= 0; dy -= 1;
-    //    break;
     default:
       // do nothing, dx and dy already set higher up.
   }
