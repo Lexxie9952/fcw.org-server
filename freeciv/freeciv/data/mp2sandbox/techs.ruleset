@@ -174,6 +174,7 @@ req2     = "The Republic"
 flags    = ""
 graphic     = "a.banking"
 graphic_alt = "-"
+helptext = _("Prevents Philosophy from awarding bonus tech.")
 cost = 364
 
 [advance_bridge_building]
@@ -460,7 +461,7 @@ req2     = "Literacy"
 flags    = ""
 graphic     = "a.invention"
 graphic_alt = "-"
-helptext = _("Increased vision for Fortress and ships in Naval Base.")
+helptext = _("Extra vision for Fortress and ships in Naval Base. Prevents Philosophy bonus.")
 
 [advance_iron_working]
 name     = _("Iron Working")
@@ -513,7 +514,7 @@ req2     = "Tactics"
 flags    = ""
 graphic     = "a.machine_tools"
 graphic_alt = "-"
-helptext = _("Obsoletes Cannon, Great Wall.")
+helptext = _("Obsoletes Cannon. Globally obsoletes Great Wall.")
 cost = 3985
 
 [advance_magnetism]
@@ -666,7 +667,7 @@ req2     = "Literacy"
 flags    = ""
 graphic     = "a.philosophy"
 graphic_alt = "-"
-helptext = _("Bonus tech if before 1600AD, Industrialization, Electricity, Conscription.")
+helptext = _("Bonus tech before 1600AD if no next tier techs are possessed.")
 cost = 276
 
 [advance_physics]
@@ -676,6 +677,7 @@ req2     = "Navigation"
 flags    = ""
 graphic     = "a.physics"
 graphic_alt = "-"
+helptext = _("Prevents Philosophy from awarding bonus tech.")
 
 [advance_plastics]
 name     = _("Plastics")
@@ -706,7 +708,7 @@ cost = 24
 [advance_radio]
 name     = _("Radio")
 req1     = "Flight"
-req2     = "Electricity"
+req2     = "Electronics"
 flags    = ""
 graphic     = "a.radio"
 graphic_alt = "-"
@@ -765,7 +767,7 @@ cost = 7860
 [advance_rocketry]
 name     = _("Rocketry")
 req1     = "Advanced Flight"
-req2     = "Electronics"
+req2     = "Miniaturization"
 flags    = ""
 graphic     = "a.rocketry"
 graphic_alt = "-"

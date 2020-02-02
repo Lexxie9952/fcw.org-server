@@ -77,6 +77,7 @@ class_flags =
     _("Airliftable"), _("Can be airlifted if it has remaining moves.")
     _("BorderPolice"), _("Military units from this class can peacefully expel certain foreign units.")
     _("AttFromNonNative"), _("Can launch attack from non-native tiles.")
+    _("CargoRestrained"), _("Can't attack as Cargo. Must first unload.")
   }
 
 [veteran_system]
@@ -197,7 +198,8 @@ min_speed     = 1
 hp_loss_pct   = 0
 flags         = "TerrainSpeed", "DamageSlows", "CanOccupyCity", "BuildAnywhere",
                 "CollectRansom", "ZOC", "CanFortify", "CanPillage",
-                "TerrainDefense", "KillCitizen", "Airliftable", "BorderPolice"
+                "TerrainDefense", "KillCitizen", "Airliftable", "BorderPolice",
+                "CargoRestrained"
 helptext      = _("\
   * Can be airlifted from a suitable city.\
 ")
@@ -208,7 +210,8 @@ min_speed     = 1
 hp_loss_pct   = 0
 flags         = "TerrainSpeed", "DamageSlows", "CanOccupyCity", "BuildAnywhere",
                 "CollectRansom", "ZOC", "CanFortify", "CanPillage",
-                "TerrainDefense", "Airliftable", "BorderPolice"
+                "TerrainDefense", "Airliftable", "BorderPolice",
+                "CargoRestrained"
 helptext      = _("\
   * Does not reduce population when attacking city.\
 ")
@@ -1652,7 +1655,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 flags         = "CantReachAir"
-roles         = "AttackStrongStartUnit"
+roles         = ""
 helptext      = _("\
 Catapults are war machines that hurl massive rocks to crush\
  and break their targets. They are strong attackers but equally\
@@ -1685,7 +1688,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 flags         = "CantReachAir"
-roles         = "AttackStrongStartUnit", "BarbarianTech", "BarbarianBuildTech"
+roles         = "BarbarianTech", "BarbarianBuildTech"
 helptext      = _("\
 Cannons are huge guns that fire heavy metallic projectiles. They are strong\
  attackers but weak defenders, so they need an escort to be effective.\
@@ -1718,7 +1721,7 @@ uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter"
 flags         = "CantReachAir"
-roles         = "AttackStrongStartUnit"
+roles         = ""
 helptext      = _("\
 Artillery are a major upgrade to Cannons, with doubled firepower. They are\
  superb attackers but poor at defense. They need an escort to be effective.\
@@ -1759,7 +1762,7 @@ bonuses       =
      "AirAttacker", "DefenseDivider", 1
      "AirAttacker", "DefenseMultiplier", 1
    }
-flags         = "NeverBlocked", "AntiAir"
+flags         = "NeverBlocked", "AntiAir", "Marines"
 roles         = ""
 helptext      = _("\
 Anti-Aircraft Artillery (AAA) can attack almost anything from anywhere. AAA get a\
@@ -1781,7 +1784,7 @@ graphic       = "u.mobile_sam"
 graphic_alt   = "u.howitzer"
 sound_move    = "m_howitzer"
 sound_move_alt = "m_generic"
-sound_fight   = "f_stealth_fighter"
+sound_fight   = "f_mobile_sam"
 sound_fight_alt = "f_generic"
 build_cost    = 75
 pop_cost      = 0
@@ -1842,7 +1845,7 @@ uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter"
 flags         = "CantReachAir"
-roles         = "AttackStrongStartUnit"
+roles         = ""
 helptext      = _("\
 Howitzers are upgraded Artillery with significant increase in mobility and attack strength. They can fire over city walls, ignoring their effect.\
 ")
@@ -2993,9 +2996,9 @@ cargo         = "Missile"
 bonuses       =
    { "flag", "type", "value"
      "AirAttacker", "DefenseMultiplier", 2
+     "Missile", "DefenseMultiplier", 2
      "Submarine", "DefenseMultiplier", 1
      "Marines", "DefenseMultiplier", 1
-     "Missile", "DefenseMultiplier", 1
    }
 flags         = "BadCityDefender", "CanEscape", "AntiAir"
 roles         = "Hunter"
@@ -3419,7 +3422,8 @@ Spies can do what a Diplomat can, and also 1)Survive ops\
  2)Sabotage lone units 3)Poison city water 4)Steal specific tech\
  5)Steal tech from cities more than once 6)Sabotage specific targets.\
 "), _("\
- Spies who survive ops escape to the nearest friendly city.\
+Spies who survive ops escape to the nearest friendly city. Spies have\
+ a 25% advantage over Diplomats in combat: a base 75% chance to win.\
  Full rules are in the Manual.\
 ")
 
@@ -3449,7 +3453,7 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable"
-roles         = ""
+roles         = "AttackStrongStartUnit"  ;note: MP2 doesn't start games with ASSU's so has co-opted this for caravan start unit.
 helptext      = _("\
 Caravans are Commerce units. In cities with whom you are not at war, Commerce units\
  help build Wonders or set up Traderoutes, increasing net trade in both cities\

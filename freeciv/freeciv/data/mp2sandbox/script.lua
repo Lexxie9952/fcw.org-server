@@ -112,24 +112,37 @@ function tech_researched_handler(tech, player, how)
         return
       end
   
-      -- Philosophy can't give advances that come after Industrialization, Electricity, and Conscription --------------
+      -- Philosophy can only give advances if you know NO techs from the next tier --------------
       -- Even knowing any of these techs makes an advance impossible !
       
       local researcher = player
-      local forbidden_tech = find.tech_type("Industrialization")
   
+      local forbidden_tech = find.tech_type("Banking")
       if researcher:knows_tech(forbidden_tech) then
         return
       end
   
-      forbidden_tech = find.tech_type("Electricity")
-  
+      forbidden_tech = find.tech_type("Medicine")
       if researcher:knows_tech(forbidden_tech) then
         return
       end
   
-      forbidden_tech = find.tech_type("Conscription")
+      forbidden_tech = find.tech_type("University")
+      if researcher:knows_tech(forbidden_tech) then
+        return
+      end
   
+      forbidden_tech = find.tech_type("Invention")
+      if researcher:knows_tech(forbidden_tech) then
+        return
+      end
+  
+      forbidden_tech = find.tech_type("Physics")
+      if researcher:knows_tech(forbidden_tech) then
+        return
+      end
+  
+      forbidden_tech = find.tech_type("Monotheism")
       if researcher:knows_tech(forbidden_tech) then
         return
       end

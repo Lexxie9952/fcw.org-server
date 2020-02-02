@@ -611,83 +611,6 @@ Adds 1 extra production to all Oceanic tiles worked by a city.  The\
  city needs to be coastal to build this improvement.\
 ")
 
-[building_palace]
-name		= _("Palace")
-genus		= "SmallWonder"
-flags		= "SaveSmallWonder"
-reqs	=
-    { "type", "name", "range"
-      "Tech", "Masonry", "Player"
-    }
-graphic	= "b.palace"
-graphic_alt	= "-"
-obsolete_by	=
-    { "type", "name", "range"
-    }
-build_cost	= 70
-upkeep		= 0
-sabotage	= 0
-sound		= "b_palace"
-sound_alt	= "b_generic"
-helptext	= _("\
-Makes a city the capital of your nation.\
- Corruption in cities increases with distance\
- from the capital (except under Democracy or\
- Communism.) A Palace reduces corruption in your capital\
- by roughly half.\
-"), _("\
-The cost of inciting a revolt decreases with distance from the\
- capital. The capital cannot be incited to revolt, and reduces the chance\
- of enemy agents defeating your agents by 50%. Attempts to sabotage buildings\
- in your capital are also reduced by 50%.\
-"), _("\
-Take good care of your capital, as its loss may result in your\
- empire plunging into civil war. Losing your current palace also\
- results in losing whatever spaceship you might have.\
-"), _("\
-If the capital is in a dangerous location, or a more central capital\
- would give a better corruption distribution, you can move your palace\
- by rebuilding it in another city.\
-"),
-_("\
-The city containing the Palace receives a production bonus of +75% under Despotism,\
- +50% under Monarchy, and +25% under Communism. Under Fundamentalism, it receives\
- a +50% gold bonus.\
-")
-
-[building_ecclesiastical_palace]
-name		= _("Ecclesiastical Palace")
-genus		= "SmallWonder"
-reqs	=
-    { "type", "name", "range"
-      "Tech", "Mysticism", "Player"
-    }
-graphic	= "b.ecclesiastical_palace"
-graphic_alt	= "b.palace"
-obsolete_by	=
-    { "type", "name", "range"
-    }
-build_cost	= 110
-upkeep		= 0
-sabotage	= 0
-sound		= "b_palace"
-sound_alt	= "b_generic"
-helptext	= _("\
-Makes a city the religious capital that acts as a second center of government.\
-"), _("\
-This building is a second Palace and gives all effects of a Palace,\
- including reduction of corruption, which is based on which capital a city\
- is closest to. Under Despotism, the city containing the Palace gains a\
- +75% gold bonus. Under Monarchy and Fundamentalism, a +50% gold bonus. \
-"), _("\
-The city where this Palace is located cannot be incited to revolt,\
- and enjoys a bonus when enemy agents try to evade your own agents\
- stationed in the city, or sabotage your buildings.\
-"), _("\
-Under Fundamentalism, Fanatics produced in the city with this building\
- are inspired by fervorous faith to +1 higher veteran level.\
-")
-
 [building_police_station]
 name		= _("Police Station")
 genus		= "Improvement"
@@ -708,8 +631,8 @@ sound_alt	= "b_generic"
 helptext	= _("\
 Neutralizes the unhappiness caused by two military units. Assists domestic diplomatic\
  units against hostile diplomatic attacks with a 10% bonus. Decreases the chance of\
- the basic Steal Tech action by 10%. Prevents enemies from establishing an embassy\
- without first agreeing to cease-fire, armistice, or peace.\
+ tech theft by 10%. Prevents enemies from establishing an embassy without first\
+ agreeing to cease-fire, armistice, or peace.\
 ")
 
 [building_port_facility]
@@ -1142,6 +1065,114 @@ Adds +150% to science output in a city with a Library.\
  in science output.\
 ")
 
+[building_palace]
+name		= _("Palace")
+genus		= "SmallWonder"
+flags		= "SaveSmallWonder"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Masonry", "Player"
+    }
+graphic	= "b.palace"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 70
+upkeep		= 0
+sabotage	= 0
+sound		= "b_palace"
+sound_alt	= "b_generic"
+helptext	= _("\
+Makes a city the capital of your nation.\
+ Corruption in cities increases with distance\
+ from the capital (except under Democracy or\
+ Communism.) A Palace reduces corruption in your capital\
+ by roughly half.\
+"), _("\
+The cost of inciting a revolt decreases with distance from the\
+ capital. The capital cannot be incited to revolt, and reduces the chance\
+ of enemy agents defeating your agents by 50%. Attempts to sabotage buildings\
+ in your capital are also reduced by 50%.\
+"), _("\
+Take good care of your capital, as its loss may result in your\
+ empire plunging into civil war. Losing your current palace also\
+ results in losing whatever spaceship you might have.\
+"), _("\
+If the capital is in a dangerous location, or a more central capital\
+ would give a better corruption distribution, you can move your palace\
+ by rebuilding it in another city.\
+"),
+_("\
+The city containing the Palace receives a production bonus of +75% under Despotism,\
+ +50% under Monarchy, and +25% under Communism. Under Fundamentalism, it receives\
+ a +50% gold bonus.\
+")
+
+[building_ecclesiastical_palace]
+name		= _("Ecclesiastical Palace")
+genus		= "SmallWonder"
+flags		= "SaveSmallWonder"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Mysticism", "Player"
+    }
+graphic	= "b.ecclesiastical_palace"
+graphic_alt	= "b.palace"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 110
+upkeep		= 0
+sabotage	= 0
+sound		= "b_palace"
+sound_alt	= "b_generic"
+helptext	= _("\
+Makes a city the religious capital that acts as a second center of government.\
+"), _("\
+This building is a second Palace and gives all effects of a Palace,\
+ including reduction of corruption (based on the nearest capital.)\
+ Unlike the Palace, capital production bonuses are rendered in gold\
+ tithes rather than shield output. Fundamentalism gets a +50% tithe\
+ gold bonus in tithes, in its ecclesiasitcal capital.\
+"), _("\
+The city where this Palace is located cannot be incited to revolt,\
+ and enjoys a bonus when enemy agents try to evade your own agents\
+ stationed in the city, or sabotage your buildings.\
+"), _("\
+Under Fundamentalism, Fanatics produced in the city with this building\
+ are inspired by fervorous faith to +1 higher veteran level.\
+")
+
+[building_agoge]
+name		= _("Agōgē of Sparta")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",            "range",  "present", "quiet"
+      "Tech",     "Bronze Working",  "Player", TRUE,      FALSE
+      "Building", "Agōgē of Sparta", "Player", FALSE,     TRUE
+    }
+graphic	= "b.agoge"
+graphic_alt	= "b.sun_tzus_war_academy"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Gunpowder", "Player"
+    }
+build_cost	= 100
+upkeep		= 0
+sabotage	= 0
+sound		= "w_agoge"
+sound_alt	= "w_generic"
+helptext	= _("\
+The Agōgē creates a culture of extreme fitness and battle readiness.\
+ All your foot soldiers get +⅓ move. Phalanx and Pikemen receive a\
+ +50% attack bonus.\
+"), _("
+The Agōgē is famous for vigilant patrols, secret shortcut trails, and\
+ readiness for battle. Foot units in the city with the Agōgē\
+ begin their turn with +1 move. Obsolete by: Gunpowder.\
+")
+
 [building_apollo_program]
 name		= _("Apollo Program")
 genus		= "SmallWonder"
@@ -1186,17 +1217,14 @@ sound		= "w_asmiths_trading_co"
 sound_alt	= "w_generic"
 helptext	= _("\
 In all your cities, Buildings with upkeep of 1 gold become free.\
- (This bonus co-exists and accumulates with other upkeep bonuses.)\
  This Wonder also allows three new specialists:\
 "), _("
-  * Each Laborer produces one production point for their city per turn;\
- the same as an unmined mountain.\
+  * Each Laborer produces 1 production point for their city per turn;\
 "), _("
-  * Each Merchant produces one gold and two trade points per turn.\
+  * Each Merchant produces 1 gold and 2 trade points per turn.\
  Trade is then distributed by your national tax rates.\
 "), _("
-  * Each Farmer provides one food for their city per turn;\
- the same output as a blank hill or swamp.\
+  * Each Farmer provides 1 food for their city per turn;\
 "), _("
  This wonder is never obsolete.\
 ")
@@ -1374,7 +1402,7 @@ sound_alt	= "w_generic"
 helptext	= _("\
 Gives a City Wall in all your cities. This has no effect\
  when City Walls are already present.  This Wonder is made\
- obsolete when you discover Machine Tools.\
+ obsolete when any nation discovers Machine Tools.\
 ")
 
 [building_hanging_gardens]

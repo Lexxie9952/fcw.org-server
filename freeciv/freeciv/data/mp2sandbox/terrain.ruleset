@@ -274,7 +274,7 @@ clean_fallout_time   = 3
 animal               = "None"
 warmer_wetter_result = "no"
 warmer_drier_result  = "Swamp"
-cooler_wetter_result = "Glacier"
+cooler_wetter_result = "Arctic"
 cooler_drier_result  = "Tundra"
 native_to            = "Sea", "Air", "Balloon", "Missile", "Helicopter", "Trireme", "RiverShip", "Submarine", "AirProtect", "AirPillage", "Bomb"
 flags                = "NoCities", "NoBarbs", "NoPollution", "FreshWater", "NoZoc", "NoFortify"
@@ -315,8 +315,8 @@ clean_fallout_time   = 3
 animal               = "None"
 warmer_wetter_result = "no"
 warmer_drier_result  = "Swamp"
-cooler_wetter_result = "Glacier"
-cooler_drier_result  = "Glacier"
+cooler_wetter_result = "Arctic"
+cooler_drier_result  = "Arctic"
 native_to            = "Sea", "Air", "Balloon", "Missile", "Helicopter", "Trireme", "RiverShip", "Submarine", "AirProtect", "AirPillage", "Bomb"
 flags                = "NoCities", "NoPollution", "UnsafeCoast", "NoZoc", "NoFortify"
 property_ocean_depth = 32
@@ -370,8 +370,8 @@ Deep oceans cover much of the world away from coastlines, and only\
  seaworthy units (not including Triremes) can travel on them.\
 ")
 
-[terrain_glacier]
-name                 = _("Glacier")
+[terrain_arctic]
+name                 = _("Arctic")
 graphic              = "arctic"
 graphic_alt          = "-"
 identifier           = "a"
@@ -385,9 +385,9 @@ resources            = "Ivory", "Oil"
 road_trade_incr_pct  = 0
 base_time            = 1
 road_time            = 4
-irrigation_result    = "no"
+irrigation_result    = "Tundra"
 irrigation_food_incr = 0
-irrigation_time      = 0
+irrigation_time      = 15
 mining_result        = "yes"
 mining_shield_incr   = 2
 mining_time          = 10
@@ -408,9 +408,8 @@ color.r              = 232
 color.g              = 232
 color.b              = 232
 helptext             = _("\
-Glaciers are found only in the most northerly or southerly\
- reaches of the world.  They are very cold, and hence difficult to\
- work with.\
+Arctic terrain is ice capped permafrost, found only in the far northern or southern\
+ reaches of the world.  It is very cold, and hence difficult to work with.\
 "), _("\
 Oil wells can be built when Refining is known.\
 ")
@@ -537,7 +536,7 @@ clean_fallout_time   = 3
 animal               = "None"
 warmer_wetter_result = "Lake"
 warmer_drier_result  = "Desert"
-cooler_wetter_result = "Glacier"
+cooler_wetter_result = "Arctic"
 cooler_drier_result  = "Tundra"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Missile", "Helicopter", "AirProtect", "AirPillage", "Bomb"
 flags                = "Starter", "CanHaveRiver", "Low Land"
@@ -715,7 +714,7 @@ clean_fallout_time   = 3
 animal               = "None"
 warmer_wetter_result = "Lake"
 warmer_drier_result  = "Desert"
-cooler_wetter_result = "Glacier"
+cooler_wetter_result = "Arctic"
 cooler_drier_result  = "Tundra"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Missile", "Helicopter", "AirProtect", "AirPillage", "Bomb"
 flags                = "Starter", "CanHaveRiver", "Low Land"
@@ -763,7 +762,7 @@ clean_fallout_time   = 3
 animal               = "None"
 warmer_wetter_result = "Lake"
 warmer_drier_result  = "Desert"
-cooler_wetter_result = "Glacier"
+cooler_wetter_result = "Arctic"
 cooler_drier_result  = "Tundra"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Missile", "Helicopter", "AirProtect", "AirPillage", "Bomb"
 flags                = "CanHaveRiver", "Low Land"
@@ -809,7 +808,7 @@ clean_fallout_time   = 3
 animal               = "None"
 warmer_wetter_result = "Lake"
 warmer_drier_result  = "Desert"
-cooler_wetter_result = "Glacier"
+cooler_wetter_result = "Arctic"
 cooler_drier_result  = "no"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Missile", "Helicopter", "AirProtect", "AirPillage", "Bomb"
 flags                = "Starter", "NoBarbs", "CanHaveRiver", "Low Land"
@@ -954,7 +953,7 @@ identifier  = "i"
 food        = 1
 shield      = 1
 trade       = 4
-# glacier 
+# arctic 
 
 [resource_silk]
 extra       = "Silk"
@@ -987,8 +986,8 @@ trade       = 4
 [resource_oil]
 extra       = "Oil"
 identifier  = "x"
-shield      = 3 ; glacier used to have 4
-# glacier, desert
+shield      = 3 ; arctic used to have 4, now it's 3+2 allowing an 0 2 0 tile.
+# arctic, desert
 
 
 [extraui]
@@ -1194,7 +1193,7 @@ conflicts      = "Irrigation", "Farmland"
 helptext       = _("\
 Oil wells behave like mines (giving an extra production point), but \
 require more technology. Oil wells can be built on Desert with knowledge \
-of Construction, and on Glacier with knowledge of Refining.\
+of Construction, and on Arctic terrain with knowledge of Refining.\
 "), _("\
 Building an oil well on an irrigated tile will destroy the irrigation.\
 ")
@@ -1503,7 +1502,7 @@ reqs           =
     }
 build_time     = 3
 removal_time   = 0
-conflicts      = "Airbase", "Irrigation", "Mine", "Oil Well", "Farmland"
+conflicts      = "Airbase"
 defense_bonus  = 33
 native_to      = "Trireme", "RiverShip", "Sea", "Submarine", "Balloon"
 flags          = "NativeTile", "NoStackDeath", "Refuel"

@@ -95,16 +95,16 @@ pillage_select           = TRUE
 tech_steal_allow_holes    = FALSE
 ; Whether one can get a tech for which prereqs are not known via
 ; diplomatic trading
-tech_trade_allow_holes    = TRUE
+tech_trade_allow_holes    = FALSE
 ; ...and whether one can lose a tech which is prereq for another known
 ; tech via trade, if techlost_donor is nonzero
-tech_trade_loss_allow_holes = TRUE
+tech_trade_loss_allow_holes = FALSE
 ; Whether one can get a tech for which prereqs are not known via
 ; parasite effect (classic ruleset's Great Library)
-tech_parasite_allow_holes = TRUE
+tech_parasite_allow_holes = FALSE
 ; Whether one can lose a tech which is prereq for another known tech
 ; due to negative bulbs, if techlossforgiveness allows loss
-tech_loss_allow_holes     = TRUE
+tech_loss_allow_holes     = FALSE
 
 ; Whether civil war is possible at all
 civil_war_enabled        = TRUE
@@ -1038,21 +1038,35 @@ target_reqs =
        "MaxUnitsonTile","0",            "Local", TRUE
     }
 
-
-
-;UPGRADE
-[actionenabler_attack_native]
+;UPGRADE - all the below need Missile=FALSE after merge with main branch
+;---------------------------------------------------------------------------
+;Native attack ALWAYS allowed for units who aren't CargoRestrained
+[actionenabler_attack_native_unrestrained]
 action = "Attack"
 actor_reqs    =
-    { "type",          "name",         "range", "present"
-      "UnitFlag",      "NonMil",       "Local", FALSE
-;      "UnitClassFlag","Missile",      "Local", FALSE
-      "MinMoveFrags",  "1",            "Local", TRUE
-      "UnitState",     "OnNativeTile", "Local", TRUE
-      "DiplRel",       "War",          "Local", TRUE
+    { "type",         "name",           "range", "present"
+      "UnitFlag",     "NonMil",         "Local", FALSE
+;     "UnitClassFlag","Missile",        "Local", FALSE
+      "UnitClassFlag","CargoRestrained","Local", FALSE
+      "MinMoveFrags", "1",              "Local", TRUE
+      "UnitState",    "OnNativeTile",   "Local", TRUE
+      "DiplRel",      "War",            "Local", TRUE
     }
-
-;UPGRADE
+;Native attack for CargoRestrained units allowed, if not Transporting
+[actionenabler_attack_native_restrained]
+action = "Attack"
+;Should Archers attack from Rivers? Probably, but then what is the Pandora's box? Muskets, etc?
+actor_reqs    =
+    { "type",         "name",           "range", "present"
+      "UnitFlag",     "NonMil",         "Local", FALSE
+;     "UnitClassFlag","Missile",        "Local", FALSE
+      "UnitClassFlag","CargoRestrained","Local", TRUE
+      "MinMoveFrags", "1",              "Local", TRUE
+      "UnitState",    "OnNativeTile",   "Local", TRUE
+      "UnitState",    "Transporting",   "Local", FALSE
+      "DiplRel",      "War",            "Local", TRUE
+    }
+;Marines
 [actionenabler_attack_marines]
 action = "Attack"
 actor_reqs    =
@@ -1063,9 +1077,7 @@ actor_reqs    =
       "UnitFlag",      "Marines", "Local", TRUE
       "DiplRel",       "War",     "Local", TRUE
     }
-
-;UPGRADE
-[actionenabler_attack_att_from_non_native]
+[actionenabler_attack_from_non_native]
 action = "Attack"
 actor_reqs    =
     { "type",          "name",             "range", "present"
@@ -1075,8 +1087,7 @@ actor_reqs    =
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
       "DiplRel",       "War",              "Local", TRUE
     }
-
-;/* UPGRADE
+;/* REQUIRED after merge 
 ;[actionenabler_explode_missile]
 ;action = "Suicide Attack"
 ;actor_reqs    =
@@ -1087,22 +1098,38 @@ actor_reqs    =
 ;      "DiplRel",       "War",     "Local", TRUE
 ;    }
 ;*/
-
-[actionenabler_conquer_city_native]
+;---------------------------------------------------------------------------
+[actionenabler_conquer_city_native_unrestrained]
 action = "Conquer City"
 actor_reqs    =
-    { "type",           "name",          "range", "present"
-      "UnitClassFlag",  "CanOccupyCity", "Local", TRUE
-      "UnitFlag",       "NonMil",        "Local", FALSE
-      "DiplRel",        "War",           "Local", TRUE
-      "MinMoveFrags",   "1",             "Local", TRUE
-      "UnitState",      "OnLivableTile", "Local", TRUE
+    { "type",           "name",           "range", "present"
+      "UnitClassFlag",  "CanOccupyCity",  "Local", TRUE
+      "UnitClassFlag",  "CargoRestrained","Local", FALSE
+      "UnitFlag",       "NonMil",         "Local", FALSE
+      "DiplRel",        "War",            "Local", TRUE
+      "MinMoveFrags",   "1",              "Local", TRUE
+      "UnitState",      "OnLivableTile",  "Local", TRUE
     }
 target_reqs    =
     { "type",           "name",          "range", "present"
       "MaxUnitsOnTile", "0",             "Local", TRUE
     }
-
+[actionenabler_conquer_city_native_restrained]
+action = "Conquer City"
+actor_reqs    =
+    { "type",           "name",           "range", "present"
+      "UnitClassFlag",  "CanOccupyCity",  "Local", TRUE
+      "UnitClassFlag",  "CargoRestrained","Local", TRUE
+      "UnitState",      "Transporting",   "Local", FALSE
+      "UnitFlag",       "NonMil",         "Local", FALSE
+      "DiplRel",        "War",            "Local", TRUE
+      "MinMoveFrags",   "1",              "Local", TRUE
+      "UnitState",      "OnLivableTile",  "Local", TRUE
+    }
+target_reqs    =
+    { "type",           "name",          "range", "present"
+      "MaxUnitsOnTile", "0",             "Local", TRUE
+    }
 [actionenabler_conquer_city_marines]
 action = "Conquer City"
 actor_reqs    =
@@ -1112,13 +1139,15 @@ actor_reqs    =
       "DiplRel",        "War",           "Local", TRUE
       "MinMoveFrags",   "1",             "Local", TRUE
       "UnitFlag",       "Marines",       "Local", TRUE
+      "UnitType",       "Anti-Aircraft Artillery", "Local", FALSE
+      ;AAA got Marines flag only to enable reasonable attacks,
+      ;not for conquering cities from a Transport.
     }
 target_reqs    =
     { "type",           "name",          "range", "present"
       "MaxUnitsOnTile", "0",             "Local", TRUE
     }
-
-[actionenabler_conquer_city_att_from_non_native]
+[actionenabler_conquer_city_from_non_native]
 action = "Conquer City"
 actor_reqs    =
     { "type",           "name",             "range", "present"
@@ -1127,12 +1156,15 @@ actor_reqs    =
       "DiplRel",        "War",              "Local", TRUE
       "MinMoveFrags",   "1",                "Local", TRUE
       "UnitClassFlag",  "AttFromNonNative", "Local", TRUE
+      "UnitType",       "Anti-Aircraft Artillery", "Local", FALSE
+      ;AAA got AttFromNonNative only to enable reasonable attacks,
+      ;not for conquering cities from a Transport.
     }
 target_reqs    =
     { "type",           "name",          "range", "present"
       "MaxUnitsOnTile", "0",             "Local", TRUE
     }
-
+;---------------------------------------------------------------------------
 [actionenabler_change_home_city]
 action = "Home City"
 actor_reqs    =
@@ -1933,6 +1965,7 @@ set =
       "huts", 0, FALSE
       "landmass", 63, FALSE
       "minplayers", 0, FALSE
+      "move_bonus_in_frags", "ENABLED", TRUE   ;locked
       "nationset", "all", FALSE 
       "nuclearwinter_percent", 20, FALSE
       "revolen", 1, FALSE
@@ -1940,7 +1973,7 @@ set =
       "spaceship_travel_time", 225, FALSE
       "specials", 350, FALSE
       "startpos", "SINGLE", FALSE
-      "startunits", "cccwwwxxa", FALSE
+      "startunits", "cccwwwxxaA", FALSE
       "techpenalty", 0, FALSE
       "tinyisles", FALSE, FALSE
       "trademindist", 12, FALSE

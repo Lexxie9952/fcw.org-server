@@ -385,9 +385,9 @@ resources            = "Ivory", "Oil"
 road_trade_incr_pct  = 0
 base_time            = 1
 road_time            = 4
-irrigation_result    = "no"
+irrigation_result    = "Tundra"
 irrigation_food_incr = 0
-irrigation_time      = 0
+irrigation_time      = 15
 mining_result        = "yes"
 mining_shield_incr   = 2
 mining_time          = 10
@@ -408,9 +408,8 @@ color.r              = 232
 color.g              = 232
 color.b              = 232
 helptext             = _("\
-Glaciers are found only in the most northerly or southerly\
- reaches of the world.  They are very cold, and hence difficult to\
- work with.\
+Glaciers are found only in the far northern or southern\
+ reaches of the world.  It is very cold, and hence difficult to work with.\
 "), _("\
 Oil wells can be built when Refining is known.\
 ")
@@ -1503,7 +1502,7 @@ reqs           =
     }
 build_time     = 3
 removal_time   = 0
-conflicts      = "Airbase", "Irrigation", "Mine", "Oil Well", "Farmland"
+conflicts      = "Airbase"
 defense_bonus  = 33
 native_to      = "Trireme", "RiverShip", "Sea", "Submarine", "Balloon"
 flags          = "NativeTile", "NoStackDeath", "Refuel"

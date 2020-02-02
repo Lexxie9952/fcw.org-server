@@ -496,7 +496,7 @@ value   = 100
 ; Nuclear power gives +1 moves to sea units (+2 under 2x)
 [effect_nuclear_powered_boats]
 type    = "Move_Bonus"
-value	= 2
+value	= 18
 reqs	=
     { "type", "name", "range"
       "Tech", "Nuclear Power", "Player"
@@ -505,7 +505,7 @@ reqs	=
 ; Nuclear power gives +1 moves to sea units (+2 under 2x)
 [effect_nuclear_powered_subs]
 type    = "Move_Bonus"
-value	= 2
+value	= 18
 reqs	=
     { "type", "name", "range"
       "Tech", "Nuclear Power", "Player"
@@ -2223,6 +2223,30 @@ reqs	=
       "Building", "Police Station", "City", TRUE 
       "Action", "Steal Tech", "Local", TRUE
     }
+[effect_police_station_theft_resistant1]
+type	= "Action_Odds_Pct"
+value	= -10  
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Police Station", "City", TRUE 
+      "Action", "Steal Tech Escape Expected", "Local", TRUE
+    }
+[effect_police_station_theft_resistant2]
+type	= "Action_Odds_Pct"
+value	= -10  
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Police Station", "City", TRUE 
+      "Action", "Targeted Steal Tech", "Local", TRUE
+    }
+[effect_police_station_theft_resistant3]
+type	= "Action_Odds_Pct"
+value	= -10  
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Police Station", "City", TRUE 
+      "Action", "Targeted Steal Tech Escape Expected", "Local", TRUE
+    }
 
 [effect_port_facility]
 type    = "Veteran_Build"
@@ -2842,6 +2866,39 @@ reqs    =
       "Tech", "Space Flight",   "Player"
     }
 
+[effect_agoge_move_bonus_1]
+type    = "Move_Bonus"
+value	= 3
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Agōgē of Sparta", "Player", TRUE
+      "UnitFlag", "FootSoldier", "Local", TRUE 
+    }
+[effect_agoge_move_bonus_2]
+type    = "Move_Bonus"
+value	= 6    ; 3/9 + 6/9 = 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Agōgē of Sparta", "City", TRUE
+      "UnitFlag", "FootSoldier", "Local", TRUE 
+    }
+[effect_agoge_phalanx]
+type    = "Attack_Bonus"
+value   = 50  
+reqs    =
+    { "type", "name", "range", "present"
+      "Building", "Agōgē of Sparta", "Player", TRUE
+      "UnitType", "Phalanx", "Local", TRUE 
+    }
+[effect_agoge_pikemen]
+type    = "Attack_Bonus"
+value   = 50  
+reqs    =
+    { "type", "name", "range", "present"
+      "Building", "Agōgē of Sparta", "Player", TRUE
+      "UnitType", "Pikemen", "Local", TRUE 
+    }
+
 [effect_asmiths_trading_co]
 type    = "Upkeep_Free"
 value	= 1
@@ -3071,6 +3128,7 @@ reqs	=
       "UnitClass", "Land", "Local", TRUE
       "CityTile", "Center", "Local", TRUE
       "UnitType", "Howitzer", "Local", FALSE
+      "Tech", "Machine Tools", "World", FALSE
     }
 [effect_great_wall_0]
 type    = "Defend_Bonus"
@@ -3080,6 +3138,7 @@ reqs	=
       "Building", "Great Wall", "Player"
       "UnitClass", "Helicopter", "Local"
       "CityTile", "Center", "Local"
+      "Tech", "Machine Tools", "World", FALSE
     }
 [effect_great_wall_0a]
 type    = "Defend_Bonus"
@@ -3090,6 +3149,7 @@ reqs	=
       "UnitClass", "LandNoKill", "Local", TRUE
       "CityTile", "Center", "Local", TRUE
       "UnitType", "Howitzer", "Local", FALSE
+      "Tech", "Machine Tools", "World", FALSE
     }
 [effect_great_wall_0b]
 type    = "Defend_Bonus"
@@ -3100,22 +3160,25 @@ reqs	=
       "UnitClass", "LandAirSea", "Local", TRUE
       "CityTile", "Center", "Local", TRUE
       "UnitType", "Howitzer", "Local", FALSE
+      "Tech", "Machine Tools", "World", FALSE
     }
 
 [effect_great_wall_1]
 type    = "Unit_No_Lose_Pop"
 value	= 1
 reqs	=
-    { "type", "name", "range"
-      "Building", "Great Wall", "Player"
+    { "type", "name", "range", "present"
+      "Building", "Great Wall", "Player", TRUE
+       "Tech", "Machine Tools", "World", FALSE
     }
 
 [effect_great_wall_visible]
 type    = "Visible_Walls"
 value	= 1
 reqs	=
-    { "type", "name", "range"
-      "Building", "Great Wall", "Player"
+    { "type", "name", "range", "present"
+      "Building", "Great Wall", "Player", TRUE
+      "Tech", "Machine Tools", "World", FALSE
     }
 
 [effect_hanging_gardens]
@@ -3217,7 +3280,7 @@ reqs	=
 
 [effect_genghis_khans_equestrian_school]
 type    = "Move_Bonus"
-value	= 1
+value	= 9
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Genghis Khan's Equestrian School", "Player", TRUE
@@ -3225,7 +3288,7 @@ reqs	=
     }
 [effect_genghis_khans_equestrian_school2]
 type    = "Move_Bonus"
-value	= 1
+value	= 9
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Genghis Khan's Equestrian School", "Player", TRUE
@@ -3234,7 +3297,7 @@ reqs	=
 
 [effect_lighthouse]
 type    = "Move_Bonus"
-value	= 2
+value	= 18
 reqs	=
     { "type", "name", "range"
       "Building", "Lighthouse", "Player"
@@ -3243,7 +3306,7 @@ reqs	=
 
 [effect_lighthouse_a]
 type    = "Move_Bonus"
-value	= 2
+value	= 18
 reqs	=
     { "type", "name", "range"
       "Building", "Lighthouse", "Player"
@@ -3252,7 +3315,7 @@ reqs	=
 
 [effect_lighthouse_1]
 type    = "Move_Bonus"
-value	= 2
+value	= 18
 reqs	=
     { "type", "name", "range"
       "Building", "Lighthouse", "Player"
@@ -3261,7 +3324,7 @@ reqs	=
 
 [effect_lighthouse_2]
 type    = "Move_Bonus"
-value	= 2
+value	= 18
 reqs	=
     { "type", "name", "range"
       "Building", "Lighthouse", "Player"
@@ -4172,7 +4235,7 @@ reqs    =
 ; The Well-Digger can move 3 before you know Pottery or Alphabet.
 [effect_welldigger_movement]
 type    = "Move_Bonus"
-value	  = -3
+value	  = -27
 reqs    =
     {
       "type", "name", "range", "present"
@@ -4181,7 +4244,7 @@ reqs    =
     }
 [effect_welldigger_movement_1]
 type    = "Move_Bonus"
-value	  = -3
+value	  = -27
 reqs    =
     {
       "type", "name", "range", "present"
@@ -4192,7 +4255,7 @@ reqs    =
 ;Can't give orders to Proletarians unless communist.
 [effect_proletarian_movement]
 type    = "Move_Bonus"
-value	  = -2
+value	  = -18
 reqs    =
     {
       "type", "name", "range", "present"
