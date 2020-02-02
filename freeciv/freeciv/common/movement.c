@@ -68,8 +68,14 @@ int utype_move_rate(const struct unit_type *utype, const struct tile *ptile,
 
   /* Add on effects bonus (Magellan's Expedition, Lighthouse,
    * Nuclear Power). */
-  move_rate += (get_unittype_bonus(pplayer, ptile, utype, EFT_MOVE_BONUS)
+  if (game.server.move_bonus_in_frags) {
+    /* ruleset awards move bonuses in frags */
+    move_rate += get_unittype_bonus(pplayer, ptile, utype, EFT_MOVE_BONUS);
+  } else {
+    /* ruleset awards move bonuses in whole moves */
+    move_rate += (get_unittype_bonus(pplayer, ptile, utype, EFT_MOVE_BONUS)
                 * SINGLE_MOVE);
+  }
 
   /* Don't let the move_rate be less than min_speed unless the base_move_rate is
    * also less than min_speed. */

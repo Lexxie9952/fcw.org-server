@@ -2677,6 +2677,14 @@ static struct setting settings[] = {
           GAME_MIN_MGR_WORLDCHANCE, GAME_MAX_MGR_WORLDCHANCE,
           GAME_DEFAULT_MGR_WORLDCHANCE)
 
+  GEN_BOOL("move_bonus_in_frags", game.server.move_bonus_in_frags,
+          SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+           N_("Whether ruleset move bonuses are applied in fragments (not whole moves.)"),
+           N_("If this is enabled, the ruleset applies move bonuses in "
+              "fragments instead of whole moves. This allows it to award "
+              "partial movement points as a bonus."), NULL, NULL,
+           GAME_DEFAULT_MOVE_BONUS_IN_FRAGS)
+           
   /* Meta options: these don't affect the internal rules of the game, but
    * do affect players.  Also options which only produce extra server
    * "output" and don't affect the actual game.

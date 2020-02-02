@@ -156,6 +156,7 @@ struct civ_game {
       int mgr_nationchance;
       int mgr_turninterval;
       int mgr_worldchance;
+      bool move_bonus_in_frags;
       bool multiresearch;
       bool migration;
       enum trait_dist_mode trait_dist;
@@ -500,6 +501,8 @@ extern struct world wld;
 #define GAME_DEFAULT_MGR_WORLDCHANCE  10
 #define GAME_MIN_MGR_WORLDCHANCE      0
 #define GAME_MAX_MGR_WORLDCHANCE      100
+
+#define GAME_DEFAULT_MOVE_BONUS_IN_FRAGS  FALSE
 
 #define GAME_DEFAULT_AQUEDUCTLOSS    0
 #define GAME_MIN_AQUEDUCTLOSS        0

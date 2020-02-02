@@ -388,6 +388,7 @@ static void game_defaults(bool keep_ruleset_value)
     game.server.mgr_nationchance  = GAME_DEFAULT_MGR_NATIONCHANCE;
     game.server.mgr_turninterval  = GAME_DEFAULT_MGR_TURNINTERVAL;
     game.server.mgr_worldchance   = GAME_DEFAULT_MGR_WORLDCHANCE;
+    game.server.move_bonus_in_frags = GAME_DEFAULT_MOVE_BONUS_IN_FRAGS;
     game.server.multiresearch     = GAME_DEFAULT_MULTIRESEARCH;
     game.server.migration         = GAME_DEFAULT_MIGRATION;
     game.server.trait_dist        = GAME_DEFAULT_TRAIT_DIST_MODE;
