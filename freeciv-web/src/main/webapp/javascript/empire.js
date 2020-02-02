@@ -834,14 +834,11 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
 function get_player_building_upkeep_bonus()
 {
   var bonus = 0;
-  const rules = ruleset_control['name'];
   const gov = governments[client.conn.playing['government']]['name']
   if (player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_ADAM_SMITH_NAME))) {
     bonus += 1;
   }
-  if (rules=="Multiplayer-Evolution ruleset" 
-      || rules=="Civ2Civ3 ruleset"
-      || rules=="Sandbox ruleset"  ) {
+  if (client_rules_flag & CRF_COMMIE_BLDG_UPKEEP) {
     if (gov=="Communism") {
       bonus +=1
     }
@@ -1479,7 +1476,7 @@ function create_worklist_unit_div()
     if (unit_types[z]['name'] == "Fanatics" && cur_gov != "Fundamentalism") continue;
     // if (unit_type[z] is unique && exists) continue; //TODO: if possible to check this
     // RULESET SPECIFIC FILTER:
-    if (ruleset_control['name'] == "Multiplayer-Evolution ruleset" ) {
+    if (client_rules_flag & CRF_MP2_SPECIAL_UNITS) {
       if (unit_types[z]['name'] == "Well-Digger") continue;
       if (unit_types[z]['name'] == "Queen") continue;
       if (unit_types[z]['name'] == "Pilgrims" && cur_gov != "Fundamentalism") continue;

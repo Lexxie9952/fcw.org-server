@@ -309,8 +309,7 @@ function create_diplomacy_dialog(counterpart, template) {
 
   var embassy_meeting;
   // Whether meeting via embassy
-  if (!( ruleset_control['name'] == "Multiplayer-Plus ruleset"
-      || ruleset_control['name'] == "Multiplayer-Evolution ruleset" )) 
+  if ( !(client_rules_flag & CRF_PACTS_SANS_EMBASSY) ) 
        embassy_meeting = true;
   else embassy_meeting = pplayer.real_embassy[counterpart['playerno']] 
        || counterpart.real_embassy[pplayer['playerno']];     

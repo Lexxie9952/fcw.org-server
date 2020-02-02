@@ -266,7 +266,7 @@ function show_city_dialog(pcity)
   if (!is_small_screen() && !observing && client.conn.playing.playerno == pcity['owner']) {
     // Create specialist control pane in title bar.
     var num_specialists = Object.keys(specialists).length;
-    if (ruleset_control['name'] == "Multiplayer-Evolution ruleset") {
+    if (client_rules_flag & CRF_ASMITH_SPECIALISTS) {
       // client has no way to check reqs for extended specialists
       if ( !player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_ADAM_SMITH_NAME)) ) {
         num_specialists = 3; // need A.Smith get access specialists 4-6
@@ -1633,8 +1633,8 @@ function city_change_specialist(event, city_id, from_specialist_id)
   var city_message;
   var to_specialist_id;
   var num_specialists = Object.keys(specialists).length;
-  // Standard case: cycle through specialists if not mp2 rules:
-  if (ruleset_control['name'] != "Multiplayer-Evolution ruleset") {
+  // Standard rules: cycle through 3 specialists if ruleset isn't flagged with CRF_ASMITH_SPECIALISTS:
+  if (!(client_rules_flag & CRF_ASMITH_SPECIALISTS)) {
     to_specialist_id = selected_specialist == -1 ? ((from_specialist_id + 1) % num_specialists) : selected_specialist;
     city_message = {"pid": packet_city_change_specialist,
     "city_id" : city_id,

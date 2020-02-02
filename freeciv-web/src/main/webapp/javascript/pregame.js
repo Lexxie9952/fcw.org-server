@@ -647,6 +647,8 @@ function ruledir_from_ruleset_name(ruleset_name, fall_back_dir)
     return "mpplus";
   case "Multiplayer-Evolution ruleset":
     return "mp2";
+  case "Avant-garde":
+    return "ag";  
   default:
     console.log("Don't know the ruleset dir of \"" + ruleset_name
                 + "\". Guessing \"" + fall_back_dir + "\".");
@@ -698,6 +700,7 @@ function pregame_settings()
       + "<div id='pregame_settings_tabs-1'><table id='settings_table'> "
       + "<tr title='Ruleset version'><td>Ruleset:</td>"
       + "<td><select name='ruleset' id='ruleset'>"
+      + "<option value='ag'>Avant-garde</option>"
       + "<option value='mp2'>Multiplayer II Expansion</option>"
       + "<option value='mpplus'>Multiplayer+ v1.1</option>"
       + "<option value='multiplayer'>Multiplayer  v1.0 (old)</option>"

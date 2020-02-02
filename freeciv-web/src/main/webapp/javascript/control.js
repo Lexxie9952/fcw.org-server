@@ -1168,7 +1168,7 @@ function update_unit_order_commands()
     }
 
     // MP2 Unit Conversion handling
-    if (ruleset_control['name']=="Multiplayer-Evolution ruleset" ) {
+    if (client_rules_flag & CRF_MP2_UNIT_CONVERSIONS) {
       if (
           // Player can convert their Leader between king/queen:
           ptype['name']=="Leader" || ptype['name']=="Queen"
@@ -1211,9 +1211,8 @@ function update_unit_order_commands()
     if (ptile == null) continue;
     pcity = tile_city(ptile);
 
-    // mp2 rules allow Legions to build Forts and road on non-domestic tiles-------------
-    // this is very hacky, we should look at how other clients are coding these things
-    if (ruleset_control['name'] == "Multiplayer-Evolution ruleset" && ptype['name'] == "Legion") {
+    // rulesets which allow Legions to build Forts and Roads on non-domestic tiles-------------
+    if ((client_rules_flag & CRF_LEGION_WORK) && ptype['name'] == "Legion") {
       
       // Forts:
       if (player_invention_state(client.conn.playing, tech_id_by_name('Masonry')) == TECH_KNOWN
@@ -1346,8 +1345,8 @@ function update_unit_order_commands()
         $("#order_build_farmland").hide();
       }
 
-      // mp2 specific bases
-      if (ruleset_control['name'] == "Multiplayer-Evolution ruleset") {
+      // Order to make Fort with masonry (if ruleset allows it)
+      if ((client_rules_flag & CRF_MASONRY_FORT)) {
         // Masonry + No Fort on tile = show order to make Fort
         if (player_invention_state(client.conn.playing, tech_id_by_name('Masonry')) == TECH_KNOWN && !tile_has_extra(ptile, EXTRA_FORT) ) {
               unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
@@ -1379,8 +1378,8 @@ function update_unit_order_commands()
 
     if (show_order_buttons==2) $("#order_explore").show(); //not frequently used for most units
     
-    ///// mp2 rules allow building Canals:
-    if (ruleset_control['name'] == "Multiplayer-Evolution ruleset") {
+    // Rulesets which allow Canals:
+    if (client_rules_flag & CRF_CANALS) {
       if (can_build_canal(punit, ptile)) {
         if (show_order_buttons==2) $("#order_canal").show(); // not frequently used button
         unit_actions["canal"] = {name: "Canal"};
@@ -3534,15 +3533,7 @@ function key_unit_load()
   /* Client gets no info from server for which cargo is allowed on which
    * transports. So we use pragmatic heuristics to generate a better list
   // for 99.5% of the games played, which are in common rulesets */
-  var normal_ruleset = false;
-  if (ruleset_control['name'] == "Multiplayer-Evolution ruleset" 
-    || (ruleset_control['name'] == "Multiplayer-Plus ruleset")
-    || (ruleset_control['name'] == "Multiplayer ruleset")
-    || (ruleset_control['name'] == "Classic ruleset") ) {
-  
-      normal_ruleset = true;
-  }
-  //----------------------  
+  var normal_ruleset = (client_rules_flag & CRF_CARGO_HEURISTIC);
   var funits = get_units_in_focus();
 
   // Send command for each selected unit in focus:
@@ -4250,7 +4241,7 @@ function can_irrigate(punit, ptile)
 
   // Check central tile for water source:
   var water_near = tile_has_extra(ptile, EXTRA_RIVER) // irrigation is also a water source but, it's already irrigated! ;)
-      || (tile_has_extra(ptile, EXTRA_OASIS) && ruleset_control['name'] == "Multiplayer-Evolution ruleset");
+      || (tile_has_extra(ptile, EXTRA_OASIS) && (client_rules_flag & CRF_OASIS_IRRIGATE));
   
   // If no water on occupied tile, check cardinally adjacent:
   if (!water_near) {
@@ -4266,7 +4257,7 @@ function can_irrigate(punit, ptile)
          || terrain_name == "Deep Ocean"
          || tile_has_extra(cadj_tile, EXTRA_IRRIGATION) 
          || tile_has_extra(cadj_tile, EXTRA_RIVER)              
-         || (tile_has_extra(cadj_tile, EXTRA_OASIS) && ruleset_control['name']=="Multiplayer-Evolution ruleset") ) { 
+         || (tile_has_extra(cadj_tile, EXTRA_OASIS) && (client_rules_flag & CRF_OASIS_IRRIGATE)) ) { 
             water_near = true;        
             break; // one adjacent water is all that's needed
         }

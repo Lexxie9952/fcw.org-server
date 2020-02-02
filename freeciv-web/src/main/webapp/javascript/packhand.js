@@ -652,6 +652,46 @@ function handle_ruleset_control(packet)
 {
   ruleset_control = packet;
 
+  // Flags for hard-coded client behaviors/optimisations specific to rulesets:
+  switch (ruleset_control['name']) {
+    case "Avant-garde":
+    case "Multiplayer-Evolution ruleset":
+      client_rules_flag = CRF_CARGO_HEURISTIC
+                        + CRF_ASMITH_SPECIALISTS
+                        + CRF_OASIS_IRRIGATE
+                        + CRF_MP2_UNIT_CONVERSIONS
+                        + CRF_LEGION_WORK
+                        + CRF_MASONRY_FORT
+                        + CRF_CANALS 
+                        + CRF_NO_UNIT_GOLD_UPKEEP
+                        + CRF_MP2_SPECIAL_UNITS
+                        + CRF_COMMIE_BLDG_UPKEEP
+                        + CRF_PACTS_SANS_EMBASSY;
+    break;
+
+    case "Multiplayer-Plus ruleset":
+      client_rules_flag = CRF_CARGO_HEURISTIC
+                        + CRF_NO_UNIT_GOLD_UPKEEP
+                        + CRF_PACTS_SANS_EMBASSY;
+    break;
+
+    case "Multiplayer ruleset":
+      client_rules_flag = CRF_CARGO_HEURISTIC
+                        + CRF_NO_UNIT_GOLD_UPKEEP;
+    break;
+
+    case "Classic ruleset":
+      client_rules_flag = CRF_CARGO_HEURISTIC
+                        + CRF_NO_UNIT_GOLD_UPKEEP;
+    break;
+
+    case "Civ2Civ3 ruleset":
+    case "Sandbox ruleset":
+      client_rules_flag = CRF_COMMIE_BLDG_UPKEEP;
+    break;
+  }
+
+  if (ruleset_control['name'])
   update_client_state(C_S_PREPARING);
 
   /* Clear out any effects belonging to the previous ruleset. */

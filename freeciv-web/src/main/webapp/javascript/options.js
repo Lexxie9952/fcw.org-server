@@ -27,10 +27,25 @@ var server_settings = {};
  and global worklists.
 *****************************************************************/
 
-/** Defaults for options normally on command line **/
+// Hard-coded client behaviours specific to certain rulesets get custom ruleset flags (CRF)
+// assigned to them inside handle_ruleset_control() (packhand.js). You can then hard-code 
+// specific client behaviour by checking for (client_rules_flag & CRF_FLAG_NAME):
+var client_rules_flag = 0;          // bit-flag for exceptional rules hard-coded into client
+const CRF_CARGO_HEURISTIC = 1;      // conventional ruleset generalisations for which cargo units go on which transports: filters a cleaner UI for transport loading
+const CRF_OASIS_IRRIGATE = 2;       // ruleset allows irrigating from oasis as a water source
+const CRF_ASMITH_SPECIALISTS = 4;   // six total specialists; but #4,#5,#6 are only active with A.Smith wonder
+const CRF_MP2_UNIT_CONVERSIONS = 8; // Leader,AAA,Worker,and Riflemen can do the unit CONVERT order
+const CRF_LEGION_WORK = 16;         // Legions can road and make forts
+const CRF_MASONRY_FORT = 32;        // Masonry tech allows building forts
+const CRF_CANALS = 64;              // Ruleset allows canals with Engineering
+const CRF_NO_UNIT_GOLD_UPKEEP = 128;// Ruleset doesn't use gold upkeep on units, so don't show it.
+const CRF_MP2_SPECIAL_UNITS = 256;  // Special rules/filters for handling extra units introduced in MP2: Well-Digger, Queen, Pilgrim, Proletarians
+const CRF_COMMIE_BLDG_UPKEEP= 512;  // Used for calculating/showing upkeep from buildings accurately for communist government bonus (in some rulesets)
+const CRF_PACTS_SANS_EMBASSY=1024;  // Ruleset allows treaties without embassy if contact_turns>0 but only for limited pacts
 
 var graphic_theme_path;
 
+/** Defaults for options normally on command line **/
 var default_user_name = "";
 var default_server_host = "localhost";
 //var  default_server_port = DEFAULT_SOCK_PORT;

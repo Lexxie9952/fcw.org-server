@@ -136,12 +136,12 @@ function init_tech_screen()
   // if classic is not selected, default to mpplus reqtree. Now we don't have to make code changes every time
   // we want to add or test a new ruleset:
   if (ruleset_control['name'] != "Classic ruleset") reqtree = reqtree_mpplus;
- 
   if (ruleset_control['name'] == "Civ2Civ3 ruleset") reqtree = reqtree_civ2civ3;
   if (ruleset_control['name'] == "Multiplayer ruleset") reqtree = reqtree_multiplayer;
   if (ruleset_control['name'] == "Longturn-Web-X ruleset") reqtree = reqtree_multiplayer;
   if (ruleset_control['name'] == "Multiplayer-Plus ruleset") reqtree = reqtree_mpplus;
   if (ruleset_control['name'] == "Multiplayer-Evolution ruleset") reqtree = reqtree_mpplus;
+  if (ruleset_control['name'] == "Avant-garde") reqtree = reqtree_avantgarde;
 
   tech_canvas = document.getElementById('tech_canvas');
   if (tech_canvas == null) {

@@ -461,16 +461,10 @@ function get_unit_city_info(punit)
   const UNCLAIMED_LAND = 255;
 
   // No need to show 3 upkeep types if ruleset doesn't use 3
-  switch (ruleset_control['name']) {
-    case "Classic ruleset":
-    case "Multiplayer ruleset":
-    case "Multiplayer-Plus ruleset":
-    case "Multiplayer-Evolution ruleset":
-      upkeep_mode=1; // Shields and Food only     
-      break;
-    default:
-      upkeep_mode=3; // F/P/G
+  if (client_rules_flag & CRF_NO_UNIT_GOLD_UPKEEP) {
+      upkeep_mode=1; // Shields and Food only 
   }
+  else upkeep_mode=3; // F/P/G
 
   var ptype = unit_type(punit);
 
