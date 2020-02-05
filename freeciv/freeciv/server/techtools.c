@@ -1032,7 +1032,7 @@ void choose_tech_goal(struct research *presearch, Tech_type_id tech)
    * choose_random_tech() should be called here. */
   presearch->tech_goal = tech;
   notify_research(presearch, NULL, E_TECH_GOAL, ftc_server,
-                  _("Technology goal is %s."),
+                  _("Future technology goal is %s."),
                   research_advance_name_translation(presearch, tech));
 }
 
