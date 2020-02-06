@@ -581,7 +581,11 @@ static const struct sset_val_name *unitwaittime_name(int bit)
 {
   switch (1 << bit) {
   NAME_CASE(UWT_ACTIVITIES, "ACTIVITIES",
-            N_("Wait time applies to activity completion at turn change"));
+            N_("Tile changes have 'unitwaittime' (roads, forts, etc.)"));
+  NAME_CASE(UWT_FORTIFY, "FORTIFY",
+            N_("Fortifying units are subject to 'fortifywaittime'."));
+  NAME_CASE(UWT_DELAY_GOTO, "DELAYGOTO",
+            N_("GOTO always performed after 'unitwaittime', not cancelled."));
   }
   return NULL;
 }
@@ -1151,6 +1155,32 @@ static bool unitwaittime_callback(int value, struct connection *caller,
     settings_snprintf(reject_msg, reject_msg_len,
                       /* TRANS: Do not translate setting names in ''. */
                       _("'unitwaittime' has to be lower than 2/3 of the "
+                        "'timeout' setting (= %d). Please change 'timeout' "
+                        "first."), game.info.timeout);
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+/************************************************************************//**
+  Check 'timeout' setting if 'unitwaittime' is changed.
+****************************************************************************/
+static bool fortifywaittime_callback(int value, struct connection *caller,
+                                  char *reject_msg, size_t reject_msg_len)
+{
+  if (game.info.timeout == -1 && value != 0) {
+    settings_snprintf(reject_msg, reject_msg_len,
+                      /* TRANS: Do not translate setting names in ''. */
+                      _("For autogames ('timeout' = -1) 'unitwaittime' "
+                        "should be deactivated (= 0)."));
+    return FALSE;
+  }
+
+  if (game.info.timeout > 0 && value > game.info.timeout * 2 / 3) {
+    settings_snprintf(reject_msg, reject_msg_len,
+                      /* TRANS: Do not translate setting names in ''. */
+                      _("'fortifywaittime' has to be lower than 2/3 of the "
                         "'timeout' setting (= %d). Please change 'timeout' "
                         "first."), game.info.timeout);
     return FALSE;
@@ -2433,7 +2463,7 @@ static struct setting settings[] = {
                * between parenthesis and in uppercase must not be
                * translated. */
               N_("This setting affects airlifting units between cities. It "
-                 "can be a set of the following values:\n"
+                 "can be set as any/all/none of the following values:\n"
                  "- \"Allows units to be airlifted from allied cities\" "
                  "(FROM_ALLIES).\n"
                  "- \"Allows units to be airlifted to allied cities\" "
@@ -2826,9 +2856,26 @@ static struct setting settings[] = {
              "if this setting is set to 20 and a unit moves 5 seconds "
              "before the turn change, it will not be able to move or act "
              "in the next turn for at least 15 seconds. This value is "
-             "limited to a maximum value of 2/3 'timeout'."),
+             "limited to a maximum value of 2/3 'timeout'. Also see: "
+             "'unitwaittime_style', 'fortifywaittime'."),
           NULL, unitwaittime_callback, NULL, GAME_MIN_UNITWAITTIME,
           GAME_MAX_UNITWAITTIME, GAME_DEFAULT_UNITWAITTIME)
+
+    GEN_INT("fortifywaittime", game.server.fortifywaittime,
+          SSET_RULES_FLEXIBLE, SSET_INTERNAL, SSET_VITAL,
+          ALLOW_NONE, ALLOW_BASIC,
+          N_("Time before a unit becomes fortified, if it began fortifying "
+            "prior to turn change."),
+          /* TRANS: The string between single quotes is a setting name and
+           * should not be translated. */
+          N_("If unitwaittime_style=FORTIFY, this sets a minimum " 
+             "time in seconds for the fortify order to take effect, if "
+             "the order was given before turn change. If this setting is "
+             "set to 20 and a unit starts fortifying 5 seconds before turn "
+             "change, it will not be fortified until 15 seconds after turn "
+             "change. (May not exceed 2/3 of the value for 'timeout')"),
+          NULL, fortifywaittime_callback, NULL, GAME_MIN_FORTIFYWAITTIME,
+          GAME_MAX_FORTIFYWAITTIME, GAME_DEFAULT_FORTIFYWAITTIME)
 
   GEN_BITWISE("unitwaittime_style", game.server.unitwaittime_style,
               SSET_RULES_FLEXIBLE, SSET_INTERNAL, SSET_VITAL,
@@ -2839,12 +2886,18 @@ static struct setting settings[] = {
                * quotes are setting names and shouldn't be translated. The
                * strings between parentheses and in uppercase must stay as
                * untranslated. */
-              N_("This setting affects unitwaittime:\n"
-                 "- \"Activities\" (ACTIVITIES): Units moved less than "
-                 "'unitwaittime' seconds from turn change will not complete "
-                 "activities such as pillaging and building roads during "
-                 "turn change, but during the next turn when their wait "
-                 "expires."),
+              N_("Affects wait time behaviours if 'unitwaittime' is set. "
+                 "Any/all/none of the following values may be set:\n"
+                 "- \"Activities\" (ACTIVITIES): Units who moved less than "
+                 "'unitwaittime' seconds before Turn Change will complete "
+                 "tile modifications immediately after 'unitwaittime' "
+                 "expires. (Roads, forts, etc.)\n"
+                 "- \"Fortify\" (FORTIFY): Units who fortify less than "
+                 "'fortifywaittime' seconds before Turn Change will "
+                 "become fortified after 'fortifywaittime' expires.\n"
+                 "- \"DelayGoto\" (DELAYGOTO): When 'unitwaittime' prevents "
+                 "a unit from moving, movement will be delayed until "
+                 "after 'unitwaittime' expires (instead of cancelled).\n"),
               NULL, NULL, unitwaittime_name, GAME_DEFAULT_UNITWAITTIME_STYLE)
 
   /* This setting points to the "stored" value; changing it won't have

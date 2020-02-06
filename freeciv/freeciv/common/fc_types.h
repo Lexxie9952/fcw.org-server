@@ -601,6 +601,13 @@ BV_DEFINE(bv_startpos_nations, MAX_NUM_STARTPOS_NATIONS);
 /* Wait time applies to activities such as building roads and fortresses. */
 #define SPECENUM_VALUE0 UWT_ACTIVITIES
 #define SPECENUM_VALUE0NAME "Activities"
+/* Wait time applies to fortifying units */
+#define SPECENUM_VALUE1 UWT_FORTIFY
+#define SPECENUM_VALUE1NAME "Fortify"
+/* GOTO orders are delayed if executed before Wait time, not cancelled. */
+#define SPECENUM_VALUE2 UWT_DELAY_GOTO
+#define SPECENUM_VALUE2NAME "DelayGoto"
+
 #include "specenum_gen.h"
 
 /* Used in the network protocol. */

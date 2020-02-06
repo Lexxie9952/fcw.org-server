@@ -191,8 +191,9 @@ struct civ_game {
       int tcptimeout;
       int techpenalty;
       bool turnblock;
-      int unitwaittime;   /* minimal time between two movements of a unit */
-      unsigned unitwaittime_style;
+      int unitwaittime;   /* minimal time between two movements (or actions) of a unit if across a TC boundary*/
+      int fortifywaittime;/* if unitwaittime_style has ACTIVITIES+FORTIFY, this sets waittime for fortifying*/
+      unsigned unitwaittime_style; /* 3 bits to control wait behaviours: "ACTIVITIES", "FORTIFY", "DELAYGOTO" */
       int upgrade_veteran_loss;
       bool vision_reveal_tiles;
 
@@ -578,6 +579,10 @@ extern struct world wld;
 #define GAME_MIN_UNITWAITTIME        0
 #define GAME_MAX_UNITWAITTIME        GAME_MAX_TIMEOUT
 #define GAME_DEFAULT_UNITWAITTIME    0
+
+#define GAME_MIN_FORTIFYWAITTIME     0
+#define GAME_MAX_FORTIFYWAITTIME     GAME_MAX_TIMEOUT
+#define GAME_DEFAULT_FORTIFYWAITTIME 0
 
 #define GAME_DEFAULT_UNITWAITTIME_STYLE UWT_CLASSICAL
 

@@ -1395,14 +1395,21 @@ static void finish_unit_waits(void)
         && head->wake_up < now) {
 
     punit = game_unit_by_number(head->id);
-    if (!punit) {
-      /* Unit doesn't exist anymore. */
+
+    if (!punit) {  /* Unit doesn't exist anymore. */
+      // Make sure to always remove, to avoid infinite loop on dead unit.
+      unit_wait_list_pop_front(server.unit_waits);
       continue;
     }
     if (punit->activity == punit->changed_from
         && punit->activity_target == punit->changed_from_target) {
       finish_unit_wait(punit, head->activity_count);
+    } else if (punit->activity == ACTIVITY_IDLE /*&& punit->has_orders*/ /*means GOTO*/) {
+    // DELAYED GOTO:
+      finish_unit_wait(punit, head->activity_count);
     }
+
+    // should we check a return code for success before taking it from the list?
     unit_wait_list_pop_front(server.unit_waits);
   }
 }
