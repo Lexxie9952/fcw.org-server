@@ -232,7 +232,7 @@ function handle_chat_msg(packet)
 
         if (ptile != null && ptile > 0) {
         message = "<span class='chatbox_text_tileinfo' "
-            + "onclick='center_tile_id(" + ptile + ");'>" + message.replace("FFFFFF", "B0F0FF") + "</span>";
+            + "onclick='center_tile_id_click(" + ptile + ");'>" + message.replace("FFFFFF", "B0F0FF") + "</span>";
         }
 
     if (is_speech_supported()) speak(message);

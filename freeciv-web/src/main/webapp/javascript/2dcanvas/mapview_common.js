@@ -90,7 +90,20 @@ function center_tile_id(ptile_id)
 
   center_tile_mapcanvas(ptile);
 }
+/**************************************************************************
+  Centers the mapview on tile with given id and executes a virtual user 
+  click: used for letting user focus-select on units coming from server
+  messages which only have tile_id info.
+**************************************************************************/
+function center_tile_id_click(ptile_id)
+{
+  var selected_units = [];
+  center_tile_id(ptile_id);
 
+  current_focus = tile_units(tiles[ptile_id]);
+  if (current_focus && current_focus.length>0)
+    update_active_units_dialog();
+}
 
 /****************************************************************************
   Translate from a cartesian system to the GUI system.  This function works
