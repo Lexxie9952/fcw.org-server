@@ -1983,4 +1983,5 @@ set =
       "universal_unload", "ENABLED", FALSE
       "unload_override", 0, FALSE    ;0=native unloading same as non-native. 1+ = move_fragment cost for unloading.
       "unreachableprotects", "ENABLED", FALSE
+      "unitwaittime_style", "ACTIVITIES|FORTIFY|DELAYGOTO", FALSE
     }
