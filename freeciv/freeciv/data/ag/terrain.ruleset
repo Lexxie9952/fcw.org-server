@@ -283,7 +283,7 @@ color.r              = 46
 color.g              = 120
 color.b              = 182
 helptext             = _("\
-Lakes are substantial bodies of fresh water.\
+Lakes are bodies of fresh water not connected to sea or ocean.\
 ")
 
 [terrain_ocean]
@@ -367,7 +367,7 @@ color.g              = 33
 color.b              = 129
 helptext             = _("\
 Deep oceans cover much of the world away from coastlines, and only\
- seaworthy units (not including Triremes) can travel on them.\
+ seaworthy units can travel on them.\
 ")
 
 [terrain_arctic]
@@ -408,8 +408,8 @@ color.r              = 232
 color.g              = 232
 color.b              = 232
 helptext             = _("\
-Arctic terrain is ice capped permafrost, found only in the far northern or southern\
- reaches of the world.  It is very cold, and hence difficult to work with.\
+Arctic terrain is ice capped permafrost, found only in the far north or south.\
+ It is very cold, and difficult to work with.\
 "), _("\
 Oil wells can be built when Refining is known.\
 ")
@@ -454,8 +454,8 @@ color.r              = 214
 color.g              = 185
 color.b              = 106
 helptext             = _("\
-Deserts are regions of extreme dryness, making agriculture and\
- trade very difficult.\
+Deserts are regions of extreme dryness, making agriculture difficult\
+ if not on a river or oasis. \
 "), _("\
 Oil wells can be built when Construction is known.\
 ")
@@ -503,8 +503,8 @@ color.r              = 43
 color.g              = 107
 color.b              = 19
 helptext             = _("\
-Forests are densely wooded, making agriculture somewhat\
- problematic.\
+Forests are densely wooded, providing lumber for production, but\
+ making agriculture somewhat problematic.\
 ")
 
 [terrain_grassland]
@@ -594,8 +594,8 @@ color.r              = 24
 color.g              = 97
 color.b              = 5
 helptext             = _("\
-In addition to being amenable to agriculture, Hills are frequently\
- rich in resources.\
+Hills are frequently rich in resources. Difficult access makes\
+ them good for defense but poor for trade.\
 ")
 
 [terrain_jungle]
@@ -638,8 +638,7 @@ color.r              = 55
 color.g              = 156
 color.b              = 38
 helptext             = _("\
-Jungles are densely overgrown, making agriculture somewhat\
- problematic.\
+Jungles are densely overgrown but sometimes provide rich resources and good defense.\
 ")
 
 [terrain_mountains]
@@ -681,8 +680,8 @@ color.r              = 129
 color.g              = 127
 color.b              = 118
 helptext             = _("\
-Mountains are regions of extreme altitude, making agriculture and\
- trade very difficult.\
+Mountains are regions of extreme altitude, excellent for defense but inferior\
+ for trade and agriculture.\
 ")
 
 [terrain_plains]
@@ -729,8 +728,8 @@ color.r              = 122
 color.g              = 156
 color.b              = 46
 helptext             = _("\
-Plains are very broad, sparse regions, which makes trade slightly\
- inconvenient.\
+Plains are broad flat regions with decent potential for\
+ agriculture, production, and trade.\
 ")
 
 [terrain_swamp]
@@ -776,7 +775,7 @@ color.g              = 85
 color.b              = 97
 helptext             = _("\
 Swamps suffer from an over-abundance of water, making agriculture\
- somewhat problematic.\
+ and trade problematic.\
 ")
 
 [terrain_tundra]
@@ -818,8 +817,7 @@ color.r              = 188
 color.g              = 188
 color.b              = 188
 helptext             = _("\
-Tundra are broad, cold regions, fit for some agriculture and little\
- else.\
+Tundra regions are cold and barren, only fit for mediocre agriculture and trade.\
 ")
 
 ; /* <-- avoid gettext warnings
