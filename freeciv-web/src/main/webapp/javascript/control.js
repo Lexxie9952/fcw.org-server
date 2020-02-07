@@ -79,6 +79,7 @@ var goto_last_order = -1;
 var goto_last_action = -1;
 
 /* Selecting unit from a stack without popup. */
+var SELECT_NO_POPUP = -1;
 var SELECT_POPUP = 0;
 var SELECT_SEA = 1;
 var SELECT_LAND = 2;
@@ -2200,7 +2201,7 @@ function do_map_click(ptile, qtype, first_time_called)
            If unit in a city, always show context menu, so that "show city" is an option.
            PREF user_click_menu==false controls clicking unit TWICE for context menu, via 'last_unit_clicked' */
 
-        if (pcity || unit_click_menu || last_unit_clicked == current_focus[0]['id']) {
+        if (qtype != SELECT_NO_POPUP && (pcity || unit_click_menu || last_unit_clicked == current_focus[0]['id'])) {
           $("#canvas").contextMenu();
 
           if (touch_device || !touch_device) { // We may differentiate behaviour for touch_device later
@@ -2211,7 +2212,7 @@ function do_map_click(ptile, qtype, first_time_called)
           }
         } 
       }
-    } else if (!mouse_click_mod_key['shiftKey'] && unit_click_menu) { 
+    } else if (qtype != SELECT_NO_POPUP && !mouse_click_mod_key['shiftKey'] && unit_click_menu) { 
       // 3D handling of above. TO DO: test/integrate same 2D functionality above for 3D if appropriate
       $("#canvas_div").contextMenu();
     }
