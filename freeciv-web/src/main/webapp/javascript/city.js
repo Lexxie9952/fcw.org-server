@@ -425,6 +425,7 @@ function show_city_dialog(pcity)
      $("#airlift_receive_capacity").tooltip();
   }
 
+  var uk_bonus = get_player_building_upkeep_bonus(pcity['owner']);
   var reduction_pct;
   var longest_word;
   var long_name_font_reducer = "";
@@ -446,12 +447,14 @@ function show_city_dialog(pcity)
        // Now generate the special style adjustment for longer names, to reduce the font size and adjust margin:
        if (longest_word>7) long_name_font_reducer ="<div style='margin-left:-6px; font-size:"+reduction_pct+"%;'>";
 
+      var upkeep = (improvements[z]['upkeep']-uk_bonus) <= 0 ? "none": (improvements[z]['upkeep']);
+
       improvements_html = improvements_html +
-       "<div id='city_improvement_element'><div style='background: transparent url("
+       "<div id='city_improvement_element'><div class='buildings_present' style='background: transparent url("
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
-           + "title=\"" + improvements[z]['helptext'].replace(stripChar, "") + "\" "
+           + "title=\"" + improvements[z]['helptext'].replace(stripChar, "") +"\n\nUpkeep: "+ upkeep + "\" "
 	   + "onclick='city_sell_improvement(" + z + ");'>"
            +"</div>"+ long_name_font_reducer+improvements[z]['name']+"</div>" + "</div>";
     }
@@ -546,6 +549,7 @@ function show_city_dialog(pcity)
     $("#city_supported_units_list").css({"margin-top":"-20px","padding-top":"20px"});
   }
   $(".game_unit_list_item").tooltip();
+  $(".buildings_present").tooltip();
 
   if ('prod' in pcity && 'surplus' in pcity) {
     var food_txt = pcity['prod'][O_FOOD] + " ( ";

@@ -831,16 +831,16 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
   Compute building upkeep bonuses from Wonders and Governments
   TO DO: make this ruleset independent when the server gives us a way.
 ***************************************************************************/
-function get_player_building_upkeep_bonus()
+function get_player_building_upkeep_bonus(player_id)
 {
   var bonus = 0;
-  const gov = governments[client.conn.playing['government']]['name']
-  if (player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_ADAM_SMITH_NAME))) {
+  const gov = governments[players[player_id]['government']]['name']
+  if (player_has_wonder(player_id, improvement_id_by_name(B_ADAM_SMITH_NAME))) {
     bonus += 1;
   }
   if (client_rules_flag & CRF_COMMIE_BLDG_UPKEEP) {
     if (gov=="Communism") {
-      bonus +=1
+      bonus += 1;
     }
   }
   return bonus;
@@ -856,7 +856,7 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
 
   //$("#empire_static").css({"height":"100%", "width":"100%"})
 
-  upkeep_gold_bonus = get_player_building_upkeep_bonus();
+  upkeep_gold_bonus = get_player_building_upkeep_bonus(client.conn.playing.playerno);
 
   estimated_max_bldgs = 5 + 28 * (game_info['turn']/130);
   if (estimated_max_bldgs>38) estimated_max_bldgs = 38;
