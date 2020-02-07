@@ -97,17 +97,12 @@ function center_tile_id(ptile_id)
 **************************************************************************/
 function center_tile_id_click(ptile_id)
 {
-  var selected_units = [];
   center_tile_id(ptile_id);
 
-  // Simulate a user click on the tile, prevent context menu on the unit
-  context_menu_active = false;
-  do_map_click(tiles[ptile_id], SELECT_NO_POPUP, true);
-
-  /* this code would select all units on tile:
-  current_focus = tile_units(tiles[ptile_id]);
-  if (current_focus && current_focus.length>0)
-    update_active_units_dialog();*/
+  var sunits = tile_units(tiles[ptile_id]);
+  if (sunits != null && sunits.length > 0)  // if units on tile
+    set_unit_focus_and_redraw(sunits[0]);
+  return;
 }
 
 /****************************************************************************
