@@ -32,6 +32,7 @@ var mouse_y;
 var prev_mouse_x;
 var prev_mouse_y;
 var prev_goto_tile;
+var mclick_tile;    // keeps track of what tile was middle clicked
 /* # of times to force request_goto_path on the same tile: performance hack to prevent constant requests on the same tile.
  * We used to constantly request_goto_path on the same tile because the first couple of times didn't give enough time to
  * properly construct a clean path: */
@@ -4960,6 +4961,9 @@ function popit()
 
   if (ptile == null) return;
 
+  mclick_tile = ptile; // improve_tile_info_dialog() wants to know this
+  setTimeout(popit_req(ptile),100);
+
   popit_req(ptile);
 }
 
@@ -5165,7 +5169,7 @@ function update_active_units_dialog()
     // graphics loaded, and a message to please refresh if they did not.
     if (sprite == null) {
       add_client_message("Uncached graphics didn't have time to load. Please refresh browser to reload site.");
-      alert("Warning - Graphical sprites couldn't load in time or do not match cache.\nPlease reload page to fix.\n\n"
+      alert("Warning - Site was rebuilt.\nGraphical sprites do not match cache.\nPlease reload page to fix.\n\n"
              +"If that doesn't work, wiping the browser cache for the site forces graphics to reset.");
       continue;
     }

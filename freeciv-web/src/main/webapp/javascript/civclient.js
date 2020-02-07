@@ -396,7 +396,10 @@ function closing_dialog_message() {
 /**************************************************************************
  Shows a generic message dialog.
 **************************************************************************/
-function show_dialog_message(title, message) {
+function show_dialog_message(title, message)
+{
+  if (title=="Tile Information" || title=="Tile Info")
+    message = improve_tile_info_dialog(message);
 
   // reset dialog page.
   $("#generic_dialog").remove();

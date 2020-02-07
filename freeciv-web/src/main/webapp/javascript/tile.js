@@ -101,3 +101,104 @@ function tile_city(ptile)
   }
   return null;
 }
+
+/**************************************************************************
+ Improve tile info message from server
+**************************************************************************/
+function improve_tile_info_dialog(message) 
+{
+  var added_text = "";
+
+  // Default: unknown terrain
+  var ttype = 0; 
+  var tindex = Object.keys(terrains).length; // code for invalid/impossible terrain
+  var tinvalid = Object.keys(terrains).length; 
+  if (mclick_tile) {
+    tindex = mclick_tile['terrain'];
+    ttype = terrains[tindex];
+  }
+
+  if (mclick_tile) ttype = terrains[mclick_tile['terrain']];
+
+  var wt = 1; // base rate of work for workers units, default=1
+  // Calculate work rate for Workers unit if ruleset has it
+  for (var i=0; i < Object.keys(unit_types).length; i++) {
+    if (unit_types[i]['name'] == "Workers") {
+      // Figure out base worker-turn unit
+      wt = unit_types[i]['move_rate'] / SINGLE_MOVE;
+      break;
+    }
+  }
+  
+  // Terrain alteration info:
+  if (ttype) {
+    added_text += "<span style='color:rgb("
+               +  Math.round(ttype['color_red']/2)+","+Math.round(ttype['color_green']/2)+","+Math.round(ttype['color_blue']/2)
+               +  ")'><br><br><b>" + ttype['name'] + "</b><br></span>";
+    const db = parseFloat(1) + parseFloat(ttype['defense_bonus'])/100;
+    added_text += "Defense Bonus: " + db + "&times;<br>";
+    added_text += "Movement Cost: " + ttype['movement_cost'] + "<br>"
+    
+    if (ttype['irrigation_time']) {
+      added_text += "<span style='color:#013'>Irrigate:<b>" + Math.ceil(ttype['irrigation_time']/wt)+"</b></span>"
+      if (ttype['irrigation_food_incr']) added_text+= " (+"+ttype['irrigation_food_incr']+")";
+    }
+    if (ttype['irrigation_result'] && ttype['irrigation_result'] != tindex && ttype['irrigation_result'] != tinvalid) 
+      added_text+="&#10145;"+terrains[ttype['irrigation_result']]['name']
+
+    if (ttype['mining_time']) {
+      added_text += "&nbsp;&nbsp; <span style='color:#300'>Mine:<b>" + Math.ceil(ttype['mining_time']/wt)+"</b></span>";
+      if (ttype['mining_shield_incr']) added_text+= " (+"+ttype['mining_shield_incr']+")";
+    }
+    if (ttype['mining_result'] && ttype['mining_result'] != tindex && ttype['mining_result'] != tinvalid)
+      added_text+="&#10145;"+terrains[ttype['mining_result']]['name']
+
+    if (ttype['transform_time'])
+      added_text += "&nbsp;&nbsp; <span style='color:#430'>Transform:<b>" + Math.ceil(ttype['transform_time']/wt)+"</b></span>";
+    if (ttype['transform_result'] && ttype['transform_result'] != tindex && ttype['transform_result'] != tinvalid)
+      added_text+="&#10145;"+terrains[ttype['transform_result']]['name']
+
+    if (ttype['road_time'])
+      added_text += "&nbsp;&nbsp; Road:<b>" + Math.ceil(ttype['road_time']/wt)+"</b>";
+    
+    added_text += "<br>" + ttype['helptext'].replace(stripChar, "")+"<br><br>";
+  }
+  
+  // Warcalc odds.
+  var saved_current_focus = current_focus.map((x) => x); // clone it to allow later restore
+  current_focus = tile_units(mclick_tile); // need to temporarily use this for function call
+  if (my_hp && current_focus.length>0) warcalc_set_default_vals();
+  if (my_hp && their_hp && current_focus.length > 0) {
+    // Store values in Warcalc Tab, to allow future reference + function re-use:
+    //strength
+    $("#id_astr").val(my_str);
+    $("#id_dstr").val(their_str);
+    //hitpoints
+    $("#id_ahp").val(my_hp);
+    $("#id_dhp").val(their_hp);
+    //firepower 
+    $("#id_afp").val(my_fp);
+    $("#id_dfp").val(their_fp);
+    //results
+    $("#att_win").html("");
+    $("#def_win").html("");
+
+    warcalc_compute();
+
+    added_text += "<b>Combat odds:</b><br>";
+    added_text += "A:<b>"+my_str.toFixed(1)+"</b>  HP:<b>"+my_hp+"</b>  FP:<b>"+my_fp+"</b>  (Attacker)<br>";
+    added_text += "D:<b>"+their_str.toFixed(1)+"</b>  HP:<b>"+their_hp+"</b>  FP:<b>"+their_fp+"</b>  ";
+    added_text += "("+unit_types[current_focus[0]['type']]['name']+")<br>";
+    added_text += $("#att_win").html();
+    added_text += "\n<div id='click_calc' style='cursor:pointer;' onclick='improve_tile_info_warcalc_click()'>"
+               +  "<u>Click</u> to apply other bonuses</div>";
+  }
+  current_focus = saved_current_focus;  // restore current_focus back to whatever it was
+  return message+added_text;
+}
+function improve_tile_info_warcalc_click()
+{
+  $("#ui-id-8").trigger("click");
+  warcalc_screen();
+}
+

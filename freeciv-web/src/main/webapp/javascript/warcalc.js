@@ -35,7 +35,7 @@ function warcalc_screen()
     $("#def_win").html("");
     //set focus on first field
   
-    setTimeout(function(){$("#id_astr").focus();$("#id_astr").select()},300);
+    setTimeout(function(){$("#id_astr").focus();$("#id_astr").select()},200);
 }
 /**************************************************************************
   Called when a unit is clicked to guess default values
