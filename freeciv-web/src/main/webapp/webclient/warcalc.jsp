@@ -27,6 +27,7 @@
                     <td align="center"><input class="tiny_button" type="button" value="&nbsp;&nbsp;x2&nbsp;&nbsp;" onClick="wc_D(2.00);"</td>
                     <td align="center"><input class="tiny_button" type="button" value="x2.1&nbsp;" onClick="wc_D(2.1);"</td>
                     <td align="center"><input class="tiny_button" type="button" value="x2.2&nbsp;" onClick="wc_D(2.2);"</td>
+                    <td align="center"><input class="tiny_button" type="button" value="x2.3&nbsp;" onClick="wc_D(2.3);"</td>
                     <td align="center"><input class="tiny_button" type="button" value="&nbsp;&nbsp;x3&nbsp;&nbsp;" onClick="wc_D(3.00);"</td>
                 </tr>
             </tbody>
