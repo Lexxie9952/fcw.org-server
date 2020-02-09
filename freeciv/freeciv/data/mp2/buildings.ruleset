@@ -549,11 +549,11 @@ A Manufacturing Plant increases base production by +50%.\
 A Mfg. Plant & Factory together double the production in a city.\
  That is, the Mfg. Plant adds another +50% to the +50% of the Factory.\
 "), _("\
-A Mfg. Plant with a Factory AND a Power/Hydro/Nuclear/Solar Plant\
+A Mfg. Plant with a Factory AND a Power, Hydro, Nuclear, or Solar Plant\
  will combine for a total +150% increase over base production.\
 "), _("\   
-The pollution reduction of a Hydro/Nuclear/Solar Plant is applied one more time\
- to cities with Mfg. Plants, effectively doubling the bonus percentage.\  
+The pollution reduction of a Hydro, Nuclear, or Solar Plant is applied one more\
+ time to cities with Mfg. Plants, effectively doubling the bonus percentage.\  
 ")
 
 [building_nuclear_plant]
