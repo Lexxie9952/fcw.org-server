@@ -1241,9 +1241,9 @@ function get_unit_activity_sprite(punit)
   // Special case: idle/sentry units on transport will show themselves
   // as "cargo" even though server has no ACTIVITY_CODE for it:
   if (punit['transported']) {
-  return {"key" : "unit.cargo",
-    "offset_x" : unit_activity_offset_x,
-    "offset_y" : - unit_activity_offset_y};
+    return {"key" : "unit.cargo",
+      "offset_x" : unit_activity_offset_x,
+      "offset_y" : - unit_activity_offset_y};
   } 
 
   var activity = punit['activity'];
@@ -1268,6 +1268,14 @@ function get_unit_activity_sprite(punit)
             "offset_y" : - unit_activity_offset_y};
             
     case ACTIVITY_FORTIFYING:
+        if (punit['movesleft']==unit_types[punit['type']]['move_rate']
+            && punit['changed_from'] == activity
+            && act_tgt == punit['changed_from_tgt'] ) {
+
+              return {"key" : "unit.fortify_delay",
+                "offset_x" : unit_activity_offset_x,
+                "offset_y" : - unit_activity_offset_y};
+        }
         return {"key" : "unit.fortifying",
             "offset_x" : unit_activity_offset_x,
             "offset_y" : - unit_activity_offset_y};
@@ -1326,11 +1334,17 @@ function get_unit_activity_sprite(punit)
   }
 
   if (unit_has_goto(punit)) {
-      return {"key" : "unit.goto",
-          "offset_x" : unit_activity_offset_x,
-          "offset_y" : - unit_activity_offset_y};
+    if (punit['movesleft']==unit_types[punit['type']]['move_rate']
+    && punit['changed_from'] == activity
+    && act_tgt == punit['changed_from_tgt'] ) {
+      return {"key" : "unit.goto_delay",
+        "offset_x" : unit_activity_offset_x,
+        "offset_y" : - unit_activity_offset_y};
+    }
+    return {"key" : "unit.goto",
+        "offset_x" : unit_activity_offset_x,
+        "offset_y" : - unit_activity_offset_y};
   }
-
   if (punit['ai'] == true) {
       return {"key" : "unit.auto_settler",
           "offset_x" : 20, //FIXME.

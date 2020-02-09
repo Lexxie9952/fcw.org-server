@@ -4962,7 +4962,7 @@ function popit()
   if (ptile == null) return;
 
   mclick_tile = ptile; // improve_tile_info_dialog() wants to know this
-  setTimeout(popit_req(ptile),100);
+  setTimeout(popit_req(ptile),150);
 
   popit_req(ptile);
 }
