@@ -32,6 +32,7 @@ tiles = { "row", "column", "tag"
   0, 1, "unit.rail"
   0, 2, "unit.maglev"
   0, 3, "unit.canal"
+  0, 4, "unit.fortify_delay"
 
   1, 0, "unit.outpost"
   1, 1, "unit.airstrip"
@@ -55,6 +56,7 @@ tiles = { "row", "column", "tag"
   4, 1, "unit.convert"
   4, 2, "unit.auto_explore"
   4, 3, "unit.cargo"
+  4, 4, "unit.goto_delay"
 
 ; [GS]
   5,  0, "unit.irrigation"
