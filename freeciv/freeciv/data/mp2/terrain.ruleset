@@ -454,8 +454,7 @@ color.r              = 214
 color.g              = 185
 color.b              = 106
 helptext             = _("\
-Deserts are regions of extreme dryness, making agriculture difficult\
- if not on a river or oasis. \
+Deserts are very dry. Agriculture is difficult if not on a river or oasis. \
 "), _("\
 Oil wells can be built when Construction is known.\
 ")
