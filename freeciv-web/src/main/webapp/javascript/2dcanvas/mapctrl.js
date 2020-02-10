@@ -478,7 +478,7 @@ function handle_info_text_message(packet)
         lines[i] = split_txt[1]
                  + "<a href='#' onclick='javascript:nation_table_select_player("
                  + pplayer['playerno']
-                 + ");' style='color: black;'>"
+                 + ");' style='color:#134; font-weight:500;'>"
                  + split_txt[2]
                  + "</a>"
                  + split_txt[3]
@@ -488,9 +488,40 @@ function handle_info_text_message(packet)
       }
     }
   }
+  // Make freeciv server layout issues to be more web presentable.
   message = lines.join("<br>\n");
+  message = message.replace(/team<br>\n/g,"team ");
+  message = message.replace(/\|<br>\n/g,"| ");
+  message = message.replace(/\|/g,"&bull;");
+
+  message = message.replace(/Occupied with<br>\n/g,"Occupied with ");
+  message = message.replace(/Not<br>\n/g,"Not ");
+
+  message = message.replace(/<br>\n<b>Hostile/g, " <b style='color:DarkRed'>Hostile");
+  message = message.replace(/<br>\nHostile/g, " <b style='color:DarkRed'>Hostile</b>");
+  message = message.replace(/<b>Hostile/g, "<b style='color:DarkRed'>Hostile");
+  
+  message = message.replace(/<br>\n<b>Friendly/g, " <b style='color:DarkGreen'>Friendly");
+  message = message.replace(/<br>\nFriendly/g, " <b style='color:DarkGreen'>Friendly</b>");
+  message = message.replace(/<b>Friendly/g, "<b style='color:DarkGreen'>Friendly");
+  
+  message = message.replace(/<br>\n<b>Neutral/g, " <b style='color:#134'>Neutral");
+  message = message.replace(/<br>\nNeutral/g, " <b style='color:#134'>Neutral</b>");
+  message = message.replace(/<b>Neutral/g, "<b style='color:#134'>Neutral");
+  
+  message = message.replace(/<br>\n<b>Mysterious/g, " <b style='color:#430'>Mysterious");
+  message = message.replace(/<br>\nMysterious/g, " <b style='color:#430'Mysterious</b>");
+  message = message.replace(/<b>Mysterious/g, "<b style='color:#430'>Mysterious");
+
+  message = message.replace(/<br>\n<b>Peaceful/g, " <b style='color:#043'>Peaceful");
+  message = message.replace(/<br>\nPeaceful/g, " <b style='color:#043'Peaceful</b>");
+  message = message.replace(/<b>Peaceful/g, "<b style='color:#043'>Peaceful");
+
+  message = message.replace(/<br>\nunit/g, " unit");
+  message = message.replace("<br>\n   with"," &#11088; with");
+  message = message.replace("[","[Continent #");
+  message = message.replace("[Continent #-","[Sea #");
 
   show_dialog_message("Tile Information", message);
-
 }
 
