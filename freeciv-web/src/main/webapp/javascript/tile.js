@@ -129,7 +129,7 @@ function improve_tile_info_dialog(message)
       break;
     }
   }
-  
+
   // Terrain alteration info:
   if (ttype) {
     added_text += "<span style='color:rgb("
@@ -167,8 +167,9 @@ function improve_tile_info_dialog(message)
   // Warcalc odds.
   var saved_current_focus = current_focus.map((x) => x); // clone it to allow later restore
   current_focus = tile_units(mclick_tile); // need to temporarily use this for function call
-  if (my_hp && current_focus.length>0) warcalc_set_default_vals();
-  if (my_hp && their_hp && current_focus.length > 0) {
+  
+  if (my_hp && current_focus && current_focus.length > 0) warcalc_set_default_vals();
+  if (my_hp && their_hp && current_focus && current_focus.length > 0) {
     // Store values in Warcalc Tab, to allow future reference + function re-use:
     //strength
     $("#id_astr").val(my_str);

@@ -42,7 +42,7 @@ function warcalc_screen()
 *************************************************************************/
 function warcalc_set_default_vals()
 {
-  if (current_focus.length<1) return;
+  if (!current_focus || current_focus.length<1) return;
 
   var punit = current_focus[0];
   var ptype = unit_types[punit['type']];

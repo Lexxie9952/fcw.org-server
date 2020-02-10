@@ -3239,7 +3239,10 @@ function handle_context_menu_callback(key)
 
     case "tile_info":
       var ptile = find_a_focus_unit_tile_to_center_on();
-      if (ptile != null) popit_req(ptile);   
+      if (ptile != null) {
+        mclick_tile = ptile;
+        popit_req(ptile); 
+      }  
       came_from_context_menu = false;  // reset UI-blocking state
       break;
 

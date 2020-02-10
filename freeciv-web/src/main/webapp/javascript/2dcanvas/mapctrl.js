@@ -230,8 +230,10 @@ function mapview_touch_start(e)
   var ptile = canvas_pos_to_tile(touch_start_x, touch_start_y);
 
   var time_elapsed = Date.now()-doubletaptimer;
-  if (time_elapsed < 350)
+  if (time_elapsed < 350) {
+    mclick_tile = ptile;
     popit_req(ptile);
+  }
 
   set_mouse_touch_started_on_unit(ptile);
 
