@@ -1268,14 +1268,6 @@ function get_unit_activity_sprite(punit)
             "offset_y" : - unit_activity_offset_y};
             
     case ACTIVITY_FORTIFYING:
-        if (punit['movesleft']==unit_types[punit['type']]['move_rate']
-            && punit['changed_from'] == activity
-            && act_tgt == punit['changed_from_tgt'] ) {
-
-              return {"key" : "unit.fortify_delay",
-                "offset_x" : unit_activity_offset_x,
-                "offset_y" : - unit_activity_offset_y};
-        }
         return {"key" : "unit.fortifying",
             "offset_x" : unit_activity_offset_x,
             "offset_y" : - unit_activity_offset_y};
@@ -1334,13 +1326,23 @@ function get_unit_activity_sprite(punit)
   }
 
   if (unit_has_goto(punit)) {
-    if (punit['movesleft']==unit_types[punit['type']]['move_rate']
+    /* DETERMINE WHETHER TO USE AN HOURGLASS ICON FOR A UWT DELAYED GOTO */
+    // if (punit['movesleft']>=unit_types[punit['type']]['move_rate'] // may have vet bonus or wonder bonus, so use >= .
+    if (punit['movesleft']>0 // The above didn't work on injured units because they begin with less than full move points.
+    // It could be made to work by calculating the exact # of moves they should have for their injuries, but instead we're
+    // now trying: **if movesleft>0** and then using a simpler way to distinguish an issue with using >0--the problem with
+    // using moves>0 is that units given a DelayGoto/shift-G command would also show an hourglass unless there is a way to
+    // distinguish them; which indeed, is that they have moved, so should have a done_moving flag; whereas the UWT delayed
+    // units didn't get to move yet. This worked in tests, but should be watched to confirm it works in all cases: 
+    && punit['done_moving'] == false   // distinguisher between shift-G delayGoto and a UWT_DELAY_GOTO forced wait. 
     && punit['changed_from'] == activity
+    && !(typeof server_settings['unitwaittime_style'] === 'undefined')
+    && (server_settings['unitwaittime_style']['val'] & 4)  // UWT_DELAY_GOTO is on
     && act_tgt == punit['changed_from_tgt'] ) {
       return {"key" : "unit.goto_delay",
         "offset_x" : unit_activity_offset_x,
         "offset_y" : - unit_activity_offset_y};
-    }
+    } // Otherwise, show standard GOTO activity icon:
     return {"key" : "unit.goto",
         "offset_x" : unit_activity_offset_x,
         "offset_y" : - unit_activity_offset_y};
