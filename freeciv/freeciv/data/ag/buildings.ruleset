@@ -1133,8 +1133,8 @@ Makes a city the religious capital that acts as a second center of government.\
 This building is a second Palace and gives all effects of a Palace,\
  including reduction of corruption (based on the nearest capital.)\
  Unlike the Palace, capital production bonuses are rendered in gold\
- tithes rather than shield output. Fundamentalism gets a +50% tithe\
- gold bonus in tithes, in its ecclesiasitcal capital.\
+ tithes rather than shield output. Fundamentalism gets a +50% gold\
+ bonus in tithes, in its ecclesiasitcal capital.\
 "), _("\
 The city where this Palace is located cannot be incited to revolt,\
  and enjoys a bonus when enemy agents try to evade your own agents\

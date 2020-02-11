@@ -3320,7 +3320,7 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = ""
 helptext      = _("\
-If you have Nuclear Fission and the Manhattan Project has been built by any player, you can make Nuclear Missiles.\
+If you have Space Flight and the Manhattan Project has been built by any player, you can make Nuclear Missiles.\
  Nuclear blasts destroy ALL units in a 3x3 area. City population is reduced by half. Land tiles may get nuclear fallout.\
  Fallout reduces tile output and increases risk of nuclear winter.\
 "), _("\
