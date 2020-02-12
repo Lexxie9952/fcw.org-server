@@ -38,6 +38,12 @@ var mclick_tile;    // keeps track of what tile was middle clicked
  * properly construct a clean path: */
 const FORCE_CHECKS_AGAIN = -4; 
 const LAST_FORCED_CHECK = -1;  // When FORCE_CHECKS_AGAIN++ arrives at this value, we stop requesting goto paths for the same tile
+
+// Prevent quick double-clicking for GOTO city, from doing context menu or city dialog:
+var LAST_GOTO_TILE = null;       // Last tile clicked on for a GOTO order
+var LAST_GOTO_TIMESTAMP = 0;     // Time it was clicked
+const GOTO_CLICK_COOLDOWN = 475; // Cooldown period before that tile can be clicked, if it's a city
+
 var keyboard_input = true;
 var unitpanel_active = false;
 var allow_right_click = false;
@@ -79,8 +85,6 @@ var action_tgt_sel_active = false;
 var goto_last_order = -1;
 var goto_last_action = -1;
 
-/* Selecting unit from a stack without popup. */
-var SELECT_NO_POPUP = -1;
 var SELECT_POPUP = 0;
 var SELECT_SEA = 1;
 var SELECT_LAND = 2;
@@ -2195,15 +2199,22 @@ function do_map_click(ptile, qtype, first_time_called)
     if (goto_active /*&& !touch_device*/) { //(allow clicking same tile when giving a Nuke order.)
       deactivate_goto(false);
     } 
-    if (renderer == RENDERER_2DCANVAS) {  
+    if (renderer == RENDERER_2DCANVAS) {
       if (!mouse_click_mod_key['shiftKey']) { // normal left-click
         /* CONDITIONS FOR SHOWING A CONTEXT MENU:
-           Automatic context menu when clicking unit set by 'unit_click_menu' user PREF.
-           If unit in a city, always show context menu, so that "show city" is an option.
-           PREF user_click_menu==false controls clicking unit TWICE for context menu, via 'last_unit_clicked' */
-
-        if (qtype != SELECT_NO_POPUP && (pcity || unit_click_menu || last_unit_clicked == current_focus[0]['id'])) {
-          $("#canvas").contextMenu();
+           1.Automatic context menu when clicking unit, if 'unit_click_menu' user PREF is on.
+           2.If unit in a city, always show context menu, so that there is a way to get past 
+             the selected unit and select "show city" in the contextmenu.
+           3.If user_click_menu==false, unit has to be clicked TWICE for context menu. We know
+             it's clicked twice by looking at last_unit_clicked. 
+           4.If city tile clicked only milliseconds after issuing a GOTO there, the click was
+             part of double-tap-GOTO. No contextmenu if this is inside the 'cooldown' period */
+        if (pcity || unit_click_menu || last_unit_clicked == current_focus[0]['id']) {
+          if (pcity) { 
+            if (city_click_goto_cooldown(ptile))
+              $("#canvas").contextMenu();
+          } 
+          else $("#canvas").contextMenu();
 
           if (touch_device || !touch_device) { // We may differentiate behaviour for touch_device later
             // -2 is transition state for refresh, needed to allow clicking unit again to get rid of the context_menu
@@ -2213,9 +2224,13 @@ function do_map_click(ptile, qtype, first_time_called)
           }
         } 
       }
-    } else if (qtype != SELECT_NO_POPUP && !mouse_click_mod_key['shiftKey'] && unit_click_menu) { 
+    } else if (!mouse_click_mod_key['shiftKey'] && unit_click_menu) { 
       // 3D handling of above. TO DO: test/integrate same 2D functionality above for 3D if appropriate
-      $("#canvas_div").contextMenu();
+      if (pcity) {
+        if (city_click_goto_cooldown(ptile))
+          $("#canvas_div").contextMenu();
+      }
+      else $("#canvas_div").contextMenu();
     }
     if (!mouse_click_mod_key['shiftKey']) {
       // Record the clicked unit to enable seeing if a unit is clicked twice.  
@@ -2240,6 +2255,11 @@ function do_map_click(ptile, qtype, first_time_called)
   if (goto_active) {
     // console.log("GO TO IS ACTIVE!");
     if (current_focus.length > 0) {
+      if (pcity) { // User clicked GOTO city tile. 
+        // This info prevents quick double-tap GOTOs from popping an unwanted contextmenu or city dialog:
+        LAST_GOTO_TILE = ptile;
+        LAST_GOTO_TIMESTAMP = Date.now();
+      }
       // send goto order for all units in focus. 
       for (var s = 0; s < current_focus.length; s++) {
         punit = current_focus[s];
@@ -2539,21 +2559,25 @@ function do_map_click(ptile, qtype, first_time_called)
             && sunits[0]['movesleft'] > 0) { // if no moves left we'd rather go inside city
                                                         
           set_unit_focus_and_redraw(sunits[0]);
-          if (renderer == RENDERER_2DCANVAS) {
-            $("#canvas").contextMenu();
-          } else {
-            $("#canvas_div").contextMenu();
+          if (city_click_goto_cooldown(ptile)) { // don't show contextmenu if in the cooldown period for a double tap GOTO
+            if (renderer == RENDERER_2DCANVAS) {
+              $("#canvas").contextMenu();
+            } else { //3D handling can potentially be made different later
+              $("#canvas_div").contextMenu();
+            }
           }
           return; // move the commented-out return from below up here
         } else if (!goto_active) { //if GOTO active then the click is a move command, not a show city command
             // the case below only happens if clicking a city with foreign unit inside while not issuing a GOTO move command.
             // It seems redundant--but we make a code-slot for changing how this case is handled.
             if (sunits[0]['owner'] != client.conn.playing.playerno) {
-              show_city_dialog(pcity); // show the city rather than select a foreign unit that would block clicking our own city
+              if (city_click_goto_cooldown(ptile))
+                show_city_dialog(pcity); // show the city rather than select a foreign unit that would block clicking our own city
               return; // move the commented-out return from below up here
             } else {  
                 // we clicked on our own city without an active unit and were not doing a GOTO, so show the city
-                show_city_dialog(pcity);
+                if (city_click_goto_cooldown(ptile))
+                  show_city_dialog(pcity);
                return; // move the commented-out return from below up here
             }
           }
@@ -2639,14 +2663,22 @@ function do_map_click(ptile, qtype, first_time_called)
           update_active_units_dialog();
         }
 
-        if (touch_device) {
+        if (touch_device) { // show context menu unless we clicked on a city prior to GOTO_COOLDOWN period
           if (renderer == RENDERER_2DCANVAS) {
-            $("#canvas").contextMenu();
-          } else {
-              $("#canvas_div").contextMenu();
+            if (pcity) {
+              if (city_click_goto_cooldown(ptile)) $("#canvas").contextMenu();
+            } else {
+              $("#canvas").contextMenu();
+            }
+          } 
+          else {  // 3D handling, currently the same
+            if (pcity) {
+              if (city_click_goto_cooldown(ptile)) $("#canvas").contextMenu();
+            } else {
+              $("#canvas").contextMenu();
+            } 
           }
         }
-
       } else if (pcity == null && !mouse_click_mod_key['shiftKey']) {
         // clicked on a tile with units exclusively owned by other players.
         save_last_unit_focus();

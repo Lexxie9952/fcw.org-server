@@ -445,6 +445,24 @@ function recenter_button_pressed(canvas_x, canvas_y)
 }
 
 /**************************************************************************
+  Prevent a double-tap for GOTO on a city, from doing context menu or 
+  show_city_dialog. Return TRUE if cooldown period is fulfilled.
+**************************************************************************/
+function city_click_goto_cooldown(ptile)
+{
+  // If clicked city was target of the last GOTO...
+  if (ptile == LAST_GOTO_TILE) {
+    var elapsed_time = Date.now() - LAST_GOTO_TIMESTAMP;
+    if (elapsed_time < GOTO_CLICK_COOLDOWN) {
+      return false; // Clicked on a city only milliseconds after GOTO to this
+                    // city! Return false to block unwanted click-actions.
+    }
+  } 
+  return true;
+}
+
+
+/**************************************************************************
 ...
 **************************************************************************/
 function handle_info_text_message(packet)
