@@ -3975,7 +3975,7 @@ static struct act_prob ap_diplomat_battle(const struct unit *pattacker,
                                           const struct unit *pvictim,
                                           const struct tile *tgt_tile)
 {
-fc_assert_ret_val(tgt_tile, ACTPROB_NOT_KNOWN);
+  fc_assert_ret_val(tgt_tile, ACTPROB_NOT_KNOWN);
 
 if (!can_player_see_hypotetic_units_at(unit_owner(pattacker),
                                         tgt_tile)) {
@@ -3983,7 +3983,8 @@ if (!can_player_see_hypotetic_units_at(unit_owner(pattacker),
   return ACTPROB_NOT_KNOWN;
 }
 
-unit_list_iterate(tgt_tile->units, punit) {    if (unit_owner(punit) == unit_owner(pattacker)) {
+  unit_list_iterate(tgt_tile->units, punit) {
+    if (unit_owner(punit) == unit_owner(pattacker)) {
       /* Won't defend against its owner. */
       continue;
     }
