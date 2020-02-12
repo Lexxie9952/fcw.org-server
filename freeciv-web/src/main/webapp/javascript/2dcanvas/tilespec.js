@@ -1207,6 +1207,8 @@ function get_html_activity_sprite(punit)
 ****************************************************************************/
 function get_sprite_from_tag(tag)
 {
+  if (!tag) return null;
+  
   var tileset_x = tileset[tag][0];
   var tileset_y = tileset[tag][1];
   var width = tileset[tag][2];
