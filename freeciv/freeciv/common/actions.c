@@ -6136,8 +6136,6 @@ const char *action_max_range_ruleset_var_name(int act)
   case ACTION_JOIN_CITY:
   case ACTION_SPY_NUKE:
   case ACTION_SPY_NUKE_ESC:
-  case ACTION_NUKE_CITY:
-  case ACTION_NUKE_UNITS:
   case ACTION_DESTROY_CITY:
   case ACTION_RECYCLE_UNIT:
   case ACTION_DISBAND_UNIT:
@@ -6180,6 +6178,10 @@ const char *action_max_range_ruleset_var_name(int act)
     return "bombard_3_max_range";
   case ACTION_NUKE:
     return "explode_nuclear_max_range";
+  case ACTION_NUKE_CITY:
+    return "nuke_city_max_range";
+  case ACTION_NUKE_UNITS:
+    return "nuke_units_max_range";
   case ACTION_AIRLIFT:
       return "airlift_max_range";
   case ACTION_USER_ACTION1:
@@ -6237,8 +6239,6 @@ int action_max_range_default(int act)
   case ACTION_JOIN_CITY:
   case ACTION_SPY_NUKE:
   case ACTION_SPY_NUKE_ESC:
-  case ACTION_NUKE_CITY:
-  case ACTION_NUKE_UNITS:
   case ACTION_DESTROY_CITY:
   case ACTION_RECYCLE_UNIT:
   case ACTION_DISBAND_UNIT:
@@ -6280,6 +6280,9 @@ int action_max_range_default(int act)
     return RS_DEFAULT_ACTION_MAX_RANGE;
   case ACTION_NUKE:
     return RS_DEFAULT_EXPLODE_NUCLEAR_MAX_RANGE;
+  case ACTION_NUKE_CITY:
+  case ACTION_NUKE_UNITS:
+    return RS_DEFAULT_ACTION_MAX_RANGE;
   case ACTION_AIRLIFT:
     return ACTION_DISTANCE_UNLIMITED;
   case ACTION_USER_ACTION1:
