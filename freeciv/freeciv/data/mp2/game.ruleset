@@ -168,7 +168,7 @@ illness_pollution_factor = 50
 total_factor = 100       ; TF   = 100 (effectively makes 100x cost at capital and 1x cost at DIST=32)
 ;city_size_adjusted      ; SZ  (happy*2 + content*1 + unhappy*0 - angry*2)
 ;nationality factor      ; NF   native=1.0, was_conquered=0.67, originally_belonged_to_inciter=0.5
-base_incite_cost = 1100   ; BIC  =1100 (base cost before modifiers) 
+base_incite_cost = 1500   ; BIC  =1100 (base cost before modifiers) 
 ;                     content bonus.
 ;city is content         ; CON 
 ;city is celebrating     ; CEL 
@@ -177,8 +177,8 @@ base_incite_cost = 1100   ; BIC  =1100 (base cost before modifiers)
 ;total unit shield cost  ; UC 
 ;total improvements cost ; IC
 ;distance to capital     ; DIST  (max distance penalty=32 tiles)
-improvement_factor = 2   ; IF   =   2
-unit_factor = 3          ; UF   =   3
+improvement_factor = 20   ; IF   =   20 these need inflation because subject to huge divisors
+unit_factor = 50          ; UF   =   50
 
 [global_unit_options]
 ; Shore landing style
