@@ -89,6 +89,7 @@
 #include "stdinhand.h"
 #include "unittools.h"
 #include "voting.h"
+/*#include "notify.h" used for DEBUG only*/
 
 #include "sernet.h"
 
@@ -135,6 +136,7 @@ static void get_lanserver_announcement(void);
 static void send_lanserver_response(void);
 
 static bool no_input = FALSE;
+
 
 /* Avoid compiler warning about defined, but unused function
  * by defining it only when needed */
@@ -1387,30 +1389,68 @@ static void finish_processing_request(struct connection *pconn)
 *****************************************************************************/
 static void finish_unit_waits(void)
 {
-  time_t now = time(NULL);
+  long int now = (long int)time(NULL); /* avoid unsigned arithmetic bug */
   struct unit *punit;
   struct unit_wait *head;
+  int first_unit = -1; /* -1 == living unit not found yet */
 
-  while((head = unit_wait_list_front(server.unit_waits))
-        && head->wake_up < now) {
+  /* FIXME(?): If you're going to "fix" this, be warned! Edge cases
+   * you probably won't test, will likely break your elegant solution. */
 
+  /* List must be cleaned on first call per turn. */
+  unit_wait_list_sort(server.unit_waits, unit_wait_cmp);
+  if (!uwt_list_cleaned) {
+    while((head = unit_wait_list_front(server.unit_waits))) {
+      /* End of "dirty" list / beginning of clean list: */
+      if (head->id == first_unit) break;   
+
+      punit = game_unit_by_number(head->id);
+      if (!punit) {  /* Throw away dead units in the list.*/
+         unit_wait_list_pop_front(server.unit_waits);
+        continue;
+      }
+      /* Break glass in case of DEBUG
+      notify_conn(game.est_connections, NULL, E_UNIT_LOST_MISC, ftc_server,
+          _("(i)   UNIT #%d was in the list with t=%ld, wu in %ld."),head->id,
+          (long int)head->wake_up,(long int)head->wake_up - now);    */
+
+      /* Record first living unit in the list:*/
+      if (first_unit == -1) first_unit = head->id;
+
+      /* Move a clone of this waitlist item to the rear of the list */
+      struct unit_wait *clone = fc_malloc(sizeof(*clone));
+            clone->activity_count = head->activity_count;
+            clone->id = head->id;
+            clone->wake_up = head->wake_up;
+      unit_wait_list_append(server.unit_waits, clone);
+      unit_wait_list_pop_front(server.unit_waits); /* next item in list */
+      uwt_list_cleaned = true;  /* Cleaned once per turn on first call */
+    }
+    unit_wait_list_sort(server.unit_waits, unit_wait_cmp);
+/*
+    // Re-assign units' wait pointers to their new records in the list
+    unit_wait_list_link_iterate(server.unit_waits, plink) {
+      struct unit *punit = game_unit_by_number(
+        unit_wait_list_link_data(plink)->id);
+      if (punit) {
+        punit->server.wait = plink;
+      }
+    } unit_wait_list_link_iterate_end;*/
+  } 
+
+  /* Execute delayed orders on units with expired wait time:*/
+  while( (head = unit_wait_list_front(server.unit_waits))
+        && (long int)head->wake_up <= now) {
     punit = game_unit_by_number(head->id);
-
-    if (!punit) {  /* Unit doesn't exist anymore. */
-      // Make sure to always remove, to avoid infinite loop on dead unit.
+    if (!punit) {  /* Discard dead units from list. */
       unit_wait_list_pop_front(server.unit_waits);
       continue;
     }
     if (punit->activity == punit->changed_from
         && punit->activity_target == punit->changed_from_target) {
-      finish_unit_wait(punit, head->activity_count);
-    } else if (punit->activity == ACTIVITY_IDLE /*&& punit->has_orders*/ /*means GOTO*/) {
-    // DELAYED GOTO:
-      finish_unit_wait(punit, head->activity_count);
-    }
-
-    // should we check a return code for success before taking it from the list?
-    unit_wait_list_pop_front(server.unit_waits);
+          finish_unit_wait(punit, head->activity_count); /* Do order */
+        }
+    unit_wait_list_pop_front(server.unit_waits); /* Discard finished orders. */
   }
 }
 

@@ -71,6 +71,9 @@
 #define SPECENUM_VALUE24NAME "transport_lost"
 #include "specenum_gen.h"
 
+/* # of cycles (different vals) scramble_uwt_stamp(.) uses */
+#define NUM_UWT_CYCLES 5
+
 /* battle related */
 struct unit_type *find_a_unit_type(enum unit_role_id role,
 				   enum unit_role_id role_tech);
@@ -94,8 +97,13 @@ void update_unit_activities(struct player *pplayer);
 void execute_unit_orders(struct player *pplayer);
 void finalize_unit_phase_beginning(struct player *pplayer);
 
-/* various */
+
+/* UWT related */
+extern int  unit_wait_cycle;  /* Cycling index used by uwt scrambler */
 void finish_unit_wait(struct unit *punit, int activity_count);
+time_t scramble_uwt_stamp(time_t stamptime); /* removes predictability exploits */
+
+/* various */
 void place_partisans(struct tile *pcenter, struct player *powner,
                      int count, int sq_radius);
 bool teleport_unit_to_city(struct unit *punit, struct city *pcity, int move_cost,

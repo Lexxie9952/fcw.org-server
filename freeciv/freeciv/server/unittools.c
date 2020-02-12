@@ -153,6 +153,10 @@ static void wipe_unit_full(struct unit *punit, bool transported,
                            enum unit_loss_reason reason,
                            struct player *killer);
 
+/* Cycling index used by uwt scrambler.*/
+int unit_wait_cycle = -1;        
+
+
 /**********************************************************************//**
   Returns a unit type that matches the role_tech or role roles.
 
@@ -658,22 +662,22 @@ void execute_unit_orders(struct player *pplayer)
 {
   unit_list_iterate_safe(pplayer->units, punit) {
     if (unit_has_orders(punit)) {
-      // Execute_orders except IFF: Delay_Goto in use & activity=GOTO & uwt restricted
+      /* Execute_orders except IFF: Delay_Goto in use & activity=GOTO & uwt restricted */
       if ((game.server.unitwaittime_style & UWT_DELAY_GOTO) && punit->has_orders) {
-        // Check if unit still has unitwaittime:
+        /* Check if unit still has UWT: */
         time_t dt = time(NULL) - punit->server.action_timestamp;
         if (dt < game.server.unitwaittime && punit->activity == ACTIVITY_IDLE ) {
-          //DON'T execute GOTO if uwt restricted, just do message:
+          /* DON'T execute GOTO if UWT restricted. Give a courtesy message: */
           char buf[64];
           if (dt>0.99) {
             format_time_duration(game.server.unitwaittime - dt, buf, sizeof(buf));
             notify_player(punit->owner, unit_tile(punit),
                           E_UNIT_ORDERS, ftc_server,
-                          _("  . %s movement delayed %s by unitwaittime."),
+                          _(" . %s movement delayed %s by unitwaittime."),
                           unit_link(punit), buf);
           }
-        } else execute_orders(punit, FALSE); //Delay_Goto in use but not applicable
-      } else execute_orders(punit, FALSE); //Delay_Goto not in use.
+        } else execute_orders(punit, FALSE); /* Delay_Goto not applicable */
+      } else execute_orders(punit, FALSE); /* Delay_Goto not in use. */
     }
   } unit_list_iterate_safe_end;
 }
@@ -845,51 +849,49 @@ static void unit_activity_complete(struct unit *punit)
  
   switch (activity) {
 
-  // DELAYED GOTO HANDLING:
+  /* DELAYED GOTO HANDLING: */
   case ACTIVITY_IDLE: /* (ACTIVITY_IDLE && has_orders) means GOTO */
   case ACTIVITY_GOTO: 
-    // Only do handling if settings have delayed GOTO AND unit is in GOTO mode:
+    /* Only do handling if settings delay GOTO, and unit is doing a GOTO: */
     if ((game.server.unitwaittime_style & UWT_DELAY_GOTO) && punit->has_orders) {
-      // DON'T execute GOTO if it is uwt restricted:
+      /* Don't execute GOTO if it is UWT restricted: */
       time_t dt = time(NULL) - punit->server.action_timestamp;
       if (dt < game.server.unitwaittime) {
         char buf[64];
         if (dt>0.99) {
           format_time_duration(game.server.unitwaittime - dt, buf, sizeof(buf));
           notify_player(punit->owner, unit_tile(punit), E_UNIT_ORDERS, ftc_server,
-                    _("  . %s movement delayed %s by unitwaittime."),
+                    _(" . %s movement delayed %s by unitwaittime."),
                     unit_link(punit), buf);
         }
-      }
-      // Else, no unitwaittime. Force the delayed GOTO to take place now:
-      else {
+      } else { /* Else, no UWT remaining. Force GOTO to happen: */
+        /* DEBUG leftover
+        notify_player(punit->owner, NULL, E_UNIT_RELOCATED, ftc_server,
+        _("uac: %s #%d execute call (a GOTO with uwt satisfied)."),unit_link(punit),punit->id);*/
         execute_orders(punit, true);
       }
       return;
     }
   break;
 
-  // DELAYED FORTIFY HANDLING:
+  /* DELAYED FORTIFY HANDLING: */
   case ACTIVITY_FORTIFYING:
-    // Criterion for delayed handling is UWT=on and UWT_FORTIFY=true 
+    /* Criterion for delayed Fortify is UWT_FORTIFY=enabled */ 
     if ((game.server.unitwaittime_style & UWT_FORTIFY)) {
-      // Unit has accumulated activity_count points to finish?
-      if (punit->activity_count
-        >= action_id_get_act_time(ACTION_FORTIFY,
+      /* Check unit has accumulated enough activity_count to finish:*/
+      if (punit->activity_count >= action_id_get_act_time(ACTION_FORTIFY,
                                   punit, ptile, punit->activity_target)) {
-        // Check if 'fortifywaittime' has expired:                            
+        /* Check if 'fortifywaittime' has expired: */                           
         time_t dt = time(NULL) - punit->server.action_timestamp;
         if (dt < game.server.fortifywaittime) {
-          // FWT not expired. This task is in the unit_wait_list to handle later.
+          /* FWT not expired. This task is in the unit_wait_list to handle later.*/
           return;
         }
         else {
-          punit->activity = ACTIVITY_FORTIFIED; /* have to force it @ mid-turn */
-           // too verbose to get this message unless we knew it's from a delayed fortify
+          punit->activity = ACTIVITY_FORTIFIED; /* Force a prompt mid-turn state change */
           send_unit_info(NULL, punit);
-          // Too many messages about fortify complete is a bit verbose,
-          // optionally we could turn it on here:
-          /*notify_player(punit->owner, NULL, E_UNIT_ORDERS, ftc_server, 
+          /* "Fortify complete" messages might be verbose. They would go here:
+             notify_player(punit->owner, NULL, E_UNIT_ORDERS, ftc_server, 
                       _("%s finished fortifying."), unit_link(punit));*/
           return;
         }
@@ -927,8 +929,7 @@ static void unit_activity_complete(struct unit *punit)
     break;
 
   case ACTIVITY_POLLUTION:
-    /* TODO: Remove this fallback target setting when target always correctly
-     *       set */
+    /* TODO: Remove fallback target setting when target always correctly set */
     if (punit->activity_target == NULL) {
       punit->activity_target = prev_extra_in_tile(ptile, ERM_CLEANPOLLUTION,
                                                   NULL, punit);
@@ -940,8 +941,7 @@ static void unit_activity_complete(struct unit *punit)
     break;
 
   case ACTIVITY_FALLOUT:
-    /* TODO: Remove this fallback target setting when target always correctly
-     *       set */
+    /* TODO: Remove fallback target setting when target always correctly set */
     if (punit->activity_target == NULL) {
       punit->activity_target = prev_extra_in_tile(ptile, ERM_CLEANFALLOUT,
                                                   NULL, punit);
@@ -1071,9 +1071,9 @@ static void update_unit_activity(struct unit *punit, time_t now)
   
   /* Fortify order has separate wait time setting (or lack thereof) */
   if (activity==ACTIVITY_FORTIFYING && (game.server.unitwaittime_style & UWT_FORTIFY) ) {
-    wake_up = punit->server.action_timestamp + game.server.fortifywaittime;
+    wake_up = punit->server.action_timestamp + (time_t)game.server.fortifywaittime;
   } else {
-    wake_up = punit->server.action_timestamp + game.server.unitwaittime;
+    wake_up = punit->server.action_timestamp + (time_t)game.server.unitwaittime;
   }
 
   unit_restore_movepoints(pplayer, punit);
@@ -1088,28 +1088,28 @@ static void update_unit_activity(struct unit *punit, time_t now)
   case ACTIVITY_LAST:
     break;
 
-  // DELAYED GOTO handling
+  /* DELAYED GOTO handling */
   case ACTIVITY_GOTO: /* DELAYED GOTO */
-  case ACTIVITY_IDLE: /* units with GOTO orders are really show up with this activity code */
-    if (!(punit->has_orders)) break; // real idle units don't have has_orders==true
+  case ACTIVITY_IDLE: /* units with GOTO orders really show up with this activity code */
+    if (!(punit->has_orders)) break; /* for a real idle unit, has_orders==false */
     if (game.server.unitwaittime
-        && punit->has_orders //no orders==idle for real
+        && punit->has_orders 
         && (game.server.unitwaittime_style & UWT_DELAY_GOTO)
         && wake_up > now) {
       wait = fc_malloc(sizeof(*wait));
       wait->activity_count = activity_rate;
       wait->id = punit->id;
-      wait->wake_up = wake_up;
-      unit_wait_list_append(server.unit_waits, wait);
-      /*time_t dt = wake_up - time(NULL);
-      /'/'char buf[64]; format_time_duration(dt, buf, sizeof(buf)); 
+      wait->wake_up = scramble_uwt_stamp(wake_up);
+      /* DEBUG LEFTOVER
       notify_player(punit->owner, NULL, E_UNIT_RELOCATED, ftc_server,
-              _("%s movement will be delayed %s by unitwaittime."),unit_link(punit),buf); */
+              _("uua.%s #%d appending to waitlist. activity_code==%d"),unit_link(punit),punit->id, (int)activity );*/
+      unit_wait_list_append(server.unit_waits, wait);
+//      unit_wait_list_sort(server.unit_waits, unit_wait_cmp);
       return;
     }
     break;
 
-  // DELAYED ACTIVITY HANDLING
+  /* DELAYED ACTIVITY handling */
   /* Some activities may cause promotion: */
   case ACTIVITY_POLLUTION:
   case ACTIVITY_MINE:
@@ -1134,19 +1134,23 @@ static void update_unit_activity(struct unit *punit, time_t now)
       wait = fc_malloc(sizeof(*wait));
       wait->activity_count = activity_rate;
       wait->id = punit->id;
-      wait->wake_up = wake_up;
+      wait->wake_up = scramble_uwt_stamp(wake_up);
       unit_wait_list_append(server.unit_waits, wait);
+      if (activity==ACTIVITY_FORTIFYING) {
+        /* Maybe (FWT != UWT)==true. Therefore, sort after adding */
+//        unit_wait_list_sort(server.unit_waits, unit_wait_cmp);
+      }
       time_t dt = wake_up - time(NULL);
       char buf[64]; format_time_duration(dt, buf, sizeof(buf));
-      // Courtesy message about activity isn't completed yet
+      /* Courtesy message: activity isn't completed yet */
       if (moves_left_at_start && punit->ai_controlled == FALSE) {
         if (punit->activity==ACTIVITY_FORTIFYING) { 
           notify_player(punit->owner, NULL, E_UNIT_ORDERS, ftc_server,
                     _("  . %s doing %s will be delayed %s by fortifywaittime."),
                     unit_link(punit), _("Fortify"), buf);
-        }
-        else {
-          //TODO: verbosity reduction. Only report activities that will be finished THIS TURN after the uwt.
+        } else {
+          /* TODO: verbosity reduction. Only report activities that will be finished 
+           * THIS TURN after the UWT. */
           notify_player(punit->owner, NULL, E_UNIT_ORDERS, ftc_server,
                     _("  . %s doing %s will be delayed %s by unitwaittime."),
                     unit_link(punit), concat_tile_activity_text(unit_tile(punit)), buf);
@@ -1157,7 +1161,6 @@ static void update_unit_activity(struct unit *punit, time_t now)
     punit->activity_count += activity_rate;
     break;
 
-   //Obsolete cases (for old savegame compatibility)
    case ACTIVITY_OLD_ROAD:
    case ACTIVITY_OLD_RAILROAD:
    case ACTIVITY_FORTRESS:
@@ -1165,7 +1168,6 @@ static void update_unit_activity(struct unit *punit, time_t now)
      fc_assert(FALSE);
      return;
   }
-
   unit_activity_complete(punit);
 }
 
@@ -1216,23 +1218,53 @@ void finish_unit_wait(struct unit *punit, int activity_count)
          sprintf(buf,"%s",_("moving"));
          possibly_moved=true;
   }
+/* DEBUG LEFTOVER
+  notify_player(punit->owner, NULL, E_UNIT_RELOCATED, ftc_server,
+        _("fuw.%s #%d getting a uac call to execute."),unit_link(punit),punit->id); */
  
-  // Call the function for finishing activities:
+  /* Call the function for finishing activities: */
   unit_activity_complete(punit);
 
   /* Send a message if legitimate activity completed */
 
-  // If unit had orders but not anymore, then unit is no longer doing activity
+  /* If unit had orders but not anymore, then unit is no longer doing activity */
   orders_finished = had_orders && !punit->has_orders;
   
-  // Catch false movement cases, bogus orders, etc.: don't print message for these
+  /* Catch false movement cases, bogus orders, etc.: don't print message for these */
   if (possibly_moved==true && (original_tile == punit->tile))
     orders_finished = false; 
                       
-  // Report activity is finished:
+  /* Report activity is finished: */
   if (orders_finished && punit->activity==ACTIVITY_IDLE)  
       notify_player(unit_owner(punit), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
                     _(" * %s finished %s."), unit_link(punit), buf); 
+}
+
+/**********************************************************************//**
+  Scramble the timestamp for when UWT_ACTIVITIES and UWT_DELAY_GOTO units
+  'wake up' to do their mid-turn orders. Disallows abuse of UwT_ACTIVITIES
+  for overly precise "time scripted exploits."
+**************************************************************************/
+time_t scramble_uwt_stamp(time_t stamptime)
+{
+#define SCRAMBLE_OFFSET_SECONDS 2
+  time_t scramble_time;
+
+  if (++unit_wait_cycle >= NUM_UWT_CYCLES) 
+    unit_wait_cycle = 0;
+
+  /* Add 0-9 seconds to the time a delayed action will be executed
+   * (UWT_ACTIVITIES / UWT_DELAY_GOTO). Do it in such a that mass-orders
+   * given to 10 units will evenly distribute over that time range, yet
+   * each is "unpredictably uneven" by 1 second. */
+  scramble_time = stamptime + (time_t)(unit_wait_cycle * SCRAMBLE_OFFSET_SECONDS 
+                            + fc_rand(SCRAMBLE_OFFSET_SECONDS));
+
+  /* Catch 32-bit unsigned time_t making negative numbers into false huge vals */
+  if (stamptime>4000000000||scramble_time>4000000000/*2038CE*/||stamptime<0)
+    scramble_time = stamptime;
+
+  return scramble_time;
 }
 
 /**********************************************************************//**
@@ -4506,27 +4538,30 @@ bool execute_orders(struct unit *punit, const bool fresh)
         if (game.server.unitwaittime_style & UWT_DELAY_GOTO) {
           time_t dt = time(NULL) - punit->server.action_timestamp;
             if (dt < game.server.unitwaittime) {
-              //DON'T CANCEL ORDERS: they need to be kept to delay GOTO later
+              /* DON'T CANCEL ORDERS: they need to be kept to delay GOTO later */
               char buf[64];
-              if (dt>0.99) { // if dt<1 second it's insignificant, don't bother showing message
+              if (dt>0.99) { /* if dt<1 second don't bother showing message */
                 format_time_duration(game.server.unitwaittime - dt, buf, sizeof(buf));
                 notify_player(pplayer, unit_tile(punit),
                           E_UNIT_ORDERS, ftc_server,
                           _("  . %s movement delayed %s by unitwaittime."),
                           unit_link(punit), buf);
               }
-              punit->orders.index--;  // We must cancel the earlier increment of order_index++ which assumed success, because 
-                                      // we didn't do anything due to uwt.
-              // Courtesy feature: put fresh user-given orders in unit_wait_list to execute later this same turn:
+              /* We must undo the earlier 'premature' increment of order_index++ which assumed success */
+              punit->orders.index--;  
+              /* Courtesy feature: put fresh user-given orders in unit_wait_list to execute later */
               if (fresh) {
-                time_t wake_up = punit->server.action_timestamp + game.server.unitwaittime;
+                time_t wake_up = punit->server.action_timestamp + (time_t)game.server.unitwaittime;
                 punit->activity = ACTIVITY_IDLE;
-                // TODO: make a GOTO to dest tile if !has_orders, this means they hit a cursor key
+                /* TODO: make a GOTO to dest tile if !has_orders, this means they hit a cursor key */
                 struct unit_wait *wait = fc_malloc(sizeof(*wait));
                 wait->activity_count = get_activity_rate_this_turn(punit);
                 wait->id = punit->id;
-                wait->wake_up = wake_up;
+                wait->wake_up = scramble_uwt_stamp(wake_up);/* DEBUG LEFTOER
+                notify_player(punit->owner, NULL, E_UNIT_RELOCATED, ftc_server,
+              _("xo.%s #%d appending to waitlist."),unit_link(punit),punit->id);*/
                 unit_wait_list_append(server.unit_waits, wait);
+//                unit_wait_list_sort(server.unit_waits, unit_wait_cmp);
               }
               return true;
             }
@@ -4814,49 +4849,49 @@ bool unit_can_do_action_now(const struct unit *punit)
 
   dt = time(NULL) - punit->server.action_timestamp;
 
-  // Is unit restricted by Unitwaittime? 
+  /* Is unit restricted by UWT? */
   if (dt < game.server.unitwaittime) {
-    give_uwt_message = true; // UWT on punit is active: default to give a fail message.
+    give_uwt_message = true; /* UWT is on punit: default to give a fail message. */
 
-    // Exceptions to fail message----------------------
-    // Every possible action will get queued to do after UWT, so don't give fail message.
+    /* Exceptions to fail message---------------------- */
+    /* Every possible action will be done after UWT, so don't do fail message.*/
     if (game.server.unitwaittime_style & UWT_ACTIVITIES & UWT_DELAY_GOTO)
       give_uwt_message = false;
 
-    // UWT_ACTIVITIES is on and it's not a GOTO command. Action will be queued. No message.
+    /* UWT_ACTIVITIES is on and it's not a GOTO. Will do action later. No message.*/
     if ((game.server.unitwaittime_style & UWT_ACTIVITIES)
         && punit->activity != ACTIVITY_IDLE
         && punit->activity != ACTIVITY_GOTO)
       give_uwt_message = false;
 
-    // Exceptions to exceptions-------------------------
-    // Delay_Goto is off and unit was given a GOTO command 
+    /* Exceptions to exceptions------------------------- */
+    /* Delay_Goto is OFF and unit was given a GOTO command */ 
     if ((game.server.unitwaittime_style & !UWT_DELAY_GOTO) 
         && (punit->activity == ACTIVITY_IDLE || punit->activity == ACTIVITY_GOTO)
         && punit->has_orders)
       give_uwt_message = true;
 
-    // Auto-explore units not regulated by UWT: it creates carryover issues
+    /* Auto-explore not supported */
     if (punit->activity == ACTIVITY_EXPLORE)
       return TRUE;
 
-    // Always give fail message if no actions can be queued to do mid-turn:
+    /* Always give fail message if no actions can be queued to do mid-turn:*/
     if (game.server.unitwaittime_style & !UWT_ACTIVITIES)
       give_uwt_message = true;
 
-    if (give_uwt_message == false) return FALSE; // Skip fail message
+    if (give_uwt_message == false) return FALSE; /* Skip message */
 
-    // Give fail message:
+    /* Give fail message: */
     char buf[64];
     format_time_duration(game.server.unitwaittime - dt, buf, sizeof(buf));
     notify_player(unit_owner(punit), unit_tile(punit), E_BAD_COMMAND,
                   ftc_server, _("Your %s may not act for another %s "
                                 "this turn. See /help unitwaittime."),
                                  unit_link(punit), buf);
-    return FALSE; // Unit can't do action.
+    return FALSE; /* Unit can't do action. */
   }
 
-  // Unit can do action now
+  /* Unit can do action now */
   return TRUE;
 }
 

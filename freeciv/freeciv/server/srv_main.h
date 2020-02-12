@@ -127,7 +127,11 @@ const char *aifill(int amount);
 extern struct server_arguments srvarg;
 
 extern bool force_end_of_sniff;
+extern bool uwt_list_cleaned; 
 
 void update_nations_with_startpos(void);
+
+int unit_wait_cmp(const struct unit_wait *const *a,
+                         const struct unit_wait *const *b);
 
 #endif /* FC__SRV_MAIN_H */

@@ -191,6 +191,9 @@ static struct timer *eot_timer = NULL;
 
 static struct timer *between_turns = NULL;
 
+/* Flag to clean uwt list on first call of the turn to finish_unit_waits() */
+bool uwt_list_cleaned = FALSE; 
+
 /**********************************************************************//**
   Initialize the game seed.  This may safely be called multiple times.
 **************************************************************************/
@@ -1170,7 +1173,7 @@ static void begin_turn(bool is_new_turn)
 /**********************************************************************//**
   Comparator for sorting unit_waits in chronological order.
 **************************************************************************/
-static int unit_wait_cmp(const struct unit_wait *const *a,
+int unit_wait_cmp(const struct unit_wait *const *a,
                          const struct unit_wait *const *b)
 {
   return (*a)->wake_up > (*b)->wake_up;
@@ -1246,6 +1249,8 @@ static void begin_phase(bool is_new_phase)
         punit->server.wait = plink;
       }
     } unit_wait_list_link_iterate_end;
+    /* List must be flagged for cleaning on its first use. */
+    uwt_list_cleaned = false;
 
     /* Execute orders after activities have been completed (roads built,
      * pillage done, etc.). */

@@ -454,8 +454,8 @@ extern struct world wld;
 #define GAME_DEFAULT_RESTRICTINFRA   FALSE
 #define GAME_DEFAULT_UNRPROTECTS     TRUE
 #define GAME_DEFAULT_UNIVERSAL_UNLOAD FALSE
-// if non-zero, override unloading move-cost when universal_unload=true:
-#define GAME_DEFAULT_UNLOAD_OVERRIDE 0 // value=move fragments. 0=no override  
+/* if non-zero, override unloading move-cost when universal_unload=true: */
+#define GAME_DEFAULT_UNLOAD_OVERRIDE 0 /* value=move fragments. 0=no override */  
 #define GAME_MIN_UNLOAD_OVERRIDE 0  
 #define GAME_MAX_UNLOAD_OVERRIDE 1000 /* 1000 effectively uses all moves_left */  
 
