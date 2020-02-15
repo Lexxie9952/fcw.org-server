@@ -440,9 +440,13 @@ function show_dialog_message(title, message)
   $("#generic_dialog").dialog('open');
   $("#game_text_input").blur();
 
+  if (title=="Tile Information")
+      $("#calc_tip").tooltip();
   
-  // automatically close dialog after 38 seconds, because sometimes the dialog can't be closed manually.
-  dialog_message_close_task = setTimeout(close_dialog_message, 38000);
+  // Automatically close dialog after 38 seconds, because sometimes the dialog can't be closed manually.
+  // When can't it be closed manually? This made problems if two dialogs opened in <30 and first one 
+  // closes second one. Turning off and will fix some other way if needed:
+  // dialog_message_close_task = setTimeout(close_dialog_message, 38000);
 
   $('#generic_dialog').css("max-height", "450px");
 }

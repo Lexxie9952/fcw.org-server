@@ -164,11 +164,11 @@ function improve_tile_info_dialog(message)
   }
   
   // Warcalc odds.
-  var saved_current_focus = current_focus.map((x) => x); // clone it to allow later restore
-  current_focus = tile_units(mclick_tile); // need to temporarily use this for function call
-  
-  if (my_hp && current_focus && current_focus.length > 0) warcalc_set_default_vals();
-  if (my_hp && their_hp && current_focus && current_focus.length > 0) {
+  warcalc_reset_roles();
+  var sunits = tile_units(mclick_tile);
+ 
+  if (my_hp && sunits && sunits.length > 0) warcalc_set_default_vals(sunits[0]);
+  if (my_hp && their_hp && sunits && units[my_uid] && units[their_uid] && sunits.length > 0) {
     // Store values in Warcalc Tab, to allow future reference + function re-use:
     //strength
     $("#id_astr").val(my_str);
@@ -185,20 +185,21 @@ function improve_tile_info_dialog(message)
 
     warcalc_compute();
 
-    added_text += "<b>Combat odds:</b><br>";
-    added_text += "A:<b>"+my_str.toFixed(1)+"</b>  HP:<b>"+my_hp+"</b>  FP:<b>"+my_fp+"</b>  (Attacker)<br>";
+    added_text += "<b>Combat odds:</b><span style='font-size:75%'> (*before base or unit-type bonus)</span><br>";
+    added_text += "A:<b>"+my_str.toFixed(1)+"</b>  HP:<b>"+my_hp+"</b>  FP:<b>"+my_fp+"</b>  ("+unit_types[units[my_uid]['type']]['name']+")<br>";
     added_text += "D:<b>"+their_str.toFixed(1)+"</b>  HP:<b>"+their_hp+"</b>  FP:<b>"+their_fp+"</b>  ";
-    added_text += "("+unit_types[current_focus[0]['type']]['name']+")<br>";
+    added_text += "("+unit_types[sunits[0]['type']]['name']+")<br>";
     added_text += $("#att_win").html();
-    added_text += "\n<div id='click_calc' style='cursor:pointer;' onclick='improve_tile_info_warcalc_click()'>"
+    added_text += "\n<div id='click_calc' title='Base and special unit bonuses not included (e.g., Fort, Pikemen vs. Chariot)' "
+               +  "style='cursor:pointer;' onclick='improve_tile_info_warcalc_click()'>"
                +  "<u>Click</u> to apply other bonuses</div>";
   }
-  current_focus = saved_current_focus;  // restore current_focus back to whatever it was
   return message+added_text;
 }
 function improve_tile_info_warcalc_click()
 {
   $("#ui-id-8").trigger("click");
+  close_dialog_message(); // close tile info popup first
   warcalc_screen();
 }
 

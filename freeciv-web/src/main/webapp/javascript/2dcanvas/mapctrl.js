@@ -509,6 +509,7 @@ function handle_info_text_message(packet)
   // Make freeciv server layout issues to be more web presentable.
   message = lines.join("<br>\n");
   message = message.replace(/team<br>\n/g,"team ");
+  message = message.replace(/turn<br>\n/g,"turn ");
   message = message.replace(/\|<br>\n/g,"| ");
   message = message.replace(/\|/g,"&bull;");
 
@@ -527,13 +528,18 @@ function handle_info_text_message(packet)
   message = message.replace(/<br>\nNeutral/g, " <b style='color:#134'>Neutral</b>");
   message = message.replace(/<b>Neutral/g, "<b style='color:#134'>Neutral");
   
-  message = message.replace(/<br>\n<b>Mysterious/g, " <b style='color:#430'>Mysterious");
-  message = message.replace(/<br>\nMysterious/g, " <b style='color:#430'Mysterious</b>");
-  message = message.replace(/<b>Mysterious/g, "<b style='color:#430'>Mysterious");
+  message = message.replace(/<br>\n<b>Mysterious/g, " <b style='color:#304'>Mysterious");
+  message = message.replace(/<br>\nMysterious/g, " <b style='color:#304'Mysterious</b>");
+  message = message.replace(/<b>Mysterious/g, "<b style='color:#304'>Mysterious");
 
   message = message.replace(/<br>\n<b>Peaceful/g, " <b style='color:#043'>Peaceful");
   message = message.replace(/<br>\nPeaceful/g, " <b style='color:#043'Peaceful</b>");
   message = message.replace(/<b>Peaceful/g, "<b style='color:#043'>Peaceful");
+
+  // show warning colour for 1 turn left on cease-fire
+  message = message.replace(/1 turn cease-fire/g,   "<b style='color:#610'><u>1 turn</u> Cease-fire</b>");
+  // standard cease-fire
+  message = message.replace(/turn cease-fire/g, "turn <b style='color:#340'>Cease-fire</b>");
 
   message = message.replace(/<br>\nunit/g, " unit");
   message = message.replace("<br>\n   with"," &#11088; with");
