@@ -5,9 +5,14 @@
 var my_hp  = "";
 var my_str = "";
 var my_fp  = 1;
+var my_uid = null;
 var their_hp = "";
 var their_str= "";
 var their_fp = 1;
+var their_uid = null;
+const WARCALC_ATTACKING = 0;
+const WARCALC_DEFENDING = 1;
+var warcalc_role_mode = WARCALC_ATTACKING;
 
 /**************************************************************************
  Updates the Warcalc tab when clicked. 
@@ -19,8 +24,103 @@ function warcalc_screen()
   $("#warcalc_tab").show();
   $("#warcalc_tab").children().show();
 
-  warcalc_set_default_vals();
+  warcalc_reset_roles();
 
+  // If there is a current_focus unit, replace with values from this one:
+  if (current_focus && current_focus.length>0) 
+    warcalc_set_default_vals(current_focus[0]);
+  
+  //strength
+  $("#id_astr").val(my_str);
+  $("#id_dstr").val(their_str);
+  //hitpoints
+  $("#id_ahp").val(my_hp);
+  $("#id_dhp").val(their_hp);
+  //firepower 
+  $("#id_afp").val(my_fp);
+  $("#id_dfp").val(their_fp);
+  //clear prior results
+  $("#att_win").html("");
+  $("#def_win").html("");
+  $("#exp_hp").html("");
+
+  //set focus on first field
+  setTimeout(function(){$("#id_astr").focus();$("#id_astr").select()},200);
+  warcalc_update_titles();
+}
+/**************************************************************************
+  When new warcalc sessions are requested, we have to reset roles so that
+  proper attack strength and defense strength show.
+*************************************************************************/
+function warcalc_reset_roles() 
+{ // Reset default role mode in case it was previously changed.
+  if (warcalc_role_mode != WARCALC_ATTACKING) {
+    warcalc_role_mode = WARCALC_ATTACKING;
+    // With a role change of att/def comes a change in strength, so recompute:
+    if (my_uid && units[my_uid])
+      warcalc_set_default_vals(units[my_uid]);
+    if (their_uid && units[their_uid])
+      warcalc_set_default_vals(units[their_uid]);
+  }
+}
+/**************************************************************************
+  Update labels
+*************************************************************************/
+function warcalc_update_titles()
+{
+  if (!my_uid || !their_uid || !units[my_uid] || !units[their_uid])
+    return;
+
+  if (warcalc_role_mode == WARCALC_ATTACKING) { //default, we are attacker
+    $("#wcamsg").prop("title", "Your "+unit_types[units[my_uid]['type']]['name']+" is set as attacker.\n\nOnly Veteran bonus is auto-calculated");
+    $("#wcamsg").html("A:&#11088;"+unit_types[units[my_uid]['type']]['name']);
+ 
+    $("#wcdmsg").prop("title", "Foreign "+unit_types[units[their_uid]['type']]['name']+" is set as defender.\n\nVeteran, Terrain, and Fortify bonuses are included.\n\nNot included:\n Base, Unit-type bonus, City modifiers");
+    $("#wcdmsg").html("D:"+unit_types[units[their_uid]['type']]['name']);
+  }
+  else if (warcalc_role_mode == WARCALC_DEFENDING) {// swapped role
+    $("#wcamsg").prop("title", "Foreign "+unit_types[units[their_uid]['type']]['name']+" is set as attacker.\n\nOnly Veteran bonus is auto-calculated");
+    $("#wcamsg").html("A:"+unit_types[units[their_uid]['type']]['name']);
+ 
+    $("#wcdmsg").prop("title", "Your "+unit_types[units[my_uid]['type']]['name']+" is set as defender.\n\nVeteran, Terrain, and Fortify bonuses are included.\n\nNot included:\n Base, Unit-type bonus, City modifiers");
+    $("#wcdmsg").html("D:&#11088;"+unit_types[units[my_uid]['type']]['name']);
+  }
+}
+
+/**************************************************************************
+  Flip who is attacker and defender
+*************************************************************************/
+function warcalc_swap_roles()
+{
+   if (!my_uid || !their_uid) return; // need two real units to swap
+   // Def. strength is existentially dependent on a real unit on a 
+   // real tile with terrain bonus, fortify state, etc.; other things
+   // depend on it being real too, so abort if there aren't 2 real units:
+   if ( !(units[my_uid] && units[their_uid]) ) return;
+
+   warcalc_role_mode = 1 - warcalc_role_mode; // swap roles of att/def
+
+  if (warcalc_compute_role_strength(my_uid, their_uid)) {
+    warcalc_update_titles();
+  }
+}
+/**************************************************************************
+  Flipping attacker and defender may result in different bonuses
+  Returns false if there was an invalid unit / dead unit
+*************************************************************************/
+function warcalc_compute_role_strength(my_uid, their_uid)
+{
+  var punit;
+  var ptype;
+  var power_fact = 100;
+
+  if ( !(my_uid && their_uid && units[their_uid] && units[my_uid]) )
+    return false;
+
+  if (warcalc_role_mode == WARCALC_ATTACKING)
+  { // This is the default role, just refresh all inputs:
+    warcalc_set_default_vals(units[my_uid]);
+    warcalc_set_default_vals(units[their_uid]);
     //strength
     $("#id_astr").val(my_str);
     $("#id_dstr").val(their_str);
@@ -30,27 +130,74 @@ function warcalc_screen()
     //firepower 
     $("#id_afp").val(my_fp);
     $("#id_dfp").val(their_fp);
-    //results
+    //clear prior results
     $("#att_win").html("");
     $("#def_win").html("");
-    //set focus on first field
-  
-    setTimeout(function(){$("#id_astr").focus();$("#id_astr").select()},200);
+    $("#exp_hp").html("");     // reset prior results
+  }
+  else if (warcalc_role_mode == WARCALC_DEFENDING)
+  { // Non-default mode. We are defender and they are attacker. Compute.
+    // SET UP "THEIR UNIT" AS ATTACKER
+    punit = units[their_uid];
+
+    ptype = unit_types[punit['type']];
+    
+    if (punit['veteran']) {
+      if (ptype['veteran_levels'] > 0) {
+        power_fact = ptype['power_fact'][punit['veteran']];
+      } else {
+        power_fact = game_rules['power_fact'][punit['veteran']];
+      }
+    }
+    their_hp  = punit['hp'];
+    their_fp  = ptype['firepower'];
+    their_str = ptype['attack_strength'];;
+    their_str *= (power_fact/100);
+    if (their_str-Math.trunc(their_str))
+    their_str = trim_decimals(their_str);
+
+    // SET UP "MY UNIT" AS DEFENDER
+    if (units[my_uid])
+      punit = units[my_uid];
+    else return false;
+    ptype = unit_types[punit['type']];
+    power_fact = warcalc_get_defense_bonus(punit);
+    my_hp  = punit['hp'];
+    my_str = ptype['defense_strength'];
+    my_fp  = ptype['firepower'];
+
+    my_str *= (power_fact/100);
+    my_str = trim_decimals(my_str);
+    // Fill the input fields with opposite values from usual now:
+    //strength
+    $("#id_dstr").val(my_str);
+    $("#id_astr").val(their_str);
+    //hitpoints
+    $("#id_dhp").val(my_hp);
+    $("#id_ahp").val(their_hp);
+    //firepower 
+    $("#id_dfp").val(my_fp);
+    $("#id_afp").val(their_fp);
+    //clear results
+    $("#att_win").html("");
+    $("#def_win").html("");
+    $("#exp_hp").html("");     // reset prior results
+
+  }
+  return true;
 }
+
 /**************************************************************************
   Called when a unit is clicked to guess default values
 *************************************************************************/
-function warcalc_set_default_vals()
+function warcalc_set_default_vals(punit)
 {
-  if (!current_focus || current_focus.length<1) return;
-
-  var punit = current_focus[0];
   var ptype = unit_types[punit['type']];
 
   // Get veteran power factor for punit
   var power_fact = 100;
 
-  // assume a clicked player unit is being considered for an attacker
+  // Assume a clicked player unit is being considered for an attacker
   if (punit['owner'] == client.conn.playing.playerno) {
     if (punit['veteran']) {
       if (ptype['veteran_levels'] > 0) {
@@ -62,17 +209,19 @@ function warcalc_set_default_vals()
     my_hp  = punit['hp'];
     my_str = ptype['attack_strength'];
     my_fp  = ptype['firepower'];
+    my_uid = punit['id'];
 
     my_str *= (power_fact/100);
     if (my_str-Math.trunc(my_str))
     my_str = trim_decimals(my_str);
   }
-  // assume a clicked non-player unit is being considered for a defender
+  // Assume a clicked non-player unit is being considered for a defender
   else {
     power_fact = warcalc_get_defense_bonus(punit);
     their_hp  = punit['hp'];
     their_str = ptype['defense_strength'];;
     their_fp  = ptype['firepower'];
+    their_uid = punit['id'];
 
     their_str *= (power_fact/100);
     their_str = trim_decimals(their_str);
@@ -205,4 +354,115 @@ function warcalc_done() {
   $("#ui-ui-8").hide();
   set_default_mapview_active();
   $("#map_tab").click();
+}
+
+/**************************************************************************
+  Optional function for those wanting ruleset specific hard-coded helptext
+   in their warcalc. May be modified as desired or deleted if unwanted.
+*************************************************************************/
+function warcalc_set_tooltips()
+{
+  $(".tiny_button").show(); // Player may have changed ruleset, start with all buttons showing
+  $(".tiny_button").tooltip();
+  $(".wcttmsg").tooltip();
+  $(".wcttmsg").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "400px");}});
+  const bl = "* ";    // bullet
+  const nbl = "\n* ";  
+
+  // Wider tool tips for attaker / defender label info:
+  $("#wcamsg").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "450px");}});
+  $("#wcdmsg").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "450px");}});  
+
+  if (ruleset_control['name']=="Avant-garde" 
+   || ruleset_control['name']=="Multiplayer-Evolution ruleset" ) {
+        if (is_small_screen()) {
+          $('#wcth1').hide(); $('#wcth2').hide(); // "attack","defend" text near applier buttons
+          $("#wcttmsg").prop( "disabled", true );
+          $("#wc400").hide(); // no room for rare destroyer button, they can use 2x twice for 4x
+          var scale = parseFloat( $( window ).width()-9 )/352*0.77;
+          var transX = 88*scale-82;
+          if (scale>1) scale=1;
+          var tran_str = "scale("+scale+") translateX("+transX+"%)"//scale and undo horizontal movement caused by scale %
+          $('#wcbtbl').css({ transform: tran_str }); 
+        }
+        // DEFEND BUTTONS
+        $("#wc500").hide(); // no 5x bonus in MP2/AG
+        $("#wc125").prop("title", bl+"In city with SAM Battery vs. Stealth Aircraft");
+        $("#wc133").prop("title", bl+"River"+nbl+"Swamp"+nbl+"Forest"+nbl+"Land/Heli in Fort vs. Land/Sea/Missile (not Armor)"+nbl+"Fighter over Fort/Fortress vs. Land/Sea/Missile (not Armor)"+nbl+"Sea unit in Naval base");
+        $("#wc150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Jungle"+nbl+"Land unit Fortified OR inside city");
+        $("#wc167").prop("title", bl+"Land/Heli in Fortress vs Armor/Aircraft"+nbl+"Land/Heli in Naval Base vs Armor/Aircraft");
+        $("#wc175").prop("title", bl+"Veteran-2 ('Hardened')");
+        $("#wc200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Hills"+nbl+"Land/Heli in Fortress vs. Land/Sea/Missile"+nbl+"In city with Coastal Defense vs. Sea"+nbl
+          + "In city with SAM Battery vs. Air (not Heli/Stealth)"+nbl+"In city with SDI vs. Missile"+nbl+"Pikemen vs Horse (not Cavalry)"+nbl+"Knight vs. Foot soldier"+nbl
+          + "Cruiser,Battleship,M.Destroyer,AEGIS vs Submarine"+nbl+"Sea unit vs. Marines"+nbl+"AAA/Mobile SAM vs. Aircraft"+nbl+"Missile Destroyer vs. Air/Missile"+nbl+"Armor II vs. Missile");
+        $("#wc210").prop("title", bl+"Veteran-4 ('Crack')");
+        $("#wc220").prop("title", bl+"Veteran-5 ('Master')");
+        $("#wc230").prop("title", bl+"Veteran-6 ('Champion')");
+        $("#wc300").prop("title", bl+"Mountains"+nbl+"In city with City Walls vs Land/Heli (not Howitzer)"+nbl+"Knight vs. Horse (not Cavalry)"+nbl+"AEGIS vs. Air/Missile");
+        $("#wc400").prop("title", bl+"Destroyer vs. Submarine");
+        // ATTACK BUTTONS
+        $("#wca133").hide(); // unused except for table alignment
+        $("#wca167").hide(); //   "      "     "    "      "
+
+        $("#wca125").prop("title", bl+"Stealth Aircraft vs. AAA/Mobile SAM");
+        $("#wca150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Phalanx/Pikemen + Agoge of Sparta");
+        $("#wca175").prop("title", bl+"Veteran-2 ('Hardened')");
+        $("#wca200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"AAA/Mobile SAM vs. Aircraft"+nbl+"Fighter vs Heli (also: Heli FP=1)");
+        $("#wca210").prop("title", bl+"Veteran-4 ('Crack')");
+        $("#wca220").prop("title", bl+"Veteran-5 ('Master')");
+        $("#wca230").prop("title", bl+"Veteran-6 ('Champion')");
+        // TOOLTIPS NEEDING MORE SPACE
+        $("#wc125").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "450px");}});
+        $("#wc133").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "450px");}});
+        $("#wc167").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "450px");}});
+        $("#wc200").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "460px");}});
+        $("#wc300").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "450px");}});
+
+        return;
+  }
+  
+  // Suppress UI buttons not present in remaining rulesets
+  $("#wc133").hide(); $("#wc167").hide(); $("#wc210").hide(); $("#wc220").hide(); $("#wc230").hide(); $("#wc400").hide();
+  $("#wca125").hide(); $("#wca133").hide(); $("#wca167").hide(); $("#wca210").hide(); $("#wca220").hide(); $("#wca230").hide();
+
+  // Classic/MP/MP+:
+  if (ruleset_control['name']=="Multiplayer-Plus ruleset" 
+  || ruleset_control['name']=="Multiplayer ruleset" 
+  || ruleset_control['name']=="Classic ruleset" ) {
+    // DEFEND BUTTONS
+    $("#wc125").hide(); // unused
+    $("#wc150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"River"+nbl+"Swamp"+nbl+"Forest"+nbl+"Jungle"+nbl+"Land unit Fortified OR inside city");
+    $("#wc175").prop("title", bl+"Veteran-2 ('Hardened')");
+    $("#wc200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Hills"+nbl+"Land/Heli in Fortress vs. Land/Sea units"+nbl+"Pikemen vs. Horse (not Cavalry)"+nbl+"In city with Coastal Defense vs. Sea"+nbl+"In city with SAM Battery vs. Aircraft"+nbl+"In city with SDI vs. Missile");
+    $("#wc300").prop("title", bl+"Mountains"+nbl+"In city with City Walls vs Land/Heli (not Howitzer)");
+    $("#wc500").prop("title", bl+"AEGIS vs. Air/Missile");
+    // ATTACK BUTTONS
+    $("#wca150").prop("title", bl+"Veteran-1 ('Veteran')");
+    $("#wca175").prop("title", bl+"Veteran-2 ('Hardened')");
+    $("#wca200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Fighter vs Heli (also: Heli FP=1)");
+    // TOOLTIPS NEEDING MORE SPACE
+    $("#wc200").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "400px");}});
+    $("#wc300").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "400px");}});
+  }
+
+  //Civ2Civ3
+  if (ruleset_control['name']=="Civ2Civ3 ruleset") {
+    // DEFEND BUTTONS
+    $("#wc300").hide(); // unused
+    $("#wc125").prop("title", bl+"River"+nbl+"Swamp"+nbl+"Forest"+nbl+"Jungle");
+    $("#wc150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Hills"+nbl+"Land unit Fortified OR inside city"+nbl+"Sea unit inside city"+nbl+"Land unit in Fort vs. Land/Sea"+nbl
+      + "On Airstrip vs. Aircraft"+nbl+"In Airbase vs. Land/Sea"+nbl+"In city and Nation has Great Wall");
+    $("#wc175").prop("title", bl+"Veteran-2 ('Hardened')");
+    $("#wc200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Mountains"+nbl+"Destroyer vs. Submarine"+nbl+""
+      + "Land unit in Fortress vs. Land/Sea"+nbl+"In Airbase vs. Aircraft"+nbl+"In city with City Walls vs Land unit"+nbl+"In city with Coastal Defense vs. Sea"+nbl
+      + "In city with SAM Battery vs. Air/Heli"+nbl+"In city with SDI vs. Missile" );
+    $("#wc500").prop("title", bl+"AEGIS vs. Air/Missile");
+    // ATTACK BUTTONS
+    $("#wca150").prop("title", bl+"Veteran-1 ('Veteran')");
+    $("#wca175").prop("title", bl+"Veteran-2 ('Hardened')");
+    $("#wca200").prop("title", bl+"Veteran-3 ('Elite')");
+    // TOOLTIPS NEEDING MORE SPACE
+    $("#wc150").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "400px");}});
+    $("#wc200").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "400px");}});
+  }
 }

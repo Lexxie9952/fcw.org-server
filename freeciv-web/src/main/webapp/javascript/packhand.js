@@ -690,6 +690,7 @@ function handle_ruleset_control(packet)
       client_rules_flag = CRF_COMMIE_BLDG_UPKEEP;
     break;
   }
+  warcalc_set_tooltips(); // set ruleset tooltips for buttons
 
   if (ruleset_control['name'])
   update_client_state(C_S_PREPARING);

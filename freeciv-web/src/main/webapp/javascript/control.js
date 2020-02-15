@@ -1785,7 +1785,6 @@ function set_unit_id_focus(id)
 function set_unit_focus(punit)
 {
   save_last_unit_focus();
-  warcalc_set_default_vals();
 
   current_focus = [];
   if (punit == null) {
@@ -1794,6 +1793,8 @@ function set_unit_focus(punit)
     current_focus[0] = punit;
     if (renderer == RENDERER_WEBGL) update_unit_position(index_to_tile(punit['tile']));
   }
+
+  if (punit) warcalc_set_default_vals(punit);
   update_active_units_dialog();
   update_unit_order_commands();
 }
@@ -1850,7 +1851,7 @@ function set_unit_focus_and_redraw(punit)
     if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
   } else {
     current_focus[0] = punit;
-    warcalc_set_default_vals(); // warcalc default vals as last clicked units
+    warcalc_set_default_vals(punit); // warcalc default vals as last clicked units
     if (renderer == RENDERER_WEBGL) update_unit_position(index_to_tile(punit['tile']));
   }
 
@@ -2683,7 +2684,8 @@ function do_map_click(ptile, qtype, first_time_called)
         // clicked on a tile with units exclusively owned by other players.
         save_last_unit_focus();
         current_focus = sunits;
-        warcalc_set_default_vals();  // feeds the warcalc with default values from current_focus[0]
+        if (current_focus.length>0) // just for insurance ;)
+          warcalc_set_default_vals(current_focus[0]);  // feeds the warcalc with default values from current_focus[0]
         $("#game_unit_orders_default").hide();
         update_active_units_dialog();
       }
@@ -3859,7 +3861,7 @@ function key_unit_show_cargo()
   }
   deactivate_goto(false);
   update_active_units_dialog();
-  warcalc_set_default_vals();
+  if (current_focus.length>0) warcalc_set_default_vals(current_focus[0]);
   update_unit_order_commands();
 }
 
