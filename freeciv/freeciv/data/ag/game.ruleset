@@ -867,7 +867,7 @@ actor_reqs    =
     { "type",         "name",        "range", "present"
       "UnitFlag",     "Bombarder",   "Local", TRUE
       "UnitType",     "Archers",      "Local", TRUE
-      "UnitState",    "Transported", "Local", FALSE
+;      "UnitState",    "Transported", "Local", FALSE
       "MinMoveFrags", "1",           "Local", TRUE
       "DiplRel",      "War",         "Local", TRUE
    }
@@ -886,7 +886,7 @@ actor_reqs    =
     { "type",         "name",        "range", "present"
       "UnitFlag",     "Bombarder",   "Local", TRUE
       "UnitType",     "Fanatics",      "Local", TRUE
-      "UnitState",    "Transported", "Local", FALSE
+;      "UnitState",    "Transported", "Local", FALSE
       "UnitState",    "OnDomesticTile", "Local",  TRUE
       "MinMoveFrags", "1",           "Local", TRUE
       "DiplRel",      "War",         "Local", TRUE
