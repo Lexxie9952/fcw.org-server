@@ -47,6 +47,7 @@ const GOTO_CLICK_COOLDOWN = 475; // Cooldown period before that tile can be clic
 var keyboard_input = true;
 var unitpanel_active = false;
 var allow_right_click = false;
+var DEBUG_UNITS = false;  // console log tools for debugging unit issues
 
 // performance: is_touch_device() was being called many times per second
 var touch_device = null; // TO DO: replace all is_touch_device() function calls
@@ -3758,7 +3759,8 @@ function key_select_same_type_units_on_tile()
           // make sure it's not already in selection before adding it to selection:
           var index = current_focus.findIndex(x => x.id==punits[i].id);
           if (index === -1) { //index == -1 means it's not in selection, so we add it:
-            current_focus.push(punits[i]);
+            if (punits[i]['owner'] ==  client.conn.playing.playerno) // only select if owned
+              current_focus.push(punits[i]);
           } 
       }
     }
@@ -5276,6 +5278,7 @@ function update_active_units_dialog()
         unit_name += "<span style='font-size:90%'>" + ptype['name'] + "</span>";
       }
       else  { // normal screen version of text
+        if (DEBUG_UNITS) unit_name+=aunit['id']+"."; // very handy for debugging issues to know uid
         unit_name += "<b>" + ptype['name'] + "</b>";
       }
     }
