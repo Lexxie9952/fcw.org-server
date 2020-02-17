@@ -26,11 +26,18 @@ Changes from Multiplayer 1.0:
 -----------------------------
 TECH
 1. Tech costs equalize pace of discovery for all game stages.
-2. Darwin's Voyage is now similar to Colossus. 
-3. No Philosophy bonus after Conscription, Industrialization, Electricity, or T85 (1600AD).
-4. Space Flight gives a Satellite Vision Bonus to cities and units.
+2. Tech holes are turned off.
+3. Darwin's Voyage is now similar to Colossus. 
+4. No Philosophy bonus after Banking, Invention, Physics, or T85 (1600AD).
+5. Space Flight gives a Satellite Vision Bonus to cities and units.
 5. Space race tuned as a viable option. 6.25x component cost, 225% default travel time (server option)
 6. Electricity removes Fog of War inside your own borders. (If BORDERS aren't set to SEE_INSIDE).
+7. Several tech reqs were reshuffled to improve game flow and playability.
+
+GOVERNMENT
+1. Fundamentalism buffed and gains a migrant Pilgrims unit to compete with rapture.
+2. Communism buffed and gains a migrant Proletarians unit to compete with rapture.
+3. Foreign Nationals added - foreign citizens in conquered cities are unhappy but convert over time.
 
 UNITS
 1. Vision:Movement ratio fixed for 2x movement: starts at 1.4x:2x then is 2x:2x after Physics.
@@ -39,7 +46,7 @@ UNITS
 4. Non-military Bribe cost fixed to work on all non-military units. 
 5. Land units on mountains get +1 vision.
 6. Knights defend at D3 vs mounted, D2 vs foot, D1 vs everything else, and do not kill city population.
-7. Legions can build Forts/Fortresses; and they can build roads on non-domestic tiles.
+7. Legions can build Forts/Fortresses; and they can build roads inside them and on non-domestic tiles.
 8. Archers can do a (limited) Range Attack.
 9. Armor: no penalty vs Fort; 1.67 penalty vs Fortress (was 2x).
 10. Armor II: upgrades Armor with Plastics. Cost:80 A16 D6 FP1 M6. No penalty vs Fort/ress, 2x defense
@@ -55,17 +62,21 @@ UNITS
 17. Medium Bombers added. Cost: 85. A6 D2 FP2. Moves:13. Fuel: 2 turns.
 18. Bomber renamed 'Heavy Bomber'. Cost: 120. A12 D3 FP2. Moves:15. Fuel: 2 turns. Carries 1 Bomb.
 19. Strategic Bomber added: Cost: 135 A13 D4 FP2 M16 Fuel: 3 turns. Carries 2 Bombs. Requires Rocketry.
-20. Anti-aircraft Artillery added. Cost: 50. A1 D1 FP2. Moves:2. 4X bonus vs. Air units.
+20. Anti-aircraft Artillery added. Cost: 50. A2 D2 HP20 FP2. Moves:2. 2X bonus vs. Air units.
 21. Air units can airlift themselves.
 22. Balloon added. Cost: 25. Ao D0 M5 Fuel:2. Has good vision but can't fly over mountains.
 23. Jet Fighter added. Cost: 70. A6 D5 FP2 M24. Requires Space Flight, so does:
 24. Jet Bomber added. Cost: 145. A15 D1 FP2 M19 Fuel:3. Can Pillage. Unreachable to propeller Fighters.
-25. Stealth Bomber, A19 (was 18), SAM Battery only 25% bonus (was 2x) 
-26. Stealth Fighter, SAM Battery only 25% Bonus (was 2x)
+25. Stealth Bomber, A19 (was 18), SAM Battery only 25% bonus (was 2x), 25% attack bonus vs. anti-air units.
+26. Stealth Fighter, SAM Battery only 25% Bonus (was 2x), 25% attack bonus vs. anti-air units.
 27. Spies cost 35 (was 30.)
 28. Atom Bomb available with Nuclear Fission + Manhattan Project.
 29. Nuclear Missiles get 1.5x moves and 2.25x target area over 1x rates. Available with Space Flight.
 30. Rare post-Elite veteran levels obtainable. (See manual under Combat.)
+31. Boat added, no tech req. Cost:10 A0 D1 M4. Can carry one unit, able to establish traderoute without Trade, and 
+ ... help build Wonders with Currency instead of Trade.
+32. Cargo ship added, req: Industrialization. Cost:45 A0 D1 M7 C4 HP30. Commerce unit, can travel on rivers.
+33. Mobile SAM added, req: Space Flight. Cost:75 A2 D2 FP2 M6 C1 HP30, 2x bonus vs. Air, can carry one missile.
 
 PROJECT POSEIDON: GLORIFYING THE ANCIENT SEAS 
 1. Combat Rounds: Ancient ships have 15 combat rounds when attacking. It may or may not result in a winner.
@@ -93,7 +104,7 @@ PROJECT NEPTUNE: MODERN NAVAL RE-BALANCE
 WONDERS - ReWonder 2.0
 1. Pyramids: Added Classic effect of +25% food storage in every city. Still raptures in home city.
 2. Copernicus' Observatory cost changed to 100 shields.
-3. Great Wall. Cost: 275. Obsolete by: Machine Tools.
+3. Great Wall. Cost: 275. Obsolete by: any nation in the world discovers Machine Tools.
 4. Supreme Court is the new name for Great Library, to avoid confusion for players coming from Classic.
 5. Hanging Garden gains +2 luxury to the home city it's built in.
 6. Colossus obsolete by Automobile, not Flight.
@@ -106,11 +117,13 @@ WONDERS - ReWonder 2.0
  ... any capital prod bonuses become capital gold bonuses.
 10. Temple of Artemis added. Mysticism. Cost 250. +1 gold,luxury,bulb,and shield in every city.
 11. Mausoleum of Mausolus added. Ceremonial Burial. +1 content for each City Walls or Courthouse.
-12. Statue of Zeus. 1 unhappy form military made content in all cities, +1 happy in home city, +4 free upkeep in 
+12. Statue of Zeus. 1 unhappy from military made content in all cities, +1 happy in home city, +4 free upkeep in 
  ... home city. Polytheism.
 13. Genghis Khan's Equestrian School. Cost:150 +1 move for ALL mounted units except Cavalry. Horeseback Riding.
 14. Tesla's Laboratory. Electricity. Cost:200. Upgrades 1 obsolete unit per turn, no expiration.
 15. Gibraltar Fortress. Cost:350. Metallurgy. Coastal Defense in all cities.
+16. Michelangelo's Chapel doesn't make Cathedrals redundant. Cities affected by both get an additional +1 happy
+ ... and +1 forced content.
 
 BUILDINGS
 1. Courthouse overhauled to be useful again and better assist non-rapture governments.
@@ -135,6 +148,7 @@ TERRAIN AND BASES
 7. Terrain Defense changes: Forest/Swamp/River go to 1.33x (was 1.5x).
 8. Can't plant forest or "build a hill" under an existing city.
 9. Fort added. requires Masonry. 1.33x defense vs Land/Sea EXCEPT Armor. Building a Fortress requires a Fort to be there first.
+10. Naval Base requires Engineering and Fortress on lowland near ocean. It's a Fortress that gives ships 1.33x defense.
 
 NEW FEATURES / GAME MECHANICS
 1. Traderoutes are back: 
@@ -161,7 +175,7 @@ NEW FEATURES / GAME MECHANICS
 13. Expelling: All land military except warriors can expel a non-military unit from your territory IF it is not on a mountain.
  ... a. Fighter types can also expel an AWACS.  Units must be alone on the tile to be expelled.
 14. Capturing: Workers/Explorers/Caravans/Freight can be captured by a Foot soldier or Mounted soldier whose attack is 
- ... A3 or higher. But not if they are on Mountains or other units are on the tile.
+ ... A3 or higher. But not if they are on Mountains, bases, or other units are on the tile.
 15. Steal Map Fragments - Diplomats and Spies can steal map fragments of the explored world map.
 16. Maximum Granary food store capped at 70. Give some balance to non-rapture governments.
 17. Forest, Swamp, River 1.33x defense bonus (was 1.5). Can't transform City Centre to Forest or Hill.

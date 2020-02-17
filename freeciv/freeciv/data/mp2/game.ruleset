@@ -1052,7 +1052,7 @@ actor_reqs    =
       "UnitState",    "OnNativeTile",   "Local", TRUE
       "DiplRel",      "War",            "Local", TRUE
     }
-;Native attack for CargoRestrained units allowed, if not Transporting
+;Native attack for CargoRestrained units allowed, if not Transported
 [actionenabler_attack_native_restrained]
 action = "Attack"
 ;Should Archers attack from Rivers? Probably, but then what is the Pandora's box? Muskets, etc?
@@ -1063,7 +1063,7 @@ actor_reqs    =
       "UnitClassFlag","CargoRestrained","Local", TRUE
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
-      "UnitState",    "Transporting",   "Local", FALSE
+      "UnitState",    "Transported",    "Local", FALSE
       "DiplRel",      "War",            "Local", TRUE
     }
 ;Marines
@@ -1120,7 +1120,7 @@ actor_reqs    =
     { "type",           "name",           "range", "present"
       "UnitClassFlag",  "CanOccupyCity",  "Local", TRUE
       "UnitClassFlag",  "CargoRestrained","Local", TRUE
-      "UnitState",      "Transporting",   "Local", FALSE
+      "UnitState",      "Transported",   "Local", FALSE
       "UnitFlag",       "NonMil",         "Local", FALSE
       "DiplRel",        "War",            "Local", TRUE
       "MinMoveFrags",   "1",              "Local", TRUE
