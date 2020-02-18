@@ -345,6 +345,9 @@ function init_options_dialog()
     $("#title_setting_div").hide();
     $("#surrender_button").hide();
   }
+
+  if (is_supercow())     
+    $("#save_button").show();
 }
 
 function change_graphic_theme()

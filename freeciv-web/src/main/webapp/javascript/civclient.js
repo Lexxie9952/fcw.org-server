@@ -775,6 +775,14 @@ function is_longturn()
 }
 
 /**************************************************************************
+ Is connected user a supercow/admin/Gamemaster?
+**************************************************************************/
+function is_supercow()
+{
+  return (client.conn["access_level"] >= 5);
+}
+
+/**************************************************************************
  Is this an ongoing LongTurn game?
 *************************************************************************/
 function is_ongoing_longturn()
