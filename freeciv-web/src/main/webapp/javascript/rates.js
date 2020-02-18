@@ -39,6 +39,8 @@ var rates_changed=false;
 **************************************************************************/
 function show_tax_rates_dialog()
 {
+  if (client_is_observer()) return;
+  
   var id = "#rates_dialog";
   $(id).remove();
   
