@@ -408,10 +408,9 @@ color.r              = 232
 color.g              = 232
 color.b              = 232
 helptext             = _("\
-Glaciers are found only in the far north or south\
- reaches of the world. Very cold and difficult to work with.\
+Arctic terrain is cold icy permafrost, found only in the far north or south.\
 "), _("\
-Oil wells can be built when Refining is known.\
+ Oil wells can be built when Refining is known.\
 ")
 
 [terrain_desert]
