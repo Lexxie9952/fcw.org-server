@@ -1374,7 +1374,7 @@ function handle_wonders_report()
     }
     if (wonders[w] > 0 && improvements[w].genus==1)  { // 1 is the genus code for small wonder
       var color_marker = "<span>";
-      if (player_has_wonder(client.conn.playing.playerno,w)) {
+      if (!client_is_observer() && player_has_wonder(client.conn.playing.playerno,w)) {
         color_marker = "<span style='color: rgb(0,0,192);'>";
       }
       appended_message += "<tr><td>" + color_marker + improvements[w].name+"</span></td><td><b>"+wonders[w] + "</b></td></tr>";
