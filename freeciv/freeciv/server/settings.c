@@ -1989,7 +1989,9 @@ static struct setting settings[] = {
   GEN_INT("techleak", game.info.tech_leak_pct,
           SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
           N_("Tech leakage percent"),
-          N_("The rate of the tech leakage."),
+          N_("The discount % on a tech's cost if 100% of nations know it. If no "
+             "nations know it, there's no discount. If between 0% and 100%, cost " 
+             "is reduced by (percent_knowing * techleak) %"),
           NULL, NULL, NULL, GAME_MIN_TECHLEAK, GAME_MAX_TECHLEAK,
           GAME_DEFAULT_TECHLEAK)
 

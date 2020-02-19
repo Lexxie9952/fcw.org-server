@@ -953,7 +953,7 @@ base_tech_cost   = 20
 ; "Normal Players" - Technology cost is reduced depending on the number of
 ;                    normal players (human and AI) which already know the
 ;                    tech.
-tech_leakage = "None"
+tech_leakage = "All Players"
 
 ; Method of paying tech upkeep
 ; "None"   - no upkeep
@@ -1302,7 +1302,6 @@ set =
       "airliftdestdivisor", 3, FALSE
       "airliftingstyle", "FROM_ALLIES|TO_ALLIES", FALSE
 
-
       "dispersion", 1, FALSE
       "diplomacy", "ALL", FALSE
       "contactturns", 10, FALSE
@@ -1314,8 +1313,7 @@ set =
       "borders", "SEE_INSIDE", FALSE
       "foggedborders", TRUE, FALSE
       "nationset", "all", FALSE 
-      "gold", 100, FALSE	
-
-     "unreachableprotects", "ENABLED", FALSE
-
+      "gold", 100, FALSE
+      "techleak", 0, FALSE
+      "unreachableprotects", "ENABLED", FALSE
     }
