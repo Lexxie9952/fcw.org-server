@@ -603,6 +603,8 @@ static void unit_restore_hitpoints(struct unit *punit)
 
   /* Bonus recovery HP (traditionally from the United Nations) */
   punit->hp += get_unit_bonus(punit, EFT_UNIT_RECOVER);
+  punit->hp += (unit_type_get(punit)->hp 
+                * get_unit_bonus(punit, EFT_UNIT_RECOVER_PCT) / 100);
 
   if (!punit->homecity && 0 < game.server.killunhomed
       && !unit_has_type_flag(punit, UTYF_GAMELOSS)) {
@@ -620,7 +622,21 @@ static void unit_restore_hitpoints(struct unit *punit)
 
   if (punit->hp >= unit_type_get(punit)->hp) {
     punit->hp = unit_type_get(punit)->hp;
+    /* Wake up injured sentry units who became fully restored */
     if (was_lower && punit->activity == ACTIVITY_SENTRY) {
+      set_unit_activity(punit, ACTIVITY_IDLE);
+    }
+    /* Wake up injured FORTIFIED units after healing, if in a city. 
+       (Fortified gives no bonus in a city EXCEPT healing faster.) Why:
+       Better UX for the usual case of fortifying to heal faster: remove
+       the penalty of needing to heal slower just to get wake-up UX
+       convenience. TODO: if the (ACTIVITY_FORTIFIED || in_city==true)
+       condition for receiving 1.5x D-bonus is ever moved out of hard-coded
+       server, this feature needs a server setting or other conditional
+       logic to not wake the unit iff it will get a lower defense bonus as
+       a result of waking */ 
+    if (was_lower && punit->activity == ACTIVITY_FORTIFIED
+        && tile_city(unit_tile(punit))) {
       set_unit_activity(punit, ACTIVITY_IDLE);
     }
   }
@@ -713,14 +729,18 @@ static int hp_gain_coord(struct unit *punit)
   /* Includes barracks (100%), fortress (25%), etc. */
   hp += base * get_unit_bonus(punit, EFT_HP_REGEN) / 100;
 
+  /* In city: +33% (rounded down) */
   if (tile_city(unit_tile(punit))) {
+    /* Apply only which is higher between EFT_HP_REGEN and 33% city bonus */
     hp = MAX(hp, base / 3);
   }
 
+  /* +10% for resting ("Math.ceil" round-up) */
   if (!unit_class_get(punit)->hp_loss_pct) {
     hp += (base + 9) / 10;
   }
 
+  /* Additional +10% for fortify (10+10=20) ("Math.ceil" round-up) */
   if (punit->activity == ACTIVITY_FORTIFIED) {
     hp += (base + 9) / 10;
   }

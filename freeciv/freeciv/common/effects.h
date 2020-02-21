@@ -296,6 +296,9 @@ extern "C" {
 #define SPECENUM_VALUE116NAME "Attack_Bonus"
 #define SPECENUM_VALUE117 EFT_CONQUEST_TECH_PCT
 #define SPECENUM_VALUE117NAME "Conquest_Tech_Pct"
+/* hp_regen regardless of movement: a pct-based Unit_Recover */
+#define SPECENUM_VALUE118 EFT_UNIT_RECOVER_PCT
+#define SPECENUM_VALUE118NAME "Unit_Recover_Pct"
 /* keep this last */
 #define SPECENUM_COUNT EFT_COUNT
 #include "specenum_gen.h"
