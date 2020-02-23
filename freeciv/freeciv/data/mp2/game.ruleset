@@ -883,14 +883,14 @@ target_reqs    =
 [actionenabler_fanatic_bombard] ;****
 action = "Bombard"
 actor_reqs    =
-    { "type",         "name",        "range", "present"
-      "UnitFlag",     "Bombarder",   "Local", TRUE
-      "UnitType",     "Fanatics",      "Local", TRUE
-;      "UnitState",    "Transported", "Local", FALSE
+    { "type",         "name",           "range", "present"
+      "UnitFlag",     "Bombarder",      "Local",  TRUE
+      "UnitType",     "Fanatics",       "Local",  TRUE
       "UnitState",    "OnDomesticTile", "Local",  TRUE
-      "MinMoveFrags", "1",           "Local", TRUE
-      "DiplRel",      "War",         "Local", TRUE
+      "MinMoveFrags", "1",              "Local",  TRUE
+      "DiplRel",      "War",            "Local",  TRUE
       "Gov",          "Fundamentalism", "Player", TRUE
+;      "UnitState",   "Transported",    "Local",  FALSE
    }
 target_reqs    =
     { "type",   "name", "range", "present"
