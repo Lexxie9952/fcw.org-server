@@ -210,6 +210,8 @@ input[type='number'] {
 .helptext {
   white-space: pre-wrap;
   font-size: 85%;
+  line-height: 110%;
+  margin-top: -2px;
 }
 
 .blue_clickable {

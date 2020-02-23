@@ -234,8 +234,19 @@ function helpdata_format_current_ruleset()
 **************************************************************************/
 function generate_help_text(key)
 {
+  var flx_tab = "0.30";  // alignment spacing for unit stats
+  // Temporarily maximize horizontal space for mobile
+  if (is_small_screen())
+  { 
+    $("#help_info_page").css("max-width",$(window).width());
+    $("#help_info_page").css("padding","1px");
+    $("#help_menu").hide();
+    flx_tab = "0.55";
+  }
+
   var rulesetdir = ruledir_from_ruleset_name(ruleset_control['name'], "");
   var msg = "";
+  const hr = "<hr style='border-top: 1px solid #000'>";
 
   if (key.indexOf("help_gen_terrain") != -1) {
     var terrain = terrains[parseInt(key.replace("help_gen_terrain_", ""))];
@@ -264,65 +275,90 @@ function generate_help_text(key)
     var obsolete_by;
     var punit_type
         = unit_types[parseInt(key.replace("help_gen_units_", ""))];
+    var punit_class
+        = unit_classes[punit_type['unit_class_id']];
+    var flex = " style='display:flex;' ";
+    var span1 = "<span style='flex:"+flx_tab+";'>";
+    var span2 = "<span style='font-weight:bold; color:#014;'>";
+    var span_end = "</span>";
+    var div_end = "</span></div>"
 
-    msg = "<h1>" + punit_type['name'] + "</h1>";
-    msg += render_sprite(get_unit_type_image_sprite(punit_type));
-    msg += "<br>";
-    msg += "<div id='manual_non_helptext_facts'>";
-    msg += "<div id='utype_fact_cost'>";
-    msg += "Cost: " + punit_type['build_cost'];
-    msg += "</div>";
-    msg += "<div id='utype_fact_upkeep'>";
-    msg += "</div>";
-    msg += "<div id='utype_fact_attack_str'>";
-    msg += "Attack: " + punit_type['attack_strength'];
-    msg += "</div>";
-    msg += "<div id='utype_fact_defense_str'>";
-    msg += "Defense: " + punit_type['defense_strength'];
-    msg += "</div>";
-    msg += "<div id='utype_fact_firepower'>";
-    msg += "Firepower: " + punit_type['firepower'];
-    msg += "</div>";
-    msg += "<div id='utype_fact_hp'>";
-    msg += "Hitpoints: " + punit_type['hp'];
-    msg += "</div>";
-    msg += "<div id='utype_fact_move_rate'>";
-    msg += "Moves: " + move_points_text(punit_type['move_rate']);
-    msg += "</div>";
-    msg += "<div id='utype_fact_vision'>";
-    msg += "Vision: " + punit_type['vision_radius_sq'];
-    msg += "</div>";
-
+    msg = "<h1 style='margin-top:0px;font-size:190%'>" + punit_type['name'] + "</h1>";
+    msg += "<div style='margin-bottom:10px;margin-top:-10px'>"+render_sprite(get_unit_type_image_sprite(punit_type))+"</div>";
+    //msg += "<br>";
+    msg += "<div id='manual_non_helptext_facts' style='max-width:984px;'>";
+    // COST
+    msg += "<div"+flex+"id='utype_fact_cost'>";
+    msg += span1 + "Cost: " + span_end + span2 + punit_type['build_cost'] + div_end;
+    // ATTACK
+    msg += "<div"+flex+" id='utype_fact_attack_str'>";
+    msg += span1 + "Attack: " + span_end + span2 + punit_type['attack_strength'] + div_end;
+    // DEFENSE
+    msg += "<div"+flex+" id='utype_fact_defense_str'>";
+    msg += span1 + "Defense: " + span_end + span2 + punit_type['defense_strength'] + div_end;
+    // FIREPOWER
+    msg += "<div"+flex+" id='utype_fact_firepower'>";
+    msg += span1 + "Firepower: " + span_end + span2 + punit_type['firepower'] + div_end;
+    // HITPOINTS
+    msg += "<div"+flex+" id='utype_fact_hp'>";
+    msg += span1 + "Hitpoints: " + span_end + span2 + punit_type['hp'] + div_end;
+    // MOVE RATE
+    msg += "<div"+flex+" id='utype_fact_move_rate'>";
+    msg += span1+"Moves: " + span_end + span2 + move_points_text(punit_type['move_rate']) + div_end;
+    // VISION
+    msg += "<div"+flex+" id='utype_fact_vision'>";
+    msg += span1 + "Vision: " + span_end + span2 + punit_type['vision_radius_sq'] + div_end;
+    // FUEL
+    if (punit_type['fuel']>0) {
+      msg += "<div"+flex+" id='utype_fact_fuel'>";
+      msg += span1 + "Fuel: " + span_end + span2 + punit_type['fuel'];
+      msg += div_end;
+    }
+    // CARGO CAPACITY
+    if (punit_type['transport_capacity']>0) {
+      msg += "<div"+flex+" id='utype_fact_cargo'>";
+      msg += span1 + "Cargo: " + span_end + span2 + punit_type['transport_capacity'];
+      msg += div_end;
+    }
+    // MIN_SPEED
+    msg += "<div"+flex+" id='utype_fact_minspeed'>";
+    msg += span1 + "Min_speed: " + span_end + span2;
+    if (utype_has_class_flag(punit_type, UCF_DAMAGE_SLOWS))
+      msg += move_points_text(punit_class['min_speed']);
+    else msg += "100%";
+    msg += div_end;
+    // UPKEEP
+    msg += "<div"+flex+" id='utype_fact_upkeep'></span></div>";
+    // IMPROVEMENT REQS
     var ireqs = get_improvement_requirements(punit_type['impr_requirement']);
     if (ireqs != null && techs[ireqs] != null) {
-      msg += "<div id='utype_fact_req_building'>";
-      msg += "Building Requirements: ";
+      msg += "<div"+flex+" id='utype_fact_req_building'>";
+      msg += span1 + "Building Reqs: " + span_end + span2;
       for (var m = 0; m < ireqs.length; m++) {
-        msg += techs[ireqs[m]]['name'] + " ";
+        msg += tab1 + techs[ireqs[m]]['name'] + " ";
       }
-      msg += "</div>";
+      msg +=  div_end;
     }
-
+    // TECH REQS
     var treq = punit_type['tech_requirement'];
     if (treq != null && techs[treq] != null) {
-      msg += "<div id='utype_fact_req_tech'>";
-      msg += "Tech Requirements: " + techs[treq]['name'];
-      msg += "</div>";
+      msg += "<div"+flex+" id='utype_fact_req_tech'>";
+      msg += span1 + "Tech Req: " + span_end + span2 + techs[treq]['name'] + div_end;
     }
-
+    // OBSOLETE BY
     obsolete_by = unit_types[punit_type['obsoleted_by']];
-    msg += "<div id='utype_fact_obsolete'>";
-    msg += "Obsolete by: ";
+    msg += "<div"+flex+" id='utype_fact_obsolete'>";
+    msg += span1 + "Obsolete by: " + span_end + span2;
     if (obsolete_by == U_NOT_OBSOLETED) {
       msg += "None";
     } else {
       msg += obsolete_by['name'];
     }
-    msg += "</div>";
+    msg += div_end;
 
-    msg += "</div>";
+    msg += "</div>"+hr;
 
-    msg += "<div id='helptext'><p>" + punit_type['helptext'] + "</p></div>";
+    msg += "<div id='helptext' style='font-weight:500; max-width:984px'><p>" + punit_type['helptext'] + "</p></div>"+hr;
 
     msg += wiki_on_item_button(punit_type['name']);
 
@@ -375,8 +411,11 @@ function generate_help_text(key)
       $("#datastore").load("../man/" + rulesetdir + "7.html #utype"
                            + utype_id + " .upkeep", function() {
                              $("#utype_fact_upkeep")[0].innerHTML
-                                 = $("#datastore")[0].children[0].innerHTML;
+                                 = $("#datastore")[0].children[0].innerHTML.replace(
+                                   "Upkeep:",
+                                   span1+"Upkeep:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;"+span_end+span2);
                            });
+                           
     } else if (key.indexOf("help_gen_governments") != -1) {
       var gov_id = parseInt(key.replace("help_gen_governments_", ""));
 
