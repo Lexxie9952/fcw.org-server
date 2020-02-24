@@ -717,12 +717,24 @@ function get_unit_class_name(punit)
 }
 
 /**************************************************************************
+ Returns the unit class of a particular unit,
+**************************************************************************/
+function get_unit_class(punit)
+{
+  if (!punit) return null;
+
+  var unit_class = unit_classes[unit_types[punit.type].unit_class_id];
+
+  return unit_class;
+}
+
+/**************************************************************************
  Returns whether a unit has one of the UCF_ flags (unit class) enumerated
   in unittype.js
  *************************************************************************/
 function unit_has_class_flag(punit, flag)
 {
-  var unit_class = unit_classes[unit_types[punit.type].unit_class_id];
+  var unit_class = unit_classes[unit_types[punit['type']]['unit_class_id']];
   return unit_classes[unit_class['id']]['flags'].isSet(flag);
 }
 
@@ -733,4 +745,63 @@ function unit_has_class_flag(punit, flag)
 function unit_has_type_flag(punit, flag)
 {
   return utype_has_flag(unit_types[punit.type], flag);
+}
+
+/**************************************************************************
+ Tries to determine as accurately as possible if the unit has moved.
+ TODO: we're ignorant of whether bonuses like Lighthouse or Genghis Khan
+ are active.
+ *************************************************************************/
+function unit_has_moved(punit)
+{
+  var ptype = unit_type(punit);
+
+  // If unit is done moving, then yeah, it has moved.
+  if (punit['done_moving']) {
+    //console.log("Code 1");
+    return true;
+  }
+  // If unit is not slowed by damage, it's a simple check for if it has 
+  // less than full move points:
+  if (!unit_has_class_flag(punit, UCF_DAMAGE_SLOWS))
+  { // min_speed is 100% so any less moves than full means it moved
+    if (punit['movesleft'] < ptype['move_rate']) {
+      //console.log("Code 2");
+      return true;
+    }
+    //console.log("Code 3");
+    return false; // could make false negative if it has a move bonus
+  }
+
+  // DAMAGE_SLOWS:
+  // if unit has full or greater moves left, it hasn't moved
+  if (punit['movesleft'] >= ptype['move_rate']) {
+    //console.log("Code 4");
+    return false; // potential false negative if unit has external move bonus
+  }
+  // DAMAGE_SLOWS unit with less than full moves left:
+  
+  // Full hp, but not full moves: this means unit has moved. 
+  if (punit['hp']>=ptype['hp']) {
+    //console.log("Code 5");
+    return true;
+  }
+
+  // Less than full moves, less than full hp. Have to look at hp*move_rate  
+  var health_pct = parseFloat(punit['hp']) / parseFloat(ptype['hp']);
+  // Calculate "injured full moves" for this health level
+  var injured_full_moves = Math.floor(parseFloat(ptype['move_rate']) * health_pct);
+
+  //console.log("health%="+health_pct+"   inj_f_m="+injured_full_moves);
+
+  // Unit has less moves than it should for its hp level, thus it has moved:
+  if (punit['movesleft'] < injured_full_moves) {
+    //console.log("Code 6");
+    return true;
+  }
+
+  // Unit has equal or greater moves than we'd expect for this health level,
+  // so, it hasn't moved:
+  //console.log("Code 7");
+  return false; // potential false negative if external move bonus in effect
 }

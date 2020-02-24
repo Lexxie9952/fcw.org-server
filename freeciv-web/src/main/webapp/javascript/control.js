@@ -2274,15 +2274,17 @@ function do_map_click(ptile, qtype, first_time_called)
             goto_path['dir'].shift();  // remove the first "refuel dir" on fuel units, so they don't freeze on refuel spots
             goto_path['length']--;     // correct the path length for the removed -1 "refuel dir"
           } else if (delayed_goto_active) {
-            if (unit_type(punit)['move_rate']==punit['movesleft']) {
-              add_client_message(unit_type(punit)['name']+" can't delay GOTO because it has full moves remaining.");
-              goto_path = null; // cancel it so it doesn't move this turn by mistake
-            }
-            else {
-              // Gives non-fuel units the -1 (refuel) dir so they can have a kind of delayed GOTO also
-              goto_path['dir'].unshift(-1);
-              goto_path['length']++;  // correct for the path having an extra -1 "refuel dir" in it
-            }
+            //if (unit_type(punit)['move_rate']==punit['movesleft']) {    didn't capture case of unmoved but damage_slows  
+            if (!unit_has_moved(punit)) {
+                add_client_message(unit_type(punit)['name']+" must first move and have less than full moves left.");
+                goto_path = null; // cancel it so it doesn't move this turn by mistake
+                return;  // avoid possible adjacent tile goto override on a delayed goto
+              }
+              else {
+                // Gives non-fuel units the -1 (refuel) dir so they can have a kind of delayed GOTO also
+                goto_path['dir'].unshift(-1);
+                goto_path['length']++;  // correct for the path having an extra -1 "refuel dir" in it
+              }
           } 
         }
         // This is where we would normally check if the goto_path is null for unit s, and do a continue to move on to the next unit.
@@ -2929,6 +2931,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         simpleStorage.set('mapgrid', draw_map_grid); 
       } else if (current_focus.length > 0) {
         activate_goto();
+        delayed_goto_active = false;
         if (shift) delayed_goto_active = true;
       }
     break;
