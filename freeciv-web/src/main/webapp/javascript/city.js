@@ -649,9 +649,27 @@ function show_city_dialog(pcity)
   }
   
   var rapture_food_status_html = "<div><div style='float:left;background: transparent url(/images/wheat.png);width:20px;height:20px;'></div><div style='margin-left:4px;float:left;color:"+city_surplus_colour+";'</div>"+city_surplus_sign+pcity['surplus'][O_FOOD]+"</div></div>"
-            
+
+  // Calculate colour code for rapture status
+  var rapture_status_class="";
+  var happy_people   = pcity['ppl_happy'][FEELING_FINAL];
+  var unhappy_angry_people = pcity['ppl_unhappy'][FEELING_FINAL]+pcity['ppl_angry'][FEELING_FINAL];
+  // Color code for upcoming state under current configuration of tiles/luxury rate/improvements/deployed units:
+  if (happy_people >= pcity['size']*0.4999 && unhappy_angry_people==0 && pcity['size']>2) {
+    $('#rapture_status').attr('title', "Celebration next turn");
+    rapture_status_class = "city_dialog_celeb";
+  }
+  else if (unhappy_angry_people > happy_people) {
+    $('#rapture_status').attr('title', "Disorder: will not produce next turn");
+    rapture_status_class = "city_dialog_disorder";
+  }
+  else {
+    $('#rapture_status').attr('title', "Peace next turn");
+  }
+ 
   $('#rapture_food').html(rapture_food_status_html);
-  $('#rapture_status').html("<div style='font-weight:bold;padding-bottom:9px;'>"+get_city_state(pcity)+"</div>");
+   
+  $('#rapture_status').html("<div class='"+rapture_status_class+"' style='font-weight:bold;padding-bottom:9px;'>"+get_city_state(pcity)+"</div>");
   $('#rapture_status').tooltip({tooltipClass: "wider-tooltip" , position: { my:"center bottom", at: "center top-3"}}); 
   
   if (pcity['size'] >= 27) $("#city_canvas_top_div").width(pcity['size']*15-30); // Fix the specialist panel overlapping with the citizen amounts panel for bigger cities 

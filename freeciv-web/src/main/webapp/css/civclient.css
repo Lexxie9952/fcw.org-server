@@ -227,6 +227,12 @@ input[type='number'] {
 .non_priority {     /* not all text should be bright-white, if it is less critical or informative */
   color: #d4cfb9;
 }
+.city_dialog_celeb {
+  color: #176313;
+}
+.city_dialog_disorder {
+  color: #800803;
+}
 .hint_of_green {
   color: #a6f4a6;
   text-align: right;
