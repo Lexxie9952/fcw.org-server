@@ -4960,7 +4960,12 @@ function update_goto_path(goto_packet)
 	  = current_goto_turns;
 
   if (current_goto_turns != undefined) {
-    $("#active_unit_info").html("Path: "+goto_packet['length']+" tiles");
+    var path_length = goto_packet['length'];
+
+    // Fuel units inject extra non-path data in the goto_packet:
+    if (unit_type(punit)['fuel']>0) path_length--;
+
+    $("#active_unit_info").html("Path: "+path_length+" tiles");
   }
   update_mouse_cursor();
 }
