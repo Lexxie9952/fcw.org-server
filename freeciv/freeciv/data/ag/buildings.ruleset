@@ -1164,13 +1164,11 @@ sabotage	= 0
 sound		= "w_agoge"
 sound_alt	= "w_generic"
 helptext	= _("\
-The Agōgē creates a culture of extreme fitness and battle readiness.\
+The Agōgē creates a culture of extreme fitness, and is famous for\
+ vigilant patrols, secret shortcut trails, and battle readiness.\
  All your foot soldiers get +⅓ move. Phalanx and Pikemen receive a\
- +50% attack bonus.\
-"), _("
-The Agōgē is famous for vigilant patrols, secret shortcut trails, and\
- readiness for battle. Foot units in the city with the Agōgē\
- begin their turn with +1 move. Obsolete by: Gunpowder.\
+ +50% attack bonus. Foot units in the city with the Agōgē begin\
+ their turn with +1 move. Obsolete by: Gunpowder.\
 ")
 
 [building_apollo_program]
