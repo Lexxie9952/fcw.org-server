@@ -226,7 +226,7 @@ function get_unit_moves_left(punit)
 }
 
 /**************************************************************************
-  Returns an amount of movement formated for player readability.
+  Returns an amount of movement formatted for player readability.
 **************************************************************************/
 function move_points_text(moves)
 {
@@ -235,7 +235,7 @@ function move_points_text(moves)
   if ((moves % SINGLE_MOVE) != 0) {
     if (Math.floor(moves / SINGLE_MOVE) > 0) {
       result = Math.floor(moves / SINGLE_MOVE)
-               + " " + Math.floor(moves % SINGLE_MOVE)
+               + "&nbsp;" + Math.floor(moves % SINGLE_MOVE)
                + "/" + SINGLE_MOVE;
     } else {
       result = Math.floor(moves % SINGLE_MOVE)
