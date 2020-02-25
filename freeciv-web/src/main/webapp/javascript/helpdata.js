@@ -29,6 +29,7 @@ var hidden_menu_items = ["help_connecting", "help_languages", "help_governor",
 function show_help()
 {
   $("#tabs-hel").show();
+  $("#help_footer").hide();$("#help_footer").remove();
   $("#help_menu").remove();
   $("#help_info_page").remove();
   $("<ul id='help_menu'></ul><div id='help_info_page'></div>").appendTo("#tabs-hel");
@@ -53,7 +54,16 @@ function show_help()
 
   show_help_intro();
   $("#tabs-hel").css("height", $(window).height() - 60);
-  $("#help_info_page").css("max-width", $(window).width() - $("#help_menu").width() - 60);
+
+  if (is_small_screen()) {
+    $("#help_info_page").css("max-width", $(window).width()-165);
+    $("#help_info_page").css({"margin":"0px","padding":"0px","font-size":"90%"});
+    $("#help_footer").remove();
+    $("#help_footer").hide();
+  } else {
+    $("#help_info_page").css("max-width", $(window).width() - $("#help_menu").width() - 60);
+    $("#help_footer").show();
+  }
 }
 
 /**************************************************************************
@@ -179,16 +189,31 @@ function handle_help_menu_select( ui )
     $.get( "/docs/LICENSE.txt", function( data ) {
       $("#help_info_page").html("<h1>Freeciv-Web License</h1>" + data.replace(/\n/g, "<br>"));
     });
+    clear_sidebar();
   } else if (selected_tag == "help_controls") {
     $.get( "/docs/controls.txt", function( data ) {
       $("#help_info_page").html(data.replace(/\n/g, "<br>"));
     });
+    clear_sidebar();
   } else {
     var msg = "<h1>" + helpdata_tag_to_title(selected_tag) + "</h1>" + helpdata[selected_tag]['text'];
     $("#help_info_page").html(msg);
   }
 
   $("#help_info_page").focus();
+}
+
+/**************************************************************************
+  Clears sidebar if on mobile, to make room for other stuff.
+**************************************************************************/
+function clear_sidebar()
+{
+  if (is_small_screen())
+  { 
+    $("#help_info_page").css("max-width",$(window).width());
+    $("#help_info_page").css("padding","1px");
+    $("#help_menu").hide();
+  }
 }
 
 /**************************************************************************
