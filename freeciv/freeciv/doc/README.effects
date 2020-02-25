@@ -336,6 +336,9 @@ Unit_No_Lose_Pop
 Unit_Recover
     Units recover amount extra hitpoints per turn.
 
+Unit_Recover_Pct
+    Units recover this percent of total hitpoints per turn.
+
 Upgrade_Unit
     Upgrade amount obsolete units per turn.
 

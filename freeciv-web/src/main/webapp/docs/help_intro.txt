@@ -1,8 +1,7 @@
-<h1>Freeciv In-Game Docs</h1>
+<h1>Freeciv Help</h1>
 <img src='/static/images/frontpage-jumbotron.png' style="max-width: 50%;"><br><br>
 
-This is a quick reference tab. <b>Info Categories</b> can be found on the <b>left panel</b>
-for quick lookup.<br><br>
+<b>Info Categories</b> are in the <b>left panel</b> for quick lookup.<br><br>
 
 <b>Full Game Manual</b> -- Use <b>About Current Ruleset</b> on left.
 <br><br>
@@ -18,14 +17,4 @@ Freeciv-Web has <b><a href="https://discord.gg/Zj8UQSN" target="_new">Discord ch
 It helps validate your in-game identity in multiplayer games.<br>Also posted there are <a href='https://discord.gg/p9M5RME' target='_new'>#rules</a> 
 to ensure fun, fair, friendly games. 
 <br><br>
-
-<a href='http://www.freeciv.org/wiki/' target='_new'>Freeciv Wiki</a><br>
-<a href='http://forum.freeciv.org/' target='_new'>Freeciv Forum</a><br>
-<a href='http://freeciv.wikia.com/wiki/Bug_Reporting' target='_new'>Bug Reporting</a><br>
-
-<div id='help_footer' style='position:absolute; bottom:0px; max-width:85%; height:80px;'>
-Freeciv-web is <a href="https://www.gnu.org/licenses/agpl-3.0.html" target='_new'>
-AGPL</a> software; the Server is <a href="https://www.gnu.org/licenses/gpl-2.0.html" target='_new'>GNU GPL</a> software.
-Freeciv-web was first created by <a href='http://www.twitter.com/andreasrosdal' target='_new'>Andreas R&oslash;sdal</a> but many have
-added to the project! We're looking for developers to improve the game! Come say hi on <a href="https://discord.gg/Zj8UQSN" target="_new">Discord</a>
-</div>
+We're looking for developers to improve the game! Come say hi on <a href="https://discord.gg/Zj8UQSN" target="_new">Discord</a>
