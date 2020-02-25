@@ -250,11 +250,20 @@ function show_city_dialog(pcity)
   } else {   // small screen control buttons
        dialog_buttons = $.extend(dialog_buttons,
          {
-          "Next" : function() {
+           // Mobile: we have to give these ultra-short names until parent element height is
+           // locked and we later RESIZE these to smaller; otherwise they don't fit and sizing
+           // becomes a train wreck.
+          "<": function() {
+            previous_city();
+          },
+          ">" : function() {
             next_city();
           },
-          "Buy" : function() {
+          "B" : function() {
             request_city_buy();
+          },
+          "N" : function() {
+            rename_city();
           }
         });
         dialog_buttons = $.extend(dialog_buttons, {"Exit": close_city_dialog_trigger});
@@ -323,9 +332,19 @@ function show_city_dialog(pcity)
   /* We can potential adjust the button pane for Next/Buy/Exit here
   $("#city_dialog").dialog('widget').children().css( {"margin-top":"20px", "padding":"0px", "visibility":"hidden"} ); */
 
-  if (is_small_screen()) { // Next/Buy/Close buttons, more compact for Mobile
+  // Fine tune mobile screen elements
+  if (is_small_screen()) { 
+    // Next/Buy/Exit buttons more compact for Mobile
     $("#city_dialog").dialog('widget').children().children().children().css( {"padding-top":"2px", "padding-bottom":"3px", 
         "padding-right":"6px", "padding-left":"6px", "margin-bottom":"3px", "margin-right":"0px" } );
+    // If there is another way to put unicode in these buttons, let me know! But you'd still
+    // get problems with iPhone 5 and narrower screens auto-sizing elements to wrong size. 
+    // We name these buttons here, after the buttons are resized and parent height is locked.
+    $("#city_dialog").next().children()[0].children[0].innerHTML = "&#9194;Last"
+    $("#city_dialog").next().children()[0].children[1].innerHTML = "Next&#9193;"
+    $("#city_dialog").next().children()[0].children[2].innerHTML = "Buy";
+    $("#city_dialog").next().children()[0].children[3].innerHTML = "Name";
+
   }
   $("#city_dialog").dialog('open');
   $("#game_text_input").blur();
@@ -730,6 +749,8 @@ function show_city_dialog(pcity)
     // Position adjustment hack
     $("#city_tabs-6").css( {"margin-top":"-20px", "padding":"0px"} );
     $("#city_dialog_info").css( {"width":"110%", "padding":"0px"} );
+    // Adjust vertical to remove 9 pixels of "slack"
+    $("#city_overview_tab").css("height", ($("#city_overview_tab").height()-9) );
   }
   // Either/OR, worked better on iPad:
   if (is_small_screen() || touch_device) {
