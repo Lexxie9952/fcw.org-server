@@ -47,8 +47,12 @@ public class GameList extends HttpServlet {
 			Statistics statistics = new Statistics();
 			request.setAttribute("singlePlayerGames", games.getSinglePlayerCount());
 			request.setAttribute("multiPlayerGames", games.getMultiPlayerCount());
+			request.setAttribute("longturnGames", games.getLongturnCount());
+
 			request.setAttribute("singlePlayerGameList", games.getSinglePlayerGames());
 			request.setAttribute("multiPlayerGamesList", games.getMultiPlayerGames());
+			request.setAttribute("longturnGamesList", games.getLongturnGames());
+			
 			request.setAttribute("playByEmailStatistics", statistics.getPlayByEmailWinners());
 			request.setAttribute("view", request.getParameter("v"));
 		} catch (RuntimeException err) {

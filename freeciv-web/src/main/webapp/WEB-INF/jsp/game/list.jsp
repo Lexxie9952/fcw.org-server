@@ -120,6 +120,9 @@
 	#multiplayer-table td:last-child {
 		width: 290px;
 	}
+	#longturn-table td:last-child {
+		width: 290px;
+	}
 	#singleplayer-table td:last-child {
 		width: 140px;
 	}
@@ -138,6 +141,8 @@
 					aria-controls="single-player" role="tab" data-toggle="tab">Single-player (${singlePlayerGames})</a></li>
 				<li role="presentation" class="${view == 'multiplayer' ? 'active' : ''}"><a href="#multi-player-tab"
 					aria-controls="multi-player" role="tab" data-toggle="tab">Multiplayer (${multiPlayerGames})</a></li>
+				<li role="presentation" class="${view == 'longturn' ? 'active' : ''}"><a href="#longturn-tab"
+					aria-controls="longturn" role="tab" data-toggle="tab">Longturn (${longturnGames})</a></li>
 				<li role="presentation" class="${view == 'play-by-email' ? 'active' : ''}"><a href="#play-by-email-tab"
 					aria-controls="play-by-email" role="tab" data-toggle="tab">Play-By-Email</a></li>
 			</ul>
@@ -146,6 +151,8 @@
 					aria-controls="single-player" role="tab" data-toggle="tab">Single (${singlePlayerGames})</a></li>
 				<li role="presentation" class="${view == 'multiplayer' ? 'active' : ''}"><a href="#multi-player-tab"
 					aria-controls="multi-player" role="tab" data-toggle="tab">Multi (${multiPlayerGames})</a></li>
+				<li role="presentation" class="${view == 'longturn' ? 'active' : ''}"><a href="#longturn-tab"
+					aria-controls="longturn" role="tab" data-toggle="tab">Longturn (${longturnGames})</a></li>
 				<li role="presentation" class="${view == 'play-by-email' ? 'active' : ''}"><a href="#play-by-email-tab"
 					aria-controls="play-by-email" role="tab" data-toggle="tab">Play-By-Email</a></li>
 			</ul>
@@ -257,7 +264,69 @@
 						No servers currently listed
 					</c:if>
 				</div>
-	
+
+				<div role="tabpanel" class="tab-pane ${view == 'longturn' ? 'active' : ''}" id="longturn-tab">
+					<c:if test="${fn:length(longturnGamesList) > 0}">
+						<table id="longturn-table" class="table">
+							<tr>
+								<th class="hidden-xs">Players</th>
+								<th>Message</th>
+								<th>State</th>
+								<th class="hidden-xs">Turn</th>
+								<th>Action</th>
+							</tr>
+							<c:forEach items="${longturnGamesList}" var="game">
+								<tr
+									class="${game.isProtected() ? 'private-game' : (game.state eq 'Running' ? 'running-game' : (game.players gt 0 ? 'highlight' : ''))}">
+									<td class="hidden-xs">
+										<c:choose>
+											<c:when test="${game.players == 0}">
+													None
+												</c:when>
+											<c:when test="${game.players == 1}">
+													1 player
+												</c:when>
+											<c:otherwise>
+													${game.players} players
+												</c:otherwise>
+										</c:choose>
+									</td>
+									<td>${game.message}</td>
+									<td>${game.state}</td>
+									<td class="hidden-xs">${game.turn}</td>
+									<td><c:choose>
+											<c:when test="${game.state != 'Running'}">
+												<a class="label label-success label-lg"
+													href="/webclient/?action=multi&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
+													Play</a>
+											</c:when>
+											<c:otherwise>
+                                                <a class="label label-success label-lg"
+													href="/webclient/?action=multi&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
+													Play 2D</a>
+											<c:if test="${game.type} ne 'longturn'}">
+												<a class="label label-success label-lg"
+													href="/webclient/?action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
+													Observe 2D</a>
+												<a class="label label-success label-lg"
+													href="/webclient/?renderer=webgl&amp;action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
+													3D</a>
+											</c:if>
+											</c:otherwise>
+										</c:choose>
+										<a class="label label-primary label-lg"	href="/game/details?host=${game.host}&amp;port=${game.port}">
+											Info
+										</a>
+									</td>
+								</tr>
+							</c:forEach>
+						</table>
+					</c:if>
+					<c:if test="${fn:length(longturnGamesList) == 0}">
+						No servers currently listed
+					</c:if>
+				</div>				
+
 				<div role="tabpanel" class="tab-pane ${view == 'play-by-email' ? 'active' : ''}" id="play-by-email-tab">
 					<div class="row">
 						<div class="col-md-12">

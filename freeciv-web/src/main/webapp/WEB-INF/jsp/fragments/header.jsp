@@ -27,7 +27,7 @@
 					<li role="separator" class="divider"></li>
 					<li><a href="/game/list?v=multiplayer">Multiplayer</a></li>
 					<li role="separator" class="divider"></li>
-					<li><a href="/game/list?v=multiplayer">One Turn per Day</a></li>
+					<li><a href="/game/list?v=longturn">Longturn (1 turn/day)</a></li>
 					<li role="separator" class="divider"></li>
 					<li><a href="/game/list?v=play-by-email">Play by Email</a></li>
 				</ul>
