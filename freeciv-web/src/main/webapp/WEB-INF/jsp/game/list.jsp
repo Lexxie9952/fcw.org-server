@@ -20,7 +20,7 @@
 				return;
 			}
 
-			$($($(".nav-tabs").children()[2]).children()[0]).html("Play-By-Email (" + data.length + ")");
+			$($($(".nav-tabs").children()[3]).children()[0]).html("Play-By-Email (" + data.length + ")");
 
 			data.reverse().forEach(function (game) {
 				var turn = game[0];
