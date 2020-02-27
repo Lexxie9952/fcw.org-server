@@ -195,7 +195,8 @@
 								Play a <b>Freeciv-web One Turn per Day</b>, where up to 300 human <br>players play one turn every day:
 							</div>
 						</c:if>
-
+						<a href="/game/list?v=longturn" class="btn"><i class="fa fa-users"></i> <fmt:message key="index-game-launcher-longturn"/></a>
+						
 					</div>
 				</div>
 		</div> <!-- end game launcher -->
