@@ -937,7 +937,14 @@ function pregame_settings()
   });
 
   $('#metamessage').change(function() {
-    send_message("/metamessage " + $('#metamessage').val());
+    if (game_type=='singleplayer') {
+      // The word Private is used elsewhere as a special flag to indicate this game type is overridden
+      // and will go in the Multiplayer games list. Therefore, singleplayer games change the word
+      if ($("#metamessage").val().includes("Private"))
+        send_message("/metamessage " + $('#metamessage').val().replace(/Private/gi, "Closed"));
+    } else {
+      send_message("/metamessage " + $('#metamessage').val());
+    }
     metamessage_changed = true;
   });
 
@@ -1010,7 +1017,14 @@ function pregame_settings()
       function(){   
         var pwd_packet = {"pid" : packet_authentication_reply, "password" : $('#password').val()};
         send_request(JSON.stringify(pwd_packet));
-        send_message("/metamessage Private password-protected game");
+
+        if (game_type == "singleplayer")
+          send_message("/metamessage Password-protected game");
+        else if (game_type == "multiplayer")
+          // the word 'Private" is a flag for longturn/flexturn games that are not public
+          // and thus go in the multiplayer game list tab
+          send_message("/metamessage Private password-protected game");
+
         metamessage_changed = true;
         $("#metamessage").prop('readonly', true);
         $("#metamessage_setting").prop('readonly', true);

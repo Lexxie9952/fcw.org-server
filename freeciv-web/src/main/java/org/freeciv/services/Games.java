@@ -30,7 +30,8 @@ public class Games {
 
 			query = "SELECT COUNT(*) AS count " //
 					+ "FROM servers s " //
-					+ "WHERE type IN ('multiplayer') " //
+					+ "WHERE (type IN ('multiplayer') " //
+					+ " OR message LIKE '%Private%') "
 					+ "	AND ( " //
 					+ "		state = 'Running' OR " //
 					+ "		(state = 'Pregame' " //
@@ -131,6 +132,7 @@ public class Games {
 			query = "SELECT COUNT(*) AS count " //
 					+ "FROM servers s " //
 					+ "WHERE type IN ('longturn') " //
+					+ " AND message NOT LIKE '%Private%' "
 					+ "	AND ( " //
 					+ "		state = 'Running' OR " //
 					+ "		(state = 'Pregame' " //
