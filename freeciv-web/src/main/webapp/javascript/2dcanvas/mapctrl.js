@@ -327,6 +327,7 @@ function action_button_pressed(canvas_x, canvas_y, qtype)
 {
    // console.log("action_button_pressed(..))")
   var ptile = canvas_pos_to_tile(canvas_x, canvas_y);
+  clicked_city = tile_city(ptile); // record last clicked city or reset this to null
 
   //console.log("FUNCTION CALLED:  action_button_pressed()");
   //console.log("       abp: current_focus.length at this point is "+current_focus.length);
@@ -434,6 +435,7 @@ function recenter_button_pressed(canvas_x, canvas_y)
       if (current_focus.length <= 1) set_unit_focus(sunit);
       $("#canvas").contextMenu(true);
       $("#canvas").contextmenu();
+      clicked_city = tile_city(ptile)
     } else {
       $("#canvas").contextMenu(false);
       /* FIXME: Some actions here will need to check can_client_issue_orders.

@@ -70,6 +70,9 @@ var came_from_context_menu = false;
 // Last map viewing location, allows user to return to it with shift-spacebar.
 var last_saved_tile = null;
 var recent_saved_tile = null;
+var clicked_city = null; // multiple units in multiple cities can be selected, this needs to
+                         // record what's the real city for a "Show City" command, not the
+                         // former method of guessing with find_a_focus_unit_tile_to_center_on() 
 
 var selector_city = null; // city that will select a tile to work from map view
 var city_paste_target = {}; // ctrl-shift-right-click for pasting city prod target into a city
@@ -3427,9 +3430,14 @@ function handle_context_menu_callback(key)
       break;
 
     case "show_city":
-      var stile = find_a_focus_unit_tile_to_center_on();
-      if (stile != null) {
-        show_city_dialog(tile_city(stile));
+      // new method:
+      if (clicked_city != null) {
+        show_city_dialog(clicked_city);
+      } else { // fail over to former method:
+        var stile = find_a_focus_unit_tile_to_center_on();
+        if (stile != null) {
+          show_city_dialog(tile_city(stile));
+        }
       }
       came_from_context_menu = false; // remove UI-blocking state.
       break;
