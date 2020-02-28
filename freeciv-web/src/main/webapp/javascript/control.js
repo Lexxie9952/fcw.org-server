@@ -1878,7 +1878,7 @@ function set_unit_focus_and_activate(punit)
 {
   if (punit != null) { 
     set_unit_focus_and_redraw(punit);
-    request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
+    ////////request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
   }
 }
 
@@ -2618,6 +2618,7 @@ function do_map_click(ptile, qtype, first_time_called)
             own_unit_index = u; //player wants to select his own unit first, not a foreign unit
             player_has_own_unit_present = true;
           }
+          if (player_has_own_unit_present) break; // gets first visible unit in stack, not last
       }
 
       //if (sunits[0]['owner'] == client.conn.playing.playerno) {   // if player had a unit index >0, we couldn't click the stack
@@ -5011,7 +5012,11 @@ function popit()
   mclick_tile = ptile; // improve_tile_info_dialog() wants to know this
   setTimeout(popit_req(ptile),150);
 
-  popit_req(ptile);
+  // there were 2 popit_req calls here, one delayed by 150ms above and the
+  // one below... it looked erroneous to leave both unless it was some
+  // undocumented hack/fix, so it was commented out to see if everything
+  // works fine 26Feb2020 ... targeted for later removal
+  //popit_req(ptile);
 }
 
 /**************************************************************************
@@ -5019,6 +5024,16 @@ function popit()
 **************************************************************************/
 function popit_req(ptile)
 {
+  /* Force prevention of contextmenu pop-up during a tile-info pop-up request
+   * (i.e. double tap for tile info on mobile on a tile that has units which
+   * usually trigger a context menu)  */
+  $("#canvas").contextMenu(false);
+  $('.context-menu-list').trigger('contextmenu:hide');
+  // Reset context menu to be active
+  setTimeout(function(){
+    $("#canvas").contextMenu(true);
+    }, 450);  
+
   if (ptile == null) return;
 
   // copies tile string to clipboard for later pasting
