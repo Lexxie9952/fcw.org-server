@@ -1705,7 +1705,7 @@ sound		= "w_oracle"
 sound_alt	= "w_generic"
 helptext	= _("\
 With this wonder, City Walls and Courthouses each make one unhappy citizen\
- content in their city, unless that citizen is unhappy about aggression.\
+ content in their city, unless that citizen is unhappy about military activity.\
  Also, no cities in the empire with this Wonder can be incited to revolt.\
  The discovery of Radio makes the Mausoleum obsolete.\
 ")
