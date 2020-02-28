@@ -138,6 +138,7 @@ function improve_tile_info_dialog(message)
     if (message.includes("River</b>")) {  // this exact string ensures no other text gives false positive
       has_river = " (<span style='color:#025'><b>River</b></span>)";
       db *= (1+extras[EXTRA_RIVER]['defense_bonus']/100);
+      db = Math.round((db + Number.EPSILON) * 100) / 100;
     }
     added_text += "<span style='color:rgb("
                +  Math.round(ttype['color_red']/2)+","+Math.round(ttype['color_green']/2)+","+Math.round(ttype['color_blue']/2)
