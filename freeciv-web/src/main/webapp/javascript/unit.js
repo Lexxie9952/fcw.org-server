@@ -712,7 +712,7 @@ function unit_forced_goto(goto_path, f_index)
 **************************************************************************/
 function get_unit_class_name(punit)
 {
-  var unit_class = unit_classes[unit_types[punit.type].unit_class_id];
+  var unit_class = unit_classes[unit_types[punit['type']]['unit_class_id']];
   return unit_class['name'].replace("?unitclass:","");
 }
 
@@ -723,8 +723,7 @@ function get_unit_class(punit)
 {
   if (!punit) return null;
 
-  var unit_class = unit_classes[unit_types[punit.type].unit_class_id];
-
+  var unit_class = unit_classes[unit_types[punit['type']]['unit_class_id']];
   return unit_class;
 }
 

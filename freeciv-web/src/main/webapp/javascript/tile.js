@@ -132,10 +132,17 @@ function improve_tile_info_dialog(message)
 
   // Terrain alteration info:
   if (ttype) {
+    // Calculate defense bonus
+    var has_river = "";
+    var db = parseFloat(1) + parseFloat(ttype['defense_bonus'])/100;
+    if (message.includes("River</b>")) {  // this exact string ensures no other text gives false positive
+      has_river = " (<span style='color:#025'><b>River</b></span>)";
+      db *= (1+extras[EXTRA_RIVER]['defense_bonus']/100);
+    }
     added_text += "<span style='color:rgb("
                +  Math.round(ttype['color_red']/2)+","+Math.round(ttype['color_green']/2)+","+Math.round(ttype['color_blue']/2)
-               +  ")'><br><br><b>" + ttype['name'] + "</b><br></span>";
-    const db = parseFloat(1) + parseFloat(ttype['defense_bonus'])/100;
+               +  ")'><br><br><b>" + ttype['name'] + "</b>"+has_river+"<br></span>";
+
     added_text += "Defense Bonus: <b>" + db + "&times;</b> &nbsp;&nbsp;&nbsp; Movement Cost: <b>" + ttype['movement_cost'] + "</b><br>"
     
     if (ttype['irrigation_time']) {
