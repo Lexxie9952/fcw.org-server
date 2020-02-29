@@ -133,6 +133,7 @@ ctrl-alt-space: paste smartlink to tile/unit under cursor
 ctrl-B: color-fill national territores
 shift-C: select all same type units on (c)ontinent
 ctrl-C:  city labels on/off
+ctrl-alt-D: disconnect (disconnected viewing mode)
 ctrl-G: map grid on/off
 ctrl-L:  show airlift counter on cities
 shift-M: show unit moves left percentage on map

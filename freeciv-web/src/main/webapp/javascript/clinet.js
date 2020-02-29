@@ -32,6 +32,8 @@ var civserverport = null;
 var ping_last = new Date().getTime();
 var pingtime_check = 240000;
 var ping_timer = null;
+var last_user_action_time = new Date().getTime();
+var kick_inactive_time = 40 * 60000; // 40min inactive = kick off time
 
 /* Tracking and knowing ping performance can be used later to adjust 
  * setTimeout(..) delays to perform better on fast connections and 
@@ -112,11 +114,17 @@ function websocket_init()
   };
 
   ws.onclose = function (event) {
-   swal("Network Error", "Connection to server is closed. Please reload the page to restart. Sorry!", "error");
-   message_log.update({
-     event: E_LOG_ERROR,
-     message: "Error: connection to server is closed. Please reload the page to restart. Sorry!"
-   });
+   var cur_time = new Date().getTime()
+   if (cur_time - last_user_action_time > kick_inactive_time) {
+    swal("Inactivity Timeout", "Session closed: "+(kick_inactive_time/60000)
+      +"min inactivity. Please reload the page to reconnect.", "error");
+   } else {
+      swal("Network Error", "Connection to server is closed. Please reload the page to restart. Sorry!", "error");
+      message_log.update({
+        event: E_LOG_ERROR,
+        message: "Error: connection to server is closed. Please reload the page to restart. Sorry!"
+      });
+   }
    console.info("WebSocket connection closed, code+reason: " + event.code + ", " + event.reason);
    $("#turn_done_button").button( "option", "disabled", true);
    $("#save_button").button( "option", "disabled", true);
@@ -202,6 +210,14 @@ function send_request(packet_payload)
   if (debug_active) {
     clinet_last_send = new Date().getTime();
   }
+  // User actions use send_request. Track user activity/inactivity here:
+  // 2 types of outgoing messages are false positive for user action:
+  var packet_type = jQuery.parseJSON("["+packet_payload+"]")[0]['pid'];
+  // ping answer and update_metamessage_game_running_status():
+  if (packet_type==packet_conn_pong || packet_type==packet_chat_msg_req) 
+    return;
+  // If we made it here, the user did something. Update activity stamp:
+  set_last_user_action_time();
 }
 
 
@@ -222,6 +238,7 @@ function clinet_debug_collect()
 function ping_check()
 {
   var time_since_last_ping = new Date().getTime() - ping_last;
+  var time_since_last_action = new Date().getTime() - last_user_action_time;
 
   //240 second 'heartbeat' for pings is perfect for also storing last time on
   //simpleStorage.set('lastOn'+6digitgamenumber, sounds_enabled);
@@ -231,6 +248,26 @@ function ping_check()
     console.log("Error: Missing PING message from server, "
                 + "indicates server connection problem.");
   }
+
+  if (time_since_last_action > kick_inactive_time) {
+    console.log("Session closed. User inactivity exceeded "+kick_inactive_time/60000+" minutes.");
+    clinet_disconnect_from_server();
+  }
+}
+/****************************************************************************
+  Force disconnect from server.
+****************************************************************************/
+function clinet_disconnect_from_server()
+{
+  ws.close();
+}
+/****************************************************************************
+  Record timestamp on user input to track log inactivity, thus triggering
+  auto-log-out.
+****************************************************************************/
+function set_last_user_action_time()
+{
+  last_user_action_time = new Date().getTime();
 }
 
 /****************************************************************************

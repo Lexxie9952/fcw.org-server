@@ -2909,6 +2909,9 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 'D':
       if (shift) {
         key_unit_disband();
+      } else if (!shift && ctrl && alt) {
+        // CTRL-ALT-D user forced disconnect
+        clinet_disconnect_from_server();
       } else if (!(alt || ctrl)) {
         key_unit_action_select();
       }
