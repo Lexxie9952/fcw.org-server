@@ -2826,6 +2826,29 @@ function city_change_prod_and_buy(event, city_id, z)
 }
 
 /**************************************************************************
+ shift-click: Highlight all cities producing same output item as this city
+ ctrl-click:  Select all cities producing same output item as this city
+ normal click:Change production in this city
+**************************************************************************/
+function city_filter_prod_type(event, city_id)
+{
+  var kind=null, z=null;
+  pcity = cities[city_id];
+  if (pcity == null) return; 
+  kind = pcity['production_kind'];
+  z = pcity['production_value'];
+  // shift-click: HIGHLIGHT all cities making same as this city
+  if (event.shiftKey) {
+    highlight_rows_by_output(kind, z, false);
+  }
+  // ctrl-click: SELECT all cities make same as this city
+  else if (event.ctrlKey) {
+    select_rows_by_output(kind, z, false);
+  }
+  // normal click: just change current prod
+  else city_change_prod(city_id);
+}
+/**************************************************************************
  Changes production in city_id to improvement type #z: clicked from improv
    panel in the city list screen
 **************************************************************************/
@@ -2850,6 +2873,42 @@ function change_city_prod_to(event, city_id, z)
   active_superpanel_cityid = city_id; // keep panel up after refresh/update
 }
 
+/**************************************************************************
+ Toggles highlighted city rows by what they're making: kind and type #z: 
+   shift-clicked from production column in the city list screen
+**************************************************************************/
+function highlight_rows_by_output(kind, z, clear)
+{ // clear==true means don't toggle, just clear them all
+  for (var city_id in cities) {
+    var pcity = cities[city_id]
+    if (client.conn.playing != null && city_owner(pcity) != null && city_owner(pcity).playerno == client.conn.playing.playerno) {      
+      // if city has same output type, toggle the highlighting:
+      if (clear || (kind==pcity['production_kind'] && z==pcity['production_value'])) {
+        if (clear || $("#cities_list_"+city_id).css("background-color") == "rgb(0, 0, 255)" ) {
+          $("#cities_list_"+city_id).css({"background-color":"rgba(0, 0, 0, 0)"}); 
+        } else $("#cities_list_"+city_id).css({"background-color":"rgb(0, 0, 255)"});  // TODO, insert a fake sort character to the name of the city?
+      }
+    }
+  }
+}
+/**************************************************************************
+ Toggles selection checkboxes in city rows by what they're making: 
+   kind and type #z: ctrl-clicked from Super PAnel in the city list screen
+**************************************************************************/
+function select_rows_by_output(kind, z, clear)
+{ // clear==true means don't toggle, just clear them all
+  for (var city_id in cities) {
+    var pcity = cities[city_id]
+    if (client.conn.playing != null && city_owner(pcity) != null && city_owner(pcity).playerno == client.conn.playing.playerno) {      
+      // if city has improvement, toggle the checkbox
+      if (clear || (kind==pcity['production_kind'] && z==pcity['production_value'])) {
+        if (clear || $("#cb"+city_id).prop("checked") == true ) {
+          $("#cb"+city_id).prop("checked", false); 
+        } else $("#cb"+city_id).prop("checked", true);  
+      }
+    }
+  }
+}
 /**************************************************************************
  Toggles highlighted city rows by improvement type #z: 
    shift-clicked from Super PAnel in the city list screen
@@ -2980,7 +3039,7 @@ function update_city_screen()
               +updown_sort_arrows+"</th><th style='text-align:right;' title='Click to change'>Producing"+updown_sort_arrows+"</th>"
         + "<th style='text-align:right;' title='Turns to finish &nbsp;&nbsp; Prod completed/needed'>Turns"+updown_sort_arrows
               +"&nbsp; Progress</th><th style='text-align:right;' title='Click to buy'>Cost"+updown_sort_arrows+"</th>"
-        + "<th style='text-align:left;'><input type='checkbox' id='master_checkbox' title='Toggle all cities' name='cbAll' value='false' onclick='toggle_city_row_selections();'></th>"
+        + "<th style='text-align:left;'><input type='checkbox' id='master_checkbox' title='CLICK:  Toggle all cities\n\nSHIFT-CLICK:  Toggle highlighted cities' name='cbAll' value='false' onclick='toggle_city_row_selections(event);'></th>"
         + "</tr></thead><tbody>";
   } else if (redux_screen) // semi-standard rendition of the above with minor trimming
   { // -1 column (selection box). Economised columns: Sort Arrows, Grows In>>Grows, Name of Production/Image >> Image only, Turns/Progress>>Progress
@@ -3006,7 +3065,7 @@ function update_city_screen()
     /*+ "Progress</th><th style='padding-right:1em; text-align:right;' title='Click to buy'>Cost"+"</th>"*/
     + ( (!tiny_screen) ? ("Progress</th><th style='padding-right:1em; text-align:right;' title='Click to buy'>Cost"+"</th>")
                        : ("in</th><th style='padding-right:1em; text-align:right;'>Cost"+"</th>") )
-    + ( (!tiny_screen) ? ("<th style='text-align:left;'><input type='checkbox' id='master_checkbox' title='Toggle all cities' name='cbAll' value='false' onclick='toggle_city_row_selections();'></th>")
+    + ( (!tiny_screen) ? ("<th style='text-align:left;'><input type='checkbox' id='master_checkbox' title='CLICK:  Toggle all cities\n\nSHIFT-CLICK:  Toggle highlighted cities' name='cbAll' value='false' onclick='toggle_city_row_selections(event);'></th>")
                      : "" )   // skip checkbox column for tiny redux mode
     + "</tr></thead><tbody>";
   } else {  // tiny - brutally cut non-crucial info
@@ -3051,7 +3110,7 @@ function update_city_screen()
     var td_click_html = "<td class='tdc1' style='padding-right:1em; text-align:right;' onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'>";
     var td_click2_html = "<td class='tdc2' style='text-align:right;' onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'>";
     var td_buy_html =   "<td style='padding-right:1em; text-align:right;' onclick='javascript:request_city_id_buy("+ pcity['id'] + ");'>";
-    var td_change_prod_html = "<td title='Click to change' style='text-align:right;' onclick='javascript:city_change_prod("+ pcity['id'] + ");'>";
+    var td_change_prod_html = "<td title='Click to change' style='text-align:right;' onclick='javascript:city_filter_prod_type(event,"+ pcity['id'] + ");'>";
 
     if (client.conn.playing != null && city_owner(pcity) != null && city_owner(pcity).playerno == client.conn.playing.playerno) {
       count++; 
@@ -3213,7 +3272,11 @@ function update_city_screen()
           
           adjust_oversize = (sprite['width']>64) ? "margin-right:-20px;" : "";  // "oversize" images are 20 pixels wider so need alignment
           
-          prod_img_html = "<div class='prod_img' oncontextmenu='set_mass_prod_city("+pcity['id']+");' title='Right-click sets mass-selection target' style='max-height:24px; float:right; padding-left:0px padding-right:0px; content-align:right; margin-top:-14px;"
+          prod_img_html = "<div class='prod_img' oncontextmenu='set_mass_prod_city("+pcity['id']+");' "
+                  //+ "onclick='city_filter_prod_type(event,"+pcity['id']+");' "
+                  + "title='RIGHT-CLICK:  Set mass-selection target\n\nSHIFT-CLICK:  Highlight ON/OFF cities making this item\n\n"
+                  + "CTRL-CLICK:   Select ON/OFF cities making this item' "
+                  + "style='max-height:24px; float:right; padding-left:0px padding-right:0px; content-align:right; margin-top:-14px;"
                   + adjust_oversize+"'>"
                   + "<div style='float:right; content-align:right;"
                   + "background: transparent url("
@@ -3358,14 +3421,23 @@ function save_city_checkbox_states()
 }
 
 /**************************************************************************
-  Toggle all checkboxes in city list for selecting cities
+  Left-click:  Toggle all checkboxes in city list for selected cities
+  Shift-click: Toggle all checkboxes in city list iff row is highlighted
 **************************************************************************/
-function toggle_city_row_selections()
+function toggle_city_row_selections(event)
 {
-  for (var city_id in cities)  {
-    $("#cb"+city_id).prop('checked', !($("#cb"+city_id).is(":checked")) );
-  }
-  master_checkbox = $("#master_checkbox").is(":checked");
+  if (event.shiftKey) { // Toggle based on highlighted state
+    for (var city_id in cities)  {
+      if ($("#cities_list_"+city_id).css("background-color") == "rgb(0, 0, 255)" ) {
+        $("#cb"+city_id).prop('checked', !($("#cb"+city_id).is(":checked")) );
+      }
+    }
+  } else {                // Toggle current check-state
+      for (var city_id in cities)  {
+        $("#cb"+city_id).prop('checked', !($("#cb"+city_id).is(":checked")) );
+      }
+      master_checkbox = $("#master_checkbox").is(":checked");
+    }
 }
 
 /**************************************************************************
