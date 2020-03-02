@@ -278,6 +278,35 @@ value	= -2400
 ;further tune upward any one time bonus to what it needs to be. reqs can look at unit type also to compensate higher cost 
 ;of making certain units, since route-creating units now vary from 20 shields to 50 shields in cost. 
 
+; ***************************** SEA UNIT REPAIR *******************************
+; Sea units have crews which pro-actively repair damage regardless of movement.
+; This is almost comparable to a fortified land unit. Sea units being "Use once
+; and dispose", and/or unable to re-enter action for literally centuries, had
+; created issues in realism, playability, and balance. 8% repair/turn effect:
+; 10hp units:  +0 hp/turn   20hp units:  +1 hp/turn
+; 30hp units:  +2 hp/turn   40hp units:  +3 hp/turn
+[effect_sea_hp_regen]
+type    = "Unit_Recover_Pct"    ; _Absolute is unaffected by rest/movement
+value   = 8   
+reqs    =
+    { "type", "name", "range"
+      "UnitClass", "Sea", "Local"
+    }
+[effect_sub_hp_regen]
+type    = "Unit_Recover_Pct"
+value   = 8   
+reqs    =
+    { "type", "name", "range"
+      "UnitClass", "Submarine", "Local"
+    }
+[effect_rivership_hp_regen]
+type    = "Unit_Recover_Pct"
+value   = 8   
+reqs    =
+    { "type", "name", "range"
+      "UnitClass", "RiverShip", "Local"
+    }
+
 ; *********************************** BASES *******************************
 
 ; **** FORT *****
@@ -1662,7 +1691,7 @@ reqs	=
 
 [effect_courthouse_spy_resistance]
 type	= "Spy_Resistant"
-value	= 15      ;50-15=35% success rate 
+value	= 30  ;30% reduction of 50% base chance = 15% bonus. 50-15=35% success rate 
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Courthouse", "City", TRUE
@@ -2208,9 +2237,18 @@ reqs	=
       "Building", "Police Station", "City", TRUE
       "Building", "Women's Suffrage", "Player", FALSE
     }
+[effect_police_station_vet_diplos]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Police Station", "City", TRUE
+      "UnitFlag", "NoVeteran", "Local", FALSE
+      "UnitFlag", "Diplomat", "Local", TRUE      
+    }
 [effect_police_station_spy_resistant]
 type	= "Spy_Resistant"
-value	= 10  
+value	= 20   ; 20% reduction of 50% base chance = 10% bonus
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Police Station", "City", TRUE 
@@ -3020,7 +3058,7 @@ reqs	=
 ;35% hostile diplomatic combat success rate with only 1 of Courthouse / Supreme Court 
 [effect_only_supreme_court_spy_resistance]
 type	= "Spy_Resistant"
-value	= 15 ;50%-15%=35% success rate 
+value	= 30 ;30% reduction of 50% base chance is 15% bonus. 50%-15%=35% success rate 
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Supreme Court", "Player", TRUE
@@ -3029,7 +3067,7 @@ reqs	=
 ;25% hostile diplomatic combat success rate with both Supreme Court + Courthouse 
 [effect_only_supreme_court_spy_resistance_stacked]
 type	= "Spy_Resistant"
-value	= 10 ;10+15 for Courthouse = 25%. 50%-25%=25% success rate 
+value	= 20 ;20% reduction of 50% bonus = 10% bonus. 10%+15% for Courthouse = 25%. 50%-25%=25% success rate 
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Supreme Court", "Player", TRUE
@@ -4261,4 +4299,26 @@ reqs    =
       "type", "name", "range", "present"
       "UnitType", "Proletarians", "Local", TRUE
       "Gov", "Communism", "Player", FALSE
+    }
+
+;10 shield discount "Sturmovik Effect".
+[effect_communist_dive_bombers]
+type    = "Unit_Build_Cost_Pct"
+value	  = -16
+reqs    =
+    {
+      "type", "name", "range", "present"
+      "UnitType", "Dive Bomber", "Local", TRUE
+      "Gov", "Communism", "Player", TRUE
+    }
+
+;5 shield discount Riflemen
+[effect_communist_riflemen]
+type    = "Unit_Build_Cost_Pct"
+value	  = -12
+reqs    =
+    {
+      "type", "name", "range", "present"
+      "UnitType", "Riflemen", "Local", TRUE
+      "Gov", "Communism", "Player", TRUE
     }

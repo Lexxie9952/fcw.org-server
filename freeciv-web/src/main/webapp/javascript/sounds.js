@@ -75,7 +75,7 @@ function unit_move_sound_play(unit)
       case "Bomber":
         move_sound = "pm_prop_bombers.ogg"; 
         break;
-
+      case "Dive Bomber":
       case "Fighter":  
       case "Escort Fighter":
         move_sound = "pm_prop_fighters.ogg";
