@@ -2030,8 +2030,7 @@ bonuses       =
    { "flag", "type", "value"
      "AirAttacker",    "DefenseDividerPct",         -50
      "CantReachAir",   "DefenseDividerPct",          50
-     "CantReachAir",   "NonMil",                     50 ; last 2 subsume all non-Anti-Air
-
+     "NonMil",         "DefenseDividerPct",          50 ; last 2 subsume all non-Anti-Air
    }
 flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape"
 veteran_names =

@@ -342,9 +342,10 @@ Reduces corruption in a city by roughly half (60% but rounded down.)\
  Provides law and order to support +1 unit free of upkeep. Eliminates\
  tile corruption under Anarchy and Despotism.\
 "), _("\
-Diplomatic attacks on your diplomatic units are 15% less effective.\
- (50%-15%=35%). The basic Steal Tech action is 35% less effective.\
- (80%-35%=45%). All other hostile diplomatic actions are 20% less effective.\
+Diplomatic attacks on your diplomatic units get a 30% bonus reduction from\
+ base odds of 50%: making such attacks roughly 15% less effective. (50%-15%=35%).\
+ The basic Steal Tech action is 35% less effective. (80%-35%=45%). All\
+ other hostile diplomatic actions are 20% less effective.\
 "), _("\
 In a Democracy, a Courthouse makes 1 unhappy citizen content (unless that\
  citizen is unhappy about military activity).\
@@ -630,9 +631,12 @@ sound		= "b_police_station"
 sound_alt	= "b_generic"
 helptext	= _("\
 Neutralizes the unhappiness caused by two military units. Assists domestic diplomatic\
- units against hostile diplomatic attacks with a 10% bonus. Decreases the chance of\
- tech theft by 10%. Prevents enemies from establishing an embassy without first\
- agreeing to cease-fire, armistice, or peace.\
+ units against hostile diplomatic attacks with roughly a 10% bonus. (20% reduction of\
+ the average base of 50% = 10%.) Decreases the chance of tech theft by 10%. Prevents\
+ enemies from establishing an embassy without first agreeing to cease-fire, armistice,\
+ or peace. (The Manual on Diplomacy explains how diplomatic odds are calculated.)\
+"), _("\n\
+Diplomats and Spies made in a city with Police Station gain +1 veteran level.\
 ")
 
 [building_port_facility]
@@ -873,7 +877,7 @@ helptext	= _("\
 Space Components can be differentiated into Propulsion and Fuel Components.\
  Each pair of them reduces spaceship travel time.  You can build up to 8 pairs.\
 "), _("\
-Before you can build any spaceship parts, any nation must have built the\
+Before you can build any spaceship parts, your nation must have built the\
  Apollo Program.\
 ")
 
@@ -909,7 +913,7 @@ Space Modules are the most expensive parts of spaceships.  There\
 "), _("\
 You can build up to 4 Space Modules of each kind.\
 "), _("\
-Before you can build any spaceship parts, any nation must have built the\
+Before you can build any spaceship parts, your nation must have built the\
  Apollo Program.\
 ")
 
@@ -936,7 +940,7 @@ Space Structurals form the base of your spaceship.  All other\
  spaceship parts need to be connected to Structurals in order to\
  function.  You can build up to 32 Space Structurals.\
 "), _("\
-Before you can build any spaceship parts, a nation must have built the\
+Before you can build any spaceship parts, your nation must have built the\
  Apollo Program.\
 ")
 
@@ -1858,8 +1862,9 @@ sound_alt	= "w_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
 The Supreme Court gives the same effect as an extra Courthouse in all your cities.\
- If a Courthouse is already present, the additional bonus for diplomatic combat and\
- Steal Tech is 10%. This Wonder is never obsolete.\
+ If a Courthouse is already present, the additional bonus for diplomatic combat is\
+ roughly 10% (20% reduction of the average base of 50% = 10%); and the additional bonus\
+ against Steal Tech is 10%. This Wonder is never obsolete.\
 ")
 
 [building_sun_tzus_war_academy]
