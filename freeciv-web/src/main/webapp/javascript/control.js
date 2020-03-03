@@ -1487,7 +1487,13 @@ function update_unit_order_commands()
       var upgrade_cost = Math.floor(upgrade_type['build_cost'] - ptype['build_cost']/2);  //subtract half the shield cost of upgrade unit
       // upgrade cost = 2*T + (T*T)/20, where T = shield_cost_of_new unit - (shield_cost_of_old unit / 2)
       upgrade_cost = 2*upgrade_cost + Math.floor( (upgrade_cost*upgrade_cost)/20 );
-      
+      // TODO: check for effect Upgrade_Price_Pct when possible and multiply that constant to upgrade_cost
+      if (client_rules_flag & CRF_TESLA_UPGRADE_DISCOUNT) {
+        if ( player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_TESLAS_LABORATORY)) ) {
+          upgrade_cost = Math.floor( upgrade_cost * 0.80); // 20% discount for Tesla's Lab
+        }
+      }
+
       unit_actions["upgrade"] =  {name: "Upgrade to "+upgrade_name+" for "+upgrade_cost+" (U)"};
       $("#order_upgrade").attr("title", "Upgrade to "+upgrade_name+" for "+upgrade_cost+" (U)");
       $("#order_upgrade").show();

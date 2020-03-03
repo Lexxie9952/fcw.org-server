@@ -666,7 +666,8 @@ function handle_ruleset_control(packet)
                         + CRF_NO_UNIT_GOLD_UPKEEP
                         + CRF_MP2_SPECIAL_UNITS
                         + CRF_COMMIE_BLDG_UPKEEP
-                        + CRF_PACTS_SANS_EMBASSY;
+                        + CRF_PACTS_SANS_EMBASSY
+                        + CRF_TESLA_UPGRADE_DISCOUNT;
     break;
 
     case "Multiplayer-Plus ruleset":

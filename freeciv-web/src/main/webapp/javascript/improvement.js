@@ -25,6 +25,7 @@ const B_PALACE_NAME = 'Palace';
 const B_ECC_PALACE_NAME = 'Ecclesiastical Palace';
 const B_STATUE_OF_LIBERTY_NAME = "Statue of Liberty";
 const B_ADAM_SMITH_NAME = "A.Smith's Trading Co.";
+const B_TESLAS_LABORATORY = "Tesla's Laboratory";
 
 var B_LAST = MAX_NUM_BUILDINGS;
 
