@@ -1935,14 +1935,14 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 200
+build_cost	= 220
 upkeep		= 0
 sabotage	= 0
 sound		= "w_teslas_laboratory"
 sound_alt	= "w_generic"
 helptext	= _("\
-Upgrades one obsolete unit per turn.  This Wonder\
- does not become obsolete.\
+Upgrades one obsolete unit per turn. Reduces price of unit upgrades by\
+ 20%. This Wonder does not become obsolete.\
 ")
 
 [building_internet]
