@@ -5059,8 +5059,10 @@ function popit_req(ptile)
   copy_string_to_clipboard("%%%"+"tile"+ptile['index']+"~%");
 
   if (tile_get_known(ptile) == TILE_KNOWN_UNSEEN) {
-   // show_dialog_message("Tile info", "Location: x:" + ptile['x'] + " y:" + ptile['y']);
-   // return;
+    //TODO: The 2 lines below should be removed after next FCW server restart
+    //comment made on 3 March 2020:
+   show_dialog_message("Tile info", "Location: x:" + ptile['x'] + " y:" + ptile['y']);
+    return;
    // Let server give us tile info. OPTIONAL TODO: reconstruct some more based on our 
    // own last known knowledge of the tile. Server only sends Terrain and that's it.
   } else if (tile_get_known(ptile) == TILE_UNKNOWN) {
