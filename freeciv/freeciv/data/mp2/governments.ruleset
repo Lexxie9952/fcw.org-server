@@ -137,6 +137,8 @@ Corruption does not vary by distance from the capital;\
  units free of upkeep. Buildings with 1 upkeep are free.\
  The capital city with Palace gets a +25% production bonus.\
 "), _("\
+Communist governments get a cost discount of -5 on Riflemen.\
+"), _("\
 Communist states can transfer Proletarians between cities to\
  re-distribute population. Large numbers of Proletarians can be\
  used to finish State projects. The Communism tech allows a\
