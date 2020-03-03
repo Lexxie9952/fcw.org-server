@@ -2613,6 +2613,16 @@ static inline void get_full_username(char *buf, int buflen,
 static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
   	 	                   struct unit *punit)
 {
+  // We can't assume client will be "good boy" and only call this function
+  // when it's allowed. Info given is restricted by knowledge of tile:
+  int vision_type; //enum known_type vision_type;  would need tile.h
+  if (map_is_known_and_seen(ptile, pplayer, V_MAIN)) {
+    vision_type = TILE_KNOWN_SEEN;
+  } else if (map_is_known(ptile, pplayer)) {
+    vision_type = TILE_KNOWN_UNSEEN;
+  } else {
+    vision_type = TILE_UNKNOWN;
+  }
   const char *activity_text;
   if (ptile == NULL || !ptile || !pplayer || pplayer == NULL) return NULL; 
   struct city *pcity = tile_city(ptile);
@@ -2647,10 +2657,15 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
     astr_add_line(&str, _("Native coordinates: (%d, %d)"),
                   nat_x, nat_y);
   }
+  // Sorry, that's all there is to know.
+  if (vision_type == TILE_UNKNOWN) goto done;
 
   astr_add_line(&str, _("Terrain: %s"), tile_get_info_text(ptile, TRUE, 0));
+  // Sorry, that's all there is to know.
+  if (vision_type == TILE_KNOWN_UNSEEN) goto done;
+
   astr_add_line(&str, _("Food/Prod/Trade: %s%s%s"), bold,
-		get_tile_output_text(ptile, pplayer), unbold);
+       get_tile_output_text(ptile, pplayer), unbold);
   extra_type_by_cause_iterate(EC_HUT, pextra) {
     if (tile_has_extra(ptile, pextra)) {
       astr_add_line(&str, "%s", extra_name_translation(pextra));
@@ -2831,6 +2846,7 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
     }
   }
 
+done:
   astr_break_lines(&str, LINE_BREAK);
   return astr_str(&str);
 }
