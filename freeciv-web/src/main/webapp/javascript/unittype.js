@@ -170,6 +170,33 @@ function utype_can_do_action(putype, action_id)
   return putype['utype_actions'].isSet(action_id);
 }
 
+/**********************************************************************//**
+  Returns the number of shields it takes to build this unit type.
+  Specifically, it might be cheaper due to UNIT_BUILD_COST_PCT effect,
+  which the server actually tells us but we have not yet implemented
+  in effects.js (but one day might)
+**************************************************************************/
+/* TO DO if we import common/effects.c
+function utype_build_shield_cost(pcity, punittype)
+{
+  var  base;
+  var  owner;
+  var  ptile;
+
+  if (pcity != null) {
+    owner = city_owner(pcity);
+    ptile = city_tile(pcity);
+  } else {
+    owner = null;
+    ptile = null;
+  }
+
+  base = punittype['build_cost']
+  * (100 + get_unittype_bonus(owner, ptile, punittype, EFT_UNIT_BUILD_COST_PCT)) / 100;
+
+return MAX(base * game.info.shieldbox / 100, 1);
+}*/
+
 /**************************************************************************
 Whether player can build given unit somewhere,
 ignoring whether unit is obsolete and assuming the
