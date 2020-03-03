@@ -660,7 +660,8 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
   var unit_offset = get_unit_anim_offset(punit);
 
   var dx = unit_offset_x + unit_offset_adj_x;  // offsets for where to draw units on the tile.
-  var dy = unit_offset_y + unit_offset_adj_y; 
+  var dy = unit_offset_y + unit_offset_adj_y;  // **WARNING: positive moves up, negative moves down
+  var sx = 0; // custom shield placement for some problematic units
 
   // This section allows custom offset adjustments for any particular unit. This helps with the
   // fact a 64x48 sprite can occupy parts of an area larger than the 96x48 tile area, and the fact
@@ -671,35 +672,53 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
     case "AEGIS Cruiser":
         dx -= 3; dy -= 6;
         break;
+    case "Transport":    
     case "Alpine Troops":                     
-        dx -= 3; dy-=1;
+        dx -= 3; dy -= 1;
         break;
     case "Archer":                     
         dx += 1; 
         break;
     case "AWACS":                     
-        dx += 4; dy+=3; 
+        dx += 3; dy += 5; 
         break;    
     case "Battleship":
         dx -= 5; dy -= 4;
         break;
     case "Chariot":
-        dx -= 2; 
+        dx -= 2; dy -= 3;
+        sx = 8; 
         break; 
     case "Caravel":
     case "Carrier":
     case "Destroyer":
     case "Missile Destroyer":
-        dx -= 3; dy-= 3; 
-        break;  
+        dx -= 3; dy -= 3; 
+        break;
+    case "Dive Bomber":
+        dx -= 11; dy -= 1;
+        sx = 8;
+        break;
+    case "Submarine":
     case "Engineers":                     
         dx -= 3; dy -= 4;
         break;
+    case "Escort Fighter":
+        dx -= 8; dy -= 4;
+        sx = 8;
+        break;
     case "Explorer":                     
-        dx -= 1; dy += 3;    
+        dx -= 0; dy += 2; 
+        break;   
     case "Fighter":
-        dx -= 11; dy -= 4;
-        break;    
+        dx -= 11; dy -= 6;
+        sx = 8;
+        break;
+    case "Bomber":
+    case "Heavy Bomber":
+        dx += 2; dy += 2;
+        sx = 8;
+        break;
     case "Horsemen":
         dx -= 5; dy += 0;
         break;
@@ -710,7 +729,8 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
         dx -= 4; dy -= 5;
         break;
     case "Jet Bomber":
-        dx -= 12; dy += 5;
+        dx -= 24; dy += 7;
+        sx = 8;
         break;
     case "Jet Fighter":
         dx += 2; dy += 3;
@@ -721,6 +741,10 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
     case "Mech. Inf.":
         dx += 1; dy += 1;
         break;
+    case "Medium Bomber":
+        dx += 5; dy += 2;
+        sx = 8;
+        break;  
     case "Musketeers":
         dx -= 1; dy -= 1;
         break;
@@ -735,9 +759,6 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
         break; 
     case "Settlers":
         dx -= 3; dy -= 2;
-        break;       
-    case "Submarine":
-        dx -= 3; dy -= 4;
         break;
     case "Stealth Bomber":
         dx -= 19; dy -= 5;  
@@ -745,16 +766,28 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
     case "Stealth Fighter":
         dx -= 2; dy -= 1;
         break;
-    case "Transport":
-        dx -= 3; dy -= 1;
+    case "Strategic Bomber":
+        dx -= 3; dy += 4;
+        sx = 8;
         break;
     default:
       // do nothing, dx and dy already set higher up.
   }
+  /*
   var result = [ get_unit_nation_flag_sprite(punit),
            {"key" : tileset_unit_type_graphic_tag(unit_type(punit)),
-            "offset_x": unit_offset['x'] + dx,
-            "offset_y": unit_offset['y'] - dy} ];
+            "offset_x": unit_offset['x'] + dx + sx,
+            "offset_y": unit_offset['y'] - dy} ];*/
+  // Shield
+  var result = [get_unit_nation_flag_sprite(punit)];
+  if (result[0]['offset_x']) {
+    result[0]['offset_x'] += sx;  // adjust shield x placement
+  }
+  // Unit
+  result.push(
+    {"key" : tileset_unit_type_graphic_tag(unit_type(punit)),
+      "offset_x": unit_offset['x'] + dx,
+      "offset_y": unit_offset['y'] - dy} );        
   var activities = get_unit_activity_sprite(punit);
   if (activities != null) {
     activities['offset_x'] = activities['offset_x'] + unit_offset['x'];
@@ -767,6 +800,7 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
   if (stacked) result.push(get_unit_stack_sprite());
   if (punit['veteran'] > 0) result.push(get_unit_veteran_sprite(punit));
 
+  //console.log(result);
   return result;
 }
 
