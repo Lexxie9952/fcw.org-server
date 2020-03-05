@@ -32,6 +32,7 @@ sprites =
 		"b.factory", "buildings/factory"
 		"b.granary", "buildings/granary"
 		"b.harbour", "buildings/harbor"
+		"b.homeland_security", "buildings/homeland_security"
 		"b.hydro_plant", "buildings/hydro_plant"
 		"b.library", "buildings/library"
 		"b.marketplace", "buildings/marketplace"
