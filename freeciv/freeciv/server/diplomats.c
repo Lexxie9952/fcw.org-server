@@ -120,6 +120,29 @@ bool spy_poison(struct player *pplayer, struct unit *pdiplomat,
   }
 
   log_debug("poison: infiltrated");
+
+    /* Check if the Diplomat/Spy succeeds with his/her task. */
+  if (diplomat_was_caught(pplayer, pdiplomat, pcity, cplayer,
+                          paction)) {
+    notify_player(pplayer, ctile, E_MY_DIPLOMAT_FAILED, ftc_server,
+                  _("Your %s was caught in the attempt"
+                    " of poisoning %s's water!"),
+                  unit_tile_link(pdiplomat),
+                  clink);
+    notify_player(cplayer, ctile, E_ENEMY_DIPLOMAT_FAILED, ftc_server,
+                  _("You caught %s %s attempting"
+                    " to poison your water in %s!"),
+                  nation_adjective_for_player(pplayer),
+                  unit_tile_link(pdiplomat),
+                  clink);
+
+    /* This may cause a diplomatic incident */
+    action_consequence_caught(paction, pplayer, cplayer, ctile, clink);
+
+    wipe_unit(pdiplomat, ULR_CAUGHT, cplayer);
+    return FALSE;
+  }
+
   log_debug("poison: succeeded");
 
   /* Poison people! */
@@ -1567,7 +1590,7 @@ static bool diplomat_was_caught(struct player *act_player,
                                 struct player *tgt_player,
                                 const struct action *act)
 {
-  int odds;
+  signed int odds;
 
   /* Take the odds from the diplchance setting. */
   odds = game.server.diplchance;
@@ -1585,6 +1608,13 @@ static bool diplomat_was_caught(struct player *act_player,
            / 100);
 
   /* Roll the dice. */
+  /* TODO: Some wanted transparency on odds, <1% of players have a clue.
+  notify_player(act_player, NULL, E_MY_SPY_NUKE, ftc_server,
+              _("Your operation's odds of success were %d percent."),
+              odds); */
+
+  if (odds<0) odds=0;   // fc_rand 100% of time gives opposite result if odds<0
+
   return fc_rand (100) >= odds;
 }
 
