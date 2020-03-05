@@ -263,7 +263,7 @@ ui_name_sabotage_city = _("%sSabotage City%s")
 ui_name_sabotage_city_escape = _("%sSabotage City Escape%s")
 
 ; /* TRANS: Industrial _Sabotage (3% chance of success). */
-ui_name_targeted_sabotage_city_escape = _("Industrial %sSabotage%s")
+ui_name_targeted_sabotage_city_escape = _("Targeted %sSabotage%s")
 
 ; /* TRANS: Incite a _Revolt (3% chance of success). */
 ui_name_incite_city = _("Incite a %sRevolt%s")
@@ -290,7 +290,7 @@ ui_name_steal_tech = _("Steal %sTechnology%s")
 ui_name_steal_tech_escape = _("Steal %sTechnology and Escape%s")
 
 ; /* TRANS: Indus_trial Espionage (3% chance of success). */
-ui_name_targeted_steal_tech_escape = _("Indus%strial Espionage%s")
+ui_name_targeted_steal_tech_escape = _("Tar%sgeted Tech Theft%s")
 
 ; /* TRANS: Steal _Map Fragments and Escape (3% chance of success). */
 ui_name_steal_maps_escape = _("Steal %sMap Fragments and Escape%s")

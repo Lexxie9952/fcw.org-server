@@ -236,6 +236,9 @@ name          = _("?unitclass:Sea")
 min_speed     = 3
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage"
+helptext      = _("\
+  • Crew Repair: each turn, regardless of movement, recovers 8% of its hit points (rounded down).\
+")
 
 ; Separating the Submarine class finally allows it to be unreachable by Air. The old Submarine was 
 ; far too offensively overpowered while simultaneously almost useless from ultra-vulnerability to Air units.
@@ -246,6 +249,10 @@ name          = _("?unitclass:Submarine")
 min_speed     = 3
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "Unreachable"
+helptext      = _("\
+  • Visibility bonus: not visible to other players unless they have a unit or city adjacent to it.\n\
+  • Crew Repair: each turn, regardless of movement, recovers 2 hit points.\
+")
 
 [unitclass_trireme]
 ; /* TRANS: Unit class: used adjectivally */
@@ -645,9 +652,8 @@ roles         = "AttackFastStartUnit"     ;this role taken over for well-digger
 helptext      = _("\
 This unit can fix unlucky starts, but has very high upkeep.\ 
  If you have no water, make a Well-Digger in a city that can\
- support it, create a water source, then disband the unit.\
-"), _("\
-This unit can dig wells or irrigate any lowland tile. It will cost its home city\
+ support it, create a water source, then disband the unit.\n\
+ This unit can dig wells or irrigate any lowland tile. It will cost its home city\
  -2 Food -2 Prod. This unit WILL NOT WORK: • Outside your borders,\
  • After Alphabet or Pottery, • After any player discovers Writing, • After 10 turns.\
  >> Don't fool around: high upkeep will permanently hinder you. Only make this unit if you\
@@ -1239,14 +1245,12 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = "DefendOk", "DefendOkStartUnit", "BarbarianSeaTech"
 helptext      = _("\
 Marines are experts at amphibious war. They are the strongest\
- foot unit in the game, and are armed with diverse weaponry.\
-"), _("\
-Unlike other units, Marines can attack Sea units (at a penalty).\
+ foot unit in the game, and are armed with diverse weaponry.\n\
+ Unlike other units, Marines can attack Sea units (at a penalty).\
  Air units do not stop them from attacking reachable targets.\
  They can attack from a Transport or Helicopter. Marines promoted to three\
- veteran levels become commandos suitable for special ops.\
-"), _("\
-Marines built in a city with an Airport, Port Facility, and Barracks III\
+ veteran levels become commandos suitable for special ops.\n\
+ Marines built in a city with an Airport, Port Facility, and Barracks III\
  receive the second veteran level (hardened.)\
 ")
 
@@ -2812,7 +2816,7 @@ flags         = "BadCityDefender", "Provoking", "CanEscape", "CantReachAir"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
 The Galleon is a heavily armed transport ship that can carry up to 4 units. Galleons can travel and attack on rivers,\
- and also do shore attacks.\
+ and also do shore attacks. Galleon crews repair their ship an extra +1hp per turn, regardless of whether it has moved.\
 "), _("
 Like most early sea units, when it initiates combat there will be 15 rounds\
  of combat and 15 total hitpoints lost between both units. This may or may not\
@@ -2855,9 +2859,9 @@ bonuses       =
 flags         = "BadCityDefender", "Provoking", "CanEscape", "CantReachAir"
 roles         = "Hunter"
 helptext      = _("\
-The Frigate is versatile -- it's a superior offensive unit and also\
- a decent transport ship. Frigates can travel and attack on rivers, or make shore attacks\
- from sea.\
+The Frigate is versatile -- it's a superior offensive unit and also a decent transport ship. Frigates\
+ can travel and attack on rivers, or make shore attacks from sea. Frigate crews repair their ship an\
+ extra +1hp per turn, regardless of whether it has moved.\
 "), _("
 From Frigates onward, all sea attacks end with a single victor.\
  Frigates can Stack-Escape: a 50% chance to escape a killed stack if they have more remaining move points than the attacker.\
@@ -3145,7 +3149,8 @@ roles         = "Hunter"
 helptext      = _("\
 Submarines are strong attackers but weak defenders. They can carry 8 Missiles.\
  They are unreachable by Air units, but do not block air attacks on surface ships.\
- Submarines cannot attack units on shore.\ 
+ Submarines cannot attack units on shore. Submarines cannot be seen by other players\
+ unless they have a unit or city adjacent to it.\ 
 "), _("\
 Submarines have superior attrition rates when attacking in numbers. They excel\
  at hit-and-run against weaker ships.\
@@ -3289,6 +3294,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter"
+disembarks    = "Land", "Sea", "Submarine"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "HasNoZOC", "Unbribable", "CantReachAir", "Missile", "NeverBlocked"
 roles         = ""
 helptext      = _("\

@@ -293,7 +293,8 @@ City Walls increase the 1.5x bonus for Land units in a city to 3x, effectively\
  doubling the strength of Land units against attacks from other Land units (and\
  Helicopters.) City Walls are ineffective against Air units, Sea units, Missiles,\
  and Howitzers; in which case the normal 1.5x bonus is given. City Walls prevent\
- population loss when a defending unit is destroyed by a Land unit.\
+ population loss when a defending unit is destroyed by a Land unit. City Walls have\
+ a 50% bonus against sabotage actions.\
 ")
 
 [building_coastal_defense]
@@ -342,9 +343,9 @@ Reduces corruption in a city by roughly half (60% but rounded down.)\
  Provides law and order to support +1 unit free of upkeep. Eliminates\
  tile corruption under Anarchy and Despotism.\
 "), _("\
-Diplomatic attacks on your diplomatic units get a 30% bonus reduction from\
- base odds of 50%: making such attacks roughly 15% less effective. (50%-15%=35%).\
- The basic Steal Tech action is 35% less effective. (80%-35%=45%). All\
+Diplomatic attacks on your diplomatic units get ¼ bonus reduction from\
+ their base odds, making finals odds of such attacks roughly ⅛ less.\
+ (½ - ⅛ = ⅜). The Steal Tech action is 20% less effective. (80%-20%=60%). All\
  other hostile diplomatic actions are 20% less effective.\
 "), _("\
 In a Democracy, a Courthouse makes 1 unhappy citizen content (unless that\
@@ -421,6 +422,30 @@ sound_alt	= "b_generic"
 helptext	= _("\
 Gives one extra food resource on all Oceanic tiles. The city needs\
  to be coastal to build this improvement.\
+")
+
+[building_homeland_security]
+name            = _("Homeland Security")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Literacy", "Player"
+      "Building", "Supreme Court", "Player"
+    }
+graphic	= "b.homeland_security"
+graphic_alt	= "b.courthouse"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 30
+upkeep		= 0
+sabotage	= 0
+sound		= "b_homeland_security"
+sound_alt	= "b_generic"
+helptext	= _("\
+You can build Homeland Security offices if you own the Supreme Court. Homeland Security\
+ gives the same bonus as a Courthouse vs. all hostile diplomatic acts. As a ministry of the\
+ Supreme Court, it has no upkeep and cannot be sabotaged.\
 ")
 
 [building_hydro_plant]
@@ -630,13 +655,17 @@ sabotage	= 100
 sound		= "b_police_station"
 sound_alt	= "b_generic"
 helptext	= _("\
-Neutralizes the unhappiness caused by two military units. Assists domestic diplomatic\
- units against hostile diplomatic attacks with roughly a 10% bonus. (20% reduction of\
- the average base of 50% = 10%.) Decreases the chance of tech theft by 10%. Prevents\
- enemies from establishing an embassy without first agreeing to cease-fire, armistice,\
- or peace. (The Manual on Diplomacy explains how diplomatic odds are calculated.)\
-"), _("\n\
+Police Stations neutralize the unhappiness caused by two military units.\
+"), _("\
+Diplomatic attacks on your diplomatic units get a ¼ bonus reduction from\
+ their base odds, making finals odds of such attacks roughly ⅛ less. (½ - ⅛ = ⅜).\
+ The Steal Tech action is 20% less effective. (80%-20%=60%). All other hostile\
+ diplomatic actions are 20% less effective.\
+"), _("\
 Diplomats and Spies made in a city with Police Station gain +1 veteran level.\
+"), _("\n\
+Prevents enemies from establishing an embassy without first agreeing to cease-fire,
+ armistice, or peace.\
 ")
 
 [building_port_facility]
@@ -1096,8 +1125,8 @@ Makes a city the capital of your nation.\
 "), _("\
 The cost of inciting a revolt decreases with distance from the\
  capital. The capital cannot be incited to revolt, and reduces the chance\
- of enemy agents defeating your agents by 50%. Attempts to sabotage buildings\
- in your capital are also reduced by 50%.\
+ of enemy agents defeating your agents by half. Attempts to sabotage buildings\
+ in your capital are also reduced by half.\
 "), _("\
 Take good care of your capital, as its loss may result in your\
  empire plunging into civil war. Losing your current palace also\
@@ -1835,9 +1864,9 @@ sound		= "w_oracle"
 sound_alt	= "w_generic"
 helptext	= _("\
 The powerful Zeus gives order and organization to both city and nation.\
- One citizen is made content about military activity in every city in\
- your nation. In the city the statue is located, it makes one citizen\
- happy and provides free upkeep to 4 units. Except for one permanent\
+ In every city in your nation, this Wonder neutralizes the unhappiness\
+ caused by one military unit.. In the city the statue is located, it makes\
+ one citizen happy and provides free upkeep to 4 units. Except for one permanent\
  happy citizen, the discovery of Tactics makes the Statue of Zeus obsolete.\
 ")
 
@@ -1861,10 +1890,11 @@ sound		= "w_great_library"
 sound_alt	= "w_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
-The Supreme Court gives the same effect as an extra Courthouse in all your cities.\
- If a Courthouse is already present, the additional bonus for diplomatic combat is\
- roughly 10% (20% reduction of the average base of 50% = 10%); and the additional bonus\
- against Steal Tech is 10%. This Wonder is never obsolete.\
+With respect to corruption, incite protection, upkeep, and other bonuses, the\
+Supreme Court gives the same effect as an extra Courthouse in all your cities. By\
+ itself, it gives no bonus against hostile diplomatic acts. However, owning the\
+ Supreme Court enables each city to build a regional Homeland Security building\
+ to acquire those additional bonuses. This Wonder is never obsolete.\
 ")
 
 [building_sun_tzus_war_academy]
