@@ -266,4 +266,14 @@ function unobstruct_minimized_dialog_continer()
   $("#dialog-extend-fixed-container").css("visibility","hidden");
 }
 
+/**************************************************************************
+   Some strings such as those going into title attribute hovertext, etc.,
+   need to be html-safe and have encoding for some characters such a '
+**************************************************************************/
+function html_safe(text)
+{
+  text = text.replace(/'/g, "&#39;");
+  return text;
+}
+
 

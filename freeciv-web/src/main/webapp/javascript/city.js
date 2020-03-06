@@ -493,7 +493,7 @@ function show_city_dialog(pcity)
         //Unit sprite for present domestic unit:
         if (punit['owner'] == client.conn.playing.playerno) { 
           present_units_html = present_units_html +
-          "<div class='game_unit_list_item' title='" + get_unit_city_info(punit)
+          "<div class='game_unit_list_item' title='" + html_safe(get_unit_city_info(punit))
               + "' style='cursor:pointer;cursor:hand; background: transparent url("
               + sprite['image-src'] +
               ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
@@ -520,7 +520,7 @@ function show_city_dialog(pcity)
               
               // unit  
               present_units_html = present_units_html +
-              "<div class='game_unit_list_item' title='" + get_unit_city_info(punit)
+              "<div class='game_unit_list_item' title='" + html_safe(get_unit_city_info(punit))
                   + "' style='cursor:pointer;cursor:hand; background: transparent url("
                   + sprite['image-src'] +
                   ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
@@ -552,7 +552,7 @@ function show_city_dialog(pcity)
        }
 
       supported_units_html = supported_units_html +
-       "<div class='game_unit_list_item' title='" + get_unit_city_info(punit)
+       "<div class='game_unit_list_item' title='" + html_safe(get_unit_city_info(punit))
            + "' style='cursor:pointer;cursor:hand; background: transparent url("
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
@@ -2766,14 +2766,14 @@ function show_city_improvement_pane(city_id)
         opacity = 1;
         border = "border:3px solid #000000;"
         bg     = "background:#FEED ";
-        title_text = "title='"+pcity['name']+":\n\nRIGHT-CLICK: Sell " + improvements[z]['name']+"."+shift_click_text;
+        title_text = "title='"+html_safe(pcity['name'])+":\n\nRIGHT-CLICK: Sell " + improvements[z]['name']+"."+shift_click_text;
         right_click_action = "oncontextmenu='city_sell_improvement_in(" +city_id+","+ z + ");' ";
       } else {
         if (!can_city_build_improvement_now(pcity, z)) {  // doesn't have and can't build: faded
           opacity=0.35;
           border = "border:3px solid #231A13;"  
           bg =     "background:#9873 ";
-          title_text = "title='" + pcity['name']+": " + improvements[z]['name'] + " unavailable.\n\nRIGHT-CLICK: Add to worklist."+shift_click_text;
+          title_text = "title='" + html_safe(pcity['name'])+": " + improvements[z]['name'] + " unavailable.\n\nRIGHT-CLICK: Add to worklist."+shift_click_text;
           right_click_action = "oncontextmenu='city_add_improv_to_worklist(" +city_id+","+ z + ");' ";
         } else {                  // doesn't have and CAN build - dark blue
           opacity = 1;
@@ -2781,8 +2781,8 @@ function show_city_improvement_pane(city_id)
           bg =     (is_city_making ? (product_finished ? "background:#BFBE " : "background:#8D87 ") : "background:#147F ");
           right_click_action = "oncontextmenu='city_change_prod_and_buy(null," +city_id+","+ z + ");' "
           title_text = is_city_making 
-            ? ("title='"+pcity['name']+verb+improvements[z]['name']+".\n\nRIGHT_CLICK: Buy "+improvements[z]['name']+shift_click_text)
-            : ("title='"+pcity['name']+":\n\nCLICK: Change production\n\nRIGHT-CLICK: Buy "+improvements[z]['name']+shift_click_text);   
+            ? ("title='"+html_safe(pcity['name'])+verb+improvements[z]['name']+".\n\nRIGHT_CLICK: Buy "+improvements[z]['name']+shift_click_text)
+            : ("title='"+html_safe(pcity['name'])+":\n\nCLICK: Change production\n\nRIGHT-CLICK: Buy "+improvements[z]['name']+shift_click_text);   
         }
       } 
       // Put improvement sprite in the cell:

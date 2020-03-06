@@ -283,7 +283,7 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
 
           adjust_oversize = (sprite['width']>64) ? -34 : -26;  // "oversize" images space differently
           
-          ptype_img_html = "<span class='prod_img' title='"+get_unit_city_info(punit)+"' style='float:left; padding-left:0px padding-right:0px; content-align:right; margin-top:-8px;"
+          ptype_img_html = "<span class='prod_img' title='"+html_safe(get_unit_city_info(punit))+"' style='float:left; padding-left:0px padding-right:0px; content-align:right; margin-top:-8px;"
                   + "margin-left:"+adjust_oversize+"px' margin-right:-4px; onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'>"
                   + "<div style='float:left; content-align:left;"
                   + "background: transparent url("
@@ -528,7 +528,7 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
 
           adjust_oversize = (sprite['width']>64) ? -34 : -26;  // "oversize" images space differently
           
-          ptype_img_html = "<span class='prod_img' title='"+get_unit_city_info(punit)+"' style='float:left; padding-left:0px padding-right:0px; content-align:right; margin-top:-8px;"
+          ptype_img_html = "<span class='prod_img' title='"+html_safe(get_unit_city_info(punit))+"' style='float:left; padding-left:0px padding-right:0px; content-align:right; margin-top:-8px;"
                   + "margin-left:"+adjust_oversize+"px' margin-right:-4px; onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'>"
                   + "<div style='float:left; content-align:left;"
                   + "background: transparent url("
@@ -776,7 +776,7 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
         opacity = 1;
         border = "border:3px solid #000000;";
         bg     = "background:#FEED ";
-        title_text = "title='"+pcity['name']+":\n\nRIGHT-CLICK: Sell " + improvements[z]['name']+".'";
+        title_text = "title='"+html_safe(pcity['name'])+":\n\nRIGHT-CLICK: Sell " + improvements[z]['name']+".'";
         right_click_action = alt_click_method+"='city_sell_improvement_in(" +city_id+","+ z + ");' ";
       } else {
         if (!can_city_build_improvement_now(pcity, z)) {  // city has improvement but CAN'T MAKE IT
@@ -791,8 +791,8 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
           bg =     (is_city_making ? (product_finished ? "background:#BFBE " : "background:#8D87 ") : "background:#AD68 ");
           right_click_action = alt_click_method+"='city_change_prod_and_buy(null," +city_id+","+ z + ");' "
           title_text = is_city_making 
-            ? ("title='"+pcity['name']+verb+improvements[z]['name']+".\n\nRIGHT_CLICK: Buy "+improvements[z]['name']+"'")
-            : ("title='"+pcity['name']+":\n\nCLICK: Change production\n\nRIGHT-CLICK: Buy "+improvements[z]['name']+"'");   
+            ? ("title='"+html_safe(pcity['name'])+verb+improvements[z]['name']+".\n\nRIGHT_CLICK: Buy "+improvements[z]['name']+"'")
+            : ("title='"+html_safe(pcity['name'])+":\n\nCLICK: Change production\n\nRIGHT-CLICK: Buy "+improvements[z]['name']+"'");   
         }
       }
       if (!show_building) opacity = 0.21;  // we show a ghost ability to see grid.
@@ -962,7 +962,7 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
       var opacity = 1;
       const border = "border:1px solid #000000;";
       var bg = upkeep>0 ? "background:#FEED " : "background:#FEED ";
-      var title_text = "title='"+pcity['name']+":\n\nRIGHT-CLICK: Sell " + improvements[z]['name']+".'";
+      var title_text = "title='"+html_safe(pcity['name'])+":\n\nRIGHT-CLICK: Sell " + improvements[z]['name']+".'";
       var right_click_action = alt_click_method+"='city_sell_improvement_in(" +city_id+","+ z + ");' ";
       // Put improvement sprite in the cell:
       improvements_html = improvements_html +
@@ -1796,7 +1796,7 @@ function empire_unittype_screen(wide_screen,narrow_screen,small_screen,
 
         adjust_oversize = (sprite['width']>64) ? -34 : -26;  // "oversize" images space differently
         
-        ptype_img_html = "<span class='prod_img' title='"+get_unit_city_info(punit)+"' style='float:left; padding-left:0px padding-right:0px; content-align:right; margin-top:-8px;"
+        ptype_img_html = "<span class='prod_img' title='"+html_safe(get_unit_city_info(punit))+"' style='float:left; padding-left:0px padding-right:0px; content-align:right; margin-top:-8px;"
                 + "margin-left:"+adjust_oversize+"px' margin-right:-4px; onclick='city_dialog_activate_unit(units[" + punit['id'] + "]);'>"
                 + "<div style='float:left; content-align:left;"
                 + "background: transparent url("
