@@ -2066,7 +2066,7 @@ NOTE: GOTO disallows unit loss from lack of fuel. You\
 [unit_medium_bomber]
 name          = _("Medium Bomber")
 class         = "Air"
-tech_req      = "Advanced Flight"
+tech_req      = "Radar"
 obsolete_by   = "Jet Bomber"
 graphic       = "u.medium_bomber"
 graphic_alt   = "u.bomber"
@@ -3294,7 +3294,8 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter"
-disembarks    = "Land", "Sea", "Submarine"
+embarks       = "Submarine"
+disembarks    = "Submarine"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "HasNoZOC", "Unbribable", "CantReachAir", "Missile", "NeverBlocked"
 roles         = ""
 helptext      = _("\
@@ -3376,6 +3377,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+embarks       = "Submarine"
+disembarks    = "Submarine"
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable", "NeverBlocked"
 ; No veteran levels (level name is never displayed)

@@ -3034,6 +3034,23 @@ reqs    =
     { "type",      "name",      "range"
       "Tech", "Space Flight",   "Player"
     }
+[effect_radar_vision]
+type    = "City_Vision_Radius_Sq"
+value   = 50 ;7 cardinal, 5 diagonal
+reqs    =
+    { "type",      "name",      "range"
+      "Tech", "Radar",   "Player"
+      "Building", "Radar Tower", "City"
+    }
+[effect_radar_vision2]
+type    = "Unit_Vision_Radius_Sq"
+value   = 16
+reqs    =
+    { "type",  "name",     "range",  "present"
+      "Extra", "Airbase",  "tile",   TRUE
+      "Tech",  "Radar",    "Player", TRUE
+      "MaxUnitsOnTile", "0", "Local", FALSE ;occupied base
+    }
 
 [effect_agoge_move_bonus_1]
 type    = "Move_Bonus"

@@ -725,6 +725,28 @@ For each Factory or Mfg. Plant in a city, a Power Plant adds +25% to\
  Solar Plant can have an active effect in a city.\
 ")
 
+[building_radar_tower]
+name		= _("Radar Tower")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Radar", "Player"
+    }
+graphic	= "b.radar_tower"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 55
+upkeep		= 0
+sabotage	= 100
+sound		= "b_radar_tower"
+sound_alt	= "b_generic"
+helptext	= _("\
+Radar Towers use advanced technology to increase the vision radius around a\
+ city by approximately 3 tiles.\
+")
+
 [building_recycling_center]
 name		= _("Recycling Center")
 genus		= "Improvement"

@@ -115,7 +115,7 @@ format_version=20
 
 [advance_advanced_flight]
 name     = _("Advanced Flight")
-req1     = "Radio"
+req1     = "Radar"
 req2     = "Machine Tools"
 flags    = ""
 graphic     = "a.advanced_flight"
@@ -400,8 +400,8 @@ graphic_alt = "-"
 
 [advance_fusion_power]
 name     = _("Fusion Power")
-req1     = "Nuclear Power"
-req2     = "Superconductors"
+req1     = "Superconductors"
+req2     = "None"
 flags    = ""
 graphic     = "a.fusion_power"
 graphic_alt = "-"
@@ -482,8 +482,8 @@ cost = 6630
 
 [advance_laser]
 name     = _("Laser")
-req1     = "Mass Production"
-req2     = "Nuclear Power"
+req1     = "Nuclear Power"
+req2     = "None"
 flags    = ""
 graphic     = "a.laser"
 graphic_alt = "-"
@@ -681,8 +681,8 @@ helptext = _("Prevents Philosophy from awarding bonus tech.")
 
 [advance_plastics]
 name     = _("Plastics")
-req1     = "Refining"
-req2     = "Space Flight"
+req1     = "Space Flight"
+req2     = "None"
 graphic     = "a.plastics"
 graphic_alt = "-"
 helptext = _("Obsoletes Armor. +25% population pollution.")
@@ -705,15 +705,25 @@ graphic     = "a.pottery"
 graphic_alt = "-"
 cost = 24
 
+[advance_radar]
+name     = _("Radar")
+req1     = "Electronics"
+req2     = "Radio"
+flags    = ""
+graphic     = "a.radar"
+graphic_alt = "-"
+helptext = _("Gives Airbase extra vision.")
+cost = 5430
+
 [advance_radio]
 name     = _("Radio")
 req1     = "Flight"
-req2     = "Electronics"
+req2     = "None"
 flags    = ""
 graphic     = "a.radio"
 graphic_alt = "-"
 helptext = _("Obsoletes Mausoleum. Allows Airbase, Buoy.")
-cost = 5430
+cost = 5120
 
 [advance_railroad]
 name     = _("?tech:Railroad")
@@ -834,8 +844,8 @@ cost = 3280
 
 [advance_superconductors]
 name     = _("Superconductors")
-req1     = "Nuclear Power"
-req2     = "Laser"
+req1     = "Laser"
+req2     = "None"
 flags    = ""
 graphic     = "a.superconductors"
 graphic_alt = "-"
