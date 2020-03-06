@@ -109,7 +109,10 @@ artists = "
  PD - Unknown author
  a.communism         a.flight             a.refining
  a.chivalry          a.leadership         a.writing
- a.feudalism         a.mass_production    
+ a.feudalism         a.mass_production
+
+ Lexxie
+ redid about half of these   
 "
 
 
@@ -210,4 +213,5 @@ tiles = { "row", "column","tag"
   8, 5, "a.writing"
   8, 6, "a.environmentalism"
   8, 7, "a.fundamentalism"
+  8, 8, "a.radar"
 }

@@ -44,6 +44,7 @@ sprites =
 		"b.police_station", "buildings/police_station"
 		"b.port_facility", "buildings/port_facility"
 		"b.power_plant", "buildings/power_plant"
+		"b.radar_tower", "buildings/radar_tower"
 		"b.recycling_center", "buildings/recycling_center"
 		"b.research_lab", "buildings/research_lab"
 		"b.sam_battery", "buildings/sam_battery"
