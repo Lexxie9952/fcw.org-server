@@ -1925,6 +1925,12 @@ function fill_layer2_sprite_array(ptile, pcity)
       result_sprites.push({"key" : "extra.ruins_mg",
                            "offset_y" : -normal_tile_height / 2});
     }
+    if (typeof EXTRA_RADAR !== 'undefined')  {
+      if (tile_has_extra(ptile, EXTRA_RADAR)) {
+        result_sprites.push({"key" : "base.radar_mg",
+                            "offset_y" : -normal_tile_height / 2});
+      }
+    }
   }
 
   return result_sprites;
