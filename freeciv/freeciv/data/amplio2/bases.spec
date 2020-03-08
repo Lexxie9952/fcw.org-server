@@ -42,7 +42,9 @@ tiles = { "row", "column", "tag"
 ;[Lexxie]
  1,  5, "base.navalbase_fg"
  1,  6, "base.navalbase_bg"
+ 2,  0, "base.radar_mg"
 ;[HH]
+  not used in FCW, had to save space to prevent a clipping bug
  0,  2, "cd.occupied",
       "city.european_occupied_0",
       "city.classical_occupied_0",
