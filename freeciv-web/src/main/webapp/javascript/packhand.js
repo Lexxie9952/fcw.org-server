@@ -652,11 +652,14 @@ function handle_ruleset_control(packet)
 {
   ruleset_control = packet;
 
+  client_rules_flag = 0; //reset
+
   // Flags for hard-coded client behaviors/optimisations specific to rulesets:
   switch (ruleset_control['name']) {
     case "Avant-garde":
+      client_rules_flag += CRF_RADAR_TOWER;
     case "Multiplayer-Evolution ruleset":
-      client_rules_flag = CRF_CARGO_HEURISTIC
+      client_rules_flag += CRF_CARGO_HEURISTIC
                         + CRF_ASMITH_SPECIALISTS
                         + CRF_OASIS_IRRIGATE
                         + CRF_MP2_UNIT_CONVERSIONS

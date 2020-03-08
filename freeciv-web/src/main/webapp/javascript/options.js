@@ -43,6 +43,7 @@ const CRF_MP2_SPECIAL_UNITS = 256;  // Special rules/filters for handling extra 
 const CRF_COMMIE_BLDG_UPKEEP= 512;  // Used for calculating/showing upkeep from buildings accurately for communist government bonus (in some rulesets)
 const CRF_PACTS_SANS_EMBASSY=1024;  // Ruleset allows treaties without embassy if contact_turns>0 but only for limited pacts
 const CRF_TESLA_UPGRADE_DISCOUNT=2048;//Ruleset has Tesla's Laboratory and gives a 20% discount on unit upgrades.
+const CRF_RADAR_TOWER = 4096;       // Ruleset has improvement for building Radar Tower over Airbase.
 
 var graphic_theme_path;
 
