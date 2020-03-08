@@ -299,6 +299,14 @@ extern "C" {
 /* hp_regen regardless of movement: a pct-based Unit_Recover */
 #define SPECENUM_VALUE118 EFT_UNIT_RECOVER_PCT
 #define SPECENUM_VALUE118NAME "Unit_Recover_Pct"
+/* Yay, finally programmatic ruleset conditions for happy upkeep! 
+   (use negative value to decrease unhappiness.) */
+#define SPECENUM_VALUE119 EFT_UNIT_UNHAPPY_COST
+#define SPECENUM_VALUE119NAME "Unit_Unhappy_Cost"
+/* uk_happy "discount" for non-aggressively deployed field units */
+#define SPECENUM_VALUE120 EFT_PEACEFUL_FIELDUNIT_BONUS
+#define SPECENUM_VALUE120NAME "Peaceful_Field_Unit_Bonus"
+
 /* keep this last */
 #define SPECENUM_COUNT EFT_COUNT
 #include "specenum_gen.h"

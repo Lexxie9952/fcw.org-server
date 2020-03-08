@@ -2874,11 +2874,21 @@ int city_unit_unhappiness(struct unit *punit, int *free_unhappy)
 
   fc_assert_ret_val(0 <= *free_unhappy, 0);
 
-  if (!unit_being_aggressive(punit) && !is_field_unit(punit)) {
-    return 0;
+  if (!unit_being_aggressive(punit)) {
+    if (!is_field_unit(punit)) { 
+      /* Non-aggressive non-field unit: 0 unhappy */
+      return 0;
+    }
+    /* Non-aggressive Field unit: let ruleset differentiate happy_cost for aggressive
+       vs. non-aggressive field units */
+    happy_cost -= get_unittype_bonus(plr, unit_tile(punit), ut, EFT_PEACEFUL_FIELDUNIT_BONUS); 
   }
 
+  /* Ruleset conditions for increased/decreased unhappy cost */
+  happy_cost += get_unit_bonus(punit, EFT_UNIT_UNHAPPY_COST); 
+  /* Last step, reduce by MAKE_CONTENT_MIL_PER */
   happy_cost -= get_city_bonus(pcity, EFT_MAKE_CONTENT_MIL_PER);
+
   if (happy_cost <= 0) {
     return 0;
   }

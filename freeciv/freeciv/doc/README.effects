@@ -50,48 +50,48 @@ field has no effect on the game rules.
 Requirement types and supported ranges
 ======================================
 
-Tech:          World, Alliance, Team, Player
-TechFlag:      World, Alliance, Team, Player
-MinTechs:      World, Player
 Achievement:   World, Alliance, Team, Player
-Gov:           Player
+Action:        Local
+Age:           Local, City
+AI:            Player
+BaseFlag:      Local, Adjacent, CAdjacent, Traderoute, City
 Building:      World, Alliance, Team, Player, Continent, Traderoute, City, Local
 BuildingGenus: Local
+CityTile:      Local, Adjacent, CAdjacent
+DiplRel:       World, Alliance, Team, Player, Local
 Extra:         Local, Adjacent, CAdjacent, Traderoute, City
-BaseFlag:      Local, Adjacent, CAdjacent, Traderoute, City
-RoadFlag:      Local, Adjacent, CAdjacent, Traderoute, City
 ExtraFlag:     Local, Adjacent, CAdjacent, Traderoute, City
-Terrain:       Local, Adjacent, CAdjacent, Traderoute, City
 Good:                                                  City
-UnitType:      Local
-UnitFlag:      Local
-UnitClass:     Local
-UnitClassFlag: Local
+Gov:           Player
+MaxUnitsOnTile:Local, Adjacent, CAdjacent
+MinCalFrag:    World
+MinCulture:    World, Alliance, Team, Player, Traderoute, City
+MinHitPoints:  Local
+MinMoveFrags:  Local
+MinSize:       Traderoute, City
+MinTechs:      World, Player
+MinVeteran:    Local
+MinYear:       World
 Nation:        World, Alliance, Team, Player
 NationGroup:   World, Alliance, Team, Player
 Nationality:   Traderoute, City
-DiplRel:       World, Alliance, Team, Player, Local
-Action:        Local
 OutputType:    Local
-Specialist:    Local
-MinYear:       World
-MinCalFrag:    World
-Topology:      World
+RoadFlag:      Local, Adjacent, CAdjacent, Traderoute, City
 ServerSetting: World
-Age:           Local, City
-MinSize:       Traderoute, City
-MinCulture:    World, Alliance, Team, Player, Traderoute, City
-AI:            Player
-MaxUnitsOnTile:Local, Adjacent, CAdjacent
+Specialist:    Local
+Style:         Player
+Tech:          World, Alliance, Team, Player
+TechFlag:      World, Alliance, Team, Player
+Terrain:       Local, Adjacent, CAdjacent, Traderoute, City
+TerrainAlter:  Local
 TerrainClass:  Local, Adjacent, CAdjacent, Traderoute, City
 TerrainFlag:   Local, Adjacent, CAdjacent, Traderoute, City
-TerrainAlter:  Local
-CityTile:      Local, Adjacent, CAdjacent
-Style:         Player
+Topology:      World
+UnitClass:     Local
+UnitClassFlag: Local
+UnitFlag:      Local
 UnitState:     Local
-MinMoveFrags:  Local
-MinVeteran:    Local
-MinHitPoints:  Local
+UnitType:      Local
 
 
 MinSize is the minimum size of a city required.
@@ -102,7 +102,7 @@ DiplRel is a diplomatic relationship.
 MaxUnitsOnTile is about the number of units present on a tile.
 UnitState is "Transported", "Transporting", "OnNativeTile", "OnLivableTile",
 "OnDomesticTile" or "HasHomeCity".
-MinMoveFargs is the minimum move fragments the unit must have left.
+MinMoveFrags is the minimum move fragments the unit must have left.
 MinCalFrag is the minimum sub-year division the calendar must have reached,
 if enabled (see [calendar].fragments in game.ruleset).
 ServerSetting is if a Boolean server setting is enabled. The setting must be
@@ -338,6 +338,20 @@ Unit_Recover
 
 Unit_Recover_Pct
     Units recover this percent of total hitpoints per turn.
+
+Unit_Unhappy_Cost
+    This amount is subtracted from unit_type's final happy_cost, if reqs are 
+    true. Note: this also applies to Field Units. Use negative values to
+    decrease happy cost.
+
+Peaceful_Field_Unit_Bonus
+    Reduction in happy_upkeep for field units if non-aggressively deployed:
+    e.g., can set field unit causing 2 unhappy in Democracy, to cause 1 unhappy
+    if not aggressively deployed. Accepts Unit_Type req only. Examples:
+    1: "Soft Field Unit": 1 less unhappy if non-aggressive deployed
+    -1:"Domestic Disturbance Unit": This unit causes MORE unrest at home than
+        when stationed abroad (Hun mercenaries, BioTerror/Chemical Warfare Unit,
+        etc.)
 
 Upgrade_Unit
     Upgrade amount obsolete units per turn.
