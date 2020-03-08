@@ -214,4 +214,5 @@ tiles = { "row", "column","tag"
   8, 6, "a.environmentalism"
   8, 7, "a.fundamentalism"
   8, 8, "a.radar"
+  8, 9, "a.avionics"
 }
