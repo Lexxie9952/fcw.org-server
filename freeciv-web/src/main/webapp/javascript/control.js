@@ -1120,6 +1120,7 @@ function update_unit_order_commands()
   $("#order_well").hide();
   $("#order_fortress").hide();
   $("#order_navalbase").hide();
+  $("#order_airbase").hide();
   $("#order_road").hide();  
   $("#order_railroad").hide();
   $("#order_mine").hide();
@@ -1354,7 +1355,7 @@ function update_unit_order_commands()
         $("#order_irrigate").hide();
         $("#order_build_farmland").hide();
       }
-
+ 
       // Order to make Fort with masonry (if ruleset allows it)
       if ((client_rules_flag & CRF_MASONRY_FORT)) {
         // Masonry + No Fort on tile = show order to make Fort
@@ -1376,8 +1377,20 @@ function update_unit_order_commands()
             if (show_order_buttons==2) $("#order_navalbase").show(); // not frequently used button
       }   
 
-      if (player_invention_state(client.conn.playing, tech_id_by_name('Radio')) == TECH_KNOWN) {
-        unit_actions["airbase"] = {name: string_unqualify(terrain_control['gui_type_base1']) + " (E)"};
+      // Order to make Radar Tower Radar (if ruleset allows it)
+      if ((client_rules_flag & CRF_RADAR_TOWER)) {
+        // Radar + has Airbase but no Radar on tile = show order to make Radar
+        if (player_invention_state(client.conn.playing, tech_id_by_name('Radar')) == TECH_KNOWN 
+            && tile_has_extra(ptile, EXTRA_AIRBASE)          
+            && !tile_has_extra(ptile, EXTRA_RADAR) ) {
+              unit_actions["airbase"] = {name: "Build Radar (Shift-E)"};
+              if (show_order_buttons==2) $("#order_airbase").show();
+        }
+      } else if (player_invention_state(client.conn.playing, tech_id_by_name('Radio')) == TECH_KNOWN
+                && !tile_has_extra(ptile, EXTRA_AIRBASE) ) {
+                  
+                  unit_actions["airbase"] = {name: string_unqualify(terrain_control['gui_type_base1']) + " (Shift-E)"};
+                  if (show_order_buttons==2) $("#order_airbase").show();
       }
 
     } else {   // Handle all things non-Settler types may have in common here:
@@ -3977,7 +3990,7 @@ function key_unit_fortify()
 **************************************************************************/
 function key_unit_fortress()
 {
-  var navbase_rules = (typeof EXTRA_NAVALBASE !== undefined);
+  var navbase_rules = (typeof EXTRA_NAVALBASE !== "undefined");
 
   var funits = get_units_in_focus();
   for (var i = 0; i < funits.length; i++) {
@@ -3993,14 +4006,21 @@ function key_unit_fortress()
 }
 
 /**************************************************************************
- Tell the units in focus to build airbase.
+ Tell the units in focus to build airbase (or Radar on top of it).
 **************************************************************************/
 function key_unit_airbase()
 {
+  var radar_rules = (client_rules_flag & CRF_RADAR_TOWER);
+  var activity = EXTRA_AIRBASE;
+
   var funits = get_units_in_focus();
-  for (var i = 0; i < funits.length; i++) {
+  for (var i=0; i< funits.length; i++) {
     var punit = funits[i];
-    request_new_unit_activity(punit, ACTIVITY_BASE, EXTRA_AIRBASE);
+    var ptile = tiles[punit['tile']]; 
+    activity = EXTRA_AIRBASE;
+    if (radar_rules && tile_has_extra(ptile, EXTRA_AIRBASE)) activity=EXTRA_RADAR;
+  
+    request_new_unit_activity(punit, ACTIVITY_BASE, activity);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);

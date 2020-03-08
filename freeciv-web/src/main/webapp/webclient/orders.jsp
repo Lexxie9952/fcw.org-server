@@ -95,6 +95,10 @@
     <a href="#" onclick="key_unit_naval_base();"><img src="/images/orders/navalbase.png" name="navbase_button" alt="" border="0" width="30" height="30"></a>
   </div>
 
+  <div id="order_airbase" class="order_button" title="Build Airbase (Shift-E)">
+    <a href="#" onclick="key_unit_airbase();"><img src="/images/orders/airbase.png" name="airbase_button" alt="" border="0" width="30" height="30"></a>
+  </div>
+
   <div id="order_transform" class="order_button" title="Transform terrain (O)">
     <a href="#" onclick="key_unit_transform();"><img src="/images/orders/transform_default.png" name="transform_button" alt="" border="0" width="30" height="30"></a>
   </div>
