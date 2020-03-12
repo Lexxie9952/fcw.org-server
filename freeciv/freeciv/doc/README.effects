@@ -52,45 +52,46 @@ Requirement types and supported ranges
 
 Achievement:   World, Alliance, Team, Player
 Action:        Local
-Age:           Local, City
-AI:            Player
+Age:           Local, City                                                          Target unit, city or player is in the game for at least so many turns.
+AI:            Player                                                               AI player difficulty level
 BaseFlag:      Local, Adjacent, CAdjacent, Traderoute, City
 Building:      World, Alliance, Team, Player, Continent, Traderoute, City, Local
-BuildingGenus: Local
-CityTile:      Local, Adjacent, CAdjacent
-DiplRel:       World, Alliance, Team, Player, Local
+BuildingGenus: Local                                                                "GreatWonder", "SmallWonder", "Improvement", "Special"
+CityTile:      Local, Adjacent, CAdjacent                                           "Center" or "Claimed", the latter means that the tile is within borders of any nation
+DiplRel:       World, Alliance, Team, Player, Local                                 "Armistice", "War", "Cease-fire", "Peace", "Alliance", "Never met", "Team", "Gives shared vision", "Receives shared vision", "Hosts embassy", "Has embassy", "Hosts real embassy", "Has real embassy","Has Casus Belli", "Provided Casus Belli", "Is foreign"
+                                                                                    "Local" range tests relation between specific players while "Player" and upper tests if any player in the range has such relation to any other living player
 Extra:         Local, Adjacent, CAdjacent, Traderoute, City
 ExtraFlag:     Local, Adjacent, CAdjacent, Traderoute, City
-Good:                                                  City
+Good:                                                  City                         If any traderoute brings the good into the city
 Gov:           Player
-MaxUnitsOnTile:Local, Adjacent, CAdjacent
-MinCalFrag:    World
+MaxUnitsOnTile:Local, Adjacent, CAdjacent                                           If on at least any one of the tiles in the range currently stand not more than this number of units (not in sum, not on every one)
+MinCalFrag:    World                                                                Calendar fragments passed since the start of the game year
 MinCulture:    World, Alliance, Team, Player, Traderoute, City
 MinHitPoints:  Local
 MinMoveFrags:  Local
-MinSize:       Traderoute, City
-MinTechs:      World, Player
+MinSize:       Traderoute, City                                                     Minimum size of a city required.
+MinTechs:      World, Player                                                        For World range, counts all techs learned by any player (e.g. P1 knows Ta, Tb, P2 knows Ta, Tc, then 2 for P1 and P2 and 3 for world)
 MinVeteran:    Local
 MinYear:       World
 Nation:        World, Alliance, Team, Player
 NationGroup:   World, Alliance, Team, Player
 Nationality:   Traderoute, City
-OutputType:    Local
+OutputType:    Local                                                                "Food", "Shield", "Trade", "Gold", "Luxury", "Science"
 RoadFlag:      Local, Adjacent, CAdjacent, Traderoute, City
-ServerSetting: World
-Specialist:    Local
+ServerSetting: World                                                                3.x: Supports only boolean-type settings (e.g. "mgr_foodneeded")
+Specialist:    Local                                                                The specialist (e.g. "Scientist") to consider in a per-citizen effect.
 Style:         Player
 Tech:          World, Alliance, Team, Player
 TechFlag:      World, Alliance, Team, Player
 Terrain:       Local, Adjacent, CAdjacent, Traderoute, City
-TerrainAlter:  Local
-TerrainClass:  Local, Adjacent, CAdjacent, Traderoute, City
+TerrainAlter:  Local                                                                "CanMine", "CanIrrigate" or "CanRoad": if the actual terrain has a defined result of mining/irrigation or a positive road building time.
+TerrainClass:  Local, Adjacent, CAdjacent, Traderoute, City                         Either "Land" or "Oceanic"
 TerrainFlag:   Local, Adjacent, CAdjacent, Traderoute, City
 Topology:      World
 UnitClass:     Local
 UnitClassFlag: Local
 UnitFlag:      Local
-UnitState:     Local
+UnitState:     Local                                                                "Transported", "OnLivableTile", "Transporting", "OnDomesticTile", "HasHomeCity", "OnNativeTile", New in 3.1: "InNativeExtra"
 UnitType:      Local
 
 
