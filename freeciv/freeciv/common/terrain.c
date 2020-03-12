@@ -527,6 +527,10 @@ const char *get_infrastructure_text(bv_extras extras)
         }
       } extra_type_iterate_end;
 
+      // Ultra-short names flag extras which are invisible to players, e.g. hideout
+      if (strlen(extra_name_translation(pextra)) <= 1)
+        hidden = true;
+
       if (!hidden) {
         cat_snprintf(s, sizeof(s), "%s/", extra_name_translation(pextra));
       }
