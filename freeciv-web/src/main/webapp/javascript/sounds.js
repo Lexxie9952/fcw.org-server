@@ -80,8 +80,16 @@ function unit_move_sound_play(unit)
       case "Escort Fighter":
         move_sound = "pm_prop_fighters.ogg";
         break;
+      case "AWACS":
+      case "Jet Bomber":
+      case "Stealth Bomber":
+      case "Jet Fighter":
+      case "Ground Strike Fighter":
+        move_sound = "pm-large-jets.ogg";
+        break;
 
-      // TO DO:  Helicopter, Armor, Jet aircraft, Cruise Missile, Nuclear 
+
+      // TO DO: Helicopter, Armor, Cruise Missile, Nuclear 
     }
   }
 
