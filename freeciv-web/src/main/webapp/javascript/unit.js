@@ -458,7 +458,6 @@ function get_unit_city_info(punit)
 {
   var result = "";
   var upkeep_mode;
-  const UNCLAIMED_LAND = 255;
 
   // No need to show 3 upkeep types if ruleset doesn't use 3
   if (client_rules_flag & CRF_NO_UNIT_GOLD_UPKEEP) {
