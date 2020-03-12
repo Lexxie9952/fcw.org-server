@@ -487,6 +487,7 @@ sprites =
 		"f.shield.south_yemen", "flags/south_yemen-shield"
 		"f.shield.soviet", "flags/soviet-shield"
 		"f.shield.spain", "flags/spain-shield"
+		"f.shield.spartan", "flags/spartan-shield"
 		"f.shield.srilanka", "flags/srilanka-shield"
 		"f.shield.srivijaya", "flags/srivijaya-shield"
 ;		"f.shield.stpatrick", "flags/stpatrick-shield"

@@ -478,6 +478,7 @@ flag_files =				\
 		southern_sudan.png	\
 		south_yemen.png		\
 		soviet.png		\
+		spartan.png    \
 		spain.png		\
 		srilanka.png		\
 		srivijaya.png		\

@@ -488,6 +488,7 @@ sprites =
 		"f.south_yemen", "flags/south_yemen-large"
 		"f.soviet", "flags/soviet-large"
 		"f.spain", "flags/spain-large"
+		"f.spartan", "flags/spartan-large"
 		"f.srilanka", "flags/srilanka-large"
 		"f.srivijaya", "flags/srivijaya-large"
 ;		"f.stpatrick", "flags/stpatrick-large"	; Alternate Irish 
