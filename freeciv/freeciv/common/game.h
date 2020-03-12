@@ -142,6 +142,7 @@ struct civ_game {
       bool fixedlength;
       bool foggedborders;
       int freecost;
+      bool hideouts;
       int incite_improvement_factor;
       int incite_total_factor;
       int incite_unit_factor;
@@ -181,6 +182,8 @@ struct civ_game {
       unsigned autosaves; /* FIXME: char would be enough, but current settings.c code wants to
                              write sizeof(unsigned) bytes */
       bool savepalace;
+      bool slot_control;
+      int slot_control_style;
       bool homecaughtunits;
       char start_units[MAX_LEN_STARTUNIT];
       bool start_city;
@@ -403,6 +406,8 @@ extern struct world wld;
 #define GAME_MIN_GLOBAL_WARMING_PERCENT 1
 #define GAME_MAX_GLOBAL_WARMING_PERCENT 10000
 
+#define GAME_DEFAULT_HIDEOUTS         FALSE
+
 #define GAME_DEFAULT_NUCLEAR_WINTER  TRUE
 
 #define GAME_DEFAULT_NUCLEAR_WINTER_PERCENT 100
@@ -476,6 +481,14 @@ extern struct world wld;
 #define GAME_DEFAULT_TRAIT_DIST_MODE TDM_FIXED
 
 #define GAME_DEFAULT_SAVEPALACE      TRUE
+
+#define GAME_DEFAULT_SLOT_CONTROL    FALSE
+#define GAME_DEFAULT_SLOT_CONTROL_STYLE 1
+#define SC_MIXED 1
+#define SC_SEGREGATED 2
+#define SC_SAME_TYPE 3
+#define GAME_MIN_SLOT_CONTROL_STYLE   1
+#define GAME_MAX_SLOT_CONTROL_STYLE   3
 
 #define GAME_DEFAULT_HOMECAUGHTUNITS TRUE
 

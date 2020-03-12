@@ -40,6 +40,8 @@
 #include "traderoutes.h"
 #include "unit.h"
 
+//#include "../server/notify.h"
+
 /* aicore */
 #include "cm.h"
 
@@ -734,49 +736,212 @@ bool city_production_build_units(const struct city *pcity,
   int shields_left = pcity->shield_stock;
   int unit_shield_cost, i;
 
+  /* When game.server.slot_control gives rulesets control over city_build_slots,
+   * then some units can be made multiple times, and other types can only be
+   * made once. The differentiator is the Shield2Gold flag, since
+   * (a) many rulesets don't use it, (b) rulesets who use it for some units and
+   * not others, tend to use it as a dynamic to encourage those unit types, (c)
+   * freeciv doesn't yet have a built-in unit-flag for differentiating (but when it
+   * does we will just change the UTYF_SHIELD2GOLD in a few lines below and we're 
+   * good to go!)
+   * There are three potential values that can be put in a the slot_control_style server 
+   * setting to regulate the style of this:
+   * 1. SC_MIXED: A non-multi-slot unit doesn't PREVENT multi-slot units from using up their 
+   *    intended ability to use free slots. Simply, more than one non-multi-slot unit
+   *    cannot be made. That is, if you have 3 slots, you can make a max. of one 
+   *    non-multi-slot unit and up to two multi-slot units. For MANY reasons this
+   *    option usually makes the most sense, which is why it's default. SC_MIXED
+   * 2. SC_SEGREGATED: Any multi-slot unit (msu) can be made with any other msu, and
+   *    production halts the moment multiple slots attempt to be occupied, where a
+   *    new slot being filled would result in a non-multi-slot unit being made in a
+   *    batch that has more than 1 unit made. SC_SEGREGATED.
+   * 3. SC_SAME_TYPE: Only the same type of unit can be made multiple times. This is the legacy
+   *    (kinda crappy) option. SC_SAME_TYPE.
+   * 
+   * If game.server.slot_control is OFF, option 1 and 2 allow units of different
+   * types to mix. Option 3 disallows it.
+   */ 
+  bool utype_is_slotblocker = false;
+  int slotblockers = 0; // slotblockers is a count of units from the group of which more
+                        // than one from that group can't be made: i.e., a non-multi-slot unit
+
   fc_assert_ret_val(num_units != NULL, FALSE);
   (*num_units) = 0;
 
   if (pcity->production.kind != VUT_UTYPE) {
-    /* not a unit as the current production */
-    return FALSE;
+    return FALSE; 
   }
 
   utype = pcity->production.value.utype;
-  if (utype_pop_value(utype) != 0 || utype_has_flag(utype, UTYF_UNIQUE)) {
-    /* unit with population cost or unique unit means that only one unit can
-     * be build */
-    (*num_units)++;
+    //DEBUG: notify_conn(NULL, NULL, E_SETTING, ftc_any,_("We're here with %d shields to use."),shields_left );
+
+  /* Can't use multiple city_build_slots:
+     ➤ Unique units: restricts any second unit.
+     ➤ Pop units: restricts any second unit.
+     ➤ Units without utypeflag "Shield2Gold" IF game.server.slot_control==TRUE
+       Later, a custom flag "MultiSlot" should be used.   */
+  if (utype_pop_value(utype) != 0 || utype_has_flag(utype, UTYF_UNIQUE) ) {
+    /* Pop_cost unit or Unique_unit: means ONLY this unit can be built */
+    (*num_units)++; // = 1
     return FALSE;
+  }
+
+  if ( game.server.slot_control 
+       && !(utype_has_flag(utype, UTYF_SHIELD2GOLD)) 
+      && game.server.slot_control_style == SC_MIXED )   { 
+
+        utype_is_slotblocker = true;
+
+  }  else if ( game.server.slot_control
+              && game.server.slot_control_style == SC_SEGREGATED
+              && !(utype_has_flag(utype, UTYF_SHIELD2GOLD))) {
+  
+        *num_units++; 
+        return FALSE;
   }
 
   if (add_production) {
     shields_left += pcity->prod[O_SHIELD];
   }
-
   unit_shield_cost = utype_build_shield_cost(pcity, utype);
 
-  for (i = 0; i < build_slots; i++) {
-    if (shields_left < unit_shield_cost) {
-      /* not enough shields */
+  switch (game.server.slot_control_style) {
+    case SC_MIXED:  // multi-slot units can mix with up to one non-multi-slot unit */
+    ///// CODE FOR OPTION #1 
+        for (i = 0; i < build_slots; i++) {
+          if (shields_left < unit_shield_cost) {
+            // not enough shields 
+            break;
+          }
+          // Maximum of one unit of a type not allowed to make multiple in one turn.
+          if (utype_is_slotblocker) {
+            if (++slotblockers > 1)
+            break;
+          }
+
+          (*num_units)++; // Birth certificate approved!
+          shields_left -= unit_shield_cost;
+          // Determine values and legality for next candidate to build, and loop again.
+
+          /* If there is another item in the worklist, then:
+            ➤ check if it's forbidden and exit if so,
+            ➤ else, adjust the shield cost to the new item so that
+            ➤ the loop will begin again with the right info to check. */ 
+          if (worklist_length(&pcity->worklist) > i) {
+            // Get next utype in the list
+            (void) worklist_peek_ith(&pcity->worklist, &target, i);
+            
+            // Stop if an item in the worklist is not a unit
+            if (target.kind != VUT_UTYPE) {
+              break;
+            }
+
+            // If next worklist item is a different utype from before:
+            if (utype_index(target.value.utype) != utype_index(utype)) {
+              utype = target.value.utype; // remember for next comparison
+              // STEP 1. Check if it it's legal at all to make this with other units
+              if (utype_pop_value(target.value.utype) != 0 
+                    || utype_has_flag(target.value.utype, UTYF_UNIQUE) ) {
+                  return FALSE; // ILLEGAL, go home
+              }
+              // STEP 2. Flag this unit if "a maximum of one unit from this category can be made"
+              // TODO: this is arbitrarily using UTYF_SHIELD2GOLD only because 1) I couldn't add new flag
+                    // UTYF_MULTI_SLOT without it breaking the manual generator's fc_assertion at 
+                    //  [unittype.c::1347]: assertion 'id >= UTYF_USER_FLAG_1 && id <= UTYF_LAST_USER_FLAG' failed.
+                    // and 2) Shield2Gold flag is often never used AND when it is used, tends to favour higher 
+                    // quantities of those types of units (probably for a good reason.)
+              if (game.server.slot_control && !(utype_has_flag(target.value.utype, UTYF_SHIELD2GOLD))) {
+                utype_is_slotblocker = true;
+              } else utype_is_slotblocker = false;
+            }
+
+            // LEGAL! Simply change shield cost and keep looping...
+            unit_shield_cost = utype_build_shield_cost(pcity, target.value.utype);
+          }   
+        }
+        
+      return TRUE;
       break;
-    }
 
-    (*num_units)++;
-    shields_left -= unit_shield_cost;
+    case SC_SEGREGATED:  // only units capable of being made more than once can spawn with each other:
+    ///// CODE FOR OPTION #2:
+        for (i = 0; i < build_slots; i++) {
+          if (shields_left < unit_shield_cost) {
+            // not enough shields 
+            break;
+          }
 
-    if (worklist_length(&pcity->worklist) > i) {
-      (void) worklist_peek_ith(&pcity->worklist, &target, i);
-      if (target.kind != VUT_UTYPE
-          || utype_index(target.value.utype) != utype_index(utype)) {
-        /* stop if there is a build target in the worklist not equal to the
-         * unit we build */
-        break;
+          (*num_units)++;
+          shields_left -= unit_shield_cost;
+
+          /* If there is another item in the worklist, then:
+            ➤ check if it's legal for shield2gold (later multislot) production and exit if not,
+            ➤ otherwise if it's legal, adjust the shield cost to the new item
+            ➤ so the loop will begin again with the right info to check. */ 
+          if (worklist_length(&pcity->worklist) > i) {
+            // Get next utype in the list
+
+            (void) worklist_peek_ith(&pcity->worklist, &target, i);
+            
+            // Stop if an item in the worklist is not a unit
+            if (target.kind != VUT_UTYPE) {
+              break;
+            }
+
+            // We got a different type!
+            if (utype_index(target.value.utype) != utype_index(utype)) {
+
+              // STEP ONE. Check again if it it's legal to make >1 of this
+              if (utype_pop_value(target.value.utype) != 0 
+                    || utype_has_flag(target.value.utype, UTYF_UNIQUE)
+                    // to do: this is arbitrarily using UTYF_SHIELD2GOLD only because 1) I couldn't add new flag
+                    // UTYF_MULTI_SLOT without it breaking the manual generator's assertion of 
+                    //  [unittype.c::1347]: assertion 'id >= UTYF_USER_FLAG_1 && id <= UTYF_LAST_USER_FLAG' failed.
+                    // and 2) it just so happens that every unit I was adding MultiSlot to in MP2 was Shield2Gold flag.
+                    || (game.server.slot_control && !(utype_has_flag(target.value.utype, UTYF_SHIELD2GOLD))) ) {
+                  return FALSE; // not legal, go home
+              }
+
+              // LEGAL! Simply change shield cost and keep looping...
+              unit_shield_cost = utype_build_shield_cost(pcity, target.value.utype);
+            }   
+          }
+        }
+
+      return TRUE;
+      break;
+
+  case SC_SAME_TYPE: // only the same type of unit can ever be made twice or more in one turn:
+  ///// CODE FOR OPTION 3: 
+/* This was legacy code that exits if worklist changed utype.
+   The raison d'etre for competitive use of this feature is getting two units
+   per turn by allowing co-creation of cheaper cannon-fodder types bundled
+   with expensive types, in order to fix FC's crippling oppressive distortion
+   toward quality-over-quantity, in order to enable one of the fundamental
+   metaphysics of all war (and war-games): optimal strategic balance of the 
+   quality-quantity spectrum. This version ignores that raison d'etre. */
+      for (i = 0; i < build_slots; i++) {
+        if (shields_left < unit_shield_cost) {
+          // not enough shields 
+          break;
+        }
+
+        (*num_units)++;
+        shields_left -= unit_shield_cost;
+
+        if (worklist_length(&pcity->worklist) > i) {
+          (void) worklist_peek_ith(&pcity->worklist, &target, i);
+          if (target.kind != VUT_UTYPE
+              || utype_index(target.value.utype) != utype_index(utype)) {
+            // stop if there is a build target in the worklist not equal to the
+            // unit we build . WHY? u should make it also! 
+            break;
+          }
+        }
       }
-    }
+      return TRUE;
+      break;
   }
-
-  return TRUE;
 }
 
 /**********************************************************************//**

@@ -2325,6 +2325,7 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
   struct unit_type *utype;
   struct worklist *pwl = &pcity->worklist;;
   int unit_shield_cost, num_units, i;
+  struct universal target; ////
 
   fc_assert_ret_val(pcity->production.kind == VUT_UTYPE, FALSE);
 
@@ -2365,7 +2366,7 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
 
     /* Should we disband the city? -- Massimo */
     if (city_size_get(pcity) == pop_cost
-	&& is_city_option_set(pcity, CITYO_DISBAND)) {
+	      && is_city_option_set(pcity, CITYO_DISBAND)) {
       return !disband_city(pcity);
     }
 
@@ -2392,10 +2393,65 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
     /* We should be able to build at least one (by checks above) */
     fc_assert(num_units >= 1);
 
+        // DEBUG notify_player(pplayer, city_tile(pcity), E_UNIT_BUILT_POP_COST,
+        //              ftc_server, _("%s entering city loop with numunits == %d."),
+        //              city_link(pcity), num_units);
+
     for (i = 0; i < num_units; i++) {
-      punit = create_unit(pplayer, pcity->tile, utype,
+      // The following code was changed to support the upgraded city_production_build_units
+      // which formerly only allowed the same type of unit to get made twice, more out of
+      // laziness to avoid complex coding, than any valid game reason.  
+      // The changes below were needed to correctly use our city_build_slots and the now-accurate 
+      // num_units info returned to us.  Go through the worklist and properly produce each
+      // unit that can be made in it, given the number of city_build_slots.
+
+      // CASE 1: producing current prod item
+      if (i==0) { 
+                // DEBUG notify_player(pplayer, city_tile(pcity), E_UNIT_BUILT_POP_COST,
+                //      ftc_server, _("  i=0 %s making %s."),
+                //      city_link(pcity), utype_name_translation(utype));
+
+        punit = create_unit(pplayer, pcity->tile, utype,
                           do_make_unit_veteran(pcity, utype),
                           pcity->id, 0);
+      }
+      // CASE 2: making an nth (ith) item AND the worklist still has unpopped items:
+      else if (worklist_length(&pcity->worklist) > 0)    // >0 means we have another item in worklist
+      { // prod comes from the worklist
+        (void) worklist_peek_ith(&pcity->worklist, &target, 0); // 0 is always the "next up" item
+
+        // city_production_build_units() should never put us in this situation, but,
+        // don't you feel nice and safer to catch it anyway?
+        if (target.kind != VUT_UTYPE) {
+                  // DEBUG notify_player(pplayer, city_tile(pcity), E_UNIT_BUILT_POP_COST,
+                  // ftc_server, _("  i=%d breaking because not a utype."), i);
+          break;
+        }
+
+        /* DEBUG
+        notify_player(pplayer, city_tile(pcity), E_UNIT_BUILT_POP_COST,
+        ftc_server, _("  i=%d worklist peek target(0) is %s."),
+        i, utype_name_translation(target.value.utype)); */
+ 
+        utype = target.value.utype;
+        punit = create_unit(pplayer, pcity->tile, utype,
+                          do_make_unit_veteran(pcity, utype),
+                          pcity->id, 0);
+        // potentially, this is a different type of unit -- make sure to set
+        // correct shield cost that will be deducted below                
+        unit_shield_cost = utype_build_shield_cost(pcity, utype);
+      }
+      // CASE 3: making an nth item and we ran out of stuff in the 
+      // worklist, so just repeat making the last item
+      else {
+        // DEBUG notify_player(pplayer, city_tile(pcity), E_UNIT_BUILT_POP_COST,
+        // ftc_server, _("  i=%d BUT no worklist target. Using last of %s."),
+        // i, utype_name_translation(utype));
+
+        punit = create_unit(pplayer, pcity->tile, utype,
+                          do_make_unit_veteran(pcity, utype),
+                          pcity->id, 0);
+      }
       pplayer->score.units_built++;
 
       /* After we created the unit remove the citizen. This will also
@@ -2439,6 +2495,8 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
          * than units build to preserve the next build target from the
          * worklist */
         worklist_remove(pwl, 0);
+        // Current production will be set to last thing that was made
+        pcity->production.value.utype = utype;
       }
     }
 

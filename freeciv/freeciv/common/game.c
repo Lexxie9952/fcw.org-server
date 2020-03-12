@@ -372,6 +372,7 @@ static void game_defaults(bool keep_ruleset_value)
     game.server.event_cache.turns = GAME_DEFAULT_EVENT_CACHE_TURNS;
     game.server.foggedborders     = GAME_DEFAULT_FOGGEDBORDERS;
     game.server.fogofwar_old      = game.info.fogofwar;
+    game.server.hideouts          = GAME_DEFAULT_HIDEOUTS;
     game.server.last_updated_year = FALSE;
     game.server.freecost          = GAME_DEFAULT_FREECOST;
     game.server.global_warming_percent = GAME_DEFAULT_GLOBAL_WARMING_PERCENT;
@@ -422,6 +423,8 @@ static void game_defaults(bool keep_ruleset_value)
     game.server.scoreturn         = GAME_DEFAULT_SCORETURN - 1;
     game.server.seed              = GAME_DEFAULT_SEED;
     sz_strlcpy(game.server.start_units, GAME_DEFAULT_START_UNITS);
+    game.server.slot_control      = GAME_DEFAULT_SLOT_CONTROL;
+    game.server.slot_control_style = GAME_DEFAULT_SLOT_CONTROL_STYLE;
     game.server.spaceship_travel_time = GAME_DEFAULT_SPACESHIP_TRAVEL_TIME;
     game.server.start_year        = GAME_START_YEAR;
     game.server.tcptimeout        = GAME_DEFAULT_TCPTIMEOUT;

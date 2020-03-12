@@ -2457,6 +2457,14 @@ static struct setting settings[] = {
               "have previously seen the tiles."),
            NULL, NULL, GAME_DEFAULT_FOGGEDBORDERS)
 
+  GEN_BOOL("hideouts", game.server.hideouts,
+           SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+           N_("Allows rulesets to elect to toggle hideouts"),
+           N_("If this setting is enabled, then rulesets which optionally "
+              "allow the base type \"Hideout\" will be instructed enable "
+              "this feature in the game."),
+           NULL, NULL, GAME_DEFAULT_HIDEOUTS)
+
   GEN_BITWISE("airliftingstyle", game.info.airlifting_style,
               SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL,
               ALLOW_NONE, ALLOW_BASIC, N_("Airlifting style"),
@@ -2607,6 +2615,55 @@ static struct setting settings[] = {
               "some rulesets, buildings other than the palace are affected "
               "by this setting.)"),
            NULL, NULL, GAME_DEFAULT_SAVEPALACE)
+
+  GEN_BOOL("slot_control", game.server.slot_control,
+           SSET_RULES_FLEXIBLE, SSET_ECONOMICS, SSET_RARE,
+           ALLOW_NONE, ALLOW_BASIC,
+           N_("Ruleset can specify which units can use extra City_Build_Slots"),
+           N_("If this is turned on, cities which can build more than one "
+              "unit per turn can only do so for units which have the "
+              "utype flag \"SHIELD2GOLD\". This should get its own custom "
+              "flag later but for now it works in rulesets which use S2G "
+              "as the balancing factor to encourage higher population of "
+              "certain units (such as infantry), vis-a-vis the game's "
+              "aritificial scarcity of City_Build_Slots."),
+           NULL, NULL, GAME_DEFAULT_SLOT_CONTROL)
+
+  GEN_INT("slot_control_style", game.server.slot_control_style,
+          SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_RARE,
+          ALLOW_NONE, ALLOW_BASIC,
+          N_("Style in which City_Build_Slots are regulated."),
+          N_("This affects rulesets where City_Build_Slots>1 may occur. "
+             "In such games, cities can potentially build more than one "
+             "unit at a time. This setting regulates allowed behaviour "
+             "for which types of units may be made if more than one is made.\n\n"
+             "***If the setting slot_control is ON, then Shield2Gold units are "
+             "privileged to be made more than once. The value of this "
+             "setting will have the following regulatory effects:\n"
+             "Values:\n1: ➤ Mixed: Units will be made from the worklist "
+             "whether S2G or not, but two non-S2G units cannot be made in the "
+             "same turn. Production stops when worklist arrives at the second "
+             "non-S2G unit.\n"
+             "2: ➤ Segregated:  Any S2G unit can be made with any other S2G "
+             "unit, and production stops the moment a non-S2G unit is arrived "
+             "at. In other words, multiple S2G units can be made in one turn "
+             "as long as no non-S2G units are bundled with them.\n"
+             "3: ➤ Same Type Only: Multiple City Build Slots can be "
+             "used on S2G or non-S2G units, but only when the worklist repeats "
+             "the exact same type of unit.\n\n "
+             "***If slot_control is OFF, the values of this setting will have the "
+             "regulatory effect described below:\n"
+             "Values:\n1: ➤ Mixed: Multiple units of multiple types can be "
+             "made from the worklist.\n"
+             "2: ➤ Segregated:  This value is identical to 1, if "
+             "slot_control is off.\n"
+             "3: ➤ Same Type Only: Multiple City Build Slots can only be "
+             "used when the worklist repeats the exact same type of unit.\n"
+             "---\nIn any and all cases, population units and unique units can "
+             "never be produced in the same turn as any other unit."),
+          NULL, NULL, NULL,
+          GAME_MIN_SLOT_CONTROL_STYLE, GAME_MAX_SLOT_CONTROL_STYLE,
+          GAME_DEFAULT_SLOT_CONTROL_STYLE)
 
   GEN_BOOL("homecaughtunits", game.server.homecaughtunits,
            SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_RARE,
