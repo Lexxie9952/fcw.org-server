@@ -1669,27 +1669,30 @@ reqs	=
     }
 
 ; BECAUSE OF ROUNDING, AVERAGE EFFECT OF 50 ENDS UP BEING 41%, WHEREAS 60 YIELDS ABOUT 53% WHICH IS CLOSER TO ADVERTISED
-[effect_courthouse]
+[effect_courthouse_corruption1]
 type    = "Output_Waste_Pct"
 value	= 60
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Courthouse", "City", TRUE
       "OutputType", "Trade", "Local", TRUE
-;     "Building", "Palace", "City", FALSE          ; Courthouse is not advertised to be useless in cities with a Palace 
     }
-
-[effect_courthouse_1]
+[effect_courthouse_corruption2]
 type    = "Output_Waste_Pct"
 value	= 60
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Courthouse", "City", TRUE
       "OutputType", "shield", "local", TRUE
-;      "Building", "Palace", "City", FALSE        ; Courthouse is not advertised to be useless in cities with a Palace 
     }
-
-[effect_courthouse_2]
+[effect_courthouse_tile_corruption]         ; Removes output penalties (Despotism/Anarchy) for cities with courthouses
+type    = "Output_Penalty_Tile"
+value   = 100
+reqs	=
+    { "type",       "name",      "range"
+      "Building", "Courthouse", "City", TRUE
+    }
+[effect_courthouse_democracy]
 type    = "Make_Content"
 value	= 1
 reqs	=
@@ -1697,8 +1700,7 @@ reqs	=
       "Gov", "Democracy", "Player"
       "Building", "Courthouse", "City"
     }
-
-[effect_courthouse_3]
+[effect_courthouse_incite_cost_occupied]
 type    = "Incite_Cost_Pct"
 value	= 300
 reqs	=
@@ -1706,7 +1708,14 @@ reqs	=
       "Building", "Courthouse", "City", TRUE
       "MaxUnitsOnTile", "0", "Local", FALSE
     }
-
+[effect_courthouse_incite_cost_empty]
+type = "Incite_Cost_Pct"
+value = 100
+reqs	=
+    { "type", "name", "range", "present"
+      "MaxUnitsOnTile", "0", "Local", TRUE
+      "Building", "Courthouse", "City", TRUE
+    }
 [effect_courthouse_upkeep]         ; Law and order provides +1 upkeep
 type    = "Unit_Upkeep_Free_Per_City"
 value	= 1
@@ -1715,102 +1724,117 @@ reqs	=
       "Building", "Courthouse", "City", TRUE
       "OutputType", "Shield", "Local"
     }    
-
-[effect_courthouse_tile_corruption]         ; Removes output penalties (Despotism/Anarchy) for cities with courthouses
-type    = "Output_Penalty_Tile"
-value   = 100
-reqs	=
-    { "type",       "name",      "range"
-      "Building", "Courthouse", "City", TRUE
-    }    
-
 [effect_courthouse_spy_resistance]
 type	= "Spy_Resistant"
-value	= 30  ;30% reduction of 50% base chance = 15% bonus. 50-15=35% success rate 
+value	= 25 ;25% reduction of 50% base chance is 12.5% bonus. 50%-12.5%=37.5% success rate
+           ; No protection= 1/2, HL = 3/8, CH+HL = 1/4, CH+HL+PS = 1/8
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Courthouse", "City", TRUE
     }
-
-[effect_courthouse_theft_resistance]
+[effect_courthouse_hostile_diplomat0]
 type	= "Action_Odds_Pct"
-value	= -35 ;80-35=45% success rate 
+value	= -25 ;// -25*.8 = -20
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Courthouse", "City", TRUE
       "Action", "Steal Tech", "Local", TRUE
     }
-
-[effect_courthouse_hostile_diplomat_7]
+[effect_courthouse_hostile_diplomat_1]
 type	= "Action_Odds_Pct"
-value	= -20
+value	= -25         ;// -25*.8 = -20
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Courthouse", "City", TRUE
       "Action", "Steal Tech Escape Expected", "Local", TRUE
     }
-
-[effect_courthouse_hostile_diplomat_8]
+[effect_courthouse_hostile_diplomat_2]
 type	= "Action_Odds_Pct"
-value	= -20
+value	= -25       ;// -25*.8 = -20
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Courthouse", "City", TRUE
       "Action", "Targeted Steal Tech", "Local", TRUE
     }
-
-[effect_courthouse_hostile_diplomat_9]
+[effect_courthouse_hostile_diplomat_3]
 type	= "Action_Odds_Pct"
-value	= -20
+value	= -25     ;// -25*.8 = -20
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Courthouse", "City", TRUE
       "Action", "Targeted Steal Tech Escape Expected", "Local", TRUE
     }
-
-[effect_courthouse_hostile_diplomat_1]
+[effect_courthouse_hostile_diplomat_4]
 type	= "Action_Odds_Pct"
-value	= -20
+value	= -25     ;// -25*.8 = -20
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Courthouse", "City", TRUE
       "Action", "Sabotage City", "Local", TRUE
     }
-
-[effect_courthouse_hostile_diplomat_2]
+[effect_courthouse_hostile_diplomat_5]
 type	= "Action_Odds_Pct"
-value	= -20
+value	= -25     ;// -25*.8 = -20
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Courthouse", "City", TRUE
       "Action", "Sabotage City Escape", "Local", TRUE
     }
-
-[effect_courthouse_hostile_diplomat_3]
+[effect_courthouse_hostile_diplomat_6]
 type	= "Action_Odds_Pct"
-value	= -20
+value	= -25     ;// -25*.8 = -20
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Courthouse", "City", TRUE
       "Action", "Targeted Sabotage City", "Local", TRUE
     }
-
-[effect_courthouse_hostile_diplomat_4]
+[effect_courthouse_hostile_diplomat_7]
 type	= "Action_Odds_Pct"
-value	= -20
+value	= -25     ;// -25*.8 = -20
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Courthouse", "City", TRUE
       "Action", "Targeted Sabotage City Escape", "Local", TRUE
     }
-
-[effect_incite_cost_empty_courthouse]
-type = "Incite_Cost_Pct"
-value = 100
+[effect_courthouse_hostile_diplomat_8]
+type	= "Action_Odds_Pct"
+value	= -25                      ;40 minus 25%*80 = 20%
 reqs	=
     { "type", "name", "range", "present"
-      "MaxUnitsOnTile", "0", "Local", TRUE
       "Building", "Courthouse", "City", TRUE
+      "Action", "Steal Maps Escape", "Local", TRUE
+    }
+[effect_courthouse_hostile_diplomat_9]
+type	= "Action_Odds_Pct"
+value	= -25                      ;40 minus 25%*80 = 20%
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Steal Maps", "Local", TRUE
+    }
+[effect_courthouse_hostile_diplomat_10]
+type	= "Action_Odds_Pct"
+value	= -25                      ;40 minus 25%*80 = 20%
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Poison City Escape", "Local", TRUE
+    }
+[effect_courthouse_hostile_diplomat_11]
+type	= "Action_Odds_Pct"
+value	= -25                      ;40 minus 25%*80 = 20%
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Incite City", "Local", TRUE
+    }
+[effect_courthouse_hostile_diplomat_12]
+type	= "Action_Odds_Pct"
+value	= -25                      ;40 minus 25%*80 = 20%
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Action", "Incite City Escape", "Local", TRUE
     }
 
 [effect_diplomat_defense_fortress]
@@ -2272,7 +2296,7 @@ reqs	=
       "Building", "Police Station", "City", TRUE
       "Building", "Women's Suffrage", "Player", FALSE
     }
-[effect_police_station_vet_diplos]
+[effect_police_station_vet_diplo]
 type    = "Veteran_Build"
 value	= 1
 reqs	=
@@ -2283,42 +2307,114 @@ reqs	=
     }
 [effect_police_station_spy_resistant]
 type	= "Spy_Resistant"
-value	= 20   ; 20% reduction of 50% base chance = 10% bonus
+value	= 25 ; 25% of 50% = -12.5% 4/8-1/8 = 3/8
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Police Station", "City", TRUE 
     }
-[effect_police_station_theft_resistant]
+[effect_police_station_hostile_diplomat_0]
 type	= "Action_Odds_Pct"
-value	= -10  
+value	= -25 ;// -25*.8 = -20
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Police Station", "City", TRUE 
       "Action", "Steal Tech", "Local", TRUE
     }
-[effect_police_station_theft_resistant1]
+[effect_police_station_hostile_diplomat_1]
 type	= "Action_Odds_Pct"
-value	= -10  
+value	= -25 ;// -25*.8 = -20
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Police Station", "City", TRUE 
+      "Building", "Police Station", "City", TRUE
       "Action", "Steal Tech Escape Expected", "Local", TRUE
     }
-[effect_police_station_theft_resistant2]
+[effect_police_station_hostile_diplomat_2]
 type	= "Action_Odds_Pct"
-value	= -10  
+value	= -25 ;// -25*.8 = -20
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Police Station", "City", TRUE 
+      "Building", "Police Station", "City", TRUE
       "Action", "Targeted Steal Tech", "Local", TRUE
     }
-[effect_police_station_theft_resistant3]
+[effect_police_station_hostile_diplomat_3]
 type	= "Action_Odds_Pct"
-value	= -10  
+value	= -25 ;// -25*.8 = -20
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Police Station", "City", TRUE 
+      "Building", "Police Station", "City", TRUE
       "Action", "Targeted Steal Tech Escape Expected", "Local", TRUE
+    }
+[effect_police_station_hostile_diplomat_4]
+type	= "Action_Odds_Pct"
+value	= -25 ;// -25*.8 = -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Police Station", "City", TRUE
+      "Action", "Sabotage City", "Local", TRUE
+    }
+[effect_police_station_hostile_diplomat_5]
+type	= "Action_Odds_Pct"
+value	= -25 ;// -25*.8 = -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Police Station", "City", TRUE
+      "Action", "Sabotage City Escape", "Local", TRUE
+    }
+[effect_police_station_hostile_diplomat_6]
+type	= "Action_Odds_Pct"
+value	= -25 ;// -25*.8 = -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Police Station", "City", TRUE
+      "Action", "Targeted Sabotage City", "Local", TRUE
+    }
+[effect_police_station_hostile_diplomat_7]
+type	= "Action_Odds_Pct"
+value	= -25 ;// -25*.8 = -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Police Station", "City", TRUE
+      "Action", "Targeted Sabotage City Escape", "Local", TRUE
+    }
+[effect_police_station_hostile_diplomat_8]
+type	= "Action_Odds_Pct"
+value	= -25 ;// -25*.8 = -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Police Station", "City", TRUE
+      "Action", "Steal Maps Escape", "Local", TRUE
+    }
+[effect_police_station_hostile_diplomat_9]
+type	= "Action_Odds_Pct"
+value	= -25 ;// -25*.8 = -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Police Station", "City", TRUE
+      "Action", "Steal Maps", "Local", TRUE
+    }
+[effect_police_station_hostile_diplomat_10]
+type	= "Action_Odds_Pct"
+value	= -25 ;// -25*.8 = -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Police Station", "City", TRUE
+      "Action", "Poison City Escape", "Local", TRUE
+    }
+[effect_police_station_hostile_diplomat_11]
+type	= "Action_Odds_Pct"
+value	= -25 ;// -25*.8 = -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Police Station", "City", TRUE
+      "Action", "Incite City", "Local", TRUE
+    }
+[effect_police_station_hostile_diplomat_12]
+type	= "Action_Odds_Pct"
+value	= -25 ;// -25*.8 = -20
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Police Station", "City", TRUE
+      "Action", "Incite City Escape", "Local", TRUE
     }
 
 [effect_port_facility]
@@ -3027,7 +3123,7 @@ value	= 1
       "OutputType", "Shield", "Local"
     }
 
-[effect_supreme_court]
+[effect_supreme_court_corruption1]
 type    = "Output_Waste_Pct"
 value	= 60
  reqs	=
@@ -3035,9 +3131,7 @@ value	= 60
       "Building", "Supreme Court", "Player"
       "OutputType", "Trade", "Local"
     }
-
-;The following effects make Supreme Court count as Courthouse in every city, as advertised
-[effect_supreme_court_1]
+[effect_supreme_court_corruption2]
 type    = "Output_Waste_Pct"
 value	= 60
 reqs	=
@@ -3045,8 +3139,7 @@ reqs	=
       "Building", "Supreme Court", "Player", TRUE
       "OutputType", "Shield", "local", TRUE
     }
-
-[effect_supreme_court_2]   
+[effect_supreme_court_democracy]   
 type    = "Make_Content"
 value	= 1
 reqs	=
@@ -3054,8 +3147,7 @@ reqs	=
       "Gov", "Democracy", "Player"
       "Building", "Supreme Court", "Player"
     }
-
-[effect_supreme_court_3]
+[effect_supreme_court_incite_occupied]
 type    = "Incite_Cost_Pct"
 value	= 300
 reqs	=
@@ -3063,7 +3155,7 @@ reqs	=
       "Building", "Supreme Court", "Player", TRUE
       "MaxUnitsOnTile", "0", "Local", FALSE
     }
-[effect_incite_cost_empty_supremecourt]
+[effect_supreme_court_incite_empty]
 type = "Incite_Cost_Pct"
 value = 100
 reqs	=
@@ -3071,125 +3163,136 @@ reqs	=
       "MaxUnitsOnTile", "0", "Local", TRUE
       "Building", "Supreme Court", "Player", TRUE
     }   
-
-[effect_supreme_court_upkeep]         ; Law and order provides +1 upkeep
+[effect_supreme_court_upkeep]
 type    = "Unit_Upkeep_Free_Per_City"
 value	= 1
 reqs	=
     { "type",       "name",      "range"
       "Building", "Supreme Court", "Player"
       "OutputType", "Shield", "Local"
-    }    
-
-[effect_supreme_court_tile_corruption]         ; Removes output penalties (Despotism/Anarchy) for cities with courthouses
+    }
+; Removes penalties (Despotism/Anarchy) for tiles >3 output
+[effect_supreme_court_tile_corruption]         
 type    = "Output_Penalty_Tile"
 value   = 100
 reqs	=
     { "type",       "name",      "range"
       "Building", "Supreme Court", "Player"
-    }    
-
-;35% success on spy-attack-spy with one court effect, 25% with both:
-;35% hostile diplomatic combat success rate with only 1 of Courthouse / Supreme Court 
-[effect_only_supreme_court_spy_resistance]
+    }
+; HOMELAND SECURITY EFFECTS
+; **********************************************************
+[effect_homeland_security_spy_resistance]
 type	= "Spy_Resistant"
-value	= 30 ;30% reduction of 50% base chance is 15% bonus. 50%-15%=35% success rate 
+value	= 25 ;25% reduction of 50% base chance is 12.5% bonus. 50%-12.5%=37.5% success rate
+           ; No protection= 1/2, HL = 3/8, CH+HL = 1/4, CH+HL+PS = 1/8
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player", TRUE
-      "Building", "Courthouse", "City", FALSE 
+      "Building", "Homeland Security", "City", TRUE 
     }
-;25% hostile diplomatic combat success rate with both Supreme Court + Courthouse 
-[effect_only_supreme_court_spy_resistance_stacked]
-type	= "Spy_Resistant"
-value	= 20 ;20% reduction of 50% bonus = 10% bonus. 10%+15% for Courthouse = 25%. 50%-25%=25% success rate 
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player", TRUE
-      "Building", "Courthouse", "City", TRUE 
-    }
-
-;45% success on theft with one court, 35% with both courts:
-[effect_supreme_court_only_steal_tech]
+[effect_homeland_security_hostile_diplomat0]
 type	= "Action_Odds_Pct"
-value	= -35 ; 80% base rate - 35% = 45% final rate 
+value	= -25 ; 25% of 80% base rate = 20%
+            ; No protection = 4/5, HL = 3/5, CH+HL = 2/5, CH+HL+PS = 1/5
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player", TRUE
-      "Building", "Courthouse", "City", FALSE 
+      "Building", "Homeland Security", "City", TRUE
       "Action", "Steal Tech", "Local", TRUE
     }
-[effect_supreme_court_only_steal_tech_stacked]
+[effect_homeland_security_hostile_diplomat_1]
 type	= "Action_Odds_Pct"
-value	= -10 ; 45% base rate after courthouse - 10% = 35% final rate 
+value	= -25 ;// -25*.8 = -20
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player", TRUE
-      "Building", "Courthouse", "City", TRUE 
-      "Action", "Steal Tech", "Local", TRUE
-    }
-
-[effect_supreme_court_hostile_diplomat_7]
-type	= "Action_Odds_Pct"
-value	= -20
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player", TRUE
+      "Building", "Homeland Security", "City", TRUE
       "Action", "Steal Tech Escape Expected", "Local", TRUE
     }
-
-[effect_supreme_court_hostile_diplomat_8]
+[effect_homeland_security_hostile_diplomat_2]
 type	= "Action_Odds_Pct"
-value	= -20
+value	= -25  ;// -25*.8 = -20
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player", TRUE
+      "Building", "Homeland Security", "City", TRUE
       "Action", "Targeted Steal Tech", "Local", TRUE
     }
-
-[effect_supreme_court_hostile_diplomat_9]
+[effect_homeland_security_hostile_diplomat_3]
 type	= "Action_Odds_Pct"
-value	= -20
+value	= -25   ;// -25*.8 = -20
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player", TRUE
+      "Building", "Homeland Security", "City", TRUE
       "Action", "Targeted Steal Tech Escape Expected", "Local", TRUE
     }
-
-[effect_supreme_court_hostile_diplomat_1]
+[effect_homeland_security_hostile_diplomat_4]
 type	= "Action_Odds_Pct"
-value	= -20
+value	= -25   ;// -25*.8 = -20
 reqs	=
     { "type", "name", "range", "present"
-       "Building", "Supreme Court", "Player", TRUE
+      "Building", "Homeland Security", "City", TRUE
        "Action", "Sabotage City", "Local", TRUE
     }
-
-[effect_supreme_court_hostile_diplomat_2]
+[effect_homeland_security_hostile_diplomat_5]
 type	= "Action_Odds_Pct"
-value	= -20
+value	= -25   ;// -25*.8 = -20
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player", TRUE
+      "Building", "Homeland Security", "City", TRUE
       "Action", "Sabotage City Escape", "Local", TRUE
     }
-
-[effect_supreme_court_hostile_diplomat_3]
+[effect_homeland_security_hostile_diplomat_6]
 type	= "Action_Odds_Pct"
-value	= -20
+value	= -25   ;// -25*.8 = -20
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player", TRUE
+      "Building", "Homeland Security", "City", TRUE
       "Action", "Targeted Sabotage City", "Local", TRUE
     }
-
-[effect_supreme_court_hostile_diplomat_4]
+[effect_homeland_security_hostile_diplomat_7]
 type	= "Action_Odds_Pct"
-value	= -20
+value	= -25   ;// -25*.8 = -20
 reqs	=
     { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player", TRUE
+      "Building", "Homeland Security", "City", TRUE
       "Action", "Targeted Sabotage City Escape", "Local", TRUE
+    }
+[effect_homeland_security_hostile_diplomat_8]
+type	= "Action_Odds_Pct"
+value	= -25                      ;40 minus 25%*80 = 20%
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Homeland Security", "City", TRUE
+      "Action", "Steal Maps Escape", "Local", TRUE
+    }
+[effect_homeland_security_hostile_diplomat_9]
+type	= "Action_Odds_Pct"
+value	= -25
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Homeland Security", "City", TRUE
+      "Action", "Steal Maps", "Local", TRUE
+    }
+[effect_homeland_security_hostile_diplomat_10]
+type	= "Action_Odds_Pct"
+value	= -25
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Homeland Security", "City", TRUE
+      "Action", "Poison City Escape", "Local", TRUE
+    }
+[effect_homeland_security_hostile_diplomat_11]
+type	= "Action_Odds_Pct"
+value	= -25
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Homeland Security", "City", TRUE
+      "Action", "Incite City", "Local", TRUE
+    }
+[effect_homeland_security_hostile_diplomat_12]
+type	= "Action_Odds_Pct"
+value	= -25
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Homeland Security", "City", TRUE
+      "Action", "Incite City Escape", "Local", TRUE
     }
 
 [effect_great_wall]
@@ -3235,7 +3338,6 @@ reqs	=
       "UnitType", "Howitzer", "Local", FALSE
       "Tech", "Machine Tools", "World", FALSE
     }
-
 [effect_great_wall_1]
 type    = "Unit_No_Lose_Pop"
 value	= 1
@@ -3244,7 +3346,6 @@ reqs	=
       "Building", "Great Wall", "Player", TRUE
        "Tech", "Machine Tools", "World", FALSE
     }
-
 [effect_great_wall_visible]
 type    = "Visible_Walls"
 value	= 1
@@ -3261,7 +3362,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "Hanging Gardens", "Player"
     }
-
 [effect_hanging_gardens_1]
 type    = "Output_Add_Tile"
 value   = 2
@@ -3282,7 +3382,6 @@ reqs	=
       "OutputType", "Shield", "Local", TRUE
       "Building", "Solar Plant", "City", FALSE
     }
-
 [effect_hoover_dam_1]
 type    = "Output_Bonus"
 value	= 25
@@ -3293,7 +3392,6 @@ reqs	=
       "OutputType", "Shield", "Local", TRUE
       "Building", "Solar Plant", "City", FALSE
     }
-
 [effect_hoover_dam_2]
 type    = "Pollu_Prod_Pct"
 value	= -25
@@ -3304,7 +3402,6 @@ reqs	=
       "Building", "Recycling Center", "City", FALSE
       "Building", "Solar Plant", "City", FALSE
     }
-
 [effect_hoover_dam_3]
 type    = "Pollu_Prod_Pct"
 value	= -25
@@ -3376,7 +3473,6 @@ reqs	=
       "Building", "Lighthouse", "Player"
       "UnitClass", "Sea", "Local"
     }
-
 [effect_lighthouse_a]
 type    = "Move_Bonus"
 value	= 18
@@ -3385,7 +3481,6 @@ reqs	=
       "Building", "Lighthouse", "Player"
       "UnitClass", "Submarine", "Local"
     }
-
 [effect_lighthouse_1]
 type    = "Move_Bonus"
 value	= 18
@@ -3394,7 +3489,6 @@ reqs	=
       "Building", "Lighthouse", "Player"
       "UnitClass", "Trireme", "Local"
     }
-
 [effect_lighthouse_2]
 type    = "Move_Bonus"
 value	= 18
@@ -3403,7 +3497,6 @@ reqs	=
       "Building", "Lighthouse", "Player"
       "UnitClass", "RiverShip", "Local"
     }
-
 [effect_lighthouse_3]
 type    = "Unit_Vision_Radius_Sq"
 value	= 6
@@ -3412,7 +3505,6 @@ reqs	=
       "Building", "Lighthouse", "Player"
       "UnitClass", "Sea", "Local"
     }
-
 [effect_lighthouse_3a]
 type    = "Unit_Vision_Radius_Sq"
 value	= 6
@@ -3421,7 +3513,6 @@ reqs	=
       "Building", "Lighthouse", "Player"
       "UnitClass", "Submarine", "Local"
     }
-
 [effect_lighthouse_4]
 type    = "Unit_Vision_Radius_Sq"
 svalue	= 6
@@ -3430,7 +3521,6 @@ reqs	=
       "Building", "Lighthouse", "Player"
       "UnitClass", "Trireme", "Local"
     }
-
 [effect_lighthouse_5]
 type    = "Unit_Vision_Radius_Sq"
 svalue	= 6
@@ -3463,15 +3553,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "Magellan's Expedition", "Player"
       "UnitClass", "Submarine", "Local"
-    }
-; Should be quite useless, just in case:
-[effect_magellans_expedition_1]
-type    = "Veteran_Build"
-value	= 1
-reqs	=
-    { "type", "name", "range"
-      "Building", "Magellan's Expedition", "Player"
-      "UnitClass", "Trireme", "Local"
     }
 
 [effect_manhattan_project]
@@ -3563,12 +3644,22 @@ reqs	=
       "Building", "Mausoleum of Mausolos", "City"
     }
 
-[effect_statue_of_zeus]
-type    = "Make_Content_Mil_Per"
+[effect_statue_of_zeus_content_republic]
+type    = "Make_Content_Mil"
 value   = 1
 reqs    =
     { "type", "name", "range", "present"
       "Building", "Statue of Zeus", "Player", TRUE
+      "Gov", "Republic", "Player", TRUE
+      "Tech", "Tactics", "Player", FALSE
+    }
+[effect_statue_of_zeus_content_democracy]
+type    = "Make_Content_Mil"
+value	= 2
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Statue of Zeus", "Player", TRUE
+      "Gov", "Democracy", "Player", TRUE
       "Tech", "Tactics", "Player", FALSE
     }
 [effect_statue_of_zeus_1]
@@ -3907,7 +3998,7 @@ reqs    =
 
 [effect_sabotage_bonus_fundamentalism1]
 type	= "Action_Odds_Pct"
-value	= 10
+value	= 13      ;// 13%*80% = 10.4%
 reqs	=
     { "type", "name", "range", "present"
       "Gov", "Fundamentalism", "Player", TRUE
@@ -3915,7 +4006,7 @@ reqs	=
     }
 [effect_sabotage_bonus_fundamentalism2]
 type	= "Action_Odds_Pct"
-value	= 10
+value	= 13      ;// 13%*80% = 10.4%
 reqs	=
     { "type", "name", "range", "present"
       "Gov", "Fundamentalism", "Player", TRUE
@@ -3923,7 +4014,7 @@ reqs	=
     }
 [effect_sabotage_bonus_fundamentalism3]
 type	= "Action_Odds_Pct"
-value	= 10
+value	= 13    ;// 13%*80% = 10.4% (int rounds to 10%)
 reqs	=
     { "type", "name", "range", "present"
       "Gov", "Fundamentalism", "Player", TRUE
@@ -3931,7 +4022,7 @@ reqs	=
     }
 [effect_sabotage_bonus_fundamentalism4]
 type	= "Action_Odds_Pct"
-value	= 10
+value	= 13    ;// 13%*80% = 10.4% (int rounds to 10%)
 reqs	=
     { "type", "name", "range", "present"
       "Gov", "Fundamentalism", "Player", TRUE
@@ -4089,31 +4180,37 @@ reqs	=
       "Extra", "Pollution", "Local"
     }
 
-[effect_incident_caught_steal_maps]
-type	= "Casus_Belli_Caught"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Action", "Steal Maps Escape", "Local", TRUE
-      "DiplRel", "War", "Local", FALSE
-    }
-
-[effect_incident_success_steal_maps]
-type	= "Casus_Belli_Success"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Action", "Steal Maps Escape", "Local", TRUE
-      "DiplRel", "War", "Local", FALSE
-    }
-
-[effect_half_chance_steal_maps]
+; **** Action Odds for Hostile Diplomatic Actions *******
+;********************************************************
+[effect_reduced_chance_steal_maps_escape]
 type	= "Action_Odds_Pct"
-value	= -30                      ;80 minus 30 is 50% or half chance, but who knows if it's really 80-.3*8=56%
+value	= -32                      ;80 minus 31%*80 = 55%
 reqs	=
     { "type", "name", "range", "present"
       "Action", "Steal Maps Escape", "Local", TRUE
     }
+[effect_reduced_chance_steal_maps]
+type	= "Action_Odds_Pct"
+value	= -13                      ;80 minus 13%*80 = 70%
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Steal Maps", "Local", TRUE
+    }
+[effect_reduced_targeted_sabotage_city]
+type	= "Action_Odds_Pct"
+value	= -32                      ;80 minus 31%*80 = 55%
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Targeted Sabotage City Escape", "Local", TRUE
+    }
+[effect_reduced_poison_city_escape]
+type	= "Action_Odds_Pct"
+value	= -13                      ;80 minus 13%*80 = 70%
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Poison City Escape", "Local", TRUE
+    }
+;*********************************************************
 
 ; FIXED flag from "Cities" to "NonMil" to have proper effect.
 [effect_unit_bribe_cost_settlers]
@@ -4134,6 +4231,40 @@ reqs	=
 ;      "Action", "Join City", "Local", FALSE
 ;    }
 
+;CASUS BELLI INCIDENTS
+;********************************************************
+[effect_incident_caught_steal_maps1]
+type	= "Casus_Belli_Caught"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Steal Maps Escape", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
+[effect_incident_success_steal_maps1]
+type	= "Casus_Belli_Success"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Steal Maps Escape", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
+[effect_incident_caught_steal_maps2]
+type	= "Casus_Belli_Caught"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Steal Maps", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
+[effect_incident_success_steal_maps2]
+type	= "Casus_Belli_Success"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Steal Maps", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
 [effect_incident_caught_steal_tech]
 type	= "Casus_Belli_Caught"
 value	= 1
@@ -4142,7 +4273,6 @@ reqs	=
       "Action",  "Steal Tech", "Local", TRUE
       "DiplRel", "War",        "Local", FALSE
     }
-
 [effect_incident_success_steal_tech]
 type	= "Casus_Belli_Success"
 value	= 1
@@ -4151,7 +4281,6 @@ reqs	=
       "Action",  "Steal Tech", "Local", TRUE
       "DiplRel", "War",        "Local", FALSE
     }
-
 [effect_incident_caught_steal_tech_esc]
 type	= "Casus_Belli_Caught"
 value	= 1
@@ -4160,7 +4289,6 @@ reqs	=
       "Action",  "Steal Tech Escape Expected", "Local", TRUE
       "DiplRel", "War",                        "Local", FALSE
     }
-
 [effect_incident_success_steal_tech_esc]
 type	= "Casus_Belli_Success"
 value	= 1
@@ -4169,7 +4297,6 @@ reqs	=
       "Action",  "Steal Tech Escape Expected", "Local", TRUE
       "DiplRel", "War",                        "Local", FALSE
     }
-
 [effect_incident_caught_tgt_steal_tech]
 type	= "Casus_Belli_Caught"
 value	= 1
@@ -4178,7 +4305,6 @@ reqs	=
       "Action",  "Targeted Steal Tech Escape Expected", "Local", TRUE
       "DiplRel", "War",                                 "Local", FALSE
     }
-
 [effect_incident_success_tgt_steal_tech]
 type	= "Casus_Belli_Success"
 value	= 1
@@ -4187,7 +4313,6 @@ reqs	=
       "Action",  "Targeted Steal Tech Escape Expected", "Local", TRUE
       "DiplRel", "War",                                 "Local", FALSE
     }
-
 [effect_incident_success_bribe_unit]
 type	= "Casus_Belli_Success"
 value	= 1
@@ -4196,7 +4321,6 @@ reqs	=
       "Action", "Bribe Unit", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
     }
-
 [effect_incident_success_capture_unit]
 type	= "Casus_Belli_Success"
 value	= 1
@@ -4205,7 +4329,6 @@ reqs	=
       "Action", "Capture Units", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
     }
-
 [effect_incident_success_sabotage_unit]
 type	= "Casus_Belli_Success"
 value	= 1
@@ -4214,7 +4337,14 @@ reqs	=
       "Action", "Sabotage Unit Escape", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
     }
-
+[effect_incident_caught_sabotage_unit]
+type	= "Casus_Belli_Caught"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Sabotage Unit Escape", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
 [effect_incident_success_incite]
 type	= "Casus_Belli_Success"
 value	= 1
@@ -4223,7 +4353,14 @@ reqs	=
       "Action", "Incite City", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
     }
-
+[effect_incident_caught_incite]
+type	= "Casus_Belli_Caught"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Incite City", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
 [effect_incident_success_incite_esc]
 type	= "Casus_Belli_Success"
 value	= 1
@@ -4232,7 +4369,14 @@ reqs	=
       "Action", "Incite City Escape", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
     }
-
+[effect_incident_caught_incite_esc]
+type	= "Casus_Belli_Caught"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Incite City Escape", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
 [effect_incident_success_poison]
 type	= "Casus_Belli_Success"
 value	= 1
@@ -4241,7 +4385,14 @@ reqs	=
       "Action", "Poison City Escape", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
     }
-
+[effect_incident_caught_poison]
+type	= "Casus_Belli_Caught"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Poison City Escape", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
 [effect_incident_success_sabotage_city]
 type	= "Casus_Belli_Success"
 value	= 1
@@ -4250,7 +4401,14 @@ reqs	=
       "Action", "Sabotage City", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
     }
-
+[effect_incident_caught_sabotage_city]
+type	= "Casus_Belli_Caught"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Sabotage City", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
 [effect_incident_success_sabotage_city_esc]
 type	= "Casus_Belli_Success"
 value	= 1
@@ -4259,7 +4417,14 @@ reqs	=
       "Action", "Sabotage City Escape", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
     }
-
+[effect_incident_caught_sabotage_city_esc]
+type	= "Casus_Belli_Caught"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Sabotage City Escape", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
 [effect_incident_success_tgt_sabotage_city]
 type	= "Casus_Belli_Success"
 value	= 1
@@ -4268,22 +4433,22 @@ reqs	=
       "Action", "Targeted Sabotage City Escape", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
     }
-
-[effect_tgt_sabotage_city_half_chance]
-type	= "Action_Odds_Pct"
-value	= -50
+[effect_incident_caught_tgt_sabotage_city]
+type	= "Casus_Belli_Caught"
+value	= 1
 reqs	=
     { "type", "name", "range", "present"
       "Action", "Targeted Sabotage City Escape", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
     }
-
 [effect_incident_success_explode_nuke]
 type	= "Casus_Belli_Success"
-value	= 1
+value	= 1000
 reqs	=
     { "type", "name", "range", "present"
       "Action", "Explode Nuclear", "Local", TRUE
     }
+;********************************************************************
 
 ; Double (+100%) buy cost for Great Wonders
 [effect_great_wonder_buy_cost]

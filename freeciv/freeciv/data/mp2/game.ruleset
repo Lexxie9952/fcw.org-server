@@ -263,7 +263,7 @@ ui_name_sabotage_city = _("%sSabotage City%s")
 ui_name_sabotage_city_escape = _("%sSabotage City Escape%s")
 
 ; /* TRANS: Industrial _Sabotage (3% chance of success). */
-ui_name_targeted_sabotage_city_escape = _("Industrial %sSabotage%s")
+ui_name_targeted_sabotage_city_escape = _("Targeted %sSabotage%s")
 
 ; /* TRANS: Incite a _Revolt (3% chance of success). */
 ui_name_incite_city = _("Incite a %sRevolt%s")
@@ -290,7 +290,7 @@ ui_name_steal_tech = _("Steal %sTechnology%s")
 ui_name_steal_tech_escape = _("Steal %sTechnology and Escape%s")
 
 ; /* TRANS: Indus_trial Espionage (3% chance of success). */
-ui_name_targeted_steal_tech_escape = _("Indus%strial Espionage%s")
+ui_name_targeted_steal_tech_escape = _("Tar%sgeted Tech Theft%s")
 
 ; /* TRANS: Steal _Map Fragments and Escape (3% chance of success). */
 ui_name_steal_maps_escape = _("Steal %sMap Fragments and Escape%s")
@@ -864,12 +864,12 @@ target_reqs    =
 [actionenabler_archer_bombard] ;****
 action = "Bombard"
 actor_reqs    =
-    { "type",         "name",        "range", "present"
-      "UnitFlag",     "Bombarder",   "Local", TRUE
+    { "type",         "name",         "range", "present"
+      "UnitFlag",     "Bombarder",    "Local", TRUE
       "UnitType",     "Archers",      "Local", TRUE
 ;      "UnitState",    "Transported", "Local", FALSE
-      "MinMoveFrags", "1",           "Local", TRUE
-      "DiplRel",      "War",         "Local", TRUE
+      "MinMoveFrags", "1",            "Local", TRUE
+      "DiplRel",      "War",          "Local", TRUE
    }
 target_reqs    =
     { "type",   "name", "range", "present"
@@ -1974,8 +1974,8 @@ set =
       "specials", 350, FALSE
       "startpos", "SINGLE", FALSE
       "startunits", "cccwwwxxaA", FALSE
-      "techpenalty", 0, FALSE
       "techleak", 0, FALSE
+      "techpenalty", 0, FALSE
       "tinyisles", FALSE, FALSE
       "trademindist", 12, FALSE
       "trade_revenue_style", "SIMPLE", FALSE   ;"simple" formula based on average trade in both cities (sans distance etc.)
@@ -1984,4 +1984,5 @@ set =
       "universal_unload", "ENABLED", FALSE
       "unload_override", 0, FALSE    ;0=native unloading same as non-native. 1+ = move_fragment cost for unloading.
       "unreachableprotects", "ENABLED", FALSE
+      "unitwaittime_style", "ACTIVITIES|FORTIFY|DELAYGOTO", FALSE
     }
