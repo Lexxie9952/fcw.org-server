@@ -10,6 +10,8 @@ The current and complete list of Freeciv-web controls can be found here:
 
 <img src="/images/orders/fortify_default.png"> Fortify (F)
 
+<img src="/images/orders/hideout.png"> Make Hideout (shift-H)
+
 <img src="/images/orders/irrigate_default.png"> Build Irrigation (I)
 
 <img src="/images/orders/irrigation.png"> Build Farmland (I)
@@ -62,6 +64,8 @@ The current and complete list of Freeciv-web controls can be found here:
 
 <img src="/images/orders/fortress.png"> Build Fort, Fortress, Naval Base (shift-F)
 
+<img src="/images/orders/airbase.png"> Build Airbase, Radar Tower (shift-E)
+
 <img src="/images/orders/load.png"> Load on Transport (L)
 
 <img src="/images/orders/unload.png"> Unload Transport (T) (in city)
@@ -86,6 +90,7 @@ Unload & Activate Cargo units (shift-U) (outside city)
   g: (g)o to tile  (then left-click mouse to select target tile)
   G: delayed (G)oto (at turn change, reqs: unit with less than full moves)
   h: set unit's (h)omecity  (to city on current tile)
+  H: make Hideout
   i: build (i)rrigation or convert terrain  (settler/worker units)
   j: no orders - skip orders for this unit this turn 
   J: cancel orders - clear current orders for this unit 
