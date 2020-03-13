@@ -3528,6 +3528,8 @@ static void cancel_orders(struct unit *punit, char *dbg_msg)
 static void wakeup_neighbor_sentries(struct unit *punit)
 {
   bool alone_in_city;
+  int stile_x, stile_y;   // tile of waking sentry unit
+  int mtile_x, mtile_y;   // tile of moving unit
 
   if (NULL != tile_city(unit_tile(punit))) {
     int count = 0;
@@ -3547,6 +3549,7 @@ static void wakeup_neighbor_sentries(struct unit *punit)
   /* There may be sentried units with a sightrange > 3, but we don't
      wake them up if the punit is farther away than 3. */
   square_iterate(&(wld.map), unit_tile(punit), 3, ptile) {
+    int num_wakings = 0; /// used to limit spam of wake-up messages
     unit_list_iterate(ptile->units, penemy) {
       int distance_sq = sq_map_distance(unit_tile(punit), ptile);
       int radius_sq = get_unit_vision_at(penemy, unit_tile(penemy), V_MAIN);
@@ -3562,6 +3565,23 @@ static void wakeup_neighbor_sentries(struct unit *punit)
           && can_unit_exist_at_tile(&(wld.map), penemy, unit_tile(penemy))) {
         set_unit_activity(penemy, ACTIVITY_IDLE);
         send_unit_info(NULL, penemy);
+
+        if (true /*is_longturn()*/) {
+          if (++num_wakings <2) {
+              index_to_map_pos(&stile_x, &stile_y, tile_index(ptile));
+              index_to_map_pos(&mtile_x, &mtile_y, tile_index(unit_tile(punit)) );
+
+              notify_player(unit_owner(penemy), unit_tile(punit),
+                    E_UNIT_ORDERS, ftc_server,
+                    _("\u24d8 Sentried %s at %d,%d reports %s %s was "
+                      "seen moving at %d,%d."),
+                    unit_link(penemy),
+                    stile_x, stile_y, 
+                    nation_rule_name(nation_of_unit(punit)), 
+                    unit_name_translation(punit),
+                    mtile_x, mtile_y );
+          }
+        }
       }
     } unit_list_iterate_end;
   } square_iterate_end;
