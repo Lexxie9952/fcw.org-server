@@ -40,7 +40,7 @@
 #include "traderoutes.h"
 #include "unit.h"
 
-//#include "../server/notify.h"
+//#include "../server/notify.h"  // for debug
 
 /* aicore */
 #include "cm.h"
@@ -773,7 +773,7 @@ bool city_production_build_units(const struct city *pcity,
   }
 
   utype = pcity->production.value.utype;
-    //DEBUG: notify_conn(NULL, NULL, E_SETTING, ftc_any,_("We're here with %d shields to use."),shields_left );
+    //debug: notify_conn(NULL, NULL, E_SETTING, ftc_any,_("We're here with %d shields to use."),shields_left );
 
   /* Can't use multiple city_build_slots:
      ➤ Unique units: restricts any second unit.
@@ -796,7 +796,7 @@ bool city_production_build_units(const struct city *pcity,
               && game.server.slot_control_style == SC_SEGREGATED
               && !(utype_has_flag(utype, UTYF_SHIELD2GOLD))) {
   
-        *num_units++; 
+        (*num_units)++; 
         return FALSE;
   }
 
@@ -890,6 +890,7 @@ bool city_production_build_units(const struct city *pcity,
 
             // We got a different type!
             if (utype_index(target.value.utype) != utype_index(utype)) {
+              utype = target.value.utype; // remember for next comparison
 
               // STEP ONE. Check again if it it's legal to make >1 of this
               if (utype_pop_value(target.value.utype) != 0 
