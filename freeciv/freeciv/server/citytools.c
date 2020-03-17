@@ -2500,6 +2500,7 @@ void package_city(struct city *pcity, struct packet_city_info *packet,
   packet->walls = city_got_citywalls(pcity);
   packet->style = pcity->style;
   packet->city_image = get_city_bonus(pcity, EFT_CITY_IMAGE);
+  packet->steal = pcity->steal;
 
   improvement_iterate(pimprove) {
     can_build_impr_buf[improvement_index(pimprove)] = 

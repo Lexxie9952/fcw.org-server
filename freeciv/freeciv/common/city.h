@@ -388,6 +388,8 @@ struct city {
   int history;                 /* Cumulative culture */
 
   struct worker_task_list *task_reqs;
+  
+  int steal; /* diplomats steal once; for spies, gets harder */
 
   union {
     struct {
@@ -398,7 +400,7 @@ struct city {
 
       int illness;
 
-      int steal; /* diplomats steal once; for spies, gets harder */
+      //int steal; /* diplomats steal once; for spies, gets harder */
 
       /* If > 0, workers will not be rearranged until they are unfrozen. */
       int workers_frozen;
