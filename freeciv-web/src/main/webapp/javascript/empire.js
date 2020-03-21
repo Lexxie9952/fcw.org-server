@@ -838,7 +838,7 @@ function get_player_building_upkeep_bonus(player_id)
   if (player_has_wonder(player_id, improvement_id_by_name(B_ADAM_SMITH_NAME))) {
     bonus += 1;
   }
-  if (client_rules_flag & CRF_COMMIE_BLDG_UPKEEP) {
+  if (client_rules_flag[CRF_COMMIE_BLDG_UPKEEP]) {
     if (gov=="Communism") {
       bonus += 1;
     }
@@ -1476,7 +1476,7 @@ function create_worklist_unit_div()
     if (unit_types[z]['name'] == "Fanatics" && cur_gov != "Fundamentalism") continue;
     // if (unit_type[z] is unique && exists) continue; //TODO: if possible to check this
     // RULESET SPECIFIC FILTER:
-    if (client_rules_flag & CRF_MP2_SPECIAL_UNITS) {
+    if (client_rules_flag[CRF_MP2_SPECIAL_UNITS]) {
       if (unit_types[z]['name'] == "Well-Digger") continue;
       if (unit_types[z]['name'] == "Queen") continue;
       if (unit_types[z]['name'] == "Pilgrims" && cur_gov != "Fundamentalism") continue;

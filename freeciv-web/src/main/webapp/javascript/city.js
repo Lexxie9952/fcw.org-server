@@ -275,7 +275,7 @@ function show_city_dialog(pcity)
   if (!is_small_screen() && !observing && client.conn.playing.playerno == pcity['owner']) {
     // Create specialist control pane in title bar.
     var num_specialists = Object.keys(specialists).length;
-    if (client_rules_flag & CRF_ASMITH_SPECIALISTS) {
+    if (client_rules_flag[CRF_ASMITH_SPECIALISTS]) {
       // client has no way to check reqs for extended specialists
       if ( !player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_ADAM_SMITH_NAME)) ) {
         num_specialists = 3; // need A.Smith get access specialists 4-6
@@ -596,9 +596,15 @@ function show_city_dialog(pcity)
     $("#city_gold").html(gold_txt);
     $("#city_luxury").html(luxury_txt);
     $("#city_science").html(science_txt);
-
     $("#city_corruption").html(pcity['waste'][O_TRADE]);
-    $("#city_waste").html(pcity['waste'][O_SHIELD]);
+    // Don't show Waste if ruleset has special flag that it doesn't have it:
+    if (client_rules_flag[CRF_NO_WASTE]) $("#city_waste_row").remove();
+    else $("#city_waste").html(pcity['waste'][O_SHIELD]);
+
+    if (pcity['steal'] && pcity['owner'] == client.conn.playing.playerno) {
+      $("#city_steal").html(pcity['steal']);
+      $("#city_steal_row").show();
+    } else $("#city_steal_row").hide();   
     $("#city_pollution").html(pcity['pollution']);
   }
 
@@ -730,6 +736,15 @@ function show_city_dialog(pcity)
     $("#city_overview_tab").append(foreigners_html);
   }
 
+  if ($("#city_improvements").parent().width() - $("#city_improvements").width() < 50) {
+    $("#city_improvements").css( {"width":"100%"} );
+    $("#city_improvements").css( {"height":"100%"} );
+    //$("#city_improvements").css( {"overflow":"hidden"} );
+    $("#city_improvements_title").css( {"width":"4096px"} );
+    $("#city_improvements_list").css( {"width":"4096px"} );
+    $("#city_improvements").css( {"padding-bottom":"0px"} );
+  }
+  
   if (is_small_screen()) {
     $(".ui-tabs-anchor").css("padding", "2px");
     $("#city_panel_stats").css( {"width":"100%", "margin-top":"17px", "padding":"0px"} );
@@ -1677,7 +1692,7 @@ function city_change_specialist(event, city_id, from_specialist_id)
   var to_specialist_id;
   var num_specialists = Object.keys(specialists).length;
   // Standard rules: cycle through 3 specialists if ruleset isn't flagged with CRF_ASMITH_SPECIALISTS:
-  if (!(client_rules_flag & CRF_ASMITH_SPECIALISTS)) {
+  if (!client_rules_flag[CRF_ASMITH_SPECIALISTS]) {
     to_specialist_id = selected_specialist == -1 ? ((from_specialist_id + 1) % num_specialists) : selected_specialist;
     city_message = {"pid": packet_city_change_specialist,
     "city_id" : city_id,

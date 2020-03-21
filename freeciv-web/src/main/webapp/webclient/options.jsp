@@ -137,8 +137,11 @@
         <input type='checkbox' name='show_compass' id='show_compass'><b><font color="#000000">Show Map Compass</font></b> 
     </div>
   </td>
-  <td>
-  </td>
+    <td>
+        <div title="Whether touch-and-dragging a unit begins a GOTO order" class="main_menu_buttons">
+            <input type='checkbox' name='enable_goto_drag' id='enable_goto_drag' checked><b>Enable GOTO dragging</b> 
+        </div>
+    </td>
 </tr>
 
 <tr>

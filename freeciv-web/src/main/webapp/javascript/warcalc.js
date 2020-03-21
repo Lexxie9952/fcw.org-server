@@ -391,15 +391,15 @@ function warcalc_set_tooltips()
         $("#wc133").prop("title", bl+"River"+nbl+"Swamp"+nbl+"Forest"+nbl+"Land/Heli in Fort vs. Land/Sea/Missile (not Armor)"+nbl+"Fighter over Fort/Fortress vs. Land/Sea/Missile (not Armor)"+nbl+"Sea unit in Naval base");
         $("#wc150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Jungle"+nbl+"Land unit Fortified OR inside city");
         $("#wc167").prop("title", bl+"Land/Heli in Fortress vs Armor/Aircraft"+nbl+"Land/Heli in Naval Base vs Armor/Aircraft");
-        $("#wc175").prop("title", bl+"Veteran-2 ('Hardened')"+nbl+"Forest River"+nbl+"Swamp River");
-        $("#wc200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Hills"+nbl+"Jungle River"+nbl+"Land/Heli in Fortress vs. Land/Sea/Missile"+nbl+"In city with Coastal Defense vs. Sea"+nbl
+        $("#wc175").prop("title", bl+"Veteran-2 ('Hardened')");
+        $("#wc200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Hills"+nbl+"Land/Heli in Fortress vs. Land/Sea/Missile"+nbl+"In city with Coastal Defense vs. Sea"+nbl
           + "In city with SAM Battery vs. Air (not Heli/Stealth)"+nbl+"In city with SDI vs. Missile"+nbl+"Pikemen vs Horse (not Cavalry)"+nbl+"Knight vs. Foot soldier"+nbl
           + "Cruiser,Battleship,M.Destroyer,AEGIS vs Submarine"+nbl+"Sea unit vs. Marines"+nbl+"AAA/Mobile SAM vs. Aircraft"+nbl+"Missile Destroyer vs. Air/Missile"+nbl+"Armor II vs. Missile");
         $("#wc210").prop("title", bl+"Veteran-4 ('Crack')");
         $("#wc220").prop("title", bl+"Veteran-5 ('Master')");
         $("#wc230").prop("title", bl+"Veteran-6 ('Champion')");
         $("#wc300").prop("title", bl+"Mountains"+nbl+"In city with City Walls vs Land/Heli (not Howitzer)"+nbl+"Knight vs. Horse (not Cavalry)"+nbl+"AEGIS vs. Air/Missile");
-        $("#wc400").prop("title", bl+"Mountains River"+nbl+"Destroyer vs. Submarine");
+        $("#wc400").prop("title", bl+"Destroyer vs. Submarine");
         // ATTACK BUTTONS
         $("#wca133").hide(); // unused except for table alignment
         $("#wca167").hide(); //   "      "     "    "      "
@@ -417,6 +417,25 @@ function warcalc_set_tooltips()
         $("#wc167").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "450px");}});
         $("#wc200").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "460px");}});
         $("#wc300").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "450px");}});
+
+        if (ruleset_control['name']=="Avant-garde") {  // AG distinctions
+          $("#wc133").prop("title", bl+"River"+nbl+"Swamp"+nbl+"Forest"+nbl+"Land/Heli in Fort vs. Land/Sea/Missile (not Armor)"+nbl+"Fighter over Fort/Fortress vs. Land/Sea/Missile (not Armor)"
+             +nbl+"Fighter vs. Dive Bomber"+nbl+"Dive Bomber, Ground Strike Fighter vs. Anti-Air");
+          $("#wc150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Jungle"+nbl+"Land unit Fortified OR inside city"
+             +nbl+"Helicopter vs. Foot or Mounted units");
+          $("#wc167").prop("title", bl+"Land/Heli in Fortress vs Armor/Aircraft"+nbl+"Land/Heli/Sea in Naval Base vs Armor/Aircraft");
+          $("#wc200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Hills"+nbl+"Land/Heli in Fortress vs. Land/Sea/Missile"+nbl+"Land/Heli/Sea in Naval Base vs. Land/Sea/Missile"+nbl+"In city with Coastal Defense vs. Sea"+nbl
+          + "In city with SAM Battery vs. Air (not Heli/Stealth)"+nbl+"In city with SDI vs. Missile"+nbl+"Pikemen vs Horse (not Cavalry)"+nbl+"Knight vs. Foot soldier"+nbl
+          + "Cruiser,Battleship,M.Destroyer,AEGIS vs Submarine"+nbl+"Sea unit vs. Marines"+nbl+"AAA/Mobile SAM vs. Aircraft"+nbl+"Missile Destroyer vs. Air/Missile"+nbl+"Armor II vs. Missile");
+
+          $("#wca150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Phalanx/Pikemen + Agoge of Sparta"+nbl+"Dive Bomber vs. Unable to attack Air");
+
+        //  $("#wca133").prop("title", bl+"Dive Bomber vs. Unable to attack Air");
+        //  $("#wca133").val("x1.33");
+        // $("#wca133").prop("disabled", false);
+        //  $("#wca133").show(); 
+          $("#wca200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"AAA/Mobile SAM vs. Aircraft");
+        }
 
         return;
   }

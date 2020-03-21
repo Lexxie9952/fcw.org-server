@@ -30,20 +30,24 @@ var server_settings = {};
 // Hard-coded client behaviours specific to certain rulesets get custom ruleset flags (CRF)
 // assigned to them inside handle_ruleset_control() (packhand.js). You can then hard-code 
 // specific client behaviour by checking for (client_rules_flag & CRF_FLAG_NAME):
-var client_rules_flag = 0;          // bit-flag for exceptional rules hard-coded into client
-const CRF_CARGO_HEURISTIC = 1;      // conventional ruleset generalisations for which cargo units go on which transports: filters a cleaner UI for transport loading
-const CRF_OASIS_IRRIGATE = 2;       // ruleset allows irrigating from oasis as a water source
-const CRF_ASMITH_SPECIALISTS = 4;   // six total specialists; but #4,#5,#6 are only active with A.Smith wonder
-const CRF_MP2_UNIT_CONVERSIONS = 8; // Leader,AAA,Worker,and Riflemen can do the unit CONVERT order
-const CRF_LEGION_WORK = 16;         // Legions can road and make forts
-const CRF_MASONRY_FORT = 32;        // Masonry tech allows building forts
-const CRF_CANALS = 64;              // Ruleset allows canals with Engineering
-const CRF_NO_UNIT_GOLD_UPKEEP = 128;// Ruleset doesn't use gold upkeep on units, so don't show it.
-const CRF_MP2_SPECIAL_UNITS = 256;  // Special rules/filters for handling extra units introduced in MP2: Well-Digger, Queen, Pilgrim, Proletarians
-const CRF_COMMIE_BLDG_UPKEEP= 512;  // Used for calculating/showing upkeep from buildings accurately for communist government bonus (in some rulesets)
-const CRF_PACTS_SANS_EMBASSY=1024;  // Ruleset allows treaties without embassy if contact_turns>0 but only for limited pacts
-const CRF_TESLA_UPGRADE_DISCOUNT=2048;//Ruleset has Tesla's Laboratory and gives a 20% discount on unit upgrades.
-const CRF_RADAR_TOWER = 4096;       // Ruleset has improvement for building Radar Tower over Airbase.
+var client_rules_flag          = []; // bit-flag for exceptional rules hard-coded into client
+const CRF_CARGO_HEURISTIC      =  0; // conventional ruleset generalisations for which cargo units go on which transports: filters a cleaner UI for transport loading
+const CRF_OASIS_IRRIGATE       =  1; // ruleset allows irrigating from oasis as a water source
+const CRF_ASMITH_SPECIALISTS   =  2; // six total specialists; but #4,#5,#6 are only active with A.Smith wonder
+const CRF_MP2_UNIT_CONVERSIONS =  3; // Leader,AAA,Worker,and Riflemen can do the unit CONVERT order
+const CRF_LEGION_WORK          =  4; // Legions can road and make forts
+const CRF_MASONRY_FORT         =  5; // Masonry tech allows building forts
+const CRF_CANALS               =  6; // Ruleset allows canals with Engineering
+const CRF_NO_UNIT_GOLD_UPKEEP  =  7; // Ruleset doesn't use gold upkeep on units, so don't show it.
+const CRF_MP2_SPECIAL_UNITS    =  8; // Special rules/filters for handling extra units introduced in MP2: Well-Digger, Queen, Pilgrim, Proletarians
+const CRF_COMMIE_BLDG_UPKEEP   =  9; // Used for calculating/showing upkeep from buildings accurately for communist government bonus (in some rulesets)
+const CRF_PACTS_SANS_EMBASSY   = 10; // Ruleset allows treaties without embassy if contact_turns>0 but only for limited pacts
+const CRF_TESLA_UPGRADE_DISCOUNT=11;//Ruleset has Tesla's Laboratory and gives a 20% discount on unit upgrades.
+const CRF_RADAR_TOWER          = 12; // Ruleset has improvement for building Radar Tower over Airbase.
+const CRF_EXTRA_HIDEOUT        = 13; // Ruleset has hideouts and hidden status.
+const CRF_EXTRA_QUAY           = 14; // Ruleset has Quay extra and Waterway Extra.
+const CRF_NO_WASTE             = 15; // Ruleset does not feature waste.
+const CRF_LAST                 = 16;
 
 var graphic_theme_path;
 
@@ -60,6 +64,7 @@ var default_sound_plugin_name = "";
 var sounds_enabled = true;
 var unit_click_menu = true;  // whether to show context menu on left-clicking a unit
 var map_drag_enabled = true; // whether double tap and drag will move the map
+var enable_goto_drag = true; // whether to disable dragging unit for GOTO
 var show_order_option = true; // corresponds to the checkbox
 var show_empire_tab = false;
 var show_warcalc = false;
@@ -212,6 +217,12 @@ function init_options_dialog()
   $('#map_drag_enabled').change(function() {
     map_drag_enabled = this.checked;
     simpleStorage.set('mapdrag', map_drag_enabled);
+  });
+  // GOTO DRAG ENABLED  
+  $('#enable_goto_drag').prop('checked', enable_goto_drag);
+  $('#enable_goto_drag').change(function() {
+    enable_goto_drag = this.checked;
+    simpleStorage.set('gotodrag', enable_goto_drag);
   });
   // UNIT CLICK GIVES CONTEXT MENU
   $('#unit_click_menu').prop('checked', unit_click_menu);

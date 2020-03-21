@@ -173,6 +173,12 @@
 						</div>
 						<c:if test="${default_lang}">
 							<div class="features">
+								Play a <b>Freeciv-web One Turn per Day</b>, where up to 300 human <br>players play one turn every day:
+							</div>
+						</c:if>
+						<a href="/game/list?v=longturn" class="btn"><i class="fa fa-users"></i> <fmt:message key="index-game-launcher-longturn"/></a>
+						<c:if test="${default_lang}">
+							<div class="features">
 								Start or join a game with multiple human or AI players.
 							</div>
 						</c:if>
@@ -189,13 +195,6 @@
 							</div>
 						</c:if>
 						<a href="/webclient/?action=hotseat&type=singleplayer" class="btn"><i class="fa fa-user-plus"></i> <fmt:message key="index-game-launcher-hotseat" /></a>
-
-						<c:if test="${default_lang}">
-							<div class="features">
-								Play a <b>Freeciv-web One Turn per Day</b>, where up to 300 human <br>players play one turn every day:
-							</div>
-						</c:if>
-						<a href="/game/list?v=longturn" class="btn"><i class="fa fa-users"></i> <fmt:message key="index-game-launcher-longturn"/></a>
 						
 					</div>
 				</div>

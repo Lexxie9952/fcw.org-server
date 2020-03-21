@@ -73,7 +73,6 @@ function mapview_mouse_click(e)
   }
 
   if (rightclick) {
-
     // Handle shift-right-click and ctrl-shift-right-click for copy/paste production target
     if (mouse_click_mod_key.shiftKey && mouse_click_mod_key.ctrlKey && !mouse_click_mod_key.altKey) {
       paste_tile_target_for_prod(mouse_x, mouse_y);
@@ -104,6 +103,7 @@ function mapview_mouse_click(e)
       map_select_check = false;
       mapview_mouse_movement = false;
     } else {   // PROCESS NORMAL LEFT CLICK HERE
+      //console.log("mapview_mouse_click about to call action_button_pressed")
       action_button_pressed(mouse_x, mouse_y, SELECT_POPUP);
     
       mapview_mouse_movement = false;
@@ -175,6 +175,7 @@ function mapview_mouse_down(e)
       return;
     }
     //console.log("Left mouse button DOWN.");
+    // if (airlift_active) return;  <<<<<<<<<< TODO was this line missing?
     if (goto_active) return;
     if (paradrop_active) return; // left-clicking on your own unit in paradrop mode was selecting it, in spite of 
                                  // action_button_pressed and do_map_click checking for paradrop_active; test for fix.      
@@ -246,7 +247,17 @@ function mapview_touch_start(e)
 ****************************************************************************/
 function mapview_touch_end(e)
 {
-  //console.log("mapview_touch_end(e)");
+  //console.log("mapview_touch_end(e) called: about to call action_button_pressed");
+  //console.log("    mapview_mouse_movement=="+mapview_mouse_movement+" real_mouse_move_mode=="+real_mouse_move_mode);
+
+  if (real_mouse_move_mode==true) {
+    /* We're on a touch device and just came out of map dragging, therefore 
+     * this touch_end event is NOT the user actually tapping an action.
+     * Interpreting such would make the tile the drag ended on become the 
+     * target for airlift, paradrop, and goto !! */
+    real_mouse_move_mode = false; // dragging has ended, turn off and return
+    return;
+  }
   action_button_pressed(touch_start_x, touch_start_y, SELECT_POPUP);
 }
 
@@ -255,6 +266,9 @@ function mapview_touch_end(e)
 ****************************************************************************/
 function mapview_touch_move(e)
 {
+  real_mouse_move_mode = true;
+  //console.log("mapview_touch_move(e) called");
+
   mouse_x = e.originalEvent.touches[0].pageX - $('#canvas').position().left;
   mouse_y = e.originalEvent.touches[0].pageY - $('#canvas').position().top;
 
@@ -269,18 +283,6 @@ function mapview_touch_move(e)
 
     mapview['gui_x0'] += diff_x;
     mapview['gui_y0'] += diff_y;
-
-    /* this would enable keeping unit selected for touch_device after map dragging
-       it currently has little use since
-         there is no way to give it an order if it's far away
-           it could still be used to drag a little to find a target for go to
-         it would be broken since it doesn't exit real_mouse_move_mode after dragging,
-           but we could fix that probably
-           
-    if (!mouse_touch_started_on_unit && !came_from_context_menu) {
-      mapview_mouse_movement = true; // if you clicked out of a context menu, don't do map drag
-   
-     } */
   }
 
   if (client.conn.playing == null) return;
@@ -325,7 +327,7 @@ function city_mapview_mouse_click(e)
 **************************************************************************/
 function action_button_pressed(canvas_x, canvas_y, qtype)
 {
-   // console.log("action_button_pressed(..))")
+  //console.log("action_button_pressed(..))")
   var ptile = canvas_pos_to_tile(canvas_x, canvas_y);
   clicked_city = tile_city(ptile); // record last clicked city or reset this to null
 

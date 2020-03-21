@@ -87,6 +87,9 @@ function unit_move_sound_play(unit)
       case "Ground Strike Fighter":
         move_sound = "pm-large-jets.ogg";
         break;
+      case "Helicopter":
+        move_sound = "pm_heli.ogg";
+        break;
 
 
       // TO DO: Helicopter, Armor, Cruise Missile, Nuclear 

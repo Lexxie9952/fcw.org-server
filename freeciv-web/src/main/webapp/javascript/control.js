@@ -1116,15 +1116,18 @@ function update_unit_order_commands()
   $("#order_upgrade").hide();
   $("#order_convert").hide();
   $("#order_maglev").hide();
+  $("#order_quay").hide();
   $("#order_canal").hide();
   $("#order_well").hide();
   $("#order_fortress").hide();
+  $("#order_hideout").hide();
   $("#order_navalbase").hide();
   $("#order_airbase").hide();
   $("#order_road").hide();  
   $("#order_railroad").hide();
   $("#order_mine").hide();
   $("#order_fortify").hide();  // not all non-Settlers can fortify (air/sea)
+  $("#order_vigil").hide();
   $("#order_irrigate").hide();
   $("#order_transform").hide(); 
   $("#order_build_farmland").hide();
@@ -1179,7 +1182,7 @@ function update_unit_order_commands()
     }
 
     // MP2 Unit Conversion handling
-    if (client_rules_flag & CRF_MP2_UNIT_CONVERSIONS) {
+    if (client_rules_flag[CRF_MP2_UNIT_CONVERSIONS]) {
       if (
           // Player can convert their Leader between king/queen:
           ptype['name']=="Leader" || ptype['name']=="Queen"
@@ -1222,31 +1225,65 @@ function update_unit_order_commands()
     if (ptile == null) continue;
     pcity = tile_city(ptile);
 
-    // rulesets which allow Legions to build Forts and Roads on non-domestic tiles-------------
-    if ((client_rules_flag & CRF_LEGION_WORK) && ptype['name'] == "Legion") {
+    // LEGIONS. rulesets which allow Legions to build Forts and Roads on non-domestic tiles-------------
+    if ((client_rules_flag[CRF_LEGION_WORK]) && ptype['name'] == "Legion") {
       
       // Forts:
       if (player_invention_state(client.conn.playing, tech_id_by_name('Masonry')) == TECH_KNOWN
-          && !tile_has_extra(ptile, EXTRA_FORT) ) {  // Show Fort button if Masonry and no Fort
-          unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
-          $("#order_fortress").show();           
-        }
-      // otherwise, Construction + no Fortress on tile = Show Fortress orders:
-      else if (!tile_has_extra(ptile, EXTRA_FORTRESS) && player_invention_state(client.conn.playing, tech_id_by_name('Construction')) == TECH_KNOWN) {
-        unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
-        $("#order_fortress").show();
+          && !tile_has_extra(ptile, EXTRA_FORT) 
+          && !pcity) {  // Show Fort button if Masonry and no Fort
+              unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
+              $("#order_fortress").show();           
       }
-      
+      if (!tile_has_extra(ptile, EXTRA_FORTRESS) 
+            && player_invention_state(client.conn.playing, tech_id_by_name('Construction')) == TECH_KNOWN
+            && !pcity
+          ) {
+              unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
+              $("#order_fortress").show();
+      }
+      if ( typeof EXTRA_NAVALBASE !== 'undefined'
+              && player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN 
+              && can_build_naval_base(punit,ptile)
+              && !pcity
+          ) {
+              unit_actions["navalbase"] = {name: "Naval Base (Shift-N)"};
+              $("#order_navalbase").show();
+      }
+       
       // Roads:
-      if (!tile_has_extra(ptile, EXTRA_ROAD)) { // TO DO, check if ptile is non-domestic (if it has no fort/ress)
-        if (tile_has_extra(ptile, EXTRA_RIVER) && player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) == TECH_UNKNOWN)
-          $("#order_road").hide(); // can't build road on river if bridge-building not known
-        else {
+      if (!tile_has_extra(ptile, EXTRA_ROAD)) {
+        const domestic = (ptile['owner'] == client.conn.playing.playerno) 
+        const has_river = tile_has_extra(ptile, EXTRA_RIVER);
+        const knows_bridges = (player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) == TECH_KNOWN);
+        var show = false; 
+
+        if (!domestic) show = true;
+        else if (tile_has_extra(ptile, EXTRA_FORT)) show = true;
+
+        if (has_river && !knows_bridges) show = false;   
+        
+        if (show) {
           $("#order_road").show();
           unit_actions["road"] = {name: "Road (R)"};
-        }
+        } else $("#order_road").hide();
       }
-    } //-------------------------
+    } //---------------------------------------------------------------------------------------------------
+    // hideouts
+    if (client_rules_flag[CRF_EXTRA_HIDEOUT] && server_settings['hideouts']['val']
+        && utype_has_flag(ptype,UTYF_FOOTSOLDIER)) {
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Warrior Code')) == TECH_KNOWN
+        && !pcity
+        && !tile_has_extra(ptile, EXTRA_FORT)
+        && !tile_has_extra(ptile, EXTRA_AIRBASE)
+        && ( (terrain_name == 'Mountains') || (terrain_name == 'Forest') || (terrain_name == 'Jungle') 
+              || (terrain_name == 'Swamp') )
+        && ( (ptile['owner'] == UNCLAIMED_LAND) || ptile['owner'] == client.conn.playing.playerno )
+        ) {  // Show Hideout button if Warrior Code and no other bases:
+        unit_actions["hideout"] = {name: string_unqualify("Hideout (Shift-H)")};
+        $("#order_hideout").show();
+      }
+    }
 
     // Figure out default of whether pillage is legal and show it, before applying special rules later
     if (get_what_can_unit_pillage_from(punit, ptile).length > 0
@@ -1357,55 +1394,70 @@ function update_unit_order_commands()
       }
  
       // Order to make Fort with masonry (if ruleset allows it)
-      if ((client_rules_flag & CRF_MASONRY_FORT)) {
+      if (client_rules_flag[CRF_MASONRY_FORT]) {
         // Masonry + No Fort on tile = show order to make Fort
-        if (player_invention_state(client.conn.playing, tech_id_by_name('Masonry')) == TECH_KNOWN && !tile_has_extra(ptile, EXTRA_FORT) ) {
+        if (player_invention_state(client.conn.playing, tech_id_by_name('Masonry')) == TECH_KNOWN 
+            && !tile_has_extra(ptile, EXTRA_FORT)
+            && !pcity) {
               unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
               $("#order_fortress").show();
         }
       } 
       // Construction + no Fortress on tile = show order to make Fortress:
-      if (player_invention_state(client.conn.playing, tech_id_by_name('Construction')) == TECH_KNOWN && !tile_has_extra(ptile, EXTRA_FORTRESS)) {
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Construction')) == TECH_KNOWN 
+          && !tile_has_extra(ptile, EXTRA_FORTRESS)
+          && !pcity) {
         unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
         $("#order_fortress").show();
-      } else // Naval Base
+      } 
       if ( typeof EXTRA_NAVALBASE !== 'undefined'
-           && player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN 
-           && can_build_naval_base(punit,ptile) ) {
-
-            unit_actions["navalbase"] = {name: "Naval Base (Shift-F)"};
-            if (show_order_buttons==2) $("#order_navalbase").show(); // not frequently used button
-      }   
-
-      // Order to make Radar Tower Radar (if ruleset allows it)
-      if ((client_rules_flag & CRF_RADAR_TOWER)) {
+              && player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN 
+              && can_build_naval_base(punit,ptile)
+              && !pcity) {
+              unit_actions["navalbase"] = {name: "Naval Base (Shift-N)"};
+              $("#order_navalbase").show();
+      }
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Radio')) == TECH_KNOWN
+          && !tile_has_extra(ptile, EXTRA_AIRBASE) && !pcity) {
+            unit_actions["airbase"] = {name: string_unqualify(terrain_control['gui_type_base1']) + " (Shift-E)"};
+            if (show_order_buttons==2) $("#order_airbase").show();
+      } else if (client_rules_flag[CRF_RADAR_TOWER]) { // Order to make Radar Tower Radar (if ruleset allows it)
         // Radar + has Airbase but no Radar on tile = show order to make Radar
         if (player_invention_state(client.conn.playing, tech_id_by_name('Radar')) == TECH_KNOWN 
             && tile_has_extra(ptile, EXTRA_AIRBASE)          
-            && !tile_has_extra(ptile, EXTRA_RADAR) ) {
+            && !tile_has_extra(ptile, EXTRA_RADAR) 
+            && !pcity) {
               unit_actions["airbase"] = {name: "Build Radar (Shift-E)"};
               if (show_order_buttons==2) $("#order_airbase").show();
         }
-      } else if (player_invention_state(client.conn.playing, tech_id_by_name('Radio')) == TECH_KNOWN
-                && !tile_has_extra(ptile, EXTRA_AIRBASE) ) {
-                  
-                  unit_actions["airbase"] = {name: string_unqualify(terrain_control['gui_type_base1']) + " (Shift-E)"};
-                  if (show_order_buttons==2) $("#order_airbase").show();
-      }
+      } 
 
     } else {   // Handle all things non-Settler types may have in common here:
-      if (utype_can_do_action(ptype, ACTION_FORTIFY)) $("#order_fortify").show();  
+      if (utype_can_do_action(ptype, ACTION_FORTIFY)) {
+        $("#order_fortify").show(); 
+        unit_actions["fortify"] = {name: "Fortify (F)"};
+      } 
       $("#order_sentry").show();  // TO DO?: air units and new triremes can't sentry outside a fueling tile      
-      unit_actions["fortify"] = {name: "Fortify (F)"};
+      if (unit_can_vigil(punit)) {
+        $("#order_vigil").show(); 
+        unit_actions["vigil"] = {name: "Vigil (Ctrl-V)"};
+      }
     }
 
     if (show_order_buttons==2) $("#order_explore").show(); //not frequently used for most units
     
     // Rulesets which allow Canals:
-    if (client_rules_flag & CRF_CANALS) {
+    if (client_rules_flag[CRF_CANALS]) {
       if (can_build_canal(punit, ptile)) {
-        if (show_order_buttons==2) $("#order_canal").show(); // not frequently used button
+        /*if (show_order_buttons==2)*/ $("#order_canal").show(); // not frequently used button
         unit_actions["canal"] = {name: "Canal"};
+      }
+    }
+    // Rulesets which allow Quays:
+    if (client_rules_flag[CRF_EXTRA_QUAY]) {
+      if (can_build_quay(punit, ptile)) {
+        $("#order_quay").show();
+        unit_actions["quay"] = {name: "Build Quay (Q)"};
       }
     }
     // Well-Digger-----------------------
@@ -1436,7 +1488,7 @@ function update_unit_order_commands()
     unit_actions["action_selection"] = {name: "Do... (D)"};
 
     if (utype_can_do_action(ptype, ACTION_TRANSFORM_TERRAIN)) {
-      if (show_order_buttons==2) $("#order_transform").show(); //not frequently used button
+      $("#order_transform").show(); //not frequently used button
       unit_actions["transform"] = {name: "Transform terrain (O)"};
     } else {
       $("#order_transform").hide();
@@ -1501,7 +1553,7 @@ function update_unit_order_commands()
       // upgrade cost = 2*T + (T*T)/20, where T = shield_cost_of_new unit - (shield_cost_of_old unit / 2)
       upgrade_cost = 2*upgrade_cost + Math.floor( (upgrade_cost*upgrade_cost)/20 );
       // TODO: check for effect Upgrade_Price_Pct when possible and multiply that constant to upgrade_cost
-      if (client_rules_flag & CRF_TESLA_UPGRADE_DISCOUNT) {
+      if (client_rules_flag[CRF_TESLA_UPGRADE_DISCOUNT]) {
         if ( player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_TESLAS_LABORATORY)) ) {
           upgrade_cost = Math.floor( upgrade_cost * 0.80); // 20% discount for Tesla's Lab
         }
@@ -1535,7 +1587,7 @@ function update_unit_order_commands()
       }
     }
 
-    // Unload unit from transport
+    // Unload unit from transport ---------------------------------------
     var units_on_tile = tile_units(ptile);
     if (units_on_tile) { 
       if (ptype['transport_capacity'] > 0 && units_on_tile.length >= 2) {
@@ -1543,15 +1595,36 @@ function update_unit_order_commands()
           var tunit = units_on_tile[r];
           if (tunit['transported']) {
             unit_actions["unit_show_cargo"] = {name: "Select Cargo (Shift-U)"};
-
-            if (pcity != null) {
+            // Check conditions which allow Unload Transport (T):
+            // 1. Marines on native tile
+            if (utype_has_flag(unit_types[tunit['type']], UTYF_MARINES) && !is_ocean_tile(ptile)) {
               unit_actions["unit_unload"] = {name: "Unload Transport (T)"};
               $("#order_unload").show();
-            } else $("#order_activate_cargo").show(); // if no option to unload, show option to activate or 'wake' units
+            }
+            // 2. In a city
+            else if (pcity != null) {
+              unit_actions["unit_unload"] = {name: "Unload Transport (T)"};
+              $("#order_unload").show();
+            } else { // 3. In a Naval Base
+              if (typeof EXTRA_NAVALBASE !== "undefined") {
+                if (tile_has_extra(ptile, EXTRA_NAVALBASE)) {
+                  unit_actions["unit_unload"] = {name: "Unload Transport (T)"};
+                  $("#order_unload").show();
+                }
+              } // 4. on a Quay
+              if (client_rules_flag[CRF_EXTRA_QUAY]) {
+                if (tile_has_extra(ptile, EXTRA_QUAY)) {
+                  unit_actions["unit_unload"] = {name: "Unload Transport (T)"};
+                  $("#order_unload").show();
+                }
+              }
+              $("#order_activate_cargo").show(); // if no option to unload, show option to activate or 'wake' units
+            }
           }
         }
       }
     }
+    //------------------------------------------------------------
   }
 
   /* TO DO at this spot:
@@ -2963,13 +3036,24 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'H':
-      key_unit_homecity();
+      if (shift) {
+        key_unit_hideout();
+      } else key_unit_homecity();
     break;
 
     case 'N':
       if (shift) {
-        key_unit_nuke();
-      } else {
+        if (current_focus.length>0) {
+          if (unit_types[current_focus[0]['type']]['name'].includes("Atom")
+              || unit_types[current_focus[0]['type']]['name'].includes("Nuclear")
+              || unit_types[current_focus[0]['type']]['name'].includes("Nuke")
+              || unit_types[current_focus[0]['type']]['name'].includes("Bomb") ) {
+              
+                key_unit_nuke();
+          } else key_unit_naval_base();
+        } 
+      }
+      else {
         key_unit_fallout();
       }
     break;
@@ -2983,6 +3067,10 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
           else key_unit_pollution();
         }
       }
+    break;
+
+    case 'Q':
+      key_unit_quay();
     break;
 
     case 'R':
@@ -3045,6 +3133,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
           key_unit_move(DIR8_NORTHWEST); // alt+I=8
         }
       }
+      else if (shift) key_unit_vigil();
       else if (!shift && !alt && !ctrl) key_unit_irrigate();
     break;
     case 'O':
@@ -3326,6 +3415,10 @@ function handle_context_menu_callback(key)
       key_unit_fortify();
       break;
 
+    case "vigil":
+      key_unit_vigil();
+      break;
+
     case "road":
       key_unit_road();
       break;
@@ -3336,6 +3429,10 @@ function handle_context_menu_callback(key)
 
     case "maglev":
       key_unit_road();
+      break;
+
+    case "quay":
+      key_unit_quay();
       break;
 
     case "canal":
@@ -3373,6 +3470,10 @@ function handle_context_menu_callback(key)
     case "fort": 
     case "fortress":
       key_unit_fortress();
+      break;
+    
+    case "hideout":
+      key_unit_hideout();
       break;
 
     case "navalbase":
@@ -3545,17 +3646,17 @@ function deactivate_goto(will_advance_unit_focus)
   prev_goto_tile = null;  // next goto is clear and fresh
   clear_goto_tiles();
 
-  /* Clear the order this action would have performed. */
-  goto_last_order = ORDER_LAST;
-  goto_last_action = ACTION_COUNT;
-
-  // update focus to next unit after 600ms.
-  if (will_advance_unit_focus) setTimeout(update_unit_focus, update_focus_delay);
+  // update focus to next unit after 600ms, except for a nuke: let
+  //  them watch of course!
+  if (will_advance_unit_focus && !(goto_last_action == ACTION_NUKE))
+    setTimeout(update_unit_focus, update_focus_delay);
   /* if leaving goto mode but not advancing, restore unit dialog to
      display unit stats instead of 'turns for goto' */
   else update_active_units_dialog(); 
 
-
+  /* Clear the order this action would have performed. */
+  goto_last_order = ORDER_LAST;
+  goto_last_action = ACTION_COUNT;
 }
 
 /**************************************************************************
@@ -3607,7 +3708,7 @@ function key_unit_load()
   /* Client gets no info from server for which cargo is allowed on which
    * transports. So we use pragmatic heuristics to generate a better list
   // for 99.5% of the games played, which are in common rulesets */
-  var normal_ruleset = (client_rules_flag & CRF_CARGO_HEURISTIC);
+  var normal_ruleset = (client_rules_flag[CRF_CARGO_HEURISTIC]);
   var funits = get_units_in_focus();
 
   // Send command for each selected unit in focus:
@@ -3738,6 +3839,8 @@ function key_unit_unload()
 {
   var funits = get_units_in_focus();
   var units_on_tile = [];
+
+  // why are we looping to set these ?!
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     var ptile = index_to_tile(punit['tile']);
@@ -3746,13 +3849,30 @@ function key_unit_unload()
 
   for (var i = 0; i < units_on_tile.length; i++) {
     var punit = units_on_tile[i];
+    // old command prior to action_enabler ACTION_TRANSPORT_UNLOAD
     if (punit['transported'] && punit['transported_by'] > 0 ) {
+      if (unit_can_do_unload(punit)) {
       var packet = {
         "pid"         : packet_unit_unload,
         "cargo_id"    : punit['id'],
         "transporter_id"   : punit['transported_by']
       };
       send_request(JSON.stringify(packet));
+    }
+    
+    /* pop this in when we get ACTION_TRANSPORT_UNLOAD into server
+    if (punit['transported'] && punit['transported_by'] > 0 ) {  
+      var packet = {
+        "pid" : packet_unit_do_action,
+        "actor_id"    : punit['transported_by'],
+        "target_id"   : punit['id'],
+        "extra_id"    : EXTRA_NONE,
+        "value"       : 0,
+        "name"        : "",
+        "action_type" : ACTION_TRANSPORT_UNLOAD 
+      };
+      send_request(JSON.stringify(packet));   
+    }*/
     }
   }
   deactivate_goto(false);
@@ -3947,6 +4067,25 @@ function key_unit_idle()
 }
 
 /**************************************************************************
+ Tell the units to vigil the tile (autoattack anyone adjacent)
+**************************************************************************/
+function key_unit_vigil()
+{
+  // unit will refocus on itself, so remove ui-blocking state
+  came_from_context_menu = false;
+
+  var funits = get_units_in_focus();
+  for (var i = 0; i < funits.length; i++) {
+    var punit = funits[i];
+    if (unit_can_vigil(punit)) {
+      request_new_unit_activity(punit, ACTIVITY_VIGIL, EXTRA_NONE);
+    }
+  }
+  deactivate_goto(false);
+  setTimeout(update_unit_focus, update_focus_delay);
+}
+
+/**************************************************************************
  Tell the units in focus to sentry.
 **************************************************************************/
 function key_unit_sentry()
@@ -3990,14 +4129,38 @@ function key_unit_fortify()
 **************************************************************************/
 function key_unit_fortress()
 {
-  var navbase_rules = (typeof EXTRA_NAVALBASE !== "undefined");
+  //navalbase no longer goes on top of fortress, they both go on top of fort
+  //var navbase_rules = (typeof EXTRA_NAVALBASE !== "undefined");
 
+  var funits = get_units_in_focus();
+  for (var i = 0; i < funits.length; i++) {
+    var punit = funits[i];
+    //var ptile = tiles[punit['tile']]; 
+    var activity = EXTRA_NONE;     /* EXTRA_NONE -> server decides */
+    request_new_unit_activity(punit, ACTIVITY_BASE, activity);
+  }
+  deactivate_goto(false);
+  setTimeout(update_unit_focus, update_focus_delay);
+}
+
+/**************************************************************************
+ Tell the units in focus to build a hideout
+**************************************************************************/
+function key_unit_hideout()
+{
+  var hideout_rules = false; // whether ruleset has hideouts turned ON
+  
+  if (server_settings['hideouts']) {
+    hideout_rules = (client_rules_flag[CRF_EXTRA_HIDEOUT])
+                     && server_settings['hideouts']['val']; 
+  }
+  
   var funits = get_units_in_focus();
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     var ptile = tiles[punit['tile']]; 
     var activity = EXTRA_NONE;     /* EXTRA_NONE -> server decides */
-    if (navbase_rules && tile_has_extra(ptile, EXTRA_FORTRESS)) activity=EXTRA_NAVALBASE;
+    if (hideout_rules) activity=EXTRA_;
 
     request_new_unit_activity(punit, ACTIVITY_BASE, activity);
   }
@@ -4010,7 +4173,7 @@ function key_unit_fortress()
 **************************************************************************/
 function key_unit_airbase()
 {
-  var radar_rules = (client_rules_flag & CRF_RADAR_TOWER);
+  var radar_rules = client_rules_flag[CRF_RADAR_TOWER];
   var activity = EXTRA_AIRBASE;
 
   var funits = get_units_in_focus();
@@ -4207,6 +4370,43 @@ function key_unit_mine()
 }
 
 /**************************************************************************
+ Check whether a unit can vigil.
+**************************************************************************/
+function unit_can_vigil(punit)
+{
+  // Hard coded for now until we get action enablers
+  var ptype = unit_type(punit);
+  var name = ptype['name'];
+  var moves_used = (parseFloat(ptype['move_rate']) / parseFloat(SINGLE_MOVE))
+                 - (parseFloat(punit['movesleft']) / parseFloat(SINGLE_MOVE));
+
+  // For now Vigil is only for these server settings:               
+  if (server_settings["autoattack"]["val"] != true) return false;             
+  if (server_settings["autoattack_style"]["val"] == 0) return false;         
+
+    switch (name) {
+      case "Fighter":
+        if (moves_used <= 2) 
+          return true;
+        break;
+      case "Escort Fighter":
+        if (moves_used <= 3) 
+          return true;
+        break;
+      case "Jet Fighter":
+        if (moves_used <= 3) 
+          return true;
+        break;  
+      case "Stealth Fighter":
+        if (moves_used <= 4)
+          return true;
+        break;
+    }
+  return false;
+}
+
+
+/**************************************************************************
  Check whether a unit can build a maglev in a tile.
 **************************************************************************/
 function can_build_maglev(punit, ptile)
@@ -4259,36 +4459,81 @@ function key_unit_well()
 }
 
 /**************************************************************************
- Check whether a unit can build a canal on a tile.
+ Returns whether a unit can build a canal on a tile. Instead of true,
+ returns the EXTRA_CANAL or EXTRA_WATERWAY code for which kind to make,
+ otherwise returns false.
 **************************************************************************/
 function can_build_canal(punit, ptile)
 {
   var is_lowland = (tile_terrain(ptile)['name'] != 'Hills' 
                    && tile_terrain(ptile)['name'] != 'Mountains');
   
-  var water_near = false;
+  var water_near = 0; // whether water is near; and then, if it is, what type
+                          // of canal gets enabled by it (canal or waterway)
   
-  // check for water near:
+  // Check for water near:
   for (var dir = 0; dir < 8; dir++) {
     /* Check if there is adjacent ocean/deep ocean/lake */
     var tile1 = mapstep(ptile, dir);
     if (tile1 != null) {
         if (terrains[tile1['terrain']]['name'] == "Lake"
         || terrains[tile1['terrain']]['name'] == "Ocean"
-        || terrains[tile1['terrain']]['name'] == "Deep Ocean" ) {
-          water_near = true;        
+        || terrains[tile1['terrain']]['name'] == "Deep Ocean") {
+          water_near = EXTRA_CANAL;        
+          break;
+        }
+        // CRF_EXTRA_QUAY says if ruleset has waterways, which can be made with river near:
+        else if ( client_rules_flag[CRF_EXTRA_QUAY] && tile_has_extra(tile1, EXTRA_RIVER) ) {
+          water_near = EXTRA_WATERWAY;        
           break;
         }
     }
   }               
 
-  return ((typeof EXTRA_CANAL !== "undefined")
+  if ((typeof EXTRA_CANAL !== "undefined")
+      &&  (punit != null && ptile != null)
+      &&  (!tile_has_extra(ptile, EXTRA_CANAL))
+      &&  (unit_can_do_action(punit, ACTION_ROAD))
+      && (is_lowland) 
+      && (water_near)
+      &&  (player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN) ) {
+
+        return water_near; // serves as a code for whether to make Canal or Waterway extra.
+      }
+
+  return 0; // i.e., false, no type allowed (not canal nor waterway)
+/*  return ((typeof EXTRA_CANAL !== "undefined")
       &&  (punit != null && ptile != null)
       &&  (!tile_has_extra(ptile, EXTRA_CANAL))
       &&  (unit_can_do_action(punit, ACTION_ROAD))
       && (is_lowland) 
       && (water_near)
       &&  (player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN)
+         ); */
+}
+
+/**************************************************************************
+ Check whether a unit can build a quay on a tile.
+**************************************************************************/
+function can_build_quay(punit, ptile)
+{
+  const domestic = (ptile['owner'] == client.conn.playing.playerno) 
+  var ptype = unit_type(punit);
+
+  if (ptype['name'] == "Legion") {
+    if ( (domestic) && !tile_has_extra(ptile, EXTRA_FORT) )
+      return false;
+  }
+
+  return ((typeof EXTRA_QUAY !== "undefined")
+      &&  (punit != null && ptile != null)
+      &&  (!tile_has_extra(ptile, EXTRA_QUAY))
+      &&  (!tile_has_extra(ptile, EXTRA_))
+      &&  (tile_has_extra(ptile, EXTRA_RIVER) 
+           || tile_has_extra(ptile, EXTRA_CANAL)
+           || tile_has_extra(ptile, EXTRA_WATERWAY))
+      &&  (unit_can_do_action(punit, ACTION_ROAD))
+      &&  (player_invention_state(client.conn.playing, tech_id_by_name('Pottery')) == TECH_KNOWN)
          );
 }
 
@@ -4323,7 +4568,7 @@ function can_irrigate(punit, ptile)
 
   // Check central tile for water source:
   var water_near = tile_has_extra(ptile, EXTRA_RIVER) // irrigation is also a water source but, it's already irrigated! ;)
-      || (tile_has_extra(ptile, EXTRA_OASIS) && (client_rules_flag & CRF_OASIS_IRRIGATE));
+      || (tile_has_extra(ptile, EXTRA_OASIS) && (client_rules_flag[CRF_OASIS_IRRIGATE]));
   
   // If no water on occupied tile, check cardinally adjacent:
   if (!water_near) {
@@ -4339,7 +4584,7 @@ function can_irrigate(punit, ptile)
          || terrain_name == "Deep Ocean"
          || tile_has_extra(cadj_tile, EXTRA_IRRIGATION) 
          || tile_has_extra(cadj_tile, EXTRA_RIVER)              
-         || (tile_has_extra(cadj_tile, EXTRA_OASIS) && (client_rules_flag & CRF_OASIS_IRRIGATE)) ) { 
+         || (tile_has_extra(cadj_tile, EXTRA_OASIS) && (client_rules_flag[CRF_OASIS_IRRIGATE])) ) { 
             water_near = true;        
             break; // one adjacent water is all that's needed
         }
@@ -4360,7 +4605,7 @@ function can_irrigate(punit, ptile)
 **************************************************************************/
 function can_build_naval_base(punit, ptile)
 {
-  if (!tile_has_extra(ptile, EXTRA_FORTRESS)) return false; 
+  if (!tile_has_extra(ptile, EXTRA_FORT)) return false; 
 
   var is_lowland = (tile_terrain(ptile)['name'] != 'Hills' 
                    && tile_terrain(ptile)['name'] != 'Mountains');
@@ -4384,11 +4629,11 @@ function can_build_naval_base(punit, ptile)
   }               
 
   return ((typeof EXTRA_NAVALBASE !== "undefined")
-      &&  (punit != null && ptile != null)
-      &&  (unit_can_do_action(punit, ACTION_BASE))
-      && (is_lowland) 
-      && (water_near)
-      &&  (player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN)
+            && (punit != null && ptile != null)
+            && (unit_can_do_action(punit, ACTION_BASE))
+            && (is_lowland) 
+            && (water_near)
+            && (player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN)
          );
 }
 
@@ -4403,8 +4648,9 @@ function key_unit_canal()
   for (var i = 0; i < funits.length; i++) {
     const punit = funits[i];
     const ptile = index_to_tile(punit['tile']);
-    if (can_build_canal(punit, ptile)) {
-      request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Canal']['id']);
+    var allowed_type = can_build_canal(punit, ptile); //EXTRA_CANAL or EXTRA_WATERWAY
+    if (allowed_type) {
+      request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, allowed_type/*extras['Canal']['id']*/);
     }
   }
   deactivate_goto(false);
@@ -4412,7 +4658,7 @@ function key_unit_canal()
 }
 
 /**************************************************************************
- Tell the units in focus to build canal.
+ Tell the units in focus to build naval base.
 **************************************************************************/
 function key_unit_naval_base()
 {
@@ -4422,7 +4668,7 @@ function key_unit_naval_base()
       FC 3.0 server checks if a conflicting action is being done on the tile 
       BEFORE changing action; thus a unit can't change to a new action that
       conflicts with the old action you try to replace (how genius!). Because
-      naval base conflicts with airbase,irrigation,and mine, it's often
+      naval base conflicts with airbase, it's often
       falsely "illegal" to change your mind. Here we fix half the cases 
       by canceling the current action first. */
   const funits = get_units_in_focus();
@@ -4464,6 +4710,27 @@ function key_unit_road()
     } else if (can_build_maglev(punit, ptile)) {
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Maglev']['id']);
     }
+  }
+  deactivate_goto(false);
+  setTimeout(update_unit_focus, update_focus_delay);
+}
+
+
+/**************************************************************************
+ Tell the units in focus to build a quay
+**************************************************************************/
+function key_unit_quay()
+{
+  var quay_rules = client_rules_flag[CRF_EXTRA_QUAY];
+  
+  var funits = get_units_in_focus();
+  for (var i = 0; i < funits.length; i++) {
+    var punit = funits[i];
+    var ptile = tiles[punit['tile']]; 
+    var activity = EXTRA_NONE;     /* EXTRA_NONE -> server decides */
+    if (quay_rules) activity=EXTRA_QUAY;
+
+    request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, activity);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
@@ -5499,6 +5766,12 @@ function update_active_units_dialog()
 **************************************************************************/
 function set_mouse_touch_started_on_unit(ptile) {
   if (ptile == null) return;
+
+  if (!enable_goto_drag) {
+    mouse_touch_started_on_unit = false;
+    return;
+  }
+
   var sunit = find_visible_unit(ptile);
   if (sunit != null && client.conn.playing != null && sunit['owner'] == client.conn.playing.playerno) {
     mouse_touch_started_on_unit = true;

@@ -282,6 +282,10 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
           var canal_sprite = get_tile_river_like_sprite(ptile, EXTRA_CANAL, "road.canal");
           if (canal_sprite != null) sprite_array.push(canal_sprite);
         }
+        if (typeof EXTRA_WATERWAY !== "undefined") {
+          var canal_sprite = get_tile_river_like_sprite(ptile, EXTRA_WATERWAY, "road.canal");
+          if (canal_sprite != null) sprite_array.push(canal_sprite);
+        }
 
         var spec_sprite = get_tile_specials_sprite(ptile);
         if (spec_sprite != null) sprite_array.push(spec_sprite);
@@ -714,9 +718,16 @@ function fill_unit_sprite_array(punit, stacked, backdrop)
         dx -= 11; dy -= 6;
         sx = 8;
         break;
+    case "Ground Strike Fighter":
+        dx += 2; dy -= 1;
+        sx = 8;
+        break;    
     case "Bomber":
     case "Heavy Bomber":
         dx += 2; dy += 2;
+        sx = 8;
+        break;
+    case "Helicopter":
         sx = 8;
         break;
     case "Horsemen":
@@ -1309,12 +1320,26 @@ function get_unit_activity_sprite(punit)
             "offset_y" : - unit_activity_offset_y};
 
     case ACTIVITY_SENTRY:
-        return {"key" : "unit.sentry",
+      if (client_rules_flag[CRF_EXTRA_HIDEOUT]) {
+        if (tile_has_extra(tiles[punit['tile']], EXTRA_)) {
+          return {"key" : "unit.sentry_hidden",
             "offset_x" : unit_activity_offset_x,
             "offset_y" : - unit_activity_offset_y};
+        }
+      }
+      return {"key" : "unit.sentry",
+          "offset_x" : unit_activity_offset_x,
+          "offset_y" : - unit_activity_offset_y};
           
     case ACTIVITY_FORTIFIED:
-        return {"key" : "unit.fortified",
+      if (client_rules_flag[CRF_EXTRA_HIDEOUT]) {
+        if (tile_has_extra(tiles[punit['tile']], EXTRA_)) {
+          return {"key" : "unit.fortified_hidden",
+            "offset_x" : unit_activity_offset_x,
+            "offset_y" : - unit_activity_offset_y};
+        }
+      }
+      return {"key" : "unit.fortified",
             "offset_x" : unit_activity_offset_x,
             "offset_y" : - unit_activity_offset_y};
 
@@ -1334,6 +1359,11 @@ function get_unit_activity_sprite(punit)
       return {"key" : "unit.pillage",
           "offset_x" : unit_activity_offset_x,
           "offset_y" : - unit_activity_offset_y};
+
+    case ACTIVITY_VIGIL:
+        return {"key" : "unit.vigil",
+            "offset_x" : unit_activity_offset_x,
+            "offset_y" : - unit_activity_offset_y};
 
     case ACTIVITY_EXPLORE:
       return {"key" : "unit.auto_explore",
@@ -1387,6 +1417,14 @@ function get_unit_activity_sprite(punit)
       return {"key" : "unit.auto_settler",
           "offset_x" : 20, //FIXME.
           "offset_y" : - unit_activity_offset_y};
+  }
+
+  if (client_rules_flag[CRF_EXTRA_HIDEOUT]) {
+    if (tile_has_extra(tiles[punit['tile']], EXTRA_)) {
+      return {"key" : "unit.hidden",
+        "offset_x" : unit_activity_offset_x,
+        "offset_y" : - unit_activity_offset_y};
+    }
   }
 
   return null;
@@ -1518,13 +1556,29 @@ function get_tile_river_like_sprite(ptile, extra, prefix)
     return null;
   }
   var extra2 = extra;   // 'synonymous' connective extra: extras can be connective to a twin type
+  
+  var integrate_extras = [];
 
-  // Make naval base and river synonymously connective to adjacent water and each other
+  // TO DO: if these are predefined it might be less processing time
+  // Handle "integrates" feature of roads. Has to be hard-coded until server gives this info.
   if (typeof EXTRA_NAVALBASE !== 'undefined') {
-    if (extra == EXTRA_NAVALBASE)
+    // process in order of frequency
+    if (extra == EXTRA_RIVER) {
+      extra2 = EXTRA_NAVALBASE;
+      integrate_extras = [EXTRA_WATERWAY, EXTRA_NAVALBASE, EXTRA_CANAL];
+    }
+    else if (extra == EXTRA_CANAL) {
+      extra2 = EXTRA_NAVALBASE;
+      integrate_extras = [EXTRA_WATERWAY, EXTRA_NAVALBASE, EXTRA_RIVER];
+    }
+    else if (extra == EXTRA_WATERWAY) {
+      extra2 = EXTRA_NAVALBASE;
+      integrate_extras = [EXTRA_RIVER, EXTRA_CANAL, EXTRA_NAVALBASE];
+    }
+    else if (extra == EXTRA_NAVALBASE) {
       extra2 = EXTRA_RIVER;
-    else if (extra == EXTRA_RIVER)
-      extra2 = EXTRA_NAVALBASE
+      integrate_extras = [EXTRA_RIVER, EXTRA_CANAL, EXTRA_WATERWAY];
+    }
   }
 
   if (tile_has_extra(ptile, extra)) {
@@ -1533,7 +1587,11 @@ function get_tile_river_like_sprite(ptile, extra, prefix)
       var dir = cardinal_tileset_dirs[i];
       var checktile = mapstep(ptile, dir);
       if (checktile 
-          && (tile_has_extra(checktile, extra) || tile_has_extra(checktile, extra2) || is_ocean_tile(checktile))) {
+          && (tile_has_extra(checktile, extra)
+          || is_ocean_tile(checktile)
+          || tile_has_extra(checktile, integrate_extras[0])
+          || tile_has_extra(checktile, integrate_extras[1])
+          || tile_has_extra(checktile, integrate_extras[2])  )  ) {
         river_str = river_str + dir_get_tileset_name(dir) + "1";
       } else {
         river_str = river_str + dir_get_tileset_name(dir) + "0";
@@ -1745,6 +1803,12 @@ function fill_road_rail_sprite_array(ptile, pcity)
 {
   var road = tile_has_extra(ptile, EXTRA_ROAD);
   var rail = tile_has_extra(ptile, EXTRA_RAIL);
+  
+  // Quays connect/integrate into roads, in a one-way nature: offloading is
+  // road 1/3 move, onloading is 1 move. So we draw the road on the tile that
+  // has it but not the quay, but we show the road going TOWARD the quay.
+  //if (client_rules_flag[CRF_EXTRA_QUAY])
+  //  road |= tile_has_extra(ptile, EXTRA_QUAY);
 
   if (typeof EXTRA_MAGLEV !== "undefined") {
     var maglev = tile_has_extra(ptile, EXTRA_MAGLEV);
@@ -1763,12 +1827,12 @@ function fill_road_rail_sprite_array(ptile, pcity)
   var draw_single_rail = rail && pcity == null;
   var draw_single_maglev = maglev == true && pcity == null && maglev == false;
 
-
   for (var dir = 0; dir < 8; dir++) {
     /* Check if there is adjacent road/rail. */
     var tile1 = mapstep(ptile, dir);
     if (tile1 != null && tile_get_known(tile1) != TILE_UNKNOWN) {
       road_near[dir] = tile_has_extra(tile1, EXTRA_ROAD);
+      if (client_rules_flag[CRF_EXTRA_QUAY]) road_near[dir] |= tile_has_extra(tile1, EXTRA_QUAY);
       rail_near[dir] = tile_has_extra(tile1, EXTRA_RAIL);
       if (typeof EXTRA_MAGLEV !== "undefined") {
         maglev_near[dir] = tile_has_extra(tile1, EXTRA_MAGLEV);
@@ -1928,6 +1992,12 @@ function fill_layer2_sprite_array(ptile, pcity)
     if (typeof EXTRA_RADAR !== 'undefined')  {
       if (tile_has_extra(ptile, EXTRA_RADAR)) {
         result_sprites.push({"key" : "base.radar_mg",
+                            "offset_y" : -normal_tile_height / 2});
+      }
+    }
+    if (typeof EXTRA_QUAY !== 'undefined')  {
+      if (tile_has_extra(ptile, EXTRA_QUAY)) {
+        result_sprites.push({"key" : "base.quay_mg",
                             "offset_y" : -normal_tile_height / 2});
       }
     }

@@ -165,6 +165,48 @@ function unit_can_do_action(punit, act_id)
 }
 
 /**************************************************************************
+  Return TRUE if this unit can unload. Currently hard-coded as a
+  placeholder for proper ruleset actionenablers.
+**************************************************************************/
+function unit_can_do_unload(punit)
+{
+  if (!punit) return false;
+  var rules = ruleset_control['name'];
+  if (rules != "Avant-garde" && rules != "Multiplayer-Evolution ruleset")
+    return true; // no actionenabler restrictions on other rulesets
+  //****************************************************************** */
+  var quay_rules = client_rules_flag[CRF_EXTRA_QUAY];
+  var ptype = unit_type(punit);
+  var ptile = index_to_tile(punit['tile']);
+  var terrain_name = tile_terrain(ptile)['name'];
+  if (ptile == null) return false;
+  var pcity = tile_city(ptile);
+  var pclass = get_unit_class_name(punit);
+  //****************************************************************** */
+  // COMMON
+  if (pcity) return true;
+  if (utype_has_flag(ptype, UTYF_MARINES) && !is_ocean_tile(ptile)) return true;
+  if (tile_has_extra(ptile, EXTRA_NAVALBASE)) return true;
+  if (pclass == "Air") return true;
+  if (pclass == "AirProtect") return true;
+  if (pclass == "AirPillage") return true;
+  if (pclass == "Balloon") return true;
+  if (pclass == "Helicopter") return true;
+  if (pclass == "Missile") return true;
+
+  // MP2:
+  if (!quay_rules) {
+    if (tile_has_extra(ptile, EXTRA_RIVER)) return false;
+    return true;
+  }
+  // AG:
+  if (tile_has_extra(ptile, EXTRA_QUAY)) return true;
+  if (tile_has_extra(ptile, EXTRA_RIVER)) return false;
+  if (tile_has_extra(ptile, EXTRA_CANAL)) return false;
+  if (tile_has_extra(ptile, EXTRA_WATERWAY)) return false;
+  return true;
+}
+/**************************************************************************
   Returns FALSE iff we definitely know the unit can't load on this type
   of transporter. Returning true only means we don't know if it can't:
   The server won't tell us for sure. Knowing the unit CAN'T load is a 
@@ -198,6 +240,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
     if (tclass.rule_name == "Air") return false;
     if (tclass.rule_name == "AirPillage") return false;
     if (ttype.name == "AEGIS Cruiser") return false;
+    if (ttype.name == "Mobile SAM") return false;
     if (ttype.name == "Missile Destroyer") return false;
   
     if (pclass != "LandAirSea") {
@@ -460,7 +503,7 @@ function get_unit_city_info(punit)
   var upkeep_mode;
 
   // No need to show 3 upkeep types if ruleset doesn't use 3
-  if (client_rules_flag & CRF_NO_UNIT_GOLD_UPKEEP) {
+  if (client_rules_flag[CRF_NO_UNIT_GOLD_UPKEEP]) {
       upkeep_mode=1; // Shields and Food only 
   }
   else upkeep_mode=3; // F/P/G

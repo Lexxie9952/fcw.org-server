@@ -88,9 +88,9 @@ const UTYF_NEWCITY_GAMES_ONLY = 29;       /* Unit can't be built in scenarios wh
 const UTYF_CANESCAPE = 30;                /* 50% chance to escape when killstack occours if more moves remaining than attacker */
 const UTYF_CANKILLESCAPING = 31;          /* Can kill escaping units */
 const UTYF_NEVER_BLOCKED = 32;            /* Overrides unreachable_protects server setting for attacker */
-const UTYF_USER_FLAG_1 = 33;
-const UTYF_USER_FLAG_2 = 34;
-const UTYF_USER_FLAG_3 = 35;
+const UTYF_USER_FLAG_1 = 33;                /* Reserved for replacing Shield2Gold as flag for using multiple city_build_slots */
+const UTYF_USER_FLAG_2 = 34;                  /* Can make hideouts */
+const UTYF_USER_FLAG_3 = 35;                /* Will never autoattack */
 const UTYF_USER_FLAG_4 = 36;
 const UTYF_USER_FLAG_5 = 37;
 const UTYF_USER_FLAG_6 = 38;
@@ -117,6 +117,15 @@ const UTYF_USER_FLAG_26 = 58;
 const UTYF_USER_FLAG_27 = 59;
 const UTYF_USER_FLAG_28 = 60;
 const UTYF_USER_FLAG_29 = 61;
+const UTYF_USER_FLAG_30 = 62;
+const UTYF_USER_FLAG_31 = 63;
+const UTYF_USER_FLAG_32 = 64;
+const UTYF_USER_FLAG_33 = 65;
+const UTYF_USER_FLAG_34 = 66;
+const UTYF_USER_FLAG_35 = 67;
+const UTYF_USER_FLAG_36 = 68;
+const UTYF_USER_FLAG_37 = 69;
+const UTYF_USER_FLAG_38 = 70;
 // ^^ ...these can be continued up to const UTYF_USER_FLAG_44 = 76;
 
 // Custom unit flags (MP2 sequence/order; TO DO: universalize/uniform order in other rules)
@@ -149,7 +158,10 @@ const UTYF_AIRPROTECTOR = UTYF_USER_FLAG_26   // Is Unreachable AND can protect 
 const UTYF_CANT_REACH_AIR = UTYF_USER_FLAG_27 // Unable to attack air units.
 const UTYF_FORTBUSTER = UTYF_USER_FLAG_28     // Defending Forts get no bonus. Has (33%) attack bonus vs. Fortresses
 const UTYF_FORTRESSBUSTER = UTYF_USER_FLAG_29 // Defending Fortresses get no bonus.
-
+const UTYF_ANTIAIR = UTYF_USER_FLAG_30;       // Anti-Air unit. e.g., AEGIS, AAA, Mobile SAM
+const UTYF_MULTISLOT = UTYF_USER_FLAG_31;     /* Reserved for replacing Shield2Gold as flag for using multiple city_build_slots */
+const UTYF_CANHIDE = UTYF_USER_FLAG_32;       /* Can make hideouts */
+const UTYF_WILLNEVER = UTYF_USER_FLAG_33;     // Doesn't auto-attack.
 /**********************************************************************//**
   Return true iff units of the given type can do the specified generalized
   (ruleset defined) action enabler controlled action.

@@ -150,7 +150,12 @@ function setup_window_size ()
     // Remove mini-map
     $(".overview_dialog").hide(); overview_active = false;
     // Remove orders buttons
-    if ($("#game_unit_orders_default").length > 0) $("#game_unit_orders_default").remove();
+    //if ($("#game_unit_orders_default").length > 0) $("#game_unit_orders_default").remove();
+    $(".not_mobile").remove(); // gets rid of all except goto,paradrop,airlift,nuke,and "hide buttons"
+    $("#game_unit_orders_default").css("position","absolute");
+    $("#game_unit_orders_default").css("top","48px");
+    $(".order_button").css("padding","1px 1px 0px 6px");
+
     if ($("#game_unit_orders_settlers").length > 0) $("#game_unit_orders_settlers").remove();
     // Optimise space/fit in game unit panel:
     $("#game_unit_panel").css({"transform":"scale(0.95)","float":"left","margin-top":"-12px","margin-left":"-22px","width":"100%;"});

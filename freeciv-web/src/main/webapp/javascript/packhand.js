@@ -652,48 +652,58 @@ function handle_ruleset_control(packet)
 {
   ruleset_control = packet;
 
-  client_rules_flag = 0; //reset
+  for (i=0;i<CRF_LAST;i++)
+    client_rules_flag[i] = false; // reset, maybe loading new rules
 
   // Flags for hard-coded client behaviors/optimisations specific to rulesets:
   switch (ruleset_control['name']) {
     case "Avant-garde":
-      client_rules_flag += CRF_RADAR_TOWER;
+      client_rules_flag[CRF_RADAR_TOWER]=true;
+      client_rules_flag[CRF_EXTRA_HIDEOUT]=true;
+      client_rules_flag[CRF_EXTRA_QUAY]=true;
+      $("#order_airbase").attr("title", "Build Airbase/Radar (Shift-E)");
+
     case "Multiplayer-Evolution ruleset":
-      client_rules_flag += CRF_CARGO_HEURISTIC
-                        + CRF_ASMITH_SPECIALISTS
-                        + CRF_OASIS_IRRIGATE
-                        + CRF_MP2_UNIT_CONVERSIONS
-                        + CRF_LEGION_WORK
-                        + CRF_MASONRY_FORT
-                        + CRF_CANALS 
-                        + CRF_NO_UNIT_GOLD_UPKEEP
-                        + CRF_MP2_SPECIAL_UNITS
-                        + CRF_COMMIE_BLDG_UPKEEP
-                        + CRF_PACTS_SANS_EMBASSY
-                        + CRF_TESLA_UPGRADE_DISCOUNT;
+      client_rules_flag[CRF_CARGO_HEURISTIC]=true;
+      client_rules_flag[CRF_ASMITH_SPECIALISTS]=true;
+      client_rules_flag[CRF_OASIS_IRRIGATE]=true;
+      client_rules_flag[CRF_MP2_UNIT_CONVERSIONS]=true;
+      client_rules_flag[CRF_LEGION_WORK]=true
+      client_rules_flag[CRF_MASONRY_FORT]=true;
+      client_rules_flag[CRF_CANALS]=true;
+   // client_rules_flag[CRF_NO_UNIT_GOLD_UPKEEP]=true;
+      client_rules_flag[CRF_MP2_SPECIAL_UNITS]=true;
+      client_rules_flag[CRF_COMMIE_BLDG_UPKEEP]=true;
+      client_rules_flag[CRF_PACTS_SANS_EMBASSY]=true;
+      client_rules_flag[CRF_TESLA_UPGRADE_DISCOUNT]=true;
+      client_rules_flag[CRF_NO_WASTE]=true;
     break;
 
     case "Multiplayer-Plus ruleset":
-      client_rules_flag = CRF_CARGO_HEURISTIC
-                        + CRF_NO_UNIT_GOLD_UPKEEP
-                        + CRF_PACTS_SANS_EMBASSY;
+      client_rules_flag[CRF_CARGO_HEURISTIC]=true;
+      client_rules_flag[CRF_NO_UNIT_GOLD_UPKEEP]=true;
+      client_rules_flag[CRF_PACTS_SANS_EMBASSY]=true;
+      client_rules_flag[CRF_NO_WASTE]=true;
     break;
 
     case "Multiplayer ruleset":
-      client_rules_flag = CRF_CARGO_HEURISTIC
-                        + CRF_NO_UNIT_GOLD_UPKEEP;
+      client_rules_flag[CRF_CARGO_HEURISTIC]=true;
+      client_rules_flag[CRF_NO_UNIT_GOLD_UPKEEP]=true;
+      client_rules_flag[CRF_NO_WASTE]=true;
     break;
 
     case "Classic ruleset":
-      client_rules_flag = CRF_CARGO_HEURISTIC
-                        + CRF_NO_UNIT_GOLD_UPKEEP;
+      client_rules_flag[CRF_CARGO_HEURISTIC]=true;
+      client_rules_flag[CRF_NO_UNIT_GOLD_UPKEEP]=true;
+      client_rules_flag[CRF_NO_WASTE]=true;
     break;
 
     case "Civ2Civ3 ruleset":
     case "Sandbox ruleset":
-      client_rules_flag = CRF_COMMIE_BLDG_UPKEEP;
+      client_rules_flag[CRF_COMMIE_BLDG_UPKEEP]=true;
     break;
   }
+
   warcalc_set_tooltips(); // set ruleset tooltips for buttons
 
   if (ruleset_control['name'])
@@ -724,7 +734,7 @@ function handle_ruleset_control(packet)
 
   improvements_init();
 
-  /* handle_ruleset_extra defines some variables dinamically */
+  /* handle_ruleset_extra defines some variables dynamically */
   for (var extra in extras) {
     var ename = extras[extra]['name'];
     delete window["EXTRA_" + ename.toUpperCase()];
