@@ -375,6 +375,31 @@ sound_alt	= "b_generic"
 helptext	= _("\
 Increases the shield production in a city by +50%.  This increase may\
  contribute to pollution.\
+"), _("\
+ This building lets you conscript one extra infantry/foot unit per turn.\
+")
+
+[building_fusion_reactor]
+name		= _("Fusion Reactor")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Fusion Power", "Player"
+    }
+graphic	= "b.fusion_reactor"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 200
+upkeep		= 4
+sabotage	= 100
+sound		= "b_fusion_reactor"
+sound_alt	= "b_generic"
+; /* xgettext:no-c-format */
+helptext	= _("\
+Increases the shield production in a city by +75% of base production levels.\
+ Gives +1 build slot and +5 free shield upkeep on units.\
 ")
 
 [building_granary]
@@ -552,7 +577,8 @@ Increased citizen mobility and ticket revenues\
 ")
 
 [building_mfg_plant]
-name		= _("Mfg. Plant")
+name		= _("Manufacturing Plant")
+rule_name = "Mfg. Plant"
 genus		= "Improvement"
 reqs	=
     { "type", "name", "range"
@@ -580,6 +606,8 @@ A Mfg. Plant with a Factory AND a Power, Hydro, Nuclear, or Solar Plant\
 "), _("\   
 The pollution reduction of a Hydro, Nuclear, or Solar Plant is applied one more\
  time to cities with Mfg. Plants, effectively doubling the bonus percentage.\  
+"), _("\
+ This building lets you conscript one extra infantry/foot unit per turn.\
 ")
 
 [building_nuclear_plant]
@@ -743,8 +771,8 @@ sabotage	= 100
 sound		= "b_radar_tower"
 sound_alt	= "b_generic"
 helptext	= _("\
-Radar Towers use advanced technology to increase the vision radius around a\
- city by approximately 3 tiles.\
+Radar Towers use advanced technology to increase a city's vision to\
+ approximately 6 tiles.\
 ")
 
 [building_recycling_center]
@@ -1139,29 +1167,27 @@ sabotage	= 0
 sound		= "b_palace"
 sound_alt	= "b_generic"
 helptext	= _("\
-Makes a city the capital of your nation.\
- Corruption in cities increases with distance\
- from the capital (except under Democracy or\
- Communism.) A Palace reduces corruption in your capital\
- by roughly half.\
+Makes a city the capital of your nation. Corruption in cities increases with distance\
+ from the capital (except under Democracy or Communism.) A Palace reduces corruption\
+ in your capital by roughly half.\
 "), _("\
-The cost of inciting a revolt decreases with distance from the\
+ The cost of inciting a revolt decreases with distance from the\
  capital. The capital cannot be incited to revolt, and reduces the chance\
  of enemy agents defeating your agents by half. Attempts to sabotage buildings\
  in your capital are also reduced by half.\
 "), _("\
-Take good care of your capital, as its loss may result in your\
- empire plunging into civil war. Losing your current palace also\
- results in losing whatever spaceship you might have.\
+ Take care of your capital. Its loss may result in your\
+ empire falling into civil war. Losing your current Palace also\
+ results in losing whatever Spaceship you might have.\
 "), _("\
-If the capital is in a dangerous location, or a more central capital\
- would give a better corruption distribution, you can move your palace\
- by rebuilding it in another city.\
-"),
-_("\
-The city containing the Palace receives a production bonus of +75% under Despotism,\
+ If the capital is in a dangerous location, or a more central capital would\
+ better reduce corruption, you can rebuild your palace in another city.\
+"), _("\
+ The Palace gives a production bonus of +75% under Despotism,\
  +50% under Monarchy, and +25% under Communism. Under Fundamentalism, it receives\
  a +50% gold bonus.\
+"), _("\
+ A Palace allows conscripting one extra infantry/foot unit per turn.\
 ")
 
 [building_ecclesiastical_palace]
@@ -1197,6 +1223,8 @@ The city where this Palace is located cannot be incited to revolt,\
 "), _("\
 Under Fundamentalism, Fanatics produced in the city with this building\
  are inspired by fervorous faith to +1 higher veteran level.\
+"), _("\
+ This building lets you conscript one extra infantry/foot unit per turn.\
 ")
 
 [building_agoge]
@@ -1538,6 +1566,33 @@ Adds 100% of base science production to every city in your\
  This wonder is never obsolete.\
 ")
 
+[building_jtids]
+name		= _("JTIDS")
+genus		= "SmallWonder"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Computers", "Player"
+    }
+graphic		= "b.seti_program"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 230
+upkeep		= 0
+sabotage	= 0
+sound		= "w_seti_program"
+sound_alt	= "w_generic"
+; /* xgettext:no-c-format */
+helptext	= _("\
+JTIDS (Joint Tactical Information Distribution System) is a radio\
+ battlefield information network that provides real-time intel to forces\
+ on the ground. Effectively, this Wonder modernizes the weaponry and info systems\
+ for all the infantry in your army.\n\n\
+All foot soldiers and Mechanized Infantry are built with +1 vet level.\
+ Odds of veteran promotion are increased.\
+")
+
 [building_js_bachs_cathedral]
 name		= _("J.S. Bach's Cathedral")
 genus		= "SmallWonder"
@@ -1582,8 +1637,10 @@ sabotage	= 0
 sound		= "w_king_richards_crusade"
 sound_alt	= "w_generic"
 helptext	= _("\
-Adds one extra shield resource on every tile in and around\
- the city where it is built. Obsolete by: Robotics.\
+In the city where it is built, adds one extra shield resource on every\
+ tile. Lets you build one extra infantry/foot unit per turn without
+ Conscription tech.\
+ Obsolete by: Robotics.\
 ")
 
 [building_leonardos_workshop]
@@ -1860,9 +1917,11 @@ sabotage	= 0
 sound		= "w_statue_of_liberty"
 sound_alt	= "w_generic"
 helptext	= _("\
-Allows you to instantly change government, including governments\
- not yet researched by your civilization, and without\
- the transition period of Anarchy.\
+Allows you to instantly change government, including governments not\
+ yet researched by your civilization, and without the transition period\
+ of Anarchy. It also allows unprovoked declaration of war regardless of\
+ any Senate or United Nations. Democracies cannot fall into Anarchy from\
+ two turns of city disorder.\n\
  This Wonder does not become obsolete.\
 ")
 

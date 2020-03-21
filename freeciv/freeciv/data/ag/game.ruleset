@@ -203,8 +203,8 @@ tired_attack = TRUE
 ; are ruleset controlled.
 ;   will_never - units with this unit type flag will never auto attack.
 
-; Not a good idea to nuke our own area.
-will_never = "Nuclear"
+; Non-fighters don't auto-attack.
+will_never = "WillNever"
 
 [actions]
 ; If force_trade_route is set to TRUE it is illegal for an actor unit to
@@ -373,6 +373,7 @@ ui_name_conquer_city = _("%sConquer City%s")
 
 ; /* TRANS: Build _Canal (100% chance of success). */
  ui_name_canal = _("Build %Canal%s")
+ ui_name_waterway = _("Build Water%way%s")
 
 ; /* TRANS: _Build Base (100% chance of success). */
  ui_name_build_base = _("%sBuild Base%s")
@@ -382,6 +383,9 @@ ui_name_conquer_city = _("%sConquer City%s")
 
 ; /* TRANS: Build _Irrigation (100% chance of success). */
  ui_name_irrigate = _("Build %sIrrigation%s")
+
+ ; /* TRANS: _Unload (100% chance of success). */
+;ui_name_transport_unload = _("%sUnload%s")
 
 ; Suppress automatic help text generation about what enables and/or
 ; disables the following actions.
@@ -1230,7 +1234,8 @@ action        = "Irrigate TF"
 actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitType",      "Legion",       "Local", FALSE
+      "UnitFlag",      "CanHide",      "Local", FALSE
+;      "UnitType",      "Legion",       "Local", FALSE
       "UnitType",      "Proletarians", "Local", FALSE
     }
 [actionenabler_irrigate_tf_prole]
@@ -1247,7 +1252,8 @@ action        = "Mine TF"
 actor_reqs    =
     { "type",          "name",        "range", "present"
       "UnitFlag",      "Settlers",    "Local", TRUE
-      "UnitType",      "Legion",      "Local", FALSE 
+      "UnitFlag",      "CanHide",      "Local", FALSE
+;      "UnitType",      "Legion",      "Local", FALSE 
       "UnitType",      "Proletarians","Local", FALSE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
       "CityTile",      "Center",      "Local", FALSE
@@ -1266,7 +1272,8 @@ action        = "Mine TF"
 actor_reqs    =
     { "type",          "name",      "range", "present"
       "UnitFlag",      "Settlers",  "Local", TRUE
-      "UnitType",      "Legion",    "Local", FALSE
+;      "UnitType",      "Legion",    "Local", FALSE
+      "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
       "UnitType",      "Proletarians", "Local", FALSE
       "CityTile",      "Center",    "Local", TRUE
@@ -1287,14 +1294,26 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitClassFlag", "CanFortify",   "Local", TRUE
       "UnitFlag",      "Cant_Fortify", "Local", FALSE
+      "UnitClass",     "AirProtect",   "Local", FALSE
     }
- 
+;Fighters can fortify as a way to "sleep" them from autoattack.
+[actionenabler_fortify_fighter1]
+action        = "Fortify"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitClassFlag", "CanFortify",   "Local", TRUE
+      "UnitFlag",      "Cant_Fortify", "Local", FALSE
+      "UnitClass",     "AirProtect",   "Local", TRUE
+      "CityTile",      "Center",       "Local", TRUE
+      ;can't fortify in bases - would give a defense bonus
+    }
+
 [actionenabler_road]
 action        = "Road"
 actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
-      "UnitType",      "Legion",       "Local",   FALSE
+      "UnitFlag",      "CanHide",      "Local",   FALSE
       "UnitType",      "Proletarians", "Local",   FALSE
     }
 [actionenabler_road_prole]
@@ -1340,6 +1359,25 @@ actor_reqs    =
       "UnitType",      "Proletarians",    "Local",  TRUE
       "Gov",           "Communism",       "Player", TRUE
      }
+[actionenabler_build_hideout_domestic]
+action        = "Build Base"
+actor_reqs    =
+    { "type",          "name",            "range", "present"
+       "UnitFlag",      "CanHide",         "Local",  TRUE
+       "UnitState",     "OnLivableTile",   "Local",  TRUE
+       "DiplRel",       "Foreign",         "Local",  FALSE
+    }
+[actionenabler_build_hideout_unclaimed]
+action        = "Build Base"
+actor_reqs    =
+    { "type",          "name",            "range", "present"
+       "UnitFlag",      "CanHide",         "Local",  TRUE
+       "UnitState",     "OnLivableTile",   "Local",  TRUE
+    }
+target_reqs    =
+    { "type",   "name", "range", "present"
+      "CityTile", "Claimed", "Local", FALSE
+    }
 
 [actionenabler_mining]
 action        = "Build Mine"
@@ -1347,7 +1385,8 @@ actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitFlag",      "Well-Digger",  "Local",   FALSE
-      "UnitType",      "Legion",       "Local",   FALSE
+;      "UnitType",      "Legion",       "Local",   FALSE
+      "UnitFlag",      "CanHide",      "Local",   FALSE
       "UnitType",      "Proletarians", "Local",   FALSE
     }
 target_reqs    =
@@ -1372,7 +1411,8 @@ action        = "Build Mine"
 actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
-      "UnitType",      "Legion",       "Local",   FALSE
+;      "UnitType",      "Legion",       "Local",   FALSE
+      "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitType",      "Proletarians", "Local",   FALSE
       "UnitFlag",      "Well-Digger",  "Local",   FALSE
       "Tech",          "Construction", "Player",  TRUE
@@ -1400,7 +1440,8 @@ action        = "Build Mine"
 actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
-      "UnitType",      "Legion",       "Local",   FALSE
+;      "UnitType",      "Legion",       "Local",   FALSE
+      "UnitFlag",      "CanHide",      "Local",   FALSE
       "UnitType",      "Proletarians", "Local",   FALSE
       "UnitFlag",      "Well-Digger",  "Local",   FALSE
       "Tech",          "Refining",     "Player",  TRUE
@@ -1445,7 +1486,8 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
-      "UnitType",      "Legion",       "Local", FALSE
+;      "UnitType",      "Legion",       "Local", FALSE
+      "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitType",      "Proletarians", "Local", FALSE
     }
 target_reqs    =
@@ -1465,20 +1507,22 @@ target_reqs    =
       "TerrainClass", "Oceanic", "CAdjacent", TRUE
     }
  
-[actionenabler_irrigate_src_river]
+[actionenabler_irrigate_src_river] ;canal and waterway too
 action        = "Build Irrigation"
 actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitType",      "Legion",       "Local", FALSE
+;      "UnitType",      "Legion",       "Local", FALSE
+      "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitType",      "Proletarians", "Local", FALSE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
     }
 target_reqs    =
     { "type",    "name",     "range", "present"
-      "Extra",   "River",    "CAdjacent", TRUE
+      "ExtraFlag", "IrrigationSource", "CAdjacent", TRUE
+;      "Extra",   "River",    "CAdjacent", TRUE
     }
-[actionenabler_irrigate_src_river_prole]
+[actionenabler_irrigate_src_river_prole] ;canal and water way too
 action        = "Build Irrigation"
 actor_reqs    =
     { "type",          "name",         "range", "present"
@@ -1488,7 +1532,8 @@ actor_reqs    =
     }
 target_reqs    =
     { "type",    "name",     "range", "present"
-      "Extra",   "River",    "CAdjacent", TRUE
+      "ExtraFlag", "IrrigationSource", "CAdjacent", TRUE
+;      "Extra",   "River",    "CAdjacent", TRUE
     }
 
 [actionenabler_irrigate_src_oasis]
@@ -1496,7 +1541,8 @@ action        = "Build Irrigation"
 actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitType",      "Legion",       "Local", FALSE
+;      "UnitType",      "Legion",       "Local", FALSE
+      "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitType",      "Proletarians", "Local", FALSE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
     }
@@ -1524,7 +1570,8 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
       "UnitType",      "Proletarians", "Local", FALSE
-      "UnitType",      "Legion",       "Local", FALSE
+;      "UnitType",      "Legion",       "Local", FALSE
+      "UnitFlag",      "CanHide",      "Local", FALSE
     }
 target_reqs    =
     { "type",    "name",       "range", "present"
@@ -1542,6 +1589,18 @@ target_reqs    =
     { "type",    "name",       "range", "present"
       "Extra",   "Irrigation", "CAdjacent", TRUE
     }
+
+;[actionenabler_unload]
+;action        = "Transport Unload"
+;actor_reqs    =
+;    { "type",      "name",         "range"
+;      "UnitState", "Transporting", "Local"
+;    }
+;target_reqs    =
+;    { "type",      "name",          "range"
+;      "UnitState", "OnLivableTile", "Local"
+;      "UnitState", "Transported",   "Local"
+;    }
 
 [borders]
 ; Base border radius from city.
@@ -1953,15 +2012,18 @@ set =
       "aifill", 6, FALSE
       "airliftingstyle", "FROM_ALLIES|TO_ALLIES", FALSE
       "airliftdestdivisor", 3, FALSE
+      "autoattack", "enabled", FALSE
+      "autoattack_style", 1, FALSE
       "barbarians", "DISABLED", FALSE
       "borders", "SEE_INSIDE", FALSE
       "contactturns", 10, FALSE
       "diplomacy", "ALL", FALSE
       "dispersion", 2, FALSE
-      "endturn", 365, FALSE
+;      "endturn", 365, FALSE
       "foggedborders", TRUE, FALSE
       "generator", "RANDOM", FALSE
       "gold", 100, FALSE
+      "hideouts", TRUE, FALSE
       "huts", 0, FALSE
       "landmass", 63, FALSE
       "minplayers", 0, FALSE
@@ -1970,6 +2032,8 @@ set =
       "nuclearwinter_percent", 20, FALSE
       "revolen", 1, FALSE
       "separatepoles", FALSE, FALSE
+      "slot_control", TRUE, FALSE
+      "slot_control_style", 1, FALSE
       "spaceship_travel_time", 225, FALSE
       "specials", 350, FALSE
       "startpos", "SINGLE", FALSE

@@ -115,12 +115,12 @@ format_version=20
 
 [advance_advanced_flight]
 name     = _("Advanced Flight")
-req1     = "Radar"
+req1     = "Radio"
 req2     = "Machine Tools"
 flags    = ""
 graphic     = "a.advanced_flight"
 graphic_alt = "-"
-cost = 6630
+cost = 5430
 
 [advance_alphabet]
 name     = _("Alphabet")
@@ -166,6 +166,15 @@ graphic     = "a.automobile"
 graphic_alt = "-"
 helptext = _("Obsoletes Leonardos Workshop, Colossus. +25% population pollution.")
 cost = 4230
+
+[advance_avionics]
+name     = _("Avionics")
+req1     = "Computers"
+req2     = "Rocketry"
+flags    = ""
+graphic     = "a.avionics"
+graphic_alt = "-"
+cost = 7250
 
 [advance_banking]
 name     = _("Banking")
@@ -238,7 +247,7 @@ req2     = "Advanced Flight"
 flags    = ""
 graphic     = "a.combined_arms"
 graphic_alt = "-"
-cost = 6970
+cost = 5650
 
 [advance_combustion]
 name     = _("Combustion")
@@ -256,7 +265,7 @@ req2     = "Industrialization"
 flags    = ""
 graphic     = "a.communism"
 graphic_alt = "-"
-helptext = _("-1 Effect for Cathedral, Michelangelos Chapel.")
+helptext = _("Allows government Communism.")
 
 [advance_computers]
 name     = _("Computers")
@@ -275,7 +284,7 @@ req2     = "Metallurgy"
 flags    = ""
 graphic     = "a.conscription"
 graphic_alt = "-"
-helptext = _("Obsoletes Musketeers.")
+helptext = _("Obsoletes Musketeers. Capable cities can make multiple infantry per turn.")
 cost = 1890
 
 [advance_construction]
@@ -387,7 +396,7 @@ req2     = "Theory of Gravity"
 flags    = "Build_Airborne"
 graphic     = "a.flight"
 graphic_alt = "-"
-helptext = _("Less Traderoute revenue.")
+helptext = _("Traderoute gives less first time revenue.")
 cost = 4680
 
 [advance_fundamentalism]
@@ -397,6 +406,8 @@ req2     = "Conscription"
 flags    = ""
 graphic     = "a.fundamentalism"
 graphic_alt = "-"
+helptext = _("Allows government Fundamentalism.")
+
 
 [advance_fusion_power]
 name     = _("Fusion Power")
@@ -478,7 +489,8 @@ req2     = "Guerilla Warfare"
 flags    = ""
 graphic     = "a.labor_union"
 graphic_alt = "-"
-cost = 6630
+cost = 5430
+helptext = _("Upkeep paid is 1 gold for: Foot Soldiers, Mechanized Infantry.")
 
 [advance_laser]
 name     = _("Laser")
@@ -602,7 +614,7 @@ flags    = ""
 graphic     = "a.mobile_warfare"
 graphic_alt = "-"
 helptext = _("Obsoletes Barracks II, Cavalry, Sun Tzu, Genghis Khan.")
-cost = 5650
+cost = 5120
 
 [advance_monarchy]
 name     = _("Monarchy")
@@ -610,6 +622,7 @@ req1     = "Ceremonial Burial"
 req2     = "Code of Laws"
 flags    = ""
 graphic     = "a.monarchy"
+helptext = _("Allows government Monarchy.")
 graphic_alt = "-"
 
 [advance_monotheism]
@@ -703,17 +716,18 @@ req2     = "None"
 flags    = ""
 graphic     = "a.pottery"
 graphic_alt = "-"
+helptext = _("Allows Quays.")
 cost = 24
 
 [advance_radar]
 name     = _("Radar")
 req1     = "Electronics"
-req2     = "Radio"
+req2     = "Advanced Flight"
 flags    = ""
 graphic     = "a.radar"
 graphic_alt = "-"
-helptext = _("Gives Airbase extra vision.")
-cost = 5430
+helptext = _("Allows building Radar on Airbases.")
+cost = 6630
 
 [advance_radio]
 name     = _("Radio")
@@ -738,10 +752,12 @@ cost = 1820
 [advance_recycling]
 name     = _("Recycling")
 req1     = "Mass Production"
-req2     = "Democracy"
+req2     = "None"
+;req2     = "Democracy" ; The chance you get to Recycling without knowing Democracy is about 0.001%, so, just clean up the line mess
 flags    = ""
 graphic     = "a.recycling"
 graphic_alt = "-"
+helptext = _("Allows government Democracy.")
 cost = 4460
 
 [advance_refining]
@@ -772,11 +788,11 @@ flags    = ""
 graphic     = "a.robotics"
 graphic_alt = "-"
 helptext = _("Obsoletes Artillery, King Richards Crusade.")
-cost = 7860
+cost = 7250
 
 [advance_rocketry]
 name     = _("Rocketry")
-req1     = "Advanced Flight"
+req1     = "Radar"
 req2     = "Miniaturization"
 flags    = ""
 graphic     = "a.rocketry"
@@ -815,7 +831,7 @@ cost = 7680
 [advance_stealth]
 name     = _("Stealth")
 req1     = "Superconductors"
-req2     = "Space Flight"
+req2     = "Avionics"
 flags    = ""
 graphic     = "a.stealth"
 graphic_alt = "-"
@@ -845,7 +861,7 @@ cost = 3280
 [advance_superconductors]
 name     = _("Superconductors")
 req1     = "Laser"
-req2     = "None"
+req2     = "Space Flight"
 flags    = ""
 graphic     = "a.superconductors"
 graphic_alt = "-"
@@ -878,6 +894,7 @@ req1     = "Code of Laws"
 req2     = "Literacy"
 flags    = ""
 graphic     = "a.the_republic"
+helptext = _("Allows government Republic.")
 graphic_alt = "-"
 
 [advance_the_wheel]
@@ -933,6 +950,7 @@ flags    = ""
 graphic     = "a.warrior_code"
 graphic_alt = "-"
 cost = 24
+helptext = _("Foot soldiers may make Hideouts (if /show hideouts enabled).")
 
 [advance_writing]
 name     = _("Writing")

@@ -34,9 +34,11 @@ flags =
 ;                 and sensible.
 ; helptxt       = displayed in the help for extra types with this flag
 ;                 (optional)
-;extra_flags =
-;  { "name", "helptxt"
-;  }
+extra_flags =
+  { "name", "helptxt"
+      _("Quayable"), _("Allows Quays to be built.")
+      _("IrrigationSource"), _("Allows Irrigation.")            
+  }
 
 [parameters]
 
@@ -547,7 +549,7 @@ color.r              = 11
 color.g              = 138
 color.b              = 4
 helptext             = _("\
-Grasslands afford exceptional agricultural opportunities.\
+Grassland affords exceptional agricultural opportunities.\
 ")
 
 [terrain_hills]
@@ -787,7 +789,7 @@ defense_bonus        = 0
 food                 = 1
 shield               = 0
 trade                = 0
-resources            = "Game", "Furs", "Gold"
+resources            = "Game", "Furs", "Game", "Furs", "Gold" ; 40/40/20 instead of 33/33/33
 road_trade_incr_pct  = 100
 base_time            = 1
 road_time            = 2
@@ -904,6 +906,11 @@ extra       = "Buffalo"
 identifier  = "b"
 shield      = 2
 # plains (horses => buffalo => cattle).
+
+;[resource_forest_game]
+;extra       = "Deer"
+;identifier  = "d"
+;food      = 3
 
 [resource_wheat]
 extra       = "Wheat"
@@ -1131,7 +1138,7 @@ Irrigating a suitable tile causes it to produce extra food each turn. Most\
 "), _("\
 Irrigating a tile with a mine or oil well will destroy it.\
 "), _("\
-City center tiles get their terrain's irrigation bonus automatically, \
+City center tiles get their terrain irrigation bonus automatically, \
 if there is no conflicting mine or oil well on the tile; however, \
 this does not make cities count as a water source for further \
 irrigation. Irrigation can be built on the city tile simply to allow \
@@ -1229,10 +1236,10 @@ Dam, Nuclear Plant, or Solar Plant -- will reduce pollution from \
 production, as will a Recycling Center or knowledge of \
 Environmentalism.\
 "), _("\
-The city's population starts adding to pollution with the discovery of \
+The city population starts adding to pollution with the discovery of \
 Industrialization, and Automobile, Mass Production, and Plastics make \
 this worse. Building a Mass Transit in a city eliminates the \
-population's contribution to pollution.\
+populational contribution to pollution.\
 "), _("\
 The contribution of these factors can be seen in the city dialog; once \
 it exceeds a threshold, the excess is the percent chance of pollution \
@@ -1342,6 +1349,65 @@ Settlers, Workers, and Engineers can clean up nuclear fallout.\
 ")
 
 ; ***************************** BASES ****************************************
+[extra_hideout]
+rule_name      = "Hideout"
+name           = _("")      ; null name is to prevent awareness of it.
+category       = "Infra"
+causes         = "Base"
+rmcauses       = "Pillage", "Disappear"
+graphic        = "None"
+graphic_alt    = "None"
+activity_gfx   = "unit.hideout"
+act_gfx_alt    = "unit.buoy"
+act_gfx_alt2   = "-"
+rmact_gfx      = "None"
+rmact_gfx_alt  = "-"
+reqs           =
+    { "type",    "name",      "range","present","quiet"
+      "CityTile","Center",    "Local", FALSE,    TRUE
+      "Terrain", "Hills",     "Local", FALSE,    FALSE
+      "Terrain", "Plains",    "Local", FALSE,    FALSE
+      "Terrain", "Grassland", "Local", FALSE,    FALSE
+      "Terrain", "Tundra",    "Local", FALSE,    FALSE
+      "Terrain", "Desert",    "Local", FALSE,    FALSE
+      "Terrain", "Arctic",    "Local", FALSE,    FALSE
+      "Tech", "Warrior Code", "Player",TRUE,     FALSE
+      "TerrainClass","Land",  "Local", TRUE,     FALSE
+      "UnitFlag","CanHide",   "Local", TRUE,     FALSE
+      "Extra",   "Naval Base","Local", FALSE,    FALSE
+      "Extra",   "Fortress",  "Local", FALSE,    FALSE
+      "Extra",   "Airbase",   "Local", FALSE,    FALSE
+      "Extra",   "Fort",      "Local", FALSE,    FALSE
+      "Extra",   "Quay",      "Local", FALSE,    FALSE
+      "ServerSetting","hideouts","World",TRUE,   FALSE
+    }
+disappearance_reqs = 
+    { "type",           "name", "range",  "present"
+      "MaxUnitsOnTile", "0",    "Local",  TRUE
+      "Extra",          "Ruins","Local",  FALSE
+    }
+disappearance_chance    = 1500     ; 1500/10000 = 15% per turn if unoccupied
+build_time     = 3
+removal_time   = 0
+unit_seen      = "Hidden"
+native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter"
+flags          = "NativeTile"
+helptext       = _("\
+Since the dawn of time, camouflaged and concealed terrain has been\
+ enhanced to make Hideouts. Usually the intent is to evade an\
+ aggressor or to set an ambush. Hideouts can only be put in Forests,\
+ Swamps, Mountains, and Jungle. Warrior Code must be known. Tile must\
+ be Friendly or Unclaimed. Only Foot soldiers can make Hideouts. Only\
+ Land units and Helicopters can hide in them. Other types will be seen.\
+ Invisibility is the only bonus of a Hideout. Hideouts can't stack with\
+ other bases. Hideouts are invisible to anyone not occupying the tile with\
+ a Land unit. For each turn it is unoccupied, a Hideout has a 15% chance\
+ of being lost to the elements of nature. The only way to know if there is\
+ a Hideout on a tile is to move a Land unit onto it.\
+"), _("
+TIP: Hideouts are good for guarding a border or setting a trap for\
+ intruders. Be careful! An abandoned Hideout can be used against you!\ 
+")
 
 [extra_fort]
 name           = _("Fort")
@@ -1361,6 +1427,7 @@ reqs           =
       "TerrainClass", "Land", "Local", TRUE, FALSE
       "UnitFlag", "CanFortress", "Local", TRUE, FALSE
       "CityTile", "Center", "Local", FALSE, TRUE
+      "Extra", "Hideout", "Local", FALSE, FALSE
     }
 build_time     = 3
 removal_time   = 0
@@ -1370,7 +1437,7 @@ flags          = "NativeTile", "NoStackDeath"  ;, "Refuel"
 ;NOTE: effect_fortress_regen should give 25% of 20HP to helicopter, +1hp for being stationary
 ;thus a fortress should give +6hp -2hp for not being in refuel spot or +4hp/turn. Healing 67% 
 ;as fast as an airbase. MEANWHILE, removing the refuel flag allows us to make Forts native 
-;to AirProtect so that they can't prevent attacks on forts. This is debatable issue of 
+;to AirProtect so that they cannot prevent attacks on forts. This is debatable issue of 
 ;Fort with no Killstack but not Airprotected vs no fort, Killstack and Airprotect, but 
 ;many times fighters over forts have come up as a dynamic. 
 helptext       = _("\
@@ -1379,7 +1446,7 @@ Forts are rapidly built fortifications which give Land units +33% defense\
  of the entire stack dying. A fort is necessary to start building a fortress.\
 "), _("
 TIP: Forts make great outposts for keeping watch on your borders. Be careful--\
-an unmanned Fort can be claimed by a foreign unit. 
+an unmanned Fort can be claimed by a foreign unit.\ 
 ")
 
 [extra_fortress]
@@ -1397,6 +1464,7 @@ rmact_gfx_alt  = "-"
 reqs           =
     { "type", "name", "range", "present", "quiet"
       "Extra", "Fort", "Local", TRUE, FALSE
+      "Extra", "Hideout", "Local", FALSE, FALSE
       "Tech", "Construction", "Player", TRUE, FALSE
       "TerrainClass", "Land", "Local", TRUE, FALSE
       "UnitFlag", "CanFortress", "Local", TRUE, FALSE
@@ -1406,7 +1474,7 @@ build_time     = 5
 removal_time   = 0
 defense_bonus  = 67
 native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter", "Balloon"
-hidden_by      = "Fortress", "Naval Base"
+hidden_by      = "Naval Base"
 flags          = "NativeTile", "Refuel", "NoStackDeath"
 helptext       = _("\
 Fortresses are improvements built on top of Forts which greatly improve defense.\
@@ -1416,6 +1484,44 @@ Fortresses are improvements built on top of Forts which greatly improve defense.
 "), _("\
 Units in a Fortress die one at a time instead of the entire stack being lost.\
 Diplomatic units get a 25% defense bonus in diplomatic fights.\
+")
+
+[extra_navalbase]
+name           = _("Naval Base")
+category       = "Infra"
+causes         = "Base"
+rmcauses       = "Pillage"
+graphic        = "base.navalbase"
+graphic_alt    = "base.fortress"
+activity_gfx   = "unit.navalbase"
+act_gfx_alt    = "unit.fortress"
+act_gfx_alt2   = "-"
+rmact_gfx      = "None"
+rmact_gfx_alt  = "-"
+reqs           =
+    { "type", "name", "range", "present", "quiet"
+      "Extra", "Fort", "Local", TRUE, FALSE
+      "Extra", "Hideout", "Local", FALSE, FALSE
+      "Tech", "Engineering", "Player", TRUE, FALSE
+      "TerrainFlag", "Low Land", "Local", TRUE, FALSE
+      "TerrainClass", "Oceanic", "CAdjacent", TRUE, FALSE
+      "UnitFlag", "CanFortress", "Local", TRUE, FALSE
+      "CityTile", "Center", "Local", FALSE, TRUE
+    }
+build_time     = 10
+removal_time   = 0
+conflicts      = "Airbase", "Fortress"
+defense_bonus  = 67
+native_to      = "Trireme", "RiverShip", "Sea", "Submarine", "Balloon",
+                 "Land", "LandAirSea", "LandNoKill", "Helicopter"
+flags          = "NativeTile", "NoStackDeath", "Refuel"
+helptext       = _("\
+Naval bases are coastal Fortresses with ocean access. They allow ships to enter and\ 
+ receive a 1.33x bonus from superior fortifications and defensive position. Naval\
+ Bases are built into Fortresses--all other units get the benefits of a Fortress.\
+"), _("
+NOTE: Naval bases are the only location where ships can be sure to avoid stack death without\
+ suffering a defense disadvantage.\ 
 ")
 
 [extra_airbase]
@@ -1433,6 +1539,7 @@ rmact_gfx_alt  = "-"
 reqs           =
     { "type", "name", "range", "present", "quiet"
       "Tech", "Radio", "Player", TRUE, FALSE
+      "Extra", "Hideout", "Local", FALSE, FALSE
       "TerrainClass", "Land", "Local", TRUE, FALSE
       "UnitFlag", "Airbase", "Local", TRUE, FALSE
       "CityTile", "Center", "Local", FALSE, TRUE
@@ -1446,6 +1553,35 @@ Airbases allow your air units to land and refuel outside cities. \
 Air units in an airbase may be attacked by land units.\
 "), _("\
 Units can paradrop from this tile.\
+")
+
+[extra_radar]
+name           = _("Radar")
+category       = "Infra"
+causes         = "Base"
+rmcauses       = "Pillage"
+graphic        = "base.airbase"
+graphic_alt    = "-"
+activity_gfx   = "unit.radar"
+act_gfx_alt    = "unit.airbase"
+act_gfx_alt2   = "-"
+rmact_gfx      = "None"
+rmact_gfx_alt  = "-"
+reqs           =
+    { "type", "name", "range", "present", "quiet"
+      "Tech", "Radar", "Player", TRUE, FALSE
+      "Extra", "Hideout", "Local", FALSE, FALSE
+      "Extra", "Airbase", "Local", TRUE, FALSE
+      "TerrainClass", "Land", "Local", TRUE, FALSE
+      "UnitFlag", "Airbase", "Local", TRUE, FALSE
+      "CityTile", "Center", "Local", FALSE, TRUE
+    }
+build_time     = 5
+removal_time   = 0
+native_to      = "Air", "Balloon", "Helicopter", "Missile", "AirProtect", "AirPillage"
+flags          = "Refuel", "NoStackDeath"
+helptext       = _("\
+With the available tech, Radar can be added to an Airbase, which significantly increases its vision.\
 ")
 
 [extra_buoy]
@@ -1475,42 +1611,6 @@ Buoys may be built in the ocean (by units on a sea-going vessel) to \
 allow their owner to see the surrounding tiles.\
 ")
 
-[extra_navalbase]
-name           = _("Naval Base")
-category       = "Infra"
-causes         = "Base"
-rmcauses       = "Pillage"
-graphic        = "base.navalbase"
-graphic_alt    = "base.fortress"
-activity_gfx   = "unit.navalbase"
-act_gfx_alt    = "unit.fortress"
-act_gfx_alt2   = "-"
-rmact_gfx      = "None"
-rmact_gfx_alt  = "-"
-reqs           =
-    { "type", "name", "range", "present", "quiet"
-      "Extra", "Fortress", "Local", TRUE, FALSE
-      "TerrainFlag", "Low Land", "Local", TRUE, FALSE
-      "TerrainClass", "Oceanic", "CAdjacent", TRUE, FALSE
-      "Tech", "Engineering", "Player", TRUE, FALSE
-      "UnitFlag", "CanFortress", "Local", TRUE, FALSE
-      "CityTile", "Center", "Local", FALSE, TRUE
-    }
-build_time     = 3
-removal_time   = 0
-conflicts      = "Airbase"
-defense_bonus  = 33
-native_to      = "Trireme", "RiverShip", "Sea", "Submarine", "Balloon"
-flags          = "NativeTile", "NoStackDeath", "Refuel"
-helptext       = _("\
-Naval bases are coastal Fortresses with ocean access. They allow ships to enter and\ 
- receive a 1.33x bonus from superior fortifications and defensive position. Naval\
- Bases are built into Fortresses--all other units get the benefits of a Fortress.\
-"), _("
-NOTE: Naval bases are the only location where ships can be sure to avoid stack death without\
- suffering a defense disadvantage.\ 
-")
-
 [extra_ruins]
 name           = _("Ruins")
 category       = "Bonus"
@@ -1532,8 +1632,52 @@ buildable      = FALSE
 removal_time   = 0
 flags          = "TerrChangeRemoves"
 helptext       = _("\
-Ruins mark the former site of a city that was destroyed or abandoned. \
-They have no effect on gameplay.\
+Ruins mark the former site of a city that was destroyed or abandoned.\
+")
+
+[extra_quay]
+name           = _("Quay")
+category       = "Infra"
+causes         = "Road"
+rmcauses       = "Pillage"
+graphic        = "base.quay"
+graphic_alt    = "base.fort"
+activity_gfx   = "unit.quay"
+act_gfx_alt    = "unit.outpost"
+act_gfx_alt2   = "-"
+rmact_gfx      = "None"
+rmact_gfx_alt  = "-"
+reqs           =
+    { "type",        "name",       "range", "present", "quiet"
+;      "Extra",       "River",      "Local", TRUE,      FALSE
+      "ExtraFlag",   "Quayable",   "Local", TRUE,      FALSE
+      "Tech",        "Pottery",    "Player",TRUE,      FALSE
+      "TerrainClass","Land",       "Local", TRUE,      FALSE
+      "UnitFlag",    "CanFortress","Local", TRUE,      TRUE
+      "Extra",       "Hideout",    "Local", FALSE,     TRUE
+    }
+build_time     = 3
+removal_time   = 0
+native_to      = "Land", "LandAirSea", "LandNoKill", "Trireme", "Balloon", "RiverShip"
+;hidden_by      = ""
+flags          = "NativeTile", "AutoOnCityCenter"
+helptext       = _("\
+Quays are structures on both sides of rivers, where boats dock parallel to the\
+ river bank for quick loading and unloading. River traffic can directly offload\
+ onto nearby roads and be underway. Quays also have built-in infrastructure to ferry\
+ units across a river——the ancient way to cross rivers before the advent of Bridge\
+ Building. Stepping from a road onto a Quay uses a full move point: the time needed\
+ to load up and use its infrastructure. Any unit already on a Quay can immediately\
+ step onto connecting roads at no penalty. (Cargo units must first be unloaded by\
+ the transport carrying them.)\
+"), _("
+TIP: Quays can boost transportational logistics for ancient civilisations who have\
+ built on rivers. Don't be tempted to make too many Quays. The unloading and movement\
+ bonus is often the extra edge an enemy needs for an effective surprise attack.\ 
+"), _("Moves needed to cross a river to a tile on the other side:\n
+⁶⁄₃ moves: No infrastructure.\n\
+⁴⁄₃ moves: Quay connected to roads.\n\
+2⁄₃ moves: Bridge connected to roads.\n\
 ")
 
 [extra_road]
@@ -1561,7 +1705,7 @@ flags          = "AutoOnCityCenter"
 bridged_over   = "River"
 helptext       = _("\
 Roads allow your land units to move more quickly, and on some terrain,\
- also provide a trade bonus.\
+ also provides a trade bonus.\
 "), _("\
 Building roads on river tiles requires knowledge of Bridge Building.\
  City center tiles automatically get roads (unless they are on a river\
@@ -1666,11 +1810,11 @@ reqs           =
     }
 build_time = 2
 removal_time = 0
-flags          = "NativeTile"
+flags          = "NativeTile", "Quayable", "IrrigationSource"
 native_to      = "Land", "LandNoKill", "LandAirSea", "Trireme", "RiverShip"
 helptext       = _("\
 Any land terrain type may have a River on it.  A River adds 1\
- trade to the resources produced by that tile.  It also increases a tile's\
+ trade to the resources produced by that tile.  It also increases the tile\
  defense factor by 50%.  Finally, land units may move along a River (but\
  not diagonally) for fast travel.\
 "), _("\
@@ -1696,15 +1840,42 @@ reqs           =
       "TerrainFlag", "Low Land", "Local", TRUE
       "TerrainClass", "Oceanic", "Adjacent", TRUE
       "Tech", "Engineering", "Player", TRUE
-      "UnitFlag", "Settlers", "Local", TRUE
+      "UnitFlag", "CanRoad", "Local", TRUE
     }
 build_time     = 10
 removal_time   = 0
 native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine"
-flags          = "NativeTile"
+flags          = "NativeTile", "Quayable"
 helptext          = _("\
 Canals allow ships to travel through land tiles. Canals can be built on \
 low land tiles only, and not far inland.\
+")
+[extra_canal2]
+name           = _("Waterway")
+category       = "Infra"
+causes         = "Road"
+rmcauses       = "Pillage"
+graphic        = "road.canal"
+graphic_alt    = "road.river"
+activity_gfx   = "unit.canal"
+act_gfx_alt    = "unit.convert"
+act_gfx_alt2   = "unit.airstrip"
+rmact_gfx      = "None"
+rmact_gfx_alt  = "-"
+generated      = FALSE
+reqs           =
+    { "type", "name", "range", "present"
+      "TerrainFlag", "Low Land", "Local", TRUE
+      "Extra", "River", "Adjacent", TRUE
+      "Tech", "Engineering", "Player", TRUE
+      "UnitFlag", "CanRoad", "Local", TRUE
+    }
+build_time     = 10
+removal_time   = 0
+native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine"
+flags          = "NativeTile", "Quayable"
+helptext          = _("\
+Waterways are navigational channels that connect canals with rivers. Essentially, they're the same as canals.\
 ")
 
 [extra_gold]
@@ -1827,8 +1998,8 @@ rmact_gfx_alt  = "-"
 [extra_buffalo]
 name           = _("Buffalo")
 category       = "Resource"
-causes         = "Resource"
-;rmcauses       = ""
+causes         = "Resource", "Appear"
+rmcauses       = "Disappear"
 graphic        = "ts.buffalo"
 graphic_alt    = "-"
 activity_gfx   = "None"
@@ -1836,6 +2007,28 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+
+;[extra_forest_game] ; cant do disappearing resource until server fix
+;name           = _("Deer")
+;category       = "Resource"
+;causes         = "Resource", "Appear"
+;rmcauses       = "Disappear"
+;graphic        = "ts.forest_game"
+;graphic_alt    = "-"
+;activity_gfx   = "None"
+;act_gfx_alt    = "-"
+;act_gfx_alt2   = "-"
+;rmact_gfx      = "None"
+;rmact_gfx_alt  = "-"
+;disappearance_chance    = 500
+;disappearance_reqs = 
+;    { "type",           "name", "range"
+;    }
+;appearance_chance       = 500
+;appearance_reqs = 
+;    { "type",           "name", "range",  "present"
+;      "Terrain", "Forest",    "Local"
+;    }
 
 [extra_wheat]
 name           = _("Wheat")
@@ -1999,6 +2192,12 @@ rmact_gfx_alt  = "-"
 ;
 ; */ <-- avoid gettext warnings
 
+[base_hideout]
+extra          = "Hideout"
+gui_type       = "Other"
+border_sq      = -1
+vision_main_sq = 2
+
 [base_fort]
 extra          = "Fort"
 gui_type       = "Fortress"
@@ -2016,6 +2215,11 @@ flags          = "NoAggressive"
 extra          = "Airbase"
 gui_type       = "Airbase"
 
+[base_radar]
+extra          = "Radar"
+gui_type       = "Airbase"
+vision_main_sq = 30
+
 [base_buoy]
 extra          = "Buoy"
 gui_type       = "Fortress"
@@ -2023,7 +2227,7 @@ vision_main_sq = 5
 
 [base_navalbase]
 extra          = "Naval Base"
-gui_type       = "Airbase"
+gui_type       = "Fortress"
 border_sq      = 3    ;this may be causing the nationality flip behaviour for allies co-occupying
 vision_main_sq = 6
 vision_subs_sq = 4
@@ -2091,7 +2295,20 @@ trade_incr     = 1
 food_bonus     = 0
 shield_bonus   = 0
 trade_bonus    = 0
+integrates     = "Quay"
 compat_special = "Road"
+flags          = "UnrestrictedInfra"
+
+[road_quay]
+extra          = "Quay"
+move_cost      = 9
+food_incr      = 0
+shield_incr    = 0
+trade_incr     = 0
+food_bonus     = 0
+shield_bonus   = 0
+trade_bonus    = 0
+integrates     = "Road"
 flags          = "UnrestrictedInfra"
 
 [road_railroad]
@@ -2121,19 +2338,19 @@ move_cost      = 3
 move_mode      = "Cardinal"
 trade_incr_const = 1
 compat_special = "River"
+integrates     = "Canal", "Waterway"
 flags          = "River", "UnrestrictedInfra"
 
 [road_canal]
 extra             = "Canal"
 move_cost         = 9
 move_mode         = "Cardinal"
-food_incr_const   = 0
-shield_incr_const = 0
-trade_incr_const  = 0
-food_incr         = 0
-shield_incr       = 0
-trade_incr        = 0
-food_bonus        = 0
-shield_bonus      = 0
-trade_bonus       = 0
+integrates        = "River", "Waterway"
+compat_special    = "None"
+
+[road_waterway]
+extra             = "Waterway"
+move_cost         = 9
+move_mode         = "Cardinal"
+integrates        = "River", "Canal"
 compat_special    = "None"
