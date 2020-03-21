@@ -1313,7 +1313,7 @@ set =
       "borders", "SEE_INSIDE", FALSE
       "diplomacy", "ALL", FALSE
       "dispersion", 2, FALSE
-      "endturn", 365, FALSE
+;      "endturn", 365, FALSE
       "foggedborders", TRUE, FALSE
       "generator", "RANDOM", FALSE
       "gold", 100, FALSE	
