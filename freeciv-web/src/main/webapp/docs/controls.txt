@@ -10,6 +10,8 @@ The current and complete list of Freeciv-web controls can be found here:
 
 <img src="/images/orders/fortify_default.png"> Fortify (F)
 
+<img src="/images/orders/vigil.png"> Vigil (Ctrl-V)
+
 <img src="/images/orders/hideout.png"> Make Hideout (shift-H)
 
 <img src="/images/orders/irrigate_default.png"> Build Irrigation (I)
@@ -29,6 +31,8 @@ The current and complete list of Freeciv-web controls can be found here:
 <img src="/images/orders/maglev.png"> Build MagLev (R)
 
 <img src="/images/orders/canal.png"> Build Canal
+
+<img src="/images/orders/canal.png"> Build Quay (Q)
 
 <img src="/images/orders/well.png"> Dig Well (R)
 
@@ -62,9 +66,11 @@ The current and complete list of Freeciv-web controls can be found here:
 
 <img src="/images/orders/pollution.png"> Remove Pollution (P)
 
-<img src="/images/orders/fortress.png"> Build Fort, Fortress, Naval Base (shift-F)
+<img src="/images/orders/fortress.png"> Build Fort/Fortress or Buoy (shift-F)
 
 <img src="/images/orders/airbase.png"> Build Airbase, Radar Tower (shift-E)
+
+<img src="/images/orders/navalbase.png"> Build Naval Base (shift-N)
 
 <img src="/images/orders/load.png"> Load on Transport (L)
 
@@ -92,6 +98,7 @@ Unload & Activate Cargo units (shift-U) (outside city)
   h: set unit's (h)omecity  (to city on current tile)
   H: make Hideout
   i: build (i)rrigation or convert terrain  (settler/worker units)
+  I: v(I)gil: (I)ntercept and auto-attack adjacent air units
   j: no orders - skip orders for this unit this turn 
   J: cancel orders - clear current orders for this unit 
   l: (l)oad unit as cargo onto transporting unit
@@ -102,6 +109,7 @@ Unload & Activate Cargo units (shift-U) (outside city)
   p: clean (p)ollution  (settler/worker units)
   p: (p)aradrop (paratroopers only)
   P: (P)illage  (destroy terrain alteration)
+  q: build (q)uay
   r: build (r)oad/railroad  (settler/worker units)
   s: (s)entry unit
   S: un(S)entry all units on tile
@@ -110,7 +118,7 @@ Unload & Activate Cargo units (shift-U) (outside city)
   U: (u)nload, show, and activate all cargo units on transport 
   v: select all units on same tile 
   V: select all units of same TYPE on tile 
-alt-v: select all units NOT of this type on tile 
+alt-v: select all units NOT of this type on tile
   x: unit auto e(x)plore
   X: select all units of same TYPE globally
   w: (w)ait: focus on next unit
