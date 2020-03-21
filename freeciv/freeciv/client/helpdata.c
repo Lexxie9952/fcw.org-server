@@ -1280,14 +1280,14 @@ char *helptext_building(char *buf, size_t bufsz, struct player *pplayer,
   requirement_vector_iterate(&pimprove->obsolete_by, pobs) {
     if (VUT_ADVANCE == pobs->source.kind && pobs->present) {
       cat_snprintf(buf, bufsz,
-                   _("* The discovery of %s will make %s obsolete.\n"),
+                   _("\u2022 The discovery of %s will make %s obsolete.\n"),
                    advance_name_translation(pobs->source.value.advance),
                    improvement_name_translation(pimprove));
     }
     if (VUT_IMPROVEMENT == pobs->source.kind && pobs->present) {
       cat_snprintf(buf, bufsz,
                    /* TRANS: both %s are improvement names */
-                   _("* The presence of %s in the city will make %s "
+                   _("\u2022 The presence of %s in the city will make %s "
                      "obsolete.\n"),
                      improvement_name_translation(pobs->source.value.building),
                      improvement_name_translation(pimprove));
@@ -1296,7 +1296,7 @@ char *helptext_building(char *buf, size_t bufsz, struct player *pplayer,
 
   if (is_small_wonder(pimprove)) {
     cat_snprintf(buf, bufsz,
-                 _("* A 'small wonder': at most one of your cities may "
+                 _("\u2022 A 'small wonder': at most one of your cities may "
                    "possess this improvement.\n"));
   }
   /* (Great wonders are in their own help section explaining their
@@ -1309,7 +1309,7 @@ char *helptext_building(char *buf, size_t bufsz, struct player *pplayer,
     cat_snprintf(buf, bufsz,
 		 /* TRANS: 'Allows all players with knowledge of atomic
 		  * power to build nuclear units.' */
-		 _("* Allows all players with knowledge of %s "
+		 _("\u2022 Allows all players with knowledge of %s "
 		   "to build %s units.\n"),
                  advance_name_translation(u->require_advance),
 		 utype_name_translation(u));
@@ -1317,16 +1317,16 @@ char *helptext_building(char *buf, size_t bufsz, struct player *pplayer,
 
   insert_allows(&source, buf + strlen(buf), bufsz - strlen(buf),
                 /* TRANS: bullet point; note trailing space */
-                Q_("?bullet:* "));
+                Q_("?bullet:\u2022 "));
 
   unit_type_iterate(u) {
     if (u->need_improvement == pimprove) {
       if (A_NEVER != u->require_advance) {
-	cat_snprintf(buf, bufsz, _("* Allows %s (with %s).\n"),
+	cat_snprintf(buf, bufsz, _("\u2022 Allows %s (with %s).\n"),
 		     utype_name_translation(u),
                      advance_name_translation(u->require_advance));
       } else {
-	cat_snprintf(buf, bufsz, _("* Allows %s.\n"),
+	cat_snprintf(buf, bufsz, _("\u2022 Allows %s.\n"),
 		     utype_name_translation(u));
       }
     }
@@ -1385,7 +1385,7 @@ char *helptext_building(char *buf, size_t bufsz, struct player *pplayer,
          * requirements. */
         cat_snprintf(buf, bufsz,
                      /* TRANS: Help build Wonder */
-                     _("* Makes it possible to target the city building it "
+                     _("\u2022 Makes it possible to target the city building it "
                        "with the action \'%s\'.\n"),
                      action_id_name_translation(act));
         break;
@@ -1394,7 +1394,7 @@ char *helptext_building(char *buf, size_t bufsz, struct player *pplayer,
          * requirements. */
         cat_snprintf(buf, bufsz,
                      /* TRANS: Help build Wonder */
-                     _("* Makes it possible to target its city with the "
+                     _("\u2022 Makes it possible to target its city with the "
                        "action \'%s\'.\n"),
                      action_id_name_translation(act));
         break;
@@ -1403,7 +1403,7 @@ char *helptext_building(char *buf, size_t bufsz, struct player *pplayer,
          * requirements. */
         cat_snprintf(buf, bufsz,
                      /* TRANS: Help build Wonder */
-                     _("* Makes it possible to target its city and its "
+                     _("\u2022 Makes it possible to target its city and its "
                        "trade partners with the action \'%s\'.\n"),
                      action_id_name_translation(act));
         break;
@@ -1412,7 +1412,7 @@ char *helptext_building(char *buf, size_t bufsz, struct player *pplayer,
          * requirements. */
         cat_snprintf(buf, bufsz,
                      /* TRANS: Help build Wonder */
-                     _("* Makes it possible to target all cities with its "
+                     _("\u2022 Makes it possible to target all cities with its "
                        "owner on its continent with the action \'%s\'.\n"),
                      action_id_name_translation(act));
         break;
@@ -1421,7 +1421,7 @@ char *helptext_building(char *buf, size_t bufsz, struct player *pplayer,
          * requirements. */
         cat_snprintf(buf, bufsz,
                      /* TRANS: Help build Wonder */
-                     _("* Makes it possible to target all cities with its "
+                     _("\u2022 Makes it possible to target all cities with its "
                        "owner with the action \'%s\'.\n"),
                      action_id_name_translation(act));
         break;
@@ -1430,7 +1430,7 @@ char *helptext_building(char *buf, size_t bufsz, struct player *pplayer,
          * requirements. */
         cat_snprintf(buf, bufsz,
                      /* TRANS: Help build Wonder */
-                     _("* Makes it possible to target all cities on the "
+                     _("\u2022 Makes it possible to target all cities on the "
                        "same team with the action \'%s\'.\n"),
                      action_id_name_translation(act));
         break;
@@ -1439,7 +1439,7 @@ char *helptext_building(char *buf, size_t bufsz, struct player *pplayer,
          * requirements. */
         cat_snprintf(buf, bufsz,
                      /* TRANS: Help build Wonder */
-                     _("* Makes it possible to target all cities owned by "
+                     _("\u2022 Makes it possible to target all cities owned by "
                        "or allied to its owner with the action \'%s\'.\n"),
                      action_id_name_translation(act));
         break;
@@ -1448,7 +1448,7 @@ char *helptext_building(char *buf, size_t bufsz, struct player *pplayer,
          * requirements. */
         cat_snprintf(buf, bufsz,
                      /* TRANS: Help build Wonder */
-                     _("* Makes it possible to target all cities with the "
+                     _("\u2022 Makes it possible to target all cities with the "
                        "action \'%s\'.\n"),
                      action_id_name_translation(act));
         break;
@@ -1521,56 +1521,56 @@ char *helptext_building(char *buf, size_t bufsz, struct player *pplayer,
       case REQ_RANGE_LOCAL:
         cat_snprintf(buf, bufsz,
                      /* TRANS: Incite City */
-                     _("* Makes it impossible to do the action \'%s\' to "
+                     _("\u2022 Makes it impossible to do the action \'%s\' to "
                        "the city building it.\n"),
                      action_id_name_translation(act));
         break;
       case REQ_RANGE_CITY:
         cat_snprintf(buf, bufsz,
                      /* TRANS: Incite City */
-                     _("* Makes it impossible to do the action \'%s\' to "
+                     _("\u2022 Makes it impossible to do the action \'%s\' to "
                        "its city.\n"),
                      action_id_name_translation(act));
         break;
       case REQ_RANGE_TRADEROUTE:
         cat_snprintf(buf, bufsz,
                      /* TRANS: Incite City */
-                     _("* Makes it impossible to do the action \'%s\' to "
+                     _("\u2022 Makes it impossible to do the action \'%s\' to "
                        "its city or to its city's trade partners.\n"),
                      action_id_name_translation(act));
         break;
       case REQ_RANGE_CONTINENT:
         cat_snprintf(buf, bufsz,
                      /* TRANS: Incite City */
-                     _("* Makes it impossible to do the action \'%s\' to "
+                     _("\u2022 Makes it impossible to do the action \'%s\' to "
                        "any city with its owner on its continent.\n"),
                      action_id_name_translation(act));
         break;
       case REQ_RANGE_PLAYER:
         cat_snprintf(buf, bufsz,
                      /* TRANS: Incite City */
-                     _("* Makes it impossible to do the action \'%s\' to "
+                     _("\u2022 Makes it impossible to do the action \'%s\' to "
                        "any city with its owner.\n"),
                      action_id_name_translation(act));
         break;
       case REQ_RANGE_TEAM:
         cat_snprintf(buf, bufsz,
                      /* TRANS: Incite City */
-                     _("* Makes it impossible to do the action \'%s\' to "
+                     _("\u2022 Makes it impossible to do the action \'%s\' to "
                        "any city on the same team.\n"),
                      action_id_name_translation(act));
         break;
       case REQ_RANGE_ALLIANCE:
         cat_snprintf(buf, bufsz,
                      /* TRANS: Incite City */
-                     _("* Makes it impossible to do the action \'%s\' to "
+                     _("\u2022 Makes it impossible to do the action \'%s\' to "
                        "any city allied to or owned by its owner.\n"),
                      action_id_name_translation(act));
         break;
       case REQ_RANGE_WORLD:
         cat_snprintf(buf, bufsz,
                      /* TRANS: Incite City */
-                     _("* Makes it impossible to do the action \'%s\' to "
+                     _("\u2022 Makes it impossible to do the action \'%s\' to "
                        "any city in the game.\n"),
                      action_id_name_translation(act));
         break;
@@ -1593,7 +1593,7 @@ char *helptext_building(char *buf, size_t bufsz, struct player *pplayer,
         break;
       } else if (improvement_by_number(n) == pimprove) {
         cat_snprintf(buf, bufsz,
-                     _("* All players start with this improvement in their "
+                     _("\u2022 All players start with this improvement in their "
                        "first city.\n"));
         break;
       }
@@ -1616,7 +1616,7 @@ char *helptext_building(char *buf, size_t bufsz, struct player *pplayer,
       } else if (improvement_by_number(n) == pimprove) {
         cat_snprintf(buf, bufsz,
                      /* TRANS: %s is a nation plural */
-                     _("* The %s start with this improvement in their "
+                     _("\u2022 The %s start with this improvement in their "
                        "first city.\n"), nation_plural_translation(pnation));
         break;
       }
@@ -1626,7 +1626,7 @@ char *helptext_building(char *buf, size_t bufsz, struct player *pplayer,
   if (improvement_has_flag(pimprove, IF_SAVE_SMALL_WONDER)) {
     cat_snprintf(buf, bufsz,
                  /* TRANS: don't translate 'savepalace' */
-                 _("* If you lose the city containing this improvement, "
+                 _("\u2022 If you lose the city containing this improvement, "
                    "it will be rebuilt for free in another of your cities "
                    "(if the 'savepalace' server setting is enabled).\n"));
   }
@@ -2156,7 +2156,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
     /* Roads, rail, mines, irrigation. */
     extra_type_by_cause_iterate(EC_ROAD, pextra) {
       if (help_is_extra_buildable(pextra, utype)) {
-        strvec_append(extras_vec, extra_name_translation(pextra));
+          strvec_append(extras_vec, extra_name_translation(pextra));
       }
     } extra_type_by_cause_iterate_end;
     if (strvec_size(extras_vec) > 0) {
@@ -2210,7 +2210,9 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
 
     extra_type_by_cause_iterate(EC_BASE, pextra) {
       if (help_is_extra_buildable(pextra, utype)) {
-        strvec_append(extras_vec, extra_name_translation(pextra));
+        if (strlen(extra_name_translation(pextra))>1)
+          /* hidden bases need to generate custom text with a unit flag */
+          strvec_append(extras_vec, extra_name_translation(pextra));
       }
     } extra_type_by_cause_iterate_end;
 
@@ -2224,7 +2226,11 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
     /* Pollution, fallout. */
     extra_type_by_rmcause_iterate(ERM_CLEANPOLLUTION, pextra) {
       if (help_is_extra_cleanable(pextra, utype)) {
-        strvec_append(extras_vec, extra_name_translation(pextra));
+        /* any Mil unit that can build anything at all is forced to be able 
+           to clean pollution due to hard-coded Settlers flag. This is a 
+           UNCLEANED fix until we get actionenablers for fallout/pollution */
+        if (utype_has_flag(utype, UTYF_CIVILIAN))
+          strvec_append(extras_vec, extra_name_translation(pextra));
      }
     } extra_type_by_rmcause_iterate_end;
 
@@ -2238,7 +2244,11 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
     
     extra_type_by_rmcause_iterate(ERM_CLEANFALLOUT, pextra) {
       if (help_is_extra_cleanable(pextra, utype)) {
-        strvec_append(extras_vec, extra_name_translation(pextra));
+        /* any Mil unit that can build anything at all is forced to be able 
+           to clean fallout due to hard-coded Settlers flag. This is a 
+           UNCLEANED fix until we get actionenablers for fallout/pollution */
+        if (utype_has_flag(utype, UTYF_CIVILIAN))
+          strvec_append(extras_vec, extra_name_translation(pextra));
       }
     } extra_type_by_rmcause_iterate_end;
 
@@ -2593,10 +2603,9 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
                      utype->bombard_rate);
         cat_snprintf(buf, bufsz,
                      /* TRANS: talking about bombard */
-                     _("  \u2022 These attacks will only damage (never kill)"
-                       " defenders, but damage all"
-                       " defenders on a tile, and have no risk for the"
-                       " attacker.\n"));
+                     _("  \u2022 These attacks only damage (never kill),"
+                       " and damage all defenders on a tile, at no risk"
+                       " to the attacker.\n"));
         break;
       case ACTION_UPGRADE_UNIT:
         cat_snprintf(buf, bufsz,
@@ -2861,7 +2870,7 @@ void helptext_advance(char *buf, size_t bufsz, struct player *pplayer,
 
   insert_allows(&source, buf + strlen(buf), bufsz - strlen(buf),
                 /* TRANS: bullet point; note trailing space */
-                Q_("?bullet:* "));
+                Q_("?bullet:\u2022 "));
 
   {
     int j;
@@ -2871,7 +2880,7 @@ void helptext_advance(char *buf, size_t bufsz, struct player *pplayer,
         break;
       } else if (game.rgame.global_init_techs[j] == i) {
         CATLSTR(buf, bufsz,
-                _("* All players start the game with knowledge of this "
+                _("\u2022 All players start the game with knowledge of this "
                   "technology.\n"));
         break;
       }
@@ -2893,7 +2902,7 @@ void helptext_advance(char *buf, size_t bufsz, struct player *pplayer,
       } else if (pnation->init_techs[j] == i) {
         cat_snprintf(buf, bufsz,
                      /* TRANS: %s is a nation plural */
-                     _("* The %s start the game with knowledge of this "
+                     _("\u2022 The %s start the game with knowledge of this "
                        "technology.\n"), nation_plural_translation(pnation));
         break;
       }
@@ -2947,7 +2956,7 @@ void helptext_advance(char *buf, size_t bufsz, struct player *pplayer,
       fc_assert(n_roots > 0);
       cat_snprintf(buf, bufsz,
                    /* TRANS: 'and'-separated list of techs */
-                   _("* Only those who know %s can acquire this "
+                   _("\u2022 Only those who know %s can acquire this "
                      "technology (by any means).\n"),
                    astr_build_and_list(&root_list, root_techs, n_roots));
       astr_free(&root_list);
@@ -2956,7 +2965,7 @@ void helptext_advance(char *buf, size_t bufsz, struct player *pplayer,
 
   if (advance_has_flag(i, TF_BONUS_TECH)) {
     cat_snprintf(buf, bufsz,
-		 _("* The first player to learn %s gets"
+		 _("\u2022 The first player to learn %s gets"
 		   " an immediate advance.\n"),
                  advance_name_translation(vap));
   }
@@ -2967,7 +2976,7 @@ void helptext_advance(char *buf, size_t bufsz, struct player *pplayer,
 
       if (helptxt != NULL) {
         /* TRANS: bullet point; note trailing space */
-        CATLSTR(buf, bufsz, Q_("?bullet:* "));
+        CATLSTR(buf, bufsz, Q_("?bullet:\u2022 "));
         CATLSTR(buf, bufsz, _(helptxt));
         CATLSTR(buf, bufsz, "\n");
       }
@@ -2979,7 +2988,7 @@ void helptext_advance(char *buf, size_t bufsz, struct player *pplayer,
 
   if (game.info.tech_upkeep_style != TECH_UPKEEP_NONE) {
     CATLSTR(buf, bufsz,
-            _("* To preserve this technology for our nation some bulbs "
+            _("\u2022 To preserve this technology for our nation some bulbs "
               "are needed each turn.\n"));
   }
 
@@ -3017,10 +3026,10 @@ void helptext_terrain(char *buf, size_t bufsz, struct player *pplayer,
 
   insert_allows(&source, buf + strlen(buf), bufsz - strlen(buf),
                 /* TRANS: bullet point; note trailing space */
-                Q_("?bullet:* "));
+                Q_("?bullet:\u2022 "));
   if (terrain_has_flag(pterrain, TER_NO_CITIES)) {
     CATLSTR(buf, bufsz,
-	    _("* You cannot build cities on this terrain."));
+	    _("\u2022 You cannot build cities on this terrain."));
     CATLSTR(buf, bufsz, "\n");
   }
   if (pterrain->road_time == 0) {
@@ -3028,7 +3037,7 @@ void helptext_terrain(char *buf, size_t bufsz, struct player *pplayer,
     extra_type_by_cause_iterate(EC_ROAD, pextra) {
       if (pextra->buildable) {
         CATLSTR(buf, bufsz,
-                _("* Paths cannot be built on this terrain."));
+                _("\u2022 Paths cannot be built on this terrain."));
         CATLSTR(buf, bufsz, "\n");
         break;
       }
@@ -3039,7 +3048,7 @@ void helptext_terrain(char *buf, size_t bufsz, struct player *pplayer,
     extra_type_by_cause_iterate(EC_BASE, pextra) {
       if (pextra->buildable) {
         CATLSTR(buf, bufsz,
-                _("* Bases cannot be built on this terrain."));
+                _("\u2022 Bases cannot be built on this terrain."));
         CATLSTR(buf, bufsz, "\n");
         break;
       }
@@ -3048,7 +3057,7 @@ void helptext_terrain(char *buf, size_t bufsz, struct player *pplayer,
   if (terrain_has_flag(pterrain, TER_UNSAFE_COAST)
       && terrain_type_terrain_class(pterrain) != TC_OCEAN) {
     CATLSTR(buf, bufsz,
-	    _("* The coastline of this terrain is unsafe."));
+	    _("\u2022 The coastline of this terrain is unsafe."));
     CATLSTR(buf, bufsz, "\n");
   }
   {
@@ -3065,26 +3074,26 @@ void helptext_terrain(char *buf, size_t bufsz, struct player *pplayer,
       struct astring list = ASTRING_INIT;
 
       /* TRANS: %s is a list of unit classes separated by "and". */
-      cat_snprintf(buf, bufsz, _("* Can be traveled by %s units.\n"),
+      cat_snprintf(buf, bufsz, _("\u2022 Can be traveled by %s units.\n"),
                    astr_build_and_list(&list, classes, i));
       astr_free(&list);
     }
   }
   if (terrain_has_flag(pterrain, TER_NO_ZOC)) {
     CATLSTR(buf, bufsz,
-            _("* Units on this terrain neither impose zones of control "
+            _("\u2022 Units on this terrain neither impose zones of control "
               "nor are restricted by them.\n"));
   } else {
     CATLSTR(buf, bufsz,
-            _("* Units on this terrain may impose a zone of control, or "
+            _("\u2022 Units on this terrain may impose a zone of control, or "
               "be restricted by one.\n"));
   }
   if (terrain_has_flag(pterrain, TER_NO_FORTIFY)) {
     CATLSTR(buf, bufsz,
-            _("* No units can fortify on this terrain.\n"));
+            _("\u2022 No units can fortify on this terrain.\n"));
   } else {
     CATLSTR(buf, bufsz,
-            _("* Units able to fortify may do so on this terrain.\n"));
+            _("\u2022 Units able to fortify may do so on this terrain.\n"));
   }
   for (flagid = TER_USER_1 ; flagid <= TER_USER_LAST; flagid++) {
     if (terrain_has_flag(pterrain, flagid)) {
@@ -3092,7 +3101,7 @@ void helptext_terrain(char *buf, size_t bufsz, struct player *pplayer,
 
       if (helptxt != NULL) {
         /* TRANS: bullet point; note trailing space */
-        CATLSTR(buf, bufsz, Q_("?bullet:* "));
+        CATLSTR(buf, bufsz, Q_("?bullet:\u2022 "));
         CATLSTR(buf, bufsz, _(helptxt));
         CATLSTR(buf, bufsz, "\n");
       }
@@ -3396,7 +3405,7 @@ void helptext_extra(char *buf, size_t bufsz, struct player *pplayer,
       (void) req_text_insert_nl(reqsbuf, sizeof(reqsbuf), pplayer, preq,
                                 VERB_DEFAULT,
                                 /* TRANS: bullet point; note trailing space */
-                                buildable ? Q_("?bullet:* ") : "");
+                                buildable ? Q_("?bullet:\u2022 ") : "");
     } requirement_vector_iterate_end;
     if (reqsbuf[0] != '\0') {
       if (buildable) {
@@ -3511,14 +3520,14 @@ void helptext_extra(char *buf, size_t bufsz, struct player *pplayer,
     char vrbuf[1024];
 
     fc_snprintf(vrbuf, sizeof(vrbuf),
-                _("* Visible only if %s known.\n"),
+                _("\u2022 Visible only if %s known.\n"),
                 advance_name_translation(advance_by_number(pextra->visibility_req)));
     CATLSTR(buf, bufsz, vrbuf);
   }
 
   if (pextra->eus == EUS_HIDDEN) {
     CATLSTR(buf, bufsz,
-            _("* Units inside are hidden from non-allied players.\n"));
+            _("\u2022 Units inside are hidden from non-allied players.\n"));
   }
 
   {
@@ -3536,36 +3545,36 @@ void helptext_extra(char *buf, size_t bufsz, struct player *pplayer,
 
       if (proad != NULL) {
         /* TRANS: %s is a list of unit classes separated by "and". */
-        cat_snprintf(buf, bufsz, _("* Can be traveled by %s units.\n"),
+        cat_snprintf(buf, bufsz, _("\u2022 Can be traveled by %s units.\n"),
                      astr_build_and_list(&list, classes, i));
       } else {
         /* TRANS: %s is a list of unit classes separated by "and". */
-        cat_snprintf(buf, bufsz, _("* Native to %s units.\n"),
+        cat_snprintf(buf, bufsz, _("\u2022 Native to %s units.\n"),
                      astr_build_and_list(&list, classes, i));
       }
       astr_free(&list);
 
       if (extra_has_flag(pextra, EF_NATIVE_TILE)) {
         CATLSTR(buf, bufsz,
-                _("  * Such units can move onto this tile even if it would "
+                _("  \u2022 Such units can move onto this tile even if it would "
                   "not normally be suitable terrain.\n"));
       }
       if (pbase != NULL) {
         if (base_has_flag(pbase, BF_NOT_AGGRESSIVE)) {
           /* "3 tiles" is hardcoded in is_friendly_city_near() */
           CATLSTR(buf, bufsz,
-                  _("  * Such units situated here are not considered aggressive "
+                  _("  \u2022 Such units situated here are not considered aggressive "
                     "if this tile is within 3 tiles of a friendly city.\n"));
         }
         if (territory_claiming_base(pbase)) {
           CATLSTR(buf, bufsz,
-                  _("  * Can be captured by such units if at war with the "
+                  _("  \u2022 Can be captured by such units if at war with the "
                     "nation that currently owns it.\n"));
         }
       }
       if (pextra->defense_bonus) {
         cat_snprintf(buf, bufsz,
-                     _("  * Such units get a %d%% defense bonus on this "
+                     _("  \u2022 Such units get a %d%% defense bonus on this "
                        "tile.\n"),
                      pextra->defense_bonus);
       }
@@ -3574,12 +3583,12 @@ void helptext_extra(char *buf, size_t bufsz, struct player *pplayer,
 
   if (proad != NULL && road_provides_move_bonus(proad)) {
     if (proad->move_cost == 0) {
-      CATLSTR(buf, bufsz, _("* Allows infinite movement.\n"));
+      CATLSTR(buf, bufsz, _("\u2022 Allows infinite movement.\n"));
     } else {
       cat_snprintf(buf, bufsz,
                    /* TRANS: "MP" = movement points. Second %s may have a
                     * fractional part. */
-                   _("* Movement cost along %s is %s MP.\n"),
+                   _("\u2022 Movement cost along %s is %s MP.\n"),
                    extra_name_translation(pextra),
                    move_points_text(proad->move_cost, TRUE));
     }
@@ -3588,27 +3597,27 @@ void helptext_extra(char *buf, size_t bufsz, struct player *pplayer,
   if (game.info.killstack
       && extra_has_flag(pextra, EF_NO_STACK_DEATH)) {
     CATLSTR(buf, bufsz,
-            _("* Defeat of one unit does not cause death of all other units "
+            _("\u2022 Defeat of one unit does not cause death of all other units "
               "on this tile.\n"));
   }
   if (pbase != NULL) {
     if (territory_claiming_base(pbase)) {
       CATLSTR(buf, bufsz,
-              _("* Extends national borders of the building nation.\n"));
+              _("\u2022 Extends national borders of the building nation.\n"));
     }
     if (pbase->vision_main_sq >= 0) {
       CATLSTR(buf, bufsz,
-              _("* Grants permanent vision of an area around the tile to "
+              _("\u2022 Grants permanent vision of an area around the tile to "
                 "its owner.\n"));
     }
     if (pbase->vision_invis_sq >= 0) {
       CATLSTR(buf, bufsz,
-              _("* Allows the owner to see normally invisible stealth units "
+              _("\u2022 Allows the owner to see normally invisible stealth units "
                 "in an area around the tile.\n"));
     }
     if (pbase->vision_subs_sq >= 0) {
       CATLSTR(buf, bufsz,
-              _("* Allows the owner to see normally invisible subsurface units "
+              _("\u2022 Allows the owner to see normally invisible subsurface units "
                 "in an area around the tile.\n"));
     }
   }
@@ -3618,7 +3627,7 @@ void helptext_extra(char *buf, size_t bufsz, struct player *pplayer,
 
       if (helptxt != NULL) {
         /* TRANS: bullet point; note trailing space */
-        CATLSTR(buf, bufsz, Q_("?bullet:* "));
+        CATLSTR(buf, bufsz, Q_("?bullet:\u2022 "));
         CATLSTR(buf, bufsz, _(helptxt));
         CATLSTR(buf, bufsz, "\n");
       }
@@ -3827,7 +3836,7 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
   CATLSTR(buf, bufsz, _("Features:\n"));
   insert_allows(&source, buf + strlen(buf), bufsz - strlen(buf),
                 /* TRANS: bullet point; note trailing space */
-                Q_("?bullet:* "));
+                Q_("?bullet:\u2022 "));
   effect_list_iterate(get_req_source_effects(&source), peffect) {
     Output_type_id output_type = O_LAST;
     struct unit_class *unitclass = NULL;
@@ -3960,9 +3969,9 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
           /* FIXME: EFT_MAKE_CONTENT_MIL_PER would cancel this out. We assume
            * no-one will set both, so we don't bother handling it. */
           cat_snprintf(buf, bufsz,
-                       PL_("* Military units away from home and field units"
+                       PL_("\u2022 Military units away from home and field units"
                            " will each cause %d citizen to become unhappy.\n",
-                           "* Military units away from home and field units"
+                           "\u2022 Military units away from home and field units"
                            " will each cause %d citizens to become unhappy.\n",
                            net_value),
                        net_value);
@@ -3973,20 +3982,20 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
           if (world_value > 0) {
             if (net_value > 0) {
               cat_snprintf(buf, bufsz,
-                           _("* Unhappiness from foreign citizens due to "
+                           _("\u2022 Unhappiness from foreign citizens due to "
                              "war with their home state is %d%% the usual "
                              "value.\n"),
                            (net_value * 100) / world_value);
             } else {
               CATLSTR(buf, bufsz,
-                      _("* No unhappiness from foreign citizens even when "
+                      _("\u2022 No unhappiness from foreign citizens even when "
                         "at war with their home state.\n"));
             }
           } else {
             cat_snprintf(buf, bufsz,
                          /* TRANS: not pluralised as gettext doesn't support
                           * fractional numbers, which this might be */
-                         _("* Each foreign citizen causes %.2g unhappiness "
+                         _("\u2022 Each foreign citizen causes %.2g unhappiness "
                            "in their city while you are at war with their "
                            "home state.\n"),
                          (double)net_value / 100);
@@ -3996,9 +4005,9 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
       case EFT_MAKE_CONTENT_MIL:
         if (playerwide) {
           cat_snprintf(buf, bufsz,
-                       PL_("* Each of your cities will avoid %d unhappiness"
+                       PL_("\u2022 Each of your cities will avoid %d unhappiness"
                            " caused by units.\n",
-                           "* Each of your cities will avoid %d unhappiness"
+                           "\u2022 Each of your cities will avoid %d unhappiness"
                            " caused by units.\n",
                            peffect->value),
                        peffect->value);
@@ -4007,9 +4016,9 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
       case EFT_MAKE_CONTENT:
         if (playerwide) {
           cat_snprintf(buf, bufsz,
-                       PL_("* Each of your cities will avoid %d unhappiness,"
+                       PL_("\u2022 Each of your cities will avoid %d unhappiness,"
                            " not including that caused by aggression.\n",
-                           "* Each of your cities will avoid %d unhappiness,"
+                           "\u2022 Each of your cities will avoid %d unhappiness,"
                            " not including that caused by aggression.\n",
                            peffect->value),
                        peffect->value);
@@ -4018,9 +4027,9 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
       case EFT_FORCE_CONTENT:
         if (playerwide) {
           cat_snprintf(buf, bufsz,
-                       PL_("* Each of your cities will avoid %d unhappiness,"
+                       PL_("\u2022 Each of your cities will avoid %d unhappiness,"
                            " including that caused by aggression.\n",
-                           "* Each of your cities will avoid %d unhappiness,"
+                           "\u2022 Each of your cities will avoid %d unhappiness,"
                            " including that caused by aggression.\n",
                            peffect->value),
                        peffect->value);
@@ -4033,11 +4042,11 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
               cat_snprintf(buf, bufsz,
                            /* TRANS: %s is the output type, like 'shield'
                             * or 'gold'. */
-                           _("* You pay no %s upkeep for your units.\n"),
+                           _("\u2022 You pay no %s upkeep for your units.\n"),
                            astr_str(&outputs_or));
             } else {
               CATLSTR(buf, bufsz,
-                      _("* You pay no upkeep for your units.\n"));
+                      _("\u2022 You pay no upkeep for your units.\n"));
             }
           } else if (net_value != world_value) {
             double ratio = (double)net_value / world_value;
@@ -4045,12 +4054,12 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
               cat_snprintf(buf, bufsz,
                            /* TRANS: %s is the output type, like 'shield'
                             * or 'gold'. */
-                           _("* You pay %.2g times normal %s upkeep for your "
+                           _("\u2022 You pay %.2g times normal %s upkeep for your "
                              "units.\n"),
                            ratio, astr_str(&outputs_and));
             } else {
               cat_snprintf(buf, bufsz,
-                           _("* You pay %.2g times normal upkeep for your "
+                           _("\u2022 You pay %.2g times normal upkeep for your "
                              "units.\n"),
                            ratio);
             }
@@ -4065,18 +4074,18 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
                           * 'gold'; pluralised in %d but there is currently
                           * no way to control the singular/plural name of the
                           * output type; sorry */
-                         PL_("* Each of your cities will avoid paying %d %s"
+                         PL_("\u2022 Each of your cities will avoid paying %d %s"
                              " upkeep for your units.\n",
-                             "* Each of your cities will avoid paying %d %s"
+                             "\u2022 Each of your cities will avoid paying %d %s"
                              " upkeep for your units.\n", peffect->value),
                          peffect->value, astr_str(&outputs_and));
           } else {
             cat_snprintf(buf, bufsz,
                          /* TRANS: Amount is subtracted from upkeep cost
                           * for each upkeep type. */
-                         PL_("* Each of your cities will avoid paying %d"
+                         PL_("\u2022 Each of your cities will avoid paying %d"
                              " upkeep for your units.\n",
-                             "* Each of your cities will avoid paying %d"
+                             "\u2022 Each of your cities will avoid paying %d"
                              " upkeep for your units.\n", peffect->value),
                          peffect->value);
           }
@@ -4085,7 +4094,7 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
       case EFT_CIVIL_WAR_CHANCE:
         if (playerwide) {
           cat_snprintf(buf, bufsz,
-                       _("* If you lose your capital,"
+                       _("\u2022 If you lose your capital,"
                          " the base chance of civil war is %d%%.\n"),
                        net_value);
         }
@@ -4093,10 +4102,10 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
       case EFT_EMPIRE_SIZE_BASE:
         if (playerwide) {
           cat_snprintf(buf, bufsz,
-                       PL_("* You can have %d city before an "
+                       PL_("\u2022 You can have %d city before an "
                            "additional unhappy citizen appears in each city "
                            "due to civilization size.\n",
-                           "* You can have up to %d cities before an "
+                           "\u2022 You can have up to %d cities before an "
                            "additional unhappy citizen appears in each city "
                            "due to civilization size.\n", net_value),
                        net_value);
@@ -4105,10 +4114,10 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
       case EFT_EMPIRE_SIZE_STEP:
         if (playerwide) {
           cat_snprintf(buf, bufsz,
-                       PL_("* After the first unhappy citizen due to"
+                       PL_("\u2022 After the first unhappy citizen due to"
                            " civilization size, for each %d additional city"
                            " another unhappy citizen will appear.\n",
-                           "* After the first unhappy citizen due to"
+                           "\u2022 After the first unhappy citizen due to"
                            " civilization size, for each %d additional cities"
                            " another unhappy citizen will appear.\n",
                            net_value),
@@ -4119,22 +4128,22 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
         if (playerwide && game.info.changable_tax) {
           if (net_value < 100) {
             cat_snprintf(buf, bufsz,
-                         _("* The maximum rate you can set for science,"
+                         _("\u2022 The maximum rate you can set for science,"
                             " gold, or luxuries is %d%%.\n"),
                          net_value);
           } else {
             CATLSTR(buf, bufsz,
-                    _("* Has unlimited science/gold/luxuries rates.\n"));
+                    _("\u2022 Has unlimited science/gold/luxuries rates.\n"));
           }
         }
         break;
       case EFT_MARTIAL_LAW_EACH:
         if (playerwide) {
           cat_snprintf(buf, bufsz,
-                       PL_("* Your units may impose martial law."
+                       PL_("\u2022 Your units may impose martial law."
                            " Each military unit inside a city will force %d"
                            " unhappy citizen to become content.\n",
-                           "* Your units may impose martial law."
+                           "\u2022 Your units may impose martial law."
                            " Each military unit inside a city will force %d"
                            " unhappy citizens to become content.\n",
                            peffect->value),
@@ -4144,9 +4153,9 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
       case EFT_MARTIAL_LAW_MAX:
         if (playerwide && net_value < 100) {
           cat_snprintf(buf, bufsz,
-                       PL_("* A maximum of %d unit in each city can enforce"
+                       PL_("\u2022 A maximum of %d unit in each city can enforce"
                            " martial law.\n",
-                           "* A maximum of %d units in each city can enforce"
+                           "\u2022 A maximum of %d units in each city can enforce"
                            " martial law.\n",
                            net_value),
                        net_value);
@@ -4155,7 +4164,7 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
       case EFT_RAPTURE_GROW:
         if (playerwide && net_value > 0) {
           cat_snprintf(buf, bufsz,
-                       _("* You may grow your cities by means of "
+                       _("\u2022 You may grow your cities by means of "
                          "celebrations."));
           if (game.info.celebratesize > 1) {
             cat_snprintf(buf, bufsz,
@@ -4170,9 +4179,9 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
       case EFT_REVOLUTION_UNHAPPINESS:
         if (playerwide) {
           cat_snprintf(buf, bufsz,
-                       PL_("* If a city is in disorder for more than %d turn "
+                       PL_("\u2022 If a city is in disorder for more than %d turn "
                            "in a row, government will fall into anarchy.\n",
-                           "* If a city is in disorder for more than %d turns "
+                           "\u2022 If a city is in disorder for more than %d turns "
                            "in a row, government will fall into anarchy.\n",
                            net_value),
                        net_value);
@@ -4181,20 +4190,20 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
       case EFT_HAS_SENATE:
         if (playerwide && net_value > 0) {
           CATLSTR(buf, bufsz,
-                  _("* Has a senate that may prevent declaration of war.\n"));
+                  _("\u2022 Has a senate that may prevent declaration of war.\n"));
         }
         break;
       case EFT_INSPIRE_PARTISANS:
         if (playerwide && net_value > 0) {
           CATLSTR(buf, bufsz,
-                  _("* Allows partisans when cities are taken by the "
+                  _("\u2022 Allows partisans when cities are taken by the "
                     "enemy.\n"));
         }
         break;
       case EFT_HAPPINESS_TO_GOLD:
         if (playerwide && net_value > 0) {
           CATLSTR(buf, bufsz,
-                  _("* Buildings that normally confer bonuses against"
+                  _("\u2022 Buildings that normally confer bonuses against"
                     " unhappiness will instead give gold.\n"));
         }
         break;
@@ -4210,7 +4219,7 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
           } unit_type_iterate_end;
           cat_snprintf(buf, bufsz,
                        /* TRANS: %s is list of unit types separated by 'or' */
-                       _("* Pays no upkeep for %s.\n"),
+                       _("\u2022 Pays no upkeep for %s.\n"),
                        strvec_to_or_list(fanatics, &fanaticstr));
           strvec_destroy(fanatics);
           astr_free(&fanaticstr);
@@ -4218,7 +4227,7 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
         break;
       case EFT_NO_UNHAPPY:
         if (playerwide && net_value > 0) {
-          CATLSTR(buf, bufsz, _("* Has no unhappy citizens.\n"));
+          CATLSTR(buf, bufsz, _("\u2022 Has no unhappy citizens.\n"));
         }
         break;
       case EFT_VETERAN_BUILD:
@@ -4270,7 +4279,7 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
             /* No extra criteria. */
             /* FIXME: same problems as above */
             cat_snprintf(buf, bufsz,
-                         _("* New units will be veteran.\n"));
+                         _("\u2022 New units will be veteran.\n"));
           }
         }
         break;
@@ -4280,10 +4289,10 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
                        /* TRANS: %s is list of output types, with 'or';
                         * pluralised in %d but of course the output types
                         * can't be pluralised; sorry */
-                       PL_("* Each worked tile that gives more than %d %s will"
+                       PL_("\u2022 Each worked tile that gives more than %d %s will"
                            " suffer a -1 penalty, unless the city working it"
                            " is celebrating.",
-                           "* Each worked tile that gives more than %d %s will"
+                           "\u2022 Each worked tile that gives more than %d %s will"
                            " suffer a -1 penalty, unless the city working it"
                            " is celebrating.", net_value),
                        net_value, astr_str(&outputs_or));
@@ -4300,10 +4309,10 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
       case EFT_OUTPUT_INC_TILE_CELEBRATE:
         cat_snprintf(buf, bufsz,
                      /* TRANS: %s is list of output types, with 'or' */
-                     PL_("* Each worked tile with at least 1 %s will yield"
+                     PL_("\u2022 Each worked tile with at least 1 %s will yield"
                          " %d more of it while the city working it is"
                          " celebrating.",
-                         "* Each worked tile with at least 1 %s will yield"
+                         "\u2022 Each worked tile with at least 1 %s will yield"
                          " %d more of it while the city working it is"
                          " celebrating.", peffect->value),
                      astr_str(&outputs_or), peffect->value);
@@ -4319,9 +4328,9 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
       case EFT_OUTPUT_INC_TILE:
         cat_snprintf(buf, bufsz,
                      /* TRANS: %s is list of output types, with 'or' */
-                     PL_("* Each worked tile with at least 1 %s will yield"
+                     PL_("\u2022 Each worked tile with at least 1 %s will yield"
                          " %d more of it.\n",
-                         "* Each worked tile with at least 1 %s will yield"
+                         "\u2022 Each worked tile with at least 1 %s will yield"
                          " %d more of it.\n", peffect->value),
                      astr_str(&outputs_or), peffect->value);
         break;
@@ -4330,7 +4339,7 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
         /* FIXME: makes most sense iff world_value == 0 */
         cat_snprintf(buf, bufsz,
                      /* TRANS: %s is list of output types, with 'and' */
-                     _("* %s production is increased %d%%.\n"),
+                     _("\u2022 %s production is increased %d%%.\n"),
                      astr_str(&outputs_and), peffect->value);
         break;
       case EFT_OUTPUT_WASTE:
@@ -4338,17 +4347,17 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
           if (net_value > 30) {
             cat_snprintf(buf, bufsz,
                          /* TRANS: %s is list of output types, with 'and' */
-                         _("* %s production will suffer massive losses.\n"),
+                         _("\u2022 %s production will suffer massive losses.\n"),
                          astr_str(&outputs_and));
           } else if (net_value >= 15) {
             cat_snprintf(buf, bufsz,
                          /* TRANS: %s is list of output types, with 'and' */
-                         _("* %s production will suffer some losses.\n"),
+                         _("\u2022 %s production will suffer some losses.\n"),
                          astr_str(&outputs_and));
           } else if (net_value > 0) {
             cat_snprintf(buf, bufsz,
                          /* TRANS: %s is list of output types, with 'and' */
-                         _("* %s production will suffer a small amount "
+                         _("\u2022 %s production will suffer a small amount "
                            "of losses.\n"),
                          astr_str(&outputs_and));
           }
@@ -4357,10 +4366,10 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
       case EFT_HEALTH_PCT:
         if (playerwide) {
           if (peffect->value > 0) {
-            CATLSTR(buf, bufsz, _("* Increases the chance of plague"
+            CATLSTR(buf, bufsz, _("\u2022 Increases the chance of plague"
                                   " within your cities.\n"));
           } else if (peffect->value < 0) {
-            CATLSTR(buf, bufsz, _("* Decreases the chance of plague"
+            CATLSTR(buf, bufsz, _("\u2022 Decreases the chance of plague"
                                   " within your cities.\n"));
           }
         }
@@ -4376,19 +4385,19 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
           if (net_value >= 300) {
             cat_snprintf(buf, bufsz,
                          /* TRANS: %s is list of output types, with 'and' */
-                         _("* %s losses will increase quickly"
+                         _("\u2022 %s losses will increase quickly"
                            " with distance from capital.\n"),
                          astr_str(&outputs_and));
           } else if (net_value >= 200) {
             cat_snprintf(buf, bufsz,
                          /* TRANS: %s is list of output types, with 'and' */
-                         _("* %s losses will increase"
+                         _("\u2022 %s losses will increase"
                            " with distance from capital.\n"),
                          astr_str(&outputs_and));
           } else if (net_value > 0) {
             cat_snprintf(buf, bufsz,
                          /* TRANS: %s is list of output types, with 'and' */
-                         _("* %s losses will increase slowly"
+                         _("\u2022 %s losses will increase slowly"
                            " with distance from capital.\n"),
                          astr_str(&outputs_and));
           }
@@ -4397,10 +4406,10 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
       case EFT_MIGRATION_PCT:
         if (playerwide) {
           if (peffect->value > 0) {
-            CATLSTR(buf, bufsz, _("* Increases the chance of migration"
+            CATLSTR(buf, bufsz, _("\u2022 Increases the chance of migration"
                                   " into your cities.\n"));
           } else if (peffect->value < 0) {
-            CATLSTR(buf, bufsz, _("* Decreases the chance of migration"
+            CATLSTR(buf, bufsz, _("\u2022 Decreases the chance of migration"
                                   " into your cities.\n"));
           }
         }
@@ -4408,7 +4417,7 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
       case EFT_BORDER_VISION:
         if (game.info.borders == BORDERS_ENABLED
             && playerwide && net_value > 0) {
-          CATLSTR(buf, bufsz, _("* All tiles inside your borders are"
+          CATLSTR(buf, bufsz, _("\u2022 All tiles inside your borders are"
                                 " monitored.\n"));
         }
         break;
@@ -4426,7 +4435,7 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
   unit_type_iterate(utype) {
     if (utype->need_government == gov) {
       cat_snprintf(buf, bufsz,
-                   _("* Allows you to build %s.\n"),
+                   _("\u2022 Allows you to build %s.\n"),
                    utype_name_translation(utype));
     }
   } unit_type_iterate_end;
@@ -4440,7 +4449,7 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
 
     if (action_immune_government(gov, act)) {
       cat_snprintf(buf, bufsz,
-                   _("* Makes it impossible to do the action \'%s\'"
+                   _("\u2022 Makes it impossible to do the action \'%s\'"
                      " to your %s.\n"),
                    action_id_name_translation(act),
                    _(action_target_kind_name(
