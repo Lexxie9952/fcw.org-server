@@ -654,6 +654,7 @@ static char activity2char(enum unit_activity activity)
   case ACTIVITY_CONVERT:
     return 'c';
   case ACTIVITY_UNKNOWN:
+    return 'v';           // new vigil activity
   case ACTIVITY_PATROL_UNUSED:
     return '?';
   case ACTIVITY_LAST:

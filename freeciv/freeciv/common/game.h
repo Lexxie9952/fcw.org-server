@@ -127,6 +127,7 @@ struct civ_game {
       int aqueductloss;
       bool auto_ai_toggle;
       bool autoattack;
+      int autoattack_style;
       int autoupgrade_veteran_loss;
       enum barbarians_rate barbarianrate;
       int base_incite_cost;
@@ -652,6 +653,14 @@ extern struct world wld;
 #define GAME_MAX_OCCUPYCHANCE        100
 
 #define GAME_DEFAULT_AUTOATTACK      FALSE
+#define GAME_DEFAULT_AUTOATTACK_STYLE 0
+#define AA_DEFAULT 0
+#define AA_PROVOKED_ONLY 1
+#define GAME_MIN_AUTOATTACK_STYLE   0
+#define GAME_MAX_AUTOATTACK_STYLE   1
+/* a server effect could be made that allows
+   rulesets to make reqs which then help decide
+   an autoattack, also */
 
 #ifdef FREECIV_WEB
 #define GAME_DEFAULT_RULESETDIR      "classic"

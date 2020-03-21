@@ -3386,13 +3386,22 @@ static int compare_units(const struct autoattack_prob *const *p1,
   unit that is adjacent to us can see us.
 **************************************************************************/
 static bool unit_survive_autoattack(struct unit *punit)
-{
+{ 
   struct autoattack_prob_list *autoattack;
   int moves = punit->moves_left;
   int sanity1 = punit->id;
 
   if (!game.server.autoattack) {
     return TRUE;
+  }
+  /* AA_PROVOKED_ONLY: only attack Provoking units with non-sentried units --
+    Lets ruleset use will_never and "Provoking" to exactly specify autoattack
+    only for much needed cases like Fighters intercepting Air attackers. Also
+    allows player to tactically OPT OUT of autoattack, by using sentry. */
+  if (game.server.autoattack_style == AA_PROVOKED_ONLY) {
+    if (!unit_has_type_flag(punit, UTYF_PROVOKING)) {
+      return TRUE; /* Unit is not Provoking: no autoattack to be done here. */
+    }
   }
 
   autoattack = autoattack_prob_list_new_full(autoattack_prob_free);
@@ -3413,6 +3422,14 @@ static bool unit_survive_autoattack(struct unit *punit)
                                      penemy, unit_owner(punit), NULL,
                                      tgt_tile, tile_city(tgt_tile),
                                      punit, NULL);
+
+     // If AA_PROVOKED_ONLY, only non-sentry units can autoattack;
+     // thus, giving human tactical opt-out to decisionmaking.                                
+      if (game.server.autoattack_style == AA_PROVOKED_ONLY) {
+          if (penemy->activity != ACTIVITY_UNKNOWN) {  // vigil
+            continue;  // skip/disallow units not under vigil
+          }
+      }
 
       if (action_prob_possible(probability->prob)) {
         probability->unit_id = penemy->id;
@@ -3456,6 +3473,13 @@ static bool unit_survive_autoattack(struct unit *punit)
                                    tgt_tile, tile_city(tgt_tile),
                                    punit, NULL);
 
+    /* If AA_PROVOKED_ONLY, sentrying a unit is user decision to not auto-attack */                           
+    if (game.server.autoattack_style == AA_PROVOKED_ONLY) {
+      if (penemy->activity != ACTIVITY_UNKNOWN) {  //ACTIVITY_VIGIL
+            continue;  // skip/disallow units not under Vigil
+      }
+    }
+
     if (!action_prob_possible(peprob->prob)) {
       /* No longer legal. */
       continue;
@@ -3464,9 +3488,23 @@ static bool unit_survive_autoattack(struct unit *punit)
     /* Assume the worst. */
     penemywin = action_prob_to_0_to_1_pessimist(peprob->prob);
 
-    if ((penemywin > 1.0 - punitwin
-         || unit_has_type_flag(punit, UTYF_PROVOKING))
+    /* UTYF_PROVOKING prioritizes autoattack under AA_DEFAULT, but under 
+     * AA_PROVOKED_ONLY, it only flags to not automatically disallow autoattack */
+    if ( (penemywin > 1.0 - punitwin
+          || (unit_has_type_flag(punit, UTYF_PROVOKING) && game.server.autoattack_style != AA_PROVOKED_ONLY) )
         && penemywin > threshold) {
+
+        notify_player(unit_owner(penemy), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
+              _("Your %s intercepted a %s %s while under vigil."),
+              unit_link(penemy),
+              nation_rule_name(nation_of_unit(punit)),
+              unit_rule_name(punit) );
+
+        notify_player(unit_owner(punit), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
+              _("Your %s was intercepted by a %s %s under vigil."),
+              unit_link(punit),
+              nation_rule_name(nation_of_unit(penemy)),
+              unit_rule_name(penemy) );
 
 #ifdef REALLY_DEBUG_THIS
       log_test("AA %s -> %s (%d,%d) %.2f > %.2f && > %.2f",
@@ -3474,12 +3512,17 @@ static bool unit_survive_autoattack(struct unit *punit)
                TILE_XY(unit_tile(punit)), penemywin,
                1.0 - punitwin, threshold);
 #endif
-
+      // Note: this puts the unit off vigil, which we think is fine to limit # of auto-attacks:
       unit_activity_handling(penemy, ACTIVITY_IDLE);
       action_auto_perf_unit_do(AAPC_UNIT_MOVED_ADJ,
                                penemy, unit_owner(punit), NULL,
                                tgt_tile, tile_city(tgt_tile), punit, NULL);
     } else {
+        notify_player(unit_owner(penemy), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
+              _("Your %s declined intercepting a %s %s while under vigil."),
+              unit_rule_name(penemy),
+              nation_rule_name(nation_of_unit(punit)),
+              unit_link(punit) );
 #ifdef REALLY_DEBUG_THIS
       log_test("!AA %s -> %s (%d,%d) %.2f > %.2f && > %.2f",
                unit_rule_name(penemy), unit_rule_name(punit),
@@ -3573,8 +3616,7 @@ static void wakeup_neighbor_sentries(struct unit *punit)
 
               notify_player(unit_owner(penemy), unit_tile(punit),
                     E_UNIT_ORDERS, ftc_server,
-                    _("\u24d8 Sentried %s at %d,%d reports %s %s was "
-                      "seen moving at %d,%d."),
+                    _("\u24d8 %s sentry (%d,%d) saw %s %s moving at (%d,%d)"),
                     unit_link(penemy),
                     stile_x, stile_y, 
                     nation_rule_name(nation_of_unit(punit)), 
@@ -3748,7 +3790,7 @@ static void check_unit_activity(struct unit *punit)
   case ACTIVITY_FORTRESS:
   case ACTIVITY_PILLAGE:
   case ACTIVITY_TRANSFORM:
-  case ACTIVITY_UNKNOWN:
+  case ACTIVITY_UNKNOWN:         // VIGIL
   case ACTIVITY_AIRBASE:
   case ACTIVITY_FORTIFYING:
   case ACTIVITY_FALLOUT:

@@ -2271,8 +2271,32 @@ static struct setting settings[] = {
            SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
            N_("Turn on/off server-side autoattack"),
            N_("If set to on, units with moves left will automatically "
-              "consider attacking enemy units that move adjacent to them."),
+              "consider attacking enemy units that move adjacent to them."
+              "See also: autoattack_style"),
            NULL, NULL, GAME_DEFAULT_AUTOATTACK)
+
+  GEN_INT("autoattack_style", game.server.autoattack_style,
+          SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL,
+          ALLOW_NONE, ALLOW_BASIC,
+          N_("Style for server side autoattack."),
+          N_("How the setting \"autoattack\" behaves, if enabled.\n "
+             "(Some rulesets depend on non-default settings for this, in order "
+             "to elicit intended behavior from units.)\n"
+             "0: ➤ DEFAULT:  Units on adjacent tiles generally attack enemy "
+             "units if they have better odds attacking than defending, OR if the "
+             "enemy has the flag \"Provoking\". Exception: a single unit in a city "
+             "not wanting to leave the city undefended if it loses.\n"
+             "1: ➤ PROVOKED_ONLY: \"Provoking\" units ONLY will be auto-attacked. "
+             "Rulesets use \"will_never\" and \"Provoking'\" flags to make reqs "
+             "for which units proactively attack specific types. Only units with the "
+             "Vigil order will auto-attack, giving players tactical control. "
+             "This is used to minimize 'baiting' "
+             "and other unnatural dynamics: e.g., a ruleset can be coded so that "
+             "only Fighters auto-attack other Air units.\n"),
+          NULL, NULL, NULL,
+          GAME_MIN_AUTOATTACK_STYLE, GAME_MAX_AUTOATTACK_STYLE,
+          GAME_DEFAULT_AUTOATTACK_STYLE)
+
 
   GEN_BOOL("killstack", game.info.killstack,
            SSET_RULES_SCENARIO, SSET_MILITARY, SSET_RARE,

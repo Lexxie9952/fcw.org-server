@@ -465,6 +465,7 @@ bool activity_requires_target(enum unit_activity activity)
   case ACTIVITY_IDLE:
   case ACTIVITY_FORTIFIED:
   case ACTIVITY_SENTRY:
+  case ACTIVITY_UNKNOWN:   // now used as vigil
   case ACTIVITY_GOTO:
   case ACTIVITY_EXPLORE:
   case ACTIVITY_TRANSFORM:
@@ -526,7 +527,7 @@ static bool is_real_activity(enum unit_activity activity)
           && activity != ACTIVITY_AIRBASE
           && activity != ACTIVITY_OLD_ROAD
           && activity != ACTIVITY_OLD_RAILROAD
-          && activity != ACTIVITY_UNKNOWN
+         // && activity != ACTIVITY_UNKNOWN   Vigil command
           && activity != ACTIVITY_PATROL_UNUSED;
 }
 
@@ -570,11 +571,12 @@ const char *get_activity_text(enum unit_activity activity)
     return _("Road");
   case ACTIVITY_CONVERT:
     return _("Convert");
+  case ACTIVITY_UNKNOWN:
+    return _("Vigil");
   case ACTIVITY_OLD_ROAD:
   case ACTIVITY_OLD_RAILROAD:
   case ACTIVITY_FORTRESS:
   case ACTIVITY_AIRBASE:
-  case ACTIVITY_UNKNOWN:
   case ACTIVITY_PATROL_UNUSED:
   case ACTIVITY_LAST:
     break;
@@ -798,6 +800,7 @@ bool can_unit_do_activity_targeted_at(const struct unit *punit,
   switch(activity) {
   case ACTIVITY_IDLE:
   case ACTIVITY_GOTO:
+  case ACTIVITY_UNKNOWN:  // new vigil command: TODO: may need some reqs put in
     return TRUE;
 
   case ACTIVITY_POLLUTION:
@@ -983,7 +986,6 @@ bool can_unit_do_activity_targeted_at(const struct unit *punit,
   case ACTIVITY_AIRBASE:
   case ACTIVITY_PATROL_UNUSED:
   case ACTIVITY_LAST:
-  case ACTIVITY_UNKNOWN:
     break;
   }
   log_error("can_unit_do_activity_targeted_at() unknown activity %d",
@@ -1187,7 +1189,9 @@ void unit_activity_astr(const struct unit *punit, struct astring *astr)
     astr_add_line(astr, "%s: %s", get_activity_text(punit->activity),
                   extra_name_translation(punit->activity_target));
     return;
-  case ACTIVITY_UNKNOWN:
+  case ACTIVITY_UNKNOWN:          // Vigil
+    astr_add_line(astr, "%s", get_activity_text(punit->activity));
+    return;
   case ACTIVITY_PATROL_UNUSED:
   case ACTIVITY_LAST:
     break;

@@ -4895,6 +4895,7 @@ void handle_unit_orders(struct player *pplayer,
       case ACTIVITY_IRRIGATE:
       case ACTIVITY_TRANSFORM:
       case ACTIVITY_CONVERT:
+      case ACTIVITY_UNKNOWN:        // new vigil activity
 	/* Simple activities. */
 	break;
       case ACTIVITY_FORTIFYING:
@@ -4944,7 +4945,6 @@ void handle_unit_orders(struct player *pplayer,
       /* Unused. */
       case ACTIVITY_PATROL_UNUSED:
       case ACTIVITY_LAST:
-      case ACTIVITY_UNKNOWN:
         log_error("handle_unit_orders() unsupported activity %d. "
                   "Sent in order number %d from %s to unit number %d.",
                   packet->activity[i], i,
