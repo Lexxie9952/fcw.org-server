@@ -1898,10 +1898,10 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
               "units on the same tile.\n"));
   }
   if (utype_has_flag(utype, UTYF_CANESCAPE)) {
-    CATLSTR(buf, bufsz, _("\u27a4 Can escape once stack defender is lost.\n"));
+    CATLSTR(buf, bufsz, _("\u27a4 Has 50% chance to escape once stack defender is lost, if it has more moves left than attacker.\n"));
   }
   if (utype_has_flag(utype, UTYF_CANKILLESCAPING)) {
-    CATLSTR(buf, bufsz, _("\u27a4 Can pursue escaping units and kill them.\n"));
+    CATLSTR(buf, bufsz, _("\u27a4 Will pursue escaping units and kill them.\n"));
   }
 
   if (utype_has_flag(utype, UTYF_NOBUILD)) {
@@ -2703,10 +2703,30 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
       }
     } action_enabler_list_iterate_end;
 
-    if (!vulnerable) {
+    /* Verbosity reduction: actions whose legality is more rare than
+      the reverse. Telling which cases are legal is more informative
+      than telling that the majority of cases are impossible. */
+    if (action_by_number(act)->id == ACTION_CAPTURE_UNITS 
+    || action_by_number(act)->id == ACTION_EXPEL_UNIT)
+    {
+      if (vulnerable) {
+        switch (action_by_number(act)->id) {
+          case ACTION_CAPTURE_UNITS:
+            cat_snprintf(buf, bufsz,
+                   _("\u27a4 Capturable: can be captured if"
+                     " conditions allow it.\n"));         
+            break;
+          case ACTION_EXPEL_UNIT:
+            cat_snprintf(buf, bufsz,
+                   _("\u27a4 Expellable: can be expelled if"
+                     " conditions allow it.\n")); 
+        }
+      }
+    }
+    /* Default: actions whose impossibility/illegality is more rare */
+    else if (!vulnerable) {
       cat_snprintf(buf, bufsz,
-                   _("\u27a4 Doing the action \'%s\' to this unit"
-                     " is impossible.\n"),
+                   _("\u27a4 Immune to the action \'%s\'.\n"),
                    action_id_name_translation(act));
     }
   } action_iterate_end;
