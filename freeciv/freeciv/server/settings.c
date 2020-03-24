@@ -1718,6 +1718,28 @@ static struct setting settings[] = {
               "as a result of nuclear war."), NULL, NULL,
            GAME_DEFAULT_NUCLEAR_WINTER)
 
+  GEN_BOOL("nukes_minor", game.server.nukes_minor,
+           SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+           N_("Allow Nuclear Detonations"),
+           N_("If turned off, will not allow detonating nukes in rulesets "
+              "which require the setting to be on in order to detonate "
+              "nukes. In all rulesets, this setting turned on will allow "
+              "nuclear detonations and (in some rulesets) the creation of "
+              "units considered to be \"minor nukes.\"\n"
+              "See also: nukes_major"), NULL, NULL,
+           GAME_DEFAULT_NUKES_MINOR)
+
+  GEN_BOOL("nukes_major", game.server.nukes_major,
+           SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+           N_("Allow players to create major thermonculear weapons."),
+           N_("If turned off, this will have no effect on standard fission "
+              "nuclear weapons; but in rulesets which require this setting "
+              "to be on for thermonuclear fusion weapons, they will be disallowed "
+              "for the current game. If turned on, rulesets which require this "
+              "setting for the creation of advanced fusion weapons "
+              "will allow them to be created in that particular game."), NULL, NULL,
+           GAME_DEFAULT_NUKES_MAJOR)           
+
   GEN_INT("nuclearwinter_percent", game.server.nuclear_winter_percent,
            SSET_RULES, SSET_GEOLOGY, SSET_VITAL, ALLOW_NONE, ALLOW_BASIC,
            N_("Nuclear winter percent"),

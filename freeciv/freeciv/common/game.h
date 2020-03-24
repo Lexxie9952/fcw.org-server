@@ -230,6 +230,10 @@ struct civ_game {
       bool global_warming;
       int global_warming_percent;
       bool nuclear_winter;
+      bool nukes_minor; /* if (dis)abled, rulesets with req "ServerSetting","nukes_minor","World",TRUE 
+                           can have games (dis)allowing nuclear detonations */
+      bool nukes_major; /* if (dis)abled, rulesets with req "ServerSetting","nukes_major","World",TRUE
+                           can have games (dis)allowing advanced (more deadly) nuclear unit types */
       int nuclear_winter_percent;
 
       bool fogofwar_old; /* as the fog_of_war bit get changed by setting
@@ -410,6 +414,8 @@ extern struct world wld;
 #define GAME_DEFAULT_HIDEOUTS         FALSE
 
 #define GAME_DEFAULT_NUCLEAR_WINTER  TRUE
+#define GAME_DEFAULT_NUKES_MINOR     TRUE
+#define GAME_DEFAULT_NUKES_MAJOR     TRUE   // USE game.ruleset to change default to FALSE 
 
 #define GAME_DEFAULT_NUCLEAR_WINTER_PERCENT 100
 #define GAME_MIN_NUCLEAR_WINTER_PERCENT 1   
