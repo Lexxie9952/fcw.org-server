@@ -29,6 +29,7 @@ sprites =
 		"b.colosseum", "buildings/colosseum"
 		"b.courthouse", "buildings/courthouse"
 		"b.ecclesiastical_palace", "buildings/ecclesiastical_palace"
+		"b.enrichment_facility", "buildings/enrichment_facility"
 		"b.factory", "buildings/factory"
 		"b.fusion_reactor", "buildings/fusion_reactor"
 		"b.granary", "buildings/granary"
