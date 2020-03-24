@@ -1571,7 +1571,7 @@ bool spy_nuke_city(struct player *act_player, struct unit *act_unit,
 
   /* Detonate the nuke. */
   dlsend_packet_nuke_tile_info(game.est_connections, tile_index(tgt_tile));
-  do_nuclear_explosion(act_player, tgt_tile);
+  do_nuclear_explosion(act_player, tgt_tile, 0, "Suitcase Nuke");
 
   /* This may cause a diplomatic incident. */
   action_consequence_success(paction, act_player,

@@ -18,6 +18,13 @@
 #include "packets.h"		/* enum unit_info_use */
 #include "unitlist.h"
 
+// These assist the new ability to set nuke radius and differntiate
+// fission detonations from fusion detonations:
+#define DEFAULT_DETONATION_RADIUS_SQ        2
+// Nuclear explosions above this sq_radius are considered fusion devices
+// sq_radius = DEFAULT_DETONATION_RADIUS_SQ + unit_type.bombard_rate
+#define FUSION_DETONATION_RADIUS_SQ         6 
+
 #define SPECENUM_NAME unit_loss_reason
 #define SPECENUM_VALUE0 ULR_KILLED
 #define SPECENUM_VALUE0NAME "killed"
@@ -158,7 +165,7 @@ void send_all_known_units(struct conn_list *dest);
 void unit_goes_out_of_sight(struct player *pplayer, struct unit *punit);
 
 /* doing a unit activity */
-void do_nuclear_explosion(struct player *pplayer, struct tile *ptile);
+void do_nuclear_explosion(struct player *pplayer, struct tile *ptile, int extra_radius_sq, const char *unit_name);
 bool do_airline(struct unit *punit, struct city *city2);
 void do_explore(struct unit *punit);
 bool do_paradrop(struct unit *punit, struct tile *ptile);

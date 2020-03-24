@@ -3467,6 +3467,12 @@ static bool unit_nuke(struct player *pplayer, struct unit *punit,
                       struct tile *def_tile, const struct action *paction)
 {
   struct city *pcity;
+  /* bombard_rate is never used on nukes, but for nukes it has a double purpose:
+     the amount of sq_radius to add to the default sq_radius of 2: */
+  int extra_radius = unit_type_get(punit)->bombard_rate;
+  char nuclear_unit_name[64];
+
+  sprintf(nuclear_unit_name,"%s",unit_rule_name(punit));
 
   /* Sanity check: The actor still exists. */
   fc_assert_ret_val(pplayer, FALSE);
@@ -3506,7 +3512,7 @@ static bool unit_nuke(struct player *pplayer, struct unit *punit,
    * detonation. */
   wipe_unit(punit, ULR_DETONATED, NULL);
 
-  do_nuclear_explosion(pplayer, def_tile);
+  do_nuclear_explosion(pplayer, def_tile, extra_radius, nuclear_unit_name);
 
   /* May cause an incident even if the target tile is unclaimed. A ruleset
    * could give everyone a casus belli against the tile nuker. A rule

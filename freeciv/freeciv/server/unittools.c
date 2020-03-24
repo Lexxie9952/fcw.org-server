@@ -2975,7 +2975,9 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile)
                     city_link(pcity));
     }
 
+    // Reduce the size
     city_reduce_size(pcity, city_size_get(pcity) / 2, pplayer, "nuke");
+    update_tile_knowledge(ptile);
   }
 
   if (fc_rand(2) == 1) {
@@ -2990,20 +2992,56 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile)
 }
 
 /**********************************************************************//**
-  Nuke all the squares in a 3x3 square around the center of the explosion
-  pplayer is the player that caused the explosion.
+  Nuke all the squares in a sqrt(2+extra_radius_sq) area around the center
+  of the explosion. High radius is considered fusion explosion with worse
+  effects. pplayer is the player that caused the explosion.
 **************************************************************************/
-void do_nuclear_explosion(struct player *pplayer, struct tile *ptile)
+void do_nuclear_explosion(struct player *pplayer, struct tile *ptile, 
+                          int extra_radius_sq, const char *unit_name)
 {
-  square_iterate(&(wld.map), ptile, 1, ptile1) {
+  int max_radius_sq = DEFAULT_DETONATION_RADIUS_SQ + extra_radius_sq; 
+  bool is_fusion = (max_radius_sq >= FUSION_DETONATION_RADIUS_SQ);
+  struct city *pcity = NULL;
+
+// old code: not that special
+//   square_iterate(&(wld.map), ptile, 1, ptile1) {
+//    do_nuke_tile(pplayer, ptile1);
+//  } square_iterate_end;
+
+  circle_dxyr_iterate(&(wld.map), ptile, max_radius_sq, ptile1, dx, dy, dr) {
     do_nuke_tile(pplayer, ptile1);
-  } square_iterate_end;
+  } circle_dxyr_iterate_end;
 
   script_server_signal_emit("nuke_exploded", 2, API_TYPE_TILE, ptile,
                             API_TYPE_PLAYER, pplayer);
   notify_conn(NULL, ptile, E_NUKE, ftc_server,
-              _("The %s detonated a nuke!"),
-              nation_plural_for_player(pplayer));
+              _("The %s detonated %s %s!"),
+              nation_plural_for_player(pplayer),
+              (unit_name[0] == 'A' ? _("an") : _("a")),
+              unit_name);
+
+  // Direct ground-zero hit by Hydrogen-Bomb / Fusion warhead, etc.
+  if (is_fusion) {  // H-bomb
+    pcity = tile_city(ptile);
+    if (pcity) {
+      int saved_id = pcity->id;
+
+      notify_player(city_owner(pcity), ptile, E_CITY_NUKED, ftc_server,
+         _("%s was annihilated at Ground Zero of a thermonuclear fusion detonation."),
+           city_link(pcity));
+
+      if (city_owner(pcity) != pplayer) {
+        notify_player(pplayer, ptile, E_CITY_NUKED, ftc_server,
+         _("%s was annihilated at Ground Zero of a thermonuclear fusion detonation."),
+           city_link(pcity));
+      }
+      script_server_signal_emit("city_destroyed", pcity, city_owner(pcity), pplayer);
+      /* We cant't be sure of city existence after running some script */
+      if (city_exist(saved_id)) {
+        remove_city(pcity);
+      }
+    }
+  }
 }
 
 /**********************************************************************//**
