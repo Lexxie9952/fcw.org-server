@@ -3010,6 +3010,9 @@ void do_nuclear_explosion(struct player *pplayer, struct tile *ptile,
 
   circle_dxyr_iterate(&(wld.map), ptile, max_radius_sq, ptile1, dx, dy, dr) {
     do_nuke_tile(pplayer, ptile1);
+    // Fusion detonation is double nasty, reduces to 1/4 pop:
+    if (is_fusion && tile_city(ptile1)) 
+      do_nuke_tile(pplayer, ptile1);
   } circle_dxyr_iterate_end;
 
   script_server_signal_emit("nuke_exploded", 2, API_TYPE_TILE, ptile,
