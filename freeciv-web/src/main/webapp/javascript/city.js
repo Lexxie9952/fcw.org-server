@@ -895,6 +895,13 @@ function generate_production_list()
       || (punit_type['name'] == "Pilgrims" && governments[players[client.conn.playing.playerno].government].name != "Fundamentalism") )
        continue;
 
+    if (utype_has_flag(punit_type, UTYF_NUCLEAR)) {
+      if (!server_settings['nukes_minor']['val']) continue; // Nukes totally turned off in this game, skip them
+      if (!server_settings['nukes_major']['val']) { // bombard_rate !=0 or !=-1 is a major nuke, skip if game settings have turned it off.
+        if (punit_type['bombard_rate']>0) continue;
+        if (punit_type['bombard_rate']<-1) continue;
+      }
+    }
     
     if (is_small_screen())
     {
@@ -926,20 +933,29 @@ function generate_production_list()
 
   for (var improvement_id in improvements) {
     var pimprovement = improvements[improvement_id];
-      var build_cost = pimprovement['build_cost'];
-      var building_details = pimprovement['upkeep'];
-      if (pimprovement['name'] == "Coinage") {
-          build_cost = "-";
-          building_details = "-";          
-      }
-      production_list.push({"kind": VUT_IMPROVEMENT,
-                           "value": pimprovement['id'],
-                            "text": pimprovement['name'],
-	                      "helptext": pimprovement['helptext'].replace(stripChar, ""),
-                       "rule_name": pimprovement['rule_name'],
-                      "build_cost": build_cost,
-                    "unit_details": building_details,
-                          "sprite": get_improvement_image_sprite(pimprovement) });
+    var build_cost = pimprovement['build_cost'];
+    var building_details = pimprovement['upkeep'];
+    if (pimprovement['name'] == "Coinage") {
+        build_cost = "-";
+        building_details = "-";          
+    }
+    // Suppress improvements if server settings don't allow them:
+    if (!server_settings['nukes_major']['val']
+        && pimprovement['name'] == "Enrichment Facility") {
+          continue; // if major nukes are OFF, suppress illegal prod choice.
+    }
+    else if (!server_settings['nukes_minor']['val']
+             && pimprovement['name'] == "Manhattan Project") {
+          continue; // if major nukes are OFF, suppress illegal prod choice.
+    }
+    production_list.push({"kind": VUT_IMPROVEMENT,
+                         "value": pimprovement['id'],
+                          "text": pimprovement['name'],
+                      "helptext": pimprovement['helptext'].replace(stripChar, ""),
+                     "rule_name": pimprovement['rule_name'],
+                    "build_cost": build_cost,
+                  "unit_details": building_details,
+                        "sprite": get_improvement_image_sprite(pimprovement) });
   }
   return production_list;
 }
@@ -2174,10 +2190,25 @@ function populate_worklist_production_choices(pcity)
     if (kind == VUT_UTYPE && opt_show_improvements_only) continue;
 
     var can_build = can_city_build_now(pcity, kind, value);
-    // Suppress improvements already in queue (except Coinage)
-    if (can_build && kind==VUT_IMPROVEMENT 
-      && improvements[value]['name'] != "Coinage"
-      && city_has_building_in_queue(pcity, value)) can_build=false;
+
+    // SUPPRESSIONS of improvements from the list:
+    if (can_build && kind==VUT_IMPROVEMENT) {
+      // Suppress improvements already in queue (except Coinage)
+      if (improvements[value]['name'] != "Coinage" 
+          && city_has_building_in_queue(pcity, value)) {
+            can_build=false;
+      }
+      // Suppress Enrichment Facility if major nukes are disabled
+      // these are now suppressed when prod list is first generated.
+      //else if (improvements[value]['name'] == "Enrichment Facility"
+      //         && !server_settings['nukes_major']['val']) {
+      //      can_build = false; // if major nukes are OFF, suppress illegal prod choice.
+      //}
+      //else if (improvements[value]['name'] == "Manhattan Project"
+      //        && !server_settings['nukes_minor']['val']) {
+      //      can_build = false; // if major nukes are OFF, suppress illegal prod choice.
+      //}
+    }
 
     var can_build_later = false; // flag for items buildable after tech discovery or making a pre-req building
 
@@ -2764,6 +2795,10 @@ function show_city_improvement_pane(city_id)
        if (sprite == null) {
          continue;
        }
+
+       if (!server_settings['nukes_major']['val'] && improvements[z]['name'] == "Enrichment Facility")
+            continue; // major nukes set to OFF, don't show illegal prod choice.
+        
        // Colour and text tags for current production and completion thereof:
        var product_finished = false;
        var verb = " is making ";
