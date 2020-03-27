@@ -3803,9 +3803,38 @@ function key_unit_load()
       $(id).dialog('open');
     }
     // otherwise, only one transporter candidate, load automatically with no GUI input from user: 
+/* this had a bug and tried loading on the first transporter ID while ignoring the work we did to 
+   figure out which transporters are real candidates, so it's commented out now to try the candidate
+   fix below.
     else { 
       for (r = 0; r < units_on_tile.length; r++) {
         tunit = units_on_tile[r];
+        if (tunit['id'] == punit['id']) continue;
+        ttype = unit_type(tunit);
+        if (ttype['transport_capacity'] > 0) {
+          has_transport_unit = true;
+          transporter_unit_id = tunit['id'];
+        }
+      }
+
+      if (has_transport_unit && transporter_unit_id > 0 && punit['tile'] > 0) {
+        var packet = {
+          "pid"              : packet_unit_load,
+          "cargo_id"         : punit['id'],
+          "transporter_id"   : transporter_unit_id,
+          "transporter_tile" : punit['tile']
+        };
+        send_request(JSON.stringify(packet));
+        setTimeout(update_active_units_dialog, update_focus_delay);
+      }
+    }
+*/
+    // Only one legal transport, no need to do pop-up to choose which one:
+    else {  
+      // in theory we got here because there was only one (possibly) legal transporter_unit,
+      // Looping the array might be needless legacy method but oh well, it's safe.
+      for (r = 0; r < transporter_units.length; r++) {
+        tunit = units[transporter_units[r]['id']]; 
         if (tunit['id'] == punit['id']) continue;
         ttype = unit_type(tunit);
         if (ttype['transport_capacity'] > 0) {
