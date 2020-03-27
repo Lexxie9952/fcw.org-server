@@ -420,7 +420,7 @@ function warcalc_set_tooltips()
 
         if (ruleset_control['name']=="Avant-garde") {  // AG distinctions
           $("#wc133").prop("title", bl+"River"+nbl+"Swamp"+nbl+"Forest"+nbl+"Land/Heli in Fort vs. Land/Sea/Missile (not Armor)"+nbl+"Fighter over Fort/Fortress vs. Land/Sea/Missile (not Armor)"
-             +nbl+"Fighter vs. Dive Bomber"+nbl+"Dive Bomber, Ground Strike Fighter vs. Anti-Air");
+             +nbl+"Dive Bomber, Ground Strike Fighter vs. Anti-Air");
           $("#wc150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Jungle"+nbl+"Land unit Fortified OR inside city"
              +nbl+"Helicopter vs. Foot or Mounted units");
           $("#wc167").prop("title", bl+"Land/Heli in Fortress vs Armor/Aircraft"+nbl+"Land/Heli/Sea in Naval Base vs Armor/Aircraft");
@@ -428,12 +428,7 @@ function warcalc_set_tooltips()
           + "In city with SAM Battery vs. Air (not Heli/Stealth)"+nbl+"In city with SDI vs. Missile"+nbl+"Pikemen vs Horse (not Cavalry)"+nbl+"Knight vs. Foot soldier"+nbl
           + "Cruiser,Battleship,M.Destroyer,AEGIS vs Submarine"+nbl+"Sea unit vs. Marines"+nbl+"AAA/Mobile SAM vs. Aircraft"+nbl+"Missile Destroyer vs. Air/Missile"+nbl+"Armor II vs. Missile");
 
-          $("#wca150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Phalanx/Pikemen + Agoge of Sparta"+nbl+"Dive Bomber vs. Unable to attack Air");
-
-        //  $("#wca133").prop("title", bl+"Dive Bomber vs. Unable to attack Air");
-        //  $("#wca133").val("x1.33");
-        // $("#wca133").prop("disabled", false);
-        //  $("#wca133").show(); 
+          $("#wca150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Phalanx/Pikemen + Agoge of Sparta"+nbl+"Dive Bomber vs. Land or Sea");
           $("#wca200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"AAA/Mobile SAM vs. Aircraft");
         }
 
