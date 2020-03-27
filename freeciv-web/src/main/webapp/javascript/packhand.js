@@ -655,12 +655,15 @@ function handle_ruleset_control(packet)
   for (i=0;i<CRF_LAST;i++)
     client_rules_flag[i] = false; // reset, maybe loading new rules
 
+  client_rules_flag[CRF_MINOR_NUKES]=true; // all known rules have 3x3 fission nukes at this time
+
   // Flags for hard-coded client behaviors/optimisations specific to rulesets:
   switch (ruleset_control['name']) {
     case "Avant-garde":
       client_rules_flag[CRF_RADAR_TOWER]=true;
       client_rules_flag[CRF_EXTRA_HIDEOUT]=true;
       client_rules_flag[CRF_EXTRA_QUAY]=true;
+      client_rules_flag[CRF_MAJOR_NUKES]=true; // ruleset has them and server setting to disallow them
       $("#order_airbase").attr("title", "Build Airbase/Radar (Shift-E)");
 
     case "Multiplayer-Evolution ruleset":
@@ -1521,6 +1524,8 @@ function handle_web_ruleset_unit_addition(packet)
   packet['utype_actions'] = new BitVector(packet['utype_actions']);
 
   unit_types[packet['id']] = $.extend(unit_types[packet['id']], packet);
+  
+  create_unit_offset_arrays();
 }
 
 /* 100% complete */
