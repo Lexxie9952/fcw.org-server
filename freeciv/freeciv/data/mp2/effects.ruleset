@@ -342,6 +342,13 @@ reqs    =
     { "type", "name", "range"
       "UnitType", "Battleship", "Local"
     }
+[effect_carrier_hp_regen] ;40 hp units get + 3
+type    = "Unit_Recover"
+value   = 1   ; 2+1=3
+reqs    =
+    { "type", "name", "range"
+      "UnitType", "Carrier", "Local"
+    }
 
 ; *********************************** BASES *******************************
 
