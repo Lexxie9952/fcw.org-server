@@ -93,6 +93,13 @@ function generate_help_menu(key)
     for (impr_id in improvements) {
       improvement = improvements[impr_id];
       if (is_wonder(improvement)) continue;
+
+      // Suppress improvements if server settings don't allow them:
+      if (!server_settings['nukes_major']['val']
+          && improvement['name'] == "Enrichment Facility") {
+            continue; // if major nukes are OFF, suppress illegal prod choice.
+      }
+
       $("<li data-helptag='" + key + "_" + improvement['id'] + "'>"
         + improvement['name'] + "</li>").appendTo("#help_city_improvements_ul");
     }
@@ -100,6 +107,13 @@ function generate_help_menu(key)
     for (impr_id in improvements) {
       improvement = improvements[impr_id];
       if (!is_wonder(improvement)) continue;
+
+      // Suppress improvements if server settings don't allow them:
+      if (!server_settings['nukes_minor']['val']
+          && improvement['name'] == "Manhattan Project") {
+          continue; // if major nukes are OFF, suppress illegal prod choice.
+      }
+      
       $("<li data-helptag='" + key + "_" + improvement['id'] + "'>"
         + improvement['name'] + "</li>").appendTo("#help_wonders_of_the_world_ul");
     }
@@ -108,8 +122,16 @@ function generate_help_menu(key)
       var unit_id = unittype_ids_alphabetic()[i];
       var punit_type = unit_types[unit_id];
 
-       $("<li data-helptag='" + key + "_" + punit_type['id'] + "'>"
-          + punit_type['name'] + "</li>").appendTo("#help_units_ul");
+      if (utype_has_flag(punit_type, UTYF_NUCLEAR)) {
+        if (!server_settings['nukes_minor']['val']) continue; // Nukes totally turned off in this game, skip them
+        if (!server_settings['nukes_major']['val']) { // bombard_rate !=0 or !=-1 is a major nuke, skip if game settings have turned it off.
+          if (punit_type['bombard_rate']>0) continue;
+          if (punit_type['bombard_rate']<-1) continue;
+        }
+      }
+
+      $("<li data-helptag='" + key + "_" + punit_type['id'] + "'>"
+         + punit_type['name'] + "</li>").appendTo("#help_units_ul");
     }
   } else if (key == "help_gen_techs") {
     for (var tech_id in techs) {
@@ -355,13 +377,11 @@ function generate_help_text(key)
     // UPKEEP
     msg += "<div"+flex+" id='utype_fact_upkeep'></span></div>";
     // IMPROVEMENT REQS
-    var ireqs = get_improvement_requirements(punit_type['impr_requirement']);
-    if (ireqs != null && techs[ireqs] != null) {
+    if (improvements[punit_type['impr_requirement']]) // if an impr_req exists to make this unit
+    {
       msg += "<div"+flex+" id='utype_fact_req_building'>";
       msg += span1 + "Building Reqs: " + span_end + span2;
-      for (var m = 0; m < ireqs.length; m++) {
-        msg += tab1 + techs[ireqs[m]]['name'] + " ";
-      }
+      msg += improvements[punit_type['impr_requirement']]['name'] + " ";
       msg +=  div_end;
     }
     // TECH REQS
