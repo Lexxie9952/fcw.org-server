@@ -16,6 +16,6 @@ printf "Suggested: Do a diff with src/derived/webapp/man/ag7.html, to redo chang
 printf "****************************************************************************\n"
 
 printf "\nOverwriting ag7.html with ag7.bak.html\n"
-   cp /src/derived/webapp/man/ag7.bak.html /src/derived/webap/man/ag7.html
+   cp ~/freeciv-web/freeciv-web/src/derived/webapp/man/ag7.bak.html ~/freeciv-web/freeciv-web/src/derived/webapp/man/ag7.html
 
 print "\n./build.sh required to update website.\n"
