@@ -113,8 +113,7 @@ Under Monarchy, a king or queen serves as a hereditary figurehead\
  for your government.\
 "), _("\
 Monarchy suffers the same small amount of corruption that\
- the Republic does.\n\
-Units who can later switch to gold upkeep have Shield:Gold rate of 1:1\ 
+ the Republic does.\
 ")
 
 ;------------------------------------------------------------------------
@@ -146,8 +145,7 @@ Communist states can transfer Proletarians between cities to\
  used to finish State projects. The Communism tech allows a\
  Communist government to conscript Workers to Riflemen and vice
  versa, if inside national territory and if possessing the necessary\
- technologies.\n\
-Units who can later switch to gold upkeep have Shield:Gold rate of 1:1\
+ technologies.\
 ")
 
 ;------------------------------------------------------------------------
@@ -169,8 +167,7 @@ Under a Republican government, citizens hold an election to select a\
  remain popular to remain in control, citizens are given a greater\
  degree of freedom.  Citizens under the Republic become unhappy\
  easily, but the self-sufficiency of your citizens allows high levels\
- of trade.\n\
-Units who can later switch to gold upkeep have Shield:Gold rate of 1:1\
+ of trade.\
 ")
 
 ;------------------------------------------------------------------------
@@ -191,8 +188,7 @@ Under Democracy, citizens govern directly by voting on issues.\
  Democracy offers the highest possible level of trade, but also\
  offers the most potential for unhappiness.  There is no corruption\
  during Democracy, but citizens become very upset during\
- wars.\n\
-Units who can later switch to gold upkeep have Shield:Gold rate of 1:1\
+ wars.\
 ")
 
 ;------------------------------------------------------------------------
@@ -219,8 +215,7 @@ Improvements that convert unhappy citizens to content produce gold tithes equal 
  the number of citizens they would convert. Fanatics cannot be bribed. Palace\
  gives +50% to gold income in its city. In each city, two military units may impose\
  martial law, making one citizen each content. Pilgrims can be used to migrate and\
- grow the population in the cities directed by the ruling High Priest.\n\
-Units who can later switch to gold upkeep have Shield:Gold rate of 1:1\
+ grow the population in the cities directed by the ruling High Priest.\
 ")
 
 ; /* <-- avoid gettext warnings

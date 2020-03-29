@@ -384,6 +384,7 @@ ui_name_conquer_city = _("%sConquer City%s")
 ; /* TRANS: Build _Irrigation (100% chance of success). */
  ui_name_irrigate = _("Build %sIrrigation%s")
 
+; NOT IMPLEMENTED IN SERVER YET
  ; /* TRANS: _Unload (100% chance of success). */
 ;ui_name_transport_unload = _("%sUnload%s")
 
@@ -826,19 +827,19 @@ target_reqs    =
 [actionenabler_recycle_unit]
 action = "Recycle Unit"
 actor_reqs    =
-    { "type",   "name", "range", "present"
-      "UnitFlag", "EvacuateFirst", "Local", FALSE
-      "DiplRel",  "War",        "Local", FALSE
-      "DiplRel",  "Cease-fire", "Local", FALSE
-      "DiplRel",  "Armistice",  "Local", FALSE
-      "DiplRel",  "Peace",      "Local", FALSE
+    { "type",     "name",         "range", "present", "quiet"
+      "UnitFlag", "EvacuateFirst","Local", FALSE,     TRUE
+      "DiplRel",  "War",          "Local", FALSE,     TRUE
+      "DiplRel",  "Cease-fire",   "Local", FALSE,     TRUE
+      "DiplRel",  "Armistice",    "Local", FALSE,     TRUE
+      "DiplRel",  "Peace",        "Local", FALSE,     TRUE
     }
 
 [actionenabler_disband_unit]
 action = "Disband Unit"
 actor_reqs    =
-    { "type",   "name", "range", "present"
-      "UnitFlag", "EvacuateFirst", "Local", FALSE
+    { "type",     "name",           "range", "present", "quiet"
+      "UnitFlag", "EvacuateFirst",  "Local", FALSE,     TRUE
     }
 
 ;CAPTURING LAND UNITS a "Capturer" must get a "Capturable" but not on a mountain.
@@ -1008,8 +1009,9 @@ target_reqs    =
 [actionenabler_nuke]
 action = "Explode Nuclear"
 actor_reqs    =
-    { "type",   "name", "range", "present"
-      "UnitFlag", "Nuclear", "Local", TRUE
+    { "type",         "name",       "range", "present", "quiet"
+      "UnitFlag",     "Nuclear",    "Local",  TRUE,     FALSE
+      "ServerSetting","nukes_minor","World",  TRUE,     FALSE
     }
 
 ;DESTROY CITY
@@ -1296,17 +1298,6 @@ actor_reqs    =
       "UnitFlag",      "Cant_Fortify", "Local", FALSE
       "UnitClass",     "AirProtect",   "Local", FALSE
     }
-;Fighters can fortify as a way to "sleep" them from autoattack.
-[actionenabler_fortify_fighter1]
-action        = "Fortify"
-actor_reqs    =
-    { "type",          "name",         "range", "present"
-      "UnitClassFlag", "CanFortify",   "Local", TRUE
-      "UnitFlag",      "Cant_Fortify", "Local", FALSE
-      "UnitClass",     "AirProtect",   "Local", TRUE
-      "CityTile",      "Center",       "Local", TRUE
-      ;can't fortify in bases - would give a defense bonus
-    }
 
 [actionenabler_road]
 action        = "Road"
@@ -1590,6 +1581,7 @@ target_reqs    =
       "Extra",   "Irrigation", "CAdjacent", TRUE
     }
 
+; NOT IMPLEMENTED IN SERVER YET
 ;[actionenabler_unload]
 ;action        = "Transport Unload"
 ;actor_reqs    =
@@ -2030,10 +2022,12 @@ set =
       "move_bonus_in_frags", "ENABLED", TRUE   ;locked
       "nationset", "all", FALSE 
       "nuclearwinter_percent", 20, FALSE
+      "nukes_minor", "ENABLED", FALSE      ; set to DISABLED to completely disallow nuclear detonations
+      "nukes_major", "DISABLED", FALSE     ; set to ENABLED to allow nuclear fusion weapons
       "revolen", 1, FALSE
       "separatepoles", FALSE, FALSE
-      "slot_control", TRUE, FALSE
-      "slot_control_style", 1, FALSE
+      "slot_control", TRUE, FALSE         ; multiple units per turn
+      "slot_control_style", 1, FALSE      ; 1 = Shield2Gold units only
       "spaceship_travel_time", 225, FALSE
       "specials", 350, FALSE
       "startpos", "SINGLE", FALSE
@@ -2049,4 +2043,5 @@ set =
       "unload_override", 0, FALSE    ;0=native unloading same as non-native. 1+ = move_fragment cost for unloading.
       "unreachableprotects", "ENABLED", FALSE
       "unitwaittime_style", "ACTIVITIES|FORTIFY|DELAYGOTO", FALSE
+      "zoc_purity", "ENABLED", FALSE           ; igZOC units don't lift ZOC for units subject to ZOC
     }

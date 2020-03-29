@@ -298,7 +298,7 @@ hut_behavior  = "Frighten"
 flags         = "Unreachable", "DoesntOccupyTile", "Airliftable", "CanPillage"
 
 ; This class is for air units that can also protect a stack.
-; (Fighters) — technically a separate AirProtect class is not needed, but
+; (Fighters) -- technically a separate AirProtect class is not needed, but
 ; Fighters also have Border Police abilities, and a separate class
 ; facilitates future adjustments and balancing in an isolated class.
 [unitclass_air_protect]
@@ -531,6 +531,7 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;  "Bombard"
 ;   attack       = base attack strength
 ;   bombard_rate = the number of shots fired at enemy units when attacking
+;       FOR NUKES: the amount to add to the default radius of 1 tile
 ;  "Join City"
 ;   pop_cost = the number of population added to the target city
 ;  "Paradrop Unit"
@@ -805,9 +806,7 @@ Masonry lets Workers build Forts. Construction lets them build Fortresses and\
  build Airbases and Buoys, which Settlers cannot. Workers must be on a ship to build Buoys.\
 "), _("\
 Communism tech allows Communist governments to conscript Workers into Riflemen via the\
-  Convert order. And vice versa.\
-"), _("\
-\nThe discovery of Labor Union changes upkeep from shields to gold.\
+ Convert order. And vice versa.\
 ")
 
 [unit_engineers]
@@ -848,8 +847,6 @@ Engineers can do everything Workers can do, at twice the speed.\
  Unlike Workers, Engineers can Transform, such as converting\
  Desert to Plains. Converting Ocean to Swamp requires being on a ship\
  on a tile bordering 3 land tiles.\
-"), _("\
-\nThe discovery of Labor Union changes upkeep from shields to gold.\
 ")
 
 [unit_warriors]
@@ -1091,17 +1088,17 @@ flags         = "Fanatic", "FootSoldier", "Capturer", "CantReachAir", "Unbribabl
                 "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
-Fanatics are warriors extremely devoted to a higher cause. Their faith\
+Fanatics are warriors devoted to a higher cause. Their faith\
  is strong and they cannot be bribed.\
 "), _("\
-Fundamentalist nations can maintain Fanatics without having to pay\
- their steep upkeep. (Fanatics are unhappy if you are not Fundamentalist,\
- and require a high upkeep to maintain contented order.) Fanatics\
+Fundamentalist nations can maintain Fanatics without paying\
+ their steep upkeep. (Fanatics are unhappy if not under Fundamentalism,\
+ requiring high upkeep to stay content.) Fanatics\
  produced in a city with Ecclesiastical Palace are inspired by\
  fervorous faith to +1 higher veteran level.\
 "), _("\
-Fanatics zealously defend their homeland, and can do surprise assaults\
- and skirmishes to snipe and injure foreign occupants: Each invader\
+Fanatics zealously defend their homeland, and can do surprise skirmish\
+ assaults to snipe and injure foreign occupants: Each invader\
  on the tile will endure three combat rounds without defense.\
 "), _("\
 \nThe discovery of Labor Union changes upkeep from shields to gold.\
@@ -1136,6 +1133,7 @@ uk_gold       = 0
 targets       = "Balloon", "Helicopter"
 flags         = "MultiSlot", "IgTer", "IgZOC", "NoHome", "FootSoldier", "Capturer", "CantReachAir",
                 "Shield2Gold", "Settlers", "CanHide", "WillNever"
+;yes Partisan has 0 upkeep so Shield2Gold is meaningless, but currently used to substitute MultiSlot inaccessible in c-server
 roles         = "DefendGood", "DefendGoodStartUnit", "Partisan", "BarbarianTech"
 helptext      = _("\
 Partisans are guerilla fighters who can use the terrain to their advantage.  Like the Explorer\
@@ -1177,10 +1175,9 @@ uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter"
 flags         = "MultiSlot", "IgTer", "FootSoldier", "Capturer", "CantReachAir", "Shield2Gold", "Settlers", "CanHide", "WillNever"
-;yes Partisan has 0 upkeep so Shield2Gold is meaningless, but currently used to substitute MultiSlot inaccessible in c-server
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
-Alpine Troops are highly mobile units as well as\
+Alpine Troops are highly mobile units and\
  excellent defenders.  Similar to an Explorer, they\
  treat every land tile like a road were on it.\
 "), _("\
@@ -1745,7 +1742,7 @@ name          = _("Artillery")
 class         = "Land"
 tech_req      = "Machine Tools"
 obsolete_by   = "Howitzer"
-graphic       = "u.artillery"
+graphic       = "u.artillery_o"
 graphic_alt   = "-"
 sound_move    = "m_artillery"
 sound_move_alt = "m_generic"
@@ -1808,7 +1805,7 @@ bonuses       =
      "AirAttacker", "DefenseDivider", 1
      "AirAttacker", "DefenseMultiplier", 1
    }
-flags         = "NeverBlocked", "AntiAir", "Marines" ;, "WillNever"
+flags         = "NeverBlocked", "AntiAir", "Marines", "WillNever"
 roles         = ""
 helptext      = _("\
 Anti-Aircraft Artillery (AAA) can attack almost anything from anywhere. AAA get a\
@@ -1853,7 +1850,7 @@ bonuses       =
      "AirAttacker", "DefenseDivider", 1
      "AirAttacker", "DefenseMultiplier", 1
    }
-flags         = "NeverBlocked", "AntiAir" ;, "WillNever"
+flags         = "NeverBlocked", "AntiAir", "WillNever"
 roles         = ""
 helptext      = _("\
 The Mobile SAM is the strongest Anti-Air unit on the ground. It can\
@@ -1861,8 +1858,8 @@ The Mobile SAM is the strongest Anti-Air unit on the ground. It can\
  Mobile SAM can also carry one Missile of any type. Unlike the AAA, it\
  cannot attack non-native tiles or attack while transported.\
 "), _("
-An AAA can upgrade to Mobile SAM for free on its 10th turn of service.\
- The Convert order must be done in the capital city, and takes 4 turns.\
+AAA can upgrade to Mobile SAM for free on its 10th turn of service.\
+ The Convert order must be done in the capital city and takes 4 turns.\
 ")
 
 [unit_howitzer]
@@ -1929,7 +1926,7 @@ Balloons gather intel on potential battle areas. They have great vision and\
  are unreachable by units prior to Riflemen and Ironclads. They can stay in\
  the air for one Turn Change before landing in a City, Fortress, Naval Base,\
  Airbase, or ship with cargo capacity of 4+. Balloons do not block units under\
-  them from being attacked, and cannot fly over mountains.\
+ them from being attacked, and cannot fly over mountains.\
 "), _("
 NOTE: GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
@@ -1982,11 +1979,11 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
 Fighters are the first offensive Air units. Their superior mobility and firepower alter\
- the very nature of warfare. They can move anywhere and attack any unit (except Submarines,\
- Missiles, and Jet Bombers.)\n\
+ the very nature of warfare. They can move anywhere and attack any unit (except Submarines\
+ and Jet Bombers.)\n\
 "), _("
-INTERCEPTOR: with the Vigil order, Fighters auto-attack adjacent Air units if they\
- have better attack odds. To vigil, Fighters must spend 2 move points or less.\n\
+INTERCEPTOR: the Vigil order lets Fighters auto-attack adjacent Air units if they\
+ have better attack odds. A Fighter can Vigil if it uses 2 move points or less.\n\
 "), _("
 NOTE: GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
@@ -2041,8 +2038,8 @@ Escort Fighters are large fighters with high fuel capacity. Higher mass and\
  as well as standard Fighters, but can return home on the next turn. They are\
  good for long-range missions, defensive air support, and escorting bombers.\
 "), _("
-INTERCEPTOR: with the Vigil order, Escort Fighters auto-attack adjacent Air units if they\
- have better attack odds. To vigil, Escort Fighters must spend 3 move points or less.\n\
+INTERCEPTOR: the Vigil order lets Escort Fighters auto-attack adjacent Air units if they\
+ have better attack odds. This unit can Vigil if it uses 3 move points or less.\n\
 "), _("
 NOTE: GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
@@ -2076,10 +2073,15 @@ uk_gold       = 0
 targets       = "Air", "AirProtect", "Balloon", "Helicopter"
 bonuses       =
    { "flag", "type", "value"
-     "AirAttacker",    "DefenseDividerPct",         -33 ; A2 vs Fighter types
-     "CantReachAir",   "DefenseDividerPct",          50 ; A4.5 vs all CantReachAir
-     "NonMil",         "DefenseDividerPct",          50 ;  "   "   "        "
-     "AntiAir",        "DefenseMultiplierPct",       33 ; D4 vs Anti-Air
+     ; A4.5 vs all Surface Units 
+     "CantReachAir",   "DefenseDividerPct",          50 
+     "NonMil",         "DefenseDividerPct",          50 ; NonMil don't have CantReachAir flag
+     "AntiAir",        "DefenseDividerPct",          50 ; AntiAir don't hav CantReachAir flag
+
+     ; Cancel CantReachAir bonus on Bombers
+     "FieldUnit",      "DefenseDividerPct",         -50 
+     ; D4 vs Anti-Air
+     "AntiAir",        "DefenseMultiplierPct",       33 
    }
 flags         = "AirAttacker", "Unbribable", "CanEscape",
                 "NeverProtects", "Provoking", "WillNever"
@@ -2097,21 +2099,23 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
-Dive Bombers are Fighters designed for Ground Attack roles. They are also good for Sea\
- combat. Range and altitude are limited by weighty armor and armaments suited for surface battles.\
- They have a small edge over multi-purpose Fighters when attacking surface targets, but suffer in\
- other areas like Air-to-Air combat. They lack agility to block attacks on land units on the same\
- tile. Yet the terror they exert over a wider radius lets them apply ZoC on adjacent land tiles.\
- This is a niche unit not suited for multipurpose use: it is not an INTERCEPTOR. Its specialized role\
- results in a distinct combat profile:\n\
-Attack strength:\n\
- • A:2     vs Fighter types\n\
- • A:4½  vs Surface units (not Anti-Air)\n\
-Defense strength:\n\
+Dive Bombers are like Fighters but fitted for Ground Attack and Sea combat. Range\
+ is reduced by heavy armor and armaments which help in attacking surface targets\
+ and in defending against Anti-Air, but hurt in Air-to-Air combat. Though unreachable\
+ to Land units, they lack agility to block attacks on their same tile. But over a wider\
+ radius, they exert ZoC on adjacent land tiles. The Dive Bomber is not an interceptor.\
+ Role specialization yields the following gains and losses over a Fighter:\n\n\
+ GAINS:\n\
+ • A:4½  vs Surface units (Land or Sea)\n\
  • D:4     vs Anti-Air\n\
+ • ZoC\n\
+LOSSES:\n\
+ • A3 instead of A4 in Air-to-Air\n\
+ • Can't block its tile\n\
+ • Can't intercept\
 "), _("
 Communists pay 10 less for this unit. GOTO prevents unit loss from lack of fuel.\
- Override this by ordering moves to adjacent tiles.\
+ Override this by ordering adjacent moves.\
 ")
 
 [unit_medium_bomber]
@@ -2160,8 +2164,8 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
 The Medium Bomber is well suited for moderately strong targets or multiple weak targets.\
- It may not attack other Air units. It is a Soft Field Unit, and can't carry Bomb\
- units. This may cause less discontent than other types of Bombers.\n\n\
+ It may not attack other Air units. It is a Soft Field Unit and can't carry Bomb\
+ units, causing less discontent than other types of Bombers.\n\
 ➤ Unhappy effect for Soft Field units:\n\
 Republic:0   Democracy:1    (non-aggressive)\n\
 Republic:1   Democracy:2    (aggressive)\
@@ -2219,7 +2223,7 @@ helptext      = _("\
 Heavy Bombers are large and sturdy Bombers with larger payload and numerous gunner defense stations.\
  They are excellent for hitting strong well-defended ground targets.\
  They cannot attack Air units. They can carry one Bomb. Like most Bombers, the Heavy Bomber is a Field Unit.\
- Field Units cause the same unhappiness no matter if aggressively or peacefully deployed.\n
+ Field Units cause the same unhappiness no matter if aggressively or peacefully deployed.\n\
 ➤ Unhappy effect for Field units:\n\
 Republic:1   Democracy:2\
 "), _("
@@ -2305,7 +2309,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "HasNoZOC", "Unbribable", "Expellable", "NeverProtects", "CanEscape", "Provoking"
+flags         = "HasNoZOC", "NoVeteran", "Unbribable", "Expellable", "NeverProtects", "CanEscape", "Provoking"
 roles         = ""
 helptext      = _("\
 The AWACS has great fuel capacity for long range flights, and advanced radar that can determine\
@@ -2350,10 +2354,10 @@ bonuses       =
    }
 cargo         = "LandAirSea"
 flags         = "Helicopter", "AirAttacker", "Unbribable",
-                "CanEscape", "Provoking", "WillNever"
+                "CanEscape", "WillNever"
                 ; Heli is low-altitude and non-provoking: if it's ever thought to be OP, 
                 ; changing this flag fixes that right away. But currently it MIGHT be UnP 
-                ; because hp_loss, range, city walls, and the existence of Ground Strike Fighter
+                ; because hp_loss, range, city walls, and Ground Strike Fighter
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -2370,15 +2374,15 @@ roles         = ""
 helptext      = _("\
 Helicopters are the Air Cavalry of modern armies. They can attack multiple targets\
  and conquer cities. Unaffected by terrain, they are good for Partisan suppression.\
- Their ability to transport specialized units makes them well-suited for commando ops.\n\
+ They can transport specialized units, making them well-suited for commando ops.\n\
 "), _("\
-Helicopters lose 1 hitpoint for every turn not spent in a City, Fort, Fortress, Airbase or Carrier. A\
- freshly fueled Helicopter starts its turn with one extra move point (13).\n\
+Helicopters lose 1 hp for each turn not ended in a City, Base, or Carrier. +1 move point\
+ is awarded if starting its turn in a City or Airbase.\n\
 "), _("\
-Helicopters are low altitude units that can be attacked by ground units from Riflemen onward,\
- but enjoy a 50% defense bonus against anything on foot — Foot Soldiers and mounted units. (They remain\
- unreachable to Artillery types.) Helicopters can also be attacked by Sea from Ironclad onward. Unlike\
- high altitude Aircraft, City Walls get a defense bonus against Helicopters.\
+Helicopters fly low to avoid Interception. This invites attacks by ground units from\
+ Riflemen onward. Even so, they are unreachable to Artillery types and get a 50% defense\
+ bonus against units on foot. City Walls get a defense bonus against them;\
+ SAM Batteries do not. Helicopters can be attacked by Sea from Ironclad onward.\n\
 "), _("\
 Helicopters can transport one Marines or AAA unit.\
 ")
@@ -2429,8 +2433,8 @@ roles         = ""
 helptext      = _("\
 Jet Fighters upgrade the Fighter with improved attack, defense, and range.\
 "), _("
-INTERCEPTOR: with the Vigil order, Jet Fighters auto-attack adjacent Air units if they\
- have better attack odds. To vigil, Jet Fighters must spend 3 move points or less.\n\
+INTERCEPTOR: the Vigil order Jets Fighters auto-attack adjacent Air units if they\
+ have better attack odds. This unit can Vigil if it uses 3 move points or less.\n\
 "), _("
 NOTE: GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
@@ -2461,7 +2465,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "Balloon", "Helicopter"
+targets       = "Air", "AirPillage", "Balloon", "Helicopter"
 bonuses       =
    { "flag", "type", "value"
      "AntiAir",    "DefenseMultiplierPct",       33 ; D5.33 vs Anti-Air
@@ -2486,7 +2490,7 @@ Ground Strike Fighters upgrade the Dive Bomber. They cannot block attacks on oth
  units on their tile, nor engage against Fighters. However, like the Dive Bomber,\
  they can interdict ZoC over land tiles. High fuel capacity allows two turns in the\
  air. No unit can stop this unit from attacking surface units on a tile. This is a\
- specialized niche unit. It is not an INTERCEPTOR.\n\
+ specialized niche unit. It is not an interceptor.\n\
 NOTE: GOTO prevents unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
@@ -2593,8 +2597,8 @@ The most advanced Fighter, with improved attack and longer range. Stealth Fighte
  to an enemy. Stealth evasion gives a 25% bonus against all Anti-Air units, and reduces\
  SAM Batteries down to a smaller 25% bonus.\
 "), _("
-INTERCEPTOR: with the Vigil order, Stealth Fighters auto-attack adjacent Air units if they\
- have better attack odds. To vigil, Stealth Fighters must spend 4 move points or less.\n\
+INTERCEPTOR: the Vigil order lets Stealth Fighters auto-attack adjacent Air units if they\
+ have better attack odds. This unit can Vigil if it uses 4 move points or less.\n\
 "), _("
 NOTE: GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
@@ -3205,7 +3209,7 @@ bonuses       =
      "Submarine", "DefenseMultiplier", 1
      "Marines", "DefenseMultiplier", 1
    }
-flags         = "BadCityDefender", "CanEscape", "AntiAir";, "WillNever"
+flags         = "BadCityDefender", "CanEscape", "AntiAir", "WillNever"
 roles         = "Hunter"
 helptext      = _("\
 The AEGIS Cruiser has an Anti-Air missile system. Radar and sonar\
@@ -3334,6 +3338,8 @@ flags         = "BadCityDefender", "Only_Native_Attack", "CanEscape",
 roles         = ""
 helptext      = _("\
 The Carrier is a mobile airport that can carry Air units, Helicopters, AAA, Marines, and Missiles.\
+ Fighters can Vigil on a Carrier if they have enough moves and the Carrier has not moved since the\
+ Vigil order was given.\
 "), _("\
 Carriers are very expensive and thus, usually protected by a fleet of scouts and escorts.\
 ")
@@ -3364,7 +3370,7 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon"
-flags         = "BadCityDefender", "HelpWonder", "Traderoute", "NonMil", "HasNoZOC"
+flags         = "BadCityDefender", "HelpWonder", "Traderoute", "NonMil", "HasNoZOC", "NoVeteran"
 roles         = ""
 helptext      = _("\
 Cargo ships are Commerce units: they can establish Trade Routes and help\
@@ -3459,13 +3465,13 @@ tech_req      = "Nuclear Fission"
 obsolete_by   = "None"
 graphic       = "u.atom_bomb"
 graphic_alt   = "u.nuclear"
-sound_move    = "m_atomb_bomb"
+sound_move    = "m_atom_bomb"
 sound_move_alt = "m_generic"
-sound_fight   = "f_atomb_bomb"
+sound_fight   = "f_atom_bomb"
 sound_fight_alt = "f_nuclear"
 build_cost    = 150
 pop_cost      = 0
-attack        = 99
+attack        = 100
 defense       = 0
 hitpoints     = 10
 firepower     = 1
@@ -3480,7 +3486,7 @@ uk_gold       = 0
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine"
 disembarks    = "Air", "AirPillage"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
-                "NeverBlocked", "WillNever"
+                "NeverBlocked", "WillNever", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0
@@ -3491,13 +3497,115 @@ roles         = ""
 helptext      = _("\
 If you have Nuclear Fission and the Manhattan Project has been built by any player, you can make Atom Bombs.\
  A Bomber can drop it within two tiles of its location. Unload the bomb and fly the Bomber out of range, then\
- attack the target (or detonate by pressing D twice.) The blast destroys ALL units in a 3x3 area. City population\
+ attack the target (or detonate by pressing D twice.) The blast destroys ALL cardinally adjacent tiles. City population\
  is reduced by half. Land tiles may get nuclear fallout.\
 "), _("\
 Fallout reduces tile output and increases risk of nuclear winter.\
 ")
+bombard_rate = -1    ; default radius - 1 = just nuke single tile.
 
-[unit_nuclear]
+[unit_hbomb]
+name          = _("Hydrogen Bomb")
+class         = "Bomb"
+tech_req      = "Fusion Power"
+impr_req      = "Enrichment Facility"
+obsolete_by   = "None"
+graphic       = "u.hbomb"
+graphic_alt   = "u.nuclear"
+sound_move    = "m_atom_bomb"
+sound_move_alt = "m_generic"
+sound_fight   = "f_atom_bomb"
+sound_fight_alt = "f_nuclear"
+build_cost    = 190
+pop_cost      = 0
+attack        = 100
+defense       = 0
+hitpoints     = 10
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 0
+transport_cap = 0
+fuel          = 1
+uk_happy      = 2
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine"
+disembarks    = "Air", "AirPillage"
+flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
+                "NeverBlocked", "WillNever", "NoVeteran"
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 0
+roles         = ""
+helptext      = _("\
+Hydrogen Bombs make Atom Bombs seem tame. Any unprotected city at Ground Zero will be absolutely annihilated.\
+ In other cities in the blast radius, population is reduced by about 75%. Blast area is 21 tiles:\
+ the same area as an entire city (5x5 minus the corners.) All units within the blast are destroyed.\n\
+A Bomber can drop a Hydrogen Bomb within two tiles of its location. Unload the bomb, fly the Bomber out of\
+ range, then detonate by pressing D twice.\n\
+If you have Fusion Power and the Manhattan Project was built, a Hydrogen Bomb\
+ can be made in a city with an Enrichment Facility. \
+"), _("\
+Fallout from a Hydrogen Bomb is grave, with more than double the contaminated area.\
+")
+bombard_rate = 5    ; sq_radius = 2 + 5 = 7 (entire workable city area)
+
+[unit_doomsday_bomb]
+name          = _("Doomsday Bomb")
+class         = "Bomb"
+tech_req      = "Fusion Power"
+impr_req      = "Enrichment Facility"
+obsolete_by   = "None"
+graphic       = "u.ddomb"
+graphic_alt   = "u.atom_bomb"
+sound_move    = "m_atom_bomb"
+sound_move_alt = "m_generic"
+sound_fight   = "f_atom_bomb"
+sound_fight_alt = "f_nuclear"
+build_cost    = 1000
+pop_cost      = 0
+attack        = 100
+defense       = 0
+hitpoints     = 30
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 0
+transport_cap = 0
+fuel          = 1
+uk_happy      = 4
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine"
+disembarks    = "Air", "AirPillage"
+flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
+                "NeverBlocked", "WillNever", "Unique", "NoVeteran"
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 0
+roles         = ""
+helptext      = _("\
+The Doomsday Bomb is the mother of all bombs. Blast area is about 100 tiles.\
+ Only one can be made at a time. A city at Ground Zero will be\
+ annihilated. Other cities in the blast area lose about 75% of their population.\
+ All units within the blast are completely destroyed.\n\
+A Bomber can drop the Bomb within two tiles of its location. Unload the Bomb and\
+ pray that you can fly the Bomber out of range. Detonate by pressing D twice.\n\
+If you have Fusion Power and the Manhattan Project was built, a Doomsday Bomb\
+ can be made in a city with an Enrichment Facility. \
+"), _("\
+The Fallout from a Doomsday Bomb is a sure ticket to Nuclear Winter.\
+")
+bombard_rate = 25    ; radius = sqrt(27) = 5.19
+
+[unit_nuclear_missile]
 name          = _("Nuclear Missile")
 class         = "Missile"
 tech_req      = "Space Flight"
@@ -3510,7 +3618,7 @@ sound_fight   = "f_nuclear"
 sound_fight_alt = "f_generic"
 build_cost    = 160
 pop_cost      = 0
-attack        = 99
+attack        = 100
 defense       = 0
 hitpoints     = 10
 firepower     = 1
@@ -3526,7 +3634,7 @@ embarks       = "Submarine"
 disembarks    = "Submarine"
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
-                "NeverBlocked", "WillNever"
+                "NeverBlocked", "WillNever", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0
@@ -3541,6 +3649,55 @@ If you have Space Flight and the Manhattan Project has been built by any player,
 "), _("\
 If Fallout is cleaned on the turn it appears, the chance of nuclear winter is reduced.\
 ")
+bombard_rate = 0       ; default sq_radius of 2: every adjacent tile.
+
+[unit_tactical_nuke]
+name          = _("Tactical Nuke")
+class         = "Missile"
+tech_req      = "Fusion Power"
+impr_req      = "Enrichment Facility"
+obsolete_by   = "None"
+graphic       = "u.tnuke"
+graphic_alt   = "-"
+sound_move    = "m_nuclear"
+sound_move_alt = "m_generic"
+sound_fight   = "f_nuclear"
+sound_fight_alt = "f_generic"
+build_cost    = 140
+pop_cost      = 0
+attack        = 100
+defense       = 0
+hitpoints     = 10
+firepower     = 1
+move_rate     = 18
+vision_radius_sq = 2
+transport_cap = 0
+fuel          = 1
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+embarks       = "Submarine"
+disembarks    = "Submarine"
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine"
+flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
+                "NeverBlocked", "WillNever", "NoVeteran"
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 0
+roles         = ""
+helptext      = _("\
+Tactical Nukes are very small warheads attached to missiles. A Tactical Nuke destroys all units on\
+ a single tile. City population is reduced by half. The target tile may get Fallout. In theory,\
+ Tactical Nukes are small enough to get the advantages of nuclear armaments without the severity of\
+ consequences. In reality, they might be a gateway that escalates toward mutual assured destruction.\n\
+If you have Fusion Power and the Manhattan Project was built, a Tactical Nuke\
+ can be made in a city with an Enrichment Facility. \
+")
+bombard_rate = -2   ; 2 - 2 = 0: only nukes target tile.
 
 [unit_diplomat]
 name          = _("Diplomat")
@@ -3579,7 +3736,7 @@ veteran_names =
 
 veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
-veteran_power_fact = 100, 105, 110, 115, 120, 125, 130
+veteran_power_fact = 100, 110, 115, 120, 125, 130, 135
 veteran_move_bonus = 0, 0, 0, 0, 0, 0, 0
 roles         = "DiplomatStartUnit"
 helptext      = _("\

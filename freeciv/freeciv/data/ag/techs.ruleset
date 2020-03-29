@@ -408,7 +408,6 @@ graphic     = "a.fundamentalism"
 graphic_alt = "-"
 helptext = _("Allows government Fundamentalism.")
 
-
 [advance_fusion_power]
 name     = _("Fusion Power")
 req1     = "Superconductors"
@@ -416,7 +415,7 @@ req2     = "None"
 flags    = ""
 graphic     = "a.fusion_power"
 graphic_alt = "-"
-cost = 6120
+cost = 8040
 
 [advance_genetic_engineering]
 name     = _("Genetic Engineering")
@@ -622,8 +621,8 @@ req1     = "Ceremonial Burial"
 req2     = "Code of Laws"
 flags    = ""
 graphic     = "a.monarchy"
-helptext = _("Allows government Monarchy.")
 graphic_alt = "-"
+helptext = _("Allows government Monarchy.")
 
 [advance_monotheism]
 name     = _("Monotheism")
@@ -865,7 +864,7 @@ req2     = "Space Flight"
 flags    = ""
 graphic     = "a.superconductors"
 graphic_alt = "-"
-cost = 5950
+cost = 7750
 helptext = _("Allows MagLev.")
 
 [advance_tactics]
@@ -894,8 +893,8 @@ req1     = "Code of Laws"
 req2     = "Literacy"
 flags    = ""
 graphic     = "a.the_republic"
-helptext = _("Allows government Republic.")
 graphic_alt = "-"
+helptext = _("Allows government Republic.")
 
 [advance_the_wheel]
 name     = _("The Wheel")

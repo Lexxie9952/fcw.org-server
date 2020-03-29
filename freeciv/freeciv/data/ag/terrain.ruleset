@@ -1546,7 +1546,7 @@ reqs           =
     }
 build_time     = 3
 removal_time   = 0
-native_to      = "Air", "Balloon", "Helicopter", "Missile", "AirProtect", "AirPillage"
+native_to      = "Air", "Balloon", "Helicopter", "Missile", "Bomb", "AirProtect", "AirPillage"
 flags          = "Refuel", "NoStackDeath"
 helptext       = _("\
 Airbases allow your air units to land and refuel outside cities. \
@@ -1578,7 +1578,7 @@ reqs           =
     }
 build_time     = 5
 removal_time   = 0
-native_to      = "Air", "Balloon", "Helicopter", "Missile", "AirProtect", "AirPillage"
+native_to      = "Air", "Balloon", "Helicopter", "Missile", "Bomb", "AirProtect", "AirPillage"
 flags          = "Refuel", "NoStackDeath"
 helptext       = _("\
 With the available tech, Radar can be added to an Airbase, which significantly increases its vision.\
@@ -1705,7 +1705,7 @@ flags          = "AutoOnCityCenter"
 bridged_over   = "River"
 helptext       = _("\
 Roads allow your land units to move more quickly, and on some terrain,\
- also provides a trade bonus.\
+ also provide a trade bonus.\
 "), _("\
 Building roads on river tiles requires knowledge of Bridge Building.\
  City center tiles automatically get roads (unless they are on a river\
@@ -1998,8 +1998,8 @@ rmact_gfx_alt  = "-"
 [extra_buffalo]
 name           = _("Buffalo")
 category       = "Resource"
-causes         = "Resource", "Appear"
-rmcauses       = "Disappear"
+causes         = "Resource"
+;rmcauses       = ""
 graphic        = "ts.buffalo"
 graphic_alt    = "-"
 activity_gfx   = "None"

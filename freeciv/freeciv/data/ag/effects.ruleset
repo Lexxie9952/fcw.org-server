@@ -331,7 +331,7 @@ type    = "Unit_Recover"
 value   = 1   ; 2+1=3
 reqs    =
     { "type", "name", "range"
-      "UnitType", "Battleship", "Local"
+      "UnitType", "Carrier", "Local"
     }
 
 ; *********************************** BASES *******************************
@@ -495,6 +495,31 @@ reqs    =
       "Extra", "Airbase", "Tile"
       "UnitClass", "Helicopter", "Local"
     }
+[effect_airbase_hp_regen1]
+type    = "HP_Regen"
+value   = 15
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Airbase", "Tile"
+      "UnitClass", "AirProtect", "Local"
+    }
+[effect_airbase_hp_regen2]
+type    = "HP_Regen"
+value   = 15
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Airbase", "Tile"
+      "UnitClass", "Air", "Local"
+    }
+[effect_airbase_hp_regen3]
+type    = "HP_Regen"
+value   = 15
+reqs    =
+    { "type", "name", "range"
+      "Extra", "Airbase", "Tile"
+      "UnitClass", "AirPillage", "Local"
+    }
+
 ; ****************** NAVAL BASE ******************************
 [effect_navbase_vision]
 type    = "Unit_Vision_Radius_Sq"
@@ -3655,25 +3680,31 @@ reqs	=
 type    = "Veteran_Build"
 value	= 1
 reqs	=
-    { "type", "name", "range"
-      "Building", "Magellan's Expedition", "Player"
-      "UnitClass", "Sea", "Local"
+    { "type", "name", "range", "present"
+      "Building", "Magellan's Expedition", "Player", TRUE
+      "UnitClass", "Sea", "Local", TRUE
+      "UnitFlag", "NonMil", "Local", FALSE
+      "UnitFlag", "NoVeteran", "Local", FALSE      
     }
 [effect_magellans_expedition_a]
 type    = "Veteran_Build"
 value	= 1
 reqs	=
-    { "type", "name", "range"
-      "Building", "Magellan's Expedition", "Player"
-      "UnitClass", "RiverShip", "Local"
+    { "type", "name", "range", "present"
+      "Building", "Magellan's Expedition", "Player", TRUE
+      "UnitClass", "RiverShip", "Local", TRUE
+      "UnitFlag", "NonMil", "Local", FALSE
+      "UnitFlag", "NoVeteran", "Local", FALSE      
     }
 [effect_magellans_expedition_b]
 type    = "Veteran_Build"
 value	= 1
 reqs	=
-    { "type", "name", "range"
-      "Building", "Magellan's Expedition", "Player"
-      "UnitClass", "Submarine", "Local"
+    { "type", "name", "range", "present"
+      "Building", "Magellan's Expedition", "Player", TRUE
+      "UnitClass", "Submarine", "Local", TRUE
+      "UnitFlag", "NonMil", "Local", FALSE
+      "UnitFlag", "NoVeteran", "Local", FALSE
     }
 
 [effect_manhattan_project]
@@ -3726,6 +3757,7 @@ reqs    =
       "Building", "Great Wall", "Player", FALSE
       "Building", "Mausoleum of Mausolos", "Player", TRUE
     }
+
 ;Great Wall counts as City Walls in every city.
 [effect_mausoleum_of_mausolos_1a]
 type    = "Make_Content"

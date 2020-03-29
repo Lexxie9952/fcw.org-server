@@ -379,6 +379,31 @@ Increases the shield production in a city by +50%.  This increase may\
  This building lets you conscript one extra infantry/foot unit per turn.\
 ")
 
+[building_enrichment_facility]
+name		= _("Enrichment Facility")
+genus		= "Improvement"
+reqs	=
+    { "type",         "name",         "range"
+      "Tech",         "Fusion Power", "Player"
+      "Building",     "Fusion Reactor","City"
+      "ServerSetting","nukes_major",  "World"
+    }
+graphic	= "b.enrichment_facility"
+graphic_alt	= "b.capitalization"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 200
+upkeep		= 3
+sabotage	= 100
+sound		= "b_enrichment_facility"
+sound_alt	= "b_generic"
+helptext	= _("\
+Allows refining the fissile isotopes needed to create nuclear fusion weapons.\
+ To make these weapons, a city requires an Enrichment Facility, which first\
+ requires a Fusion Reactor.\
+")
+
 [building_fusion_reactor]
 name		= _("Fusion Reactor")
 genus		= "Improvement"
