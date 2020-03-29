@@ -407,7 +407,7 @@ function warcalc_set_tooltips()
         $("#wca125").prop("title", bl+"Stealth Aircraft vs. AAA/Mobile SAM");
         $("#wca150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Phalanx/Pikemen + Agoge of Sparta");
         $("#wca175").prop("title", bl+"Veteran-2 ('Hardened')");
-        $("#wca200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"AAA/Mobile SAM vs. Aircraft"+nbl+"Fighter vs Heli (also: Heli FP=1)");
+        $("#wca200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"AAA/Mobile SAM vs. Aircraft"+nbl+"Fighter vs Heli (also: Heli FP=1)")+nbl+"Any unit vs Ship in a city: Defend FP1, Attack FP x2";
         $("#wca210").prop("title", bl+"Veteran-4 ('Crack')");
         $("#wca220").prop("title", bl+"Veteran-5 ('Master')");
         $("#wca230").prop("title", bl+"Veteran-6 ('Champion')");
