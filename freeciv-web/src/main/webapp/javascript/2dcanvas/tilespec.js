@@ -1501,6 +1501,12 @@ function get_tile_river_like_sprite(ptile, extra, prefix)
   // TO DO: if these are predefined it might be less processing time
   // Handle "integrates" feature of roads. Has to be hard-coded until server gives this info.
   if (typeof EXTRA_NAVALBASE !== 'undefined') {
+    
+    // hack fix to get client working, should do something else later:
+    if (typeof EXTRA_WATERWAY === 'undefined') {
+      var EXTRA_WATERWAY = EXTRA_RIVER;
+    }
+      
     // process in order of frequency
     if (extra == EXTRA_RIVER) {
       extra2 = EXTRA_NAVALBASE;
