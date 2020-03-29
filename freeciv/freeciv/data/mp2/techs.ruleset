@@ -256,7 +256,7 @@ req2     = "Industrialization"
 flags    = ""
 graphic     = "a.communism"
 graphic_alt = "-"
-helptext = _("-1 Effect for Cathedral, Michelangelos Chapel.")
+helptext = _("Allows government Communism.")
 
 [advance_computers]
 name     = _("Computers")
@@ -387,7 +387,7 @@ req2     = "Theory of Gravity"
 flags    = "Build_Airborne"
 graphic     = "a.flight"
 graphic_alt = "-"
-helptext = _("Less Traderoute revenue.")
+helptext = _("Traderoute gives less first time revenue.")
 cost = 4680
 
 [advance_fundamentalism]
@@ -397,11 +397,12 @@ req2     = "Conscription"
 flags    = ""
 graphic     = "a.fundamentalism"
 graphic_alt = "-"
+helptext = _("Allows government Fundamentalism.")
 
 [advance_fusion_power]
 name     = _("Fusion Power")
-req1     = "Nuclear Power"
-req2     = "Superconductors"
+req1     = "Superconductors"
+req2     = "none"
 flags    = ""
 graphic     = "a.fusion_power"
 graphic_alt = "-"
@@ -611,6 +612,7 @@ req2     = "Code of Laws"
 flags    = ""
 graphic     = "a.monarchy"
 graphic_alt = "-"
+helptext = _("Allows government Monarchy.")
 
 [advance_monotheism]
 name     = _("Monotheism")
@@ -681,8 +683,8 @@ helptext = _("Prevents Philosophy from awarding bonus tech.")
 
 [advance_plastics]
 name     = _("Plastics")
-req1     = "Refining"
-req2     = "Space Flight"
+req1     = "Space Flight"
+req2     = "None"
 graphic     = "a.plastics"
 graphic_alt = "-"
 helptext = _("Obsoletes Armor. +25% population pollution.")
@@ -728,10 +730,12 @@ cost = 1820
 [advance_recycling]
 name     = _("Recycling")
 req1     = "Mass Production"
-req2     = "Democracy"
+req2     = "None"
+;req2     = "Democracy" ; The chance you get to Recycling without knowing Democracy is about 0.001%, so, just clean up the line mess
 flags    = ""
 graphic     = "a.recycling"
 graphic_alt = "-"
+helptext = _("Allows government Democracy.")
 cost = 4460
 
 [advance_refining]
@@ -869,6 +873,7 @@ req2     = "Literacy"
 flags    = ""
 graphic     = "a.the_republic"
 graphic_alt = "-"
+helptext = _("Allows government Republic.")
 
 [advance_the_wheel]
 name     = _("The Wheel")

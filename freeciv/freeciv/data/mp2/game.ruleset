@@ -31,7 +31,7 @@ name = _("Multiplayer-Evolution ruleset")
 
 ; Summary of the ruleset
 ; /* TRANS: In the client, this is displayed alongside the contents of
-;    README.multiplayer, which are not localized. */
+;    README.mp2, which are not localized. */
 summary = _("")
 
 ; Detailed description
@@ -382,6 +382,10 @@ ui_name_conquer_city = _("%sConquer City%s")
 
 ; /* TRANS: Build _Irrigation (100% chance of success). */
  ui_name_irrigate = _("Build %sIrrigation%s")
+
+; NOT IMPLEMENTED IN SERVER YET
+ ; /* TRANS: _Unload (100% chance of success). */
+;ui_name_transport_unload = _("%sUnload%s")
 
 ; Suppress automatic help text generation about what enables and/or
 ; disables the following actions.
@@ -822,19 +826,19 @@ target_reqs    =
 [actionenabler_recycle_unit]
 action = "Recycle Unit"
 actor_reqs    =
-    { "type",   "name", "range", "present"
-      "UnitFlag", "EvacuateFirst", "Local", FALSE
-      "DiplRel",  "War",        "Local", FALSE
-      "DiplRel",  "Cease-fire", "Local", FALSE
-      "DiplRel",  "Armistice",  "Local", FALSE
-      "DiplRel",  "Peace",      "Local", FALSE
+    { "type",     "name",         "range", "present", "quiet"
+      "UnitFlag", "EvacuateFirst","Local", FALSE,     TRUE
+      "DiplRel",  "War",          "Local", FALSE,     TRUE
+      "DiplRel",  "Cease-fire",   "Local", FALSE,     TRUE
+      "DiplRel",  "Armistice",    "Local", FALSE,     TRUE
+      "DiplRel",  "Peace",        "Local", FALSE,     TRUE
     }
 
 [actionenabler_disband_unit]
 action = "Disband Unit"
 actor_reqs    =
-    { "type",   "name", "range", "present"
-      "UnitFlag", "EvacuateFirst", "Local", FALSE
+    { "type",     "name",           "range", "present", "quiet"
+      "UnitFlag", "EvacuateFirst",  "Local", FALSE,     TRUE
     }
 
 ;CAPTURING LAND UNITS a "Capturer" must get a "Capturable" but not on a mountain.
@@ -1004,8 +1008,9 @@ target_reqs    =
 [actionenabler_nuke]
 action = "Explode Nuclear"
 actor_reqs    =
-    { "type",   "name", "range", "present"
-      "UnitFlag", "Nuclear", "Local", TRUE
+    { "type",         "name",       "range", "present", "quiet"
+      "UnitFlag",     "Nuclear",    "Local",  TRUE,     FALSE
+      "ServerSetting","nukes_minor","World",  TRUE,     FALSE
     }
 
 ;DESTROY CITY
@@ -1543,6 +1548,19 @@ target_reqs    =
       "Extra",   "Irrigation", "CAdjacent", TRUE
     }
 
+; NOT IMPLEMENTED IN SERVER YET
+;[actionenabler_unload]
+;action        = "Transport Unload"
+;actor_reqs    =
+;    { "type",      "name",         "range"
+;      "UnitState", "Transporting", "Local"
+;    }
+;target_reqs    =
+;    { "type",      "name",          "range"
+;      "UnitState", "OnLivableTile", "Local"
+;      "UnitState", "Transported",   "Local"
+;    }
+
 [borders]
 ; Base border radius from city.
 radius_sq_city = 17
@@ -1953,23 +1971,30 @@ set =
       "aifill", 6, FALSE
       "airliftingstyle", "FROM_ALLIES|TO_ALLIES", FALSE
       "airliftdestdivisor", 3, FALSE
+      "autoattack", "disabled", FALSE
+      "autoattack_style", 0, FALSE
       "barbarians", "DISABLED", FALSE
       "borders", "SEE_INSIDE", FALSE
       "contactturns", 10, FALSE
       "diplomacy", "ALL", FALSE
       "dispersion", 2, FALSE
-      "endturn", 365, FALSE
+;      "endturn", 365, FALSE
       "foggedborders", TRUE, FALSE
       "generator", "RANDOM", FALSE
       "gold", 100, FALSE
+      "hideouts", FALSE, TRUE
       "huts", 0, FALSE
       "landmass", 63, FALSE
       "minplayers", 0, FALSE
       "move_bonus_in_frags", "ENABLED", TRUE   ;locked
       "nationset", "all", FALSE 
       "nuclearwinter_percent", 20, FALSE
+      "nukes_minor", "ENABLED", FALSE      ; set to DISABLED to completely disallow nuclear detonations
+      "nukes_major", "DISABLED", TRUE      ; set to ENABLED to allow nuclear fusion weapons
       "revolen", 1, FALSE
       "separatepoles", FALSE, FALSE
+      "slot_control", FALSE, TRUE          ; multiple units per turn
+      "slot_control_style", 1, FALSE       ; 1 = Shield2Gold units only
       "spaceship_travel_time", 225, FALSE
       "specials", 350, FALSE
       "startpos", "SINGLE", FALSE
@@ -1985,4 +2010,5 @@ set =
       "unload_override", 0, FALSE    ;0=native unloading same as non-native. 1+ = move_fragment cost for unloading.
       "unreachableprotects", "ENABLED", FALSE
       "unitwaittime_style", "ACTIVITIES|FORTIFY|DELAYGOTO", FALSE
+       "zoc_purity", "DISABLED", FALSE           ; igZOC units don't lift ZOC for units subject to ZOC
     }

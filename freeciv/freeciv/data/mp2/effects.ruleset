@@ -38,21 +38,6 @@ format_version=20
 ;    { "type", "name", "range", "present"
 ;      "UnitType", "Medium Bomber", "Local", TRUE
 ;    }
-;[effect_combat_rounds_heavy_bomber]
-;type    = "Combat_Rounds"
-;value   = 20
-;reqs	=
-;   { "type", "name", "range", "present"
-;      "UnitType", "Heavy Bomber", "Local", TRUE
-;    }
-;[effect_combat_rounds_stealth_bomber]
-;type    = "Combat_Rounds"
-;value   = 20
-;reqs	=
-;    { "type", "name", "range", "present"
-;      "UnitType", "Stealth Bomber", "Local", TRUE
-;    }
-; */ <-- avoid gettext warnings
 
 ; Combat_rounds for ancient ships
 [effect_combat_rounds_riverships]
@@ -84,18 +69,7 @@ value   = 4
 type    = "Enemy_Citizen_Unhappy_Pct"
 value   = 34   ; handles proper rounding for 1/3
 
-
-;[effect_happy_foreigners]   ; major happy is only a test to see how the Nationality flag works in test games.
-;type    = "Make_Happy"
-;value   = 30
-;reqs  =
-;    { "type", "name", "range"
-;      "Nationality", "War", "City"
-;    }
-
-
 ; Barbarian effects
-
 [effect_barb1]
 type    = "No_Diplomacy"
 value   = 1
@@ -105,7 +79,6 @@ reqs    =
     }
 
 ; Barbarian disappearance
-
 [effect_barb_disappear]
 type    = "Retire_Pct"
 value   = 10
@@ -280,7 +253,7 @@ value	= -2400
 
 ; ***************************** SEA UNIT REPAIR *******************************
 ; Sea units have crews which pro-actively repair damage regardless of movement.
-; This is almost comparable to a fortified land unit. Sea units being "Use once
+; This is almost comparable to land unit healing. Sea units being "Use once
 ; and dispose", and/or unable to re-enter action for literally centuries, had
 ; created issues in realism, playability, and balance. 8% repair/turn effect:
 ; 10hp units:  +0 hp/turn   20hp units:  +1 hp/turn
@@ -3541,25 +3514,31 @@ reqs	=
 type    = "Veteran_Build"
 value	= 1
 reqs	=
-    { "type", "name", "range"
-      "Building", "Magellan's Expedition", "Player"
-      "UnitClass", "Sea", "Local"
+    { "type", "name", "range", "present"
+      "Building", "Magellan's Expedition", "Player", TRUE
+      "UnitClass", "Sea", "Local", TRUE
+      "UnitFlag", "NonMil", "Local", FALSE
+      "UnitFlag", "NoVeteran", "Local", FALSE      
     }
 [effect_magellans_expedition_a]
 type    = "Veteran_Build"
 value	= 1
 reqs	=
-    { "type", "name", "range"
-      "Building", "Magellan's Expedition", "Player"
-      "UnitClass", "RiverShip", "Local"
+    { "type", "name", "range", "present"
+      "Building", "Magellan's Expedition", "Player", TRUE
+      "UnitClass", "RiverShip", "Local", TRUE
+      "UnitFlag", "NonMil", "Local", FALSE
+      "UnitFlag", "NoVeteran", "Local", FALSE      
     }
 [effect_magellans_expedition_b]
 type    = "Veteran_Build"
 value	= 1
 reqs	=
-    { "type", "name", "range"
-      "Building", "Magellan's Expedition", "Player"
-      "UnitClass", "Submarine", "Local"
+    { "type", "name", "range", "present"
+      "Building", "Magellan's Expedition", "Player", TRUE
+      "UnitClass", "Submarine", "Local", TRUE
+      "UnitFlag", "NonMil", "Local", FALSE
+      "UnitFlag", "NoVeteran", "Local", FALSE
     }
 
 [effect_manhattan_project]
@@ -3622,7 +3601,6 @@ reqs    =
       "Building", "Great Wall", "Player"
       "Building", "Mausoleum of Mausolos", "Player"
     }
-
 [effect_mausoleum_of_mausolos_2]
 type    = "Make_Content"
 value   = 1
@@ -3632,7 +3610,6 @@ reqs    =
       "Building", "Supreme Court", "Player", FALSE
       "Building", "Mausoleum of Mausolos", "Player", TRUE
     }
-
 ;Mausoleum respects that Supreme Court counts as Courthouse in every city.
 [effect_mausoleum_of_mausolos_2a]
 type    = "Make_Content"
@@ -3642,7 +3619,6 @@ reqs    =
       "Building", "Supreme Court", "Player"
       "Building", "Mausoleum of Mausolos", "Player"
     }
-
 [effect_mausoleum_of_mausolos_culture]
 type    = "History"
 value	= 2

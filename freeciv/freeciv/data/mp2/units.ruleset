@@ -64,7 +64,10 @@ flags =
     _("AntiAir"), _("Anti-Air bonus of this unit is less effective against Stealth, which has a 25% bonus against this unit.")
 ;;;   _("NeverProtects"), _("Does not protect other units on its tile.")   ; UNCOMMENT THIS IF NOT USING SCL'S PATCH FOR THIS FLAG
 ;;;   _("NeverBlocked"), _("Bypasses unreachable units when attacking a tile.")   ; UNCOMMENT THIS IF NOT USING LEXXIE'S PATCH FOR THIS FLAG
-  }
+    _("MultiSlot"), _("Cities with proper requirements can produce more than one of these per turn.") ;uncomment if you don't have slot_control patch
+    _("CanHide"), _("In appropriate terrain, this unit can make a Hideout, which will conceal all land units on the tile.")
+    _("WillNever")
+    }
 
 ; Names for custom unit class flags. There can be up to 8 of these.
 ; name          = rule name; In some circumstances user may see this
@@ -501,7 +504,10 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;                 the "CanKillEscaping" unit type flag.
 ; "CanKillEscaping" = an attack from this unit ignores the "CanEscape" unit
 ;                 type flag.
-; "Provoking" =   a unit considering to auto attack this unit will choose to
+; "Provoking" =   Under autoattack_style=1 which this ruleset uses, only 
+;                 Fighter types will autoattack and will ONLY attack units
+;                 marked with the Provoking flag.  If overridden to autoattack_style=0,
+;                 a unit considering to auto attack this unit will choose to
 ;                 do so even if has better odds when defending against it
 ;                 then when attacking it. Applies when the autoattack server
 ;                 setting is enabled.
@@ -510,7 +516,9 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;                 is enabled and the unit class is unreachable
 ; "NeverBlocked" = isn't blocked by unreachable units on targeted tile,
 ;                  even if the unreachableprotects server setting
-;                 is enabled and the unit class is unreachable
+;                  is enabled and the unit class is unreachable
+; "MultiSlot"    = if server setting slot_control is ON, only unit types with this
+;                  flag can use extra city_build_slots
 ;
 ; Following actions require extra fields:
 ;  "Attack"
@@ -518,6 +526,7 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;  "Bombard"
 ;   attack       = base attack strength
 ;   bombard_rate = the number of shots fired at enemy units when attacking
+;       FOR NUKES: the amount to add to the default radius of 1 tile
 ;  "Join City"
 ;   pop_cost = the number of population added to the target city
 ;  "Paradrop Unit"
@@ -833,9 +842,6 @@ Engineers can do everything Workers can do, at twice the speed.\
  Unlike Workers, Engineers can Transform, such as converting\
  Desert to Plains. Converting Ocean to Swamp requires being on a ship\
  on a tile bordering 3 land tiles.\
-"), _("\
-TIP: If you build Leonardos Workshop, research Explosives before it goes\
- obsolete, so that you upgrade your Workers for free.\
 ")
 
 [unit_warriors]
@@ -1075,7 +1081,7 @@ targets       = "Balloon", "Helicopter"
 flags         = "Fanatic", "FootSoldier", "Capturer", "CantReachAir", "Unbribable", "Bombarder"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
-Fanatics are warriors extremely devoted to a higher cause. Their faith\
+Fanatics are warriors devoted to a higher cause. Their faith\
  is strong and they cannot be bribed.\
 "), _("\
 Fundamentalist nations can maintain Fanatics without having to pay\
@@ -1158,9 +1164,9 @@ targets       = "Balloon", "Helicopter"
 flags         = "IgTer", "FootSoldier", "Capturer", "CantReachAir"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
-Alpine Troops are highly mobile units as well as\
+Alpine Troops are highly mobile units and\
  excellent defenders.  Similar to an Explorer, they\
- treat every land tile as if it had a road on it.\
+ treat every land tile like a road were on it.\
 ")
 
 [unit_riflemen]
@@ -1705,7 +1711,7 @@ name          = _("Artillery")
 class         = "Land"
 tech_req      = "Machine Tools"
 obsolete_by   = "Howitzer"
-graphic       = "u.artillery"
+graphic       = "u.artillery_o"
 graphic_alt   = "-"
 sound_move    = "m_artillery"
 sound_move_alt = "m_generic"
@@ -1886,9 +1892,9 @@ roles         = ""
 helptext      = _("\
 Balloons gather intel on potential battle areas. They have great vision and\
  are unreachable by units prior to Riflemen and Ironclads. They can stay in\
- the air for one Turn Change before landing in a City, Fortress, Airbase, or\
- ship with cargo capacity of 4+. Balloons do not block units under them\
- from being attacked, and cannot fly over mountains.\
+ the air for one Turn Change before landing in a City, Fortress, Naval Base,\
+ Airbase, or ship with cargo capacity of 4+. Balloons do not block units under\
+ them from being attacked, and cannot fly over mountains.\
 "), _("
 NOTE: GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
@@ -2100,8 +2106,12 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
-Heavy Bombers are good for hitting strong and well-defended ground targets, or multiple weaker targets.\
- They cannot attack Air units. May carry one Bomb.\
+Heavy Bombers are large and sturdy Bombers with larger payload and numerous gunner defense stations.\
+ They are excellent for hitting strong well-defended ground targets.\
+ They cannot attack Air units. They can carry one Bomb. Like most Bombers, the Heavy Bomber is a Field Unit.\
+ Field Units cause the same unhappiness no matter if aggressively or peacefully deployed.\n\
+➤ Unhappy effect for Field units:\n\
+Republic:1   Democracy:2\
 "), _("
 NOTE: GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
@@ -2137,7 +2147,8 @@ cargo         = "Bomb"
 bonuses       =
    { "flag", "type", "value"
    }
-flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape", "CantReachAir", "NeverProtects"
+flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape",
+                "CantReachAir", "NeverProtects"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -2184,7 +2195,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "HasNoZOC", "Unbribable", "Expellable", "NeverProtects", "CanEscape"
+flags         = "HasNoZOC", "NoVeteran", "Unbribable", "Expellable", "NeverProtects", "CanEscape"
 roles         = ""
 helptext      = _("\
 The AWACS has great fuel capacity for long range flights, and advanced radar that can determine\
@@ -2322,7 +2333,8 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Bomb"
-flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape", "CantReachAir", "NeverProtects"
+flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape",
+                "CantReachAir", "NeverProtects"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -2338,8 +2350,8 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
 Jet Bombers are stratospheric long-range bombers with 3 turns of fuel: they can be airborne for two\
- turn-changes. Their range makes them useful even after Stealth Bombers are available. Stratospheric altitude\
- makes them unreachable to propeller-based Fighters and AAA. Jet Bombers can carpet-bomb,\
+ turn-changes. Their range makes them useful even after Stealth Bombers are available. Stratospheric\
+ altitude is unreachable to propeller-based Fighters and AAA. Jet Bombers can carpet-bomb,\
  pillaging tiles from the air. May carry three Bombs.\ 
 "), _("
 NOTE: GOTO disallows unit loss from lack of fuel. You\
@@ -2533,7 +2545,7 @@ Triremes are used for exploration, transport, and Commerce.\
  The entry on Caravan explains what Commerce units may do.\
 "), _("
 Triremes can enter Deep Ocean, but there is risk: they must end every second\
- turn on river, coastline, or a city--or else be lost at sea. They can travel\
+ turn on river, coastline, or a city—or else be lost at sea. They can travel\
  and attack on rivers, but cannot attack the shore.\
 "), _("
 Like most ancient sea units, when it initiates combat there will be 15 rounds\
@@ -2604,7 +2616,8 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea"
-flags         = "BadCityDefender", "Provoking", "CantReachAir", "HelpWonder", "Traderoute", "Only_Native_Attack"
+flags         = "BadCityDefender", "Provoking", "CantReachAir", "HelpWonder",
+                "Traderoute", "Only_Native_Attack"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
 The Galley is an all-purpose sea unit and upgrades the Trireme. It has decent\
@@ -2800,7 +2813,7 @@ bonuses       =
 flags         = "BadCityDefender", "Provoking", "CanEscape", "CantReachAir"
 roles         = "Hunter"
 helptext      = _("\
-The Frigate is versatile -- it's a superior offensive unit and also a decent transport ship. Frigates\
+The Frigate is versatile — it's a superior offensive unit and also a decent transport ship. Frigates\
  can travel and attack on rivers, or make shore attacks from sea. Frigate crews repair their ship an\
  extra +1hp per turn, regardless of whether it has moved.\
 "), _("
@@ -2843,7 +2856,8 @@ roles         = "Hunter"
 helptext      = _("\
 The Ironclad is an armored ship that is much more sturdy than the Frigate but\
  loses transport capability and the ability to navigate rivers. From the Ironclad\
- onward, warships are excellent at attacking shore targets.\ 
+ onward, warships are excellent at attacking shore targets, and can also pillage\
+ buoys.\ 
 "), _("
 Ironclads and all modern ships can Stack-Escape: a 50% chance to escape a killed stack if they have more remaining move points than the attacker.\
 ")
@@ -3085,7 +3099,8 @@ bonuses       =
    { "flag", "type", "value"
      "Submarine", "DefenseMultiplier", 1
    }
-flags         = "NeverProtects", "BadCityDefender", "Provoking", "Only_Native_Attack", "Submarine", "CanEscape", "CantReachAir"
+flags         = "NeverProtects", "BadCityDefender", "Provoking", "Only_Native_Attack",
+                "Submarine", "CanEscape", "CantReachAir"
 roles         = "Hunter"
 helptext      = _("\
 Submarines are strong attackers but weak defenders. They can carry 8 Missiles.\
@@ -3162,7 +3177,7 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon"
-flags         = "BadCityDefender", "HelpWonder", "Traderoute", "NonMil", "HasNoZOC"
+flags         = "BadCityDefender", "HelpWonder", "Traderoute", "NonMil", "HasNoZOC", "NoVeteran"
 roles         = ""
 helptext      = _("\
 Cargo ships are Commerce units: they can establish Trade Routes and help\
@@ -3256,13 +3271,13 @@ tech_req      = "Nuclear Fission"
 obsolete_by   = "None"
 graphic       = "u.atom_bomb"
 graphic_alt   = "u.nuclear"
-sound_move    = "m_atomb_bomb"
+sound_move    = "m_atom_bomb"
 sound_move_alt = "m_generic"
-sound_fight   = "f_atomb_bomb"
+sound_fight   = "f_atom_bomb"
 sound_fight_alt = "f_nuclear"
 build_cost    = 150
 pop_cost      = 0
-attack        = 99
+attack        = 100
 defense       = 0
 hitpoints     = 10
 firepower     = 1
@@ -3276,7 +3291,8 @@ uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine"
 disembarks    = "Air", "AirPillage"
-flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable", "NeverBlocked"
+flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
+                "NeverBlocked", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0
@@ -3306,7 +3322,7 @@ sound_fight   = "f_nuclear"
 sound_fight_alt = "f_generic"
 build_cost    = 160
 pop_cost      = 0
-attack        = 99
+attack        = 100
 defense       = 0
 hitpoints     = 10
 firepower     = 1
@@ -3374,7 +3390,7 @@ veteran_names =
 
 veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
-veteran_power_fact = 100, 105, 110, 115, 120, 125, 130
+veteran_power_fact = 100, 110, 115, 120, 125, 130, 135
 veteran_move_bonus = 0, 0, 0, 0, 0, 0, 0
 roles         = "DiplomatStartUnit"
 helptext      = _("\

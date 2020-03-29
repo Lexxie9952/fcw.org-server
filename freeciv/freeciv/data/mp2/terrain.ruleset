@@ -547,7 +547,7 @@ color.r              = 11
 color.g              = 138
 color.b              = 4
 helptext             = _("\
-Grasslands afford exceptional agricultural opportunities.\
+Grassland affords exceptional agricultural opportunities.\
 ")
 
 [terrain_hills]
@@ -1131,7 +1131,7 @@ Irrigating a suitable tile causes it to produce extra food each turn. Most\
 "), _("\
 Irrigating a tile with a mine or oil well will destroy it.\
 "), _("\
-City center tiles get their terrain's irrigation bonus automatically, \
+City center tiles get their terrain irrigation bonus automatically, \
 if there is no conflicting mine or oil well on the tile; however, \
 this does not make cities count as a water source for further \
 irrigation. Irrigation can be built on the city tile simply to allow \
@@ -1229,10 +1229,10 @@ Dam, Nuclear Plant, or Solar Plant -- will reduce pollution from \
 production, as will a Recycling Center or knowledge of \
 Environmentalism.\
 "), _("\
-The city's population starts adding to pollution with the discovery of \
+The city population starts adding to pollution with the discovery of \
 Industrialization, and Automobile, Mass Production, and Plastics make \
 this worse. Building a Mass Transit in a city eliminates the \
-population's contribution to pollution.\
+populational contribution to pollution.\
 "), _("\
 The contribution of these factors can be seen in the city dialog; once \
 it exceeds a threshold, the excess is the percent chance of pollution \
@@ -1370,7 +1370,7 @@ flags          = "NativeTile", "NoStackDeath"  ;, "Refuel"
 ;NOTE: effect_fortress_regen should give 25% of 20HP to helicopter, +1hp for being stationary
 ;thus a fortress should give +6hp -2hp for not being in refuel spot or +4hp/turn. Healing 67% 
 ;as fast as an airbase. MEANWHILE, removing the refuel flag allows us to make Forts native 
-;to AirProtect so that they can't prevent attacks on forts. This is debatable issue of 
+;to AirProtect so that they cannot prevent attacks on forts. This is debatable issue of 
 ;Fort with no Killstack but not Airprotected vs no fort, Killstack and Airprotect, but 
 ;many times fighters over forts have come up as a dynamic. 
 helptext       = _("\
@@ -1379,7 +1379,7 @@ Forts are rapidly built fortifications which give Land units +33% defense\
  of the entire stack dying. A fort is necessary to start building a fortress.\
 "), _("
 TIP: Forts make great outposts for keeping watch on your borders. Be careful--\
-an unmanned Fort can be claimed by a foreign unit. 
+an unmanned Fort can be claimed by a foreign unit.\ 
 ")
 
 [extra_fortress]
@@ -1439,7 +1439,7 @@ reqs           =
     }
 build_time     = 3
 removal_time   = 0
-native_to      = "Air", "Balloon", "Helicopter", "Missile", "AirProtect", "AirPillage"
+native_to      = "Air", "Balloon", "Helicopter", "Missile", "Bomb", "AirProtect", "AirPillage"
 flags          = "Refuel", "NoStackDeath"
 helptext       = _("\
 Airbases allow your air units to land and refuel outside cities. \
@@ -2121,19 +2121,12 @@ move_cost      = 3
 move_mode      = "Cardinal"
 trade_incr_const = 1
 compat_special = "River"
+integrates    = "Canal"
 flags          = "River", "UnrestrictedInfra"
 
 [road_canal]
 extra             = "Canal"
 move_cost         = 9
 move_mode         = "Cardinal"
-food_incr_const   = 0
-shield_incr_const = 0
-trade_incr_const  = 0
-food_incr         = 0
-shield_incr       = 0
-trade_incr        = 0
-food_bonus        = 0
-shield_bonus      = 0
-trade_bonus       = 0
+integrates        = "River"
 compat_special    = "None"

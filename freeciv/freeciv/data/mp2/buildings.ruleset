@@ -1835,9 +1835,11 @@ sabotage	= 0
 sound		= "w_statue_of_liberty"
 sound_alt	= "w_generic"
 helptext	= _("\
-Allows you to instantly change government, including governments\
- not yet researched by your civilization, and without\
- the transition period of Anarchy.\
+Allows you to instantly change government, including governments not\
+ yet researched by your civilization, and without the transition period\
+ of Anarchy. It also allows unprovoked declaration of war regardless of\
+ any Senate or United Nations. Democracies cannot fall into Anarchy from\
+ two turns of city disorder.\n\
  This Wonder does not become obsolete.\
 ")
 
