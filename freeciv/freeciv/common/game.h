@@ -200,6 +200,7 @@ struct civ_game {
       unsigned unitwaittime_style; /* 3 bits to control wait behaviours: "ACTIVITIES", "FORTIFY", "DELAYGOTO" */
       int upgrade_veteran_loss;
       bool vision_reveal_tiles;
+      bool zoc_purity;   /* igZoC units can't lift ZoC for non-igZoC units */
 
       bool debug[DEBUG_LAST];
       int timeoutint;     /* increase timeout every N turns... */
@@ -605,6 +606,8 @@ extern struct world wld;
 #define GAME_DEFAULT_FORTIFYWAITTIME 0
 
 #define GAME_DEFAULT_UNITWAITTIME_STYLE UWT_CLASSICAL
+
+#define GAME_DEFAULT_ZOC_PURITY      0
 
 #define GAME_DEFAULT_PHASE_MODE 0
 

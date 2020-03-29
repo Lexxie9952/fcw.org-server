@@ -359,8 +359,12 @@ int get_transporter_capacity(const struct unit *punit);
 struct player *unit_nationality(const struct unit *punit);
 void unit_tile_set(struct unit *punit, struct tile *ptile);
 
+struct unit *is_allied_unit_tile_allowing_movement(const struct tile *ptile,
+				 const struct player *pplayer);
 struct unit *is_allied_unit_tile(const struct tile *ptile,
 				 const struct player *pplayer);
+struct unit *is_allied_unit_tile_zoc_pure(const struct tile *ptile,
+         const struct player *pplayer);
 struct unit *is_enemy_unit_tile(const struct tile *ptile,
 				const struct player *pplayer);
 struct unit *is_non_allied_unit_tile(const struct tile *ptile,

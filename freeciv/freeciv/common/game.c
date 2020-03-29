@@ -442,6 +442,7 @@ static void game_defaults(bool keep_ruleset_value)
     game.server.timeoutintinc     = GAME_DEFAULT_TIMEOUTINTINC;
     game.server.turnblock         = GAME_DEFAULT_TURNBLOCK;
     game.server.unitwaittime      = GAME_DEFAULT_UNITWAITTIME;
+    game.server.zoc_purity        = GAME_DEFAULT_ZOC_PURITY;
     game.server.fortifywaittime   = GAME_DEFAULT_FORTIFYWAITTIME;
     game.server.plr_colors        = NULL;
   } else {

@@ -485,8 +485,8 @@ bool can_step_taken_wrt_to_zoc(const struct unit_type *punittype,
   if (unit_type_really_ignores_zoc(punittype)) {
     return TRUE;
   }
-  if (is_allied_unit_tile(dst_tile, unit_owner)) {
-    return TRUE;
+  if (is_allied_unit_tile_allowing_movement(dst_tile, unit_owner)) {
+    return true;
   }
   if (tile_city(src_tile) || tile_city(dst_tile)) {
     return TRUE;

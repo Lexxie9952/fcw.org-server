@@ -3005,6 +3005,15 @@ static struct setting settings[] = {
                  "after 'unitwaittime' expires (instead of cancelled).\n"),
               NULL, NULL, unitwaittime_name, GAME_DEFAULT_UNITWAITTIME_STYLE)
 
+  GEN_BOOL("zoc_purity", game.server.zoc_purity, SSET_RULES_FLEXIBLE, SSET_MILITARY,
+           SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
+           N_("Whether units who ignore ZoC lift ZOC for units who don't ignore ZoC."),
+           N_("If ON, igZOC units do not negate ZoC for other units. "
+              "This decreases exploits and increases importance " 
+              "of tactical positioning, notably in games with "
+              "RestrictINFRA OFF."),
+           NULL, NULL, GAME_DEFAULT_ZOC_PURITY)              
+
   /* This setting points to the "stored" value; changing it won't have
    * an effect until the next synchronization point (i.e., the start of
    * the next turn). */

@@ -1237,6 +1237,26 @@ void unit_tile_set(struct unit *punit, struct tile *ptile)
 }
 
 /**********************************************************************//**
+Pass-through function for is_allied_unit_tile(), which is supposed to be 
+used to see if it's an allied unit tile. But sometimes it was hard-coded
+to determine the legality of ZoC movement under the assumption ZoC rules
+were invariable and not changeable by effects or settings. This function
+now substitutes for using that function when determining ZoC legal moves.
+Logic goes here for handling the response based on server settings,
+ruleset effects, etc.
+**************************************************************************/
+struct unit *is_allied_unit_tile_allowing_movement(const struct tile *ptile,
+				 const struct player *pplayer)
+{
+  if (game.server.zoc_purity) {
+    return is_allied_unit_tile_zoc_pure(ptile, pplayer);
+  }
+  else {
+    return is_allied_unit_tile(ptile, pplayer); 
+  }
+}
+
+/**********************************************************************//**
 Returns true if the tile contains an allied unit and only allied units.
 (ie, if your nation A is allied with B, and B is allied with C, a tile
 containing units from B and C will return false)
@@ -1249,6 +1269,31 @@ struct unit *is_allied_unit_tile(const struct tile *ptile,
   unit_list_iterate(ptile->units, cunit) {
     if (pplayers_allied(pplayer, unit_owner(cunit)))
       punit = cunit;
+    else
+      return NULL;
+  }
+  unit_list_iterate_end;
+
+  return punit;
+}
+
+/**********************************************************************//**
+Returns true if the tile contains an allied unit that is NOT igZOC. 
+This is alternate version of above func for game.server.zoc_purity==true,
+(igzoc units don't lift zoc for non-igzoc units.)
+(if your nation A is allied with B, and B is allied with C, a tile
+containing units from B and C will return false)
+**************************************************************************/
+struct unit *is_allied_unit_tile_zoc_pure(const struct tile *ptile,
+         const struct player *pplayer)
+{
+  struct unit *punit = NULL;
+
+  unit_list_iterate(ptile->units, cunit) {
+    if (pplayers_allied(pplayer, unit_owner(cunit))) {
+      if (!unit_type_really_ignores_zoc(unit_type_get(cunit)))
+        punit = cunit;
+    }
     else
       return NULL;
   }

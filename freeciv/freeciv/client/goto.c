@@ -1759,7 +1759,7 @@ void send_goto_route(void)
     /* TODO: Should this be a client option? */
     if (goto_last_order == ORDER_LAST
         && ((is_allied_city_tile(tgt_tile, client_player())
-             || is_allied_unit_tile(tgt_tile, client_player()))
+             || is_allied_unit_tile_allowing_movement(tgt_tile, client_player()))
             && (can_utype_do_act_if_tgt_diplrel(unit_type_get(punit),
                                                 ACTION_ANY,
                                                 DRO_FOREIGN,

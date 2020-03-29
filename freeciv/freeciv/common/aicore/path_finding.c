@@ -363,6 +363,15 @@ static inline bool pf_normal_node_init(struct pf_normal_map *pfnm,
         && !params->get_zoc(params->owner, ptile, params->map)) {
       node->zoc_number = (0 < unit_list_size(ptile->units)
                           ? ZOC_ALLIED : ZOC_NO);
+      ////
+      if (game.server.zoc_purity) {
+        if (unit_list_size(ptile->units)>0) {
+          node->zoc_number = (is_allied_unit_tile_zoc_pure(ptile,params->owner)
+                ? ZOC_ALLIED : ZOC_NO);
+        }
+      }                 
+
+
 #ifdef ZERO_VARIABLES_FOR_SEARCHING
     } else {
       /* Nodes are allocated by fc_calloc(), so should be already set to
@@ -1110,6 +1119,14 @@ static inline bool pf_danger_node_init(struct pf_danger_map *pfdm,
         && !params->get_zoc(params->owner, ptile, params->map)) {
       node->zoc_number = (0 < unit_list_size(ptile->units)
                           ? ZOC_ALLIED : ZOC_NO);
+      ////
+      if (game.server.zoc_purity) {
+        if (unit_list_size(ptile->units)>0) {
+          node->zoc_number = (is_allied_unit_tile_zoc_pure(ptile,params->owner)
+                ? ZOC_ALLIED : ZOC_NO);
+        }
+      }       
+
 #ifdef ZERO_VARIABLES_FOR_SEARCHING
     } else {
       /* Nodes are allocated by fc_calloc(), so should be already set to
@@ -1486,6 +1503,9 @@ static bool pf_danger_map_iterate(struct pf_map *pfm)
   int tindex = tile_index(tile);
   struct pf_danger_node *node = pfdm->lattice + tindex;
   enum pf_move_scope scope = node->move_scope;
+  /////
+  const struct player *pplayer = params->owner;
+
 
   /* The previous position is defined by 'tile' (tile pointer), 'node'
    * (the data of the tile for the pf_map), and index (the index of the
@@ -1553,7 +1573,19 @@ static bool pf_danger_map_iterate(struct pf_map *pfm)
         /* Is the move ZOC-ok? */
         if (node->zoc_number != ZOC_MINE && node1->zoc_number == ZOC_NO) {
           continue;
-        }
+        } 
+        // further check ZoC if ZoC purity is on, because node1->zoc_number doesn't
+        // have ZOC_NO if occupied only by friendly igzoc units
+        ///// 
+        // sadly this didn't work
+        /*
+        if (game.server.zoc_purity && node->zoc_number != ZOC_MINE) {
+          if (unit_list_size(tile1->units)>0) {
+            if (!is_allied_unit_tile_allowing_movement(tile1, pplayer))
+              continue;
+          }
+        } */
+        
 
         /* Evaluate the cost of the move. */
         if (PF_ACTION_NONE != node1->action) {
@@ -2154,6 +2186,14 @@ static inline bool pf_fuel_node_init(struct pf_fuel_map *pffm,
         && !params->get_zoc(params->owner, ptile, params->map)) {
       node->zoc_number = (0 < unit_list_size(ptile->units)
                           ? ZOC_ALLIED : ZOC_NO);
+      ////
+      if (game.server.zoc_purity) {
+        if (unit_list_size(ptile->units)>0) {
+          node->zoc_number = (is_allied_unit_tile_zoc_pure(ptile,params->owner)
+                ? ZOC_ALLIED : ZOC_NO);
+        }
+      }       
+
 #ifdef ZERO_VARIABLES_FOR_SEARCHING
     } else {
       /* Nodes are allocated by fc_calloc(), so should be already set to
