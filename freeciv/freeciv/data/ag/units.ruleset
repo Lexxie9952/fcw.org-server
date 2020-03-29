@@ -1306,7 +1306,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Helicopter"
-flags         = "Paratroopers", "FootSoldier", "Capturer", "CantReachAir",
+flags         = "Paratroopers", "FootSoldier", "Capturer", "CantReachAir", "Provoking"
                 "Shield2Gold", "MultiSlot", "Settlers", "CanHide", "WillNever"
 roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
@@ -1315,6 +1315,9 @@ Paratroopers are experts at airborne attacks.\
  move points can paradrop directly to any tile in range, and be\
  immediately ready to act there. Beware dropping into unseen territory,\
  as Paratroopers landing on a tile occupied by enemy units will be lost.\
+ Also note: Paradropping is assumed to be done from aircraft. Therefore,\
+ Fighters on Vigil on adjacent tiles can auto-attack the tile you land on,
+ if adjacent.\
 "), _("\
 \nThe discovery of Labor Union changes upkeep from shields to gold.\
 ")
