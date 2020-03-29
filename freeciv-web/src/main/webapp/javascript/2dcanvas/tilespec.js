@@ -1498,34 +1498,47 @@ function get_tile_river_like_sprite(ptile, extra, prefix)
   
   var integrate_extras = [];
 
-  // TO DO: if these are predefined it might be less processing time
+  // TO DO: if these are predefined it might be less processing time. Rulesets could have any
+  // combination of Canal, Waterway, or Navalbase, and this just assumes what we've done with
+  // MP2 and AG. 
   // Handle "integrates" feature of roads. Has to be hard-coded until server gives this info.
   if (typeof EXTRA_NAVALBASE !== 'undefined') {
-    
-    // hack fix to get client working, should do something else later:
+    // Ruleset with Naval base but no Waterway (old MP2):
     if (typeof EXTRA_WATERWAY === 'undefined') {
-      var EXTRA_WATERWAY = EXTRA_RIVER;
+      // process in order of frequency
+      if (extra == EXTRA_RIVER) {
+        extra2 = EXTRA_NAVALBASE;
+        integrate_extras = [EXTRA_NAVALBASE, EXTRA_CANAL];
+      }
+      else if (extra == EXTRA_CANAL) {
+        extra2 = EXTRA_NAVALBASE;
+        integrate_extras = [EXTRA_NAVALBASE, EXTRA_RIVER];
+      }
+      else if (extra == EXTRA_NAVALBASE) {
+        extra2 = EXTRA_RIVER;
+        integrate_extras = [EXTRA_RIVER, EXTRA_CANAL];
+      } 
     }
-      
-    // process in order of frequency
-    if (extra == EXTRA_RIVER) {
-      extra2 = EXTRA_NAVALBASE;
-      integrate_extras = [EXTRA_WATERWAY, EXTRA_NAVALBASE, EXTRA_CANAL];
-    }
-    else if (extra == EXTRA_CANAL) {
-      extra2 = EXTRA_NAVALBASE;
-      integrate_extras = [EXTRA_WATERWAY, EXTRA_NAVALBASE, EXTRA_RIVER];
-    }
-    else if (extra == EXTRA_WATERWAY) {
-      extra2 = EXTRA_NAVALBASE;
-      integrate_extras = [EXTRA_RIVER, EXTRA_CANAL, EXTRA_NAVALBASE];
-    }
-    else if (extra == EXTRA_NAVALBASE) {
-      extra2 = EXTRA_RIVER;
-      integrate_extras = [EXTRA_RIVER, EXTRA_CANAL, EXTRA_WATERWAY];
+    else // Ruleset with Naval base, Canal, Waterway
+    {  // process in order of frequency
+      if (extra == EXTRA_RIVER) {
+        extra2 = EXTRA_NAVALBASE;
+        integrate_extras = [EXTRA_WATERWAY, EXTRA_NAVALBASE, EXTRA_CANAL];
+      }
+      else if (extra == EXTRA_CANAL) {
+        extra2 = EXTRA_NAVALBASE;
+        integrate_extras = [EXTRA_WATERWAY, EXTRA_NAVALBASE, EXTRA_RIVER];
+      }
+      else if (extra == EXTRA_WATERWAY) {
+        extra2 = EXTRA_NAVALBASE;
+        integrate_extras = [EXTRA_RIVER, EXTRA_CANAL, EXTRA_NAVALBASE];
+      }
+      else if (extra == EXTRA_NAVALBASE) {
+        extra2 = EXTRA_RIVER;
+        integrate_extras = [EXTRA_RIVER, EXTRA_CANAL, EXTRA_WATERWAY];
+      }
     }
   }
-
   if (tile_has_extra(ptile, extra)) {
     var river_str = "";
     for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
