@@ -17,6 +17,13 @@
 
 ***********************************************************************/
 
+
+// Unit offset arrays for graphics placement of units and their various icon components
+var UO_dx = [], UO_dy = []; // Unit graphic delta.
+var UO_sx = [];             // Shield graphic
+var UO_vx = [], UO_vy = []; // Vet badge graphic
+var UO_mx = [], UO_my = []; // Multi-unit graphic (stacked "+" icon)
+
 var fill_national_border = false; // option to draw solid territorial area
 var num_cardinal_tileset_dirs = 4;
 var cardinal_tileset_dirs = [DIR8_NORTH, DIR8_EAST, DIR8_SOUTH, DIR8_WEST];
@@ -341,10 +348,11 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
     case LAYER_UNIT:
       var do_draw_unit = (punit != null && (draw_units || ptile == null || (draw_focus_unit
 				     && unit_is_in_focus(punit))));
-
+      var is_stacked = false;    // stacked units get a "+" icon drawn over them
+      
       if (do_draw_unit && active_city == null) {
-        var stacked = (ptile['units'] != null && ptile['units'].length > 1);
-        var backdrop = false; /* !pcity;*/
+        is_stacked = (ptile['units'] != null && ptile['units'].length > 1);
+        //var backdrop = false; /* !pcity; // this was unused var, eliminated for performance */
 
         if (unit_is_in_focus(punit)) {
           sprite_array.push(get_select_sprite());
@@ -352,12 +360,13 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
 
         /* TODO: Special case for drawing the selection rectangle.  The blinking
         * unit is handled separately, inside get_drawable_unit(). */
-        sprite_array = sprite_array.concat(fill_unit_sprite_array(punit, stacked, backdrop));
-     }
-        // Front walls of Forts and Fortresses are drawn one tile at a time immediately after a unit is drawn on that tile,
-        // this will obviously put the front wall over the unit on that tile, but prevent front walls on other tiles from 
+        sprite_array = sprite_array.concat(fill_unit_sprite_array(punit, is_stacked));
+      }
+        // Front walls of Forts and Fortresses are drawn immediately over a unit on a tile in the same layer.
+        // This puts the front wall over the unit on that tile, but prevents front walls on other tiles from 
         // improperly occluding units on other tiles.
-        if (ptile != null) sprite_array = sprite_array.concat(fill_layer3_sprite_array(ptile, pcity)); 
+        if (!pcity && ptile != null) 
+          sprite_array = sprite_array.concat(fill_layer3_sprite_array(ptile, is_stacked, punit)); 
 
     /* show explosion animation on current tile.*/
      if (ptile != null && explosion_anim_map[ptile['index']] != null) {
@@ -655,166 +664,86 @@ function check_sprite_type(sprite_type)
 
 
 /**************************************************************************
- ...
+ ...Highly modified, look at commits prior to 25.March.2020 if debug/
+  comparison needed.
 **************************************************************************/
-function fill_unit_sprite_array(punit, stacked, backdrop)
+function fill_unit_sprite_array(punit, stacked)
 {
-  var ptype = unit_type(punit);
+  //var ptype = unit_type(punit);
+  var id = punit['type'];
 
   var unit_offset = get_unit_anim_offset(punit);
+  unit_offset = get_unit_anim_offset(punit);
+  unit_offset = get_unit_anim_offset(punit);
+  unit_offset = get_unit_anim_offset(punit);
 
-  var dx = unit_offset_x + unit_offset_adj_x;  // offsets for where to draw units on the tile.
-  var dy = unit_offset_y + unit_offset_adj_y;  // **WARNING: positive moves up, negative moves down
-  var sx = 0; // custom shield placement for some problematic units
+  /* NOTE: Yes we call it twice. Explanation: formerly this was called twice anyway,
+  once above, then one more time inside get_unit_nation_flag_sprite(). The second call
+  inside get_unit_nation_flag_sprite effectively halved our animation frames for a GOTO,
+  which was good because browser animations can't achieve the FPS of native client.
+  HOWEVER, the result was jiggly because the shield was always one frame ahead of the
+  unit. Now we call it twice at the start and both the unit and send the offset to the 
+  get_unit_nation_flag_sprite function. Result: the shield are now always on the same 
+  animation frame, skipping every other frame together (instead of skipping every other
+  but the shields always +1 frame ahead of the unit.) TODO: performance could be 
+  increased by finding a way to call the above function only once and having it increment
+  TWO frames in one call. Then we'd avoid doing a double call here.
+  */
 
-  // This section allows custom offset adjustments for any particular unit. This helps with the
-  // fact a 64x48 sprite can occupy parts of an area larger than the 96x48 tile area, and the fact
-  // that sprites have distinct shapes and sizes. 
-  // TO DO: We should load a list of offsets associated to the actual graphic, read from a file.
-
-  switch(ptype['name']) {
-    case "AEGIS Cruiser":
-        dx -= 3; dy -= 6;
-        break;
-    case "Transport":    
-    case "Alpine Troops":                     
-        dx -= 3; dy -= 1;
-        break;
-    case "Archer":                     
-        dx += 1; 
-        break;
-    case "AWACS":                     
-        dx += 3; dy += 5; 
-        break;    
-    case "Battleship":
-        dx -= 5; dy -= 4;
-        break;
-    case "Chariot":
-        dx -= 2; dy -= 3;
-        sx = 8; 
-        break; 
-    case "Caravel":
-    case "Carrier":
-    case "Destroyer":
-    case "Missile Destroyer":
-        dx -= 3; dy -= 3; 
-        break;
-    case "Dive Bomber":
-        dx -= 11; dy -= 1;
-        sx = 8;
-        break;
-    case "Submarine":
-    case "Engineers":                     
-        dx -= 3; dy -= 4;
-        break;
-    case "Escort Fighter":
-        dx -= 8; dy -= 4;
-        sx = 8;
-        break;
-    case "Explorer":                     
-        dx -= 0; dy += 2; 
-        break;   
-    case "Fighter":
-        dx -= 11; dy -= 6;
-        sx = 8;
-        break;
-    case "Ground Strike Fighter":
-        dx += 2; dy -= 1;
-        sx = 8;
-        break;    
-    case "Bomber":
-    case "Heavy Bomber":
-        dx += 2; dy += 2;
-        sx = 8;
-        break;
-    case "Helicopter":
-        sx = 8;
-        break;
-    case "Horsemen":
-        dx -= 5; dy += 0;
-        break;
-    case "Howitzer":
-        dx -= 9; dy += 1;
-        break;
-    case "Ironclad":
-        dx -= 4; dy -= 5;
-        break;
-    case "Jet Bomber":
-        dx -= 24; dy += 7;
-        sx = 8;
-        break;
-    case "Jet Fighter":
-        dx += 2; dy += 3;
-        break;
-    case "Marines":
-        dx += 2; dy += 2;
-        break;
-    case "Mech. Inf.":
-        dx += 1; dy += 1;
-        break;
-    case "Medium Bomber":
-        dx += 5; dy += 2;
-        sx = 8;
-        break;  
-    case "Musketeers":
-        dx -= 1; dy -= 1;
-        break;
-    case "Phalanx":                     
-        dx += 1; dy -= 2;
-        break;
-    case "Pikemen":
-        dx += 1; dy += 3;
-        break;
-    case "Riflemen":
-        dx -= 4; dy -= 2;
-        break; 
-    case "Settlers":
-        dx -= 3; dy -= 2;
-        break;
-    case "Stealth Bomber":
-        dx -= 19; dy -= 5;  
-        break;
-    case "Stealth Fighter":
-        dx -= 2; dy -= 1;
-        break;
-    case "Strategic Bomber":
-        dx -= 3; dy += 4;
-        sx = 8;
-        break;
-    default:
-      // do nothing, dx and dy already set higher up.
-  }
-  /*
-  var result = [ get_unit_nation_flag_sprite(punit),
-           {"key" : tileset_unit_type_graphic_tag(unit_type(punit)),
-            "offset_x": unit_offset['x'] + dx + sx,
-            "offset_y": unit_offset['y'] - dy} ];*/
   // Shield
-  var result = [get_unit_nation_flag_sprite(punit)];
+  var result = [get_unit_nation_flag_sprite(punit, unit_offset)];
   if (result[0]['offset_x']) {
-    result[0]['offset_x'] += sx;  // adjust shield x placement
+    result[0]['offset_x'] += UO_sx[id];  // adjust shield x placement
   }
   // Unit
   result.push(
     {"key" : tileset_unit_type_graphic_tag(unit_type(punit)),
-      "offset_x": unit_offset['x'] + dx,
-      "offset_y": unit_offset['y'] - dy} );        
+      "offset_x": unit_offset['x'] + UO_dx[id],
+      "offset_y": unit_offset['y'] - UO_dy[id]} );        
   var activities = get_unit_activity_sprite(punit);
   if (activities != null) {
     activities['offset_x'] = activities['offset_x'] + unit_offset['x'];
     activities['offset_y'] = activities['offset_y'] + unit_offset['y'];
     result.push(activities);
   }
-
-  if (show_unit_movepct && punit['movesleft']!=null) result.push(get_mp_sprite(punit));
-  result.push(get_unit_hp_sprite(punit));
-  if (stacked) result.push(get_unit_stack_sprite());
-  if (punit['veteran'] > 0) result.push(get_unit_veteran_sprite(punit));
-
-  //console.log(result);
+  if (unit_offset['x'] == 0 && unit_offset['y'] == 0) { // if unit is moving, don't draw these
+    // Move point bar
+    if (show_unit_movepct && punit['movesleft']!=null) result.push(get_mp_sprite(punit));
+    // Hit point bar
+    result.push(get_unit_hp_sprite(punit));
+    // Stacked "+" icon
+    if (stacked) {
+      var stacked = get_unit_stack_sprite();
+      stacked['offset_x'] += UO_my[id];
+      stacked['offset_y'] -= UO_my[id];
+      result.push(stacked);
+    }
+  }
+  // Veteran Badge
+  if (punit['veteran'] > 0) {
+    var veteran = get_unit_veteran_sprite(punit);
+    veteran['offset_x'] +=  UO_vx[id] + unit_offset['x'];
+    veteran['offset_y'] -= (UO_vy[id] - unit_offset['y']); // bundle in unit_offset so badge moves with the unit
+    result.push(veteran);
+  }
   return result;
 }
 
+/**************************************************************************
+ ...Fixing the fort drawing bug meant that when front walls of a base are
+ drawn they can obscure the stacked icon, which gets redrawn in this case.
+**************************************************************************/
+function fill_stacked_in_base_sprite_array(punit)
+{
+  var id = punit['type'];
+  const mx = UO_my[id];   const my = UO_my[id];
+
+    var stacked = get_unit_stack_sprite();
+    stacked['offset_x'] += mx;
+    stacked['offset_y'] -= my;
+
+  return stacked;
+}
 
 /**************************************************************************
   Return the tileset name of the direction.  This is similar to
@@ -1032,13 +961,17 @@ function get_grid_line_sprites(ptile)
 /**********************************************************************
   ...
 ***********************************************************************/
-function get_unit_nation_flag_sprite(punit)
+function get_unit_nation_flag_sprite(punit, unit_offset)
 {
   var owner_id = punit['owner'];
   var owner = players[owner_id];
   var nation_id = owner['nation'];
   var nation = nations[nation_id];
-  var unit_offset = get_unit_anim_offset(punit);
+  //var unit_offset = get_unit_anim_offset(punit);
+  // line above removed because, now we pass this value since the 
+  // function calling this already got this info; this also fixed
+  // jiggly movement since making the two get_unit_anim_offset calls
+  // returned different values for the same frame!
 
   return {"key" : "f.shield." + nation['graphic_str'],
           "offset_x" : unit_flag_offset_x + unit_offset['x'],
@@ -1285,16 +1218,22 @@ function get_unit_veteran_sprite(punit)
 ***********************************************************************/
 function get_unit_activity_sprite(punit)
 {
+  
+  var activity = punit['activity'];
+  var act_tgt  = punit['activity_tgt'];
+
   // Special case: idle/sentry units on transport will show themselves
   // as "cargo" even though server has no ACTIVITY_CODE for it:
   if (punit['transported']) {
-    return {"key" : "unit.cargo",
-      "offset_x" : unit_activity_offset_x,
-      "offset_y" : - unit_activity_offset_y};
-  } 
-
-  var activity = punit['activity'];
-  var act_tgt  = punit['activity_tgt'];
+    if (activity != ACTIVITY_VIGIL)
+      return {"key" : "unit.cargo",
+        "offset_x" : unit_activity_offset_x,
+        "offset_y" : - unit_activity_offset_y};
+    // it's important to see whether aircraft on a carrier are in vigil/intercept mode
+    else return {"key" : "unit.vigil",
+                  "offset_x" : unit_activity_offset_x,
+                  "offset_y" : - unit_activity_offset_y};
+  }
 
   switch (activity) {
     case ACTIVITY_GEN_ROAD:
@@ -2007,37 +1946,42 @@ function fill_layer2_sprite_array(ptile, pcity)
 }
 
 /****************************************************************************
-  ...
+  Foreground layer of walled bases
+...st_unit is unit shown on top of stack (if any)
 ****************************************************************************/
-function fill_layer3_sprite_array(ptile, pcity) ///// this should be drawn simultaneous and immediately AFTER the unit is drawn, tile after tile
-                                                   // in order to avoid buggy overdraw. when forts and units are side by side on tiles.
+function fill_layer3_sprite_array(ptile, stacked, st_unit) 
 {
   var result_sprites = [];
-
-  /* We don't draw the bases if there's a city */
-  if (pcity == null) {
-    if (typeof EXTRA_NAVALBASE !== 'undefined')  { 
-      if (tile_has_extra(ptile, EXTRA_NAVALBASE)) {
-        result_sprites.push({"key" : "base.navalbase_fg",
-                              "offset_y" : -normal_tile_height / 2});
-        return result_sprites;
-      }
-    }
-    if (tile_has_extra(ptile, EXTRA_FORTRESS)) {
-      result_sprites.push({"key" : "base.fortress_fg",
-                           "offset_y" : -normal_tile_height / 2});
-    }
-    // We can only draw the Fort if there's not a Fortress (which hides it)
-    // but first we also check if it's defined because some rulesets don't have it:
-    else if (typeof EXTRA_FORT !== 'undefined')  { 
-      if (tile_has_extra(ptile, EXTRA_FORT)) {   
-        result_sprites.push({"key" : "base.outpost_fg",
-                           "offset_y" : -normal_tile_height / 2});
-      }
-    }  
+  
+  if (tile_has_extra(ptile, EXTRA_FORTRESS)) {
+    result_sprites.push({"key" : "base.fortress_fg",
+                          "offset_y" : -normal_tile_height / 2});
+    if (stacked)
+      result_sprites.push(fill_stacked_in_base_sprite_array(st_unit));
+    return result_sprites;                  
   }
+  // navalbase on top of fort, have to check for it first then return
+  if (typeof EXTRA_NAVALBASE !== 'undefined')  { 
+    if (tile_has_extra(ptile, EXTRA_NAVALBASE)) {
+      result_sprites.push({"key" : "base.navalbase_fg",
+                            "offset_y" : -normal_tile_height / 2});
+      if (stacked)
+        result_sprites.push(fill_stacked_in_base_sprite_array(st_unit));
+      return result_sprites;
+    }
+  }
+  // We can only draw the Fort if there's no Fortress or Naval Base
+  if (typeof EXTRA_FORT !== 'undefined')  { 
+    if (tile_has_extra(ptile, EXTRA_FORT)) {   
+      result_sprites.push({"key" : "base.outpost_fg",
+                          "offset_y" : -normal_tile_height / 2});
+      if (stacked)
+        result_sprites.push(fill_stacked_in_base_sprite_array(st_unit));
+      return result_sprites;  
+    }
+  }  
 
-  return result_sprites;
+  return result_sprites; // returns empty array
 }
 
 /****************************************************************************
@@ -2123,3 +2067,268 @@ function color_rbg_to_list(pcolor)
   return color_rgb;
 }
 
+
+/**************************************************************************
+ One step closer to all unit graphics having all their offsets defined in
+ a file. This currently hard-codes it but the function could be easily 
+ changed to load from a file once there is some standard for that.
+**************************************************************************/
+function create_unit_offset_arrays()
+{
+  var num_utypes = Object.keys(unit_types).length;
+  for (i=0; i < num_utypes; i++) {
+    var ptype = unit_types[i];
+
+    // **WARNING for all y values: positive moves up, negative moves down
+    var dx = unit_offset_adj_x;  // this is a base value to allow adjusting all unit offsets
+    var dy = unit_offset_adj_y; 
+    var sx = 0;               // custom shield placement
+    var vx = 0,  vy = 0;      // custom vet badge placement
+    var mx = -10, my = -19;   // a "starting base value" for position of multi-unit 
+                              // (stacked "+") sprite. Some units will change this.
+
+    // This section allows custom offset adjustments for any particular unit. This helps with the
+    // fact a 64x48 sprite can occupy parts of an area larger than the 96x48 tile area, and the fact
+    // that sprites have distinct shapes and sizes. 
+
+    switch(ptype['name']) {
+      case "AEGIS Cruiser":
+          dx -= 3;  dy -= 6;
+          vx -= 11; vy += 8;
+          mx -= 6;  my += 13;
+          break;
+      case "Alpine Troops":                     
+          dx -= 3; dy -= 1;
+          vx -= 4; vy -= 4;
+          break;
+      case "Archer":                     
+          dx += 1;
+          vx -= 8; vy -= 8;
+          break;
+      case "Armor":
+          vx += 6; vy += 14;
+          break;
+      case "Armor II":
+          vx += 11; vy += 4;
+          break;
+      case "Artillery":
+          dx -= 12;               
+          vx += 8; vy -= 8;
+          break;
+      case "AWACS":                     
+          dx += 3; dy += 5;
+          mx -= 7; my += 6; 
+          break;    
+      case "Battleship":
+          dx -= 5; dy -= 4;
+          vx += 4; vy -= 8;
+          mx -= 7; my += 6;
+          break;
+      case "Cannon":
+          vx += 1; vy -= 4;
+          break;
+      case "Caravel":
+          dx -= 3; dy -= 3;
+          vx += 3; vy -= 3;
+          mx -= 2; my -= 1;
+          break;
+      case "Carrier":
+          dx -= 3; dy -= 3; 
+          vx -= 12; vy +=12;
+          mx -= 10; my +=7;
+          break;
+      case "Cargo Ship":
+          mx -= 2; my += 9; 
+          break;
+      case "Catapult":
+          vx -= 15; vy += 8;
+          break;
+      case "Cavalry":
+          vx -= 4; vy -= 10;
+          break;
+      case "Chariot":
+          sx = 8; 
+          dx -= 2; dy -= 3;
+          vx -= 11; vy += 4;
+          mx -= 8;  my += 2;
+          break; 
+      case "Cruiser":
+          vx -= 13; vy += 15;
+          mx -= 3; my += 4;
+          break;
+      case "Crusaders":
+          vx -= 3; vy -= 10;
+          break;    
+      case "Destroyer":
+          dx -= 3; dy -= 3; 
+          vx -= 13; vy += 12;
+          mx -= 2; my += 2;
+          break;
+      case "Dive Bomber":
+          sx = 8;
+          dx -= 11; dy -= 1;
+          vx -= 3; vy -= 4;
+          mx += 2; my -= 2;
+          break;
+      case "Dragoons":
+          vx -= 4; vy -= 9;
+          break;
+      case "Engineers":                     
+          dx -= 3; dy -= 4;
+          break;
+      case "Elephants":                     
+          vx -= 1; vy -= 16;
+          break;
+      case "Escort Fighter":
+          sx = 8;
+          dx -= 8; dy -= 4;
+          vx += 2; vy += 2;
+          mx -= 2; my -= 2;
+          break;
+      case "Explorer":                     
+          dx -= 0; dy += 2; 
+          break;   
+      case "Fighter":
+          sx = 8;
+          dx -= 11; dy -= 6;
+          vx -= 14; vy += 10;
+          break;
+      case "Frigate":
+          vx += 3;  vy += 2;
+          break;
+      case "Galley":
+          vx -= 12; vy += 14;
+          mx -= 3; my += 0;
+          break;
+      case "Ground Strike Fighter":
+          sx = 8;
+          dx += 2; dy -= 1;
+          vx -= 4; vy += 15;
+          mx -= 6; my += 9;
+          break;    
+      case "Heavy Bomber":
+            case "Bomber":
+          sx = 8;
+          dx += 2; dy += 2;
+          vx -= 13; vy += 12;
+          break;
+      case "Helicopter":
+          sx = 8;
+          vx += 5; vy -= 5;
+          mx -= 1; my -= 1;
+          break;
+      case "Horsemen":
+          dx -= 5; dy += 0;
+          vy -= 9;
+          break;
+      case "Howitzer":
+          dx -= 9;  dy += 1;
+          vx -= 45; vy -= 10;
+          mx -= 8;  my += 5;
+          break;
+      case "Ironclad":
+          dx -= 4; dy -= 5;
+          vx += 5; vy += 2
+          mx -= 3; my += 1;
+          break;
+      case "Jet Bomber":
+          sx = 8;
+          dx -= 24; dy += 7;
+          vx += 11; vy += 1;
+          mx += 3;  my -= 3;
+          break;
+      case "Jet Fighter":
+          dx += 2; dy += 3;
+          vx += 9; vy += 16;
+          break;
+      case "Knights":
+          dx += 3; dy += 1;
+      case "Legion":
+          vx -= 5; vy -= 5;
+          mx += 1; my += 1;
+          break;
+      case "Marines":
+          dx += 2; dy += 2;
+          vx -= 11; vy -= 13;
+          break;
+      case "Mechanized Infantry":
+      case "Mech. Inf.":
+          vx -= 25; vy += 12;
+          break;
+      case "Medium Bomber":
+          sx = 8;
+          dx += 5; dy += 2;
+          vx += 7; vy += 18;
+          break;  
+      case "Missile Destroyer":
+          dx -= 3; dy -= 3; 
+          vx -= 12; vy += 11;
+          break;
+      case "Musketeers":
+          dx -= 1; dy -= 1;
+          vx -= 4; vy += 5;
+          break;
+      case "Phalanx":                     
+          dx += 1; dy -= 2;
+          vx += 1; vy -= 7;
+          break;
+      case "Paratroopers":
+          vy -= 7;
+          break;
+      case "Pikemen":
+          dx += 1; dy += 3;
+          vx -= 1; vy -= 1;
+          break;
+      case "Riflemen":
+          dx -= 4; dy -= 2;
+          vx -= 9; vy -= 4;
+          break; 
+      case "Ram Ship":
+          vx -= 1; vy -= 1;
+          break;
+      case "Settlers":
+          dx -= 3; dy -= 2;
+          break;
+      case "Stealth Bomber":
+          dx -= 19; dy -= 5;  
+          vx -= 53; vy += 1;
+          mx -= 2;  my -= 1;
+          break;
+      case "Stealth Fighter":
+          dx -= 2; dy -= 1;
+          vx += 4; vy -= 14;
+          break;
+      case "Strategic Bomber":
+          sx = 8;
+          dx -= 3; dy += 4;
+          vx -= 13; vy += 15;
+          mx -= 2;  my -= 1;
+          break;
+      case "Submarine":
+          dx -= 3; dy -= 4;
+          vx -= 11; vy += 8;
+          mx -= 4; my += 6;
+          break;
+      case "Transport":
+          dx -= 3; dy -= 1;
+          vx -= 25; vy += 11;
+          mx -= 5; my += 3;
+          break;
+      case "Trireme":
+          vx += 2; vy += 1;
+          break;
+      case "War Galley":
+          vx -= 4; vy += 3;
+          break;
+      default:
+        // do nothing, dx and dy already set higher up.
+    }
+
+    // Put above information into the UO unit offset arrays for units and their icon components:
+    UO_dx[i] = dx + unit_offset_x; 
+    UO_dy[i] = dy + unit_offset_y;
+    UO_sx[i] = sx;
+    UO_vx[i] = vx; UO_vy[i] = vy;
+    UO_mx[i] = mx; UO_my[i] = my;
+  }
+}

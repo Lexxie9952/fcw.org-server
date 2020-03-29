@@ -376,6 +376,7 @@ function get_unit_anim_offset(punit)
   if (punit['anim_list'] != null && punit['anim_list'].length >= 2)  {
     var anim_tuple_src = punit['anim_list'][0];
     var anim_tuple_dst = punit['anim_list'][1];
+    //var anim_tuple_dst = punit['anim_list'][2];
     var src_tile = index_to_tile(anim_tuple_src['tile']);
     var dst_tile = index_to_tile(anim_tuple_dst['tile']);
     var u_tile = index_to_tile(punit['tile']);
@@ -402,8 +403,10 @@ function get_unit_anim_offset(punit)
 
     if (i == 0) {
       punit['anim_list'].splice(0, 1);
+//      punit['anim_list'].splice(0, 2);
       if (punit['anim_list'].length == 1) {
-        punit['anim_list'].splice(0, 1);
+//      if (punit['anim_list'].length <= 2) {
+        punit['anim_list'].splice(0, punit['anim_list'].length);
       }
     }
 
