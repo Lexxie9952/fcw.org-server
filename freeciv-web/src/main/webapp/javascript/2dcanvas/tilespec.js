@@ -714,7 +714,7 @@ function fill_unit_sprite_array(punit, stacked)
     // Stacked "+" icon
     if (stacked) {
       var stacked = get_unit_stack_sprite();
-      stacked['offset_x'] += UO_my[id];
+      stacked['offset_x'] += UO_mx[id];
       stacked['offset_y'] -= UO_my[id];
       result.push(stacked);
     }
@@ -736,7 +736,7 @@ function fill_unit_sprite_array(punit, stacked)
 function fill_stacked_in_base_sprite_array(punit)
 {
   var id = punit['type'];
-  const mx = UO_my[id];   const my = UO_my[id];
+  const mx = UO_mx[id];   const my = UO_my[id];
 
     var stacked = get_unit_stack_sprite();
     stacked['offset_x'] += mx;
@@ -2112,9 +2112,9 @@ function create_unit_offset_arrays()
 
     switch(ptype['name']) {
       case "AEGIS Cruiser":
-          dx -= 3;  dy -= 6;
+          dx -= 2;  dy -= 7;
           vx -= 11; vy += 8;
-          mx -= 6;  my += 13;
+          mx -= 6; my += 7; 
           break;
       case "Alpine Troops":                     
           dx -= 3; dy -= 1;
@@ -2125,7 +2125,7 @@ function create_unit_offset_arrays()
           vx -= 8; vy -= 8;
           break;
       case "Armor":
-          vx += 6; vy += 14;
+          vx += 12; vy += 11;
           break;
       case "Armor II":
           vx += 11; vy += 4;
@@ -2139,9 +2139,9 @@ function create_unit_offset_arrays()
           mx -= 7; my += 6; 
           break;    
       case "Battleship":
-          dx -= 5; dy -= 4;
-          vx += 4; vy -= 8;
-          mx -= 7; my += 6;
+          dx -= 5; dy -= 7;
+          vx += 4; vy -= 11;
+          //mx -= 6; my += 7; 
           break;
       case "Cannon":
           vx += 1; vy -= 4;
@@ -2149,39 +2149,37 @@ function create_unit_offset_arrays()
       case "Caravel":
           dx -= 3; dy -= 3;
           vx += 3; vy -= 3;
-          mx -= 2; my -= 1;
           break;
       case "Carrier":
-          dx -= 3; dy -= 3; 
+          dx -= 3; dy -= 4; 
           vx -= 12; vy +=12;
           mx -= 10; my +=7;
           break;
       case "Cargo Ship":
-          mx -= 2; my += 9; 
+          dx -= 1; dy -= 2;
+          mx -= 6; my += 7; 
           break;
       case "Catapult":
           vx -= 15; vy += 8;
           break;
       case "Cavalry":
-          vx -= 4; vy -= 10;
+          vx -= 2; vy -= 11;
           break;
       case "Chariot":
           sx = 8; 
           dx -= 2; dy -= 3;
           vx -= 11; vy += 4;
-          mx -= 8;  my += 2;
+          mx -= 6;  my += 7;
           break; 
       case "Cruiser":
           vx -= 13; vy += 15;
-          mx -= 3; my += 4;
           break;
       case "Crusaders":
-          vx -= 3; vy -= 10;
+          vx -= 3; vy -= 12;
           break;    
       case "Destroyer":
           dx -= 3; dy -= 3; 
           vx -= 13; vy += 12;
-          mx -= 2; my += 2;
           break;
       case "Dive Bomber":
           sx = 8;
@@ -2190,7 +2188,8 @@ function create_unit_offset_arrays()
           mx += 2; my -= 2;
           break;
       case "Dragoons":
-          vx -= 4; vy -= 9;
+          dx += 1; dy += 1;
+          vx -= 2; vy -= 10;
           break;
       case "Engineers":                     
           dx -= 3; dy -= 4;
@@ -2202,7 +2201,7 @@ function create_unit_offset_arrays()
           sx = 8;
           dx -= 8; dy -= 4;
           vx += 2; vy += 2;
-          mx -= 2; my -= 2;
+          mx -= 6; my += 4;
           break;
       case "Explorer":                     
           dx -= 0; dy += 2; 
@@ -2217,24 +2216,24 @@ function create_unit_offset_arrays()
           break;
       case "Galley":
           vx -= 12; vy += 14;
-          mx -= 3; my += 0;
           break;
       case "Ground Strike Fighter":
           sx = 8;
           dx += 2; dy -= 1;
           vx -= 4; vy += 15;
-          mx -= 6; my += 9;
+          mx -= 6; my += 7;
           break;    
       case "Heavy Bomber":
             case "Bomber":
           sx = 8;
           dx += 2; dy += 2;
           vx -= 13; vy += 12;
+          mx -= 6; my += 5;
           break;
       case "Helicopter":
           sx = 8;
           vx += 5; vy -= 5;
-          mx -= 1; my -= 1;
+          mx -= 6; my += 7;
           break;
       case "Horsemen":
           dx -= 5; dy += 0;
@@ -2242,13 +2241,11 @@ function create_unit_offset_arrays()
           break;
       case "Howitzer":
           dx -= 9;  dy += 1;
-          vx -= 45; vy -= 10;
-          mx -= 8;  my += 5;
+          vx -= 43; vy -= 9;
           break;
       case "Ironclad":
           dx -= 4; dy -= 5;
           vx += 5; vy += 2
-          mx -= 3; my += 1;
           break;
       case "Jet Bomber":
           sx = 8;
@@ -2262,9 +2259,10 @@ function create_unit_offset_arrays()
           break;
       case "Knights":
           dx += 3; dy += 1;
+          vx += 9; vy += 4;
+          break;
       case "Legion":
           vx -= 5; vy -= 5;
-          mx += 1; my += 1;
           break;
       case "Marines":
           dx += 2; dy += 2;
@@ -2326,12 +2324,10 @@ function create_unit_offset_arrays()
       case "Submarine":
           dx -= 3; dy -= 4;
           vx -= 11; vy += 8;
-          mx -= 4; my += 6;
           break;
       case "Transport":
           dx -= 3; dy -= 1;
           vx -= 25; vy += 11;
-          mx -= 5; my += 3;
           break;
       case "Trireme":
           vx += 2; vy += 1;
@@ -2339,8 +2335,10 @@ function create_unit_offset_arrays()
       case "War Galley":
           vx -= 4; vy += 3;
           break;
-      default:
-        // do nothing, dx and dy already set higher up.
+    }
+    // Adjustment to standard + location:
+    if (mx==-10 && my==-19) {
+      mx -= 5; my += 6;
     }
 
     // Put above information into the UO unit offset arrays for units and their icon components:
