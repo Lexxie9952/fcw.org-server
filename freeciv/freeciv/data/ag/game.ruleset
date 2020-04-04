@@ -1180,6 +1180,15 @@ actor_reqs    =
 ; REMOVE LINE BELOW TO ALLOW GIVING UNITS TO ALLIES THROUGH HOME CITY COMMAND
       "DiplRel",   "Foreign",  "Local", FALSE
     }
+; Allow no-home caravans to be "homed" so they can be used for a Trade Route:
+[actionenabler_change_home_commerce]
+action = "Home City"
+actor_reqs    =
+    { "type",      "name",        "range", "present"
+      "UnitFlag",  "TradeRoute",  "Local", TRUE
+; REMOVE LINE BELOW TO ALLOW GIVING UNITS TO ALLIES THROUGH HOME CITY COMMAND
+      "DiplRel",   "Foreign",  "Local", FALSE
+    }
 
 [actionenabler_paradrop_base]
 action = "Paradrop Unit"
