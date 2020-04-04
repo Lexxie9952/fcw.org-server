@@ -1185,6 +1185,7 @@ actor_reqs    =
 action = "Home City"
 actor_reqs    =
     { "type",      "name",        "range", "present"
+      "UnitFlag",  "NoHome",      "Local", FALSE
       "UnitFlag",  "TradeRoute",  "Local", TRUE
 ; REMOVE LINE BELOW TO ALLOW GIVING UNITS TO ALLIES THROUGH HOME CITY COMMAND
       "DiplRel",   "Foreign",  "Local", FALSE
