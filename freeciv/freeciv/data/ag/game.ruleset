@@ -822,7 +822,19 @@ target_reqs    =
       "BuildingGenus", "SmallWonder", "Local", TRUE
 ;     "Building", "Palace", "Local", FALSE
     }
-
+; Allow no-home commerce units to be used on a first wonder: 
+[actionenabler_help_build_wonder_starting_caravan]
+action = "Help Wonder"
+actor_reqs    =
+    { "type",   "name", "range", "present"
+      "UnitFlag", "HelpWonder", "Local", TRUE
+      "UnitState", "HasHomeCity", "Local", FALSE
+      "DiplRel", "War", "Local", FALSE
+    }
+target_reqs    =
+    { "type",   "name", "range", "present"
+      "BuildingGenus", "SmallWonder", "Local", TRUE
+    }
 
 [actionenabler_recycle_unit]
 action = "Recycle Unit"
