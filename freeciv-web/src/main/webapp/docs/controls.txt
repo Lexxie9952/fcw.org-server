@@ -10,7 +10,7 @@ The current and complete list of Freeciv-web controls can be found here:
 
 <img src="/images/orders/fortify_default.png"> Fortify (F)
 
-<img src="/images/orders/vigil.png"> Vigil (Ctrl-V)
+<img src="/images/orders/vigil.png"> Vigil (Shift-I)
 
 <img src="/images/orders/hideout.png"> Make Hideout (shift-H)
 
@@ -74,8 +74,9 @@ The current and complete list of Freeciv-web controls can be found here:
 
 <img src="/images/orders/load.png"> Load on Transport (L)
 
-<img src="/images/orders/unload.png"> Unload Transport (T) (in city)
-Unload & Activate Cargo units (shift-U) (outside city)
+<img src="/images/orders/unload.png"> Unload Transport (T) (in city, quay, naval base)
+
+<img src="/images/orders/activate_cargo.png"> Activate Cargo units (shift-U) (outside city)
 
 <img src="/images/orders/airlift.png"> Airlift (shift-L)
 
@@ -114,6 +115,7 @@ Unload & Activate Cargo units (shift-U) (outside city)
   s: (s)entry unit
   S: un(S)entry all units on tile
   L: unit go (t)o/airlift to city
+  t: unload transport (in City, Naval Base, or Quay)
   u: (u)nload unit from transporter
   U: (u)nload, show, and activate all cargo units on transport 
   v: select all units on same tile 
