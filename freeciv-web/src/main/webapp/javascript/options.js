@@ -67,6 +67,7 @@ var sounds_enabled = true;
 var unit_click_menu = true;  // whether to show context menu on left-clicking a unit
 var map_drag_enabled = true; // whether double tap and drag will move the map
 var enable_goto_drag = true; // whether to disable dragging unit for GOTO
+var enable_autoexplore = true; // whether to disable the X hotkey because some people mess up
 var show_order_option = true; // corresponds to the checkbox
 var show_empire_tab = false;
 var show_warcalc = false;
@@ -225,6 +226,12 @@ function init_options_dialog()
   $('#enable_goto_drag').change(function() {
     enable_goto_drag = this.checked;
     simpleStorage.set('gotodrag', enable_goto_drag);
+  });
+  // AUTOEXPLORE HOTKEY 'X' ENABLED  
+  $('#enable_autoexplore').prop('checked', enable_autoexplore);
+  $('#enable_autoexplore').change(function() {
+    enable_autoexplore = this.checked;
+    simpleStorage.set('explorekey', enable_autoexplore);
   });
   // UNIT CLICK GIVES CONTEXT MENU
   $('#unit_click_menu').prop('checked', unit_click_menu);

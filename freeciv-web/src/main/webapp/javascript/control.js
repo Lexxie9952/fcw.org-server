@@ -3110,7 +3110,10 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 'X':
         if (shift) { //shift-x = select all units of same type on same continent
           key_select_same_global_type(false); // false=same continent only
-        } else key_unit_auto_explore();
+        } 
+        else if (enable_autoexplore) {
+          key_unit_auto_explore();
+        } else add_client_message("X hotkey was disabled in user PREFS.")
     break;
     
     // ALT + UIO / JKL / M,. simulates keypad for devices that don't have it, if alt not held

@@ -146,6 +146,16 @@
 
 <tr>
   <td>
+    <div title="Enable Auto-explore 'X' hotkey" class="main_menu_buttons">
+        <input type='checkbox' name='enable_autoexplore' id='enable_autoexplore' checked><b>Enable Explore &apos;X&apos; Hotkey</b> 
+    </div>
+  </td>
+  <td>
+  </td>
+</tr>
+
+<tr>
+  <td>
     <div class="main_menu_buttons">
       <button id="replay_button" type="button" class="button setting_button" onClick="show_replay();">Show game replay</button>
     </div>  

@@ -194,7 +194,11 @@ function civclient_init()
 
   enable_goto_drag = simpleStorage.get('gotodrag');
   if (enable_goto_drag == null) 
-    enable_goto_drag = true;  // Default case      
+    enable_goto_drag = true;  // Default case 
+    
+  enable_autoexplore = simpleStorage.get('explorekey');
+  if (enable_autoexplore == null) 
+    enable_autoexplore = true;  // Default case     
 
   unit_click_menu = simpleStorage.get('unitclickmenu');
   if (unit_click_menu == null) 
