@@ -1890,7 +1890,7 @@ sound_alt	= "w_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
 With respect to corruption, incite protection, upkeep, and other bonuses, the\
-Supreme Court gives the same effect as an extra Courthouse in all your cities. By\
+ Supreme Court gives the same effect as an extra Courthouse in all your cities. By\
  itself, it gives no bonus against hostile diplomatic acts. However, owning the\
  Supreme Court enables each city to build a regional Homeland Security building\
  to acquire those additional bonuses. This Wonder is never obsolete.\
