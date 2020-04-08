@@ -226,6 +226,10 @@ function mapview_touch_start(e)
   //console.log("mapview_touch_start(e)");
   e.preventDefault();
 
+  if (is_touch_device())
+    add_client_message("mapview_touch_end::action_button_pressed will call, rmm==false");
+
+
   touch_start_x = e.originalEvent.touches[0].pageX - $('#canvas').position().left;
   touch_start_y = e.originalEvent.touches[0].pageY - $('#canvas').position().top;
   var ptile = canvas_pos_to_tile(touch_start_x, touch_start_y);
@@ -247,6 +251,9 @@ function mapview_touch_start(e)
 ****************************************************************************/
 function mapview_touch_end(e)
 {
+  ////
+  if (is_touch_device())
+    add_client_message("\nmapview_touch_end::real_mouse_move_mode=="+real_mouse_move_mode);
   //console.log("mapview_touch_end(e) called: about to call action_button_pressed");
   //console.log("    mapview_mouse_movement=="+mapview_mouse_movement+" real_mouse_move_mode=="+real_mouse_move_mode);
 
@@ -256,8 +263,14 @@ function mapview_touch_end(e)
      * Interpreting such would make the tile the drag ended on become the 
      * target for airlift, paradrop, and goto !! */
     real_mouse_move_mode = false; // dragging has ended, turn off and return
+    if (is_touch_device())
+      add_client_message("mapview_touch_end::abort action_button_pressed: rmm was true");
+
     return;
   }
+  ////
+  if (is_touch_device())
+    add_client_message("mapview_touch_end::action_button_pressed will call, rmm==false");
   action_button_pressed(touch_start_x, touch_start_y, SELECT_POPUP);
 }
 
@@ -267,7 +280,8 @@ function mapview_touch_end(e)
 function mapview_touch_move(e)
 {
   real_mouse_move_mode = true;
-  //console.log("mapview_touch_move(e) called");
+  ////
+  console.log("mapview_touch_move(e) called");
 
   mouse_x = e.originalEvent.touches[0].pageX - $('#canvas').position().left;
   mouse_y = e.originalEvent.touches[0].pageY - $('#canvas').position().top;
@@ -277,6 +291,11 @@ function mapview_touch_move(e)
 
   touch_start_x = mouse_x;
   touch_start_y = mouse_y;
+
+  ////
+  console.log("diff_x: "+diff_x+"   diff_y: "+diff_y)
+  if (is_touch_device())
+    add_client_message("\nmapview_touch_move -- rmm->TRUE  diff_x:"+diff_x+"   diff_y:"+diff_y);
 
   if (!goto_active) {
     check_mouse_drag_unit(canvas_pos_to_tile(mouse_x, mouse_y));
