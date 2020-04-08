@@ -227,7 +227,7 @@ function mapview_touch_start(e)
   e.preventDefault();
 
   if (is_touch_device())
-    add_client_message("mapview_touch_end::action_button_pressed will call, rmm==false");
+    add_client_message("mapview_touch_start::action_button_pressed will call, rmm==false");
 
 
   touch_start_x = e.originalEvent.touches[0].pageX - $('#canvas').position().left;
@@ -253,7 +253,7 @@ function mapview_touch_end(e)
 {
   ////
   if (is_touch_device())
-    add_client_message("\nmapview_touch_end::real_mouse_move_mode=="+real_mouse_move_mode);
+    add_client_message("\nmapview_touch_end::rmm=="+real_mouse_move_mode);
   //console.log("mapview_touch_end(e) called: about to call action_button_pressed");
   //console.log("    mapview_mouse_movement=="+mapview_mouse_movement+" real_mouse_move_mode=="+real_mouse_move_mode);
 
