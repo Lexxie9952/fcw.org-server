@@ -47,6 +47,8 @@ function mapctrl_init_2d()
     $('#canvas').bind('touchstart', mapview_touch_start);
     $('#canvas').bind('touchend', mapview_touch_end);
     $('#canvas').bind('touchmove', mapview_touch_move);
+    $('#canvas').bind('touchcancel', mapview_touch_cancel);
+
   }
 
 }
@@ -274,6 +276,15 @@ function mapview_touch_end(e)
   action_button_pressed(touch_start_x, touch_start_y, SELECT_POPUP);
 }
 
+// test function only
+function mapview_touch_cancel(e)
+{
+  var time_elapsed = Date.now()-doubletaptimer;
+
+  if (is_touch_device())
+    add_client_message("\nmapview_touch_cancel(e) called, dt="+time_elapsed);
+
+}
 /****************************************************************************
   This function is triggered on a touch move event on a touch device.
 ****************************************************************************/
@@ -284,7 +295,8 @@ function mapview_touch_move(e)
 
   real_mouse_move_mode = true;
   ////
-  console.log("mapview_touch_move(e) called, dt="+time_elapsed);
+  if (is_touch_device())
+    add_client_message("\nmapview_touch_move(e) called, dt="+time_elapsed);
 
   mouse_x = e.originalEvent.touches[0].pageX - $('#canvas').position().left;
   mouse_y = e.originalEvent.touches[0].pageY - $('#canvas').position().top;
