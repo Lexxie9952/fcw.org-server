@@ -264,14 +264,15 @@ function mapview_touch_end(e)
   //console.log("mapview_touch_end(e) called: about to call action_button_pressed");
   //console.log("    mapview_mouse_movement=="+mapview_mouse_movement+" real_mouse_move_mode=="+real_mouse_move_mode);
 
-  if (real_mouse_move_mode==true) {
+  // Handle touchend event iff we were map dragging:
+  if (real_mouse_move_mode && mouse_touch_started_on_unit) {
     /* We're on a touch device and just came out of map dragging, therefore 
      * this touch_end event is NOT the user actually tapping an action.
      * Interpreting such would make the tile the drag ended on become the 
      * target for airlift, paradrop, and goto !! */
     real_mouse_move_mode = false; // dragging has ended, turn off and return
     if (is_touch_device())
-      add_client_message("mapview_touch_end::abort action_button_pressed: rmm was true");
+      add_client_message("mapview_touch_end::abort action_button_pressed: rmm && mtsou==true");
 
     return;
   }
@@ -301,10 +302,14 @@ function mapview_touch_move(e)
   // HACK: Catch Chrome Mobile's false generation of 2 touch moves after every touchstart
   // This means other users will have to generate at least 3 touchmove events before 
   // it starts registering. 
+  // TODO: this might no longer be needed since touchend now fires an action_button_pressed
+  // unless we came out of mapdrag mode.
   suppress_touch_move--;
   if (suppress_touch_move>=0) return; // probable false event
 
-  real_mouse_move_mode = true;
+  // on Mobile, real_mouse_move_mode represents something else: if we're in a touchmove cycle.
+  // if we are REALLY map dragging, then: (real_mouse_move_mode && mouse_touch_started_on_unit)==true.
+  real_mouse_move_mode = true; // not necessarily true, depends if mouse touch started on unit!
   ////
   if (is_touch_device())
     add_client_message("\nmapview_touch_move(e) called, dt="+time_elapsed);
