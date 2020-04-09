@@ -33,6 +33,9 @@ var mouse_click_mod_key = {shiftKey:false};
 var dblclick_count = 0;
 var dblclick_timeout = 0;
 
+var suppress_touch_move = 2;  // hack to fix false touchmove events in mobile Chrome
+
+
 /****************************************************************************
   Init 2D mapctrl
 ****************************************************************************/
@@ -219,7 +222,6 @@ function mapview_mouse_down(e)
   }
 }
 
-var suppress_touch_move = 0;
 /****************************************************************************
   This function is triggered when beginning a touch event on a touch device,
   eg. finger down on screen.
@@ -299,7 +301,7 @@ function mapview_touch_move(e)
   // This means other users will have to generate at least 3 touchmove events before 
   // it starts registering. 
   suppress_touch_move--;
-  if (suppress_touch_move>0) return; // probable false event
+  if (suppress_touch_move>=0) return; // probable false event
 
   real_mouse_move_mode = true;
   ////
