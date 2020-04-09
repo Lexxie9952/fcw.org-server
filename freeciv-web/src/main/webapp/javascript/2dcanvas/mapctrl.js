@@ -293,9 +293,10 @@ function mapview_touch_move(e)
   // This means at least 3 touchmove events are needed before it starts registering. 
   // TODO: this might no longer be needed since touchend now fires an action_button_pressed
   // unless we came out of mapdrag mode.
+  /* test if we can remove this now 
   suppress_touch_move--; ////
   if (suppress_touch_move>=0) return; // probable false touchmove event
-
+  */
   // on Mobile, touch_drag_mode represents if we're in a touchmove cycle, which may or 
   // MAY NOT be concurrent with actual map dragging (e.g., could be doing touchmove on goto pathing)
   // NB: if we are map dragging, then: (touch_drag_mode && !mouse_touch_started_on_unit)==true.
