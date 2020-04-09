@@ -219,6 +219,7 @@ function mapview_mouse_down(e)
   }
 }
 
+var suppress_touch_move = 0;
 /****************************************************************************
   This function is triggered when beginning a touch event on a touch device,
   eg. finger down on screen.
@@ -229,7 +230,7 @@ function mapview_touch_start(e)
   e.preventDefault();
 
   if (is_touch_device())
-    add_client_message("mapview_touch_start::action_button_pressed will call, rmm==false");
+    add_client_message("mapview_touch_start");
 
 
   touch_start_x = e.originalEvent.touches[0].pageX - $('#canvas').position().left;
@@ -245,6 +246,7 @@ function mapview_touch_start(e)
   set_mouse_touch_started_on_unit(ptile);
 
   doubletaptimer = Date.now();
+  suppress_touch_move = 2;  // chrome mobile generates 2 false touchmoves after every touchstart
 }
 
 /****************************************************************************
@@ -292,6 +294,12 @@ function mapview_touch_move(e)
 {
   // Evil hack
   var time_elapsed = Date.now()-doubletaptimer;
+  
+  // HACK: Catch Chrome Mobile's false generation of 2 touch moves after every touchstart
+  // This means other users will have to generate at least 3 touchmove events before 
+  // it starts registering. 
+  suppress_touch_move--;
+  if (suppress_touch_move>0) return; // probable false event
 
   real_mouse_move_mode = true;
   ////
