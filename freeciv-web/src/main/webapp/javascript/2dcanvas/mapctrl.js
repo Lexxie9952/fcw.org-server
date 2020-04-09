@@ -232,8 +232,9 @@ function mapview_touch_start(e)
   e.preventDefault();
 
   if (is_touch_device())
-    add_client_message("mapview_touch_start");
+    add_client_message("mapview_touch_start::rmm=="+real_mouse_move_mode);
 
+  real_mouse_move_mode = false; // reset for touchstart
 
   touch_start_x = e.originalEvent.touches[0].pageX - $('#canvas').position().left;
   touch_start_y = e.originalEvent.touches[0].pageY - $('#canvas').position().top;
