@@ -61,6 +61,7 @@ var touch_device = null; // TO DO: replace all is_touch_device() function calls
 var mapview_mouse_movement = false;  
 // real_mouse_move_mode always represents the true state of map-drag mode.
 var real_mouse_move_mode = false;
+var touch_drag_mode = false;  // whether touch devices are processing touchmove 
 // determines if unit clicked twice, which creates a context menu under some UI user prefs
 var last_unit_clicked = -1;
 // if a context menu is up, a click simply kills that menu instead of doing other mechanics  

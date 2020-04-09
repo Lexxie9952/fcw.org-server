@@ -50,8 +50,6 @@ function mapctrl_init_2d()
     $('#canvas').bind('touchstart', mapview_touch_start);
     $('#canvas').bind('touchend', mapview_touch_end);
     $('#canvas').bind('touchmove', mapview_touch_move);
-    $('#canvas').bind('touchcancel', mapview_touch_cancel);
-
   }
 
 }
@@ -135,6 +133,7 @@ function mapview_mouse_down(e)
       came_from_context_menu = false;
       mapview_mouse_movement = false;
       real_mouse_move_mode = false;
+      touch_drag_mode = false;
       return; // leave to avoid triggering a mouse event
     }
   }
@@ -231,10 +230,11 @@ function mapview_touch_start(e)
   //console.log("mapview_touch_start(e)");
   e.preventDefault();
 
+  /* DEBUG
   if (is_touch_device())
-    add_client_message("mapview_touch_start::rmm=="+real_mouse_move_mode);
+    add_client_message("mapview_touch_start::tdm=="+touch_drag_mode); */
 
-  real_mouse_move_mode = false; // reset for touchstart
+  touch_drag_mode = false;             // reset for touchstart
 
   touch_start_x = e.originalEvent.touches[0].pageX - $('#canvas').position().left;
   touch_start_y = e.originalEvent.touches[0].pageY - $('#canvas').position().top;
@@ -258,61 +258,51 @@ function mapview_touch_start(e)
 ****************************************************************************/
 function mapview_touch_end(e)
 {
-  ////
+  /* DEBUG
   if (is_touch_device())
-    add_client_message("\nmapview_touch_end::rmm=="+real_mouse_move_mode);
-  //console.log("mapview_touch_end(e) called: about to call action_button_pressed");
-  //console.log("    mapview_mouse_movement=="+mapview_mouse_movement+" real_mouse_move_mode=="+real_mouse_move_mode);
+   add_client_message("\nmapview_touch_end::tdm=="+touch_drag_mode);
+  console.log("mapview_touch_end(e) called: about to call action_button_pressed");
+  console.log("    mapview_mouse_movement=="+mapview_mouse_movement+" touch_drag_mode=="+touch_drag_mode);
+  */
 
   // Handle touchend event iff we were map dragging:
-  if (real_mouse_move_mode && mouse_touch_started_on_unit) {
+  if ((touch_drag_mode && !mouse_touch_started_on_unit) && !goto_active) {
     /* We're on a touch device and just came out of map dragging, therefore 
      * this touch_end event is NOT the user actually tapping an action.
      * Interpreting such would make the tile the drag ended on become the 
      * target for airlift, paradrop, and goto !! */
-    real_mouse_move_mode = false; // dragging has ended, turn off and return
+    touch_drag_mode = false; // dragging has ended, turn off and return
+    /* DEBUG
     if (is_touch_device())
-      add_client_message("mapview_touch_end::abort action_button_pressed: rmm && mtsou==true");
+      add_client_message("mapview_touch_end::abort action_button_pressed: tdm && mtsou==true"); */
 
     return;
   }
-  ////
+  /* DEBUG
   if (is_touch_device())
-    add_client_message("mapview_touch_end::action_button_pressed will call, rmm==false");
+    add_client_message("mapview_touch_end::action_button_pressed will call, tdm==false"); */
   action_button_pressed(touch_start_x, touch_start_y, SELECT_POPUP);
 }
 
-// test function only
-function mapview_touch_cancel(e)
-{
-  var time_elapsed = Date.now()-doubletaptimer;
-
-  if (is_touch_device())
-    add_client_message("\nmapview_touch_cancel(e) called, dt="+time_elapsed);
-
-}
 /****************************************************************************
   This function is triggered on a touch move event on a touch device.
 ****************************************************************************/
 function mapview_touch_move(e)
 {
-  // Evil hack
-  var time_elapsed = Date.now()-doubletaptimer;
-  
   // HACK: Catch Chrome Mobile's false generation of 2 touch moves after every touchstart
-  // This means other users will have to generate at least 3 touchmove events before 
-  // it starts registering. 
+  // This means at least 3 touchmove events are needed before it starts registering. 
   // TODO: this might no longer be needed since touchend now fires an action_button_pressed
   // unless we came out of mapdrag mode.
-  suppress_touch_move--;
-  if (suppress_touch_move>=0) return; // probable false event
+  suppress_touch_move--; ////
+  if (suppress_touch_move>=0) return; // probable false touchmove event
 
-  // on Mobile, real_mouse_move_mode represents something else: if we're in a touchmove cycle.
-  // if we are REALLY map dragging, then: (real_mouse_move_mode && mouse_touch_started_on_unit)==true.
-  real_mouse_move_mode = true; // not necessarily true, depends if mouse touch started on unit!
-  ////
+  // on Mobile, touch_drag_mode represents if we're in a touchmove cycle, which may or 
+  // MAY NOT be concurrent with actual map dragging (e.g., could be doing touchmove on goto pathing)
+  // NB: if we are map dragging, then: (touch_drag_mode && !mouse_touch_started_on_unit)==true.
+  touch_drag_mode = true;
+  /* DEBUG
   if (is_touch_device())
-    add_client_message("\nmapview_touch_move(e) called, dt="+time_elapsed);
+    add_client_message("\nmapview_touch_move(e) called"); */
 
   mouse_x = e.originalEvent.touches[0].pageX - $('#canvas').position().left;
   mouse_y = e.originalEvent.touches[0].pageY - $('#canvas').position().top;
@@ -323,16 +313,14 @@ function mapview_touch_move(e)
   touch_start_x = mouse_x;
   touch_start_y = mouse_y;
 
-  ////
-  //console.log("diff_x: "+diff_x+"   diff_y: "+diff_y)
-  //if (is_touch_device())
-  //  add_client_message("\nmapview_touch_move -- rmm->TRUE  diff_x:"+diff_x+"   diff_y:"+diff_y);
-
   if (!goto_active) {
     check_mouse_drag_unit(canvas_pos_to_tile(mouse_x, mouse_y));
 
-    mapview['gui_x0'] += diff_x;
-    mapview['gui_y0'] += diff_y;
+    // (touch_drag_mode && !mouse_touch_started on unit) means we will drag map:
+    if (!mouse_touch_started_on_unit) { 
+      mapview['gui_x0'] += diff_x;
+      mapview['gui_y0'] += diff_y;
+    }
   }
 
   if (client.conn.playing == null) return;
