@@ -33,8 +33,10 @@ var mouse_click_mod_key = {shiftKey:false};
 var dblclick_count = 0;
 var dblclick_timeout = 0;
 
-var suppress_touch_move = 2;  // hack to fix false touchmove events in mobile Chrome
-
+// number of 'false' touchmove events to suppress after touchstart based on 
+// non-universal inconsistency in this behaviour among browsers:
+var num_suppressions = (navigator.userAgent.indexOf("Chrome") !== -1) ? 2 : 0;
+var suppress_touch_move = num_suppressions;  // hack to fix false touchmove events in mobile Chrome
 
 /****************************************************************************
   Init 2D mapctrl
@@ -249,7 +251,8 @@ function mapview_touch_start(e)
   set_mouse_touch_started_on_unit(ptile);
 
   doubletaptimer = Date.now();
-  suppress_touch_move = 2;  // chrome mobile generates 2 false touchmoves after every touchstart
+  // Mobile Chrome generates 2 false touchmoves after every touchstart
+  suppress_touch_move = num_suppressions;  
 }
 
 /****************************************************************************
@@ -289,17 +292,12 @@ function mapview_touch_end(e)
 ****************************************************************************/
 function mapview_touch_move(e)
 {
-  // HACK: Catch Chrome Mobile's false generation of 2 touch moves after every touchstart
-  // This means at least 3 touchmove events are needed before it starts registering. 
-  // TODO: this might no longer be needed since touchend now fires an action_button_pressed
-  // unless we came out of mapdrag mode.
-  /* test if we can remove this now 
-  suppress_touch_move--; ////
+  // HACK: Catch Mobile Chrome's false generation of 2 touchmoves after every touchstart
+  suppress_touch_move--;
   if (suppress_touch_move>=0) return; // probable false touchmove event
-  */
+
   // on Mobile, touch_drag_mode represents if we're in a touchmove cycle, which may or 
   // MAY NOT be concurrent with actual map dragging (e.g., could be doing touchmove on goto pathing)
-  // NB: if we are map dragging, then: (touch_drag_mode && !mouse_touch_started_on_unit)==true.
   touch_drag_mode = true;
   /* DEBUG
   if (is_touch_device())
@@ -317,8 +315,8 @@ function mapview_touch_move(e)
   if (!goto_active) {
     check_mouse_drag_unit(canvas_pos_to_tile(mouse_x, mouse_y));
 
-    // (touch_drag_mode && !mouse_touch_started on unit) means we will drag map:
-    if (!mouse_touch_started_on_unit) { 
+    // This is how we know if this touchmove is dragging the map:
+    if (!goto_active && !mouse_touch_started_on_unit) { 
       mapview['gui_x0'] += diff_x;
       mapview['gui_y0'] += diff_y;
     }
