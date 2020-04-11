@@ -51,7 +51,7 @@ function set_client_state(newstate)
       if (is_pbem()) {
         setTimeout(function () {
           set_human_pbem_players();
-          advance_unit_focus();
+          advance_unit_focus(false);
         }, 1500);
       }
 
@@ -64,7 +64,7 @@ function set_client_state(newstate)
 
       if (observing || $.getUrlVar('action') == "multi" || is_longturn() || game_loaded) {
         center_on_any_city();
-        advance_unit_focus();
+        advance_unit_focus(false);
       }
 
       if (speech_recogntition_enabled) speech_recogntition_init()

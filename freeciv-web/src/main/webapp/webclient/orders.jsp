@@ -152,7 +152,7 @@
   </div>
 
   <div id="order_wait" class="order_button" title="Wait (W)">
-    <a href="#" onclick="key_unit_wait();"><img src="/images/orders/wait.png" name="wait_button" alt="" border="0" width="30" height="30"></a>
+    <a href="#" onclick="key_unit_wait(false);"><img src="/images/orders/wait.png" name="wait_button" alt="" border="0" width="30" height="30"></a>
   </div>
 
   <div id="order_disband" class="order_button not_mobile" title="Disband unit">

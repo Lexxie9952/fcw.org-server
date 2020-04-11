@@ -1115,7 +1115,7 @@ function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapac
       setTimeout(update_active_units_dialog, 600);
 
       // for very last dialog, click advances unit focus
-      if (dialog_num==last_dialog) setTimeout(advance_unit_focus, 700);
+      if (dialog_num==last_dialog) setTimeout(function() {advance_unit_focus(false)}, 700);
 
       $(dialog_id).remove();
     }
