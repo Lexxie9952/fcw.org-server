@@ -821,7 +821,19 @@ target_reqs    =
       "BuildingGenus", "SmallWonder", "Local", TRUE
 ;     "Building", "Palace", "Local", FALSE
     }
-
+; Allow no-home commerce units to be used on a first wonder: 
+[actionenabler_help_build_wonder_starting_caravan]
+action = "Help Wonder"
+actor_reqs    =
+    { "type",   "name", "range", "present"
+      "UnitFlag", "HelpWonder", "Local", TRUE
+      "UnitState", "HasHomeCity", "Local", FALSE
+      "DiplRel", "War", "Local", FALSE
+    }
+target_reqs    =
+    { "type",   "name", "range", "present"
+      "BuildingGenus", "SmallWonder", "Local", TRUE
+    }
 
 [actionenabler_recycle_unit]
 action = "Recycle Unit"
@@ -1176,6 +1188,16 @@ actor_reqs    =
     { "type",      "name",        "range", "present"
       "UnitFlag",  "NoHome",      "Local", FALSE
       "UnitState", "HasHomeCity", "Local", TRUE
+; REMOVE LINE BELOW TO ALLOW GIVING UNITS TO ALLIES THROUGH HOME CITY COMMAND
+      "DiplRel",   "Foreign",  "Local", FALSE
+    }
+; Allow no-home caravans to be "homed" so they can be used for a Trade Route:
+[actionenabler_change_home_commerce]
+action = "Home City"
+actor_reqs    =
+    { "type",      "name",        "range", "present"
+      "UnitFlag",  "NoHome",      "Local", FALSE
+      "UnitFlag",  "TradeRoute",  "Local", TRUE
 ; REMOVE LINE BELOW TO ALLOW GIVING UNITS TO ALLIES THROUGH HOME CITY COMMAND
       "DiplRel",   "Foreign",  "Local", FALSE
     }
@@ -2010,5 +2032,5 @@ set =
       "unload_override", 0, FALSE    ;0=native unloading same as non-native. 1+ = move_fragment cost for unloading.
       "unreachableprotects", "ENABLED", FALSE
       "unitwaittime_style", "ACTIVITIES|FORTIFY|DELAYGOTO", FALSE
-       "zoc_purity", "DISABLED", FALSE           ; igZOC units don't lift ZOC for units subject to ZOC
+      "zoc_purity", "DISABLED", FALSE           ; igZOC units don't lift ZOC for units subject to ZOC
     }

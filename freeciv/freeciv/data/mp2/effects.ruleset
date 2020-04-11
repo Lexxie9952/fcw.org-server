@@ -2587,18 +2587,18 @@ reqs	=
 type    = "Defend_Bonus"
 value	= 100
 reqs	=
-    { "type", "name", "range"
-      "Building", "SAM Battery", "City"
-      "UnitClass", "Air", "Local"
+    { "type", "name", "range", "present"
+      "Building", "SAM Battery", "City", TRUE
+      "UnitClass", "Air", "Local", TRUE
       "UnitType", "Stealth Bomber", "Local", FALSE
     }
 [effect_sam_battery_1]
 type    = "Defend_Bonus"
 value	= 100
 reqs	=
-    { "type", "name", "range"
-      "Building", "SAM Battery", "City"
-      "UnitClass", "AirProtect", "Local"
+    { "type", "name", "range", "present"
+      "Building", "SAM Battery", "City", TRUE
+      "UnitClass", "AirProtect", "Local", TRUE
       "UnitType", "Stealth Fighter", "Local", FALSE
     }
 [effect_sam_battery_2]
@@ -2608,22 +2608,21 @@ reqs	=
     { "type", "name", "range"
       "Building", "SAM Battery", "City"
       "UnitClass", "AirPillage", "Local"
-      "UnitType", "Stealth Fighter", "Local", FALSE
     }
 [effect_sam_battery_stealth_bomber]
 type    = "Defend_Bonus"
 value	= 25
 reqs	=
-    { "type", "name", "range"
-      "Building", "SAM Battery", "City"
+    { "type", "name", "range", "present"
+      "Building", "SAM Battery", "City", TRUE
       "UnitType", "Stealth Bomber", "Local", TRUE
     }    
 [effect_sam_battery_stealth_fighter]
 type    = "Defend_Bonus"
 value	= 25
 reqs	=
-    { "type", "name", "range"
-      "Building", "SAM Battery", "City"
+    { "type", "name", "range", "present"
+      "Building", "SAM Battery", "City", TRUE
       "UnitType", "Stealth Fighter", "Local", TRUE
     }
 
