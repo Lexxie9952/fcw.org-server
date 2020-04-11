@@ -2793,7 +2793,8 @@ function do_map_click(ptile, qtype, first_time_called)
         // clicked on a tile with units exclusively owned by other players.
         save_last_unit_focus();
         current_focus = [];
-        current_focus.push(sunits);
+        for (i=0;i<sunits.length;i++)
+          current_focus.push(sunits[i]);
         //current_focus = sunits;
         if (current_focus.length>0) // just for insurance ;)
           warcalc_set_default_vals(current_focus[0]);  // feeds the warcalc with default values from current_focus[0]
