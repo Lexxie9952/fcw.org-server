@@ -919,7 +919,7 @@ function update_unit_focus()
       return;
     }
   }
-  advance_unit_focus();
+  advance_unit_focus(false);
 }
 
 /**************************************************************************
@@ -3879,7 +3879,7 @@ function key_unit_load()
   // Don't advance focus if more than one dialog open, it would reset our focus units
   // which we need for upcoming dialogs for each additional unit
   if (funits.length<2)
-    setTimeout(advance_unit_focus, update_focus_delay);
+    setTimeout(function() {advance_unit_focus(false)}, update_focus_delay);
 }
 
 /**************************************************************************
@@ -3926,7 +3926,7 @@ function key_unit_unload()
     }
   }
   deactivate_goto(false);
-  setTimeout(advance_unit_focus, update_focus_delay);
+  setTimeout(function() {advance_unit_focus(false)}, update_focus_delay);
 }
 
 /**************************************************************************
@@ -4136,7 +4136,7 @@ function key_unit_noorders()
     punit['done_moving'] = true;
   }
   deactivate_goto(false);
-  advance_unit_focus();
+  advance_unit_focus(false);
 }
 
 /**************************************************************************
