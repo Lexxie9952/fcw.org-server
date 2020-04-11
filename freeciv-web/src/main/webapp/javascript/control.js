@@ -3935,13 +3935,22 @@ function key_unit_unload()
 function key_select_all_units_on_tile()
 {
   var punits = [];
-  if (current_focus != null && current_focus.length > 0) {
-    var ptile = index_to_tile(current_focus[0]['tile']);
-    var punits = tile_units(ptile);
+  if (current_focus != null && current_focus.length>0) {
+    var punit = current_focus[0];
+    var ptile = index_to_tile(punit['tile']);
+    var ptype = punit['type'];
 
-    save_last_unit_focus();
-
-    current_focus = punits;
+    punits = tile_units(ptile);
+    for (var i=0; i<punits.length; i++) {
+      if ( true /*unit_types[punits[i]['type']]['name'] == unit_types[ptype]['name']*/ ) {
+          // make sure it's not already in selection before adding it to selection:
+          var index = current_focus.findIndex(x => x.id==punits[i].id);
+          if (index === -1) { //index == -1 means it's not in selection, so we add it:
+            if (punits[i]['owner'] ==  client.conn.playing.playerno) // only select if owned
+              current_focus.push(punits[i]);
+          }
+      }
+    }
     update_active_units_dialog();
   }
 }
