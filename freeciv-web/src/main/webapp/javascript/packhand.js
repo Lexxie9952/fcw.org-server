@@ -929,7 +929,7 @@ function handle_unit_remove(packet)
   var funits = get_units_in_focus();
   if (funits != null && funits.length == 1 && funits[0]['id'] == packet['unit_id']) {
     /* if the unit in focus is removed, then advance the unit focus. */
-    advance_unit_focus();
+    advance_unit_focus(false);
   }
 
   /* TODO: Close diplomat dialog if the diplomat is lost */

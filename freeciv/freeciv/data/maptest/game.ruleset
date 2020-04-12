@@ -10,7 +10,7 @@
 ; than minor changes.
 
 [datafile]
-description="Map-tester using Avant-garde ruleset for Freeciv"
+description="Avant-garde game rules for Freeciv"
 options="+Freeciv-ruleset-Devel-2017.Jan.02 web-compatible"
 format_version=20
 

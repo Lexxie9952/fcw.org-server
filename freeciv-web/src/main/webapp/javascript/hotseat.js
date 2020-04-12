@@ -147,7 +147,7 @@ function hotseat_next_player()
   hotseat_active_player = ((hotseat_active_player + 1) % num_hotseat_players);
   send_message("/take " + hotseat_players[hotseat_active_player]);
   clear_chatbox();
-  setTimeout(advance_unit_focus, 400);
+  setTimeout(function() {advance_unit_focus(false)}, 400);
   $("#turn_done_button").button("option", "disabled", false);
   $("#turn_done_button").button("option", "label", "Turn Done");
   show_hotseat_new_phase();
@@ -203,7 +203,7 @@ function show_hotseat_new_phase()
                                    keyboard_input = true;
                                    $("#game_page").show();
                                    set_default_mapview_active();
-                                   advance_unit_focus();
+                                   advance_unit_focus(false);
                                  }
 			}
 		});
@@ -258,7 +258,7 @@ function add_hotseat_password()
                                    keyboard_input = true;
                                    $("#game_page").show();
                                    set_default_mapview_active();
-                                   advance_unit_focus();
+                                   advance_unit_focus(false);
 
                                  }			
                         }

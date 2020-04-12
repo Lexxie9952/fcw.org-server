@@ -132,7 +132,7 @@ function speech_recogntition_handle_result(event)
         break;
 
       case "wait":
-        key_unit_wait();
+        key_unit_wait(false);
         found = true;
         break;
 
