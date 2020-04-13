@@ -317,6 +317,8 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
         if (tile_has_extra(ptile, EXTRA_POLLUTION)) {
           sprite_array.push({"key" :
                               tileset_extra_id_graphic_tag(EXTRA_POLLUTION)});
+          if (draw_highlighted_pollution)
+            sprite_array.push(get_city_invalid_worked_sprite());
         }
 
         if (tile_has_extra(ptile, EXTRA_FALLOUT)) {

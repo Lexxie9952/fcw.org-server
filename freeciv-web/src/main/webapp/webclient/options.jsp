@@ -159,6 +159,16 @@
 
 <tr>
   <td>
+    <div title="Polluted tiles are marked in highlighted red (CTRL-ALT-P)" class="main_menu_buttons">
+        <input type='checkbox' name='draw_highlighted_pollution' id='draw_highlighted_pollution'><b><font color="#0000c0">Highlight polluted tiles on map</font></b> 
+    </div>
+  </td>
+    <td>
+  </td>
+</tr>
+
+<tr>
+  <td>
     <div class="main_menu_buttons">
       <button id="replay_button" type="button" class="button setting_button" onClick="show_replay();">Show game replay</button>
     </div>  

@@ -2905,7 +2905,7 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
     break;
 
     case 'P':
-        if (alt) {
+        if (alt && !ctrl) {
           the_event.preventDefault(); // override possible browser shortcut
           $('#ui-id-6').trigger("click"); // prefs tab
         }
@@ -3078,7 +3078,11 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 'P':
       if (shift) {
         key_unit_pillage();
-      } else {
+      } else if (ctrl && alt && !shift) {
+        the_event.preventDefault(); // override possible browser shortcut
+        draw_highlighted_pollution = !draw_highlighted_pollution;
+      }
+      else {
         if (current_focus.length>0) {
           if (unit_types[current_focus[0]['type']]['name'] == "Paratroopers") key_unit_paradrop();
           else key_unit_pollution();

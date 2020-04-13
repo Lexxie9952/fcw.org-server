@@ -111,6 +111,7 @@ var update_city_text_in_refresh_tile = true;
 var draw_city_outlines = true;
 var draw_city_output = false;
 var draw_city_airlift_counter = false;
+var draw_highlighted_pollution = false;
 var draw_city_mood = false;
 var draw_map_grid = false;
 var draw_city_names = true;
@@ -267,6 +268,12 @@ function init_options_dialog()
   $('#auto_attack').change(function() {
     auto_attack = this.checked;
     //simpleStorage.set('autoattack', auto_attack); // don't store this to next session
+  });
+  // HIGHLIGHT POLLUTED TILES
+  $('#draw_highlighted_pollution').prop('checked', draw_highlighted_pollution);
+  $('#draw_highlighted_pollution').change(function() {
+    draw_highlighted_pollution = this.checked;
+    // don't store this to next session
   });
   // CITY AIRLIFT COUNTER
   $('#airlift_setting').prop('checked', draw_city_airlift_counter);
