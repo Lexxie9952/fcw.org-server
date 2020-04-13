@@ -3203,10 +3203,10 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         if (show_unit_movepct) hp_bar_offset = -5;
         else hp_bar_offset = 0;
         //simpleStorage.set('showMoves', show_unit_movepct);
-      } else if (alt) {
+      } else if (alt && !shift && !ctrl) {
         the_event.preventDefault(); // override possible browser shortcut
         key_unit_move(DIR8_SOUTH);  // alt+M=1
-      } else if (ctrl) {
+      } else if (ctrl && !alt && !shift) {
         the_event.preventDefault(); // override possible browser shortcut
         draw_city_mood = !draw_city_mood;
       }

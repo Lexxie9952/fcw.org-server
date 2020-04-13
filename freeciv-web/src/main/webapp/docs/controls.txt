@@ -161,6 +161,7 @@ ctrl-G: map grid on/off
 ctrl-L:  show airlift counter on cities
 ctrl-M:  show city Mood on map
 shift-M: show unit moves left percentage on map
+ctrl-alt-P: highlight polluted tiles in red
 shift-R: revolution: choose new government
 alt-S: fullscreen mode
 ctrl-S: save game
