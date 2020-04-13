@@ -293,45 +293,100 @@ function canvas_put_select_rectangle(canvas_context, canvas_x, canvas_y, width, 
 **************************************************************************/
 function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
 
-  // City Airlift Counter:
-  var airlift_text = "";
+  var airlift_text = "";   // City Airlift Counter
   const SRC_UNLIMITED = 4;   // bit value for SRC_UNLIMITED airliftingstyle
   const DEST_UNLIMITED = 8;  // bit value for DEST_UNLIMITED airliftingstyle
   const infinity_symbol = "%E2%88%9E";
   const left_div = "%E2%9D%AC";   // unicode <> dividers
   const right_div = "%E2%9D%AD";
-  //const left_div = "%E2%A4%A3";   // hooked arrows
-  //const right_div = "%E2%A4%A5";  
   const bullet = "%E2%88%99";     // bullet
+  var mood_text = "";      // City mood
+  var size_color = "rgba(255, 255, 255, 1)";  // default white
+  var size_shadow_color = "rgba(0, 0, 0, 1)"; // default black
+  const peace = "%E2%98%AE ";
+  const celeb = "%F0%9F%8E%89 ";  // 88 balloon, 89 party popper
+  const disorder = "%E2%9C%8A ";
+  const lose_celeb_color = "rgba(0,0,0,1)";
+  const start_celeb_color = "rgb(128,255,128)";
+  var start_celeb = false;  
+  var lose_celeb = 0;  // uses 0,1 instead of false,true to also adjust inverted shadows to look better.
 
-  // source capacity = airlift counter (unless SRC_UNLIMITED==true, in which case it's infinite)
-  var src_capacity = (game_info['airlifting_style'] & SRC_UNLIMITED) ? infinity_symbol : city['airlift'];
-  if (src_capacity<0) src_capacity = 0;
+  // City mood:
+  if (draw_city_mood) {
+    if (client.conn.playing != null && !client_is_observer()) {
+      if (city['owner'] == client.conn.playing.playerno) {
+        var city_state = get_city_state(city);
+        happy_people   = city['ppl_happy'][FEELING_FINAL];
+        content_people = city['ppl_content'][FEELING_FINAL];
+        unhappy_angry_people = city['ppl_unhappy'][FEELING_FINAL] + city['ppl_angry'][FEELING_FINAL];
 
-  if (client.conn.playing != null && !client_is_observer()) {
-    if (city['owner'] == client.conn.playing.playerno && draw_city_airlift_counter==true ) {
-      if (game_info['airlift_dest_divisor'] == 0) { // if no dest_divisor, there is one counter for both source and dest
-        // show source airlifts if it has them, otherwise keep the label blank:
-        airlift_text = ( city['airlift']>0 ? " "+left_div+src_capacity+right_div : "");
-      } else if (city_has_building(city, improvement_id_by_name(B_AIRPORT_NAME))) {  
-        // We get here if city has airport && airliftdestdivsor > 0. This means destination-airlifts has a separate counter
-        var airlift_receive_text;  
-        var airlift_receive_max_capacity = Math.round(city['size'] / game_info['airlift_dest_divisor']);
+        switch (city_state) {
+          case "Peace":
+            mood_text = peace;
+            break;
+          case "Disorder":
+            mood_text = disorder;
+            break;
+          case "Celebrating": 
+            mood_text = celeb;
+            break;
+        }
+        if (happy_people >= city['size']*0.4999 && unhappy_angry_people==0 && city['size']>2)  {
+          // case handling: city is going to celebrate next turn. 
+          if (mood_text == peace) start_celeb = true;
+        }
+        else if (unhappy_angry_people > happy_people) { // case: city going into disorder          
+          if (mood_text == celeb) { // if losing celebration, invert size color and size shadow
+            size_shadow_color = "rgba(128,128,128,1)";
+            size_color = lose_celeb_color;
+            lose_celeb = 1;
+          }
+        }
+        else { // case handling: city will go into peace next turn
+          if (mood_text == celeb) { // if losing celebration, invert size color and size shadow
+            size_shadow_color = "rgba(128,128,128,1)";
+            size_color = lose_celeb_color;
+            lose_celeb = 1;
+          }
+          else if (mood_text == peace) {
+            mood_text = ""; // simplify: peace now+later = blank
+          }
+        }
+      }
+    }
+  }
 
-        if (game_info['airlifting_style'] & DEST_UNLIMITED) airlift_receive_text = infinity_symbol;  
-        // else destination airlifts allowed = population of city / airliftdivisor, rounded to nearest whole number:   
-        else airlift_receive_text = Math.max(0,city["airlift"] + airlift_receive_max_capacity - effects[1][0]['effect_value']);             
-        
-        airlift_text = (city['airlift']>0  ||  airlift_receive_text==infinity_symbol  || src_capacity==infinity_symbol || airlift_receive_text != "0")  
-                        ? " "+left_div + src_capacity + bullet + airlift_receive_text + right_div  
-                        : " "+left_div + bullet + right_div ;  
+  // Airlift Counter
+  if (draw_city_airlift_counter) {
+    // source capacity = airlift counter (unless SRC_UNLIMITED==true, in which case it's infinite)
+    var src_capacity = (game_info['airlifting_style'] & SRC_UNLIMITED) ? infinity_symbol : city['airlift'];
+    if (src_capacity<0) src_capacity = 0;
+
+    if (client.conn.playing != null && !client_is_observer()) {
+      if (city['owner'] == client.conn.playing.playerno) {
+        if (game_info['airlift_dest_divisor'] == 0) { // if no dest_divisor, there is one counter for both source and dest
+          // show source airlifts if it has them, otherwise keep the label blank:
+          airlift_text = ( city['airlift']>0 ? " "+left_div+src_capacity+right_div : "");
+        } else if (city_has_building(city, improvement_id_by_name(B_AIRPORT_NAME))) {  
+          // We get here if city has airport && airliftdestdivsor > 0. This means destination-airlifts has a separate counter
+          var airlift_receive_text;  
+          var airlift_receive_max_capacity = Math.round(city['size'] / game_info['airlift_dest_divisor']);
+
+          if (game_info['airlifting_style'] & DEST_UNLIMITED) airlift_receive_text = infinity_symbol;  
+          // else destination airlifts allowed = population of city / airliftdivisor, rounded to nearest whole number:   
+          else airlift_receive_text = Math.max(0,city["airlift"] + airlift_receive_max_capacity - effects[1][0]['effect_value']);             
+          
+          airlift_text = (city['airlift']>0  ||  airlift_receive_text==infinity_symbol  || src_capacity==infinity_symbol || airlift_receive_text != "0")  
+                          ? " "+left_div + src_capacity + bullet + airlift_receive_text + right_div  
+                          : " "+left_div + bullet + right_div ;  
+        }
       }
     }
   }
 
   var text = decodeURIComponent(city['name'] + airlift_text).toUpperCase();
-  if (replace_capital_i) text = text.replace(/I/gi, "|");  // option to fix capital I for some bad windows sans fonts
-  var size = city['size'];
+  if (replace_capital_i) text = text.replace(/I/gi, "|");  // option to fix midget capital I for some bad sans-serif fonts
+  var size = decodeURIComponent(mood_text + city['size']);
   var color = nations[city_owner(city)['nation']]['color'];
   var prod_type = get_city_production_type(city);
 
@@ -382,13 +437,20 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
   // shadow text
   pcanvas.fillStyle = "rgba(40, 40, 40, 1)";
   pcanvas.fillText(text, canvas_x - Math.floor(txt_measure.width / 2)     , canvas_y + 1);
-  pcanvas.fillStyle = "rgba(0, 0, 0, 1)";
-  pcanvas.fillText(size, canvas_x + Math.floor(txt_measure.width / 2) + 10, canvas_y + 1);
+  pcanvas.fillStyle = size_shadow_color; // "rgba(0, 0, 0, 1)";
+  pcanvas.fillText(size, canvas_x + Math.floor(txt_measure.width / 2) + 10 - lose_celeb, canvas_y + 1 - lose_celeb);
 
-  // white text on top of shadows
+  // text on top of shadows
   pcanvas.fillStyle = "rgba(255, 255, 255, 1)";
   pcanvas.fillText(text, canvas_x - Math.floor(txt_measure.width / 2) - 2, canvas_y - 1);
+  pcanvas.fillStyle = size_color;
   pcanvas.fillText(size, canvas_x + Math.floor(txt_measure.width / 2) + 8, canvas_y - 1);
+  
+  if (start_celeb) {
+    mood_text = decodeURIComponent(mood_text); // only do when needed - performance
+    pcanvas.fillStyle = start_celeb_color;
+    pcanvas.fillText(mood_text, canvas_x + Math.floor(txt_measure.width / 2) + 8, canvas_y - 1);
+  }
 }
 
 /**************************************************************************

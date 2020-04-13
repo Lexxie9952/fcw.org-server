@@ -111,6 +111,7 @@ var update_city_text_in_refresh_tile = true;
 var draw_city_outlines = true;
 var draw_city_output = false;
 var draw_city_airlift_counter = false;
+var draw_city_mood = false;
 var draw_map_grid = false;
 var draw_city_names = true;
 var draw_city_growth = true;
@@ -272,6 +273,12 @@ function init_options_dialog()
   $('#airlift_setting').change(function() {
     draw_city_airlift_counter = this.checked;
     simpleStorage.set('airlift', draw_city_airlift_counter);
+  });
+  // DRAW CITY MOOD ON MAP
+  $('#draw_city_mood').prop('checked', draw_city_mood);
+  $('#draw_city_mood').change(function() {
+    draw_city_mood = this.checked;
+    simpleStorage.set('drawMood', draw_city_mood);
   });
    // SHOW WORKED TILES ON MAP
    $('#draw_city_output').prop('checked', draw_city_output);

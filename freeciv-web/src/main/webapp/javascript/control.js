@@ -3202,7 +3202,12 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       } else if (alt) {
         the_event.preventDefault(); // override possible browser shortcut
         key_unit_move(DIR8_SOUTH);  // alt+M=1
-      } else key_unit_mine();
+      } else if (ctrl) {
+        the_event.preventDefault(); // override possible browser shortcut
+        draw_city_mood = !draw_city_mood;
+      }
+      
+      else key_unit_mine();
     break;
     /* these were moved lower to keycode 188,190 for Mac compatibility:
     case ',':

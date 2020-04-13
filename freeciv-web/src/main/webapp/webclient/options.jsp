@@ -151,6 +151,9 @@
     </div>
   </td>
   <td>
+    <div title="Shows citizen mood for cities on the main map. (CTRL-M)" class="main_menu_buttons">
+        <input type='checkbox' name='draw_city_mood' id='draw_city_mood'><b>Show city mood on map</b> 
+    </div>
   </td>
 </tr>
 
