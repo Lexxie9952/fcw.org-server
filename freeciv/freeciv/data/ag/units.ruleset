@@ -3830,7 +3830,7 @@ flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capt
 roles         = "AttackStrongStartUnit"  ;note: MP2 doesn't start games with ASSU's so has co-opted this for caravan start unit.
 helptext      = _("\
 Caravans are Commerce units. In cities with whom you are not at war, Commerce units\
- help build Wonders or create Traderoutes, increasing net trade in both cities\
+ help build Wonders or create Trade Routes, increasing net trade in both cities\
  relative to combined trade (minimum city distance: 12 tiles.) Routes are inactive in\
  war but renew if war ends.\nCommerce units can enter the Marketplace of foreign cities to sell\
  goods: revenue derives from total trade in both cities.\nCommerce units with no Home City\
