@@ -694,9 +694,12 @@ void toggle_ai_player_direct(struct connection *caller, struct player *pplayer)
 {
   fc_assert_ret(pplayer != NULL);
 
+  /* this only prevented admins and private flexturn organisers from 
+     putting an "away" player on AI.
   if (is_longturn() && S_S_RUNNING == server_state()) {
     return;
   }
+  */
 
   if (is_human(pplayer)) {
     cmd_reply(CMD_AITOGGLE, caller, C_OK,
