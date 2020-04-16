@@ -3105,8 +3105,14 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'S':
-      if (!ctrl) {
+      if (!ctrl && !alt && !shift) {
         key_unit_sentry();
+      }
+      else if (shift) { // cycle through stacked unit display modes
+        draw_stacked_unit_mode ++;
+        if (draw_stacked_unit_mode>3)
+          draw_stacked_unit_mode = 0;
+          simpleStorage.set('stackmode', draw_stacked_unit_mode);
       }
     break;
 

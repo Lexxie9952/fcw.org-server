@@ -697,6 +697,7 @@ function fill_unit_sprite_array(punit, stacked)
   if (result[0]['offset_x']) {
     result[0]['offset_x'] += UO_sx[id];  // adjust shield x placement
   }
+
   // Unit
   result.push(
     {"key" : tileset_unit_type_graphic_tag(unit_type(punit)),
@@ -715,9 +716,29 @@ function fill_unit_sprite_array(punit, stacked)
     result.push(get_unit_hp_sprite(punit));
     // Stacked "+" icon
     if (stacked) {
+      var push_right=0; // whether to push small stack icon right 2 pixels (for right aligned shield)
+      // Optional shield ring for stacked units
+      if (draw_stacked_unit_mode & dsum_RING) { 
+        if (UO_sx[id]){ // right-aligned shield:
+          result.push({"key" : "unit.stk_shld_r",
+                "offset_x" : unit_offset['x'],
+                "offset_y" : -31-unit_offset['y']});
+          push_right = 2; // small "+" needs +2 pixels for right-aligned shield 
+        }
+        else           // left-aligned shield:
+          result.push({"key" : "unit.stk_shld_l",
+                "offset_x" : unit_offset['x'],
+                "offset_y" : -31-unit_offset['y']});
+      }
+      // Yellow "+" (small or normal) to show unit is in a stack:
       var stacked = get_unit_stack_sprite();
-      stacked['offset_x'] += UO_mx[id];
-      stacked['offset_y'] -= UO_my[id];
+      if (draw_stacked_unit_mode & dsum_SMALL) {
+        stacked['offset_x'] += push_right;
+      }
+      else {  // normal mode has custom offsets
+        stacked['offset_x'] += UO_mx[id];
+        stacked['offset_y'] -= UO_my[id];
+      }
       result.push(stacked);
     }
   }
@@ -737,13 +758,14 @@ function fill_unit_sprite_array(punit, stacked)
 **************************************************************************/
 function fill_stacked_in_base_sprite_array(punit)
 {
-  var id = punit['type'];
-  const mx = UO_mx[id];   const my = UO_my[id];
+  var stacked = get_unit_stack_sprite();
 
-    var stacked = get_unit_stack_sprite();
+  if (!(draw_stacked_unit_mode & dsum_SMALL) ) {  //// regular mode has custom offsets
+    var id = punit['type'];
+    const mx = UO_mx[id];   const my = UO_my[id];
     stacked['offset_x'] += mx;
     stacked['offset_y'] -= my;
-
+  }  
   return stacked;
 }
 
@@ -1001,7 +1023,12 @@ function get_unit_nation_flag_normal_sprite(punit)
 ***********************************************************************/
 function get_unit_stack_sprite(punit)
 {
-  return {"key" : "unit.stack",
+  if (draw_stacked_unit_mode & dsum_SMALL) {   //// alternate small mode of showing stack near hpbar
+    return {"key" : "unit.stack1",
+    "offset_x" : unit_flag_offset_x + -25,
+    "offset_y" : - unit_flag_offset_y - 15};
+  }
+  else return {"key" : "unit.stack",
           "offset_x" : unit_flag_offset_x + -25,
           "offset_y" : - unit_flag_offset_y - 15};
 }
@@ -2272,7 +2299,7 @@ function create_unit_offset_arrays()
           break;
       case "Mechanized Infantry":
       case "Mech. Inf.":
-          vx -= 25; vy += 12;
+          vx -= 23; vy += 13;
           break;
       case "Medium Bomber":
           sx = 8;

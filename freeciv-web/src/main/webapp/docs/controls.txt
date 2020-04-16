@@ -164,6 +164,7 @@ shift-M: show unit moves left percentage on map
 ctrl-alt-P: highlight polluted tiles in red
 shift-R: revolution: choose new government
 alt-S: fullscreen mode
+shift-S: stack display mode (multiple tile units)
 ctrl-S: save game
 shift-T: change tax rates
 shift-W: show city tile production on map

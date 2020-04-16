@@ -214,6 +214,10 @@ function civclient_init()
   draw_city_mood = simpleStorage.get('drawMood');
   if (draw_city_mood == null) 
     draw_city_mood = false;  // Default case
+
+  draw_stacked_unit_mode = simpleStorage.get('stackmode');
+  if (draw_stacked_unit_mode == null) 
+    draw_stacked_unit_mode = dsum_BASIC;  // Default case
   
   draw_city_output = simpleStorage.get('drawTiles');
   if (draw_city_output == null) 
