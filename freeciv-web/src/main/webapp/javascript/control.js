@@ -3209,6 +3209,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       } else if (ctrl && !alt && !shift) {
         the_event.preventDefault(); // override possible browser shortcut
         draw_city_mood = !draw_city_mood;
+        simpleStorage.set('drawMood', draw_city_mood);
       }
       
       else key_unit_mine();
