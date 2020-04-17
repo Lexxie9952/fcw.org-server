@@ -2356,7 +2356,7 @@ function create_unit_offset_arrays()
           break;
       case "Transport":
           dx -= 3; dy -= 1;
-          vx -= 25; vy += 11;
+          vx -= 23; vy += 12;
           break;
       case "Trireme":
           vx += 2; vy += 1;

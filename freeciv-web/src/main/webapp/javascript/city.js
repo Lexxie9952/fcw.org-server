@@ -41,6 +41,31 @@ var worklist_dialog_active = false;
 var production_selection = [];
 var worklist_selection = [];
 
+// User definable row in city list:   *****************************
+var city_user_row_val = 0;  
+const CURV_NOTHING      = 0;
+const CURV_CORRUPTION   = 1;
+const CURV_POLLUTION    = 2;
+const CURV_TRADE_REVENUE= 3;
+const CURV_FOREIGNERS   = 4;
+const CURV_TURN_FOUNDED = 5;
+const CURV_LAST         = 6;
+const clkmsg = "\n\nClick column to change info category.";
+const CURV_icons = ["/images/city_user_row.png",
+                    "/images/corrupt.png",
+                    "/images/pollution.png",
+                    "/images/camel.png",
+                    "/images/foreigner.png",
+                    "/images/stone_henge.png"];
+const CURV_title = ["User Info Column:\nClick column below to choose",
+                    "Corruption"+clkmsg,
+                    "Pollution Probability"+clkmsg,
+                    "Trade from Trade Routes"+clkmsg,
+                    "Foreign Citizens"+clkmsg,
+                    "Turn Founded"+clkmsg];
+
+// *****************************************************************
+
 /* The city_options enum. */
 var CITYO_DISBAND      = 0;
 var CITYO_NEW_EINSTEIN = 1;
@@ -1985,6 +2010,31 @@ function show_city_traderoutes()
 }
 
 /**************************************************************************
+ Gets total trade route revenue for a city
+**************************************************************************/
+function get_city_traderoute_revenue(city_id)
+{
+  var pcity = cities[city_id], total_revenue = 0;
+  if (pcity == null) return 0;
+
+  var routes = city_trade_routes[city_id];
+
+  if (pcity['traderoute_count'] != 0 && routes == null) {
+    console.log("Can't find the trade routes "+pcity['name']+" is said to have");
+    return 0;
+  }
+
+  for (var i = 0; i < pcity['traderoute_count']; i++) {
+    var tcity_id;
+    if (routes[i] == null) continue;
+    tcity_id = routes[i]['partner'];
+    if (tcity_id == 0 || tcity_id == null) continue;
+    total_revenue += routes[i]['value'];
+  }
+  return total_revenue;
+}
+
+/**************************************************************************
  Populates data to the production tab in the city dialog.
 **************************************************************************/
 function city_worklist_dialog(pcity)
@@ -3081,7 +3131,8 @@ function update_city_screen()
         + "<th id='food' title='Food surplus' class='food_text' style='text-align:right;padding-right:0px'><img style='margin-right:-6px; margin-top:-3px;' class='lowered_gov' src='/images/wheat.png'></th>"
         + "<th title='Production surplus (shields)' class='prod_text' style='text-align:right;padding-right:0px'> <img class='lowered_gov' src='/images/shield14x18.png'></th>"
         + "<th title='Trade' class='trade_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/trade.png'></th>"
-        + "<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>"
+        + "<th title='"+CURV_title[city_user_row_val]+"' class='non_priority' style='text-align:right;padding-left:0px;padding-right:30px;'><img class='lowered_gov' src='"+CURV_icons[city_user_row_val]+"'></th>"
+    //    + "<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>"
         + "<th title='Gold' class='gold_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/gold.png'></th>"
         + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='lowered_gov' src='/images/lux.png'></th>"
         + "<th title='Science (bulbs)' class='sci_text' style='text-align:right'><img class='lowered_gov' src='/images/sci.png'></th>"
@@ -3143,6 +3194,7 @@ function update_city_screen()
   var city_name;
   var city_food, city_prod, city_trade;
   var city_gold, city_lux, city_sci; 
+  var city_user = "";                     // user defined row
   var city_growth, city_food_stock;       // grows in x turns, how much is in grain storage
   var city_granary_size, city_buy_cost;   // grain needed to grow, cost to buy city's production
   var city_state; 
@@ -3215,7 +3267,6 @@ function update_city_screen()
 
           progress_string="<span class='non_priority'>"+progress_string+shield_cost+"</span>"
         }
-        
         happy_people   = pcity['ppl_happy'][FEELING_FINAL];
         content_people = pcity['ppl_content'][FEELING_FINAL];
         unhappy_angry_people = pcity['ppl_unhappy'][FEELING_FINAL]+pcity['ppl_angry'][FEELING_FINAL];
@@ -3225,12 +3276,12 @@ function update_city_screen()
         if (tiny_screen) {
           switch (city_state) {
             case "Peace":
-              city_state = "&#x262E;"; // peace
+              city_state = "&#x262E;";   // peace
               break;
             case "Disorder":
-              city_state = "&#x270A;"  // fist
+              city_state = "&#x270A;"    // fist
               break;
-            case "Celebrating": 
+            case "Celebrating":
               city_state = "&#x1F388;";  // balloon
               break;
           }
@@ -3273,6 +3324,33 @@ function update_city_screen()
           + "<span class='lux_text'>" + pcity['prod'][O_LUXURY] +"</span>" +  "</td>";
         city_sci = "<td style='text-align:right;' class='sci_text' onclick='javascript:show_city_dialog_by_id(" + pcity['id'] + ");'>"
           + "<span class='sci_text'>" + pcity['prod'][O_SCIENCE] + "</span>" + "</td>";
+
+        // Widescreen only:  user defined info column:
+        switch (city_user_row_val) {
+          case CURV_CORRUPTION:
+            city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
+              + "<span style='color:#d65'>" + pcity['waste'][O_TRADE] +"</span>" +  "</td>";
+            break;
+          case CURV_POLLUTION:
+            city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
+              + "<span style='color:#A73'>" + pcity['pollution']+"</span>" +  "</td>";
+            break;
+          case CURV_TRADE_REVENUE:
+            city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
+            + "<span style='color:#fdff7d;'>" + get_city_traderoute_revenue(pcity['id']) +"</span>" +  "</td>";
+            break;  
+          case CURV_TURN_FOUNDED:
+            city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
+              + "<span style='color:#999'>" + pcity['turn_founded'] +"</span>" +  "</td>";
+            break;
+          case CURV_FOREIGNERS:
+            city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
+              + "<span style='color:#F92'>" + (pcity['size'] - pcity['nation_citizens'][client.conn.playing.playerno]) +"</span>" +  "</td>";
+            break;
+          default:
+            city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
+            + "<span style='color:#0000'>0</span></td>";
+          }
 
         // Calculate turns to grow or " " if not growing
         if (tiny_screen) { // tiny screen, numerals only
@@ -3351,7 +3429,7 @@ function update_city_screen()
                 + td_click2_html + unhappy_angry_people+"</td>"
                 + td_click_html + city_state + "</td>"
                 + city_food + city_prod + city_trade
-                + td_click_html + "</td>"
+                + (wide_screen ? city_user : td_click_html + "</td>")
                 + city_gold + city_lux + city_sci
                 + td_click_html + city_growth + "</td>"
                 + td_click_html+ city_food_stock + "<span class='contrast_text'>/</span>" + city_granary_size + "</td>"
@@ -3436,6 +3514,20 @@ function update_city_screen()
     else  
       active_superpanel_cityid = -1; // deactive refresh mode.
   }
+}
+
+
+/**************************************************************************
+  User defined city info row
+**************************************************************************/
+function change_city_user_row(city_id)
+{
+  city_user_row_val ++;
+
+  if (city_user_row_val == CURV_LAST)
+    city_user_row_val = 0;
+
+  update_city_screen();
 }
 
 /**************************************************************************
