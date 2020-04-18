@@ -3329,15 +3329,16 @@ function update_city_screen()
         switch (city_user_row_val) {
           case CURV_CORRUPTION:
             city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
-              + "<span style='color:#d65'>" + pcity['waste'][O_TRADE] +"</span>" +  "</td>";
+              + "<span style='color:#d65'>" + (pcity['waste'][O_TRADE]<1 ? " " : pcity['waste'][O_TRADE]) +"</span>" +  "</td>";
             break;
           case CURV_POLLUTION:
             city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
-              + "<span style='color:#A73'>" + pcity['pollution']+"</span>" +  "</td>";
+              + "<span style='color:#A73'>" + (pcity['pollution']<1 ? " " : pcity['pollution']) +"</span>" +  "</td>";
             break;
           case CURV_TRADE_REVENUE:
+            const rev = get_city_traderoute_revenue(pcity['id']);
             city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
-            + "<span style='color:#fdff7d;'>" + get_city_traderoute_revenue(pcity['id']) +"</span>" +  "</td>";
+              + "<span style='color:#fdff7d;'>" + (rev<1 ? " " : rev) + "</span>" +  "</td>";
             break;  
           case CURV_TURN_FOUNDED:
             city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
@@ -3345,7 +3346,8 @@ function update_city_screen()
             break;
           case CURV_FOREIGNERS:
             city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
-              + "<span style='color:#F92'>" + (pcity['size'] - pcity['nation_citizens'][client.conn.playing.playerno]) +"</span>" +  "</td>";
+              + "<span style='color:#F92'>" + 
+              (pcity['nationalities_count'] < 2 ? " " : (pcity['size'] - pcity['nation_citizens'][0/*0=current owner*/]) +"</span>" +  "</td>");
             break;
           default:
             city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
