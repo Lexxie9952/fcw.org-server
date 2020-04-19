@@ -3746,7 +3746,7 @@ helptext      = _("\
 A Diplomat performs official or covert actions. Covert acts make incidents\
  which let Senates break treaties. Diplomats in cities defend such acts with\
  combat. Diplomats can • Bribe a lone unit • Establish embassy • Investigate City\
- • Sabotage production/buildings • Steal tech 6)Steal maps • Incite city revolt.\n\
+ • Sabotage production/buildings • Steal tech • Steal maps • Incite city revolt.\n\
 "), _("\
 Full rules for Diplomats are in the Manual.\
 ")
