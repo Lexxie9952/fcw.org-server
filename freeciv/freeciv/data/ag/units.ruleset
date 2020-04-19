@@ -3834,11 +3834,11 @@ Caravans are Commerce units, and can act upon any city with whom you are not at 
  create Trade Routes: net trade in both cities will increase relative to combined trade.\
  Routes become inactive in war, but renew if war ends.\n\
 Commerce units can enter the Marketplace of foreign cities to sell goods: revenue derives\
- from total trade in both cities. This is profitable only between cities with very trade.\n\
+ from total trade in both cities. This is profitable only between cities with very high trade.\n\
 Commerce units given at Game Start can build Wonders without tech requirements. To use them\
- for a Trade Route, first assign them a Home City.\n\n\
+ for a Trade Route, first assign them a Home City.\n\
 ➤ Caravans are the only Commerce unit that can be produced more than once per turn, if the city\
- has enough output and the appropriate bonuses.\ 
+ has appropriate output bonuses.\ 
 ")
 
 [unit_freight]
