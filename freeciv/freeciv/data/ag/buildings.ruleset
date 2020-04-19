@@ -339,19 +339,18 @@ sound		= "b_courthouse"
 sound_alt	= "b_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
-Reduces corruption in a city by roughly half (60% but rounded down.)\
- Provides law and order to support +1 unit free of upkeep. Eliminates\
- tile corruption under Anarchy and Despotism.\
+Courthouses reduce corruption by about half (60% rounded down),\
+ eliminate tile output penalties for Anarchy and Despotism, and\
+ give +1 unit free of upkeep.\
 "), _("\
-Diplomatic attacks on your diplomatic units get ¼ bonus reduction from\
- their base odds, making finals odds of such attacks roughly ⅛ less.\
- (½ - ⅛ = ⅜). The Steal Tech action is 20% less effective. (80%-20%=60%). All\
- other hostile diplomatic actions are 20% less effective.\
+ Diplomatic combat gets a bonus of ¼ of base odds. (At general base odds\
+ of ½, odds of losing become: ½ - ⅛ = ⅜). All other hostile diplomatic\
+ actions are 20% less effective (80% - 20% = 60%).\
 "), _("\
-In a Democracy, a Courthouse makes 1 unhappy citizen content (unless that\
+ In Democracy, Courthouses make 1 unhappy citizen content, unless the\
  citizen is unhappy about military activity).\
 "), _("\
-Cost to incite revolt in the city is 2x if empty and 4x if occupied.\
+ Cost to incite revolt in the city is 2x if empty and 4x if occupied.\
 ")
 
 [building_factory]
@@ -708,17 +707,15 @@ sabotage	= 100
 sound		= "b_police_station"
 sound_alt	= "b_generic"
 helptext	= _("\
-Police Stations neutralize the unhappiness caused by two military units.\
+Police Stations neutralize the unhappiness caused by two military units, and\
+ prevent enemies from estalishing embassies without first agreeing to cease-fire\
+ or peace.\
 "), _("\
-Diplomatic attacks on your diplomatic units get a ¼ bonus reduction from\
- their base odds, making finals odds of such attacks roughly ⅛ less. (½ - ⅛ = ⅜).\
- The Steal Tech action is 20% less effective. (80%-20%=60%). All other hostile\
- diplomatic actions are 20% less effective.\
+ Diplomatic combat gets a bonus of ¼ of base odds. (At general base odds\
+ of ½, odds of losing become: ½ - ⅛ = ⅜). All other hostile diplomatic\
+ actions are 20% less effective (80% - 20% = 60%).\
 "), _("\
-Diplomats and Spies made in a city with Police Station gain +1 veteran level.\
-"), _("\n\
-Prevents enemies from establishing an embassy without first agreeing to cease-fire,
- armistice, or peace.\
+ Diplomats and Spies made in a city with Police Station gain +1 veteran level.\
 ")
 
 [building_port_facility]
