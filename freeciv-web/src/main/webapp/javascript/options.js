@@ -49,7 +49,8 @@ const CRF_EXTRA_QUAY           = 14; // Ruleset has Quay extra and Waterway Extr
 const CRF_NO_WASTE             = 15; // Ruleset does not feature waste.
 const CRF_MINOR_NUKES          = 16; // Ruleset has minor nukes (fission, 3x3 area)
 const CRF_MAJOR_NUKES          = 17; // Ruleset has major nukes (fusion), which it may want to disable in some games.
-const CRF_LAST                 = 18;
+const CRF_DEMOCRACY_NONCORRUPT = 18; // Allows skipping past corruption display modes in rulesets where we know there's no corruption to show. 
+const CRF_LAST                 = 19;
 
 var graphic_theme_path;
 

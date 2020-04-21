@@ -3002,20 +3002,25 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'C':
-      if (ctrl) {
+      if (ctrl && !shift && !alt) {
+        the_event.preventDefault();          // override possible browser shortcut
         show_citybar = !show_citybar;
-      } else if (shift) {
-        key_select_same_global_type(true); //true=same continent only
+      } else if (shift && !ctrl && !alt) {
+          key_select_same_global_type(true); // true=same continent only
+      } else if (ctrl && shift && !alt) {            // cycle citybar display mode
+          the_event.preventDefault();          // override possible browser shortcut
+          mapview_cycle_city_display_mode();
       } else if (current_focus.length > 0) {
-        auto_center_on_focus_unit();
+          auto_center_on_focus_unit();
       }
     break;
 
     case 'D':
-      if (shift) {
+      if (shift && !ctrl && !alt) {
         key_unit_disband();
       } else if (!shift && ctrl && alt) {
         // CTRL-ALT-D user forced disconnect
+        the_event.preventDefault(); // override possible browser shortcut
         clinet_disconnect_from_server();
       } else if (!(alt || ctrl)) {
         key_unit_action_select();
@@ -3126,6 +3131,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       if (shift) {
         key_select_same_type_units_on_tile();
       } else if (alt) {
+        the_event.preventDefault(); // override possible browser shortcut
         key_select_different_units_on_tile();
       } else {
         key_select_all_units_on_tile();
@@ -3160,6 +3166,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 'I':
       if (alt) {
         if (ctrl && shift) {  // toggle capital I fixer
+          the_event.preventDefault(); // override possible browser shortcut
           replace_capital_i = !replace_capital_i;
           simpleStorage.set('capI', replace_capital_i);
         } else {

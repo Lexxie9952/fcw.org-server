@@ -24,6 +24,17 @@ var buffer_canvas = null;
 var city_canvas_ctx = null;
 var city_canvas = null;
 
+var city_map_display_mode = 0;
+const CMDM_SIZE           = 0;   // size of city
+const CMDM_FINISHED       = 1;   // when output is finished
+const CMDM_BUY_COST       = 2;   // cost to buy item 
+const CMDM_GROWS          = 3;   // turns to city growth
+const CMDM_SHIELDS        = 4;   // surplus shields
+const CMDM_POLLUTION      = 5;   // pollution
+// KEEP THIS PENULTIMATE, ONE BEFORE CMDM_LAST:
+const CMDM_CORRUPTION     = 6;   // corruption 
+const CMDM_LAST           = 7;   // marks end of city_map_display_mode enum
+
 var tileset_images = [];
 var sprites = {};
 var loaded_images = 0;
@@ -41,6 +52,51 @@ var dashedSupport = false;
 // [0] line-edge borders, [1] main thick line, [2] tile way points, [3] inner way-point dot
 var goto_colors_active = ["0,10,40,1","30,208,255,1","2,26,45,1","197,243,255,1"]; //active goto path
 var goto_colors_info   = ["40,10,0,.91","255,208,30,.91","45,26,2,.91","255,243,197,.91"]; //tile/unit info
+
+/**************************************************************************
+  Cycles through city map display modes for citybar when user presses 
+  ctrl-shift-c
+**************************************************************************/
+function mapview_cycle_city_display_mode()
+{
+  var last = CMDM_LAST;  // indicates time to cycle back to first display mode
+
+  // Skip corruption display mode for Democracies in rulesets where it has no corruption
+  if (client_rules_flag[CRF_DEMOCRACY_NONCORRUPT]
+      && !client_is_observer() 
+      && governments[players[client.conn.playing.playerno].government].name == "Democracy") {
+        last--;
+  }
+
+  city_map_display_mode++;
+
+  if (city_map_display_mode >= last)
+    city_map_display_mode = 0;
+
+  switch (city_map_display_mode) {
+    case CMDM_SIZE:
+      add_client_message("Showing city population.");
+      break;
+    case CMDM_FINISHED:
+      add_client_message("Showing turns to completion.");
+      break;
+    case CMDM_BUY_COST:
+      add_client_message("Showing buy cost.");
+      break;
+    case CMDM_GROWS:
+      add_client_message("Showing city growth turns.");
+      break;
+    case CMDM_SHIELDS:
+      add_client_message("Showing city production surplus.");
+      break;
+    case CMDM_POLLUTION:
+      add_client_message("Showing city pollution probability.");
+      break;
+    case CMDM_CORRUPTION:
+      add_client_message("Showing city corruption.");
+      break;                        
+  }
+}
 
 /**************************************************************************
   ...
@@ -289,6 +345,94 @@ function canvas_put_select_rectangle(canvas_context, canvas_x, canvas_y, width, 
 
 
 /**************************************************************************
+  Gives mapview_put_city_bar() the number and colour it will put in the 
+  citybar, according to user selected city_map_display_mode.
+**************************************************************************/
+function mapview_get_citybar_num_and_color(city_id)
+{
+  var num = "";
+  var col = "rgba(255,255,255,1)";
+  const pcity = cities[city_id];
+
+  switch (city_map_display_mode) {
+    // size of city
+    case CMDM_SIZE:
+      num = pcity['size'];
+      break;
+    // turns to finish production
+    case CMDM_FINISHED:
+      num = get_city_production_time(pcity);
+      if (num===undefined || num>999) num = "";
+      else if (num==1) {
+        num = "%E2%9C%94"; // checkmark, completing!
+        if (pcity['buy_cost']) { // still has shields though, show diff. color
+          col = "rgb(96,255,255)";
+        }
+      }
+      else col = "rgb(96,255,255)";
+      break;
+    case CMDM_BUY_COST:
+      if (pcity['buy_cost'] !== undefined) {
+        num = pcity['buy_cost'];
+        if (num===0) {
+          num = "%E2%9C%94"; // checkmark, no shields left at all
+        }
+        else col = "rgb(255,213,44)";   // match civclient.css .gold_text
+      }
+      break;
+    // turns to grow
+    case CMDM_GROWS:
+      if (pcity.hasOwnProperty('granary_turns')) {
+        num = pcity['granary_turns'];
+        if (num>999) num = "";
+        else if (num===0) {
+          num = "--";
+          col = "rgb(196,196,196)";
+        }
+        else if (num>0) col = "rgb(128,255,128)";
+        else if (num<0) {
+          col = "rgb(255,131,0)";   // starving !
+          if (num==-1) num += " ** %E2%9A%A0"  // starving in one turn !!
+        }
+      }
+      break;
+    // surplus shield output
+    case CMDM_SHIELDS:
+      if (pcity.hasOwnProperty('surplus')) {
+        num = pcity['surplus'][O_SHIELD];
+        if (num>0) num = "+" + num;
+        else if (num===0) {
+          num = "-";  // no surplus = grey "-"
+          col = "rgb(128,128,128)";
+        } else { // negative upkeep WARNING!!
+          num += " %E2%9A%A0";   //warning symbol
+          col = "rgb(255,128,128)";
+        }
+      }
+      break;
+    case CMDM_POLLUTION:
+      if (pcity['pollution']) {
+        num = pcity['pollution'];
+        if (num<1) num = "";
+        else {
+          col = "rgb(170,119,51)";
+        }
+      }
+      break;
+    case CMDM_CORRUPTION:
+      if (pcity.hasOwnProperty('waste')) {
+        num = pcity['waste'][O_TRADE];
+        if (num<1) num = "";
+        else {
+          col = "rgb(255,128,102)";
+        }
+      }
+      break; 
+  }
+
+  return {"num":num, "col":col};
+}
+/**************************************************************************
   Draw city text onto the canvas.
 **************************************************************************/
 function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
@@ -301,7 +445,7 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
   const right_div = "%E2%9D%AD";
   const bullet = "%E2%88%99";     // bullet
   var mood_text = "";      // City mood
-  var size_color = "rgba(255, 255, 255, 1)";  // default white
+  var size_color;
   var size_shadow_color = "rgba(0, 0, 0, 1)"; // default black
   const peace = "%E2%98%AE ";
   const celeb = "%F0%9F%8E%89 ";  // 88 balloon, 89 party popper
@@ -386,7 +530,10 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
 
   var text = decodeURIComponent(city['name'] + airlift_text).toUpperCase();
   if (replace_capital_i) text = text.replace(/I/gi, "|");  // option to fix midget capital I for some bad sans-serif fonts
-  var size = decodeURIComponent(mood_text + city['size']);
+  var citybarinfo = mapview_get_citybar_num_and_color(city['id']);
+  // "size" is now alternatively other things, based on which city_map_display_mode we're in:
+  var size = decodeURIComponent(mood_text + citybarinfo['num'] /*city['size']*/ );
+  var size_color = citybarinfo['col']; // colour indicates city_map_display_mode
   var color = nations[city_owner(city)['nation']]['color'];
   var prod_type = get_city_production_type(city);
 
@@ -434,11 +581,12 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
               canvas_y - 19, 28, 24);
   }
 
+  var shadow_offset_fix = (lose_celeb || city_map_display_mode) ? 1 : 0; //shadow offsets of 2 only look good under white
   // shadow text
   pcanvas.fillStyle = "rgba(40, 40, 40, 1)";
   pcanvas.fillText(text, canvas_x - Math.floor(txt_measure.width / 2)     , canvas_y + 1);
   pcanvas.fillStyle = size_shadow_color; // "rgba(0, 0, 0, 1)";
-  pcanvas.fillText(size, canvas_x + Math.floor(txt_measure.width / 2) + 10 - lose_celeb, canvas_y + 1 - lose_celeb);
+  pcanvas.fillText(size, canvas_x + Math.floor(txt_measure.width / 2) + 10 - shadow_offset_fix, canvas_y + 1 - shadow_offset_fix);
 
   // text on top of shadows
   pcanvas.fillStyle = "rgba(255, 255, 255, 1)";
