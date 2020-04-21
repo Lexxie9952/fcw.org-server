@@ -130,6 +130,7 @@ flags    = ""
 graphic     = "a.alphabet"
 graphic_alt = "-"
 cost = 24
+helptext = _("Obsoletes Boat.")
 
 [advance_amphibious_warfare]
 name     = _("Amphibious Warfare")
@@ -174,6 +175,7 @@ req2     = "Rocketry"
 flags    = ""
 graphic     = "a.avionics"
 graphic_alt = "-"
+helptext = _("Obsoletes Dive Bomber, prior Fighters")
 cost = 7250
 
 [advance_banking]
@@ -229,7 +231,7 @@ req2     = "Horseback Riding"
 flags    = ""
 graphic     = "a.chivalry"
 graphic_alt = "-"
-helptext = _("Obsoletes Horsemen, Chariots.")
+helptext = _("Obsoletes Horsemen, Chariots. Does not block Philosophy bonus.")
 cost = 226
 
 [advance_code_of_laws]
@@ -284,7 +286,7 @@ req2     = "Metallurgy"
 flags    = ""
 graphic     = "a.conscription"
 graphic_alt = "-"
-helptext = _("Obsoletes Musketeers. Capable cities can make multiple infantry per turn.")
+helptext = _("Obsoletes Musketeers. Capable cities can make multiple caravans/infantry per turn.")
 cost = 1890
 
 [advance_construction]
@@ -303,6 +305,7 @@ req2     = "None"
 flags    = ""
 graphic     = "a.currency"
 graphic_alt = "-"
+helptext = _("Boats can build Wonders.")
 
 [advance_democracy]
 name     = _("Democracy")
@@ -396,7 +399,7 @@ req2     = "Theory of Gravity"
 flags    = "Build_Airborne"
 graphic     = "a.flight"
 graphic_alt = "-"
-helptext = _("Traderoute gives less first time revenue.")
+helptext = _("Traderoutes give less first time revenue.")
 cost = 4680
 
 [advance_fundamentalism]
@@ -444,7 +447,7 @@ flags    = ""
 graphic     = "a.gunpowder"
 graphic_alt = "-"
 cost = 800
-helptext = _("Obsoletes Barracks, earlier foot soldiers.")
+helptext = _("Obsoletes Agōgē of Sparta, Barracks, earlier foot soldiers.")
 
 [advance_horseback_riding]
 name     = _("Horseback Riding")
@@ -471,7 +474,7 @@ req2     = "Literacy"
 flags    = ""
 graphic     = "a.invention"
 graphic_alt = "-"
-helptext = _("Extra vision for Fortress and ships in Naval Base. Prevents Philosophy bonus.")
+helptext = _("Extra vision for Fortress and Naval Base. Prevents Philosophy bonus.")
 
 [advance_iron_working]
 name     = _("Iron Working")
@@ -689,7 +692,7 @@ req2     = "Navigation"
 flags    = ""
 graphic     = "a.physics"
 graphic_alt = "-"
-helptext = _("Prevents Philosophy from awarding bonus tech.")
+helptext = _("Increases unit vision. Prevents Philosophy bonus.")
 
 [advance_plastics]
 name     = _("Plastics")
@@ -745,7 +748,7 @@ req2     = "Bridge Building"
 flags    = ""
 graphic     = "a.railroad"
 graphic_alt = "-"
-helptext = _("Obsoletes Hanging Gardens. Less Traderoute revenue. Allows Railroads.")
+helptext = _("Obsoletes Hanging Gardens. Traderoutes less first time revenue. Allows Railroads.")
 cost = 1820
 
 [advance_recycling]
@@ -824,7 +827,7 @@ req2     = "Rocketry"
 flags    = ""
 graphic     = "a.space_flight"
 graphic_alt = "-"
-helptext = _("Obsoletes prior Bombers/Fighters")
+helptext = _("Obsoletes earlier Bombers.")
 cost = 7680
 
 [advance_stealth]
@@ -949,7 +952,7 @@ flags    = ""
 graphic     = "a.warrior_code"
 graphic_alt = "-"
 cost = 24
-helptext = _("Foot soldiers may make Hideouts (if /show hideouts enabled).")
+helptext = _("Foot soldiers may make Hideouts, if enabled.")
 
 [advance_writing]
 name     = _("Writing")
