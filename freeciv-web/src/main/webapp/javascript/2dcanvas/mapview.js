@@ -533,7 +533,7 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
   var citybarinfo = mapview_get_citybar_num_and_color(city['id']);
   // "size" is now alternatively other things, based on which city_map_display_mode we're in:
   var size = decodeURIComponent(mood_text + citybarinfo['num'] /*city['size']*/ );
-  var size_color = citybarinfo['col']; // colour indicates city_map_display_mode
+  if (!lose_celeb) size_color = citybarinfo['col']; // colour indicates city_map_display_mode
   var color = nations[city_owner(city)['nation']]['color'];
   var prod_type = get_city_production_type(city);
 
