@@ -2916,7 +2916,7 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
     break;
 
     case 'S':
-      if (ctrl) {
+      if (ctrl && !shift && !alt) {
         the_event.preventDefault(); // override possible browser shortcut
         quicksave();
       }
@@ -3113,7 +3113,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       if (!ctrl && !alt && !shift) {
         key_unit_sentry();
       }
-      else if (shift) { // cycle through stacked unit display modes
+      else if (shift && !ctrl && !alt) { // cycle through stacked unit display modes
         draw_stacked_unit_mode ++;
         if (draw_stacked_unit_mode>3)
           draw_stacked_unit_mode = 0;

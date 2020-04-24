@@ -353,7 +353,8 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
       var is_stacked = false;    // stacked units get a "+" icon drawn over them
       
       if (do_draw_unit && active_city == null) {
-        is_stacked = (ptile['units'] != null && ptile['units'].length > 1);
+        is_stacked = (ptile['units'] != null && ptile['units'].length > 1) ? ptile['units'].length : false;
+        if (is_stacked>9) is_stacked =9;  // 9 or more will just show a "9+" stack icon
         //var backdrop = false; /* !pcity; // this was unused var, eliminated for performance */
 
         if (unit_is_in_focus(punit)) {
@@ -669,7 +670,7 @@ function check_sprite_type(sprite_type)
  ...Highly modified, look at commits prior to 25.March.2020 if debug/
   comparison needed.
 **************************************************************************/
-function fill_unit_sprite_array(punit, stacked)
+function fill_unit_sprite_array(punit, num_stacked)
 {
   //var ptype = unit_type(punit);
   var id = punit['type'];
@@ -715,7 +716,7 @@ function fill_unit_sprite_array(punit, stacked)
     // Hit point bar
     result.push(get_unit_hp_sprite(punit));
     // Stacked "+" icon
-    if (stacked) {
+    if (num_stacked) {
       var push_right=0; // whether to push small stack icon right 2 pixels (for right aligned shield)
       // Optional shield ring for stacked units
       if (draw_stacked_unit_mode & dsum_RING) { 
@@ -731,7 +732,7 @@ function fill_unit_sprite_array(punit, stacked)
                 "offset_y" : -31-unit_offset['y']});
       }
       // Yellow "+" (small or normal) to show unit is in a stack:
-      var stacked = get_unit_stack_sprite();
+      var stacked = get_unit_stack_sprite(num_stacked);
       if (draw_stacked_unit_mode & dsum_SMALL) {
         stacked['offset_x'] += push_right;
       }
@@ -756,9 +757,9 @@ function fill_unit_sprite_array(punit, stacked)
  ...Fixing the fort drawing bug meant that when front walls of a base are
  drawn they can obscure the stacked icon, which gets redrawn in this case.
 **************************************************************************/
-function fill_stacked_in_base_sprite_array(punit)
+function fill_stacked_in_base_sprite_array(punit, num_stacked)
 {
-  var stacked = get_unit_stack_sprite();
+  var stacked = get_unit_stack_sprite(num_stacked);
 
   if (!(draw_stacked_unit_mode & dsum_SMALL) ) {  //// regular mode has custom offsets
     var id = punit['type'];
@@ -1021,10 +1022,10 @@ function get_unit_nation_flag_normal_sprite(punit)
 /**********************************************************************
   ...
 ***********************************************************************/
-function get_unit_stack_sprite(punit)
+function get_unit_stack_sprite(stacksize)
 {
   if (draw_stacked_unit_mode & dsum_SMALL) {   //// alternate small mode of showing stack near hpbar
-    return {"key" : "unit.stack1",
+    return {"key" : "unit.stack"+stacksize+"",
     "offset_x" : unit_flag_offset_x + -25,
     "offset_y" : - unit_flag_offset_y - 15};
   }
@@ -2005,7 +2006,7 @@ function fill_layer3_sprite_array(ptile, stacked, st_unit)
     result_sprites.push({"key" : "base.fortress_fg",
                           "offset_y" : -normal_tile_height / 2});
     if (stacked)
-      result_sprites.push(fill_stacked_in_base_sprite_array(st_unit));
+      result_sprites.push(fill_stacked_in_base_sprite_array(st_unit, stacked));
     return result_sprites;                  
   }
   // navalbase on top of fort, have to check for it first then return
@@ -2014,7 +2015,7 @@ function fill_layer3_sprite_array(ptile, stacked, st_unit)
       result_sprites.push({"key" : "base.navalbase_fg",
                             "offset_y" : -normal_tile_height / 2});
       if (stacked)
-        result_sprites.push(fill_stacked_in_base_sprite_array(st_unit));
+        result_sprites.push(fill_stacked_in_base_sprite_array(st_unit, stacked));
       return result_sprites;
     }
   }
@@ -2024,7 +2025,7 @@ function fill_layer3_sprite_array(ptile, stacked, st_unit)
       result_sprites.push({"key" : "base.outpost_fg",
                           "offset_y" : -normal_tile_height / 2});
       if (stacked)
-        result_sprites.push(fill_stacked_in_base_sprite_array(st_unit));
+        result_sprites.push(fill_stacked_in_base_sprite_array(st_unit, stacked));
       return result_sprites;  
     }
   }  

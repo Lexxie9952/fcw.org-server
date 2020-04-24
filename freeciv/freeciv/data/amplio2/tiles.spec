@@ -144,5 +144,13 @@ tiles = { "row", "column", "tag"
   3, 11, "unit.stack1"
   4, 11, "unit.stk_shld_r"
   5, 11, "unit.stk_shld_l"
-
+; Stacked unit count for display mode 2
+  9, 0,  "unit.stack2"
+  9, 1,  "unit.stack3"
+  9, 2,  "unit.stack4"
+  9, 3,  "unit.stack5"
+  9, 4,  "unit.stack6"
+  9, 5,  "unit.stack7"
+  9, 6,  "unit.stack8"
+  9, 7,  "unit.stack9"  ; NB: 9 or more
 }
