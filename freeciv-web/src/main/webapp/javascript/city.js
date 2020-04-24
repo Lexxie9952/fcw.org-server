@@ -2831,74 +2831,78 @@ function show_city_improvement_pane(city_id)
   var improvements_html = "";
   var opacity = 1;
   var border = "";
-  var mag_factor = ($(window).width()-519)/2450;   //.57 on 1920p
+  var mag_factor = ($(window).width()-519)/2470;   //was 2450 which was .57 on 1920p
 
   //console.log("width: "+$(window).width()+"mag factor:"+mag_factor);
-  var magnification = "zoom:"+mag_factor+"; -moz-transform:"+mag_factor+";";
+  //var magnification = "zoom:"+mag_factor+";"; // doesn't work right on Firefox, use line below insead:
+  var magnification = "transform:scale("+mag_factor+"); transform-origin: top left;";
+
   var bg = "background:#335 ";
   var title_text = "";
   var right_click_action = "oncontextmenu='city_sell_improvement_in(" +city_id+","+ z + ");' ";
   var shift_click_text = "\n\nSHIFT-CLICK: Highlight ON/OFF cities with this building.\n\nCTRL-CLICK: &#x2611; select ON/OFF cities with this building.' ";
     for (var z = 0; z < ruleset_control.num_impr_types; z ++) {
-    if (pcity['improvements'] != null /*&& pcity['improvements'].isSet(z) if present*/ && improvements[z].genus==GENUS_IMPROVEMENT) {
-       sprite = get_improvement_image_sprite(improvements[z]);
-       if (sprite == null) {
-         continue;
-       }
-
-       if (!server_settings['nukes_major']['val'] && improvements[z]['name'] == "Enrichment Facility")
-            continue; // major nukes set to OFF, don't show illegal prod choice.
-        
-       // Colour and text tags for current production and completion thereof:
-       var product_finished = false;
-       var verb = " is making ";
-       var is_city_making = (pcity['production_kind'] == VUT_IMPROVEMENT && pcity['production_value']==z);
-       if (is_city_making) { // colour code currently produced items which are bought/finished
-         var shields_invested = pcity['shield_stock'];
-         if (shields_invested>=improvements[z]['build_cost']) {
-           product_finished=true;
-           var verb = " is finishing ";
-         } 
-       }
-       
-      // Set cell colour/opacity based on: if present / can build 
-      if (pcity['improvements'].isSet(z)) {     // city has improvement: white cell
-        opacity = 1;
-        border = "border:3px solid #000000;"
-        bg     = "background:#FEED ";
-        title_text = "title='"+html_safe(pcity['name'])+":\n\nRIGHT-CLICK: Sell " + improvements[z]['name']+"."+shift_click_text;
-        right_click_action = "oncontextmenu='city_sell_improvement_in(" +city_id+","+ z + ");' ";
-      } else {
-        if (!can_city_build_improvement_now(pcity, z)) {  // doesn't have and can't build: faded
-          opacity=0.35;
-          border = "border:3px solid #231A13;"  
-          bg =     "background:#9873 ";
-          title_text = "title='" + html_safe(pcity['name'])+": " + improvements[z]['name'] + " unavailable.\n\nRIGHT-CLICK: Add to worklist."+shift_click_text;
-          right_click_action = "oncontextmenu='city_add_improv_to_worklist(" +city_id+","+ z + ");' ";
-        } else {                  // doesn't have and CAN build - dark blue
-          opacity = 1;
-          border = (is_city_making ? (product_finished ? "border:3px solid #308000;" : "border:3px solid #80E0FF;") : "border:3px solid #000000;");  // highlight if current prod
-          bg =     (is_city_making ? (product_finished ? "background:#BFBE " : "background:#8D87 ") : "background:#147F ");
-          right_click_action = "oncontextmenu='city_change_prod_and_buy(null," +city_id+","+ z + ");' "
-          title_text = is_city_making 
-            ? ("title='"+html_safe(pcity['name'])+verb+improvements[z]['name']+".\n\nRIGHT_CLICK: Buy "+improvements[z]['name']+shift_click_text)
-            : ("title='"+html_safe(pcity['name'])+":\n\nCLICK: Change production\n\nRIGHT-CLICK: Buy "+improvements[z]['name']+shift_click_text);   
+      if (pcity['improvements'] != null /*&& pcity['improvements'].isSet(z) if present*/ && improvements[z].genus==GENUS_IMPROVEMENT) {
+        sprite = get_improvement_image_sprite(improvements[z]);
+        if (sprite == null) {
+          continue;
         }
-      } 
-      // Put improvement sprite in the cell:
-      improvements_html = improvements_html +
-        "<div style='padding:0px; opacity:"+opacity+"; "+magnification
-            +"' id='city_improvement_element'><span style='padding:0px; margin:0px; "+border+" "+bg+" url("
-            + sprite['image-src'] +
-            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
-            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left;' "
-            + title_text 
-            + right_click_action 
-            + "onclick='change_city_prod_to(event," +city_id+","+ z + ");'>"  
-            +"</span></div>";
-    }
+
+        if (!server_settings['nukes_major']['val'] && improvements[z]['name'] == "Enrichment Facility")
+              continue; // major nukes set to OFF, don't show illegal prod choice.
+          
+        // Colour and text tags for current production and completion thereof:
+        var product_finished = false;
+        var verb = " is making ";
+        var is_city_making = (pcity['production_kind'] == VUT_IMPROVEMENT && pcity['production_value']==z);
+        if (is_city_making) { // colour code currently produced items which are bought/finished
+          var shields_invested = pcity['shield_stock'];
+          if (shields_invested>=improvements[z]['build_cost']) {
+            product_finished=true;
+            var verb = " is finishing ";
+          } 
+        }
+        
+        // Set cell colour/opacity based on: if present / can build 
+        if (pcity['improvements'].isSet(z)) {     // city has improvement: white cell
+          opacity = 1;
+          border = "border:3px solid #000000;"
+          bg     = "background:#FEED ";
+          title_text = "title='"+html_safe(pcity['name'])+":\n\nRIGHT-CLICK: Sell " + improvements[z]['name']+"."+shift_click_text;
+          right_click_action = "oncontextmenu='city_sell_improvement_in(" +city_id+","+ z + ");' ";
+        } else {
+          if (!can_city_build_improvement_now(pcity, z)) {  // doesn't have and can't build: faded
+            opacity=0.35;
+            border = "border:3px solid #231A13;"  
+            bg =     "background:#9873 ";
+            title_text = "title='" + html_safe(pcity['name'])+": " + improvements[z]['name'] + " unavailable.\n\nRIGHT-CLICK: Add to worklist."+shift_click_text;
+            right_click_action = "oncontextmenu='city_add_improv_to_worklist(" +city_id+","+ z + ");' ";
+          } else {                  // doesn't have and CAN build - dark blue
+            opacity = 1;
+            border = (is_city_making ? (product_finished ? "border:3px solid #308000;" : "border:3px solid #80E0FF;") : "border:3px solid #000000;");  // highlight if current prod
+            bg =     (is_city_making ? (product_finished ? "background:#BFBE " : "background:#8D87 ") : "background:#147F ");
+            right_click_action = "oncontextmenu='city_change_prod_and_buy(null," +city_id+","+ z + ");' "
+            title_text = is_city_making 
+              ? ("title='"+html_safe(pcity['name'])+verb+improvements[z]['name']+".\n\nRIGHT_CLICK: Buy "+improvements[z]['name']+shift_click_text)
+              : ("title='"+html_safe(pcity['name'])+":\n\nCLICK: Change production\n\nRIGHT-CLICK: Buy "+improvements[z]['name']+shift_click_text);   
+          }
+        } 
+        // Put improvement sprite in the cell:
+            improvements_html = improvements_html +
+            "<div style='padding:0px; opacity:"+opacity+"; "//+magnification
+                +"' id='city_improvement_element' class='cip'><span style='padding:0px; margin:0px; "+border+" "+bg+" url("
+                + sprite['image-src'] +
+                ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
+                + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left;"+magnification+"' "
+                + title_text 
+                + right_click_action 
+                + "onclick='change_city_prod_to(event," +city_id+","+ z + ");'>"  
+                +"</span></div>";
+      }
   }
   $("#city_improvements_hover_list").html(improvements_html);
+  $(".cip").width(mag_factor*64); // improvement images are 64px wide
+  $(".cip").height(mag_factor*48); // improvement images are 64px wide
 }
 /**************************************************************************
  Changes production in city_id to improvement type #z THEN buys it
@@ -3478,7 +3482,17 @@ function update_city_screen()
   $("#city_table").tablesorter({theme:"dark", sortList: sortList});
 
   if (tiny_screen) {
-    $("#city_table").css({"zoom":"0.6", "-moz-transform":"0.6"});  // -40% scaling if screen is small AND narrow
+    //$("#city_table").css({"zoom":"0.6"});  // doesn't work right on Firefox, use 3 lines below insead
+    // -40% scaling if screen is small AND narrow
+    $("#city_table").css({"transform":"scale(0.6)","transform-origin":"0 0"});
+    $("#cities").css({"width":"166.66%"}); // compensate that transform-scale doesn't change zoom level, so it occupies whole screen
+    if (scroll_narrow_x) { // mobile wider table rows option
+      // don't disable horiz. scroll: users get a little more width for buy cost columnn
+    }
+    else {  
+      $("#cities_scroll").css({"overflow-x":"hidden"}); // now clip overflow from it
+    }
+
     $("#city_table_head").css({"font-size":"85%"});  
     $(".prod_img").css({"margin-top":"-19px"});  
     $(".tdc1").css({"padding-right":"0px"});  
@@ -3487,13 +3501,19 @@ function update_city_screen()
     $(".mobile_centre").css({"text-align":"center"});
   }
   else if (redux_screen) {
-    $("#city_table").css({"zoom":"0.91", "-moz-transform":"0.91"});  // -9% scaling if screen is only slightly smaller
+    //$("#city_table").css({"zoom":"0.91"});  // doesn't work right on Firefox, use 3 lines below insead
+    //-9% scaling if screen is only slightly smaller
+    $("#city_table").css({"transform":"scale(0.91)","transform-origin":"0 0"});
+    $("#cities").css({"width":"110%",}); // compensate that transform-scale doesn't change zoom level, so it occupies whole screen
+    $("#cities_scroll").css({"overflow-x":"hidden"}); // now clip overflow from it
+
     $("#city_table_head").css({"font-size":"95%"});  
     $(".tdc1").css({"padding-right":"0px"});  
     $(".tdc2").css({"padding-right":"0px"}); 
     $(".redux_centre").parent().css({"text-align":"center"});
     $(".redux_centre").css({"text-align":"center"}); 
   } else if (wide_screen) {
+    $("#cities").css({"width":"100%",});   // reset in case of screen or window resize
   }
 
   if (retain_checkboxes_on_update)
