@@ -3660,7 +3660,8 @@ function set_mass_prod_city(city_id)
     prod_img_html = "<span title='" + (prod_type!=null ? "Selected cities will change production to: "+prod_type['type']['name'] : "") + "' style='background: transparent url("
            + sprite['image-src']
            + ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
-           + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px; float:right; transform:scale(0.7); cursor:pointer;' "
+           + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px; float:right; transform:scale(0.7); "
+           + " cursor:pointer; margin-bottom:-20px;' "
            + "onclick='javascript:city_change_prod("+ pcity['id'] + ");'"
            + ">"
            +"</span>";
