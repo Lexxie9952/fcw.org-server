@@ -49,7 +49,8 @@ const CRF_EXTRA_QUAY           = 14; // Ruleset has Quay extra and Waterway Extr
 const CRF_NO_WASTE             = 15; // Ruleset does not feature waste.
 const CRF_MINOR_NUKES          = 16; // Ruleset has minor nukes (fission, 3x3 area)
 const CRF_MAJOR_NUKES          = 17; // Ruleset has major nukes (fusion), which it may want to disable in some games.
-const CRF_LAST                 = 18;
+const CRF_DEMOCRACY_NONCORRUPT = 18; // Allows skipping past corruption display modes in rulesets where we know there's no corruption to show. 
+const CRF_LAST                 = 19;
 
 var graphic_theme_path;
 
@@ -111,7 +112,13 @@ var update_city_text_in_refresh_tile = true;
 var draw_city_outlines = true;
 var draw_city_output = false;
 var draw_city_airlift_counter = false;
+var draw_highlighted_pollution = false;
+var draw_city_mood = false;
 var draw_map_grid = false;
+var draw_stacked_unit_mode = 0;
+  const dsum_BASIC = 0;  // normal large + for stacked unit sprite
+  const dsum_RING  = 1;  // small + near hpbar for stacked unit sprite
+  const dsum_SMALL = 2;  // ring around national shield for stacked unit sprite
 var draw_city_names = true;
 var draw_city_growth = true;
 var draw_city_productions = false;
@@ -267,11 +274,23 @@ function init_options_dialog()
     auto_attack = this.checked;
     //simpleStorage.set('autoattack', auto_attack); // don't store this to next session
   });
+  // HIGHLIGHT POLLUTED TILES
+  $('#draw_highlighted_pollution').prop('checked', draw_highlighted_pollution);
+  $('#draw_highlighted_pollution').change(function() {
+    draw_highlighted_pollution = this.checked;
+    // don't store this to next session
+  });
   // CITY AIRLIFT COUNTER
   $('#airlift_setting').prop('checked', draw_city_airlift_counter);
   $('#airlift_setting').change(function() {
     draw_city_airlift_counter = this.checked;
     simpleStorage.set('airlift', draw_city_airlift_counter);
+  });
+  // DRAW CITY MOOD ON MAP
+  $('#draw_city_mood').prop('checked', draw_city_mood);
+  $('#draw_city_mood').change(function() {
+    draw_city_mood = this.checked;
+    simpleStorage.set('drawMood', draw_city_mood);
   });
    // SHOW WORKED TILES ON MAP
    $('#draw_city_output').prop('checked', draw_city_output);

@@ -150,18 +150,22 @@ double-tap drag: move unit
 <h2>Other Keyboard Shortcuts:</h2>
 b: buy production in city under mouse cursor
 w: return to map: close tab/window/pop-up
-space: de-select units, exit GOTO mode
+space: de-select units, clear GOTO paths, exit drag-select
 shift-space: re-focus to previous map position
 ctrl-alt-space: paste smartlink to tile/unit under cursor
 ctrl-B: color-fill national territores
 shift-C: select all same type units on (c)ontinent
 ctrl-C:  city labels on/off
+ctrl-shift-C: cycle city info display mode on map
 ctrl-alt-D: disconnect (disconnected viewing mode)
 ctrl-G: map grid on/off
 ctrl-L:  show airlift counter on cities
+ctrl-M:  show city Mood on map
 shift-M: show unit moves left percentage on map
-shift-R: revolution: choose new government 
+ctrl-alt-P: highlight polluted tiles in red
+shift-R: revolution: choose new government
 alt-S: fullscreen mode
+shift-S: stack display mode (multiple tile units)
 ctrl-S: save game
 shift-T: change tax rates
 shift-W: show city tile production on map

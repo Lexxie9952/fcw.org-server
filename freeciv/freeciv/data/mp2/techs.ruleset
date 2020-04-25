@@ -130,6 +130,7 @@ flags    = ""
 graphic     = "a.alphabet"
 graphic_alt = "-"
 cost = 24
+helptext = _("Obsoletes Boat.")
 
 [advance_amphibious_warfare]
 name     = _("Amphibious Warfare")
@@ -220,7 +221,7 @@ req2     = "Horseback Riding"
 flags    = ""
 graphic     = "a.chivalry"
 graphic_alt = "-"
-helptext = _("Obsoletes Horsemen, Chariots.")
+helptext = _("Obsoletes Horsemen, Chariots. Does not block Philosophy bonus.")
 cost = 226
 
 [advance_code_of_laws]
@@ -294,6 +295,7 @@ req2     = "None"
 flags    = ""
 graphic     = "a.currency"
 graphic_alt = "-"
+helptext = _("Boats can build Wonders.")
 
 [advance_democracy]
 name     = _("Democracy")
@@ -387,7 +389,7 @@ req2     = "Theory of Gravity"
 flags    = "Build_Airborne"
 graphic     = "a.flight"
 graphic_alt = "-"
-helptext = _("Traderoute gives less first time revenue.")
+helptext = _("Traderoutes less first time revenue.")
 cost = 4680
 
 [advance_fundamentalism]
@@ -462,7 +464,7 @@ req2     = "Literacy"
 flags    = ""
 graphic     = "a.invention"
 graphic_alt = "-"
-helptext = _("Extra vision for Fortress and ships in Naval Base. Prevents Philosophy bonus.")
+helptext = _("Extra vision for Fortress and Naval Base. Prevents Philosophy bonus.")
 
 [advance_iron_working]
 name     = _("Iron Working")
@@ -679,7 +681,7 @@ req2     = "Navigation"
 flags    = ""
 graphic     = "a.physics"
 graphic_alt = "-"
-helptext = _("Prevents Philosophy from awarding bonus tech.")
+helptext = _("Increases unit vision. Prevents Philosophy bonus.")
 
 [advance_plastics]
 name     = _("Plastics")
@@ -724,7 +726,7 @@ req2     = "Bridge Building"
 flags    = ""
 graphic     = "a.railroad"
 graphic_alt = "-"
-helptext = _("Obsoletes Hanging Gardens. Less Traderoute revenue. Allows Railroads.")
+helptext = _("Obsoletes Hanging Gardens. Traderoutes less first time revenue. Allows Railroads.")
 cost = 1820
 
 [advance_recycling]

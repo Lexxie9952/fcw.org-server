@@ -2905,7 +2905,7 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
     break;
 
     case 'P':
-        if (alt) {
+        if (alt && !ctrl) {
           the_event.preventDefault(); // override possible browser shortcut
           $('#ui-id-6').trigger("click"); // prefs tab
         }
@@ -2916,7 +2916,7 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
     break;
 
     case 'S':
-      if (ctrl) {
+      if (ctrl && !shift && !alt) {
         the_event.preventDefault(); // override possible browser shortcut
         quicksave();
       }
@@ -3002,20 +3002,25 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'C':
-      if (ctrl) {
+      if (ctrl && !shift && !alt) {
+        the_event.preventDefault();          // override possible browser shortcut
         show_citybar = !show_citybar;
-      } else if (shift) {
-        key_select_same_global_type(true); //true=same continent only
+      } else if (shift && !ctrl && !alt) {
+          key_select_same_global_type(true); // true=same continent only
+      } else if (ctrl && shift && !alt) {            // cycle citybar display mode
+          the_event.preventDefault();          // override possible browser shortcut
+          mapview_cycle_city_display_mode();
       } else if (current_focus.length > 0) {
-        auto_center_on_focus_unit();
+          auto_center_on_focus_unit();
       }
     break;
 
     case 'D':
-      if (shift) {
+      if (shift && !ctrl && !alt) {
         key_unit_disband();
       } else if (!shift && ctrl && alt) {
         // CTRL-ALT-D user forced disconnect
+        the_event.preventDefault(); // override possible browser shortcut
         clinet_disconnect_from_server();
       } else if (!(alt || ctrl)) {
         key_unit_action_select();
@@ -3078,7 +3083,11 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 'P':
       if (shift) {
         key_unit_pillage();
-      } else {
+      } else if (ctrl && alt && !shift) {
+        the_event.preventDefault(); // override possible browser shortcut
+        draw_highlighted_pollution = !draw_highlighted_pollution;
+      }
+      else {
         if (current_focus.length>0) {
           if (unit_types[current_focus[0]['type']]['name'] == "Paratroopers") key_unit_paradrop();
           else key_unit_pollution();
@@ -3101,8 +3110,14 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'S':
-      if (!ctrl) {
+      if (!ctrl && !alt && !shift) {
         key_unit_sentry();
+      }
+      else if (shift && !ctrl && !alt) { // cycle through stacked unit display modes
+        draw_stacked_unit_mode ++;
+        if (draw_stacked_unit_mode>3)
+          draw_stacked_unit_mode = 0;
+          simpleStorage.set('stackmode', draw_stacked_unit_mode);
       }
     break;
 
@@ -3116,6 +3131,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       if (shift) {
         key_select_same_type_units_on_tile();
       } else if (alt) {
+        the_event.preventDefault(); // override possible browser shortcut
         key_select_different_units_on_tile();
       } else {
         key_select_all_units_on_tile();
@@ -3150,6 +3166,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 'I':
       if (alt) {
         if (ctrl && shift) {  // toggle capital I fixer
+          the_event.preventDefault(); // override possible browser shortcut
           replace_capital_i = !replace_capital_i;
           simpleStorage.set('capI', replace_capital_i);
         } else {
@@ -3199,10 +3216,16 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         if (show_unit_movepct) hp_bar_offset = -5;
         else hp_bar_offset = 0;
         //simpleStorage.set('showMoves', show_unit_movepct);
-      } else if (alt) {
+      } else if (alt && !shift && !ctrl) {
         the_event.preventDefault(); // override possible browser shortcut
         key_unit_move(DIR8_SOUTH);  // alt+M=1
-      } else key_unit_mine();
+      } else if (ctrl && !alt && !shift) {
+        the_event.preventDefault(); // override possible browser shortcut
+        draw_city_mood = !draw_city_mood;
+        simpleStorage.set('drawMood', draw_city_mood);
+      }
+      
+      else key_unit_mine();
     break;
     /* these were moved lower to keycode 188,190 for Mac compatibility:
     case ',':

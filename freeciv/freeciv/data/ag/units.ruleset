@@ -3746,7 +3746,7 @@ helptext      = _("\
 A Diplomat performs official or covert actions. Covert acts make incidents\
  which let Senates break treaties. Diplomats in cities defend such acts with\
  combat. Diplomats can • Bribe a lone unit • Establish embassy • Investigate City\
- • Sabotage production/buildings • Steal tech 6)Steal maps • Incite city revolt.\n\
+ • Sabotage production/buildings • Steal tech • Steal maps • Incite city revolt.\n\
 "), _("\
 Full rules for Diplomats are in the Manual.\
 ")
@@ -3826,16 +3826,19 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable"
+flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Shield2Gold"
 roles         = "AttackStrongStartUnit"  ;note: MP2 doesn't start games with ASSU's so has co-opted this for caravan start unit.
 helptext      = _("\
-Caravans are Commerce units. In cities with whom you are not at war, Commerce units\
- help build Wonders or create Traderoutes, increasing net trade in both cities\
- relative to combined trade (minimum city distance: 12 tiles.) Routes are inactive in\
- war but renew if war ends.\nCommerce units can enter the Marketplace of foreign cities to sell\
- goods: revenue derives from total trade in both cities.\nCommerce units with no Home City\
- can help build Wonders with no tech requirement, but you must assign them a Home City\
- to use them for a Trade Route.\
+Caravans are Commerce units. Commerce units can help build Wonders in any city with whom\
+ you are not at war. In foreign cities 12+ tiles distant, they can create Trade Routes,\
+ increasing net trade in both cities relative to their combined trade. Routes are inactive\
+ during war and (re)activate during peace.\n\
+Commerce units can enter the Marketplace of non-hostile foreign cities to sell goods: revenue derives\
+ from total trade in both cities. This is only profitable between cities with very high trade.\n\
+Commerce units given at Game Start can build Wonders without tech requirements. To use them\
+ for a Trade Route, first assign them a Home City.\n\
+➤ Caravans are the only Commerce unit that can be produced more than once per turn, if the city\
+ has appropriate output bonuses.\ 
 ")
 
 [unit_freight]

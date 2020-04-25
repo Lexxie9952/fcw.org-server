@@ -317,6 +317,8 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
         if (tile_has_extra(ptile, EXTRA_POLLUTION)) {
           sprite_array.push({"key" :
                               tileset_extra_id_graphic_tag(EXTRA_POLLUTION)});
+          if (draw_highlighted_pollution)
+            sprite_array.push(get_city_invalid_worked_sprite());
         }
 
         if (tile_has_extra(ptile, EXTRA_FALLOUT)) {
@@ -351,7 +353,8 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
       var is_stacked = false;    // stacked units get a "+" icon drawn over them
       
       if (do_draw_unit && active_city == null) {
-        is_stacked = (ptile['units'] != null && ptile['units'].length > 1);
+        is_stacked = (ptile['units'] != null && ptile['units'].length > 1) ? ptile['units'].length : false;
+        if (is_stacked>9) is_stacked =9;  // 9 or more will just show a "9+" stack icon
         //var backdrop = false; /* !pcity; // this was unused var, eliminated for performance */
 
         if (unit_is_in_focus(punit)) {
@@ -667,7 +670,7 @@ function check_sprite_type(sprite_type)
  ...Highly modified, look at commits prior to 25.March.2020 if debug/
   comparison needed.
 **************************************************************************/
-function fill_unit_sprite_array(punit, stacked)
+function fill_unit_sprite_array(punit, num_stacked)
 {
   //var ptype = unit_type(punit);
   var id = punit['type'];
@@ -695,6 +698,7 @@ function fill_unit_sprite_array(punit, stacked)
   if (result[0]['offset_x']) {
     result[0]['offset_x'] += UO_sx[id];  // adjust shield x placement
   }
+
   // Unit
   result.push(
     {"key" : tileset_unit_type_graphic_tag(unit_type(punit)),
@@ -712,10 +716,30 @@ function fill_unit_sprite_array(punit, stacked)
     // Hit point bar
     result.push(get_unit_hp_sprite(punit));
     // Stacked "+" icon
-    if (stacked) {
-      var stacked = get_unit_stack_sprite();
-      stacked['offset_x'] += UO_mx[id];
-      stacked['offset_y'] -= UO_my[id];
+    if (num_stacked) {
+      var push_right=0; // whether to push small stack icon right 2 pixels (for right aligned shield)
+      // Optional shield ring for stacked units
+      if (draw_stacked_unit_mode & dsum_RING) { 
+        if (UO_sx[id]){ // right-aligned shield:
+          result.push({"key" : "unit.stk_shld_r",
+                "offset_x" : unit_offset['x'],
+                "offset_y" : -31-unit_offset['y']});
+          push_right = 2; // small "+" needs +2 pixels for right-aligned shield 
+        }
+        else           // left-aligned shield:
+          result.push({"key" : "unit.stk_shld_l",
+                "offset_x" : unit_offset['x'],
+                "offset_y" : -31-unit_offset['y']});
+      }
+      // Yellow "+" (small or normal) to show unit is in a stack:
+      var stacked = get_unit_stack_sprite(num_stacked);
+      if (draw_stacked_unit_mode & dsum_SMALL) {
+        stacked['offset_x'] += push_right;
+      }
+      else {  // normal mode has custom offsets
+        stacked['offset_x'] += UO_mx[id];
+        stacked['offset_y'] -= UO_my[id];
+      }
       result.push(stacked);
     }
   }
@@ -733,15 +757,16 @@ function fill_unit_sprite_array(punit, stacked)
  ...Fixing the fort drawing bug meant that when front walls of a base are
  drawn they can obscure the stacked icon, which gets redrawn in this case.
 **************************************************************************/
-function fill_stacked_in_base_sprite_array(punit)
+function fill_stacked_in_base_sprite_array(punit, num_stacked)
 {
-  var id = punit['type'];
-  const mx = UO_mx[id];   const my = UO_my[id];
+  var stacked = get_unit_stack_sprite(num_stacked);
 
-    var stacked = get_unit_stack_sprite();
+  if (!(draw_stacked_unit_mode & dsum_SMALL) ) {  //// regular mode has custom offsets
+    var id = punit['type'];
+    const mx = UO_mx[id];   const my = UO_my[id];
     stacked['offset_x'] += mx;
     stacked['offset_y'] -= my;
-
+  }  
   return stacked;
 }
 
@@ -997,9 +1022,14 @@ function get_unit_nation_flag_normal_sprite(punit)
 /**********************************************************************
   ...
 ***********************************************************************/
-function get_unit_stack_sprite(punit)
+function get_unit_stack_sprite(stacksize)
 {
-  return {"key" : "unit.stack",
+  if (draw_stacked_unit_mode & dsum_SMALL) {   //// alternate small mode of showing stack near hpbar
+    return {"key" : "unit.stack"+stacksize+"",
+    "offset_x" : unit_flag_offset_x + -25,
+    "offset_y" : - unit_flag_offset_y - 15};
+  }
+  else return {"key" : "unit.stack",
           "offset_x" : unit_flag_offset_x + -25,
           "offset_y" : - unit_flag_offset_y - 15};
 }
@@ -1976,7 +2006,7 @@ function fill_layer3_sprite_array(ptile, stacked, st_unit)
     result_sprites.push({"key" : "base.fortress_fg",
                           "offset_y" : -normal_tile_height / 2});
     if (stacked)
-      result_sprites.push(fill_stacked_in_base_sprite_array(st_unit));
+      result_sprites.push(fill_stacked_in_base_sprite_array(st_unit, stacked));
     return result_sprites;                  
   }
   // navalbase on top of fort, have to check for it first then return
@@ -1985,7 +2015,7 @@ function fill_layer3_sprite_array(ptile, stacked, st_unit)
       result_sprites.push({"key" : "base.navalbase_fg",
                             "offset_y" : -normal_tile_height / 2});
       if (stacked)
-        result_sprites.push(fill_stacked_in_base_sprite_array(st_unit));
+        result_sprites.push(fill_stacked_in_base_sprite_array(st_unit, stacked));
       return result_sprites;
     }
   }
@@ -1995,7 +2025,7 @@ function fill_layer3_sprite_array(ptile, stacked, st_unit)
       result_sprites.push({"key" : "base.outpost_fg",
                           "offset_y" : -normal_tile_height / 2});
       if (stacked)
-        result_sprites.push(fill_stacked_in_base_sprite_array(st_unit));
+        result_sprites.push(fill_stacked_in_base_sprite_array(st_unit, stacked));
       return result_sprites;  
     }
   }  
@@ -2270,7 +2300,7 @@ function create_unit_offset_arrays()
           break;
       case "Mechanized Infantry":
       case "Mech. Inf.":
-          vx -= 25; vy += 12;
+          vx -= 23; vy += 13;
           break;
       case "Medium Bomber":
           sx = 8;
@@ -2327,7 +2357,7 @@ function create_unit_offset_arrays()
           break;
       case "Transport":
           dx -= 3; dy -= 1;
-          vx -= 25; vy += 11;
+          vx -= 23; vy += 12;
           break;
       case "Trireme":
           vx += 2; vy += 1;

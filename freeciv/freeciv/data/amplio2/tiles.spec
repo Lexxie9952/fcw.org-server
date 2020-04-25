@@ -50,7 +50,6 @@ tiles = { "row", "column", "tag"
 
 ; Numbers: city size: (also used for goto)
 
-
   1,  0, "city.size_000"
   1,  1, "city.size_100"
   1,  2, "city.size_200"
@@ -141,5 +140,17 @@ tiles = { "row", "column", "tag"
          "unit.auto_settler"
   5, 10, "unit.stack"
   6, 10, "unit.loaded"
-
+; Alternate display modes for stacked units 
+  3, 11, "unit.stack1"
+  4, 11, "unit.stk_shld_r"
+  5, 11, "unit.stk_shld_l"
+; Stacked unit count for display mode 2
+  9, 0,  "unit.stack2"
+  9, 1,  "unit.stack3"
+  9, 2,  "unit.stack4"
+  9, 3,  "unit.stack5"
+  9, 4,  "unit.stack6"
+  9, 5,  "unit.stack7"
+  9, 6,  "unit.stack8"
+  9, 7,  "unit.stack9"  ; NB: 9 or more
 }
