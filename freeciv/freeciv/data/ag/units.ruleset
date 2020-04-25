@@ -3829,12 +3829,12 @@ uk_gold       = 0
 flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Shield2Gold"
 roles         = "AttackStrongStartUnit"  ;note: MP2 doesn't start games with ASSU's so has co-opted this for caravan start unit.
 helptext      = _("\
-Caravans are Commerce units, and can act upon any city with whom you are not at war.\
- Commerce units can help build Wonders. In foreign cities 12+ tiles distant, they can\
- create Trade Routes: net trade in both cities will increase relative to combined trade.\
- Routes become inactive in war, but renew if war ends.\n\
-Commerce units can enter the Marketplace of foreign cities to sell goods: revenue derives\
- from total trade in both cities. This is profitable only between cities with very high trade.\n\
+Caravans are Commerce units. Commerce units can help build Wonders in any city with whom\
+ you are not at war. In foreign cities 12+ tiles distant, they can create Trade Routes,\
+ increasing net trade in both cities relative to their combined trade. Routes are inactive\
+ during war and (re)activate during peace.\n\
+Commerce units can enter the Marketplace of non-hostile foreign cities to sell goods: revenue derives\
+ from total trade in both cities. This is only profitable between cities with very high trade.\n\
 Commerce units given at Game Start can build Wonders without tech requirements. To use them\
  for a Trade Route, first assign them a Home City.\n\
 ➤ Caravans are the only Commerce unit that can be produced more than once per turn, if the city\
