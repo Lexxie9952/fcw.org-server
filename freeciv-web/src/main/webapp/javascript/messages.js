@@ -28,7 +28,7 @@ var max_chat_message_length = 500;
 
 var restore_chatbox_vals = { "h_container" : null,
                              "w_container" : null,
-                             "h_game_chatbox_panel": null, 
+                             "h_game_chatbox_panel": null,
                              "w_game_chatbox_panel": null,
 };
 
@@ -64,8 +64,8 @@ function init_chatbox()
                         "restore" : " ui-icon-pause",   // unused icon so we can hide button without affecting other dialogs
                         "maximize" : "ui-icon-circle-plus",
                       }});
-  } 
-  else {   // Normal non-mobile behavior:             
+  }
+  else {   // Normal non-mobile behavior:
       $("#game_chatbox_panel").dialog({
           bgiframe: true,
           modal: false,
@@ -90,12 +90,12 @@ function init_chatbox()
                           "maximize" : "ui-icon-circle-plus",
                           "restore" : "ui-icon-bullet"
                         }});
-                        
+
         // User resize saves size for next restore. Immediate reload needed to reset contained elements to new size.
         $( "#game_chatbox_panel" ).parent().resize( function(e,ui) { chatbox_restore("save");chatbox_restore("load");});
     }
 
-  $( "#game_chatbox_panel" ).parent().css("z-index","100"); // ensure it can always be opened/closed/never covered                                                         
+  $( "#game_chatbox_panel" ).parent().css("z-index","100"); // ensure it can always be opened/closed/never covered
   $("#game_chatbox_panel").dialog('open');
   $(".chatbox_dialog").css("top", "52px");
 
@@ -109,7 +109,7 @@ function init_chatbox()
     if (simpleStorage.get("chatDlg") != null) chatbox_restore("load");
     else chatbox_restore("save"); // save initial settings for later restore after minimize/maximize
     // chat bubble icon in title bar
-    $("#game_chatbox_panel").parent().children().not("#game_chatbox_panel").children().get(0).innerHTML 
+    $("#game_chatbox_panel").parent().children().not("#game_chatbox_panel").children().get(0).innerHTML
       = "<div style='font-size:80%; vertical-align:top;'><i class='fa fa-commenting-o' aria-hidden='true'></i></div>";
     $("#game_text_input").blur();  // normal large screen, don't default focus into here on launch
   }
@@ -156,14 +156,14 @@ function msg_minimize(evt,dlg) {
   unread_messages = 0; // minimizing means one came from viewing messages
 }
 function msg_restore(evt,dlg) {
-  current_message_dialog_state = $("#game_chatbox_panel").dialogExtend("state"); 
+  current_message_dialog_state = $("#game_chatbox_panel").dialogExtend("state");
   unread_messages = 0;
   chatbox_restore("load"); // load last known size (user may have changed)
   $(".chatbox_dialog").css({"left":"2px", "top":"43px", "position":"fixed"});
   chatbox_scroll_to_bottom(false);
 }
 function msg_maximize(evt,dlg) {
-  current_message_dialog_state = $("#game_chatbox_panel").dialogExtend("state"); 
+  current_message_dialog_state = $("#game_chatbox_panel").dialogExtend("state");
   unread_messages = 0;
   $(".chatbox_dialog").css({"left":"2px", "top":"43px", "position":"fixed"});
   $(".chatbox_dialog").css({"height":($(window).height-44), "width":"99%"});
@@ -174,17 +174,17 @@ function msg_maximize(evt,dlg) {
   chatbox_scroll_to_bottom(false);
 }
 function toggle_msgbox()
-{ 
+{
   if (!is_small_screen()) {
     if (current_message_dialog_state == "minimized")
       $(".chatbox_dialog .ui-icon-bullet").click();
-    else 
+    else
       $('.chatbox_dialog .ui-icon-circle-minus').click();
-  }/*  mobile currently only uses manual maximize/minimize buttons to toggle 
-  else { 
+  }/*  mobile currently only uses manual maximize/minimize buttons to toggle
+  else {
     if (current_message_dialog_state == "minimized")
      $(".message_chatbox.dialog .ui-icon-circle-plus").click();
-    else 
+    else
       $(".message_chatbox.dialog .ui-icon-circle-minus").click();
   }*/
 }
@@ -196,9 +196,9 @@ function msg_minimize_mobile(evt, dlg) {
   unread_messages = 0; // minimizing means one cam from viewing
 }
 function msg_restore_mobile(evt, dlg) {
-  /* shouldn't ever be called, but reserved for possible future  
+  /* shouldn't ever be called, but reserved for possible future
    * implementation of a "half screen" chat window:
-  current_message_dialog_state = "normal"; 
+  current_message_dialog_state = "normal";
   unread_messages = 0;
   $(".mobile_chatbox_dialog").css({"height":"30","width":"80"});
   chatbox_scroll_to_bottom(false);
@@ -296,7 +296,7 @@ function add_chatbox_text(packet)
     // Increment unread messages IFF chat minimized and AFTER filtering ignored/unshown server messages (above)
     if (current_message_dialog_state == "minimized") unread_messages ++;
     else unread_messages = 0;
-    
+
     if (civclient_state <= C_S_PREPARING) {
       text = text.replace(/#FFFFFF/g, '#000000');
     } else {
@@ -305,8 +305,8 @@ function add_chatbox_text(packet)
                  .replace(/#551166/g, '#AA88FF');
 
       var real_time = true;
-      var outgoing = false; 
-  
+      var outgoing = false;
+
       // Fix historic messages for outgoing formatting
       if (client.conn.playing != null && text.includes("{"+client.conn.playing.name+" -> ")) {
         outgoing = true;
@@ -318,14 +318,14 @@ function add_chatbox_text(packet)
         if (outgoing) text = text.replace("->{", "{<font color='#c888ff'>You</font><font color='#ffffff'>&#x279E;</font>");
       }
 
-      // Check for incoming private message:           
+      // Check for incoming private message:
       var check_im = outgoing ? text.replace(/#A020F0/g, '#ffb789') : text.replace(/#A020F0/g, '#ff87b7');
       if (check_im != text) {         // if different, there was a private message
         if (packet['turn'] != null) {
           // Message may have come last turn after you logged out. Exclude earlier notification sounds:
           if ((!outgoing || real_time) && packet['turn'] >= game_info['turn'] - 1) play_sound("iphone1.ogg");
         }
-        text=check_im; // now update the text var so the changed colour code goes in the message_log  
+        text=check_im; // now update the text var so the changed colour code goes in the message_log
       }
     }
 
@@ -393,7 +393,7 @@ function update_chatbox(messages)
     for (var i = 0; i < messages.length; i++) {
         var item = document.createElement('li');
         item.className = fc_e_events[messages[i].event][E_I_NAME];
-        
+
         // Align outgoing messages. &#x279E is arrow for outgoings
         if (messages[i].message.includes("&#x279E;")) {
           item.style.textAlign = "right";
