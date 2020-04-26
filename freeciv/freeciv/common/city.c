@@ -801,6 +801,8 @@ bool city_production_build_units(const struct city *pcity,
   }
 
   if (add_production) {
+    //TODO: test, shouldn't this be pcity->surplus[O_SHIELD] instead? if we are crediting shields
+    //prior to upkeep, there could be a case where a unit gets made without sufficient shields?
     shields_left += pcity->prod[O_SHIELD];
   }
   unit_shield_cost = utype_build_shield_cost(pcity, utype);

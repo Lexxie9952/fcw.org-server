@@ -553,6 +553,7 @@ void update_city_activities(struct player *pplayer)
   n = city_list_size(pplayer->cities);
   gold = pplayer->economic.gold;
   pplayer->server.bulbs_last_turn = 0;
+  pplayer->score.mfg = 0;  //// have to calculate this before begin_turn due to new tile worker re-arrangement
 
   if (n > 0) {
     struct city *cities[n];
@@ -612,6 +613,11 @@ void update_city_activities(struct player *pplayer)
       r = fc_rand(i);
       /* update unit upkeep */
       city_units_upkeep(cities[r]);
+      
+      // is this the right place?
+      //// accumulate the shields for score.mfg prior to updating city
+      pplayer->score.mfg += cities[r]->surplus[O_SHIELD]; 
+
       update_city_activity(cities[r]);
       cities[r] = cities[--i];
     }

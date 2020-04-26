@@ -1112,7 +1112,8 @@ static void begin_turn(bool is_new_turn)
 
     /* We build scores at the beginning of every turn.  We have to
      * build them at the beginning so that the AI can use the data,
-     * and we are sure to have it when we need it. */
+     * and we are sure to have it when we need it. Unfortunately this
+     * means score.mfg has to be calculated outside calc_civ_score function */
     players_iterate(pplayer) {
       calc_civ_score(pplayer);
     } players_iterate_end;

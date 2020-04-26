@@ -271,7 +271,8 @@ void calc_civ_score(struct player *pplayer)
   pplayer->score.units = 0;
   pplayer->score.pollution = 0;
   pplayer->score.bnp = 0;
-  pplayer->score.mfg = 0;
+  // This has to be calculated in a different phase or else gives wildly incorrect results
+  //pplayer->score.mfg = 0; 
   pplayer->score.literacy = 0;
   pplayer->score.spaceship = 0;
   pplayer->score.culture = player_culture(pplayer);
@@ -295,7 +296,8 @@ void calc_civ_score(struct player *pplayer)
     pplayer->score.pollution += pcity->pollution;
     pplayer->score.techout += pcity->prod[O_SCIENCE];
     pplayer->score.bnp += pcity->surplus[O_TRADE];
-    pplayer->score.mfg += pcity->surplus[O_SHIELD];
+    // This has to be calculated prior to update_city_activity or else gives wildly incorrect results
+    //pplayer->score.mfg += pcity->surplus[O_SHIELD];
 
     bonus = get_final_city_output_bonus(pcity, O_SCIENCE) - 100;
     bonus = CLIP(0, bonus, 100);
