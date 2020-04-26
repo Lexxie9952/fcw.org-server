@@ -864,7 +864,14 @@ function get_city_occupied_sprite(pcity) {
   if (!observing && client.conn.playing != null
       && owner_id != client.conn.playing.playerno && pcity['occupied']) {
     return "citybar.occupied";
-  } else if (punits.length == 1) {
+  } else if (punits.length > 0) {
+    return punits.length >= 20 ? "citybar.occupancy_20" : ("citybar.occupancy_"+punits.length);
+  } else {
+    return "citybar.occupancy_0";
+  }
+  
+  /*
+  else if (punits.length == 1) {
     return "citybar.occupancy_1";
   } else if (punits.length == 2) {
     return "citybar.occupancy_2";
@@ -872,8 +879,7 @@ function get_city_occupied_sprite(pcity) {
     return "citybar.occupancy_3";
   } else {
     return "citybar.occupancy_0";
-  }
-
+  }*/
 }
 
 /**********************************************************************

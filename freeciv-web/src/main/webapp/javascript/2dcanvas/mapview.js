@@ -554,7 +554,7 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
               canvas_x - Math.floor(txt_measure.width / 2) - 45, canvas_y - 17);
 
   pcanvas.drawImage(sprites[get_city_occupied_sprite(city)],
-              canvas_x - Math.floor(txt_measure.width / 2) - 12, canvas_y - 16);
+              canvas_x - Math.floor(txt_measure.width / 2) - 14, canvas_y - 16);
 
   pcanvas.strokeStyle = color;
   pcanvas.lineWidth = 1.5;
