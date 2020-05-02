@@ -1233,7 +1233,7 @@ sound_alt	= "b_generic"
 helptext	= _("\
 Makes a city the religious capital that acts as a second center of government.\
 "), _("\
-Cities experience lower corruption rates if they are closer to\
+ Cities experience lower corruption rates if they are closer to\
  a capital. In your religious capital, capital bonuses are rendered\
  in gold tithes rather than shield output. Under Fundamentalism,\
  the religious capital gets a +50% gold bonus from tithes.\
