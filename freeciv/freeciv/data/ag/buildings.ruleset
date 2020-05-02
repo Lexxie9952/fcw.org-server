@@ -1233,17 +1233,17 @@ sound_alt	= "b_generic"
 helptext	= _("\
 Makes a city the religious capital that acts as a second center of government.\
 "), _("\
-This building is a second Palace and gives all effects of a Palace,\
- including reduction of corruption (based on the nearest capital.)\
- Unlike the Palace, capital production bonuses are rendered in gold\
- tithes rather than shield output. Fundamentalism gets a +50% gold\
- bonus in tithes, in its ecclesiastic capital.\
+Cities experience lower corruption rates if they are closer to\
+ a capital. In your religious capital, capital bonuses are rendered\
+ in gold tithes rather than shield output. Under Fundamentalism,\
+ the religious capital gets a +50% gold bonus from tithes.\
 "), _("\
-The city where this Palace is located cannot be incited to revolt,\
- and enjoys a bonus when enemy agents try to evade your own agents\
- stationed in the city, or sabotage your buildings.\
+ The cost of inciting a revolt decreases with distance from a\
+ capital. No capital city can be incited to revolt.\
+ The chance of enemy agents defeating your agents or sabotaging\
+ buildings is reduced by half.\
 "), _("\
-Under Fundamentalism, Fanatics produced in the city with this building\
+ Under Fundamentalism, Fanatics produced in the city with this building\
  are inspired by fervorous faith to +1 higher veteran level.\
 "), _("\
  With Conscription, this building allows making one extra qualifying unit per turn.\
