@@ -2964,7 +2964,7 @@ static void check_pollution(struct city *pcity)
 int city_incite_cost(struct player *pplayer, struct city *pcity)
 {
   struct city *capital;
-  int dist, size;
+  int dist, min_dist=32, size;  /* set min_dist to max before checking */
   double cost; /* Intermediate values can get very large */
 
   /* Gold factor */
@@ -3000,8 +3000,21 @@ int city_incite_cost(struct player *pplayer, struct city *pcity)
     }
   }
 
-  /* Distance from capital */
+  // ---------------------------------------------------------------
+  /* Distance from nearest capital */
   capital = player_capital(city_owner(pcity));
+  if (capital) min_dist = map_distance(capital->tile, pcity->tile);
+  /* Check for closer capitals (gov_centers) */
+  city_list_iterate(city_owner(pcity)->cities, gc) {
+    if (gc != pcity  &&  gc != capital  &&  is_gov_center(gc)) {
+      int gc_dist = map_distance(gc->tile, pcity->tile);
+      if (gc_dist < min_dist) {
+        capital = gc; /* record a closer capital */
+        min_dist = gc_dist;
+      }
+    }
+  } city_list_iterate_end;
+  // ---------------------------------------------------------------
   if (capital) {
     int tmp = map_distance(capital->tile, pcity->tile);
     dist = MIN(32, tmp);
@@ -3424,7 +3437,7 @@ static float city_migration_score(struct city *pcity)
     score *= 1.25;
   }
 
-  if (is_capital(pcity)) {
+  if (is_capital(pcity) || is_gov_center(pcity)) {
     /* the capital is a magnet for the citizens */
     score *= 1.25;
   }
@@ -3902,7 +3915,7 @@ static bool check_city_migrations_player(const struct player *pplayer)
    * remove one city from the list */
   city_list_iterate_safe(pplayer->cities, pcity) {
     /* no migration out of the capital */
-    if (is_capital(pcity)) {
+    if (is_capital(pcity) || is_gov_center(pcity)) {
       continue;
     }
 

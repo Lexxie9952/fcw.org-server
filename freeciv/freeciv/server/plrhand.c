@@ -2772,7 +2772,7 @@ struct player *civil_war(struct player *pplayer)
     bool gameloss_present = FALSE;
 
     /* Capital (probably new capital) won't defect */
-    if (is_capital(pcity)) {
+    if (is_capital(pcity) || is_gov_center(pcity)) {
       continue;
     }
 
