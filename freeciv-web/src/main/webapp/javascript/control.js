@@ -4226,13 +4226,32 @@ function key_unit_sentry()
          if (pcity == null) {
            key_unit_noorders();
          }
-         else request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
+         else {
+           request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
+           remove_unit_id_from_waiting_list(punit['id']);
+         }
       }
     }
-    else request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
+    else {
+      request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
+      remove_unit_id_from_waiting_list(punit['id']);
+    }
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
+}
+
+/**************************************************************************
+ Remove unit from the list of units who are awaiting orders.
+**************************************************************************/
+function remove_unit_id_from_waiting_list(uid)
+{
+  var w = waiting_units_list.indexOf(uid);
+  if (w>0) {
+    waiting_units_list.splice(i, 1);
+    return true;
+  }
+  return false;
 }
 
 /**************************************************************************
@@ -4244,6 +4263,8 @@ function key_unit_fortify()
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_FORTIFYING, EXTRA_NONE);
+    // remove from waiting list
+    remove_unit_id_from_waiting_list(punit['id']);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
