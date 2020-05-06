@@ -128,7 +128,8 @@ Capital_City
 
 Gov_Center
     The city with this effect is governmental center. Corruption and
-    waste depends on distance to nearest such city.
+    waste depends on distance to nearest such city. This also affects
+    incite costs and migration dynamics.
 
 Enable_Nuke
     Allows the production of nuclear weapons.
