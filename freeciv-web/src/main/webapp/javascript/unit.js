@@ -175,6 +175,13 @@ function unit_can_do_unload(punit)
   if (rules != "Avant-garde" && rules != "Multiplayer-Evolution ruleset")
     return true; // no actionenabler restrictions on other rulesets
   //****************************************************************** */
+  var tunit=null,ttype=null,tclass=null;
+  if (punit['transported_by']) {
+    tunit = units[punit['transported_by']];
+    ttype = unit_type(tunit);
+    tclass = unit_classes[ttype.unit_class_id];
+  } else return false; // not even loaded!
+  //****************************************************************** */
   var quay_rules = client_rules_flag[CRF_EXTRA_QUAY];
   var ptype = unit_type(punit);
   var ptile = index_to_tile(punit['tile']);
@@ -200,6 +207,11 @@ function unit_can_do_unload(punit)
     return true;
   }
   // AG:
+  if (tclass.rule_name == "Helicopter" && pclass =="Land") {
+    // NB:Land could only be on a Transport Helicopter utype.
+    if (!tile_has_extra(ptile, EXTRA_AIRBASE)) return false;
+    /* could also unload in city and naval base -- already checked above */
+  } 
   if (tile_has_extra(ptile, EXTRA_QUAY)) return true;
   if (tile_has_extra(ptile, EXTRA_RIVER)) return false;
   if (tile_has_extra(ptile, EXTRA_CANAL)) return false;
@@ -245,11 +257,17 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
   
     if (pclass != "LandAirSea") {
       if (ttype.name == "Carrier") return false;
-      if (tclass.rule_name == "Helicopter") return false;
+      if (ttype.name == "Helicopter") return false; // transport heli allowed
     }
   }
 
-  if (pclass.startsWith("Air") || pclass == "Helicopter" || pclass == "Balloon") {
+  if (pclass == "Balloon") {
+    if (tclass.rule.name == "RiverShip" && !(ttype.name == "Cargo Ship" || ttype.name == "Galleon")) return false;
+    if (tclass.rule.name == "Sea" && !(ttype.name == "Transport" || ttype.name == "Carrier")) 
+      return false;
+  }
+
+  if (pclass.startsWith("Air") || pclass == "Helicopter") {
     //console.log("  Air*/heli/balloon CHECK ON: tclass.rulename =="+tclass.rule_name);
     if (ttype.name != "Carrier") return false;
   }
