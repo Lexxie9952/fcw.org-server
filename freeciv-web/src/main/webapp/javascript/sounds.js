@@ -65,7 +65,7 @@ function unit_move_sound_play(unit)
   var ptype = unit_type(unit);
   move_sound = soundset[ptype['sound_move']];  
 
-  // PARTIAL MOVE SOUNDS.  Some units are loud and/or often move one tile at a time. 
+  // PARTIAL MOVE SOUNDS.  Some sounds are loud or long duration and shouldn't repeat for each step 
   // Use "partial move sounds" to avoid annoyance:
   if ( unit['movesleft'] < ptype['move_rate'] )  { 
     switch(ptype['name']) {
@@ -74,6 +74,12 @@ function unit_move_sound_play(unit)
       case "Strategic Bomber": 
       case "Bomber":
         move_sound = "pm_prop_bombers.ogg"; 
+        break;
+      case "Cruise Missile":
+      case "Nuclear Missile":
+      case "Nuclear":
+      case "Tactical Nuke":
+        move_sound = null;
         break;
       case "Dive Bomber":
       case "Fighter":  
