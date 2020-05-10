@@ -2171,8 +2171,9 @@ function create_unit_offset_arrays()
           vx += 8; vy -= 8;
           break;
       case "AWACS":                     
-          dx += 3; dy += 5;
-          mx -= 7; my += 6; 
+          dx -= 17; dy += 3;
+          mx -= 7; my += 6;
+          sx = 8;
           break;    
       case "Battleship":
           dx -= 5; dy -= 7;
@@ -2206,9 +2207,13 @@ function create_unit_offset_arrays()
           dx -= 2; dy -= 3;
           vx -= 11; vy += 4;
           mx -= 6;  my += 7;
-          break; 
+          break;
       case "Cruiser":
           vx -= 13; vy += 15;
+          break;
+      case "Cruise Missile":
+          dx -= 8; dy -= 7;
+          vx -= 23; vy += 15;
           break;
       case "Crusaders":
           vx -= 3; vy -= 12;
@@ -2364,6 +2369,9 @@ function create_unit_offset_arrays()
       case "Transport":
           dx -= 3; dy -= 1;
           vx -= 23; vy += 12;
+          break;
+      case "Transport Helicopter":
+          vx -= 24; vy += 15;
           break;
       case "Trireme":
           vx += 2; vy += 1;

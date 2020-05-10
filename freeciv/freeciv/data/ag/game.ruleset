@@ -572,6 +572,7 @@ actor_reqs    =
       "UnitState", "OnLivableTile", "Local", TRUE
       "MinMoveFrags", "1", "Local", TRUE
       "DiplRel", "Foreign", "Local", TRUE
+      "UnitState",    "Transported",    "Local", FALSE
       "UnitFlag", "Spy", "Local", FALSE
     }
 
@@ -582,6 +583,7 @@ actor_reqs    =
       "UnitFlag", "Spy", "Local"
       "UnitState", "OnLivableTile", "Local"
       "MinMoveFrags", "1", "Local"
+      "UnitState",    "Transported",    "Local", FALSE
       "DiplRel", "Foreign", "Local"
     }
 
@@ -590,6 +592,7 @@ action = "Poison City Escape"
 actor_reqs    =
     { "type",   "name", "range"
       "UnitFlag", "Spy", "Local"
+      "UnitState",    "Transported",    "Local", FALSE
       "DiplRel", "War", "Local"
       "UnitState", "OnLivableTile", "Local"
       "MinMoveFrags", "1", "Local"
@@ -607,6 +610,7 @@ actor_reqs    =
       "UnitState", "OnLivableTile", "Local"
       "MinMoveFrags", "1", "Local"
       "DiplRel", "Foreign", "Local"
+      "UnitState",    "Transported",    "Local", FALSE
     }
 target_reqs  =
     { "type",   "name", "range", "present"
@@ -620,6 +624,7 @@ actor_reqs    =
       "UnitState", "OnLivableTile", "Local"
       "MinMoveFrags", "1", "Local"
       "DiplRel", "Foreign", "Local"
+      "UnitState",    "Transported",    "Local", FALSE
     }
 target_reqs  =
     { "type",   "name", "range", "present"
@@ -635,6 +640,7 @@ actor_reqs    =
       "UnitState",    "OnLivableTile", "Local", TRUE
       "MinMoveFrags", "1",             "Local", TRUE
       "DiplRel",      "Foreign",       "Local", TRUE
+      "UnitState",    "Transported",    "Local", FALSE
     }
 target_reqs  =
     { "type",        "name",      "range",  "present"
@@ -649,6 +655,7 @@ actor_reqs    =
       "UnitState",    "OnLivableTile", "Local"
       "MinMoveFrags", "1",             "Local"
       "DiplRel",      "Foreign",       "Local"
+      "UnitState",    "Transported",    "Local", FALSE
     }
 target_reqs  =
     { "type",        "name",      "range",  "present"
@@ -663,6 +670,7 @@ actor_reqs    =
       "UnitState",    "OnLivableTile", "Local"
       "MinMoveFrags", "1",             "Local"
       "DiplRel",      "Foreign",       "Local"
+      "UnitState",    "Transported",    "Local", FALSE
     }
 target_reqs  =
     { "type",        "name",      "range",  "present"
@@ -680,6 +688,7 @@ actor_reqs    =
       "MinMoveFrags", "1",             "Local", TRUE
       "DiplRel",      "Foreign",       "Local", TRUE
       "UnitFlag",     "Spy",           "Local", FALSE
+      "UnitState",    "Transported",    "Local", FALSE
     }
 target_reqs  =
     { "type",     "name",      "range",  "present"
@@ -699,6 +708,7 @@ actor_reqs    =
       "UnitState",    "OnLivableTile", "Local", TRUE
       "MinMoveFrags", "1",             "Local", TRUE
       "DiplRel",      "Foreign",       "Local", TRUE
+      "UnitState",    "Transported",    "Local", FALSE
     }
 target_reqs  =
     { "type",     "name",      "range",  "present"
@@ -859,7 +869,8 @@ actor_reqs    =
 action = "Capture Units"
 actor_reqs    =
     { "type",   "name", "range", "present"
-      "UnitFlag", "Capturer", "Local", TRUE      
+      "UnitFlag", "Capturer", "Local", TRUE
+      "UnitState", "Transported", "Local", FALSE
 ;     "DiplRel", "War", "Local", TRUE             ;NAH 
       "MinMoveFrags", "1", "Local", TRUE
       "DiplRel", "Foreign", "Local", TRUE
