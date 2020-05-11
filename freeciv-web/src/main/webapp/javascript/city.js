@@ -1275,10 +1275,17 @@ function close_city_dialog()
 function do_city_map_click(ptile)
 {
   var packet = null;
+  var change_specialist = 0; // default freed worker to Entertainer
   if (ptile['worked'] == active_city['id']) {
+
+    // server defaults unclicking a tile to make an entertainer,
+    // override it if user has a selected_specialist type:
+    if (selected_specialist != -1) change_specialist=selected_specialist;
+
     packet = {"pid"     : packet_city_make_specialist,
               "city_id" : active_city['id'],
-              "tile_id" : ptile['index']};
+              "tile_id" : ptile['index']/*, "to": change_specialist*/
+             };
   } else {
     packet = {"pid"     : packet_city_make_worker,
               "city_id" : active_city['id'],
