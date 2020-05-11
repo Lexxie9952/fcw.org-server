@@ -664,6 +664,7 @@ function handle_ruleset_control(packet)
       client_rules_flag[CRF_EXTRA_HIDEOUT]=true;
       client_rules_flag[CRF_EXTRA_QUAY]=true;
       client_rules_flag[CRF_MAJOR_NUKES]=true; // ruleset has them and server setting to disallow them
+      client_rules_flag[CRF_SURGICAL_PILLAGE]=true;
       $("#order_airbase").attr("title", "Build Airbase/Radar (Shift-E)");
 
     case "Multiplayer-Evolution ruleset":

@@ -1322,7 +1322,13 @@ actor_reqs    =
     { "type",          "name",         "range"
       "UnitClassFlag", "CanPillage",   "Local"
     }
- 
+[actionenabler_pillage2]
+action        = "Pillage"
+actor_reqs    =
+    { "type",     "name",                  "range"
+      "UnitType", "Ground Strike Fighter", "Local"
+    }
+
 [actionenabler_fortify]
 action        = "Fortify"
 actor_reqs    =

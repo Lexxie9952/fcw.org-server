@@ -2575,7 +2575,7 @@ bonuses       =
      "AntiAir",    "DefenseMultiplierPct",       33 ; D5.33 vs Anti-Air
    }
 flags         = "AirAttacker", "Unbribable", "CanEscape", "NeverBlocked",
-                "NeverProtects", "Provoking", "WillNever", "CanPillage"
+                "NeverProtects", "Provoking", "WillNever"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),

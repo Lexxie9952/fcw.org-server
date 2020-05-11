@@ -707,7 +707,17 @@ function get_what_can_unit_pillage_from(punit, ptile)
 
   if (terrains[ptile.terrain].pillage_time == 0) return targets;
   var unit_class = unit_classes[unit_types[punit.type].unit_class_id];
-  if (!unit_class.flags.isSet(UCF_CAN_PILLAGE)) return targets;
+  
+  // Abort if unit can't pillage
+  if (!unit_class.flags.isSet(UCF_CAN_PILLAGE)) {
+    if (client_rules_flag[CRF_SURGICAL_PILLAGE]) {
+      var ptype = unit_type(punit);
+      if (ptype['name'] != "Ground Strike Fighter") {
+        return targets;
+      }
+    }  
+    else return targets;  // abort: unit can't pillage
+  }
 
   var available = ptile.extras.toBitSet();
   var cannot_pillage = new BitVector([]);
