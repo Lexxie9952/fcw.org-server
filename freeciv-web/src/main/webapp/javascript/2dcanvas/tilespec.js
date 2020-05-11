@@ -1261,14 +1261,10 @@ function get_unit_activity_sprite(punit)
   // Special case: idle/sentry units on transport will show themselves
   // as "cargo" even though server has no ACTIVITY_CODE for it:
   if (punit['transported']) {
-    if (activity != ACTIVITY_VIGIL)
+    if (activity == ACTIVITY_SENTRY || activity == ACTIVITY_IDLE)
       return {"key" : "unit.cargo",
         "offset_x" : unit_activity_offset_x,
         "offset_y" : - unit_activity_offset_y};
-    // it's important to see whether aircraft on a carrier are in vigil/intercept mode
-    else return {"key" : "unit.vigil",
-                  "offset_x" : unit_activity_offset_x,
-                  "offset_y" : - unit_activity_offset_y};
   }
 
   switch (activity) {
