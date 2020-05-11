@@ -68,6 +68,9 @@ flags =
     _("MultiSlot"), _("Cities with proper requirements can produce more than one of these per turn.") ;uncomment if you don't have slot_control patch
     _("CanHide"), _("In appropriate terrain, this unit can make a Hideout, which will conceal all land units on the tile.")
     _("WillNever")
+;;; The following flag MUST be #34 position to work with hack in movement.c which allows transported AAA to defend on non-native:
+;;; this comment can be removed when we have some smarter way for unit_can_defend_here(..) to get ruleset control.
+    _("TransportDefender"), _("Can defend while transported on non-native tiles.")
   }
 
 ; Names for custom unit class flags. There can be up to 8 of these.
@@ -1283,7 +1286,7 @@ veteran_names =
 veteran_raise_chance = 60, 50, 40, 30, 20, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 1, 1, 1, 1
 roles         = "DefendOk", "DefendOkStartUnit", "BarbarianSeaTech"
 helptext      = _("\
 Marines are experts at amphibious war. They are the strongest\
@@ -1838,13 +1841,13 @@ bonuses       =
      "AirAttacker", "DefenseDivider", 1
      "AirAttacker", "DefenseMultiplier", 1
    }
-flags         = "NeverBlocked", "AntiAir", "Marines", "WillNever"
+flags         = "NeverBlocked", "AntiAir", "Marines", "WillNever", "TransportDefender"
 roles         = ""
 helptext      = _("\
 Anti-Aircraft Artillery (AAA) can attack almost anything from anywhere. AAA get a\
- 2x bonus against Air units. They are often used by Marines in combined ops because\
- they can be transported on any unit that can carry Marines, can attack from or to non-native\
- tiles, and do not lose a turn when unloading. (AAA cannot attack Submarines, Missiles,\
+ 2x bonus against Air units. AAA qualify as weaponry for Marines and have the same\
+ abilities: they can be transported on any unit that carries Marines, can attack from\
+ or to non-native tiles, and do not lose a turn when unloading. (AAA cannot attack Submarines, Missiles,\
  or Jet Bombers.)\
 "), _("
 After Space Flight and 10 turns of service, AAA can be retrofitted to\
@@ -2390,7 +2393,7 @@ bonuses       =
    }
 cargo         = "Land", "LandAirSea", "LandNoKill"
 flags         = "Helicopter", "AirAttacker", "Unbribable", "Provoking",
-                "CanEscape", "WillNever"
+                "CanEscape", "WillNever", "HasNoZOC"
                 ; Tranport Heli is provoking; Fighters don't like them.
 veteran_names =
   _("?vet_rank:green"),
@@ -2409,7 +2412,7 @@ helptext      = _("\
 Transport Helicopters can transport up to three land units.\
 "), _("\
 Armor and Freight must load and unload from a refueling tile.\
- Foot units, infantry, and artillery types can load and unload on any tile.\
+ Foot units and artillery types can load and unload on any tile.\
  Except for Marines, unloading on a non-refueling tile uses up all moves.\
 "), _("\
  Helicopters lose 1 hp for each turn not ended in a City, Base, or Carrier. +1 move point\
@@ -2572,7 +2575,7 @@ bonuses       =
      "AntiAir",    "DefenseMultiplierPct",       33 ; D5.33 vs Anti-Air
    }
 flags         = "AirAttacker", "Unbribable", "CanEscape", "NeverBlocked",
-                "NeverProtects", "Provoking", "WillNever"
+                "NeverProtects", "Provoking", "WillNever", "CanPillage"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -2590,7 +2593,8 @@ helptext      = _("\
 Ground Strike Fighters upgrade the Dive Bomber. They cannot block attacks on other\
  units on their tile, nor engage against Fighters. However, like the Dive Bomber,\
  they can interdict ZoC over land tiles. High fuel capacity allows two turns in the\
- air. No unit can stop this unit from attacking surface units on a tile. This is a\
+ air. No unit can stop this unit from attacking surface units on a tile. This unit\
+ can also do pinpointed surgical strikes to pillage tiles. This aircraft is a\
  specialized niche unit. It is not an interceptor.\n\
 NOTE: GOTO prevents unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\

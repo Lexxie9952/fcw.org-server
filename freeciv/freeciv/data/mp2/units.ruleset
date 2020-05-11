@@ -67,6 +67,7 @@ flags =
     _("MultiSlot"), _("Cities with proper requirements can produce more than one of these per turn.") ;uncomment if you don't have slot_control patch
     _("CanHide"), _("In appropriate terrain, this unit can make a Hideout, which will conceal all land units on the tile.")
     _("WillNever")
+    _("TransportDefender"), _("Can defend while transported on non-native tiles.")
     }
 
 ; Names for custom unit class flags. There can be up to 8 of these.
