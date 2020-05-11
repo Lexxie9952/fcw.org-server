@@ -162,6 +162,7 @@ const UTYF_ANTIAIR = UTYF_USER_FLAG_30;       // Anti-Air unit. e.g., AEGIS, AAA
 const UTYF_MULTISLOT = UTYF_USER_FLAG_31;     /* Reserved for replacing Shield2Gold as flag for using multiple city_build_slots */
 const UTYF_CANHIDE = UTYF_USER_FLAG_32;       /* Can make hideouts */
 const UTYF_WILLNEVER = UTYF_USER_FLAG_33;     // Doesn't auto-attack.
+const UTYF_TRANSPORTDEFENDER = UTYF_USER_FLAG_34 // Can defend while transported on non-native tiles //
 /**********************************************************************//**
   Return true iff units of the given type can do the specified generalized
   (ruleset defined) action enabler controlled action.
