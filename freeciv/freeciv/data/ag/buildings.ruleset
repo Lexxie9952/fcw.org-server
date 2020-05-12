@@ -1238,9 +1238,9 @@ Makes a city the religious capital that acts as a second center of government.\
  in gold tithes rather than shield output. Under Fundamentalism,\
  the religious capital gets a +50% gold bonus from tithes.\
 "), _("\
- The cost of inciting a revolt decreases with distance from a\
- capital. No capital city can be incited to revolt.\
- The chance of enemy agents defeating your agents or sabotaging\
+ The cost of bribing and inciting increase when closer to a\
+ capital. Capitals can not be incited to revolt, and the\
+ chance of enemy agents defeating your agents or sabotaging\
  buildings is reduced by half.\
 "), _("\
  Under Fundamentalism, Fanatics produced in the city with this building\
