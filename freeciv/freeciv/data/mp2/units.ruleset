@@ -3250,7 +3250,6 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Helicopter"
 embarks       = "Submarine"
 disembarks    = "Submarine"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "HasNoZOC", "Unbribable", "CantReachAir", "Missile", "NeverBlocked"
