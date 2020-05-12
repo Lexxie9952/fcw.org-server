@@ -100,9 +100,16 @@ void handle_city_change_specialist(struct player *pplayer, int city_id,
 				   Specialist_type_id to)
 {
   struct city *pcity = player_city_by_number(pplayer, city_id);
-
   if (!pcity) {
     return;
+  }
+  
+  bool change_all = false;
+  /* Adding 100 to Specialist_type_id "to", requests to change all specialists.
+    Semi-ugly but maintains compatibility between client/server versions. */
+  if (to >= 100) {
+    to -= 100;
+    change_all = true;
   }
 
   if (to < 0 || to >= specialist_count()
@@ -115,8 +122,13 @@ void handle_city_change_specialist(struct player *pplayer, int city_id,
     return;
   }
 
-  pcity->specialists[from]--;
-  pcity->specialists[to]++;
+  if (change_all) {
+    pcity->specialists[to] += pcity->specialists[from];
+    pcity->specialists[from] = 0;
+  } else {
+    pcity->specialists[from]--;
+    pcity->specialists[to]++;
+  }
 
   city_refresh(pcity);
   sanity_check_city(pcity);
@@ -129,8 +141,21 @@ void handle_city_change_specialist(struct player *pplayer, int city_id,
 void handle_city_make_specialist(struct player *pplayer,
                                  int city_id, int tile_id)
 {
+  int specalist_to = DEFAULT_SPECIALIST;
+
+#ifdef FREECIV_WEB
+  // FCW uses top 3 bits to represent default specialist, thus city_id is really
+  // a 12-bit number. Perhaps later we should just send a specalist_to param
+  // if we ever have games over 8000 cities.  But for now this maintains packet
+  // compatibility
+  if (city_id > 32768) {city_id -= 32768; specalist_to += 4;}
+  if (city_id > 16384) {city_id -= 16384; specalist_to += 2;}
+  if (city_id >  8192) {city_id -=  8192; specalist_to += 1;}
+#endif
+
   struct tile *ptile = index_to_tile(&(wld.map), tile_id);
   struct city *pcity = player_city_by_number(pplayer, city_id);
+
 
   if (NULL == pcity) {
     /* Probably lost. */
@@ -154,7 +179,7 @@ void handle_city_make_specialist(struct player *pplayer,
     auto_arrange_workers(pcity);
   } else if (tile_worked(ptile) == pcity) {
     city_map_update_empty(pcity, ptile);
-    pcity->specialists[DEFAULT_SPECIALIST]++;
+    pcity->specialists[specalist_to]++;
   } else {
     log_verbose("handle_city_make_specialist() not working (%d, %d) "
                 "\"%s\".", TILE_XY(ptile), city_name_get(pcity));
