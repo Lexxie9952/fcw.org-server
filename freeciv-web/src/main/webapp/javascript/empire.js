@@ -43,12 +43,19 @@ var EMPIRE_ECON_UPKEEP         = 4;
 var EMPIRE_ECON_WORKLISTS      = 5;
 var empire_mode = EMPIRE_UNIT_TYPE_MODE;
 
-var SORT_NONE   = 0;
-var SORT_HP     = 1;
-var SORT_MOVES  = 2;
-var SORT_VET    = 3;
-var DO_NO_SORT  = -1;
+const SORT_NONE  = 0;
+const SORT_HP    = 1;
+const SORT_MOVES = 2;
+const SORT_VET   = 3;
+const DO_NO_SORT = -1;
 var empire_sort_mode = SORT_NONE;
+
+// which kinds of upkeep to show in Unit Home Cities
+var empire_upkeep_show_food    = true;
+var empire_upkeep_show_gold    = true;
+var empire_upkeep_show_shields = true;
+var empire_upkeep_show_free    = true;
+
 
 empire_screen_updater = new EventAggregator(update_empire_screen, 250, EventAggregator.DP_NONE, 250, 3, 250);
 
@@ -146,9 +153,20 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
   + "title='Sort unit rows by Moves Left' style='padding:5px; margin-bottom:2px;'>&#x2943Moves</button>";
   panel_html += "<button id='button_sortvet' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_sort_vet();'"
   + "title='Sort unit rows by Vet level' style='padding:5px; margin-bottom:2px;'>&#x2943Vet</button>";
+  panel_html += "&nbsp;&nbsp;&nbsp;&nbsp; show upkeep: &nbsp;"
+                  + "<input type='checkbox' id='show_food' title='Show food upkeep' name='cbFU' value='false' onclick='toggle_empire_show_upkeep(\"food\");'>Food"
+                  + "<input type='checkbox' id='show_gold' title='Show gold upkeep' name='cbGU' value='false' onclick='toggle_empire_show_upkeep(\"gold\");'>Gold"
+                  + "<input type='checkbox' id='show_shield' title='Show shield upkeep' name='cbSU' value='false' onclick='toggle_empire_show_upkeep(\"shields\");'>Shield"
+                  + "<input type='checkbox' id='show_free' title='Show units with no upkeep' name='cbFR' value='false' onclick='toggle_empire_show_upkeep(\"free\");'>Free";
+
   $("#empire_mode_panel").html(panel_html);
   $("#show_hp").prop("checked", empire_show_hitpoints);
   $("#show_mp").prop("checked", empire_show_movesleft);
+  $("#show_food").prop("checked", empire_upkeep_show_food);
+  $("#show_gold").prop("checked", empire_upkeep_show_gold);
+  $("#show_shield").prop("checked", empire_upkeep_show_shields);
+  $("#show_free").prop("checked", empire_upkeep_show_free);
+
 
   $('#empire_scroll').css({"height": $(window).height()-160, "overflow-y":"scroll", "overflow-x":"hidden" });
 
@@ -218,7 +236,22 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
     for (var unit_id in units) {  // pre-sort units belonging to player, by type, into this array
       var sunit = units[unit_id];
       if (client.conn.playing != null && unit_owner(sunit).playerno == client.conn.playing.playerno) {
-        units_sorted_by_type[sunit['type']].push(sunit);
+        // See if unit qualifies to be displayed based on upkeep types desired to be shown
+        var show_unit = false;
+        var f,g,s,l;
+        if (sunit['upkeep'] != null) {
+          s = parseInt(sunit['upkeep'][O_SHIELD],10);
+          f = parseInt(sunit['upkeep'][O_FOOD],10);
+          g = parseInt(sunit['upkeep'][O_GOLD],10);
+          l = f+g+s; // if zero it's a free upkeep unit
+          if   (empire_upkeep_show_shields && s>0) show_unit=true;
+          else if (empire_upkeep_show_food && f>0) show_unit=true;
+          else if (empire_upkeep_show_gold && g>0) show_unit=true;
+          else if (empire_upkeep_show_free && l==0) show_unit=true;
+        } else if (empire_upkeep_show_free) show_unit=true;
+        if (show_unit) {
+          units_sorted_by_type[sunit['type']].push(sunit);
+        }
       }
     }
   }
@@ -360,11 +393,12 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
   else $(".food_upkeep_column").remove();
   if (sum_ukg > 0) $("#g_upkeep_total").html(sum_ukg);
   else $(".gold_upkeep_column").remove();  
-  if (sum_uks > 0 || sum_ukf+sum_ukg==0) $("#s_upkeep_total").html(sum_uks);
-  // Remove empty shield upkeep column only if there's at least one other
-  // visible upkeep column; this way someone with no upkeep at all still 
-  // sees 0 sheild upkeep to know they have no upkeep at all:
-  else if (sum_ukf+sum_ukg>0) $(".shield_upkeep_column").remove();
+  if (sum_uks > 0) $("#s_upkeep_total").html(sum_uks);
+  // Remove empty shield upkeep column if they don't want to see shield upkeep OR
+  // there's at least one other visible upkeep column; this way someone with no
+  // upkeep at all still sees 0 shield upkeep to know they have no upkeep at all:
+  else if (sum_ukf+sum_ukg>0 || !empire_upkeep_show_shields) 
+    $(".shield_upkeep_column").remove();
   //---------------------------------------------------------------------
 
   if (city_count == 0) {                 // city count 
@@ -379,6 +413,7 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
   } else if (wide_screen) {
   }
 }
+
   
 /**************************************************************************
  Display Empire tab when it's in EMPIRE_UNIT_IN_CITY_MODE
@@ -1523,7 +1558,36 @@ function create_worklist_unit_div()
           + title_text + click_action
           +"</span></div>";
   }
-  return units_html;}
+  return units_html;
+}
+/**************************************************************************
+ toggles which upkeep types to show for unit home cities
+**************************************************************************/
+function toggle_empire_show_upkeep(upkeep_type)
+{
+  
+  switch (upkeep_type) {
+    case "food":
+      empire_upkeep_show_food = !empire_upkeep_show_food;
+      $("#show_food").prop("checked", empire_upkeep_show_food);
+      break;
+    case "gold":
+      empire_upkeep_show_gold = !empire_upkeep_show_gold;
+      $("#show_gold").prop("checked", empire_upkeep_show_gold);
+      break;
+    case "shields":
+      empire_upkeep_show_shields = !empire_upkeep_show_shields;
+      $("#show_shield").prop("checked", empire_upkeep_show_shields);
+      break;
+    case "free":
+      empire_upkeep_show_free = !empire_upkeep_show_free;
+      $("#show_free").prop("checked", empire_upkeep_show_free);
+      break;
+  }
+  empire_sort_mode = SORT_NONE;
+  update_empire_screen();
+  empire_sort_mode = SORT_NONE;
+}
 /**************************************************************************
  Toggle whether to show present buildings 
 **************************************************************************/
