@@ -199,17 +199,28 @@ function findLongestWord(str) {
 
 /**************************************************************************
  Server has web_player_info packet to update player income, but we don't
-  get updated after incoming city info packets. When we don't get the info
-  we can use this.
+  get refreshed info after incoming city info packets. When we don't get
+  the info we can calculate it client-side.
 **************************************************************************/
 function city_force_income_update()
 {
   if (observing) return;
 
   var income = 0;
+  // Go through all cities
   for (cid in cities) {
-    if (cities[cid]['owner'] == client.conn.playing.playerno) {
-      income += cities[cid]['surplus'][O_GOLD];
+    var pcity = cities[cid];
+    // Look at player cities only
+    if (pcity['owner'] == client.conn.playing.playerno) {
+      // add net gold income from tax collection
+      income += pcity['surplus'][O_GOLD];
+
+      // add net gold income from Coinage, if applicable
+      if (pcity['production_kind'] == VUT_IMPROVEMENT) {
+        if (improvements[pcity['production_value']]['name'] == "Coinage") {
+          income += pcity['surplus'][O_SHIELD];
+        }
+      }
     }
   }
   client.conn.playing['expected_income'] = income;
@@ -1274,21 +1285,28 @@ function close_city_dialog()
 **************************************************************************/
 function do_city_map_click(ptile)
 {
+  // updated==if cityhand.c:handle_city_specialist() looks at
+  // the top 3 bits in city_id for the type of specialst to make:
+  var updated = false; 
+
   var packet = null;
-  var change_specialist = 0; // default freed worker to Entertainer
-  if (ptile['worked'] == active_city['id']) {
-
-    // server defaults unclicking a tile to make an entertainer,
-    // override it if user has a selected_specialist type:
-    if (selected_specialist != -1) change_specialist=selected_specialist;
-
+  var city_id = active_city['id'];
+  if (ptile['worked'] == city_id) {
+    // Server defaults to make tile-worker into an entertainer.
+    // Override it if user has a selected_specialist type:
+    if (updated) { // only run this feature on updated server
+      var s = selected_specialist;
+      if (s >= 4) {city_id += 32768; s-= 4;}
+      if (s >= 2) {city_id += 16384; s-= 2;}
+      if (s >= 1) {city_id +=  8192;       }
+    }
     packet = {"pid"     : packet_city_make_specialist,
-              "city_id" : active_city['id'],
-              "tile_id" : ptile['index']/*, "to": change_specialist*/
+              "city_id" : city_id,
+              "tile_id" : ptile['index']
              };
   } else {
     packet = {"pid"     : packet_city_make_worker,
-              "city_id" : active_city['id'],
+              "city_id" : city_id,
               "tile_id" : ptile['index']};
   }
   send_request(JSON.stringify(packet));
@@ -1736,6 +1754,7 @@ function city_select_specialist(event, to_specialist_id)
 **************************************************************************/
 function city_change_specialist(event, city_id, from_specialist_id)
 {
+  var updated = 0;  // 0=running on un-updated server, 1=server was updated
   var city_message;
   var to_specialist_id;
   var num_specialists = Object.keys(specialists).length;
@@ -1764,16 +1783,20 @@ function city_change_specialist(event, city_id, from_specialist_id)
     city_message = {"pid": packet_city_change_specialist,
     "city_id" : city_id,
     "from" : from_specialist_id,
-    "to" : to_specialist_id}; 
+    "to" : (event.shiftKey ? (to_specialist_id+100*updated) : to_specialist_id)};
+    // adding 100 to the specialist code tells it to change all specialists.
+    // this maintains compatibility to old versions
   }
 
   send_request(JSON.stringify(city_message));
-  
-  // shift-click: change all specialists of this type 
-  if (event.shiftKey) { // for every specialist of this type, send another packet.
-    for (var s=1; s<cities[city_id].specialists[from_specialist_id]; s++) { // start at s=1, because we already sent one packet
-      send_request(JSON.stringify(city_message));
-     }
+  if (!updated) {
+  /* old method: send packets one-at-a-time to change all specialists
+     if using shift-click to change all specialists of this type */ 
+    if (event.shiftKey) { // for every specialist of this type, send another packet.
+      for (var s=1; s<cities[city_id].specialists[from_specialist_id]; s++) { // start at s=1, because we already sent one packet
+        send_request(JSON.stringify(city_message));
+      }
+    }
   }
 }
 
