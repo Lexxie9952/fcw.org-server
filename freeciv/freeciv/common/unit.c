@@ -2090,7 +2090,7 @@ void unit_set_ai_data(struct unit *punit, const struct ai_type *ai,
 
 /**********************************************************************//**
   Calculate how expensive it is to bribe the unit. The cost depends on the
-  distance to the capital, the owner's treasury, and the build cost of the
+  distance to a capital, the owner's treasury, and the build cost of the
   unit. For a damaged unit the price is reduced. For a veteran unit, it is
   increased.
 
@@ -2099,21 +2099,31 @@ void unit_set_ai_data(struct unit *punit, const struct ai_type *ai,
 int unit_bribe_cost(struct unit *punit, struct player *briber)
 {
   int cost, default_hp, dist = 0;
-  struct city *capital;
+  ///struct city *capital; old code marked with ///
+  struct tile *ptile = unit_tile(punit);
 
   fc_assert_ret_val(punit != NULL, 0);
 
   default_hp = unit_type_get(punit)->hp;
   cost = unit_owner(punit)->economic.gold + game.info.base_bribe_cost;
-  capital = player_capital(unit_owner(punit));
+  ///capital = player_capital(unit_owner(punit));
 
-  /* Consider the distance to the capital. */
+  /* /// Consider the distance to the capital. 
   if (capital != NULL) {
     dist = MIN(GAME_UNIT_BRIBE_DIST_MAX,
                map_distance(capital->tile, unit_tile(punit)));
   } else {
     dist = GAME_UNIT_BRIBE_DIST_MAX;
-  }
+  }*/
+  dist = GAME_UNIT_BRIBE_DIST_MAX;
+  city_list_iterate(unit_owner(punit)->cities, capital) {
+    if (is_capital(capital) || is_gov_center(capital)) {
+      int tmp = map_distance(capital->tile, ptile);
+      if (tmp < dist) {
+        dist = tmp;
+      }
+    }
+  } city_list_iterate_end;
   cost /= dist + 2;
 
   /* Consider the build cost. */
@@ -2123,7 +2133,7 @@ int unit_bribe_cost(struct unit *punit, struct player *briber)
   cost += (cost
            * get_target_bonus_effects(NULL, unit_owner(punit), briber,
                                       game_city_by_number(punit->homecity),
-                                      NULL, unit_tile(punit),
+                                      NULL, ptile,
                                       punit, unit_type_get(punit), NULL, NULL,
                                       NULL,
                                       EFT_UNIT_BRIBE_COST_PCT))
