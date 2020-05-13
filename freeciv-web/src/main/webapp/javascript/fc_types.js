@@ -46,7 +46,8 @@ var ACTIVITY_PILLAGE = 9;
 var ACTIVITY_GOTO = 10;
 var ACTIVITY_EXPLORE = 11;
 var ACTIVITY_TRANSFORM = 12;
-var ACTIVITY_UNUSED = 13; var ACTIVITY_VIGIL = 13; // not unused anymore!
+var ACTIVITY_UNUSED = 13; 
+var ACTIVITY_VIGIL = 13; // not unused anymore!
 var ACTIVITY_FORTIFYING = 15;
 var ACTIVITY_FALLOUT = 16;
 var ACTIVITY_BASE = 18;			/* building base */
