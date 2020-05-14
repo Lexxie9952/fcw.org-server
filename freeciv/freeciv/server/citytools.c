@@ -359,7 +359,7 @@ static const char *search_for_city_name(struct tile *ptile,
 bool is_allowed_city_name(struct player *pplayer, const char *cityname,
 			  char *error_buf, size_t bufsz)
 {
-  struct connection *pconn = conn_by_user(pplayer->username);
+  //struct connection *pconn = conn_by_user(pplayer->username);
 
   /* Mode 1: A city name has to be unique for each player. */
   if (CNM_PLAYER_UNIQUE == game.server.allowed_city_names
