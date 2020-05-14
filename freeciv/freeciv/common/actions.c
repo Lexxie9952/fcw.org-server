@@ -3366,10 +3366,18 @@ static struct act_prob ap_dipl_battle_win(const struct unit *pattacker,
   See diplomat_infiltrate_tile() in server/diplomats.c
 **************************************************************************/
 static struct act_prob ap_diplomat_battle(const struct unit *pattacker,
-                                          const struct unit *pvictim)
+                                          const struct unit *pvictim,
+                                          const struct tile *tgt_tile)
 {
-  unit_list_iterate(unit_tile(pvictim)->units, punit) {
-    if (unit_owner(punit) == unit_owner(pattacker)) {
+fc_assert_ret_val(tgt_tile, ACTPROB_NOT_KNOWN);
+
+if (!can_player_see_hypotetic_units_at(unit_owner(pattacker),
+                                        tgt_tile)) {
+  /* Don't leak information about unseen defenders. */
+  return ACTPROB_NOT_KNOWN;
+}
+
+unit_list_iterate(tgt_tile->units, punit) {    if (unit_owner(punit) == unit_owner(pattacker)) {
       /* Won't defend against its owner. */
       continue;
     }
@@ -3384,7 +3392,7 @@ static struct act_prob ap_diplomat_battle(const struct unit *pattacker,
     }
 
     if (!(unit_has_type_flag(punit, UTYF_DIPLOMAT)
-        || unit_has_type_flag(punit, UTYF_SUPERSPY))) {
+          || unit_has_type_flag(punit, UTYF_SUPERSPY))) {
       /* The unit can't defend. */
       continue;
     }
@@ -3496,7 +3504,8 @@ action_prob(const action_id wanted_action,
     /* TODO */
     break;
   case ACTION_SPY_POISON_ESC:
-    /* TODO */
+    /* All uncertainty comes from potential diplomatic battles. */
+    chance = ap_diplomat_battle(actor_unit, NULL, target_tile);
     break;
   case ACTION_SPY_STEAL_GOLD:
     /* TODO */
@@ -3513,11 +3522,11 @@ action_prob(const action_id wanted_action,
   case ACTION_SPY_SABOTAGE_UNIT:
   case ACTION_SPY_SABOTAGE_UNIT_ESC:
     /* All uncertainty comes from potential diplomatic battles. */
-    chance = ap_diplomat_battle(actor_unit, target_unit);
+    chance = ap_diplomat_battle(actor_unit, target_unit, target_tile);
     break;
   case ACTION_SPY_BRIBE_UNIT:
     /* All uncertainty comes from potential diplomatic battles. */
-    chance = ap_diplomat_battle(actor_unit, target_unit);;
+    chance = ap_diplomat_battle(actor_unit, target_unit, target_tile);
     break;
   case ACTION_SPY_SABOTAGE_CITY:
     /* TODO */
@@ -4543,6 +4552,10 @@ struct act_prob action_prob_fall_back(const struct act_prob *ap1,
 
     out.min = ap1->min;
     out.max = ap2->max;
+
+    /* Cap at 100%. */
+    out.min = MIN(out.min, ACTPROB_VAL_MAX);
+    out.max = MIN(out.max, ACTPROB_VAL_MAX);
 
     return out;
   }
