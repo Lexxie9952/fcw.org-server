@@ -1503,9 +1503,16 @@ sabotage	= 0
 sound		= "w_great_wall"
 sound_alt	= "w_generic"
 helptext	= _("\
-Gives a City Wall in all your cities. This has no effect\
- when City Walls are already present.  This Wonder is made\
- obsolete when any nation discovers Machine Tools.\
+The Great Wall protects your cities with City Walls. It takes three\
+ turns after founding a city for the Great Wall to extend protection\
+ to the new city. Also, the city must have been founded by you, or\
+ assimilated to where less than a fifth of its citizens are foreign.\n\
+The Great Wall gives no extra effect when City Walls are already present.\
+ However, regular City Walls still protect a city in which the Great\
+ Wall has not yet activated.\nWarning! This Wonder is obsolete when\
+ ANY nation in the world discovers Machine Tools. You may not know\
+ which nations have Machine Tools. This makes it possible for you to\
+ build an obsolete wonder!\
 ")
 
 [building_hanging_gardens]

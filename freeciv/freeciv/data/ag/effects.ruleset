@@ -1578,7 +1578,6 @@ reqs	=
       "Building", "Michelangelo's Chapel", "Player", TRUE
     }
 ;------------------------------------------------------------
-
 [effect_city_walls]
 type    = "Defend_Bonus"
 value	= 200
@@ -1586,10 +1585,9 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "City Walls", "City", TRUE
       "UnitClass", "Land", "Local", TRUE
-      "Building", "Great Wall", "Player", FALSE
+;      "Building", "Great Wall", "Player", FALSE
       "UnitType", "Howitzer", "Local", FALSE
     }
-
 [effect_city_walls_0]
 type    = "Defend_Bonus"
 value	= 200
@@ -1597,7 +1595,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "City Walls", "City", TRUE
       "UnitClass", "Helicopter", "Local", TRUE
-      "Building", "Great Wall", "Player", FALSE
+;      "Building", "Great Wall", "Player", FALSE
     }
 [effect_city_walls_0a]
 type    = "Defend_Bonus"
@@ -1606,7 +1604,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "City Walls", "City", TRUE
       "UnitClass", "LandAirSea", "Local", TRUE
-      "Building", "Great Wall", "Player", FALSE
+;     "Building", "Great Wall", "Player", FALSE
       "UnitType", "Howitzer", "Local", FALSE
    }
 [effect_city_walls_0b]
@@ -1616,10 +1614,9 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "City Walls", "City", TRUE
       "UnitClass", "LandNoKill", "Local", TRUE
-      "Building", "Great Wall", "Player", FALSE
+;     "Building", "Great Wall", "Player", FALSE
       "UnitType", "Howitzer", "Local", FALSE
     }
-
 [effect_city_walls_1]
 type    = "Unit_No_Lose_Pop"
 value	= 1
@@ -1627,7 +1624,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "City Walls", "City"
     }
-
 [effect_city_walls_visible]
 type    = "Visible_Walls"
 value	= 1
@@ -3390,65 +3386,170 @@ reqs	=
       "Action", "Incite City Escape", "Local", TRUE
     }
 
-[effect_great_wall]
+;==============================================================
+; GREAT Wall
+;==============================================================
+[effect_great_wall_0_original]
 type    = "Defend_Bonus"
 value	= 200
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
+      "Building", "City Walls", "City", FALSE
+      "Age", "3", "City", TRUE
+      "CityStatus", "OwnedByOriginal", "City",  TRUE
       "UnitClass", "Land", "Local", TRUE
       "CityTile", "Center", "Local", TRUE
       "UnitType", "Howitzer", "Local", FALSE
       "Tech", "Machine Tools", "World", FALSE
     }
-[effect_great_wall_0]
+[effect_great_wall_0_assimilated]
+type    = "Defend_Bonus"
+value	= 200
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Great Wall", "Player", TRUE
+      "Building", "City Walls", "City", FALSE
+      "Age", "3", "City", TRUE
+      "CityStatus", "OwnedByOriginal", "City",  FALSE
+      "MinForeignPct", "19", "City",  FALSE
+      "UnitClass", "Land", "Local", TRUE
+      "CityTile", "Center", "Local", TRUE
+      "UnitType", "Howitzer", "Local", FALSE
+      "Tech", "Machine Tools", "World", FALSE
+    }
+[effect_great_wall_1_original]
 type    = "Defend_Bonus"
 value	= 200
 reqs	=
     { "type", "name", "range"
       "Building", "Great Wall", "Player"
+      "Building", "City Walls", "City", FALSE
+      "Age", "3", "City", TRUE
+      "CityStatus", "OwnedByOriginal", "City",  TRUE
       "UnitClass", "Helicopter", "Local"
       "CityTile", "Center", "Local"
       "Tech", "Machine Tools", "World", FALSE
     }
-[effect_great_wall_0a]
+[effect_great_wall_1_assimilated]
+type    = "Defend_Bonus"
+value	= 200
+reqs	=
+    { "type", "name", "range"
+      "Building", "Great Wall", "Player"
+      "Building", "City Walls", "City", FALSE
+      "Age", "3", "City", TRUE
+      "CityStatus", "OwnedByOriginal", "City",  FALSE
+      "MinForeignPct", "19", "City",  FALSE
+      "UnitClass", "Helicopter", "Local"
+      "CityTile", "Center", "Local"
+      "Tech", "Machine Tools", "World", FALSE
+    }
+[effect_great_wall_2_original]
 type    = "Defend_Bonus"
 value	= 200
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
+      "Building", "City Walls", "City", FALSE
+      "Age", "3", "City", TRUE
+      "CityStatus", "OwnedByOriginal", "City",  TRUE
       "UnitClass", "LandNoKill", "Local", TRUE
       "CityTile", "Center", "Local", TRUE
       "UnitType", "Howitzer", "Local", FALSE
       "Tech", "Machine Tools", "World", FALSE
     }
-[effect_great_wall_0b]
+[effect_great_wall_2_assimilated]
 type    = "Defend_Bonus"
 value	= 200
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
+      "Building", "City Walls", "City", FALSE
+      "Age", "3", "City", TRUE
+      "CityStatus", "OwnedByOriginal", "City",  FALSE
+      "MinForeignPct", "19", "City",  FALSE
+      "UnitClass", "LandNoKill", "Local", TRUE
+      "CityTile", "Center", "Local", TRUE
+      "UnitType", "Howitzer", "Local", FALSE
+      "Tech", "Machine Tools", "World", FALSE
+    }
+[effect_great_wall_3_original]
+type    = "Defend_Bonus"
+value	= 200
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Great Wall", "Player", TRUE
+      "Building", "City Walls", "City", FALSE
+      "Age", "3", "City", TRUE
+      "CityStatus", "OwnedByOriginal", "City",  TRUE
       "UnitClass", "LandAirSea", "Local", TRUE
       "CityTile", "Center", "Local", TRUE
       "UnitType", "Howitzer", "Local", FALSE
       "Tech", "Machine Tools", "World", FALSE
     }
-[effect_great_wall_1]
+[effect_great_wall_3_assimilated]
+type    = "Defend_Bonus"
+value	= 200
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Great Wall", "Player", TRUE
+      "Building", "City Walls", "City", FALSE
+      "Age", "3", "City", TRUE
+      "CityStatus", "OwnedByOriginal", "City",  FALSE
+      "MinForeignPct", "19", "City",  FALSE
+      "UnitClass", "LandAirSea", "Local", TRUE
+      "CityTile", "Center", "Local", TRUE
+      "UnitType", "Howitzer", "Local", FALSE
+      "Tech", "Machine Tools", "World", FALSE
+    }
+[effect_great_wall_poploss_original]
 type    = "Unit_No_Lose_Pop"
 value	= 1
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
-       "Tech", "Machine Tools", "World", FALSE
+      "Building", "City Walls", "City", FALSE
+      "Age", "3", "City", TRUE
+      "CityStatus", "OwnedByOriginal", "City",  TRUE
+      "Tech", "Machine Tools", "World", FALSE
     }
-[effect_great_wall_visible]
+[effect_great_wall_poploss_assimilated]
+type    = "Unit_No_Lose_Pop"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Great Wall", "Player", TRUE
+      "Building", "City Walls", "City", FALSE
+      "Age", "3", "City", TRUE
+      "CityStatus", "OwnedByOriginal", "City",  FALSE
+      "MinForeignPct", "19", "City",  FALSE
+      "Tech", "Machine Tools", "World", FALSE
+    }
+[effect_great_wall_visible_original]
 type    = "Visible_Walls"
 value	= 1
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
+      "Building", "City Walls", "City", FALSE
+      "Age", "3", "City", TRUE
+      "CityStatus", "OwnedByOriginal", "City",  TRUE
       "Tech", "Machine Tools", "World", FALSE
     }
+[effect_great_wall_visible_assimilated]
+type    = "Visible_Walls"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Great Wall", "Player", TRUE
+      "Building", "City Walls", "City", FALSE
+      "Age", "3", "City", TRUE
+      "CityStatus", "OwnedByOriginal", "City",  FALSE
+      "MinForeignPct", "19", "City",  FALSE
+      "Tech", "Machine Tools", "World", FALSE
+    }
+;==============================================================
 
 [effect_hanging_gardens]
 type    = "Make_Happy"
