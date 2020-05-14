@@ -259,6 +259,12 @@ void universal_value_from_str(struct universal *source, const char *value)
       return;
     }
     break;
+  case VUT_MINFOREIGNPCT:
+    source->value.minforeignpct = atoi(value);
+    if (source->value.minforeignpct > 0) {
+      return;
+    }
+    break;
   case VUT_AI_LEVEL:
     source->value.ai_level = ai_level_by_name(value, fc_strcasecmp);
     if (ai_level_is_valid(source->value.ai_level)) {
@@ -328,6 +334,12 @@ void universal_value_from_str(struct universal *source, const char *value)
   case VUT_CITYTILE:
     source->value.citytile = citytile_type_by_name(value, fc_strcasecmp);
     if (source->value.citytile != CITYT_LAST) {
+      return;
+    }
+    break;
+  case VUT_CITYSTATUS:
+    source->value.citystatus = citystatus_type_by_name(value, fc_strcasecmp);
+    if (source->value.citystatus != CITYS_LAST) {
       return;
     }
     break;
@@ -486,6 +498,9 @@ struct universal universal_by_number(const enum universals_n kind,
   case VUT_MINCULTURE:
     source.value.minculture = value;
     return source;
+  case VUT_MINFOREIGNPCT:
+    source.value.minforeignpct = value;
+    return source;
   case VUT_AI_LEVEL:
     source.value.ai_level = value;
     return source;
@@ -521,6 +536,9 @@ struct universal universal_by_number(const enum universals_n kind,
     return source;
   case VUT_CITYTILE:
     source.value.citytile = value;
+    return source;
+  case VUT_CITYSTATUS:
+    source.value.citystatus = value;
     return source;
   case VUT_COUNT:
     break;
@@ -613,6 +631,8 @@ int universal_number(const struct universal *source)
     return source->value.minsize;
   case VUT_MINCULTURE:
     return source->value.minculture;
+  case VUT_MINFOREIGNPCT:
+    return source->value.minforeignpct;
   case VUT_AI_LEVEL:
     return source->value.ai_level;
   case VUT_MAXTILEUNITS:
@@ -637,6 +657,8 @@ int universal_number(const struct universal *source)
     return source->value.terrainalter;
   case VUT_CITYTILE:
     return source->value.citytile;
+  case VUT_CITYSTATUS:
+    return source->value.citystatus;
   case VUT_COUNT:
     break;
   }
@@ -724,7 +746,9 @@ struct requirement req_from_str(const char *type, const char *range,
         break;
       case VUT_MINSIZE:
       case VUT_MINCULTURE:
+      case VUT_MINFOREIGNPCT:
       case VUT_NATIONALITY:
+      case VUT_CITYSTATUS:
         req.range = REQ_RANGE_CITY;
         break;
       case VUT_GOVERNMENT:
@@ -782,8 +806,10 @@ struct requirement req_from_str(const char *type, const char *range,
       invalid = (req.range != REQ_RANGE_PLAYER);
       break;
     case VUT_MINSIZE:
+    case VUT_MINFOREIGNPCT:
     case VUT_NATIONALITY:
     case VUT_GOOD:
+    case VUT_CITYSTATUS:
       invalid = (req.range != REQ_RANGE_CITY
                  && req.range != REQ_RANGE_TRADEROUTE);
       break;
@@ -892,6 +918,7 @@ struct requirement req_from_str(const char *type, const char *range,
     case VUT_SPECIALIST:
     case VUT_MINSIZE:
     case VUT_MINCULTURE:
+    case VUT_MINFOREIGNPCT:
     case VUT_AI_LEVEL:
     case VUT_TERRAINCLASS:
     case VUT_MINYEAR:
@@ -900,6 +927,7 @@ struct requirement req_from_str(const char *type, const char *range,
     case VUT_SERVERSETTING:
     case VUT_TERRAINALTER:
     case VUT_CITYTILE:
+    case VUT_CITYSTATUS:
     case VUT_TERRFLAG:
     case VUT_NATIONALITY:
     case VUT_BASEFLAG:
@@ -1632,6 +1660,58 @@ static enum fc_tristate is_minculture_in_range(const struct city *target_city,
   fc_assert_msg(FALSE, "Invalid range %d.", range);
 
   return TRI_MAYBE;
+}
+
+/**********************************************************************//**
+  Is city with at least min_foreign_pct foreigners in range?
+**************************************************************************/
+static enum fc_tristate
+is_minforeignpct_in_range(const struct city *target_city, enum req_range range,
+                          int min_foreign_pct)
+{
+  int foreign_pct;
+
+   switch (range) {
+  case REQ_RANGE_CITY:
+    if (!target_city) {
+      return TRI_MAYBE;
+    }
+    foreign_pct = citizens_nation_foreign(target_city) * 100
+      / city_size_get(target_city);
+    return BOOL_TO_TRISTATE(foreign_pct >= min_foreign_pct);
+  case REQ_RANGE_TRADEROUTE:
+    if (!target_city) {
+      return TRI_MAYBE;
+    }
+    foreign_pct = citizens_nation_foreign(target_city) * 100
+      / city_size_get(target_city);
+    if (foreign_pct >= min_foreign_pct) {
+      return TRI_YES;
+    } else {
+      trade_partners_iterate(target_city, trade_partner) {
+        foreign_pct = citizens_nation_foreign(trade_partner) * 100
+          / city_size_get(trade_partner); 
+        if (foreign_pct >= min_foreign_pct) {
+          return TRI_YES;
+        }
+      } trade_partners_iterate_end;
+      return TRI_MAYBE;
+    }
+  case REQ_RANGE_PLAYER:
+  case REQ_RANGE_TEAM:
+  case REQ_RANGE_ALLIANCE:
+  case REQ_RANGE_WORLD:
+  case REQ_RANGE_LOCAL:
+  case REQ_RANGE_CADJACENT:
+  case REQ_RANGE_ADJACENT:
+  case REQ_RANGE_CONTINENT:
+  case REQ_RANGE_COUNT:
+    break;
+  }
+
+   fc_assert_msg(FALSE, "Invalid range %d.", range);
+
+   return TRI_MAYBE;
 }
 
 /**********************************************************************//**
@@ -2717,6 +2797,53 @@ static enum fc_tristate is_citytile_in_range(const struct tile *target_tile,
 }
 
 /**********************************************************************//**
+  Is city with specific status in range. If city is NULL, any city will do.
+**************************************************************************/
+static enum fc_tristate is_citystatus_in_range(const struct city *target_city,
+                                               enum req_range range,
+                                               enum citystatus_type citystatus)
+{
+  if (citystatus == CITYS_OWNED_BY_ORIGINAL) {
+    switch (range) {
+    case REQ_RANGE_CITY:
+      return city_owner(target_city) == target_city->original;
+    case REQ_RANGE_TRADEROUTE:
+      {
+        bool found = FALSE;
+
+         trade_partners_iterate(target_city, trade_partner) {
+          if (city_owner(trade_partner) == trade_partner->original) {
+            found = TRUE;
+            break;
+          }
+        } trade_partners_iterate_end;
+
+         return BOOL_TO_TRISTATE(found);
+      }
+    case REQ_RANGE_LOCAL:
+    case REQ_RANGE_CADJACENT:
+    case REQ_RANGE_ADJACENT:
+    case REQ_RANGE_CONTINENT:
+    case REQ_RANGE_PLAYER:
+    case REQ_RANGE_TEAM:
+    case REQ_RANGE_ALLIANCE:
+    case REQ_RANGE_WORLD:
+    case REQ_RANGE_COUNT:
+      break;
+    }
+
+     fc_assert_msg(FALSE, "Invalid range %d for citystatus.", range);
+
+     return TRI_MAYBE;
+  } else {
+    /* Not implemented */
+    log_error("is_req_active(): citystatus %d not supported.",
+              citystatus);
+    return TRI_MAYBE;
+  }
+}
+
+/**********************************************************************//**
   Has achievement been claimed by someone in range.
 **************************************************************************/
 static enum fc_tristate
@@ -3020,6 +3147,10 @@ bool is_req_active(const struct player *target_player,
     eval = is_minculture_in_range(target_city, target_player, req->range,
                                   req->source.value.minculture);
     break;
+  case VUT_MINFOREIGNPCT:
+    eval = is_minforeignpct_in_range(target_city, req->range,
+                                     req->source.value.minforeignpct);
+    break;
   case VUT_AI_LEVEL:
     if (target_player == NULL) {
       eval = TRI_MAYBE;
@@ -3081,6 +3212,15 @@ bool is_req_active(const struct player *target_player,
       eval = is_citytile_in_range(target_tile, target_city,
                                   req->range,
                                   req->source.value.citytile);
+    }
+    break;
+  case VUT_CITYSTATUS:
+    if (target_city == NULL) {
+      eval = TRI_MAYBE;
+    } else {
+      eval = is_citystatus_in_range(target_city,
+                                    req->range,
+                                    req->source.value.citystatus);
     }
     break;
   case VUT_COUNT:
@@ -3159,6 +3299,7 @@ bool is_req_unchanging(const struct requirement *req)
   case VUT_SPECIALIST:	/* Only so long as it's at local range only */
   case VUT_AI_LEVEL:
   case VUT_CITYTILE:
+  case VUT_CITYSTATUS:  /* We don't *want* owner of our city to change */
   case VUT_STYLE:
   case VUT_TOPO:
   case VUT_SERVERSETTING:
@@ -3174,6 +3315,7 @@ bool is_req_unchanging(const struct requirement *req)
   case VUT_IMPR_GENUS:
   case VUT_MINSIZE:
   case VUT_MINCULTURE:
+  case VUT_MINFOREIGNPCT:
   case VUT_MINTECHS:
   case VUT_NATIONALITY:
   case VUT_DIPLREL:
@@ -3303,6 +3445,8 @@ bool are_universals_equal(const struct universal *psource1,
     return psource1->value.minsize == psource2->value.minsize;
   case VUT_MINCULTURE:
     return psource1->value.minculture == psource2->value.minculture;
+  case VUT_MINFOREIGNPCT:
+    return psource1->value.minforeignpct == psource2->value.minforeignpct;
   case VUT_AI_LEVEL:
     return psource1->value.ai_level == psource2->value.ai_level;
   case VUT_MAXTILEUNITS:
@@ -3327,6 +3471,8 @@ bool are_universals_equal(const struct universal *psource1,
     return psource1->value.terrainalter == psource2->value.terrainalter;
   case VUT_CITYTILE:
     return psource1->value.citytile == psource2->value.citytile;
+  case VUT_CITYSTATUS:
+    return psource1->value.citystatus == psource2->value.citystatus;
   case VUT_COUNT:
     break;
   }
@@ -3348,6 +3494,8 @@ const char *universal_rule_name(const struct universal *psource)
     return "(none)";
   case VUT_CITYTILE:
     return citytile_type_name(psource->value.citytile);
+  case VUT_CITYSTATUS:
+    return citystatus_type_name(psource->value.citystatus);
   case VUT_MINYEAR:
     fc_snprintf(buffer, sizeof(buffer), "%d", psource->value.minyear);
 
@@ -3435,6 +3583,10 @@ const char *universal_rule_name(const struct universal *psource)
     fc_snprintf(buffer, sizeof(buffer), "%d", psource->value.minculture);
 
     return buffer;
+    case VUT_MINFOREIGNPCT:
+    fc_snprintf(buffer, sizeof(buffer), "%d", psource->value.minforeignpct);
+
+     return buffer;  
   case VUT_AI_LEVEL:
     return ai_level_name(psource->value.ai_level);
   case VUT_MAXTILEUNITS:
@@ -3633,6 +3785,10 @@ const char *universal_name_translation(const struct universal *psource,
     cat_snprintf(buf, bufsz, _("Culture %d"),
 		 psource->value.minculture);
     return buf;
+  case VUT_MINFOREIGNPCT:
+    cat_snprintf(buf, bufsz, _("%d%% Foreigners"),
+		 psource->value.minforeignpct);
+    return buf;
   case VUT_AI_LEVEL:
     /* TRANS: "Hard AI" */
     cat_snprintf(buf, bufsz, _("%s AI"),
@@ -3697,8 +3853,34 @@ const char *universal_name_translation(const struct universal *psource,
     cat_snprintf(buf, bufsz, _("%s possible"),
                  Q_(terrain_alteration_name(psource->value.terrainalter)));
     return buf;
+  /* previous  
   case VUT_CITYTILE:
     fc_strlcat(buf, _("City center"), bufsz);
+    return buf; */
+  case VUT_CITYTILE:
+    switch (psource->value.citytile) {
+    case CITYT_CENTER:
+      fc_strlcat(buf, _("City center"), bufsz);
+      break;
+    case CITYT_CLAIMED:
+      fc_strlcat(buf, _("Tile claimed"), bufsz);
+      break;
+    case CITYT_LAST:
+      fc_assert(psource->value.citytile != CITYT_LAST);
+      fc_strlcat(buf, "error", bufsz);
+      break;
+    }	
+    return buf;
+  case VUT_CITYSTATUS:
+    switch (psource->value.citystatus) {
+    case CITYS_OWNED_BY_ORIGINAL:
+      fc_strlcat(buf, _("Owned by original"), bufsz);
+      break;
+    case CITYS_LAST:
+      fc_assert(psource->value.citystatus != CITYS_LAST);
+      fc_strlcat(buf, "error", bufsz);
+      break;
+    }
     return buf;
   case VUT_COUNT:
     break;

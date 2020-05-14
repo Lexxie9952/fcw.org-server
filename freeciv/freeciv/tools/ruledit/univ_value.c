@@ -115,6 +115,9 @@ bool universal_value_initial(struct universal *src)
   case VUT_CITYTILE:
     src->value.citytile = CITYT_CENTER;
     return TRUE;
+  case VUT_CITYSTATUS:
+    src->value.citystatus = CITYS_OWNED_BY_ORIGINAL;
+    return TRUE;
   case VUT_GOOD:
     if (game.control.num_goods_types <= 0) {
       return FALSE;
@@ -165,6 +168,9 @@ bool universal_value_initial(struct universal *src)
     return TRUE;
   case VUT_MINCULTURE:
     src->value.minculture = 0;
+    return TRUE;
+  case VUT_MINFOREIGNPCT:
+    src->value.minforeignpct = 0;
     return TRUE;
   case VUT_UNITSTATE:
     src->value.unit_state = USP_TRANSPORTED;
@@ -345,6 +351,11 @@ void universal_kind_values(struct universal *univ,
       cb(citytile_type_name(i), univ->value.citytile == i, data);
     }
     break;
+  case VUT_CITYSTATUS:
+    for (i = 0; i < CITYS_LAST; i++) {
+      cb(citystatus_type_name(i), univ->value.citystatus == i, data);
+    }
+    break;
   case VUT_ACHIEVEMENT:
     achievements_active_iterate(pach) {
       cb(achievement_rule_name(pach), univ->value.achievement == pach, data);
@@ -402,6 +413,7 @@ void universal_kind_values(struct universal *univ,
   case VUT_MINCALFRAG:
   case VUT_MAXTILEUNITS:
   case VUT_MINCULTURE:
+  case VUT_MINFOREIGNPCT:
   case VUT_MINMOVES:
   case VUT_MINVETERAN:
   case VUT_MINHP:

@@ -280,6 +280,7 @@ static bool sanity_check_req_set(int reqs_of_type[], int local_reqs_of_type[],
      case VUT_OTYPE:
      case VUT_SPECIALIST:
      case VUT_MINSIZE: /* Breaks nothing, but has no sense either */
+     case VUT_MINFOREIGNPCT:
      case VUT_MINMOVES: /* Breaks nothing, but has no sense either */
      case VUT_MINVETERAN: /* Breaks nothing, but has no sense either */
      case VUT_MINHP: /* Breaks nothing, but has no sense either */
@@ -290,6 +291,7 @@ static bool sanity_check_req_set(int reqs_of_type[], int local_reqs_of_type[],
      case VUT_CITYTILE:
      case VUT_STYLE:
      case VUT_IMPR_GENUS:
+     case VUT_CITYSTATUS:
        /* There can be only one requirement of these types (with current
         * range limitations)
         * Requirements might be identical, but we consider multiple

@@ -1604,22 +1604,45 @@ static bool worklist_change_build_target(struct player *pplayer,
                 /* What has been written may not be unwritten. */
                 success = FALSE;
               }
-	      break;
-            case VUT_MINTECHS:
-              if (preq->present) {
-                notify_player(pplayer, city_tile(pcity),
-                              E_CITY_CANTBUILD, ftc_server,
-                              _("%s can't build %s from the worklist; "
-                                "%d techs must be known. Postponing..."),
-                              city_link(pcity),
-                              city_improvement_name_translation(pcity, ptarget),
-                              preq->source.value.min_techs);
-                script_server_signal_emit("building_cant_be_built", ptarget,
-                                          pcity, "need_mintechs");
-              } else {
-                success = FALSE;
-              }
-              break;
+	        break;
+        case VUT_MINFOREIGNPCT:
+        if (preq->present) {
+          notify_player(pplayer, city_tile(pcity),
+                        E_CITY_CANTBUILD, ftc_server,
+                        _("%s can't build %s from the worklist; "
+                          "city must have %d%% foreign population. Postponing..."),
+                        city_link(pcity),
+                        city_improvement_name_translation(pcity, ptarget),
+                        preq->source.value.minforeignpct);
+          script_server_signal_emit("building_cant_be_built", ptarget,
+                                    pcity, "need_minforeignpct");
+        } else {
+          notify_player(pplayer, city_tile(pcity),
+                        E_CITY_CANTBUILD, ftc_server,
+                        _("%s can't build %s from the worklist; "
+                          "city must have %d%% native population. Postponing..."),
+                        city_link(pcity),
+                        city_improvement_name_translation(pcity, ptarget),
+                        100 - preq->source.value.minforeignpct);
+          script_server_signal_emit("building_cant_be_built", ptarget,
+                                    pcity, "need_minforeignpct");
+        }
+          break;
+        case VUT_MINTECHS:
+          if (preq->present) {
+            notify_player(pplayer, city_tile(pcity),
+                          E_CITY_CANTBUILD, ftc_server,
+                          _("%s can't build %s from the worklist; "
+                            "%d techs must be known. Postponing..."),
+                          city_link(pcity),
+                          city_improvement_name_translation(pcity, ptarget),
+                          preq->source.value.min_techs);
+            script_server_signal_emit("building_cant_be_built", ptarget,
+                                      pcity, "need_mintechs");
+          } else {
+            success = FALSE;
+          }
+          break;
 	    case VUT_MAXTILEUNITS:
 	      if (preq->present) {
 		notify_player(pplayer, city_tile(pcity),
@@ -1797,6 +1820,7 @@ static bool worklist_change_build_target(struct player *pplayer,
 	    case VUT_SPECIALIST:
 	    case VUT_TERRAINALTER: /* XXX could do this in principle */
 	    case VUT_CITYTILE:
+      case VUT_CITYSTATUS:
 	      /* Will only happen with a bogus ruleset. */
               log_error("worklist_change_build_target() has bogus preq");
 	      break;

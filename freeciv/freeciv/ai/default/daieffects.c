@@ -708,6 +708,16 @@ bool dai_can_requirement_be_met_in_city(const struct requirement *preq,
   case VUT_NATIONALITY:
     /* Crude, but the right answer needs to consider civil wars. */
     return nation_is_in_current_set(preq->source.value.nation);
+    
+  case VUT_CITYSTATUS:
+    if (pcity == NULL) {
+      return preq->present;
+    }
+    if (preq->present) {
+      return city_owner(pcity) == pcity->original;
+    } else {
+      return city_owner(pcity) != pcity->original;
+    }
 
   case VUT_TERRAIN:
   case VUT_TERRAINCLASS:
@@ -734,6 +744,10 @@ bool dai_can_requirement_be_met_in_city(const struct requirement *preq,
   case VUT_MINTECHS:
     /* No way to remove once present. */
     return preq->present;
+
+  case VUT_MINFOREIGNPCT:
+    /* No way to add once lost. */
+    return !preq->present;
 
   case VUT_NATION:
   case VUT_NATIONGROUP:
