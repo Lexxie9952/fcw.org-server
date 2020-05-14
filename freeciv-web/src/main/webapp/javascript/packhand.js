@@ -1095,7 +1095,7 @@ function handle_unit_combat_info(packet)
         play_combat_sound(defender); 
         
         //update_map_canvas_full();
-
+/*
         // Construct the names of the defender unit: e.g., "Your Cannon", "French Cavalry", etc.
         var defend_unit = "the " + nations[defender_nation]['adjective'];
         if (nations[defender_nation]['adjective']==player_nation) defend_unit = "your";
@@ -1130,9 +1130,10 @@ function handle_unit_combat_info(packet)
 
           scrollDiv.appendChild(item); 
           chatbox_scroll_to_bottom(true);
-
+*/
           // New packet style coming back for a no-victory battle wasn't getting interpreted and redrawn
           // We will hard-code in here the new unit infos so redraw will work:
+/*          
           units[packet['attacker_unit_id']]['hp'] = attacker_hp;
           units[packet['defender_unit_id']]['hp'] = defender_hp;
 
@@ -1145,22 +1146,23 @@ function handle_unit_combat_info(packet)
           // what is 99% likely true, that the unit has 0 moves left, instead of 100% certainly false, that it has full movesleft:
           units[packet['attacker_unit_id']]['movesleft'] = 0;
           units[packet['defender_unit_id']]['movesleft'] = 0;  //packet 63 will reset these when it finally comes, likely to 0.
-          
+*/          
           // TO DO: send harmless action/info refresh on the unit such as a shift-J or unit info inquiry etc., using 
           // var packet_unit_do_action = 84 (or other?) ...  to provoke the server to come back with a packet 63, in order 
           // to get the proper move points that are remaining for the player's unit... this will make all the hacky junk above superfluous.
-           
+/*           
           // Forced redraw:
           update_tile_unit(units[packet['attacker_unit_id']]);   
           update_tile_unit(units[packet['defender_unit_id']]);
           auto_center_on_focus_unit();
           update_active_units_dialog();
           update_unit_order_commands();
+*/
           //setTimeout(update_unit_focus, 700);  // remove this if unit redraw still doesn't work
           // --------------------------------------------------------------------------------------------------------------------
         }
       }
-    } 
+     
 }
 
 /**************************************************************************
