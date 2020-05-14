@@ -3415,6 +3415,26 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
 
       unit_bombs_unit(punit, pdefender, &att_hp, &def_hp);
 
+      notify_player(pplayer, ptile,
+                    E_UNIT_ACTION_FAILED, ftc_server,
+                    /* TODO: replace generic "assaulted" with ruleset
+                       defined name of action.*/
+                    _("Your %s assaulted the %s %s (%dhp)."),
+                    unit_name_translation(punit),
+                    nation_adjective_for_player(unit_owner(pdefender)),
+                    unit_name_translation(pdefender),
+                    def_hp);
+
+       notify_player(unit_owner(pdefender), ptile,
+                    E_UNIT_ESCAPED, ftc_server,
+                    /* TODO: replace generic "assaulted" with ruleset
+                       defined name of action.*/
+                    _("%s %s assaulted your %s (%dhp)."),
+                    nation_adjective_for_player(pplayer),
+                    unit_name_translation(punit),
+                    unit_name_translation(pdefender),
+                    def_hp);
+
       see_combat(punit, pdefender);
 
       punit->hp = att_hp;
@@ -3727,6 +3747,42 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
     /* Neither died */
     send_combat(punit, pdefender, punit->veteran - old_unit_vet,
                 pdefender->veteran - old_defender_vet, 0);
+
+    // send_combat was failing to update clients.
+    // TODO: fix that and remove this block below
+    send_unit_info(NULL, punit);
+    send_unit_info(NULL, pdefender);
+
+    /* N.B.: unit_link always returns the same pointer. */
+    // loser=attacker, winner=defender, for purposes below
+    sz_strlcpy(loser_link, unit_tile_link(punit));
+    sz_strlcpy(winner_link, unit_link(pdefender));
+
+    notify_player(unit_owner(punit), def_tile,
+                  E_UNIT_ACTION_FAILED, ftc_server,
+                  /* TRANS: "... Cannon ... the Polish Destroyer." */
+                  _("Your %s (%dhp) could not defeat the %s %s (%dhp).\n"),
+                  loser_link,
+                  punit->hp,
+                  nation_adjective_for_player(unit_owner(pdefender)),
+                  winner_link,
+                  pdefender->hp);
+    notify_player(unit_owner(pdefender), def_tile,
+                  E_UNIT_ESCAPED, ftc_server,
+                  /* TRANS: "... Polish Cannon ... your Destroyer ..." */
+                  _("%s %s (%dhp) attacked your %s (%dhp), with no casualties.\n"),
+                  nation_adjective_for_player(unit_owner(punit)),
+                  loser_link,
+                  punit->hp,
+                  winner_link,
+                  pdefender->hp);
+
+      if (punit->veteran > old_unit_vet)
+        notify_unit_experience(punit);
+
+      if (pdefender->veteran > old_defender_vet)
+        notify_unit_experience(pdefender);
+
     return TRUE;
   }
   pwinner = (punit->hp > 0) ? punit : pdefender;
