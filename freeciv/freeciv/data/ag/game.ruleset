@@ -2071,7 +2071,7 @@ set =
       "specials", 350, FALSE
       "startpos", "SINGLE", FALSE
       "startunits", "cccwwwxxaA", FALSE
-      "techleak", 0, FALSE
+      "techleak", 25, FALSE
       "techpenalty", 0, FALSE
       "tinyisles", FALSE, FALSE
       "trademindist", 12, FALSE
