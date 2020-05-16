@@ -103,6 +103,7 @@ The current and complete list of Freeciv-web controls can be found here:
   h: set unit's (h)omecity  (to city on current tile)
   H: make Hideout
   i: build (i)rrigation or convert terrain  (settler/worker units)
+alt-I: connect irrigation along path (alt-shift-I)
   I: v(I)gil: (I)ntercept and auto-attack adjacent air units
   j: no orders - skip orders for this unit this turn 
   J: cancel orders - clear current orders for this unit
@@ -119,6 +120,7 @@ The current and complete list of Freeciv-web controls can be found here:
   q: build (q)uay
   Q: select all units from the (Q)ueue awaiting orders (also filters multi-selections)
   r: build (r)oad/railroad  (settler/worker units)
+alt-R: connect roads along path (alt-shift-R)
   s: (s)entry unit
   S: un(S)entry all units on tile
   L: unit go (t)o/airlift to city

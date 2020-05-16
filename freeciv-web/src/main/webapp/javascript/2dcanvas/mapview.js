@@ -52,6 +52,8 @@ var dashedSupport = false;
 // [0] line-edge borders, [1] main thick line, [2] tile way points, [3] inner way-point dot
 var goto_colors_active = ["0,10,40,1","30,208,255,1","2,26,45,1","197,243,255,1"]; //active goto path
 var goto_colors_info   = ["40,10,0,.91","255,208,30,.91","45,26,2,.91","255,243,197,.91"]; //tile/unit info
+var goto_colors_road   = ["40,10,0,.91","168,84,15,.91","65,18,2,.91","255,213,167,.91"]; //connect road
+var goto_colors_irr    = ["0,40,10,1","128,208,84,1","25,45,15,1","150,255,123,1"]; //connect irrigation
 
 /**************************************************************************
   Cycles through city map display modes for citybar when user presses 
@@ -682,7 +684,11 @@ function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y)
   var y1 = y0 + GOTO_DIR_DY[dir] * (tileset_tile_height / 2);
 
   // Use colours according to active goto or tile/unit info
-  var colors = goto_active ? goto_colors_active : goto_colors_info; 
+  var colors = goto_active ? goto_colors_active : goto_colors_info;
+  if (connect_active) {
+    if (connect_extra==EXTRA_ROAD) colors = goto_colors_road;
+    else if (connect_extra==EXTRA_IRRIGATION) colors=goto_colors_irr;
+  }
 
   // Line edges
   pcanvas.strokeStyle = 'rgba('+colors[0]+')';

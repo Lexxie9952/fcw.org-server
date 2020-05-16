@@ -709,6 +709,12 @@ function fill_unit_sprite_array(punit, num_stacked)
     activities['offset_x'] = activities['offset_x'] + unit_offset['x'];
     activities['offset_y'] = activities['offset_y'] + unit_offset['y'];
     result.push(activities);
+    // also push "connect mode" sprite for units connecting roads/irrigation
+    if (activities['connect']==true) {
+      result.push({ "key" : "unit.connect",
+                    "offset_x" : unit_offset['x']-6,
+                    "offset_y" : activities['offset_y'] + unit_offset['y']+19 });
+    }
   }
   if (unit_offset['x'] == 0 && unit_offset['y'] == 0) { // if unit is moving, don't draw these
     // Move point bar
@@ -1254,7 +1260,6 @@ function get_unit_veteran_sprite(punit)
 ***********************************************************************/
 function get_unit_activity_sprite(punit)
 {
-  
   var activity = punit['activity'];
   var act_tgt  = punit['activity_tgt'];
 
@@ -1269,16 +1274,22 @@ function get_unit_activity_sprite(punit)
 
   switch (activity) {
     case ACTIVITY_GEN_ROAD:
-      return {"key" : tileset_extra_id_activity_graphic_tag(act_tgt),
-              "offset_x" : unit_activity_offset_x,
-              "offset_y" : - unit_activity_offset_y};
+        return   {"key" : tileset_extra_id_activity_graphic_tag(act_tgt),
+                  "offset_x" : unit_activity_offset_x,
+                  "offset_y" : - unit_activity_offset_y,
+                  /*flag to also push a connect sprite on top */
+                  "connect" : ((punit['orders_length']>0) ? true : false) 
+                };
 
     case ACTIVITY_IRRIGATE:
         return {"key" : -1 == act_tgt ?
                           "unit.irrigate" :
                           tileset_extra_id_activity_graphic_tag(act_tgt),
                 "offset_x" : unit_activity_offset_x,
-                "offset_y" : - unit_activity_offset_y};
+                "offset_y" : - unit_activity_offset_y,
+                /*flag to also push a connect sprite on top */
+                "connect" : ((punit['orders_length']>0) ? true : false) 
+               };
 
     case ACTIVITY_GOTO:
         return {"key" : "unit.goto",

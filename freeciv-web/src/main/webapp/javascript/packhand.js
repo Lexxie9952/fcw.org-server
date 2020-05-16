@@ -682,6 +682,7 @@ function handle_ruleset_control(packet)
       client_rules_flag[CRF_TESLA_UPGRADE_DISCOUNT]=true;
       client_rules_flag[CRF_NO_WASTE]=true;
       client_rules_flag[CRF_DEMOCRACY_NONCORRUPT] = true;
+      client_rules_flag[CRF_MAGLEV] = true;
     break;
 
     case "Multiplayer-Plus ruleset":
@@ -707,6 +708,7 @@ function handle_ruleset_control(packet)
     break;
 
     case "Civ2Civ3 ruleset":
+      client_rules_flag[CRF_MAGLEV] = true;
     case "Sandbox ruleset":
       client_rules_flag[CRF_COMMIE_BLDG_UPKEEP]=true;
     break;

@@ -84,6 +84,10 @@ var goto_active = false;  // state for selecting goto target for a unit
 var delayed_goto_active = false; // modifies goto_active state to give delayed goto command
 var paradrop_active = false;
 var airlift_active = false;
+// Connect order (worker does multiple orders along goto path, e.g. roading)
+var connect_active = false;  // indicates that goto_active goto_path is for connect mode
+var connect_extra = -1;      // type of EXTRA to make, e.g., EXTRA_ROAD, EXTRA_IRRIGATION
+var connect_activity = ACTIVITY_LAST;  // e.g., ACTIVITY_GEN_ROAD
 var action_tgt_sel_active = false;
 
 /* Will be set when the goto is activated. */
@@ -946,8 +950,7 @@ function advance_unit_focus(same_type)
   came_from_context_menu = false;
 
   if (candidate != null) {
-    goto_active = false;  // turn Go-To off if jumping focus to a new unit
-    delayed_goto_active = false;
+    clear_all_modes();
     clear_goto_tiles();   // TO DO: update mouse cursor function call too?
     save_last_unit_focus();
     set_unit_focus_and_redraw(candidate);
@@ -984,6 +987,25 @@ function advance_unit_focus(same_type)
   }
 }
 
+
+/**************************************************************************
+ * Clears whatever modes we may have had going for a unit, if user 
+ * escapes out, selects other unit, etc.
+**************************************************************************/
+function clear_all_modes()
+{
+  goto_active = false;  // turn Go-To off if jumping focus to a new unit
+  connect_active = false;
+  connect_extra = -1;      // type of EXTRA to make, e.g., EXTRA_ROAD, EXTRA_IRRIGATION
+  connect_activity = ACTIVITY_LAST;  // e.g., ACTIVITY_GEN_ROAD
+  action_tgt_sel_active = false;
+  delayed_goto_active = false;
+  paradrop_active = false;
+  airlift_active = false;
+  goto_last_order = ORDER_LAST;
+  goto_last_action = ACTION_COUNT;
+}
+
 /**************************************************************************
  This function may be called from packhand.c, via update_unit_focus(),
  as a result of packets indicating change in activity for a unit. Also
@@ -1010,8 +1032,7 @@ function advance_focus_inactive_units()
   came_from_context_menu = false;
 
   if (candidate != null) {
-    goto_active = false;  // turn Go-To off if jumping focus to a new unit
-    delayed_goto_active = false;
+    clear_all_modes();
     clear_goto_tiles();   // TO DO: update mouse cursor function call too?
     save_last_unit_focus();
     set_unit_focus_and_redraw(candidate);
@@ -2428,6 +2449,7 @@ function do_map_click(ptile, qtype, first_time_called)
 
         if (  Math.abs(tile_dx)<=1 && Math.abs(tile_dy) <=1     // adjacent
               && goto_last_action != ACTION_NUKE                // not a nuke command appended to a GOTO
+              && !connect_active                                // not in connect mode to make multiple roads/irrigation
               && (true_goto_path_length <= 1)   // don't override path>=2 which has better legal way to get to adjacent tile
           )                                    // "illegal" adjacent goto attempts render goto_path.length == undefined (true_goto_path_length will then be 0)
 
@@ -2583,6 +2605,15 @@ function do_map_click(ptile, qtype, first_time_called)
                       + " to move along a path made for unit "
                       + goto_path['unit_id']);
           return;
+        }
+        // If we're in connect mode, insert connect orders inside it:
+        if (connect_active) {
+          // reconstruct the packet
+          packet = create_connect_packet(packet);
+          // reset/clear connect mode
+          connect_active = false;
+          connect_activity = ACTIVITY_LAST;
+          connect_extra = -1;
         }
         /* Send the order to move using the orders system. */
         send_request(JSON.stringify(packet));
@@ -3104,8 +3135,10 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'R':
-      if (shift) {
+      if (shift && !ctrl && !alt) {
         show_revolution_dialog();
+      } else if (alt && shift) {
+        key_unit_connect(EXTRA_ROAD)
       } else key_unit_road();
     break;
 
@@ -3169,7 +3202,10 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
           the_event.preventDefault(); // override possible browser shortcut
           replace_capital_i = !replace_capital_i;
           simpleStorage.set('capI', replace_capital_i);
-        } else {
+        } else if (shift && !ctrl) {
+          key_unit_connect(EXTRA_IRRIGATION);
+        }
+        else {
           the_event.preventDefault(); // override possible browser shortcut
           key_unit_move(DIR8_NORTHWEST); // alt+I=8
         }
@@ -3318,6 +3354,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
 
     case 27:      //Esc
       deactivate_goto(false);
+      clear_all_modes();
       /* Abort UI states */
       map_select_active = false;
       map_select_check = false;
@@ -3349,8 +3386,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
 
         current_focus = [];
         if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
-        goto_active = false;
-        delayed_goto_active = false;
+        clear_all_modes();
         $("#canvas_div").css("cursor", "default");
         goto_request_map = {};
         goto_turns_request_map = {};
@@ -3358,8 +3394,6 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         update_active_units_dialog();
 
         // clear out of special UI-states, too
-        paradrop_active = false;
-        airlift_active = false;
         map_select_active = false;
         map_select_check = false;
         mapview_mouse_movement = false;
@@ -3687,6 +3721,11 @@ function deactivate_goto(will_advance_unit_focus)
   //console.log("deactivate_goto called!")
   goto_active = false;
   delayed_goto_active = false;
+  // connect uses goto mode also. reset:
+  connect_active = false;
+  connect_activity = ACTIVITY_LAST;
+  connect_extra = - 1;
+  // clear cursor
   $("#canvas_div").css("cursor", "default");
   goto_request_map = {};
   goto_turns_request_map = {};
@@ -4364,6 +4403,128 @@ function key_unit_pollution()
   setTimeout(update_unit_focus, update_focus_delay);
 }
 
+/**************************************************************************
+ Tell the unit to "connect" / build extras along the goto_path.
+**************************************************************************/
+function key_unit_connect(extra_id)
+{
+  if (current_focus.length < 1)
+    return; // no unit selected, abort
+
+    connect_active = true;
+    connect_extra = extra_id;
+    switch (connect_extra) {
+      case EXTRA_ROAD:
+        connect_activity = ACTIVITY_GEN_ROAD;
+        break;
+      case EXTRA_IRRIGATION:
+        connect_activity = ACTIVITY_IRRIGATE;
+        break;
+    }
+    // TODO: this will be consistent with native clients if/when we do
+    // client-side goto path, then we send it a mode for connect==true
+    // to skip tiles where the unit can't build the extra on it.
+    activate_goto();
+    delayed_goto_active = false;
+}
+/**************************************************************************
+ Reconstructs a goto orders packet with orders to build an extra on
+   each tile visited along the path. 
+**************************************************************************/
+function create_connect_packet(packet)
+{
+  if (!packet) return;
+  var new_packet = {   // Copy the meta data from original packet
+          "pid"      : packet['pid'],
+          "unit_id"  : packet['unit_id'],
+          "src_tile" : packet['src_tile'],
+          "length"   : (packet['length']*2+1),
+          "repeat"   : packet['repeat'],
+          "vigilant" : packet['vigilant'],
+          "dest_tile": packet['dest_tile']    };
+  new_packet['orders'] = [];
+  new_packet['dir'] = [];
+  new_packet['activity'] = [];
+  new_packet['target'] = [];
+  new_packet['extra'] = [];
+  new_packet['action'] = [];
+
+  var punit = units[packet['unit_id']];
+  var ptile = tiles[punit['tile']];
+  var length = new_packet['length'];
+
+  // Reconstruct packet with an order before each move, and one at the end.
+  for (i=0; i<packet['length']+1; i++) {
+    var upgrade_extra = extra_dep(punit,ptile,connect_extra);
+    console.log("upgrade_extra=="+upgrade_extra)
+    // insert order before each move
+    if (upgrade_extra != -1) {
+      new_packet['orders'].push(ORDER_ACTIVITY);
+      new_packet['dir'].push(0); // not a move
+      new_packet['activity'].push(connect_activity);
+      new_packet['target'].push(-1); //could set a connect_target for advanced commands
+      new_packet['extra'].push(upgrade_extra);
+      new_packet['action'].push(ACTION_COUNT); //could set a connect_ACTION for more commands
+    } else length--; // illegal order not inserted, cut one from length
+    // insert original packet move order
+    if (i<packet['length']) {
+      new_packet['orders'].push(packet['orders'][i]);
+      new_packet['dir'].push(packet['dir'][i]);
+      new_packet['activity'].push(packet['activity'][i]);
+      new_packet['target'].push(packet['target'][i]);
+      new_packet['extra'].push(packet['extra'][i]);
+      new_packet['action'].push(packet['action'][i]);
+      ptile = mapstep(ptile, packet['dir'][i]); // iterate tile for next check
+    }
+  }
+  new_packet['length'] = length;
+  console.log(new_packet);
+  return new_packet;
+}
+/**************************************************************************
+  Figures out which extra to make for the Connect command on each tile
+**************************************************************************/
+function extra_dep(punit, ptile, extra_id)
+{
+  console.log("extra_dep called with extra_id=="+extra_id)
+  if (extra_id == EXTRA_ROAD) {
+    console.log("  checking river and BB")
+    // TODO: if (tile_has_river && !tile_has_road && !player has bridge building), return -1
+    // "magic number" extra so it won't abort on the tile OR if that doesn't work
+    // create_connect_packet will just see the -1 flag to simple NOT insert an order at that position
+    if (tile_has_extra(ptile, EXTRA_RIVER)) {
+      console.log("    tile has river")
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) < TECH_KNOWN)
+        if (!tile_has_extra(ptile, EXTRA_ROAD)) {
+          console.log("      no road: RETURN NULL")
+          return -1; // null flag means don't break sequence with an impossible order
+        }
+    }
+    
+    if (!tile_has_extra(ptile, EXTRA_ROAD))
+      return EXTRA_ROAD; // The server smartly skips over if same type already on the tile.
+    if (player_invention_state(client.conn.playing, tech_id_by_name('Railroad')) < TECH_KNOWN)
+      return EXTRA_ROAD;
+    if (!tile_has_extra(ptile, EXTRA_RAIL))
+      return EXTRA_RAIL;
+    if (!client_rules_flag[CRF_MAGLEV])
+      return EXTRA_RAIL;
+    if (player_invention_state(client.conn.playing, tech_id_by_name('Superconductors')) < TECH_KNOWN)
+      return EXTRA_RAIL;
+
+    return EXTRA_MAGLEV;
+  }
+  else if (extra_id == EXTRA_IRRIGATION) {
+    console.log("  checking irrigation")
+    if (player_invention_state(client.conn.playing, tech_id_by_name('Refrigeration')) < TECH_KNOWN)
+      return EXTRA_IRRIGATION;
+    if (!tile_has_extra(ptile, EXTRA_IRRIGATION))
+      return EXTRA_IRRIGATION;
+
+    return EXTRA_FARMLAND;
+  }
+  return extra_id;
+}
 
 /**************************************************************************
   Start a goto that will end in the unit(s) detonating in a nuclear
