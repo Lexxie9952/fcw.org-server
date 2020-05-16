@@ -1339,8 +1339,7 @@ Paratroopers are experts at airborne attacks.\
  immediately ready to act there. Beware dropping into unseen territory,\
  as Paratroopers landing on a tile occupied by enemy units will be lost.\
  Also note: Paradropping is assumed to be done from aircraft. Therefore,\
- Fighters on Vigil on adjacent tiles can auto-attack the tile you land on,
- if adjacent.\
+ Fighters on Vigil may auto-attack the tile you land on, if adjacent.\
 "), _("\
 \nThe discovery of Labor Union changes upkeep from shields to gold.\
 ")
@@ -2371,7 +2370,7 @@ sound_move    = "m_helicopter"
 sound_move_alt = "m_generic"
 sound_fight   = "f_helicopter"
 sound_fight_alt = "f_generic"
-build_cost    = 100
+build_cost    = 90
 pop_cost      = 0
 attack        = 0
 defense       = 3
