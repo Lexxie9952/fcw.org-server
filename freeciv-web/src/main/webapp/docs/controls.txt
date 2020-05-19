@@ -109,6 +109,7 @@ alt-I: connect irrigation along path (alt-shift-I)
   J: cancel orders - clear current orders for this unit
   k: next unit of same (k)ind awaiting orders
   l: (l)oad unit as cargo onto transporting unit
+  L: airLift to city
   m: build (m)ine or convert terrain  (settler/worker units)
   n: clean (n)uclear fallout
   N: explode (N)uclear
@@ -123,9 +124,7 @@ alt-I: connect irrigation along path (alt-shift-I)
 alt-R: connect roads along path (alt-shift-R)
   s: (s)entry unit
   S: un(S)entry all units on tile
-  L: unit go (t)o/airlift to city
-  t: unload transport (in City, Naval Base, or Quay)
-  u: (u)nload unit from transporter
+  t: (t)ransport unload (in City, Naval Base, Quay; or Marines anywhere)
   U: (u)nload, show, and activate all cargo units on transport 
   v: select all units on same tile 
   V: select all units of same TYPE on tile 
@@ -161,6 +160,7 @@ ctrl-C:  city labels on/off
 ctrl-shift-C: cycle city info display mode on map
 ctrl-alt-D: disconnect (disconnected viewing mode)
 ctrl-G: map grid on/off
+ctrl-alt-shift-I: change style of the letter capital 'I'
 ctrl-L:  show airlift counter on cities
 ctrl-M:  show city Mood on map
 shift-M: show unit moves left percentage on map
@@ -200,11 +200,11 @@ Ctrl-Alt-Right-click:            Paste into chat a smartlink to tile or unit und
 W: map tab; escape window/tab/popup without exiting full screen
 alt-C: cities tab
 alt-E: empire tab
-alt-G: gov. tab
+alt-G: government tab
 alt-H: help tab
 alt-M: map tab 
 alt-N: nations tab 
-alt-P: prefs tab 
+alt-P: preferences tab 
 alt-T: tech tab 
 
 <h2>Cities List:</h2>
