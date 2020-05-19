@@ -983,7 +983,15 @@ function generate_production_list()
     else if (!server_settings['nukes_minor']['val']
              && pimprovement['name'] == "Manhattan Project") {
           continue; // if major nukes are OFF, suppress illegal prod choice.
-    }
+    } 
+    // Suppress improvements with special obsolete conditions
+    if ((ruleset_control['name']=="Multiplayer-Evolution ruleset"
+               || ruleset_control['name']=="Avant-garde")
+               && pimprovement['name'] == "Great Wall"
+               && player_invention_state(client.conn.playing, tech_id_by_name('Machine Tools')) == TECH_KNOWN) {
+                 continue;
+    } 
+              
     production_list.push({"kind": VUT_IMPROVEMENT,
                          "value": pimprovement['id'],
                           "text": pimprovement['name'],
