@@ -24,6 +24,8 @@ var techcoststyle1 = {};
 var bulb_output_text = "";
 
 var tech_canvas_text_font = "18px Arial";
+var tech_canvas_text_font_redux = "17px Arial"; // smaller for bold long tech names
+var tech_canvas_text_font_alt = "18px Arial";   // smaller for !bold long names
 
 var is_tech_tree_init = false;
 var tech_dialog_active = false;
@@ -127,7 +129,9 @@ function player_invention_state(pplayer, tech_id)
 **************************************************************************/
 function init_tech_screen()
 {
-  if (is_small_screen()) tech_canvas_text_font = "20px Arial";
+  if (is_small_screen()) {
+    tech_canvas_text_font = "20px Arial";
+  }
   $("#technologies").width($(window).width() - 20);
   $("#technologies").height($(window).height() - $("#technologies").offset().top - 15);
 
@@ -271,8 +275,9 @@ function update_tech_tree()
       tech_canvas_ctx.strokeStyle = KNOWN_TECH_FRAME;
       tech_canvas_ctx.strokeRect(x-2, y-2, tech_item_width, tech_item_height);
       mapview_put_tile(tech_canvas_ctx, tag, x+1, y)
-
-      tech_canvas_ctx.font = tech_canvas_text_font;
+      // tech names >17 overflow their boxes on mobile, so use redux font for those
+      if (ptech['name'].length>17) tech_canvas_ctx.font = tech_canvas_text_font_alt;
+      else tech_canvas_ctx.font = tech_canvas_text_font;
       tech_canvas_ctx.fillStyle = "rgba(0, 0, 0, 1)";
       tech_canvas_ctx.fillText(ptech['name'], x + 50, y + 15);
 
@@ -306,9 +311,13 @@ function update_tech_tree()
 
       if (client.conn.playing['researching'] == ptech['id']) {
         tech_canvas_ctx.fillStyle = 'rgb(0, 0, 0)';
-        tech_canvas_ctx.font = "Bold " + tech_canvas_text_font;
+        // tech names >17 overflow their boxes when bold, so use redux font for those
+        if (ptech['name'].length>17) tech_canvas_ctx.font = "Bold "+tech_canvas_text_font_redux;
+        else tech_canvas_ctx.font = "Bold " + tech_canvas_text_font;
       } else {
-        tech_canvas_ctx.font = tech_canvas_text_font;
+        // tech names >17 overflow their boxes on mobile, so use redux font for those
+        if (ptech['name'].length>17) tech_canvas_ctx.font = tech_canvas_text_font_alt;
+        else tech_canvas_ctx.font = tech_canvas_text_font;
         tech_canvas_ctx.fillStyle = 'rgb(255, 255, 255)';
       }
       tech_canvas_ctx.fillText(ptech['name'], x + 51, y + 16);
@@ -332,10 +341,14 @@ function update_tech_tree()
 
       if (client.conn.playing['tech_goal'] == ptech['id']) {
         tech_canvas_ctx.fillStyle = 'rgb(0, 0, 0)';
-        tech_canvas_ctx.font = "Bold " + tech_canvas_text_font;
+        // tech names >17 overflow their boxes when bold, so use redux font for those
+        if (ptech['name'].length>17) tech_canvas_ctx.font = "Bold "+tech_canvas_text_font_redux;
+        else tech_canvas_ctx.font = "Bold " + tech_canvas_text_font;
       } else {
         tech_canvas_ctx.fillStyle = 'rgb(255, 255, 255)';
-        tech_canvas_ctx.font = tech_canvas_text_font;
+        // tech names >17 overflow their boxes on mobile, so use redux font for those
+        if (ptech['name'].length>17) tech_canvas_ctx.font = tech_canvas_text_font_alt;
+        else tech_canvas_ctx.font = tech_canvas_text_font;
       }
       tech_canvas_ctx.fillText(ptech['name'], x + 51, y + 16);
     }
