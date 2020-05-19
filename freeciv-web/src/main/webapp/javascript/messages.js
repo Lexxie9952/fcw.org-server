@@ -400,6 +400,10 @@ function update_chatbox(messages)
           item.style.paddingLeft = "30px";
         }
 
+        // Intercept server-side tile links 
+        if (messages[i].message.includes("<l tgt="))
+          messages[i].message = parseServerLink(messages[i].message);
+
         item.innerHTML = messages[i].message;
         scrollDiv.appendChild(item);
     }
@@ -420,6 +424,24 @@ function update_chatbox(messages)
   } else {
     chatbox_scroll_to_bottom(true);
   }
+}
+
+/**************************************************************************
+ Intercepts blank server side tile links and forms them properly.
+ This fixes a bug where server sends us malformed link such as 
+  <l tgt=\"tile\" x=0 y=11 />.        which browser renders as:
+  <l tgt="tile" x=0 y=11>.</l>        ... but should be:
+  <l tgt="tile" x=0 y=11>(0,11)</l>
+**************************************************************************/
+function parseServerLink(message)
+{
+  if (message.includes(" />.</"))  { // empty tile link with no coordinates
+    var x = message.match(/x=(.*?) y=/)[1];
+    var y = message.match(/y=(.*?) \/>.</)[1];
+    const fcol = "<font style='text-decoration: underline;' color='#1FDFFF'>"
+    message = message.replace(/ \/>.<\//, ">"+fcol+"("+x+","+y+")</font></l></");
+  }
+  return message;
 }
 
 /**************************************************************************
