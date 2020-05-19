@@ -94,6 +94,7 @@ function unit_move_sound_play(unit)
         move_sound = "pm-large-jets.ogg";
         break;
       case "Helicopter":
+      case "Transport Helicopter":
         move_sound = "pm_heli.ogg";
         break;
 
