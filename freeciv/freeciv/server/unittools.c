@@ -4604,6 +4604,14 @@ bool execute_orders(struct unit *punit, const bool fresh)
           punit->done_moving = TRUE;
           set_unit_activity_targeted(punit, activity, pextra);
           send_unit_info(NULL, punit);
+          
+          if (activity == ACTIVITY_PILLAGE) {
+            action_consequence_success(action_by_number(ACTION_PILLAGE),
+                                       unit_owner(punit),
+                                       tile_owner(unit_tile(punit)),
+                                       unit_tile(punit),
+                                       tile_link(unit_tile(punit)));
+          }
           break;
         } else {
 
