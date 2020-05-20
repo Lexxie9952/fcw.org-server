@@ -1295,7 +1295,7 @@ function do_city_map_click(ptile)
 {
   // updated==if cityhand.c:handle_city_specialist() looks at
   // the top 3 bits in city_id for the type of specialst to make:
-  var updated = false; 
+  var updated = true; 
 
   var packet = null;
   var city_id = active_city['id'];
@@ -1762,7 +1762,7 @@ function city_select_specialist(event, to_specialist_id)
 **************************************************************************/
 function city_change_specialist(event, city_id, from_specialist_id)
 {
-  var updated = 0;  // 0=running on un-updated server, 1=server was updated
+  var updated = 1;  // 0=running on un-updated server, 1=server was updated
   var city_message;
   var to_specialist_id;
   var num_specialists = Object.keys(specialists).length;
