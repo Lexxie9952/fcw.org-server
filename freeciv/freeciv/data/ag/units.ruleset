@@ -2408,18 +2408,18 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 roles         = ""
 helptext      = _("\
-Transport Helicopters can transport up to three land units.\
+Transport Helicopters can carry three land units.\
 "), _("\
-Armor and Freight must load and unload from a refueling tile.\
- Foot units and artillery types can load and unload on any tile.\
- Except for Marines, unloading on a non-refueling tile uses up all moves.\
+ Foot and artillery types can load/unload on any tile. Other types\
+ need a refuel-tile. Unloading on a non-refuel tile loses all moves\
+ (except Marines)\n.\
 "), _("\
- Helicopters lose 1 hp for each turn not ended in a City, Base, or Carrier. +1 move point\
- is awarded if starting its turn in a City or Airbase.\n\
+ Helicopters lose 1 hp for each turn not ended in a City, Base, or Carrier. +1 move\
+ is awarded if starting a turn in a City or Airbase.\n\
 "), _("\
- Transport Helicopters can be attacked by land from Riflemen onward; by sea from Ironclad\
- onward. Unlike attack Helicopters, they can be intercepted by Fighters on vigil. They are\
- unreachable to Artillery types and get a 50% defense bonus against units on foot.\n\
+ All Helicopters can be attacked by land from Riflemen onward; by sea from Ironclad\
+ onward; get +50% defence vs. foot units; and are unreachable to artillery types.\
+ Unlike attack Helicopters, Transport Helicopters are intercepted by Fighters on vigil.\
 ")
 
 [unit_helicopter]
@@ -2477,14 +2477,14 @@ roles         = ""
 helptext      = _("\
 Helicopters are the Air Cavalry of modern armies. They can attack multiple targets\
  and conquer cities. Unaffected by terrain, they are good for Partisan suppression.\
- They can transport specialized units, making them well-suited for commando ops.\n\
+ They can transport Marines and AAA and are thus well-suited for commando ops.\n\
 "), _("\
-Helicopters lose 1 hp for each turn not ended in a City, Base, or Carrier. +1 move point\
- is awarded if starting its turn in a City or Airbase.\n\
+For each turn not ended in a City, Base, or Carrier, 1hp is lost. +1 move\
+ is awarded if starting a turn in a City or Airbase.\n\
 "), _("\
 Helicopters fly low to avoid Interception. This invites attacks by ground units from\
- Riflemen onward. Even so, they are unreachable to Artillery types and get a 50% defense\
- bonus against units on foot. City Walls get a defense bonus against them;\
+ Riflemen onward. They are unreachable to Artillery types and get +50% defense\
+ vs. foot units. City Walls get a defense bonus against them;\
  SAM Batteries do not. Helicopters can be attacked by Sea from Ironclad onward.\n\
 "), _("\
 Helicopters can transport one Marines or AAA unit.\
