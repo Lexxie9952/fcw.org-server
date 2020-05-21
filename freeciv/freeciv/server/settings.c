@@ -471,6 +471,19 @@ static const struct sset_val_name *barbarians_name(int barbarians)
 }
 
 /************************************************************************//**
+  Loot style setting names accessor.
+****************************************************************************/
+static const struct sset_val_name *lootstyle_name(int looting)
+{
+  switch (looting) {
+  NAME_CASE(LOOT_CLASSIC, "CLASSIC", N_("Classic loot formula"));
+  NAME_CASE(LOOT_OFF, "OFF", N_("Cities yield no loot"));
+  NAME_CASE(LOOT_BASE_TRADE, "BASE_TRADE", N_("Proportional to Base Trade"));
+  }
+  return NULL;
+}
+
+/************************************************************************//**
   Revolution length type setting names accessor.
 ****************************************************************************/
 static const struct sset_val_name *revolentype_name(int revolentype)
@@ -2461,6 +2474,15 @@ static struct setting settings[] = {
           NULL, NULL, NULL,
           GAME_MIN_ONSETBARBARIAN, GAME_MAX_ONSETBARBARIAN, 
           GAME_DEFAULT_ONSETBARBARIAN)
+
+  GEN_ENUM("looting", game.server.lootstyle,
+           SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL,
+           ALLOW_NONE, ALLOW_BASIC,
+           N_("Formula for loot from city conquest"),
+           N_("This setting controls the formula for how much loot is captured "
+              "from conquered cities."),
+              NULL, NULL, NULL,
+           lootstyle_name, GAME_DEFAULT_LOOTSTYLE)
 
   GEN_ENUM("revolentype", game.info.revolentype,
            SSET_RULES, SSET_SOCIOLOGY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,

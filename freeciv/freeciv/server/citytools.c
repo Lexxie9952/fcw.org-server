@@ -1940,10 +1940,21 @@ bool unit_conquer_city(struct unit *punit, struct city *pcity)
     return TRUE;
   }
 
-  coins = cplayer->economic.gold;
-  coins = MIN(coins,
-              fc_rand((coins / 20) + 1)
-              + (coins * (city_size_get(pcity))) / 200);
+  /* Calculate the loot! */
+  switch (game.server.lootstyle) {
+    case LOOT_OFF:
+      coins = 0;
+      break;
+    case LOOT_BASE_TRADE:
+      coins = MIN(cplayer->economic.gold,
+                  pcity->surplus[O_TRADE]);
+      break;
+    default: /* case LOOT_CLASSIC:*/
+      coins = cplayer->economic.gold;
+      coins = MIN(coins,
+                  fc_rand((coins / 20) + 1)
+                  + (coins * (city_size_get(pcity))) / 200);
+  }
   pplayer->economic.gold += coins;
   cplayer->economic.gold -= coins;
   send_player_info_c(pplayer, pplayer->connections);

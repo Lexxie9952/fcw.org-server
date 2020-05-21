@@ -55,6 +55,12 @@ enum barbarians_rate {
   BARBS_HORDES
 };
 
+enum loot_style {
+  LOOT_CLASSIC = 0,
+  LOOT_OFF,
+  LOOT_BASE_TRADE
+};
+
 enum autosave_type {
   AS_TURN = 0,
   AS_GAME_OVER,
@@ -150,6 +156,7 @@ struct civ_game {
       int init_vis_radius_sq;
       int kick_time;
       int killunhomed;    /* slowly killing unhomed units */
+      enum loot_style lootstyle;
       int maxconnectionsperhost;
       int max_players;
       char nationset[MAX_LEN_NAME];
@@ -656,6 +663,8 @@ extern struct world wld;
 #define GAME_DEFAULT_ONSETBARBARIAN  60
 #define GAME_MIN_ONSETBARBARIAN      1
 #define GAME_MAX_ONSETBARBARIAN      GAME_MAX_END_TURN
+
+#define GAME_DEFAULT_LOOTSTYLE      LOOT_CLASSIC
 
 #define GAME_DEFAULT_OCCUPYCHANCE    0
 #define GAME_MIN_OCCUPYCHANCE        0

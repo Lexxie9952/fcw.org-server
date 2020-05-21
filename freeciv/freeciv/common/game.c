@@ -374,6 +374,7 @@ static void game_defaults(bool keep_ruleset_value)
     game.server.foggedborders     = GAME_DEFAULT_FOGGEDBORDERS;
     game.server.fogofwar_old      = game.info.fogofwar;
     game.server.hideouts          = GAME_DEFAULT_HIDEOUTS;
+    game.server.lootstyle         = GAME_DEFAULT_LOOTSTYLE;
     game.server.last_updated_year = FALSE;
     game.server.freecost          = GAME_DEFAULT_FREECOST;
     game.server.global_warming_percent = GAME_DEFAULT_GLOBAL_WARMING_PERCENT;
