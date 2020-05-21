@@ -1203,7 +1203,9 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
 
     var rheight = 10; // set it short then let it expand it only as high as it needs
     // Mobile users have to click empty row to append clipboard:
-    var empty_row_click = small_screen ? " onclick='mobile_emulate_shift_click(event, "+city_id+")'" : "";
+    //var empty_row_click = small_screen ? " onclick='tap_empty_production_row(event, "+city_id+")'" : "";
+    // Now all users can click an empty row to append to clipboard
+    var empty_row_click = " title='CLICK: paste worklist\nCTRL-CLICK: clear worklist\nSHIFT-CLICK: copy worklist' onclick='tap_empty_production_row(event, "+city_id+")'";
     queue_html = "<tr class='cities_row;' style='border-bottom: 3px solid #000; height:"+rheight+"px;'>";
     queue_html += "<td style='cursor:pointer; font-size:85%; text-align:right; padding-right:10px;' onclick='javascript:show_city_dialog_by_id(" 
                       + pcity['id']+")' id='citycell"+city_id+"'>"+pcity['name']+"</td>";
@@ -1351,18 +1353,33 @@ function handle_worklist_action(event,city_id, z)
   return;
 }
 /**************************************************************************
- Called when a mobile user taps a BLANK part of the row; does same thing
- as shift-clicking the last item
+ Called when a user taps a BLANK part of the row; does same thing as shift-
+   click on a worklist item.  Shift-click will copy whole worklist to
+   clipboard. Ctrl-click will "nuke" the current worklist.
 **************************************************************************/
-function mobile_emulate_shift_click(event, city_id)
+function tap_empty_production_row(event, city_id)
 {
   event.stopPropagation(); // prevent row click / item click from double firing
   active_city = cities[city_id];
-  production_selection = empire_worklist_clipboard.slice();  // make a copy of clipboard
 
-  var z = active_city['worklist'].length-1; // pretend we clicked last item in clipboard
-  worklist_selection = [z+1];  // (+1 changes before to after)  
-  city_insert_in_worklist();
+  if (event.shiftKey)
+  { // Shift-click: copy worklist to clipboard
+    empire_worklist_clipboard = Array.from(active_city['worklist']);
+    redraw_improv_clipboard();
+  }
+  else if (event.ctrlKey)
+  { // Remove whole worklist.
+    active_city['worklist'] = [];
+    send_city_worklist(active_city['id']);
+  }
+  else 
+  { // Main function:  append clipboard after worklist
+    production_selection = empire_worklist_clipboard.slice();  // make a copy of clipboard
+
+    var z = active_city['worklist'].length-1; // pretend we clicked last item in clipboard
+    worklist_selection = [z+1];  // (+1 changes before to after)  
+    city_insert_in_worklist();
+  }
   active_city = null;
 }
 
