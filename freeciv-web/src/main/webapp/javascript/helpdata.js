@@ -21,7 +21,9 @@ var toplevel_menu_items = ["help_terrain", "help_economy", "help_cities",
     "help_city_improvements", "help_wonders_of_the_world", "help_units",
     "help_combat", "help_technology", "help_government"];
 var hidden_menu_items = ["help_connecting", "help_languages", "help_governor",
-    "help_chatline", "help_about", "help_worklist_editor"];
+    "help_chatline", "help_about", "help_worklist_editor", "help_nations", 
+    "help_copying"
+  ];
 
 /**************************************************************************
  Show the Freeciv-web Help Dialog
@@ -33,9 +35,14 @@ function show_help()
   $("#help_menu").remove();
   $("#help_info_page").remove();
   $("<ul id='help_menu'></ul><div id='help_info_page'></div>").appendTo("#tabs-hel");
+  
+  generate_help_menu("help_gen_ruleset");
+
   for (var sec_id in helpdata_order) {
     var key = helpdata_order[sec_id];
-    if (hidden_menu_items.indexOf(key) > -1) {
+    if (sec_id)
+
+    if (hidden_menu_items.indexOf(key) > -1 || key == "help_gen_ruleset") {
       continue;
     } else if (key.indexOf("help_gen") != -1) {
       generate_help_menu(key);
@@ -149,7 +156,7 @@ function generate_help_menu(key)
     }
   } else if (key == "help_gen_ruleset") {
     $("<li id='" + key +  "' data-helptag='" + key +  "'>"
-       + "About Current Ruleset" + "</li>").appendTo(
+       + "Ruleset" + "</li>").appendTo(
           find_parent_help_key(key));
   }
 }

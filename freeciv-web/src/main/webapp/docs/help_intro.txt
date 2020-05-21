@@ -3,7 +3,7 @@
 
 <b>Info Categories</b> are in the <b>left panel</b> for quick lookup.<br><br>
 
-<b>Full Game Manual</b> -- Use <b>About Current Ruleset</b> on left.
+<b>Full Game Manual</b> -- Click <b>Ruleset</b> at top left.
 <br><br>
 
 Freeciv-web and the game you're playing now are only possible by <a href="https://www.patreon.com/freecivweb"
