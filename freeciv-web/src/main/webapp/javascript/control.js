@@ -3181,7 +3181,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         if (shift) { //shift-x = select all units of same type on same continent
           key_select_same_global_type(false); // false=same continent only
         }
-        else if (enable_autoexplore) {
+        else if (enable_autoexplore && !ctrl && !shift && !alt) {
           key_unit_auto_explore();
         } else add_client_message("X hotkey was disabled in user PREFS.")
     break;
