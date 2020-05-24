@@ -118,7 +118,7 @@ end
 
 -- Randomly choose a hut event
 function _deflua_hut_enter_callback(unit)
-  local chance = random(0, 7)
+  local chance = random(0, 6)
   local alive = true
 
   if chance == 0 or chance == 1 then
