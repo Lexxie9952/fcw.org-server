@@ -37,6 +37,12 @@ var max_select_sprite = 4;
 
 var explosion_anim_map = {};
 
+const USER_MARK_1     = 1
+const USER_MARK_2     = 2; 
+const USER_MARK_3     = 3;
+const USER_MARK_4     = 4;
+const USER_MARKS = ["","grid.usermark","grid.userarea","user.attention","grid.userspot"];
+
 /* Items on the mapview are drawn in layers.  Each entry below represents
  * one layer.  The names are basically arbitrary and just correspond to
  * groups of elements in fill_sprite_array().  Callers of fill_sprite_array
@@ -420,6 +426,12 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
     case LAYER_TILELABEL:
       if (ptile != null && ptile['label'] != null && ptile['label'].length > 0) {
         sprite_array.push(get_tile_label_text(ptile));
+      }
+      // User markup sprite
+      if (!user_marking_mode || !ptile) break;
+      const tkey = "cPlan"+ptile['index'];  // key/val for user mark-up tiles
+      if (myGameVars[tkey]) {
+        sprite_array.push(get_user_mark_sprite(myGameVars[tkey]));
       }
       break;
 
@@ -925,6 +937,14 @@ function get_city_invalid_worked_sprite() {
           "offset_y" : 0};
 }
 
+/**********************************************************************
+  Return the sprite for an user marking the map with notes.
+***********************************************************************/
+function get_user_mark_sprite(index) {
+  return {"key" : USER_MARKS[index],
+  "offset_x" : 0,
+  "offset_y" : 0};
+}
 
 /**********************************************************************
 ...

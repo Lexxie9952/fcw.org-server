@@ -41,4 +41,8 @@ tiles = { "row", "column", "tag"
   2, 1, "grid.borders.s"
   2, 2, "grid.borders.w"
   2, 3, "grid.borders.e"
+
+  3, 0, "grid.usermark"
+  3, 1, "grid.userarea"
+  3, 2, "grid.userspot"
 }

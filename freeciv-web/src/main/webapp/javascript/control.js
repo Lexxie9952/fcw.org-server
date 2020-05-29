@@ -66,6 +66,7 @@ var touch_drag_mode = false;  // whether touch devices are processing touchmove
 var last_unit_clicked = -1;
 // if a context menu is up, a click simply kills that menu instead of doing other mechanics
 var came_from_context_menu = false;
+var user_marking_mode = false;   // whether clicking just makes user marks/notes on map
 // ----------------------------------------------------------------------------------------
 
 // Last map viewing location, allows user to return to it with shift-spacebar.
@@ -2322,6 +2323,29 @@ function do_map_click(ptile, qtype, first_time_called)
     return;
   }
 
+  // User planning mode, clicks only mark tiles with user notes
+  if (user_marking_mode) {
+    if (!ptile) return;    
+    var usermark = null;
+    const tkey = "cPlan"+ptile['index'];    
+    if (myGameVars[tkey]) {
+      usermark = null;  // toggle it off
+    } else {
+        if (mouse_click_mod_key['shiftKey'])
+          usermark = USER_MARK_2
+        else if (mouse_click_mod_key['altKey'])
+          usermark = USER_MARK_4;
+        else if (mouse_click_mod_key['ctrlKey'])
+          usermark = USER_MARK_3;
+        else 
+          usermark = USER_MARK_1;
+    }
+    if (usermark)  myGameVars[tkey] = usermark;
+    else delete myGameVars[tkey]; // don't keep records of tiles for unplanned cities
+    simpleStorage.set(Game_UID, myGameVars); // save persistent for this game only
+    return;
+  }
+
   if (current_focus.length > 0 && current_focus[0]['tile'] == ptile['index']) {
     /* clicked on unit at the same tile, then deactivate goto and show context menu. */
     if (goto_active /*&& !touch_device*/) { //(allow clicking same tile when giving a Nuke order.)
@@ -2893,7 +2917,7 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
 {
   switch (keyboard_key) {
     case 'C':
-      if (alt) {
+      if (alt && !ctrl && !shift) {
         the_event.preventDefault();     // override possible browser shortcut
         $('#ui-id-5').trigger("click"); // cities tab
       }
@@ -2904,40 +2928,40 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
         the_event.preventDefault(); // override possible browser shortcut
         show_debug_info();
       }
-      else if (alt) $('#ui-id-7').trigger("click");  // docs tab
+      else if (alt && !ctrl && !shift) $('#ui-id-7').trigger("click");  // docs tab
     break;
 
     case 'E':
-      if (alt) {
+      if (alt && !ctrl && !shift) {
         the_event.preventDefault(); // override possible browser shortcut
         $('#ui-id-2').trigger("click"); // empire tab
       }
     break;
 
     case 'G':
-      if (alt) {
+      if (alt && !ctrl && !shift) {
         the_event.preventDefault(); // override possible browser shortcut
         $('#ui-id-3').trigger("click"); // gov tab
       }
     break;
 
     case 'M':
-      if (alt) {
+      if (alt && !ctrl && !shift) {
         the_event.preventDefault(); // override possible browser shortcut
         $('#ui-id-1').trigger("click"); // map tab  // reserved for messages tab later
       }
     break;
 
     case 'N':
-      if (alt) {
+      if (alt && !ctrl && !shift) {
         the_event.preventDefault(); // override possible browser shortcut
         $('#ui-id-4').trigger("click"); // nations tab
       }
     break;
 
     case 'P':
-        if (alt && !ctrl) {
-          the_event.preventDefault(); // override possible browser shortcut
+      if (alt && !ctrl && !shift) {
+        the_event.preventDefault(); // override possible browser shortcut
           $('#ui-id-6').trigger("click"); // prefs tab
         }
       break;
@@ -2958,7 +2982,7 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
     break;
 
     case 'T':
-      if (alt) {
+      if (alt && !ctrl && !shift) {
         the_event.preventDefault(); // override possible browser shortcut
         $('#tech_tab_item').trigger("click"); // tech tab
       }
@@ -2969,9 +2993,10 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
       if (!alt && !ctrl && !shift) { // also key_code 112 (F1)
         $('#ui-id-1').trigger("click");
         chatbox_scroll_to_bottom(false);
-      } else if (alt) {               // warcalc tab
-        $("#ui-id-8").trigger("click");
-        warcalc_screen();
+      } else if (alt && !ctrl && !shift) {
+          // warcalc tab
+          $("#ui-id-8").trigger("click");
+          warcalc_screen();
       }
     break;
   }
@@ -3155,15 +3180,17 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'T':
-      if (shift) {
+      if (shift && !alt && !ctrl) {
         show_tax_rates_dialog();
+      } else if (ctrl && alt) {
+        draw_city_traderoutes = !draw_city_traderoutes;
       } else key_unit_unload();
     break;
 
     case 'V':
-      if (shift) {
+      if (shift && !alt && !ctrl) {
         key_select_same_type_units_on_tile();
-      } else if (alt) {
+      } else if (alt && !shift && !ctrl) {
         the_event.preventDefault(); // override possible browser shortcut
         key_select_different_units_on_tile();
       } else {
@@ -3178,12 +3205,17 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'X':
-        if (shift) { //shift-x = select all units of same type on same continent
+        if (shift && !ctrl && !alt) { //shift-x = select all units of same type on same continent
           key_select_same_global_type(false); // false=same continent only
+        } else if (alt && !shift && !ctrl) { // alt-x toggle user map-markup mode
+            the_event.preventDefault(); // override possible browser shortcut
+            user_marking_mode = !user_marking_mode;
+            if (user_marking_mode) add_client_message("Map marker mode is ON.  Alt-X to toggle.")
+            else add_client_message("Map marker mode is OFF.")
         }
         else if (enable_autoexplore && !ctrl && !shift && !alt) {
           key_unit_auto_explore();
-        } else add_client_message("X hotkey was disabled in user PREFS.")
+        } else if (!enable_autoexplore) add_client_message("X hotkey was disabled in user PREFS.")
     break;
 
     // ALT + UIO / JKL / M,. simulates keypad for devices that don't have it, if alt not held

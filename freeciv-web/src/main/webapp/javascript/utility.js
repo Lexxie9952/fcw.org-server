@@ -276,4 +276,16 @@ function html_safe(text)
   return text;
 }
 
+/**************************************************************************
+   Makes a unique hash (not absolutely guaranteed unique but good enough)
+**************************************************************************/
+function getHash(input){
+  var hash = 0, len = input.length;
+  for (var i = 0; i < len; i++) {
+    hash  = ((hash << 5) - hash) + input.charCodeAt(i);
+    hash |= 0; // to 32bit integer
+  } 
+  return Math.abs(hash).toString();
+}
+
 

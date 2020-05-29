@@ -169,6 +169,7 @@ function mapview_mouse_down(e)
   }
 
   if (!rightclick && !middleclick) { /* Left mouse button is down */
+    if (user_marking_mode) return; // user markup mode, let them mark their map in peace
     // Alt-click substitute for right-click drag for trackpad users:
     if (e.altKey && /* !e.shiftKey && !e.ctrlKey && */ !map_select_active && is_right_mouse_selection_supported()) {
       map_select_check = true;

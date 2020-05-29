@@ -27,6 +27,8 @@ var server_settings = {};
  and global worklists.
 *****************************************************************/
 
+var Game_UID;   // (semi)-Unique-enough identifier for the particular game
+var myGameVars; // User persistent storage tied to a unique game
 // Hard-coded client behaviours specific to certain rulesets get custom ruleset flags (CRF)
 // assigned to them inside handle_ruleset_control() (packhand.js). You can then hard-code 
 // specific client behaviour by checking for (client_rules_flag & CRF_FLAG_NAME):

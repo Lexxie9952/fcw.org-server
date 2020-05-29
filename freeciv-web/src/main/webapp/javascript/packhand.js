@@ -1775,7 +1775,6 @@ function handle_goto_path(packet)
 
 /**************************************************************************
   Receive general information about a server setting.
-
   Setting data type specific information comes in a follow up packet.
 **************************************************************************/
 function handle_server_setting_const(packet)
@@ -1790,7 +1789,6 @@ function handle_server_setting_const(packet)
 
 /**************************************************************************
   Receive general information about a server setting.
-
   This is a follow up packet with data type specific information.
 **************************************************************************/
 function handle_server_setting_int(packet)
@@ -1800,7 +1798,6 @@ function handle_server_setting_int(packet)
 
 /**************************************************************************
   Receive general information about a server setting.
-
   This is a follow up packet with data type specific information.
 **************************************************************************/
 function handle_server_setting_enum(packet)
@@ -1810,7 +1807,6 @@ function handle_server_setting_enum(packet)
 
 /**************************************************************************
   Receive general information about a server setting.
-
   This is a follow up packet with data type specific information.
 **************************************************************************/
 function handle_server_setting_bitwise(packet)
@@ -1820,7 +1816,6 @@ function handle_server_setting_bitwise(packet)
 
 /**************************************************************************
   Receive general information about a server setting.
-
   This is a follow up packet with data type specific information.
 **************************************************************************/
 function handle_server_setting_bool(packet)
@@ -1830,12 +1825,43 @@ function handle_server_setting_bool(packet)
 
 /**************************************************************************
   Receive general information about a server setting.
-
   This is a follow up packet with data type specific information.
 **************************************************************************/
 function handle_server_setting_str(packet)
 {
   $.extend(server_settings[packet['id']], packet);
+    // Make browser persistent identifier for this game
+    if (packet['id']==146) {
+      handle_game_uid();
+      //console.log("hsss: making UID"+Game_UID+" from "+packet['id'])  
+    }
+}
+
+/**************************************************************************
+  Makes a game UID that is browser persistent, so user data specific 
+  to a game can be remembered on client.
+**************************************************************************/
+function handle_game_uid()
+{
+  if (! (server_settings && Object.keys(server_settings).length > 0) ) return;
+  if (is_longturn() 
+      && server_settings['metamessage']
+      && server_settings['metamessage']['val']) {
+        
+        Game_UID = server_settings['metamessage']['val']; 
+  }
+  else {
+    Game_UID = server_settings['xsize']['val'] * server_settings['ysize']['val']
+              + server_settings['xsize']['val'] + server_settings['ysize']['val'];
+    if (client.conn.playing) {
+      Game_UID += client.conn.playing['name'] + client.conn.playing['nation']
+      + client.conn.playing['playerno'];
+    }          
+  }
+  Game_UID = getHash(Game_UID.toString()); // get UID
+
+  myGameVars = simpleStorage.get(Game_UID); // get persistent data for UID
+  if (!myGameVars) myGameVars = {};
 }
 
 function handle_server_setting_control(packet)
