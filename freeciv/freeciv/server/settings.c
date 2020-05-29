@@ -3282,7 +3282,7 @@ static struct setting settings[] = {
           GAME_MIN_KICK_TIME, GAME_MAX_KICK_TIME, GAME_DEFAULT_KICK_TIME)
 
   GEN_STRING("metamessage", game.server.meta_info.user_message,
-             SSET_META, SSET_INTERNAL, SSET_RARE, ALLOW_CTRL, ALLOW_CTRL,
+             SSET_META, SSET_INTERNAL, SSET_RARE, ALLOW_NONE, ALLOW_CTRL,
              N_("Metaserver info line"),
              N_("User defined metaserver info line. For most of the time "
                 "a user defined metamessage will be used instead of an "
