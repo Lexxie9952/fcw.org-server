@@ -1565,7 +1565,8 @@ sound_alt	= "w_generic"
 helptext	= _("\
 Works exactly as a Hydro Plant in all your cities.\
  (This reduces pollution and increases the effects\
- of Factories and Mfg. Plants.)  This wonder is never obsolete.\
+ of Factories and Mfg. Plants.) Must be built adjacent\
+ to a river. This wonder is never obsolete.\
 ")
 
 [building_isaac_newtons_college]
