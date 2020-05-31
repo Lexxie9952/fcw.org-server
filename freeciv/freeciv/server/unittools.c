@@ -689,7 +689,7 @@ void execute_unit_orders(struct player *pplayer)
             format_time_duration(game.server.unitwaittime - dt, buf, sizeof(buf));
             notify_player(punit->owner, unit_tile(punit),
                           E_UNIT_ORDERS, ftc_server,
-                          _(" . %s movement delayed %s by unitwaittime."),
+                          _(" * %s movement delayed %s by unitwaittime."),
                           unit_link(punit), buf);
           }
         } else execute_orders(punit, FALSE); /* Delay_Goto not applicable */
@@ -881,7 +881,7 @@ static void unit_activity_complete(struct unit *punit)
         if (dt>0.99) {
           format_time_duration(game.server.unitwaittime - dt, buf, sizeof(buf));
           notify_player(punit->owner, unit_tile(punit), E_UNIT_ORDERS, ftc_server,
-                    _(" . %s movement delayed %s by unitwaittime."),
+                    _(" + %s movement delayed %s by unitwaittime."),
                     unit_link(punit), buf);
         }
       } else { /* Else, no UWT remaining. Force GOTO to happen: */
@@ -1156,10 +1156,7 @@ static void update_unit_activity(struct unit *punit, time_t now)
       wait->id = punit->id;
       wait->wake_up = scramble_uwt_stamp(wake_up);
       unit_wait_list_append(server.unit_waits, wait);
-      if (activity==ACTIVITY_FORTIFYING) {
-        /* Maybe (FWT != UWT)==true. Therefore, sort after adding */
-//        unit_wait_list_sort(server.unit_waits, unit_wait_cmp);
-      }
+
       time_t dt = wake_up - time(NULL);
       char buf[64]; format_time_duration(dt, buf, sizeof(buf));
       /* Courtesy message: activity isn't completed yet */
@@ -4706,13 +4703,13 @@ bool execute_orders(struct unit *punit, const bool fresh)
                 wait->id = punit->id;
                 wait->wake_up = scramble_uwt_stamp(wake_up);/* DEBUG LEFTOER
                 notify_player(punit->owner, NULL, E_UNIT_RELOCATED, ftc_server,
-              _("xo.%s #%d appending to waitlist."),unit_link(punit),punit->id);*/
+                              _("xo.%s #%d appending to waitlist."),unit_link(punit),punit->id);*/
+                unit_forget_last_activity(punit); // prevent last activity getting a wait on this turn 
                 unit_wait_list_append(server.unit_waits, wait);
-//                unit_wait_list_sort(server.unit_waits, unit_wait_cmp);
               }
               return true;
             }
-        }
+        } // END DELAYED GOTO HANDLING
         cancel_orders(punit, "  attempt to move failed.");
 
         if (!player_is_watching(punit, fresh)
