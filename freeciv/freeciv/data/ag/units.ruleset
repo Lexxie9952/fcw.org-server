@@ -2410,7 +2410,7 @@ roles         = ""
 helptext      = _("\
 Transport Helicopters can carry three land units.\
 "), _("\
- Foot and artillery types can load/unload on any tile. Other types\
+ Foot and artillery types can unload on any tile. Other types\
  need a refuel-tile. Unloading on a non-refuel tile loses all moves\
  (except Marines)\n.\
 "), _("\
