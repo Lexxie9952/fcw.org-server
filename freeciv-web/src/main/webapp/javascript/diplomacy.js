@@ -511,13 +511,15 @@ function meeting_template_data(embassy_meeting, giver, taker)
     clauses = [];
     for (var tech_id in techs) {
       if (player_invention_state(giver, tech_id) == TECH_KNOWN
-          && (player_invention_state(taker, tech_id) == TECH_UNKNOWN
-              || player_invention_state(taker, tech_id) == TECH_PREREQS_KNOWN)) {
-        clauses.push({
-          type: CLAUSE_ADVANCE,
-          value: tech_id,
-          name: techs[tech_id]['name']
-        });
+            && (
+                 (player_invention_state(taker, tech_id) == TECH_UNKNOWN && game_info['tech_trade_allow_holes'])
+                  || player_invention_state(taker, tech_id) == TECH_PREREQS_KNOWN)
+               ) {
+          clauses.push({
+            type: CLAUSE_ADVANCE,
+            value: tech_id,
+            name: techs[tech_id]['name']
+          });
       }
     }
     if (clauses.length > 0) {
