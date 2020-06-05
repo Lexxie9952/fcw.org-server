@@ -1654,6 +1654,16 @@ static struct setting settings[] = {
               "a pole. This setting has no effect if the map wraps both "
               "directions."), NULL, NULL, MAP_DEFAULT_SINGLE_POLE)
 
+  GEN_BOOL("polarstrip", wld.map.server.polar_strip,
+           SSET_MAP_GEN, SSET_GEOLOGY, SSET_SITUATIONAL,
+           ALLOW_NONE, ALLOW_BASIC,
+           N_("Whether the map will generate polar strip(s)."),
+           N_("If this setting is disabled, then any geological settings that "
+              "normally generate polar strip(s) on the top and/or bottom of the  "
+              "map, will be forcibly suppressed. This does not suppress the "
+              "formation of natural continents and islands in these regions."),
+              NULL, NULL, MAP_DEFAULT_POLAR_STRIP)
+
   GEN_BOOL("alltemperate", wld.map.server.alltemperate, 
            SSET_MAP_GEN, SSET_GEOLOGY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
            N_("All the map is temperate"),

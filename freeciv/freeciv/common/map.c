@@ -186,6 +186,7 @@ void map_init(struct civ_map *imap, bool server_side)
     imap->server.tinyisles = MAP_DEFAULT_TINYISLES;
     imap->server.separatepoles = MAP_DEFAULT_SEPARATE_POLES;
     imap->server.single_pole = MAP_DEFAULT_SINGLE_POLE;
+    imap->server.polar_strip = MAP_DEFAULT_POLAR_STRIP;
     imap->server.alltemperate = MAP_DEFAULT_ALLTEMPERATE;
     imap->server.temperature = MAP_DEFAULT_TEMPERATURE;
     imap->server.have_huts = FALSE;

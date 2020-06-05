@@ -656,6 +656,10 @@ moves. Includes MAP_MAX_LINEAR_SIZE because a map can be non wrapping. */
 #define MAP_MIN_SINGLE_POLE        FALSE
 #define MAP_MAX_SINGLE_POLE        TRUE
 
+#define MAP_DEFAULT_POLAR_STRIP    TRUE
+#define MAP_MIN_POLAR_STRIP        FALSE 
+#define MAP_MAX_POLAR_STRIP        TRUE
+
 #define MAP_DEFAULT_ALLTEMPERATE   FALSE
 #define MAP_MIN_ALLTEMPERATE       FALSE
 #define MAP_MAX_ALLTEMPERATE       TRUE
