@@ -945,6 +945,7 @@ bool city_production_build_units(const struct city *pcity,
       return TRUE;
       break;
   }
+  return FALSE;
 }
 
 /**********************************************************************//**
