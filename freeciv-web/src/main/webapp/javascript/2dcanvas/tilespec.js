@@ -50,8 +50,12 @@ const USER_MARKS = ["","grid.usermark","grid.userarea","user.attention","grid.us
 var LAYER_TERRAIN1 = 0;
 var LAYER_TERRAIN2 = 1;
 var LAYER_TERRAIN3 = 2;
-var LAYER_ROADS = 3;
-var LAYER_SPECIAL1 = 4;
+//var LAYER_ROADS = 3;
+//var LAYER_SPECIAL1 = 4;
+// layer re-order test: rails should go over a river, not under it
+var LAYER_SPECIAL1 = 3;
+var LAYER_ROADS = 4;
+
 var LAYER_CITY1 = 5;
 var LAYER_SPECIAL2 = 6;
 var LAYER_UNIT = 7;
