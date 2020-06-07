@@ -50,12 +50,11 @@ const USER_MARKS = ["","grid.usermark","grid.userarea","user.attention","grid.us
 var LAYER_TERRAIN1 = 0;
 var LAYER_TERRAIN2 = 1;
 var LAYER_TERRAIN3 = 2;
-//var LAYER_ROADS = 3;
-//var LAYER_SPECIAL1 = 4;
-// layer re-order test: rails should go over a river, not under it
+// Layer re-order test: rails should go over a river, not under it
+/* uncomment if bringing back LAYER_ROADS. See comments in LAYER_SPECIAL1 which now 
+   integrate roads as a sublayer, for better efficiency AND visual clarity.
 var LAYER_SPECIAL1 = 3;
 var LAYER_ROADS = 4;
-
 var LAYER_CITY1 = 5;
 var LAYER_SPECIAL2 = 6;
 var LAYER_UNIT = 7;
@@ -65,6 +64,18 @@ var LAYER_TILELABEL = 10;
 var LAYER_CITYBAR = 11;
 var LAYER_GOTO = 12;
 var LAYER_COUNT = 13;
+*/
+var LAYER_SPECIAL1 = 3;
+var LAYER_CITY1 = 4;
+var LAYER_SPECIAL2 = 5;
+var LAYER_UNIT = 6;
+var LAYER_FOG = 7;
+var LAYER_SPECIAL3 = 8;
+var LAYER_TILELABEL = 9;
+var LAYER_CITYBAR = 10;
+var LAYER_GOTO = 11;
+var LAYER_COUNT = 12;
+
 
 // these layers are not used at the moment, for performance reasons.
 //var LAYER_BACKGROUND = ; (not in use)
@@ -278,9 +289,10 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
     break;
 
     case LAYER_ROADS:
-      if (ptile != null) {
-        sprite_array = sprite_array.concat(fill_road_rail_sprite_array(ptile, pcity));
-      }
+      // test, move to LAYER_SPECIAL1
+      //if (ptile != null) {
+      //  sprite_array = sprite_array.concat(fill_road_rail_sprite_array(ptile, pcity));
+      //}
     break;
 
     case LAYER_SPECIAL1:
@@ -303,6 +315,14 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
           var canal_sprite = get_tile_river_like_sprite(ptile, EXTRA_WATERWAY, "road.canal");
           if (canal_sprite != null) sprite_array.push(canal_sprite);
         }
+
+        /* Moved from LAYER_SPECIAL1.  Why? Because special-over-river-over-rail hides rails.
+         * Changing layer order makes rail-over-special-over-river, which is also not ideal
+         * because roads/rails clutter all over.  What's wanted is special-over-rail-over-river,
+         * and that requires just ordering them all as sub-layers in this single layer. Potentially,
+         * this leads to a performance boost as there is one less layer iterating every tile...
+         * TODO: if this works, remove LAYER_ROADS to avoid iterating tiles on a dead layer */
+        sprite_array = sprite_array.concat(fill_road_rail_sprite_array(ptile, pcity));
 
         var spec_sprite = get_tile_specials_sprite(ptile);
         if (spec_sprite != null) sprite_array.push(spec_sprite);
