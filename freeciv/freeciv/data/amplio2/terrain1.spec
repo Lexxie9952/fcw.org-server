@@ -102,6 +102,17 @@ tiles = { "row", "column", "tag"
  12, 7, "road.road_w"
  12, 8, "road.road_nw"
 
+ ;bridges
+ 16, 0, "road.bridge_isolated"
+ 16, 1, "road.bridge_n"
+ 16, 2, "road.bridge_ne"
+ 16, 3, "road.bridge_e"
+ 16, 4, "road.bridge_se"
+ 16, 5, "road.bridge_s"
+ 16, 6, "road.bridge_sw"
+ 16, 7, "road.bridge_w"
+ 16, 8, "road.bridge_nw"
+
 ;rails
  13, 0, "road.rail_isolated"
  13, 1, "road.rail_n"
