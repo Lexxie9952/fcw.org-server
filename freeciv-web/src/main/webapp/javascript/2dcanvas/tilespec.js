@@ -50,11 +50,8 @@ const USER_MARKS = ["","grid.usermark","grid.userarea","user.attention","grid.us
 var LAYER_TERRAIN1 = 0;
 var LAYER_TERRAIN2 = 1;
 var LAYER_TERRAIN3 = 2;
-// Layer re-order test: rails should go over a river, not under it
-/* uncomment if bringing back LAYER_ROADS. See comments in LAYER_SPECIAL1 which now 
-   integrate roads as a sublayer, for better efficiency AND visual clarity.
-var LAYER_SPECIAL1 = 3;
-var LAYER_ROADS = 4;
+var LAYER_ROADS = 3;
+var LAYER_SPECIAL1 = 4;
 var LAYER_CITY1 = 5;
 var LAYER_SPECIAL2 = 6;
 var LAYER_UNIT = 7;
@@ -64,18 +61,6 @@ var LAYER_TILELABEL = 10;
 var LAYER_CITYBAR = 11;
 var LAYER_GOTO = 12;
 var LAYER_COUNT = 13;
-*/
-var LAYER_SPECIAL1 = 3;
-var LAYER_CITY1 = 4;
-var LAYER_SPECIAL2 = 5;
-var LAYER_UNIT = 6;
-var LAYER_FOG = 7;
-var LAYER_SPECIAL3 = 8;
-var LAYER_TILELABEL = 9;
-var LAYER_CITYBAR = 10;
-var LAYER_GOTO = 11;
-var LAYER_COUNT = 12;
-
 
 // these layers are not used at the moment, for performance reasons.
 //var LAYER_BACKGROUND = ; (not in use)
@@ -270,7 +255,6 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
       var tterrain_near = tile_terrain_near(ptile);
       var pterrain = tile_terrain(ptile);
       sprite_array = sprite_array.concat(fill_terrain_sprite_layer(1, ptile, pterrain, tterrain_near));
-
     }
     break;
 
@@ -289,40 +273,20 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
     break;
 
     case LAYER_ROADS:
-      // test, move to LAYER_SPECIAL1
-      //if (ptile != null) {
-      //  sprite_array = sprite_array.concat(fill_road_rail_sprite_array(ptile, pcity));
-      //}
+      if (ptile != null) {
+        sprite_array = sprite_array.concat(fill_road_rail_sprite_array(ptile, pcity));
+      }
     break;
 
     case LAYER_SPECIAL1:
       if (ptile != null) {
-
         // TEST: borders moved from last sub-layer of LAYER_SPECIAL1 to here:
         //  it was drawing on top of resources, and seemed better here:
         if (draw_map_grid) sprite_array = sprite_array.concat(get_grid_line_sprites(ptile));
         if (!fill_national_border) 
           sprite_array = sprite_array.concat(get_border_line_sprites(ptile));
 
-        var river_sprite = get_tile_river_like_sprite(ptile, EXTRA_RIVER, "road.river");
-        if (river_sprite != null) sprite_array.push(river_sprite);
-
-        if (typeof EXTRA_CANAL !== "undefined") {
-          var canal_sprite = get_tile_river_like_sprite(ptile, EXTRA_CANAL, "road.canal");
-          if (canal_sprite != null) sprite_array.push(canal_sprite);
-        }
-        if (typeof EXTRA_WATERWAY !== "undefined") {
-          var canal_sprite = get_tile_river_like_sprite(ptile, EXTRA_WATERWAY, "road.canal");
-          if (canal_sprite != null) sprite_array.push(canal_sprite);
-        }
-
-        /* Moved from LAYER_SPECIAL1.  Why? Because special-over-river-over-rail hides rails.
-         * Changing layer order makes rail-over-special-over-river, which is also not ideal
-         * because roads/rails clutter all over.  What's wanted is special-over-rail-over-river,
-         * and that requires just ordering them all as sub-layers in this single layer. Potentially,
-         * this leads to a performance boost as there is one less layer iterating every tile...
-         * TODO: if this works, remove LAYER_ROADS to avoid iterating tiles on a dead layer */
-        sprite_array = sprite_array.concat(fill_road_rail_sprite_array(ptile, pcity));
+        ////sprite_array = sprite_array.concat(fill_road_rail_sprite_array(ptile, pcity));
 
         var spec_sprite = get_tile_specials_sprite(ptile);
         if (spec_sprite != null) sprite_array.push(spec_sprite);
@@ -358,7 +322,6 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
         // moved to first sub-layer above
         //if (draw_map_grid) sprite_array = sprite_array.concat(get_grid_line_sprites(ptile)); 
         //sprite_array = sprite_array.concat(get_border_line_sprites(ptile));
-
       }
     break;
 
@@ -1848,14 +1811,13 @@ function fill_road_rail_sprite_array(ptile, pcity)
 {
   var road = tile_has_extra(ptile, EXTRA_ROAD);
   var rail = tile_has_extra(ptile, EXTRA_RAIL);
+  // Road/river types ruleset may or may not have:
+  const MAGLEV_active = (typeof EXTRA_MAGLEV !== "undefined");
+  const CANAL_active =  (typeof EXTRA_CANAL !== "undefined");
+  const WATERWAY_active = (typeof EXTRA_WATERWAY !== "undefined");
+  const QUAY_active = (typeof EXTRA_QUAY !== "undefined");
   
-  // Quays connect/integrate into roads, in a one-way nature: offloading is
-  // road 1/3 move, onloading is 1 move. So we draw the road on the tile that
-  // has it but not the quay, but we show the road going TOWARD the quay.
-  //if (client_rules_flag[CRF_EXTRA_QUAY])
-  //  road |= tile_has_extra(ptile, EXTRA_QUAY);
-
-  if (typeof EXTRA_MAGLEV !== "undefined") {
+  if (MAGLEV_active) {
     var maglev = tile_has_extra(ptile, EXTRA_MAGLEV);
   }
 
@@ -1877,16 +1839,15 @@ function fill_road_rail_sprite_array(ptile, pcity)
     var tile1 = mapstep(ptile, dir);
     if (tile1 != null && tile_get_known(tile1) != TILE_UNKNOWN) {
       road_near[dir] = tile_has_extra(tile1, EXTRA_ROAD);
-      if (client_rules_flag[CRF_EXTRA_QUAY]) road_near[dir] |= tile_has_extra(tile1, EXTRA_QUAY);
+      // Quays integrate with roads "one-way", so we draw the road on the tile that
+      // has it but not the quay tile, showing the road going TOWARD the quay.
+      if (QUAY_active) road_near[dir] |= tile_has_extra(tile1, EXTRA_QUAY);
       rail_near[dir] = tile_has_extra(tile1, EXTRA_RAIL);
-      if (typeof EXTRA_MAGLEV !== "undefined") {
-        maglev_near[dir] = tile_has_extra(tile1, EXTRA_MAGLEV);
-      } 
-
-      /* Draw rail/road/maglev if there is a connection from this tile to the
-       * adjacent tile.  But don't draw road/rail if there is also a rail/maglev
-       * connection. */
-      if (typeof EXTRA_MAGLEV !== "undefined") {
+      if (MAGLEV_active) maglev_near[dir] = tile_has_extra(tile1, EXTRA_MAGLEV);
+   
+      /* Draw rail/road/maglev if this tile connects to the adjacent tile. But don't
+       * draw road/rail if there is also a rail/maglev connection. */
+      if (MAGLEV_active) {
         draw_maglev[dir] = maglev && maglev_near[dir];
         draw_rail[dir] = rail && rail_near[dir] && !draw_maglev[dir];
         draw_road[dir] = road && road_near[dir] && !draw_rail[dir] && !draw_maglev[dir];
@@ -1894,10 +1855,8 @@ function fill_road_rail_sprite_array(ptile, pcity)
         draw_single_maglev &= !draw_maglev[dir];
         draw_single_rail &= !draw_maglev[dir] && !draw_rail[dir];
         draw_single_road &= !draw_maglev[dir] && !draw_rail[dir] && !draw_road[dir];
-      } else {         // same as above if ruleset has no EXTRA_MAGLEVS in it:
-        /* Draw rail/road if there is a connection from this tile to the
-        * adjacent tile.  But don't draw road if there is also a rail
-        * connection. */
+      } else { /* Same as above for rules with no EXTRA_MAGLEV:  Draw rail/road if
+        * this tile connects to adjacent tile; but don't draw road if there is a rail */
        draw_rail[dir] = rail && rail_near[dir];
        draw_road[dir] = road && road_near[dir] && !draw_rail[dir];
 
@@ -1911,16 +1870,28 @@ function fill_road_rail_sprite_array(ptile, pcity)
      * necessary and it generally doesn't look very good. */
     var i;
 
-    /* First raw roads under rails. */
-    if (road) {
+    /* Do roads first, under river-like sprites. */
+    if (road /*&& !river_sprite && !canal_sprite << include this if bridge is separate sprite excluding road sprite under it*/) {
       for (i = 0; i < 8; i++) {
         if (draw_road[i]) {
-	      result_sprites.push({"key" : "road.road_" + dir_get_tileset_name(i)});
-	    }
+	        result_sprites.push({"key" : "road.road_" + dir_get_tileset_name(i)});
+	      }
       }
     }
 
-    /* Then draw rails over roads. */
+    /// Rivers, canals, waterways are next.
+    var river_sprite = get_tile_river_like_sprite(ptile, EXTRA_RIVER, "road.river");
+    var canal_sprite = null;
+    if (CANAL_active) {
+      canal_sprite = get_tile_river_like_sprite(ptile, EXTRA_CANAL, "road.canal");
+    }
+    if (!canal_sprite && WATERWAY_active) {
+      canal_sprite = get_tile_river_like_sprite(ptile, EXTRA_WATERWAY, "road.canal");
+    }
+    if (river_sprite != null) result_sprites.push(river_sprite);
+    if (canal_sprite != null) result_sprites.push(canal_sprite);
+
+    /* Draw rails over rivers and roads. */
     if (rail) {
       for (i = 0; i < 8; i++) {
         if (draw_rail[i]) {
@@ -1929,26 +1900,36 @@ function fill_road_rail_sprite_array(ptile, pcity)
       }
     }
 
-    /* Then draw maglevs over rails over roads. */
-    if (typeof EXTRA_MAGLEV !== "undefined") {
-        if (maglev) {
-        for (i = 0; i < 8; i++) {
-          if (draw_maglev[i]) {
-	        result_sprites.push({"key" : "road.maglev_" + dir_get_tileset_name(i)});
-          }
+    /* TODO: this is ready to uncomment if bridge graphics are available.
+    // Bridges go over rails and rivers
+    if (road && (river_sprite || canal_sprite)) {
+      for (i = 0; i < 8; i++) {
+        if (draw_road[i]) {
+	        result_sprites.push({"key" : "road.bridge_" + dir_get_tileset_name(i)});
         }
       }
-    }
- /* Draw isolated rail/road separately (styles 0 and 1 only). */
+    } */
 
+    /* Finally draw MagLevs over all of it. */
+    if (MAGLEV_active) {
+        if (maglev) {
+          for (i = 0; i < 8; i++) {
+            if (draw_maglev[i]) {
+            result_sprites.push({"key" : "road.maglev_" + dir_get_tileset_name(i)});
+            }
+          }
+      }
+    }
+
+  /* Draw isolated rail/road/maglev separately (styles 0 and 1 only). */
   if (draw_single_rail) {
       result_sprites.push({"key" : "road.rail_isolated"});
   } else if (draw_single_road) {
       result_sprites.push({"key" : "road.road_isolated"});
-  } else if (typeof EXTRA_MAGLEV !== "undefined") {
-            if (draw_single_maglev) {
-              result_sprites.push({"key" : "road.maglev_isolated"});
-            }
+  } else if (MAGLEV_active) {
+      if (draw_single_maglev) {
+        result_sprites.push({"key" : "road.maglev_isolated"});
+      }
   }
 
   return result_sprites;
