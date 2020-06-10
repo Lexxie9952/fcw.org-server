@@ -3214,9 +3214,9 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
               // Non-ideally, we create the Game_UID every time we go into chalkboard mode.
               // Please see note in handle_game_uid() for how we should refactor this.
               handle_game_uid();
-              add_client_message("Map marker mode is ON.  Alt-X to toggle.")
+              add_client_message("Chalkboard is ON.  Alt-X to toggle.")
             }
-            else add_client_message("Map marker mode is OFF.")
+            else add_client_message("Chalkboard is OFF.")
         }
         else if (enable_autoexplore && !ctrl && !shift && !alt) {
           key_unit_auto_explore();
@@ -3310,8 +3310,14 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     // the block of code above contains virtual keypad ^^
     */
   }
-
   switch (key_code) {
+    case 46: // DEL key
+      if (user_marking_mode) { // Reset chalkboard
+        myGameVars = {};
+        simpleStorage.set(Game_UID, myGameVars);
+        add_client_message("Chalkboard erased.");
+      }
+      break;
     case 35: //1
     case 97:
       key_unit_move(DIR8_SOUTH);
