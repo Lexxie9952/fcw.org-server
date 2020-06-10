@@ -164,7 +164,7 @@ ctrl-alt-shift-I: change style of the letter capital 'I'
 ctrl-L:  show airlift counter on cities
 ctrl-M:  show city Mood on map
 shift-M: show unit moves left percentage on map
-ctrl-alt-P: highlight polluted tiles in red
+ctrl-alt-P: highlight polluted tiles everywhere on map
 shift-R: revolution: choose new government
 alt-S: fullscreen mode
 shift-S: stack display mode (multiple tile units)

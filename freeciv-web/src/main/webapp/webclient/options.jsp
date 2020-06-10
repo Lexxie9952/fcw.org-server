@@ -159,7 +159,7 @@
 
 <tr>
   <td>
-    <div title="Polluted tiles are marked in highlighted red (CTRL-ALT-P)" class="main_menu_buttons">
+    <div title="Highlights polluted tiles everywhere on map (CTRL-ALT-P)" class="main_menu_buttons">
         <input type='checkbox' name='draw_highlighted_pollution' id='draw_highlighted_pollution'><b><font color="#0000c0">Highlight polluted tiles on map</font></b> 
     </div>
   </td>
