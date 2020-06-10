@@ -172,7 +172,8 @@ ctrl-S: save game
 shift-T: change tax rates
 shift-W: show city tile production on map
 alt-W: war calculator
-alt-X: toggle Chalkboard (map notes marking mode)
+alt-X: toggle Chalkboard (map notes marking mode) 
+...{Click, Shift-Click, Ctrl-Click, Alt-Click make user notes on the map}
 DEL: erase Chalkboard
 shift-Return: Turn done
 &apos; &nbsp; Focus on chat input area. (Restores if minimized)
