@@ -45,7 +45,7 @@ function tile_get_known(ptile)
 **************************************************************************/
 function tile_has_extra(ptile, extra)
 {
-  if (ptile['extras'] == null) {
+  if (!ptile || ptile['extras'] == null) {
     return false;
   }
 

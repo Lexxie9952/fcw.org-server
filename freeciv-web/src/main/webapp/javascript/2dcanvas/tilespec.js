@@ -311,8 +311,8 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
         if (tile_has_extra(ptile, EXTRA_POLLUTION)) {
           sprite_array.push({"key" :
                               tileset_extra_id_graphic_tag(EXTRA_POLLUTION)});
-          if (draw_highlighted_pollution)
-            sprite_array.push(get_city_invalid_worked_sprite());
+          //if (draw_highlighted_pollution)
+          //  sprite_array.push(get_user_highlighted_pollution_sprite());
         }
 
         if (tile_has_extra(ptile, EXTRA_FALLOUT)) {
@@ -325,12 +325,23 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
       }
     break;
 
+    // City Layer  AND  Highlight Polluted Tiles
     case LAYER_CITY1:
+      var polluted = tile_has_extra(ptile, EXTRA_POLLUTION);
+
+      // Due to visibility difficulty, city tiles ALWAYS show highlighted pollution
       if (pcity != null) {
-        sprite_array.push(get_city_sprite(pcity));
+        if (polluted) sprite_array.push({"key" : "grid.pollute_ring"}); //ring under city "wraps" around it
+        sprite_array.push(get_city_sprite(pcity));                      //city
+        if (polluted) sprite_array.push({"key" : "grid.pollute_icon"}); //pollution icon clearly over top
 	      if (pcity['unhappy']) {
           sprite_array.push({"key" : "city.disorder"});
-	      }
+        }
+      }
+      // Otherwise show highlighted pollution only if user pref is on:
+      else if (draw_highlighted_pollution && polluted) {
+        sprite_array.push({"key" : "grid.pollute_ring"});
+        sprite_array.push({"key" : "grid.pollute_icon"});
       }
     break;
 
