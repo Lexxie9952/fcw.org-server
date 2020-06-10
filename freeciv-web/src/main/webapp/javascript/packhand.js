@@ -1830,11 +1830,6 @@ function handle_server_setting_bool(packet)
 function handle_server_setting_str(packet)
 {
   $.extend(server_settings[packet['id']], packet);
-    // Make browser persistent identifier for this game
-    if (packet['id']==146) {
-      handle_game_uid();
-      //console.log("hsss: making UID"+Game_UID+" from "+packet['id'])  
-    }
 }
 
 /**************************************************************************
@@ -1843,6 +1838,14 @@ function handle_server_setting_str(packet)
 **************************************************************************/
 function handle_game_uid()
 {
+  /* TODO: Currently, we just call this every time the user toggles Alt-X
+    * to go into chalkboard mode. That's bad because we might want to start
+    * using the UID for saving other game-specific info on the client side.
+    * Ideally we would not create a Game_UID on the client side but rather,
+    * pull it from server_settings or game_info. Or alternatively, find some 
+    * unique point/event/trigger during game load or game start that we know 
+    * only happens once and happens AFTER we have received a packet with the
+    * server_settings loaded, since those are needed to create the Game_UID. */
   if (! (server_settings && Object.keys(server_settings).length > 0) ) return;
   if (is_longturn() 
       && server_settings['metamessage']

@@ -3210,7 +3210,12 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         } else if (alt && !shift && !ctrl) { // alt-x toggle user map-markup mode
             the_event.preventDefault(); // override possible browser shortcut
             user_marking_mode = !user_marking_mode;
-            if (user_marking_mode) add_client_message("Map marker mode is ON.  Alt-X to toggle.")
+            if (user_marking_mode) {
+              // Non-ideally, we create the Game_UID every time we go into chalkboard mode.
+              // Please see note in handle_game_uid() for how we should refactor this.
+              handle_game_uid();
+              add_client_message("Map marker mode is ON.  Alt-X to toggle.")
+            }
             else add_client_message("Map marker mode is OFF.")
         }
         else if (enable_autoexplore && !ctrl && !shift && !alt) {
