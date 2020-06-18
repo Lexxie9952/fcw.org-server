@@ -178,7 +178,9 @@ All software components in Freeciv-web will log to the /logs sub-directory of th
 
 Freeciv-web can easily be built and run from Docker using `docker-compose`. Web is exposed on port 80 by default.
 
- 1. Make sure you have both [Docker](https://www.docker.com/get-started) and [Docker Compose](https://docs.docker.com/compose/install/) installed.
+ 1. Make sure you have both [Docker](https://www.docker.com/get-started) and [Docker Compose](https://docs.docker.com/compose/install/) installed using MOST CURRENT VERSION of both, and are using a CURRENT Docker storage driver. 
+ 
+    ("Problems regarding 'setfacl' have been reported when using (deprecated) 'aufs' as Docker storage driver. Please try using 'overlay2' instead. You can check the storage driver by running 'docker info' or 'docker info | grep Storage'.")
 
  2. Run the following from the freeciv-web directory:
 
