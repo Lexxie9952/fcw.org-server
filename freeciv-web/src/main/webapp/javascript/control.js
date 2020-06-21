@@ -2421,8 +2421,10 @@ function do_map_click(ptile, qtype, first_time_called)
         if (goto_path) { // touch devices don't have a goto_path until they call this function twice. see: if (touch_device) below
           // Client circumvents FC Server has buggy GOTO for units which have UTYF_COAST + fuel:
           if (unit_has_type_flag(punit, UTYF_COAST) && punit['fuel']>0 && !delayed_goto_active && goto_path !== undefined) {
-            goto_path['dir'].shift();  // remove the first "refuel dir" on fuel units, so they don't freeze on refuel spots
-            goto_path['length']--;     // correct the path length for the removed -1 "refuel dir"
+            if (goto_path['dir'] && goto_path['dir'][0] && goto_path['dir'][0]==-1) {
+              goto_path['dir'].shift();  // remove the first "refuel dir -1" on coastal fuel units so they don't freeze on refuel spots
+              goto_path['length']--;     // correct the path length for the removed -1 "refuel dir"
+            }
           } else if (delayed_goto_active) {
             //if (unit_type(punit)['move_rate']==punit['movesleft']) {    didn't capture case of unmoved but damage_slows
             if (!unit_has_moved(punit)) {
@@ -5587,6 +5589,7 @@ function update_goto_path(goto_packet)
   var t0 = index_to_tile(punit['tile']);
   var ptile = t0;
   var goaltile = index_to_tile(goto_packet['dest']);
+  var refuel = 0;
 
   // don't bother check goto for same tile unit is on
   if (ptile==goaltile) return;
@@ -5598,6 +5601,7 @@ function update_goto_path(goto_packet)
 
       if (dir == -1) {
         /* Assume that this means refuel. */
+        refuel++;
         continue;
       }
 
@@ -5617,8 +5621,8 @@ function update_goto_path(goto_packet)
   if (current_goto_turns != undefined) {
     var path_length = goto_packet['length'];
 
-    // Fuel units inject extra non-path data in the goto_packet:
-    if (unit_type(punit)['fuel']>0) path_length--;
+    // Fuel units inject extra non-path 'refuel data' in the goto_packet: +++
+    if (refuel) path_length -= refuel;  // remove "refuel path steps" from path_length
 
     $("#active_unit_info").html("Path: "+path_length+" tiles");
   }
