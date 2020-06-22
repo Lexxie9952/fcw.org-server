@@ -2051,6 +2051,7 @@ set =
       "diplomacy", "ALL", FALSE
       "dispersion", 0, FALSE
 ;      "endturn", 365, FALSE
+      "endspaceship", ENABLED, FALSE 
       "foggedborders", TRUE, FALSE
       "generator", "RANDOM", FALSE
       "gold", 100, FALSE
@@ -2082,5 +2083,6 @@ set =
       "unload_override", 0, FALSE    ;0=native unloading same as non-native. 1+ = move_fragment cost for unloading.
       "unreachableprotects", "ENABLED", FALSE
       "unitwaittime_style", "ACTIVITIES|FORTIFY|DELAYGOTO", FALSE
+      "victories", "ALLIED|SPACERACE", FALSE
       "zoc_purity", "ENABLED", FALSE           ; igZOC units don't lift ZOC for units subject to ZOC
     }
