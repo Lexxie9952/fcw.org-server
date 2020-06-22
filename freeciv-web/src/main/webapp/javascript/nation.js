@@ -72,7 +72,7 @@ function update_nation_screen()
     + header_titles[5]+"</th><th"+center_style+">"+header_titles[6]+"</th><th"+center_style+">"+header_titles[7]+"</th>"
     + "<th"+center_style+">"+header_titles[8]+"</th><th"+center_style+">"+header_titles[9]+"</th><th"+center_style+">"+header_titles[10]
     + "</th><th"+center_style+" class='nation_team'>"+header_titles[11]
-    +"</th><th style='text-align:right;'>"+header_titles[12]+"</th></tr></thead><tbody class='nation_table_body'>";
+    +"</th><th style='text-align:right;'>"+header_titles[12]+"</th></tr></thead><tbody class='nation_table_body alternate-row-color'>";
 
   var sortList = [];
   var headers = $('#nation_table thead th');
