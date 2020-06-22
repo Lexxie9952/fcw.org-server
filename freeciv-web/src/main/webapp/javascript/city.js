@@ -3183,7 +3183,7 @@ function update_city_screen()
         + "<th style='text-align:right;' title='Turns to finish &nbsp;&nbsp; Prod completed/needed'>Turns"+updown_sort_arrows
               +"&nbsp; Progress</th><th style='text-align:right;' title='Click to buy'>Cost"+updown_sort_arrows+"</th>"
         + "<th style='text-align:left;'><input type='checkbox' id='master_checkbox' title='CLICK:  Toggle all cities\n\nSHIFT-CLICK:  Toggle highlighted cities' name='cbAll' value='false' onclick='toggle_city_row_selections(event);'></th>"
-        + "</tr></thead><tbody>";
+        + "</tr></thead><tbody class='alternate-row-color'>";
   } else if (redux_screen) // semi-standard rendition of the above with minor trimming
   { // -1 column (selection box). Economised columns: Sort Arrows, Grows In>>Grows, Name of Production/Image >> Image only, Turns/Progress>>Progress
     //console.log("MODE: Reduced Standard")

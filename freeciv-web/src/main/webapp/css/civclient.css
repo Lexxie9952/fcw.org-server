@@ -666,16 +666,16 @@ input[type='number'] {
 	background: inherit;
 }
 
+.alternate-row-color tr:not(.ui-selected):nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
 .nation_row_self {
   color: lightgreen;
 }
 
 .nation_table_body tr td {
   padding-left:20px;
-}
-
-.nation_table_body tr:nth-child(even) {
-  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .nation_row_war {
@@ -1064,10 +1064,6 @@ input[type='number'] {
 #city_table {
   width: 100%;
   cursor: pointer;
-}
-
-.cities_row:nth-child(even) {
-  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .cities_row {
