@@ -1971,6 +1971,42 @@ NOTE: GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
+[unit_airplane]
+name          = _("Airplane")
+class         = "Air"
+tech_req      = "Flight"
+obsolete_by   = "None"
+graphic       = "u.airplane"
+graphic_alt   = "u.awacs"
+sound_move    = "m_awacs"
+sound_move_alt = "m_generic"
+sound_fight   = "f_awacs"
+sound_fight_alt = "f_generic"
+build_cost    = 50
+pop_cost      = 0
+attack        = 0
+defense       = 1
+hitpoints     = 20
+firepower     = 1
+move_rate     = 20
+vision_radius_sq = 12
+transport_cap = 2
+fuel          = 2
+uk_happy      = 0
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+flags         = "HasNoZOC", "NoVeteran", "Unbribable", "Expellable", "NeverProtects", "CanEscape", "Provoking"
+roles         = ""
+cargo         = "Land"
+helptext      = _("\
+Airplanes can carry a single diplomatic unit. They can land in any domestic or allied\
+ city. For missions to non-allied nations, an empty Airbase must be available for landing.\
+ Each new aviation tech upgrades the Airplane's range by +2 moves per turn.\
+"), _("
+NOTE: GOTO disallows unit loss from lack of fuel. You\
+ can override this by ordering moves to adjacent tiles.\
+")
 
 [unit_fighter]
 name          = _("Fighter")
@@ -2327,7 +2363,7 @@ NOTE: GOTO disallows unit loss from lack of fuel. You\
 name          = _("AWACS")
 class         = "Air"
 tech_req      = "Radar"
-obsolete_by   = "None"
+obsolete_by   = "Spy Plane"
 graphic       = "u.awacs_o"
 graphic_alt   = "u.awacs"
 sound_move    = "m_awacs"
@@ -2353,6 +2389,43 @@ roles         = ""
 helptext      = _("\
 The AWACS has great fuel capacity for long range flights, and advanced radar that can determine\
  the location of enemy units over a wide area.\
+"), _("
+NOTE: GOTO disallows unit loss from lack of fuel. You\
+ can override this by ordering moves to adjacent tiles.\
+")
+
+[unit_spy_plane]
+name          = _("Spy Plane")
+class         = "Air"
+tech_req      = "Stealth"
+obsolete_by   = "None"
+graphic       = "u.spy_plane_o"
+graphic_alt   = "u.awacs"
+sound_move    = "m_awacs"
+sound_move_alt = "m_generic"
+sound_fight   = "f_awacs"
+sound_fight_alt = "f_generic"
+build_cost    = 160
+pop_cost      = 0
+attack        = 0
+defense       = 1
+hitpoints     = 20
+firepower     = 1
+move_rate     = 34
+vision_radius_sq = 46
+transport_cap = 0
+fuel          = 2
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+vision_layer  = "Stealth"
+flags         = "HasNoZOC", "NoVeteran", "Unbribable", "NeverProtects", "CanEscape", "Provoking"
+roles         = ""
+helptext      = _("\
+The Spy Plane is an ultrasonic high altitude aircraft with long range. It gathers\
+ intel over a wide area. Stealth technology makes it invisible, except to enemies on\
+ adjacent tiles.\
 "), _("
 NOTE: GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\

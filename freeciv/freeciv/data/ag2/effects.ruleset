@@ -3720,6 +3720,55 @@ reqs	=
       "UnitType", "Explorer", "Local", TRUE 
     }
 
+[effect_airplane_rannge_1]
+type    = "Move_Bonus"
+value	= 18
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Radio", "Player"
+      "UnitType", "Airplane", "Local"
+    }
+[effect_airplane_rannge_2]
+type    = "Move_Bonus"
+value	= 18
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Advanced Flight", "Player"
+      "UnitType", "Airplane", "Local"
+    }
+[effect_airplane_rannge_3]
+type    = "Move_Bonus"
+value	= 18
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Radar", "Player"
+      "UnitType", "Airplane", "Local"
+    }
+[effect_airplane_rannge_4]
+type    = "Move_Bonus"
+value	= 18
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Rocketry", "Player"
+      "UnitType", "Airplane", "Local"
+    }
+[effect_airplane_rannge_5]
+type    = "Move_Bonus"
+value	= 18
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Space Flight", "Player"
+      "UnitType", "Airplane", "Local"
+    }
+[effect_airplane_rannge_6]
+type    = "Move_Bonus"
+value	= 18
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Avionics", "Player"
+      "UnitType", "Airplane", "Local"
+    }
+
 [effect_lighthouse]
 type    = "Move_Bonus"
 value	= 18
