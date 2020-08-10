@@ -2390,6 +2390,11 @@ function create_unit_offset_arrays()
       case "Settlers":
           dx -= 3; dy -= 2;
           break;
+      case "Spy Plane":
+          sx = 8;
+          dx -= 26; dy += 1;
+          mx -= 4;  my -= 6;
+          break;       
       case "Stealth Bomber":
           dx -= 19; dy -= 5;  
           vx -= 53; vy += 1;
