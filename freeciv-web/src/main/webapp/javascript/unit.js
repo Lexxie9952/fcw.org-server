@@ -249,7 +249,12 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
   if (pclass.startsWith("Land")) {   // Land, LandNoKill, LandAirSea
     //console.log("  Land* CHECK ON: tclass.rulename =="+tclass.rule_name);
     if (tclass.rule_name == "Submarine") return false;
-    if (tclass.rule_name == "Air") return false;
+    if (tclass.rule_name == "Air") {
+      if (ttype.name != "Airplane" || !unit_has_type_flag(punit, UTYF_DIPLOMAT))
+        return false;
+      // We got here if a diplomat type is trying to board an Airplane. That's
+      // currently the only legal way for "Land" to load on "Air". (MP2-AG rev2)
+    }
     if (tclass.rule_name == "AirPillage") return false;
     if (ttype.name == "AEGIS Cruiser") return false;
     if (ttype.name == "Mobile SAM") return false;
