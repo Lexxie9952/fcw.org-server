@@ -1628,7 +1628,8 @@ function update_unit_order_commands()
             else if (pcity != null) {
               unit_actions["unit_unload"] = {name: "Unload Transport (T)"};
               $("#order_unload").show();
-            } else { // 3. In a Naval Base
+            } 
+            else { // 3. In a Naval Base
               if (typeof EXTRA_NAVALBASE !== "undefined") {
                 if (tile_has_extra(ptile, EXTRA_NAVALBASE)) {
                   unit_actions["unit_unload"] = {name: "Unload Transport (T)"};
@@ -1641,7 +1642,12 @@ function update_unit_order_commands()
                   $("#order_unload").show();
                 }
               }
-              $("#order_activate_cargo").show(); // if no option to unload, show option to activate or 'wake' units
+              // 5. diplomat-type on the unit-type named "Airplane" over an Airbase
+              if ( unit_types[punit['type']]['name'] == "Airplane" && tile_has_extra(ptile, EXTRA_AIRBASE)) {
+                unit_actions["unit_unload"] = {name: "Unload Transport (T)"};
+                $("#order_unload").show();
+              } 
+            $("#order_activate_cargo").show(); // if no option to unload, show option to activate or 'wake' units
             }
           }
         }
