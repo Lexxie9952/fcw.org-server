@@ -3720,7 +3720,7 @@ reqs	=
       "UnitType", "Explorer", "Local", TRUE 
     }
 
-[effect_airplane_rannge_1]
+[effect_airplane_range_1]
 type    = "Move_Bonus"
 value	= 18
 reqs	=
@@ -3728,7 +3728,7 @@ reqs	=
       "Tech", "Radio", "Player"
       "UnitType", "Airplane", "Local"
     }
-[effect_airplane_rannge_2]
+[effect_airplane_range_2]
 type    = "Move_Bonus"
 value	= 18
 reqs	=
@@ -3736,7 +3736,7 @@ reqs	=
       "Tech", "Advanced Flight", "Player"
       "UnitType", "Airplane", "Local"
     }
-[effect_airplane_rannge_3]
+[effect_airplane_range_3]
 type    = "Move_Bonus"
 value	= 18
 reqs	=
@@ -3744,7 +3744,7 @@ reqs	=
       "Tech", "Radar", "Player"
       "UnitType", "Airplane", "Local"
     }
-[effect_airplane_rannge_4]
+[effect_airplane_range_4]
 type    = "Move_Bonus"
 value	= 18
 reqs	=
@@ -3752,7 +3752,7 @@ reqs	=
       "Tech", "Rocketry", "Player"
       "UnitType", "Airplane", "Local"
     }
-[effect_airplane_rannge_5]
+[effect_airplane_range_5]
 type    = "Move_Bonus"
 value	= 18
 reqs	=
@@ -3760,7 +3760,7 @@ reqs	=
       "Tech", "Space Flight", "Player"
       "UnitType", "Airplane", "Local"
     }
-[effect_airplane_rannge_6]
+[effect_airplane_range_6]
 type    = "Move_Bonus"
 value	= 18
 reqs	=
