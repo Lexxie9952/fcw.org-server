@@ -205,7 +205,7 @@ helptext      = _("\
 name          = _("?unitclass:LandRail")
 min_speed     = 4
 hp_loss_pct   = 0
-flags         = "Unreachable", "BuildAnywhere", "ZOC", "CargoRestrained", "TerrainDefense"
+flags         = "Unreachable", "BuildAnywhere", "ZOC", "CargoRestrained", "TerrainDefense", "TerrainSpeed"
 helptext      = _("\
   • Only able to move on railroad tiles.\
 ")
@@ -4145,9 +4145,9 @@ helptext      = _("\
 Trains allow Foot soldiers to move as far as other units on your rails. Soldiers\
  can board and unload from any tile, but may lose moves unloading outside of\
  a city. (Depends on server settings.) Trains can also transport Bombs.\n\n\
-Trains on non-allied foreign rails use one full move point per tile.\n\n\
-After Electricity, Trains gain +1 move. Combustion also gives another +1 move.\
-Pre-gunpowder units can't attack Trains.\
+Trains on non-allied foreign rails incur full terrain movement costs.\n\n\
+Electricity and Combustion each give an additional +1 move. Pre-gunpowder units\
+ can't attack Trains.\
 ")
 
 [unit_leader]
