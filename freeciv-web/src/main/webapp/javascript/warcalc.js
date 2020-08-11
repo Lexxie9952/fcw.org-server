@@ -373,7 +373,7 @@ function warcalc_set_tooltips()
   $("#wcamsg").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "450px");}});
   $("#wcdmsg").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "450px");}});  
 
-  if (ruleset_control['name']=="Avant-garde" 
+  if (ruleset_control['name'].startsWith("Avant-garde")
    || ruleset_control['name']=="Multiplayer-Evolution ruleset" ) {
         if (is_small_screen()) {
           $('#wcth1').hide(); $('#wcth2').hide(); // "attack","defend" text near applier buttons
@@ -418,7 +418,7 @@ function warcalc_set_tooltips()
         $("#wc200").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "460px");}});
         $("#wc300").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "450px");}});
 
-        if (ruleset_control['name']=="Avant-garde") {  // AG distinctions
+        if (ruleset_control['name'].startsWith("Avant-garde")) {  // AG distinctions
           $("#wc133").prop("title", bl+"River"+nbl+"Swamp"+nbl+"Forest"+nbl+"Land/Heli in Fort vs. Land/Sea/Missile (not Armor)"+nbl+"Fighter over Fort/Fortress vs. Land/Sea/Missile (not Armor)"
              +nbl+"Dive Bomber, Ground Strike Fighter vs. Anti-Air");
           $("#wc150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Jungle"+nbl+"Land unit Fortified OR inside city"

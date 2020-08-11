@@ -986,7 +986,7 @@ function generate_production_list()
     } 
     // Suppress improvements with special obsolete conditions
     if ((ruleset_control['name']=="Multiplayer-Evolution ruleset"
-               || ruleset_control['name']=="Avant-garde")
+               || ruleset_control['name'].startsWith("Avant-garde"))
                && pimprovement['name'] == "Great Wall"
                && player_invention_state(client.conn.playing, tech_id_by_name('Machine Tools')) == TECH_KNOWN) {
                  continue;

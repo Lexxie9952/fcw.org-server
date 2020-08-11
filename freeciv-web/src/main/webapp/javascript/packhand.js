@@ -660,6 +660,7 @@ function handle_ruleset_control(packet)
   // Flags for hard-coded client behaviors/optimisations specific to rulesets:
   switch (ruleset_control['name']) {
     case "Avant-garde":
+    case "Avant-garde 2":
       client_rules_flag[CRF_RADAR_TOWER]=true;
       client_rules_flag[CRF_EXTRA_HIDEOUT]=true;
       client_rules_flag[CRF_EXTRA_QUAY]=true;

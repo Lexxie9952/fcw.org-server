@@ -172,7 +172,7 @@ function unit_can_do_unload(punit)
 {
   if (!punit) return false;
   var rules = ruleset_control['name'];
-  if (rules != "Avant-garde" && rules != "Multiplayer-Evolution ruleset")
+  if (!rules.startsWith("Avant-garde") && rules != "Multiplayer-Evolution ruleset")
     return true; // no actionenabler restrictions on other rulesets
   //****************************************************************** */
   var tunit=null,ttype=null,tclass=null;

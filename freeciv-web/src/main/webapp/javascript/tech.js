@@ -145,7 +145,7 @@ function init_tech_screen()
   if (ruleset_control['name'] == "Longturn-Web-X ruleset") reqtree = reqtree_multiplayer;
   if (ruleset_control['name'] == "Multiplayer-Plus ruleset") reqtree = reqtree_mpplus;
   if (ruleset_control['name'] == "Multiplayer-Evolution ruleset") reqtree = reqtree_mpplus;
-  if (ruleset_control['name'] == "Avant-garde") reqtree = reqtree_avantgarde;
+  if (ruleset_control['name'].startsWith("Avant-garde")) reqtree = reqtree_avantgarde;
 
   tech_canvas = document.getElementById('tech_canvas');
   if (tech_canvas == null) {
