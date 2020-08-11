@@ -4174,7 +4174,7 @@ roles         = ""
 helptext      = _("\
 Trains allow Foot soldiers to move as far as other units on your rails. Soldiers\
  can board and unload from any tile, but may lose moves unloading outside of\
- a city. (Depends on server settings.) Trains can also transport Bombs.\n\n\
+ a city. Trains can also transport Bombs.\n\n\
 Trains on non-allied foreign rails incur full terrain movement costs.\n\n\
 Electricity and Combustion each give an additional +1 move. Pre-gunpowder units\
  can't attack Trains.\
