@@ -1,7 +1,7 @@
 11#!/bin/bash
 # builds Freeciv-web, copies the war file to Tomcat and builds the selected rulesets.
 
-RULESETS=(ag)
+RULESETS=(ag ag2)
 TOPDIR="$( cd ../"$( dirname "${BASH_SOURCE[0]}" )" > /dev/null && pwd )"
 
 printf "\nThis script may solve issues with Game Manual generation for vagrant users.\n"
