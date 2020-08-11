@@ -1733,9 +1733,9 @@ reqs           =
     }
 build_time     = 3
 removal_time   = 0
-native_to      = "Land", "LandNoKill", "LandAirSea"
+native_to      = "Land", "LandNoKill", "LandAirSea", "LandRail"
 hidden_by      = "Maglev", "Naval Base"
-flags          = "AutoOnCityCenter"
+flags          = "AutoOnCityCenter", "NativeTile"
 bridged_over   = "River"
 helptext       = _("\
 Once you learn Railroad technology, you may upgrade your roads to\
@@ -1777,7 +1777,7 @@ hidden_by      = "Naval Base"
 flags          = "NativeTile", "AutoOnCityCenter"
 helptext       = _("\
 With Superconductors, you may build MAGnetic LEVitation tracks\
- on your railroad routes. Land units expend no movement points\
+ on tiles. Land units expend no movement points\
  when riding a MagLev; you may ride indefinitely.\
 "), _("\
 City center tiles with railroads are automatically upgraded to MagLev\
