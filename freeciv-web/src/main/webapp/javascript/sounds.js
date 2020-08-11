@@ -65,9 +65,38 @@ function unit_move_sound_play(unit)
   var ptype = unit_type(unit);
   move_sound = soundset[ptype['sound_move']];  
 
+  // Figure out if this unit is moving for the first time or has already moved
+  var full_moves = ptype['move_rate'];
+  var used_moves = full_moves - unit['movesleft'];
+
+  // Negative used_moves means move bonus in effect. Adjust full_moves to properly reflect move bonus:
+  if (used_moves<0) {  
+    if (ptype['name']=="Train") {
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Electricity')) == TECH_KNOWN) 
+        full_moves += 9;
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Combustion')) == TECH_KNOWN) 
+        full_moves += 9;
+    }
+    /* unnecessary, since we set this unit to simply always use partial move sound even with full moves
+    if (ptype['name']=="Airplane") {
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Radio')) == TECH_KNOWN) 
+        full_moves += 18;
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Advanced Flight')) == TECH_KNOWN) 
+        full_moves += 18;
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Radar')) == TECH_KNOWN) 
+        full_moves += 18;
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Rocketry')) == TECH_KNOWN) 
+        full_moves += 18;
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Avionics')) == TECH_KNOWN) 
+        full_moves += 18;
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Space Flight')) == TECH_KNOWN) 
+        full_moves += 18;
+    }
+    */
+  }
+  
   // PARTIAL MOVE SOUNDS.  Some sounds are loud or long duration and shouldn't repeat for each step 
-  // Use "partial move sounds" to avoid annoyance:
-  if ( unit['movesleft'] < ptype['move_rate'] )  { 
+  if ( unit['movesleft'] < full_moves )  { 
     switch(ptype['name']) {
       case "Medium Bomber":
       case "Heavy Bomber": 
@@ -82,6 +111,7 @@ function unit_move_sound_play(unit)
         move_sound = null;
         break;
       case "Dive Bomber":
+      case "Airplane":
       case "Fighter":  
       case "Escort Fighter":
         move_sound = "pm_prop_fighters.ogg";
@@ -97,12 +127,12 @@ function unit_move_sound_play(unit)
       case "Transport Helicopter":
         move_sound = "pm_heli.ogg";
         break;
-
-
-      // TO DO: Helicopter, Armor, Cruise Missile, Nuclear 
+      case "Train":
+        move_sound = "pm_train.ogg";
+        break;
+      // TO DO: Armor, Cruise Missile, Nuclear 
     }
   }
-
   // PLAY MOVE SOUND
   if (move_sound != null) {
     play_sound(move_sound);

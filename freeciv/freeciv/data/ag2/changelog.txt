@@ -1,2 +1,9 @@
 1. Spy Plane upgrades AWACS
 2. Airplane can carry diplomatic units.
+3. Train
+    a. capturable (doc it)
+    b. foot units can embark/disembark
+    c. unreachable to pre-gunpowder
+    d. helis/bomb/land cargo
+4. Transporting units can't fortify
+
