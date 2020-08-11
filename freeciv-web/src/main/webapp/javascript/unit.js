@@ -246,9 +246,12 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
     if (tclass.rule_name == "Helicopter") return false;
   }
 
-  if (pclass.startsWith("Land")) {   // Land, LandNoKill, LandAirSea
+  if (pclass.startsWith("Land")) {   // Land, LandNoKill, LandAirSea   *** LandRail ???!?!
     //console.log("  Land* CHECK ON: tclass.rulename =="+tclass.rule_name);
     if (tclass.rule_name == "Submarine") return false;
+    if (tclass.rule_name == "LandRail") {  // only Foot soldiers can get on Trains
+      if (!unit_has_type_flag(punit, UTYF_FOOTSOLDIER)) return false;
+    }
     if (tclass.rule_name == "Air") {
       if (ttype.name != "Airplane" || !unit_has_type_flag(punit, UTYF_DIPLOMAT))
         return false;
