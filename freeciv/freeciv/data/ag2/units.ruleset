@@ -197,6 +197,18 @@ min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
 flags         = "Unreachable", "DoesntOccupyTile", "Airliftable" 
+helptext      = _("\
+  • Can be airlifted from a suitable city.\
+")
+
+[unitclass_landrail]
+name          = _("?unitclass:LandRail")
+min_speed     = 4
+hp_loss_pct   = 0
+flags         = "Unreachable", "BuildAnywhere", "ZOC", "CargoRestrained", "TerrainDefense"
+helptext      = _("\
+  • Only able to move on railroad tiles.\
+")
 
 [unitclass_land]
 ; /* TRANS: Unit class: used adjectivally */
@@ -703,8 +715,8 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 1
 uk_gold       = 0
-embarks       = "Helicopter"    ; transport helicopter only
-disembarks    = "Helicopter"
+embarks       = "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRail", "Helicopter"
 flags         = "Settlers", "Infra", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Airbase", "CanFortress", "CanRoad", "Proletarian"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -749,8 +761,8 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 2
 uk_gold       = 0
-embarks       = "Helicopter"    ; transport helicopter only
-disembarks    = "Helicopter"
+embarks       = "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRail", "Helicopter"
 flags         = "Fanatic", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -793,8 +805,8 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Helicopter"    ; transport helicopter only
-disembarks    = "Helicopter"
+embarks       = "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRail", "Helicopter"
 flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "Airbase", "Cant_Fortify", "Capturable", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names =
@@ -885,6 +897,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+embarks       = "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRail", "Helicopter"
 flags         = "FootSoldier", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
 roles         = "DefendOk", "DefendOkStartUnit", "FirstBuild", "Hut"
 helptext      = _("\
@@ -916,6 +930,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+embarks       = "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRail", "Helicopter"
 flags         = "FootSoldier", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild", "HutTech"
 helptext      = _("\
@@ -948,6 +964,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+embarks       = "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRail", "Helicopter"
 flags         = "FootSoldier", "Capturer", "CantReachAir", "Bombarder", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
 roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
@@ -986,6 +1004,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+embarks       = "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRail", "Helicopter"
 flags         = "FootSoldier", "Settlers", "CanHide", "Infra", "CanRoad", "CanFortress", "Capturer",
                 "CantReachAir", "MultiSlot", "Shield2Gold", "WillNever"
 roles         = "DefendOk", "DefendOkStartUnit", "BarbarianBuild", "BarbarianSea"
@@ -1021,6 +1041,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+embarks       = "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRail", "Helicopter"
 bonuses       =
    { "flag", "type", "value"
      "Horse", "DefenseMultiplier", 1
@@ -1058,8 +1080,9 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Helicopter"    ; transport helicopter only
-disembarks    = "Helicopter"
+embarks       = "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRail", "Helicopter"
+targets       = "LandRail"
 flags         = "FootSoldier", "Capturer", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild",
                 "BarbarianTech", "BarbarianBuildTech", "BarbarianSeaTech"
@@ -1096,9 +1119,9 @@ uk_happy      = 2
 uk_shield     = 2
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Helicopter"    ; transport helicopter only
-disembarks    = "Helicopter"
-targets       = "Balloon", "Helicopter"
+embarks       = "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRail", "Helicopter"
+targets       = "Balloon", "Helicopter", "LandRail"
 flags         = "Fanatic", "FootSoldier", "Capturer", "CantReachAir", "Unbribable", "Bombarder",
                 "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit"
@@ -1145,9 +1168,9 @@ uk_happy      = 1
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Helicopter"    ; transport helicopter only
-disembarks    = "Helicopter"
-targets       = "Balloon", "Helicopter"
+embarks       = "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRail", "Helicopter"
+targets       = "Balloon", "Helicopter", "LandRail"
 flags         = "MultiSlot", "IgTer", "IgZOC", "NoHome", "FootSoldier", "Capturer", "CantReachAir",
                 "Shield2Gold", "Settlers", "CanHide", "WillNever"
 ;yes Partisan has 0 upkeep so Shield2Gold is meaningless, but currently used to substitute MultiSlot inaccessible in c-server
@@ -1190,9 +1213,9 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Helicopter"    ; transport helicopter only
-disembarks    = "Helicopter"
-targets       = "Balloon", "Helicopter"
+embarks       = "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRail", "Helicopter"
+targets       = "Balloon", "Helicopter", "LandRail"
 flags         = "MultiSlot", "IgTer", "FootSoldier", "Capturer", "CantReachAir", "Shield2Gold", "Settlers", "CanHide", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
@@ -1230,9 +1253,9 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Helicopter"    ; transport helicopter only
-disembarks    = "Helicopter"
-targets       = "Balloon", "Helicopter"
+embarks       = "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRail", "Helicopter"
+targets       = "Balloon", "Helicopter", "LandRail"
 flags         = "MultiSlot", "FootSoldier", "Capturer", "CantReachAir", "Shield2Gold", "Settlers", "CanHide", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
@@ -1270,9 +1293,9 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Helicopter", "Land", "Sea"
-disembarks    = "Helicopter", "Land", "Sea"
-targets       = "Sea", "Balloon", "Helicopter"
+embarks       = "Helicopter", "Land", "Sea", "LandRail"
+disembarks    = "Helicopter", "Land", "Sea", "LandRail"
+targets       = "Sea", "Balloon", "Helicopter", "LandRail"
 flags         = "MultiSlot", "Marines", "FootSoldier", "BeachLander", "Capturer",
                 "NeverBlocked", "Shield2Gold", "Settlers", "CanHide", "WillNever"
 veteran_names =
@@ -1326,9 +1349,9 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Helicopter"    ; transport helicopter only
-disembarks    = "Helicopter"
-targets       = "Balloon", "Helicopter"
+embarks       = "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRail", "Helicopter"
+targets       = "Balloon", "Helicopter", "LandRail"
 flags         = "Paratroopers", "FootSoldier", "Capturer", "CantReachAir", "Provoking",
                 "Shield2Gold", "MultiSlot", "Settlers", "CanHide", "WillNever"
 roles         = "DefendOk", "DefendOkStartUnit"
@@ -1375,7 +1398,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 ;disembarks    = "Helicopter"
-targets       = "Balloon", "Helicopter"
+targets       = "Balloon", "Helicopter", "LandRail"
 flags         = "CantReachAir", "Shield2Gold", "MultiSlot", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
@@ -1578,6 +1601,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+targets       = "LandRail"
 flags         = "Horse", "Capturer", "CantReachAir", "WillNever"
 roles         = "AttackFastStartUnit", "BarbarianBuildTech", "BarbarianSeaTech", "Hunter"
 helptext      = _("\
@@ -1611,7 +1635,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Helicopter"
+targets       = "Balloon", "Helicopter", "LandRail"
 bonuses       =
    { "flag", "type", "value"
      "Helicopter", "DefenseDividerPct", -50 
@@ -1651,7 +1675,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 ;disembarks    = "Helicopter"
-targets       = "Balloon", "Helicopter"
+targets       = "Balloon", "Helicopter", "LandRail"
 flags         = "CantReachAir", "FortBuster", "WillNever"
 roles         = "AttackFastStartUnit", "Hunter"
 helptext      = _("\
@@ -1688,7 +1712,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 ;disembarks    = "Helicopter"
-targets       = "Balloon", "Helicopter"
+targets       = "Balloon", "Helicopter", "LandRail"
 bonuses       =
    { "flag", "type", "value"
      "Missile",      "DefenseMultiplier", 1
@@ -1763,6 +1787,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
+targets       = "LandRail"
 flags         = "CantReachAir", "WillNever"
 roles         = "BarbarianTech", "BarbarianBuildTech"
 helptext      = _("\
@@ -1797,7 +1822,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
-targets       = "Balloon"
+targets       = "Balloon", "LandRail"
 flags         = "CantReachAir", "WillNever"
 roles         = ""
 helptext      = _("\
@@ -1834,7 +1859,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter"
 disembarks    = "Helicopter"
-targets       = "Air", "AirProtect", "Sea", "Balloon", "Helicopter"
+targets       = "Air", "AirProtect", "Sea", "Balloon", "Helicopter", "LandRail"
 bonuses       =
    { "flag", "type", "value"
      "AirAttacker", "DefenseDivider", 1
@@ -1880,7 +1905,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
-targets       = "Air", "AirProtect", "AirPillage", "Balloon", "Helicopter"
+targets       = "Air", "AirProtect", "AirPillage", "Balloon", "Helicopter", "LandRail"
 cargo         = "Missile"
 bonuses       =
    { "flag", "type", "value"
@@ -1926,7 +1951,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
-targets       = "Balloon"
+targets       = "Balloon", "LandRail"
 flags         = "CantReachAir", "WillNever"
 roles         = ""
 helptext      = _("\
@@ -1964,7 +1989,7 @@ helptext      = _("\
 Balloons gather intel on potential battle areas. They have great vision and\
  are unreachable by units prior to Riflemen and Ironclads. They can stay in\
  the air for one Turn Change before landing in a City, Fortress, Naval Base,\
- Airbase, or ship with cargo capacity of 4+. Balloons do not block units under\
+ Airbase, or transport unit with cargo capacity of 4+. Balloons do not block units under\
  them from being attacked, and cannot fly over mountains.\
 "), _("
 NOTE: GOTO disallows unit loss from lack of fuel. You\
@@ -1978,9 +2003,9 @@ tech_req      = "Flight"
 obsolete_by   = "None"
 graphic       = "u.airplane"
 graphic_alt   = "u.awacs"
-sound_move    = "m_awacs"
+sound_move    = "pm_prop_fighters"
 sound_move_alt = "m_generic"
-sound_fight   = "f_awacs"
+sound_fight   = "f_fighter"
 sound_fight_alt = "f_generic"
 build_cost    = 50
 pop_cost      = 0
@@ -1989,7 +2014,7 @@ defense       = 1
 hitpoints     = 20
 firepower     = 1
 move_rate     = 20
-vision_radius_sq = 12
+vision_radius_sq = 8
 transport_cap = 2
 fuel          = 2
 uk_happy      = 0
@@ -2002,7 +2027,7 @@ cargo         = "Land"
 helptext      = _("\
 Airplanes can carry a single diplomatic unit. They can land in any domestic or allied\
  city. For missions to non-allied nations, an empty Airbase must be available for landing.\
- Each new aviation tech upgrades the Airplane's range by +2 moves per turn.\
+ Airplanes have two turns of fuel. Each new aviation tech upgrades range by +2 moves per turn.\
 "), _("
 NOTE: GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
@@ -2033,7 +2058,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "AirProtect", "Missile", "Balloon", "Helicopter"
+targets       = "Air", "AirProtect", "Missile", "Balloon", "Helicopter", "LandRail"
 bonuses       =
    { "flag", "type", "value"
    }
@@ -2089,7 +2114,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "AirProtect", "Missile", "Balloon", "Helicopter"
+targets       = "Air", "AirProtect", "Missile", "Balloon", "Helicopter", "LandRail"
 bonuses       =
    { "flag", "type", "value"
    }
@@ -2145,7 +2170,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "AirProtect", "Balloon", "Helicopter"
+targets       = "Air", "AirProtect", "Balloon", "Helicopter", "LandRail"
 bonuses       =
    { "flag", "type", "value"
      ; A4.5 vs all Surface Units 
@@ -2218,7 +2243,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon"
+targets       = "Balloon", "LandRail"
 bonuses       =
    { "flag", "type", "value"
    }
@@ -2249,7 +2274,7 @@ NOTE: GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
-[unit_bomber]
+[unit_heavy_bomber]
 name          = _("Heavy Bomber")
 class         = "Air"
 tech_req      = "Radar"
@@ -2274,7 +2299,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon"
+targets       = "Balloon", "LandRail"
 cargo         = "Bomb"
 bonuses       =
    { "flag", "type", "value"
@@ -2331,7 +2356,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon"
+targets       = "Balloon", "LandRail"
 cargo         = "Bomb"
 bonuses       =
    { "flag", "type", "value"
@@ -2388,7 +2413,7 @@ flags         = "HasNoZOC", "NoVeteran", "Unbribable", "Expellable", "NeverProte
 roles         = ""
 helptext      = _("\
 The AWACS has great fuel capacity for long range flights, and advanced radar that can determine\
- the location of enemy units over a wide area.\
+ the location of enemy units over a wide area. The AWACS has 2 turns of fuel.\
 "), _("
 NOTE: GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
@@ -2425,7 +2450,7 @@ roles         = ""
 helptext      = _("\
 The Spy Plane is an ultrasonic high altitude aircraft with long range. It gathers\
  intel over a wide area. Stealth technology makes it invisible, except to enemies on\
- adjacent tiles.\
+ adjacent tiles. Spy Planes have 2 turns of fuel.\
 "), _("
 NOTE: GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
@@ -2483,9 +2508,8 @@ roles         = ""
 helptext      = _("\
 Transport Helicopters can carry three land units.\
 "), _("\
- Foot and artillery types can unload on any tile. Other types\
- need a refuel-tile. Unloading on a non-refuel tile loses all moves\
- (except Marines)\n.\
+ Foot and artillery types can unload on any tile, but will lose moves (except Marines).\
+ Other types need a city or base to unload.\n.\
 "), _("\
  Helicopters lose 1 hp for each turn not ended in a City, Base, or Carrier. +1 move\
  is awarded if starting a turn in a City or Airbase.\n\
@@ -2521,7 +2545,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Helicopter"
+targets       = "Balloon", "Helicopter", "LandRail"
 bonuses       =
    { "flag", "type", "value"
       "FootSoldier", "DefenseMultiplierPct", 50   ; all Infantry (Foot and Mech.)
@@ -2588,7 +2612,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "AirProtect", "AirPillage", "Missile", "Balloon", "Helicopter"
+targets       = "Air", "AirProtect", "AirPillage", "Missile", "Balloon", "Helicopter", "LandRail"
 bonuses       =
    { "flag", "type", "value"
    }
@@ -2616,7 +2640,7 @@ NOTE: GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
-[unit_strike_fighter]
+[unit_ground_strike_fighter]
 name          = _("Ground Strike Fighter")
 class         = "Air"
 tech_req      = "Avionics"
@@ -2641,7 +2665,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "AirPillage", "Balloon", "Helicopter"
+targets       = "Air", "AirPillage", "Balloon", "Helicopter", "LandRail"
 bonuses       =
    { "flag", "type", "value"
      "AntiAir",    "DefenseMultiplierPct",       33 ; D5.33 vs Anti-Air
@@ -2697,6 +2721,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+targets       = "LandRail"
 cargo         = "Bomb"
 flags         = "FieldUnit", "Unbribable", "AirAttacker", "HasNoZOC", "CanEscape",
                 "CantReachAir", "NeverProtects", "Provoking", "WillNever"
@@ -2748,7 +2773,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "AirProtect", "AirPillage", "Missile", "Balloon", "Helicopter"
+targets       = "Air", "AirProtect", "AirPillage", "Missile", "Balloon", "Helicopter", "LandRail"
 bonuses       =
    { "flag", "type", "value"
      "AntiAir", "DefenseDividerPct", 25
@@ -2806,7 +2831,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon"
+targets       = "Balloon", "LandRail"
 bonuses       =
    { "flag", "type", "value"
       "AntiAir", "DefenseDividerPct", 25
@@ -3131,7 +3156,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Submarine"
+targets       = "Submarine", "LandRail"
 cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon"
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
@@ -3171,7 +3196,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Submarine"
+targets       = "Submarine", "LandRail"
 cargo         = "Land", "LandNoKill", "LandAirSea"
 bonuses       =
    { "flag", "type", "value"
@@ -3213,7 +3238,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Submarine", "Helicopter"
+targets       = "Balloon", "Submarine", "Helicopter", "LandRail"
 bonuses       =
    { "flag", "type", "value"
      "Marines", "DefenseMultiplier", 1    
@@ -3254,7 +3279,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Submarine", "Helicopter"
+targets       = "Balloon", "Submarine", "Helicopter", "LandRail"
 bonuses       =
    { "flag", "type", "value"
      "Submarine", "DefenseMultiplier", 3
@@ -3295,7 +3320,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Submarine", "Helicopter"
+targets       = "Balloon", "Submarine", "Helicopter", "LandRail"
 bonuses       =
    { "flag", "type", "value"
      "Submarine", "DefenseMultiplier", 1
@@ -3335,7 +3360,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Submarine", "Helicopter"
+targets       = "Balloon", "Submarine", "Helicopter", "LandRail"
 cargo         = "Missile"
 bonuses       =
    { "flag", "type", "value"
@@ -3377,7 +3402,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "AirProtect", "AirPillage", "Missile", "Helicopter", "Balloon", "Submarine"
+targets       = "Air", "AirProtect", "AirPillage", "Missile", "Helicopter", "Balloon", "Submarine", "LandRail"
 cargo         = "Missile"
 bonuses       =
    { "flag", "type", "value"
@@ -3422,7 +3447,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Submarine", "Helicopter"
+targets       = "Balloon", "Submarine", "Helicopter", "LandRail"
 bonuses       =
    { "flag", "type", "value"
      "Submarine", "DefenseMultiplier", 1
@@ -3621,6 +3646,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Submarine"
 disembarks    = "Submarine"
+targets       = "LandRail"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "HasNoZOC", "Unbribable",
                 "CantReachAir", "Missile", "NeverBlocked", "WillNever"
 roles         = ""
@@ -3659,7 +3685,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine"
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine", "LandRail"
 disembarks    = "Air", "AirPillage"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"
@@ -3706,7 +3732,7 @@ uk_happy      = 2
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine"
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine", "LandRail"
 disembarks    = "Air", "AirPillage"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"
@@ -3756,7 +3782,7 @@ uk_happy      = 4
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine"
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine", "LandRail"
 disembarks    = "Air", "AirPillage"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "Unique", "NoVeteran"
@@ -3808,7 +3834,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Submarine"
 disembarks    = "Submarine"
-targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine"
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine", "LandRail"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"
 ; No veteran levels (level name is never displayed)
@@ -3855,7 +3881,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Submarine"
 disembarks    = "Submarine"
-targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine"
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine", "LandRail"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"
 ; No veteran levels (level name is never displayed)
@@ -3900,8 +3926,8 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Helicopter"    ; transport helicopter only
-disembarks    = "Helicopter"
+embarks       = "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRail", "Helicopter"
 flags         = "Diplomat", "IgZOC", "NonMil", "HasNoZOC", "Expellable"
 veteran_names =
   _("?diplomatic_rank:attaché"),
@@ -3951,8 +3977,8 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Helicopter"    ; transport helicopter only
-disembarks    = "Helicopter"
+embarks       = "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRail", "Helicopter"
 flags         = "Diplomat", "IgZOC", "NonMil", "HasNoZOC", "Spy", "Expellable"
 veteran_names =
   _("?spy_level:informant"),
@@ -4087,6 +4113,43 @@ Explorers are brave individuals who map unknown territory. They can slip through
  ZOC, and have no unit upkeep.\
 ")
 
+[unit_train]
+name          = _("Train")
+class         = "LandRail"
+tech_req      = "Railroad"
+obsolete_by   = "None"
+graphic       = "u.train_o"
+graphic_alt   = "u.transport"
+sound_move    = "m_train"
+sound_move_alt = "m_generic"
+sound_fight   = "f_generic"
+sound_fight_alt = "f_generic"
+build_cost    = 35
+pop_cost      = 0
+attack        = 0
+defense       = 1
+hitpoints     = 30
+firepower     = 1
+move_rate     = 4
+vision_radius_sq = 4
+transport_cap = 6
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+cargo         = "Land", "LandAirSea", "Balloon", "Bomb"
+flags         = "NonMil", "HasNoZOC", "NoVeteran", "Capturable"
+roles         = ""
+helptext      = _("\
+Trains allow Foot soldiers to move as far as other units on your rails. Soldiers\
+ can board and unload from any tile, but may lose moves unloading outside of\
+ a city. (Depends on server settings.) Trains can also transport Bombs.\n\n\
+Trains on non-allied foreign rails use one full move point per tile.\n\n\
+After Electricity, Trains gain +1 move. Combustion also gives another +1 move.\
+Pre-gunpowder units can't attack Trains.\
+")
+
 [unit_leader]
 name          = _("?unit:Leader")
 class         = "Land"
@@ -4113,8 +4176,8 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Helicopter"    ; transport helicopter only
-disembarks    = "Helicopter"
+embarks       = "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRail", "Helicopter"
 flags         = "IgZOC", "NonMil", "HasNoZOC", "NoBuild", "NoHome", "SuperSpy", 
                 "EvacuateFirst", "Unbribable", "GameLoss", "Unique", "WillNever"
 ; No veteran levels (level name is never displayed)
@@ -4158,8 +4221,8 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Helicopter"    ; transport helicopter only
-disembarks    = "Helicopter"
+embarks       = "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRail", "Helicopter"
 flags         = "IgZOC", "NonMil", "HasNoZOC", "NoBuild", "NoHome", "SuperSpy", 
                 "EvacuateFirst", "Unbribable", "GameLoss", "Unique", "WillNever"
 ; No veteran levels (level name is never displayed)

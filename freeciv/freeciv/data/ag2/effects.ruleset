@@ -3769,6 +3769,23 @@ reqs	=
       "UnitType", "Airplane", "Local"
     }
 
+[effect_rail_electricity]
+type    = "Move_Bonus"
+value	= 9
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Electricity", "Player"
+      "UnitClass", "LandRail", "Local"
+    }
+[effect_rail_combustion]
+type    = "Move_Bonus"
+value	= 9
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Combustion", "Player"
+      "UnitClass", "LandRail", "Local"
+    }
+
 [effect_lighthouse]
 type    = "Move_Bonus"
 value	= 18

@@ -258,6 +258,7 @@ req2     = "Explosives"
 flags    = ""
 graphic     = "a.combustion"
 graphic_alt = "-"
+helptext = _("+1 move for Trains.")
 cost = 3810
 
 [advance_communism]
@@ -332,7 +333,7 @@ req2     = "Magnetism"
 flags    = ""
 graphic     = "a.electricity"
 graphic_alt = "-"
-helptext = _("Obsoletes Ironclad. +1 Effect for Amphitheaters.")
+helptext = _("Obsoletes Ironclad. +1 Effect for Amphitheaters. +1 move for Trains.")
 cost = 2220
 
 [advance_electronics]
