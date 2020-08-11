@@ -1340,6 +1340,7 @@ actor_reqs    =
       "UnitClassFlag", "CanFortify",   "Local", TRUE
       "UnitFlag",      "Cant_Fortify", "Local", FALSE
       "UnitClass",     "AirProtect",   "Local", FALSE
+      "UnitState",    "Transported",   "Local", FALSE
     }
 
 [actionenabler_road]
