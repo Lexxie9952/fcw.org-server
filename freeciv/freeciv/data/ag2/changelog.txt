@@ -1,5 +1,6 @@
 1. Spy Plane upgrades AWACS
 2. Airplane can carry diplomatic units.
+    a. can be expelled (doc it)
 3. Train
     a. capturable (doc it)
     b. foot units can embark/disembark

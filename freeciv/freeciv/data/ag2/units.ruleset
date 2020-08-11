@@ -1983,7 +1983,13 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "Unbribable", "HasNoZOC", "NeverProtects", "NonMil"
+flags         = "Unbribable", "HasNoZOC", "NeverProtects", "NonMil", "NoVeteran"
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 0
 roles         = ""
 helptext      = _("\
 Balloons gather intel on potential battle areas. They have great vision and\
