@@ -4070,8 +4070,8 @@ Caravans are Commerce units. Commerce units can help build Wonders in any city w
  during war and (re)activate during peace.\n\
 Commerce units can enter the Marketplace of non-hostile foreign cities to sell goods: revenue derives\
  from total trade in both cities. This is only profitable between cities with very high trade.\n\
-Commerce units given at Game Start can build Wonders without tech requirements. To use them\
- for a Trade Route, first assign them a Home City.\n\
+Commerce units can build any Wonders for which you have the tech requirement. To use them\
+ for a Trade Route, the Trade tech is needed, and they need to have an assigned Home City.\n\
 ➤ Caravans are the only Commerce unit that can be produced more than once per turn, if the city\
  has appropriate output bonuses.\ 
 ")
