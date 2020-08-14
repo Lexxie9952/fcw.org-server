@@ -234,7 +234,9 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
   var pclass = get_unit_class_name(punit);
   //console.log("   pclass=="+pclass);
 
-  if (pclass == "Bomb" && !ttype.name.includes("Bomber")) return false;
+  if (pclass == "Bomb") {
+    if (!ttype.name.includes("Bomber") && tclass.rule_name != "LandRail") return false;
+  } 
 
   if (pclass == "Missile") {
     //console.log("  Missile CHECK ON: tclass.rulename =="+tclass.rule_name);
