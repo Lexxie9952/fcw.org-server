@@ -798,7 +798,7 @@ action = "Help Wonder"
 actor_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "HelpWonder", "Local", TRUE
-      "Tech", "Trade", "Player", TRUE
+;      "Tech", "Trade", "Player", TRUE
       "DiplRel", "War", "Local", FALSE
       "UnitType", "Caravel", "Local", FALSE 
     }
@@ -812,7 +812,7 @@ action = "Help Wonder"
 actor_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "HelpWonder", "Local", TRUE
-      "Tech", "Trade", "Player", TRUE
+;      "Tech", "Trade", "Player", TRUE
       "DiplRel", "War", "Local", FALSE
       "UnitType", "Caravel", "Local", FALSE
     }
@@ -827,7 +827,7 @@ action = "Help Wonder"
 actor_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "HelpWonder", "Local", TRUE
-      "Tech", "Currency", "Player", TRUE
+;      "Tech", "Currency", "Player", TRUE
       "DiplRel", "War", "Local", FALSE
       "UnitType", "Boat", "Local", TRUE
     }
