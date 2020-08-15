@@ -231,6 +231,11 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
   //console.log("Checking "+ptype.name+" onto "+ttype.name);
   if (!punit || !ptype || !ttype || !tclass) return false;
 
+  // when actionenabler_load is in server, we can remove this and put UnitState,Transported,FALSE in rulesets
+  if (punit['transported']) {
+    return false;  // can't load on new transport without unloading from old first.
+  }
+
   var pclass = get_unit_class_name(punit);
   //console.log("   pclass=="+pclass);
 
@@ -252,7 +257,8 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
     //console.log("  Land* CHECK ON: tclass.rulename =="+tclass.rule_name);
     if (tclass.rule_name == "Submarine") return false;
     if (tclass.rule_name == "LandRail") {  // only Foot soldiers can get on Trains
-      if (!unit_has_type_flag(punit, UTYF_FOOTSOLDIER)) return false;
+      if (ptype['move_rate'] > 2 * SINGLE_MOVE) return false; //Rail equality: units with ≤2 moves can use trains
+      //if (!unit_has_type_flag(punit, UTYF_FOOTSOLDIER)) return false; //used to be foot only, now it's line above
     }
     if (tclass.rule_name == "Air") {
       if (ttype.name != "Airplane" || !unit_has_type_flag(punit, UTYF_DIPLOMAT))
@@ -272,6 +278,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
   }
 
   if (pclass == "Balloon") {
+    if (tclass.rule_name == "LandRail") return true;
     if (tclass.rule.name == "RiverShip" && !(ttype.name == "Cargo Ship" || ttype.name == "Galleon")) return false;
     if (tclass.rule.name == "Sea" && !(ttype.name == "Transport" || ttype.name == "Carrier")) 
       return false;
