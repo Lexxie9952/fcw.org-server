@@ -475,12 +475,12 @@ var reqtree_avantgarde = {
     "66": {"x":3870, "y":708}, // Radar
     "1":  {"x":3618, "y":569}, // Advanced Flight
     "60": {"x":3870, "y":208}, // Nuclear Power 
-    "72": {"x":4116, "y":395}, // Robotics                      
+    "72": {"x":4116, "y":390}, // Robotics                      
     "73": {"x":4116, "y":529}, // Rocketry 
     "15": {"x":3870, "y":483}, // Combined Arms
-    "7": {"x":4366, "y":504}, // Avionics                       
-    "76": {"x":4366, "y":286}, // Space Flight                  
-    "42": {"x":4366, "y":395}, // Laser 
+    "7": {"x":4366, "y":507}, // Avionics                       
+    "76": {"x":4366, "y":241}, // Space Flight                  
+    "42": {"x":4366, "y":398}, // Laser 
     "63": {"x":4618, "y":286}, // Plastics 
     "27": {"x":4618, "y":181}, // Environmentalism 
     "80": {"x":4618, "y":395}, // Superconductors 
