@@ -4148,7 +4148,7 @@ name          = _("Train")
 class         = "LandRail"
 tech_req      = "Railroad"
 obsolete_by   = "None"
-graphic       = "u.train_o"
+graphic       = "u.train"
 graphic_alt   = "u.transport"
 sound_move    = "m_train"
 sound_move_alt = "m_generic"
@@ -4167,9 +4167,9 @@ fuel          = 0
 uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
-uk_gold       = 0
+uk_gold       = 1
 cargo         = "Land", "LandAirSea", "Balloon", "Bomb"
-flags         = "NonMil", "HasNoZOC", "NoVeteran", "Capturable"
+flags         =  "HelpWonder", "TradeRoute", "NonMil", "HasNoZOC", "NoVeteran", "Capturable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0
@@ -4178,12 +4178,12 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = ""
 helptext      = _("\
-Trains allow Foot soldiers to move as far as other units on your rails. Soldiers\
- can board and unload from any tile, but may lose moves unloading outside of\
- a city. Trains can also transport Bombs.\n\n\
-Trains on non-allied foreign rails incur full terrain movement costs.\n\n\
-Electricity and Combustion each give an additional +1 move. Pre-gunpowder units\
- can't attack Trains.\
+Trains are Commerce units with an important bonus: they allow units with 2 or less\
+ move points to travel your rails at distances comparable to other units. Only Foot Soldiers\
+ are allowed to load/unload outside a city, but lose their moves if doing so.\n\n\
+On non-allied foreign rails, Trains incur full terrain movement cost.\
+ Pre-gunpowder units can't attack Trains.\n\n\
+Electricity and Combustion each give Trains an additional +1 move.\
 ")
 
 [unit_leader]

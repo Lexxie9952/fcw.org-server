@@ -131,6 +131,7 @@ tiles = { "row", "column", "tag"
   4,  0, "u.tnuke"            ; Lexxie
   4,  1, "u.ddomb"            ; Lexxie
   4,  2, "u.spy"              ; Lexxie
+  4,  3, "u.train"            ; Lexxie
   4,  4, "u.t_helicopter"     ; Lexxie
   4,  5, "u.airplane"         ; Lexxie
 }
