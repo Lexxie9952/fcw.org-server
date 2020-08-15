@@ -698,7 +698,7 @@ helptext = _("Increases unit vision. Prevents Philosophy bonus.")
 [advance_plastics]
 name     = _("Plastics")
 req1     = "Space Flight"
-req2     = "None"
+req2     = "Robotics"
 graphic     = "a.plastics"
 graphic_alt = "-"
 helptext = _("Obsoletes Armor. +25% population pollution.")
