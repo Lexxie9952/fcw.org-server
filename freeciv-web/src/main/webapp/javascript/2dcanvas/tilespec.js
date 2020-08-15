@@ -2415,8 +2415,7 @@ function create_unit_offset_arrays()
           vx -= 11; vy += 8;
           break;
       case "Train":
-          sx = 8;
-          dx -= 4; dy -= 8;
+          dx += 5; dy -= 8;
           break;  
       case "Transport":
           dx -= 3; dy -= 1;
