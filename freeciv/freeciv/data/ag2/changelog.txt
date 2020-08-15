@@ -5,15 +5,19 @@
     a. capturable (doc it)
     b. foot units can embark/disembark
     c. unreachable to pre-gunpowder
-    d. bomb/foot cargo
+    d. cargo: any unit with <=2 moves
 4. Transporting units can't fortify
 5. Trade is no longer a requirement for making wonders.
     Wonders already need a tech to enable them, 
     logistics on Commerce units are already a limitation
     priority of early economic growth is already a limitation 
-    the game is artificially limiting ancient bronze age civilisation and diversity
+    remove artificial impossibility of making bronze age wonders in bronze age
 6. [phalanx]
 7. Stone Age herds of wild game appear in forests for first 10 turns (3000 BC), during the age before they are hunted out and/or learn to be more wary of humans.
     a. this micro-balances resource distribution balance; smooths effect of luck on starting position; micro-accelerates the slower starting turns
 8. Hidden resources can exist as in Civ2 - transforming a terrain type to another type might reveal it.
 8b. Prophets get visions of hidden resources on T2. These visions are forgotten unless you record them in your tribal scriptures.
+9. Robotics needed for Plastics, makes Armor I required before Armor II
+10. On average, Fallout lasts 5 turns before randomly disappearing.
+11. All FCW:Transported units must unload before loading on a different transport.
+
