@@ -1323,7 +1323,7 @@ Like irrigation, farmland is incompatible with mines and oil wells.\
 name           = _("Fallout")
 category       = "Nuisance"
 causes         = "Fallout"
-rmcauses       = "CleanFallout"
+rmcauses       = "CleanFallout", "Disappear"
 graphic        = "tx.fallout"
 graphic_alt    = "-"
 activity_gfx   = "None"
@@ -1336,6 +1336,10 @@ reqs           =
       "TerrainFlag", "NoPollution", "Local", FALSE, TRUE
     }
 removal_time   = 0
+disappearance_chance    = 2000
+disappearance_reqs = 
+    { "type",           "name", "range"
+    }
 flags          = "NuclearWinter"
 helptext       = _("\
 Nuclear fallout can appear on land tiles when a Nuclear unit is \
@@ -1346,6 +1350,8 @@ nuclear winter. If nuclear winter occurs, land across the globe \
 changes into desert, tundra, and ice, and lakes and oceans freeze.\
 "), _("\
 Settlers, Workers, and Engineers can clean up nuclear fallout.\
+ Nuclear fallout disperses and disappears randomly over time.\
+ On average, it lasts for 5 turns.\
 ")
 
 ; ***************************** BASES ****************************************
