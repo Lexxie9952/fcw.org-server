@@ -315,6 +315,7 @@ req2     = "Invention"
 flags    = ""
 graphic     = "a.democracy"
 graphic_alt = "-"
+helptext = _("Allows government Democracy.")
 cost = 875
 
 [advance_economics]
@@ -760,7 +761,6 @@ req2     = "None"
 flags    = ""
 graphic     = "a.recycling"
 graphic_alt = "-"
-helptext = _("Allows government Democracy.")
 cost = 4460
 
 [advance_refining]
