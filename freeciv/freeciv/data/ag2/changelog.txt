@@ -5,7 +5,7 @@
     a. capturable (doc it)
     b. foot units can embark/disembark
     c. unreachable to pre-gunpowder
-    d. cargo: any unit with <=2 moves
+    d. cargo: any unit with <=2 moves, also balloons
 4. Transporting units can't fortify
 5. Trade is no longer a requirement for making wonders.
     Wonders already need a tech to enable them, 
