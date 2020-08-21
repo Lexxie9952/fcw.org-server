@@ -2427,6 +2427,10 @@ function create_unit_offset_arrays()
       case "Trireme":
           vx += 2; vy += 1;
           break;
+      case "Wagon":
+          dx -= 9; dy -= 5;
+          mx -= 7; my -= 3;
+          break;  
       case "War Galley":
           vx -= 4; vy += 3;
           break;
