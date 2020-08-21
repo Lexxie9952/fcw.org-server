@@ -1465,7 +1465,7 @@ bool can_player_build_unit_direct(const struct player *p,
          * else. */
         return FALSE;
       }
-    } else {
+    } else if (!is_small_wonder(punittype->need_improvement)) {
       if (!can_player_build_improvement_direct(p,
                                                punittype->need_improvement)) {
         return FALSE;
