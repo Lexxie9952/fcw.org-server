@@ -1609,8 +1609,8 @@ static void end_turn(void)
            *       like in case of barbarian uprising */
           notify_player(tile_owner(ptile), ptile,
                         E_SPONTANEOUS_EXTRA, ftc_server,
-                        /* TRANS: Small Fish appears to (32, 72). */
-                        _("%s appears to %s."),
+                        /* TRANS: Small Fish appears at (32, 72). */
+                        _("%s appears at %s."),
                         extra_name_translation(pextra),
                         tile_link(ptile));
         }
