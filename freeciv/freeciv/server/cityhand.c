@@ -389,9 +389,9 @@ void really_handle_city_buy(struct player *pplayer, struct city *pcity)
   } else if (VUT_IMPROVEMENT == pcity->production.kind) {
     notify_player(pplayer, pcity->tile, E_IMP_BUY, ftc_server,
                   /* TRANS: bought an improvement .*/
-                  Q_("?improvement:You bought %s in %s."),
+                  Q_("?improvement:You bought %s in %s for %d gold."),
                   improvement_name_translation(pcity->production.value.building),
-                  city_name_get(pcity));
+                  city_name_get(pcity), cost);
   }
 
   conn_list_do_buffer(pplayer->connections);
