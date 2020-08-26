@@ -2362,6 +2362,16 @@ static struct setting settings[] = {
               "enabled, only some units may kill citizens."),
            NULL, NULL, GAME_DEFAULT_KILLCITIZEN)
 
+  GEN_INT("killcitizen_pct", game.server.killcitizen_pct,
+          SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          N_("Odds of 'killcitizen' engagements killing a citizen "),
+          N_("If setting 'killcitizen' is enabled, then this setting "
+             "regulates the odds that a successful attack on a city will "
+             "engage that setting's functionality. See the 'killcitizen' "
+             "setting for more info."),
+          NULL, NULL, NULL, GAME_MIN_KILLCITIZEN_PCT, GAME_MAX_KILLCITIZEN_PCT,
+          GAME_DEFAULT_KILLCITIZEN_PCT)
+
   GEN_INT("killunhomed", game.server.killunhomed,
           SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
           N_("Slowly kill units without home cities (e.g., starting units)"),

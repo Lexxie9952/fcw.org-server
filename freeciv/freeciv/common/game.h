@@ -155,6 +155,7 @@ struct civ_game {
       int incite_unit_factor;
       int init_vis_radius_sq;
       int kick_time;
+      int killcitizen_pct; /* percent chance of city pop loss if killcitizen enabled */
       int killunhomed;    /* slowly killing unhomed units */
       enum loot_style lootstyle;
       int maxconnectionsperhost;
@@ -540,6 +541,9 @@ extern struct world wld;
 
 #define GAME_DEFAULT_KILLSTACK       TRUE
 #define GAME_DEFAULT_KILLCITIZEN     TRUE
+#define GAME_DEFAULT_KILLCITIZEN_PCT 100
+#define GAME_MIN_KILLCITIZEN_PCT     0
+#define GAME_MAX_KILLCITIZEN_PCT     100
 
 #define GAME_DEFAULT_KILLUNHOMED     0
 #define GAME_MIN_KILLUNHOMED         0
