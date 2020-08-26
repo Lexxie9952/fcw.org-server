@@ -2461,6 +2461,12 @@ void package_city(struct city *pcity, struct packet_city_info *packet,
     tri_packet->index = i;
     tri_packet->partner = proute->partner;
     tri_packet->value = proute->value;
+
+#ifdef FREECIV_WEB // freeciv web doesn't have /common files to go figure out trade_route bonus percent, the final trade value should just come in packet
+    tri_packet->value = proute->value
+        * (100 + get_city_bonus(pcity, EFT_TRADEROUTE_PCT)) / 100;   ////////// test outgoing packets contain adjusted trade value with bonuses
+#endif
+
     tri_packet->direction = proute->dir;
     tri_packet->goods = goods_number(proute->goods);
 
