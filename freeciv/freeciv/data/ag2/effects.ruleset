@@ -212,55 +212,70 @@ reqs    =
 type    = "Tech_Upkeep_Free"
 value   = 3
 
-; ******************* TRADE ********************
-
+; *************************** TRADE ROUTES ****************************
 [effect_trade_routes]
 type    = "Max_Trade_Routes"
 value   = 1
 
-;pow(2, value/1000) -> Base = 50% 
+; -------------------- TRADE ROUTE ONGOING REVENUE --------------------
+[effect_appian_traderoute_nation]
+type    = "Traderoute_Pct"
+value   = 33
+reqs    =
+    { "type", "name", "range"
+      "Building", "Appian Way", "Player"
+    }
+[effect_appian_traderoute_city]
+type    = "Traderoute_Pct"
+value   = 33
+reqs    =
+    { "type", "name", "range"
+      "Building", "Appian Way", "City"
+    }
+
+; ------------ ESTABLISH TRADE ROUTE, ONE TIME BONUS -----------------
+;pow(2, value/1000) = 19% or about 1/5 of normal
 [effect_base_trade_revenue_reduce]
 type    = "Trade_Revenue_Bonus"
-value   = -1000
-
-;Total = 25%
+value   = -2400
+reqs    =
+    { "type", "name", "range", "present"
+    }
+[effect_appian_base_restore]
+type    = "Trade_Revenue_Bonus"
+value   = 2400
+reqs    =
+    { "type", "name", "range", "present"
+; don't stack on top of already restored bonuses for Enter Marketplace
+      "Action", "Enter Marketplace", "Local", FALSE
+      "Building", "Appian Way", "Player", TRUE
+    }
+; 2 ^ (-0.414) = 75% (i.e. -25%)
 [effect_railroad_trade_revenue_reduce]
 type    = "Trade_Revenue_Bonus"
-value   = -1000
+value   = -414
 reqs    =
-    { "type", "name", "range"
-      "Tech", "Railroad", "Player"
+    { "type", "name", "range", "present"
+      "Tech", "Railroad", "Player", TRUE
     }
-;Total = 25%
+; 2 ^ (-0.414) = 75% (i.e. -25%)
 [effect_flight_trade_revenue_reduce]
 type    = "Trade_Revenue_Bonus"
-value   = -1000
+value   = -414
 reqs    =
-    { "type", "name", "range"
-      "Tech", "Flight", "Player"
+    { "type", "name", "range", "present"
+      "Tech", "Flight", "Player", TRUE
     }
-
-
-;If you don't acquire ongoing trade revenue from a trade route,
-;a DECREASE in one-time bonus made NO SENSE AT ALL,
-;Now it's a one time bonus with potentially slight ROI.
-[effect_enter_marketplace_bonus_increase]
+; ------------ ESTABLISH TRADE ROUTE, ONE TIME BONUS -----------------
+; 1. Restore Trade_Revenue_Bonus effects: -2400+1986=-414 = 75% of norm.
+; Average-ish Size8-to-Size8 route gets 80 gold, i.e. 20 in profit for 30 shield unit.
+[effect_enter_marketplace_bonus_restore]
 type	= "Trade_Revenue_Bonus"
-value	= 2000 
+value	= 1986
 reqs	=
     { "type", "name", "range"
       "Action", "Enter Marketplace", "Local"
-    } 
-;TO-DO: pay x more than gold value of vessel entering marketplace, with ROI being somewhat inferior to most 
-;investments but hinting toward same order of magnitude.
-
-[effect_establish_traderoute_bonus]
-type	= "Trade_Revenue_Bonus"
-value	= -2400 
-;this -2400 should go into base effect above 
-;then reqs action = "Establish Trade Route" can be an increase to counter both the -2400 subtracted above then to 
-;further tune upward any one time bonus to what it needs to be. reqs can look at unit type also to compensate higher cost 
-;of making certain units, since route-creating units now vary from 20 shields to 50 shields in cost. 
+    }
 
 ; ***************************** SEA UNIT REPAIR *******************************
 ; Sea units have crews which pro-actively repair damage regardless of movement.
@@ -1965,6 +1980,15 @@ reqs	=
       "Extra", "Deer", "Local"
       "OutputType", "Food", "Local"
     }
+
+[effect_wild_boar]
+type    = "Output_Add_Tile"
+value	= 3
+reqs	=
+    { "type", "name", "range"
+      "Extra", "Wild Boar", "Local"
+      "OutputType", "Food", "Local"
+    }
   
 [effect_hydro_plant]
 type    = "Output_Bonus"
@@ -3166,6 +3190,25 @@ reqs    =
     { "type", "name", "range", "present"
       "Building", "Agōgē of Sparta", "Player", TRUE
       "UnitType", "Pikemen", "Local", TRUE 
+    }
+
+[effect_appian_trade_city]
+type    = "Output_Add_Tile"
+value   = 1
+reqs    =
+    { "type", "name", "range"
+      "Building", "Appian Way", "City"
+      "Building", "Appian Way", "Player"
+      "CityTile", "Center", "Local"
+      "OutputType", "Trade", "Local"
+    }
+
+[effect_angkor_wat]
+type    = "No_Unhappy"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Building", "Angkor Wat", "Player"
     }
 
 [effect_asmiths_trading_co]

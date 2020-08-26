@@ -912,6 +912,12 @@ extra       = "Deer"
 identifier  = "d"
 ;food      = 3  ;food added in effects because only generated resources tied to a terrain type can access this var
 
+[resource_wild_boar]
+extra       = "Wild Boar"
+identifier  = "q"
+;food      = 3  ;food added in effects because only generated resources tied to a terrain type can access this var
+
+
 [resource_wheat]
 extra       = "Wheat"
 identifier  = "j"
@@ -1705,9 +1711,9 @@ reqs           =
     }
 build_time     = 0
 removal_time   = 0
-native_to      = "Land", "LandNoKill", "LandAirSea"
+native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 hidden_by      = "Railroad", "Maglev", "Naval Base"
-flags          = "AutoOnCityCenter"
+flags          = "AutoOnCityCenter", "NativeTile"
 bridged_over   = "River"
 helptext       = _("\
 Roads allow your land units to move more quickly, and on some terrain,\
@@ -1933,7 +1939,7 @@ appearance_reqs =
 [extra_furs]
 name           = _("Furs")
 category       = "Resource"
-causes         = "Resource", "Appear"
+causes         = "Resource"; "Appear"
 ;rmcauses       = ""
 graphic        = "ts.furs"
 graphic_alt    = "-"
@@ -1953,7 +1959,7 @@ appearance_reqs =
 [extra_coal]
 name           = _("Coal")
 category       = "Resource"
-causes         = "Resource", "Appear"
+causes         = "Resource"; "Appear"
 ;rmcauses       = ""
 graphic        = "ts.coal"
 graphic_alt    = "-"
@@ -1973,7 +1979,7 @@ appearance_reqs =
 [extra_fish]
 name           = _("Fish")
 category       = "Resource"
-causes         = "Resource", "Appear"
+causes         = "Resource"; "Appear"
 ;rmcauses       = ""
 graphic        = "ts.fish"
 graphic_alt    = "-"
@@ -2034,7 +2040,7 @@ rmact_gfx_alt  = "-"
 [extra_buffalo]
 name           = _("Buffalo")
 category       = "Resource"
-causes         = "Resource", "Appear"
+causes         = "Resource"; "Appear"
 ;rmcauses       = ""
 graphic        = "ts.buffalo"
 graphic_alt    = "-"
@@ -2051,7 +2057,7 @@ appearance_reqs =
       "MinYear", "-3900", "World", FALSE
     }
 
-[extra_forest_game]
+[extra_deer]
 name           = _("Deer")
 category       = "Resource"
 causes         = "Appear", "Resource"
@@ -2067,17 +2073,42 @@ disappearance_chance    = 10000
 disappearance_reqs = 
     { "type",           "name", "range"
     }
-appearance_chance       = 500
+appearance_chance       = 400
+appearance_reqs = 
+    { "type",    "name", "range",  "present"
+      "Terrain", "Grassland","Local", TRUE
+      "MinYear", "-3000", "World", FALSE
+      "Extra", "Deer", "Adjacent", FALSE
+    }
+
+[extra_wild_boar]
+name           = _("Wild Boar")
+category       = "Resource"
+causes         = "Appear", "Resource"
+rmcauses       = "Disappear"
+graphic        = "ts.boar"
+graphic_alt    = "-"
+activity_gfx   = "None"
+act_gfx_alt    = "-"
+act_gfx_alt2   = "-"
+rmact_gfx      = "None"
+rmact_gfx_alt  = "-"
+disappearance_chance    = 10000
+disappearance_reqs = 
+    { "type",           "name", "range"
+    }
+appearance_chance       = 400
 appearance_reqs = 
     { "type",    "name", "range",  "present"
       "Terrain", "Forest","Local", TRUE
       "MinYear", "-3000", "World", FALSE
+      "Extra", "Wild Boar", "Adjacent", FALSE
     }
 
 [extra_wheat]
 name           = _("Wheat")
 category       = "Resource"
-causes         = "Resource", "Appear"
+causes         = "Resource"; "Appear"
 ;rmcauses       = ""
 graphic        = "ts.wheat"
 graphic_alt    = "-"
@@ -2090,8 +2121,8 @@ rmact_gfx_alt  = "-"
 appearance_chance       = 1800   ;18% 
 appearance_reqs = 
     { "type",    "name", "range",  "present"
-      "Terrain", "Forest", "Local", TRUE
-      "MinYear", "-3900", "World", FALSE
+      ;"Terrain", "Forest", "Local", TRUE
+      ;"MinYear", "-3900", "World", FALSE
     }
 
 [extra_oasis]
@@ -2123,7 +2154,7 @@ rmact_gfx_alt  = "-"
 [extra_pheasant]
 name           = _("Pheasant")
 category       = "Resource"
-causes         = "Resource", "Appear"
+causes         = "Resource"; "Appear"
 ;rmcauses       = ""
 graphic        = "ts.pheasant"
 graphic_alt    = "-"
@@ -2143,7 +2174,7 @@ appearance_reqs =
 [extra_bonus]
 name           = _("Resources")
 category       = "Resource"
-causes         = "Resource", "Appear"
+causes         = "Resource"; "Appear"
 ;rmcauses       = ""
 graphic        = "ts.grassland_resources"
 graphic_alt    = "-"
@@ -2177,7 +2208,7 @@ rmact_gfx_alt  = "-"
 [extra_silk]
 name           = _("Silk")
 category       = "Resource"
-causes         = "Resource", "Appear"
+causes         = "Resource"; "Appear"
 ;rmcauses       = ""
 graphic        = "ts.silk"
 graphic_alt    = "-"
@@ -2224,7 +2255,7 @@ rmact_gfx_alt  = "-"
 [extra_wine]
 name           = _("Wine")
 category       = "Resource"
-causes         = "Resource", "Appear"
+causes         = "Resource"; "Appear"
 ;rmcauses       = ""
 graphic        = "ts.wine"
 graphic_alt    = "-"
@@ -2244,7 +2275,7 @@ appearance_reqs =
 [extra_oil]
 name           = _("Oil")
 category       = "Resource"
-causes         = "Resource", "Appear"
+causes         = "Resource"; "Appear"
 ;rmcauses       = ""
 graphic        = "ts.oil"
 graphic_alt    = "-"

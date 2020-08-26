@@ -210,6 +210,15 @@ helptext      = _("\
   • Only able to move on railroad tiles.\
 ")
 
+[unitclass_landroad]
+name          = _("?unitclass:LandRoad")
+min_speed     = 3
+hp_loss_pct   = 0
+flags         = "BuildAnywhere", "ZOC", "TerrainDefense", "TerrainSpeed"
+helptext      = _("\
+  • Only able to move on road tiles.\
+")
+
 [unitclass_land]
 ; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Land")
@@ -671,6 +680,8 @@ uk_shield     = 5
 uk_food       = 2
 uk_gold       = 2
 flags         = "Settlers", "Infra", "NonMil", "HasNoZOC", "Cant_Fortify", "Unique", "Well-Digger", "Expellable"
+embarks       = "LandRoad"
+disembarks    = "LandRoad"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0
@@ -715,8 +726,8 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 1
 uk_gold       = 0
-embarks       = "LandRail", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRail", "Helicopter"
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
 flags         = "Settlers", "Infra", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Airbase", "CanFortress", "CanRoad", "Proletarian"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -761,8 +772,8 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 2
 uk_gold       = 0
-embarks       = "LandRail", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRail", "Helicopter"
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
 flags         = "Fanatic", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -805,8 +816,8 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "LandRail", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRail", "Helicopter"
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
 flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "Airbase", "Cant_Fortify", "Capturable", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names =
@@ -897,8 +908,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "LandRail", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRail", "Helicopter"
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
 flags         = "FootSoldier", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
 roles         = "DefendOk", "DefendOkStartUnit", "FirstBuild", "Hut"
 helptext      = _("\
@@ -930,8 +941,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "LandRail", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRail", "Helicopter"
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
 flags         = "FootSoldier", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild", "HutTech"
 helptext      = _("\
@@ -964,8 +975,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "LandRail", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRail", "Helicopter"
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
 flags         = "FootSoldier", "Capturer", "CantReachAir", "Bombarder", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
 roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
@@ -1004,8 +1015,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "LandRail", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRail", "Helicopter"
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
 flags         = "FootSoldier", "Settlers", "CanHide", "Infra", "CanRoad", "CanFortress", "Capturer",
                 "CantReachAir", "MultiSlot", "Shield2Gold", "WillNever"
 roles         = "DefendOk", "DefendOkStartUnit", "BarbarianBuild", "BarbarianSea"
@@ -1041,8 +1052,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "LandRail", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRail", "Helicopter"
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
 bonuses       =
    { "flag", "type", "value"
      "Horse", "DefenseMultiplier", 1
@@ -1080,8 +1091,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "LandRail", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRail", "Helicopter"
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "LandRail"
 flags         = "FootSoldier", "Capturer", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild",
@@ -1119,8 +1130,8 @@ uk_happy      = 2
 uk_shield     = 2
 uk_food       = 0
 uk_gold       = 0
-embarks       = "LandRail", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRail", "Helicopter"
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail"
 flags         = "Fanatic", "FootSoldier", "Capturer", "CantReachAir", "Unbribable", "Bombarder",
                 "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
@@ -1168,8 +1179,8 @@ uk_happy      = 1
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-embarks       = "LandRail", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRail", "Helicopter"
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail"
 flags         = "MultiSlot", "IgTer", "IgZOC", "NoHome", "FootSoldier", "Capturer", "CantReachAir",
                 "Shield2Gold", "Settlers", "CanHide", "WillNever"
@@ -1213,8 +1224,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "LandRail", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRail", "Helicopter"
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail"
 flags         = "MultiSlot", "IgTer", "FootSoldier", "Capturer", "CantReachAir", "Shield2Gold", "Settlers", "CanHide", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit"
@@ -1253,8 +1264,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "LandRail", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRail", "Helicopter"
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail"
 flags         = "MultiSlot", "FootSoldier", "Capturer", "CantReachAir", "Shield2Gold", "Settlers", "CanHide", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
@@ -1293,8 +1304,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Helicopter", "Land", "Sea", "LandRail"
-disembarks    = "Helicopter", "Land", "Sea", "LandRail"
+embarks       = "Helicopter", "Land", "Sea", "LandRoad", "LandRail"
+disembarks    = "Helicopter", "Land", "Sea", "LandRoad", "LandRail"
 targets       = "Sea", "Balloon", "Helicopter", "LandRail"
 flags         = "MultiSlot", "Marines", "FootSoldier", "BeachLander", "Capturer",
                 "NeverBlocked", "Shield2Gold", "Settlers", "CanHide", "WillNever"
@@ -1349,8 +1360,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "LandRail", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRail", "Helicopter"
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail"
 flags         = "Paratroopers", "FootSoldier", "Capturer", "CantReachAir", "Provoking",
                 "Shield2Gold", "MultiSlot", "Settlers", "CanHide", "WillNever"
@@ -1857,8 +1868,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Helicopter"
-disembarks    = "Helicopter"
+embarks       = "LandRoad", "Helicopter"
+disembarks    = "LandRoad", "Helicopter"
 targets       = "Air", "AirProtect", "Sea", "Balloon", "Helicopter", "LandRail"
 bonuses       =
    { "flag", "type", "value"
@@ -4059,8 +4070,8 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Helicopter"    ; transport helicopter only
-disembarks    = "Helicopter"
+embarks       = "LandRoad", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "Helicopter"
 flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Shield2Gold"
 roles         = "AttackStrongStartUnit"  ;note: MP2 doesn't start games with ASSU's so has co-opted this for caravan start unit.
 helptext      = _("\
@@ -4134,8 +4145,8 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-embarks       = "Helicopter"    ; transport helicopter only
-disembarks    = "Helicopter"
+embarks       = "LandRoad", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "Helicopter"
 flags         = "IgTer", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable"
 roles         = "Explorer", "ExplorerStartUnit"
 helptext      = _("\
@@ -4318,4 +4329,49 @@ One Barbarian Leader appears every time there is a barbarian uprising\
 "), _("\
 When a Barbarian Leader is killed on a tile without any defending units,\
  the 100 gold ransom is paid, but only to land units and helicopters.\
+")
+
+[unit_wagon]
+name          = _("Wagon")
+class         = "LandRoad"
+tech_req      = "The Wheel"
+impr_req      = "Appian Way"
+obsolete_by   = "Train"
+graphic       = "u.wagon"
+graphic_alt   = "-"
+sound_move    = "m_explorer"
+sound_move_alt = "m_generic"
+sound_fight   = "f_caravan"
+sound_fight_alt = "f_generic"
+build_cost    = 25
+pop_cost      = 0
+attack        = 0
+defense       = 0
+hitpoints     = 10
+firepower     = 1
+move_rate     = 3
+vision_radius_sq = 4
+transport_cap = 2
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 1
+cargo         = "Land", "LandAirSea"
+flags         = "HelpWonder", "TradeRoute", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Shield2Gold"
+roles         = ""
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 0
+helptext      = _("\
+Wagons are special Commerce units that can be made in the city that built the Appian Way.\
+ Read the help on Caravans to see what Commerce units can do.\n\n\
+Wagons are the first Land unit that can do Commerce; but they pay gold upkeep, cannot defend,\
+ cannot fortify, and can only travel on roads. The main benefit of Wagons\
+ is to transport slower units and reach distant cities faster.\n\n\
+Units with 2 moves or less can be carried on Wagons. Only Foot units can\
+ load/unload outside a city, but may lose their moves doing so.\n\n\
 ")

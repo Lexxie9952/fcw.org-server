@@ -10,6 +10,7 @@ artists = "
 
   Lexxie9952
   b.agoge
+  b.angkor_wat
   b.appian_way
   b.eiffel_tower
   b.great_library
@@ -59,6 +60,7 @@ artists = "
 sprites =
 	{	"tag", "file"
                 "b.agoge", "wonders/agoge"
+                "b.angkor_wat", "wonders/angkor_wat"
                 "b.appian_way", "wonders/appian_way"
 		"b.asmiths_trading_co", "wonders/asmiths_trading_co"
 		"b.apollo_program", "wonders/apollo_program"

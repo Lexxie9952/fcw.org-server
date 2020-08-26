@@ -2061,6 +2061,7 @@ set =
       "gold", 100, FALSE
       "hideouts", TRUE, FALSE
       "huts", 0, FALSE
+      "killcitizen_pct", 60, FALSE        ; regulates % chance of pop kill by city pop-killer units
       "landmass", 63, FALSE
       "minplayers", 0, FALSE
       "move_bonus_in_frags", "ENABLED", TRUE   ;locked
@@ -2075,7 +2076,7 @@ set =
       "spaceship_travel_time", 225, FALSE
       "specials", 350, FALSE
       "startpos", "SINGLE", FALSE
-      "startunits", "cccwwwxxaA", FALSE
+      "startunits", "xxcccwwwaA", FALSE
       "techleak", 25, FALSE
       "techpenalty", 0, FALSE
       "tinyisles", FALSE, FALSE

@@ -176,12 +176,27 @@ end
 signal.connect("tech_researched", "tech_researched_handler")
 
 function turn_callback(turn, year)
-  if turn == 2 then
+  if turn == 120 then
     notify.event(nil, nil, E.SCRIPT,
 _("<b>Prophets have Visions!</b>\n\
-Soothsayers of your tribe have visions of hidden resources in the Promised Lands.\
-The gods favor those tribes who record their prophets' visions...\n\
+Evangelists warn the End Times are near.\
+"))
+  end
+
+  if turn == 2 then
+    notify.event(nil, nil, E.SCRIPT,
+_("<b>Hunt for Food!</b>\n\
+Meat from wild animals is an important part of the Stone Age diet. Use wandering Deer and Wild Boar for extra food.\
+"))
+  end
+
+  if turn == 12 then
+    notify.event(nil, nil, E.SCRIPT,
+_("<b>Overhunting by Humans</b>\n\
+Frequent hunting has reduced wild animal populations and trained them to stay away from human settlements.\
 "))
   end
 end
+
+
 signal.connect('turn_begin', 'turn_callback')

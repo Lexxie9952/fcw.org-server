@@ -1263,7 +1263,7 @@ obsolete_by	=
     { "type", "name", "range"
       "Tech", "Gunpowder", "Player"
     }
-build_cost	= 100
+build_cost	= 90
 upkeep		= 0
 sabotage	= 0
 sound		= "w_agoge"
@@ -1274,6 +1274,65 @@ The Agōgē creates a culture of extreme fitness, and is famous for\
  All your foot soldiers get +⅓ move. Phalanx and Pikemen receive a\
  +50% attack bonus. Foot units in the city with the Agōgē begin\
  their turn with +1 move. Obsolete by: Gunpowder.\
+")
+
+[building_angkor_wat]
+name		= _("Angkor Wat")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",            "range",  "present", "quiet"
+      "Tech",     "Code of Laws",    "Player", TRUE,      FALSE
+      "Building", "Angkor Wat",      "Player", FALSE,     TRUE
+    }
+graphic	= "b.angkor_wat"
+graphic_alt	= "b.ecclesiastical_palace"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Sanitation", "Player"
+    }
+build_cost	= 200
+upkeep		= 0
+sabotage	= 0
+sound		= "w_angkor"
+sound_alt	= "w_generic"
+helptext	= _("\
+Angkor Wat provides splendor and culture to your nation.\
+ No citizen will ever be discontent in any of your cities.\
+ Those who were dissatisfied by military activity may\
+ still refuse to become happy, however.\n\
+Obsolete by: Sanitation.\
+")
+
+[building_appian_way]
+name		= _("Appian Way")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",            "range",  "present", "quiet"
+      "Tech",     "The Wheel",       "Player", TRUE,      FALSE
+      "Building", "Appian Way",      "Player", FALSE,     TRUE
+    }
+graphic	= "b.appian_way"
+graphic_alt	= "b.colossus"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Railroad", "Player"
+    }
+build_cost	= 80
+upkeep		= 0
+sabotage	= 0
+sound		= "w_appian"
+sound_alt	= "w_generic"
+helptext	= _("\
+The Appian Way is the first flat paved highway able to drain\
+ rainwater. It enhances trade route revenue and allows making\
+ Wagon units. The Appian Way gives the following bonuses:\n\
+ ➤ all Routes get +33% ongoing revenue\n\
+ ➤ Establishing Route gets a 5× bonus\n\
+ ➤ the City with Appian Way gets:\n\
+　　　• +1 Trade on the city center tile\n\
+　　　• an extra +33% in Route revenue\   
+　　　• the ability to make Wagons.\n\n\
+Obsolete by: Railroad.\
 ")
 
 [building_apollo_program]
