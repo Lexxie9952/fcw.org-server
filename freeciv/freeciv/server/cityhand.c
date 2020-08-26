@@ -383,9 +383,9 @@ void really_handle_city_buy(struct player *pplayer, struct city *pcity)
   if (VUT_UTYPE == pcity->production.kind) {
     notify_player(pplayer, pcity->tile, E_UNIT_BUY, ftc_server,
                   /* TRANS: bought an unit. */
-                  Q_("?unit:You bought %s in %s."),
+                  Q_("?unit:You bought %s in %s for %d gold."),
                   utype_name_translation(pcity->production.value.utype),
-                  city_name_get(pcity));
+                  city_name_get(pcity), cost);
   } else if (VUT_IMPROVEMENT == pcity->production.kind) {
     notify_player(pplayer, pcity->tile, E_IMP_BUY, ftc_server,
                   /* TRANS: bought an improvement .*/
