@@ -15,6 +15,7 @@ artists = "
   b.eiffel_tower
   b.great_library
   b.great_wall
+  b.hammurabi
   b.isaac_newtons_college
   b.js_bachs_cathedral
   b.king_richards_crusade
@@ -73,6 +74,7 @@ sprites =
                 "b.gibraltar_fortress", "wonders/gibraltar_fortress"
 		"b.great_library", "wonders/great_library"
 		"b.great_wall", "wonders/great_wall"
+                "b.hammurabi", "wonders/hammurabi"
 		"b.hanging_gardens", "wonders/hanging_gardens"
 		"b.hoover_dam", "wonders/hoover_dam"
                 "b.internet", "wonders/internet"

@@ -1391,6 +1391,35 @@ In all your cities, Buildings with upkeep of 1 gold become free.\
  This wonder is never obsolete.\
 ")
 
+[building_code_of_hammurabi]
+name		= _("Code of Hammurabi")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",               "range",  "present", "quiet"
+      "Tech",     "Alphabet",           "Player", TRUE,      FALSE
+      "Building", "Code of Hammurabi",  "Player", FALSE,     TRUE
+    }
+graphic	= "b.hammurabi"
+graphic_alt	= "b.courthouse"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Democracy", "Player"
+    }
+build_cost	= 130
+upkeep		= 0
+sabotage	= 0
+sound		= "w_hammurabi"
+sound_alt	= "w_generic"
+helptext	= _("\
+The Code of Hammurabi is a prototype toward legal organized\
+ civilization. It provides a primitive version of many\
+ later advancements to societal order. In many areas, it bridges\
+ the gap between Despotism and Monarchy by exactly half.\n\
+  • cities with no Temple get +1 content\n\
+  • Despotism base corruption reduced to 26%; corruption per tile distance reduced to 3%.\n\n\
+Obsolete by: Democracy.\
+")
+
 [building_colossus]
 name		= _("Colossus")
 genus		= "SmallWonder"

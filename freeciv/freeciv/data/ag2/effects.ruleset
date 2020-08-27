@@ -699,17 +699,38 @@ reqs	=
 type    = "Output_Waste"
 value	= 37
 reqs	=
+    { "type", "name", "range", "present"
+      "Gov", "Despotism", "Player", TRUE
+      "Building", "Code of Hammurabi", "Player", FALSE
+      "OutputType", "Trade", "Local", TRUE
+    }
+[effect_corruption_hammurabi_despotism0]
+type    = "Output_Waste"
+value	= 26
+reqs	=
     { "type", "name", "range"
       "Gov", "Despotism", "Player"
+      "Building", "Code of Hammurabi", "Player"
       "OutputType", "Trade", "Local"
     }
+
 
 [effect_corruption_despotism1]
 type    = "Output_Waste_By_Distance"
 value	= 400
 reqs	=
+    { "type", "name", "range", "present"
+      "Gov", "Despotism", "Player", TRUE
+      "Building", "Code of Hammurabi", "Player", FALSE
+      "OutputType", "Trade", "Local", TRUE
+    }
+[effect_corruption_hammurabi_despotism1]
+type    = "Output_Waste_By_Distance"
+value	= 300
+reqs	=
     { "type", "name", "range"
       "Gov", "Despotism", "Player"
+      "Building", "Code of Hammurabi", "Player"
       "OutputType", "Trade", "Local"
     }
 
@@ -3218,6 +3239,16 @@ reqs	=
     { "type", "name", "range"
       "Building", "A.Smith's Trading Co.", "Player"
     }
+
+[effect_code_of_hammurabi_temple]
+type    = "Make_Content"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Code of Hammurabi", "Player", TRUE
+      "Building", "Temple", "City", FALSE
+    }
+;other hammurabi effects in gov:despotism section
 
 [effect_colossus]
 type    = "Output_Inc_Tile"

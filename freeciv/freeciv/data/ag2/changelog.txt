@@ -16,13 +16,18 @@
 7. Stone Age herds of wild game appear in forests for first 10 turns (3000 BC), during the age before they are hunted out and/or learn to be more wary of humans.
     a. this micro-balances resource distribution balance; smooths effect of luck on starting position; micro-accelerates the slower starting turns
 [[[8. Hidden resources can exist as in Civ2 - transforming a terrain type to another type might reveal it.]]] disabled *** commented about as ; "Appear"
-9. Robotics needed for Plastics, makes Armor I required before Armor II
+9. Robotics needed for Plastics, forces Armor I to be required before Armor II
 10. On average, Fallout lasts 5 turns before randomly disappearing.
 12. Appian Way wonder, allows Wagon also. 
 13. Deer and Wild Boar: piques the first 10 turns with slightly more speed and interest; smooths statistical resource distribution and "fair start" issues
 14. Foot soldiers can clean pollution
 **. Document, clean pollution can be done by foot soldiers and also while transported 
 15. New server setting killcitizen_pct defaults to 62% (doc it)
+
+
+Angkor Wat
+Code of Hammurabi
+
 
 
 
