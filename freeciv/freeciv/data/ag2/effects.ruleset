@@ -1160,7 +1160,7 @@ reqs	=
       "UnitFlag", "Diplomat", "Local"
     }
 
-[effect_gov_tile_bonus_0]
+[effect_gov_tile_bonus_anarchy]
 type    = "Output_Penalty_Tile"
 value   = 2
 reqs	=
@@ -1168,12 +1168,22 @@ reqs	=
       "Gov", "Anarchy", "Player"
     }
 
-[effect_gov_tile_bonus_1]
+[effect_gov_tile_bonus_despotism]
 type    = "Output_Penalty_Tile"
 value   = 2
 reqs	=
-    { "type",       "name",      "range"
-      "Gov", "Despotism", "Player"
+    { "type",         "name",             "range",  "present"
+      "Gov",          "Despotism",        "Player", TRUE
+      "Building",     "Code of Hammurabi","Player", FALSE
+    }
+[effect_gov_tile_bonus_despotism1]  ; Code of Hammurabi removes tile penalty on lowlands tiles
+type    = "Output_Penalty_Tile"
+value   = 2
+reqs	=
+    { "type",         "name",            "range",   "present"
+      "Gov",          "Despotism",       "Player",  TRUE
+      "Building",     "Code of Hammurabi","Player", TRUE
+      "TerrainFlag",  "Low Land",         "Local",  FALSE
     }
 
 [effect_gov_tile_bonus_2]

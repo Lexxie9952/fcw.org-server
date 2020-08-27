@@ -1411,12 +1411,16 @@ sabotage	= 0
 sound		= "w_hammurabi"
 sound_alt	= "w_generic"
 helptext	= _("\
-The Code of Hammurabi is a prototype toward legal organized\
- civilization. It provides a primitive version of many\
- later advancements to societal order. In many areas, it bridges\
- the gap between Despotism and Monarchy by exactly half.\n\
-  • cities with no Temple get +1 content\n\
-  • Despotism base corruption reduced to 26%; corruption per tile distance reduced to 3%.\n\n\
+The Code of Hammurabi is a first step toward legal organized\
+ civilization. It is a primitive version of later societal\
+ advancements. In some areas, this Wonder closes the gap\
+ between Despotism and Monarchy by exactly half.\n\
+Improvements to Despotism:\n\
+  • base corruption is 26% (was 37%)\n\
+  • distance corruption is 3% (was 4%)\n\
+  • penalties eliminated on Lowland tiles\n\
+Other bonus:\n\
+  • cities with no Temple get +1 content citizen\n\n\
 Obsolete by: Democracy.\
 ")
 

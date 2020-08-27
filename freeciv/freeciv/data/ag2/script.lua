@@ -187,12 +187,13 @@ Evangelists warn the End Times are near.\
     notify.event(nil, nil, E.SCRIPT,
 _("<b>Hunt for Food!</b>\n\
 Meat from wild animals is an important part of the Stone Age diet. Use wandering Deer and Wild Boar for extra food.\
+   (TIP: Use Shift-W and Ctrl-Shift-Click to monitor and manage these resource opportunities.)\
 "))
   end
 
   if turn == 12 then
     notify.event(nil, nil, E.SCRIPT,
-_("<b>Overhunting by Humans</b>\n\
+_("<b>Ecology Report</b>\n\
 Frequent hunting has reduced wild animal populations and trained them to stay away from human settlements.\
 "))
   end

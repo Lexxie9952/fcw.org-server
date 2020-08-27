@@ -2050,8 +2050,7 @@ set =
       "contactturns", 10, FALSE
       "diplomacy", "ALL", FALSE
       "dispersion", 0, FALSE
-;      "endturn", 365, FALSE
-      "endspaceship", ENABLED, FALSE 
+      "endspaceship", "ENABLED", FALSE 
       "foggedborders", TRUE, FALSE
       "generator", "RANDOM", FALSE
       "gold", 100, FALSE
@@ -2071,7 +2070,7 @@ set =
       "spaceship_travel_time", 225, FALSE
       "specials", 350, FALSE
       "startpos", "SINGLE", FALSE
-      "startunits", "cccwwwxxaA", FALSE
+      "startunits", "xxcccwwwaA", FALSE
       "techleak", 25, FALSE
       "techpenalty", 0, FALSE
       "tinyisles", FALSE, FALSE
