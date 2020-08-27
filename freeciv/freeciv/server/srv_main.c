@@ -3727,6 +3727,7 @@ bool is_longturn(void)
 /**********************************************************************//**
  Check if the connection is on the supercow list (admins and gamemasters
  who get cmdlevel hack, can observe and take over players)
+ FIXME! This method needs to be reviewed to prevent segmentation faults if the supercows file contains invalid text.
 **************************************************************************/
 bool is_supercow(struct connection * caller)
 {
