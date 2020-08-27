@@ -5,6 +5,7 @@
 # Do NOT for some reason put 1000 characters on one line in this file or you will make everyone admin.
 # In order to post anonymously in-game, prefix your message with "(server)", so for example "(server) The game is over!"
 # Any leading or trailing spaces will be removed from that message automatically. Make sure not to add : after (server)
+# Warning: There is a bug which causes the server to crash, if this file contains a line with just some spaces.
 #
 #Rhue:6003
 Lexxie:6070
