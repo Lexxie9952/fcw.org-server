@@ -3463,11 +3463,15 @@ function update_city_screen()
                   +"</div></div>";
         }   
         
+        // Capital markers
+        city_name = "";
+        if (is_capital(pcity)) city_name = "<span style='color:cyan'>&#9733; </span>";
+        if (city_has_building(pcity, improvement_id_by_name(B_ECC_PALACE_NAME))) city_name = "<span style='color:yellow'>&#x2CE9; </span>";
         // tiny mobile: abbreviate city name to first 11 letters plus small "..."
-        city_name = ( (tiny_screen && pcity['name'].length>11) 
+        city_name += ( (tiny_screen && pcity['name'].length>11) 
               ? (pcity['name'].substring(0,10) + "<span style='font-size:66%;'>&#x22ef;</span></td>") 
               : (pcity['name'] + "</td>") );
-        
+
         city_list_html += "<tr class='cities_row' id='cities_list_" + pcity['id'] + "'>"
                 + td_hover_html + city_name + "</td>" // tiny mobile: abbreviate city name to first 11 letters plus "..."
                 + td_click_html + city_size_string + "</td>"

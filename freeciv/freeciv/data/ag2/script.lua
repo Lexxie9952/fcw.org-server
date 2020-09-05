@@ -194,7 +194,7 @@ Meat from wild animals is an important part of the Stone Age diet. Use wandering
   if turn == 12 then
     notify.event(nil, nil, E.SCRIPT,
 _("<b>Ecology Report</b>\n\
-Frequent hunting has reduced wild animal populations and trained them to stay away from human settlements.\
+Frequent hunting has reduced wild animal populations and scared them away from human settlements.\
 "))
   end
 end
