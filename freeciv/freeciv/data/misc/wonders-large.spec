@@ -12,6 +12,8 @@ artists = "
   b.agoge
   b.angkor_wat
   b.appian_way
+  b.apollo_program
+  b.manhattan_project
   b.chand_baori
   b.eiffel_tower
   b.great_library
@@ -32,8 +34,10 @@ artists = "
   b.magellans_expedition
   b.olympics
   b.roman_colosseum
+  b.seti_program
   b.sphinx
   b.statue_of_liberty
+  b.statue_of_zeus
   b.temple_of_artemis
   b.teslas_laboratory
   b.womens_suffrage
@@ -52,15 +56,9 @@ artists = "
   b.asmiths_trading_co
   b.sun_tzus_war_academy
 
-  Hajor
-  b.seti_program
-
   PD images
-  b.apollo_program
   b.hoover_dam
-  b.manhattan_project
   b.oracle, embossed by Lexxie
-  b.statue_of_zeus
 "
 
 [extra]
