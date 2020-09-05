@@ -12,10 +12,12 @@ artists = "
   b.agoge
   b.angkor_wat
   b.appian_way
+  b.chand_baori
   b.eiffel_tower
   b.great_library
   b.great_wall
   b.hammurabi
+  b.hypogeum
   b.isaac_newtons_college
   b.js_bachs_cathedral
   b.king_richards_crusade
@@ -28,10 +30,14 @@ artists = "
   b.hanging_gardens
   b.leonardos_workshop
   b.magellans_expedition
+  b.olympics
+  b.roman_colosseum
+  b.sphinx
   b.statue_of_liberty
   b.temple_of_artemis
   b.teslas_laboratory
   b.womens_suffrage
+  b.ziggurat
  
   Daniel Markstedt
   b.darwins_voyage
@@ -65,6 +71,7 @@ sprites =
                 "b.appian_way", "wonders/appian_way"
 		"b.asmiths_trading_co", "wonders/asmiths_trading_co"
 		"b.apollo_program", "wonders/apollo_program"
+                "b.chand_baori", "wonders/chand_baori"
 		"b.colossus", "wonders/colossus"
 		"b.copernicus_observatory", "wonders/copernicus_observatory"
 		"b.cure_for_cancer", "wonders/cure_for_cancer"
@@ -77,6 +84,7 @@ sprites =
                 "b.hammurabi", "wonders/hammurabi"
 		"b.hanging_gardens", "wonders/hanging_gardens"
 		"b.hoover_dam", "wonders/hoover_dam"
+                "b.hypogeum", "wonders/hypogeum"
                 "b.internet", "wonders/internet"
 		"b.isaac_newtons_college", "wonders/isaac_newtons_college"
 		"b.js_bachs_cathedral", "wonders/js_bachs_cathedral"
@@ -88,15 +96,19 @@ sprites =
 		"b.marco_polos_embassy", "wonders/marco_polos_embassy"
                 "b.mausoleum", "wonders/mausoleum_of_halicarnassus"
 		"b.michelangelos_chapel", "wonders/michelangelos_chapel"
+                "b.olympics", "wonders/olympics"
 		"b.oracle", "wonders/oracle"
 		"b.pyramids", "wonders/pyramids"
+                "b.roman_colosseum", "wonders/colosseum"
 		"b.seti_program", "wonders/seti_program"
 		"b.shakespeares_theatre", "wonders/shakespeares_theatre"
 		"b.statue_of_liberty", "wonders/statue_of_liberty"
+                "b.sphinx", "wonders/sphinx"
                 "b.statue_of_zeus", "wonders/statue_of_zeus"
 		"b.sun_tzus_war_academy", "wonders/sun_tzus_war_academy"
                 "b.teslas_laboratory", "wonders/teslas_laboratory"
                 "b.temple_of_artemis", "wonders/temple_of_artemis"
 		"b.united_nations", "wonders/united_nations"
 		"b.womens_suffrage", "wonders/womens_suffrage"
+                "b.ziggurat", "wonders/ziggurat"
 	}

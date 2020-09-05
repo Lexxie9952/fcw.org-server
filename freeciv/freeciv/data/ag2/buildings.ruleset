@@ -1225,7 +1225,7 @@ graphic_alt	= "b.palace"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 100
+build_cost	= 90
 upkeep		= 0
 sabotage	= 0
 sound		= "b_palace"
@@ -2203,6 +2203,31 @@ Adds to science production in all your cities with\
  This Wonder does not become obsolete.\
 ")
 
+[building_sphinx]
+name            = _("The Sphinx")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",                  "range",  "present", "quiet"
+       "Gov",     "Despotism",             "Player", TRUE,      FALSE
+    }
+graphic	= "b.sphinx"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 70
+upkeep		= 0
+sabotage	= 0
+sound		= "w_sphinx"
+sound_alt	= "w_generic"
+helptext	= _("\
+The Sphinx is said to watch over all citizens to ensure they are good.\
+ The result is loss of tile corruption penalties on all worked tiles in\
+ the city it is built. As a shared work of community art and culture, it\
+ adds +1 luxury. In addition, it reduces corruption in the city by\
+ half. This Wonder does not become obsolete.\
+")
+
 [building_united_nations]
 name		= _("United Nations")
 genus		= "GreatWonder"
@@ -2275,6 +2300,115 @@ In the capacity of reducing Military Unhappiness, this Wonder neutralizes the\
  Station. It gives no bonus to cities which already have a Police Station.\
  This Wonder does not become obsolete.\
 ")
+
+[building_roman_colosseum]
+name		= _("The Colosseum")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",           "range", "present",  "quiet"
+      "Tech",     "Construction",   "Player", TRUE,      FALSE
+      "Building", "The Colosseum",  "Player", FALSE,     TRUE
+    }
+graphic	= "b.roman_colosseum"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 300
+upkeep		= 0
+sabotage	= 0
+sound		= "w_colosseum"
+sound_alt	= "w_generic"
+helptext	= _("\
+The Colosseum was really something special.\
+ ")
+
+[building_hypogeum]
+name		= _("Hypogeum")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",      "range", "present",  "quiet"
+      "Building", "Hypogeum",  "Player", FALSE,     TRUE
+    }
+graphic	= "b.hypogeum"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 50
+upkeep		= 0
+sabotage	= 0
+sound		= "w_hypogeum"
+sound_alt	= "w_generic"
+helptext	= _("\
+The Hypogeum was really something special.\
+ ")
+
+[building_olympics]
+name		= _("The Olympics")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",          "range", "present",  "quiet"
+      "Tech",     "Currency",      "Player", TRUE,      FALSE
+      "Building", "The Olympics",  "Player", FALSE,     TRUE
+    }
+graphic	= "b.olympics"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 50
+upkeep		= 0
+sabotage	= 0
+sound		= "w_olympics"
+sound_alt	= "w_generic"
+helptext	= _("\
+The Olympics were really something special.\
+ ")
+
+[building_chand_baori]
+name		= _("Chand Baori")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",          "range", "present",  "quiet"
+      "Building", "Chand Baori",  "Player", FALSE,     TRUE
+    }
+graphic	= "b.chand_baori"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 50
+upkeep		= 0
+sabotage	= 0
+sound		= "w_chand_baori"
+sound_alt	= "w_generic"
+helptext	= _("\
+Chand Baori was really something special. It allows 3 food from grass on a city center, and\
+ even more special, allows you to irrigate adjacent to all cities.\
+")
+
+[building_ziggurat]
+name		= _("Ziggurat")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",          "range", "present",  "quiet"
+      "Building", "Ziggurat",  "Player", FALSE,     TRUE
+    }
+graphic	= "b.ziggurat"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 55
+upkeep		= 0
+sabotage	= 0
+sound		= "w_ziggurat"
+sound_alt	= "w_generic"
+helptext	= _("\
+Counts as a Temple, gives +1 happy, and as primitive City Walls giving +50% extra defence.\
+")
+
 
 [building_capitalization]
 name		= _("Coinage")

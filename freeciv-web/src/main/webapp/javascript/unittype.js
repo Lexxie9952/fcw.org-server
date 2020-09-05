@@ -88,11 +88,12 @@ const UTYF_NEWCITY_GAMES_ONLY = 29;       /* Unit can't be built in scenarios wh
 const UTYF_CANESCAPE = 30;                /* 50% chance to escape when killstack occours if more moves remaining than attacker */
 const UTYF_CANKILLESCAPING = 31;          /* Can kill escaping units */
 const UTYF_NEVER_BLOCKED = 32;            /* Overrides unreachable_protects server setting for attacker */
-const UTYF_USER_FLAG_1 = 33;                /* Reserved for replacing Shield2Gold as flag for using multiple city_build_slots */
-const UTYF_USER_FLAG_2 = 34;                  /* Can make hideouts */
-const UTYF_USER_FLAG_3 = 35;                /* Will never autoattack */
-const UTYF_USER_FLAG_4 = 36;
-const UTYF_USER_FLAG_5 = 37;
+                                          /* some of these USER_FLAG may be mis-aligned, some of these may have hard-coded behaviour*/
+const UTYF_USER_FLAG_1 = 33;              /* Reserved for replacing Shield2Gold as flag for using multiple city_build_slots */
+const UTYF_USER_FLAG_2 = 34;              /* Can make hideouts */
+const UTYF_USER_FLAG_3 = 35;              /* Will never autoattack */
+const UTYF_USER_FLAG_4 = 36;              /* Transport Defender: will defend stack as cargo even on non-native tiles FLAG=34 on server */ 
+const UTYF_USER_FLAG_5 = 37;              /* Non-Mil Attack - as NonMil can enter Peace tiles, but if not at Peace, can attack e.g., Trireme */
 const UTYF_USER_FLAG_6 = 38;
 const UTYF_USER_FLAG_7 = 39;
 const UTYF_USER_FLAG_8 = 40;

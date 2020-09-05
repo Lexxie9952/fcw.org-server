@@ -23,7 +23,8 @@
 14. Foot soldiers can clean pollution
 **. Document, clean pollution can be done by foot soldiers and also while transported 
 15. New server setting killcitizen_pct defaults to 62% (doc it)
-
+16. Ecclesiastical Palace price drop to 90.
+17. Commerce units can enter Peace territory for peaceful purposes, and during War can attack.
 
 Angkor Wat
 Code of Hammurabi

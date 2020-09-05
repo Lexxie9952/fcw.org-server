@@ -1919,7 +1919,7 @@ rmact_gfx_alt  = "-"
 [extra_game]
 name           = _("?animals:Game")
 category       = "Resource"
-causes         = "Resource", "Appear"
+causes         = "Resource"; "Appear"
 ;rmcauses       = ""
 graphic        = "ts.tundra_game"
 graphic_alt    = "-"

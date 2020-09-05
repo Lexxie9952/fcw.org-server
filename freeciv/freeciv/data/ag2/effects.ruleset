@@ -4243,6 +4243,31 @@ reqs	=
       "Building", "Shakespeare's Theatre", "City"
     }
 
+[effect_sphinx_tile]
+type    = "Output_Penalty_Tile"
+value = 100
+reqs	=
+    { "type",     "name",       "range"
+      "Building", "The Sphinx", "City"
+    }
+[effect_sphinx_luxury]
+type    = "Output_Add_Tile"
+value = 1
+reqs	=
+    { "type",       "name",        "range"
+      "Building",   "The Sphinx",  "City"
+      "CityTile",   "Center",      "Local"
+      "OutputType", "Luxury",      "Local" 
+    }
+[effect_sphinx_corruption]
+type    = "Output_Waste_Pct"
+value	= 60
+reqs	=
+    { "type",       "name",       "range" 
+      "Building",   "The Sphinx", "City" 
+      "OutputType", "Trade",      "Local" 
+    } 
+  
 [effect_statue_of_liberty]
 type    = "Any_Government"
 value	= 1
