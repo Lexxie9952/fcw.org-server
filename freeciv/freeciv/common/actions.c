@@ -264,15 +264,30 @@ static void hard_code_oblig_hard_reqs(void)
                           "the actor doesn't have the NoHome utype flag.",
                           ACTION_HOME_CITY, ACTION_NONE);
 
-  /* Why this is a hard requirement: Preserve semantics of NonMil
-   * flag. Need to replace other uses in game engine before this can
-   * be demoted to a regular unit flag. */
+  /* Why someone previously made this a hard requirement:
+   * "Preserve semantics of NonMil flag. Need to replace other uses in game
+   * engine before this can be demoted to a regular unit flag.""
+   * 
+   * NO! Rulesets are perfectly capable of specifying "NonMil",FALSE  
+   * without a hard req, if they want. Forceful prioritizing of semantics
+   * over ruleset flexibility is bad. Rulesets rely on "NonMil" to hardcode
+   * disallowed entry into Peace territory. Don't FORCE rulesets to couple
+   * this with inability to attack, when we have an action enabler for that
+   * already. Doing so forbids legitimate use cases:
+   *  
+   * Specifically, units able to serve peaceful functions during peace and 
+   * military functions during war:  e.g., Triremes and other ancient ships 
+   * who were dual purpose for commerce and military. 
+   * 
+   * COMMENTED OUT:
   oblig_hard_req_register(req_from_values(VUT_UTFLAG, REQ_RANGE_LOCAL,
                                           FALSE, TRUE, TRUE, UTYF_CIVILIAN),
                           FALSE,
                           "All action enablers for %s must require that "
                           "the actor doesn't have the NonMil utype flag.",
                           ACTION_ATTACK, ACTION_CONQUER_CITY, ACTION_NONE);
+  */
+
 
   /* Why this is a hard requirement: Preserve semantics of
    * CanOccupyCity unit class flag. */

@@ -1099,6 +1099,19 @@ actor_reqs    =
       "UnitState",    "Transported",    "Local", FALSE
       "DiplRel",      "War",            "Local", TRUE
     }
+;Commerce units have to be NonMil to enter peaceful waters
+;but they can also attack those with whom they are at war:   
+[actionenabler_attack_native_nonmil_attacker]
+action = "Attack"
+actor_reqs    =
+    { "type",         "name",           "range", "present"
+      "UnitFlag",     "NonMilAttack",   "Local", TRUE
+;     "UnitClassFlag","Missile",        "Local", FALSE
+      "UnitClassFlag","CargoRestrained","Local", FALSE
+      "MinMoveFrags", "1",              "Local", TRUE
+      "UnitState",    "OnNativeTile",   "Local", TRUE
+      "DiplRel",      "War",            "Local", TRUE
+    }
 ;Marines
 [actionenabler_attack_marines]
 action = "Attack"
@@ -1120,6 +1133,17 @@ actor_reqs    =
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
       "DiplRel",       "War",              "Local", TRUE
     }
+[actionenabler_attack_from_non_native_nonmil_attacker]
+action = "Attack"
+actor_reqs    =
+    { "type",          "name",             "range", "present"
+      "UnitFlag",      "NonMilAttack",     "Local", TRUE
+;     "UnitClassFlag", "Missile",          "Local", FALSE
+      "MinMoveFrags",  "1",                "Local", TRUE
+      "UnitClassFlag", "AttFromNonNative", "Local", TRUE
+      "DiplRel",       "War",              "Local", TRUE
+    }
+
 ;/* REQUIRED after merge 
 ;[actionenabler_explode_missile]
 ;action = "Suicide Attack"

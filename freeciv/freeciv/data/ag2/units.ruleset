@@ -71,6 +71,7 @@ flags =
 ;;; The following flag MUST be #34 position to work with hack in movement.c which allows transported AAA to defend on non-native:
 ;;; this comment can be removed when we have some smarter way for unit_can_defend_here(..) to get ruleset control.
     _("TransportDefender"), _("Can defend while transported on non-native tiles.")
+    _("NonMilAttack"), _("Has military capacity but for peaceful purposes, can enter territories with whom you are at Peace")
   }
 
 ; Names for custom unit class flags. There can be up to 8 of these.
@@ -470,7 +471,7 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;                 "ZOC" flag
 ; "HasNoZOC"	= unit has no Zone of Control (ZOC), thus any unit can move
 ;		  around it freely
-; "NonMil"	= a non-military unit: no attacks; no martial law; can enter
+; "NonMil"	= a non-military unit: no martial law; can enter
 ;                 peaceful borders; DoesntOccupyTile
 ; "IgTer"       = use constant move cost defined in igter_cost (terrain.ruleset)
 ;                 rather than terrain/road etc cost, unless terrain cost is
@@ -548,6 +549,7 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;                  is enabled and the unit class is unreachable
 ; "MultiSlot"    = if server setting slot_control is ON, only unit types with this
 ;                  flag can use extra city_build_slots
+;                   
 ;
 ; Following actions require extra fields:
 ;  "Attack"
@@ -2965,7 +2967,7 @@ uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "CantReachAir", "HelpWonder",
-                "TradeRoute", "Coast", "WillNever"
+                "TradeRoute", "Coast", "WillNever", "NonMil", "NonMilAttack"
 roles         = "Ferryboat", "FerryStartUnit"
 helptext      = _("\
 Triremes are used for exploration, transport, and Commerce.\
@@ -3044,7 +3046,7 @@ uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "CantReachAir", "HelpWonder",
-                "Traderoute", "Only_Native_Attack", "WillNever"
+                "Traderoute", "Only_Native_Attack", "WillNever", "NonMil", "NonMilAttack"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
 The Galley is an all-purpose sea unit and upgrades the Trireme. It has decent\
@@ -3155,7 +3157,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea"
-flags         = "BadCityDefender", "CantReachAir", "Traderoute", "WillNever"
+flags         = "BadCityDefender", "CantReachAir", "Traderoute", "WillNever", "NonMil", "NonMilAttack"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat", "Hunter"
 helptext      = _("\
 Caravels upgrade older sea units, and are a big advance in combat, speed, range, and transport capacity. They have\
