@@ -2537,6 +2537,8 @@ function update_worklist_actions()
   if (production_selection.length > 0) {
     $("#city_add_to_worklist_btn").button("enable");
     $("#city_worklist_insert_btn").button("enable");
+    $("#city_worklist_append_btn").button("enable");
+    
 
     if (production_selection.length == worklist_selection.length ||
         worklist_selection.length == 1) {
@@ -2548,6 +2550,7 @@ function update_worklist_actions()
   } else {
     $("#city_add_to_worklist_btn").button("disable");
     $("#city_worklist_insert_btn").button("disable");
+    $("#city_worklist_append_btn").button("disable");
     $("#city_worklist_exchange_btn").button("disable");
   }
 
