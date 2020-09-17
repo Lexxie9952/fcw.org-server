@@ -1463,7 +1463,7 @@ function update_unit_order_commands()
       $("#order_sentry").show();  // TO DO?: air units and new triremes can't sentry outside a fueling tile
       if (unit_can_vigil(punit)) {
         $("#order_vigil").show();
-        unit_actions["vigil"] = {name: "Vigil (Ctrl-V)"};
+        unit_actions["vigil"] = {name: "Vigil (Shift-I)"};
       }
     }
 
