@@ -259,7 +259,7 @@ static int team_placement_vertical(const struct tile *ptile1,
 
   map_distance_vector(&dx, &dy, ptile1, ptile2);
   /* Map vector to natural vector (X axis). */
-  return abs(MAP_IS_ISOMETRIC ? dx - dy : dy);
+  return abs(MAP_IS_ISOMETRIC ? dx - dy : dx);
 }
 
 /************************************************************************//**
