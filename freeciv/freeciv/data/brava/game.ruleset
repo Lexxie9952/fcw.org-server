@@ -19,24 +19,24 @@ format_version=20
 [ruledit]
 
 ; Which file to read description in from.
-description_file = "ag2/README.ag2"
+description_file = "ag/README.ag"
 
 [about]
 ; Ruleset name
 ; DO NOT CHANGE, FCW unfortunately has to hard-code certain special cases for this.
-name = _("Avant-garde 2")
+name = _("Avant-garde")
 
 ; There`s no separate versioning in rulesets part of main freeciv distribution
 ;version = ""
 
 ; Summary of the ruleset
 ; /* TRANS: In the client, this is displayed alongside the contents of
-;    README.ag2, which are not localized. */
+;    README.ag, which are not localized. */
 summary = _("")
 
 ; Detailed description
 ; When updating this, update also desciption_file in [ruledit] section to match
-description = *ag2/README.ag2*
+description = *ag/README.ag*
 
 ; What capabilities ruleset provides for the scenarios.
 ; mimimum-default-sets - Default units, terrains, buildings, etc

@@ -25,6 +25,7 @@
 15. New server setting killcitizen_pct defaults to 62% (doc it)
 16. Ecclesiastical Palace price drop to 90.
 17. Commerce units can enter Peace territory for peaceful purposes, and during War can attack.
+18. Pre-civilized tribes enjoy a +1/3 move bonus. Building your first city increases sedentary culture and eliminates the bonus.
 
 Angkor Wat
 Code of Hammurabi

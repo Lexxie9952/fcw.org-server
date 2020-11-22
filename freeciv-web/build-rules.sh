@@ -1,7 +1,7 @@
 #!/bin/bash
 # builds Freeciv-web, copies the war file to Tomcat and builds the selected rulesets.
 
-RULESETS=(maptest civ2civ3 classic multiplayer mpplus mp2 mp2sandbox ag ag2)
+RULESETS=(maptest civ2civ3 classic multiplayer mpplus mp2 mp2sandbox ag ag2 brava)
 TOPDIR="$( cd ../"$( dirname "${BASH_SOURCE[0]}" )" > /dev/null && pwd )"
 
 printf "\nUpdating rulesets\n"

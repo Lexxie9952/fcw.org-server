@@ -107,7 +107,8 @@ tiles = { "row", "column", "tag"
   2, 15, "u.leader"		      ; [GB]
   2, 16, "u.barbarian_leader"	; FiftyNine
   2, 17, "u.migrants"		    ; Eleazar
-  2, 18, "u.anti_aircraft"    ; [Lexxie] 
+  2, 18, "u.anti_aircraft"    ; [Lexxie]
+  2, 19, "u.tribesmen"        ; [Lexxie]
   3,  0, "u.well_digger"		  ; [Lexxie]
   3,  1, "u.balloon"          ; [Lexxie]
   3,  2, "u.missile_destroyer" ; [Lexxie]

@@ -211,71 +211,56 @@ reqs    =
 [effect_upkeep_tech_free]
 type    = "Tech_Upkeep_Free"
 value   = 3
-
 ; *************************** TRADE ROUTES ****************************
 [effect_trade_routes]
 type    = "Max_Trade_Routes"
 value   = 1
 
-; -------------------- TRADE ROUTE ONGOING REVENUE --------------------
-[effect_appian_traderoute_nation]
-type    = "Traderoute_Pct"
-value   = 33
-reqs    =
-    { "type", "name", "range"
-      "Building", "Appian Way", "Player"
-    }
-[effect_appian_traderoute_city]
-type    = "Traderoute_Pct"
-value   = 33
-reqs    =
-    { "type", "name", "range"
-      "Building", "Appian Way", "City"
-    }
-
+;pow(2, value/1000) -> Base = 50% 
 ; ------------ ESTABLISH TRADE ROUTE, ONE TIME BONUS -----------------
 ;pow(2, value/1000) = 19% or about 1/5 of normal
 [effect_base_trade_revenue_reduce]
 type    = "Trade_Revenue_Bonus"
-value   = -2400
-reqs    =
-    { "type", "name", "range", "present"
-    }
-[effect_appian_base_restore]
-type    = "Trade_Revenue_Bonus"
-value   = 2400
-reqs    =
-    { "type", "name", "range", "present"
-; don't stack on top of already restored bonuses for Enter Marketplace
-      "Action", "Enter Marketplace", "Local", FALSE
-      "Building", "Appian Way", "Player", TRUE
-    }
-; 2 ^ (-0.414) = 75% (i.e. -25%)
+value   = -1000
+
+;Total = 25%
 [effect_railroad_trade_revenue_reduce]
 type    = "Trade_Revenue_Bonus"
-value   = -414
+value   = -1000
 reqs    =
-    { "type", "name", "range", "present"
-      "Tech", "Railroad", "Player", TRUE
+    { "type", "name", "range"
+      "Tech", "Railroad", "Player"
     }
-; 2 ^ (-0.414) = 75% (i.e. -25%)
+;Total = 25%
 [effect_flight_trade_revenue_reduce]
 type    = "Trade_Revenue_Bonus"
-value   = -414
+value   = -1000
 reqs    =
-    { "type", "name", "range", "present"
-      "Tech", "Flight", "Player", TRUE
+    { "type", "name", "range"
+      "Tech", "Flight", "Player"
     }
-; ------------ ESTABLISH TRADE ROUTE, ONE TIME BONUS -----------------
-; 1. Restore Trade_Revenue_Bonus effects: -2400+1986=-414 = 75% of norm.
-; Average-ish Size8-to-Size8 route gets 80 gold, i.e. 20 in profit for 30 shield unit.
-[effect_enter_marketplace_bonus_restore]
+
+
+;If you don't acquire ongoing trade revenue from a trade route,
+;a DECREASE in one-time bonus made NO SENSE AT ALL,
+;Now it's a one time bonus with potentially slight ROI.
+[effect_enter_marketplace_bonus_increase]
 type	= "Trade_Revenue_Bonus"
-value	= 1986
+value	= 2000 
 reqs	=
     { "type", "name", "range"
       "Action", "Enter Marketplace", "Local"
-    }
+    } 
+;TO-DO: pay x more than gold value of vessel entering marketplace, with ROI being somewhat inferior to most 
+;investments but hinting toward same order of magnitude.
+
+[effect_establish_traderoute_bonus]
+type	= "Trade_Revenue_Bonus"
+value	= -2400 
+;this -2400 should go into base effect above 
+;then reqs action = "Establish Trade Route" can be an increase to counter both the -2400 subtracted above then to 
+;further tune upward any one time bonus to what it needs to be. reqs can look at unit type also to compensate higher cost 
+;of making certain units, since route-creating units now vary from 20 shields to 50 shields in cost. 
 
 ; ***************************** SEA UNIT REPAIR *******************************
 ; Sea units have crews which pro-actively repair damage regardless of movement.
@@ -699,38 +684,17 @@ reqs	=
 type    = "Output_Waste"
 value	= 37
 reqs	=
-    { "type", "name", "range", "present"
-      "Gov", "Despotism", "Player", TRUE
-      "Building", "Code of Hammurabi", "Player", FALSE
-      "OutputType", "Trade", "Local", TRUE
-    }
-[effect_corruption_hammurabi_despotism0]
-type    = "Output_Waste"
-value	= 26
-reqs	=
     { "type", "name", "range"
       "Gov", "Despotism", "Player"
-      "Building", "Code of Hammurabi", "Player"
       "OutputType", "Trade", "Local"
     }
-
 
 [effect_corruption_despotism1]
 type    = "Output_Waste_By_Distance"
 value	= 400
 reqs	=
-    { "type", "name", "range", "present"
-      "Gov", "Despotism", "Player", TRUE
-      "Building", "Code of Hammurabi", "Player", FALSE
-      "OutputType", "Trade", "Local", TRUE
-    }
-[effect_corruption_hammurabi_despotism1]
-type    = "Output_Waste_By_Distance"
-value	= 300
-reqs	=
     { "type", "name", "range"
       "Gov", "Despotism", "Player"
-      "Building", "Code of Hammurabi", "Player"
       "OutputType", "Trade", "Local"
     }
 
@@ -1172,18 +1136,8 @@ reqs	=
 type    = "Output_Penalty_Tile"
 value   = 2
 reqs	=
-    { "type",         "name",             "range",  "present"
-      "Gov",          "Despotism",        "Player", TRUE
-      "Building",     "Code of Hammurabi","Player", FALSE
-    }
-[effect_gov_tile_bonus_despotism1]  ; Code of Hammurabi removes tile penalty on lowlands tiles
-type    = "Output_Penalty_Tile"
-value   = 2
-reqs	=
-    { "type",         "name",            "range",   "present"
-      "Gov",          "Despotism",       "Player",  TRUE
-      "Building",     "Code of Hammurabi","Player", TRUE
-      "TerrainFlag",  "Low Land",         "Local",  FALSE
+    { "type",       "name",      "range"
+      "Gov", "Despotism", "Player"
     }
 
 [effect_gov_tile_bonus_2]
@@ -3234,25 +3188,6 @@ reqs    =
       "UnitType", "Pikemen", "Local", TRUE 
     }
 
-[effect_appian_trade_city]
-type    = "Output_Add_Tile"
-value   = 1
-reqs    =
-    { "type", "name", "range"
-      "Building", "Appian Way", "City"
-      "Building", "Appian Way", "Player"
-      "CityTile", "Center", "Local"
-      "OutputType", "Trade", "Local"
-    }
-
-[effect_angkor_wat]
-type    = "No_Unhappy"
-value	= 1
-reqs	=
-    { "type", "name", "range"
-      "Building", "Angkor Wat", "Player"
-    }
-
 [effect_asmiths_trading_co]
 type    = "Upkeep_Free"
 value	= 1
@@ -3260,16 +3195,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "A.Smith's Trading Co.", "Player"
     }
-
-[effect_code_of_hammurabi_temple]
-type    = "Make_Content"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Code of Hammurabi", "Player", TRUE
-      "Building", "Temple", "City", FALSE
-    }
-;other hammurabi effects in gov:despotism section
 
 [effect_colossus]
 type    = "Output_Inc_Tile"
@@ -4254,31 +4179,6 @@ reqs	=
       "Building", "Shakespeare's Theatre", "City"
     }
 
-[effect_sphinx_tile]
-type    = "Output_Penalty_Tile"
-value = 100
-reqs	=
-    { "type",     "name",       "range"
-      "Building", "The Sphinx", "City"
-    }
-[effect_sphinx_luxury]
-type    = "Output_Add_Tile"
-value = 1
-reqs	=
-    { "type",       "name",        "range"
-      "Building",   "The Sphinx",  "City"
-      "CityTile",   "Center",      "Local"
-      "OutputType", "Luxury",      "Local" 
-    }
-[effect_sphinx_corruption]
-type    = "Output_Waste_Pct"
-value	= 60
-reqs	=
-    { "type",       "name",       "range" 
-      "Building",   "The Sphinx", "City" 
-      "OutputType", "Trade",      "Local" 
-    } 
-  
 [effect_statue_of_liberty]
 type    = "Any_Government"
 value	= 1
