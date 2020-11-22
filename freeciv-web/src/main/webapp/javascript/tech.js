@@ -146,6 +146,7 @@ function init_tech_screen()
   if (ruleset_control['name'] == "Multiplayer-Plus ruleset") reqtree = reqtree_mpplus;
   if (ruleset_control['name'] == "Multiplayer-Evolution ruleset") reqtree = reqtree_mpplus;
   if (ruleset_control['name'].startsWith("Avant-garde")) reqtree = reqtree_avantgarde;
+  if (ruleset_control['name'].startsWith("MP2")) reqtree = reqtree_avantgarde;   // from MP2 Brava onward all MP2 rules start with "MP2"
 
   tech_canvas = document.getElementById('tech_canvas');
   if (tech_canvas == null) {
@@ -357,6 +358,18 @@ function update_tech_tree()
     var prunits = get_units_from_tech(tech_id);
     for (var i = 0; i < prunits.length; i++) {
       var punit = prunits[i];
+      var ptype = unit_type(punit);
+
+      // Suppress nuclear units if server settings don't allow them:
+      /* TO DO:  this isn't working for some reason, make it work
+      if (ptype && utype_has_flag(ptype, UTYF_NUCLEAR)) {
+        if (!server_settings['nukes_minor']['val']) continue; // Nukes totally turned off in this game, skip them
+        if (!server_settings['nukes_major']['val']) { // bombard_rate !=0 or !=-1 is a major nuke, skip if game settings have turned it off.
+          if (ptype['bombard_rate']>0) continue;   // if major nukes are OFF, suppress illegal prod choice.
+          if (ptype['bombard_rate']<-1) continue;  // if major nukes are OFF, suppress illegal prod choice.
+        }
+      }
+      */
       var sprite = sprites[tileset_unit_type_graphic_tag(punit)];
       if (sprite != null) {
         tech_canvas_ctx.drawImage(sprite, x + 50 + ((tech_things++) * 30), y + 23, 28, 24);
@@ -366,6 +379,15 @@ function update_tech_tree()
     var primprovements = get_improvements_from_tech(tech_id);
     for (var i = 0; i < primprovements.length; i++) {
       var pimpr = primprovements[i];
+
+      // Suppress improvements if server settings don't allow them:
+      /* TO DO:  this isn't working for some reason, make it work
+      if (!server_settings['nukes_major']['val']
+          && primprovements['name'] == "Enrichment Facility") {
+            continue; // if major nukes are OFF, suppress illegal prod choice.
+      }
+      */
+
       var sprite = sprites[tileset_building_graphic_tag(pimpr)];
       if (sprite != null) {
         tech_canvas_ctx.drawImage(sprite, x + 50 + ((tech_things++) * 30), y + 23, 28, 24);

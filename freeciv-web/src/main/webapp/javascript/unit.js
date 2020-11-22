@@ -172,7 +172,9 @@ function unit_can_do_unload(punit)
 {
   if (!punit) return false;
   var rules = ruleset_control['name'];
-  if (!rules.startsWith("Avant-garde") && rules != "Multiplayer-Evolution ruleset")
+  if ( !rules.startsWith("Avant-garde") 
+       && rules != "Multiplayer-Evolution ruleset"
+       && !rules.startsWith("MP2") )  // from MP2 Brava onward all MP2 rules start with "MP2"
     return true; // no actionenabler restrictions on other rulesets
   //****************************************************************** */
   var tunit=null,ttype=null,tclass=null;

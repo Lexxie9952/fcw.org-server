@@ -986,7 +986,8 @@ function generate_production_list()
     } 
     // Suppress improvements with special obsolete conditions
     if ((ruleset_control['name']=="Multiplayer-Evolution ruleset"
-               || ruleset_control['name'].startsWith("Avant-garde"))
+               || ruleset_control['name'].startsWith("Avant-garde")
+               || ruleset_control['name'].startsWith("MP2")) // from MP2 Brava onward all MP2 rules start with "MP2"
                && pimprovement['name'] == "Great Wall"
                && player_invention_state(client.conn.playing, tech_id_by_name('Machine Tools')) == TECH_KNOWN) {
                  continue;

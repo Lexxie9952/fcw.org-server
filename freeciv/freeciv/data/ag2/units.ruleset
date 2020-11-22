@@ -656,7 +656,7 @@ Upkeep for Settlers costs food as well as production. A Settler\
 [unit_tribesmen]
 name          = _("?unit:Tribesmen")
 class         = "Land"
-tech_req      = "Fusion Power"
+tech_req      = "None"
 obsolete_by   = "None"
 graphic       = "u.tribesmen"
 graphic_alt   = "u.engineers" ; for compatibility
@@ -678,7 +678,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "NonMil", "HasNoZOC", "Cant_Fortify", "Capturable", "Expellable"
+flags         = "NoBuild", "NonMil", "HasNoZOC", "Cant_Fortify", "Capturable", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0
@@ -733,6 +733,7 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = "AttackFastStartUnit"     ;this role taken over for well-digger
 helptext      = _("\
+AG2 ! \
 This unit can fix unlucky starts, but has very high upkeep.\ 
  If you have no water, make a Well-Digger in a city that can\
  support it, create a water source, then disband the unit.\n\
@@ -4418,7 +4419,3 @@ Wagons are the first Land unit that can do Commerce; but they pay gold upkeep, c
 Units with 2 moves or less can be carried on Wagons. Only Foot units can\
  load/unload outside a city, but may lose their moves doing so.\n\n\
 ")
-
-
-
-

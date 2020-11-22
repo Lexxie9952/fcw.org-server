@@ -652,15 +652,24 @@ function handle_ruleset_control(packet)
 {
   ruleset_control = packet;
 
+  // Set Flags for hard-coded client behaviors/optimisations specific to rulesets: *************************
   for (i=0;i<CRF_LAST;i++)
     client_rules_flag[i] = false; // reset, maybe loading new rules
 
   client_rules_flag[CRF_MINOR_NUKES]=true; // all known rules have 3x3 fission nukes at this time
 
-  // Flags for hard-coded client behaviors/optimisations specific to rulesets:
-  switch (ruleset_control['name']) {
+
+  var rules = ruleset_control['name'];
+
+  // Establish legacy compatibility for all MP2 rulesets from Brava onward: 
+  if (rules.startsWith("MP2")) {
+    rules = "MP2";
+  }
+  // Legacy rules block:
+  switch (rules) {
     case "Avant-garde":
     case "Avant-garde 2":
+    case "MP2":
       client_rules_flag[CRF_RADAR_TOWER]=true;
       client_rules_flag[CRF_EXTRA_HIDEOUT]=true;
       client_rules_flag[CRF_EXTRA_QUAY]=true;
@@ -676,7 +685,6 @@ function handle_ruleset_control(packet)
       client_rules_flag[CRF_LEGION_WORK]=true
       client_rules_flag[CRF_MASONRY_FORT]=true;
       client_rules_flag[CRF_CANALS]=true;
-   // client_rules_flag[CRF_NO_UNIT_GOLD_UPKEEP]=true;
       client_rules_flag[CRF_MP2_SPECIAL_UNITS]=true;
       client_rules_flag[CRF_COMMIE_BLDG_UPKEEP]=true;
       client_rules_flag[CRF_PACTS_SANS_EMBASSY]=true;
@@ -712,6 +720,16 @@ function handle_ruleset_control(packet)
       client_rules_flag[CRF_MAGLEV] = true;
     case "Sandbox ruleset":
       client_rules_flag[CRF_COMMIE_BLDG_UPKEEP]=true;
+    break;
+  }
+  /* Flags for hard-coded client behaviors/optimisations specific to rulesets,
+     for MP2 Brava and onward:            */
+  switch (ruleset_control['name']) {
+    case "MP2 Crusader":
+       // crusader-only flags
+       client_rules_flag[CRF_DEMOCRACY_NONCORRUPT] = false;
+    case "MP2 Brava":
+      // flags for brava and crusader, etc.
     break;
   }
 
