@@ -22,5 +22,7 @@ printf "\nOverwriting ag7.html with ag7.bak.html\n"
    cp /vagrant/freeciv-web/src/derived/webapp/man/ag7.bak.html /vagrant/freeciv-web/src/derived/webapp/man/ag7.html
 printf "\nOverwriting ag27.html with ag27.bak.html\n"
    cp /vagrant/freeciv-web/src/derived/webapp/man/ag27.bak.html /vagrant/freeciv-web/src/derived/webapp/man/ag27.html
+printf "\nOverwriting mp2-brava7.html with mp2-brava7.bak.html\n"
+   cp /vagrant/freeciv-web/src/derived/webapp/man/mp2-brava7.bak.html /vagrant/freeciv-web/src/derived/webapp/man/mp2-brava7.html
 
 printf "\n*** REMINDER:  run ./build.sh to refresh and activate new manual.\n"
