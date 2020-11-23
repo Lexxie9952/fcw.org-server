@@ -649,10 +649,18 @@ function ruledir_from_ruleset_name(ruleset_name, fall_back_dir)
     return "mp2";
   case "Avant-garde":
     return "ag";  
-  default:
+ default:
+    /* Prevent the need of hardcoding this client function for every new ruleset, by 
+       making a way for fall_back_dir to match the name of the ruleset automatically:
+       dir_name will be forced to lowercase and replace spaces with hyphen ("-")
+       In other words, in game.ruleset, name your ruleset the same as the dir name,
+       then you won't have to change this function. */
+    if (!fall_back_dir) {
+      fall_back_dir = ruleset_name.toLowerCase().replace(" ","-");
+    } 
     console.log("Don't know the ruleset dir of \"" + ruleset_name
                 + "\". Guessing \"" + fall_back_dir + "\".");
-    return fall_back_dir;
+    return fall_back_dir; // af
   }
 }
 
