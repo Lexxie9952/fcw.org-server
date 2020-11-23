@@ -1365,11 +1365,12 @@ veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
 veteran_move_bonus = 0, 0, 0, 1, 1, 1, 1
 roles         = "DefendOk", "DefendOkStartUnit", "BarbarianSeaTech"
 helptext      = _("\
-Marines are experts at amphibious war. They are the strongest\
+Marines are experts at all-terrain warfare. They are the strongest\
  foot unit in the game, and are armed with diverse weaponry.\n\
  Unlike other units, Marines can attack Sea units (at a penalty).\
  Air units do not stop them from attacking reachable targets.\
- They can attack from a Transport or Helicopter. Marines promoted to three\
+ They can attack from a Transport or Helicopter, and can offload
+ without losing a turn of movement. Marines promoted to three\
  veteran levels become commandos suitable for special ops.\n\
  Marines built in a city with an Airport, Port Facility, and Barracks III\
  receive the second veteran level (hardened.)\
@@ -1446,9 +1447,9 @@ vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
 uk_happy      = 1
-uk_shield     = 1
+uk_shield     = 0
 uk_food       = 0
-uk_gold       = 0
+uk_gold       = 1
 embarks       = "Helicopter"    ; transport helicopter only
 ;disembarks    = "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail"
@@ -1924,7 +1925,8 @@ helptext      = _("\
 Anti-Aircraft Artillery (AAA) can attack almost anything from anywhere. AAA get a\
  2x bonus against Air units. AAA qualify as weaponry for Marines and have the same\
  abilities: they can be transported on any unit that carries Marines, can attack from\
- or to non-native tiles, and do not lose a turn when unloading. (AAA cannot attack Submarines, Missiles,\
+ or to non-native tiles, and do not lose a turn when unloading. Transported AAA can\
+ defend their tile on both Land and Sea. (AAA cannot attack Submarines, Missiles,\
  or Jet Bombers.)\
 "), _("
 After Space Flight and 10 turns of service, AAA can be retrofitted to\
@@ -2976,8 +2978,7 @@ Boats were used pre-historically for exploration,\
  commerce: building Wonders or setting up Traderoutes\
  without Trade tech. Primitive bartering generates little\
  or no extra trade, but may help you advance faster or\
- create relations with ancient neighbors. To build\
- Wonders with Boats requires Currency.\
+ create relations with ancient neighbors.\
 ")
 
 [unit_trireme]
