@@ -20,18 +20,18 @@ cd ${basedir}/scripts/ && ./start-freeciv-web.sh
 cat ${basedir}/logs/*.log 
 
 echo "============================================"
-echo "Start testing of Freeciv-web using CasperJS:"
-cd ${basedir}/tests/
+#echo "Start testing of Freeciv-web using CasperJS:"
+#cd ${basedir}/tests/
 
-casper_test freeciv-web-tests.js
+#casper_test freeciv-web-tests.js
 
-echo "Running Freeciv-web server in autogame mode."
-mv "${basedir}"/publite2/pubscript_singleplayer.serv{,.bak}
-cp ${basedir}/publite2/pubscript_autogame.serv ${basedir}/publite2/pubscript_singleplayer.serv
-killall freeciv-web
-sleep 20
-casper_test freeciv-web-autogame.js
-mv "${basedir}"/publite2/pubscript_singleplayer.serv{.bak,}
+#echo "Running Freeciv-web server in autogame mode."
+#mv "${basedir}"/publite2/pubscript_singleplayer.serv{,.bak}
+#cp ${basedir}/publite2/pubscript_autogame.serv ${basedir}/publite2/pubscript_singleplayer.serv
+#killall freeciv-web
+#sleep 20
+#casper_test freeciv-web-autogame.js
+#mv "${basedir}"/publite2/pubscript_singleplayer.serv{.bak,}
 
 echo "running pbem unit tests."
 cd ${basedir}/pbem
