@@ -672,8 +672,8 @@ static bool manual_command(struct tag_types *tag_info)
                 move_points_text(putype->move_rate, TRUE));
         fprintf(doc, "%s", tag_info->subitem_end);
         fprintf(doc, tag_info->subitem_begin, "vision");
-        fprintf(doc, _("Vision: %d"),
-                (int)sqrt((double)putype->vision_radius_sq));
+        fprintf(doc, _("Vision: %.2f tiles"),
+                sqrt((double)putype->vision_radius_sq));
         fprintf(doc, "%s", tag_info->subitem_end);
         fprintf(doc, tag_info->subitem_begin, "attack");
         fprintf(doc, _("Attack: %d"),
