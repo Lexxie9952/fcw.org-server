@@ -1364,7 +1364,7 @@ actor_reqs    =
       "UnitClassFlag", "CanFortify",   "Local", TRUE
       "UnitFlag",      "Cant_Fortify", "Local", FALSE
       "UnitClass",     "AirProtect",   "Local", FALSE
-      "UnitState",    "Transported",   "Local", FALSE
+      "UnitState",     "Transported",  "Local", FALSE
     }
 
 [actionenabler_road]
@@ -1381,7 +1381,7 @@ actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitType",      "Proletarians", "Local",   TRUE
-      "Gov",           "Communism",     "Player", TRUE
+      "Gov",           "Communism",    "Player", TRUE
     }
 [actionenabler_legion_road]
 action        = "Road"
@@ -2093,6 +2093,7 @@ set =
       "nuclearwinter_percent", 20, FALSE
       "nukes_minor", "ENABLED", FALSE      ; set to DISABLED to completely disallow nuclear detonations
       "nukes_major", "DISABLED", FALSE     ; set to ENABLED to allow nuclear fusion weapons
+      "polarstrip", "DISABLED", FALSE      ; blocks making horizontal polar strips on most generators
       "revolen", 1, FALSE
       "separatepoles", FALSE, FALSE
       "slot_control", TRUE, FALSE         ; multiple units per turn

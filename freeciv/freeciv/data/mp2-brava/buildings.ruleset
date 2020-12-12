@@ -1189,26 +1189,29 @@ sabotage	= 0
 sound		= "b_palace"
 sound_alt	= "b_generic"
 helptext	= _("\
-Sets the capital of your nation. Generally, corruption in cities increases with\
- distance from the capital. A Palace reduces corruption in the capital by half.\
+Sets the main capital of your nation. Loss of your main capital: \
+ (1) creates a new Palace and capital in a random city,\
+ (2) destroys any Spaceship you are building, (3) may cause civil war.\
 "), _("\
- The cost of inciting a revolt decreases with distance from the\
- capital. The capital cannot be incited to revolt. The chance\
- of enemy agents defeating your agents or sabotaging buildings is\
- reduced by half.\
+ Capital cities gain +1 happy citizen.\
 "), _("\
- Losing your capital may result in your empire falling into civil\
- war. It will also destroy any Spaceship you have.\
+ Capitals cannot be incited to revolt. The closer a city is to a capital,\
+ the higher the cost to bribe or incite revolt. In a capital, the chance of\
+ enemy agents defeating your agents or sabotaging buildings is halved.\
 "), _("\
- You can rebuild your Palace in another city. This may help secure\
- a safer location or reduce corruption.\ 
+ Corruption in cities increases with distance from the capital. Capitals\
+ enjoy a further reduction of corruption by half.\
+"), _("\
+ You can rebuild your Palace in another city. This may secure\
+ a safer location or reduce corruption for nearby cities.\ 
 "), _("\
  The Palace gives a production bonus of +75% under Despotism,\
  +50% under Monarchy, and +25% under Communism. Fundamentalism gets\
  a +50% gold bonus.\
 "), _("\
- A Palace is created when you make your first city. Sedentary city\
- culture nullifies the move bonus of tribes who have no cities.\
+ A Palace automatically appears in your first city. This nullifies\
+ the move bonus for nations who have no cities, due to sedentary\
+ culture.\
 "), _("\
  With Conscription, a Palace allows conscripting one extra qualifying unit per turn.\
 ")
@@ -1232,17 +1235,20 @@ sabotage	= 0
 sound		= "b_palace"
 sound_alt	= "b_generic"
 helptext	= _("\
-Makes a city the religious capital that acts as a second center of government.\
+Sets your religious capital and second center of government. Loss of this\
+ city will create a new Ecclesiastical Palace in a random city.\
 "), _("\
- Cities experience lower corruption rates if they are closer to\
- a capital. In your religious capital, capital bonuses are rendered\
- in gold tithes rather than shield output. Under Fundamentalism,\
- the religious capital gets a +50% gold bonus from tithes.\
+ Capital cities gain +1 happy citizen.\
 "), _("\
- The cost of bribing and inciting increase when closer to a\
- capital. Capitals can not be incited to revolt, and the\
- chance of enemy agents defeating your agents or sabotaging\
- buildings is reduced by half.\
+ Capitals cannot be incited to revolt. The closer a city is to a capital,\
+ the higher the cost to bribe or incite revolt. In a capital, the chance of\
+ enemy agents defeating your agents or sabotaging buildings is halved.\
+"), _("\
+ Corruption in cities increases with distance from the closest capital. Capitals\
+ enjoy a further reduction of corruption by half.\
+"), _("\
+ Religious capitals have a gold income bonus of +75% under Despotism,\
+ +50% under Monarchy, +50% under Fundamentalism, and +25% under Communism.\
 "), _("\
  Under Fundamentalism, Fanatics produced in the city with this building\
  are inspired by fervorous faith to +1 higher veteran level.\

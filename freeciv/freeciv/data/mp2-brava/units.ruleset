@@ -922,7 +922,8 @@ helptext      = _("\
 Engineers can do everything Workers can do, at twice the speed.\
  Unlike Workers, Engineers can Transform, such as converting\
  Desert to Plains. Converting Ocean to Swamp requires being on a ship\
- on a tile bordering 3 land tiles.\
+ on a tile bordering 3 land tiles. Constructing a Sea Bridge requires\
+ being on a ship on a tile cardinally adjacent to land.\
 ")
 
 [unit_warriors]

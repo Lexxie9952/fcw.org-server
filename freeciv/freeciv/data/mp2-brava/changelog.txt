@@ -18,10 +18,11 @@
 9. On average, Fallout lasts 5 turns before randomly disappearing.
 10. Clean pollution can be done by foot soldiers and also while transported 
 11. New server setting killcitizen_pct defaults to 60% (doc it)
-12. Ecclesiastical Palace price drop to 90.
+12. Ecclesiastical Palace price drop to 90. Like a Palace, relocates when the city is lost.
 13. Pre-civilized tribes enjoy a +1/3 move bonus. Building your first city increases sedentary culture and eliminates the bonus.
 14. Tribesmen -- allows defending a city, early exploring, but mostly, a better unit than Explorer for giving the ability to disband for early shield acceleration.
 15. Explorer -- cost reduced to 25, req changed to Map Making (was Seafaring), slight vision boost from sqrt(4) to sqrt(5)
-
+16. Sea Bridge -- can be built with Steel tech, requires Worker type on sea transport, 6 turns. MagLevs can also be made over them.
+    Trains on Sea Bridge use 1/3 move instead of 1/9.
 
 

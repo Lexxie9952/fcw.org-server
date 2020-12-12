@@ -1342,8 +1342,8 @@ function update_unit_order_commands()
         $("#order_road").show();
         $("#order_railroad").hide();
         if (!(tile_has_extra(ptile, EXTRA_RIVER) && player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) == TECH_UNKNOWN)) {
-	      unit_actions["road"] = {name: "Road (R)"};
-	    }
+	        unit_actions["road"] = {name: "Road (R)"};
+	      }
       } else if (player_invention_state(client.conn.playing, tech_id_by_name('Railroad')) == TECH_KNOWN
                  && tile_has_extra(ptile, EXTRA_ROAD)
                && !tile_has_extra(ptile, EXTRA_RAIL)) {
@@ -1359,6 +1359,10 @@ function update_unit_order_commands()
         $("#order_road").hide();
         $("#order_railroad").hide();
       }
+      if (can_build_sea_bridge(punit, ptile)) {
+          unit_actions["road"] = {name: "Sea Bridge (R)"};
+      }
+
       if (tile_has_extra(ptile, EXTRA_RIVER) && player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) == TECH_UNKNOWN) {
         $("#order_road").hide();
       }
@@ -4763,6 +4767,18 @@ function unit_can_vigil(punit)
   return false;
 }
 
+/**************************************************************************
+ Check whether a unit can build a Sea Bridge in a tile.
+**************************************************************************/
+function can_build_sea_bridge(punit, ptile)
+{
+  return ((typeof EXTRA_SEABRIDGE !== "undefined")
+      &&  (punit != null && ptile != null)
+      && (!tile_has_extra(ptile, EXTRA_SEABRIDGE)) 
+      && (player_invention_state(client.conn.playing, tech_id_by_name('Steel')))
+      &&  (unit_can_do_action(punit, ACTION_ROAD))
+         );
+}
 
 /**************************************************************************
  Check whether a unit can build a maglev in a tile.
@@ -5061,6 +5077,12 @@ function key_unit_road()
 
     if (unit_types[punit['type']]['name'] == "Well-Digger")
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['River']['id']);
+    else if (is_ocean_tile(ptile)) {
+      if (can_build_sea_bridge(punit,ptile) && !tile_has_extra(ptile, EXTRA_SEABRIDGE))
+         request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Sea Bridge']['id']);
+      else if (can_build_maglev(punit, ptile))
+        request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Maglev']['id']);  
+    }
     else if (!tile_has_extra(ptile, EXTRA_ROAD)) {
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Road']['id']);
     } else if (!tile_has_extra(ptile, EXTRA_RAIL)) {

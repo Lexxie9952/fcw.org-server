@@ -1600,32 +1600,63 @@ function get_tile_river_like_sprite(ptile, extra, prefix)
       }
     }
   }
-  if (tile_has_extra(ptile, extra)) {
-    var river_str = "";
-    for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
-      var dir = cardinal_tileset_dirs[i];
-      var checktile = mapstep(ptile, dir);
-      if (checktile 
-          && (tile_has_extra(checktile, extra)
-          || is_ocean_tile(checktile)
-          || tile_has_extra(checktile, integrate_extras[0])
-          || tile_has_extra(checktile, integrate_extras[1])
-          || tile_has_extra(checktile, integrate_extras[2])  )  ) {
-        river_str = river_str + dir_get_tileset_name(dir) + "1";
-      } else {
-        river_str = river_str + dir_get_tileset_name(dir) + "0";
+  if (typeof EXTRA_SEABRIDGE !== 'undefined' && extra == EXTRA_SEABRIDGE) {
+    if (tile_has_extra(ptile, extra)) {
+      var river_str = "";
+      for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
+        var dir = cardinal_tileset_dirs[i];
+        var checktile = mapstep(ptile, dir);
+        if (checktile 
+            && (tile_has_extra(checktile, extra)
+            || !is_ocean_tile(checktile)
+            || tile_has_extra(checktile, EXTRA_ROAD)  )  ) {
+          river_str = river_str + dir_get_tileset_name(dir) + "1";
+        } else {
+          river_str = river_str + dir_get_tileset_name(dir) + "0";
+        }
+      }
+      return {"key" : prefix + "_s_" + river_str};
+    }
+
+    var pterrain = tile_terrain(ptile);
+    if (pterrain['graphic_str'] != "coast") {
+      for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
+        var dir = cardinal_tileset_dirs[i];
+        var checktile = mapstep(ptile, dir);
+        if (checktile != null && (tile_has_extra(checktile, extra) || tile_has_extra(checktile, extra2)) ) {
+          return {"key" : prefix + "_outlet_" + dir_get_tileset_name(dir)};
+        }
       }
     }
-    return {"key" : prefix + "_s_" + river_str};
-  }
+  } else // SEABRIDGE has opposite outlets: i.e., sea to land, not land to sea
+  {
+    if (tile_has_extra(ptile, extra)) {
+      var river_str = "";
+      for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
+        var dir = cardinal_tileset_dirs[i];
+        var checktile = mapstep(ptile, dir);
+        if (checktile 
+            && (tile_has_extra(checktile, extra)
+            || is_ocean_tile(checktile)
+            || tile_has_extra(checktile, integrate_extras[0])
+            || tile_has_extra(checktile, integrate_extras[1])
+            || tile_has_extra(checktile, integrate_extras[2])  )  ) {
+          river_str = river_str + dir_get_tileset_name(dir) + "1";
+        } else {
+          river_str = river_str + dir_get_tileset_name(dir) + "0";
+        }
+      }
+      return {"key" : prefix + "_s_" + river_str};
+    }
 
-  var pterrain = tile_terrain(ptile);
-  if (pterrain['graphic_str'] == "coast") {
-    for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
-      var dir = cardinal_tileset_dirs[i];
-      var checktile = mapstep(ptile, dir);
-      if (checktile != null && (tile_has_extra(checktile, extra) || tile_has_extra(checktile, extra2)) ) {
-        return {"key" : prefix + "_outlet_" + dir_get_tileset_name(dir)};
+    var pterrain = tile_terrain(ptile);
+    if (pterrain['graphic_str'] == "coast") {
+      for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
+        var dir = cardinal_tileset_dirs[i];
+        var checktile = mapstep(ptile, dir);
+        if (checktile != null && (tile_has_extra(checktile, extra) || tile_has_extra(checktile, extra2)) ) {
+          return {"key" : prefix + "_outlet_" + dir_get_tileset_name(dir)};
+        }
       }
     }
   }
@@ -1827,6 +1858,7 @@ function fill_road_rail_sprite_array(ptile, pcity)
   const CANAL_active =  (typeof EXTRA_CANAL !== "undefined");
   const WATERWAY_active = (typeof EXTRA_WATERWAY !== "undefined");
   const QUAY_active = (typeof EXTRA_QUAY !== "undefined");
+  const SEABRIDGE_active = (typeof EXTRA_SEABRIDGE !== "undefined");
   
   if (MAGLEV_active) {
     var maglev = tile_has_extra(ptile, EXTRA_MAGLEV);
@@ -1853,6 +1885,13 @@ function fill_road_rail_sprite_array(ptile, pcity)
       // Quays integrate with roads "one-way", so we draw the road on the tile that
       // has it but not the quay tile, showing the road going TOWARD the quay.
       if (QUAY_active) road_near[dir] |= tile_has_extra(tile1, EXTRA_QUAY);
+      // Sea Bridges integrate with roads, so the road-tile itself will draw a road
+      // up to the bridge, IFF it's cardinally connected to that bridge.
+      if (SEABRIDGE_active) {
+        if (cardinal_tileset_dirs.includes(dir)) {  // only cardinal tiles are valid road-connectors
+          road_near[dir] |= tile_has_extra(tile1, EXTRA_SEABRIDGE);
+        }
+      }
       rail_near[dir] = tile_has_extra(tile1, EXTRA_RAIL);
       if (MAGLEV_active) maglev_near[dir] = tile_has_extra(tile1, EXTRA_MAGLEV);
    
@@ -1893,14 +1932,19 @@ function fill_road_rail_sprite_array(ptile, pcity)
     /// Rivers, canals, waterways are next.
     var river_sprite = get_tile_river_like_sprite(ptile, EXTRA_RIVER, "road.river");
     var canal_sprite = null;
+    var seabridge_sprite = null;
     if (CANAL_active) {
       canal_sprite = get_tile_river_like_sprite(ptile, EXTRA_CANAL, "road.canal");
     }
     if (!canal_sprite && WATERWAY_active) {
       canal_sprite = get_tile_river_like_sprite(ptile, EXTRA_WATERWAY, "road.canal");
     }
+    if (SEABRIDGE_active) {
+      seabridge_sprite = get_tile_river_like_sprite(ptile, EXTRA_SEABRIDGE, "road.sea_bridge")
+    }
     if (river_sprite != null) result_sprites.push(river_sprite);
     if (canal_sprite != null) result_sprites.push(canal_sprite);
+    if (seabridge_sprite != null) result_sprites.push(seabridge_sprite);
 
     /* Draw rails over rivers and roads. */
     if (rail) {
@@ -2017,7 +2061,9 @@ function fill_layer2_sprite_array(ptile, pcity)
       result_sprites.push({"key" : "base.airbase_mg",
                            "offset_y" : -normal_tile_height / 2});
     }
-    if (tile_has_extra(ptile, EXTRA_BUOY)) {
+    if (tile_has_extra(ptile, EXTRA_BUOY) 
+        || tile_has_extra(ptile, EXTRA_FORTRESS)
+        || (typeof EXTRA_NAVALBASE !== undefined && tile_has_extra(ptile, EXTRA_NAVALBASE))) {
       result_sprites.push(get_base_flag_sprite(ptile));
       result_sprites.push({"key" : "base.buoy_mg",
                            "offset_y" : -normal_tile_height / 2});

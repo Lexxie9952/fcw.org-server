@@ -770,6 +770,9 @@ function handle_ruleset_control(packet)
     if (ename == "Railroad") delete window["EXTRA_RAIL"];
     else if (ename == "Oil Well") delete window["EXTRA_OIL_WELL"];
     else if (ename == "Minor Tribe Village") delete window["EXTRA_HUT"];
+    else if (typeof EXTRA_SEABRIDGE !== 'undefined') {
+      if (ename == "Sea Bridge") delete window["EXTRA_SEABRIDGE"];
+    }
     else if (typeof EXTRA_FORT !== 'undefined') { //makes sure it's defined first
       if (ename == "Fort") delete window["EXTRA_FORT"]; ///// 
     } else if (typeof EXTRA_NAVALBASE !== 'undefined') {
@@ -1950,6 +1953,7 @@ function handle_ruleset_extra(packet)
     if (packet['name'] == "Naval Base") window["EXTRA_NAVALBASE"] = packet['id']; /////
   } */
 
+  if (packet['name'] == "Sea Bridge") window['EXTRA_SEABRIDGE'] = packet['id'];
   if (packet['name'] == "Naval Base") window["EXTRA_NAVALBASE"] = packet['id']; /////
   if (packet['name'] == "Railroad") window["EXTRA_RAIL"] = packet['id'];
   if (packet['name'] == "Oil Well") window["EXTRA_OIL_WELL"] = packet['id'];

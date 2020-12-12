@@ -261,7 +261,7 @@ trade                = 2
 resources            = "Fish"
 road_trade_incr_pct  = 0
 base_time            = 1
-road_time            = 0
+road_time            = 12
 irrigation_result    = "no"
 irrigation_food_incr = 0
 irrigation_time      = 0
@@ -302,7 +302,7 @@ trade                = 2
 resources            = "Fish", "Whales"
 road_trade_incr_pct  = 0
 base_time            = 1
-road_time            = 0
+road_time            = 12
 irrigation_result    = "no"
 irrigation_food_incr = 0
 irrigation_time      = 0
@@ -1487,7 +1487,7 @@ removal_time   = 0
 defense_bonus  = 67
 native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter", "Balloon"
 hidden_by      = "Naval Base"
-flags          = "NativeTile", "Refuel", "NoStackDeath"
+flags          = "ShowFlag", "NativeTile", "Refuel", "NoStackDeath"
 helptext       = _("\
 Fortresses are improvements built on top of Forts which greatly improve defense.\
  A Land unit remaining in a fortress for a whole turn without moving recovers a\
@@ -1526,7 +1526,7 @@ conflicts      = "Airbase", "Fortress"
 defense_bonus  = 67
 native_to      = "Trireme", "RiverShip", "Sea", "Submarine", "Balloon",
                  "Land", "LandAirSea", "LandNoKill", "Helicopter"
-flags          = "NativeTile", "NoStackDeath", "Refuel"
+flags          = "ShowFlag", "NativeTile", "NoStackDeath", "Refuel"
 helptext       = _("\
 Naval bases are coastal Fortresses with ocean access. They allow ships to enter and\ 
  receive a 1.33x bonus from superior fortifications and defensive position. Naval\
@@ -1832,6 +1832,35 @@ Any land terrain type may have a River on it.  A River adds 1\
 "), _("\
 Roads, railroads and MagLev can only be built on River tiles if your\
  civilization has learned Bridge Building technology.\
+")
+
+[extra_sea_bridge]
+name           = _("Sea Bridge")
+category       = "Infra"
+causes         = "Road"
+rmcauses       = "Pillage"
+graphic        = "road.sea_bridge"
+graphic_alt    = "road.road"
+activity_gfx   = "unit.airstrip"
+act_gfx_alt    = "unit.road"
+act_gfx_alt2   = "unit.airstrip"
+rmact_gfx      = "None"
+rmact_gfx_alt  = "-"
+generated      = FALSE
+reqs           =
+    { "type", "name", "range", "present"
+      "TerrainClass", "Oceanic", "Local", TRUE
+      "TerrainClass", "Land", "CAdjacent", TRUE
+      "Tech", "Explosives", "Player", TRUE
+      "UnitFlag", "CanRoad", "Local", TRUE
+    }
+build_time     = 12
+removal_time   = 0
+native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad", "LandRail"
+flags          = "NativeTile"
+helptext          = _("\
+Sea Bridges are engineering marvels which span lakes and seas to connect them for \
+land traffic. They must be built cardinally adjacent to land.\
 ")
 
 [extra_canal]
@@ -2333,7 +2362,7 @@ trade_incr     = 1
 food_bonus     = 0
 shield_bonus   = 0
 trade_bonus    = 0
-integrates     = "Quay"
+integrates     = "Quay", "Sea Bridge"
 compat_special = "Road"
 flags          = "UnrestrictedInfra"
 
@@ -2358,6 +2387,7 @@ trade_incr     = 0
 food_bonus     = 0
 shield_bonus   = 50
 trade_bonus    = 0
+integrates     = "Sea Bridge"
 compat_special = "Railroad"
 
 [road_maglev]
@@ -2378,6 +2408,17 @@ trade_incr_const = 1
 compat_special = "River"
 integrates     = "Canal", "Waterway"
 flags          = "River", "UnrestrictedInfra"
+
+[road_sea_bridge]
+extra          = "Sea Bridge"
+move_cost      = 3
+move_mode      = "Cardinal"
+trade_incr     = 0
+food_bonus     = 0
+shield_bonus   = 0
+trade_bonus    = 0
+integrates     = "Road", "Railroad"
+flags          = "UnrestrictedInfra"
 
 [road_canal]
 extra             = "Canal"
