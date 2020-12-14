@@ -935,7 +935,7 @@ req2     = "Code of Laws"
 flags    = ""
 graphic     = "a.trade"
 graphic_alt = "-"
-helptext = _("Lets all Commerce units make Wonders, Traderoutes.")
+helptext = _("Commerce may do Traderoutes, Enter Marketplace.")
 
 [advance_university]
 name     = _("University")

@@ -2084,7 +2084,7 @@ set =
       "generator", "RANDOM", FALSE
       "gold", 100, FALSE
       "hideouts", TRUE, FALSE
-      "huts", 0, FALSE
+      "huts", 10, FALSE
       "killcitizen_pct", 60, FALSE        ; regulates % chance of pop kill by city pop-killer units
       "landmass", 63, FALSE
       "minplayers", 0, FALSE

@@ -1487,7 +1487,7 @@ removal_time   = 0
 defense_bonus  = 67
 native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter", "Balloon"
 hidden_by      = "Naval Base"
-flags          = "ShowFlag", "NativeTile", "Refuel", "NoStackDeath"
+flags          = "NativeTile", "Refuel", "NoStackDeath"
 helptext       = _("\
 Fortresses are improvements built on top of Forts which greatly improve defense.\
  A Land unit remaining in a fortress for a whole turn without moving recovers a\
@@ -1526,7 +1526,7 @@ conflicts      = "Airbase", "Fortress"
 defense_bonus  = 67
 native_to      = "Trireme", "RiverShip", "Sea", "Submarine", "Balloon",
                  "Land", "LandAirSea", "LandNoKill", "Helicopter"
-flags          = "ShowFlag", "NativeTile", "NoStackDeath", "Refuel"
+flags          = "NativeTile", "NoStackDeath", "Refuel"
 helptext       = _("\
 Naval bases are coastal Fortresses with ocean access. They allow ships to enter and\ 
  receive a 1.33x bonus from superior fortifications and defensive position. Naval\
@@ -1784,7 +1784,7 @@ reqs           =
     }
 build_time     = 3
 removal_time   = 0
-native_to      = "Land", "LandNoKill", "LandAirSea"
+native_to      = "Land", "LandNoKill", "LandAirSea", "LandRail"
 hidden_by      = "Naval Base"
 flags          = "NativeTile", "AutoOnCityCenter"
 helptext       = _("\
