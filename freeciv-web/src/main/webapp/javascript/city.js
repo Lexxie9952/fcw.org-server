@@ -211,7 +211,7 @@ function city_force_income_update()
   for (cid in cities) {
     var pcity = cities[cid];
     // Look at player cities only
-    if (pcity['owner'] == client.conn.playing.playerno) {
+    if (pcity['owner'] == client.conn.playing.playerno && pcity['surplus'] != null) {
       // add net gold income from tax collection
       income += pcity['surplus'][O_GOLD];
 
@@ -1092,6 +1092,8 @@ function city_has_building(pcity, improvement_id)
 **************************************************************************/
 function city_has_building_in_queue(pcity, improvement_id)
 {
+  if (pcity == null || city['worklist'] == null) return false;
+
   // Go through each item in worklist looking for improvement
   for (var z = -1; z < pcity['worklist'].length; z++) { // current prod is not in worklist array but separate, so start at -1
     // Get item from current prod or future worklist---------
@@ -2567,6 +2569,8 @@ function update_worklist_actions()
 **************************************************************************/
 function send_city_worklist(city_id)
 {
+  if (cities[city_id] == null) return;
+
   var worklist = cities[city_id]['worklist'];
   var overflow = worklist.length - MAX_LEN_WORKLIST;
   if (overflow > 0) {
@@ -2819,7 +2823,7 @@ function city_exchange_worklist_task()
   var task_l = worklist_selection.length;
   if (prod_l === task_l) {
     for (i = 0; i < prod_l; i++) {
-      if (same &&
+      if (same && wl[worklist_selection[i]] != null &&
           (wl[worklist_selection[i]].kind !== production_selection[i].kind ||
            wl[worklist_selection[i]].value !== production_selection[i].value)) {
         same = false;
@@ -3681,7 +3685,7 @@ function mass_change_prod()
   //console.log("  mass_change_prod() called")
   var c = prod_selection_city;  // the city to model for what all others should produce
   for (var city_id in cities)  {
-    if ($("#cb"+city_id).is(":checked")) {     
+    if ($("#cb"+city_id).is(":checked") && cities[city_id] != null) {
       send_city_change(cities[city_id].id, cities[c].production_kind,cities[c].production_value);
       city_checkbox_states[city_id] = true;
     } else city_checkbox_states[city_id] = false;

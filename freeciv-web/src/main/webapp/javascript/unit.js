@@ -579,9 +579,11 @@ function get_unit_city_info(punit)
   } else if (client.conn.playing != null && punit['owner'] != client.conn.playing.playerno) {
     // Foreign unit, we don't know home city but we do know nationality and player:
     var player_id = punit['owner'];
-    var nation_id = players[player_id]['nation'];
-    result += ": "+nations[nation_id]['adjective'];
-    result += "\nLeader: "+players[player_id]['name']+"";
+    if (players[player_id] != null) {
+      var nation_id = players[player_id]['nation'];
+      result += ": "+nations[nation_id]['adjective'];
+      result += "\nLeader: "+players[player_id]['name']+"";
+    }
   }
 
   // LOCATION 
@@ -611,9 +613,11 @@ function get_unit_city_info(punit)
     }
     else if (tiles[punit['tile']]['owner'] != client.conn.playing.playerno) {
       var player_id = tiles[punit['tile']]['owner'];
-      var nation_id = players[player_id]['nation'];
-      result += "\nTerritory: "+nations[nation_id]['adjective'];
-      result += " ("+players[player_id]['name']+")";
+      if (players[player_id] != null) {
+        var nation_id = players[player_id]['nation'];
+        result += "\nTerritory: "+nations[nation_id]['adjective'];
+        result += " ("+players[player_id]['name']+")";
+      }
     }
   }
 

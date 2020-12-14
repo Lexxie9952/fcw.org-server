@@ -4839,6 +4839,8 @@ function key_unit_well()
 **************************************************************************/
 function can_build_canal(punit, ptile)
 {
+  if (tile_terrain(ptile) == null) return false;
+
   var is_lowland = (tile_terrain(ptile)['name'] != 'Hills'
                    && tile_terrain(ptile)['name'] != 'Mountains');
 
@@ -4849,7 +4851,7 @@ function can_build_canal(punit, ptile)
   for (var dir = 0; dir < 8; dir++) {
     /* Check if there is adjacent ocean/deep ocean/lake */
     var tile1 = mapstep(ptile, dir);
-    if (tile1 != null) {
+    if (tile1 != null && terrains[tile1['terrain']] != null) {
         if (terrains[tile1['terrain']]['name'] == "Lake"
         || terrains[tile1['terrain']]['name'] == "Ocean"
         || terrains[tile1['terrain']]['name'] == "Deep Ocean") {

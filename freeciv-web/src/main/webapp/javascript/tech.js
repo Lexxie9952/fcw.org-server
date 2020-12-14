@@ -808,6 +808,7 @@ function show_wikipedia_dialog(tech_name)
 {
   $("#tech_tab_item").css("color", "#aa0000");
   if (freeciv_wiki_docs == null || freeciv_wiki_docs[tech_name] == null) return;
+  if (freeciv_wiki_docs[tech_name] == null) return;
 
   var message = "<b>Wikipedia on <a href='" + wikipedia_url
 	  + freeciv_wiki_docs[tech_name]['title']
@@ -1038,7 +1039,7 @@ function get_current_bulbs_output()
     var cplayer = client.conn.playing.playerno;
     for (var city_id in cities){
       var city = cities[city_id];
-      if(city.owner === cplayer) {
+      if(city.owner === cplayerv && city.prod != null) {
         self_bulbs += city.prod[O_SCIENCE];
       }
     }
