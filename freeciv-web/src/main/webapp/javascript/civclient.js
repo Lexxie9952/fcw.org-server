@@ -803,7 +803,7 @@ function is_supercow()
 *************************************************************************/
 function is_ongoing_longturn()
 {
-  return is_longturn() && game_info['turn'] > 0;
+  return is_longturn() && game_info != null && game_info['turn'] > 0;
 }
 
 /**************************************************************************

@@ -54,7 +54,7 @@ handle_error () {
   >&2 echo "${msg}"
   >&2 echo "${stars// /*}"
   >&2 echo
-  exit $status
+  exit(1) 
 }
 
 while :; do
