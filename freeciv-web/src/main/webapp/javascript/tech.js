@@ -1039,7 +1039,7 @@ function get_current_bulbs_output()
     var cplayer = client.conn.playing.playerno;
     for (var city_id in cities){
       var city = cities[city_id];
-      if(city.owner === cplayerv && city.prod != null) {
+      if(city.owner === cplayer && city.prod != null) {
         self_bulbs += city.prod[O_SCIENCE];
       }
     }
