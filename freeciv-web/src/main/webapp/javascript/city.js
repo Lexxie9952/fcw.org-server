@@ -1092,7 +1092,7 @@ function city_has_building(pcity, improvement_id)
 **************************************************************************/
 function city_has_building_in_queue(pcity, improvement_id)
 {
-  if (pcity == null || city['worklist'] == null) return false;
+  if (pcity == null || pcity['worklist'] == null) return false;
 
   // Go through each item in worklist looking for improvement
   for (var z = -1; z < pcity['worklist'].length; z++) { // current prod is not in worklist array but separate, so start at -1

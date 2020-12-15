@@ -2063,7 +2063,7 @@ function fill_layer2_sprite_array(ptile, pcity)
     }
     if (tile_has_extra(ptile, EXTRA_BUOY) 
         || tile_has_extra(ptile, EXTRA_FORTRESS)
-        || (typeof EXTRA_NAVALBASE !== undefined && tile_has_extra(ptile, EXTRA_NAVALBASE))) {
+        || (typeof EXTRA_NAVALBASE !== 'undefined' && tile_has_extra(ptile, EXTRA_NAVALBASE))) {
       result_sprites.push(get_base_flag_sprite(ptile));
       result_sprites.push({"key" : "base.buoy_mg",
                            "offset_y" : -normal_tile_height / 2});
