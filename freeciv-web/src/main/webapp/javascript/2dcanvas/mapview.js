@@ -460,7 +460,7 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
   // City mood:
   if (draw_city_mood) {
     if (client.conn.playing != null && !client_is_observer()) {
-      if (city['owner'] == client.conn.playing.playerno && city['ppl_happy'] != null && city['ppl_content'] != null &6 city['ppl_unhappy'] != null) {
+      if (city['owner'] == client.conn.playing.playerno && city['ppl_happy'] != null && city['ppl_content'] != null && city['ppl_unhappy'] != null) {
         var city_state = get_city_state(city);
         happy_people   = city['ppl_happy'][FEELING_FINAL];
         content_people = city['ppl_content'][FEELING_FINAL];
