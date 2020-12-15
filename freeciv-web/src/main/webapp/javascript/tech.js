@@ -539,8 +539,8 @@ function get_advances_text(tech_id)
 {
   const num = (value) => value === null ? 'null' : value;
   const tech_span = (name, unit_id, impr_id, title) =>
-    `<span>${title ? `title='${title}'` : ''}`
-    + ` onclick='show_tech_info_dialog("${name}", ${num(unit_id)}, ${num(impr_id)})'>${name}</span>`;
+    `<span ${title ? `title='${title}'` : ''}`
+    + ` onclick='show_tech_info_dialog("${name}", ${num(unit_id)}, ${num(impr_id)})`>${name}</span>`;
 
   const is_valid_and_required = (next_tech_id) =>
     reqtree.hasOwnProperty(next_tech_id) && is_tech_req_for_tech(tech_id, next_tech_id);
@@ -870,8 +870,8 @@ function show_tech_info_dialog(tech_name, unit_type_id, improvement_id)
     var tech_id = tech_id_by_name(tech_name);
     const num = (value) => value === null ? 'null' : value;
     const tech_span = (name, unit_id, impr_id, title) =>
-      `<span>${title ? `title='${title}'` : ''}`
-      + ` onclick='show_tech_info_dialog("${name}", ${num(unit_id)}, ${num(impr_id)}")'</span>`;
+      `<span ${title ? `title='${title}'` : ''}`
+      + ` onclick='show_tech_info_dialog("${name}", ${num(unit_id)}, ${num(impr_id)}")`>${name}'</span>`;
     const is_valid_and_required = (next_tech_id) =>
       reqtree.hasOwnProperty(next_tech_id) && is_tech_req_for_tech(tech_id, next_tech_id);
     const format_list_with_intro = (intro, list) =>
