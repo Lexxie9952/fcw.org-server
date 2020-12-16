@@ -208,12 +208,21 @@ function unit_can_do_unload(punit)
     if (tile_has_extra(ptile, EXTRA_RIVER)) return false;
     return true;
   }
-  // AG:
+  // AG onward:
   if (tclass.rule_name == "Helicopter" && pclass =="Land") {
     // NB:Land could only be on a Transport Helicopter utype.
     if (!tile_has_extra(ptile, EXTRA_AIRBASE)) return false;
+    return true;
     /* could also unload in city and naval base -- already checked above */
-  } 
+  }
+  // Brava onward:
+  if (tclass.rule_name == "LandRail") { // non-Marines can unload from Train on any Base or quay tile.
+    if (tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
+    if (quay_rules && tile_has_extra(ptile, EXTRA_QUAY)) return true;
+    if (typeof EXTRA_FORT !== 'undefined' && tile_has_extra(ptile, EXTRA_FORT)) return true;
+    if (tile_has_extra(ptile, EXTRA_FORTRESS)) return true;
+    return false;  // City already unloaded; Marines, Balloons, and AAA already got off higher above.
+  }
   if (tile_has_extra(ptile, EXTRA_QUAY)) return true;
   if (tile_has_extra(ptile, EXTRA_RIVER)) return false;
   if (tile_has_extra(ptile, EXTRA_CANAL)) return false;
