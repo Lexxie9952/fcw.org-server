@@ -246,7 +246,7 @@ function alphanumeric_cleaner(text)
     var result = text.match(regex);
 
     // If there are illegal characters, they become separators and result comes back as an array
-    if (result.length>1) return "";
+    if (result == null || result.length>1) return "";
 
     return result;
 }

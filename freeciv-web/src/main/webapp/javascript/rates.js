@@ -117,7 +117,7 @@ function rate_refresh()
 **************************************************************************/
 function update_rates_dialog()
 {
-  if (client_is_observer()) return;
+  if (client_is_observer() || client.conn.playing == null) return;
 
   maxrate = government_max_rate(client.conn.playing['government']);
 

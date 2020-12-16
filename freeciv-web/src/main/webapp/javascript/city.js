@@ -211,7 +211,7 @@ function city_force_income_update()
   for (cid in cities) {
     var pcity = cities[cid];
     // Look at player cities only
-    if (pcity['owner'] == client.conn.playing.playerno) {
+    if (pcity['owner'] == client.conn.playing.playerno && pcity['surplus'] != null) {
       // add net gold income from tax collection
       income += pcity['surplus'][O_GOLD];
 
@@ -308,7 +308,7 @@ function show_city_dialog(pcity)
   // CREATE THE TITLE AND THE SPECIALIST CONTROL PANE IN THE TITLE (for large screens) --------------------------------------
   var city_dialog_title = "<div><span style='float:left;margin-right:70px;'>"
                         + decodeURIComponent(pcity['name']) + " (" + pcity['size'] + ")</span>";
-  if (!is_small_screen() && !observing && client.conn.playing.playerno == pcity['owner']) {
+  if (!is_small_screen() && !observing && client.conn.playing.playerno == pcity['owner'] && specialists != null && Object.keys(specialists) != null) {
     // Create specialist control pane in title bar.
     var num_specialists = Object.keys(specialists).length;
     if (client_rules_flag[CRF_ASMITH_SPECIALISTS]) {
@@ -431,7 +431,7 @@ function show_city_dialog(pcity)
 
   var prod_type = get_city_production_type_sprite(pcity);
   var prod_string = "<b>" + (prod_type != null ? prod_type['type']['name']+"</b>" : "None</b>");
-  if (is_small_screen() && prod_type != null && prod_type['type']['name'].length>18) 
+  if (is_small_screen() && prod_type != null && prod_type['type']['name'] != null && prod_type['type']['name'].length>18)
     prod_string = "<span style='font-size:90%'>" + prod_string + "</span>";
   $("#city_production_overview").html(prod_string);
 
@@ -496,7 +496,7 @@ function show_city_dialog(pcity)
        // Also move long names 6px left to use unused margin space.
        long_name_font_reducer = "<div>"; // Default to a plain div with no style adjustment.
        longest_word = findLongestWord(improvements[z]['name']); // Find longest word in city improvement name
-       if (improvements[z]['name'].length==10) longest_word = 10; // Two word names 10 long don't get new line, so treat like 1 word.
+       if (improvements[z]['name'] != null && improvements[z]['name'].length==10) longest_word = 10; // Two word names 10 long don't get new line, so treat like 1 word.
        reduction_pct = 100-(longest_word-7)*5;    // For words over 7 in length, reduce font 5% for each letter over 7 length.
        if (reduction_pct<70) reduction_pct = 70;  // Maximum 30% reduction in size.
        // Now generate the special style adjustment for longer names, to reduce the font size and adjust margin:
@@ -650,7 +650,7 @@ function show_city_dialog(pcity)
   for (var s = 0; s < citizen_types.length; s++) {
 
     // The line right below the line below this, was throwing undefined errors, test hack to see if this avoids it:
-    if (pcity == null || pcity['ppl_' + citizen_types[s]].length<1 || pcity['ppl_' + citizen_types[s]] == null) continue;
+    if (pcity == null || (pcity['ppl_' + citizen_types[s]] != null && pcity['ppl_' + citizen_types[s]].length<1) || pcity['ppl_' + citizen_types[s]] == null) continue;
     if (pcity['ppl_' + citizen_types[s]] == null) continue;
     for (var i = 0; i < pcity['ppl_' + citizen_types[s]][FEELING_FINAL]; i ++) {
       sprite = get_specialist_image_sprite("citizen." + citizen_types[s] + "_"
@@ -1092,6 +1092,8 @@ function city_has_building(pcity, improvement_id)
 **************************************************************************/
 function city_has_building_in_queue(pcity, improvement_id)
 {
+  if (pcity == null || pcity['worklist'] == null) return false;
+
   // Go through each item in worklist looking for improvement
   for (var z = -1; z < pcity['worklist'].length; z++) { // current prod is not in worklist array but separate, so start at -1
     // Get item from current prod or future worklist---------
@@ -2567,6 +2569,8 @@ function update_worklist_actions()
 **************************************************************************/
 function send_city_worklist(city_id)
 {
+  if (cities[city_id] == null) return;
+
   var worklist = cities[city_id]['worklist'];
   var overflow = worklist.length - MAX_LEN_WORKLIST;
   if (overflow > 0) {
@@ -2819,7 +2823,7 @@ function city_exchange_worklist_task()
   var task_l = worklist_selection.length;
   if (prod_l === task_l) {
     for (i = 0; i < prod_l; i++) {
-      if (same &&
+      if (same && wl[worklist_selection[i]] != null &&
           (wl[worklist_selection[i]].kind !== production_selection[i].kind ||
            wl[worklist_selection[i]].value !== production_selection[i].value)) {
         same = false;
@@ -3681,7 +3685,7 @@ function mass_change_prod()
   //console.log("  mass_change_prod() called")
   var c = prod_selection_city;  // the city to model for what all others should produce
   for (var city_id in cities)  {
-    if ($("#cb"+city_id).is(":checked")) {     
+    if ($("#cb"+city_id).is(":checked") && cities[city_id] != null) {
       send_city_change(cities[city_id].id, cities[c].production_kind,cities[c].production_value);
       city_checkbox_states[city_id] = true;
     } else city_checkbox_states[city_id] = false;

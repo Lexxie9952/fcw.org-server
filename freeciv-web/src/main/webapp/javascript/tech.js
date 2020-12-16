@@ -808,6 +808,7 @@ function show_wikipedia_dialog(tech_name)
 {
   $("#tech_tab_item").css("color", "#aa0000");
   if (freeciv_wiki_docs == null || freeciv_wiki_docs[tech_name] == null) return;
+  if (freeciv_wiki_docs[tech_name] == null) return;
 
   var message = "<b>Wikipedia on <a href='" + wikipedia_url
 	  + freeciv_wiki_docs[tech_name]['title']
@@ -870,7 +871,7 @@ function show_tech_info_dialog(tech_name, unit_type_id, improvement_id)
     const num = (value) => value === null ? 'null' : value;
     const tech_span = (name, unit_id, impr_id, title) =>
       `<span ${title ? `title='${title}'` : ''}`
-      + ` onclick='show_tech_info_dialog("${name}", ${num(unit_id)}, ${num(impr_id)}")'</span>`;
+      + ` onclick='show_tech_info_dialog("${name}", ${num(unit_id)}, ${num(impr_id)}")'>${name}</span>`;
     const is_valid_and_required = (next_tech_id) =>
       reqtree.hasOwnProperty(next_tech_id) && is_tech_req_for_tech(tech_id, next_tech_id);
     const format_list_with_intro = (intro, list) =>
@@ -1038,7 +1039,7 @@ function get_current_bulbs_output()
     var cplayer = client.conn.playing.playerno;
     for (var city_id in cities){
       var city = cities[city_id];
-      if(city.owner === cplayer) {
+      if(city.owner === cplayer && city.prod != null) {
         self_bulbs += city.prod[O_SCIENCE];
       }
     }
