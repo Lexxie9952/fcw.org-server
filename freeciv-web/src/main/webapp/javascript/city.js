@@ -3685,7 +3685,7 @@ function mass_change_prod()
   //console.log("  mass_change_prod() called")
   var c = prod_selection_city;  // the city to model for what all others should produce
   for (var city_id in cities)  {
-    if ($("#cb"+city_id).is(":checked") && cities[city_id] != null) {
+    if ($("#cb"+city_id).is(":checked") && cities[city_id] != null && cities[c] != null) {
       send_city_change(cities[city_id].id, cities[c].production_kind,cities[c].production_value);
       city_checkbox_states[city_id] = true;
     } else city_checkbox_states[city_id] = false;
