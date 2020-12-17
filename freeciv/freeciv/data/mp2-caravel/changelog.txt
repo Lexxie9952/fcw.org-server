@@ -1,0 +1,43 @@
+1. Fundamentalist governments get partisan effect. Only tech req is Guerilla Warfare, not communism nor gunpowder.
+
+2. Price changes: pre-feudal units -20% foot soldiers, -10% mounted. Catapult 34. Feudal: -10% foot, -5% mounted. Armor II: 85 (was 80)
+
+3. Cheaper Agoge - 90 (brava change?) needs docs
+
+4. TEST Incite City is possible against Democracies but costs 3x
+
+5. TEST Bribe is possible on Democracies but costs 3x
+
+6. TEST Courthouse gives +1 content to all govs, not just Democracy 
+
+7. TEST Democracy has base corruption level of 8%, half that of Republic/Monarchy. Increases by distance at 40/100 per tile or 1/5th the rate of other govs
+
+8. [NEEDS FIX] Proletarians and Pilgrims count under the Conscription build slot bonus, can be made along with other units more than 1 per turn. 
+
+9. TEST Helicopter not susceptible to City Walls but rather SAM Battery (fixes a nerf of 3x for a land unit not from original game)
+
+10. TEST Skirmish assaults can be done to Foreign cities if not original owner and they contain foreigners inside. doc: this is a very powerful trait few think of potential for
+
+11. TEST Early foot soldiers can convert to musketeers for free in domestic cities upon discovering Conscription (needs lots of testing and docs to each unit etc.)
+    this includes the fixed unit doc file text.
+
+12. Statue of Zeus makes 1 citizen content about military for govs who need that, and for those who don't, simply 1 citizen content.
+13. Hanging Gardens now obsolete by steam engine: increases diversity of other early wonders, nudges more balance to Frigates before Ironclads.
+14. TEST Pikemen get a 50% attack bonus vs. mounted units.
+15. Swordsmen new unit with Bronze working A1.5 D1.5 cost:13
+16. Siege Ram, A1 D1 M2, must use roads, 50% chance to destroy city walls (requires 1 full mp), odds halved against capitals.
+17. Police Station prevents investigate city for all govs except democracy.
+18. Courthouse prevents Diplomats (not Spies) from doing hostile Embassy without first cease-fire or peace.
+19. Spy Plane unreachable to propeller-based aircraft.
+20. new unit Satellite: invisible, can investigate cities with police station, has superior vision and movement
+21.
+
+[17] Ranged attack range 2
+[18] Archers 2 combat rounds
+
+
+
+test Airplane can load other stuff?
+test killcitizen_pct
+tribesmen bribe is -3030, need to fix
+test democracy_noncorrupt flag, i think it shows up in the city popups?
