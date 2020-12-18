@@ -346,10 +346,13 @@ function generate_help_text(key)
     msg += span1 + "Cost: " + span_end + span2 + punit_type['build_cost'] + div_end;
     // ATTACK
     msg += "<div"+flex+" id='utype_fact_attack_str'>";
-    msg += span1 + "Attack: " + span_end + span2 + punit_type['attack_strength'] + div_end;
+      // hack to make manual properly display decimal attack strength on this unit
+      var as = punit_type['name'] == "Swordsmen" ? "1.5" : punit_type['attack_strength'];
+    msg += span1 + "Attack: " + span_end + span2 + as + div_end;
     // DEFENSE
     msg += "<div"+flex+" id='utype_fact_defense_str'>";
-    msg += span1 + "Defense: " + span_end + span2 + punit_type['defense_strength'] + div_end;
+      var ds = punit_type['name'] == "Swordsmen" ? "1.5" : punit_type['defense_strength'];
+    msg += span1 + "Defense: " + span_end + span2 + ds + div_end;
     // FIREPOWER
     msg += "<div"+flex+" id='utype_fact_firepower'>";
     msg += span1 + "Firepower: " + span_end + span2 + punit_type['firepower'] + div_end;
@@ -361,7 +364,7 @@ function generate_help_text(key)
     msg += span1+"Moves: " + span_end + span2 + move_points_text(punit_type['move_rate']) + div_end;
     // VISION
     msg += "<div"+flex+" id='utype_fact_vision'>";
-    msg += span1 + "Vision: " + span_end + span2 + punit_type['vision_radius_sq'] + div_end;
+    msg += span1 + "Vision: " + span_end + span2 + Math.sqrt(parseInt(punit_type['vision_radius_sq'])).toFixed(2) + " tiles" + div_end;
     // FUEL
     if (punit_type['fuel']>0) {
       msg += "<div"+flex+" id='utype_fact_fuel'>";
