@@ -90,7 +90,7 @@ tiles = { "row", "column", "tag"
   1, 18, "u.escort_fighter" ; [Lexxie]
   1, 19, "u.medium_bomber"  ; [Lexxie]
   2,  0, "u.marines"		    ; [GB] & [Lexxie]
-;  2,  1, "u.spy"		        ; [EW] & [CT] & [Lexxie]
+;  2,  1, "u.EMPTY SLOT"    ; [EW] & [CT] & [Lexxie]
   2,  2, "u.engineers"		  ; [Nemo] & [CT] & [Lexxie]
   2,  3, "u.artillery"	   	; [Lexxie]
   2,  4, "u.helicopter"		  ; [T] & [Lexxie]
@@ -114,13 +114,13 @@ tiles = { "row", "column", "tag"
   3,  2, "u.missile_destroyer" ; [Lexxie]
   3,  3, "u.war_galley"       
   3,  4, "u.longboat"         ; Lexxie
-; 3,  5, "u.battleship"      ; Lexxie
+; 3,  5, "u.EMPTY SLOT"  
   3,  6, "u.atom_bomb"        ; Lexxie  
   3,  7, "u.galley"           ; Lexxie
   3,  8, "u.jet_fighter"      ; [Nemo] & [AHS] & [Lexxie]
   3,  9, "u.ram_ship"         ; Lexxie
   3, 10, "u.armor_ii"         ; Wahazar & Lexxie
-  3, 11, "u.boat"              ; Lexxie
+  3, 11, "u.boat"             ; Lexxie
   3, 12, "u.cargo_ship"       ; Lexxie
   3, 13, "u.mobile_sam"       ; Lexxie
   3, 14, "u.proletarian"	    ; Lexxie
@@ -135,4 +135,7 @@ tiles = { "row", "column", "tag"
   4,  3, "u.train"            ; Lexxie
   4,  4, "u.t_helicopter"     ; Lexxie
   4,  5, "u.airplane"         ; Lexxie
+  4,  6, "u.swordsmen"        ; Lexxie
+  4,  7, "u.siege_ram"        ; Lexxie
+  4,  8, "u.satellite",       ; Lexxie
 }
