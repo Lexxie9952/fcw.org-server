@@ -54,7 +54,8 @@ const CRF_MAJOR_NUKES          = 17; // Ruleset has major nukes (fusion), which 
 const CRF_DEMOCRACY_NONCORRUPT = 18; // Allows skipping past corruption display modes in rulesets where we know there's no corruption to show. 
 const CRF_SURGICAL_PILLAGE     = 19; // Allow special exception units without UCF_PILLAGE to pillage tiles.
 const CRF_MAGLEV               = 20; // Ruleset has MAGLEVS
-const CRF_LAST                 = 21;
+const CRF_SIEGE_RAM            = 21; // Ruleset uses Siege Ram, which highjacks diplomatic sabotage popup to only allow City Wall sabotage.
+const CRF_LAST                 = 22;
 
 var graphic_theme_path;
 

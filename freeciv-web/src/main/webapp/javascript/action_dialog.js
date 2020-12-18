@@ -502,8 +502,7 @@ function popup_action_selection(actor_unit, action_probabilities,
              "Action for " + unit_types[actor_unit['type']]['name']
              + ":");
       
-  // THIS SECTION ALLOWS OVERRIDE NAMES for completely different types
-  // of so-called Bombard behaviours           
+  // THIS SECTION ALLOWS OVERRIDE NAMES for different actions from special unit types         
   if (unit_types[actor_unit['type']]['name']=="Fanatics") {
     for (button_id in buttons) {
       if (buttons[button_id].text == "Ranged Attack (100%)") {
@@ -511,6 +510,14 @@ function popup_action_selection(actor_unit, action_probabilities,
       }
     }
   }
+  if (unit_types[actor_unit['type']]['name']=="Siege Ram") {
+    for (button_id in buttons) {
+      if (buttons[button_id].text == "Targeted Sabotage") {
+        buttons[button_id].text = "Destroy City Walls"
+      }
+    }
+  }
+
   //--------------------------------------------------------------------
 
   $(id).dialog({
@@ -866,6 +873,15 @@ function popup_sabotage_dialog(actor_unit, target_city, city_imprs, act_id)
   var id = "sabotage_impr_dialog_" + actor_unit['id'];
   var buttons = [];
 
+            // Siege Ram used for Wall sabotage: highjack for better presentation****
+            var battering_event = false;
+            if (client_rules_flag[CRF_SIEGE_RAM] == true) {
+              var punit = units[actor_unit['id']];
+              var ptype = unit_type(punit);
+              if (ptype['name'] == "Siege Ram") battering_event = true;
+            } //**********************************************************************
+
+
   /* Reset dialog page. */
   $("#" + id).remove();
   $("<div id='" + id + "'></div>").appendTo("div#game_page");
@@ -877,6 +893,29 @@ function popup_sabotage_dialog(actor_unit, target_city, city_imprs, act_id)
   for (var i = 0; i < ruleset_control['num_impr_types']; i++) {
     var improvement = improvements[i];
 
+              // Battering Rams can only select City Walls *********************************
+              if (battering_event) {
+                if (improvement['name'] != "City Walls") continue;
+                //We got here if we're at City Walls, see if it's present now:
+                if (city_imprs.isSet(i) && improvement['sabotage'] > 0) {
+                  // City walls present! No need to make a button: we know they'd press it.
+                  // Instead, just automate what would happen if they did press the button:
+                  var packet = {
+                    "pid"          : packet_unit_do_action,
+                    "actor_id"     : actor_unit['id'],
+                    "target_id"    : target_city['id'],
+                    "extra_id"     : EXTRA_NONE,
+                    "value"        : encode_building_id(improvement['id']),
+                    "name"         : "",
+                    "action_type"  : act_id
+                  };
+                  send_request(JSON.stringify(packet));
+                  
+                  // We're done. Go home without making popup dialog.
+                  return;
+                }
+              } //****************************************************************************
+
     if (city_imprs.isSet(i)
         && improvement['sabotage'] > 0) {
       /* The building is in the city. The probability of successfully
@@ -886,6 +925,10 @@ function popup_sabotage_dialog(actor_unit, target_city, city_imprs, act_id)
                                                target_city['id'],
                                                act_id));
     }
+  }
+  if (battering_event) {
+    swal("City has no City Walls.");
+    return;
   }
 
   /* Allow the user to cancel. */
