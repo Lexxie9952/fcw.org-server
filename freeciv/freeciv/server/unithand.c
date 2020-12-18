@@ -3465,6 +3465,16 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
     city_reduce_size(pcity, 1, pplayer, "bombard");
     city_refresh(pcity);
     send_city_info(NULL, pcity);
+    // For non-obvious values of killcitizen_pct, report whether city lost population.
+    if (game.server.killcitizen_pct>0 && game.server.killcitizen_pct<100) {
+/* notify players of population loss can go here*/
+    }   
+  } 
+  else {
+    // For non-obvious values of killcitizen_pct, report whether city lost population.
+    if (game.server.killcitizen_pct>0 && game.server.killcitizen_pct<100) {
+/* notify players of population loss can go here       */
+    }
   }
 
   send_unit_info(NULL, punit);
@@ -3734,12 +3744,41 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
   if (pdefender->hp <= 0
       && (pcity = tile_city(def_tile))
       && city_size_get(pcity) > 1
-      && get_city_bonus(pcity, EFT_UNIT_NO_LOSE_POP) <= 0
-      && kills_citizen_after_attack(punit)) {
-    city_reduce_size(pcity, 1, pplayer, "attack");
-    city_refresh(pcity);
-    send_city_info(NULL, pcity);
-  }
+      && get_city_bonus(pcity, EFT_UNIT_NO_LOSE_POP) <= 0) {
+
+        if (kills_citizen_after_attack(punit)) {
+          // For non-obvious values of killcitizen_pct, report whether city lost population.
+          if (game.server.killcitizen_pct>0 && game.server.killcitizen_pct<100) {
+            notify_player(pplayer, NULL,
+                E_UNIT_LOST_MISC, ftc_server,
+                _("Population lost in %s after successful attack:"),
+                city_link(pcity));
+            notify_player(unit_owner(pdefender), def_tile,
+                E_UNIT_LOST_MISC, ftc_server,
+                _("The %s attack caused population loss in %s:"),
+                nation_adjective_for_player(pplayer),
+                city_link(pcity));      
+          }   
+          city_reduce_size(pcity, 1, pplayer, "attack");
+          city_refresh(pcity);
+          send_city_info(NULL, pcity);
+        } 
+        else  {
+          // For non-obvious values of killcitizen_pct, report whether city lost population.
+          if (game.server.killcitizen_pct>0 && game.server.killcitizen_pct<100) {    
+            notify_player(pplayer, NULL,
+                  E_CITY_NORMAL, ftc_server,
+                  _("%s maintained current population after attack:"),
+                  city_link(pcity));
+            notify_player(unit_owner(pdefender), NULL,
+                  E_CITY_NORMAL, ftc_server,
+                  _("No population loss in %s after %s attack:"),
+                  city_link(pcity),
+                  nation_adjective_for_player(pplayer));
+            }  
+        }
+      }
+
   if (unit_has_type_flag(punit, UTYF_ONEATTACK)) {
     punit->moves_left = 0;
   }
