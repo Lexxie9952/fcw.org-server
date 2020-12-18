@@ -670,6 +670,19 @@ function handle_ruleset_control(packet)
     case "Avant-garde":
     case "Avant-garde 2":
     case "MP2":
+      // Each time a beta version becomes vetted and is the new standard floor, the hard-coded if statement
+      // can disappear because the CRF behaviour is then standardized into MP2. Current block was made when
+      // standard floor was MP2 Avant-garde
+      if (ruleset_control['name'] == "MP2 Brava") {
+        // ...etc.../
+      }
+      else if (ruleset_control['name'] == "MP2 Caravel") {
+        // ... include Brava stuff in this block too, it inherits it ... //
+        client_rules_flag[CRF_SIEGE_RAM]=true;
+        client_rules_flag[CRF_DEMOCRACY_NONCORRUPT] = false;
+        // ...etc... //
+      }
+
       client_rules_flag[CRF_RADAR_TOWER]=true;
       client_rules_flag[CRF_EXTRA_HIDEOUT]=true;
       client_rules_flag[CRF_EXTRA_QUAY]=true;
@@ -906,8 +919,8 @@ function handle_city_name_suggestion_info(packet)
 }
 
 /**************************************************************************
-  Handle the response the a request asking what buildings a potential
-  victim of targeted sabotage city victim.
+  PID 45. Handle the response the a request asking what buildings a
+  potential victim of targeted sabotage city victim.
 **************************************************************************/
 function handle_city_sabotage_list(packet)
 {
