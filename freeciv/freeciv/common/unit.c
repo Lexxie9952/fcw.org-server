@@ -2100,7 +2100,8 @@ void unit_set_ai_data(struct unit *punit, const struct ai_type *ai,
 **************************************************************************/
 int unit_bribe_cost(struct unit *punit, struct player *briber)
 {
-  int cost, default_hp, dist = 0;
+  long int cost;
+  int default_hp, dist = 0;
   ///struct city *capital; old code marked with ///
   struct tile *ptile = unit_tile(punit);
 
@@ -2158,7 +2159,10 @@ int unit_bribe_cost(struct unit *punit, struct player *briber)
   /* Cost now contains the basic bribe cost.  We now reduce it by:
    *    bribecost = cost/2 + cost/2 * damage/hp
    *              = cost/2 * (1 + damage/hp) */
-  return ((float)cost / 2 * (1.0 + (float)punit->hp / default_hp));
+  float final_cost = ((float)cost / 2 * (1.0 + (float)punit->hp / default_hp));
+  //FIXME: bandage: situations arose that generated negative bribe cost
+  final_cost = (final_cost>0) ? final_cost : final_cost * -1;
+  return (final_cost<32000) ? final_cost : 32000;
 }
 
 /**********************************************************************//**
