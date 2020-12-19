@@ -1173,11 +1173,11 @@ bool diplomat_sabotage(struct player *pplayer, struct unit *pdiplomat,
     if (vulnerability<100) {
       notify_player(pplayer, NULL,
             E_UNIT_ACTION_TARGET_OTHER, ftc_server,
-            _("<font color='#C0C0C0'><br>ⓘ <u>Destruction Odds</u>: {1-%d} of 100. You rolled: <b>%d</b></font>"),
+            _("<font color='#C0C0C0'><br>ⓘ <u>Destruction Odds</u>: {1-%d} in 100. You rolled: <b>%d</b></font>"),
             vulnerability, your_roll+1); //convert from 0-based index
       notify_player(cplayer, NULL, 
             E_UNIT_ACTION_TARGET_OTHER, ftc_server,
-            _("<font color='#C0C0C0'><br>ⓘ <u>Resistance Odds</u>: {%d-100} of 100. You rolled: <b>%d</b></font>"),
+            _("<font color='#C0C0C0'><br>ⓘ <u>Resistance Odds</u>: {%d-100} in 100. You rolled: <b>%d</b></font>"),
             vulnerability+1, your_roll+1); //convert from 0-based index
 
     }
@@ -1634,10 +1634,10 @@ static bool diplomat_was_caught(struct player *act_player,
   if (strcmp(utype_name_translation(unit_type_get(act_unit)), "Siege Ram")!=0) {
 
     notify_player(act_player, NULL, E_UNIT_ACTION_TARGET_OTHER, ftc_server,
-                  _("<font color='#C0C0C0'><br>ⓘ <u>Operation Odds</u>: {1-%d} of 100. You rolled: <b>%d</b></font>"),
+                  _("<font color='#C0C0C0'><br>ⓘ <u>Operation Odds</u>: {1-%d} in 100. You rolled: <b>%d</b></font>"),
                   odds, your_odds+1);
     notify_player(tgt_player, NULL, E_UNIT_ACTION_TARGET_OTHER, ftc_server,
-                  _("<font color='#C0C0C0'><br>ⓘ <u>Hostile Operation Defense Odds</u>:\n {%d-100} of 100. You rolled: <b>%d</b></font>"),
+                  _("<font color='#C0C0C0'><br>ⓘ <u>Hostile Operation Defense Odds</u>:\n {%d-100} in 100. You rolled: <b>%d</b></font>"),
                   odds+1, your_odds+1);
   }
   return your_odds >= odds;
@@ -1711,11 +1711,11 @@ static bool diplomat_success_vs_defender(struct unit *pattacker,
   int your_roll = (int)fc_rand(100);
   notify_player(unit_owner(pattacker), NULL,
         E_UNIT_ACTION_TARGET_OTHER, ftc_server,
-        _("<font color='#C0C0C0'><br>ⓘ <u>Attack Odds</u>: {1-%d} of 100. You rolled: <b>%d</b></font>"),
+        _("<font color='#C0C0C0'><br>ⓘ <u>Attack Odds</u>: {1-%d} in 100. You rolled: <b>%d</b></font>"),
         chance, your_roll+1); //convert from 0-based index
   notify_player(unit_owner(pdefender), NULL,
         E_UNIT_ACTION_TARGET_OTHER, ftc_server,
-        _("<font color='#C0C0C0'><br>ⓘ <u>Defense Odds</u>: {%d-100} of 100. You rolled: <b>%d</b></font>"),
+        _("<font color='#C0C0C0'><br>ⓘ <u>Defense Odds</u>: {%d-100} in 100. You rolled: <b>%d</b></font>"),
         chance+1, your_roll+1); //convert from 0-based index
 
   return (your_roll < chance);
