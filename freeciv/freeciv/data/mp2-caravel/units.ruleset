@@ -527,7 +527,9 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;		  and firepower of attacker is doubled (the Pearl Harbour
 ;                 rule)
 ; "BarbarianOnly" = only barbarians can build this unit
-; "Shield2Gold" = Switch from shield upkeep to gold upkeep possible
+; "Shield2Gold" = Switch from shield upkeep to gold upkeep possible.
+;                 Also, currently substitutes for "MultiSlot" flag due to inability
+;                 to add another UTYF flag to the server.
 ; "NewCityGamesOnly" = unit can't be built on scenarios where founding new cities
 ;                 is not allowed. Give this flag to units that would make no sense
 ;                 to have in a game with such a scenario
@@ -555,7 +557,7 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;                  is enabled and the unit class is unreachable
 ; "MultiSlot"    = if server setting slot_control is ON, only unit types with this
 ;                  flag can use extra city_build_slots
-;
+;                  TO DO: make this a server UTYF flag that's used instead of Shield2Gold
 ; Following actions require extra fields:
 ;  "Attack"
 ;   attack = base attack strength
@@ -1416,7 +1418,8 @@ embarks       = "Helicopter", "Land", "Sea", "LandRoad", "LandRail"
 disembarks    = "Helicopter", "Land", "Sea", "LandRoad", "LandRail"
 targets       = "Sea", "Balloon", "Helicopter", "LandRail"
 flags         = "MultiSlot", "Marines", "FootSoldier", "BeachLander", "Capturer",
-                "NeverBlocked", "Shield2Gold", "Settlers", "CanHide", "WillNever"
+                "NeverBlocked", "Shield2Gold", "Settlers", "CanHide", "WillNever",
+                "Airbase", "CanFortress" ; can Fort only, actually.
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -1428,15 +1431,16 @@ veteran_names =
 veteran_raise_chance = 60, 50, 40, 30, 20, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
-veteran_move_bonus = 0, 0, 0, 1, 1, 1, 1
+veteran_move_bonus = 0, 2, 4, 6, 8, 10, 12
 roles         = "DefendOk", "DefendOkStartUnit", "BarbarianSeaTech"
 helptext      = _("\
 Marines are experts at all-terrain warfare. They are the strongest\
  foot unit in the game, and are armed with diverse weaponry.\n\
  Unlike other units, Marines can attack Sea units (at a penalty).\
  Air units do not stop them from attacking reachable targets.\
- They can attack from a Transport or Helicopter, and can offload
- without losing a turn of movement. Marines promoted to three\
+ They can attack from a Transport or Helicopter, and can offload\
+ without losing a turn of movement. Marines can also makes Forts\
+ and Airbases, but not other bases. Marines promoted to two\
  veteran levels become commandos suitable for special ops.\n\
  Marines built in a city with an Airport, Port Facility, and Barracks III\
  receive the second veteran level (hardened.)\
@@ -1883,7 +1887,7 @@ Catapults are war machines that hurl massive rocks to crush\
 [unit_siege_ram]
 name          = _("Siege Ram")
 class         = "LandRoad"
-tech_req      = "Engineering"
+tech_req      = "Construction"
 obsolete_by   = "Cannon"
 graphic       = "u.siege_ram"
 graphic_alt   = "-"
@@ -4270,7 +4274,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRoad", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "Helicopter"
-flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Shield2Gold"
+flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable"
 roles         = "AttackStrongStartUnit"  ;note: MP2 doesn't start games with ASSU's so has co-opted this for caravan start unit.
 helptext      = _("\
 Caravans are Commerce units. Commerce units can help build Wonders in any city with whom\
@@ -4281,8 +4285,6 @@ Commerce units can enter the Marketplace of non-hostile foreign cities to sell g
  from total trade in both cities. This is only profitable between cities with very high trade.\n\
 Commerce units can build any Wonders for which you have the tech requirement. To use them\
  for a Trade Route, the Trade tech is needed, and they need to have an assigned Home City.\n\
-➤ Caravans are the only Commerce unit that can be produced more than once per turn, if the city\
- has appropriate output bonuses.\ 
 ")
 
 [unit_freight]
