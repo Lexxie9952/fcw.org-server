@@ -234,6 +234,22 @@ function act_sel_click_function(parent_id,
 
       $(parent_id).remove();
     };
+    case ACTION_ATTACK:
+      return function() {
+        var packet = {
+          "pid"         : packet_unit_do_action,
+          "actor_id"    : actor_unit_id,
+          "target_id"   : tgt_id,
+          "extra_id"    : EXTRA_NONE,
+          "value"       : 0,
+          "name"        : "",
+          "action_type" : action_id
+        };
+        send_request(JSON.stringify(packet));
+        // unit lost hp or died or promoted after attack, so update it:
+        setTimeout(update_active_units_dialog, update_focus_delay);
+        $(parent_id).remove();
+      };      
   default:
     return function() {
       var packet = {
@@ -470,6 +486,7 @@ function popup_action_selection(actor_unit, action_probabilities,
                               "action_type" : ACTION_ATTACK
                             };
                             send_request(JSON.stringify(packet));
+                            setTimeout(update_active_units_dialog, update_focus_delay);
                             auto_attack = true;
                             $(id).remove();
                           }
@@ -486,6 +503,8 @@ function popup_action_selection(actor_unit, action_probabilities,
               "action_type" : ACTION_ATTACK
             };
             send_request(JSON.stringify(packet));
+            // unit lost hp or died or promoted after attack, so update it:
+            setTimeout(update_active_units_dialog, update_focus_delay);
             return;
         }
   }
@@ -503,7 +522,8 @@ function popup_action_selection(actor_unit, action_probabilities,
              + ":");
       
   // THIS SECTION ALLOWS OVERRIDE NAMES for different actions from special unit types         
-  if (unit_types[actor_unit['type']]['name']=="Fanatics") {
+  if (unit_types[actor_unit['type']]['name']=="Fanatics"
+      && client_rules_flag[CRF_MP2_SPECIAL_UNITS]) {
     for (button_id in buttons) {
       if (buttons[button_id].text == "Ranged Attack (100%)") {
         buttons[button_id].text = "Skirmish Assault (100%)"
