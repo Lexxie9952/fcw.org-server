@@ -55,7 +55,8 @@ const CRF_DEMOCRACY_NONCORRUPT = 18; // Allows skipping past corruption display 
 const CRF_SURGICAL_PILLAGE     = 19; // Allow special exception units without UCF_PILLAGE to pillage tiles.
 const CRF_MAGLEV               = 20; // Ruleset has MAGLEVS
 const CRF_SIEGE_RAM            = 21; // Ruleset uses Siege Ram, which highjacks diplomatic sabotage popup to only allow City Wall sabotage.
-const CRF_LAST                 = 22;
+const CRF_MARINE_BASES         = 22; // Needed to optimize due to flaws in actionenablers/req
+const CRF_LAST                 = 23;
 
 var graphic_theme_path;
 

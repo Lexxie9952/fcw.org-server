@@ -667,29 +667,6 @@ function handle_ruleset_control(packet)
   }
   // Legacy rules block:
   switch (rules) {
-    case "Avant-garde":
-    case "Avant-garde 2":
-    case "MP2":
-      // Each time a beta version becomes vetted and is the new standard floor, the hard-coded if statement
-      // can disappear because the CRF behaviour is then standardized into MP2. Current block was made when
-      // standard floor was MP2 Avant-garde
-      if (ruleset_control['name'] == "MP2 Brava") {
-        // ...etc.../
-      }
-      else if (ruleset_control['name'] == "MP2 Caravel") {
-        // ... include Brava stuff in this block too, it inherits it ... //
-        client_rules_flag[CRF_SIEGE_RAM]=true;
-        client_rules_flag[CRF_DEMOCRACY_NONCORRUPT] = false;
-        // ...etc... //
-      }
-
-      client_rules_flag[CRF_RADAR_TOWER]=true;
-      client_rules_flag[CRF_EXTRA_HIDEOUT]=true;
-      client_rules_flag[CRF_EXTRA_QUAY]=true;
-      client_rules_flag[CRF_MAJOR_NUKES]=true; // ruleset has them and server setting to disallow them
-      client_rules_flag[CRF_SURGICAL_PILLAGE]=true;
-      $("#order_airbase").attr("title", "Build Airbase/Radar (Shift-E)");
-
     case "Multiplayer-Evolution ruleset":
       client_rules_flag[CRF_CARGO_HEURISTIC]=true;
       client_rules_flag[CRF_ASMITH_SPECIALISTS]=true;
@@ -705,7 +682,30 @@ function handle_ruleset_control(packet)
       client_rules_flag[CRF_NO_WASTE]=true;
       client_rules_flag[CRF_DEMOCRACY_NONCORRUPT] = true;
       client_rules_flag[CRF_MAGLEV] = true;
-    break;
+      case "Avant-garde":
+      case "Avant-garde 2":
+      case "MP2":
+        // Each time a beta version becomes vetted and is the new standard floor, the hard-coded if statement
+        // can disappear because the CRF behaviour is then standardized into MP2. Current block was made when
+        // standard floor was MP2 Avant-garde
+        if (ruleset_control['name'] == "MP2 Brava") {
+          // ...etc.../
+        }
+        else if (ruleset_control['name'] == "MP2 Caravel") {
+          // ... include Brava stuff in this block too, it inherits it ... //
+          client_rules_flag[CRF_SIEGE_RAM]=true;
+          client_rules_flag[CRF_DEMOCRACY_NONCORRUPT] = false;
+          client_rules_flag[CRF_MARINE_BASES] = true;
+          // ...etc... //
+        }
+  
+        client_rules_flag[CRF_RADAR_TOWER]=true;
+        client_rules_flag[CRF_EXTRA_HIDEOUT]=true;
+        client_rules_flag[CRF_EXTRA_QUAY]=true;
+        client_rules_flag[CRF_MAJOR_NUKES]=true; // ruleset has them and server setting to disallow them
+        client_rules_flag[CRF_SURGICAL_PILLAGE]=true;
+        $("#order_airbase").attr("title", "Build Airbase/Radar (Shift-E)");
+      break;
 
     case "Multiplayer-Plus ruleset":
       client_rules_flag[CRF_CARGO_HEURISTIC]=true;
