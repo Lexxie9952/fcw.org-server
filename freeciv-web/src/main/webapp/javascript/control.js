@@ -1248,6 +1248,20 @@ function update_unit_order_commands()
     if (ptile == null) continue;
     pcity = tile_city(ptile);
 
+    // MP2, Marines can build FORTS (wedded to CRF_MARINE_BASES flag)
+    if (client_rules_flag[CRF_MARINE_BASES]
+        && !tile_has_extra(ptile, EXTRA_FORT)
+        && !pcity && ptype['name'] == "Marines") {
+          unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
+          $("#order_fortress").show();
+
+        // Also can build Airbase, but not Radar Tower
+        if (player_invention_state(client.conn.playing, tech_id_by_name('Radio')) == TECH_KNOWN
+            && !tile_has_extra(ptile, EXTRA_AIRBASE)) {
+              unit_actions["airbase"] = {name: string_unqualify(terrain_control['gui_type_base1']) + " (Shift-E)"};
+              $("#order_airbase").show();
+        }
+    }
     // LEGIONS. rulesets which allow Legions to build Forts and Roads on non-domestic tiles-------------
     if ((client_rules_flag[CRF_LEGION_WORK]) && ptype['name'] == "Legion") {
 
@@ -4375,7 +4389,16 @@ function key_unit_fortress()
   var funits = get_units_in_focus();
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
-    //var ptile = tiles[punit['tile']];
+    var ptile = tiles[punit['tile']];
+
+    // Action-enabler restricts Marines to Fort only. Be double safe.
+    if (typeof EXTRA_FORT !== undefined && client_rules_flag[CRF_MARINE_BASES]) {
+      var ptype = unit_type(punit);
+      if (ptype['name'] == "Marines" &&
+          (punit['transported'] || tile_has_extra(ptile, EXTRA_FORT))) {
+        continue;
+      }
+    }
     var activity = EXTRA_NONE;     /* EXTRA_NONE -> server decides */
     request_new_unit_activity(punit, ACTIVITY_BASE, activity);
   }
@@ -4420,6 +4443,16 @@ function key_unit_airbase()
   for (var i=0; i< funits.length; i++) {
     var punit = funits[i];
     var ptile = tiles[punit['tile']];
+
+    // Action-enabler restricts Marines unable to work while Transported. Be double safe.
+    if (client_rules_flag[CRF_MARINE_BASES]) {
+      var ptype = unit_type(punit);
+      if (ptype['name'] == "Marines" &&
+          (punit['transported'])) {
+        continue;
+      }
+    }
+
     activity = EXTRA_AIRBASE;
     if (radar_rules && tile_has_extra(ptile, EXTRA_AIRBASE)) activity=EXTRA_RADAR;
 
