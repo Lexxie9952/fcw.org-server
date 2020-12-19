@@ -3596,14 +3596,6 @@ function change_city_user_row(city_id)
 {
   city_user_row_val ++;
 
-  // Skip corruption display for Democracies in rulesets where it has no corruption
-  if (client_rules_flag[CRF_DEMOCRACY_NONCORRUPT]
-    && !client_is_observer() 
-    && governments[players[client.conn.playing.playerno].government].name == "Democracy"
-    && city_user_row_val == CURV_CORRUPTION) {
-      city_user_row_val ++;  // skip over showing corruption in democracy
-  }
-
   if (city_user_row_val >= CURV_LAST)
     city_user_row_val = 0;
 
