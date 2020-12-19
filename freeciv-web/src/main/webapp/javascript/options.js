@@ -41,7 +41,7 @@ const CRF_LEGION_WORK          =  4; // Legions can road and make forts
 const CRF_MASONRY_FORT         =  5; // Masonry tech allows building forts
 const CRF_CANALS               =  6; // Ruleset allows canals with Engineering
 const CRF_NO_UNIT_GOLD_UPKEEP  =  7; // Ruleset doesn't use gold upkeep on units, so don't show it.
-const CRF_MP2_SPECIAL_UNITS    =  8; // Special rules/filters for handling extra units introduced in MP2: Well-Digger, Queen, Pilgrim, Proletarians
+const CRF_MP2_SPECIAL_UNITS    =  8; // Special rules/filters for handling MP2 units: Fanatics (skirmish), Well-Digger, Queen, Pilgrim, Proletarians
 const CRF_COMMIE_BLDG_UPKEEP   =  9; // Used for calculating/showing upkeep from buildings accurately for communist government bonus (in some rulesets)
 const CRF_PACTS_SANS_EMBASSY   = 10; // Ruleset allows treaties without embassy if contact_turns>0 but only for limited pacts
 const CRF_TESLA_UPGRADE_DISCOUNT=11;//Ruleset has Tesla's Laboratory and gives a 20% discount on unit upgrades.
@@ -51,12 +51,11 @@ const CRF_EXTRA_QUAY           = 14; // Ruleset has Quay extra and Waterway Extr
 const CRF_NO_WASTE             = 15; // Ruleset does not feature waste.
 const CRF_MINOR_NUKES          = 16; // Ruleset has minor nukes (fission, 3x3 area)
 const CRF_MAJOR_NUKES          = 17; // Ruleset has major nukes (fusion), which it may want to disable in some games.
-const CRF_DEMOCRACY_NONCORRUPT = 18; // Allows skipping past corruption display modes in rulesets where we know there's no corruption to show. 
-const CRF_SURGICAL_PILLAGE     = 19; // Allow special exception units without UCF_PILLAGE to pillage tiles.
-const CRF_MAGLEV               = 20; // Ruleset has MAGLEVS
-const CRF_SIEGE_RAM            = 21; // Ruleset uses Siege Ram, which highjacks diplomatic sabotage popup to only allow City Wall sabotage.
-const CRF_MARINE_BASES         = 22; // Needed to optimize due to flaws in actionenablers/req
-const CRF_LAST                 = 23;
+const CRF_SURGICAL_PILLAGE     = 18; // Allow special exception units without UCF_PILLAGE to pillage tiles.
+const CRF_MAGLEV               = 19; // Ruleset has MAGLEVS
+const CRF_SIEGE_RAM            = 20; // Ruleset uses Siege Ram, which highjacks diplomatic sabotage popup to only allow City Wall sabotage.
+const CRF_MARINE_BASES         = 21; // Needed to optimize due to flaws in actionenablers/req
+const CRF_LAST                 = 22;
 
 var graphic_theme_path;
 
