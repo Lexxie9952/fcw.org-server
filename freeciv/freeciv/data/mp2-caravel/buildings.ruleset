@@ -1364,7 +1364,15 @@ sound		= "w_colossus"
 sound_alt	= "w_generic"
 helptext	= _("\
 In the city where this wonder is built, +1 trade is added to every tile\
- that generates trade on its own.\
+ worked. The city center tile gets an additional +1 trade in\
+ addition to the first bonus. Until you discover The Corporation, the\
+ Colossus city receives a discount on all Commerce units:\n\
+ Boat:             7 shields.\n\
+ Trireme:         15 shields.\n\
+ Caravan, Galley: 25 shields.\n\
+ Train:           30 shields.\n\
+ Caravel:         35 shields.\n\
+ Cargo Ship:      40 shields.\n\
  Obsolete by: Automobile.\
 ")
 

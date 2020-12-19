@@ -1133,21 +1133,6 @@ reqs	=
       "Gov", "Democracy", "Player"
     }
 
-[effect_democracy_0]
-type    = "Incite_Cost_Pct"
-value	= 300
-reqs	=
-    { "type", "name", "range", "present"
-      "Gov", "Democracy", "Player", TRUE
-    }
-[effect_democracy_1]
-type	= "Unit_Bribe_Cost_Pct"
-value	= -300
-reqs	=
-    { "type", "name", "range"
-      "UnitFlag", "NonMil", "Local"
-    }
-
 [effect_communism_0]
 type    = "Veteran_Build"
 value   = 1
@@ -3249,15 +3234,105 @@ reqs	=
       "Building", "A.Smith's Trading Co.", "Player"
     }
 
+;**************************************************** 
 [effect_colossus]
-type    = "Output_Inc_Tile"
+type    = "Output_Add_Tile"
 value	= 1
 reqs	=
     { "type", "name", "range"
       "Building", "Colossus", "City"
       "OutputType", "Trade", "Local"
     }
-
+[effect_colossus2]
+type    = "Output_Add_Tile"
+value   = 1
+reqs    =
+    { "type", "name", "range"
+      "Building", "Colossus", "City"
+      "CityTile", "Center", "Local"
+      "OutputType", "Trade", "Local"
+    }
+[effect_colossus_commerce_unit_discount]
+type    = "Unit_Build_Cost_Pct"
+value	  = -12
+reqs    =
+    {
+      "type", "name", "range", "present"
+      "Building", "Colossus", "City"
+      "UnitFlag", "HelpWonder", "Local", TRUE
+      "Tech", "The Corporation", "Player", FALSE
+    }
+[effect_colossus_cargo_ship_adjust]
+type    = "Unit_Build_Cost_Pct"
+value	  = 1
+reqs    =
+    {
+      "type", "name", "range", "present"
+      "Building", "Colossus", "City"
+      "UnitFlag", "HelpWonder", "Local", TRUE
+      "Tech", "The Corporation", "Player", FALSE
+    }
+[effect_colossus_caravel_discount]
+type    = "Unit_Build_Cost_Pct"
+value	  = -12     ;40-5 = -12%
+reqs    =
+    {
+      "type", "name", "range", "present"
+      "Building", "Colossus", "City"
+      "UnitType", "Caravel", "Local", TRUE
+      "Tech", "The Corporation", "Player", FALSE
+    }
+[effect_colossus_train_discount]
+type    = "Unit_Build_Cost_Pct"
+value	  = -2     ;35-5 = -14%
+reqs    =
+    {
+      "type", "name", "range", "present"
+      "Building", "Colossus", "City"
+      "UnitType", "Train", "Local", TRUE
+      "Tech", "The Corporation", "Player", FALSE
+    }
+[effect_colossus_galley_discount]
+type    = "Unit_Build_Cost_Pct"
+value	  = -4     ;30-5 = -17%
+reqs    =
+    {
+      "type", "name", "range", "present"
+      "Building", "Colossus", "City"
+      "UnitType", "Galley", "Local", TRUE
+      "Tech", "The Corporation", "Player", FALSE
+    }
+[effect_colossus_caravan_discount]
+type    = "Unit_Build_Cost_Pct"
+value	  = -4     ;30-5 = -17%
+reqs    =
+    {
+      "type", "name", "range", "present"
+      "Building", "Colossus", "City"
+      "UnitType", "Caravan", "Local", TRUE
+      "Tech", "The Corporation", "Player", FALSE
+    }
+[effect_colossus_trireme_discount]
+type    = "Unit_Build_Cost_Pct"
+value	  = -13     ;20-5 = -25%
+reqs    =
+    {
+      "type", "name", "range", "present"
+      "Building", "Colossus", "City"
+      "UnitType", "Trireme", "Local", TRUE
+      "Tech", "The Corporation", "Player", FALSE
+    }  
+[effect_colossus_boat_discount]
+type    = "Unit_Build_Cost_Pct"
+value	  = -18     ;10-3 = -30%
+reqs    =
+    {
+      "type", "name", "range", "present"
+      "Building", "Colossus", "City"
+      "UnitType", "Boat", "Local", TRUE
+      "Tech", "The Corporation", "Player", FALSE
+    }
+;**************************************************** 
 [effect_copernicus_observatory]
 type    = "Output_Bonus"
 value	= 100
@@ -4694,8 +4769,7 @@ reqs	=
       "Action", "Poison City Escape", "Local", TRUE
     }
 ;*********************************************************
-
-; FIXED flag from "Cities" to "NonMil" to have proper effect.
+; Bribe and Incite Costs *********************************
 [effect_unit_bribe_cost_settlers]
 type	= "Unit_Bribe_Cost_Pct"
 value	= -50
@@ -4703,6 +4777,36 @@ reqs	=
     { "type", "name", "range"
       "UnitFlag", "NonMil", "Local"
     }
+[effect_bribe_democracy]
+type	= "Unit_Bribe_Cost_Pct"
+value	= 200
+reqs	=
+    { "type", "name", "range"
+      "Gov", "Democracy", "Player"
+    }
+[effect_bribe_fundamentalism]
+type	= "Unit_Bribe_Cost_Pct"
+value	= 100
+reqs	=
+    { "type", "name", "range"
+      "Gov", "Fundamentalism", "Player"
+    }
+[effect_bribe_commies]
+type	= "Unit_Bribe_Cost_Pct"
+value	= 100
+reqs	=
+    { "type", "name", "range"
+      "Gov", "Communism", "Player"
+    }
+[effect_incite_democracy]
+type    = "Incite_Cost_Pct"
+value	= 200
+reqs	=
+    { "type", "name", "range", "present"
+      "Gov", "Democracy", "Player", TRUE
+    }
+;*********************************************************
+
 
 ;LOSING MOVES FROM ILLEGAL ACTION NEVER MADE SENSE. JUST FORBID IT AND LET THEM PICK A LEGAL ACTION. 
 ;[effect_illegal_action_move_cost_base]

@@ -889,7 +889,7 @@ req2     = "Industrialization"
 flags    = ""
 graphic     = "a.the_corporation"
 graphic_alt = "-"
-helptext = _("Obsoletes Caravan.")
+helptext = _("Obsoletes Caravan. Ends Colossus discount on Commerce units.")
 cost = 2900
 
 [advance_the_republic]
@@ -964,13 +964,13 @@ flags    = ""
 graphic     = "a.writing"
 graphic_alt = "-"
 
-[advance_agricultural]
-name     = _("Agricultural")
-req1     = "None"
-req2     = "None"
-flags    = ""
-graphic     = "a.horseback_riding"
-graphic_alt = "-"
+;[advance_agricultural]
+;name     = _("Agricultural")
+;req1     = "None"
+;req2     = "None"
+;flags    = ""
+;graphic     = "a.horseback_riding"
+;graphic_alt = "-"
 
 
 ; A placeholder tech used to ensure that when

@@ -1503,13 +1503,27 @@ actor_reqs    =
       "Extra",         "Fort",          "Local",   TRUE
     }
 
+;*******************************************************
 [actionenabler_base]
 action        = "Build Base"
 actor_reqs    =
     { "type",          "name",            "range", "present"
       "UnitFlag",      "CanFortress",     "Local", TRUE
       "UnitType",      "Proletarians",    "Local", FALSE
+      "UnitType",      "Marines",         "Local", FALSE
       "UnitFlag",      "Well-Digger",     "Local", FALSE
+    }
+[actionenabler_marines_can_fort_only]
+action        = "Build Base"
+actor_reqs    =
+    { "type",          "name",            "range", "present"
+      "UnitType",      "Marines",         "Local", TRUE
+      "UnitState",     "Transported",     "Local", FALSE
+      "UnitFlag",      "CanFortress",     "Local", TRUE
+    }
+target_reqs    =
+    { "type",   "name",       "range", "present"
+      "Extra",  "Fort",       "Local",  FALSE
     }
 [actionenabler_base_prole]
 action        = "Build Base"
@@ -1538,6 +1552,7 @@ target_reqs    =
     { "type",   "name", "range", "present"
       "CityTile", "Claimed", "Local", FALSE
     }
+;*******************************************************
 
 [actionenabler_mining]
 action        = "Build Mine"
