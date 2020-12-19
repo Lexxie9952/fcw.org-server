@@ -658,7 +658,6 @@ function handle_ruleset_control(packet)
 
   client_rules_flag[CRF_MINOR_NUKES]=true; // all known rules have 3x3 fission nukes at this time
 
-
   var rules = ruleset_control['name'];
 
   // Establish legacy compatibility for all MP2 rulesets from Brava onward: 
@@ -667,6 +666,16 @@ function handle_ruleset_control(packet)
   }
   // Legacy rules block:
   switch (rules) {
+    case "MP2":
+    case "Avant-garde 2":
+    case "Avant-garde":
+      client_rules_flag[CRF_RADAR_TOWER]=true;
+      client_rules_flag[CRF_EXTRA_HIDEOUT]=true;
+      client_rules_flag[CRF_EXTRA_QUAY]=true;
+      client_rules_flag[CRF_MAJOR_NUKES]=true; // ruleset has them and server setting to disallow them
+      client_rules_flag[CRF_SURGICAL_PILLAGE]=true;
+      $("#order_airbase").attr("title", "Build Airbase/Radar (Shift-E)");
+
     case "Multiplayer-Evolution ruleset":
       client_rules_flag[CRF_CARGO_HEURISTIC]=true;
       client_rules_flag[CRF_ASMITH_SPECIALISTS]=true;
@@ -680,53 +689,26 @@ function handle_ruleset_control(packet)
       client_rules_flag[CRF_PACTS_SANS_EMBASSY]=true;
       client_rules_flag[CRF_TESLA_UPGRADE_DISCOUNT]=true;
       client_rules_flag[CRF_NO_WASTE]=true;
-      client_rules_flag[CRF_DEMOCRACY_NONCORRUPT] = true;
       client_rules_flag[CRF_MAGLEV] = true;
-      case "Avant-garde":
-      case "Avant-garde 2":
-      case "MP2":
-        // Each time a beta version becomes vetted and is the new standard floor, the hard-coded if statement
-        // can disappear because the CRF behaviour is then standardized into MP2. Current block was made when
-        // standard floor was MP2 Avant-garde
-        if (ruleset_control['name'] == "MP2 Brava") {
-          // ...etc.../
-        }
-        else if (ruleset_control['name'] == "MP2 Caravel") {
-          // ... include Brava stuff in this block too, it inherits it ... //
-          client_rules_flag[CRF_SIEGE_RAM]=true;
-          client_rules_flag[CRF_DEMOCRACY_NONCORRUPT] = false;
-          client_rules_flag[CRF_MARINE_BASES] = true;
-          // ...etc... //
-        }
-  
-        client_rules_flag[CRF_RADAR_TOWER]=true;
-        client_rules_flag[CRF_EXTRA_HIDEOUT]=true;
-        client_rules_flag[CRF_EXTRA_QUAY]=true;
-        client_rules_flag[CRF_MAJOR_NUKES]=true; // ruleset has them and server setting to disallow them
-        client_rules_flag[CRF_SURGICAL_PILLAGE]=true;
-        $("#order_airbase").attr("title", "Build Airbase/Radar (Shift-E)");
-      break;
+    break;
 
     case "Multiplayer-Plus ruleset":
       client_rules_flag[CRF_CARGO_HEURISTIC]=true;
       client_rules_flag[CRF_NO_UNIT_GOLD_UPKEEP]=true;
       client_rules_flag[CRF_PACTS_SANS_EMBASSY]=true;
       client_rules_flag[CRF_NO_WASTE]=true;
-      client_rules_flag[CRF_DEMOCRACY_NONCORRUPT] = true;
     break;
 
     case "Multiplayer ruleset":
       client_rules_flag[CRF_CARGO_HEURISTIC]=true;
       client_rules_flag[CRF_NO_UNIT_GOLD_UPKEEP]=true;
       client_rules_flag[CRF_NO_WASTE]=true;
-      client_rules_flag[CRF_DEMOCRACY_NONCORRUPT] = true;
     break;
 
     case "Classic ruleset":
       client_rules_flag[CRF_CARGO_HEURISTIC]=true;
       client_rules_flag[CRF_NO_UNIT_GOLD_UPKEEP]=true;
       client_rules_flag[CRF_NO_WASTE]=true;
-      client_rules_flag[CRF_DEMOCRACY_NONCORRUPT] = true;
     break;
 
     case "Civ2Civ3 ruleset":
@@ -736,13 +718,15 @@ function handle_ruleset_control(packet)
     break;
   }
   /* Flags for hard-coded client behaviors/optimisations specific to rulesets,
-     for MP2 Brava and onward:            */
+     for MP2 Brava and onward:  ALSO, if a setting becomes false in later version
+     these client_rules_flag[_] =false statements go here to avoid the chronologic
+     override logic above */
   switch (ruleset_control['name']) {
-    case "MP2 Crusader":
-       // crusader-only flags
-       client_rules_flag[CRF_DEMOCRACY_NONCORRUPT] = false;
+    case "MP2 Caravel":
+      client_rules_flag[CRF_SIEGE_RAM]=true;
+      client_rules_flag[CRF_MARINE_BASES] = true;
     case "MP2 Brava":
-      // flags for brava and crusader, etc.
+      // flags for brava that don't override/contradict caravel
     break;
   }
 
