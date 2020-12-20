@@ -5360,6 +5360,7 @@ function request_unit_build_city()
           },
           function(){
              send_request(JSON.stringify(packet));
+             setTimeout(update_active_units_dialog, update_focus_delay);
           });
         }
       }
@@ -5403,7 +5404,6 @@ function key_unit_disband()
         "action_type" : (target_city == null ? ACTION_DISBAND_UNIT
                                             : ACTION_RECYCLE_UNIT)
       };
-
       send_request(JSON.stringify(packet));
     }
     setTimeout(update_unit_focus, update_focus_delay);
