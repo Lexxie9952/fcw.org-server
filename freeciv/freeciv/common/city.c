@@ -777,10 +777,11 @@ bool city_production_build_units(const struct city *pcity,
 
   /* Can't use multiple city_build_slots:
      ➤ Unique units: restricts any second unit.
-     ➤ Pop units: restricts any second unit.
      ➤ Units without utypeflag "Shield2Gold" IF game.server.slot_control==TRUE
-       Later, a custom flag "MultiSlot" should be used.   */
-  if (utype_pop_value(utype) != 0 || utype_has_flag(utype, UTYF_UNIQUE) ) {
+       Later, a custom flag "MultiSlot" should be used.   
+     ➤ Pop units: restricts any second unit. 
+       Can't think of WHY, this nerfs Migrants too much by wiping out a whole production-turn-slot. */
+  if (/*utype_pop_value(utype) != 0 || */utype_has_flag(utype, UTYF_UNIQUE) ) {
     /* Pop_cost unit or Unique_unit: means ONLY this unit can be built */
     (*num_units)++; // = 1
     return FALSE;
@@ -842,8 +843,8 @@ bool city_production_build_units(const struct city *pcity,
             if (utype_index(target.value.utype) != utype_index(utype)) {
               utype = target.value.utype; // remember for next comparison
               // STEP 1. Check if it it's legal at all to make this with other units
-              if (utype_pop_value(target.value.utype) != 0 
-                    || utype_has_flag(target.value.utype, UTYF_UNIQUE) ) {
+              if (/*utype_pop_value(target.value.utype) != 0 
+                    ||*/ utype_has_flag(target.value.utype, UTYF_UNIQUE) ) {
                   return FALSE; // ILLEGAL, go home
               }
               // STEP 2. Flag this unit if "a maximum of one unit from this category can be made"
@@ -895,8 +896,8 @@ bool city_production_build_units(const struct city *pcity,
               utype = target.value.utype; // remember for next comparison
 
               // STEP ONE. Check again if it it's legal to make >1 of this
-              if (utype_pop_value(target.value.utype) != 0 
-                    || utype_has_flag(target.value.utype, UTYF_UNIQUE)
+              if (/*utype_pop_value(target.value.utype) != 0 
+                    || */ utype_has_flag(target.value.utype, UTYF_UNIQUE)
                     // to do: this is arbitrarily using UTYF_SHIELD2GOLD only because 1) I couldn't add new flag
                     // UTYF_MULTI_SLOT without it breaking the manual generator's assertion of 
                     //  [unittype.c::1347]: assertion 'id >= UTYF_USER_FLAG_1 && id <= UTYF_LAST_USER_FLAG' failed.
