@@ -103,8 +103,8 @@ The current and complete list of Freeciv-web controls can be found here:
   h: set unit's (h)omecity  (to city on current tile)
   H: make Hideout
   i: build (i)rrigation or convert terrain  (settler/worker units)
-alt-I: connect irrigation along path (alt-shift-I)
   I: v(I)gil: (I)ntercept and auto-attack adjacent air units
+alt-I: connect irrigation along path (alt-shift-I)
   j: no orders - skip orders for this unit this turn 
   J: cancel orders - clear current orders for this unit
   k: next unit of same (k)ind awaiting orders
@@ -131,6 +131,7 @@ alt-R: connect roads along path (alt-shift-R)
 alt-v: select all units NOT of this type on tile
   x: unit auto e(x)plore
   X: select all units of same TYPE globally
+alt-x: Chalkboard: private map for plans and notes. Alt/Shift-Ctrl click to mark with notes.
   w: (w)ait: focus on next unit
   w: <in other tab or pop-up dialog>: close dialog
 ESC: <In MAP tab>: Exit GOTO mode/Drag mode/Multi-select mode
