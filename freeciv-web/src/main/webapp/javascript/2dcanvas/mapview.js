@@ -63,12 +63,12 @@ function mapview_cycle_city_display_mode()
 {
   var last = CMDM_LAST;  // indicates time to cycle back to first display mode
 
-  // Skip corruption display mode for Democracies in rulesets where it has no corruption
-  if (client_rules_flag[CRF_DEMOCRACY_NONCORRUPT]
-      && !client_is_observer() 
-      && governments[players[client.conn.playing.playerno].government].name == "Democracy") {
-        last--;
-  }
+  // Former code that shows an example of how we can filter the custom user info column in cities list.
+  //if (client_rules_flag[CRF_DEMOCRACY_NONCORRUPT]
+  //    && !client_is_observer() 
+  //    && governments[players[client.conn.playing.playerno].government].name == "Democracy") {
+  //      last--;
+  //}
 
   city_map_display_mode++;
 
