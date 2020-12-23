@@ -1524,7 +1524,9 @@ function city_sell_improvement_in(city_id, improvement_id)
                     "build_id": improvement_id};
         send_request(JSON.stringify(packet));
         active_superpanel_cityid = city_id;
-        play_sound(soundset["e_imp_sold"]);
+        // Play sound for normal building sale but not wonders (which can't happen)
+        if (improvements[improvement_id].genus == GENUS_IMPROVEMENT)
+          play_sound(soundset["e_imp_sold"]);
     });
 }
 /**************************************************************************
