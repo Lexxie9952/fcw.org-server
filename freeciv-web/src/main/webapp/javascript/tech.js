@@ -549,8 +549,14 @@ function get_advances_text(tech_id)
     (list = list.filter(Boolean)).length ? (intro + ' ' + list.join(', ')) : '';
 
   const ptech = techs[tech_id];
+  var cost = ptech.cost;
 
-  return tech_span(ptech.name, null, null) + ' (' + Math.floor(ptech.cost) + ')'
+  // Adjust tech cost for sciencebox
+  if (game_info["sciencebox"] != 100)   {
+    cost = ptech.cost * game_info["sciencebox"] / 100;
+  }
+
+  return tech_span(ptech.name, null, null) + ' (' + Math.floor(cost) + ')'
     + format_list_with_intro(' enables',
       [
         format_list_with_intro('', get_units_from_tech(tech_id)
