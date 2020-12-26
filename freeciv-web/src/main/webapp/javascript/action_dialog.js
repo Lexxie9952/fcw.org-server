@@ -527,6 +527,8 @@ function popup_action_selection(actor_unit, action_probabilities,
     for (button_id in buttons) {
       if (buttons[button_id].text == "Ranged Attack (100%)") {
         buttons[button_id].text = "Skirmish Assault (100%)"
+      } else if (buttons[button_id].text == "Ranged Attack ([0%, 100%])") {
+        buttons[button_id].text = "Skirmish Assault (100%)"
       }
     }
   }
