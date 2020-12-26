@@ -43,24 +43,27 @@ var worklist_selection = [];
 
 // User definable row in city list:   *****************************
 var city_user_row_val = 0;  
-const CURV_NOTHING      = 0;
-const CURV_CORRUPTION   = 1;
-const CURV_POLLUTION    = 2;
-const CURV_TRADE_REVENUE= 3;
-const CURV_FOREIGNERS   = 4;
-const CURV_TURN_FOUNDED = 5;
-const CURV_LAST         = 6;
+const CURV_NOTHING        = 0;
+const CURV_CORRUPTION     = 1;
+const CURV_POLLUTION      = 2;
+const CURV_TRADE_REVENUE  = 3;
+const CURV_GOLD_PER_SHIELD= 4;
+const CURV_FOREIGNERS     = 5;
+const CURV_TURN_FOUNDED   = 6;
+const CURV_LAST           = 7;
 const clkmsg = "\n\nClick column to change info category.";
 const CURV_icons = ["/images/city_user_row.png",
                     "/images/corrupt.png",
                     "/images/pollution.png",
                     "/images/camel.png",
+                    "/images/goldpershield.png",
                     "/images/foreigner.png",
                     "/images/stone_henge.png"];
 const CURV_title = ["User Info Column:\nClick column below to choose",
                     "Corruption"+clkmsg,
                     "Pollution Probability"+clkmsg,
                     "Trade from Trade Routes"+clkmsg,
+                    "Gold cost per Shield"+clkmsg,
                     "Foreign Citizens"+clkmsg,
                     "Turn Founded"+clkmsg];
 
@@ -916,6 +919,34 @@ function get_production_progress(pcity)
 }
 
 /**************************************************************************
+ Returns the gold cost per shield to buy off current city prod target
+**************************************************************************/
+function get_gold_cost_per_shield(pcity)
+{
+  var accumulated = pcity['shield_stock'], // shields invested
+      buy_cost = pcity['buy_cost'],        // gold cost to buy product
+      total_shields = 0, // total shield cost of product
+      remaining = 0,     // remaining shields
+      gcps = 0;          // gold cost per shield
+
+  if (buy_cost == 0) return "No";  // can't buy
+
+  if (pcity['production_kind'] == VUT_UTYPE) {
+    var punit_type = unit_types[pcity['production_value']];
+    total_shields = universal_build_shield_cost(pcity, punit_type);
+  }
+  else if (pcity['production_kind'] == VUT_IMPROVEMENT) {
+    var improvement = improvements[pcity['production_value']];
+    if (improvement['name'] != "Coinage")
+      total_shields = universal_build_shield_cost(pcity, improvement);
+  }
+
+  remaining = total_shields - accumulated;
+  gcps = buy_cost / remaining;
+  return gcps.toFixed(2);
+}
+
+/**************************************************************************
 ...
 **************************************************************************/
 function generate_production_list()
@@ -1182,25 +1213,26 @@ function request_city_buy()
     var punit_type = unit_types[pcity['production_value']];
     if (punit_type != null) {
       buy_price_string = punit_type['name'] + " costs " + pcity['buy_cost'] + " gold.";
-      buy_question_string = "Buy " + punit_type['name'] + " for " + pcity['buy_cost'] + " gold?";
+      buy_question_string = "Buy " + punit_type['name'] + " for <b>" + pcity['buy_cost'] + "</b> gold";
     }
   } else {
     var improvement = improvements[pcity['production_value']];
     if (improvement != null) {
       buy_price_string = improvement['name'] + " costs " + pcity['buy_cost'] + " gold.";
-      buy_question_string = "Buy " + improvement['name'] + " for " + pcity['buy_cost'] + " gold?";
+      buy_question_string = "Buy " + improvement['name'] + " for <b>" + pcity['buy_cost'] + "</b> gold";
     }
   }
 
+  var cost_per_shield_text = " @ "+get_gold_cost_per_shield(pcity)+"g/shield ?";
   var treasury_text = "<br>Treasury contains " + pplayer['gold'] + " gold.";
 
-  if (pcity['buy_cost'] > pplayer['gold']) {
-    show_dialog_message("Buy It!",
+  if (pcity['buy_cost'] == 0 || pcity['buy_cost'] > pplayer['gold']) {
+    show_dialog_message("Purchase not possible",
       buy_price_string + treasury_text);
     return;
   }
 
-  var dhtml = buy_question_string + treasury_text;
+  var dhtml = buy_question_string + cost_per_shield_text + treasury_text;
 
 
   $("#dialog").html(dhtml);
@@ -3391,7 +3423,12 @@ function update_city_screen()
             const rev = get_city_traderoute_revenue(pcity['id']);
             city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
               + "<span style='color:#fdff7d;'>" + (rev<1 ? " " : rev) + "</span>" +  "</td>";
-            break;  
+            break;
+          case CURV_GOLD_PER_SHIELD:
+            const gcps = get_gold_cost_per_shield(pcity);
+            city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
+            + "<span style='color:#fdff7d;'>" + (gcps=="No" ? " " : gcps) + "</span>" +  "</td>";
+            break;
           case CURV_TURN_FOUNDED:
             city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
               + "<span style='color:#999'>" + pcity['turn_founded'] +"</span>" +  "</td>";
