@@ -530,10 +530,18 @@ function popup_action_selection(actor_unit, action_probabilities,
       }
     }
   }
-  if (unit_types[actor_unit['type']]['name']=="Siege Ram") {
+  else if (unit_types[actor_unit['type']]['name']=="Marines"
+      && client_rules_flag[CRF_MARINE_RANGED]) {
+    for (button_id in buttons) {
+     if (buttons[button_id].text == "Ranged Attack (100%)") {
+        buttons[button_id].text = "Bazooka Attack (100%)"
+      }
+    }
+  }
+  else if (unit_types[actor_unit['type']]['name']=="Siege Ram") {
     for (button_id in buttons) {
       if (buttons[button_id].text == "Targeted Sabotage") {
-        buttons[button_id].text = "Destroy City Walls"
+        buttons[button_id].text = "Attack City Walls"
       }
     }
   }
