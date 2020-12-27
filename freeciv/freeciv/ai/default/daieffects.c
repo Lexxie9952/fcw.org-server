@@ -167,6 +167,9 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
 
   switch (peffect->type) {
   /* These effects have already been evaluated in base_want() */
+  case EFT_UNIT_RECOVER_PCT:                   // not yet evaluated
+  case EFT_UNIT_UNHAPPY_COST:                  // not yet evaluated
+  case EFT_PEACEFUL_FIELDUNIT_BONUS:           // not yet evaluated
   case EFT_CAPITAL_CITY:
   case EFT_GOV_CENTER:
   case EFT_UPKEEP_FREE:
