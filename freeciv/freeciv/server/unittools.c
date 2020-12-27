@@ -4602,8 +4602,23 @@ bool execute_orders(struct unit *punit, const bool fresh)
           set_unit_activity_targeted(punit, activity, pextra);
           send_unit_info(NULL, punit);
           
+          // Doing these 4 in foreign territory may trigger casus belli:
           if (activity == ACTIVITY_PILLAGE) {
             action_consequence_success(action_by_number(ACTION_PILLAGE),
+                                       unit_owner(punit),
+                                       tile_owner(unit_tile(punit)),
+                                       unit_tile(punit),
+                                       tile_link(unit_tile(punit)));                                       
+          }
+          else if (activity == ACTIVITY_GEN_ROAD) {
+            action_consequence_success(action_by_number(ACTION_ROAD),
+                                       unit_owner(punit),
+                                       tile_owner(unit_tile(punit)),
+                                       unit_tile(punit),
+                                       tile_link(unit_tile(punit)));
+          }
+          else if (activity == ACTIVITY_BASE) {
+            action_consequence_success(action_by_number(ACTION_BASE),
                                        unit_owner(punit),
                                        tile_owner(unit_tile(punit)),
                                        unit_tile(punit),

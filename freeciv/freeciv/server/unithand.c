@@ -4789,6 +4789,14 @@ bool unit_activity_handling_targeted(struct unit *punit,
 {
   if (!activity_requires_target(new_activity)) {
     unit_activity_handling(punit, new_activity);
+    if (new_activity == ACTIVITY_TRANSFORM) {
+        action_consequence_success(action_by_number(ACTION_TRANSFORM_TERRAIN),
+                                   unit_owner(punit),
+                                   tile_owner(unit_tile(punit)),
+                                   unit_tile(punit),
+                                   tile_link(unit_tile(punit)));      
+      }
+
   } else if (can_unit_do_activity_targeted(punit, new_activity, *new_target)) {
     enum unit_activity old_activity = punit->activity;
     struct extra_type *old_target = punit->activity_target;
@@ -4807,12 +4815,28 @@ bool unit_activity_handling_targeted(struct unit *punit,
       send_unit_info(NULL, punit);    
       unit_activity_dependencies(punit, old_activity, old_target);
 
+      // Successful action consequence has to come early to make casus belli,
+      // so that victim can preventatively react to the offensive behaviour:
       if (new_activity == ACTIVITY_PILLAGE) {
         action_consequence_success(action_by_number(ACTION_PILLAGE),
                                    unit_owner(punit),
                                    tile_owner(unit_tile(punit)),
                                    unit_tile(punit),
                                    tile_link(unit_tile(punit)));
+      }
+      else if (new_activity == ACTIVITY_GEN_ROAD) {
+        action_consequence_success(action_by_number(ACTION_ROAD),
+                                   unit_owner(punit),
+                                   tile_owner(unit_tile(punit)),
+                                   unit_tile(punit),
+                                   tile_link(unit_tile(punit)));                                   
+      }
+      else if (new_activity == ACTIVITY_BASE) {
+        action_consequence_success(action_by_number(ACTION_BASE),
+                                   unit_owner(punit),
+                                   tile_owner(unit_tile(punit)),
+                                   unit_tile(punit),
+                                   tile_link(unit_tile(punit)));                                   
       }
     }
   }
