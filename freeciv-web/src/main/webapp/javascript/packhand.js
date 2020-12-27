@@ -725,6 +725,8 @@ function handle_ruleset_control(packet)
     case "MP2 Caravel":
       client_rules_flag[CRF_SIEGE_RAM]=true;
       client_rules_flag[CRF_MARINE_BASES] = true;
+      client_rules_flag[CRF_MARINE_RANGED] = true;
+      client_rules_flag[CRF_BSHIP_BOMBARD] = true;
     case "MP2 Brava":
       // flags for brava that don't override/contradict caravel
     break;

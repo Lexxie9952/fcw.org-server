@@ -56,7 +56,8 @@ const CRF_MAGLEV               = 19; // Ruleset has MAGLEVS
 const CRF_SIEGE_RAM            = 20; // Ruleset uses Siege Ram, which highjacks diplomatic sabotage popup to only allow City Wall sabotage.
 const CRF_MARINE_BASES         = 21; // Needed to optimize due to flaws in actionenablers/req
 const CRF_MARINE_RANGED        = 22; // Marines can do ranged attack
-const CRF_LAST                 = 23;
+const CRF_BSHIP_BOMBARD        = 23; // Battleships can Bombard
+const CRF_LAST                 = 24;
 
 var graphic_theme_path;
 

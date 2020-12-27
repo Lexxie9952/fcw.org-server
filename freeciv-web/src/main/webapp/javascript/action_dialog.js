@@ -525,9 +525,7 @@ function popup_action_selection(actor_unit, action_probabilities,
   if (unit_types[actor_unit['type']]['name']=="Fanatics"
       && client_rules_flag[CRF_MP2_SPECIAL_UNITS]) {
     for (button_id in buttons) {
-      if (buttons[button_id].text == "Ranged Attack (100%)") {
-        buttons[button_id].text = "Skirmish Assault (100%)"
-      } else if (buttons[button_id].text == "Ranged Attack ([0%, 100%])") {
+      if (buttons[button_id].text.startsWith("Ranged Attack")) {
         buttons[button_id].text = "Skirmish Assault (100%)"
       }
     }
@@ -535,7 +533,7 @@ function popup_action_selection(actor_unit, action_probabilities,
   else if (unit_types[actor_unit['type']]['name']=="Marines"
       && client_rules_flag[CRF_MARINE_RANGED]) {
     for (button_id in buttons) {
-     if (buttons[button_id].text == "Ranged Attack (100%)") {
+     if (buttons[button_id].text.startsWith("Ranged Attack")) {
         buttons[button_id].text = "Bazooka Attack (100%)"
       }
     }
@@ -544,6 +542,13 @@ function popup_action_selection(actor_unit, action_probabilities,
     for (button_id in buttons) {
       if (buttons[button_id].text == "Targeted Sabotage") {
         buttons[button_id].text = "Attack City Walls"
+      }
+    }
+  }
+  else if (unit_types[actor_unit['type']]['name']=="Battleship") {
+    for (button_id in buttons) {
+      if (buttons[button_id].text.startsWith("Ranged Attack")) {
+        buttons[button_id].text = "Bombard (100%)"
       }
     }
   }
