@@ -531,6 +531,10 @@ struct unit_type {
 
   /* Values for founding cities */
   int city_size;
+  #define utype_bombard_flags city_size
+// TO DO: when save game compatibility breaks, add lots of separate vars
+// and even some unused ones for other things so we don't get this problem
+// with later upgrades.
 
   int city_slots;
 

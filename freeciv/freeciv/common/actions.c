@@ -1750,9 +1750,12 @@ action_actor_utype_hard_reqs_ok(const action_id wanted_action,
 {
   switch ((enum gen_action)wanted_action) {
   case ACTION_JOIN_CITY:
+    /* Reason: Must have population to add. */
     if (utype_pop_value(actor_unittype) <= 0) {
-      /* Reason: Must have population to add. */
-      return FALSE;
+      // fall-thru: use city_size if no pop_cost. This allows
+      // "shields for rapture" behaviour for non-rep migrant types.
+      if (actor_unittype->city_size < 1)
+        return FALSE;
     }
     break;
 
@@ -2333,7 +2336,11 @@ is_action_possible(const action_id wanted_action,
         return TRI_MAYBE;
       }
 
-      new_pop = city_size_get(target_city) + unit_pop_value(actor_unit);
+      // This allows 0 pop cost units who add to size: e.g., shields for rapture.
+      int add_pop = unit_pop_value(actor_unit) > unit_type_get(actor_unit)->city_size
+                  ? unit_pop_value(actor_unit) : unit_type_get(actor_unit)->city_size;
+
+      new_pop = city_size_get(target_city) + add_pop;
 
       if (new_pop > game.info.add_to_size_limit) {
         /* Reason: Make the add_to_size_limit setting work. */

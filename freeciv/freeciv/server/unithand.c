@@ -2945,6 +2945,9 @@ static bool city_add_unit(struct player *pplayer, struct unit *punit,
                           struct city *pcity, const struct action *paction)
 {
   int amount = unit_pop_value(punit);
+  // Handle 0 pop cost migrant type possibilities: "shields for rapture"
+  amount = (amount >= unit_type_get(punit)->city_size) 
+           ? amount : unit_type_get(punit)->city_size;
 
   /* Sanity check: The actor is still alive. */
   fc_assert_ret_val(punit, FALSE);
@@ -3453,7 +3456,10 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
 
   } unit_list_iterate_safe_end;
 
-  punit->moves_left = 0;
+  // Bits 3,4,5,6,7 of utype_bombard_flags represent move_frags used by bombarding (1-63).
+  // If zero (default), then default behaviour is to lose all moves from bombard.
+  int bombard_move_cost = ((unit_type_get(punit)->utype_bombard_flags) & 0b1111100) >> 2; 
+  punit->moves_left =  (punit->moves_left-bombard_move_cost) > 0 ? (punit->moves_left - bombard_move_cost) : 0;
 
   unit_did_action(punit);
   unit_forget_last_activity(punit);
