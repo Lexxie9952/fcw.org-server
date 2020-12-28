@@ -2286,3 +2286,57 @@ bool utype_is_cityfounder(struct unit_type *utype)
 
   return utype_can_do_action(utype, ACTION_FOUND_CITY);
 }
+
+/**************************************************************************
+ * BOMBARD FEATURES ADDITION
+ * ***********************************************************************/
+//
+/**********************************************************************//**
+  Return the bombard_stats for this unit by filling in *pstats
+**************************************************************************/
+void unit_get_bombard_stats(struct bombard_stats *pstats, 
+                                   const struct unit *punit)
+{
+  fc_assert_ret_val(NULL != punit, NULL);
+
+  struct unit_type *ptype = unit_type_get(punit);
+
+  utype_get_bombard_stats(pstats, ptype);
+}
+
+/**********************************************************************//**
+  Return the bombard_stats for this unit_type by filling in *pstats
+**************************************************************************/
+void utype_get_bombard_stats(struct bombard_stats *pstats, 
+                                             const struct unit_type *ptype)
+{
+  fc_assert_ret_val(NULL != ptype, NULL);
+
+  // extract bits from unused city_size field (for savegame compat)
+  // TO DO: on next upgrade that breaks savegame, get this data from
+  // a new and normal set of data fields
+  int BB = ptype->city_size;         
+
+  // Preserve a copy of the bombard flags/stats:
+  pstats->bit_field = BB;
+  // Bit 0:      RESERVED, extra range flag (+1 range)
+  pstats->bombard_extra_range = (BB & 1);
+  // Bit 1:      RESERVED
+  // Bits 2-7:   Move cost of bombard action
+  pstats->bombard_move_cost =          (BB & 0b11111100) >> 2;
+  // Bits 8-10:  Max targets exposed on tile (0==all)
+  pstats->bombard_primary_targets = (BB & 0b11100000000) >> 8;
+  // Bits 11-13: Max # of kills possible on primary targets (0==none)
+  pstats->bombard_primary_kills =(BB & 0b11100000000000) >> 11;
+
+  // RESERVED for future use, see .h file for explanations
+  pstats->bombard_collateral_targets = 0;
+  pstats->bombard_collateral_kills = 0;
+  pstats->bombard_collateral_rate_reduce = 0;
+  pstats->bombard_collateral_atk_mod = 0;
+  pstats->bombard_stay_fortified = 0;
+  pstats->bombard_rate_range_mod = 0;
+  pstats->bombard_atk_mod = 0;
+  pstats->bombard_atk_range_mod = 0;
+}
+

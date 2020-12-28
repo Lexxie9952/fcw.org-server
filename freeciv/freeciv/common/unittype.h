@@ -570,6 +570,36 @@ struct unit_type {
   void *ais[FREECIV_AI_MOD_LAST];
 };
 
+/************************************************************************
+ * BOMBARD MECHANICS ADDITION 
+ * **********************************************************************/
+struct bombard_stats {
+  int bit_field;                  // raw bit field currently taken from unit_type.city_size
+
+  int bombard_extra_range;        // Bit      0: RESERVED, whether this unit gets +1 extra range
+  int bombard_move_cost;          // Bits   2-7: Move fragments expended by performing a bombard action
+  int bombard_primary_targets;    // Bits  8-10: Max # of targets on tile that are hit. (0==all)
+  int bombard_primary_kills;      // Bits 11-13: Max # of kills possible on primary targets (0==none)
+  int bombard_collateral_targets; // RESERVED, # of secondary units who receive (lesser) damage
+  int bombard_collateral_kills;   // RESERVED, # of collateral units who could possibly die (0==none)
+  int bombard_collateral_rate_reduce;//RESERVED, reduction in bombard_rate for collateral target exposure
+  int bombard_collateral_atk_mod; // RESERVED, adjustment to atk strength on collateral targets (e.g., -25)
+  bool bombard_stay_fortified;    // RESERVED, whether bombard action preserves fortified status
+  int bombard_fortifed_def_mod;   // RESERVED, additional defense bonus for targets IFF fortified
+  int bombard_rate_range_mod;     // RESERVED, adjustment to bombard_rate for each 1 tile distance
+  int bombard_atk_mod;            // RESERVED, % adjustment to attack strength when bombarding (-50 = -50%)
+  int bombard_atk_range_mod;      // RESERVED, % adjustment to attack strength for tile distance beyond dist==1
+
+  // RESERVED for later use
+  struct name_translation name;       // unique name for this type of ranged attack
+  char sound_fight[MAX_LEN_NAME];     // different sound for bombardment
+  char sound_fight_alt[MAX_LEN_NAME]; 
+};
+
+void unit_get_bombard_stats(struct bombard_stats *pstats, const struct unit *punit);
+void utype_get_bombard_stats(struct bombard_stats *pstats, const struct unit_type *ptype);
+/*******************************************************************************************/
+
 /* General unit and unit type (matched) routines */
 Unit_type_id utype_count(void);
 Unit_type_id utype_index(const struct unit_type *punittype);

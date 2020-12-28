@@ -3380,25 +3380,67 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
   /* Sanity check: The actor still exists. */
   fc_assert_ret_val(pplayer, FALSE);
   fc_assert_ret_val(punit, FALSE);
+  
+  struct bombard_stats pstats;
+  unit_get_bombard_stats(&pstats, punit);
 
   log_debug("Start bombard: %s %s to %d, %d.",
             nation_rule_name(nation_of_player(pplayer)),
             unit_rule_name(punit), TILE_XY(ptile));
 
-  unit_list_iterate_safe(ptile->units, pdefender) {
+/* If bombard_primary_targets isn't unlimited (==0), then we:
+   1. count targets on the tile
+   2. if tile targets are less than max_targets, treat as unlimited 
+   3. else randomly select max_targets # of targets to be bombed. */
+  int max_targets = pstats.bombard_primary_targets;
+  int num_reachable = 0;
+  bool *is_target = NULL; // dynamic array
 
+  if (max_targets) { // !max_targets means everyone is target
+    // Count reachable units on tile:
+    unit_list_iterate_safe(ptile->units, pdefender) {
+      if (is_unit_reachable_at(pdefender, punit, ptile)) {
+        num_reachable++;
+      }
+    } unit_list_iterate_safe_end;
+
+    // If less targets on tile than max, we can skip forward
+    if (num_reachable <= max_targets)
+      max_targets = 0; // unlimited, hit all targets on tile
+
+    if (max_targets) { // Create target list only if needed
+      // Randomly select the max_targets # of targets:
+#define ITERATION_LIMIT 1000 // Safety insurance
+      int c=0, iteration = 0; 
+      // Init dynamic target array:
+      is_target = (bool *)calloc(num_reachable, sizeof(bool));
+      // Pick a random target for each of the # of targets:
+      for (c=0; c < max_targets; c++) {
+        if (iteration++ > ITERATION_LIMIT) break;
+        int r = fc_rand(num_reachable);
+        if (is_target[r] == TRUE) c--; // pick non-selected target
+        else
+          is_target[r] = TRUE;
+      }
+#undef ITERATION_LIMIT
+    }
+  }
+/** FINISHED TARGET SELECTION ************************************/
+
+  int r = 0;  // index to reachable is_target[] array
+  int kills = pstats.bombard_primary_kills;
+
+  unit_list_iterate_safe(ptile->units, pdefender) {
     /* Sanity checks */
     fc_assert_ret_val_msg(!pplayers_non_attack(unit_owner(punit),
-                                               unit_owner(pdefender)),
-                          FALSE,
+                           unit_owner(pdefender)), FALSE,
                           "Trying to attack a unit with which you have "
                           "peace or cease-fire at (%d, %d).",
                           TILE_XY(unit_tile(pdefender)));
     fc_assert_ret_val_msg(!pplayers_allied(unit_owner(punit),
-                                           unit_owner(pdefender)),
-                          FALSE,
+                          unit_owner(pdefender)), FALSE,
                           "Trying to attack a unit with which you have "
-                          "alliance at (%d, %d).",
+                          "alliance at (%d, %d).", 
                           TILE_XY(unit_tile(pdefender)));
 
     if (is_unit_reachable_at(pdefender, punit, ptile)) {
@@ -3408,58 +3450,85 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
 
       adj = base_get_direction_for_step(&(wld.map),
                                         punit->tile, pdefender->tile, &facing);
-
-      if (adj) {
+      /* Unlike normal attack, no change defender orientation when bombarding */
+      if (adj)
         punit->facing = facing;
 
-        /* Unlike with normal attack, we don't change orientation of
-         * defenders when bombarding */
+      // Bombard unit if: targets=unlimited OR target was randomly selected:
+      if (!max_targets || is_target[r]) {
+        bool could_kill = (kills>0);
+        unit_bombs_unit(punit, pdefender, &att_hp, &def_hp, could_kill);
+
+        if (def_hp > 0) {   // SURVIVED
+          notify_player(pplayer, ptile,
+                        E_UNIT_ACTION_FAILED, ftc_server,
+                        /* TODO: replace generic "assaulted" with ruleset
+                          defined name of action.*/
+                        _("Your %s assaulted the %s %s (%dhp)."),
+                        unit_name_translation(punit),
+                        nation_adjective_for_player(unit_owner(pdefender)),
+                        unit_name_translation(pdefender),
+                        def_hp);
+
+          notify_player(unit_owner(pdefender), ptile,
+                        E_UNIT_ESCAPED, ftc_server,
+                        /* TODO: replace generic "assaulted" with ruleset
+                          defined name of action.*/
+                        _("%s %s assaulted your %s (%dhp)."),
+                        nation_adjective_for_player(pplayer),
+                        unit_name_translation(punit),
+                        unit_name_translation(pdefender),
+                        def_hp);
+        } else {          // DIED 
+          notify_player(pplayer, ptile,
+                        E_UNIT_ACTION_FAILED, ftc_server,
+                        /* TODO: replace generic "assaulted" with ruleset
+                          defined name of action.*/
+                        _("Your %s assault <b>killed</b> the %s %s."),
+                        unit_name_translation(punit),
+                        nation_adjective_for_player(unit_owner(pdefender)),
+                        unit_name_translation(pdefender));
+
+          notify_player(unit_owner(pdefender), ptile,
+                        E_UNIT_ESCAPED, ftc_server,
+                        /* TODO: replace generic "assaulted" with ruleset
+                          defined name of action.*/
+                        _("%s %s assaulted and <b>killed</b> your %s."),
+                        nation_adjective_for_player(pplayer),
+                        unit_name_translation(punit),
+                        unit_name_translation(pdefender));        
+        }
+
+        see_combat(punit, pdefender);
+
+        punit->hp = att_hp;
+        pdefender->hp = def_hp;
+
+        send_combat(punit, pdefender, 0, 0, 1);
+    
+        send_unit_info(NULL, pdefender);
+
+        /* May cause an incident */
+        action_consequence_success(paction, unit_owner(punit),
+                                  unit_owner(pdefender),
+                                  unit_tile(pdefender),
+                                  unit_link(pdefender));
+
+        if (def_hp<=0) {  // handle burial
+          wipe_unit(pdefender, ULR_KILLED, unit_owner(punit));
+          kills--;  // track the max #kills allowed
+        }
       }
-
-      unit_bombs_unit(punit, pdefender, &att_hp, &def_hp);
-
-      notify_player(pplayer, ptile,
-                    E_UNIT_ACTION_FAILED, ftc_server,
-                    /* TODO: replace generic "assaulted" with ruleset
-                       defined name of action.*/
-                    _("Your %s assaulted the %s %s (%dhp)."),
-                    unit_name_translation(punit),
-                    nation_adjective_for_player(unit_owner(pdefender)),
-                    unit_name_translation(pdefender),
-                    def_hp);
-
-       notify_player(unit_owner(pdefender), ptile,
-                    E_UNIT_ESCAPED, ftc_server,
-                    /* TODO: replace generic "assaulted" with ruleset
-                       defined name of action.*/
-                    _("%s %s assaulted your %s (%dhp)."),
-                    nation_adjective_for_player(pplayer),
-                    unit_name_translation(punit),
-                    unit_name_translation(pdefender),
-                    def_hp);
-
-      see_combat(punit, pdefender);
-
-      punit->hp = att_hp;
-      pdefender->hp = def_hp;
-
-      send_combat(punit, pdefender, 0, 0, 1);
-  
-      send_unit_info(NULL, pdefender);
-
-      /* May cause an incident */
-      action_consequence_success(paction, unit_owner(punit),
-                                 unit_owner(pdefender),
-                                 unit_tile(pdefender),
-                                 unit_link(pdefender));
+      r++;  // iterates reachable target counter
     }
-
   } unit_list_iterate_safe_end;
 
-  // Bits 3,4,5,6,7 of utype_bombard_flags represent move_frags used by bombarding (1-63).
-  // If zero (default), then default behaviour is to lose all moves from bombard.
-  int bombard_move_cost = ((unit_type_get(punit)->utype_bombard_flags) & 0b1111100) >> 2; 
-  punit->moves_left =  (punit->moves_left-bombard_move_cost) > 0 ? (punit->moves_left - bombard_move_cost) : 0;
+  // clean dynamic target array
+  if (is_target) free(is_target);
+
+  int bm_cost = pstats.bombard_move_cost;
+  punit->moves_left = (punit->moves_left - bm_cost > 0) 
+                    ? (punit->moves_left - bm_cost) : 0;
 
   unit_did_action(punit);
   unit_forget_last_activity(punit);
@@ -3467,19 +3536,21 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
   if (pcity
       && city_size_get(pcity) > 1
       && get_city_bonus(pcity, EFT_UNIT_NO_LOSE_POP) <= 0
+      // && ( !(game.server.killcitizen_pct>0 && game.server.killcitizen_pct<100)
+      //    || (fc_rand(100) < game.server.killcitizen_pct) )
       && kills_citizen_after_attack(punit)) {
     city_reduce_size(pcity, 1, pplayer, "bombard");
     city_refresh(pcity);
     send_city_info(NULL, pcity);
-    // For non-obvious values of killcitizen_pct, report whether city lost population.
+    // For non-obvious values of killcitizen_pct, report that city lost population.
     if (game.server.killcitizen_pct>0 && game.server.killcitizen_pct<100) {
-/* notify players of population loss can go here*/
+      /* notify players of population loss can go here*/
     }   
   } 
   else {
-    // For non-obvious values of killcitizen_pct, report whether city lost population.
+    // For non-obvious values of killcitizen_pct, report city lost no population.
     if (game.server.killcitizen_pct>0 && game.server.killcitizen_pct<100) {
-/* notify players of population loss can go here       */
+      /* notify players of population loss can go here       */
     }
   }
 
