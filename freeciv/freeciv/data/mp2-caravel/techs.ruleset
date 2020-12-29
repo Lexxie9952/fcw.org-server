@@ -185,7 +185,7 @@ req2     = "The Republic"
 flags    = ""
 graphic     = "a.banking"
 graphic_alt = "-"
-helptext = _("Prevents Philosophy from awarding bonus tech.")
+helptext = _("Upkeep changes to 1 gold for Infantry. Prevents Philosophy from awarding bonus tech.")
 cost = 364
 
 [advance_bridge_building]
@@ -494,7 +494,7 @@ flags    = ""
 graphic     = "a.labor_union"
 graphic_alt = "-"
 cost = 5430
-helptext = _("Upkeep paid is 1 gold for: Foot Soldiers, Mechanized Infantry.")
+helptext = _("")
 
 [advance_laser]
 name     = _("Laser")

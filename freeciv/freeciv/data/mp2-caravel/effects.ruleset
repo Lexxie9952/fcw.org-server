@@ -262,6 +262,18 @@ value	= -2400
 ;further tune upward any one time bonus to what it needs to be. reqs can look at unit type also to compensate higher cost 
 ;of making certain units, since route-creating units now vary from 20 shields to 50 shields in cost. 
 
+;Minimum trade from a traderoute is 1; change down-round to up-round by adding 1 to city center.
+[effect_traderoute_minimum2]
+type    = "Output_Add_Tile"
+value   = 1
+reqs    =
+    { "type", "name", "range"
+      ; This was the ONLY req we could find for detecting a TradeRoute, everything else was false + or -
+      "CityStatus", "OwnedByOriginal", "TradeRoute"     
+      "CityTile", "Center", "Local"
+      "OutputType", "Trade", "Local"
+    }
+
 ; ***************************** SEA UNIT REPAIR *******************************
 ; Sea units have crews which pro-actively repair damage regardless of movement.
 ; This is almost comparable to land unit healing. Sea units being "Use once
@@ -4828,6 +4840,30 @@ reqs	=
       "Action", "Pillage", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
     }
+[effect_incident_success_sneaky_road]
+type	= "Casus_Belli_Success"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Road", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
+[effect_incident_success_sneaky_fort]
+type	= "Casus_Belli_Success"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Build Base", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
+[effect_incident_success_sneaky_transform]
+type	= "Casus_Belli_Success"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Transform Terrain", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
 
 [effect_incident_caught_steal_maps1]
 type	= "Casus_Belli_Caught"
@@ -5119,6 +5155,19 @@ reqs    =
       "Gov", "Communism", "Player", TRUE
     }
 
+;10 shield discount Armor
+[effect_communist_armor]
+type    = "Unit_Build_Cost_Pct"
+value	  = -12
+reqs    =
+    {
+      "type", "name", "range", "present"
+      "UnitType", "Armor", "Local", TRUE
+      "Gov", "Communism", "Player", TRUE
+    }
+
+
+
 ;Labor Union changes upkeep of foot units and mech.inf to gold
 [effect_labor_union_upkeep]
 type    = "Shield2Gold_Factor"
@@ -5126,5 +5175,5 @@ value   = 100
 reqs    =
   {
     "type", "name", "range", "present"
-    "Tech", "Labor Union", "Player", TRUE
+    "Tech", "Banking", "Player", TRUE
   }

@@ -236,7 +236,7 @@ poison_empties_food_stock = FALSE
 ; the actor unit. The special value "unlimited" lifts the maximum distance
 ; restriction. The maximum distance can`t be smaller than the minimum
 ; distance.
-bombard_max_range = 2
+bombard_max_range = 1
 
 ; What each action should be called when showing them to the player.
 ; The first %s should be before the mnemonic of the action. A Freeciv client
@@ -967,29 +967,67 @@ target_reqs    =
       "Extra", "Fortress", "Local", FALSE
     }
 
-;Archers can strafe/soften every unit on a tile for one 
-;round of combat only, iff it is not a city, fortress,
-;or sea tile:
-[actionenabler_archer_bombard] ;****
+; ***************** BOMBARDS *****************************
+;Archers can do volley attacks
+[actionenabler_archer_volley]
 action = "Bombard"
 actor_reqs    =
     { "type",         "name",         "range", "present"
       "UnitFlag",     "Bombarder",    "Local", TRUE
       "UnitType",     "Archers",      "Local", TRUE
-;      "UnitState",    "Transported", "Local", FALSE
       "MinMoveFrags", "1",            "Local", TRUE
       "DiplRel",      "War",          "Local", TRUE
    }
 target_reqs    =
+    { "type",   "name", "range",  "present"
+      "CityTile", "Center",       "Local", FALSE
+      "Extra",    "Fortress",     "Local", FALSE
+      "Extra",    "Naval Base",   "Local", FALSE
+      "TerrainClass", "Oceanic",  "Local", FALSE
+    }
+;Fortified Phalanxes can "rumble"
+[actionenabler_phalanx_rumble_fortified]
+action = "Bombard"
+actor_reqs    =
+    { "type",         "name",         "range", "present"
+      "UnitFlag",     "Bombarder",    "Local", TRUE
+      "UnitType",     "Phalanx",      "Local", TRUE
+      "UnitState",    "Transported",  "Local", FALSE
+      "UnitState",    "Fortified",    "Local", TRUE  ;3.1 added "Activity" req
+      "MinMoveFrags", "9",            "Local", TRUE
+      "DiplRel",      "War",          "Local", TRUE
+   }
+target_reqs    =
     { "type",   "name", "range", "present"
-      "CityTile", "Center",   "Local", FALSE
-      "Extra",    "Fortress", "Local", FALSE
-      "TerrainClass",  "Oceanic",  "Local", FALSE
+      "CityTile",   "Center",    "Local", FALSE
+      "Extra",      "Fort",      "Local", FALSE
+      "Extra",      "Fortress",  "Local", FALSE
+      "Extra",      "Naval Base","Local", FALSE
+      "TerrainClass","Oceanic",  "Local", FALSE
+    }
+;Phalanxes who haven't moved can "rumble"
+[actionenabler_phalanx_rumble_unmoved]
+action = "Bombard"
+actor_reqs    =
+    { "type",         "name",         "range", "present"
+      "UnitFlag",     "Bombarder",    "Local", TRUE
+      "UnitType",     "Phalanx",      "Local", TRUE
+      "UnitState",    "Transported",  "Local", FALSE
+      "UnitState",    "MovedThisTurn","Local", FALSE
+      "MinMoveFrags", "9",            "Local", TRUE
+      "DiplRel",      "War",          "Local", TRUE
+   }
+target_reqs    =
+    { "type",   "name", "range", "present"
+      "CityTile",   "Center",    "Local", FALSE
+      "Extra",      "Fort",      "Local", FALSE
+      "Extra",      "Fortress",  "Local", FALSE
+      "Extra",      "Naval Base","Local", FALSE
+      "TerrainClass","Oceanic",  "Local", FALSE
     }
 
-;Fanatics can strafe/soften every unit on a tile for one 
-;round of combat only, iff it is in domestic territory.
-[actionenabler_fanatic_bombard] ;****
+;Fanatics can do skirmish assaults
+[actionenabler_fanatic_skirmish_assault]
 action = "Bombard"
 actor_reqs    =
     { "type",         "name",           "range", "present"
@@ -1003,11 +1041,13 @@ actor_reqs    =
    }
 target_reqs    =
     { "type",   "name", "range", "present"
-      "CityTile", "Center",   "Local", FALSE
-      "Extra",    "Fortress", "Local", FALSE
-      "TerrainClass",  "Oceanic",  "Local", FALSE
+      "CityTile", "Center",       "Local", FALSE
+      "Extra",    "Fortress",     "Local", FALSE
+      "Extra",    "Naval Base",   "Local", FALSE
+      "TerrainClass",  "Oceanic", "Local", FALSE
     }
-[actionenabler_fanatic_bombard_original_city] ;*can skirmish cities that were yours
+;Fanatics can infiltrate/skirmish foreign occupied cities
+[actionenabler_fanatic_skirmish_original_city]
 action = "Bombard"
 actor_reqs    =
     { "type",         "name",           "range", "present"
@@ -1018,14 +1058,45 @@ actor_reqs    =
       "Gov",          "Fundamentalism", "Player", TRUE
    }
 target_reqs    =
-    { "type",   "name", "range", "present"
-      "CityTile", "Center",   "Local", TRUE
-      "Extra",    "Fortress", "Local", FALSE
-      "TerrainClass",  "Oceanic",  "Local", FALSE
-      "CityStatus", "OwnedByOriginal", "City",  FALSE
-      "MinForeignPct", "1", "City",  FALSE
+    { "type",         "name",        "range", "present"
+      "CityTile",     "Center",      "Local", TRUE
+      "Extra",        "Fortress",    "Local", FALSE
+      "Extra",        "Naval Base",  "Local", FALSE
+      "TerrainClass", "Oceanic",     "Local", FALSE
+      "CityStatus","OwnedByOriginal","City",  FALSE
+      "MinForeignPct","1",           "City",  TRUE
     }
 
+;Marines can do mortar/bazooka/rocket attacks at V3
+[actionenabler_marines_bombard]
+action = "Bombard"
+actor_reqs    =
+    { "type",         "name",         "range", "present"
+      "UnitFlag",     "Bombarder",    "Local", TRUE
+      "UnitType",     "Marines",      "Local", TRUE
+      "MinMoveFrags", "1",            "Local", TRUE
+      "DiplRel",      "War",          "Local", TRUE
+      "MinVeteran",   "3",            "Local", TRUE
+   }
+target_reqs    =
+    { "type",   "name", "range",  "present"
+      "CityTile", "Center",       "Local", FALSE
+      "Extra",    "Fortress",     "Local", FALSE
+      "Extra",    "Naval Base",   "Local", FALSE
+      "TerrainClass",  "Oceanic", "Local", FALSE
+    }
+
+;Battleships can do bombardment
+[actionenabler_battleship_bombard]
+action = "Bombard"
+actor_reqs    =
+    { "type",         "name",         "range", "present"
+      "UnitFlag",     "Bombarder",    "Local", TRUE
+      "UnitType",     "Battleship",   "Local", TRUE
+      "MinMoveFrags", "1",            "Local", TRUE
+      "DiplRel",      "War",          "Local", TRUE
+   }
+; ********************************************************
 
 [actionenabler_build_city_pioneer]
 action = "Found City"
@@ -1475,6 +1546,20 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitFlag",      "CanHide",      "Local",   FALSE
       "UnitType",      "Proletarians", "Local",   FALSE
+      "UnitState",     "Transported",  "Local",   FALSE    ; Prevent quay exploit
+    }
+[actionenabler_road1] ; can't road while transported in foreign lands
+action        = "Road"
+actor_reqs    =
+    { "type",          "name",         "range",   "present"
+      "UnitFlag",      "Settlers",     "Local",   TRUE
+      "UnitFlag",      "CanHide",      "Local",   FALSE
+      "UnitType",      "Proletarians", "Local",   FALSE
+      "UnitState",     "Transported",  "Local",   TRUE
+    }
+target_reqs    =
+    { "type",       "name",    "range", "present"
+        "CityTile", "Claimed", "Local", FALSE
     }
 [actionenabler_road_prole]
 action        = "Road"
@@ -1482,7 +1567,21 @@ actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitType",      "Proletarians", "Local",   TRUE
-      "Gov",           "Communism",    "Player", TRUE
+      "Gov",           "Communism",    "Player",  TRUE
+      "UnitState",     "Transported",  "Local",   FALSE    ; Prevent quay exploit
+    }
+[actionenabler_road_prole1] ; can't road while transported in foreign lands
+action        = "Road"
+actor_reqs    =
+    { "type",          "name",         "range",   "present"
+      "UnitFlag",      "Settlers",     "Local",   TRUE
+      "UnitType",      "Proletarians", "Local",   TRUE
+      "Gov",           "Communism",    "Player",  TRUE
+      "UnitState",     "Transported",  "Local",   TRUE    
+    }
+target_reqs    =
+    { "type",       "name",    "range", "present"
+        "CityTile", "Claimed", "Local", FALSE
     }
 [actionenabler_legion_road]
 action        = "Road"
@@ -1491,6 +1590,7 @@ actor_reqs    =
       "UnitFlag",      "Settlers",      "Local",   TRUE
       "UnitType",      "Legion",        "Local",   TRUE
       "UnitState",     "OnDomesticTile","Local",   FALSE
+      "UnitState",     "Transported",  "Local",   FALSE    ; Prevent quay exploit
     }
 ; Don't force legions to road BEFORE making a fortress 
 ; from fortress being "domestic national territory"

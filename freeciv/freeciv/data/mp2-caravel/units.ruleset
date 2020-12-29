@@ -275,7 +275,7 @@ helptext      = _("\
 [unitclass_submarine]
 ; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Submarine")
-min_speed     = 3
+min_speed     = 4
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "Unreachable"
 helptext      = _("\
@@ -408,7 +408,16 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ; uk_*          = upkeep costs, these are used as base values in the game
 ; cargo         = Unit classes this unit can transport
 ; city_slots    = How many of homecity's unit maintenance slots unit takes
-; city_size     = Initial size of the cities built by 'Found City' type units
+; city_size     = UNUSED in MP rulesets in its original form, so now it is used
+;                 for bit-field for additional flags that won't break save game
+;                 compatibility.
+;                 BIT 0 = RESERVED for +1 bombard range.
+;                 BIT 1 = RESERVED 
+;                 BITS 2-7   = move frags used (up to 63, 0=turn loss/oneattack)
+;                 BITS 8-10  = bombard_primary_targets. 0=all, or 1-7.
+;                 BITS 11-13 = bombard_primary_kills, max kills allowed. 0-7.
+;                 ---------------------------------
+;                 FORMERLY: Initial size of the cities built by 'Found City' type units
 ;                 (but 'Join City' uses pop_cost)
 ; targets       = list of unit classes this unit can attack against even
 ;                 if they have Unreachable unit class flag
@@ -772,14 +781,15 @@ move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
+city_size     = 2
 uk_happy      = 0
 uk_shield     = 0
 uk_food       = 1
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
-flags         = "Settlers", "Infra", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Airbase", "Shield2Gold", 
-                 "CanFortress", "CanRoad", "Proletarian", "MultiSlot"
+flags         = "Settlers", "Infra", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Airbase", 
+                 "CanFortress", "CanRoad", "Proletarian"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0
@@ -791,7 +801,10 @@ helptext      = _("\
 Proletarians can only be controlled by Communist governments.\
 "), _("\
 Communist States can assign Proletarians from one city to another, which transfers population\
- from one to the other. They can also be ordered to the same tasks as Workers.\
+ from one to the other. They can also be ordered to the same tasks as Workers. Proletarians\
+ are extremely valuable as Workers for a third of the price. The disadvantage is that they\
+ cost one population to make. However, this is more than compensated by the fact that when\
+ they join a city, they add two to the population!\
 "), _("\
 Large numbers of Proletarians can be used to rapidly complete important State projects,\
  which you may organize into Five-turn Plans.\
@@ -810,7 +823,7 @@ sound_move_alt = "m_generic"
 sound_fight   = "f_worker"
 sound_fight_alt = "f_generic"
 build_cost    = 10
-pop_cost      = 1
+pop_cost      = 0
 attack        = 0
 defense       = 1
 hitpoints     = 10
@@ -819,13 +832,14 @@ move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
+city_size     = 1
 uk_happy      = 0
 uk_shield     = 0
 uk_food       = 2
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
-flags         = "Fanatic", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "MultiSlot", "Shield2Gold"
+flags         = "Fanatic", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0
@@ -836,7 +850,8 @@ helptext      = _("\
 Pilgrims are wayfaring migrants from Fundamentalist nations. Like Fanatics,\
  they have no upkeep if under a Fundamentalist government. Heeding the call\
  of ecclesiastic authority, Pilgrims can be guided from one city to another in\
- order to transfer population from city to city.\
+ order to transfer population from city to city. Pilgrims have no population\
+ cost, so can be thought of as rapture for the price of 10 shields.\
 ")
 
 
@@ -969,49 +984,54 @@ roles         = "DefendOk", "DefendOkStartUnit", "FirstBuild", "Hut"
 helptext      = _("\
 The Warrior is the weakest military unit, but can also be very cost effective.\n\
 With the discovery of Conscription, can convert to Musketeers in any domestic city.\
+"), _("\
+\nThe discovery of Banking changes upkeep from shields to gold.\
 ")
 
-[unit_swordsmen]
-name          = _("Swordsmen")
-class         = "Land"
-tech_req      = "Bronze Working"
-obsolete_by   = "Musketeers"
-graphic       = "u.swordsmen"
-graphic_alt   = "u.warriors"
-sound_move    = "m_swordsmen"
-sound_move_alt = "m_generic"
-sound_fight   = "f_phalanx"
-sound_fight_alt = "f_generic"
-build_cost    = 13
-pop_cost      = 0
-attack        = 1
-defense       = 1
-hitpoints     = 10
-firepower     = 1
-move_rate     = 2
-vision_radius_sq = 4
-convert_to    = "Musketeers"
-convert_time  = 4
-transport_cap = 0
-fuel          = 0
-uk_happy      = 1
-uk_shield     = 1
-uk_food       = 0
-uk_gold       = 0
-embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRoad", "LandRail", "Helicopter"
-flags         = "FootSoldier", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
-roles         = "DefendOk", "DefendOkStartUnit"
-bonuses       =
-   { "flag", "type", "value"
-      "CantReachAir", "DefenseMultiplierPct", 50   ;basically, D1.5 vs all land units
-      "CantReachAir", "DefenseDividerPct", 50      ;basically, A1.5 vs all land units
-   }
-helptext      = _("\
-Swordsmen are ancient soldiers armed with sharpened bronze swords. Compared to Warriors,\
- they have a 50% bonus in attack and defense. NOTE: Warcalc will give this unit the same\
- strength as a Warrior. You must enter this bonus manually.\
-")
+;Swordsmen unit, if we can find a way to give it more relevance or useful niche by changing stats later.
+;[unit_swordsmen]
+;name          = _("Swordsmen")
+;class         = "Land"
+;tech_req      = "Bronze Working"
+;obsolete_by   = "Musketeers"
+;graphic       = "u.swordsmen"
+;graphic_alt   = "u.warriors"
+;sound_move    = "m_swordsmen"
+;sound_move_alt = "m_generic"
+;sound_fight   = "f_phalanx"
+;sound_fight_alt = "f_generic"
+;build_cost    = 13
+;pop_cost      = 0
+;attack        = 1
+;defense       = 1
+;hitpoints     = 10
+;firepower     = 1
+;move_rate     = 2
+;vision_radius_sq = 4
+;convert_to    = "Musketeers"
+;convert_time  = 4
+;transport_cap = 0
+;fuel          = 0
+;uk_happy      = 1
+;uk_shield     = 1
+;uk_food       = 0
+;uk_gold       = 0
+;embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+;disembarks    = "LandRoad", "LandRail", "Helicopter"
+;flags         = "FootSoldier", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
+;roles         = "DefendOk", "DefendOkStartUnit"
+;bonuses       =
+;   { "flag", "type", "value"
+;      "CantReachAir", "DefenseMultiplierPct", 50   ;basically, D1.5 vs all land units
+;      "CantReachAir", "DefenseDividerPct", 50      ;basically, A1.5 vs all land units
+;   }
+;helptext      = _("\
+;Swordsmen are ancient soldiers armed with sharpened bronze swords. Compared to Warriors,\
+; they have a 50% bonus in attack and defense. NOTE: Warcalc will give this unit the same\
+; strength as a Warrior. You must enter this bonus manually.\
+;"), _("\
+;\nThe discovery of Banking changes upkeep from shields to gold.\
+;")
 
 [unit_phalanx]
 name          = _("Phalanx")
@@ -1036,19 +1056,29 @@ convert_to    = "Musketeers"
 convert_time  = 4
 transport_cap = 0
 fuel          = 0
+city_size     = 276 ; 000,001,000101,00 max_kiils=0, targets=1, move_cost=5 frags, reserved=00
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
-flags         = "FootSoldier", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
+flags         = "FootSoldier", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever", "Bombarder"
 roles         = "DefendGood", "FirstBuild", "HutTech"
 helptext      = _("\
-The Phalanx is armored infantry, suitable for defending your cities. It offers good value\
- for defending.\n\
- With the discovery of Conscription, can convert to Musketeers in any domestic city.\
+The Phalanx is armored infantry, suitable for defending your cities. It is valuable\
+ for claiming and holding defensive tactical positions.\n\
+Phalanxes can do a special Rumble Attack with enemy units who move adjacent to them,\
+ if the Phalanx is fortified OR has not moved this turn. Moving enemies cannot counter\
+ a well-shielded battalion in formation from shoving into their\
+ flank, targeting them with long sarissas. Rumble attacks are not mortal combat —— the turtled Phalanx\
+ does not expose itself to vulnerability, but at the cost of only applying slow belligerent frontal\
+ pressure to hopefully unsettle and drive the enemy out of their position.\n\
+With the discovery of Conscription, Phalanxes can convert to Musketeers in any domestic city.\
+"), _("\
+\nThe discovery of Banking changes upkeep from shields to gold.\
 ")
+bombard_rate = 3
 
 [unit_archers]
 name          = _("Archers")
@@ -1073,6 +1103,7 @@ convert_to    = "Musketeers"
 convert_time  = 2
 transport_cap = 0
 fuel          = 0
+city_size     = 1848 ; 0,111,001110,00 = max_kills=0, targets=7, move_cost=14 frags, reserved = 00
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1089,6 +1120,8 @@ Archers fight with bows and arrows. They have good offense and decent defense.\
  enemies prior to battle, or for deterring an approach to a strategic location.\
  (Ranged Attack is not possible on Cities or Fortresses.)\n\
  With the discovery of Conscription, can convert to Musketeers in any domestic city.\
+"), _("\
+\nThe discovery of Banking changes upkeep from shields to gold.\
 ")
 bombard_rate = 2
 
@@ -1131,6 +1164,8 @@ Legions are heavily armed well disciplined soldiers with excellent offensive str
  technology they can build Forts and Fortresses. They can build Roads outside domestic\
  national territory and inside Forts and Fortresses.\n\
  With the discovery of Conscription, can convert to Musketeers in any domestic city.\
+"), _("\
+\nThe discovery of Banking changes upkeep from shields to gold.\
 ")
 
 [unit_pikemen]
@@ -1165,15 +1200,16 @@ disembarks    = "LandRoad", "LandRail", "Helicopter"
 bonuses       =
    { "flag", "type", "value"
      "Horse", "DefenseMultiplier", 1
-     "Horse", "DefenseDividerPct", 50
    }
 flags         = "FootSoldier", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
 Long sharp pikes give Pikemen a counter to the height and mobility of mounted\
- units. They enjoy a 2x defense bonus against mounted units, and a 1.5x attack
- bonus. Pikemen replace the Phalanx as the preferred city defender.\n\
+ units. They enjoy a 2x defense bonus against mounted units. Pikemen replace\
+ the Phalanx as the preferred city defender.\n\
  With the discovery of Conscription, can convert to Musketeers in any domestic city.\
+"), _("\
+\nThe discovery of Banking changes upkeep from shields to gold.\
 ")
 
 [unit_musketeers]
@@ -1212,6 +1248,8 @@ Musketeers are infantry equipped with early\
  firearms and replace Pikemen as the preferred\
  city defender, and replace Archers and Legions\
  for offensive foot soldiers.\
+"), _("\
+\nThe discovery of Banking changes upkeep from shields to gold.\
 ")
 
 [unit_fanatics]
@@ -1236,6 +1274,7 @@ move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
+city_size     = 568; 0,010,001110,00 = max_kills=0, targets=4, move_cost=14 frags, reserved = 00
 uk_happy      = 2
 uk_shield     = 2
 uk_food       = 0
@@ -1257,10 +1296,10 @@ Fundamentalist nations can maintain Fanatics without paying\
  fervorous faith to +1 higher veteran level.\
 "), _("\
 Fanatics zealously defend their homeland, and can do surprise skirmish\
- assaults to snipe and injure foreign occupants: Each invader\
+ assaults to snipe and injure foreign occupants: Up to 4 invaders\
  on the tile will endure three combat rounds without defense.\
 "), _("\
-\nThe discovery of Labor Union changes upkeep from shields to gold.\
+\nThe discovery of Banking changes upkeep from shields to gold.\
 ")
 bombard_rate = 3
 
@@ -1344,7 +1383,7 @@ Alpine Troops are highly mobile units and\
  excellent defenders.  Similar to an Explorer, they\
  treat every land tile like a road were on it.\
 "), _("\
-\nThe discovery of Labor Union changes upkeep from shields to gold.\
+\nThe discovery of Banking changes upkeep from shields to gold.\
 ")
 
 [unit_riflemen]
@@ -1386,7 +1425,7 @@ Riflemen are World War-era infantry. They are good at defending cities and\
 Under Communism this unit costs 5 less. Also, Communism tech allows Communist\
  governments to de-commission Riflemen into Workers via the Convert order. And vice versa.\
 "), _("\
-\nThe discovery of Labor Union changes upkeep from shields to gold.\
+\nThe discovery of Banking changes upkeep from shields to gold.\
 ")
 
 [unit_marines]
@@ -1410,6 +1449,7 @@ move_rate     = 2
 vision_radius_sq = 8  ; hard-coded the +4 extra for effect_physics_vision since it is a pre-req anyway
 transport_cap = 0
 fuel          = 0
+city_size     = 2616 ; 1,010,001110,00 = max_kills=1, targets=4, move_cost=14 frags, reserved = 00
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1419,7 +1459,7 @@ disembarks    = "Helicopter", "Land", "Sea", "LandRoad", "LandRail"
 targets       = "Sea", "Balloon", "Helicopter", "LandRail"
 flags         = "MultiSlot", "Marines", "FootSoldier", "BeachLander", "Capturer",
                 "NeverBlocked", "Shield2Gold", "Settlers", "CanHide", "WillNever",
-                "Airbase", "CanFortress" ; can Fort only, actually.
+                "Airbase", "CanFortress", "Bombarder" ; can Fort only, actually.
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -1436,17 +1476,20 @@ roles         = "DefendOk", "DefendOkStartUnit", "BarbarianSeaTech"
 helptext      = _("\
 Marines are experts at all-terrain warfare. They are the strongest\
  foot unit in the game, and are armed with diverse weaponry.\n\
- Unlike other units, Marines can attack Sea units (at a penalty).\
+ Unlike other units, Marines can attack Sea units (at a 50% penalty).\
  Air units do not stop them from attacking reachable targets.\
  They can attack from a Transport or Helicopter, and can offload\
  without losing a turn of movement. Marines can also makes Forts\
- and Airbases, but not other bases. Marines promoted to two\
- veteran levels become commandos suitable for special ops.\n\
+ and Airbases. Marines get an extra 2/9 movement points for each\
+ veteran level they possess. Starting at v3, they gain the ability\
+ to do bazooka ranged attacks for 3 combat rounds, hitting up to 4\
+ units on the tile and killing a maximum of 1.\n\
  Marines built in a city with an Airport, Port Facility, and Barracks III\
  receive the second veteran level (hardened.)\
 "), _("\
-\nThe discovery of Labor Union changes upkeep from shields to gold.\
+\nThe discovery of Banking changes upkeep from shields to gold.\
 ")
+bombard_rate = 3
 
 [unit_paratroopers]
 name          = _("Paratroopers")
@@ -1488,7 +1531,7 @@ Paratroopers are experts at airborne attacks.\
  Also note: Paradropping is assumed to be done from aircraft. Therefore,\
  Fighters on Vigil may auto-attack the tile you land on, if adjacent.\
 "), _("\
-\nThe discovery of Labor Union changes upkeep from shields to gold.\
+\nThe discovery of Banking changes upkeep from shields to gold.\
 ")
 paratroopers_range = 14
 paratroopers_mr_req = 1
@@ -1783,7 +1826,7 @@ sound_move    = "m_armor"
 sound_move_alt = "m_generic"
 sound_fight   = "f_armor"
 sound_fight_alt = "f_generic"
-build_cost    = 85
+build_cost    = 80
 pop_cost      = 0
 attack        = 10
 defense       = 5
@@ -1820,7 +1863,7 @@ sound_move    = "m_armor_ii"
 sound_move_alt = "m_armor"
 sound_fight   = "f_armor_ii"
 sound_fight_alt = "f_armor"
-build_cost    = 80
+build_cost    = 85
 pop_cost      = 0
 attack        = 16
 defense       = 6
@@ -1903,12 +1946,13 @@ hitpoints     = 10
 firepower     = 1
 move_rate     = 2
 vision_radius_sq = 4
-transport_cap = 0
+transport_cap = 1
 fuel          = 0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+cargo         = "Land"
 flags         = "CantReachAir", "WillNever", "Diplomat", "Spy"
 roles         = ""
 helptext      = _("\
@@ -1918,8 +1962,10 @@ Siege Rams launch a tremendous thrusting force\
  strong defenses, but Siege Rams have solid\
  protective shielding. This gives the Siege Ram even odds\
  of success or failure. Wall defenses at capital cities\
- are twice as stiff--cutting the odds of success in half.\
- Siege Rams can only travel on roads.\n\ 
+ are twice as stiff —— cutting the odds of success in half.\
+ Siege Rams can only travel on roads. They can carry 1 Land\
+ unit as cargo, but at their slow pace it serves more for\
+ disguise than for transportation utility.\n\ 
  Siege Rams are ill-suited for combat with other units and need an\
  escort for protection. SIEGE RAMS NEED A MINIMUM OF 1 FULL MOVE POINT\
  IN ORDER TO ATTACK A CITY WALL. Cities protected by the Great Wall\
@@ -2255,7 +2301,7 @@ veteran_names =
 veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 Fighters are the first offensive Air units. Their superior mobility and firepower alter\
@@ -2310,7 +2356,7 @@ veteran_names =
 veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 Escort Fighters are large fighters with high fuel capacity. Higher mass and\
@@ -2334,7 +2380,7 @@ graphic       = "u.dive_bomber"
 graphic_alt   = "-"
 sound_move    = "m_dive_bomber"
 sound_move_alt = "m_escort_fighter"
-sound_fight   = "f_medium_bomber"
+sound_fight   = "f_dive_bomber"
 sound_fight_alt = "f_artillery"
 build_cost    = 60
 pop_cost      = 0
@@ -2376,7 +2422,7 @@ veteran_names =
 veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 Dive Bombers are like Fighters but fitted for Ground Attack and Sea combat. Range\
@@ -2440,7 +2486,7 @@ veteran_names =
 veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 The Medium Bomber is well suited for moderately strong targets or multiple weak targets.\
@@ -2497,7 +2543,7 @@ veteran_names =
 veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 Heavy Bombers are large and sturdy Bombers with larger payload and numerous gunner defense stations.\
@@ -2554,7 +2600,7 @@ veteran_names =
 veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 The Strategic Bomber offers a small improvement in attack. Higher altitude offers a good upgrade in\
@@ -2742,13 +2788,13 @@ veteran_names =
 veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 Transport Helicopters can carry three land units.\
 "), _("\
  Foot and artillery types can unload on any tile, but will lose moves (except Marines).\
- Other types need a city or base to unload.\n.\
+ Other types need a city or base to unload.\n\
 "), _("\
  Helicopters lose 1 hp for each turn not ended in a City, Base, or Carrier. +1 move\
  is awarded if starting a turn in a City or Airbase.\n\
@@ -2808,7 +2854,7 @@ veteran_names =
 veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 Helicopters are the Air Cavalry of modern armies. They can attack multiple targets\
@@ -2866,7 +2912,7 @@ veteran_names =
 veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 Jet Fighters upgrade the Fighter with improved attack, defense, and range.\
@@ -2921,7 +2967,7 @@ veteran_names =
 veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 Ground Strike Fighters upgrade the Dive Bomber. They cannot block attacks on other\
@@ -2974,7 +3020,7 @@ veteran_names =
 veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 Jet Bombers are stratospheric long-range bombers with 3 turns of fuel: they can be airborne for two\
@@ -3030,7 +3076,7 @@ veteran_names =
 veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 The most advanced Fighter, with improved attack and longer range. Stealth Fighters cannot be seen unless adjacent\
@@ -3090,7 +3136,7 @@ veteran_names =
 veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 The deadliest Bomber, with improved attack and speed. Stealth Bombers cannot be seen\
@@ -3126,7 +3172,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea"
+cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 flags         = "BadCityDefender", "HelpWonder", "TradeRoute", "CoastStrict", "NonMil", "HasNoZOC"
 roles         = "Ferryboat", "FerryStartUnit"
 helptext      = _("\
@@ -3165,7 +3211,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea"
+cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 flags         = "BadCityDefender", "CantReachAir", "HelpWonder",
                 "TradeRoute", "Coast", "WillNever", "NonMil", "NonMilAttack"
 roles         = "Ferryboat", "FerryStartUnit"
@@ -3207,7 +3253,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea"
+cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 flags         = "BadCityDefender", "CantReachAir", "WillNever"
 roles         = "Ferryboat", "Hunter"
 helptext      = _("\
@@ -3244,7 +3290,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea"
+cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 flags         = "BadCityDefender", "CantReachAir", "HelpWonder",
                 "Traderoute", "Only_Native_Attack", "WillNever", "NonMil", "NonMilAttack"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
@@ -3284,7 +3330,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea"
+cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 flags         = "BadCityDefender", "CantReachAir", "WillNever"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat", "Hunter"
 helptext      = _("\
@@ -3356,7 +3402,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea"
+cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 flags         = "BadCityDefender", "CantReachAir", "Traderoute", "WillNever", "NonMil", "NonMilAttack"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat", "Hunter"
 helptext      = _("\
@@ -3394,7 +3440,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Submarine", "LandRail"
-cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad"
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
@@ -3434,7 +3480,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Submarine", "LandRail"
-cargo         = "Land", "LandNoKill", "LandAirSea"
+cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 bonuses       =
    { "flag", "type", "value"
      "Marines", "DefenseMultiplier", 1    
@@ -3680,6 +3726,7 @@ move_rate     = 10
 vision_radius_sq = 12
 transport_cap = 0
 fuel          = 0
+city_size     = 3252  ; 01,100,101101,00 = max_kills=1, primary targets=4, bombard_move_cost=45 frags, bombard_extra_range = 0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -3690,11 +3737,14 @@ bonuses       =
      "Submarine", "DefenseMultiplier", 1
      "Marines", "DefenseMultiplier", 1    
    }
-flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
+flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever", "Bombarder"
 roles         = ""
 helptext      = _("\
-The Battleship is the supreme naval unit with excellent offensive and defensive strength. It has a 2x defense bonus vs Submarines.\
+The Battleship is the supreme naval unit, with excellent offensive and defensive strength. It has a 2x defense bonus vs Submarines.\
+ Battleships may expend 5 move points to do a 3 round bombardment which hits up to 4 units within a stack, of which only a maximum\
+ of one can be killed.\
 ")
+bombard_rate = 3
 
 [unit_submarine]
 name          = _("Submarine")
@@ -3808,7 +3858,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad"
 flags         = "BadCityDefender", "HelpWonder", "Traderoute", "NonMil", "HasNoZOC", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -3848,7 +3898,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad"
 bonuses       =
    { "flag", "type", "value"
      "Marines", "DefenseMultiplier", 1    
@@ -4379,7 +4429,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
-cargo         = "Land", "LandAirSea", "Balloon", "Bomb"
+cargo         = "Land", "LandAirSea", "Balloon", "Bomb", "LandRoad"
 flags         =  "HelpWonder", "TradeRoute", "NonMil", "HasNoZOC", "NoVeteran", "Capturable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -4391,8 +4441,8 @@ roles         = ""
 helptext      = _("\
 Trains are Commerce units with a bonus: they allow units with 2 or less\
  move points to travel your rails at distances comparable to other units. Only Foot Soldiers\
- are allowed to load outside a city or base; or step off outside a city (losing their moves if
- stepping off.)\n\n\
+ can:\n1. load outside a city or base;\n2. unload (T) in a base;\n3.step off the Train outside a city\
+ (loses all moves.)\nAll other units must load/unload inside a city.\n\n\
 On non-allied foreign rails, Trains incur full terrain movement cost.\
  Pre-gunpowder units can't attack Trains.\n\n\
 Electricity and Combustion each give Trains an additional +1 move.\

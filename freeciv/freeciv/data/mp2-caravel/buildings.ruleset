@@ -289,12 +289,11 @@ sabotage	= 50
 sound		= "b_city_walls"
 sound_alt	= "b_generic"
 helptext	= _("\
-City Walls increase the 1.5x bonus for Land units in a city to 3x, effectively\
- doubling the strength of Land units against attacks from other Land units\
- City Walls are ineffective against Air and Helicopter units, Sea units, Missiles,\
- and Howitzers; in which case the normal 1.5x bonus is given. City Walls prevent\
- population loss when a defending unit is destroyed by a Land unit. City Walls have\
- a 50% bonus against sabotage actions.\
+City Walls give a 3x bonus to ALL units in a City against attacks from\
+ Land units. City Walls are ineffective against Air, Sea, Missile, and\
+ Howitzers. City Walls always prevent population loss when a defending unit\
+ is destroyed by a Land unit. If an enemy attempts to sabotage City Walls,\
+ the odds of success are halved.\
 ")
 
 [building_coastal_defense]
@@ -711,9 +710,9 @@ sound		= "b_police_station"
 sound_alt	= "b_generic"
 helptext	= _("\
 Police Stations neutralize the unhappiness caused by two military units. They\
- prevent enemy Spies from Estalishing Embassy without first agreeing to\
- Cease-Fire or Peace. They prevent Investigate City under all governments\
- except Democracy.
+ prevent enemy Diplomats and Spies from Estalishing Embassy without first\
+ agreeing to Cease-Fire or Peace. They also prevent Investigate City under all\
+ governments except Democracy.\
 "), _("\
  Diplomatic combat gets a bonus of ¼ of base odds. (At general base odds\
  of ½, odds of losing become: ½ - ⅛ = ⅜). All other hostile diplomatic\
@@ -873,7 +872,7 @@ sound		= "b_sam_battery"
 sound_alt	= "b_generic"
 helptext	= _("\
 Doubles the defense of all units inside the city when attacked by\
- aircraft and Helicopters (not including Missiles). Stealth aircraft\
+ aircraft and Helicopters (but not Missiles). Stealth aircraft\
  reduce the bonus to 25%.\
 ")
 
@@ -1203,7 +1202,7 @@ Sets the main capital of your nation. Loss of your main capital: \
  the higher the cost to bribe or incite revolt. In a capital, the chance of\
  enemy agents defeating your agents or sabotaging buildings is halved.\
 "), _("\
- Corruption in cities increases with distance from the capital. Capitals\
+ Corruption in cities increases with distance from a capital. Capitals\
  enjoy a further reduction of corruption by half.\
 "), _("\
  You can rebuild your Palace in another city. This may secure\
@@ -1548,7 +1547,7 @@ obsolete_by	=
     { "type", "name", "range"
       "Tech", "Steam Engine", "Player"
     }
-build_cost	= 200
+build_cost	= 210
 upkeep		= 0
 sabotage	= 0
 sound		= "w_hanging_gardens"
