@@ -644,13 +644,23 @@ function tech_mapview_mouse_click(e)
           var adjusted_tech_cost = Math.max(1, Math.floor(ptech['cost']*game_info['sciencebox']/100.0))
           if (client.conn.playing['bulbs_researched'] >= adjusted_tech_cost) {
             var swal_tech_id = ptech['id'];
+            var warning_text = "You will immediately discover "+ptech['name']+".";
+            var extra_title = "";
+            if (!(!techs[client.conn.playing['tech_goal']])) {   // !(!) == neither 0, null, nor undefined
+              warning_text += ".\n\n";
+              if (techs[client.conn.playing['tech_goal']]['id'] != swal_tech_id) {
+                warning_text += "Extra bulbs instantly go toward " + techs[client.conn.playing['tech_goal']]['name'] +".\n";
+                warning_text += "\nSet Future Goal to "+ptech['name']+ " to prevent this."
+                extra_title="\nthen proceed to "+techs[client.conn.playing['tech_goal']]['name'];
+              }
+            }
             swal({
-                title: 'Research '+ptech['name']+'?',
-                text: 'You will immediately discover '+ptech['name']+'.',
+                title: 'Research '+ptech['name']+extra_title+'?',
+                text: warning_text,
                 type: 'info',
                 background: '#a19886',
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
+                confirmButtonColor: '#38e',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes',
                 cancelButtonText: 'No'
