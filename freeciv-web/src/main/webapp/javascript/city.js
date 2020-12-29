@@ -41,6 +41,21 @@ var worklist_dialog_active = false;
 var production_selection = [];
 var worklist_selection = [];
 
+// Discounted price lists from MP2 rules
+var communist_discounts = {
+"Riflemen": 5,
+"Dive Bomber": 10,
+"Armor": 10
+};
+var colossus_discounts = {
+  "Boat": 3,
+  "Trireme": 5,
+  "Galley": 5,
+  "Caravan": 5,
+  "Caravel": 5,
+  "Cargo Ship": 5
+};
+
 // User definable row in city list:   *****************************
 var city_user_row_val = 0;  
 const CURV_NOTHING        = 0;
@@ -863,7 +878,7 @@ function get_city_production_time(pcity)
 
   if (pcity['production_kind'] == VUT_UTYPE) {
     var punit_type = unit_types[pcity['production_value']];
-    return city_turns_to_build(pcity, punit_type, true);
+    return city_turns_to_build(pcity, punit_type, true, true);
   }
 
   if (pcity['production_kind'] == VUT_IMPROVEMENT) {
@@ -872,7 +887,7 @@ function get_city_production_time(pcity)
       return FC_INFINITY;
     }
 
-    return city_turns_to_build(pcity, improvement, true);
+    return city_turns_to_build(pcity, improvement, true, false);
   }
 
   return FC_INFINITY;
@@ -947,6 +962,29 @@ function get_gold_cost_per_shield(pcity)
 }
 
 /**************************************************************************
+...Figures out discounts for units
+**************************************************************************/
+function get_unit_discount_price(ptype, pcity)
+{
+  // Apply MP2 communist discounts
+  if (client_rules_flag[CRF_MP2_SPECIAL_UNITS] && 
+      governments[players[client.conn.playing.playerno].government].name == "Communism") {
+    
+    if (communist_discounts[ptype['name']])
+      return ptype['build_cost'] - communist_discounts[ptype['name']];
+  }
+  // Apply discounts for having Colossus
+  if (pcity && 
+      city_has_building(pcity, improvement_id_by_name(B_COLOSSUS))) {
+
+    if (colossus_discounts[ptype['name']])
+        return ptype['build_cost'] - colossus_discounts[ptype['name']];
+  }
+  // default, no discount:
+  return ptype['build_cost'];
+}
+
+/**************************************************************************
 ...
 **************************************************************************/
 function generate_production_list()
@@ -976,7 +1014,7 @@ function generate_production_list()
                             "text": punit_type['name'],
                         "helptext": punit_type['helptext'].replace(stripChar, ""),
                         "rule_name": punit_type['rule_name'],
-                        "build_cost": punit_type['build_cost'],
+                        "build_cost": get_unit_discount_price(punit_type),
                         "unit_details": "A<b>"+punit_type['attack_strength']  
                         + "</b>D<b>"+punit_type['defense_strength']  
                         + "</b>F<b>"+punit_type['firepower'] 
@@ -988,7 +1026,7 @@ function generate_production_list()
                             "text": punit_type['name'],
 	                      "helptext": punit_type['helptext'].replace(stripChar, ""),
                        "rule_name": punit_type['rule_name'],
-                      "build_cost": punit_type['build_cost'],
+                      "build_cost": get_unit_discount_price(punit_type),
                     "unit_details": "A<b>"+punit_type['attack_strength'] + "</b> " 
                                   + "D<b>"+punit_type['defense_strength'] + "</b> " 
                                   + "F<b>"+punit_type['firepower'] + "</b> "
@@ -1148,11 +1186,13 @@ function city_has_building_in_queue(pcity, improvement_id)
  Calculates the turns which are needed to build the requested
  improvement in the city.  GUI Independent.
 **************************************************************************/
-function city_turns_to_build(pcity, target, include_shield_stock)
+function city_turns_to_build(pcity, target, include_shield_stock, is_unit)
 {
   var city_shield_surplus =  pcity['surplus'][O_SHIELD];
   var city_shield_stock = include_shield_stock ? pcity['shield_stock'] : 0;
-  var cost = universal_build_shield_cost(pcity, target);
+  var cost = is_unit
+             ? get_unit_discount_price(target, pcity)
+             : universal_build_shield_cost(pcity, target);
 
   if (include_shield_stock == true && (pcity['shield_stock'] >= cost)) {
     return 1;
@@ -2142,7 +2182,7 @@ function city_worklist_dialog(pcity)
 		"kind" : kind,
 		"value" : value,
 		"helptext" : putype['helptext'].replace(stripChar, ""),
-		"build_cost" : putype['build_cost'],
+		"build_cost" : get_unit_discount_price(putype, pcity),
 		"sprite" : get_unit_type_image_sprite(putype)});
       } else {
         console.log("unknown kind: " + kind);
@@ -2384,14 +2424,16 @@ function populate_worklist_production_choices(pcity)
        if (kind == VUT_UTYPE /*&& !small*/) {
           production_html += "<td title='Attack/Defence/Firepower, Hitpoints' class='prod_choice_info' "
           + "style='padding-right:30px; text-align:right'>" 
-          + production_list[a]['unit_details'] + "</td>";
+          + production_list[a]['unit_details'] + "</td>"
+          + "<td class='prod_choice_cost'>" + get_unit_discount_price(unit_types[value],pcity) + "</td></tr>";
        }
        else if (kind == VUT_IMPROVEMENT /*&& !small*/) {
           production_html += "<td title='Upkeep' class='prod_choice_info' " 
           + "style='padding-right:30px; text-align:right'>" 
-          + production_list[a]['unit_details'] + "</td>";
+          + production_list[a]['unit_details'] + "</td>"
+          "<td class='prod_choice_cost'>" + production_list[a]['build_cost'] + "</td></tr>";
        }
-          production_html += "<td class='prod_choice_cost'>" + production_list[a]['build_cost'] + "</td></tr>";
+          //moved above production_html += "<td class='prod_choice_cost'>" + production_list[a]['build_cost'] + "</td></tr>";
      }
   }
   production_html += "</table>";

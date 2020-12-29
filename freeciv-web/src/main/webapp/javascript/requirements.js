@@ -228,5 +228,12 @@ function universal_build_shield_cost(pcity, target)
    * (or from a universal that may be a building or a unit) to something
    * that evaluates the effect (like this function).
    * At the moment (10th Oct 2018) it isn't used in any bundled ruleset. */
-  return target['build_cost'];
+
+   /* when the above is done, change get_unit_discount_cost() from city.js 
+    * back to using this function */
+
+  if (!target['hp'])              // improvements don't have hit points
+    return target['build_cost'];
+  else
+    return get_unit_discount_price(target, pcity);
 }
