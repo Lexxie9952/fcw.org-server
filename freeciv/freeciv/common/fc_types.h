@@ -327,6 +327,12 @@ typedef int Unit_Class_id;
 #define SPECENUM_VALUE4NAME "HasHomeCity"
 #define SPECENUM_VALUE5 USP_NATIVE_TILE
 #define SPECENUM_VALUE5NAME "OnNativeTile"
+#define SPECENUM_VALUE6 USP_NATIVE_EXTRA
+#define SPECENUM_VALUE6NAME "InNativeExtra"
+#define SPECENUM_VALUE7 USP_MOVED_THIS_TURN
+#define SPECENUM_VALUE7NAME "MovedThisTurn"
+#define SPECENUM_VALUE8 USP_FORTIFIED
+#define SPECENUM_VALUE8NAME "Fortified"
 #define SPECENUM_COUNT USP_COUNT
 #include "specenum_gen.h"
 

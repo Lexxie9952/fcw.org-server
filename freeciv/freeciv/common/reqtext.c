@@ -1429,6 +1429,16 @@ bool req_text_insert(char *buf, size_t bufsz, struct player *pplayer,
                          _("Requires that the unit isn't transported."));
           }
           return TRUE;
+        case USP_FORTIFIED:
+          fc_strlcat(buf, prefix, bufsz);
+          if (preq->present) {
+            cat_snprintf(buf, bufsz,
+                         _("Requires that the unit is fortified."));
+          } else {
+            cat_snprintf(buf, bufsz,
+                         _("Requires that the unit isn't fortified."));
+          }
+          return TRUE;          
         case USP_LIVABLE_TILE:
           fc_strlcat(buf, prefix, bufsz);
           if (preq->present) {
@@ -1483,6 +1493,26 @@ bool req_text_insert(char *buf, size_t bufsz, struct player *pplayer,
                          _("Requires that the unit isn't on native tile."));
           }
           return TRUE;
+        case USP_NATIVE_EXTRA:
+          fc_strlcat(buf, prefix, bufsz);
+          if (preq->present) {
+            cat_snprintf(buf, bufsz,
+                         _("Requires that the unit is in a native extra."));
+          } else {
+            cat_snprintf(buf, bufsz,
+                         _("Requires that the unit isn't in a native extra."));
+          }
+          return TRUE;
+        case USP_MOVED_THIS_TURN:
+          fc_strlcat(buf, prefix, bufsz);
+          if (preq->present) {
+            cat_snprintf(buf, bufsz,
+                         _("Requires that the unit has moved this turn."));
+          } else {
+            cat_snprintf(buf, bufsz,
+                         _("Requires that the unit hasn't moved this turn."));
+          }
+          return TRUE;          
         case USP_COUNT:
           fc_assert_msg(preq->source.value.unit_state != USP_COUNT,
                         "Invalid unit state property.");

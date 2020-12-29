@@ -2654,6 +2654,8 @@ static enum fc_tristate is_unit_state(const struct unit *target_unit,
   switch (uprop) {
   case USP_TRANSPORTED:
     return BOOL_TO_TRISTATE(target_unit->transporter != NULL);
+  case USP_FORTIFIED:
+    return BOOL_TO_TRISTATE(target_unit->activity == ACTIVITY_FORTIFIED);
   case USP_LIVABLE_TILE:
     return BOOL_TO_TRISTATE(
           can_unit_exist_at_tile(&(wld.map), target_unit,
@@ -2671,6 +2673,13 @@ static enum fc_tristate is_unit_state(const struct unit *target_unit,
     return BOOL_TO_TRISTATE(
         is_native_tile(unit_type_get(target_unit), unit_tile(target_unit)));
     break;
+  case USP_NATIVE_EXTRA:
+    return BOOL_TO_TRISTATE(
+        tile_has_native_base(unit_tile(target_unit),
+                             unit_type_get(target_unit)));
+    break;
+  case USP_MOVED_THIS_TURN:
+    return BOOL_TO_TRISTATE(target_unit->moved);    
   case USP_COUNT:
     fc_assert_msg(uprop != USP_COUNT, "Invalid unit state property.");
     /* Invalid property is unknowable. */
@@ -3714,6 +3723,10 @@ const char *universal_name_translation(const struct universal *psource,
       /* TRANS: unit state. (appears in strings like "Missile+Transported") */
       cat_snprintf(buf, bufsz, _("Transported"));
       break;
+    case USP_FORTIFIED:
+      /* TRANS: unit state. (appears in strings like "Missile+Transported") */
+      cat_snprintf(buf, bufsz, _("Fortified"));
+      break;
     case USP_LIVABLE_TILE:
       cat_snprintf(buf, bufsz,
                    /* TRANS: unit state. (appears in strings like
@@ -3736,9 +3749,20 @@ const char *universal_name_translation(const struct universal *psource,
       break;
     case USP_NATIVE_TILE:
       cat_snprintf(buf, bufsz,
+              /* TRANS: unit state. (appears in strings like
+              * "Missile+On native tile") */
+              _("On native tile"));
+      break;
+    case USP_NATIVE_EXTRA:
+      cat_snprintf(buf, bufsz,
                    /* TRANS: unit state. (appears in strings like
-                    * "Missile+On native tile") */
-                   _("On native tile"));
+                    * "Missile+In native extra") */
+                   _("In native extra"));
+      break;
+    case USP_MOVED_THIS_TURN:
+      /* TRANS: unit state. (appears in strings like
+       * "Missile+Has moved this turn") */
+      cat_snprintf(buf, bufsz, _("Has moved this turn"));
       break;
     case USP_COUNT:
       fc_assert_msg(psource->value.unit_state != USP_COUNT,
