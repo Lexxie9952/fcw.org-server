@@ -1353,8 +1353,8 @@ function update_unit_order_commands()
       if (show_order_buttons==1) $("#order_noorders").hide();  //not frequently used order
 
       /*console.log("\nRoad test: !thx(r)=="+!tile_has_extra(ptile, EXTRA_ROAD));
-      console.log("Road test: type(SB)=="+(typeof EXTRA_SEABRIDGE !== undefined));
-      console.log("Road test: thx(sb)=="+tile_has_extra(ptile, EXTRA_SEABRIDGE));*/
+      //console.log("Road test: type(SB)=="+(typeof EXTRA_SEABRIDGE !== undefined));
+      //console.log("Road test: thx(sb)=="+tile_has_extra(ptile, EXTRA_SEABRIDGE));*/
 
       if (!tile_has_extra(ptile, EXTRA_ROAD) 
           && !(typeof EXTRA_SEABRIDGE !== undefined && tile_has_extra(ptile, EXTRA_SEABRIDGE))) {
@@ -2693,12 +2693,12 @@ function do_map_click(ptile, qtype, first_time_called)
       has to be requested first, and then do_map_click will be called again
       to issue the unit order based on the goto path. */
       if (current_focus.length > 0) {
-        console.log("touch device requesting goto path")
+        //console.log("touch device requesting goto path")
         request_goto_path(current_focus[0]['id'], ptile['x'], ptile['y']);
         if (first_time_called) {
-          console.log("inside first_time_called code")
+          //console.log("inside first_time_called code")
           setTimeout(function(){
-            console.log("setting up virtual do_map_click")
+            //console.log("setting up virtual do_map_click")
             do_map_click(ptile, qtype, false);
           }, 250);
         }
@@ -3878,21 +3878,21 @@ function key_unit_load()
 
   // PHASE I: SCOOPING. 'L' command given to a Transport will attempt to SCOOP units onto it.
   // First cycle through all selected Transports and attempt to Load un-transported units on the tile into them.
-  console.log("Scooping phase started.")
+  //console.log("Scooping phase started.")
 
   for (var s=0; s < sunits.length; s++)  { // iterate selected unit 
     var stype = unit_type(sunits[s]);
-    console.log("  sunits["+s.name+ "] being checked...");
+    //console.log("  sunits["+s.name+ "] being checked...");
 
     if (stype && stype.transport_capacity > 0) {  // Iterate all Transports among the selected units.
-      console.log("   ..."+stype.name+ "is a transport attempting to scoop.");
+      //console.log("   ..."+stype.name+ "is a transport attempting to scoop.");
       var ptile = index_to_tile(sunits[s]['tile']); // Each selected unit may be on a different tile.
       units_on_tile = tile_units(ptile);
-      console.log("      "+stype.name+ "got a list of all units on its tile");
+      //console.log("      "+stype.name+ "got a list of all units on its tile");
 
       // Iterate each unit on the selected Transport's tile for attempted loading. (If it's legal, great. If not, server won't do it.)
       for (var i = 0; i < units_on_tile.length; i++) {
-        console.log("        CHECKING punit["+i+"] on tile");
+        //console.log("        CHECKING punit["+i+"] on tile");
         var punit = units_on_tile[i]; // iterate to next unit on tile
         // Attempt to load units on selected Transport IFF unit is not already loaded on a Transport.
         // (TODO: also skip units who have their own cargo? May be edge cases?)
@@ -3915,7 +3915,7 @@ function key_unit_load()
     setTimeout(update_active_units_dialog, update_focus_delay);
     return;
   }
-  console.log("Normal loading phase started.")
+  //console.log("Normal loading phase started.")
 
   // PHASE II: 'L' command may apply to selected non-Transports who wish to select a unit to Load on:
   for (var i = 0; i < funits.length; i++) {
@@ -4080,7 +4080,7 @@ function key_unit_unload()
     var ptile = index_to_tile(sunit['tile']);
   }
 
-  console.log("sunits == ");
+  //console.log("sunits == ");
   var funits = get_units_in_focus();
   var units_on_tile = [];
 
@@ -4093,7 +4093,7 @@ function key_unit_unload()
 
   // Loop through all selected units, rationally determining what 'T' means for it:
   for (var s = 0; s < sunits.length; s++) {
-    console.log("sunit["+s+"]");
+    //console.log("sunit["+s+"]");
     // A selected unit which is a transport AND is itself not transported rationally
     // wants the T command to unload all of ITS cargo. (Heli carrying Marines on a
     // Carrier would want to unload from Carrier, not be forced to unload its Marines
@@ -4102,10 +4102,10 @@ function key_unit_unload()
     // Selected Unit is: selected, a transporter, and not being transported.
     // So, check each unit on tile to see if it's on this transporter, and unload it
     if (sunits[s] && stype.transport_capacity>0 && !sunits[s].transported) {
-      console.log("  sunit[i] is a transport (that's not being transported)");
+      //console.log("  sunit[i] is a transport (that's not being transported)");
       for (var i = 0; i < units_on_tile.length; i++) {
         var punit = units_on_tile[i];
-        console.log("punit["+i+"]");
+        //console.log("punit["+i+"]");
 
         // If iterated tile unit is being transported by selected unit, then UNLOAD it!
         if (punit['transported'] && punit['transported_by'] == sunits[s]['id']) {
@@ -4123,7 +4123,7 @@ function key_unit_unload()
     // A selected unit which is 1) NOT an untransported transporter, and 2) is being
     // transported, will want the 'T' command to just unload from the transporter.
     else if (sunits[s]['transported']) { 
-      console.log("  sunit[i] is cargo)");
+      //console.log("  sunit[i] is cargo)");
       if (unit_can_do_unload(sunits[s])) {
         var packet = {
           "pid"         : packet_unit_unload,
@@ -4334,7 +4334,7 @@ function key_unit_show_cargo()
   if (!sunits || sunits.length == 0)
     return;
 
-  console.log("Going through selected units.")
+  //console.log("Going through selected units.")
 
   save_last_unit_focus();
 
@@ -4347,13 +4347,13 @@ function key_unit_show_cargo()
     // selected units might be on different tiles, so recalc these for each iterated sunit.
     var ptile = index_to_tile(sunits[s]['tile']);
     var units_on_tile = tile_units(ptile);
-    console.log("  sunits["+s+"]");
+    //console.log("  sunits["+s+"]");
 
     stype = unit_type(sunits[s]);
 
     // Is selected unit a transporter? If so, put all its cargo into new_current_focus;
     if (stype.transport_capacity > 0) {
-      console.log("  sunits["+s+"] is a transporter");
+      //console.log("  sunits["+s+"] is a transporter");
       for (var i = 0; i < units_on_tile.length; i++) {
         var punit = units_on_tile[i];
         if (punit['transported'] && punit['transported_by'] == sunits[s]['id']) {
@@ -4362,7 +4362,7 @@ function key_unit_show_cargo()
       }
     }
     else {
-      console.log("  sunits["+s+"] is NOT a transporter");
+      //console.log("  sunits["+s+"] is NOT a transporter");
       // if non-transport unit us selected, player wants to activate all cargo units on tile!
       new_current_focus = []; // clean up to avoid double-popped units, then push everything once and leave!
       for (var i = 0; i < units_on_tile.length; i++) {
@@ -4676,7 +4676,7 @@ function create_connect_packet(packet)
   // Reconstruct packet with an order before each move, and one at the end.
   for (i=0; i<packet['length']+1; i++) {
     var upgrade_extra = extra_dep(punit,ptile,connect_extra);
-    console.log("upgrade_extra=="+upgrade_extra)
+    //console.log("upgrade_extra=="+upgrade_extra)
     // insert order before each move
     if (upgrade_extra != -1) {
       new_packet['orders'].push(ORDER_ACTIVITY);
@@ -4698,7 +4698,7 @@ function create_connect_packet(packet)
     }
   }
   new_packet['length'] = length;
-  console.log(new_packet);
+  //console.log(new_packet);
   return new_packet;
 }
 /**************************************************************************
@@ -4706,17 +4706,17 @@ function create_connect_packet(packet)
 **************************************************************************/
 function extra_dep(punit, ptile, extra_id)
 {
-  console.log("extra_dep called with extra_id=="+extra_id)
+  //console.log("extra_dep called with extra_id=="+extra_id)
   if (extra_id == EXTRA_ROAD) {
-    console.log("  checking river and BB")
+    //console.log("  checking river and BB")
     // TODO: if (tile_has_river && !tile_has_road && !player has bridge building), return -1
     // "magic number" extra so it won't abort on the tile OR if that doesn't work
     // create_connect_packet will just see the -1 flag to simple NOT insert an order at that position
     if (tile_has_extra(ptile, EXTRA_RIVER)) {
-      console.log("    tile has river")
+      //console.log("    tile has river")
       if (player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) < TECH_KNOWN)
         if (!tile_has_extra(ptile, EXTRA_ROAD)) {
-          console.log("      no road: RETURN NULL")
+          //console.log("      no road: RETURN NULL")
           return -1; // null flag means don't break sequence with an impossible order
         }
     }
@@ -4735,7 +4735,7 @@ function extra_dep(punit, ptile, extra_id)
     return EXTRA_MAGLEV;
   }
   else if (extra_id == EXTRA_IRRIGATION) {
-    console.log("  checking irrigation")
+    //console.log("  checking irrigation")
     if (player_invention_state(client.conn.playing, tech_id_by_name('Refrigeration')) < TECH_KNOWN)
       return EXTRA_IRRIGATION;
     if (!tile_has_extra(ptile, EXTRA_IRRIGATION))
