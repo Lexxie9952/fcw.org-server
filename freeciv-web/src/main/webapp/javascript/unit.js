@@ -242,13 +242,37 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
   //console.log("Checking "+ptype.name+" onto "+ttype.name);
   if (!punit || !ptype || !ttype || !tclass) return false;
 
-  // when actionenabler_load is in server, we can remove this and put UnitState,Transported,FALSE in rulesets
-  if (punit['transported']) {
-    return false;  // can't load on new transport without unloading from old first.
-  }
-
   var pclass = get_unit_class_name(punit);
   //console.log("   pclass=="+pclass);
+
+  // Transported units can't swap transports except under some conditions such being in a city.
+  // (Since it's legal there anyway, don't force "extra work" of unloading first.) 
+  // TO DO: when actionenabler_load is in server, we can put all this in game.ruleset actionenablers.
+  if (punit['transported']) {
+    var ptile = tiles[punit['tile']];
+    var can_load = false;
+
+    /* Can "transport swap" in 1) cities, 2) in ships & gunships who have neither moved more than 4 moves NOR 
+       move more than half their moves; Every other type of transported-scenario, swapping is not allowed. */
+    if (tile_city(ptile)) can_load = true; 
+    if (tclass.rule_name == "Trireme" || tclass.rule_name == "RiverShip") {
+      if (units[punit['transported_by']].movesleft >= 3*SINGLE_MOVE) {
+        can_load = true;
+      }
+    }
+    if (tclass.rule_name == "Sea") {
+      if (units[punit['transported_by']].movesleft >= 4*SINGLE_MOVE)
+        can_load = true;
+    }
+    if (tclass.rule_name == "Helicopter") {
+      if (units[punit['transported_by']].movesleft >= 9*SINGLE_MOVE)
+        can_load = true;
+    }
+
+    if (!can_load) 
+      // in such case, can't swap transport without unloading from old first.
+      return false;
+   }
 
   if (pclass == "Bomb") {
     if (!ttype.name.includes("Bomber") && tclass.rule_name != "LandRail") return false;
@@ -264,7 +288,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
     if (tclass.rule_name == "Helicopter") return false;
   }
 
-  if (pclass.startsWith("Land")) {   // Land, LandNoKill, LandAirSea   *** LandRail ???!?!
+  if (pclass.startsWith("Land")) {   // Land, LandNoKill, LandAirSea, LandRail, LandRoad
     //console.log("  Land* CHECK ON: tclass.rulename =="+tclass.rule_name);
     if (tclass.rule_name == "Submarine") return false;
     if (tclass.rule_name == "LandRail") {  // only Foot soldiers can get on Trains
