@@ -16,15 +16,12 @@ LINKS:
 <a href="https://freeciv.fandom.com/wiki/Defense_bonus_chart.mp2" target="_blank">Terrain+Base Defense Bonus Quick-Reference</a>
 <a href="https://freeciv.fandom.com/wiki/Hotkeys.mp" target="_blank">Hotkeys and Mouse Control</a>
 
-The Avant-garde ruleset is a modernized ruleset to take advantage of cutting-edge advancements in Freeciv Server development. 
-Compared to Multiplayer-Evolution (MP2), the differences are that it is less restrained to keep the same "DNA" as the other
-MP-branch rulesets, and allows itself to import features, improvements, and novel ideas from all other versions of Freeciv,
-later versions of the commercial series, as well as original ideas from players.
+The Caravel ruleset is a modernized ruleset to take advantage of cutting-edge advancements in Freeciv Server development. 
 
 This ruleset began using MP2 as its base and added to it. Enjoy!
 
 -----------------------------
-Changes from MP2:
+Changelogs for MP2:
 -----------------------------
 <a href="https://freeciv.fandom.com/wiki/Multiplayer_II_Summary#Avant-Garde_MP2" target="_blank">Hotkeys and Mouse Control</a>
 
