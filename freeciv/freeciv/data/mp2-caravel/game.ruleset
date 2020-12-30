@@ -1539,6 +1539,7 @@ actor_reqs    =
       "UnitState",     "Transported",  "Local", FALSE
     }
 
+;******************************** ROADS ************************
 [actionenabler_road]
 action        = "Road"
 actor_reqs    =
@@ -1561,6 +1562,20 @@ target_reqs    =
     { "type",       "name",    "range", "present"
         "CityTile", "Claimed", "Local", FALSE
     }
+[actionenabler_road2_sea_bridge]
+action        = "Road"
+actor_reqs    =
+    { "type",          "name",         "range",   "present"
+      "UnitFlag",      "Settlers",     "Local",   TRUE
+      "UnitFlag",      "CanHide",      "Local",   FALSE
+      "Tech",          "Explosives",   "Player",  TRUE
+      "UnitType",      "Proletarians", "Local",   FALSE
+    }
+target_reqs    =
+    { "type",         "name",    "range",    "present"
+      "TerrainClass", "Oceanic", "Local",    TRUE
+      "TerrainClass", "Land",    "CAdjacent",TRUE
+    }
 [actionenabler_road_prole]
 action        = "Road"
 actor_reqs    =
@@ -1582,6 +1597,20 @@ actor_reqs    =
 target_reqs    =
     { "type",       "name",    "range", "present"
         "CityTile", "Claimed", "Local", FALSE
+    }
+[actionenabler_road_prole2_sea_bridge]
+action        = "Road"
+actor_reqs    =
+    { "type",          "name",         "range",   "present"
+      "UnitFlag",      "Settlers",     "Local",   TRUE
+      "UnitType",      "Proletarians", "Local",   TRUE
+      "Tech",          "Explosives",   "Player",  TRUE
+      "Gov",           "Communism",    "Player",  TRUE
+    }
+target_reqs    =
+    { "type",         "name",    "range",    "present"
+      "TerrainClass", "Oceanic", "Local",    TRUE
+      "TerrainClass", "Land",    "CAdjacent",TRUE
     }
 [actionenabler_legion_road]
 action        = "Road"
