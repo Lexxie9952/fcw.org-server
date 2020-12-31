@@ -1025,6 +1025,25 @@ target_reqs    =
       "Extra",      "Naval Base","Local", FALSE
       "TerrainClass","Oceanic",  "Local", FALSE
     }
+;Legions can do Pilum assault
+[actionenabler_legion_pilum_assault]
+action = "Bombard"
+actor_reqs    =
+    { "type",         "name",         "range", "present"
+      "UnitFlag",     "Bombarder",    "Local", TRUE
+      "UnitType",     "Legion",       "Local", TRUE
+      "UnitState",    "Transported",  "Local", FALSE
+      "MinMoveFrags", "1",            "Local", TRUE
+      "DiplRel",      "War",          "Local", TRUE
+   }
+target_reqs    =
+    { "type",   "name", "range",  "present"
+      "CityTile", "Center",       "Local", FALSE
+      "Extra",    "Fortress",     "Local", FALSE
+      "Extra",    "Fort",         "Local", FALSE
+      "Extra",    "Naval Base",   "Local", FALSE
+      "TerrainClass", "Oceanic",  "Local", FALSE
+    }
 
 ;Fanatics can do skirmish assaults
 [actionenabler_fanatic_skirmish_assault]
@@ -1619,7 +1638,7 @@ actor_reqs    =
       "UnitFlag",      "Settlers",      "Local",   TRUE
       "UnitType",      "Legion",        "Local",   TRUE
       "UnitState",     "OnDomesticTile","Local",   FALSE
-      "UnitState",     "Transported",  "Local",   FALSE    ; Prevent quay exploit
+      "UnitState",     "Transported",  "Local",    FALSE    ; Prevent quay exploit
     }
 ; Don't force legions to road BEFORE making a fortress 
 ; from fortress being "domestic national territory"

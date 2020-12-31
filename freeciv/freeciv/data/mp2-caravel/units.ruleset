@@ -60,7 +60,7 @@ flags =
     _("Expellable"), _("Can be peacefully expelled from foreign tiles.")
     _("AirProtector"), _("Is Unreachable AND can protect its tile from units unable to attack this unit.")
     _("CantReachAir"), _("Unable to attack air units.")
-    _("FortBuster"), _("Defending Forts get no bonus. +33% attack bonus vs. the 2x defense of a Fortress.")
+    _("FortBuster"), _("Defending Forts get no bonus. +33% attack bonus vs. the 2× defense of a Fortress.")
     _("FortressBuster"), _("Defending Fortresses get no bonus.")
     _("AntiAir"), _("Anti-Air bonus of this unit is less effective against Stealth, which has a 25% bonus against this unit.")
 ;;;   _("NeverProtects"), _("Does not protect other units on its tile.")   ; UNCOMMENT THIS IF NOT USING SCL'S PATCH FOR THIS FLAG
@@ -473,8 +473,8 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ; "DefenseDivider"    = Divide defense value with (1 + 'value').
 ;                       Bonus is defined in attackers entry.
 ; "DefenseDividerPct" = Divide defense value by 1 + (value / 100).
-;                       Value of 100 means division by 2, (2x for attacker)
-;                       value of 50 means division by 1.5, (1.5x for attacker)
+;                       Value of 100 means division by 2, (2× for attacker)
+;                       value of 50 means division by 1.5, (1.5× for attacker)
 ;                       i.e.: Effectively increases *attack* by value percent.
 ; "FirePower1"        = Defender firepower is reduced to value 1 when
 ;                       ever this has non-zero value.
@@ -983,7 +983,7 @@ flags         = "FootSoldier", "CantReachAir", "Settlers", "CanHide", "MultiSlot
 roles         = "DefendOk", "DefendOkStartUnit", "FirstBuild", "Hut"
 helptext      = _("\
 The Warrior is the weakest military unit, but can also be very cost effective.\n\
-With the discovery of Conscription, can convert to Musketeers in any domestic city.\
+With the discovery of Conscription, Warriors can convert to Musketeers in any domestic city.\
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
@@ -1056,7 +1056,7 @@ convert_to    = "Musketeers"
 convert_time  = 4
 transport_cap = 0
 fuel          = 0
-city_size     = 276 ; 000,001,000101,00 max_kiils=0, targets=1, move_cost=5 frags, reserved=00
+city_size     = 276 ; 000000,000,001,000101,00 atk_bonus=0, max_kiils=0, targets=1, move_cost=5 frags, reserved=00
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1103,7 +1103,7 @@ convert_to    = "Musketeers"
 convert_time  = 2
 transport_cap = 0
 fuel          = 0
-city_size     = 1848 ; 0,111,001110,00 = max_kills=0, targets=7, move_cost=14 frags, reserved = 00
+city_size     = 1848 ; 000000,000,111,001110,00 = atk_bonus=0, max_kills=0, targets=7, move_cost=14 frags, reserved = 00
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1115,11 +1115,11 @@ roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
 Archers fight with bows and arrows. They have good offense and decent defense.\
  Rather than fight to the death, Archers can also do a Ranged Attack with no risk\
- of retaliatory damage: a single volley of arrows is fired over all enemy units on the tile,\
- causing 1hp of damage to any units who are hit. This is useful for softening\
+ of retaliatory damage: two volleys of arrows are fired on up to 7 enemy units on the tile,\
+ causing 1-2hp of damage to any units who are hit. This is useful for softening\
  enemies prior to battle, or for deterring an approach to a strategic location.\
  (Ranged Attack is not possible on Cities or Fortresses.)\n\
- With the discovery of Conscription, can convert to Musketeers in any domestic city.\
+ With the discovery of Conscription, Archers can convert to Musketeers in any domestic city.\
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
@@ -1149,6 +1149,7 @@ convert_to    = "Musketeers"
 convert_time  = 2
 transport_cap = 0
 fuel          = 0
+city_size     = 70180 ; 000100,010,010,001001,00 = atk +4*25=+100% (2×), max_kills=2, targets=2, move_cost=9 frags, reserved = 00
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1156,17 +1157,22 @@ uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
 flags         = "FootSoldier", "Settlers", "CanHide", "Infra", "CanRoad", "CanFortress", "Capturer",
-                "CantReachAir", "MultiSlot", "Shield2Gold", "WillNever"
+                "CantReachAir", "MultiSlot", "Shield2Gold", "WillNever", "Bombarder"
 roles         = "DefendOk", "DefendOkStartUnit", "BarbarianBuild", "BarbarianSea"
 helptext      = _("\
 Legions are heavily armed well disciplined soldiers with excellent offensive strength.\
- They are famous and feared for their engineering abilities: with the required\
+ They are famous for their engineering abilities: with the required\
  technology they can build Forts and Fortresses. They can build Roads outside domestic\
  national territory and inside Forts and Fortresses.\n\
- With the discovery of Conscription, can convert to Musketeers in any domestic city.\
+Legions are feared for how they start battle: a Pilum Assault targets the\
+ shields of the enemy. A pilum stuck in a shield renders it useless, leaving\
+ the front line vulnerable to a full-on charge. The Pilum Assault does 1 round\
+ of combat at 2× attack bonus on up to 2 units on the tile.\n\
+ With the discovery of Conscription, Legions can convert to Musketeers in any domestic city.\
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
+bombard_rate = 1;
 
 [unit_pikemen]
 name          = _("Pikemen")
@@ -1205,9 +1211,9 @@ flags         = "FootSoldier", "CantReachAir", "Settlers", "CanHide", "MultiSlot
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
 Long sharp pikes give Pikemen a counter to the height and mobility of mounted\
- units. They enjoy a 2x defense bonus against mounted units. Pikemen replace\
+ units. They enjoy a 2× defense bonus against mounted units. Pikemen replace\
  the Phalanx as the preferred city defender.\n\
- With the discovery of Conscription, can convert to Musketeers in any domestic city.\
+ With the discovery of Conscription, Pikemen can convert to Musketeers in any domestic city.\
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
@@ -1274,7 +1280,7 @@ move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
-city_size     = 568; 0,010,001110,00 = max_kills=0, targets=4, move_cost=14 frags, reserved = 00
+city_size     = 568; 000000,0,010,001110,00 = atk_bonus=0, max_kills=0, targets=4, move_cost=14 frags, reserved = 00
 uk_happy      = 2
 uk_shield     = 2
 uk_food       = 0
@@ -1449,7 +1455,7 @@ move_rate     = 2
 vision_radius_sq = 8  ; hard-coded the +4 extra for effect_physics_vision since it is a pre-req anyway
 transport_cap = 0
 fuel          = 0
-city_size     = 2616 ; 1,010,001110,00 = max_kills=1, targets=4, move_cost=14 frags, reserved = 00
+city_size     = 2616 ; 000000,001,010,001110,00 = atk_bonus=0, max_kills=1, targets=4, move_cost=14 frags, reserved = 00
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1849,7 +1855,7 @@ helptext      = _("\
 Armor is the mechanized equivalent of a Cavalry unit. They have high attack strength,\
  superb mobility, and the highest defense of any offensive unit. They are massive all-terrain\
  vehicles, well-suited for penetrating defensive fortifications: Units inside Forts get no defense\
- bonus against Armor. Units inside Fortresses get a reduced bonus of 1.67x instead of 2x.\
+ bonus against Armor. Units inside Fortresses get a reduced bonus of 1.67× instead of 2×.\
 ")
 
 [unit_armor_ii]
@@ -1890,7 +1896,7 @@ helptext      = _("\
 Armor II is the ultra-modern upgrade to Armor. It features high tech composite armor and\
  electronic countermeasures (ECM). Forts and Fortresses gain no bonus against\
  its ability to blast and break through fortifications. ECM and composite armor\
- give a 2x defense bonus against Missiles. Unlike most land units,\
+ give a 2× defense bonus against Missiles. Unlike most land units,\
  Armor II can attack reachable units regardless of whether unreachable units protect the tile.\ 
 ")
 
@@ -2082,7 +2088,7 @@ flags         = "NeverBlocked", "AntiAir", "Marines", "WillNever", "TransportDef
 roles         = ""
 helptext      = _("\
 Anti-Aircraft Artillery (AAA) can attack almost anything from anywhere. AAA get a\
- 2x bonus against Air units. AAA qualify as weaponry for Marines and have the same\
+ 2× bonus against Air units. AAA qualify as weaponry for Marines and have the same\
  abilities: they can be transported on any unit that carries Marines, can attack from\
  or to non-native tiles, and do not lose a turn when unloading. Transported AAA can\
  defend their tile on both Land and Sea. (AAA cannot attack Submarines, Missiles,\
@@ -2130,7 +2136,7 @@ flags         = "NeverBlocked", "AntiAir", "WillNever"
 roles         = ""
 helptext      = _("\
 The Mobile SAM is the strongest Anti-Air unit on the ground. It can\
- attack nearby aircraft. It has a 2x bonus against all Air units. The\
+ attack nearby aircraft. It has a 2× bonus against all Air units. The\
  Mobile SAM can also carry one Missile of any type. Unlike the AAA, it\
  cannot attack non-native tiles or attack while transported.\
 "), _("
@@ -3574,7 +3580,7 @@ helptext      = _("\
 Destroyers are the first of the modern ships to start your modern\
  navy. Their main roles are fast scouting, seek-and-destroy,\
  anti-submarine warfare, shore bombardment of lighter targets,\
- and supporting the needs of larger fleets. 4x ASW defence gives a\
+ and supporting the needs of larger fleets. 4× ASW defence gives a\
  35% chance defending vs Submarines.\
 ")
 
@@ -3613,7 +3619,7 @@ flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
 roles         = "Hunter"
 helptext      = _("\
 The Cruiser is a large and fast surface warship with equally strong offensive and defensive strength. More often than not, its\
- 2x ASW defence allows it to survive a Submarine attack.\
+ 2× ASW defence allows it to survive a Submarine attack.\
 "), _("\
 The main duties of the Cruiser are offensive strikes against lesser ships, and escorting weaker ships.\
 ")
@@ -3656,7 +3662,7 @@ flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
 roles         = "Hunter"
 helptext      = _("\
 The Missile Destroyer has double the firepower of a Destroyer, and shares the same roles\
- as its ancestor. It gains 2x defense against Air and Missile units. It has a 2x ASW bonus\
+ as its ancestor. It gains 2× defense against Air and Missile units. It has a 2× ASW bonus\
  and can can carry one Missile.\
 ")
 
@@ -3698,11 +3704,11 @@ flags         = "BadCityDefender", "CanEscape", "AntiAir", "WillNever"
 roles         = "Hunter"
 helptext      = _("\
 The AEGIS Cruiser has an Anti-Air missile system. Radar and sonar\
- give superior vision and 2x defense bonus against Submarines.\
+ give superior vision and 2× defense bonus against Submarines.\
  The AEGIS can carry two Missiles, and is the only ship that can attack\
  Air and Missile units.\
 "), _("\
-Excellent vision and 3x Anti-Air bonus are ideal for scouting and escorting.\
+Excellent vision and 3× Anti-Air bonus are ideal for scouting and escorting.\
 ")
 
 [unit_battleship]
@@ -3726,7 +3732,7 @@ move_rate     = 10
 vision_radius_sq = 12
 transport_cap = 0
 fuel          = 0
-city_size     = 3252  ; 01,100,101101,00 = max_kills=1, primary targets=4, bombard_move_cost=45 frags, bombard_extra_range = 0
+city_size     = 3252  ; 000000,001,100,101101,00 = atk_bonus=0, max_kills=1, targets=4, move_cost=45 frags, reserved = 00
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -3740,7 +3746,7 @@ bonuses       =
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever", "Bombarder"
 roles         = ""
 helptext      = _("\
-The Battleship is the supreme naval unit, with excellent offensive and defensive strength. It has a 2x defense bonus vs Submarines.\
+The Battleship is the supreme naval unit, with excellent offensive and defensive strength. It has a 2× defense bonus vs Submarines.\
  Battleships may expend 5 move points to do a 3 round bombardment which hits up to 4 units within a stack, of which only a maximum\
  of one can be killed.\
 ")
@@ -4039,7 +4045,7 @@ roles         = ""
 helptext      = _("\
 Hydrogen Bombs make Atom Bombs seem tame. Any unprotected city at Ground Zero will be absolutely annihilated.\
  In other cities in the blast radius, population is reduced by about 75%. Blast area is 21 tiles:\
- the same area as an entire city (5x5 minus the corners.) All units within the blast are destroyed.\n\
+ the same area as an entire city (5×5 minus the corners.) All units within the blast are destroyed.\n\
 A Bomber can drop a Hydrogen Bomb within two tiles of its location. Unload the bomb, fly the Bomber out of\
  range, then detonate by pressing D twice.\n\
 If you have Fusion Power and the Manhattan Project was built, a Hydrogen Bomb\
@@ -4139,7 +4145,7 @@ veteran_move_bonus = 0
 roles         = ""
 helptext      = _("\
 If you have Space Flight and the Manhattan Project has been built by any player, you can make Nuclear Missiles.\
- Nuclear blasts destroy ALL units in a 3x3 area. City population is reduced by half. Land tiles may get nuclear fallout.\
+ Nuclear blasts destroy ALL units in a 3×3 area. City population is reduced by half. Land tiles may get nuclear fallout.\
  Fallout reduces tile output and increases risk of nuclear winter.\
 "), _("\
 If Fallout is cleaned on the turn it appears, the chance of nuclear winter is reduced.\

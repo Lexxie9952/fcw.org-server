@@ -546,6 +546,14 @@ function popup_action_selection(actor_unit, action_probabilities,
       }
     }
   }  
+  else if (unit_types[actor_unit['type']]['name']=="Legion"
+      && client_rules_flag[CRF_MP2_SPECIAL_UNITS]) {
+    for (button_id in buttons) {
+     if (buttons[button_id].text.startsWith("Ranged Attack")) {
+        buttons[button_id].text = "Pilum Assault (100%)"
+      }
+    }
+  }
   else if (unit_types[actor_unit['type']]['name']=="Marines"
       && client_rules_flag[CRF_MARINE_RANGED]) {
     for (button_id in buttons) {
