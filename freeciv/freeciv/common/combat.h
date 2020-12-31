@@ -25,8 +25,10 @@ extern "C" {
  * to yield the base of attack_power and defense_power.
  *
  * The constant may be changed since it isn't externally visible used.
+ * Yeah I changed it. 10 meant it was rounding to only one decimal place.
+ * Absolutely horrible, an Attack strength of 1.99 became 1.9!
  */
-#define POWER_FACTOR	10
+#define POWER_FACTOR	100
 
 enum unit_attack_result {
   ATT_OK,
