@@ -50,4 +50,5 @@ tiles = { "row", "column", "tag"
   0,  6, "u.awacs_o"                  ; Lexxie
   0,  7, "u.spy_plane_o"              ; Lexxie
   0,  8, "u.wagon"                    ; Lexxie
+  0,  9, "u.truck"                    ; Lexxie
 }
