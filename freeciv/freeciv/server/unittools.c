@@ -340,11 +340,26 @@ void unit_bombs_unit(struct unit *attacker, struct unit *defender,
   int attack_firepower, defense_firepower;
   struct player *plr1 = unit_owner(attacker);
   struct player *plr2 = unit_owner(defender);
+  
+  struct bombard_stats pstats;
+  unit_get_bombard_stats(&pstats, attacker);
 
   *att_hp = attacker->hp;
   *def_hp = defender->hp;
   get_modified_firepower(attacker, defender,
                          &attack_firepower, &defense_firepower);
+
+  // Special attack modifiers applying to Bombard only:
+  attackpower *= (100 + pstats.bombard_atk_mod);
+  attackpower /= 100;
+
+  //notify_player(plr1, NULL, E_UNIT_ACTION_FAILED, ftc_server, _("Modified ATK = %f"), (float)attackpower/100);
+
+  // Special defense modifiers applying to Bombard only:
+  // TO DO:
+  /* if (defender->activity == ACTIVITY_FORTIFIED)
+  defensepower *= (100 + pstats->fortified_def_mod);
+  defensepower /= 100; */
 
   log_verbose("attack:%d, defense:%d, attack firepower:%d, "
               "defense firepower:%d", attackpower, defensepower,

@@ -585,7 +585,7 @@ struct bombard_stats {
   int bombard_collateral_rate_reduce;//RESERVED, reduction in bombard_rate for collateral target exposure
   int bombard_collateral_atk_mod; // RESERVED, adjustment to atk strength on collateral targets (e.g., -25)
   bool bombard_stay_fortified;    // RESERVED, whether bombard action preserves fortified status
-  int bombard_fortifed_def_mod;   // RESERVED, additional defense bonus for targets IFF fortified
+  int bombard_fortified_def_mod;  // RESERVED, additional defense bonus for targets IFF fortified
   int bombard_rate_range_mod;     // RESERVED, adjustment to bombard_rate for each 1 tile distance
   int bombard_atk_mod;            // RESERVED, % adjustment to attack strength when bombarding (-50 = -50%)
   int bombard_atk_range_mod;      // RESERVED, % adjustment to attack strength for tile distance beyond dist==1

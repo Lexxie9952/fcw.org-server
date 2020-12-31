@@ -2320,23 +2320,35 @@ void utype_get_bombard_stats(struct bombard_stats *pstats,
   // Preserve a copy of the bombard flags/stats:
   pstats->bit_field = BB;
   // Bit 0:      RESERVED, extra range flag (+1 range)
-  pstats->bombard_extra_range = (BB & 1);
-  // Bit 1:      RESERVED
+  pstats->bombard_extra_range =                 (BB & 1);
+  // Bit 1:      RESERVED for bombard_stay_fortified
+  pstats->bombard_stay_fortified =             (BB & 10) >> 1;
   // Bits 2-7:   Move cost of bombard action
   pstats->bombard_move_cost =          (BB & 0b11111100) >> 2;
   // Bits 8-10:  Max targets exposed on tile (0==all)
   pstats->bombard_primary_targets = (BB & 0b11100000000) >> 8;
   // Bits 11-13: Max # of kills possible on primary targets (0==none)
   pstats->bombard_primary_kills =(BB & 0b11100000000000) >> 11;
+  // Bits 14-19: bombard_atk_mod
+  /* How to get the most out of 6 bits? 
+     For positive values, each unit is worth +25%, taking us up to 31*25 = +775% or 8.75x
+     For negative values, each unit is worth -3%, taking us down to 31*-3 = -93%
+   */
+  pstats->bombard_atk_mod= (BB & 0b01111100000000000000) >> 14;
+  if /* signed bit for - */(BB & 0b10000000000000000000) {
+    pstats->bombard_atk_mod *= -3;
+  } 
+  else {
+    pstats->bombard_atk_mod *= 25;
+  }
 
   // RESERVED for future use, see .h file for explanations
   pstats->bombard_collateral_targets = 0;
   pstats->bombard_collateral_kills = 0;
   pstats->bombard_collateral_rate_reduce = 0;
   pstats->bombard_collateral_atk_mod = 0;
-  pstats->bombard_stay_fortified = 0;
+  pstats->bombard_fortified_def_mod = 0;
   pstats->bombard_rate_range_mod = 0;
-  pstats->bombard_atk_mod = 0;
   pstats->bombard_atk_range_mod = 0;
 }
 
