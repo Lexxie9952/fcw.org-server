@@ -1,43 +1,114 @@
-1. Fundamentalist governments get partisan effect. Only tech req is Guerilla Warfare, not communism nor gunpowder.
-
-2. Price changes: pre-feudal units -20% foot soldiers, -10% mounted. Catapult 34. Feudal: -10% foot, -5% mounted. Armor II: 85 (was 80)
-
-3. Cheaper Agoge - 90 (brava change?) needs docs
-
-4. TEST Incite City is possible against Democracies but costs 3x
-
-5. TEST Bribe is possible on Democracies but costs 3x
-
-6. TEST Courthouse gives +1 content to all govs, not just Democracy 
-
-7. TEST Democracy has base corruption level of 8%, half that of Republic/Monarchy. Increases by distance at 40/100 per tile or 1/5th the rate of other govs
-
-8. [NEEDS FIX] Proletarians and Pilgrims count under the Conscription build slot bonus, can be made along with other units more than 1 per turn. 
-
-9. TEST Helicopter not susceptible to City Walls but rather SAM Battery (fixes a nerf of 3x for a land unit not from original game)
-
-10. TEST Skirmish assaults can be done to Foreign cities if not original owner and they contain foreigners inside. doc: this is a very powerful trait few think of potential for
-
-11. TEST Early foot soldiers can convert to musketeers for free in domestic cities upon discovering Conscription (needs lots of testing and docs to each unit etc.)
-    this includes the fixed unit doc file text.
-
-12. Statue of Zeus makes 1 citizen content about military for govs who need that, and for those who don't, simply 1 citizen content.
-13. Hanging Gardens now obsolete by steam engine: increases diversity of other early wonders, nudges more balance to Frigates before Ironclads.
-14. TEST Pikemen get a 50% attack bonus vs. mounted units.
-15. Swordsmen new unit with Bronze working A1.5 D1.5 cost:13
-16. Siege Ram, A1 D1 M2, must use roads, 50% chance to destroy city walls (requires 1 full mp), odds halved against capitals.
-17. Police Station prevents investigate city for all govs except democracy.
-18. Courthouse prevents Diplomats (not Spies) from doing hostile Embassy without first cease-fire or peace.
-19. Spy Plane unreachable to propeller-based aircraft.
-20. new unit Satellite: invisible, can investigate cities with police station, has superior vision and movement
-21.
-
-[17] Ranged attack range 2
-[18] Archers 2 combat rounds
+Ongoing goals of MP2-Caravel
+1. Increase splendor of the Bronze Age. Define your national race, characteristics, and unique path.
+2. Attempt the Final Re-balance of what 2x movement rates have done to foot units.
+   Make Foot units a true tactical component again.
+3. Re-balance of Govs toward the vibe and vision of what we know it should be like.
+4. Enhance Trade routes and other mechanics to increase the Diplomatic / Economic bloc / Sovereign concerns of
+   each individual nation:  Nerf mechanics forcing gang-alliance loyalties.
 
 
+BUILDINGS AND WONDERS:
+1. Colossus: +1 trade on ALL tiles (not just existing trade), +1 trade on city center, -5 cost on most commerce units built in that city.
+2. Hanging Gardens now costs 210 and is obsolete by Steam Engine: 
+   increase diversity of other early wonder strategies
+   encourage Frigates before Ironclads
+   more difficult for non-representative govs to rapture simultaneous to mid-game invasions
+3. Police Station prevents investigate city for all govs except Democracy.
+4. Courthouse prevents Diplomats (not Spies) from doing hostile Embassy without first cease-fire or peace.
+5. Recycling Center reduces upgrade costs 20%.
 
-test Airplane can load other stuff?
-test killcitizen_pct
-tribesmen bribe is -3030, need to fix
-test democracy_noncorrupt flag, i think it shows up in the city popups?
+GOVERNMENT RE-BALANCE:
+* ALL NON-REPRESENTATIVE GOVERNMENTS:
+1. Courthouse gives +1 content to all govs, not just Democracy 
+2. Statue of Zeus makes 1 citizen content about military for govs who need that, and for those who don't, simply 1 citizen content.
+3. Also see: Police Station
+* FUNDAMENTALISM:
+1. Fundamentalist govs are harder to bribe, cost is 2x.
+2. A Pilgrim may use ONE of the multi-build-slots in a city with Conscription bonus, along with Foot Soldiers (e.g. Fanatics)
+3. Fundamentalist government now joins Democracy/Communism to get the "generate partisans" effect.
+4. Fanatics can skirmish assault cities which have foreign populations (e.g., your recently conquered city)
+5. Pilgrams have no pop_cost. Effectively, it's "rapture you can geographically direct, for 10 shields"
+* COMMUNISM:
+1. A Proletarian may use ONE of the multi-build-slots in a city with Conscription bonus, along with Foot Soldiers (e.g. Riflemen)
+2. Communists 10 shield discount on Armor.
+3. TEST Proletarians have 1 pop_cost but add 2 pop. Essentially same as #11 but can magnify helping out "boom-towns" to grow.
+* DEMOCRACY:
+1. Democracy has base corruption level of 8%, (50% of Republic/Monarchy)
+2. Democracy corruption increases by 0.4% per tile from capital (1/5 that of other govs)
+3. Democracies can now be BRIBED, but costs 3x. 
+4. Democacies can now be INCITED TO REVOLT, but costs 3x.
+5. Also see, Hanging Gardens, Police Station
+
+UNITS/COMBAT/MECHANICS:
+* FOOT UNITS
+1. Early foot soldiers can convert to Musketeers for free in domestic cities upon discovering Conscription.
+2. Pre-feudal foot units (Warrior, Archer, Phalanx, Legion) cost 20% less.
+3. Feudal foot units (Pikemen) cost 10% less.
+4. Marines can now: build Fort/Airbase, gain +2 move frags per vet level, and v3 can do ranged bazooka attack for 3 rounds.
+   Marines cost 55.
+5. Paratroopers A7 D5. Cost 55.
+6. SPECIAL UNIT ATTACKS
+   Tactical depth blossoms: Can allow hit and run, in some cases multiple ranged attacks per turn.
+      Archers range attack: 2 combat rounds (was 1), can hit up to 7 units (was unlimited), can kill no units, uses 1 5/9 moves (was turn loss)
+      Fanatics range attack: 3 combat rounds, can hit up to 4 units, can kill no units, uses 1 5/9 moves. Now, can also assault conquered foreign-occupied cities.
+      Marines range attack: 3 combat rounds, can hit up to 4 units, can kill 1 unit, uses 1 5/9 moves.
+1. Price changes: pre-feudal units -20% foot soldiers, -10% mounted. Catapult 34. Feudal: -10% foot, -5% mounted. Armor II: 85 (was 80)
+2. Siege Ram, A1 D1 M2, must use roads, 50% chance to destroy city walls (requires 1 full move point), odds halved against capitals.
+3. Satellite: invisible, can investigate all cities (even with Police Station), has superior vision and movement. Requires Apollo Program.
+4. TEST Helicopter not susceptible to City Walls but rather SAM Battery (fixes a nerf of 3x for a land unit not from original game)
+5. Shift from shield to gold upkeep for Infantry changed from Labor Union to Banking. Allows realistic foot soldier compositions to affect more of the game.
+6. Battleship gets ranged attack: 3 rounds, can hit up to 4 units, can kill up to 1 unit, uses 5 moves.
+7. Damaged Submarine min_speed=4 (was 3); makes hit-and-run and escape somewhat more viable.
+8. Truck replaces Freight. Changes: Road only, moves: 5, can carry 3 land units.
+OTHER:
+1. In a foreign territory casus belli is given by:  Transforming Terrain, Building Base, or making road-types (road,rail,quay,canal,etc.)
+
+MINOR AND MISC.
+---------------
+Conscription does not allow making multiple Caravans per turn.
+Traderoutes add a hard +1 trade to the city centre
+Spy Plane correctly made to be unreachable to propeller-based aircraft.
+Can't make road-types while transported in foreign lands (road/quay/rail/maglev/canal)
++1/9 move bonus for v4+ aircraft was changed to +1, as it too frequently led to death of precious v4 units from tired attack on last move.
+
+SERVER UPGRADES: 
+1. Bombard actions
+   a. can optionally specify a move cost up to 7 moves points.
+   b. can optionally specify a limit to number of units on tile which can be hit
+   c. can optionally specify a maximum number of units who can be potentially killed
+2. Population units can specify pop-cost and add-pop differently. 
+3. Non-diplomatic units can be made to enter "direct combat with buildings": e.g., Siege Ram vs. City Walls. 
+4. Added "gold per shield" displays to Purchase pop-ups and as a sortable user column in cities list. 
+5. Bulb cost displays now reflect non-default sciencebox settings 
+6. Fixed design flaw in server that made pop-cost units prohibit multi-units-per-turn city production.  
+7. Made units-display in lower-right always update instead of still show dead/spent/disbanded units. 
+8. Fixed a cheat/exploit/backdoor in bribe mechanics. 
+9. DIPLOMATIC ACTION REPORTING TRANSPARENCY: all diplomatic actions show the odds and results for all stages to both contestants.
+10. Unit vision range now reported in raw tile units rather than square of radius.
+11. Fortresses and Naval Bases show a flag of who owns them to prevent confusion. 
+12. Fixed variety of small quirks/inconsistencies in loading/unloading of transports.
+13. Added ability for rulesets to include the "Sea Bridge" improvement over water.
+14. DOC HOTKEYS.MP:: Intelligent Load/Unload/Activate Cargo are now a Holstic Suite of upgraded mechanics which all work together:
+   UNLOAD TRANSPORT 'T':
+    a. 'T' tells a selected Transport(s) to unload their specific cargo.
+    b. 'T' tells selected Cargo to unload from their Transports. 
+   LOAD 'L': 
+    a. 'L' command tells selected unloaded units which Transport to load onto (if multiple legal transport exists).
+    b. 'L' command tells selected Transports to 'scoop up' all units on the tile which it can legally take as cargo.
+    c. 'L' command tells selected Cargo units to transfer to another Transport such action is legal OR would be legal 
+           after the cargo unloaded with no movement penalty (e.g., in a City.)
+    d. 'L' command given at Sea, to tell selected Cargo to move to a new Transport, is legal if current Transport has spent neither
+           half its moves nor more than 4 moves. This: handicaps "transport shuffling" to nearly infeasible while still facilitating 
+           ordinary logistical operations and reducing micro-management.
+   SELECT CARGO on TRANSPORT 'U':
+    a. 'U' command given to selected Transports will only activate/select Cargo units on user-selected Transport(s).
+    b. To select ALL cargo on ALL transports (old behaviour), select any non-Transport when hitting 'U'
+What no longer happens:
+1. 'T' will never unload unselected transport/cargo units. Previously, it unloading ALL cargo on same tile.
+2. 'U' command will never select all cargo on same tile, only on selected Transports.
+3. 'L' command won't disallow changing Transports in cities because you didn't take micro-management step of unloading first.
+4. 'L' command doesn't force you to select every embarking unit on a tile, but gives options to select the Transport who scoops up instead.
+5. 'L' command won't disallow more ordinary logistics like transfering cargo at sea to an allied Transport, or having a Transport in a city 
+       come pick up units from a Transport 2 tiles away, or having a city Transport drop off cargo to NEARBY Transport on its "shipping lane."
+
+

@@ -1068,7 +1068,7 @@ roles         = "DefendGood", "FirstBuild", "HutTech"
 helptext      = _("\
 The Phalanx is armored infantry, suitable for defending your cities. It is valuable\
  for claiming and holding defensive tactical positions.\n\
-Phalanxes can do a special Rumble Attack with enemy units who move adjacent to them,\
+Phalanxes can do a special Rumble Attack on enemy units who move adjacent to them,\
  if the Phalanx is fortified OR has not moved this turn. Moving enemies cannot counter\
  a well-shielded battalion in formation from shoving into their\
  flank, targeting them with long sarissas. Rumble attacks are not mortal combat —— the turtled Phalanx\
@@ -1439,7 +1439,7 @@ sound_move    = "m_marines"
 sound_move_alt = "m_generic"
 sound_fight   = "f_marines"
 sound_fight_alt = "f_generic"
-build_cost    = 60
+build_cost    = 55
 pop_cost      = 0
 attack        = 8
 defense       = 5
@@ -1502,10 +1502,10 @@ sound_move    = "m_paratroopers"
 sound_move_alt = "m_generic"
 sound_fight   = "f_paratroopers"
 sound_fight_alt = "f_generic"
-build_cost    = 60
+build_cost    = 55
 pop_cost      = 0
-attack        = 6
-defense       = 4
+attack        = 7
+defense       = 5
 hitpoints     = 20
 firepower     = 1
 move_rate     = 2
@@ -4301,7 +4301,7 @@ Spies who survive ops escape to the nearest friendly city. Spies have\
 name          = _("Caravan")
 class         = "Land"
 tech_req      = "Trade"
-obsolete_by   = "Freight"
+obsolete_by   = "Truck"
 graphic       = "u.caravan"
 graphic_alt   = "-"
 sound_move    = "m_caravan"
@@ -4337,13 +4337,13 @@ Commerce units can build any Wonders for which you have the tech requirement. To
  for a Trade Route, the Trade tech is needed, and they need to have an assigned Home City.\n\
 ")
 
-[unit_freight]
-name          = _("Freight")
+[unit_truck]
+name          = _("Truck")
 class         = "LandRoad"
 tech_req      = "The Corporation"
 obsolete_by   = "None"
-graphic       = "u.freight"
-graphic_alt   = "-"
+graphic       = "u.truck"
+graphic_alt   = "u.freight"
 sound_move    = "m_freight"
 sound_move_alt = "m_generic"
 sound_fight   = "f_freight"
@@ -4354,20 +4354,25 @@ attack        = 0
 defense       = 1
 hitpoints     = 10
 firepower     = 1
-move_rate     = 4
+move_rate     = 5
 vision_radius_sq = 4
-transport_cap = 0
+transport_cap = 3
 fuel          = 0
 uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
+cargo         = "Land", "LandAirSea", "Bomb"
 flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Fortify"
 roles         = ""
 helptext      = _("\
-The Freight unit replaces the Caravan as the basic Commerce unit on Land. It moves at\
- twice the speed, but must stay on roads. Each Freight used to build a wonder will add\
- 50 shields. See the entry on Caravan to read what Commerce units may do.\
+The Truck unit replaces the Caravan as the basic Commerce unit on Land. It moves at\
+ more than twice the speed, but must stay on roads. Each Truck used to build a wonder\
+ will add 50 shields. See the entry on Caravan to read what Commerce units may do.\
+"), _("\
+Trucks can carry 3 Land units. Only Foot Soldiers can:\n1. L)oad outside a city or base;\n\
+2. Unload (T) in a base;\n3. Move off the Train outside a city\
+ (loses all moves.)\nAll other units must load/unload inside a city.\n\n\\
 ")
 
 [unit_explorer]
