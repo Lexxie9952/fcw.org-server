@@ -216,7 +216,8 @@ function unit_can_do_unload(punit)
     /* could also unload in city and naval base -- already checked above */
   }
   // Brava onward:
-  if (tclass.rule_name == "LandRail") { // non-Marines can unload from Train on any Base or quay tile.
+  if (tclass.rule_name == "LandRail"
+      || tclass.rule_name == "LandRoad") { // non-Marines can unload from Train/Truck on any Base or quay tile.
     if (tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
     if (quay_rules && tile_has_extra(ptile, EXTRA_QUAY)) return true;
     if (typeof EXTRA_FORT !== 'undefined' && tile_has_extra(ptile, EXTRA_FORT)) return true;
@@ -275,7 +276,9 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
    }
 
   if (pclass == "Bomb") {
-    if (!ttype.name.includes("Bomber") && tclass.rule_name != "LandRail") return false;
+    if (!ttype.name.includes("Bomber") 
+        && tclass.rule_name != "LandRail"
+        && tclass.rule_name != "LandRoad" ) return false;
   } 
 
   if (pclass == "Missile") {
@@ -291,7 +294,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
   if (pclass.startsWith("Land")) {   // Land, LandNoKill, LandAirSea, LandRail, LandRoad
     //console.log("  Land* CHECK ON: tclass.rulename =="+tclass.rule_name);
     if (tclass.rule_name == "Submarine") return false;
-    if (tclass.rule_name == "LandRail") {  // only Foot soldiers can get on Trains
+    if (tclass.rule_name == "LandRail" || tclass.rule_name == "LandRoad") {  // only Foot soldiers can get on Trains/Trucks
       if (ptype['move_rate'] > 2 * SINGLE_MOVE) return false; //Rail equality: units with ≤2 moves can use trains
       //if (!unit_has_type_flag(punit, UTYF_FOOTSOLDIER)) return false; //used to be foot only, now it's line above
     }

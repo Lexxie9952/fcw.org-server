@@ -3896,7 +3896,8 @@ function key_unit_load()
         var punit = units_on_tile[i]; // iterate to next unit on tile
         // Attempt to load units on selected Transport IFF unit is not already loaded on a Transport.
         // (TODO: also skip units who have their own cargo? May be edge cases?)
-        if (!punit['transported']) { 
+        if (!punit['transported'] 
+            && unit_could_possibly_load(punit, unit_type(punit), stype, get_unit_class(sunits[s]))) { 
           var packet1 = {
             "pid"              : packet_unit_load,
             "cargo_id"         : punit['id'],
@@ -4456,20 +4457,38 @@ function key_unit_vigil()
 function key_unit_sentry()
 {
   var funits = get_units_in_focus();
+
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
-
-    // Hack to fix 3.09 server can't sentry fuel-Triremes on shore/river. Remove if FC server fixed:
-    if (get_unit_class_name(punit) == "Trireme") {
-      if (punit['fuel']>0) {
-         var pcity = tile_city(index_to_tile(punit['tile']));
-         if (pcity == null) {
-           key_unit_noorders();
-         }
-         else {
-           request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
-           remove_unit_id_from_waiting_list(punit['id']);
-         }
+    var class_name = get_unit_class_name(punit);
+    var pcity = tile_city(index_to_tile(punit['tile']));
+    // 3.09 server can't sentry fuel-Triremes on shore/river.
+    if (client_rules_flag[CRF_TRIREME_FUEL] && class_name == "Trireme") {
+      if (pcity == null) {
+        if (typeof EXTRA_NAVALBASE !== undefined) {
+          if (!tile_has_extra(EXTRA_NAVALBASE)) {
+            key_unit_noorders();
+          }
+        } else key_unit_noorders();
+      }
+      else {
+        request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
+        remove_unit_id_from_waiting_list(punit['id']);
+      }
+    } // Annoying to hit S to move through units and be stuck on an Air unit,
+      //  so S becomes synonymous with No Orders for these kinds of units:
+    else if (class_name == "Helicopter"
+              || class_name == "Air"
+              || class_name == "AirProtect" 
+              || class_name == "AirPillage" 
+              || class_name == "Air_High_Altitude") 
+    {
+      if (pcity == null && !tile_has_extra(EXTRA_AIRBASE)) {
+        key_unit_noorders();      
+      }
+      else {
+        request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
+        remove_unit_id_from_waiting_list(punit['id']);
       }
     }
     else {

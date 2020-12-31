@@ -57,7 +57,8 @@ const CRF_SIEGE_RAM            = 20; // Ruleset uses Siege Ram, which highjacks 
 const CRF_MARINE_BASES         = 21; // Needed to optimize due to flaws in actionenablers/req
 const CRF_MARINE_RANGED        = 22; // Marines can do ranged attack
 const CRF_BSHIP_BOMBARD        = 23; // Battleships can Bombard
-const CRF_LAST                 = 24;
+const CRF_TRIREME_FUEL         = 24; // Trireme is fuel unit, client benefts from UI optimisations
+const CRF_LAST                 = 25;
 
 var graphic_theme_path;
 

@@ -690,6 +690,7 @@ function handle_ruleset_control(packet)
       client_rules_flag[CRF_TESLA_UPGRADE_DISCOUNT]=true;
       client_rules_flag[CRF_NO_WASTE]=true;
       client_rules_flag[CRF_MAGLEV] = true;
+      client_rules_flag[CRF_TRIREME_FUEL] = true;
     break;
 
     case "Multiplayer-Plus ruleset":

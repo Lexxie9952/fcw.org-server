@@ -85,6 +85,26 @@ function tile_set_worked(ptile, pwork)
   ptile['worked'] = pwork;
 }
 
+/**************************************************************************
+ Returns whether the tile has a base.  true or false
+**************************************************************************/
+function does_tile_have_base(ptile)
+{
+  if (typeof EXTRA_FORTRESS !== "undefined" && tile_has_extra(ptile, EXTRA_FORTRESS))
+    return true;  
+  if (typeof EXTRA_FORT !== "undefined" && tile_has_extra(ptile, EXTRA_FORT))
+    return true;
+  if (typeof EXTRA_AIRBASE !== "undefined" && tile_has_extra(ptile, EXTRA_AIRBASE))
+    return true;
+  if (typeof EXTRA_NAVALBASE !== "undefined" && tile_has_extra(ptile, EXTRA_NAVALBASE))
+    return true;
+  if (typeof EXTRA_AIRSTRIP !== "undefined" && tile_has_extra(ptile, EXTRA_AIRSTRIP))
+    return true;
+  if (typeof EXTRA_ !== "undefined" && tile_has_extra(ptile, EXTRA_))  // hideout
+    return true;
+    
+  return false;
+}
 
 /****************************************************************************
   Return the city on this tile (or NULL), checking for city center.
