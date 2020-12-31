@@ -966,6 +966,10 @@ function get_gold_cost_per_shield(pcity)
 **************************************************************************/
 function get_unit_discount_price(ptype, pcity)
 {
+  // Since 'name' and 'build_cost' are the only fields checked and
+  // are universal to both improvements and units, we can adapt this
+  // for everything when needed: 
+  
   // Apply MP2 communist discounts
   if (client_rules_flag[CRF_MP2_SPECIAL_UNITS] && 
       governments[players[client.conn.playing.playerno].government].name == "Communism") {
@@ -2431,7 +2435,7 @@ function populate_worklist_production_choices(pcity)
           production_html += "<td title='Upkeep' class='prod_choice_info' " 
           + "style='padding-right:30px; text-align:right'>" 
           + production_list[a]['unit_details'] + "</td>"
-          "<td class='prod_choice_cost'>" + production_list[a]['build_cost'] + "</td></tr>";
+          + "<td class='prod_choice_cost'>" + production_list[a]['build_cost'] + "</td></tr>";
        }
           //moved above production_html += "<td class='prod_choice_cost'>" + production_list[a]['build_cost'] + "</td></tr>";
      }
