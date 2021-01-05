@@ -542,7 +542,7 @@ static int defense_multiplication(const struct unit_type *att_type,
                                   const struct tile *ptile,
                                   int defensepower)
 {
-  struct city *pcity = tile_city(ptile);
+  ///+++struct city *pcity = tile_city(ptile);
   int mod;
   const struct unit_type *def_type = unit_type_get(def);
 
@@ -570,12 +570,18 @@ static int defense_multiplication(const struct unit_type *att_type,
 
   defensepower +=
     defensepower * tile_extras_defense_bonus(ptile, def_type) / 100;
-  
+  /* //+++
   if ((pcity || def->activity == ACTIVITY_FORTIFIED)
       && uclass_has_flag(utype_class(def_type), UCF_CAN_FORTIFY)
       && !utype_has_flag(def_type, UTYF_CANT_FORTIFY)) {
     defensepower = (defensepower * 3) / 2;
-  }
+  }*/ // old hard coded 0.5 bonus for fortified or in city, now uses:
+  defensepower = defensepower
+  * (100
+      + get_target_bonus_effects(NULL, unit_owner(def), NULL,
+                                tile_city(ptile), NULL, ptile, def,
+                                unit_type_get(def), NULL, NULL, NULL,
+                                EFT_FORTIFY_DEFENSE_BONUS)) / 100;
 
   return defensepower;
 }
@@ -658,13 +664,19 @@ int get_fortified_defense_power(const struct unit *attacker,
   const struct unit_type *att_type = NULL;
   enum unit_activity real_act;
   int def;
+  const struct unit_type *utype;
 
   if (attacker != NULL) {
     att_type = unit_type_get(attacker);
   }
 
   real_act = defender->activity;
-  defender->activity = ACTIVITY_FORTIFIED;
+  ///+++defender->activity = ACTIVITY_FORTIFIED; >>> now becomes:
+  utype = unit_type_get(defender);
+  if (uclass_has_flag(utype_class(utype), UCF_CAN_FORTIFY)
+      && !utype_has_flag(utype, UTYF_CANT_FORTIFY)) {
+    defender->activity = ACTIVITY_FORTIFIED;
+  } //
 
   def = defense_multiplication(att_type, defender,
                                unit_owner(defender), unit_tile(defender),

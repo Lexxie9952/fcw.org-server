@@ -2635,7 +2635,7 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
   int tile_x, tile_y, nat_x, nat_y;
 
   char bold[10],unbold[10];
-  sprintf(bold, "\0"); sprintf(unbold, "\0");
+  sprintf(bold, "%c", '\0'); sprintf(unbold, "%c", '\0');
 #ifdef FREECIV_WEB
   sprintf(bold, "<b>"); sprintf(unbold, "</b>");
 #endif /* FREECIV_WEB */

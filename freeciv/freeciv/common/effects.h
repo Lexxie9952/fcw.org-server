@@ -306,7 +306,8 @@ extern "C" {
 /* uk_happy "discount" for non-aggressively deployed field units */
 #define SPECENUM_VALUE120 EFT_PEACEFUL_FIELDUNIT_BONUS
 #define SPECENUM_VALUE120NAME "Peaceful_Field_Unit_Bonus"
-
+#define SPECENUM_VALUE121 EFT_FORTIFY_DEFENSE_BONUS
+#define SPECENUM_VALUE121NAME "Fortify_Defense_Bonus"
 /* keep this last */
 #define SPECENUM_COUNT EFT_COUNT
 #include "specenum_gen.h"
