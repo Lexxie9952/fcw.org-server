@@ -4386,7 +4386,7 @@ The Truck unit replaces the Caravan as the basic Commerce unit on Land. It moves
  will add 50 shields. See the entry on Caravan to read what Commerce units may do.\
 "), _("\
 Trucks can carry 3 Land units. Only Foot Soldiers can:\n1. L)oad outside a city or base;\n\
-2. Unload (T) in a base;\n3. Move off the Train outside a city\
+2. Unload (T) in a base;\n3. Move off the Truck outside a city\
  (loses all moves.)\nAll other units must load/unload inside a city.\n\n\\
 ")
 
