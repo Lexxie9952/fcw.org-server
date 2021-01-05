@@ -1501,7 +1501,7 @@ static bool plr_sees_tile(const struct player *plr,
 
   target_city can't be NULL
 **************************************************************************/
-static struct impr_type *
+static const struct impr_type *
 tgt_city_local_building(const struct city *target_city)
 {
   /* Only used with city targets */
@@ -1524,7 +1524,7 @@ tgt_city_local_building(const struct city *target_city)
 
   target_city can't be NULL
 **************************************************************************/
-static struct unit_type *
+static const struct unit_type *
 tgt_city_local_utype(const struct city *target_city)
 {
   /* Only used with city targets */
@@ -2841,8 +2841,8 @@ is_action_enabled_unit_on_city_full(const action_id wanted_action,
                                     const struct tile *actor_tile,
                                     const struct city *target_city)
 {
-  struct impr_type *target_building;
-  struct unit_type *target_utype;
+  const struct impr_type *target_building;
+  const struct unit_type *target_utype;
 
   if (actor_unit == NULL || target_city == NULL) {
     /* Can't do an action when actor or target are missing. */
@@ -3744,8 +3744,8 @@ action_prob_vs_city_full(const struct unit* actor_unit,
                          const action_id act_id,
                          const struct city* target_city)
 {
-  struct impr_type *target_building;
-  struct unit_type *target_utype;
+  const struct impr_type *target_building;
+  const struct unit_type *target_utype;
 
   if (actor_unit == NULL || target_city == NULL) {
     /* Can't do an action when actor or target are missing. */

@@ -41,7 +41,7 @@
 /************************************************************************//**
   Return suitable animal type for the terrain
 ****************************************************************************/
-static struct unit_type *animal_for_terrain(struct terrain *pterr)
+static const struct unit_type *animal_for_terrain(struct terrain *pterr)
 {
   return pterr->animal;
 }
@@ -52,7 +52,7 @@ static struct unit_type *animal_for_terrain(struct terrain *pterr)
 static void place_animal(struct player *plr)
 {
   struct tile *ptile = rand_map_pos(&(wld.map));
-  struct unit_type *ptype;
+  const struct unit_type *ptype;
 
   extra_type_by_cause_iterate(EC_HUT, pextra) {
     if (tile_has_extra(ptile, pextra)) {

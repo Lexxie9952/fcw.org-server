@@ -797,7 +797,7 @@ static int dai_war_desire(struct ai_type *ait, struct player *pplayer,
     } city_built_iterate_end;
   } city_list_iterate_end;
   unit_list_iterate(target->units, punit) {
-    struct unit_type *ptype = unit_type_get(punit);
+    const struct unit_type *ptype = unit_type_get(punit);
 
     fear += ATTACK_POWER(ptype);
 
@@ -807,7 +807,7 @@ static int dai_war_desire(struct ai_type *ait, struct player *pplayer,
     }
   } unit_list_iterate_end;
   unit_list_iterate(pplayer->units, punit) {
-    struct unit_type *ptype = unit_type_get(punit);
+    const struct unit_type *ptype = unit_type_get(punit);
 
     fear -= ATTACK_POWER(ptype) / 2;
 

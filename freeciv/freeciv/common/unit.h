@@ -132,7 +132,7 @@ struct unit_wait {
 #define unit_wait_list_link_iterate_end LIST_LINK_ITERATE_END
 
 struct unit {
-  struct unit_type *utype; /* Cannot be NULL. */
+  const struct unit_type *utype; /* Cannot be NULL. */
   struct tile *tile;
   int refcount;
   enum direction8 facing;
@@ -386,7 +386,7 @@ bool is_clean_activity(enum unit_activity activity);
 bool is_tile_activity(enum unit_activity activity);
 
 struct unit *unit_virtual_create(struct player *pplayer, struct city *pcity,
-                                 struct unit_type *punittype,
+                                 const struct unit_type *punittype,
 				 int veteran_level);
 void unit_virtual_destroy(struct unit *punit);
 bool unit_is_virtual(const struct unit *punit);

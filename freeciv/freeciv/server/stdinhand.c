@@ -2437,7 +2437,7 @@ static bool name_command(struct connection *caller, char *str, bool check)
   char *arg[2];
   int ntokens = 0, i;
   bool res = FALSE;
-  struct team_slot *tslot;
+  // struct team_slot *tslot;  was throwing unused warning
 
   if (str != NULL || strlen(str) > 0) {
     sz_strlcpy(buf, str);

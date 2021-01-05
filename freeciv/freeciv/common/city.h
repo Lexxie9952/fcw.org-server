@@ -551,21 +551,21 @@ bool city_is_occupied(const struct city *pcity);
 /* city related improvement and unit functions */
 
 int city_improvement_upkeep(const struct city *pcity,
-			    const struct impr_type *pimprove);
+			                      const struct impr_type *pimprove);
 
 bool can_city_build_improvement_direct(const struct city *pcity,
-				       struct impr_type *pimprove);
+				                               const struct impr_type *pimprove);
 bool can_city_build_improvement_later(const struct city *pcity,
-				      struct impr_type *pimprove);
+				                              const struct impr_type *pimprove);
 bool can_city_build_improvement_now(const struct city *pcity,
-				    struct impr_type *pimprove);
+				                            const struct impr_type *pimprove);
 
 bool can_city_build_unit_direct(const struct city *pcity,
-				const struct unit_type *punittype);
+				                        const struct unit_type *punittype);
 bool can_city_build_unit_later(const struct city *pcity,
-			       const struct unit_type *punittype);
+			                         const struct unit_type *punittype);
 bool can_city_build_unit_now(const struct city *pcity,
-			     const struct unit_type *punittype);
+			                       const struct unit_type *punittype);
 
 bool can_city_build_direct(const struct city *pcity,
                            const struct universal *target);
@@ -609,7 +609,7 @@ void city_choose_build_default(struct city *pcity);
 /* textual representation of buildings */
 
 const char *city_improvement_name_translation(const struct city *pcity,
-					      struct impr_type *pimprove);
+					                                    const struct impr_type *pimprove);
 const char *city_production_name_translation(const struct city *pcity);
 
 /* city map functions */

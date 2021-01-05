@@ -370,7 +370,7 @@ void dai_manage_tech(struct ai_type *ait, struct player *pplayer)
 struct unit_type *dai_wants_defender_against(struct ai_type *ait,
                                              struct player *pplayer,
                                              struct city *pcity,
-                                             struct unit_type *att, int want)
+                                             const struct unit_type *att, int want)
 {
   struct research *presearch = research_get(pplayer);
   int best_avl_def = 0;
@@ -417,7 +417,7 @@ struct unit_type *dai_wants_defender_against(struct ai_type *ait,
       }
       if (deftype->need_improvement 
           && !can_player_build_improvement_direct(pplayer, deftype->need_improvement)) {
-        struct impr_type *building = deftype->need_improvement;
+        const struct impr_type *building = deftype->need_improvement;
 
         requirement_vector_iterate(&building->reqs, preq) {
           if (!is_req_active(pplayer, NULL, pcity, building, city_tile(pcity),
@@ -509,7 +509,7 @@ struct unit_type *dai_wants_role_unit(struct ai_type *ait, struct player *pplaye
       }
       if (iunit->need_improvement 
           && !can_player_build_improvement_direct(pplayer, iunit->need_improvement)) {
-        struct impr_type *building = iunit->need_improvement;
+        /*const*/ struct impr_type *building = iunit->need_improvement;
 
         requirement_vector_iterate(&building->reqs, preq) {
           if (VUT_ADVANCE == preq->source.kind && preq->present) {

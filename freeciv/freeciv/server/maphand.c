@@ -2782,7 +2782,7 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
   }
   if (punit != NULL && pcity == NULL) {
     struct player *owner = unit_owner(punit);
-    struct unit_type *ptype = unit_type_get(punit);
+    const struct unit_type *ptype = unit_type_get(punit);
 
     get_full_username(username, sizeof(username), owner);
     get_full_nation(nation, sizeof(nation), owner);

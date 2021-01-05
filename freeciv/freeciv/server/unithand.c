@@ -93,7 +93,7 @@ struct ane_expl {
     struct nation_type *no_act_nation;
 
     /* The unit type that can't be targeted. */
-    struct unit_type *no_tgt_utype;
+    const struct unit_type *no_tgt_utype;
 
     /* The action that blocks the action. */
     struct action *blocker;
@@ -155,7 +155,7 @@ static bool do_unit_conquer_city(struct player *act_player,
 **************************************************************************/
 void handle_unit_type_upgrade(struct player *pplayer, Unit_type_id uti)
 {
-  struct unit_type *to_unittype;
+  const struct unit_type *to_unittype;
   struct unit_type *from_unittype = utype_by_number(uti);
   int number_of_upgraded_units = 0;
 
@@ -229,8 +229,8 @@ static bool do_unit_upgrade(struct player *pplayer,
   char buf[512];
 
   if (UU_OK == unit_upgrade_info(punit, buf, sizeof(buf))) {
-    struct unit_type *from_unit = unit_type_get(punit);
-    struct unit_type *to_unit = can_upgrade_unittype(pplayer, from_unit);
+    const struct unit_type *from_unit = unit_type_get(punit);
+    const struct unit_type *to_unit = can_upgrade_unittype(pplayer, from_unit);
 
     transform_unit(punit, to_unit, FALSE);
     send_player_info_c(pplayer, pplayer->connections);
@@ -2263,7 +2263,7 @@ void handle_unit_action_query(struct connection *pc,
     if (pcity
         && is_action_enabled_unit_on_city(action_type,
                                           pactor, pcity)) {
-      struct unit_type *tgt_utype;
+      const struct unit_type *tgt_utype;
       int upgr_cost;
 
       tgt_utype = can_upgrade_unittype(pplayer, unit_type_get(pactor));
@@ -3538,7 +3538,6 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
   if (pstats.bombard_stay_fortified && punit->activity == ACTIVITY_FORTIFIED) {
     // don't forget last activity
   } else {
-      pstats.bombard_stay_fortified, punit->activity);
       unit_forget_last_activity(punit); // Otherwise forget last activity as usual
   }
 
