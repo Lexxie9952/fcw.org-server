@@ -59,7 +59,8 @@ const CRF_MARINE_RANGED            = 22; // Marines can do ranged attack
 const CRF_BSHIP_BOMBARD            = 23; // Battleships can Bombard
 const CRF_TRIREME_FUEL             = 24; // Trireme is fuel unit, client benefts from UI optimisations
 const CRF_RECYCLING_DISCOUNT       = 25;
-const CRF_LAST                     = 26;
+const CRF_SEABRIDGE                = 26;
+const CRF_LAST                     = 27;
 
 var graphic_theme_path;
 

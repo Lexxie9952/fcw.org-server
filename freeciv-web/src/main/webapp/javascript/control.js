@@ -1356,16 +1356,16 @@ function update_unit_order_commands()
       //console.log("Road test: type(SB)=="+(typeof EXTRA_SEABRIDGE !== undefined));
       //console.log("Road test: thx(sb)=="+tile_has_extra(ptile, EXTRA_SEABRIDGE));*/
 
-      if (!tile_has_extra(ptile, EXTRA_ROAD) 
-          && !(typeof EXTRA_SEABRIDGE !== undefined && tile_has_extra(ptile, EXTRA_SEABRIDGE))) {
-        //console.log("how did we fuckin get here.")
-        $("#order_road").show();
-        $("#order_railroad").hide();
-        if (!(tile_has_extra(ptile, EXTRA_RIVER) && player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) == TECH_UNKNOWN)) {
-	        unit_actions["road"] = {name: "Road (R)"};
-	      }
+      if (!tile_has_extra(ptile, EXTRA_ROAD)) {
+        if ( !client_rules_flag[CRF_SEABRIDGE] || !tile_has_extra(ptile, EXTRA_SEABRIDGE)) {
+          $("#order_road").show();
+          $("#order_railroad").hide();
+          if (!(tile_has_extra(ptile, EXTRA_RIVER) && player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) == TECH_UNKNOWN)) {
+            unit_actions["road"] = {name: "Road (R)"};
+          }
+        }
       } else if (player_invention_state(client.conn.playing, tech_id_by_name('Railroad')) == TECH_KNOWN
-                 && (tile_has_extra(ptile, EXTRA_ROAD) || (typeof EXTRA_SEABRIDGE !== undefined && tile_has_extra(ptile, EXTRA_SEABRIDGE)))
+                 && (tile_has_extra(ptile, EXTRA_ROAD) || (client_rules_flag[CRF_SEABRIDGE] && tile_has_extra(ptile, EXTRA_SEABRIDGE)))
                  && !tile_has_extra(ptile, EXTRA_RAIL)) {
         $("#order_road").hide();
         $("#order_railroad").show();
@@ -4475,7 +4475,7 @@ function key_unit_sentry()
     // 3.09 server can't sentry fuel-Triremes on shore/river.
     if (client_rules_flag[CRF_TRIREME_FUEL] && class_name == "Trireme") {
       if (pcity == null) {
-        if (typeof EXTRA_NAVALBASE !== undefined) {
+        if (typeof EXTRA_NAVALBASE !== "undefined") {
           if (!tile_has_extra(EXTRA_NAVALBASE)) {
             key_unit_noorders();
           }
@@ -4553,7 +4553,7 @@ function key_unit_fortress()
     var ptile = tiles[punit['tile']];
 
     // Action-enabler restricts Marines to Fort only. Be double safe.
-    if (typeof EXTRA_FORT !== undefined && client_rules_flag[CRF_MARINE_BASES]) {
+    if (typeof EXTRA_FORT !== "undefined" && client_rules_flag[CRF_MARINE_BASES]) {
       var ptype = unit_type(punit);
       if (ptype['name'] == "Marines" &&
           (punit['transported'] || tile_has_extra(ptile, EXTRA_FORT))) {
@@ -5276,7 +5276,7 @@ function key_unit_road()
     else if (is_ocean_tile(ptile)) {
       if (can_build_sea_bridge(punit,ptile) && !tile_has_extra(ptile, EXTRA_SEABRIDGE))
          request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Sea Bridge']['id']);
-      else if (typeof EXTRA_SEABRIDGE !== undefined && tile_has_extra(ptile, EXTRA_SEABRIDGE)
+      else if (typeof EXTRA_SEABRIDGE !== "undefined" && tile_has_extra(ptile, EXTRA_SEABRIDGE)
                && !tile_has_extra(ptile, EXTRA_RAIL)) 
           request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Railroad']['id']);   
       else if (can_build_maglev(punit, ptile))
