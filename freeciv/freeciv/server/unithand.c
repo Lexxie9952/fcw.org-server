@@ -3537,7 +3537,6 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
   //  unit_forget_last_activity(punit); // Otherwise forget last activity as usual
   if (pstats.bombard_stay_fortified && punit->activity == ACTIVITY_FORTIFIED) {
     // don't forget last activity
-      pstats.bombard_stay_fortified, punit->activity);
   } else {
       pstats.bombard_stay_fortified, punit->activity);
       unit_forget_last_activity(punit); // Otherwise forget last activity as usual
