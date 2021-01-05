@@ -614,7 +614,7 @@ actor_reqs    =
       "DiplRel",      "Foreign",       "Local", TRUE
       "UnitState",    "Transported",   "Local", FALSE
       "UnitFlag",     "Spy",           "Local", FALSE
-    }   
+    }
 target_reqs  =
     { "type",        "name",              "range",    "present"
       "Building",    "Police Station",    "City",     FALSE
@@ -969,6 +969,8 @@ target_reqs    =
 
 ; ***************** BOMBARDS *****************************
 ;Archers can do volley attacks
+; can hit ocean from land and land from ocean?
+; NOT so sure we want ocean-to-ocean
 [actionenabler_archer_volley]
 action = "Bombard"
 actor_reqs    =
@@ -979,7 +981,7 @@ actor_reqs    =
       "DiplRel",      "War",          "Local", TRUE
    }
 target_reqs    =
-    { "type",   "name", "range",  "present"
+    { "type",     "name",         "range","present"
       "CityTile", "Center",       "Local", FALSE
       "Extra",    "Fortress",     "Local", FALSE
       "Extra",    "Naval Base",   "Local", FALSE
@@ -1043,6 +1045,38 @@ target_reqs    =
       "Extra",    "Fort",         "Local", FALSE
       "Extra",    "Naval Base",   "Local", FALSE
       "TerrainClass", "Oceanic",  "Local", FALSE
+    }
+;Siege Rams can assault Fortress Perimeter
+[actionenabler_siege_ram_fortress_assault]
+action = "Bombard"
+actor_reqs    =
+    { "type",         "name",         "range", "present"
+      "Tech",         "Steel",        "World", FALSE
+      "UnitFlag",     "Bombarder",    "Local", TRUE
+      "UnitType",     "Siege Ram",    "Local", TRUE
+      "UnitState",    "Transported",  "Local", FALSE
+      "MinMoveFrags", "10",            "Local", TRUE
+      "DiplRel",      "War",          "Local", TRUE
+   }
+target_reqs    =
+    { "type",  "name",     "range", "present"
+      "Extra", "Fortress", "Local", TRUE
+    }
+;Siege Rams can assault Fortress Perimeter
+[actionenabler_siege_ram_navbase_assault]
+action = "Bombard"
+actor_reqs    =
+    { "type",         "name",         "range", "present"
+      "Tech",         "Steel",        "World", FALSE
+      "UnitFlag",     "Bombarder",    "Local", TRUE
+      "UnitType",     "Siege Ram",    "Local", TRUE
+      "UnitState",    "Transported",  "Local", FALSE
+      "MinMoveFrags", "10",            "Local", TRUE
+      "DiplRel",      "War",          "Local", TRUE
+   }
+target_reqs    =
+    { "type",  "name",       "range", "present"
+      "Extra", "Naval Base", "Local", TRUE
     }
 
 ;Fanatics can do skirmish assaults

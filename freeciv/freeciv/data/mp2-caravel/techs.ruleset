@@ -762,6 +762,7 @@ flags    = ""
 graphic     = "a.recycling"
 graphic_alt = "-"
 cost = 4460
+helptext = _("Unit upgrades cost 20% less.")
 
 [advance_refining]
 name     = _("Refining")

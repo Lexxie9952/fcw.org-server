@@ -155,7 +155,6 @@ Corruption does not vary by distance from the capital;\
 Communist governments get a cost discount of -5 on Riflemen and -10 on\
  Armor and Dive Bombers. Diplomats and Spies are produced with +1 veteran\
  status. The effect of Cathedrals and Michelangelo is reduced -1.\
-
 "), _("\
 Communist states can transfer Proletarians between cities to\
  re-distribute population. Large numbers of Proletarians can be\
@@ -190,8 +189,8 @@ Under a Republican government, citizens hold an election to select a\
  easily, but the self-sufficiency of your citizens allows high levels\
  of trade.\
 "), _("\
-1* citizen is made unhappy by each aggressive unit.\n\
-     (first aggressive unit does not cause unhappy)\n\
+1 citizen is made unhappy by each aggressive unit*.\n\
+     (* first aggressive unit does not cause unhappy)\n\
 15% Base corruption in cities\n\
 2% Extra corruption per each tile in distance from capital\n\
 ")

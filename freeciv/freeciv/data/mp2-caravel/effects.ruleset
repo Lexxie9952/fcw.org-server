@@ -58,6 +58,7 @@ reqs	=
     { "type", "name", "range", "present"
       "UnitClass", "RiverShip", "Local", TRUE
       "UnitType", "Frigate", "Local", FALSE
+      "UnitType", "Ram Ship", "Local", FALSE
     }
 [effect_combat_rounds_trireme]
 type    = "Combat_Rounds"
@@ -399,40 +400,39 @@ type    = "Defend_Bonus"
 value   = 20 ;increase 1.67x to 2x except when defending against FortBuster types. 
 ;note: 1.20*1.67=2.0 (this bonus is multiplied after terrain defense_bonus was multiplied)
 reqs    =
-    { "type", "name", "range", "present"
-      "Extra", "Fortress", "Local", TRUE
-      "UnitFlag", "FortBuster", "Local", FALSE
+    { "type",     "name",           "range", "present"
+      "Extra",    "Fortress",       "Local", TRUE
+      "UnitFlag", "FortBuster",     "Local", FALSE
       "UnitFlag", "FortressBuster", "Local", FALSE 
-      "UnitFlag", "AirAttacker", "Local", FALSE
+      "UnitFlag", "AirAttacker",    "Local", FALSE
     }
 [effect_nonfortbuster_vs_navalbase] ;same as above but for naval base
 type    = "Defend_Bonus"
 value   = 20 ;increase 1.67x to 2x except when defending against FortBuster types. 
 ;note: 1.20*1.67=2.0 (this bonus is multiplied after terrain defense_bonus was multiplied)
 reqs    =
-    { "type", "name", "range", "present"
-      "Extra", "Naval Base", "Local", TRUE
-      "UnitFlag", "FortBuster", "Local", FALSE
+    { "type",     "name",           "range", "present"
+      "Extra",    "Naval Base",     "Local", TRUE
+      "UnitFlag", "FortBuster",     "Local", FALSE
       "UnitFlag", "FortressBuster", "Local", FALSE 
-      "UnitFlag", "AirAttacker", "Local", FALSE
+      "UnitFlag", "AirAttacker",    "Local", FALSE
     }
 [effect_fortressbuster_fortress]
 type    = "Attack_Bonus"
 value   = 67 ;Cancel defender's 1.67x with attacker getting 1.67x 
 reqs    =
-    { "type", "name", "range", "present"
-      "Extra", "Fortress", "Local", TRUE
+    { "type",     "name",           "range", "present"
+      "Extra",    "Fortress",       "Local", TRUE
       "UnitFlag", "FortressBuster", "Local", TRUE 
     }
 [effect_fortressbuster_navalbase]
 type    = "Attack_Bonus"
 value   = 67 ;Cancel defender's 1.67x with attacker getting 1.67x 
 reqs    =
-    { "type", "name", "range", "present"
-      "Extra", "Naval Base", "Local", TRUE
+    { "type",     "name",           "range", "present"
+      "Extra",    "Naval Base",     "Local", TRUE
       "UnitFlag", "FortressBuster", "Local", TRUE 
     }
-
 ; ****** ^^ defense_bonus_correctives ^^ *************************************
 
 ; Vision benefit from fortress watchtowers
@@ -440,27 +440,27 @@ reqs    =
 type    = "Unit_Vision_Radius_Sq"
 value   = 8   
 reqs    =
-    { "type", "name", "range"
-      "Extra", "Fortress", "tile"
-      "Tech", "Invention", "Player"
-      "UnitClass", "Land", "Local"
+    { "type",     "name",      "range"
+      "Extra",    "Fortress",  "tile"
+      "Tech",     "Invention", "Player"
+      "UnitClass", "Land",     "Local"
     }
 [effect_fortress_vision_1]   ;Marines, AAA
 type    = "Unit_Vision_Radius_Sq"
 value   = 8
 reqs    =
-    { "type", "name", "range"
-      "Extra", "Fortress", "tile"
-      "Tech", "Invention", "Player"
+    { "type",      "name",       "range"
+      "Extra",     "Fortress",   "tile"
+      "Tech",      "Invention",  "Player"
       "UnitClass", "LandAirSea", "Local"
     }
 [effect_fortress_vision_2]     ;Knights
 type    = "Unit_Vision_Radius_Sq"
 value   = 8
 reqs    =
-    { "type", "name", "range"
-      "Extra", "Fortress", "tile"
-      "Tech", "Invention", "Player"
+    { "type",      "name",       "range"
+      "Extra",     "Fortress",   "tile"
+      "Tech",      "Invention",  "Player"
       "UnitClass", "LandNoKill", "Local"
     }
 
@@ -1423,6 +1423,16 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Barracks", "City", TRUE
       "UnitClass", "LandNoKill", "Local", TRUE
+      "UnitFlag", "NonMil", "Local", FALSE
+      "UnitFlag", "NoVeteran", "Local", FALSE
+    }
+[effect_barracks_2]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Barracks", "City", TRUE
+      "UnitClass", "LandRoad", "Local", TRUE
       "UnitFlag", "NonMil", "Local", FALSE
       "UnitFlag", "NoVeteran", "Local", FALSE
     }
@@ -2732,7 +2742,7 @@ type    = "Upgrade_Price_Pct"
 value   = -20
 reqs    =
     { "type", "name", "range"
-      "Building", "Recycling Center", "City"
+      "Tech", "Recycling", "Player"
     } 
 
 [effect_research_lab]
@@ -4024,7 +4034,6 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Magellan's Expedition", "Player", TRUE
       "UnitClass", "Sea", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
       "UnitFlag", "NoVeteran", "Local", FALSE      
     }
 [effect_magellans_expedition_a]
@@ -4034,7 +4043,6 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Magellan's Expedition", "Player", TRUE
       "UnitClass", "RiverShip", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
       "UnitFlag", "NoVeteran", "Local", FALSE      
     }
 [effect_magellans_expedition_b]
@@ -4044,7 +4052,6 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Magellan's Expedition", "Player", TRUE
       "UnitClass", "Submarine", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
       "UnitFlag", "NoVeteran", "Local", FALSE
     }
 
@@ -4291,6 +4298,7 @@ reqs    =
     { "type", "name", "range"
       "Building", "Tesla's Laboratory", "Player"
     } 
+
 [effect_oracle]
 type    = "Make_Content"
 value	= 2
@@ -4750,6 +4758,10 @@ reqs	=
 
 ; **** Action Odds for Hostile Diplomatic Actions *******
 ;********************************************************
+;Jan 2021 this effect does nothing because it's hard-coded as 100%.
+;Instead the purpose of this effect is to not show 100% in pop-up odds
+;but to give a [0,100] range, since certain improvement effects now may
+;disallow this action.
 [effect_no_free_investigation]
 type	= "Action_Odds_Pct"
 value	= -75                      ;80 minus 31%*80 = 55%
@@ -4757,6 +4769,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Action", "Investigate City", "Local", TRUE
     }
+
 [effect_reduced_chance_steal_maps_escape]
 type	= "Action_Odds_Pct"
 value	= -32                      ;80 minus 31%*80 = 55%
@@ -4815,6 +4828,14 @@ reqs	=
     { "type", "name", "range"
       "Gov", "Communism", "Player"
     }
+[effect_ship_bribe_correction]  ; ships far from home were too cheap and it just wasn't right
+type	= "Unit_Bribe_Cost_Pct"
+value	= 100
+reqs	=
+    { "type", "name", "range"
+      "UnitFlag", "BadCityDefender", "Local"
+    }
+
 [effect_incite_democracy]
 type    = "Incite_Cost_Pct"
 value	= 200
@@ -4822,6 +4843,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Gov", "Democracy", "Player", TRUE
     }
+
 ;*********************************************************
 
 

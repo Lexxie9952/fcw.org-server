@@ -412,7 +412,7 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;                 for bit-field for additional flags that won't break save game
 ;                 compatibility.
 ;                 BIT 0 = RESERVED for +1 bombard range.
-;                 BIT 1 = RESERVED 
+;                 BIT 1 =      bombard_stay_fortified, attacks do not lose fortified status. 
 ;                 BITS 2-7   = move frags used (up to 63, 0=turn loss/oneattack)
 ;                 BITS 8-10  = bombard_primary_targets. 0=all, or 1-7.
 ;                 BITS 11-13 = bombard_primary_kills, max kills allowed. 0-7.
@@ -1056,7 +1056,8 @@ convert_to    = "Musketeers"
 convert_time  = 4
 transport_cap = 0
 fuel          = 0
-city_size     = 276 ; 000000,000,001,000101,00 atk_bonus=0, max_kiils=0, targets=1, move_cost=5 frags, reserved=00
+city_size     = 278 ; 000000,000,001,000101,1,0 atk_bonus=0, max_kiils=0, targets=1, move_cost=5 frags, stay_frtfy=1, reserverd=0
+paratroopers_mr_sub = 1;   xxxxxxx,1 attack_stay_fortified=1
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1067,7 +1068,8 @@ flags         = "FootSoldier", "CantReachAir", "Settlers", "CanHide", "MultiSlot
 roles         = "DefendGood", "FirstBuild", "HutTech"
 helptext      = _("\
 The Phalanx is armored infantry, suitable for defending your cities. It is valuable\
- for claiming and holding defensive tactical positions.\n\
+ for claiming and holding defensive tactical positions. They can attack while fortified\
+ and maintain fortified status.\n\
 Phalanxes can do a special Rumble Attack on enemy units who move adjacent to them,\
  if the Phalanx is fortified OR has not moved this turn. Moving enemies cannot counter\
  a well-shielded battalion in formation from shoving into their\
@@ -1103,7 +1105,8 @@ convert_to    = "Musketeers"
 convert_time  = 2
 transport_cap = 0
 fuel          = 0
-city_size     = 1848 ; 000000,000,111,001110,00 = atk_bonus=0, max_kills=0, targets=7, move_cost=14 frags, reserved = 00
+city_size     = 1850 ; 000000,000,111,001110,1,0 = atk_bonus=0, max_kills=0, targets=7, move_cost=14 frags, stay_fortfy=1, reserved = 0
+paratroopers_mr_sub = 0;   xxxxxxx,0 attack_stay_fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1280,7 +1283,7 @@ move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
-city_size     = 568; 000000,0,010,001110,00 = atk_bonus=0, max_kills=0, targets=4, move_cost=14 frags, reserved = 00
+city_size     = 568; 000000,0,010,001110,00 = atk_bonus=0, max_kills=0, targets=4, move_cost=14 frags, sty_frtfy=0, reserved = 0
 uk_happy      = 2
 uk_shield     = 2
 uk_food       = 0
@@ -1350,8 +1353,8 @@ Proportional to city size, up to 8 Partisans appear when an enemy conquers your 
  prefer defensive tiles, and ignore tile nationality. They spawn only when:\n\
  ➣ Guerilla Warfare is known by any player.\n\
  ➣ The city was originally built by you.\n\
- ➣ You must be Fundamentalist, Democracy, or Communist.\
- ➣ You know Communism and Gunpowder, unless you are Fundamentalist.\n\
+ ➣ You must be Fundamentalist, OR,\
+ ➣ You must be Democracy or Communist and know Communism and Gunpowder.\
 ")
 
 [unit_alpine_troops]
@@ -1415,6 +1418,8 @@ convert_to    = "Workers"
 convert_time  = 2
 transport_cap = 0
 fuel          = 0
+city_size     = 2;  ...xxxxx..., 1, 0  use bombard_stay_fortified on a non-bombard unit to specify can remain fortified when attacking.
+paratroopers_mr_sub = 0;   xxxxxxx,1 attack_stay_fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1455,7 +1460,8 @@ move_rate     = 2
 vision_radius_sq = 8  ; hard-coded the +4 extra for effect_physics_vision since it is a pre-req anyway
 transport_cap = 0
 fuel          = 0
-city_size     = 2616 ; 000000,001,010,001110,00 = atk_bonus=0, max_kills=1, targets=4, move_cost=14 frags, reserved = 00
+city_size     = 2618 ; 000000,001,010,001110,1,0 = atk_bonus=0, max_kills=1, targets=4, move_cost=14 frags, stay_frtfy=1, reserved = 0
+paratroopers_mr_sub = 1; xxxxxxxxx,1 = attack_stay_fortified=1
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1484,6 +1490,7 @@ Marines are experts at all-terrain warfare. They are the strongest\
  foot unit in the game, and are armed with diverse weaponry.\n\
  Unlike other units, Marines can attack Sea units (at a 50% penalty).\
  Air units do not stop them from attacking reachable targets.\
+ They can attack while fortified and maintain fortified status.\
  They can attack from a Transport or Helicopter, and can offload\
  without losing a turn of movement. Marines can also makes Forts\
  and Airbases. Marines get an extra 2/9 movement points for each\
@@ -1946,7 +1953,7 @@ sound_fight   = "f_catapult"
 sound_fight_alt = "f_generic"
 build_cost    = 45
 pop_cost      = 0
-attack        = 1
+attack        = 2
 defense       = 1
 hitpoints     = 10
 firepower     = 1
@@ -1954,30 +1961,32 @@ move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 1
 fuel          = 0
+city_size     = 507940  ; 011111,000,000,001001,00 = atk_bonus=8.75x, max_kills=0, targets=all, move_cost=9 frags, reserved = 00
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Land"
-flags         = "CantReachAir", "WillNever", "Diplomat", "Spy"
+flags         = "CantReachAir", "WillNever", "Diplomat", "Spy", "Bombarder"
 roles         = ""
 helptext      = _("\
-Siege Rams launch a tremendous thrusting force\
- through iron-capped timber shafts. They can break through\
- City Walls if defenders do not kill them first. City Walls have\
- strong defenses, but Siege Rams have solid\
- protective shielding. This gives the Siege Ram even odds\
- of success or failure. Wall defenses at capital cities\
- are twice as stiff —— cutting the odds of success in half.\
- Siege Rams can only travel on roads. They can carry 1 Land\
- unit as cargo, but at their slow pace it serves more for\
- disguise than for transportation utility.\n\ 
- Siege Rams are ill-suited for combat with other units and need an\
- escort for protection. SIEGE RAMS NEED A MINIMUM OF 1 FULL MOVE POINT\
- IN ORDER TO ATTACK A CITY WALL. Cities protected by the Great Wall\
- are immune to siege rams.\n\
+Siege Rams launch a tremendous thrusting force through\
+ iron-capped timber shafts. They can break through City\
+ Walls if they are not killed first. City Walls have counter\
+ defenses, giving Siege Rams even odds of success. Wall\
+ defense in capitals is twice as stiff——cutting odds to 25%.\n\
+Siege Rams may also ram Fortresses, doing up to 4hp of damage\
+ on each occupant. This emulates damage to the Fortress defense\
+ bonus, which is partly or fully repaired/recovered next turn.\n\
+Siege Rams can only travel by road. They can carry 1 Land\
+ unit as cargo: their slow pace means this serves more for\
+ disguise or defense.\n\ 
+Siege Rams need an escort for protection. They need a minimum of\
+ 1 move point to attack walls, and 1 1/9 points against a Fortress.\
+ Cities protected by the Great Wall are immune to Siege Rams.\n\
  The discovery of Steel by any nation incapacitates Siege Rams.\
 ")
+bombard_rate = 4
 
 [unit_cannon]
 name          = _("Cannon")
@@ -3350,7 +3359,7 @@ Like most ancient sea units, when it initiates combat there will be 15 rounds\
 
 [unit_ram_ship]
 name          = _("Ram Ship")
-class         = "Sea"
+class         = "RiverShip"
 tech_req      = "Engineering"
 obsolete_by   = "Caravel"
 graphic       = "u.ram_ship"
@@ -3366,7 +3375,7 @@ defense       = 2
 hitpoints     = 10
 firepower     = 1
 move_rate     = 6
-vision_radius_sq = 1
+vision_radius_sq = 2
 transport_cap = 0
 fuel          = 0
 uk_happy      = 1

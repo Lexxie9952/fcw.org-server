@@ -38,7 +38,7 @@ extra_flags =
   { "name", "helptxt"
       _("Quayable"), _("Allows Quays to be built.")
       _("IrrigationSource"), _("Allows Irrigation.")
-      _("Railable"), _("Allows Railroads to be built.")     
+      _("Railable"), _("Allows Railroads to be built.")
   }
 
 [parameters]
@@ -1444,7 +1444,7 @@ reqs           =
     }
 build_time     = 3
 removal_time   = 0
-native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter", "Balloon", "AirProtect"
+native_to      = "Land", "LandAirSea", "LandNoKill", "LandRoad", "Helicopter", "Balloon", "AirProtect"
 hidden_by      = "Fortress", "Naval Base"
 flags          = "NativeTile", "NoStackDeath"  ;, "Refuel"
 ;NOTE: effect_fortress_regen should give 25% of 20HP to helicopter, +1hp for being stationary
@@ -1486,13 +1486,13 @@ reqs           =
 build_time     = 5
 removal_time   = 0
 defense_bonus  = 67
-native_to      = "Land", "LandAirSea", "LandNoKill", "Helicopter", "Balloon"
+native_to      = "Land", "LandAirSea", "LandNoKill", "LandRoad", "Helicopter", "Balloon"
 hidden_by      = "Naval Base"
 flags          = "NativeTile", "Refuel", "NoStackDeath"
 helptext       = _("\
 Fortresses are improvements built on top of Forts which greatly improve defense.\
- A Land unit remaining in a fortress for a whole turn without moving recovers a\
- quarter of its hit points. With Invention, fortresses gain watchtowers from which\
+ A Land unit remaining in a Fortress for a whole turn without moving recovers a\
+ quarter of its hit points. With Invention, Fortresses gain watchtowers from which\
  land units can see farther.\
 "), _("\
 Units in a Fortress die one at a time instead of the entire stack being lost.\

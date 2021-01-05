@@ -15,7 +15,6 @@ BUILDINGS AND WONDERS:
    more difficult for non-representative govs to rapture simultaneous to mid-game invasions
 3. Police Station prevents investigate city for all govs except Democracy.
 4. Courthouse prevents Diplomats (not Spies) from doing hostile Embassy without first cease-fire or peace.
-5. Recycling Center reduces upgrade costs 20%.
 
 GOVERNMENT RE-BALANCE:
 * ALL NON-REPRESENTATIVE GOVERNMENTS:
@@ -49,17 +48,28 @@ UNITS/COMBAT/MECHANICS:
 5. Paratroopers A7 D5. Cost 55.
 6. SPECIAL UNIT ATTACKS
    Tactical depth blossoms: Can allow hit and run, in some cases multiple ranged attacks per turn.
-      Archers range attack: 2 combat rounds (was 1), can hit up to 7 units (was unlimited), can kill no units, uses 1 5/9 moves (was turn loss)
-      Fanatics range attack: 3 combat rounds, can hit up to 4 units, can kill no units, uses 1 5/9 moves. Now, can also assault conquered foreign-occupied cities.
-      Marines range attack: 3 combat rounds, can hit up to 4 units, can kill 1 unit, uses 1 5/9 moves.
+      Phalanx rumble attack: 3 combat rounds, stays fortified, can hit 1 unit, can kill no units, uses 5/9 moves
+      Legion pilum assault: 1 combat round, 2x attack, can hit 2 units, can kill 2 units, uses 1 move.
+      Archers volley attack: 2 combat rounds (was 1), stays fortified, can hit up to 7 units (was unlimited), can kill no units, uses 1 5/9 moves (was turn loss), can attack water.
+      Fanatics skirmish assault: 3 combat rounds, can hit up to 4 units, can kill no units, uses 1 5/9 moves. Now, can also assault conquered foreign-occupied cities.
+      Marines bazooka attack: 3 combat rounds, can hit up to 4 units, can kill 1 unit, uses 1 5/9 moves can do oceanic (but not transported)
+      Battleship bombard: 3 combat rounds, 4 units, can kill 1, uses 5 moves.
+   STANDARD ATTACKS
+      Phalanx and Marines can stay fortified during attack.
 1. Price changes: pre-feudal units -20% foot soldiers, -10% mounted. Catapult 34. Feudal: -10% foot, -5% mounted. Armor II: 85 (was 80)
-2. Siege Ram, A1 D1 M2, must use roads, 50% chance to destroy city walls (requires 1 full move point), odds halved against capitals.
+2. Siege Ram, A2 D1 M2, must use roads, 50% chance to destroy city walls (requires 1 full move point), odds halved against capitals.
+     up to 4hp damage on each tile, emulating up to 80% reduction of Fortress defense bonus; which may be partly/fully repaired/recovered each successive turn.
+    One ram is effective at (up to) 80% reduction of Fortress defense bonus, though the strongest and possibly least effective unit will defend first.
+      This still greatly facilitates the probably still rather costly proposition of taking a Fortress.
+    Two rams will likely be effective at almost totally eradicating the Fortress defense bonus. Troops foolish enough to remain in a Fortress facing two siege 
+    rams can be demoralize and incapacitated from falling and crashing stone debris. If they are proactive they may deliberately pillage sections of the Fortress
+    to render it un-rammable, which effectively leaves it as a solid unrammable Fort with 1.33x bonus.
 3. Satellite: invisible, can investigate all cities (even with Police Station), has superior vision and movement. Requires Apollo Program.
 4. TEST Helicopter not susceptible to City Walls but rather SAM Battery (fixes a nerf of 3x for a land unit not from original game)
 5. Shift from shield to gold upkeep for Infantry changed from Labor Union to Banking. Allows realistic foot soldier compositions to affect more of the game.
 6. Battleship gets ranged attack: 3 rounds, can hit up to 4 units, can kill up to 1 unit, uses 5 moves.
-7. Damaged Submarine min_speed=4 (was 3); makes hit-and-run and escape somewhat more viable.
-8. Truck replaces Freight. Changes: Road only, moves: 5, can carry 3 land units.
+7. Truck replaces Freight. Changes: Road only, moves: 5, can carry 3 land units.
+8. Discovery of Recycling reduces unit upgrades 20%, stacks with other discounts.
 OTHER:
 1. In a foreign territory casus belli is given by:  Transforming Terrain, Building Base, or making road-types (road,rail,quay,canal,etc.)
 
@@ -69,13 +79,20 @@ Conscription does not allow making multiple Caravans per turn.
 Traderoutes add a hard +1 trade to the city centre
 Spy Plane correctly made to be unreachable to propeller-based aircraft.
 Can't make road-types while transported in foreign lands (road/quay/rail/maglev/canal)
+   move to mp2-brava
 +1/9 move bonus for v4+ aircraft was changed to +1, as it too frequently led to death of precious v4 units from tired attack on last move.
+   move to MP2-brava
+Ships cost 2x to bribe -- injured ships far from home had too low bribe costs for what you're getting.
+Ram Ship can see 1 tile around it and travel on rivers - prevents unintened attacks when travelling diagonally.
+   move to MP2-brava (except not the travel on river part)
+Damaged Submarine min_speed=4 (was 3); makes hit-and-run and escape somewhat more viable.
 
 SERVER UPGRADES: 
-1. Bombard actions
+1. Special Unit Actions / Attacks:
    a. can optionally specify a move cost up to 7 moves points.
    b. can optionally specify a limit to number of units on tile which can be hit
    c. can optionally specify a maximum number of units who can be potentially killed
+   d. can optionally specify a unit stays fortified when doing the action.
 2. Population units can specify pop-cost and add-pop differently. 
 3. Non-diplomatic units can be made to enter "direct combat with buildings": e.g., Siege Ram vs. City Walls. 
 4. Added "gold per shield" displays to Purchase pop-ups and as a sortable user column in cities list. 
@@ -110,5 +127,6 @@ What no longer happens:
 4. 'L' command doesn't force you to select every embarking unit on a tile, but gives options to select the Transport who scoops up instead.
 5. 'L' command won't disallow more ordinary logistics like transfering cargo at sea to an allied Transport, or having a Transport in a city 
        come pick up units from a Transport 2 tiles away, or having a city Transport drop off cargo to NEARBY Transport on its "shipping lane."
-
+15. Hovering over a Special Unit Attack will give helptext for all its special parameters.
+16. Fixed rounding errors in displayed upgrade costs on client side.
 
