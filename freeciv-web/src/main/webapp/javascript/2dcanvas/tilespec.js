@@ -2440,6 +2440,10 @@ function create_unit_offset_arrays()
       case "Settlers":
           dx -= 3; dy -= 2;
           break;
+      case "Siege Ram":
+          dx -= 2; dy -= 4;
+          vx += 3; vy += 2;
+          break;
       case "Spy Plane":
           sx = 8;
           dx -= 26; dy += 1;
