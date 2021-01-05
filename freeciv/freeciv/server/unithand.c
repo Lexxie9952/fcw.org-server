@@ -3531,8 +3531,18 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
                     ? (punit->moves_left - bm_cost) : 0;
 
   unit_did_action(punit);
-  unit_forget_last_activity(punit);
   
+  // Don't forget "fortified" if action specifies to stay fortified
+  //if (pstats.bombard_stay_fortified && punit->activity != ACTIVITY_FORTIFIED)
+  //  unit_forget_last_activity(punit); // Otherwise forget last activity as usual
+  if (pstats.bombard_stay_fortified && punit->activity == ACTIVITY_FORTIFIED) {
+    // don't forget last activity
+      pstats.bombard_stay_fortified, punit->activity);
+  } else {
+      pstats.bombard_stay_fortified, punit->activity);
+      unit_forget_last_activity(punit); // Otherwise forget last activity as usual
+  }
+
   if (pcity
       && city_size_get(pcity) > 1
       && get_city_bonus(pcity, EFT_UNIT_NO_LOSE_POP) <= 0
@@ -3765,6 +3775,9 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
                         "Trying to attack a unit with which you have "
                         "alliance at (%d, %d).", TILE_XY(def_tile));
 
+  struct extra_unit_stats pstats;
+  unit_get_extra_stats(&pstats, punit);                      
+
   moves_used = unit_move_rate(punit) - punit->moves_left;
   def_moves_used = unit_move_rate(pdefender) - pdefender->moves_left;
 
@@ -3812,8 +3825,15 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
     pdefender->moves_left = 0;
   }
   unit_did_action(punit);
-  unit_forget_last_activity(punit);
 
+  // Don't forget "fortified" if unit attribute specifies to stay fortified
+  // TO DO: don't use this struct-> member but a separate for attack attributes
+  if (pstats.attack_stay_fortified && punit->activity == ACTIVITY_FORTIFIED) {
+    // don't forget last activity
+  } else {
+      unit_forget_last_activity(punit); // Otherwise forget last activity as usual
+  }
+    
   /* This may cause a diplomatic incident. */
   action_consequence_success(paction, pplayer, unit_owner(pdefender),
                              def_tile, unit_link(pdefender));

@@ -2288,6 +2288,51 @@ bool utype_is_cityfounder(struct unit_type *utype)
 }
 
 /**************************************************************************
+ * EXTRA STATS FEATURES ADDITION
+ * ***********************************************************************/
+//
+/**********************************************************************//**
+  Return the extra_unit_stats for this unit by filling in *pstats
+**************************************************************************/
+void unit_get_extra_stats(struct extra_unit_stats *pstats, 
+                          const struct unit *punit)
+{
+  fc_assert(NULL != punit);
+
+  struct unit_type *ptype = unit_type_get(punit);
+
+  utype_get_extra_stats(pstats, ptype);
+}
+/**********************************************************************//**
+  Return the extra_unit_stats for this unit_type by filling in *pstats
+**************************************************************************/
+void utype_get_extra_stats(struct extra_unit_stats *pstats, 
+                                             const struct unit_type *ptype)
+{
+  fc_assert(NULL != ptype);
+
+  int BB = ptype->paratroopers_mr_sub;       
+
+  /* extra_unit_stats are currently embedded in paratroopers_mr_sub,
+     which means if it that var is being used by a real paratrooper,
+     we must abort. */
+  if (ptype->paratroopers_range > 0) { // real paratrooper
+    BB = 0; // effectively will zero out extra_unit_stats
+  }
+
+  // Extract bits from unused paratroopers_mr_sub field (for savegame compat)
+  // FIXME: on next upgrade that breaks savegame, get this data from
+  // a new and normal set of data fields
+
+  // Preserve a whole copy of the flags/stats:
+  pstats->bit_field = BB;
+  // Bit 0:
+  pstats->attack_stay_fortified  =            (BB & 0b1);
+
+  // other fields added here later:
+}
+
+/**************************************************************************
  * BOMBARD FEATURES ADDITION
  * ***********************************************************************/
 //
@@ -2297,7 +2342,7 @@ bool utype_is_cityfounder(struct unit_type *utype)
 void unit_get_bombard_stats(struct bombard_stats *pstats, 
                                    const struct unit *punit)
 {
-  fc_assert_ret_val(NULL != punit, NULL);
+  fc_assert(NULL != punit);
 
   struct unit_type *ptype = unit_type_get(punit);
 
@@ -2310,19 +2355,19 @@ void unit_get_bombard_stats(struct bombard_stats *pstats,
 void utype_get_bombard_stats(struct bombard_stats *pstats, 
                                              const struct unit_type *ptype)
 {
-  fc_assert_ret_val(NULL != ptype, NULL);
+  fc_assert(NULL != ptype);
 
   // extract bits from unused city_size field (for savegame compat)
-  // TO DO: on next upgrade that breaks savegame, get this data from
+  // FIXME: on next upgrade that breaks savegame, get this data from
   // a new and normal set of data fields
   int BB = ptype->city_size;         
 
   // Preserve a copy of the bombard flags/stats:
   pstats->bit_field = BB;
   // Bit 0:      RESERVED, extra range flag (+1 range)
-  pstats->bombard_extra_range =                 (BB & 1);
+  pstats->bombard_extra_range =               (BB & 0b1);
   // Bit 1:      RESERVED for bombard_stay_fortified
-  pstats->bombard_stay_fortified =             (BB & 10) >> 1;
+  pstats->bombard_stay_fortified =           (BB & 0b10) >> 1;
   // Bits 2-7:   Move cost of bombard action
   pstats->bombard_move_cost =          (BB & 0b11111100) >> 2;
   // Bits 8-10:  Max targets exposed on tile (0==all)
@@ -2351,4 +2396,3 @@ void utype_get_bombard_stats(struct bombard_stats *pstats,
   pstats->bombard_rate_range_mod = 0;
   pstats->bombard_atk_range_mod = 0;
 }
-

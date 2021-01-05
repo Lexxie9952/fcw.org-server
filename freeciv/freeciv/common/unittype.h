@@ -598,7 +598,37 @@ struct bombard_stats {
 
 void unit_get_bombard_stats(struct bombard_stats *pstats, const struct unit *punit);
 void utype_get_bombard_stats(struct bombard_stats *pstats, const struct unit_type *ptype);
-/*******************************************************************************************/
+/************************************************************************
+ * EXTRA STATS ADDITION: paradrop vars are bit fields, dirty way to 
+ * maintain savegame compat. TO DO: next major upgrade, create more 
+ * blank fields.
+ * **********************************************************************/
+struct extra_unit_stats {
+  int bit_field;                  // raw bit field currently taken from unit_type.city_size
+
+  bool attack_stay_fortified;     // Bit 0
+  
+  // Candidates for future inclusions:
+  /*
+  int attack_extra_range;         // ability to attack a non-adjacent tile
+  int attack_move_cost;           // could even be negative frags, overrides hard-coded val of 1
+  int tired_penalty_adjust;       // some ratio for giving unique stats for tired attack
+  int attack_primary_kills;       // can't kill more than this in a stack kill event
+  int attack_collateral_targets;  // number of non-kills in a stack death that can be damaged
+  int attack_collateral_damage_pct;// % hitpoints lost to collateral units
+ 
+  int stealth_terrain_type[3];     // index to terrain types this unit becomes "stealth" in
+  int stealth_terrain_class;       // terrain class this unit comes stealth in OR'd with above
+
+  int move_rate_adjust_factor1;    // some kind of move bonuses/special dynamics to partially compensate 2x distortion
+  int move_rate_adjust_factor2;    // e.g., "is considered to have x extra fragments when doing an attack"
+                                   // gains x extra fragments when moving on specific extra
+                                   // or, has x extra moves without being able to attack/having tired attack, even better.
+  int instafortify_move_rate;      // a previously fortified unit(?) can re-fortify instantly if it moved less than this
+ */
+ };
+ void unit_get_extra_stats(struct extra_unit_stats *pstats, const struct unit *punit);
+ void utype_get_extra_stats(struct extra_unit_stats *pstats, const struct unit_type *ptype);
 
 /* General unit and unit type (matched) routines */
 Unit_type_id utype_count(void);

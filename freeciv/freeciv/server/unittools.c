@@ -288,6 +288,9 @@ void unit_versus_unit(struct unit *attacker, struct unit *defender,
   int max_rounds;
   int rounds;
 
+  struct extra_unit_stats pstats;   // TO DO, this should be separate structure for attack modifier stats.
+  unit_get_extra_stats(&pstats, attacker);
+
   *att_hp = attacker->hp;
   *def_hp = defender->hp;
   get_modified_firepower(attacker, defender,
@@ -321,6 +324,16 @@ void unit_versus_unit(struct unit *attacker, struct unit *defender,
   }
   if (*def_hp < 0) {
     *def_hp = 0;
+  }
+  // Re-fortify those whose attributes specifiy it:
+  if (attacker->changed_from == ACTIVITY_FORTIFIED) {
+    if (pstats.attack_stay_fortified) { // TODO: later will not share this struct/member with bombard
+      attacker->activity = ACTIVITY_FORTIFIED;
+    } // Make sure those who don't, aren't, prevent 'D' exploit:
+    else {
+      attacker->activity = ACTIVITY_IDLE;
+      attacker->changed_from = ACTIVITY_IDLE;
+    }
   }
 }
 
@@ -377,6 +390,17 @@ void unit_bombs_unit(struct unit *attacker, struct unit *defender,
   /* Don't kill the target unless allowed */
   if (!can_kill && *def_hp <= 0) {
     *def_hp = 1;
+  }
+
+  // Re-fortify those whose Special Unit Attack specifies it:
+  if (attacker->changed_from == ACTIVITY_FORTIFIED) {
+    if (pstats.bombard_stay_fortified) {
+      attacker->activity = ACTIVITY_FORTIFIED;
+    } // Make sure those who don't, aren't, prevent 'D' exploit:
+    else {
+      attacker->activity = ACTIVITY_IDLE;
+      attacker->changed_from = ACTIVITY_IDLE;
+    }
   }
 }
 
