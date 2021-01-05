@@ -154,7 +154,7 @@ pop_report_zeroes    = 4        ; Population in reports in tens of thousands
 
 [citizen]
 nationality          = TRUE     ; account for the nationality of the citizens
-convert_speed        = 1000     ; base probability 333/1000 -> once every 3 turns
+convert_speed        = 1000     ; per mille, base probability of 1 citizen nationalizing. x/1000
 partisans_pct        = 0        ; percentage of own nationality to inspire partisans
                                 ; if 0, original city owner information is used instead
 conquest_convert_pct = 34       ; percentage which converts to the new nation

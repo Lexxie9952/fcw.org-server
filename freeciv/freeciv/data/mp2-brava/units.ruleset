@@ -60,7 +60,7 @@ flags =
     _("Expellable"), _("Can be peacefully expelled from foreign tiles.")
     _("AirProtector"), _("Is Unreachable AND can protect its tile from units unable to attack this unit.")
     _("CantReachAir"), _("Unable to attack air units.")
-    _("FortBuster"), _("Defending Forts get no bonus. +33% attack bonus vs. the 2x defense of a Fortress.")
+    _("FortBuster"), _("Defending Forts get no bonus. +33% attack bonus vs. the 2× defense of a Fortress.")
     _("FortressBuster"), _("Defending Fortresses get no bonus.")
     _("AntiAir"), _("Anti-Air bonus of this unit is less effective against Stealth, which has a 25% bonus against this unit.")
 ;;;   _("NeverProtects"), _("Does not protect other units on its tile.")   ; UNCOMMENT THIS IF NOT USING SCL'S PATCH FOR THIS FLAG
@@ -458,8 +458,8 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ; "DefenseDivider"    = Divide defense value with (1 + 'value').
 ;                       Bonus is defined in attackers entry.
 ; "DefenseDividerPct" = Divide defense value by 1 + (value / 100).
-;                       Value of 100 means division by 2, (2x for attacker)
-;                       value of 50 means division by 1.5, (1.5x for attacker)
+;                       Value of 100 means division by 2, (2× for attacker)
+;                       value of 50 means division by 1.5, (1.5× for attacker)
 ;                       i.e.: Effectively increases *attack* by value percent.
 ; "FirePower1"        = Defender firepower is reduced to value 1 when
 ;                       ever this has non-zero value.
@@ -549,7 +549,7 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;                  is enabled and the unit class is unreachable
 ; "MultiSlot"    = if server setting slot_control is ON, only unit types with this
 ;                  flag can use extra city_build_slots
-;
+;                  TO DO: make this a server UTYF flag that's used instead of Shield2Gold
 ; Following actions require extra fields:
 ;  "Attack"
 ;   attack = base attack strength
@@ -770,7 +770,8 @@ uk_food       = 1
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
-flags         = "Settlers", "Infra", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Airbase", "CanFortress", "CanRoad", "Proletarian"
+flags         = "Settlers", "Infra", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Airbase", 
+                 "CanFortress", "CanRoad", "Proletarian"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0
@@ -1104,7 +1105,7 @@ bonuses       =
 flags         = "FootSoldier", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
-Equipped with long pikes and a 2x defence bonus against\
+Equipped with long pikes and a 2× defence bonus against\
  mounted units, Pikemen replace the Phalanx as the\
  preferred city defender.\
 ")
@@ -1368,9 +1369,9 @@ roles         = "DefendOk", "DefendOkStartUnit", "BarbarianSeaTech"
 helptext      = _("\
 Marines are experts at all-terrain warfare. They are the strongest\
  foot unit in the game, and are armed with diverse weaponry.\n\
- Unlike other units, Marines can attack Sea units (at a penalty).\
+ Unlike other units, Marines can attack Sea units (at a 50% penalty).\
  Air units do not stop them from attacking reachable targets.\
- They can attack from a Transport or Helicopter, and can offload
+ They can attack from a Transport or Helicopter, and can offload\
  without losing a turn of movement. Marines promoted to three\
  veteran levels become commandos suitable for special ops.\n\
  Marines built in a city with an Airport, Port Facility, and Barracks III\
@@ -1737,7 +1738,7 @@ helptext      = _("\
 Armor is the mechanized equivalent of a Cavalry unit. They have high attack strength,\
  superb mobility, and the highest defense of any offensive unit. They are massive all-terrain\
  vehicles, well-suited for penetrating defensive fortifications: Units inside Forts get no defense\
- bonus against Armor. Units inside Fortresses get a reduced bonus of 1.67x instead of 2x.\
+ bonus against Armor. Units inside Fortresses get a reduced bonus of 1.67× instead of 2×.\
 ")
 
 [unit_armor_ii]
@@ -1778,7 +1779,7 @@ helptext      = _("\
 Armor II is the ultra-modern upgrade to Armor. It features high tech composite armor and\
  electronic countermeasures (ECM). Forts and Fortresses gain no bonus against\
  its ability to blast and break through fortifications. ECM and composite armor\
- give a 2x defense bonus against Missiles. Unlike most land units,\
+ give a 2× defense bonus against Missiles. Unlike most land units,\
  Armor II can attack reachable units regardless of whether unreachable units protect the tile.\ 
 ")
 
@@ -1924,7 +1925,7 @@ flags         = "NeverBlocked", "AntiAir", "Marines", "WillNever", "TransportDef
 roles         = ""
 helptext      = _("\
 Anti-Aircraft Artillery (AAA) can attack almost anything from anywhere. AAA get a\
- 2x bonus against Air units. AAA qualify as weaponry for Marines and have the same\
+ 2× bonus against Air units. AAA qualify as weaponry for Marines and have the same\
  abilities: they can be transported on any unit that carries Marines, can attack from\
  or to non-native tiles, and do not lose a turn when unloading. Transported AAA can\
  defend their tile on both Land and Sea. (AAA cannot attack Submarines, Missiles,\
@@ -1972,7 +1973,7 @@ flags         = "NeverBlocked", "AntiAir", "WillNever"
 roles         = ""
 helptext      = _("\
 The Mobile SAM is the strongest Anti-Air unit on the ground. It can\
- attack nearby aircraft. It has a 2x bonus against all Air units. The\
+ attack nearby aircraft. It has a 2× bonus against all Air units. The\
  Mobile SAM can also carry one Missile of any type. Unlike the AAA, it\
  cannot attack non-native tiles or attack while transported.\
 "), _("
@@ -2143,7 +2144,7 @@ veteran_names =
 veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 Fighters are the first offensive Air units. Their superior mobility and firepower alter\
@@ -2198,7 +2199,7 @@ veteran_names =
 veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 Escort Fighters are large fighters with high fuel capacity. Higher mass and\
@@ -2264,7 +2265,7 @@ veteran_names =
 veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 Dive Bombers are like Fighters but fitted for Ground Attack and Sea combat. Range\
@@ -2328,7 +2329,7 @@ veteran_names =
 veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 The Medium Bomber is well suited for moderately strong targets or multiple weak targets.\
@@ -2385,7 +2386,7 @@ veteran_names =
 veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 Heavy Bombers are large and sturdy Bombers with larger payload and numerous gunner defense stations.\
@@ -2442,7 +2443,7 @@ veteran_names =
 veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 The Strategic Bomber offers a small improvement in attack. Higher altitude offers a good upgrade in\
@@ -2583,13 +2584,13 @@ veteran_names =
 veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 Transport Helicopters can carry three land units.\
 "), _("\
  Foot and artillery types can unload on any tile, but will lose moves (except Marines).\
- Other types need a city or base to unload.\n.\
+ Other types need a city or base to unload.\n\
 "), _("\
  Helicopters lose 1 hp for each turn not ended in a City, Base, or Carrier. +1 move\
  is awarded if starting a turn in a City or Airbase.\n\
@@ -2649,7 +2650,7 @@ veteran_names =
 veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 Helicopters are the Air Cavalry of modern armies. They can attack multiple targets\
@@ -2708,7 +2709,7 @@ veteran_names =
 veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 Jet Fighters upgrade the Fighter with improved attack, defense, and range.\
@@ -2763,7 +2764,7 @@ veteran_names =
 veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 Ground Strike Fighters upgrade the Dive Bomber. They cannot block attacks on other\
@@ -2816,7 +2817,7 @@ veteran_names =
 veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 Jet Bombers are stratospheric long-range bombers with 3 turns of fuel: they can be airborne for two\
@@ -2872,7 +2873,7 @@ veteran_names =
 veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 The most advanced Fighter, with improved attack and longer range. Stealth Fighters cannot be seen unless adjacent\
@@ -2932,7 +2933,7 @@ veteran_names =
 veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 The deadliest Bomber, with improved attack and speed. Stealth Bombers cannot be seen\
@@ -2968,7 +2969,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea"
+cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 flags         = "BadCityDefender", "HelpWonder", "TradeRoute", "CoastStrict", "NonMil", "HasNoZOC"
 roles         = "Ferryboat", "FerryStartUnit"
 helptext      = _("\
@@ -3007,7 +3008,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea"
+cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 flags         = "BadCityDefender", "CantReachAir", "HelpWonder",
                 "TradeRoute", "Coast", "WillNever", "NonMil", "NonMilAttack"
 roles         = "Ferryboat", "FerryStartUnit"
@@ -3049,7 +3050,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea"
+cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 flags         = "BadCityDefender", "CantReachAir", "WillNever"
 roles         = "Ferryboat", "Hunter"
 helptext      = _("\
@@ -3086,7 +3087,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea"
+cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 flags         = "BadCityDefender", "CantReachAir", "HelpWonder",
                 "Traderoute", "Only_Native_Attack", "WillNever", "NonMil", "NonMilAttack"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
@@ -3126,7 +3127,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea"
+cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 flags         = "BadCityDefender", "CantReachAir", "WillNever"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat", "Hunter"
 helptext      = _("\
@@ -3156,7 +3157,7 @@ defense       = 2
 hitpoints     = 10
 firepower     = 1
 move_rate     = 6
-vision_radius_sq = 1
+vision_radius_sq = 2
 transport_cap = 0
 fuel          = 0
 uk_happy      = 1
@@ -3198,7 +3199,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea"
+cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 flags         = "BadCityDefender", "CantReachAir", "Traderoute", "WillNever", "NonMil", "NonMilAttack"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat", "Hunter"
 helptext      = _("\
@@ -3236,7 +3237,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Submarine", "LandRail"
-cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad"
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
@@ -3276,7 +3277,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Submarine", "LandRail"
-cargo         = "Land", "LandNoKill", "LandAirSea"
+cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 bonuses       =
    { "flag", "type", "value"
      "Marines", "DefenseMultiplier", 1    
@@ -3370,7 +3371,7 @@ helptext      = _("\
 Destroyers are the first of the modern ships to start your modern\
  navy. Their main roles are fast scouting, seek-and-destroy,\
  anti-submarine warfare, shore bombardment of lighter targets,\
- and supporting the needs of larger fleets. 4x ASW defence gives a\
+ and supporting the needs of larger fleets. 4× ASW defence gives a\
  35% chance defending vs Submarines.\
 ")
 
@@ -3409,7 +3410,7 @@ flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
 roles         = "Hunter"
 helptext      = _("\
 The Cruiser is a large and fast surface warship with equally strong offensive and defensive strength. More often than not, its\
- 2x ASW defence allows it to survive a Submarine attack.\
+ 2× ASW defence allows it to survive a Submarine attack.\
 "), _("\
 The main duties of the Cruiser are offensive strikes against lesser ships, and escorting weaker ships.\
 ")
@@ -3452,7 +3453,7 @@ flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
 roles         = "Hunter"
 helptext      = _("\
 The Missile Destroyer has double the firepower of a Destroyer, and shares the same roles\
- as its ancestor. It gains 2x defense against Air and Missile units. It has a 2x ASW bonus\
+ as its ancestor. It gains 2× defense against Air and Missile units. It has a 2× ASW bonus\
  and can can carry one Missile.\
 ")
 
@@ -3494,11 +3495,11 @@ flags         = "BadCityDefender", "CanEscape", "AntiAir", "WillNever"
 roles         = "Hunter"
 helptext      = _("\
 The AEGIS Cruiser has an Anti-Air missile system. Radar and sonar\
- give superior vision and 2x defense bonus against Submarines.\
+ give superior vision and 2× defense bonus against Submarines.\
  The AEGIS can carry two Missiles, and is the only ship that can attack\
  Air and Missile units.\
 "), _("\
-Excellent vision and 3x Anti-Air bonus are ideal for scouting and escorting.\
+Excellent vision and 3× Anti-Air bonus are ideal for scouting and escorting.\
 ")
 
 [unit_battleship]
@@ -3535,7 +3536,7 @@ bonuses       =
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
 roles         = ""
 helptext      = _("\
-The Battleship is the supreme naval unit with excellent offensive and defensive strength. It has a 2x defense bonus vs Submarines.\
+The Battleship is the supreme naval unit with excellent offensive and defensive strength. It has a 2× defense bonus vs Submarines.\
 ")
 
 [unit_submarine]
@@ -3650,7 +3651,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad"
 flags         = "BadCityDefender", "HelpWonder", "Traderoute", "NonMil", "HasNoZOC", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -3690,7 +3691,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad"
 bonuses       =
    { "flag", "type", "value"
      "Marines", "DefenseMultiplier", 1    
@@ -3770,7 +3771,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine", "LandRail"
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine", "LandRail","LandRoad"
 disembarks    = "Air", "AirPillage"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"
@@ -3817,7 +3818,7 @@ uk_happy      = 2
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine", "LandRail"
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine", "LandRail", "LandRoad"
 disembarks    = "Air", "AirPillage"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"
@@ -3831,7 +3832,7 @@ roles         = ""
 helptext      = _("\
 Hydrogen Bombs make Atom Bombs seem tame. Any unprotected city at Ground Zero will be absolutely annihilated.\
  In other cities in the blast radius, population is reduced by about 75%. Blast area is 21 tiles:\
- the same area as an entire city (5x5 minus the corners.) All units within the blast are destroyed.\n\
+ the same area as an entire city (5×5 minus the corners.) All units within the blast are destroyed.\n\
 A Bomber can drop a Hydrogen Bomb within two tiles of its location. Unload the bomb, fly the Bomber out of\
  range, then detonate by pressing D twice.\n\
 If you have Fusion Power and the Manhattan Project was built, a Hydrogen Bomb\
@@ -3867,7 +3868,7 @@ uk_happy      = 4
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine", "LandRail"
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine", "LandRail", "LandRoad"
 disembarks    = "Air", "AirPillage"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "Unique", "NoVeteran"
@@ -3919,7 +3920,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Submarine"
 disembarks    = "Submarine"
-targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine", "LandRail"
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine", "LandRail", "LandRoad"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"
 ; No veteran levels (level name is never displayed)
@@ -3931,7 +3932,7 @@ veteran_move_bonus = 0
 roles         = ""
 helptext      = _("\
 If you have Space Flight and the Manhattan Project has been built by any player, you can make Nuclear Missiles.\
- Nuclear blasts destroy ALL units in a 3x3 area. City population is reduced by half. Land tiles may get nuclear fallout.\
+ Nuclear blasts destroy ALL units in a 3×3 area. City population is reduced by half. Land tiles may get nuclear fallout.\
  Fallout reduces tile output and increases risk of nuclear winter.\
 "), _("\
 If Fallout is cleaned on the turn it appears, the chance of nuclear winter is reduced.\
@@ -3966,7 +3967,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Submarine"
 disembarks    = "Submarine"
-targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine", "LandRail"
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Missile", "Submarine", "LandRail", "LandRoad"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"
 ; No veteran levels (level name is never displayed)
@@ -4223,7 +4224,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
-cargo         = "Land", "LandAirSea", "Balloon", "Bomb"
+cargo         = "Land", "LandAirSea", "Balloon", "Bomb", "LandRoad"
 flags         =  "HelpWonder", "TradeRoute", "NonMil", "HasNoZOC", "NoVeteran", "Capturable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -4233,9 +4234,10 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = ""
 helptext      = _("\
-Trains are Commerce units with an important bonus: they allow units with 2 or less\
+Trains are Commerce units with a bonus: they allow units with 2 or less\
  move points to travel your rails at distances comparable to other units. Only Foot Soldiers\
- are allowed to load/unload outside a city, but lose their moves if doing so.\n\n\
+ can:\n1. load outside a city or base;\n2. unload (T) in a base;\n3.step off the Train outside a city\
+ (loses all moves.)\nAll other units must load/unload inside a city.\n\n\
 On non-allied foreign rails, Trains incur full terrain movement cost.\
  Pre-gunpowder units can't attack Trains.\n\n\
 Electricity and Combustion each give Trains an additional +1 move.\

@@ -37,7 +37,8 @@ flags =
 extra_flags =
   { "name", "helptxt"
       _("Quayable"), _("Allows Quays to be built.")
-      _("IrrigationSource"), _("Allows Irrigation.")            
+      _("IrrigationSource"), _("Allows Irrigation.")
+      _("Railable"), _("Allows Railroads to be built.")
   }
 
 [parameters]
@@ -1661,12 +1662,12 @@ rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 reqs           =
     { "type",        "name",       "range", "present", "quiet"
-;      "Extra",       "River",      "Local", TRUE,      FALSE
-      "ExtraFlag",   "Quayable",   "Local", TRUE,      FALSE
-      "Tech",        "Pottery",    "Player",TRUE,      FALSE
-      "TerrainClass","Land",       "Local", TRUE,      FALSE
-      "UnitFlag",    "CanFortress","Local", TRUE,      TRUE
-      "Extra",       "Hideout",    "Local", FALSE,     TRUE
+;      "Extra",       "River",     "Local",  TRUE,      FALSE
+      "ExtraFlag",   "Quayable",   "Local",  TRUE,      FALSE
+      "Tech",        "Pottery",    "Player", TRUE,      FALSE
+      "TerrainClass","Land",       "Local",  TRUE,      FALSE
+      "UnitFlag",    "CanFortress","Local",  TRUE,      TRUE
+      "Extra",       "Hideout",    "Local",  FALSE,     TRUE
     }
 build_time     = 3
 removal_time   = 0
@@ -1713,7 +1714,7 @@ build_time     = 0
 removal_time   = 0
 native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 hidden_by      = "Railroad", "Maglev", "Naval Base"
-flags          = "AutoOnCityCenter", "NativeTile"
+flags          = "AutoOnCityCenter", "NativeTile", "Railable"
 bridged_over   = "River"
 helptext       = _("\
 Roads allow your land units to move more quickly, and on some terrain,\
@@ -1738,10 +1739,10 @@ rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 reqs           =
     { "type", "name", "range"
-      "Tech", "Railroad", "Player"
-      "Extra", "Road", "Local"
-      "UnitFlag", "CanRoad", "Local"
-      "TerrainClass", "Land", "Local"
+      "Tech",      "Railroad", "Player"
+      "ExtraFlag", "Railable", "Local"
+      "UnitFlag",  "CanRoad",  "Local"
+;     "TerrainClass", "Land", "Local" ;if there's a railable extra that's all we need: cf. Sea Bridge.
     }
 build_time     = 3
 removal_time   = 0
@@ -1851,13 +1852,13 @@ reqs           =
     { "type", "name", "range", "present"
       "TerrainClass", "Oceanic", "Local", TRUE
       "TerrainClass", "Land", "CAdjacent", TRUE
-      "Tech", "Explosives", "Player", TRUE
+      "Tech", "Steel", "Player", TRUE
       "UnitFlag", "CanRoad", "Local", TRUE
     }
 build_time     = 12
 removal_time   = 0
 native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad", "LandRail"
-flags          = "NativeTile"
+flags          = "NativeTile", "Railable"
 helptext          = _("\
 Sea Bridges are engineering marvels which span lakes and seas to connect them for \
 land traffic. They must be built cardinally adjacent to land.\

@@ -289,12 +289,11 @@ sabotage	= 50
 sound		= "b_city_walls"
 sound_alt	= "b_generic"
 helptext	= _("\
-City Walls increase the 1.5x bonus for Land units in a city to 3x, effectively\
- doubling the strength of Land units against attacks from other Land units (and\
- Helicopters.) City Walls are ineffective against Air units, Sea units, Missiles,\
- and Howitzers; in which case the normal 1.5x bonus is given. City Walls prevent\
- population loss when a defending unit is destroyed by a Land unit. City Walls have\
- a 50% bonus against sabotage actions.\
+City Walls give a 3x bonus to ALL units in a City against attacks from\
+ Land units and Helicopters. City Walls are ineffective against Air, Sea, Missile, and\
+ Howitzers. City Walls always prevent population loss when a defending unit\
+ is destroyed by a Land unit. If an enemy attempts to sabotage City Walls,\
+ the odds of success are halved.\
 ")
 
 [building_coastal_defense]
@@ -1199,7 +1198,7 @@ Sets the main capital of your nation. Loss of your main capital: \
  the higher the cost to bribe or incite revolt. In a capital, the chance of\
  enemy agents defeating your agents or sabotaging buildings is halved.\
 "), _("\
- Corruption in cities increases with distance from the capital. Capitals\
+ Corruption in cities increases with distance from a capital. Capitals\
  enjoy a further reduction of corruption by half.\
 "), _("\
  You can rebuild your Palace in another city. This may secure\
@@ -1213,7 +1212,7 @@ Sets the main capital of your nation. Loss of your main capital: \
  the move bonus for nations who have no cities, due to sedentary\
  culture.\
 "), _("\
- With Conscription, a Palace allows conscripting one extra qualifying unit per turn.\
+ With Conscription, a Palace allows producing one extra qualifying unit per turn.\
 ")
 
 [building_ecclesiastical_palace]
@@ -1253,7 +1252,7 @@ Sets your religious capital and second center of government. Loss of this\
  Under Fundamentalism, Fanatics produced in the city with this building\
  are inspired by fervorous faith to +1 higher veteran level.\
 "), _("\
- With Conscription, this building allows making one extra qualifying unit per turn.\
+ With Conscription, allows producing one extra qualifying unit per turn.\
 ")
 
 [building_agoge]
@@ -1676,7 +1675,7 @@ sound		= "w_king_richards_crusade"
 sound_alt	= "w_generic"
 helptext	= _("\
 In the city where it is built, adds one extra shield resource on every\
- tile. Lets you build one extra Caravan or infantry unit per turn without\
+ tile. Lets you build one extra qualifying unit per turn —— without\
  Conscription tech.\
  Obsolete by: Robotics.\
 ")

@@ -3878,7 +3878,6 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Magellan's Expedition", "Player", TRUE
       "UnitClass", "Sea", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
       "UnitFlag", "NoVeteran", "Local", FALSE      
     }
 [effect_magellans_expedition_a]
@@ -3888,7 +3887,6 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Magellan's Expedition", "Player", TRUE
       "UnitClass", "RiverShip", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
       "UnitFlag", "NoVeteran", "Local", FALSE      
     }
 [effect_magellans_expedition_b]
@@ -3898,7 +3896,6 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Magellan's Expedition", "Player", TRUE
       "UnitClass", "Submarine", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
       "UnitFlag", "NoVeteran", "Local", FALSE
     }
 
@@ -4611,8 +4608,7 @@ reqs	=
       "Action", "Poison City Escape", "Local", TRUE
     }
 ;*********************************************************
-
-; FIXED flag from "Cities" to "NonMil" to have proper effect.
+; Bribe and Incite Costs *********************************
 [effect_unit_bribe_cost_settlers]
 type	= "Unit_Bribe_Cost_Pct"
 value	= -50
@@ -4620,6 +4616,8 @@ reqs	=
     { "type", "name", "range"
       "UnitFlag", "NonMil", "Local"
     }
+;*********************************************************
+
 
 ;LOSING MOVES FROM ILLEGAL ACTION NEVER MADE SENSE. JUST FORBID IT AND LET THEM PICK A LEGAL ACTION. 
 ;[effect_illegal_action_move_cost_base]

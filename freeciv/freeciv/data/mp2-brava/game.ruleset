@@ -494,8 +494,9 @@ actor_reqs    =
       "MinMoveFrags", "1",             "Local"
     }
 
+
 ; ************************ ESTABLISH EMBASSY ***********************
-; normal establish embassy--if not at war 
+; DIPLOMAT: normal establish embassy--if not at war 
 [actionenabler_establish_embassy]
 action       = "Establish Embassy Stay"
 actor_reqs    =
@@ -532,7 +533,7 @@ target_reqs  =
       "Gov",         "Fundamentalism", "Player",  FALSE
     }
 
-; normal establish embassy--if not at war 
+; SPY: normal establish embassy--if not at war 
 [actionenabler_establish_embassy_spy]
 action       = "Establish Embassy"
 actor_reqs    =
@@ -563,32 +564,31 @@ actor_reqs    =
 target_reqs  =
     { "type",        "name",          "range",    "present"
       "NationGroup", "Barbarian",     "Player",   FALSE
-      "Building",    "Police Station", "City",    FALSE  ; to do: when we can check for spy present to stop it
-      "Gov",         "Fundamentalism", "Player",  FALSE
+      "Building",    "Police Station","City",     FALSE  ; to do: when we can check for spy present to stop it
+      "Gov",         "Fundamentalism","Player",   FALSE
     }
 ; ***************************************************
 
 [actionenabler_investigate_city]
 action       = "Investigate City Spend Unit"
 actor_reqs    =
-    { "type",   "name", "range", "present"
-      "UnitFlag", "Diplomat", "Local", TRUE
-      "UnitState", "OnLivableTile", "Local", TRUE
-      "MinMoveFrags", "1", "Local", TRUE
-      "DiplRel", "Foreign", "Local", TRUE
-      "UnitState",    "Transported",    "Local", FALSE
-      "UnitFlag", "Spy", "Local", FALSE
+    { "type",         "name",          "range", "present"
+      "UnitFlag",     "Diplomat",      "Local", TRUE
+      "UnitState",    "OnLivableTile", "Local", TRUE
+      "MinMoveFrags", "1",             "Local", TRUE
+      "DiplRel",      "Foreign",       "Local", TRUE
+      "UnitState",    "Transported",   "Local", FALSE
+      "UnitFlag",     "Spy",           "Local", FALSE
     }
-
 [actionenabler_investigate_city_spy]
 action       = "Investigate City"
 actor_reqs    =
-    { "type",   "name", "range", "present"
-      "UnitFlag", "Spy", "Local", TRUE
-      "UnitState", "OnLivableTile", "Local", TRUE
-      "MinMoveFrags", "1", "Local", TRUE
-      "UnitState",    "Transported", "Local", FALSE
-      "DiplRel", "Foreign", "Local", TRUE
+    { "type",         "name",          "range","present"
+      "UnitFlag",     "Spy",           "Local", TRUE
+      "UnitState",    "OnLivableTile", "Local", TRUE
+      "MinMoveFrags", "1",             "Local", TRUE
+      "UnitState",    "Transported",   "Local", FALSE
+      "DiplRel",      "Foreign",       "Local", TRUE
     }
 
 [actionenabler_poison_city]
@@ -744,11 +744,11 @@ target_reqs    =
 [actionenabler_sabotage_unit]
 action = "Sabotage Unit Escape"
 actor_reqs    =
-    { "type",   "name", "range"
-      "UnitFlag", "Spy", "Local"
-      "DiplRel", "War", "Local"
-      "UnitState", "OnLivableTile", "Local"
-      "MinMoveFrags", "1", "Local"
+    { "type",   "name", "range",  "present"
+      "UnitFlag", "Spy",       "Local", TRUE
+      "DiplRel", "War", "Local", TRUE
+      "UnitState", "OnLivableTile", "Local", TRUE
+      "MinMoveFrags", "1", "Local", TRUE
     }
 target_reqs    =
     { "type",   "name", "range", "present"
@@ -890,29 +890,27 @@ target_reqs    =
       "Extra", "Fortress", "Local", FALSE
     }
 
-;Archers can strafe/soften every unit on a tile for one 
-;round of combat only, iff it is not a city, fortress,
-;or sea tile:
-[actionenabler_archer_bombard] ;****
+; ***************** BOMBARDS *****************************
+;Archers can do volley attacks
+[actionenabler_archer_volley]
 action = "Bombard"
 actor_reqs    =
     { "type",         "name",         "range", "present"
       "UnitFlag",     "Bombarder",    "Local", TRUE
       "UnitType",     "Archers",      "Local", TRUE
-;      "UnitState",    "Transported", "Local", FALSE
       "MinMoveFrags", "1",            "Local", TRUE
       "DiplRel",      "War",          "Local", TRUE
    }
 target_reqs    =
-    { "type",   "name", "range", "present"
-      "CityTile", "Center",   "Local", FALSE
-      "Extra",    "Fortress", "Local", FALSE
-      "TerrainClass",  "Oceanic",  "Local", FALSE
+    { "type",     "name",         "range","present"
+      "CityTile", "Center",       "Local", FALSE
+      "Extra",    "Fortress",     "Local", FALSE
+      "Extra",    "Naval Base",   "Local", FALSE
+      "TerrainClass", "Oceanic",  "Local", FALSE
     }
 
-;Fanatics can strafe/soften every unit on a tile for one 
-;round of combat only, iff it is in domestic territory.
-[actionenabler_fanatic_bombard] ;****
+;Fanatics can do skirmish assaults
+[actionenabler_fanatic_skirmish_assault]
 action = "Bombard"
 actor_reqs    =
     { "type",         "name",           "range", "present"
@@ -926,11 +924,12 @@ actor_reqs    =
    }
 target_reqs    =
     { "type",   "name", "range", "present"
-      "CityTile", "Center",   "Local", FALSE
-      "Extra",    "Fortress", "Local", FALSE
-      "TerrainClass",  "Oceanic",  "Local", FALSE
+      "CityTile", "Center",       "Local", FALSE
+      "Extra",    "Fortress",     "Local", FALSE
+      "Extra",    "Naval Base",   "Local", FALSE
+      "TerrainClass",  "Oceanic", "Local", FALSE
     }
-
+; ********************************************************
 
 [actionenabler_build_city_pioneer]
 action = "Found City"
@@ -1367,6 +1366,7 @@ actor_reqs    =
       "UnitState",     "Transported",  "Local", FALSE
     }
 
+;******************************** ROADS ************************
 [actionenabler_road]
 action        = "Road"
 actor_reqs    =
@@ -1374,6 +1374,34 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitFlag",      "CanHide",      "Local",   FALSE
       "UnitType",      "Proletarians", "Local",   FALSE
+      "UnitState",     "Transported",  "Local",   FALSE    ; Prevent quay exploit
+    }
+[actionenabler_road1] ; can't road while transported in foreign lands
+action        = "Road"
+actor_reqs    =
+    { "type",          "name",         "range",   "present"
+      "UnitFlag",      "Settlers",     "Local",   TRUE
+      "UnitFlag",      "CanHide",      "Local",   FALSE
+      "UnitType",      "Proletarians", "Local",   FALSE
+      "UnitState",     "Transported",  "Local",   TRUE
+    }
+target_reqs    =
+    { "type",       "name",    "range", "present"
+        "CityTile", "Claimed", "Local", FALSE
+    }
+[actionenabler_road2_sea_bridge]
+action        = "Road"
+actor_reqs    =
+    { "type",          "name",         "range",   "present"
+      "UnitFlag",      "Settlers",     "Local",   TRUE
+      "UnitFlag",      "CanHide",      "Local",   FALSE
+      "Tech",          "Explosives",   "Player",  TRUE
+      "UnitType",      "Proletarians", "Local",   FALSE
+    }
+target_reqs    =
+    { "type",         "name",    "range",    "present"
+      "TerrainClass", "Oceanic", "Local",    TRUE
+      "TerrainClass", "Land",    "CAdjacent",TRUE
     }
 [actionenabler_road_prole]
 action        = "Road"
@@ -1381,7 +1409,35 @@ actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitType",      "Proletarians", "Local",   TRUE
-      "Gov",           "Communism",    "Player", TRUE
+      "Gov",           "Communism",    "Player",  TRUE
+      "UnitState",     "Transported",  "Local",   FALSE    ; Prevent quay exploit
+    }
+[actionenabler_road_prole1] ; can't road while transported in foreign lands
+action        = "Road"
+actor_reqs    =
+    { "type",          "name",         "range",   "present"
+      "UnitFlag",      "Settlers",     "Local",   TRUE
+      "UnitType",      "Proletarians", "Local",   TRUE
+      "Gov",           "Communism",    "Player",  TRUE
+      "UnitState",     "Transported",  "Local",   TRUE    
+    }
+target_reqs    =
+    { "type",       "name",    "range", "present"
+        "CityTile", "Claimed", "Local", FALSE
+    }
+[actionenabler_road_prole2_sea_bridge]
+action        = "Road"
+actor_reqs    =
+    { "type",          "name",         "range",   "present"
+      "UnitFlag",      "Settlers",     "Local",   TRUE
+      "UnitType",      "Proletarians", "Local",   TRUE
+      "Tech",          "Explosives",   "Player",  TRUE
+      "Gov",           "Communism",    "Player",  TRUE
+    }
+target_reqs    =
+    { "type",         "name",    "range",    "present"
+      "TerrainClass", "Oceanic", "Local",    TRUE
+      "TerrainClass", "Land",    "CAdjacent",TRUE
     }
 [actionenabler_legion_road]
 action        = "Road"
@@ -1390,6 +1446,7 @@ actor_reqs    =
       "UnitFlag",      "Settlers",      "Local",   TRUE
       "UnitType",      "Legion",        "Local",   TRUE
       "UnitState",     "OnDomesticTile","Local",   FALSE
+      "UnitState",     "Transported",  "Local",    FALSE    ; Prevent quay exploit
     }
 ; Don't force legions to road BEFORE making a fortress 
 ; from fortress being "domestic national territory"
@@ -1402,6 +1459,7 @@ actor_reqs    =
       "Extra",         "Fort",          "Local",   TRUE
     }
 
+;*******************************************************
 [actionenabler_base]
 action        = "Build Base"
 actor_reqs    =
@@ -1437,6 +1495,7 @@ target_reqs    =
     { "type",   "name", "range", "present"
       "CityTile", "Claimed", "Local", FALSE
     }
+;*******************************************************
 
 [actionenabler_mining]
 action        = "Build Mine"

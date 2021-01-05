@@ -68,10 +68,15 @@ helptext = _("\
 Anarchy is simply the absence of any recognizable government.\
  Citizens are disorganized and unproductive, and will spend all\
  income as quickly as possible, rather than paying taxes or\
- conducting research.\
+ conducting research. Under Anarchy, tiles suffer a -1 tile output\
+ penalty if they produce 3 or more of any resource.\
 "), _("\
 Anarchy offers slightly less corruption than Despotism,\
  but slightly more unhappiness.\
+"), _("\
+No citizens are made unhappy by each aggressive unit.\n\
+25% Base corruption in cities\n\
+2% Extra corruption per each tile in distance from capital\n\
 ")
 
 ;------------------------------------------------------------------------
@@ -89,9 +94,15 @@ ruler_female_title = _("?female:Chief %s")
 helptext = _("\
 Under Despotism, you are the absolute ruler of your people.  Your\
  control over your citizens is maintained largely by martial law.\
+ Under Despotism, tiles suffer a -1 tile output penalty if they\
+ produce 3 resource points.\
 "), _("\
 Despotism suffers the highest level of corruption of all\
  forms of government.\
+"), _("\
+No citizens are made unhappy by each aggressive unit.\n\
+37% Base corruption in cities\n\
+4% Extra corruption per each tile in distance from capital\n\
 ")
 
 ;------------------------------------------------------------------------
@@ -114,6 +125,10 @@ Under Monarchy, a king or queen serves as a hereditary figurehead\
 "), _("\
 Monarchy suffers the same small amount of corruption that\
  the Republic does.\
+"), _("\
+No citizens are made unhappy by each aggressive unit.\n\
+15% Base corruption in cities\n\
+2% Extra corruption per each tile in distance from capital\n\
 ")
 
 ;------------------------------------------------------------------------
@@ -138,14 +153,19 @@ Corruption does not vary by distance from the capital;\
  The capital city with Palace gets a +25% production bonus.\
 "), _("\
 Communist governments get a cost discount of -5 on Riflemen and -10\
- on Dive Bombers.\
+ on Dive Bombers. Diplomats and Spies are produced with +1 veteran\
+ status. The effect of Cathedrals and Michelangelo is reduced -1.\
 "), _("\
 Communist states can transfer Proletarians between cities to\
  re-distribute population. Large numbers of Proletarians can be\
  used to finish State projects. The Communism tech allows a\
- Communist government to conscript Workers to Riflemen and vice\
+ Communist government to convert Workers to Riflemen and vice\
  versa, if inside national territory and if possessing the necessary\
  technologies.\
+"), _("\
+No citizens are made unhappy by each aggressive unit.\n\
+20% Base corruption in cities\n\
+No Extra corruption per each tile in distance from capital\n\
 ")
 
 ;------------------------------------------------------------------------
@@ -168,6 +188,11 @@ Under a Republican government, citizens hold an election to select a\
  degree of freedom.  Citizens under the Republic become unhappy\
  easily, but the self-sufficiency of your citizens allows high levels\
  of trade.\
+"), _("\
+1 citizen is made unhappy by each aggressive unit*.\n\
+     (* first aggressive unit does not cause unhappy)\n\
+15% Base corruption in cities\n\
+2% Extra corruption per each tile in distance from capital\n\
 ")
 
 ;------------------------------------------------------------------------
@@ -189,8 +214,13 @@ Under Democracy, citizens govern directly by voting on issues.\
  offers the most potential for unhappiness.  There is no corruption\
  during Democracy, but citizens become very upset during\
  wars.\
+Democracy revolts to Anarchy if any city remains in disorder for two turns.\
+ Cities and units belonging to Democracy cannot be incited or bribed.\
+"), _("\
+2 citizens are made unhappy by each aggressive unit.\n\
+No base corruption in cities\n\
+No extra corruption per each tile in distance from capital\n\
 ")
-
 ;------------------------------------------------------------------------
 [government_fundamentalism]
 
@@ -209,13 +239,18 @@ Fundamentalism is organized around central beliefs, usually religious. These for
  rigid guidelines for the actions of the rulers and the people.\
 "), _("\
 The people are entirely devoted to their beliefs, and are often willing to die to\
- preserve them.\
+ preserve them. Enemies cannot establish hostile embassies without first making Cease-Fire\
+ or Peace. Theocratic rule causes science output to suffer by 50%.\
 "), _("\
-Improvements that convert unhappy citizens to content produce gold tithes equal to\
- the number of citizens they would convert. Fanatics cannot be bribed. Palace\
+Improvements that appease unhappy citizens produce gold tithes equal to\
+ the number of citizens they would appease. Fanatics cannot be bribed. Palace\
  gives +50% to gold income in its city. In each city, two military units may impose\
- martial law, making one citizen each content. Pilgrims can be used to migrate and\
+ martial law, each making one citizen content. Pilgrims can be used to migrate and\
  grow the population in the cities directed by the ruling High Priest.\
+"), _("\
+No citizens are made unhappy by each aggressive unit.\n\
+2% Base corruption in cities\n\
+2% Extra corruption per each tile in distance from capital\n\
 ")
 
 ; /* <-- avoid gettext warnings
