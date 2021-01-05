@@ -3783,7 +3783,6 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Magellan's Expedition", "Player", TRUE
       "UnitClass", "Sea", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
       "UnitFlag", "NoVeteran", "Local", FALSE      
     }
 [effect_magellans_expedition_a]
@@ -3793,7 +3792,6 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Magellan's Expedition", "Player", TRUE
       "UnitClass", "RiverShip", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
       "UnitFlag", "NoVeteran", "Local", FALSE      
     }
 [effect_magellans_expedition_b]
@@ -3803,7 +3801,6 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Magellan's Expedition", "Player", TRUE
       "UnitClass", "Submarine", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
       "UnitFlag", "NoVeteran", "Local", FALSE
     }
 
