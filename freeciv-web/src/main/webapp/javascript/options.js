@@ -32,33 +32,34 @@ var myGameVars; // User persistent storage tied to a unique game
 // Hard-coded client behaviours specific to certain rulesets get custom ruleset flags (CRF)
 // assigned to them inside handle_ruleset_control() (packhand.js). You can then hard-code 
 // specific client behaviour by checking for (client_rules_flag & CRF_FLAG_NAME):
-var client_rules_flag          = []; // bit-flag for exceptional rules hard-coded into client
-const CRF_CARGO_HEURISTIC      =  0; // conventional ruleset generalisations for which cargo units go on which transports: filters a cleaner UI for transport loading
-const CRF_OASIS_IRRIGATE       =  1; // ruleset allows irrigating from oasis as a water source
-const CRF_ASMITH_SPECIALISTS   =  2; // six total specialists; but #4,#5,#6 are only active with A.Smith wonder
-const CRF_MP2_UNIT_CONVERSIONS =  3; // Leader,AAA,Worker,and Riflemen can do the unit CONVERT order
-const CRF_LEGION_WORK          =  4; // Legions can road and make forts
-const CRF_MASONRY_FORT         =  5; // Masonry tech allows building forts
-const CRF_CANALS               =  6; // Ruleset allows canals with Engineering
-const CRF_NO_UNIT_GOLD_UPKEEP  =  7; // Ruleset doesn't use gold upkeep on units, so don't show it.
-const CRF_MP2_SPECIAL_UNITS    =  8; // Special rules/filters for handling MP2 units: Fanatics (skirmish), Well-Digger, Queen, Pilgrim, Proletarians
-const CRF_COMMIE_BLDG_UPKEEP   =  9; // Used for calculating/showing upkeep from buildings accurately for communist government bonus (in some rulesets)
-const CRF_PACTS_SANS_EMBASSY   = 10; // Ruleset allows treaties without embassy if contact_turns>0 but only for limited pacts
-const CRF_TESLA_UPGRADE_DISCOUNT=11;//Ruleset has Tesla's Laboratory and gives a 20% discount on unit upgrades.
-const CRF_RADAR_TOWER          = 12; // Ruleset has improvement for building Radar Tower over Airbase.
-const CRF_EXTRA_HIDEOUT        = 13; // Ruleset has hideouts and hidden status.
-const CRF_EXTRA_QUAY           = 14; // Ruleset has Quay extra and Waterway Extra.
-const CRF_NO_WASTE             = 15; // Ruleset does not feature waste.
-const CRF_MINOR_NUKES          = 16; // Ruleset has minor nukes (fission, 3x3 area)
-const CRF_MAJOR_NUKES          = 17; // Ruleset has major nukes (fusion), which it may want to disable in some games.
-const CRF_SURGICAL_PILLAGE     = 18; // Allow special exception units without UCF_PILLAGE to pillage tiles.
-const CRF_MAGLEV               = 19; // Ruleset has MAGLEVS
-const CRF_SIEGE_RAM            = 20; // Ruleset uses Siege Ram, which highjacks diplomatic sabotage popup to only allow City Wall sabotage.
-const CRF_MARINE_BASES         = 21; // Needed to optimize due to flaws in actionenablers/req
-const CRF_MARINE_RANGED        = 22; // Marines can do ranged attack
-const CRF_BSHIP_BOMBARD        = 23; // Battleships can Bombard
-const CRF_TRIREME_FUEL         = 24; // Trireme is fuel unit, client benefts from UI optimisations
-const CRF_LAST                 = 25;
+var client_rules_flag              = []; // bit-flag for exceptional rules hard-coded into client
+const CRF_CARGO_HEURISTIC          =  0; // conventional ruleset generalisations for which cargo units go on which transports: filters a cleaner UI for transport loading
+const CRF_OASIS_IRRIGATE           =  1; // ruleset allows irrigating from oasis as a water source
+const CRF_ASMITH_SPECIALISTS       =  2; // six total specialists; but #4,#5,#6 are only active with A.Smith wonder
+const CRF_MP2_UNIT_CONVERSIONS     =  3; // Leader,AAA,Worker,and Riflemen can do the unit CONVERT order
+const CRF_LEGION_WORK              =  4; // Legions can road and make forts
+const CRF_MASONRY_FORT             =  5; // Masonry tech allows building forts
+const CRF_CANALS                   =  6; // Ruleset allows canals with Engineering
+const CRF_NO_UNIT_GOLD_UPKEEP      =  7; // Ruleset doesn't use gold upkeep on units, so don't show it.
+const CRF_MP2_SPECIAL_UNITS        =  8; // Special rules/filters for handling MP2 units: Fanatics (skirmish), Well-Digger, Queen, Pilgrim, Proletarians
+const CRF_COMMIE_BLDG_UPKEEP       =  9; // Used for calculating/showing upkeep from buildings accurately for communist government bonus (in some rulesets)
+const CRF_PACTS_SANS_EMBASSY       = 10; // Ruleset allows treaties without embassy if contact_turns>0 but only for limited pacts
+const CRF_TESLA_UPGRADE_DISCOUNT   = 11;//Ruleset has Tesla's Laboratory and gives a 20% discount on unit upgrades.
+const CRF_RADAR_TOWER              = 12; // Ruleset has improvement for building Radar Tower over Airbase.
+const CRF_EXTRA_HIDEOUT            = 13; // Ruleset has hideouts and hidden status.
+const CRF_EXTRA_QUAY               = 14; // Ruleset has Quay extra and Waterway Extra.
+const CRF_NO_WASTE                 = 15; // Ruleset does not feature waste.
+const CRF_MINOR_NUKES              = 16; // Ruleset has minor nukes (fission, 3x3 area)
+const CRF_MAJOR_NUKES              = 17; // Ruleset has major nukes (fusion), which it may want to disable in some games.
+const CRF_SURGICAL_PILLAGE         = 18; // Allow special exception units without UCF_PILLAGE to pillage tiles.
+const CRF_MAGLEV                   = 19; // Ruleset has MAGLEVS
+const CRF_SIEGE_RAM                = 20; // Ruleset uses Siege Ram, which highjacks diplomatic sabotage popup to only allow City Wall sabotage.
+const CRF_MARINE_BASES             = 21; // Needed to optimize due to flaws in actionenablers/req
+const CRF_MARINE_RANGED            = 22; // Marines can do ranged attack
+const CRF_BSHIP_BOMBARD            = 23; // Battleships can Bombard
+const CRF_TRIREME_FUEL             = 24; // Trireme is fuel unit, client benefts from UI optimisations
+const CRF_RECYCLING_DISCOUNT       = 25;
+const CRF_LAST                     = 26;
 
 var graphic_theme_path;
 

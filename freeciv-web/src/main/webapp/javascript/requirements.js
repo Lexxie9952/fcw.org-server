@@ -233,7 +233,9 @@ function universal_build_shield_cost(pcity, target)
     * back to using this function */
 
   if (!target['hp'])              // improvements don't have hit points
-    return target['build_cost'];
+    // code for improvement discounts:
+    return get_universal_discount_price(target, pcity);
   else
-    return get_unit_discount_price(target, pcity);
+    // code for unit discounts:
+    return get_universal_discount_price(target, pcity);
 }

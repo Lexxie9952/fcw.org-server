@@ -964,12 +964,12 @@ function get_gold_cost_per_shield(pcity)
 /**************************************************************************
 ...Figures out discounts for units
 **************************************************************************/
-function get_unit_discount_price(ptype, pcity)
+function get_universal_discount_price(ptype, pcity)
 {
   // Since 'name' and 'build_cost' are the only fields checked and
   // are universal to both improvements and units, we can adapt this
   // for everything when needed: 
-  
+
   // Apply MP2 communist discounts
   if (client_rules_flag[CRF_MP2_SPECIAL_UNITS] && 
       governments[players[client.conn.playing.playerno].government].name == "Communism") {
@@ -1018,7 +1018,7 @@ function generate_production_list()
                             "text": punit_type['name'],
                         "helptext": punit_type['helptext'].replace(stripChar, ""),
                         "rule_name": punit_type['rule_name'],
-                        "build_cost": get_unit_discount_price(punit_type),
+                        "build_cost": get_universal_discount_price(punit_type),
                         "unit_details": "A<b>"+punit_type['attack_strength']  
                         + "</b>D<b>"+punit_type['defense_strength']  
                         + "</b>F<b>"+punit_type['firepower'] 
@@ -1030,7 +1030,7 @@ function generate_production_list()
                             "text": punit_type['name'],
 	                      "helptext": punit_type['helptext'].replace(stripChar, ""),
                        "rule_name": punit_type['rule_name'],
-                      "build_cost": get_unit_discount_price(punit_type),
+                      "build_cost": get_universal_discount_price(punit_type),
                     "unit_details": "A<b>"+punit_type['attack_strength'] + "</b> " 
                                   + "D<b>"+punit_type['defense_strength'] + "</b> " 
                                   + "F<b>"+punit_type['firepower'] + "</b> "
@@ -1194,9 +1194,7 @@ function city_turns_to_build(pcity, target, include_shield_stock, is_unit)
 {
   var city_shield_surplus =  pcity['surplus'][O_SHIELD];
   var city_shield_stock = include_shield_stock ? pcity['shield_stock'] : 0;
-  var cost = is_unit
-             ? get_unit_discount_price(target, pcity)
-             : universal_build_shield_cost(pcity, target);
+  var cost = universal_build_shield_cost(pcity, target);
 
   if (include_shield_stock == true && (pcity['shield_stock'] >= cost)) {
     return 1;
@@ -2186,7 +2184,7 @@ function city_worklist_dialog(pcity)
 		"kind" : kind,
 		"value" : value,
 		"helptext" : putype['helptext'].replace(stripChar, ""),
-		"build_cost" : get_unit_discount_price(putype, pcity),
+		"build_cost" : get_universal_discount_price(putype, pcity),
 		"sprite" : get_unit_type_image_sprite(putype)});
       } else {
         console.log("unknown kind: " + kind);
@@ -2429,7 +2427,7 @@ function populate_worklist_production_choices(pcity)
           production_html += "<td title='Attack/Defence/Firepower, Hitpoints' class='prod_choice_info' "
           + "style='padding-right:30px; text-align:right'>" 
           + production_list[a]['unit_details'] + "</td>"
-          + "<td class='prod_choice_cost'>" + get_unit_discount_price(unit_types[value],pcity) + "</td></tr>";
+          + "<td class='prod_choice_cost'>" + get_universal_discount_price(unit_types[value],pcity) + "</td></tr>";
        }
        else if (kind == VUT_IMPROVEMENT /*&& !small*/) {
           production_html += "<td title='Upkeep' class='prod_choice_info' " 

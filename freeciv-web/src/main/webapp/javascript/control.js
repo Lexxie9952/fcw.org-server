@@ -1596,15 +1596,25 @@ function update_unit_order_commands()
       }
       //console.log("EXITED upgrade target check.");
       var upgrade_name = upgrade_type['name'];
-      var upgrade_cost = Math.floor(upgrade_type['build_cost'] - ptype['build_cost']/2);  //subtract half the shield cost of upgrade unit
+      // Upgrade cost in unittype.c doesn't seem to take conditional unit discounts into effect.
+      var upgrade_cost = Math.floor(upgrade_type['build_cost'] - Math.floor(ptype['build_cost']/2));  //subtract half the shield cost of upgrade unit
       // upgrade cost = 2*T + (T*T)/20, where T = shield_cost_of_new unit - (shield_cost_of_old unit / 2)
       upgrade_cost = 2*upgrade_cost + Math.floor( (upgrade_cost*upgrade_cost)/20 );
       // TODO: check for effect Upgrade_Price_Pct when possible and multiply that constant to upgrade_cost
+      var cost_adjust = 0;
       if (client_rules_flag[CRF_TESLA_UPGRADE_DISCOUNT]) {
         if ( player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_TESLAS_LABORATORY)) ) {
-          upgrade_cost = Math.floor( upgrade_cost * 0.80); // 20% discount for Tesla's Lab
+          cost_adjust -= 20; // 20% discount for Tesla's Lab
         }
       }
+      if (client_rules_flag[CRF_RECYCLING_DISCOUNT]) {
+        console.log("recycling present")
+        if (player_invention_state(client.conn.playing, tech_id_by_name('Recycling')) == TECH_KNOWN) {
+          cost_adjust -= 20; // 20% discount after Recycling Tech
+        }
+      }
+      upgrade_cost = Math.floor(upgrade_cost * (100 + cost_adjust) / 100);
+      /* *********************************************************************************************** */
 
       unit_actions["upgrade"] =  {name: "Upgrade to "+upgrade_name+" for "+upgrade_cost+" (U)"};
       $("#order_upgrade").attr("title", "Upgrade to "+upgrade_name+" for "+upgrade_cost+" (U)");

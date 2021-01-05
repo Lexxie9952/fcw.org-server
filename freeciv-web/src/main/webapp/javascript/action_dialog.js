@@ -521,7 +521,117 @@ function popup_action_selection(actor_unit, action_probabilities,
              "Action for " + unit_types[actor_unit['type']]['name']
              + ":");
       
-  // THIS SECTION ALLOWS OVERRIDE NAMES for different actions from special unit types         
+  // THIS SECTION DOES OVERRIDE NAMES for special unit actions:
+  if (client_rules_flag[CRF_MP2_SPECIAL_UNITS]) {
+    switch (unit_types[actor_unit['type']]['name']) {
+      case "Siege Ram":  for (button_id in buttons) {
+        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+          buttons[button_id].text = "Ram Fortress (100%)"
+          buttons[button_id].title = "Odds of survival:  100%\n"
+                                  + "Combat:                4 rounds\n"
+                                  + "Targets:                 ALL\n"
+                                  + "Attack bonus:        8.75x\n"
+                                  + "Move cost:            1 move\n"
+                                  + "Min. moves:          1 1/9 moves\n"
+                                  + "Casualties:             --\n"
+                                  + "\n\"Damage\" to the Fortress is represented by HP loss to all\n"
+                                  + "units (up to 40%/turn): emulating damage reduction to the\n"
+                                  + "Fortress defense bonus. HP healing of units (up to 40%/turn),\n"
+                                  + "emulates resistance and repairing Fortress damage over the\n"
+                                  + "course of a long siege.\n"
+        }
+        else if (buttons[button_id].text.startsWith("Targeted Sabotage")) {
+          buttons[button_id].text = "Attack City Walls ([25%, 50%])"
+          buttons[button_id].title = "Odds of survival:  50%  (halved if city is capital)\n"
+                                  + "Targets:                 City Walls\n"
+                                  + "Move cost:            1/9 move\n"
+                                  + "Min. moves:          1 move\n"
+                                  + "Attacks the City Walls, resulting in destruction\n"
+                                  + "of the City Walls or the loss of the Siege Ram."
+        }
+      } break;
+      case "Phalanx":  for (button_id in buttons) {
+        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+          buttons[button_id].text = "Rumble Attack (100%)"
+          buttons[button_id].title = "Odds of survival:  100%\n"
+                                  + "Combat:                3 rounds\n"
+                                  + "Targets:                 1 unit\n"
+                                  + "Move cost:            5/9 move\n"
+                                  + "Min. moves:          fortified OR hasn't moved\n"
+                                  + "Casualties:             --\n"
+                                  + "\nA 3 round rumble against one unit on the target tile\n"
+                                  + "represents the Phalanx safely pushing from a held\n"
+                                  + "position vs. a weak defender who comes too close.\n"
+        }
+      } break;
+      case "Archers":  for (button_id in buttons) {
+        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+          buttons[button_id].text = "Volley Attack (100%)"
+          buttons[button_id].title = "Odds of survival:  100%\n"
+                                  + "Combat:                2 rounds\n"
+                                  + "Targets:                 7 units\n"
+                                  + "Move cost:            1 5/9 moves\n"
+                                  + "Casualties:             --\n"
+                                  + "\n2 rounds of arrows against up to 7 units,\n"
+                                  + "represents Archers raining arrows from a\n"
+                                  + "safe distance over an adjacent force."
+        }
+      } break;
+      case "Legion":  for (button_id in buttons) {
+        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+          buttons[button_id].text = "Pilum Assault (100%)"
+          buttons[button_id].title = "Odds of survival:  100%\n"
+                                  + "Attack bonus:        2x\n"
+                                  + "Combat:                1 round\n"
+                                  + "Targets:                 2 units\n"
+                                  + "Move cost:            1 move\n"
+                                  + "Max. casualties:     2\n"
+                                  + "\nPila easily disable shields in the enemy front line, represented by\n"
+                                  + "1hp damage caused to up to 2 units. This helps the odds of success\n"
+                                  + "of follow-up attack if done before the units heal (\"fix their shields.\")"
+        }
+      } break;
+      case "Fanatics":  for (button_id in buttons) {
+        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+          buttons[button_id].text = "Skirmish Assault (100%)"
+          buttons[button_id].title = "Odds of survival:  100%\n"
+                                  + "Combat:                3 rounds\n"
+                                  + "Targets:                 4 units\n"
+                                  + "Move cost:            1 5/9 moves\n"
+                                  + "Casualties:             --\n"
+                                  + "\nFanatics opportunistically damage and degrade foreign occupants\n"
+                                  + "of their native land, for 3 rounds of combat on up to 4 foreign\n"
+                                  + "occupants of a city or tile."
+        }
+      } break;
+      case "Marines":  for (button_id in buttons) {
+        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+          buttons[button_id].text = "Bazooka Attack (100%)"
+          buttons[button_id].title = "Odds of survival:  100%\n"
+                                  + "Combat:                3 rounds\n"
+                                  + "Targets:                 4 units\n"
+                                  + "Move cost:            1 5/9 moves\n"
+                                  + "Max. casualties:     1\n"        
+                                  + "\nV3 Marines use agility/mobility over terrain features to improvise hit-and-run\n"
+                                  + "ballistic attacks: 3 rounds of combat on up to 4 occupants of a tile.\n"
+        }
+      } break;
+      case "Battleship":  for (button_id in buttons) {
+        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+          buttons[button_id].text = "Bombard Attack (100%)"
+          buttons[button_id].title = "Odds of survival:  100%\n"
+                                  + "Combat:                3 rounds\n"
+                                  + "Targets:                 4 units\n"
+                                  + "Move cost:            5 moves\n"
+                                  + "Max. casualties:     1\n"
+                                  + "\nUses the range advantage of massive large guns to safely\n" 
+                                  + "shell and degrade up to 4 distant targets on a tile or city.\n"
+        }
+      } break;
+    }
+  }
+  /*
+      
   if (unit_types[actor_unit['type']]['name']=="Fanatics"
       && client_rules_flag[CRF_MP2_SPECIAL_UNITS]) {
     for (button_id in buttons) {
@@ -576,7 +686,7 @@ function popup_action_selection(actor_unit, action_probabilities,
       }
     }
   }
-
+*/
   //--------------------------------------------------------------------
 
   $(id).dialog({
