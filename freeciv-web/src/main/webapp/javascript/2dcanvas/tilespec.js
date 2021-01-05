@@ -1863,6 +1863,9 @@ function fill_road_rail_sprite_array(ptile, pcity)
   if (MAGLEV_active) {
     var maglev = tile_has_extra(ptile, EXTRA_MAGLEV);
   }
+  if (SEABRIDGE_active) {
+    var seabridge = tile_has_extra(ptile, EXTRA_SEABRIDGE)
+  }
 
   var road_near = [];
   var rail_near = [];
@@ -1882,17 +1885,25 @@ function fill_road_rail_sprite_array(ptile, pcity)
     var tile1 = mapstep(ptile, dir);
     if (tile1 != null && tile_get_known(tile1) != TILE_UNKNOWN) {
       road_near[dir] = tile_has_extra(tile1, EXTRA_ROAD);
+
       // Quays integrate with roads "one-way", so we draw the road on the tile that
       // has it but not the quay tile, showing the road going TOWARD the quay.
       if (QUAY_active) road_near[dir] |= tile_has_extra(tile1, EXTRA_QUAY);
+
+      rail_near[dir] = tile_has_extra(tile1, EXTRA_RAIL);
+
       // Sea Bridges integrate with roads, so the road-tile itself will draw a road
       // up to the bridge, IFF it's cardinally connected to that bridge.
       if (SEABRIDGE_active) {
         if (cardinal_tileset_dirs.includes(dir)) {  // only cardinal tiles are valid road-connectors
           road_near[dir] |= tile_has_extra(tile1, EXTRA_SEABRIDGE);
         }
+        // For non-cardinal adjacent sea-bridges, we also want rails to not show, but 
+        // rails go on top so we catch it contrarily here:
+        else {  // non-cardinal (diagonally adjacent) tiles don't connect rails if EITHER has a sea bridge
+          if (seabridge || tile_has_extra(tile1, EXTRA_SEABRIDGE)) rail_near[dir] = false; // absolute override
+        }
       }
-      rail_near[dir] = tile_has_extra(tile1, EXTRA_RAIL);
       if (MAGLEV_active) maglev_near[dir] = tile_has_extra(tile1, EXTRA_MAGLEV);
    
       /* Draw rail/road/maglev if this tile connects to the adjacent tile. But don't
