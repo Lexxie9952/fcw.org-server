@@ -633,6 +633,11 @@ static void hard_code_actions(void)
       action_new(ACTION_IRRIGATE, ATK_TILE,
                  FALSE, ACT_TGT_COMPL_MANDATORY, TRUE, FALSE,
                  0, 0, FALSE);
+  actions[ACTION_SPY_ATTACK] =
+      action_new(ACTION_SPY_ATTACK,
+                 ATK_UNITS,
+                 TRUE, ACT_TGT_COMPL_SIMPLE, FALSE, TRUE,
+                 1, 1, FALSE);
 }
 
 /**********************************************************************//**
@@ -875,6 +880,7 @@ enum action_battle_kind action_get_battle_kind(const struct action *pact)
   switch (pact->id) {
   case ACTION_ATTACK:
     return ABK_STANDARD;
+  case ACTION_SPY_ATTACK:
   case ACTION_SPY_POISON:
   case ACTION_SPY_POISON_ESC:
   case ACTION_SPY_STEAL_GOLD:
@@ -1848,6 +1854,7 @@ action_actor_utype_hard_reqs_ok(const action_id wanted_action,
   case ACTION_HEAL_UNIT:
   case ACTION_PILLAGE:
   case ACTION_FORTIFY:
+  case ACTION_SPY_ATTACK:
     /* No hard unit type requirements. */
     break;
 
@@ -2008,6 +2015,7 @@ action_hard_reqs_actor(const action_id wanted_action,
   case ACTION_BASE:
   case ACTION_MINE:
   case ACTION_IRRIGATE:
+  case ACTION_SPY_ATTACK:
     /* No hard unit requirements. */
     break;
 
@@ -2695,6 +2703,45 @@ is_action_possible(const action_id wanted_action,
       return TRI_NO;
     }
     break;
+
+  case ACTION_SPY_ATTACK:
+    {
+      bool found;
+
+      if (!can_player_see_hypotetic_units_at(actor_player, target_tile)) {
+        /* May have a hidden diplomatic defender. */
+        return TRI_MAYBE;
+      }
+
+      found = FALSE;
+      unit_list_iterate(target_tile->units, punit) {
+        struct player *uplayer = unit_owner(punit);
+
+        if (uplayer == actor_player) {
+          /* Won't defend against its owner. */
+          continue;
+        }
+
+        if (unit_has_type_flag(punit, UTYF_SUPERSPY)) {
+          /* This unbeatable diplomatic defender will defend before any
+           * that can be beaten. */
+          found = FALSE;
+          break;
+        }
+
+        if (unit_has_type_flag(punit, UTYF_DIPLOMAT)) {
+          /* Found a beatable diplomatic defender. */
+          found = TRUE;
+          break;
+        }
+      } unit_list_iterate_end;
+
+      if (!found) {
+        return TRI_NO;
+      }
+    }
+    break;
+  
 
   case ACTION_SPY_INVESTIGATE_CITY:
   case ACTION_INV_CITY_SPEND:
@@ -3550,6 +3597,10 @@ action_prob(const action_id wanted_action,
     /* All uncertainty comes from potential diplomatic battles. */
     chance = ap_diplomat_battle(actor_unit, target_unit, target_tile);
     break;
+  case ACTION_SPY_ATTACK:
+    /* All uncertainty comes from potential diplomatic battles. */
+    chance = ap_diplomat_battle(actor_unit, NULL, target_tile);
+    break;  
   case ACTION_SPY_SABOTAGE_CITY:
     /* TODO */
     break;
@@ -4952,6 +5003,8 @@ const char *action_ui_name_ruleset_var_name(int act)
     return "ui_name_build_mine";
   case ACTION_IRRIGATE:
     return "ui_name_irrigate";
+  case ACTION_SPY_ATTACK:
+    return "ui_name_spy_attack";  
   case ACTION_COUNT:
     break;
   }
@@ -5129,6 +5182,9 @@ const char *action_ui_name_default(int act)
   case ACTION_IRRIGATE:
     /* TRANS: Build _Irrigation (100% chance of success). */
     return N_("Build %sIrrigation%s");
+  case ACTION_SPY_ATTACK:
+    /* TRANS: _Eliminate Diplomat (100% chance of success). */
+    return N_("%sEliminate Diplomat%s");    
   }
 
   return NULL;

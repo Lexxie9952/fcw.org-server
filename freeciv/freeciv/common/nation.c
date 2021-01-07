@@ -42,6 +42,8 @@ struct nation_set {
   char description[MAX_LEN_MSG];
 };
 
+static const char *indef_articles[4] = {"a", "an", "A", "An"};
+
 static struct nation_type *nations = NULL;
 
 static int num_nation_sets;
@@ -168,6 +170,26 @@ const char *nation_plural_translation(const struct nation_type *pnation)
 const char *nation_adjective_for_player(const struct player *pplayer)
 {
   return nation_adjective_translation(nation_of_player(pplayer));
+}
+/************************************************************************//**
+  Return "a" or "an", optionally capitalized, based on the word passed. 
+****************************************************************************/
+const char *indefinite_article_for_word(const char *word, bool capitalize)
+{
+  // indef_articles[] = {'a', 'an', 'A', 'An'};
+  const char *vowels[10] = {"a", "e", "i", "o", "u",
+                            "A", "E", "I", "O", "U"};
+  int vowel_count = 10;
+
+  for (int i=0; i<vowel_count; i++) {
+    if (word[0] == vowels[i][0]) {  // use "an":
+      if (capitalize) return indef_articles[3];
+      else return indef_articles[1];
+    }
+  }
+  // use "a":
+  if (capitalize) return indef_articles[2];
+  else return indef_articles[0];
 }
 
 /************************************************************************//**

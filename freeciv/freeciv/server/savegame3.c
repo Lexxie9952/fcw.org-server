@@ -5663,6 +5663,7 @@ static bool sg_load_player_unit(struct loaddata *loading,
           case ACTION_MINE_TF:
           case ACTION_FORTIFY:
           case ACTION_CONVERT:
+          case ACTION_SPY_ATTACK:
           case ACTION_COUNT:
             /* None of these can take an extra. */
             fc_assert_msg(order_extra == EXTRA_NONE,

@@ -196,6 +196,7 @@ const char *nation_rule_name(const struct nation_type *pnation);
 
 const char *nation_adjective_translation(const struct nation_type *pnation);
 const char *nation_adjective_for_player(const struct player *pplayer);
+const char *indefinite_article_for_word(const char *word, bool capitalize); // adds a/an indefinite article
 const char *nation_plural_translation(const struct nation_type *pnation);
 const char *nation_plural_for_player(const struct player *pplayer);
 

@@ -350,7 +350,7 @@ static bool do_capture_units(struct player *pplayer,
 
     /* May cause an incident */
     action_consequence_success(paction, pplayer,
-                               unit_owner(to_capture),
+                               uplayer, /*unit_owner(to_capture), offender now owns this unit, duh!*/
                                pdesttile, victim_link);
 
     if (NULL != pcity) {
@@ -670,6 +670,7 @@ static struct player *need_war_player_hlp(const struct unit *actor,
   case ACTION_BASE:
   case ACTION_MINE:
   case ACTION_IRRIGATE:
+  case ACTION_SPY_ATTACK:
     /* No special help. */
     break;
   case ACTION_COUNT:
@@ -2687,6 +2688,11 @@ bool unit_perform_action(struct player *pplayer,
     ACTION_STARTED_UNIT_UNITS(action_type, actor_unit, target_tile,
                               do_attack(actor_unit, target_tile, paction));
     break;
+  case ACTION_SPY_ATTACK:
+    ACTION_STARTED_UNIT_UNITS(action_type, actor_unit, target_tile,
+                              spy_attack(pplayer, actor_unit, target_tile,
+                                         paction));
+    break;  
   case ACTION_FOUND_CITY:
     ACTION_STARTED_UNIT_TILE(action_type, actor_unit, target_tile,
                              city_build(pplayer, actor_unit,
