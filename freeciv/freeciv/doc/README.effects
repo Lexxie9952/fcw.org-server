@@ -52,6 +52,7 @@ Requirement types and supported ranges
 
 Achievement:   World, Alliance, Team, Player
 Action:        Local
+Activity:      Local
 Age:           Local, City                                             Target unit, city or player is in the game for at least so many turns.
 AI:            Player                                                  AI player difficulty level
 BaseFlag:      Local, Adjacent, CAdjacent, Traderoute, City
@@ -116,6 +117,9 @@ DiplRel is a diplomatic relationship.
 MaxUnitsOnTile is about the number of units present on a tile.
 UnitState is "Transported", "Transporting", "OnNativeTile", "OnLivableTile",
 "OnDomesticTile" or "HasHomeCity".
+Activity is "Idle", "Pollution", "Mine", "Irrigate", "Fortified", "Fortress", "Sentry",
+"Pillage", "Goto", "Explore", "Transform", "Fortifying", "Fallout", "Base", "Road",
+"Convert", ["Cultivate"] (Irrigate), or ["Plant"] (Mine).
 MinMoveFrags is the minimum move fragments the unit must have left.
 MinCalFrag is the minimum sub-year division the calendar must have reached,
 if enabled (see [calendar].fragments in game.ruleset).

@@ -170,7 +170,13 @@ static void action_consequence_common(const struct action *paction,
                                NULL, NULL,
                                paction,
                                eft);
-
+/* DEBUG to catch all the casus belli that don't trigger properly
+   notify_player(offender, victim_tile, E_ENEMY_DIPLOMAT_BRIBE, ftc_server,
+                _("Will '%s' cause an incident? %s. victim_player=%s"),
+                action_name_translation(paction),
+                (casus_belli_amount >= 1 ? "YES!" : "....no...."),
+                victim_player ? victim_player->name : "NULL");                             
+*/
   if (casus_belli_amount >= 1) {
     /* In this situation the specified action provides a casus belli
      * against the actor. */
