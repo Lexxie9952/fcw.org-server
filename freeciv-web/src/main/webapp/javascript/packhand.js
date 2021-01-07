@@ -729,6 +729,7 @@ function handle_ruleset_control(packet)
       client_rules_flag[CRF_MARINE_RANGED] = true;
       client_rules_flag[CRF_BSHIP_BOMBARD] = true;
       client_rules_flag[CRF_RECYCLING_DISCOUNT] = true;      
+      client_rules_flag[CRF_COLOSSUS_DISCOUNT] = true;      
     case "MP2 Brava":
       // flags for brava that don't override/contradict caravel
       client_rules_flag[CRF_SEABRIDGE] = true;      

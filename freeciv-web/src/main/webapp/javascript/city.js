@@ -978,7 +978,7 @@ function get_universal_discount_price(ptype, pcity)
       return ptype['build_cost'] - communist_discounts[ptype['name']];
   }
   // Apply discounts for having Colossus
-  if (pcity && 
+  if (pcity && client_rules_flag[CRF_COLOSSUS_DISCOUNT] &&
       city_has_building(pcity, improvement_id_by_name(B_COLOSSUS))) {
 
     if (colossus_discounts[ptype['name']])
