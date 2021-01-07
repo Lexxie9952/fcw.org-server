@@ -253,27 +253,30 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
     var ptile = tiles[punit['tile']];
     var can_load = false;
 
+    var from_unit  = units[punit['transported_by']];  // unit currently transporting the cargo who wants to swap transports
+    var from_class = get_unit_class(tr_unit);          // unit_class of the transport currently transporting the cargo
+
     /* Can "transport swap" in 1) cities, 2) in ships & gunships who have neither moved more than 4 moves NOR 
        move more than half their moves; Every other type of transported-scenario, swapping is not allowed. */
     if (tile_city(ptile)) can_load = true; 
-    if (tclass.rule_name == "Trireme" || tclass.rule_name == "RiverShip") {
-      if (units[punit['transported_by']].movesleft >= 3*SINGLE_MOVE) {
+    if (from_class.rule_name == "Trireme" || from_class.rule_name == "RiverShip") {
+      if (from_unit.movesleft >= 3*SINGLE_MOVE) {
         can_load = true;
       }
     }
-    if (tclass.rule_name == "Sea") {
-      if (units[punit['transported_by']].movesleft >= 4*SINGLE_MOVE)
+    if (from_class.rule_name == "Sea") {
+      if (from_unit.movesleft >= 4*SINGLE_MOVE)
         can_load = true;
     }
-    if (tclass.rule_name == "Helicopter") {
-      if (units[punit['transported_by']].movesleft >= 9*SINGLE_MOVE)
+    if (from_class.rule_name == "Helicopter") {
+      if (from_unit.movesleft >= 9*SINGLE_MOVE)
         can_load = true;
     }
 
     if (!can_load) 
       // in such case, can't swap transport without unloading from old first.
       return false;
-   }
+  }
 
   if (pclass == "Bomb") {
     if (!ttype.name.includes("Bomber") 
