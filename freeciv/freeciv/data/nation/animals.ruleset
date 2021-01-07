@@ -9,9 +9,9 @@ legend=_("Before civilization claimed the lands, ancient man had to \
 survive the wilderness with all kinds of dangerous animals.")
 
 leaders = {
- "name",        "sex"
- "Lion",        "Female"
- "Orca",        "Male"
+ "name",          "sex"
+ "Tigress",       "Female"
+ "Mufasa",        "Male"
 }
 
 flag     = "animals"
