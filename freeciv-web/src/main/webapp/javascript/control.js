@@ -1353,9 +1353,13 @@ function update_unit_order_commands()
       if (show_order_buttons==1) $("#order_noorders").hide();  //not frequently used order
 
       /*console.log("\nRoad test: !thx(r)=="+!tile_has_extra(ptile, EXTRA_ROAD));
-      //console.log("Road test: type(SB)=="+(typeof EXTRA_SEABRIDGE !== undefined));
+      //console.log("Road test: type(SB)=="+(typeof EXTRA_SEABRIDGE !== "undefined"));
       //console.log("Road test: thx(sb)=="+tile_has_extra(ptile, EXTRA_SEABRIDGE));*/
 
+      //FIXME and remove me after UR8 is over or UR8 restarts.
+      // Fix Unrated Game 8 used MP2-Brava before SEA-Bridge was corrected:
+      if (typeof EXTRA_SEABRIDGE === "undefined") client_rules_flag[CRF_SEABRIDGE] = false;
+      /////////////////////////////////////////////////////////////////////////////////////
       if (!tile_has_extra(ptile, EXTRA_ROAD)) {
         if ( !client_rules_flag[CRF_SEABRIDGE] || !tile_has_extra(ptile, EXTRA_SEABRIDGE)) {
           $("#order_road").show();
@@ -2460,7 +2464,7 @@ function do_map_click(ptile, qtype, first_time_called)
 
         if (goto_path) { // touch devices don't have a goto_path until they call this function twice. see: if (touch_device) below
           // Client circumvents FC Server has buggy GOTO for units which have UTYF_COAST + fuel:
-          if (unit_has_type_flag(punit, UTYF_COAST) && punit['fuel']>0 && !delayed_goto_active && goto_path !== undefined) {
+          if (unit_has_type_flag(punit, UTYF_COAST) && punit['fuel']>0 && !delayed_goto_active && goto_path !== "undefined") {
             if (goto_path['dir'] && goto_path['dir'][0] && goto_path['dir'][0]==-1) {
               goto_path['dir'].shift();  // remove the first "refuel dir -1" on coastal fuel units so they don't freeze on refuel spots
               goto_path['length']--;     // correct the path length for the removed -1 "refuel dir"
@@ -5845,7 +5849,7 @@ function update_goto_path(goto_packet)
   goto_turns_request_map[goto_packet['unit_id'] + "," + goaltile['x'] + "," + goaltile['y']]
 	  = current_goto_turns;
 
-  if (current_goto_turns != undefined) {
+  if (current_goto_turns !== "undefined") {
     var path_length = goto_packet['length'];
 
     // Fuel units inject extra non-path 'refuel data' in the goto_packet: +++
@@ -5955,7 +5959,7 @@ function popit_req(ptile)
   if (punit_id) { // units are on tile
     var tunits = tile_units(ptile);
     for (u = 0; u < tunits.length; u++) {
-      if (tunits[u]['goto_tile'] != undefined) { // don't show foreign units: this key is undefined
+      if (tunits[u]['goto_tile'] !== "undefined") { // don't show foreign units: this key is undefined
         var goto_tile_id = tunits[u]['goto_tile'];
         if (goto_tile_id > 0) {  // unit has go to orders
           request_goto_path(tunits[u]['id'], tiles[goto_tile_id]['x'], tiles[goto_tile_id]['y']);
