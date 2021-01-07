@@ -346,6 +346,9 @@ ui_name_airlift_unit = _("%sAirlift to City%s")
 ; /* TRANS: _Attack (100% chance of success). */
 ui_name_attack = _("%sAttack%s")
 
+; /* TRANS: Eliminate _Spy (100% chance of success). */
+ui_name_spy_attack = _("Eliminate %sSpy%s")
+
 ; /* TRANS: _Bombard (100% chance of success). */
 ui_name_bombard = _("Range%sd Attack%s")
 
@@ -850,6 +853,24 @@ target_reqs    =
       "MaxUnitsOnTile", "1", "Local", TRUE
     }
 
+[actionenabler_eliminate_spy]
+action = "Spy Attack"
+actor_reqs    =
+    { "type",   "name",           "range", "present"
+      "UnitFlag", "Spy",          "Local", TRUE
+      "UnitType", "Siege Ram",    "Local", FALSE
+      "UnitState","OnLivableTile","Local", TRUE
+      "UnitState","Transported",  "Local", FALSE
+      "MinMoveFrags", "1",        "Local", TRUE
+      "DiplRel",  "Alliance",     "Local", FALSE
+      "DiplRel",  "Team",         "Local", FALSE
+      "DiplRel", "Foreign",       "Local", TRUE
+    }
+target_reqs    =
+    { "type",   "name", "range", "present"
+      "CityTile", "Center", "Local", FALSE
+    }
+
 [actionenabler_traderoute]
 action = "Establish Trade Route"
 actor_reqs    =
@@ -995,7 +1016,8 @@ actor_reqs    =
       "UnitFlag",     "Bombarder",    "Local", TRUE
       "UnitType",     "Phalanx",      "Local", TRUE
       "UnitState",    "Transported",  "Local", FALSE
-      "UnitState",    "Fortified",    "Local", TRUE  ;3.1 added "Activity" req
+      "UnitState",   "Fortified",    "Local", TRUE   
+;      "Activity",     "Fortified",    "Local", TRUE  ;3.1 version, which we now have working also.
       "MinMoveFrags", "9",            "Local", TRUE
       "DiplRel",      "War",          "Local", TRUE
    }
@@ -1129,7 +1151,7 @@ actor_reqs    =
       "UnitType",     "Marines",      "Local", TRUE
       "MinMoveFrags", "1",            "Local", TRUE
       "DiplRel",      "War",          "Local", TRUE
-      "MinVeteran",   "3",            "Local", TRUE
+      "MinVeteran",   "2",            "Local", TRUE
    }
 target_reqs    =
     { "type",   "name", "range",  "present"

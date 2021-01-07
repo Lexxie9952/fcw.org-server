@@ -147,23 +147,20 @@ ruler_female_title = _("?female:Comrade %s")
 helptext = _("\
 In Communism, all work, output, and goods are owned by the state.\
 "), _("\
-Corruption does not vary by distance from the capital;\
- all cities have the same base level of corruption. Each city gets 4\
- units free of upkeep. Buildings with 1 upkeep are free.\
- The capital city with Palace gets a +25% production bonus.\
+Each city gets 4 units free of upkeep. Buildings with 1 upkeep\
+ are free. The city with a Palace gets +25% production.\
 "), _("\
-Communist governments get a cost discount of -5 on Riflemen and -10 on\
- Armor and Dive Bombers. Diplomats and Spies are produced with +1 veteran\
- status. The effect of Cathedrals and Michelangelo is reduced -1.\
+Riflemen cost 5 less; Armor and Dive Bombers, 10 less.\
+ Diplomats and Spies get +1 vet level. The effect of\
+ Cathedrals and Michelangelo is reduced -1.\
 "), _("\
-Communist states can transfer Proletarians between cities to\
- re-distribute population. Large numbers of Proletarians can be\
- used to finish State projects. The Communism tech allows a\
- Communist government to convert Workers to Riflemen and vice\
- versa, if inside national territory and if possessing the necessary\
- technologies.\
+Communists can transfer Proletarians between cities to\
+ re-distribute population, or use them as workers on\
+ State projects. The Communism tech allows a Communist government\
+ to convert Workers to Riflemen and vice versa, if in domestic\
+ territory and possessing the necessary tech.\
 "), _("\
-No citizens are made unhappy by each aggressive unit.\n\
+No citizens are made unhappy by aggressive units.\n\
 20% Base corruption in cities\n\
 No Extra corruption per each tile in distance from capital\n\
 ")
@@ -235,19 +232,18 @@ ruler_male_title = _("High Priest %s")
 ruler_female_title = _("High Priestess %s")
 
 helptext = _("\
-Fundamentalism is organized around central beliefs, usually religious. These form\
- rigid guidelines for the actions of the rulers and the people.\
+Fundamentalism is formed on religious beliefs which are the law of the land.\
 "), _("\
-The people are entirely devoted to their beliefs, and are often willing to die to\
- preserve them. Cost for enemies to bribe units or incite cities is doubled.\
- Enemies cannot establish hostile embassies without first making Cease-Fire\
- or Peace. Theocratic rule causes science output to suffer by 50%.\
+The people are devoted and often willing to die for their faith. Cost for\
+ enemies to incite cities or bribe units is 2x, but Fanatics cannot be\
+ bribed. Enemies cannot establish embassies without first making Ceasefire\
+ or Peace.\
 "), _("\
-Improvements that appease unhappy citizens produce gold tithes equal to\
- the number of citizens they would appease. Fanatics cannot be bribed. Palace\
- gives +50% to gold income in its city. In each city, two military units may impose\
- martial law, each making one citizen content. Pilgrims can be used to migrate and\
- grow the population in the cities directed by the ruling High Priest.\
+Improvements that appease unhappy citizens produce 1 gold in tithes for each\
+ citizen appeased. Tithes also boost gold income by +20%, but science output\
+ suffers -20%. Palace gives +50% to gold income in its city. In cities, two\
+ military units may impose martial law, affecting one citizen each. Pilgrims\
+ can be made to migrate and grow cities.\
 "), _("\
 No citizens are made unhappy by each aggressive unit.\n\
 2% Base corruption in cities\n\

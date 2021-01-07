@@ -12,7 +12,7 @@ BUILDINGS AND WONDERS:
 2. Hanging Gardens now costs 210 and is obsolete by Steam Engine: 
    increase diversity of other early wonder strategies
    encourage Frigates before Ironclads
-   more difficult for non-representative govs to rapture simultaneous to mid-game invasions
+   more difficult for representative govs to rapture simultaneous to mid-game invasions
 3. Police Station prevents investigate city for all govs except Democracy.
 4. Courthouse prevents Diplomats (not Spies) from doing hostile Embassy without first cease-fire or peace.
 
@@ -27,10 +27,12 @@ GOVERNMENT RE-BALANCE:
 3. Fundamentalist government now joins Democracy/Communism to get the "generate partisans" effect.
 4. Fanatics can skirmish assault cities which have foreign populations (e.g., your recently conquered city)
 5. Pilgrams have no pop_cost. Effectively, it's "rapture you can geographically direct, for 10 shields"
+6. -50% bulbs in exchange for basically free upkeep on temples and make_content buildings, was a raw deal. 
+   a. in addition to the 1 gold for every +1 content, penalties are symmetric balanced now, -20% for sci, +20% for gold.
 * COMMUNISM:
 1. A Proletarian may use ONE of the multi-build-slots in a city with Conscription bonus, along with Foot Soldiers (e.g. Riflemen)
 2. Communists 10 shield discount on Armor.
-3. TEST Proletarians have 1 pop_cost but add 2 pop. Essentially same as #11 but can magnify helping out "boom-towns" to grow.
+3. Proletarians have 1 pop_cost but add 2 pop. Essentially same +1 net pop as Pilgrims, but can magnify helping out "boom-towns" to grow.
 * DEMOCRACY:
 1. Democracy has base corruption level of 8%, (50% of Republic/Monarchy)
 2. Democracy corruption increases by 0.4% per tile from capital (1/5 that of other govs)
@@ -43,7 +45,7 @@ UNITS/COMBAT/MECHANICS:
 1. Early foot soldiers can convert to Musketeers for free in domestic cities upon discovering Conscription.
 2. Pre-feudal foot units (Warrior, Archer, Phalanx, Legion) cost 20% less.
 3. Feudal foot units (Pikemen) cost 10% less.
-4. Marines can now: build Fort/Airbase, gain +2 move frags per vet level, and v3 can do ranged bazooka attack for 3 rounds.
+4. Marines can now: build Fort/Airbase, gain +2 move frags per vet level, and v2+ can do ranged bazooka attack for 3 rounds.
    Marines cost 55.
 5. Paratroopers A7 D5. Cost 55.
 6. SPECIAL UNIT ATTACKS
@@ -62,7 +64,7 @@ UNITS/COMBAT/MECHANICS:
     One ram is effective at (up to) 80% reduction of Fortress defense bonus, though the strongest and possibly least effective unit will defend first.
       This still greatly facilitates the probably still rather costly proposition of taking a Fortress.
     Two rams will likely be effective at almost totally eradicating the Fortress defense bonus. Troops foolish enough to remain in a Fortress facing two siege 
-    rams can be demoralize and incapacitated from falling and crashing stone debris. If they are proactive they may deliberately pillage sections of the Fortress
+    rams can be demoralized and incapacitated from falling and crashing stone debris. If they are proactive they may deliberately pillage sections of the Fortress
     to render it un-rammable, which effectively leaves it as a solid unrammable Fort with 1.33x bonus.
 3. Satellite: invisible, can investigate all cities (even with Police Station), has superior vision and movement. Requires Apollo Program.
 4. TEST Helicopter not susceptible to City Walls but rather SAM Battery (fixes a nerf of 3x for a land unit not from original game)
@@ -70,8 +72,18 @@ UNITS/COMBAT/MECHANICS:
 6. Battleship gets ranged attack: 3 rounds, can hit up to 4 units, can kill up to 1 unit, uses 5 moves.
 7. Truck replaces Freight. Changes: Road only, moves: 5, can carry 3 land units.
 8. Discovery of Recycling reduces unit upgrades 20%, stacks with other discounts.
+SPIES/DIPLOMATS:
+9. Diplomatic units can now defend a unit on a tile from hostile diplomatic acts (bribe/sabotage), the same as they can for a city.
+   a. In the case where actions aren't possible (i.e., other units > 1), no defense is necessary since it's "No action possible."
+   b. Where it is only the case of 1 diplomat vs. 1 enemy diplomat, they enter into diplomatic combat, the same as in a city.
+   c. Spies promotion odds increased to compensate for the weaker strength of their veterancy levels, to make it track more similar 
+      to other units for number of successful surviving actions.
 OTHER:
+Casus Belli Expansions:
 1. In a foreign territory casus belli is given by:  Transforming Terrain, Building Base, or making road-types (road,rail,quay,canal,etc.)
+2. Bribe enemy unit.
+3. Found City on foreign territory (i.e., in a Fort.)
+4. Capture Units (server bug fix allows it now.)
 
 MINOR AND MISC.
 ---------------
@@ -83,7 +95,7 @@ Can't make road-types while transported in foreign lands (road/quay/rail/maglev/
 +1/9 move bonus for v4+ aircraft was changed to +1, as it too frequently led to death of precious v4 units from tired attack on last move.
    move to MP2-brava
 Ships cost 2x to bribe -- injured ships far from home had too low bribe costs for what you're getting.
-Ram Ship can see 1 tile around it and travel on rivers - prevents unintened attacks when travelling diagonally.
+Ram Ship can see 1 tile around it and travel on rivers - prevents unintended attacks when travelling diagonally.
    move to MP2-brava (except not the travel on river part)
 Damaged Submarine min_speed=4 (was 3); makes hit-and-run and escape somewhat more viable.
 
@@ -112,7 +124,7 @@ SERVER UPGRADES:
    LOAD 'L': 
     a. 'L' command tells selected unloaded units which Transport to load onto (if multiple legal transport exists).
     b. 'L' command tells selected Transports to 'scoop up' all units on the tile which it can legally take as cargo.
-    c. 'L' command tells selected Cargo units to transfer to another Transport such action is legal OR would be legal 
+    c. 'L' command tells selected Cargo units to transfer to another Transport IFF such action is legal OR would be legal 
            after the cargo unloaded with no movement penalty (e.g., in a City.)
     d. 'L' command given at Sea, to tell selected Cargo to move to a new Transport, is legal if current Transport has spent neither
            half its moves nor more than 4 moves. This: handicaps "transport shuffling" to nearly infeasible while still facilitating 
@@ -120,13 +132,24 @@ SERVER UPGRADES:
    SELECT CARGO on TRANSPORT 'U':
     a. 'U' command given to selected Transports will only activate/select Cargo units on user-selected Transport(s).
     b. To select ALL cargo on ALL transports (old behaviour), select any non-Transport when hitting 'U'
-What no longer happens:
-1. 'T' will never unload unselected transport/cargo units. Previously, it unloading ALL cargo on same tile.
-2. 'U' command will never select all cargo on same tile, only on selected Transports.
-3. 'L' command won't disallow changing Transports in cities because you didn't take micro-management step of unloading first.
-4. 'L' command doesn't force you to select every embarking unit on a tile, but gives options to select the Transport who scoops up instead.
-5. 'L' command won't disallow more ordinary logistics like transfering cargo at sea to an allied Transport, or having a Transport in a city 
-       come pick up units from a Transport 2 tiles away, or having a city Transport drop off cargo to NEARBY Transport on its "shipping lane."
-15. Hovering over a Special Unit Attack will give helptext for all its special parameters.
-16. Fixed rounding errors in displayed upgrade costs on client side.
+   What no longer happens:
+   1. 'T' will never unload unselected transport/cargo units. Previously, it unloaded ALL cargo on same tile.
+   2. 'U' command will never select all cargo on same tile, only on selected Transports.
+   3. 'L' command won't disallow changing Transports in cities because you didn't take micro-management step of unloading first.
+   4. 'L' command doesn't force you to select every embarking unit on a tile, but gives options to select the Transport who scoops up instead.
+   5. 'L' command won't disallow more ordinary logistics like transfering cargo at sea to an allied Transport, or having a Transport in a city 
+         come pick up units from a Transport 2 tiles away, or having a city Transport drop off cargo to NEARBY Transport on its "shipping lane."
+14a. Can "transport swap" in
+   1) cities 
+   2) in ships & gunships who have neither moved more than 4 moves NOR 
+       move more than half their moves;
+
+       Transports who moved no more than 4 moves AND have min. of 3 moves left, may cargo swap. 
+
+   Every other type of transported-scenario, swapping is not allowed. */
+16. Hovering over a Special Unit Attack will give helptext for all its special parameters.
+17. Fixed rounding errors in displayed upgrade costs on client side.
+18. Fixed upstream server bug that didn't allow capture units to trigger casus belli.
+19. Added ability for effects to be triggered by unit activity states (isntead of only completed actions.)
+
 

@@ -328,6 +328,16 @@ hp_loss_pct   = 0
 hut_behavior  = "Nothing"
 flags         = "Unreachable", "DoesntOccupyTile"
 
+;[unitclass_virtual]
+;; /* TRANS: Unit class: used adjectivally */
+;name          = _("?unitclass:Virtual")
+;min_speed     = 5
+;hp_loss_pct   = 0
+;flags         = "DoesntOccupyTile", "Airliftable"
+;helptext      = _("\
+;  • Must end each turn on Destroyer class or AEGIS Cruiser.\
+;")
+
 ; This class is for air units that can also protect a stack.
 ; (Fighters) -- technically a separate AirProtect class is not needed, but
 ; Fighters also have Border Police abilities, and a separate class
@@ -988,51 +998,6 @@ With the discovery of Conscription, Warriors can convert to Musketeers in any do
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
 
-;Swordsmen unit, if we can find a way to give it more relevance or useful niche by changing stats later.
-;[unit_swordsmen]
-;name          = _("Swordsmen")
-;class         = "Land"
-;tech_req      = "Bronze Working"
-;obsolete_by   = "Musketeers"
-;graphic       = "u.swordsmen"
-;graphic_alt   = "u.warriors"
-;sound_move    = "m_swordsmen"
-;sound_move_alt = "m_generic"
-;sound_fight   = "f_phalanx"
-;sound_fight_alt = "f_generic"
-;build_cost    = 13
-;pop_cost      = 0
-;attack        = 1
-;defense       = 1
-;hitpoints     = 10
-;firepower     = 1
-;move_rate     = 2
-;vision_radius_sq = 4
-;convert_to    = "Musketeers"
-;convert_time  = 4
-;transport_cap = 0
-;fuel          = 0
-;uk_happy      = 1
-;uk_shield     = 1
-;uk_food       = 0
-;uk_gold       = 0
-;embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
-;disembarks    = "LandRoad", "LandRail", "Helicopter"
-;flags         = "FootSoldier", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
-;roles         = "DefendOk", "DefendOkStartUnit"
-;bonuses       =
-;   { "flag", "type", "value"
-;      "CantReachAir", "DefenseMultiplierPct", 50   ;basically, D1.5 vs all land units
-;      "CantReachAir", "DefenseDividerPct", 50      ;basically, A1.5 vs all land units
-;   }
-;helptext      = _("\
-;Swordsmen are ancient soldiers armed with sharpened bronze swords. Compared to Warriors,\
-; they have a 50% bonus in attack and defense. NOTE: Warcalc will give this unit the same\
-; strength as a Warrior. You must enter this bonus manually.\
-;"), _("\
-;\nThe discovery of Banking changes upkeep from shields to gold.\
-;")
-
 [unit_phalanx]
 name          = _("Phalanx")
 class         = "Land"
@@ -1494,7 +1459,7 @@ Marines are experts at all-terrain warfare. They are the strongest\
  They can attack from a Transport or Helicopter, and can offload\
  without losing a turn of movement. Marines can also makes Forts\
  and Airbases. Marines get an extra 2/9 movement points for each\
- veteran level they possess. Starting at v3, they gain the ability\
+ veteran level they possess. Starting at v2, they gain the ability\
  to do bazooka ranged attacks for 3 combat rounds, hitting up to 4\
  units on the tile and killing a maximum of 1.\n\
  Marines built in a city with an Airport, Port Facility, and Barracks III\
@@ -3578,6 +3543,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Submarine", "Helicopter", "LandRail"
+;cargo         = "Virtual"
 bonuses       =
    { "flag", "type", "value"
      "Submarine", "DefenseMultiplier", 3
@@ -3659,7 +3625,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Balloon", "Submarine", "Helicopter", "LandRail"
-cargo         = "Missile"
+cargo         = "Missile"; , "Virtual"
 bonuses       =
    { "flag", "type", "value"
      "Submarine", "DefenseMultiplier", 1
@@ -3701,7 +3667,7 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Air", "AirProtect", "Air_High_Altitude", "Missile", "Helicopter", "Balloon", "Submarine", "LandRail"
-cargo         = "Missile"
+cargo         = "Missile";, "Virtual"
 bonuses       =
    { "flag", "type", "value"
      "AirAttacker", "DefenseMultiplier", 2
@@ -4246,7 +4212,7 @@ veteran_names =
   _("?diplomatic_rank:statesman"),
   _("?diplomatic_rank:plenipotentiary")
 
-veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_raise_chance = 60, 50, 40, 30, 20, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 110, 115, 120, 125, 130, 135
 veteran_move_bonus = 0, 0, 0, 0, 0, 0, 0
@@ -4296,8 +4262,8 @@ veteran_names =
   _("?spy_level:secret agent"),
   _("?spy_level:neutralizer"),
   _("?spy_level:spymaster")
-  
-veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
+
+veteran_raise_chance = 60, 50, 40, 30, 20, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 110, 115, 120, 125, 130, 135
 veteran_move_bonus = 0, 0, 0, 0, 0, 0, 0
@@ -4601,3 +4567,93 @@ One Barbarian Leader appears every time there is a barbarian uprising\
 When a Barbarian Leader is killed on a tile without any defending units,\
  the 100 gold ransom is paid, but only to land units and helicopters.\
 ")
+
+;Swordsmen unit, if we can find a way to give it more relevance or useful niche by changing stats later.
+;Iron Working A2 D2 ?
+;[unit_swordsmen]
+;name          = _("Swordsmen")
+;class         = "Land"
+;tech_req      = "Bronze Working"
+;obsolete_by   = "Musketeers"
+;graphic       = "u.swordsmen"
+;graphic_alt   = "u.warriors"
+;sound_move    = "m_swordsmen"
+;sound_move_alt = "m_generic"
+;sound_fight   = "f_phalanx"
+;sound_fight_alt = "f_generic"
+;build_cost    = 13
+;pop_cost      = 0
+;attack        = 1
+;defense       = 1
+;hitpoints     = 10
+;firepower     = 1
+;move_rate     = 2
+;vision_radius_sq = 4
+;convert_to    = "Musketeers"
+;convert_time  = 4
+;transport_cap = 0
+;fuel          = 0
+;uk_happy      = 1
+;uk_shield     = 1
+;uk_food       = 0
+;uk_gold       = 0
+;embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+;disembarks    = "LandRoad", "LandRail", "Helicopter"
+;flags         = "FootSoldier", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
+;roles         = "DefendOk", "DefendOkStartUnit"
+;bonuses       =
+;   { "flag", "type", "value"
+;      "CantReachAir", "DefenseMultiplierPct", 50   ;basically, D1.5 vs all land units
+;      "CantReachAir", "DefenseDividerPct", 50      ;basically, A1.5 vs all land units
+;   }
+;helptext      = _("\
+;Swordsmen are ancient soldiers armed with sharpened bronze swords. Compared to Warriors,\
+; they have a 50% bonus in attack and defense. NOTE: Warcalc will give this unit the same\
+; strength as a Warrior. You must enter this bonus manually.\
+;"), _("\
+;\nThe discovery of Banking changes upkeep from shields to gold.\
+;")
+
+;*** This unit can be turned on by uncommenting this, the Virtual class above, and adding "Virtual" as native to oceanic tiles
+;*** in terrain.ruleset.
+;[unit_sonar]
+;name          = _("Sonar Ping")
+;class         = "Virtual"
+;tech_req      = "Radar"
+;obsolete_by   = "None"
+;graphic       = "u.sonar"
+;graphic_alt   = "u.explorer"
+;sound_move    = "m_sonar"
+;sound_move_alt = "m_generic"
+;sound_fight   = "f_generic"
+;sound_fight_alt = "f_generic"
+;build_cost    = 1
+;pop_cost      = 0
+;attack        = 0
+;defense       = 0
+;hitpoints     = 1
+;firepower     = 1
+;move_rate     = 6
+;vision_radius_sq = 2
+;transport_cap = 0
+;fuel          = 1
+;uk_happy      = 0
+;uk_shield     = 0
+;uk_food       = 0
+;uk_gold       = 0
+;vision_layer  = "Subsurface"
+;embarks       = "Sea"
+;disembarks    = "Sea"
+;flags         = "IgZOC", "IgTer", "NonMil", "HasNoZOC", "Unbribable", "WillNever", "NoHome", "NoVeteran", "Shield2Gold"
+;helptext      = _("\
+;A Sonar Ping represents active focusing of ship sonar on a\
+; specific area. Destroyer class and AEGIS Cruisers may take\
+; this virtual unit as cargo. Then the ship can send the\
+; Sonar Ping virtual unit out to sea, manually directing the\
+; focus of the sonar investigation. The virtual unit must end\
+; its turn back on the ship, or sonar capability is lost.\
+;"), _("\
+;This unit can be made with other units in the same turn, and can be\
+; made multiple times in a turn.\
+;") 
+;THIS LINE RESERVED FOR NECESSARY BLANK END OF LINE:

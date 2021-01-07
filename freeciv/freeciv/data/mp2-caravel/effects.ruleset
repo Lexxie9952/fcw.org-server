@@ -347,6 +347,26 @@ reqs    =
       "UnitType", "Carrier", "Local"
     }
 
+; *************************** Ruleset Fortify Bonus *********************** 
+[effect_fortified]
+type    = "Fortify_Defense_Bonus"
+value   = 50
+reqs    =
+    { "type", "name", "range"
+      "UnitState", "Fortified", "Local"
+    }
+
+[effect_city_fortified]
+type    = "Fortify_Defense_Bonus"
+value   = 50
+reqs    =
+    { "type",          "name",         "range", "present"
+      "CityTile",      "Center",       "Local", TRUE
+      "UnitState",     "Fortified",    "Local", FALSE
+      "UnitClassFlag", "CanFortify",   "Local", TRUE
+      "UnitFlag",      "Cant_Fortify", "Local", FALSE
+    }
+
 ; *********************************** BASES *******************************
 
 ; **** FORT *****
@@ -4448,25 +4468,6 @@ reqs    =
       "OutputType", "Trade", "Local"
     }
 
-;Shield waste is not a proper feature of mp rulesets
-;[effect_waste_fundamentalism0]
-;type    = "Output_Waste"
-;value   = 2
-;reqs    =
-;    { "type", "name", "range"
-;      "Gov", "Fundamentalism", "Player"
-;      "OutputType", "Shield", "Local"
-;    }
-
-;[effect_waste_fundamentalism1]
-;type    = "Output_Waste_By_Distance"
-;value   = 100
-;reqs    =
-;    { "type", "name", "range"
-;      "Gov", "Fundamentalism", "Player"
-;      "OutputType", "Shield", "Local"
-;    }
-
 [effect_fundamentalism_unit_upkeep]
 type    = "Upkeep_Factor"
 value   = 1
@@ -4487,20 +4488,30 @@ reqs    =
 
 [effect_bad_sci_fundamentalism]
 type    = "Output_Bonus_2"
-value   = -50
+value   = -20
 reqs    =
     { "type", "name", "range"
       "Gov", "Fundamentalism", "Player"
       "OutputType", "science", "local"
     }
 
-[effect_tithes_fundamentalism]
+[effect_tithes_fundamentalism_1]
 type    = "Happiness_To_Gold" 
-value   = 1 
+value   = 1 ; really, 1 gold for a temple that costs 1 gold, it's nothing, we need 1.5x
 reqs    = 
     { "type", "name", "range" 
       "Gov", "Fundamentalism", "Player" 
     }
+[effect_tithes_fundamentalism_2]
+type    = "Output_Bonus_2"
+value   = 20
+reqs    =
+    { "type", "name", "range"
+      "Gov", "Fundamentalism", "Player"
+      "OutputType", "gold", "local"
+    }
+
+  
 
 ; Calibrate sabotage City Walls odds to 50%
 [effect_siege_ram_city_walls]
@@ -4859,6 +4870,22 @@ reqs	=
 
 ;CASUS BELLI INCIDENTS
 ;********************************************************
+[effect_incident_success_spy_attack]
+type	= "Casus_Belli_Success"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Spy Attack", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
+[effect_incident_success_spy_attack2]
+type	= "Casus_Belli_Caught"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Spy Attack", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
 [effect_incident_success_pillage]
 type	= "Casus_Belli_Success"
 value	= 1
@@ -4891,7 +4918,6 @@ reqs	=
       "Action", "Transform Terrain", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
     }
-
 [effect_incident_caught_steal_maps1]
 type	= "Casus_Belli_Caught"
 value	= 1
@@ -5004,6 +5030,22 @@ reqs	=
       "Action", "Sabotage Unit Escape", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
     }
+[effect_incident_success_sabotage_unit_1]
+type	= "Casus_Belli_Success"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Sabotage Unit", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
+[effect_incident_caught_sabotage_unit_1]
+type	= "Casus_Belli_Caught"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Sabotage Unit", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
 [effect_incident_success_incite]
 type	= "Casus_Belli_Success"
 value	= 1
@@ -5107,6 +5149,15 @@ reqs	=
     { "type", "name", "range", "present"
       "Action", "Explode Nuclear", "Local", TRUE
     }
+[effect_incident_success_found_city]
+type	= "Casus_Belli_Success"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Found City", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
+
 ;********************************************************************
 
 ; Double (+100%) buy cost for Great Wonders
