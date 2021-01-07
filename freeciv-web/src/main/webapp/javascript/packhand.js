@@ -1927,7 +1927,8 @@ function handle_player_diplstate(packet)
   players[packet['plr1']].diplstates[packet['plr2']] = {
     state: packet['type'],
     turns_left: packet['turns_left'],
-    contact_turns_left: packet['contact_turns_left']
+    contact_turns_left: packet['contact_turns_left'],
+    has_reason_to_cancel: packet['has_reason_to_cancel']
   };
 }
 

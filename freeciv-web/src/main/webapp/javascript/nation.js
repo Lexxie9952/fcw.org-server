@@ -122,6 +122,9 @@ function update_nation_screen()
       if (dstate == "None") dstate = "<span style='font-size:1%; color:rgba(0,0,0,0);'>+</span>" + dstate; // sorting hack
       if (dstate!="Ceasefire" && dstate!="Armistice") pact_time=0; // don't show unless it's a real timer on an expiring pact.
       pact_time = (pact_time>0) ? ":<span title='Turns till pact expires' style='color:#f0d0c0'>"+pact_time+"</span>" : "";   // show turns left for diplstate or blank if n/a
+      if (dstate !="War" && players[client.conn.playing['playerno']].diplstates[player_id]['has_reason_to_cancel']) {  // Mark casus belli
+        dstate = "<span title='Casus Belli given' style='color:#ff8000'><u>"+dstate+"</u></span>";
+      }
       nation_list_html += "<td style='text-align:center'>" + dstate +pact_time+"</td>";
     } else {
       nation_list_html += "<td style='text-align:center'>-</td>";
