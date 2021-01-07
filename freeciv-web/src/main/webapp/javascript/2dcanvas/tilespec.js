@@ -2457,7 +2457,7 @@ function create_unit_offset_arrays()
           break;
       case "Spy Plane":
           sx = 8;
-          dx -= 26; dy += 1;
+          dx -= 27; dy += 0;
           mx -= 4;  my -= 6;
           break;       
       case "Stealth Bomber":
