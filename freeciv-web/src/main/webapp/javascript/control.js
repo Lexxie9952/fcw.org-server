@@ -1356,10 +1356,6 @@ function update_unit_order_commands()
       //console.log("Road test: type(SB)=="+(typeof EXTRA_SEABRIDGE !== "undefined"));
       //console.log("Road test: thx(sb)=="+tile_has_extra(ptile, EXTRA_SEABRIDGE));*/
 
-      //FIXME and remove me after UR8 is over or UR8 restarts.
-      // Fix Unrated Game 8 used MP2-Brava before SEA-Bridge was corrected:
-      if (typeof EXTRA_SEABRIDGE === "undefined") client_rules_flag[CRF_SEABRIDGE] = false;
-      /////////////////////////////////////////////////////////////////////////////////////
       if (!tile_has_extra(ptile, EXTRA_ROAD)) {
         if ( !client_rules_flag[CRF_SEABRIDGE] || !tile_has_extra(ptile, EXTRA_SEABRIDGE)) {
           $("#order_road").show();
