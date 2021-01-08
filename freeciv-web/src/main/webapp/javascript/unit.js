@@ -82,6 +82,21 @@ function tile_units(ptile)
 }
 
 /**************************************************************************
+ Returns a ptile, (tiles[punit['tile]]) for the tile a unit is on,
+  or else returns null.
+**************************************************************************/
+function unit_tile(punit) {
+  if (punit && punit['tile'])
+    return index_to_tile(punit['tile']);
+  
+  return null;
+}  /* TODO: occurrences of ptile=index_to_tile(punit['tile']) in the code,
+      could be:  ptile = unit_tile(punit)
+      for conformity to c server code and native clients
+   */
+      
+
+/**************************************************************************
  Returns a list of units supported by this city.
 **************************************************************************/
 function get_supported_units(pcity)

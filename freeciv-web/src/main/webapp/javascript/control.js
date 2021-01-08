@@ -4471,12 +4471,16 @@ function key_unit_sentry()
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     var class_name = get_unit_class_name(punit);
-    var pcity = tile_city(index_to_tile(punit['tile']));
+    var ptile = unit_tile(punit)
+    var pcity = tile_city(ptile);
+
+    // HANDLE UNITS WHO SOMETIMES CAN'T SENTRY:
+    // ********************************************************************
     // 3.09 server can't sentry fuel-Triremes on shore/river.
     if (client_rules_flag[CRF_TRIREME_FUEL] && class_name == "Trireme") {
       if (pcity == null) {
         if (typeof EXTRA_NAVALBASE !== "undefined") {
-          if (!tile_has_extra(EXTRA_NAVALBASE)) {
+          if (!tile_has_extra(ptile, EXTRA_NAVALBASE)) {
             key_unit_noorders();
           }
         } else key_unit_noorders();
@@ -4485,22 +4489,25 @@ function key_unit_sentry()
         request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
         remove_unit_id_from_waiting_list(punit['id']);
       }
-    } // Annoying to hit S to move through units and be stuck on an Air unit,
-      //  so S becomes synonymous with No Orders for these kinds of units:
-    else if (class_name == "Helicopter"
-              || class_name == "Air"
-              || class_name == "AirProtect" 
-              || class_name == "AirPillage" 
-              || class_name == "Air_High_Altitude") 
+    }
+    // IFF these units can't sentry, then S is synonymous with "No Orders":
+    else if (   class_name == "Helicopter"
+             || class_name == "Air"
+             || class_name == "AirProtect" 
+             || class_name == "AirPillage"
+             || class_name == "Air_High_Altitude"
+             || class_name == "Missile" ) 
     {
-      if (pcity == null && !tile_has_extra(EXTRA_AIRBASE)) {
-        key_unit_noorders();      
-      }
-      else {
+      if (pcity || tile_has_extra(ptile, EXTRA_AIRBASE)) {
         request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
         remove_unit_id_from_waiting_list(punit['id']);
       }
-    }
+      else {
+        key_unit_noorders();
+      }
+    } // END SPECIAL UNIT SENTRY HANDLING
+    // *******************************************************************
+
     else {
       request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
       remove_unit_id_from_waiting_list(punit['id']);
