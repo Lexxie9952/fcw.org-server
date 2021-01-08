@@ -43,12 +43,14 @@ GOVERNMENT RE-BALANCE:
 UNITS/COMBAT/MECHANICS:
 * FOOT UNITS
 1. Early foot soldiers can convert to Musketeers for free in domestic cities upon discovering Conscription.
+   Musketeers to Riflemen with Labor Union.
 2. Pre-feudal foot units (Warrior, Archer, Phalanx, Legion) cost 20% less.
 3. Feudal foot units (Pikemen) cost 10% less.
 4. Marines can now: build Fort/Airbase, gain +2 move frags per vet level, and v2+ can do ranged bazooka attack for 3 rounds.
    Marines cost 55.
 5. Paratroopers A7 D5. Cost 55.
-6. SPECIAL UNIT ATTACKS
+6. Partisan cost 45.
+7. SPECIAL UNIT ATTACKS
    Tactical depth blossoms: Can allow hit and run, in some cases multiple ranged attacks per turn.
       Phalanx rumble attack: 3 combat rounds, stays fortified, can hit 1 unit, can kill no units, uses 5/9 moves
       Legion pilum assault: 1 combat round, 2x attack, can hit 2 units, can kill 2 units, uses 1 move.
@@ -72,6 +74,9 @@ UNITS/COMBAT/MECHANICS:
 6. Battleship gets ranged attack: 3 rounds, can hit up to 4 units, can kill up to 1 unit, uses 5 moves.
 7. Truck replaces Freight. Changes: Road only, moves: 5, can carry 3 land units.
 8. Discovery of Recycling reduces unit upgrades 20%, stacks with other discounts.
+9. A server flaw sometimes
+   a. allowed military units to clean fallout and pollution. This fix affects ALL rulesets.
+   b. For non-military units, only spies and worker types can pillage now. Excluded are: Caravans, Explorers, Diplomats, Pilgrims, Freight.
 SPIES/DIPLOMATS:
 9. Diplomatic units can now defend a unit on a tile from hostile diplomatic acts (bribe/sabotage), the same as they can for a city.
    a. In the case where actions aren't possible (i.e., other units > 1), no defense is necessary since it's "No action possible."
@@ -98,6 +103,7 @@ Ships cost 2x to bribe -- injured ships far from home had too low bribe costs fo
 Ram Ship can see 1 tile around it and travel on rivers - prevents unintended attacks when travelling diagonally.
    move to MP2-brava (except not the travel on river part)
 Damaged Submarine min_speed=4 (was 3); makes hit-and-run and escape somewhat more viable.
+Nuclear winter is was patches of random arctic everywhere, now is more of a temperature downgrade of each affected tile to one level colder.
 
 SERVER UPGRADES: 
 1. Special Unit Actions / Attacks:
@@ -151,5 +157,7 @@ SERVER UPGRADES:
 17. Fixed rounding errors in displayed upgrade costs on client side.
 18. Fixed upstream server bug that didn't allow capture units to trigger casus belli.
 19. Added ability for effects to be triggered by unit activity states (isntead of only completed actions.)
-
+20. There was a hidden flaw in 3.0 server, any unit who can do ANYTHING to a tile gets magic bonus to also clean pollution and fallout. 
+      This was affecting foot soldiers (who can make hideouts) so we went with the flow. But now this flaw is fixed, and only non-military 
+      we're back to the classical orthodoxy:  only non-military tile workers can clean fallout and pollution (worker, engineer, settler, proletarian)
 

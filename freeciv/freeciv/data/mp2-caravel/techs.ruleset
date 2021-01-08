@@ -287,7 +287,7 @@ req2     = "Metallurgy"
 flags    = ""
 graphic     = "a.conscription"
 graphic_alt = "-"
-helptext = _("Obsoletes Musketeers. Capable cities can make extra units per turn.")
+helptext = _("Musketeers obsolete. Cities can build >1 unit. Old infantry convert to Musketeers.")
 cost = 1890
 
 [advance_construction]
@@ -494,7 +494,7 @@ flags    = ""
 graphic     = "a.labor_union"
 graphic_alt = "-"
 cost = 5430
-helptext = _("")
+helptext = _("Musketeers can convert to Riflemen.")
 
 [advance_laser]
 name     = _("Laser")

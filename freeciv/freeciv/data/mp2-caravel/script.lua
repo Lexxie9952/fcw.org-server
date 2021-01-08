@@ -199,5 +199,41 @@ Frequent hunting has reduced wild animal populations and frightened them from hu
   end
 end
 
-
 signal.connect('turn_begin', 'turn_callback')
+
+function unit_lost_callback(unit, loser, reason)
+  num_owners = 0
+  owner = ""
+  if reason == "killed" then
+    nation = loser.nation:name_translation()
+    if nation == "Animal Kingdom" then
+      for tile in unit.tile:square_iterate(1) do
+        for foe in tile:units_iterate() do
+          if unit.tile ~= tile then
+            foe_nation = foe.owner.nation:name_translation()
+            if owner ~= foe.owner and foe_nation ~= "Animal Kingdom" then
+              num_owners = num_owners + 1
+              owner = foe.owner
+            end
+          end
+        end
+      end
+    end
+
+    if num_owners == 1 then
+      gold = 3
+      culture = 1
+      edit.change_gold(owner, gold)
+      edit.add_player_history(owner, 1)
+      if owner:is_human() then
+        notify.player(owner,
+                    "Wild animal killed, furs and meats are worth %d gold", gold)
+      end
+    end
+  end
+
+  -- continue processing
+  return false
+end
+
+signal.connect("unit_lost", "unit_lost_callback")

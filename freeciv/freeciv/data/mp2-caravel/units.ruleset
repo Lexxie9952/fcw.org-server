@@ -29,6 +29,7 @@ format_version=20
 ; ************** MADE COMPATIBLE BETWEEN MP+ AND MP2 RULESETS AND POSSIBLY CLASSIC AND CIV2CIV3 SO THAT
 ; ************** THERE IS UNIFORMITY IN FCW CLIENT which checks these flags based on index #. Not keeping
 ; ************** uniformity results in loss of features as ability to check these flags would be lost.
+; *** if you remove one, make it "unused" and add to it later, so the index of the others doesn't mess up
 flags =
   { "name", "helptxt"
     _("Airbase")
@@ -72,6 +73,7 @@ flags =
 ;;; this comment can be removed when we have some smarter way for unit_can_defend_here(..) to get ruleset control.
     _("TransportDefender"), _("Can defend while transported on non-native tiles.")
     _("NonMilAttack"), _("Has military capacity but for peaceful purposes, can enter territories with whom you are at Peace")
+    _("Cant_Pillage"), _("Unable to pillage tiles.")
   }
 
 ; Names for custom unit class flags. There can be up to 8 of these.
@@ -693,9 +695,9 @@ sound_fight   = "f_worker"
 sound_fight_alt = "f_generic"
 build_cost    = 20
 pop_cost      = 0
-attack        = 0
+attack        = 1
 defense       = 1
-hitpoints     = 5
+hitpoints     = 6
 firepower     = 1
 move_rate     = 2
 vision_radius_sq = 4
@@ -705,20 +707,17 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "NoBuild", "NonMil", "HasNoZOC", "Cant_Fortify", "Capturable", "Expellable"
-; No veteran levels (level name is never displayed)
-veteran_names = _("green")
-veteran_raise_chance = 0
-veteran_work_raise_chance = 0
-veteran_power_fact = 100
-veteran_move_bonus = 0
+flags         = "NoBuild", "HasNoZOC", "Cant_Fortify", "Capturable", "Expellable"
 roles         = "DefendGoodStartUnit"  ; re-purposed from Phalanx
 helptext      = _("\
 Tribesmen are ancestors whose contributions are forgotten\
  in the sands of time. Tribesmen help new nations by disbanding,\
  dedicating their life work to 10 shields of the first output in\
  a city. They also explore the area around your new nation,\
- and watch for nearby tribes. They cannot do tile improvements.\
+ and watch for nearby tribes. They cannot improve tiles.\
+ Unlike city folk, Tribesmen can handle wild animals, and they\
+ are experienced hunters with a 3x bonus. This gives them a very\
+ important role in games with Animals set to on.\
 ")
 
 ;A unique patch unit to provide fair starts regardless of lack of nearby water.
@@ -849,7 +848,7 @@ uk_food       = 2
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
-flags         = "Fanatic", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable"
+flags         = "Fanatic", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Cant_Pillage"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0
@@ -1022,7 +1021,7 @@ convert_time  = 4
 transport_cap = 0
 fuel          = 0
 city_size     = 278 ; 000000,000,001,000101,1,0 atk_bonus=0, max_kiils=0, targets=1, move_cost=5 frags, stay_frtfy=1, reserverd=0
-paratroopers_mr_sub = 1;   xxxxxxx,1 attack_stay_fortified=1
+paratroopers_mr_sub = 1;   xxx,000,0,1 - iPill move_cost=0, iPillage=0, attack_stay_fortified=1
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1071,7 +1070,7 @@ convert_time  = 2
 transport_cap = 0
 fuel          = 0
 city_size     = 1850 ; 000000,000,111,001110,1,0 = atk_bonus=0, max_kills=0, targets=7, move_cost=14 frags, stay_fortfy=1, reserved = 0
-paratroopers_mr_sub = 0;   xxxxxxx,0 attack_stay_fortified=0
+paratroopers_mr_sub = 0;   xxx,000,0,1 - iPill move_cost=0, iPillage=0, attack_stay_fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1205,6 +1204,7 @@ hitpoints     = 20
 firepower     = 1
 move_rate     = 2
 vision_radius_sq = 4
+convert_to    = "Riflemen"
 transport_cap = 0
 fuel          = 0
 uk_happy      = 1
@@ -1218,10 +1218,10 @@ flags         = "FootSoldier", "Capturer", "CantReachAir", "Settlers", "CanHide"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild",
                 "BarbarianTech", "BarbarianBuildTech", "BarbarianSeaTech"
 helptext      = _("\
-Musketeers are infantry equipped with early\
- firearms and replace Pikemen as the preferred\
- city defender, and replace Archers and Legions\
- for offensive foot soldiers.\
+Musketeers are infantry equipped with early firearms. They replace Pikemen as the preferred\
+ city defender, and replace Archers and Legions for offensive foot soldiers.\
+ The discovery of Labor Union allows upgrading Musketeers to Riflemen for free\
+ in any domestic city.\
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
@@ -1288,7 +1288,7 @@ sound_move    = "m_partisan"
 sound_move_alt = "m_generic"
 sound_fight   = "f_partisan"
 sound_fight_alt = "f_generic"
-build_cost    = 50
+build_cost    = 45
 pop_cost      = 0
 attack        = 4
 defense       = 4
@@ -1320,6 +1320,50 @@ Proportional to city size, up to 8 Partisans appear when an enemy conquers your 
  ➣ The city was originally built by you.\n\
  ➣ You must be Fundamentalist, OR,\
  ➣ You must be Democracy or Communist and know Communism and Gunpowder.\
+")
+
+[unit_riflemen]
+name          = _("Riflemen")
+class         = "Land"
+tech_req      = "Conscription"
+obsolete_by   = "None"
+graphic       = "u.riflemen"
+graphic_alt   = "-"
+sound_move    = "m_riflemen"
+sound_move_alt = "m_generic"
+sound_fight   = "f_riflemen"
+sound_fight_alt = "f_generic"
+build_cost    = 40
+pop_cost      = 0
+attack        = 5
+defense       = 4
+hitpoints     = 20
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 4
+convert_to    = "Workers"
+convert_time  = 2
+transport_cap = 0
+fuel          = 0
+city_size     = 2;  ...xxxxx..., 1, 0  use bombard_stay_fortified on a non-bombard unit to specify can remain fortified when attacking.
+paratroopers_mr_sub = 0;   xxx,000,0,1 - iPill move_cost=0, iPillage=0, attack_stay_fortified=0
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
+targets       = "Balloon", "Helicopter", "LandRail"
+flags         = "MultiSlot", "FootSoldier", "Capturer", "CantReachAir", "Shield2Gold", "Settlers", "CanHide", "WillNever"
+roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
+helptext      = _("\
+Riflemen are World War-era infantry. They are good at defending cities and\
+ strategic Fortresses. They also have good attack capability.\ 
+"), _("\
+Under Communism this unit costs 5 less. Also, Communism tech allows Communist\
+ governments to de-commission Riflemen into Workers via the Convert order. And vice versa.\
+"), _("\
+\nThe discovery of Banking changes upkeep from shields to gold.\
 ")
 
 [unit_alpine_troops]
@@ -1360,50 +1404,6 @@ Alpine Troops are highly mobile units and\
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
 
-[unit_riflemen]
-name          = _("Riflemen")
-class         = "Land"
-tech_req      = "Conscription"
-obsolete_by   = "None"
-graphic       = "u.riflemen"
-graphic_alt   = "-"
-sound_move    = "m_riflemen"
-sound_move_alt = "m_generic"
-sound_fight   = "f_riflemen"
-sound_fight_alt = "f_generic"
-build_cost    = 40
-pop_cost      = 0
-attack        = 5
-defense       = 4
-hitpoints     = 20
-firepower     = 1
-move_rate     = 2
-vision_radius_sq = 4
-convert_to    = "Workers"
-convert_time  = 2
-transport_cap = 0
-fuel          = 0
-city_size     = 2;  ...xxxxx..., 1, 0  use bombard_stay_fortified on a non-bombard unit to specify can remain fortified when attacking.
-paratroopers_mr_sub = 0;   xxxxxxx,1 attack_stay_fortified=0
-uk_happy      = 1
-uk_shield     = 1
-uk_food       = 0
-uk_gold       = 0
-embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
-disembarks    = "LandRoad", "LandRail", "Helicopter"
-targets       = "Balloon", "Helicopter", "LandRail"
-flags         = "MultiSlot", "FootSoldier", "Capturer", "CantReachAir", "Shield2Gold", "Settlers", "CanHide", "WillNever"
-roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
-helptext      = _("\
-Riflemen are World War-era infantry. They are good at defending cities and\
- strategic Fortresses. They also have good attack capability.\ 
-"), _("\
-Under Communism this unit costs 5 less. Also, Communism tech allows Communist\
- governments to de-commission Riflemen into Workers via the Convert order. And vice versa.\
-"), _("\
-\nThe discovery of Banking changes upkeep from shields to gold.\
-")
-
 [unit_marines]
 name          = _("Marines")
 class         = "LandAirSea"
@@ -1426,7 +1426,7 @@ vision_radius_sq = 8  ; hard-coded the +4 extra for effect_physics_vision since 
 transport_cap = 0
 fuel          = 0
 city_size     = 2618 ; 000000,001,010,001110,1,0 = atk_bonus=0, max_kills=1, targets=4, move_cost=14 frags, stay_frtfy=1, reserved = 0
-paratroopers_mr_sub = 1; xxxxxxxxx,1 = attack_stay_fortified=1
+paratroopers_mr_sub = 1;   xxx,000,0,1 - iPill move_cost=0, iPillage=0, attack_stay_fortified=1
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -2925,6 +2925,7 @@ move_rate     = 21
 vision_radius_sq = 12
 transport_cap = 0
 fuel          = 2
+paratroopers_mr_sub = 15;   xxx,011,1,1 - iPill move_cost=3, iPillage=1, attack_stay_fortified=1
 uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
@@ -2981,6 +2982,7 @@ move_rate     = 19
 vision_radius_sq = 12
 transport_cap = 3
 fuel          = 3
+paratroopers_mr_sub = 11;   xxx,010,1,1 - iPill move_cost=2, iPillage=1, attack_stay_fortified=1
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -4202,7 +4204,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRail", "Helicopter"
-flags         = "Diplomat", "IgZOC", "NonMil", "HasNoZOC", "Expellable"
+flags         = "Diplomat", "IgZOC", "NonMil", "HasNoZOC", "Expellable", "Cant_Pillage"
 veteran_names =
   _("?diplomatic_rank:attaché"),
   _("?diplomatic_rank:secretary"),
@@ -4305,7 +4307,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRoad", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "Helicopter"
-flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable"
+flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage"
 roles         = "AttackStrongStartUnit"  ;note: MP2 doesn't start games with ASSU's so has co-opted this for caravan start unit.
 helptext      = _("\
 Caravans are Commerce units. Commerce units can help build Wonders in any city with whom\
@@ -4316,6 +4318,50 @@ Commerce units can enter the Marketplace of non-hostile foreign cities to sell g
  from total trade in both cities. This is only profitable between cities with very high trade.\n\
 Commerce units can build any Wonders for which you have the tech requirement. To use them\
  for a Trade Route, the Trade tech is needed, and they need to have an assigned Home City.\n\
+")
+
+[unit_train]
+name          = _("Train")
+class         = "LandRail"
+tech_req      = "Railroad"
+obsolete_by   = "None"
+graphic       = "u.train"
+graphic_alt   = "u.transport"
+sound_move    = "m_train"
+sound_move_alt = "m_generic"
+sound_fight   = "f_generic"
+sound_fight_alt = "f_generic"
+build_cost    = 35
+pop_cost      = 0
+attack        = 0
+defense       = 1
+hitpoints     = 30
+firepower     = 1
+move_rate     = 4
+vision_radius_sq = 4
+transport_cap = 6
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 1
+cargo         = "Land", "LandAirSea", "Balloon", "Bomb", "LandRoad"
+flags         =  "HelpWonder", "TradeRoute", "NonMil", "HasNoZOC", "NoVeteran", "Capturable"
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 0
+roles         = ""
+helptext      = _("\
+Trains are Commerce units with a bonus: they allow units with 2 or less\
+ move points to travel your rails at distances comparable to other units. Only Foot Soldiers\
+ can:\n1. load outside a city or base;\n2. unload (T) in a base;\n3.step off the Train outside a city\
+ (loses all moves.)\nAll other units must load/unload inside a city.\n\n\
+On non-allied foreign rails, Trains incur full terrain movement cost.\
+ Pre-gunpowder units can't attack Trains.\n\n\
+Electricity and Combustion each give Trains an additional +1 move.\
 ")
 
 [unit_truck]
@@ -4383,55 +4429,11 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRoad", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "Helicopter"
-flags         = "IgTer", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable"
+flags         = "IgTer", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage"
 roles         = "Explorer", "ExplorerStartUnit"
 helptext      = _("\
 Explorers are brave individuals who map unknown territory. They can slip through enemy\
  ZOC, and have no unit upkeep.\
-")
-
-[unit_train]
-name          = _("Train")
-class         = "LandRail"
-tech_req      = "Railroad"
-obsolete_by   = "None"
-graphic       = "u.train"
-graphic_alt   = "u.transport"
-sound_move    = "m_train"
-sound_move_alt = "m_generic"
-sound_fight   = "f_generic"
-sound_fight_alt = "f_generic"
-build_cost    = 35
-pop_cost      = 0
-attack        = 0
-defense       = 1
-hitpoints     = 30
-firepower     = 1
-move_rate     = 4
-vision_radius_sq = 4
-transport_cap = 6
-fuel          = 0
-uk_happy      = 0
-uk_shield     = 0
-uk_food       = 0
-uk_gold       = 1
-cargo         = "Land", "LandAirSea", "Balloon", "Bomb", "LandRoad"
-flags         =  "HelpWonder", "TradeRoute", "NonMil", "HasNoZOC", "NoVeteran", "Capturable"
-; No veteran levels (level name is never displayed)
-veteran_names = _("green")
-veteran_raise_chance = 0
-veteran_work_raise_chance = 0
-veteran_power_fact = 100
-veteran_move_bonus = 0
-roles         = ""
-helptext      = _("\
-Trains are Commerce units with a bonus: they allow units with 2 or less\
- move points to travel your rails at distances comparable to other units. Only Foot Soldiers\
- can:\n1. load outside a city or base;\n2. unload (T) in a base;\n3.step off the Train outside a city\
- (loses all moves.)\nAll other units must load/unload inside a city.\n\n\
-On non-allied foreign rails, Trains incur full terrain movement cost.\
- Pre-gunpowder units can't attack Trains.\n\n\
-Electricity and Combustion each give Trains an additional +1 move.\
 ")
 
 [unit_leader]
@@ -4655,5 +4657,327 @@ When a Barbarian Leader is killed on a tile without any defending units,\
 ;"), _("\
 ;This unit can be made with other units in the same turn, and can be\
 ; made multiple times in a turn.\
-;") 
+;")
+
+[unit_animal_wolf]
+name          = _("[Wolf]")
+class         = "Land"
+tech_req      = "None"
+obsolete_by   = "None"
+graphic       = "u.wolf"
+graphic_alt   = "None"
+sound_move    = "m_generic"
+sound_move_alt = "m_generic"
+sound_fight   = "f_generic"
+sound_fight_alt = "f_generic"
+build_cost    = 10
+pop_cost      = 0
+attack        = 2
+defense       = 1
+hitpoints     = 10
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 2
+transport_cap = 0
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+flags         = "NoBuild", "Cant_Fortify", "Unbribable", "IgZOC", "HasNoZOC", "SuperSpy", "NoVeteran", "Cant_Pillage"
+roles         = "Barbarian"
+helptext      = _("\
+Watch out for wild animals.\
+"), _("\
+Wolves are mean wild ancestors of dogs, who hunt grasslands and hills.\
+")
+[unit_animal_leopard]
+name          = _("[Leopard]")
+class         = "Land"
+tech_req      = "None"
+obsolete_by   = "None"
+graphic       = "u.leopard"
+graphic_alt   = "None"
+sound_move    = "m_generic"
+sound_move_alt = "m_generic"
+sound_fight   = "f_generic"
+sound_fight_alt = "f_generic"
+build_cost    = 10
+pop_cost      = 0
+attack        = 2
+defense       = 1
+hitpoints     = 10
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 2
+transport_cap = 0
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+flags         = "NoBuild", "Cant_Fortify", "Unbribable", "IgZOC", "HasNoZOC", "SuperSpy", "NoVeteran", "Cant_Pillage"
+roles         = "Barbarian"
+helptext      = _("\
+Watch out for wild animals.\
+"), _("\
+Leopards are mean wild cats, who hunt in the forests.\
+")
+[unit_animal_tiger]
+name          = _("[Tiger]")
+class         = "Land"
+tech_req      = "None"
+obsolete_by   = "None"
+graphic       = "u.tiger"
+graphic_alt   = "None"
+sound_move    = "m_generic"
+sound_move_alt = "m_generic"
+sound_fight   = "f_generic"
+sound_fight_alt = "f_generic"
+build_cost    = 10
+pop_cost      = 0
+attack        = 2
+defense       = 1
+hitpoints     = 10
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 2
+transport_cap = 0
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+flags         = "NoBuild", "Cant_Fortify", "Unbribable", "IgZOC", "HasNoZOC", "SuperSpy", "NoVeteran", "Cant_Pillage"
+roles         = "Barbarian"
+helptext      = _("\
+Watch out for wild animals.\
+"), _("\
+Tigers are mean wild cats, who hunt in the jungles.\
+")
+[unit_animal_lion]
+name          = _("[Lion]")
+class         = "Land"
+tech_req      = "None"
+obsolete_by   = "None"
+graphic       = "u.lion"
+graphic_alt   = "None"
+sound_move    = "m_generic"
+sound_move_alt = "m_generic"
+sound_fight   = "f_generic"
+sound_fight_alt = "f_generic"
+build_cost    = 10
+pop_cost      = 0
+attack        = 2
+defense       = 1
+hitpoints     = 5
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 2
+transport_cap = 0
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+flags         = "NoBuild", "Cant_Fortify", "Unbribable", "IgZOC", "HasNoZOC", "SuperSpy", "NoVeteran", "Cant_Pillage"
+roles         = "Barbarian"
+helptext      = _("\
+Watch out for wild animals.\
+"), _("\
+Lions hunt the savannahs and plains.\
+")
+[unit_animal_bear]
+name          = _("[Bear]")
+class         = "Land"
+tech_req      = "None"
+obsolete_by   = "None"
+graphic       = "u.bear"
+graphic_alt   = "None"
+sound_move    = "m_generic"
+sound_move_alt = "m_generic"
+sound_fight   = "f_generic"
+sound_fight_alt = "f_generic"
+build_cost    = 10
+pop_cost      = 0
+attack        = 2
+defense       = 2
+hitpoints     = 6
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 2
+transport_cap = 0
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+flags         = "NoBuild", "Cant_Fortify", "Unbribable", "IgZOC", "HasNoZOC", "SuperSpy", "NoVeteran", "Cant_Pillage"
+roles         = "Barbarian"
+helptext      = _("\
+Watch out for wild animals.\
+"), _("\
+Bears live in the mountains.\
+")
+[unit_animal_crocodile]
+name          = _("[Crocodile]")
+class         = "Land"
+tech_req      = "None"
+obsolete_by   = "None"
+graphic       = "u.crocodile"
+graphic_alt   = "None"
+sound_move    = "m_generic"
+sound_move_alt = "m_generic"
+sound_fight   = "f_generic"
+sound_fight_alt = "f_generic"
+build_cost    = 10
+pop_cost      = 0
+attack        = 2
+defense       = 1
+hitpoints     = 7
+firepower     = 1
+move_rate     = 1
+vision_radius_sq = 2
+transport_cap = 0
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+flags         = "NoBuild", "Cant_Fortify", "Unbribable", "IgZOC", "HasNoZOC", "SuperSpy", "NoVeteran", "Cant_Pillage"
+roles         = "Barbarian"
+helptext      = _("\
+Watch out for wild animals.\
+"), _("\
+Crocodiles live in the swamps, where they wait to catch and eat prey.\
+")
+[unit_animal_hippo]
+name          = _("[Hippo]")
+class         = "Sea"
+tech_req      = "None"
+obsolete_by   = "None"
+graphic       = "u.hippo"
+graphic_alt   = "None"
+sound_move    = "m_generic"
+sound_move_alt = "m_generic"
+sound_fight   = "f_generic"
+sound_fight_alt = "f_generic"
+build_cost    = 10
+pop_cost      = 0
+attack        = 1
+defense       = 1
+hitpoints     = 10
+firepower     = 1
+move_rate     = 1
+vision_radius_sq = 2
+transport_cap = 0
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+flags         = "NoBuild", "Cant_Fortify", "Unbribable", "IgZOC", "HasNoZOC", "SuperSpy", "NoVeteran", "Cant_Pillage"
+roles         = "Barbarian"
+helptext      = _("\
+Watch out for wild animals.\
+"), _("\
+Hippos live in shallow smaller lakes.\
+")
+[unit_animal_rhino]
+name          = _("[Rhino]")
+class         = "Land"
+tech_req      = "None"
+obsolete_by   = "None"
+graphic       = "u.rhino"
+graphic_alt   = "None"
+sound_move    = "m_generic"
+sound_move_alt = "m_generic"
+sound_fight   = "f_generic"
+sound_fight_alt = "f_generic"
+build_cost    = 10
+pop_cost      = 0
+attack        = 1
+defense       = 2
+hitpoints     = 6
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 2
+transport_cap = 0
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+flags         = "NoBuild", "Cant_Fortify", "Unbribable", "IgZOC", "HasNoZOC", "SuperSpy", "NoVeteran", "Cant_Pillage"
+roles         = "Barbarian"
+helptext      = _("\
+Watch out for wild animals.\
+"), _("\
+Rhinos roam the edge of the deserts.\
+")
+[unit_animal_polarbear]
+name          = _("[Polar Bear]")
+class         = "Land"
+tech_req      = "None"
+obsolete_by   = "None"
+graphic       = "u.polar_bear"
+graphic_alt   = "None"
+sound_move    = "m_generic"
+sound_move_alt = "m_generic"
+sound_fight   = "f_generic"
+sound_fight_alt = "f_generic"
+build_cost    = 10
+pop_cost      = 0
+attack        = 2
+defense       = 1
+hitpoints     = 6
+firepower     = 1
+move_rate     = 1
+vision_radius_sq = 2
+transport_cap = 0
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+flags         = "NoBuild", "Cant_Fortify", "Unbribable", "IgZOC", "HasNoZOC", "SuperSpy", "NoVeteran", "Cant_Pillage"
+roles         = "Barbarian"
+helptext      = _("\
+Watch out for wild animals.\
+"), _("\
+Polar Bears live in the tundra and frozen arctic. They think of people as food.\
+")
+[unit_animal_giantsquid]
+name          = _("[Giant Squid]")
+class         = "Sea"
+tech_req      = "None"
+obsolete_by   = "None"
+graphic       = "u.squid"
+graphic_alt   = "None"
+sound_move    = "m_generic"
+sound_move_alt = "m_generic"
+sound_fight   = "f_generic"
+sound_fight_alt = "f_generic"
+build_cost    = 10
+pop_cost      = 0
+attack        = 1
+defense       = 1
+hitpoints     = 9
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 2
+transport_cap = 0
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+flags         = "NoBuild", "Cant_Fortify", "Unbribable", "IgZOC", "HasNoZOC", "SuperSpy", "NoVeteran", "Cant_Pillage"
+roles         = "Barbarian"
+helptext      = _("\
+Watch out for wild animals.\
+"), _("\
+Giant Squids live out at sea; they don't come near shore or shallow waters. Avoid them at all costs.\
+")
+
 ;THIS LINE RESERVED FOR NECESSARY BLANK END OF LINE:

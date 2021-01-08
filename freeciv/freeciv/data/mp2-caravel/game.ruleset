@@ -371,6 +371,12 @@ ui_name_conquer_city = _("%sConquer City%s")
 ; /* TRANS: Pilla_ge (100% chance of success). */
  ui_name_pillage = _("Pilla%sge%s")
 
+; /* TRANS: Clean _Pollution (100% chance of success). */
+ ui_name_clean_pollution = "Clean %sPollution%s"
+
+; /* TRANS: Clean _Fallout (100% chance of success). */
+ ui_name_clean_fallout = "Clean %sFallout%s"
+
 ; /* TRANS: _Fortify (100% chance of success). */
  ui_name_fortify = _("%sFortify%s")
 
@@ -482,6 +488,15 @@ actor_reqs    =
       "UnitState","OnDomesticTile",   "Local", TRUE
       "CityTile", "Center",           "Local", TRUE
       "Tech",     "Conscription",     "Player",TRUE
+    }
+[actionenabler_musket_to_rifle] ;;Musketeers become Riflemen with Labor Union
+action = "Convert Unit"
+actor_reqs    =
+    { "type",     "name",             "range", "present"
+      "UnitType", "Musketeers",       "Local", TRUE 
+      "UnitState","OnDomesticTile",   "Local", TRUE
+      "CityTile", "Center",           "Local", TRUE
+      "Tech",     "Labor Union",      "Player",TRUE
     }
 
 [actionenabler_sabotage_city]
@@ -1407,6 +1422,7 @@ actor_reqs    =
       "DiplRel",        "War",            "Local", TRUE
       "MinMoveFrags",   "1",              "Local", TRUE
       "UnitState",      "OnLivableTile",  "Local", TRUE
+      "Nation",         "Animal Kingdom", "Player",FALSE
     }
 target_reqs    =
     { "type",           "name",          "range", "present"
@@ -1423,6 +1439,7 @@ actor_reqs    =
       "DiplRel",        "War",            "Local", TRUE
       "MinMoveFrags",   "1",              "Local", TRUE
       "UnitState",      "OnLivableTile",  "Local", TRUE
+      "Nation",         "Animal Kingdom", "Player",FALSE
     }
 target_reqs    =
     { "type",           "name",          "range", "present"
@@ -1440,6 +1457,7 @@ actor_reqs    =
       "UnitType",       "Anti-Aircraft Artillery", "Local", FALSE
       ;AAA got Marines flag only to enable reasonable attacks,
       ;not for conquering cities from a Transport.
+      "Nation",         "Animal Kingdom", "Player",FALSE
     }
 target_reqs    =
     { "type",           "name",          "range", "present"
@@ -1457,6 +1475,7 @@ actor_reqs    =
       "UnitType",       "Anti-Aircraft Artillery", "Local", FALSE
       ;AAA got AttFromNonNative only to enable reasonable attacks,
       ;not for conquering cities from a Transport.
+      "Nation",         "Animal Kingdom",   "Player",FALSE
     }
 target_reqs    =
     { "type",           "name",          "range", "present"
@@ -1588,8 +1607,9 @@ actor_reqs    =
 [actionenabler_pillage]
 action        = "Pillage"
 actor_reqs    =
-    { "type",          "name",         "range"
-      "UnitClassFlag", "CanPillage",   "Local"
+    { "type",          "name",         "range", "present"
+      "UnitClassFlag", "CanPillage",   "Local", TRUE
+      "UnitFlag",      "Cant_Pillage",  "Local", FALSE
     }
 [actionenabler_pillage2]
 action        = "Pillage"
@@ -1602,7 +1622,24 @@ action        = "Pillage"
 actor_reqs    =
     { "type",     "name",                  "range"
       "UnitType", "Jet Bomber",            "Local"
-    }    
+    }
+
+[actionenabler_clean_pollution]
+action        = "Clean Pollution"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitFlag",      "NonMil",       "Local", TRUE
+      ;NonMil = don't let ability to do Hideouts 'cause' ability to clean pollution
+    }
+[actionenabler_clean_fallout]
+action        = "Clean Fallout"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitFlag",      "NonMil",       "Local", TRUE
+      ;NonMil = don't let ability to do Hideouts 'cause' ability to clean fallout
+    }
 
 [actionenabler_fortify]
 action        = "Fortify"
@@ -1717,6 +1754,8 @@ actor_reqs    =
       "UnitType",      "Marines",         "Local", FALSE
       "UnitFlag",      "Well-Digger",     "Local", FALSE
     }
+;Somewhat counterintuitive but this results in Marines able to build
+;Forts and airbases, though no airbase inside an existing fort.
 [actionenabler_marines_can_fort_only]
 action        = "Build Base"
 actor_reqs    =
@@ -2392,29 +2431,36 @@ set =
       "aifill", 6, FALSE
       "airliftingstyle", "FROM_ALLIES|TO_ALLIES", FALSE
       "airliftdestdivisor", 3, FALSE
+      "animals", 0, FALSE
       "autoattack", "enabled", FALSE
       "autoattack_style", 1, FALSE
       "barbarians", "DISABLED", FALSE
       "borders", "SEE_INSIDE", FALSE
       "contactturns", 10, FALSE
+      "conquercost", 0, FALSE
       "diplomacy", "ALL", FALSE
+      "diplgoldcost", 5, FALSE
+      "diplbulbcost", 5, FALSE
       "dispersion", 0, FALSE
       "endspaceship", "ENABLED", FALSE 
       "foggedborders", TRUE, FALSE
+      "freecost", 0, FALSE
       "generator", "RANDOM", FALSE
-      "gold", 100, FALSE
+      "gold", 70, FALSE
       "hideouts", TRUE, FALSE
       "huts", 10, FALSE
       "killcitizen_pct", 60, FALSE        ; regulates % chance of pop kill by city pop-killer units
       "landmass", 63, FALSE
+      "looting", "BASE_TRADE", FALSE
       "minplayers", 0, FALSE
       "move_bonus_in_frags", "ENABLED", TRUE   ;locked
       "nationset", "all", FALSE 
-      "nuclearwinter_percent", 20, FALSE
+      "nuclearwinter_percent", 15, FALSE
       "nukes_minor", "ENABLED", FALSE      ; set to DISABLED to completely disallow nuclear detonations
-      "nukes_major", "DISABLED", FALSE     ; set to ENABLED to allow nuclear fusion weapons
+      "nukes_major", "ENABLED", FALSE      ; set to DISABLED to disallow nuclear fusion weapons
       "polarstrip", "DISABLED", FALSE      ; blocks making horizontal polar strips on most generators
       "revolen", 1, FALSE
+      "restrictinfra", "ENABLED", FALSE    ; required for mp2 mechanics.
       "separatepoles", FALSE, FALSE
       "slot_control", TRUE, FALSE         ; multiple units per turn
       "slot_control_style", 1, FALSE      ; 1 = Shield2Gold units only
@@ -2423,10 +2469,18 @@ set =
       "startpos", "SINGLE", FALSE
       "startunits", "xxcccwwwaADD", FALSE
       "techleak", 25, FALSE
+      "techlossforgiveness", 200, FALSE
+      "techlossrestore", 100, FALSE
       "techpenalty", 0, FALSE
+      "temperature", 50, FALSE
+      "tilesperplayer", 290, FALSE
+      "tinyisles", "DISABLED", FALSE
+      "wetness", 50, FALSE
+      "steepness", 30, FALSE
       "tinyisles", FALSE, FALSE
       "trademindist", 12, FALSE
       "trade_revenue_style", "SIMPLE", FALSE   ;"simple" formula based on average trade in both cities (sans distance etc.)
+      "trading_city", "DISABLED", FALSE
       "topology", "WRAPX", FALSE
       "trading_city", "DISABLED", FALSE
       "universal_unload", "ENABLED", FALSE

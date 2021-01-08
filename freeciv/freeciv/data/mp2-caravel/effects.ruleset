@@ -4877,8 +4877,8 @@ reqs	=
     { "type", "name", "range", "present"
       "Action", "Spy Attack", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
-    }
-[effect_incident_success_spy_attack2]
+    }    
+[effect_incident_caught_spy_attack]
 type	= "Casus_Belli_Caught"
 value	= 1
 reqs	=
@@ -5255,3 +5255,15 @@ reqs    =
     "type", "name", "range", "present"
     "Tech", "Banking", "Player", TRUE
   }
+
+[effect_barb_disappear2]
+type    = "Retire_Pct"
+value   = 5
+reqs    ={ "type", "name", "range", "present"
+"NationGroup", "Barbarian", "Player", TRUE
+"Nation", "Animal Kingdom", "Player", FALSE
+"Age", "15", "Local", TRUE
+"CityTile", "Center", "Local", FALSE
+}
+
+;This line intentionally left blank:
