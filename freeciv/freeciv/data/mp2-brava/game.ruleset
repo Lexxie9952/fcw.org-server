@@ -1355,6 +1355,12 @@ actor_reqs    =
     { "type",     "name",                  "range"
       "UnitType", "Ground Strike Fighter", "Local"
     }
+[actionenabler_pillage3]
+action        = "Pillage"
+actor_reqs    =
+    { "type",     "name",                  "range"
+      "UnitType", "Jet Bomber",            "Local"
+    }
 
 [actionenabler_fortify]
 action        = "Fortify"
@@ -2136,24 +2142,30 @@ set =
       "barbarians", "DISABLED", FALSE
       "borders", "SEE_INSIDE", FALSE
       "contactturns", 10, FALSE
+      "conquercost", 0, FALSE
       "diplomacy", "ALL", FALSE
+      "diplgoldcost", 5, FALSE
+      "diplbulbcost", 5, FALSE
       "dispersion", 0, FALSE
       "endspaceship", "ENABLED", FALSE 
       "foggedborders", TRUE, FALSE
+      "freecost", 0, FALSE
       "generator", "RANDOM", FALSE
-      "gold", 100, FALSE
+      "gold", 70, FALSE
       "hideouts", TRUE, FALSE
       "huts", 10, FALSE
       "killcitizen_pct", 60, FALSE        ; regulates % chance of pop kill by city pop-killer units
       "landmass", 63, FALSE
+      "looting", "BASE_TRADE", FALSE
       "minplayers", 0, FALSE
       "move_bonus_in_frags", "ENABLED", TRUE   ;locked
       "nationset", "all", FALSE 
-      "nuclearwinter_percent", 20, FALSE
+      "nuclearwinter_percent", 15, FALSE
       "nukes_minor", "ENABLED", FALSE      ; set to DISABLED to completely disallow nuclear detonations
-      "nukes_major", "DISABLED", FALSE     ; set to ENABLED to allow nuclear fusion weapons
+      "nukes_major", "ENABLED", FALSE      ; set to DISABLED to disallow nuclear fusion weapons
       "polarstrip", "DISABLED", FALSE      ; blocks making horizontal polar strips on most generators
       "revolen", 1, FALSE
+      "restrictinfra", "ENABLED", FALSE    ; required for mp2 mechanics.
       "separatepoles", FALSE, FALSE
       "slot_control", TRUE, FALSE         ; multiple units per turn
       "slot_control_style", 1, FALSE      ; 1 = Shield2Gold units only
@@ -2162,10 +2174,18 @@ set =
       "startpos", "SINGLE", FALSE
       "startunits", "xxcccwwwaADD", FALSE
       "techleak", 25, FALSE
+      "techlossforgiveness", 200, FALSE
+      "techlossrestore", 100, FALSE
       "techpenalty", 0, FALSE
+      "temperature", 50, FALSE
+      "tilesperplayer", 290, FALSE
+      "tinyisles", "DISABLED", FALSE
+      "wetness", 50, FALSE
+      "steepness", 30, FALSE
       "tinyisles", FALSE, FALSE
       "trademindist", 12, FALSE
       "trade_revenue_style", "SIMPLE", FALSE   ;"simple" formula based on average trade in both cities (sans distance etc.)
+      "trading_city", "DISABLED", FALSE
       "topology", "WRAPX", FALSE
       "trading_city", "DISABLED", FALSE
       "universal_unload", "ENABLED", FALSE
