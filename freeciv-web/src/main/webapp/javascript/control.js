@@ -5974,10 +5974,45 @@ function popit_req(ptile)
 
 
 /**************************************************************************
-   find any city to focus on.
+   Find any city to focus on, if nothing more intelligent can be found
+   to focus on. Priority: capital, owned city, owned unit, any city at 
+   all.
 **************************************************************************/
 function center_on_any_city()
 {
+  var fallback_city;
+
+  if (!observing) {
+    for (var city_id in cities) {
+      var pcity = cities[city_id];
+      // Loop through all cities
+      if (pcity['owner'] == client.conn.playing.playerno) {
+        // any owned city is a fallback if we don't find a capital
+        fallback_city = pcity; 
+        // if it's the capital, center on it.
+        if (city_has_building(pcity), improvement_id_by_name("Palace")) {
+          center_tile_mapcanvas(city_tile(pcity));
+          return;
+        }
+      }
+    }
+    // no capital found, use a fallback_city if available
+    if (fallback_city) {
+      center_tile_mapcanvas(city_tile(fallback_city));
+      return;
+    }
+    // player has no cities, find a unit:
+    for (var unit_id in units) {
+      var punit = units[unit_id];
+      if (punit['owner'] == client.conn.playing.playerno) {
+        center_tile_mapcanvas(unit_tile(punit));
+        return;
+      }
+    }
+  }
+
+  // player is either an observer, a dead player, or something else,
+  // so find any city at all to focus on:
   for (var city_id in cities) {
     var pcity = cities[city_id];
     center_tile_mapcanvas(city_tile(pcity));
