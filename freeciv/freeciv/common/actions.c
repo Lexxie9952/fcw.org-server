@@ -264,20 +264,34 @@ static void hard_code_oblig_hard_reqs(void)
                           "the actor doesn't have the NoHome utype flag.",
                           ACTION_HOME_CITY, ACTION_NONE);
 
+  /* Why this is a hard requirement: Preserve semantics of the Settlers
+   * unit type flag. */
+  oblig_hard_req_register(req_from_values(VUT_UTFLAG, REQ_RANGE_LOCAL,
+                                          FALSE, FALSE, TRUE,
+                                          UTYF_SETTLERS),
+                          FALSE,
+                          "All action enablers for %s must require that "
+                          "the actor has the Settlers utype flag.",
+                     /*     ACTION_TRANSFORM_TERRAIN,
+                          ACTION_MINE,
+                          ACTION_IRRIGATE, */
+              // FIXME: they broke all 3.0 rulesets with that, they need "Settlers" req in all of them.
+                          ACTION_CLEAN_POLLUTION,
+                          ACTION_CLEAN_FALLOUT,
+                          ACTION_NONE);
+
   /* Why someone previously made this a hard requirement:
    * "Preserve semantics of NonMil flag. Need to replace other uses in game
    * engine before this can be demoted to a regular unit flag.""
    * 
-   * NO! Rulesets are perfectly capable of specifying "NonMil",FALSE  
-   * without a hard req, if they want. Forceful prioritizing of semantics
-   * over ruleset flexibility is bad. Rulesets rely on "NonMil" to hardcode
-   * disallowed entry into Peace territory. Don't FORCE rulesets to couple
-   * this with inability to attack, when we have an action enabler for that
-   * already. Doing so forbids legitimate use cases:
+   * NO! Rulesets RELY on "NonMil" to code for allowed entry into Peace
+   * territory. Don't FORCE ruleset to wed this with the inability to
+   * attack. Actionenablers can CHOOSE to do that or not already. This
+   * has to be removed for the following to even be possible in Freeciv:
    *  
-   * Specifically, units able to serve peaceful functions during peace and 
-   * military functions during war:  e.g., Triremes and other ancient ships 
-   * who were dual purpose for commerce and military. 
+   * Units which are able to serve peaceful functions during peace and 
+   * military functions during war:  e.g., half of all ships from 3000BC
+   * to 1400AD, and maybe beyond. 
    * 
    * COMMENTED OUT:
   oblig_hard_req_register(req_from_values(VUT_UTFLAG, REQ_RANGE_LOCAL,
@@ -352,6 +366,7 @@ static void hard_code_oblig_hard_reqs(void)
                           "All action enablers for %s must require that "
                           "the actor isn't transporting another unit.",
                           ACTION_PARADROP, ACTION_AIRLIFT, ACTION_NONE);
+
 }
 
 /**********************************************************************//**
@@ -614,6 +629,14 @@ static void hard_code_actions(void)
       action_new(ACTION_PILLAGE, ATK_TILE,
                  FALSE, ACT_TGT_COMPL_FLEXIBLE, TRUE, FALSE,
                  0, 0, FALSE);
+  actions[ACTION_CLEAN_POLLUTION] =
+      action_new(ACTION_CLEAN_POLLUTION, ATK_TILE,
+                 FALSE, ACT_TGT_COMPL_FLEXIBLE, TRUE, FALSE,
+                 0, 0, FALSE);
+  actions[ACTION_CLEAN_FALLOUT] =
+      action_new(ACTION_CLEAN_FALLOUT, ATK_TILE,
+                 FALSE, ACT_TGT_COMPL_FLEXIBLE, TRUE, FALSE,
+                 0, 0, FALSE);               
   actions[ACTION_FORTIFY] =
       action_new(ACTION_FORTIFY, ATK_SELF,
                  FALSE, ACT_TGT_COMPL_SIMPLE, TRUE, FALSE,
@@ -1248,6 +1271,10 @@ enum unit_activity action_get_activity(const struct action *paction)
     return ACTIVITY_GEN_ROAD;
   } else if (action_has_result(paction, ACTION_PILLAGE)) {
     return ACTIVITY_PILLAGE;
+  } else if (action_has_result(paction, ACTION_CLEAN_POLLUTION)) {
+    return ACTIVITY_POLLUTION;
+  } else if (action_has_result(paction, ACTION_CLEAN_FALLOUT)) {
+    return ACTIVITY_FALLOUT;    
   } else if (action_has_result(paction, ACTION_TRANSFORM_TERRAIN)) {
     return ACTIVITY_TRANSFORM;
   } else if (action_has_result(paction, ACTION_CONVERT)) {
@@ -1858,6 +1885,8 @@ action_actor_utype_hard_reqs_ok(const action_id wanted_action,
   case ACTION_CONQUER_CITY:
   case ACTION_HEAL_UNIT:
   case ACTION_PILLAGE:
+  case ACTION_CLEAN_POLLUTION:
+  case ACTION_CLEAN_FALLOUT:  
   case ACTION_FORTIFY:
   case ACTION_SPY_ATTACK:
     /* No hard unit type requirements. */
@@ -2015,6 +2044,8 @@ action_hard_reqs_actor(const action_id wanted_action,
   case ACTION_IRRIGATE_TF:
   case ACTION_MINE_TF:
   case ACTION_PILLAGE:
+  case ACTION_CLEAN_POLLUTION:
+  case ACTION_CLEAN_FALLOUT:
   case ACTION_FORTIFY:
   case ACTION_ROAD:
   case ACTION_BASE:
@@ -2695,6 +2726,86 @@ is_action_possible(const action_id wanted_action,
           return TRI_NO;
         }
       }
+    }
+    break;
+
+case ACTION_CLEAN_POLLUTION:
+    {
+      /*const*/ struct extra_type *pextra;
+
+      pterrain = tile_terrain(target_tile);
+      if (pterrain->clean_pollution_time == 0) {
+        return TRI_NO;
+      }
+
+      if (target_extra != NULL) {
+        pextra = (struct extra_type *) target_extra;
+      } else {
+        /* TODO: Make sure that all callers set target so that
+         * we don't need this fallback. */
+        pextra = prev_extra_in_tile(target_tile,
+                                    ERM_CLEANPOLLUTION,
+                                    actor_player,
+                                    actor_unit);
+        if (pextra == NULL) {
+          /* No available pollution extras */
+          return TRI_NO;
+        }
+      }
+
+      if (!is_extra_removed_by(pextra, ERM_CLEANPOLLUTION)) {
+        return TRI_NO;
+      }
+
+      if (!can_remove_extra(pextra, actor_unit, target_tile)) {
+        return TRI_NO;
+      }
+
+      if (tile_has_extra(target_tile, pextra)) {
+        return TRI_YES;
+      }
+
+      return TRI_NO;
+    }
+    break;
+
+  case ACTION_CLEAN_FALLOUT:
+    {
+      /*const*/ struct extra_type *pextra;
+
+      pterrain = tile_terrain(target_tile);
+      if (pterrain->clean_fallout_time == 0) {
+        return TRI_NO;
+      }
+
+      if (target_extra != NULL) {
+        pextra = (struct extra_type *) target_extra;
+      } else {
+        /* TODO: Make sure that all callers set target so that
+         * we don't need this fallback. */
+        pextra = prev_extra_in_tile(target_tile,
+                                    ERM_CLEANFALLOUT,
+                                    actor_player,
+                                    actor_unit);
+        if (pextra == NULL) {
+          /* No available pollution extras */
+          return TRI_NO;
+        }
+      }
+
+      if (!is_extra_removed_by(pextra, ERM_CLEANFALLOUT)) {
+        return TRI_NO;
+      }
+
+      if (!can_remove_extra(pextra, actor_unit, target_tile)) {
+        return TRI_NO;
+      }
+
+      if (tile_has_extra(target_tile, pextra)) {
+        return TRI_YES;
+      }
+
+      return TRI_NO;
     }
     break;
 
@@ -3752,6 +3863,8 @@ action_prob(const action_id wanted_action,
   case ACTION_IRRIGATE_TF:
   case ACTION_MINE_TF:
   case ACTION_PILLAGE:
+  case ACTION_CLEAN_POLLUTION:
+  case ACTION_CLEAN_FALLOUT:
   case ACTION_FORTIFY:
   case ACTION_ROAD:
   case ACTION_CONVERT:
@@ -4996,6 +5109,10 @@ const char *action_ui_name_ruleset_var_name(int act)
     return "ui_name_mine_tf";
   case ACTION_PILLAGE:
     return "ui_name_pillage";
+  case ACTION_CLEAN_POLLUTION:
+    return "ui_name_clean_pollution";
+  case ACTION_CLEAN_FALLOUT:
+    return "ui_name_clean_fallout";
   case ACTION_FORTIFY:
     return "ui_name_fortify";
   case ACTION_ROAD:
@@ -5169,6 +5286,12 @@ const char *action_ui_name_default(int act)
   case ACTION_PILLAGE:
     /* TRANS: Pilla_ge (100% chance of success). */
     return N_("Pilla%sge%s");
+  case ACTION_CLEAN_POLLUTION:
+    /* TRANS: Clean _Pollution (100% chance of success). */
+    return N_("Clean %sPollution%s");
+  case ACTION_CLEAN_FALLOUT:
+    /* TRANS: Clean _Fallout (100% chance of success). */
+    return N_("Clean %sFallout%s");
   case ACTION_FORTIFY:
     /* TRANS: _Fortify (100% chance of success). */
     return N_("%sFortify%s");

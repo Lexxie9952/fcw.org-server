@@ -806,45 +806,49 @@ bool can_unit_do_activity_targeted_at(const struct unit *punit,
     return TRUE;
 
   case ACTIVITY_POLLUTION:
+    /* The call below doesn't support actor tile speculation. */
+    fc_assert_msg(unit_tile(punit) == ptile,
+                  "Please use action_speculate_unit_on_tile()");
+    return is_action_enabled_unit_on_tile(ACTION_CLEAN_POLLUTION,
+                                          punit, ptile, target);
+/* FORMER CODE WAS HERE BEFORE it was an actionenabler:
     {
       struct extra_type *pextra;
-
       if (pterrain->clean_pollution_time == 0) {
         return FALSE;
       }
-
       if (target != NULL) {
         pextra = target;
       } else {
-        /* TODO: Make sure that all callers set target so that
-         * we don't need this fallback. */
         pextra = prev_extra_in_tile(ptile,
                                     ERM_CLEANPOLLUTION,
                                     unit_owner(punit),
                                     punit);
         if (pextra == NULL) {
-          /* No available pollution extras */
+          // No available pollution extras 
           return FALSE;
         }
       }
-
       if (!is_extra_removed_by(pextra, ERM_CLEANPOLLUTION)) {
         return FALSE;
       }
-
       if (!unit_has_type_flag(punit, UTYF_SETTLERS)
           || !can_remove_extra(pextra, punit, ptile)) {
         return FALSE;
       }
-
       if (tile_has_extra(ptile, pextra)) {
         return TRUE;
       }
-
       return FALSE;
     }
-
+    */
   case ACTIVITY_FALLOUT:
+      /* The call below doesn't support actor tile speculation. */
+      fc_assert_msg(unit_tile(punit) == ptile,
+                    "Please use action_speculate_unit_on_tile()");
+      return is_action_enabled_unit_on_tile(ACTION_CLEAN_FALLOUT,
+                                            punit, ptile, target);
+      /* FORMER CODE WAS here before it became actionenabler :
     {
       struct extra_type *pextra;
 
@@ -855,14 +859,13 @@ bool can_unit_do_activity_targeted_at(const struct unit *punit,
       if (target != NULL) {
         pextra = target;
       } else {
-        /* TODO: Make sure that all callers set target so that
-         * we don't need this fallback. */
+        //TODO: Make all callers set target so we don't need this fallback.
         pextra = prev_extra_in_tile(ptile,
                                     ERM_CLEANFALLOUT,
                                     unit_owner(punit),
                                     punit);
         if (pextra == NULL) {
-          /* No available pollution extras */
+          // No available pollution extras 
           return FALSE;
         }
       }
@@ -882,7 +885,7 @@ bool can_unit_do_activity_targeted_at(const struct unit *punit,
 
       return FALSE;
     }
-
+*/
   case ACTIVITY_MINE:
     if (pterrain->mining_result != pterrain
         && pterrain->mining_result != T_NONE) {

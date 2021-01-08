@@ -925,6 +925,8 @@ void adv_best_government(struct player *pplayer)
           case ACTION_BASE:
           case ACTION_MINE:
           case ACTION_IRRIGATE:
+          case ACTION_CLEAN_POLLUTION:
+          case ACTION_CLEAN_FALLOUT:
             /* Could be good. An embassy gives permanent contact. A trade
              * route gives gold per turn. Join city gives population. Help
              * wonder gives shields. */
