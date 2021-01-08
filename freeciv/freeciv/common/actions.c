@@ -361,7 +361,12 @@ static void hard_code_oblig_hard_reqs(void)
 static void hard_code_oblig_hard_reqs_ruleset(void)
 {
   /* Why this is a hard requirement: the "animal can't conquer a city"
-   * rule. Assumed in unit_can_take_over(). */
+   * rule. Assumed in unit_can_take_over(). 
+
+    why this was removed:
+    "Nation",         "Animal Kingdom", "Player",FALSE
+    was put in the ruleset and this still threw an exception */
+   /*
   nations_iterate(pnation) {
     if (nation_barbarian_type(pnation) == ANIMAL_BARBARIAN) {
       oblig_hard_req_register(req_from_values(VUT_NATION, REQ_RANGE_PLAYER,
@@ -372,7 +377,7 @@ static void hard_code_oblig_hard_reqs_ruleset(void)
                               "non animal player actor.",
                               ACTION_CONQUER_CITY, ACTION_NONE);
     }
-  } nations_iterate_end;
+  } nations_iterate_end;*/
 }
 
 /**********************************************************************//**
