@@ -72,7 +72,7 @@ UNITS/COMBAT/MECHANICS:
 4. TEST Helicopter not susceptible to City Walls but rather SAM Battery (fixes a nerf of 3x for a land unit not from original game)
 5. Shift from shield to gold upkeep for Infantry changed from Labor Union to Banking. Allows realistic foot soldier compositions to affect more of the game.
 6. Battleship gets ranged attack: 3 rounds, can hit up to 4 units, can kill up to 1 unit, uses 5 moves.
-7. Truck replaces Freight. Changes: Road only, moves: 5, can carry 3 land units.
+7. Truck replaces Freight. Changes: Road only, moves: 6, can carry 3 land units.
 8. Discovery of Recycling reduces unit upgrades 20%, stacks with other discounts.
 9. A server flaw sometimes
    a. allowed military units to clean fallout and pollution. This fix affects ALL rulesets.
@@ -84,12 +84,23 @@ SPIES/DIPLOMATS:
    c. Spies promotion odds increased to compensate for the weaker strength of their veterancy levels, to make it track more similar 
       to other units for number of successful surviving actions.
 OTHER:
-Casus Belli Expansions:
-1. In a foreign territory casus belli is given by:  Transforming Terrain, Building Base, or making road-types (road,rail,quay,canal,etc.)
-2. Bribe enemy unit.
-3. Found City on foreign territory (i.e., in a Fort.)
-4. Capture Units (server bug fix allows it now.)
-
+1.Casus Belli Expansions:
+   a. In a foreign territory casus belli is given by:  Transforming Terrain, Building Base, or making road-types (road,rail,quay,canal,etc.)
+   b. Bribe enemy unit.
+   c. Found City on foreign territory (i.e., in a Fort.)
+   d. Capture Units (server bug fix allows it now.)
+2. Improved tuning of terrain dispersion; less domination in some areas by a single terrain type.
+3. Balance Alignment of Resource Distribution (BARD. 1. On the TC, BARD allocates a small amount of:
+   Berries, Spice, Peat, Oasis, Rubber, Gems, Elk, Furs, Arctic Oil, Ivory, and Iron, in order to enhance statistical
+   balance in each climactic region. Typically this is less than a 4% chance per tile, with exact value tuned to regional
+   geographic balance. (Swamp and Arctic get somewhat more.) 2. BARD overcomes the map generator's forced 35%
+   chance a tile gets a resource, regardless of terrain, resource type, or scarcity of nearby resources on other tiles.
+   3. BARD discourages settling on the first turn, giving one turn of "oxygen" for all players to look around before settling
+   their cities. This was preferred to proposals to disallow settling on first turn, or to exaggerate inconsistent special
+   exception bonuses for starting moves, exceptions to terrain movement penalties for x turns, etc., etc.
+4. "Blood for Oil": Discovery of Refining gives +1 shield per Oil and allows accessing subterranean Oil reserves regardless how you transform
+   the surface terrain. +50% Railroad plus +1 shield overcome down-rounding, plus agricultural possibilities after transforming, means that
+   Oil tiles become highly coveted and worth fighting over. 
 MINOR AND MISC.
 ---------------
 Conscription does not allow making multiple Caravans per turn.
@@ -122,7 +133,7 @@ SERVER UPGRADES:
 10. Unit vision range now reported in raw tile units rather than square of radius.
 11. Fortresses and Naval Bases show a flag of who owns them to prevent confusion. 
 12. Fixed variety of small quirks/inconsistencies in loading/unloading of transports.
-13. Added ability for rulesets to include the "Sea Bridge" improvement over water.
+13. Added ability for rulesets to include the "Sea Bridge" improvement over water. Must be CAdjacent on lake or ocean (not deep ocean)
 14. DOC HOTKEYS.MP:: Intelligent Load/Unload/Activate Cargo are now a Holstic Suite of upgraded mechanics which all work together:
    UNLOAD TRANSPORT 'T':
     a. 'T' tells a selected Transport(s) to unload their specific cargo.

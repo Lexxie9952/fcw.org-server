@@ -9,23 +9,23 @@ function _deflua_hut_get_gold(unit, gold)
   local owner = unit.owner
 
   if gold == 1 then
-    notify.event(owner, unit.tile, E.HUT_GOLD, PL_("You found medicinal herbs worth %d gold.",
-                                                  "You found medicinal herbs worth %d gold.", gold),
-                gold)
-    owner:change_gold(gold)
-  elseif gold == 2 then  
     notify.event(owner, unit.tile, E.HUT_GOLD, PL_("You found beads worth %d gold.",
                                                   "You found beads worth %d gold.", gold),
                 gold)
     owner:change_gold(gold)
+  elseif gold == 2 then  
+    notify.event(owner, unit.tile, E.HUT_GOLD, PL_("You found medicinal herbs worth %d gold.",
+                                                  "You found medicinal herbs %d gold.", gold),
+                gold)
+    owner:change_gold(gold)
   elseif gold == 5 then  
-    notify.event(owner, unit.tile, E.HUT_GOLD, PL_("You found furs worth %d gold.",
-                                                  "You found furs worth %d gold.", gold),
+    notify.event(owner, unit.tile, E.HUT_GOLD, PL_("You found stone tools worth %d gold.",
+                                                  "You found stone tools worth %d gold.", gold),
                 gold)
     owner:change_gold(gold)
   elseif gold == 10 then  
-    notify.event(owner, unit.tile, E.HUT_GOLD, PL_("You found stone tools worth %d gold.",
-                                                  "You found stone tools worth %d gold.", gold),
+    notify.event(owner, unit.tile, E.HUT_GOLD, PL_("You found furs worth %d gold.",
+                                                  "You found furs worth %d gold.", gold),
                 gold)
     owner:change_gold(gold)
   end
