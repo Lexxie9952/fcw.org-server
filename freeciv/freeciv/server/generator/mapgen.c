@@ -312,10 +312,14 @@ static void make_relief(void)
                          pick_terrain(MG_MOUNTAINOUS, fc_rand(10) < 4
                                       ? MG_UNUSED : MG_GREEN, MG_UNUSED));
       } else {
-        /* Prefer mountains hills to in cold regions. */
+        /* Prefer mountains hills to in cold regions. 
         tile_set_terrain(ptile,
                          pick_terrain(MG_MOUNTAINOUS, MG_UNUSED,
                                       fc_rand(10) < 8 ? MG_GREEN : MG_UNUSED));
+        NO, cold startpos is worse already, WTF were you thinking? */
+        // Prefer Hills to Mountains in cold regions:
+        tile_set_terrain(ptile,
+                         pick_terrain(MG_MOUNTAINOUS, MG_GREEN, MG_UNUSED));
       }
       map_set_placed(ptile);
     }
@@ -1485,8 +1489,11 @@ static void adjust_terrain_param(void)
                (MAX_COLATITUDE * 2);
   forest_pct -= jungle_pct;
 
-  /* 3 - 11 % */
-  river_pct = (100 - polar) * (3 + wld.map.server.wetness / 12) / 100;
+  /* 3 - 11 %    if wetness == 50 then 7% */
+  // NOT ENOUGH RIVERS: river_pct = (100 - polar) * (3 + wld.map.server.wetness / 12) / 100;
+  
+  /* 5 - 17 %    if wetness == 50 then 11% */
+  river_pct = (100 - polar) * (5 + wld.map.server.wetness / 8) / 100;  // much nicer
 
   /* 7 %  if wetness == 50 && temperature == 50 */
   swamp_pct = factor * MAX(0, (wld.map.server.wetness * 12 - 150
