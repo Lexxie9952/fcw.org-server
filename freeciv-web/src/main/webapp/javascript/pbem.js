@@ -105,7 +105,7 @@ function login_pbem_user()
   var title = "Log in";
   var message = "Log in to your Freeciv-web user account:<br><br>"
                 + "<table><tr><td>Username:</td><td><input id='username' type='text' size='25' maxlength='30' onkeyup='return forceLower(this);'></td></tr>"  
-                + "<tr><td>Password:</td><td><input id='password' type='password' size='25'> &nbsp; <a class='pwd_reset' href='#' style='color: #666666;'>Forgot password?</a></td></tr></table><br><br>"
+                + "<tr><td>Password:</td><td><input id='password' type='password' size='25'> &nbsp;"+/* <a class='pwd_reset' href='#' style='color: #666666;'>Forgot password?</a>*/"</td></tr></table><br><br>"
                 + "<div id='username_validation_result' style='display:none;'></div><br><br>";
 
   // reset dialog page.
