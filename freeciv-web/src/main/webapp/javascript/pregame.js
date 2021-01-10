@@ -708,10 +708,11 @@ function pregame_settings()
       + "<div id='pregame_settings_tabs-1'><table id='settings_table'> "
       + "<tr title='Ruleset version'><td>Ruleset:</td>"
       + "<td><select name='ruleset' id='ruleset'>"
-      + "<option value='ag'>Avant-garde</option>"
-      + "<option value='mp2'>Multiplayer II Expansion</option>"
-      + "<option value='mpplus'>Multiplayer+ v1.1</option>"
-      + "<option value='multiplayer'>Multiplayer  v1.0 (old)</option>"
+      + "<option value='mp2-caravel'>Multiplayer 2.3 Caravel</option>"
+      + "<option value='mp2-brava'>Multiplayer 2.2 Brava</option>"
+      + "<option value='ag'>Multiplayer 2.1 Avant-garde</option>"
+      + "<option value='mpplus'>Multiplayer+ 1.1</option>"
+      + "<option value='multiplayer'>Multiplayer 1.0 (old)</option>"
       + "<option value='classic'>Classic</option>"
       + "<option value='civ2civ3'>Civ2Civ3</option>"
       + "</select><a id='ruleset_description'></a></td></tr>"
@@ -1256,9 +1257,11 @@ function show_intro_dialog(title, message) {
   var stored_password = simpleStorage.get("password", "");
   if (stored_password != null && stored_password != false) {
     $("#password_row").show();
-    $("#password_td").html("<input id='password_req' type='password' size='25' maxlength='200'>  &nbsp; <a class='pwd_reset_2' href='#' style='color: #666666;'>Forgot password?</a>");
-    $("#password_req").val(stored_password);
-    $(".pwd_reset_2").click(forgot_pbem_password);
+   // $("#password_td").html("<input id='password_req' type='password' size='25' maxlength='200'>  &nbsp; <a class='pwd_reset_2' href='#' style='color: #666666;'>Forgot password?</a>");
+   $("#password_td").remove(); // we don't have password reset at the moment. 
+   $("#password_req").val(stored_password);
+   // $(".pwd_reset_2").click(forgot_pbem_password);
+   $(".pwd_reset_2").remove();
   }
   var join_game_customize_text = "";
   var join_game_title_text = "";
@@ -1425,8 +1428,19 @@ function show_longturn_intro_dialog() {
           }
         }
       },
-      buttons: []
-
+      buttons: [
+        {
+          text : "Join game",
+          click : function() {
+                    if (is_touch_device() || is_small_screen()) {
+                      BigScreen.toggle();
+                    }
+          dialog_close_trigger = "button";
+          validate_username_callback();
+        },
+        icons : { primary: "ui-icon-gear" }
+        }
+      ]
     });
 
   if (is_small_screen()) {
@@ -1462,10 +1476,6 @@ function validate_username_callback()
    url: "/validate_user?userstring=" + check_username,
    success: function(data, textStatus, request){
       if (data == "user_does_not_exist") {
-        if (is_longturn()) {
-          show_new_user_account_dialog();
-          return;
-        }
 
         if (validate_username()) {
           network_init();
@@ -1520,8 +1530,10 @@ function validate_username_callback()
 
         $("#password_row").show();
         $("#password_req").focus();
-        $("#password_td").html("<input id='password_req' type='password' size='25' maxlength='200'>  &nbsp; <a class='pwd_reset' href='#' style='color: #666666;'>Forgot password?</a>");
-        $(".pwd_reset").click(forgot_pbem_password);
+        //$("#password_td").html("<input id='password_req' type='password' size='25' maxlength='200'>  &nbsp; <a class='pwd_reset' href='#' style='color: #666666;'>Forgot password?</a>");
+        //$(".pwd_reset").click(forgot_pbem_password);
+        $(".pwd_reset").remove();
+        $("#password_td").remove(); // we don't have this option at the moment.
       }
     },
    error: function (request, textStatus, errorThrown) {
