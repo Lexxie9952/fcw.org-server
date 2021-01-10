@@ -994,14 +994,18 @@ function get_universal_discount_price(ptype, pcity)
 function generate_production_list()
 {
   var production_list = [];
+  const gov = governments[players[client.conn.playing.playerno].government].name;
   
   for (var unit_type_id in unit_types) {
     var punit_type = unit_types[unit_type_id];
     
     /* FIXME: web client doesn't support unit flags yet, so this is a hack: */
-    if (punit_type['name'] == "Barbarian Leader" || punit_type['name'] == "Leader" || punit_type['name'] == "Queen" 
-      || (punit_type['name'] == "Proletarians" && governments[players[client.conn.playing.playerno].government].name != "Communism")
-      || (punit_type['name'] == "Pilgrims" && governments[players[client.conn.playing.playerno].government].name != "Fundamentalism") )
+    if ( (punit_type['name'] == "Proletarians" && gov != "Communism")
+      || (punit_type['name'] == "Pilgrims" && gov != "Fundamentalism")
+      || punit_type['name'] == "Barbarian Leader" 
+      || punit_type['name'] == "Leader" 
+      || punit_type['name'] == "Queen" 
+      || punit_type['name'].startsWith("["))  // names starting with "[" are reserved for Non-Player Units: e.g., animals, tornados, zombies ;) 
        continue;
 
     if (utype_has_flag(punit_type, UTYF_NUCLEAR)) {
