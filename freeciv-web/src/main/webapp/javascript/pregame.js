@@ -12,7 +12,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
+    You should've received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ***********************************************************************/
@@ -691,7 +691,7 @@ function show_ruleset_description_full() {
 }
 
 /****************************************************************************
- Shows the pregame settings dialog.
+ Shows the pregame settings dialog.!!
 ****************************************************************************/
 function pregame_settings()
 {
