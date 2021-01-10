@@ -372,9 +372,9 @@ function init_common_intro_dialog() {
     
   } else {
     show_intro_dialog("Singleplayer vs. Freeciv AI",
-      "<br>Creating an account is optional. Saved games need an account."+
-      " (<a class='pwd_reset' href='#' style='color: #404A6F;'>Forgot password?</a>) Have fun! <br>");
-      $(".pwd_reset").click(forgot_pbem_password); 
+      "<br>Creating an account is optional. Saved games need an account."); 
+      //+" (<a class='pwd_reset' href='#' style='color: #404A6F;'>Forgot password?</a>) Have fun! <br>");
+      //$(".pwd_reset").click(forgot_pbem_password); 
   }
   $("#pregame_message_area").html("<b>Game</b>: Select rules and game settings.<br>"+
   "<b>Load</b>: Load saved game.<br>"+
