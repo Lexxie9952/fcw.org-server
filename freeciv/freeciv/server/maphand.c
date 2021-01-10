@@ -2506,39 +2506,72 @@ void give_distorted_map(struct player *pfrom, struct player *pto,
   unbuffer_shared_vision(pto);
 }
 
+
 /****************************************************************************
   Return a (static) string with a tile's food/prod/trade
 ****************************************************************************/
-static const char *get_tile_output_text(const struct tile *ptile, 
+static const char *get_tile_base_output_text(const struct tile *ptile, 
 		                        struct player *pplayer)
 {
   static struct astring str = ASTRING_INIT;
+  int i; char output_text[O_LAST][30];
+  for (i = 0; i < O_LAST; i++) {
+    int x = city_tile_output(NULL, ptile, FALSE, i);
+    sprintf(output_text[i], "%d", x);
+  }
+  astr_clear(&str);
+  astr_add(&str, "%s▪%s▪%s", output_text[O_FOOD], output_text[O_SHIELD], output_text[O_TRADE]);
+  return astr_str(&str);
+}
+
+/****************************************************************************
+  Return a (static) string with a tile's food/prod/trade
+  bool is_raw lets caller know if there were bonuses or penalties.
+****************************************************************************/
+static const char *get_tile_output_text(const struct tile *ptile, 
+		                        struct player *pplayer, bool *is_raw)
+{
+  static struct astring str = ASTRING_INIT;
   int i;
-  char output_text[O_LAST][16];
+  char output_text[O_LAST][1024];
 
   for (i = 0; i < O_LAST; i++) {
     int before_penalty = 0;
+    int before_bonus   = 0;
+    char background_color[200];
+    sprintf(&background_color[0], "<b class='%s'>",
+                                  (i == O_FOOD) ? "fbt" 
+                                                : (i==O_SHIELD ? "sbt"
+                                                : "tbt"));
+
     int x = city_tile_output(NULL, ptile, FALSE, i);
 
     if (NULL != pplayer) {
       before_penalty = get_player_output_bonus(pplayer,
                                                get_output_type(i),
                                                EFT_OUTPUT_PENALTY_TILE);
+
+      before_bonus = get_player_output_bonus(pplayer, get_output_type(i), EFT_OUTPUT_INC_TILE);
+/*  EFT_OUTPUT_INC_TILE_CELEBRATE ? for nonrep govs
+    EFT_OUTPUT_ADD_TILE colossus, artemis maybe, */
     }
 
     if (before_penalty > 0 && x > before_penalty) {
-      fc_snprintf(output_text[i], sizeof(output_text[i]), "%d(-1)", x);
-    } else {
-      fc_snprintf(output_text[i], sizeof(output_text[i]), "%d", x);
+      sprintf(output_text[i], "%s  %d↓", background_color, x-1);
+      *is_raw = false;
+    } 
+    else if (before_bonus > 0 && x>0) {
+      sprintf(output_text[i], "%s  %d↑", background_color, x+before_bonus);
+      *is_raw = false;
+    }
+    else {
+      sprintf(output_text[i], "%s  %d ", background_color, x);
     }
   }
   
   astr_clear(&str);
-  astr_add_line(&str, "%s/%s/%s",
-                output_text[O_FOOD],
-		output_text[O_SHIELD],
-		output_text[O_TRADE]);
-
+  astr_add(&str, " %s %s %s ",
+                output_text[O_FOOD], output_text[O_SHIELD], output_text[O_TRADE]);
   return astr_str(&str);
 }
 
@@ -2653,15 +2686,21 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
   // Sorry, that's all there is to know.
   if (vision_type == TILE_UNKNOWN) goto done;
 
-  astr_add_line(&str, _("Terrain: %s"), tile_get_info_text(ptile, TRUE, 0));
+  astr_add_line(&str, _("Terrain: <b>%s</b>"), tile_get_info_text(ptile, TRUE, 0));
   // Sorry, that's all there is to know.
   if (vision_type == TILE_KNOWN_UNSEEN) goto done;
 
-  astr_add_line(&str, _("Food/Prod/Trade: %s%s%s"), bold,
-       get_tile_output_text(ptile, pplayer), unbold);
+  astr_add_line(&str, _("Food ▪ Production ▪ Trade (penalty:<b>↓</b> bonus:<b>↑</b>)"));
+  bool is_raw = true;
+  astr_add_line(&str, _("%s"), get_tile_output_text(ptile, pplayer, &is_raw));
+  astr_add_line(&str, _("</b></b></b>"));
+  if (!is_raw) {
+    astr_add(&str, _("(Raw value: %s)\n"), get_tile_base_output_text(ptile,pplayer));
+  }
+
   extra_type_by_cause_iterate(EC_HUT, pextra) {
     if (tile_has_extra(ptile, pextra)) {
-      astr_add_line(&str, "%s", extra_name_translation(pextra));
+      astr_add_line(&str, "<b>%s</b>", extra_name_translation(pextra));
     }
   } extra_type_by_cause_iterate_end;
   if (BORDERS_DISABLED != game.info.borders && !pcity) {
@@ -2671,7 +2710,7 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
     get_full_nation(nation, sizeof(nation), owner);
 
     if (NULL != pplayer && owner == pplayer) {
-      astr_add_line(&str, _("Our territory"));
+      astr_add_line(&str, _("<b>Our territory</b>"));
     } else if (NULL != owner && NULL == pplayer) {
       /* TRANS: "Territory of <username> (<nation + team>)" */
       astr_add_line(&str, _("Territory of %s%s (%s)%s"), bold, username, nation, unbold);

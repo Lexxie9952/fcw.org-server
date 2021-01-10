@@ -271,6 +271,15 @@ input[type='number'] {
   max-width: 2em;
   margin-right: 0px;
 }
+.fbt {
+  background-color: #00ee01;
+}
+.sbt {
+  background-color: #e4e4e4;
+}
+.tbt {
+  background-color: #ebde11;
+}
 .negative_food_text {
   color: #c55c55;
   padding-top: 0 px;
