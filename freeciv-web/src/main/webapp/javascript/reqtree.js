@@ -397,11 +397,11 @@ var reqtree_mpplus = {
 
 var reqtree_avantgarde = {
     "2": {"x":0, "y":0},       // Alphabet 
-    "11": {"x":0, "y":174},     // Ceremonial Burial 
+    "11": {"x":0, "y":174},    // Ceremonial Burial 
     "65": {"x":0, "y":248},    // Pottery 
     "48": {"x":0, "y":347},    // Masonry 
     "37": {"x":0, "y":446},    // Horseback Riding 
-    "10": {"x":0, "y":582},     // Bronze Working 
+    "10": {"x":0, "y":582},    // Bronze Working 
     "89": {"x":0, "y":708},    // Warrior Code 
     "90": {"x":416, "y":0},    // Writing 
     "14": {"x":416, "y":82},   // Code of Laws 
@@ -424,7 +424,7 @@ var reqtree_avantgarde = {
     "26": {"x":918, "y":461},  // Engineering 
     "30": {"x":918, "y":553},  // Feudalism 
     "9": {"x":918, "y":693},   // Bridge Building 
-    "8": {"x":1169, "y":14},    // Banking 
+    "8": {"x":1169, "y":14},   // Banking 
     "51": {"x":1169, "y":86},  // Medicine 
     "88": {"x":1169, "y":195}, // University 
     "39": {"x":1169, "y":319}, // Invention 
@@ -485,5 +485,14 @@ var reqtree_avantgarde = {
     "27": {"x":4618, "y":181}, // Environmentalism 
     "80": {"x":4618, "y":395}, // Superconductors 
     "33": {"x":4856, "y":340}, // Fusion Power 
-    "77": {"x":4856, "y":456}, // Stealth     
+    "77": {"x":4856, "y":456}, // Stealth  
     };
+
+    /*
+    // tree 2 becomes activated by clicking a button in tech screen and it shows reqtree[2] or whatever instead.
+    // conversely, 5000 is added to every x and it's just appended into the list of objects/keys.
+    var reqtree_mp2_tree2 = {
+        // Civilizational Specialization Tree
+        "91": {"x":0, "y":0},   // Agricultural
+        "92": {"x":0, "y":174}, // Maritime
+    } */
