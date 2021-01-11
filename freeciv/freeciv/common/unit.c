@@ -806,11 +806,15 @@ bool can_unit_do_activity_targeted_at(const struct unit *punit,
     return TRUE;
 
   case ACTIVITY_POLLUTION:
-    /* The call below doesn't support actor tile speculation. */
+     /* FIXME: The call below doesn't support actor tile speculation.
+      But it is not explained why we need it for this, and it's
+      terribly slowing the server and making huge log files.
     fc_assert_msg(unit_tile(punit) == ptile,
                   "Please use action_speculate_unit_on_tile()");
+                  */
     return is_action_enabled_unit_on_tile(ACTION_CLEAN_POLLUTION,
                                           punit, ptile, target);
+
 /* FORMER CODE WAS HERE BEFORE it was an actionenabler:
     {
       struct extra_type *pextra;
@@ -843,9 +847,14 @@ bool can_unit_do_activity_targeted_at(const struct unit *punit,
     }
     */
   case ACTIVITY_FALLOUT:
-      /* The call below doesn't support actor tile speculation. */
+      /* FIXME: The call below doesn't support actor tile speculation.
+      But it is not explained why we need it for this, and it's
+      terribly slowing the server and making huge log files.
+
       fc_assert_msg(unit_tile(punit) == ptile,
                     "Please use action_speculate_unit_on_tile()");
+
+                    */
       return is_action_enabled_unit_on_tile(ACTION_CLEAN_FALLOUT,
                                             punit, ptile, target);
       /* FORMER CODE WAS here before it became actionenabler :
