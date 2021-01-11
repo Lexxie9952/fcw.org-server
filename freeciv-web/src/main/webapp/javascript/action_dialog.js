@@ -520,7 +520,10 @@ function popup_action_selection(actor_unit, action_probabilities,
   $(id).attr("title",
              "Action for " + unit_types[actor_unit['type']]['name']
              + ":");
-      
+
+  // helps decide what to populate in these message, for backward
+  // compatibility with Brava and AG rules:
+  var SUA = client_rules_flag[CRF_SPECIAL_UNIT_ATTACKS];
   // THIS SECTION DOES OVERRIDE NAMES for special unit actions:
   if (client_rules_flag[CRF_MP2_SPECIAL_UNITS]) {
     switch (unit_types[actor_unit['type']]['name']) {
@@ -567,14 +570,16 @@ function popup_action_selection(actor_unit, action_probabilities,
       case "Archers":  for (button_id in buttons) {
         if (buttons[button_id].text.startsWith("Ranged Attack")) {
           buttons[button_id].text = "Volley Attack (100%)"
-          buttons[button_id].title = "Odds of survival:  100%\n"
-                                  + "Combat:                2 rounds\n"
-                                  + "Targets:                 7 units\n"
-                                  + "Move cost:            1 5/9 moves\n"
-                                  + "Casualties:             --\n"
-                                  + "\n2 rounds of arrows against up to 7 units,\n"
-                                  + "represents Archers raining arrows from a\n"
-                                  + "safe distance over an adjacent force."
+          if (SUA) {
+            buttons[button_id].title = "Odds of survival:  100%\n"
+                                    + "Combat:                2 rounds\n"
+                                    + "Targets:                 7 units\n"
+                                    + "Move cost:            1 5/9 moves\n"
+                                    + "Casualties:             --\n"
+                                    + "\n2 rounds of arrows against up to 7 units,\n"
+                                    + "represents Archers raining arrows from a\n"
+                                    + "safe distance over an adjacent force."
+          }
         }
       } break;
       case "Legion":  for (button_id in buttons) {
@@ -594,14 +599,17 @@ function popup_action_selection(actor_unit, action_probabilities,
       case "Fanatics":  for (button_id in buttons) {
         if (buttons[button_id].text.startsWith("Ranged Attack")) {
           buttons[button_id].text = "Skirmish Assault (100%)"
-          buttons[button_id].title = "Odds of survival:  100%\n"
-                                  + "Combat:                3 rounds\n"
-                                  + "Targets:                 4 units\n"
-                                  + "Move cost:            1 5/9 moves\n"
-                                  + "Casualties:             --\n"
-                                  + "\nFanatics opportunistically damage and degrade foreign occupants\n"
-                                  + "of their native land, for 3 rounds of combat on up to 4 foreign\n"
-                                  + "occupants of a city or tile."
+          if (SUA)
+          {
+            buttons[button_id].title = "Odds of survival:  100%\n"
+                                    + "Combat:                3 rounds\n"
+                                    + "Targets:                 4 units\n"
+                                    + "Move cost:            1 5/9 moves\n"
+                                    + "Casualties:             --\n"
+                                    + "\nFanatics opportunistically damage and degrade foreign occupants\n"
+                                    + "of their native land, for 3 rounds of combat on up to 4 foreign\n"
+                                    + "occupants of a city or tile."
+          }
         }
       } break;
       case "Marines":  for (button_id in buttons) {
