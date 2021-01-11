@@ -224,8 +224,9 @@ function unit_can_do_unload(punit)
     return true;
   }
   // AG onward:
-  if (tclass.rule_name == "Helicopter" && pclass =="Land") {
-    // NB:Land could only be on a Transport Helicopter utype.
+  if ( (tclass.rule_name == "Helicopter" || tclass.rule_name.startsWith("Air"))
+        && (pclass.startsWith("Land") || pclass == "Bomb") ) {
+    // NB:Land could only be on a Transport Helicopter or Airplane utype.
     if (!tile_has_extra(ptile, EXTRA_AIRBASE)) return false;
     return true;
     /* could also unload in city and naval base -- already checked above */
