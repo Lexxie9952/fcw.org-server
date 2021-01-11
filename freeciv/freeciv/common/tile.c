@@ -974,6 +974,16 @@ void tile_add_extra(struct tile *ptile, const struct extra_type *pextra)
 {
   if (pextra != NULL) {
     BV_SET(ptile->extras, extra_index(pextra));
+
+    /* 11Jan2020 fix by FCW: when a resource extra appears, it needs to be
+       tagged as a resource. Formerly, reloading a savegame did log it as a
+       resource, but it was not in current server memory as such until after
+       a re-load savegame. This made issues e.g., when terrain changed,
+       it would show a resource for the wrong terrain type, but only 
+       for resources which were caused by "Appear": */
+       
+    if (is_extra_caused_by(pextra, EC_RESOURCE)) 
+      ptile->resource = (struct extra_type *)pextra;
   }
 }
 
@@ -984,6 +994,13 @@ void tile_remove_extra(struct tile *ptile, const struct extra_type *pextra)
 {
   if (pextra != NULL) {
     BV_CLR(ptile->extras, extra_index(pextra));
+
+    /* 11Jan2020 fix by FCW: when a resource extra appears, if a pextra
+       disappears AND is a resource, the tile needs to stop reporting
+       that it has this extra as a resource: */
+
+    if (is_extra_caused_by(pextra, EC_RESOURCE))
+      ptile->resource = NULL;
   }
 }
 
