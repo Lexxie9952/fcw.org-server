@@ -61,7 +61,8 @@ const CRF_TRIREME_FUEL             = 24; // Trireme is fuel unit, client benefts
 const CRF_RECYCLING_DISCOUNT       = 25;
 const CRF_SEABRIDGE                = 26;
 const CRF_COLOSSUS_DISCOUNT        = 27;
-const CRF_LAST                     = 28;
+const CRF_SPECIAL_UNIT_ATTACKS     = 28; // complex special one-way engagements enabled, mp2-caravel onward.
+const CRF_LAST                     = 29;
 
 var graphic_theme_path;
 
