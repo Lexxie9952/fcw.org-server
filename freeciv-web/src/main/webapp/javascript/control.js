@@ -2735,19 +2735,21 @@ function do_map_click(ptile, qtype, first_time_called)
     paradrop_active = false;
 
   } else if (airlift_active && current_focus.length > 0) {
-    punit = current_focus[0];
-    pcity = tile_city(ptile); // TO DO: remove? we set pcity at top
-    if (pcity != null) {
-      packet = {
-        "pid"         : packet_unit_do_action,
-        "actor_id"    : punit['id'],
-        "target_id"   : pcity['id'],
-        "extra_id"    : EXTRA_NONE,
-        "value"       : 0,
-        "name"        : "",
-        "action_type" : ACTION_AIRLIFT
-      };
-      send_request(JSON.stringify(packet));
+    for (var a=0; a<current_focus.length; a++) {
+      punit = current_focus[a];
+      pcity = tile_city(ptile); // TO DO: remove? we set pcity at top
+      if (pcity != null) {
+        packet = {
+          "pid"         : packet_unit_do_action,
+          "actor_id"    : punit['id'],
+          "target_id"   : pcity['id'],
+          "extra_id"    : EXTRA_NONE,
+          "value"       : 0,
+          "name"        : "",
+          "action_type" : ACTION_AIRLIFT
+        };
+        send_request(JSON.stringify(packet));
+      }
     }
     airlift_active = false;
 
