@@ -3532,7 +3532,8 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
   // clean dynamic target array
   if (is_target) free(is_target);
 
-  int bm_cost = pstats.bombard_move_cost;
+  // bm_cost is bombard_move_cost if specified otherwise it's a OneAttack turn loss:
+  int bm_cost = (pstats.bombard_move_cost>0) ? pstats.bombard_move_cost : 999;
   punit->moves_left = (punit->moves_left - bm_cost > 0) 
                     ? (punit->moves_left - bm_cost) : 0;
 
