@@ -25,7 +25,6 @@ var REPORT_TOP_5_CITIES = 1;
 var REPORT_DEMOGRAPHIC = 2;
 var REPORT_ACHIEVEMENTS = 3;
 
-
 /**************************************************************************
    ...
 **************************************************************************/
@@ -307,4 +306,80 @@ function request_report(rtype)
   var packet = {"pid"  : packet_report_req,
                 "type" : rtype};
   send_request(JSON.stringify(packet));
+}
+
+
+
+/**************************************************************************
+ ...
+**************************************************************************/
+function show_climate_dialog(rtype)
+{
+  var title = "Climate Report";
+  var message = "<br>";
+  message += "<span title='IF global warming occurs, the impact strength on the surface tiles of the planet.\n0% = none.\n100% = normal.\n101-10000 = elevated.'>" 
+          +"<b>Global Warming Strength</b>:&nbsp; " + game_info['global_warming'] +"%"
+          + "</span><br>";
+
+  message += "<span title='The current cumulative impact of existing pollution over recent turns, possibly accumulating higher beyond the tolerance to trigger Global Warming. A certain amount will naturally disperse each turn, if the impact caused by existing pollution is not greater.'>"
+          +"<b>Global Warming Impact</b>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " 
+          + (game_info['globalwarming'] > 0 ? game_info['globalwarming'] : "<span title='The impact is either near zero, or a major climate disaster has recently reset the climate models.'>[unknown]</span>") 
+          + "<span title='One unit of Accumulated Climate Stress, whether in measuring impact to climate, or tolerance to the stress.'> ACS</span>"
+          + "</span><br>";
+
+  message += "<span title='The current tolerance of the climate after exposure to recent impacts. This represents the natural reduction per turn that the Earth can ecologically absorb and process, and thus, also the tolerance beyond which global warming has a chance to trigger.'>"
+          +"<b>Global Warming Tolerance</b>: " + game_info['warminglevel'] 
+          + "<span title='One unit of Accumulated Climate Stress, whether in measuring impact to climate, or tolerance to that stress.'> ACS </span>"
+          + "</span><br>";
+
+  message += "<span title='This is a server setting. Higher numbers make Global Warming more likely, by secretly lowering the Global Warming Tolerance shown above. Default of 100% = unchanged.'>"
+          +"<b>Global Warming Percent</b>:&nbsp;&nbsp;&nbsp; " + server_settings['globalwarming_percent']['val']
+          + "%</span><br><br>";
+
+  if (game_info['globalwarming'] > game_info['warminglevel'])
+      message += "Scientists recommend immediate international action to halt habitat destruction from Global Warming!!<br><br>"
+  else if (game_info['globalwarming'] > game_info['warminglevel'] *.5)
+      message += "Scientists are concerned that pollution impact is too close to Climate Tolerance levels.<br><br>"
+
+  message += "<br><span title='IF nuclear winter occurs, the impact strength on the surface tiles of the planet.\n0% = none.\n100% = normal.\n101-10000 = elevated.'>"
+          + "<b>Nuclear Winter Strength</b>:&nbsp; " + game_info['nuclear_winter']+"%"
+          + "</span><br>";
+
+  message += "<span title='The current cumulative impact of existing fallout over recent turns, possibly accumulating higher beyond the tolerance to trigger Nuclear Winter. A certain amount will naturally disperse each turn, if the impact caused by existing fallout is not greater.'>"
+          + "<b>Nuclear Winter Impact</b>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " 
+          + (game_info['nuclearwinter'] > 0 ? game_info['nuclearwinter'] : "<span title='The impact is either near zero, or a major climate disaster has recently reset the climate models.'>[unknown]</span>")
+          + "<span title='One unit of Accumulated Climate Stress, whether in measuring impact to climate, or tolerance to that stress.'> ACS </span>"
+          + "</span><br>";
+
+  message += "<span title='The current tolerance of the climate after exposure to recent impacts. This represents the natural reduction per turn that the Earth can ecologically absorb and process, and thus, also the tolerance beyond which nuclear winter has a chance to trigger.'>"
+          + "<b>Nuclear Winter Tolerance</b>: " + game_info['coolinglevel']
+          + "<span title='One unit of Accumulated Climate Stress, whether in measuring impact to climate, or tolerance to that stress.'> ACS </span>"
+          + "</span><br>";
+
+  message += "<span title='This server is a setting. Higher numbers make Nuclear Winter more likely, by secretly lowering the Nuclear Winter Tolerance shown above. Default of 100% = unchanged.'>"
+          +"<b>Nuclear Winter Percent</b>:&nbsp;&nbsp;&nbsp; " + server_settings['nuclearwinter_percent']['val'] 
+          + "%</span><br><br>";
+        
+  if (game_info['nuclearwinter'] > game_info['coolinglevel'])
+      message += "Scientists recommend immediate international action to halt habitat destruction from Nuclear Winter!!<br>"
+  else if (game_info['nuclearwinter'] > game_info['coolinglevel'] *.5)
+      message += "Scientists are concerned that fallout impact is too close to Climate Tolerance levels.<br>"
+
+  $("#dialog").remove();
+  $("<div id='dialog'></div>").appendTo("div#game_page");
+
+  $("#dialog").html(message);
+  $("#dialog").attr("title", title);
+  $("#dialog").dialog({
+      bgiframe: true,
+      modal: true,
+      width: is_small_screen() ? "90%" : "40%",
+      buttons: {
+        Close: function() {
+          $("#dialog").dialog('close');
+        }
+      }
+    });
+
+  $("#dialog").dialog('open');
 }
