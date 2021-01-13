@@ -236,9 +236,9 @@ struct civ_game {
       int seed_setting;
       int seed;
 
-      bool global_warming;
+      int global_warming;           // changed from bool to int so that it can regulate strength
       int global_warming_percent;
-      bool nuclear_winter;
+      int nuclear_winter;           // changed from bool to int so that it can regulate strength
       bool nukes_minor; /* if (dis)abled, rulesets with req "ServerSetting","nukes_minor","World",TRUE 
                            can have games (dis)allowing nuclear detonations */
       bool nukes_major; /* if (dis)abled, rulesets with req "ServerSetting","nukes_major","World",TRUE
@@ -414,19 +414,24 @@ extern struct world wld;
 
 #define GAME_DEFAULT_FOGGEDBORDERS   FALSE
 
-#define GAME_DEFAULT_GLOBAL_WARMING  TRUE
+#define GAME_DEFAULT_GLOBAL_WARMING  100         // strength of effect, 0 to 10000
+#define GAME_MIN_GLOBAL_WARMING 0                // 0 = false
+#define GAME_MAX_GLOBAL_WARMING 10000
 
-#define GAME_DEFAULT_GLOBAL_WARMING_PERCENT 100
+#define GAME_DEFAULT_GLOBAL_WARMING_PERCENT 100  // controls threshold/likelihood for it to happen
 #define GAME_MIN_GLOBAL_WARMING_PERCENT 1
 #define GAME_MAX_GLOBAL_WARMING_PERCENT 10000
 
 #define GAME_DEFAULT_HIDEOUTS         FALSE
 
-#define GAME_DEFAULT_NUCLEAR_WINTER  TRUE
+#define GAME_DEFAULT_NUCLEAR_WINTER  100         // strength of effect, 0 to 10000
+#define GAME_MIN_NUCLEAR_WINTER  0               // 0 = false
+#define GAME_MAX_NUCLEAR_WINTER  10000
+
 #define GAME_DEFAULT_NUKES_MINOR     TRUE
 #define GAME_DEFAULT_NUKES_MAJOR     TRUE   // USE game.ruleset to change default to FALSE 
 
-#define GAME_DEFAULT_NUCLEAR_WINTER_PERCENT 100
+#define GAME_DEFAULT_NUCLEAR_WINTER_PERCENT 100 // controls threshold/likelihood for it to happen
 #define GAME_MIN_NUCLEAR_WINTER_PERCENT 1   
 #define GAME_MAX_NUCLEAR_WINTER_PERCENT 10000
 

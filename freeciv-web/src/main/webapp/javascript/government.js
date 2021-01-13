@@ -317,6 +317,7 @@ function show_climate_dialog(rtype)
 {
   var title = "Climate Report";
   var message = "<br>";
+
   message += "<span title='IF global warming occurs, the impact strength on the surface tiles of the planet.\n0% = none.\n100% = normal.\n101-10000 = elevated.'>" 
           +"<b>Global Warming Strength</b>:&nbsp; " + game_info['global_warming'] +"%"
           + "</span><br>";

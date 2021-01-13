@@ -759,12 +759,28 @@ static void do_border_vision_effect(void)
 /**********************************************************************//**
   Handle environmental upsets, meaning currently pollution or fallout.
 **************************************************************************/
-static void update_environmental_upset(enum environment_upset_type type,
-                                       int *current, int *accum, int *level,
-                                       int percent,
+static void update_environmental_upset(enum environment_upset_type type,   // EUT_NUCLEAR_WINTER, etc.
+                                       int *current,          // &game.info.cooling        #fallout_tiles * nuclear_winter_percent
+                                                              // only used for weighing autosettler importance of cleaning fallout/pollution !
+                                       int *accum,            // &game.info.nuclearwinter  accumulates += #fallout_tiles each turn 
+                                       int *level,            // &game.info.coolinglevel   accum threshold to trigger climate change, also the per turn
+                                                              // "healing"/reduction of accum (game.info.nuclearwinter).
+                                       int percent,           // game.server.nuclear_winter_percent: inverse adjuster for the threshold/tolerance var above.
                                        void (*upset_action_fn)(int))
+
+/* NOTES:  1. accum accumulates AND reduces. problem tiles add, while coolinglevel reduces by x each turn, as a kind of tolerance threshold.
+           2. coolinglevel/warminglevel (*level): the threshold where triggering becomes possible, is the same as the tolerance (amount reduced from 
+              accumulation each turn), thus, "exceeding tolerance" leads past threshold because you are adding more than subtracting each turn.
+           3. game.info.cooling (*current) is set here and nuclear_winter_percent modifies it, but is never used except to weigh autosettler decisions,
+               which the zoltan patch will break if values other than 100 are used.
+           4. game.info.coolinglevel (*level) is set at game start. In common/game.c::game_map_init,
+                game.info.coolinglevel = (map_num_tiles() + 499) / 500; In this function below, it seems as if it grows every turn? did not find
+                somewhere else that changes it.
+
+   TO DO: 
+           1. Number of affected tiles proportionate to map size, not proportionate to (perimeter / 20) ?- see affected_tiles below. */
 {
-  int count;
+  int count;     // number of problem tiles which affect climate change
 
   count = 0;
   extra_type_iterate(cause) {
@@ -777,16 +793,80 @@ static void update_environmental_upset(enum environment_upset_type type,
     }
   } extra_type_iterate_end;
 
-  *current = (count * percent) / 100;
+  // THIS SECTION ASSUMES these settings were upgraded from bool to int in complementary commit/patch
+  //-------------------------------------------------------------------------------------------------
+
+  /* The higher the percent, the lower the threshold to trigger, and the lower the 'healing' reduction
+     effect on accumulation. The lower the percent, it's vice versa. */
+  int new_level = ((*level) * 100)/percent;  // min percent is 1 (server settings)
+  if (new_level<1) new_level = 1;  // prevent divide by zero, for huge values like percent==10000.                
+  
+  if (type == EUT_NUCLEAR_WINTER) {     // multiply in strength modifiers for climate change effects: 
+    count = (count * game.info.nuclear_winter) / 100;  // this would affect STRENGTH
+  } else { // global warming
+    count = (count * game.info.global_warming) / 100;  // this would affect STRENGTH
+  }
+  //--------------------------------------------------------------------------------------------------
   *accum += count;
-  if (*accum < *level) {
+
+
+  bool IPCC_report = ( (count*100/new_level)>20 || (*accum*100)/new_level > 25); // IPCC starts getting alarmed
+
+  *current = (count * percent) / 100;  // this does nothing
+
+
+  if (IPCC_report) {
+    notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
+                  _("————————————————————————————<br>"
+                    "Scientists release IPCC report on <b>%s</b>:<br>"
+                    "————————————————————————————<br>"
+                    "%d impact from %s. <br>"
+                    "————————————————————————————<br>"),
+                    (type == EUT_GLOBAL_WARMING ? "Global Warming" : "Nuclear Winter"), 
+                    ((count*1000)/map_num_tiles()+1), (type == EUT_GLOBAL_WARMING ? "pollution" : "nuclear fallout")
+    );
+    notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
+                  _("<b>A</b>ccumulated <b>C</b>limate <b>S</b>tress:<br>"
+                    "Cumulative Impact  = %d ACS units.<br>"
+                    "Climate Tolerance  = %d ACS units.<br>"
+                    "————————————————————————————<br>"
+                    "%s<br>"
+                    "————————————————————————————<br>"),
+                    *accum,
+                    new_level,
+                    (*accum >= new_level ? "International action recommended to halt habitat destruction !"
+                                         : "Scientists recommend keeping impact below Climate Tolerance.")
+    );
+  }
+
+  if (*accum < new_level) {
     *accum = 0;
-  } else {
-    *accum -= *level;
+  } 
+  else {
+    *accum -= new_level; 
+  }
+    // Basically, (polluted_tile_pct_of_map * 20) = chance of climate change,
+    // except in the the case it's within the Climate Tolerance:
     if (fc_rand((map_num_tiles() + 19) / 20) < *accum) {
-      upset_action_fn((wld.map.xsize / 10) + (wld.map.ysize / 10) + ((*accum) * 5));
+
+      // TO DO: server setting to control this:
+      int affected_tiles = (wld.map.xsize / 10) + (wld.map.ysize / 10) + (*accum) * 5;
+      int planet_pct = (100 * affected_tiles) / map_num_tiles() + 1;
+      if (planet_pct>100) planet_pct = 100;
+
+      upset_action_fn(affected_tiles);
+
       *accum = 0;
-      *level += (map_num_tiles() + 999) / 1000;
+
+      // Seems to be artificial increase each turn, does this make any sense?
+      // ... and should it also be adjusted by one of the modifiers ?
+      *level += (map_num_tiles() + 999) / 1000;  
+      if (IPCC_report) {
+      notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
+                  _("IPCC estimate: %d%% of the planet was affected.<br>"
+                   "————————————————————————————<br>"),
+                  planet_pct);
+      }
     }
   }
 

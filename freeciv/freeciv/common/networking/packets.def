@@ -502,7 +502,7 @@ PACKET_GAME_INFO = 16; sc, is-info
   /* True if at least one civilization has researched a tech */
   UINT16 global_advance_count;
   BOOL global_advances[A_LAST]; diff
-  BOOL global_warming;
+  UINT32 global_warming;
   UINT32 globalwarming;
   GOLD gold;
   GOLD_UPKEEP_STYLE gold_upkeep_style;
@@ -533,7 +533,7 @@ PACKET_GAME_INFO = 16; sc, is-info
   BOOL muuk_gold_wipe;
   BOOL muuk_shield_wipe;
   UINT8 notradesize;
-  BOOL nuclear_winter;
+  UINT32 nuclear_winter;
   UINT32 nuclearwinter;
   PHASE phase;
   PHASE_MODE phase_mode;

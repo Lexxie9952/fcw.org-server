@@ -708,7 +708,12 @@ bool can_thaw_terrain(const struct tile *ptile)
   int unfrozen_tiles = 100 - count_terrain_flag_near_tile(ptile, FALSE, TRUE,
                                                           TER_FROZEN);
 
-  return unfrozen_tiles >= terrain_control.terrain_thaw_requirement_pct;
+  // Too MUCH nuclear winter could make so much ice that thawing NEVER
+  // can happen again; therefore, a micro-thaw helps bring it back out:                                                        
+  int override = (fc_rand(100)<=12);
+
+  return override ||
+         (unfrozen_tiles >= terrain_control.terrain_thaw_requirement_pct);
 }
 
 /*******************************************************************//**
@@ -721,7 +726,13 @@ bool can_freeze_terrain(const struct tile *ptile)
   int frozen_tiles = count_terrain_flag_near_tile(ptile, FALSE, TRUE,
                                                   TER_FROZEN);
 
-  return frozen_tiles >= terrain_control.terrain_freeze_requirement_pct;
+  // Too MUCH global warming can make all ice caps disappear, causing
+  // it so that ice caps could never form again. Therefore, give the
+  // ice age just a little foothold to start... 
+  int override = (fc_rand(1000)<=5);
+
+  return override ||
+         (frozen_tiles >= terrain_control.terrain_freeze_requirement_pct);
 }
 
 /*******************************************************************//**
@@ -733,10 +744,13 @@ bool terrain_surroundings_allow_change(const struct tile *ptile,
 {
   bool ret = TRUE;
 
-  if (is_ocean(tile_terrain(ptile))
+  if (is_ocean(tile_terrain(ptile)) 
+      //&& !terrain_has_flag(tile_terrain(ptile), TER_FRESHWATER)  //lakes can recede
       && !is_ocean(pterrain) && !can_reclaim_ocean(ptile)) {
     ret = FALSE;
   } else if (!is_ocean(tile_terrain(ptile))
+             // prevents "swamp rut" and allows new lakes to form
+             && !terrain_has_flag(pterrain, TER_FRESHWATER)
              && is_ocean(pterrain) && !can_channel_land(ptile)) {
     ret = FALSE;
   }

@@ -1717,28 +1717,42 @@ static struct setting settings[] = {
              "jungles, and rivers."), NULL, NULL, NULL,
           MAP_MIN_WETNESS, MAP_MAX_WETNESS, MAP_DEFAULT_WETNESS)
 
-  GEN_BOOL("globalwarming", game.info.global_warming,
+  GEN_INT("globalwarming", game.info.global_warming,
            SSET_RULES, SSET_GEOLOGY, SSET_VITAL, ALLOW_NONE, ALLOW_BASIC,
            N_("Global warming"),
-           N_("If turned off, global warming will not occur "
-              "as a result of pollution. This setting does not "
-              "affect pollution."), NULL, NULL,
+           N_("If set to 0, Global Warming will not occur because of "
+              "pollution. Otherwise, this setting modifies the strength of global "
+              "warming: the accumulated climate stress added each turn, which "
+              "also affects how many tiles will be transformed. 100 is "
+              "standard. Lower is less, higher is more. This setting does "
+              "not affect pollution."), NULL, NULL, NULL,
+           GAME_MIN_GLOBAL_WARMING,
+           GAME_MAX_GLOBAL_WARMING,
            GAME_DEFAULT_GLOBAL_WARMING)
 
   GEN_INT("globalwarming_percent", game.server.global_warming_percent,
            SSET_RULES, SSET_GEOLOGY, SSET_VITAL, ALLOW_NONE, ALLOW_BASIC,
            N_("Global warming percent"),
-           N_("This is a multiplier for the rate of accumulation of global "
-              "warming."), NULL, NULL, NULL,
+           N_("The percentage by which to modify the default strength of global "
+           "warming sensitivity. Specifically, a lower value causes a higher threshold " 
+           "for Pollution to trigger Global Warming, and a higher rate of ecologically "
+           "absorbing the cumulative climatic impact, each turn."), NULL, NULL, NULL,
            GAME_MIN_GLOBAL_WARMING_PERCENT,
            GAME_MAX_GLOBAL_WARMING_PERCENT,
            GAME_DEFAULT_GLOBAL_WARMING_PERCENT)
 
-  GEN_BOOL("nuclearwinter", game.info.nuclear_winter,
+  GEN_INT("nuclearwinter", game.info.nuclear_winter,
            SSET_RULES, SSET_GEOLOGY, SSET_VITAL, ALLOW_NONE, ALLOW_BASIC,
            N_("Nuclear winter"),
-           N_("If turned off, nuclear winter will not occur "
-              "as a result of nuclear war."), NULL, NULL,
+           N_("If set to 0, Nuclear Winter will not occur from the uncleaned "
+              "nuclear fallout caused by nuclear explosions. Otherwise, this setting "
+              "modifies the strength of nuclear winter: the accumulated climate "
+              "stress added each turn, which also affects how many tiles will be "
+              "transformed. 100 is standard. Lower is less, higher is more. This "
+              "setting does not affect likelihood of nuclear fallout from "
+              "detonation."), NULL, NULL, NULL,
+           GAME_MIN_NUCLEAR_WINTER,
+           GAME_MAX_NUCLEAR_WINTER,
            GAME_DEFAULT_NUCLEAR_WINTER)
 
   GEN_BOOL("nukes_minor", game.server.nukes_minor,
@@ -1766,8 +1780,11 @@ static struct setting settings[] = {
   GEN_INT("nuclearwinter_percent", game.server.nuclear_winter_percent,
            SSET_RULES, SSET_GEOLOGY, SSET_VITAL, ALLOW_NONE, ALLOW_BASIC,
            N_("Nuclear winter percent"),
-           N_("This is a multiplier for the rate of accumulation of nuclear "
-              "winter."), NULL, NULL, NULL,
+           N_("The percentage by which to modify the default strength of nuclear "
+           "winter sensitivity. Specifically, a lower value causes a higher threshold " 
+           "for Fallout to trigger Nuclear Winter, and also causes a higher rate of "
+           "ecologically absorbing the cumulative climatic impact on "
+           "each turn."), NULL, NULL, NULL,
            GAME_MIN_NUCLEAR_WINTER_PERCENT,
            GAME_MAX_NUCLEAR_WINTER_PERCENT,
            GAME_DEFAULT_NUCLEAR_WINTER_PERCENT)
