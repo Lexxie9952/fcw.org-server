@@ -998,9 +998,9 @@ void tile_remove_extra(struct tile *ptile, const struct extra_type *pextra)
     /* 11Jan2020 fix by FCW: when a resource extra appears, if a pextra
        disappears AND is a resource, the tile needs to stop reporting
        that it has this extra as a resource: */
-
+/* commented out in case it removes extra but keeps resource so you can get it back
     if (is_extra_caused_by(pextra, EC_RESOURCE))
-      ptile->resource = NULL;
+      ptile->resource = NULL; */
   }
 }
 
