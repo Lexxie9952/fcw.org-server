@@ -844,7 +844,6 @@ static void update_environmental_upset(enum environment_upset_type type,   // EU
   } 
   else {
     *accum -= new_level; 
-  }
     // Basically, (polluted_tile_pct_of_map * 20) = chance of climate change,
     // except in the the case it's within the Climate Tolerance:
     if (fc_rand((map_num_tiles() + 19) / 20) < *accum) {
