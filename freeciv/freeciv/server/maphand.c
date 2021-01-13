@@ -103,13 +103,17 @@ static bool is_terrain_ecologically_wet(struct tile *ptile)
 **************************************************************************/
 void global_warming(int effect)
 {
-  return; //disabled, causes problems.
+  // return; //disabled, causes problems.
+
+  // It can take a while so notify first.
+  notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
+                _("Global warming is occurring! "
+                  "Coastlines are flooding. Hotter climate is "
+                  "affecting vegetation. Please wait..."));
+
   climate_change(TRUE, effect);
   notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
-                _("Global warming has occurred!"));
-  notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
-                _("Coastlines have been flooded and vast "
-                  "ranges of grassland have become deserts."));
+                _("Climate change completed."));
 }
 
 /**********************************************************************//**
@@ -117,43 +121,49 @@ void global_warming(int effect)
 **************************************************************************/
 void nuclear_winter(int effect)
 {
+  // It can take a while so notify first.                
+  notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
+                _("Nuclear winter is happening!<br>"
+                  "Wetlands are drying. Ranges of plains and "
+                  "Grassland may become tundra. Please wait..."));
+
   climate_change(FALSE, effect);
   notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
-                _("Nuclear winter has occurred!"));
-  notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
-                _("Wetlands have dried up and vast "
-                  "ranges of grassland have become tundra."));
+              _("Climate change completed."));
 }
 
 /**********************************************************************//**
-  Do a climate change. Global warming occurred if 'warming' is TRUE, else
-  there is a nuclear winter.
+  Do a climate change. Global Warming occurred if 'warming' is TRUE, else
+  there is a Nuclear Winter.
 **************************************************************************/
 void climate_change(bool warming, int effect)
 {
   int k = map_num_tiles();
   bool used[k];
   memset(used, 0, sizeof(used));
+  struct terrain *wetter, *drier; // moved up from below
 
   log_verbose("Climate change: %s (%d)",
               warming ? "Global warming" : "Nuclear winter", effect);
 
-  while (effect > 0 && (k--) > 0) {
+  while (effect > 0 && (k--) > 1) {
     struct terrain *old, *candidates[2], *new;
     struct tile *ptile;
     int i;
 
+    // If we can't find an unused tile after 30 tries then escape from lag hell: 
+    int iteration_escape = 30;  
     do {
       /* We want to transform a tile at most once due to a climate change. */
       ptile = rand_map_pos(&(wld.map));
-    } while (used[tile_index(ptile)]);
+    } while (used[tile_index(ptile)] && --iteration_escape > 0);
     used[tile_index(ptile)] = TRUE;
 
     old = tile_terrain(ptile);
     /* Prefer the transformation that's appropriate to the ambient moisture,
      * but be prepared to fall back in exceptional circumstances */
-    {
-      struct terrain *wetter, *drier;
+// {  11Jan2021: COMMENTED CODE RELOCATED UP: Prevented crashes and faster.
+      // struct terrain *wetter, *drier;
       wetter = warming ? old->warmer_wetter_result : old->cooler_wetter_result;
       drier  = warming ? old->warmer_drier_result  : old->cooler_drier_result;
       if (is_terrain_ecologically_wet(ptile)) {
@@ -163,7 +173,7 @@ void climate_change(bool warming, int effect)
         candidates[0] = drier;
         candidates[1] = wetter;
       }
-    }
+ // }
 
     /* If the preferred transformation is ruled out for some exceptional reason
      * specific to this tile, fall back to the other, rather than letting this
@@ -202,7 +212,10 @@ void climate_change(bool warming, int effect)
 
       /* Really change the terrain. */
       tile_change_terrain(ptile, new);
-      check_terrain_change(ptile, old);
+
+      terrain_change_check(ptile, old, false); 
+        // false == don't re-calculate continents every time
+
       update_tile_knowledge(ptile);
 
       /* Check the unit activities. */
@@ -216,6 +229,9 @@ void climate_change(bool warming, int effect)
       effect--;
     }
   }
+
+  assign_continent_numbers();
+  send_all_known_tiles(NULL);
 }
 
 /**********************************************************************//**
@@ -1839,12 +1855,27 @@ void fix_tile_on_terrain_change(struct tile *ptile,
 }
 
 /**********************************************************************//**
-  Handles local and global side effects for a terrain change for a single
-  tile.
+  Handles local and global side effects for terrain change to a single
+  tile. (This is now a wrapper to keep compatibility for other callers.)
+  
   Call this in the server immediately after calling tile_change_terrain.
   Assumes an in-game terrain change (e.g., by workers/engineers).
 **************************************************************************/
 void check_terrain_change(struct tile *ptile, struct terrain *oldter)
+{
+  terrain_change_check(ptile, oldter, true); 
+     //      __, __, true == recalc continents if needed.
+}
+
+/**********************************************************************//**
+  Wrapped version of the above. Provides the ability for climate_change
+  function to call this for thousands of repetitions without redundantly
+  re-calculating the continents every time, even recursively while 
+  changing lakes. This eliminates more than half of the lag for Freeciv's
+  biggest performance hog.
+**************************************************************************/
+void terrain_change_check(struct tile *ptile, struct terrain *oldter,
+                          bool do_continent_recalc)
 {
   struct terrain *newter = tile_terrain(ptile);
   struct tile *claimer;
@@ -1887,13 +1918,17 @@ void check_terrain_change(struct tile *ptile, struct terrain *oldter)
 
         /* Recursive, but as lakes are of limited size, this
          * won't recurse so much as to cause stack problems. */
-        check_terrain_change(atile, aold);
+        // 11Jan2021: "Famous last words" !! It was recursively calling
+        // assign_continent_numbers(..) and send_all_known_tiles(..) !!!
+        terrain_change_check(atile, aold, do_continent_recalc);
         update_tile_knowledge(atile);
       }
     } adjc_iterate_end;
   }
 
-  if (need_to_reassign_continents(oldter, newter)) {
+  //notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server, _("   STAGE 2..."));
+
+  if (do_continent_recalc && need_to_reassign_continents(oldter, newter)) {
     assign_continent_numbers();
     send_all_known_tiles(NULL);
   }
