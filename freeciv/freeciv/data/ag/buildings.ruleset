@@ -1602,6 +1602,7 @@ genus		= "SmallWonder"
 reqs	=
     { "type", "name", "range"
       "Tech", "Computers", "Player"
+      "Building", "JTIDS", "Player", FALSE, TRUE
     }
 graphic		= "b.seti_program"
 graphic_alt	= "-"
