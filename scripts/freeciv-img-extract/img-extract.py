@@ -133,7 +133,7 @@ curr_y = 14;
 tileset_height = 1126;
 tileset_width = 2020; #was 1919;
 
-dither_types = ["t.l0.desert1", "t.l0.plains1", "t.l0.grassland1", "t.l0.forest1", "t.l0.jungle1", "t.l0.hills1", "t.l0.mountains1", "t.l0.tundra1", "t.l0.swamp1"];
+dither_types = ["t.l0.arctic1",  "t.l0.desert1", "t.l0.plains1", "t.l0.grassland1", "t.l0.forest1", "t.l0.jungle1", "t.l0.hills1", "t.l0.mountains1", "t.l0.tundra1", "t.l0.swamp1"];
 print("Freeciv-img-extract running with PIL ");
 tileset = Image.new('RGBA', (tileset_width, tileset_height), (0, 0, 0, 0));
 mask_image = None;
@@ -350,6 +350,10 @@ for tileset_id in sorted(files.keys()):
             tag = str(dir) + src_key[5:].replace("1", "") + "_" + alt_key[5:].replace("1", "");
             src_img = dither_map[src_key].copy();
             alt_img = dither_map[alt_key].copy();
+            if (tag.find("arctic") > 0):
+              src_img.paste(alt_img, None, dither_mask);
+              #double dithering for arctic reduces biting contrast.
+
             src_img.paste(alt_img, None, dither_mask);
 
             (WZ, HZ) = src_img.size;
