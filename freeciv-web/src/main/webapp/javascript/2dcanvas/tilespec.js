@@ -538,7 +538,10 @@ function fill_terrain_sprite_array(l, ptile, pterrain, tterrain_near)
              for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
                if (ts_tiles[tterrain_near[DIR4_TO_DIR8[i]]['graphic_str']] == null) continue;
                var near_dlp = tile_types_setup["l" + l + "." + tterrain_near[DIR4_TO_DIR8[i]]['graphic_str']];
-	           var terrain_near = (near_dlp['dither'] == true) ?  tterrain_near[DIR4_TO_DIR8[i]]['graphic_str'] : pterrain['graphic_str'];
+             
+             var terrain_near = (pterrain['graphic_str']=='arctic' && !(near_dlp['dither'] == true))
+               ? "swamp" // hard-coded for now, but dithers so much nicer into shore graphics
+	             : (near_dlp['dither'] == true) ?  tterrain_near[DIR4_TO_DIR8[i]]['graphic_str'] : pterrain['graphic_str'];
 	           var dither_tile = i + pterrain['graphic_str'] + "_" +  terrain_near;
                var x = dither_offset_x[i];
                var y = dither_offset_y[i];
@@ -606,11 +609,11 @@ function fill_terrain_sprite_array(l, ptile, pterrain, tterrain_near)
 	      /* We have no need for matching, just plug the piece in place. */
 	      break;
 	    case MATCH_SAME:
-	      	var b1 = (m[2] != this_match_index) ? 1 : 0;
-	      	var b2 = (m[1] != this_match_index) ? 1 : 0;
-	      	var b3 = (m[0] != this_match_index) ? 1 : 0;
-	      	array_index = array_index * 2 + b1;
-			array_index = array_index * 2 + b2;
+        var b1 = (m[2] != this_match_index) ? 1 : 0;
+        var b2 = (m[1] != this_match_index) ? 1 : 0;
+        var b3 = (m[0] != this_match_index) ? 1 : 0;
+        array_index = array_index * 2 + b1;
+			  array_index = array_index * 2 + b2;
 	  		array_index = array_index * 2 + b3;
 	      break;
 	    case MATCH_PAIR:
