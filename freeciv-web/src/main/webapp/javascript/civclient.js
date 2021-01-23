@@ -400,7 +400,7 @@ function init_common_intro_dialog() {
  Closes a generic message dialog.
 **************************************************************************/
 function close_dialog_message() {
-  $("#generic_dialog").dialog('close');
+  remove_active_dialog("#generic_dialog");
   $(this).off("keypress");
 }
 
@@ -418,7 +418,7 @@ function show_dialog_message(title, message)
     message = improve_tile_info_dialog(message);
 
   // reset dialog page.
-  $("#generic_dialog").remove();
+  remove_active_dialog("#generic_dialog");
   $("<div id='generic_dialog'></div>").appendTo("div#game_page");
 
   speak(title);
@@ -434,7 +434,7 @@ function show_dialog_message(title, message)
 			width: is_small_screen() ? "90%" : "50%",
 			close: closing_dialog_message,
 			buttons: {
-				Ok: close_dialog_message
+				"OK (W)": close_dialog_message
 			}
 		}).dialogExtend({
                    "minimizable" : true,
@@ -454,6 +454,8 @@ function show_dialog_message(title, message)
   });
 
   $("#generic_dialog").dialog('open');
+  dialog_register("#generic_dialog");
+
   $("#game_text_input").blur();
 
   if (title=="Tile Information")

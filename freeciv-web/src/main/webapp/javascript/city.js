@@ -1250,7 +1250,7 @@ function request_city_buy()
   var pplayer = client.conn.playing;
 
   // reset dialog page.
-  $("#dialog").remove();
+  remove_active_dialog("#dialog");
   $("<div id='dialog'></div>").appendTo("div#game_page");
   var buy_price_string = "";
   var buy_question_string = "";
@@ -1290,17 +1290,17 @@ function request_city_buy()
 			width: is_small_screen() ? "95%" : "50%",
 			buttons: {
 				"Yes": function() {
-						send_city_buy();
-						$("#dialog").dialog('close');
+            send_city_buy();
+            remove_active_dialog("#dialog");
 				},
-				"No": function() {
-						$("#dialog").dialog('close');
-
+				"No (W)": function() {
+            remove_active_dialog("#dialog");
 				}
 			}
 		});
 
   $("#dialog").dialog('open');
+  dialog_register("#dialog");
 }
 
 

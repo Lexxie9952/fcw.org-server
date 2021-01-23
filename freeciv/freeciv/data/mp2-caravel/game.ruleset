@@ -535,12 +535,13 @@ actor_reqs    =
 [actionenabler_break_walls_siege_ram]
 action = "Targeted Sabotage City Escape"
 actor_reqs    =
-    { "type",         "name",          "range"
-      "DiplRel",      "War",           "Local"
-      "UnitFlag",     "Spy",           "Local"
-      "UnitType",     "Siege Ram",     "Local"
-      "UnitState",    "OnLivableTile", "Local"
-      "MinMoveFrags", "9",             "Local"
+    { "type",         "name",          "range", "present"
+      "Tech",         "Metallurgy",    "World", FALSE
+      "DiplRel",      "War",           "Local", TRUE
+      "UnitFlag",     "Spy",           "Local", TRUE
+      "UnitType",     "Siege Ram",     "Local", TRUE
+      "UnitState",    "OnLivableTile", "Local", TRUE
+      "MinMoveFrags", "9",             "Local", TRUE
     }
 
 
@@ -1005,8 +1006,7 @@ target_reqs    =
 
 ; ***************** BOMBARDS *****************************
 ;Archers can do volley attacks
-; can hit ocean from land and land from ocean?
-; NOT so sure we want ocean-to-ocean
+; can hit ocean from land, and land from ocean.
 [actionenabler_archer_volley]
 action = "Bombard"
 actor_reqs    =
@@ -1023,6 +1023,24 @@ target_reqs    =
       "Extra",    "Naval Base",   "Local", FALSE
       "TerrainClass", "Oceanic",  "Local", FALSE
     }
+;Can hit Oceanic but not while transported.
+[actionenabler_archer_volley2]
+action = "Bombard"
+actor_reqs    =
+    { "type",         "name",         "range", "present"
+      "UnitFlag",     "Bombarder",    "Local", TRUE
+      "UnitType",     "Archers",      "Local", TRUE
+      "UnitState",    "Transported",  "Local", FALSE
+      "MinMoveFrags", "1",            "Local", TRUE
+      "DiplRel",      "War",          "Local", TRUE
+   }
+target_reqs    =
+    { "type",     "name",         "range","present"
+      "CityTile", "Center",       "Local", FALSE
+      "Extra",    "Fortress",     "Local", FALSE
+      "Extra",    "Naval Base",   "Local", FALSE
+    }
+
 ;Fortified Phalanxes can "rumble"
 [actionenabler_phalanx_rumble_fortified]
 action = "Bombard"
@@ -1031,8 +1049,7 @@ actor_reqs    =
       "UnitFlag",     "Bombarder",    "Local", TRUE
       "UnitType",     "Phalanx",      "Local", TRUE
       "UnitState",    "Transported",  "Local", FALSE
-      "UnitState",   "Fortified",    "Local", TRUE   
-;      "Activity",     "Fortified",    "Local", TRUE  ;3.1 version, which we now have working also.
+      "UnitState",    "Fortified",    "Local", TRUE ;"Activity","Fortified","Local",TRUE ;3.1 version, which we now have working also.
       "MinMoveFrags", "9",            "Local", TRUE
       "DiplRel",      "War",          "Local", TRUE
    }
@@ -1088,11 +1105,11 @@ target_reqs    =
 action = "Bombard"
 actor_reqs    =
     { "type",         "name",         "range", "present"
-      "Tech",         "Steel",        "World", FALSE
+      "Tech",         "Metallurgy",   "World", FALSE
       "UnitFlag",     "Bombarder",    "Local", TRUE
       "UnitType",     "Siege Ram",    "Local", TRUE
       "UnitState",    "Transported",  "Local", FALSE
-      "MinMoveFrags", "10",            "Local", TRUE
+      "MinMoveFrags", "10",           "Local", TRUE
       "DiplRel",      "War",          "Local", TRUE
    }
 target_reqs    =
@@ -1104,11 +1121,11 @@ target_reqs    =
 action = "Bombard"
 actor_reqs    =
     { "type",         "name",         "range", "present"
-      "Tech",         "Steel",        "World", FALSE
+      "Tech",         "Metallurgy",   "World", FALSE
       "UnitFlag",     "Bombarder",    "Local", TRUE
       "UnitType",     "Siege Ram",    "Local", TRUE
       "UnitState",    "Transported",  "Local", FALSE
-      "MinMoveFrags", "10",            "Local", TRUE
+      "MinMoveFrags", "10",           "Local", TRUE
       "DiplRel",      "War",          "Local", TRUE
    }
 target_reqs    =
@@ -1174,6 +1191,24 @@ target_reqs    =
       "Extra",    "Fortress",     "Local", FALSE
       "Extra",    "Naval Base",   "Local", FALSE
       "TerrainClass",  "Oceanic", "Local", FALSE
+    }
+;Can hit Oceanic but not while transported
+[actionenabler_marines_bombard2]
+action = "Bombard"
+actor_reqs    =
+    { "type",         "name",         "range", "present"
+      "UnitFlag",     "Bombarder",    "Local", TRUE
+      "UnitType",     "Marines",      "Local", TRUE
+      "UnitState",    "Transported",  "Local", FALSE
+      "MinMoveFrags", "1",            "Local", TRUE
+      "DiplRel",      "War",          "Local", TRUE
+      "MinVeteran",   "2",            "Local", TRUE
+   }
+target_reqs    =
+    { "type",   "name", "range",  "present"
+      "CityTile", "Center",       "Local", FALSE
+      "Extra",    "Fortress",     "Local", FALSE
+      "Extra",    "Naval Base",   "Local", FALSE
     }
 
 ;Battleships can do bombardment
@@ -1609,19 +1644,36 @@ action        = "Pillage"
 actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitClassFlag", "CanPillage",   "Local", TRUE
-      "UnitFlag",      "Cant_Pillage",  "Local", FALSE
+      "UnitFlag",      "Cant_Pillage", "Local", FALSE
+      "MinMoveFrags",  "1",            "Local", TRUE
     }
 [actionenabler_pillage2]
 action        = "Pillage"
 actor_reqs    =
-    { "type",     "name",                  "range"
-      "UnitType", "Ground Strike Fighter", "Local"
+    { "type",         "name",        "range", "present"
+      "UnitType",     "Dive Bomber", "Local", TRUE
+      "MinMoveFrags", "1",           "Local", TRUE
+    }
+[actionenabler_pillage2a]
+action        = "Pillage"
+actor_reqs    =
+    { "type",     "name",                  "range", "present"
+      "UnitType", "Ground Strike Fighter", "Local", TRUE
+      "MinMoveFrags", "1",                 "Local", TRUE
     }
 [actionenabler_pillage3]
 action        = "Pillage"
 actor_reqs    =
-    { "type",     "name",                  "range"
-      "UnitType", "Jet Bomber",            "Local"
+    { "type",     "name",              "range", "present"
+      "UnitType", "Strategic Bomber",  "Local", TRUE
+      "MinMoveFrags", "1",             "Local", TRUE
+    }    
+[actionenabler_pillage3a]
+action        = "Pillage"
+actor_reqs    =
+    { "type",     "name",              "range", "present"
+      "UnitType", "Jet Bomber",        "Local", TRUE
+      "MinMoveFrags", "1",             "Local", TRUE
     }
 
 [actionenabler_clean_pollution]
@@ -1630,6 +1682,7 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "NonMil",       "Local", TRUE
+      "MinMoveFrags", "1",                 "Local", TRUE
       ;NonMil = don't let ability to do Hideouts 'cause' ability to clean pollution
     }
 [actionenabler_clean_fallout]
@@ -1638,6 +1691,7 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "NonMil",       "Local", TRUE
+      "MinMoveFrags", "1",                 "Local", TRUE
       ;NonMil = don't let ability to do Hideouts 'cause' ability to clean fallout
     }
 
@@ -2455,7 +2509,7 @@ set =
       "minplayers", 0, FALSE
       "move_bonus_in_frags", "ENABLED", TRUE   ;locked
       "nationset", "all", FALSE 
-      "nuclearwinter_percent", 15, FALSE
+      "nuclearwinter_percent", 50, FALSE
       "nukes_minor", "ENABLED", FALSE      ; set to DISABLED to completely disallow nuclear detonations
       "nukes_major", "ENABLED", FALSE      ; set to DISABLED to disallow nuclear fusion weapons
       "polarstrip", "DISABLED", FALSE      ; blocks making horizontal polar strips on most generators
@@ -2468,6 +2522,7 @@ set =
       "specials", 350, FALSE
       "startpos", "SINGLE", FALSE
       "startunits", "xxcccwwwaADD", FALSE
+      "steepness", 20, FALSE
       "techleak", 25, FALSE
       "techlossforgiveness", 200, FALSE
       "techlossrestore", 100, FALSE
@@ -2475,8 +2530,7 @@ set =
       "temperature", 50, FALSE
       "tilesperplayer", 290, FALSE
       "tinyisles", "DISABLED", FALSE
-      "wetness", 50, FALSE
-      "steepness", 30, FALSE
+      "steepness", 15, FALSE
       "tinyisles", FALSE, FALSE
       "trademindist", 12, FALSE
       "trade_revenue_style", "SIMPLE", FALSE   ;"simple" formula based on average trade in both cities (sans distance etc.)
@@ -2487,6 +2541,10 @@ set =
       "unload_override", 0, FALSE    ;0=native unloading same as non-native. 1+ = move_fragment cost for unloading.
       "unreachableprotects", "ENABLED", FALSE
       "unitwaittime_style", "ACTIVITIES|FORTIFY|DELAYGOTO", FALSE
+      "wetness", 50, FALSE
       "victories", "ALLIED|SPACERACE", FALSE
       "zoc_purity", "ENABLED", FALSE           ; igZOC units don't lift ZOC for units subject to ZOC
+; TESTING ONLY, REMOVE FOR SURE: *(***************************************)
+      "fogofwar", FALSE, FALSE
+      "revealmap", "start", FALSE
     }

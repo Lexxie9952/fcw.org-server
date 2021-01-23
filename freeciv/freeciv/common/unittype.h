@@ -607,7 +607,13 @@ struct extra_unit_stats {
   int bit_field;                  // raw bit field currently taken from unit_type.city_size
 
   bool attack_stay_fortified;     // Bit 0
+  bool iPillage;                  // Bit 1    - Whether pillage can be done instantly
+  int  iPillage_moves;            // Bits 2-4 - Moves expended from an iPillage 
   
+  int iPillage_odds;              // Bits 5-8 - odds of success expressed as 100-(6*)
+  int iPillage_random_targets;    // Bit 9-10:  non-zero==randomly pick x targets. 0==user select target.
+
+
   // Candidates for future inclusions:
   /*
   int attack_extra_range;         // ability to attack a non-adjacent tile
@@ -627,8 +633,10 @@ struct extra_unit_stats {
   int instafortify_move_rate;      // a previously fortified unit(?) can re-fortify instantly if it moved less than this
  */
  };
- void unit_get_extra_stats(struct extra_unit_stats *pstats, const struct unit *punit);
- void utype_get_extra_stats(struct extra_unit_stats *pstats, const struct unit_type *ptype);
+void unit_get_extra_stats(struct extra_unit_stats *pstats, const struct unit *punit); // maintain this as identical to same func. in unit.js
+void utype_get_extra_stats(struct extra_unit_stats *pstats, const struct unit_type *ptype); // maintain this as identical to same func. in unit.js
+bool unit_can_iPillage(const struct unit *punit);
+bool utype_can_iPillage(const struct unit_type *ptype);
 
 /* General unit and unit type (matched) routines */
 Unit_type_id utype_count(void);

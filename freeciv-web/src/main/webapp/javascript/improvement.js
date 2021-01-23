@@ -28,6 +28,8 @@ const B_STATUE_OF_LIBERTY_NAME = "Statue of Liberty";
 const B_ADAM_SMITH_NAME = "A.Smith's Trading Co.";
 const B_TESLAS_LABORATORY = "Tesla's Laboratory";
 const B_COLOSSUS = "Colossus";
+const B_LIGHTHOUSE = "Lighthouse";
+
 
 var B_LAST = MAX_NUM_BUILDINGS;
 

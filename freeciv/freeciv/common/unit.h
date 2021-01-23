@@ -131,6 +131,8 @@ struct unit_wait {
   TYPED_LIST_LINK_ITERATE(struct unit_wait_list_link, unit_wait_list, plink)
 #define unit_wait_list_link_iterate_end LIST_LINK_ITERATE_END
 
+#define ACTIVITY_IPILLAGE_OVERRIDE_FLAG 1024
+
 struct unit {
   const struct unit_type *utype; /* Cannot be NULL. */
   struct tile *tile;
@@ -225,6 +227,11 @@ struct unit {
       /* Only used in the server (./ai/ and ./server/). */
 
       bool debug;
+
+      int iPillage_count;      // keeps track of multiple targets in one action
+                               // so that move_cost is only recokoned on the last one.
+      bool iPillage_no;        // client requests unit NOT to do iPillage: do a normal
+                               // pillage instead of a default iPillage.
 
       struct unit_adv *adv;
       void *ais[FREECIV_AI_MOD_LAST];

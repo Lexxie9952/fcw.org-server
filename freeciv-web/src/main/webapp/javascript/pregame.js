@@ -71,6 +71,14 @@ function pregame_start_game()
     //setTimeout(function() { $("#game_text_input").show(); }, 8000);
     //setTimeout(show_fullscreen_window, 11000);
   } */
+
+  /*
+  $('html').click( function() {
+    if(!document.fullscreenElement){
+      $('html')[0].requestFullscreen();
+    }
+  });*/
+  popup_fullscreen_enter_game_dialog();
 }
 
 /****************************************************************************

@@ -88,8 +88,9 @@ function update_animated_objects()
 /****************************************************************************
  Renders an explosion animation on the given tile.
 ****************************************************************************/
-function animate_explosion_on_tile(tile_id, animation_frame)
+function animate_explosion_on_tile(tile_id, animation_frame, swords)
 {
+  var more_frames = swords ? 2 : 0;
   if (scene == null) return;
   
   var ptile = tiles[tile_id];
@@ -101,13 +102,13 @@ function animate_explosion_on_tile(tile_id, animation_frame)
     scene.remove(ptile['explosion_mesh']);
     ptile['explosion_mesh'] = null;
   }
-  if (animation_frame == 5) {
+  if (animation_frame == 5+(more_frames) ) {
     scene.remove(ptile['explosion_mesh']);
     ptile['explosion_mesh'] = null;
     return;
   }
 
-  var explosion_mesh = get_unit_explosion_mesh(animation_frame);
+  var explosion_mesh = swords ? get_unit_swords_mesh(animation_frame) : get_unit_explosion_mesh(animation_frame);
   var pos = map_to_scene_coords(ptile['x'], ptile['y']);
   explosion_mesh.matrixAutoUpdate = false;
   explosion_mesh.translateOnAxis(new THREE.Vector3(1,0,0).normalize(), pos['x'] - 6);
@@ -120,8 +121,10 @@ function animate_explosion_on_tile(tile_id, animation_frame)
      scene.add(explosion_mesh);
   }
 
-  if (animation_frame <= 4) setTimeout("animate_explosion_on_tile(" + tile_id + "," + (animation_frame + 1) + ")", 350);
-
+  if (animation_frame <= (4+more_frames)) {
+    if (swords) setTimeout("animate_swords_on_tile(" + tile_id + "," + (animation_frame + 1) + ")", 350);
+    else setTimeout("animate_explosion_on_tile(" + tile_id + "," + (animation_frame + 1) + ")", 350);
+  } 
 }
 
 /****************************************************************************

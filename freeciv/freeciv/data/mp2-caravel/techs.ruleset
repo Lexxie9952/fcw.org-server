@@ -771,7 +771,7 @@ req2     = "Steel"
 flags    = ""
 graphic     = "a.refining"
 graphic_alt = "-"
-helptext = _("Allows Oil Wells on Glaciers.")
+helptext = _("Allows Arctic Oil Wells. Oil Wells on Oil get +1 shield after other bonuses.")
 cost = 3630
 
 [advance_refrigeration]

@@ -895,7 +895,7 @@ void unit_activities_cancel_all_illegal(const struct tile *ptile)
 /**********************************************************************//**
   Finish all the effects of unit activity.
 **************************************************************************/
-static void unit_activity_complete(struct unit *punit)
+void unit_activity_complete(struct unit *punit)
 {
   const enum unit_activity tile_changing_actions[] =
     { ACTIVITY_PILLAGE, ACTIVITY_GEN_ROAD, ACTIVITY_IRRIGATE, ACTIVITY_MINE,
@@ -978,6 +978,7 @@ static void unit_activity_complete(struct unit *punit)
 
       destroy_extra(ptile, punit->activity_target);
       unit_activity_done = TRUE;
+      punit->server.iPillage_no = false; // never carries over after successful pillage.
 
       bounce_units_on_terrain_change(ptile);
 
@@ -1331,6 +1332,7 @@ time_t scramble_uwt_stamp(time_t stamptime)
 void unit_forget_last_activity(struct unit *punit)
 {
   punit->changed_from = ACTIVITY_IDLE;
+  punit->server.iPillage_no = false;
   if (punit->server.wait) {
     unit_wait_list_erase(server.unit_waits, punit->server.wait);
   }
@@ -3012,11 +3014,37 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile)
                     city_link(pcity));
     }
 
-    // Reduce the size
-    city_reduce_size(pcity, city_size_get(pcity) / 2, pplayer, "nuke");
-    update_tile_knowledge(ptile);
+    // Reduce city size by half.
+
+    // Half of one is zero: DESTROY IT
+    if (city_size_get(pcity) == 1) {
+      if (pcity) {
+        int saved_id = pcity->id;
+
+        notify_player(city_owner(pcity), ptile, E_CITY_NUKED, ftc_server,
+          _("%s was annihilated by a nuclear detonation."),
+            city_link(pcity));
+
+        if (city_owner(pcity) != pplayer) {
+          notify_player(pplayer, ptile, E_CITY_NUKED, ftc_server,
+          _("%s was annihilated by a nuclear detonation."),
+            city_link(pcity));
+        }
+        script_server_signal_emit("city_destroyed", pcity, city_owner(pcity), pplayer);
+        /* We cant't be sure of city existence after running some script */
+        if (city_exist(saved_id)) {
+          remove_city(pcity);
+        }
+      }
+    }
+    // Reduce size by half
+    else {
+      city_reduce_size(pcity, city_size_get(pcity) / 2, pplayer, "nuke");
+      update_tile_knowledge(ptile);
+    }
   }
 
+  // 50% chance of Fallout.
   if (fc_rand(2) == 1) {
     struct extra_type *pextra;
 
@@ -4648,7 +4676,7 @@ bool execute_orders(struct unit *punit, const bool fresh)
                                        unit_owner(punit),
                                        tile_owner(unit_tile(punit)),
                                        unit_tile(punit),
-                                       tile_link(unit_tile(punit)));                                       
+                                       tile_link(unit_tile(punit)));
           }
           else if (activity == ACTIVITY_GEN_ROAD) {
             action_consequence_success(action_by_number(ACTION_ROAD),

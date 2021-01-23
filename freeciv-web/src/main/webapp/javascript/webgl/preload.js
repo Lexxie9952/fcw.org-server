@@ -314,6 +314,30 @@ function get_unit_explosion_mesh(frame)
   meshes[key] = canvas_to_user_facing_mesh(ecanvas, 32, 32, 32, true);
   return meshes[key].clone();
 }
+/****************************************************************************
+ Returns unit explosion mesh  (frame = [0-7].
+****************************************************************************/
+function get_unit_swords_mesh(frame)
+{
+  var key = 'swords.unit_' + frame;
+  if (meshes[key] != null) return meshes[key].clone();
+  if (sprites[key] == null) {
+    console.log("Invalid unit swords key: " + key);
+    return null;
+  }
+
+  var ecanvas = document.createElement("canvas");
+  ecanvas.width = 34;
+  ecanvas.height = 48;
+  var econtext = ecanvas.getContext("2d");
+  econtext.drawImage(sprites[key], 0, 0,
+                sprites[key].width, sprites[key].height,
+                0,0,34,48);
+
+  meshes[key] = canvas_to_user_facing_mesh(ecanvas, 34, 34, 48, true);
+  return meshes[key].clone();
+}
+
 
 /****************************************************************************
  Returns nuke explosion mesh

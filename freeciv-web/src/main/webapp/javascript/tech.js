@@ -586,7 +586,7 @@ function send_player_research(tech_id)
 {
   var packet = {"pid" : packet_player_research, "tech" : tech_id};
   send_request(JSON.stringify(packet));
-  $("#tech_dialog").dialog('close');
+  remove_active_dialog("#tech_dialog");
 }
 
 /**************************************************************************
@@ -726,7 +726,7 @@ function check_queued_tech_gained_dialog()
   var queued_tech = simpleStorage.get(get_pbem_game_key(), "");
 
   if (queued_tech != null) {
-    $("#dialog").remove();
+    remove_active_dialog("#dialog");
     show_tech_gained_dialog(queued_tech);
     simpleStorage.set(get_pbem_game_key(), null);
   }
@@ -782,7 +782,7 @@ function show_tech_gained_dialog(tech_gained_id)
   message += "</div>";
 
   // reset dialog page.
-  $("#tech_dialog").remove();
+  remove_active_dialog("#tech_dialog");
   $("<div id='tech_dialog'></div>").appendTo("div#game_page");
 
   $("#tech_dialog").html(message);
@@ -793,9 +793,9 @@ function show_tech_gained_dialog(tech_gained_id)
 			width: is_small_screen() ? "90%" : "60%",
 			buttons: [
 			 {
-                text : "Close",
+                text : "Close (W)",
                 click : function() {
-                  $("#tech_dialog").dialog('close');
+                  remove_active_dialog("#tech_dialog");
                   $("#game_text_input").blur();
                 }
             },{
@@ -804,13 +804,14 @@ function show_tech_gained_dialog(tech_gained_id)
                   $("#tabs").tabs("option", "active", TAB_TECH);
                   set_default_mapview_inactive();
                   update_tech_screen();
-				          $("#tech_dialog").dialog('close');
+                  remove_active_dialog("#tech_dialog");
                 }
               }
              ]
 		});
 
   $("#tech_dialog").dialog('open');
+  dialog_register("#tech_dialog");
   $("#game_text_input").blur();
   $("#tech_advance_helptext").tooltip({ disabled: false });
   $(".specific_tech").tooltip({ disabled: false });
@@ -837,7 +838,7 @@ function show_wikipedia_dialog(tech_name)
   message += freeciv_wiki_docs[tech_name]['summary'];
 
   // reset dialog page.
-  $("#wiki_dialog").remove();
+  remove_active_dialog("#wiki_dialog");
   $("<div id='wiki_dialog'></div>").appendTo("div#game_page");
 
   $("#wiki_dialog").html(message);
@@ -847,13 +848,14 @@ function show_wikipedia_dialog(tech_name)
 			modal: true,
 			width: is_small_screen() ? "90%" : "60%",
 			buttons: {
-				Ok: function() {
-					$("#wiki_dialog").dialog('close');
+				"OK (W)": function() {
+          remove_active_dialog("#wiki_dialog");
 				}
 			}
 		});
 
   $("#wiki_dialog").dialog('open');
+  dialog_register("#wiki_dialog");
   $("#wiki_dialog").css("max-height", $(window).height() - 100);
   $("#game_text_input").blur();
 }
@@ -920,7 +922,7 @@ function show_tech_info_dialog(tech_name, unit_type_id, improvement_id)
   }
 
   // reset dialog page.
-  $("#wiki_dialog").remove();
+  remove_active_dialog("#wiki_dialog");
   $("<div id='wiki_dialog'></div>").appendTo("div#game_page");
 
   $("#wiki_dialog").html(message);
@@ -931,13 +933,14 @@ function show_tech_info_dialog(tech_name, unit_type_id, improvement_id)
 			width: is_small_screen() ? "95%" : "70%",
 			height: $(window).height() - 60,
 			buttons: {
-				Ok: function() {
-					$("#wiki_dialog").dialog('close');
+				"OK (W)": function() {
+          remove_active_dialog("#wiki_dialog");
 				}
 			}
 		});
 
   $("#wiki_dialog").dialog('open');
+  dialog_register("#wiki_dialog");
   $("#game_text_input").blur();
 }
 

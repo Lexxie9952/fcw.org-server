@@ -3185,6 +3185,8 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
         i, utype_name_translation(target.value.utype)); */
  
         utype = target.value.utype;
+        pop_cost = utype_pop_value(utype);
+
         punit = create_unit(pplayer, pcity->tile, utype,
                           do_make_unit_veteran(pcity, utype),
                           pcity->id, 0);

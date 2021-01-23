@@ -141,6 +141,33 @@ function unit_move_sound_play(unit)
   }
 }
 
+
+/**************************************************************************
+ Plays the hostile event sound specified by 'key' if that tile is visible
+ to the player (which we know only by if units are visible on that tile.)
+**************************************************************************/
+function play_hostile_event_sound(key, ptile, ptype) 
+{
+  if (!sounds_enabled) return;
+
+  var funits = tile_units(ptile);
+  if (!funits) return;
+
+  if (soundset == null) {
+    console.error("Soundset not found.");
+    return;
+  }
+
+  if (soundset[key] != null) {
+    play_sound(soundset[key]);
+  }
+
+  /*
+  var pclass = unit_classes[ptype['unit_class_id']];
+  if (pclass['rule_name'].startsWith("Air")) {
+  }*/
+}
+
 /**************************************************************************
  Plays the combat sound for the unit if visible.
 **************************************************************************/

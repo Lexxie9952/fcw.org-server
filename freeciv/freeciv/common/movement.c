@@ -467,6 +467,11 @@ bool can_unit_survive_at_tile(const struct civ_map *nmap,
     return TRUE;
   }
 
+  if (unit_has_type_flag(punit, UTYF_COAST) && is_safe_ocean(nmap, ptile)) {
+    /* Refueling coast */
+    return TRUE;
+  }
+
   if (utype_fuel(unit_type_get(punit))) {
     /* Unit requires fuel and this is not refueling tile */
     return FALSE;

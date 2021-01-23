@@ -62,7 +62,11 @@ const CRF_RECYCLING_DISCOUNT       = 25;
 const CRF_SEABRIDGE                = 26;
 const CRF_COLOSSUS_DISCOUNT        = 27;
 const CRF_SPECIAL_UNIT_ATTACKS     = 28; // complex special one-way engagements enabled, mp2-caravel onward.
-const CRF_LAST                     = 29;
+const CRF_MP2                      = 29; // rules flags for "minimum" mp2 ruleset, for when new feature came in.
+const CRF_MP2_A                    = 30; 
+const CRF_MP2_B                    = 31;
+const CRF_MP2_C                    = 32;
+const CRF_LAST                     = 33;
 
 var graphic_theme_path;
 

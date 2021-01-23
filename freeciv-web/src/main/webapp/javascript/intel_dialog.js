@@ -68,7 +68,7 @@ function show_intelligence_report_hearsay(pplayer)
 function show_intelligence_report_embassy(pplayer)
 {
   // reset dialog page.
-  $("#intel_dialog").remove();
+  remove_active_dialog("#intel_dialog");
   $("<div id='intel_dialog'></div>").appendTo("div#game_page");
 
   const capital = player_capital(pplayer);
@@ -151,6 +151,8 @@ function show_intelligence_report_embassy(pplayer)
                      });
 
   $("#intel_dialog").dialog('open');
+  dialog_register("#intel_dialog");
+  
   $("#intel_tabs").tabs();
   $("#game_text_input").blur();
 }

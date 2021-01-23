@@ -368,7 +368,7 @@ extern struct world wld;
 
 #define GAME_DEFAULT_TECHLEVEL   0
 #define GAME_MIN_TECHLEVEL       0
-#define GAME_MAX_TECHLEVEL       100
+#define GAME_MAX_TECHLEVEL       1000
 
 #define GAME_DEFAULT_ANGRYCITIZEN TRUE
 

@@ -377,7 +377,7 @@ helptext	= _("\
 Increases the shield production in a city by +50%.  This increase may\
  contribute to pollution.\
 "), _("\
- This building lets you conscript one extra infantry/foot unit per turn.\
+ This building lets you build one extra infantry unit per turn.\
 ")
 
 [building_enrichment_facility]
@@ -425,7 +425,9 @@ sound_alt	= "b_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
 Increases the shield production in a city by +75% of base production levels.\
- Gives +1 build slot and +5 free shield upkeep on units.\
+ Gives +5 free shield upkeep on units.\
+"), _("\
+ This building lets you build one extra infantry unit per turn.\
 ")
 
 [building_granary]
@@ -633,7 +635,7 @@ A Mfg. Plant with a Factory AND a Power, Hydro, Nuclear, or Solar Plant\
 The pollution reduction of a Hydro, Nuclear, or Solar Plant is applied one more\
  time to cities with Mfg. Plants, effectively doubling the bonus percentage.\  
 "), _("\
- This building lets you conscript one extra infantry/foot unit per turn.\
+ This building lets you build one extra infantry unit per turn.\
 ")
 
 [building_nuclear_plant]
@@ -1686,7 +1688,7 @@ sound		= "w_king_richards_crusade"
 sound_alt	= "w_generic"
 helptext	= _("\
 In the city where it is built, adds one extra shield resource on every\
- tile. Lets you build one extra qualifying unit per turn —— without\
+ tile. Lets you build one extra infantry unit per turn —— without\
  Conscription tech.\
  Obsolete by: Robotics.\
 ")

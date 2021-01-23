@@ -54,6 +54,7 @@
 #include "citytools.h"
 #include "cityturn.h"
 #include "diplomats.h"
+#include "diplhand.h"
 #include "maphand.h"
 #include "notify.h"
 #include "plrhand.h"
@@ -664,6 +665,8 @@ static struct player *need_war_player_hlp(const struct unit *actor,
   case ACTION_IRRIGATE_TF:
   case ACTION_MINE_TF:
   case ACTION_PILLAGE:
+  case ACTION_CLEAN_POLLUTION:
+  case ACTION_CLEAN_FALLOUT:
   case ACTION_FORTIFY:
   case ACTION_CONVERT:
   case ACTION_ROAD:
@@ -2969,6 +2972,9 @@ static bool city_add_unit(struct player *pplayer, struct unit *punit,
   citizens_update(pcity, unit_nationality(punit));
   /* Refresh the city data. */
   city_refresh(pcity);
+  // Now make the worker do something besides entertain and eater other people's food:
+  auto_arrange_workers(pcity);
+  city_refresh(pcity);
 
   /* Notify the unit owner that the unit successfully joined the city. */
   notify_player(pplayer, city_tile(pcity), E_CITY_BUILD, ftc_server,
@@ -3151,10 +3157,9 @@ static void handle_unit_change_activity_real(struct player *pplayer,
 
   if (punit->activity == activity
       && punit->activity_target == activity_target
-      && !punit->ai_controlled) {
-    /* Treat change in ai.control as change in activity, so
-     * idle autosettlers behave correctly when selected --dwp
-     */
+      && !punit->ai_controlled // Treat change in ai.control as change in activity, so idle autosettlers behave correctly.
+      && !(activity == ACTIVITY_PILLAGE && unit_can_iPillage(punit)) // Can change your mind from regular pillage to iPillage.
+      ) {
     return;
   }
 
@@ -3200,6 +3205,16 @@ void handle_unit_change_activity(struct player *pplayer, int unit_id,
                                  int target_id)
 {
   struct extra_type *activity_target;
+
+  if (activity == ACTIVITY_PILLAGE) {
+    struct unit *punit = player_unit_by_number(pplayer, unit_id);
+    if (target_id >= ACTIVITY_IPILLAGE_OVERRIDE_FLAG) {  // & causes 'true' for target_id == -1
+      // Client requests to override default iPillage with standard Pillage.
+      target_id -= ACTIVITY_IPILLAGE_OVERRIDE_FLAG; // convert target_id to valid again.
+      if (punit) punit->server.iPillage_no = true;
+    } 
+    else punit->server.iPillage_no = false;
+  }
 
   if (target_id < 0 || target_id >= game.control.num_extra_types) {
     activity_target = NULL;
@@ -4896,7 +4911,7 @@ bool unit_activity_handling_targeted(struct unit *punit,
                                    unit_owner(punit),
                                    tile_owner(unit_tile(punit)),
                                    unit_tile(punit),
-                                   tile_link(unit_tile(punit)));      
+                                   tile_link(unit_tile(punit)));
       }
 
   } else if (can_unit_do_activity_targeted(punit, new_activity, *new_target)) {
@@ -4912,34 +4927,138 @@ bool unit_activity_handling_targeted(struct unit *punit,
       /* unit_assign_specific_activity_target() changed our target activity
        * (to ACTIVITY_IDLE in practice) */
       unit_activity_handling(punit, new_activity);
-    } else {
-      set_unit_activity_targeted(punit, new_activity, *new_target);
-      send_unit_info(NULL, punit);    
-      unit_activity_dependencies(punit, old_activity, old_target);
+    } 
+    else 
+    {
+        set_unit_activity_targeted(punit, new_activity, *new_target);
+        send_unit_info(NULL, punit);    
+        unit_activity_dependencies(punit, old_activity, old_target);
+/*** BEGIN all Pillage actions *****/
+        if (new_activity == ACTIVITY_PILLAGE) {
+            // Check if this is an instant-Pillage and act accordingly. ("iPillage").
+            struct extra_unit_stats pstats;
+            unit_get_extra_stats(&pstats, punit);
+/**** <start iPillage block>: TODO: move to its own function *****/
+            if (unit_can_iPillage(punit) && punit->server.iPillage_no == false) {
+              int odds = pstats.iPillage_odds + 5 * punit->veteran; // +5% for each veteran level.
+              if (pstats.iPillage_random_targets) punit->server.iPillage_count++; // increment counter for units who pillage multiple extras in one action
+/*** BEGIN SUCCESSFUL PILLAGE BLOCK ***/
+              if (fc_rand(100) < odds) {
+                notify_player(unit_owner(punit), unit_tile(punit),
+                          E_UNIT_ACTION_TARGET_HOSTILE, ftc_server,
+                          _("Your %s destroyed the %s %s with a %s."),
+                          unit_link(punit),
+                          (tile_owner(unit_tile(punit)) ? nation_adjective_for_player(tile_owner(unit_tile(punit))) : " " ), 
+                          extra_name_translation(punit->activity_target),
+                          unit_type_get(punit)->sound_fight_alt);
+                //notify other player:
+                if (tile_owner(punit->tile) && tile_owner(punit->tile) != unit_owner(punit)) {
+                  notify_player(tile_owner(punit->tile), unit_tile(punit),
+                          E_UNIT_ACTION_TARGET_HOSTILE, ftc_server,
+                          _("Your %s was destroyed from %s %s done by %s %s %s!"),
+                          extra_name_translation(punit->activity_target),
+                          indefinite_article_for_word(unit_type_get(punit)->sound_fight_alt, false),                          
+                          unit_type_get(punit)->sound_fight_alt,
+                          indefinite_article_for_word(nation_adjective_for_player(unit_owner(punit)), false),
+                          nation_adjective_for_player(unit_owner(punit)),
+                          unit_link(punit));
+                }
+                // update_unit_activity(..) usually calls unit_activity_complete(..), but, it
+                // assumes it is processing activities at TC, so it does things like restoring
+                // move points.. Therefore, handle all house-keeping here prior to the call, so
+                // that send_unit_info, etc., sends the right info out to clients after:
+                punit->server.action_timestamp = 0;
+                if (pstats.iPillage_random_targets) {
+                  // Multiple targets in one action, only subtract the unit's moves_left on the final iPillage.
+                  if (((punit->server.iPillage_count) % pstats.iPillage_random_targets) == 0) {
+                    punit->moves_left -= pstats.iPillage_moves * SINGLE_MOVE; //reduce moves left
+                    punit->server.iPillage_count = 0;  // reset counter back to 0.
+                  }
+                }
+                else { // always subtract moves_left if not on a counter up to iPillage_random_targets:
+                  punit->moves_left -= pstats.iPillage_moves * SINGLE_MOVE; //reduce moves left
+                }
+                if (punit->moves_left<0) punit->moves_left = 0;
+                punit->activity_count = 1000;  // force unit_activity_complete to iPillage (instant-finish activity)
+                unit_activity_complete(punit);
+                unit_did_action(punit); // iPillage, just like unit_move, needs an immediate real-time uwt timestamp.
+              } 
+/*** END SUCCESSFUL iPILLAGE BLOCK ***/
+/*** BEGIN FAILED iPILLAGE BLOCK ***/
+              else {
+                notify_player(unit_owner(punit), unit_tile(punit),
+                          E_UNIT_ACTION_ACTOR_FAILURE, ftc_server,
+                          _("Your %s's %s missed its target."),
+                          unit_link(punit),
+                          unit_type_get(punit)->sound_fight_alt);
+                //notify other player:
+                if (tile_owner(punit->tile)) {
+                  notify_player(tile_owner(punit->tile), unit_tile(punit),
+                          E_UNIT_ACTION_ACTOR_FAILURE, ftc_server,
+                          _("%s %s %s failed while attempting to %s your %s."),
+                          indefinite_article_for_word(nation_adjective_for_player(unit_owner(punit)), true),
+                          nation_adjective_for_player(unit_owner(punit)),
+                          unit_link(punit),
+                          unit_type_get(punit)->sound_fight_alt,
+                          extra_name_translation(punit->activity_target));
+                }
+                if (pstats.iPillage_random_targets) {
+                  // Multiple targets in one action, only subtract the moves on the final iPillage.
+                  if (((punit->server.iPillage_count) % pstats.iPillage_random_targets) == 0) {
+                    punit->moves_left -= pstats.iPillage_moves * SINGLE_MOVE; //reduce moves left
+                    punit->server.iPillage_count = 0;  // reset counter back to 0.
+                  }
+                }
+                else punit->moves_left -= pstats.iPillage_moves * SINGLE_MOVE; // always reduce moves left for single_target ops
+                if (punit->moves_left<0) punit->moves_left = 0;
+                // unit_activity_complete(..) was not called due to FAILED MISSION, so do house-keeping here:
+                unit_did_action(punit); // iPillage, just like unit_move, needs an immediate real-time uwt timestamp.
+                unit_list_refresh_vision(unit_tile(punit)->units);
+                set_unit_activity(punit, ACTIVITY_IDLE);
+                unit_forget_last_activity(punit);
+                send_unit_info(NULL, punit);
+              } 
+/*** END FAILED iPILLAGE BLOCK ***/
+            }
+/**** </end iPillage block>: TODO: move to its own function *****/
+            punit->server.iPillage_no = false; 
+            // both iPillage and regular Pillage reset special request flag to false after any pillage attempt type completed.
 
-      // Successful action consequence has to come early to make casus belli,
-      // so that victim can preventatively react to the offensive behaviour:
-      if (new_activity == ACTIVITY_PILLAGE) {
-        action_consequence_success(action_by_number(ACTION_PILLAGE),
-                                   unit_owner(punit),
-                                   tile_owner(unit_tile(punit)),
-                                   unit_tile(punit),
-                                   tile_link(unit_tile(punit)));
-      }
-      else if (new_activity == ACTIVITY_GEN_ROAD) {
-        action_consequence_success(action_by_number(ACTION_ROAD),
-                                   unit_owner(punit),
-                                   tile_owner(unit_tile(punit)),
-                                   unit_tile(punit),
-                                   tile_link(unit_tile(punit)));                                   
-      }
-      else if (new_activity == ACTIVITY_BASE) {
-        action_consequence_success(action_by_number(ACTION_BASE),
-                                   unit_owner(punit),
-                                   tile_owner(unit_tile(punit)),
-                                   unit_tile(punit),
-                                   tile_link(unit_tile(punit)));                                   
-      }
+            /* DEBUG only:
+            notify_player(unit_owner(punit), NULL,
+                          E_UNIT_RELOCATED, ftc_server,
+                          _("%s is true.\niPillage_moves=%d\nbitfield=%d\nptype->paratroopers_mr_sub=%d"),
+                          unit_type_get(punit)->sound_fight_alt,
+                          pstats.iPillage_moves, pstats.bit_field,
+                          unit_type_get(punit)->paratroopers_mr_sub);*/
+
+            // Successful action consequence has to come early to make casus belli,
+            // so that victim can preventatively react to the offensive behaviour:
+            action_consequence_success(action_by_number(ACTION_PILLAGE),
+                                    unit_owner(punit),
+                                    tile_owner(unit_tile(punit)),
+                                    unit_tile(punit),
+                                    tile_link(unit_tile(punit)));
+        }
+/**** </end all PILLAGE ACTIONS> *****/        
+        else if (new_activity == ACTIVITY_GEN_ROAD) {
+          // Successful action consequence has to come early to make casus belli,
+          // so that victim can preventatively react to the offensive behaviour:          
+          action_consequence_success(action_by_number(ACTION_ROAD),
+                                    unit_owner(punit),
+                                    tile_owner(unit_tile(punit)),
+                                    unit_tile(punit),
+                                    tile_link(unit_tile(punit)));                                   
+        }
+        else if (new_activity == ACTIVITY_BASE) {
+          // Successful action consequence has to come early to make casus belli,
+          // so that victim can preventatively react to the offensive behaviour:
+          action_consequence_success(action_by_number(ACTION_BASE),
+                                    unit_owner(punit),
+                                    tile_owner(unit_tile(punit)),
+                                    unit_tile(punit),
+                                    tile_link(unit_tile(punit)));                                   
+        }
     }
   }
 
@@ -5318,6 +5437,7 @@ void handle_unit_orders(struct player *pplayer,
       case ACTION_MARKETPLACE:
       case ACTION_HELP_WONDER:
       case ACTION_SPY_BRIBE_UNIT:
+      case ACTION_SPY_ATTACK:
       case ACTION_SPY_SABOTAGE_UNIT:
       case ACTION_SPY_SABOTAGE_UNIT_ESC:
       case ACTION_CAPTURE_UNITS:
@@ -5344,6 +5464,8 @@ void handle_unit_orders(struct player *pplayer,
       case ACTION_IRRIGATE_TF:
       case ACTION_MINE_TF:
       case ACTION_PILLAGE:
+      case ACTION_CLEAN_FALLOUT:
+      case ACTION_CLEAN_POLLUTION:
       case ACTION_FORTIFY:
       case ACTION_CONVERT:
         /* No validation required. */

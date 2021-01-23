@@ -22,6 +22,8 @@
 // keeps track of when our info for this is fresh from either source. 
 var income_needs_refresh = false;
 
+var last_ground_attack_time = 0;
+
 /* Freeciv Web Client.
    This file contains the handling-code for packets from the civserver.
 */
@@ -204,6 +206,47 @@ function handle_tile_info(packet)
 
 
 /**************************************************************************
+  intercepts the E_UNIT_ACTION_TARGET_HOSTILE event which is only used
+  for ground attacks, then processes what needs to happen from it. 
+**************************************************************************/
+function handle_iPillage_event(message, tile_id)  // iPillage.
+{
+  var ptile = tiles[tile_id];
+  var ptype;
+  var delay = 0;
+  var cur_time = new Date().getTime();
+
+  for (ptype_id in unit_types) {
+    // Find out the unit_type who did this hostile deed !
+    ptype = unit_types[ptype_id];
+    if (message.includes(ptype['name'])) {
+
+      // The alt sound is preferred for alternate attack types:
+      var sskey = ptype['sound_fight_alt'];  
+      if (!sskey) sskey = ptype['sound_fight']; //fallback
+      if (!soundset[sskey]) sskey = ptype['sound_fight']; //fallback
+      play_hostile_event_sound(sskey, ptile, ptype);
+
+      break;
+    }
+  }
+  // Activate explosion on the tile also.
+  delay = 500; // synchronise explosion with sound effect
+  // times for each unit are in the top of unit.js:
+  if (ptype && unit_pillage_sound_delay_times[ptype.rule_name])
+    delay += unit_pillage_sound_delay_times[ptype.rule_name];
+
+  delayed_explosion(tile_id, delay);
+}
+function delayed_explosion(tile_id, delay_ms) {
+  setTimeout(() => { delayed_explosion_helper(tile_id);}, delay_ms);
+}
+function delayed_explosion_helper(tile_id) {
+  explosion_anim_map[tile_id] = 25;
+  anim_swords_instead[tile_id] = false;
+}
+
+/**************************************************************************
  100% complete.
 **************************************************************************/
 function handle_chat_msg(packet)
@@ -211,13 +254,21 @@ function handle_chat_msg(packet)
   var message = packet['message'];
   var event = packet['event'];
   var conn_id = packet['conn_id'];
-  var ptile = packet['tile'];
+  var tile_id = packet['tile'];
 
   if (message == null) return;
   if (event == null || event < 0 || event >= E_UNDEFINED) {
     console.log('Undefined message event type');
     console.log(packet);
     packet['event'] = E_UNDEFINED;
+  }
+
+  /* Event interceptions... mostly used to process sound effects but can be 
+     used to trigger any other client processing */
+  switch (event) {
+    case E_UNIT_ACTION_TARGET_HOSTILE:
+      handle_iPillage_event(message, tile_id);
+      break;
   }
 
   if (connections[conn_id] == null) {
@@ -230,9 +281,9 @@ function handle_chat_msg(packet)
         if (message.indexOf("/metamessage") != -1) return;  //don't spam message dialog on game start.
         if (message.indexOf("Metaserver message string") != -1) return;  //don't spam message dialog on game start.
 
-        if (ptile != null && ptile > 0) {
+        if (tile_id != null && tile_id > 0) {
         message = "<span class='chatbox_text_tileinfo' "
-            + "onclick='center_tile_id_click(" + ptile + ");'>" + message.replace("FFFFFF", "B0F0FF") + "</span>";
+            + "onclick='center_tile_id_click(" + tile_id + ");'>" + message.replace("FFFFFF", "B0F0FF") + "</span>";
         }
 
     if (is_speech_supported()) speak(message);
@@ -669,6 +720,7 @@ function handle_ruleset_control(packet)
     case "MP2":
     case "Avant-garde 2":
     case "Avant-garde":
+      client_rules_flag[CRF_MP2_A]=true;
       client_rules_flag[CRF_RADAR_TOWER]=true;
       client_rules_flag[CRF_EXTRA_HIDEOUT]=true;
       client_rules_flag[CRF_EXTRA_QUAY]=true;
@@ -677,6 +729,7 @@ function handle_ruleset_control(packet)
       $("#order_airbase").attr("title", "Build Airbase/Radar (Shift-E)");
 
     case "Multiplayer-Evolution ruleset":
+      client_rules_flag[CRF_MP2]=true;
       client_rules_flag[CRF_CARGO_HEURISTIC]=true;
       client_rules_flag[CRF_ASMITH_SPECIALISTS]=true;
       client_rules_flag[CRF_OASIS_IRRIGATE]=true;
@@ -724,15 +777,19 @@ function handle_ruleset_control(packet)
      override logic above */
   switch (ruleset_control['name']) {
     case "MP2 Caravel":
-      client_rules_flag[CRF_SIEGE_RAM]=true;
+      client_rules_flag[CRF_MP2_C] = true;
+      client_rules_flag[CRF_SIEGE_RAM] = true;
       client_rules_flag[CRF_MARINE_BASES] = true;
       client_rules_flag[CRF_MARINE_RANGED] = true;
       client_rules_flag[CRF_BSHIP_BOMBARD] = true;
       client_rules_flag[CRF_RECYCLING_DISCOUNT] = true;      
       client_rules_flag[CRF_COLOSSUS_DISCOUNT] = true;      
-    case "MP2 Brava":
+      client_rules_flag[CRF_SPECIAL_UNIT_ATTACKS] = true;      
+
+      case "MP2 Brava":
       // flags for brava that don't override/contradict caravel
-      client_rules_flag[CRF_SEABRIDGE] = true;      
+      client_rules_flag[CRF_SEABRIDGE] = true;
+      client_rules_flag[CRF_MP2_B] = true;
     break;
   }
 
@@ -1079,9 +1136,9 @@ function handle_unit_combat_info(packet)
   var tile_y = tiles[attacker['tile']]['y'];
 
   if (renderer == RENDERER_WEBGL) {
-    if (attacker_hp == 0) animate_explosion_on_tile(attacker['tile'], 0);
-    if (defender_hp == 0) animate_explosion_on_tile(defender['tile'], 0);
-    // TO DO: WEBGL is missing out on all this below, which we should put in after it's final
+    if (attacker_hp == 0) animate_explosion_on_tile(attacker['tile'], 0, false);
+    if (defender_hp == 0) animate_explosion_on_tile(defender['tile'], 0, false);
+      // TO DO: WEBGL is missing out on all this below, which we should put in after it's final
   } 
   
   else {
@@ -1103,15 +1160,21 @@ function handle_unit_combat_info(packet)
 
       // When an attacker loses, play sound for defender if: a combatant is visible OR the player was involved in the battle. 
       if (attacker_hp == 0 && (combatant_visible || player_is_combatant) )  {
-        if (combatant_visible) explosion_anim_map[attacker['tile']] = 25;
+        var win_type = unit_type(defender)['name'];
+        var swords = (units_pregunpowder.indexOf(win_type) >= 0);
+        if (combatant_visible) explosion_anim_map[attacker['tile']] = 25 - swords*1;
+        anim_swords_instead[attacker['tile']] = swords; 
 
         if (!combat_sound_special_case(attacker,attacker_hp,defender) ) // this function lets us program special cases sounds
           play_combat_sound(defender); //attacker lost, player defender combat sound
       }
       // When a defender loses, play sound for attacker if: a combatant is visible OR the player was involved in the battle.
       if (defender_hp == 0  && (combatant_visible || player_is_combatant) ) {
-        if (combatant_visible) explosion_anim_map[defender['tile']] = 25;
-        
+        var win_type = unit_type(attacker)['name'];
+        var swords = (units_pregunpowder.indexOf(win_type) >= 0);
+        if (combatant_visible) explosion_anim_map[defender['tile']] = 25 - swords*1;
+        anim_swords_instead[defender['tile']] = swords; 
+
         if (!combat_sound_special_case(attacker,attacker_hp,defender) ) // this function lets us program special cases sounds
           play_combat_sound(attacker); //defender lost, player attacker combat sound
       }

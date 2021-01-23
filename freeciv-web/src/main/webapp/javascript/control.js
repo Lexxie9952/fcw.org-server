@@ -606,8 +606,7 @@ function chat_context_set_next(recipients) {
 function chat_context_dialog_show(recipients) {
   var dlg = $("#chat_context_dialog");
   if (dlg.length > 0) {
-    dlg.dialog('close');
-    dlg.remove();
+    remove_active_dialog("#chat_context_dialog");
   }
   $("<div id='chat_context_dialog' title='Choose chat recipient'></div>")
     .appendTo("div#game_page");
@@ -678,6 +677,7 @@ function chat_context_dialog_show(recipients) {
   });
 
   $("#chat_context_dialog").dialog('open');
+  dialog_register("#chat_context_dialog");
 }
 
 /****************************************************************************
@@ -685,7 +685,7 @@ function chat_context_dialog_show(recipients) {
 ****************************************************************************/
 function handle_chat_direction_chosen(ev) {
   var new_send_to = $(this).data("chatSendTo");
-  $("#chat_context_dialog").dialog('close');
+  remove_active_dialog("#chat_context_dialog");
   if (new_send_to == null) {
     set_chat_direction(null);
   } else {
@@ -1325,8 +1325,12 @@ function update_unit_order_commands()
     // Figure out default of whether pillage is legal and show it, before applying special rules later
     if (get_what_can_unit_pillage_from(punit, ptile).length > 0
          && (pcity == null || city_owner_player_id(pcity) !== client.conn.playing.playerno)) {
+           var pillage_title = unit_has_dual_pillage_options(punit) 
+                               ? "Pillage / "+unit_get_pillage_name(punit)
+                               : unit_get_pillage_name(punit);
+            $("#order_pillage").prop('title', pillage_title+" (Shift-P)");
             $("#order_pillage").show();
-            unit_actions["pillage"] = {name: "Pillage (Shift-P)"};
+            unit_actions["pillage"] = {name: pillage_title+" (Shift-P)"};
     } else {
             $("#order_pillage").hide();
     }
@@ -1381,7 +1385,8 @@ function update_unit_order_commands()
       }
       if (can_build_sea_bridge(punit, ptile)) {
           unit_actions["road"] = {name: "Sea Bridge (R)"};
-      }
+          $("#order_road").prop('title', "Build Sea Bridge (R)");
+      } else $("#order_road").prop('title', "Build Road (R)")
 
       if (tile_has_extra(ptile, EXTRA_RIVER) && player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) == TECH_UNKNOWN) {
         $("#order_road").hide();
@@ -1608,7 +1613,6 @@ function update_unit_order_commands()
         }
       }
       if (client_rules_flag[CRF_RECYCLING_DISCOUNT]) {
-        console.log("recycling present")
         if (player_invention_state(client.conn.playing, tech_id_by_name('Recycling')) == TECH_KNOWN) {
           cost_adjust -= 20; // 20% discount after Recycling Tech
         }
@@ -3037,6 +3041,11 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
       if (!alt && !ctrl && !shift) { // also key_code 112 (F1)
         $('#ui-id-1').trigger("click");
         chatbox_scroll_to_bottom(false);
+        // Close dialogs that dialog_key_listener can't intercept:          
+        if (active_dialogs.length) {
+          the_event.stopPropagation();
+          remove_active_dialog(active_dialogs.pop());
+        }
       } else if (alt && !ctrl && !shift) {
           // warcalc tab
           $("#ui-id-8").trigger("click");
@@ -3906,6 +3915,7 @@ function key_unit_load()
       for (var i = 0; i < units_on_tile.length; i++) {
         //console.log("        CHECKING punit["+i+"] on tile");
         var punit = units_on_tile[i]; // iterate to next unit on tile
+        if (punit == sunits[s]) continue;
         // Attempt to load units on selected Transport IFF unit is not already loaded on a Transport.
         // (TODO: also skip units who have their own cargo? May be edge cases?)
         if (!punit['transported'] 
@@ -3917,11 +3927,14 @@ function key_unit_load()
             "transporter_tile" : punit['tile']
           };
           send_request(JSON.stringify(packet1));
+          //console.log("punit=="+unit_type(punit)['name']+".  sel_unit=="+stype['name']+". ucpl=="
+          //    + unit_could_possibly_load(punit, unit_type(punit), stype, get_unit_class(sunits[s])));
           did_scoop = true;
         }
       }
     } // else { /* sunit is not a transport, don't attempt to do SCOOPING /* }
   }
+  //console.log("did_scoop == "+did_scoop);
 
   // We don't simultaneously mix scoop 'L' with embark 'L' or we could get a recusrive tangle.
   if (did_scoop) {
@@ -3947,6 +3960,9 @@ function key_unit_load()
       if (tunit['id'] == punit['id']) continue;
       ttype = unit_type(tunit);
       tclass = unit_classes[ttype.unit_class_id];
+
+      // Cargo is already on transport--excluded it as candidate:
+      if (punit['transported_by'] == tunit['id']) continue;
 
       if (ttype['transport_capacity'] > 0) {
         // add candidate to list
@@ -3974,7 +3990,7 @@ function key_unit_load()
       var id = "";
       var buttons = [];
       id = "#load_unit_dialog_" + punit['id'];
-      $(id).remove();     // Reset dialog page.
+      remove_active_dialog(id);  // Reset dialog page.
       $("<div id='load_unit_dialog_" + punit['id'] + "'></div>").appendTo("div#game_page");
 
       var home_city_name = "";
@@ -4020,6 +4036,7 @@ function key_unit_load()
         width: is_small_screen() ? $( window ).width() : "575",
         fluid: true     });
       $(id).dialog('open');
+      dialog_register(id);
     }
     // otherwise, only one transporter candidate, load automatically with no GUI input from user:
 /* this had a bug and tried loading on the first transporter ID while ignoring the work we did to
@@ -4476,24 +4493,25 @@ function key_unit_sentry()
     var ptile = unit_tile(punit)
     var pcity = tile_city(ptile);
 
-    // HANDLE UNITS WHO SOMETIMES CAN'T SENTRY:
-    // ********************************************************************
-    // 3.09 server can't sentry fuel-Triremes on shore/river.
-    if (client_rules_flag[CRF_TRIREME_FUEL] && class_name == "Trireme") {
-      if (pcity == null) {
-        if (typeof EXTRA_NAVALBASE !== "undefined") {
-          if (!tile_has_extra(ptile, EXTRA_NAVALBASE)) {
-            key_unit_noorders();
-          }
-        } else key_unit_noorders();
+    // Server can now handle Trireme sentry on coast, so only thing to check is...
+    // Trireme on a tile that can't sentry receives no_orders:
+    if (client_rules_flag[CRF_TRIREME_FUEL] && class_name == "Trireme") {   
+      // 0==land,1==water.  Check the tile we're on: it might be a river on a tiny isle:
+      var no_coast_near = tile_terrain(ptile)['tclass']; // 0==false if it's land
+
+      for (var t=0; t < num_cardinal_tileset_dirs; t++) {
+        var dir = cardinal_tileset_dirs[t];
+        var checktile = mapstep(ptile, dir);
+        var pterrain = tile_terrain(checktile);
+        // if NEITHER graphic_str NOR graphic_alt is 'coast', it's land:
+        if (pterrain['tclass'] == 0) no_coast_near = false; // 0==land
       }
-      else {
-        request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
-        remove_unit_id_from_waiting_list(punit['id']);
-      }
+      if (no_coast_near == true) key_unit_noorders();
+      // else go ahead and sentry later below...
     }
+
     // IFF these units can't sentry, then S is synonymous with "No Orders":
-    else if (   class_name == "Helicopter"
+    if (   class_name == "Helicopter"
              || class_name == "Air"
              || class_name == "AirProtect" 
              || class_name == "AirPillage"
@@ -4540,7 +4558,16 @@ function key_unit_fortify()
   var funits = get_units_in_focus();
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
-    request_new_unit_activity(punit, ACTIVITY_FORTIFYING, EXTRA_NONE);
+    // sentry before fortify will make units who can fortify override 
+    // sentry, whereas units who can't will sentry. this is a UI convenience
+    // for hitting F on a whole stack and making it do the best option it has.
+    
+    if (!unit_has_class_flag(punit, UCF_CAN_FORTIFY) 
+      || unit_has_type_flag(punit,UTYF_CANT_FORTIFY)) {
+
+        request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
+    }
+    else request_new_unit_activity(punit, ACTIVITY_FORTIFYING, EXTRA_NONE);
     // remove from waiting list
     remove_unit_id_from_waiting_list(punit['id']);
   }
@@ -4890,13 +4917,23 @@ function key_unit_pillage()
   var funits = get_units_in_focus();
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
+    var pstats = unit_get_extra_stats(punit);
     var tgt = get_what_can_unit_pillage_from(punit, null);
     //if (tgt) console.log("Unit can pillage "+tgt.length+" targets: "+tgt);
     if (tgt.length > 0) {
-      if (tgt.length == 1) {
-        request_new_unit_activity(punit, ACTIVITY_PILLAGE, EXTRA_NONE);
-      } else {
-        popup_pillage_selection_dialog(punit);
+      // handle iPillage of multiple targets:
+      if (pstats.iPillage_random_targets) {
+        for (i = 0; i < pstats.iPillage_random_targets; i++) {
+          request_new_unit_activity(punit, ACTIVITY_PILLAGE, EXTRA_NONE);
+        }
+      }
+      // handle one target cases:
+      else {
+        if (tgt.length == 1 && !(unit_has_dual_pillage_options(punit))) {
+          request_new_unit_activity(punit, ACTIVITY_PILLAGE, EXTRA_NONE);
+        } else {
+          popup_pillage_selection_dialog(punit);
+        }
       }
     }
   }
@@ -6430,4 +6467,52 @@ function check_mouse_drag_unit(ptile)
   if (ptile_units.length > 1) {
      update_active_units_dialog();
   }
+}
+/**************************************************************************
+  Pop-up at game start to enter fullscreen. We might use a browser but we
+  are a full-screen game, damn it!
+**************************************************************************/
+function popup_fullscreen_enter_game_dialog()
+{
+  id = "#fullscreen_dialog";
+  remove_active_dialog(id);  /* Reset dialog page. */
+  $("#fullscreen_dialog").css("white-space","pre-wrap"); // allow \n to work.
+  $("<div id='fullscreen_dialog'></div>").appendTo("div#game_page");
+
+  $(id).html("ALT-S  =  toggle");
+
+  var buttons = { 'Yes!': function()
+                 { openFullscreen(); remove_active_dialog(id); },
+                  'No': function() {remove_active_dialog(id);} };
+  $(id).attr("title", "Full Immersion Mode");
+  $(id).dialog({bgiframe: true, modal: true, buttons: (buttons), height: "auto", width: "400"});
+  $(id).dialog('open'); $(id).dialog('widget').position({my:"center", at:"center", of:window})
+  dialog_register(id);
+}
+/****************************************************************************
+ This function opens full screen mode.
+****************************************************************************/
+function openFullscreen() {
+  var elem = document.documentElement;
+  if (!elem) {
+    if (active_dialogs.length) { 
+      var dialog_id = active_dialogs.pop();
+      remove_active_dialog(dialog_id);
+     }
+    return;
+  }
+
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) { /* Safari */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE11 */
+    elem.msRequestFullscreen();
+  }
+  // clicking anywhere will restore you back!
+  $('html').click( function() {
+    if(!document.fullscreenElement){
+      $('html')[0].requestFullscreen();
+    }
+  });
 }

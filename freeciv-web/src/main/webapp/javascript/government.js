@@ -44,7 +44,7 @@ function show_revolution_dialog()
   }
 
   var id = "#revolution_dialog";
-  $(id).remove();
+  remove_active_dialog(id);
   $("<div id='revolution_dialog'></div>").appendTo("div#game_page");
 
   if (client.conn.playing == null) return;
@@ -64,17 +64,15 @@ function show_revolution_dialog()
 			width: is_small_screen() ? "99%" : revo_width,
 			height: is_small_screen() ? $(window).height() - 40 : (revo_height+extended_height),
 			  buttons: {
-				"Start revolution!" : function() {
-					start_revolution();
-					$("#revolution_dialog").dialog('close');
-				}
+          "Start revolution!" : function() {
+            start_revolution();
+            remove_active_dialog("#revolution_dialog");
+				  }
 			  }
-
   });
 
-
+  dialog_register(id);
   update_govt_dialog();
-
 }
 
 /**************************************************************************
@@ -329,11 +327,11 @@ function show_climate_dialog(rtype)
           + "</span><br>";
 
   message += "<span title='The current tolerance of the climate after exposure to recent impacts. This represents the natural reduction per turn that the Earth can ecologically absorb and process, and thus, also the tolerance beyond which global warming has a chance to trigger.'>"
-          +"<b>Global Warming Tolerance</b>: " + game_info['warminglevel'] 
+          +"<b>Global Warming Tolerance</b>: " + (game_info['warminglevel']*100)/server_settings['globalwarming_percent']['val']
           + "<span title='One unit of Accumulated Climate Stress, whether in measuring impact to climate, or tolerance to that stress.'> ACS </span>"
           + "</span><br>";
 
-  message += "<span title='This is a server setting. Higher numbers make Global Warming more likely, by secretly lowering the Global Warming Tolerance shown above. Default of 100% = unchanged.'>"
+  message += "<span title='This is a server setting. Higher numbers make Global Warming more likely, by altering the Global Warming Tolerance shown above. Default of 100% = unchanged.'>"
           +"<b>Global Warming Percent</b>:&nbsp;&nbsp;&nbsp; " + server_settings['globalwarming_percent']['val']
           + "%</span><br><br>";
 
@@ -353,11 +351,11 @@ function show_climate_dialog(rtype)
           + "</span><br>";
 
   message += "<span title='The current tolerance of the climate after exposure to recent impacts. This represents the natural reduction per turn that the Earth can ecologically absorb and process, and thus, also the tolerance beyond which nuclear winter has a chance to trigger.'>"
-          + "<b>Nuclear Winter Tolerance</b>: " + game_info['coolinglevel']
+          + "<b>Nuclear Winter Tolerance</b>: " + (game_info['coolinglevel']*100)/server_settings['nuclearwinter_percent']['val']
           + "<span title='One unit of Accumulated Climate Stress, whether in measuring impact to climate, or tolerance to that stress.'> ACS </span>"
           + "</span><br>";
 
-  message += "<span title='This server is a setting. Higher numbers make Nuclear Winter more likely, by secretly lowering the Nuclear Winter Tolerance shown above. Default of 100% = unchanged.'>"
+  message += "<span title='This is a server setting. Higher numbers make Nuclear Winter more likely, by altering the Nuclear Winter Tolerance shown above. Default of 100% = unchanged.'>"
           +"<b>Nuclear Winter Percent</b>:&nbsp;&nbsp;&nbsp; " + server_settings['nuclearwinter_percent']['val'] 
           + "%</span><br><br>";
         
@@ -366,7 +364,7 @@ function show_climate_dialog(rtype)
   else if (game_info['nuclearwinter'] > game_info['coolinglevel'] *.5)
       message += "Scientists are concerned that fallout impact is too close to Climate Tolerance levels.<br>"
 
-  $("#dialog").remove();
+  remove_active_dialog("#dialog");
   $("<div id='dialog'></div>").appendTo("div#game_page");
 
   $("#dialog").html(message);
@@ -376,11 +374,12 @@ function show_climate_dialog(rtype)
       modal: true,
       width: is_small_screen() ? "90%" : "40%",
       buttons: {
-        Close: function() {
-          $("#dialog").dialog('close');
+        'Close (W)': function() {
+          remove_active_dialog("#dialog");
         }
       }
     });
 
   $("#dialog").dialog('open');
+  dialog_register("#dialog");
 }

@@ -222,6 +222,16 @@ helptext      = _("\
   • Only able to move on road tiles.\
 ")
 
+[unitclass_cargo]
+name          = _("?unitclass:Cargo")
+min_speed     = 1
+hp_loss_pct   = 0
+flags         = "BuildAnywhere", "ZOC", "TerrainDefense", "TerrainSpeed"
+helptext      = _("\
+  • Only able to move on road tiles.\n\
+  • Pays no penalty for recycling production into Units, Buildings, or Wonders.\
+")
+
 [unitclass_land]
 ; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Land")
@@ -688,7 +698,7 @@ class         = "Land"
 tech_req      = "None"
 obsolete_by   = "None"
 graphic       = "u.tribesmen"
-graphic_alt   = "u.engineers" ; for compatibility
+graphic_alt   = "u.migrants"
 sound_move    = "m_worker"
 sound_move_alt = "m_generic"
 sound_fight   = "f_worker"
@@ -707,7 +717,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "NoBuild", "HasNoZOC", "Cant_Fortify", "Capturable", "Expellable"
+flags         = "NoBuild", "HasNoZOC", "Cant_Fortify", "Capturable", "Expellable", "Cant_Pillage"
 roles         = "DefendGoodStartUnit"  ; re-purposed from Phalanx
 helptext      = _("\
 Tribesmen are ancestors whose contributions are forgotten\
@@ -870,7 +880,7 @@ class         = "Land"
 tech_req      = "Pottery"
 obsolete_by   = "Engineers"
 graphic       = "u.worker"
-graphic_alt   = "u.engineers" ; for compatibility
+graphic_alt   = "u.migrants"
 sound_move    = "m_worker"
 sound_move_alt = "m_generic"
 sound_fight   = "f_worker"
@@ -926,7 +936,7 @@ graphic_alt   = "u.worker"
 sound_move    = "m_engineers"
 sound_move_alt = "m_generic"
 sound_fight   = "f_engineers"
-sound_fight_alt = "f_generic"
+sound_fight_alt = "Demolishment"
 build_cost    = 40
 pop_cost      = 0
 attack        = 0
@@ -1020,8 +1030,9 @@ convert_to    = "Musketeers"
 convert_time  = 4
 transport_cap = 0
 fuel          = 0
-city_size     = 278 ; 000000,000,001,000101,1,0 atk_bonus=0, max_kiils=0, targets=1, move_cost=5 frags, stay_frtfy=1, reserverd=0
-paratroopers_mr_sub = 1;   xxx,000,0,1 - iPill move_cost=0, iPillage=0, attack_stay_fortified=1
+city_size     = 278     ;000000,000,001,000101,1,0 atk_bonus=0, max_kiils=0, targets=1, move_cost=5 frags, stay_frtfy=1, reserverd=0
+paratroopers_mr_sub = 1 ;00,0000,000,0,1 iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
+;NOTE: iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1070,7 +1081,8 @@ convert_time  = 2
 transport_cap = 0
 fuel          = 0
 city_size     = 1850 ; 000000,000,111,001110,1,0 = atk_bonus=0, max_kills=0, targets=7, move_cost=14 frags, stay_fortfy=1, reserved = 0
-paratroopers_mr_sub = 0;   xxx,000,0,1 - iPill move_cost=0, iPillage=0, attack_stay_fortified=0
+paratroopers_mr_sub = 0 ;00,0000,000,0,0 iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
+;NOTE: iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1083,7 +1095,8 @@ helptext      = _("\
 Archers fight with bows and arrows. They have good offense and decent defense.\
  Rather than fight to the death, Archers can also do a Ranged Attack with no risk\
  of retaliatory damage: two volleys of arrows are fired on up to 7 enemy units on the tile,\
- causing 1-2hp of damage to any units who are hit. This is useful for softening\
+ causing 1-2hp of damage to any units who are hit. This includes Oceanic tiles if not\
+ transported. This is useful for softening\
  enemies prior to battle, or for deterring an approach to a strategic location.\
  (Ranged Attack is not possible on Cities or Fortresses.)\n\
  With the discovery of Conscription, Archers can convert to Musketeers in any domestic city.\
@@ -1248,7 +1261,7 @@ move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
-city_size     = 568; 000000,0,010,001110,00 = atk_bonus=0, max_kills=0, targets=4, move_cost=14 frags, sty_frtfy=0, reserved = 0
+city_size     = 1080; 000000,0,100,001110,0,0 = atk_bonus=0, max_kills=0, targets=4, move_cost=14 frags, sty_frtfy=0, reserved = 0
 uk_happy      = 2
 uk_shield     = 2
 uk_food       = 0
@@ -1346,7 +1359,8 @@ convert_time  = 2
 transport_cap = 0
 fuel          = 0
 city_size     = 2;  ...xxxxx..., 1, 0  use bombard_stay_fortified on a non-bombard unit to specify can remain fortified when attacking.
-paratroopers_mr_sub = 0;   xxx,000,0,1 - iPill move_cost=0, iPillage=0, attack_stay_fortified=0
+paratroopers_mr_sub = 0 ;00,0000,000,0,0 iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
+;NOTE: iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1425,8 +1439,9 @@ move_rate     = 2
 vision_radius_sq = 8  ; hard-coded the +4 extra for effect_physics_vision since it is a pre-req anyway
 transport_cap = 0
 fuel          = 0
-city_size     = 2618 ; 000000,001,010,001110,1,0 = atk_bonus=0, max_kills=1, targets=4, move_cost=14 frags, stay_frtfy=1, reserved = 0
-paratroopers_mr_sub = 1;   xxx,000,0,1 - iPill move_cost=0, iPillage=0, attack_stay_fortified=1
+city_size     = 2618 ; 000000,001,010,001110,1,0 = atk_bonus=0, max_kills=1, targets=2, move_cost=14 frags, stay_frtfy=1, reserved = 0
+paratroopers_mr_sub = 1 ;00,0000,000,0,1 iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=1
+;NOTE: iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1460,10 +1475,11 @@ Marines are experts at all-terrain warfare. They are the strongest\
  without losing a turn of movement. Marines can also makes Forts\
  and Airbases. Marines get an extra 2/9 movement points for each\
  veteran level they possess. Starting at v2, they gain the ability\
- to do bazooka ranged attacks for 3 combat rounds, hitting up to 4\
- units on the tile and killing a maximum of 1.\n\
+ to do Bazooka ranged attacks for 3 combat rounds, hitting up to 2\
+ units on the tile and killing a maximum of 1. Bazooka attacks can\
+ be done to Oceanic tiles if the Marines aren't transported.\n\
  Marines built in a city with an Airport, Port Facility, and Barracks III\
- receive the second veteran level (hardened.)\
+ receive an extra veteran level.\
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
@@ -1803,7 +1819,7 @@ graphic_alt   = "-"
 sound_move    = "m_armor"
 sound_move_alt = "m_generic"
 sound_fight   = "f_armor"
-sound_fight_alt = "f_generic"
+sound_fight_alt = "Blitz Sack"
 build_cost    = 80
 pop_cost      = 0
 attack        = 10
@@ -1814,6 +1830,8 @@ move_rate     = 6
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
+paratroopers_mr_sub = 170 ;00,0101,010,1,0 iPill_rand_tgts=0, iPill_odds=-5 pentads=75%, iPill_moves=2, iPillage=1, ATK_Stay_Fortified=0
+;NOTE: iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1840,7 +1858,7 @@ graphic_alt   = "u.armor"
 sound_move    = "m_armor_ii"
 sound_move_alt = "m_armor"
 sound_fight   = "f_armor_ii"
-sound_fight_alt = "f_armor"
+sound_fight_alt = "Blitz Sack"
 build_cost    = 85
 pop_cost      = 0
 attack        = 16
@@ -1851,6 +1869,8 @@ move_rate     = 6
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
+paratroopers_mr_sub = 170 ;00,0101,010,1,0 iPill_rand_tgts=0, iPill_odds=-5 pentads=80%, iPill_moves=2, iPillage=1, ATK_Stay_Fortified=0
+;NOTE: iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1949,7 +1969,7 @@ Siege Rams can only travel by road. They can carry 1 Land\
 Siege Rams need an escort for protection. They need a minimum of\
  1 move point to attack walls, and 1 1/9 points against a Fortress.\
  Cities protected by the Great Wall are immune to Siege Rams.\n\
- The discovery of Steel by any nation incapacitates Siege Rams.\
+ The discovery of Metallurgy by any nation incapacitates Siege Rams.\
 ")
 bombard_rate = 4
 
@@ -2361,7 +2381,7 @@ graphic_alt   = "-"
 sound_move    = "m_dive_bomber"
 sound_move_alt = "m_escort_fighter"
 sound_fight   = "f_dive_bomber"
-sound_fight_alt = "f_artillery"
+sound_fight_alt = "Ground Strike"
 build_cost    = 60
 pop_cost      = 0
 attack        = 3
@@ -2372,6 +2392,8 @@ move_rate     = 18
 vision_radius_sq = 12
 transport_cap = 0
 fuel          = 1
+paratroopers_mr_sub = 346 ;00,1010,110,1,0 - iPill_rand_tgts=0, iPill_odds=-10 pentads=50%, iPill_moves=6, iPillage=1, attack_stay_fortified=0
+;NOTE: iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
@@ -2389,8 +2411,7 @@ bonuses       =
      ; D4 vs Anti-Air
      "AntiAir",        "DefenseMultiplierPct",       33 
    }
-flags         = "AirAttacker", "Unbribable", "CanEscape",
-                "NeverProtects", "Provoking", "WillNever"
+flags         = "AirAttacker", "Unbribable", "CanEscape", "NeverProtects", "Provoking", "WillNever"
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -2547,7 +2568,7 @@ graphic_alt   = "u.bomber"
 sound_move    = "m_strategic_bomber"
 sound_move_alt = "m_bomber"
 sound_fight   = "f_strategic_bomber"
-sound_fight_alt = "f_bomber"
+sound_fight_alt = "Bomb"
 build_cost    = 135
 pop_cost      = 0
 attack        = 13
@@ -2558,6 +2579,8 @@ move_rate     = 16
 vision_radius_sq = 12
 transport_cap = 2
 fuel          = 3
+paratroopers_mr_sub = 782 ;01,1000,011,1,0 - iPill_rand_tgts=1, iPill_odds=-8 pentads=60%, iPill_moves=3, iPillage=1, ATK_Stay_Fortified=0
+;NOTE: iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -2584,7 +2607,8 @@ veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 The Strategic Bomber offers a small improvement in attack. Higher altitude offers a good upgrade in\
- defense. It has considerably longer range, with one more turn of fuel. May carry two Bombs.\
+ defense. It has considerably longer range, with one more turn of fuel. Upgraded payload enables\
+ instant-Pillage bombing. May carry two Bombs.\
 "), _("
 NOTE: GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
@@ -2913,8 +2937,8 @@ graphic       = "u.strike_fighter"
 graphic_alt   = "-"
 sound_move    = "m_strike_fighter"
 sound_move_alt = "m_jet_fighter"
-sound_fight   = "f_medium_bomber"
-sound_fight_alt = "f_artillery"
+sound_fight   = "f_fighter"
+sound_fight_alt = "Ground Strike"
 build_cost    = 80
 pop_cost      = 0
 attack        = 7
@@ -2925,7 +2949,8 @@ move_rate     = 21
 vision_radius_sq = 12
 transport_cap = 0
 fuel          = 2
-paratroopers_mr_sub = 15;   xxx,011,1,1 - iPill move_cost=3, iPillage=1, attack_stay_fortified=1
+paratroopers_mr_sub = 178 ;00,0101,100,1,0 - iPill_rand_tgts=0, iPill_odds=-5 pentads=75%, iPill_moves=4, iPillage=1, ATK_Stay_Fortified=0
+;NOTE: iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
@@ -2971,7 +2996,7 @@ graphic_alt   = "u.bomber"
 sound_move    = "m_jet_bomber"
 sound_move_alt = "m_bomber"
 sound_fight   = "f_jet_bomber"
-sound_fight_alt = "f_bomber"
+sound_fight_alt = "Carpet Bomb"
 build_cost    = 145
 pop_cost      = 0
 attack        = 15
@@ -2982,7 +3007,8 @@ move_rate     = 19
 vision_radius_sq = 12
 transport_cap = 3
 fuel          = 3
-paratroopers_mr_sub = 11;   xxx,010,1,1 - iPill move_cost=2, iPillage=1, attack_stay_fortified=1
+paratroopers_mr_sub = 1198 ;10,0101,011,1,0 - iPill_rand_tgts=2, iPill_odds=-5 pentads=75%, iPill_moves=3, iPillage=1, ATK_Stay_Fortified=0
+;NOTE: iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -3007,8 +3033,8 @@ roles         = ""
 helptext      = _("\
 Jet Bombers are stratospheric long-range bombers with 3 turns of fuel: they can be airborne for two\
  turn-changes. Their range makes them useful even after Stealth Bombers are available. Stratospheric\
- altitude is unreachable to propeller-based Fighters and AAA. Jet Bombers can carpet-bomb,\
- pillaging tiles from the air. May carry three Bombs.\ 
+ altitude is unreachable to propeller-based Fighters and AAA. Jet Bombers can Carpet Bomb, an\
+ instant-Pillage of tiles from the air. May carry three Bombs.\ 
 "), _("
 NOTE: GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
@@ -3349,7 +3375,6 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "CantReachAir", "Only_Native_Attack", "WillNever"
 roles         = "Hunter"
 helptext      = _("\
@@ -3841,7 +3866,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad", "Cargo"
 flags         = "BadCityDefender", "HelpWonder", "Traderoute", "NonMil", "HasNoZOC", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -3881,7 +3906,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad", "Cargo"
 bonuses       =
    { "flag", "type", "value"
      "Marines", "DefenseMultiplier", 1    
@@ -4081,7 +4106,7 @@ If you have Fusion Power and the Manhattan Project was built, a Doomsday Bomb\
 "), _("\
 The Fallout from a Doomsday Bomb is a sure ticket to Nuclear Winter.\
 ")
-bombard_rate = 25    ; radius = sqrt(27) = 5.19
+bombard_rate = 63     ; radius = sqrt(43) = 7.93
 
 [unit_nuclear_missile]
 name          = _("Nuclear Missile")
@@ -4141,7 +4166,7 @@ sound_move    = "m_nuclear"
 sound_move_alt = "m_generic"
 sound_fight   = "f_nuclear"
 sound_fight_alt = "f_generic"
-build_cost    = 140
+build_cost    = 130
 pop_cost      = 0
 attack        = 100
 defense       = 0
@@ -4345,8 +4370,8 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
-cargo         = "Land", "LandAirSea", "Balloon", "Bomb", "LandRoad"
-flags         =  "HelpWonder", "TradeRoute", "NonMil", "HasNoZOC", "NoVeteran", "Capturable"
+cargo         = "Land", "LandAirSea", "Balloon", "Bomb", "LandRoad", "Cargo"
+flags         =  "HelpWonder", "TradeRoute", "NonMil", "HasNoZOC", "Cant_Fortify", "NoVeteran", "Capturable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0
@@ -4381,7 +4406,7 @@ attack        = 0
 defense       = 1
 hitpoints     = 10
 firepower     = 1
-move_rate     = 5
+move_rate     = 6
 vision_radius_sq = 4
 transport_cap = 3
 fuel          = 0
@@ -4389,8 +4414,8 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandAirSea", "Bomb"
-flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Fortify"
+cargo         = "Land", "LandAirSea", "Bomb", "Cargo"
+flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "NoVeteran", "Cant_Pillage"
 roles         = ""
 helptext      = _("\
 The Truck unit replaces the Caravan as the basic Commerce unit on Land. It moves at\
@@ -4400,6 +4425,46 @@ The Truck unit replaces the Caravan as the basic Commerce unit on Land. It moves
 Trucks can carry 3 Land units. Only Foot Soldiers can:\n1. L)oad outside a city or base;\n\
 2. Unload (T) in a base;\n3. Move off the Truck outside a city\
  (loses all moves.)\nAll other units must load/unload inside a city.\n\n\\
+")
+
+[unit_freight]
+name          = _("Freight")
+class         = "Cargo"
+tech_req      = "Mass Production"
+obsolete_by   = "None"
+graphic       = "u.container"
+graphic_alt   = "u.freight"
+sound_move    = "m_generic"
+sound_move_alt = "m_generic"
+sound_fight   = "f_generic"
+sound_fight_alt = "f_generic"
+build_cost    = 25
+pop_cost      = 0
+attack        = 0
+defense       = 0
+hitpoints     = 1
+firepower     = 1
+move_rate     = 1
+vision_radius_sq = 2
+transport_cap = 0
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+flags         = "HelpWonder", "TradeRoute", "NonMil", "HasNoZOC", "Capturable", "Cant_Fortify", "NoVeteran", "Cant_Pillage"
+roles         = ""
+helptext      = _("\
+The methodical logistics of modern shipping render the Freight unit: a cargo\
+ container separate from the transport vehicle. Freight brings benefits of\
+ organized efficiency. Like all Commerce units, it can Help Build\
+ Wonders, and Establish Trade Route or Enter Marketplace (with a lower unit cost.)\
+ Unlike other Commerce units, it can Disband to Recycle Production with\
+ no net loss in shields. This gives Freight a variety of creative industrial uses. \n\
+"), _("\
+By itself, Freight is only able to move to tiles with loading infrastructure:\
+ Cities, Quays, Fortresses, and Naval Bases. To be transported, it must be carried\
+ by train, truck, or ship.\
 ")
 
 [unit_explorer]

@@ -32,6 +32,9 @@ var SPECENUM_COUNT = 10;
 var clause_infos = {};
 var diplomacy_clause_map = {};
 
+// sneaky way to send second parameter to key listener.
+var last_dialog_counterpart = -1; 
+
 /**************************************************************************
  ...
 **************************************************************************/
@@ -339,7 +342,7 @@ function create_diplomacy_dialog(counterpart, template) {
 				"Accept treaty": function() {
 				    accept_treaty_req(counterpart_id);
 				},
-				"Cancel meeting" : function() {
+				"Cancel meeting (W)" : function() {
 				    cancel_meeting_req(counterpart_id);
 				}
 			},
@@ -356,6 +359,8 @@ function create_diplomacy_dialog(counterpart, template) {
              "minimize" : "ui-icon-circle-minus",
              "restore" : "ui-icon-bullet"
            }});
+
+  diplomacy_dialog_register("#diplomacy_dialog_" + counterpart_id,counterpart_id);
 
   var nation = nations[pplayer['nation']];
   if (nation['customized']) {
@@ -405,6 +410,40 @@ function create_diplomacy_dialog(counterpart, template) {
   diplomacy_dialog.css("overflow", "visible");
   diplomacy_dialog.parent().css("z-index", 1000);
 }
+
+/**************************************************************************
+ Custom registration for diplomacy dialog, so that proper cleanup triggered
+ when player hits 'W' to close pop-up dialog.  
+**************************************************************************/
+function diplomacy_dialog_register(id, counterpart_id) 
+{
+  $(id).dialog('widget').keydown(
+    function() {
+      //sneaky way to send a parameter to key listener
+      last_dialog_counterpart = counterpart_id;
+      diplomacy_dialog_key_listener(event);
+    });
+  $(id).dialog({ autoOpen: true }).bind('dialogclose', function(event, ui) { 
+    cancel_meeting_req(counterpart_id);
+  });
+}
+/*********************************************************************** */
+function diplomacy_dialog_key_listener(ev)
+{
+/* Get counterpart_id from global var that was set microseconds ago by
+   the wrapper to this (since keylistener can't take a second parameter): */
+  counterpart_id = last_dialog_counterpart;  
+  // Check if focus is in chat field, where these keyboard events are ignored.
+  if ($('input:focus').length > 0 || !keyboard_input) return;
+  if (C_S_RUNNING != client_state()) return;
+
+  var keyboard_key = String.fromCharCode(ev.keyCode).toUpperCase();
+  if (keyboard_key == 'W') {
+        ev.stopPropagation();
+        cancel_meeting_req(counterpart_id);
+  }
+}
+/************************************************************************ */
 
 function meeting_paint_custom_flag(nation, flag_canvas)
 {

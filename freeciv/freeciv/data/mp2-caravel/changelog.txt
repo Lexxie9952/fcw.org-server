@@ -6,9 +6,8 @@ Ongoing goals of MP2-Caravel
 4. Enhance Trade routes and other mechanics to increase the Diplomatic / Economic bloc / Sovereign concerns of
    each individual nation:  Nerf mechanics forcing gang-alliance loyalties.
 
-
 BUILDINGS AND WONDERS:
-1. Colossus: +1 trade on ALL tiles (not just existing trade), +1 trade on city center, -5 cost on most commerce units built in that city.
+1. Colossus: +1 trade on city center, -5 cost on most commerce units built in that city.
 2. Hanging Gardens now costs 210 and is obsolete by Steam Engine: 
    increase diversity of other early wonder strategies
    encourage Frigates before Ironclads
@@ -19,67 +18,80 @@ BUILDINGS AND WONDERS:
 GOVERNMENT RE-BALANCE:
 * ALL NON-REPRESENTATIVE GOVERNMENTS:
 1. Courthouse gives +1 content to all govs, not just Democracy 
-2. Statue of Zeus makes 1 citizen content about military for govs who need that, and for those who don't, simply 1 citizen content.
-3. Also see: Police Station
+2. Statue of Zeus makes 1 citizen content about military for govs who need that, and if not, simply 1 citizen content.
 * FUNDAMENTALISM:
 1. Fundamentalist govs are harder to bribe, cost is 2x.
-2. A Pilgrim may use ONE of the multi-build-slots in a city with Conscription bonus, along with Foot Soldiers (e.g. Fanatics)
-3. Fundamentalist government now joins Democracy/Communism to get the "generate partisans" effect.
+2. Pilgrams have no pop_cost. Effectively, it's rapture that costs 10 shields. Pilgrims use ONE city-build-slot instead of all.
+3. Fundamentalist now gets the "generate partisans" effect.
 4. Fanatics can skirmish assault cities which have foreign populations (e.g., your recently conquered city)
-5. Pilgrams have no pop_cost. Effectively, it's "rapture you can geographically direct, for 10 shields"
-6. -50% bulbs in exchange for basically free upkeep on temples and make_content buildings, was a raw deal. 
-   a. in addition to the 1 gold for every +1 content, penalties are symmetric balanced now, -20% for sci, +20% for gold.
+5. -50% bulbs in exchange for free upkeep on temples/make_content buildings, was a penalty. Changed to:  
+   a. Bonus/penalty is symmetric now: -20% for sci, +20% for gold.
 * COMMUNISM:
-1. A Proletarian may use ONE of the multi-build-slots in a city with Conscription bonus, along with Foot Soldiers (e.g. Riflemen)
-2. Communists 10 shield discount on Armor.
-3. Proletarians have 1 pop_cost but add 2 pop. Essentially same +1 net pop as Pilgrims, but can magnify helping out "boom-towns" to grow.
+1. Proletarians have 1 pop_cost but add 2 pop. Same +1 net pop as Pilgrims, but can better use granary dynamics and magnify "boom-town" growth. One city build slot used, not all.
+2. Communists: 10 shield discount on Armor I.
 * DEMOCRACY:
-1. Democracy has base corruption level of 8%, (50% of Republic/Monarchy)
-2. Democracy corruption increases by 0.4% per tile from capital (1/5 that of other govs)
-3. Democracies can now be BRIBED, but costs 3x. 
-4. Democacies can now be INCITED TO REVOLT, but costs 3x.
+1. Democracy has base corruption level of 8%, (half of Republic/Monarchy)
+2. Democracy: corruption increases by 0.4% per tile from capital (1/5 that of most other govs (=2%))
+3. Democracies can now be BRIBED, but cost is 3x. 
+4. Democacies can now be INCITED TO REVOLT, but cost is 3x.
 5. Also see, Hanging Gardens, Police Station
 
 UNITS/COMBAT/MECHANICS:
 * FOOT UNITS
-1. Early foot soldiers can convert to Musketeers for free in domestic cities upon discovering Conscription.
-   Musketeers to Riflemen with Labor Union.
+1. "Hand-me-down upgrade bonus":
+   Early foot convert to Musketeers for free in domestic cities upon discovering Conscription.
+   Musketeers "        " Riflemen    "    "   "    "        "     "      "       Labor Union.
 2. Pre-feudal foot units (Warrior, Archer, Phalanx, Legion) cost 20% less.
 3. Feudal foot units (Pikemen) cost 10% less.
-4. Marines can now: build Fort/Airbase, gain +2 move frags per vet level, and v2+ can do ranged bazooka attack for 3 rounds.
-   Marines cost 55.
-5. Paratroopers A7 D5. Cost 55.
-6. Partisan cost 45.
-7. SPECIAL UNIT ATTACKS
-   Tactical depth blossoms: Can allow hit and run, in some cases multiple ranged attacks per turn.
-      Phalanx rumble attack: 3 combat rounds, stays fortified, can hit 1 unit, can kill no units, uses 5/9 moves
-      Legion pilum assault: 1 combat round, 2x attack, can hit 2 units, can kill 2 units, uses 1 move.
-      Archers volley attack: 2 combat rounds (was 1), stays fortified, can hit up to 7 units (was unlimited), can kill no units, uses 1 5/9 moves (was turn loss), can attack water.
-      Fanatics skirmish assault: 3 combat rounds, can hit up to 4 units, can kill no units, uses 1 5/9 moves. Now, can also assault conquered foreign-occupied cities.
-      Marines bazooka attack: 3 combat rounds, can hit up to 4 units, can kill 1 unit, uses 1 5/9 moves can do oceanic (but not transported)
-      Battleship bombard: 3 combat rounds, 4 units, can kill 1, uses 5 moves.
-   STANDARD ATTACKS
+4. Marines can now: build Fort/Airbase 
+      Gain +2 move frags per vet level
+      V2+ can do ranged Bazooka Attack for 3 rounds on up to 2 targets.
+      Note this does not represent superior range of Marines to other units/weaponry, but rather
+         special commando training for fast initiative surprise degradation tactics, concealment advantage, etc.
+      Marines cost 55 (was 60).
+5. Paratroopers A7 D5. Cost 55 (was 60)
+6. Partisans cost 45 (was 50).
+7. Shift from shield to gold upkeep for Infantry changed from Labor Union to Banking. Allows realistic foot soldier compositions to affect more of the game.
+* SPECIAL UNIT ABILITIES - This is a new MP2 design goal to increase tactical depth, unit diversity, playstyle variety, realism accuracy, and even further reduce "golden pathing" of military strategies.
+1. SPECIAL UNIT ATTACKS. Tactical depth blossoms: Now possible are: Hit-and-run tactics; multiple ranged attacks per turn; engagements with less than all units on the tile.
+      Phalanx, Rumble Attack: 3 combat rounds, stays fortified, can hit 1 unit, can kill no units, uses 5/9 moves, requires 1 move left, requires fortified or not moved prior.
+      Legion, Pilum Assault: 1 combat round, 2x attack, can hit 2 units, can kill 2 units, uses 1 move.
+      Archers, Volley attack: 2 combat rounds (was 1), stays fortified, can hit up to 7 units (was unlimited), can kill no units, uses 1 5/9 moves (was turn loss), can attack water.
+      Fanatics, Skirmish assault: 3 combat rounds, can hit up to 4 units, can kill no units, uses 1 5/9 moves. Now, can also assault conquered foreign-occupied cities.
+      Marines, Bazooka attack: 3 combat rounds, can hit up to 4 units, can kill 1 unit, uses 1 5/9 moves, can hit oceanic (but not while transported)
+      Battleship, Bombard attack: 3 combat rounds, 4 units, can kill 1, uses 5 moves.
+2. iPILLAGE. Instant Pillage is tactically significant. Formerly, roads under rails couldn't be pillaged in one turn. Scorched Earth and Blitz tactics barely existed in the game.
+      NOTE: iPillage Odds increase +5% per vet level.
+      Dive Bomber - 50% odds, 1 selectable target, 7 move cost. 
+      Ground Strike Fighter - 75% odds, 1 selectable target, 3 moves cost.
+      Armor I/II - 75% odds, 1 selectable target, 2 move cost.
+      Strategic Bomber - 60% odds, 1 random target, 3 move cost.
+      Jet Bomber - 75% odds, 2 random targets, 3 move cost.
+3. SPECIAL STANDARD ATTACKS
       Phalanx and Marines can stay fortified during attack.
-1. Price changes: pre-feudal units -20% foot soldiers, -10% mounted. Catapult 34. Feudal: -10% foot, -5% mounted. Armor II: 85 (was 80)
-2. Siege Ram, A2 D1 M2, must use roads, 50% chance to destroy city walls (requires 1 full move point), odds halved against capitals.
-     up to 4hp damage on each tile, emulating up to 80% reduction of Fortress defense bonus; which may be partly/fully repaired/recovered each successive turn.
-    One ram is effective at (up to) 80% reduction of Fortress defense bonus, though the strongest and possibly least effective unit will defend first.
-      This still greatly facilitates the probably still rather costly proposition of taking a Fortress.
-    Two rams will likely be effective at almost totally eradicating the Fortress defense bonus. Troops foolish enough to remain in a Fortress facing two siege 
-    rams can be demoralized and incapacitated from falling and crashing stone debris. If they are proactive they may deliberately pillage sections of the Fortress
-    to render it un-rammable, which effectively leaves it as a solid unrammable Fort with 1.33x bonus.
-3. Satellite: invisible, can investigate all cities (even with Police Station), has superior vision and movement. Requires Apollo Program.
-4. TEST Helicopter not susceptible to City Walls but rather SAM Battery (fixes a nerf of 3x for a land unit not from original game)
-5. Shift from shield to gold upkeep for Infantry changed from Labor Union to Banking. Allows realistic foot soldier compositions to affect more of the game.
+* PRICE CHANGES
+    Pre-feudal units -20% foot, -10% mounted. Catapult 34.
+    Feudal:          -10% foot, -5% mounted.  Armor II: 85 (was 80)
+* UNITS:
+1. Siege Ram: Must use roads. SPECIAL UNIT ATTACKS:
+    Attack City Walls. 50% chance to destroy city walls (requires 1 full move point), odds halved against capitals.
+    Ram Fortress:      attack on fortified walls is emulated by up to 4hp damage on each occupant, emulating a 0 to 80% reduction of Fortress defense bonus; which may be partly/fully repaired/recovered each successive turn.
+    Two Rams will likely render Fortress defense into liability. Troops who remain in a Fortress facing two Siege Rams will be damaged and demoralized from breaches
+    and crushing stone debris. But, proactive defenders can pillage the Fortress and use its stone to improvise fortified structures. That is, render the tile into an
+    unrammable Fort which enjoys a 1.33x bonus protection from stack kill.
+    The net effect of this realistically emulates that Fortresses are dominant military presences until attackers take the time and wherewithal to get around 
+    to protracted siege, whereafter they are still defendable but at a lesser bonus.
+2. Satellite: invisible, can investigate all cities (even with Police Station), has superior vision and movement. Requires Apollo Program.
+3. Helicopter fixed, correctly susceptible to SAM Battery not City Walls (fixes a nerf of 3x for a land unit not from original game)
 6. Battleship gets ranged attack: 3 rounds, can hit up to 4 units, can kill up to 1 unit, uses 5 moves.
-7. Truck replaces Freight. Changes: Road only, moves: 6, can carry 3 land units.
+7. Truck replaces Freight. Changes: Road only, moves: 6, can carry 3 land units. load/unload rules same as Train.
 8. Discovery of Recycling reduces unit upgrades 20%, stacks with other discounts.
 9. A server flaw sometimes
    a. allowed military units to clean fallout and pollution. This fix affects ALL rulesets.
-   b. For non-military units, only spies and worker types can pillage now. Excluded are: Caravans, Explorers, Diplomats, Pilgrims, Freight.
+   b. For non-military units, only spies and worker types can pillage now. Excluded are: Caravans, Explorers, Diplomats, Pilgrims, Tribesmen, Trucks, Freight.
 SPIES/DIPLOMATS:
-9. Diplomatic units can now defend a unit on a tile from hostile diplomatic acts (bribe/sabotage), the same as they can for a city.
-   a. In the case where actions aren't possible (i.e., other units > 1), no defense is necessary since it's "No action possible."
+9. Diplomatic units now defend a unit on a tile from hostile diplomatic acts (bribe/sabotage), the same as they defend a city from hostile diplomat attacks.
+   a. In the case where bribe/sabotage isn't possible (i.e., other non-diplomat units > 1), no defense is necessary since it's "No action possible."
    b. Where it is only the case of 1 diplomat vs. 1 enemy diplomat, they enter into diplomatic combat, the same as in a city.
    c. Spies promotion odds increased to compensate for the weaker strength of their veterancy levels, to make it track more similar 
       to other units for number of successful surviving actions.
@@ -88,22 +100,23 @@ OTHER:
    a. In a foreign territory casus belli is given by:  Transforming Terrain, Building Base, or making road-types (road,rail,quay,canal,etc.)
    b. Bribe enemy unit.
    c. Found City on foreign territory (i.e., in a Fort.)
-   d. Capture Units (server bug fix allows it now.)
+   d. Capture Units (fixed an unknown server bug that allows this to work now.)
 2. Improved tuning of terrain dispersion; less domination in some areas by a single terrain type.
-3. Balance Alignment of Resource Distribution (BARD. 1. On the TC, BARD allocates a small amount of:
-   Berries, Spice, Peat, Oasis, Rubber, Gems, Elk, Furs, Arctic Oil, Ivory, and Iron, in order to enhance statistical
+3. Balance Alignment of Resource Distribution (BARD. 1. On the first TC, BARD allocates a SMALL amount of:
+   Berries, Spice, Peat, Oasis, Rubber, Gems, Elk, Furs, Ivory, and Iron, in order to enhance statistical
    balance in each climactic region. Typically this is less than a 4% chance per tile, with exact value tuned to regional
    geographic balance. (Swamp and Arctic get somewhat more.) 2. BARD overcomes the map generator's forced 35%
    chance a tile gets a resource, regardless of terrain, resource type, or scarcity of nearby resources on other tiles.
    3. BARD discourages settling on the first turn, giving one turn of "oxygen" for all players to look around before settling
    their cities. This was preferred to proposals to disallow settling on first turn, or to exaggerate inconsistent special
    exception bonuses for starting moves, exceptions to terrain movement penalties for x turns, etc., etc.
-4. "Blood for Oil": Discovery of Refining gives +1 shield per Oil and allows accessing subterranean Oil reserves regardless how you transform
-   the surface terrain. +50% Railroad plus +1 shield overcome down-rounding, plus agricultural possibilities after transforming, means that
-   Oil tiles become highly coveted and worth fighting over. 
+3a. Furs can now exist on Arctic terrain. This provides more balance to the worst terrain type in the game.
+4. "Blood for Oil":  After Refining, Oil Wells built on Oil get +1 shield after other bonuses. 
+     (Previously, it was arguably better to irrigate rather than mine.) Oil tiles with more value are now more worth fighting for.
+
 MINOR AND MISC.
 ---------------
-Conscription does not allow making multiple Caravans per turn.
+Conscription bonus simplified - applies to infantry only.
 Traderoutes add a hard +1 trade to the city centre
 Spy Plane correctly made to be unreachable to propeller-based aircraft.
 Can't make road-types while transported in foreign lands (road/quay/rail/maglev/canal)
@@ -115,8 +128,10 @@ Ram Ship can see 1 tile around it and travel on rivers - prevents unintended att
    move to MP2-brava (except not the travel on river part)
 Damaged Submarine min_speed=4 (was 3); makes hit-and-run and escape somewhat more viable.
 Nuclear winter is was patches of random arctic everywhere, now is more of a temperature downgrade of each affected tile to one level colder.
+Fallout disappear chance changed from 20% to 15%
 
-SERVER UPGRADES: 
+
+SERVER UPGRADES:
 1. Special Unit Actions / Attacks:
    a. can optionally specify a move cost up to 7 moves points.
    b. can optionally specify a limit to number of units on tile which can be hit
@@ -124,51 +139,87 @@ SERVER UPGRADES:
    d. can optionally specify a unit stays fortified when doing the action.
 2. Population units can specify pop-cost and add-pop differently. 
 3. Non-diplomatic units can be made to enter "direct combat with buildings": e.g., Siege Ram vs. City Walls. 
-4. Added "gold per shield" displays to Purchase pop-ups and as a sortable user column in cities list. 
 5. Bulb cost displays now reflect non-default sciencebox settings 
-6. Fixed design flaw in server that made pop-cost units prohibit multi-units-per-turn city production.  
-7. Made units-display in lower-right always update instead of still show dead/spent/disbanded units. 
-8. Fixed a cheat/exploit/backdoor in bribe mechanics. 
+6. Fixed design flaw in server that made pop-cost units take up all a city's build slots.  
+7. Made units-display in lower-right update correctly more often (not showing dead/spent/disbanded units.) Please report any exceptional cases.
+8. Fixed possibilities for some rare backdoors.
 9. DIPLOMATIC ACTION REPORTING TRANSPARENCY: all diplomatic actions show the odds and results for all stages to both contestants.
 10. Unit vision range now reported in raw tile units rather than square of radius.
-11. Fortresses and Naval Bases show a flag of who owns them to prevent confusion. 
+11. Fortresses and Naval Bases show a flag of who owns them to prevent confusion, fixed first version incorrectly showed a buoy.
 12. Fixed variety of small quirks/inconsistencies in loading/unloading of transports.
 13. Added ability for rulesets to include the "Sea Bridge" improvement over water. Must be CAdjacent on lake or ocean (not deep ocean)
-14. DOC HOTKEYS.MP:: Intelligent Load/Unload/Activate Cargo are now a Holstic Suite of upgraded mechanics which all work together:
+16. Hovering over a Special Unit Attack button in the Attack pop-up window, now gives info-text for all its special traits and requirements (from mp2-c onward)
+17. Fixed rounding errors in displayed upgrade costs on client side.
+18. Fixed upstream server bug that didn't allow capture units to trigger casus belli.
+19. Added ability for effects to be triggered by unit activity states (instead of only completed actions.)
+20. There was a hidden flaw in 3.0 server, any unit who can do ANYTHING to a tile gets magic bonus to also clean pollution and fallout. 
+      This was affecting foot soldiers (who can make hideouts) so we went with the flow. But now this flaw is fixed, and we're back to the
+      classical orthodoxy:  only non-military tile workers can clean fallout and pollution (worker, engineer, settler, proletarian)
+21. A bug in main freeciv server caused climate change to lag, often not completing for several minutes, with a high probability of crashing.  This exists in all
+    versions of freeciv but FCW had to hard-code global warming out because the problem was exponentially worse on larger maps.
+    This now has following fixes and upgrades:
+    1. New settings for STRENGTH of nuclear winter and global warming exist (how much of earth is affected if triggered.)
+    2. New percent setting allows adjusting the threshold that triggers climate events, and the tolerance/absorption of the earth to diminish 
+       the accumulation of impact over time.
+    3. TC Climate Change processing takes onyl seconds instead of several minutes.
+    4. It doesn't crash.
+    5. Note: the defaults for these settings were always ON in all games, they were just not triggered because a patch prevented their 
+       execution to prevent crashing. So, be careful of global warming.
+    6. New feature: IPCC report gives transparency on risk of climate change if the risk starts to escalate.  
+    7. Climate Report is now in Gov tab.
+22. Landmass can be set from 10 to 99 (was 15 to 85)
+UI / Ease of use / Macro-management mechanics.
+23. Mass select Airlift: you can select multiple units and give them simultaneous airlift command, which will execute in sequential order if each is legal.
+    This upgrades one-at-a-time airlifting.
+24 Intelligent Load/Unload/Activate Cargo are now upgraded to work holistically with each other.
    UNLOAD TRANSPORT 'T':
     a. 'T' tells a selected Transport(s) to unload their specific cargo.
     b. 'T' tells selected Cargo to unload from their Transports. 
    LOAD 'L': 
-    a. 'L' command tells selected unloaded units which Transport to load onto (if multiple legal transport exists).
-    b. 'L' command tells selected Transports to 'scoop up' all units on the tile which it can legally take as cargo.
-    c. 'L' command tells selected Cargo units to transfer to another Transport IFF such action is legal OR would be legal 
-           after the cargo unloaded with no movement penalty (e.g., in a City.)
-    d. 'L' command given at Sea, to tell selected Cargo to move to a new Transport, is legal if current Transport has spent neither
-           half its moves nor more than 4 moves. This: handicaps "transport shuffling" to nearly infeasible while still facilitating 
-           ordinary logistical operations and reducing micro-management.
+    a. 'L' Load selected units on Transport(s).
+    b. 'L' Load selected Transport(s) with all units on the tile which it can legally take as cargo. ("Cargo Scoop")
+    c. 'L' Transfer selected Cargo units to other Transports IFF such action would be legal if the cargo can legally unload then reload. 
+    d. 'L' command given at Sea, to tell selected Cargo to move to a new Transport, is legal if current Transport has moved no more than 4
+        moves and has at least 3 moves left.
+    
+    has used half or more of its 
+           moves AND has more than 3 moves left. This may seem complex but it is a "Sweet spot" compromise to allow legitimate "Transport transfer"
+           while hindering the "Transport shuffle" exploit.
    SELECT CARGO on TRANSPORT 'U':
-    a. 'U' command given to selected Transports will only activate/select Cargo units on user-selected Transport(s).
-    b. To select ALL cargo on ALL transports (old behaviour), select any non-Transport when hitting 'U'
+    a. 'U' command will only select Cargo units on the SELECTED Transport(s).
+    b. If no Transport is selected, 'U' commamnd does its old behaviour to select ALL cargo units on the tile.
    What no longer happens:
-   1. 'T' will never unload unselected transport/cargo units. Previously, it unloaded ALL cargo on same tile.
+   1. 'T' will never do as previously, it unloaded ALL cargo on same tile, making multiple load/unload operations tedious.
    2. 'U' command will never select all cargo on same tile, only on selected Transports.
-   3. 'L' command won't disallow changing Transports in cities because you didn't take micro-management step of unloading first.
-   4. 'L' command doesn't force you to select every embarking unit on a tile, but gives options to select the Transport who scoops up instead.
-   5. 'L' command won't disallow more ordinary logistics like transfering cargo at sea to an allied Transport, or having a Transport in a city 
-         come pick up units from a Transport 2 tiles away, or having a city Transport drop off cargo to NEARBY Transport on its "shipping lane."
-14a. Can "transport swap" in
-   1) cities 
-   2) in ships & gunships who have neither moved more than 4 moves NOR 
-       move more than half their moves;
+   3. 'L' command won't disallow swapping Cargo between Transports in cities because you didn't take the extra step of unloading first.
+   4. 'L' command doesn't force you to click-select every unit you want to load. Now you can select the Transport who scoops up all legal units instead.
+24a. Can "Transport swap" Land-type cargo units in
+   1) where it's legal to unload anyway, to save an extra step (cities, naval bases, quays)
+   2) in sea units who have enough moves (see 24.'L.d.)
+25. iPillage - this uses the server's new surgical strike pillage feature, where tiles can be destroyed in real-time on par with everything else
+    (buildingis, units, etc.)  iPillage brings Scorched Earth and Blitzkrieg into the game; gives Air Strikes more of a real purpose, increases 
+    the tactical importance of Vigil, as well as the placement of Forts, more Foot soldiers, and AAA, to protect regional infrastructure. 
+    Features can be set for each unit:
+      success odds, move cost, pin-point single target, or multiple random targets in one strike.
+      note: the documented iPillage odds go up +5% for each veteran level.
+26. Added "gold per shield" info to the City screen (custom user column) and on pop-up window to buy item.
+27. Added option to enter Full Screen (full immersion) like every non-browser game, when the game launches. ESC is now dedicated to exiting 
+    Full Immersion (ALT-S or Options>>Full Screen) to re-enter. You are no longer required to hit ESC to exit tabs and pop-up windows, and lose 
+    full screen display. Instead, the command to exit any tab or pop-up window is "W" for (W)ithdraw (W)indow. This now allows the game to default 
+    into an orthodox full screen experience like Freeciv Native Client and EVERY OTHER GAME, instead of being a "second class browser game."
+   Recommended: become familiar with your OS's hotkeys, which better enable you to navigate while having a fullscreen process:
+28. Fortify given to non-fortifiable units will sentry them instead. This allows giving F to a large stack and every unit who can fortify will, 
+    while sentrying the rest. Reason: quicker/easier micro-management during late game.
+28a. Sentry given to non-sentryable units will NO-ORDERS them instead.
+29. Triremes on sentry on all legal refueling spots (formerly could not sentry on coastline.)
+30. Size 1 cities aren't impervious to infinite nukes while every other city is cut in half each time. Now s1 cities die if nuked.
 
-       Transports who moved no more than 4 moves AND have min. of 3 moves left, may cargo swap. 
+these help with much more than Freeciv and other Full-screen apps. They help you with everything you do on your computer:
+            Switch active Program   Flip to Last Program    Switch Browser tab   See all Programs on Workspace   Swap Workspaces
+Linux*      Alt-Tab                 Alt-ESC                 CTRL-Shift-Tab       🐧, ALT-F1                      CTRL-ALT-arrow
+Windows     Alt-Tab                 Alt-ESC                 CTRL-Shift-Tab       Three fingers up, ⊞-tab        ⊞-CTRL-arrow, four finger side swipe 
+Mac         ⌘-Tab                  ⌘-Shift-Tab            CTRL-Tab             Three fingers up, F3            4 finger side-swipe
 
-   Every other type of transported-scenario, swapping is not allowed. */
-16. Hovering over a Special Unit Attack will give helptext for all its special parameters.
-17. Fixed rounding errors in displayed upgrade costs on client side.
-18. Fixed upstream server bug that didn't allow capture units to trigger casus belli.
-19. Added ability for effects to be triggered by unit activity states (isntead of only completed actions.)
-20. There was a hidden flaw in 3.0 server, any unit who can do ANYTHING to a tile gets magic bonus to also clean pollution and fallout. 
-      This was affecting foot soldiers (who can make hideouts) so we went with the flow. But now this flaw is fixed, and only non-military 
-      we're back to the classical orthodoxy:  only non-military tile workers can clean fallout and pollution (worker, engineer, settler, proletarian)
 
+ 
+   Every other type of transported-scenario, swapping is not allowed.

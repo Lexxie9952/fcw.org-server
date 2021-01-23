@@ -59,6 +59,7 @@ spec_files = {
     "cities.spec",
     "bases.spec",
     "explosions.spec",
+    "swords.spec",
     "fog.spec",
     "grid.spec",
     "nuke.spec",

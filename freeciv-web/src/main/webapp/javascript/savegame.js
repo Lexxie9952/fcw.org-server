@@ -49,7 +49,7 @@ function save_game()
     return;
   }
   // reset dialog page.
-  $("#save_dialog").remove();
+  remove_active_dialog("#save_dialog");
   $("<div id='save_dialog'></div>").appendTo("div#game_page");
 
   var dhtml = "<span id='settings_info'><i>You can save your current game here. "
@@ -73,7 +73,7 @@ function save_game()
                         },
 			buttons: {
 				"Save Game": function() {
-					$("#save_dialog").dialog('close');
+          remove_active_dialog("#save_dialog");
 					send_message("/save");
 					swal("Game saved.");
 					}
@@ -86,6 +86,7 @@ function save_game()
   }
 
   $("#save_dialog").dialog('open');
+  dialog_register("#save_dialog");
   saved_this_turn = true;
 }
 

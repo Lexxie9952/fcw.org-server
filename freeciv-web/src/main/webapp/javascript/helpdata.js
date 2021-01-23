@@ -331,6 +331,8 @@ function generate_help_text(key)
         = unit_types[parseInt(key.replace("help_gen_units_", ""))];
     var punit_class
         = unit_classes[punit_type['unit_class_id']];
+    var pstats = utype_get_extra_stats(punit_type);
+    var bstats = utype_get_bombard_stats(punit_type);
     var flex = " style='display:flex;' ";
     var span1 = "<span style='flex:"+flx_tab+";'>";
     var span2 = "<span style='font-weight:bold; color:#014;'>";
@@ -347,11 +349,11 @@ function generate_help_text(key)
     // ATTACK
     msg += "<div"+flex+" id='utype_fact_attack_str'>";
       // hack to make manual properly display decimal attack strength on this unit
-      var as = punit_type['name'] == "Swordsmen" ? "1.5" : punit_type['attack_strength'];
+      var as = punit_type['attack_strength'];
     msg += span1 + "Attack: " + span_end + span2 + as + div_end;
     // DEFENSE
     msg += "<div"+flex+" id='utype_fact_defense_str'>";
-      var ds = punit_type['name'] == "Swordsmen" ? "1.5" : punit_type['defense_strength'];
+      var ds = punit_type['defense_strength'];
     msg += span1 + "Defense: " + span_end + span2 + ds + div_end;
     // FIREPOWER
     msg += "<div"+flex+" id='utype_fact_firepower'>";
@@ -386,6 +388,41 @@ function generate_help_text(key)
     msg += div_end;
     // UPKEEP
     msg += "<div"+flex+" id='utype_fact_upkeep'></span></div>";
+    // iPILLAGE
+    if (pstats.iPillage) {
+      msg += "<div"+flex+" id='utype_fact_ipillage'>";
+      msg += span1 + "iPillage &nbsp;: "+ span_end + span2;
+      msg += pstats.iPillage_odds+"% odds. "
+          + pstats.iPillage_moves + (pstats.iPillage_moves > 1 ? " moves.": " move.");
+      if (pstats.iPillage_random_targets)
+        msg+= " " + pstats.iPillage_random_targets + " random " +
+         (pstats.iPillage_random_targets > 1 ? "targets" : "target");
+      msg += div_end;
+    }
+    // BOMBARD
+    if (utype_has_flag(punit_type, UTYF_BOMBARDER)) {
+      var bombard_name = utype_get_bombard_name(punit_type['rule_name']);
+      msg += "<div"+flex+" id='utype_fact_bombard'>";
+      msg += span1 + bombard_name.replace(" ", "&nbsp;") +":&nbsp;&nbsp;"+ span_end + span2;
+
+      msg += punit_type['bombard_rate'] 
+          + (punit_type['bombard_rate'] > 1 ? " rounds. " : "round.");
+      if (bstats.bombard_primary_targets) {
+        msg += bstats.bombard_primary_targets;
+        msg += (bstats.bombard_primary_targets > 1 ? " targets. " : " target. ");
+      }
+      else 
+        msg += "ALL targets. ";
+
+      if (bstats.bombard_move_cost)
+        msg += move_points_text(bstats.bombard_move_cost)
+            + (bstats.bombard_move_cost > SINGLE_MOVE ? " moves." : " move.");
+      else 
+        msg += move_points_text(punit_type['move_rate']+" moves.");
+      
+      msg += div_end;
+    }
+
     // IMPROVEMENT REQS
     if (improvements[punit_type['impr_requirement']]) // if an impr_req exists to make this unit
     {

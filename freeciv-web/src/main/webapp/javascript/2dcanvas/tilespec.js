@@ -36,6 +36,7 @@ var current_select_sprite = 0;
 var max_select_sprite = 4;
 
 var explosion_anim_map = {};
+var anim_swords_instead = {};  // bools for whether to show swords instead of explosion.
 
 const USER_MARK_1     = 1
 const USER_MARK_2     = 2; 
@@ -378,7 +379,23 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
     /* show explosion animation on current tile.*/
      if (ptile != null && explosion_anim_map[ptile['index']] != null) {
        var explode_step = explosion_anim_map[ptile['index']];
+     
+       var swords = anim_swords_instead[ptile['index']];
+       key_prefix = swords ? "swords.unit_" : "explode.unit_";
+       frame_repeat = swords ? 3 : 5;
+       frame = Math.abs(Math.round((23-explode_step)/frame_repeat));
        explosion_anim_map[ptile['index']] =  explode_step - 1;
+
+
+       if (explode_step <= 1) {
+         delete explosion_anim_map[ptile['index']];
+         delete anim_swords_instead[ptile['index']];
+       }
+       else {
+         sprite_array.push({"key": key_prefix+frame, 
+           "offset_x" : unit_offset_x+swords*8,
+           "offset_y" : unit_offset_y+swords*-15});
+       } /* the above 8 lines replace the below for supporting 2 explosion types.
        if (explode_step > 20) {
          sprite_array.push({"key" : "explode.unit_0",
            "offset_x" : unit_offset_x,
@@ -399,10 +416,10 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
          sprite_array.push({"key" : "explode.unit_4",
            "offset_x" : unit_offset_x,
            "offset_y" : unit_offset_y});
-       } else {
+       } 
+       else {
          delete explosion_anim_map[ptile['index']];
-       }
-
+       } */
      }
 
 

@@ -83,7 +83,7 @@ tiles = { "row", "column", "tag"
   1, 11, "u.destroyer"	  	; [Nemo] & [Lexxie]
   1, 12, "u.dragoons"		    ; [GB]
   1, 13, "u.explorer"		    ; [Alex] & [CT] & [Lexxie]
-  1, 14, "u.freight"		    ; [CT] & qwm
+  1, 14, "u.freight"		    ; [CT] & qwm & [Lexxie] - This new graphic covers MP2 Truck and backward ruleset "Freight" unit. NOT MP2 Freight unit.
   1, 15, "u.galleon"		    ; [BB]
   1, 16, "u.partisan"		    ; [BB] & [CT] & [Lexxie]
   1, 17, "u.pikemen"		    ; [T] & [Lexxie]
@@ -114,7 +114,7 @@ tiles = { "row", "column", "tag"
   3,  2, "u.missile_destroyer" ; [Lexxie]
   3,  3, "u.war_galley"       
   3,  4, "u.longboat"         ; Lexxie
-; 3,  5, "u.EMPTY SLOT"  
+  3,  5, "u.container"        ; Lexxie      ; Is the Freight graphic for MP2 onward (not u.freight--preserves ammplio2 compatibility for other rules)
   3,  6, "u.atom_bomb"        ; Lexxie  
   3,  7, "u.galley"           ; Lexxie
   3,  8, "u.jet_fighter"      ; [Nemo] & [AHS] & [Lexxie]

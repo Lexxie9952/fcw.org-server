@@ -37,6 +37,7 @@
 #include "research.h"
 #include "unitlist.h"
 
+/* server */
 #include "unittype.h"
 
 #define MAX_UNIT_ROLES L_LAST + ACTION_COUNT
@@ -2292,6 +2293,9 @@ bool utype_is_cityfounder(const struct unit_type *utype)
  * ***********************************************************************/
 //
 /**********************************************************************//**
+  ************* NOTE: THIS FUNCTION HAS TO BE MAINTAINED TO BE IDENTICAL
+  to the function of the same name in unit.js
+  -------------------------------------------------------------------------  
   Return the extra_unit_stats for this unit by filling in *pstats
 **************************************************************************/
 void unit_get_extra_stats(struct extra_unit_stats *pstats, 
@@ -2304,6 +2308,9 @@ void unit_get_extra_stats(struct extra_unit_stats *pstats,
   utype_get_extra_stats(pstats, ptype);
 }
 /**********************************************************************//**
+  ************* NOTE: THIS FUNCTION HAS TO BE MAINTAINED TO BE IDENTICAL
+  to the function of the same name in unit.js
+  -------------------------------------------------------------------------  
   Return the extra_unit_stats for this unit_type by filling in *pstats
 **************************************************************************/
 void utype_get_extra_stats(struct extra_unit_stats *pstats, 
@@ -2311,7 +2318,9 @@ void utype_get_extra_stats(struct extra_unit_stats *pstats,
 {
   fc_assert(NULL != ptype);
 
-  int BB = ptype->paratroopers_mr_sub;       
+//FIXME: / SINGLE_MOVE should be there instead of / 9, but it means all these
+//functions need to go into unittools.c in the /server directory: 
+  int BB = ptype->paratroopers_mr_sub / 9;        
 
   /* extra_unit_stats are currently embedded in paratroopers_mr_sub,
      which means if it that var is being used by a real paratrooper,
@@ -2327,9 +2336,39 @@ void utype_get_extra_stats(struct extra_unit_stats *pstats,
   // Preserve a whole copy of the flags/stats:
   pstats->bit_field = BB;
   // Bit 0:
-  pstats->attack_stay_fortified  =            (BB & 0b1);
+  pstats->attack_stay_fortified  =             (BB & 0b1);
+  // Bit 1:  unit can instantly pillage targets
+  pstats->iPillage =                          (BB & 0b10) >> 1;
+  // Bits 2-4:  move cost for doing so
+  pstats->iPillage_moves =                 (BB & 0b11100) >> 2;
+  // Bits 5-8:  odds of successful real-time strike on the extra target
+  pstats->iPillage_odds  =             (BB & 0b111100000) >> 5;
+  // Bit 9-10:  # of targets randomly selected. 0==pinpoint selection
+  pstats->iPillage_random_targets =  (BB & 0b11000000000) >> 9;    
 
-  // other fields added here later:
+  // the odds come as bits from 0 to 15. Each value represents reduction by
+  // 5%. 15x5=75 so this gives us a range from 100% down to 25%, by fives.
+  // kinda dirty but it's assumed no one would bother with an iPillage that
+  // only had 20% chance to succeed.
+  pstats->iPillage_odds = 100 - 5 * pstats->iPillage_odds;
+}
+/**********************************************************************//**
+  Returns whether the unit can iPillage ("instant-Pillage")
+**************************************************************************/
+bool unit_can_iPillage(const struct unit *punit)
+{
+  fc_assert(NULL != punit);
+  return utype_can_iPillage((const struct unit_type *)unit_type_get(punit));
+}
+/**********************************************************************//**
+  Returns whether the utype can iPillage ("instant-Pillage")
+**************************************************************************/
+bool utype_can_iPillage(const struct unit_type *ptype)
+{
+  struct extra_unit_stats pstats;
+  fc_assert(NULL != ptype);
+  utype_get_extra_stats(&pstats, ptype);
+  return (pstats.iPillage == true);
 }
 
 /**************************************************************************
@@ -2348,7 +2387,6 @@ void unit_get_bombard_stats(struct bombard_stats *pstats,
 
   utype_get_bombard_stats(pstats, ptype);
 }
-
 /**********************************************************************//**
   Return the bombard_stats for this unit_type by filling in *pstats
 **************************************************************************/

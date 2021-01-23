@@ -160,6 +160,7 @@ files =
   "misc/treaty.spec",
   "amplio2/nuke.spec",
   "amplio2/explosions.spec",
+  "amplio2/swords.spec",
   "amplio2/cities.spec",
   "amplio2/bases.spec",
   "amplio2/select.spec",

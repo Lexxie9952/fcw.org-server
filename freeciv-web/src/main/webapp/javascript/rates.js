@@ -79,12 +79,13 @@ function show_tax_rates_dialog()
       dialogClass: 'rate_slider',
       width: is_small_screen() ? "90%" : "40%",
 			  buttons: {
-				"Done" : function() {
+				"Done (W)" : function() {
           submit_player_rates();
           close_rates_dialog();
-				}
-			  }
+				}}
   });
+  $(id).dialog('widget').keydown(tax_rate_key_listener);
+
 
   //$(".rate_slider").css("z-index", 201);
 
@@ -94,6 +95,33 @@ function show_tax_rates_dialog()
   freeze=true; // turn off updates to cities,empire,tech,map tabs
 
   rate_updater_interval = setInterval(rate_refresh, 500);
+}
+function tax_rate_key_listener(ev)
+{
+    // Check if focus is in chat field, where these keyboard events are ignored.
+    if ($('input:focus').length > 0 || !keyboard_input) return;
+    if (C_S_RUNNING != client_state()) return;
+    var keyboard_key = String.fromCharCode(ev.keyCode).toUpperCase();
+    var key_code = ev.keyCode;
+  
+    switch (key_code) {
+      case 13: //hit enter on 'Done'
+        ev.stopPropagation();
+        clearInterval(rate_updater_interval);
+        rate_output_update=null;
+        $("#rates_dialog").dialog('close');
+        $("#rates_dialog").remove();
+        break;
+    }
+    switch (keyboard_key) {
+      case 'W':
+        ev.stopPropagation();
+        clearInterval(rate_updater_interval);
+        rate_output_update=null;
+        $("#rates_dialog").dialog('close');
+        $("#rates_dialog").remove();
+        break;
+    }
 }
 
 /**************************************************************************
