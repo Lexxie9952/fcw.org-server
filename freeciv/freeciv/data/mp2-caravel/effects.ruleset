@@ -637,6 +637,26 @@ reqs    =
       "UnitFlag",      "Cant_Fortify", "Local", FALSE
     }
 
+; ****************************** RECYCLE SHIELDS **************************
+[effect_unit_shield_value_recycle]
+type    = "Unit_Shield_Value_Pct"
+value   = -50
+reqs    =
+    { "type",   "name",         "range", "present"
+      "Action", "Recycle Unit", "Local", TRUE
+; Everything except Freight has classic 50% recycle penalty:
+      "UnitType", "Freight",    "Local", FALSE
+    }
+
+;TO DO: this could be used in interesting ways.
+[effect_unit_shield_value_in_upgrade_price_calc]
+type    = "Unit_Shield_Value_Pct"
+value   = -50
+reqs    =
+    { "type",   "name",         "range", "present"
+      "Action", "Upgrade Unit", "Local", TRUE
+    }
+
 ; *********************************** BASES *******************************
 
 ; **** FORT *****

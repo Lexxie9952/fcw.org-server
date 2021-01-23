@@ -308,6 +308,8 @@ extern "C" {
 #define SPECENUM_VALUE120NAME "Peaceful_Field_Unit_Bonus"
 #define SPECENUM_VALUE121 EFT_FORTIFY_DEFENSE_BONUS
 #define SPECENUM_VALUE121NAME "Fortify_Defense_Bonus"
+#define SPECENUM_VALUE122 EFT_UNIT_SHIELD_VALUE_PCT
+#define SPECENUM_VALUE122NAME "Unit_Shield_Value_Pct"
 /* keep this last */
 #define SPECENUM_COUNT EFT_COUNT
 #include "specenum_gen.h"

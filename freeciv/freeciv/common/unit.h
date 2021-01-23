@@ -295,6 +295,9 @@ extern Activity_type_id real_activities[ACTIVITY_LAST];
   activity_type_list_iterate_end                                            \
 }
 
+int unit_shield_value(const struct unit *punit,
+                      const struct unit_type *punittype,
+                      const struct action *paction);
 bool unit_can_help_build_wonder_here(const struct unit *punit);
 bool unit_can_est_trade_route_here(const struct unit *punit);
 enum unit_airlift_result

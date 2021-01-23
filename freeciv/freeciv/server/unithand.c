@@ -122,14 +122,10 @@ static bool do_unit_establish_trade(struct player *pplayer,
                                     struct unit *punit,
                                     struct city *pcity_dest,
                                     const struct action *paction);
-
-static bool unit_do_recycle(struct player *pplayer,
-                            struct unit *punit,
-                            struct city *pcity);
-static bool do_unit_help_build_wonder(struct player *pplayer,
-                                      struct unit *punit,
-                                      struct city *pcity_dest,
-                                      const struct action *paction);
+static bool unit_do_help_build(struct player *pplayer,
+                               struct unit *punit,
+                               struct city *pcity_dest,
+                               const struct action *paction);
 static bool unit_bombard(struct unit *punit, struct tile *ptile,
                          const struct action *paction);
 static bool unit_nuke(struct player *pplayer, struct unit *punit,
@@ -159,6 +155,7 @@ void handle_unit_type_upgrade(struct player *pplayer, Unit_type_id uti)
   const struct unit_type *to_unittype;
   struct unit_type *from_unittype = utype_by_number(uti);
   int number_of_upgraded_units = 0;
+  struct action *paction = action_by_number(ACTION_UPGRADE_UNIT);
 
   if (NULL == from_unittype) {
     /* Probably died or bribed. */
@@ -183,10 +180,10 @@ void handle_unit_type_upgrade(struct player *pplayer, Unit_type_id uti)
     if (unit_type_get(punit) == from_unittype) {
       struct city *pcity = tile_city(unit_tile(punit));
 
-      if (is_action_enabled_unit_on_city(ACTION_UPGRADE_UNIT, punit, pcity)
+      if (is_action_enabled_unit_on_city(paction->id, punit, pcity)
           && unit_perform_action(pplayer, punit->id, pcity->id, EXTRA_NONE,
                                  0, "",
-                                 ACTION_UPGRADE_UNIT, ACT_REQ_SS_AGENT)) {
+                                 paction->id, ACT_REQ_SS_AGENT)) {
         number_of_upgraded_units++;
       } else if (UU_NO_MONEY == unit_upgrade_test(punit, FALSE)) {
         break;
@@ -227,35 +224,24 @@ static bool do_unit_upgrade(struct player *pplayer,
                             struct unit *punit, struct city *pcity,
                             enum action_requester ordered_by)
 {
-  char buf[512];
+  const struct unit_type *from_unit = unit_type_get(punit);
+  const struct unit_type *to_unit = can_upgrade_unittype(pplayer, from_unit);
 
-  if (UU_OK == unit_upgrade_info(punit, buf, sizeof(buf))) {
-    const struct unit_type *from_unit = unit_type_get(punit);
-    const struct unit_type *to_unit = can_upgrade_unittype(pplayer, from_unit);
+  transform_unit(punit, to_unit, FALSE);
+  send_player_info_c(pplayer, pplayer->connections);
 
-    transform_unit(punit, to_unit, FALSE);
-    send_player_info_c(pplayer, pplayer->connections);
+  if (ordered_by == ACT_REQ_PLAYER) {
+    int cost = unit_upgrade_price(pplayer, from_unit, to_unit);
 
-    if (ordered_by == ACT_REQ_PLAYER) {
-      int cost = unit_upgrade_price(pplayer, from_unit, to_unit);
-
-      notify_player(pplayer, unit_tile(punit), E_UNIT_UPGRADED, ftc_server,
-                    PL_("%s upgraded to %s for %d gold.",
-                        "%s upgraded to %s for %d gold.", cost),
-                    utype_name_translation(from_unit),
-                    unit_link(punit),
-                    cost);
-    }
-
-    return TRUE;
-  } else {
-    if (ordered_by == ACT_REQ_PLAYER) {
-      notify_player(pplayer, unit_tile(punit), E_UNIT_UPGRADED, ftc_server,
-                    "%s", buf);
-    }
-
-    return FALSE;
+    notify_player(pplayer, unit_tile(punit), E_UNIT_UPGRADED, ftc_server,
+                  PL_("%s upgraded to %s for %d gold.",
+                      "%s upgraded to %s for %d gold.", cost),
+                  utype_name_translation(from_unit),
+                  unit_link(punit),
+                  cost);
   }
+
+  return TRUE;
 }
 
 /**********************************************************************//**
@@ -2633,9 +2619,8 @@ bool unit_perform_action(struct player *pplayer,
     break;
   case ACTION_HELP_WONDER:
     ACTION_STARTED_UNIT_CITY(action_type, actor_unit, pcity,
-                             do_unit_help_build_wonder(pplayer,
-                                                       actor_unit, pcity,
-                                                       paction));
+                             unit_do_help_build(pplayer, actor_unit, pcity,
+                                                paction));
     break;
   case ACTION_SPY_NUKE:
   case ACTION_SPY_NUKE_ESC:
@@ -2657,7 +2642,8 @@ bool unit_perform_action(struct player *pplayer,
     break;
   case ACTION_RECYCLE_UNIT:
     ACTION_STARTED_UNIT_CITY(action_type, actor_unit, pcity,
-                             unit_do_recycle(pplayer, actor_unit, pcity));
+                             unit_do_help_build(pplayer, actor_unit, pcity,
+                                                paction));
     break;
   case ACTION_HOME_CITY:
     ACTION_STARTED_UNIT_CITY(action_type, actor_unit, pcity,
@@ -2901,18 +2887,22 @@ static bool do_unit_change_homecity(struct unit *punit,
 }
 
 /**********************************************************************//**
-  Recycle a unit in a city.
+  Help build the current production in a city.
 
-  1/2 of the shields used to build the unit is added to the city's shield
-  stock for the current production.
-
+  The amount of shields used to build the unit added to the city's shield
+  stock for the current production is determined by the
+  Unit_Shield_Value_Pct effect.
+  
   Returns TRUE iff action could be done, FALSE if it couldn't. Even if
   this returns TRUE, unit may have died during the action.
 **************************************************************************/
-static bool unit_do_recycle(struct player *pplayer,
-                            struct unit *punit,
-                            struct city *pcity)
+static bool unit_do_help_build(struct player *pplayer,
+                               struct unit *punit,
+                               struct city *pcity_dest,
+                               const struct action *paction)
 {
+  const char *work;
+  const char *prod;
   int shields;
 
   /* Sanity check: The actor still exists. */
@@ -2920,26 +2910,93 @@ static bool unit_do_recycle(struct player *pplayer,
   fc_assert_ret_val(punit, FALSE);
 
   /* Sanity check: The target city still exists. */
-  fc_assert_ret_val(pcity, FALSE);
+  fc_assert_ret_val(pcity_dest, FALSE);
 
-  shields = unit_disband_shields(punit);
+  shields = unit_shield_value(punit, unit_type_get(punit), paction);
 
-  /* Add the shields from recycling the unit to the city's current
-   * production. */
-  pcity->shield_stock += shields;
+  if (action_has_result(paction, ACTION_HELP_WONDER)) {
+    /* Add the caravan shields */
+    pcity_dest->shield_stock += shields;
 
-  /* If we change production later at this turn. No penalty is added. */
-  pcity->disbanded_shields += shields;
+    /* Will be punished for changing production to something that can't
+     * receive "Help Wonder" help. */
+    fc_assert(city_production_gets_caravan_shields(
+                  &pcity_dest->production));
+    pcity_dest->caravan_shields += shields;
+  } else {
+    fc_assert(action_has_result(paction, ACTION_RECYCLE_UNIT));
+    /* Add the shields from recycling the unit to the city's current
+     * production. */
+    pcity_dest->shield_stock += shields;
 
-  notify_player(pplayer, city_tile(pcity), E_CARAVAN_ACTION, ftc_server,
-                /* TRANS: ... Ironclad ... New York */
-                _("Recycled your %s to help the current production in %s."),
+    /* If we change production later at this turn. No penalty is added. */
+    pcity_dest->disbanded_shields += shields;
+  }
+
+  conn_list_do_buffer(pplayer->connections);
+
+  if (action_has_result(paction, ACTION_HELP_WONDER)) {
+    /* Let the player that just donated shields with "Help Wonder" know
+     * the result of his donation. */
+    prod = city_production_name_translation(pcity_dest);
+  } else {
+    fc_assert(action_has_result(paction, ACTION_RECYCLE_UNIT));
+    /* TRANS: Your Caravan does "Recycle Unit" to help build the
+     * current production in Bergen (4 surplus).
+     * "Recycle Unit" says "current production" rather than its name. */
+    prod = _("current production");
+  }
+
+  if (build_points_left(pcity_dest) >= 0) {
+    /* TRANS: Your Caravan does "Help Wonder" to help build the
+     * Pyramids in Bergen (4 remaining).
+     * You can reorder '4' and 'remaining' in the actual format string. */
+    work = _("remaining");
+  } else {
+    /* TRANS: Your Caravan does "Help Wonder" to help build the
+     * Pyramids in Bergen (4 surplus).
+     * You can reorder '4' and 'surplus' in the actual format string. */
+    work = _("surplus");
+  }
+
+  notify_player(pplayer, city_tile(pcity_dest), E_CARAVAN_ACTION,
+                ftc_server,
+                /* TRANS: Your Caravan does "Help Wonder" to help build the
+                 * Pyramids in Bergen (4 surplus). */
+                _("Your %s does %s to help build the %s in %s (%d %s)."),
                 unit_link(punit),
-                city_link(pcity));
+                action_name_translation(paction),
+                prod,
+                city_link(pcity_dest), 
+                abs(build_points_left(pcity_dest)),
+                work);
 
-  send_city_info(city_owner(pcity), pcity);
+  /* May cause an incident */
+  action_consequence_success(paction, pplayer, city_owner(pcity_dest),
+                             city_tile(pcity_dest), city_link(pcity_dest));
 
-  /* The unit is now recycled. */
+  if (city_owner(pcity_dest) != unit_owner(punit)) {
+    /* Tell the city owner about the gift he just received. */
+
+    send_city_info(city_owner(pcity_dest), pcity_dest);
+    notify_player(city_owner(pcity_dest), city_tile(pcity_dest),
+                  E_CARAVAN_ACTION, ftc_server,
+                  /* TRANS: Help building the Pyramids in Bergen received
+                   * from Persian Caravan (4 surplus). */
+                  _("Help building the %s in %s received from %s %s "
+                    "(%d %s)."),
+                  city_production_name_translation(pcity_dest),
+                  city_link(pcity_dest),
+                  nation_adjective_for_player(pplayer),
+                  unit_link(punit),
+                  abs(build_points_left(pcity_dest)),
+                  work);
+  }
+
+  send_player_info_c(pplayer, pplayer->connections);
+  send_city_info(pplayer, pcity_dest);
+  conn_list_do_unbuffer(pplayer->connections);
+
   return TRUE;
 }
 
@@ -4200,9 +4257,23 @@ bool unit_move_handling(struct unit *punit, struct tile *pdesttile,
     return FALSE;
   }
 
-  /*** Phase 2: Special abilities checks ***/
+  /*** Phase 2: Attempted action interpretation checks ***/
 
-  /* Actors. Pop up an action selection dialog in the client.
+  /* Check if the move should be interpreted as an attempt to perform an
+   * enabler controlled action to the target tile. When the move may be an
+   * action attempt the server stops moving the unit, marks it as wanting a
+   * decision based on its own movement to the tile it attempted to move to
+   * and notifies the client.
+   *
+   * In response to the unit being marked as wanting a decision the client
+   * can query the server for what actions the unit, given the player's
+   * knowledge, may be able to perform against a target at the tile it tried
+   * to move to. The server will respond to the query with the actions that
+   * may be enabled and, when all actions are known to be illegal given the
+   * player's knowledge, an explanation why no action could be done. The
+   * client will probably use the list of potentially legal actions, if any,
+   * to pop up an action selection dialog. See handle_unit_action_query()
+   *
    * If the AI has used a goto to send an actor to a target do not
    * pop up a dialog in the client.
    * For tiles occupied by allied cities or units, keep moving if
@@ -4285,86 +4356,6 @@ bool unit_move_handling(struct unit *punit, struct tile *pdesttile,
   } else {
     return FALSE;
   }
-}
-
-/**********************************************************************//**
-  Handle request to help in wonder building.
-
-  Returns TRUE iff action could be done, FALSE if it couldn't. Even if
-  this returns TRUE, unit may have died during the action.
-**************************************************************************/
-static bool do_unit_help_build_wonder(struct player *pplayer,
-                                      struct unit *punit,
-                                      struct city *pcity_dest,
-                                      const struct action *paction)
-{
-  const char *work;
-
-  /* Sanity check: The actor still exists. */
-  fc_assert_ret_val(pplayer, FALSE);
-  fc_assert_ret_val(punit, FALSE);
-
-  /* Sanity check: The target city still exists. */
-  fc_assert_ret_val(pcity_dest, FALSE);
-
-  pcity_dest->shield_stock += unit_build_shield_cost_base(punit);
-  pcity_dest->caravan_shields += unit_build_shield_cost_base(punit);
-
-  conn_list_do_buffer(pplayer->connections);
-
-  if (build_points_left(pcity_dest) >= 0) {
-    /* TRANS: Your Caravan helps build the Pyramids in Bergen (4
-     * remaining). You can reorder '4' and 'remaining' in the actual
-     * format string. */
-    work = _("remaining");
-  } else {
-    /* TRANS: Your Caravan helps build the Pyramids in Bergen (4
-     * surplus). You can reorder '4' and 'surplus' in the actual
-     * format string. */
-    work = _("surplus");
-  }
-
-  /* Let the player that just donated shields to the wonder building know
-   * the result of his donation. */
-  notify_player(pplayer, city_tile(pcity_dest), E_CARAVAN_ACTION,
-                ftc_server,
-                /* TRANS: Your Caravan helps build the Pyramids in Bergen
-                 * (4 surplus). */
-                _("Your %s helps build the %s in %s (%d %s)."),
-                unit_link(punit),
-                improvement_name_translation(
-                  pcity_dest->production.value.building),
-                city_link(pcity_dest), 
-                abs(build_points_left(pcity_dest)),
-                work);
-
-  /* May cause an incident */
-  action_consequence_success(paction, pplayer, city_owner(pcity_dest),
-                             city_tile(pcity_dest), city_link(pcity_dest));
-
-  if (city_owner(pcity_dest) != unit_owner(punit)) {
-    /* Tell the city owner about the gift he just received. */
-
-    notify_player(city_owner(pcity_dest), city_tile(pcity_dest),
-                  E_CARAVAN_ACTION, ftc_server,
-                  /* TRANS: Help building the Pyramids in Bergen received
-                   * from Persian Caravan (4 surplus). */
-                  _("Help building the %s in %s received from %s %s "
-                    "(%d %s)."),
-                  improvement_name_translation(
-                    pcity_dest->production.value.building),
-                  city_link(pcity_dest),
-                  nation_adjective_for_player(pplayer),
-                  unit_link(punit),
-                  abs(build_points_left(pcity_dest)),
-                  work);
-  }
-
-  send_player_info_c(pplayer, pplayer->connections);
-  send_city_info(pplayer, pcity_dest);
-  conn_list_do_unbuffer(pplayer->connections);
-
-  return TRUE;
 }
 
 /**********************************************************************//**

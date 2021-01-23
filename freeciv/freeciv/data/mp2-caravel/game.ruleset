@@ -921,7 +921,7 @@ target_reqs  =
       "Building", "Marketplace", "City"
     }
 
-[actionenabler_help_build_wonder]
+[actionenabler_help_build_great_wonder]
 action = "Help Wonder"
 actor_reqs    =
     { "type",   "name", "range", "present"
@@ -935,6 +935,7 @@ target_reqs    =
       "BuildingGenus", "GreatWonder", "Local"
     }
 
+;This could also be used for "Great Units"; e.g., Doomsday Bomb.
 [actionenabler_help_build_small_wonder]
 action = "Help Wonder"
 actor_reqs    =
