@@ -4994,13 +4994,12 @@ reqs	=
 
 ; **** Action Odds for Hostile Diplomatic Actions *******
 ;********************************************************
-;Jan 2021 this effect does nothing because it's hard-coded as 100%.
-;Instead the purpose of this effect is to not show 100% in pop-up odds
-;but to give a [0,100] range, since certain improvement effects now may
-;disallow this action.
+;Jan 2021 this effect should be non-zero so that it triggers 
+;not showing 100% in pop-up odds, since certain improvement 
+;effects may now disallow this action.
 [effect_no_free_investigation]
 type	= "Action_Odds_Pct"
-value	= -75                      ;80 minus 31%*80 = 55%
+value	= 7                      ;80 plus 7%*80 = 85%
 reqs	=
     { "type", "name", "range", "present"
       "Action", "Investigate City", "Local", TRUE
@@ -5095,6 +5094,14 @@ reqs	=
 
 ;CASUS BELLI INCIDENTS
 ;********************************************************
+[effect_incident_caught_spying_on_city]
+type	= "Casus_Belli_Caught"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Investigate City", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
 [effect_incident_success_spy_attack]
 type	= "Casus_Belli_Success"
 value	= 1

@@ -2795,10 +2795,10 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
-Transport Helicopters can carry three land units.\
+Transport Helicopters can carry three land units, which they can pick up from anywhere.\
 "), _("\
- Foot and artillery types can unload on any tile, but will lose moves (except Marines).\
- Other types need a city or base to unload.\n\
+ Foot and artillery types can unload by stepping off to any adjacent tile, but will\
+ lose all moves (except Marine types). Other types need a City, Airbase, or Naval Base to unload.\n\
 "), _("\
  Helicopters lose 1 hp for each turn not ended in a City, Base, or Carrier. +1 move\
  is awarded if starting a turn in a City or Airbase.\n\
@@ -3180,7 +3180,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
+cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "HelpWonder", "TradeRoute", "CoastStrict", "NonMil", "HasNoZOC"
 roles         = "Ferryboat", "FerryStartUnit"
 helptext      = _("\
@@ -4370,7 +4370,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
-cargo         = "Land", "LandAirSea", "Balloon", "Bomb", "LandRoad", "Cargo"
+cargo         = "Land", "LandAirSea", "Balloon", "Bomb", "Cargo"
 flags         =  "HelpWonder", "TradeRoute", "NonMil", "HasNoZOC", "Cant_Fortify", "NoVeteran", "Capturable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -4382,8 +4382,8 @@ roles         = ""
 helptext      = _("\
 Trains are Commerce units with a bonus: they allow units with 2 or less\
  move points to travel your rails at distances comparable to other units. Only Foot Soldiers\
- can:\n1. load outside a city or base;\n2. unload (T) in a base;\n3.step off the Train outside a city\
- (loses all moves.)\nAll other units must load/unload inside a city.\n\n\
+ can:\n1. (L)oad outside a City or Base;\n2. Unload (T) in a Base or Quay.;\n3. Step off the Train outside a City\
+ (loses all moves.)\nAll other units must load/unload inside a City.\n\n\
 On non-allied foreign rails, Trains incur full terrain movement cost.\
  Pre-gunpowder units can't attack Trains.\n\n\
 Electricity and Combustion each give Trains an additional +1 move.\
@@ -4419,12 +4419,13 @@ flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capt
 roles         = ""
 helptext      = _("\
 The Truck unit replaces the Caravan as the basic Commerce unit on Land. It moves at\
- more than twice the speed, but must stay on roads. Each Truck used to build a wonder\
+ more than twice the speed, but must stay on roads. Each Truck used to build a Wonder\
  will add 50 shields. See the entry on Caravan to read what Commerce units may do.\
 "), _("\
-Trucks can carry 3 Land units. Only Foot Soldiers can:\n1. L)oad outside a city or base;\n\
-2. Unload (T) in a base;\n3. Move off the Truck outside a city\
- (loses all moves.)\nAll other units must load/unload inside a city.\n\n\\
+Trucks allow units with 2 or less move points to travel your roads at\
+distances comparable to other units. Only Foot Soldiers can:\n1. (L)oad outside a City or Base;\n\
+2. Unload (T) in a Base or Quay;\n3. Move off the Truck outside a City\
+ (loses all moves.)\nAll other units must load/unload inside a City.\n\n\\
 ")
 
 [unit_freight]

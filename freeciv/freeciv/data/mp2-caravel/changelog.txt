@@ -95,6 +95,13 @@ SPIES/DIPLOMATS:
    b. Where it is only the case of 1 diplomat vs. 1 enemy diplomat, they enter into diplomatic combat, the same as in a city.
    c. Spies promotion odds increased to compensate for the weaker strength of their veterancy levels, to make it track more similar 
       to other units for number of successful surviving actions.
+10. Investigate City is now no longer hard-coded in server to 100% success. What this means for MP2:
+   80% chance to COVERTLY SLIP past enemy diplomats/spies WITHOUT diplomatic combat. (100% if unprotected)
+   If slipped past OR defeated enemy diplomats in combat, 85% chance to succeed at investigating city.
+   FINAL ODDS: 
+      85% chance to investigate unprotected city
+      ~75% chance to succeed vs. protected city (varies slightly up or down with the vet levels of the spy units in combat.)
+
 OTHER:
 1.Casus Belli Expansions:
    a. In a foreign territory casus belli is given by:  Transforming Terrain, Building Base, or making road-types (road,rail,quay,canal,etc.)
@@ -177,7 +184,7 @@ UI / Ease of use / Macro-management mechanics.
     b. 'T' tells selected Cargo to unload from their Transports. 
    LOAD 'L': 
     a. 'L' Load selected units on Transport(s).
-    b. 'L' Load selected Transport(s) with all units on the tile which it can legally take as cargo. ("Cargo Scoop")
+    b. 'L' Load ONE selected Transport with all units on the tile which it can legally take as cargo. ("Cargo Scoop")
     c. 'L' Transfer selected Cargo units to other Transports IFF such action would be legal if the cargo can legally unload then reload. 
     d. 'L' command given at Sea, to tell selected Cargo to move to a new Transport, is legal if current Transport has moved no more than 4
         moves and has at least 3 moves left.
@@ -208,13 +215,27 @@ UI / Ease of use / Macro-management mechanics.
     full screen display. Instead, the command to exit any tab or pop-up window is "W" for (W)ithdraw (W)indow. This now allows the game to default 
     into an orthodox full screen experience like Freeciv Native Client and EVERY OTHER GAME, instead of being a "second class browser game."
    Recommended: become familiar with your OS's hotkeys, which better enable you to navigate while having a fullscreen process:
-28. Fortify given to non-fortifiable units will sentry them instead. This allows giving F to a large stack and every unit who can fortify will, 
-    while sentrying the rest. Reason: quicker/easier micro-management during late game.
+28. Fortify given to non-fortifiable units will sentry them instead, and if they can't sentry, they will be given "No Orders" (J) and stay put.
+    This turns the F key into the magic spam key for making unit(s) stay put and select their best option on the tile. It allows giving F
+    to a large stack and every unit who can fortify will, while sentrying the rest, so you can move on, and maybe spam F again, rapidly.
+    Reason: quicker/easier micro-management during late game.
 28a. Sentry given to non-sentryable units will NO-ORDERS them instead.
 29. Triremes on sentry on all legal refueling spots (formerly could not sentry on coastline.)
 30. Size 1 cities aren't impervious to infinite nukes while every other city is cut in half each time. Now s1 cities die if nuked.
+31. Investigate City now has:
+     1. "diplchance" odds (80%) of avoiding diplomatic battle even if enemy spy is present (was 100%) - "Covert Slip Attempt"
+     2. Then [possibly] diplomatic battle,
+     3. Then "diplchance"+(ruleset odds) chance to succeed. MP2 gives a +5% over base diplchance of 80, or 85% chance to succeed at this phase.
+What this means for MP2 rules: 
+   80% chance to slip past enemy diplomats/spies without diplomatic combat. (100% if unprotected)
+   If slipped past OR defeated enemy diplomats in combat, 85% chance to succeed at investigating city.
+   Thus, 85% chance to investigate unprotected city, and about 75% chance to succeed vs. protected city (plus or minus with vet levels of spies.)
+32. Spies could only sabotage city production at random but not targeted. This was fixed: targeted sabotage now lists "Production" as one of the 
+   choices along with the improvements.
+33. Info-codes. Special info symbols mark the information you get in the chat window, to make it easier/faster to scan for important events of 
+   different types, or to scroll back to find again.
 
-these help with much more than Freeciv and other Full-screen apps. They help you with everything you do on your computer:
+These help with much more than Freeciv and other Full-screen apps. They help you with everything you do on your computer:
             Switch active Program   Flip to Last Program    Switch Browser tab   See all Programs on Workspace   Swap Workspaces
 Linux*      Alt-Tab                 Alt-ESC                 CTRL-Shift-Tab       🐧, ALT-F1                      CTRL-ALT-arrow
 Windows     Alt-Tab                 Alt-ESC                 CTRL-Shift-Tab       Three fingers up, ⊞-tab        ⊞-CTRL-arrow, four finger side swipe 
