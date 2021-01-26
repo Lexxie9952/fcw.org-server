@@ -850,7 +850,7 @@ void send_year_to_clients(void)
 
   /* Hmm, clients could add this themselves based on above packet? */
   notify_conn(game.est_connections, NULL, E_NEXT_YEAR, ftc_any,
-              _("Year: %s"), calendar_text());
+              _("✨Year: %s✨"), calendar_text());
 }
 
 /************************************************************************//**

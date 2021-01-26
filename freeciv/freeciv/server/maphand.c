@@ -107,9 +107,9 @@ void global_warming(int effect)
 
   // It can take a while so notify first.
   notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
-                _("Global warming is occurring! "
+                _("🌞 Global warming is occurring! "
                   "Coastlines are flooding. Hotter climate is "
-                  "affecting vegetation. Please wait..."));
+                  "affecting vegetation."));
 
   climate_change(TRUE, effect);
   notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
@@ -123,9 +123,9 @@ void nuclear_winter(int effect)
 {
   // It can take a while so notify first.                
   notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
-                _("Nuclear winter is happening!<br>"
+                _("⚠️ Nuclear winter is happening!<br>"
                   "Wetlands are drying. Ranges of plains and "
-                  "Grassland may become tundra. Please wait..."));
+                  "Grassland may become tundra."));
 
   climate_change(FALSE, effect);
   notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
@@ -312,14 +312,14 @@ void upgrade_all_city_extras(struct player *pplayer, bool discovery)
     if (discovery) {
       if (percent >= 75) {
         notify_player(pplayer, NULL, E_TECH_GAIN, ftc_server,
-                      _("New hope sweeps like fire through the country as "
+                      _("💡 New hope sweeps like fire through the country as "
                         "the discovery of new infrastructure building technology "
                         "is announced."));
       }
     } else {
       if (percent >= 75) {
         notify_player(pplayer, NULL, E_TECH_GAIN, ftc_server,
-                      _("The people are pleased to hear that your "
+                      _("💡 The people are pleased to hear that your "
                         "scientists finally know about new infrastructure building "
                         "technology."));
       }
@@ -327,11 +327,11 @@ void upgrade_all_city_extras(struct player *pplayer, bool discovery)
 
     if (multiple_types) {
       notify_player(pplayer, NULL, E_TECH_GAIN, ftc_server,
-                    _("Workers spontaneously gather and upgrade all "
+                    _("💡 Workers spontaneously gather and upgrade all "
                       "possible cities with better infrastructure."));
     } else {
       notify_player(pplayer, NULL, E_TECH_GAIN, ftc_server,
-                    _("Workers spontaneously gather and upgrade all "
+                    _("💡 Workers spontaneously gather and upgrade all "
                       "possible cities with %s."), extra_name_translation(upgradet));
     }
   }
@@ -1774,7 +1774,7 @@ static void check_units_single_tile(struct tile *ptile)
                     unit_rule_name(punit), TILE_XY(unit_tile(punit)));
         notify_player(unit_owner(punit), unit_tile(punit),
                       E_UNIT_LOST_MISC, ftc_server,
-                      _("Disbanded your %s due to changing terrain."),
+                      _("⚠️ Disbanded your %s due to changing terrain."),
                       unit_tile_link(punit));
         wipe_unit(punit, ULR_NONNATIVE_TERR, NULL);
       }
@@ -2643,8 +2643,9 @@ static inline void get_full_nation(char *buf, int buflen,
 
 
 /****************************************************************************
-  For AIs, fill the buffer with their player name prefixed with "AI". For
-  humans, just fill it with their username.
+  For AIs, fill the buffer with their player name suffixed with "(A.I.)".
+  For humans, just fill it with their username. Changed from prefix of "AI"
+  which always looked like Arabic "Al <name>".
 ****************************************************************************/
 static inline void get_full_username(char *buf, int buflen,
                                      const struct player *pplayer)
@@ -2660,7 +2661,7 @@ static inline void get_full_username(char *buf, int buflen,
 
   if (is_ai(pplayer)) {
     /* TRANS: "AI <player name>" */
-    fc_snprintf(buf, buflen, _("AI %s"), pplayer->name);
+    fc_snprintf(buf, buflen, _("%s (A.I.)"), pplayer->name);
   } else {
     fc_strlcpy(buf, pplayer->username, buflen);
   }

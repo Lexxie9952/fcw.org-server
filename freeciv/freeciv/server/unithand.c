@@ -200,8 +200,8 @@ void handle_unit_type_upgrade(struct player *pplayer, Unit_type_id uti)
                    * (Plurality of unit names is messed up anyway.) */
                   /* TRANS: "2 Musketeers upgraded to Riflemen for 100 gold."
                    * Plurality is in gold (second %d), not units. */
-                  PL_("%d %s upgraded to %s for %d gold.",
-                      "%d %s upgraded to %s for %d gold.",
+                  PL_("💰 %d %s upgraded to %s for %d gold.",
+                      "💰 %d %s upgraded to %s for %d gold.",
                       cost * number_of_upgraded_units),
                   number_of_upgraded_units,
                   utype_name_translation(from_unittype),
@@ -234,8 +234,8 @@ static bool do_unit_upgrade(struct player *pplayer,
     int cost = unit_upgrade_price(pplayer, from_unit, to_unit);
 
     notify_player(pplayer, unit_tile(punit), E_UNIT_UPGRADED, ftc_server,
-                  PL_("%s upgraded to %s for %d gold.",
-                      "%s upgraded to %s for %d gold.", cost),
+                  PL_("💰 %s upgraded to %s for %d gold.",
+                      "💰 %s upgraded to %s for %d gold.", cost),
                   utype_name_translation(from_unit),
                   unit_link(punit),
                   cost);
@@ -326,14 +326,15 @@ static bool do_capture_units(struct player *pplayer,
     /* Notify players */
     notify_player(pplayer, pdesttile, E_MY_DIPLOMAT_BRIBE, ftc_server,
                   /* TRANS: <unit> ... <unit> */
-                  _("Your %s succeeded in capturing the %s %s."),
+                  _("🎁 Your %s succeeded in capturing the %s %s."),
                   capturer_link, nation_adjective_for_player(uplayer),
                   victim_link);
     notify_player(uplayer, pdesttile,
                   E_ENEMY_DIPLOMAT_BRIBE, ftc_server,
                   /* TRANS: <unit> ... <Poles> */
-                  _("Your %s was captured by the %s."),
-                  victim_link, capturer_nation);
+                  _("⚠️ Your %s %s captured by the %s."),
+                  victim_link, (is_unit_plural(to_capture) ? "were" : "was"), 
+                  capturer_nation);
 
     /* May cause an incident */
     action_consequence_success(paction, pplayer,
@@ -425,13 +426,15 @@ static bool do_expel_unit(struct player *pplayer,
   /* Notify everybody involved. */
   notify_player(pplayer, target_tile, E_UNIT_DID_EXPEL, ftc_server,
                 /* TRANS: <Border Patrol> ... <Spy> */
-                _("Your %s succeeded in expelling the %s %s."),
+                _("👢 Your %s succeeded in expelling the %s %s."),
                 unit_link(actor), nation_adjective_for_player(uplayer),
                 target_link);
   notify_player(uplayer, target_tile, E_UNIT_WAS_EXPELLED, ftc_server,
                 /* TRANS: <unit> ... <Poles> */
-                _("Your %s was expelled by the %s."),
-                target_link, nation_plural_for_player(pplayer));
+                _("👢 Your %s %s expelled by the %s."),
+                target_link, 
+                (is_unit_plural(target) ? "were" : "was"),
+                nation_plural_for_player(pplayer));
 
   /* Being expelled destroys all remaining movement. */
   if (!teleport_unit_to_city(target, pcity, -1, FALSE)) {
@@ -515,13 +518,13 @@ static bool do_heal_unit(struct player *act_player,
   notify_player(act_player, tgt_tile, E_MY_UNIT_DID_HEAL, ftc_server,
                 /* TRANS: If foreign: Your Leader heals Finnish Warrior.
                  * If domestic: Your Leader heals your Warrior. */
-                _("Your %s heals %s %s."),
+                _("🩸 Your %s heals %s %s."),
                 act_unit_link, tgt_unit_owner, tgt_unit_link);
 
   if (act_player != tgt_player) {
     notify_player(tgt_player, tgt_tile, E_MY_UNIT_WAS_HEALED, ftc_server,
                   /* TRANS: Norwegian ... Leader ... Warrior */
-                  _("%s %s heals your %s."),
+                  _("🩸 %s %s heals your %s."),
                   nation_adjective_for_player(unit_nationality(act_unit)),
                   act_unit_link, tgt_unit_link);
   }
@@ -1475,8 +1478,7 @@ static void explain_why_no_action_enabled(struct unit *punit,
     break;
   case ANEK_TGT_UNREACHABLE:
     notify_player(pplayer, target_tile, E_BAD_COMMAND, ftc_server,
-                  _("%s can't do anything since there is an unreachable "
-                    "unit."),
+                  _("%s can't reach any target."),
                   unit_name_translation(punit));
     break;
   case ANEK_TGT_IS_UNIQUE_ACT_HAS:
@@ -1887,8 +1889,9 @@ void illegal_action_msg(struct player *pplayer,
   case ANEK_ACTOR_HAS_HOME_CITY:
     notify_player(pplayer, unit_tile(actor),
                   event, ftc_server,
-                  _("Your %s can't do %s because it has a home city."),
+                  _("Your %s can't do %s because %s a home city."),
                   unit_name_translation(actor),
+                  (is_unit_plural(actor) ? "they have" : "it has"),
                   action_id_name_translation(stopped_action));
     break;
   case ANEK_ACTOR_HAS_NO_HOME_CITY:
@@ -1948,8 +1951,9 @@ void illegal_action_msg(struct player *pplayer,
   case ANEK_LOW_MP:
     notify_player(pplayer, unit_tile(actor),
                   event, ftc_server,
-                  _("Your %s has too few moves left to %s."),
+                  _("Your %s %s too few moves left to %s."),
                   unit_name_translation(actor),
+                  (is_unit_plural(actor) ? "have" : "has"),
                   action_id_name_translation(stopped_action));
     break;
   case ANEK_IS_CITY_CENTER:
@@ -1983,8 +1987,8 @@ void illegal_action_msg(struct player *pplayer,
   case ANEK_DISTANCE_NEAR:
     notify_player(pplayer, unit_tile(actor),
                   event, ftc_server,
-                  PL_("Your %s must be at least %d tile away to do %s.",
-                      "Your %s must be at least %d tiles away to do %s.",
+                  PL_("%s must be at least %d tile away to do %s.",
+                      "%s must be at least %d tiles away to do %s.",
                       explnat->distance),
                   unit_name_translation(actor),
                   explnat->distance,
@@ -1993,8 +1997,8 @@ void illegal_action_msg(struct player *pplayer,
   case ANEK_DISTANCE_FAR:
     notify_player(pplayer, unit_tile(actor),
                   event, ftc_server,
-                  PL_("Your %s can't be more than %d tile away to do %s.",
-                      "Your %s can't be more than %d tiles away to do %s.",
+                  PL_("%s have a maximum range of %d tile to do %s.",
+                      "%s have a maximum range of %d tiles to do %s.",
                       explnat->distance),
                   unit_name_translation(actor),
                   explnat->distance,
@@ -2066,8 +2070,7 @@ void illegal_action_msg(struct player *pplayer,
   case ANEK_TGT_UNREACHABLE:
     notify_player(pplayer, target_tile,
                   event, ftc_server,
-                  _("Your %s can't do %s there since there's an "
-                    "unreachable unit."),
+                  _("<font color='#C0C0C0'>No reachable target for %s to %s.</font>"),
                   unit_name_translation(actor),
                   action_id_name_translation(stopped_action));
     break;
@@ -2088,8 +2091,9 @@ void illegal_action_msg(struct player *pplayer,
   case ANEK_UNKNOWN:
     notify_player(pplayer, unit_tile(actor),
                   event, ftc_server,
-                  _("Your %s was unable to %s."),
+                  _("Your %s %s unable to %s."),
                   unit_name_translation(actor),
+                  (is_unit_plural(actor) ? "were" : "was"),                    
                   action_id_name_translation(stopped_action));
     break;
   }
@@ -2877,7 +2881,7 @@ static bool do_unit_change_homecity(struct unit *punit,
     notify_player(city_owner(pcity), city_tile(pcity), E_UNIT_BUILT,
                   ftc_server,
                   /* TRANS: other player ... unit type ... city name. */
-                  _("%s transferred control over a %s to you in %s."),
+                  _("🎁 %s transferred control over a %s to you in %s."),
                   giver,
                   unit_tile_link(punit),
                   city_link(pcity));;
@@ -2903,6 +2907,8 @@ static bool unit_do_help_build(struct player *pplayer,
 {
   const char *work;
   const char *prod;
+  const char *action_name;
+  const char *info_emoji;
   int shields;
 
   /* Sanity check: The actor still exists. */
@@ -2913,6 +2919,9 @@ static bool unit_do_help_build(struct player *pplayer,
   fc_assert_ret_val(pcity_dest, FALSE);
 
   shields = unit_shield_value(punit, unit_type_get(punit), paction);
+
+  bool full_contributor = (shields == unit_type_get(punit)->build_cost) 
+                          ? true : false;
 
   if (action_has_result(paction, ACTION_HELP_WONDER)) {
     /* Add the caravan shields */
@@ -2939,33 +2948,47 @@ static bool unit_do_help_build(struct player *pplayer,
     /* Let the player that just donated shields with "Help Wonder" know
      * the result of his donation. */
     prod = city_production_name_translation(pcity_dest);
+    action_name = (is_unit_plural(punit) ? _("help build")
+                                         : _("helps build"));
+    info_emoji = _("🐫");
   } else {
     fc_assert(action_has_result(paction, ACTION_RECYCLE_UNIT));
     /* TRANS: Your Caravan does "Recycle Unit" to help build the
      * current production in Bergen (4 surplus).
      * "Recycle Unit" says "current production" rather than its name. */
-    prod = _("current production");
+    //prod = _("current production");
+    prod = city_production_name_translation(pcity_dest);
+    // Reason someone made it say "current production": you might not have
+    // intel on what your ally is making who is planning to backstab you.
+    // Reason it's changed: if you help make something, you get direct
+    // intel on what's being made. Also, most names are shorter than 
+    // 'current production', so it's a verbosity reduction for busy
+    // leaders.
+    action_name = (is_unit_plural(punit) ? _("render themselves to build")
+                                         : _("renders itself to build"));
+    info_emoji = full_contributor ? _("📦") : _("<font color='#50C010'>♻</font>");
   }
 
   if (build_points_left(pcity_dest) >= 0) {
     /* TRANS: Your Caravan does "Help Wonder" to help build the
-     * Pyramids in Bergen (4 remaining).
-     * You can reorder '4' and 'remaining' in the actual format string. */
-    work = _("remaining");
+     * Pyramids in Bergen (4 left).
+     * You can reorder '4' and 'left' in the actual format string. */
+    work = _("left");
   } else {
     /* TRANS: Your Caravan does "Help Wonder" to help build the
      * Pyramids in Bergen (4 surplus).
      * You can reorder '4' and 'surplus' in the actual format string. */
-    work = _("surplus");
+    work = _("extra");
   }
 
   notify_player(pplayer, city_tile(pcity_dest), E_CARAVAN_ACTION,
                 ftc_server,
                 /* TRANS: Your Caravan does "Help Wonder" to help build the
                  * Pyramids in Bergen (4 surplus). */
-                _("Your %s does %s to help build the %s in %s (%d %s)."),
+                _("%s Your %s %s %s in %s (%d %s)"),
+                info_emoji,
                 unit_link(punit),
-                action_name_translation(paction),
+                action_name,
                 prod,
                 city_link(pcity_dest), 
                 abs(build_points_left(pcity_dest)),
@@ -2983,7 +3006,7 @@ static bool unit_do_help_build(struct player *pplayer,
                   E_CARAVAN_ACTION, ftc_server,
                   /* TRANS: Help building the Pyramids in Bergen received
                    * from Persian Caravan (4 surplus). */
-                  _("Help building the %s in %s received from %s %s "
+                  _("🎁 Help building the %s in %s received from %s %s "
                     "(%d %s)."),
                   city_production_name_translation(pcity_dest),
                   city_link(pcity_dest),
@@ -3035,7 +3058,7 @@ static bool city_add_unit(struct player *pplayer, struct unit *punit,
 
   /* Notify the unit owner that the unit successfully joined the city. */
   notify_player(pplayer, city_tile(pcity), E_CITY_BUILD, ftc_server,
-                _("%s added to aid %s in growing."),
+                _("➕ %s added to aid %s in growing."),
                 unit_tile_link(punit),
                 city_link(pcity));
   if (pplayer != city_owner(pcity)) {
@@ -3043,7 +3066,7 @@ static bool city_add_unit(struct player *pplayer, struct unit *punit,
     notify_player(city_owner(pcity), city_tile(pcity), E_CITY_BUILD,
                   ftc_server,
                   /* TRANS: another player had his unit joint your city. */
-                  _("%s adds %s to your city %s."),
+                  _("➕ %s adds %s to your city %s."),
                   player_name(unit_owner(punit)),
                   unit_tile_link(punit),
                   city_link(pcity));;
@@ -3542,7 +3565,7 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
                         E_UNIT_ACTION_FAILED, ftc_server,
                         /* TODO: replace generic "assaulted" with ruleset
                           defined name of action.*/
-                        _("Your %s assaulted the %s %s (%dhp)."),
+                        _("💢 Your %s assaulted the %s %s (%dhp)."),
                         unit_name_translation(punit),
                         nation_adjective_for_player(unit_owner(pdefender)),
                         unit_name_translation(pdefender),
@@ -3552,7 +3575,7 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
                         E_UNIT_ESCAPED, ftc_server,
                         /* TODO: replace generic "assaulted" with ruleset
                           defined name of action.*/
-                        _("%s %s assaulted your %s (%dhp)."),
+                        _("💢 %s %s assaulted your %s (%dhp)."),
                         nation_adjective_for_player(pplayer),
                         unit_name_translation(punit),
                         unit_name_translation(pdefender),
@@ -3562,7 +3585,7 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
                         E_UNIT_ACTION_FAILED, ftc_server,
                         /* TODO: replace generic "assaulted" with ruleset
                           defined name of action.*/
-                        _("Your %s assault <b>killed</b> the %s %s."),
+                        _("💥 Your %s assault <b>killed</b> the %s %s."),
                         unit_name_translation(punit),
                         nation_adjective_for_player(unit_owner(pdefender)),
                         unit_name_translation(pdefender));
@@ -3571,7 +3594,7 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
                         E_UNIT_ESCAPED, ftc_server,
                         /* TODO: replace generic "assaulted" with ruleset
                           defined name of action.*/
-                        _("%s %s assaulted and <b>killed</b> your %s."),
+                        _("⚠️ %s %s assaulted and <b>killed</b> your %s."),
                         nation_adjective_for_player(pplayer),
                         unit_name_translation(punit),
                         unit_name_translation(pdefender));        
@@ -3680,10 +3703,10 @@ static bool unit_nuke(struct player *pplayer, struct unit *punit,
   if ((pcity = sdi_try_defend(pplayer, def_tile))) {
     /* FIXME: Remove the hard coded reference to SDI defense. */
     notify_player(pplayer, unit_tile(punit), E_UNIT_LOST_ATT, ftc_server,
-                  _("Your %s was shot down by "
+                  _("⚠️Your %s was shot down by "
                     "SDI defenses, what a waste."), unit_tile_link(punit));
     notify_player(city_owner(pcity), def_tile, E_UNIT_WIN_DEF, ftc_server,
-                  _("The nuclear attack on %s was avoided by"
+                  _("💥The nuclear attack on %s was thwarted by"
                     " your SDI defense."), city_link(pcity));
 
     /* Trying to nuke something this close can be... unpopular. */
@@ -3771,14 +3794,14 @@ static bool unit_do_destroy_city(struct player *act_player,
   /* Let the actor know. */
   notify_player(act_player, city_tile(tgt_city),
                 E_UNIT_WIN_ATT, ftc_server,
-                _("You destroy %s completely."),
+                _("💥You destroy %s completely."),
                 city_tile_link(tgt_city));
 
   if (tgt_player != act_player) {
     /* This was done to a foreign city. Inform the victim player. */
     notify_player(tgt_player, city_tile(tgt_city),
                   E_CITY_LOST, ftc_server,
-                  _("%s has been destroyed by %s."),
+                  _("⚠️%s has been destroyed by %s."),
                   city_tile_link(tgt_city),
                   player_name(act_player));
   }
@@ -3925,11 +3948,11 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
           if (game.server.killcitizen_pct>0 && game.server.killcitizen_pct<100) {
             notify_player(pplayer, NULL,
                 E_UNIT_LOST_MISC, ftc_server,
-                _("Population lost in %s after successful attack:"),
+                _("💥 Population lost in %s after successful attack:"),
                 city_link(pcity));
             notify_player(unit_owner(pdefender), def_tile,
                 E_UNIT_LOST_MISC, ftc_server,
-                _("The %s attack caused population loss in %s:"),
+                _("⚠️ The %s attack caused population loss in %s:"),
                 nation_adjective_for_player(pplayer),
                 city_link(pcity));      
           }   
@@ -3942,11 +3965,11 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
           if (game.server.killcitizen_pct>0 && game.server.killcitizen_pct<100) {    
             notify_player(pplayer, NULL,
                   E_CITY_NORMAL, ftc_server,
-                  _("%s maintained current population after attack:"),
+                  _("💢 %s maintained current population after attack:"),
                   city_link(pcity));
             notify_player(unit_owner(pdefender), NULL,
                   E_CITY_NORMAL, ftc_server,
-                  _("No population loss in %s after %s attack:"),
+                  _("💢 No population loss in %s after %s attack:"),
                   city_link(pcity),
                   nation_adjective_for_player(pplayer));
             }  
@@ -3974,7 +3997,7 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
     notify_player(unit_owner(punit), def_tile,
                   E_UNIT_ACTION_FAILED, ftc_server,
                   /* TRANS: "... Cannon ... the Polish Destroyer." */
-                  _("Your %s (%dhp) could not defeat the %s %s (%dhp).\n"),
+                  _("💢 Your %s (%dhp) could not defeat the %s %s (%dhp).\n"),
                   loser_link,
                   punit->hp,
                   nation_adjective_for_player(unit_owner(pdefender)),
@@ -3983,7 +4006,7 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
     notify_player(unit_owner(pdefender), def_tile,
                   E_UNIT_ESCAPED, ftc_server,
                   /* TRANS: "... Polish Cannon ... your Destroyer ..." */
-                  _("%s %s (%dhp) attacked your %s (%dhp), with no casualties.\n"),
+                  _("💢 %s %s (%dhp) attacked your %s (%dhp), with no casualties.\n"),
                   nation_adjective_for_player(unit_owner(punit)),
                   loser_link,
                   punit->hp,
@@ -4025,7 +4048,7 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
     notify_player(unit_owner(pwinner), unit_tile(pwinner),
                   E_UNIT_WIN_DEF, ftc_server,
                   /* TRANS: "Your Cannon ... the Polish Destroyer." */
-                  _("Your %s survived the pathetic attack from the %s %s."),
+                  _("⚠️ Your %s survived the pathetic attack from the %s %s."),
                   winner_link,
                   nation_adjective_for_player(unit_owner(ploser)),
                   loser_link);
@@ -4035,7 +4058,7 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
     notify_player(unit_owner(ploser), def_tile,
                   E_UNIT_LOST_ATT, ftc_server,
                   /* TRANS: "... Cannon ... the Polish Destroyer." */
-                  _("Your attacking %s failed against the %s %s!"),
+                  _("⚠️ Your attacking %s failed against the %s %s!"),
                   loser_link,
                   nation_adjective_for_player(unit_owner(pwinner)),
                   winner_link);
@@ -4396,8 +4419,8 @@ static bool do_unit_establish_trade(struct player *pplayer,
   if (!pcity_homecity) {
     notify_player(pplayer, unit_tile(punit), E_BAD_COMMAND, ftc_server,
                   _("Sorry, your %s cannot establish"
-                    " a trade route because it has no home city."),
-                  unit_link(punit));
+                    " a trade route because it %s no home city."),
+                  unit_link(punit), (is_unit_plural(punit) ? "they have" : "it has"));
     return FALSE;
   }
 
@@ -4409,8 +4432,8 @@ static bool do_unit_establish_trade(struct player *pplayer,
   if (goods == NULL) {
     notify_player(pplayer, unit_tile(punit), E_BAD_COMMAND, ftc_server,
                   _("Sorry, your %s cannot establish"
-                    " a trade route because it's not carrying any goods."),
-                  unit_link(punit));
+                    " a trade route because %s not carrying any goods."),
+                  unit_link(punit), (is_unit_plural(punit) ? "they're" : "it's"));
     return FALSE;
   }
 
@@ -4516,9 +4539,10 @@ static bool do_unit_establish_trade(struct player *pplayer,
     notify_player(pplayer, city_tile(pcity_dest),
                   E_CARAVAN_ACTION, ftc_server,
                   /* TRANS: ... Caravan ... Paris ... Stockholm ... Goods */
-                  _("Your %s from %s has arrived in %s carrying %s."),
+                  _("Your %s from %s %s arrived in %s carrying %s."),
                   punit_link,
                   homecity_link,
+                  (is_unit_plural(punit) ? "have" : "has"),
                   destcity_link,
                   goods_str);
     break;
@@ -4526,13 +4550,14 @@ static bool do_unit_establish_trade(struct player *pplayer,
     notify_player(pplayer, city_tile(pcity_dest),
                   E_CARAVAN_ACTION, ftc_server,
                   /* TRANS: ... Caravan ... Paris ... Stockholm, ... Goods... */
-                  PL_("Your %s from %s has arrived in %s carrying %s,"
+                  PL_("💰 Your %s from %s %s arrived in %s carrying %s,"
                       " and revenues amount to %d in gold.",
-                      "Your %s from %s has arrived in %s carrying %s,"
+                      "💰 Your %s from %s %s arrived in %s carrying %s,"
                       " and revenues amount to %d in gold.",
                       revenue),
                   punit_link,
                   homecity_link,
+                  (is_unit_plural(punit) ? "have" : "has"),
                   destcity_link,
                   goods_str,
                   revenue);
@@ -4541,13 +4566,14 @@ static bool do_unit_establish_trade(struct player *pplayer,
     notify_player(pplayer, city_tile(pcity_dest),
                   E_CARAVAN_ACTION, ftc_server,
                   /* TRANS: ... Caravan ... Paris ... Stockholm, ... Goods... */
-                  PL_("Your %s from %s has arrived in %s carrying %s,"
+                  PL_("💡 Your %s from %s %s arrived in %s carrying %s,"
                       " and revenues amount to %d in research.",
-                      "Your %s from %s has arrived in %s carrying %s,"
+                      "💡 Your %s from %s %s arrived in %s carrying %s,"
                       " and revenues amount to %d in research.",
                       revenue),
                   punit_link,
                   homecity_link,
+                  (is_unit_plural(punit) ? "have" : "has"),
                   destcity_link,
                   goods_str,
                   revenue);
@@ -4556,13 +4582,14 @@ static bool do_unit_establish_trade(struct player *pplayer,
     notify_player(pplayer, city_tile(pcity_dest),
                   E_CARAVAN_ACTION, ftc_server,
                   /* TRANS: ... Caravan ... Paris ... Stockholm, ... Goods... */
-                  PL_("Your %s from %s has arrived in %s carrying %s,"
+                  PL_("Your %s from %s %s arrived in %s carrying %s,"
                       " and revenues amount to %d in gold and research.",
-                      "Your %s from %s has arrived in %s carrying %s,"
+                      "Your %s from %s %s arrived in %s carrying %s,"
                       " and revenues amount to %d in gold and research.",
                       revenue),
                   punit_link,
                   homecity_link,
+                  (is_unit_plural(punit) ? "have" : "has"),
                   destcity_link,
                   goods_str,
                   revenue);
@@ -4598,13 +4625,13 @@ static bool do_unit_establish_trade(struct player *pplayer,
     /* Always tell the unit owner */
     notify_player(pplayer, NULL,
                   E_CARAVAN_ACTION, ftc_server,
-                  _("New trade route established from %s to %s."),
+                  _("🐫 New trade route established from %s to %s."),
                   homecity_link,
                   destcity_link);
     if (pplayer != partner_player) {
       notify_player(partner_player, city_tile(pcity_dest),
                     E_CARAVAN_ACTION, ftc_server,
-                    _("The %s established a trade route between their "
+                    _("🐫 The %s established a trade route between their "
                       "city %s and %s."),
                     nation_plural_for_player(pplayer),
                     homecity_link,
@@ -4941,7 +4968,7 @@ bool unit_activity_handling_targeted(struct unit *punit,
               if (fc_rand(100) < odds) {
                 notify_player(unit_owner(punit), unit_tile(punit),
                           E_UNIT_ACTION_TARGET_HOSTILE, ftc_server,
-                          _("Your %s destroyed the %s %s with a %s."),
+                          _("💥 Your %s destroyed the %s %s with a %s."),
                           unit_link(punit),
                           (tile_owner(unit_tile(punit)) ? nation_adjective_for_player(tile_owner(unit_tile(punit))) : " " ), 
                           extra_name_translation(punit->activity_target),
@@ -4950,8 +4977,9 @@ bool unit_activity_handling_targeted(struct unit *punit,
                 if (tile_owner(punit->tile) && tile_owner(punit->tile) != unit_owner(punit)) {
                   notify_player(tile_owner(punit->tile), unit_tile(punit),
                           E_UNIT_ACTION_TARGET_HOSTILE, ftc_server,
-                          _("Your %s was destroyed from %s %s done by %s %s %s!"),
+                          _("⚠️ Your %s %s destroyed from %s %s done by %s %s %s!"),
                           extra_name_translation(punit->activity_target),
+                          (is_word_plural(extra_name_translation(punit->activity_target)) ? "were" : "was"),
                           indefinite_article_for_word(unit_type_get(punit)->sound_fight_alt, false),                          
                           unit_type_get(punit)->sound_fight_alt,
                           indefinite_article_for_word(nation_adjective_for_player(unit_owner(punit)), false),
@@ -4983,14 +5011,14 @@ bool unit_activity_handling_targeted(struct unit *punit,
               else {
                 notify_player(unit_owner(punit), unit_tile(punit),
                           E_UNIT_ACTION_ACTOR_FAILURE, ftc_server,
-                          _("Your %s's %s missed its target."),
+                          _("💢 Your %s's %s missed its target."),
                           unit_link(punit),
                           unit_type_get(punit)->sound_fight_alt);
                 //notify other player:
                 if (tile_owner(punit->tile)) {
                   notify_player(tile_owner(punit->tile), unit_tile(punit),
                           E_UNIT_ACTION_ACTOR_FAILURE, ftc_server,
-                          _("%s %s %s failed while attempting to %s your %s."),
+                          _("💢 %s %s %s failed while attempting to %s your %s."),
                           indefinite_article_for_word(nation_adjective_for_player(unit_owner(punit)), true),
                           nation_adjective_for_player(unit_owner(punit)),
                           unit_link(punit),
@@ -5034,6 +5062,7 @@ bool unit_activity_handling_targeted(struct unit *punit,
                                     tile_owner(unit_tile(punit)),
                                     unit_tile(punit),
                                     tile_link(unit_tile(punit)));
+
         }
 /**** </end all PILLAGE ACTIONS> *****/        
         else if (new_activity == ACTIVITY_GEN_ROAD) {

@@ -185,4 +185,6 @@ void unit_activity_complete(struct unit *punit);
 
 void unit_get_goods(struct unit *punit);
 
+bool is_unit_plural(struct unit *punit);
+
 #endif  /* FC__UNITTOOLS_H */

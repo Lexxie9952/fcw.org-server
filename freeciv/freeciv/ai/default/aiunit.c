@@ -2566,7 +2566,7 @@ void dai_manage_unit(struct ai_type *ait, struct player *pplayer,
     dai_manage_diplomat(ait, pplayer, punit);
     TIMING_LOG(AIT_DIPLOMAT, TIMER_STOP);
     return;
-  } else if (unit_has_type_flag(punit, UTYF_SETTLERS)
+  } else if ((unit_has_type_flag(punit, UTYF_SETTLERS) && unit_has_type_flag(punit, UTYF_CIVILIAN))
              || unit_is_cityfounder(punit)) {
     dai_manage_settler(ait, pplayer, punit);
     return;

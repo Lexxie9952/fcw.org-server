@@ -363,15 +363,14 @@ void unit_bombs_unit(struct unit *attacker, struct unit *defender,
                          &attack_firepower, &defense_firepower);
 
   // Special attack modifiers applying to Bombard only:
-  attackpower *= (100 + pstats.bombard_atk_mod);
-  attackpower /= 100;
+  attackpower = attackpower * (100 + pstats.bombard_atk_mod)/100;
 
   //notify_player(plr1, NULL, E_UNIT_ACTION_FAILED, ftc_server, _("Modified ATK = %f"), (float)attackpower/100);
 
   // Special defense modifiers applying to Bombard only:
   // TO DO:
   /* if (defender->activity == ACTIVITY_FORTIFIED)
-  defensepower *= (100 + pstats->fortified_def_mod);
+  defensepower *= (100 + def_pstats->fortified_def_mod);
   defensepower /= 100; */
 
   log_verbose("attack:%d, defense:%d, attack firepower:%d, "
@@ -449,8 +448,9 @@ static void do_upgrade_effects(struct player *pplayer)
 
     transform_unit(punit, type_to, TRUE);
     notify_player(pplayer, unit_tile(punit), E_UNIT_UPGRADED, ftc_server,
-                  _("%s was upgraded for free to %s."),
+                  _("🎀 %s %s upgraded for free to %s."),
                   utype_name_translation(type_from),
+                  (is_unit_plural(punit) ? "were" : "was"),
                   unit_link(punit));
     unit_list_remove(candidates, punit);
     upgrades--;
@@ -492,12 +492,12 @@ void player_restore_units(struct player *pplayer)
        * killed; notify player here */
       if (!punit->homecity && 0 < game.server.killunhomed) {
         notify_player(pplayer, unit_tile(punit), E_UNIT_LOST_MISC,
-                      ftc_server, _("Your %s has run out of hit points "
+                      ftc_server, _("⚠️ Your %s has run out of hit points "
                                     "because it was not supported by a city."),
                       unit_tile_link(punit));
       } else {
         notify_player(pplayer, unit_tile(punit), E_UNIT_LOST_MISC, ftc_server,
-                      _("Your %s has run out of hit points."),
+                      _("⚠️ Your %s has run out of hit points."),
                       unit_tile_link(punit));
       }
 
@@ -573,7 +573,7 @@ void player_restore_units(struct player *pplayer)
 
                 notify_player(pplayer, unit_tile(punit),
                               E_UNIT_ORDERS, ftc_server,
-                              _("Your %s has returned to refuel."),
+                              _("⛽ Your %s has returned to refuel."),
                               unit_link(punit));
 	      }
               pf_path_destroy(path);
@@ -604,8 +604,10 @@ void player_restore_units(struct player *pplayer)
   unit_list_iterate_safe(pplayer->units, punit) {
     if (punit->fuel <= 0 && utype_fuel(unit_type_get(punit))) {
       notify_player(pplayer, unit_tile(punit), E_UNIT_LOST_MISC, ftc_server,
-                    _("Your %s has run out of fuel."),
-                    unit_tile_link(punit));
+                    _("⚠️Your %s %s lost when %s ran out of fuel."),
+                    unit_tile_link(punit),
+                    (is_unit_plural(punit) ? "were" : "was"),
+                    (is_unit_plural(punit) ? "they" : "it"));
       wipe_unit(punit, ULR_FUEL, NULL);
     } 
   } unit_list_iterate_safe_end;
@@ -728,7 +730,7 @@ void execute_unit_orders(struct player *pplayer)
             format_time_duration(game.server.unitwaittime - dt, buf, sizeof(buf));
             notify_player(punit->owner, unit_tile(punit),
                           E_UNIT_ORDERS, ftc_server,
-                          _(" * %s movement delayed %s by unitwaittime."),
+                          _(" ⏳ %s movement delayed %s by unitwaittime."),
                           unit_link(punit), buf);
           }
         } else execute_orders(punit, FALSE); /* Delay_Goto not applicable */
@@ -839,7 +841,7 @@ void notify_unit_experience(struct unit *punit)
   notify_player(unit_owner(punit), unit_tile(punit),
                 E_UNIT_BECAME_VET, ftc_server,
                 /* TRANS: Your <unit> became ... rank of <veteran level>. */
-                _("Your %s became more experienced and achieved the rank "
+                _("🥈 Your %s became more experienced and achieved the rank "
                   "of %s."),
                 unit_link(punit), name_translation_get(&vlevel->name));
 }
@@ -859,7 +861,7 @@ static void unit_convert(struct unit *punit)
     transform_unit(punit, to_type, TRUE);
     notify_player(unit_owner(punit), unit_tile(punit),
                   E_UNIT_UPGRADED, ftc_server,
-                  _("%s converted to %s."),
+                  _("♻ %s converted to %s."),
                   utype_name_translation(from_type),
                   utype_name_translation(to_type));
   } else {
@@ -921,7 +923,7 @@ void unit_activity_complete(struct unit *punit)
         if (dt>0.99) {
           format_time_duration(game.server.unitwaittime - dt, buf, sizeof(buf));
           notify_player(punit->owner, unit_tile(punit), E_UNIT_ORDERS, ftc_server,
-                    _(" + %s movement delayed %s by unitwaittime."),
+                    _(" ⏳ %s movement delayed %s by unitwaittime."),
                     unit_link(punit), buf);
         }
       } else { /* Else, no UWT remaining. Force GOTO to happen: */
@@ -1204,13 +1206,13 @@ static void update_unit_activity(struct unit *punit, time_t now)
       if (moves_left_at_start && punit->ai_controlled == FALSE) {
         if (punit->activity==ACTIVITY_FORTIFYING) { 
           notify_player(punit->owner, NULL, E_UNIT_ORDERS, ftc_server,
-                    _("  . %s doing %s will be delayed %s by fortifywaittime."),
+                    _("  ⏳ %s doing %s will be delayed %s by fortifywaittime."),
                     unit_link(punit), _("Fortify"), buf);
         } else {
           /* TODO: verbosity reduction. Only report activities that will be finished 
            * THIS TURN after the UWT. */
           notify_player(punit->owner, NULL, E_UNIT_ORDERS, ftc_server,
-                    _("  . %s doing %s will be delayed %s by unitwaittime."),
+                    _("  ⏳ %s doing %s will be delayed %s by unitwaittime."),
                     unit_link(punit), concat_tile_activity_text(unit_tile(punit)), buf);
         }
       }
@@ -1295,7 +1297,7 @@ void finish_unit_wait(struct unit *punit, int activity_count)
   /* Report activity is finished: */
   if (orders_finished && punit->activity==ACTIVITY_IDLE)  
       notify_player(unit_owner(punit), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
-                    _(" * %s finished %s."), unit_link(punit), buf); 
+                    _(" ⏰ %s finished %s."), unit_link(punit), buf); 
 }
 
 /**********************************************************************//**
@@ -1559,7 +1561,7 @@ void bounce_unit(struct unit *punit, bool verbose)
   if (verbose) {
     notify_player(pplayer, punit_tile, E_UNIT_LOST_MISC, ftc_server,
                   /* TRANS: A unit is disbanded to resolve stack conflicts. */
-                  _("Disbanded your %s."),
+                  _("⚠️ Disbanded your %s."),
                   unit_tile_link(punit));
   }
   wipe_unit(punit, ULR_STACK_CONFLICT, NULL);
@@ -2063,11 +2065,11 @@ static void server_remove_unit_full(struct unit *punit, bool transported,
   /* check if this unit had UTYF_GAMELOSS flag */
   if (unit_has_type_flag(punit, UTYF_GAMELOSS) && unit_owner(punit)->is_alive) {
     notify_conn(game.est_connections, ptile, E_UNIT_LOST_MISC, ftc_server,
-                _("Unable to defend %s, %s has lost the game."),
+                _("💥 Unable to defend %s, %s has lost the game."),
                 unit_link(punit),
                 player_name(pplayer));
     notify_player(pplayer, ptile, E_GAME_END, ftc_server,
-                  _("Losing %s meant losing the game! "
+                  _("⚠️ Losing %s meant losing the game! "
                   "Be more careful next time!"),
                   unit_link(punit));
     player_status_add(unit_owner(punit), PSTATUS_DYING);
@@ -2124,7 +2126,7 @@ static void unit_lost_with_transport(const struct player *pplayer,
                                      struct player *killer)
 {
   notify_player(pplayer, unit_tile(pcargo), E_UNIT_LOST_MISC, ftc_server,
-                _("%s lost when %s was lost."),
+                _("⚠️ %s lost when %s was lost."),
                 unit_tile_link(pcargo),
                 utype_name_translation(ptransport));
   /* Unit is not transported any more at this point, but it has jumped
@@ -2368,7 +2370,7 @@ static bool try_to_save_unit(struct unit *punit, const struct unit_type *pttype,
 
         if (teleport_unit_to_city(punit, pcity, 0, FALSE)) {
           notify_player(pplayer, ptile, E_UNIT_RELOCATED, ftc_server,
-                        _("%s escaped the destruction of %s, and fled to %s."),
+                        _("💢 %s escaped the destruction of %s, and fled to %s."),
                         tplink,
                         utype_name_translation(pttype),
                         city_link(pcity));
@@ -2529,8 +2531,8 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
     ransom = (pvictim->economic.gold >= game.server.ransom_gold) 
              ? game.server.ransom_gold : pvictim->economic.gold;
     notify_player(pvictor, unit_tile(pkiller), E_UNIT_WIN_ATT, ftc_server,
-                  PL_("Barbarian leader captured; %d gold ransom paid.",
-                      "Barbarian leader captured; %d gold ransom paid.",
+                  PL_("💰 Barbarian leader captured; %d gold ransom paid.",
+                      "💰 Barbarian leader captured; %d gold ransom paid.",
                       ransom),
                   ransom);
     pvictor->economic.gold += ransom;
@@ -2550,7 +2552,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
   if (!is_stack_vulnerable(unit_tile(punit)) || unitcount == 1) {
     notify_player(pvictor, unit_tile(pkiller), E_UNIT_WIN_ATT, ftc_server,
                   /* TRANS: "... Cannon ... the Polish Destroyer." */
-                  _("Your attacking %s succeeded against the %s %s!"),
+                  _("💥Your attacking %s eliminated the %s %s!"),
                   pkiller_link,
                   nation_adjective_for_player(pvictim),
                   punit_link);
@@ -2559,8 +2561,9 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
     }
     notify_player(pvictim, unit_tile(punit), E_UNIT_LOST_DEF, ftc_server,
                   /* TRANS: "Cannon ... the Polish Destroyer." */
-                  _("%s lost to an attack by the %s %s."),
+                  _("⚠️%s lost to an attack by %s %s %s."),
                   punit_link,
+                  indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
                   nation_adjective_for_player(pvictor),
                   pkiller_link);
 
@@ -2641,9 +2644,9 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
     /* Inform the destroyer: lots of different cases here! */
     notify_player(pvictor, unit_tile(pkiller), E_UNIT_WIN_ATT, ftc_server,
                   /* TRANS: "... Cannon ... the Polish Destroyer ...." */
-                  PL_("Your attacking %s succeeded against the %s %s "
+                  PL_("💥Your attacking %s eliminated the %s %s "
                       "(and %d other unit)!",
-                      "Your attacking %s succeeded against the %s %s "
+                      "💥Your attacking %s eliminated the %s %s "
                       "(and %d other units)!", unitcount - 1),
                   pkiller_link,
                   nation_adjective_for_player(pvictim),
@@ -2666,8 +2669,9 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
           notify_player(player_by_number(i), ptile,
                         E_UNIT_LOST_DEF, ftc_server,
                         /* TRANS: "Cannon ... the Polish Destroyer." */
-                        _("%s lost to an attack by the %s %s."),
+                        _("⚠️%s lost to an attack by %s %s %s."),
                         punit_link,
+                        indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
                         nation_adjective_for_player(pvictor),
                         pkiller_link);
         } else {
@@ -2676,8 +2680,9 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
                         E_UNIT_LOST_DEF, ftc_server,
                         /* TRANS: "Cannon lost when the Polish Destroyer
                          * attacked the German Musketeers." */
-                        _("%s lost when the %s %s attacked the %s %s."),
+                        _("⚠️%s lost when %s %s %s attacked the %s %s."),
                         unit_link(other_killed[i]),
+                        indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
                         nation_adjective_for_player(pvictor),
                         pkiller_link,
                         nation_adjective_for_player(pvictim),
@@ -2692,9 +2697,10 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
                           E_UNIT_LOST_DEF, ftc_server,
                           /* TRANS: "Musketeers (and Cannon) lost to an
                            * attack from the Polish Destroyer." */
-                          _("%s (and %s) lost to an attack from the %s %s."),
+                          _("⚠️%s (and %s) were lost to %s %s %s."),
                           punit_link,
                           unit_link(other_killed[i]),
+                          indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
                           nation_adjective_for_player(pvictor),
                           pkiller_link);
           } else {
@@ -2703,12 +2709,13 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
                           /* TRANS: "Musketeers and 3 other units lost to
                            * an attack from the Polish Destroyer."
                            * (only happens with at least 2 other units) */
-                          PL_("%s and %d other unit lost to an attack "
-                              "from the %s %s.",
-                              "%s and %d other units lost to an attack "
-                              "from the %s %s.", others),
+                          PL_("⚠️%s and %d other unit lost to "
+                              "%s %s %s.",
+                              "⚠️%s and %d other units lost to "
+                              "%s %s %s.", others),
                           punit_link,
                           others,
+                          indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
                           nation_adjective_for_player(pvictor),
                           pkiller_link);
           }
@@ -2718,10 +2725,11 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
                         /* TRANS: "2 units lost when the Polish Destroyer
                          * attacked the German Musketeers."
                          * (only happens with at least 2 other units) */
-                        PL_("%d unit lost when the %s %s attacked the %s %s.",
-                            "%d units lost when the %s %s attacked the %s %s.",
+                        PL_("⚠️ %d unit lost when %s %s %s attacked the %s %s.",
+                            "⚠️ %d units lost when %s %s %s attacked the %s %s.",
                             num_killed[i]),
                         num_killed[i],
+                        indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
                         nation_adjective_for_player(pvictor),
                         pkiller_link,
                         nation_adjective_for_player(pvictim),
@@ -2735,13 +2743,13 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
       if (0 < num_escaped[i]) {
         notify_player(player_by_number(i), unit_tile(punit),
                       E_UNIT_ESCAPED, ftc_server,
-                      PL_("%d unit escaped from attack by %s %s",
-                          "%d units escaped from attack by %s %s",
+                      PL_("💢 %d unit escaped from attack by %s %s %s",
+                          "💢 %d units escaped from attack by %s %s %s",
                           num_escaped[i]),
                       num_escaped[i],
-                      pkiller_link,
-                      nation_adjective_for_player(pkiller->nationality)
-        );
+                      indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
+                      nation_adjective_for_player(pkiller->nationality),
+                      pkiller_link);
       }
     }
 
@@ -2984,15 +2992,17 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile)
 
   unit_list_iterate_safe(ptile->units, punit) {
     notify_player(unit_owner(punit), ptile, E_UNIT_LOST_MISC, ftc_server,
-                  _("Your %s was nuked by %s."),
+                  _("⚠️ Your %s %s nuked by %s."),
                   unit_tile_link(punit),
+                  (is_unit_plural(punit) ? "were" : "was"),
                   pplayer == unit_owner(punit)
                   ? _("yourself")
                   : nation_plural_for_player(pplayer));
     if (unit_owner(punit) != pplayer) {
       notify_player(pplayer, ptile, E_UNIT_WIN_ATT, ftc_server,
-                    _("The %s %s was nuked."),
+                    _("💥 The %s %s %s nuked."),
                     nation_adjective_for_player(unit_owner(punit)),
+                    (is_unit_plural(punit) ? "were" : "was"),
                     unit_tile_link(punit));
     }
     wipe_unit(punit, ULR_NUKE, pplayer);
@@ -3002,7 +3012,7 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile)
 
   if (pcity) {
     notify_player(city_owner(pcity), ptile, E_CITY_NUKED, ftc_server,
-                  _("%s was nuked by %s."),
+                  _("⚠️ %s was nuked by %s."),
                   city_link(pcity),
                   pplayer == city_owner(pcity)
                   ? _("yourself")
@@ -3010,7 +3020,7 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile)
 
     if (city_owner(pcity) != pplayer) {
       notify_player(pplayer, ptile, E_CITY_NUKED, ftc_server,
-                    _("You nuked %s."),
+                    _("💥 You nuked %s."),
                     city_link(pcity));
     }
 
@@ -3022,12 +3032,12 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile)
         int saved_id = pcity->id;
 
         notify_player(city_owner(pcity), ptile, E_CITY_NUKED, ftc_server,
-          _("%s was annihilated by a nuclear detonation."),
+          _("💀 %s was annihilated by a nuclear detonation."),
             city_link(pcity));
 
         if (city_owner(pcity) != pplayer) {
           notify_player(pplayer, ptile, E_CITY_NUKED, ftc_server,
-          _("%s was annihilated by a nuclear detonation."),
+          _("💥 %s was annihilated by a nuclear detonation."),
             city_link(pcity));
         }
         script_server_signal_emit("city_destroyed", pcity, city_owner(pcity), pplayer);
@@ -3083,9 +3093,9 @@ void do_nuclear_explosion(struct player *pplayer, struct tile *ptile,
   script_server_signal_emit("nuke_exploded", 2, API_TYPE_TILE, ptile,
                             API_TYPE_PLAYER, pplayer);
   notify_conn(NULL, ptile, E_NUKE, ftc_server,
-              _("The %s detonated %s %s!"),
+              _("💢 The %s detonated %s %s!"),
               nation_plural_for_player(pplayer),
-              (unit_name[0] == 'A' ? _("an") : _("a")),
+              indefinite_article_for_word(unit_name, false),
               unit_name);
 
   // Direct ground-zero hit by Hydrogen-Bomb / Fusion warhead, etc.
@@ -3095,12 +3105,12 @@ void do_nuclear_explosion(struct player *pplayer, struct tile *ptile,
       int saved_id = pcity->id;
 
       notify_player(city_owner(pcity), ptile, E_CITY_NUKED, ftc_server,
-         _("%s was annihilated at Ground Zero of a thermonuclear fusion detonation."),
+         _("⚠️ %s was annihilated at Ground Zero of a thermonuclear fusion explosion."),
            city_link(pcity));
 
       if (city_owner(pcity) != pplayer) {
         notify_player(pplayer, ptile, E_CITY_NUKED, ftc_server,
-         _("%s was annihilated at Ground Zero of a thermonuclear fusion detonation."),
+         _("💥 %s was annihilated at Ground Zero of a thermonuclear fusion explosion."),
            city_link(pcity));
       }
       script_server_signal_emit("city_destroyed", pcity, city_owner(pcity), pplayer);
@@ -3254,9 +3264,10 @@ bool do_paradrop(struct unit *punit, struct tile *ptile)
             || !unit_could_load_at(punit, ptile))) {
       map_show_circle(pplayer, ptile, unit_type_get(punit)->vision_radius_sq);
       notify_player(pplayer, ptile, E_UNIT_LOST_MISC, ftc_server,
-                    _("Your %s paradropped into the %s and was lost."),
+                    _("⚠️Your %s paradropped into the %s and %s lost."),
                     unit_tile_link(punit),
-                    terrain_name_translation(tile_terrain(ptile)));
+                    terrain_name_translation(tile_terrain(ptile)),
+                    (is_unit_plural(punit) ? "were" : "was"));
       pplayer->score.units_lost++;
       server_remove_unit(punit, ULR_NONNATIVE_TERR);
       return TRUE;
@@ -3268,9 +3279,10 @@ bool do_paradrop(struct unit *punit, struct tile *ptile)
     map_show_circle(pplayer, ptile, unit_type_get(punit)->vision_radius_sq);
     maybe_make_contact(ptile, pplayer);
     notify_player(pplayer, ptile, E_UNIT_LOST_MISC, ftc_server,
-                  _("Your %s was killed by enemy units at the "
+                  _("⚠️Your %s %s killed by enemy units at the "
                     "paradrop destination."),
-                  unit_tile_link(punit));
+                  unit_tile_link(punit),
+                  (is_unit_plural(punit) ? "were" : "was"));
     /* TODO: Should defender score.units_killed get increased too?
      * What if there's units of several allied players? Should the
      * city owner or owner of the first/random unit get the kill? */
@@ -3313,8 +3325,8 @@ static bool hut_get_limited(struct unit *punit)
   if (hut_chance != 0) {
     int cred = 25;
     notify_player(pplayer, unit_tile(punit), E_HUT_GOLD, ftc_server,
-                  PL_("You found %d gold.",
-                      "You found %d gold.", cred), cred);
+                  PL_("💰 You found %d gold.",
+                      "💰 You found %d gold.", cred), cred);
     pplayer->economic.gold += cred;
   } else if (city_exists_within_max_city_map(unit_tile(punit), TRUE)
              || unit_has_type_flag(punit, UTYF_GAMELOSS)) {
@@ -3323,7 +3335,7 @@ static bool hut_get_limited(struct unit *punit)
                   _("An abandoned village is here."));
   } else {
     notify_player(pplayer, unit_tile(punit), E_HUT_BARB_KILLED, ftc_server,
-                  _("Your %s has been killed by barbarians!"),
+                  _("⚠️ Your %s has been killed by barbarians!"),
                   unit_tile_link(punit));
     wipe_unit(punit, ULR_BARB_UNLEASH, NULL);
     ok = FALSE;
@@ -3617,14 +3629,15 @@ static bool unit_survive_autoattack(struct unit *punit)
         && penemywin > threshold) {
 
         notify_player(unit_owner(penemy), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
-              _("Your %s intercepted a %s %s while under vigil."),
+              _("💢 Your %s intercepted a %s %s while under vigil."),
               unit_link(penemy),
               nation_rule_name(nation_of_unit(punit)),
               unit_rule_name(punit) );
 
         notify_player(unit_owner(punit), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
-              _("Your %s was intercepted by a %s %s under vigil."),
+              _("💢 Your %s %s intercepted by a %s %s under vigil."),
               unit_link(punit),
+              (is_unit_plural(punit) ? "were" : "was"),
               nation_rule_name(nation_of_unit(penemy)),
               unit_rule_name(penemy) );
 
@@ -3641,7 +3654,7 @@ static bool unit_survive_autoattack(struct unit *punit)
                                tgt_tile, tile_city(tgt_tile), punit, NULL);
     } else {
         notify_player(unit_owner(penemy), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
-              _("Your %s declined intercepting a %s %s while under vigil."),
+              _("💢 Your %s declined intercepting a %s %s while under vigil."),
               unit_rule_name(penemy),
               nation_rule_name(nation_of_unit(punit)),
               unit_link(punit) );
@@ -3738,7 +3751,7 @@ static void wakeup_neighbor_sentries(struct unit *punit)
 
               notify_player(unit_owner(penemy), unit_tile(punit),
                     E_UNIT_ORDERS, ftc_server,
-                    _("\u24d8 %s sentry (%d,%d) saw %s %s moving at (%d,%d)"),
+                    _("👁️ %s sentry (%d,%d) saw %s %s moving at (%d,%d)"),
                     unit_link(penemy),
                     stile_x, stile_y, 
                     nation_rule_name(nation_of_unit(punit)), 
@@ -4771,7 +4784,7 @@ bool execute_orders(struct unit *punit, const bool fresh)
                 format_time_duration(game.server.unitwaittime - dt, buf, sizeof(buf));
                 notify_player(pplayer, unit_tile(punit),
                           E_UNIT_ORDERS, ftc_server,
-                          _("  . %s movement delayed %s by unitwaittime."),
+                          _("  ⌛ %s movement delayed %s by unitwaittime."),
                           unit_link(punit), buf);
               }
               /* We must undo the earlier 'premature' increment of order_index++ which assumed success */
@@ -5112,7 +5125,7 @@ bool unit_can_do_action_now(const struct unit *punit)
     char buf[64];
     format_time_duration(game.server.unitwaittime - dt, buf, sizeof(buf));
     notify_player(unit_owner(punit), unit_tile(punit), E_BAD_COMMAND,
-                  ftc_server, _("Your %s may not act for another %s "
+                  ftc_server, _("⌛ Your %s may not act for another %s "
                                 "this turn. See /help unitwaittime."),
                                  unit_link(punit), buf);
     return FALSE; /* Unit can't do action. */
@@ -5152,5 +5165,15 @@ bool unit_can_be_retired(struct unit *punit)
   }
   square_iterate_end;
 
-  return TRUE;
+  return true;
+}
+
+/**********************************************************************//**
+  If unit type's name is plural, returns true. Otherwise, false.
+**************************************************************************/
+bool is_unit_plural(struct unit *punit)
+{
+  if (!punit) return false;
+
+  return is_word_plural( utype_name_translation(unit_type_get(punit)) );
 }

@@ -205,7 +205,7 @@ void dai_data_phase_begin(struct ai_type *ait, struct player *pplayer,
   unit_list_iterate(pplayer->units, punit) {
     struct tile *ptile = unit_tile(punit);
 
-    if (unit_has_type_flag(punit, UTYF_SETTLERS)) {
+    if (unit_has_type_flag(punit, UTYF_SETTLERS) && unit_has_type_flag(punit, UTYF_CIVILIAN)) {
       if (is_ocean_tile(ptile)) {
         ai->stats.ocean_workers[(int)-tile_continent(ptile)]++;
       } else {

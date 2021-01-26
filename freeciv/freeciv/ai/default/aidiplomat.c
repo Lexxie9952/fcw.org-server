@@ -746,7 +746,7 @@ static bool dai_diplomat_bribe_nearby(struct ai_type *ait,
 
     if (has_handicap(pplayer, H_NOBRIBE_WF)) {
       /* Don't bribe settlers! */
-      if (unit_has_type_flag(pvictim, UTYF_SETTLERS)
+      if ((unit_has_type_flag(punit, UTYF_SETTLERS) && unit_has_type_flag(punit, UTYF_CIVILIAN))
           || unit_can_do_action(pvictim, ACTION_FOUND_CITY)) {
         continue;
       }

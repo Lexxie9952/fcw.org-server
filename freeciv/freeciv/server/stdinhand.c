@@ -2410,7 +2410,7 @@ static bool team_command(struct connection *caller, char *str, bool check)
             give_shared_vision(p1,p2);
 
             cmd_reply(CMD_TEAM, caller, C_OK, _("   %s teamed with %s."),
-              player_name(p1), player_name(p2), diplstate->type);
+              player_name(p1), player_name(p2)/*, diplstate->type*/);
           }
         }
       } players_iterate_end;

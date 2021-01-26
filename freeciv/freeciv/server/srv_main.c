@@ -650,7 +650,7 @@ bool check_for_game_over(void)
       }
 
       notify_player(NULL, NULL, E_SPACESHIP, ftc_server,
-                    _("Notice: the %s spaceship will likely arrive at "
+                    _("🚀 Notice: the %s spaceship will likely arrive at "
                       "Alpha Centauri next turn."),
                     nation_adjective_for_player(pplayer));
     }
@@ -817,25 +817,21 @@ static void update_environmental_upset(enum environment_upset_type type,   // EU
 
   if (IPCC_report) {
     notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
-                  _("————————————————————————————<br>"
-                    "Scientists release IPCC report on <b>%s</b>:<br>"
-                    "————————————————————————————<br>"
-                    "%d impact from %s. <br>"
-                    "————————————————————————————<br>"),
-                    (type == EUT_GLOBAL_WARMING ? "Global Warming" : "Nuclear Winter"), 
-                    ((count*1000)/map_num_tiles()+1), (type == EUT_GLOBAL_WARMING ? "pollution" : "nuclear fallout")
-    );
+                  _("—————————————————————————————<br>"
+                    "🌍 Scientists release IPCC report on <b>%s</b>:<br>"
+                    "—————————————————————————————<br>"),
+                    (type == EUT_GLOBAL_WARMING ? "Global Warming" : "Nuclear Winter"));
     notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
                   _("<b>A</b>ccumulated <b>C</b>limate <b>S</b>tress:<br>"
                     "Cumulative Impact  = %d ACS units.<br>"
                     "Climate Tolerance  = %d ACS units.<br>"
-                    "————————————————————————————<br>"
+                    "—————————————————————————————<br>"
                     "%s<br>"
-                    "————————————————————————————<br>"),
+                    "—————————————————————————————<br>"),
                     *accum,
                     new_level,
-                    (*accum >= new_level ? "International action recommended to halt habitat destruction !"
-                                         : "Scientists recommend keeping impact below Climate Tolerance.")
+                    (*accum >= new_level ? "⚠️ International action recommended to halt habitat destruction!"
+                                         : "💢 Scientists recommend keeping impact below Climate Tolerance.")
     );
   }
 
@@ -894,8 +890,8 @@ static void notify_illegal_armistice_units(struct player *phost,
 
     astr_set(&unitstr,
              /* TRANS: "... 2 military units in Norwegian territory." */
-             PL_("Warning: you still have %d military unit in %s territory.",
-                 "Warning: you still have %d military units in %s territory.",
+             PL_("💢 Warning: you still have %d military unit in %s territory.",
+                 "💢 Warning: you still have %d military units in %s territory.",
                  nunits),
              nunits, nation_adjective_for_player(phost));
     /* If there's one lousy unit left, we may as well include a link for it */
@@ -923,7 +919,7 @@ static void remove_illegal_armistice_units(struct player *plr1,
     if (tile_owner(unit_tile(punit)) == plr2
         && is_military_unit(punit)) {
       notify_player(plr1, unit_tile(punit), E_DIPLOMACY, ftc_server,
-                    _("Your %s was disbanded in accordance with "
+                    _("⚠️ Your %s was disbanded in accordance with "
                       "your peace treaty with the %s."),
                     unit_tile_link(punit),
                     nation_plural_for_player(plr2));
@@ -934,7 +930,7 @@ static void remove_illegal_armistice_units(struct player *plr1,
     if (tile_owner(unit_tile(punit)) == plr1
         && is_military_unit(punit)) {
       notify_player(plr2, unit_tile(punit), E_DIPLOMACY, ftc_server,
-                    _("Your %s was disbanded in accordance with "
+                    _("⚠️ Your %s was disbanded in accordance with "
                       "your peace treaty with the %s."),
                     unit_tile_link(punit),
                     nation_plural_for_player(plr1));
@@ -984,7 +980,7 @@ static void update_diplomatics(void)
           switch(state->turns_left) {
           case 1:
             notify_player(plr1, NULL, E_DIPLOMACY, ftc_server,
-                          _("Concerned citizens point out that the cease-fire "
+                          _("💢 Concerned citizens point out that the cease-fire "
                             "with %s will run out soon."), player_name(plr2));
             /* Message to plr2 will be done when plr1 and plr2 will be swapped.
              * Else, we will get a message duplication.  Note the case is not
@@ -993,12 +989,12 @@ static void update_diplomatics(void)
             break;
           case 0:
             notify_player(plr1, NULL, E_DIPLOMACY, ftc_server,
-                          _("The cease-fire with %s has run out. "
+                          _("⚔ The cease-fire with %s has run out. "
                             "You are now at war with the %s."),
                           player_name(plr2),
                           nation_plural_for_player(plr2));
             notify_player(plr2, NULL, E_DIPLOMACY, ftc_server,
-                          _("The cease-fire with %s has run out. "
+                          _("⚔ The cease-fire with %s has run out. "
                             "You are now at war with the %s."),
                           player_name(plr1),
                           nation_plural_for_player(plr1));
@@ -1038,7 +1034,7 @@ static void update_diplomatics(void)
                   cancel2 = TRUE;
 
                   notify_player(plr3, NULL, E_TREATY_BROKEN, ftc_server,
-                                _("The cease-fire between %s and %s has run out. "
+                                _("⚔ The cease-fire between %s and %s has run out. "
                                   "They are at war. You cancel your alliance "
                                   "with %s."),
                                 plr1name, plr2name, plr2name);
@@ -1048,7 +1044,7 @@ static void update_diplomatics(void)
                   cancel2 = FALSE;
 
                   notify_player(plr3, NULL, E_TREATY_BROKEN, ftc_server,
-                                _("The cease-fire between %s and %s has run out. "
+                                _("⚔ The cease-fire between %s and %s has run out. "
                                   "They are at war. You cancel your alliance "
                                   "with %s."),
                                 plr1name, plr2name, plr1name);
@@ -1058,7 +1054,7 @@ static void update_diplomatics(void)
                   cancel2 = TRUE;
 
                   notify_player(plr3, NULL, E_TREATY_BROKEN, ftc_server,
-                                _("The cease-fire between %s and %s has run out. "
+                                _("⚔ The cease-fire between %s and %s has run out. "
                                   "They are at war. You cancel your alliance "
                                   "with both."),
                                 player_name(plr1),
@@ -1477,7 +1473,7 @@ static void end_phase(void)
      * during this entire turn, autoplace them. */
     if (adv_spaceship_autoplace(pplayer, &pplayer->spaceship)) {
       notify_player(pplayer, NULL, E_SPACESHIP, ftc_server,
-                    _("Automatically placed spaceship parts that were still not placed."));
+                    _("🚀 Automatically placed spaceship parts that were still not placed."));
     }
 
     update_city_activities(pplayer);
@@ -3111,7 +3107,7 @@ static void srv_scores(void)
   report_final_scores(NULL);
   show_map_to_all();
   notify_player(NULL, NULL, E_GAME_END, ftc_server,
-                _("The game is over..."));
+                _("🏆 The game is over..."));
   send_server_info_to_metaserver(META_INFO);
 
   if (game.server.save_nturns > 0

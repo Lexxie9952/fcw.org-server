@@ -17,6 +17,7 @@
 
 /* common */
 #include "actions.h"
+#include "map.h"
 
 /* server */
 #include "aiiface.h"
@@ -228,6 +229,8 @@ static void notify_actor_caught(struct player *receiver,
                                 const struct tile *victim_tile,
                                 const char *victim_link)
 {
+  int i_x, i_y;
+
   if (!victim_player || offender == victim_player) {
     /* There is no victim or the actor did this to him self. */
     return;
@@ -238,9 +241,9 @@ static void notify_actor_caught(struct player *receiver,
   case ATK_CITY:
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
-                  /* TRANS: Suitcase Nuke ... San Francisco */
-                  _("You have caused an incident getting caught"
-                    " trying to do %s to %s."),
+                  /* TRANS: Suitcase Nuke ... Copenhagen */
+                  _("<font color='#C08080'>You caused an incident "
+                    " trying to %s at %s</font>"),
                   action_name_translation(paction),
                   victim_link);
     break;
@@ -248,21 +251,25 @@ static void notify_actor_caught(struct player *receiver,
   case ATK_UNITS:
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
-                  /* TRANS: Bribe Enemy Unit ... American ... Partisan */
-                  _("You have caused an incident getting caught"
-                    " trying to do %s to %s %s."),
+                  /* TRANS: Bribe Enemy Unit ... Danish */
+                  _("<font color='#C08080'>You caused an incident "
+                    " trying to %s against the %s.</font>"),
                   action_name_translation(paction),
-                  nation_adjective_for_player(victim_player),
                   victim_link);
     break;
   case ATK_TILE:
+    index_to_map_pos(&i_x, &i_y, tile_index(victim_tile));
+
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
-                  /* TRANS: Explode Nuclear ... (54, 26) */
-                  _("You have caused an incident getting caught"
-                    " trying to do %s at %s."),
+                  /* TRANS: Explode Nuclear ... Danish */
+                  _("<font color='#C08080'>You caused an incident "
+                    " trying to %s against the %s at"
+                    "<font style='text-decoration: underline;' color='#1FDFFF'>"
+                    "{%d,%d}</font></font>"),
                   action_name_translation(paction),
-                  victim_link);
+                  nation_plural_for_player(victim_player),
+                  i_x, i_y);
     break;
   case ATK_SELF:
     /* Special actor notice not needed. Actor is victim. */
@@ -284,6 +291,8 @@ static void notify_victim_caught(struct player *receiver,
                                  const struct tile *victim_tile,
                                  const char *victim_link)
 {
+  int i_x, i_y;
+
   if (!victim_player || offender == victim_player) {
     /* There is no victim or the actor did this to him self. */
     return;
@@ -295,8 +304,8 @@ static void notify_victim_caught(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Europeans ... Suitcase Nuke ... San Francisco */
-                  _("The %s have caused an incident getting caught"
-                    " trying to do %s to %s."),
+                  _("<font color='#C08080'>The %s caused an incident trying to"
+                    " %s at %s.<font color='#C08080'>"),
                   nation_plural_for_player(offender),
                   action_name_translation(paction),
                   victim_link);
@@ -306,21 +315,25 @@ static void notify_victim_caught(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Europeans ... Bribe Enemy Unit ... Partisan */
-                  _("The %s have caused an incident getting caught"
-                    " trying to do %s to your %s."),
+                  _("<font color='#C08080'>The %s caused an incident trying to"
+                    " %s to your %s.<font color='#C08080'>"),
                   nation_plural_for_player(offender),
                   action_name_translation(paction),
                   victim_link);
     break;
   case ATK_TILE:
+    index_to_map_pos(&i_x, &i_y, tile_index(victim_tile));
+
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Europeans ... Explode Nuclear ... (54, 26) */
-                  _("The %s have caused an incident getting caught"
-                    " trying to do %s at %s."),
+                  _("<font color='#C08080'>The %s caused an incident trying to "
+                    " %s at "
+                    "<font style='text-decoration: underline;' color='#1FDFFF'>"
+                    "{%d,%d}</font></font>"),
                   nation_plural_for_player(offender),
                   action_name_translation(paction),
-                  victim_link);
+                  i_x, i_y);
     break;
   case ATK_SELF:
     /* Special victim notice not needed. Actor is victim. */
@@ -332,7 +345,7 @@ static void notify_victim_caught(struct player *receiver,
 }
 
 /**********************************************************************//**
-  Notify the world that the failed action gave the everyone a casus belli
+  Notify the world that the failed action gave everyone a casus belli
   against the actor.
 **************************************************************************/
 static void notify_global_caught(struct player *receiver,
@@ -346,14 +359,14 @@ static void notify_global_caught(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Suitcase Nuke */
-                  _("Getting caught while trying to do %s gives "
+                  _("⚠️ Getting caught trying to do %s gives "
                     "everyone a casus belli against you."),
                   action_name_translation(paction));
   } else if (receiver == victim_player) {
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Suitcase Nuke ... Europeans */
-                  _("Getting caught while trying to do %s to you gives "
+                  _("👮‍♂️ Getting caught trying to do %s to you gives "
                     "everyone a casus belli against the %s."),
                   action_name_translation(paction),
                   nation_plural_for_player(offender));
@@ -361,7 +374,7 @@ static void notify_global_caught(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Europeans ... Suitcase Nuke */
-                  _("You now have a casus belli against the %s. "
+                  _("👮‍♂️ You now have casus belli against the %s. "
                     "They got caught trying to do %s."),
                   nation_plural_for_player(offender),
                   action_name_translation(paction));
@@ -369,7 +382,7 @@ static void notify_global_caught(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Europeans ... Suitcase Nuke ... Americans */
-                  _("You now have a casus belli against the %s. "
+                  _("👮‍♂️ You now have casus belli against the %s. "
                     "They got caught trying to do %s to the %s."),
                   nation_plural_for_player(offender),
                   action_name_translation(paction),
@@ -378,7 +391,7 @@ static void notify_global_caught(struct player *receiver,
 }
 
 /**********************************************************************//**
-  Take care of any consequences (like casus belli) of getting caught while
+  Take care of any consequences (like casus belli) of being caught while
   trying to perform the given action.
 
   victim_player can be NULL
@@ -409,6 +422,8 @@ static void notify_actor_success(struct player *receiver,
                                  const struct tile *victim_tile,
                                  const char *victim_link)
 {
+  int i_x, i_y;
+
   if (!victim_player || offender == victim_player) {
     /* There is no victim or the actor did this to him self. */
     return;
@@ -420,7 +435,7 @@ static void notify_actor_success(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Suitcase Nuke ... San Francisco */
-                  _("You have caused an incident doing %s to %s."),
+                  _("<font color='#C08080'>You caused an incident doing %s to %s.</font>"),
                   action_name_translation(paction),
                   victim_link);
     break;
@@ -429,18 +444,21 @@ static void notify_actor_success(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRAND: Bribe Enemy Unit ... American ... Partisan */
-                  _("You have caused an incident doing %s to %s %s."),
+                  _("<font color='#C08080'>You caused an incident doing %s to the %s %s.</font>"),
                   action_name_translation(paction),
                   nation_adjective_for_player(victim_player),
                   victim_link);
     break;
   case ATK_TILE:
+    index_to_map_pos(&i_x, &i_y, tile_index(victim_tile));
+
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Explode Nuclear ... (54, 26) */
-                  _("You have caused an incident doing %s at %s."),
-                  action_name_translation(paction),
-                  victim_link);
+                  _("<font color='#C08080'>You caused an incident doing %s"
+                    " at <font style='text-decoration: underline;' color='#1FDFFF'>"
+                    "{%d,%d}</font>.</font>"),
+                    action_name_translation(paction), i_x, i_y);
     break;
   case ATK_SELF:
     /* Special actor notice not needed. Actor is victim. */
@@ -462,18 +480,22 @@ static void notify_victim_success(struct player *receiver,
                                   const struct tile *victim_tile,
                                   const char *victim_link)
 {
+  int i_x, i_y;
+
   if (!victim_player || offender == victim_player) {
     /* There is no victim or the actor did this to him self. */
     return;
   }
+
+  if (!victim_link) victim_link = tile_link(victim_tile);
 
   /* Custom message based on action type. */
   switch (action_get_target_kind(paction)) {
   case ATK_CITY:
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
-                  /* TRANS: Europeans ... Suitcase Nuke ... San Francisco */
-                  _("The %s have caused an incident doing %s to %s."),
+                  /* TRANS: Europeans ... Suitcase Nuke ... Copenhagen */
+                  _("<font color='#C08080'>The %s caused an incident doing %s to %s!</font>"),
                   nation_plural_for_player(offender),
                   action_name_translation(paction),
                   victim_link);
@@ -483,20 +505,23 @@ static void notify_victim_success(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Europeans ... Bribe Enemy Unit ... Partisan */
-                  _("The %s have caused an incident doing "
-                    "%s to your %s."),
+                  _("<font color='#C08080'>The %s caused an incident doing "
+                    "%s to %s!</font>"),
                   nation_plural_for_player(offender),
                   action_name_translation(paction),
                   victim_link);
     break;
   case ATK_TILE:
+    index_to_map_pos(&i_x, &i_y, tile_index(victim_tile));
+
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Europeans ... Explode Nuclear ... (54, 26) */
-                  _("The %s have caused an incident doing %s at %s."),
+                  _("<font color='#C08080'>The %s caused an incident doing %s"
+                    " at <font style='text-decoration: underline;' color='#1FDFFF'>"
+                    "{%d,%d}</font></font>"),
                   nation_plural_for_player(offender),
-                  action_name_translation(paction),
-                  victim_link);
+                  action_name_translation(paction), i_x, i_y);
     break;
   case ATK_SELF:
     /* Special victim notice not needed. Actor is victim. */
@@ -522,13 +547,13 @@ static void notify_global_success(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Suitcase Nuke */
-                  _("Doing %s gives everyone a casus belli against you."),
+                  _("⚠️ Doing %s gives everyone a casus belli against you."),
                   action_name_translation(paction));
   } else if (receiver == victim_player) {
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Suitcase Nuke ... Europeans */
-                  _("Doing %s to you gives everyone a casus belli against "
+                  _("👮‍♂️ Doing %s to you gives everyone a casus belli against "
                     "the %s."),
                   action_name_translation(paction),
                   nation_plural_for_player(offender));
@@ -536,7 +561,7 @@ static void notify_global_success(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Europeans ... Suitcase Nuke */
-                  _("You now have a casus belli against the %s. "
+                  _("👮‍♂️ You now have a casus belli against the %s. "
                     "They did %s."),
                   nation_plural_for_player(offender),
                   action_name_translation(paction));
@@ -544,7 +569,7 @@ static void notify_global_success(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Europeans ... Suitcase Nuke ... Americans */
-                  _("You now have a casus belli against the %s. "
+                  _("👮‍♂️ You now have a casus belli against the %s. "
                     "They did %s to the %s."),
                   nation_plural_for_player(offender),
                   action_name_translation(paction),

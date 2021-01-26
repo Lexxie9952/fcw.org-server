@@ -184,6 +184,7 @@ static void texai_tile_worker_task_select(struct player *pplayer,
     unit_list_iterate(ptile->units, punit) {
       if (unit_owner(punit) == pplayer
           && unit_has_type_flag(punit, UTYF_SETTLERS)
+          && unit_has_type_flag(punit, UTYF_CIVILIAN)
           && punit->activity == action_id_get_activity(act)) {
         consider = FALSE;
         break;
@@ -310,6 +311,7 @@ static void texai_tile_worker_task_select(struct player *pplayer,
       unit_list_iterate(ptile->units, punit) {
         if (unit_owner(punit) == pplayer
             && unit_has_type_flag(punit, UTYF_SETTLERS)
+            && unit_has_type_flag(punit, UTYF_CIVILIAN)
             && punit->activity == act) {
           consider = FALSE;
           break;
