@@ -227,6 +227,36 @@ function unit_can_do_action(punit, act_id)
 }
 
 /**************************************************************************
+  Return TRUE iff this unit has cargo capacity and that capacity is not 
+  already full from other units transported by it.
+**************************************************************************/
+function unit_has_cargo_room(punit) {
+  if (!punit) {
+    console.log("Error: unit_has_cargo_room(..) was asked the capacity of a null unit.")
+    return true; // before we had this function, we always assumed true anyway
+  }
+  var ptype = unit_type(punit);
+  var ptile = unit_tile(punit);
+  var units_on_tile = tile_units(ptile);
+
+  var transport_id = punit['id'];
+  var transport_capacity = ptype['transport_capacity'];
+  var cargo_units = 0;
+
+  // Count how many units on this tile are on this transport.
+  for (var u=0; u < units_on_tile.length; u++) {
+    if (units_on_tile[u]['transported_by']==transport_id) {
+      cargo_units++;
+    }
+  }
+
+  if (cargo_units >= transport_capacity) {
+    return false;
+  }
+  return true;
+}
+
+/**************************************************************************
   Return TRUE if this unit can unload. Currently hard-coded as a
   placeholder for proper ruleset actionenablers.
 **************************************************************************/
@@ -261,6 +291,7 @@ function unit_can_do_unload(punit)
   if (pclass == "Air") return true;
   if (pclass == "AirProtect") return true;
   if (pclass == "AirPillage") return true;
+  if (pclass == "Air_High_Altitude") return true;
   if (pclass == "Balloon") return true;
   if (pclass == "Helicopter") return true;
   if (pclass == "Missile") return true;
@@ -283,7 +314,7 @@ function unit_can_do_unload(punit)
   }
   // Brava onward:
   if (tclass.rule_name == "LandRail"
-      || tclass.rule_name == "LandRoad") { // non-Marines can unload from Train/Truck on any Base or quay tile.
+      || tclass.rule_name == "LandRoad") { // Foot soldiers can unload from Train/Truck on any Base or Quay.
     if (tile_has_extra(ptile, EXTRA_AIRBASE)) return true;
     if (quay_rules && tile_has_extra(ptile, EXTRA_QUAY)) return true;
     if (typeof EXTRA_FORT !== 'undefined' && tile_has_extra(ptile, EXTRA_FORT)) return true;
@@ -314,7 +345,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
 
   // Transported units can't swap transports except under some conditions:
   // TO DO: when actionenabler_load is in server, we can put all this in game.ruleset actionenablers.
-  if (pclass.startsWith("Land") && punit['transported']) {
+  if ( (pclass.startsWith("Land") || pclass=="Cargo") && punit['transported']) {
     var ptile = tiles[punit['tile']];
     var can_load = false;
 
@@ -324,8 +355,10 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
 
     // Can "transport swap" where 1) unloading then loading again is legal anyway (cities, naval bases, quays) ...
     if (tile_city(ptile)) can_load = true;
-    else if (typeof EXTRA_NAVALBASE !== undefined && tile_has_extra(EXTRA_NAVALBASE)) can_load = true;
-    else if (client_rules_flag[CRF_EXTRA_QUAY] && tile_has_extra(EXTRA_QUAY)) can_load=true;    
+    else if (unit_can_do_unload(punit)) can_load = true; // Whenever unloading is already legal, don't force micro-managing an extra step to unload.
+    //commented out: e.g., Riflemen can't necessarily get off a Heli on a Quay.
+    //else if (typeof EXTRA_NAVALBASE !== undefined && tile_has_extra(EXTRA_NAVALBASE)) can_load = true;
+    //else if (client_rules_flag[CRF_EXTRA_QUAY] && tile_has_extra(EXTRA_QUAY)) can_load=true;    
     // ... 2) in ships who have neither moved more than 4 moves NOR moved more than half their moves;
     else if (from_class.rule_name == "Trireme" 
           || from_class.rule_name == "RiverShip"
@@ -361,18 +394,24 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
       pclass == "RiverShip" ||
       pclass == "Submarine" ||
       pclass == "Trireme" ||
+      pclass == "LandRail" ||
       pclass == "Space") {
         return false;
   }
 
-  if (pclass == "Bomb") {
+  if (pclass == "Cargo") {
+    if (tclass.rule_name != "LandRail"
+        && tclass.rule_name != "LandRoad"
+        && ttype.name != "Cargo Ship"
+        && ttype.name != "Transport") return false;
+  }
+  else if (pclass == "Bomb") {
     if (!ttype.name.includes("Bomber") 
         && tclass.rule_name != "LandRail"
         && tclass.rule_name != "LandRoad" ) return false;
     if (ttype.cargo[0]==0) return false; // Dive-Bomber or Bomber who can't carry bombs.
   } 
-
-  if (pclass == "Missile") {
+  else if (pclass == "Missile") {
     //console.log("  Missile CHECK ON: tclass.rulename =="+tclass.rule_name);
      /*
     if (tclass.rule_name == "Trireme") return false;
@@ -389,8 +428,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
         ttype.name=="Carrier") return true;
     return false;
   }
-
-  if (pclass.startsWith("Land")) {   // Land, LandNoKill, LandAirSea, LandRail, LandRoad
+  else if (pclass.startsWith("Land")) {   // Land, LandNoKill, LandAirSea, LandRail, LandRoad
     //console.log("  Land* CHECK ON: tclass.rulename =="+tclass.rule_name);
     if (tclass.rule_name == "Submarine") return false;
     if (tclass.rule_name == "LandRail" || tclass.rule_name == "LandRoad") {  // only Foot soldiers can get on Trains/Trucks
@@ -413,16 +451,17 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
       if (ttype.name == "Carrier") return false;
       if (ttype.name == "Helicopter") return false; // transport heli allowed
     }
+    if (pclass == "LandRoad" || pclass =="LandRail") {
+      if (tclass.rule_name == "Helicopter") return false;
+    }
   }
-
-  if (pclass == "Balloon") {
+  else if (pclass == "Balloon") {
     if (tclass.rule_name == "LandRail") return true;
     if (tclass.rule.name == "RiverShip" && !(ttype.name == "Cargo Ship" || ttype.name == "Galleon")) return false;
     if (tclass.rule.name == "Sea" && !(ttype.name == "Transport" || ttype.name == "Carrier")) 
       return false;
   }
-
-  if (pclass.startsWith("Air") || pclass == "Helicopter") {
+  else if (pclass.startsWith("Air") || pclass == "Helicopter") {
     //console.log("  Air*/heli/balloon CHECK ON: tclass.rulename =="+tclass.rule_name);
     if (ttype.name != "Carrier") return false;
   }
