@@ -197,6 +197,7 @@ const char *nation_rule_name(const struct nation_type *pnation);
 const char *nation_adjective_translation(const struct nation_type *pnation);
 const char *nation_adjective_for_player(const struct player *pplayer);
 const char *indefinite_article_for_word(const char *word, bool capitalize); // adds a/an indefinite article
+bool is_word_plural(const char *word); // works on 99% of words but not mice, children, or geese. ;)
 const char *nation_plural_translation(const struct nation_type *pnation);
 const char *nation_plural_for_player(const struct player *pplayer);
 

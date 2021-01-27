@@ -191,6 +191,32 @@ const char *indefinite_article_for_word(const char *word, bool capitalize)
   if (capitalize) return indef_articles[2];
   else return indef_articles[0];
 }
+/************************************************************************//**
+  Return true if the word is probably plural
+  Works on all words of known rulesets, but not mice, children, or geese. ;)
+****************************************************************************/
+bool is_word_plural(const char *word)
+{
+  if (!word) return false;
+  int len = strlen(word);
+  if (len<3) return false;
+  if (strcmp(&word[len-2], "ss") == 0) return false; // -ss are singular
+  if (word[len-1] == 's') return true;
+  if (strcmp(&word[len-3], "men") == 0) return true;  // Pikemen, Riflemen, etc.
+  return false;
+
+  /* Exceptions I, currently commented because they don't come up:
+  if (strcmp(word, "AWACS") == 0) return false; // names end in small 's'
+  if (strcmp(word, "JTIDS") == 0) return false; // names end in small 's'
+  if (strcmp(word, "United Nations") == 0) return false; // debatable ;)*/
+  /* Exceptions II, currently not needed / unimportant.  if (len>=5) {
+  if (strcmp(&word[len-4], "s II") == 0)  return true;  // Barracks II, et similia
+  if (strcmp(&word[len-5], "s III") == 0) return true;  // Barracks III, et similia
+  if (strcmp(&word[len-5], "solos") == 0) return false; // Mausoleum of Mausolos
+  if (strcmp(&word[len-5], "temis") == 0) return false; // Temple of Artemis
+  if (strcmp(&word[len-4], "Zeus") == 0) return false;} // Statue of Zeus
+  the above don't come up or in the case of Barracks, plurality seems loose */
+}
 
 /************************************************************************//**
   Return the (translated) plural noun of the given nation of a player. 
