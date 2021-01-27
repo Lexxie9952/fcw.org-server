@@ -1030,8 +1030,13 @@ function popup_sabotage_dialog(actor_unit, target_city, city_imprs, act_id)
   $("#" + id).attr("title", "Pick Sabotage Target");
 
   /* List the alternatives */
-  for (var i = 0; i < ruleset_control['num_impr_types']; i++) {
-    var improvement = improvements[i];
+  for (var i = -1; i < ruleset_control['num_impr_types']; i++) {
+    var improvement;
+    if (i >= 0) improvement = improvements[i];
+    // "virtual improvement" id==-1, is the  code to sabotage production instead of building: 
+    else {
+      improvement = {"name": "Production", "id": -2, "sabotage": 100}; // code is -1 but encoding adds +=1.
+    }
 
               // Battering Rams can only select City Walls *********************************
               if (battering_event) {
@@ -1056,8 +1061,8 @@ function popup_sabotage_dialog(actor_unit, target_city, city_imprs, act_id)
                 }
               } //****************************************************************************
 
-    if (city_imprs.isSet(i)
-        && improvement['sabotage'] > 0) {
+    if (i==-1 || // can always sabotage production.
+       (city_imprs.isSet(i) && improvement['sabotage'] > 0)) {
       /* The building is in the city. The probability of successfully
        * sabotaging it as above zero. */
       buttons.push(create_sabotage_impr_button(improvement, id,
