@@ -201,6 +201,35 @@ function network_stop()
 function send_request(packet_payload)
 {
   if (ws != null) {
+
+    //console.log("Received outgoing pid=="+object_packet['pid'])
+    /* workaround current 3.1 server uses actionenablers to filter activities
+       legality. The actions being sent to the client after a (D)o Action 
+       render unit_do_action requests in the user dialog, which the server
+       rejects because it wants the request as a change_activity packet. 
+       TO DO: remove when upstream fixes this. */
+    var object_packet = JSON.parse(packet_payload);
+    if ( (object_packet['pid'] == packet_unit_do_action /*84*/)
+      && (object_packet['action_type']== ACTION_CLEAN_POLLUTION
+          || object_packet['action_type'] == ACTION_CLEAN_FALLOUT)
+       )
+        { // change do_action request to a change_activity request
+          console.log("Client forced to circumvent server's suggested packet_unit_do_action as a packet_unit_change_activity.")
+
+          object_packet['pid'] = packet_unit_change_activity /*222*/;
+          object_packet['unit_id'] = object_packet['actor_id'];
+          object_packet['activity'] = (object_packet['action_type']==ACTION_CLEAN_POLLUTION ? ACTIVITY_POLLUTION : ACTIVITY_FALLOUT);
+          object_packet['target'] = -1;
+          delete object_packet.actor_id;  // remove keys not present in packet_unit_change_activity
+          delete object_packet.target_id;
+          delete object_packet.extra_id;
+          delete object_packet.value;
+          delete object_packet.name;
+          delete object_packet.action_type;
+          packet_payload = JSON.stringify(object_packet);
+        }
+        /* END Client workaround of 3.1 server bug ******************************/
+
     ws.send(packet_payload);
   }
 
