@@ -5175,6 +5175,5 @@ bool is_unit_plural(struct unit *punit)
 {
   if (!punit) return false;
 
-  //FIXME: return is_word_plural( utype_name_translation(unit_type_get(punit)) );
-  return false;
+  return is_word_plural( utype_name_translation(unit_type_get(punit)) );
 }
