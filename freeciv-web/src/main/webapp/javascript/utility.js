@@ -288,4 +288,16 @@ function getHash(input){
   return Math.abs(hash).toString();
 }
 
+/**************************************************************************
+   Force execution to delay by x milliseconds.
+**************************************************************************/
+function wait(ms) 
+{
+  var start = new Date().getTime();
+  var end = start;
+  while(end < start + ms) {
+    end = new Date().getTime();
+  }
+}
+
 
