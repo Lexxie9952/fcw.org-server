@@ -1304,6 +1304,9 @@ function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapac
         "transporter_tile" : ttile
       };
       send_request(JSON.stringify(packet));
+      // Loaded units don't ask orders later:
+      remove_unit_id_from_waiting_list(actor['id']); 
+      actor['done_moving'] = true;
       setTimeout(update_active_units_dialog, 600);
 
       // for very last dialog, click advances unit focus

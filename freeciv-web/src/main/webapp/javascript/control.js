@@ -3877,6 +3877,7 @@ function key_unit_auto_explore()
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_EXPLORE, EXTRA_NONE);
     if (punit['movesleft'] > 0 && punit['owner'] == client.conn.playing.playerno) unit_move_sound_play(punit);
+    remove_unit_id_from_waiting_list(punit['id']);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
@@ -3918,6 +3919,9 @@ function key_unit_load()
               "transporter_tile" : punit['tile']
             };
             send_request(JSON.stringify(packet1));
+            // Loaded units don't ask orders later:
+            remove_unit_id_from_waiting_list(punit['id']); 
+            punit['done_moving'] = true; // in case server doesn't do it
             // A transport who scooped won't try to load onto another in the same key-press:
             scoop_happened = true; //did_scoop[sunits[s]['id']] = true;
           }
@@ -4049,6 +4053,9 @@ function key_unit_load()
           "transporter_tile" : punit['tile']
         };
         send_request(JSON.stringify(packet));
+        // Loaded units don't ask orders later:
+        remove_unit_id_from_waiting_list(punit['id']); 
+        punit['done_moving'] = true; // in case server doesn't do it
         setTimeout(update_active_units_dialog, update_focus_delay);
       }
     }
@@ -4403,7 +4410,9 @@ function key_unit_wait(same_type)
   var funits = get_units_in_focus();
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
-    waiting_units_list.push(punit['id']);
+    // only push to waiting list if it's not already there:
+    if (waiting_units_list.indexOf(punit['id'] == -1))
+      waiting_units_list.push(punit['id']);
   }
   deactivate_goto(false);
   advance_unit_focus(same_type);
@@ -4427,7 +4436,7 @@ function unit_noorders(punit) {
   if (!punit) return;
   punit['done_moving'] = true;
   deactivate_goto(false);
-  remove_unit_id_from_waiting_list(punit['id'])
+  remove_unit_id_from_waiting_list(punit['id']);
 }
 
 /**************************************************************************
@@ -4460,6 +4469,9 @@ function key_unit_vigil()
     var punit = funits[i];
     if (unit_can_vigil(punit)) {
       request_new_unit_activity(punit, ACTIVITY_VIGIL, EXTRA_NONE);
+      // Vigil units don't ask orders later:
+      remove_unit_id_from_waiting_list(punit['id']); 
+      punit['done_moving'] = true; // in case server doesn't know it
     }
   }
   deactivate_goto(false);
@@ -4480,7 +4492,7 @@ function key_unit_sentry()
       remove_unit_id_from_waiting_list(punit['id']);
     } else {
       unit_noorders(punit);
-      advance_unit_focus(false);
+      advance_unit_focus(false); // FIXME: is this needed if we update_unit_focus below?
     }
   }
   deactivate_goto(false);
@@ -4535,8 +4547,12 @@ function unit_can_sentry(punit)
 function remove_unit_id_from_waiting_list(uid)
 {
   var w = waiting_units_list.indexOf(uid);
-  if (w>0) {
-    waiting_units_list.splice(w, 1);
+  if (w>=0) { // -1 means not found; 0 is a valid index.
+    var deleted_elements;
+    // ENSURE unit isn't in the waiting list twice by looping til gone
+    do { 
+      deleted_elements = waiting_units_list.splice(w, 1);
+    } while (deleted_elements.length > 0)
     return true;
   }
   return false;
@@ -4548,12 +4564,12 @@ function remove_unit_id_from_waiting_list(uid)
 function force_clear_unit(uid)
 {
   var w = current_focus.indexOf(uid);
-  if (w>0) {
+  if (w>=0) { // -1 means not found; 0 is a valid index.
     current_focus.splice(w, 1);
   }
 
   remove_unit_id_from_waiting_list(uid);
-  units[uid].done_moving = true;
+  units[uid].done_moving = true; // forces a "unit_noorders" at very minimum.
 }
 
 /**************************************************************************
@@ -4625,6 +4641,8 @@ function key_unit_fortress()
     }
     var activity = EXTRA_NONE;     /* EXTRA_NONE -> server decides */
     request_new_unit_activity(punit, ACTIVITY_BASE, activity);
+    // Unit has orders, don't ask orders later:
+    remove_unit_id_from_waiting_list(punit['id']);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
@@ -4648,8 +4666,9 @@ function key_unit_hideout()
     var ptile = tiles[punit['tile']];
     var activity = EXTRA_NONE;     /* EXTRA_NONE -> server decides */
     if (hideout_rules) activity=EXTRA_;
-
     request_new_unit_activity(punit, ACTIVITY_BASE, activity);
+    // Focused unit got orders, make sure not on waiting_list now:
+    remove_unit_id_from_waiting_list(punit['id']);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
@@ -4681,6 +4700,8 @@ function key_unit_airbase()
     if (radar_rules && tile_has_extra(ptile, EXTRA_AIRBASE)) activity=EXTRA_RADAR;
 
     request_new_unit_activity(punit, ACTIVITY_BASE, activity);
+    // Focused unit got orders, make sure not on waiting_list now:
+    remove_unit_id_from_waiting_list(punit['id']);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
@@ -4696,6 +4717,8 @@ function key_unit_irrigate()
     var punit = funits[i];
     /* EXTRA_NONE -> server decides */
     request_new_unit_activity(punit, ACTIVITY_IRRIGATE, EXTRA_NONE);
+    // Focused unit got orders, make sure not on waiting_list now:
+    remove_unit_id_from_waiting_list(punit['id']);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
@@ -4710,6 +4733,8 @@ function key_unit_pollution()
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_POLLUTION, EXTRA_NONE);
+    // Focused unit got orders, make sure not on waiting_list now:
+    remove_unit_id_from_waiting_list(punit['id']);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
@@ -4917,6 +4942,8 @@ function key_unit_fallout()
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_FALLOUT, EXTRA_NONE);
+    // Unit received orders, don't ask orders later:
+    remove_unit_id_from_waiting_list(punit['id']);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
@@ -4931,6 +4958,8 @@ function key_unit_transform()
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_TRANSFORM, EXTRA_NONE);
+    // Unit received orders, don't ask orders later:
+    remove_unit_id_from_waiting_list(punit['id']);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
@@ -4978,6 +5007,8 @@ function key_unit_convert()
     var punit = funits[i];
     /* EXTRA_NONE -> server decides */
     request_new_unit_activity(punit, ACTIVITY_CONVERT, -1)
+    // Unit received orders, don't ask orders later:
+    remove_unit_id_from_waiting_list(punit['id']);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
@@ -4993,6 +5024,8 @@ function key_unit_mine()
     var punit = funits[i];
     /* EXTRA_NONE -> server decides */
     request_new_unit_activity(punit, ACTIVITY_MINE, EXTRA_NONE);
+    // Unit received orders, don't ask orders later:
+    remove_unit_id_from_waiting_list(punit['id']);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
@@ -5093,6 +5126,8 @@ function key_unit_well()
     const ptile = index_to_tile(punit['tile']);
     if (can_build_well(punit, ptile)) {
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['River']['id']);
+      // Unit received orders, don't ask orders later:
+      remove_unit_id_from_waiting_list(punit['id']);
     }
   }
   deactivate_goto(false);
@@ -5294,6 +5329,8 @@ function key_unit_canal()
     var allowed_type = can_build_canal(punit, ptile); //EXTRA_CANAL or EXTRA_WATERWAY
     if (allowed_type) {
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, allowed_type/*extras['Canal']['id']*/);
+      // Unit received orders, don't ask orders later:
+      remove_unit_id_from_waiting_list(punit['id']);
     }
   }
   deactivate_goto(false);
@@ -5328,6 +5365,8 @@ function key_unit_naval_base()
       const ptile = index_to_tile(punit['tile']);
       if (can_build_naval_base(punit, ptile)) {
         request_new_unit_activity(punit, ACTIVITY_BASE, EXTRA_NAVALBASE);
+        // Unit received orders, don't ask orders later:
+        remove_unit_id_from_waiting_list(punit['id']);
       }
     }},     200);
   deactivate_goto(false);
@@ -5344,23 +5383,34 @@ function key_unit_road()
     var punit = funits[i];
     var ptile = index_to_tile(punit['tile']);
 
-    if (unit_types[punit['type']]['name'] == "Well-Digger")
+    if (unit_types[punit['type']]['name'] == "Well-Digger") {
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['River']['id']);
+      remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
+    }
     else if (is_ocean_tile(ptile)) {
-      if (can_build_sea_bridge(punit,ptile) && !tile_has_extra(ptile, EXTRA_SEABRIDGE))
+      if (can_build_sea_bridge(punit,ptile) && !tile_has_extra(ptile, EXTRA_SEABRIDGE)) {
          request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Sea Bridge']['id']);
+         remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
+      }
       else if (typeof EXTRA_SEABRIDGE !== "undefined" && tile_has_extra(ptile, EXTRA_SEABRIDGE)
-               && !tile_has_extra(ptile, EXTRA_RAIL)) 
-          request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Railroad']['id']);   
-      else if (can_build_maglev(punit, ptile))
-        request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Maglev']['id']);  
+               && !tile_has_extra(ptile, EXTRA_RAIL)) {
+          request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Railroad']['id']);
+          remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
+      }
+      else if (can_build_maglev(punit, ptile)) {
+        request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Maglev']['id']);
+        remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
+      }
     }
     else if (!tile_has_extra(ptile, EXTRA_ROAD)) {
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Road']['id']);
+      remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
     } else if (!tile_has_extra(ptile, EXTRA_RAIL)) {
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Railroad']['id']);
+      remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
     } else if (can_build_maglev(punit, ptile)) {
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Maglev']['id']);
+      remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
     }
   }
   deactivate_goto(false);
@@ -5383,6 +5433,7 @@ function key_unit_quay()
     if (quay_rules) activity=EXTRA_QUAY;
 
     request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, activity);
+    remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
@@ -5491,6 +5542,7 @@ function key_unit_auto_settle()
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     request_unit_autosettlers(punit);
+    remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
   }
   setTimeout(update_unit_focus, update_focus_delay);
   deactivate_goto(false);
@@ -5642,6 +5694,7 @@ function key_unit_disband()
                                             : ACTION_RECYCLE_UNIT)
       };
       send_request(JSON.stringify(packet));
+      remove_unit_id_from_waiting_list(punit['id']); // definitely don't want dead unit on wait list
     }
     setTimeout(update_unit_focus, update_focus_delay);
     setTimeout(update_active_units_dialog, update_focus_delay+100);
@@ -5688,6 +5741,7 @@ function key_unit_move(dir)
       "dest_tile": newtile['index']
     };
     send_request(JSON.stringify(packet));
+    remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
     if (punit['movesleft'] > 0 && punit['owner'] == client.conn.playing.playerno) unit_move_sound_play(punit);
   }
   deactivate_goto(true);
@@ -5732,6 +5786,7 @@ function key_unit_move_focus_index(dir, s)
     };
 
     send_request(JSON.stringify(packet));
+    remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
     if (punit['movesleft'] > 0 && punit['owner'] == client.conn.playing.playerno) unit_move_sound_play(punit);
   }
 
