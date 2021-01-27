@@ -315,6 +315,10 @@ function show_climate_dialog(rtype)
 {
   var title = "Climate Report";
   var message = "<br>";
+  var warm_toler = (game_info['warminglevel']*100)/server_settings['globalwarming_percent']['val'];
+  var warm_accum = game_info['globalwarming'] + warm_toler;
+  var cold_toler = (game_info['coolinglevel']*100)/server_settings['nuclearwinter_percent']['val'];
+  var cold_accum = game_info['nuclearwinter'] + cold_toler;
 
   message += "<span title='IF global warming occurs, the impact strength on the surface tiles of the planet.\n0% = none.\n100% = normal.\n101-10000 = elevated.'>" 
           +"<b>Global Warming Strength</b>:&nbsp; " + game_info['global_warming'] +"%"
@@ -322,12 +326,12 @@ function show_climate_dialog(rtype)
 
   message += "<span title='The current cumulative impact of existing pollution over recent turns, possibly accumulating higher beyond the tolerance to trigger Global Warming. A certain amount will naturally disperse each turn, if the impact caused by existing pollution is not greater.'>"
           +"<b>Global Warming Impact</b>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " 
-          + (game_info['globalwarming'] > 0 ? game_info['globalwarming'] : "<span title='The impact is either near zero, or a major climate disaster has recently reset the climate models.'>[unknown]</span>") 
+          + (game_info['globalwarming'] > 0 ? warm_accum : "<span title='The impact is below tolerance or a major climate disaster has recently reset the climate models.'>[unknown]</span>") 
           + "<span title='One unit of Accumulated Climate Stress, whether in measuring impact to climate, or tolerance to the stress.'> ACS</span>"
           + "</span><br>";
 
   message += "<span title='The current tolerance of the climate after exposure to recent impacts. This represents the natural reduction per turn that the Earth can ecologically absorb and process, and thus, also the tolerance beyond which global warming has a chance to trigger.'>"
-          +"<b>Global Warming Tolerance</b>: " + (game_info['warminglevel']*100)/server_settings['globalwarming_percent']['val']
+          +"<b>Global Warming Tolerance</b>: " + warm_toler
           + "<span title='One unit of Accumulated Climate Stress, whether in measuring impact to climate, or tolerance to that stress.'> ACS </span>"
           + "</span><br>";
 
@@ -346,12 +350,12 @@ function show_climate_dialog(rtype)
 
   message += "<span title='The current cumulative impact of existing fallout over recent turns, possibly accumulating higher beyond the tolerance to trigger Nuclear Winter. A certain amount will naturally disperse each turn, if the impact caused by existing fallout is not greater.'>"
           + "<b>Nuclear Winter Impact</b>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " 
-          + (game_info['nuclearwinter'] > 0 ? game_info['nuclearwinter'] : "<span title='The impact is either near zero, or a major climate disaster has recently reset the climate models.'>[unknown]</span>")
+          + (game_info['nuclearwinter'] > 0 ? cold_accum : "<span title='The impact is below tolerance or a major climate disaster has recently reset the climate models.'>[unknown]</span>")
           + "<span title='One unit of Accumulated Climate Stress, whether in measuring impact to climate, or tolerance to that stress.'> ACS </span>"
           + "</span><br>";
 
   message += "<span title='The current tolerance of the climate after exposure to recent impacts. This represents the natural reduction per turn that the Earth can ecologically absorb and process, and thus, also the tolerance beyond which nuclear winter has a chance to trigger.'>"
-          + "<b>Nuclear Winter Tolerance</b>: " + (game_info['coolinglevel']*100)/server_settings['nuclearwinter_percent']['val']
+          + "<b>Nuclear Winter Tolerance</b>: " + cold_toler
           + "<span title='One unit of Accumulated Climate Stress, whether in measuring impact to climate, or tolerance to that stress.'> ACS </span>"
           + "</span><br>";
 
