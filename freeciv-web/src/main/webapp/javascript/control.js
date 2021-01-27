@@ -3892,60 +3892,51 @@ function key_unit_load()
   // for 99.5% of the games played, which are in common rulesets */
   var normal_ruleset = (client_rules_flag[CRF_CARGO_HEURISTIC]);
   var funits = get_units_in_focus();
-  var did_scoop = false;
+  //var did_scoop = {};  // which transport(s) did a scoop of cargo, currently only one allowed.
+  var scoop_happened = false;
 
   var sunits = current_focus;
-  if (!sunits || sunits.length ==0) return;
+  if (!sunits || sunits.length == 0) return;
 
   // PHASE I: SCOOPING. 'L' command given to a Transport will attempt to SCOOP units onto it.
-  // First cycle through all selected Transports and attempt to Load un-transported units on the tile into them.
-  //console.log("Scooping phase started.")
-
-  for (var s=0; s < sunits.length; s++)  { // iterate selected unit 
-    var stype = unit_type(sunits[s]);
-    //console.log("  sunits["+s.name+ "] being checked...");
-
-    if (stype && stype.transport_capacity > 0) {  // Iterate all Transports among the selected units.
-      //console.log("   ..."+stype.name+ "is a transport attempting to scoop.");
-      var ptile = index_to_tile(sunits[s]['tile']); // Each selected unit may be on a different tile.
-      units_on_tile = tile_units(ptile);
-      //console.log("      "+stype.name+ "got a list of all units on its tile");
-
-      // Iterate each unit on the selected Transport's tile for attempted loading. (If it's legal, great. If not, server won't do it.)
-      for (var i = 0; i < units_on_tile.length; i++) {
-        //console.log("        CHECKING punit["+i+"] on tile");
-        var punit = units_on_tile[i]; // iterate to next unit on tile
-        if (punit == sunits[s]) continue;
-        // Attempt to load units on selected Transport IFF unit is not already loaded on a Transport.
-        // (TODO: also skip units who have their own cargo? May be edge cases?)
-        if (!punit['transported'] 
-            && unit_could_possibly_load(punit, unit_type(punit), stype, get_unit_class(sunits[s]))) { 
-          var packet1 = {
-            "pid"              : packet_unit_load,
-            "cargo_id"         : punit['id'],
-            "transporter_id"   : sunits[s]['id'],
-            "transporter_tile" : punit['tile']
-          };
-          send_request(JSON.stringify(packet1));
-          //console.log("punit=="+unit_type(punit)['name']+".  sel_unit=="+stype['name']+". ucpl=="
-          //    + unit_could_possibly_load(punit, unit_type(punit), stype, get_unit_class(sunits[s])));
-          did_scoop = true;
+  // Cycle through all selected Transports and attempt to Load un-transported units on the tile into them.
+  if (sunits.length == 1) { // Multiple sunits fails: sunits[2] scoops sunits[1]'s cargo before server updates
+    for (var s=0; s < sunits.length; s++)  { // iterate just in case we one day figure a way to give to multiple units. 
+      var stype = unit_type(sunits[s]);
+      if (stype && stype.transport_capacity > 0 && unit_has_cargo_room(sunits[s])) {
+        var ptile = unit_tile(sunits[s]); // Each selected unit may be on a different tile.
+        units_on_tile = tile_units(ptile);
+        // Request server to load each legal unit on the selected Transport's tile:
+        for (var i = 0; i < units_on_tile.length; i++) {
+          var punit = units_on_tile[i];
+          if (!punit['transported'] && punit != sunits[s] //can't load onto itself
+              && unit_could_possibly_load(punit, unit_type(punit), stype, get_unit_class(sunits[s]))) { 
+            var packet1 = {
+              "pid"              : packet_unit_load,
+              "cargo_id"         : punit['id'],
+              "transporter_id"   : sunits[s]['id'],
+              "transporter_tile" : punit['tile']
+            };
+            send_request(JSON.stringify(packet1));
+            // A transport who scooped won't try to load onto another in the same key-press:
+            scoop_happened = true; //did_scoop[sunits[s]['id']] = true;
+          }
         }
       }
-    } // else { /* sunit is not a transport, don't attempt to do SCOOPING /* }
+    }
   }
-  //console.log("did_scoop == "+did_scoop);
-
-  // We don't simultaneously mix scoop 'L' with embark 'L' or we could get a recusrive tangle.
-  if (did_scoop) {
-    setTimeout(update_active_units_dialog, update_focus_delay);
+  // Scooping is a lot of packets, make a longer delay to update focus on it.
+  if (scoop_happened) {
+    setTimeout(update_active_units_dialog, update_focus_delay*1.35);
     return;
-  }
-  //console.log("Normal loading phase started.")
-
-  // PHASE II: 'L' command may apply to selected non-Transports who wish to select a unit to Load on:
+  } // *********** END PHASE I *************************************************************************************
+  // PHASE II: 'L' units who aren't scooping transports just want to load onto something:
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
+    /* Don't scoop cargo then also load onto some other unit in the same key-press.
+    if (did_scoop[punit['id']]) {
+      continue;
+    } */
     var ptype = unit_type(punit);
     var ptile = index_to_tile(punit['tile']);
     var transporter_unit_id = 0;
@@ -3972,9 +3963,6 @@ function key_unit_load()
         }
       }
     }
-    // No candidate transporters found: abort
-    if (transporter_units.length < 1) return;
-
     // if 2 or more candidates, give user a GUI choice what to load on:
     if (transporter_units.length >= 2 /*&& funits.length == 1*/) {
       // Count up how many on each transport candidate:
@@ -4039,34 +4027,8 @@ function key_unit_load()
       dialog_register(id);
     }
     // otherwise, only one transporter candidate, load automatically with no GUI input from user:
-/* this had a bug and tried loading on the first transporter ID while ignoring the work we did to
-   figure out which transporters are real candidates, so it's commented out now to try the candidate
-   fix below.
-    else {
-      for (r = 0; r < units_on_tile.length; r++) {
-        tunit = units_on_tile[r];
-        if (tunit['id'] == punit['id']) continue;
-        ttype = unit_type(tunit);
-        if (ttype['transport_capacity'] > 0) {
-          has_transport_unit = true;
-          transporter_unit_id = tunit['id'];
-        }
-      }
-
-      if (has_transport_unit && transporter_unit_id > 0 && punit['tile'] > 0) {
-        var packet = {
-          "pid"              : packet_unit_load,
-          "cargo_id"         : punit['id'],
-          "transporter_id"   : transporter_unit_id,
-          "transporter_tile" : punit['tile']
-        };
-        send_request(JSON.stringify(packet));
-        setTimeout(update_active_units_dialog, update_focus_delay);
-      }
-    }
-*/
     // Only one legal transport, no need to do pop-up to choose which one:
-    else {
+    else if (transporter_units.length == 1) { // excludes the case of no candidates found
       // in theory we got here because there was only one (possibly) legal transporter_unit,
       // Looping the array might be needless legacy method but oh well, it's safe.
       for (r = 0; r < transporter_units.length; r++) {
@@ -4104,6 +4066,8 @@ function key_unit_load()
 **************************************************************************/
 function key_unit_unload()
 {
+  var unloaded=0; // don't advance to next unit if illegal/nothing happened.
+
   if (current_focus != null && current_focus.length>0) {
     var sunit = current_focus[0];
     var sunits = current_focus;
@@ -4140,12 +4104,13 @@ function key_unit_unload()
         // If iterated tile unit is being transported by selected unit, then UNLOAD it!
         if (punit['transported'] && punit['transported_by'] == sunits[s]['id']) {
           if (unit_can_do_unload(punit)) {
-          var packet = {
-            "pid"         : packet_unit_unload,
-            "cargo_id"    : punit['id'],
-            "transporter_id"   : punit['transported_by']
-          };
-          send_request(JSON.stringify(packet));
+            var packet = {
+              "pid"         : packet_unit_unload,
+              "cargo_id"    : punit['id'],
+              "transporter_id"   : punit['transported_by']
+            };
+            send_request(JSON.stringify(packet));
+            unloaded++;
           }  
         }
       }
@@ -4161,6 +4126,7 @@ function key_unit_unload()
           "transporter_id"   : sunits[s]['transported_by']
         };
         send_request(JSON.stringify(packet));
+        unloaded++;
       }
     }
     else {  
@@ -4185,7 +4151,20 @@ function key_unit_unload()
     }
   }  
   deactivate_goto(false);
-  setTimeout(function() {advance_unit_focus(false)}, update_focus_delay);
+  if (unloaded) {
+    add_client_message("Unloaded "+unloaded+" unit"+ (unloaded>1 ? "s." : ".") )
+    setTimeout(function() {advance_unit_focus(false)}, update_focus_delay);
+  }
+  else {
+    if (sunits.length == 1) {
+      add_client_message(unit_type(sunits[0]).rule_name+" couldn't unload here.")
+      // Could call a function that gives legality helptext on what's legal
+      // and what's not based on the unit and the unit.transported_by...
+    }
+    else { 
+      add_client_message("Can't unload here.");
+    }
+  }
 }
 
 /**************************************************************************
@@ -4443,6 +4422,13 @@ function key_unit_noorders()
   deactivate_goto(false);
   advance_unit_focus(false);
 }
+// requires caller to do advance_unit_focus(false) if desired:
+function unit_noorders(punit) {  
+  if (!punit) return;
+  punit['done_moving'] = true;
+  deactivate_goto(false);
+  remove_unit_id_from_waiting_list(punit['id'])
+}
 
 /**************************************************************************
  Tell the units to stop what they are doing.
@@ -4481,7 +4467,7 @@ function key_unit_vigil()
 }
 
 /**************************************************************************
- Tell the units in focus to sentry.
+ Tell the units in focus to sentry. If it can't, it's given No Orders.
 **************************************************************************/
 function key_unit_sentry()
 {
@@ -4489,54 +4475,60 @@ function key_unit_sentry()
 
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
-    var class_name = get_unit_class_name(punit);
-    var ptile = unit_tile(punit)
-    var pcity = tile_city(ptile);
-
-    // Server can now handle Trireme sentry on coast, so only thing to check is...
-    // Trireme on a tile that can't sentry receives no_orders:
-    if (client_rules_flag[CRF_TRIREME_FUEL] && class_name == "Trireme") {   
-      // 0==land,1==water.  Check the tile we're on: it might be a river on a tiny isle:
-      var no_coast_near = tile_terrain(ptile)['tclass']; // 0==false if it's land
-
-      for (var t=0; t < num_cardinal_tileset_dirs; t++) {
-        var dir = cardinal_tileset_dirs[t];
-        var checktile = mapstep(ptile, dir);
-        var pterrain = tile_terrain(checktile);
-        // if NEITHER graphic_str NOR graphic_alt is 'coast', it's land:
-        if (pterrain['tclass'] == 0) no_coast_near = false; // 0==land
-      }
-      if (no_coast_near == true) key_unit_noorders();
-      // else go ahead and sentry later below...
-    }
-
-    // IFF these units can't sentry, then S is synonymous with "No Orders":
-    if (   class_name == "Helicopter"
-             || class_name == "Air"
-             || class_name == "AirProtect" 
-             || class_name == "AirPillage"
-             || class_name == "Air_High_Altitude"
-             || class_name == "Missile" ) 
-    {
-      if (pcity || tile_has_extra(ptile, EXTRA_AIRBASE)) {
-        request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
-        remove_unit_id_from_waiting_list(punit['id']);
-      }
-      else {
-        key_unit_noorders();
-      }
-    } // END SPECIAL UNIT SENTRY HANDLING
-    // *******************************************************************
-
-    else {
+    if (unit_can_sentry(punit)) {
       request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
       remove_unit_id_from_waiting_list(punit['id']);
+    } else {
+      unit_noorders(punit);
+      advance_unit_focus(false);
     }
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
 }
+/**************************************************************************
+ Returns true if this type of unit can sentry on its current tile.
+**************************************************************************/
+function unit_can_sentry(punit)
+{
+  var class_name = get_unit_class_name(punit);
+  var ptile = unit_tile(punit)
+  var pcity = tile_city(ptile);
 
+  if (client_rules_flag[CRF_TRIREME_FUEL] && class_name == "Trireme") {   
+    // 0==land,1==water.  Check the tile we're on: it might be a river on a tiny isle:
+    var no_coast_near = tile_terrain(ptile)['tclass']; // 0==false if it's land
+
+    for (var t=0; t < num_cardinal_tileset_dirs; t++) {
+      var dir = cardinal_tileset_dirs[t];
+      var checktile = mapstep(ptile, dir);
+      var pterrain = tile_terrain(checktile);
+      // if NEITHER graphic_str NOR graphic_alt is 'coast', it's land:
+      if (pterrain['tclass'] == 0) no_coast_near = false; // 0==land
+    }
+    if (no_coast_near == true) {
+      return false;
+    }
+  }
+
+  if (class_name == "Helicopter"
+          || class_name == "Air"
+          || class_name == "AirProtect" 
+          || class_name == "AirPillage"
+          || class_name == "Air_High_Altitude"
+          || class_name == "Missile" ) 
+  {
+    if (pcity || punit['transported'] || tile_has_extra(ptile, EXTRA_AIRBASE)) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  else {
+    return true;
+  }
+}
 /**************************************************************************
  Remove unit from the list of units who are awaiting orders.
 **************************************************************************/
@@ -4544,35 +4536,70 @@ function remove_unit_id_from_waiting_list(uid)
 {
   var w = waiting_units_list.indexOf(uid);
   if (w>0) {
-    waiting_units_list.splice(i, 1);
+    waiting_units_list.splice(w, 1);
     return true;
   }
   return false;
 }
 
 /**************************************************************************
- Tell the units in focus to fortify.
+ Remove unit from focus AND the list of units who are awaiting orders.
+**************************************************************************/
+function force_clear_unit(uid)
+{
+  var w = current_focus.indexOf(uid);
+  if (w>0) {
+    current_focus.splice(w, 1);
+  }
+
+  remove_unit_id_from_waiting_list(uid);
+  units[uid].done_moving = true;
+}
+
+/**************************************************************************
+ Tell the units in focus to fortify, or if they can't, to do the next
+ best thing that makes them stay put and advances unit focus.
 **************************************************************************/
 function key_unit_fortify()
 {
   var funits = get_units_in_focus();
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
-    // sentry before fortify will make units who can fortify override 
-    // sentry, whereas units who can't will sentry. this is a UI convenience
-    // for hitting F on a whole stack and making it do the best option it has.
+    var can_sentry = unit_can_sentry(punit);
+    /* This is a UI convenience: hitting F on a whole stack and making it
+       do the best option each unit has, to stay put so we can move on to
+       the next unit orders:
+       Priority 1: Fortify
+       Priority 2: Sentry
+       Priority 3: No Orders      */
     
+    // Can't fortify. Try priority 2: Sentry
     if (!unit_has_class_flag(punit, UCF_CAN_FORTIFY) 
-      || unit_has_type_flag(punit,UTYF_CANT_FORTIFY)) {
-
-        request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
+      || unit_has_type_flag(punit, UTYF_CANT_FORTIFY)) {
+        if (can_sentry) {
+          request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
+        }
+        else { // can't fortify, can't sentry: priority 3:
+          unit_noorders(punit);
+        }
     }
-    else request_new_unit_activity(punit, ACTIVITY_FORTIFYING, EXTRA_NONE);
-    // remove from waiting list
-    remove_unit_id_from_waiting_list(punit['id']);
+    // Unit can intrinsically Fortify (Priority 1), but still maybe can't:
+    else if (punit['transported']) {
+      // if transported, we can't Fortify. Priority 2: Sentry
+      if (can_sentry) {
+        request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
+      } else { // can't fortify, can't sentry: priority 3:
+        unit_noorders(punit);
+      }
+    }
+    else { // Priority 1: Fortify.
+      request_new_unit_activity(punit, ACTIVITY_FORTIFYING, EXTRA_NONE);
+      // remove from waiting list
+    }
+    force_clear_unit(punit['id'], 0);
   }
   deactivate_goto(false);
-  setTimeout(update_unit_focus, update_focus_delay);
+  setTimeout(update_unit_focus, update_focus_delay*0.8);
 }
 
 /**************************************************************************
@@ -5403,8 +5430,8 @@ function key_unit_action_select()
     action_tgt_sel_active = true;
     message_log.update({
       event: E_BEGINNER_HELP,
-      message: "Click on a tile to act against it. "
-             + "Press 'd' again to act against own tile."
+      message: "Click on a tile to act on it. "
+             + "Press <b>D</b> again to act on own tile."
     });
   }
   deactivate_goto(false);
@@ -5533,7 +5560,7 @@ function request_unit_build_city()
       if (punit['movesleft'] == 0) {
         message_log.update({
           event: E_BAD_COMMAND,
-          message: "Unit has no moves left to build city"
+          message: unit_type(punit).rule_name+" have no moves left to build city"
         });
         return;
       }
@@ -5559,7 +5586,7 @@ function request_unit_build_city()
 
             swal({
               title: 'Add '+ptype['name']+' to \n'+target_city['name']+'?',
-              text: 'Unit will add +1 population and disband into an Entertainer.',
+              text: 'Unit will add +1 population and re-arrange citizen tile workers.',
               type: 'info',
               background: '#a19886',
               showCancelButton: true,
