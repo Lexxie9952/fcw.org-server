@@ -907,6 +907,17 @@ actor_reqs    =
 ;     "DiplRel", "War", "Local", FALSE  ; allows establishing during war then awaiting diplomatic relation to activate trade income.
     }
 
+;Caravans that exist before Trade tech must be start units. Start units are allowed/encouraged to do what they're made for.
+[actionenabler_traderoute_startunit]
+action = "Establish Trade Route"
+actor_reqs    =
+    { "type",   "name", "range", "present"
+      "Tech", "Trade", "Player", FALSE
+      "MinMoveFrags", "1", "Local", TRUE
+      "UnitType", "Caravan", "Local", TRUE
+;     "DiplRel", "War", "Local", FALSE  ; allows establishing during war then awaiting diplomatic relation to activate trade income.
+    }    
+
 [actionenabler_marketplace]
 action = "Enter Marketplace"
 actor_reqs    =

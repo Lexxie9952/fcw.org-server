@@ -2920,7 +2920,7 @@ static bool unit_do_help_build(struct player *pplayer,
 
   shields = unit_shield_value(punit, unit_type_get(punit), paction);
 
-  bool full_contributor = (shields == unit_type_get(punit)->build_cost) 
+  bool full_contributor = (shields >= unit_type_get(punit)->build_cost) 
                           ? true : false;
 
   if (action_has_result(paction, ACTION_HELP_WONDER)) {

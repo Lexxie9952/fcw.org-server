@@ -82,10 +82,10 @@ function tech_researched_handler(tech, player, how)
       for c in player:cities_iterate() do 
         if c:has_building(find.building_type("Palace")) then
           notify.event(NIL, c.tile, E.TECH_GAIN,
-          _("<font color=#ffff00>Travellers tell stories of the amazing skills of the %s, who ride wild beasts near %s! (%i,%i)</font>"),
+          _("<font color=#ffff00>🐎 Travellers tell stories of the amazing skills of the %s, who ride wild beasts near %s! (%i,%i)</font>"),
           player.nation:plural_translation(), c.name, c.tile.x, c.tile.y )
 
-          notify.all( _("Tribesmen have learned to ride wild beasts near %s (%i,%i)"), c.name, c.tile.x, c.tile.y)
+          notify.all( _("🐎 Tribesmen have learned to ride wild beasts near %s (%i,%i)"), c.name, c.tile.x, c.tile.y)
         end
       end  
     end

@@ -27,7 +27,7 @@ GOVERNMENT RE-BALANCE:
 5. -50% bulbs in exchange for free upkeep on temples/make_content buildings, was a penalty. Changed to:  
    a. Bonus/penalty is symmetric now: -20% for sci, +20% for gold.
 * COMMUNISM:
-1. Proletarians have 1 pop_cost but add 2 pop. Same +1 net pop as Pilgrims, but can better use granary dynamics and magnify "boom-town" growth. One city build slot used, not all.
+1. Proletarians have 1 pop_cost but add 2 pop. Same +1 net pop as Pilgrims, but can better use granary dynamics and magnify state populace control of "boom-town" growth. One city build slot used, not all.
 2. Communists: 10 shield discount on Armor I.
 * DEMOCRACY:
 1. Democracy has base corruption level of 8%, (half of Republic/Monarchy)
@@ -136,6 +136,7 @@ Ram Ship can see 1 tile around it and travel on rivers - prevents unintended att
 Damaged Submarine min_speed=4 (was 3); makes hit-and-run and escape somewhat more viable.
 Nuclear winter is was patches of random arctic everywhere, now is more of a temperature downgrade of each affected tile to one level colder.
 Fallout disappear chance changed from 20% to 15%
+Starting Caravans have all restrictions and complications removed. Can Help Wonder or Establish Trade Route (remember to set Home City first!)
 
 
 SERVER UPGRADES:
@@ -232,7 +233,7 @@ What this means for MP2 rules:
    Thus, 85% chance to investigate unprotected city, and about 75% chance to succeed vs. protected city (plus or minus with vet levels of spies.)
 32. Spies could only sabotage city production at random but not targeted. This was fixed: targeted sabotage now lists "Production" as one of the 
    choices along with the improvements.
-33. Info-codes. Special info symbols mark the information you get in the chat window, to make it easier/faster to scan for important events of 
+33. Info-code0. Special info symbols mark the information you get in the chat window, to make it easier/faster to scan for important events of 
    different types, or to scroll back to find again.
 
 These help with much more than Freeciv and other Full-screen apps. They help you with everything you do on your computer:
