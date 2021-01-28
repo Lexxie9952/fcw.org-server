@@ -717,7 +717,7 @@ extern struct world wld;
 #define GAME_HARDCODED_DEFAULT_SKILL_LEVEL 3 /* that was 'easy' in old saves */
 #define GAME_OLD_DEFAULT_SKILL_LEVEL 5  /* normal; for oldest save games */
 
-#define GAME_DEFAULT_DEMOGRAPHY      "NASRLPEMOCqrb"
+#define GAME_DEFAULT_DEMOGRAPHY      "NASRLPEMOCUKDqrb"
 #define GAME_DEFAULT_ALLOW_TAKE      "HAhadOo"
 
 #define GAME_DEFAULT_EVENT_CACHE_TURNS    1
