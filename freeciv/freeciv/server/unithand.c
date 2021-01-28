@@ -308,11 +308,68 @@ static bool do_capture_units(struct player *pplayer,
   sz_strlcpy(capturer_link, unit_link(punit));
 
   pcity = tile_city(pdesttile);
+
+  // First, sanity unload all units to capture so they aren't transported by null units!
+  unit_list_iterate(pdesttile->units, pcargo) {
+
+    if (unit_transported(pcargo)) {
+        /* Captured cargo must first be unloaded so it won't crash when its transport becomes null after capture */
+        struct unit *tunit = unit_transport_get(pcargo);
+        if (pcargo) {
+          unit_transport_unload_send(pcargo);
+        }
+        else return FALSE; // shouldn't be there but failsafe to avoid crashy.
+
+        /*TRICKERY: just create a new cargo unit of same type in the closest city.*/
+        struct city *new_home_city = find_closest_city(unit_tile(punit), NULL, unit_owner(punit), FALSE,
+                                FALSE, FALSE, TRUE, FALSE, NULL);
+        struct unit *new_unit;
+        new_unit = create_unit(pplayer, new_home_city->tile, pcargo->utype, 
+                          0, (game.server.homecaughtunits ? punit->homecity : IDENTITY_NUMBER_ZERO), 0);
+        if (new_unit) new_unit=NULL;
+        else return FALSE; // failsafe
+        
+        notify_player(unit_owner(pcargo), pdesttile,
+                    E_ENEMY_DIPLOMAT_BRIBE, ftc_server,
+                    _("⚠️ Your transported %s %s stolen when the %s ambushed %s %s."),
+                    unit_name_translation(pcargo),
+                    (is_unit_plural(pcargo) ? "were" : "was"),
+                    nation_plural_for_player(pplayer),
+                    (is_unit_plural(pcargo) ? "their" : "its"),
+                    unit_name_translation(tunit));
+
+        // This is what we formerly did to avoid seg fault. We can revert to this for safety if needed. 
+        // Don't make new unit. Award gold for booty below. Do a return FALSE; All the important data
+        // gets updated & fresh, and each separate capture takes one move. Not so bad. 
+
+        /* pplayer->economic.gold += unit_build_shield_cost_base(pcargo); 
+
+        notify_player(pplayer, pdesttile,
+                    E_ENEMY_DIPLOMAT_BRIBE, ftc_server,
+                    _("💰 Captured %s cargo was taken as booty and auctioned for %d gold."),
+                    unit_name_translation(pcargo),
+                    unit_build_shield_cost_base(pcargo));
+        *****************************************************************************/
+        notify_player(pplayer, pdesttile,
+                    E_ENEMY_DIPLOMAT_BRIBE, ftc_server,
+                    _("🎁 Captured %s %s confiscated as booty and taken to your nearest city, %s."),
+                    unit_name_translation(pcargo),
+                    (is_unit_plural(pcargo) ? "were" : "was"),
+                    city_link(new_home_city));
+
+        wipe_unit(pcargo, ULR_CAPTURED, pplayer);
+
+        //return FALSE; //ultra-conservative escape to avoid seg-fault and make each confiscation take 1 move/ bring it back if bugs return.
+      }
+  } unit_list_iterate_end;
+
   unit_list_iterate(pdesttile->units, to_capture) {
     struct player *uplayer = unit_owner(to_capture);
     const char *victim_link;
 
     unit_owner(to_capture)->score.units_lost++;
+    
+   
     to_capture = unit_change_owner(to_capture, pplayer,
                                    (game.server.homecaughtunits
                                     ? punit->homecity
@@ -357,6 +414,7 @@ static bool do_capture_units(struct player *pplayer,
   unit_forget_last_activity(punit);
 
   send_unit_info(NULL, punit);
+  send_player_info_c(pplayer, pplayer->connections);
 
   return TRUE;
 }
@@ -4531,6 +4589,12 @@ static bool do_unit_establish_trade(struct player *pplayer,
   conn_list_do_buffer(pplayer->connections);
 
   goods_str = goods_name_translation(goods);
+  // in the case where, e.g., the unit name is "Goods" and the goods name is "Goods", 
+  // avoid saying "Goods Goods" in the messages generated farther below.
+  char empty[1] = "";
+  if (strcmp(goods_str, utype_name_translation(unit_type_get(punit))) ==0 ) {
+    goods_str = empty;
+  }
 
   /* We want to keep the bonus type string as the part of the format of the PL_() strings
    * for supporting proper pluralization for it. */
@@ -4539,60 +4603,56 @@ static bool do_unit_establish_trade(struct player *pplayer,
     notify_player(pplayer, city_tile(pcity_dest),
                   E_CARAVAN_ACTION, ftc_server,
                   /* TRANS: ... Caravan ... Paris ... Stockholm ... Goods */
-                  _("Your %s from %s %s arrived in %s carrying %s."),
+                  _("%s %s from %s arrived in %s."),
                   punit_link,
+                  goods_str,
                   homecity_link,
-                  (is_unit_plural(punit) ? "have" : "has"),
-                  destcity_link,
-                  goods_str);
+                  destcity_link);
     break;
   case TBONUS_GOLD:
     notify_player(pplayer, city_tile(pcity_dest),
                   E_CARAVAN_ACTION, ftc_server,
                   /* TRANS: ... Caravan ... Paris ... Stockholm, ... Goods... */
-                  PL_("💰 Your %s from %s %s arrived in %s carrying %s,"
-                      " and revenues amount to %d in gold.",
-                      "💰 Your %s from %s %s arrived in %s carrying %s,"
-                      " and revenues amount to %d in gold.",
+                  PL_("💰 %s %s from %s arrived in %s."
+                      " Revenue: <font color='#fff'><b>%d</b></font> gold.",
+                      "💰 %s %s from %s arrived in %s."
+                      " Revenue: <font color='#fff'><b>%d</b></font> gold.",
                       revenue),
                   punit_link,
-                  homecity_link,
-                  (is_unit_plural(punit) ? "have" : "has"),
-                  destcity_link,
                   goods_str,
+                  homecity_link,
+                  destcity_link,
                   revenue);
     break;
   case TBONUS_SCIENCE:
     notify_player(pplayer, city_tile(pcity_dest),
                   E_CARAVAN_ACTION, ftc_server,
                   /* TRANS: ... Caravan ... Paris ... Stockholm, ... Goods... */
-                  PL_("💡 Your %s from %s %s arrived in %s carrying %s,"
-                      " and revenues amount to %d in research.",
-                      "💡 Your %s from %s %s arrived in %s carrying %s,"
-                      " and revenues amount to %d in research.",
+                  PL_("💡 %s %s from %s arrived in %s."
+                      " Bulbs received: <font color='#ff0'><b>%d</b></font>.",
+                      "💡 %s %s from %s arrived in %s."
+                      " Bulbs received: <font color='#ff0'><b>%d</b></font>.",
                       revenue),
                   punit_link,
-                  homecity_link,
-                  (is_unit_plural(punit) ? "have" : "has"),
-                  destcity_link,
                   goods_str,
+                  homecity_link,
+                  destcity_link,
                   revenue);
     break;
   case TBONUS_BOTH:
     notify_player(pplayer, city_tile(pcity_dest),
                   E_CARAVAN_ACTION, ftc_server,
                   /* TRANS: ... Caravan ... Paris ... Stockholm, ... Goods... */
-                  PL_("Your %s from %s %s arrived in %s carrying %s,"
-                      " and revenues amount to %d in gold and research.",
-                      "Your %s from %s %s arrived in %s carrying %s,"
-                      " and revenues amount to %d in gold and research.",
+                  PL_("💰💡 %s %s from %s arrived in %s."
+                      " Revenues: <font color='#fff'><b>%d</b></font> gold, <font color='#ff0'>%d</b></font> bulbs.",
+                      "💰💡 %s %s from %s arrived in %s."
+                      " Revenues: <font color='#fff'><b>%d</b></font> gold, <font color='#ff0'>%d</b></font> bulbs.",
                       revenue),
                   punit_link,
-                  homecity_link,
-                  (is_unit_plural(punit) ? "have" : "has"),
-                  destcity_link,
                   goods_str,
-                  revenue);
+                  homecity_link,
+                  destcity_link,
+                  revenue, revenue);
     break;
   }
 
@@ -4631,8 +4691,8 @@ static bool do_unit_establish_trade(struct player *pplayer,
     if (pplayer != partner_player) {
       notify_player(partner_player, city_tile(pcity_dest),
                     E_CARAVAN_ACTION, ftc_server,
-                    _("🐫 The %s established a trade route between their "
-                      "city %s and %s."),
+                    _("🐫 The %s established a trade route from "
+                      "%s to %s."),
                     nation_plural_for_player(pplayer),
                     homecity_link,
                     destcity_link);
@@ -5018,7 +5078,7 @@ bool unit_activity_handling_targeted(struct unit *punit,
                 if (tile_owner(punit->tile)) {
                   notify_player(tile_owner(punit->tile), unit_tile(punit),
                           E_UNIT_ACTION_ACTOR_FAILURE, ftc_server,
-                          _("💢 %s %s %s failed while attempting to %s your %s."),
+                          _("💢 %s %s %s failed while trying to %s your %s."),
                           indefinite_article_for_word(nation_adjective_for_player(unit_owner(punit)), true),
                           nation_adjective_for_player(unit_owner(punit)),
                           unit_link(punit),
