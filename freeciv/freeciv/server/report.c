@@ -139,6 +139,10 @@ static int get_economics(const struct player *pplayer);
 static int get_pollution(const struct player *pplayer);
 static int get_mil_service(const struct player *pplayer);
 static int get_culture(const struct player *pplayer);
+static int get_units_built(const struct player *pplayer);
+static int get_units_killed(const struct player *pplayer);
+static int get_units_lost(const struct player *pplayer);
+
 
 static const char *area_to_text(int value);
 static const char *percent_to_text(int value);
@@ -148,6 +152,7 @@ static const char *science_to_text(int value);
 static const char *mil_service_to_text(int value);
 static const char *pollution_to_text(int value);
 static const char *culture_to_text(int value);
+static const char *units_to_text(int value);
 
 #define GOOD_PLAYER(p) ((p)->is_alive && !is_barbarian(p))
 
@@ -161,17 +166,20 @@ static struct dem_row {
   const char *(*to_text) (int);
   bool greater_values_are_better;
 } rowtable[] = {
-  {'N', N_("Population"),       get_population,  population_to_text,  TRUE },
-  {'A', N_("Land Area"),        get_landarea,    area_to_text,        TRUE },
-  {'S', N_("Settled Area"),     get_settledarea, area_to_text,        TRUE },
-  {'R', N_("Research Speed"),   get_research,    science_to_text,     TRUE },
+  {'N', N_("Population"),       get_population,   population_to_text,  TRUE },
+  {'A', N_("Land Area"),        get_landarea,     area_to_text,        TRUE },
+  {'S', N_("Settled Area"),     get_settledarea,  area_to_text,        TRUE },
+  {'R', N_("Research Speed"),   get_research,     science_to_text,     TRUE },
   /* TRANS: How literate people are. */
   {'L', N_("?ability:Literacy"), get_literacy,    percent_to_text,     TRUE },
-  {'P', N_("Production"),       get_production,  production_to_text,  TRUE },
-  {'E', N_("Economics"),        get_economics,   economics_to_text,   TRUE },
-  {'M', N_("Military Service"), get_mil_service, mil_service_to_text, FALSE },
-  {'O', N_("Pollution"),        get_pollution,   pollution_to_text,   FALSE },
-  {'C', N_("Culture"),          get_culture,     culture_to_text,     TRUE }
+  {'P', N_("Production"),       get_production,   production_to_text,  TRUE },
+  {'E', N_("Economics"),        get_economics,    economics_to_text,   TRUE },
+  {'M', N_("Military Service"), get_mil_service,  mil_service_to_text, FALSE },
+  {'O', N_("Pollution"),        get_pollution,    pollution_to_text,   FALSE },
+  {'C', N_("Culture"),          get_culture,      culture_to_text,     TRUE },
+  {'U', N_("Units Built"),      get_units_built,  units_to_text,       TRUE },
+  {'K', N_("Units Killed"),     get_units_killed, units_to_text,       FALSE },
+  {'D', N_("Units Lost"),       get_units_lost,   units_to_text,       TRUE },
 };
 
 /* Demographics columns. */
@@ -877,6 +885,16 @@ static const char *culture_to_text(int value)
 {
   /* TRANS: Unit(s) of culture */
   return value_units(value, PL_(" point", " points", value));
+}
+
+/**********************************************************************//**
+  Construct string containing value followed by unit suitable for
+  units built/killed/lost stats.
+**************************************************************************/
+static const char *units_to_text(int value)
+{
+  /* TRANS: Unit(s) quantity for built/killed/lost */
+  return value_units(value, PL_(" unit", " units", value));  
 }
 
 /**********************************************************************//**
