@@ -960,7 +960,7 @@ static bool city_increase_size(struct city *pcity, struct player *nationality)
   } trade_partners_iterate_end;
 
   notify_player(powner, city_tile(pcity), E_CITY_GROWTH, ftc_server,
-                _("🥣 %s grows to size %d."),
+                _("🔼 %s grows to size %d."),
                 city_link(pcity), city_size_get(pcity));
 
   /* Deprecated signal. Connect your lua functions to "city_size_change" that's
@@ -2998,7 +2998,7 @@ static bool city_build_building(struct player *pplayer, struct city *pcity)
     }
 
     notify_player(pplayer, city_tile(pcity), E_IMP_BUILD, ftc_server,
-                  _("%s has finished building %s."),
+                  _("🔨 %s has finished building %s."),
                   city_link(pcity), improvement_name_translation(pimprove));
     script_server_signal_emit("building_built", pimprove, pcity);
 
@@ -3229,8 +3229,8 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
                       ftc_server,
                       /* TRANS: "<unit> cost... <city> shrinks..."
                        * Plural in "%d population", not "size %d". */
-                      PL_("%s cost %d population. %s shrinks to size %d.",
-                          "%s cost %d population. %s shrinks to size %d.",
+                      PL_("🔽 %s cost %d population. %s shrinks to size %d.",
+                          "🔽 %s cost %d population. %s shrinks to size %d.",
                           pop_cost),
                       utype_name_translation(utype), pop_cost,
                       city_link(pcity), city_size_get(pcity));

@@ -841,9 +841,10 @@ void notify_unit_experience(struct unit *punit)
   notify_player(unit_owner(punit), unit_tile(punit),
                 E_UNIT_BECAME_VET, ftc_server,
                 /* TRANS: Your <unit> became ... rank of <veteran level>. */
-                _("🥈 Your %s became more experienced and achieved the rank "
-                  "of %s."),
-                unit_link(punit), name_translation_get(&vlevel->name));
+                _("🥈 <font color='#fff'>∨%d</font>. <font color='#a8a8a8'>Your %s gained experience and %s now %s.</font>"),
+                punit->veteran, unit_link(punit),
+                (is_unit_plural(punit) ? "are" : "is"),
+                name_translation_get(&vlevel->name));
 }
 
 /**********************************************************************//**
@@ -3635,9 +3636,10 @@ static bool unit_survive_autoattack(struct unit *punit)
               unit_rule_name(punit) );
 
         notify_player(unit_owner(punit), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
-              _("💢 Your %s %s intercepted by a %s %s under vigil."),
+              _("💢 Your %s %s intercepted by %s %s %s under vigil."),
               unit_link(punit),
               (is_unit_plural(punit) ? "were" : "was"),
+              indefinite_article_for_word(nation_rule_name(nation_of_unit(penemy)), false),
               nation_rule_name(nation_of_unit(penemy)),
               unit_rule_name(penemy) );
 
@@ -3654,8 +3656,9 @@ static bool unit_survive_autoattack(struct unit *punit)
                                tgt_tile, tile_city(tgt_tile), punit, NULL);
     } else {
         notify_player(unit_owner(penemy), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
-              _("💢 Your %s declined intercepting a %s %s while under vigil."),
+              _("💢 Your %s declined intercepting %s %s %s while under vigil."),
               unit_rule_name(penemy),
+              indefinite_article_for_word(nation_rule_name(nation_of_unit(punit)), false),
               nation_rule_name(nation_of_unit(punit)),
               unit_link(punit) );
 #ifdef REALLY_DEBUG_THIS

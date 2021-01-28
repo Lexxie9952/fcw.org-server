@@ -2070,11 +2070,11 @@ void make_contact(struct player *pplayer1, struct player *pplayer2,
     ds_plr1plr2->first_contact_turn = game.info.turn;
     ds_plr2plr1->first_contact_turn = game.info.turn;
     notify_player(pplayer1, ptile, E_FIRST_CONTACT, ftc_server,
-                  _("You have made contact with the %s, ruled by %s."),
+                  _("💢 You have made contact with the %s, ruled by %s."),
                   nation_plural_for_player(pplayer2),
                   player_name(pplayer2));
     notify_player(pplayer2, ptile, E_FIRST_CONTACT, ftc_server,
-                  _("You have made contact with the %s, ruled by %s."),
+                  _("💢 You have made contact with the %s, ruled by %s."),
                   nation_plural_for_player(pplayer1),
                   player_name(pplayer1));
     send_player_all_c(pplayer1, pplayer2->connections);
