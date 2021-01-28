@@ -125,6 +125,10 @@ MINOR AND MISC.
 ---------------
 Conscription bonus simplified - applies to infantry only.
 Traderoutes add a hard +1 trade to the city centre
+Commerce units simplified. All commerce can build wonders and do trade routes at all times under all conditions.
+   Trade tech isn't needed for Trade routes. Trade tech simply increases Trade revenue higher rates.
+Galleon, like Caravel,Galley,etc., can enter Peace Waters but may not attack unless war declared: this ensures a naval vessel
+   always exists which can bring commerce units to coastal cities; and realistically reflects the historic use of real Galleons.
 Spy Plane correctly made to be unreachable to propeller-based aircraft.
 Can't make road-types while transported in foreign lands (road/quay/rail/maglev/canal)
    move to mp2-brava
@@ -137,7 +141,10 @@ Damaged Submarine min_speed=4 (was 3); makes hit-and-run and escape somewhat mor
 Nuclear winter is was patches of random arctic everywhere, now is more of a temperature downgrade of each affected tile to one level colder.
 Fallout disappear chance changed from 20% to 15%
 Starting Caravans have all restrictions and complications removed. Can Help Wonder or Establish Trade Route (remember to set Home City first!)
-
+Camels move faster than people, Caravans get 2 7/9 moves. They can also carry 2 Goods units. 
+Capturable commerce units can't become uncapturable just by carrying Goods or being on same tile with other capturable commerce units.
+   Put another unit_type with them. This prevents mere cargo from making commerce units immune to capture.  Cargo becomes lost in capture 
+   event: e.g., Caravan carrying goods gets captured. Goods are lost, Caravan transfers ownership.
 
 SERVER UPGRADES:
 1. Special Unit Actions / Attacks:
@@ -233,8 +240,12 @@ What this means for MP2 rules:
    Thus, 85% chance to investigate unprotected city, and about 75% chance to succeed vs. protected city (plus or minus with vet levels of spies.)
 32. Spies could only sabotage city production at random but not targeted. This was fixed: targeted sabotage now lists "Production" as one of the 
    choices along with the improvements.
-33. Info-code0. Special info symbols mark the information you get in the chat window, to make it easier/faster to scan for important events of 
-   different types, or to scroll back to find again.
+33. Info-codes. Special info symbols mark the messages you get in the chat window, to make it easier/faster to scan and read important events,
+    or to scroll back to find again.
+34. 3 NEW DEMOGRAPHICS statistics: Units Built, Units Killed, Units Lost. We can also select which rows in demographics report to show, and also 
+    which of 3 columns to turn on (your quantitative score, your rank, who is #1 and their quantitative score [if you have embassy])
+35. Discovery of new government gives instant click-link icon to change government, in the chat window.
+
 
 These help with much more than Freeciv and other Full-screen apps. They help you with everything you do on your computer:
             Switch active Program   Flip to Last Program    Switch Browser tab   See all Programs on Workspace   Swap Workspaces

@@ -892,7 +892,7 @@ action = "Establish Trade Route"
 actor_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "TradeRoute", "Local", TRUE
-      "Tech", "Trade", "Player", TRUE
+;      "Tech", "Trade", "Player", TRUE  ; simplified: can always do trade, but Trade tech increases trade revenue.
       "MinMoveFrags", "1", "Local", TRUE
 ;     "DiplRel", "War", "Local", FALSE  ; allows establishing during war then awaiting diplomatic relation to activate trade income.
     }
@@ -923,7 +923,7 @@ action = "Enter Marketplace"
 actor_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "TradeRoute", "Local", TRUE
-      "Tech", "Trade", "Player", TRUE
+;      "Tech", "Trade", "Player", TRUE
       "MinMoveFrags", "1", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
     }
@@ -1014,6 +1014,37 @@ target_reqs    =
       "MaxUnitsOnTile", "1", "Local", TRUE
       "Extra", "Fort", "Local", FALSE
       "Extra", "Fortress", "Local", FALSE
+    }
+;CAPTURING LAND COMMERCE UNIT CARRYING CARGO:
+;Transported commercial cargo does not prevent capture!
+[actionenabler_capture_commerce]
+action = "Capture Units"
+actor_reqs    =
+    { "type",   "name", "range", "present"
+      "UnitFlag", "Capturer", "Local", TRUE
+      "UnitState", "Transported", "Local", FALSE
+      "MinMoveFrags", "1", "Local", TRUE
+      "DiplRel", "Foreign", "Local", TRUE
+      "DiplRel", "Alliance", "Local", FALSE
+    }
+target_reqs    =
+    { "type",          "name",       "range", "present"
+      "UnitFlag",      "Capturable", "Local", TRUE
+      "CityTile",      "Center",     "Local", FALSE
+      "Terrain",       "Mountains",  "Local", FALSE
+      "MaxUnitsOnTile","1",          "Local", FALSE ; only applies to stack
+      "Extra",         "Fort",       "Local", FALSE
+      "Extra",         "Fortress",   "Local", FALSE
+    ;exclusions to only leave commerce and cargo:
+      "UnitFlag",      "Settlers",   "Local", FALSE ; workers and foot units who make hideouts
+      "UnitFlag",      "NonMil",     "Local", TRUE  ; all military excluded
+      "UnitFlag",      "HasNoZOC",   "Local", TRUE  ; "    "        "
+      "UnitFlag",      "Diplomat",   "Local", FALSE ; no diplomat 
+      "UnitType",      "Explorer",   "Local", FALSE ; no explorer
+      "TerrainClass",  "Oceanic",    "Local", FALSE ; not on a ship
+      "UnitClass",     "RiverShip",  "Local", FALSE ; no ships
+      "UnitClass",     "Trireme",    "Local", FALSE ; no ships
+      "UnitClass",     "Sea",        "Local", FALSE ; no ships
     }
 
 ; ***************** BOMBARDS *****************************

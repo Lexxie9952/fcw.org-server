@@ -226,11 +226,7 @@ helptext      = _("\
 name          = _("?unitclass:Cargo")
 min_speed     = 1
 hp_loss_pct   = 0
-flags         = "BuildAnywhere", "ZOC", "TerrainDefense", "TerrainSpeed"
-helptext      = _("\
-  • Only able to move on road tiles.\n\
-  • Pays no penalty for recycling production into Units, Buildings, or Wonders.\
-")
+flags         = "BuildAnywhere", "ZOC", "TerrainSpeed"
 
 [unitclass_land]
 ; /* TRANS: Unit class: used adjectivally */
@@ -351,7 +347,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;")
 
 ; This class is for air units that can also protect a stack.
-; (Fighters) -- technically a separate AirProtect class is not needed, but
+; (Fighters) — technically a separate AirProtect class is not needed, but
 ; Fighters also have Border Police abilities, and a separate class
 ; facilitates future adjustments and balancing in an isolated class.
 [unitclass_air_protect]
@@ -438,7 +434,7 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;                 BITS 2-7   = move frags used (up to 63, 0=turn loss/oneattack)
 ;                 BITS 8-10  = bombard_primary_targets. 0=all, or 1-7.
 ;                 BITS 11-13 = bombard_primary_kills, max kills allowed. 0-7.
-;                 ---------------------------------
+;                 ————————————————————————————————
 ;                 FORMERLY: Initial size of the cities built by 'Found City' type units
 ;                 (but 'Join City' uses pop_cost)
 ; targets       = list of unit classes this unit can attack against even
@@ -3180,7 +3176,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Cargo"
 flags         = "BadCityDefender", "HelpWonder", "TradeRoute", "CoastStrict", "NonMil", "HasNoZOC"
 roles         = "Ferryboat", "FerryStartUnit"
 helptext      = _("\
@@ -3219,7 +3215,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
+cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Cargo"
 flags         = "BadCityDefender", "CantReachAir", "HelpWonder",
                 "TradeRoute", "Coast", "WillNever", "NonMil", "NonMilAttack"
 roles         = "Ferryboat", "FerryStartUnit"
@@ -3298,7 +3294,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
+cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Cargo"
 flags         = "BadCityDefender", "CantReachAir", "HelpWonder",
                 "Traderoute", "Only_Native_Attack", "WillNever", "NonMil", "NonMilAttack"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
@@ -3409,7 +3405,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
+cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Cargo"
 flags         = "BadCityDefender", "CantReachAir", "Traderoute", "WillNever", "NonMil", "NonMilAttack"
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat", "Hunter"
 helptext      = _("\
@@ -3447,8 +3443,9 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 targets       = "Submarine", "LandRail"
-cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad"
-flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad", "Cargo"
+flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever",
+                "NonMil", "NonMilAttack" ;  maritime trade can continue after Caravel expires.
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
 The Galleon is a heavily armed transport ship that can carry up to 4 units. Galleons can travel and attack on rivers,\
@@ -3456,7 +3453,9 @@ The Galleon is a heavily armed transport ship that can carry up to 4 units. Gall
 "), _("
 Like most early sea units, when it initiates combat there will be 15 rounds\
  of combat and 15 total hitpoints lost between both units. This may or may not\
- result in the loss of one of the units.\
+ result in the loss of one of the units. Although the Galleon is not a Commerce\
+ unit, it retains one vestige of the commercial abilities for the ships it upgrades.\
+ It can enter Peace waters to deliver commercial cargo.\
 "), _("
 Galleons can Stack-Escape: a 50% chance to escape a killed stack if they have more remaining moves than the attacker.\
 ")
@@ -3916,8 +3915,9 @@ roles         = "Ferryboat", "FerryStartUnit"
 helptext      = _("\
 The Transport cannot attack but can defend itself when under attack.\
  Marines and Anti-Aircraft Artillery can directly attack from a Transport. Its\
- large cargo capacity makes it a significant logistical upgrade in\
- sea transportation.\
+ large cargo capacity makes it a significant logistical upgrade in sea\
+ sea transportation. The Transport is considered a military vessel: unwelcome in\
+ the waters of nations with whom you are at Peace.\
 ")
 
 [unit_cruise_missile]
@@ -4324,18 +4324,22 @@ hitpoints     = 10
 firepower     = 1
 move_rate     = 2
 vision_radius_sq = 4
-transport_cap = 0
 fuel          = 0
 uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
+transport_cap = 2
+cargo         = "Cargo"
 embarks       = "LandRoad", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "Helicopter"
 flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage"
 roles         = "AttackStrongStartUnit"  ;note: MP2 doesn't start games with ASSU's so has co-opted this for caravan start unit.
 helptext      = _("\
-Caravans are Commerce units. Commerce units can help build Wonders in any city with whom\
+Compared to other early Commerce units, the Caravan is special for being rugged: the only\
+ one who can go off roads or rails, pay no upkeep, and present no military threat to peaceful\
+ trade partners.\n\n\ 
+Commerce units can help build Wonders in any city with whom\
  you are not at war. In foreign cities 12+ tiles distant, they can create Trade Routes,\
  increasing net trade in both cities relative to their combined trade. Routes are inactive\
  during war and (re)activate during peace.\n\
@@ -4343,6 +4347,45 @@ Commerce units can enter the Marketplace of non-hostile foreign cities to sell g
  from total trade in both cities. This is only profitable between cities with very high trade.\n\
 Commerce units can build any Wonders for which you have the tech requirement. To use them\
  for a Trade Route, the Trade tech is needed, and they need to have an assigned Home City.\n\
+All Commerce units can carry Goods as cargo.\
+")
+
+[unit_wagon]
+name          = _("Wagon")
+class         = "LandRoad"
+tech_req      = "The Wheel"
+obsolete_by   = "Train"
+graphic       = "u.wagon"
+graphic_alt   = "-"
+sound_move    = "m_wagon"
+sound_move_alt = "m_explorer"
+sound_fight   = "f_caravan"
+sound_fight_alt = "f_generic"
+build_cost    = 25
+pop_cost      = 0
+attack        = 0
+defense       = 0
+hitpoints     = 10
+firepower     = 1
+move_rate     = 3
+vision_radius_sq = 4
+transport_cap = 2
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 1
+cargo         = "Land", "LandAirSea"
+flags         = "HelpWonder", "TradeRoute", "Cant_Fortify", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Shield2Gold"
+roles         = ""
+helptext      = _("\
+Wagons are the first Land unit that can do Commerce. Compared to a Caravan, they pay gold\
+ upkeep, cannot fortify, and can only travel on roads—which exposes them to ambush and capture\
+ from units in Hideouts. A benefit of Wagons is to transport slower units to reach distant\
+ cities faster.\n\
+Foot Units and Goods can be carried on Wagons. Foot units can load/unload outside a city,\
+ but may lose their moves doing so.\n\
+Read the help on Caravans to see what Commerce units can do.\n\
 ")
 
 [unit_train]
@@ -4426,6 +4469,46 @@ Trucks allow units with 2 or less move points to travel your roads at\
 distances comparable to other units. Only Foot Soldiers can:\n1. (L)oad outside a City or Base;\n\
 2. Unload (T) in a Base or Quay;\n3. Move off the Truck outside a City\
  (loses all moves.)\nAll other units must load/unload inside a City.\n\n\\
+")
+
+[unit_cargo]
+name          = _("Goods")
+class         = "Cargo"
+tech_req      = "Currency"
+obsolete_by   = "Freight"
+graphic       = "u.amphorae"
+graphic_alt   = "u.tribesmen"
+sound_move    = "m_generic"
+sound_move_alt = "m_generic"
+sound_fight   = "f_generic"
+sound_fight_alt = "f_generic"
+build_cost    = 25
+pop_cost      = 0
+attack        = 0
+defense       = 0
+hitpoints     = 1
+firepower     = 1
+move_rate     = 1
+vision_radius_sq = 2
+transport_cap = 0
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+flags         = "TradeRoute", "NonMil", "HasNoZOC", "Capturable", "Cant_Fortify", "NoVeteran", "Cant_Pillage"
+roles         = ""
+helptext      = _("\
+Goods are commodities.\
+ The cargo containers of the ancient world were amphorae, which carried\
+ Goods for trade routes.\n\
+ Goods can be used to Establish Trade Route or Enter Marketplace. They can\
+ be carried by Commerce units, allowing them to establish multiple\
+ trade routes in one voyage. Also, Cargo can Recycle Production with only\
+ a 25% penalty.\n\
+"), _("\
+ By itself, Cargo can only move onto tiles with Cities, Quays, Fortresses,\
+ and Naval Bases. Commerce units and Galleons may carry them as cargo.\
 ")
 
 [unit_freight]

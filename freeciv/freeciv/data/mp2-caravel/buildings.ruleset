@@ -299,6 +299,7 @@ City Walls give a 3x bonus to ALL units in a City against attacks from\
 [building_coastal_defense]
 name		= _("Coastal Defense")
 genus		= "Improvement"
+flags		= "VisibleByOthers"
 reqs	=
     { "type", "name", "range"
       "Tech", "Gunpowder", "Player"

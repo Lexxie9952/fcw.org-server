@@ -642,10 +642,19 @@ reqs    =
 type    = "Unit_Shield_Value_Pct"
 value   = -50
 reqs    =
-    { "type",   "name",         "range", "present"
-      "Action", "Recycle Unit", "Local", TRUE
-; Everything except Freight has classic 50% recycle penalty:
-      "UnitType", "Freight",    "Local", FALSE
+    { "type",      "name",         "range", "present"
+      "Action",    "Recycle Unit", "Local", TRUE
+      "UnitClass", "Cargo",        "Local", FALSE
+      ; Everything except Cargo class has classic 50% recycle penalty:
+    }
+[effect_unit_shield_value_recycle_cargo_unit]
+;The Goods unit_Type has 25% recycle penalty.
+type    = "Unit_Shield_Value_Pct"
+value   = -25
+reqs    =
+    { "type",     "name",         "range", "present"
+      "Action",   "Recycle Unit", "Local", TRUE
+      "UnitType", "Goods",        "Local", TRUE
     }
 
 ;TO DO: this could be used in interesting ways.
@@ -915,6 +924,16 @@ value   = 5
 type    = "Conquest_Tech_Pct"
 value   = 100
 
+;Camels travel faster than people on foot, and now we have
+; move_bonus_in_frags effect to be more accurate.
+[effect_caravan_move_bonus]
+type = "Move_Bonus"
+value = 7
+reqs =
+    {
+      "type",      "name",   "range",  "present"
+      "UnitType",  "Caravan",   "Local",   TRUE
+    }
 ;Freshly fueled full hp helicopters get +1 move per turn
 [effect_fresh_helicopter]
 type    = "Move_Bonus"

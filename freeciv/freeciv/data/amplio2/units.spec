@@ -90,7 +90,7 @@ tiles = { "row", "column", "tag"
   1, 18, "u.escort_fighter" ; [Lexxie]
   1, 19, "u.medium_bomber"  ; [Lexxie]
   2,  0, "u.marines"		    ; [GB] & [Lexxie]
-;  2,  1, "u.EMPTY SLOT"    ; [EW] & [CT] & [Lexxie]
+  2,  1, "u.amphorae"       ; [Lexxie]
   2,  2, "u.engineers"		  ; [Nemo] & [CT] & [Lexxie]
   2,  3, "u.artillery"	   	; [Lexxie]
   2,  4, "u.helicopter"		  ; [T] & [Lexxie]
