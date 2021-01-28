@@ -2433,7 +2433,13 @@ void dai_manage_military(struct ai_type *ait, struct player *pplayer,
   switch (unit_data->task) {
   case AIUNIT_AUTO_SETTLER:
   case AIUNIT_BUILD_CITY:
-    fc_assert(FALSE); /* This is not the place for this role */
+    // We're here because Settlers flag is being used synonymously with Settlers when it really just means
+    // the unit can alter terrain. How stupid, we'll have to force it to not think that way.
+    unit_data->task = AIUNIT_NONE;
+    TIMING_LOG(AIT_ATTACK, TIMER_START);
+    dai_military_attack(ait, pplayer, punit);
+    TIMING_LOG(AIT_ATTACK, TIMER_STOP);
+    //fc_assert(FALSE); /* This is not the place for this role */
     break;
   case AIUNIT_DEFEND_HOME:
     TIMING_LOG(AIT_DEFENDERS, TIMER_START);
