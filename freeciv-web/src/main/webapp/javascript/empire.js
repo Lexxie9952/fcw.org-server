@@ -1533,6 +1533,7 @@ function create_worklist_unit_div()
       if (unit_types[z]['name'] == "Queen") continue;
       if (unit_types[z]['name'] == "Pilgrims" && cur_gov != "Fundamentalism") continue;
       if (unit_types[z]['name'] == "Proletarians" && cur_gov != "Communism") continue;
+      if (unit_types[z]['name'].startsWith("[")) continue;
     }
     // OBSOLETE - See if we have the tech for the unit which obsoletes it:
     const obs_by_type = unit_types[z]['obsoleted_by']; 

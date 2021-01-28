@@ -6561,12 +6561,12 @@ function popup_fullscreen_enter_game_dialog()
   $("#fullscreen_dialog").css("white-space","pre-wrap"); // allow \n to work.
   $("<div id='fullscreen_dialog'></div>").appendTo("div#game_page");
 
-  $(id).html("ALT-S  =  toggle");
+  $(id).html("In non-automatic mode, use ALT-S to toggle.");
 
   var buttons = { 'Yes!': function()
                  { openFullscreen(); remove_active_dialog(id); },
                   'No': function() {remove_active_dialog(id);} };
-  $(id).attr("title", "Full Immersion Mode");
+  $(id).attr("title", "Automatic Full Immersion Mode");
   $(id).dialog({bgiframe: true, modal: true, buttons: (buttons), height: "auto", width: "400"});
   $(id).dialog('open'); $(id).dialog('widget').position({my:"center", at:"center", of:window})
   dialog_register(id);
