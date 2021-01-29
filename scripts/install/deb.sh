@@ -82,6 +82,10 @@ if [ "${FCW_INSTALL_MODE}" = TEST ]; then
 fi
 
 echo "==== Installing Updates and Dependencies ===="
+
+#workaround for whatever...
+sudo env ACCEPT_EULA=Y apt-get install msodbcsql17
+
 echo "apt-get upgrade"
 sudo ${APT_GET} upgrade --with-new-pkgs
 echo "mysql setup..."
