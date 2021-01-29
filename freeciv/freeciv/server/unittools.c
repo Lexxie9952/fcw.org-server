@@ -3003,8 +3003,8 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile)
       notify_player(pplayer, ptile, E_UNIT_WIN_ATT, ftc_server,
                     _("💥 The %s %s %s nuked."),
                     nation_adjective_for_player(unit_owner(punit)),
-                    (is_unit_plural(punit) ? "were" : "was"),
-                    unit_tile_link(punit));
+                    unit_tile_link(punit),
+                    (is_unit_plural(punit) ? "were" : "was"));
     }
     wipe_unit(punit, ULR_NUKE, pplayer);
   } unit_list_iterate_safe_end;

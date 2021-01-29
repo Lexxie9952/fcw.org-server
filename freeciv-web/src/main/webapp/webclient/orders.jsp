@@ -39,6 +39,10 @@
     <a href="#" onclick="key_unit_road();"><img src="/images/orders/road_default.png" name="road_button" alt="" border="0" width="30" height="30"></a>
   </div>
 
+  <div id="order_seabridge" class="order_button" title="Build Sea Bridge (R)">
+    <a href="#" onclick="key_unit_road();"><img src="/images/orders/seabridge.png" name="seabridge_button" alt="" border="0" width="30" height="30"></a>
+  </div>
+
   <div id="order_railroad" class="order_button" title="Build railroad (R)">
     <a href="#" onclick="key_unit_road();"><img src="/images/orders/railroad_default.png" name="railroad_button" alt="" border="0" width="30" height="30"></a>
   </div>
@@ -115,8 +119,12 @@
     <a href="#" onclick="key_unit_transform();"><img src="/images/orders/transform_default.png" name="transform_button" alt="" border="0" width="30" height="30"></a>
   </div>
 
-  <div id="order_pollution" class="order_button not_mobile" title="Remove pollution (P)">
+  <div id="order_pollution" class="order_button not_mobile" title="Clean Pollution (P)">
     <a href="#" onclick="key_unit_pollution();"><img src="/images/orders/pollution.png" name="pollution_button" alt="" border="0" width="30" height="30"></a>
+  </div>
+
+  <div id="order_fallout" class="order_button not_mobile" title="Clean Fallout (N)">
+    <a href="#" onclick="key_unit_fallout();"><img src="/images/orders/fallout.png" name="fallout_button" alt="" border="0" width="30" height="30"></a>
   </div>
 
   <div id="order_load" class="order_button not_mobile" title="Load (L)">

@@ -1147,6 +1147,7 @@ function update_unit_order_commands()
   $("#order_navalbase").hide();
   $("#order_airbase").hide();
   $("#order_road").hide();
+  $("#order_seabridge").hide();
   $("#order_railroad").hide();
   $("#order_mine").hide();
   $("#order_fortify").hide();  // not all non-Settlers can fortify (air/sea)
@@ -1157,6 +1158,7 @@ function update_unit_order_commands()
   $("#order_auto_settlers").hide();
   $("#order_explore").hide();
   $("#order_pollution").hide();
+  $("#order_fallout").hide();
   $("#order_forest_remove").hide();
   $("#order_plant_forest").hide();
   $("#order_oil_well").hide();
@@ -1385,7 +1387,9 @@ function update_unit_order_commands()
       }
       if (can_build_sea_bridge(punit, ptile)) {
           unit_actions["road"] = {name: "Sea Bridge (R)"};
-          $("#order_road").prop('title', "Build Sea Bridge (R)");
+          $("#order_seabridge").prop('title', "Build Sea Bridge (R)");
+          $("#order_seabridge").show();
+          $("#order_road").hide();
       } else $("#order_road").prop('title', "Build Road (R)")
 
       if (tile_has_extra(ptile, EXTRA_RIVER) && player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) == TECH_UNKNOWN) {
@@ -1396,7 +1400,6 @@ function update_unit_order_commands()
       if (show_order_buttons==1) $("#order_explore").hide(); // not frequently used button
       if (show_order_buttons==2) $("#order_sentry").show(); // not frequently used for settler types
       if (show_order_buttons==2) $("#order_auto_settlers").show(); // not frequently used button
-      $("#order_pollution").show();    //TO DO: show this if there's pollution
       if ( (terrain_name == 'Hills' || terrain_name == 'Mountains') && !tile_has_extra(ptile, EXTRA_MINE)) {
         $("#order_mine").show();
         unit_actions["mine"] =  {name: "Mine (M)"};
@@ -1414,6 +1417,7 @@ function update_unit_order_commands()
 
       if (tile_has_extra(ptile, EXTRA_FALLOUT)) {
         unit_actions["fallout"] = {name: "clean Fallout (N)"};
+        $("#order_fallout").show();
       }
 
       if (tile_has_extra(ptile, EXTRA_POLLUTION)) {
@@ -5072,12 +5076,33 @@ function unit_can_vigil(punit)
 **************************************************************************/
 function can_build_sea_bridge(punit, ptile)
 {
+  var land_near;
+
+  if (!unit_can_do_action(punit, ACTION_ROAD))
+    return false;
+
+  if (!is_ocean_tile(ptile)) return false;
+
+  for (var dir = 1; dir < 7; dir++) {
+    if (dir==2 || dir==5)
+      continue; // only check cardinal dir 1,3,4,6 (N,W,E,S)
+
+    var cadj_tile = mapstep(ptile, dir);
+    if (cadj_tile != null) {
+      var tclass = tile_terrain(cadj_tile)['tclass'];
+      if (tclass == 0) {  // 1==water, 0==land
+        land_near = true;
+        break; // one CAdjacent land is all that's needed
+      }
+    }
+  }
+
   return ((typeof EXTRA_SEABRIDGE !== "undefined")
       &&  (punit != null && ptile != null)
       && (!tile_has_extra(ptile, EXTRA_SEABRIDGE)) 
       && (player_invention_state(client.conn.playing, tech_id_by_name('Steel')))
       &&  (unit_can_do_action(punit, ACTION_ROAD))
-         );
+      && land_near );
 }
 
 /**************************************************************************
