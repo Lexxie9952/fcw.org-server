@@ -1095,6 +1095,7 @@ function update_unit_order_commands()
   var pcity;
   var ptile;
   var unit_actions = {};
+  var disband_type = 0;
   var funits = get_units_in_focus();
 
   if (funits!=null) {
@@ -1250,6 +1251,26 @@ function update_unit_order_commands()
     if (ptile == null) continue;
     pcity = tile_city(ptile);
 
+    // Disbanding in a city isn't red skull death, but recycles production:
+    if (pcity) {
+      disband_type = 1; // flags Recycle icon
+      $("#order_disband").prop('title', 'Recycle Unit (Shift-D)');
+      $("#order_disband").html("<a href='#' onclick='key_unit_disband();'><img src='/images/orders/disband_recycle.png' name='disband_button' alt='' border='0' width='30' height='30'></a>");
+      // Cargo class disbands often for recycling shields, show button always, less threatening recycle version of it.
+      if (client_rules_flag[CRF_MP2_C]) {
+        if (ptype['name']=="Goods" || ptype['name']=="Freight") {
+          $("#order_disband").show();
+          var city_prod_name = get_city_production_type(pcity)['name']; 
+          if (!city_prod_name) city_prod_name = "Production";
+          $("#order_disband").prop('title', 'Help Build '+city_prod_name+' (Shift-D)');
+        }
+      }
+    } else {
+      disband_type = 0; // flags Death/You're fired icon
+      $("#order_disband").prop('title', 'Disband (Shift-D)');
+      $("#order_disband").html("<a href='#' onclick='key_unit_disband();'><img src='/images/orders/disband_default.png' name='disband_button' alt='' border='0' width='30' height='30'></a>");
+    }
+    
     // MP2, Marines can build FORTS (wedded to CRF_MARINE_BASES flag)
     if (client_rules_flag[CRF_MARINE_BASES]
         && !tile_has_extra(ptile, EXTRA_FORT)
@@ -1409,7 +1430,7 @@ function update_unit_order_commands()
           unit_actions["mine"] =  {name: "Oil Well (M)"};
       } else if (terrain_name == 'Grassland' || terrain_name == 'Plains' || terrain_name == 'Swamp' || terrain_name == 'Jungle') {
           unit_actions["mine"] = {name: "plant Forest (M)"};
-          if (show_order_buttons==2) $("#order_plant_forest").show();  //not frequently used button
+          /* if (show_order_buttons==2)*/ $("#order_plant_forest").show();  //not frequently used button
       } else if (terrain_name == 'Forest') {
           unit_actions["mine"] = {name: "make Swamp (M)"};
           if (show_order_buttons==2) $("#order_make_swamp").show();  //not frequently used button
@@ -1428,7 +1449,7 @@ function update_unit_order_commands()
       }
 
       if (terrain_name == "Forest") {
-        if (show_order_buttons==2) $("#order_forest_remove").show(); // not frequently used button
+        /* if (show_order_buttons==2) */ $("#order_forest_remove").show(); // not frequently used button
         $("#order_irrigate").hide();
         $("#order_build_farmland").hide();
 	      unit_actions["forest"] = {name: "Chop Forest (I)"};
@@ -1722,7 +1743,7 @@ function update_unit_order_commands()
   unit_actions = $.extend(unit_actions, {
             "sentry": {name: "Sentry (S)"},
             "wait": {name: "Wait (W)"},
-            "disband": {name: "Disband (Shift-D)"}
+            "disband": {name: (disband_type ? "Recycle Unit (Shift-D)" : "Disband (Shift-D)")}
             });
 
 /* this code removed: it was inconsistently making context menu too large on mobile:
@@ -5687,14 +5708,50 @@ function request_unit_build_city()
 **************************************************************************/
 function key_unit_disband()
 {
+  // Look at who is disbanding where, and how many, to intelligently form the message
+  var plural = false, recycle = true, swaltype = "info"; // default values
+  var ptitle, ptext, cb_text, cb_color="#DD6B55";
+  var focus_units = get_units_in_focus();
+  for (var i = 0; i < focus_units.length; i++) {
+    if (i>=1) plural = true;
+    var pcity = tile_city(index_to_tile(focus_units[i]['tile']));
+    if (!pcity) {
+      recycle = false; // even one unit not in City means a disband
+      swaltype = "warning";
+    }
+  }
+
+  if (recycle) {  // ALL units are recycling in a city
+    if (plural) { // Plural number of units recycling
+      ptitle = "Recycle units?";
+      ptext = "Recycle these units into city production?";
+      cb_color="#55DD6B";
+      cb_text = "Yes, recycle units.";
+    } else {  // Only ONE unit recycling
+      ptitle = "Recycle unit?";
+      ptext = "Recycle this unit into city production?";
+      cb_color="#55DD6B";
+      cb_text = "Yes, recycle unit.";
+    }
+  } else { // At least ONE disbanding unit, it will be permanently lost with no recycle value!
+    if (plural) { // Plural number of units receiving order
+      ptitle = "Disband units?";
+      ptext = "Do you want to destroy these units?";
+      cb_text = "Yes, disband units.";
+    } else {
+      ptitle = "Disband unit?";
+      ptext = "Do you want to destroy this unit?";
+      cb_text = "Yes, disband unit.";      
+    }
+  }
 
   swal({
-    title: "Disband unit?",
-    text: "Do you want to destroy this unit?",
-    type: "warning",
+    title: ptitle,
+    text:  ptext,
+    type:  swaltype,
     showCancelButton: true,
-    confirmButtonColor: "#DD6B55",
-    confirmButtonText: "Yes, disband unit.",
+    confirmButtonColor: cb_color,
+    confirmButtonText: cb_text,
     closeOnConfirm: true
 },
   function(){
