@@ -82,12 +82,12 @@
     <div id="city_production_tab" class="citydlg_tabs">
       <div id='worklist_left'>
         <div id='worklist_dialog_headline' title="Click to remove from worklist. Remaining worklist will move up."></div>
-        <div id='worklist_heading'>Queue:</div><div id='city_current_worklist'></div>
+        <div id='worklist_heading'>Worklist:</div><div id='city_current_worklist'></div>
       </div>
       <div id='worklist_right'>
         <div id='tasks_heading'>
           <input id='show_unreachable_items' type='checkbox'/>Unreachable items</br>
-          <input id='show_improvements_only' type='checkbox'/>Improvements only
+          <input id='show_improvements_only' type='checkbox'/>Improvements only<span id='info_city_prod' style='float:right;'></span>
           <br/>
           Choices:
         </div>
@@ -101,7 +101,7 @@
       </div>
       <div id="worklist_control">
         <button type="button" class="button" onClick="city_insert_in_worklist();" id="city_worklist_insert_btn" title="Insert before first selected task, or first in the list"><i class="fa fa-chevron-left fa-fw"></i></button>
-        <button type="button" class="button" onClick="city_add_to_worklist();" id="city_worklist_append_btn" title="Append after last selected task"><i class="fa fa-download fa-fw"></i></button>        
+        <button type="button" class="button" onClick="city_add_to_worklist();" id="city_worklist_append_btn" title="Append to end of worklist"><i class="fa fa-download fa-fw"></i></button>        
         <div class="wc_spacer"></div>
         <button type="button" class="button" onClick="city_worklist_task_up();" id="city_worklist_up_btn" style="height: 20%;" title="Move selected tasks up"><i class="fa fa-chevron-up fa-fw"></i></button>
         <button type="button" class="button" onClick="city_worklist_task_down();" id="city_worklist_down_btn" style="height: 20%;" title="Move selected tasks down"><i class="fa fa-chevron-down fa-fw"></i></button>

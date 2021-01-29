@@ -2488,6 +2488,34 @@ function populate_worklist_production_choices(pcity)
 
     });
   }
+  if (small) $("#info_city_prod").hide();
+  else {
+    $("#info_city_prod").html("&#x2753;");
+    $("#info_city_prod").css('cursor', "help");
+    
+    //$('#info_city_prod').css("overflow", "visible");
+    //$('#info_city_prod').parent().css("overflow", "visible");
+    var city_prod_help = 
+    "CLICK Current Production    Remove\n"+
+    "DOUBLE CLICK Worklist       Remove Item\n"+
+    "ALT CLICK Prod.Choice         Replace Current Production\n"+
+    "SHIFT CLICK Prod.Choice      Add to Worklist\n"+
+    "DOUBLE CLICK Prod.Choice    \"     \"        \"\n"+
+    "CTRL CLICK Items                  Select multiple items\n"+
+    "DOUBLE-TAP DRAG Items         \"           \"       \"\n"+
+    "/\\  UP ARROW                       Flip to City Overview\n"+
+    "\\/  DOWN ARROW                Flip to City Production\n"+
+    "B     Buy Current Production\n"+
+    "N    Next City\n"+
+    "P     Previous City\n"+
+    "\n"+
+    "Top Left:    Current Production\n"+
+    "Left Side:   Worklist Items\n"+
+    "Right Side: Production Choices";
+
+    $("#info_city_prod").prop('title', city_prod_help);
+  }
+  
 }
 
 /**************************************************************************
