@@ -49,6 +49,8 @@ bool connection_delegate_restore(struct connection *pconn);
 
 void connection_close_server(struct connection *pconn, const char *reason);
 
+void do_longturn_tech_latejoiner_effect(struct player *pplayer);
+
 void attach_longturn_player(struct connection *pc, struct player *pplayer);
 
 #endif /* FC__CONNECTHAND_H */

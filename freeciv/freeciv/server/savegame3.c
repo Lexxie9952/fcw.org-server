@@ -5671,6 +5671,8 @@ static bool sg_load_player_unit(struct loaddata *loading,
                           order->action);
             order_extra = EXTRA_NONE;
             /* They can't take a target either, so fall through: */
+          case ACTION_CLEAN_POLLUTION:
+          case ACTION_CLEAN_FALLOUT:
           case ACTION_PILLAGE:
           case ACTION_ROAD:
           case ACTION_BASE:
