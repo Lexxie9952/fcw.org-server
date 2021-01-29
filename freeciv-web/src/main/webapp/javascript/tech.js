@@ -186,13 +186,13 @@ function init_tech_screen()
   }
 
   if (!is_small_screen()) { 
-    $("#mouse_info_box").html("<div title='Right-click:   Scrolls the screen.\nMiddle-click:  Sets the Future Goal.' style='background: transparent url(/images/info-hover.png);margin-right:-10px;margin-bottom:-10px;transform:scaleX(0.6);transform:scaleY(0.8);width:86px;height:30px;'></div>")
+    $("#mouse_info_box").html("<div title='Right-click:   Scrolls the screen.\nMiddle-click:  Sets the Future Goal.' style='margin-right:-10px;margin-bottom:10px;float:right;width:26px;height:20px;'>&#x2753;</div>");
+    $("#mouse_info_box").css('cursor', "help");
     $("#mouse_info_box").tooltip();
   }
   is_tech_tree_init = true;
   clicked_tech_id = null;
 }
-
 /**************************************************************************
  ...
 **************************************************************************/
