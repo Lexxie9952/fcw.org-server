@@ -83,8 +83,9 @@ fi
 
 echo "==== Installing Updates and Dependencies ===="
 
-#workaround for whatever...
-sudo env ACCEPT_EULA=Y apt-get install msodbcsql17
+#workaround for msodbcsql17...
+sudo apt-mark hold msodbcsql17 || echo "workaround erred"
+
 
 echo "apt-get upgrade"
 sudo ${APT_GET} upgrade --with-new-pkgs
