@@ -3890,13 +3890,13 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
          break;
        case VUT_UCLASS:
          fc_assert(unitclass == NULL);
-         unitclass = preq->source.value.uclass;
+         unitclass = (struct unit_class *) preq->source.value.uclass;
          /* FIXME: can't easily get world bonus for unit class */
          world_value_valid = FALSE;
          break;
        case VUT_UTYPE:
          fc_assert(unittype == NULL);
-         /* unittype = preq->source.value.utype;     FIXME:  error: assignment discards ‘const’ qualifier from pointer target type */
+         unittype = (struct unit_type *) preq->source.value.utype;    // FIXME:  error: assignment discards ï¿½constï¿½ qualifier from pointer target type */
          break;
        case VUT_UTFLAG:
          if (!unit_type_flag_id_is_valid(unitflag)) {
