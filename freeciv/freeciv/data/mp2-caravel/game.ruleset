@@ -1216,6 +1216,27 @@ target_reqs    =
       "CityStatus","OwnedByOriginal","City",  FALSE
       "MinForeignPct","1",           "City",  TRUE
     }
+;Zeppelins can bomb
+[actionenabler_zeppelin_bomb]
+action = "Bombard"
+actor_reqs    =
+    { "type",         "name",           "range", "present"
+      "UnitFlag",     "Bombarder",      "Local",  TRUE
+      "UnitType",     "Zeppelin",       "Local",  TRUE
+      "MinMoveFrags", "1",              "Local",  TRUE
+      "DiplRel",      "War",            "Local",  TRUE
+   }
+target_reqs    =
+    { "type",   "name", "range", "present"
+      "UnitClass",  "Air",         "Local", FALSE
+      "UnitClass", "AirProtect",  "Local", FALSE
+      "UnitClass", "Missile",     "Local", FALSE
+      "UnitClass", "Helicopter",  "Local", FALSE
+      "UnitClass", "Space",       "Local", FALSE
+      "UnitClass", "Balloon",       "Local", FALSE
+      "UnitClass", "Zeppelin",       "Local", FALSE
+      "UnitClass", "Air_High_Altitude",  "Local", FALSE
+    }
 
 ;Marines can do mortar/bazooka/rocket attacks at V3
 [actionenabler_marines_bombard]

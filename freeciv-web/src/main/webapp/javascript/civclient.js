@@ -434,7 +434,7 @@ function show_dialog_message(title, message)
 			width: is_small_screen() ? "90%" : "50%",
 			close: closing_dialog_message,
 			buttons: {
-				"OK (W)": close_dialog_message
+				"OK (𝗪)": close_dialog_message
 			}
 		}).dialogExtend({
                    "minimizable" : true,

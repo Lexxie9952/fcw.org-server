@@ -281,26 +281,31 @@ function show_city_dialog(pcity)
 
   show_city_traderoutes();
   show_city_happy_tab();
+  // Attempt to show city governor tab button, and hide it if
+  // city governor tab is not allowed to generate:
+  if (show_city_governor_tab() == false) {
+    $("#ct6").parent().hide()
+  }
 
   var dialog_buttons = {};
 
   if (!is_small_screen() && !touch_device) {
     dialog_buttons = $.extend(dialog_buttons,
       {
-       "Previous city (P)" : function() {
+        "𝗣revious city" : function() {
          previous_city();
        },
-       "Next city (N)" : function() {
+       "𝗡ext city" : function() {
          next_city();
        },
-       "Buy (B)" : function() {
+       "𝗕uy" : function() {
          request_city_buy();
        },
        "Rename" : function() {
          rename_city();
        }
      });
-     dialog_buttons = $.extend(dialog_buttons, {"Exit": close_city_dialog_trigger});
+     dialog_buttons = $.extend(dialog_buttons, {"Exit (𝗪)": close_city_dialog_trigger});
   } else {   // small screen control buttons
        dialog_buttons = $.extend(dialog_buttons,
          {
@@ -401,6 +406,7 @@ function show_city_dialog(pcity)
 
   }
   $("#city_dialog").dialog('open');
+
   $("#game_text_input").blur();
 
   /* prepare city dialog for small screens. */
@@ -419,7 +425,8 @@ function show_city_dialog(pcity)
     // Abbreviate tab title buttons to fit.
     $("#ct0").html("Main");     $("#ct1").html("Prod");
     $("#ct2").html("Routes");   $("#ct3").html("Option");
-    $("#ct4").html("Happy");    $("#ct5").html("Inside"); 
+    $("#ct4").html("Happy");    $("#ct5").html("Inside");
+    $("#ct6").html("Gov");
    }
 
   $("#city_tabs").tabs({ active: city_tab_index});
@@ -1293,7 +1300,7 @@ function request_city_buy()
             send_city_buy();
             remove_active_dialog("#dialog");
 				},
-				"No (W)": function() {
+				"No (𝗪)": function() {
             remove_active_dialog("#dialog");
 				}
 			}
@@ -2505,6 +2512,7 @@ function populate_worklist_production_choices(pcity)
     "DOUBLE-TAP DRAG Items         \"           \"       \"\n"+
     "/\\  UP ARROW                       Flip to City Overview\n"+
     "\\/  DOWN ARROW                Flip to City Production\n"+
+    "<SPACE>                             Flip Overview/Production\n"+
     "B     Buy Current Production\n"+
     "N    Next City\n"+
     "P     Previous City\n"+
@@ -3924,7 +3932,19 @@ function city_keyboard_listener(ev)
           city_tab_index = 2;  // Trade routes
           $("#city_tabs").tabs({ active: city_tab_index});
           break;
-       
+
+      case 'H':
+        ev.stopPropagation();
+        city_tab_index = 4;  // Happy
+        $("#city_tabs").tabs({ active: city_tab_index});
+        break;
+
+      case 'G':
+        ev.stopPropagation();
+        city_tab_index = 5;  // Trade routes
+        $("#city_tabs").tabs({ active: city_tab_index});
+        break;
+  
        case 'O':
           ev.stopPropagation();
           city_tab_index = 3;  // Options/Settings

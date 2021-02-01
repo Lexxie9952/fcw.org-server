@@ -515,7 +515,7 @@ function popup_action_selection(actor_unit, action_probabilities,
   buttons.push({
       id      : "act_sel_cancel" + actor_unit['id'],
       "class" : 'act_sel_button',
-      text    : 'Cancel (W)',
+      text    : 'Cancel (𝗪)',
       click   : function() {
         remove_active_dialog(id);
       } });
@@ -647,6 +647,18 @@ function popup_action_selection(actor_unit, action_probabilities,
                                   + "shell and degrade up to 4 distant targets on a tile or city.\n"
         }
       } break;
+      case "Zeppelin":  for (button_id in buttons) {
+        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+          buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
+          buttons[button_id].title = "Odds of survival:  100%\n"
+                                  + "Combat:                4 rounds\n"
+                                  + "Targets:                 2 units\n"
+                                  + "Move cost:            2 moves\n"
+                                  + "Max. casualties:     1\n"
+                                  + "\nDrops shrapnel bombs in the vicinity of enemies,\n" 
+                                  + "affecting up to 2 units and possibly killing one.\n"
+        }
+      } break;
     }
   }
   //--------------------------------------------------------------------
@@ -694,8 +706,8 @@ function popup_bribe_dialog(actor_unit, target_unit, cost, act_id)
 
   $(id).html(dhtml);
 
-  var close_button = {	"Close (W)": function() {remove_active_dialog(id);}};
-  var bribe_close_button = {	"Cancel (W)": function() {remove_active_dialog(id);},
+  var close_button = {	"Close (𝗪)": function() {remove_active_dialog(id);}};
+  var bribe_close_button = {	"Cancel (𝗪)": function() {remove_active_dialog(id);},
   				"Do it!": function() {
       var packet = {"pid" : packet_unit_do_action,
                     "actor_id" : actor_unit['id'],
@@ -759,8 +771,8 @@ function popup_incite_dialog(actor_unit, target_city, cost, act_id)
 
   $(id).html(dhtml);
 
-  var close_button = {         'Close (W)':    function() {remove_active_dialog(id);}};
-  var incite_close_buttons = { 'Cancel (W)': function() {remove_active_dialog(id);},
+  var close_button = {         'Close (𝗪)':    function() {remove_active_dialog(id);}};
+  var incite_close_buttons = { 'Cancel (𝗪)': function() {remove_active_dialog(id);},
                                'Do it!': function() {
                                  var packet = {"pid" : packet_unit_do_action,
                                                "actor_id" : actor_unit['id'],
@@ -818,8 +830,8 @@ function popup_unit_upgrade_dlg(actor_unit, target_city, cost, act_id)
 
   $(id).html(dhtml);
 
-  var close_button = {          'Close (W)':    function() {remove_active_dialog(id);}};
-  var upgrade_close_buttons = { 'Cancel (W)': function() {remove_active_dialog(id);},
+  var close_button = {          'Close (𝗪)':    function() {remove_active_dialog(id);}};
+  var upgrade_close_buttons = { 'Cancel (𝗪)': function() {remove_active_dialog(id);},
                                 'Do it!': function() {
                                   var packet = {
                                     "pid" : packet_unit_do_action,
@@ -956,7 +968,7 @@ function popup_steal_tech_selection_dialog(actor_unit, target_city,
 
   /* Allow the user to cancel. */
   buttons.push({
-                 text : 'Cancel (W)',
+                 text : 'Cancel (𝗪)',
                  click : function() {
                   remove_active_dialog("#"+id);
                  }
@@ -1078,7 +1090,7 @@ function popup_sabotage_dialog(actor_unit, target_city, city_imprs, act_id)
 
   /* Allow the user to cancel. */
   buttons.push({
-                 text : 'Cancel (W)',
+                 text : 'Cancel (𝗪)',
                  click : function() {
                   remove_active_dialog("#"+id);
                  }
@@ -1383,7 +1395,7 @@ function dialog_register(id) {
 **************************************************************************/
 function create_a_close_button(parent_id)
 {
-  var close_button = {text: "Cancel (W)", click: function() {
+  var close_button = {text: "Cancel (𝗪)", click: function() {
       remove_active_dialog(parent_id)
   }};
   return close_button;

@@ -86,7 +86,7 @@ function popup_pillage_selection_dialog(punit)
   buttons.push({
     id     : 'pillage_sel_cancel_' + punit['id'],
     'class': 'act_sel_button',
-    text   : 'Cancel (W)',
+    text   : 'Cancel (𝗪)',
     click  : function() {remove_active_dialog(id); /* might need "#"+id*/}
   });
 

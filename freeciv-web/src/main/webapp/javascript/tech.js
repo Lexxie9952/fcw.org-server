@@ -793,7 +793,7 @@ function show_tech_gained_dialog(tech_gained_id)
 			width: is_small_screen() ? "90%" : "60%",
 			buttons: [
 			 {
-                text : "Close (W)",
+                text : "Close (𝗪)",
                 click : function() {
                   remove_active_dialog("#tech_dialog");
                   $("#game_text_input").blur();
@@ -848,7 +848,7 @@ function show_wikipedia_dialog(tech_name)
 			modal: true,
 			width: is_small_screen() ? "90%" : "60%",
 			buttons: {
-				"OK (W)": function() {
+				"OK (𝗪)": function() {
           remove_active_dialog("#wiki_dialog");
 				}
 			}
@@ -933,7 +933,7 @@ function show_tech_info_dialog(tech_name, unit_type_id, improvement_id)
 			width: is_small_screen() ? "95%" : "70%",
 			height: $(window).height() - 60,
 			buttons: {
-				"OK (W)": function() {
+				"OK (𝗪)": function() {
           remove_active_dialog("#wiki_dialog");
 				}
 			}

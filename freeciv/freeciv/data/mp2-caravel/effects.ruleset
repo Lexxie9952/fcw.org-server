@@ -67,6 +67,13 @@ reqs	=
     { "type", "name", "range", "present"
       "UnitType", "Trireme", "Local", TRUE
     }
+[effect_combat_rounds_zeppelin]
+type    = "Combat_Rounds"
+value   = 20
+reqs	=
+    { "type",     "name",     "range", "present"
+      "UnitType", "Zeppelin", "Local", TRUE
+    }
 
 ; Cheating AI effects are in separate file
 *include "default/ai_effects.ruleset"

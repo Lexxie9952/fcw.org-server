@@ -43,7 +43,7 @@ function show_spaceship_dialog()
 
   if (client_is_observer()) return;
 
-  console.log(spaceship_info[client.conn.playing['playerno']]);
+  //console.log(spaceship_info[client.conn.playing['playerno']]);
 
   var spaceship = spaceship_info[client.conn.playing['playerno']];
 
@@ -77,7 +77,7 @@ function show_spaceship_dialog()
 			modal: true,
 			width: is_small_screen() ? "90%" : "40%",
 			buttons: {
-				'Close (W)': function() {
+				'Close (𝗪)': function() {
                 remove_active_dialog("#dialog");
 			        },
 			         Launch : function() {

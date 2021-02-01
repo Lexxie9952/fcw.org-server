@@ -401,7 +401,7 @@ function generate_help_text(key)
     }
     // BOMBARD
     if (utype_has_flag(punit_type, UTYF_BOMBARDER)) {
-      var bombard_name = utype_get_bombard_name(punit_type['rule_name']);
+      var bombard_name = utype_get_bombard_name(punit_type);
       msg += "<div"+flex+" id='utype_fact_bombard'>";
       msg += span1 + bombard_name.replace(" ", "&nbsp;") +":&nbsp;&nbsp;"+ span_end + span2;
 

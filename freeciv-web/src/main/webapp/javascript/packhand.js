@@ -484,7 +484,6 @@ function handle_web_city_info_addition(packet)
   packet = cities[packet['id']];
 
   /* Continue with the city_info processing. */
-
   if (active_city != null) {
     show_city_dialog(active_city);
   }

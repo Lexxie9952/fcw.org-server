@@ -79,7 +79,7 @@ function show_tax_rates_dialog()
       dialogClass: 'rate_slider',
       width: is_small_screen() ? "90%" : "40%",
 			  buttons: {
-				"Done (W)" : function() {
+				"Done (𝗪)" : function() {
           submit_player_rates();
           close_rates_dialog();
 				}}

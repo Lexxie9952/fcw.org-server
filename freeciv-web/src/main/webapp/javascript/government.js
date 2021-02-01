@@ -378,7 +378,7 @@ function show_climate_dialog(rtype)
       modal: true,
       width: is_small_screen() ? "90%" : "40%",
       buttons: {
-        'Close (W)': function() {
+        'Close (𝗪)': function() {
           remove_active_dialog("#dialog");
         }
       }
