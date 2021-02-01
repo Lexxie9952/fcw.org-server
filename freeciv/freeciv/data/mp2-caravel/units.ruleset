@@ -369,6 +369,13 @@ hp_loss_pct   = 0
 hut_behavior  = "Frighten"
 flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 
+[unitclass_zeppelin]
+; /* TRANS: Unit class: used adjectivally */
+name          = _("?unitclass:Zeppelin")
+min_speed     = 1
+hp_loss_pct   = 0
+hut_behavior  = "Frighten"
+flags         = "Unreachable", "DoesntOccupyTile"
 
 ; /* <-- avoid gettext warnings
 ;
@@ -599,8 +606,10 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ;                         Max range is 65534.
 ;   paratroopers_mr_req = the move rate which is required at least for
 ;                         paradropping (whole movement points)
-;   paratroopers_mr_sub = the move rate which is subtracted after paradropping
-;                         (whole movement points)
+;   paratroopers_mr_sub = <the move rate which is subtracted after paradropping>
+;                         This field, unused by any MP2 unit, is temporarily
+;                         a bitfield for extra_unit_stats, to support added features
+;                         without breaking savegame compatibility.
 ;  "Upgrade Unit"
 ;   obsolete_by = the unit type upgraded to.
 ;  "Convert Unit"
@@ -713,7 +722,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "NoBuild", "HasNoZOC", "Cant_Fortify", "Capturable", "Expellable", "Cant_Pillage"
+flags         = "NoBuild", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage"
 roles         = "DefendGoodStartUnit"  ; re-purposed from Phalanx
 helptext      = _("\
 Tribesmen are ancestors whose contributions are forgotten\
@@ -1077,7 +1086,7 @@ convert_time  = 2
 transport_cap = 0
 fuel          = 0
 city_size     = 1850 ; 000000,000,111,001110,1,0 = atk_bonus=0, max_kills=0, targets=7, move_cost=14 frags, stay_fortfy=1, reserved = 0
-paratroopers_mr_sub = 0 ;00,0000,000,0,0 iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 4096 ; 00010,00,0000,000,0,0 - bbd_retal_rate=2, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 ;NOTE: iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
@@ -1089,12 +1098,13 @@ flags         = "FootSoldier", "Capturer", "CantReachAir", "Bombarder", "Settler
 roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
 Archers fight with bows and arrows. They have good offense and decent defense.\
- Rather than fight to the death, Archers can also do a Ranged Attack with no risk\
- of retaliatory damage: two volleys of arrows are fired on up to 7 enemy units on the tile,\
+ Rather than fight to the death, Archers can also do a ranged Volley Attack which\
+ avoids hand-to-hand retaliation: two volleys of arrows are fired on up to 7 enemy units on the tile,\
  causing 1-2hp of damage to any units who are hit. This includes Oceanic tiles if not\
- transported. This is useful for softening\
- enemies prior to battle, or for deterring an approach to a strategic location.\
- (Ranged Attack is not possible on Cities or Fortresses.)\n\
+ transported. This is useful for softening enemies prior to battle, or for deterring an\
+ approach to a strategic location. (Volley Attack is not possible on Cities or Fortresses.)\
+ Archers can do a retaliatory Volley attack against any unit which does a Special Unit Attack\
+ on them.\n\
  With the discovery of Conscription, Archers can convert to Musketeers in any domestic city.\
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
@@ -1444,7 +1454,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter", "Land", "Sea", "LandRoad", "LandRail"
 disembarks    = "Helicopter", "Land", "Sea", "LandRoad", "LandRail"
-targets       = "Sea", "Balloon", "Helicopter", "LandRail"
+targets       = "Sea", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 flags         = "MultiSlot", "Marines", "FootSoldier", "BeachLander", "Capturer",
                 "NeverBlocked", "Shield2Gold", "Settlers", "CanHide", "WillNever",
                 "Airbase", "CanFortress", "Bombarder" ; can Fort only, actually.
@@ -1508,7 +1518,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
-targets       = "Balloon", "Helicopter", "LandRail"
+targets       = "Balloon", "Helicopter", "LandRail", "Zeppelin"
 flags         = "Paratroopers", "FootSoldier", "Capturer", "CantReachAir", "Provoking",
                 "Shield2Gold", "MultiSlot", "Settlers", "CanHide", "WillNever"
 roles         = "DefendOk", "DefendOkStartUnit"
@@ -1555,7 +1565,7 @@ uk_food       = 0
 uk_gold       = 1
 embarks       = "Helicopter"    ; transport helicopter only
 ;disembarks    = "Helicopter"
-targets       = "Balloon", "Helicopter", "LandRail"
+targets       = "Balloon", "Helicopter", "LandRail", "Zeppelin"
 flags         = "CantReachAir", "Shield2Gold", "MultiSlot", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
@@ -1834,7 +1844,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 ;disembarks    = "Helicopter"
-targets       = "Balloon", "Helicopter", "LandRail"
+targets       = "Balloon", "Helicopter", "LandRail", "Zeppelin"
 flags         = "CantReachAir", "FortBuster", "WillNever"
 roles         = "AttackFastStartUnit", "Hunter"
 helptext      = _("\
@@ -1873,7 +1883,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 ;disembarks    = "Helicopter"
-targets       = "Balloon", "Helicopter", "LandRail"
+targets       = "Balloon", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
      "Missile",      "DefenseMultiplier", 1
@@ -2031,7 +2041,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
-targets       = "Balloon", "LandRail"
+targets       = "Balloon", "LandRail", "Zeppelin"
 flags         = "CantReachAir", "WillNever"
 roles         = ""
 helptext      = _("\
@@ -2068,7 +2078,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRoad", "Helicopter"
 disembarks    = "LandRoad", "Helicopter"
-targets       = "Air", "AirProtect", "Sea", "Balloon", "Helicopter", "LandRail"
+targets       = "Air", "AirProtect", "Sea", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
      "AirAttacker", "DefenseDivider", 1
@@ -2115,7 +2125,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
-targets       = "Air", "AirProtect", "Air_High_Altitude", "Balloon", "Helicopter", "LandRail"
+targets       = "Air", "AirProtect", "Air_High_Altitude", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 cargo         = "Missile"
 bonuses       =
    { "flag", "type", "value"
@@ -2161,7 +2171,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 disembarks    = "Helicopter"
-targets       = "Balloon", "LandRail"
+targets       = "Balloon", "LandRail", "Zeppelin"
 flags         = "CantReachAir", "WillNever"
 roles         = ""
 helptext      = _("\
@@ -2172,7 +2182,7 @@ Howitzers are upgraded Artillery with significant increase in mobility and attac
 name          = _("Balloon")
 class         = "Balloon"
 tech_req      = "Chemistry"
-obsolete_by   = "None"
+obsolete_by   = "Zeppelin"
 graphic       = "u.balloon"
 graphic_alt   = "u.trireme"
 sound_move    = "m_balloon"
@@ -2204,13 +2214,59 @@ roles         = ""
 helptext      = _("\
 Balloons gather intel on potential battle areas. They have great vision and\
  are unreachable by units prior to Riflemen and Ironclads. They can stay in\
- the air for one Turn Change before landing in a City, Fortress, Naval Base,\
- Airbase, or transport unit with cargo capacity of 4+. Balloons do not block units under\
+ the air for one Turn Change before landing in a City, Base, Quay, or transport\
+ unit with cargo capacity of 4+. Balloons do not block units under\
  them from being attacked, and cannot fly over mountains.\
 "), _("
 NOTE: GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
+
+[unit_zeppelin]
+name          = _("Zeppelin")
+class         = "Zeppelin"
+tech_req      = "Combustion"
+obsolete_by   = "None"
+graphic       = "u.zeppelin"
+graphic_alt   = "u.balloon"
+sound_move    = "m_balloon"
+sound_move_alt = "m_trireme"
+sound_fight   = "f_musketeers"
+sound_fight_alt = "f_riflemen"
+build_cost    = 45
+pop_cost      = 0
+attack        = 2
+defense       = 1
+hitpoints     = 20
+firepower     = 2
+move_rate     = 6
+vision_radius_sq = 24
+transport_cap = 0
+fuel          = 3
+city_size     = 2632    ;000000,001,010,010010,0,0 = atk_bonus=0, max_kills=1, targets=2, move_cost=18 frags, stay_frtfy=0, reserved = 0
+paratroopers_mr_sub = 0 ;00000,00,0000,000,0,0 = bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+flags         = "Unbribable", "HasNoZOC", "NeverProtects", "Bombarder", "Provoking"
+roles         = ""
+helptext      = _("\
+As new technology inspires the upgrade of Balloons, the Zeppelin appears.\
+ In theory, it can be used for tactical advantage in combat. However,\
+ vulnerability and cost make it better for intel. It can do limited attack\
+ with bombs, or 20 combat rounds with medium caliber ordnance. It can stay out\
+ for two Turn Changes before landing in a City, Quay, Fortress, Naval Base,\
+ Airbase, or transport with 6+ capacity.\n\
+Zeppelins have great vision and are unreachable by units prior to Marines and\
+ Destroyers. Zeppelins do not block units under them from being attacked. Unlike\
+ Balloons, they can fly over Mountains.\
+"), _("
+NOTE: GOTO disallows unit loss from lack of fuel. You\
+ can override this by ordering moves to adjacent tiles.\
+")
+bombard_rate = 4
+
 
 [unit_airplane]
 name          = _("Airplane")
@@ -2237,7 +2293,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-flags         = "HasNoZOC", "NoVeteran", "Unbribable", "Expellable", "NeverProtects", "CanEscape", "Provoking"
+flags         = "HasNoZOC", "NoVeteran", "Unbribable", "Expellable", "NeverProtects", "CanEscape", "Provoking", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
 veteran_raise_chance = 0
@@ -2280,7 +2336,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "AirProtect", "Missile", "Balloon", "Helicopter", "LandRail"
+targets       = "Air", "AirProtect", "Missile", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
    }
@@ -2336,7 +2392,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "AirProtect", "Missile", "Balloon", "Helicopter", "LandRail"
+targets       = "Air", "AirProtect", "Missile", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
    }
@@ -2394,7 +2450,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "AirProtect", "Balloon", "Helicopter", "LandRail"
+targets       = "Air", "AirProtect", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
      ; A4.5 vs all Surface Units 
@@ -2466,7 +2522,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "LandRail"
+targets       = "Balloon", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
    }
@@ -2522,7 +2578,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "LandRail"
+targets       = "Balloon", "LandRail", "Zeppelin"
 cargo         = "Bomb"
 bonuses       =
    { "flag", "type", "value"
@@ -2581,7 +2637,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "LandRail"
+targets       = "Balloon", "LandRail", "Zeppelin"
 cargo         = "Bomb"
 bonuses       =
    { "flag", "type", "value"
@@ -2826,11 +2882,12 @@ move_rate     = 12
 vision_radius_sq = 12
 transport_cap = 1
 fuel          = 0
+paratroopers_mr_sub = 6144 ; 00011,00,0000,000,0,0 - bbd_retal_rate=3, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Helicopter", "LandRail"
+targets       = "Balloon", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
       "FootSoldier", "DefenseMultiplierPct", 50   ; all Infantry (Foot and Mech.)
@@ -2866,7 +2923,8 @@ For each turn not ended in a City, Base, or Carrier, 1hp is lost. +1 move\
 "), _("\
 Helicopters fly low to avoid Interception. This invites attacks by ground units from\
  Riflemen onward. They are unreachable to Artillery types and get +50% defense\
- vs. foot units. Helicopters can be attacked by Sea from Ironclad onward.\n\
+ vs. foot units. Helicopters can be attacked by Sea from Ironclad onward.
+Helicopters can retaliate 3 rounds against Special Unit Attacks.\n\
 "), _("\
 Helicopters can transport one Marines or AAA unit.\
 ")
@@ -2896,7 +2954,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "AirProtect", "Air_High_Altitude", "Missile", "Balloon", "Helicopter", "LandRail"
+targets       = "Air", "AirProtect", "Air_High_Altitude", "Missile", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
    }
@@ -2951,7 +3009,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "Air_High_Altitude", "Balloon", "Helicopter", "LandRail"
+targets       = "Air", "Air_High_Altitude", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
      "AntiAir",    "DefenseMultiplierPct",       33 ; D5.33 vs Anti-Air
@@ -3061,7 +3119,7 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "AirProtect", "Air_High_Altitude", "Missile", "Balloon", "Helicopter", "LandRail"
+targets       = "Air", "AirProtect", "Air_High_Altitude", "Missile", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
      "AntiAir", "DefenseDividerPct", 25
@@ -3119,7 +3177,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "LandRail"
+targets       = "Balloon", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
       "AntiAir", "DefenseDividerPct", 25
@@ -3568,7 +3626,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Submarine", "Helicopter", "LandRail"
+targets       = "Balloon", "Submarine", "Helicopter", "LandRail", "Zeppelin"
 ;cargo         = "Virtual"
 bonuses       =
    { "flag", "type", "value"
@@ -3610,7 +3668,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Submarine", "Helicopter", "LandRail"
+targets       = "Balloon", "Submarine", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
      "Submarine", "DefenseMultiplier", 1
@@ -3650,7 +3708,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Submarine", "Helicopter", "LandRail"
+targets       = "Balloon", "Submarine", "Helicopter", "LandRail", "Zeppelin"
 cargo         = "Missile"; , "Virtual"
 bonuses       =
    { "flag", "type", "value"
@@ -3692,7 +3750,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Air", "AirProtect", "Air_High_Altitude", "Missile", "Helicopter", "Balloon", "Submarine", "LandRail"
+targets       = "Air", "AirProtect", "Air_High_Altitude", "Missile", "Helicopter", "Balloon", "Submarine", "LandRail", "Zeppelin"
 cargo         = "Missile";, "Virtual"
 bonuses       =
    { "flag", "type", "value"
@@ -3733,12 +3791,13 @@ move_rate     = 10
 vision_radius_sq = 12
 transport_cap = 0
 fuel          = 0
-city_size     = 3252  ; 000000,001,100,101101,00 = atk_bonus=0, max_kills=1, targets=4, move_cost=45 frags, reserved = 00
+city_size     = 3252       ; 000000,001,100,101101,00 = atk_bonus=0, max_kills=1, targets=4, move_cost=45 frags, reserved = 00
+paratroopers_mr_sub = 6144 ; 00011,00,0000,000,0,0 - bbd_retal_rate=3, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Submarine", "Helicopter", "LandRail"
+targets       = "Balloon", "Submarine", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
      "Submarine", "DefenseMultiplier", 1
@@ -3749,7 +3808,7 @@ roles         = ""
 helptext      = _("\
 The Battleship is the supreme naval unit, with excellent offensive and defensive strength. It has a 2× defense bonus vs Submarines.\
  Battleships may expend 5 move points to do a 3 round bombardment which hits up to 4 units within a stack, of which only a maximum\
- of one can be killed.\
+ of one can be killed. Defending Battleships get a free bombardment against Special Unit Attacks.\
 ")
 bombard_rate = 3
 
@@ -3823,8 +3882,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Submarine", "Helicopter"
-cargo         = "Air", "AirProtect", "Air_High_Altitude", "Missile", "Helicopter", "Balloon", "LandAirSea"
+targets       = "Balloon", "Submarine", "Helicopter", "Zeppelin"
+cargo         = "Air", "AirProtect", "Air_High_Altitude", "Missile", "Helicopter", "Balloon", "LandAirSea", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
      "Marines", "DefenseMultiplier", 1    
@@ -3905,7 +3964,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad", "Cargo"
+cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad", "Cargo", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
      "Marines", "DefenseMultiplier", 1    
@@ -3986,7 +4045,7 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space"
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space", "Zeppelin"
 disembarks    = "Air", "Air_High_Altitude"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"
@@ -4033,7 +4092,7 @@ uk_happy      = 2
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space"
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space", "Zeppelin"
 disembarks    = "Air", "Air_High_Altitude"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"
@@ -4083,7 +4142,7 @@ uk_happy      = 4
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space"
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space", "Zeppelin"
 disembarks    = "Air", "Air_High_Altitude"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "Unique", "NoVeteran"
@@ -4135,7 +4194,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Submarine"
 disembarks    = "Submarine"
-targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space"
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space", "Zeppelin"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"
 ; No veteran levels (level name is never displayed)
@@ -4182,7 +4241,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "Submarine"
 disembarks    = "Submarine"
-targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space"
+targets       = "Balloon", "Helicopter", "Air", "AirProtect", "Air_High_Altitude", "Missile", "Submarine", "LandRail", "LandRoad", "Space", "Zeppelin"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable",
                 "NeverBlocked", "WillNever", "NoVeteran"
 ; No veteran levels (level name is never displayed)
@@ -4336,9 +4395,9 @@ disembarks    = "LandRoad", "Helicopter"
 flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage"
 roles         = "AttackStrongStartUnit"  ;note: MP2 doesn't start games with ASSU's so has co-opted this for caravan start unit.
 helptext      = _("\
-Compared to other early Commerce units, the Caravan is special for being rugged: the only\
- one who can go off roads or rails, pay no upkeep, and present no military threat to peaceful\
- trade partners.\n\n\ 
+Compared to other early Commerce units, the Caravan is the only\
+ one who can: go off roads and rails, pay no upkeep, and present no military threat to\
+ trade partners.\n\ 
 Commerce units can help build Wonders in any city with whom\
  you are not at war. In foreign cities 12+ tiles distant, they can create Trade Routes,\
  increasing net trade in both cities relative to their combined trade. Routes are inactive\
@@ -4346,7 +4405,7 @@ Commerce units can help build Wonders in any city with whom\
 Commerce units can enter the Marketplace of non-hostile foreign cities to sell goods: revenue derives\
  from total trade in both cities. This is only profitable between cities with very high trade.\n\
 Commerce units can build any Wonders for which you have the tech requirement. To use them\
- for a Trade Route, the Trade tech is needed, and they need to have an assigned Home City.\n\
+ for a Trade Route, they need to have given a Home City.\n\
 All Commerce units can carry Goods as cargo.\
 ")
 
@@ -4413,7 +4472,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
-cargo         = "Land", "LandAirSea", "Balloon", "Bomb", "Cargo"
+cargo         = "Land", "LandAirSea", "Balloon", "Bomb", "Cargo", "Zeppelin"
 flags         =  "HelpWonder", "TradeRoute", "NonMil", "HasNoZOC", "Cant_Fortify", "NoVeteran", "Capturable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
@@ -4504,10 +4563,10 @@ Goods are commodities.\
  Goods for trade routes.\n\
  Goods can be used to Establish Trade Route or Enter Marketplace. They can\
  be carried by Commerce units, allowing them to establish multiple\
- trade routes in one voyage. Also, Cargo can Recycle Production with only\
+ trade routes in one voyage. Also, Goods can Recycle Production with only\
  a 25% penalty.\n\
 "), _("\
- By itself, Cargo can only move onto tiles with Cities, Quays, Fortresses,\
+ By themselves, Goods can only move onto tiles with Cities, Quays, Fortresses,\
  and Naval Bases. Commerce units and Galleons may carry them as cargo.\
 ")
 

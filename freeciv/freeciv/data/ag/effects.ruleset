@@ -334,6 +334,43 @@ reqs    =
       "UnitType", "Carrier", "Local"
     }
 
+; *************************** Ruleset Fortify Bonus *********************** 
+[effect_fortified]
+type    = "Fortify_Defense_Bonus"
+value   = 50
+reqs    =
+    { "type", "name", "range"
+      "UnitState", "Fortified", "Local"
+    }
+
+[effect_city_fortified]
+type    = "Fortify_Defense_Bonus"
+value   = 50
+reqs    =
+    { "type",          "name",         "range", "present"
+      "CityTile",      "Center",       "Local", TRUE
+      "UnitState",     "Fortified",    "Local", FALSE
+      "UnitClassFlag", "CanFortify",   "Local", TRUE
+      "UnitFlag",      "Cant_Fortify", "Local", FALSE
+    }
+
+; ****************************** RECYCLE SHIELDS **************************
+[effect_unit_shield_value_recycle]
+type    = "Unit_Shield_Value_Pct"
+value   = -50
+reqs    =
+    { "type",   "name",         "range", "present"
+      "Action", "Recycle Unit", "Local", TRUE
+    }
+
+[effect_unit_shield_value_in_upgrade_price_calc]
+type    = "Unit_Shield_Value_Pct"
+value   = -50
+reqs    =
+    { "type",   "name",         "range", "present"
+      "Action", "Upgrade Unit", "Local", TRUE
+    }
+
 ; *********************************** BASES *******************************
 
 ; **** FORT *****
@@ -1588,15 +1625,6 @@ reqs	=
 ;      "Building", "Great Wall", "Player", FALSE
       "UnitType", "Howitzer", "Local", FALSE
     }
-[effect_city_walls_0]
-type    = "Defend_Bonus"
-value	= 200
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "City Walls", "City", TRUE
-      "UnitClass", "Helicopter", "Local", TRUE
-;      "Building", "Great Wall", "Player", FALSE
-    }
 [effect_city_walls_0a]
 type    = "Defend_Bonus"
 value	= 200
@@ -2704,6 +2732,14 @@ reqs	=
       "Building", "SAM Battery", "City"
       "UnitClass", "AirPillage", "Local"
     }
+[effect_sam_battery_3]
+type    = "Defend_Bonus"
+value	= 100
+reqs	=
+    { "type", "name", "range"
+      "Building", "SAM Battery", "City"
+      "UnitClass", "Helicopter", "Local"
+    }
 [effect_sam_battery_stealth_bomber]
 type    = "Defend_Bonus"
 value	= 25
@@ -3416,33 +3452,6 @@ reqs	=
       "UnitClass", "Land", "Local", TRUE
       "CityTile", "Center", "Local", TRUE
       "UnitType", "Howitzer", "Local", FALSE
-      "Tech", "Machine Tools", "World", FALSE
-    }
-[effect_great_wall_1_original]
-type    = "Defend_Bonus"
-value	= 200
-reqs	=
-    { "type", "name", "range"
-      "Building", "Great Wall", "Player"
-      "Building", "City Walls", "City", FALSE
-      "Age", "3", "City", TRUE
-      "CityStatus", "OwnedByOriginal", "City",  TRUE
-      "UnitClass", "Helicopter", "Local"
-      "CityTile", "Center", "Local"
-      "Tech", "Machine Tools", "World", FALSE
-    }
-[effect_great_wall_1_assimilated]
-type    = "Defend_Bonus"
-value	= 200
-reqs	=
-    { "type", "name", "range"
-      "Building", "Great Wall", "Player"
-      "Building", "City Walls", "City", FALSE
-      "Age", "3", "City", TRUE
-      "CityStatus", "OwnedByOriginal", "City",  FALSE
-      "MinForeignPct", "19", "City",  FALSE
-      "UnitClass", "Helicopter", "Local"
-      "CityTile", "Center", "Local"
       "Tech", "Machine Tools", "World", FALSE
     }
 [effect_great_wall_2_original]
