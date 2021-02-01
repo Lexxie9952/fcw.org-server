@@ -120,7 +120,10 @@ var ACTION_CONVERT = 50;
 var ACTION_BASE = 51;
 var ACTION_MINE = 52;
 var ACTION_IRRIGATE = 53;
-var ACTION_COUNT = 54;
+var ACTION_CLEAN_POLLUTION = 54;
+var ACTION_CLEAN_FALLOUT = 55;
+var ACTION_SPY_ATTACK = 56;
+var ACTION_COUNT = 57;
 
 /* The action_decision enum */
 /* Doesn't need the player to decide what action to take. */
@@ -193,17 +196,20 @@ var GUI_GTK3x   = 8;
 
 /* Sometimes we don't know (or don't care) if some requirements for effect
  * are currently fulfilled or not. This enum tells lower level functions
- * how to handle uncertain requirements.
- */
+ * how to handle uncertain requirements. */
 var RPT_POSSIBLE = 0; /* We want to know if it is possible that effect is active */
 var RPT_CERTAIN = 1;  /* We want to know if it is certain that effect is active  */
 
-var O_FOOD = 0;
-var O_SHIELD = 1;
-var O_TRADE = 2;
-var O_GOLD = 3;
-var O_LUXURY = 4;
-var O_SCIENCE = 5;
+// Output Types and their Names 
+const O_FOOD = 0;
+const O_SHIELD = 1;
+const O_TRADE = 2;
+const O_GOLD = 3;
+const O_LUXURY = 4;
+const O_SCIENCE = 5;
+const O_LAST = 6;
+const O_NAME = ["Food", "Shield", "Trade", "Gold", "Luxury", "Science"];
+const O_PIC = ["/images/wheat.png","/images/shield14x18.png","/images/trade.png","/images/gold.png","/images/lux.png","/images/sci.png"];
 
 /* vision_layer enum */
 var V_MAIN = 0;

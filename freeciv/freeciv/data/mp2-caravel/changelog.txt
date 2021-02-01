@@ -82,11 +82,13 @@ UNITS/COMBAT/MECHANICS:
     The net effect of this realistically emulates that Fortresses are dominant military presences until attackers take the time and wherewithal to get around 
     to protracted siege, whereafter they are still defendable but at a lesser bonus.
 2. Satellite: invisible, can investigate all cities (even with Police Station), has superior vision and movement. Requires Apollo Program.
-3. Helicopter fixed, correctly susceptible to SAM Battery not City Walls (fixes a nerf of 3x for a land unit not from original game)
-6. Battleship gets ranged attack: 3 rounds, can hit up to 4 units, can kill up to 1 unit, uses 5 moves.
-7. Truck replaces Freight. Changes: Road only, moves: 6, can carry 3 land units. load/unload rules same as Train.
-8. Discovery of Recycling reduces unit upgrades 20%, stacks with other discounts.
-9. A server flaw sometimes
+3. Zeppelin:  upgrades balloon, greater vision/movement/fuel, some limited attack capabilities, can do limited bombing.
+4. Helicopter fixed, correctly susceptible to SAM Battery not City Walls (fixes a nerf of 3x for a land unit not from original game)
+   this fix was retroactive to AG and Brava also, as it was a really bad treason against the branch's DNA.
+5. Battleship gets ranged attack: 3 rounds, can hit up to 4 units, can kill up to 1 unit, uses 5 moves.
+6. Truck replaces Freight. Changes: Road only, moves: 6, can carry 3 land units. load/unload rules same as Train.
+7. Discovery of Recycling reduces unit upgrades 20%, stacks with other discounts.
+8. A server flaw sometimes
    a. allowed military units to clean fallout and pollution. This fix affects ALL rulesets.
    b. For non-military units, only spies and worker types can pillage now. Excluded are: Caravans, Explorers, Diplomats, Pilgrims, Tribesmen, Trucks, Freight.
 SPIES/DIPLOMATS:
@@ -101,6 +103,7 @@ SPIES/DIPLOMATS:
    FINAL ODDS: 
       85% chance to investigate unprotected city
       ~75% chance to succeed vs. protected city (varies slightly up or down with the vet levels of the spy units in combat.)
+      causes casus belli on failure!
 
 OTHER:
 1.Casus Belli Expansions:
@@ -145,6 +148,7 @@ Camels move faster than people, Caravans get 2 7/9 moves. They can also carry 2 
 Capturable commerce units can't become uncapturable just by carrying Goods or being on same tile with other capturable commerce units.
    Put another unit_type with them. This prevents mere cargo from making commerce units immune to capture.  Cargo becomes lost in capture 
    event: e.g., Caravan carrying goods gets captured. Goods are lost, Caravan transfers ownership.
+Tribesmen gain 1 HP and can fight back. A1D1 HP6. It might be just enough for 2 of them to fight off 1 intruder unit, if one dies ;)
 
 SERVER UPGRADES:
 1. Special Unit Actions / Attacks:
@@ -245,8 +249,15 @@ What this means for MP2 rules:
 34. 3 NEW DEMOGRAPHICS statistics: Units Built, Units Killed, Units Lost. We can also select which rows in demographics report to show, and also 
     which of 3 columns to turn on (your quantitative score, your rank, who is #1 and their quantitative score [if you have embassy])
 35. Discovery of new government gives instant click-link icon to change government, in the chat window.
-
-
+36. Recycling Unit is smarter to differentiate single or plural simultaneous; and differentiate a disbanding from a recycling into production. Also new 
+   Orders button for Recycle/Disband has same intelligence to it.
+37 CTRL-click: clicks a tile as if a city is not there: good for selecting units without extra UI fussing (going inside a city to pick the unit etc.)
+38. Special retaliation ability: units getting ranged attacks now have the potential to retaliate against those. This opens up new tactics
+      currently given only to units that benefit from big balance improvement from it (Archer, Battleship, Helicopter.)
+        one Bship bombards 2, now they have 37 hp and 1 Bship beats both. This prevents such possibilities and indeed, 
+        the 2 battleships properly retaliate leaving the single Bship in worse, not better condition. This dynamic is
+        carefully used to allow deeper level of tactics for some units and to slightly buff units whose special
+        role abilities were represented weaker than the realistic and tactical use they should have. 
 These help with much more than Freeciv and other Full-screen apps. They help you with everything you do on your computer:
             Switch active Program   Flip to Last Program    Switch Browser tab   See all Programs on Workspace   Swap Workspaces
 Linux*      Alt-Tab                 Alt-ESC                 CTRL-Shift-Tab       🐧, ALT-F1                      CTRL-ALT-arrow

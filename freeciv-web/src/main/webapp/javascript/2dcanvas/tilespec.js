@@ -20,7 +20,7 @@
 
 // Unit offset arrays for graphics placement of units and their various icon components
 var UO_dx = [], UO_dy = []; // Unit graphic delta.
-var UO_sx = [];             // Shield graphic
+var UO_sx = [], UO_sy = [];             // Shield graphic
 var UO_vx = [], UO_vy = []; // Vet badge graphic
 var UO_mx = [], UO_my = []; // Multi-unit graphic (stacked "+" icon)
 
@@ -727,6 +727,7 @@ function fill_unit_sprite_array(punit, num_stacked)
   var result = [get_unit_nation_flag_sprite(punit, unit_offset)];
   if (result[0]['offset_x']) {
     result[0]['offset_x'] += UO_sx[id];  // adjust shield x placement
+    result[0]['offset_y'] -= UO_sy[id];  // adjust shield x placement
   }
 
   // Unit
@@ -755,8 +756,8 @@ function fill_unit_sprite_array(punit, num_stacked)
     if (num_stacked) {
       var push_right=0; // whether to push small stack icon right 2 pixels (for right aligned shield)
       // Optional shield ring for stacked units
-      if (draw_stacked_unit_mode & dsum_RING) { 
-        if (UO_sx[id]){ // right-aligned shield:
+      if ((!UO_sy[id]) && draw_stacked_unit_mode & dsum_RING) {  // y-aligned shield doesn't get a ring for now.
+        if (UO_sx[id]>0){ // right-aligned shield:
           result.push({"key" : "unit.stk_shld_r",
                 "offset_x" : unit_offset['x'],
                 "offset_y" : -31-unit_offset['y']});
@@ -764,8 +765,8 @@ function fill_unit_sprite_array(punit, num_stacked)
         }
         else           // left-aligned shield:
           result.push({"key" : "unit.stk_shld_l",
-                "offset_x" : unit_offset['x'],
-                "offset_y" : -31-unit_offset['y']});
+                "offset_x" : unit_offset['x']-UO_sx[id],
+                "offset_y" : -31-unit_offset['y']-UO_sy[id]});
       }
       // Yellow "+" (small or normal) to show unit is in a stack:
       var stacked = get_unit_stack_sprite(num_stacked);
@@ -2261,7 +2262,7 @@ function create_unit_offset_arrays()
     // **WARNING for all y values: positive moves up, negative moves down
     var dx = unit_offset_adj_x;  // this is a base value to allow adjusting all unit offsets
     var dy = unit_offset_adj_y; 
-    var sx = 0;               // custom shield placement
+    var sx = 0, sy = 0;       // custom shield placement
     var vx = 0,  vy = 0;      // custom vet badge placement
     var mx = -10, my = -19;   // a "starting base value" for position of multi-unit 
                               // (stacked "+") sprite. Some units will change this.
@@ -2519,6 +2520,12 @@ function create_unit_offset_arrays()
       case "War Galley":
           vx -= 4; vy += 3;
           break;
+      case "Zeppelin":
+          sx = -13; sy = 5;
+          dx -= 19; dy += 4;
+          vx += 11; vy -= 5;
+          mx += 3;  my -= 3;
+          break;
     }
     // Adjustment to standard + location:
     if (mx==-10 && my==-19) {
@@ -2528,7 +2535,7 @@ function create_unit_offset_arrays()
     // Put above information into the UO unit offset arrays for units and their icon components:
     UO_dx[i] = dx + unit_offset_x; 
     UO_dy[i] = dy + unit_offset_y;
-    UO_sx[i] = sx;
+    UO_sx[i] = sx; UO_sy[i] = sy;
     UO_vx[i] = vx; UO_vy[i] = vy;
     UO_mx[i] = mx; UO_my[i] = my;
   }

@@ -342,7 +342,7 @@ function create_diplomacy_dialog(counterpart, template) {
 				"Accept treaty": function() {
 				    accept_treaty_req(counterpart_id);
 				},
-				"Cancel meeting (W)" : function() {
+				"Cancel meeting (𝗪)" : function() {
 				    cancel_meeting_req(counterpart_id);
 				}
 			},
@@ -426,6 +426,8 @@ function diplomacy_dialog_register(id, counterpart_id)
   $(id).dialog({ autoOpen: true }).bind('dialogclose', function(event, ui) { 
     cancel_meeting_req(counterpart_id);
   });
+
+  $(id).dialog('widget').position({my:"center top", at:"center top", of:window});
 }
 /*********************************************************************** */
 function diplomacy_dialog_key_listener(ev)

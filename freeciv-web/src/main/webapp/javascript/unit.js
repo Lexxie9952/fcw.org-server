@@ -38,6 +38,7 @@ var unit_bombard_attack_names = {
   "Siege Ram":  "Ram Fortress",
   "Fanatics":   "Skirmish Assault",
   "Marines":    "Bazooka Attack",
+  "Zeppelin":   "Bomb Attack",
   "Battleship": "Bombard Attack"
 };
 
@@ -465,6 +466,10 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
     if (tclass.rule_name == "LandRail") return true;
     if (tclass.rule.name == "RiverShip" && !(ttype.name == "Cargo Ship" || ttype.name == "Galleon")) return false;
     if (tclass.rule.name == "Sea" && !(ttype.name == "Transport" || ttype.name == "Carrier")) 
+      return false;
+  }
+  else if (pclass == "Zeppelin") {
+    if (ttype.name != "Carrier" && ttype.name != "Transport" && ttype.name != "Train")
       return false;
   }
   else if (pclass.startsWith("Air") || pclass == "Helicopter") {
@@ -1223,12 +1228,31 @@ function utype_get_extra_stats(ptype) {
   // Bits 5-8:  odds of success as 100-(5*x):
   pstats.iPillage_odds  =             (BB & 0b111100000) >> 5;
   // Bit 9-10:  # of targets randomly selected. 0==pinpoint selection
-  pstats.iPillage_random_targets =  (BB & 0b11000000000) >> 9;   
+  pstats.iPillage_random_targets =  (BB & 0b11000000000) >> 9;
+  // Bit 11-15: # of rounds of Bombard retaliation
+  pstats.bombard_retaliate_rounds =
+                              (BB & 0b11111100000000000) >> 11;
   
-  // Odds are expressed in bits, and range from 0-15. Value is in pentads:
-  // each is a reduction by 5%. 15x-5=-%75, so our range is 100% down to 25%,
-  // by fives. It's ugly, but no ruleset plans an iPillage with only 20% odds.
+  /* Adjustments of the raw encoded values to match their purpose: */
+
+  // The iPillage_odds came as bits from 0 to 15. Each value represents reduction
+  // by 5%. 15x5=75 so this gives us a range from 100% down to 25%, by fives.
   pstats.iPillage_odds = 100 - 5 * pstats.iPillage_odds;
+  
+  // bombard_retaliate_rounds came as 5 bits with 32 possible values,
+  // encoding up to 30 retaliation rounds and 2 other possibilities for 
+  // NONE or infinite. Raw ruleset bitfield comes in as follows:
+  //    0=none, 1=infinite, 2-31 = number of rounds (minus one)
+  // This is then converted to more understandable values below, which are:
+  //    0=none, -1=infinite, 1=30 = exact number of rounds.
+  if (pstats.bombard_retaliate_rounds > 0) { // 0 == none == no mod done
+    // adjust other values:
+    pstats.bombard_retaliate_rounds--; // 2-31 become 1-30 
+    // an original value of 1 for infinite becomes 0, set it now:
+    if (pstats.bombard_retaliate_rounds==0) {
+      pstats.bombard_retaliate_rounds=1000; // "infinite" rounds
+    }
+  }
 
   return pstats;
 }

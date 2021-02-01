@@ -394,12 +394,12 @@ function warcalc_set_tooltips()
         $("#wc167").prop("title", bl+"Land/Heli in Fortress vs Armor/Aircraft"+nbl+"Land/Heli in Naval Base vs Armor/Aircraft");
         $("#wc175").prop("title", bl+"Veteran-2 ('Hardened')");
         $("#wc200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Hills"+nbl+"Land/Heli in Fortress vs. Land/Sea/Missile"+nbl+"In city with Coastal Defense vs. Sea"+nbl
-          + "In city with SAM Battery vs. Air (not Heli/Stealth)"+nbl+"In city with SDI vs. Missile"+nbl+"Pikemen vs Horse (not Cavalry)"+nbl+"Knight vs. Foot soldier"+nbl
+          + "In city with SAM Battery vs. Air (not Stealth)"+nbl+"In city with SDI vs. Missile"+nbl+"Pikemen vs Horse (not Cavalry)"+nbl+"Knight vs. Foot soldier"+nbl
           + "Cruiser,Battleship,M.Destroyer,AEGIS vs Submarine"+nbl+"Sea unit vs. Marines"+nbl+"AAA/Mobile SAM vs. Aircraft"+nbl+"Missile Destroyer vs. Air/Missile"+nbl+"Armor II vs. Missile");
         $("#wc210").prop("title", bl+"Veteran-4 ('Crack')");
         $("#wc220").prop("title", bl+"Veteran-5 ('Master')");
         $("#wc230").prop("title", bl+"Veteran-6 ('Champion')");
-        $("#wc300").prop("title", bl+"Mountains"+nbl+"In city with City Walls vs Land/Heli (not Howitzer)"+nbl+"Knight vs. Horse (not Cavalry)"+nbl+"AEGIS vs. Air/Missile");
+        $("#wc300").prop("title", bl+"Mountains"+nbl+"In city with City Walls vs Land (not Howitzer)"+nbl+"Knight vs. Horse (not Cavalry)"+nbl+"AEGIS vs. Air/Missile");
         $("#wc400").prop("title", bl+"Destroyer vs. Submarine");
         // ATTACK BUTTONS
         $("#wca133").hide(); // unused except for table alignment

@@ -1258,7 +1258,7 @@ function update_unit_order_commands()
       $("#order_disband").html("<a href='#' onclick='key_unit_disband();'><img src='/images/orders/disband_recycle.png' name='disband_button' alt='' border='0' width='30' height='30'></a>");
       // Cargo class disbands often for recycling shields, show button always, less threatening recycle version of it.
       if (client_rules_flag[CRF_MP2_C]) {
-        if (ptype['name']=="Goods" || ptype['name']=="Freight") {
+        if (ptype['name']=="Goods" || ptype['name']=="Well-Digger" || ptype['name']=="Freight") {
           $("#order_disband").show();
           var city_prod_name = get_city_production_type(pcity)['name']; 
           if (!city_prod_name) city_prod_name = "Production";
@@ -2391,7 +2391,10 @@ function do_map_click(ptile, qtype, first_time_called)
     worked_tile_click(ptile);
     return;
   }
-
+  // handle ctrl-click (Click a city to select unit(s) inside instead of city itself)
+  if (!mouse_click_mod_key['shiftKey'] && mouse_click_mod_key['ctrlKey'] && !mouse_click_mod_key['altKey']) {
+    pcity = null;  // pretend there's no city.
+  }
   // User planning mode, clicks only mark tiles with user notes
   if (user_marking_mode) {
     if (!ptile) return;    
@@ -4553,6 +4556,8 @@ function unit_can_sentry(punit)
           || class_name == "AirProtect" 
           || class_name == "AirPillage"
           || class_name == "Air_High_Altitude"
+          || class_name == "Balloon"
+          || class_name == "Zeppelin"
           || class_name == "Missile" ) 
   {
     if (pcity || punit['transported'] || tile_has_extra(ptile, EXTRA_AIRBASE)) {
@@ -5776,7 +5781,8 @@ function key_unit_disband()
                                             : ACTION_RECYCLE_UNIT)
       };
       send_request(JSON.stringify(packet));
-      remove_unit_id_from_waiting_list(punit['id']); // definitely don't want dead unit on wait list
+      force_clear_unit(punit['id']);
+      //remove_unit_id_from_waiting_list(punit['id']); // definitely don't want dead unit on wait list
     }
     setTimeout(update_unit_focus, update_focus_delay);
     setTimeout(update_active_units_dialog, update_focus_delay+100);

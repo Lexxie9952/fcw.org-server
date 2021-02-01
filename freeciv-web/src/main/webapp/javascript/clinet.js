@@ -208,8 +208,7 @@ function send_request(packet_payload)
        render unit_do_action requests in the user dialog, which the server
        rejects because it wants the request as a change_activity packet. 
        TO DO: remove when upstream fixes this. */
-/* uncomment after fc_types.js has ACTION_CLEAN_POLLUTION et al in it, currently
-   left out to allow site rebuilds compatible with current production server
+
     var object_packet = JSON.parse(packet_payload);
     if ( (object_packet['pid'] == packet_unit_do_action) // 84
       && (object_packet['action_type']== ACTION_CLEAN_POLLUTION
@@ -229,7 +228,7 @@ function send_request(packet_payload)
           delete object_packet.name;
           delete object_packet.action_type;
           packet_payload = JSON.stringify(object_packet);
-        } */
+        }
         /* END Client workaround of 3.1 server bug ******************************/
 
     ws.send(packet_payload);
