@@ -286,7 +286,7 @@ bool is_ascii_name(const char *name)
     }
     for (j = 0; illegal_chars[j]; j++) {
       if (name[i] == illegal_chars[j]) {
-	return FALSE;
+      	return FALSE;
       }
     }
   }

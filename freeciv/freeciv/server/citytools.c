@@ -52,6 +52,9 @@
 #include "unitlist.h"
 #include "vision.h"
 
+/* common/aicore */
+#include "cm.h"
+
 /* common/scriptcore */
 #include "luascript_types.h"
 
@@ -1222,6 +1225,12 @@ bool transfer_city(struct player *ptaker, struct city *pcity,
   if (city_remains) {
     /* Update the city's trade routes. */
     reestablish_city_trade_routes(pcity);
+
+    /* Clear CMA. */
+    if (pcity->cm_parameter) {
+      free(pcity->cm_parameter);
+      pcity->cm_parameter = NULL;
+    }
 
     city_refresh(pcity);
   }
@@ -2518,6 +2527,14 @@ void package_city(struct city *pcity, struct packet_city_info *packet,
   packet->style = pcity->style;
   packet->city_image = get_city_bonus(pcity, EFT_CITY_IMAGE);
   packet->steal = pcity->steal;
+
+  if (pcity->cm_parameter) {
+    packet->cma_enabled = TRUE;
+    cm_copy_parameter(&packet->cm_parameter, pcity->cm_parameter);
+  } else {
+    packet->cma_enabled = FALSE;
+    memset(&packet->cm_parameter, 0, sizeof(packet->cm_parameter));
+  }
 
   improvement_iterate(pimprove) {
     can_build_impr_buf[improvement_index(pimprove)] = 

@@ -2333,13 +2333,33 @@ void utype_get_extra_stats(struct extra_unit_stats *pstats,
   // Bits 5-8:  odds of successful real-time strike on the extra target
   pstats->iPillage_odds  =             (BB & 0b111100000) >> 5;
   // Bit 9-10:  # of targets randomly selected. 0==pinpoint selection
-  pstats->iPillage_random_targets =  (BB & 0b11000000000) >> 9;    
+  pstats->iPillage_random_targets =  (BB & 0b11000000000) >> 9;
+  // Bit 11-15: # of rounds of Bombard retaliation
+  pstats->bombard_retaliate_rounds =
+                               (BB & 0b11111100000000000) >> 11;
 
-  // the odds come as bits from 0 to 15. Each value represents reduction by
-  // 5%. 15x5=75 so this gives us a range from 100% down to 25%, by fives.
+  /* Adjustments of the raw encoded values to match their purpose: */
+
+  // The iPillage_odds came as bits from 0 to 15. Each value represents reduction
+  // by 5%. 15x5=75 so this gives us a range from 100% down to 25%, by fives.
   // kinda dirty but it's assumed no one would bother with an iPillage that
   // only had 20% chance to succeed.
   pstats->iPillage_odds = 100 - 5 * pstats->iPillage_odds;
+
+  // bombard_retaliate_rounds came as 5 bits with 32 possible values,
+  // encoding up to 30 retaliation rounds and 2 other possibilities for 
+  // NONE or infinite. Raw ruleset bitfield comes in as follows:
+  //    0=none, 1=infinite, 2-31 = number of rounds (minus one)
+  // This is then converted to more understandable values below, which are:
+  //    0=none, 1000=infinite, 1=30 = exact number of rounds.
+  if (pstats->bombard_retaliate_rounds > 0) { // 0 == none == no mod done
+    // adjust other values:
+    pstats->bombard_retaliate_rounds--; // 2-31 become 1-30 
+    // an original value of 1 for infinite becomes 0, set it now:
+    if (pstats->bombard_retaliate_rounds==0) {
+      pstats->bombard_retaliate_rounds=1000; // "infinite" rounds.
+    }
+  }
 }
 /**********************************************************************//**
   Returns whether the unit can iPillage ("instant-Pillage")

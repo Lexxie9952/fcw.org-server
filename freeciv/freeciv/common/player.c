@@ -1764,7 +1764,7 @@ bool is_valid_username(const char *name)
 {
   return (strlen(name) > 0
           && !fc_isdigit(name[0])
-          && is_ascii_name(name)
+          //&& is_ascii_name(name)
           && fc_strcasecmp(name, ANON_USER_NAME) != 0);
 }
 

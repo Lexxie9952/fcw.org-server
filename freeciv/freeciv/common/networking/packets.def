@@ -206,6 +206,7 @@ type STRVEC             = STRING
 type WORKLIST           = worklist(struct worklist)
 # string that is URI encoded in the JSON protocol
 type ESTRING            = estring(char)
+type CM_PARAMETER       = cm_parameter(struct cm_parameter)
 
 # typedefs for enums
 type ACHIEVEMENT_TYPE   = uint8(enum achievement_type)
@@ -731,6 +732,9 @@ PACKET_CITY_INFO = 31; sc, lsend, is-game-info, force, cancel(PACKET_CITY_SHORT_
   STRING trade_output[MAX_LEN_MSG];
   BV_CITY_OPTIONS city_options;
   ESTRING name[MAX_LEN_CITYNAME];
+
+  BOOL cma_enabled;
+  CM_PARAMETER cm_parameter;
 end
 
 PACKET_CITY_SHORT_INFO = 32; sc, lsend, is-game-info, cancel(PACKET_CITY_INFO), cancel(PACKET_WEB_CITY_INFO_ADDITION)
@@ -833,6 +837,12 @@ PACKET_CITY_SABOTAGE_LIST = 45; sc, lsend
   ACTION_ID act_id;
 
   BOOL disturb_player;
+end
+
+PACKET_CITY_MANAGER = 139; cs
+  CITY city_id;
+  BOOL enabled;
+  CM_PARAMETER parameter;
 end
 
 PACKET_WORKER_TASK = 241; cs, sc, lsend, handle-via-packet

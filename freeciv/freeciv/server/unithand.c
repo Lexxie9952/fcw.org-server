@@ -127,7 +127,8 @@ static bool unit_do_help_build(struct player *pplayer,
                                struct city *pcity_dest,
                                const struct action *paction);
 static bool unit_bombard(struct unit *punit, struct tile *ptile,
-                         const struct action *paction);
+                         const struct action *paction,
+                         bool is_retaliation);
 static bool unit_nuke(struct player *pplayer, struct unit *punit,
                       struct tile *def_tile,
                       const struct action *paction);
@@ -2733,7 +2734,7 @@ bool unit_perform_action(struct player *pplayer,
   case ACTION_BOMBARD:
     ACTION_STARTED_UNIT_UNITS(action_type, actor_unit, target_tile,
                               unit_bombard(actor_unit, target_tile,
-                                           paction));
+                                           paction, false));
     break;
   case ACTION_ATTACK:
     ACTION_STARTED_UNIT_UNITS(action_type, actor_unit, target_tile,
@@ -3529,9 +3530,12 @@ static void send_combat(struct unit *pattacker, struct unit *pdefender,
 
   Returns TRUE iff action could be done, FALSE if it couldn't. Even if
   this returns TRUE, unit may have died during the action.
+
+  bool is_retaliation = flags if this is an initiated bombardment, or if
+   this bombardment is a tit-for-tat "reverse bombardment" retaliation.
 **************************************************************************/
 static bool unit_bombard(struct unit *punit, struct tile *ptile,
-                         const struct action *paction)
+                         const struct action *paction, bool is_retaliation)
 {
   struct player *pplayer = unit_owner(punit);
   struct city *pcity = tile_city(ptile);
@@ -3542,6 +3546,25 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
   
   struct bombard_stats pstats;
   unit_get_bombard_stats(&pstats, punit);
+  int bombard_rate = unit_type_get(punit)->bombard_rate;
+  // handle encoding for "infinite" rounds, a thereotical case no one will ever do:
+  if (bombard_rate<0) bombard_rate = 1000; // 1000 is our 'infinity'.
+  if (is_retaliation) { // initiators use normal bombard stats
+    /* Retaliation bombardment is stipulated only for
+       some units, in their extra_unit_stats: */
+    struct extra_unit_stats estats;
+    unit_get_extra_stats(&estats, punit);
+    // for re-usability of code, construct bombard_stats from retaliation stats:
+    bombard_rate = estats.bombard_retaliate_rounds;
+    pstats.bombard_stay_fortified = true; // defenders never lose fortify
+    pstats.bombard_move_cost = 0;
+    // pstats->bombard_primary_targets = retaliator uses same val as its bombard_stats
+    // pstats->bombard_primary_kills =   retaliator uses same val as its bombard_stats
+    // pstats->bombard_atk_mod =         retaliator uses same val as its bombard_stats
+    // The above 3 stats can be set on units who still can't initiate bombard, to inform
+    // how they behave in retaliatory bombard.
+  } 
+  // Now the retaliator is all set up to look like the attacker, in this function
 
   log_debug("Start bombard: %s %s to %d, %d.",
             nation_rule_name(nation_of_player(pplayer)),
@@ -3591,16 +3614,18 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
 
   unit_list_iterate_safe(ptile->units, pdefender) {
     /* Sanity checks */
-    fc_assert_ret_val_msg(!pplayers_non_attack(unit_owner(punit),
-                           unit_owner(pdefender)), FALSE,
-                          "Trying to attack a unit with which you have "
-                          "peace or cease-fire at (%d, %d).",
-                          TILE_XY(unit_tile(pdefender)));
-    fc_assert_ret_val_msg(!pplayers_allied(unit_owner(punit),
-                          unit_owner(pdefender)), FALSE,
-                          "Trying to attack a unit with which you have "
-                          "alliance at (%d, %d).", 
-                          TILE_XY(unit_tile(pdefender)));
+    if (!is_retaliation) { // retaliating against treaty breaker is natural
+      fc_assert_ret_val_msg(!pplayers_non_attack(unit_owner(punit),
+                            unit_owner(pdefender)), FALSE,
+                            "Trying to attack a unit with which you have "
+                            "peace or cease-fire at (%d, %d).",
+                            TILE_XY(unit_tile(pdefender)));
+      fc_assert_ret_val_msg(!pplayers_allied(unit_owner(punit),
+                            unit_owner(pdefender)), FALSE,
+                            "Trying to attack a unit with which you have "
+                            "alliance at (%d, %d).", 
+                            TILE_XY(unit_tile(pdefender)));
+    }
 
     if (is_unit_reachable_at(pdefender, punit, ptile)) {
       bool adj;
@@ -3616,15 +3641,16 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
       // Bombard unit if: targets=unlimited OR target was randomly selected:
       if (!max_targets || is_target[r]) {
         bool could_kill = (kills>0);
-        unit_bombs_unit(punit, pdefender, &att_hp, &def_hp, could_kill);
+        unit_bombs_unit(punit, pdefender, &att_hp, &def_hp, could_kill, bombard_rate);
 
         if (def_hp > 0) {   // SURVIVED
           notify_player(pplayer, ptile,
                         E_UNIT_ACTION_FAILED, ftc_server,
                         /* TODO: replace generic "assaulted" with ruleset
                           defined name of action.*/
-                        _("💢 Your %s assaulted the %s %s (%dhp)."),
+                        _("💢 Your %s %s the %s %s (%dhp)."),
                         unit_name_translation(punit),
+                        (is_retaliation ? "retaliated against": "assaulted"),
                         nation_adjective_for_player(unit_owner(pdefender)),
                         unit_name_translation(pdefender),
                         def_hp);
@@ -3633,9 +3659,10 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
                         E_UNIT_ESCAPED, ftc_server,
                         /* TODO: replace generic "assaulted" with ruleset
                           defined name of action.*/
-                        _("💢 %s %s assaulted your %s (%dhp)."),
+                        _("💢 %s %s %s your %s (%dhp)."),
                         nation_adjective_for_player(pplayer),
                         unit_name_translation(punit),
+                        (is_retaliation ? "retaliated against": "assaulted"),
                         unit_name_translation(pdefender),
                         def_hp);
         } else {          // DIED 
@@ -3643,8 +3670,9 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
                         E_UNIT_ACTION_FAILED, ftc_server,
                         /* TODO: replace generic "assaulted" with ruleset
                           defined name of action.*/
-                        _("💥 Your %s assault <b>killed</b> the %s %s."),
+                        _("💥 Your %s %s <b>killed</b> the %s %s."),
                         unit_name_translation(punit),
+                        (is_retaliation ? "retaliation": "assault"),
                         nation_adjective_for_player(unit_owner(pdefender)),
                         unit_name_translation(pdefender));
 
@@ -3652,9 +3680,10 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
                         E_UNIT_ESCAPED, ftc_server,
                         /* TODO: replace generic "assaulted" with ruleset
                           defined name of action.*/
-                        _("⚠️ %s %s assaulted and <b>killed</b> your %s."),
+                        _("⚠️ %s %s %s and <b>killed</b> your %s."),
                         nation_adjective_for_player(pplayer),
                         unit_name_translation(punit),
+                        (is_retaliation ? "retaliated": "assaulted"),
                         unit_name_translation(pdefender));        
         }
 
@@ -3668,10 +3697,12 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
         send_unit_info(NULL, pdefender);
 
         /* May cause an incident */
-        action_consequence_success(paction, unit_owner(punit),
-                                  unit_owner(pdefender),
-                                  unit_tile(pdefender),
-                                  unit_link(pdefender));
+        if (!is_retaliation) { // only initiating causes incident
+          action_consequence_success(paction, unit_owner(punit),
+                                    unit_owner(pdefender),
+                                    unit_tile(pdefender),
+                                    unit_link(pdefender));
+        }
 
         if (def_hp<=0) {  // handle burial
           wipe_unit(pdefender, ULR_KILLED, unit_owner(punit));
@@ -3685,41 +3716,69 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
   // clean dynamic target array
   if (is_target) free(is_target);
 
+  /* Initiators of bombardment:
+     a) lose moves, b) get a UWT timestamp, c) possibly lose fortified status
+     d) could possibly do a killcitizen to target city
+     BUT, Retaliation bombarders don't process any of this stuff. */
+  if (!is_retaliation)  { 
   // bm_cost is bombard_move_cost if specified otherwise it's a OneAttack turn loss:
-  int bm_cost = (pstats.bombard_move_cost>0) ? pstats.bombard_move_cost : 999;
-  punit->moves_left = (punit->moves_left - bm_cost > 0) 
-                    ? (punit->moves_left - bm_cost) : 0;
+    int bm_cost = (pstats.bombard_move_cost>0) ? pstats.bombard_move_cost : 999;
+    punit->moves_left = (punit->moves_left - bm_cost > 0) 
+                      ? (punit->moves_left - bm_cost) : 0;
 
-  unit_did_action(punit);
+    // Retaliators don't get UWT stamped either
+    unit_did_action(punit);
+
+    // Retaliators don't ever lose fortified status from incoming attacks:
+
+    // Don't forget "fortified" if action specifies to stay fortified
+    //if (pstats.bombard_stay_fortified && punit->activity != ACTIVITY_FORTIFIED)
+    //  unit_forget_last_activity(punit); // Otherwise forget last activity as usual
+    if (pstats.bombard_stay_fortified && punit->activity == ACTIVITY_FORTIFIED) {
+      // don't forget last activity
+    } else {
+        unit_forget_last_activity(punit); // Otherwise forget last activity as usual
+    }
   
-  // Don't forget "fortified" if action specifies to stay fortified
-  //if (pstats.bombard_stay_fortified && punit->activity != ACTIVITY_FORTIFIED)
-  //  unit_forget_last_activity(punit); // Otherwise forget last activity as usual
-  if (pstats.bombard_stay_fortified && punit->activity == ACTIVITY_FORTIFIED) {
-    // don't forget last activity
-  } else {
-      unit_forget_last_activity(punit); // Otherwise forget last activity as usual
+    if (pcity
+        && city_size_get(pcity) > 1
+        && get_city_bonus(pcity, EFT_UNIT_NO_LOSE_POP) <= 0
+        // && ( !(game.server.killcitizen_pct>0 && game.server.killcitizen_pct<100)
+        //    || (fc_rand(100) < game.server.killcitizen_pct) )
+        && kills_citizen_after_attack(punit)) {
+      city_reduce_size(pcity, 1, pplayer, "bombard");
+      city_refresh(pcity);
+      send_city_info(NULL, pcity);
+      // For non-obvious values of killcitizen_pct, report that city lost population.
+      if (game.server.killcitizen_pct>0 && game.server.killcitizen_pct<100) {
+        /* notify players of population loss can go here*/
+      }   
+    } 
+    else {
+      // For non-obvious values of killcitizen_pct, report city lost no population.
+      if (game.server.killcitizen_pct>0 && game.server.killcitizen_pct<100) {
+        /* notify players of population loss can go here       */
+      }
+    }
   }
 
-  if (pcity
-      && city_size_get(pcity) > 1
-      && get_city_bonus(pcity, EFT_UNIT_NO_LOSE_POP) <= 0
-      // && ( !(game.server.killcitizen_pct>0 && game.server.killcitizen_pct<100)
-      //    || (fc_rand(100) < game.server.killcitizen_pct) )
-      && kills_citizen_after_attack(punit)) {
-    city_reduce_size(pcity, 1, pplayer, "bombard");
-    city_refresh(pcity);
-    send_city_info(NULL, pcity);
-    // For non-obvious values of killcitizen_pct, report that city lost population.
-    if (game.server.killcitizen_pct>0 && game.server.killcitizen_pct<100) {
-      /* notify players of population loss can go here*/
-    }   
-  } 
-  else {
-    // For non-obvious values of killcitizen_pct, report city lost no population.
-    if (game.server.killcitizen_pct>0 && game.server.killcitizen_pct<100) {
-      /* notify players of population loss can go here       */
-    }
+  // This is where we recursively call this function for retaliators to fight back. 
+  // Safe Recursion because is_retaliation==true won't continue recursion.
+  if (!is_retaliation) {
+    // function calls itself once for every retaliator to fight back 
+    unit_list_iterate_safe(ptile->units, pdefender) {
+      struct extra_unit_stats rstats;
+      unit_get_extra_stats(&rstats, pdefender);
+
+      if (rstats.bombard_retaliate_rounds   // a retaliator recursively fights back...
+       && pdefender->moves_left > 0) {      // ... if it has moves_left:
+        
+          unit_bombard(pdefender,        // Defender is now Attacker
+                      unit_tile(punit),  // Attacker tile is now Defender tile
+                      paction,           // (still Bombardment, but will be unused)
+                      true);             // is_retaliation==true, ...    
+      }                                  // ... (so no further recursion)
+    } unit_list_iterate_safe_end;
   }
 
   send_unit_info(NULL, punit);

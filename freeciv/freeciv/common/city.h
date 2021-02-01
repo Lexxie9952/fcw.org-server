@@ -302,6 +302,8 @@ struct tile_cache; /* defined and only used within city.c */
 
 struct adv_city; /* defined in ./server/advisors/infracache.h */
 
+struct cm_parameter; /* defined in ./common/aicore/cm.h */
+
 #pragma pack(push, 1)
 struct city {
   char name[MAX_LEN_CITYNAME];
@@ -390,6 +392,8 @@ struct city {
   struct worker_task_list *task_reqs;
   
   int steal; /* diplomats steal once; for spies, gets harder */
+
+  struct cm_parameter *cm_parameter;
 
   union {
     struct {

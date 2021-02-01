@@ -343,10 +343,11 @@ void unit_versus_unit(struct unit *attacker, struct unit *defender,
   2) Do rate attacks and don't kill the defender, then return.
 **************************************************************************/
 void unit_bombs_unit(struct unit *attacker, struct unit *defender,
-                     int *att_hp, int *def_hp, bool can_kill)
+                     int *att_hp, int *def_hp, bool can_kill, int bombard_rate)
 {
   int i;
-  int rate = unit_type_get(attacker)->bombard_rate;
+  // int rate = unit_type_get(attacker)->bombard_rate;
+  int rate = bombard_rate; 
 
   int attackpower = get_total_attack_power(attacker, defender);
   int defensepower = get_total_defense_power(attacker, defender);

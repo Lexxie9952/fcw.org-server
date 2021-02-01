@@ -21,6 +21,7 @@ extern "C" {
 #include "bitvector.h"
 #include "support.h"            /* bool type */
 
+struct cm_parameter;
 struct worklist;
 struct requirement;
 struct act_prob;
@@ -138,6 +139,8 @@ bool dio_get_memory_raw(struct data_in *din, void *dest, size_t dest_size)
     fc__attribute((nonnull (2)));
 bool dio_get_string_raw(struct data_in *din, char *dest, size_t max_dest_size)
     fc__attribute((nonnull (2)));
+bool dio_get_cm_parameter_raw(struct data_in *din, struct cm_parameter *param)
+    fc__attribute((nonnull (2)));
 bool dio_get_worklist_raw(struct data_in *din, struct worklist *pwl)
     fc__attribute((nonnull (2)));
 bool dio_get_requirement_raw(struct data_in *din, struct requirement *preq)
@@ -184,6 +187,8 @@ void dio_put_sfloat_raw(struct raw_data_out *dout, float value, int float_factor
 void dio_put_memory_raw(struct raw_data_out *dout, const void *value, size_t size);
 void dio_put_string_raw(struct raw_data_out *dout, const char *value);
 void dio_put_city_map_raw(struct raw_data_out *dout, const char *value);
+void dio_put_cm_parameter_raw(struct raw_data_out *dout,
+                              const struct cm_parameter *param);
 void dio_put_worklist_raw(struct raw_data_out *dout, const struct worklist *pwl);
 void dio_put_requirement_raw(struct raw_data_out *dout, const struct requirement *preq);
 void dio_put_action_probability_raw(struct raw_data_out *dout,

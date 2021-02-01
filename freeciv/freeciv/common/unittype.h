@@ -612,7 +612,12 @@ struct extra_unit_stats {
   
   int iPillage_odds;              // Bits 5-8 - odds of success expressed as 100-(6*)
   int iPillage_random_targets;    // Bit 9-10:  non-zero==randomly pick x targets. 0==user select target.
-
+  int bombard_retaliate_rounds;   // Bits 11-15:number of rounds of bombard retaliation when bombarded
+    /****** NOTE ****** A retaliator should be aware to also set the following bombard_stats,
+       which are used in its retaliation but do NOT enable initiated bombardment, per se:
+                                           bombard_primary_targets 
+                                           bombard_primary_kills
+                                           bombard_atk_mod */
 
   // Candidates for future inclusions:
   /*
