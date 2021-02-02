@@ -247,6 +247,29 @@ function delayed_explosion_helper(tile_id) {
 }
 
 /**************************************************************************
+ Intercepts server messages about city governor and puts them in the 
+ Governor tab where they can be read in timely manner, since map chatbox
+ is not open during this time.
+**************************************************************************/
+function handle_city_governor_event(message)
+{
+  global_governor_message = message;
+  global_governor_message.replace("#FFFFFF","#800");
+  global_governor_message = "<b>"+global_governor_message+"</b>";
+  $("#cma_unsaved_warning").html(global_governor_message);
+  $("#cma_unsaved_warning").show();
+  // Put an expiration on it.
+  setTimeout(function() { global_governor_message=""; }, 10000);
+
+  //FIXME: when governor tab updates faster than 3 seconds, we don't need a loop
+ /* for (i=0;i<4;i++)
+   setTimeout(function() {
+         $("#cma_unsaved_warning").html("<b>"+message+" </b>("+i+")");
+         $("#cma_unsaved_warning").show();
+        }, 500+i*500);*/
+}
+
+/**************************************************************************
  100% complete.
 **************************************************************************/
 function handle_chat_msg(packet)
@@ -263,11 +286,13 @@ function handle_chat_msg(packet)
     packet['event'] = E_UNDEFINED;
   }
 
-  /* Event interceptions... mostly used to process sound effects but can be 
-     used to trigger any other client processing */
+  /* Event interceptions... used to trigger client processing */
   switch (event) {
     case E_UNIT_ACTION_TARGET_HOSTILE:
       handle_iPillage_event(message, tile_id);
+      break;
+    case E_CITY_CMA_RELEASE:
+      handle_city_governor_event(message);
       break;
   }
 

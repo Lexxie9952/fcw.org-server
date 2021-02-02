@@ -252,11 +252,19 @@ function show_city_dialog(pcity)
 {
   //console.log("show_city_dialog() called.")
   //console.log("    caller is " + show_city_dialog.caller.toString().substring(0,35));
-
   var turns_to_complete;
   var sprite;
   //var shield_sprite;
   var punit;
+
+  var the_time = new Date().getTime();
+  var from_tab = null;
+  // We got here from updating the City Governor. Don't override
+  // back to main city overview view.
+  if (the_time-gov_refresh_timer < 1100) {
+    city_tab_index = 6;
+    $("#ctg").click();
+  }
 
   if (active_city != pcity || active_city == null) {
     city_prod_clicks = 0;
@@ -284,7 +292,7 @@ function show_city_dialog(pcity)
   // Attempt to show city governor tab button, and hide it if
   // city governor tab is not allowed to generate:
   if (show_city_governor_tab() == false) {
-    $("#ct6").parent().hide()
+    $("#ctg").parent().hide()
   }
 
   var dialog_buttons = {};
@@ -411,22 +419,19 @@ function show_city_dialog(pcity)
 
   /* prepare city dialog for small screens. */
   if (!is_small_screen()) {
-    //$("#city_tabs-5").remove();     // whatever this tab was, it was removed
-    $("#city_tabs-6").remove();       // "Inside" tab for units, not needed on large screen.
+    $("#city_tabs-u").hide();       // "Inside" tab for units, not needed on large screen.
     $(".extra_tabs_small").remove();  // class identified for "Inside" tab for units, not needed on large screen.
     $("#mobile_cma_checkbox").remove();
+    $("#ctg").html("<b>G</b>overnor"+(pcity.cma_enabled?" &#x1F539;":"")); // blue diamond to show governor active.
   } else {
-    //$("#city_tabs-4").remove();     // Options tab formerly removed; made inconsistent tab indices
-    //$(".extra_tabs_big").remove();  // Options tab formerly removed; disallowed disbanding s1 cities on mobile!
-    //$("#city_stats").hide();        // There was no need to hide city stats info after moving units to its own tab
     var units_element = $("#city_improvements_panel").detach();  // Remove this from main tab and put it in "Inside" tab
     $('#city_units_tab').append(units_element);  // "Inside" tab:units inside
     $("#city_tabs").css( {"margin":"-21px", "margin-top":"-11px"} ); // Compact tabs for mobile fit
     // Abbreviate tab title buttons to fit.
     $("#ct0").html("Main");     $("#ct1").html("Prod");
     $("#ct2").html("Routes");   $("#ct3").html("Option");
-    $("#ct4").html("Happy");    $("#ct5").html("Inside");
-    $("#ct6").html("Gov");
+    $("#ct4").html("Happy");    $("#cti").html("Inside");
+    $("#ctg").html("Gov"+(pcity.cma_enabled?"&#x1F539;":""));
    }
 
   $("#city_tabs").tabs({ active: city_tab_index});
@@ -823,7 +828,7 @@ function show_city_dialog(pcity)
     $("#city_supported_units_title").css( {"width":"4096px"} );
     $("#city_supported_units_list").css( {"width":"4096px"} );
     // Position adjustment hack
-    $("#city_tabs-6").css( {"margin-top":"-20px", "padding":"0px"} );
+    $("#city_tabs-u").css( {"margin-top":"-20px", "padding":"0px"} );
     $("#city_dialog_info").css( {"width":"110%", "padding":"0px"} );
     // Adjust vertical to remove 9 pixels of "slack"
     $("#city_overview_tab").css("height", ($("#city_overview_tab").height()-9) );
@@ -1309,7 +1314,6 @@ function request_city_buy()
   $("#dialog").dialog('open');
   dialog_register("#dialog");
 }
-
 
 /**************************************************************************
  Buy whatever is being built in the city.
@@ -3591,15 +3595,16 @@ function update_city_screen()
                   +"</div></div>";
         }   
         
-        // Capital markers
+        // City name: Capital markers and CMA markers, length shortening for tiny screen
         city_name = "";
-        if (is_capital(pcity)) city_name = "<span style='color:cyan'>&#9733; </span>";
-        if (city_has_building(pcity, improvement_id_by_name(B_ECC_PALACE_NAME))) city_name = "<span style='color:yellow'>&#x2CE9; </span>";
+        if (is_capital(pcity)) city_name += "<span title='Capital' style='color:cyan'>&#9733; </span>";
+        if (city_has_building(pcity, improvement_id_by_name(B_ECC_PALACE_NAME))) city_name += "<span title='Ecclesiastic Capital' style='color:yellow'>&#x2CE9; </span>";
         // tiny mobile: abbreviate city name to first 11 letters plus small "..."
         city_name += ( (tiny_screen && pcity['name'].length>11) 
               ? (pcity['name'].substring(0,10) + "<span style='font-size:66%;'>&#x22ef;</span></td>") 
-              : (pcity['name'] + "</td>") );
-
+              : (pcity['name'] + (pcity.cma_enabled ? "<span title='Governor controlled'> &#x1F539;</span>" :"")+ "</td>") );  
+                 // added CMA blue diamond to show if city governor present
+                
         city_list_html += "<tr class='cities_row' id='cities_list_" + pcity['id'] + "'>"
                 + td_hover_html + city_name + "</td>" // tiny mobile: abbreviate city name to first 11 letters plus "..."
                 + td_click_html + city_size_string + "</td>"
@@ -3628,7 +3633,7 @@ function update_city_screen()
   }
 
   // Title Header Area:
-  var title_text = "<span style='text-align:left; float:left; padding-right:10px;'>Your Cities ("+count+")</span>";
+  var title_text = "<span id='cities_title_cma_panel' style='text-align:left; float:left; padding-right:10px;'>Your Cities ("+count+")</span>";
   if (!is_small_screen() ) {
     title_text +=
        " <span id='city_improvements_hover_list'></span>"
@@ -3636,7 +3641,13 @@ function update_city_screen()
      + " <button title='Change production in selected cities' class='button ui-button ui-corner-all ui-widget' style='padding:5px; margin:4px; font-size:70%; float:right;' onclick='mass_change_prod();'>Change &#x2611; to:</button>"
      + " <button title='BUY in selected cities' class='button ui-button ui-corner-all ui-widget' style='padding:5px; margin:4px; font-size:70%; float:right;' onclick='buy_all_selected_cities();'>&#x2611; Buy selected</button>";
   } else $('#cities_title').css({"font-size":"100%"}); 
-  $('#cities_title').html(title_text); 
+  $('#cities_title').html(title_text);
+
+  if (power_cma==true) {
+    var power_panel =
+      "<button title='Click: Save CMA clipboard to selected.\nCTRL-Click: Apply CMA clipboard to selected.' class='button ui-button ui-corner-all ui-widget' style='padding:1px; margin:1px; font-size:100%; float:left;' onclick='cma_clipboard_macro(event);'>&#x1F4CB;</button>";
+    $("#cities_title_cma_panel").html(power_panel);
+  }
   
   city_list_html += "</tbody></table>";
   $("#cities_list").html(city_list_html);
@@ -3780,6 +3791,23 @@ function toggle_city_row_selections(event)
 /**************************************************************************
   Buys (or attempts to buy) every production item in every selected city.
 **************************************************************************/
+function cma_clipboard_macro(event)
+{
+  // Normal click is save, ctrl-click is apply once.
+  var apply_once = (event.ctrlKey) ? true : false;
+  // Mass send of packets to save or apply the clipboard:
+  for (var city_id in cities)  {
+    if ($("#cb"+city_id).is(":checked")) {
+      cma_paste_to_city_id(parseInt(city_id), apply_once);
+      city_checkbox_states[city_id] = true;
+    } else city_checkbox_states[city_id] = false;
+  }
+  retain_checkboxes_on_update = true;
+}
+
+/**************************************************************************
+  Buys (or attempts to buy) every production item in every selected city.
+**************************************************************************/
 function buy_all_selected_cities()
 {
   for (var city_id in cities)  {
@@ -3908,30 +3936,36 @@ function city_keyboard_listener(ev)
           break;
         }
     switch (keyboard_key) {
-       case 'P':
-         ev.stopPropagation();
-         previous_city();
-         break;
+      case 'P':
+        ev.stopPropagation();
+        previous_city();
+        break;
 
-       case 'V':
-       case 'M':
-          ev.stopPropagation();
-          city_tab_index = 0;  // Main screen / View
-          $("#city_tabs").tabs({ active: city_tab_index});
-          break;
+      case 'V':
+      case 'M':
+        ev.stopPropagation();
+        city_tab_index = 0;  // Main screen / View
+        $("#city_tabs").tabs({ active: city_tab_index});
+        break;
     
-       case 'Q':
-         ev.stopPropagation();
-         city_tab_index = 1;  // Production screen
-         $("#city_tabs").tabs({ active: city_tab_index});
-         break;
+      case 'D':
+        ev.stopPropagation();
+        city_tab_index = 1;  // Production screen
+        $("#city_tabs").tabs({ active: city_tab_index});
+        break;
 
-       case 'T':
-       case 'R':
-          ev.stopPropagation();
-          city_tab_index = 2;  // Trade routes
-          $("#city_tabs").tabs({ active: city_tab_index});
-          break;
+      case 'T':
+      case 'R':
+        ev.stopPropagation();
+        city_tab_index = 2;  // Trade routes
+        $("#city_tabs").tabs({ active: city_tab_index});
+        break;
+
+      case 'O':
+        ev.stopPropagation();
+        city_tab_index = 3;  // Options/Settings
+        $("#city_tabs").tabs({ active: city_tab_index});
+        break;
 
       case 'H':
         ev.stopPropagation();
@@ -3939,17 +3973,22 @@ function city_keyboard_listener(ev)
         $("#city_tabs").tabs({ active: city_tab_index});
         break;
 
+      // The following 2 tabs remove under certain conditions
+      // and don't have reliable tab index because of it.
+      // However, an artificial click is done to ensure transition.  
       case 'G':
         ev.stopPropagation();
-        city_tab_index = 5;  // Trade routes
+        city_tab_index = 5;
         $("#city_tabs").tabs({ active: city_tab_index});
+        $("#ctg").click();
         break;
-  
-       case 'O':
-          ev.stopPropagation();
-          city_tab_index = 3;  // Options/Settings
-          $("#city_tabs").tabs({ active: city_tab_index});
-          break;
+
+      case 'I':
+        ev.stopPropagation();
+        city_tab_index = 6;
+        $("#city_tabs").tabs({ active: city_tab_index});
+        $("#cti").click();
+        break;
 
        case 'W': // same command as ESC above (code 27)
          ev.stopPropagation();

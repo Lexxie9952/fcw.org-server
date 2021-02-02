@@ -549,9 +549,31 @@ void handle_city_options_req(struct player *pplayer, int city_id,
   Handles a request to set city manager parameter.
 **************************************************************************/
 void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
-                         struct cm_parameter parameter)
+                         bool apply_once, struct cm_parameter parameter)
 {
   struct city *pcity = player_city_by_number(pplayer, city_id);
+
+
+      notify_player(city_owner(pcity), city_tile(pcity),
+            E_CITY_PRODUCTION_CHANGED, ftc_server,
+            _("handle_city_manager received CMA parameter:\n"
+              "apply_once         %d\n"
+              "allow_disorder:    %d\n"
+              "allow_specialists: %d\n"
+              "max_growth:        %d\n"
+              "happy_factor:      %d\n"
+              "require_happy:     %d\n"
+              "factors:           %d,%d,%d,%d,%d,%d\n"
+              "min.surplus:       %d,%d,%d,%d,%d,%d\n"),
+              apply_once,
+              parameter.allow_disorder,
+              parameter.allow_specialists,
+              parameter.max_growth,
+              parameter.happy_factor,
+              parameter.require_happy,
+              parameter.factor[0],parameter.factor[1],parameter.factor[2],parameter.factor[3],parameter.factor[4],parameter.factor[5],
+              parameter.minimal_surplus[0],parameter.minimal_surplus[1],parameter.minimal_surplus[2],parameter.minimal_surplus[3],
+                parameter.minimal_surplus[4],parameter.minimal_surplus[5]);
 
   if (NULL == pcity) {
     /* Probably lost. */
@@ -559,27 +581,74 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
     return;
   }
 
-  if (!enabled) {
-    if (pcity->cm_parameter) {
-      free(pcity->cm_parameter);
-      pcity->cm_parameter = NULL;
-      send_city_info(pplayer, pcity);
+  // User requested a normal change to city governor, which we'll do here:
+  if (apply_once==false) {
+    // User is requesting to release the governor:
+    if (!enabled) {
+      if (pcity->cm_parameter) {
+        free(pcity->cm_parameter);
+        pcity->cm_parameter = NULL;
+        send_city_info(pplayer, pcity);
+        notify_player(city_owner(pcity), city_tile(pcity),
+              E_CITY_CMA_RELEASE, ftc_server,
+              _("🔹 Retired the Governor in %s."),
+              city_link(pcity));
+      }
+      return;
     }
+    // User is requesting to apply a new city governor:
+    if (!pcity->cm_parameter) {
+      pcity->cm_parameter = fc_calloc(1, sizeof(struct cm_parameter));
+    }
+    notify_player(city_owner(pcity), city_tile(pcity),
+                E_CITY_CMA_RELEASE, ftc_server,
+                _("🔹 Governor successfully assigned to %s."),
+                city_link(pcity));
+    cm_copy_parameter(pcity->cm_parameter, &parameter);
+    auto_arrange_workers(pcity);
+    sync_cities();
+    send_city_info(pplayer, pcity);
     return;
   }
 
-  if (!pcity->cm_parameter) {
-    pcity->cm_parameter = fc_calloc(1, sizeof(struct cm_parameter));
+  // User requested to apply this parameter only one time, without altering any of the current configuration.
+  else {   
+      struct cm_parameter backup_parameter;
+      bool was_enabled = false;  // whether governor was formerly on or not
+
+      if (!pcity->cm_parameter) {
+        // wasn't enabled, so create a new parameter for this city.
+        pcity->cm_parameter = fc_calloc(1, sizeof(struct cm_parameter));
+      } else {
+         // was enabled: remember that fact, and how it used to be so we can re-apply it after:
+        was_enabled = true;
+        backup_parameter = *(pcity->cm_parameter);
+        //cm_copy_parameter(&backup_parameter, pcity->cm_parameter);
+      }
+      // Now arrange the city, once, according to the user supplied parameter:
+      cm_copy_parameter(pcity->cm_parameter, &parameter);
+      auto_arrange_workers(pcity);
+
+      // CMA wasn't enabled so keep it that way
+      if (!was_enabled) {
+         if (pcity->cm_parameter) {
+          free(pcity->cm_parameter);
+          pcity->cm_parameter = NULL;
+        }
+      }
+      // CMA was enabled before, restore everything exactly how it used to be: 
+      else {
+        cm_copy_parameter(pcity->cm_parameter, &backup_parameter);
+        sync_cities();
+      }
+
+      send_city_info(pplayer, pcity);
+      
+      notify_player(city_owner(pcity), city_tile(pcity),
+                  E_CITY_CMA_RELEASE, ftc_server,
+                  _("🔹 Interim orders sent to Governor of %s."),
+                  city_link(pcity));      
   }
 
-  notify_player(city_owner(pcity), city_tile(pcity),
-              E_CITY_PRODUCTION_CHANGED, ftc_server,
-              _("🔍 City governor successfully assigned in %s."),
-              city_link(pcity));
-
-  cm_copy_parameter(pcity->cm_parameter, &parameter);
-
-  auto_arrange_workers(pcity);
-  sync_cities();
   return;
 }

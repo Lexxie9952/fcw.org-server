@@ -96,6 +96,7 @@ void cm_print_result(const struct cm_result *result);
 
 int cm_result_citizens(const struct cm_result *result);
 int cm_result_specialists(const struct cm_result *result);
+int cm_nonlux_result_specialists(const struct cm_result *result);
 int cm_result_workers(const struct cm_result *result);
 
 void cm_result_from_main_map(struct cm_result *result,

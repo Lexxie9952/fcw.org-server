@@ -281,6 +281,12 @@ static double estimate_fitness(const struct cm_state *state,
 static bool choice_is_promising(struct cm_state *state, int newchoice,
                                 bool negative_ok);
 
+static int nonlux_specialists_in_solution(const struct cm_state *state,
+                                   const struct partial_solution *soln);
+
+static int specialists_in_solution(const struct cm_state *state,
+                                   const struct partial_solution *soln);
+
 /************************************************************************//**
   Initialize the CM data at the start of each game.  Note the citymap
   indices will not have been initialized yet (cm_init_citymap is called
@@ -444,6 +450,11 @@ static bool tile_type_equal(const struct cm_tile_type *a,
     return FALSE;
   }
 
+  // Two different kinds of specialists are not EQUAL!
+  if (a->spec != b->spec) {
+    return FALSE;
+  }
+
   return TRUE;
 }
 
@@ -583,7 +594,7 @@ static struct cm_fitness worst_fitness(void)
   according to the weights and minimums given in the parameter.
 ****************************************************************************/
 static struct cm_fitness compute_fitness(const int surplus[],
-					 bool disorder, bool happy,
+					 bool disorder, bool happy, int num_nonlux_specialists,
 					const struct cm_parameter *parameter)
 {
   struct cm_fitness fitness;
@@ -595,6 +606,7 @@ static struct cm_fitness compute_fitness(const int surplus[],
     fitness.weighted += surplus[stat_index] * parameter->factor[stat_index];
     if (surplus[stat_index] < parameter->minimal_surplus[stat_index]) {
       fitness.sufficient = FALSE;
+      return worst_fitness(); // have to try to force it to reject.
     }
   } output_type_iterate_end;
 
@@ -606,6 +618,10 @@ static struct cm_fitness compute_fitness(const int surplus[],
 
   if (disorder && !parameter->allow_disorder) {
     fitness.sufficient = FALSE;
+  }
+
+  if (num_nonlux_specialists && !parameter->allow_specialists) {
+    return worst_fitness();
   }
 
   return fitness;
@@ -781,7 +797,8 @@ static struct cm_fitness evaluate_solution(struct cm_state *state,
        + 1;
   }
 
-  return compute_fitness(surplus, disorder, happy, &state->parameter);
+  return compute_fitness(surplus, disorder, happy,
+           nonlux_specialists_in_solution(state, soln), &state->parameter);
 }
 
 /************************************************************************//**
@@ -807,8 +824,23 @@ static void convert_solution_to_result(struct cm_state *state,
 
   /* result->found_a_valid should be only true if it matches the
    *  parameter; figure out if it does */
-  fitness = compute_fitness(result->surplus, result->disorder,
-                            result->happy, &state->parameter);
+
+     // DID WE SAY DISALLOW SPECIALISTS OR DID WE SAY DISALLOW SPECIALISTS?
+     /* possibly another way to kill non-entertainers
+  int num_nonlux_specialists = 0;
+  specialist_type_iterate(sp) {
+    if (sp==0) continue; // Entertainers allowed to keep order.
+    fc_assert_ret_val(MAX_CITY_SIZE - num_specialists > pcity->specialists[sp], 0);
+    num_specialists += pcity->specialists[sp];
+  } specialist_type_iterate_end;
+  if (!pcity->cm_parameter->allow_specialists 
+      && num_nonlux_specialists > 0)
+    return worst_fitness();
+    */
+
+  fitness = compute_fitness(result->surplus, result->disorder, result->happy,
+                             cm_nonlux_result_specialists(result),
+                             &state->parameter);
   result->found_a_valid = fitness.sufficient;
 }
 
@@ -1003,6 +1035,10 @@ static void init_specialist_lattice_nodes(struct tile_type_vector *lattice,
    * the bonus for the specialist (if the city is allowed to use it) */
   specialist_type_iterate(i) {
     if (city_can_use_specialist(pcity, i)) {
+      if (pcity->cm_parameter) {
+        if (!pcity->cm_parameter->allow_specialists && i > 0) // specialist only allowed for lux to keep order.
+          continue;
+      }
       type.spec = i;
       output_type_iterate(output) {
 	type.production[output] = get_specialist_output(pcity, i, output);
@@ -1254,8 +1290,8 @@ static int last_choice(struct cm_state *state)
 
 /************************************************************************//**
   Return the number of different tile types.  There is one tile type for
-  each type specialist, plus one for each distinct (different amounts of
-  production) citymap tile.
+  each type legally allowed specialist, plus one for each distinct 
+  (different amounts of production) citymap tile.
 ****************************************************************************/
 static int num_types(const struct cm_state *state)
 {
@@ -1532,6 +1568,25 @@ static int specialists_in_solution(const struct cm_state *state,
 
   return count;
 }
+/************************************************************************//**
+  return number of non-entertainer specialists used in partial solution:
+  allow_specialists still has to allow entertainers to prevent disorder !!
+****************************************************************************/
+static int nonlux_specialists_in_solution(const struct cm_state *state,
+                                   const struct partial_solution *soln)
+{
+  int count = 0;
+  int i;
+
+  for (i = 0 ; i < num_types(state); i++) {
+    if (soln->worker_counts[i] > 0 && tile_type_get(state, i)->is_specialist
+        && tile_type_get(state, i)->spec /* only true for non-entertainers */) {
+      count += soln->worker_counts[i];
+    }
+  }
+
+  return count;
+}
 
 /************************************************************************//**
   The heuristic:
@@ -1650,7 +1705,11 @@ static bool choice_is_promising(struct cm_state *state, int newchoice,
      don't need to take effects, angry citizens etc into account here
      either.)
      FIXME: this heuristic will break in rulesets where specialists can
-     influence happiness other than by direct production of luxury. */
+     influence happiness other than by direct production of luxury. Also 
+     this heuristic now assumes ENTERTAINER or spec[0] is the only one 
+     allowed to produce luxury if allow_specialists is off, which the 
+     FIXME solution should figure out some other way, such as looking at
+     how Merchant specialist produces Trade.*/
   {
     int specialists_amount = specialists_in_solution(state, &state->current);
     int max_content = player_content_citizens(city_owner(state->pcity));
@@ -1668,6 +1727,13 @@ static bool choice_is_promising(struct cm_state *state, int newchoice,
       return FALSE;
     }
   }
+  // Because !allow_specialists MEANS NO SPECIALISTS! (Damn it!)
+  if (!state->parameter.allow_specialists) {
+    if (nonlux_specialists_in_solution(state, &state->current)>0) {
+      beats_best = FALSE;
+    }
+  } 
+
   if (!beats_best) {
     log_base(LOG_PRUNE_BRANCH, "--- pruning: best is better in all important ways");
   }
@@ -1737,7 +1803,7 @@ static double estimate_fitness(const struct cm_state *state,
     estimates[stat_index] = production[stat_index];
   } output_type_iterate_end;
 
-  /* bonus to trade is applied before calculating taxes, see city.c */
+  /* Bonus to trade is applied before calculating taxes, see city.c */
   trade = estimates[O_TRADE] * pcity->bonus[O_TRADE] / 100.0;
 
   get_tax_rates(pplayer, rates);
@@ -1750,18 +1816,24 @@ static double estimate_fitness(const struct cm_state *state,
   estimates[O_GOLD]
     += rates[TAX] * trade / 100.0;
 
-  /* now add in the bonuses from building effects (in percentage) */
+  bool F_this = false;
+
+  /* Now add in the bonuses from building effects (in percentage) */
   output_type_iterate(stat_index) {
     estimates[stat_index] *= pcity->bonus[stat_index] / 100.0;
+    if (estimates[stat_index] < state->parameter.minimal_surplus[stat_index])
+      F_this = true; 
+      // Fire the governor and let the user decide, if mins can't be met.
+      // reason: preserve the semantic meaning of "minimum surplus"
   } output_type_iterate_end;
 
-  /* finally, sum it all up, weighted by the parameter, but give additional
+  /* Finally, sum it all up, weighted by the parameter, but give additional
    * weight to luxuries to take account of disorder/happy constraints */
   output_type_iterate(stat_index) {
     sum += estimates[stat_index] * state->parameter.factor[stat_index];
   } output_type_iterate_end;
   sum += estimates[O_LUXURY];
-  return sum;
+  return F_this ? -FC_INFINITY : sum;
 }
 
 
@@ -2174,6 +2246,21 @@ int cm_result_specialists(const struct cm_result *result)
   int count = 0;
 
   specialist_type_iterate(spec) {
+    count += result->specialists[spec];
+  } specialist_type_iterate_end;
+
+  return count;
+}
+/************************************************************************//**
+  Count the total number of non-entertainer specialists in the result
+  (allow_specialists has to allow entertainers to prevent disorder)
+****************************************************************************/
+int cm_nonlux_result_specialists (const struct cm_result *result)
+{
+  int count = 0;
+
+  specialist_type_iterate(spec) {
+    if (spec==0) continue; // Entertainers needed for keeping order.
     count += result->specialists[spec];
   } specialist_type_iterate_end;
 

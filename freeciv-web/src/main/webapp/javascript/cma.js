@@ -17,20 +17,35 @@
 
 ***********************************************************************/
 
+var power_cma = true;  /* Whether or not "Your Cities" text in Cities list becomes 
+power-user buttons for mass-paste or mass-apply of clipboard to each city */
 
 // Global vars that allow multiple functions to work on the City Governor
 var cma_val_sliders = [1,0,0,0,0,0];  // UI supplied values for cm_parameter['factor'][..]
-var s_val = ["","","","","",""];                        // corresponding UI sliders
+var s_val = [" "," "," "," "," "," "];                        // corresponding UI sliders
 var cma_min_sliders = [1,0,0,0,0,0];  // UI supplied values for cm_parameter['minimal_surplus'][..]
-var s_min = ["","","","","",""];                        // corresponding UI sliders
+var s_min = [" "," "," "," "," "," "];                        // corresponding UI sliders
+var cma_happy_slider = 0;
+var s_hpy = " ";
 var cma_celebrate = false;
-var cma_enabled = false;
-var cma_updater_interval;
 var cma_allow_disorder = false; 
 var cma_allow_specialists = true;
 var cma_max_growth = false;
-var cma_happy_slider = 0;
+var cma_apply_once = false;
+var cma_enabled = false;
+
+// Governor Clipboard for copy/paste:
+var _cma_val_sliders = [1,0,0,0,0,0];
+var _cma_min_sliders = [1,0,0,0,0,0];
+var _cma_happy_slider = 0;
+var _cma_celebrate = false;
+var _cma_allow_disorder = false; 
+var _cma_allow_specialists = true;
+var _cma_max_growth = false;
+
 var cma_user_changed = false;         // state var for whether user made any changes
+var gov_refresh_timer = 0;
+var global_governor_message = "";     // for intercepting and displaying CMA messages from server
 
 /**************************************************************************
 Init Governor tab - returns true if the tab was able to generate
@@ -56,11 +71,17 @@ function show_city_governor_tab()
   // --------------------------------------------------------------------------------------------
   cma_init_data();  // Retrieve city's current cm_parameter into the UI state vars.
   const id = "#city_governor_tab";
-  var governor_tab_html = "<header><div id='cma_status' style='font-size: 150%'>"
+  var dhtml = "<header><div id='cma_status' style='font-size: 150%'>"
                         + cma_get_status_icon()+" City Governor <b>" 
-                        + cma_get_status_text(cma_enabled) + "d</b>.<span id='cma_help' style='float:right;'>&#x2753;</span></div><br>";
-  var dhtml = "<button type='button' class='button ui-button ui-corner-all' onclick='button_pushed_toggle_cma();' id='btn_toggle_cma' title='"+cma_get_status_text(!cma_enabled)+" city governor in this city'>";
-  dhtml += "<b>"+cma_get_status_text(!cma_enabled)+'</b> Governor</button></header><br>';
+                        + cma_get_status_text(cma_enabled) + "d</b><br><span style='float:right'>?</span></div><header>";
+  // Toggle enable/disable governor button:
+  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='button_pushed_toggle_cma();' id='btn_toggle_cma' title='"+cma_get_status_text(!cma_enabled)+" city governor in this city'>";
+  dhtml += "<b>"+cma_get_status_text(!cma_enabled)+"</b></button>";
+  // Refresh screen button:
+  dhtml +="<button type='button' class='button ui-button ui-corner-all' onclick='button_pushed_refresh_cma();' id='btn_refresh_cma'>";
+  dhtml += "Reload</button>";
+
+  // Main slider panel:
   dhtml += "<form name='cma_vals'><table border='0'><th style='font-size:150%'>Output Priorities</th>";
   // Basic Vals:
   var pic_str = "<img style='' class='lowered_gov' src='";
@@ -69,7 +90,14 @@ function show_city_governor_tab()
     dhtml += "<tr> <td><span style='margin-left:-30px; float:right'><b>"+name+" </b>"+pic_str+O_PIC[i]+"'></td> <td><div class='horizontal dynamic-slider-control slider' id='cma-val-slider-"+name+"'></div> </td>"
     dhtml += "<td> <div id='"+name+"_val_result' style='float:left;'></div> </td></tr>"
   }
+  const name = "<span title='The relative importance of celebration vs. the other raw outputs. Use the Force Celebration checkbox to ensure celebration.'>Happy Factor</span>"
+  dhtml += "<tr> <td><span style='margin-left:-30px; float:right'><b>"+name+" </b>&#x1F60A;</td> <td><div class='horizontal dynamic-slider-control slider' id='cma-happy-slider'></div> </td>"
+  dhtml += "<td> <div id='happy_result' style='float:left;'></div> </td></tr>"
   dhtml += "</table></form>";
+  dhtml += "<br><input type='checkbox' onchange='cma_user_input();' id='cma_celebrate'><b><span style='font-size:110%;'>Force Celebration</span></b> &nbsp;";
+  dhtml += "<input type='checkbox' title='Suppress all specialists who do not prevent disorder.' onchange='cma_user_input();' id='cma_specialists'><span style='font-size:110%;'>Suppress Specialists</span> &nbsp;";
+  dhtml += "<input type='checkbox' onchange='cma_user_input();' id='cma_disorder'><span style='font-size:110%;'>Allow Disorder</span> <br>";
+
   dhtml += "<br><form name='cma_min_vals'><table border='0' style='color: #000000;'><th style='font-size:150%'>Minimum Surplus</th>";
   // Min Surplus Vals:
   for (i=0; i<O_LAST; i++) {
@@ -78,12 +106,16 @@ function show_city_governor_tab()
     dhtml += "<td> <div id='"+name+"_min_result' style='float:left;'></div> </td></tr>"
   }
   dhtml += "</table></form>";
-  dhtml += "<br><input type='checkbox' style='font-size:120%' onchange='cma_user_input();' id='cma_celebrate'><b>Force Celebration</b><br>";
-  dhtml += "<br><div id='cma_unsaved_warning'></div>";
-  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='button_pushed_cma_save();' id='btn_set_cma' title='Saves new settings for the City Governor'><b>Save</b></button>";
+  dhtml += "<br><button type='button' class='button ui-button ui-corner-all' onclick='button_pushed_cma_save();' id='btn_set_cma' title='Send these orders to the City Governor'>Save</button>";
+  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='button_pushed_cma_apply();' id='btn_apply_cma' title='Set city to these orders now, but not permanently.'>Set Once</button>";
+  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='cma_copy_current();' title='Copies the current on-screen settings to clipboard.'>Copy</button>";
+  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='cma_paste_clipboard();' title='Pastes from clipboard into the current Governor settings.'>Paste</button>";
+  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='cma_all_cities(true);' title='Sets all cities to copied clipboard settings, but not permanently.'>&#x26A0;Set All</button>";
+  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='cma_all_cities(false);' title='Saves all cities to copied clipboard settings, permanently.'>&#x26A0;Save All</button>";
 
-  governor_tab_html += dhtml;
-  $(id).html(governor_tab_html);
+  dhtml += "<div id='cma_unsaved_warning'>"+global_governor_message+"</div>";
+
+  $(id).html(dhtml);
 
   var helpstr = "The City Governor helps manage cities. It deploys citizens on the city's free tiles to regulate output. It can change citizens to specialists, if needed. The governor has another ability: it can try to prevent disorder."
   +" You can tell your Governor what kind of output you want. There are two kinds of sliders: On the bottom, you set a Minimum Surplus for each kind of output; e.g. Gold=3 tells the Governor to earn at least 3 gold more than it needs for building upkeep. The top sliders define preference for one kind of output over others: setting Shield=1,Science=3 means you value 1 bulb as equal to 3 shields."
@@ -94,9 +126,9 @@ function show_city_governor_tab()
   setTimeout(function() {
     //$("#cma_helptext").html(helpstr);
     create_cma_sliders();
-    wait(250);
-    create_cma_page();
     wait(350);
+    if (!create_cma_page()) return false; // exit if unable to create page.
+    wait(250);
     update_cma_state();
   },2100);
 
@@ -115,13 +147,13 @@ function cma_init_data()
   if (cma_enabled) {
     cma_val_sliders = [...pcity['cm_parameter']['factor']];
     cma_min_sliders = [...pcity['cm_parameter']['minimal_surplus']];
-    cma_celebrate = pcity['cm_parameter']['require_happy'];
-
-    // Currently not used but part of the cm_parameter:
-    cma_allow_disorder = pcity['cm_parameter']['allow_disorder'];
-    cma_allow_specialists = pcity['cm_parameter']['allow_specialists'];
-    cma_max_growth = pcity['cm_parameter']['max_growth'];
     cma_happy_slider = pcity['cm_parameter']['happy_factor'];
+    cma_celebrate = pcity['cm_parameter']['require_happy'];
+    cma_allow_specialists = pcity['cm_parameter']['allow_specialists'];
+    cma_allow_disorder = pcity['cm_parameter']['allow_disorder'];
+
+    // Currently not changeable, but always on:
+    cma_max_growth = pcity['cm_parameter']['max_growth'];
   }
   else {
     cma_set_default_city_manager(); // sets UI vars to server's CMA defaults
@@ -139,10 +171,12 @@ function create_cma_sliders() {
     s_val[i] = $("#cma-val-slider-"+name);
     $("#cma-min-slider-"+name).html("<input class='slider-input' id='cma-min-slider-"+name+"-input' name='cma-min-slider-"+name+"-input'/>");
     s_min[i] = $("#cma-val-slider-"+name);
+    $("#cma-happy-slider").html("<input class='slider-input' id='cma-happy-slider-input' name='cma-happy-slider-input'/>");
+    s_hpy = $("#cma-happy-slider");
   }
 }
 /**************************************************************************
-  ...
+  ...returns true if was able to do it, or else false
 **************************************************************************/
 function create_cma_page()
 {
@@ -150,43 +184,62 @@ function create_cma_page()
   const min_min = -20;  // min surplus is -20
   const max_min = 20;   // max surplus is +20
 
+  // Create sliders first, assign next. Might give processor more time to catch up.
+      
+  // Val sliders:
   for (var i = 0; i < O_LAST; i++) {
-    // Val sliders:
     var name = O_NAME[i];
     s_val[i] = new Slider(document.getElementById("cma-val-slider-"+name),
     document.getElementById("cma-val-slider-"+name+"-input"));
-
+  }
+  // Minimum surplus sliders:
+  for (var i = 0; i < O_LAST; i++) {
+    var name = O_NAME[i];
+    s_min[i] = new Slider(document.getElementById("cma-min-slider-"+name),
+    document.getElementById("cma-min-slider-"+name+"-input"));
+  }
+  for (var i = 0; i < O_LAST; i++) {
     s_val[i].setMaximum(maxval);
     s_val[i].setMinimum(0);
     s_val[i].setValue(cma_val_sliders[i]);
-    s_val[i].setBlockIncrement(1);
+    s_val[i].setBlockIncrement(5);
     s_val[i].setUnitIncrement(1);
     s_val[i].onchange = cma_user_input;
   }
   for (var i = 0; i < O_LAST; i++) {
-    // Minimum surplus sliders:
-    var name = O_NAME[i];
-    s_min[i] = new Slider(document.getElementById("cma-min-slider-"+name),
-    document.getElementById("cma-min-slider-"+name+"-input"));
-
     s_min[i].setMaximum(max_min);
     s_min[i].setMinimum(min_min);
     s_min[i].setValue(cma_min_sliders[i]);
-    s_min[i].setBlockIncrement(1);
+    s_min[i].setBlockIncrement(5);
     s_min[i].setUnitIncrement(1);
     s_min[i].onchange = cma_user_input;
   }
+  s_hpy = new Slider(document.getElementById("cma-happy-slider"),
+  document.getElementById("cma-happy-slider-input"));
+  s_hpy.setMaximum(50);
+  s_hpy.setMinimum(0);
+  s_hpy.setValue(cma_happy_slider);
+  s_hpy.setBlockIncrement(5);
+  s_hpy.setUnitIncrement(1);
+  s_hpy.onchange = cma_user_input;
+
   $("#cma_celebrate").prop("checked", cma_celebrate);
   $("#cma_celebrate").onchange = cma_user_input;
+
+  $("#cma_specialists").prop("checked", (!cma_allow_specialists)); // suppress = !allow
+  $("#cma_specialists").onchange = cma_user_input;
+
+  $("#cma_disorder").prop("checked", cma_allow_disorder);
+  $("#cma_disorder").onchange = cma_user_input;
+
   // Update all UI that dynamically changes with enabled/disabled state:
   cma_set_title();
-
   update_dynamic_UI();
-
   update_cma_labels();
+  return true;
 }
 /**************************************************************************
-  ...
+  Changes dynamic parts of the page to reflect current events and states.
 **************************************************************************/
 function update_dynamic_UI()
 {
@@ -195,10 +248,16 @@ function update_dynamic_UI()
   if (cma_user_changed) {
     $("#cma_unsaved_warning").html("<b>Warning: current values are not yet saved.</b>")
     $("#cma_unsaved_warning").show();
-  } else $("#cma_unsaved_warning").hide();
+    $("#btn_set_cma").html("<b>Save</b>"); // bold to prompt user to save.
+    global_governor_message=""; // always reset when newer message comes.
+  } else {
+    if (!global_governor_message)
+      $("#cma_unsaved_warning").hide();
+  }
 }
 /**************************************************************************
-  ...
+  1. Number labels next to sliders get updated.
+  2. Stored UI states of sliders get recored.
 **************************************************************************/
 function update_cma_labels()
 {
@@ -209,6 +268,9 @@ function update_cma_labels()
     $("#"+name+"_val_result").html("<b>"+cma_val_sliders[i] + "</b>");
     $("#"+name+"_min_result").html("<b>"+cma_min_sliders[i] + "</b>");
   }
+  $("#happy_result").html("<b>"+cma_happy_slider + "</b>");
+  cma_happy_slider = s_hpy.getValue();
+
   // Update all UI that dynamically changes with enabled/disabled state:
   cma_set_title();
   update_dynamic_UI(); // TODO: for better performance should maybe call in cma_user_input but it relies on cma_user_changed which not all buttons will set off.
@@ -222,46 +284,59 @@ function cma_user_input()
   update_cma_state();
 }
 /**************************************************************************
-  ...
+  Step one of synchronising UI state with variables recording them.
+  This is for checkboxes, then proceeds to call it for update_cma_labels.
 **************************************************************************/
 function update_cma_state()
 {
   cma_celebrate = $("#cma_celebrate").prop("checked");
+  cma_allow_specialists = !($("#cma_specialists").prop("checked")); //suppress=!allow
+  cma_allow_disorder = $("#cma_disorder").prop("checked");
   update_cma_labels();
 }
 /**************************************************************************
-  ...
+  Called when user clicks button to Enable/Disable governor.
 **************************************************************************/
 function button_pushed_toggle_cma() {
-  //var state = !(active_city['cma_enabled'])
-  //active_city['cma_enabled'] = state;
   cma_enabled = !cma_enabled;
+  cma_apply_once = false;  // a regular cma command
   request_new_cma();
-  setTimeout(create_cma_page, 2000);
+  $("#btn_set_cma").html("Save"); // unbold, latest state was already uploaded to server
+  gov_refresh_timer = new Date().getTime(); //tells show_city_dialog this happened
 }
 /**************************************************************************
-  called when user hits button to save new CMA values
+  Called when user hits button to upload new CMA values to the server.
 **************************************************************************/
 function button_pushed_cma_save() {
   cma_enabled = true;     // obviously true if requesting to turn on
+  cma_apply_once = false; // a regular cma command
   update_cma_state();     // refresh UI state vars before saving
   request_new_cma();      // send new CMA off too server
-  setTimeout(create_cma_page, 2000);
+  $("#btn_set_cma").html("Save"); // unbold, latest state was already uploaded to server
+  gov_refresh_timer = new Date().getTime(); //tells show_city_dialog this happened
 }
 /**************************************************************************
-  This is periodically called to submit and display rates, in order to 
-  avoid laggy overload and unneeded server packet sending/receiving
-**************************************************************************
-function cma_refresh()
-{
-  // only submit rates if they changed
-  if (cma_rates_changed) {
-    cma_rates_changed = false;
-    update_cma_state();
-  }
-} THIS FUNCTION WASN'T NEEDED.*/
+  Called when user hits button to apply CMA values one time without
+  altering ongoing settings (or lack thereof):
+**************************************************************************/
+function button_pushed_cma_apply() {
+  cma_enabled = true;     // stand-in "true", will revert to whatever it was
+  update_cma_state();     // refresh UI state vars before saving
+  // a special cma command; apply once without altering anything:
+  cma_apply_once = true;  
+  request_new_cma();      // send new CMA off to server
+  gov_refresh_timer = new Date().getTime(); //tells show_city_dialog this happened
+}
 /**************************************************************************
-  The title is dynamic: it displays whether CMA is enabled or disabled.
+  Lets user refresh the screen, make sure it has right values or is 
+  represented correctly.
+**************************************************************************/
+function button_pushed_refresh_cma() {
+  $("#city_governor_tab").html("");
+  show_city_governor_tab();
+}
+/**************************************************************************
+  The title is dynamic: it tells whether CMA is enabled or disabled.
 **************************************************************************/
 function cma_set_title() {
   dhtml = cma_get_status_icon()+" City Governor <b>" 
@@ -274,17 +349,17 @@ function cma_set_title() {
 function request_new_cma() {
   var cm_parameter = {};
   cm_parameter['minimal_surplus'] = [...cma_min_sliders];
-  cm_parameter['max_growth'] = true;  // no-brainer to not do extra food surplus
+  cm_parameter['max_growth'] = cma_max_growth;
   cm_parameter['require_happy'] = cma_celebrate;
-  cm_parameter['allow_disorder'] = false;   // keep default server CM behaviour
-  cm_parameter['allow_specialists'] = true; // keep default server CM behaviour
+  cm_parameter['allow_disorder'] = cma_allow_disorder;
+  cm_parameter['allow_specialists'] = cma_allow_specialists;
   cm_parameter['factor'] = [...cma_val_sliders];
-  cm_parameter['happy_factor'] = 0; // TODO: figure out what this does and set this later. **********************************************
-
+  cm_parameter['happy_factor'] = cma_happy_slider;
   var packet = {
-    "pid"       : packet_city_manager,         // !!!!!!!! need to regen or upload src/derived/webapp/javascript/packets.js !!!!!!!!!!!!!!!!!!!!!!!!!
+    "pid"       : packet_city_manager,
     "city_id"   : active_city['id'],
     "enabled"   : cma_enabled,
+    "apply_once": cma_apply_once,
     "parameter" : cm_parameter
   }
 
@@ -297,22 +372,8 @@ function request_new_cma() {
   // update some labels and enable/disable checkboxes, etc., in this tab, so that the info is visible
   // to the user in real time.  This includes any message about CMA had to release itself to user control.
 }
-
 /**************************************************************************
-  Checked box or Red X to visually indicate if CMA is on/off
-**************************************************************************/
-function cma_get_status_icon() {
-    return cma_enabled ? "&#x2705 " : "&#x274c ";
-}
-/**************************************************************************
-...
-**************************************************************************/
-function cma_get_status_text(state) {
-    return state ? "Enable" : "Disable"
-}
-
-/**************************************************************************
- Set default UI values to emulate cityturn.c::set_default_city_manager
+ Set default UI values to emulate cityturn.c::set_default_city_manager(..)
 **************************************************************************/
 function cma_set_default_city_manager() 
 {
@@ -348,7 +409,7 @@ function cma_set_default_city_manager()
   cma_val_sliders[O_GOLD]    = 2;
   cma_val_sliders[O_LUXURY]  = 0;  /* Luxury only influences happiness. */
   cma_val_sliders[O_SCIENCE] = 2;
-  cma_happy_slider = 0;
+  cma_happy_slider = pcity.size >= 3 ? 1 : 0;
   if (pcity.granary_size == pcity.food_stock) {
     cma_min_sliders[O_FOOD] = 0;
   } else {
@@ -359,4 +420,98 @@ function cma_set_default_city_manager()
   cma_min_sliders[O_GOLD] = -20;
   cma_min_sliders[O_LUXURY] = 0;
   cma_min_sliders[O_SCIENCE] = 0;
+}
+/**************************************************************************
+ Copy current state of the Governor settings (whether saved or unsaved)
+ to the clipboard, for pasting.
+**************************************************************************/
+function cma_copy_current() {
+  _cma_val_sliders = [...cma_val_sliders];
+  _cma_min_sliders = [...cma_min_sliders];
+  _cma_happy_slider = cma_happy_slider;
+  _cma_celebrate = cma_celebrate;
+  _cma_allow_disorder  = cma_allow_disorder;
+  _cma_allow_specialists = cma_allow_specialists;
+  _cma_max_growth = cma_max_growth;
+  $("#cma_unsaved_warning").html("On-screen settings copied to clipboard.")
+}
+/**************************************************************************
+ Paste the clipboard into the current state of the Governor UI.
+**************************************************************************/
+function cma_paste_clipboard() {
+  const maxval = 25;    // value sliders have max of 25
+  const min_min = -20;  // min surplus is -20
+  const max_min = 20;   // max surplus is +20
+
+  for (var i = 0; i < O_LAST; i++) {
+    s_val[i].setValue(_cma_val_sliders[i]);
+  }
+  for (var i = 0; i < O_LAST; i++) {
+    s_min[i].setValue(_cma_min_sliders[i]);
+  }
+  s_hpy.setValue(_cma_happy_slider);
+  $("#cma_celebrate").prop("checked", _cma_celebrate);
+  $("#cma_specialists").prop("checked", (!_cma_allow_specialists)); // suppress = !allow
+  $("#cma_disorder").prop("checked", _cma_allow_disorder);
+  // Update all UI that dynamically changes with enabled/disabled state:
+  cma_set_title();
+  update_dynamic_UI();
+  update_cma_labels();
+  cma_user_input();
+}
+/**************************************************************************
+  Pastes CMA clipboard into a city's CMA settings on the server.
+  Set apply_once=true if this is a temporary application,
+  set apply_once=false if this is a permanent save to server  
+**************************************************************************/
+function cma_paste_to_city_id(city_id, apply_once)
+{
+  var cm_parameter = {};
+  cm_parameter['minimal_surplus'] = [..._cma_min_sliders];
+  cm_parameter['max_growth'] = _cma_max_growth;  
+  cm_parameter['require_happy'] = _cma_celebrate;
+  cm_parameter['allow_disorder'] = _cma_allow_disorder;
+  cm_parameter['allow_specialists'] = _cma_allow_specialists;
+  cm_parameter['factor'] = [..._cma_val_sliders];
+  cm_parameter['happy_factor'] = _cma_happy_slider;
+  var packet = {
+    "pid"       : packet_city_manager,
+    "city_id"   : city_id,  // caller supplied
+    "enabled"   : true,     // has to be true for both actions
+    "apply_once": apply_once,
+    "parameter" : cm_parameter
+  }
+  send_request(JSON.stringify(packet));
+}
+/**************************************************************************
+  Buys (or attempts to buy) every production item in every selected city.
+**************************************************************************/
+function cma_all_cities(apply_once)
+{
+  // Mass send of packets to save or apply the clipboard:
+  for (var city_id in cities)  {
+    if (city_owner_player_id(cities[city_id]) == client.conn.playing.playerno) {
+      cma_paste_to_city_id(parseInt(city_id), apply_once);
+    }
+  }
+}
+/**************************************************************************
+  'Green Checked Box' or 'Red X' to visually indicate if CMA is on/off
+**************************************************************************/
+function cma_get_status_icon() {
+  return cma_enabled ? "&#x2705 " : "&#x274c ";
+}
+/**************************************************************************
+ Text to represent CMA is on or off.
+**************************************************************************/
+function cma_get_status_text(state) {
+  return state ? "Enable" : "Disable"
+}
+/**************************************************************************
+ Goes directly to view a particular city's governor.
+**************************************************************************/
+function cma_select_tab(city_id) {
+  show_city_dialog_by_id(city_id);  // open city
+  wait(300);
+  $("#ctg").click();                // click gov tab
 }

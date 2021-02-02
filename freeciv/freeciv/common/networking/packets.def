@@ -842,6 +842,7 @@ end
 PACKET_CITY_MANAGER = 139; cs
   CITY city_id;
   BOOL enabled;
+  BOOL apply_once;
   CM_PARAMETER parameter;
 end
 

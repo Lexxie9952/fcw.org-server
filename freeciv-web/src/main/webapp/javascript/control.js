@@ -1258,7 +1258,7 @@ function update_unit_order_commands()
       $("#order_disband").html("<a href='#' onclick='key_unit_disband();'><img src='/images/orders/disband_recycle.png' name='disband_button' alt='' border='0' width='30' height='30'></a>");
       // Cargo class disbands often for recycling shields, show button always, less threatening recycle version of it.
       if (client_rules_flag[CRF_MP2_C]) {
-        if (ptype['name']=="Goods" || ptype['name']=="Well-Digger" || ptype['name']=="Freight") {
+        if (ptype['name']=="Goods" || ptype['name']=="Well-Digger" || ptype['name']=="Tribesmen" || ptype['name']=="Freight") {
           $("#order_disband").show();
           var city_prod_name = get_city_production_type(pcity)['name']; 
           if (!city_prod_name) city_prod_name = "Production";
