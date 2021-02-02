@@ -1,6 +1,6 @@
 /**********************************************************************
     Freeciv-web - the web version of Freeciv. http://play.freeciv.org/
-    Copyright (C) 2009-2021  The Freeciv-web project
+    Copyright (C) 2009-2015  The Freeciv-web project
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -47,16 +47,21 @@ function show_city_governor_tab()
     $("#city_governor_tab").html("City Governor available only for domestic cities.");
     return false;
   }
-
+  if (!client_rules_flag[CRF_MP2_C]) {
+    // Temporarily disallow in normal games until vetted in development ruleset:
+    // TODO: remove this if-block in April 2021.
+    $("#city_governor_tab").html("Sorry! This ruleset does not yet support the City Governor.");
+    return false;
+  }
   // --------------------------------------------------------------------------------------------
   cma_init_data();  // Retrieve city's current cm_parameter into the UI state vars.
   const id = "#city_governor_tab";
-  var governor_tab_html = "<header><div id='cma_status' style='font-size: 120%'>"
+  var governor_tab_html = "<header><div id='cma_status' style='font-size: 150%'>"
                         + cma_get_status_icon()+" City Governor <b>" 
                         + cma_get_status_text(cma_enabled) + "d</b>.<span id='cma_help' style='float:right;'>&#x2753;</span></div><br>";
   var dhtml = "<button type='button' class='button ui-button ui-corner-all' onclick='button_pushed_toggle_cma();' id='btn_toggle_cma' title='"+cma_get_status_text(!cma_enabled)+" city governor in this city'>";
   dhtml += "<b>"+cma_get_status_text(!cma_enabled)+'</b> Governor</button></header><br>';
-  dhtml += "<form name='cma_vals' style='float: left;'><table border='0'><th style='font-size:150%'>Output Priorities</th>";
+  dhtml += "<form name='cma_vals'><table border='0'><th style='font-size:150%'>Output Priorities</th>";
   // Basic Vals:
   var pic_str = "<img style='' class='lowered_gov' src='";
   for (i=0; i<O_LAST; i++) {
@@ -65,17 +70,17 @@ function show_city_governor_tab()
     dhtml += "<td> <div id='"+name+"_val_result' style='float:left;'></div> </td></tr>"
   }
   dhtml += "</table></form>";
-  dhtml += "<br><form name='cma_min_vals' style='float: left;'><table border='0' style='color: #000000;'><th style='font-size:150%'>Minimum Surplus</th>";
+  dhtml += "<br><form name='cma_min_vals'><table border='0' style='color: #000000;'><th style='font-size:150%'>Minimum Surplus</th>";
   // Min Surplus Vals:
   for (i=0; i<O_LAST; i++) {
     const name = O_NAME[i]; // Food, Shield, Trade, Gold, etc.
     dhtml += "<tr> <td><span style='margin-left:-30px; float:right'><b>"+name+" </b>"+pic_str+O_PIC[i]+"'></td> <td><div class='horizontal dynamic-slider-control slider' id='cma-min-slider-"+name+"'></div> </td>"
     dhtml += "<td> <div id='"+name+"_min_result' style='float:left;'></div> </td></tr>"
   }
-  dhtml += "</table></form> <br>";
-  dhtml += "<div style='float: left; width: 100%;'><input type='checkbox' style='font-size:120%' onchange='cma_user_input();' id='cma_celebrate'><b>Force Celebration</b></div><br>";
-  dhtml += "<br><div id='cma_unsaved_warning'></div><br>";
-  dhtml += "<div style='float: left; width: 95%; padding: 15px; background-color: #22222211'><button type='button' class='button ui-button ui-corner-all' onclick='button_pushed_cma_save();' id='btn_set_cma' title='Saves new settings for the City Governor'><b>Save</b></button></div>";
+  dhtml += "</table></form>";
+  dhtml += "<br><input type='checkbox' style='font-size:120%' onchange='cma_user_input();' id='cma_celebrate'><b>Force Celebration</b><br>";
+  dhtml += "<br><div id='cma_unsaved_warning'></div>";
+  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='button_pushed_cma_save();' id='btn_set_cma' title='Saves new settings for the City Governor'><b>Save</b></button>";
 
   governor_tab_html += dhtml;
   $(id).html(governor_tab_html);
@@ -85,13 +90,17 @@ function show_city_governor_tab()
   +" If you set goals that your Governor can't fulfill, he resigns and passes control back to you. Use Minimum Surpluses conservatively and rely on Priorities to achieve your goals."
   +" The Force Celebrate checkbox tells your Governor to do what he can to make your people celebrate. This usually only works if you help him out with a higher luxury rate."
   +" Beware of using the Governor in some cities: you may encounter difficulties with the overlapping cities nearby. It's best to manage both overlapping cities the same way: by yourself or by Governor.";
-
-  create_cma_sliders();
-  if (cma_enabled) {
+  // These need a setup delay to avoid a mess:
+  setTimeout(function() {
+    //$("#cma_helptext").html(helpstr);
+    create_cma_sliders();
+    wait(250);
     create_cma_page();
-    create_cma_page();
-  }
+    wait(350);
+    update_cma_state();
+  },2100);
 
+  //cma_updater_interval = setInterval(cma_refresh, 500); NOT NEEDED
   return true;
 }
 /**************************************************************************
@@ -239,7 +248,18 @@ function button_pushed_cma_save() {
   request_new_cma();      // send new CMA off too server
   setTimeout(create_cma_page, 2000);
 }
-
+/**************************************************************************
+  This is periodically called to submit and display rates, in order to 
+  avoid laggy overload and unneeded server packet sending/receiving
+**************************************************************************
+function cma_refresh()
+{
+  // only submit rates if they changed
+  if (cma_rates_changed) {
+    cma_rates_changed = false;
+    update_cma_state();
+  }
+} THIS FUNCTION WASN'T NEEDED.*/
 /**************************************************************************
   The title is dynamic: it displays whether CMA is enabled or disabled.
 **************************************************************************/
@@ -247,13 +267,6 @@ function cma_set_title() {
   dhtml = cma_get_status_icon()+" City Governor <b>" 
         + cma_get_status_text(cma_enabled) + "d</b>."
   $("#cma_status").html(dhtml);
-
-  if (cma_enabled) {
-    $("#btn_toggle_cma").text("Disable Governor");
-  } else {
-    $("#btn_toggle_cma").text("Enable Governor");
-  }
-
 }
 /**************************************************************************
   Sends new CMA parameters to the server, populated from the UI states.
@@ -278,6 +291,8 @@ function request_new_cma() {
   send_request(JSON.stringify(packet));
   cma_user_changed = false;
 
+  //console.log("Sending CMA packet:")
+  //add_client_message(JSON.stringify(packet));
   // TODO:  packet info that comes back to update city info, will, if the city_id matches active_city,
   // update some labels and enable/disable checkboxes, etc., in this tab, so that the info is visible
   // to the user in real time.  This includes any message about CMA had to release itself to user control.
