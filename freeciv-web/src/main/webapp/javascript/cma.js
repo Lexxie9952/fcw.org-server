@@ -89,7 +89,7 @@ function show_city_governor_tab()
   create_cma_sliders();
   if (cma_enabled) {
     create_cma_page();
-    update_cma_state();
+    create_cma_page();
   }
 
   return true;
