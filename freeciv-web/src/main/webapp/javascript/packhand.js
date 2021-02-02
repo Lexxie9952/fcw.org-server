@@ -457,6 +457,11 @@ function handle_city_info(packet)
     tiles[packet['tile']]['worked'] = packet['id'];
   }
 
+  console.log("packet['cma_enabled']: " + packet['cma_enabled']);
+  if (packet['cma_enabled'] && active_city != null && active_city['id'] == packet['id']) {
+    update_cma_state();
+  }
+
   /* Stop the processing here. Wait for the web_city_info_addition packet.
    * The processing of this packet will continue once it arrives. */
 }
