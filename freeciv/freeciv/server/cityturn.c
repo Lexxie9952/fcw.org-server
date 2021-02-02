@@ -447,7 +447,7 @@ ABOVE removed Jan2021 for server-side CMA patch */
 
       notify_player(city_owner(pcity), city_tile(pcity),
                     E_CITY_CMA_RELEASE, ftc_server,
-                    _("❌❌ City governor of %s failed to meet goals and resigned."),
+                    _("❌ Governor of %s failed to meet goals and resigned."),
                     city_link(pcity));
     }
     /* Drop surpluses and try again. */

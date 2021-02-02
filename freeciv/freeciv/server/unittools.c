@@ -3755,7 +3755,7 @@ static void wakeup_neighbor_sentries(struct unit *punit)
 
               notify_player(unit_owner(penemy), unit_tile(punit),
                     E_UNIT_ORDERS, ftc_server,
-                    _("👁️ %s sentry (%d,%d) saw %s %s moving at (%d,%d)"),
+                    _("👁️ %s (%d,%d) saw %s %s moving at (%d,%d)"),
                     unit_link(penemy),
                     stile_x, stile_y, 
                     nation_rule_name(nation_of_unit(punit)), 
