@@ -4165,7 +4165,7 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
     notify_player(unit_owner(pwinner), unit_tile(pwinner),
                   E_UNIT_WIN_DEF, ftc_server,
                   /* TRANS: "Your Cannon ... the Polish Destroyer." */
-                  _("⚠️ Your %s survived the pathetic attack from the %s %s."),
+                  _("💥 Your %s survived the pathetic attack from the %s %s."),
                   winner_link,
                   nation_adjective_for_player(unit_owner(ploser)),
                   loser_link);
