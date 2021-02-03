@@ -553,7 +553,7 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
 {
   struct city *pcity = player_city_by_number(pplayer, city_id);
 
-
+/* debug
       notify_player(city_owner(pcity), city_tile(pcity),
             E_CITY_PRODUCTION_CHANGED, ftc_server,
             _("handle_city_manager received CMA parameter:\n"
@@ -574,6 +574,7 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
               parameter.factor[0],parameter.factor[1],parameter.factor[2],parameter.factor[3],parameter.factor[4],parameter.factor[5],
               parameter.minimal_surplus[0],parameter.minimal_surplus[1],parameter.minimal_surplus[2],parameter.minimal_surplus[3],
                 parameter.minimal_surplus[4],parameter.minimal_surplus[5]);
+                */
 
   if (NULL == pcity) {
     /* Probably lost. */

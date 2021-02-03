@@ -310,6 +310,7 @@ static void set_default_city_manager(struct cm_parameter *cmp,
   cmp->require_happy = FALSE;
   cmp->allow_disorder = FALSE;
   cmp->allow_specialists = TRUE;
+  cmp->max_growth = FALSE;
 
   /* We used to look at pplayer->ai.xxx_priority to determine the values
    * to be used here.  However that doesn't work at all because those values
@@ -449,6 +450,11 @@ ABOVE removed Jan2021 for server-side CMA patch */
                     E_CITY_CMA_RELEASE, ftc_server,
                     _("❌ Governor of %s failed to meet goals and resigned."),
                     city_link(pcity));
+      
+      // Don't keep the solution of an incompetent governor.
+      set_default_city_manager(&cmp, pcity); // new func for setting default
+      cmr = cm_result_new(pcity);
+      cm_query_result(pcity, &cmp, cmr, FALSE);
     }
     /* Drop surpluses and try again. */
     cmp.minimal_surplus[O_FOOD] = 0;
@@ -475,6 +481,25 @@ ABOVE removed Jan2021 for server-side CMA patch */
   }
   fc_assert_ret(cmr->found_a_valid);
 
+  bool incompetent_governor = false;
+  if (pcity->cm_parameter) {
+    for (int o=0; o<O_LAST; o++) {
+      if (cmr->surplus[o] < pcity->cm_parameter->minimal_surplus[o]) {
+        incompetent_governor = true;
+      }
+    }
+  }
+  if (incompetent_governor) {
+    notify_player(city_owner(pcity), city_tile(pcity),
+                  E_CITY_CMA_RELEASE, ftc_server,
+                  _("❌ Malfeasant Governor was caught in %s: he failed meeting his goals without reporting it!"
+                  " Immediate change of tile allocation is recommended. Please report on %%%%Discord."),
+                  city_link(pcity));
+    if (pcity->cm_parameter) {
+      free(pcity->cm_parameter);
+      pcity->cm_parameter = NULL;
+    }
+  }  
   apply_cmresult_to_city(pcity, cmr);
 
   if (pcity->server.debug) {

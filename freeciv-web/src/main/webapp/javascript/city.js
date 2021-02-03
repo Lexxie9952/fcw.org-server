@@ -3845,10 +3845,12 @@ function cma_clipboard_macro(event, called_by_CMA)
     }
     retain_checkboxes_on_update = true;
     if (count) {
-      if (count>7) cities_string = ""+count+" cities, "
-      cities_string = "Ordered Governor to refresh tiles in <font color='yellow'>"+cities_string
+      if (count>5) cities_string = ""+count+" cities, "
+      cities_string = "&#x1F539; Ordered Governor to refresh tiles in <font color='yellow'>"+cities_string
                     + "</font>using existing Governor settings.";
-      add_client_message(cities_string);
+      // Emulate incoming server packet for CMA, so it is intercepted and processed properly.              
+      packet = {"pid":25,"message":cities_string, "event":E_CITY_CMA_RELEASE};
+      add_chatbox_text(packet);
       if (called_by_CMA) {
         $("#cma_unsaved_warning").html(cities_string);
         global_governor_message = cities_string;

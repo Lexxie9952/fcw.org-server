@@ -5121,9 +5121,9 @@ bool unit_activity_handling_targeted(struct unit *punit,
                   punit->moves_left -= pstats.iPillage_moves * SINGLE_MOVE; //reduce moves left
                 }
                 if (punit->moves_left<0) punit->moves_left = 0;
-                punit->activity_count = 1000;  // force unit_activity_complete to iPillage (instant-finish activity)
-                unit_activity_complete(punit);
-                unit_did_action(punit); // iPillage, just like unit_move, needs an immediate real-time uwt timestamp.
+                  punit->activity_count = 1000;  // force unit_activity_complete to iPillage (instant-finish activity)
+                  unit_activity_complete(punit);
+                  unit_did_action(punit); // iPillage, just like unit_move, needs an immediate real-time uwt timestamp.
               } 
 /*** END SUCCESSFUL iPILLAGE BLOCK ***/
 /*** BEGIN FAILED iPILLAGE BLOCK ***/

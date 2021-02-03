@@ -30,9 +30,11 @@ var s_hpy = " ";
 var cma_celebrate = false;
 var cma_allow_disorder = false; 
 var cma_allow_specialists = true;
-var cma_max_growth = false;
 var cma_apply_once = false;
 var cma_enabled = false;
+// current implementation allowed starving, with food min_surplus of 20,
+// even when positive food was available:
+var cma_max_growth = false;  
 
 // Governor Clipboard for copy/paste:
 var _cma_val_sliders = [1,0,0,0,0,0];
@@ -180,8 +182,8 @@ function cma_init_data()
     cma_allow_specialists = pcity['cm_parameter']['allow_specialists'];
     cma_allow_disorder = pcity['cm_parameter']['allow_disorder'];
 
-    // Currently not changeable, but always on:
-    cma_max_growth = pcity['cm_parameter']['max_growth'];
+    //FIX LATER: Deveopment testing, allow comparing results with it on vs off.
+    cma_max_growth = cma_allow_disorder; 
   }
   else {
     cma_set_default_city_manager(); // sets UI vars to server's CMA defaults
@@ -412,7 +414,7 @@ function cma_set_default_city_manager()
   cma_celebrate = false;
   cma_allow_disorder = false; 
   cma_allow_specialists = true;
-  cma_max_growth = true; // Don't overdo food surplus if city grows @ TC
+  cma_max_growth = false; // Don't overdo food surplus if city grows @ TC
   
   if (pcity.size > 1) {
     if (pcity.size <= game_info.notradesize) {
