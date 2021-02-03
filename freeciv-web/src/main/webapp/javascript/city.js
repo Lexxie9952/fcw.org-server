@@ -3645,7 +3645,7 @@ function update_city_screen()
 
   if (power_cma==true) {
     var power_panel =
-      "<button title='Click: Save CMA clipboard to selected.\nCTRL-Click: Apply CMA clipboard to selected.' class='button ui-button ui-corner-all ui-widget' style='padding:1px; margin:1px; font-size:100%; float:left;' onclick='cma_clipboard_macro(event);'>&#x1F4CB;</button>";
+      "<button title='Click: Refresh tile arrangement in selected cities.\nCTRL-Click: Save Governor Clipboard to selected cities.\nShift-Click: Use Governor Clipboard to arrange tiles, without saving.' class='button ui-button ui-corner-all ui-widget' style='padding:1px; margin:1px; font-size:100%; float:left;' onclick='cma_clipboard_macro(event,false);'>&#x1F4CB; "+count+" Cities</button>";
     $("#cities_title_cma_panel").html(power_panel);
   }
   
@@ -3789,22 +3789,76 @@ function toggle_city_row_selections(event)
 }
 
 /**************************************************************************
-  Buys (or attempts to buy) every production item in every selected city.
+  Depending on parameters,
+  1. Auto-arranges tiles in selected cities using the CMA Clipboard,
+  2. Saves the CMA Clipboard as a new Governor in all selected cities,
+  3. Auto-arranges tiles in selected cities, which will either use 
+     their Governor if enabled, or the server's default CMA if not.
+  ...   
+  'called_by_CMA' parameter means the CMA tab called this function
+  to auto-arrange tiles in all cities with governors, instead of all
+  cities that were selected in the Cities List.
 **************************************************************************/
-function cma_clipboard_macro(event)
+function cma_clipboard_macro(event, called_by_CMA)
 {
-  // Normal click is save, ctrl-click is apply once.
-  var apply_once = (event.ctrlKey) ? true : false;
-  // Mass send of packets to save or apply the clipboard:
-  for (var city_id in cities)  {
-    if ($("#cb"+city_id).is(":checked")) {
-      cma_paste_to_city_id(parseInt(city_id), apply_once);
-      city_checkbox_states[city_id] = true;
-    } else city_checkbox_states[city_id] = false;
-  }
-  retain_checkboxes_on_update = true;
-}
+  var apply_once = false, save = false;
+  if (!event) event = new Event(""); // avoid null exceptions if called by CMA tab.
 
+  // City_List was caller, Shift-Click to apply Clipboard settings without Save:
+  if (event.ctrlKey) save = true;
+  // City List was caller, CTRL-Click to save Clipboard as governor:
+  else if (event.shiftKey) apply_once = true;
+  // City List was caller with normal-Click || CMA tab called this function:
+  var autoarrange = !(apply_once || save) || called_by_CMA;
+
+  // Arrange tiles according to the CMA clipboard in all selected cities:
+  if (apply_once || save) {
+    for (var city_id in cities)  {
+      if ($("#cb"+city_id).is(":checked")) {
+        cma_paste_to_city_id(parseInt(city_id), apply_once);
+        city_checkbox_states[city_id] = true;
+      } else city_checkbox_states[city_id] = false;
+    }
+    retain_checkboxes_on_update = true;
+    return;
+  }
+  // Refresh tiles according to their current CMA (or server default CMA):
+  else if (autoarrange) {
+    var cities_string="";
+    var count = 0;
+    for (var city_id in cities)  {
+       // if City List was caller, selected cities only:
+      if ($("#cb"+city_id).is(":checked")
+        // if CMA tab was caller, all governed cities:
+        || (called_by_CMA && cities[city_id].cma_enabled) 
+         ) {
+        // Emulates clicking the city centre, causing auto-arrange tiles:
+        var packet = {"pid"     : packet_city_make_specialist,
+                      "city_id" : parseInt(city_id),
+                      "tile_id" : city_tile(cities[city_id]).index
+                     };
+        send_request(JSON.stringify(packet));
+        city_checkbox_states[city_id] = true;
+        count++;
+        cities_string += cities[city_id].name+", "
+      } else city_checkbox_states[city_id] = false;
+    }
+    retain_checkboxes_on_update = true;
+    if (count) {
+      if (count>7) cities_string = ""+count+" cities, "
+      cities_string = "Ordered Governor to refresh tiles in <font color='yellow'>"+cities_string
+                    + "</font>using existing Governor settings.";
+      add_client_message(cities_string);
+      if (called_by_CMA) {
+        $("#cma_unsaved_warning").html(cities_string);
+        global_governor_message = cities_string;
+      }
+    } else {
+      add_client_message("&#x26A0;&#xFE0F; <b>Failed:</b> no cities were selected for tile refresh.");
+      global_governor_message = "&#x26A0;&#xFE0F; <b>Failed:</b> no goverened cities were found.";
+    }
+  }
+}
 /**************************************************************************
   Buys (or attempts to buy) every production item in every selected city.
 **************************************************************************/

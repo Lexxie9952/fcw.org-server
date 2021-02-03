@@ -47,6 +47,37 @@ var cma_user_changed = false;         // state var for whether user made any cha
 var gov_refresh_timer = 0;
 var global_governor_message = "";     // for intercepting and displaying CMA messages from server
 
+
+const gov_help =
+"<b>BASICS:</b><br>City Governors help you manage cities. When city population changes, they arrange the citizens to work tiles in"
++" order to best achieve the goals of the On-Screen Settings. If told, the Governor can change citizens to specialists and prevent disorder."
++" By saving the On-Screen Settings, you order your Governor what kind of output to achieve. There are two kinds"
++" of sliders: (<b>1</b>) <b>Minimum Surplus</b> orders a minimum floor to achieve. For example, {Food=3} tells the Governor to gather"
++" at least +3 food. (<b>2</b>) <b>Output Priorities</b> tell the Governor which outputs to prioritize. For example,"
++" {Science=2, Shield=1} values bulbs at double the value of shields. The Governor would select shields over bulbs only in cases where he gets more than 2"
++" shields in exchange for 1 bulb. If you set goals that your Governor can't fulfill, he resigns and passes control back to you. In general,"
++" use 'Minimum Surpluses' as a fail-safe floor, and 'Output Priorities' to target preferred output.<br>"
++" The <b>Force Celebrate</b> option orders your Governor to achieve celebration. Usually this needs a higher "
++" national Luxury rate. You can less forcefully express a preference to celebrate by using the Happy slider.<br><b>NOTE:</b> In cities with"
++" overlapping tiles, it's best to avoid competing with your Governor: manage both cities manually, or both via the Governor.<br><br>"
++" <b>ADVANCED:</b><br><b>I. <u>TILE REFRESH</u>.</b> The Governor only re-arranges tiles when population changes, or a foreign military unit occupies"
++" a worked tile. The City Governor Tab can help you optimally refresh the tile arrangement"
++" at other important times, such as: (<b>1</b>) New tile improvements"
++" finished, such as Irrigation. (<b>2</b>) A new Building changes output bonuses. (<b>3</b>) Pollution."
++"  (<b>4</b>) Change in tax rates. (<b>5</b>) The turn before growth, to collect other resources instead of exceeding"
++" the food surplus needed to grow.<br>You can manually request cities to refresh tiles: (<b>a</b>) In single cities, refresh tiles with the On-Screen settings by clicking"
++" <b>Set Once</b>. In the city tile view, clicking the city-center-tile will also auto-arrange, using the existing Governor settings. (<b>2</b>) You can click <b>Refresh All</b> to make all cities refresh their tiles according to their saved City Governor Settings."
++" (<b>c</b>) In the City List, click the upper-left Clipboard button to refresh tiles in selected cities.<br>"
++" <b>II. <u>COPY/PASTE CLIPBOARD</u>.<br></b> You may want to apply specific City Governor Settings to multiple cities."
++" Advanced buttons let you do this. (<b>1</b>) <b>Copy</b> copies On-Screen Settings to the Clipboard."
++" (<b>2</b>) <b>Paste</b> pastes the Clipboard to On-Screen Settings. (<b>3</b>) <b>Set Once</b> tells the Governor to refresh tiles according to"
++" On-Screen Settings, <i>without</i> changing his current saved orders. (<b>4</b>) <b>Set All</b> dangerously tells ALL Governors in ALL Cities to"
++" refresh their tiles according to the On-Screen Settings, <i>without</i> changing their current saved orders. (<b>5</b>) <b>Save All</b> dangerously"
++" tells ALL Governors in ALL Cities to immediately adopt the On-Screen Settings as their new orders. (<b>6</b>) Instead of 'Set All'"
++" or 'Save All', you can selectively Set or Save multiple cities via the upper-left Clipboard in the City List: (<b>a</b>) SHIFT-CLICK to <b>set</b>"
++" selected cities to Clipboard Settings <i>without</i> changing orders. (<b>b</b>) CTRL-CLICK to <b>save</b> the Clipboard Settings to every selected city."
++" <b>NOTE:</b> Be careful with advanced macro buttons! It's easy to confuse multiple origins (Clipboard or On-Screen Settings) and multiple destinations"
++" (interim order, permanent order; one city, some cities, all cities, etc.)";
 /**************************************************************************
 Init Governor tab - returns true if the tab was able to generate
 **************************************************************************/
@@ -73,13 +104,16 @@ function show_city_governor_tab()
   const id = "#city_governor_tab";
   var dhtml = "<header><div id='cma_status' style='font-size: 150%'>"
                         + cma_get_status_icon()+" City Governor <b>" 
-                        + cma_get_status_text(cma_enabled) + "d</b><br><span style='float:right'>?</span></div><header>";
+                        + cma_get_status_text(cma_enabled) + "d</b><br></div><header>";
   // Toggle enable/disable governor button:
   dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='button_pushed_toggle_cma();' id='btn_toggle_cma' title='"+cma_get_status_text(!cma_enabled)+" city governor in this city'>";
   dhtml += "<b>"+cma_get_status_text(!cma_enabled)+"</b></button>";
   // Refresh screen button:
-  dhtml +="<button type='button' class='button ui-button ui-corner-all' onclick='button_pushed_refresh_cma();' id='btn_refresh_cma'>";
+  dhtml +="<button type='button' class='button ui-button ui-corner-all' onclick='button_pushed_refresh_cma();' id='btn_refresh_cma' title='Reset or refresh the On-Screen Settings back to the saved state of the City Governor Settings.'>";
   dhtml += "Reload</button>";
+  // Help button:
+  dhtml +="<button type='button' class='button ui-button ui-corner-all' style='float:right' onclick='show_governor_help();' title='How to use City Governors'>";
+  dhtml += "Help</button>";
 
   // Main slider panel:
   dhtml += "<form name='cma_vals'><table border='0'><th style='font-size:150%'>Output Priorities</th>";
@@ -106,30 +140,24 @@ function show_city_governor_tab()
     dhtml += "<td> <div id='"+name+"_min_result' style='float:left;'></div> </td></tr>"
   }
   dhtml += "</table></form>";
-  dhtml += "<br><button type='button' class='button ui-button ui-corner-all' onclick='button_pushed_cma_save();' id='btn_set_cma' title='Send these orders to the City Governor'>Save</button>";
-  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='button_pushed_cma_apply();' id='btn_apply_cma' title='Set city to these orders now, but not permanently.'>Set Once</button>";
-  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='cma_copy_current();' title='Copies the current on-screen settings to clipboard.'>Copy</button>";
-  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='cma_paste_clipboard();' title='Pastes from clipboard into the current Governor settings.'>Paste</button>";
-  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='cma_all_cities(true);' title='Sets all cities to copied clipboard settings, but not permanently.'>&#x26A0;Set All</button>";
-  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='cma_all_cities(false);' title='Saves all cities to copied clipboard settings, permanently.'>&#x26A0;Save All</button>";
+  dhtml += "<br><button type='button' class='button ui-button ui-corner-all' onclick='button_pushed_cma_save();' id='btn_set_cma' title='Save On-Screen Settings as the new City Governor Setttings for this city.'>Save</button>";
+  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='button_pushed_cma_apply();' id='btn_apply_cma' title='Set city tiles to match On-Screen Settings without changing the current City Governor Settings.'>Set Once</button>";
+  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='cma_copy_current();' title='Copy On-Screen Settings to Clipboard.'>Copy</button>";
+  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='cma_paste_clipboard();' title='Paste Clipboard to the On-Screen Settings.'>Paste</button>";
+  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='cma_all_cities(true);' title='Set tiles in all cities to match the Clipboard, without changing City Governor Settings.'>&#x26A0;&#xFE0F;Set All</button>";
+  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='cma_all_cities(false);' title='Paste and save Clipboard as the new City Governor Settings, for all cities.'>&#x26A0;&#xFE0F;Save All</button>";
+  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='cma_clipboard_macro(null,true);' title='Auto-arrange tiles in all cities with a Governor'>&#x26A0;&#xFE0F;Refresh All</button>";
 
   dhtml += "<div id='cma_unsaved_warning'>"+global_governor_message+"</div>";
 
   $(id).html(dhtml);
 
-  var helpstr = "The City Governor helps manage cities. It deploys citizens on the city's free tiles to regulate output. It can change citizens to specialists, if needed. The governor has another ability: it can try to prevent disorder."
-  +" You can tell your Governor what kind of output you want. There are two kinds of sliders: On the bottom, you set a Minimum Surplus for each kind of output; e.g. Gold=3 tells the Governor to earn at least 3 gold more than it needs for building upkeep. The top sliders define preference for one kind of output over others: setting Shield=1,Science=3 means you value 1 bulb as equal to 3 shields."
-  +" If you set goals that your Governor can't fulfill, he resigns and passes control back to you. Use Minimum Surpluses conservatively and rely on Priorities to achieve your goals."
-  +" The Force Celebrate checkbox tells your Governor to do what he can to make your people celebrate. This usually only works if you help him out with a higher luxury rate."
-  +" Beware of using the Governor in some cities: you may encounter difficulties with the overlapping cities nearby. It's best to manage both overlapping cities the same way: by yourself or by Governor.";
   // These need a setup delay to avoid a mess:
   setTimeout(function() {
-    //$("#cma_helptext").html(helpstr);
+    //$("#cma_helptext").html(gov_help);
     create_cma_sliders();
-    wait(350);
-    if (!create_cma_page()) return false; // exit if unable to create page.
-    wait(250);
-    update_cma_state();
+    setTimeout(function() {if (!create_cma_page()) return false;},350);
+    setTimeout(update_cma_state,600); // 350+250=600
   },2100);
 
   //cma_updater_interval = setInterval(cma_refresh, 500); NOT NEEDED
@@ -482,6 +510,13 @@ function cma_paste_to_city_id(city_id, apply_once)
     "parameter" : cm_parameter
   }
   send_request(JSON.stringify(packet));
+}
+/**************************************************************************
+ ...
+**************************************************************************/
+function show_governor_help()
+{
+  show_dialog_message("Help",gov_help);
 }
 /**************************************************************************
   Buys (or attempts to buy) every production item in every selected city.
