@@ -619,6 +619,7 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
       if (!pcity->cm_parameter) {
         // wasn't enabled, so create a new parameter for this city.
         pcity->cm_parameter = fc_calloc(1, sizeof(struct cm_parameter));
+        // There will be no backup paramter because was_enabled will be false.
       } else {
          // was enabled: remember that fact, and how it used to be so we can re-apply it after:
         was_enabled = true;
@@ -629,26 +630,69 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
       cm_copy_parameter(pcity->cm_parameter, &parameter);
       auto_arrange_workers(pcity);
 
-      // CMA wasn't enabled so keep it that way
+      // Handle all the permutations of accepted/rejected parameter based on former
+      // state of the city:
+
+      // Cases where the city had no former CMA:
       if (!was_enabled) {
+         /* CASE 1. CMA wasn't enabled and temporary order was accepted. Disable 
+            the "virtual temporary" CMA while thanking it for arranging our tiles */
          if (pcity->cm_parameter) {
           free(pcity->cm_parameter);
           pcity->cm_parameter = NULL;
+          send_city_info(pplayer, pcity);
+          notify_player(city_owner(pcity), city_tile(pcity),
+                      E_CITY_CMA_RELEASE, ftc_server,
+                      _("🔹 %s, which has no Governor, has accepted your interim orders."),
+                      city_link(pcity));
+          return;
+        }
+        /* CASE 2: CMA wasn't enabled and temporary order was rejected.
+           Help player to make sense of what happened. */ 
+        else {
+          send_city_info(pplayer, pcity);
+          notify_player(city_owner(pcity), city_tile(pcity),
+                      E_CITY_CMA_RELEASE, ftc_server,
+                      _("🔹 (Interim Orders for %s were not attainable.)"),
+                      city_link(pcity));
+          return;
         }
       }
-      // CMA was enabled before, restore everything exactly how it used to be: 
+      /* CMA was enabled before: undo virtual temporary cm_parameter and restore 
+         everything how it used to be: */
       else {
-        cm_copy_parameter(pcity->cm_parameter, &backup_parameter);
-        sync_cities();
-      }
-
-      send_city_info(pplayer, pcity);
-      
-      notify_player(city_owner(pcity), city_tile(pcity),
-                  E_CITY_CMA_RELEASE, ftc_server,
-                  _("🔹 Interim orders sent to Governor of %s."),
-                  city_link(pcity));      
+        /* CASE 3. CMA was enabled before and if it is still enabled, it means 
+           temporary orders were accepted. */
+        if (pcity->cm_parameter) {
+          // Restore the old parameter  
+          cm_copy_parameter(pcity->cm_parameter, &backup_parameter);
+          sync_cities();
+          send_city_info(pplayer, pcity);
+          notify_player(city_owner(pcity), city_tile(pcity),
+                      E_CITY_CMA_RELEASE, ftc_server,
+                      _("🔹 Interim orders accepted by the Governor of %s."),
+                      city_link(pcity));
+          return;
+        }
+        /* CASE 4. CMA was enabled before and now it's disabled. This means the
+           city released the virtual temporary governor and disabled the city's
+           CMA. Clean up and restore everything back to sensibility. */  
+        else { 
+            /* Construct the backup cm_parameter as if it's the creation of a whole
+              new Governor. */
+            if (!pcity->cm_parameter) {
+              pcity->cm_parameter = fc_calloc(1, sizeof(struct cm_parameter));
+            }
+            cm_copy_parameter(pcity->cm_parameter, &backup_parameter);
+            auto_arrange_workers(pcity); // Back to how we were before failing 
+            sync_cities();
+            send_city_info(pplayer, pcity);
+            notify_player(city_owner(pcity), city_tile(pcity),
+                      E_CITY_CMA_RELEASE, ftc_server,
+                      _("🔹 Failed interim orders means the old Governor of %s was re-hired."),
+                      city_link(pcity));
+            return;
+        }
+      }      
   }
-
-  return;
 }

@@ -2197,7 +2197,7 @@ void cm_init_parameter(struct cm_parameter *dest)
   dest->require_happy = FALSE;
   dest->allow_disorder = FALSE;
   dest->allow_specialists = TRUE;
-  dest->max_growth = FALSE;
+  dest->max_growth = TRUE; // LOL, someone thought FALSE was more sane than TRUE
 }
 
 /************************************************************************//**
