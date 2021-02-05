@@ -1702,7 +1702,7 @@ reqs           =
     }
 build_time     = 3
 removal_time   = 0
-native_to      = "Land", "LandAirSea", "LandNoKill", "Trireme", "Cargo", "Balloon", "Zeppelin", "RiverShip"
+native_to      = "Land", "LandRoad", "LandAirSea", "LandNoKill", "Trireme", "Cargo", "Balloon", "Zeppelin", "RiverShip"
 ;hidden_by      = ""
 flags          = "NativeTile", "AutoOnCityCenter"
 helptext       = _("\
@@ -1713,7 +1713,8 @@ Quays are structures on both sides of rivers, where boats dock parallel to the\
  Building. Stepping from a road onto a Quay uses a full move point: the time needed\
  to load up and use its infrastructure. Any unit already on a Quay can immediately\
  step onto connecting roads at no penalty. (Cargo units must first be unloaded by\
- the transport carrying them.)\
+ the transport carrying them.) A quay can equally be placed on a canal and will\
+ behave the same as on a river.\
 "), _("
 TIP: Quays can boost transportational logistics for ancient civilisations who have\
  built on rivers. Don't be tempted to make too many Quays. The unloading and movement\

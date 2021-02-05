@@ -1746,7 +1746,7 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "NonMil",       "Local", TRUE
-      "MinMoveFrags", "1",                 "Local", TRUE
+;      "MinMoveFrags", "1",             "Local", TRUE  ; no need to prevent the activity from starting
       ;NonMil = don't let ability to do Hideouts 'cause' ability to clean pollution
     }
 [actionenabler_clean_fallout]
@@ -1755,7 +1755,7 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "NonMil",       "Local", TRUE
-      "MinMoveFrags", "1",                 "Local", TRUE
+;      "MinMoveFrags", "1",                 "Local", TRUE
       ;NonMil = don't let ability to do Hideouts 'cause' ability to clean fallout
     }
 
