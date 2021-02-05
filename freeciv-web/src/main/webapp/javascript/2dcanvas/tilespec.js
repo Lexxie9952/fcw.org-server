@@ -333,7 +333,19 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
       // Due to visibility difficulty, city tiles ALWAYS show highlighted pollution
       if (pcity != null) {
         if (polluted) sprite_array.push({"key" : "grid.pollute_ring"}); //ring under city "wraps" around it
+        
+        var layer_sprite = get_city_fortifications_underlay_sprite(pcity);   // underlays (coastal defence, fortifications)
+        if (layer_sprite) sprite_array.push(layer_sprite);
+        layer_sprite = get_city_coastal_underlay_sprite(pcity);
+        if (layer_sprite) sprite_array.push(layer_sprite);
+
         sprite_array.push(get_city_sprite(pcity));                      //city
+        
+        layer_sprite = get_city_fortifications_overlay_sprite(pcity);  // overlays (coastal defence, fortifications)
+        if (layer_sprite) sprite_array.push(layer_sprite);
+        layer_sprite = get_city_coastal_overlay_sprite(pcity);
+        if (layer_sprite) sprite_array.push(layer_sprite);
+        
         if (polluted) sprite_array.push({"key" : "grid.pollute_icon"}); //pollution icon clearly over top
 	      if (pcity['unhappy']) {
           sprite_array.push({"key" : "city.disorder"});
@@ -1450,7 +1462,38 @@ function get_unit_activity_sprite(punit)
 
   return null;
 }
+function get_city_coastal_overlay_sprite(pcity) {
+  // LAYER THREE: Overlays
+  if (pcity['walls'] & 2) {
+    return {"key": "city.coastal_overlay", "offset_x" : -4, "offset_y" : -24};
+  }
+  return null; // no overlay.
+}
+function get_city_coastal_underlay_sprite(pcity) {
+  // LAYER ONE: Underlays
+  if (pcity['walls'] & 2) {
+    return {"key": "city.coastal_underlay", "offset_x" : -4, "offset_y" : -24};
+  }
+  return null; // no underlay.
+}
+function get_city_fortifications_overlay_sprite(pcity) {
+  // LAYER THREE: Overlays
+  if ((pcity['walls'] & 4) && !(pcity['walls'] & 1)) {
+    // !(&1) means, don't show if there are also City Walls
+    return {"key": "city.fortifications_overlay", "offset_x" : -4, "offset_y" : -24};
+  }
+  return null; // no overlay.
+}
+function get_city_fortifications_underlay_sprite(pcity) {
+  // LAYER ONE: Underlays
+      // !(&1) means, don't show if there are also City Walls
+  if ((pcity['walls'] & 4) && !(pcity['walls'] & 1)) {
+    return {"key": "city.fortifications_underlay", "offset_x" : -4, "offset_y" : -24};
+  }
+  return null; // no underlay.
+}
 
+ /*
 /****************************************************************************
   Return the sprite in the city_sprite listing that corresponds to this
   city - based on city style and size.
@@ -1474,7 +1517,7 @@ function get_city_sprite(pcity)
     size = 4;
   }
 
-  var city_walls = pcity['walls'] ? "wall" : "city";
+  var city_walls = (pcity['walls'] & 1) ? "wall" : "city";
 
   var tag = city_rule['graphic'] + "_" + city_walls + "_" + size;
   if (sprites[tag] == null) {

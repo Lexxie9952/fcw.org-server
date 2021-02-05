@@ -296,6 +296,36 @@ City Walls give a 3x bonus to ALL units in a City against attacks from\
  the odds of success are halved.\
 ")
 
+[building_fortifications]
+name		= _("Fortifications")
+genus		= "Improvement"
+flags		= "VisibleByOthers"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Masonry", "Player"
+    }
+graphic	= "b.city_walls"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 35
+upkeep		= 0
+sabotage	= 75
+sound		= "b_city_walls"
+sound_alt	= "b_generic"
+helptext	= _("\
+Fortifications give a 1.75x bonus to ALL units in a City against attacks from Land\
+ units. However, they have no bonus against Cannons or any unit upgraded therefrom.\
+ Fortifications prevent population loss when a defending unit is destroyed.\n\
+ Fortifications are a combination of palisades, trenches, shorter walls, and earthen\
+ bulwarks; thus they are not an accessible target to Siege Rams. If an enemy tries\
+ to sabotage Fortifications, the odds of success are 75% of the normal odds for other\
+ sabotage targets. In history, when more advanced cities chose to upgrade their\
+ first Fortifications to City Walls, they built them beyond the outside perimeter\
+ of the original defense. Thus, Fortifications give no bonus if City Walls are in place.\
+")
+
 [building_coastal_defense]
 name		= _("Coastal Defense")
 genus		= "Improvement"
@@ -1181,7 +1211,6 @@ genus		= "SmallWonder"
 flags		= "SaveSmallWonder"
 reqs	=
     { "type", "name", "range"
-      "Tech", "Masonry", "Player"
     }
 graphic	= "b.palace"
 graphic_alt	= "-"

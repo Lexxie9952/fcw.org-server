@@ -603,7 +603,7 @@ Veteran_Combat
     Increases the chance of units of this type becoming veteran after combat 
     by amount percent.
 
-Visible_Wall
+Visible_Walls
     Instruct client to show specific buildings version of the city graphics.
     Zero or below are considered normal city graphics.
 

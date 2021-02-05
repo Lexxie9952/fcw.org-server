@@ -159,5 +159,9 @@ tiles = { "row", "column", "tag"
  9,  7, "city.postmodern_wall_2"
  9,  8, "city.postmodern_wall_3"
  9,  9, "city.postmodern_wall_4"
-
+ ;Lexxie
+ 10, 0, "city.coastal_overlay"
+ 10, 1, "city.coastal_underlay"
+ 10, 2, "city.fortifications_overlay"
+ 10, 3, "city.fortifications_underlay"
 }

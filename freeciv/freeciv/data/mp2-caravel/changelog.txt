@@ -149,6 +149,8 @@ Capturable commerce units can't become uncapturable just by carrying Goods or be
    Put another unit_type with them. This prevents mere cargo from making commerce units immune to capture.  Cargo becomes lost in capture 
    event: e.g., Caravan carrying goods gets captured. Goods are lost, Caravan transfers ownership.
 Tribesmen gain 1 HP and can fight back. A1D1 HP6. It might be just enough for 2 of them to fight off 1 intruder unit, if one dies ;)
+Coastal Defense is visible without middle-clicking for city info.
+Masonry is not needed for Palace (simplification)
 
 SERVER UPGRADES:
 1. Special Unit Actions / Attacks:
@@ -252,12 +254,18 @@ What this means for MP2 rules:
 36. Recycling Unit is smarter to differentiate single or plural simultaneous; and differentiate a disbanding from a recycling into production. Also new 
    Orders button for Recycle/Disband has same intelligence to it.
 37 CTRL-click: clicks a tile as if a city is not there: good for selecting units without extra UI fussing (going inside a city to pick the unit etc.)
-38. Special retaliation ability: units getting ranged attacks now have the potential to retaliate against those. This opens up new tactics
-      currently given only to units that benefit from big balance improvement from it (Archer, Battleship, Helicopter.)
+38. Special retaliation ability: units defending from ranged attacks now have the potential to retaliate if they also can range attack...
+    "ranged defense".  This opens up new tactics currently given only to units that benefit from big balance improvement from it 
+    (Archer, Battleship, Helicopter.) Note that ranged defense requires there to be move points left.
         one Bship bombards 2, now they have 37 hp and 1 Bship beats both. This prevents such possibilities and indeed, 
         the 2 battleships properly retaliate leaving the single Bship in worse, not better condition. This dynamic is
         carefully used to allow deeper level of tactics for some units and to slightly buff units whose special
-        role abilities were represented weaker than the realistic and tactical use they should have. 
+        role abilities were represented weaker than the realistic and tactical use they should have.
+39. fixed rounding errors in calculation of move points on damaged units.
+40. adding a pop unit to a city arranges tiles by its CMA (server default or governor) instead of making entertainer. 
+
+
+
 These help with much more than Freeciv and other Full-screen apps. They help you with everything you do on your computer:
             Switch active Program   Flip to Last Program    Switch Browser tab   See all Programs on Workspace   Swap Workspaces
 Linux*      Alt-Tab                 Alt-ESC                 CTRL-Shift-Tab       🐧, ALT-F1                      CTRL-ALT-arrow

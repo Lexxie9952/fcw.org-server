@@ -2169,6 +2169,20 @@ reqs	=
       "Building", "Coastal Defense", "City"
       "UnitClass", "Trireme", "Local"
     }
+[effect_coastal_defense_visible]
+type    = "Visible_Walls"
+value	= 2      ; 2 is for coastal
+reqs	=
+    { "type", "name", "range"
+      "Building", "Coastal Defense", "City"
+    }
+[effect_fortifications_visible]
+type    = "Visible_Walls"
+value	= 4
+reqs	=
+    { "type", "name", "range"
+      "Building", "Fortifications", "City"
+    }
 
 [effect_gibraltar_fortress]
 type    = "Defend_Bonus"
