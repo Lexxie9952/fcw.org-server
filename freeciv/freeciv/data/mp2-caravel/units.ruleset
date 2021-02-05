@@ -3560,6 +3560,86 @@ From Frigates onward, all sea attacks end with a single victor.\
  Frigates can Stack-Escape: a 50% chance to escape a killed stack if they have more remaining move points than the attacker.\
 ")
 
+[unit_cargo_ship]
+name          = _("Cargo Ship")
+class         = "RiverShip"
+tech_req      = "Industrialization"
+obsolete_by   = "None"
+graphic       = "u.cargo_ship"
+graphic_alt   = "u.transport"
+sound_move    = "m_transport"
+sound_move_alt = "m_transport"
+sound_fight   = "f_trireme"
+sound_fight_alt = "f_generic"
+build_cost    = 45
+pop_cost      = 0
+attack        = 0
+defense       = 1
+hitpoints     = 30
+firepower     = 1
+move_rate     = 7
+vision_radius_sq = 4
+transport_cap = 4
+fuel          = 0
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 0
+cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad", "Cargo"
+flags         = "BadCityDefender", "HelpWonder", "Traderoute", "NonMil", "HasNoZOC", "NoVeteran"
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 0
+roles         = ""
+helptext      = _("\
+Cargo ships are Commerce units: they can establish Trade Routes and help\
+ build Wonders. They can travel rivers and oceans. Cargo ships can also carry\
+ four land units: thus, they are useful for transporting units by river or sea.\
+")
+
+[unit_transport]
+name          = _("Transport")
+class         = "Sea"
+tech_req      = "Industrialization"
+obsolete_by   = "None"
+graphic       = "u.transport"
+graphic_alt   = "-"
+sound_move    = "m_transport"
+sound_move_alt = "m_generic"
+sound_fight   = "f_transport"
+sound_fight_alt = "f_generic"
+build_cost    = 50
+pop_cost      = 0
+attack        = 0
+defense       = 3
+hitpoints     = 30
+firepower     = 1
+move_rate     = 10
+vision_radius_sq = 12
+transport_cap = 8
+fuel          = 0
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad", "Cargo", "Zeppelin"
+bonuses       =
+   { "flag", "type", "value"
+     "Marines", "DefenseMultiplier", 1    
+   }
+flags         = "BadCityDefender", "CanEscape"
+roles         = "Ferryboat", "FerryStartUnit"
+helptext      = _("\
+The Transport cannot attack but can defend itself when under attack.\
+ Marines and Anti-Aircraft Artillery can directly attack from a Transport. Its\
+ large cargo capacity makes it a significant logistical upgrade in sea\
+ sea transportation. The Transport is considered a military vessel: unwelcome in\
+ the waters of nations with whom you are at Peace.\
+")
+
 [unit_ironclad]
 name          = _("Ironclad")
 class         = "Sea"
@@ -3897,86 +3977,6 @@ The Carrier is a mobile airport that can carry Air units, Helicopters, AAA, Mari
  Vigil order was given.\
 "), _("\
 Carriers are very expensive and thus, usually protected by a fleet of scouts and escorts.\
-")
-
-[unit_cargo_ship]
-name          = _("Cargo Ship")
-class         = "RiverShip"
-tech_req      = "Industrialization"
-obsolete_by   = "None"
-graphic       = "u.cargo_ship"
-graphic_alt   = "u.transport"
-sound_move    = "m_transport"
-sound_move_alt = "m_transport"
-sound_fight   = "f_trireme"
-sound_fight_alt = "f_generic"
-build_cost    = 45
-pop_cost      = 0
-attack        = 0
-defense       = 1
-hitpoints     = 30
-firepower     = 1
-move_rate     = 7
-vision_radius_sq = 4
-transport_cap = 4
-fuel          = 0
-uk_happy      = 0
-uk_shield     = 0
-uk_food       = 0
-uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad", "Cargo"
-flags         = "BadCityDefender", "HelpWonder", "Traderoute", "NonMil", "HasNoZOC", "NoVeteran"
-; No veteran levels (level name is never displayed)
-veteran_names = _("green")
-veteran_raise_chance = 0
-veteran_work_raise_chance = 0
-veteran_power_fact = 100
-veteran_move_bonus = 0
-roles         = ""
-helptext      = _("\
-Cargo ships are Commerce units: they can establish Trade Routes and help\
- build Wonders. They can travel rivers and oceans. Cargo ships can also carry\
- four land units: thus, they are useful for transporting units by river or sea.\
-")
-
-[unit_transport]
-name          = _("Transport")
-class         = "Sea"
-tech_req      = "Industrialization"
-obsolete_by   = "None"
-graphic       = "u.transport"
-graphic_alt   = "-"
-sound_move    = "m_transport"
-sound_move_alt = "m_generic"
-sound_fight   = "f_transport"
-sound_fight_alt = "f_generic"
-build_cost    = 50
-pop_cost      = 0
-attack        = 0
-defense       = 3
-hitpoints     = 30
-firepower     = 1
-move_rate     = 10
-vision_radius_sq = 12
-transport_cap = 8
-fuel          = 0
-uk_happy      = 1
-uk_shield     = 1
-uk_food       = 0
-uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad", "Cargo", "Zeppelin"
-bonuses       =
-   { "flag", "type", "value"
-     "Marines", "DefenseMultiplier", 1    
-   }
-flags         = "BadCityDefender", "CanEscape"
-roles         = "Ferryboat", "FerryStartUnit"
-helptext      = _("\
-The Transport cannot attack but can defend itself when under attack.\
- Marines and Anti-Aircraft Artillery can directly attack from a Transport. Its\
- large cargo capacity makes it a significant logistical upgrade in sea\
- sea transportation. The Transport is considered a military vessel: unwelcome in\
- the waters of nations with whom you are at Peace.\
 ")
 
 [unit_cruise_missile]
@@ -4413,7 +4413,7 @@ All Commerce units can carry Goods as cargo.\
 name          = _("Wagon")
 class         = "LandRoad"
 tech_req      = "The Wheel"
-obsolete_by   = "Train"
+obsolete_by   = "Truck"
 graphic       = "u.wagon"
 graphic_alt   = "-"
 sound_move    = "m_wagon"
@@ -4434,17 +4434,23 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 1
-cargo         = "Land", "LandAirSea"
-flags         = "HelpWonder", "TradeRoute", "Cant_Fortify", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Shield2Gold"
+cargo         = "Land", "Cargo", "LandAirSea"
+flags         = "HelpWonder", "TradeRoute", "Cant_Fortify", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Shield2Gold", "NoVeteran"
 roles         = ""
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 3
 helptext      = _("\
 Wagons are the first Land unit that can do Commerce. Compared to a Caravan, they pay gold\
  upkeep, cannot fortify, and can only travel on roads—which exposes them to ambush and capture\
  from units in Hideouts. A benefit of Wagons is to transport slower units to reach distant\
- cities faster.\n\
-Foot Units and Goods can be carried on Wagons. Foot units can load/unload outside a city,\
- but may lose their moves doing so.\n\
-Read the help on Caravans to see what Commerce units can do.\n\
+ cities faster. They have 3⅓ move points, giving a range of 10 tiles on roads.\n\
+Goods and units with 2 or less move points can be carried on Wagons. Outside a city, units can load;\
+ but will lose their moves stepping off.\n\
+Read the help on Caravans to see what Commerce units can do.\
 ")
 
 [unit_train]
