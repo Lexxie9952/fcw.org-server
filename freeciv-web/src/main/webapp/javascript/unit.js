@@ -437,6 +437,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
   }
   else if (pclass.startsWith("Land")) {   // Land, LandNoKill, LandAirSea, LandRail, LandRoad
     //console.log("  Land* CHECK ON: tclass.rulename =="+tclass.rule_name);
+    if (tclass.rule_name == "Land") return false; // can't load on Caravans, the only Land class with cargo capacity.
     if (tclass.rule_name == "Submarine") return false;
     if (tclass.rule_name == "LandRail" || tclass.rule_name == "LandRoad") {  // only Foot soldiers can get on Trains/Trucks
       if (ptype['move_rate'] > 2 * SINGLE_MOVE) return false; //Rail equality: units with ≤2 moves can use trains
