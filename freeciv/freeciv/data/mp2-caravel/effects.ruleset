@@ -2003,6 +2003,54 @@ reqs	=
     { "type", "name", "range"
       "Building", "City Walls", "City"
     }
+; FORTIFICATIONS 
+[effect_fortifications_visible]
+type    = "Visible_Walls"
+value	= 4
+reqs	=
+    { "type", "name", "range"
+      "Building", "Fortifications", "City"
+    }
+[effect_fortifications_vs_Land]
+type    = "Defend_Bonus"
+value	= 75
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Fortifications", "City", TRUE
+      "Building", "City Walls", "City", FALSE
+      "Building", "Great Wall", "Player", FALSE
+      "UnitClass", "Land", "Local", TRUE
+      "UnitType", "Cannon", "Local", FALSE
+      "UnitType", "Artillery", "Local", FALSE
+      "UnitType", "Howitzer", "Local", FALSE
+    }
+[effect_fortifications_vs_Land_2]
+type    = "Defend_Bonus"
+value	= 75
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Fortifications", "City", TRUE
+      "Building", "City Walls", "City", FALSE
+      "Building", "Great Wall", "Player", FALSE
+      "UnitClass", "LandAirSea", "Local", TRUE
+   }
+[effect_fortifications_vs_Land_3]
+type    = "Defend_Bonus"
+value	= 75
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Fortifications", "City", TRUE
+      "Building", "City Walls", "City", FALSE
+      "Building", "Great Wall", "Player", FALSE
+      "UnitClass", "LandNoKill", "Local", TRUE
+    }
+[effect_fortifications_1]
+type    = "Unit_No_Lose_Pop"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Building", "Fortifications", "City"
+    }
 
 ; GREAT Wall
 ;--------------------------------------------------------
@@ -2176,13 +2224,7 @@ reqs	=
     { "type", "name", "range"
       "Building", "Coastal Defense", "City"
     }
-[effect_fortifications_visible]
-type    = "Visible_Walls"
-value	= 4
-reqs	=
-    { "type", "name", "range"
-      "Building", "Fortifications", "City"
-    }
+
 
 [effect_gibraltar_fortress]
 type    = "Defend_Bonus"

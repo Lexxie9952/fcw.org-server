@@ -300,6 +300,17 @@ void unit_versus_unit(struct unit *attacker, struct unit *defender,
               "defense firepower:%d", attackpower, defensepower,
               attack_firepower, defense_firepower);
 
+  log_verbose("attack:%d, defense:%d, attack firepower:%d, "
+            "defense firepower:%d", attackpower, defensepower,
+            attack_firepower, defense_firepower);   
+
+/* debug
+  notify_player(plr1, NULL, E_UNIT_ACTION_FAILED, ftc_server,
+            _("attack: %d, defense:%d, att_fp: %d, "
+            "def_fp: %d"), attackpower, defensepower,
+            attack_firepower, defense_firepower);  
+            */
+         
   player_update_last_war_action(plr1);
   player_update_last_war_action(plr2);
 
