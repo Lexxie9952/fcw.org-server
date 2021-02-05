@@ -3539,6 +3539,7 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
 {
   struct player *pplayer = unit_owner(punit);
   struct city *pcity = tile_city(ptile);
+  int def_moves_used; 
 
   /* Sanity check: The actor still exists. */
   fc_assert_ret_val(pplayer, FALSE);
@@ -3641,6 +3642,9 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
       // Bombard unit if: targets=unlimited OR target was randomly selected:
       if (!max_targets || is_target[r]) {
         bool could_kill = (kills>0);
+
+        def_moves_used = unit_move_rate(pdefender) - pdefender->moves_left;
+
         unit_bombs_unit(punit, pdefender, &att_hp, &def_hp, could_kill, bombard_rate);
 
         if (def_hp > 0) {   // SURVIVED
@@ -3693,7 +3697,11 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
         pdefender->hp = def_hp;
 
         send_combat(punit, pdefender, 0, 0, 1);
-    
+        // Attacker loses no hit points so suffers no injured-caused mp loss, but
+        // defender indeed does. Note if defender is a retaliator, this will be
+        // role reversal later when function is called again.
+        pdefender->moves_left = unit_move_rate(pdefender) - def_moves_used;  
+        if (pdefender->moves_left<0) pdefender->moves_left = 0;
         send_unit_info(NULL, pdefender);
 
         /* May cause an incident */
