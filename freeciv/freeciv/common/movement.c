@@ -53,6 +53,7 @@ int utype_move_rate(const struct unit_type *utype, const struct tile *ptile,
   const struct unit_class *uclass;
   const struct veteran_level *vlevel;
   int base_move_rate, move_rate;
+  float rounded_move_rate;  // don't make a unit with 1.88 moves get 1 move ;)
 
   fc_assert_ret_val(NULL != utype, 0);
   fc_assert_ret_val(NULL != pplayer, 0);
@@ -64,12 +65,17 @@ int utype_move_rate(const struct unit_type *utype, const struct tile *ptile,
   move_rate = base_move_rate;
 
   if (uclass_has_flag(uclass, UCF_DAMAGE_SLOWS)) {
-    /* Scale the MP based on how many HP the unit has. */
-    move_rate = (move_rate * hitpoints) / utype->hp;
+    /* Scale the MP based on how many HP the unit has...
+     * Rounding is required!! Or multiple rounding errors keep compounding!
+     * (e.g., damaged unit lost frag from round error, attacked then lost
+     * frag from round error, defended then lost frag from round error.)
+     * Rounding to nearest whole averages to zero error over time, with a
+     * max.error of 0.5frag instead of 0.88frag[9fr] or .83frag[6fr]) */
+    rounded_move_rate = ((float)move_rate * (float)hitpoints) / (float)utype->hp + 0.50;
+    move_rate = (int)rounded_move_rate;
   }
 
-  /* Add on effects bonus (Magellan's Expedition, Lighthouse,
-   * Nuclear Power). */
+  /* Add on effects bonus (Magellan's Expedition, Lighthouse, Nuclear Power). */
   if (game.server.move_bonus_in_frags) {
     /* ruleset awards move bonuses in frags */
     move_rate += get_unittype_bonus(pplayer, ptile, utype, EFT_MOVE_BONUS);
