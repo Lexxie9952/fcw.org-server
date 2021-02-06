@@ -290,40 +290,13 @@ sound		= "b_city_walls"
 sound_alt	= "b_generic"
 helptext	= _("\
 City Walls give a 3x bonus to ALL units in a City against attacks from\
- Land units. City Walls are ineffective against Air, Sea, Missile, and\
- Howitzers. City Walls always prevent population loss when a defending unit\
- is destroyed by a Land unit. If an enemy attempts to sabotage City Walls,\
- the odds of success are halved.\
-")
-
-[building_fortifications]
-name		= _("Fortifications")
-genus		= "Improvement"
-flags		= "VisibleByOthers"
-reqs	=
-    { "type", "name", "range"
-      "Tech", "Masonry", "Player"
-    }
-graphic	= "b.city_walls"
-graphic_alt	= "-"
-obsolete_by	=
-    { "type", "name", "range"
-    }
-build_cost	= 35
-upkeep		= 0
-sabotage	= 75
-sound		= "b_city_walls"
-sound_alt	= "b_generic"
-helptext	= _("\
-Fortifications give a 1.75x bonus to ALL units in a City against attacks from Land\
- units. However, they have no bonus against Cannons or any unit upgraded therefrom.\
- Fortifications prevent population loss when a defending unit is destroyed.\n\
- Fortifications are a combination of palisades, trenches, shorter walls, and earthen\
- bulwarks; thus they are not an accessible target to Siege Rams. If an enemy tries\
- to sabotage Fortifications, the odds of success are 75% of the normal odds for other\
- sabotage targets. In history, when more advanced cities chose to upgrade their\
- first Fortifications to City Walls, they built them beyond the outside perimeter\
- of the original defense. Thus, Fortifications give no bonus if City Walls are in place.\
+ Land units, except from Howitzers. City Walls are ineffective against Air,\
+ Sea, and Missile units. City Walls prevent population loss when a defending unit\
+ is killed. City Walls are tall and enormous stone constructions which have few\
+ areas vulnerable to sabotage: if an enemy attempts to sabotage City Walls,\
+ the odds of success are halved. In a city with Fortifications, City Walls are\
+ built beyond the fortified perimeter—thus, they replace the bonus instead of\
+ stacking with it.\
 ")
 
 [building_coastal_defense]
@@ -434,6 +407,34 @@ helptext	= _("\
 Allows refining the fissile isotopes needed to create nuclear fusion weapons.\
  To make these weapons, a city requires an Enrichment Facility, which first\
  requires a Fusion Reactor.\
+")
+
+[building_fortifications]
+name		= _("Fortifications")
+genus		= "Improvement"
+flags		= "VisibleByOthers"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Masonry", "Player"
+    }
+graphic	= "b.fortifications"
+graphic_alt	= "b.city_walls"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 35
+upkeep		= 0
+sabotage	= 75
+sound		= "b_fortifications"
+sound_alt	= "b_generic"
+helptext	= _("\
+Fortifications give a 1.75x bonus to ALL units in a City against attacks from Land\
+ units; except from Cannons (or upgraded models of it.)\
+ Fortifications prevent population loss when a defending unit is killed.\n\
+ Fortifications are a combination of trenches, palisades, earthen bulwarks and short walls,\
+ so cannot be targeted by Siege Rams. If an enemy attempts sabotage, odds of success are 75%\
+ of base odds. Since City Walls expand beyond the perimeter of Fortifications, this improvement\
+ offers no bonus when City Walls are in place―but provides a fallback if City Walls come down.\
 ")
 
 [building_fusion_reactor]

@@ -561,6 +561,23 @@ actor_reqs    =
       "UnitClassFlag", "CanPillage",   "Local"
     }
 
+[actionenabler_clean_pollution]
+action        = "Clean Pollution"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitFlag",      "NonMil",       "Local", TRUE
+      ;NonMil = don't let ability to do Hideouts 'cause' ability to clean pollution
+    }
+[actionenabler_clean_fallout]
+action        = "Clean Fallout"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitFlag",      "NonMil",       "Local", TRUE
+      ;NonMil = don't let ability to do Hideouts 'cause' ability to clean fallout
+    }
+
 [actionenabler_fortify]
 action        = "Fortify"
 actor_reqs    =

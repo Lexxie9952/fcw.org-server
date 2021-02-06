@@ -263,8 +263,8 @@ What this means for MP2 rules:
         role abilities were represented weaker than the realistic and tactical use they should have.
 39. fixed rounding errors in calculation of move points on damaged units.
 40. adding a pop unit to a city arranges tiles by its CMA (server default or governor) instead of making entertainer. 
-
-
+41. TC reports on UWT activity delays now only report activities that finish this turn; Not anymore, e.g., transform or mine that finishes on a future turn.
+42. possibly fixed spurious message re:UWT
 
 These help with much more than Freeciv and other Full-screen apps. They help you with everything you do on your computer:
             Switch active Program   Flip to Last Program    Switch Browser tab   See all Programs on Workspace   Swap Workspaces
