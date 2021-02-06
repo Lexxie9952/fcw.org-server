@@ -2686,6 +2686,8 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
     vision_type = TILE_UNKNOWN;
   }
   const char *activity_text;
+  int dummy=0; // int * param needed to fetch turns remaining for work
+
   if (ptile == NULL || !ptile || !pplayer || pplayer == NULL) return NULL; 
   struct city *pcity = tile_city(ptile);
   const char *diplo_nation_plural_adjectives[DS_LAST] =
@@ -2843,7 +2845,6 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
       astr_add_line(&str, _("   with %s%s%s."),bold,astr_str(&list),unbold);
       astr_free(&list);
     }
-
   }
   {
     const char *infratext = get_infrastructure_text(ptile->extras);
@@ -2851,7 +2852,7 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
       astr_add_line(&str, _("Infrastructure: %s%s%s"), bold, infratext, unbold);
     }
   }
-  activity_text = concat_tile_activity_text(ptile);
+  activity_text = concat_tile_activity_text(ptile, &dummy);
   if (strlen(activity_text) > 0) {
     astr_add_line(&str, _("Activity: %s%s%s"), bold, activity_text, unbold);
   }
@@ -2898,13 +2899,32 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
       }
     }
 
+    // Info reserved for unit's owner: UWT and exact bribe cost:
     if (unit_owner(punit) == pplayer) {
-      /* Show bribe cost for own units. */
+      /* Show bribe cost for own units and UWT for own units. */
+      ///////////UWT GOES HERE:
+      if (game.server.unitwaittime > 0) {
+        if (punit->server.action_timestamp > 0) {
+          int dt = time(NULL) - punit->server.action_timestamp;
+          if (dt < game.server.unitwaittime) {
+            char uwt_msg[64];
+            format_time_duration(game.server.unitwaittime - dt, uwt_msg, sizeof(uwt_msg));
+            if (punit->server.action_turn == game.info.turn - 1) {
+              astr_add_line(&str, _("Wait Time left this turn: %s%s%s"), bold, uwt_msg, unbold);
+            }
+            else { // assume order was given this turn
+              astr_add_line(&str, _("Wait Time left this turn:   %sNone.%s"),bold,unbold);
+              astr_add_line(&str, _("Wait for next turn expires: %s%s%s"), bold, uwt_msg, unbold);
+            }
+          }
+        }
+      }
       astr_add_line(&str, _("Bribe cost: %s%d%s"), bold, unit_bribe_cost(punit, pplayer), unbold);
-    } else {
-      /* We can only give an (lower) boundary for units of other players. */
-      astr_add_line(&str, _("Estimated bribe cost: > %s%d%s"),
-                    bold, unit_bribe_cost(punit, pplayer), unbold);
+    } 
+    else {
+         /* We can only give an (lower) boundary for units of other players. */
+         astr_add_line(&str, _("Estimated bribe cost: > %s%d%s"),
+                       bold, unit_bribe_cost(punit, pplayer), unbold);
     }
 
     if ((NULL == pplayer || owner == pplayer)

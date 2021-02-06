@@ -1218,15 +1218,18 @@ static void update_unit_activity(struct unit *punit, time_t now)
       /* Courtesy message: activity isn't completed yet */
       if (moves_left_at_start && punit->ai_controlled == FALSE) {
         if (punit->activity==ACTIVITY_FORTIFYING) { 
-          notify_player(punit->owner, NULL, E_UNIT_ORDERS, ftc_server,
-                    _("  ⏳ %s doing %s will be delayed %s by fortifywaittime."),
-                    unit_link(punit), _("Fortify"), buf);
+          notify_player(punit->owner, unit_tile(punit), E_UNIT_ORDERS, ftc_server,
+                    _("  ⏳ %s will finish Fortifying in %s."),
+                    unit_link(punit), buf);
         } else {
-          /* TODO: verbosity reduction. Only report activities that will be finished 
-           * THIS TURN after the UWT. */
-          notify_player(punit->owner, NULL, E_UNIT_ORDERS, ftc_server,
-                    _("  ⏳ %s doing %s will be delayed %s by unitwaittime."),
-                    unit_link(punit), concat_tile_activity_text(unit_tile(punit)), buf);
+          /* Only report activities that will be finished THIS TURN after the UWT. */
+          int turns = 0;
+          const char *activity_text = concat_tile_activity_text(unit_tile(punit), &turns);
+          if (turns<=1) { // e.g., no uwt report for Mine finished in 3 more turns.
+            notify_player(punit->owner, unit_tile(punit), E_UNIT_ORDERS, ftc_server,
+                    _("  ⏳ %s doing %s will finish in %s."),
+                    unit_link(punit), activity_text, buf);
+          }
         }
       }
       return;
@@ -1292,7 +1295,7 @@ void finish_unit_wait(struct unit *punit, int activity_count)
          possibly_moved=true;
   }
 /* DEBUG LEFTOVER
-  notify_player(punit->owner, NULL, E_UNIT_RELOCATED, ftc_server,
+  notify_player(punit->owner, unit_tile(punit), E_UNIT_RELOCATED, ftc_server,
         _("fuw.%s #%d getting a uac call to execute."),unit_link(punit),punit->id); */
  
   /* Call the function for finishing activities: */
@@ -2447,11 +2450,18 @@ struct unit *unit_change_owner(struct unit *punit, struct player *pplayer,
 **************************************************************************/
 void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
 {
-  char pkiller_link[MAX_LEN_LINK], punit_link[MAX_LEN_LINK];
+  char pkiller_link[MAX_LEN_LINK], 
+       punit_link[MAX_LEN_LINK],                 // stack defender
+       casualty_type_name[MAX_LEN_LINK];         // unit type name for secondary casualties
   struct player *pvictim = unit_owner(punit);
   struct player *pvictor = unit_owner(pkiller);
   int ransom, unitcount = 0;
   bool escaped;
+  /* number of secondary casualties to list before abrdiging to
+     "x other units." */
+  const int MAX_SECONDARY_CASUALTIES_TO_REPORT = 8;
+  const int MAX_KILLED_UNITS_TO_REPORT_TO_ALL_PLAYERS = 128;
+
 
   sz_strlcpy(pkiller_link, unit_link(pkiller));
   sz_strlcpy(punit_link, unit_tile_link(punit));
@@ -2565,8 +2575,9 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
   if (!is_stack_vulnerable(unit_tile(punit)) || unitcount == 1) {
     notify_player(pvictor, unit_tile(pkiller), E_UNIT_WIN_ATT, ftc_server,
                   /* TRANS: "... Cannon ... the Polish Destroyer." */
-                  _("💥Your attacking %s eliminated the %s %s!"),
+                  _("💥Your attacking %s %s the %s %s!"),
                   pkiller_link,
+                  get_battle_winner_verb(0),
                   nation_adjective_for_player(pvictim),
                   punit_link);
     if (vet) {
@@ -2576,7 +2587,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
                   /* TRANS: "Cannon ... the Polish Destroyer." */
                   _("⚠️%s lost to an attack by %s %s %s."),
                   punit_link,
-                  indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
+                  is_unit_plural(pkiller) ? "" : indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
                   nation_adjective_for_player(pvictor),
                   pkiller_link);
 
@@ -2586,6 +2597,8 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
     int num_killed[player_slot_count()];
     int num_escaped[player_slot_count()];
     struct unit *other_killed[player_slot_count()];
+    struct unit killed_units[MAX_KILLED_UNITS_TO_REPORT_TO_ALL_PLAYERS];
+    int kill_counter = 0;
     struct tile *ptile = unit_tile(punit);
 
     fc_assert(unitcount > 1);
@@ -2649,45 +2662,102 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
           if (vunit != punit) {
             other_killed[player_index(vplayer)] = vunit;
             other_killed[player_index(pvictor)] = vunit;
+            if (kill_counter < MAX_KILLED_UNITS_TO_REPORT_TO_ALL_PLAYERS) {
+              killed_units[kill_counter++] = *vunit;
+            }
           }
         }
       }
     } unit_list_iterate_end;
 
-    /* Inform the destroyer: lots of different cases here! */
-    notify_player(pvictor, unit_tile(pkiller), E_UNIT_WIN_ATT, ftc_server,
-                  /* TRANS: "... Cannon ... the Polish Destroyer ...." */
-                  PL_("💥Your attacking %s eliminated the %s %s "
-                      "(and %d other unit)!",
-                      "💥Your attacking %s eliminated the %s %s "
-                      "(and %d other units)!", unitcount - 1),
-                  pkiller_link,
-                  nation_adjective_for_player(pvictim),
-                  punit_link,
-                  unitcount - 1);
+    // Inform victorious attacker of multiple killed units:
+    // ...
+    // Too many secondary casualties to list: give abridged report.
+    if (unitcount-1 > MAX_SECONDARY_CASUALTIES_TO_REPORT
+        || kill_counter > MAX_KILLED_UNITS_TO_REPORT_TO_ALL_PLAYERS) {
+      notify_player(pvictor, unit_tile(pkiller), E_UNIT_WIN_ATT, ftc_server,
+          // won't ever be singular, but kept in case we revert to simpler message:
+                    PL_("💥Your attacking %s %s the %s %s "
+                        "and <b>%d</b> other unit!",
+                        "💥Your attacking %s %s the %s %s "
+                        "and <b>%d</b> other units!", unitcount - 1),
+                    pkiller_link,
+                    get_battle_winner_verb(kill_counter),
+                    nation_adjective_for_player(pvictim),
+                    punit_link,
+                    unitcount - 1);
+    }
+    // List up to {MAX_SECONDARY_CASUALTIES_TO_REPORT} other units killed on the tile: 
+    else if (unitcount-1 <= MAX_SECONDARY_CASUALTIES_TO_REPORT
+             && kill_counter <= MAX_KILLED_UNITS_TO_REPORT_TO_ALL_PLAYERS) {
+        char dead_units_str[1024];
+        char killed_unit_str[128];
+        char plural_string[32];
+        plural_string[0] = 0;
+        memset(dead_units_str, '\0', sizeof(dead_units_str));
+        // Make a string out of all the secondary casualty unit types and nationalities.
+        for (int k = 0; k < kill_counter; k++) {
+          // Don't show primary stack defender as secondary casualty
+          if (killed_units[k].id != punit->id) { 
+            // Concatenate the result string for secondary casualties
+            sz_strlcpy(casualty_type_name, unit_name_translation(&killed_units[k]));
+            sprintf(killed_unit_str, " 💥%s %s", nation_adjective_for_player(unit_owner(&killed_units[k])), casualty_type_name);
+            strcat(dead_units_str, killed_unit_str);
+            if (k<kill_counter-1) { // not the last unit in list: penultimate list item or before
+              strcat(dead_units_str, (k==kill_counter-2 ? ", and" : ","));
+            }
+          }
+        }
+        // Secondary casualties are a blank "" if singular, for nicer text:
+        if (unitcount-1 > 1) sprintf(plural_string, "<b>%d</b>", unitcount-1);
+        // Send final report.
+        //_PL macro maybe can't take it, so split into 2:
+        if (unitcount-1 == 1) {
+          notify_player(pvictor, unit_tile(pkiller), E_UNIT_WIN_ATT, ftc_server,
+                _("💥Your attacking %s %s the %s %s and the %s."),
+                pkiller_link, get_battle_winner_verb(1),
+                nation_adjective_for_player(pvictim),
+                punit_link, dead_units_str);
+        } else {
+          notify_player(pvictor, unit_tile(pkiller), E_UNIT_WIN_ATT, ftc_server,
+                        _("💥Your attacking %s %s the %s %s and <b>%d</b> other units:%s."),
+                        pkiller_link,
+                        get_battle_winner_verb(kill_counter),
+                        nation_adjective_for_player(pvictim),
+                        punit_link,
+                        (unitcount-1),
+                        dead_units_str);
+        }
+    } // </end> Inform attacking victor of multiple unit stack deaths.
+
     if (vet) {
       notify_unit_experience(pkiller);
     }
 
-    /* inform the owners: this only tells about owned units that were killed.
-     * there may have been 20 units who died but if only 2 belonged to the
-     * particular player they'll only learn about those.
-     *
-     * Also if a large number of units die you don't find out what type
-     * they all are. */
+    /* Inform the victim-owners: this only tells about owned units that were killed,
+     * not units from other players. Also, if there are more than MAX_SECONDARY_CASUALTIES_TO_REPORT
+     * secondary casualties, players only get a number, not what they all were. */
+     // ...
+    // Iterate every player in the game to see if they lost one or more units... 
     for (i = 0; i < player_slot_count(); i++) {
+
+      // Case handling for each player who lost exactly one unit in the stack:
       if (num_killed[i] == 1) {
+        // Player owns the lost stack defender unit
         if (i == player_index(pvictim)) {
           fc_assert(other_killed[i] == NULL);
           notify_player(player_by_number(i), ptile,
                         E_UNIT_LOST_DEF, ftc_server,
                         /* TRANS: "Cannon ... the Polish Destroyer." */
                         _("⚠️%s lost to an attack by %s %s %s."),
-                        punit_link,
-                        indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
+                        punit_link,                  
+                        is_unit_plural(pkiller) ? "" : indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
                         nation_adjective_for_player(pvictor),
                         pkiller_link);
-        } else {
+        }
+        /* Player's unit was a single secondary casualty in a stack whose stack defender
+           belonged to another player: */
+        else {
           fc_assert(other_killed[i] != punit);
           notify_player(player_by_number(i), ptile,
                         E_UNIT_LOST_DEF, ftc_server,
@@ -2695,72 +2765,158 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
                          * attacked the German Musketeers." */
                         _("⚠️%s lost when %s %s %s attacked the %s %s."),
                         unit_link(other_killed[i]),
-                        indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
+                        is_unit_plural(pkiller) ? "" : indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
                         nation_adjective_for_player(pvictor),
                         pkiller_link,
                         nation_adjective_for_player(pvictim),
                         punit_link);
         }
-      } else if (num_killed[i] > 1) {
+      } 
+      // CASE HANDLING FOR EACH PLAYER WHO LOST MORE THAN ONE UNIT:
+      else if (num_killed[i] > 1) {
+        // REPORT for SAME PLAYER as the primary stack defender
         if (i == player_index(pvictim)) {
           int others = num_killed[i] - 1;
-
-          if (others == 1) {
+          /* Used to have two separate blocks for whether you had one or more than one secondary casualty:
+             This block is no longer necessary but kept around for reference history
+          if (others == 1) {  // 2 units lost, meaning one secondary casualty to list 
             notify_player(player_by_number(i), ptile,
                           E_UNIT_LOST_DEF, ftc_server,
-                          /* TRANS: "Musketeers (and Cannon) lost to an
-                           * attack from the Polish Destroyer." */
+                          // TRANS: "Musketeers (and Cannon) lost to an
+                          // attack from the Polish Destroyer." 
                           _("⚠️%s (and %s) were lost to %s %s %s."),
                           punit_link,
                           unit_link(other_killed[i]),
                           indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
                           nation_adjective_for_player(pvictor),
                           pkiller_link);
-          } else {
-            notify_player(player_by_number(i), ptile,
-                          E_UNIT_LOST_DEF, ftc_server,
-                          /* TRANS: "Musketeers and 3 other units lost to
-                           * an attack from the Polish Destroyer."
-                           * (only happens with at least 2 other units) */
-                          PL_("⚠️%s and %d other unit lost to "
-                              "%s %s %s.",
-                              "⚠️%s and %d other units lost to "
-                              "%s %s %s.", others),
-                          punit_link,
-                          others,
-                          indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
-                          nation_adjective_for_player(pvictor),
-                          pkiller_link);
-          }
-        } else {
-          notify_player(player_by_number(i), ptile,
-                        E_UNIT_LOST_DEF, ftc_server,
-                        /* TRANS: "2 units lost when the Polish Destroyer
-                         * attacked the German Musketeers."
-                         * (only happens with at least 2 other units) */
-                        PL_("⚠️ %d unit lost when %s %s %s attacked the %s %s.",
-                            "⚠️ %d units lost when %s %s %s attacked the %s %s.",
-                            num_killed[i]),
-                        num_killed[i],
-                        indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
-                        nation_adjective_for_player(pvictor),
-                        pkiller_link,
-                        nation_adjective_for_player(pvictim),
-                        punit_link);
-        }
-      }
-    }
+          }  */
 
-    /* Inform the owner of the units that escaped. */
+          // CASE HANDLING: primary stack defender had two many secondary casualties to list individually, OR,
+          // the total number of all player units killed was so high that we gave up recording them all
+          if (num_killed[i]-1 > MAX_SECONDARY_CASUALTIES_TO_REPORT // "if player's secondary casualties is more than max allowed to report on, or...
+              || kill_counter > MAX_KILLED_UNITS_TO_REPORT_TO_ALL_PLAYERS) {  // ...too many total units were killed to make invidual reports"
+              // Use the old abridged message: unit and x other units lost.
+              notify_player(player_by_number(i), ptile,
+                        E_UNIT_LOST_DEF, ftc_server,
+                        // TRANS: "Musketeers and 3 other units lost to
+                        // an attack from the Polish Destroyer."
+                        // (only happens with at least 2 other units)
+                        PL_("⚠️%s and %d other unit lost to "
+                            "%s %s %s:",
+                            "⚠️%s and %d other units lost to "
+                            "%s %s %s:", others),
+                        punit_link,
+                        others,
+                        is_unit_plural(pkiller) ? "" : indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
+                        nation_adjective_for_player(pvictor),
+                        pkiller_link);
+          }
+          // CASE HANDLING: Owner's secondary casualties are fewer than the max allowed to enumerate: report every unit lost.
+          else if (num_killed[i]-1 <= MAX_SECONDARY_CASUALTIES_TO_REPORT
+                   && kill_counter <= MAX_KILLED_UNITS_TO_REPORT_TO_ALL_PLAYERS) {
+            char dead_units_str[1024];
+            char killed_unit_str[128];
+            char plural_string[32];
+            plural_string[0] = 0;
+            memset(dead_units_str, '\0', sizeof(dead_units_str));
+            for (int k = 0; k < kill_counter; k++) {
+              /* 1. Don't show primary stack defender as secondary casualty
+                  2. Only show casualties belonging to this player to this player */
+              if (unit_owner(&killed_units[k])==player_by_number(i) && killed_units[k].id != punit->id) { 
+                // Concatenate the result string for secondary casualties
+                sz_strlcpy(casualty_type_name, unit_name_translation(&killed_units[k]));
+                sprintf(killed_unit_str, " ◽%s", casualty_type_name);
+                strcat(dead_units_str, killed_unit_str);
+                if (k<kill_counter-1) { // not the last unit in list: penultimate list item or before
+                  strcat(dead_units_str, (k==kill_counter-2 ? ", and" : ","));
+                } else if (k==kill_counter-1) {
+                  strcat(dead_units_str, ""); // possible terminating text.
+                }
+              }
+            }
+            if (num_killed[i]-1 > 1) sprintf(plural_string, "<b>%d</b>", num_killed[i]);
+            notify_player(player_by_number(i), unit_tile(pkiller), E_UNIT_LOST_DEF, ftc_server,
+                  PL_("⚠️%s and %s lost to %s %s %s.%s",  // last %s is null for singular situations
+                      "⚠️%s, %s lost to %s %s %s. (%s units)", num_killed[i] - 1),
+                  punit_link,
+                  dead_units_str,
+                  is_unit_plural(pkiller) ? "" : indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
+                  nation_adjective_for_player(pvictor),
+                  pkiller_link,
+                  plural_string);
+            }
+        } // </end> case handling for casualty report for owner of the killed stack defender unit
+
+        // Player had secondary casualties but was not the stack defender.
+        // CASE HANDLING: player had too secondary casualties to report them all:
+        else {
+          if (num_killed[i]-1 > MAX_SECONDARY_CASUALTIES_TO_REPORT
+                   || kill_counter > MAX_KILLED_UNITS_TO_REPORT_TO_ALL_PLAYERS) {
+                
+              notify_player(player_by_number(i), ptile,
+                      E_UNIT_LOST_DEF, ftc_server,
+                      /* TRANS: "2 units lost when the Polish Destroyer
+                      * attacked the German Musketeers."
+                      * (only happens with at least 2 other units) */
+                      PL_("⚠️ %d unit lost when %s %s %s attacked the %s %s.",
+                          "⚠️ %d units lost when %s %s %s attacked the %s %s.",
+                          num_killed[i]),
+                      num_killed[i],
+                      is_unit_plural(pkiller) ? "" : indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
+                      nation_adjective_for_player(pvictor),
+                      pkiller_link,
+                      nation_adjective_for_player(pvictim),
+                      punit_link);
+            } 
+            /* CASE HANDLING: player's secondary casualties less than MAX_SECONDARY_CASUALTIES_TO_REPORT,
+               so report them all */
+            else if (num_killed[i]-1 <= MAX_SECONDARY_CASUALTIES_TO_REPORT
+                   && kill_counter <= MAX_KILLED_UNITS_TO_REPORT_TO_ALL_PLAYERS) 
+            {
+              char dead_units_str[1024];
+              char killed_unit_str[128];
+              char plural_string[32];
+              plural_string[0] = 0;
+              memset(dead_units_str, '\0', sizeof(dead_units_str));
+              for (int k = 0; k < kill_counter; k++) {
+                   /* Only show casualties belonging to this player */
+                if (unit_owner(&killed_units[k])==player_by_number(i)) { 
+                  // Concatenate the result string for secondary casualties
+                  sz_strlcpy(casualty_type_name, unit_name_translation(&killed_units[k]));
+                  sprintf(killed_unit_str, " ◽%s", casualty_type_name);
+                  strcat(dead_units_str, killed_unit_str);
+                  if (k<kill_counter-1) { // not the last unit in list: penultimate list item or before
+                    strcat(dead_units_str, (k==kill_counter-2 ? ", and" : ","));
+                  } else if (k==kill_counter-1) {
+                    strcat(dead_units_str, ""); // possible terminating text.
+                  }
+                }
+              }
+              if (num_killed[i]-1 > 0) sprintf(plural_string, "<b>%d</b>", num_killed[i]);
+              notify_player(player_by_number(i), unit_tile(pkiller), E_UNIT_LOST_DEF, ftc_server,
+                    PL_("⚠️%s lost to %s %s %s.%s",  // last %s is null for singular situations
+                        "⚠️%s lost to %s %s %s. (%s units)", num_killed[i]),
+                    dead_units_str,
+                    is_unit_plural(pkiller) ? "" : indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
+                    nation_adjective_for_player(pvictor),
+                    pkiller_link,
+                    plural_string);
+            }
+        } // </end> case handling for player with secondary casualties who did not own the stack defender.
+      } // </end> case handling for each player who lost more than one unit 
+    } // </end> report to every player who lost a unit
+
+    /* Inform the owners of their units who escaped. */
     for (i = 0; i < player_slot_count(); ++i) {
-      if (0 < num_escaped[i]) {
+      if (num_escaped[i] > 0) {
         notify_player(player_by_number(i), unit_tile(punit),
                       E_UNIT_ESCAPED, ftc_server,
-                      PL_("💢 %d unit escaped from attack by %s %s %s",
-                          "💢 %d units escaped from attack by %s %s %s",
+                      PL_("🏃🏻‍♂️ %d unit escaped from attack by %s %s %s",
+                          "🏃🏻‍♂️ %d units escaped from attack by %s %s %s",
                           num_escaped[i]),
                       num_escaped[i],
-                      indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
+                      is_unit_plural(pkiller) ? "" : indefinite_article_for_word(nation_adjective_for_player(pvictor), false),
                       nation_adjective_for_player(pkiller->nationality),
                       pkiller_link);
       }
@@ -3670,7 +3826,7 @@ static bool unit_survive_autoattack(struct unit *punit)
         notify_player(unit_owner(penemy), unit_tile(punit), E_UNIT_ORDERS, ftc_server,
               _("💢 Your %s declined intercepting %s %s %s while under vigil."),
               unit_rule_name(penemy),
-              indefinite_article_for_word(nation_rule_name(nation_of_unit(punit)), false),
+              is_unit_plural(punit) ? "" : indefinite_article_for_word(nation_rule_name(nation_of_unit(punit)), false),
               nation_rule_name(nation_of_unit(punit)),
               unit_link(punit) );
 #ifdef REALLY_DEBUG_THIS
@@ -4794,14 +4950,28 @@ bool execute_orders(struct unit *punit, const bool fresh)
           time_t dt = time(NULL) - punit->server.action_timestamp;
             if (dt < game.server.unitwaittime) {
               /* DON'T CANCEL ORDERS: they need to be kept to delay GOTO later */
+              // ....
+              /* This message was coming up redundant to the message in unit_can_do_action_now,
+                 for all unit move orders, thus unneeded in that case. It was suspected of 
+                 making the spurious messages about 9 hours 59 minutes on units that could move,
+                 likely because it was forgetting to check if (punit->server.action_turn == game.info.turn - 1),
+                 AND it was suspected of giving FALSE positives about UWT preventing an action
+                 when the action was simply reported illegal for some other reason. For all
+                 these reasons it's commented out now, but might have had some reason before,
+                 which could be made to work again, if we filter out ANYTHING that's NOT 
+                 the unit in a state of a LEGAL delayed GOTO, remove the redundant message 
+                 about UWT from unit_can_do_action_now(..) under those conditions there, and 
+                 check the server.action_turn like we weren't doing before. For now, it's just
+                 commented out and we'll see how it goes.  
               char buf[64];
-              if (dt>0.99) { /* if dt<1 second don't bother showing message */
+              if (dt>0.99) { 
                 format_time_duration(game.server.unitwaittime - dt, buf, sizeof(buf));
                 notify_player(pplayer, unit_tile(punit),
                           E_UNIT_ORDERS, ftc_server,
-                          _("  ⌛ %s movement delayed %s by unitwaittime."),
+                          _("  ⌛ %s movement postponed %s by unitwaittime."),
                           unit_link(punit), buf);
-              }
+              } */
+              // ....
               /* We must undo the earlier 'premature' increment of order_index++ which assumed success */
               punit->orders.index--;  
               /* Courtesy feature: put fresh user-given orders in unit_wait_list to execute later */
@@ -5087,10 +5257,11 @@ void unit_list_refresh_vision(struct unit_list *punitlist)
   Used to implement the game rule controlled by the unitwaittime setting.
   Notifies the unit owner if the unit is unable to act.
 **************************************************************************/
-bool unit_can_do_action_now(const struct unit *punit)
+bool unit_can_do_action_now(const struct unit *punit, char *caller_string)
 {
   time_t dt;
   bool give_uwt_message = false;
+  bool is_movement_action = (strcmp(caller_string, "unit_move_handling")==0);
 
   if (!punit) {
     return FALSE;
@@ -5110,39 +5281,52 @@ bool unit_can_do_action_now(const struct unit *punit)
 
     /* Exceptions to fail message---------------------- */
     /* Every possible action will be done after UWT, so don't do fail message.*/
-    if (game.server.unitwaittime_style & UWT_ACTIVITIES & UWT_DELAY_GOTO)
+    if (game.server.unitwaittime_style & UWT_ACTIVITIES & UWT_DELAY_GOTO) {
       give_uwt_message = false;
-
-    /* UWT_ACTIVITIES is on and it's not a GOTO. Will do action later. No message.*/
+    }
+    /* UWT_ACTIVITIES is on and it's not a movement or GOTO. Will do action later. No message.*/
     if ((game.server.unitwaittime_style & UWT_ACTIVITIES)
         && punit->activity != ACTIVITY_IDLE
-        && punit->activity != ACTIVITY_GOTO)
-      give_uwt_message = false;
-
+        && !is_movement_action) {
+          give_uwt_message = false;
+    }
     /* Exceptions to exceptions------------------------- */
     /* Delay_Goto is OFF and unit was given a GOTO command */ 
     if ((game.server.unitwaittime_style & !UWT_DELAY_GOTO) 
-        && (punit->activity == ACTIVITY_IDLE || punit->activity == ACTIVITY_GOTO)
-        && punit->has_orders)
-      give_uwt_message = true;
-
+        && (punit->activity == ACTIVITY_IDLE || is_movement_action)
+        && punit->has_orders) {
+        give_uwt_message = true;
+    }
     /* Auto-explore not supported */
     if (punit->activity == ACTIVITY_EXPLORE)
       return TRUE;
-
     /* Always give fail message if no actions can be queued to do mid-turn:*/
-    if (game.server.unitwaittime_style & !UWT_ACTIVITIES)
+    if (game.server.unitwaittime_style & !UWT_ACTIVITIES) {
       give_uwt_message = true;
-
+    }
     if (give_uwt_message == false) return FALSE; /* Skip message */
 
     /* Give fail message: */
     char buf[64];
     format_time_duration(game.server.unitwaittime - dt, buf, sizeof(buf));
-    notify_player(unit_owner(punit), unit_tile(punit), E_BAD_COMMAND,
-                  ftc_server, _("⌛ Your %s may not act for another %s "
-                                "this turn. See /help unitwaittime."),
+    // TODO: This is where, if we can somehow know it's a GOTO and not a cursor key
+    // to adjacent tile, we can give a specially nice message about unit 
+    // "orders will be executed in 2 hours, 32 minutes." For now it's && false to
+    // block it out: 
+    if (false && is_movement_action && (game.server.unitwaittime_style & UWT_DELAY_GOTO)) { 
+      /* UWT_DELAY_GOTO means some actions WILL perform with a delay, others not
+        (e.g. investigate city, attack unit) */
+      notify_player(unit_owner(punit), unit_tile(punit), E_BAD_COMMAND,
+                    ftc_server, _("⌛ %s has wait time and will move "
+                                  " in %s.\n"),
+                                  unit_link(punit), buf);
+    }
+    else {
+      notify_player(unit_owner(punit), unit_tile(punit), E_BAD_COMMAND,
+                    ftc_server, _("⌛ %s delayed for %s."
+                                "See /help unitwaittime."),
                                  unit_link(punit), buf);
+    }
     return FALSE; /* Unit can't do action. */
   }
 

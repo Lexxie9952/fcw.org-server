@@ -148,6 +148,73 @@ static bool do_unit_conquer_city(struct player *act_player,
                                  struct city *tgt_city,
                                  struct action *paction);
 
+#define NUM_BATTLE_LOSS_ADJECTIVES 44
+const char battle_survivor_adjectives[NUM_BATTLE_LOSS_ADJECTIVES][40] = {
+  "brutal", "ruthless", "vicious", "bloodthirsty",                             //  0- 3
+  "savage", "harsh", "barbarous", "atrocious",                                 //  4- 7
+  "unsuccessful", "inadequate", "ineffective", "mediocre",                     //  8-11
+  "disrespectful", "deficient", "unimpressive", "scrappy",                     // 12-15 
+  "pointless", "cheap", "pathetic", "useless",                                // 16-19   
+  "insignficant", "futile", "inept", "shabby",                                 // 20-23
+  "sorry", "decrepit", "pathetic", "hopeless",                                 // 24-27 
+  "effete", "weak", "pitiful", "feeble",                                       // 28-31
+  "incompetent", "laughable", "puny", "worthless",                             // 32-35
+  "impotent", "lame",  "wimpy", "ridiculous",                                  // 36-39   
+  "amusing", "trifling", "total joke of an ", "textbook example of how not to "// 40-43
+};
+
+#define NUM_BATTLE_WINNER_VERBS 28
+const char battle_winner_verbs[NUM_BATTLE_WINNER_VERBS][40] = {
+  // redundancy for leaning more heavily to generic/common words
+  // NB: first half are for normal battles, second half are for
+  // stack kills.
+  "eliminated", "eliminated", "eliminated", "eliminated",
+  "eliminated", "eliminated", "eliminated", "eliminated",
+  "disposed of", "destroyed", "killed", "killed",
+  "defeated", "killed", "defeated", "killed",
+  "destroyed", "destroyed", "slaughtered", "eradicated",
+  "crushed", "vanquished", "eliminated", "wiped out",
+  "snuffed out", "annihilated", "exterminated", "massacred"
+};
+
+
+/**********************************************************************//**
+  For variety, returns a battle adjective after defeating an enemy
+  attack, based on hitpoints left of the survivor.
+**************************************************************************/
+static const char *get_battle_survivor_adjective(struct unit *psurvivor)
+{
+  float hp_pct = (float)psurvivor->hp / (float)unit_type_get(psurvivor)->hp;
+  int range = hp_pct * NUM_BATTLE_LOSS_ADJECTIVES;
+  int min_range = (range-5 > 0) ? range-6 : 0;
+  range += NUM_BATTLE_LOSS_ADJECTIVES/4; // always have min. 25% range
+  if (range >= NUM_BATTLE_LOSS_ADJECTIVES)
+    range = NUM_BATTLE_LOSS_ADJECTIVES-1;
+/* debug
+        notify_player(unit_owner(psurvivor), NULL, E_BAD_COMMAND, ftc_server,
+                  _("pct=%f, min_range=%d, range=%d, picking from %d to %d"),
+                  hp_pct, min_range, range, min_range,
+                  min_range+(range-min_range));
+*/
+  return battle_survivor_adjectives[(fc_rand(range-min_range)+min_range)];
+}
+
+/**********************************************************************//**
+  For variety, returns a battle adjective after defeating an enemy
+  'stack_size == 0 means, pick a generic.
+  'stack_size'>= 1 means, pick a more glorious word.
+**************************************************************************/
+const char *get_battle_winner_verb(int stack_size)
+{
+  if (!stack_size)
+    return battle_winner_verbs[fc_rand(NUM_BATTLE_WINNER_VERBS/2)];
+
+  return
+    battle_winner_verbs[fc_rand(NUM_BATTLE_WINNER_VERBS/2)+
+                             (NUM_BATTLE_WINNER_VERBS/2)];   
+}
+
+
 /**********************************************************************//**
   Upgrade all units of a given type.
 **************************************************************************/
@@ -2438,7 +2505,7 @@ bool unit_perform_action(struct player *pplayer,
   }
 
   if (paction->unitwaittime_controlled
-      && !unit_can_do_action_now(actor_unit)) {
+      && !unit_can_do_action_now(actor_unit, "unit_perform_action")) {
     /* Action not possible due to unitwaittime setting. */
     return FALSE;
   }
@@ -3674,9 +3741,10 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
                         E_UNIT_ACTION_FAILED, ftc_server,
                         /* TODO: replace generic "assaulted" with ruleset
                           defined name of action.*/
-                        _("💥 Your %s %s <b>killed</b> the %s %s."),
+                        _("💥 Your %s %s <b>%s</b> the %s %s."),
                         unit_name_translation(punit),
                         (is_retaliation ? "retaliation": "assault"),
+                        get_battle_winner_verb(0),
                         nation_adjective_for_player(unit_owner(pdefender)),
                         unit_name_translation(pdefender));
 
@@ -3684,10 +3752,11 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
                         E_UNIT_ESCAPED, ftc_server,
                         /* TODO: replace generic "assaulted" with ruleset
                           defined name of action.*/
-                        _("⚠️ %s %s %s and <b>killed</b> your %s."),
+                        _("⚠️ %s %s %s and <b>%s</b> your %s."),
                         nation_adjective_for_player(pplayer),
                         unit_name_translation(punit),
                         (is_retaliation ? "retaliated": "assaulted"),
+                        get_battle_winner_verb(0),
                         unit_name_translation(pdefender));        
         }
 
@@ -4170,11 +4239,15 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
               nation_rule_name(nation_of_unit(pdefender)),
               unit_rule_name(pdefender));
 
+    const char *adj = get_battle_survivor_adjective(pdefender);
     notify_player(unit_owner(pwinner), unit_tile(pwinner),
                   E_UNIT_WIN_DEF, ftc_server,
                   /* TRANS: "Your Cannon ... the Polish Destroyer." */
-                  _("💥 Your %s survived the pathetic attack from the %s %s."),
+                  _("💥 Your %s survived %s %s attack by %s %s %s!"),
                   winner_link,
+                  indefinite_article_for_word(adj, false),
+                  adj,
+                  (is_unit_plural(punit) ? "" : indefinite_article_for_word(unit_rule_name(punit),false)),
                   nation_adjective_for_player(unit_owner(ploser)),
                   loser_link);
     if (vet) {
@@ -4401,7 +4474,7 @@ bool unit_move_handling(struct unit *punit, struct tile *pdesttile,
     return FALSE;
   }
 
-  if (!unit_can_do_action_now(punit)) {
+  if (!unit_can_do_action_now(punit, "unit_move_handling")) {
     return FALSE;
   }
 

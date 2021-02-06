@@ -175,7 +175,7 @@ bool unit_move(struct unit *punit, struct tile *ptile, int move_cost,
                struct unit *embark_to, bool conquer_city_allowed);
 bool execute_orders(struct unit *punit, const bool fresh);
 
-bool unit_can_do_action_now(const struct unit *punit);
+bool unit_can_do_action_now(const struct unit *punit, char *caller_string);
 void unit_did_action(struct unit *punit);
 
 bool unit_can_be_retired(struct unit *punit);

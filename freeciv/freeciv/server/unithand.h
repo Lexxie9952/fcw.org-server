@@ -136,4 +136,7 @@ enum ane_kind action_not_enabled_reason(struct unit *punit,
                                         const struct city *target_city,
                                         const struct unit *target_unit);
 
+const char *get_battle_winner_verb(int stack_size);
+
+
 #endif  /* FC__UNITHAND_H */

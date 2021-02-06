@@ -31,8 +31,10 @@
 
 /************************************************************************//**
   Creates the activity progress text for the given tile.
+  Caller is responsible now for passing an int *, this empowers other
+  code to also use this function to calculate turns left on the tile.
 ****************************************************************************/
-const char *concat_tile_activity_text(struct tile *ptile)
+const char *concat_tile_activity_text(struct tile *ptile, int *turns)
 {
   int activity_total[ACTIVITY_LAST];
   int activity_units[ACTIVITY_LAST];
@@ -41,7 +43,7 @@ const char *concat_tile_activity_text(struct tile *ptile)
   int rmextra_total[MAX_EXTRA_TYPES];
   int rmextra_units[MAX_EXTRA_TYPES];
   int num_activities = 0;
-  int remains, turns;
+  int remains; //, turns;
   static struct astring str = ASTRING_INIT;
 
   astr_clear(&str);
@@ -102,15 +104,15 @@ const char *concat_tile_activity_text(struct tile *ptile)
           if (extra_units[ei] > 0) {
             remains = tile_activity_time(i, ptile, ep) - extra_total[ei];
             if (remains > 0) {
-              turns = 1 + (remains + extra_units[ei] - 1) / extra_units[ei];
+              *turns = 1 + (remains + extra_units[ei] - 1) / extra_units[ei];
             } else {
               /* extra will be finished this turn */
-              turns = 1;
+              *turns = 1;
             }
             if (num_activities > 0) {
               astr_add(&str, "/");
             }
-            astr_add(&str, "%s(%d)", extra_name_translation(ep), turns);
+            astr_add(&str, "%s(%d)", extra_name_translation(ep), *turns);
             num_activities++;
           }
         } extra_type_by_cause_iterate_end;
@@ -140,16 +142,16 @@ const char *concat_tile_activity_text(struct tile *ptile)
           if (rmextra_units[ei] > 0) {
             remains = tile_activity_time(i, ptile, ep) - rmextra_total[ei];
             if (remains > 0) {
-              turns = 1 + (remains + rmextra_units[ei] - 1) / rmextra_units[ei];
+              *turns = 1 + (remains + rmextra_units[ei] - 1) / rmextra_units[ei];
             } else {
               /* extra will be removed this turn */
-              turns = 1;
+              *turns = 1;
             }
             if (num_activities > 0) {
               astr_add(&str, "/");
             }
             astr_add(&str, rmcause == ERM_PILLAGE ? _("Pillage %s(%d)") : _("Clean %s(%d)"),
-                     extra_name_translation(ep), turns);
+                     extra_name_translation(ep), *turns);
             num_activities++;
           }
         } extra_type_by_rmcause_iterate_end;
@@ -158,15 +160,15 @@ const char *concat_tile_activity_text(struct tile *ptile)
       if (activity_units[i] > 0) {
         remains = tile_activity_time(i, ptile, NULL) - activity_total[i];
         if (remains > 0) {
-          turns = 1 + (remains + activity_units[i] - 1) / activity_units[i];
+          *turns = 1 + (remains + activity_units[i] - 1) / activity_units[i];
         } else {
           /* activity will be finished this turn */
-          turns = 1;
+          *turns = 1;
         }
         if (num_activities > 0) {
           astr_add(&str, "/");
         }
-        astr_add(&str, "%s(%d)", get_activity_text(i), turns);
+        astr_add(&str, "%s(%d)", get_activity_text(i), *turns);
         num_activities++;
       }
     }
