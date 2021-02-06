@@ -2792,16 +2792,14 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
                           pkiller_link);
           }  */
 
-          // CASE HANDLING: primary stack defender had two many secondary casualties to list individually, OR,
+          // CASE HANDLING: primary stack defender had too many secondary casualties to list individually, OR,
           // the total number of all player units killed was so high that we gave up recording them all
           if (num_killed[i]-1 > MAX_SECONDARY_CASUALTIES_TO_REPORT // "if player's secondary casualties is more than max allowed to report on, or...
               || kill_counter > MAX_KILLED_UNITS_TO_REPORT_TO_ALL_PLAYERS) {  // ...too many total units were killed to make invidual reports"
               // Use the old abridged message: unit and x other units lost.
               notify_player(player_by_number(i), ptile,
                         E_UNIT_LOST_DEF, ftc_server,
-                        // TRANS: "Musketeers and 3 other units lost to
-                        // an attack from the Polish Destroyer."
-                        // (only happens with at least 2 other units)
+                        // TRANS: "Musketeers and 3 other units lost to an attack from a Polish Destroyer."
                         PL_("⚠️%s and %d other unit lost to "
                             "%s %s %s:",
                             "⚠️%s and %d other units lost to "
@@ -2856,9 +2854,7 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
                 
               notify_player(player_by_number(i), ptile,
                       E_UNIT_LOST_DEF, ftc_server,
-                      /* TRANS: "2 units lost when the Polish Destroyer
-                      * attacked the German Musketeers."
-                      * (only happens with at least 2 other units) */
+                      /* TRANS: "2 units lost when a Polish Destroyer attacked the German Musketeers." */
                       PL_("⚠️ %d unit lost when %s %s %s attacked the %s %s.",
                           "⚠️ %d units lost when %s %s %s attacked the %s %s.",
                           num_killed[i]),

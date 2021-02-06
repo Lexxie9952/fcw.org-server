@@ -186,10 +186,10 @@ static const char *get_battle_survivor_adjective(struct unit *psurvivor)
 {
   float hp_pct = (float)psurvivor->hp / (float)unit_type_get(psurvivor)->hp;
   int range = hp_pct * NUM_BATTLE_LOSS_ADJECTIVES;
-  int min_range = (range-5 > 0) ? range-6 : 0;
+  int min_range = (range-6 > 0) ? range-6 : 0;
   range += NUM_BATTLE_LOSS_ADJECTIVES/4; // always have min. 25% range
   if (range >= NUM_BATTLE_LOSS_ADJECTIVES)
-    range = NUM_BATTLE_LOSS_ADJECTIVES-1;
+    range = NUM_BATTLE_LOSS_ADJECTIVES;
 /* debug
         notify_player(unit_owner(psurvivor), NULL, E_BAD_COMMAND, ftc_server,
                   _("pct=%f, min_range=%d, range=%d, picking from %d to %d"),
