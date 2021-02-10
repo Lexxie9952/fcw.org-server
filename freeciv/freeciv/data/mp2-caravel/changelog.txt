@@ -266,6 +266,15 @@ What this means for MP2 rules:
 41. TC reports on UWT activity delays now only report activities that finish this turn; Not anymore, e.g., transform or mine that finishes on a future turn.
 42. possibly fixed spurious message re:UWT
 
+43. Note, unit emoji are not for gimmick fun, but:
+      a) help you scan a long list of info to parse it or find the right info, 
+      b) the ACTOR unit has the emoji before the name, the TARGET unit has the emoji after the name (after getting the habit, this helps a lot with #1)
+44. Middle-click in tech screen for setting future goal, doesn't slip into scroll-pane mode.  Alt-right click now works as middle click in tech screen
+45. defending units lost in cities, now inform the player what city they were in when they were lost, so they can know better where the attack was 
+      without having to click the text link.
+47. chatbox scrolling to end of page after getting a message, was sometimes slow and lazy, just like that person that does most of the job but 
+   quits before it's done. now after a certain time of getting a new message and scrolling it, it is force snapped to the bottom.
+
 These help with much more than Freeciv and other Full-screen apps. They help you with everything you do on your computer:
             Switch active Program   Flip to Last Program    Switch Browser tab   See all Programs on Workspace   Swap Workspaces
 Linux*      Alt-Tab                 Alt-ESC                 CTRL-Shift-Tab       🐧, ALT-F1                      CTRL-ALT-arrow
