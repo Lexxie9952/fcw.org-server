@@ -882,6 +882,7 @@ function pregame_settings()
      * alternatives etc is kept up to date. */
     $("#generator").val(server_settings['generator']['support_names'][
                         server_settings['generator']['val']]);
+  }
       
   if (server_settings['temperature'] != null
       && server_settings['temperature']['val'] != null) {
@@ -889,6 +890,7 @@ function pregame_settings()
      * alternatives etc is kept up to date. */
     $("#temperature").val(server_settings['temperature']['support_names'][
                         server_settings['temperature']['val']]);
+  }
 
   $("#select_multiple_units_setting").prop("checked", map_select_setting_enabled);
   $("#select_multiple_units_area").prop("title", "Select multiple units with right-click and drag");
