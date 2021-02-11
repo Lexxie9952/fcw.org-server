@@ -107,7 +107,7 @@ function quicksave()
 
   send_message("/save");
   message_log.update({
-    event: E_SCRIPT,
+    event: E_REPORT, // chosen for whiteness
     message: "Game saved."
   });
   saved_this_turn = true;

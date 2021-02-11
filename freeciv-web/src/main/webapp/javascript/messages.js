@@ -449,8 +449,11 @@ function parseServerLink(message)
 **************************************************************************/
 function chatbox_scroll_to_bottom(slow_scroll) {
 
-  if (slow_scroll)
+  if (slow_scroll) {
     setTimeout(() => $('#freeciv_custom_scrollbar_div').mCustomScrollbar('scrollTo', 'bottom'), 200);
+    // After half a second, ensure we really are at the bottom.
+    setTimeout(() => $("#freeciv_custom_scrollbar_div").mCustomScrollbar("scrollTo", "bottom",{scrollInertia:0}), 900);
+  }
   else
     setTimeout(() => $("#freeciv_custom_scrollbar_div").mCustomScrollbar("scrollTo", "bottom",{scrollInertia:0}), 200);
 }
@@ -508,7 +511,7 @@ function insert_pregame_messages(welcome_message)
     for (var i = 0; i < pregame_messages.length; i++) {
       var message_node = pregame_messages[i];
       if (is_any_word_in_string(message_node.message,bad_words)) continue;
-      message_node.message = message_node.message.replace(/#000000/g, '#FFFFFF');
+      message_node.message = message_node.message.replace(/#000000/g, '#F0F0F0');
       message_log.update(message_node)
     }
     pregame_messages = undefined;

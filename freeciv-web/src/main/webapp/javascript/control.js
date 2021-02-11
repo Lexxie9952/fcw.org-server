@@ -4109,6 +4109,9 @@ function key_unit_unload()
     var ptile = index_to_tile(sunit['tile']);
   }
 
+  // no units selected.
+  if (!sunit) return;
+
   //console.log("sunits == ");
   var funits = get_units_in_focus();
   var units_on_tile = [];

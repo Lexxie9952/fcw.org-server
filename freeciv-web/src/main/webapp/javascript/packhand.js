@@ -254,19 +254,11 @@ function delayed_explosion_helper(tile_id) {
 function handle_city_governor_event(message)
 {
   global_governor_message = message;
-  global_governor_message.replace("#FFFFFF","#800");
   global_governor_message = "<b>"+global_governor_message+"</b>";
   $("#cma_unsaved_warning").html(global_governor_message);
   $("#cma_unsaved_warning").show();
   // Put an expiration on it.
   setTimeout(function() { global_governor_message=""; }, 10000);
-
-  //FIXME: when governor tab updates faster than 3 seconds, we don't need a loop
- /* for (i=0;i<4;i++)
-   setTimeout(function() {
-         $("#cma_unsaved_warning").html("<b>"+message+" </b>("+i+")");
-         $("#cma_unsaved_warning").show();
-        }, 500+i*500);*/
 }
 
 /**************************************************************************
@@ -278,6 +270,15 @@ function handle_chat_msg(packet)
   var event = packet['event'];
   var conn_id = packet['conn_id'];
   var tile_id = packet['tile'];
+
+  const DEFAULT_OFF_WHITE_COLOR = "#D0C8C0";
+
+  // Dirty way to remove the server forcing blinding white font tags into every 
+  // event we get, disallowing us to set the classes ourselves!
+  // TODO: find out where the server is doing this and remove it: it will
+  // decrease bandwidth volume also! 
+  if (event != E_CHAT_MSG) message.replace('<font color="#FFFFFF">', '');
+  else message.replace("#FFFFFF", DEFAULT_OFF_WHITE_COLOR);
 
   if (message == null) return;
   if (event == null || event < 0 || event >= E_UNDEFINED) {
@@ -308,14 +309,14 @@ function handle_chat_msg(packet)
 
         if (tile_id != null && tile_id > 0) {
         message = "<span class='chatbox_text_tileinfo' "
-            + "onclick='center_tile_id_click(" + tile_id + ");'>" + message.replace("FFFFFF", "B0F0FF") + "</span>";
+            + "onclick='center_tile_id_click(" + tile_id + ");'>" + message.replace(DEFAULT_OFF_WHITE_COLOR, "B0F0FF") + "</span>";
         }
 
     if (is_speech_supported()) speak(message);
     }
   }
 
-  if (message.includes("%%")) message = decode_user_hyperlinks(message);
+  if (message.includes("%%") || message.includes("[`")) message = decode_user_hyperlinks(message);
 
   packet['message'] = message;
   add_chatbox_text(packet);
@@ -340,6 +341,7 @@ function recenter_flare_tile(tile_id)
 {
   center_tile_id(tile_id);
   explosion_anim_map[tile_id] = 25;
+  show_tile_marker_instead[tile_id] = true;
 }
 
 /**************************************************************************
@@ -358,16 +360,37 @@ function decode_user_hyperlinks(message)
     // Historic message from oneself to oneself
     if (message.includes("{"+pname+" -> ")) {
       message = message.replace("{"+pname+" -> "+pname+"}: ", "<font color='#AFA8A8'>{Private Link}: </font>");
-      message = message.replace("#A020F0","#FFFFFF"); //private msg colour triggers sound: remove
+      message = message.replace("#A020F0",DEFAULT_OFF_WHITE_COLOR); //private msg colour triggers sound: remove
     } else if (message.includes("->{"+pname+"}: ")) {  // Real-time message from oneself to oneself}
       message = message.replace("->{"+pname+"}: ", "<font color='#AFA8A8'>{Private Link}: </font>");
-      message = message.replace("#A020F0","#FFFFFF"); //private msg colour triggers sound: remove
+      message = message.replace("#A020F0",DEFAULT_OFF_WHITE_COLOR); //private msg colour triggers sound: remove
     }
   }
 
+  // Freemoji:  (emoji/info icons, etc.)
+  var assert_escape = 0;
+  while (message.includes("[`")) {
+      if (assert_escape++ > 20) break; // insurance against freaky or erroneous markups
+
+      var freemoji_name = message.substring(message.indexOf("[`") + 2, message.indexOf("`]"));
+      var replace_me = "[`"+freemoji_name+"`]";
+
+      // Force lower case and remove white space and escape sequences
+      freemoji_name = freemoji_name.toLowerCase();
+      freemoji_name = freemoji_name.replace(/\s+/g, '');
+      freemoji_name = freemoji_name.replace('.', '');
+      freemoji_name = freemoji_name.replace("'", "");
+      // e.g., "A. Smith's Trading Co." will become "asmithstradingco.png"
+      
+      path = "/images/e/"+freemoji_name+".png";
+      element = "<img class='v' src='"+path+"'>";
+
+      message = message.replace( replace_me, (element) );
+  }
+  
   // EXTRACT ENCODED TILE LINKS
   if (message.includes("%%tile")) {
-    var assert_escape = 0;
+    assert_escape = 0;
     var tile_x, tile_y, tile_link;
     var tile_extract, tile_id;
     var pcity, city_name;
@@ -394,7 +417,7 @@ function decode_user_hyperlinks(message)
 
   // EXTRACT ENCODED UNIT LINK
   if (message.includes("%%unit")) {
-    var assert_escape = 0;
+    assert_escape = 0;
     var unit_link, unit_name;
     var unit_extract, unit_id;
 

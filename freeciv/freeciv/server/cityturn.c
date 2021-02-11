@@ -240,10 +240,11 @@ void remove_obsolete_buildings_city(struct city *pcity, bool refresh)
       do_sell_building(pplayer, pcity, pimprove, "obsolete");
       sgold = impr_sell_gold(pimprove);
       notify_player(pplayer, city_tile(pcity), E_IMP_SOLD, ftc_server,
-                    PL_("💰 %s is selling %s (obsolete) for %d.",
-                        "💰 %s is selling %s (obsolete) for %d.",
+                    PL_("&#8203;[`gold`] %s is selling %s [`%s`] (obsolete) for %d gold.",
+                        "&#8203;[`gold`] %s is selling %s [`%s`] (obsolete) for %d gold.",
                         sgold),
                     city_link(pcity),
+                    improvement_name_translation(pimprove),
                     improvement_name_translation(pimprove),
                     sgold);
       sold = TRUE;
@@ -739,7 +740,7 @@ void update_city_activities(struct player *pplayer)
    * player_balance_treasury_units(). */
   if (gold - (gold - pplayer->economic.gold) * 3 < 0) {
     notify_player(pplayer, NULL, E_LOW_ON_FUNDS, ftc_server,
-                  _("⬇💰⬇ WARNING, we're LOW on FUNDS %s."),
+                  _("⬇[`gold`]⬇ WARNING, we're LOW on FUNDS, %s."),
                   ruler_title_for_player(pplayer, buf, sizeof(buf)));
   }
 
@@ -986,13 +987,13 @@ static bool city_increase_size(struct city *pcity, struct player *nationality)
     if (get_current_construction_bonus(pcity, EFT_SIZE_ADJ, RPT_CERTAIN) > 0
         || get_current_construction_bonus(pcity, EFT_SIZE_UNLIMIT, RPT_CERTAIN) > 0) {
       notify_player(powner, city_tile(pcity), E_CITY_AQ_BUILDING, ftc_server,
-                    _("🧱 %s needs %s (being built) to grow beyond size %d."),
+                    _("👉🏻 %s needs %s (being built) to grow beyond size %d."),
                     city_link(pcity),
                     improvement_name_translation(pimprove),
                     city_size_get(pcity));
     } else {
       notify_player(powner, city_tile(pcity), E_CITY_AQUEDUCT, ftc_server,
-                    _("🧱 %s needs an improvement to grow beyond size %d."),
+                    _("👉🏻 %s needs an improvement to grow beyond size %d."),
                     city_link(pcity), city_size_get(pcity));
     }
     /* Granary can only hold so much */
@@ -1053,7 +1054,7 @@ static bool city_increase_size(struct city *pcity, struct player *nationality)
   } trade_partners_iterate_end;
 
   notify_player(powner, city_tile(pcity), E_CITY_GROWTH, ftc_server,
-                _("🔼 %s grows to size %d."),
+                _("➕ %s grows to size %d."),
                 city_link(pcity), city_size_get(pcity));
 
   /* Deprecated signal. Connect your lua functions to "city_size_change" that's
@@ -1149,13 +1150,14 @@ static void city_populate(struct city *pcity, struct player *nationality)
     unit_list_iterate_safe(pcity->units_supported, punit) {
       if (punit->upkeep[O_FOOD] > 0) {
         const char *punit_link = unit_tile_link(punit);
+        const char *punit_log = unit_name_translation(punit);
 
         if (upkeep_kill_unit(punit, O_FOOD, ULR_STARVED,
                              game.info.muuk_food_wipe)) {
           notify_player(city_owner(pcity), city_tile(pcity),
                         E_UNIT_LOST_MISC, ftc_server,
-                        _("⚠️ Famine feared in %s, %s lost!"),
-                        city_link(pcity), punit_link);
+                        _("⚠️ Famine feared in %s, %s [`%s`] lost!"),
+                        city_link(pcity), punit_link, punit_log);
         }
 
         if (city_exist(saved_id)) {
@@ -1167,7 +1169,7 @@ static void city_populate(struct city *pcity, struct player *nationality)
     if (city_size_get(pcity) > 1) {
       notify_player(city_owner(pcity), city_tile(pcity),
                     E_CITY_FAMINE, ftc_server,
-                    _("⚠️ Famine causes population loss in %s."),
+                    _("➖ Famine causes population loss in %s."),
                     city_link(pcity));
     } else {
       notify_player(city_owner(pcity), city_tile(pcity),
@@ -2022,8 +2024,9 @@ static bool worklist_change_build_target(struct player *pplayer,
       } else {
 	/* Yep, we can go after pupdate instead.  Joy! */
         notify_player(pplayer, city_tile(pcity), E_WORKLIST, ftc_server,
-                      _("Production of %s is upgraded to %s in %s."),
+                      _("🔸 Production of %s is upgraded to %s [`%s`] in %s."),
                       utype_name_translation(ptarget), 
+                      utype_name_translation(pupdate),
                       utype_name_translation(pupdate),
                       city_link(pcity));
 	target.value.utype = pupdate;
@@ -2905,8 +2908,9 @@ static void upgrade_building_prod(struct city *pcity)
   if (upgrading && can_city_build_improvement_now(pcity, upgrading)) {
     notify_player(city_owner(pcity), city_tile(pcity),
                   E_UNIT_UPGRADED, ftc_server,
-                  _("Production of %s is upgraded to %s in %s."),
+                  _("🔸 Production of %s is upgraded to %s [`%s`] in %s."),
                   improvement_name_translation(producing),
+                  improvement_name_translation(upgrading),
                   improvement_name_translation(upgrading),
                   city_link(pcity));
     pcity->production.kind = VUT_IMPROVEMENT;
@@ -2951,8 +2955,9 @@ static void upgrade_unit_prod(struct city *pcity)
   if (upgrading && can_city_build_unit_direct(pcity, upgrading)) {
     notify_player(city_owner(pcity), city_tile(pcity),
                   E_UNIT_UPGRADED, ftc_server,
-		  _("Production of %s is upgraded to %s in %s."),
+		  _("🔸 Production of %s is upgraded to %s [`%s`] in %s."),
 		  utype_name_translation(producing),
+		  utype_name_translation(upgrading), 
 		  utype_name_translation(upgrading), 
 		  city_link(pcity));
     pcity->production.value.utype = upgrading;
@@ -2975,12 +2980,14 @@ static bool city_distribute_surplus_shields(struct player *pplayer,
         /* TODO: Should the unit try to help cities on adjacent tiles? That
          * would be a rules change. (This action is performed by the game
          * it self) */
+        const char *punit_log = unit_name_translation(punit);
+
         if (upkeep_kill_unit(punit, O_SHIELD, ULR_DISBANDED,
                              game.info.muuk_shield_wipe)) {
           notify_player(pplayer, city_tile(pcity),
                         E_UNIT_LOST_MISC, ftc_server,
-                        _("⚠️ %s can't upkeep %s, unit disbanded."),
-                        city_link(pcity), punit_link);
+                        _("⚠️ %s can't upkeep %s [`%s`], unit disbanded."),
+                        city_link(pcity), punit_link, punit_log);
         }
 
 	/* pcity->surplus[O_SHIELD] is automatically updated. */
@@ -3044,7 +3051,7 @@ static bool city_build_building(struct player *pplayer, struct city *pcity)
 
   if (!can_city_build_improvement_now(pcity, pimprove)) {
     notify_player(pplayer, city_tile(pcity), E_CITY_CANTBUILD, ftc_server,
-                  _("%s is building %s, which is no longer available."),
+                  _("⚠️ %s is building %s, which is no longer available."),
                   city_link(pcity),
                   city_improvement_name_translation(pcity, pimprove));
     script_server_signal_emit("building_cant_be_built", pimprove, pcity,
@@ -3084,15 +3091,17 @@ static bool city_build_building(struct player *pplayer, struct city *pcity)
     /* to eliminate micromanagement */
     if (is_great_wonder(pimprove)) {
       notify_player(NULL, city_tile(pcity), E_WONDER_BUILD, ftc_server,
-                    _("💢 The %s have finished building %s in %s."),
+                    _("💢[`%s`] The %s have finished building %s in %s."),
+                    city_improvement_name_translation(pcity, pimprove),
                     nation_plural_for_player(pplayer),
                     city_improvement_name_translation(pcity, pimprove),
                     city_link(pcity));
     }
 
     notify_player(pplayer, city_tile(pcity), E_IMP_BUILD, ftc_server,
-                  _("🔨 %s has finished building %s."),
-                  city_link(pcity), improvement_name_translation(pimprove));
+                  _("🔨[`%s`] %s has finished building %s."),
+                  improvement_name_translation(pimprove), city_link(pcity),
+                  improvement_name_translation(pimprove));
     script_server_signal_emit("building_built", pimprove, pcity);
 
     if (!city_exist(saved_id)) {
@@ -3139,7 +3148,7 @@ static bool city_build_building(struct player *pplayer, struct city *pcity)
     }
     if (space_part && pplayer->spaceship.state == SSHIP_NONE) {
       notify_player(NULL, city_tile(pcity), E_SPACESHIP, ftc_server,
-                    _("🚀 The %s have started building a spaceship!"),
+                    _("&#8203;[`events/spaceship`]<br>🚀 The %s have started building a spaceship!"),
                     nation_plural_for_player(pplayer));
       pplayer->spaceship.state = SSHIP_STARTED;
     }
@@ -3191,7 +3200,7 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
   if (!can_city_build_unit_direct(pcity, utype)
       && !is_barbarian(pplayer)) {
     notify_player(pplayer, city_tile(pcity), E_CITY_CANTBUILD, ftc_server,
-                  _("%s is building %s, which is no longer available."),
+                  _("⚠️ %s is building %s, which is no longer available."),
                   city_link(pcity), utype_name_translation(utype));
 
     /* Log before signal emitting, so pointers are certainly valid */
@@ -3217,7 +3226,7 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
     if (city_size_get(pcity) <= pop_cost) {
       notify_player(pplayer, city_tile(pcity), E_CITY_CANTBUILD, ftc_server,
                     /* TRANS: city ... utype ... size ... pop_cost */
-                    _("%s can't build %s yet. "
+                    _("❗ %s can't build %s yet. "
                       "(city size: %d, unit population cost: %d)"),
                     city_link(pcity), utype_name_translation(utype),
                     city_size_get(pcity), pop_cost);
@@ -3313,8 +3322,9 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
 
       notify_player(pplayer, city_tile(pcity), E_UNIT_BUILT, ftc_server,
                     /* TRANS: <city> is finished building <unit/building>. */
-                    _("🔨 %s is finished building %s."),
-                    city_link(pcity), utype_name_translation(utype));
+                    _("🔨[`%s`] %s is finished building %s."),
+                    utype_name_translation(utype), city_link(pcity),
+                    utype_name_translation(utype));
 
       if (pop_cost > 0) {
         /* Additional message if the unit has population cost. */
@@ -3322,9 +3332,10 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
                       ftc_server,
                       /* TRANS: "<unit> cost... <city> shrinks..."
                        * Plural in "%d population", not "size %d". */
-                      PL_("🔽 %s cost %d population. %s shrinks to size %d.",
-                          "🔽 %s cost %d population. %s shrinks to size %d.",
+                      PL_("➖ [`%s`]%s cost %d population. %s shrinks to size %d.",
+                          "➖ [`%s`]%s cost %d population. %s shrinks to size %d.",
                           pop_cost),
+                      utype_name_translation(utype),
                       utype_name_translation(utype), pop_cost,
                       city_link(pcity), city_size_get(pcity));
       }
@@ -3407,7 +3418,8 @@ static bool sell_random_building(struct player *pplayer,
 
   notify_player(pplayer, city_tile(pcityimpr->pcity), E_IMP_AUCTIONED,
                 ftc_server,
-                _("⚠️ Can't afford to maintain %s in %s, building sold!"),
+                _("⚠️[`gold`] Can't afford to maintain %s [`%s`] in %s, building sold!"),
+                improvement_name_translation(pcityimpr->pimprove),
                 improvement_name_translation(pcityimpr->pimprove),
                 city_link(pcityimpr->pcity));
   log_debug("%s: sold building (%s)", player_name(pplayer),
@@ -3535,9 +3547,7 @@ static struct unit *sell_random_unit(struct player *pplayer,
 
   {
     const char *punit_link = unit_tile_link(punit);
-#ifdef FREECIV_DEBUG
-    const char *punit_logname = unit_name_translation(punit);
-#endif /* FREECIV_DEBUG */
+    const char *punit_name = unit_name_translation(punit);
     struct tile *utile = unit_tile(punit);
 
     if (upkeep_kill_unit(punit, O_GOLD, ULR_SOLD,
@@ -3548,10 +3558,10 @@ static struct unit *sell_random_unit(struct player *pplayer,
        * uk_rem_gold_callback() run as the unit's removal call back. */
 
       notify_player(pplayer, utile, E_UNIT_LOST_MISC, ftc_server,
-                    _("⚠️ Not enough gold. %s disbanded."),
-                    punit_link);
+                    _("⚠️ Not enough gold. %s [`%s`] disbanded."),
+                    punit_link, punit_name);
       log_debug("%s: unit sold (%s)", player_name(pplayer),
-                punit_logname);
+                punit_name);
     } else {
       /* Not able to get rid of punit */
       return NULL;
@@ -3789,7 +3799,7 @@ static void check_pollution(struct city *pcity)
   if (fc_rand(100) < pcity->pollution) {
     if (place_pollution(pcity, EC_POLLUTION)) {
       notify_player(city_owner(pcity), city_tile(pcity), E_POLLUTION, ftc_server,
-                    _("☣ Pollution near %s."), city_link(pcity));
+                    _("&#8203;[`pollution`] Pollution near %s."), city_link(pcity));
     }
   }
 }
@@ -3997,7 +4007,7 @@ static void update_city_activity(struct city *pcity)
 
       if (city_illness_check(pcity)) {
         notify_player(pplayer, city_tile(pcity), E_CITY_PLAGUE, ftc_server,
-                      _("💀 %s has been struck by a plague! Population lost!"), 
+                      _("➖ %s has been struck by a plague! Population lost!"), 
                       city_link(pcity));
         city_reduce_size(pcity, 1, NULL, "plague");
         pcity->turn_plague = game.info.turn;
@@ -4614,7 +4624,7 @@ static void apply_disaster(struct city *pcity, struct disaster_type *pdis)
   if (disaster_has_effect(pdis, DE_POLLUTION)) {
     if (place_pollution(pcity, EC_POLLUTION)) {
       notify_player(pplayer, ptile, E_DISASTER, ftc_server,
-                    _("☣ Pollution near %s."), city_link(pcity));
+                    _("&#8203;[`pollution`] Pollution near %s."), city_link(pcity));
       had_internal_effect = TRUE;
     }
   }
@@ -4622,7 +4632,7 @@ static void apply_disaster(struct city *pcity, struct disaster_type *pdis)
   if (disaster_has_effect(pdis, DE_FALLOUT)) {
     if (place_pollution(pcity, EC_FALLOUT)) {
       notify_player(pplayer, ptile, E_DISASTER, ftc_server,
-                    _("☢ Fallout near %s."), city_link(pcity));
+                    _("&#8203;[`fallout`] Fallout near %s."), city_link(pcity));
       had_internal_effect = TRUE;
     }
   }
@@ -4859,7 +4869,7 @@ static bool check_city_migrations_player(const struct player *pplayer)
         /* N.B.: city_link always returns the same pointer. */
         sz_strlcpy(city_link_text, city_link(pcity));
         notify_player(pplayer, city_tile(pcity), E_CITY_TRANSFER, ftc_server,
-                      _("Citizens of %s are thinking about migrating to %s "
+                      _("&#8203;[`migrants`] Citizens of %s are thinking about migrating to %s "
                         "for a better life."),
                       city_link_text, city_link(best_city_player));
       } else {
@@ -4881,7 +4891,7 @@ static bool check_city_migrations_player(const struct player *pplayer)
         sz_strlcpy(city_link_text, city_link(pcity));
         notify_player(pplayer, city_tile(pcity), E_CITY_TRANSFER, ftc_server,
                       /* TRANS: <city1> to <city2> (<city2 nation adjective>). */
-                      _("Citizens of %s are thinking about migrating to %s "
+                      _("&#8203;[`migrants`] Citizens of %s are thinking about migrating to %s "
                         "(%s) for a better life."),
                       city_link_text, city_link(best_city_world), nname);
       } else {

@@ -149,22 +149,23 @@ static bool do_unit_conquer_city(struct player *act_player,
                                  struct action *paction);
 
 #define NUM_BATTLE_LOSS_ADJECTIVES 44
-const char battle_survivor_adjectives[NUM_BATTLE_LOSS_ADJECTIVES][40] = {
+const char battle_survivor_adjectives[NUM_BATTLE_LOSS_ADJECTIVES+1][40] = {
   "brutal", "ruthless", "vicious", "bloodthirsty",                             //  0- 3
   "savage", "harsh", "barbarous", "atrocious",                                 //  4- 7
   "unsuccessful", "inadequate", "ineffective", "mediocre",                     //  8-11
   "disrespectful", "deficient", "unimpressive", "scrappy",                     // 12-15 
-  "pointless", "cheap", "pathetic", "useless",                                // 16-19   
+  "pointless", "cheap", "pathetic", "&#8203;useless", // prevent "an useless"  // 16-19   
   "insignficant", "futile", "inept", "shabby",                                 // 20-23
   "sorry", "decrepit", "pathetic", "hopeless",                                 // 24-27 
   "effete", "weak", "pitiful", "feeble",                                       // 28-31
   "incompetent", "laughable", "puny", "worthless",                             // 32-35
   "impotent", "lame",  "wimpy", "ridiculous",                                  // 36-39   
-  "amusing", "trifling", "total joke of an ", "textbook example of how not to "// 40-43
+  "amusing", "trifling", "total joke of an ", "textbook example of how not to ",// 40-43
+  "ERROR"
 };
 
 #define NUM_BATTLE_WINNER_VERBS 28
-const char battle_winner_verbs[NUM_BATTLE_WINNER_VERBS][40] = {
+const char battle_winner_verbs[NUM_BATTLE_WINNER_VERBS+1][40] = {
   // redundancy for leaning more heavily to generic/common words
   // NB: first half are for normal battles, second half are for
   // stack kills.
@@ -174,7 +175,8 @@ const char battle_winner_verbs[NUM_BATTLE_WINNER_VERBS][40] = {
   "defeated", "killed", "defeated", "killed",
   "destroyed", "destroyed", "slaughtered", "eradicated",
   "crushed", "vanquished", "eliminated", "wiped out",
-  "snuffed out", "annihilated", "exterminated", "massacred"
+  "snuffed out", "annihilated", "exterminated", "massacred",
+  "ERROR"
 };
 
 
@@ -268,8 +270,8 @@ void handle_unit_type_upgrade(struct player *pplayer, Unit_type_id uti)
                    * (Plurality of unit names is messed up anyway.) */
                   /* TRANS: "2 Musketeers upgraded to Riflemen for 100 gold."
                    * Plurality is in gold (second %d), not units. */
-                  PL_("💰 %d %s upgraded to %s for %d gold.",
-                      "💰 %d %s upgraded to %s for %d gold.",
+                  PL_("&#8203;[`gold`] %d %s upgraded to %s for %d gold.",
+                      "&#8203;[`gold`] %d %s upgraded to %s for %d gold.",
                       cost * number_of_upgraded_units),
                   number_of_upgraded_units,
                   utype_name_translation(from_unittype),
@@ -302,8 +304,8 @@ static bool do_unit_upgrade(struct player *pplayer,
     int cost = unit_upgrade_price(pplayer, from_unit, to_unit);
 
     notify_player(pplayer, unit_tile(punit), E_UNIT_UPGRADED, ftc_server,
-                  PL_("💰 %s upgraded to %s for %d gold.",
-                      "💰 %s upgraded to %s for %d gold.", cost),
+                  PL_("&#8203;[`gold`] %s upgraded to %s for %d gold.",
+                      "&#8203;[`gold`] %s upgraded to %s for %d gold.", cost),
                   utype_name_translation(from_unit),
                   unit_link(punit),
                   cost);
@@ -399,8 +401,8 @@ static bool do_capture_units(struct player *pplayer,
         
         notify_player(unit_owner(pcargo), pdesttile,
                     E_ENEMY_DIPLOMAT_BRIBE, ftc_server,
-                    _("⚠️ Your transported %s %s stolen when the %s ambushed %s %s."),
-                    unit_name_translation(pcargo),
+                    _("⚠️ Your transported %s %s %s stolen when the %s ambushed %s %s."),
+                    unit_name_translation(pcargo), UNIT_EMOJI(pcargo), 
                     (is_unit_plural(pcargo) ? "were" : "was"),
                     nation_plural_for_player(pplayer),
                     (is_unit_plural(pcargo) ? "their" : "its"),
@@ -414,14 +416,15 @@ static bool do_capture_units(struct player *pplayer,
 
         notify_player(pplayer, pdesttile,
                     E_ENEMY_DIPLOMAT_BRIBE, ftc_server,
-                    _("💰 Captured %s cargo was taken as booty and auctioned for %d gold."),
+                    _("&#8203;[`gold`] Captured %s cargo was taken as booty and auctioned for %d gold."),
                     unit_name_translation(pcargo),
                     unit_build_shield_cost_base(pcargo));
         *****************************************************************************/
         notify_player(pplayer, pdesttile,
                     E_ENEMY_DIPLOMAT_BRIBE, ftc_server,
-                    _("🎁 Captured %s %s confiscated as booty and taken to your nearest city, %s."),
+                    _("🎁 Captured %s %s %s confiscated as booty and taken to your nearest city, %s."),
                     unit_name_translation(pcargo),
+                    UNIT_EMOJI(pcargo),
                     (is_unit_plural(pcargo) ? "were" : "was"),
                     city_link(new_home_city));
 
@@ -3007,10 +3010,11 @@ static bool do_unit_change_homecity(struct unit *punit,
     notify_player(city_owner(pcity), city_tile(pcity), E_UNIT_BUILT,
                   ftc_server,
                   /* TRANS: other player ... unit type ... city name. */
-                  _("🎁 %s transferred control over a %s to you in %s."),
+                  _("🎁 %s transferred control over a %s %s to you in %s."),
                   giver,
                   unit_tile_link(punit),
-                  city_link(pcity));;
+                  UNIT_EMOJI(punit),
+                  city_link(pcity));
   }
 
   return punit->homecity == pcity->id;
@@ -3048,6 +3052,10 @@ static bool unit_do_help_build(struct player *pplayer,
 
   bool full_contributor = (shields >= unit_type_get(punit)->build_cost) 
                           ? true : false;
+  bool three_quarters = three_quarters = 
+                          (!full_contributor
+                          && shields >= (float)unit_type_get(punit)->build_cost*70/100)
+                          ? true : false;
 
   if (action_has_result(paction, ACTION_HELP_WONDER)) {
     /* Add the caravan shields */
@@ -3076,7 +3084,7 @@ static bool unit_do_help_build(struct player *pplayer,
     prod = city_production_name_translation(pcity_dest);
     action_name = (is_unit_plural(punit) ? _("help build")
                                          : _("helps build"));
-    info_emoji = _("🐫");
+    info_emoji = UNIT_EMOJI(punit);
   } else {
     fc_assert(action_has_result(paction, ACTION_RECYCLE_UNIT));
     /* TRANS: Your Caravan does "Recycle Unit" to help build the
@@ -3090,9 +3098,16 @@ static bool unit_do_help_build(struct player *pplayer,
     // intel on what's being made. Also, most names are shorter than 
     // 'current production', so it's a verbosity reduction for busy
     // leaders.
-    action_name = (is_unit_plural(punit) ? _("render themselves to build")
-                                         : _("renders itself to build"));
-    info_emoji = full_contributor ? _("📦") : _("<font color='#50C010'>♻</font>");
+    if (full_contributor || three_quarters) {
+      action_name = (is_unit_plural(punit) ? _("help build")
+                                          : _("helps build"));
+    }
+    action_name = (is_unit_plural(punit) ? _("are recycled into building")
+                                         : _("recycles itself to build"));
+    if (three_quarters) info_emoji = _("&#8203;[`recycle`][`75`]");
+    else { 
+      info_emoji = full_contributor ? _("&#8203;[`recycle`][`100`]") : _("&#8203;[`recycle`][`50pct`]");
+    }
   }
 
   if (build_points_left(pcity_dest) >= 0) {
@@ -3111,7 +3126,7 @@ static bool unit_do_help_build(struct player *pplayer,
                 ftc_server,
                 /* TRANS: Your Caravan does "Help Wonder" to help build the
                  * Pyramids in Bergen (4 surplus). */
-                _("%s Your %s %s %s in %s (%d %s)"),
+                _("%s Your %s %s %s in %s <span class='nowrap'>(%d %s)</span>"),
                 info_emoji,
                 unit_link(punit),
                 action_name,
@@ -3130,14 +3145,16 @@ static bool unit_do_help_build(struct player *pplayer,
     send_city_info(city_owner(pcity_dest), pcity_dest);
     notify_player(city_owner(pcity_dest), city_tile(pcity_dest),
                   E_CARAVAN_ACTION, ftc_server,
-                  /* TRANS: Help building the Pyramids in Bergen received
-                   * from Persian Caravan (4 surplus). */
-                  _("🎁 Help building the %s in %s received from %s %s "
+                  /* TRANS: We received help to build the Pyramids in Bergen
+                   * from [a] Persian Caravan (4 surplus). */
+                  _("🎁 We received help to build the %s [`%s`] in %s from %s %s %s %s "
                     "(%d %s)."),
                   city_production_name_translation(pcity_dest),
+                  city_production_name_translation(pcity_dest),
                   city_link(pcity_dest),
+                  (is_unit_plural(punit) ? "" : indefinite_article_for_word(nation_adjective_for_player(pplayer),false)),
                   nation_adjective_for_player(pplayer),
-                  unit_link(punit),
+                  unit_link(punit), UNIT_EMOJI(punit),
                   abs(build_points_left(pcity_dest)),
                   work);
   }
@@ -3606,7 +3623,7 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
 {
   struct player *pplayer = unit_owner(punit);
   struct city *pcity = tile_city(ptile);
-  int def_moves_used; 
+  int def_moves_used;
 
   /* Sanity check: The actor still exists. */
   fc_assert_ret_val(pplayer, FALSE);
@@ -3717,47 +3734,55 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
         if (def_hp > 0) {   // SURVIVED
           notify_player(pplayer, ptile,
                         E_UNIT_ACTION_FAILED, ftc_server,
+                        /* TRANS: 💢 Your 🤺Swordsmen assaulted the English Horsemen🏇 (9hp).
+                             or   💢 Your 🤺Swordsmen retaliated against the English Horsemen🏇 (9hp). */
                         /* TODO: replace generic "assaulted" with ruleset
                           defined name of action.*/
-                        _("💢 Your %s %s the %s %s (%dhp)."),
-                        unit_name_translation(punit),
+                        _("💢 Your %s %s the %s %s [`%s`] (%dhp)."),
+                        /*UNIT_EMOJI(punit),*/ unit_name_translation(punit),
                         (is_retaliation ? "retaliated against": "assaulted"),
                         nation_adjective_for_player(unit_owner(pdefender)),
-                        unit_name_translation(pdefender),
+                        unit_name_translation(pdefender), unit_name_translation(pdefender),
                         def_hp);
 
           notify_player(unit_owner(pdefender), ptile,
                         E_UNIT_ESCAPED, ftc_server,
+                        /* TRANS: 💢 French 🤺Swordsmen assaulted your Horsemen🏇 (9hp).
+                             or   💢 French 🤺Swordsmen retaliated against your Horsemen🏇 (9hp). */
                         /* TODO: replace generic "assaulted" with ruleset
                           defined name of action.*/
-                        _("💢 %s %s %s your %s (%dhp)."),
+                        _("💢 %s %s %s %s your %s [`%s`] (%dhp)."),
                         nation_adjective_for_player(pplayer),
-                        unit_name_translation(punit),
+                        UNIT_EMOJI(punit), unit_name_translation(punit),
                         (is_retaliation ? "retaliated against": "assaulted"),
-                        unit_name_translation(pdefender),
+                        unit_name_translation(pdefender), unit_name_translation(pdefender),
                         def_hp);
         } else {          // DIED 
           notify_player(pplayer, ptile,
                         E_UNIT_ACTION_FAILED, ftc_server,
+                        /* TRANS: 💥 Your 🤺Swordsmen assault eliminated the English Horsemen🏇.
+                             or   💥 Your 🤺Swordsmen retaliation eliminated the English Horsemen🏇. */
                         /* TODO: replace generic "assaulted" with ruleset
                           defined name of action.*/
-                        _("💥 Your %s %s <b>%s</b> the %s %s."),
-                        unit_name_translation(punit),
+                        _("💥 Your %s %s <b>%s</b> the %s %s [`%s`]."),
+                        /*UNIT_EMOJI(punit), */unit_name_translation(punit),
                         (is_retaliation ? "retaliation": "assault"),
                         get_battle_winner_verb(0),
                         nation_adjective_for_player(unit_owner(pdefender)),
-                        unit_name_translation(pdefender));
+                        unit_name_translation(pdefender), unit_name_translation(pdefender));
 
           notify_player(unit_owner(pdefender), ptile,
                         E_UNIT_ESCAPED, ftc_server,
+                        /* TRANS: ⚠️ French 🤺Swordsmen assaulted and eliminated your Horsemen🏇.
+                             or   ⚠️ French 🤺Swordsmen retaliated and eliminated your Horsemen🏇. */
                         /* TODO: replace generic "assaulted" with ruleset
                           defined name of action.*/
-                        _("⚠️ %s %s %s and <b>%s</b> your %s."),
+                        _("⚠️ %s %s %s %s and <b>%s</b> your %s [`%s`]."),
                         nation_adjective_for_player(pplayer),
-                        unit_name_translation(punit),
+                        UNIT_EMOJI(punit), unit_name_translation(punit),
                         (is_retaliation ? "retaliated": "assaulted"),
                         get_battle_winner_verb(0),
-                        unit_name_translation(pdefender));        
+                        unit_name_translation(pdefender), unit_name_translation(pdefender));        
         }
 
         see_combat(punit, pdefender);
@@ -3877,6 +3902,17 @@ static bool unit_bombard(struct unit *punit, struct tile *ptile,
 static bool unit_nuke(struct player *pplayer, struct unit *punit,
                       struct tile *def_tile, const struct action *paction)
 {
+
+/*
+  unit_type_iterate(ptype) {
+        notify_player(pplayer, unit_tile(punit), E_UNIT_LOST_ATT, ftc_server,
+                  _("&#8203;[`/units/%s`] id:%d name: %s"),
+                     utype_name_translation(ptype),
+                     ptype->item_number,
+                     utype_name_translation(ptype));
+  } unit_type_iterate_end;
+*/
+
   struct city *pcity;
   /* bombard_rate is never used on nukes, but for nukes it has a double purpose:
      the amount of sq_radius to add to the default sq_radius of 2: */
@@ -4037,7 +4073,7 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
 {
   char loser_link[MAX_LEN_LINK], winner_link[MAX_LEN_LINK];
   struct unit *ploser, *pwinner;
-  struct city *pcity;
+  struct city *pcity = NULL;
   int moves_used, def_moves_used; 
   int old_unit_vet, old_defender_vet, vet;
   int winner_id;
@@ -4145,8 +4181,8 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
                 _("💥 Population lost in %s after successful attack:"),
                 city_link(pcity));
             notify_player(unit_owner(pdefender), def_tile,
-                E_UNIT_LOST_MISC, ftc_server,
-                _("⚠️ The %s attack caused population loss in %s:"),
+                E_CITY_FAMINE, ftc_server, //E_CITY_FAMINE is only shared event for pop loss in city.
+                _("➖ The %s attack caused population loss in %s:"),
                 nation_adjective_for_player(pplayer),
                 city_link(pcity));      
           }   
@@ -4159,16 +4195,16 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
           if (game.server.killcitizen_pct>0 && game.server.killcitizen_pct<100) {    
             notify_player(pplayer, NULL,
                   E_CITY_NORMAL, ftc_server,
-                  _("💢 %s maintained current population after attack:"),
+                  _("&#8203;[`equal`] %s lost no population after your attack:"),
                   city_link(pcity));
             notify_player(unit_owner(pdefender), NULL,
                   E_CITY_NORMAL, ftc_server,
-                  _("💢 No population loss in %s after %s attack:"),
+                  _("&#8203;[`equal`] No population loss in %s after %s attack:"),
                   city_link(pcity),
                   nation_adjective_for_player(pplayer));
-            }  
+            }
         }
-      }
+  }
 
   if (unit_has_type_flag(punit, UTYF_ONEATTACK)) {
     punit->moves_left = 0;
@@ -4188,23 +4224,28 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
     sz_strlcpy(loser_link, unit_tile_link(punit));
     sz_strlcpy(winner_link, unit_link(pdefender));
 
+     // Make a reference copy for use.
+    char punit_emoji[MAX_LEN_LINK], pdefender_emoji[MAX_LEN_LINK];
+    sprintf(punit_emoji, "%s", UNIT_EMOJI(punit));
+    sprintf(pdefender_emoji, "%s", UNIT_EMOJI(pdefender));
+
     notify_player(unit_owner(punit), def_tile,
                   E_UNIT_ACTION_FAILED, ftc_server,
-                  /* TRANS: "... Cannon ... the Polish Destroyer." */
-                  _("💢 Your %s (%dhp) could not defeat the %s %s (%dhp).\n"),
-                  loser_link,
-                  punit->hp,
+                  /* TRANS: Your 🐎Horsemen (2hp) could not defeat the Australian Horsemen🐎 (2hp)." */
+                  _("💢 Your %s %s (%dhp) could not defeat the %s %s %s (%dhp).\n"),
+                  punit_emoji, loser_link, punit->hp,
                   nation_adjective_for_player(unit_owner(pdefender)),
-                  winner_link,
-                  pdefender->hp);
+                  winner_link, pdefender_emoji, pdefender->hp);
     notify_player(unit_owner(pdefender), def_tile,
                   E_UNIT_ESCAPED, ftc_server,
-                  /* TRANS: "... Polish Cannon ... your Destroyer ..." */
-                  _("💢 %s %s (%dhp) attacked your %s (%dhp), with no casualties.\n"),
+                  /* TRANS: "[An] Indian ⛵Galleon (4hp) attacked your Frigate⛵ (6hp), with no casualties. */
+                  _("💢 %s %s %s %s (%dhp) attacked your %s %s %s (%dhp), with no casualties.\n"),
+                  is_unit_plural(punit) ? "" : indefinite_article_for_word(nation_adjective_for_player(unit_owner(punit)), true),
                   nation_adjective_for_player(unit_owner(punit)),
-                  loser_link,
+                  punit_emoji, loser_link,
                   punit->hp,
-                  winner_link,
+                  (pcity ? city_link(pcity) : ""),
+                  winner_link, pdefender_emoji,
                   pdefender->hp);
 
       if (punit->veteran > old_unit_vet)
@@ -4230,6 +4271,7 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
   sz_strlcpy(winner_link,
              utype_is_consumed_by_action(paction, pwinner->utype)
              ? unit_tile_link(pwinner) : unit_link(pwinner));
+  const char *ploser_name = unit_name_translation(ploser);
 
   if (punit == ploser) {
     /* The attacker lost */
@@ -4243,12 +4285,14 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
     notify_player(unit_owner(pwinner), unit_tile(pwinner),
                   E_UNIT_WIN_DEF, ftc_server,
                   /* TRANS: "Your Cannon ... the Polish Destroyer." */
-                  _("💥 Your %s survived %s %s attack by %s %s %s!"),
-                  winner_link,
+                  _("💥 Your %s %s %s survived %s %s attack by %s %s [`%s`] %s."),
+                  (pcity ? city_link(pcity) : ""),
+                  winner_link, UNIT_EMOJI(pwinner),
                   indefinite_article_for_word(adj, false),
                   adj,
-                  (is_unit_plural(punit) ? "" : indefinite_article_for_word(unit_rule_name(punit),false)),
+                  (is_unit_plural(punit) ? "" : indefinite_article_for_word(nation_adjective_for_player(unit_owner(ploser)),false)),
                   nation_adjective_for_player(unit_owner(ploser)),
+                  ploser_name,
                   loser_link);
     if (vet) {
       notify_unit_experience(pwinner);
@@ -4256,7 +4300,7 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
     notify_player(unit_owner(ploser), def_tile,
                   E_UNIT_LOST_ATT, ftc_server,
                   /* TRANS: "... Cannon ... the Polish Destroyer." */
-                  _("⚠️ Your attacking %s failed against the %s %s!"),
+                  _("⚠️ Your attacking %s failed against the %s %s."),
                   loser_link,
                   nation_adjective_for_player(unit_owner(pwinner)),
                   winner_link);
@@ -4753,9 +4797,9 @@ static bool do_unit_establish_trade(struct player *pplayer,
     notify_player(pplayer, city_tile(pcity_dest),
                   E_CARAVAN_ACTION, ftc_server,
                   /* TRANS: ... Caravan ... Paris ... Stockholm, ... Goods... */
-                  PL_("💰 %s %s from %s arrived in %s."
+                  PL_("&#8203;[`gold`] %s %s from %s arrived in %s."
                       " Revenue: <font color='#fff'><b>%d</b></font> gold.",
-                      "💰 %s %s from %s arrived in %s."
+                      "&#8203;[`gold`] %s %s from %s arrived in %s."
                       " Revenue: <font color='#fff'><b>%d</b></font> gold.",
                       revenue),
                   punit_link,
@@ -4783,9 +4827,9 @@ static bool do_unit_establish_trade(struct player *pplayer,
     notify_player(pplayer, city_tile(pcity_dest),
                   E_CARAVAN_ACTION, ftc_server,
                   /* TRANS: ... Caravan ... Paris ... Stockholm, ... Goods... */
-                  PL_("💰💡 %s %s from %s arrived in %s."
+                  PL_("&#8203;[`gold`]💡 %s %s from %s arrived in %s."
                       " Revenues: <font color='#fff'><b>%d</b></font> gold, <font color='#ff0'>%d</b></font> bulbs.",
-                      "💰💡 %s %s from %s arrived in %s."
+                      "&#8203;[`gold`]💡 %s %s from %s arrived in %s."
                       " Revenues: <font color='#fff'><b>%d</b></font> gold, <font color='#ff0'>%d</b></font> bulbs.",
                       revenue),
                   punit_link,

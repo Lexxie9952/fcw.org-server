@@ -5558,8 +5558,6 @@ reqs    =
       "Gov", "Communism", "Player", TRUE
     }
 
-
-
 ;Banking changes upkeep of foot units and mech.inf to gold
 [effect_labor_union_upkeep]
 type    = "Shield2Gold_Factor"

@@ -132,6 +132,10 @@ function init_tech_screen()
   if (is_small_screen()) {
     tech_canvas_text_font = "20px Arial";
   }
+
+  // We use middle click for future goal, not for browser mouse-wheel scrolling:
+  addEventListener("mousedown", function(e){ if(e.button == 1){ e.preventDefault(); } });
+
   $("#technologies").width($(window).width() - 20);
   $("#technologies").height($(window).height() - $("#technologies").offset().top - 15);
 
@@ -186,7 +190,7 @@ function init_tech_screen()
   }
 
   if (!is_small_screen()) { 
-    $("#mouse_info_box").html("<div title='Right-click:   Scrolls the screen.\nMiddle-click:  Sets the Future Goal.' style='margin-right:-10px;margin-bottom:10px;float:right;width:26px;height:20px;'>&#x2753;</div>");
+    $("#mouse_info_box").html("<div title='Right-click:     Scrolls the screen.\nMiddle-click:    Sets the Future Goal.\nALT+Right-click: alternate mid-click' style='margin-right:-10px;margin-bottom:10px;float:right;width:26px;height:20px;'>&#x2753;</div>");
     $("#mouse_info_box").css('cursor', "help");
     $("#mouse_info_box").tooltip();
   }
@@ -612,7 +616,7 @@ function tech_mapview_mouse_click(e)
     mouse_button = e.button + 1
   }
 
-  if (mouse_button == 3) {
+  if (mouse_button == 3 && !e.altKey) {
     if (mouse_x > $(window).width() / 2) {
       $("#technologies").scrollLeft($("#technologies").scrollLeft() + mouse_x/2);
     } else {
@@ -639,7 +643,7 @@ function tech_mapview_mouse_click(e)
 
       if (tech_mouse_x > x && tech_mouse_x < x + tech_item_width
           && tech_mouse_y > y && tech_mouse_y < y + tech_item_height) {
-        if (mouse_button == 2) send_player_tech_goal(ptech['id']);        
+        if (mouse_button == 2 || (mouse_button == 3 && e.altKey)) send_player_tech_goal(ptech['id']);        
         else if (player_invention_state(client.conn.playing, ptech['id']) == TECH_PREREQS_KNOWN) {
           var adjusted_tech_cost = Math.max(1, Math.floor(ptech['cost']*game_info['sciencebox']/100.0))
           if (client.conn.playing['bulbs_researched'] >= adjusted_tech_cost) {
@@ -1158,5 +1162,11 @@ function tech_id_by_name(tname)
     if (tname == techs[tech_id]['name']) return tech_id;
   }
   return null;
+}
+/**************************************************************************
+ Provide links or other functions a way to switch into Tech Tab
+**************************************************************************/
+function click_tech_tab() {
+  $("#tech_tab_item").click();
 }
 

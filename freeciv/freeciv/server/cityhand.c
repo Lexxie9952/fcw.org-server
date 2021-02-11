@@ -284,8 +284,8 @@ void really_handle_city_sell(struct player *pplayer, struct city *pcity,
   pcity->did_sell=TRUE;
   price = impr_sell_gold(pimprove);
   notify_player(pplayer, pcity->tile, E_IMP_SOLD, ftc_server,
-                PL_("💰 You sell %s in %s for %d gold.",
-                    "💰 You sell %s in %s for %d gold.", price),
+                PL_("&#8203;[`gold`] You sell %s in %s for %d gold.",
+                    "&#8203;[`gold`] You sell %s in %s for %d gold.", price),
                 improvement_name_translation(pimprove),
                 city_link(pcity), price);
   do_sell_building(pplayer, pcity, pimprove, "sold");
@@ -386,13 +386,13 @@ void really_handle_city_buy(struct player *pplayer, struct city *pcity)
   if (VUT_UTYPE == pcity->production.kind) {
     notify_player(pplayer, pcity->tile, E_UNIT_BUY, ftc_server,
                   /* TRANS: bought an unit. */
-                  Q_("?unit:💰 You bought %s in %s for %d gold."),
+                  Q_("?unit:&#8203;[`gold`] You bought %s in %s for %d gold."),
                   utype_name_translation(pcity->production.value.utype),
                   city_name_get(pcity), cost);
   } else if (VUT_IMPROVEMENT == pcity->production.kind) {
     notify_player(pplayer, pcity->tile, E_IMP_BUY, ftc_server,
                   /* TRANS: bought an improvement .*/
-                  Q_("?improvement:💰 You bought %s in %s for %d gold."),
+                  Q_("?improvement:&#8203;[`gold`] You bought %s in %s for %d gold."),
                   improvement_name_translation(pcity->production.value.building),
                   city_name_get(pcity), cost);
   }
@@ -601,14 +601,16 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
     if (!pcity->cm_parameter) {
       pcity->cm_parameter = fc_calloc(1, sizeof(struct cm_parameter));
     }
-    notify_player(city_owner(pcity), city_tile(pcity),
-                E_CITY_CMA_RELEASE, ftc_server,
-                _("🔹 Governor successfully assigned to %s."),
-                city_link(pcity));
     cm_copy_parameter(pcity->cm_parameter, &parameter);
     auto_arrange_workers(pcity);
     sync_cities();
     send_city_info(pplayer, pcity);
+    if (pcity->cm_parameter) { // notify only if successful.
+      notify_player(city_owner(pcity), city_tile(pcity),
+                E_CITY_CMA_RELEASE, ftc_server,
+                _("🔹 Governor successfully assigned to %s."),
+                city_link(pcity));
+    }
     return;
   }
 

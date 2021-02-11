@@ -818,20 +818,20 @@ static void update_environmental_upset(enum environment_upset_type type,   // EU
   if (IPCC_report) {
     notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
                   _("—————————————————————————————<br>"
-                    "🌍 Scientists release IPCC report on <b>%s</b>:<br>"
+                    "[`earth`] Scientists release IPCC report on <b>%s</b>:<br>"
                     "—————————————————————————————<br>"),
-                    (type == EUT_GLOBAL_WARMING ? "Global Warming" : "Nuclear Winter"));
+                    (type == EUT_GLOBAL_WARMING ? "☀️Global Warming" : "[`snowflake`]Nuclear Winter"));
     notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
-                  _("<b>A</b>ccumulated <b>C</b>limate <b>S</b>tress:<br>"
-                    "Cumulative Impact  = %d ACS units.<br>"
-                    "Climate Tolerance  = %d ACS units.<br>"
+                  _(""
+                    "Cumulative Impact  = %d units.<br>"
+                    "Climate Tolerance  = %d units.<br>"
                     "—————————————————————————————<br>"
                     "%s<br>"
                     "—————————————————————————————<br>"),
                     *accum,
                     new_level,
-                    (*accum >= new_level ? "⚠️ International action recommended to halt habitat destruction!"
-                                         : "💢 Scientists recommend keeping impact below Climate Tolerance.")
+                    (*accum >= new_level ? "⚠️ <font color='#f44'>International action recommended to halt habitat destruction!</font>"
+                                         : "💢 <font color='#ddd'>Scientists recommend keeping impact below Climate Tolerance.</font>")
     );
   }
 

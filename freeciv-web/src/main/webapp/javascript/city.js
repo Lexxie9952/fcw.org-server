@@ -986,8 +986,12 @@ function get_universal_discount_price(ptype, pcity)
   if (client_rules_flag[CRF_MP2_SPECIAL_UNITS] && 
       governments[players[client.conn.playing.playerno].government].name == "Communism") {
     
-    if (communist_discounts[ptype['name']])
+    if (communist_discounts[ptype['name']]) {
+      if (!client_rules_flag[CRF_MP2_C]) {
+        if (ptype['name'] == "Armor") return ptype['build_cost']
+      } 
       return ptype['build_cost'] - communist_discounts[ptype['name']];
+    }
   }
   // Apply discounts for having Colossus
   if (pcity && client_rules_flag[CRF_COLOSSUS_DISCOUNT] &&
@@ -3306,7 +3310,7 @@ function update_city_screen()
         + "<th title='"+CURV_title[city_user_row_val]+"' class='non_priority' style='text-align:right;padding-left:0px;padding-right:30px;'><img class='lowered_gov' src='"+CURV_icons[city_user_row_val]+"'></th>"
     //    + "<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>"
         + "<th title='Gold' class='gold_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/gold.png'></th>"
-        + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='lowered_gov' src='/images/lux.png'></th>"
+        + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='lowered_gov' src='/images/luxury2.png'></th>"
         + "<th title='Science (bulbs)' class='sci_text' style='text-align:right'><img class='lowered_gov' src='/images/sci.png'></th>"
         + "<th style='text-align:right;'>Grows In"+updown_sort_arrows+"</th><th style='text-align:right;'>Granary"
               +updown_sort_arrows+"</th><th style='text-align:right;' title='Click to change'>Producing"+updown_sort_arrows+"</th>"
@@ -3326,7 +3330,7 @@ function update_city_screen()
     + "<th title='Trade' class='trade_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/trade.png'></th>"
     + "<th>&nbsp;&nbsp;&nbsp;&nbsp;</th>"
     + "<th title='Gold' class='gold_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/gold.png'></th>"
-    + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='lowered_gov' src='/images/lux.png'></th>"
+    + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='lowered_gov' src='/images/luxury2.png'></th>"
     + "<th title='Science (bulbs)' class='sci_text' style='text-align:right'><img class='lowered_gov' src='/images/sci.png'></th>"
     /*+ "<th style='text-align:right;'>Grows"+"</th><th style='text-align:right;'>Grain"*/
     + ( (!tiny_screen) ? ("<th style='text-align:right;'>Grows"+"</th><th style='text-align:right;'>Grain")
@@ -3353,7 +3357,7 @@ function update_city_screen()
     + "<th title='Trade' class='trade_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/trade.png'></th>"
     + "<th>&nbsp;&nbsp;&nbsp;</th>"
     + "<th title='Gold' class='gold_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/gold.png'></th>"
-    + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='lowered_gov' src='/images/lux.png'></th>"
+    + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='lowered_gov' src='/images/luxury2.png'></th>"
     + "<th title='Science (bulbs)' class='sci_text' style='text-align:right'><img class='lowered_gov' src='/images/sci.png'></th>"
     + "<th style='text-align:center;'>Grow"+"</th><th style='text-align:right;'>Food"
           +"</th><th style='text-align:right;' title='Click to change'>Build"+"</th>"
@@ -3850,13 +3854,15 @@ function cma_clipboard_macro(event, called_by_CMA)
                     + "</font>using existing Governor settings.";
       // Emulate incoming server packet for CMA, so it is intercepted and processed properly.              
       packet = {"pid":25,"message":cities_string, "event":E_CITY_CMA_RELEASE};
-      add_chatbox_text(packet);
+      handle_chat_msg(packet);
       if (called_by_CMA) {
         $("#cma_unsaved_warning").html(cities_string);
         global_governor_message = cities_string;
       }
     } else {
-      add_client_message("&#x26A0;&#xFE0F; <b>Failed:</b> no cities were selected for tile refresh.");
+      packet = {"pid":25, "message":"&#x26A0;&#xFE0F; <b>Failed:</b> no cities were selected for tile refresh.",
+                "event":E_CITY_CMA_RELEASE};
+      handle_chat_msg(packet);
       global_governor_message = "&#x26A0;&#xFE0F; <b>Failed:</b> no goverened cities were found.";
     }
   }

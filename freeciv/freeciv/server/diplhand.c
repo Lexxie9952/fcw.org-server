@@ -488,8 +488,8 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
           pgiver->economic.gold -= pclause->value;
           pdest->economic.gold += received;
           notify_player(pdest, NULL, E_DIPLOMACY, ftc_server,
-                        PL_("💰 You get %d gold.",
-                            "💰 You get %d gold.", received), received);
+                        PL_("&#8203;[`gold`] You get %d gold.",
+                            "&#8203;[`gold`] You get %d gold.", received), received);
         }
 	break;
       case CLAUSE_MAP:

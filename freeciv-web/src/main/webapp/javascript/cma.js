@@ -22,11 +22,8 @@ power-user buttons for mass-paste or mass-apply of clipboard to each city */
 
 // Global vars that allow multiple functions to work on the City Governor
 var cma_val_sliders = [1,0,0,0,0,0];  // UI supplied values for cm_parameter['factor'][..]
-var s_val = [" "," "," "," "," "," "];                        // corresponding UI sliders
 var cma_min_sliders = [1,0,0,0,0,0];  // UI supplied values for cm_parameter['minimal_surplus'][..]
-var s_min = [" "," "," "," "," "," "];                        // corresponding UI sliders
 var cma_happy_slider = 0;
-var s_hpy = " ";
 var cma_celebrate = false;
 var cma_allow_disorder = false; 
 var cma_allow_specialists = true;
@@ -34,7 +31,7 @@ var cma_apply_once = false;
 var cma_enabled = false;
 // current implementation allowed starving, with food min_surplus of 20,
 // even when positive food was available:
-var cma_max_growth = false;  
+var cma_max_growth = false;
 
 // Governor Clipboard for copy/paste:
 var _cma_val_sliders = [1,0,0,0,0,0];
@@ -87,82 +84,25 @@ function show_city_governor_tab()
 { // Reject cases which can't show the Governor: -----------------------------------------------
   if (client_is_observer() || client.conn.playing == null) return false;
   if (!active_city) return false;
+  // this should disable CMA in saved games started before CMA was put in:
   if (!active_city['cm_parameter']) {
-    $("#city_governor_tab").html("City Governor unavailable.");
+    // could we just insert a cm_parameter for the city with a default?
+    $("#city_governor_tab").html("Game was started before City Governor feature was added.");
     return false;
   }
   if (city_owner_player_id(active_city) != client.conn.playing.playerno) {
     $("#city_governor_tab").html("City Governor available only for domestic cities.");
     return false;
   }
-  if (!client_rules_flag[CRF_MP2_C]) {
-    // Temporarily disallow in normal games until vetted in development ruleset:
-    // TODO: remove this if-block in April 2021.
-    $("#city_governor_tab").html("Sorry! This ruleset does not yet support the City Governor.");
-    return false;
-  }
   // --------------------------------------------------------------------------------------------
   cma_init_data();  // Retrieve city's current cm_parameter into the UI state vars.
-  const id = "#city_governor_tab";
-  var dhtml = "<header><div id='cma_status' style='font-size: 150%'>"
-                        + cma_get_status_icon()+" City Governor <b>" 
-                        + cma_get_status_text(cma_enabled) + "d</b><br></div><header>";
-  // Toggle enable/disable governor button:
-  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='button_pushed_toggle_cma();' id='btn_toggle_cma' title='"+cma_get_status_text(!cma_enabled)+" city governor in this city'>";
-  dhtml += "<b>"+cma_get_status_text(!cma_enabled)+"</b></button>";
-  // Refresh screen button:
-  dhtml +="<button type='button' class='button ui-button ui-corner-all' onclick='button_pushed_refresh_cma();' id='btn_refresh_cma' title='Reset or refresh the On-Screen Settings back to the saved state of the City Governor Settings.'>";
-  dhtml += "Reload</button>";
-  // Help button:
-  dhtml +="<button type='button' class='button ui-button ui-corner-all' style='float:right' onclick='show_governor_help();' title='How to use City Governors'>";
-  dhtml += "Help</button>";
+  $("#cma_status").html(cma_get_status_icon()+" City Governor <b>"+cma_get_status_text(cma_enabled) + "d</b><br>");
+  $("#btn_toggle_cma").prop("title", cma_get_status_text(!cma_enabled)+" city governor in this city");
+  $("#btn_toggle_cma").html("<b>"+cma_get_status_text(!cma_enabled)+"</b></button>");
+  create_cma_sliders();
+  create_cma_page();
+  update_cma_state();
 
-  // Main slider panel:
-  dhtml += "<form name='cma_vals'><table border='0'><th style='font-size:150%'>Output Priorities</th>";
-  // Basic Vals:
-  var pic_str = "<img style='' class='lowered_gov' src='";
-  for (i=0; i<O_LAST; i++) {
-    const name = O_NAME[i]; // Food, Shield, Trade, Gold, etc.
-    dhtml += "<tr> <td><span style='margin-left:-30px; float:right'><b>"+name+" </b>"+pic_str+O_PIC[i]+"'></td> <td><div class='horizontal dynamic-slider-control slider' id='cma-val-slider-"+name+"'></div> </td>"
-    dhtml += "<td> <div id='"+name+"_val_result' style='float:left;'></div> </td></tr>"
-  }
-  const name = "<span title='The relative importance of celebration vs. the other raw outputs. Use the Force Celebration checkbox to ensure celebration.'>Happy Factor</span>"
-  dhtml += "<tr> <td><span style='margin-left:-30px; float:right'><b>"+name+" </b>&#x1F60A;</td> <td><div class='horizontal dynamic-slider-control slider' id='cma-happy-slider'></div> </td>"
-  dhtml += "<td> <div id='happy_result' style='float:left;'></div> </td></tr>"
-  dhtml += "</table></form>";
-  dhtml += "<br><input type='checkbox' onchange='cma_user_input();' id='cma_celebrate'><b><span style='font-size:110%;'>Force Celebration</span></b> &nbsp;";
-  dhtml += "<input type='checkbox' title='Suppress all specialists who do not prevent disorder.' onchange='cma_user_input();' id='cma_specialists'><span style='font-size:110%;'>Suppress Specialists</span> &nbsp;";
-  dhtml += "<input type='checkbox' onchange='cma_user_input();' id='cma_disorder'><span style='font-size:110%;'>Allow Disorder</span> <br>";
-
-  dhtml += "<br><form name='cma_min_vals'><table border='0' style='color: #000000;'><th style='font-size:150%'>Minimum Surplus</th>";
-  // Min Surplus Vals:
-  for (i=0; i<O_LAST; i++) {
-    const name = O_NAME[i]; // Food, Shield, Trade, Gold, etc.
-    dhtml += "<tr> <td><span style='margin-left:-30px; float:right'><b>"+name+" </b>"+pic_str+O_PIC[i]+"'></td> <td><div class='horizontal dynamic-slider-control slider' id='cma-min-slider-"+name+"'></div> </td>"
-    dhtml += "<td> <div id='"+name+"_min_result' style='float:left;'></div> </td></tr>"
-  }
-  dhtml += "</table></form>";
-  dhtml += "<br><button type='button' class='button ui-button ui-corner-all' onclick='button_pushed_cma_save();' id='btn_set_cma' title='Save On-Screen Settings as the new City Governor Setttings for this city.'>Save</button>";
-  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='button_pushed_cma_apply();' id='btn_apply_cma' title='Set city tiles to match On-Screen Settings without changing the current City Governor Settings.'>Set Once</button>";
-  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='cma_copy_current();' title='Copy On-Screen Settings to Clipboard.'>Copy</button>";
-  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='cma_paste_clipboard();' title='Paste Clipboard to the On-Screen Settings.'>Paste</button>";
-  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='cma_all_cities(true);' title='Set tiles in all cities to match the Clipboard, without changing City Governor Settings.'>&#x26A0;&#xFE0F;Set All</button>";
-  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='cma_all_cities(false);' title='Paste and save Clipboard as the new City Governor Settings, for all cities.'>&#x26A0;&#xFE0F;Save All</button>";
-  dhtml += "<button type='button' class='button ui-button ui-corner-all' onclick='cma_clipboard_macro(null,true);' title='Auto-arrange tiles in all cities with a Governor'>&#x26A0;&#xFE0F;Refresh All</button>";
-
-  dhtml += "<div id='cma_unsaved_warning'>"+global_governor_message+"</div>";
-
-  $(id).html(dhtml);
-
-  // These need a setup delay to avoid a mess:
-  setTimeout(function() {
-    //$("#cma_helptext").html(gov_help);
-    create_cma_sliders();
-    setTimeout(function() {if (!create_cma_page()) return false;},350);
-    setTimeout(update_cma_state,600); // 350+250=600
-  },2100);
-
-  //cma_updater_interval = setInterval(cma_refresh, 500); NOT NEEDED
   return true;
 }
 /**************************************************************************
@@ -197,62 +137,27 @@ function create_cma_sliders() {
 
   for (i=0; i<O_LAST; i++) {
     const name = O_NAME[i]; // Food, Shield, Trade, Gold, etc.
-    $("#cma-val-slider-"+name).html("<input class='slider-input' id='cma-val-slider-"+name+"-input' name='cma-val-slider-"+name+"-input'/>");
-    s_val[i] = $("#cma-val-slider-"+name);
-    $("#cma-min-slider-"+name).html("<input class='slider-input' id='cma-min-slider-"+name+"-input' name='cma-min-slider-"+name+"-input'/>");
-    s_min[i] = $("#cma-val-slider-"+name);
-    $("#cma-happy-slider").html("<input class='slider-input' id='cma-happy-slider-input' name='cma-happy-slider-input'/>");
-    s_hpy = $("#cma-happy-slider");
+
+    $("#cma-val-slider-"+name).slider({ value: cma_val_sliders[i], min:0, max:25 });
+    $("#cma-val-slider-"+name).slider("enable");
+    $("#cma-min-slider-"+name).slider({ value: cma_min_sliders[i], min:-20, max:20 });
+    $("#cma-min-slider-"+name).slider("enable");
+    $("#cma-val-slider-"+name).css("width", 160); 
+    $("#cma-min-slider-"+name).css("width", 160); 
+
+    $("#cma-val-slider-"+name).slider({"slide": cma_user_slide, "change": cma_user_input});
+    $("#cma-min-slider-"+name).slider({"slide": cma_user_slide, "change": cma_user_input});
   }
+  $("#cma-happy-slider").slider({ value: cma_happy_slider, min:0, max:50 });
+  $("#cma-happy-slider").slider("enable");
+  $("#cma-val-slider-"+name).css("width", 160); 
+  $("#cma-happy-slider"+name).slider({"slide": cma_user_slide, "change": cma_user_input});
 }
 /**************************************************************************
-  ...returns true if was able to do it, or else false
+  ...returns true if was able to do it
 **************************************************************************/
 function create_cma_page()
 {
-  const maxval = 25;    // value sliders have max of 25
-  const min_min = -20;  // min surplus is -20
-  const max_min = 20;   // max surplus is +20
-
-  // Create sliders first, assign next. Might give processor more time to catch up.
-      
-  // Val sliders:
-  for (var i = 0; i < O_LAST; i++) {
-    var name = O_NAME[i];
-    s_val[i] = new Slider(document.getElementById("cma-val-slider-"+name),
-    document.getElementById("cma-val-slider-"+name+"-input"));
-  }
-  // Minimum surplus sliders:
-  for (var i = 0; i < O_LAST; i++) {
-    var name = O_NAME[i];
-    s_min[i] = new Slider(document.getElementById("cma-min-slider-"+name),
-    document.getElementById("cma-min-slider-"+name+"-input"));
-  }
-  for (var i = 0; i < O_LAST; i++) {
-    s_val[i].setMaximum(maxval);
-    s_val[i].setMinimum(0);
-    s_val[i].setValue(cma_val_sliders[i]);
-    s_val[i].setBlockIncrement(5);
-    s_val[i].setUnitIncrement(1);
-    s_val[i].onchange = cma_user_input;
-  }
-  for (var i = 0; i < O_LAST; i++) {
-    s_min[i].setMaximum(max_min);
-    s_min[i].setMinimum(min_min);
-    s_min[i].setValue(cma_min_sliders[i]);
-    s_min[i].setBlockIncrement(5);
-    s_min[i].setUnitIncrement(1);
-    s_min[i].onchange = cma_user_input;
-  }
-  s_hpy = new Slider(document.getElementById("cma-happy-slider"),
-  document.getElementById("cma-happy-slider-input"));
-  s_hpy.setMaximum(50);
-  s_hpy.setMinimum(0);
-  s_hpy.setValue(cma_happy_slider);
-  s_hpy.setBlockIncrement(5);
-  s_hpy.setUnitIncrement(1);
-  s_hpy.onchange = cma_user_input;
-
   $("#cma_celebrate").prop("checked", cma_celebrate);
   $("#cma_celebrate").onchange = cma_user_input;
 
@@ -292,14 +197,14 @@ function update_dynamic_UI()
 function update_cma_labels()
 {
   for (var i=0; i < O_LAST; i++) {
-    cma_val_sliders[i] = s_val[i].getValue();
-    cma_min_sliders[i] = s_min[i].getValue();
     var name = O_NAME[i];
-    $("#"+name+"_val_result").html("<b>"+cma_val_sliders[i] + "</b>");
-    $("#"+name+"_min_result").html("<b>"+cma_min_sliders[i] + "</b>");
+    cma_val_sliders[i] = $("#cma-val-slider-"+name).slider("option", "value");
+    cma_min_sliders[i] = $("#cma-min-slider-"+name).slider("option", "value");
+    $("#"+name+"_val_result").html("<b>"+cma_val_sliders[i]+"</b>");
+    $("#"+name+"_min_result").html("<b>"+cma_min_sliders[i]+"</b>");
   }
-  $("#happy_result").html("<b>"+cma_happy_slider + "</b>");
-  cma_happy_slider = s_hpy.getValue();
+  cma_happy_slider = $("#cma-happy-slider" ).slider( "option", "value" );
+  $("#happy_result").html("<b>"+cma_happy_slider+"</b>");
 
   // Update all UI that dynamically changes with enabled/disabled state:
   cma_set_title();
@@ -313,6 +218,36 @@ function cma_user_input()
   cma_user_changed=true;
   update_cma_state();
 }
+/**************************************************************************
+  Called when the user is in the process of sliding a slider.
+  Has to correct for glitch in jquery slider that reports a different 
+  value from what it will decide after mouseup
+**************************************************************************/
+function cma_user_slide()
+{
+  var h,v,m;
+
+  cma_user_changed=true;
+  for (var i=0; i < O_LAST; i++) {
+    var name = O_NAME[i];
+    v = $("#cma-val-slider-"+name).slider("option", "value");
+    m = $("#cma-min-slider-"+name).slider("option", "value");
+    // Heuristic that fixes majority of glitchy value reporting by jq widget:
+    if (v<cma_val_sliders[i]) v--; else if (v>cma_val_sliders[i]) v++;
+    if (m<cma_min_sliders[i]) m--; else if (m>cma_min_sliders[i]) m++;  
+    $("#"+name+"_val_result").html("<b>"+v+"</b>");
+    $("#"+name+"_min_result").html("<b>"+m+"</b>");
+  }
+  h = $("#cma-happy-slider" ).slider( "option", "value" );
+  // correct jquery slider glitch:
+  if (h<cma_happy_slider) h--; else if (h>cma_happy_slider) h++;
+  $("#happy_result").html("<b>"+h+"</b>");
+
+  // Update all UI that dynamically changes with enabled/disabled state:
+  cma_set_title();
+  update_dynamic_UI(); 
+}
+
 /**************************************************************************
   Step one of synchronising UI state with variables recording them.
   This is for checkboxes, then proceeds to call it for update_cma_labels.
@@ -362,7 +297,6 @@ function button_pushed_cma_apply() {
   represented correctly.
 **************************************************************************/
 function button_pushed_refresh_cma() {
-  $("#city_governor_tab").html("");
   show_city_governor_tab();
 }
 /**************************************************************************
@@ -474,12 +408,12 @@ function cma_paste_clipboard() {
   const max_min = 20;   // max surplus is +20
 
   for (var i = 0; i < O_LAST; i++) {
-    s_val[i].setValue(_cma_val_sliders[i]);
+    var name = O_NAME[i];
+    $("#cma-val-slider"+name).slider({"value":_cma_val_sliders[i]});
+    $("#cma-min-slider"+name).slider({"value":_cma_val_sliders[i]});
   }
-  for (var i = 0; i < O_LAST; i++) {
-    s_min[i].setValue(_cma_min_sliders[i]);
-  }
-  s_hpy.setValue(_cma_happy_slider);
+  $("#cma-happy-slider"+name).slider({"value":_cma_happy_slider});
+
   $("#cma_celebrate").prop("checked", _cma_celebrate);
   $("#cma_specialists").prop("checked", (!_cma_allow_specialists)); // suppress = !allow
   $("#cma_disorder").prop("checked", _cma_allow_disorder);

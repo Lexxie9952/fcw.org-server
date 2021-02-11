@@ -4,28 +4,31 @@
 -- ruleset is easier as you do not need to keep your own copy of
 -- default.lua updated when ever it changes in Freeciv distribution.
 
+-- only show partisan banner events the first few times it happens
+partisan_spawns = 0
+
 -- Get gold from entering a hut.
 function _deflua_hut_get_gold(unit, gold)
   local owner = unit.owner
 
   if gold == 1 then
-    notify.event(owner, unit.tile, E.HUT_GOLD, PL_("💰 You found beads worth %d gold.",
-                                                  "💰 You found beads worth %d gold.", gold),
+    notify.event(owner, unit.tile, E.HUT_GOLD, PL_("[`gold`] You found beads worth %d gold.",
+                                                  "[`gold`] You found beads worth %d gold.", gold),
                 gold)
     owner:change_gold(gold)
   elseif gold == 2 then  
-    notify.event(owner, unit.tile, E.HUT_GOLD, PL_("💰 You found medicinal herbs worth %d gold.",
-                                                  "💰 You found medicinal herbs %d gold.", gold),
+    notify.event(owner, unit.tile, E.HUT_GOLD, PL_("[`gold`] You found medicinal herbs worth %d gold.",
+                                                  "[`gold`] You found medicinal herbs %d gold.", gold),
                 gold)
     owner:change_gold(gold)
   elseif gold == 5 then  
-    notify.event(owner, unit.tile, E.HUT_GOLD, PL_("💰 You found stone tools worth %d gold.",
-                                                  "💰 You found stone tools worth %d gold.", gold),
+    notify.event(owner, unit.tile, E.HUT_GOLD, PL_("[`gold`] You found stone tools worth %d gold.",
+                                                  "[`gold`] You found stone tools worth %d gold.", gold),
                 gold)
     owner:change_gold(gold)
   elseif gold == 10 then  
-    notify.event(owner, unit.tile, E.HUT_GOLD, PL_("💰 You found furs worth %d gold.",
-                                                  "💰 You found furs worth %d gold.", gold),
+    notify.event(owner, unit.tile, E.HUT_GOLD, PL_("[`gold`] You found furs worth %d gold.",
+                                                  "[`gold`] You found furs worth %d gold.", gold),
                 gold)
     owner:change_gold(gold)
   end
@@ -190,10 +193,13 @@ function _deflua_make_partisans_callback(city, loser, winner, reason)
     partisans = 8
   end
   city.tile:place_partisans(loser, partisans, city:map_sq_radius())
-  notify.event(loser, city.tile, E.CITY_LOST,
-      _("🤺 The loss of %s has inspired partisans!"), city.name)
-  notify.event(winner, city.tile, E.UNIT_WIN_ATT,
-      _("🤺 The loss of %s has inspired partisans!"), city.name)
+  partisan_spawns = partisan_spawns + 1
+  if partisan_spawns < 5 then
+    notify.event(loser, city.tile, E.CITY_LOST,
+        _("[`events/partisans`]<br>[`partisan`] The loss of %s has inspired %d partisans!"), partisans, city.name)
+    notify.event(winner, city.tile, E.UNIT_WIN_ATT,
+        _("[`events/partisans`]<br>[`partisan`] The loss of %s has inspired %d partisans!"), partisans, city.name)
+  end
 end
 
 signal.connect("city_transferred", "_deflua_make_partisans_callback")

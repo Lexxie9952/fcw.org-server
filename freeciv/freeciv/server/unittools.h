@@ -187,4 +187,12 @@ void unit_get_goods(struct unit *punit);
 
 bool is_unit_plural(struct unit *punit);
 
+/* get unit emoji icon for FCW */
+char *get_web_unit_icon(const struct unit *punit, char *unit_emoji_str);
+char encoded_unit_emoji[128];
+// This macro uses a global string (above) for ease, but if you make two calls to it inside a
+// single text creation (a sprintf or notify_player() call,) one result would overwrite the other.
+// In those cases, do it yourself with get_web_unit_icon() and your own separate strings:
+#define UNIT_EMOJI(punit) get_web_unit_icon((const struct unit*)punit, &encoded_unit_emoji[0])
+
 #endif  /* FC__UNITTOOLS_H */

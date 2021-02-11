@@ -2829,7 +2829,7 @@ struct player *civil_war(struct player *pplayer)
 
   notify_player(pplayer, NULL, E_FIRST_CONTACT, ftc_server,
                 /* TRANS: <leader> ... the Poles. */
-                _("✊ %s is the rebellious leader of the %s."),
+                _("&#8203;[`raisedfist`] %s is the rebellious leader of the %s."),
                 player_name(cplayer),
                 nation_plural_for_player(cplayer));
 
@@ -2851,7 +2851,7 @@ struct player *civil_war(struct player *pplayer)
                     nation_rule_name(nation_of_player(cplayer)));
         notify_player(pplayer, pcity->tile, E_CITY_LOST, ftc_server,
                       /* TRANS: <city> ... the Poles. */
-                      _("✊ %s declares allegiance to the %s."),
+                      _("&#8203;[`raisedfist`] %s declares allegiance to the %s."),
                       city_link(pcity),
                       nation_plural_for_player(cplayer));
         script_server_signal_emit("city_transferred", pcity, pplayer,
@@ -2876,9 +2876,9 @@ struct player *civil_war(struct player *pplayer)
 
   notify_player(NULL, NULL, E_CIVIL_WAR, ftc_server,
                 /* TRANS: ... Danes ... Poles ... <7> cities. */
-                PL_("⚔️ Civil war partitions the %s;"
+                PL_("&#8203;[`events/civilwar`]⚔️ Civil war partitions the %s;"
                     " the %s now hold %d city.",
-                    "⚔️ Civil war partitions the %s;"
+                    "&#8203;[`events/civilwar`]⚔️ Civil war partitions the %s;"
                     " the %s now hold %d cities.",
                     i),
                 nation_plural_for_player(pplayer),

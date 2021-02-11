@@ -327,12 +327,12 @@ void upgrade_all_city_extras(struct player *pplayer, bool discovery)
 
     if (multiple_types) {
       notify_player(pplayer, NULL, E_TECH_GAIN, ftc_server,
-                    _("💡 Workers spontaneously gather and upgrade all "
-                      "possible cities with better infrastructure."));
+                    _("💡 With new tech, Workers upgrade appropriate "
+                      "cities with better infrastructure."));
     } else {
       notify_player(pplayer, NULL, E_TECH_GAIN, ftc_server,
-                    _("💡 Workers spontaneously gather and upgrade all "
-                      "possible cities with %s."), extra_name_translation(upgradet));
+                    _("💡 With new tech, Workers upgrade appropriate "
+                      "cities with %s."), extra_name_translation(upgradet));
     }
   }
 

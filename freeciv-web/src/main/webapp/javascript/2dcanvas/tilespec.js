@@ -37,6 +37,7 @@ var max_select_sprite = 4;
 
 var explosion_anim_map = {};
 var anim_swords_instead = {};  // bools for whether to show swords instead of explosion.
+var show_tile_marker_instead = {}; // bools for whether to show a tile marker indicator instead of combat animation.
 
 const USER_MARK_1     = 1
 const USER_MARK_2     = 2; 
@@ -393,20 +394,28 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
        var explode_step = explosion_anim_map[ptile['index']];
      
        var swords = anim_swords_instead[ptile['index']];
+       if (!swords) swords = 0;
+       var marker = show_tile_marker_instead[ptile['index']];
        key_prefix = swords ? "swords.unit_" : "explode.unit_";
        frame_repeat = swords ? 3 : 5;
        frame = Math.abs(Math.round((23-explode_step)/frame_repeat));
        explosion_anim_map[ptile['index']] =  explode_step - 1;
 
-
+       if (marker) {
+         key_prefix = (explode_step>16 && explode_step<34) ? "" : USER_MARKS[USER_MARK_1];
+         frame ="";
+       }       
        if (explode_step <= 1) {
          delete explosion_anim_map[ptile['index']];
          delete anim_swords_instead[ptile['index']];
+         delete show_tile_marker_instead[ptile['index']];
        }
        else {
+         const xo = marker ? 0 : (unit_offset_x+swords*8);
+         const yo = marker ? 0 : (unit_offset_y+swords*-15);
          sprite_array.push({"key": key_prefix+frame, 
-           "offset_x" : unit_offset_x+swords*8,
-           "offset_y" : unit_offset_y+swords*-15});
+           "offset_x" : xo,
+           "offset_y" : yo});
        } /* the above 8 lines replace the below for supporting 2 explosion types.
        if (explode_step > 20) {
          sprite_array.push({"key" : "explode.unit_0",

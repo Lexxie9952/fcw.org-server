@@ -70,7 +70,7 @@ enum sequence_type {
 
 /* Predefined colors. */
 const struct ft_color ftc_any           = FT_COLOR(NULL,        NULL);
-
+/*
 const struct ft_color ftc_warning       = FT_COLOR("#FF0000",   NULL);
 const struct ft_color ftc_log           = FT_COLOR("#7F7F7F",   NULL);
 const struct ft_color ftc_server        = FT_COLOR("#FFFFFF",   NULL);
@@ -101,6 +101,37 @@ const struct ft_color ftc_luaconsole_warn    = FT_COLOR("#CF2020", NULL);
 const struct ft_color ftc_luaconsole_normal  = FT_COLOR("#006400", NULL);
 const struct ft_color ftc_luaconsole_verbose = FT_COLOR("#B8B8B8", NULL);
 const struct ft_color ftc_luaconsole_debug   = FT_COLOR("#B87676", NULL);
+*/
+const struct ft_color ftc_warning       = FT_COLOR(NULL,        NULL);
+const struct ft_color ftc_log            = FT_COLOR(NULL,        NULL);
+const struct ft_color ftc_server         = FT_COLOR(NULL,        NULL);
+const struct ft_color ftc_client         = FT_COLOR(NULL,        NULL);
+const struct ft_color ftc_editor         = FT_COLOR(NULL,        NULL);
+const struct ft_color ftc_command        = FT_COLOR(NULL,        NULL);
+      struct ft_color ftc_changed        = FT_COLOR(NULL,        NULL);
+const struct ft_color ftc_server_prompt  = FT_COLOR(NULL,        NULL);
+const struct ft_color ftc_player_lost    = FT_COLOR(NULL,        NULL);
+const struct ft_color ftc_game_start     = FT_COLOR(NULL,        NULL);
+
+const struct ft_color ftc_chat_public    = FT_COLOR(NULL,        NULL);
+const struct ft_color ftc_chat_ally      = FT_COLOR(NULL,        NULL);
+const struct ft_color ftc_chat_private   = FT_COLOR(NULL,        NULL);
+const struct ft_color ftc_chat_luaconsole  = FT_COLOR(NULL,        NULL);
+
+const struct ft_color ftc_vote_public    = FT_COLOR(NULL,        NULL);
+const struct ft_color ftc_vote_team      = FT_COLOR(NULL,        NULL);
+const struct ft_color ftc_vote_passed    = FT_COLOR(NULL,        NULL);
+const struct ft_color ftc_vote_failed   = FT_COLOR(NULL,        NULL);
+const struct ft_color ftc_vote_yes     = FT_COLOR(NULL,        NULL);
+const struct ft_color ftc_vote_no       = FT_COLOR(NULL,        NULL);
+const struct ft_color ftc_vote_abstain  = FT_COLOR(NULL,        NULL);
+
+const struct ft_color ftc_luaconsole_input   = FT_COLOR(NULL,        NULL);
+const struct ft_color ftc_luaconsole_error    = FT_COLOR(NULL,        NULL);
+const struct ft_color ftc_luaconsole_warn    = FT_COLOR(NULL,        NULL);
+const struct ft_color ftc_luaconsole_normal   = FT_COLOR(NULL,        NULL);
+const struct ft_color ftc_luaconsole_verbose  = FT_COLOR(NULL,        NULL);
+const struct ft_color ftc_luaconsole_debug    = FT_COLOR(NULL,        NULL);
 
 /**********************************************************************//**
   Return the long name of the text tag type.

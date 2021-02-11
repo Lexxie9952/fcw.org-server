@@ -103,6 +103,10 @@ function center_tile_id_click(ptile_id)
   var sunits = tile_units(tiles[ptile_id]);
   if (sunits != null && sunits.length > 0)  // if units on tile
     set_unit_focus_and_redraw(sunits[0]);
+  else {   // no unit here, so make a marker
+    explosion_anim_map[ptile_id] = 50;
+    show_tile_marker_instead[ptile_id] = true;
+  }
   return;
 }
 

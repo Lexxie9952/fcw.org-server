@@ -1279,18 +1279,18 @@ bool transfer_city(struct player *ptaker, struct city *pcity,
       const char *clink = city_link(pcity);
 
       notify_player(ptaker, pcenter, E_CITY_TRANSFER, ftc_server,
-                    _("The people in %s are stunned by your "
+                    _("💡 The people in %s are stunned by your "
                       "technological insight!"),
                     clink);
 
       if (upgradet != NULL) {
         notify_player(ptaker, pcenter, E_CITY_TRANSFER, ftc_server,
-                      _("Workers spontaneously gather and upgrade "
+                      _("💡 With new tech, Workers upgrade "
                         "%s with %s."),
                       clink, extra_name_translation(upgradet));
       } else {
         notify_player(ptaker, pcenter, E_CITY_TRANSFER, ftc_server,
-                      _("Workers spontaneously gather and upgrade "
+                      _("💡 Workers spontaneously gather and upgrade "
                         "%s infrastructure."),
                       clink);
       }
@@ -1971,9 +1971,9 @@ bool unit_conquer_city(struct unit *punit, struct city *pcity)
   if (pcity->original != pplayer) {
     if (coins > 0) {
       notify_player(pplayer, city_tile(pcity), E_UNIT_WIN_ATT, ftc_server,
-		    PL_("💥 You conquer %s; 💰 your lootings accumulate"
+		    PL_("💥 You conquer %s; [`gold`] your lootings accumulate"
 			" to %d gold!",
-			"💥 You conquer %s; 💰 your lootings accumulate"
+			"💥 You conquer %s; [`gold`] your lootings accumulate"
 			" to %d gold!", coins), 
 		    city_link(pcity),
 		    coins);
@@ -1998,9 +1998,9 @@ bool unit_conquer_city(struct unit *punit, struct city *pcity)
     if (coins > 0) {
       notify_player(pplayer, city_tile(pcity), E_UNIT_WIN_ATT, ftc_server,
 		    PL_("💥 You have liberated %s!"
-			" 💰 Lootings accumulate to %d gold.",
+			" [`gold`] Lootings accumulate to %d gold.",
 			"💥 You have liberated %s!"
-			" 💰 Lootings accumulate to %d gold.", coins),
+			" [`gold`] Lootings accumulate to %d gold.", coins),
 		    city_link(pcity),
 		    coins);
       notify_player(cplayer, city_tile(pcity), E_CITY_LOST, ftc_server,
@@ -3009,8 +3009,9 @@ void change_build_target(struct player *pplayer, struct city *pcity,
        don't announce that the player has *stopped* building that wonder. 
        */
     notify_player(NULL, city_tile(pcity), E_WONDER_STOPPED, ftc_server,
-                  _("💢 The %s have stopped building The %s in %s."),
+                  _("💢 The %s have stopped building The %s [`%s`] in %s."),
                   nation_plural_for_player(pplayer),
+                  city_production_name_translation(pcity),
                   city_production_name_translation(pcity),
                   city_link(pcity));
   }
@@ -3043,7 +3044,7 @@ void change_build_target(struct player *pplayer, struct city *pcity,
       break;
   }
 
-  log_base(LOG_BUILD_TARGET, "%s started building %s%s.",
+  log_base(LOG_BUILD_TARGET, "%s started building %s %s.",
            city_name_get(pcity), name, source);
 
   /* Tell the player what's up. */
@@ -3053,18 +3054,18 @@ void change_build_target(struct player *pplayer, struct city *pcity,
                 /* TRANS: "<city> is building <production><source>."
                  * 'source' might be an empty string, or a clause like
                  * " from the worklist". */
-                _("%s is building %s%s."),
+                _("%s is building %s [`%s`]%s."),
                 city_link(pcity),
-                name, source);
+                name, name, source);
 
   /* If the city is building a wonder, tell the rest of the world
      about it. */
   if (VUT_IMPROVEMENT == pcity->production.kind
       && is_great_wonder(pcity->production.value.building)) {
     notify_player(NULL, city_tile(pcity), E_WONDER_STARTED, ftc_server,
-                  _("💢 The %s have started building The %s in %s."),
+                  _("💢 The %s have started building The %s [`%s`] in %s."),
                   nation_plural_for_player(pplayer),
-                  name,
+                  name, name,
                   city_link(pcity));
   }
 }
@@ -3222,9 +3223,9 @@ void city_landlocked_sell_coastal_improvements(struct tile *ptile)
 
             do_sell_building(pplayer, pcity, pimprove, "landlocked");
             notify_player(pplayer, tile1, E_IMP_SOLD, ftc_server,
-                          PL_("💰 You sell %s in %s (now landlocked)"
+                          PL_("&#8203;[`gold`] You sell %s in %s (now landlocked)"
                               " for %d gold.",
-                              "💰 You sell %s in %s (now landlocked)"
+                              "&#8203;[`gold`] You sell %s in %s (now landlocked)"
                               " for %d gold.", price),
                           improvement_name_translation(pimprove),
                           city_link(pcity), price);

@@ -444,24 +444,26 @@ void found_new_tech(struct research *presearch, Tech_type_id tech_found,
             && can_change_to_government(aplayer, pgov)) {
           /* Notify player about new governments available: */
           char info_emoji[256];
-          if (strcmp(government_name_translation(pgov),"Monarchy")==0)
-            sprintf(info_emoji,  "<span onclick='javascript:show_revolution_dialog()' style='cursor:pointer;font-size:larger;background-color:#0580ff'>👑</span>");
-          else if (strcmp(government_name_translation(pgov),"Republic")==0)
-            sprintf(info_emoji,  "<span onclick='javascript:show_revolution_dialog()' style='cursor:pointer;font-size:larger;color:#c00;background-color:#f2c545'>★</span>");
-          else if (strcmp(government_name_translation(pgov),"Democracy")==0)
-            sprintf(info_emoji,  "<span onclick='javascript:show_revolution_dialog()' style='cursor:pointer'><img class='lowered_gov' src='/images/gov.democracy.png'></span>");
-          else if (strcmp(government_name_translation(pgov),"Fundamentalism")==0)
-            sprintf(info_emoji,  "<span onclick='javascript:show_revolution_dialog()' style='cursor:pointer'><img class='lowered_gov' src='/images/gov.fundamentalism2.png'></span>");
-          else if (strcmp(government_name_translation(pgov),"Communism")==0)
-            sprintf(info_emoji,  "<span onclick='javascript:show_revolution_dialog()' style='cursor:pointer;font-size:larger;color:#fcf10d;;background-color:#e41624'><b>☭</b></span>");
-          else if (strcmp(government_name_translation(pgov),"Federation")==0)
-            sprintf(info_emoji,  "<span onclick='javascript:show_revolution_dialog()' style='cursor:pointer'><img class='lowered_gov' src='/images/gov.federation.png'></span>");
-          else
-            sprintf(info_emoji,  "🟢");
+          if ((strcmp(government_name_translation(pgov),"Monarchy")==0)
+           || (strcmp(government_name_translation(pgov),"Republic")==0)
+           || (strcmp(government_name_translation(pgov),"Democracy")==0)
+           || (strcmp(government_name_translation(pgov),"Fundamentalism")==0)
+           || (strcmp(government_name_translation(pgov),"Communism")==0)
+           || (strcmp(government_name_translation(pgov),"Federation")==0) )
+          {
+            sprintf(info_emoji,  "<span onclick='javascript:show_revolution_dialog()' style='cursor:pointer;'>[`%s`]",
+              government_name_translation(pgov));
+          }
+          else {
+            sprintf(info_emoji,  "<span onclick='javascript:show_revolution_dialog()' style='cursor:pointer;'>🟢");
+          }
 
-          notify_player(aplayer, NULL, E_NEW_GOVERNMENT, ftc_server,
-                        _("%s Discovery of %s enables the government %s."
-                          " You may want a revolution."),
+          if (strcmp(advance_name, government_name_translation(pgov))==0) {
+            notify_player(aplayer, NULL, E_NEW_GOVERNMENT, ftc_server,
+                        _("%s Discovery of %s allows you to change government.</span><br>"),
+                        info_emoji, advance_name);
+          } else notify_player(aplayer, NULL, E_NEW_GOVERNMENT, ftc_server,
+                        _("%s Discovery of %s enables the %s government.</span><br>"),
                         info_emoji, advance_name, government_name_translation(pgov));
         }
       } governments_iterate_end;
@@ -505,9 +507,9 @@ void found_new_tech(struct research *presearch, Tech_type_id tech_found,
      * before really picking the new technology. */
     if (A_UNSET != next_tech) {
       notify_research(presearch, NULL, E_TECH_LEARNED, ftc_server,
-                      _("💡 Learned %s. Our scientists focus on %s; "
+                      _("&#8203;[`techs/%s`] Learned %s.<br>💡 Scientists now focus on %s; "
                         "goal is %s."),
-                      advance_name,
+                      advance_name, advance_name,
                       research_advance_name_translation(presearch,
                                                         next_tech),
                       research_advance_name_translation
@@ -529,13 +531,12 @@ void found_new_tech(struct research *presearch, Tech_type_id tech_found,
 
       if (A_UNSET == next_tech) {
         notify_research(presearch, NULL, E_TECH_LEARNED, ftc_server,
-                        _("💡 Learned %s. Scientists "
-                          "do not know what to research next."),
-                        advance_name);
+                        _("&#8203;[`techs/%s`] Learned %s.<br><span style='cursor:pointer' onclick='click_tech_tab()'>💡 Scientists ask what to research next.</span>"),
+                        advance_name, advance_name);
       } else {
         notify_research(presearch, NULL, E_TECH_LEARNED, ftc_server,
-                        _("💡 Learned %s. Scientists choose to research %s."),
-                        advance_name,
+                        _("&#8203;[`techs/%s`] Learned %s.<br>💡 Our scientists' new goal is %s."),
+                        advance_name, advance_name,
                         research_advance_name_translation(presearch,
                                                           next_tech));
       }
@@ -573,9 +574,9 @@ void found_new_tech(struct research *presearch, Tech_type_id tech_found,
       /* FIXME: "your" when it was just civilization of one of the players
        * sharing the reseach. */
       notify_research(presearch, NULL, E_TECH_GAIN, ftc_server,
-                      _("💡 Great scientists from all the "
+                      _("&#8203;[`techs/%s`] Scientists from all the "
                         "world join your civilization: you learn "
-                        "%s immediately."), radv_name);
+                        "%s immediately."), radv_name, radv_name);
     }
     /* TODO: Ruleset should be able to customize this message too */
     notify_research_embassies(presearch, NULL, E_TECH_EMBASSY, ftc_server,

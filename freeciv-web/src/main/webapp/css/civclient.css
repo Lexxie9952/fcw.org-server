@@ -1207,6 +1207,12 @@ li.tech-me_only::before {
   overflow: hidden;
 }
 
+/* city governor sliders */
+.cma_slider {
+  margin-left:10px;
+  margin-bottom:0px;
+}
+
 /* Diplomacy dialog. */
 .diplomacy_messages {
   background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;
@@ -1376,8 +1382,6 @@ li.tech-me_only::before {
 .e_setting {
  color: #a88888;
 }
-
-
 .e_chat_msg {
   color: #dbd5c0
 }
@@ -1555,7 +1559,7 @@ li.tech-me_only::before {
 .e_game_start,
 .e_game_end,
 .e_turn_bell {
-  color: #f0f0f0;
+  color: #f1efef;
 }
 .e_unit_illegal_action {
   color: #848080;

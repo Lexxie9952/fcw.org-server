@@ -190,7 +190,7 @@ void handle_spaceship_launch(struct player *pplayer)
   arrival = ship->launch_year + (int) ship->travel_time;
 
   notify_player(NULL, NULL, E_SPACESHIP, ftc_server,
-                _("The %s have launched a spaceship!  "
+                _("[`events/spaceship`]<br>🚀 The %s have launched a spaceship!  "
                   "It is estimated to arrive at Alpha Centauri in %s."),
                 nation_plural_for_player(pplayer),
                 textyear(arrival));
@@ -418,7 +418,7 @@ bool do_spaceship_place(struct player *pplayer, enum action_requester from,
 void spaceship_arrived(struct player *pplayer)
 {
   notify_player(NULL, NULL, E_SPACESHIP, ftc_server,
-                _("The %s spaceship has arrived at Alpha Centauri."),
+                _("[`events/spacelanding`]<br>🚀 The %s spaceship has arrived at Alpha Centauri."),
                 nation_adjective_for_player(pplayer));
   pplayer->spaceship.state = SSHIP_ARRIVED;
 }

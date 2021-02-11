@@ -18,6 +18,7 @@
 -- This flags whether philosophy awards a bonus advance, and gets set to off (0) after T85.
 philosophy_possible = 1
 game_turn = 0
+first_horse_warning = 0
 
 --Give players custom messages on certain years.  Currently at 1600 AD (T85), Philosophy expires. Let them know.
 function history_turn_notifications(turn, year)
@@ -31,6 +32,8 @@ function history_turn_notifications(turn, year)
   -- Philosophy no longer gives advances after 1600 AD
     notify.all("<font color=#000000>Philosophers around the world mourn the execution of Giordano Bruno. Philosophy no longer gives a bonus advance.</font>")
     philosophy_possible = 0
+    notify.event(nil, nil, E.BEGINNER_HELP,
+_("[`events/giordano`]<br>🔥 Philosophers hide their books after Giordano Bruno is burned.<br>Philosophy no longer gives a bonus advance."))
   end
   
   return false
@@ -80,12 +83,18 @@ function tech_researched_handler(tech, player, how)
   if id == find.tech_type("Horseback Riding").id and how == "researched" then
     if game_turn < 15 then
       for c in player:cities_iterate() do 
-        if c:has_building(find.building_type("Palace")) then
+        if c:has_building(find.building_type("Palace")) and first_horse_warning > 0 then
           notify.event(NIL, c.tile, E.TECH_GAIN,
-          _("<font color=#ffff00>🐎 Travellers tell stories of the amazing skills of the %s, who ride wild beasts near %s! (%i,%i)</font>"),
+          _("<font color=#ffff00>🐎 Travellers say the %s now ride horses, near %s. (%i,%i)</font>"),
           player.nation:plural_translation(), c.name, c.tile.x, c.tile.y )
-
-          notify.all( _("🐎 Tribesmen have learned to ride wild beasts near %s (%i,%i)"), c.name, c.tile.x, c.tile.y)
+          notify.all( _("🐎 Tribesmen have learned to ride horses near %s (%i,%i)"), c.name, c.tile.x, c.tile.y)          
+        end
+        if c:has_building(find.building_type("Palace")) and first_horse_warning == 0 then
+          first_horse_warning = 1
+          notify.event(NIL, c.tile, E.TECH_GAIN,
+          _("[`events/wildbeasts`]<br><font color=#ffff00>🐎 Travellers tell of the %s, who ride horses near %s! (%i,%i)</font>"),
+          player.nation:plural_translation(), c.name, c.tile.x, c.tile.y )
+          notify.all( _("🐎 Tribesmen have learned to ride wild beasts near %s (%i,%i)"), c.name, c.tile.x, c.tile.y)          
         end
       end  
     end
@@ -154,12 +163,12 @@ function tech_researched_handler(tech, player, how)
       -- Notify the player. Include the tech names in a way that makes it
       -- look natural no matter if each tech is announced or not.
     notify.event(player, NIL, E.TECH_GAIN,
-                 _("<font color=#ffff00>Great philosophers from all the world join your civilization: you get the immediate advance %s.</font>"),
+                 _("[`events/philosophy`]<font color=#ffff00>Great philosophers from all the world join your civilization: you get the immediate advance %s.</font>"),
                  gained:name_translation())
 
     -- Notify research partners
     notify.research(player, false, E.TECH_GAIN,
-                    _("<font color=#ffff00>Great philosophers from all the world join the %s: you get the immediate advance %s.</font>"),
+                    _("[`events/philosophy`]<br><font color=#ffff00>Great philosophers from all the world join the %s: you get the immediate advance %s.</font>"),
                     player.nation:plural_translation(),
                     gained:name_translation())
 
@@ -167,7 +176,7 @@ function tech_researched_handler(tech, player, how)
     -- They should therefore be informed about the source here too.
     notify.research_embassies(player, E.TECH_EMBASSY,
             -- /* TRANS: first %s is leader or team name */
-            _("<font color=#ffff00>Great philosophers from all the world join %s: they get %s as an immediate advance.</font>"),
+            _("[`events/philosophy2`]<font color=#ffff00>Great philosophers from all the world join %s: they get %s as an immediate advance.</font>"),
             player:research_name_translation(),
             gained:name_translation())
   end
@@ -176,11 +185,13 @@ end
 signal.connect("tech_researched", "tech_researched_handler")
 
 function turn_callback(turn, year)
-  if turn == 120 then
+  if turn == 99 then
     notify.event(nil, nil, E.SCRIPT,
 _("<b>Prophets have Visions!</b>\n\
 Evangelists warn the End Times are near.\
 "))
+notify.event(nil, nil, E.BEGINNER_HELP,
+_("[`events/endtimes`]<br>Philosophers are concerned that weapons technology is becoming too advanced."))
   end
 
   if turn == 2 then
@@ -189,6 +200,8 @@ _("<b>Hunt for Food!</b>\n\
 Meat from wild animals is an important part of the Stone Age diet. Use wandering Deer and Wild Boar for extra food.\
    (TIP: Use Shift-W and Ctrl-Shift-Click to monitor and manage these resource opportunities.)\
 "))
+notify.event(nil, nil, E.BEGINNER_HELP,
+_("[`events/hunt`]<br>Wild animals available to hunt for food."))
   end
 
   if turn == 17 then
@@ -196,6 +209,8 @@ Meat from wild animals is an important part of the Stone Age diet. Use wandering
 _("<b>Ecology Report</b>\n\
 Frequent hunting has reduced wild animal populations and frightened them from human settlements.\
 "))
+notify.event(nil, nil, E.BEGINNER_HELP,
+_("[`events/runningdeer`]<br>Animal populations no longer come near human settlements."))
   end
 end
 

@@ -274,6 +274,8 @@ What this means for MP2 rules:
       without having to click the text link.
 47. chatbox scrolling to end of page after getting a message, was sometimes slow and lazy, just like that person that does most of the job but 
    quits before it's done. now after a certain time of getting a new message and scrolling it, it is force snapped to the bottom.
+48. every event in chat that took place somewhere on the map, is a link to center the map there, AND will select the unit there if there is one, 
+      OR else make a signal marker to identify the exact tile.
 
 These help with much more than Freeciv and other Full-screen apps. They help you with everything you do on your computer:
             Switch active Program   Flip to Last Program    Switch Browser tab   See all Programs on Workspace   Swap Workspaces
