@@ -1015,6 +1015,10 @@ function pregame_settings()
   $('#generator').change(function() {
     send_message("/set generator " + $('#generator').val());
   });
+      
+  $('#temperature').change(function() {
+    send_message("/set temperature " + $('#temperature').val());
+  });
 
   /* Make the long ruleset description available in the pregame. The
    * ruleset's README isn't located at the player's computer. */
