@@ -732,17 +732,17 @@ function pregame_settings()
         "<option value='1'>Handicapped</option>" +
         "<option value='2'>Novice</option>" +
         "<option value='3'>Easy</option>" +
-          "<option value='4'>Normal</option>" +
-          "<option value='5'>Hard</option>" +
-          "<option value='6'>Cheating</option>" +
+        "<option value='4'>Normal</option>" +
+        "<option value='5'>Hard</option>" +
+        "<option value='6'>Cheating</option>" +
     "</select></td></tr>"+
-    "<tr class='not_pbem' title='This setting sets the world general tempeture, changing the types of tiles.><td>AI skill level:</td>" +
+    "<tr class='not_pbem' title='This setting sets the world general tempeture, changing the types of tiles.><td>Temperature</td>" +
     "<td><select name='temperature' id='temperature'>" +
         "<option value='100'>Very Hot</option>" +
         "<option value='70'>Hot</option>" +
         "<option value='50'>Normal</option>" +
-          "<option value='30'>Cold</option>" +
-          "<option value='0'>Very Cold</option>" +
+        "<option value='30'>Cold</option>" +
+        "<option value='0'>Very Cold</option>" +
     "</select></td></tr>"+
     "<tr title='Number of initial techs per player'><td>Tech level:</td>" +
     "<td><input type='number' name='techlevel' id='techlevel' size='3' length='3' min='0' max='100' step='10'></td></tr>" +
@@ -754,6 +754,8 @@ function pregame_settings()
     "<td><input type='number' name='citymindist' id='citymindist' size='4' length='4' min='1' max='9' step='1'></td></tr>" +
           "<tr title='The game will end at the end of the given turn.'><td>End turn:</td>" +
     "<td><input type='number' name='endturn' id='endturn' size='4' length='4' min='0' max='32767' step='1'></td></tr>" +
+    "<td><input type='number' name='globalwarming_percent' id='globalwarmingpercent' size='20' length='3' min='0' max='100' step='10'></td></tr>" +
+    "<tr title='Global Warming Percent'><td>Global Warming:</td>" +
     "<tr class='not_pbem' title='Enables score graphs for all players, showing score, population, techs and more."+
           " This will lead to information leakage about other players.'><td>Score graphs</td>" +
           "<td><input type='checkbox' name='scorelog_setting' id='scorelog_setting' checked>Enable score graphs</td></tr>" +
@@ -844,6 +846,11 @@ function pregame_settings()
   if (server_settings['landmass'] != null
       && server_settings['landmass']['val'] != null) {
     $("#landmass").val(server_settings['landmass']['val']);
+  }
+    
+  if (server_settings['global_warming_percent'] != null
+      && server_settings['global_warming_percent']['val'] != null) {
+    $("#global_warming_percent").val(server_settings['global_warming_percent']['val']);
   }
 
   if (server_settings['specials'] != null
@@ -1004,6 +1011,10 @@ function pregame_settings()
 
   $('#landmass').change(function() {
     send_message("/set landmass " + $('#landmass').val());
+  });
+    
+  $('#global_warming_percent').change(function() {
+    send_message("/set global_warming_percent " + $('#global_warming_percent').val());
   });
 
   $('#citymindist').change(function() {
