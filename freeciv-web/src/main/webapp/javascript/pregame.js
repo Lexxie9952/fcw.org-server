@@ -701,9 +701,12 @@ function pregame_settings()
 
   var dhtml = "<div id='pregame_settings_tabs'>" +
       "   <ul>" +
-      "     <li><a href='#pregame_settings_tabs-1'>Game</a></li>" +
+      "     <li><a href='#pregame_settings_tabs-1'>Main</a></li>" +
       "     <li><a href='#pregame_settings_tabs-2'>3D WebGL</a></li>" +
       "     <li><a href='#pregame_settings_tabs-3'>Other</a></li>" +
+      "     <li><a href='#pregame_settings_tabs-4'>Military</a></li>" +
+      "     <li><a href='#pregame_settings_tabs-5'>Economic</a></li>" +
+      "     <li><a href='#pregame_settings_tabs-6'>Costs</a></li>" +
       "   </ul>"
       + "<div id='pregame_settings_tabs-1'><table id='settings_table'> "
       + "<tr title='Ruleset version'><td>Ruleset:</td>"
@@ -754,8 +757,14 @@ function pregame_settings()
     "<td><input type='number' name='citymindist' id='citymindist' size='4' length='4' min='1' max='9' step='1'></td></tr>" +
           "<tr title='The game will end at the end of the given turn.'><td>End turn:</td>" +
     "<td><input type='number' name='endturn' id='endturn' size='4' length='4' min='0' max='32767' step='1'></td></tr>" +
-    "<td><input type='number' name='globalwarming_percent' id='globalwarmingpercent' size='20' length='3' min='0' max='100' step='10'></td></tr>" +
-    "<tr title='Global Warming Percent'><td>Global Warming:</td>" +
+    "<td><input type='number' name='global_warming_percent' id='global_warming_percent' size='20' length='3' min='0' max='200' step='10'></td></tr>" +
+    "<tr title='Global Warming Percent'><td>Global Warming Percent:</td>" +
+    "<td><input type='number' name='global_warming' id='global_warming' size='20' length='3' min='0' max='200' step='10'></td></tr>" +
+    "<tr title='Global Warming'><td>Global Warming:</td>" +
+    "<td><input type='number' name='nuclear_winter_percent' id='nuclear_winter_percent' size='20' length='3' min='0' max='200' step='10'></td></tr>" +
+    "<tr title='Nuclear Winter Percent'><td>Global Warming Percent:</td>" +
+    "<td><input type='number' name='nuclear_winter' id='nuclear_winter' size='20' length='3' min='0' max='200' step='10'></td></tr>" +
+    "<tr title='Nuclear Winter'><td>Global Warming:</td>" +
     "<tr class='not_pbem' title='Enables score graphs for all players, showing score, population, techs and more."+
           " This will lead to information leakage about other players.'><td>Score graphs</td>" +
           "<td><input type='checkbox' name='scorelog_setting' id='scorelog_setting' checked>Enable score graphs</td></tr>" +
@@ -851,6 +860,21 @@ function pregame_settings()
   if (server_settings['global_warming_percent'] != null
       && server_settings['global_warming_percent']['val'] != null) {
     $("#global_warming_percent").val(server_settings['global_warming_percent']['val']);
+  }
+    
+  if (server_settings['global_warming'] != null
+      && server_settings['global_warming']['val'] != null) {
+    $("#global_warming").val(server_settings['global_warming']['val']);
+  }
+    
+  if (server_settings['nuclear_winter_percent'] != null
+      && server_settings['nuclear_winter_percent']['val'] != null) {
+    $("#global_warming_percent").val(server_settings['nuclear_winter_percent']['val']);
+  }
+    
+  if (server_settings['nuclear_winter'] != null
+      && server_settings['nuclear_winter']['val'] != null) {
+    $("#global_warming").val(server_settings['nuclear_winter']['val']);
   }
 
   if (server_settings['specials'] != null
@@ -1015,6 +1039,15 @@ function pregame_settings()
     
   $('#global_warming_percent').change(function() {
     send_message("/set global_warming_percent " + $('#global_warming_percent').val());
+  });
+  $('#global_warming').change(function() {
+    send_message("/set global_warming " + $('#global_warming').val());
+  });
+  $('#global_warming_percent').change(function() {
+    send_message("/set nuclear_winter_percent " + $('#nuclear_winter_percent').val());
+  });
+  $('#nuclear_winter').change(function() {
+    send_message("/set nuclear_winter " + $('#nuclear_winter').val());
   });
 
   $('#citymindist').change(function() {
