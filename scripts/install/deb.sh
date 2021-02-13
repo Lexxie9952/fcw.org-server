@@ -84,7 +84,8 @@ fi
 echo "==== Installing Updates and Dependencies ===="
 
 #workaround for msodbcsql17...
-sudo apt-mark hold msodbcsql17 || echo "workaround erred"
+sudo apt-mark hold msodbcsql17  containers-common || echo "workaround erred"
+
 
 
 echo "apt-get upgrade"
