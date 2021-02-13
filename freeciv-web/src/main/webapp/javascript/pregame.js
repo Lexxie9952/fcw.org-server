@@ -747,7 +747,7 @@ function pregame_settings()
         "<option value='5'>Hard</option>" +
         "<option value='6'>Cheating</option>" +
     "</select></td></tr>"+
-    "<tr class='not_pbem' title='This setting sets the world general tempeture, changing the types of tiles.><td>Temperature</td>" +
+    "<tr class='not_pbem' title='This setting sets the world general tempeture, changing the types of tiles.'><td>Temperature</td>" +
     "<td><select name='temperature' id='temperature'>" +
         "<option value='100'>Very Hot</option>" +
         "<option value='70'>Hot</option>" +
@@ -755,7 +755,7 @@ function pregame_settings()
         "<option value='30'>Cold</option>" +
         "<option value='0'>Very Cold</option>" +
     "</select></td></tr>"+
-    "<tr class='not_pbem' title='This setting sets the world general tempeture, changing the types of tiles.><td>AI skill level:</td>" +
+    "<tr class='not_pbem' title='This setting sets the world general tempeture, changing the types of tiles.'><td>AI skill level:</td>" +
     "<td><select name='temperature' id='temperature'>" +
         "<option value='100'>Very Hot</option>" +
         "<option value='70'>Hot</option>" +
@@ -833,7 +833,10 @@ function pregame_settings()
       "<tr id='voice_row'><td id='voice_label'></td>" +
         "<td><select name='voice' id='voice'></select></td></tr>" +
         "</table>" +
-      "</div>"
+      "</div>" +
+      "<div id='pregame_settings_tabs-4'></div>" +
+      "<div id='pregame_settings_tabs-5'></div>" +
+      "<div id='pregame_settings_tabs-6'></div>"
     ;
   $(id).html(dhtml);  
 
@@ -935,7 +938,7 @@ function pregame_settings()
       && server_settings['temperature']['val'] != null) {
     /* TODO: Should probably be auto generated from setting so help text,
      * alternatives etc is kept up to date. */
-    $("#temperature").val(server_settings['temperature']['support_names'][
+    $("#temperature").val(server_settings['temperature']['name'] [
                         server_settings['temperature']['val']]);
   }
 
