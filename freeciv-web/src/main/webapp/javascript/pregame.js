@@ -712,9 +712,9 @@ function pregame_settings()
       "     <li><a href='#pregame_settings_tabs-1'>Main</a></li>" +
       "     <li><a href='#pregame_settings_tabs-2'>3D WebGL</a></li>" +
       "     <li><a href='#pregame_settings_tabs-3'>Other</a></li>" +
-      "     <li><a href='#pregame_settings_tabs-4'>Military</a></li>" +
-      "     <li><a href='#pregame_settings_tabs-5'>Economic</a></li>" +
-      "     <li><a href='#pregame_settings_tabs-6'>Costs</a></li>" +
+      //"     <li><a href='#pregame_settings_tabs-4'>Military</a></li>" +
+      //"     <li><a href='#pregame_settings_tabs-5'>Economic</a></li>" +
+      //"     <li><a href='#pregame_settings_tabs-6'>Costs</a></li>" +
       "   </ul>"
       + "<div id='pregame_settings_tabs-1'><table id='settings_table'> "
       + "<tr title='Ruleset version'><td>Ruleset:</td>"
@@ -733,7 +733,7 @@ function pregame_settings()
           "<td><input type='checkbox' name='music_setting' id='music_setting'>Play Music</td></tr>" +
     "<tr class='not_pbem' title='Total number of players (including AI players)'><td>Number of Players (including AI):</td>" +
     "<td><input type='number' name='aifill' id='aifill' size='4' length='3' min='0' max='32' step='1'></td></tr>" +
-    "<td><input type='number' name='timeout' id='timeout' size='4' length='3' min='30' max='3600' step='1'></td></tr>" +
+    "<tr><td>Timeout:</td><td><input type='number' name='timeout' id='timeout' size='4' length='3' min='30' max='3600' step='1'></td></tr>" +
           "<tr class='not_pbem' title='Creates a private game where players need to know this password in order to join.'><td>Password for private game:</td>" +
     "<td><input type='text' name='password' id='password' size='10' length='10'></td></tr>" +
     "<tr title='Map size (in thousands of tiles)'><td>Map size:</td>" +
@@ -755,14 +755,6 @@ function pregame_settings()
         "<option value='30'>Cold</option>" +
         "<option value='0'>Very Cold</option>" +
     "</select></td></tr>"+
-    "<tr class='not_pbem' title='This setting sets the world general tempeture, changing the types of tiles.'><td>AI skill level:</td>" +
-    "<td><select name='temperature' id='temperature'>" +
-        "<option value='100'>Very Hot</option>" +
-        "<option value='70'>Hot</option>" +
-        "<option value='50'>Normal</option>" +
-          "<option value='30'>Cold</option>" +
-          "<option value='0'>Very Cold</option>" +
-    "</select></td></tr>"+
     "<tr title='Number of initial techs per player'><td>Tech level:</td>" +
     "<td><input type='number' name='techlevel' id='techlevel' size='3' length='3' min='0' max='100' step='10'></td></tr>" +
     "<tr title='This setting gives the approximate percentage of the map that will be made into land.'><td>Landmass:</td>" +
@@ -773,14 +765,6 @@ function pregame_settings()
     "<td><input type='number' name='citymindist' id='citymindist' size='4' length='4' min='1' max='9' step='1'></td></tr>" +
           "<tr title='The game will end at the end of the given turn.'><td>End turn:</td>" +
     "<td><input type='number' name='endturn' id='endturn' size='4' length='4' min='0' max='32767' step='1'></td></tr>" +
-    "<td><input type='number' name='global_warming_percent' id='global_warming_percent' size='20' length='3' min='0' max='200' step='10'></td></tr>" +
-    "<tr title='Global Warming Percent'><td>Global Warming Percent:</td>" +
-    "<td><input type='number' name='global_warming' id='global_warming' size='20' length='3' min='0' max='200' step='10'></td></tr>" +
-    "<tr title='Global Warming'><td>Global Warming:</td>" +
-    "<td><input type='number' name='nuclear_winter_percent' id='nuclear_winter_percent' size='20' length='3' min='0' max='200' step='10'></td></tr>" +
-    "<tr title='Nuclear Winter Percent'><td>Global Warming Percent:</td>" +
-    "<td><input type='number' name='nuclear_winter' id='nuclear_winter' size='20' length='3' min='0' max='200' step='10'></td></tr>" +
-    "<tr title='Nuclear Winter'><td>Global Warming:</td>" +
     "<tr class='not_pbem' title='Enables score graphs for all players, showing score, population, techs and more."+
           " This will lead to information leakage about other players.'><td>Score graphs</td>" +
           "<td><input type='checkbox' name='scorelog_setting' id='scorelog_setting' checked>Enable score graphs</td></tr>" +
