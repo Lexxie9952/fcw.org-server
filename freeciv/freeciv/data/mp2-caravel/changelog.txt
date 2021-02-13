@@ -14,6 +14,11 @@ BUILDINGS AND WONDERS:
    more difficult for representative govs to rapture simultaneous to mid-game invasions
 3. Police Station prevents investigate city for all govs except Democracy.
 4. Courthouse prevents Diplomats (not Spies) from doing hostile Embassy without first cease-fire or peace.
+5. City Walls were sometimes too cheap, sometimes too expensive, sometimes too OP, etc., this was very similar to the issue with Fortresses 
+   that was fixed earlier with the Fort/Fortress distinction. The new City Walls solution breaks into two types somewhat modeled on the 
+   Fort / Fortress solution now. City Fortifications are available with Masonry and provide 1.75x; City Walls come with Construction and 
+   remain 3x. Just as with Fort/Fortress, City Fortifications are cheaper/easier to build but not as strong. Also same is that they don't 
+   stack. And also same is Masonry for first, Construction for second.
 
 GOVERNMENT RE-BALANCE:
 * ALL NON-REPRESENTATIVE GOVERNMENTS:
@@ -104,6 +109,10 @@ SPIES/DIPLOMATS:
       85% chance to investigate unprotected city
       ~75% chance to succeed vs. protected city (varies slightly up or down with the vet levels of the spy units in combat.)
       causes casus belli on failure!
+CITY-BUSTER
+1. Catapult > Cannon > Artillery > Howitzer is now an evolutionary sub-class of land units for Ballistic/Siege/City Busting as their 
+   special unit ability or distinction. Each one gets a special bonus against City Defense improvements that progressively grows until
+   arriving at Howitzer. This does a lot for game balance and logic. 
 
 OTHER:
 1.Casus Belli Expansions:

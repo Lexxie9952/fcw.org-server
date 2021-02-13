@@ -276,7 +276,7 @@ genus		= "Improvement"
 flags		= "VisibleByOthers"
 reqs	=
     { "type", "name", "range"
-      "Tech", "Masonry", "Player"
+      "Tech", "Construction", "Player"
     }
 graphic	= "b.city_walls"
 graphic_alt	= "-"
@@ -289,14 +289,19 @@ sabotage	= 50
 sound		= "b_city_walls"
 sound_alt	= "b_generic"
 helptext	= _("\
-City Walls give a 3x bonus to ALL units in a City against attacks from\
- Land units, except from Howitzers. City Walls are ineffective against Air,\
- Sea, and Missile units. City Walls prevent population loss when a defending unit\
- is killed. City Walls are tall and enormous stone constructions which have few\
- areas vulnerable to sabotage: if an enemy attempts to sabotage City Walls,\
- the odds of success are halved. In a city with Fortifications, City Walls are\
- built beyond the fortified perimeter—thus, they replace the bonus instead of\
- stacking with it.\
+City Walls give a 3x bonus to every type of unit in a City, against attacks\
+ from Land units. However, this bonus is reduced when attacked by Catapults\
+ and all upgrades thereof. City Walls are ineffective against attacks from\
+ units which are not in the Land unit class: they are useless against Air,\
+ Sea, and Missile units.\n\
+City Walls prevent population loss when a defending unit is killed. As enormous\
+ tall stone constructions with few vulnerabilties, they are resistant\
+ to sabotage. If an enemy attempts to sabotage City Walls, the odds of success\
+ are halved. In a city with Fortifications, City Walls are built beyond the\
+ fortified perimeter—thus, they replace the bonus instead of stacking with it.\n\
+When you discover Metallurgy, extra materials and construction are needed to\
+ keep up with the growing threat from Cannon-type weapons; and cost increases to\
+ 70 shields.\
 ")
 
 [building_coastal_defense]
@@ -424,16 +429,16 @@ obsolete_by	=
     }
 build_cost	= 35
 upkeep		= 0
-sabotage	= 75
+sabotage	= 50
 sound		= "b_fortifications"
 sound_alt	= "b_generic"
 helptext	= _("\
-Fortifications give a 1.75x bonus to ALL units in a City against attacks from Land\
- units; except from Cannons (or upgraded models of it.)\
+Fortifications give a 1.75x bonus to every unit in a City against attacks from Land\
+ units; except from Catapults and its upgrades, which reduce that bonus.\
  Fortifications prevent population loss when a defending unit is killed.\n\
  Fortifications are a combination of trenches, palisades, earthen bulwarks and short walls,\
- so cannot be targeted by Siege Rams. If an enemy attempts sabotage, odds of success are 75%\
- of base odds. Since City Walls expand beyond the perimeter of Fortifications, this improvement\
+ so cannot be targeted by Siege Rams. If an enemy attempts sabotage, odds of success are halved.\
+ Since City Walls expand beyond the perimeter of Fortifications, this improvement\
  offers no bonus when City Walls are in place―but provides a fallback if City Walls come down.\
 ")
 

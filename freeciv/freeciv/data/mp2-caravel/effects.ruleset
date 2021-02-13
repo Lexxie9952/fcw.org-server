@@ -1966,12 +1966,39 @@ reqs	=
 ;==============================================================
 [effect_city_walls_vs_Land]
 type    = "Defend_Bonus"
-value	= 200
+value	= 200 ; 3x vs most Land
 reqs	=
     { "type", "name", "range", "present"
       "Building", "City Walls", "City", TRUE
       "UnitClass", "Land", "Local", TRUE
+      "UnitType", "Catapult", "Local", FALSE
+      "UnitType", "Cannon", "Local", FALSE
+      "UnitType", "Artillery", "Local", FALSE
       "UnitType", "Howitzer", "Local", FALSE
+    }
+[effect_city_walls_vs_Catapult_25pct_bonus]
+type    = "Defend_Bonus"
+value	= 175 ; 2.75x vs Catapult
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "City Walls", "City", TRUE
+      "UnitType", "Catapult", "Local", TRUE
+    }
+[effect_city_walls_vs_Cannon_50pct_bonus]
+type    = "Defend_Bonus"
+value	= 150 ; 2.5x vs Cannon
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "City Walls", "City", TRUE
+      "UnitType", "Cannon", "Local", TRUE
+    }
+[effect_city_walls_vs_Artillery_75pct_bonus]
+type    = "Defend_Bonus"
+value	= 125 ; 2.25x vs Artillery
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "City Walls", "City", TRUE
+      "UnitType", "Artillery", "Local", TRUE
     }
 [effect_city_walls_vs_Land_2]
 type    = "Defend_Bonus"
@@ -2003,7 +2030,15 @@ reqs	=
     { "type", "name", "range"
       "Building", "City Walls", "City"
     }
-; FORTIFICATIONS 
+[effect_city_walls_price_increase]
+type    = "Building_Build_Cost_Pct"
+value	  = 17
+reqs    =
+    {
+      "type", "name", "range"
+      "Tech", "Metallurgy", "Player"
+    }
+; FORTIFICATIONS *****************************************
 [effect_fortifications_visible]
 type    = "Visible_Walls"
 value	= 4
@@ -2013,17 +2048,42 @@ reqs	=
     }
 [effect_fortifications_vs_Land]
 type    = "Defend_Bonus"
-value	= 75
+value	= 75  ; 1.75x vs most Land
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Fortifications", "City", TRUE
       "Building", "City Walls", "City", FALSE
       "Building", "Great Wall", "Player", FALSE
       "UnitClass", "Land", "Local", TRUE
+      "UnitType", "Catapult", "Local", FALSE
       "UnitType", "Cannon", "Local", FALSE
       "UnitType", "Artillery", "Local", FALSE
       "UnitType", "Howitzer", "Local", FALSE
     }
+[effect_fortifications_vs_Catapult]
+type    = "Defend_Bonus"
+value	= 50 ; 1.5x vs Catapult's 25% bonus
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Fortifications", "City", TRUE
+      "Building", "City Walls", "City", FALSE
+      "Building", "Great Wall", "Player", FALSE
+      "UnitType", "Catapult", "Local", TRUE
+    }
+[effect_fortifications_vs_Cannon]
+type    = "Defend_Bonus"
+value	= 25 ; 1.25x vs Cannon's 50% bonus
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Fortifications", "City", TRUE
+      "Building", "City Walls", "City", FALSE
+      "Building", "Great Wall", "Player", FALSE
+      "UnitType", "Cannon", "Local", TRUE
+    }
+
+;NOTE: -75% from Artillery nullifies +75% bonus:
+;no need for an effect, therefore.
+
 [effect_fortifications_vs_Land_2]
 type    = "Defend_Bonus"
 value	= 75
@@ -2054,9 +2114,9 @@ reqs	=
 
 ; GREAT Wall
 ;--------------------------------------------------------
-[effect_great_wall_0_original]
+[effect_great_wall_0_vs_Land_original]
 type    = "Defend_Bonus"
-value	= 200
+value	= 200 ; 3x vs most Land
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
@@ -2065,12 +2125,44 @@ reqs	=
       "CityStatus", "OwnedByOriginal", "City",  TRUE
       "UnitClass", "Land", "Local", TRUE
       "CityTile", "Center", "Local", TRUE
+      "UnitType", "Catapult", "Local", FALSE
+      "UnitType", "Cannon", "Local", FALSE
+      "UnitType", "Artillery", "Local", FALSE
       "UnitType", "Howitzer", "Local", FALSE
       "Tech", "Machine Tools", "World", FALSE
     }
+[effect_great_wall_0_vs_Catapult25pct_bonus_original]
+type    = "Defend_Bonus"
+value	= 175 ; 2.75x vs Catapult
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Great Wall", "Player", TRUE
+      "Building", "City Walls", "City", FALSE
+      "Age", "3", "City", TRUE
+      "CityStatus", "OwnedByOriginal", "City",  TRUE
+      "CityTile", "Center", "Local", TRUE
+      "UnitType", "Catapult", "Local", TRUE
+      "Tech", "Machine Tools", "World", FALSE
+    }
+[effect_great_wall_0_vs_Cannon50pct_bonus_original]
+type    = "Defend_Bonus"
+value	= 150 ; 2.5x vs Cannon
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Great Wall", "Player", TRUE
+      "Building", "City Walls", "City", FALSE
+      "Age", "3", "City", TRUE
+      "CityStatus", "OwnedByOriginal", "City",  TRUE
+      "CityTile", "Center", "Local", TRUE
+      "UnitType", "Cannon", "Local", TRUE
+      "Tech", "Machine Tools", "World", FALSE
+    }
+
+; 2.25x vs Artillery not needed since Machine Tools expires it.
+
 [effect_great_wall_0_assimilated]
 type    = "Defend_Bonus"
-value	= 200
+value	= 200 ; 3x vs most Land
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
@@ -2080,9 +2172,43 @@ reqs	=
       "MinForeignPct", "19", "City",  FALSE
       "UnitClass", "Land", "Local", TRUE
       "CityTile", "Center", "Local", TRUE
+      "UnitType", "Catapult", "Local", FALSE
+      "UnitType", "Cannon", "Local", FALSE
+      "UnitType", "Artillery", "Local", FALSE
       "UnitType", "Howitzer", "Local", FALSE
       "Tech", "Machine Tools", "World", FALSE
     }
+[effect_great_wall_0_vs_Catapult25pct_bonus_assimilated]
+type    = "Defend_Bonus"
+value	= 175 ; 2.75x vs Catapult
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Great Wall", "Player", TRUE
+      "Building", "City Walls", "City", FALSE
+      "Age", "3", "City", TRUE
+      "CityStatus", "OwnedByOriginal", "City",  FALSE
+      "MinForeignPct", "19", "City",  FALSE
+      "CityTile", "Center", "Local", TRUE
+      "UnitType", "Catapult", "Local", TRUE
+      "Tech", "Machine Tools", "World", FALSE
+    }
+[effect_great_wall_0_vs_Cannon50pct_bonus_assimilated]
+type    = "Defend_Bonus"
+value	= 150 ; 2.5x vs. Cannon
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Great Wall", "Player", TRUE
+      "Building", "City Walls", "City", FALSE
+      "Age", "3", "City", TRUE
+      "CityStatus", "OwnedByOriginal", "City",  FALSE
+      "MinForeignPct", "19", "City",  FALSE
+      "CityTile", "Center", "Local", TRUE
+      "UnitType", "Cannon", "Local", TRUE
+      "Tech", "Machine Tools", "World", FALSE
+    }
+
+; 2.25x vs Artillery not needed since Machine Tools expires it.
+
 [effect_great_wall_1_original]
 type    = "Defend_Bonus"
 value	= 200
@@ -3778,7 +3904,7 @@ value	  = -12
 reqs    =
     {
       "type", "name", "range", "present"
-      "Building", "Colossus", "City"
+      "Building", "Colossus", "City", TRUE
       "UnitFlag", "HelpWonder", "Local", TRUE
       "Tech", "The Corporation", "Player", FALSE
     }
@@ -3788,7 +3914,7 @@ value	  = 1
 reqs    =
     {
       "type", "name", "range", "present"
-      "Building", "Colossus", "City"
+      "Building", "Colossus", "City", TRUE
       "UnitFlag", "HelpWonder", "Local", TRUE
       "Tech", "The Corporation", "Player", FALSE
     }
@@ -3798,7 +3924,7 @@ value	  = -12     ;40-5 = -12%
 reqs    =
     {
       "type", "name", "range", "present"
-      "Building", "Colossus", "City"
+      "Building", "Colossus", "City", TRUE
       "UnitType", "Caravel", "Local", TRUE
       "Tech", "The Corporation", "Player", FALSE
     }
@@ -3808,7 +3934,7 @@ value	  = -2     ;35-5 = -14%
 reqs    =
     {
       "type", "name", "range", "present"
-      "Building", "Colossus", "City"
+      "Building", "Colossus", "City", TRUE
       "UnitType", "Train", "Local", TRUE
       "Tech", "The Corporation", "Player", FALSE
     }
@@ -3818,7 +3944,7 @@ value	  = -4     ;30-5 = -17%
 reqs    =
     {
       "type", "name", "range", "present"
-      "Building", "Colossus", "City"
+      "Building", "Colossus", "City", TRUE
       "UnitType", "Galley", "Local", TRUE
       "Tech", "The Corporation", "Player", FALSE
     }
@@ -3828,7 +3954,7 @@ value	  = -4     ;30-5 = -17%
 reqs    =
     {
       "type", "name", "range", "present"
-      "Building", "Colossus", "City"
+      "Building", "Colossus", "City", TRUE
       "UnitType", "Caravan", "Local", TRUE
       "Tech", "The Corporation", "Player", FALSE
     }
@@ -3838,7 +3964,7 @@ value	  = -13     ;20-5 = -25%
 reqs    =
     {
       "type", "name", "range", "present"
-      "Building", "Colossus", "City"
+      "Building", "Colossus", "City", TRUE
       "UnitType", "Trireme", "Local", TRUE
       "Tech", "The Corporation", "Player", FALSE
     }  
@@ -3848,7 +3974,7 @@ value	  = -18     ;10-3 = -30%
 reqs    =
     {
       "type", "name", "range", "present"
-      "Building", "Colossus", "City"
+      "Building", "Colossus", "City", TRUE
       "UnitType", "Boat", "Local", TRUE
       "Tech", "The Corporation", "Player", FALSE
     }

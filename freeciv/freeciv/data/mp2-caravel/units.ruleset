@@ -1927,8 +1927,10 @@ flags         = "CantReachAir", "WillNever"
 roles         = ""
 helptext      = _("\
 Catapults are war machines that hurl massive rocks to crush\
- and break their targets. They are strong attackers but equally\
- weak defenders, and will need an escort to be effective.\
+ and break their targets. The ballistic delivery of massive\
+ stones diminishes the bonus of Fortifications and\
+ City Walls by -25%, yielding a 1.5x and 2.75x bonus, respectively.\
+ Catapults are weak defenders, and will need an escort to be effective.\
 ")
 
 [unit_siege_ram]
@@ -2010,8 +2012,13 @@ targets       = "LandRail"
 flags         = "CantReachAir", "WillNever"
 roles         = "BarbarianTech", "BarbarianBuildTech"
 helptext      = _("\
-Cannons are huge guns that fire heavy metallic projectiles. They are strong\
- attackers but weak defenders, so they need an escort to be effective.\
+Cannons are huge guns that use gunpowder to fire massive metallic projectiles\
+ much faster and more accurately than earlier ballistic weapons. The\
+ aerial delivery of high speed massive metal gives an edge against\
+ Fortifications and City Walls. The bonuses from those are reduced by\
+ -50% to 1.25x and 2.5x, respectively.\
+ While Cannons are strong attackers, they are also weak defenders. They\
+ need an escort to be effective.\
 ")
 
 [unit_artillery]
@@ -2045,8 +2052,13 @@ targets       = "Balloon", "LandRail", "Zeppelin"
 flags         = "CantReachAir", "WillNever"
 roles         = ""
 helptext      = _("\
-Artillery are a major upgrade to Cannons, with doubled firepower. They are\
- superb attackers but poor at defense. They need an escort to be effective.\
+Artillery are a major upgrade to Cannons, with doubled firepower. Accuracy\
+ and projectile speed go to a whole new level. Thus, they have an\
+ even greater bonus than their predecessors against Fortifications\
+ and City Walls. Such bonuses are reduced -75%. This renders Fortifications\
+ completely ineffective, and reduces the bonus from Walls down to 2.25x.\
+ Like their predecessors, Artillery are poor at defense, and need an\
+ escort to be effective.\
 ")
 
 [unit_anti_aircraft]
@@ -2175,7 +2187,9 @@ targets       = "Balloon", "LandRail", "Zeppelin"
 flags         = "CantReachAir", "WillNever"
 roles         = ""
 helptext      = _("\
-Howitzers are upgraded Artillery with significant increase in mobility and attack strength. They can fire over city walls, ignoring their effect.\
+Howitzers are upgraded Artillery with a terrifying increase to mobility and attack strength.\
+ This is so much so, that Fortifications and City Walls are completely ineffective\
+ against Howitzers. Howitzers are vulnerable when not escorted.\
 ")
 
 [unit_balloon]
