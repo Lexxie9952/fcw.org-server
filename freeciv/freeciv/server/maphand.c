@@ -107,7 +107,7 @@ void global_warming(int effect)
 
   // It can take a while so notify first.
   notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
-                _("🌞 Global warming is occurring! "
+                _("[`events/globalwarming`]<br>🌞 Global warming is occurring! "
                   "Coastlines are flooding. Hotter climate is "
                   "affecting vegetation."));
 
@@ -123,7 +123,7 @@ void nuclear_winter(int effect)
 {
   // It can take a while so notify first.                
   notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
-                _("⚠️ Nuclear winter is happening!<br>"
+                _("[`events/nuclearwinter`]<br>⚠️ Nuclear winter is happening!<br>"
                   "Wetlands are drying. Ranges of plains and "
                   "Grassland may become tundra."));
 

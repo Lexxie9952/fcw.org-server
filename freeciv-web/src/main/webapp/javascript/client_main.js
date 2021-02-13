@@ -266,7 +266,7 @@ function show_new_game_message()
 
   } else if (client.conn.playing != null && !game_loaded) {
     var pplayer = client.conn.playing;
-    var player_nation_text = "Welcome, " + username + " ruler of the " + nations[pplayer['nation']]['adjective'] + " empire.";
+    var player_nation_text = "Welcome, " + username + ", ruler of the " + nations[pplayer['nation']]['adjective'] + " empire.";
 
     if (is_touch_device()) {
       message = player_nation_text + " Your\n" +
@@ -299,7 +299,7 @@ function show_new_game_message()
     return;
   }
 
-  message_log.update({ event: E_CONNECTION, message: message });
+  message_log.update({ event: E_FIRST_CONTACT, message: message });
 }
 
 /**************************************************************************

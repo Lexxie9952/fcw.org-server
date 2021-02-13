@@ -966,9 +966,9 @@ function pregame_settings()
   });
 
   $('#metamessage').bind('keyup blur',function(){
-    var cleaned_text = $(this).val().replace(/[^a-zA-Z\s\-]/g,'');
-    if ($(this).val() != cleaned_text) {
-      $(this).val( cleaned_text ); }
+    var clean_text = $(this).val().replace(/[^a-zA-Z\s\-]/g,'');
+    if ($(this).val() != clean_text) {
+      $(this).val( clean_text ); }
     }
   );
 

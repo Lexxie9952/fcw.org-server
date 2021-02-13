@@ -216,6 +216,13 @@ input[type='number'] {
   line-height: 110%;
   margin-top: -2px;
 }
+.helptext_pane {
+  max-width: 684px;
+}
+.helptext_pane_mobile {
+  max-width: 984px;
+}
+
 
 .blue_clickable {
   color: #3498DB; 
@@ -1380,7 +1387,7 @@ li.tech-me_only::before {
 
 
 .e_setting {
- color: #a88888;
+ color: #777c79;
 }
 .e_chat_msg {
   color: #dbd5c0
@@ -1447,6 +1454,7 @@ li.tech-me_only::before {
 .e_wonder_build {
   color: #eee092;
 }
+.e_diplomacy,
 .e_treaty_shared_vision,
 .e_treaty_alliance,
 .e_treaty_peace,
@@ -1496,6 +1504,10 @@ li.tech-me_only::before {
   text-decoration: underline;
   font-style: italic;
 }
+.e_first_contact {
+  color: #9ecbff;
+}
+
 
 /*reclassify later: all other generic messages*/
 .e_city_cantbuild,
@@ -1537,8 +1549,6 @@ li.tech-me_only::before {
 .e_achievement,
 .e_uprising,
 .e_anarchy,
-.e_first_contact,
-.e_diplomacy, 
 .e_nation_selected,
 .e_message_wall,
 .e_destroyed,
@@ -1565,7 +1575,7 @@ li.tech-me_only::before {
   color: #848080;
 }
 .e_connection {
-  color:#000;
+  color:#111
 }
 .e_global_eco {
   color:#eee;

@@ -17,6 +17,14 @@
 
 ***********************************************************************/
 
+
+// Global strip code for removing the └ that Chrome renders at line breaks,
+// also 
+var stripChar = [];
+stripChar[0] = new RegExp(String.fromCharCode(3), "g");
+//stripChar[1] = new RegExp("", "g");
+const STRIPCHAR_LAST = 1;
+
 // if old browser lacks String.repeat, add it here:
 String.prototype.repeat = String.prototype.repeat || 
 function(n) {
@@ -40,7 +48,6 @@ function clone(obj){
 
   return temp;
 }
-
 
 /*
  * DIVIDE() divides and rounds down, rather than just divides and
@@ -300,4 +307,16 @@ function wait(ms)
   }
 }
 
+/**************************************************************************
+   Remove from strings, garbage that may come from line feeds or escape
+   characters.
+**************************************************************************/
+function cleaned_text(str)
+{
+  // Remove each type of ugly spurious character or escape code.
+  for (i=0; i<STRIPCHAR_LAST; i++) {
+    str = str.replace(stripChar[i],"");
+  }
+  return str;
+}
 

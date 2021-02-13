@@ -539,7 +539,7 @@ function show_city_dialog(pcity)
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
-           + "title=\"" + improvements[z]['helptext'].replace(stripChar, "") +"\n\nUpkeep: "+ upkeep + "\" "
+           + "title=\"" + cleaned_text(improvements[z]['helptext']) +"\n\nUpkeep: "+ upkeep + "\" "
 	   + "onclick='city_sell_improvement(" + z + ");'>"
            +"</div>"+ long_name_font_reducer+improvements[z]['name']+"</div>" + "</div>";
     }
@@ -993,12 +993,20 @@ function get_universal_discount_price(ptype, pcity)
       return ptype['build_cost'] - communist_discounts[ptype['name']];
     }
   }
+  // City Walls increase with Metallurgy
+  if (client_rules_flag[CRF_MP2_C]) {
+    if (ptype['name'] == "City Walls"
+        && player_invention_state(client.conn.playing, tech_id_by_name('Machine Tools')) == TECH_KNOWN) {
+          return ptype['build_cost'] + 10;
+        }
+  }
+  
   // Apply discounts for having Colossus
   if (pcity && client_rules_flag[CRF_COLOSSUS_DISCOUNT] &&
       city_has_building(pcity, improvement_id_by_name(B_COLOSSUS))) {
 
     if (colossus_discounts[ptype['name']])
-        return ptype['build_cost'] - colossus_discounts[ptype['name']];
+        return ptype['build_cost'] - colossus_discounts[ptype['name']];      
   }
   // default, no discount:
   return ptype['build_cost'];
@@ -1036,7 +1044,7 @@ function generate_production_list()
     {
       production_list.push({"kind": VUT_UTYPE, "value" : punit_type['id'],
                             "text": punit_type['name'],
-                        "helptext": punit_type['helptext'].replace(stripChar, ""),
+                        "helptext": cleaned_text(punit_type['helptext']),
                         "rule_name": punit_type['rule_name'],
                         "build_cost": get_universal_discount_price(punit_type),
                         "unit_details": "A<b>"+punit_type['attack_strength']  
@@ -1048,7 +1056,7 @@ function generate_production_list()
     } else {
       production_list.push({"kind": VUT_UTYPE, "value" : punit_type['id'],
                             "text": punit_type['name'],
-	                      "helptext": punit_type['helptext'].replace(stripChar, ""),
+	                      "helptext": cleaned_text(punit_type['helptext']),
                        "rule_name": punit_type['rule_name'],
                       "build_cost": get_universal_discount_price(punit_type),
                     "unit_details": "A<b>"+punit_type['attack_strength'] + "</b> " 
@@ -1062,7 +1070,7 @@ function generate_production_list()
 
   for (var improvement_id in improvements) {
     var pimprovement = improvements[improvement_id];
-    var build_cost = pimprovement['build_cost'];
+    var build_cost = universal_build_shield_cost(active_city, pimprovement);
     var building_details = pimprovement['upkeep'];
     if (pimprovement['name'] == "Coinage") {
         build_cost = "-";
@@ -1089,7 +1097,7 @@ function generate_production_list()
     production_list.push({"kind": VUT_IMPROVEMENT,
                          "value": pimprovement['id'],
                           "text": pimprovement['name'],
-                      "helptext": pimprovement['helptext'].replace(stripChar, ""),
+                      "helptext": cleaned_text(pimprovement['helptext']),
                      "rule_name": pimprovement['rule_name'],
                     "build_cost": build_cost,
                   "unit_details": building_details,
@@ -2189,12 +2197,12 @@ function city_worklist_dialog(pcity)
       if (kind == null || value == null || work_item.length == 0) continue;
       if (kind == VUT_IMPROVEMENT) {
         var pimpr = improvements[value];
-	var build_cost = pimpr['build_cost'];
+	var build_cost = universal_build_shield_cost(pcity,pimpr);
 	if (pimpr['name'] == "Coinage") build_cost = "-";
 	universals_list.push({"name" : pimpr['name'],
 		"kind" : kind,
 		"value" : value,
-		"helptext" : pimpr['helptext'].replace(stripChar, ""),
+		"helptext" : cleaned_text(pimpr['helptext']),
 		"build_cost" : build_cost,
 		"sprite" : get_improvement_image_sprite(pimpr)});
       } else if (kind == VUT_UTYPE) {
@@ -2202,7 +2210,7 @@ function city_worklist_dialog(pcity)
         universals_list.push({"name" : putype['name'],
 		"kind" : kind,
 		"value" : value,
-		"helptext" : putype['helptext'].replace(stripChar, ""),
+		"helptext" : cleaned_text(putype['helptext']),
 		"build_cost" : get_universal_discount_price(putype, pcity),
 		"sprite" : get_unit_type_image_sprite(putype)});
       } else {
@@ -2224,7 +2232,7 @@ function city_worklist_dialog(pcity)
      + (can_city_build_now(pcity, universal['kind'], universal['value']) ?
         "" : " cannot_build_item")
      + "' data-wlitem='" + j + "' "
-     + " title=\"" + universal['helptext'] + "\">"
+     + " title=\"" + cleaned_text(universal['helptext']) + "\">"
      + "<td><div class='production_list_item_sub' "
            + "style=' background: transparent url("
            + sprite['image-src'] +
@@ -2232,7 +2240,7 @@ function city_worklist_dialog(pcity)
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'"
            +"></div></td>"
      + "<td class='prod_choice_name'>" + universal['name'] + "</td>"
-     + "<td class='prod_choice_cost'>" + universal['build_cost'] + "</td></tr>";
+     + "<td class='prod_choice_cost'>" + universal['build_cost']+"</td></tr>";
   }
   worklist_html += "</table>";
   $("#city_current_worklist").html(worklist_html);
@@ -2435,7 +2443,7 @@ function populate_worklist_production_choices(pcity)
       production_html += "<tr class='prod_choice_list_item kindvalue_item"
        + (can_build ? "" : " cannot_build_item")
        + "' data-value='" + value + "' data-kind='" + kind + "'>"
-       + "<td><div class='production_list_item_sub' title=\"" + production_list[a]['helptext'] + "\" style=' background: transparent url("
+       + "<td><div class='production_list_item_sub' title=\"" + cleaned_text(production_list[a]['helptext']) + "\" style=' background: transparent url("
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'"
@@ -3029,7 +3037,7 @@ function show_city_improvement_pane(city_id)
         var is_city_making = (pcity['production_kind'] == VUT_IMPROVEMENT && pcity['production_value']==z);
         if (is_city_making) { // colour code currently produced items which are bought/finished
           var shields_invested = pcity['shield_stock'];
-          if (shields_invested>=improvements[z]['build_cost']) {
+          if (shields_invested>=universal_build_shield_cost(pcity,improvements[z])) {
             product_finished=true;
             var verb = " is finishing ";
           } 

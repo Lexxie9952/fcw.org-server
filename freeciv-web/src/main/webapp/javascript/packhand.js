@@ -340,7 +340,7 @@ function handle_chat_msg(packet)
 function recenter_flare_tile(tile_id)
 {
   center_tile_id(tile_id);
-  explosion_anim_map[tile_id] = 25;
+  explosion_anim_map[tile_id] = 50;
   show_tile_marker_instead[tile_id] = true;
 }
 

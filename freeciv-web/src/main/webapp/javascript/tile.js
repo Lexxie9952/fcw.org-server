@@ -188,7 +188,7 @@ function improve_tile_info_dialog(message)
     if (ttype['road_time'])
       added_text += "&nbsp;&nbsp; Road:<b>" + Math.ceil(ttype['road_time']/wt)+"</b>";
     
-    added_text += "<br>" + ttype['helptext'].replace(stripChar, "")+"<br><br>";
+    added_text += "<br>" + cleaned_text(ttype['helptext'])+"<br><br>";
   }
   
   // Warcalc odds.

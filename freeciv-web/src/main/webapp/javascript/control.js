@@ -17,11 +17,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ***********************************************************************/
-
-//var stripChar = String.fromCharCode(3);
-
-// Global strip code for removing the └ that Chrome renders at line breaks.
-var stripChar = new RegExp(String.fromCharCode(3), "g")
 var show_order_buttons = 1;  // 1=most common, 2=all orders, 3=hide panels
 
 const update_focus_delay = 500;

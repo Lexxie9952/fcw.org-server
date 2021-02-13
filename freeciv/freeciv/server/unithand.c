@@ -3102,8 +3102,8 @@ static bool unit_do_help_build(struct player *pplayer,
       action_name = (is_unit_plural(punit) ? _("help build")
                                           : _("helps build"));
     }
-    action_name = (is_unit_plural(punit) ? _("are recycled into building")
-                                         : _("recycles itself to build"));
+    action_name = (is_unit_plural(punit) ? _("recycle to build")
+                                         : _("recycles to build"));
     if (three_quarters) info_emoji = _("&#8203;[`recycle`][`75`]");
     else { 
       info_emoji = full_contributor ? _("&#8203;[`recycle`][`100`]") : _("&#8203;[`recycle`][`50pct`]");

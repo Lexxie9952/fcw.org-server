@@ -499,7 +499,7 @@ function update_tech_screen()
       default:
         fs = "90%";
     } //hack to fit some techs on 768px screens
-    var tech_help_text = techs[clicked_tech_id].helptext.replace(stripChar, "");  // splice out the └ that Chrome renders for end of line 
+    var tech_help_text = cleaned_text(techs[clicked_tech_id].helptext); // splice out the └ that Chrome renders for end of line 
 
     if (touch_device) $("#tech_results").css("margin-left","-22px");
     $("#tech_result_text").html("<span style='font-size:"+fs+"' title='"+tech_help_text+"' id='tech_advance_helptext'>" + get_advances_text(clicked_tech_id)
@@ -516,7 +516,7 @@ function update_tech_screen()
       default:
         fs = "90%";
     } //hack to fit some techs on 768px screens
-    var research_help_text = techs[client.conn.playing['researching']].helptext.replace(stripChar, "");
+    var research_help_text = cleaned_text(techs[client.conn.playing['researching']].helptext);
 
     $("#tech_result_text").html("<span style='font-size:"+fs+"' title='"+research_help_text+"' id='tech_advance_helptext'>" + get_advances_text(client.conn.playing['researching'])
         +" "+(is_wide_screen ? "" /*research_help_text*/ : "") +"</span>");
@@ -564,9 +564,9 @@ function get_advances_text(tech_id)
     + format_list_with_intro(' enables',
       [
         format_list_with_intro('', get_units_from_tech(tech_id)
-          .map(unit => tech_span(unit.name, unit.id, null, unit.helptext.replace(stripChar, "")))),  // strip linebreak markers
+          .map(unit => tech_span(unit.name, unit.id, null, cleaned_text(unit.helptext)))),  // strip linebreak markers
         format_list_with_intro('', get_improvements_from_tech(tech_id)
-          .map(impr => tech_span(impr.name, null, impr.id, impr.helptext.replace(stripChar, "")))),
+          .map(impr => tech_span(impr.name, null, impr.id, cleaned_text(impr.helptext)))),
         format_list_with_intro('', Object.keys(techs)
           .filter(is_valid_and_required)
           .map(tid => techs[tid])
@@ -875,7 +875,7 @@ function show_tech_info_dialog(tech_name, unit_type_id, improvement_id)
 
   if (unit_type_id != null) {
      var punit_type = unit_types[unit_type_id];
-     message += "<b>Unit info</b>: " + punit_type['helptext'].replace(stripChar, "") + "<br>"
+     message += "<b>Unit info</b>: " + cleaned_text(punit_type['helptext']) + "<br>"
      + "</b><br>Cost: <b>" + punit_type['build_cost']
      + "</b><br>Attack: <b>" + punit_type['attack_strength']
      + "</b><br>Defense: <b>" + punit_type['defense_strength']
@@ -886,7 +886,7 @@ function show_tech_info_dialog(tech_name, unit_type_id, improvement_id)
      + "</b><br><br>";
   }
 
-  if (improvement_id != null) message += "<b>Improvement info</b>: " + improvements[improvement_id]['helptext'].replace(stripChar, "") + "<br><br>";
+  if (improvement_id != null) message += "<b>Improvement info</b>: " + cleaned_text(improvements[improvement_id]['helptext']) + "<br><br>";
 
   if (freeciv_wiki_docs[tech_name] != null) {
     var tech_id = tech_id_by_name(tech_name);
@@ -903,15 +903,15 @@ function show_tech_info_dialog(tech_name, unit_type_id, improvement_id)
       message += "<b>"+tech_name+"</b>"+format_list_with_intro(' enables',
       [
         format_list_with_intro('', get_units_from_tech(tech_id)
-          .map(unit => tech_span(unit.name, unit.id, null, unit.helptext))),  
+          .map(unit => tech_span(unit.name, unit.id, null, cleaned_text(unit.helptext)))),  
         format_list_with_intro('', get_improvements_from_tech(tech_id)
-          .map(impr => tech_span(impr.name, null, impr.id, impr.helptext))),
+          .map(impr => tech_span(impr.name, null, impr.id, cleaned_text(impr.helptext)))),
         format_list_with_intro('', Object.keys(techs)
           .filter(is_valid_and_required)
           .map(tid => techs[tid])
           .map(tech => tech_span(tech.name, null, null)))
       ]) + '.<br>';
-      message += techs[tech_id].helptext.replace(stripChar, "")+"<br><br>";
+      message += cleaned_text(techs[tech_id].helptext)+"<br><br>";
     }
     message += "<b>Wikipedia on <a href='" + wikipedia_url
 	  + freeciv_wiki_docs[tech_name]['title']
@@ -1006,7 +1006,7 @@ function update_tech_dialog_cursor()
         //if ( ptech['name']=="Space Flight" || ptech['name']=="Automobile" || ptech['name']=="Rocketry") fs="80%;"; else fs="90%;"; //hack to fit 2 techs on 768px screens
        
         var is_wide_screen = $(window).width()<1590 ? false : true;
-        var tech_help_text = techs[ptech['id']].helptext.replace(stripChar, "");  // splice out the └ that Chrome renders for end of line 
+        var tech_help_text = cleaned_text(techs[ptech['id']].helptext);  // splice out the └ that Chrome renders for end of line 
     
         $("#tech_result_text").html("<span title='"+tech_help_text+"' style='margin-left:-4px; font-size:"+fs+"' id='tech_advance_helptext'>"+get_advances_text(ptech['id']) 
           + "</span><span style='color: #ffd588; font-size:"+fs+"'>&nbsp;"+ (is_wide_screen ? tech_help_text : "") + "</span>");

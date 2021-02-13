@@ -120,7 +120,7 @@ function update_govt_dialog()
     govt = governments[govt_id];
     governments_list_html += "<button class='govt_button' id='govt_id_" + govt['id'] + "' "
 	                  + "onclick='set_req_government(" + govt['id'] + ");' "
-			  + "title='" + govt['helptext'] + "'>" +  govt['name'] + "</button>";
+			  + "title='" + cleaned_text(govt['helptext']) + "'>" +  govt['name'] + "</button>";
   }
 
   $("#governments_list").html(governments_list_html);

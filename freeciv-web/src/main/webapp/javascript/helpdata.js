@@ -289,6 +289,7 @@ function helpdata_format_current_ruleset()
 function generate_help_text(key)
 {
   var flx_tab = "0.30";  // alignment spacing for unit stats
+  var pane_class = "helptext_pane";
   // Temporarily maximize horizontal space for mobile
   if (is_small_screen())
   { 
@@ -296,6 +297,7 @@ function generate_help_text(key)
     $("#help_info_page").css("padding","1px");
     $("#help_menu").hide();
     flx_tab = "0.55";
+    pane_class += "_mobile";
   }
 
   var rulesetdir = ruledir_from_ruleset_name(ruleset_control['name'], "");
@@ -304,17 +306,18 @@ function generate_help_text(key)
 
   if (key.indexOf("help_gen_terrain") != -1) {
     var terrain = terrains[parseInt(key.replace("help_gen_terrain_", ""))];
-    msg = "<h1>" + terrain['name'] + "</h1>" + terrain['helptext']
-	    + "<br><br>Movement cost: " + terrain['movement_cost']
+    msg = "<h1>" + terrain['name'] + "</h1>" + "<div class='"+pane_class+"'>"
+      + cleaned_text(terrain['helptext'])
+	    + "<b><br><br>Movement cost: " + terrain['movement_cost']
 	    + "<br>Defense bonus: " + terrain['defense_bonus']
 	    + "<br>Food/Prod/Trade: " + terrain['output'][0] + "/"
-	    + terrain['output'][1] + "/" + terrain['output'][2];
+	    + terrain['output'][1] + "/" + terrain['output'][2]+"</b></div>";
   } else if (key.indexOf("help_gen_improvements") != -1 || key.indexOf("help_gen_wonders") != -1) {
     var improvement = improvements[parseInt(key.replace("help_gen_wonders_", "").replace("help_gen_improvements_", ""))];
-    msg = "<h1>" + improvement['name'] + "</h1>"
+    msg = "<h1>" + improvement['name'] + "</h1>"+"<div class='"+pane_class+"'>"
 	    + render_sprite(get_improvement_image_sprite(improvement)) + "<br>"
-	    + improvement['helptext']
-            + "<br><br>Cost: " + improvement['build_cost']
+	    + cleaned_text(improvement['helptext'])
+            + "<b><br><br>Cost: " + improvement['build_cost']
             + "<br>Upkeep: " + improvement['upkeep'];
     var reqs = get_improvement_requirements(improvement['id']);
     if (reqs != null) {
@@ -323,7 +326,7 @@ function generate_help_text(key)
        msg += techs[reqs[n]]['name'] + " ";
       }
     }
-    msg += "<br><br>";
+    msg += "<br><br></b></div>";
     msg += wiki_on_item_button(improvement['name']);
   } else if (key.indexOf("help_gen_units") != -1) {
     var obsolete_by;
@@ -450,18 +453,18 @@ function generate_help_text(key)
 
     msg += "</div>"+hr;
 
-    msg += "<div id='helptext' style='font-weight:500; max-width:984px'><p>" + punit_type['helptext'] + "</p></div>"+hr;
+    msg += "<div id='helptext' style='font-weight:500; max-width:984px'><p>" + cleaned_text(punit_type['helptext']) + "</p></div>"+hr;
 
     msg += wiki_on_item_button(punit_type['name']);
 
     msg += "<div id='datastore' hidden='true'></div>";
   } else if (key.indexOf("help_gen_techs") != -1) {
     var tech = techs[parseInt(key.replace("help_gen_techs_", ""))];
-    msg = "<h1>" + tech['name'] + "</h1>"
+    msg = "<h1>" + tech['name'] + "</h1>" + "<div class='"+pane_class+"'><b>"
 	    + render_sprite(get_technology_image_sprite(tech)) + "<br>"
 	    + get_advances_text(tech['id']);
     msg += "<br><br>";
-    msg += "<div id='helptext'><p>" + tech['helptext'] + "</p></div>";
+    msg += "<div id='helptext'><p>" + cleaned_text(tech['helptext']) + "</p></b></div></div>";
 
     msg += wiki_on_item_button(tech['name']);
   } else if (key == "help_gen_ruleset") {
@@ -470,8 +473,8 @@ function generate_help_text(key)
     var pgov = governments[parseInt(key.replace("help_gen_governments_",
                                                 ""))];
 
-    msg = "<h1>" + pgov['name'] + "</h1>";
-    msg += "<div id='helptext'><p>" + pgov['helptext'] + "</p></div>";
+    msg = "<h1>" + pgov['name'] + "</h1>"+"<div class='"+pane_class+"'>";
+    msg += "<div id='helptext'><p>" + cleaned_text(pgov['helptext']) + "</p></div></div>";
 
     msg += wiki_on_item_button(pgov['name']);
   }
