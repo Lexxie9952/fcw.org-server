@@ -1589,7 +1589,7 @@ li.tech-me_only::before {
 
 @font-face {
   font-family: FranciscoBold;
-  src: url(/fonts/System San Francisco Display Bold.ttf);
+  src: url('/fonts/System San Francisco Display Bold.ttf');
 }
 
 
