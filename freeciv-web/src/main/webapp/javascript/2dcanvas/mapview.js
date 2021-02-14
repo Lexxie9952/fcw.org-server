@@ -450,7 +450,7 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
   var size_color;
   var size_shadow_color = "rgba(0, 0, 0, 1)"; // default black
   const peace = "%E2%98%AE ";
-  const celeb = "%F0%9F%8E%89 ";  // 88 balloon, 89 party popper
+  const celeb = "%F0%9F%A5%82 ";  // 88 balloon, "%F0%9F%8E%89 " party popper
   const disorder = "%E2%9C%8A ";
   const lose_celeb_color = "rgba(0,0,0,1)";
   const start_celeb_color = "rgb(128,255,128)";

@@ -79,7 +79,7 @@ function _deflua_hut_get_mercenaries(unit)
 
   if type then
     notify.event(owner, unit.tile, E.HUT_MERC,
-                 _("🤺 A band of friendly mercenaries joins your cause."))
+                 _("[`warriors`] A band of friendly mercenaries joins your cause."))
     owner:create_unit(unit.tile, type, 0, unit:get_homecity(), -1)
     return true
   else

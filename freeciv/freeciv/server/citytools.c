@@ -3032,12 +3032,12 @@ void change_build_target(struct player *pplayer, struct city *pcity,
     case E_WORKLIST:
       /* TRANS: Possible 'source' of the production change
        * (in "<city> is building ..." sentence). */
-      source = _(" from the worklist");
+      source = _(" from the worklist.");
       break;
     case E_IMP_AUTO:
       /* TRANS: Possible 'source' of the production change
        * (in "<city> is building ..." sentence). */
-      source = _(" as suggested by the advisor");
+      source = _(" as suggested by the advisor.");
       break;
     default:
       source = "";
@@ -3054,7 +3054,7 @@ void change_build_target(struct player *pplayer, struct city *pcity,
                 /* TRANS: "<city> is building <production><source>."
                  * 'source' might be an empty string, or a clause like
                  * " from the worklist". */
-                _("%s is building %s [`%s`]%s."),
+                _("%s is building %s [`%s`]%s"),
                 city_link(pcity),
                 name, name, source);
 

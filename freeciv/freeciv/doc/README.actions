@@ -479,7 +479,7 @@ Actions done by a unit against all units at a tile
  * if force_explode_nuclear is true "Explode Nuclear" must be impossible
  * the actor must be on the tile next to the target.
  * the actor's attack must be above 0
- * the actor can't have the "NonMil" unit type flag (!)
+ * the actor can't have the "NonMil" unit type flag (!) [removed because stupid]
  * the actor must be native to the target tile unless it has the
    "AttackNonNative" unit class flag and not the "Only_Native_Attack" unit
    type flag.

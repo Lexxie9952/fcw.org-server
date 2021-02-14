@@ -379,6 +379,7 @@ function decode_user_hyperlinks(message)
       freemoji_name = freemoji_name.toLowerCase();
       freemoji_name = freemoji_name.replace(/\s+/g, '');
       freemoji_name = freemoji_name.replace('.', '');
+      freemoji_name = freemoji_name.replace('_', '');
       freemoji_name = freemoji_name.replace("'", "");
       // e.g., "A. Smith's Trading Co." will become "asmithstradingco.png"
       

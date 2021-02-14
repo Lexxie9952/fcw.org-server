@@ -708,31 +708,51 @@ sound_move    = "m_worker"
 sound_move_alt = "m_generic"
 sound_fight   = "f_worker"
 sound_fight_alt = "f_generic"
-build_cost    = 20
+build_cost    = 7
 pop_cost      = 0
 attack        = 1
 defense       = 1
 hitpoints     = 6
 firepower     = 1
-move_rate     = 2
-vision_radius_sq = 4
+move_rate     = 1
+vision_radius_sq = 5
 transport_cap = 0
 fuel          = 0
 uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "NoBuild", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage"
+cargo         = "Cargo"
+flags         = "NoBuild", "Settlers", "Infra", "CanRoad",  "Capturable", "Expellable",
+                "HasNoZOC", "IgTer", "IgZOC", "NonMil", "NonMilAttack"
 roles         = "DefendGoodStartUnit"  ; re-purposed from Phalanx
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:spirit walker"),
+  _("?vet_rank:chief"),
+  _("?vet_rank:chief of all chiefs")
+veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
+veteran_move_bonus = 3, 4, 5, 6, 7, 8, 9
 helptext      = _("\
-Tribesmen are ancestors whose contributions are forgotten\
- in the sands of time. Tribesmen help new nations by disbanding,\
- dedicating their life work to 10 shields of the first output in\
- a city. They also explore the area around your new nation,\
- and watch for nearby tribes. They cannot improve tiles.\
- Unlike city folk, Tribesmen can handle wild animals, and they\
- are experienced hunters with a 3x bonus. This gives them a very\
- important role in games with Animals set to on.\
+Tribesmen are ancestors whose achievements are forgotten in the sands\
+ of time. Tribesmen can donate their life-work to the first output of a\
+ city, recycling 20 shields to output.\n\
+Tribesmen are expert at little and versatile at much. They can scout the\
+ area around your nation, but cannot see as far nor move as fast as an\
+ Explorer. They can establish Cease-fire and Peace or Investigate cities,\
+ but cannot do an Embassy. They can engage in primitive combat, but can\
+ be captured, cannot conquer cities, and often won't fight to the death\
+ (10 combat rounds). They can carry Goods, but cannot establish trade routes.\n\
+As wild men of the land, they move over terrain with no penalty and slip past ZOC\
+ (but exert none either). They can even work tiles, but at a rate slower than Workers.\
+  One thing Tribesmen are good at is killing animals, for which they have a 3x bonus.\n\
+After 2500BC when wild game is gone, the last tribesmen of your nation reach Old Age:\
+ they will start to move slower, can no longer work tiles, and lose their recycle bonus.\
 ")
 
 ;A unique patch unit to provide fair starts regardless of lack of nearby water.
@@ -752,7 +772,7 @@ build_cost    = 5
 pop_cost      = 0
 attack        = 0
 defense       = 1
-hitpoints     = 10
+hitpoints     = 6
 firepower     = 1
 move_rate     = 3
 vision_radius_sq = 4
@@ -878,7 +898,6 @@ Pilgrims are wayfaring migrants from Fundamentalist nations. Like Fanatics,\
  cost, so can be thought of as rapture for the price of 10 shields.\
 ")
 
-
 [unit_worker]
 name          = _("?unit:Workers")
 class         = "Land"
@@ -894,7 +913,7 @@ build_cost    = 30
 pop_cost      = 0
 attack        = 0
 defense       = 1
-hitpoints     = 10
+hitpoints     = 6
 firepower     = 1
 move_rate     = 2
 vision_radius_sq = 4
@@ -4290,7 +4309,7 @@ build_cost    = 30
 pop_cost      = 0
 attack        = 0
 defense       = 0
-hitpoints     = 10
+hitpoints     = 6
 firepower     = 1
 move_rate     = 4
 vision_radius_sq = 4
@@ -4341,7 +4360,7 @@ build_cost    = 35
 pop_cost      = 0
 attack        = 0
 defense       = 0
-hitpoints     = 10
+hitpoints     = 6
 firepower     = 1
 move_rate     = 6
 vision_radius_sq = 8
@@ -4408,10 +4427,22 @@ embarks       = "LandRoad", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "Helicopter"
 flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage"
 roles         = "AttackStrongStartUnit"  ;note: MP2 doesn't start games with ASSU's so has co-opted this for caravan start unit.
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite runner"),
+  _("?vet_rank:caravaneer"),
+  _("?vet_rank:master runner"),
+  _("?vet_rank:zaeim alqafila")
+veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
+veteran_move_bonus = 7, 7, 7, 7, 8, 9, 10
 helptext      = _("\
-Compared to other early Commerce units, the Caravan is the only\
- one who can: go off roads and rails, pay no upkeep, and present no military threat to\
- trade partners.\n\ 
+Compared to other early Commerce units, the Caravan is the only one who can\
+ go off roads and rails, pay no upkeep, and present no military threat to\
+ trade partners. Faster than foot units, they have 2 7/9 moves.\n\ 
 Commerce units can help build Wonders in any city with whom\
  you are not at war. In foreign cities 12+ tiles distant, they can create Trade Routes,\
  increasing net trade in both cities relative to their combined trade. Routes are inactive\

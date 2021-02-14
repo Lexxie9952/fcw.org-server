@@ -366,7 +366,7 @@ function generate_help_text(key)
     msg += span1 + "Hitpoints: " + span_end + span2 + punit_type['hp'] + div_end;
     // MOVE RATE
     msg += "<div"+flex+" id='utype_fact_move_rate'>";
-    msg += span1+"Moves: " + span_end + span2 + move_points_text(punit_type['move_rate']) + div_end;
+    msg += span1+"Moves: " + span_end + span2 + move_points_text(punit_type['move_rate']+punit_type['move_bonus'][0]) + div_end;
     // VISION
     msg += "<div"+flex+" id='utype_fact_vision'>";
     msg += span1 + "Vision: " + span_end + span2 + Math.sqrt(parseInt(punit_type['vision_radius_sq'])).toFixed(2) + " tiles" + div_end;

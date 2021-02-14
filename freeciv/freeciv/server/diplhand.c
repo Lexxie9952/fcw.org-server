@@ -545,10 +545,10 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
         ds_destgiver->type = DS_CEASEFIRE;
         ds_destgiver->turns_left = TURNS_LEFT;
         notify_player(pgiver, NULL, E_TREATY_CEASEFIRE, ftc_server,
-                      _("📜 You agree on a cease-fire with %s."),
+                      _("📜[`olivebranch`] You agree on a cease-fire with %s."),
                       player_name(pdest));
         notify_player(pdest, NULL, E_TREATY_CEASEFIRE, ftc_server,
-                      _("📜 You agree on a cease-fire with %s."),
+                      _("📜[`olivebranch`] You agree on a cease-fire with %s."),
                       player_name(pgiver));
         if (old_diplstate == DS_ALLIANCE) {
           update_players_after_alliance_breakup(pgiver, pdest,
@@ -575,11 +575,11 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
                                               ds_destgiver->max_state);
         notify_player(pgiver, NULL, E_TREATY_PEACE, ftc_server,
                       /* TRANS: ... the Poles ... Polish territory */
-                      PL_("📜 You agree on an armistice with the %s. In %d turn, "
+                      PL_("📜[`dove`] You agree on an armistice with the %s. In %d turn, "
                           "it will become a peace treaty. Move your "
                           "military units out of %s territory to avoid them "
                           "being disbanded.",
-                          "📜 You agree on an armistice with the %s. In %d turns, "
+                          "📜[`dove`] You agree on an armistice with the %s. In %d turns, "
                           "it will become a peace treaty. Move any "
                           "military units out of %s territory to avoid them "
                           "being disbanded.",
@@ -589,11 +589,11 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
                       nation_adjective_for_player(pdest));
         notify_player(pdest, NULL, E_TREATY_PEACE, ftc_server,
                       /* TRANS: ... the Poles ... Polish territory */
-                      PL_("📜 You agree on an armistice with the %s. In %d turn, "
+                      PL_("📜[`dove`] You agree on an armistice with the %s. In %d turn, "
                           "it will become a peace treaty. Move your "
                           "military units out of %s territory to avoid them "
                           "being disbanded.",
-                          "📜 You agree on an armistice with the %s. In %d turns, "
+                          "📜[`dove`] You agree on an armistice with the %s. In %d turns, "
                           "it will become a peace treaty. Move any "
                           "military units out of %s territory to avoid them "
                           "being disbanded.",
@@ -619,10 +619,10 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
         ds_destgiver->max_state = dst_closest(DS_ALLIANCE,
                                               ds_destgiver->max_state);
         notify_player(pgiver, NULL, E_TREATY_ALLIANCE, ftc_server,
-                      _("📜 You agree on an alliance with %s."),
+                      _("📜[`shield`] You agree on an alliance with %s."),
                       player_name(pdest));
         notify_player(pdest, NULL, E_TREATY_ALLIANCE, ftc_server,
-                      _("📜 You agree on an alliance with %s."),
+                      _("📜[`shield`] You agree on an alliance with %s."),
                       player_name(pgiver));
         give_allied_visibility(pgiver, pdest);
         give_allied_visibility(pdest, pgiver);
@@ -632,10 +632,10 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
       case CLAUSE_VISION:
 	give_shared_vision(pgiver, pdest);
         notify_player(pgiver, NULL, E_TREATY_SHARED_VISION, ftc_server,
-                      _("📜 You give shared vision to %s."),
+                      _("📜👁‍🗨 You give shared vision to %s."),
                       player_name(pdest));
         notify_player(pdest, NULL, E_TREATY_SHARED_VISION, ftc_server,
-                      _("📜 %s gives you shared vision."),
+                      _("📜👁‍🗨 %s gives you shared vision."),
                       player_name(pgiver));
 
         /* Yes, shared vision may let us to _know_ tiles

@@ -2070,11 +2070,13 @@ void make_contact(struct player *pplayer1, struct player *pplayer2,
     ds_plr1plr2->first_contact_turn = game.info.turn;
     ds_plr2plr1->first_contact_turn = game.info.turn;
     notify_player(pplayer1, ptile, E_FIRST_CONTACT, ftc_server,
-                  _("💢 You have made contact with the %s, ruled by %s."),
+                  _("[`flag/%s`] You have made contact with the %s, ruled by %s."),
+                  nation_of_player(pplayer2)->flag_graphic_str,
                   nation_plural_for_player(pplayer2),
                   player_name(pplayer2));
     notify_player(pplayer2, ptile, E_FIRST_CONTACT, ftc_server,
-                  _("💢 You have made contact with the %s, ruled by %s."),
+                  _("[`flag/%s`] You have made contact with the %s, ruled by %s."),
+                  nation_of_player(pplayer1)->flag_graphic_str,
                   nation_plural_for_player(pplayer1),
                   player_name(pplayer1));
     send_player_all_c(pplayer1, pplayer2->connections);
@@ -2829,8 +2831,9 @@ struct player *civil_war(struct player *pplayer)
 
   notify_player(pplayer, NULL, E_FIRST_CONTACT, ftc_server,
                 /* TRANS: <leader> ... the Poles. */
-                _("&#8203;[`raisedfist`] %s is the rebellious leader of the %s."),
-                player_name(cplayer),
+                _("&#8203;[`flag/%s`][`raisedfist`] %s is the rebellious leader of the %s."),
+                nation_of_player(cplayer)->flag_graphic_str,
+                player_name(cplayer),        /* [`small_flags/%s:nation_of_player(cplayer)%/_web`] */
                 nation_plural_for_player(cplayer));
 
   j = city_list_size(defector_candidates);  /* number left to process */
@@ -2876,14 +2879,16 @@ struct player *civil_war(struct player *pplayer)
 
   notify_player(NULL, NULL, E_CIVIL_WAR, ftc_server,
                 /* TRANS: ... Danes ... Poles ... <7> cities. */
-                PL_("&#8203;[`events/civilwar`]⚔️ Civil war partitions the %s;"
-                    " the %s now hold %d city.",
-                    "&#8203;[`events/civilwar`]⚔️ Civil war partitions the %s;"
-                    " the %s now hold %d cities.",
+                PL_("[`flag/%s`][`events/civilwar`]⚔️ Civil war partitions the %s;"
+                    " the %s now hold %d city [`flag/%s`]",
+                    "[`flag/%s`][`events/civilwar`]⚔️ Civil war partitions the %s;"
+                    " the %s now hold %d cities [`flag/%s`]",
                     i),
+                nation_of_player(pplayer)->flag_graphic_str,
                 nation_plural_for_player(pplayer),
                 nation_plural_for_player(cplayer),
-                i);
+                i,
+                nation_of_player(cplayer)->flag_graphic_str);
 
   return cplayer;
 }

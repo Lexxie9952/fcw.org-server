@@ -384,7 +384,7 @@ warmer_wetter_result = "no"
 warmer_drier_result  = "no"
 cooler_wetter_result = "no"
 cooler_drier_result  = "no"
-native_to            =  "Trireme", "Sea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "RiverShip", "Submarine", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
+native_to            = "Trireme", "Sea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "RiverShip", "Submarine", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
 flags                = "NoCities", "NoPollution", "UnsafeCoast", "NoZoc", "NoFortify"
 property_ocean_depth = 87
 color.r              = 0
@@ -1169,6 +1169,7 @@ build_time     = 0
 removal_time   = 0
 conflicts      = "Mine", "Oil Well"
 hidden_by      = "Farmland"
+flags          = "IrrigationSource"
 helptext       = _("\
 Irrigating a suitable tile causes it to produce extra food each turn. Most\
  tiles yield +1 extra food. A desert river that does not already benefit\
@@ -1349,6 +1350,7 @@ reqs           =
 build_time     = 0
 removal_time   = 0
 conflicts      = "Mine", "Oil Well"
+flags          = "IrrigationSource"
 helptext       = _("\
 Once Refrigeration is known, irrigation systems can be upgraded to \
 farmland by irrigating them a second time; if the city working the tile \
@@ -2183,6 +2185,7 @@ act_gfx_alt    = "-"
 act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
+flags          = "IrrigationSource"
 ;Resource distribution scripting to add more resources in leaner
 ;regions. Adds about +40 to specials, so adjust settings accordingly
 appearance_chance = 400   ; +4% if no adjacent resource

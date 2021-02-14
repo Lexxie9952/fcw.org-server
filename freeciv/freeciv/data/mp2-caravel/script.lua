@@ -201,7 +201,7 @@ Meat from wild animals is an important part of the Stone Age diet. Use wandering
    (TIP: Use Shift-W and Ctrl-Shift-Click to monitor and manage these resource opportunities.)\
 "))
 notify.event(nil, nil, E.BEGINNER_HELP,
-_("[`events/hunt`]<br>Wild animals available to hunt for food."))
+_("[`events/hunt`]<br>Wild animals are available to hunt for food."))
   end
 
   if turn == 17 then
@@ -210,7 +210,7 @@ _("<b>Ecology Report</b>\n\
 Frequent hunting has reduced wild animal populations and frightened them from human settlements.\
 "))
 notify.event(nil, nil, E.BEGINNER_HELP,
-_("[`events/runningdeer`]<br>Animal populations no longer come near human settlements."))
+_("[`events/runningdeer`][`events/oldtribesmen`]<br>Animal populations no longer come near human settlements.<br>Tribesmen are getting old.<br>"))
   end
 end
 

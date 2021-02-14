@@ -49,7 +49,14 @@ reqs	=
 ;      "UnitType", "Medium Bomber", "Local", TRUE
 ;      "UnitState","OnDomesticTile","Local", TRUE 
 ;    }   
-
+; Combat_rounds Tribesmen
+[effect_combat_rounds_tribesmen]
+type    = "Combat_Rounds"
+value   = 10
+reqs	=
+    { "type", "name", "range", "present"
+      "UnitType", "Tribesmen", "Local", TRUE
+    }
 ; Combat_rounds for ancient ships
 [effect_combat_rounds_riverships]
 type    = "Combat_Rounds"
@@ -652,6 +659,7 @@ reqs    =
     { "type",      "name",         "range", "present"
       "Action",    "Recycle Unit", "Local", TRUE
       "UnitClass", "Cargo",        "Local", FALSE
+      "UnitType",  "Tribesmen",    "Local", FALSE
       ; Everything except Cargo class has classic 50% recycle penalty:
     }
 [effect_unit_shield_value_recycle_cargo_unit]
@@ -663,8 +671,17 @@ reqs    =
       "Action",   "Recycle Unit", "Local", TRUE
       "UnitType", "Goods",        "Local", TRUE
     }
+[effect_starting_tribesmen]
+type    = "Unit_Shield_Value_Pct"
+value   = 186 ; 20 shields for starting Tribesmen.
+reqs    =
+    { "type",     "name",         "range", "present"
+      "Action",   "Recycle Unit", "Local", TRUE
+      "UnitType", "Tribesmen",    "Local", TRUE
+      "MinYear",  "-1900",        "World", FALSE
+    }
 
-;TO DO: this could be used in interesting ways.
+;TO DO: this could be used in interesting ways: e.g., foot units, bombers, etc.
 [effect_unit_shield_value_in_upgrade_price_calc]
 type    = "Unit_Shield_Value_Pct"
 value   = -50
@@ -931,16 +948,44 @@ value   = 5
 type    = "Conquest_Tech_Pct"
 value   = 100
 
-;Camels travel faster than people on foot, and now we have
-; move_bonus_in_frags effect to be more accurate.
-[effect_caravan_move_bonus]
+;Tribesmen OLD AGE! -----------------------------------
+[effect_tribesmen_slow]
 type = "Move_Bonus"
-value = 7
+value = -3
 reqs =
     {
-      "type",      "name",   "range",  "present"
-      "UnitType",  "Caravan",   "Local",   TRUE
+      "type",      "name",      "range"
+      "UnitType",  "Tribesmen", "Local"
+      "MinYear",   "-2400",     "World"
     }
+[effect_tribesmen_slow2]
+type = "Move_Bonus"
+value = -3
+reqs =
+    {
+      "type",      "name",      "range"
+      "UnitType",  "Tribesmen", "Local"
+      "MinYear",   "-1900",     "World"
+    }
+[effect_tribesmen_glaucoma]
+type = "Unit_Vision_Radius_Sq"
+value = -1
+reqs =
+    {
+      "type",      "name",      "range"
+      "UnitType",  "Tribesmen", "Local"
+      "MinYear",   "-2400",     "World"
+    }
+[effect_physics_glaucoma2]
+type    = "Unit_Vision_Radius_Sq"
+value	= -1
+reqs	=
+    { "type",     "name",      "range"
+      "UnitType", "Tribesmen", "Local"
+      "MinYear",  "-1900",     "World"
+    }
+;------------------------------------------------------
+
 ;Freshly fueled full hp helicopters get +1 move per turn
 [effect_fresh_helicopter]
 type    = "Move_Bonus"
