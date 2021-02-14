@@ -54,6 +54,7 @@ button {
   color: white;
   list-style-type: none;
   margin: 0px;
+  font-family: FranciscoBold;
 }
 
 #game_chat_box {
@@ -1583,6 +1584,14 @@ li.tech-me_only::before {
 .e_bad_command {
   color: #aba5a5;
 }
+
+
+
+@font-face {
+  font-family: FranciscoBold;
+  src: url(/fonts/System San Francisco Display Bold.ttf);
+}
+
 
 
 /*  These get put in chatbox classes, meaning we can define colours, fonts, indent, collapsing, all kinds of stuff 
