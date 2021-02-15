@@ -50,7 +50,7 @@
 
 <td>
   <div title="Computer generated speech for console messages" class="main_menu_buttons">
-      <input type='checkbox' name='speech_enabled_setting' id='speech_enabled_setting'><b><font color="#0000c0">Speech messages</font></b> 
+      <input type='checkbox' name='speech_enabled_setting' id='speech_enabled_setting'><b><font color="#4cf">Speech messages</font></b> 
   </div>
 </td>
 </tr>
@@ -76,7 +76,7 @@
     </td>
      <td> 
         <div title="Shortcut buttons for unit orders at bottom of screen" class="main_menu_buttons">
-            <input type='checkbox' name='show_order_buttons' id='show_order_buttons' checked><b><font color="#0000c0">Show Orders Buttons</font></b>  
+            <input type='checkbox' name='show_order_buttons' id='show_order_buttons' checked><b><font color="#4cf">Show Orders Buttons</font></b>  
         </div>
     </td>
 </tr>
@@ -84,7 +84,7 @@
 <tr>
     <td>
         <div title="Units auto-attack without showing odds or asking confirmation. (SHIFT-A)" class="main_menu_buttons">
-            <input type='checkbox' name='auto_attack' id='auto_attack'><b><font color="#0000c0">Auto-attack</font></b> 
+            <input type='checkbox' name='auto_attack' id='auto_attack'><b><font color="#4cf">Auto-attack</font></b> 
         </div>
     </td>
     <td>
@@ -109,7 +109,7 @@
 <tr>
   <td>
       <div title="Fills territories with national colors (CTRL-B)" class="main_menu_buttons">
-          <input type='checkbox' name='fill_borders' id='fill_borders'><b><font color="#0000c0">Fill national boundaries</font></b> 
+          <input type='checkbox' name='fill_borders' id='fill_borders'><b><font color="#4cf">Fill national boundaries</font></b> 
       </div>
   </td>
   <td>
@@ -121,12 +121,12 @@
 <tr>
     <td>
       <div title="Movement Point Percentage displayed on units on main map (SHIFT-M)" class="main_menu_buttons">
-          <input type='checkbox' name='show_unit_mp' id='show_unit_mp'><b><font color="#0000c0">Movement Point Display</font></b> 
+          <input type='checkbox' name='show_unit_mp' id='show_unit_mp'><b><font color="#4cf">Movement Point Display</font></b> 
       </div>
     </td>
     <td>
       <div title="Show Warcalc Odds (ALT-W)" class="main_menu_buttons">
-          <input type='checkbox' name='show_warcalc' id='show_warcalc'><b><font color="#0000c0">Show Warcalc Odds</font></b> 
+          <input type='checkbox' name='show_warcalc' id='show_warcalc'><b><font color="#4cf">Show Warcalc Odds</font></b> 
       </div>
     </td>
 </tr>
@@ -134,7 +134,7 @@
 <tr>
   <td>
     <div title="Show compass in upper right corner of map" class="main_menu_buttons">
-        <input type='checkbox' name='show_compass' id='show_compass'><b><font color="#000000">Show Map Compass</font></b> 
+        <input type='checkbox' name='show_compass' id='show_compass'><b>Show Map Compass</b> 
     </div>
   </td>
     <td>
@@ -160,7 +160,7 @@
 <tr>
   <td>
     <div title="Highlights polluted tiles everywhere on map (CTRL-ALT-P)" class="main_menu_buttons">
-        <input type='checkbox' name='draw_highlighted_pollution' id='draw_highlighted_pollution'><b><font color="#0000c0">Highlight polluted tiles on map</font></b> 
+        <input type='checkbox' name='draw_highlighted_pollution' id='draw_highlighted_pollution'><b><font color="#4cf">Highlight polluted tiles on map</font></b> 
     </div>
   </td>
     <td>

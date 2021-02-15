@@ -25,9 +25,9 @@ button {
 
 #freeciv_logo {
   float:left; 
-  background: #444444 url(/images/freeciv-web-logo.png);
-  width: 138px; 
-  height: 35px; 
+  background-image: url(/images/freeciv-web-logo2.png);
+  width: 118px; 
+  height: 30px; 
   margin-right: 10px;
 }
 
@@ -51,10 +51,10 @@ button {
   padding-left: 0px;
   box-sizing: border-box;
   border: 1px solid #111111;
-  color: white;
+  color: rgb(247, 241, 241);
   list-style-type: none;
   margin: 0px;
-  font-family: FranciscoBold;
+ /* font-family: Consolas; */
 }
 
 #game_chat_box {
@@ -75,6 +75,7 @@ button {
   border: 1px solid #555555;
   color: #d0c8c0;
   background-color: rgba(0, 0, 0, 0.7);
+  font-family: Consolas;
 }
 
 #overview_map {
@@ -108,8 +109,6 @@ button {
   width: 120px;
 }
 
-
-
 .order_button {
   overflow: hidden;
   padding-right: 12px;
@@ -132,40 +131,6 @@ button {
 
 .main_menu_buttons {
   padding:10px
-}
-
-#city_canvas_div {
-  width: 350px; 
-  height: 175px; 
-  float: left;
-  margin: 5px;
-  border: 1px solid #888888;
-}
-
-#city_dialog_info {
-  float: left;
-  padding: 0 10px 9px 10px;
-}
-
-#city_button_pane {
-  margin: 20px;
-  float: left;
-}
-.city_panel {
-  background: url("/images/bg.jpg") repeat scroll 0 0 #222222;
-  padding-right: 30px;
-  margin-top: 20px;
-}
-#city_right_panel {
-  float: right; 
-  width: 55%;
-  background: url("/images/bg.jpg") repeat scroll 0 0 #222222;
-  height: 533px;
-} /* theme classes 1 */
-
-#city_improvements_panel {
-  clear: left;
-  width: 95%;
 }
 
 #freeciv_manual {  
@@ -223,7 +188,9 @@ input[type='number'] {
 .helptext_pane_mobile {
   max-width: 984px;
 }
-
+.unit_desc {
+  color: #9aa;
+}
 
 .blue_clickable {
   color: #3498DB; 
@@ -381,7 +348,7 @@ input[type='number'] {
   position: relative; 
   overflow: auto; 
   width: 100%;
-  background-image: url('/images/bg.jpg');
+  background-image: url('/images/bg-dark.jpg');
 } /* theme classes 3 */
 
 #tech_info_box {
@@ -393,7 +360,8 @@ input[type='number'] {
   margin: 2px; 
   margin-left: 0px; 
   background: url("/images/bg-dark.jpg") repeat scroll 0 0 ; 
-  color: white;
+  color: rgb(226, 226, 226);
+  font-family: Segoe;
 }
 
 #tech_goal_box {
@@ -454,8 +422,6 @@ input[type='number'] {
   opacity: 0.75;
 }
 
-
-
 #game_status_panel_bottom {
   position: absolute;
   color: #ffffff;
@@ -471,12 +437,13 @@ input[type='number'] {
 
 #game_status_panel_top {
   float: right;
-  color: #ffffff;
+  color: #d6d0c3;
   height: 30px;
   text-align: center;
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   padding-right: 150px;
   padding-top: 5px;
+  font-family: Freeciv;
 }
 
 .ui-dialog .ui-dialog-content {
@@ -556,10 +523,15 @@ input[type='number'] {
   float: none;
 }
 
+#tabs {
+  background-image: url("/images/bg-dark.jpg");
+}
+
 #tabs_menu {
   font-size: 0.98em;
   overflow: hidden;
-  background: #444 url("images/ui-bg_highlight-soft_44_444444_1x100.png") 50% 50% repeat-x;
+ /* background: #444 url("images/ui-bg_highlight-soft_44_444444_1x100.png") 50% 50% repeat-x; */
+  background: #444 url("/images/ui-widget-header.png") 50% 50% repeat-x;
 }
 
 .chatbox_dialog {
@@ -748,8 +720,8 @@ input[type='number'] {
 }
 #help_menu {
   float: left;
-  background-image: url('/images/bg.jpg');
-  color: black;
+  background-image: url('/images/bg-dark.jpg');
+  color: rgb(226, 226, 226);
 }
 #help_info_page {
   float: left;
@@ -759,17 +731,17 @@ input[type='number'] {
   max-height:  600px;
   overflow: auto;
   min-width: 320px;
-  background-image: url('/images/bg.jpg');
-  color: black;
+  background-image: url('/images/bg-dark.jpg');
+  color: rgb(226, 226, 226);
 }
 
 #tabs-hel.manual_doc {
-  background-image: url('/images/bg.jpg');
-  color: black;
+  background-image: url('/images/bg-dark.jpg');
+  color: rgb(226, 226, 226);
 }
 
 #tabs-hel.manual_doc a {
-  color: darkgreen;
+  color: #8e8;
 }
 
 #tabs-hel.ui-icon, #tabs-hel.ui-widget-content .ui-icon {
@@ -778,22 +750,6 @@ input[type='number'] {
 
 #game_chatbox_panel {
   overflow: hidden;
-}
-
-#city_current_worklist {
-  width: 100%;
-  float: left;
-  overflow: auto;
-  background-color: rgba(40,40,40,0.4);
-  border: 1px solid black;
-}
-
-#worklist_production_choices {
-  width: 100%;
-  float: left;
-  overflow: auto;
-  background-color: rgba(40,40,40,0.4);
-  border: 1px solid black;
 }
 
 #worklist_heading {
@@ -1360,7 +1316,7 @@ li.tech-me_only::before {
   background: #cb842e url("/images/themes/faroese/ui-widget-header.png") 100% 50% repeat-x;
 }
 .faroese7 {
-  background: #444444 url(/images/themes/faroese/freeciv-web-logo.png);
+  background: #444444 url(/images/freeciv-web-logo2.png);
 }
 
 /* GREEK */
@@ -1386,7 +1342,24 @@ li.tech-me_only::before {
   background: #444444 url(/images/themes/greek/freeciv-web-logo.png);
 }
 
+.ui-tabs-panel {
+  color: #d0c8c0;
+  font-family: Freeciv;
+}
+.ui-widget:not(.ui-button,.ui-dialog, #game_chatbox_panel, #game_message_area) {
+  background: url('/images/bg-dark.jpg');
+  color: #d0c8c0;
+}
 
+.ui-dialog:not(#game_message_area, #game_chatbox_panel) {
+  color: black;
+  font-family:Segoe;
+  background: url('/images/bg.jpg');
+}
+
+/*  These get put in chatbox classes, meaning we can define colours, fonts, indent, collapsing, all kinds of stuff 
+    In addition, these could be intercepted and their names used as playsounds, where, if playsound not found, it just does nothing.
+*/
 .e_setting {
  color: #777c79;
 }
@@ -1509,7 +1482,6 @@ li.tech-me_only::before {
   color: #9ecbff;
 }
 
-
 /*reclassify later: all other generic messages*/
 .e_city_cantbuild,
 
@@ -1585,16 +1557,154 @@ li.tech-me_only::before {
   color: #aba5a5;
 }
 
-
-
-@font-face {
-  font-family: FranciscoBold;
-  src: url('/fonts/System San Francisco Display Bold.ttf');
+/* Font Control over various game elements 
+*******************************************************************/
+#pregame_message_area {
+  font-family: SegoeSB;
+  line-height:115%;
+  font-size:115%;
+  color:black !important;
+}
+/* override everything in pregame to black */
+#pregame_message_area .e_setting {
+  font-family: ConsolasBold;
+  line-height:90%;
+  font-size:90%;
+  color: inherit !important;
+}
+#pregame_message_area .e_connection {
+  font-family: ConsolasBold;
+  line-height:90%;
+  font-size:90%;
+  color: inherit !important;
+}
+#private_message_text,
+#pregame_text_input {
+  font-family: Consolas;
+}
+/* info on terrain, gov, wonders, buildings */
+#helptext_pane {
+  /*font-family: Arial;*/
+  line-height: 115%;
+  font-size: 115%;
+}
+.ui-button, button {
+  color: black;
+  font-family: Freeciv !important;
+  background: url('/images/bg-light.jpg');
 }
 
+.ui-tabs-anchor {
+  font-family: "Freeciv";
+  background: url('/images/bg-light.jpg');
+/*
+  background: #938F8c;*/
+}
+.ui-tabs-tab {
+  border-color: #777;
+}
+#city_canvas_div {
+  width: 350px; 
+  height: 175px; 
+  float: left;
+  margin: 5px;
+  border: 1px solid #888888;
+}
 
+#city_dialog_info {
+  float: left;
+  padding: 0 10px 9px 10px;
+}
 
-/*  These get put in chatbox classes, meaning we can define colours, fonts, indent, collapsing, all kinds of stuff 
-    In addition, these could be intercepted and their names used as playsounds, where, if playsound not found, it just does nothing.
+#city_button_pane {
+  margin: 20px;
+  float: left;
+}
+.city_panel {
+  background: url("/images/bg.jpg") repeat scroll 0 0 #222222;
+  padding-right: 30px;
+  margin-top: 20px;
+  font-family: Segoe;
+  color: black;
+}
+#city_right_panel {
+  float: right; 
+  width: 55%;
+  background: url("/images/bg.jpg") repeat scroll 0 0 #222222;
+  height: 533px;
+} /* theme classes 1 */
 
-*/
+#city_improvements_panel {
+  clear: left;
+  width: 95%;
+}
+
+#city_current_worklist {
+  width: 100%;
+  float: left;
+  overflow: auto;
+  background-color: rgba(40,40,40,0.4);
+  border: 1px solid black;
+}
+#prod_descr,
+#city_dialog,
+#city_tabs,
+#tasks_heading,
+#city_traderoutes_tab,
+.citydlg_tabs,
+#city_disband_options,
+#city_happy_tab,
+#city_governor_tab,
+#city_foreigners {
+  color: black !important;
+}
+
+#worklist_production_choices {
+  width: 100%;
+  float: left;
+  overflow: auto;
+  background-color: rgba(40,40,40,0.4);
+  border: 1px solid black;
+}
+
+/* Font faces */
+@font-face {
+  font-family: ConsolasBold;
+  src: url('/fonts/consolab.ttf');
+}
+@font-face {
+  font-family: Consolas;
+  src: url('/fonts/consola.ttf');
+}
+
+@font-face {
+  font-family: Helvetica;
+  src: url('/fonts/arial.ttf');
+}
+@font-face {
+  font-family: Freeciv;
+  src: url('/fonts/freeciv.otf');
+}
+@font-face {
+  font-family: Arial;
+  src: url('/fonts/arial.ttf');
+}
+@font-face {
+  font-family: SegoeSB; /* semi-bold */
+  src: url('/fonts/seg.sb.ttf');
+}
+@font-face {
+  font-family: SegoeBold;
+  src: url('/fonts/seg.b.ttf');
+}
+@font-face {
+  font-family: SegoeBlack;
+  src: url('/fonts/seg.bl.ttf');
+}
+@font-face {
+  font-family: Segoe;
+  src: url('/fonts/seg.ttf');
+}
+body {
+  font-family: Arial;
+}

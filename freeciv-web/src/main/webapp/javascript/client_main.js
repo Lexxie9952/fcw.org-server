@@ -181,6 +181,9 @@ function setup_window_size ()
 
   if (overview_active) init_overview();
   if (unitpanel_active) init_game_unit_panel();
+
+  // Because CSS file is ignoring this style, we do it here:
+  $(".ui-tabs-tab").css("border-color","#777");
 }
 
 function client_state()

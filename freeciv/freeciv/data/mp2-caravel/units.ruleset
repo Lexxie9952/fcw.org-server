@@ -708,7 +708,7 @@ sound_move    = "m_worker"
 sound_move_alt = "m_generic"
 sound_fight   = "f_worker"
 sound_fight_alt = "f_generic"
-build_cost    = 7
+build_cost    = 10
 pop_cost      = 0
 attack        = 1
 defense       = 1
@@ -739,20 +739,21 @@ veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
 veteran_move_bonus = 3, 4, 5, 6, 7, 8, 9
 helptext      = _("\
-Tribesmen are ancestors whose achievements are forgotten in the sands\
- of time. Tribesmen can donate their life-work to the first output of a\
- city, recycling 20 shields to output.\n\
-Tribesmen are expert at little and versatile at much. They can scout the\
- area around your nation, but cannot see as far nor move as fast as an\
- Explorer. They can establish Cease-fire and Peace or Investigate cities,\
- but cannot do an Embassy. They can engage in primitive combat, but can\
- be captured, cannot conquer cities, and often won't fight to the death\
- (10 combat rounds). They can carry Goods, but cannot establish trade routes.\n\
-As wild men of the land, they move over terrain with no penalty and slip past ZOC\
- (but exert none either). They can even work tiles, but at a rate slower than Workers.\
-  One thing Tribesmen are good at is killing animals, for which they have a 3x bonus.\n\
-After 2500BC when wild game is gone, the last tribesmen of your nation reach Old Age:\
- they will start to move slower, can no longer work tiles, and lose their recycle bonus.\
+Tribesmen came before cities, specialization, and division of labor.\
+ They help in nation-building by recycling into city production with\
+ a bonus, donating their life-work as 20 shields toward a building,\
+ wonder, goods, or ship; or 10 shields into anything else.\n\
+Tribesmen have limited skills in every category of later specialized units.\
+ They can explore, make contact to establish Cease-fire or Peace, and\
+ Investigate cities. They can enter lands regardless of Peace arrangements,\
+ yet can engage in primitive combat. But they do not conquer cities, and often\
+ won't fight to the death (10 combat rounds). They can also carry Goods.\n\
+Tribesmen move over terrain with no penalty, and do not respect nor exert ZOC.\
+ They can work tiles at a rate slower than Workers. They have a 3x bonus at\
+ hunting animals.\n\
+After 2500BC (T15) your last Tribesmen get old as your nation settles into the\
+ ways of city life. Tribesmen start to move slower, see less, lose their recycle\
+ bonus, and can no longer work tiles.\
 ")
 
 ;A unique patch unit to provide fair starts regardless of lack of nearby water.
@@ -797,9 +798,9 @@ This unit can fix unlucky starts, but has very high upkeep.\
  If you have no water, make a Well-Digger in a city that can\
  support it, create a water source, then disband the unit.\n\
  This unit can dig wells; or irrigate any lowland tile. It will cost its home city\
- -2 Food -2 Prod. This unit WILL NOT WORK: • Outside your borders,\
+ -2 Food -2 Prod. This unit WILL NOT WORK：• Outside your borders,\
  • After Alphabet or Pottery, • After any player discovers Writing, • After 10 turns.\
- >> Don't fool around: high upkeep will permanently hinder you. Only make this unit if you\
+ >> Don't fool around：high upkeep will permanently hinder you. Only make this unit if you\
  lack water when the game starts!\
 ")
 
@@ -1056,7 +1057,7 @@ transport_cap = 0
 fuel          = 0
 city_size     = 278     ;000000,000,001,000101,1,0 atk_bonus=0, max_kiils=0, targets=1, move_cost=5 frags, stay_frtfy=1, reserverd=0
 paratroopers_mr_sub = 1 ;00,0000,000,0,1 iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
-;NOTE: iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
+;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1106,7 +1107,7 @@ transport_cap = 0
 fuel          = 0
 city_size     = 1850 ; 000000,000,111,001110,1,0 = atk_bonus=0, max_kills=0, targets=7, move_cost=14 frags, stay_fortfy=1, reserved = 0
 paratroopers_mr_sub = 4096 ; 00010,00,0000,000,0,0 - bbd_retal_rate=2, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
-;NOTE: iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
+;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1118,7 +1119,7 @@ roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
 Archers fight with bows and arrows. They have good offense and decent defense.\
  Rather than fight to the death, Archers can also do a ranged Volley Attack which\
- avoids hand-to-hand retaliation: two volleys of arrows are fired on up to 7 enemy units on the tile,\
+ avoids hand-to-hand retaliation：two volleys of arrows are fired on up to 7 enemy units on the tile,\
  causing 1-2hp of damage to any units who are hit. This includes Oceanic tiles if not\
  transported. This is useful for softening enemies prior to battle, or for deterring an\
  approach to a strategic location. (Volley Attack is not possible on Cities or Fortresses.)\
@@ -1166,10 +1167,10 @@ flags         = "FootSoldier", "Settlers", "CanHide", "Infra", "CanRoad", "CanFo
 roles         = "DefendOk", "DefendOkStartUnit", "BarbarianBuild", "BarbarianSea"
 helptext      = _("\
 Legions are heavily armed well disciplined soldiers with excellent offensive strength.\
- They are famous for their engineering abilities: with the required\
+ They are famous for their engineering abilities：with the required\
  technology they can build Forts and Fortresses. They can build Roads outside domestic\
  national territory and inside Forts and Fortresses.\n\
-Legions are feared for how they start battle: a Pilum Assault targets the\
+Legions are feared for how they start battle：a Pilum Assault targets the\
  shields of the enemy. A pilum stuck in a shield renders it useless, leaving\
  the front line vulnerable to a full-on charge. The Pilum Assault does 1 round\
  of combat at 2× attack bonus on up to 2 units on the tile.\n\
@@ -1308,7 +1309,7 @@ Fundamentalist nations can maintain Fanatics without paying\
  fervorous faith to +1 higher veteran level.\
 "), _("\
 Fanatics zealously defend their homeland, and can do surprise skirmish\
- assaults to snipe and injure foreign occupants: Up to 4 invaders\
+ assaults to snipe and injure foreign occupants：Up to 4 invaders\
  on the tile will endure three combat rounds without defense.\
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
@@ -1385,7 +1386,7 @@ transport_cap = 0
 fuel          = 0
 city_size     = 2;  ...xxxxx..., 1, 0  use bombard_stay_fortified on a non-bombard unit to specify can remain fortified when attacking.
 paratroopers_mr_sub = 0 ;00,0000,000,0,0 iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
-;NOTE: iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
+;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1466,7 +1467,7 @@ transport_cap = 0
 fuel          = 0
 city_size     = 2618 ; 000000,001,010,001110,1,0 = atk_bonus=0, max_kills=1, targets=2, move_cost=14 frags, stay_frtfy=1, reserved = 0
 paratroopers_mr_sub = 1 ;00,0000,000,0,1 iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=1
-;NOTE: iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
+;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1547,7 +1548,7 @@ Paratroopers are experts at airborne attacks.\
  move points can paradrop directly to any tile in range, and be\
  immediately ready to act there. Beware dropping into unseen territory,\
  as Paratroopers landing on a tile occupied by enemy units will be lost.\
- Also note: Paradropping is assumed to be done from aircraft. Therefore,\
+ Also note：Paradropping is assumed to be done from aircraft. Therefore,\
  Fighters on Vigil may auto-attack the tile you land on, if adjacent.\
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
@@ -1856,7 +1857,7 @@ vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
 paratroopers_mr_sub = 170 ;00,0101,010,1,0 iPill_rand_tgts=0, iPill_odds=-5 pentads=75%, iPill_moves=2, iPillage=1, ATK_Stay_Fortified=0
-;NOTE: iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
+;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1869,7 +1870,7 @@ roles         = "AttackFastStartUnit", "Hunter"
 helptext      = _("\
 Armor is the mechanized equivalent of a Cavalry unit. They have high attack strength,\
  superb mobility, and the highest defense of any offensive unit. They are massive all-terrain\
- vehicles, well-suited for penetrating defensive fortifications: Units inside Forts get no defense\
+ vehicles, well-suited for penetrating defensive fortifications：Units inside Forts get no defense\
  bonus against Armor. Units inside Fortresses get a reduced bonus of 1.67× instead of 2×.\
 ")
 
@@ -1895,7 +1896,7 @@ vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
 paratroopers_mr_sub = 170 ;00,0101,010,1,0 iPill_rand_tgts=0, iPill_odds=-5 pentads=80%, iPill_moves=2, iPillage=1, ATK_Stay_Fortified=0
-;NOTE: iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
+;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1991,7 +1992,7 @@ Siege Rams may also ram Fortresses, doing up to 4hp of damage\
  on each occupant. This emulates damage to the Fortress defense\
  bonus, which is partly or fully repaired/recovered next turn.\n\
 Siege Rams can only travel by road. They can carry 1 Land\
- unit as cargo: their slow pace means this serves more for\
+ unit as cargo：their slow pace means this serves more for\
  disguise or defense.\n\ 
 Siege Rams need an escort for protection. They need a minimum of\
  1 move point to attack walls, and 1 1/9 points against a Fortress.\
@@ -2120,7 +2121,7 @@ roles         = ""
 helptext      = _("\
 Anti-Aircraft Artillery (AAA) can attack almost anything from anywhere. AAA get a\
  2× bonus against Air units. AAA qualify as weaponry for Marines and have the same\
- abilities: they can be transported on any unit that carries Marines, can attack from\
+ abilities：they can be transported on any unit that carries Marines, can attack from\
  or to non-native tiles, and do not lose a turn when unloading. Transported AAA can\
  defend their tile on both Land and Sea. (AAA cannot attack Submarines, Missiles,\
  or Jet Bombers.)\
@@ -2251,7 +2252,7 @@ Balloons gather intel on potential battle areas. They have great vision and\
  unit with cargo capacity of 4+. Balloons do not block units under\
  them from being attacked, and cannot fly over mountains.\
 "), _("
-NOTE: GOTO disallows unit loss from lack of fuel. You\
+NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -2295,7 +2296,7 @@ Zeppelins have great vision and are unreachable by units prior to Marines and\
  Destroyers. Zeppelins do not block units under them from being attacked. Unlike\
  Balloons, they can fly over Mountains.\
 "), _("
-NOTE: GOTO disallows unit loss from lack of fuel. You\
+NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 bombard_rate = 4
@@ -2340,7 +2341,7 @@ Airplanes can carry a single diplomatic unit. They can land in any domestic or a
  city. For missions to non-allied nations, an empty Airbase must be available for landing.\
  Airplanes have two turns of fuel. Each new aviation tech upgrades range by +2 moves per turn.\
 "), _("
-NOTE: GOTO disallows unit loss from lack of fuel. You\
+NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -2393,10 +2394,10 @@ Fighters are the first offensive Air units. Their superior mobility and firepowe
  the very nature of warfare. They can move anywhere and attack any unit (except Submarines\
  and Jet Bombers.)\n\
 "), _("
-INTERCEPTOR: the Vigil order lets Fighters auto-attack adjacent Air units if they\
+INTERCEPTOR：the Vigil order lets Fighters auto-attack adjacent Air units if they\
  have better attack odds. A Fighter can Vigil if it uses 2 move points or less.\n\
 "), _("
-NOTE: GOTO disallows unit loss from lack of fuel. You\
+NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -2449,10 +2450,10 @@ Escort Fighters are large fighters with high fuel capacity. Higher mass and\
  as well as standard Fighters, but can return home on the next turn. They are\
  good for long-range missions, defensive air support, and escorting bombers.\
 "), _("
-INTERCEPTOR: the Vigil order lets Escort Fighters auto-attack adjacent Air units if they\
+INTERCEPTOR：the Vigil order lets Escort Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 3 move points or less.\n\
 "), _("
-NOTE: GOTO disallows unit loss from lack of fuel. You\
+NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -2478,7 +2479,7 @@ vision_radius_sq = 12
 transport_cap = 0
 fuel          = 1
 paratroopers_mr_sub = 346 ;00,1010,110,1,0 - iPill_rand_tgts=0, iPill_odds=-10 pentads=50%, iPill_moves=6, iPillage=1, attack_stay_fortified=0
-;NOTE: iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
+;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
@@ -2582,7 +2583,7 @@ The Medium Bomber is well suited for moderately strong targets or multiple weak 
 Republic:0   Democracy:1    (non-aggressive)\n\
 Republic:1   Democracy:2    (aggressive)\
 "), _("
-NOTE: GOTO disallows unit loss from lack of fuel. You\
+NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -2639,7 +2640,7 @@ Heavy Bombers are large and sturdy Bombers with larger payload and numerous gunn
 ➤ Unhappy effect for Field units:\n\
 Republic:1   Democracy:2\
 "), _("
-NOTE: GOTO disallows unit loss from lack of fuel. You\
+NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -2665,7 +2666,7 @@ vision_radius_sq = 12
 transport_cap = 2
 fuel          = 3
 paratroopers_mr_sub = 782 ;01,1000,011,1,0 - iPill_rand_tgts=1, iPill_odds=-8 pentads=60%, iPill_moves=3, iPillage=1, ATK_Stay_Fortified=0
-;NOTE: iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
+;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -2695,7 +2696,7 @@ The Strategic Bomber offers a small improvement in attack. Higher altitude offer
  defense. It has considerably longer range, with one more turn of fuel. Upgraded payload enables\
  instant-Pillage bombing. May carry two Bombs.\
 "), _("
-NOTE: GOTO disallows unit loss from lack of fuel. You\
+NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -2736,7 +2737,7 @@ helptext      = _("\
 The AWACS has great fuel capacity for long range flights, and advanced radar that can determine\
  the location of enemy units over a wide area. The AWACS has 2 turns of fuel.\
 "), _("
-NOTE: GOTO disallows unit loss from lack of fuel. You\
+NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -2780,7 +2781,7 @@ The Spy Plane is an ultrasonic high altitude aircraft with long range. It gather
  adjacent tiles. Spy Planes have 2 turns of fuel. They are unreachable to primitive\
  propeller-based aircraft.\
 "), _("
-NOTE: GOTO disallows unit loss from lack of fuel. You\
+NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 [unit_satellite]
@@ -2825,13 +2826,13 @@ Satellites orbit the Earth above the atmosphere. They are unreachable to anythin
  city has a Police Station. Satellites cannot be seen by others unless adjacent.\
  Satellites require Laser tech and the Apollo Program.\
 "), _("
-NOTE:  Due to game mechanics, Satellites block terrestrial movement\
+NOTE： Due to game mechanics, Satellites block terrestrial movement\
  over a tile. This is solved by killing it with any Missile. To avoid\
  this, end your turn far away from developed or trafficked areas.\
 ")
 
 [unit_transport_helicopter]
-; /* TRANS: unit type */
+; /* TRANS：unit type */
 name          = _("Transport Helicopter")
 class         = "Helicopter"
 tech_req      = "Combined Arms"
@@ -2894,7 +2895,7 @@ Transport Helicopters can carry three land units, which they can pick up from an
 ")
 
 [unit_helicopter]
-; /* TRANS: unit type */
+; /* TRANS：unit type */
 name          = _("Helicopter")
 class         = "Helicopter"
 tech_req      = "Combined Arms"
@@ -2930,7 +2931,7 @@ bonuses       =
 cargo         = "LandAirSea"
 flags         = "Helicopter", "AirAttacker", "Unbribable",
                 "CanEscape", "WillNever"
-                ; Heli is low-altitude and non-provoking: if it's ever thought to be OP, 
+                ; Heli is low-altitude and non-provoking：if it's ever thought to be OP, 
                 ; changing this flag fixes that right away. But currently it MIGHT be UnP 
                 ; because hp_loss, range, city walls, and Ground Strike Fighter
 veteran_names =
@@ -3008,10 +3009,10 @@ roles         = ""
 helptext      = _("\
 Jet Fighters upgrade the Fighter with improved attack, defense, and range.\
 "), _("
-INTERCEPTOR: the Vigil order Jets Fighters auto-attack adjacent Air units if they\
+INTERCEPTOR：the Vigil order Jets Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 3 move points or less.\n\
 "), _("
-NOTE: GOTO disallows unit loss from lack of fuel. You\
+NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -3037,7 +3038,7 @@ vision_radius_sq = 12
 transport_cap = 0
 fuel          = 2
 paratroopers_mr_sub = 178 ;00,0101,100,1,0 - iPill_rand_tgts=0, iPill_odds=-5 pentads=75%, iPill_moves=4, iPillage=1, ATK_Stay_Fortified=0
-;NOTE: iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
+;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
@@ -3069,7 +3070,7 @@ Ground Strike Fighters upgrade the Dive Bomber. They cannot block attacks on oth
  air. No unit can stop this unit from attacking surface units on a tile. This unit\
  can also do pinpointed surgical strikes to pillage tiles. This aircraft is a\
  specialized niche unit. It is not an interceptor.\n\
-NOTE: GOTO prevents unit loss from lack of fuel. You\
+NOTE：GOTO prevents unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -3095,7 +3096,7 @@ vision_radius_sq = 12
 transport_cap = 3
 fuel          = 3
 paratroopers_mr_sub = 1198 ;10,0101,011,1,0 - iPill_rand_tgts=2, iPill_odds=-5 pentads=75%, iPill_moves=3, iPillage=1, ATK_Stay_Fortified=0
-;NOTE: iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
+;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -3118,12 +3119,12 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
-Jet Bombers are stratospheric long-range bombers with 3 turns of fuel: they can be airborne for two\
+Jet Bombers are stratospheric long-range bombers with 3 turns of fuel：they can be airborne for two\
  turn-changes. Their range makes them useful even after Stealth Bombers are available. Stratospheric\
  altitude is unreachable to propeller-based Fighters and AAA. Jet Bombers can Carpet Bomb, an\
  instant-Pillage of tiles from the air. May carry three Bombs.\ 
 "), _("
-NOTE: GOTO disallows unit loss from lack of fuel. You\
+NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -3178,10 +3179,10 @@ The most advanced Fighter, with improved attack and longer range. Stealth Fighte
  to an enemy. Stealth evasion gives a 25% bonus against all Anti-Air units, and reduces\
  SAM Batteries down to a smaller 25% bonus.\
 "), _("
-INTERCEPTOR: the Vigil order lets Stealth Fighters auto-attack adjacent Air units if they\
+INTERCEPTOR：the Vigil order lets Stealth Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 4 move points or less.\n\
 "), _("
-NOTE: GOTO disallows unit loss from lack of fuel. You\
+NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -3238,7 +3239,7 @@ The deadliest Bomber, with improved attack and speed. Stealth Bombers cannot be 
  unless adjacent to an enemy. Stealth evasion gives a 25% bonus against all Anti-Air\
  units, and reduces SAM Batteries down to only a 25% bonus. May carry two Bombs.\
 "), _("
-NOTE: GOTO disallows unit loss from lack of fuel. You\
+NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -3275,7 +3276,7 @@ Boats were used pre-historically for exploration,\
  transport, and interaction with other tribes. They\
  can travel rivers and oceans, but must always stay\
  near shore. Boats can carry one unit and do ancient\
- commerce: building Wonders or setting up Traderoutes\
+ commerce：building Wonders or setting up Traderoutes\
  without Trade tech. Primitive bartering generates little\
  or no extra trade, but may help you advance faster or\
  create relations with ancient neighbors.\
@@ -3314,7 +3315,7 @@ helptext      = _("\
 Triremes are used for exploration, transport, and Commerce.\
  The entry on Caravan explains what Commerce units may do.\
 "), _("
-Triremes can enter Deep Ocean, but there is risk: they must end every second\
+Triremes can enter Deep Ocean, but there is risk：they must end every second\
  turn on river, coastline, or a city—or else be lost at sea. They can travel\
  and attack on rivers, but cannot attack the shore.\
 "), _("
@@ -3465,7 +3466,7 @@ uk_gold       = 0
 flags         = "BadCityDefender", "CantReachAir", "Only_Native_Attack", "WillNever"
 roles         = "Hunter"
 helptext      = _("\
-The Ram Ship has one purpose: to destroy other ships. It has poor vision, no transport or\
+The Ram Ship has one purpose：to destroy other ships. It has poor vision, no transport or\
  commerce ability, and cannot travel rivers. Unlike other early ships, there will always be\
  a winner and a loser when Ram Ships attack. They are good for first-strike, and are good\
  counter units for nations not invested into sea tech. Ram Ships cannot do shore attacks.\
@@ -3548,7 +3549,7 @@ Like most early sea units, when it initiates combat there will be 15 rounds\
  unit, it retains one vestige of the commercial abilities for the ships it upgrades.\
  It can enter Peace waters to deliver commercial cargo.\
 "), _("
-Galleons can Stack-Escape: a 50% chance to escape a killed stack if they have more remaining moves than the attacker.\
+Galleons can Stack-Escape：a 50% chance to escape a killed stack if they have more remaining moves than the attacker.\
 ")
 
 [unit_frigate]
@@ -3590,7 +3591,7 @@ The Frigate is versatile — it's a superior offensive unit and also a decent tr
  extra +1hp per turn, regardless of whether it has moved.\
 "), _("
 From Frigates onward, all sea attacks end with a single victor.\
- Frigates can Stack-Escape: a 50% chance to escape a killed stack if they have more remaining move points than the attacker.\
+ Frigates can Stack-Escape：a 50% chance to escape a killed stack if they have more remaining move points than the attacker.\
 ")
 
 [unit_cargo_ship]
@@ -3628,9 +3629,9 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = ""
 helptext      = _("\
-Cargo ships are Commerce units: they can establish Trade Routes and help\
+Cargo ships are Commerce units：they can establish Trade Routes and help\
  build Wonders. They can travel rivers and oceans. Cargo ships can also carry\
- four land units: thus, they are useful for transporting units by river or sea.\
+ four land units：thus, they are useful for transporting units by river or sea.\
 ")
 
 [unit_transport]
@@ -3669,7 +3670,7 @@ helptext      = _("\
 The Transport cannot attack but can defend itself when under attack.\
  Marines and Anti-Aircraft Artillery can directly attack from a Transport. Its\
  large cargo capacity makes it a significant logistical upgrade in sea\
- sea transportation. The Transport is considered a military vessel: unwelcome in\
+ sea transportation. The Transport is considered a military vessel：unwelcome in\
  the waters of nations with whom you are at Peace.\
 ")
 
@@ -3711,7 +3712,7 @@ The Ironclad is an armored ship that is much more sturdy than the Frigate but\
  onward, warships are excellent at attacking shore targets, and can also pillage\
  buoys.\ 
 "), _("
-Ironclads and all modern ships can Stack-Escape: a 50% chance to escape a killed stack if they have more remaining move points than the attacker.\
+Ironclads and all modern ships can Stack-Escape：a 50% chance to escape a killed stack if they have more remaining move points than the attacker.\
 ")
 
 [unit_destroyer]
@@ -4244,7 +4245,7 @@ If you have Space Flight and the Manhattan Project has been built by any player,
 "), _("\
 If Fallout is cleaned on the turn it appears, the chance of nuclear winter is reduced.\
 ")
-bombard_rate = 0       ; default sq_radius of 2: every adjacent tile.
+bombard_rate = 0       ; default sq_radius of 2：every adjacent tile.
 
 [unit_tactical_nuke]
 name          = _("Tactical Nuke")
@@ -4292,7 +4293,7 @@ Tactical Nukes are very small warheads attached to missiles. A Tactical Nuke des
 If you have Fusion Power and the Manhattan Project was built, a Tactical Nuke\
  can be made in a city with an Enrichment Facility. \
 ")
-bombard_rate = -2   ; 2 - 2 = 0: only nukes target tile.
+bombard_rate = -2   ; 2 - 2 = 0：only nukes target tile.
 
 [unit_diplomat]
 name          = _("Diplomat")
@@ -4388,12 +4389,12 @@ veteran_power_fact = 100, 110, 115, 120, 125, 130, 135
 veteran_move_bonus = 0, 0, 0, 0, 0, 0, 0
 roles         = "DiplomatStartUnit"
 helptext      = _("\
-Spies can do what a Diplomat can, and also: • Survive ops\
+Spies can do what a Diplomat can, and also：• Survive ops\
  • Sabotage lone units • Poison city water • Steal specific tech\
  • Steal tech from cities more than once • Sabotage specific targets in cities.\
 "), _("\
 Spies who survive ops escape to the nearest friendly city. Spies have\
- a 25% advantage over Diplomats in combat: a base 75% chance to win.\
+ a 25% advantage over Diplomats in combat：a base 75% chance to win.\
  Full rules are in the Manual.\
 ")
 
@@ -4426,7 +4427,7 @@ cargo         = "Cargo"
 embarks       = "LandRoad", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "Helicopter"
 flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage"
-roles         = "AttackStrongStartUnit"  ;note: MP2 doesn't start games with ASSU's so has co-opted this for caravan start unit.
+roles         = "AttackStrongStartUnit"  ;note：MP2 doesn't start games with ASSU's so has co-opted this for caravan start unit.
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -4447,7 +4448,7 @@ Commerce units can help build Wonders in any city with whom\
  you are not at war. In foreign cities 12+ tiles distant, they can create Trade Routes,\
  increasing net trade in both cities relative to their combined trade. Routes are inactive\
  during war and (re)activate during peace.\n\
-Commerce units can enter the Marketplace of non-hostile foreign cities to sell goods: revenue derives\
+Commerce units can enter the Marketplace of non-hostile foreign cities to sell goods：revenue derives\
  from total trade in both cities. This is only profitable between cities with very high trade.\n\
 Commerce units can build any Wonders for which you have the tech requirement. To use them\
  for a Trade Route, they need to have given a Home City.\n\
@@ -4533,7 +4534,7 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = ""
 helptext      = _("\
-Trains are Commerce units with a bonus: they allow units with 2 or less\
+Trains are Commerce units with a bonus：they allow units with 2 or less\
  move points to travel your rails at distances comparable to other units. Only Foot Soldiers\
  can:\n1. (L)oad outside a City or Base;\n2. Unload (T) in a Base or Quay.;\n3. Step off the Train outside a City\
  (loses all moves.)\nAll other units must load/unload inside a City.\n\n\
@@ -4649,7 +4650,7 @@ uk_gold       = 0
 flags         = "HelpWonder", "TradeRoute", "NonMil", "HasNoZOC", "Capturable", "Cant_Fortify", "NoVeteran", "Cant_Pillage"
 roles         = ""
 helptext      = _("\
-The methodical logistics of modern shipping render the Freight unit: a cargo\
+The methodical logistics of modern shipping render the Freight unit：a cargo\
  container separate from the transport vehicle. Freight brings benefits of\
  organized efficiency. Like all Commerce units, it can Help Build\
  Wonders, and Establish Trade Route or Enter Marketplace (with a lower unit cost.)\
@@ -4869,7 +4870,7 @@ When a Barbarian Leader is killed on a tile without any defending units,\
 ;   }
 ;helptext      = _("\
 ;Swordsmen are ancient soldiers armed with sharpened bronze swords. Compared to Warriors,\
-; they have a 50% bonus in attack and defense. NOTE: Warcalc will give this unit the same\
+; they have a 50% bonus in attack and defense. NOTE：Warcalc will give this unit the same\
 ; strength as a Warrior. You must enter this bonus manually.\
 ;"), _("\
 ;\nThe discovery of Banking changes upkeep from shields to gold.\

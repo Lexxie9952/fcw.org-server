@@ -1442,22 +1442,22 @@ target_reqs =
 
 ;UPGRADE - all the below need Missile=FALSE after merge with main branch
 ;---------------------------------------------------------------------------
-[actionenabler_attack_occupant_and_border_enforcement] ; cease-fire or no, invaders aren't welcome.
-action = "Attack"
-actor_reqs    =
-    { "type",         "name",           "range", "present"
-      "UnitFlag",     "NonMil",         "Local", FALSE
-      "UnitState",    "OnDomesticTile", "Local", TRUE
-      "UnitState",    "Transported",    "Local", FALSE
-      "MinMoveFrags", "1",              "Local", TRUE
-      "UnitState",    "OnNativeTile",   "Local", TRUE
-      "DiplRel",      "Alliance",       "Local", FALSE
-      "DiplRel",      "Foreign",        "Local", TRUE    ; Player is foreign
-    }
-target_reqs =
-    { "type",       "name",    "range",   "present"
-        "CityTile", "Claimed", "Local",   FALSE    ; not claimed by some OTHER player.
-    }
+;[actionenabler_attack_occupant_and_border_enforcement] ; cease-fire or no, invaders aren't welcome.
+;action = "Attack"
+;actor_reqs    =
+;    { "type",         "name",           "range", "present"
+;      "UnitFlag",     "NonMil",         "Local", FALSE
+;      "UnitState",    "OnDomesticTile", "Local", TRUE
+;      "UnitState",    "Transported",    "Local", FALSE
+;      "MinMoveFrags", "1",              "Local", TRUE
+;      "UnitState",    "OnNativeTile",   "Local", TRUE
+;      "DiplRel",      "Alliance",       "Local", FALSE
+;      "DiplRel",      "Foreign",        "Local", TRUE    ; Player is foreign
+;    }
+;target_reqs =
+;    { "type",       "name",    "range",   "present"
+;        "CityTile", "Claimed", "Local",   FALSE    ; not claimed by some OTHER player.
+;    }
 ;Tribesmen can attack:   
 [actionenabler_attack_native_tribesmen]
 action = "Attack"

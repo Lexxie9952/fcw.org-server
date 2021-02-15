@@ -338,7 +338,7 @@ function generate_help_text(key)
     var bstats = utype_get_bombard_stats(punit_type);
     var flex = " style='display:flex;' ";
     var span1 = "<span style='flex:"+flx_tab+";'>";
-    var span2 = "<span style='font-weight:bold; color:#014;'>";
+    var span2 = "<span style='font-weight:bold; color:#48F;'>";
     var span_end = "</span>";
     var div_end = "</span></div>"
 

@@ -65,7 +65,7 @@ CityTile:      Local, Adjacent, CAdjacent                              "Center" 
 DiplRel:       World, Alliance, Team, Player, Local                    "Armistice", "War", "Cease-fire", "Peace", "Alliance", "Never met", "Team",
                                                                        "Gives shared vision", "Receives shared vision", "Hosts embassy", "Has embassy",
                                                                        "Hosts real embassy", "Has real embassy","Has Casus Belli", "Provided Casus Belli",
-                                                                       "Is foreign". ** "Local" range tests relation between specific players while
+                                                                       "Foreign". ** "Local" range tests relation between specific players while
                                                                        "Player" and upper tests if any player in the range has such relation to any
                                                                        other living player
 Extra:         Local, Adjacent, CAdjacent, Traderoute, City
@@ -620,7 +620,7 @@ Look for the diplomatic relationship "Never met", "War", "Cease-fire",
 "Armistice", "Peace", "Alliance", "Team", "Gives shared vision",
 "Receives shared vision", "Hosts embassy", "Has embassy",
 "Hosts real embassy" (not from an effect), "Has real embassy",
-"Has Casus Belli" (reason for war), "Provided Casus Belli" or "Is foreign".
+"Has Casus Belli" (reason for war), "Provided Casus Belli" or "Foreign".
 
 A DiplRel is considered fulfilled for the range
  * world if some player in the world has the specified diplomatic
@@ -644,10 +644,10 @@ needs the player the first player's relationship is to.
 Example: The requirements below are about the relationship to the owner of a
 tile. The table shows in what situations a requirement is fulfilled.
 
-Requirement is                            fulfilled when the tile is
-                                        | domestic | unclaimed | foreign
-"DiplRel", "Is foreign", "Local", TRUE  | no       | no        | yes
-"DiplRel", "Is foreign", "Local", FALSE | yes      | no        | no
+Requirement is                          fulfilled when the tile is
+                                     | domestic | unclaimed | foreign
+"DiplRel", "Foreign", "Local", TRUE  | no       | no        | yes
+"DiplRel", "Foreign", "Local", FALSE | yes      | no        | no
 
 The MaxUnitsOnTile requirement type
 -----------------------------------

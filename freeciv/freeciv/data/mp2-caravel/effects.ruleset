@@ -671,14 +671,18 @@ reqs    =
       "Action",   "Recycle Unit", "Local", TRUE
       "UnitType", "Goods",        "Local", TRUE
     }
-[effect_starting_tribesmen]
+[effect_tribesmen_recycle]
 type    = "Unit_Shield_Value_Pct"
-value   = 186 ; 20 shields for starting Tribesmen.
+value   = 100 ; 20 shields recycle for Tribesmen.
 reqs    =
     { "type",     "name",         "range", "present"
       "Action",   "Recycle Unit", "Local", TRUE
       "UnitType", "Tribesmen",    "Local", TRUE
       "MinYear",  "-1900",        "World", FALSE
+    }
+target_reqs    =
+    { "type",      "name", "range", "present"
+      "UnitClass", "Land", "Local", FALSE
     }
 
 ;TO DO: this could be used in interesting ways: e.g., foot units, bombers, etc.

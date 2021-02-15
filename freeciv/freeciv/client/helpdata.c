@@ -1716,7 +1716,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
     strvec_iterate(utype->helptext, text) {
       cat_snprintf(
         buf, bufsz,
-        "<b style='font-family:sans-serif;line-height:115%%;font-size:115%%;'>%s</b>\n", _(text));
+        "<b class='unit_desc' style='font-family:SegoeSB;line-height:115%%;font-size:115%%;'>%s</b>\n", _(text));
     } strvec_iterate_end;
   }
   CATLSTR(buf, bufsz, user_text);
