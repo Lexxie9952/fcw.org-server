@@ -880,7 +880,7 @@ void notify_unit_experience(struct unit *punit)
   notify_player(unit_owner(punit), unit_tile(punit),
             E_UNIT_BECAME_VET, ftc_server,
             //  TRANS: Your <unit> became ... rank of <veteran level>. 
-            _("🥈 <font color='#fff'>∨%d</font>. Your %s gained experience and %s now %s. %s[`v%d`]"),
+            _("🥈 <font color='#fff'>∨%d</font>. Your %s gained experience and %s now %s. <span class='nowrap'>%s[`v%d`]</span>"),
             punit->veteran, unit_link(punit), 
             (is_unit_plural(punit) ? "are" : "is"),
             name_translation_get(&vlevel->name), UNIT_EMOJI(punit), punit->veteran);
