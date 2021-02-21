@@ -3050,6 +3050,8 @@ static bool unit_do_help_build(struct player *pplayer,
 
   shields = unit_shield_value(punit, unit_type_get(punit), paction);
 
+  bool double_contributor = (shields >= unit_type_get(punit)->build_cost * 2) 
+                          ? true : false;
   bool full_contributor = (shields >= unit_type_get(punit)->build_cost) 
                           ? true : false;
   bool three_quarters = three_quarters = 
@@ -3072,8 +3074,13 @@ static bool unit_do_help_build(struct player *pplayer,
      * production. */
     pcity_dest->shield_stock += shields;
 
+    // This had to change, otherwise there is no control at all over what 
+    // production types can get a Unit_Shield_Value_Pct penalty/bonus, since
+    // you can just change production to allowed/bonus type, disband, then
+    // change back again:
+    // ...
     /* If we change production later at this turn. No penalty is added. */
-    pcity_dest->disbanded_shields += shields;
+    //pcity_dest->disbanded_shields += shields;
   }
 
   conn_list_do_buffer(pplayer->connections);
@@ -3106,7 +3113,10 @@ static bool unit_do_help_build(struct player *pplayer,
                                          : _("recycles to build"));
     if (three_quarters) info_emoji = _("&#8203;[`recycle`][`75`]");
     else { 
-      info_emoji = full_contributor ? _("&#8203;[`recycle`][`100`]") : _("&#8203;[`recycle`][`50pct`]");
+      if (double_contributor) info_emoji = _("&#8203;[`recycle`][`200`]");
+      else {
+        info_emoji = full_contributor ? _("&#8203;[`recycle`][`100`]") : _("&#8203;[`recycle`][`50pct`]");
+      }
     }
   }
 
