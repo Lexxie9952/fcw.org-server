@@ -356,7 +356,8 @@ void government_change(struct player *pplayer, struct government *gov,
   }
 
   notify_player(pplayer, NULL, E_REVOLT_DONE, ftc_server,
-                _("%s now governs the %s as a %s."), 
+                _("[`%s`] %s now governs the %s as a %s."),
+                government_name_translation(gov),
                 player_name(pplayer),
                 nation_plural_for_player(pplayer),
                 government_name_translation(gov));
