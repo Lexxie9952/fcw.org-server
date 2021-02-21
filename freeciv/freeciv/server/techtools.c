@@ -448,7 +448,9 @@ void found_new_tech(struct research *presearch, Tech_type_id tech_found,
            || (strcmp(government_name_translation(pgov),"Republic")==0)
            || (strcmp(government_name_translation(pgov),"Democracy")==0)
            || (strcmp(government_name_translation(pgov),"Fundamentalism")==0)
+           || (strcmp(government_name_translation(pgov),"Theocracy")==0)
            || (strcmp(government_name_translation(pgov),"Communism")==0)
+           || (strcmp(government_name_translation(pgov),"Nationalism")==0)
            || (strcmp(government_name_translation(pgov),"Federation")==0) )
           {
             sprintf(info_emoji,  "<span onclick='javascript:show_revolution_dialog()' style='cursor:pointer;'>[`%s`]",
