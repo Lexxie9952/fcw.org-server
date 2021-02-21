@@ -2116,6 +2116,21 @@ function fill_layer1_sprite_array(ptile, pcity)
         return result_sprites;
       }
     }
+    // bunker hides everything under it, but is drawn in other layer since it's _mg
+    if (typeof EXTRA_BUNKER !== 'undefined')  { 
+      if (tile_has_extra(ptile, EXTRA_BUNKER)) {   
+        return result_sprites;
+      }
+    }
+    // show in top-down order and return early, to not show hidden foundational 
+    // based underneath:
+    if (typeof EXTRA_CASTLE !== 'undefined') {
+      if (tile_has_extra(ptile, EXTRA_CASTLE)) {
+        result_sprites.push({"key" : "base.castle_bg",
+                           "offset_y" : -normal_tile_height / 2});
+        return result_sprites;
+      }
+    } 
     if (tile_has_extra(ptile, EXTRA_FORTRESS)) {
       result_sprites.push({"key" : "base.fortress_bg",
                            "offset_y" : -normal_tile_height / 2});
@@ -2141,6 +2156,12 @@ function fill_layer2_sprite_array(ptile, pcity)
 
   /* We don't draw the bases if there's a city */
   if (pcity == null) {
+    if (tile_has_extra(ptile, EXTRA_BUNKER)) {
+      result_sprites.push({"key" : "base.bunker_mg",
+                           "offset_y" : -normal_tile_height / 2});
+      result_sprites.push(get_base_flag_sprite(ptile));   
+      return result_sprites; // hides all others under it
+    }
     if (tile_has_extra(ptile, EXTRA_AIRBASE)) {
       result_sprites.push({"key" : "base.airbase_mg",
                            "offset_y" : -normal_tile_height / 2});
@@ -2185,6 +2206,23 @@ function fill_layer3_sprite_array(ptile, stacked, st_unit)
 {
   var result_sprites = [];
   
+  // bunker hides everything under it, but is drawn in other layer since it's _mg
+  if (typeof EXTRA_BUNKER !== 'undefined')  { 
+    if (tile_has_extra(ptile, EXTRA_BUNKER)) {   
+      return result_sprites;
+    }
+  }
+  // castle on top of fortress, have to check for it first then return
+  if (typeof EXTRA_CASTLE !== 'undefined')  { 
+    if (tile_has_extra(ptile, EXTRA_CASTLE)) {   
+    result_sprites.push({"key" : "base.castle_fg",
+                          "offset_y" : -normal_tile_height / 2});
+    if (stacked)
+      result_sprites.push(fill_stacked_in_base_sprite_array(st_unit, stacked));
+    return result_sprites;                  
+    }
+  }
+  // fortress on top of fort, have to check for it first then return
   if (tile_has_extra(ptile, EXTRA_FORTRESS)) {
     result_sprites.push({"key" : "base.fortress_fg",
                           "offset_y" : -normal_tile_height / 2});
@@ -2423,7 +2461,11 @@ function create_unit_offset_arrays()
           break;
       case "Explorer":                     
           dx -= 0; dy += 2; 
-          break;   
+          break;
+      case "Falconeers":
+          dx += 2; dy += 2;
+          vx += 3; vy -= 5;
+          break;
       case "Fighter":
           sx = 8;
           dx -= 11; dy -= 6;

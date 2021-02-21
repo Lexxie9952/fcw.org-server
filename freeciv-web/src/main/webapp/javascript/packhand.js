@@ -295,6 +295,8 @@ function handle_chat_msg(packet)
     case E_CITY_CMA_RELEASE:
       handle_city_governor_event(message);
       break;
+    case E_IMP_SOLD:
+      play_sound(soundset["e_imp_sold"]);
   }
 
   if (connections[conn_id] == null) {
@@ -885,13 +887,21 @@ function handle_ruleset_control(packet)
       if (ename == "Fort") delete window["EXTRA_FORT"]; ///// 
     } else if (typeof EXTRA_NAVALBASE !== 'undefined') {
         if (ename =="Naval Base") delete window["EXTRA_NAVALBASE"]
-    } 
+    } else if (typeof EXTRA_CASTLE !== 'undefined') {
+      if (ename =="Castle") delete window["EXTRA_CASTLE"]
+    } else if (typeof EXTRA_BUNKER !== 'undefined') {
+      if (ename =="Castle") delete window["EXTRA_BUNKER"]
+    }
   }
   extras = {};
 
   /* Reset legal diplomatic clauses. */
   clause_infos = {};
 
+  // Granularity. From MP2_C onward, some units may have non-integer attack scores.
+  // Put these into the client stored data for unit_types so that warcalc and helptext
+  // will show perfect info:
+  
   /* TODO: implement rest.
    * Some ruleset packets don't have handlers *yet*. Remember to clean up
    * when they are implemented:
@@ -918,7 +928,49 @@ function handle_ruleset_control(packet)
    *   handle_rulesets_ready
    *   handle_nation_availability
    */
+}
+/**************************************************************************
+  Adjust granularity combat scores. Have to hard code these until we get 
+  a better solution like, scores are all 1000x to start with.
+**************************************************************************/
+function handle_non_integer_combat_scores(key)
+{
+  /* Granularity placeholder solution, for units whose base combat strength is 
+    non-integer and achieve non-integer base score via a globally applied
+    bonus/penalty in units.ruleset. NOTE that this does not include another
+    method of achieving this through a v0 power_factor that is not 100. There
+    are use cases for both methods.
+  * Using v0 power_factor:  PROS: It is automatically calculated into warcalc
+    odds, and automatically adjusted to show in base combat strength level by the 
+    utype_real_base_attack_strength(ptype) wrappers for displaying base combat
+    strength to players. CONS: it's secretly "lying" about having lower/higher
+    vet power_factor, and ruleset is obliged to make power_factors behave exactly
+    the same as default standard instead of custom, so that one can suppress
+    showing custom hacky/confusing non-standard power_factors in the manual and
+    everything still washes out clean as far as game behaviour: user "knowledge"
+    of the "false" information will then be exactly verisimilitudinous to the
+    actual mechanics and they live in a nice simpler cleaner world unaware of the
+    hacky solution used to achieve it.
+  * Using handle_non_integer_combat_scores. PROS: Allows the ruleset to simply 
+    apply a global combat_strength bonus that achieves a non-integer base strength,
+    with his bonus/penalty simply 'hidden' in the ruleset. The reported strength
+    value will then be adjusted in this function to match, and everything is exactly
+    equal from this point out between actual mechanics and reported strength.  
+    CONS: You have to actually hard-code these exceptional non-integer strengthed
+    units into the function for each ruleset. You have to suppress (manually edit)
+    the generated ruleset html to not confusing report a bonus or penalty for 
+    every single unit_type this unit can enter combat with. 
+  * Using both. In some cases, the math is such that using only one would cause
+    bad rounding errors; e.g., the Falconeer with 20fp needs ultra-small values with
+    a finer precision than either method can achieve by itself, so it achieves this
+    by using both the (v0 != 100) method and a globally applied ruleset defense penalty
+    which is then hard-coded into the unit_type's local ['defense_strength'] property. */
+  var has_falconeers = false;
 
+  if (unit_types[key]['name']=="Falconeers") {
+    unit_types[key].defense_strength *= 0.5;
+    console.log("Defense strength of Falconeers set to "+unit_types[key].defense_strength);
+  }
 }
 
 /**************************************************************************
@@ -1655,6 +1707,11 @@ function handle_ruleset_unit(packet)
     packet['name'] = packet['name'].replace('?unit:', '');
 
   unit_types[packet['id']] = packet;
+  // Granularity placeholder solution, for units whose base combat strength is 
+  // non-integer and achieve non-integer base score via a globally applied
+  // bonus/penalty in units.ruleset.  
+  if (client_rules_flag[CRF_MP2_C])
+    handle_non_integer_combat_scores(packet['id']);
 }
 
 /************************************************************************//**
@@ -2073,6 +2130,9 @@ function handle_ruleset_extra(packet)
   if (packet['name'] == "Railroad") window["EXTRA_RAIL"] = packet['id'];
   if (packet['name'] == "Oil Well") window["EXTRA_OIL_WELL"] = packet['id'];
   if (packet['name'] == "Minor Tribe Village") window["EXTRA_HUT"] = packet['id'];
+  if (packet['name'] == "Castle") window["EXTRA_CASTLE"] = packet['id'];
+  if (packet['name'] == "Bunker") window["EXTRA_BUNKER"] = packet['id'];
+
 }
 
 /**************************************************************************
