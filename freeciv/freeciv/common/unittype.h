@@ -211,7 +211,7 @@ struct unit_class {
 /* Cannot attack vs non-native tiles even if class can */
 #define SPECENUM_VALUE15 UTYF_ONLY_NATIVE_ATTACK
 #define SPECENUM_VALUE15NAME N_("?unitflag:Only_Native_Attack")
-/* Only Fundamentalist government can build these units */
+/* Only Fundamentalist/Theocratic government can build these units */
 #define SPECENUM_VALUE16 UTYF_FANATIC
 #define SPECENUM_VALUE16NAME N_("?unitflag:Fanatic")
 /* Losing this unit means losing the game */
