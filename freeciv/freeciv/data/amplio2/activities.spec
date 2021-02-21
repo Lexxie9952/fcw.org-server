@@ -73,4 +73,5 @@ tiles = { "row", "column", "tag"
 
   6,  0, "unit.navalbase"
   6,  1, "unit.vigil"
+  6,  2, "unit.castle"
 }

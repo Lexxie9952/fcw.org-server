@@ -44,6 +44,11 @@ tiles = { "row", "column", "tag"
  1,  6, "base.navalbase_bg"
  2,  0, "base.radar_mg"
  2,  1, "base.quay_mg"
+ ;2,  2, "base.castle_fg"        ; alternate castle (make hidden units seem more plausible)
+ ;2,  3, "base.castle_bg"        ; but also hides too much terrain problematically
+ 2,  4, "base.castle_fg"
+ 2,  5, "base.castle_bg"
+ 2,  6, "base.bunker_mg"
 ;[HH]
   not used in FCW, had to save space to prevent a clipping bug
  0,  2, "cd.occupied",
