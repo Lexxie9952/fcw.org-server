@@ -859,6 +859,9 @@ input[type='number'] {
 .govt_button {
   width: 60%;
   margin: 6px;
+  line-height: 110%;
+  font-size: 115%;
+  margin-bottom:-5px;
 }
 
 #governments {
@@ -1346,6 +1349,7 @@ li.tech-me_only::before {
   color: #d0c8c0;
   font-family: Freeciv;
 }
+/*
 .ui-widget:not(.ui-button,.ui-dialog, #game_chatbox_panel, #game_message_area) {
   background: url('/images/bg-dark.jpg');
   color: #d0c8c0;
@@ -1356,6 +1360,7 @@ li.tech-me_only::before {
   font-family:Segoe;
   background: url('/images/bg.jpg');
 }
+*/
 
 /*  These get put in chatbox classes, meaning we can define colours, fonts, indent, collapsing, all kinds of stuff 
     In addition, these could be intercepted and their names used as playsounds, where, if playsound not found, it just does nothing.
@@ -1475,7 +1480,6 @@ li.tech-me_only::before {
 }
 .e_new_government {
   color: #ffffff;
-  text-decoration: underline;
   font-style: italic;
 }
 .e_first_contact {
