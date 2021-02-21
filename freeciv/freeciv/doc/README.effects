@@ -157,7 +157,7 @@ Border_Vision
     lock it if border vision rules are important to your ruleset.
 
 Building_Build_Cost_Pct
-    Percentage added to building building cost.
+    Percentage added to building building cost, for any kind of building (does not target a specific kind of building)
 
 Building_Buy_Cost_Pct
     Percentage added to building buy cost.
