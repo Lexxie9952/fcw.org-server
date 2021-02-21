@@ -34,5 +34,6 @@ tiles = { "row", "column", "tag"
   0,  6, "gov.democracy"
   0,  7, "gov.tribal"
   0,  8, "gov.federation"
-
+  0,  9, "gov.nationalism"
+  0, 10, "gov.theocracy"
 }
