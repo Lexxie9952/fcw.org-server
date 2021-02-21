@@ -1691,8 +1691,12 @@ static bool load_ruleset_veteran(struct section_file *file,
                         (vlist_move[i] < 0), vlist_move[i] = 0);
       if (i == 0) {
         /* First element.*/
+        /* This sanity check was used to prevent setting values other than
+           100 for v0, in an attempt to prevent granularity by making
+           non-integer base attack strengths. Thus, it's removed for the
+           purposes of improved granularity 
         rs_sanity_veteran(path, "veteran_power_fact", i,
-                          (vlist_power[i] != 100), vlist_power[i] = 100);
+                          (vlist_power[i] != 100), vlist_power[i] = 100); */
       } else if (i == count_name - 1) {
         /* Last element. */
         rs_sanity_veteran(path, "veteran_power_fact", i,
