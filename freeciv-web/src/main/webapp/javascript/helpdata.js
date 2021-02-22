@@ -25,6 +25,9 @@ var hidden_menu_items = ["help_connecting", "help_languages", "help_governor",
     "help_copying"
   ];
 
+var max_help_pane_width;
+var MAX_ALLOWED_HELP_WIDTH = 984;
+
 /**************************************************************************
  Show the Freeciv-web Help Dialog
 **************************************************************************/
@@ -68,7 +71,10 @@ function show_help()
     $("#help_footer").remove();
     $("#help_footer").hide();
   } else {
-    $("#help_info_page").css("max-width", $(window).width() - $("#help_menu").width() - 60);
+    max_help_pane_width = $(window).width() - $("#help_menu").width() - 60;
+    if (max_help_pane_width > MAX_ALLOWED_HELP_WIDTH) 
+      max_help_pane_width = MAX_ALLOWED_HELP_WIDTH;
+    $("#help_info_page").css("max-width", max_help_pane_width);
     $("#help_footer").show();
   }
 }
@@ -338,25 +344,30 @@ function generate_help_text(key)
     var bstats = utype_get_bombard_stats(punit_type);
     var flex = " style='display:flex;' ";
     var span1 = "<span style='flex:"+flx_tab+";'>";
-    var span2 = "<span style='font-weight:bold; color:#48F;'>";
+    //var span2 = "<span style='font-weight:bold; color:#48F;'>";
+    var span2 = "<span style='font-family:Arial; font-weight:bold; color:#48F;'>";
     var span_end = "</span>";
     var div_end = "</span></div>"
 
     msg = "<h1 style='margin-top:0px;font-size:190%'>" + punit_type['name'] + "</h1>";
     msg += "<div style='margin-bottom:10px;margin-top:-10px'>"+render_sprite(get_unit_type_image_sprite(punit_type))+"</div>";
     //msg += "<br>";
-    msg += "<div id='manual_non_helptext_facts' style='max-width:984px;'>";
+    msg += "<div id='manual_non_helptext_facts' style='max-width:"+max_help_pane_width+"px;'>";
     // COST
     msg += "<div"+flex+"id='utype_fact_cost'>";
     msg += span1 + "Cost: " + span_end + span2 + punit_type['build_cost'] + div_end;
     // ATTACK
     msg += "<div"+flex+" id='utype_fact_attack_str'>";
       // hack to make manual properly display decimal attack strength on this unit
-      var as = punit_type['attack_strength'];
+      //var as = punit_type['attack_strength'];
+      // Display base attack relative to v0 vet power which may be non-100:
+      var as = utype_real_base_attack_strength(punit_type);
     msg += span1 + "Attack: " + span_end + span2 + as + div_end;
     // DEFENSE
     msg += "<div"+flex+" id='utype_fact_defense_str'>";
-      var ds = punit_type['defense_strength'];
+      //var ds = punit_type['defense_strength'];
+      // Display base attack relative to v0 vet power which may be non-100:
+      var ds = utype_real_base_defense_strength(punit_type);
     msg += span1 + "Defense: " + span_end + span2 + ds + div_end;
     // FIREPOWER
     msg += "<div"+flex+" id='utype_fact_firepower'>";
@@ -366,7 +377,10 @@ function generate_help_text(key)
     msg += span1 + "Hitpoints: " + span_end + span2 + punit_type['hp'] + div_end;
     // MOVE RATE
     msg += "<div"+flex+" id='utype_fact_move_rate'>";
-    msg += span1+"Moves: " + span_end + span2 + move_points_text(punit_type['move_rate']+punit_type['move_bonus'][0]) + div_end;
+    var move_bonus = parseInt(punit_type['move_bonus'][0]) ? parseInt(punit_type['move_bonus'][0]) : 0;
+    var move_rate = ""; move_rate += move_points_text((parseInt(punit_type['move_rate'])+move_bonus), true);
+    msg += span1+"Moves: " + span_end + span2
+        + String(move_rate) + div_end;
     // VISION
     msg += "<div"+flex+" id='utype_fact_vision'>";
     msg += span1 + "Vision: " + span_end + span2 + Math.sqrt(parseInt(punit_type['vision_radius_sq'])).toFixed(2) + " tiles" + div_end;
@@ -386,7 +400,7 @@ function generate_help_text(key)
     msg += "<div"+flex+" id='utype_fact_minspeed'>";
     msg += span1 + "Min_speed: " + span_end + span2;
     if (utype_has_class_flag(punit_type, UCF_DAMAGE_SLOWS))
-      msg += move_points_text(punit_class['min_speed']);
+      msg += move_points_text(punit_class['min_speed'],false);
     else msg += "100%";
     msg += div_end;
     // UPKEEP
@@ -418,10 +432,10 @@ function generate_help_text(key)
         msg += "ALL targets. ";
 
       if (bstats.bombard_move_cost)
-        msg += move_points_text(bstats.bombard_move_cost)
+        msg += move_points_text(bstats.bombard_move_cost, false)
             + (bstats.bombard_move_cost > SINGLE_MOVE ? " moves." : " move.");
       else 
-        msg += move_points_text(punit_type['move_rate']+" moves.");
+        msg += move_points_text(punit_type['move_rate'], false)+" moves.";
       
       msg += div_end;
     }
@@ -453,7 +467,8 @@ function generate_help_text(key)
 
     msg += "</div>"+hr;
 
-    msg += "<div id='helptext' style='font-weight:500; max-width:984px'><p>" + cleaned_text(punit_type['helptext']) + "</p></div>"+hr;
+    msg += "<div id='helptext' style='font-weight:500; max-width:"+max_help_pane_width+"px'><p>"
+        + cleaned_text(punit_type['helptext']) + "</p></div>"+hr;
 
     msg += wiki_on_item_button(punit_type['name']);
 
@@ -472,8 +487,9 @@ function generate_help_text(key)
   } else if (key.indexOf("help_gen_governments") != -1) {
     var pgov = governments[parseInt(key.replace("help_gen_governments_",
                                                 ""))];
+    var gov_img = "<img src='/images/e/techs/" + pgov['name'].toLowerCase() + ".png'>";
 
-    msg = "<h1>" + pgov['name'] + "</h1>"+"<div class='"+pane_class+"'>";
+    msg = "<h1>" + gov_img + " " + pgov['name'] + "</h1>"+"<div class='"+pane_class+"'>";
     msg += "<div id='helptext'><p>" + cleaned_text(pgov['helptext']) + "</p></div></div>";
 
     msg += wiki_on_item_button(pgov['name']);
