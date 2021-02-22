@@ -70,7 +70,7 @@ const UTYF_COAST = 12;                    /* Can 'refuel' at coast - meaningless
 const UTYF_SHIELD2GOLD = 13;              /* Upkeep can switch from shield to gold */
 const UTYF_SPY = 14;                      /* Strong in diplomatic battles */
 const UTYF_ONLY_NATIVE_ATTACK = 15;       /* Cannot attack vs non-native tiles even if class can */
-const UTYF_FANATIC = 16;                  /* Only Fundamentalist government can build these units. */
+const UTYF_FANATIC = 16;                  /* Only Fundamentalist/Theocratic government can build these units. */
 const UTYF_GAMELOSS = 17;                 /* Losing this unit means losing the game */
 const UTYF_UNIQUE = 18;                   /* A player can only have one unit of this type */
 const UTYF_EVAC_FIRST = 19;               /* When a transport with this unit ist lost the game rescues this type first */
@@ -276,3 +276,33 @@ function get_units_from_tech(tech_id)
   }
   return result;
 }
+
+/************************************************************************ 
+ * Returns the REAL base attack strength of a unit based on its v0 vet
+ * power level.
+*************************************************************************/
+function utype_real_base_attack_strength(ptype) {
+  // no custom power_fact means default of 100%:
+  if (ptype.power_fact[0] === undefined) return ptype.attack_strength;
+
+  var adjusted = ptype.attack_strength * ptype.power_fact[0];
+  // round to 3 decimals
+  adjusted *= 10; // already 100x higher from power_fect, so make 1000x
+  adjusted = Math.round(adjusted) / 1000;
+  return adjusted;
+}
+/************************************************************************ 
+ * Same as above, for base defense strength.
+*************************************************************************/
+function utype_real_base_defense_strength(ptype) {
+  // no custom power_fact means default of 100%:
+  if (ptype.power_fact[0] === undefined) return ptype.defense_strength;
+
+  var adjusted = ptype.defense_strength * ptype.power_fact[0];
+  // round to 3 decimals
+  adjusted *= 10; // already 100x higher from power_fect, so make 1000x
+  adjusted = Math.round(adjusted) / 1000;
+  return adjusted;
+}
+
+
