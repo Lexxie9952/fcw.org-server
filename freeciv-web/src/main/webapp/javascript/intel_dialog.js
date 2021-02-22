@@ -43,7 +43,10 @@ function show_intelligence_report_hearsay(pplayer)
 {
   var msg = "Ruler " + pplayer['name'] + "<br>";
   if (pplayer['government'] > 0) {
-    msg += "Government: " + governments[pplayer['government']]['name'] + "<br>";
+    var gov_mod = get_gov_modifier(pplayer.playerno, true);
+    var gov_name = governments[pplayer['government']]['name'];
+    if (gov_name == "Monarchy") gov_name = gov_mod + " " + gov_name;
+    msg += "Government: " + gov_name + "<br>";
   }
 
   if (pplayer['gold'] > 0) {
@@ -73,9 +76,13 @@ function show_intelligence_report_embassy(pplayer)
 
   const capital = player_capital(pplayer);
 
+  var gov_mod = get_gov_modifier(pplayer.playerno, true);
+  var gov_name = governments[pplayer['government']]['name'];
+  if (gov_name == "Monarchy") gov_name = gov_mod + " " + gov_name;
+
   var intel_data = {
     ruler: pplayer['name'],
-    government: governments[pplayer['government']]['name'],
+    government: gov_name,
     capital: capital ? capital.name : '(capital unknown)',
     gold: pplayer['gold'],
     tax: pplayer['tax'] + '%',

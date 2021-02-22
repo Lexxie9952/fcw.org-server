@@ -13,25 +13,27 @@ artists = "
   b.angkor_wat
   b.appian_way
   b.apollo_program
-  b.manhattan_project
   b.chand_baori
+  b.colossus
+  b.copernicus_observatory
   b.eiffel_tower
   b.great_library
   b.great_wall
   b.hammurabi
+  b.hanging_gardens
   b.hypogeum
   b.isaac_newtons_college
   b.js_bachs_cathedral
   b.king_richards_crusade
+  b.leonardos_workshop
   b.lighthouse
+  b.magellans_expedition
+  b.magna_carta
+  b.manhattan_project
   b.marco_polos_embassy
   b.mausoleum
   b.michelangelos_chapel
   b.pyramids
-  b.copernicus_observatory
-  b.hanging_gardens
-  b.leonardos_workshop
-  b.magellans_expedition
   b.olympics
   b.roman_colosseum
   b.seti_program
@@ -40,6 +42,7 @@ artists = "
   b.statue_of_zeus
   b.temple_of_artemis
   b.teslas_laboratory
+  b.united_nations
   b.womens_suffrage
   b.ziggurat
  
@@ -47,10 +50,8 @@ artists = "
   b.darwins_voyage
 
   Frederic Rodrigo
-  b.colossus
   b.cure_for_cancer
   b.shakespeares_theatre
-  b.united_nations
 
   Paul Zastoupil
   b.asmiths_trading_co
@@ -90,6 +91,7 @@ sprites =
 		"b.leonardos_workshop", "wonders/leonardos_workshop"
 		"b.lighthouse", "wonders/lighthouse"
 		"b.magellans_expedition", "wonders/magellans_expedition"
+                "b.magna_carta", "wonders/magna_carta"
 		"b.manhattan_project", "wonders/manhattan_project"
 		"b.marco_polos_embassy", "wonders/marco_polos_embassy"
                 "b.mausoleum", "wonders/mausoleum_of_halicarnassus"

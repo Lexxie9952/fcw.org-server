@@ -49,7 +49,10 @@ function show_revolution_dialog()
 
   if (client.conn.playing == null) return;
 
-  var dhtml = "Current form of government: <b>" + governments[client.conn.playing['government']]['name']
+  var gov_name = governments[client.conn.playing['government']]['name'];
+  if (gov_name == "Monarchy") gov_name = get_gov_modifier(client.conn.playing.playerno, true) + " " + gov_name;
+
+  var dhtml = "Current form of government: <b>" + gov_name
 	          + "</b><br>To start a revolution, select the new form of government:"
             + "<p><div id='governments' >"
             + "<div id='governments_list'>"
@@ -87,19 +90,19 @@ function init_civ_dialog()
     var tag = pnation['graphic_str'];
 
     var civ_description = "";
+    var gov_modifier = get_gov_modifier(client.conn.playing.playerno, true); if (gov_modifier) gov_modifier += " ";
     if (!pnation['customized']) {
 	    civ_description += "<img src='/images/flags/" + tag + "-web" + get_tileset_file_extention() + "' width='180'>";
-	}
+    }
 
     civ_description += "<br><div>" + pplayer['name'] + " rules the " + nations[pplayer['nation']]['adjective']
-	    + " with the form of government: " + governments[client.conn.playing['government']]['name']
+	    + " with the form of government: " + gov_modifier + governments[client.conn.playing['government']]['name']
 	    + "</div><br>";
     $("#nation_title").html("The " + nations[pplayer['nation']]['adjective'] + " nation");
     $("#civ_dialog_text").html(civ_description);
 
   } else {
     $("#civ_dialog_text").html("This dialog isn't available as observer.");
-
   }
 
 }
@@ -125,10 +128,16 @@ function update_govt_dialog()
 
   $("#governments_list").html(governments_list_html);
 
+  var magna_carta = get_gov_modifier(client.conn.playing.playerno, false); // Allows secondary species of sub-governments
+
+  var gov_modifier = "";
   for (govt_id in governments) {
-    govt = governments[govt_id];
-    label_html = "<img class='lowered_gov' src='/images/e/"+govt['name'].toLowerCase()+".png'>&nbsp;&nbsp;&nbsp;"+govt['name']
-               + "<img src='/images/e/techs/"+govt['name'].toLowerCase()+".png' style='margin:-8px;margin-top:-9x;float:right;' "
+    govt = governments[govt_id]; 
+    gov_modifier = (govt['name'] == "Monarchy" ? magna_carta : "");
+
+    label_html = "<img class='lowered_gov' src='/images/e/"+govt['name'].toLowerCase()+gov_modifier+".png'>&nbsp;&nbsp;&nbsp;"
+               + capitalize(gov_modifier) + " " + govt['name']
+               + "<img src='/images/e/techs/"+govt['name'].toLowerCase()+gov_modifier+".png' style='margin:-8px;margin-top:-9x;float:right;' "
                + "width='36px' height='36px'>"
     if (!can_player_get_gov(govt_id)) {
       $("#govt_id_" + govt['id'] ).button({ disabled: true, label: label_html});
@@ -185,6 +194,8 @@ function do_worklists(cur_gov, new_gov)
   for (city_id in cities) {
     var pcity=cities[city_id];
     if (pcity['owner'] != client.conn.playing.playerno) continue;
+
+    var magna_carta = player_has_wonder(client.conn.playing.playerno, B_MAGNA_CARTA);
      
     if (cur_gov == "Fundie" && new_gov != "Fundie") {
       if (pcity['worklist'] != null && pcity['worklist'].length != 0) {
@@ -213,6 +224,34 @@ function do_worklists(cur_gov, new_gov)
         if (before != pcity['worklist'].length) {send_city_worklist(pcity['id']);altered = true;}
       }
       if (pcity['production_kind']==VUT_UTYPE && unit_types[pcity['production_value']]['name'] == "Proletarians") {
+        altered=true;
+        if (pcity['worklist'] != null && pcity['worklist'].length) {
+          send_city_change(pcity['id'],pcity['worklist'][0]['kind'],pcity['worklist'][0]['value']);
+          pcity['worklist'].shift();
+          send_city_worklist(pcity['id']);
+        } else {send_city_change(pcity['id'], VUT_IMPROVEMENT, Object.keys(improvements).length-1);}
+      }
+    } else if (cur_gov == "Nationalism" && new_gov != "Nationalism") {
+      if (pcity['worklist'] != null && pcity['worklist'].length != 0) {
+        var before = pcity['worklist'].length;
+        pcity['worklist'] = pcity['worklist'].filter(list_item => !(list_item['kind']==VUT_UTYPE && unit_types[list_item['value']]['name'] == "Migrants") );
+        if (before != pcity['worklist'].length) {send_city_worklist(pcity['id']);altered = true;}
+      }
+      if (pcity['production_kind']==VUT_UTYPE && unit_types[pcity['production_value']]['name'] == "Migrants") {
+        altered=true;
+        if (pcity['worklist'] != null && pcity['worklist'].length) {
+          send_city_change(pcity['id'],pcity['worklist'][0]['kind'],pcity['worklist'][0]['value']);
+          pcity['worklist'].shift();
+          send_city_worklist(pcity['id']);
+        } else {send_city_change(pcity['id'], VUT_IMPROVEMENT, Object.keys(improvements).length-1);}
+      }
+    } else if (!magna_carta || (cur_gov == "Monarchy" && new_gov != "Monarchy")) {
+      if (pcity['worklist'] != null && pcity['worklist'].length != 0) {
+        var before = pcity['worklist'].length;
+        pcity['worklist'] = pcity['worklist'].filter(list_item => !(list_item['kind']==VUT_UTYPE && unit_types[list_item['value']]['name'] == "Migrants") );
+        if (before != pcity['worklist'].length) {send_city_worklist(pcity['id']);altered = true;}
+      }
+      if (pcity['production_kind']==VUT_UTYPE && unit_types[pcity['production_value']]['name'] == "Peasants") {
         altered=true;
         if (pcity['worklist'] != null && pcity['worklist'].length) {
           send_city_change(pcity['id'],pcity['worklist'][0]['kind'],pcity['worklist'][0]['value']);
@@ -391,4 +430,18 @@ function show_climate_dialog(rtype)
 
   $("#dialog").dialog('open');
   dialog_register("#dialog");
+}
+
+/************************************************
+*
+************************************************/
+function get_gov_modifier(playerno, uppercase) {
+  if (!client_rules_flag[CRF_MP2_C]) return "";
+
+  var gov_modifier = "";
+   
+  if (players[playerno].wonders[improvement_id_by_name(B_MAGNA_CARTA)]) {
+    gov_modifier = uppercase ? "Constitutional" : "constitutional";
+  }
+  return gov_modifier;
 }

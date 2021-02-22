@@ -56,12 +56,12 @@ tiles = { "row", "column", "tag"
   0,  4, "u.cannon"		  ; [Lexxie]
   0,  5, "u.caravan"		; [Alex] & [CT]
   0,  6, "u.carrier"		; [Nemo] & [Lexxie]
-  0,  7, "u.catapult"		; [CT] & [Lexxie]
+  0,  7, "u.catapult"		; [Lexxie]
   0,  8, "u.horsemen"		; [GB] & [Lexxie]
   0,  9, "u.chariot"		; [BB] & [GB] & [Lexxie]
   0, 10, "u.cruiser"		; [Nemo] & [Lexxie]
   0, 11, "u.diplomat"		; [Nemo] & [Lexxie]
-  0, 12, "u.fighter"		; [Sor] & [Lexxie]
+  0, 12, "u.fighter"		; [Lexxie]
   0, 13, "u.frigate"		; [BB]
   0, 14, "u.ironclad"		; [Nemo] & [Lexxie]
   0, 15, "u.knights"		; [BB] & [Lexxie]
@@ -70,20 +70,20 @@ tiles = { "row", "column", "tag"
   0, 18, "u.warriors"		; [GB] & [Lexxie]
   0, 19, "u.musketeers" ; [Lexxie]
   1,  0, "u.nuclear"		; [Nemo] & [CS] & [Lexxie]
-  1,  1, "u.phalanx"		; [GB] & [CT] & [Lexxie]
+  1,  1, "u.phalanx"		; [Lexxie]
   1,  2, "u.riflemen"		; [Lexxie]
-  1,  3, "u.caravel"		; [BB]
+  1,  3, "u.caravel"		; [Lexxie]
   1,  4, "u.settlers"		; [MHN] & [Lexxie]
-  1,  5, "u.submarine"	; [GP]
-  1,  6, "u.transport"	; [Nemo]
+  1,  5, "u.submarine"	; [GP] & [Lexxie]
+  1,  6, "u.transport"	; [Nemo] & [Lexxie]
   1,  7, "u.trireme"		; [BB]
   1,  8, "u.archers"		; [GB] & [Lexxie]
   1,  9, "u.cavalry"		; [Lexxie]
-  1, 10, "u.cruise_missile"	; [CS] & [Lexxie]
+  1, 10, "u.cruise_missile"	; [Lexxie]
   1, 11, "u.destroyer"	  	; [Nemo] & [Lexxie]
-  1, 12, "u.dragoons"		    ; [GB]
+  1, 12, "u.dragoons"		    ; [GB] & [Lexxie]
   1, 13, "u.explorer"		    ; [Alex] & [CT] & [Lexxie]
-  1, 14, "u.freight"		    ; [CT] & qwm & [Lexxie] - This new graphic covers MP2 Truck and backward ruleset "Freight" unit. NOT MP2 Freight unit.
+  1, 14, "u.freight"		    ; [CT] & qwm & [Lexxie] - This new graphic is NOT MP2_C onward, Freight unit.
   1, 15, "u.galleon"		    ; [BB]
   1, 16, "u.partisan"		    ; [BB] & [CT] & [Lexxie]
   1, 17, "u.pikemen"		    ; [T] & [Lexxie]
@@ -112,7 +112,7 @@ tiles = { "row", "column", "tag"
   3,  0, "u.well_digger"		  ; [Lexxie]
   3,  1, "u.balloon"          ; [Lexxie]
   3,  2, "u.missile_destroyer" ; [Lexxie]
-  3,  3, "u.war_galley"       
+  3,  3, "u.war_galley"       ; ???
   3,  4, "u.longboat"         ; Lexxie
   3,  5, "u.container"        ; Lexxie      ; Is the Freight graphic for MP2 onward (not u.freight--preserves ammplio2 compatibility for other rules)
   3,  6, "u.atom_bomb"        ; Lexxie  
@@ -140,4 +140,5 @@ tiles = { "row", "column", "tag"
   4,  8, "u.satellite",       ; Lexxie
   4,  9, "u.falconeers",      ; Lexxie
   4, 10, "u.zealots",         ; Lexxie
+  4, 11, "u.peasants"         ; Lexxie
 }

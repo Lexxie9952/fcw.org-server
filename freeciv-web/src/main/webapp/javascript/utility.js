@@ -331,3 +331,10 @@ function cleaned_text(str)
   return str;
 }
 
+/**************************************************************************
+   Capitalize first letter of string
+**************************************************************************/
+function capitalize(s) {
+  if (typeof s !== 'string') return "";
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}
