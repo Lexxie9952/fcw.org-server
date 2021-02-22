@@ -75,6 +75,17 @@ function XOR(a,b) {
 }
 
 /****************************************************************************
+ Reduce a fraction by finding the Greatest Common Divisor and dividing by it.
+****************************************************************************/
+function fraction_reduce(numerator,denominator) {
+  var gcd = function gcd(a,b){
+    return b ? gcd(b, a%b) : a;
+  };
+  gcd = gcd(numerator,denominator);
+  return {"numerator": (numerator/gcd), "denominator": (denominator/gcd)};
+}
+
+/****************************************************************************
  ...
 ****************************************************************************/
 $.extend({
