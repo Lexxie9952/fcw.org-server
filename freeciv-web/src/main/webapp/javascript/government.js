@@ -49,11 +49,11 @@ function show_revolution_dialog()
 
   if (client.conn.playing == null) return;
 
-  var dhtml = "Current form of government: " + governments[client.conn.playing['government']]['name']
-	  + "<br>To start a revolution, select the new form of government:"
-  + "<p><div id='governments' >"
-  + "<div id='governments_list'>"
-  + "</div></div><br> ";
+  var dhtml = "Current form of government: <b>" + governments[client.conn.playing['government']]['name']
+	          + "</b><br>To start a revolution, select the new form of government:"
+            + "<p><div id='governments' >"
+            + "<div id='governments_list'>"
+            + "</div></div><br> ";
 
   $(id).html(dhtml);
 
@@ -127,23 +127,25 @@ function update_govt_dialog()
 
   for (govt_id in governments) {
     govt = governments[govt_id];
+    label_html = "<img class='lowered_gov' src='/images/e/"+govt['name'].toLowerCase()+".png'>&nbsp;&nbsp;&nbsp;"+govt['name']
+               + "<img src='/images/e/techs/"+govt['name'].toLowerCase()+".png' style='margin:-8px;margin-top:-9x;float:right;' "
+               + "width='36px' height='36px'>"
     if (!can_player_get_gov(govt_id)) {
-      $("#govt_id_" + govt['id'] ).button({ disabled: true, label: govt['name'], icons: {primary: govt['rule_name']} });
+      $("#govt_id_" + govt['id'] ).button({ disabled: true, label: label_html});
     } else if (requested_gov == govt_id) {
-    $("#govt_id_" + govt['id'] ).button({label: govt['name'], icons: {primary: govt['rule_name']}}).css("background", "green");
+    $("#govt_id_" + govt['id'] ).button({label: label_html}).css("background", "green");
     } else if (client.conn.playing['government'] == govt_id) {
-      $("#govt_id_" + govt['id'] ).button({label: govt['name'], icons: {primary: govt['rule_name']}}).css("background", "#BBBBFF").css("font-weight", "bolder");
+      $("#govt_id_" + govt['id'] ).button({label: label_html}).css("background", "#BBBBFF").css("font-weight", "bolder");
     } else {
-      $("#govt_id_" + govt['id'] ).button({label: govt['name'], icons: {primary: govt['rule_name']}});
+      $("#govt_id_" + govt['id'] ).button({label: label_html});
     }
-
   }
-  $(".govt_button").tooltip();
+  /*$(".govt_button").tooltip();
   $(".govt_button").tooltip({
     open: function (event, ui) {
         ui.tooltip.css({"max-width":"100%", "width":"88%", "margin-top":"15px", "margin-left":"-95px", "overflow":"visible"});
     }
-});
+});*/
 }
 
 
@@ -176,20 +178,27 @@ function start_revolution()
 function do_worklists(cur_gov, new_gov)
 {
   var altered = false;
+  // make one code to treat both theocracy and fundamentalism the same:
+  var cur_gov = (cur_gov=="Fundamentalism" || cur_gov=="Theocracy") ? "Fundie" : cur_gov;
+  var new_gov = (new_gov=="Fundamentalism" || new_gov=="Theocracy") ? "Fundie" : new_gov;
 
   for (city_id in cities) {
     var pcity=cities[city_id];
     if (pcity['owner'] != client.conn.playing.playerno) continue;
      
-    if (cur_gov == "Fundamentalism" && new_gov != "Fundamentalism") {
+    if (cur_gov == "Fundie" && new_gov != "Fundie") {
       if (pcity['worklist'] != null && pcity['worklist'].length != 0) {
         var before = pcity['worklist'].length;
+        pcity['worklist'] = pcity['worklist'].filter(list_item => !(list_item['kind']==VUT_UTYPE && unit_types[list_item['value']]['name'] == "Zealots") );
         pcity['worklist'] = pcity['worklist'].filter(list_item => !(list_item['kind']==VUT_UTYPE && unit_types[list_item['value']]['name'] == "Fanatics") );
         pcity['worklist'] = pcity['worklist'].filter(list_item => !(list_item['kind']==VUT_UTYPE && unit_types[list_item['value']]['name'] == "Pilgrims") );
+        pcity['worklist'] = pcity['worklist'].filter(list_item => !(list_item['kind']==VUT_UTYPE && unit_types[list_item['value']]['name'] == "Falconeers") );
         if (before != pcity['worklist'].length) {send_city_worklist(pcity['id']);altered = true;}
       }
       if (pcity['production_kind']==VUT_UTYPE && (unit_types[pcity['production_value']]['name'] == "Fanatics"
-          || unit_types[pcity['production_value']]['name'] == "Pilgrims")) {
+          || unit_types[pcity['production_value']]['name'] == "Falconeers"
+          || unit_types[pcity['production_value']]['name'] == "Pilgrims"
+          || unit_types[pcity['production_value']]['name'] == "Zealots")) {
         altered=true;
         if (pcity['worklist'] != null && pcity['worklist'].length) {
           send_city_change(pcity['id'],pcity['worklist'][0]['kind'],pcity['worklist'][0]['value']);
@@ -242,33 +251,29 @@ function send_player_change_government(govt_id)
 **************************************************************************/
 function government_max_rate(govt_id)
 {
-  if (govt_id == 0) {
-    // Anarchy
+  var govt = governments[govt_id]['name'];
+  if (govt == "Anarchy") {
     return 100;
-  } else if (govt_id == 1) {
-    //Despotism
+  } else if (govt == "Despotism") {
     return 60;
-  } else if (govt_id == 2) {
-    // Monarchy
+  } else if (govt == "Monarchy") {
     return 70;
-  } else if (govt_id == 3) {
-    //Communism
+  } else if (govt == "Communism") {
     return 80;
-  } else if (govt_id == 4) {
-    //Republic
+  } else if (govt == "Republic") {
     return 80;
-  } else if (govt_id == 5) {
-    //Democracy
+  } else if (govt == "Democracy") {
     return 100;
-  } else if (govt_id == 6) {
-      //Fundamentalism
-      return 80;
-  } else if (govt_id == 7) {
-        //Tribalism
-        return 60;
-  } else if (govt_id == 8) {
-    //Federation
+  } else if (govt == "Fundamentalism") {
+    return 80;
+  } else if (govt == "Tribalism") {
+    return 60;
+  } else if (govt == "Federation") {
     return 90;
+  } else if (govt == "Nationalism") {
+    return 90;
+  } else if (govt == "Theocracy") {
+    return 80;
   } else {
     // this should not happen
     return 100;
