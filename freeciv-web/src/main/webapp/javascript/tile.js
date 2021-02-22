@@ -100,6 +100,10 @@ function does_tile_have_base(ptile)
     return true;
   if (typeof EXTRA_AIRSTRIP !== "undefined" && tile_has_extra(ptile, EXTRA_AIRSTRIP))
     return true;
+  if (typeof EXTRA_CASTLE !== "undefined" && tile_has_extra(ptile, EXTRA_CASTLE))
+    return true;
+  if (typeof EXTRA_BUNKER !== "undefined" && tile_has_extra(ptile, EXTRA_BUNKER))
+    return true;
   if (typeof EXTRA_ !== "undefined" && tile_has_extra(ptile, EXTRA_))  // hideout
     return true;
     
@@ -212,10 +216,12 @@ function improve_tile_info_dialog(message)
     $("#def_win").html("");
 
     warcalc_compute();
+    var A_val = (parseFloat(my_str)<0.1) ? my_str.toFixed(2) : my_str.toFixed(1);
+    var D_val = (parseFloat(their_str)<0.1) ? their_str.toFixed(2) : their_str.toFixed(1);
 
     added_text += "<b>Combat odds:</b><span style='font-size:75%'> (*before base or unit-type bonus)</span><br>";
-    added_text += "A:<b>"+my_str.toFixed(1)+"</b>  HP:<b>"+my_hp+"</b>  FP:<b>"+my_fp+"</b>  ("+unit_types[units[my_uid]['type']]['name']+")<br>";
-    added_text += "D:<b>"+their_str.toFixed(1)+"</b>  HP:<b>"+their_hp+"</b>  FP:<b>"+their_fp+"</b>  ";
+    added_text += "A:<b>"+A_val+"</b>  HP:<b>"+my_hp+"</b>  FP:<b>"+my_fp+"</b>  ("+unit_types[units[my_uid]['type']]['name']+")<br>";
+    added_text += "D:<b>"+D_val+"</b>  HP:<b>"+their_hp+"</b>  FP:<b>"+their_fp+"</b>  ";
     added_text += "("+unit_types[sunits[0]['type']]['name']+")<br>";
     added_text += $("#att_win").html();
     added_text += "\n<div id='click_calc' title='Base and special unit bonuses not included (e.g., Fort, Pikemen vs. Chariot)' "

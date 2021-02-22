@@ -37,6 +37,7 @@ var unit_bombard_attack_names = {
   "Legion":     "Pilum Assult",
   "Siege Ram":  "Ram Fortress",
   "Fanatics":   "Skirmish Assault",
+  "Zealots":    "Skirmish Assault",
   "Marines":    "Bazooka Attack",
   "Zeppelin":   "Bomb Attack",
   "Battleship": "Bombard Attack"
@@ -320,6 +321,8 @@ function unit_can_do_unload(punit)
     if (quay_rules && tile_has_extra(ptile, EXTRA_QUAY)) return true;
     if (typeof EXTRA_FORT !== 'undefined' && tile_has_extra(ptile, EXTRA_FORT)) return true;
     if (tile_has_extra(ptile, EXTRA_FORTRESS)) return true;
+    if ((typeof EXTRA_CASTLE !== "undefined") && tile_has_extra(ptile, EXTRA_CASTLE)) return true;
+    if ((typeof EXTRA_BUNKER !== "undefined") && tile_has_extra(ptile, EXTRA_BUNKER)) return true;
     return false;  // City already unloaded; Marines, Balloons, and AAA already got off higher above.
   }
   if (tile_has_extra(ptile, EXTRA_QUAY)) return true;
@@ -488,8 +491,8 @@ function get_unit_moves_left(punit)
   if (punit == null) {
     return 0;
   }
-
-  return "Moves:" + move_points_text(punit['movesleft']) + "";
+  // doesn't make unicode fraction because it's tiny unit pane label
+  return "Moves:" + move_points_text(punit['movesleft'],false) + "";
 }
 /**************************************************************************
   Returns a string representing only the raw number for how many moves
@@ -500,25 +503,41 @@ function unit_moves_left(punit)
   if (punit == null) {
     return 0;
   }
-
-  return move_points_text(punit['movesleft']) + "";
+  // doesn't make unicode fraction because it's tiny tooltip
+  return move_points_text(punit['movesleft'],false) + "";
 }
 
 /**************************************************************************
   Returns an amount of movement formatted for player readability.
+  moves = moves expressed in total move fragments
+  make_fraction = make a unicode vulgar fraction out of remainder frags?
 **************************************************************************/
-function move_points_text(moves)
+function move_points_text(moves, make_fraction)
 {
   var result = "";
+  if (make_fraction === undefined) make_fraction = false;
+
+  // optional unicode slash to make fraction symbol
+  var div_symbol = make_fraction ? "&#x2044;" : "/"
+  var spacer = make_fraction ? "&#8203;" : " ";
+  var numerator,denominator;
 
   if ((moves % SINGLE_MOVE) != 0) {
+    // change 3/6 to 1/2, 3/9 to 1/3, etc:
+    numerator = Math.floor(moves % SINGLE_MOVE);
+    denominator = SINGLE_MOVE;
+    
+    var simplified_fraction = fraction_reduce(numerator, denominator);
+    numerator = simplified_fraction.numerator;
+    denominator = simplified_fraction.denominator;
+
+
     if (Math.floor(moves / SINGLE_MOVE) > 0) {
-      result = Math.floor(moves / SINGLE_MOVE)
-               + " " + Math.floor(moves % SINGLE_MOVE)
-               + "/" + SINGLE_MOVE;
+      result = "" + Math.floor(moves / SINGLE_MOVE) 
+               + spacer + numerator
+               + div_symbol + denominator;
     } else {
-      result = Math.floor(moves % SINGLE_MOVE)
-               + "/" + SINGLE_MOVE;
+      result = "" + numerator + div_symbol + denominator;
     }
   } else {
     result = Math.floor(moves / SINGLE_MOVE);
@@ -903,7 +922,7 @@ function get_unit_city_info(punit)
   // MOVES LEFT
   if (client.conn.playing != null && punit['owner'] == client.conn.playing.playerno)
   { // ^ We don't know move points of non-domestic units (NaN), so only do domestic:
-    result += "\nMoves: " + move_points_text(punit['movesleft']);
+    result += "\nMoves: " + move_points_text(punit['movesleft'],false);
     // FUEL 
     if (punit['fuel']) result += "\nFuel: "+punit['fuel'];
   }  
