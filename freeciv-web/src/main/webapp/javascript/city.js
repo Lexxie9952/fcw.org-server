@@ -1025,7 +1025,7 @@ function generate_production_list()
     
     /* FIXME: web client doesn't support unit flags yet, so this is a hack: */
     if ( (punit_type['name'] == "Proletarians" && gov != "Communism")
-      || (punit_type['name'] == "Pilgrims" && gov != "Fundamentalism")
+      || (punit_type['name'] == "Pilgrims" && !(gov == "Fundamentalism" || gov == "Theocracy"))
       || punit_type['name'] == "Barbarian Leader" 
       || punit_type['name'] == "Leader" 
       || punit_type['name'] == "Queen" 
@@ -1047,23 +1047,28 @@ function generate_production_list()
                         "helptext": cleaned_text(punit_type['helptext']),
                         "rule_name": punit_type['rule_name'],
                         "build_cost": get_universal_discount_price(punit_type),
-                        "unit_details": "A<b>"+punit_type['attack_strength']  
-                        + "</b>D<b>"+punit_type['defense_strength']  
+                        "unit_details": "A<b>" + utype_real_base_attack_strength(punit_type) //+punit_type['attack_strength']  
+                        + "</b>D<b>" + utype_real_base_defense_strength(punit_type) //+punit_type['defense_strength']                  
                         + "</b>F<b>"+punit_type['firepower'] 
                         + "</b>H<b>"+punit_type['hp'],
                          "sprite" : get_unit_type_image_sprite(punit_type)});
 
     } else {
+      var move_bonus = parseInt(punit_type['move_bonus'][0]) ? parseInt(punit_type['move_bonus'][0]) : 0; 
       production_list.push({"kind": VUT_UTYPE, "value" : punit_type['id'],
                             "text": punit_type['name'],
 	                      "helptext": cleaned_text(punit_type['helptext']),
                        "rule_name": punit_type['rule_name'],
                       "build_cost": get_universal_discount_price(punit_type),
-                    "unit_details": "A<b>"+punit_type['attack_strength'] + "</b> " 
-                                  + "D<b>"+punit_type['defense_strength'] + "</b> " 
+//                    "unit_details": "A<b>"+punit_type['attack_strength'] + "</b> " 
+//                                  + "D<b>"+punit_type['defense_strength'] + "</b> " 
+                    "unit_details": "A<b>"+utype_real_base_attack_strength(punit_type) + "</b> " 
+                                  + "D<b>"+utype_real_base_defense_strength(punit_type) + "</b> " 
                                   + "F<b>"+punit_type['firepower'] + "</b> "
                                   + "H<b>"+punit_type['hp']+"</b> "
-                                  + "M<b>"+punit_type['move_rate'] / SINGLE_MOVE + "",
+                                  + "M<b style='font-family:Arial'>"
+                                  + move_points_text((parseInt(punit_type['move_rate'])+move_bonus), true)+"",
+                                 // punit_type['move_rate'] / SINGLE_MOVE + "",
                           "sprite": get_unit_type_image_sprite(punit_type)});
     }
   }
@@ -1626,8 +1631,8 @@ function city_sell_improvement_in(city_id, improvement_id)
         send_request(JSON.stringify(packet));
         active_superpanel_cityid = city_id;
         // Play sound for normal building sale but not wonders (which can't happen)
-        if (improvements[improvement_id].genus == GENUS_IMPROVEMENT)
-          play_sound(soundset["e_imp_sold"]);
+        //if (improvements[improvement_id].genus == GENUS_IMPROVEMENT)
+         // play_sound(soundset["e_imp_sold"]);
     });
 }
 /**************************************************************************
