@@ -1289,14 +1289,41 @@ function update_unit_order_commands()
           && !pcity) {  // Show Fort button if Masonry and no Fort
               unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
               $("#order_fortress").show();
+              if (is_ocean_tile(ptile)) $("#order_fortress").prop("title", "Build Buoy (Shift-F)");
+              else $("#order_fortress").prop("title", "Build Fort (Shift-F)");
       }
-      if (!tile_has_extra(ptile, EXTRA_FORTRESS)
+      if (!tile_has_extra(ptile, EXTRA_FORTRESS && tile_has_extra(ptile, EXTRA_FORT))
             && player_invention_state(client.conn.playing, tech_id_by_name('Construction')) == TECH_KNOWN
             && !pcity
           ) {
-              unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
+              unit_actions["fortress"] = {name: "Build Fortress (Shift-F)"};
               $("#order_fortress").show();
+              $("#order_fortress").prop("title", "Build Fortress (Shift-F)");
+            }
+      // "else" means there was a fortress, so it's on to making castle now:
+      else if (client_rules_flag[CRF_MP2_C] && !tile_has_extra(ptile, EXTRA_CASTLE && tile_has_extra(ptile, EXTRA_FORTRESS))
+            && player_invention_state(client.conn.playing, tech_id_by_name('Construction')) == TECH_KNOWN
+            && player_invention_state(client.conn.playing, tech_id_by_name('Feudalism')) == TECH_KNOWN
+            && player_invention_state(client.conn.playing, tech_id_by_name('Gunpowder')) != TECH_KNOWN
+            && !pcity
+          ) 
+      {
+              unit_actions["fortress"] = {name: "Build Castle (Shift-F)"};
+              $("#order_fortress").show();
+              $("#order_fortress").prop("title", "Build Castle (Shift-F)");
       }
+      else if (client_rules_flag[CRF_MP2_C]) {
+        if (!tile_has_extra(ptile, EXTRA_BUNKER) && !tile_has_extra(ptile, EXTRA_CASTLE) && tile_has_extra(ptile, EXTRA_FORTRESS)
+            && player_invention_state(client.conn.playing, tech_id_by_name('Gunpowder')) == TECH_KNOWN
+            && player_invention_state(client.conn.playing, tech_id_by_name('Steel')) == TECH_KNOWN) {
+  
+              unit_actions["fortress"] = {name: "Build Bunker (Shift-F)"};
+              $("#order_fortress").show();
+              $("#order_fortress").prop("title", "Build Bunker (Shift-F)");
+        }
+      }
+      
+
       if ( typeof EXTRA_NAVALBASE !== 'undefined'
               && player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN
               && can_build_naval_base(punit,ptile)
@@ -1473,14 +1500,38 @@ function update_unit_order_commands()
             && !pcity) {
               unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
               $("#order_fortress").show();
+              if (is_ocean_tile(ptile)) $("#order_fortress").prop("title", "Build Buoy (Shift-F)");
+              else $("#order_fortress").prop("title", "Build Fort (Shift-F)");
         }
       }
-      // Construction + no Fortress on tile = show order to make Fortress:
+      // Construction + Fort on tile = show order to make Fortress, Castle, or Bunker:
       if (player_invention_state(client.conn.playing, tech_id_by_name('Construction')) == TECH_KNOWN
-          && !tile_has_extra(ptile, EXTRA_FORTRESS)
-          && !pcity) {
-        unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
-        $("#order_fortress").show();
+          && !pcity && tile_has_extra(ptile, EXTRA_FORT)) {
+
+          if (!tile_has_extra(ptile, EXTRA_FORTRESS)) {
+            unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
+            $("#order_fortress").show();
+            $("#order_fortress").prop("title", "Build Fortress (Shift-F)");
+          }
+          else if (client_rules_flag[CRF_MP2_C]  // Fortress is on tile if we got here
+                    && !tile_has_extra(ptile, EXTRA_CASTLE)
+                    && player_invention_state(client.conn.playing, tech_id_by_name('Feudalism')) == TECH_KNOWN
+                    && player_invention_state(client.conn.playing, tech_id_by_name('Gunpowder')) != TECH_KNOWN)
+          {
+            unit_actions["fortress"] = {name: "Build Castle (Shift-F)"};
+            $("#order_fortress").show();
+            $("#order_fortress").prop("title", "Build Castle (Shift-F)");
+          }
+          else if (client_rules_flag[CRF_MP2_C]) {  // Fortress is on tile but can't make a Castle, if we got here
+            if (!tile_has_extra(ptile, EXTRA_BUNKER) && !tile_has_extra(ptile, EXTRA_CASTLE) && tile_has_extra(ptile, EXTRA_FORTRESS)
+                && player_invention_state(client.conn.playing, tech_id_by_name('Gunpowder')) == TECH_KNOWN
+                && player_invention_state(client.conn.playing, tech_id_by_name('Steel')) == TECH_KNOWN) {
+      
+                  unit_actions["fortress"] = {name: "Build Bunker (Shift-F)"};
+                  $("#order_fortress").show();
+                  $("#order_fortress").prop("title", "Build Bunker (Shift-F)");
+            }
+          }
       }
       if ( typeof EXTRA_NAVALBASE !== 'undefined'
               && player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN
@@ -6459,17 +6510,17 @@ function update_active_units_dialog()
 
     if (client.conn.playing != null && current_focus[0]['owner'] == client.conn.playing.playerno) {
       if (mobile_mode) { // mobile version of text
-        active_uinfo += "<span style='color:white'> &nbsp; M:<span style='color:lightgreen;font-size:110%'><b>" + move_points_text(aunit['movesleft']) + "</b></span></span>";
+        active_uinfo += "<span style='color:white'> &nbsp; M:<span style='color:lightgreen;font-size:110%'><b>" + move_points_text(aunit['movesleft'],false) + "</b></span></span>";
       } else { // normal non-mobile text:
-        active_uinfo += "<span style='color:white'>Moves:<span style='color:lightgreen;font-size:120%;'><b>" + move_points_text(aunit['movesleft']) + "</b></span></span> ";
+        active_uinfo += "<span style='color:white'>Moves:<span style='color:lightgreen;font-size:120%;'><b>" + move_points_text(aunit['movesleft'],false) + "</b></span></span> ";
       }
     }
     if (mobile_mode) { // mobile version of text
       active_uinfo += "<span>&nbsp;H:<span style='color:lightpink;font-size:110%'><b>"
       + aunit['hp'] + " </b> </span> </span>" + unit_name; // unit name after Moves and HP for mobile
     } else { // normal non-mobile text:
-        active_uinfo += "<span title='Attack'>A:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['attack_strength']   // make terser titles to avoid cramped clutter (Lexxie)
-        + "</b></span></span> <span title='Defense'>D:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['defense_strength']
+        active_uinfo += "<span title='Attack'>A:<span style='color:gainsboro;font-size:100%;'><b>"+utype_real_base_attack_strength(ptype) //+ ptype['attack_strength']   // make terser titles to avoid cramped clutter (Lexxie)
+        + "</b></span></span> <span title='Defense'>D:<span style='color:gainsboro;font-size:100%;'><b>"+utype_real_base_defense_strength(ptype)//+ ptype['defense_strength']
         + "</b></span></span> <span title='Firepower'>FP:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['firepower']
         + "</b></span></span> <span title='Health'>H:<span style='color:lightpink;font-size:120%;'><b>"
         + aunit['hp'] + "</b></span></span>"; //<span style='color:gainsboro;font-size:85%;'>/" + ptype['hp'] + "</span></span>";
