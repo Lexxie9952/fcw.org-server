@@ -623,6 +623,20 @@ function popup_action_selection(actor_unit, action_probabilities,
           
         }
       } break;
+      case "Zealots":  for (button_id in buttons) {
+        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+          buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
+          buttons[button_id].title = "Odds of survival:  100%\n"
+                                    + "Combat:                3 rounds\n"
+                                    + "Targets:                 4 units\n"
+                                    + "Move cost:            1 5/9 moves\n"
+                                    + "Casualties:             --\n"
+                                    + "\Zealots opportunistically damage and degrade foreign occupants\n"
+                                    + "of their native land, for 3 rounds of combat on up to 4 foreign\n"
+                                    + "occupants of a city or tile."
+          
+        }
+      } break;
       case "Marines":  for (button_id in buttons) {
         if (buttons[button_id].text.startsWith("Ranged Attack")) {
           buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
@@ -1290,7 +1304,7 @@ function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapac
     disable = true;
   } else tloaded = " L:"+tloaded;
 
-  var moves_text = move_points_text(tmoves);
+  var moves_text = move_points_text(tmoves,false);
   if (moves_text == "-") {
   // "-" means it was NaN/unknown because foreign, which means it's an ally on same tile
     moves_text = " ALLY"
