@@ -151,6 +151,7 @@ function init_tech_screen()
   if (ruleset_control['name'] == "Multiplayer-Evolution ruleset") reqtree = reqtree_mpplus;
   if (ruleset_control['name'].startsWith("Avant-garde")) reqtree = reqtree_avantgarde;
   if (ruleset_control['name'].startsWith("MP2")) reqtree = reqtree_avantgarde;   // from MP2 Brava onward all MP2 rules start with "MP2"
+  if (client_rules_flag[CRF_MP2_C]) reqtree = reqtree_mp2c;
 
   tech_canvas = document.getElementById('tech_canvas');
   if (tech_canvas == null) {
@@ -228,12 +229,16 @@ function update_tech_tree()
       var sequence = 1+Math.round(dy/55)+Math.round(dx/45);      // Create a "seed" that bumps up as we span the canvas vertically and horizontally
       sequence = sequence - (sequence-sequence%9);               // This creates a colour number from 0-8 out of our "seed"
      
-      if (sequence == 8) tech_canvas_ctx.strokeStyle =      'rgba(45, 73, 194, 0.83)';       // egyptian blue
-      else if (sequence == 7) tech_canvas_ctx.strokeStyle = 'rgba(61, 136, 167, 0.8)';       // teal
-      else if (sequence == 6) tech_canvas_ctx.strokeStyle = 'rgba(82, 76, 61, 0.88)';        // olive
+      if (sequence == 8) tech_canvas_ctx.strokeStyle =      'rgba(55, 83, 204, 0.83)';       // egyptian blue
+//      if (sequence == 8) tech_canvas_ctx.strokeStyle =      'rgba(45, 73, 194, 0.83)';       // egyptian blue
+      else if (sequence == 7) tech_canvas_ctx.strokeStyle = 'rgba(81, 146, 187, 0.8)';       // teal
+//      else if (sequence == 7) tech_canvas_ctx.strokeStyle = 'rgba(61, 136, 167, 0.8)';       // teal
+//      else if (sequence == 6) tech_canvas_ctx.strokeStyle = 'rgba(82, 76, 61, 0.88)';        // olive
+      else if (sequence == 6) tech_canvas_ctx.strokeStyle = 'rgba(112, 106, 88, 0.88)';        // olive
       else if (sequence == 5) tech_canvas_ctx.strokeStyle = 'rgba(138, 36, 78, 0.8)';        // wine
       else if (sequence == 4) tech_canvas_ctx.strokeStyle = 'rgba(161, 227, 243, 0.8)';      // faded light-cyan-grey
-      else if (sequence == 3) tech_canvas_ctx.strokeStyle = 'rgba(30, 80, 80, 0.8)';         // faded sea-grey
+//      else if (sequence == 3) tech_canvas_ctx.strokeStyle = 'rgba(30, 80, 80, 0.8)';         // faded sea-grey
+      else if (sequence == 3) tech_canvas_ctx.strokeStyle = 'rgba(10, 40, 40, 0.8)';         // faded sea-grey
       else if (sequence == 2) tech_canvas_ctx.strokeStyle = 'rgba(10, 10, 30, 0.8)';         // midnight
       else if (sequence == 1) tech_canvas_ctx.strokeStyle = 'rgba(223, 223, 223, 0.8)';      // dim white
       else tech_canvas_ctx.strokeStyle =                    'rgba(189, 91, 79, 0.85)';       // coral
@@ -872,16 +877,19 @@ function show_tech_info_dialog(tech_name, unit_type_id, improvement_id)
   $("#tech_tab_item").css("color", "#aa0000");
 
   var message = "";
-
+  
   if (unit_type_id != null) {
      var punit_type = unit_types[unit_type_id];
+     var move_bonus = parseInt(punit_type['move_bonus'][0]) ? parseInt(punit_type['move_bonus'][0]) : 0;
+     var move_rate = ""; move_rate += move_points_text((parseInt(punit_type['move_rate'])+move_bonus), false);
+   
      message += "<b>Unit info</b>: " + cleaned_text(punit_type['helptext']) + "<br>"
      + "</b><br>Cost: <b>" + punit_type['build_cost']
-     + "</b><br>Attack: <b>" + punit_type['attack_strength']
-     + "</b><br>Defense: <b>" + punit_type['defense_strength']
+     + "</b><br>Attack: <b>" + utype_real_base_attack_strength(punit_type)//+ punit_type['attack_strength']
+     + "</b><br>Defense: <b>" + utype_real_base_defense_strength(punit_type) //+ punit_type['defense_strength']
      + "</b><br>Firepower: <b>" + punit_type['firepower']
      + "</b><br>Hitpoints: <b>" + punit_type['hp']
-     + "</b><br>Moves: <b>" + move_points_text(punit_type['move_rate'])
+     + "</b><br>Moves: <b>" + move_rate
      + "</b><br>Vision: <b>" + punit_type['vision_radius_sq']
      + "</b><br><br>";
   }
