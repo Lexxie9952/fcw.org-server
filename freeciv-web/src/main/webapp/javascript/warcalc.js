@@ -151,7 +151,7 @@ function warcalc_compute_role_strength(my_uid, their_uid)
     }
     their_hp  = punit['hp'];
     their_fp  = ptype['firepower'];
-    their_str = ptype['attack_strength'];;
+    their_str = utype_real_base_attack_strength(ptype); // ptype['attack_strength'];;
     their_str *= (power_fact/100);
     if (their_str-Math.trunc(their_str))
     their_str = trim_decimals(their_str);
@@ -163,7 +163,7 @@ function warcalc_compute_role_strength(my_uid, their_uid)
     ptype = unit_types[punit['type']];
     power_fact = warcalc_get_defense_bonus(punit);
     my_hp  = punit['hp'];
-    my_str = ptype['defense_strength'];
+    my_str = utype_real_base_defense_strength(ptype); // ptype['defense_strength']; 
     my_fp  = ptype['firepower'];
 
     my_str *= (power_fact/100);
@@ -207,7 +207,8 @@ function warcalc_set_default_vals(punit)
       }
     }
     my_hp  = punit['hp'];
-    my_str = ptype['attack_strength'];
+    // accounts for wrong hard-coded assumption that v0 is always power_fact=100:
+    my_str = (power_fact == 100) ? utype_real_base_attack_strength(ptype) : ptype['attack_strength'];
     my_fp  = ptype['firepower'];
     my_uid = punit['id'];
 
@@ -219,7 +220,7 @@ function warcalc_set_default_vals(punit)
   else {
     power_fact = warcalc_get_defense_bonus(punit);
     their_hp  = punit['hp'];
-    their_str = ptype['defense_strength'];;
+    their_str = (power_fact == 100) ? utype_real_base_defense_strength(ptype) : ptype['defense_strength'];
     their_fp  = ptype['firepower'];
     their_uid = punit['id'];
 
@@ -229,6 +230,7 @@ function warcalc_set_default_vals(punit)
 }
 function trim_decimals(value)
 {
+  if (value<1) return value; // Math.round(parseFloat(value) * 1000) / 1000;
   return Math.round(parseFloat(value) * 100) / 100;
 }
 
@@ -288,10 +290,42 @@ function warcalc_compute()
 /**************************************************************************
   The FORMULAS
 *************************************************************************/
+/* these functions can be used for extreme edge cases like high FP or
+   any situation where it only takes 1 or 2 hits to kill, where it is 
+   greatly more accurate i.e., not completely inaccurate like the other
+   estimate. So they're here in commented code for now. The case of only
+   1 hit needed is a lot simpler and hard coded in one line and that's 
+   all we're using for now 
+function factorial(a) {
+  return a*(a>1)?factorial(a-1):1;
+}
+function binomial_coeff (n, k)  { 
+  return factorial(n)/(factorial(k)*factorial(n-k)); 
+}
+function P_X_is_x(x, N, p)  { 
+  return binomial_coeff(N,x)*Math.pow(p,x)*Math.pow(1-p,N-x); 
+}
+function P_X_is_ge_x (x, N, p) {
+   return P_X_is_x(x,N,p)+(x<N)?P_X_is_ge_x(x+1,N,p):0;
+}
+*/
 function warcalc_win_chance(as,ahp,afp,ds,dhp,dfp) {
   var as = parseFloat(as);   var ds = parseFloat(ds);
   var ahp = parseFloat(ahp); var dhp = parseFloat(dhp);
   var afp = parseFloat(afp); var dfp = parseFloat(dfp);
+
+  // Special case: attacker firepower wins in one hit, needs
+  // different formula to be accurate:
+  if (afp >= dhp) {
+    //console.log("using as="+as);
+    return 1 - Math.pow( ds/(as+ds),ahp); // 1 minus "the chance defender hits every time"
+    // since it's only 1 hit we don't need the below, which we could use
+    // for cases with 1-3 hits to be more accurate, IF we could find the tiny bug
+    // in the formula, which I'm 99% sure was we didn't do ParseFloat since that made
+    // the formula above also not work until we put it underneath.
+    //return P_X_is_ge_x (1, ahp, as/(as+ds))
+  }
+
   var att_N_lose = Math.trunc( (ahp + dfp - 1) / dfp );
   var def_N_lose = Math.trunc( (dhp + afp - 1) / afp );
   var att_P_lose1 = (as + ds == 0) ? 0.5 : ds / (as + ds);
