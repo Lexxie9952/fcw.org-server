@@ -46,7 +46,7 @@ function popup_pillage_selection_dialog(punit)
   $(id).append(document.createTextNode(unit_types[punit['type']]['name']
               + " performing " + unit_get_pillage_name(punit) + ":\n"
               + (unit_can_iPillage(punit) ? "(" + unit_moves_left(punit) + " moves - " + pstats.iPillage_moves + " spent "
-                                        + " = " + move_points_text(moves_remaining) + " left)\n"
+                                        + " = " + move_points_text(moves_remaining, false) + " left)\n"
                                         : "")
               ));
 
