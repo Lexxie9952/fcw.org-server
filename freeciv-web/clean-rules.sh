@@ -24,6 +24,8 @@ printf "\nOverwriting ag27.html with ag27.bak.html\n"
    cp /vagrant/freeciv-web/src/derived/webapp/man/ag27.bak.html /vagrant/freeciv-web/src/derived/webapp/man/ag27.html
 printf "\nOverwriting mp2-brava7.html with mp2-brava7.bak.html\n"
    cp /vagrant/freeciv-web/src/derived/webapp/man/mp2-brava7.bak.html /vagrant/freeciv-web/src/derived/webapp/man/mp2-brava7.html
+printf "\nOverwriting mp2-caravel6.html with mp2-caravel6.bak.html\n"
+   cp /vagrant/freeciv-web/src/derived/webapp/man/mp2-caravel6.bak.html /vagrant/freeciv-web/src/derived/webapp/man/mp2-caravel6.html
 printf "\nOverwriting mp2-caravel7.html with mp2-caravel7.bak.html\n"
    cp /vagrant/freeciv-web/src/derived/webapp/man/mp2-caravel7.bak.html /vagrant/freeciv-web/src/derived/webapp/man/mp2-caravel7.html
 

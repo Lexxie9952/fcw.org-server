@@ -823,8 +823,9 @@ void handle_diplomacy_cancel_pact(struct player *pplayer,
   sync_cities();
 
   notify_player(pplayer, NULL, E_TREATY_BROKEN, ftc_server,
-                _("❗📜 The diplomatic state between the %s "
+                _("📜[`%s`] The diplomatic state between the %s "
                   "and the %s is now %s."),
+                diplstate_type_translated_name(new_type),
                 nation_plural_for_player(pplayer),
                 nation_plural_for_player(pplayer2),
                 diplstate_type_translated_name(new_type));
