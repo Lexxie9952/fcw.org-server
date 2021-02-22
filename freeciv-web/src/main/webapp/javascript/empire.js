@@ -1525,13 +1525,16 @@ function create_worklist_unit_div()
     // FILTER OUT INAPPROPRIATE UNITS FROM LIST------------------------------------------------
     if (unit_types[z]['name'] == "Leader") continue;      
     if (unit_types[z]['name'] == "Barbarian Leader") continue;     
-    if (unit_types[z]['name'] == "Fanatics" && cur_gov != "Fundamentalism") continue;
+    if (unit_types[z]['name'] == "Fanatics" && (cur_gov != "Fundamentalism")) continue;
+    if (unit_types[z]['name'] == "Falconeers" && (cur_gov != "Theocracy")) continue;
+    if (unit_types[z]['name'] == "Zealots" && (cur_gov != "Theocracy")) continue;
+
     // if (unit_type[z] is unique && exists) continue; //TODO: if possible to check this
     // RULESET SPECIFIC FILTER:
     if (client_rules_flag[CRF_MP2_SPECIAL_UNITS]) {
       if (unit_types[z]['name'] == "Well-Digger") continue;
       if (unit_types[z]['name'] == "Queen") continue;
-      if (unit_types[z]['name'] == "Pilgrims" && cur_gov != "Fundamentalism") continue;
+      if (unit_types[z]['name'] == "Pilgrims" && !(cur_gov == "Fundamentalism" || cur_gov == "Theocracy")) continue;
       if (unit_types[z]['name'] == "Proletarians" && cur_gov != "Communism") continue;
       if (unit_types[z]['name'].startsWith("[")) continue;
     }
