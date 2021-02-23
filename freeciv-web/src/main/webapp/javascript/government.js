@@ -25,6 +25,10 @@ var REPORT_TOP_5_CITIES = 1;
 var REPORT_DEMOGRAPHIC = 2;
 var REPORT_ACHIEVEMENTS = 3;
 
+var GOV_LAST = -1; // set in handle_ruleset_government() when server tells us the ruleset.
+                   // -1 causes a failsafe for checking gov_requirement on whether units
+                   // can be built, so worst case is displaying units you can't make with cur_gov.
+
 /**************************************************************************
    ...
 **************************************************************************/
@@ -172,95 +176,61 @@ function start_revolution()
           }
         }    
       }
+      var cur_gov = governments[client.conn.playing['government']]['id'];
+      if (do_worklists(cur_gov, governments[requested_gov]['id']))
+        setTimeout(send_player_change_government(requested_gov),1500); // delay to remove Fanatics from 134 cities;
+      else send_player_change_government(requested_gov);
+      requested_gov = -1;
 
-      var cur_gov = governments[client.conn.playing['government']];
+      /* old code for calling do_worklists, used strings as gov identifiers.
+         new code wants id to do a cleaner check */
+      /*var cur_gov = governments[client.conn.playing['government']];
       if (do_worklists(cur_gov['name'], governments[requested_gov]['name']))
         setTimeout(send_player_change_government(requested_gov),800);
       else send_player_change_government(requested_gov);
-      requested_gov = -1;
+      requested_gov = -1;*/
   }
 }
 
 /**************************************************************************
-   ...
+   When changing government, clear illegal production from worklist
 **************************************************************************/
-function do_worklists(cur_gov, new_gov)
+function do_worklists(cur_gov_id, new_gov_id)
 {
   var altered = false;
-  // make one code to treat both theocracy and fundamentalism the same:
-  var cur_gov = (cur_gov=="Fundamentalism" || cur_gov=="Theocracy") ? "Fundie" : cur_gov;
-  var new_gov = (new_gov=="Fundamentalism" || new_gov=="Theocracy") ? "Fundie" : new_gov;
 
+  // THIS was a clean-up of DIRTY hard-coding. If it fails, see commits for 23Feb2021 to revert.
   for (city_id in cities) {
     var pcity=cities[city_id];
-    if (pcity['owner'] != client.conn.playing.playerno) continue;
-
-    var magna_carta = player_has_wonder(client.conn.playing.playerno, B_MAGNA_CARTA);
-     
-    if (cur_gov == "Fundie" && new_gov != "Fundie") {
-      if (pcity['worklist'] != null && pcity['worklist'].length != 0) {
-        var before = pcity['worklist'].length;
-        pcity['worklist'] = pcity['worklist'].filter(list_item => !(list_item['kind']==VUT_UTYPE && unit_types[list_item['value']]['name'] == "Zealots") );
-        pcity['worklist'] = pcity['worklist'].filter(list_item => !(list_item['kind']==VUT_UTYPE && unit_types[list_item['value']]['name'] == "Fanatics") );
-        pcity['worklist'] = pcity['worklist'].filter(list_item => !(list_item['kind']==VUT_UTYPE && unit_types[list_item['value']]['name'] == "Pilgrims") );
-        pcity['worklist'] = pcity['worklist'].filter(list_item => !(list_item['kind']==VUT_UTYPE && unit_types[list_item['value']]['name'] == "Falconeers") );
-        if (before != pcity['worklist'].length) {send_city_worklist(pcity['id']);altered = true;}
-      }
-      if (pcity['production_kind']==VUT_UTYPE && (unit_types[pcity['production_value']]['name'] == "Fanatics"
-          || unit_types[pcity['production_value']]['name'] == "Falconeers"
-          || unit_types[pcity['production_value']]['name'] == "Pilgrims"
-          || unit_types[pcity['production_value']]['name'] == "Zealots")) {
-        altered=true;
-        if (pcity['worklist'] != null && pcity['worklist'].length) {
-          send_city_change(pcity['id'],pcity['worklist'][0]['kind'],pcity['worklist'][0]['value']);
-          pcity['worklist'].shift();
-          send_city_worklist(pcity['id']);
-        } else {send_city_change(pcity['id'], VUT_IMPROVEMENT, Object.keys(improvements).length-1);}
-      }
-    } else if (cur_gov == "Communism" && new_gov != "Communism") {
-      if (pcity['worklist'] != null && pcity['worklist'].length != 0) {
-        var before = pcity['worklist'].length;
-        pcity['worklist'] = pcity['worklist'].filter(list_item => !(list_item['kind']==VUT_UTYPE && unit_types[list_item['value']]['name'] == "Proletarians") );
-        if (before != pcity['worklist'].length) {send_city_worklist(pcity['id']);altered = true;}
-      }
-      if (pcity['production_kind']==VUT_UTYPE && unit_types[pcity['production_value']]['name'] == "Proletarians") {
-        altered=true;
-        if (pcity['worklist'] != null && pcity['worklist'].length) {
-          send_city_change(pcity['id'],pcity['worklist'][0]['kind'],pcity['worklist'][0]['value']);
-          pcity['worklist'].shift();
-          send_city_worklist(pcity['id']);
-        } else {send_city_change(pcity['id'], VUT_IMPROVEMENT, Object.keys(improvements).length-1);}
-      }
-    } else if (cur_gov == "Nationalism" && new_gov != "Nationalism") {
-      if (pcity['worklist'] != null && pcity['worklist'].length != 0) {
-        var before = pcity['worklist'].length;
-        pcity['worklist'] = pcity['worklist'].filter(list_item => !(list_item['kind']==VUT_UTYPE && unit_types[list_item['value']]['name'] == "Migrants") );
-        if (before != pcity['worklist'].length) {send_city_worklist(pcity['id']);altered = true;}
-      }
-      if (pcity['production_kind']==VUT_UTYPE && unit_types[pcity['production_value']]['name'] == "Migrants") {
-        altered=true;
-        if (pcity['worklist'] != null && pcity['worklist'].length) {
-          send_city_change(pcity['id'],pcity['worklist'][0]['kind'],pcity['worklist'][0]['value']);
-          pcity['worklist'].shift();
-          send_city_worklist(pcity['id']);
-        } else {send_city_change(pcity['id'], VUT_IMPROVEMENT, Object.keys(improvements).length-1);}
-      }
-    } else if (!magna_carta || (cur_gov == "Monarchy" && new_gov != "Monarchy")) {
-      if (pcity['worklist'] != null && pcity['worklist'].length != 0) {
-        var before = pcity['worklist'].length;
-        pcity['worklist'] = pcity['worklist'].filter(list_item => !(list_item['kind']==VUT_UTYPE && unit_types[list_item['value']]['name'] == "Migrants") );
-        if (before != pcity['worklist'].length) {send_city_worklist(pcity['id']);altered = true;}
-      }
-      if (pcity['production_kind']==VUT_UTYPE && unit_types[pcity['production_value']]['name'] == "Peasants") {
-        altered=true;
-        if (pcity['worklist'] != null && pcity['worklist'].length) {
-          send_city_change(pcity['id'],pcity['worklist'][0]['kind'],pcity['worklist'][0]['value']);
-          pcity['worklist'].shift();
-          send_city_worklist(pcity['id']);
-        } else {send_city_change(pcity['id'], VUT_IMPROVEMENT, Object.keys(improvements).length-1);}
+    if (pcity['owner'] != client.conn.playing.playerno) continue;             // don't bother with unowned cities
+    if (pcity['worklist'] == null || pcity['worklist'].length == 0) continue; // don't bother with null worklists
+    var prev_worklist_len = pcity['worklist'].length;
+    var cur_prod_is_legal = true;
+    for (ut_id in unit_types) {
+      if (unit_types[ut_id].gov_requirement < GOV_LAST && unit_types[ut_id].gov_requirement != new_gov_id) {
+        // We have iterated to a unit type that is not allowed under the new gov. Force wipe it from the worklist.
+        pcity['worklist'] = pcity['worklist'].filter(list_item => !(list_item['kind']==VUT_UTYPE && list_item['value'] == ut_id));
+        if (pcity['production_kind']==VUT_UTYPE && pcity['production_value'] == ut_id) {
+          // Current prod in this city is of the illegal type. Flag it to take action AFTER everything in worklist got purged.
+          altered=true;
+          cur_prod_is_legal=false;
+        }
       }
     }
-  }  
+    // If illegal types were removed from worklist, tell the server our new worklist for this city. 
+    if (prev_worklist_len != pcity['worklist'].length) {
+      send_city_worklist(pcity['id']);
+      altered = true; // lets caller know we might be making heavy server traffic on changing lots of worklists
+    }
+    // Only after worklist is purged remove illegal current_production:    (to avoid it became null or bumping up another illegal unit to cur_prod)
+    if (!cur_prod_is_legal) {
+      if (pcity['worklist'] != null && pcity['worklist'].length) {
+        send_city_change(pcity['id'],pcity['worklist'][0]['kind'],pcity['worklist'][0]['value']);
+        pcity['worklist'].shift();
+        send_city_worklist(pcity['id']);
+      } else {send_city_change(pcity['id'], VUT_IMPROVEMENT, Object.keys(improvements).length-1);}
+    }
+  }
   return altered;
 }
 

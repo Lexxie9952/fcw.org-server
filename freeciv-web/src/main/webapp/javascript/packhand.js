@@ -1801,6 +1801,8 @@ function handle_ruleset_tech_flag(packet)
 function handle_ruleset_government(packet)
 {
   governments[packet['id']] = packet;
+  // Track number of governments for ruleset:
+  GOV_LAST =  Object.keys(governments).length; // length = last_index+1 because 0-based
 }
 
 /* 100% complete */

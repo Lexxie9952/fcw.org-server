@@ -1509,6 +1509,8 @@ function create_worklist_wonder_div()
 function create_worklist_unit_div()
 {
   const cur_gov = governments[client.conn.playing['government']];
+  const gov_id = players[client.conn.playing.playerno].government;
+
   var units_html = "";
   var bg = "";
   const border = "border:2px solid #000000;"
@@ -1521,26 +1523,15 @@ function create_worklist_unit_div()
   var magnification = "zoom:"+mag_factor+"; -moz-transform:"+mag_factor+";";
   const constant_title = "CLICK: Copy to clipboard\n\nSHIFT-CLICK: Add to clipboard' ";
 
+  // THIS was a clean-up of DIRTY hard-coding. If it fails, see commits for 23Feb2021 to revert.
   for (var z = 0; z < ruleset_control.num_unit_types; z ++) {
-    // FILTER OUT INAPPROPRIATE UNITS FROM LIST------------------------------------------------
-    if (unit_types[z]['name'] == "Leader") continue;      
-    if (unit_types[z]['name'] == "Barbarian Leader") continue;     
-    if (unit_types[z]['name'] == "Fanatics" && (cur_gov != "Fundamentalism")) continue;
-
-    // if (unit_type[z] is unique && exists) continue; //TODO: if possible to check this
-    // RULESET SPECIFIC FILTER:
-    if (client_rules_flag[CRF_MP2_SPECIAL_UNITS]) {
-      if (unit_types[z]['name'] == "Well-Digger") continue;
-      if (unit_types[z]['name'] == "Queen") continue;
-      if (unit_types[z]['name'] == "Pilgrims" && !(cur_gov == "Fundamentalism" || cur_gov == "Theocracy")) continue;
-      if (unit_types[z]['name'] == "Proletarians" && cur_gov != "Communism") continue;
-      if (unit_types[z]['name'].startsWith("[")) continue;
-      if (unit_types[z]['name'] == "Falconeers" && (cur_gov != "Theocracy")) continue;
-      if (unit_types[z]['name'] == "Zealots" && (cur_gov != "Theocracy")) continue;
-      if (unit_types[z]['name'] == "Migrants" && (cur_gov != "Nationalism")) continue;  
-      if (unit_types[z]['name'] == "Peasamts" 
-          && (cur_gov != "Monarchy" || !player_has_wonder(client.conn.playing.playerno, B_MAGNA_CARTA))) continue;  
+    if (utype_has_flag(unit_types[z],UTYF_NOBUILD)) continue; // Leader, Barbarian Leader, Animals, Tribesmen, etc.
+    if (unit_types[z].government_req < GOV_LAST) {             // IF Unit has a government requirement
+      if (unit_types[z].goverment_req != gov_id) continue;     // then if it's not GOV_LAST and not the player's GOV, we're not allowed to build.
+      // Special case, gov_req AND an impr_req, a "sub-gov activated by an improvement"
+      if (unit_types[z]['name'] == "Peasants" && (!player_has_wonder(client.conn.playing.playerno, B_MAGNA_CARTA))) continue;
     }
+
     // OBSOLETE - See if we have the tech for the unit which obsoletes it:
     const obs_by_type = unit_types[z]['obsoleted_by']; 
     if (obs_by_type < ruleset_control.num_unit_types) {  // highest index+1 == flag for never obsolete

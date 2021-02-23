@@ -1018,20 +1018,16 @@ function get_universal_discount_price(ptype, pcity)
 function generate_production_list()
 {
   var production_list = [];
-  const gov = governments[players[client.conn.playing.playerno].government].name;
-  
+  const gov_id = players[client.conn.playing.playerno].government;
+
+  // THIS was a clean-up of DIRTY hard-coding. If it fails, see commits for 23Feb2021 to revert.
   for (var unit_type_id in unit_types) {
     var punit_type = unit_types[unit_type_id];
-    
-    /* FIXME: web client doesn't support unit flags yet, so this is a hack: */
-    if ( (punit_type['name'] == "Proletarians" && gov != "Communism")
-      || (punit_type['name'] == "Pilgrims" && !(gov == "Fundamentalism" || gov == "Theocracy"))
-      || punit_type['name'] == "Barbarian Leader" 
-      || punit_type['name'] == "Leader" 
-      || punit_type['name'] == "Queen" 
-      || punit_type['name'].startsWith("["))  // names starting with "[" are reserved for Non-Player Units: e.g., animals, tornados, zombies ;) 
-       continue;
 
+    // Uses SERVER supplied info which presumably uses gov_reqs, impr_reqs, all that nice jazz.
+    if (!can_city_build_unit_now(active_city, unit_type_id)) continue;
+
+    // Exclude major nukes and minor nukes based on whether server settings say to do so:
     if (utype_has_flag(punit_type, UTYF_NUCLEAR)) {
       if (!server_settings['nukes_minor']['val']) continue; // Nukes totally turned off in this game, skip them
       if (!server_settings['nukes_major']['val']) { // bombard_rate !=0 or !=-1 is a major nuke, skip if game settings have turned it off.
@@ -1045,12 +1041,14 @@ function generate_production_list()
       production_list.push({"kind": VUT_UTYPE, "value" : punit_type['id'],
                             "text": punit_type['name'],
                         "helptext": cleaned_text(punit_type['helptext']),
-                        "rule_name": punit_type['rule_name'],
-                        "build_cost": get_universal_discount_price(punit_type),
-                        "unit_details": "A<b>" + utype_real_base_attack_strength(punit_type) //+punit_type['attack_strength']  
-                        + "</b>D<b>" + utype_real_base_defense_strength(punit_type) //+punit_type['defense_strength']                  
-                        + "</b>F<b>"+punit_type['firepower'] 
-                        + "</b>H<b>"+punit_type['hp'],
+                       "rule_name": punit_type['rule_name'],
+                      "build_cost": get_universal_discount_price(punit_type),
+//                  "unit_details": "A<b>"+punit_type['attack_strength'] + "</b> " 
+//                                + "D<b>"+punit_type['defense_strength'] + "</b> " 
+                    "unit_details": "A<b>" + utype_real_base_attack_strength(punit_type)  
+                                  + "</b>D<b>" + utype_real_base_defense_strength(punit_type)                  
+                                  + "</b>F<b>"+punit_type['firepower'] 
+                                  + "</b>H<b>"+punit_type['hp'],
                          "sprite" : get_unit_type_image_sprite(punit_type)});
 
     } else {
@@ -2372,6 +2370,7 @@ function city_worklist_dialog(pcity)
 **************************************************************************/
 function populate_worklist_production_choices(pcity)    
 {
+  const gov_id = players[client.conn.playing.playerno].government;
   var small = is_small_screen();
 
   var production_list = generate_production_list();
@@ -2397,16 +2396,6 @@ function populate_worklist_production_choices(pcity)
           && city_has_building_in_queue(pcity, value)) {
             can_build=false;
       }
-      // Suppress Enrichment Facility if major nukes are disabled
-      // these are now suppressed when prod list is first generated.
-      //else if (improvements[value]['name'] == "Enrichment Facility"
-      //         && !server_settings['nukes_major']['val']) {
-      //      can_build = false; // if major nukes are OFF, suppress illegal prod choice.
-      //}
-      //else if (improvements[value]['name'] == "Manhattan Project"
-      //        && !server_settings['nukes_minor']['val']) {
-      //      can_build = false; // if major nukes are OFF, suppress illegal prod choice.
-      //}
     }
 
     var can_build_later = false; // flag for items buildable after tech discovery or making a pre-req building
@@ -2428,13 +2417,19 @@ function populate_worklist_production_choices(pcity)
           } 
         }
       } else if (kind == VUT_UTYPE) {
-        // player is researching the tech for the unit, so let them queue it
+        // Player is researching the tech for the unit, so we usually will let them queue it later in list:
         if (unit_types[value]['tech_requirement'] == techs[client.conn.playing['researching']]['id']) {
-          can_build_later = true;
-          // (hack: don't queue future sea units until we can check for landlocked vs. river/ocean adjacent cities)
+          if (unit_types[value].gov_requirement < GOV_LAST && unit_types[value].gov_requirement != gov_id) {
+            /* ...unless there is also a Govt req for it, e.g., Fanatics, and they aren't the right Gov:  */
+            can_build_later = false;
+          } 
+          else can_build_later = true;
+          /* ...unless it's a ship and someone wants to hard-code for checking landlocked, river, canal, ocean, and compare to 
+             unit_class native types and all that jazz which gets very complex and performance laggy for every unit in the list:  */ 
           var class_name = unit_classes[unit_types[value]['unit_class_id']]['name'].replace("?unitclass:","");
           if (class_name == "Sea" || class_name == "RiverShip" || class_name == "Submarine" || class_name == "Trireme") 
             can_build_later = false;
+          // TODO: make the above block re-usable in a separate function so super panel and empire tabs use it too.  
         }
       }
     }
