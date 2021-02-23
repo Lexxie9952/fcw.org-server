@@ -2156,12 +2156,13 @@ function fill_layer2_sprite_array(ptile, pcity)
 
   /* We don't draw the bases if there's a city */
   if (pcity == null) {
-    if (tile_has_extra(ptile, EXTRA_BUNKER)) {
+    /* uncomment to show base flag over bunkers
+    if (typeof EXTRA_BUNKER !== 'undefined' && tile_has_extra(ptile, EXTRA_BUNKER)) {
       result_sprites.push({"key" : "base.bunker_mg",
                            "offset_y" : -normal_tile_height / 2});
       result_sprites.push(get_base_flag_sprite(ptile));   
       return result_sprites; // hides all others under it
-    }
+    }*/
     if (tile_has_extra(ptile, EXTRA_AIRBASE)) {
       result_sprites.push({"key" : "base.airbase_mg",
                            "offset_y" : -normal_tile_height / 2});
