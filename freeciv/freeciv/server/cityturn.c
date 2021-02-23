@@ -3332,8 +3332,8 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
                       ftc_server,
                       /* TRANS: "<unit> cost... <city> shrinks..."
                        * Plural in "%d population", not "size %d". */
-                      PL_("➖ [`%s`]%s cost %d population. %s shrinks to size %d.",
-                          "➖ [`%s`]%s cost %d population. %s shrinks to size %d.",
+                      PL_("➖ [`%s`] %s cost %d population. %s shrinks to size %d.",
+                          "➖ [`%s`] %s cost %d population. %s shrinks to size %d.",
                           pop_cost),
                       utype_name_translation(utype),
                       utype_name_translation(utype), pop_cost,
