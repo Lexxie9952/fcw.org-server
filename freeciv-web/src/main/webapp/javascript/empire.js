@@ -1526,8 +1526,6 @@ function create_worklist_unit_div()
     if (unit_types[z]['name'] == "Leader") continue;      
     if (unit_types[z]['name'] == "Barbarian Leader") continue;     
     if (unit_types[z]['name'] == "Fanatics" && (cur_gov != "Fundamentalism")) continue;
-    if (unit_types[z]['name'] == "Falconeers" && (cur_gov != "Theocracy")) continue;
-    if (unit_types[z]['name'] == "Zealots" && (cur_gov != "Theocracy")) continue;
 
     // if (unit_type[z] is unique && exists) continue; //TODO: if possible to check this
     // RULESET SPECIFIC FILTER:
@@ -1537,6 +1535,11 @@ function create_worklist_unit_div()
       if (unit_types[z]['name'] == "Pilgrims" && !(cur_gov == "Fundamentalism" || cur_gov == "Theocracy")) continue;
       if (unit_types[z]['name'] == "Proletarians" && cur_gov != "Communism") continue;
       if (unit_types[z]['name'].startsWith("[")) continue;
+      if (unit_types[z]['name'] == "Falconeers" && (cur_gov != "Theocracy")) continue;
+      if (unit_types[z]['name'] == "Zealots" && (cur_gov != "Theocracy")) continue;
+      if (unit_types[z]['name'] == "Migrants" && (cur_gov != "Nationalism")) continue;  
+      if (unit_types[z]['name'] == "Peasamts" 
+          && (cur_gov != "Monarchy" || !player_has_wonder(client.conn.playing.playerno, B_MAGNA_CARTA))) continue;  
     }
     // OBSOLETE - See if we have the tech for the unit which obsoletes it:
     const obs_by_type = unit_types[z]['obsoleted_by']; 

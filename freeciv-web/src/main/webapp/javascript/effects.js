@@ -19,7 +19,7 @@
 
 var effects = {};
 
-// This file is commented out in a form that will assst in its eventual 
+// This file is commented out in a form that will assist in its eventual 
 // incorporation into FCW client features.
 
 /*
