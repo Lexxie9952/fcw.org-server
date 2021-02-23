@@ -265,12 +265,16 @@ function research_get(pplayer)
 **************************************************************************/
 function player_has_wonder(playerno, improvement_id)
 {
+  // This is faster than looping through every city like we did before.
+  if (players[playerno].wonders[improvement_id]) return true;
+
+  /* preserved just in case the faster code above fails for some reason:
   for (var city_id in cities) {
     var pcity = cities[city_id];
     if (city_owner(pcity).playerno == playerno && city_has_building(pcity, improvement_id)) {
       return true;
     }
-  }
+  }*/
   return false;
 }
 
