@@ -1357,9 +1357,16 @@ function get_unit_activity_sprite(punit)
             "offset_y" : - unit_activity_offset_y};
             
     case ACTIVITY_FORTIFYING:
-        return {"key" : "unit.fortifying",
-            "offset_x" : unit_activity_offset_x,
-            "offset_y" : - unit_activity_offset_y};
+      if (client_rules_flag[CRF_EXTRA_HIDEOUT]) {
+        if (tile_has_extra(tiles[punit['tile']], EXTRA_)) {
+          return {"key" : "unit.fortifying_hidden",
+          "offset_x" : unit_activity_offset_x,
+          "offset_y" : - unit_activity_offset_y};
+        }
+      }
+      return {"key" : "unit.fortifying",
+          "offset_x" : unit_activity_offset_x,
+          "offset_y" : - unit_activity_offset_y};
 
     case ACTIVITY_SENTRY:
       if (client_rules_flag[CRF_EXTRA_HIDEOUT]) {
@@ -2156,13 +2163,12 @@ function fill_layer2_sprite_array(ptile, pcity)
 
   /* We don't draw the bases if there's a city */
   if (pcity == null) {
-    /* uncomment to show base flag over bunkers
     if (typeof EXTRA_BUNKER !== 'undefined' && tile_has_extra(ptile, EXTRA_BUNKER)) {
       result_sprites.push({"key" : "base.bunker_mg",
                            "offset_y" : -normal_tile_height / 2});
-      result_sprites.push(get_base_flag_sprite(ptile));   
+      //result_sprites.push(get_base_flag_sprite(ptile));   //uncomment to show base flag on bunkers.
       return result_sprites; // hides all others under it
-    }*/
+    }
     if (tile_has_extra(ptile, EXTRA_AIRBASE)) {
       result_sprites.push({"key" : "base.airbase_mg",
                            "offset_y" : -normal_tile_height / 2});
