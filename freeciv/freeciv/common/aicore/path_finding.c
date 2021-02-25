@@ -3939,7 +3939,7 @@ pf_reverse_map_utype_pos(struct pf_reverse_map *pfrm,
   /* Fill parameter. */
   param->start_tile = ptile;
   param->move_rate = utype_move_rate(punittype, ptile, pplayer,
-                                     veteran_level, punittype->hp);
+                                     veteran_level, punittype->hp, NULL);
   param->moves_left_initially = param->move_rate;
   param->utype = punittype;
   return pf_reverse_map_pos(pfrm, param);
