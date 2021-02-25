@@ -338,3 +338,11 @@ function capitalize(s) {
   if (typeof s !== 'string') return "";
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
+
+/**************************************************************************
+   Get the length of an Object list
+***************************************************************************/
+function getLength(obj) {
+  if (obj) return Object.keys(obj).length;
+  else return 0;
+}
