@@ -350,6 +350,11 @@ Move_Bonus
     'Local' to give it a specific class of units only. If ruleset forces 
     server setting "move_bonus_in_frags" to ENABLED, gives bonus in fragments,
     otherwise whole move points.
+    NOTES: has a bug, always returns FALSE for DiplRel req;
+           now supports two missing reqs that upstream doesn't, but special note:
+           *!!* seg-faults if UnitState req doesn't include a tile_target in vector (e.g. "Extra", ...,....,...)
+           now supports "CityTile" req
+           See FCW commits of 25Feb2021 "Partial Bug Fix: Move_Bonus can access UnitState and CityTile reqs."
 
 National_Performance
     Value is how much performance type culture, not tied to any specific city,

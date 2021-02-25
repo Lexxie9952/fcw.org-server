@@ -48,7 +48,7 @@
 ****************************************************************************/
 int utype_move_rate(const struct unit_type *utype, const struct tile *ptile,
                     const struct player *pplayer, int veteran_level,
-                    int hitpoints)
+                    int hitpoints, const struct unit *punit)
 {
   const struct unit_class *uclass;
   const struct veteran_level *vlevel;
@@ -75,14 +75,24 @@ int utype_move_rate(const struct unit_type *utype, const struct tile *ptile,
     move_rate = (int)rounded_move_rate;
   }
 
-  /* Add on effects bonus (Magellan's Expedition, Lighthouse, Nuclear Power). */
-  if (game.server.move_bonus_in_frags) {
-    /* ruleset awards move bonuses in frags */
-    move_rate += get_unittype_bonus(pplayer, ptile, utype, EFT_MOVE_BONUS);
-  } else {
-    /* ruleset awards move bonuses in whole moves */
-    move_rate += (get_unittype_bonus(pplayer, ptile, utype, EFT_MOVE_BONUS)
-                * SINGLE_MOVE);
+  // If we know the punit, be inclusive of other effects (e.g., UnitState, DiplRel)
+  if (punit) {  
+    if (game.server.move_bonus_in_frags) {
+      move_rate += get_unit_bonus(punit, EFT_MOVE_BONUS);
+    } else {
+      move_rate += (get_unit_bonus(punit, EFT_MOVE_BONUS) * SINGLE_MOVE);
+    }
+  } 
+  else { // Otherwise we can only get bonuses for unittype
+    /* Add on effects bonus (Magellan's Expedition, Lighthouse, Nuclear Power). */
+    if (game.server.move_bonus_in_frags) {
+      /* ruleset awards move bonuses in frags */
+      move_rate += get_unittype_bonus(pplayer, ptile, utype, EFT_MOVE_BONUS);
+    } else {
+      /* ruleset awards move bonuses in whole moves */
+      move_rate += (get_unittype_bonus(pplayer, ptile, utype, EFT_MOVE_BONUS)
+                  * SINGLE_MOVE);
+    }
   }
 
   /* Don't let the move_rate be less than min_speed unless the base_move_rate is
@@ -103,7 +113,7 @@ int unit_move_rate(const struct unit *punit)
   fc_assert_ret_val(NULL != punit, 0);
 
   return utype_move_rate(unit_type_get(punit), unit_tile(punit),
-                         unit_owner(punit), punit->veteran, punit->hp);
+                         unit_owner(punit), punit->veteran, punit->hp, punit);
 }
 
 /************************************************************************//**

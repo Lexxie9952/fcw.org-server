@@ -49,7 +49,7 @@ enum unit_move_result {
 
 int utype_move_rate(const struct unit_type *utype, const struct tile *ptile,
                     const struct player *pplayer, int veteran_level,
-                    int hitpoints);
+                    int hitpoints, const struct unit *punit);
 int unit_move_rate(const struct unit *punit);
 int utype_unknown_move_cost(const struct unit_type *utype);
 
