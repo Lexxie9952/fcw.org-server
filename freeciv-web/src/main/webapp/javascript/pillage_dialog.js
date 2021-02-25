@@ -59,7 +59,8 @@ function popup_pillage_selection_dialog(punit)
       id     : button_id_prefix + extra_id,
       'class': 'act_sel_button',
       text   : extras[extra_id]['name'] + (regular_pillage_available ? " -- "+unit_get_pillage_name(punit)+": "+odds+"%" : ""),
-      click  : function() {pillage_target_selected(event); remove_active_dialog(id); /* might need "#"+id*/}
+      click  : function() { pillage_target_selected(event); remove_active_dialog(id); /* might need "#"+id*/ 
+                            setTimeout(update_unit_focus, update_focus_delay); }
     });
   }
   if (!regular_pillage_available)
@@ -67,7 +68,8 @@ function popup_pillage_selection_dialog(punit)
       id     : button_id_prefix + 'ANYTHING',
       'class': 'act_sel_button',
       text   : 'Just do something!',
-      click  : function () {pillage_target_selected(event); remove_active_dialog(id);/* might need "#"+id*/}
+      click  : function () {pillage_target_selected(event); remove_active_dialog(id);/* might need "#"+id*/
+                            setTimeout(update_unit_focus, update_focus_delay); }
     });
   else if (regular_pillage_available) { //iPillage unit who can also do standard pillage
     var button_id_prefix = 'std_pillage_sel_' + punit['id'] + '_';
@@ -78,7 +80,8 @@ function popup_pillage_selection_dialog(punit)
         id     : button_id_prefix + extra_id,
         'class': 'act_sel_button',
         text   : extras[extra_id]['name']+" -- Pillage: 100%",
-        click  : function () {pillage_target_selected(event); remove_active_dialog(id); /* might need "#"+id*/}
+        click  : function () {pillage_target_selected(event); remove_active_dialog(id); /* might need "#"+id*/
+                              setTimeout(update_unit_focus, update_focus_delay); }
       });
     }
   }
