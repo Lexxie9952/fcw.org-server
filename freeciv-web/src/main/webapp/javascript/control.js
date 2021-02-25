@@ -1139,9 +1139,11 @@ function update_unit_order_commands()
   $("#order_canal").hide();
   $("#order_well").hide();
   $("#order_fortress").hide();
+  $("#order_buoy").hide();
   $("#order_hideout").hide();
   $("#order_navalbase").hide();
   $("#order_airbase").hide();
+  $("#order_radar").hide();
   $("#order_road").hide();
   $("#order_seabridge").hide();
   $("#order_railroad").hide();
@@ -1174,6 +1176,7 @@ function update_unit_order_commands()
     return;
 
   var terrain_name;
+  var oceanic = false;
 
   for (i = 0; i < funits.length; i++) {
     punit = funits[i];
@@ -1210,12 +1213,12 @@ function update_unit_order_commands()
           // Workers/Riflemen can convert between each other in Communism:
           || ((governments[client.conn.playing['government']]['name']=="Communism"
                && ((ptype['name']=="Workers") || ptype['name']=="Riflemen"))
-               && player_invention_state(client.conn.playing, tech_id_by_name('Communism')) == TECH_KNOWN)
+               && tech_known('Communism'))
           // AAA can convert to Mobile SAM under qualifying conditions:
           || ( ptype['name']=="Anti-Aircraft Artillery"
                && pcity != null
                && city_owner_player_id(pcity) == client.conn.playing.playerno
-               && player_invention_state(client.conn.playing, tech_id_by_name('Space Flight')) == TECH_KNOWN
+               && tech_known('Space Flight')
                && ( city_has_building(pcity, improvement_id_by_name(B_PALACE_NAME)) || city_has_building(pcity, improvement_id_by_name(B_ECC_PALACE_NAME)) )
              )
           ) {
@@ -1235,18 +1238,132 @@ function update_unit_order_commands()
     punit = funits[i];
     ptype = unit_type(punit);
     var worker_type = false; // Handles civ2civ3 + mp2: these units have same orders as workers (join city already handled above):
+    var infra_type = false;
     if (ptype['name'] == "Workers" || ptype['name'] == "Migrants"
       || (ptype['name'] =="Proletarians" && governments[client.conn.playing['government']]['name']=="Communism")) {
 
         worker_type = true;
+        infra_type = true;
+    } else if (ptype['name'] == "Settlers" || ptype['name'] == "Engineers") {
+      infra_type = true;
     }
+
 
     ptile = index_to_tile(punit['tile']);
     terrain_name = tile_terrain(ptile)['name'];
+    oceanic = is_ocean_tile(ptile)
     if (ptile == null) continue;
     pcity = tile_city(ptile);
 
-    // Disbanding in a city isn't red skull death, but recycles production:
+    /* Centralize the Base Logic for rulesets **********************************************************************************************************
+       Define and set filters/rules/conditions for bases. This is a first step to prepare ruleset independence. See TODO below. */
+    // TODO: server actually sends us reqs in extras[n].reqs[]. This would require complex setup/parsing but would finally achieve ruleset independence.
+    // problem though, is sometimes janky server behaviour not doing what ruleset specifies, so hard-coded client here actually is a means to fix it.
+    // Each variable-grouping would become a single array indexed by base type.
+    /* Whether Ruleset has Base*/
+    const HIDEOUTS      = (typeof EXTRA_ !== 'undefined') && client_rules_flag[CRF_EXTRA_HIDEOUT] && server_settings['hideouts']['val'];
+    const FORTS         = (typeof EXTRA_FORT !== 'undefined');
+    const FORTRESSES    = (typeof EXTRA_FORTRESS !== 'undefined');
+    const NAVALBASES    = (typeof EXTRA_NAVALBASE !== 'undefined');
+    const CASTLES       = (typeof EXTRA_CASTLE !== 'undefined');
+    const BUNKERS       = (typeof EXTRA_BUNKER !== 'undefined');
+    const AIRBASES      = (typeof EXTRA_AIRBASE !== 'undefined');
+    const BUOYS         = (typeof EXTRA_BUOY !== 'undefined');
+    const RADAR         = (typeof EXTRA_RADAR !== 'undefined');
+    const QUAYS         = (typeof EXTRA_QUAY !== 'undefined');
+    /* Whether player has tech for the Base. */
+    const HIDEOUT_TECH   = tech_known("Warrior Code");
+    const FORT_TECH      = tech_known("Construction") || (tech_known("Masonry") && client_rules_flag[CRF_MASONRY_FORT]);
+    const FORTRESS_TECH  = tech_known("Construction");
+    const NAVALBASE_TECH = tech_known("Engineering");
+    const CASTLE_TECH    = tech_known("Construction") && tech_known("Feudalism") && !tech_known("Gunpowder");
+    const BUNKER_TECH    = tech_known("Steel");
+    const AIRBASE_TECH   = tech_known("Radio");
+    const BUOY_TECH      = tech_known("Radio");
+    const RADAR_TECH     = tech_known("Radar");
+    /* Whether the tile has pre-existing bases, which may be reqs or blockers for other bases to be built. */
+    const TILE_HAS_HIDEOUT   = HIDEOUTS   && tile_has_extra(ptile,EXTRA_);
+    const TILE_HAS_FORT      = FORTS      && tile_has_extra(ptile,EXTRA_FORT);
+    const TILE_HAS_FORTRESS  = FORTRESSES && tile_has_extra(ptile,EXTRA_FORTRESS);
+    const TILE_HAS_NAVALBASE = NAVALBASES && tile_has_extra(ptile,EXTRA_NAVALBASE);
+    const TILE_HAS_CASTLE    = CASTLES    && tile_has_extra(ptile,EXTRA_CASTLE);
+    const TILE_HAS_BUNKER    = BUNKERS    && tile_has_extra(ptile,EXTRA_BUNKER);
+    const TILE_HAS_AIRBASE   = AIRBASES   && tile_has_extra(ptile,EXTRA_AIRBASE);
+    const TILE_HAS_BUOY      = BUOYS      && tile_has_extra(ptile,EXTRA_BUOY);
+    const TILE_HAS_RADAR     = RADAR      && tile_has_extra(ptile,EXTRA_RADAR);
+    //-- Misc reqs: 
+    const TILE_HAS_RIVER     = tile_has_extra(ptile,EXTRA_RIVER);
+    const NO_RIVER_BASE      = client_rules_flag[CRF_NO_BASES_ON_RIVERS];
+    const TILE_HAS_OVERFORT  = TILE_HAS_FORTRESS || TILE_HAS_NAVALBASE || TILE_HAS_CASTLE || TILE_HAS_BUNKER; 
+    // TODO: civ2civ3 also needs flag for Airbase conflicts with other bases.
+    /* Tile requirements for base to possibly exist there */
+    const CAN_TILE_HIDEOUT   = !pcity && !oceanic && HIDEOUTS   && !TILE_HAS_HIDEOUT && !does_tile_have_base(ptile) && (!QUAYS || !tile_has_extra(ptile,EXTRA_QUAY))
+                                  && (ptile['owner']==UNCLAIMED_LAND || ptile['owner'] == client.conn.playing.playerno)
+                                  && (terrain_name=='Mountains' || terrain_name=='Forest' || terrain_name == 'Jungle' || terrain_name == 'Swamp')
+                                  && !(TILE_HAS_RIVER && NO_RIVER_BASE);
+    const CAN_TILE_FORT      = !pcity && !oceanic && FORTS      && !TILE_HAS_FORT && !TILE_HAS_OVERFORT && !(TILE_HAS_RIVER && NO_RIVER_BASE);
+    const CAN_TILE_FORTRESS  = !pcity && !oceanic && FORTRESSES && (!FORTS || TILE_HAS_FORT) && (!TILE_HAS_FORTRESS || TILE_HAS_BUNKER) && !TILE_HAS_NAVALBASE && !TILE_HAS_CASTLE && !(TILE_HAS_RIVER && NO_RIVER_BASE); // Bunker allowed: the "pillage-proof" mechanic of Bunkers makes Fortressing the only way to remove it. Needed to prevent Jet Bombers from pillaging bunkers.
+    const CAN_TILE_NAVALBASE = !pcity && !oceanic && NAVALBASES && TILE_HAS_FORT && !TILE_HAS_OVERFORT && !(TILE_HAS_RIVER && NO_RIVER_BASE); // further tile reqs in: can_build_naval_base(punit,ptile)
+    const CAN_TILE_CASTLE    = !pcity && !oceanic && CASTLES    && !TILE_HAS_CASTLE && !TILE_HAS_BUNKER && TILE_HAS_FORTRESS && !(TILE_HAS_RIVER && NO_RIVER_BASE);
+    const CAN_TILE_BUNKER    = !pcity && !oceanic && BUNKERS    && !TILE_HAS_BUNKER && !TILE_HAS_CASTLE && TILE_HAS_FORTRESS && !(TILE_HAS_RIVER && NO_RIVER_BASE);
+    const CAN_TILE_AIRBASE   = !pcity && !oceanic && AIRBASES   && !TILE_HAS_AIRBASE && !(TILE_HAS_RIVER && NO_RIVER_BASE);
+    const CAN_TILE_BUOY      = !pcity &&  oceanic && BUOYS      && !TILE_HAS_BUOY && !(TILE_HAS_RIVER && NO_RIVER_BASE);
+    const CAN_TILE_RADAR     = !pcity && !oceanic && RADAR      && !TILE_HAS_RADAR && TILE_HAS_AIRBASE && !(TILE_HAS_RIVER && NO_RIVER_BASE);
+    /* Currently iterating unit is able to build bases on this tile? */
+    const UNIT_CAN_HIDEOUT   = CAN_TILE_HIDEOUT   && HIDEOUT_TECH   && utype_has_flag(ptype,UTYF_FOOTSOLDIER);
+    const UNIT_CAN_FORT      = CAN_TILE_FORT      && FORT_TECH      && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK]) || (ptype['name'] == "Marines" && client_rules_flag[CRF_MARINE_BASES]));
+    const UNIT_CAN_FORTRESS  = CAN_TILE_FORTRESS  && FORTRESS_TECH  && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK]));
+    const UNIT_CAN_NAVALBASE = CAN_TILE_NAVALBASE && NAVALBASE_TECH && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK])) && can_build_naval_base(punit,ptile);
+    const UNIT_CAN_CASTLE    = CAN_TILE_CASTLE    && CASTLE_TECH    && (worker_type || infra_type);
+    const UNIT_CAN_BUNKER    = CAN_TILE_BUNKER    && BUNKER_TECH    && (worker_type || infra_type);
+    const UNIT_CAN_AIRBASE   = CAN_TILE_AIRBASE   && AIRBASE_TECH   && (worker_type || infra_type || (ptype['name'] == "Marines" && client_rules_flag[CRF_MARINE_BASES])) && ptype['name'] != "Settlers";
+    const UNIT_CAN_BUOY      = CAN_TILE_BUOY      && BUOY_TECH      && (worker_type || infra_type) && ptype['name'] != "Settlers";
+    const UNIT_CAN_RADAR     = CAN_TILE_RADAR     && RADAR_TECH     && (worker_type || infra_type) && ptype['name'] != "Settlers";
+    // ******************************************************************************************************************* </END Base Logic setup> ***
+    if (UNIT_CAN_HIDEOUT) {
+      unit_actions["hideout"] = {name: "Hideout (Shift-H)"};  $("#order_hideout").show();  
+    }
+    //--
+    if (UNIT_CAN_FORT) {
+      unit_actions["fortress"] = {name: "Build Fort (Shift-F)"};  $("#order_fortress").show();
+      $("#order_fortress").prop("title", "Build Fort (Shift-F)");
+    } else if (UNIT_CAN_FORTRESS) { // Fortress over Bunker allowed, to remove it. (Bunkers are pillage-proof)
+      if (TILE_HAS_BUNKER) {
+        console.log("Tile has bunker so setting REMOVE BUNKER to order name.")
+        unit_actions["fortress"] = {name: "Remove Bunker (Shift-F)"}; 
+        $("#order_fortress").prop("title", "Remove Bunker (Shift-F)");
+      } else {
+        console.log("Tile thinks it has no Bunker so setting Build Fortress to order name.")
+        unit_actions["fortress"] = {name: "Build Fortress (Shift-F)"}; 
+        $("#order_fortress").prop("title", "Build Fortress (Shift-F)");
+      }
+      $("#order_fortress").show();
+    } else if (UNIT_CAN_CASTLE) {
+      unit_actions["fortress"] = {name: "Build Castle (Shift-F)"};  $("#order_fortress").show();
+      $("#order_fortress").prop("title", "Build Castle (Shift-F)");
+    } else if (UNIT_CAN_BUNKER) {
+      unit_actions["fortress"] = {name: "Build Bunker (Shift-F)"};  $("#order_fortress").show();
+      $("#order_fortress").prop("title", "Build Bunker (Shift-F)");
+    } else if (UNIT_CAN_BUOY) {
+      unit_actions["fortress"] = {name: "Lay Buoy (Shift-F)"};  $("#order_buoy").show();
+    }
+    //--
+    if (UNIT_CAN_NAVALBASE) {
+      unit_actions["navalbase"] = {name: "Naval Base (Shift-N)"};  $("#order_navalbase").show();
+    }
+    if (UNIT_CAN_AIRBASE) {
+      unit_actions["airbase"] = {name: "Build Airbase (Shift-E)"};
+      if (worker_type || infra_type) { 
+        if (show_order_buttons==2) $("#order_airbase").show(); // Uncommon order for infra units.
+      } else $("#order_airbase").show(); // Marines always want to see it.
+    }
+    if (UNIT_CAN_RADAR) {
+      unit_actions["airbase"] = {name: "Build Radar (Shift-E)"};
+      $("#order_radar").show();
+    }
+    // ********************************************************************** </END Base Building> ***
+
+    // Disbanding in a city doesn't show red-skull-death-button because it recycles production:
     if (pcity) {
       disband_type = 1; // flags Recycle icon
       $("#order_disband").prop('title', 'Recycle Unit (Shift-D)');
@@ -1265,79 +1382,12 @@ function update_unit_order_commands()
       $("#order_disband").prop('title', 'Disband (Shift-D)');
       $("#order_disband").html("<a href='#' onclick='key_unit_disband();'><img src='/images/orders/disband_default.png' name='disband_button' alt='' border='0' width='30' height='30'></a>");
     }
-    
-    // MP2, Marines can build FORTS (wedded to CRF_MARINE_BASES flag)
-    if (client_rules_flag[CRF_MARINE_BASES]
-        && !tile_has_extra(ptile, EXTRA_FORT)
-        && !pcity && ptype['name'] == "Marines") {
-          unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
-          $("#order_fortress").show();
-
-        // Also can build Airbase, but not Radar Tower
-        if (player_invention_state(client.conn.playing, tech_id_by_name('Radio')) == TECH_KNOWN
-            && !tile_has_extra(ptile, EXTRA_AIRBASE)) {
-              unit_actions["airbase"] = {name: string_unqualify(terrain_control['gui_type_base1']) + " (Shift-E)"};
-              $("#order_airbase").show();
-        }
-    }
-    // LEGIONS. rulesets which allow Legions to build Forts and Roads on non-domestic tiles-------------
+    // LEGIONS. rulesets which allow Legions to build Roads on non-domestic tiles-------------
     if ((client_rules_flag[CRF_LEGION_WORK]) && ptype['name'] == "Legion") {
-
-      // Forts:
-      if (player_invention_state(client.conn.playing, tech_id_by_name('Masonry')) == TECH_KNOWN
-          && !tile_has_extra(ptile, EXTRA_FORT)
-          && !pcity) {  // Show Fort button if Masonry and no Fort
-              unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
-              $("#order_fortress").show();
-              if (is_ocean_tile(ptile)) $("#order_fortress").prop("title", "Build Buoy (Shift-F)");
-              else $("#order_fortress").prop("title", "Build Fort (Shift-F)");
-      }
-      if (!tile_has_extra(ptile, EXTRA_FORTRESS && tile_has_extra(ptile, EXTRA_FORT))
-            && player_invention_state(client.conn.playing, tech_id_by_name('Construction')) == TECH_KNOWN
-            && !pcity
-          ) {
-              unit_actions["fortress"] = {name: "Build Fortress (Shift-F)"};
-              $("#order_fortress").show();
-              $("#order_fortress").prop("title", "Build Fortress (Shift-F)");
-            }
-      // "else" means there was a fortress, so it's on to making castle now:
-      else if (client_rules_flag[CRF_MP2_C] && !tile_has_extra(ptile, EXTRA_CASTLE && tile_has_extra(ptile, EXTRA_FORTRESS))
-            && player_invention_state(client.conn.playing, tech_id_by_name('Construction')) == TECH_KNOWN
-            && player_invention_state(client.conn.playing, tech_id_by_name('Feudalism')) == TECH_KNOWN
-            && player_invention_state(client.conn.playing, tech_id_by_name('Gunpowder')) != TECH_KNOWN
-            && !pcity
-          ) 
-      {
-              unit_actions["fortress"] = {name: "Build Castle (Shift-F)"};
-              $("#order_fortress").show();
-              $("#order_fortress").prop("title", "Build Castle (Shift-F)");
-      }
-      else if (client_rules_flag[CRF_MP2_C]) {
-        if (!tile_has_extra(ptile, EXTRA_BUNKER) && !tile_has_extra(ptile, EXTRA_CASTLE) && tile_has_extra(ptile, EXTRA_FORTRESS)
-            && player_invention_state(client.conn.playing, tech_id_by_name('Gunpowder')) == TECH_KNOWN
-            && player_invention_state(client.conn.playing, tech_id_by_name('Steel')) == TECH_KNOWN) {
-  
-              unit_actions["fortress"] = {name: "Build Bunker (Shift-F)"};
-              $("#order_fortress").show();
-              $("#order_fortress").prop("title", "Build Bunker (Shift-F)");
-        }
-      }
-      
-
-      if ( typeof EXTRA_NAVALBASE !== 'undefined'
-              && player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN
-              && can_build_naval_base(punit,ptile)
-              && !pcity
-          ) {
-              unit_actions["navalbase"] = {name: "Naval Base (Shift-N)"};
-              $("#order_navalbase").show();
-      }
-
-      // Roads:
       if (!tile_has_extra(ptile, EXTRA_ROAD)) {
         const domestic = (ptile['owner'] == client.conn.playing.playerno)
         const has_river = tile_has_extra(ptile, EXTRA_RIVER);
-        const knows_bridges = (player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) == TECH_KNOWN);
+        const knows_bridges = tech_known('Bridge Building');
         var show = false;
 
         if (!domestic) show = true;
@@ -1351,21 +1401,7 @@ function update_unit_order_commands()
         } else $("#order_road").hide();
       }
     } //---------------------------------------------------------------------------------------------------
-    // hideouts
-    if (client_rules_flag[CRF_EXTRA_HIDEOUT] && server_settings['hideouts']['val']
-        && utype_has_flag(ptype,UTYF_FOOTSOLDIER)) {
-      if (player_invention_state(client.conn.playing, tech_id_by_name('Warrior Code')) == TECH_KNOWN
-        && !pcity
-        && !tile_has_extra(ptile, EXTRA_FORT)
-        && !tile_has_extra(ptile, EXTRA_AIRBASE)
-        && ( (terrain_name == 'Mountains') || (terrain_name == 'Forest') || (terrain_name == 'Jungle')
-              || (terrain_name == 'Swamp') )
-        && ( (ptile['owner'] == UNCLAIMED_LAND) || ptile['owner'] == client.conn.playing.playerno )
-        ) {  // Show Hideout button if Warrior Code and no other bases:
-        unit_actions["hideout"] = {name: string_unqualify("Hideout (Shift-H)")};
-        $("#order_hideout").show();
-      }
-    }
+
 
     // Figure out default of whether pillage is legal and show it, before applying special rules later
     if (get_what_can_unit_pillage_from(punit, ptile).length > 0
@@ -1392,8 +1428,7 @@ function update_unit_order_commands()
 
     // All Settler types have similar types or orders and rules for whether to show those orders:
     // TO DO:  this should be checking for the FLAG "Settlers" in the ptype which indicates who can do the follow build/road/mine/etc. actions:
-    if (ptype['name'] == "Settlers" || worker_type == true || ptype['name'] == "Engineers") {
-
+    if (infra_type || worker_type) {
       if (ptype['name'] == "Settlers") unit_actions["autosettlers"] = {name: "Auto settler (A)"};
       if (worker_type == true) unit_actions["autosettlers"] = {name: "Auto workers (A)"};
       if (ptype['name'] == "Engineers") unit_actions["autosettlers"] = {name: "Auto engineers (A)"};
@@ -1409,11 +1444,11 @@ function update_unit_order_commands()
         if ( !client_rules_flag[CRF_SEABRIDGE] || !tile_has_extra(ptile, EXTRA_SEABRIDGE)) {
           $("#order_road").show();
           $("#order_railroad").hide();
-          if (!(tile_has_extra(ptile, EXTRA_RIVER) && player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) == TECH_UNKNOWN)) {
+          if (!(tile_has_extra(ptile, EXTRA_RIVER) && !tech_known('Bridge Building'))) {
             unit_actions["road"] = {name: "Road (R)"};
           }
         }
-      } else if (player_invention_state(client.conn.playing, tech_id_by_name('Railroad')) == TECH_KNOWN
+      } else if (tech_known('Railroad')
                  && (tile_has_extra(ptile, EXTRA_ROAD) || (client_rules_flag[CRF_SEABRIDGE] && tile_has_extra(ptile, EXTRA_SEABRIDGE)))
                  && !tile_has_extra(ptile, EXTRA_RAIL)) {
         $("#order_road").hide();
@@ -1435,7 +1470,7 @@ function update_unit_order_commands()
           $("#order_road").hide();
       } else $("#order_road").prop('title', "Build Road (R)")
 
-      if (tile_has_extra(ptile, EXTRA_RIVER) && player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) == TECH_UNKNOWN) {
+      if (tile_has_extra(ptile, EXTRA_RIVER) && !tech_known('Bridge Building')) {
         $("#order_road").hide();
       }
 
@@ -1446,8 +1481,7 @@ function update_unit_order_commands()
       if ( (terrain_name == 'Hills' || terrain_name == 'Mountains') && !tile_has_extra(ptile, EXTRA_MINE)) {
         $("#order_mine").show();
         unit_actions["mine"] =  {name: "Mine (M)"};
-      } else if (terrain_name == "Desert" && !tile_has_extra(ptile, EXTRA_OIL_WELL)
-        && player_invention_state(client.conn.playing, tech_id_by_name('Construction'))!= TECH_UNKNOWN ) {
+      } else if (terrain_name == "Desert" && !tile_has_extra(ptile, EXTRA_OIL_WELL) && tech_known('Construction')) {
           $("#order_oil_well").show();
           unit_actions["mine"] =  {name: "Oil Well (M)"};
       } else if (terrain_name == 'Grassland' || terrain_name == 'Plains' || terrain_name == 'Swamp' || terrain_name == 'Jungle') {
@@ -1481,7 +1515,7 @@ function update_unit_order_commands()
         $("#order_build_farmland").hide();
         if (terrain_name == "Swamp") unit_actions["irrigation"] = {name: "drain Swamp (I)"};
         else unit_actions["irrigation"] = {name: "Irrigation (I)"};
-      } else if (tile_has_extra(ptile, EXTRA_IRRIGATION) && !tile_has_extra(ptile, EXTRA_FARMLAND) && player_invention_state(client.conn.playing, tech_id_by_name('Refrigeration')) == TECH_KNOWN) {
+      } else if (tile_has_extra(ptile, EXTRA_IRRIGATION) && !tile_has_extra(ptile, EXTRA_FARMLAND) && tech_known('Refrigeration')) {
         $("#order_build_farmland").show();
         $("#order_irrigate").hide();
         $("#order_forest_remove").hide();
@@ -1491,71 +1525,9 @@ function update_unit_order_commands()
         $("#order_irrigate").hide();
         $("#order_build_farmland").hide();
       }
-
-      // Order to make Fort with masonry (if ruleset allows it)
-      if (client_rules_flag[CRF_MASONRY_FORT]) {
-        // Masonry + No Fort on tile = show order to make Fort
-        if (player_invention_state(client.conn.playing, tech_id_by_name('Masonry')) == TECH_KNOWN
-            && !tile_has_extra(ptile, EXTRA_FORT)
-            && !pcity) {
-              unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
-              $("#order_fortress").show();
-              if (is_ocean_tile(ptile)) $("#order_fortress").prop("title", "Build Buoy (Shift-F)");
-              else $("#order_fortress").prop("title", "Build Fort (Shift-F)");
-        }
-      }
-      // Construction + Fort on tile = show order to make Fortress, Castle, or Bunker:
-      if (player_invention_state(client.conn.playing, tech_id_by_name('Construction')) == TECH_KNOWN
-          && !pcity && tile_has_extra(ptile, EXTRA_FORT)) {
-
-          if (!tile_has_extra(ptile, EXTRA_FORTRESS)) {
-            unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
-            $("#order_fortress").show();
-            $("#order_fortress").prop("title", "Build Fortress (Shift-F)");
-          }
-          else if (client_rules_flag[CRF_MP2_C]  // Fortress is on tile if we got here
-                    && !tile_has_extra(ptile, EXTRA_CASTLE)
-                    && player_invention_state(client.conn.playing, tech_id_by_name('Feudalism')) == TECH_KNOWN
-                    && player_invention_state(client.conn.playing, tech_id_by_name('Gunpowder')) != TECH_KNOWN)
-          {
-            unit_actions["fortress"] = {name: "Build Castle (Shift-F)"};
-            $("#order_fortress").show();
-            $("#order_fortress").prop("title", "Build Castle (Shift-F)");
-          }
-          else if (client_rules_flag[CRF_MP2_C]) {  // Fortress is on tile but can't make a Castle, if we got here
-            if (!tile_has_extra(ptile, EXTRA_BUNKER) && !tile_has_extra(ptile, EXTRA_CASTLE) && tile_has_extra(ptile, EXTRA_FORTRESS)
-                && player_invention_state(client.conn.playing, tech_id_by_name('Gunpowder')) == TECH_KNOWN
-                && player_invention_state(client.conn.playing, tech_id_by_name('Steel')) == TECH_KNOWN) {
-      
-                  unit_actions["fortress"] = {name: "Build Bunker (Shift-F)"};
-                  $("#order_fortress").show();
-                  $("#order_fortress").prop("title", "Build Bunker (Shift-F)");
-            }
-          }
-      }
-      if ( typeof EXTRA_NAVALBASE !== 'undefined'
-              && player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN
-              && can_build_naval_base(punit,ptile)
-              && !pcity) {
-              unit_actions["navalbase"] = {name: "Naval Base (Shift-N)"};
-              $("#order_navalbase").show();
-      }
-      if (player_invention_state(client.conn.playing, tech_id_by_name('Radio')) == TECH_KNOWN
-          && !tile_has_extra(ptile, EXTRA_AIRBASE) && !pcity) {
-            unit_actions["airbase"] = {name: string_unqualify(terrain_control['gui_type_base1']) + " (Shift-E)"};
-            if (show_order_buttons==2) $("#order_airbase").show();
-      } else if (client_rules_flag[CRF_RADAR_TOWER]) { // Order to make Radar Tower Radar (if ruleset allows it)
-        // Radar + has Airbase but no Radar on tile = show order to make Radar
-        if (player_invention_state(client.conn.playing, tech_id_by_name('Radar')) == TECH_KNOWN
-            && tile_has_extra(ptile, EXTRA_AIRBASE)
-            && !tile_has_extra(ptile, EXTRA_RADAR)
-            && !pcity) {
-              unit_actions["airbase"] = {name: "Build Radar (Shift-E)"};
-              if (show_order_buttons==2) $("#order_airbase").show();
-        }
-      }
-
-    } else {   // Handle all things non-Settler types may have in common here:
+    } // ********************************************************************************************* </END Settler/infra actions block>
+     // Handle all things non-Settler types may have in common here: ********************************************************************
+    else {
       if (utype_can_do_action(ptype, ACTION_FORTIFY)) {
         $("#order_fortify").show();
         unit_actions["fortify"] = {name: "Fortify (F)"};
@@ -1684,7 +1656,7 @@ function update_unit_order_commands()
         }
       }
       if (client_rules_flag[CRF_RECYCLING_DISCOUNT]) {
-        if (player_invention_state(client.conn.playing, tech_id_by_name('Recycling')) == TECH_KNOWN) {
+        if (tech_known('Recycling')) {
           cost_adjust -= 20; // 20% discount after Recycling Tech
         }
       }
@@ -1699,7 +1671,6 @@ function update_unit_order_commands()
     if (ptype != null && ptype['name'] != "Explorer") {
       unit_actions["explore"] = {name: "Auto explore (X)"};
     }
-
 
     // Display order to load unit on transport, if: (A) on a city or river && (B) tile has a transport && (C) unit not already loaded:
         // **** TO DO: fix flawed logic, a fighter can get on a carrier if not on city/river, marines on helicopter, etc.
@@ -4702,9 +4673,6 @@ function key_unit_fortify()
 **************************************************************************/
 function key_unit_fortress()
 {
-  //navalbase no longer goes on top of fortress, they both go on top of fort
-  //var navbase_rules = (typeof EXTRA_NAVALBASE !== "undefined");
-
   var funits = get_units_in_focus();
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
@@ -5052,6 +5020,14 @@ function key_unit_pillage()
   var funits = get_units_in_focus();
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
+    var ptile = unit_tile(punit);
+    // Since enemy Bunkers can't be pillaged, provide user info:
+    if (typeof EXTRA_BUNKER !== "undefined") {
+      if (tile_has_extra(ptile, EXTRA_BUNKER)) {
+        add_client_message("Bunkers prevent Pillage. Build Fortress to remove Bunker.");
+        return;
+      }
+    } 
     var pstats = unit_get_extra_stats(punit);
     var tgt = get_what_can_unit_pillage_from(punit, null);
     //if (tgt) console.log("Unit can pillage "+tgt.length+" targets: "+tgt);
@@ -5060,20 +5036,22 @@ function key_unit_pillage()
       if (pstats.iPillage_random_targets) {
         for (i = 0; i < pstats.iPillage_random_targets; i++) {
           request_new_unit_activity(punit, ACTIVITY_PILLAGE, EXTRA_NONE);
+          setTimeout(update_unit_focus, update_focus_delay);
         }
       }
       // handle one target cases:
       else {
         if (tgt.length == 1 && !(unit_has_dual_pillage_options(punit))) {
           request_new_unit_activity(punit, ACTIVITY_PILLAGE, EXTRA_NONE);
+          setTimeout(update_unit_focus, update_focus_delay);
         } else {
           popup_pillage_selection_dialog(punit);
+          // doesn't get update_unit_focus because there's a pop-up.
         }
       }
     }
   }
   deactivate_goto(false);
-  setTimeout(update_unit_focus, update_focus_delay);
 }
 
 /**************************************************************************
@@ -5175,7 +5153,7 @@ function can_build_sea_bridge(punit, ptile)
   return ((typeof EXTRA_SEABRIDGE !== "undefined")
       &&  (punit != null && ptile != null)
       && (!tile_has_extra(ptile, EXTRA_SEABRIDGE)) 
-      && (player_invention_state(client.conn.playing, tech_id_by_name('Steel')))
+      && tech_known('Steel')
       &&  (unit_can_do_action(punit, ACTION_ROAD))
       && land_near );
 }
@@ -5190,9 +5168,7 @@ function can_build_maglev(punit, ptile)
       &&  (!tile_has_extra(ptile, EXTRA_MAGLEV))
       &&  (tile_has_extra(ptile, EXTRA_RAIL))
       &&  (unit_can_do_action(punit, ACTION_ROAD))
-      &&  (player_invention_state(client.conn.playing, tech_id_by_name('Superconductors')) == TECH_KNOWN)
-      &&  ((!tile_has_extra(ptile, EXTRA_RIVER))
-           || (player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) == TECH_KNOWN))
+      &&  tech_known('Superconductors')
          );
 }
 
@@ -5211,8 +5187,8 @@ function can_build_well(punit, ptile)
       &&  tile_owner(ptile) == punit['owner']
       &&  (unit_types[punit['type']]['name'] == "Well-Digger")
 /*      &&  (is_lowland)  */
-      &&  (player_invention_state(client.conn.playing, tech_id_by_name('Pottery')) != TECH_KNOWN)
-      &&  (player_invention_state(client.conn.playing, tech_id_by_name('Alphabet')) != TECH_KNOWN)
+      &&  !tech_known('Pottery')
+      &&  !tech_known('Alphabet')
          );
 }
 /**************************************************************************
@@ -5269,25 +5245,16 @@ function can_build_canal(punit, ptile)
   }
 
   if ((typeof EXTRA_CANAL !== "undefined")
-      &&  (punit != null && ptile != null)
-      &&  (!tile_has_extra(ptile, EXTRA_CANAL))
-      &&  (unit_can_do_action(punit, ACTION_ROAD))
-      && (is_lowland)
-      && (water_near)
-      &&  (player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN) ) {
+      && (punit != null && ptile != null)
+      && !tile_has_extra(ptile, EXTRA_CANAL)
+      && unit_can_do_action(punit, ACTION_ROAD)
+      && is_lowland
+      && water_near
+      && tech_known('Engineering')) {
 
         return water_near; // serves as a code for whether to make Canal or Waterway extra.
-      }
-
-  return 0; // i.e., false, no type allowed (not canal nor waterway)
-/*  return ((typeof EXTRA_CANAL !== "undefined")
-      &&  (punit != null && ptile != null)
-      &&  (!tile_has_extra(ptile, EXTRA_CANAL))
-      &&  (unit_can_do_action(punit, ACTION_ROAD))
-      && (is_lowland)
-      && (water_near)
-      &&  (player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN)
-         ); */
+  }
+  return 0;
 }
 
 /**************************************************************************
@@ -5305,13 +5272,13 @@ function can_build_quay(punit, ptile)
 
   return ((typeof EXTRA_QUAY !== "undefined")
       &&  (punit != null && ptile != null)
-      &&  (!tile_has_extra(ptile, EXTRA_QUAY))
-      &&  (!tile_has_extra(ptile, EXTRA_))
+      &&  !tile_has_extra(ptile, EXTRA_QUAY)
+      &&  !tile_has_extra(ptile, EXTRA_)
       &&  (tile_has_extra(ptile, EXTRA_RIVER)
            || tile_has_extra(ptile, EXTRA_CANAL)
            || tile_has_extra(ptile, EXTRA_WATERWAY))
-      &&  (unit_can_do_action(punit, ACTION_ROAD))
-      &&  (player_invention_state(client.conn.playing, tech_id_by_name('Pottery')) == TECH_KNOWN)
+      &&  unit_can_do_action(punit, ACTION_ROAD)
+      &&  tech_known('Pottery')
          );
 }
 
@@ -5383,7 +5350,10 @@ function can_irrigate(punit, ptile)
 **************************************************************************/
 function can_build_naval_base(punit, ptile)
 {
+  if (typeof EXTRA_NAVALBASE === "undefined") return false;
   if (!tile_has_extra(ptile, EXTRA_FORT)) return false;
+  if (tile_has_extra(ptile, EXTRA_FORTRESS)) return false; 
+  if (!punit || !ptile) return false;
 
   var is_lowland = (tile_terrain(ptile)['name'] != 'Hills'
                    && tile_terrain(ptile)['name'] != 'Mountains');
@@ -5406,12 +5376,10 @@ function can_build_naval_base(punit, ptile)
     }
   }
 
-  return ((typeof EXTRA_NAVALBASE !== "undefined")
-            && (punit != null && ptile != null)
-            && (unit_can_do_action(punit, ACTION_BASE))
-            && (is_lowland)
-            && (water_near)
-            && (player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN)
+  return (  unit_can_do_action(punit, ACTION_BASE)
+            && is_lowland
+            && water_near
+            && tech_known('Engineering')
          );
 }
 
@@ -6698,13 +6666,13 @@ function popup_fullscreen_enter_game_dialog()
   $("#fullscreen_dialog").css("white-space","pre-wrap"); // allow \n to work.
   $("<div id='fullscreen_dialog'></div>").appendTo("div#game_page");
 
-  $(id).html("In non-automatic mode, use ALT-S to toggle.");
+  $(id).html("Makes game Full Screen only when you interact with it.<br>In every mode:<br><b>ALT-S</b> toggles Full Screen<br><b>ESC</b> exits full screen");
 
   var buttons = { 'Yes!': function()
                  { openFullscreen(); remove_active_dialog(id); },
                   'No': function() {remove_active_dialog(id);} };
   $(id).attr("title", "Automatic Full Immersion Mode");
-  $(id).dialog({bgiframe: true, modal: true, buttons: (buttons), height: "auto", width: "400"});
+  $(id).dialog({bgiframe: true, modal: true, buttons: (buttons), height: "auto", width: "480"});
   $(id).dialog('open'); $(id).dialog('widget').position({my:"center", at:"center", of:window})
   dialog_register(id);
 }

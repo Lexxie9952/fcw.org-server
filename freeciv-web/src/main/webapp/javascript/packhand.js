@@ -818,7 +818,8 @@ function handle_ruleset_control(packet)
     case "Civ2Civ3 ruleset":
       client_rules_flag[CRF_MAGLEV] = true;
     case "Sandbox ruleset":
-      client_rules_flag[CRF_COMMIE_BLDG_UPKEEP]=true;
+      client_rules_flag[CRF_NO_BASES_ON_RIVERS] = true;
+      client_rules_flag[CRF_COMMIE_BLDG_UPKEEP] = true;
     break;
   }
   /* Flags for hard-coded client behaviors/optimisations specific to rulesets,
