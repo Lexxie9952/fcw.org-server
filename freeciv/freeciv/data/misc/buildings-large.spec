@@ -61,5 +61,6 @@ sprites =
 		"b.super_highways", "buildings/super_highways"
 		"b.supermarket", "buildings/supermarket"
 		"b.temple", "buildings/temple"
+		"b.totem_pole", "buildings/totem_pole"
 		"b.university", "buildings/university"
 	}
