@@ -103,12 +103,20 @@
     <a href="#" onclick="key_unit_fortress();"><img src="/images/orders/fortress.png" name="fortress_button" alt="" border="0" width="30" height="30"></a>
   </div>
 
+  <div id="order_buoy" class="order_button not_mobile" title="Lay Buoy (Shift-F)">
+    <a href="#" onclick="key_unit_fortress();"><img src="/images/orders/buoy.png" name="buoy_button" alt="" border="0" width="30" height="30"></a>
+  </div>
+
   <div id="order_navalbase" class="order_button not_mobile" title="Build Naval Base (Shift-N)">
     <a href="#" onclick="key_unit_naval_base();"><img src="/images/orders/navalbase.png" name="navbase_button" alt="" border="0" width="30" height="30"></a>
   </div>
 
   <div id="order_airbase" class="order_button not_mobile" title="Build Airbase (Shift-E)">
     <a href="#" onclick="key_unit_airbase();"><img src="/images/orders/airbase.png" name="airbase_button" alt="" border="0" width="30" height="30"></a>
+  </div>
+
+  <div id="order_radar" class="order_button not_mobile" title="Build Radar (Shift-E)">
+    <a href="#" onclick="key_unit_airbase();"><img src="/images/orders/radar.png" name="radar_button" alt="" border="0" width="30" height="30"></a>
   </div>
 
    <div id="order_hideout" class="order_button not_mobile" title="Hideout (Shift-H)">
