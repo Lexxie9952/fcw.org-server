@@ -55,6 +55,9 @@ var colossus_discounts = {
   "Caravel": 5,
   "Cargo Ship": 5
 };
+var appian_discounts = {
+  "Wagon": 5
+}
 
 // User definable row in city list:   *****************************
 var city_user_row_val = 0;  
@@ -1007,6 +1010,12 @@ function get_universal_discount_price(ptype, pcity)
 
     if (colossus_discounts[ptype['name']])
         return ptype['build_cost'] - colossus_discounts[ptype['name']];      
+  }
+  // Apply discount for Appian Way
+  if (pcity && client_rules_flag[CRF_MP2_C] &&
+    city_has_building(pcity, improvement_id_by_name(B_APPIAN_WAY))) {
+      if (appian_discounts[ptype['name']])
+      return ptype['build_cost'] - appian_discounts[ptype['name']];      
   }
   // default, no discount:
   return ptype['build_cost'];
