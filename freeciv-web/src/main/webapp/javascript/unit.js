@@ -983,6 +983,14 @@ function get_what_can_unit_pillage_from(punit, ptile)
     }
   }
 
+  //TODO: PART 1 of 2:  remove this hack fix for this function still not working right.
+  const RAIL = tile_has_extra(ptile,EXTRA_RAILROAD);
+  const FORT = (typeof EXTRA_FORT !== "undefined") ? tile_has_extra(ptile,EXTRA_FORT) : false;
+  const FORTRESS= tile_has_extra(ptile,EXTRA_FORTRESS);
+  const NAVALBASE = (typeof EXTRA_NAVALBASE !== "undefined") ? tile_has_extra(ptile,EXTRA_NAVALBASE) : false;
+  const CASTLE = (typeof EXTRA_CASTLE !== "undefined") ? tile_has_extra(ptile,EXTRA_CASTLE) : false;
+  const BUNKER = (typeof EXTRA_BUNKER !== "undefined") ? tile_has_extra(ptile,EXTRA_BUNKER) : false;
+  
   // TODO: more things to check?
   // Sure!
   // MP2-Brava+ UI convenience. Railroad reqs changed to EXTRAFLAG "Railable" instead of EXTRAS "Road", 
@@ -1006,7 +1014,13 @@ function get_what_can_unit_pillage_from(punit, ptile)
     if (is_extra_removed_by(extras[extra], ERM_PILLAGE)
         && !cannot_pillage.isSet(extra)) {
       if (game_info.pillage_select) {
-        targets.push(extra);
+        //TODO: PART 2 of 2: remove when we get it working. 
+        /* Hack to force these from not showing */
+        if (extra==EXTRA_ROAD && (RAIL)) { /*no road selectable if rail is present*/}
+        else if (FORT      && extra==EXTRA_FORT      && (FORTRESS || NAVALBASE || CASTLE || BUNKER)) {}
+        else if (FORTRESS  && extra==EXTRA_FORTRESS  && (CASTLE || BUNKER)) {}
+        else if (NAVALBASE && extra==EXTRA_NAVALBASE && (CASTLE || BUNKER)) {}
+        else { targets.push(extra); } // passed all hacky hard-coded tests, push the target.
       } else {
         targets.push(EXTRA_NONE);
         break;
