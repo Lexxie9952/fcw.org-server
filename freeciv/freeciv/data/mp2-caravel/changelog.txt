@@ -7,30 +7,51 @@ Ongoing goals of MP2-Caravel
    each individual nation:  Nerf mechanics forcing gang-alliance loyalties.
 
 BUILDINGS AND WONDERS:
-1. Colossus: +1 trade on city center, -5 cost on most commerce units built in that city.
+1. Colossus: +1 trade on city center, -5 cost on most commerce units built in that city. 2 notch or ~22% increase to trade in its city. Bug-fix: Now must be built adjacent to Ocean.
 2. Hanging Gardens now costs 210 and is obsolete by Steam Engine: 
    increase diversity of other early wonder strategies
    encourage Frigates before Ironclads
    more difficult for representative govs to rapture simultaneous to mid-game invasions
 3. Police Station prevents investigate city for all govs except Democracy.
+3a. Since Foreign Nationals are categorised as "discontent about military", Police Station now works on those for all governments (was Repub/Demo only)
 4. Courthouse prevents Diplomats (not Spies) from doing hostile Embassy without first cease-fire or peace.
 5. City Walls were sometimes too cheap, sometimes too expensive, sometimes too OP, etc., this was very similar to the issue with Fortresses 
    that was fixed earlier with the Fort/Fortress distinction. The new City Walls solution breaks into two types somewhat modeled on the 
    Fort / Fortress solution now. City Fortifications are available with Masonry and provide 1.75x; City Walls come with Construction and 
    remain 3x. Just as with Fort/Fortress, City Fortifications are cheaper/easier to build but not as strong. Also same is that they don't 
-   stack. And also same is Masonry for first, Construction for second.
+   stack. And also same is Masonry for first, Construction for second. City Walls which cost 80 in Civ2, are bumped closer to original at 65 now.
+6. Magna Carta, new wonder, creates a new government Constitutional Monarchy which is half between Monarchy and Republic. 
+   for the price of Oracle, Eiffel Tower, and Statue of Zeus, you basically get those same effects and a Republic-ish government: 
+      1 extra content, 1 free unit upkeep, 1 more content about military than Republic, extra trade on land tiles, ability to rapture.
+      One can also consider no lost turn of anarchy as a hidden discount in the 300 shield price. 
+      What you don't get: 1 free trade on water (unless celebrating), lower chance of civil war, 80% max tax, the ability to choose
+         those 300 shields went to some other more desired first investment than Oracle, Zeus, Eiffel Tower, as much trust from your
+         peaceful neighbours. 
+      What you get Republic that Republic doesn't, if it had spent 300 on Oracle, Eiffel Tower, and Zeus:  one free martial law,
+      keep your capital production bonus, the ability to still make 1) Oracle, Eiffel Tower, and Zeus; 2) Your "free" Oracle and Zeus won't
+      expire/become obsolete, less trust from your neighbours.
+7. Barracks requirement is Warrior Code. Besides making sense and rewarding early discovery of that tech as a diverse strategy to pursue, it 
+   balances out the longturn's format of giving starting gold and extra disbandable units.
 
 GOVERNMENT RE-BALANCE:
 * ALL NON-REPRESENTATIVE GOVERNMENTS:
 1. Courthouse gives +1 content to all govs, not just Democracy 
 2. Statue of Zeus makes 1 citizen content about military for govs who need that, and if not, simply 1 citizen content.
+* MONARCHY:
+   gets the option to build Magna Carta to become a half/hybrid between monarchy and republic characteristics, which opens 
+   up intriguing different strategies or counter-strategies to others. Magna Carta activates the new gov 
+* CONSTITUTIONAL MONARCHY
 * FUNDAMENTALISM:
-1. Fundamentalist govs are harder to bribe, cost is 2x.
-2. Pilgrams have no pop_cost. Effectively, it's rapture that costs 10 shields. Pilgrims use ONE city-build-slot instead of all.
-3. Fundamentalist now gets the "generate partisans" effect.
-4. Fanatics can skirmish assault cities which have foreign populations (e.g., your recently conquered city)
-5. -50% bulbs in exchange for free upkeep on temples/make_content buildings, was a penalty. Changed to:  
+0. Renamed to Theocracy and re-balanced to be more competitive.
+1. Theocratic govs are harder to bribe, cost is 2x.
+2. Pilgrams have no pop_cost! Now, it's like buying rapture for 10 shields. Pilgrims use ONE city-build-slot instead of all.
+3. Government now gets the "generate partisans" effect.
+4. Fanatics renamed to Zealots, otherwise same unit, except:
+   a. They can skirmish assault cities which have foreign populations (e.g., your recently conquered city)
+   b. Available with Conscription, not Fundamentalism which is no longer a tech.
+5. -50% bulbs in exchange for free upkeep on temples/make_content buildings, was a harsh penalty. Changed to:  
    a. Bonus/penalty is symmetric now: -20% for sci, +20% for gold.
+6. New unit Falconeer represents the Janissaries and Hand cannoneers employed by mediaevel theocratic orders.  
 * COMMUNISM:
 1. Proletarians have 1 pop_cost but add 2 pop. Same +1 net pop as Pilgrims, but can better use granary dynamics and magnify state populace control of "boom-town" growth. One city build slot used, not all.
 2. Communists: 10 shield discount on Armor I.
@@ -39,6 +60,7 @@ GOVERNMENT RE-BALANCE:
 2. Democracy: corruption increases by 0.4% per tile from capital (1/5 that of most other govs (=2%))
 3. Democracies can now be BRIBED, but cost is 3x. 
 4. Democacies can now be INCITED TO REVOLT, but cost is 3x.
+5. Democracy can't rapture with 10% or more foreign citizens.
 5. Also see, Hanging Gardens, Police Station
 
 UNITS/COMBAT/MECHANICS:
@@ -48,7 +70,7 @@ UNITS/COMBAT/MECHANICS:
    Musketeers "        " Riflemen    "    "   "    "        "     "      "       Labor Union.
 2. Pre-feudal foot units (Warrior, Archer, Phalanx, Legion) cost 20% less.
 3. Feudal foot units (Pikemen) cost 10% less.
-4. Marines can now: build Fort/Airbase 
+4. Marines can now: build Fort/Airbase, but not Airbase in a Fort.
       Gain +2 move frags per vet level
       V2+ can do ranged Bazooka Attack for 3 rounds on up to 2 targets.
       Note this does not represent superior range of Marines to other units/weaponry, but rather
@@ -96,12 +118,18 @@ UNITS/COMBAT/MECHANICS:
 8. A server flaw sometimes
    a. allowed military units to clean fallout and pollution. This fix affects ALL rulesets.
    b. For non-military units, only spies and worker types can pillage now. Excluded are: Caravans, Explorers, Diplomats, Pilgrims, Tribesmen, Trucks, Freight.
+9. Catapults and their upgrade line (Cannon, Artillery, Howitzer) are now the City Buster sub-class of land units. Each gets a growing +25% upgrade over 
+   the last, in how much of the Fortification/City Wall bonus it reduces. e.g., Catapult takes -25% from Fortifications and Wall bonuses. This represents their 
+   special unit ability, makes them all a more logical family progression (instead of all useless then howitzer is suddenly 0/1/black/white). It also helps these
+   slow units who were not used as much as historically, find more purpose in the game.
 SPIES/DIPLOMATS:
 9. Diplomatic units now defend a unit on a tile from hostile diplomatic acts (bribe/sabotage), the same as they defend a city from hostile diplomat attacks.
    a. In the case where bribe/sabotage isn't possible (i.e., other non-diplomat units > 1), no defense is necessary since it's "No action possible."
    b. Where it is only the case of 1 diplomat vs. 1 enemy diplomat, they enter into diplomatic combat, the same as in a city.
    c. Spies promotion odds increased to compensate for the weaker strength of their veterancy levels, to make it track more similar 
       to other units for number of successful surviving actions.
+   d. Spies can investigate city from a transport, but not other actions.
+   e. Diplomats can investigate city without being spent.
 10. Investigate City is now no longer hard-coded in server to 100% success. What this means for MP2:
    80% chance to COVERTLY SLIP past enemy diplomats/spies WITHOUT diplomatic combat. (100% if unprotected)
    If slipped past OR defeated enemy diplomats in combat, 85% chance to succeed at investigating city.
@@ -132,6 +160,13 @@ OTHER:
 3a. Furs can now exist on Arctic terrain. This provides more balance to the worst terrain type in the game.
 4. "Blood for Oil":  After Refining, Oil Wells built on Oil get +1 shield after other bonuses. 
      (Previously, it was arguably better to irrigate rather than mine.) Oil tiles with more value are now more worth fighting for.
+5. Monotheism 384 (was 415), Theology 600 (was 725), Theocracy 725
+6. Added Castle. Built on top of Fortress. a. Units inside can't be seen. b. Moat prevents Siege Rams. c. Claims more surrounding tiles. d. Sees farther.
+ e. No extra defense bonus.
+   reqs: Construction, Feudalism. Obsolete by: Gunpowder.
+7. Added Bunker. Built on top of Fortress. a. Units inside can't be seen. b. Prevents Air and Missile attacks. 
+   c. Prevents tile pillage (so Jet Bomber etc. can't remove it) d. Claims less surrounding tiles, doesn't see as far, no extra defense bonus.
+   reqs: steel
 
 MINOR AND MISC.
 ---------------
@@ -158,8 +193,14 @@ Capturable commerce units can't become uncapturable just by carrying Goods or be
    Put another unit_type with them. This prevents mere cargo from making commerce units immune to capture.  Cargo becomes lost in capture 
    event: e.g., Caravan carrying goods gets captured. Goods are lost, Caravan transfers ownership.
 Tribesmen gain 1 HP and can fight back. A1D1 HP6. It might be just enough for 2 of them to fight off 1 intruder unit, if one dies ;)
+   tribesmen also become somewhat primitive generalists who can do a mediocre job at many things, rather than specialized like other 
+      units.
+Workers now have 6hp, so they are not equal to a warrior in combat, but can still be safer if taking refuge in defensive terrain.
+With weaker units like Tribesmen and Warriors at 6hp in existence, the Warrior now becomes somewhat more meaningful in early game.
 Coastal Defense is visible without middle-clicking for city info.
 Masonry is not needed for Palace (simplification)
+Tribesmen, Diplomats, and Explorers can investigate cities without being spent. Let the games of ancient or mediaevel espionage and paranoia 
+   over it, begin !
 
 SERVER UPGRADES:
 1. Special Unit Actions / Attacks:
@@ -271,10 +312,10 @@ What this means for MP2 rules:
         carefully used to allow deeper level of tactics for some units and to slightly buff units whose special
         role abilities were represented weaker than the realistic and tactical use they should have.
 39. fixed rounding errors in calculation of move points on damaged units.
-40. adding a pop unit to a city arranges tiles by its CMA (server default or governor) instead of making entertainer. 
+40. adding a pop unit to a city arranges tiles by its CMA (server default or governor) instead of making entertainer.
+40a. fixed small bug where ranged attacks did not reduce movement points of damaged units.
 41. TC reports on UWT activity delays now only report activities that finish this turn; Not anymore, e.g., transform or mine that finishes on a future turn.
 42. possibly fixed spurious message re:UWT
-
 43. Note, unit emoji are not for gimmick fun, but:
       a) help you scan a long list of info to parse it or find the right info, 
       b) the ACTOR unit has the emoji before the name, the TARGET unit has the emoji after the name (after getting the habit, this helps a lot with #1)
@@ -285,7 +326,13 @@ What this means for MP2 rules:
    quits before it's done. now after a certain time of getting a new message and scrolling it, it is force snapped to the bottom.
 48. every event in chat that took place somewhere on the map, is a link to center the map there, AND will select the unit there if there is one, 
       OR else make a signal marker to identify the exact tile.
-
+49. Poisoning a size 1 city eliminates it. (all rulesets)
+50. Kill-stack events sometimes left you ignorant, seeing "Killed the Riflemen and 5 other units!".  Now, up to 6 other unit kills are reported in a kill-stack,
+   individually, before it will start to just say (and x other units!)
+51. CITY GOVERNOR, with advanced features not found in native client or upstream server.
+52. fixed, sound effect for sold building only happens when server confirms it's really a legal sale.
+53. server has new effect rulesets can use, for increasing/decreasing the work rate of units.
+54. units fortifying inside a hideout now have aqua fortifying icon to show they're in a hideout, similar to sentry and (already) fortified.
 These help with much more than Freeciv and other Full-screen apps. They help you with everything you do on your computer:
             Switch active Program   Flip to Last Program    Switch Browser tab   See all Programs on Workspace   Swap Workspaces
 Linux*      Alt-Tab                 Alt-ESC                 CTRL-Shift-Tab       🐧, ALT-F1                      CTRL-ALT-arrow

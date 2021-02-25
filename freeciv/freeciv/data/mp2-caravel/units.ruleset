@@ -29,7 +29,7 @@ format_version=20
 ; ************** MADE COMPATIBLE BETWEEN MP+ AND MP2 RULESETS AND POSSIBLY CLASSIC AND CIV2CIV3 SO THAT
 ; ************** THERE IS UNIFORMITY IN FCW CLIENT which checks these flags based on index #. Not keeping
 ; ************** uniformity results in loss of features as ability to check these flags would be lost.
-; *** if you remove one, make it "unused" and add to it later, so the index of the others doesn't mess up
+; *** if you remove one, make it "unused" and add to it later, so the index of the others does not mess up
 flags =
   { "name", "helptxt"
     _("Airbase")
@@ -181,12 +181,11 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 
 ; **********************************************************************************
 ; **********************************************************************************
-; WARNING: ANY CHANGES TO WHAT TYPES OR CLASSES CAN LOAD ONTO WHICH TRANSPORTS MAY 
+; WARNING：ANY CHANGES TO WHAT TYPES OR CLASSES CAN LOAD ONTO WHICH TRANSPORTS MAY 
 ; REQUIRE CHANGES TO FCW function unit_could_possibly_load() in unit.js
 ; **********************************************************************************
 ; **********************************************************************************
 [unitclass_missile]
-; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Missile")
 min_speed     = 1
 hp_loss_pct   = 0
@@ -229,7 +228,6 @@ hp_loss_pct   = 0
 flags         = "BuildAnywhere", "ZOC", "TerrainSpeed"
 
 [unitclass_land]
-; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Land")
 min_speed     = 1
 hp_loss_pct   = 0
@@ -268,31 +266,28 @@ helptext      = _("\
 ")
 
 [unitclass_sea]
-; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Sea")
 min_speed     = 3
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage"
 helptext      = _("\
-  • Crew Repair: each turn, regardless of movement, recovers 8% of its hit points (rounded down).\
+  • Crew Repair：each turn, regardless of movement, recovers 8% of its hit points (rounded down).\
 ")
 
 ; Separating the Submarine class finally allows it to be unreachable by Air. The old Submarine was 
 ; far too offensively overpowered while simultaneously almost useless from ultra-vulnerability to Air units.
 ; Because it is now Unreachable, any unit able to attack it needs this class in its targets.
 [unitclass_submarine]
-; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Submarine")
 min_speed     = 4
 hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative", "CanPillage", "Unreachable"
 helptext      = _("\
-  • Visibility bonus: not visible to other players unless they have a unit or city adjacent to it.\n\
-  • Crew Repair: each turn, regardless of movement, recovers 2 hit points.\
+  • Visibility bonus：not visible to other players unless they have a unit or city adjacent to it.\n\
+  • Crew Repair：each turn, regardless of movement, recovers 2 hit points.\
 ")
 
 [unitclass_trireme]
-; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Trireme")
 min_speed     = 2
 hp_loss_pct   = 0
@@ -306,7 +301,6 @@ hp_loss_pct   = 0
 flags         = "DamageSlows", "AttackNonNative", "AttFromNonNative"
 
 [unitclass_heli]
-; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Helicopter")
 min_speed     = 1
 hp_loss_pct   = 5
@@ -314,7 +308,6 @@ flags         = "Unreachable", "CanOccupyCity", "CollectRansom", "Airliftable"
 
 ; This class is for air units that are unreachable but do not protect a stack.
 [unitclass_air]
-; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Air")
 min_speed     = 1
 hp_loss_pct   = 0
@@ -337,7 +330,6 @@ hut_behavior  = "Nothing"
 flags         = "Unreachable", "DoesntOccupyTile"
 
 ;[unitclass_virtual]
-;; /* TRANS: Unit class: used adjectivally */
 ;name          = _("?unitclass:Virtual")
 ;min_speed     = 5
 ;hp_loss_pct   = 0
@@ -351,18 +343,16 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ; Fighters also have Border Police abilities, and a separate class
 ; facilitates future adjustments and balancing in an isolated class.
 [unitclass_air_protect]
-; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:AirProtect")
 min_speed     = 1
 hp_loss_pct   = 0
 hut_behavior  = "Frighten"
 flags         = "Unreachable", "DoesntOccupyTile", "Airliftable", "BorderPolice"
 helptext      = _("\
-  • INTERCEPTOR: can be given the Vigil order to auto-attack adjacent Air units.\n\
-  • AIR COVER: Most units who cannot attack this unit also cannot attack other units on the tile.\
+  • INTERCEPTOR：can be given the Vigil order to auto-attack adjacent Air units.\n\
+  • AIR COVER：Most units who cannot attack this unit also cannot attack other units on the tile.\
 ")
 [unitclass_balloon]
-; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Balloon")
 min_speed     = 1
 hp_loss_pct   = 0
@@ -370,7 +360,6 @@ hut_behavior  = "Frighten"
 flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 
 [unitclass_zeppelin]
-; /* TRANS: Unit class: used adjectivally */
 name          = _("?unitclass:Zeppelin")
 min_speed     = 1
 hp_loss_pct   = 0
@@ -379,13 +368,13 @@ flags         = "Unreachable", "DoesntOccupyTile"
 
 ; /* <-- avoid gettext warnings
 ;
-; Below: The individual unit types, one per section.
+; Below：The individual unit types, one per section.
 ;
 ; The number can be variable, up to 200.
 ; However for the "official" rulesets, units should not be removed
 ; because that would break backward compatability with savegames.
 ;
-; The order here matters: later units are considered "better" for
+; The order here matters：later units are considered "better" for
 ; a given flag or role.
 ;
 ; The actual tag used (the * in [unit_*]) does not matter, except
@@ -418,7 +407,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ; hitpoints     = how much damage unit can withstand
 ; firepower     = number of hitpoints removed per round of combat; at least 1
 ; move_rate     = base move rate (whole movement points)
-; vision_radius_sq = base vision of unit: unit can see tile up to the square
+; vision_radius_sq = base vision of unit：unit can see tile up to the square
 ;                 root of this value away
 ; convert_to    = can be converted to another type of unit by name
 ; convert_time  = number of movement points it takes to convert to
@@ -442,7 +431,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                 BITS 8-10  = bombard_primary_targets. 0=all, or 1-7.
 ;                 BITS 11-13 = bombard_primary_kills, max kills allowed. 0-7.
 ;                 ————————————————————————————————
-;                 FORMERLY: Initial size of the cities built by 'Found City' type units
+;                 FORMERLY：Initial size of the cities built by 'Found City' type units
 ;                 (but 'Join City' uses pop_cost)
 ; targets       = list of unit classes this unit can attack against even
 ;                 if they have Unreachable unit class flag
@@ -500,7 +489,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ; "DefenseDividerPct" = Divide defense value by 1 + (value / 100).
 ;                       Value of 100 means division by 2, (2× for attacker)
 ;                       value of 50 means division by 1.5, (1.5× for attacker)
-;                       i.e.: Effectively increases *attack* by value percent.
+;                       i.e.：Effectively increases *attack* by value percent.
 ; "FirePower1"        = Defender firepower is reduced to value 1 when
 ;                       ever this has non-zero value.
 ;                       Bonus is defined in attackers entry.  
@@ -511,7 +500,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                 "ZOC" flag
 ; "HasNoZOC"	= unit has no Zone of Control (ZOC), thus any unit can move
 ;		  around it freely
-; "NonMil"	= a non-military unit: no martial law; can enter
+; "NonMil"	= a non-military unit：no martial law; can enter
 ;                 peaceful borders; DoesntOccupyTile
 ; "IgTer"       = use constant move cost defined in igter_cost (terrain.ruleset)
 ;                 rather than terrain/road etc cost, unless terrain cost is
@@ -532,7 +521,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                 unit class can
 ; "Cant_Fortify" =  cannot fortify even if unit class has "CanFortify" flag
 ; "Fanatic"	= can only be built by governments that allow them
-;		  (see civ2/governments.ruleset, Fundamentalism government)
+;		  (see civ2/governments.ruleset, Fvndamentalist government)
 ; "Unique"	= a player can only have one of these units in the game at
 ;		  the same time; barbarians cannot use this at present
 ; "GameLoss"	= losing one of these units means you lose the game, but it
@@ -591,14 +580,14 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                  is enabled and the unit class is unreachable
 ; "MultiSlot"    = if server setting slot_control is ON, only unit types with this
 ;                  flag can use extra city_build_slots
-;                  TO DO: make this a server UTYF flag that's used instead of Shield2Gold
+;                  TO DO：make this a server UTYF flag that's used instead of Shield2Gold
 ; Following actions require extra fields:
 ;  "Attack"
 ;   attack = base attack strength
 ;  "Bombard"
 ;   attack       = base attack strength
 ;   bombard_rate = the number of shots fired at enemy units when attacking
-;       FOR NUKES: the amount to add to the default radius of 1 tile
+;       FOR NUKES：the amount to add to the default radius of 1 tile
 ;  "Join City"
 ;   pop_cost = the number of population added to the target city
 ;  "Paradrop Unit"
@@ -623,9 +612,9 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ; "HutTech"               = can be found in a hut, but its techs required
 ; "Partisan"              = can be created as a partisan (only one unit can have this
 ;                           flag), see end of this file for its tech requirements option
-; "DefendOk"              = AI hint: ok for defending with
-; "DefendGood"            = AI hint: good for defending with
-; "Ferryboat"             = AI hint: useful for ferrying
+; "DefendOk"              = AI hint：ok for defending with
+; "DefendGood"            = AI hint：good for defending with
+; "Ferryboat"             = AI hint：useful for ferrying
 ; "Barbarian"             = can be created as land barbarian
 ; "BarbarianTech"         = can be created as land barbarian, if someone has
 ;                           researched its tech requirements
@@ -638,7 +627,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ; "BarbarianSeaTech"      = can be created as a barbarian that disembarks from a barbarian boat
 ;                           if someone has researched its tech requirements
 ; "Settlers"              = can irrigate and build roads
-; "Hunter"                = AI hint: good for hunting other units
+; "Hunter"                = AI hint：good for hunting other units
 ; "CitiesStartUnit"       = Gets granted as 'c' startunit
 ; "WorkerStartUnit"       = Gets granted as 'w' startunit
 ; "ExplorerStartUnit"     = Gets granted as 'x' startunit
@@ -662,7 +651,7 @@ graphic_alt   = "-"
 sound_move    = "m_settlers"
 sound_move_alt = "m_generic"
 sound_fight   = "f_settlers"
-sound_fight_alt = "f_generic"
+sound_fight_alt = "Demolishment"
 build_cost    = 40
 pop_cost      = 1
 attack        = 0
@@ -689,11 +678,11 @@ helptext      = _("\
 Settlers are your only means of founding new cities.\
 "), _("\
 Settlers can perform most of the terrain alterations as\
- Workers (but cannot build Airbases or Buoys).\
+ Workers (but can’t build Airbases or Buoys).\
 "), _("\
 Upkeep for Settlers costs food as well as production. A Settler\
  can die if its supporting city runs out of food. Settlers in a\
- Republic, Democracy, or Fundamentalist nation require twice as\
+ Republic, Democracy, or Theocratic nation require twice as\
  much food per turn.\
 ")
 
@@ -703,7 +692,7 @@ class         = "Land"
 tech_req      = "None"
 obsolete_by   = "None"
 graphic       = "u.tribesmen"
-graphic_alt   = "u.migrants"
+graphic_alt   = "-"
 sound_move    = "m_worker"
 sound_move_alt = "m_generic"
 sound_fight   = "f_worker"
@@ -723,6 +712,13 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 cargo         = "Cargo"
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
+bonuses       =
+   { "flag", "type", "value"
+     "NoBuild", "DefenseMultiplier", 1  ; all animals are "NoBuild" flag. technically this also means
+     "NoBuild", "DefenseDivider", 2     ; Barbarian Leader (which is 0D anyway), and Leader, which is hardly used.
+   }
 flags         = "NoBuild", "Settlers", "Infra", "CanRoad",  "Capturable", "Expellable",
                 "HasNoZOC", "IgTer", "IgZOC", "NonMil", "NonMilAttack"
 roles         = "DefendGoodStartUnit"  ; re-purposed from Phalanx
@@ -741,30 +737,31 @@ veteran_move_bonus = 3, 4, 5, 6, 7, 8, 9
 helptext      = _("\
 Tribesmen came before cities, specialization, and division of labor.\
  They help in nation-building by recycling into city production with\
- a bonus, donating their life-work as 20 shields toward a building,\
- wonder, goods, or ship; or 10 shields into anything else.\n\
-Tribesmen have limited skills in every category of later specialized units.\
- They can explore, make contact to establish Cease-fire or Peace, and\
- Investigate cities. They can enter lands regardless of Peace arrangements,\
- yet can engage in primitive combat. But they do not conquer cities, and often\
- won't fight to the death (10 combat rounds). They can also carry Goods.\n\
+ a 2× bonus, donating their life-work as 20 shields toward a building,\
+ wonder, or coinage. They can’t recycle into units. ** Any change of\
+ production target throws away their life-work! **\n\
+Tribesmen are versatile.\
+ They can explore, make basic diplomatic contact, and freely Investigate\
+ cities. They can carry Goods and enter nations with whom you are at Peace,\
+ and engage in primitive combat. They can’t conquer cities, and often\
+ do not fight to the death (10 combat rounds).\n\
 Tribesmen move over terrain with no penalty, and do not respect nor exert ZOC.\
  They can work tiles at a rate slower than Workers. They have a 3x bonus at\
- hunting animals.\n\
-After 2500BC (T15) your last Tribesmen get old as your nation settles into the\
- ways of city life. Tribesmen start to move slower, see less, lose their recycle\
- bonus, and can no longer work tiles.\
+ hunting animals, and 2x defending against them.\n\
+After 2500BC (T15) your last Tribesmen get old and your nation settles into\
+ city life. Tribesmen move ⅓ slower, see less, lose the recycle bonus, and can\
+ no longer work tiles. After 2000BC they lose another ⅓ move.\
 ")
 
 ;A unique patch unit to provide fair starts regardless of lack of nearby water.
-;to make as a start unit, use the letter "a": for example, cccwwwxxa
+;to make as a start unit, use the letter "a"：for example, cccwwwxxa
 [unit_welldigger]
 name          = _("Well-Digger")
 class         = "Land"
 tech_req      = "None"
 obsolete_by   = "Workers"
 graphic       = "u.well_digger"
-graphic_alt   = "u.migrants"
+graphic_alt   = "-"
 sound_move    = "m_worker"
 sound_move_alt = "m_generic"
 sound_fight   = "f_worker"
@@ -811,11 +808,11 @@ tech_req      = "Communism"
 gov_req       = "Communism"
 obsolete_by   = "None"
 graphic       = "u.proletarian"
-graphic_alt   = "u.migrants"
+graphic_alt   = "-"
 sound_move    = "m_worker"
 sound_move_alt = "m_generic"
 sound_fight   = "f_worker"
-sound_fight_alt = "f_generic"
+sound_fight_alt = "Demolishment"
 build_cost    = 10
 pop_cost      = 1
 attack        = 0
@@ -858,11 +855,11 @@ Large numbers of Proletarians can be used to rapidly complete important State pr
 [unit_pilgrims]
 name          = _("Pilgrims")
 class         = "Land"
-tech_req      = "Fundamentalism"
-gov_req       = "Fundamentalism"
+tech_req      = "Theocracy"
+gov_req       = "Theocracy"
 obsolete_by   = "None"
 graphic       = "u.pilgrims"
-graphic_alt   = "u.migrants"
+graphic_alt   = "-"
 sound_move    = "m_worker"
 sound_move_alt = "m_generic"
 sound_fight   = "f_worker"
@@ -892,11 +889,54 @@ veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
 helptext      = _("\
-Pilgrims are wayfaring migrants from Fundamentalist nations. Like Fanatics,\
- they have no upkeep if under a Fundamentalist government. Heeding the call\
+Pilgrims are wayfaring migrants from Theocratic nations. Like Zealots,\
+ they have no upkeep if under a Theocratic government. Heeding the call\
  of ecclesiastic authority, Pilgrims can be guided from one city to another in\
  order to transfer population from city to city. Pilgrims have no population\
  cost, so can be thought of as rapture for the price of 10 shields.\
+")
+
+[unit_migrants]
+name          = _("Migrants")
+class         = "Land"
+tech_req      = "Nationalism"
+gov_req       = "Nationalism"
+obsolete_by   = "None"
+graphic       = "u.migrants"
+graphic_alt   = "-"
+sound_move    = "m_worker"
+sound_move_alt = "m_generic"
+sound_fight   = "f_worker"
+sound_fight_alt = "f_generic"
+build_cost    = 10
+pop_cost      = 1
+attack        = 0
+defense       = 1
+hitpoints     = 10
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 4
+transport_cap = 0
+fuel          = 0
+city_size     = 1
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 2
+uk_gold       = 0
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
+flags         = "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Cant_Pillage"
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 0
+helptext      = _("\
+Migrants are citizens under Nationalist governments who are encouraged to\
+ settle in new cities, usually in conquered or colonized areas.\
+ They can be guided to transfer population from city to city. This may\
+ be used to increase national population growth.\
 ")
 
 [unit_worker]
@@ -905,11 +945,11 @@ class         = "Land"
 tech_req      = "Pottery"
 obsolete_by   = "Engineers"
 graphic       = "u.worker"
-graphic_alt   = "u.migrants"
+graphic_alt   = "-"
 sound_move    = "m_worker"
 sound_move_alt = "m_generic"
 sound_fight   = "f_worker"
-sound_fight_alt = "f_generic"
+sound_fight_alt = "Demolishment"
 build_cost    = 30
 pop_cost      = 0
 attack        = 0
@@ -957,7 +997,7 @@ class         = "Land"
 tech_req      = "Explosives"
 obsolete_by   = "None"
 graphic       = "u.engineers"
-graphic_alt   = "u.worker"
+graphic_alt   = "-"
 sound_move    = "m_engineers"
 sound_move_alt = "m_generic"
 sound_fight   = "f_engineers"
@@ -1071,7 +1111,7 @@ The Phalanx is armored infantry, suitable for defending your cities. It is valua
  for claiming and holding defensive tactical positions. They can attack while fortified\
  and maintain fortified status.\n\
 Phalanxes can do a special Rumble Attack on enemy units who move adjacent to them,\
- if the Phalanx is fortified OR has not moved this turn. Moving enemies cannot counter\
+ if the Phalanx is fortified OR has not moved this turn. Moving enemies can’t counter\
  a well-shielded battalion in formation from shoving into their\
  flank, targeting them with long sarissas. Rumble attacks are not mortal combat —— the turtled Phalanx\
  does not expose itself to vulnerability, but at the cost of only applying slow belligerent frontal\
@@ -1265,18 +1305,84 @@ Musketeers are infantry equipped with early firearms. They replace Pikemen as th
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
 
-[unit_fanatics]
-name          = _("Fanatics")
+[unit_falconeers]
+name          = _("Falconeers")
 class         = "Land"
-tech_req      = "Fundamentalism"
-gov_req       = "Fundamentalism"
+tech_req      = "Theocracy"
+gov_req       = "Theocracy"
+obsolete_by   = "Zealots"
+graphic       = "u.falconeers"
+sound_move    = "m_musketeers"
+sound_move_alt = "m_generic"
+sound_fight   = "f_falconeers"
+sound_fight_alt = "f_musketeers"
+build_cost    = 20
+pop_cost      = 0
+attack        = 1
+defense       = 1
+hitpoints     = 20
+firepower     = 20
+move_rate     = 2
+vision_radius_sq = 4
+transport_cap = 0
+fuel          = 0
+uk_happy      = 2
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
+targets       = "LandRail"
+bonuses       =
+   { "flag", "type", "value"
+     ;The values below would be what we use if we went with normal veterancy levels.
+     ;"WillNever", "DefenseDividerPct", -90    ;The way to change general attack score on everyone without using integer attack score.
+     ;"WillNever", "DefenseMultiplierPct", -98 ;The way to change general defense score on everyone without using integer defense score.
+     ;However, the value below is with using the custom veterancy level. For 20FP unit, a D 20% of A emulates emulates a D 2/3 of A. 
+     ;********* requires hard-coding fix to packhand.js:handle_non_integer_combat_scores() if changed: ******************************
+     "WillNever", "DefenseMultiplierPct", -50 ;The way to change general defense score on everyone without using integer defense score. 
+   }
+flags         = "FootSoldier", "Capturer", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "WillNever"
+roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:Hand of God")
+veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 10, 15, 18, 20, 21, 22, 23
+veteran_move_bonus = 0, 0, 0, 0, 1, 2, 3
+helptext      = _("\
+Falconeers are Theocratic holy warriors armed with Falconettes—the\
+ largest hand cannons humans can carry, it proves whose side God is\
+ on. Ottoman Janissaries, Reconquistadores, Persian Safavid, and Indian\
+ Mughal used them in holy wars.\n\
+Falconettes are huge and heavy. They have woeful accuracy but lethal\
+ firepower：they either kill or totally miss. On paper, attack odds\
+ are closest to a Musketeer (A3). Yet there is a high chance of losing\
+ when you expect to win, or winning when you expect to lose. The outcome\
+ is in God's hands! Falconeers defend a bit worse than they attack.\n\
+Righteous faith is needed to fight with slow heavy inaccurate weaponry:\
+ only Theocracies can train Falconeers. Other governments will incur\
+ high upkeep or see them retire.\n\
+")
+
+[unit_zealots]
+name          = _("Zealots")
+class         = "Land"
+tech_req      = "Conscription"
+gov_req       = "Theocracy"
 obsolete_by   = "None"
-graphic       = "u.fanatics"
-graphic_alt   = "-"
+graphic       = "u.zealots"
+graphic_alt   = "u.fanatics"
 sound_move    = "m_fanatics"
 sound_move_alt = "m_generic"
-sound_fight   = "f_fanatics"
-sound_fight_alt = "f_generic"
+sound_fight   = "f_zealots"
+sound_fight_alt = "f_riflemen"
 build_cost    = 20
 pop_cost      = 0
 attack        = 4
@@ -1289,30 +1395,28 @@ transport_cap = 0
 fuel          = 0
 city_size     = 1080; 000000,0,100,001110,0,0 = atk_bonus=0, max_kills=0, targets=4, move_cost=14 frags, sty_frtfy=0, reserved = 0
 uk_happy      = 2
-uk_shield     = 2
+uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail"
 flags         = "Fanatic", "FootSoldier", "Capturer", "CantReachAir", "Unbribable", "Bombarder",
-                "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
-roles         = "DefendGood", "DefendGoodStartUnit"
+                "Settlers", "CanHide", "MultiSlot", "WillNever"
+roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
-Fanatics are warriors devoted to a higher cause. Their faith\
+Zealots are warriors devoted to a higher cause. Their faith\
  is strong and they cannot be bribed.\
 "), _("\
-Fundamentalist nations can maintain Fanatics without paying\
- their steep upkeep. (Fanatics are unhappy if not under Fundamentalism,\
- requiring high upkeep to stay content.) Fanatics\
+Theocratic nations can maintain Zealots without paying\
+ their steep upkeep. (Zealots are unhappy if not under Theocracy,\
+ requiring high upkeep to stay content.) Zealots\
  produced in a city with Ecclesiastical Palace are inspired by\
  fervorous faith to +1 higher veteran level.\
 "), _("\
-Fanatics zealously defend their homeland, and can do surprise skirmish\
+Zealots zealously defend their homeland, and can do surprise skirmish\
  assaults to snipe and injure foreign occupants：Up to 4 invaders\
  on the tile will endure three combat rounds without defense.\
-"), _("\
-\nThe discovery of Banking changes upkeep from shields to gold.\
 ")
 bombard_rate = 3
 
@@ -1357,8 +1461,8 @@ Proportional to city size, up to 8 Partisans appear when an enemy conquers your 
  prefer defensive tiles, and ignore tile nationality. They spawn only when:\n\
  ➣ Guerilla Warfare is known by any player.\n\
  ➣ The city was originally built by you.\n\
- ➣ You must be Fundamentalist, OR,\
- ➣ You must be Democracy or Communist and know Communism and Gunpowder.\
+ ➣ You must be Theocracy, OR,\n\
+ ➣ You must be Democracy or Communist, AND know Communism AND Gunpowder.\
 ")
 
 [unit_riflemen]
@@ -1503,7 +1607,7 @@ Marines are experts at all-terrain warfare. They are the strongest\
  veteran level they possess. Starting at v2, they gain the ability\
  to do Bazooka ranged attacks for 3 combat rounds, hitting up to 2\
  units on the tile and killing a maximum of 1. Bazooka attacks can\
- be done to Oceanic tiles if the Marines aren't transported.\n\
+ be done to Oceanic tiles if the Marines are not transported.\n\
  Marines built in a city with an Airport, Port Facility, and Barracks III\
  receive an extra veteran level.\
 "), _("\
@@ -1880,7 +1984,7 @@ class         = "Land"
 tech_req      = "Plastics"
 obsolete_by   = "None"
 graphic       = "u.armor_ii"
-graphic_alt   = "u.armor"
+graphic_alt   = "-"
 sound_move    = "m_armor_ii"
 sound_move_alt = "m_armor"
 sound_fight   = "f_armor_ii"
@@ -1946,8 +2050,8 @@ uk_gold       = 0
 flags         = "CantReachAir", "WillNever"
 roles         = ""
 helptext      = _("\
-Catapults are war machines that hurl massive rocks to crush\
- and break their targets. The ballistic delivery of massive\
+Catapults are large rock-throwing war machines.\
+ The ballistic delivery of massive\
  stones diminishes the bonus of Fortifications and\
  City Walls by -25%, yielding a 1.5x and 2.75x bonus, respectively.\
  Catapults are weak defenders, and will need an escort to be effective.\
@@ -2087,7 +2191,7 @@ class         = "LandAirSea"
 tech_req      = "Flight"
 obsolete_by   = "None"
 graphic       = "u.anti_aircraft"
-graphic_alt   = "u.howitzer"
+graphic_alt   = "-"
 sound_move    = "m_anti_aircraft"
 sound_move_alt = "m_generic"
 sound_fight   = "f_anti_aircraft"
@@ -2123,7 +2227,7 @@ Anti-Aircraft Artillery (AAA) can attack almost anything from anywhere. AAA get 
  2× bonus against Air units. AAA qualify as weaponry for Marines and have the same\
  abilities：they can be transported on any unit that carries Marines, can attack from\
  or to non-native tiles, and do not lose a turn when unloading. Transported AAA can\
- defend their tile on both Land and Sea. (AAA cannot attack Submarines, Missiles,\
+ defend their tile on both Land and Sea. (AAA can’t attack Submarines, Missiles,\
  or Jet Bombers.)\
 "), _("
 After Space Flight and 10 turns of service, AAA can be retrofitted to\
@@ -2136,7 +2240,7 @@ class         = "Land"
 tech_req      = "Space Flight"
 obsolete_by   = "None"
 graphic       = "u.mobile_sam"
-graphic_alt   = "u.howitzer"
+graphic_alt   = "-"
 sound_move    = "m_howitzer"
 sound_move_alt = "m_generic"
 sound_fight   = "f_mobile_sam"
@@ -2170,7 +2274,7 @@ helptext      = _("\
 The Mobile SAM is the strongest Anti-Air unit on the ground. It can\
  attack nearby aircraft. It has a 2× bonus against all Air units. The\
  Mobile SAM can also carry one Missile of any type. Unlike the AAA, it\
- cannot attack non-native tiles or attack while transported.\
+ can’t attack non-native tiles or attack while transported.\
 "), _("
 AAA can upgrade to Mobile SAM for free on its 10th turn of service.\
  The Convert order must be done in the capital city and takes 4 turns.\
@@ -2182,7 +2286,7 @@ class         = "Land"
 tech_req      = "Robotics"
 obsolete_by   = "None"
 graphic       = "u.howitzer_o"
-graphic_alt   = "u.howitzer"
+graphic_alt   = "-"
 sound_move    = "m_howitzer"
 sound_move_alt = "m_generic"
 sound_fight   = "f_howitzer"
@@ -2218,7 +2322,7 @@ class         = "Balloon"
 tech_req      = "Chemistry"
 obsolete_by   = "Zeppelin"
 graphic       = "u.balloon"
-graphic_alt   = "u.trireme"
+graphic_alt   = "-"
 sound_move    = "m_balloon"
 sound_move_alt = "m_trireme"
 sound_fight   = "f_warrior"
@@ -2250,7 +2354,7 @@ Balloons gather intel on potential battle areas. They have great vision and\
  are unreachable by units prior to Riflemen and Ironclads. They can stay in\
  the air for one Turn Change before landing in a City, Base, Quay, or transport\
  unit with cargo capacity of 4+. Balloons do not block units under\
- them from being attacked, and cannot fly over mountains.\
+ them from being attacked, and can’t fly over mountains.\
 "), _("
 NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
@@ -2262,7 +2366,7 @@ class         = "Zeppelin"
 tech_req      = "Combustion"
 obsolete_by   = "None"
 graphic       = "u.zeppelin"
-graphic_alt   = "u.balloon"
+graphic_alt   = "-"
 sound_move    = "m_balloon"
 sound_move_alt = "m_trireme"
 sound_fight   = "f_musketeers"
@@ -2308,7 +2412,7 @@ class         = "Air"
 tech_req      = "Flight"
 obsolete_by   = "None"
 graphic       = "u.airplane"
-graphic_alt   = "u.awacs"
+graphic_alt   = "-"
 sound_move    = "pm_prop_fighters"
 sound_move_alt = "m_generic"
 sound_fight   = "f_fighter"
@@ -2407,7 +2511,7 @@ class         = "AirProtect"
 tech_req      = "Radio"
 obsolete_by   = "Jet Fighter"
 graphic       = "u.escort_fighter"
-graphic_alt   = "u.fighter"
+graphic_alt   = "-"
 sound_move    = "m_escort_fighter"
 sound_move_alt = "m_generic"
 sound_fight   = "f_fighter"
@@ -2489,8 +2593,8 @@ bonuses       =
    { "flag", "type", "value"
      ; A4.5 vs all Surface Units 
      "CantReachAir",   "DefenseDividerPct",          50 
-     "NonMil",         "DefenseDividerPct",          50 ; NonMil don't have CantReachAir flag
-     "AntiAir",        "DefenseDividerPct",          50 ; AntiAir don't hav CantReachAir flag
+     "NonMil",         "DefenseDividerPct",          50 ; NonMil do not have CantReachAir flag
+     "AntiAir",        "DefenseDividerPct",          50 ; AntiAir do not hav CantReachAir flag
 
      ; Cancel CantReachAir bonus on Bombers
      "FieldUnit",      "DefenseDividerPct",         -50 
@@ -2524,8 +2628,8 @@ Dive Bombers are like Fighters but fitted for Ground Attack and Sea combat. Rang
  • ZoC\n\
 LOSSES:\n\
  • A3 instead of A4 in Air-to-Air\n\
- • Can't block its tile\n\
- • Can't intercept\
+ • Can’t block its tile\n\
+ • Can’t intercept\
 "), _("
 Communists pay 10 less for this unit. GOTO prevents unit loss from lack of fuel.\
  Override this by ordering adjacent moves.\
@@ -2537,7 +2641,7 @@ class         = "Air"
 tech_req      = "Advanced Flight"
 obsolete_by   = "Jet Bomber"
 graphic       = "u.medium_bomber"
-graphic_alt   = "u.bomber"
+graphic_alt   = "-"
 sound_move    = "m_medium_bomber"
 sound_move_alt = "m_generic"
 sound_fight   = "f_medium_bomber"
@@ -2577,7 +2681,7 @@ veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 The Medium Bomber is well suited for moderately strong targets or multiple weak targets.\
- It may not attack other Air units. It is a Soft Field Unit and can't carry Bomb\
+ It may not attack other Air units. It is a Soft Field Unit and can’t carry Bomb\
  units, causing less discontent than other types of Bombers.\n\
 ➤ Unhappy effect for Soft Field units:\n\
 Republic:0   Democracy:1    (non-aggressive)\n\
@@ -2593,7 +2697,7 @@ class         = "Air"
 tech_req      = "Radar"
 obsolete_by   = "Jet Bomber"
 graphic       = "u.heavy_bomber_o"
-graphic_alt   = "u.bomber"
+graphic_alt   = "-"
 sound_move    = "m_bomber"
 sound_move_alt = "m_generic"
 sound_fight   = "f_heavy_bomber"
@@ -2635,7 +2739,7 @@ roles         = ""
 helptext      = _("\
 Heavy Bombers are large and sturdy Bombers with larger payload and numerous gunner defense stations.\
  They are excellent for hitting strong well-defended ground targets.\
- They cannot attack Air units. They can carry one Bomb. Like most Bombers, the Heavy Bomber is a Field Unit.\
+ They can’t attack Air units. They can carry one Bomb. Like most Bombers, the Heavy Bomber is a Field Unit.\
  Field Units cause the same unhappiness no matter if aggressively or peacefully deployed.\n\
 ➤ Unhappy effect for Field units:\n\
 Republic:1   Democracy:2\
@@ -2650,7 +2754,7 @@ class         = "Air"
 tech_req      = "Rocketry"
 obsolete_by   = "Jet Bomber"
 graphic       = "u.ultra_heavy_bomber_o"
-graphic_alt   = "u.bomber"
+graphic_alt   = "-"
 sound_move    = "m_strategic_bomber"
 sound_move_alt = "m_bomber"
 sound_fight   = "f_strategic_bomber"
@@ -2706,7 +2810,7 @@ class         = "Air"
 tech_req      = "Radar"
 obsolete_by   = "Spy Plane"
 graphic       = "u.awacs_o"
-graphic_alt   = "u.awacs"
+graphic_alt   = "-"
 sound_move    = "m_awacs"
 sound_move_alt = "m_generic"
 sound_fight   = "f_awacs"
@@ -2747,7 +2851,7 @@ class         = "Air_High_Altitude"
 tech_req      = "Stealth"
 obsolete_by   = "None"
 graphic       = "u.spy_plane_o"
-graphic_alt   = "u.awacs"
+graphic_alt   = "-"
 sound_move    = "m_awacs"
 sound_move_alt = "m_generic"
 sound_fight   = "f_awacs"
@@ -2791,7 +2895,7 @@ tech_req      = "Laser"
 impr_req      = "Apollo Program"
 obsolete_by   = "None"
 graphic       = "u.satellite"
-graphic_alt   = "u.awacs"
+graphic_alt   = "-"
 sound_move    = ""
 sound_move_alt = "m_generic"
 sound_fight   = "f_awacs"
@@ -2823,7 +2927,7 @@ helptext      = _("\
 Satellites orbit the Earth above the atmosphere. They are unreachable to anything\
  but missiles. Their orbital velocity allows them to circumnavigate the planet\
  in a couple turns. Telescopic cameras allow them to Investigate City, even if the\
- city has a Police Station. Satellites cannot be seen by others unless adjacent.\
+ city has a Police Station. Satellites can’t be seen by others unless adjacent.\
  Satellites require Laser tech and the Apollo Program.\
 "), _("
 NOTE： Due to game mechanics, Satellites block terrestrial movement\
@@ -2838,7 +2942,7 @@ class         = "Helicopter"
 tech_req      = "Combined Arms"
 obsolete_by   = "None"
 graphic       = "u.t_helicopter"
-graphic_alt   = "u.helicopter"
+graphic_alt   = "-"
 sound_move    = "m_helicopter"
 sound_move_alt = "m_generic"
 sound_fight   = "f_helicopter"
@@ -2866,7 +2970,7 @@ bonuses       =
 cargo         = "Land", "LandAirSea", "LandNoKill"
 flags         = "Helicopter", "AirAttacker", "Unbribable", "Provoking",
                 "CanEscape", "WillNever", "HasNoZOC"
-                ; Tranport Heli is provoking; Fighters don't like them.
+                ; Tranport Heli is provoking; Fighters do not like them.
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -2931,7 +3035,7 @@ bonuses       =
 cargo         = "LandAirSea"
 flags         = "Helicopter", "AirAttacker", "Unbribable",
                 "CanEscape", "WillNever"
-                ; Heli is low-altitude and non-provoking：if it's ever thought to be OP, 
+                ; Heli is low-altitude and non-provoking：if it is ever thought to be OP, 
                 ; changing this flag fixes that right away. But currently it MIGHT be UnP 
                 ; because hp_loss, range, city walls, and Ground Strike Fighter
 veteran_names =
@@ -2969,7 +3073,7 @@ class         = "AirProtect"
 tech_req      = "Avionics"
 obsolete_by   = "None"
 graphic       = "u.jet_fighter"
-graphic_alt   = "u.stealth_fighter"
+graphic_alt   = "-"
 sound_move    = "m_jet_fighter"
 sound_move_alt = "m_stealth_fighter"
 sound_fight   = "f_jet_fighter"
@@ -3064,7 +3168,7 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
-Ground Strike Fighters upgrade the Dive Bomber. They cannot block attacks on other\
+Ground Strike Fighters upgrade the Dive Bomber. They can’t block attacks on other\
  units on their tile, nor engage against Fighters. However, like the Dive Bomber,\
  they can interdict ZoC over land tiles. High fuel capacity allows two turns in the\
  air. No unit can stop this unit from attacking surface units on a tile. This unit\
@@ -3080,7 +3184,7 @@ class         = "Air_High_Altitude"
 tech_req      = "Space Flight"           
 obsolete_by   = "None"                   
 graphic       = "u.jet_bomber_o"
-graphic_alt   = "u.bomber"
+graphic_alt   = "-"
 sound_move    = "m_jet_bomber"
 sound_move_alt = "m_bomber"
 sound_fight   = "f_jet_bomber"
@@ -3175,7 +3279,7 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
-The most advanced Fighter, with improved attack and longer range. Stealth Fighters cannot be seen unless adjacent\
+The most advanced Fighter, with improved attack and longer range. Stealth Fighters can’t be seen unless adjacent\
  to an enemy. Stealth evasion gives a 25% bonus against all Anti-Air units, and reduces\
  SAM Batteries down to a smaller 25% bonus.\
 "), _("
@@ -3192,7 +3296,7 @@ class         = "Air"
 tech_req      = "Stealth"
 obsolete_by   = "None"
 graphic       = "u.stealth_bomber_o"
-graphic_alt   = "u.stealth_bomber"
+graphic_alt   = "-"
 sound_move    = "m_stealth_bomber"
 sound_move_alt = "m_generic"
 sound_fight   = "f_stealth_bomber"
@@ -3235,7 +3339,7 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
-The deadliest Bomber, with improved attack and speed. Stealth Bombers cannot be seen\
+The deadliest Bomber, with improved attack and speed. Stealth Bombers can’t be seen\
  unless adjacent to an enemy. Stealth evasion gives a 25% bonus against all Anti-Air\
  units, and reduces SAM Batteries down to only a 25% bonus. May carry two Bombs.\
 "), _("
@@ -3317,7 +3421,7 @@ Triremes are used for exploration, transport, and Commerce.\
 "), _("
 Triremes can enter Deep Ocean, but there is risk：they must end every second\
  turn on river, coastline, or a city—or else be lost at sea. They can travel\
- and attack on rivers, but cannot attack the shore.\
+ and attack on rivers, but can’t attack the shore.\
 "), _("
 Like most ancient sea units, when it initiates combat there will be 15 rounds\
  of combat and 15 total hp lost between both units. This may or may not\
@@ -3330,7 +3434,7 @@ class         = "RiverShip"
 tech_req      = "Map Making"
 obsolete_by   = "Caravel"
 graphic       = "u.longboat"
-graphic_alt   = "u.trireme"
+graphic_alt   = "-"
 sound_move    = "m_longboat"
 sound_move_alt = "m_trireme"
 sound_fight   = "f_trireme"
@@ -3367,7 +3471,7 @@ class         = "RiverShip"
 tech_req      = "Seafaring"
 obsolete_by   = "Caravel"
 graphic       = "u.galley"
-graphic_alt   = "u.trireme"
+graphic_alt   = "-"
 sound_move    = "m_galley"
 sound_move_alt = "m_trireme"
 sound_fight   = "f_trireme"
@@ -3394,7 +3498,7 @@ helptext      = _("\
 The Galley is an all-purpose sea unit and upgrades the Trireme. It has decent\
  combat strength, can transport, and is a Commerce unit. The entry on Caravan\
  explains what Commerce units may do. Galleys can travel and attack on rivers,\
- but cannot attack the shore. Galleys do not cause unhappiness.\
+ but can’t attack the shore. Galleys do not cause unhappiness.\
 "), _("
 Like most early sea units, when it initiates an attack, there will be 15 rounds\
  of combat and 15 total hp lost between both units. This may or may not\
@@ -3407,7 +3511,7 @@ class         = "RiverShip"
 tech_req      = "Astronomy"
 obsolete_by   = "Caravel"
 graphic       = "u.war_galley"
-graphic_alt   = "u.trireme"
+graphic_alt   = "-"
 sound_move    = "m_war_galley"
 sound_move_alt = "m_trireme"
 sound_fight   = "f_trireme"
@@ -3444,7 +3548,7 @@ class         = "RiverShip"
 tech_req      = "Engineering"
 obsolete_by   = "Caravel"
 graphic       = "u.ram_ship"
-graphic_alt   = "u.trireme"
+graphic_alt   = "-"
 sound_move    = "m_ram_ship"
 sound_move_alt = "m_trireme"
 sound_fight   = "f_ram_ship"
@@ -3467,9 +3571,9 @@ flags         = "BadCityDefender", "CantReachAir", "Only_Native_Attack", "WillNe
 roles         = "Hunter"
 helptext      = _("\
 The Ram Ship has one purpose：to destroy other ships. It has poor vision, no transport or\
- commerce ability, and cannot travel rivers. Unlike other early ships, there will always be\
+ commerce ability, and can’t travel rivers. Unlike other early ships, there will always be\
  a winner and a loser when Ram Ships attack. They are good for first-strike, and are good\
- counter units for nations not invested into sea tech. Ram Ships cannot do shore attacks.\
+ counter units for nations not invested into sea tech. Ram Ships can’t do shore attacks.\
 ")
 
 [unit_caravel]
@@ -3478,7 +3582,7 @@ class         = "RiverShip"
 tech_req      = "Navigation"
 obsolete_by   = "Galleon"
 graphic       = "u.caravel"
-graphic_alt   = "u.trireme"
+graphic_alt   = "-"
 sound_move    = "m_caravel"
 sound_move_alt = "m_generic"
 sound_fight   = "f_caravel"
@@ -3586,7 +3690,7 @@ bonuses       =
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
 roles         = "Hunter"
 helptext      = _("\
-The Frigate is versatile — it's a superior offensive unit and also a decent transport ship. Frigates\
+The Frigate is versatile — it is a superior offensive unit and also a decent transport ship. Frigates\
  can travel and attack on rivers, or make shore attacks from sea. Frigate crews repair their ship an\
  extra +1hp per turn, regardless of whether it has moved.\
 "), _("
@@ -3600,7 +3704,7 @@ class         = "RiverShip"
 tech_req      = "Industrialization"
 obsolete_by   = "None"
 graphic       = "u.cargo_ship"
-graphic_alt   = "u.transport"
+graphic_alt   = "-"
 sound_move    = "m_transport"
 sound_move_alt = "m_transport"
 sound_fight   = "f_trireme"
@@ -3667,7 +3771,7 @@ bonuses       =
 flags         = "BadCityDefender", "CanEscape"
 roles         = "Ferryboat", "FerryStartUnit"
 helptext      = _("\
-The Transport cannot attack but can defend itself when under attack.\
+The Transport can’t attack but can defend itself when under attack.\
  Marines and Anti-Aircraft Artillery can directly attack from a Transport. Its\
  large cargo capacity makes it a significant logistical upgrade in sea\
  sea transportation. The Transport is considered a military vessel：unwelcome in\
@@ -3803,7 +3907,7 @@ class         = "Sea"
 tech_req      = "Rocketry"
 obsolete_by   = "None"
 graphic       = "u.missile_destroyer"
-graphic_alt   = "u.destroyer"
+graphic_alt   = "-"
 sound_move    = "m_destroyer"
 sound_move_alt = "m_generic"
 sound_fight   = "f_destroyer"
@@ -3890,7 +3994,7 @@ class         = "Sea"
 tech_req      = "Refining"
 obsolete_by   = "None"
 graphic       = "u.battleship"
-graphic_alt   = "u.battleship"
+graphic_alt   = "-"
 sound_move    = "m_battleship"
 sound_move_alt = "m_generic"
 sound_fight   = "f_battleship"
@@ -3964,7 +4068,7 @@ roles         = "Hunter"
 helptext      = _("\
 Submarines are strong attackers but weak defenders. They can carry 8 Missiles.\
  They are unreachable by Air units, but do not block air attacks on surface ships.\
- Submarines cannot attack units on shore. Submarines cannot be seen by other players\
+ Submarines can’t attack units on shore. Submarines can’t be seen by other players\
  unless they have a unit or city adjacent to it.\ 
 "), _("\
 Submarines have superior attrition rates when attacking in numbers. They excel\
@@ -4046,11 +4150,11 @@ flags         = "NeverProtects", "FieldUnit", "OneAttack", "HasNoZOC", "Unbribab
 roles         = ""
 helptext      = _("\
 A Cruise Missile can strike distant targets. It\
- cannot attack Air units, but Air units never block\
+ can’t attack Air units, but Air units never block\
  a strike on reachable surface units. Cruise Missiles\
  can be relocated by ending their turn on a city,\
  airbase, Submarine, Missile Destroyer, AEGIS Cruiser,\
- Carrier, or Mobile SAM. A Cruise Missile cannot\
+ Carrier, or Mobile SAM. A Cruise Missile can’t\
  block attacks on other units on its tile.\
 ")
 
@@ -4060,7 +4164,7 @@ class         = "Bomb"
 tech_req      = "Nuclear Fission"
 obsolete_by   = "None"
 graphic       = "u.atom_bomb"
-graphic_alt   = "u.nuclear"
+graphic_alt   = "-"
 sound_move    = "m_atom_bomb"
 sound_move_alt = "m_generic"
 sound_fight   = "f_atom_bomb"
@@ -4107,7 +4211,7 @@ tech_req      = "Fusion Power"
 impr_req      = "Enrichment Facility"
 obsolete_by   = "None"
 graphic       = "u.hbomb"
-graphic_alt   = "u.nuclear"
+graphic_alt   = "-"
 sound_move    = "m_atom_bomb"
 sound_move_alt = "m_generic"
 sound_fight   = "f_atom_bomb"
@@ -4157,7 +4261,7 @@ tech_req      = "Fusion Power"
 impr_req      = "Enrichment Facility"
 obsolete_by   = "None"
 graphic       = "u.ddomb"
-graphic_alt   = "u.atom_bomb"
+graphic_alt   = "-"
 sound_move    = "m_atom_bomb"
 sound_move_alt = "m_generic"
 sound_fight   = "f_atom_bomb"
@@ -4338,10 +4442,12 @@ veteran_power_fact = 100, 110, 115, 120, 125, 130, 135
 veteran_move_bonus = 0, 0, 0, 0, 0, 0, 0
 roles         = "DiplomatStartUnit"
 helptext      = _("\
-A Diplomat performs official or covert actions. Covert acts make incidents\
- which let Senates break treaties. Diplomats in cities defend such acts with\
- combat. Diplomats can • Bribe a lone unit • Establish embassy • Investigate City\
- • Sabotage production/buildings • Steal tech • Steal maps • Incite city revolt.\n\
+A Diplomat performs official or covert actions. Covert actions make incidents\
+ which let Senates break treaties. Diplomats in cities may defend such acts with\
+ diplomatic combat. Diplomats can • Bribe a lone unit • Establish embassy • Investigate City\
+ • Sabotage random production or buildings • Steal tech • Steal maps • Incite city revolt.\n\
+Except for Bribing and Investigate City, diplomatic actions will spend the Diplomat,\
+ making it unavailable for further use. \
 "), _("\
 Full rules for Diplomats are in the Manual.\
 ")
@@ -4427,7 +4533,7 @@ cargo         = "Cargo"
 embarks       = "LandRoad", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "Helicopter"
 flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage"
-roles         = "AttackStrongStartUnit"  ;note：MP2 doesn't start games with ASSU's so has co-opted this for caravan start unit.
+roles         = "AttackStrongStartUnit"  ;note：MP2 does not start games with ASSUs so has co-opted this for caravan start unit.
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -4448,8 +4554,9 @@ Commerce units can help build Wonders in any city with whom\
  you are not at war. In foreign cities 12+ tiles distant, they can create Trade Routes,\
  increasing net trade in both cities relative to their combined trade. Routes are inactive\
  during war and (re)activate during peace.\n\
-Commerce units can enter the Marketplace of non-hostile foreign cities to sell goods：revenue derives\
- from total trade in both cities. This is only profitable between cities with very high trade.\n\
+Commerce units can enter the Marketplace of non-hostile foreign cities to sell their
+ wares：revenue derives from total trade in both cities. This is only profitable between
+ cities with very high trade.\n\
 Commerce units can build any Wonders for which you have the tech requirement. To use them\
  for a Trade Route, they need to have given a Home City.\n\
 All Commerce units can carry Goods as cargo.\
@@ -4491,7 +4598,7 @@ veteran_power_fact = 100
 veteran_move_bonus = 3
 helptext      = _("\
 Wagons are the first Land unit that can do Commerce. Compared to a Caravan, they pay gold\
- upkeep, cannot fortify, and can only travel on roads—which exposes them to ambush and capture\
+ upkeep, are defenseless, and can only travel on roads—which exposes them to ambush and capture\
  from units in Hideouts. A benefit of Wagons is to transport slower units to reach distant\
  cities faster. They have 3⅓ move points, giving a range of 10 tiles on roads.\n\
 Goods and units with 2 or less move points can be carried on Wagons. Outside a city, units can load;\
@@ -4505,7 +4612,7 @@ class         = "LandRail"
 tech_req      = "Railroad"
 obsolete_by   = "None"
 graphic       = "u.train"
-graphic_alt   = "u.transport"
+graphic_alt   = "-"
 sound_move    = "m_train"
 sound_move_alt = "m_generic"
 sound_fight   = "f_generic"
@@ -4539,7 +4646,7 @@ Trains are Commerce units with a bonus：they allow units with 2 or less\
  can:\n1. (L)oad outside a City or Base;\n2. Unload (T) in a Base or Quay.;\n3. Step off the Train outside a City\
  (loses all moves.)\nAll other units must load/unload inside a City.\n\n\
 On non-allied foreign rails, Trains incur full terrain movement cost.\
- Pre-gunpowder units can't attack Trains.\n\n\
+ Pre-gunpowder units can’t attack Trains.\n\n\
 Electricity and Combustion each give Trains an additional +1 move.\
 ")
 
@@ -4549,7 +4656,7 @@ class         = "LandRoad"
 tech_req      = "The Corporation"
 obsolete_by   = "None"
 graphic       = "u.truck"
-graphic_alt   = "u.freight"
+graphic_alt   = "-"
 sound_move    = "m_freight"
 sound_move_alt = "m_generic"
 sound_fight   = "f_freight"
@@ -4588,7 +4695,7 @@ class         = "Cargo"
 tech_req      = "Currency"
 obsolete_by   = "Freight"
 graphic       = "u.amphorae"
-graphic_alt   = "u.tribesmen"
+graphic_alt   = "-"
 sound_move    = "m_generic"
 sound_move_alt = "m_generic"
 sound_fight   = "f_generic"
@@ -4613,13 +4720,13 @@ helptext      = _("\
 Goods are commodities.\
  The cargo containers of the ancient world were amphorae, which carried\
  Goods for trade routes.\n\
- Goods can be used to Establish Trade Route or Enter Marketplace. They can\
+Goods can be used to Establish Trade Route or Enter Marketplace. They can\
  be carried by Commerce units, allowing them to establish multiple\
  trade routes in one voyage. Also, Goods can Recycle Production with only\
  a 25% penalty.\n\
 "), _("\
- By themselves, Goods can only move onto tiles with Cities, Quays, Fortresses,\
- and Naval Bases. Commerce units and Galleons may carry them as cargo.\
+By themselves, Goods can only move onto a tiles with a City, Quay, Fortress,\
+ or Naval Base. Commerce units, Tribesmen, and Galleons may carry them as cargo.\
 ")
 
 [unit_freight]
@@ -4693,7 +4800,13 @@ flags         = "IgTer", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellabl
 roles         = "Explorer", "ExplorerStartUnit"
 helptext      = _("\
 Explorers are brave individuals who map unknown territory. They can slip through enemy\
- ZOC, and have no unit upkeep.\
+ ZOC, and, like Tribesmen, ignore all terrain penalties; basically, treating every tile\
+ as if it had a road, they can move 6 tiles per turn. As a non-military traveler, they\
+ can also visit far off cities to Investigate City and gather intel. Sometimes generals\
+ will use their scouting information for strategic advantage. Explorers can make contact\
+ with far-off lands to arrange cease-fire or peace. Best of all, Explorers live off the\
+ land and have have no unit upkeep. In later times, Explorers upgrade to Partisans. For\
+ all these reasons, the Explorer is perhaps one of the most undervalued of all units.\
 ")
 
 [unit_leader]
@@ -4787,7 +4900,6 @@ Will not unleash barbarians from huts.\
 You can use the DO command to change the gender of the Leader.\
 ")
 
-
 [unit_barbarian_leader]
 name          = _("Barbarian Leader")
 class         = "Land"
@@ -4828,6 +4940,52 @@ One Barbarian Leader appears every time there is a barbarian uprising\
 "), _("\
 When a Barbarian Leader is killed on a tile without any defending units,\
  the 100 gold ransom is paid, but only to land units and helicopters.\
+")
+
+[unit_peasants]
+name          = _("Peasants")
+class         = "Land"
+tech_req      = "Monarchy"
+gov_req       = "Monarchy"
+impr_req      = "Magna Carta"
+obsolete_by   = "None"
+graphic       = "u.peasants"
+graphic_alt   = "u.migrants"
+sound_move    = "m_worker"
+sound_move_alt = "m_generic"
+sound_fight   = "f_worker"
+sound_fight_alt = "f_generic"
+build_cost    = 10
+pop_cost      = 1
+attack        = 0
+defense       = 1
+hitpoints     = 10
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 4
+transport_cap = 0
+fuel          = 0
+city_size     = 1
+uk_happy      = 0
+uk_shield     = 0
+uk_food       = 2
+uk_gold       = 0
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
+flags         = "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Cant_Pillage"
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 0
+helptext      = _("\
+Peasants are the common people in Monarchies. Under Constitutional Monarchy,\
+ you can encourage them by edicts or other programs, and migrate them to other\
+ cities or colonize new areas.\
+ If managed correctly, they can increase the overall rate of national population,\
+ especially in new territories and settlements.\
+ To direct Peasants, the Magna Carta is required, and also the government Monarchy.\
 ")
 
 ;Swordsmen unit, if we can find a way to give it more relevance or useful niche by changing stats later.
@@ -4925,7 +5083,7 @@ class         = "Land"
 tech_req      = "None"
 obsolete_by   = "None"
 graphic       = "u.wolf"
-graphic_alt   = "None"
+graphic_alt   = "-"
 sound_move    = "m_generic"
 sound_move_alt = "m_generic"
 sound_fight   = "f_generic"
@@ -4957,7 +5115,7 @@ class         = "Land"
 tech_req      = "None"
 obsolete_by   = "None"
 graphic       = "u.leopard"
-graphic_alt   = "None"
+graphic_alt   = "-"
 sound_move    = "m_generic"
 sound_move_alt = "m_generic"
 sound_fight   = "f_generic"
@@ -4989,7 +5147,7 @@ class         = "Land"
 tech_req      = "None"
 obsolete_by   = "None"
 graphic       = "u.tiger"
-graphic_alt   = "None"
+graphic_alt   = "-"
 sound_move    = "m_generic"
 sound_move_alt = "m_generic"
 sound_fight   = "f_generic"
@@ -5021,7 +5179,7 @@ class         = "Land"
 tech_req      = "None"
 obsolete_by   = "None"
 graphic       = "u.lion"
-graphic_alt   = "None"
+graphic_alt   = "-"
 sound_move    = "m_generic"
 sound_move_alt = "m_generic"
 sound_fight   = "f_generic"
@@ -5053,7 +5211,7 @@ class         = "Land"
 tech_req      = "None"
 obsolete_by   = "None"
 graphic       = "u.bear"
-graphic_alt   = "None"
+graphic_alt   = "-"
 sound_move    = "m_generic"
 sound_move_alt = "m_generic"
 sound_fight   = "f_generic"
@@ -5085,7 +5243,7 @@ class         = "Land"
 tech_req      = "None"
 obsolete_by   = "None"
 graphic       = "u.crocodile"
-graphic_alt   = "None"
+graphic_alt   = "-"
 sound_move    = "m_generic"
 sound_move_alt = "m_generic"
 sound_fight   = "f_generic"
@@ -5117,7 +5275,7 @@ class         = "Sea"
 tech_req      = "None"
 obsolete_by   = "None"
 graphic       = "u.hippo"
-graphic_alt   = "None"
+graphic_alt   = "-"
 sound_move    = "m_generic"
 sound_move_alt = "m_generic"
 sound_fight   = "f_generic"
@@ -5149,7 +5307,7 @@ class         = "Land"
 tech_req      = "None"
 obsolete_by   = "None"
 graphic       = "u.rhino"
-graphic_alt   = "None"
+graphic_alt   = "-"
 sound_move    = "m_generic"
 sound_move_alt = "m_generic"
 sound_fight   = "f_generic"
@@ -5181,7 +5339,7 @@ class         = "Land"
 tech_req      = "None"
 obsolete_by   = "None"
 graphic       = "u.polar_bear"
-graphic_alt   = "None"
+graphic_alt   = "-"
 sound_move    = "m_generic"
 sound_move_alt = "m_generic"
 sound_fight   = "f_generic"
@@ -5213,7 +5371,7 @@ class         = "Sea"
 tech_req      = "None"
 obsolete_by   = "None"
 graphic       = "u.squid"
-graphic_alt   = "None"
+graphic_alt   = "-"
 sound_move    = "m_generic"
 sound_move_alt = "m_generic"
 sound_fight   = "f_generic"
@@ -5237,7 +5395,7 @@ roles         = "Barbarian"
 helptext      = _("\
 Watch out for wild animals.\
 "), _("\
-Giant Squids live out at sea; they don't come near shore or shallow waters. Avoid them at all costs.\
+Giant Squids live out at sea; they do not come near shore or shallow waters. Avoid them at all costs.\
 ")
 
 ;THIS LINE RESERVED FOR NECESSARY BLANK END OF LINE:

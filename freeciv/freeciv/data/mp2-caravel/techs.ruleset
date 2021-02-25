@@ -393,6 +393,8 @@ flags    = ""
 graphic     = "a.feudalism"
 graphic_alt = "-"
 cost = 146
+helptext = _("Allows Castles (with Construction).")
+
 
 [advance_flight]
 name     = _("Flight")
@@ -404,14 +406,15 @@ graphic_alt = "-"
 helptext = _("Traderoutes give less first time revenue.")
 cost = 4680
 
-[advance_fundamentalism]
-name     = _("Fundamentalism")
+[advance_theocracy]
+name     = _("Theocracy")
 req1     = "Theology"
-req2     = "Conscription"
+req2     = "None"
 flags    = ""
-graphic     = "a.fundamentalism"
+graphic     = "a.theocracy"
 graphic_alt = "-"
-helptext = _("Allows government Fundamentalism.")
+helptext = _("Allows government Theocracy.")
+cost = 725
 
 [advance_fusion_power]
 name     = _("Fusion Power")
@@ -449,7 +452,7 @@ flags    = ""
 graphic     = "a.gunpowder"
 graphic_alt = "-"
 cost = 800
-helptext = _("Obsoletes Agōgē of Sparta, Barracks, earlier foot soldiers.")
+helptext = _("Obsoletes Castle, Agōgē of Sparta, Barracks, earlier foot soldiers.")
 
 [advance_horseback_riding]
 name     = _("Horseback Riding")
@@ -637,7 +640,7 @@ flags    = ""
 graphic     = "a.monotheism"
 helptext = _("Obsoletes Elephants.")
 graphic_alt = "-"
-cost = 415
+cost = 384
 
 [advance_mysticism]
 name     = _("Mysticism")
@@ -860,7 +863,7 @@ req2     = "Industrialization"
 flags    = ""
 graphic     = "a.steel"
 graphic_alt = "-"
-helptext = _("Allows Sea Bridge.")
+helptext = _("Obsoletes Castle. Allows Sea Bridge, Bunker.")
 cost = 3280
 
 [advance_superconductors]
@@ -918,7 +921,7 @@ flags    = ""
 graphic     = "a.theology"
 graphic_alt = "-"
 helptext = _("Obsoletes Oracle. +1 Effect on Cathedral, Michelangelos Chapel.")
-cost = 725
+cost = 600
 
 [advance_theory_of_gravity]
 name     = _("Theory of Gravity")
@@ -964,6 +967,16 @@ req2     = "None"
 flags    = ""
 graphic     = "a.writing"
 graphic_alt = "-"
+
+[advance_nationalism]
+name     = _("Nationalism")
+req1     = "The Corporation"
+req2     = "Communism"
+flags    = ""
+graphic     = "a.nationalism"
+graphic_alt = "-"
+helptext = _("Allows government Nationalism.")
+cost = 2775
 
 ;[advance_agricultural]
 ;name     = _("Agricultural")

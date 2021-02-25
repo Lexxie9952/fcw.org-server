@@ -164,7 +164,7 @@ name		= _("Barracks")
 genus		= "Improvement"
 reqs	=
     { "type", "name", "range"
-
+      "Tech", "Warrior Code", "Player"
     }
 graphic	= "b.barracks_i"
 graphic_alt	= "-"
@@ -266,7 +266,7 @@ sound_alt	= "b_generic"
 helptext	= _("\
 A Cathedral makes 3 unhappy citizens content, but does not affect citizens\
  made unhappy by military activity. Theology increases the effect by +1.\
- Communist government decreases the effect by -1. (Michelangelos Chapel enhances\
+ Communist government decreases the effect by -1. (Michelangelo’s Chapel enhances\
  the effect of Cathedrals by +1 happy citizen and +1 forced content citizen.)\
 ")
 
@@ -283,7 +283,7 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 60
+build_cost	= 65
 upkeep		= 0
 sabotage	= 50
 sound		= "b_city_walls"
@@ -299,9 +299,6 @@ City Walls prevent population loss when a defending unit is killed. As enormous\
  to sabotage. If an enemy attempts to sabotage City Walls, the odds of success\
  are halved. In a city with Fortifications, City Walls are built beyond the\
  fortified perimeter—thus, they replace the bonus instead of stacking with it.\n\
-When you discover Metallurgy, extra materials and construction are needed to\
- keep up with the growing threat from Cannon-type weapons; and cost increases to\
- 70 shields.\
 ")
 
 [building_coastal_defense]
@@ -355,12 +352,12 @@ Courthouses reduce corruption by about half (60% rounded down),\
  of ½, odds of losing become: ½ - ⅛ = ⅜). All other hostile diplomatic\
  actions are 20% less effective (80% - 20% = 60%).\
 "), _("\
- In Democracy, Courthouses make 1 unhappy citizen content, unless the\
+ Courthouses make 1 unhappy citizen content, unless the\
  citizen is unhappy about military activity).\
 "), _("\
  Cost to incite revolt in the city is 2x if empty and 4x if occupied.\
 "), _("\
- Diplomats cannot establish embassies unless you permit it through\
+ Diplomats can’t establish embassies unless you permit it through\
  Cease-fire or Peace. (Spies require a Police Station to block them.)\
 ")
 
@@ -748,10 +745,11 @@ sabotage	= 100
 sound		= "b_police_station"
 sound_alt	= "b_generic"
 helptext	= _("\
-Police Stations neutralize the unhappiness caused by two military units. They\
- prevent enemy Diplomats and Spies from Estalishing Embassy without first\
- agreeing to Cease-Fire or Peace. They also prevent Investigate City under all\
- governments except Democracy.\
+Police Stations neutralize the unhappiness caused by two military units or two\
+ unhappy Foreign Nationals. Under Nationalism the effect is +1, affecting three\
+ citizens. Police Stations prevent Estalishing Embassy without first agreeing to\
+ Cease-Fire or Peace. They also prevent Investigate City under all governments\
+ except Democracy.\
 "), _("\
  Diplomatic combat gets a bonus of ¼ of base odds. (At general base odds\
  of ½, odds of losing become: ½ - ⅛ = ⅜). All other hostile diplomatic\
@@ -1186,6 +1184,29 @@ Makes one unhappy citizen content. Mysticism doubles\
  activity.\
 ")
 
+[building_totem_pole]
+name		= _("Totem Pole")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+    }
+graphic	= "b.totem_pole"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 30
+upkeep		= 0
+sabotage	= 100
+sound		= "b_totem_pole"
+sound_alt	= "b_generic"
+helptext	= _("\
+Gives one luxury to a city. The watchful eye of guardian ancestors\
+ reminds your tribe to produce and prepare for its future in a\
+ tough unpredictable world.\n\
+Obsolete by: Temple.\
+")
+
 [building_university]
 name		= _("University")
 genus		= "Improvement"
@@ -1235,7 +1256,7 @@ Sets the main capital of your nation. Loss of your main capital: \
 "), _("\
  Capital cities gain +1 happy citizen.\
 "), _("\
- Capitals cannot be incited to revolt. The closer a city is to a capital,\
+ Capitals can’t be incited to revolt. The closer a city is to a capital,\
  the higher the cost to bribe or incite revolt. In a capital, the chance of\
  enemy agents defeating your agents or sabotaging buildings is halved.\
 "), _("\
@@ -1246,8 +1267,8 @@ Sets the main capital of your nation. Loss of your main capital: \
  a safer location or reduce corruption for nearby cities.\ 
 "), _("\
  The Palace gives a production bonus of +75% under Despotism,\
- +50% under Monarchy, and +25% under Communism. Fundamentalism gets\
- a +50% gold bonus.\
+ +50% under Monarchy, +25% under Communism, +15% under\
+ Nationalism; and Theocracy gets a +50% gold bonus.\
 "), _("\
  A Palace automatically appears in your first city. This nullifies\
  the move bonus for nations who have no cities, due to sedentary\
@@ -1280,7 +1301,7 @@ Sets your religious capital and second center of government. Loss of this\
 "), _("\
  Capital cities gain +1 happy citizen.\
 "), _("\
- Capitals cannot be incited to revolt. The closer a city is to a capital,\
+ Capitals can’t be incited to revolt. The closer a city is to a capital,\
  the higher the cost to bribe or incite revolt. In a capital, the chance of\
  enemy agents defeating your agents or sabotaging buildings is halved.\
 "), _("\
@@ -1288,9 +1309,10 @@ Sets your religious capital and second center of government. Loss of this\
  enjoy a further reduction of corruption by half.\
 "), _("\
  Religious capitals have a gold income bonus of +75% under Despotism,\
- +50% under Monarchy, +50% under Fundamentalism, and +25% under Communism.\
+ +50% under Monarchy, +50% under Theocracy, +25% under Communism, and\
+ +15% under Nationalism.\
 "), _("\
- Under Fundamentalism, Fanatics produced in the city with this building\
+ Under Theocracy, Zealots produced in the city with this building\
  are inspired by fervorous faith to +1 higher veteran level.\
 "), _("\
  With Conscription, allows producing one extra qualifying unit per turn.\
@@ -1379,6 +1401,39 @@ In all your cities, Buildings with upkeep of 1 gold become free.\
  This wonder is never obsolete.\
 ")
 
+[building_appian_way]
+name		= _("Appian Way")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",            "range",  "present", "quiet"
+      "Tech",     "The Wheel",       "Player", TRUE,      FALSE
+      "Building", "Appian Way",      "Player", FALSE,     TRUE
+    }
+graphic	= "b.appian_way"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Railroad", "Player"
+    }
+build_cost	= 100
+upkeep		= 0
+sabotage	= 0
+sound		= "w_appian"
+sound_alt	= "w_generic"
+helptext	= _("\
+The Appian Way is the first flat stone paved highway that can drain\
+ rainwater. The Appian Way gives the following bonuses: \n\
+ ➤ Trade Routes get a slight increase in ongoing revenue \n\
+ If not in Foreign territory: \n
+ ➤ Tile Workers gain +⅓ move and build Roads at twice the speed. \n\
+ ➤ Wagons, Chariots, and Foot soldiers gain +⅓ move when starting \n\
+  their turn on a Road. \n\
+ In the city with Appian Way: \n\
+ ➤ Each trade-producing tile produces +1 extra trade, if there is a road on it. \n\
+ ➤ Wagons cost 5 shields less. \n\
+Obsolete by: Railroad.\
+")
+
 [building_colossus]
 name		= _("Colossus")
 genus		= "SmallWonder"
@@ -1386,6 +1441,7 @@ reqs	=
     { "type",     "name",           "range", "present", "quiet"
       "Tech",     "Bronze Working", "Player", TRUE,     FALSE
       "Building", "Colossus",       "Player", FALSE,    TRUE
+      "TerrainClass", "Oceanic",    "Adjacent",TRUE,    FALSE
     }
 graphic	= "b.colossus"
 graphic_alt	= "-"
@@ -1803,6 +1859,42 @@ All your new sea units built in cities in your nation start with an\
  This wonder is never obsolete.\
 ")
 
+[building_magna_carta]
+name		= _("Magna Carta")
+genus		= "SmallWonder"
+reqs	=
+    { "type",         "name",                  "range",    "present", "quiet"
+      "Tech",         "Monarchy",              "Player",   TRUE,      FALSE
+      "Building",     "Magna Carta",           "Player",   FALSE,     TRUE
+    }
+graphic	= "b.magna_carta"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 300
+upkeep		= 0
+sabotage	= 0
+sound		= "w_magna_carta"
+sound_alt	= "w_generic"
+helptext	= _("\
+Establishes the government Constitutional Monarchy, which makes Monarchy \
+halfway like representative government. \n\
+"), _("
+Features: \n\
+ ➣ +1 content citizen. \n\
+ ➣ +1 trade on Land tiles that produce trade. (Sea tiles require celebration.) \n\ 
+ ➣ Allows rapture in originally founded cities. \n\
+ ➣ Allows Peasants in the city it’s located. \n\ 
+"), _("
+Penalties: \n\ 
+ ➣ One unit may be used for Martial Law. \n\
+ ➣ One unit is free of upkeep. \n\
+ ➣ 2 military units may be abroad. Each extra causes a discontent citizen. \n\
+ ➣ Gives you a Senate, which can be ignored if King Richard’s Crusade \
+and J.S. Bach’s Cathedral are owned.\
+")
+
 [building_manhattan_project]
 name		= _("Manhattan Project")
 genus		= "GreatWonder"
@@ -2006,7 +2098,7 @@ helptext	= _("\
 Allows you to instantly change government, including governments not\
  yet researched by your civilization, and without the transition period\
  of Anarchy. It also allows unprovoked declaration of war regardless of\
- any Senate or United Nations. Democracies cannot fall into Anarchy from\
+ any Senate or United Nations. Democracies can’t fall into Anarchy from\
  two turns of city disorder.\n\
  This Wonder does not become obsolete.\
 ")

@@ -178,7 +178,7 @@ signal.connect("hut_enter", "_deflua_hut_enter_callback")
   with the Partisan role.
 
   In the default ruleset, the requirements for inspiring partisans are:
-  a) Guerilla warfare must be known by atleast 1 player
+  a) Guerilla warfare must be known by at least 1 player
   b) The player must know about Communism and Gunpowder
   c) The player must run either a democracy or a communist society.
 ]]--

@@ -305,7 +305,7 @@ ui_name_steal_maps = _("Steal %sMap Fragments%s")
 ui_name_investigate_city = _("%sInvestigate City%s")
 
 ; /* TRANS: _Investigate City (spends the unit) (100% chance of success). */
-ui_name_investigate_city_spend_unit = _("%sInvestigate City (spends the unit)%s")
+;ui_name_investigate_city_spend_unit = _("%sInvestigate City (spends the unit)%s")
 
 ; /* TRANS: Help _build Wonder (100% chance of success). */
 ui_name_help_wonder = _("Help %sbuild Wonder%s")
@@ -582,7 +582,7 @@ target_reqs  =
       "Building",    "Courthouse",        "City",    FALSE
       "Building",    "Homeland Security", "City",    FALSE
       "Building",    "Police Station",    "City",    FALSE ; to do: when we can check for spy present to stop it
-      "Gov",         "Fundamentalism",    "Player",  FALSE
+      "Gov",         "Theocracy",    "Player",  FALSE
     }
 
 ; SPY: normal establish embassy--if not at war 
@@ -619,7 +619,7 @@ target_reqs  =
     { "type",        "name",          "range",    "present"
       "NationGroup", "Barbarian",     "Player",   FALSE
       "Building",    "Police Station","City",     FALSE  ; to do: when we can check for spy present to stop it
-      "Gov",         "Fundamentalism","Player",   FALSE
+      "Gov",         "Theocracy",     "Player",   FALSE
     }
 ; ***************************************************
 
@@ -652,23 +652,9 @@ target_reqs  =
     { "type",        "name",              "range",    "present"
       "Building",    "Police Station",    "City",     FALSE
     }
-[actionenabler_investigate_city_spy]
-action       = "Investigate City"
-actor_reqs    =
-    { "type",         "name",          "range","present"
-      "UnitFlag",     "Spy",           "Local", TRUE
-      "UnitType",     "Siege Ram",     "Local", FALSE
-      "UnitState",    "OnLivableTile", "Local", TRUE
-      "MinMoveFrags", "1",             "Local", TRUE
-      "DiplRel",      "Foreign",       "Local", TRUE
-    }
-target_reqs  =
-    { "type",        "name",           "range",    "present"
-      "Building",    "Police Station", "City",    FALSE  
-    }
-;Democracy is unable to block investigate city.
+;Democracy is unable to block Investigate City.
 [actionenabler_investigate_city_democracy]
-action       = "Investigate City Spend Unit"
+action       = "Investigate City"
 actor_reqs    =
     { "type",         "name",          "range", "present"
       "UnitFlag",     "Diplomat",      "Local", TRUE
@@ -682,21 +668,6 @@ target_reqs  =
     { "type",        "name",          "range",    "present"
       "Gov",         "Democracy",     "Player",   TRUE 
     }
-[actionenabler_investigate_city_spy_democracy]
-action       = "Investigate City"
-actor_reqs    =
-    { "type",         "name",          "range", "present"
-      "UnitFlag",     "Spy",           "Local", TRUE
-      "UnitType",     "Siege Ram",     "Local", FALSE
-      "UnitState",    "OnLivableTile", "Local", TRUE
-      "MinMoveFrags", "1",             "Local", TRUE
-      "UnitState",    "Transported",   "Local", FALSE
-      "DiplRel",      "Foreign",       "Local", TRUE
-    }
-target_reqs  =
-    { "type",        "name",          "range",    "present"
-      "Gov",         "Democracy",     "Player",   TRUE 
-    }
 [actionenabler_investigate_city_satellite]
 action       = "Investigate City"
 actor_reqs    =
@@ -704,6 +675,40 @@ actor_reqs    =
       "UnitType",     "Satellite",     "Local", TRUE
       "DiplRel",      "Foreign",       "Local", TRUE
     }    
+
+;Spy has Diplomat flag and there is no more differentiation of
+;Diplomats can only do Investigate City (spends unit)
+;[actionenabler_investigate_city_spy]
+;action       = "Investigate City"
+;actor_reqs    =
+;    { "type",         "name",          "range","present"
+;      "UnitFlag",     "Spy",           "Local", TRUE
+;      "UnitType",     "Siege Ram",     "Local", FALSE
+;      "UnitState",    "OnLivableTile", "Local", TRUE
+;      "MinMoveFrags", "1",             "Local", TRUE
+;      "DiplRel",      "Foreign",       "Local", TRUE
+;    }
+;target_reqs  =
+;    { "type",        "name",           "range",    "present"
+;      "Building",    "Police Station", "City",    FALSE  
+;    }
+;Spy has Diplomat flag and there is no more differentiation of
+;Diplomats can only doi Investigate City (spends unit)
+;[actionenabler_investigate_city_spy_democracy]
+;action       = "Investigate City"
+;actor_reqs    =
+;    { "type",         "name",          "range", "present"
+;      "UnitFlag",     "Spy",           "Local", TRUE
+;      "UnitType",     "Siege Ram",     "Local", FALSE
+;      "UnitState",    "OnLivableTile", "Local", TRUE
+;      "MinMoveFrags", "1",             "Local", TRUE
+;      "UnitState",    "Transported",   "Local", FALSE
+;      "DiplRel",      "Foreign",       "Local", TRUE
+;    }
+;target_reqs  =
+;    { "type",        "name",          "range",    "present"
+;      "Gov",         "Democracy",     "Player",   TRUE 
+;    }
 ; ***********************************************************
 
 [actionenabler_poison_city]
@@ -994,12 +999,56 @@ action = "Recycle Unit"
 actor_reqs    =
     { "type",     "name",         "range", "present", "quiet"
       "UnitFlag", "EvacuateFirst","Local", FALSE,     TRUE
+      "UnitType", "Tribesmen",    "Local", FALSE,     TRUE
       "DiplRel",  "War",          "Local", FALSE,     TRUE
       "DiplRel",  "Cease-fire",   "Local", FALSE,     TRUE
       "DiplRel",  "Armistice",    "Local", FALSE,     TRUE
       "DiplRel",  "Peace",        "Local", FALSE,     TRUE
     }
-
+;TRIBESMEN RECYCLE: Building, Wonder, or Coinage (special)
+[actionenabler_recycle_unit_tribesmen_1]
+action = "Recycle Unit"
+actor_reqs    =
+    { "type",     "name",         "range", "present", "quiet"
+      "UnitType", "Tribesmen",    "Local", TRUE,      TRUE
+      "DiplRel",  "War",          "Local", FALSE,     TRUE
+      "DiplRel",  "Cease-fire",   "Local", FALSE,     TRUE
+      "DiplRel",  "Armistice",    "Local", FALSE,     TRUE
+      "DiplRel",  "Peace",        "Local", FALSE,     TRUE
+    }
+target_reqs    =
+    { "type",   "name", "range", "present"
+      "BuildingGenus", "SmallWonder", "Local", TRUE
+    }
+[actionenabler_recycle_unit_tribesmen_2]
+action = "Recycle Unit"
+actor_reqs    =
+    { "type",     "name",         "range", "present", "quiet"
+      "UnitType", "Tribesmen",    "Local", TRUE,      TRUE
+      "DiplRel",  "War",          "Local", FALSE,     TRUE
+      "DiplRel",  "Cease-fire",   "Local", FALSE,     TRUE
+      "DiplRel",  "Armistice",    "Local", FALSE,     TRUE
+      "DiplRel",  "Peace",        "Local", FALSE,     TRUE
+    }
+target_reqs    =
+    { "type",   "name", "range", "present"
+      "BuildingGenus", "Improvement", "Local", TRUE
+    }
+[actionenabler_recycle_unit_tribesmen_3]
+action = "Recycle Unit"
+actor_reqs    =
+    { "type",     "name",         "range", "present", "quiet"
+      "UnitType", "Tribesmen",    "Local", TRUE,      TRUE
+      "DiplRel",  "War",          "Local", FALSE,     TRUE
+      "DiplRel",  "Cease-fire",   "Local", FALSE,     TRUE
+      "DiplRel",  "Armistice",    "Local", FALSE,     TRUE
+      "DiplRel",  "Peace",        "Local", FALSE,     TRUE
+    }
+target_reqs    =
+    { "type",   "name", "range", "present"
+      "BuildingGenus", "Special", "Local", TRUE
+    }  
+;---------------------------
 [actionenabler_disband_unit]
 action = "Disband Unit"
 actor_reqs    =
@@ -1189,17 +1238,17 @@ target_reqs    =
       "Extra", "Naval Base", "Local", TRUE
     }
 
-;Fanatics can do skirmish assaults
-[actionenabler_fanatic_skirmish_assault]
+;Zealots can do skirmish assaults
+[actionenabler_zealot_skirmish_assault]
 action = "Bombard"
 actor_reqs    =
     { "type",         "name",           "range", "present"
       "UnitFlag",     "Bombarder",      "Local",  TRUE
-      "UnitType",     "Fanatics",       "Local",  TRUE
+      "UnitType",     "Zealots",       "Local",  TRUE
       "UnitState",    "OnDomesticTile", "Local",  TRUE
       "MinMoveFrags", "1",              "Local",  TRUE
       "DiplRel",      "War",            "Local",  TRUE
-      "Gov",          "Fundamentalism", "Player", TRUE
+      "Gov",          "Theocracy", "Player", TRUE
 ;      "UnitState",   "Transported",    "Local",  FALSE
    }
 target_reqs    =
@@ -1209,16 +1258,16 @@ target_reqs    =
       "Extra",    "Naval Base",   "Local", FALSE
       "TerrainClass",  "Oceanic", "Local", FALSE
     }
-;Fanatics can infiltrate/skirmish foreign occupied cities
-[actionenabler_fanatic_skirmish_original_city]
+;Zealots can infiltrate/skirmish foreign occupied cities
+[actionenabler_zealot_skirmish_original_city]
 action = "Bombard"
 actor_reqs    =
     { "type",         "name",           "range", "present"
       "UnitFlag",     "Bombarder",      "Local",  TRUE
-      "UnitType",     "Fanatics",       "Local",  TRUE
+      "UnitType",     "Zealots",       "Local",  TRUE
       "MinMoveFrags", "1",              "Local",  TRUE
       "DiplRel",      "War",            "Local",  TRUE
-      "Gov",          "Fundamentalism", "Player", TRUE
+      "Gov",          "Theocracy", "Player", TRUE
    }
 target_reqs    =
     { "type",         "name",        "range", "present"
@@ -1442,22 +1491,6 @@ target_reqs =
 
 ;UPGRADE - all the below need Missile=FALSE after merge with main branch
 ;---------------------------------------------------------------------------
-;[actionenabler_attack_occupant_and_border_enforcement] ; cease-fire or no, invaders aren't welcome.
-;action = "Attack"
-;actor_reqs    =
-;    { "type",         "name",           "range", "present"
-;      "UnitFlag",     "NonMil",         "Local", FALSE
-;      "UnitState",    "OnDomesticTile", "Local", TRUE
-;      "UnitState",    "Transported",    "Local", FALSE
-;      "MinMoveFrags", "1",              "Local", TRUE
-;      "UnitState",    "OnNativeTile",   "Local", TRUE
-;      "DiplRel",      "Alliance",       "Local", FALSE
-;      "DiplRel",      "Foreign",        "Local", TRUE    ; Player is foreign
-;    }
-;target_reqs =
-;    { "type",       "name",    "range",   "present"
-;        "CityTile", "Claimed", "Local",   FALSE    ; not claimed by some OTHER player.
-;    }
 ;Tribesmen can attack:   
 [actionenabler_attack_native_tribesmen]
 action = "Attack"
@@ -1470,30 +1503,98 @@ actor_reqs    =
       "DiplRel",      "War",            "Local", TRUE
     }
 ;Native attack ALWAYS allowed for units who aren't CargoRestrained
-[actionenabler_attack_native_unrestrained]
+[actionenabler_landclass_attacker_native_unrestrained]
 action = "Attack"
 actor_reqs    =
     { "type",         "name",           "range", "present"
       "UnitFlag",     "NonMil",         "Local", FALSE
-;     "UnitClassFlag","Missile",        "Local", FALSE
       "UnitClassFlag","CargoRestrained","Local", FALSE
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
+      "UnitClassFlag", "TerrainSpeed",  "Local", TRUE
       "DiplRel",      "War",            "Local", TRUE
     }
-;Native attack for CargoRestrained units allowed, if not Transported
-[actionenabler_attack_native_restrained]
+;Native attack ALWAYS allowed for units who aren't CargoRestrained
+[actionenabler_non_landclass_attacker_native_unrestrained]
 action = "Attack"
 actor_reqs    =
     { "type",         "name",           "range", "present"
       "UnitFlag",     "NonMil",         "Local", FALSE
-;     "UnitClassFlag","Missile",        "Local", FALSE
+      "UnitClassFlag","CargoRestrained","Local", FALSE
+      "MinMoveFrags", "1",              "Local", TRUE
+      "UnitState",    "OnNativeTile",   "Local", TRUE
+      "UnitClassFlag", "TerrainSpeed",  "Local", FALSE
+      "DiplRel",      "War",            "Local", TRUE
+    }
+target_reqs = 
+    { "type",  "name",   "range", "present"
+      "Extra", "Bunker", "Local", FALSE
+    }
+;Native attack for CargoRestrained units allowed, if not Transported
+[actionenabler_landclass_attacker_native_restrained]
+action = "Attack"
+actor_reqs    =
+    { "type",         "name",           "range", "present"
+      "UnitFlag",     "NonMil",         "Local", FALSE
       "UnitClassFlag","CargoRestrained","Local", TRUE
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
       "UnitState",    "Transported",    "Local", FALSE
+      "UnitClassFlag","TerrainSpeed",   "Local", TRUE
       "DiplRel",      "War",            "Local", TRUE
     }
+;Non-Land units can't attack Bunkers 
+[actionenabler_non_landclass_attacker_native_restrained]
+action = "Attack"
+actor_reqs    =
+    { "type",         "name",           "range", "present"
+      "UnitFlag",     "NonMil",         "Local", FALSE
+      "UnitClassFlag","CargoRestrained","Local", TRUE
+      "MinMoveFrags", "1",              "Local", TRUE
+      "UnitState",    "OnNativeTile",   "Local", TRUE
+      "UnitState",    "Transported",    "Local", FALSE
+      "UnitClassFlag", "TerrainSpeed",  "Local", FALSE
+      "DiplRel",      "War",            "Local", TRUE
+    }
+target_reqs = 
+    { "type",  "name",   "range", "present"
+      "Extra", "Bunker", "Local", FALSE
+    }    
+;Marines
+[actionenabler_attack_marines]
+action = "Attack"
+actor_reqs    =
+    { "type",          "name",    "range", "present"
+      "UnitFlag",      "NonMil",  "Local", FALSE
+      "MinMoveFrags",  "1",       "Local", TRUE
+      "UnitFlag",      "Marines", "Local", TRUE
+      "DiplRel",       "War",     "Local", TRUE
+    }
+[actionenabler_landclass_attack_from_non_native]
+action = "Attack"
+actor_reqs    =
+    { "type",          "name",             "range", "present"
+      "UnitFlag",      "NonMil",           "Local", FALSE
+      "MinMoveFrags",  "1",                "Local", TRUE
+      "UnitClassFlag", "AttFromNonNative", "Local", TRUE
+      "UnitClassFlag", "TerrainSpeed",     "Local", TRUE
+      "DiplRel",       "War",              "Local", TRUE
+    }
+[actionenabler_non_landclass_attack_from_non_native]
+action = "Attack"
+actor_reqs    =
+    { "type",          "name",             "range", "present"
+      "UnitFlag",      "NonMil",           "Local", FALSE
+      "MinMoveFrags",  "1",                "Local", TRUE
+      "UnitClassFlag", "AttFromNonNative", "Local", TRUE
+      "UnitClassFlag", "TerrainSpeed",     "Local", FALSE
+      "DiplRel",       "War",              "Local", TRUE
+    }
+target_reqs = 
+    { "type",  "name",   "range", "present"
+      "Extra", "Bunker", "Local", FALSE
+    }
+; ***** NON-MIL ATTACKER rules (commerce units)
 ;Commerce units have to be NonMil to enter peaceful waters
 ;but they can also attack those with whom they are at war:   
 [actionenabler_attack_native_nonmil_attacker]
@@ -1501,32 +1602,14 @@ action = "Attack"
 actor_reqs    =
     { "type",         "name",           "range", "present"
       "UnitFlag",     "NonMilAttack",   "Local", TRUE
-;     "UnitClassFlag","Missile",        "Local", FALSE
       "UnitClassFlag","CargoRestrained","Local", FALSE
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
       "DiplRel",      "War",            "Local", TRUE
     }
-;Marines
-[actionenabler_attack_marines]
-action = "Attack"
-actor_reqs    =
-    { "type",          "name",    "range", "present"
-      "UnitFlag",      "NonMil",  "Local", FALSE
-;      "UnitClassFlag","Missile", "Local", FALSE
-      "MinMoveFrags",  "1",       "Local", TRUE
-      "UnitFlag",      "Marines", "Local", TRUE
-      "DiplRel",       "War",     "Local", TRUE
-    }
-[actionenabler_attack_from_non_native]
-action = "Attack"
-actor_reqs    =
-    { "type",          "name",             "range", "present"
-      "UnitFlag",      "NonMil",           "Local", FALSE
-;     "UnitClassFlag", "Missile",          "Local", FALSE
-      "MinMoveFrags",  "1",                "Local", TRUE
-      "UnitClassFlag", "AttFromNonNative", "Local", TRUE
-      "DiplRel",       "War",              "Local", TRUE
+target_reqs = 
+    { "type",  "name",   "range", "present"
+      "Extra", "Bunker", "Local", FALSE
     }
 [actionenabler_attack_from_non_native_nonmil_attacker]
 action = "Attack"
@@ -1537,6 +1620,10 @@ actor_reqs    =
       "MinMoveFrags",  "1",                "Local", TRUE
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
       "DiplRel",       "War",              "Local", TRUE
+    }
+target_reqs = 
+    { "type",  "name",   "range", "present"
+      "Extra", "Bunker", "Local", FALSE
     }
 
 ;/* REQUIRED after merge 
@@ -1922,7 +2009,8 @@ actor_reqs    =
       "UnitFlag",      "Well-Digger",     "Local", FALSE
     }
 ;Somewhat counterintuitive but this results in Marines able to build
-;Forts and airbases, though no airbase inside an existing fort.
+;Forts and airbases, though no airbase inside an existing fort,
+;because otherwise they'd also be able to build Fortresses.
 [actionenabler_marines_can_fort_only]
 action        = "Build Base"
 actor_reqs    =
