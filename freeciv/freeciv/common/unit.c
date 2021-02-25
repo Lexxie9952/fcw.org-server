@@ -428,7 +428,8 @@ bool can_unit_change_homecity(const struct unit *punit)
 /**********************************************************************//**
   Returns the speed of a unit doing an activity.  This depends on the
   veteran level and the base move_rate of the unit (regardless of HP or
-  effects).  Usually this is just used for settlers but the value is also
+  effects), and any active bonus effects dictated by the ruleset.
+  Usually this is just used for settlers but the value is also
   used for military units doing fortify/pillage activities.
 
   The speed is multiplied by ACTIVITY_FACTOR.
@@ -436,6 +437,7 @@ bool can_unit_change_homecity(const struct unit *punit)
 int get_activity_rate(const struct unit *punit)
 {
   const struct veteran_level *vlevel;
+  struct tile *ptile = unit_tile(punit);
 
   fc_assert_ret_val(punit != NULL, 0);
 
@@ -447,12 +449,29 @@ int get_activity_rate(const struct unit *punit)
    * This means sea formers won't have their activity rate increased by
    * Magellan's, and it means injured units work just as fast as
    * uninjured ones.  Note the value is never less than SINGLE_MOVE. */
-  int move_rate = unit_type_get(punit)->move_rate;
+  /* That's great and smart to keep adjusted move rate out of work 
+     activity rate because it should be a separate effect, which it
+     now is. Setting a new standard for good Freeciv maths practices,
+     we're keeping it float all the way through to set a new example in 
+     accurate mathematical rounding */
+  float work_bonus_rate = (float)get_target_bonus_effects(NULL, unit_owner(punit), NULL,
+                                  tile_city(ptile), NULL, ptile, punit,
+                                  unit_type_get(punit), NULL, NULL, NULL,
+                                  EFT_UNIT_WORK_FRAG_BONUS);
+  float work_bonus_pct = (float)get_target_bonus_effects(NULL, unit_owner(punit), NULL,
+                                  tile_city(ptile), NULL, ptile, punit,
+                                  unit_type_get(punit), NULL, NULL, NULL,
+                                  EFT_UNIT_WORK_PCT)/100;
+
+   float move_rate = (float)unit_type_get(punit)->move_rate;
+   // Add work_bonus_rate and/or multiple by work_bonus_pct:
+   move_rate = (move_rate + work_bonus_rate) * (1.0 + work_bonus_pct) + .5; //round up 
+                                                             
 
   /* All settler actions are multiplied by ACTIVITY_FACTOR. */
-  return ACTIVITY_FACTOR
+  return (int)(ACTIVITY_FACTOR
          * (float)vlevel->power_fact / 100
-         * move_rate / SINGLE_MOVE;
+         * move_rate / SINGLE_MOVE);
 }
 
 /**********************************************************************//**

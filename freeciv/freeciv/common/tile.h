@@ -166,7 +166,9 @@ bool tile_is_seen(const struct tile *target_tile,
 /* A somewhat arbitrary integer value.  Activity times are multiplied by
  * this amount, and divided by them later before being used.  This may
  * help to avoid rounding errors; however it should probably be removed. */
-#define ACTIVITY_FACTOR 10
+ /* No, it needs to be increased to allow for granularity and application
+  * of "Work_Bonus" similar to "Move_Bonus" */
+#define ACTIVITY_FACTOR 100
 int tile_activity_time(enum unit_activity activity,
 		       const struct tile *ptile,
                        struct extra_type *tgt);

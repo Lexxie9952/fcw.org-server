@@ -579,6 +579,15 @@ Unit_Upkeep_Free_Per_City
 Unit_Vision_Radius_Sq
     Increase unit vision radius in squared distance by amount tiles.
 
+Unit_Work_Frag_Bonus
+    Adds a number of move fragments to the unit's work rate which accumulates
+    into its work target, per turn.   
+
+Unit_Work_Pct
+    Adds a percent to the unit's work work that accumulates into the work 
+    target, per turn. For example: -100 (unit can't work here),
+     -50 (works at half speed), 0 (no change), 100 (works at double speed.)
+
 Upgrade_Unit
     Upgrade amount obsolete units per turn.
 

@@ -413,6 +413,14 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
     num = num_affected_units(peffect, ai);
     v += (8 * v * amount + num);
     break;
+  case EFT_UNIT_WORK_FRAG_BONUS:
+    num = num_affected_units(peffect, ai);
+    v += (6 * v * amount + num);
+    break;
+  case EFT_UNIT_WORK_PCT:
+    num = num_affected_units(peffect, ai);
+    v += (6 * v * amount + num)/100;
+    break;
   case EFT_UNIT_NO_LOSE_POP:
     v += unit_list_size(pcity->tile->units) * 2;
     break;
