@@ -422,15 +422,6 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
     if (ttype.cargo[0]==0) return false; // Dive-Bomber or Bomber who can't carry bombs.
   } 
   else if (pclass == "Missile") {
-    //console.log("  Missile CHECK ON: tclass.rulename =="+tclass.rule_name);
-     /*
-    if (tclass.rule_name == "Trireme") return false;
-    if (tclass.rule_name == "RiverShip") return false;
-    if (ttype.name == "Transport") return false;
-    if (tclass.rule_name == "Air") return false;
-    if (tclass.rule_name == "AirPillage") return false;
-    if (tclass.rule_name == "Air_High_Altitude") return false;
-    if (tclass.rule_name == "Helicopter") return false; */
     if (ttype.name=="Missile Destroyer" ||
         ttype.name=="AEGIS Cruiser" ||
         ttype.name=="Submarine" ||
@@ -442,8 +433,8 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
     //console.log("  Land* CHECK ON: tclass.rulename =="+tclass.rule_name);
     if (tclass.rule_name == "Land") return false; // can't load on Caravans, the only Land class with cargo capacity.
     if (tclass.rule_name == "Submarine") return false;
-    if (tclass.rule_name == "LandRail" || tclass.rule_name == "LandRoad") {  // only Foot soldiers can get on Trains/Trucks
-      if (ptype['move_rate'] > 2 * SINGLE_MOVE) return false; //Rail equality: units with ≤2 moves can use trains
+    if (tclass.rule_name == "LandRail" || tclass.rule_name == "LandRoad") {  
+      if (utype_real_base_move_rate(ptype) >= 3 * SINGLE_MOVE) return false; // Rail equality: units with <3 moves can use trains
       //if (!unit_has_type_flag(punit, UTYF_FOOTSOLDIER)) return false; //used to be foot only, now it's line above
     }
     if (tclass.rule_name == "Air") {

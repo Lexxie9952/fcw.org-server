@@ -305,4 +305,20 @@ function utype_real_base_defense_strength(ptype) {
   return adjusted;
 }
 
+/************************************************************************ 
+ * Returns the "real" base move rate of a unit, since v0 veteran level
+ * can be used to achieve non-integer values for base movement.
+ * Return value is in move_frags.
+*************************************************************************/
+function utype_real_base_move_rate(punit_type)
+{
+  var move_bonus = parseInt(punit_type['move_bonus'][0]) 
+                 ? parseInt(punit_type['move_bonus'][0]) 
+                 : 0;
+  var move_rate  = parseInt(punit_type['move_rate']);
+
+  return move_bonus + move_rate;
+}
+
+
 
