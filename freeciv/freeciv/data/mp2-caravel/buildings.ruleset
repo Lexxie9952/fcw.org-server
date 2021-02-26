@@ -155,8 +155,10 @@ sound		= "b_bank"
 sound_alt	= "b_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
-Together, a Bank and Marketplace double the tax and luxury production in a city.\
- That is, the Bank adds another +50% to the +50% of the Marketplace.\
+Together, a Bank and Marketplace double the tax and luxury output in a city.\
+ That is, the Bank adds another +50% to the +50% of the Marketplace. \n\
+Banks also increase the conversion rate of Coinage by +25%. A Bank and\
+ Marketplace each add +25%, yielding a rate of 2.0 gold per 1 shield invested.\
 ")
 
 [building_barracks]
@@ -610,6 +612,8 @@ sound_alt	= "b_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
 Increases the luxury and tax output in a city by +50%.\
+Also increases the conversion rate of Coinage by +25%,\
+ yielding a rate of 1.75 gold per 1 shield invested.\
 ")
 
 [building_mass_transit]
@@ -1112,6 +1116,9 @@ In cities with a Bank, a Stock Exchange boosts tax and luxury\
 "), _("\
 *A Marketplace, Bank, and Stock Exchange together boost\
  tax and luxury production by +150%.\
+"), _("\
+Also increases the conversion rate of Coinage by +25%. A Bank, Marketplace, and\
+ Stock Exchange each add +25%, yielding a rate of 2.25 gold per 1 shield invested.\
 ")
 
 [building_super_highways]
@@ -1194,6 +1201,8 @@ graphic	= "b.totem_pole"
 graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
+      "Tech", "Ceremonial Burial", "Player"
+      "Building", "Temple", "City"
     }
 build_cost	= 30
 upkeep		= 0
@@ -1201,9 +1210,10 @@ sabotage	= 100
 sound		= "b_totem_pole"
 sound_alt	= "b_generic"
 helptext	= _("\
-Gives one luxury to a city. The watchful eye of guardian ancestors\
- reminds your tribe to produce and prepare for its future in a\
- tough unpredictable world.\n\
+Gives one luxury to a city. The process of building a Totem\
+ Pole can be more useful than completing it. It keeps your\
+ tribe productive and can store shields toward future\
+ buildings made possible by your first scientific discovery.\n\
 Obsolete by: Temple.\
 ")
 
@@ -2351,6 +2361,12 @@ build_cost	= 999
 upkeep		= 0
 sabotage	= 0
 helptext	= _("\
-This is not a normal improvement. Setting production to Coinage converts\
- normal output into tax output (money, coins!)\
+Coinage converts production output to gold. The base rate is 2 shield\
+ to 3 gold. The base rate is favorable only in niche contexts. City\
+ improvements can increase the rate of return: \n\
+ ➤ 1.50 gold per shield:  Base rate. \n\
+ ➤ 1.75 gold per shield:  Marketplace (adds +25%). \n\
+ ➤ 2.00 gold per shield:  Bank (adds +25%). \n\
+ ➤ 2.25 gold per shield:  Stock Exchange (adds +25%). \n\
+ Fractional income is resolved by randomized Banker’s Rounding.\
 ")

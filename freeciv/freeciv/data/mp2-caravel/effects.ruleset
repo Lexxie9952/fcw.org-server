@@ -2009,7 +2009,7 @@ reqs	=
       "Building", "Aqueduct", "City"
     }
 
-[effect_bank]
+[effect_bank_gold]
 type    = "Output_Bonus"
 value	= 50
 reqs	=
@@ -2018,8 +2018,7 @@ reqs	=
       "Building", "Bank", "City"
       "OutputType", "Gold", "Local"
     }
-
-[effect_bank_1]
+[effect_bank_luxury]
 type    = "Output_Bonus"
 value	= 50
 reqs	=
@@ -2027,6 +2026,13 @@ reqs	=
       "Building", "Marketplace", "City"
       "Building", "Bank", "City"
       "OutputType", "Luxury", "Local"
+    }
+[effect_bank_coinage]
+type    = "Coinage_Bonus_Pct"
+value	= 25
+reqs	=
+    { "type", "name", "range"
+      "Building", "Bank", "City"
     }
 
 [effect_barracks]
@@ -2986,7 +2992,7 @@ reqs	=
       "OutputType", "Science", "Local"
     }
 
-[effect_marketplace]
+[effect_marketplace_gold]
 type    = "Output_Bonus"
 value	= 50
 reqs	=
@@ -2994,14 +3000,20 @@ reqs	=
       "Building", "Marketplace", "City"
       "OutputType", "Gold", "Local"
     }
-
-[effect_marketplace_1]
+[effect_marketplace_luxury]
 type    = "Output_Bonus"
 value	= 50
 reqs	=
     { "type", "name", "range"
       "Building", "Marketplace", "City"
       "OutputType", "Luxury", "Local"
+    }
+[effect_marketplace_coinage]
+type    = "Coinage_Bonus_Pct"
+value	= 25
+reqs	=
+    { "type", "name", "range"
+      "Building", "Marketplace", "City"
     }
 
 ; No population pollution until certain techs researched
@@ -3852,7 +3864,7 @@ reqs    =
       "Tech", "Space Flight", "World", TRUE
     }
 
-[effect_stock_exchange]
+[effect_stock_exchange_gold]
 type    = "Output_Bonus"
 value	= 50
 reqs	=
@@ -3861,8 +3873,7 @@ reqs	=
       "Building", "Stock Exchange", "City"
       "OutputType", "Gold", "Local"
     }
-
-[effect_stock_exchange_1]
+[effect_stock_exchange_luxury]
 type    = "Output_Bonus"
 value	= 50
 reqs	=
@@ -3870,6 +3881,13 @@ reqs	=
       "Building", "Bank", "City"
       "Building", "Stock Exchange", "City"
       "OutputType", "Luxury", "Local"
+    }
+[effect_stock_exchange_coinage]
+type    = "Coinage_Bonus_Pct"
+value	= 25
+reqs	=
+    { "type", "name", "range"
+      "Building", "Stock Exchange", "City"
     }
 
 [effect_super_highways]
@@ -4000,7 +4018,7 @@ reqs	=
 
 [effect_totem_pole]
 type    = "Output_Add_Tile"
-value   = 2
+value   = 1
 reqs    =
     { "type", "name", "range"
       "Building", "Totem Pole", "City"
@@ -4237,7 +4255,6 @@ reqs =
       "UnitType", "Legion",        "Local", FALSE ;Legions already got a bonus above.
       "CityTile", "Claimed",       "Local", FALSE
     }
-;SAME effect as the others but causes segfault?
 [effect_appian_move_workers2]
 type    = "Move_Bonus"
 value   = 3
@@ -6149,4 +6166,11 @@ reqs    =
     "Tech", "Banking", "Player", TRUE
   }
 
+[effect_coinage_base_rate]
+type    = "Coinage_Bonus_Pct"
+value	= 50
+reqs	=
+    { "type", "name", "range"
+    }
+    
 ;This line intentionally left blank:

@@ -1,3 +1,4 @@
+;: ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：
 ; Modifying this file:
 ; You should not modify this file except to make bugfixes or
 ; for other "maintenance".  If you want to make custom changes,
@@ -13,6 +14,7 @@
 ; unit with the relevant role that the player can build will be chosen.
 ; If no such unit can be found (eg Explorers that require Seafaring),
 ; then the first unit with this role will be chosen.
+;: ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：
 
 [datafile]
 description="Unit definitions for the MP2 ruleset."
@@ -846,7 +848,7 @@ Communist States can assign Proletarians from one city to another, which transfe
  from one to the other. They can also be ordered to the same tasks as Workers. Proletarians\
  are extremely valuable as Workers for a third of the price. The disadvantage is that they\
  cost one population to make. However, this is more than compensated by the fact that when\
- they join a city, they add two to the population!\
+ they join a city, they add two to the population! \
 "), _("\
 Large numbers of Proletarians can be used to rapidly complete important State projects,\
  which you may organize into Five-turn Plans.\
@@ -1107,15 +1109,16 @@ disembarks    = "LandRoad", "LandRail", "Helicopter"
 flags         = "FootSoldier", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever", "Bombarder"
 roles         = "DefendGood", "FirstBuild", "HutTech"
 helptext      = _("\
-The Phalanx is armored infantry, suitable for defending your cities. It is valuable\
- for claiming and holding defensive tactical positions. They can attack while fortified\
- and maintain fortified status.\n\
-Phalanxes can do a special Rumble Attack on enemy units who move adjacent to them,\
- if the Phalanx is fortified OR has not moved this turn. Moving enemies can’t counter\
- a well-shielded battalion in formation from shoving into their\
- flank, targeting them with long sarissas. Rumble attacks are not mortal combat —— the turtled Phalanx\
- does not expose itself to vulnerability, but at the cost of only applying slow belligerent frontal\
- pressure to hopefully unsettle and drive the enemy out of their position.\n\
+The Phalanx is armored infantry, excellent for city defense. It is also valuable\
+ for holding tactical positions： Phalanxes can attack while remaining fortified.\n\
+ "), _("\
+If a Phalanx is fortified or has not moved this turn, it can Rumble enemy units\
+ who move adjacent. (Newly arriving enemies get exposed to a Phalanx in tight turtle-shield\
+ formation attacking them with long sarissas.) Rumble attacks are a skirmish and not mortal\
+ combat. The Phalanx has no vulnerability during Rumble, but its tight formation can only\
+ thrust at exposed outer ranks. Rumble attacks are meant to push and unsettle the enemy to\
+ stop them from fortifying into a tactical position. The action goes for 3 rounds of combat,\
+ uses 5/9 of a move point, and does not alter the fortified status of the Phalanx.\n\
 With the discovery of Conscription, Phalanxes can convert to Musketeers in any domestic city.\
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
@@ -4548,8 +4551,8 @@ veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
 veteran_move_bonus = 7, 7, 7, 7, 8, 9, 10
 helptext      = _("\
 Compared to other early Commerce units, the Caravan is the only one who can\
- go off roads and rails, pay no upkeep, and present no military threat to\
- trade partners. Faster than foot units, they have 2 7/9 moves.\n\ 
+ travel by land off roads and rails, and cause no military threat to\
+ trade partners. It can defend itself and also fortify. They have 2 7/9 moves.\n\ 
 Commerce units can help build Wonders in any city with whom\
  you are not at war. In foreign cities 12+ tiles distant, they can create Trade Routes,\
  increasing net trade in both cities relative to their combined trade. Routes are inactive\
@@ -4586,7 +4589,7 @@ fuel          = 0
 uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
-uk_gold       = 1
+uk_gold       = 0
 cargo         = "Land", "Cargo", "LandAirSea"
 flags         = "HelpWonder", "TradeRoute", "Cant_Fortify", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Shield2Gold", "NoVeteran"
 roles         = ""
@@ -4597,8 +4600,8 @@ veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 3
 helptext      = _("\
-Wagons are the first Land unit that can do Commerce. Compared to a Caravan, they pay gold\
- upkeep, are defenseless, and can only travel on roads—which exposes them to ambush and capture\
+Wagons are the first Land unit that can do Commerce. Compared to a Caravan, they are defenseless,\
+ and can only travel on roads—both of which exposes them to ambush and capture\
  from units in Hideouts. A benefit of Wagons is to transport slower units to reach distant\
  cities faster. They have 3⅓ move points, giving a range of 10 tiles on roads.\n\
 Goods and units with 2 or less move points can be carried on Wagons. Outside a city, units can load;\
@@ -4630,7 +4633,7 @@ fuel          = 0
 uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
-uk_gold       = 1
+uk_gold       = 0
 cargo         = "Land", "LandAirSea", "Balloon", "Bomb", "Cargo", "Zeppelin"
 flags         =  "HelpWonder", "TradeRoute", "NonMil", "HasNoZOC", "Cant_Fortify", "NoVeteran", "Capturable"
 ; No veteran levels (level name is never displayed)

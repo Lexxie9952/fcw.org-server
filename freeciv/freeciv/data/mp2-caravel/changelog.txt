@@ -1,10 +1,41 @@
-Ongoing goals of MP2-Caravel
+Brief Explanations of goals and challenges.
+   Simplicity vs. Complexity.
+      Unneeded complexity should be reduced. Where needed for balance it is acceptable, but look for 
+         other additions or modifications to ultimately reduce it.
+      Simplicity is ideal exactly up to the point where it doesn't create imbalance, spam, or golden 
+         path. Sometimes this can be obtained quite easily, other times it is difficult and first 
+         solutions to solve balance issues might be more complex then later ways are found to reduce it.
+   Balance, Playability, Realism, ideally all three, conflicts are resolved in that respective order.
+   Several other Manifesto points:
+      "Game of a lifetime", "Depth of strategy, diversity of strategy: i.e., reduce spamming contexts,
+      reduce/eliminate Golden Path formulas."
+
+   What motivates Ruleset additions
+      Obviously a lot of new things appear, which seems to be throwing "the kitchen sink into the rules
+      just for the fun of it." This is not what is happening. Everything is driven by #1 goal of balance,
+      and additions happen when the easiest way to achieve that is to add something. Some new additions 
+      rarely happen because of Playability and Realism, but most are because of Balance. We can't just 
+      throw in "Saw Mill" because it seems "cool", as this may affect the balance of every other thing.
+      Rather, when a balance issue is identified, sometimes the easiest way to solve it is through 
+      creating a "holistic" counterbalance. If that counterbalance also supplies more playability, fun,
+      and realism, THEN we add it.
+   Issues 
+      2x movement, side effect balancing.
+      Non-infinite rails, side effect balancing.
+      Rewonder 1.0, side effect balancing. Largest side effect was radically empowering rapture-based govs.
+   Almost all changes since MP2 started have been in response to these. Most smaller areas have already been 
+      resolved or finalized (air unit balance and mechanics, unreachable exploits, infinite rails, etc.)
+      
+Focus goals for MP2-Caravel
 1. Increase splendor of the Bronze Age. Define your national race, characteristics, and unique path.
 2. Attempt the Final Re-balance of what 2x movement rates have done to foot units.
    Make Foot units a true tactical component again.
 3. Re-balance of Govs toward the vibe and vision of what we know it should be like.
 4. Enhance Trade routes and other mechanics to increase the Diplomatic / Economic bloc / Sovereign concerns of
    each individual nation:  Nerf mechanics forcing gang-alliance loyalties.
+
+
+
 
 BUILDINGS AND WONDERS:
 1. Colossus: +1 trade on city center, -5 cost on most commerce units built in that city. 2 notch or ~22% increase to trade in its city. Bug-fix: Now must be built adjacent to Ocean.
@@ -32,6 +63,8 @@ BUILDINGS AND WONDERS:
       expire/become obsolete, less trust from your neighbours.
 7. Barracks requirement is Warrior Code. Besides making sense and rewarding early discovery of that tech as a diverse strategy to pursue, it 
    balances out the longturn's format of giving starting gold and extra disbandable units.
+8. Coinage yields 3 gold per 2 shields, (1.5 gold per shield), so it now less "useless".
+8a. Marketplace, Bank, and Stock Exchange each add 0.25 to the conversion rate (1.75,2.00,2.25, respectively).
 
 GOVERNMENT RE-BALANCE:
 * ALL NON-REPRESENTATIVE GOVERNMENTS:
@@ -201,6 +234,8 @@ Coastal Defense is visible without middle-clicking for city info.
 Masonry is not needed for Palace (simplification)
 Tribesmen, Diplomats, and Explorers can investigate cities without being spent. Let the games of ancient or mediaevel espionage and paranoia 
    over it, begin !
+Train goes from 1 gold upkeep to 0. Cost was too high for achieving parity in foot unit mobility on rails.
+Getting on a train is < 3 moves rather than <= 2 moves. Effectively the same but is more clear for units who have partial move bonuses over 2mp.
 
 SERVER UPGRADES:
 1. Special Unit Actions / Attacks:
