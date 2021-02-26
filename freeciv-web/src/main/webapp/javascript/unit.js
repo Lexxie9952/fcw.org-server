@@ -458,9 +458,10 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
     }
   }
   else if (pclass == "Balloon") {
+    debugger;
     if (tclass.rule_name == "LandRail") return true;
-    if (tclass.rule.name == "RiverShip" && !(ttype.name == "Cargo Ship" || ttype.name == "Galleon")) return false;
-    if (tclass.rule.name == "Sea" && !(ttype.name == "Transport" || ttype.name == "Carrier")) 
+    if (tclass.rule_name == "RiverShip" && !(ttype.name == "Cargo Ship" || ttype.name == "Galleon")) return false;
+    if (tclass.rule_name == "Sea" && !(ttype.name == "Transport" || ttype.name == "Carrier")) 
       return false;
   }
   else if (pclass == "Zeppelin") {
