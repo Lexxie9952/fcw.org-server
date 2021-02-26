@@ -244,8 +244,9 @@ function city_force_income_update()
         if (improvements[pcity['production_value']]['name'] == "Coinage") {
           var multiplier = 1.0;
           if (client_rules_flag[CRF_MP2_C]) {
+            multiplier = 1.5;
             multiplier += city_has_building(pcity, improvement_id_by_name("Marketplace"))
-               ? 0.5 : 0;
+               ? 0.25 : 0;
             multiplier += city_has_building(pcity, improvement_id_by_name("Bank"))
                ? 0.25 : 0;
             multiplier += city_has_building(pcity, improvement_id_by_name("Stock Exchange"))
