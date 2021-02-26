@@ -1245,10 +1245,13 @@ static void update_unit_activity(struct unit *punit, time_t now)
       char buf[64]; format_time_duration(dt, buf, sizeof(buf));
       /* Courtesy message: activity isn't completed yet */
       if (moves_left_at_start && punit->ai_controlled == FALSE) {
-        if (punit->activity==ACTIVITY_FORTIFYING) { 
-          notify_player(punit->owner, unit_tile(punit), E_UNIT_ORDERS, ftc_server,
-                    _("  ⏳ %s %s will finish Fortifying in %s."),
-                    UNIT_EMOJI(punit), unit_link(punit), buf);
+        if (punit->activity==ACTIVITY_FORTIFYING) {
+          if (!tile_city(unit_tile(punit))) {
+          // fortifying in a city isn't reported, more of a "client UI convenience"
+            notify_player(punit->owner, unit_tile(punit), E_UNIT_ORDERS, ftc_server,
+                      _("  ⏳ %s %s will finish Fortifying in %s."),
+                      UNIT_EMOJI(punit), unit_link(punit), buf);
+          }
         } else {
           /* Only report activities that will be finished THIS TURN after the UWT. */
           int turns = 0;
