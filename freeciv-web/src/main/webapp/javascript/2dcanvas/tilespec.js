@@ -2549,8 +2549,8 @@ function create_unit_offset_arrays()
           vx -= 12; vy += 11;
           break;
       case "Musketeers":
-          dx -= 1; dy -= 1;
-          vx -= 4; vy += 5;
+          dx -= 3; dy -= 3;
+          vx -= 3; vy -= 19;
           break;
       case "Phalanx":                     
           dx += 1; dy -= 2;
