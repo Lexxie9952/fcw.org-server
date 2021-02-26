@@ -122,10 +122,13 @@ function update_game_status_panel() {
     var sci = client.conn.playing['science'];
 
     if (income_needs_refresh) city_force_income_update();
-    var net_income = pplayer['expected_income'];
+
+    var net_income = pplayer['expected_income'].toString();
+    var income_str = (net_income.slice(-2) == ".5") ? (net_income.substring(0, net_income.length - 2) + "</b>&#189<b>") : net_income;
+
     if (pplayer['expected_income'] > 0) {
-      net_income = "+" + pplayer['expected_income'];
-    }
+      net_income = "+" + income_str;
+    } else net_income = income_str;
 
     // PUT FLAG TO LEFT OF NATION NAME
     if (!is_small_screen()) {
@@ -174,7 +177,8 @@ function update_game_status_panel() {
     var income_color = "<b";
     // colour for positive/zero/negative income
     if (pplayer['expected_income'] < 0) income_color += " class='negative_net_income' title='Deficit'";
-    else if (pplayer['expected_income'] > 0) income_color += " style='color:#89c06a' title='Income'"
+    else if (pplayer['expected_income'] > 0) income_color += income_calculated_by_client 
+       ? " style='color:#89c06a' title='Income'" : " style='color:#a2b095' title='Income'" // slight hint whether accurate client calc or from server.
     
     status_html += "<b style='color:#ffde80; cursor:default;' title='Gold'>"+pplayer['gold'] 
     + "</b> "+income_color+" style='cursor:default;'>" + net_income + "</b>"+"  &nbsp;&nbsp;";

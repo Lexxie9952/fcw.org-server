@@ -6666,7 +6666,7 @@ function popup_fullscreen_enter_game_dialog()
   $("#fullscreen_dialog").css("white-space","pre-wrap"); // allow \n to work.
   $("<div id='fullscreen_dialog'></div>").appendTo("div#game_page");
 
-  $(id).html("Makes game Full Screen only when you interact with it.<br>In every mode:<br><b>ALT-S</b> toggles Full Screen<br><b>ESC</b> exits full screen");
+  $(id).html("<b>Game enters Full Screen when you interact with it.</b><br><br><b>ALT-S</b> toggles Full Screen.<br><b>ESC</b> exits full screen.");
 
   var buttons = { 'Yes!': function()
                  { openFullscreen(); remove_active_dialog(id); },

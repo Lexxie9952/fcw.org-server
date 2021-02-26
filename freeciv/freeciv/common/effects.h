@@ -314,6 +314,9 @@ extern "C" {
 #define SPECENUM_VALUE123NAME "Unit_Work_Frag_Bonus"
 #define SPECENUM_VALUE124 EFT_UNIT_WORK_PCT
 #define SPECENUM_VALUE124NAME "Unit_Work_Pct"
+/* adds val to the hard-coded 1:1 conversion of shields to gold */
+#define SPECENUM_VALUE125 EFT_COINAGE_BONUS_PCT
+#define SPECENUM_VALUE125NAME "Coinage_Bonus_Pct"
 /* keep this last */
 #define SPECENUM_COUNT EFT_COUNT
 #include "specenum_gen.h"

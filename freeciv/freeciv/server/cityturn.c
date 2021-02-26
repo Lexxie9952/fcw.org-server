@@ -3037,11 +3037,24 @@ static bool city_build_building(struct player *pplayer, struct city *pcity)
   const struct impr_type *pimprove = pcity->production.value.building;
   int saved_id = pcity->id;
 
+  /* Convert Coinage (or other "Gold" flagged improvement) from shields
+     into gold in player's treasury. Rate is 1/1 * EFT_COINAGE_BONUS_PCT */ 
   if (city_production_has_flag(pcity, IF_GOLD)) {
     fc_assert(pcity->surplus[O_SHIELD] >= 0);
     /* pcity->before_change_shields already contains the surplus from
      * this turn. */
-    pplayer->economic.gold += pcity->before_change_shields;
+    int bonus_pct = get_target_bonus_effects(NULL, NULL, NULL,
+                          pcity, pimprove, city_tile(pcity), NULL,
+                          NULL, NULL, NULL, NULL,
+                          EFT_COINAGE_BONUS_PCT);
+    double coinage = pcity->before_change_shields*(100+bonus_pct);
+    // Round to nearest int with 0.5 randomly decided up or down:
+    coinage = (coinage / 100) + (double)(49.000000001+fc_rand(2))/100; 
+    notify_player(pplayer, city_tile(pcity), E_IMP_BUILD, ftc_server,
+              _("[`shield`]➡[`gold`] %s %s renders %d shields to %d gold."),
+              city_link(pcity), city_improvement_name_translation(pcity, pimprove),
+              pcity->before_change_shields, (int)coinage);  
+    pplayer->economic.gold += (int)coinage;
     pcity->before_change_shields = 0;
     pcity->shield_stock = 0;
     choose_build_target(pplayer, pcity);

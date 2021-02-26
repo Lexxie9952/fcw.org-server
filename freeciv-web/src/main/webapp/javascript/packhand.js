@@ -654,6 +654,7 @@ function handle_web_player_info_addition(packet)
       update_game_status_panel();
       update_net_income();
       income_needs_refresh = false;
+      income_calculated_by_client = false;
     }
   }
   update_player_info_pregame();

@@ -17,6 +17,7 @@
 
 ***********************************************************************/
 
+income_calculated_by_client = false;
 
 var cities = {};
 var city_rules = {};
@@ -227,6 +228,8 @@ function city_force_income_update()
 {
   if (observing) return;
 
+  console.log("Updating income")
+
   var income = 0;
   // Go through all cities
   for (cid in cities) {
@@ -239,11 +242,24 @@ function city_force_income_update()
       // add net gold income from Coinage, if applicable
       if (pcity['production_kind'] == VUT_IMPROVEMENT) {
         if (improvements[pcity['production_value']]['name'] == "Coinage") {
-          income += pcity['surplus'][O_SHIELD];
+          var multiplier = 1.0;
+          if (client_rules_flag[CRF_MP2_C]) {
+            multiplier += city_has_building(pcity, improvement_id_by_name("Marketplace"))
+               ? 0.5 : 0;
+            multiplier += city_has_building(pcity, improvement_id_by_name("Bank"))
+               ? 0.25 : 0;
+            multiplier += city_has_building(pcity, improvement_id_by_name("Stock Exchange"))
+               ? 0.25 : 0;
+          }      
+          income += multiplier * pcity['surplus'][O_SHIELD];
+          // Server rounds income to nearest integer but if it's exactly .5 it rounds randomly
+          if (Math.round(income)-income != .5) income = Math.round(income); 
+          income_calculated_by_client = true;
         }
       }
     }
   }
+
   client.conn.playing['expected_income'] = income;
   income_needs_refresh = false;
 }
@@ -1033,8 +1049,11 @@ function generate_production_list()
   for (var unit_type_id in unit_types) {
     var punit_type = unit_types[unit_type_id];
 
-    // Uses SERVER supplied info which presumably uses gov_reqs, impr_reqs, all that nice jazz.
-    if (!can_city_build_unit_now(active_city, unit_type_id)) continue;
+    if (utype_has_flag(punit_type, UTYF_NOBUILD)) continue;  
+
+    if (punit_type.government_req < GOV_LAST) {         // IF Unit has a government requirement
+      if (punit_type.goverment_req != gov_id) continue; // gov_req != player's GOV: can't build
+    }
 
     // Exclude major nukes and minor nukes based on whether server settings say to do so:
     if (utype_has_flag(punit_type, UTYF_NUCLEAR)) {
