@@ -157,7 +157,7 @@ Border_Vision
     lock it if border vision rules are important to your ruleset.
 
 Building_Build_Cost_Pct
-    Percentage added to building building cost, for any kind of building (does not target a specific kind of building)
+    Percentage added to building building cost.
 
 Building_Buy_Cost_Pct
     Percentage added to building buy cost.
@@ -305,7 +305,7 @@ Illegal_Action_Move_Cost
 
 Improvement_Sale_Pct
     Multiplier Pct to the 1/1 rate at which a building's shield value converts 
-    to gold when the city is sold.
+    to gold when the building is sold.
 
 Incite_Cost_Pct
     Increases revolt cost by amount percent.

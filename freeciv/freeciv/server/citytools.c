@@ -2874,37 +2874,11 @@ int do_sell_building(struct player *pplayer, struct city *pcity,
   if (can_city_sell_building(pcity, pimprove)) {
     const int ROUND = 50; // round to nearest int.
     float sale_pct = 0;   // pct to add to sale price
-    bool sold_building_matches_req_building = false;
 
-/*     We KNOW what the building being sold is: it's passed into
-       this function as pimprove. 
-       The "Improvement_Sale_Pct" needs to apply the bonus/penalty price 
-       IFF pimprove is the building being sold. That is, we need to check
-       if pimprove is the same building in EFT_IMPROVEMENT_SALE_PCT's 
-       Local req-range. (The current req range of "Local" does not acces
-       what building is being sold, who knows what building it is putting
-       there? Probably null.)  Therefore, we have two choices
-       #1. Someone codes building sale to put that building into Local, somewhere
-       else.
-       #2. This function here does a simple check for if improve matches the
-       building that's in the City req-range.  If pimprove is the same building
-       as the building in that City req-range, then we apply the 
-       EFT_IMPROVEMENT_SALE_PCT, otherwise we do not. 
-
-       pseudo-code for what #2 needs:
-
-       iterate and find the reqs for EFT_IMPROVEMENT_SALE_PCT for city {
-         if (req.type=="Building" && req.range=="City" && req.present==true) {
-           if (pimprove == req.value.building)
-            sold_building_matches_req_building = true;
-         }
-       }*/
-    if (sold_building_matches_req_building) {
-      sale_pct = (float)
-        get_target_bonus_effects(NULL, NULL, NULL, pcity, pimprove, 
-                                city_tile(pcity), NULL, NULL, NULL,
-                                NULL, NULL, EFT_IMPROVEMENT_SALE_PCT);
-    }
+    sale_pct = (float)
+      get_target_bonus_effects(NULL, NULL, NULL, pcity, pimprove, 
+                              city_tile(pcity), NULL, NULL, NULL,
+                              NULL, NULL, EFT_IMPROVEMENT_SALE_PCT);
 
     int price = ((float)impr_sell_gold(pimprove)
                                 * (100 + sale_pct) + ROUND) / 100;

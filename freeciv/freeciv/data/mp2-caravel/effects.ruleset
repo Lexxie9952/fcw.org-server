@@ -2398,9 +2398,9 @@ reqs	=
     { "type", "name", "range"
       "Building", "Fortifications", "City"
     }
-[effect_fortifications_sale_value]
+[effect_fortifications_sale_value] 
 type    = "Improvement_Sale_Pct"
-value = 100;
+value = 100
 reqs  =
     { "type", "name", "range"
       "Building", "Fortifications", "Local"
@@ -5724,6 +5724,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Action", "Investigate City", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
+      "DiplRel", "Alliance", "Local", FALSE
     }
 [effect_incident_success_spy_attack]
 type	= "Casus_Belli_Success"
@@ -5748,6 +5749,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Action", "Pillage", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
+      "DiplRel", "Alliance", "Local", FALSE
     }
 [effect_incident_success_sneaky_road]
 type	= "Casus_Belli_Success"
@@ -5756,6 +5758,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Action", "Road", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
+      "DiplRel", "Alliance", "Local", FALSE
     }
 [effect_incident_success_sneaky_fort]
 type	= "Casus_Belli_Success"
@@ -5764,6 +5767,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Action", "Build Base", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
+      "DiplRel", "Alliance", "Local", FALSE
     }
 [effect_incident_success_sneaky_transform]
 type	= "Casus_Belli_Success"
@@ -5772,6 +5776,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Action", "Transform Terrain", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
+      "DiplRel", "Alliance", "Local", FALSE
     }
 [effect_incident_caught_steal_maps1]
 type	= "Casus_Belli_Caught"
@@ -6011,6 +6016,16 @@ reqs	=
     { "type", "name", "range", "present"
       "Action", "Found City", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
+      "DiplRel", "Alliance", "Local", FALSE
+    }
+[effect_incident_paradrop_invasion]
+type	= "Casus_Belli_Success"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Paradrop Unit", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+      "DiplRel", "Alliance", "Local", FALSE
     }
 
 ;********************************************************************
@@ -6244,5 +6259,148 @@ value	= 50
 reqs	=
     { "type", "name", "range"
     }
+
+
+
+
+[effect_united_nations_international_treaty_violation_outrage]
+type    = "Casus_Belli_Success"
+value    = 1000
+reqs    =
+    { "type",   "name",                            "range", "present"
+      "DiplRel", "War",                            "Local", FALSE
+      "DiplRel", "Alliance",                       "Local", FALSE
+      "DiplRel", "Foreign",                        "Local", TRUE
+;     "UnitFlag", "NonMil",                        "Local", FALSE
+      "Building", "United Nations",                "World", TRUE 
+      "Action", "Establish Embassy",               "Local", FALSE 
+      "Action", "Establish Embassy Stay",          "Local", FALSE 
+      "Action", "Investigate City",                "Local", FALSE 
+      "Action", "Investigate City Spend Unit",     "Local", FALSE 
+      "Action", "Poison City",                     "Local", FALSE 
+      "Action", "Poison City Escape",              "Local", FALSE 
+      "Action", "Steal Gold",                      "Local", FALSE 
+      "Action", "Steal Gold Escape",               "Local", FALSE 
+      "Action", "Sabotage City",                   "Local", FALSE 
+      "Action", "Sabotage City Escape",            "Local", FALSE 
+      "Action", "Targeted Sabotage City",          "Local", FALSE 
+      "Action", "Targeted Sabotage City Escape",   "Local", FALSE 
+      "Action", "Steal Tech",                      "Local", FALSE 
+      "Action", "Steal Tech Escape Expected",      "Local", FALSE 
+      "Action", "Targeted Steal Tech",             "Local", FALSE 
+      "Action","Targeted Steal Tech Escape Expected","Local", FALSE 
+      "Action", "Incite City",                     "Local", FALSE
+      "Action", "Incite City Escape",              "Local", FALSE
+      "Action", "Establish Trade Route",           "Local", FALSE 
+      "Action", "Enter Marketplace",               "Local", FALSE 
+      "Action", "Help Wonder",                     "Local", FALSE 
+      "Action", "Bribe Unit",                      "Local", FALSE 
+      "Action", "Sabotage Unit",                   "Local", FALSE 
+      "Action", "Sabotage Unit Escape",            "Local", FALSE 
+      "Action", "Capture Units",                   "Local", FALSE 
+      "Action", "Found City",                      "Local", FALSE 
+      "Action", "Join City",                       "Local", FALSE 
+      "Action", "Steal Maps",                      "Local", FALSE 
+      "Action", "Steal Maps Escape",               "Local", FALSE 
+      "Action", "Bombard",                         "Local", FALSE 
+      "Action", "Suitcase Nuke",                   "Local", FALSE 
+      "Action", "Suitcase Nuke Escape",            "Local", FALSE 
+      "Action", "Explode Nuclear",                 "Local", FALSE 
+      "Action", "Destroy City",                    "Local", FALSE 
+      "Action", "Expel Unit",                      "Local", FALSE 
+      "Action", "Recycle Unit",                    "Local", FALSE 
+      "Action", "Disband Unit",                    "Local", FALSE 
+      "Action", "Home City",                       "Local", FALSE 
+      "Action", "Upgrade Unit",                    "Local", FALSE 
+      "Action", "Paradrop Unit",                   "Local", FALSE 
+      "Action", "Airlift Unit",                    "Local", FALSE 
+      "Action", "Attack",                          "Local", FALSE 
+      "Action", "Conquer City",                    "Local", FALSE 
+      "Action", "Heal Unit",                       "Local", FALSE 
+      "Action", "Transform Terrain",               "Local", FALSE 
+      "Action", "Irrigate TF",                     "Local", FALSE 
+      "Action", "Mine TF",                         "Local", FALSE 
+      "Action", "Pillage",                         "Local", FALSE 
+      "Action", "Fortify",                         "Local", FALSE 
+      "Action", "Road",                            "Local", FALSE 
+      "Action", "Convert Unit",                    "Local", FALSE 
+      "Action", "Build Base",                      "Local", FALSE 
+      "Action", "Build Mine",                      "Local", FALSE 
+      "Action", "Build Irrigation",                "Local", FALSE 
+      "Action", "Clean Pollution",                 "Local", FALSE 
+      "Action", "Clean Fallout",                   "Local", FALSE 
+      "Action", "Spy Attack",                      "Local", FALSE 
+    }
+
+;Implement 'ugly hack' of kvilhaugsvik for invading cease-fire
+;territory to be casus belli in 3.0 rulesets
+;*********************************************************************
+[effect_incident_success_move]
+type    = "Casus_Belli_Success"
+value    = 1
+reqs    =
+    { "type",   "name",                            "range", "present"
+      "DiplRel", "War",                            "Local", FALSE
+      "DiplRel", "Alliance",                       "Local", FALSE
+      "DiplRel", "Foreign",                        "Local", TRUE
+ ;     "UnitFlag", "NonMil",                        "Local", FALSE
+      "Action", "Establish Embassy",               "Local", FALSE 
+      "Action", "Establish Embassy Stay",          "Local", FALSE 
+      "Action", "Investigate City",                "Local", FALSE 
+      "Action", "Investigate City Spend Unit",     "Local", FALSE 
+      "Action", "Poison City",                     "Local", FALSE 
+      "Action", "Poison City Escape",              "Local", FALSE 
+      "Action", "Steal Gold",                      "Local", FALSE 
+      "Action", "Steal Gold Escape",               "Local", FALSE 
+      "Action", "Sabotage City",                   "Local", FALSE 
+      "Action", "Sabotage City Escape",            "Local", FALSE 
+      "Action", "Targeted Sabotage City",          "Local", FALSE 
+      "Action", "Targeted Sabotage City Escape",   "Local", FALSE 
+      "Action", "Steal Tech",                      "Local", FALSE 
+      "Action", "Steal Tech Escape Expected",      "Local", FALSE 
+      "Action", "Targeted Steal Tech",             "Local", FALSE 
+      "Action","Targeted Steal Tech Escape Expected","Local", FALSE 
+      "Action", "Incite City",                     "Local", FALSE
+      "Action", "Incite City Escape",              "Local", FALSE
+      "Action", "Establish Trade Route",           "Local", FALSE 
+      "Action", "Enter Marketplace",               "Local", FALSE 
+      "Action", "Help Wonder",                     "Local", FALSE 
+      "Action", "Bribe Unit",                      "Local", FALSE 
+      "Action", "Sabotage Unit",                   "Local", FALSE 
+      "Action", "Sabotage Unit Escape",            "Local", FALSE 
+      "Action", "Capture Units",                   "Local", FALSE 
+      "Action", "Found City",                      "Local", FALSE 
+      "Action", "Join City",                       "Local", FALSE 
+      "Action", "Steal Maps",                      "Local", FALSE 
+      "Action", "Steal Maps Escape",               "Local", FALSE 
+      "Action", "Bombard",                         "Local", FALSE 
+      "Action", "Suitcase Nuke",                   "Local", FALSE 
+      "Action", "Suitcase Nuke Escape",            "Local", FALSE 
+      "Action", "Explode Nuclear",                 "Local", FALSE 
+      "Action", "Destroy City",                    "Local", FALSE 
+      "Action", "Expel Unit",                      "Local", FALSE 
+      "Action", "Recycle Unit",                    "Local", FALSE 
+      "Action", "Disband Unit",                    "Local", FALSE 
+      "Action", "Home City",                       "Local", FALSE 
+      "Action", "Upgrade Unit",                    "Local", FALSE 
+      "Action", "Paradrop Unit",                   "Local", FALSE 
+      "Action", "Airlift Unit",                    "Local", FALSE 
+      "Action", "Attack",                          "Local", FALSE 
+      "Action", "Conquer City",                    "Local", FALSE 
+      "Action", "Heal Unit",                       "Local", FALSE 
+      "Action", "Transform Terrain",               "Local", FALSE 
+      "Action", "Irrigate TF",                     "Local", FALSE 
+      "Action", "Mine TF",                         "Local", FALSE 
+      "Action", "Pillage",                         "Local", FALSE 
+      "Action", "Fortify",                         "Local", FALSE 
+      "Action", "Road",                            "Local", FALSE 
+      "Action", "Convert Unit",                    "Local", FALSE 
+      "Action", "Build Base",                      "Local", FALSE 
+      "Action", "Build Mine",                      "Local", FALSE 
+      "Action", "Build Irrigation",                "Local", FALSE 
+      "Action", "Clean Pollution",                 "Local", FALSE 
+      "Action", "Clean Fallout",                   "Local", FALSE 
+      "Action", "Spy Attack",                      "Local", FALSE 
+    }    
 
 ;This line intentionally left blank:

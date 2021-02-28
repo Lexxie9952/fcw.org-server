@@ -2827,7 +2827,7 @@ bool unit_perform_action(struct player *pplayer,
     break;
   case ACTION_PARADROP:
     ACTION_STARTED_UNIT_TILE(action_type, actor_unit, target_tile,
-                             do_paradrop(actor_unit, target_tile));
+                             do_paradrop(actor_unit, target_tile, paction));
     break;
   case ACTION_TRANSFORM_TERRAIN:
     ACTION_STARTED_UNIT_TILE(action_type, actor_unit, target_tile,
@@ -4623,6 +4623,11 @@ bool unit_move_handling(struct unit *punit, struct tile *pdesttile,
   if (can_unit_move_to_tile_with_notify(punit, pdesttile, igzoc,
                                         embark_to, FALSE)) {
     int move_cost = map_move_cost_unit(&(wld.map), punit, pdesttile);
+
+    /* May cause an incident */
+    action_consequence_success(NULL, pplayer,
+                               tile_owner(pdesttile),
+                               pdesttile, tile_link(pdesttile));
 
     unit_move(punit, pdesttile, move_cost, embark_to,
               FALSE);

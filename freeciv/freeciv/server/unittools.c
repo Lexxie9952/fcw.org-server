@@ -3415,9 +3415,11 @@ void do_explore(struct unit *punit)
   in the case where the drop was succesful, but the unit was killed by
   barbarians in a hut.
 **************************************************************************/
-bool do_paradrop(struct unit *punit, struct tile *ptile)
+bool do_paradrop(struct unit *punit, struct tile *ptile,
+                 const struct action *paction)
 {
   struct player *pplayer = unit_owner(punit);
+  struct player *tgt_player = tile_owner(ptile);
 
   if (map_is_known_and_seen(ptile, pplayer, V_MAIN)) {
     if (!can_unit_exist_at_tile(&(wld.map), punit, ptile)
@@ -3534,6 +3536,11 @@ bool do_paradrop(struct unit *punit, struct tile *ptile)
     fc_assert(can_unit_exist_at_tile(&(wld.map), punit, unit_tile(punit))
               || unit_transported(punit));
   }
+
+  /* May cause an incident */
+  action_consequence_success(paction, pplayer, tgt_player,
+                             ptile, tile_link(ptile));
+
   return TRUE;
 }
 
