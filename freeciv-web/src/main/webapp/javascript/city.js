@@ -228,8 +228,6 @@ function city_force_income_update()
 {
   if (observing) return;
 
-  console.log("Updating income")
-
   var income = 0;
   // Go through all cities
   for (cid in cities) {

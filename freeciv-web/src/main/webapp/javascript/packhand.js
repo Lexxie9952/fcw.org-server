@@ -383,6 +383,9 @@ function decode_user_hyperlinks(message)
       freemoji_name = freemoji_name.replace('.', '');
       freemoji_name = freemoji_name.replace('_', '');
       freemoji_name = freemoji_name.replace("'", "");
+//      freemoji_name = freemoji_name.replace("​", ""); //0-width space. only ONE of these 3 is needed, TODO; find which works and remove the other 2
+//      freemoji_name = freemoji_name.replace("​&#8203;", "");
+//      freemoji_name = freemoji_name.replace("​%E2%80%B8", "");
       // e.g., "A. Smith's Trading Co." will become "asmithstradingco.png"
       
       path = "/images/e/"+freemoji_name+".png";

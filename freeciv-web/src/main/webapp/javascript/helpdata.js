@@ -121,6 +121,10 @@ function generate_help_menu(key)
       improvement = improvements[impr_id];
       if (!is_wonder(improvement)) continue;
 
+      //check for 0-width space for virtual duplicates (required because server has no world-range on small wonders)
+      s = improvement['name'].slice(-1)
+      if (s != alphanumeric_cleaner(s)) continue;
+
       // Suppress improvements if server settings don't allow them:
       if (!server_settings['nukes_minor']['val']
           && improvement['name'] == "Manhattan Project") {
