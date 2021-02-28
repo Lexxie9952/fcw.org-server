@@ -2034,6 +2034,17 @@ bool unit_conquer_city(struct unit *punit, struct city *pcity)
   city_remains = transfer_city(pplayer, pcity, 0, TRUE, TRUE, TRUE,
                                !is_barbarian(pplayer));
 
+  /* Conquered cities are SUPPOSED to be in Disorder. We will start like the 
+     older freeciv and just hard-code in the proper behaviour, then allow people
+     to make settings / effects / or some other options to allow rulesets and players
+     to adjust later. For now the choice was correct behaviour or incorrect behavior,
+     and we had to choose the former
+     See sentence #3 at https://civilization.fandom.com/wiki/Civil_disorder_(Civ2) */
+  // For now, allow rulesets to specifically turn it off with EFT_GULAG:
+  //if (!game.server.disorder_in_conquered && !get_city_bonus(pcity, EFT_???) {
+    pcity->anarchy++;
+  //}
+
   if (city_remains) {
     /* reduce size should not destroy this city */
     fc_assert(city_size_get(pcity) > 1);
