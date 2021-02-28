@@ -1172,6 +1172,7 @@ static void update_unit_activity(struct unit *punit, time_t now)
   struct unit_wait *wait;
   time_t wake_up;
   int moves_left_at_start = punit->moves_left;
+  //const struct unit_type *act_utype = unit_type_get(punit);
   
   /* Fortify order has separate wait time setting (or lack thereof) */
   if (activity==ACTIVITY_FORTIFYING && (game.server.unitwaittime_style & UWT_FORTIFY) ) {
@@ -3538,8 +3539,8 @@ bool do_paradrop(struct unit *punit, struct tile *ptile,
   }
 
   /* May cause an incident */
-  action_consequence_success(paction, pplayer, tgt_player,
-                             ptile, tile_link(ptile));
+  action_consequence_success(paction, pplayer, unit_type_get(punit), 
+                             tgt_player, ptile, tile_link(ptile));
 
   return TRUE;
 }
@@ -4934,21 +4935,21 @@ bool execute_orders(struct unit *punit, const bool fresh)
           // Doing these 4 in foreign territory may trigger casus belli:
           if (activity == ACTIVITY_PILLAGE) {
             action_consequence_success(action_by_number(ACTION_PILLAGE),
-                                       unit_owner(punit),
+                                       unit_owner(punit), unit_type_get(punit),
                                        tile_owner(unit_tile(punit)),
                                        unit_tile(punit),
                                        tile_link(unit_tile(punit)));
           }
           else if (activity == ACTIVITY_GEN_ROAD) {
             action_consequence_success(action_by_number(ACTION_ROAD),
-                                       unit_owner(punit),
+                                       unit_owner(punit), unit_type_get(punit),
                                        tile_owner(unit_tile(punit)),
                                        unit_tile(punit),
                                        tile_link(unit_tile(punit)));
           }
           else if (activity == ACTIVITY_BASE) {
             action_consequence_success(action_by_number(ACTION_BASE),
-                                       unit_owner(punit),
+                                       unit_owner(punit), unit_type_get(punit),
                                        tile_owner(unit_tile(punit)),
                                        unit_tile(punit),
                                        tile_link(unit_tile(punit)));

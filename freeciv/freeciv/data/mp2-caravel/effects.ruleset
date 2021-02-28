@@ -6260,9 +6260,6 @@ reqs	=
     { "type", "name", "range"
     }
 
-
-
-
 [effect_united_nations_international_treaty_violation_outrage]
 type    = "Casus_Belli_Success"
 value    = 1000
@@ -6271,7 +6268,7 @@ reqs    =
       "DiplRel", "War",                            "Local", FALSE
       "DiplRel", "Alliance",                       "Local", FALSE
       "DiplRel", "Foreign",                        "Local", TRUE
-;     "UnitFlag", "NonMil",                        "Local", FALSE
+      "UnitFlag", "NonMil",                        "Local", FALSE
       "Building", "United Nations",                "World", TRUE 
       "Action", "Establish Embassy",               "Local", FALSE 
       "Action", "Establish Embassy Stay",          "Local", FALSE 
@@ -6343,7 +6340,7 @@ reqs    =
       "DiplRel", "War",                            "Local", FALSE
       "DiplRel", "Alliance",                       "Local", FALSE
       "DiplRel", "Foreign",                        "Local", TRUE
- ;     "UnitFlag", "NonMil",                        "Local", FALSE
+      "UnitFlag", "NonMil",                        "Local", FALSE
       "Action", "Establish Embassy",               "Local", FALSE 
       "Action", "Establish Embassy Stay",          "Local", FALSE 
       "Action", "Investigate City",                "Local", FALSE 

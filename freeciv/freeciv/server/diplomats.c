@@ -95,6 +95,7 @@ static void diplomat_escape_full(struct player *pplayer,
 bool spy_poison(struct player *pplayer, struct unit *pdiplomat,
                 struct city *pcity, const struct action *paction)
 {
+  const struct unit_type *act_utype;
   struct player *cplayer;
   struct tile *ctile;
   const char *clink;
@@ -107,6 +108,8 @@ bool spy_poison(struct player *pplayer, struct unit *pdiplomat,
   /* Sanity check: The actor still exists. */
   fc_assert_ret_val(pplayer, FALSE);
   fc_assert_ret_val(pdiplomat, FALSE);
+
+  act_utype = unit_type_get(pdiplomat);
 
   ctile = city_tile(pcity);
   clink = city_link(pcity);
@@ -138,7 +141,8 @@ bool spy_poison(struct player *pplayer, struct unit *pdiplomat,
                   clink);
 
     /* This may cause a diplomatic incident */
-    action_consequence_caught(paction, pplayer, cplayer, ctile, clink);
+    action_consequence_success(paction, pplayer, act_utype,
+                             cplayer, ctile, clink);
 
     wipe_unit(pdiplomat, ULR_CAUGHT, cplayer);
     return FALSE;
@@ -178,7 +182,7 @@ bool spy_poison(struct player *pplayer, struct unit *pdiplomat,
   }
 
   /* this may cause a diplomatic incident */
-  action_consequence_success(paction, pplayer, cplayer, ctile, clink);
+  action_consequence_success(paction, pplayer, act_utype, cplayer, ctile, clink);
 
   /* Now lets see if the spy survives. */
   diplomat_escape_full(pplayer, pdiplomat, TRUE, ctile, clink, paction);
@@ -206,6 +210,7 @@ bool diplomat_investigate(struct player *pplayer, struct unit *pdiplomat,
   struct packet_city_info city_packet;
   struct packet_web_city_info_addition web_packet;
   struct traderoute_packet_list *routes;
+  const struct unit_type *act_utype;
 
   /* Fetch target city's player.  Sanity checks. */
   fc_assert_ret_val(pcity, FALSE);
@@ -215,6 +220,8 @@ bool diplomat_investigate(struct player *pplayer, struct unit *pdiplomat,
   /* Sanity check: The actor still exists. */
   fc_assert_ret_val(pplayer, FALSE);
   fc_assert_ret_val(pdiplomat, FALSE);
+
+  act_utype = unit_type_get(pdiplomat);
 
   /* Sanity check: The target is foreign. */
   if (cplayer == pplayer) {
@@ -252,7 +259,7 @@ bool diplomat_investigate(struct player *pplayer, struct unit *pdiplomat,
                     unit_tile_link(pdiplomat), city_link(pcity)); 
               
       /* If you were seen, it could trigger a diplomatic incident even if you fail. */
-      action_consequence_caught(paction, pplayer, cplayer, city_tile(pcity), city_link(pcity));
+      action_consequence_caught(paction, pplayer, act_utype, cplayer, city_tile(pcity), city_link(pcity));
 
       // Diplomatic combat now ensues, if enemy diplomats are present:
       if (!diplomat_infiltrate_tile(pplayer, cplayer, paction,
@@ -276,7 +283,7 @@ bool diplomat_investigate(struct player *pplayer, struct unit *pdiplomat,
                     city_link(pcity));
 
       /* If you were caught, it could trigger a diplomatic incident */
-      action_consequence_caught(paction, pplayer, cplayer, city_tile(pcity), city_link(pcity));
+      action_consequence_caught(paction, pplayer, act_utype, cplayer, city_tile(pcity), city_link(pcity));
 
       wipe_unit(pdiplomat, ULR_CAUGHT, cplayer);
       return FALSE;
@@ -327,7 +334,7 @@ bool diplomat_investigate(struct player *pplayer, struct unit *pdiplomat,
   }
 
   /* this may cause a diplomatic incident */
-  action_consequence_success(paction, pplayer, cplayer,
+  action_consequence_success(paction, pplayer,  act_utype, cplayer,
                              city_tile(pcity), city_link(pcity));
 
   /* The actor unit always survive unless the action it self has determined
@@ -388,6 +395,7 @@ bool diplomat_embassy(struct player *pplayer, struct unit *pdiplomat,
                       struct city *pcity, const struct action *paction)
 {
   struct player *cplayer;
+  const struct unit_type *act_utype;
 
   /* Fetch target city's player.  Sanity checks. */
   fc_assert_ret_val(pcity, FALSE);
@@ -397,6 +405,8 @@ bool diplomat_embassy(struct player *pplayer, struct unit *pdiplomat,
   /* Sanity check: The actor still exists. */
   fc_assert_ret_val(pplayer, FALSE);
   fc_assert_ret_val(pdiplomat, FALSE);
+
+  act_utype = unit_type_get(pdiplomat);
 
   /* Sanity check: The target is foreign. */
   if (cplayer == pplayer) {
@@ -428,7 +438,7 @@ bool diplomat_embassy(struct player *pplayer, struct unit *pdiplomat,
   }
 
   /* this may cause a diplomatic incident */
-  action_consequence_success(paction, pplayer, cplayer,
+  action_consequence_success(paction, pplayer, act_utype, cplayer,
                              city_tile(pcity), city_link(pcity));
 
   /* The actor unit always survive unless the action it self has determined
@@ -458,6 +468,7 @@ bool spy_sabotage_unit(struct player *pplayer, struct unit *pdiplomat,
 {
   char victim_link[MAX_LEN_LINK];
   struct player *uplayer;
+  const struct unit_type *act_utype;
 
   /* Fetch target unit's player.  Sanity checks. */
   fc_assert_ret_val(pvictim, FALSE);
@@ -467,6 +478,8 @@ bool spy_sabotage_unit(struct player *pplayer, struct unit *pdiplomat,
   /* Sanity check: The actor still exists. */
   fc_assert_ret_val(pplayer, FALSE);
   fc_assert_ret_val(pdiplomat, FALSE);
+
+  act_utype = unit_type_get(pdiplomat);
 
   log_debug("sabotage-unit: unit: %d", pdiplomat->id);
 
@@ -528,7 +541,7 @@ bool spy_sabotage_unit(struct player *pplayer, struct unit *pdiplomat,
   }
 
   /* this may cause a diplomatic incident */
-  action_consequence_success(paction, pplayer, uplayer,
+  action_consequence_success(paction, pplayer, act_utype, uplayer,
                              unit_tile(pvictim), victim_link);
 
   /* Now lets see if the spy survives. */
@@ -557,6 +570,7 @@ bool diplomat_bribe(struct player *pplayer, struct unit *pdiplomat,
   struct tile *victim_tile;
   int bribe_cost;
   int diplomat_id = pdiplomat->id;
+  const struct unit_type *act_utype;
   struct city *pcity;
 
   /* Fetch target unit's player.  Sanity checks. */
@@ -567,6 +581,8 @@ bool diplomat_bribe(struct player *pplayer, struct unit *pdiplomat,
   /* Sanity check: The actor still exists. */
   fc_assert_ret_val(pplayer, FALSE);
   fc_assert_ret_val(pdiplomat, FALSE);
+
+  act_utype = unit_type_get(pdiplomat);
 
   /* Sanity check: The target is foreign. */
   if (uplayer == pplayer) {
@@ -653,7 +669,7 @@ bool diplomat_bribe(struct player *pplayer, struct unit *pdiplomat,
   pplayer->economic.gold -= bribe_cost;
 
   /* This may cause a diplomatic incident */
-  action_consequence_success(paction, pplayer, uplayer,
+  action_consequence_success(paction, pplayer, act_utype, uplayer,
                              victim_tile, victim_link);
 
   if (!unit_is_alive(diplomat_id)) {
@@ -692,11 +708,13 @@ bool spy_attack(struct player *act_player, struct unit *act_unit,
 {
   int act_unit_id;
   struct player *tgt_player = NULL;
+  const struct unit_type *act_utype;
 
   /* Sanity check: The actor still exists. */
   fc_assert_ret_val(act_player, FALSE);
   fc_assert_ret_val(act_unit, FALSE);
 
+  act_utype = unit_type_get(act_unit);
   act_unit_id = act_unit->id;
 
   /* Do the diplomatic battle against a diplomatic defender. */
@@ -717,7 +735,7 @@ bool spy_attack(struct player *act_player, struct unit *act_unit,
   }
 
   /* This may cause a diplomatic incident. */
-  action_consequence_success(paction, act_player,
+  action_consequence_success(paction, act_player, act_utype,
                              tgt_player, tgt_tile, tile_link(tgt_tile));
 
   /* The action was to start a diplomatic battle. */
@@ -775,6 +793,7 @@ bool diplomat_get_tech(struct player *pplayer, struct unit *pdiplomat,
 {
   struct research *presearch, *cresearch;
   struct player *cplayer;
+  const struct unit_type *act_utype;
   int count;
   int times;
   Tech_type_id tech_stolen;
@@ -788,6 +807,8 @@ bool diplomat_get_tech(struct player *pplayer, struct unit *pdiplomat,
   /* Sanity check: The actor still exists. */
   fc_assert_ret_val(pplayer, FALSE);
   fc_assert_ret_val(pdiplomat, FALSE);
+
+  act_utype = unit_type_get(pdiplomat);
 
   /* Sanity check: The target is foreign. */
   if (cplayer == pplayer) {
@@ -902,7 +923,7 @@ bool diplomat_get_tech(struct player *pplayer, struct unit *pdiplomat,
                   UNIT_EMOJI(pdiplomat), unit_tile_link(pdiplomat),
                   city_link(pcity));
     /* this may cause a diplomatic incident */
-    action_consequence_caught(paction, pplayer, cplayer,
+    action_consequence_caught(paction, pplayer, act_utype, cplayer,
                               city_tile(pcity), city_link(pcity));
     wipe_unit(pdiplomat, ULR_CAUGHT, cplayer);
     return FALSE;
@@ -927,7 +948,7 @@ bool diplomat_get_tech(struct player *pplayer, struct unit *pdiplomat,
   (pcity->steal)++;
 
   /* this may cause a diplomatic incident */
-  action_consequence_success(paction, pplayer, cplayer,
+  action_consequence_success(paction, pplayer, act_utype, cplayer, 
                              city_tile(pcity), city_link(pcity));
 
   /* Check if a spy survives her mission. */
@@ -961,6 +982,7 @@ bool diplomat_incite(struct player *pplayer, struct unit *pdiplomat,
   struct tile *ctile;
   const char *clink;
   int revolt_cost;
+  const struct unit_type *act_utype;
 
   /* Fetch target civilization's player.  Sanity checks. */
   fc_assert_ret_val(pcity, FALSE);
@@ -976,6 +998,8 @@ bool diplomat_incite(struct player *pplayer, struct unit *pdiplomat,
     /* Nothing to do to a domestic target. */
     return FALSE;
   }
+
+  act_utype = unit_type_get(pdiplomat);
 
   ctile = city_tile(pcity);
   clink = city_link(pcity);
@@ -1020,7 +1044,7 @@ bool diplomat_incite(struct player *pplayer, struct unit *pdiplomat,
                   clink);
 
     /* This may cause a diplomatic incident */
-    action_consequence_caught(paction, pplayer, cplayer, ctile, clink);
+    action_consequence_caught(paction, pplayer, act_utype, cplayer, ctile, clink);
 
     wipe_unit(pdiplomat, ULR_CAUGHT, cplayer);
     return FALSE;
@@ -1054,7 +1078,7 @@ bool diplomat_incite(struct player *pplayer, struct unit *pdiplomat,
   steal_a_tech(pplayer, cplayer, A_UNSET);
 
   /* this may cause a diplomatic incident */
-  action_consequence_success(paction, pplayer, cplayer, ctile, clink);
+  action_consequence_success(paction, pplayer, act_utype, cplayer, ctile, clink);
 
   /* Transfer city and units supported by this city (that
      are within one square of the city) to the new owner. */
@@ -1102,6 +1126,7 @@ bool diplomat_sabotage(struct player *pplayer, struct unit *pdiplomat,
   struct player *cplayer;
   struct impr_type *ptarget;
   int count, which;
+  const struct unit_type *act_utype;
 
   /* Fetch target city's player.  Sanity checks. */
   fc_assert_ret_val(pcity, FALSE);
@@ -1111,6 +1136,8 @@ bool diplomat_sabotage(struct player *pplayer, struct unit *pdiplomat,
   /* Sanity check: The actor still exists. */
   fc_assert_ret_val(pplayer, FALSE);
   fc_assert_ret_val(pdiplomat, FALSE);
+
+  act_utype = unit_type_get(pdiplomat);
 
   log_debug("sabotage: unit: %d", pdiplomat->id);
 
@@ -1141,7 +1168,7 @@ bool diplomat_sabotage(struct player *pplayer, struct unit *pdiplomat,
                   city_link(pcity));
 
     /* This may cause a diplomatic incident */
-    action_consequence_caught(paction, pplayer, cplayer,
+    action_consequence_caught(paction, pplayer, act_utype, cplayer,
                               city_tile(pcity), city_link(pcity));
 
     wipe_unit(pdiplomat, ULR_CAUGHT, cplayer);
@@ -1325,7 +1352,7 @@ bool diplomat_sabotage(struct player *pplayer, struct unit *pdiplomat,
                     city_link(pcity));
 
       /* This may cause a diplomatic incident */
-      action_consequence_caught(paction, pplayer, cplayer,
+      action_consequence_caught(paction, pplayer, act_utype, cplayer,
                                 city_tile(pcity), city_link(pcity));
 
       wipe_unit(pdiplomat, ULR_CAUGHT, cplayer);
@@ -1361,7 +1388,7 @@ bool diplomat_sabotage(struct player *pplayer, struct unit *pdiplomat,
   send_city_info(NULL, pcity);
 
   /* this may cause a diplomatic incident */
-  action_consequence_success(paction, pplayer, cplayer,
+  action_consequence_success(paction, pplayer, act_utype, cplayer, 
                              city_tile(pcity), city_link(pcity));
 
   if (strcmp(utype_name_translation(unit_type_get(pdiplomat)), "Siege Ram")==0) {
@@ -1395,10 +1422,13 @@ bool spy_steal_gold(struct player *act_player, struct unit *act_unit,
 
   int gold_take;
   int gold_give;
+  const struct unit_type *act_utype;
 
   /* Sanity check: The actor still exists. */
   fc_assert_ret_val(act_player, FALSE);
   fc_assert_ret_val(act_unit, FALSE);
+
+  act_utype = unit_type_get(act_unit);
 
   /* Sanity check: The target city still exists. */
   fc_assert_ret_val(tgt_city, FALSE);
@@ -1451,7 +1481,7 @@ bool spy_steal_gold(struct player *act_player, struct unit *act_unit,
                   tgt_city_link);
 
     /* This may cause a diplomatic incident */
-    action_consequence_caught(paction, act_player,
+    action_consequence_caught(paction, act_player, act_utype,
                               tgt_player, tgt_tile, tgt_city_link);
 
     /* Execute the caught thief. */
@@ -1501,7 +1531,7 @@ bool spy_steal_gold(struct player *act_player, struct unit *act_unit,
                 nation_plural_for_player(act_player));
 
   /* This may cause a diplomatic incident. */
-  action_consequence_success(paction, act_player,
+  action_consequence_success(paction, act_player, act_utype,
                              tgt_player, tgt_tile, tgt_city_link);
 
   /* Try to escape. */
@@ -1530,12 +1560,15 @@ bool spy_steal_some_maps(struct player *act_player, struct unit *act_unit,
 {
   struct player *tgt_player;
   struct tile *tgt_tile;
+  const struct unit_type *act_utype;
 
   const char *tgt_city_link;
 
   /* Sanity check: The actor still exists. */
   fc_assert_ret_val(act_player, FALSE);
   fc_assert_ret_val(act_unit, FALSE);
+
+  act_utype = unit_type_get(act_unit);
 
   /* Sanity check: The target city still exists. */
   fc_assert_ret_val(tgt_city, FALSE);
@@ -1584,7 +1617,7 @@ bool spy_steal_some_maps(struct player *act_player, struct unit *act_unit,
                   tgt_city_link);
 
     /* This may cause a diplomatic incident. */
-    action_consequence_caught(paction, act_player,
+    action_consequence_caught(paction, act_player, act_utype,
                               tgt_player, tgt_tile, tgt_city_link);
 
     /* Execute the caught thief. */
@@ -1612,7 +1645,7 @@ bool spy_steal_some_maps(struct player *act_player, struct unit *act_unit,
                 tgt_city_link);
 
   /* This may cause a diplomatic incident. */
-  action_consequence_success(paction, act_player,
+  action_consequence_success(paction, act_player, act_utype,
                              tgt_player, tgt_tile, tgt_city_link);
 
   /* Try to escape. */
@@ -1638,10 +1671,13 @@ bool spy_nuke_city(struct player *act_player, struct unit *act_unit,
   struct tile *tgt_tile;
 
   const char *tgt_city_link;
+  const struct unit_type *act_utype;
 
   /* Sanity check: The actor still exists. */
   fc_assert_ret_val(act_player, FALSE);
   fc_assert_ret_val(act_unit, FALSE);
+
+  act_utype = unit_type_get(act_unit);
 
   /* Sanity check: The target city still exists. */
   fc_assert_ret_val(tgt_city, FALSE);
@@ -1683,7 +1719,7 @@ bool spy_nuke_city(struct player *act_player, struct unit *act_unit,
                   tgt_city_link);
 
     /* This may cause a diplomatic incident. */
-    action_consequence_caught(paction, act_player,
+    action_consequence_caught(paction, act_player, act_utype,
                               tgt_player, tgt_tile, tgt_city_link);
 
     /* Execute the caught terrorist. */
@@ -1723,7 +1759,7 @@ bool spy_nuke_city(struct player *act_player, struct unit *act_unit,
   do_nuclear_explosion(act_player, tgt_tile, 0, "Suitcase Nuke");
 
   /* This may cause a diplomatic incident. */
-  action_consequence_success(paction, act_player,
+  action_consequence_success(paction, act_player, act_utype,
                              tgt_player, tgt_tile, tgt_city_link);
 
   return TRUE;
@@ -1883,6 +1919,7 @@ static bool diplomat_infiltrate_tile(struct player *pplayer,
   char link_diplomat[MAX_LEN_LINK];
   char link_unit[MAX_LEN_LINK];
   struct city *pcity = tile_city(ptile);
+  const struct unit_type *act_utype = unit_type_get(pdiplomat);
 
   // TO DO: change this hard-coding to: if unit_has_type_flag(UTYF_EVADES_DIPLOMATIC_COMBAT)
   // after this flag is created. For now, Siege Ram is the test case for this when it tries
@@ -2116,13 +2153,13 @@ static bool diplomat_infiltrate_tile(struct player *pplayer,
 
         // Caught trying to kill the specific uplayer's unit. This
         // means war !
-        action_consequence_caught(paction, pplayer, uplayer,
+        action_consequence_caught(paction, pplayer, act_utype, uplayer,
                                   ptile, victim_link);
 
         // If action took place in a city not belonging to the victim unit, then
         // the city owner also gets a casus belli for this outrageous incident:
         if (pcity && (cplayer != uplayer)) {
-          action_consequence_caught(paction, pplayer, cplayer,
+          action_consequence_caught(paction, pplayer, act_utype, cplayer,
                                     ptile, victim_link);
         }
         wipe_unit(pdiplomat, ULR_ELIMINATED, uplayer);

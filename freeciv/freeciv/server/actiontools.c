@@ -156,6 +156,7 @@ static void action_notify_ai(const struct action *paction,
 **************************************************************************/
 static void action_consequence_common(const struct action *paction,
                                       struct player *offender,
+                                      const struct unit_type *offender_utype,
                                       struct player *victim_player,
                                       const struct tile *victim_tile,
                                       const char *victim_link,
@@ -175,7 +176,7 @@ static void action_consequence_common(const struct action *paction,
                                tile_city(victim_tile),
                                NULL,
                                victim_tile,
-                               NULL, NULL,
+                               NULL, offender_utype,
                                NULL, NULL,
                                paction,
                                eft);
@@ -375,14 +376,14 @@ static void notify_global_caught(struct player *receiver,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Suitcase Nuke */
                   _("⚠️ Getting caught trying to do %s gives "
-                    "everyone a casus belli against you."),
+                    "everyone casus belli against you."),
                   action_name_translation(paction));
   } else if (receiver == victim_player) {
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Suitcase Nuke ... Europeans */
                   _("👮‍♂️ Getting caught trying to do %s to you gives "
-                    "everyone a casus belli against the %s."),
+                    "everyone casus belli against the %s."),
                   action_name_translation(paction),
                   nation_plural_for_player(offender));
   } else if (victim_player == NULL) {
@@ -413,12 +414,13 @@ static void notify_global_caught(struct player *receiver,
 **************************************************************************/
 void action_consequence_caught(const struct action *paction,
                                struct player *offender,
+                               const struct unit_type *offender_utype,
                                struct player *victim_player,
                                const struct tile *victim_tile,
                                const char *victim_link)
 {
 
-  action_consequence_common(paction, offender,
+  action_consequence_common(paction, offender, offender_utype,
                             victim_player, victim_tile, victim_link,
                             notify_actor_caught,
                             notify_victim_caught,
@@ -579,7 +581,7 @@ static void notify_global_success(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Suitcase Nuke */
-                  _("⚠️ Doing %s gives everyone a casus belli against you."),
+                  _("⚠️ Doing %s gives everyone casus belli against you."),
                   action_name_translation(paction));
   } else if (receiver == victim_player) {
     if (paction == NULL) {
@@ -595,7 +597,7 @@ static void notify_global_success(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Suitcase Nuke ... Europeans */
-                  _("👮‍♂️ Doing %s to you gives everyone a casus belli against "
+                  _("👮‍♂️ Doing %s to you gives everyone casus belli against "
                     "the %s."),
                   action_name_translation(paction),
                   nation_plural_for_player(offender));
@@ -604,7 +606,7 @@ static void notify_global_success(struct player *receiver,
       /* Ugly hack for the lack of "Unit Move" */
       notify_player(receiver, victim_tile,
                     E_DIPLOMATIC_INCIDENT, ftc_server,
-                    _("[`unitednations`]⚠️ You now have a casus belli against the %s. "
+                    _("[`unitednations`]⚠️ You now have casus belli against the %s. "
                       "They invaded."),
                     nation_plural_for_player(offender));
       return;
@@ -612,7 +614,7 @@ static void notify_global_success(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Europeans ... Suitcase Nuke */
-                  _("👮‍♂️ You now have a casus belli against the %s. "
+                  _("👮‍♂️ You now have casus belli against the %s. "
                     "They did %s."),
                   nation_plural_for_player(offender),
                   action_name_translation(paction));
@@ -621,7 +623,7 @@ static void notify_global_success(struct player *receiver,
       /* Ugly hack for the lack of "Unit Move" */
       notify_player(receiver, victim_tile,
                     E_DIPLOMATIC_INCIDENT, ftc_server,
-                    _("[`unitednations`]⚠️ All nations of the world have casus belli against the %s, "
+                    _("[`unitednations`]⚠️ All nations have casus belli against the %s. "
                       "Their invasion of the %s violated their treaty!"),
                     nation_plural_for_player(offender),
                     nation_plural_for_player(victim_player));
@@ -630,7 +632,7 @@ static void notify_global_success(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Europeans ... Suitcase Nuke ... Americans */
-                  _("👮‍♂️ You now have a casus belli against the %s. "
+                  _("👮‍♂️ You now have casus belli against the %s. "
                     "They did %s to the %s."),
                   nation_plural_for_player(offender),
                   action_name_translation(paction),
@@ -646,11 +648,12 @@ static void notify_global_success(struct player *receiver,
 **************************************************************************/
 void action_consequence_success(const struct action *paction,
                                 struct player *offender,
+                                const struct unit_type *offender_utype,
                                 struct player *victim_player,
                                 const struct tile *victim_tile,
                                 const char *victim_link)
 {
-  action_consequence_common(paction, offender,
+  action_consequence_common(paction, offender, offender_utype,
                             victim_player, victim_tile, victim_link,
                             notify_actor_success,
                             notify_victim_success,
