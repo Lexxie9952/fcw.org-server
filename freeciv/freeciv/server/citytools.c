@@ -2851,18 +2851,60 @@ void establish_trade_route(struct city *pc1, struct city *pc2)
 }
 
 /************************************************************************//**
-  Sell the improvement from the city, and give the player the owner.  Not
-  all buildings can be sold.
+  Sell the improvement from the city, and give the player the gold.  Not
+  all buildings can be sold. Returns the price, so caller functions don't
+  have to calculate the price twice. 0==sale not possible.
 
   I guess the player should always be the city owner?
 ****************************************************************************/
-void do_sell_building(struct player *pplayer, struct city *pcity,
+int do_sell_building(struct player *pplayer, struct city *pcity,
                       struct impr_type *pimprove, const char *reason)
 {
   if (can_city_sell_building(pcity, pimprove)) {
-    pplayer->economic.gold += impr_sell_gold(pimprove);
+    const int ROUND = 50; // round to nearest int.
+    float sale_pct = 0;   // pct to add to sale price
+    bool sold_building_matches_req_building = false;
+
+/*
+    // The "Improvement_Sale_Pct" needs access to a different req range. It 
+    // wants to check if the "Building", pimprove, "City" is what is being
+    // sold, not have if the building is present. Because the bonus applies
+    // only to the sale of that specific building. Thus, first we check the
+    // reqs to see if it's in there.
+
+    // This block of pseudo-code, if it is one day completed to do
+       if (the "Building", X, "City".req.X==pimprove.item_number)
+          sold_building_matches_req_building = true; 
+    // Then the "Improvement_Sale_Pct" effect will work, making sales of 
+    // building X and only X, receive a bonus/penalty in the re-sale gold value. 
+
+    enum effect_type effect_type;
+    effect_list_iterate(get_effects(effect_type), peffect) {
+      // check for EFT_IMPROVEMENT_SALE_PCT
+      if (peffect->type == EFT_IMPROVEMENT_SALE_PCT) {
+        iterate peffect->reqs {
+          if (req.source.impr_type == pimprove);
+            sold_building_matches_req_building = true; // we only activate the effect if the sold building is same as the effect building.
+            break;
+        }
+      }
+    } reqs_iterate_end;
+*/
+    if (sold_building_matches_req_building) {
+      sale_pct = (float)
+        get_target_bonus_effects(NULL, NULL, NULL, pcity, pimprove, 
+                                city_tile(pcity), NULL, NULL, NULL,
+                                NULL, NULL, EFT_IMPROVEMENT_SALE_PCT);
+    }
+
+    int price = ((float)impr_sell_gold(pimprove)
+                                * (100 + sale_pct) + ROUND) / 100;
+
+    pplayer->economic.gold += price;
     building_lost(pcity, pimprove, reason, NULL);
+    return price;
   }
+  return 0;
 }
 
 /************************************************************************//**
@@ -3218,17 +3260,16 @@ void city_landlocked_sell_coastal_improvements(struct tile *ptile)
                || VUT_TERRAINCLASS == preq->source.kind)
               && !is_req_active(city_owner(pcity), NULL, pcity, NULL,
                                 NULL, NULL, NULL, NULL, NULL, NULL,
-				preq, TRUE)) {
-            int price = impr_sell_gold(pimprove);
-
-            do_sell_building(pplayer, pcity, pimprove, "landlocked");
-            notify_player(pplayer, tile1, E_IMP_SOLD, ftc_server,
-                          PL_("&#8203;[`gold`] You sell %s in %s (now landlocked)"
-                              " for %d gold.",
-                              "&#8203;[`gold`] You sell %s in %s (now landlocked)"
-                              " for %d gold.", price),
-                          improvement_name_translation(pimprove),
-                          city_link(pcity), price);
+				preq, TRUE)) 
+    {
+      int price = do_sell_building(pplayer, pcity, pimprove, "landlocked");
+      notify_player(pplayer, tile1, E_IMP_SOLD, ftc_server,
+                    PL_("[`gold`] Sold %s in %s (now landlocked)"
+                        " for %d gold.",
+                        "[`gold`] Sold %s in %s (now landlocked)"
+                        " for %d gold.", price),
+                    improvement_name_translation(pimprove),
+                    city_link(pcity), price);
 	  }
 	} requirement_vector_iterate_end;
       } city_built_iterate_end;

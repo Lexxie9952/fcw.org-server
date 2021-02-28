@@ -282,14 +282,13 @@ void really_handle_city_sell(struct player *pplayer, struct city *pcity,
   }
 
   pcity->did_sell=TRUE;
-  price = impr_sell_gold(pimprove);
+  price = do_sell_building(pplayer, pcity, pimprove, "sold");
   notify_player(pplayer, pcity->tile, E_IMP_SOLD, ftc_server,
-                PL_("&#8203;[`gold`] You sell %s in %s for %d gold.",
-                    "&#8203;[`gold`] You sell %s in %s for %d gold.", price),
+                PL_("[`gold`] You sell %s in %s for %d gold.",
+                    "[`gold`] You sell %s in %s for %d gold.", price),
                 improvement_name_translation(pimprove),
                 city_link(pcity), price);
-  do_sell_building(pplayer, pcity, pimprove, "sold");
-
+  
   city_refresh(pcity);
 
   /* If we sold the walls the other players should see it */
@@ -343,9 +342,15 @@ void really_handle_city_buy(struct player *pplayer, struct city *pcity)
     return;
   }
 
-  if (VUT_UTYPE == pcity->production.kind && pcity->anarchy != 0) {
+  if (VUT_UTYPE == pcity->production.kind && pcity->anarchy != 0 && pcity->hangry != 0) {
     notify_player(pplayer, pcity->tile, E_BAD_COMMAND, ftc_server,
                   _("😡 Can't buy units when city is in disorder."));
+    return;
+  }
+  if (game.server.fulldisorder && VUT_IMPROVEMENT == pcity->production.kind 
+      && pcity->anarchy != 0 && pcity->hangry != 0) {
+    notify_player(pplayer, pcity->tile, E_BAD_COMMAND, ftc_server,
+                  _("😡 Can't buy buildings when city is in disorder."));
     return;
   }
 
@@ -386,13 +391,13 @@ void really_handle_city_buy(struct player *pplayer, struct city *pcity)
   if (VUT_UTYPE == pcity->production.kind) {
     notify_player(pplayer, pcity->tile, E_UNIT_BUY, ftc_server,
                   /* TRANS: bought an unit. */
-                  Q_("?unit:&#8203;[`gold`] You bought %s in %s for %d gold."),
+                  Q_("?unit:[`gold`] You bought %s in %s for %d gold."),
                   utype_name_translation(pcity->production.value.utype),
                   city_name_get(pcity), cost);
   } else if (VUT_IMPROVEMENT == pcity->production.kind) {
     notify_player(pplayer, pcity->tile, E_IMP_BUY, ftc_server,
                   /* TRANS: bought an improvement .*/
-                  Q_("?improvement:&#8203;[`gold`] You bought %s in %s for %d gold."),
+                  Q_("?improvement:[`gold`] You bought %s in %s for %d gold."),
                   improvement_name_translation(pcity->production.value.building),
                   city_name_get(pcity), cost);
   }

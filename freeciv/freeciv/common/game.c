@@ -377,7 +377,9 @@ static void game_defaults(bool keep_ruleset_value)
     game.server.lootstyle         = GAME_DEFAULT_LOOTSTYLE;
     game.server.last_updated_year = FALSE;
     game.server.freecost          = GAME_DEFAULT_FREECOST;
+    game.server.fulldisorder      = GAME_DEFUALT_FULLDISORDER;
     game.server.global_warming_percent = GAME_DEFAULT_GLOBAL_WARMING_PERCENT;
+    game.server.hangry            = GAME_DEFAULT_HANGRY;
     game.server.homecaughtunits   = GAME_DEFAULT_HOMECAUGHTUNITS;
     game.server.kick_time         = GAME_DEFAULT_KICK_TIME;
     game.server.killcitizen_pct  = GAME_DEFAULT_KILLCITIZEN_PCT;

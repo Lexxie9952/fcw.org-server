@@ -2373,7 +2373,7 @@ static struct setting settings[] = {
   GEN_BOOL("killcitizen", game.info.killcitizen,
            SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
            N_("Reduce city population after attack"),
-           N_("This flag indicates whether a city's population is reduced "
+           N_("This setting indicates whether a city's population is reduced "
               "after a successful attack by an enemy unit. If this is "
               "disabled, population is never reduced. Even when this is "
               "enabled, only some units may kill citizens."),
@@ -2399,6 +2399,24 @@ static struct setting settings[] = {
              "death of the unit."),
           NULL, NULL, NULL, GAME_MIN_KILLUNHOMED, GAME_MAX_KILLUNHOMED,
           GAME_DEFAULT_KILLUNHOMED)
+
+  GEN_INT("hangry", game.server.hangry,
+          SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
+          N_("Starvation causes city disorder"),
+          N_("If set to 0, starvation does not affect the mood of city "
+            "citizens: there will be no disorder after famine. If set to positive, "
+            "starvation causes disorder."),
+          NULL, NULL, NULL, GAME_MIN_HANGRY, GAME_MAX_HANGRY, GAME_DEFAULT_HANGRY)
+
+  GEN_BOOL("fulldisorder", game.server.fulldisorder,
+           SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
+           N_("Disorder prevents city production"),
+           N_("This setting indicates whether disorder in a city prevents "
+              "production. In the default case where it is disabled, "
+              "a city is merely not allowed to buy units. If this "
+              "setting is enabled, cities in disorder can neither produce "
+              "nor buy anything."),
+           NULL, NULL, GAME_DEFAULT_FULLDISORDER)
 
   GEN_ENUM("borders", game.info.borders,
            SSET_RULES, SSET_MILITARY, SSET_SITUATIONAL,

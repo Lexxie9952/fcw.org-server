@@ -90,7 +90,7 @@ static struct city_list *city_refresh_queue = NULL;
 static struct unit_list *uk_rem_gold = NULL;
 
 static void check_pollution(struct city *pcity);
-static void city_populate(struct city *pcity, struct player *nationality);
+static bool city_populate(struct city *pcity, struct player *nationality);
 
 static bool worklist_change_build_target(struct player *pplayer,
 					 struct city *pcity);
@@ -235,18 +235,13 @@ void remove_obsolete_buildings_city(struct city *pcity, bool refresh)
   city_built_iterate(pcity, pimprove) {
     if (improvement_obsolete(pplayer, pimprove, pcity)
         && can_city_sell_building(pcity, pimprove)) {
-      int sgold;
-
-      do_sell_building(pplayer, pcity, pimprove, "obsolete");
-      sgold = impr_sell_gold(pimprove);
+      int sgold = do_sell_building(pplayer, pcity, pimprove, "obsolete");
       notify_player(pplayer, city_tile(pcity), E_IMP_SOLD, ftc_server,
-                    PL_("&#8203;[`gold`] %s is selling %s [`%s`] (obsolete) for %d gold.",
-                        "&#8203;[`gold`] %s is selling %s [`%s`] (obsolete) for %d gold.",
+                    PL_("[`gold`] %s sold %s [`%s`] (obsolete) for %d gold.",
+                        "[`gold`] %s sold %s [`%s`] (obsolete) for %d gold.",
                         sgold),
-                    city_link(pcity),
-                    improvement_name_translation(pimprove),
-                    improvement_name_translation(pimprove),
-                    sgold);
+                    city_link(pcity), improvement_name_translation(pimprove),
+                    improvement_name_translation(pimprove), sgold);
       sold = TRUE;
     }
   } city_built_iterate_end;
@@ -1112,10 +1107,12 @@ bool city_change_size(struct city *pcity, citizens size,
 }
 
 /**********************************************************************//**
-  Check whether the population can be increased or
-  if the city is unable to support a 'settler'...
+  Executes population growth from food surplus, or the consequences of
+  famine (i.e. pop loss || city is unable to support 'Settlers'...)
+  Returns true if city lost population from famine and is in disorder
+  from that, so the caller can be aware and do the appropriate handling.
 **************************************************************************/
-static void city_populate(struct city *pcity, struct player *nationality)
+static bool city_populate(struct city *pcity, struct player *nationality)
 {
   int saved_id = pcity->id;
   int granary_size = city_granary_size(city_size_get(pcity));
@@ -1163,7 +1160,8 @@ static void city_populate(struct city *pcity, struct player *nationality)
         if (city_exist(saved_id)) {
           city_reset_foodbox(pcity, city_size_get(pcity));
         }
-	return;
+
+	      return false; // city famine avoided by a lost unit
       }
     } unit_list_iterate_safe_end;
     if (city_size_get(pcity) > 1) {
@@ -1179,7 +1177,36 @@ static void city_populate(struct city *pcity, struct player *nationality)
     }
     city_reset_foodbox(pcity, city_size_get(pcity) - 1);
     city_reduce_size(pcity, 1, NULL, "famine");
+    // Hangry: Nothing makes people more upset than starving:
+    if (game.server.hangry) {
+      // but they're quiet about it in the gulag:
+      int gulag = get_city_bonus(pcity, EFT_GULAG);
+      /* Disorder from Famine conditions:
+         1. No gulag effect = don't suppress disorder
+         2. martial_law < gulag effect. don't suppress disorder.
+         3. martial_law >= gulag effect. suppress disorder.
+         3. EFT_GULAG=100: always suppress disorder */
+      if ((!gulag || pcity->martial_law < gulag) && gulag != 100) {
+        pcity->rapture = 0;
+        pcity->was_happy = false;
+        pcity->hangry++;
+        if (gulag) {
+          notify_player(city_owner(pcity), city_tile(pcity),
+                        E_CITY_FAMINE, ftc_server,
+                        _("Martial law force of %d not enough to suppress famine disorder in %s."),
+                         pcity->martial_law, city_link(pcity));          
+        }
+        return true; // indicates city is hangry from starvation
+      } else {
+          notify_player(city_owner(pcity), city_tile(pcity),
+                        E_CITY_NORMAL, ftc_server,
+                        _("Gulag policy in %s prevents disorder."), city_link(pcity));
+      }
+    } 
   }
+  // No starvation occurred:
+  pcity->hangry = 0;  // reset turns of starving counter
+  return false;       // tells caller no famine occurred
 }
 
 /**********************************************************************//**
@@ -3020,7 +3047,10 @@ static bool city_distribute_surplus_shields(struct player *pplayer,
   }
 
   /* Now we confirm changes made last turn. */
-  pcity->shield_stock += pcity->surplus[O_SHIELD];
+  if (!pcity->hangry && 
+      !(game.server.fulldisorder && (pcity->anarchy || pcity->hangry))) {
+    pcity->shield_stock += pcity->surplus[O_SHIELD];
+  } else pcity->surplus[O_SHIELD] = 0;
   pcity->before_change_shields = pcity->shield_stock;
   pcity->last_turns_shield_surplus = pcity->surplus[O_SHIELD];
 
@@ -3161,7 +3191,7 @@ static bool city_build_building(struct player *pplayer, struct city *pcity)
     }
     if (space_part && pplayer->spaceship.state == SSHIP_NONE) {
       notify_player(NULL, city_tile(pcity), E_SPACESHIP, ftc_server,
-                    _("&#8203;[`events/spaceship`]<br>🚀 The %s have started building a spaceship!"),
+                    _("[`events/spaceship`]<br>🚀 The %s have started building a spaceship!"),
                     nation_plural_for_player(pplayer));
       pplayer->spaceship.state = SSHIP_STARTED;
     }
@@ -3384,6 +3414,8 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
 **************************************************************************/
 static bool city_build_stuff(struct player *pplayer, struct city *pcity)
 {
+  const char *add_message;
+
   if (!city_distribute_surplus_shields(pplayer, pcity)) {
     return FALSE;
   }
@@ -3393,9 +3425,32 @@ static bool city_build_stuff(struct player *pplayer, struct city *pcity)
 
   switch (pcity->production.kind) {
   case VUT_IMPROVEMENT:
-    return city_build_building(pplayer, pcity);
+    if (!pcity->hangry && !(game.server.fulldisorder && pcity->anarchy)) { 
+      return city_build_building(pplayer, pcity);
+    }
+    else {
+      const struct impr_type *pimprove = pcity->production.value.building;
+      add_message = pcity->hangry ? _("famine") : _("disorder");
+      notify_player(pplayer, city_tile(pcity), E_CITY_CANTBUILD, ftc_server,
+            /* TRANS: <city> is finished building <unit/building>. */
+            _("⚠️ Recent %s in %s halts construction on %s."),
+            add_message, city_link(pcity),
+            city_improvement_name_translation(pcity, pimprove));
+      return true;
+    }
   case VUT_UTYPE:
-    return city_build_unit(pplayer, pcity);
+    if (!pcity->hangry && !(game.server.fulldisorder && pcity->anarchy)) {
+      return city_build_unit(pplayer, pcity);
+    }
+    else {
+      const struct unit_type *utype = pcity->production.value.utype;
+      add_message = pcity->hangry ? _("famine") : _("disorder");
+      notify_player(pplayer, city_tile(pcity), E_CITY_CANTBUILD, ftc_server,
+            /* TRANS: <city> is finished building <unit/building>. */
+            _("⚠️ Recent %s in %s halts production of %s."),
+            add_message, city_link(pcity), utype_name_translation(utype));
+      return true;
+    }
   default:
     /* must never happen! */
     fc_assert(FALSE);
@@ -3429,16 +3484,16 @@ static bool sell_random_building(struct player *pplayer,
   r = fc_rand(cityimpr_list_size(imprs));
   pcityimpr = cityimpr_list_get(imprs, r);
 
+  int sgold = do_sell_building(pplayer, pcityimpr->pcity,
+                               pcityimpr->pimprove, "cant_maintain");
   notify_player(pplayer, city_tile(pcityimpr->pcity), E_IMP_AUCTIONED,
                 ftc_server,
-                _("⚠️[`gold`] Can't afford to maintain %s [`%s`] in %s, building sold!"),
+                _("⚠️[`gold`] Can't afford to maintain %s [`%s`] in %s: sold for %d gold!"),
                 improvement_name_translation(pcityimpr->pimprove),
                 improvement_name_translation(pcityimpr->pimprove),
-                city_link(pcityimpr->pcity));
+                city_link(pcityimpr->pcity), sgold);
   log_debug("%s: sold building (%s)", player_name(pplayer),
             improvement_name_translation(pcityimpr->pimprove));
-
-  do_sell_building(pplayer, pcityimpr->pcity, pcityimpr->pimprove, "cant_maintain");
 
   cityimpr_list_remove(imprs, pcityimpr);
 
@@ -3812,7 +3867,7 @@ static void check_pollution(struct city *pcity)
   if (fc_rand(100) < pcity->pollution) {
     if (place_pollution(pcity, EC_POLLUTION)) {
       notify_player(city_owner(pcity), city_tile(pcity), E_POLLUTION, ftc_server,
-                    _("&#8203;[`pollution`] Pollution near %s."), city_link(pcity));
+                    _("[`pollution`] Pollution near %s."), city_link(pcity));
     }
   }
 }
@@ -3962,6 +4017,11 @@ static void update_city_activity(struct city *pcity)
   struct government *gov;
   bool is_happy;
   bool is_celebrating;
+  bool city_is_hangry = false;
+  const char *add_message;
+  int revolution_turns;
+  int saved_id;
+
 
   if (!pcity) {
     return;
@@ -3969,8 +4029,8 @@ static void update_city_activity(struct city *pcity)
 
   pplayer = city_owner(pcity);
   gov = government_of_city(pcity);
-  is_happy = city_happy(pcity);
-  is_celebrating = city_celebrating(pcity);
+  is_happy = city_happy(pcity) && !pcity->hangry;
+  is_celebrating = city_celebrating(pcity) && !pcity->hangry;
 
   if (city_refresh(pcity)) {
     auto_arrange_workers(pcity);
@@ -3979,9 +4039,6 @@ static void update_city_activity(struct city *pcity)
   /* Reporting of celebrations rewritten, copying the treatment of disorder below,
      with the added rapture rounds count.  991219 -- Jing */
   if (city_build_stuff(pplayer, pcity)) {
-    int saved_id;
-    int revolution_turns;
-
     pcity->history += city_history_gain(pcity);
 
     /* History can decrease, but never go below zero */
@@ -3990,10 +4047,10 @@ static void update_city_activity(struct city *pcity)
     /* Keep old behaviour when building new improvement could keep
        city celebrating */
     if (is_happy == FALSE) {
-      is_happy = city_happy(pcity);
+      is_happy = city_happy(pcity) && !pcity->hangry;
     }
 
-    if (city_celebrating(pcity) || is_celebrating) {
+    if ((city_celebrating(pcity) || is_celebrating) && !pcity->hangry) {
       pcity->rapture++;
       if (pcity->rapture == 1) {
         notify_player(pplayer, city_tile(pcity), E_CITY_LOVE, ftc_server,
@@ -4002,9 +4059,11 @@ static void update_city_activity(struct city *pcity)
       }
     } else {
       if (pcity->rapture != 0) {
+        if (pcity->hangry) add_message = _(" from recent famine.");
+        else add_message = _(".");
         notify_player(pplayer, city_tile(pcity), E_CITY_NORMAL, ftc_server,
-                      _("💢 Celebrations canceled in %s."),
-                      city_link(pcity));
+                      _("💢 Celebrations canceled in %s%s"),
+                      city_link(pcity), add_message);
       }
       pcity->rapture = 0;
     }
@@ -4034,11 +4093,11 @@ static void update_city_activity(struct city *pcity)
 
     /* City population updated here, after the rapture stuff above. --Jing */
     saved_id = pcity->id;
-    city_populate(pcity, pplayer);
+    city_is_hangry = city_populate(pcity, pplayer);
     if (NULL == player_city_by_number(pplayer, saved_id)) {
       return;
     }
-
+  
     pcity->did_sell = FALSE;
     pcity->did_buy = FALSE;
     pcity->airlift = city_airlift_max(pcity);
@@ -4076,31 +4135,32 @@ static void update_city_activity(struct city *pcity)
     }
 
     revolution_turns = get_city_bonus(pcity, EFT_REVOLUTION_UNHAPPINESS);
-    if (city_unhappy(pcity)) {
-      const char *revomsg;
+    if (city_unhappy(pcity) || city_is_hangry) {
 
       pcity->anarchy++;
       if (pcity->anarchy == revolution_turns) {
         /* Revolution next turn if not dealt with */
         /* TRANS: preserve leading space; this string will be appended to
          * another sentence */
-        revomsg = _(" Unrest threatens to spread beyond the city.");
+        add_message = _(" Unrest threatens to spread beyond the city.");
+      } else if (city_is_hangry) {
+        add_message = _(" Famine is blamed.");
       } else {
-        revomsg = "";
+        add_message = "";
       }
       if (pcity->anarchy == 1) {
         notify_player(pplayer, city_tile(pcity), E_CITY_DISORDER, ftc_server,
                       /* TRANS: second %s is an optional extra sentence */
                       _("😡 Civil disorder in %s.%s"),
-                      city_link(pcity), revomsg);
+                      city_link(pcity), add_message);
       } else {
         notify_player(pplayer, city_tile(pcity), E_CITY_DISORDER, ftc_server,
                       /* TRANS: second %s is an optional extra sentence */
                       _("😡 CIVIL DISORDER CONTINUES in %s.%s"),
-                      city_link(pcity), revomsg);
+                      city_link(pcity), add_message);
       }
     } else {
-      if (pcity->anarchy != 0) {
+      if (pcity->anarchy != 0 && !city_is_hangry) {
         notify_player(pplayer, city_tile(pcity), E_CITY_NORMAL, ftc_server,
                       _("🙂 Order restored in %s."),
                       city_link(pcity));
@@ -4637,7 +4697,7 @@ static void apply_disaster(struct city *pcity, struct disaster_type *pdis)
   if (disaster_has_effect(pdis, DE_POLLUTION)) {
     if (place_pollution(pcity, EC_POLLUTION)) {
       notify_player(pplayer, ptile, E_DISASTER, ftc_server,
-                    _("&#8203;[`pollution`] Pollution near %s."), city_link(pcity));
+                    _("[`pollution`] Pollution near %s."), city_link(pcity));
       had_internal_effect = TRUE;
     }
   }
@@ -4645,7 +4705,7 @@ static void apply_disaster(struct city *pcity, struct disaster_type *pdis)
   if (disaster_has_effect(pdis, DE_FALLOUT)) {
     if (place_pollution(pcity, EC_FALLOUT)) {
       notify_player(pplayer, ptile, E_DISASTER, ftc_server,
-                    _("&#8203;[`fallout`] Fallout near %s."), city_link(pcity));
+                    _("[`fallout`] Fallout near %s."), city_link(pcity));
       had_internal_effect = TRUE;
     }
   }
@@ -4882,7 +4942,7 @@ static bool check_city_migrations_player(const struct player *pplayer)
         /* N.B.: city_link always returns the same pointer. */
         sz_strlcpy(city_link_text, city_link(pcity));
         notify_player(pplayer, city_tile(pcity), E_CITY_TRANSFER, ftc_server,
-                      _("&#8203;[`migrants`] Citizens of %s are thinking about migrating to %s "
+                      _("[`migrants`] Citizens of %s are thinking about migrating to %s "
                         "for a better life."),
                       city_link_text, city_link(best_city_player));
       } else {
@@ -4904,7 +4964,7 @@ static bool check_city_migrations_player(const struct player *pplayer)
         sz_strlcpy(city_link_text, city_link(pcity));
         notify_player(pplayer, city_tile(pcity), E_CITY_TRANSFER, ftc_server,
                       /* TRANS: <city1> to <city2> (<city2 nation adjective>). */
-                      _("&#8203;[`migrants`] Citizens of %s are thinking about migrating to %s "
+                      _("[`migrants`] Citizens of %s are thinking about migrating to %s "
                         "(%s) for a better life."),
                       city_link_text, city_link(best_city_world), nname);
       } else {

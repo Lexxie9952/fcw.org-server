@@ -661,7 +661,7 @@ const char *city_improvement_name_translation(const struct city *pcity,
 
   if (is_great_wonder(pimprove)) {
     if (great_wonder_is_available(pimprove)) {
-      state = Q_("?wonder:W");
+      state = Q_("?wonder:GW");
     } else if (great_wonder_is_destroyed(pimprove)) {
       state = Q_("?destroyed:D");
     } else {

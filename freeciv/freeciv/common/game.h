@@ -149,6 +149,8 @@ struct civ_game {
       bool fixedlength;
       bool foggedborders;
       int freecost;
+      bool fulldisorder;
+      int hangry;
       bool hideouts;
       int incite_improvement_factor;
       int incite_total_factor;
@@ -543,6 +545,12 @@ extern struct world wld;
 #define GAME_DEFAULT_AQUEDUCTLOSS    0
 #define GAME_MIN_AQUEDUCTLOSS        0
 #define GAME_MAX_AQUEDUCTLOSS        100
+
+#define GAME_DEFAULT_HANGRY          0
+#define GAME_MIN_HANGRY              0
+#define GAME_MAX_HANGRY              100
+
+#define GAME_DEFAULT_FULLDISORDER    FALSE
 
 #define GAME_DEFAULT_KILLSTACK       TRUE
 #define GAME_DEFAULT_KILLCITIZEN     TRUE

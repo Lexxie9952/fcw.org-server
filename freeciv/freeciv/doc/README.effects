@@ -242,7 +242,6 @@ Enable_Nuke
 Enable_Space
     Allows the production of space components.
 
-
 Enemy_Citizen_Unhappy_Pct
     There will be one extra unhappy citizen for each value/100 citizens
     of enemy nationality in the city.
@@ -268,6 +267,14 @@ Give_Imm_Tech
 Growth_Food
     Food left after cities grow or shrink is amount percent of the capacity of 
     the city's foodbox. This also affects the 'aqueductloss' penalty.
+
+Gulag
+    Suppresses famine from causing disorder in starving cities, when game.server.hangry
+    is active. Values:
+     *   0     =  No suppression.
+     *   1-99  =  Total martial law impact needed to achieve suppression.
+     *   100   =  always suppress. 
+    "Gulag" suppression of disorder. 100 = always suppress disorder.
 
 Happiness_To_Gold
     Make all Make_Content and Force_Content effects instead generate gold.
@@ -295,6 +302,10 @@ HP_Regen
 Illegal_Action_Move_Cost
     The number of move fragments lost when the player tries to do an action
     that turns out to be illegal.
+
+Improvement_Sale_Pct
+    Multiplier Pct to the 1/1 rate at which a building's shield value converts 
+    to gold when the city is sold.
 
 Incite_Cost_Pct
     Increases revolt cost by amount percent.

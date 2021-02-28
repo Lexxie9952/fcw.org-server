@@ -310,6 +310,7 @@ extern "C" {
 #define SPECENUM_VALUE121NAME "Fortify_Defense_Bonus"
 #define SPECENUM_VALUE122 EFT_UNIT_SHIELD_VALUE_PCT
 #define SPECENUM_VALUE122NAME "Unit_Shield_Value_Pct"
+/* bonuses to activity_count / work rate on tiles */
 #define SPECENUM_VALUE123 EFT_UNIT_WORK_FRAG_BONUS
 #define SPECENUM_VALUE123NAME "Unit_Work_Frag_Bonus"
 #define SPECENUM_VALUE124 EFT_UNIT_WORK_PCT
@@ -317,6 +318,13 @@ extern "C" {
 /* adds val to the hard-coded 1:1 conversion of shields to gold */
 #define SPECENUM_VALUE125 EFT_COINAGE_BONUS_PCT
 #define SPECENUM_VALUE125NAME "Coinage_Bonus_Pct"
+/* bonus/penalty to gold acquired from selling a building */
+#define SPECENUM_VALUE126 EFT_IMPROVEMENT_SALE_PCT
+#define SPECENUM_VALUE126NAME "Improvement_Sale_Pct"
+/* suppresses game.server.hangry based on reqs from game state */
+#define SPECENUM_VALUE127 EFT_GULAG
+#define SPECENUM_VALUE127NAME "Gulag"
+
 /* keep this last */
 #define SPECENUM_COUNT EFT_COUNT
 #include "specenum_gen.h"
