@@ -2099,8 +2099,8 @@ set =
       "slot_control_style", 1, FALSE      ; 1 = Shield2Gold units only
       "spaceship_travel_time", 225, FALSE
       "specials", 350, FALSE
-      "startpos", "SINGLE", FALSE
-      "startunits", "xxcccwwwaADD", FALSE
+      "startpos", "DEFAULT", FALSE
+      "startunits", "xxcccwwwADD", FALSE
       "techleak", 25, FALSE
       "techpenalty", 0, FALSE
       "tinyisles", FALSE, FALSE
