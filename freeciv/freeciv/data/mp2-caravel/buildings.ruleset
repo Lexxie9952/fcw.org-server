@@ -433,12 +433,15 @@ sound		= "b_fortifications"
 sound_alt	= "b_generic"
 helptext	= _("\
 Fortifications give a 1.75x bonus to every unit in a City against attacks from Land\
- units; except from Catapults and its upgrades, which reduce that bonus.\
+ units. This bonus is reduced if attacked by Catapult or the units to which it upgrades.\
  Fortifications prevent population loss when a defending unit is killed.\n\
  Fortifications are a combination of trenches, palisades, earthen bulwarks and short walls,\
- so cannot be targeted by Siege Rams. If an enemy attempts sabotage, odds of success are halved.\
- Since City Walls expand beyond the perimeter of Fortifications, this improvement\
- offers no bonus when City Walls are in place―but provides a fallback if City Walls come down.\
+ so cannot be targeted by Siege Rams. If an enemy attempts sabotage, odds of success are halved. \n\
+ ➤ Since City Walls expand beyond the perimeter of Fortifications, this improvement\
+ offers no bonus when City Walls are in place―but provides a fallback if City Walls come down. \n\n\
+ ➤ Material from old Fortifications is useful for building City Walls. You can later sell\
+ Fortifications with full return of the gold cost, and put it toward City Walls with no loss\
+ of investment.\
 ")
 
 [building_fusion_reactor]
@@ -1790,7 +1793,7 @@ sound		= "w_king_richards_crusade"
 sound_alt	= "w_generic"
 helptext	= _("\
 In the city where it is built, adds one extra shield resource on every\
- tile. Lets you build one extra infantry unit per turn —— without\
+ tile and lets you build one extra infantry unit per turn —— without\
  Conscription tech.\
  Obsolete by: Robotics.\
 ")
@@ -1895,7 +1898,8 @@ Features: \n\
  ➣ +1 content citizen. \n\
  ➣ +1 trade on Land tiles that produce trade. (Sea tiles require celebration.) \n\ 
  ➣ Allows rapture in originally founded cities. \n\
- ➣ Allows Peasants in the city it’s located. \n\ 
+ ➣ Allows making Peasants in the city it’s located. \n\ 
+ ➣ Lets you build an extra infantry or Peasant per turn, without Conscription. \n\ 
 "), _("
 Penalties: \n\ 
  ➣ One unit may be used for Martial Law. \n\
@@ -2318,13 +2322,15 @@ In the city where this wonder is built, +1 trade is added to every tile\
  This Wonder is never obsolete.\
 ")
 
-[building_womens_suffrage]
+[building_womens_suffrage_small_wonder]
 name		= _("Women's Suffrage")
 genus		= "SmallWonder"
 reqs	=
     { "type",     "name",              "range",  "present", "quiet"
       "Tech",     "Industrialization", "Player", TRUE,      FALSE
       "Building", "Women's Suffrage",  "Player", FALSE,     TRUE
+      "Building", "Women's Suffrage​",  "Player", FALSE,     TRUE ;has a zero width space in it, for the great wonder
+      "Building", "Women's Suffrage​",  "World",  TRUE,      TRUE ;has a zero width space in it, for the great wonder
     }
 graphic	= "b.womens_suffrage"
 graphic_alt	= "-"
@@ -2337,11 +2343,39 @@ sabotage	= 0
 sound		= "w_womens_suffrage"
 sound_alt	= "w_generic"
 helptext	= _("\
-In the capacity of reducing Military Unhappiness, this Wonder neutralizes the\
- unhappiness caused by two military units. This Wonder has no other\
- effect. It does not confer bonuses against hostile diplomats like a Police\
- Station. It gives no bonus to cities which already have a Police Station.\
- This Wonder does not become obsolete.\
+Women's Suffrage brings equality and happiness to half the population, resulting\
+ in +1 happy in every city with Republic and Democracy. On the other hand, once\
+ this Wonder is achieved by any player in the world, any Republic or Democracy\
+ that does NOT have it, will suffer +1 unhappy citizen, as vocal dissidents will\
+ arise and demand for the adoption of this progressive advancement.\
+")
+
+;This has a zero width space in it to be the first one made.
+[building_womens_suffrage_great_wonder]
+name		= _("Women's Suffrage​") ;great wonder marker
+genus		= "GreatWonder"
+reqs	=
+    { "type",     "name",              "range",  "present", "quiet"
+      "Tech",     "Industrialization", "Player", TRUE,      FALSE
+      "Building", "Women's Suffrage",  "Player", FALSE,     TRUE ;can't own small wonder.
+      "Building", "Women's Suffrage​",  "Player", FALSE,     TRUE ;can't own great wonder. has a zero width space in it, for the great wonder
+    }
+graphic	= "b.womens_suffrage"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 300
+upkeep		= 0
+sabotage	= 0
+sound		= "w_womens_suffrage"
+sound_alt	= "w_generic"
+helptext	= _("\
+Women's Suffrage brings equality and happiness to half the population, resulting\
+ in +1 happy in every city with Republic and Democracy. On the other hand, once\
+ this Wonder is achieved by any player in the world, any Republic or Democracy\
+ that does NOT have it, will suffer +1 unhappy citizen, as vocal dissidents will\
+ arise and demand for the adoption of this progressive advancement!\
 ")
 
 [building_capitalization]

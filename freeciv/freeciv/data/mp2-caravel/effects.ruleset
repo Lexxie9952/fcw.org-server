@@ -2027,6 +2027,7 @@ reqs	=
       "Building", "Bank", "City"
       "OutputType", "Luxury", "Local"
     }
+;Changes require changes to city_force_income_update() in city.js
 [effect_bank_coinage]
 type    = "Coinage_Bonus_Pct"
 value	= 25
@@ -2396,6 +2397,13 @@ value	= 1
 reqs	=
     { "type", "name", "range"
       "Building", "Fortifications", "City"
+    }
+[effect_fortifications_sale_value]
+type    = "Improvement_Sale_Pct"
+value = 100;
+reqs  =
+    { "type", "name", "range"
+      "Building", "Fortifications", "Local"
     }
 
 ; GREAT Wall
@@ -3008,6 +3016,7 @@ reqs	=
       "Building", "Marketplace", "City"
       "OutputType", "Luxury", "Local"
     }
+;Changes require changes to city_force_income_update() in city.js
 [effect_marketplace_coinage]
 type    = "Coinage_Bonus_Pct"
 value	= 25
@@ -3355,7 +3364,6 @@ value	= 2  ; handles foreign nationals for every gov.
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Police Station", "City", TRUE
-      "Building", "Women's Suffrage", "Player", FALSE
     }
 [effect_police_station_1]
 type    = "Make_Content_Mil"
@@ -3364,7 +3372,6 @@ reqs	=
     { "type", "name", "range", "present"
       "Gov", "Democracy", "Player", TRUE
       "Building", "Police Station", "City", TRUE
-      "Building", "Women's Suffrage", "Player", FALSE
     }
 [effect_police_station_nationalism]
 type    = "Make_Content_Mil"
@@ -3882,6 +3889,7 @@ reqs	=
       "Building", "Stock Exchange", "City"
       "OutputType", "Luxury", "Local"
     }
+;Changes require changes to city_force_income_update() in city.js
 [effect_stock_exchange_coinage]
 type    = "Coinage_Bonus_Pct"
 value	= 25
@@ -4035,7 +4043,7 @@ reqs	=
       "Building", "University", "City"
       "OutputType", "Science", "Local"
     }
-;----------------------------------------------------------------------------* Vision Bonuses
+;********************************************************************************* VISION BONUSES
 [effect_apollo_program]
 type    = "Enable_Space"
 value	= 1
@@ -4051,7 +4059,8 @@ reqs   =
     { "type", "name", "range"
       "Tech", "Electricity", "Player"
     }
- ; Air+Sea+LandAirSea CLASS units REQUIRE PHYSICS so their BONUS is in their stats to AVOID more [effect_] entries.
+; Air+Sea+LandAirSea CLASS units REQUIRE PHYSICS so their BONUS
+; is in their stats to AVOID more [effect_] entries.
 [effect_physics_vision]
 type    = "Unit_Vision_Radius_Sq"
 value	= 4
@@ -4156,9 +4165,76 @@ reqs    =
 ;      "Tech",  "Radar",    "Player", TRUE
 ;      "MaxUnitsOnTile", "0", "Local", FALSE ;occupied base
 ;    }
-;----------------------------------------------------------------------------</end Vision Bonuses>
+;-------------------------------------------------------------</end Vision Bonuses>
 
-;--------------- Appian Way Effects ----------------
+;********************************************************************************* MOVE BONUSES
+[effect_airplane_range_1]
+type    = "Move_Bonus"
+value	= 18
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Radio", "Player"
+      "UnitType", "Airplane", "Local"
+    }
+[effect_airplane_range_2]
+type    = "Move_Bonus"
+value	= 18
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Advanced Flight", "Player"
+      "UnitType", "Airplane", "Local"
+    }
+[effect_airplane_range_3]
+type    = "Move_Bonus"
+value	= 18
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Radar", "Player"
+      "UnitType", "Airplane", "Local"
+    }
+[effect_airplane_range_4]
+type    = "Move_Bonus"
+value	= 18
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Rocketry", "Player"
+      "UnitType", "Airplane", "Local"
+    }
+[effect_airplane_range_5]
+type    = "Move_Bonus"
+value	= 18
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Space Flight", "Player"
+      "UnitType", "Airplane", "Local"
+    }
+[effect_airplane_range_6]
+type    = "Move_Bonus"
+value	= 18
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Avionics", "Player"
+      "UnitType", "Airplane", "Local"
+    }
+
+[effect_rail_electricity]
+type    = "Move_Bonus"
+value	= 9
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Electricity", "Player"
+      "UnitClass", "LandRail", "Local"
+    }
+[effect_rail_combustion]
+type    = "Move_Bonus"
+value	= 9
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Combustion", "Player"
+      "UnitClass", "LandRail", "Local"
+    }
+
+;************************************************************************ Appian Way
 [effect_appian_trade_revenue_bonus]
 type    = "Trade_Revenue_Bonus"     ; roughly 10% ?
 value   = 264
@@ -4274,7 +4350,7 @@ reqs =
       "UnitFlag", "Infra",         "Local", TRUE
       "Activity", "Road",          "Local", TRUE
     }
-;-----------------
+;************************************************************************ Agoge of Sparta
 [effect_agoge_move_bonus_1]
 type    = "Move_Bonus"
 value	= 3
@@ -4307,7 +4383,7 @@ reqs    =
       "Building", "Agōgē of Sparta", "Player", TRUE
       "UnitType", "Pikemen", "Local", TRUE 
     }
-
+;************************************************************************ Adam Smith
 [effect_asmiths_trading_co]
 type    = "Upkeep_Free"
 value	= 1
@@ -4315,8 +4391,7 @@ reqs	=
     { "type", "name", "range"
       "Building", "A.Smith's Trading Co.", "Player"
     }
-
-;**************************************************** 
+;************************************************************************ Colossus
 [effect_colossus_tile_trade]
 type    = "Output_Inc_Tile"
 value	= 1
@@ -4421,7 +4496,7 @@ reqs    =
       "UnitType", "Boat", "Local", TRUE
       "Tech", "The Corporation", "Player", FALSE
     }
-;**************************************************** 
+;************************************************************************ Copernicus 
 [effect_copernicus_observatory]
 type    = "Output_Bonus"
 value	= 100
@@ -4430,7 +4505,7 @@ reqs	=
       "Building", "Copernicus' Observatory", "City"
       "OutputType", "Science", "Local"
     }
-
+;************************************************************************ Cure for Cancer
 [effect_cure_for_cancer]
 type    = "Make_Happy"
 value	= 2
@@ -4439,18 +4514,7 @@ value	= 2
       "Building", "Cure For Cancer", "World"
       "Tech", "Genetic Engineering", "Player"
      }
-
-; HACK: there's all kinds of nasty hard-coded stuff to this Wonder, so it had to be 
-; given a different name (Voyage of Darwin) to avoid potential messyness 
-[effect_darwins_voyage]
-type    = "Output_Inc_Tile"
-value	= 1
-reqs	=
-    { "type", "name", "range"
-      "Building", "Voyage of Darwin", "City"
-      "OutputType", "Trade", "Local"
-    }
-
+;************************************************************************ Eiffel Tower
 [effect_eiffel_tower]
 type    = "Unit_Upkeep_Free_Per_City"
 value	= 1
@@ -4459,7 +4523,400 @@ value	= 1
       "Building", "Eiffel Tower", "Player"
       "OutputType", "Shield", "Local"
     }
-
+;************************************************************************ Hanging Gardens
+[effect_hanging_gardens]
+type    = "Make_Happy"
+value	= 2
+reqs	=
+    { "type", "name", "range"
+      "Building", "Hanging Gardens", "Player"
+    }
+[effect_hanging_gardens_1]
+type    = "Output_Add_Tile"
+value   = 2
+reqs    =
+    { "type", "name", "range"
+      "Building", "Hanging Gardens", "City"
+      "CityTile", "Center", "Local"
+      "OutputType", "Luxury", "Local"
+    }
+;************************************************************************ Hoover Dam
+[effect_hoover_dam]
+type    = "Output_Bonus"
+value	= 25
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Factory", "City", TRUE
+      "Building", "Hoover Dam", "Player", TRUE
+      "OutputType", "Shield", "Local", TRUE
+      "Building", "Solar Plant", "City", FALSE
+    }
+[effect_hoover_dam_1]
+type    = "Output_Bonus"
+value	= 25
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Mfg. Plant", "City", TRUE
+      "Building", "Hoover Dam", "Player", TRUE
+      "OutputType", "Shield", "Local", TRUE
+      "Building", "Solar Plant", "City", FALSE
+    }
+[effect_hoover_dam_2]
+type    = "Pollu_Prod_Pct"
+value	= -25
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Factory", "City", TRUE
+      "Building", "Hoover Dam", "Player", TRUE
+      "Building", "Recycling Center", "City", FALSE
+      "Building", "Solar Plant", "City", FALSE
+    }
+[effect_hoover_dam_3]
+type    = "Pollu_Prod_Pct"
+value	= -25
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Mfg. Plant", "City", TRUE
+      "Building", "Hoover Dam", "Player", TRUE
+      "Building", "Recycling Center", "City", FALSE
+      "Building", "Solar Plant", "City", FALSE
+    }
+;************************************************************************ Isaac Newton
+[effect_isaac_newtons_college]
+type    = "Output_Bonus"
+value	= 100
+reqs	=
+    { "type", "name", "range"
+      "Building", "University", "City"
+      "Building", "Isaac Newton's College", "Player"
+      "OutputType", "Science", "Local"
+    }
+;************************************************************************ JTIDS
+[effect_jtids]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "JTIDS", "Player", TRUE
+      "UnitFlag", "FootSoldier", "Local", TRUE
+    }
+[effect_jtids_1]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "JTIDS", "Player", TRUE
+      "UnitType", "Mech. Inf.", "Local", TRUE   ; uses rule_name
+    }
+[effect_jtids_2]
+type    = "Veteran_Combat"
+value	= 75  ; 87 57::35 26 26 26
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "JTIDS", "Player", TRUE
+      "UnitFlag", "FootSoldier", "Local", TRUE
+      "UnitType", "Marines", "Local", FALSE
+    }
+[effect_jtids_3]
+type    = "Veteran_Combat"
+value	= 60  ; 80 52::32 24 24 24
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "JTIDS", "Player", TRUE
+      "UnitType", "Mech. Inf.", "Local", TRUE   ; uses rule_name
+    }
+[effect_jtids_4]
+type    = "Veteran_Combat"
+value	= 40  ;84 70::56 42 28 21
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "JTIDS", "Player", TRUE
+      "UnitFlag", "FootSoldier", "Local", TRUE
+      "UnitType", "Marines", "Local", TRUE
+    }
+;************************************************************************ J.S. Bach
+[effect_js_bachs_cathedral]
+type    = "Force_Content"
+value	= 2
+reqs	=
+    { "type", "name", "range"
+      "Building", "J.S. Bach's Cathedral", "Player"
+    }
+;************************************************************************ King Richard
+[effect_king_richards_crusade]
+type    = "Output_Add_Tile"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Building", "King Richard's Crusade", "City"
+      "OutputType", "Shield", "Local"
+    }
+[effect_city_build_slots_kr]
+type    = "City_Build_Slots"
+value   = 1
+reqs    =
+    { "type", "name", "range", "present"
+      "Building", "King Richard's Crusade", "City", TRUE
+    }
+;************************************************************************ Leonardo
+[effect_leonardos_workshop]
+type    = "Upgrade_Unit"
+value	= 2
+reqs	=
+    { "type", "name", "range"
+      "Building", "Leonardo's Workshop", "Player"
+    }
+;************************************************************************ Genghis Khan
+[effect_genghis_khans_equestrian_school]
+type    = "Move_Bonus"
+value	= 9
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Genghis Khan's Equestrian School", "Player", TRUE
+      "UnitFlag", "Horse", "Local", TRUE 
+    }
+[effect_genghis_khans_equestrian_school2]
+type    = "Move_Bonus"
+value	= 9
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Genghis Khan's Equestrian School", "Player", TRUE
+      "UnitType", "Explorer", "Local", TRUE 
+    }
+;************************************************************************ Lighthouse
+[effect_lighthouse]
+type    = "Move_Bonus"
+value	= 18
+reqs	=
+    { "type", "name", "range"
+      "Building", "Lighthouse", "Player"
+      "UnitClass", "Sea", "Local"
+    }
+[effect_lighthouse_a]
+type    = "Move_Bonus"
+value	= 18
+reqs	=
+    { "type", "name", "range"
+      "Building", "Lighthouse", "Player"
+      "UnitClass", "Submarine", "Local"
+    }
+[effect_lighthouse_1]
+type    = "Move_Bonus"
+value	= 18
+reqs	=
+    { "type", "name", "range"
+      "Building", "Lighthouse", "Player"
+      "UnitClass", "Trireme", "Local"
+    }
+[effect_lighthouse_2]
+type    = "Move_Bonus"
+value	= 18
+reqs	=
+    { "type", "name", "range"
+      "Building", "Lighthouse", "Player"
+      "UnitClass", "RiverShip", "Local"
+    }
+[effect_lighthouse_3]
+type    = "Unit_Vision_Radius_Sq"
+value	= 6
+reqs	=
+    { "type", "name", "range"
+      "Building", "Lighthouse", "Player"
+      "UnitClass", "Sea", "Local"
+    }
+[effect_lighthouse_3a]
+type    = "Unit_Vision_Radius_Sq"
+value	= 6
+reqs	=
+    { "type", "name", "range"
+      "Building", "Lighthouse", "Player"
+      "UnitClass", "Submarine", "Local"
+    }
+[effect_lighthouse_4]
+type    = "Unit_Vision_Radius_Sq"
+svalue	= 6
+reqs	=
+    { "type", "name", "range"
+      "Building", "Lighthouse", "Player"
+      "UnitClass", "Trireme", "Local"
+    }
+[effect_lighthouse_5]
+type    = "Unit_Vision_Radius_Sq"
+svalue	= 6
+reqs	=
+    { "type", "name", "range"
+      "Building", "Lighthouse", "Player"
+      "UnitClass", "RiverShip", "Local"
+    }
+;************************************************************************ Magellan
+[effect_magellans_expedition]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Magellan's Expedition", "Player", TRUE
+      "UnitClass", "Sea", "Local", TRUE
+      "UnitFlag", "NoVeteran", "Local", FALSE      
+    }
+[effect_magellans_expedition_a]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Magellan's Expedition", "Player", TRUE
+      "UnitClass", "RiverShip", "Local", TRUE
+      "UnitFlag", "NoVeteran", "Local", FALSE      
+    }
+[effect_magellans_expedition_b]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Magellan's Expedition", "Player", TRUE
+      "UnitClass", "Submarine", "Local", TRUE
+      "UnitFlag", "NoVeteran", "Local", FALSE
+    }
+;************************************************************************ Manhattan
+[effect_manhattan_project]
+type    = "Enable_Nuke"
+value	= 1
+reqs	=
+    { "type", "name", "range", "survives"
+      "Building", "Manhattan Project", "World", TRUE
+    }
+;************************************************************************ Marco Polo
+[effect_marco_polos_embassy]
+type    = "Output_Bonus"
+value	= 40
+reqs	=
+    { "type", "name", "range"
+      "Building", "Marco Polo's Embassy", "Player"
+      "OutputType", "Trade", "Local"
+    }
+;************************************************************************ Michelangelo
+[effect_michelangelos_chapel]
+type    = "Make_Content"
+value	= 3
+reqs	=
+    { "type", "name", "range"
+      "Building", "Michelangelo's Chapel", "Player"
+    }
+[effect_michelangelos_chapel_1]
+type    = "Make_Content"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Theology", "Player"
+      "Building", "Michelangelo's Chapel", "Player"
+    }
+[effect_michelangelos_chapel_2]
+type    = "Make_Content"
+value	= -1
+reqs	=
+    { "type", "name", "range"
+      "Building", "Michelangelo's Chapel", "Player"
+      "Gov", "Communism", "Player"
+    }
+;************************************************************************ Mausoleum
+[effect_mausoleum_of_mausolos_1]
+type    = "Make_Content"
+value   = 1
+reqs    =
+    { "type", "name", "range", "present"
+      "Building", "City Walls", "City", TRUE
+      "Building", "Great Wall", "Player", FALSE
+      "Building", "Mausoleum of Mausolos", "Player", TRUE
+    }
+;Great Wall counts as City Walls in every city.
+[effect_mausoleum_of_mausolos_1a]
+type    = "Make_Content"
+value   = 1
+reqs    =
+    { "type", "name", "range"
+      "Building", "Great Wall", "Player"
+      "Building", "Mausoleum of Mausolos", "Player"
+    }
+[effect_mausoleum_of_mausolos_2]
+type    = "Make_Content"
+value   = 1
+reqs    =
+    { "type", "name", "range", "present"
+      "Building", "Courthouse", "City", TRUE
+      "Building", "Mausoleum of Mausolos", "Player", TRUE
+    }
+;Mausoleum respects that Supreme Court counts as extra Courthouse in every city.
+[effect_mausoleum_of_mausolos_2a]
+type    = "Make_Content"
+value   = 1
+reqs    =
+    { "type", "name", "range"
+      "Building", "Supreme Court", "Player"
+      "Building", "Mausoleum of Mausolos", "Player"
+    }
+[effect_mausoleum_of_mausolos_culture]
+type    = "History"
+value	= 2
+reqs	=
+    { "type", "name", "range"
+      "Building", "Mausoleum of Mausolos", "City"
+    }
+;************************************************************************ Statue of Zeus
+[effect_statue_of_zeus_content_nonrep]
+type    = "Make_Content"
+value   = 1
+reqs    =
+    { "type", "name", "range", "present"
+      "Building", "Statue of Zeus", "Player", TRUE
+      "Gov",      "Republic",       "Player", FALSE
+      "Gov",      "Democracy",      "Player", FALSE
+      "Tech",     "Tactics",        "Player", FALSE
+      "Building", "Magna Carta",    "Player", FALSE 
+    }
+[effect_statue_of_zeus_content_magna_carta]
+type    = "Make_Content_Mil"
+value   = 1
+reqs    =
+    { "type",     "name",           "range", "present"
+      "Building", "Statue of Zeus", "Player", TRUE
+      "Gov",      "Monarchy",       "Player", TRUE
+      "Building", "Magna Carta",    "Player", TRUE
+      "Tech",     "Tactics",        "Player", FALSE
+    }
+[effect_statue_of_zeus_content_republic]
+type    = "Make_Content_Mil"
+value   = 1
+reqs    =
+    { "type",     "name",           "range", "present"
+      "Building", "Statue of Zeus", "Player", TRUE
+      "Gov",      "Republic",       "Player", TRUE
+      "Tech",     "Tactics",        "Player", FALSE
+    }
+[effect_statue_of_zeus_content_democracy]
+type    = "Make_Content_Mil"
+value	= 2
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Statue of Zeus", "Player", TRUE
+      "Gov",      "Democracy",      "Player", TRUE
+      "Tech",     "Tactics",        "Player", FALSE
+    }
+[effect_statue_of_zeus_1]
+type    = "Unit_Upkeep_Free_Per_City"
+value   = 4
+reqs    =
+    { "type",        "name",           "range", "present"
+      "Building",    "Statue of Zeus", "City",   TRUE
+       "Tech",       "Tactics",        "Player", FALSE
+       "OutputType", "Shield",         "Local",  TRUE
+    }
+[effect_statue_of_zeus_2]
+type    = "Make_Happy"
+value   = 1
+reqs    =
+    { "type",     "name",           "range"
+      "Building", "Statue of Zeus", "City"
+    }
+;************************************************************************ Supreme Court
 [effect_supreme_court_corruption1]
 type    = "Output_Waste_Pct"
 value	= 60
@@ -4630,467 +5087,7 @@ reqs	=
       "Building", "Homeland Security", "City", TRUE
       "Action", "Incite City Escape", "Local", TRUE
     }
-
-[effect_hanging_gardens]
-type    = "Make_Happy"
-value	= 2
-reqs	=
-    { "type", "name", "range"
-      "Building", "Hanging Gardens", "Player"
-    }
-[effect_hanging_gardens_1]
-type    = "Output_Add_Tile"
-value   = 2
-reqs    =
-    { "type", "name", "range"
-      "Building", "Hanging Gardens", "City"
-      "CityTile", "Center", "Local"
-      "OutputType", "Luxury", "Local"
-    }
-
-[effect_hoover_dam]
-type    = "Output_Bonus"
-value	= 25
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Factory", "City", TRUE
-      "Building", "Hoover Dam", "Player", TRUE
-      "OutputType", "Shield", "Local", TRUE
-      "Building", "Solar Plant", "City", FALSE
-    }
-[effect_hoover_dam_1]
-type    = "Output_Bonus"
-value	= 25
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Mfg. Plant", "City", TRUE
-      "Building", "Hoover Dam", "Player", TRUE
-      "OutputType", "Shield", "Local", TRUE
-      "Building", "Solar Plant", "City", FALSE
-    }
-[effect_hoover_dam_2]
-type    = "Pollu_Prod_Pct"
-value	= -25
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Factory", "City", TRUE
-      "Building", "Hoover Dam", "Player", TRUE
-      "Building", "Recycling Center", "City", FALSE
-      "Building", "Solar Plant", "City", FALSE
-    }
-[effect_hoover_dam_3]
-type    = "Pollu_Prod_Pct"
-value	= -25
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Mfg. Plant", "City", TRUE
-      "Building", "Hoover Dam", "Player", TRUE
-      "Building", "Recycling Center", "City", FALSE
-      "Building", "Solar Plant", "City", FALSE
-    }
-
-[effect_isaac_newtons_college]
-type    = "Output_Bonus"
-value	= 100
-reqs	=
-    { "type", "name", "range"
-      "Building", "University", "City"
-      "Building", "Isaac Newton's College", "Player"
-      "OutputType", "Science", "Local"
-    }
-
-[effect_jtids]
-type    = "Veteran_Build"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "JTIDS", "Player", TRUE
-      "UnitFlag", "FootSoldier", "Local", TRUE
-    }
-[effect_jtids_1]
-type    = "Veteran_Build"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "JTIDS", "Player", TRUE
-      "UnitType", "Mech. Inf.", "Local", TRUE   ; uses rule_name
-    }
-[effect_jtids_2]
-type    = "Veteran_Combat"
-value	= 75  ; 87 57::35 26 26 26
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "JTIDS", "Player", TRUE
-      "UnitFlag", "FootSoldier", "Local", TRUE
-      "UnitType", "Marines", "Local", FALSE
-    }
-[effect_jtids_3]
-type    = "Veteran_Combat"
-value	= 60  ; 80 52::32 24 24 24
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "JTIDS", "Player", TRUE
-      "UnitType", "Mech. Inf.", "Local", TRUE   ; uses rule_name
-    }
-[effect_jtids_4]
-type    = "Veteran_Combat"
-value	= 40  ;84 70::56 42 28 21
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "JTIDS", "Player", TRUE
-      "UnitFlag", "FootSoldier", "Local", TRUE
-      "UnitType", "Marines", "Local", TRUE
-    }
-
-[effect_js_bachs_cathedral]
-type    = "Force_Content"
-value	= 2
-reqs	=
-    { "type", "name", "range"
-      "Building", "J.S. Bach's Cathedral", "Player"
-    }
-
-[effect_king_richards_crusade]
-type    = "Output_Add_Tile"
-value	= 1
-reqs	=
-    { "type", "name", "range"
-      "Building", "King Richard's Crusade", "City"
-      "OutputType", "Shield", "Local"
-    }
-[effect_city_build_slots_kr]
-type    = "City_Build_Slots"
-value   = 1
-reqs    =
-    { "type", "name", "range", "present"
-      "Building", "King Richard's Crusade", "City", TRUE
-    }
-
-[effect_leonardos_workshop]
-type    = "Upgrade_Unit"
-value	= 2
-reqs	=
-    { "type", "name", "range"
-      "Building", "Leonardo's Workshop", "Player"
-    }
-
-[effect_genghis_khans_equestrian_school]
-type    = "Move_Bonus"
-value	= 9
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Genghis Khan's Equestrian School", "Player", TRUE
-      "UnitFlag", "Horse", "Local", TRUE 
-    }
-[effect_genghis_khans_equestrian_school2]
-type    = "Move_Bonus"
-value	= 9
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Genghis Khan's Equestrian School", "Player", TRUE
-      "UnitType", "Explorer", "Local", TRUE 
-    }
-
-[effect_airplane_range_1]
-type    = "Move_Bonus"
-value	= 18
-reqs	=
-    { "type", "name", "range"
-      "Tech", "Radio", "Player"
-      "UnitType", "Airplane", "Local"
-    }
-[effect_airplane_range_2]
-type    = "Move_Bonus"
-value	= 18
-reqs	=
-    { "type", "name", "range"
-      "Tech", "Advanced Flight", "Player"
-      "UnitType", "Airplane", "Local"
-    }
-[effect_airplane_range_3]
-type    = "Move_Bonus"
-value	= 18
-reqs	=
-    { "type", "name", "range"
-      "Tech", "Radar", "Player"
-      "UnitType", "Airplane", "Local"
-    }
-[effect_airplane_range_4]
-type    = "Move_Bonus"
-value	= 18
-reqs	=
-    { "type", "name", "range"
-      "Tech", "Rocketry", "Player"
-      "UnitType", "Airplane", "Local"
-    }
-[effect_airplane_range_5]
-type    = "Move_Bonus"
-value	= 18
-reqs	=
-    { "type", "name", "range"
-      "Tech", "Space Flight", "Player"
-      "UnitType", "Airplane", "Local"
-    }
-[effect_airplane_range_6]
-type    = "Move_Bonus"
-value	= 18
-reqs	=
-    { "type", "name", "range"
-      "Tech", "Avionics", "Player"
-      "UnitType", "Airplane", "Local"
-    }
-
-[effect_rail_electricity]
-type    = "Move_Bonus"
-value	= 9
-reqs	=
-    { "type", "name", "range"
-      "Tech", "Electricity", "Player"
-      "UnitClass", "LandRail", "Local"
-    }
-[effect_rail_combustion]
-type    = "Move_Bonus"
-value	= 9
-reqs	=
-    { "type", "name", "range"
-      "Tech", "Combustion", "Player"
-      "UnitClass", "LandRail", "Local"
-    }
-
-[effect_lighthouse]
-type    = "Move_Bonus"
-value	= 18
-reqs	=
-    { "type", "name", "range"
-      "Building", "Lighthouse", "Player"
-      "UnitClass", "Sea", "Local"
-    }
-[effect_lighthouse_a]
-type    = "Move_Bonus"
-value	= 18
-reqs	=
-    { "type", "name", "range"
-      "Building", "Lighthouse", "Player"
-      "UnitClass", "Submarine", "Local"
-    }
-[effect_lighthouse_1]
-type    = "Move_Bonus"
-value	= 18
-reqs	=
-    { "type", "name", "range"
-      "Building", "Lighthouse", "Player"
-      "UnitClass", "Trireme", "Local"
-    }
-[effect_lighthouse_2]
-type    = "Move_Bonus"
-value	= 18
-reqs	=
-    { "type", "name", "range"
-      "Building", "Lighthouse", "Player"
-      "UnitClass", "RiverShip", "Local"
-    }
-[effect_lighthouse_3]
-type    = "Unit_Vision_Radius_Sq"
-value	= 6
-reqs	=
-    { "type", "name", "range"
-      "Building", "Lighthouse", "Player"
-      "UnitClass", "Sea", "Local"
-    }
-[effect_lighthouse_3a]
-type    = "Unit_Vision_Radius_Sq"
-value	= 6
-reqs	=
-    { "type", "name", "range"
-      "Building", "Lighthouse", "Player"
-      "UnitClass", "Submarine", "Local"
-    }
-[effect_lighthouse_4]
-type    = "Unit_Vision_Radius_Sq"
-svalue	= 6
-reqs	=
-    { "type", "name", "range"
-      "Building", "Lighthouse", "Player"
-      "UnitClass", "Trireme", "Local"
-    }
-[effect_lighthouse_5]
-type    = "Unit_Vision_Radius_Sq"
-svalue	= 6
-reqs	=
-    { "type", "name", "range"
-      "Building", "Lighthouse", "Player"
-      "UnitClass", "RiverShip", "Local"
-    }
-
-[effect_magellans_expedition]
-type    = "Veteran_Build"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Magellan's Expedition", "Player", TRUE
-      "UnitClass", "Sea", "Local", TRUE
-      "UnitFlag", "NoVeteran", "Local", FALSE      
-    }
-[effect_magellans_expedition_a]
-type    = "Veteran_Build"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Magellan's Expedition", "Player", TRUE
-      "UnitClass", "RiverShip", "Local", TRUE
-      "UnitFlag", "NoVeteran", "Local", FALSE      
-    }
-[effect_magellans_expedition_b]
-type    = "Veteran_Build"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Magellan's Expedition", "Player", TRUE
-      "UnitClass", "Submarine", "Local", TRUE
-      "UnitFlag", "NoVeteran", "Local", FALSE
-    }
-
-[effect_manhattan_project]
-type    = "Enable_Nuke"
-value	= 1
-reqs	=
-    { "type", "name", "range", "survives"
-      "Building", "Manhattan Project", "World", TRUE
-    }
-
-[effect_marco_polos_embassy]
-type    = "Output_Bonus"
-value	= 40
-reqs	=
-    { "type", "name", "range"
-      "Building", "Marco Polo's Embassy", "Player"
-      "OutputType", "Trade", "Local"
-    }
-
-[effect_michelangelos_chapel]
-type    = "Make_Content"
-value	= 3
-reqs	=
-    { "type", "name", "range"
-      "Building", "Michelangelo's Chapel", "Player"
-    }
-[effect_michelangelos_chapel_1]
-type    = "Make_Content"
-value	= 1
-reqs	=
-    { "type", "name", "range"
-      "Tech", "Theology", "Player"
-      "Building", "Michelangelo's Chapel", "Player"
-    }
-[effect_michelangelos_chapel_2]
-type    = "Make_Content"
-value	= -1
-reqs	=
-    { "type", "name", "range"
-      "Building", "Michelangelo's Chapel", "Player"
-      "Gov", "Communism", "Player"
-    }
-
-[effect_mausoleum_of_mausolos_1]
-type    = "Make_Content"
-value   = 1
-reqs    =
-    { "type", "name", "range", "present"
-      "Building", "City Walls", "City", TRUE
-      "Building", "Great Wall", "Player", FALSE
-      "Building", "Mausoleum of Mausolos", "Player", TRUE
-    }
-
-;Great Wall counts as City Walls in every city.
-[effect_mausoleum_of_mausolos_1a]
-type    = "Make_Content"
-value   = 1
-reqs    =
-    { "type", "name", "range"
-      "Building", "Great Wall", "Player"
-      "Building", "Mausoleum of Mausolos", "Player"
-    }
-[effect_mausoleum_of_mausolos_2]
-type    = "Make_Content"
-value   = 1
-reqs    =
-    { "type", "name", "range", "present"
-      "Building", "Courthouse", "City", TRUE
-      "Building", "Mausoleum of Mausolos", "Player", TRUE
-    }
-;Mausoleum respects that Supreme Court counts as extra Courthouse in every city.
-[effect_mausoleum_of_mausolos_2a]
-type    = "Make_Content"
-value   = 1
-reqs    =
-    { "type", "name", "range"
-      "Building", "Supreme Court", "Player"
-      "Building", "Mausoleum of Mausolos", "Player"
-    }
-[effect_mausoleum_of_mausolos_culture]
-type    = "History"
-value	= 2
-reqs	=
-    { "type", "name", "range"
-      "Building", "Mausoleum of Mausolos", "City"
-    }
-
-[effect_statue_of_zeus_content_nonrep]
-type    = "Make_Content"
-value   = 1
-reqs    =
-    { "type", "name", "range", "present"
-      "Building", "Statue of Zeus", "Player", TRUE
-      "Gov",      "Republic",       "Player", FALSE
-      "Gov",      "Democracy",      "Player", FALSE
-      "Tech",     "Tactics",        "Player", FALSE
-      "Building", "Magna Carta",    "Player", FALSE 
-    }
-[effect_statue_of_zeus_content_magna_carta]
-type    = "Make_Content_Mil"
-value   = 1
-reqs    =
-    { "type",     "name",           "range", "present"
-      "Building", "Statue of Zeus", "Player", TRUE
-      "Gov",      "Monarchy",       "Player", TRUE
-      "Building", "Magna Carta",    "Player", TRUE
-      "Tech",     "Tactics",        "Player", FALSE
-    }
-[effect_statue_of_zeus_content_republic]
-type    = "Make_Content_Mil"
-value   = 1
-reqs    =
-    { "type",     "name",           "range", "present"
-      "Building", "Statue of Zeus", "Player", TRUE
-      "Gov",      "Republic",       "Player", TRUE
-      "Tech",     "Tactics",        "Player", FALSE
-    }
-[effect_statue_of_zeus_content_democracy]
-type    = "Make_Content_Mil"
-value	= 2
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Statue of Zeus", "Player", TRUE
-      "Gov",      "Democracy",      "Player", TRUE
-      "Tech",     "Tactics",        "Player", FALSE
-    }
-[effect_statue_of_zeus_1]
-type    = "Unit_Upkeep_Free_Per_City"
-value   = 4
-reqs    =
-    { "type",        "name",           "range", "present"
-      "Building",    "Statue of Zeus", "City",   TRUE
-       "Tech",       "Tactics",        "Player", FALSE
-       "OutputType", "Shield",         "Local",  TRUE
-    }
-[effect_statue_of_zeus_2]
-type    = "Make_Happy"
-value   = 1
-reqs    =
-    { "type",     "name",           "range"
-      "Building", "Statue of Zeus", "City"
-    }
-
+;************************************************************************ Temple of Artemis
 [effect_temple_of_artemis]
 type    = "Output_Add_Tile"
 value   = 1
@@ -5166,7 +5163,6 @@ reqs	=
       "OutputType", "Shield", "Local", TRUE
     }
 ;------
-
 [effect_temple_of_artemis_2]
 type    = "Output_Add_Tile"
 value   = 1
@@ -5177,7 +5173,6 @@ reqs    =
       "CityTile", "Center", "Local"
       "OutputType", "Gold", "Local"
     }
-
 [effect_temple_of_artemis_3]
 type    = "Output_Add_Tile"
 value   = 1
@@ -5188,8 +5183,7 @@ reqs    =
       "CityTile", "Center", "Local"
       "OutputType", "Science", "Local"
     }
-
-
+;************************************************************************ Tesla
 [effect_teslas_laboratory]
 type    = "Upgrade_Unit"
 value	= 1
@@ -5203,8 +5197,8 @@ value   = -20
 reqs    =
     { "type", "name", "range"
       "Building", "Tesla's Laboratory", "Player"
-    } 
-
+    }
+;************************************************************************ Oracle
 [effect_oracle]
 type    = "Make_Content"
 value	= 2
@@ -5213,7 +5207,7 @@ reqs	=
       "Building", "Temple", "City"
       "Building", "Oracle", "Player"
     }
-
+;************************************************************************ Pyramids
 [effect_pyramids]
 type    = "Growth_Food"
 value	= 25
@@ -5221,7 +5215,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "Pyramids", "Player"
     }
-
 [effect_pyramids_1]
 type    = "Rapture_Grow"
 value	= 1
@@ -5229,7 +5222,7 @@ reqs	=
     { "type", "name", "range"
       "Building", "Pyramids", "City"
     }
- 
+ ;************************************************************************ The Internet
 [effect_internet]
 type    = "Output_Bonus"
 value	= 100
@@ -5239,7 +5232,7 @@ reqs	=
       "Building", "The Internet", "Player"
       "OutputType", "Science", "Local"
     }
-
+;************************************************************************ Shakespeare
 [effect_shakespeares_theatre]
 type    = "No_Unhappy"
 value	= 1
@@ -5247,7 +5240,7 @@ reqs	=
     { "type", "name", "range"
       "Building", "Shakespeare's Theatre", "City"
     }
-
+;************************************************************************ Statue of Liberty
 [effect_statue_of_liberty]
 type    = "Any_Government"
 value	= 1
@@ -5255,7 +5248,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "Statue of Liberty", "Player"
     }
-
 [effect_statue_of_liberty_1]
 type    = "No_Anarchy"
 value	= 1
@@ -5263,7 +5255,7 @@ reqs	=
     { "type", "name", "range"
       "Building", "Statue of Liberty", "Player"
     }
-
+;************************************************************************ Sun Tzu
 [effect_sun_tzus_war_academy]
 type    = "Veteran_Build"
 value	= 1
@@ -5291,6 +5283,7 @@ reqs	=
       "UnitClass", "LandNoKill", "Local", TRUE
     }
 
+;************************************************************************ United Nations
 [effect_united_nations]
 type    = "Has_Senate"
 value	= 1
@@ -5298,7 +5291,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "United Nations", "World"
     }
-
 [effect_united_nations_1]
 type    = "Revolution_Unhappiness"
 value	= 2
@@ -5310,32 +5302,82 @@ reqs	=
       "Gov", "Democracy", "Player", FALSE
     }
 
+;[effect_foreign_national_tuner]
+;type = "Enemy_Citizen_Unhappy_Pct"
+;value = 50
+;reqs = 
+;    {
+;
+;    }
+;************************************************************************ Voyage of Darwin
+; There are nasty hard-coded things to the original Wonder, so it had
+; to be given a name change (Voyage of Darwin) to avoid messy problems. 
+[effect_voyage_of_darwin]
+type    = "Output_Inc_Tile"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Building", "Voyage of Darwin", "City"
+      "OutputType", "Trade", "Local"
+    }
+;************************************************************************ Women's Suffrage small wonder version
 [effect_womens_suffrage_republic]
-type    = "Make_Content_Mil"
-value	= 2
+type    = "Make_Happy"
+value	= 1
+reqs	=
+    { "type",     "name",             "range", "present"
+      "Gov",      "Republic",         "Player", TRUE
+      "Building", "Women's Suffrage", "Player", TRUE
+      "Building", "Women's Suffrage​", "Player", FALSE ; has zero-width space for the great wonder. can't get double women's suffrage bonus.
+    }
+[effect_no_womens_suffrage_unhappy_republic]
+type    = "Empire_Size_Base"
+value	= -13 ; causes +1 unhappy for all cities, usually over s2 or s3 (depending on empire size)
+reqs	=
+    { "type", "name", "range", "present"
+      "Gov",      "Republic",         "Player", TRUE
+      "Building", "Women's Suffrage", "Player", FALSE ; small. if you have neither you get the unhappy 
+      "Building", "Women's Suffrage​", "Player", FALSE ; great. zero-width space for the great wonder
+      "Building", "Women's Suffrage​", "World",  TRUE  ; great. zero-width space for the great wonder
+
+    }
+[effect_womens_suffrage_democracy]
+type    = "Make_Happy"
+value	= 1
+reqs	=
+    { "type",     "name",             "range", "present"
+      "Gov",      "Democracy",        "Player", TRUE
+      "Building", "Women's Suffrage", "Player", TRUE
+      "Building", "Women's Suffrage​", "Player", FALSE ; has zero-width space for the great wonder. can't get double women's suffrage bonus.
+    }
+[effect_no_womens_suffrage_unhappy_democracy]
+type    = "Empire_Size_Base"
+value	= -14 ; causes +1 unhappy for all cities, usually over s2 or s3 (depending on empire size)
+reqs	=
+    { "type", "name", "range", "present"
+      "Gov",      "Democracy",        "Player", TRUE
+      "Building", "Women's Suffrage", "Player", FALSE ; small. if you own neither you get the unhappy
+      "Building", "Women's Suffrage​", "Player", FALSE ; great. has zero-width space for the great wonder
+      "Building", "Women's Suffrage​", "World",  TRUE  ; great. zero-width space for the great wonder
+    }
+;************************************************************************ Women's Suffrage great wonder version
+[effect_womens_suffrage_gw_republic]
+type    = "Make_Happy"
+value	= 1
 reqs	=
     { "type", "name", "range"
       "Gov", "Republic", "Player"
-      "Building", "Women's Suffrage", "Player"
+      "Building", "Women's Suffrage​", "Player" ; has zero-width space for the great wonder
     }
-;you can't really vote in a monarchy, but we could turn it on for balance if needed.
-;[effect_womens_suffrage_magna_Carta]
-;type    = "Make_Content_Mil"
-;value	= 2
-;reqs	=
-;    { "type", "name", "range"
-;      "Gov", "Monarchy", "Player"
-;      "Building", "Women's Suffrage", "Player"
-;      "Building", "Magna Carta", "Player"
-;    }    
-[effect_womens_suffrage_democracy]
-type    = "Make_Content_Mil"
-value	= 4
+[effect_womens_suffrage_gw_democracy]
+type    = "Make_Happy"
+value	= 1
 reqs	=
     { "type", "name", "range"
       "Gov", "Democracy", "Player"
-      "Building", "Women's Suffrage", "Player"
+      "Building", "Women's Suffrage​", "Player" ; has zero-width space for the great wonder
     }
+;-------------------------------------------------------------------------------</end WONDERS>
 
 ; Calibrate sabotage City Walls odds to 50%
 [effect_siege_ram_city_walls]
@@ -5451,6 +5493,14 @@ reqs    =
       "Tech", "Conscription", "Player", TRUE
       "Building", "Ecclesiastical Palace", "City", TRUE
     }
+[effect_city_build_slots_magna_carta]
+type    = "City_Build_Slots"
+value   = 1
+reqs    =
+    { "type", "name",            "range", "present"
+      "Gov", "Monarchy",         "Player", TRUE
+      "Building", "Magna Carta", "City", TRUE
+    }    
 [effect_city_build_slots_factory]
 type    = "City_Build_Slots"
 value   = 1
@@ -6004,6 +6054,17 @@ reqs    =
       "UnitFlag", "Well-Digger", "Local", TRUE
       "Tech", "Pottery",  "Player", TRUE
     }
+
+;******** DESPOTISM EFFECTS ****************************************
+;DESPOTISM No disorder from starvation
+[effect_despotism_gulag]
+type    = "Gulag"
+value	  = 2 ; 2 martial law units needed to suppress disorder from Famine
+reqs    =
+    {
+      "type", "name", "range"
+      "Gov", "Despotism", "Player"
+    }
 ;******** THEOCRACY EFFECTS ****************************************
 [effect_sabotage_bonus_theocracy1]
 type	= "Action_Odds_Pct"
@@ -6155,6 +6216,16 @@ reqs    =
       "UnitType", "Armor", "Local", TRUE
       "Gov", "Communism", "Player", TRUE
     }
+;COMMUNISM No disorder from starvation
+[effect_communist_gulag]
+type    = "Gulag" ; 2 martial law units needed to suppress disorder from Famine
+value	  = 3       ; or 1 + Police Station.
+reqs    =
+    {
+      "type", "name", "range"
+      "Gov", "Communism", "Player"
+    }
+
 ;*********************************************************************
 ;Banking changes upkeep of infantry to gold
 [effect_banking_upkeep]
@@ -6166,11 +6237,12 @@ reqs    =
     "Tech", "Banking", "Player", TRUE
   }
 
+;Changes require changes to city_force_income_update() in city.js
 [effect_coinage_base_rate]
 type    = "Coinage_Bonus_Pct"
 value	= 50
 reqs	=
     { "type", "name", "range"
     }
-    
+
 ;This line intentionally left blank:

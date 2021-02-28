@@ -100,6 +100,7 @@ Under Despotism, you are the absolute ruler of your people.  Your\
 Despotism suffers the highest level of corruption of all\
  forms of government.\
 "), _("\
+Can Gulag：You can starve cities without disorder, with 2 martial law units.\n\
 No citizens are made unhappy by each aggressive unit.\n\
 37% Base corruption in cities\n\
 4% Extra corruption per each tile in distance from capital\n\
@@ -246,6 +247,7 @@ Communists can transfer Proletarians between cities to\
  to convert Workers to Riflemen and vice versa, if in domestic\
  territory and possessing the necessary tech.\
 "), _("\
+Can Gulag：You can starve cities without disorder, with 2 martial law units.\n\
 No citizens are made unhappy by aggressive units.\n\
 20% Base corruption in cities\n\
 No Extra corruption per each tile in distance from capital\n\

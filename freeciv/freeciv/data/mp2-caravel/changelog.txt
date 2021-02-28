@@ -22,7 +22,14 @@ Brief Explanations of goals and challenges.
    Issues 
       2x movement, side effect balancing.
       Non-infinite rails, side effect balancing.
-      Rewonder 1.0, side effect balancing. Largest side effect was radically empowering rapture-based govs.
+      Rewonder 1.0, side effect balancing. Largest side effects:
+         1. overpowering the rapture-based govs.
+         2. "counts as a ... in every city" had rendered many improvements in the game useless, e.g. power plant, 
+            hydro plant, nuclear plant, police station, cathedral, courthouse, etc. One by one, these are being
+            morphed into more interesting layered effects instead of just "x in every city", which worked for
+            Great Wonders fine, but created a kind of exponential imbalance where the more powerful you were,
+            the more powerful you were (because the wonders represent cheaper and cheaper improvements), thus 
+            resulting in a more exaggerated power imbalance between players.
    Almost all changes since MP2 started have been in response to these. Most smaller areas have already been 
       resolved or finalized (air unit balance and mechanics, unreachable exploits, infinite rails, etc.)
       
@@ -65,11 +72,22 @@ BUILDINGS AND WONDERS:
    balances out the longturn's format of giving starting gold and extra disbandable units.
 8. Coinage yields 3 gold per 2 shields, (1.5 gold per shield), so it now less "useless".
 8a. Marketplace, Bank, and Stock Exchange each add 0.25 to the conversion rate (1.75,2.00,2.25, respectively).
+9. New Wonder Appian Way:  Foot units, Chariots and Wagons get move bonus from Appian Way. City with Appian gets discounts on Wagons. 
+      increases revenue from trade routes approx. 10%, gives +1 trade to every road tile in its home city, 
+      workers +1/3 move and build roads at double speed
+10. Women's Suffrage small wonder combined with JSB small wonder made Democracy almost immune to the intended disadvantages it's supposed to have
+      to counterbalance its superior economy. Women's Suffrage now counts as +1 happy in every city, which effectively neutralises the discontent 
+      from ONE foreign unit instead of two, and making rapture slightly harder than before, when at war, and slightly easier than before, when at 
+      peace. However, also represents another slight nerf to democracy because once ONE player has it, it causes discontent in all representative 
+      governments which DON'T have it, thereby causing an obligatory 300 shield expense for democracies OR a nerf of +1 unhappy person in all 
+      democracies without it.
 
 GOVERNMENT RE-BALANCE:
 * ALL NON-REPRESENTATIVE GOVERNMENTS:
 1. Courthouse gives +1 content to all govs, not just Democracy 
 2. Statue of Zeus makes 1 citizen content about military for govs who need that, and if not, simply 1 citizen content.
+* DESPOTISM
+   Gains new "Gulag" ability: can starve cities without disorder if 2 martial law units are there.
 * MONARCHY:
    gets the option to build Magna Carta to become a half/hybrid between monarchy and republic characteristics, which opens 
    up intriguing different strategies or counter-strategies to others. Magna Carta activates the new gov 
@@ -88,13 +106,14 @@ GOVERNMENT RE-BALANCE:
 * COMMUNISM:
 1. Proletarians have 1 pop_cost but add 2 pop. Same +1 net pop as Pilgrims, but can better use granary dynamics and magnify state populace control of "boom-town" growth. One city build slot used, not all.
 2. Communists: 10 shield discount on Armor I.
+3. Gains new "Gulag" ability: can starve cities without disorder if martial_law count is 3 or more. (each unit counts for 2, each police station for 2.)
 * DEMOCRACY:
 1. Democracy has base corruption level of 8%, (half of Republic/Monarchy)
 2. Democracy: corruption increases by 0.4% per tile from capital (1/5 that of most other govs (=2%))
 3. Democracies can now be BRIBED, but cost is 3x. 
 4. Democacies can now be INCITED TO REVOLT, but cost is 3x.
 5. Democracy can't rapture with 10% or more foreign citizens.
-5. Also see, Hanging Gardens, Police Station
+5. Also see, Hanging Gardens, Police Station, Women's Suffrage.
 
 UNITS/COMBAT/MECHANICS:
 * FOOT UNITS
@@ -368,6 +387,13 @@ What this means for MP2 rules:
 52. fixed, sound effect for sold building only happens when server confirms it's really a legal sale.
 53. server has new effect rulesets can use, for increasing/decreasing the work rate of units.
 54. units fortifying inside a hideout now have aqua fortifying icon to show they're in a hideout, similar to sentry and (already) fortified.
+55. new server settings hangry and fulldisorder. 
+      hangry - fixes a logic flaw in TC processing, where people were happier starving with lux, than being fed to avoid starvation and death.
+      fulldisorder - closes a couple exploits/loopholes where heavy micromanagement of disorder gains a competitive edge.
+                     disorder is very simple now: all production and purchasing power for 1 turn is stopped if disorder is not prevented before TC;
+                     like celebration, when disorder status occurs, the effects of it are felt on the turn when it's reached (i.e., the TC after it happens) 
+56. fixed a bug that was not giving score for small wonders 
+
 These help with much more than Freeciv and other Full-screen apps. They help you with everything you do on your computer:
             Switch active Program   Flip to Last Program    Switch Browser tab   See all Programs on Workspace   Swap Workspaces
 Linux*      Alt-Tab                 Alt-ESC                 CTRL-Shift-Tab       🐧, ALT-F1                      CTRL-ALT-arrow
