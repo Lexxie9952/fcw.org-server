@@ -2863,8 +2863,8 @@ void establish_trade_route(struct city *pc1, struct city *pc2)
 
 /************************************************************************//**
   Sell the improvement from the city, and give the player the gold.  Not
-  all buildings can be sold. Returns the price, so caller functions don't
-  have to calculate the price twice. 0==sale not possible.
+  all buildings can be sold. Returns the price if sold or 0 if not possible,
+  so the caller function didn't have to check twice (like it did before.)
 
   I guess the player should always be the city owner?
 ****************************************************************************/
@@ -2876,31 +2876,29 @@ int do_sell_building(struct player *pplayer, struct city *pcity,
     float sale_pct = 0;   // pct to add to sale price
     bool sold_building_matches_req_building = false;
 
-/*
-    // The "Improvement_Sale_Pct" needs access to a different req range. It 
-    // wants to check if the "Building", pimprove, "City" is what is being
-    // sold, not have if the building is present. Because the bonus applies
-    // only to the sale of that specific building. Thus, first we check the
-    // reqs to see if it's in there.
+/*     We KNOW what the building being sold is: it's passed into
+       this function as pimprove. 
+       The "Improvement_Sale_Pct" needs to apply the bonus/penalty price 
+       IFF pimprove is the building being sold. That is, we need to check
+       if pimprove is the same building in EFT_IMPROVEMENT_SALE_PCT's 
+       Local req-range. (The current req range of "Local" does not acces
+       what building is being sold, who knows what building it is putting
+       there? Probably null.)  Therefore, we have two choices
+       #1. Someone codes building sale to put that building into Local, somewhere
+       else.
+       #2. This function here does a simple check for if improve matches the
+       building that's in the City req-range.  If pimprove is the same building
+       as the building in that City req-range, then we apply the 
+       EFT_IMPROVEMENT_SALE_PCT, otherwise we do not. 
 
-    // This block of pseudo-code, if it is one day completed to do
-       if (the "Building", X, "City".req.X==pimprove.item_number)
-          sold_building_matches_req_building = true; 
-    // Then the "Improvement_Sale_Pct" effect will work, making sales of 
-    // building X and only X, receive a bonus/penalty in the re-sale gold value. 
+       pseudo-code for what #2 needs:
 
-    enum effect_type effect_type;
-    effect_list_iterate(get_effects(effect_type), peffect) {
-      // check for EFT_IMPROVEMENT_SALE_PCT
-      if (peffect->type == EFT_IMPROVEMENT_SALE_PCT) {
-        iterate peffect->reqs {
-          if (req.source.impr_type == pimprove);
-            sold_building_matches_req_building = true; // we only activate the effect if the sold building is same as the effect building.
-            break;
-        }
-      }
-    } reqs_iterate_end;
-*/
+       iterate and find the reqs for EFT_IMPROVEMENT_SALE_PCT for city {
+         if (req.type=="Building" && req.range=="City" && req.present==true) {
+           if (pimprove == req.value.building)
+            sold_building_matches_req_building = true;
+         }
+       }*/
     if (sold_building_matches_req_building) {
       sale_pct = (float)
         get_target_bonus_effects(NULL, NULL, NULL, pcity, pimprove, 
