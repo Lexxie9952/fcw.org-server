@@ -250,7 +250,7 @@ static void get_player_landarea(struct claim_map *pcmap,
 void calc_civ_score(struct player *pplayer)
 {
   const struct research *presearch;
-  struct city *wonder_city;
+  //struct city *wonder_city;
   int landarea = 0, settledarea = 0;
   static struct claim_map cmap;
 
@@ -302,6 +302,13 @@ void calc_civ_score(struct player *pplayer)
     bonus = get_final_city_output_bonus(pcity, O_SCIENCE) - 100;
     bonus = CLIP(0, bonus, 100);
     pplayer->score.literacy += (city_population(pcity) * bonus) / 100;
+
+    // Wonders moved from below because small wonders deserve a score too.
+    city_built_iterate(pcity, pimprove) {
+      if (is_wonder(pimprove) && player_owns_city(pplayer, pcity)) {
+        pplayer->score.wonders++;
+      }
+    } city_built_iterate_end;
   } city_list_iterate_end;
 
   build_landarea_map(&cmap);
@@ -324,13 +331,8 @@ void calc_civ_score(struct player *pplayer)
     }
   } unit_list_iterate_end
 
-  improvement_iterate(i) {
-    if (is_great_wonder(i)
-        && (wonder_city = city_from_great_wonder(i))
-        && player_owns_city(pplayer, wonder_city)) {
-      pplayer->score.wonders++;
-    }
-  } improvement_iterate_end;
+  // see commit around 27Feb2021 for what this used to be (Great Wonders only)
+  // this is now handled inside the city_list_iterate above.
 
   pplayer->score.spaceship = pplayer->spaceship.state;
 
