@@ -514,6 +514,15 @@ static void notify_victim_success(struct player *receiver,
 
   if (!victim_link) victim_link = tile_link(victim_tile);
 
+  if (paction == NULL) {
+    /* Ugly hack for the lack of "Unit Move" */
+    notify_player(receiver, victim_tile,
+                  E_DIPLOMATIC_INCIDENT, ftc_server,
+                  _("⚠️ The %s invaded your territory, giving you casus belli."),
+                  nation_plural_for_player(offender));
+    return;
+  }
+
   /* Custom message based on action type. */
   switch (action_get_target_kind(paction)) {
   case ATK_CITY:
