@@ -2400,10 +2400,11 @@ reqs	=
     }
 [effect_fortifications_sale_value] 
 type    = "Improvement_Sale_Pct"
-value = 100
+value = 100 ; full 'recycle value' after City Walls go up.
 reqs  =
     { "type", "name", "range"
       "Building", "Fortifications", "Local"
+      "Building", "City Walls", "City"
     }
 
 ; GREAT Wall
@@ -6267,6 +6268,7 @@ reqs    =
     { "type",   "name",                            "range", "present"
       "DiplRel", "War",                            "Local", FALSE
       "DiplRel", "Alliance",                       "Local", FALSE
+      "DiplRel", "Armistice",                      "Local", FALSE  ; Time to get units out of the territory
       "DiplRel", "Foreign",                        "Local", TRUE
       "UnitFlag", "NonMil",                        "Local", FALSE
       "Building", "United Nations",                "World", TRUE 
@@ -6339,6 +6341,7 @@ reqs    =
     { "type",   "name",                            "range", "present"
       "DiplRel", "War",                            "Local", FALSE
       "DiplRel", "Alliance",                       "Local", FALSE
+      "DiplRel", "Armistice",                      "Local", FALSE  ; Time to get units out of the territory
       "DiplRel", "Foreign",                        "Local", TRUE
       "UnitFlag", "NonMil",                        "Local", FALSE
       "Action", "Establish Embassy",               "Local", FALSE 

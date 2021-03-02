@@ -2720,10 +2720,12 @@ set =
       "airliftingstyle", "FROM_ALLIES|TO_ALLIES", FALSE
       "airliftdestdivisor", 3, FALSE
       "animals", 0, FALSE
+      "armisticelength", 5, FALSE
       "autoattack", "enabled", FALSE
       "autoattack_style", 1, FALSE
       "barbarians", "DISABLED", FALSE
       "borders", "SEE_INSIDE", FALSE
+      "ceasefirelength", 15, FALSE
       "contactturns", 10, FALSE
       "conquercost", 0, FALSE
       "diplomacy", "ALL", FALSE
