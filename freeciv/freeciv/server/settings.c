@@ -2329,6 +2329,28 @@ static struct setting settings[] = {
           GAME_MIN_OCCUPYCHANCE, GAME_MAX_OCCUPYCHANCE,
           GAME_DEFAULT_OCCUPYCHANCE)
 
+  GEN_INT("armisticelength", game.server.armisticelength,
+          SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
+          N_("Turn length of Armistice before state of Peace commences."),
+          N_("This setting sets the turn length of the Armistice that occurs when "
+            "two nations agree to a Peace treaty. Armistice is a state that comes "
+            "when agreeing to Peace, in which units that may be in the other "
+            "nation's territory are given a certain number of turns to vacate the "
+            "territory without that possibly being grounds for casus belli or "
+            "the movement being disallowed without first declaring war. "),
+          NULL, NULL, NULL, 
+          GAME_MIN_ARMISTICELENGTH, GAME_MAX_ARMISTICELENGTH,
+          GAME_DEFAULT_ARMISTICELENGTH)
+
+  GEN_INT("ceasefirelength", game.server.ceasefirelength,
+          SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
+          N_("Turn length of Cease-Fire treaties before they expire."),
+          N_("This setting sets how long Cease-Fire "
+            "agreements will last, before they expire."),
+          NULL, NULL, NULL, 
+          GAME_MIN_CEASEFIRELENGTH, GAME_MAX_CEASEFIRELENGTH,
+          GAME_DEFAULT_CEASEFIRELENGTH)     
+
   GEN_BOOL("autoattack", game.server.autoattack, SSET_RULES_FLEXIBLE, SSET_MILITARY,
            SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
            N_("Turn on/off server-side autoattack"),

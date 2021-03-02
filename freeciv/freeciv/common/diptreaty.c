@@ -148,6 +148,11 @@ bool add_clause(struct Treaty *ptreaty, struct player *pfrom,
   enum diplstate_type ds
     = player_diplstate_get(ptreaty->plr0, ptreaty->plr1)->type;
 
+  bool casus_belli =
+   (player_diplstate_get(ptreaty->plr0, ptreaty->plr1)->has_reason_to_cancel
+       || player_diplstate_get(ptreaty->plr1, ptreaty->plr0)->has_reason_to_cancel);
+  int turns_left = player_diplstate_get(ptreaty->plr0, ptreaty->plr1)->turns_left;
+
   if (!clause_type_is_valid(type)) {
     log_error("Illegal clause type encountered.");
     return FALSE;
@@ -164,11 +169,25 @@ bool add_clause(struct Treaty *ptreaty, struct player *pfrom,
           || (ds == DS_ALLIANCE && type == CLAUSE_ALLIANCE)
           || (ds == DS_CEASEFIRE && type == CLAUSE_CEASEFIRE))) {
     /* we already have this diplomatic state */
-    log_error("Illegal treaty suggested between %s and %s - they "
-              "already have this treaty level.",
-              nation_rule_name(nation_of_player(ptreaty->plr0)), 
-              nation_rule_name(nation_of_player(ptreaty->plr1)));
-    return FALSE;
+    /* however, affirming a new cease-fire will negate a casus belli */
+    if (casus_belli || (turns_left >= 1 && turns_left <= 3)) {
+         /* Fix Janky diplomacy:
+            1. re-affirming treaty after casus belli was given, is an offer to forget
+               the past and re-affirm a new treaty (i.e., without casus-belli of
+               past actions hanging over the agreement: perhaps casus belli was a simple
+               mistake or even an action asked or agreed by both parties.)
+            2. Cease-Fire or Armistice coming near the end of its treaty period can be 
+               re-affirmed prior to treaty transition to new state. Player enablement over
+               their own agreed states!
+          */
+       }
+     else {
+        log_error("Illegal treaty suggested between %s and %s - they "
+                  "already have this treaty level.",
+                  nation_rule_name(nation_of_player(ptreaty->plr0)), 
+                  nation_rule_name(nation_of_player(ptreaty->plr1)));
+        return FALSE;
+     }
   }
 
   if (type == CLAUSE_EMBASSY && player_has_real_embassy(pto, pfrom)) {

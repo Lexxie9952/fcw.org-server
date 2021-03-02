@@ -57,9 +57,6 @@
 
 static struct treaty_list *treaties = NULL;
 
-/* FIXME: Should this be put in a ruleset somewhere? */
-#define TURNS_LEFT 16
-
 /**********************************************************************//**
   Calls treaty_evaluate function if such is set for AI player.    
 **************************************************************************/
@@ -166,6 +163,11 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
   enum dipl_reason diplcheck;
   bool worker_refresh_required = FALSE;
   struct player *pother = player_by_number(counterpart);
+
+  bool casus_belli =
+   (player_diplstate_get(pplayer, pother)->has_reason_to_cancel
+       || player_diplstate_get(pother, pplayer)->has_reason_to_cancel); 
+
 
   if (NULL == pother || pplayer == pother) {
     return;
@@ -541,15 +543,30 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
           pdest_seen_units = get_units_seen_via_ally(pdest, pgiver);
         }
         ds_giverdest->type = DS_CEASEFIRE;
-        ds_giverdest->turns_left = TURNS_LEFT;
         ds_destgiver->type = DS_CEASEFIRE;
-        ds_destgiver->turns_left = TURNS_LEFT;
-        notify_player(pgiver, NULL, E_TREATY_CEASEFIRE, ftc_server,
-                      _("📜[`olivebranch`] You agree on a cease-fire with %s."),
-                      player_name(pdest));
-        notify_player(pdest, NULL, E_TREATY_CEASEFIRE, ftc_server,
-                      _("📜[`olivebranch`] You agree on a cease-fire with %s."),
-                      player_name(pgiver));
+        if (!casus_belli) { // restting a casus belli doesn't reset the agreed period of cease-fire.
+          ds_giverdest->turns_left = game.server.ceasefirelength;
+          ds_destgiver->turns_left = game.server.ceasefirelength;
+        }
+        // New non-aggression pacts don't start already having a casus belli, when created:
+        player_diplstate_get(pgiver, pdest)->has_reason_to_cancel = 0;
+        player_diplstate_get(pdest, pgiver)->has_reason_to_cancel = 0;
+
+        if (!casus_belli) {
+          notify_player(pgiver, NULL, E_TREATY_CEASEFIRE, ftc_server,
+                        _("📜[`olivebranch`] You agree on a cease-fire with %s."),
+                        player_name(pdest));
+          notify_player(pdest, NULL, E_TREATY_CEASEFIRE, ftc_server,
+                        _("📜[`olivebranch`] You agree on a cease-fire with %s."),
+                        player_name(pgiver));
+        } else {
+            notify_player(pgiver, NULL, E_TREATY_CEASEFIRE, ftc_server,
+                        _("📜[`olivebranch`] You affirm a cease-fire with %s, agreeing to reset casus belli."),
+                        player_name(pdest));
+            notify_player(pdest, NULL, E_TREATY_CEASEFIRE, ftc_server,
+                        _("📜[`olivebranch`] You affirm a cease-fire with %s, agreeing to reset casus belli."),
+                        player_name(pgiver));
+        }
         if (old_diplstate == DS_ALLIANCE) {
           update_players_after_alliance_breakup(pgiver, pdest,
                                                 pgiver_seen_units,
@@ -567,12 +584,17 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
         }
         ds_giverdest->type = DS_ARMISTICE;
         ds_destgiver->type = DS_ARMISTICE;
-        ds_giverdest->turns_left = TURNS_LEFT;
-        ds_destgiver->turns_left = TURNS_LEFT;
+        if (!casus_belli) { // resetting a casus belli doesn't reset the armistice period
+          ds_giverdest->turns_left = game.server.armisticelength;
+          ds_destgiver->turns_left = game.server.armisticelength;
+        }
         ds_giverdest->max_state = dst_closest(DS_PEACE,
                                               ds_giverdest->max_state);
         ds_destgiver->max_state = dst_closest(DS_PEACE,
                                               ds_destgiver->max_state);
+        // New non-war treaties don't start with a casus belli violation, when created:
+        player_diplstate_get(pgiver, pdest)->has_reason_to_cancel = 0;
+        player_diplstate_get(pdest, pgiver)->has_reason_to_cancel = 0;
         notify_player(pgiver, NULL, E_TREATY_PEACE, ftc_server,
                       /* TRANS: ... the Poles ... Polish territory */
                       PL_("📜[`dove`] You agree on an armistice with the %s. In %d turn, "
@@ -583,9 +605,9 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
                           "it will become a peace treaty. Move any "
                           "military units out of %s territory to avoid them "
                           "being disbanded.",
-                          TURNS_LEFT),
+                          game.server.armisticelength),
                       nation_plural_for_player(pdest),
-                      TURNS_LEFT,
+                      game.server.armisticelength,
                       nation_adjective_for_player(pdest));
         notify_player(pdest, NULL, E_TREATY_PEACE, ftc_server,
                       /* TRANS: ... the Poles ... Polish territory */
@@ -597,9 +619,9 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
                           "it will become a peace treaty. Move any "
                           "military units out of %s territory to avoid them "
                           "being disbanded.",
-                          TURNS_LEFT),
+                          game.server.armisticelength),
                       nation_plural_for_player(pgiver),
-                      TURNS_LEFT,
+                      game.server.armisticelength,
                       nation_adjective_for_player(pgiver));
         if (old_diplstate == DS_ALLIANCE) {
           update_players_after_alliance_breakup(pgiver, pdest,

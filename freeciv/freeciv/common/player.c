@@ -154,6 +154,10 @@ enum dipl_reason pplayer_can_make_treaty(const struct player *p1,
 {
   enum diplstate_type existing = player_diplstate_get(p1, p2)->type;
 
+  bool casus_belli =
+   (player_diplstate_get(p1, p2)->has_reason_to_cancel
+       || player_diplstate_get(p2, p1)->has_reason_to_cancel);
+
   if (players_on_same_team(p1, p2)) {
     /* This includes the case p1 == p2 */
     return DIPL_ERROR;
@@ -170,11 +174,21 @@ enum dipl_reason pplayer_can_make_treaty(const struct player *p1,
     return DIPL_ERROR; /* these are not negotiable treaties */
   }
   if (treaty == DS_CEASEFIRE && existing != DS_WAR) {
-    return DIPL_ERROR; /* only available from war */
+    if (existing == DS_CEASEFIRE && casus_belli) {
+      // if casus belli, can re-affirm treaty as way to erase casus
+      // belli for old deeds.
+      return DIPL_OK;
+    }
+    else return DIPL_ERROR; /* only available from war */
   }
   if (treaty == DS_PEACE 
       && (existing != DS_WAR && existing != DS_CEASEFIRE)) {
-    return DIPL_ERROR;
+    if ((existing == DS_PEACE || existing == DS_ARMISTICE) && casus_belli) {
+      // if casus belli, can re-affirm treaty as way to erase casus
+      // belli for old deeds.
+      return DIPL_OK;
+    }
+    else return DIPL_ERROR;
   }
   if (treaty == DS_ALLIANCE) {
     if (!is_valid_alliance(p1, p2)) {

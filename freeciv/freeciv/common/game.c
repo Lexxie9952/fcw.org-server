@@ -349,10 +349,12 @@ static void game_defaults(bool keep_ruleset_value)
     sz_strlcpy(game.server.allow_take, GAME_DEFAULT_ALLOW_TAKE);
     game.server.allowed_city_names = GAME_DEFAULT_ALLOWED_CITY_NAMES;
     game.server.aqueductloss      = GAME_DEFAULT_AQUEDUCTLOSS;
+    game.server.armisticelength   = GAME_DEFAULT_ARMISTICELENGTH;
     game.server.auto_ai_toggle    = GAME_DEFAULT_AUTO_AI_TOGGLE;
     game.server.autoattack        = GAME_DEFAULT_AUTOATTACK;
     game.server.autoattack_style  = GAME_DEFAULT_AUTOATTACK_STYLE;
     game.server.barbarianrate     = GAME_DEFAULT_BARBARIANRATE;
+    game.server.ceasefirelength   = GAME_DEFAULT_CEASEFIRELENGTH;
     game.server.civilwarsize      = GAME_DEFAULT_CIVILWARSIZE;
     game.server.connectmsg[0]     = '\0';
     game.server.conquercost       = GAME_DEFAULT_CONQUERCOST;

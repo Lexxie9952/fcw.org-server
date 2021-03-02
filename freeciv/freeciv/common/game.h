@@ -131,12 +131,14 @@ struct civ_game {
       enum city_names_mode allowed_city_names;
       enum plrcolor_mode plrcolormode;
       int aqueductloss;
+      int armisticelength;
       bool auto_ai_toggle;
       bool autoattack;
       int autoattack_style;
       int autoupgrade_veteran_loss;
       enum barbarians_rate barbarianrate;
       int base_incite_cost;
+      int ceasefirelength;
       int civilwarsize;
       int conquercost;
       int contactturns;
@@ -686,6 +688,14 @@ extern struct world wld;
 #define GAME_DEFAULT_OCCUPYCHANCE    0
 #define GAME_MIN_OCCUPYCHANCE        0
 #define GAME_MAX_OCCUPYCHANCE        100
+
+#define GAME_DEFAULT_ARMISTICELENGTH  16
+#define GAME_MIN_ARMISTICELENGTH     1
+#define GAME_MAX_ARMISTICELENGTH     100
+
+#define GAME_DEFAULT_CEASEFIRELENGTH  16
+#define GAME_MIN_CEASEFIRELENGTH     1
+#define GAME_MAX_CEASEFIRELENGTH     1000
 
 #define GAME_DEFAULT_AUTOATTACK      FALSE
 #define GAME_DEFAULT_AUTOATTACK_STYLE 0
