@@ -243,6 +243,11 @@ function client_diplomacy_clause_string(counterpart, giver, type, value)
   var pplayer = players[giver];
   var nation = nations[pplayer['nation']]['adjective'];
 
+  debugger;
+  var cb1 = players[counterpart].diplstates[giver]['has_reason_to_cancel'];
+  var cb2 = players[giver].diplstates[counterpart]['has_reason_to_cancel'];  
+  const casus_belli = cb1 || cb2;
+
   switch (type) {
   case CLAUSE_ADVANCE:
     var ptech = techs[value];
@@ -256,7 +261,6 @@ function client_diplomacy_clause_string(counterpart, giver, type, value)
       return "The " + nation + " give unknown city.";
     }
     break;
-
   case CLAUSE_GOLD:
     if (giver == client.conn.playing['playerno']) {
       $("#self_gold_" + counterpart).val(value);
@@ -269,11 +273,11 @@ function client_diplomacy_clause_string(counterpart, giver, type, value)
   case CLAUSE_SEAMAP:
     return "The " + nation + " give their seamap";
   case CLAUSE_CEASEFIRE:
-    return "The parties agree on a cease-fire";
+    return casus_belli ? "The parties re-affirm cease-fire." : "The parties agree on a cease-fire";
   case CLAUSE_PEACE:
-    return "The parties agree on a peace";
+    return casus_belli ? "The parties re-affirm peace" : "The parties agree on a peace";
   case CLAUSE_ALLIANCE:
-    return "The parties create an alliance";
+    return casus_belli ? "The parties re-affirm the alliance" : "The parties create an alliance";
   case CLAUSE_VISION:
     return "The " + nation + " give shared vision";
   case CLAUSE_EMBASSY:

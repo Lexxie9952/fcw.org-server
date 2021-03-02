@@ -117,6 +117,8 @@ function update_nation_screen()
           get_ai_level_text(pplayer) + " AI" : "Human") + "</td><td>"
 	   + (pplayer['is_alive'] ? "Alive" : "Dead") +  "</td>";
 
+    var we_have_cb = players[client.conn.playing['playerno']].diplstates[player_id]['has_reason_to_cancel'];
+    var they_have_cb = players[player_id].diplstates[client.conn.playing['playerno']]['has_reason_to_cancel'];  
     var contact_time=0;
     if (!client_is_observer() && client.conn.playing != null && diplstates[player_id] != null && player_id != client.conn.playing['playerno']) {
       contact_time = pplayer.diplstates[client.conn.playing.playerno].contact_turns_left; //set this here because it needs the same 'if'
@@ -126,8 +128,20 @@ function update_nation_screen()
       if (dstate == "None") dstate = "<span style='font-size:1%; color:rgba(0,0,0,0);'>+</span>" + dstate; // sorting hack
       if (dstate!="Ceasefire" && dstate!="Armistice") pact_time=0; // don't show unless it's a real timer on an expiring pact.
       pact_time = (pact_time>0) ? ":<span title='Turns till pact expires' style='color:#f0d0c0'>"+pact_time+"</span>" : "";   // show turns left for diplstate or blank if n/a
-      if (dstate !="War" && players[client.conn.playing['playerno']].diplstates[player_id]['has_reason_to_cancel']) {  // Mark casus belli
-        dstate = "<span title='Casus Belli given' style='color:#ff8000'><u>"+dstate+"</u></span>";
+      if (dstate != "War") {
+        // cur_player has casus belli against row player:
+        if (we_have_cb) {  // Mark casus belli
+          // row player also has casus belli against cur_player:
+          if (they_have_cb) {
+            dstate = "<span title='We have Casus Belli\nThey have Casus Belli' style='color:#ff0000'><u>"+dstate+"</u>&#8224;&#x2021;</span>";
+          }
+          // only cur_player has casus belli, not row player:
+          else dstate = "<span title='We have Casus Belli' style='color:#ff8000'><u>"+dstate+"</u>&#8224;</span>";
+        }
+        // only row player has casus belli against cur player: 
+        else if (they_have_cb) {
+          dstate = "<span title='They have Casus Belli' style='color:#ffe000'><u>"+dstate+"</u>&#x2021;</span>";
+        } 
       }
       nation_list_html += "<td style='text-align:center'>" + dstate +pact_time+"</td>";
     } else {
