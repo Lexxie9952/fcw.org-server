@@ -153,6 +153,7 @@ enum dipl_reason pplayer_can_make_treaty(const struct player *p1,
                                          enum diplstate_type treaty)
 {
   enum diplstate_type existing = player_diplstate_get(p1, p2)->type;
+  int turns_left = player_diplstate_get(p1, p2)->turns_left;
 
   bool casus_belli =
    (player_diplstate_get(p1, p2)->has_reason_to_cancel
@@ -174,18 +175,21 @@ enum dipl_reason pplayer_can_make_treaty(const struct player *p1,
     return DIPL_ERROR; /* these are not negotiable treaties */
   }
   if (treaty == DS_CEASEFIRE && existing != DS_WAR) {
-    if (existing == DS_CEASEFIRE && casus_belli) {
+    if (existing == DS_CEASEFIRE && (casus_belli 
+        || (turns_left >= 1 && turns_left <= 3))) {
       // if casus belli, can re-affirm treaty as way to erase casus
-      // belli for old deeds.
+      // belli for old deeds. can renew cease-fire if <=3 turns left
       return DIPL_OK;
     }
     else return DIPL_ERROR; /* only available from war */
   }
   if (treaty == DS_PEACE 
       && (existing != DS_WAR && existing != DS_CEASEFIRE)) {
-    if ((existing == DS_PEACE || existing == DS_ARMISTICE) && casus_belli) {
+    if ((existing == DS_PEACE || existing == DS_ARMISTICE)
+        && (casus_belli || (turns_left >= 1 && turns_left <= 3))) {
       // if casus belli, can re-affirm treaty as way to erase casus
-      // belli for old deeds.
+      // belli for old deeds. can extend armistice if more time needed
+      // to get units out of territory if <= 3 turns left.
       return DIPL_OK;
     }
     else return DIPL_ERROR;
