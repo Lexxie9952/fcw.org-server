@@ -243,7 +243,6 @@ function client_diplomacy_clause_string(counterpart, giver, type, value)
   var pplayer = players[giver];
   var nation = nations[pplayer['nation']]['adjective'];
 
-  debugger;
   var cb1 = players[counterpart].diplstates[giver]['has_reason_to_cancel'];
   var cb2 = players[giver].diplstates[counterpart]['has_reason_to_cancel'];  
   const casus_belli = cb1 || cb2;
