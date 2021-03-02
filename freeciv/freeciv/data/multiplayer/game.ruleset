@@ -1309,7 +1309,7 @@ set =
       "minplayers", 0, FALSE
       "generator", "ISLAND", FALSE
       "topology", "WRAPX", FALSE
-      "startpos", "SINGLE", FALSE
+      "startpos", "DEFAULT", FALSE
       "tinyisles", FALSE, FALSE
       "alltemperate", TRUE, FALSE
       "separatepoles", FALSE, FALSE
