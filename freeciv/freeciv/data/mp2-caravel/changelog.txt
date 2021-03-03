@@ -42,8 +42,6 @@ Focus goals for MP2-Caravel
    each individual nation:  Nerf mechanics forcing gang-alliance loyalties.
 
 
-
-
 BUILDINGS AND WONDERS:
 1. Colossus: +1 trade on city center, -5 cost on most commerce units built in that city. 2 notch or ~22% increase to trade in its city. Bug-fix: Now must be built adjacent to Ocean.
 2. Hanging Gardens now costs 210 and is obsolete by Steam Engine: 
@@ -57,7 +55,10 @@ BUILDINGS AND WONDERS:
    that was fixed earlier with the Fort/Fortress distinction. The new City Walls solution breaks into two types somewhat modeled on the 
    Fort / Fortress solution now. City Fortifications are available with Masonry and provide 1.75x; City Walls come with Construction and 
    remain 3x. Just as with Fort/Fortress, City Fortifications are cheaper/easier to build but not as strong. Also same is that they don't 
-   stack. And also same is Masonry for first, Construction for second. City Walls which cost 80 in Civ2, are bumped closer to original at 65 now.
+   stack. And also same is Masonry for first, Construction for second. City Walls which cost 80 in Civ2, cost 65 now in early game, and
+   75 after discovery of Steel. Fortifications for cities that get Walls later are not wasted investment. Selling Fortifications in a city
+   with City Walls will recoup the full gold price of the Fortifications. Be sure to have the City Walls up first. In addition, if City Walls
+   are sabotaged, you can keep the Fortifications for weaker backup.
 6. Magna Carta, new wonder, creates a new government Constitutional Monarchy which is half between Monarchy and Republic. 
    for the price of Oracle, Eiffel Tower, and Statue of Zeus, you basically get those same effects and a Republic-ish government: 
       1 extra content, 1 free unit upkeep, 1 more content about military than Republic, extra trade on land tiles, ability to rapture.
@@ -76,11 +77,23 @@ BUILDINGS AND WONDERS:
       increases revenue from trade routes approx. 10%, gives +1 trade to every road tile in its home city, 
       workers +1/3 move and build roads at double speed
 10. Women's Suffrage small wonder combined with JSB small wonder made Democracy almost immune to the intended disadvantages it's supposed to have
-      to counterbalance its superior economy. Women's Suffrage now counts as +1 happy in every city, which effectively neutralises the discontent 
-      from ONE foreign unit instead of two, and making rapture slightly harder than before, when at war, and slightly easier than before, when at 
-      peace. However, also represents another slight nerf to democracy because once ONE player has it, it causes discontent in all representative 
-      governments which DON'T have it, thereby causing an obligatory 300 shield expense for democracies OR a nerf of +1 unhappy person in all 
-      democracies without it.
+      to counterbalance its superior economy. Women's Suffrage now counts as +1 happy in every city. This will keep a city content from one military
+      but not necessarily help rapture it since rapture needs no unhappy; instead of formerly, 4 unhappy citizens about military all being forced
+      content.  This makes slightly tunes Democracies to perform better at Peace and not as well for war. However, this also represents another slight
+      nerf to democracy because once ONE player has it, it causes discontent in all representative governments which DON'T have it, thereby causing
+      an obligatory 300 shield expense for democracies OR a nerf of +1 unhappy person in all democracies without it.
+11. United Nations Wonder has new features which make it more globally interesting and strategic.
+      1. When someone violates a treaty with another player, United Nations will give the whole world casus belli against that player. 
+      2. Now that casus belli is tuned to work better, this opens up a lot more diplomatic intrigue and strategies from this wonder.
+      3. Cost 500, was 600.
+12. SAM Battery cost 80 (was 70) [100 in Civ2]
+13. Barracks II 35, Barracks III 40.
+14. Coastal Defense cost 65, upkeep 2. (Civ2: 80, 1). Micro-balances economic inflation effects and complaints C.D. is too cheap/strong/easy/common 
+     for preventing naval attacks.
+14. Gibraltar Fortress was another "wonder in every city" that made the original improvement worthless, while itself adding no extra dynamic to the 
+    game. It now becomes an extra commitment in cost to make existing coastal defenses stronger, which can recoup that cost if many coastal defenses 
+    are made; also gives the one city it's built in a 3x defense against sea attacks, as an additional point of interest to balance out the new bombard 
+    abilities of battleships. Cost: 330 (was 350)
 
 GOVERNMENT RE-BALANCE:
 * ALL NON-REPRESENTATIVE GOVERNMENTS:
@@ -113,7 +126,11 @@ GOVERNMENT RE-BALANCE:
 3. Democracies can now be BRIBED, but cost is 3x. 
 4. Democacies can now be INCITED TO REVOLT, but cost is 3x.
 5. Democracy can't rapture with 10% or more foreign citizens.
-5. Also see, Hanging Gardens, Police Station, Women's Suffrage.
+6. Also see, Hanging Gardens, Police Station, Women's Suffrage.
+* FOREIGN NATIONALS:
+1. Half are unhappy, not one third.
+2. Fixed, was sometimes rounding up too high, the number of your own nationals in a newly conquered city.
+
 
 UNITS/COMBAT/MECHANICS:
 * FOOT UNITS
@@ -200,6 +217,9 @@ OTHER:
    b. Bribe enemy unit.
    c. Found City on foreign territory (i.e., in a Fort.)
    d. Capture Units (fixed an unknown server bug that allows this to work now.)
+   e. Investigate City if discovered when dong it.
+   f. Moving military units inside foreign territory with whom you have Cease-fire, Peace, Armistice:
+      NOTE, if you accept cease-fire while inside someone's territory, moving the units will give casus belli. Be out first. 
 2. Improved tuning of terrain dispersion; less domination in some areas by a single terrain type.
 3. Balance Alignment of Resource Distribution (BARD. 1. On the first TC, BARD allocates a SMALL amount of:
    Berries, Spice, Peat, Oasis, Rubber, Gems, Elk, Furs, Ivory, and Iron, in order to enhance statistical
@@ -219,6 +239,10 @@ OTHER:
 7. Added Bunker. Built on top of Fortress. a. Units inside can't be seen. b. Prevents Air and Missile attacks. 
    c. Prevents tile pillage (so Jet Bomber etc. can't remove it) d. Claims less surrounding tiles, doesn't see as far, no extra defense bonus.
    reqs: steel
+8. Trade re-balance. You've only got one trade route per city so we're going to make it mean something. One-time bonus for establishing is 
+   now standard freeciv bonus. Base route revenus is now 1.5x what it was before. But, minimum distance is 20 tiles... reaching out farther is 
+   a small balance to pay for your higher bonus. Encourages more world-interconnectivity and intrigue. Marco Polo continues to take care of 
+   micro-managing your other 3 routes you would have had under standard rules.
 
 MINOR AND MISC.
 ---------------
@@ -392,7 +416,21 @@ What this means for MP2 rules:
       fulldisorder - closes a couple exploits/loopholes where heavy micromanagement of disorder gains a competitive edge.
                      disorder is very simple now: all production and purchasing power for 1 turn is stopped if disorder is not prevented before TC;
                      like celebration, when disorder status occurs, the effects of it are felt on the turn when it's reached (i.e., the TC after it happens) 
-56. fixed a bug that was not giving score for small wonders 
+                     2. conquered cities count as a kind of disorder as far as being able to produce anything after conquest, and/or also toward 
+                        the rule of 2 turns of disorder causing anarchy to democracy.
+56. fixed a bug that was not giving score for small wonders
+57. full 2-way casus belli status displayed in nations tab.
+58. Diplomacy Pacts Upgrades:
+    a. You may forget or excuse a casus belli, possibly from some verbal agreement over an action or maneuver which generates a casus belli,
+       simply by doing another Cease-Fire, or Peace. This clears the casus belli or "forgives past casus belli".
+    b. When a Cease-Fire has 3 or less turns left, you may create a new one, instead of being forced to wait for it to expire into war.
+    c. Doing a Cease-Fire or Peace agreement when you already have one but there is casus belli, will not reset the length of the agreement, 
+       but only pardon the casus belli.
+    d. Doing a Cease-Fire or after casus belli is reset, sets a new one with a new length of time, as set by GM in game.server.ceasefirelength.  
+    e. (b,c,d) give players the ability to choose separate combinations of excusing casus belli and re-affirming 
+       cease-fire for a new time period.
+59. Server settings armisticelength and ceasefirelength are now under the control of the GM.
+60. Two-way state of casus belli is shown in nations list in nations tab now. Mouse hover shows turns left.
 
 These help with much more than Freeciv and other Full-screen apps. They help you with everything you do on your computer:
             Switch active Program   Flip to Last Program    Switch Browser tab   See all Programs on Workspace   Swap Workspaces

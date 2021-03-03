@@ -204,7 +204,7 @@ obsolete_by	=
       "Tech", "Mobile Warfare", "Player"
       "Building", "Barracks III", "City"
     }
-build_cost	= 30
+build_cost	= 35
 upkeep		= 1
 sabotage	= 100
 sound		= "b_barracks_ii"
@@ -230,7 +230,7 @@ graphic_alt	= "b.barracks_i"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 30
+build_cost	= 40
 upkeep		= 1
 sabotage	= 100
 sound		= "b_barracks_iii"
@@ -295,12 +295,15 @@ City Walls give a 3x bonus to every type of unit in a City, against attacks\
  from Land units. However, this bonus is reduced when attacked by Catapults\
  and all upgrades thereof. City Walls are ineffective against attacks from\
  units which are not in the Land unit class: they are useless against Air,\
- Sea, and Missile units.\n\
+ Sea, and Missile units. \n\
+ "), _("\
 City Walls prevent population loss when a defending unit is killed. As enormous\
  tall stone constructions with few vulnerabilties, they are resistant\
  to sabotage. If an enemy attempts to sabotage City Walls, the odds of success\
  are halved. In a city with Fortifications, City Walls are built beyond the\
- fortified perimeter—thus, they replace the bonus instead of stacking with it.\n\
+ fortified perimeter—thus, they replace the bonus instead of stacking with it. \n\
+ "), _("\
+ Discovery of Steel increases cost to 75 shields.\
 ")
 
 [building_coastal_defense]
@@ -317,8 +320,8 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 60
-upkeep		= 1
+build_cost	= 65
+upkeep		= 2
 sabotage	= 100
 sound		= "b_coastal_defense"
 sound_alt	= "b_generic"
@@ -434,11 +437,13 @@ sound_alt	= "b_generic"
 helptext	= _("\
 Fortifications give a 1.75x bonus to every unit in a City against attacks from Land\
  units. This bonus is reduced if attacked by Catapult or the units to which it upgrades.\
- Fortifications prevent population loss when a defending unit is killed.\n\
+ Fortifications prevent population loss when a defending unit is killed. \n\
+"), _("\
  Fortifications are a combination of trenches, palisades, earthen bulwarks and short walls,\
  so cannot be targeted by Siege Rams. If an enemy attempts sabotage, odds of success are halved. \n\
+"), _("\
  ➤ Since City Walls expand beyond the perimeter of Fortifications, this improvement\
- offers no bonus when City Walls are in place―but provides a fallback if City Walls come down. \n\n\
+ offers no bonus when City Walls are in place―but provides a fallback if City Walls come down. \n\
  ➤ Material from old Fortifications is useful for building City Walls. You can later sell\
  Fortifications with full return of the gold cost, and put it toward City Walls with no loss\
  of investment.\
@@ -908,7 +913,7 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 70
+build_cost	= 80
 upkeep		= 2
 sabotage	= 100
 sound		= "b_sam_battery"
@@ -1216,7 +1221,7 @@ helptext	= _("\
 Gives one luxury to a city. The process of building a Totem\
  Pole can be more useful than completing it. It keeps your\
  tribe productive and can store shields toward future\
- buildings made possible by your first scientific discovery.\n\
+ buildings made possible by your first scientific discovery. \n\
 Obsolete by: Temple.\
 ")
 
@@ -1481,7 +1486,6 @@ In the city where this wonder is built, +1 trade is added to every tile\
  Obsolete by: Automobile.\
 ")
 
-
 [building_copernicus_observatory]
 name		= _("Copernicus' Observatory")
 genus		= "SmallWonder"
@@ -1588,23 +1592,32 @@ genus		= "SmallWonder"
 reqs	=
     { "type",     "name",               "range",  "present", "quiet"
       "Tech",     "Metallurgy",         "Player",   TRUE,     FALSE
+      "Building", "Coastal Defense",    "City",     TRUE,     FALSE
       "Building", "Gibraltar Fortress", "Player",   FALSE,    TRUE
-      "TerrainClass", "Oceanic",        "Adjacent", TRUE,     FALSE
+;     "TerrainClass", "Oceanic",        "Adjacent", TRUE,     FALSE ; redundant to #2 req.
     }
 graphic	= "b.gibraltar_fortress"
 graphic_alt	= "b.great_wall"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 350
+build_cost	= 330
 upkeep		= 0
 sabotage	= 0
 sound		= "w_gibraltar_fortress"
 sound_alt	= "w_generic"
 helptext	= _("\
-Gives a Coastal Defense in all your coastal cities. This has no effect\
- when Coastal Defense is already present.  This Wonder must be built\
- in a coastal city. It does not become obsolete.\
+When facing attacks by sea, Gibraltar Fortress brings defensive capabilities\
+ to cities with Coastal Defense, especially to the city in which it’s built：\n\
+"), _("\
+1. Reduces cost Coastal Defense by 15, to 50 shields. \n\
+2. Reduces upkeep on Coastal Defense by 1 gold. \n\
+3. The city with Gibraltar Fortress gains a +100% defense bonus, for a total\
+ of 3x defense against sea attacks. \n\ 
+4. All other cities with Coastal Defence gain +25% defense, for a total of 2.25x\
+ defense against sea attacks. \n\n\
+"), _("\
+Gibraltar Fortress must be built in a city with Coastal Defense, and is never obsolete.\
 ")
 
 [building_great_wall]
@@ -1630,7 +1643,8 @@ helptext	= _("\
 The Great Wall protects your cities with City Walls. It takes three\
  turns after founding a city for the Great Wall to extend protection\
  to the new city. Also, the city must have been founded by you, or\
- assimilated to where less than a fifth of its citizens are foreign.\n\
+ assimilated to where less than a fifth of its citizens are foreign .\n\
+"), _("\
 The Great Wall gives no extra effect when City Walls are already present.\
  However, regular City Walls still protect a city in which the Great\
  Wall has not yet activated.\nWarning! This Wonder is obsolete when\
@@ -1743,7 +1757,8 @@ helptext	= _("\
 JTIDS (Joint Tactical Information Distribution System) is a radio\
  battlefield information network that provides real-time intel to forces\
  on the ground. Effectively, this Wonder modernizes the weaponry and info systems\
- for all the infantry in your army.\n\n\
+ for all the infantry in your army. \n\n\
+"), _("\
 All foot soldiers and Mechanized Infantry are built with +1 vet level.\
  Odds of veteran promotion are increased.\
 ")
@@ -1892,7 +1907,7 @@ sound		= "w_magna_carta"
 sound_alt	= "w_generic"
 helptext	= _("\
 Establishes the government Constitutional Monarchy, which makes Monarchy \
-halfway like representative government. \n\
+half like representative government. \n\
 "), _("
 Features: \n\
  ➣ +1 content citizen. \n\
@@ -2113,8 +2128,9 @@ Allows you to instantly change government, including governments not\
  yet researched by your civilization, and without the transition period\
  of Anarchy. It also allows unprovoked declaration of war regardless of\
  any Senate or United Nations. Democracies can’t fall into Anarchy from\
- two turns of city disorder.\n\
- This Wonder does not become obsolete.\
+ two turns of city disorder. \n\
+"), _("\
+This Wonder does not become obsolete.\
 ")
 
 [building_statue_of_zeus]
@@ -2287,15 +2303,17 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 600
+build_cost	= 500
 upkeep		= 0
 sabotage	= 0
 sound		= "w_united_nations"
 sound_alt	= "w_generic"
 helptext	= _("\
-Creates a World Senate that may prevent declarations of war in some circumstances. If\
- any city in the world is in revolt for more than two turns, its whole government falls.\
- This Wonder does not become obsolete.\
+Creates a World Senate with the following effects:\n\
+ 1. Breaking of a treaty by any nation, will give casus belli to all other nations.\
+ 2. Prevents declarations of war in some circumstances.\
+ 3. If any city in the world is in revolt for more than two turns, its government\
+  goes into Anarchy for a turn. This Wonder does not become obsolete.\
 ")
 
 [building_voyage_of_darwin]
@@ -2347,7 +2365,7 @@ Women's Suffrage brings equality and happiness to half the population, resulting
  in +1 happy in every city with Republic and Democracy. On the other hand, once\
  this Wonder is achieved by any player in the world, any Republic or Democracy\
  that does NOT have it, will suffer +1 unhappy citizen, as vocal dissidents will\
- arise and demand for the adoption of this progressive advancement.\
+ arise and demand the adoption of this progressive advancement.\
 ")
 
 ;This has a zero width space in it to be the first one made.
@@ -2375,7 +2393,7 @@ Women's Suffrage brings equality and happiness to half the population, resulting
  in +1 happy in every city with Republic and Democracy. On the other hand, once\
  this Wonder is achieved by any player in the world, any Republic or Democracy\
  that does NOT have it, will suffer +1 unhappy citizen, as vocal dissidents will\
- arise and demand for the adoption of this progressive advancement!\
+ arise and demand the adoption of this progressive advancement!\
 ")
 
 [building_capitalization]

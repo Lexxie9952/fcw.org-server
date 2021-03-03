@@ -863,7 +863,7 @@ req2     = "Industrialization"
 flags    = ""
 graphic     = "a.steel"
 graphic_alt = "-"
-helptext = _("Obsoletes Castle. Allows Sea Bridge, Bunker.")
+helptext = _("Obsoletes Castle. Allows Sea Bridge, Bunker. City Walls cost +10.")
 cost = 3280
 
 [advance_superconductors]

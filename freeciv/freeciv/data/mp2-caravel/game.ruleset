@@ -2503,7 +2503,7 @@ settings =
   }
 
 ; When are goods for the trade route chosen.
-; "Leaving" - Goods to carry are assigned to unit when it`s built, or it changes homecity
+; "Leaving" - Goods to carry are assigned to unit when it's built, or it changes homecity
 ; "Arrival" - Goods are chosen when trade route is established, when unit arrives to destination
 goods_selection = "Arrival"
 
@@ -2538,7 +2538,8 @@ goods_selection = "Arrival"
 
 [goods_good]
 name = _("Goods")
-
+;onetime_pct = 100  ; uses standard bonus both here and in effects.ruleset (except gold only)
+from_pct = 150
 
 ; /* <-- avoid gettext warnings
 ;

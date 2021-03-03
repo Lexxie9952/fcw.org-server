@@ -93,7 +93,7 @@ value   = 4
 ; with their original nation
 [effect_angry_conquered]
 type    = "Enemy_Citizen_Unhappy_Pct"
-value   = 34   ; handles proper rounding for 1/3
+value   = 50
 
 ; Barbarian effects
 [effect_barb1]
@@ -501,50 +501,39 @@ value   = 3
 type    = "Max_Trade_Routes"
 value   = 1
 
-;pow(2, value/1000) -> Base = 50% 
+;pow(2, value/1000) = Base % 
 ; ------------ ESTABLISH TRADE ROUTE, ONE TIME BONUS -----------------
-;pow(2, value/1000) = 19% or about 1/5 of normal
-[effect_base_trade_revenue_reduce]
-type    = "Trade_Revenue_Bonus"
-value   = -1000
+;pow(2, value/1000)   USE STANDARD BONUS.
+;[effect_base_trade_revenue_reduce]
+;type    = "Trade_Revenue_Bonus"
+;value   = 0
 
-;Total = 25%
+;-40%
 [effect_railroad_trade_revenue_reduce]
 type    = "Trade_Revenue_Bonus"
-value   = -1000
+value   = -736
 reqs    =
     { "type", "name", "range"
       "Tech", "Railroad", "Player"
     }
-;Total = 25%
+;-40%
 [effect_flight_trade_revenue_reduce]
 type    = "Trade_Revenue_Bonus"
-value   = -1000
+value   = -736
 reqs    =
     { "type", "name", "range"
       "Tech", "Flight", "Player"
     }
-
-;If you don't acquire ongoing trade revenue from a trade route,
-;a DECREASE in one-time bonus made NO SENSE AT ALL,
-;Now it's a one time bonus with potentially slight ROI.
+;Adjust as a one time bonus with slightly higher ROI than coinage.
+;-33%
 [effect_enter_marketplace_bonus_increase]
 type	= "Trade_Revenue_Bonus"
-value	= 2000 
+value	= -585
 reqs	=
     { "type", "name", "range"
       "Action", "Enter Marketplace", "Local"
     } 
-;TO-DO: pay x more than gold value of vessel entering marketplace, with ROI being somewhat inferior to most 
-;investments but hinting toward same order of magnitude.
-
-[effect_establish_traderoute_bonus]
-type	= "Trade_Revenue_Bonus"
-value	= -2400 
-;this -2400 should go into base effect above 
-;then reqs action = "Establish Trade Route" can be an increase to counter both the -2400 subtracted above then to 
-;further tune upward any one time bonus to what it needs to be. reqs can look at unit type also to compensate higher cost 
-;of making certain units, since route-creating units now vary from 20 shields to 50 shields in cost. 
+;------------------------------------------------------------------------
 
 ;Minimum trade from a traderoute is 1; change down-round to up-round by adding 1 to city center.
 [effect_traderoute_minimum2]
@@ -2324,6 +2313,16 @@ reqs	=
     { "type", "name", "range"
       "Building", "City Walls", "City"
     }
+;Metallurgy increases cost of city walls
+[effect_city_wall_metallurgy_price_increase]
+type    = "Building_Build_Cost_Pct"
+value   = 16
+reqs    =
+  {
+    "type", "name", "range", "present"
+    "Tech", "Metallurgy", "Player", TRUE
+    "Building", "City Walls", "Local", TRUE
+  }
 
 ; FORTIFICATIONS *****************************************
 [effect_fortifications_visible]
@@ -2645,43 +2644,98 @@ reqs	=
     { "type", "name", "range"
       "Building", "Coastal Defense", "City"
     }
-
-
-[effect_gibraltar_fortress]
+;==============================================================
+[effect_gibraltar_fortress_city]
 type    = "Defend_Bonus"
 value	= 100
 reqs	=
     { "type",     "name",               "range", "present"
+      "Building", "Gibraltar Fortress", "City",   TRUE
+      "Building", "Coastal Defense",    "City",   TRUE
+      "UnitClass", "Sea", "Local"
+    }
+[effect_gibraltar_fortress_city_1]
+type    = "Defend_Bonus"
+value	= 100
+reqs	=
+    { "type",     "name",               "range", "present"
+      "Building", "Gibraltar Fortress", "City",   TRUE
+      "Building", "Coastal Defense",    "City",   TRUE
+      "UnitClass", "RiverShip", "Local"
+    }
+[effect_gibraltar_fortress_city_2]
+type    = "Defend_Bonus"
+value	= 100
+reqs	=
+    { "type",     "name",               "range", "present"
+      "Building", "Gibraltar Fortress", "City",   TRUE
+      "Building", "Coastal Defense",    "City",   TRUE
+      "UnitClass", "Submarine", "Local"
+    }
+[effect_gibraltar_fortress_city_trireme]
+type    = "Defend_Bonus"
+value	= 100
+reqs	=
+    { "type",     "name",               "range", "present"
+      "Building", "Gibraltar Fortress", "City",   TRUE
+      "Building", "Coastal Defense",    "City",   TRUE
+      "UnitClass", "Trireme", "Local"
+    }
+[effect_gibraltar_fortress]
+type    = "Defend_Bonus"
+value	= 25
+reqs	=
+    { "type",     "name",               "range", "present"
       "Building", "Gibraltar Fortress", "Player", TRUE
-      "Building", "Coastal Defense",    "City",   FALSE
+      "Building", "Gibraltar Fortress", "City",   FALSE
+      "Building", "Coastal Defense",    "City",   TRUE
       "UnitClass", "Sea", "Local"
     }
 [effect_gibraltar_fortress_1]
 type    = "Defend_Bonus"
-value	= 100
+value	= 25
 reqs	=
     { "type",     "name",               "range", "present"
       "Building", "Gibraltar Fortress", "Player", TRUE
-      "Building", "Coastal Defense",    "City",   FALSE
+      "Building", "Gibraltar Fortress", "City",   FALSE
+      "Building", "Coastal Defense",    "City",   TRUE
       "UnitClass", "RiverShip", "Local"
     }
 [effect_gibraltar_fortress_2]
 type    = "Defend_Bonus"
-value	= 100
+value	= 25
 reqs	=
     { "type",     "name",               "range", "present"
       "Building", "Gibraltar Fortress", "Player", TRUE
-      "Building", "Coastal Defense",    "City",   FALSE
+      "Building", "Gibraltar Fortress", "City",   FALSE
+      "Building", "Coastal Defense",    "City",   TRUE
       "UnitClass", "Submarine", "Local"
     }
 [effect_gibraltar_fortress_trireme]
 type    = "Defend_Bonus"
-value	= 100
+value	= 25
 reqs	=
     { "type",     "name",               "range", "present"
       "Building", "Gibraltar Fortress", "Player", TRUE
-      "Building", "Coastal Defense",    "City",   FALSE
+      "Building", "Gibraltar Fortress", "City",   FALSE
+      "Building", "Coastal Defense",    "City",   TRUE
       "UnitClass", "Trireme", "Local"
+    }
+[effect_gibraltar_fortress_coastal_defense_discount]
+type    = "Building_Build_Cost_Pct"
+value	= -23 ; 15 shields. 65-15 = 50.
+reqs	=
+    { "type",     "name",               "range", "present"
+      "Building", "Gibraltar Fortress", "Player", TRUE
+      "Building", "Coastal Defense",    "Local",  TRUE
+    }
+[effect_building_upkeep_gibratalar_fortress]
+type    = "Upkeep_Free"          ; 
+value   = 1
+reqs    =
+    { "type", "name", "range", "quiet"
+      "Building", "Gibraltar Fortress", "Player", TRUE
+      "Building", "Coastal Defense",    "Local",  TRUE
     }
 ;------------------------------------------------------------
 
