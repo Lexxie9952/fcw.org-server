@@ -37,7 +37,8 @@ flags =
 extra_flags =
   { "name", "helptxt"
       _("Quayable"), _("Allows Quays to be built.")
-      _("IrrigationSource"), _("Allows Irrigation.")            
+      _("IrrigationSource"), _("Allows Irrigation.")
+      _("Railable"), _("Allows Railroads to be built.")
   }
 
 [parameters]
@@ -447,7 +448,7 @@ warmer_drier_result  = "no"
 cooler_wetter_result = "Plains"
 cooler_drier_result  = "Tundra"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Missile", "Helicopter", "AirProtect", "AirPillage", "Bomb"
-flags                = "CanHaveRiver", "Oil", "Low Land"
+flags                = "NotGenerated", "CanHaveRiver", "Oil", "Low Land"
 property_dry         = 75
 property_tropical    = 40
 property_temperate   = 26
@@ -493,12 +494,12 @@ cooler_wetter_result = "Swamp"
 cooler_drier_result  = "Tundra"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Missile", "Helicopter", "AirProtect", "AirPillage", "Bomb"
 flags                = "Starter", "CanHaveRiver", "Low Land"
-property_cold        = 35
+property_cold        = 20
 property_frozen      = 7
 property_mountainous = 15
-property_wet         = 30
-property_foliage     = 50
-property_temperate   = 50
+property_wet         = 25
+property_foliage     = 25
+property_temperate   = 15
 color.r              = 43
 color.g              = 107
 color.b              = 19
@@ -539,7 +540,7 @@ warmer_drier_result  = "Desert"
 cooler_wetter_result = "Arctic"
 cooler_drier_result  = "Tundra"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Missile", "Helicopter", "AirProtect", "AirPillage", "Bomb"
-flags                = "Starter", "CanHaveRiver", "Low Land"
+flags                = "NotGenerated", "Starter", "CanHaveRiver", "Low Land"
 property_green       = 50
 property_temperate   = 50
 property_cold        = 12
@@ -586,8 +587,8 @@ cooler_drier_result  = "no"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Missile", "Helicopter", "AirProtect", "AirPillage", "Bomb"
 flags                = "Starter", "CanHaveRiver"
 property_green       = 50
-property_mountainous = 35
-property_cold        = 35
+property_mountainous = 65
+property_cold        = 40
 property_frozen      = 20
 property_dry         = 15
 color.r              = 24
@@ -630,7 +631,7 @@ warmer_drier_result  = "Desert"
 cooler_wetter_result = "Swamp"
 cooler_drier_result  = "Tundra"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Missile", "Helicopter", "AirProtect", "AirPillage", "Bomb"
-flags                = "CanHaveRiver", "Low Land"
+flags                = "NotGenerated", "CanHaveRiver", "Low Land"
 property_foliage     = 45
 property_tropical    = 50
 property_wet         = 45
@@ -674,8 +675,8 @@ cooler_wetter_result = "no"
 cooler_drier_result  = "no"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Missile", "Helicopter", "AirProtect", "AirPillage", "Bomb"
 flags                = "CanHaveRiver"
-property_mountainous = 65
-property_cold        = 50
+property_mountainous = 20
+property_cold        = 10
 color.r              = 129
 color.g              = 127
 color.b              = 118
@@ -695,7 +696,7 @@ defense_bonus        = 0
 food                 = 1
 shield               = 1
 trade                = 0
-resources            = "Buffalo", "Wheat"
+resources            = "Buffalo", "Wheat", "Buffalo"
 road_trade_incr_pct  = 100
 base_time            = 1
 road_time            = 2
@@ -717,13 +718,13 @@ cooler_wetter_result = "Arctic"
 cooler_drier_result  = "Tundra"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Missile", "Helicopter", "AirProtect", "AirPillage", "Bomb"
 flags                = "Starter", "CanHaveRiver", "Low Land"
-property_green       = 50
+property_green       = 16
 property_frozen      = 5
 property_dry         = 16
 property_cold        = 28
 property_tropical    = 10
-property_temperate   = 50
-property_mountainous = 15
+property_temperate   = 16
+property_mountainous = 35
 color.r              = 122
 color.g              = 156
 color.b              = 46
@@ -765,7 +766,7 @@ cooler_wetter_result = "Arctic"
 cooler_drier_result  = "Tundra"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Missile", "Helicopter", "AirProtect", "AirPillage", "Bomb"
 flags                = "CanHaveRiver", "Low Land"
-property_wet         = 100
+property_wet         = 50
 property_frozen      = 3
 property_tropical    = 10
 property_temperate   = 10
@@ -811,8 +812,15 @@ cooler_wetter_result = "Arctic"
 cooler_drier_result  = "no"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Missile", "Helicopter", "AirProtect", "AirPillage", "Bomb"
 flags                = "Starter", "NoBarbs", "CanHaveRiver", "Low Land"
-property_cold        = 38
+property_cold        = 60
 property_frozen      = 45
+property_green       = 50
+property_mountainous = 25
+property_wet         = 50
+property_dry         = 50
+property_foliage     = 50
+property_temperate   = 50
+property_tropical    = 50
 color.r              = 188
 color.g              = 188
 color.b              = 188
@@ -1661,12 +1669,12 @@ rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 reqs           =
     { "type",        "name",       "range", "present", "quiet"
-;      "Extra",       "River",      "Local", TRUE,      FALSE
-      "ExtraFlag",   "Quayable",   "Local", TRUE,      FALSE
-      "Tech",        "Pottery",    "Player",TRUE,      FALSE
-      "TerrainClass","Land",       "Local", TRUE,      FALSE
-      "UnitFlag",    "CanFortress","Local", TRUE,      TRUE
-      "Extra",       "Hideout",    "Local", FALSE,     TRUE
+;      "Extra",       "River",     "Local",  TRUE,      FALSE
+      "ExtraFlag",   "Quayable",   "Local",  TRUE,      FALSE
+      "Tech",        "Pottery",    "Player", TRUE,      FALSE
+      "TerrainClass","Land",       "Local",  TRUE,      FALSE
+      "UnitFlag",    "CanFortress","Local",  TRUE,      TRUE
+      "Extra",       "Hideout",    "Local",  FALSE,     TRUE
     }
 build_time     = 3
 removal_time   = 0
@@ -1713,7 +1721,7 @@ build_time     = 0
 removal_time   = 0
 native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 hidden_by      = "Railroad", "Maglev", "Naval Base"
-flags          = "AutoOnCityCenter", "NativeTile"
+flags          = "AutoOnCityCenter", "NativeTile", "Railable"
 bridged_over   = "River"
 helptext       = _("\
 Roads allow your land units to move more quickly, and on some terrain,\
@@ -1738,10 +1746,10 @@ rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 reqs           =
     { "type", "name", "range"
-      "Tech", "Railroad", "Player"
-      "Extra", "Road", "Local"
-      "UnitFlag", "CanRoad", "Local"
-      "TerrainClass", "Land", "Local"
+      "Tech",      "Railroad", "Player"
+      "ExtraFlag", "Railable", "Local"
+      "UnitFlag",  "CanRoad",  "Local"
+;     "TerrainClass", "Land", "Local" ;if there's a railable extra that's all we need: cf. Sea Bridge.
     }
 build_time     = 3
 removal_time   = 0
@@ -1851,13 +1859,13 @@ reqs           =
     { "type", "name", "range", "present"
       "TerrainClass", "Oceanic", "Local", TRUE
       "TerrainClass", "Land", "CAdjacent", TRUE
-      "Tech", "Explosives", "Player", TRUE
+      "Tech", "Steel", "Player", TRUE
       "UnitFlag", "CanRoad", "Local", TRUE
     }
 build_time     = 12
 removal_time   = 0
 native_to      = "Land", "LandNoKill", "LandAirSea", "LandRoad", "LandRail"
-flags          = "NativeTile"
+flags          = "NativeTile", "Railable"
 helptext          = _("\
 Sea Bridges are engineering marvels which span lakes and seas to connect them for \
 land traffic. They must be built cardinally adjacent to land.\
