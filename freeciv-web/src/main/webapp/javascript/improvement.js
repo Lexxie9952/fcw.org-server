@@ -25,12 +25,13 @@ const B_RECYCLING_CENTER = "Recycling Center";
 const B_PALACE_NAME = 'Palace';
 const B_ECC_PALACE_NAME = 'Ecclesiastical Palace';
 //--
-const B_STATUE_OF_LIBERTY_NAME = "Statue of Liberty";
 const B_ADAM_SMITH_NAME = "A.Smith's Trading Co.";
 const B_APPIAN_WAY = "Appian Way";
 const B_COLOSSUS = "Colossus";
+const B_GIBRALTAR_FORTRESS = "Gibraltar Fortress"
 const B_LIGHTHOUSE = "Lighthouse";
 const B_MAGNA_CARTA = "Magna Carta";
+const B_STATUE_OF_LIBERTY_NAME = "Statue of Liberty";
 const B_TESLAS_LABORATORY = "Tesla's Laboratory";
 
 

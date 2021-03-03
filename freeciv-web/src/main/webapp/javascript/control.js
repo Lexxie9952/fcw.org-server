@@ -6666,13 +6666,17 @@ function popup_fullscreen_enter_game_dialog()
   $("#fullscreen_dialog").css("white-space","pre-wrap"); // allow \n to work.
   $("<div id='fullscreen_dialog'></div>").appendTo("div#game_page");
 
-  $(id).html("<b>Game enters Full Screen when you interact with it.</b><br><br><b>ALT-S</b> toggles Full Screen.<br><b>ESC</b> exits full screen.");
+  if (!is_small_screen())
+    $(id).html("<b>Enter Full Screen when you interact with game.</b><br><br><b>ALT-S</b> toggles Full Screen.<br><b>ESC</b> exits full screen.");
+  else 
+    $(id).html("<b>Play in Full Screen Mode.");
 
   var buttons = { 'Yes!': function()
                  { openFullscreen(); remove_active_dialog(id); },
                   'No': function() {remove_active_dialog(id);} };
-  $(id).attr("title", "Automatic Full Immersion Mode");
-  $(id).dialog({bgiframe: true, modal: true, buttons: (buttons), height: "auto", width: "480"});
+  $(id).attr("title", "Full Immersion Mode");
+  var dwidth = is_small_screen() ? "90%" : "480";
+  $(id).dialog({bgiframe: true, modal: true, buttons: (buttons), height: "auto", width: dwidth});
   $(id).dialog('open'); $(id).dialog('widget').position({my:"center", at:"center", of:window})
   dialog_register(id);
 }

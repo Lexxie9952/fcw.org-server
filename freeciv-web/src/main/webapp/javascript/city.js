@@ -268,6 +268,7 @@ function city_force_income_update()
 **************************************************************************/
 function show_city_dialog(pcity)
 {
+  const playerno = pcity.owner;
   //console.log("show_city_dialog() called.")
   //console.log("    caller is " + show_city_dialog.caller.toString().substring(0,35));
   var turns_to_complete;
@@ -362,7 +363,7 @@ function show_city_dialog(pcity)
     var num_specialists = Object.keys(specialists).length;
     if (client_rules_flag[CRF_ASMITH_SPECIALISTS]) {
       // client has no way to check reqs for extended specialists
-      if ( !player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_ADAM_SMITH_NAME)) ) {
+      if ( !player_has_wonder(playerno, improvement_id_by_name(B_ADAM_SMITH_NAME)) ) {
         num_specialists = 3; // need A.Smith get access specialists 4-6
       }
     }
@@ -430,8 +431,13 @@ function show_city_dialog(pcity)
     $("#city_dialog").next().children()[0].children[2].innerHTML = "Buy";
     $("#city_dialog").next().children()[0].children[3].innerHTML = "Name";
 
+  } else {
+    // align "Change Production" and "Add to Worklist" buttons with the wood panel and tab selector buttons to their left.
+    $("#prod_buttons").css({"margin-top": "15px", "margin-right": "2px"});
   }
   $("#city_dialog").dialog('open');
+  // prevent tooltip from janking the layout on some helptext
+  $("#city_dialog").parent().css("overflow-y", "hidden");
 
   $("#game_text_input").blur();
 
@@ -996,13 +1002,19 @@ function get_gold_cost_per_shield(pcity)
 **************************************************************************/
 function get_universal_discount_price(ptype, pcity)
 {
+  var playerno;
+  if (!pcity) pcity = active_city;
+  if (!active_city) {
+    playerno = client.conn.playing.playerno;
+  } else playerno = pcity.owner;
+
   // Since 'name' and 'build_cost' are the only fields checked and
   // are universal to both improvements and units, we can adapt this
   // for everything when needed: 
-
+  
   // Apply MP2 communist discounts
   if (client_rules_flag[CRF_MP2_SPECIAL_UNITS] && 
-      governments[players[client.conn.playing.playerno].government].name == "Communism") {
+      governments[players[playerno].government].name == "Communism") {
     
     if (communist_discounts[ptype['name']]) {
       if (!client_rules_flag[CRF_MP2_C]) {
@@ -1011,12 +1023,17 @@ function get_universal_discount_price(ptype, pcity)
       return ptype['build_cost'] - communist_discounts[ptype['name']];
     }
   }
-  // City Walls increase with Metallurgy
   if (client_rules_flag[CRF_MP2_C]) {
+    // City Walls increase with Metallurgy
     if (ptype['name'] == "City Walls"
-        && player_invention_state(client.conn.playing, tech_id_by_name('Machine Tools')) == TECH_KNOWN) {
-          return ptype['build_cost'] + 10;
-        }
+          && tech_known('Steel')) {
+            return ptype['build_cost'] + 10;
+    }
+    if (ptype['name'] == "Coastal Defense"
+        && player_has_wonder(playerno,
+           improvement_id_by_name(B_GIBRALTAR_FORTRESS))) {
+            return ptype['build_cost'] - 15;
+    }
   }
   
   // Apply discounts for having Colossus
@@ -2699,6 +2716,7 @@ function update_worklist_actions()
   }
 
   if (production_selection.length > 0) {
+    $("#prod_buttons").show();
     $("#city_add_to_worklist_btn").button("enable");
     $("#city_worklist_insert_btn").button("enable");
     $("#city_worklist_append_btn").button("enable");
@@ -2712,6 +2730,7 @@ function update_worklist_actions()
     }
 
   } else {
+    $("#prod_buttons").hide();
     $("#city_add_to_worklist_btn").button("disable");
     $("#city_worklist_insert_btn").button("disable");
     $("#city_worklist_append_btn").button("disable");

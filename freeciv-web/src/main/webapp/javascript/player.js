@@ -277,6 +277,15 @@ function player_has_wonder(playerno, improvement_id)
   }*/
   return false;
 }
+/**************************************************************************
+  returns true if the active player has the given wonder (improvement)
+  note, uses the string value of the wonder and fetches the id for you.
+**************************************************************************/
+function has_wonder(wonder_name_str)
+{
+  return player_has_wonder(client.conn.playing.playerno,
+    improvement_id_by_name(wonder_name_str));
+}
 
 /**************************************************************************
   Checks if a username is valid.
