@@ -19,6 +19,7 @@
 philosophy_possible = 1
 game_turn = 0
 first_horse_warning = 0
+first_womens_suffrage = 0
 
 --Give players custom messages on certain years.  Currently at 1600 AD (T85), Philosophy expires. Let them know.
 function history_turn_notifications(turn, year)
@@ -252,3 +253,23 @@ function unit_lost_callback(unit, loser, reason)
 end
 
 signal.connect("unit_lost", "unit_lost_callback")
+
+function building_built_callback(building, city)
+  if building:rule_name() == "Women's Suffrage​" and first_womens_suffrage < 1 then
+    first_womens_suffrage = 1
+    notify.event(nil, nil, E.SCRIPT,
+    _("<b>Women in Republics and Democracies demand Women's Suffrage.</b>\n\
+       All cities under these governments now have one unhappy citizen demanding Women's Suffrage.\
+    "))
+    notify.event(nil, nil, E.BEGINNER_HELP,
+    _("[`events/womenssuffrage`]<br><font color=#ff20ff>Discontent reported in representative governments who lack Women's Suffrage.</font>"))
+  end
+
+  -- continue processing
+  return false
+end
+
+signal.connect("building_built", "building_built_callback")
+
+
+
