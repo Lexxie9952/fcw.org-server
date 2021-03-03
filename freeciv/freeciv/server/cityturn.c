@@ -4142,7 +4142,7 @@ static void update_city_activity(struct city *pcity)
         /* Revolution next turn if not dealt with */
         /* TRANS: preserve leading space; this string will be appended to
          * another sentence */
-        add_message = _(" Unrest threatens to spread beyond the city.");
+        add_message = _(" National disorder may come.");
       } else if (city_is_hangry) {
         add_message = _(" Famine is blamed.");
       } else {
