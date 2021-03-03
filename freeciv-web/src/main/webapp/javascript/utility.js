@@ -346,3 +346,17 @@ function getLength(obj) {
   if (obj) return Object.keys(obj).length;
   else return 0;
 }
+/**************************************************************************
+   Pluralize and number most regular nouns.
+   e.g. pluralize("turn",1) returns "1 turn"
+        pluralize("turn",2) returns "2 turns"
+***************************************************************************/
+function pluralize(str, num) {
+  if (num > 1) {
+    // add rules for making more plurals here, when needed
+    str +="s";
+
+    return ""+num+" "+str;
+  }
+  else return "1 "+str;
+}
