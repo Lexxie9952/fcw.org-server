@@ -2351,6 +2351,20 @@ static struct setting settings[] = {
           GAME_MIN_CEASEFIRELENGTH, GAME_MAX_CEASEFIRELENGTH,
           GAME_DEFAULT_CEASEFIRELENGTH)     
 
+  GEN_INT("casusbelliturns", game.server.casusbelliturns,
+          SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
+          N_("Length in turns of a first casus belli before it expires."),
+          N_("If there is already a state of casus belli, additional "
+          "incidents will simply refresh it to this value; or, if it is already "
+          "this value or greater, add an additional turn to the length. NOTE: "
+          "any new non-aggression treaty made after casus belli, is considered "
+          "to supercede violations of past treaties, and eliminate casus belli. "
+          "Thus, players may re-affirm a treaty that has casus belli on it, and "
+          "eliminate the casus belli status of that treaty."),
+          NULL, NULL, NULL, 
+          GAME_MIN_CASUSBELLITURNS, GAME_MAX_CASUSBELLITURNS,
+          GAME_DEFAULT_CASUSBELLITURNS)
+
   GEN_BOOL("autoattack", game.server.autoattack, SSET_RULES_FLEXIBLE, SSET_MILITARY,
            SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
            N_("Turn on/off server-side autoattack"),

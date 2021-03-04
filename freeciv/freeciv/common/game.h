@@ -138,6 +138,7 @@ struct civ_game {
       int autoupgrade_veteran_loss;
       enum barbarians_rate barbarianrate;
       int base_incite_cost;
+      int casusbelliturns;
       int ceasefirelength;
       int civilwarsize;
       int conquercost;
@@ -696,6 +697,10 @@ extern struct world wld;
 #define GAME_DEFAULT_CEASEFIRELENGTH  16
 #define GAME_MIN_CEASEFIRELENGTH     1
 #define GAME_MAX_CEASEFIRELENGTH     1000
+
+#define GAME_DEFAULT_CASUSBELLITURNS 2
+#define GAME_MIN_CASUSBELLITURNS     2
+#define GAME_MAX_CASUSBELLITURNS     1000
 
 #define GAME_DEFAULT_AUTOATTACK      FALSE
 #define GAME_DEFAULT_AUTOATTACK_STYLE 0

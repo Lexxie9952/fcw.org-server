@@ -63,6 +63,9 @@ static void action_give_casus_belli(struct player *offender,
                                     struct player *victim_player,
                                     const bool int_outrage)
 {
+  int cb_now;
+  int cb_turns = game.server.casusbelliturns;
+
   if (int_outrage) {
     /* This action is seen as a reason for any other player, no matter who
      * the victim was, to declare war on the actor. It could be used to
@@ -71,21 +74,32 @@ static void action_give_casus_belli(struct player *offender,
 
     players_iterate(oplayer) {
       if (oplayer != offender) {
-        // +=2: continual incrementing allows a spam filter on reporting incidents
-        // and might unlock other interesting effects later if it reaches 
-        // higher numbers:
-        player_diplstate_get(oplayer, offender)->has_reason_to_cancel += 2;
+        cb_now = player_diplstate_get(oplayer, offender)->has_reason_to_cancel;
+
+        // At minimum, reset has_reason_to_cancel to game.server.casusbelliturns,
+        // since it is also a counter that decrements every turn until casus belli
+        // expires. If it is at or above that number, simply add +1 to it.
+        if (cb_now < cb_turns) {
+          player_diplstate_get(oplayer, offender)->has_reason_to_cancel = cb_turns;
+        } else if (cb_now >= cb_turns) {
+          player_diplstate_get(oplayer, offender)->has_reason_to_cancel++;
+        }
         player_update_last_war_action(oplayer);
       }
     } players_iterate_end;
   } else if (victim_player && offender != victim_player) {
+    cb_now = player_diplstate_get(victim_player, offender)->has_reason_to_cancel;
     /* If an unclaimed tile is nuked there is no victim to give casus
      * belli. If an actor nukes his own tile he is more than willing to
      * forgive him self. */
 
     /* Give the victim player a casus belli. */
-    // +=2: continual incrementing allows a spam filter on reporting incidents
-    player_diplstate_get(victim_player, offender)->has_reason_to_cancel += 2;
+    // Adjust has_reason_to_cancel under the same logic as in the block above:
+    if (cb_now < cb_turns) {
+      player_diplstate_get(victim_player, offender)->has_reason_to_cancel = cb_turns;
+    } else if (cb_now >= cb_turns) {
+      player_diplstate_get(victim_player, offender)->has_reason_to_cancel++;
+    }
     player_update_last_war_action(victim_player);
   }
   player_update_last_war_action(offender);
@@ -166,7 +180,8 @@ static void action_consequence_common(const struct action *paction,
                                       const enum effect_type eft)
 {
   int casus_belli_amount;
-  int spam_limit = 0; // avoid excessive reporting of incidents.
+  int cb_turns = game.server.casusbelliturns;
+  bool spam_limit = false; // avoid excessive reporting of incidents.
 
   /* The victim gets a casus belli if 1 or above. Everyone gets a casus
    * belli if 1000 or above. */
@@ -199,9 +214,9 @@ static void action_consequence_common(const struct action *paction,
     action_give_casus_belli(offender, victim_player, int_outrage);
 
     // Avoid spam on incident messages. (Incident #2 will have h_r_t_c == 4)
-    if (player_diplstate_get(offender, victim_player)->has_reason_to_cancel > 3
-      || player_diplstate_get(victim_player, offender)->has_reason_to_cancel > 3) {
-        spam_limit = 1;
+    if (player_diplstate_get(offender, victim_player)->has_reason_to_cancel >= cb_turns+1
+      || player_diplstate_get(victim_player, offender)->has_reason_to_cancel >= cb_turns+1) {
+        spam_limit = true;
     }
 
     /* Notify the involved players by sending them a message. */
@@ -211,7 +226,7 @@ static void action_consequence_common(const struct action *paction,
       notify_victim(victim_player, paction, offender, victim_player,
                     victim_tile, victim_link);
     }
-    if (!spam_limit && int_outrage) {
+    if (int_outrage) { // May create a new casus belli for someone, can't spam limit this :(
       /* Every other player gets a casus belli against the actor. Tell each
        * players about it. */
       players_iterate(oplayer) {
