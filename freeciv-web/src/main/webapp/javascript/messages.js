@@ -235,6 +235,8 @@ function msg_maximize_mobile(evt,dlg) {
  <font color="#A020F0">->{other} lt private sent msg</font>
  ...
 **************************************************************************/
+/* should no longer be necessary after 4March2021 and earlier commits, search for 4March2021 in other comments.
+
 function reclassify_chat_message(text)
 {
   // 29 characters just for the font tags
@@ -259,6 +261,8 @@ function reclassify_chat_message(text)
   }
   return E_CHAT_MSG;
 }
+*/
+
 
 /**************************************************************************
  This adds new text to the main message chatbox. This allows the client
@@ -288,15 +292,22 @@ function add_chatbox_text(packet)
     }
     if (text.length >= max_chat_message_length) return;
 
+    /*
     if (packet['event'] === E_CHAT_MSG) {
       if (is_any_word_in_string(text,["You are logged in as", "Load complete"])) return;
-      packet['event'] = reclassify_chat_message(text);
-    }
+      // packet['event'] = reclassify_chat_message(text);  // DEFINITELY NO LONGER NECESSARY ****************
+    } 
+    */
 
     // Increment unread messages IFF chat minimized and AFTER filtering ignored/unshown server messages (above)
     if (current_message_dialog_state == "minimized") unread_messages ++;
     else unread_messages = 0;
     
+    /* Removed 4Mar2021 as all this got changed in server handchat.c and older commits in month before,
+       Formatting is handled server side. Colors don't come from server anymore. Server encapsulates
+       all messages in one of its event_types which are rendered into css classes for display and intercepted
+       in packhand.js for sounds.
+
     if (civclient_state <= C_S_PREPARING) {
       text = text.replace(/#FFFFFF/g, '#000000');
     } else {
@@ -307,6 +318,7 @@ function add_chatbox_text(packet)
       var real_time = true;
       var outgoing = false; 
   
+
       // Fix historic messages for outgoing formatting
       if (client.conn.playing != null && text.includes("{"+client.conn.playing.name+" -> ")) {
         outgoing = true;
@@ -328,6 +340,7 @@ function add_chatbox_text(packet)
         text=check_im; // now update the text var so the changed colour code goes in the message_log  
       }
     }
+    */
 
     packet['message'] = text;
     message_log.update(packet);

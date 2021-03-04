@@ -16,7 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ***********************************************************************/
-
+var game_launch_timer = new Date().getTime();
+const event_sound_suppress_delay = 15000; // suppress event sounds for 15 seconds after launch
 
 var error_shown = false;
 var syncTimerId = -1;

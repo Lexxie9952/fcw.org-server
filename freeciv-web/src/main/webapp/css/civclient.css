@@ -1372,6 +1372,35 @@ li.tech-me_only::before {
 .e_chat_msg {
   color: #dbd5c0
 }
+.e_chat_msg_public {
+  text-align: center;
+  color: #d8d2c1
+}
+.e_chat_msg_private_sent {
+  text-align: right;
+  color: #ffb789;
+}
+.e_chat_msg_private_rcvd {
+  color: #ff87b7
+}
+.e_chat_msg_ally {
+  text-align: center;
+  color: #969ce0;
+}
+.cht_prv_sndr {
+  color: #c79cae
+}
+.cht_ally_sndr {
+  color: #898fd8;
+}
+.cht_you {
+  color: #c888ff;
+}
+.cht_arw {
+  color: #ffffff;
+}
+
+
 /* unit tile link */
 .e_unit_relocated,
 .e_unit_escaped,
@@ -1408,8 +1437,14 @@ li.tech-me_only::before {
 .e_my_diplomat_failed,
 .e_enemy_diplomat_poison,
 .e_enemy_spy_nuke,
+.e_enemy_diplomat_bribe,
+.e_enemy_diplomat_embassy,
+.e_enemy_diplomat_incite,
+.e_enemy_diplomat_poison,
+.e_enemy_diplomat_sabotage,
+.e_enemy_diplomat_theft,
 .e_enemy_spy_steal_map {
-  color: #beb3b3;
+  color: #b88f8f;
 }
 .e_unit_orders { /* sentry saw a unit*/
 /*  color: #d5e9a7; */
@@ -1445,7 +1480,6 @@ li.tech-me_only::before {
 .e_city_nuked,
 .e_nuke,
 .e_diplomatic_incident,
-.e_enemy_diplomatic_incident,
 .e_disaster,
 .e_city_plague,
 .e_city_lost,

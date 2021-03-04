@@ -206,6 +206,7 @@ SPIES/DIPLOMATS:
       85% chance to investigate unprotected city
       ~75% chance to succeed vs. protected city (varies slightly up or down with the vet levels of the spy units in combat.)
       causes casus belli on failure!
+11. Conquered cities with Foreigners have a +10% chance of success in sabotage actions.
 CITY-BUSTER
 1. Catapult > Cannon > Artillery > Howitzer is now an evolutionary sub-class of land units for Ballistic/Siege/City Busting as their 
    special unit ability or distinction. Each one gets a special bonus against City Defense improvements that progressively grows until
@@ -431,6 +432,7 @@ What this means for MP2 rules:
        cease-fire for a new time period.
 59. Server settings armisticelength and ceasefirelength are now under the control of the GM.
 60. Two-way state of casus belli is shown in nations list in nations tab now. Mouse hover shows turns left.
+61. chat marks speaker with their flag. sent messages are right aligned, allied chat and global chat are center, incoming are left aligned. 
 
 These help with much more than Freeciv and other Full-screen apps. They help you with everything you do on your computer:
             Switch active Program   Flip to Last Program    Switch Browser tab   See all Programs on Workspace   Swap Workspaces

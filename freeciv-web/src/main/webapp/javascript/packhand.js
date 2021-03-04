@@ -276,9 +276,13 @@ function handle_chat_msg(packet)
   // Dirty way to remove the server forcing blinding white font tags into every 
   // event we get, disallowing us to set the classes ourselves!
   // TODO: find out where the server is doing this and remove it: it will
-  // decrease bandwidth volume also! 
+  // decrease bandwidth volume also!
+  
+  
+  /* Shouldn't be needed anymore:
   if (event != E_CHAT_MSG) message.replace('<font color="#FFFFFF">', '');
   else message.replace("#FFFFFF", DEFAULT_OFF_WHITE_COLOR);
+  */
 
   if (message == null) return;
   if (event == null || event < 0 || event >= E_UNDEFINED) {
@@ -296,7 +300,12 @@ function handle_chat_msg(packet)
       handle_city_governor_event(message);
       break;
     case E_IMP_SOLD:
-      play_sound(soundset["e_imp_sold"]);
+      if (!suppress_event_sound()) play_sound(soundset["e_imp_sold"]);
+    case E_CHAT_MSG_PRIVATE_RCVD:
+      if (!suppress_event_sound()) play_sound("iphone1.ogg");
+      break;
+    //case E_CHAT_MSG_PRIVATE_SENT:
+    //  break;
   }
 
   if (connections[conn_id] == null) {
@@ -325,6 +334,7 @@ function handle_chat_msg(packet)
 
   // Do sounds for special messages
   //console.log("Event type = "+packet['event']);
+  // TODO: these can now go into event interceptor above by looking at event class instead of here.
   if (packet['event']==1 || packet['event']==77) /* 1==E_CITY_LOST, 77==E_UNIT_WIN_ATT, there are in events.h and are the two
   types of event that come back for cities being conquered by someone.*/
   {
@@ -357,6 +367,7 @@ function decode_user_hyperlinks(message)
   // to onself, it is probably a SafeLink. SafeLinks are forced to go to oneself only. 
   // In any case, all links in messages going from oneself to oneself will be interpreted
   // as such. Therefore, if this is the case, repackage the presentation of this message here:
+  /* Old code for fixing historic chat messages and Private Links.
   if (client.conn.playing && client.conn.playing['name']) {
     pname = client.conn.playing.name;
     // Historic message from oneself to oneself
@@ -367,7 +378,7 @@ function decode_user_hyperlinks(message)
       message = message.replace("->{"+pname+"}: ", "<font color='#AFA8A8'>{Private Link}: </font>");
       message = message.replace("#A020F0",DEFAULT_OFF_WHITE_COLOR); //private msg colour triggers sound: remove
     }
-  }
+  }*/
 
   // Freemoji:  (emoji/info icons, etc.)
   var assert_escape = 0;
@@ -421,7 +432,7 @@ function decode_user_hyperlinks(message)
     }
   }  // TO DO: Hover text the territory info, terrain type
 
-  // EXTRACT ENCODED UNIT LINK
+  // EXTRACT ENCODED UNIT LINK... TODO... 4Mar2021 and previous commits over the month broke this to only give coordinates.
   if (message.includes("%%unit")) {
     assert_escape = 0;
     var unit_link, unit_name;
@@ -974,7 +985,6 @@ function handle_non_integer_combat_scores(key)
 
   if (unit_types[key]['name']=="Falconeers") {
     unit_types[key].defense_strength *= 0.5;
-    console.log("Defense strength of Falconeers set to "+unit_types[key].defense_strength);
   }
 }
 
@@ -2291,4 +2301,22 @@ function handle_achievement_info(packet)
 function handle_team_name_info(packet)
 {
   /* TODO: implement */
+}
+
+/************************************************************************//**
+  Returns true if the sound of an event in the chat_log history should not
+  be played because the client is in a cooldown after launch, and not 
+  wanting to hear repeated events from long past turns (e.g., chat messages,
+  sold buildings, etc.)
+****************************************************************************/
+function suppress_event_sound()
+{
+  var cur_time = new Date().getTime();
+
+  // uses global vars located in clinet.js:
+  if (cur_time-game_launch_timer < event_sound_suppress_delay) {
+    console.log(cur_time-game_launch_timer+" < "+event_sound_suppress_delay)
+    return true;
+  }
+  return false;
 }

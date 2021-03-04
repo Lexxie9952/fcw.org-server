@@ -43,8 +43,9 @@
 static void send_chat_msg(struct connection *pconn,
                           const struct connection *sender,
                           const struct ft_color color,
+                          const enum event_type msgclass,
                           const char *format, ...)
-                          fc__attribute((__format__ (__printf__, 4, 5)));
+                          fc__attribute((__format__ (__printf__, 5, 6)));
 
 /**********************************************************************//**
   Returns whether 'dest' is ignoring the 'sender' connection.
@@ -79,19 +80,48 @@ static void form_chat_name(struct connection *pconn, char *buffer, size_t len)
 }
 
 /**********************************************************************//**
+  Formulate the flag emoji string for this connection, returning empty
+  string if not available.
+**************************************************************************/
+static void form_chat_flag(struct connection *pconn, char *buffer, size_t len)
+{
+  struct player *pplayer = pconn->playing;
+
+  if (pconn->supercow) {
+    buffer[0] = '\0';
+    //fc_snprintf(buffer, len, "​"); //zero-width space to avoid compiler error
+  } else if (!pplayer || pconn->observer
+      || strcmp(player_name(pplayer), ANON_PLAYER_NAME) == 0) {
+    buffer[0] = '\0';
+    //fc_snprintf(buffer, len, "​"); //zero-width space to avoid compiler error
+  } else {
+    fc_snprintf(buffer, len, "[`flag/%s`]", nation_of_player(pplayer)->flag_graphic_str);
+  }
+}
+
+/**********************************************************************//**
   Send a chat message packet.
 **************************************************************************/
 static void send_chat_msg(struct connection *pconn,
                           const struct connection *sender,
                           const struct ft_color color,
+                          const enum event_type msgclass,
                           const char *format, ...)
 {
   struct packet_chat_msg packet;
   va_list args;
 
   va_start(args, format);
-  vpackage_chat_msg(&packet, sender, color, format, args);
+/* Freeciv-Web uses NULL color to prevent unwanted color injected into
+   network communication. */
+  vpackage_chat_msg(&packet, sender, ftc_any, E_CHAT_MSG, format, args);
+  //vpackage_chat_msg(&packet, sender, color, E_CHAT_MSG format, args);
   va_end(args);
+
+// Instead, Freeciv-Web uses css class styling:
+#ifdef FREECIV_WEB 
+  packet.event = msgclass;
+#endif /* FREECIV_WEB */
 
   send_packet_chat_msg(pconn, &packet);
 }
@@ -129,11 +159,13 @@ static void chat_msg_to_conn(struct connection *sender,
                              struct connection *dest, char *msg)
 {
   char sender_name[MAX_LEN_CHAT_NAME], dest_name[MAX_LEN_CHAT_NAME];
+  char sender_flag[MAX_LEN_CHAT_NAME], dest_flag[MAX_LEN_CHAT_NAME];
 
   form_chat_name(dest, dest_name, sizeof(dest_name));
+  form_chat_flag(dest, dest_flag, sizeof(dest_flag));
 
   if (conn_is_ignored(sender, dest)) {
-    send_chat_msg(sender, NULL, ftc_warning,
+    send_chat_msg(sender, NULL, ftc_any, E_DIPLOMATIC_INCIDENT,
                   _("You cannot send messages to %s; you are ignored."),
                   dest_name);
     return;
@@ -141,13 +173,17 @@ static void chat_msg_to_conn(struct connection *sender,
 
   msg = skip_leading_spaces(msg);
   form_chat_name(sender, sender_name, sizeof(sender_name));
+  form_chat_flag(sender, sender_flag, sizeof(sender_flag));
 
-  send_chat_msg(sender, sender, ftc_chat_private,
-                "->*%s*: %s", dest_name, msg);
+  /* Repeat the message for the sender. */
+  send_chat_msg(sender, sender, ftc_any, E_CHAT_MSG_PRIVATE_SENT,
+                "%s<span class='cht_arw'>🠄</span>%s<br>%s",
+                 dest_name, sender_flag, msg);
 
   if (sender != dest) {
-    send_chat_msg(dest, sender, ftc_chat_private,
-                  "*%s*: %s", sender_name, msg);
+    send_chat_msg(dest, sender, ftc_any, E_CHAT_MSG_PRIVATE_RCVD,
+                  "<span class='cht_prv_sndr'>%s %s</span>🠆<br>%s",
+                   sender_flag, sender_name, msg);
   }
 }
 
@@ -159,18 +195,21 @@ static void chat_msg_to_player(struct connection *sender,
 {
   struct packet_chat_msg packet;
   char sender_name[MAX_LEN_CHAT_NAME];
+  char sender_flag[MAX_LEN_CHAT_NAME], dest_flag[MAX_LEN_CHAT_NAME];
+
   struct connection *dest = NULL;       /* The 'pdest' user. */
   struct event_cache_players *players = event_cache_player_add(NULL, pdest);
 
   msg = skip_leading_spaces(msg);
   form_chat_name(sender, sender_name, sizeof(sender_name));
+  form_chat_flag(sender, sender_flag, sizeof(sender_flag));
 
   /* Find the user of the player 'pdest'. */
   conn_list_iterate(pdest->connections, pconn) {
     if (!pconn->observer) {
       /* Found it! */
       if (conn_is_ignored(sender, pconn)) {
-        send_chat_msg(sender, NULL, ftc_warning,
+        send_chat_msg(sender, NULL, ftc_any, E_DIPLOMATIC_INCIDENT,
                       _("You cannot send messages to %s; you are ignored."),
                       player_name(pdest));
         return;         /* NB: stop here, don't send to observers. */
@@ -180,19 +219,25 @@ static void chat_msg_to_player(struct connection *sender,
     }
   } conn_list_iterate_end;
 
+  if (dest != NULL) form_chat_flag(dest,   dest_flag,   sizeof(dest_flag));
+  else dest_flag[0] = '\0';
+
   /* Repeat the message for the sender. */
-  send_chat_msg(sender, sender, ftc_chat_private,
-                "->{%s}: %s", player_name(pdest), msg);
+  send_chat_msg(sender, sender, ftc_any, E_CHAT_MSG_PRIVATE_SENT,
+                "%s<span class='cht_arw'>🠄</span>%s<br>%s",
+                 player_name(pdest), sender_flag, msg);
 
   /* Send the message to destination. */
   if (NULL != dest && dest != sender) {
-    send_chat_msg(dest, sender, ftc_chat_private,
-                  "{%s}: %s", sender_name, msg);
-  }
+    send_chat_msg(dest, sender, ftc_any, E_CHAT_MSG_PRIVATE_RCVD,
+                  "<span class='cht_prv_sndr'>%s %s</span><span class='cht_arw'>🠆</span><br>%s",
+                   sender_flag, sender_name, msg);
+  }//color="#caa3b3"
 
   /* Send the message to player observers. */
-  package_chat_msg(&packet, sender, ftc_chat_private,
-                   "{%s -> %s}: %s", sender_name, player_name(pdest), msg);
+  package_chat_msg(&packet, sender, ftc_any, E_CHAT_MSG_PRIVATE_RCVD, 
+                   "%s %s<span class='cht_arw'>🠆</span>%s %s:<br>%s", sender_flag, sender_name,
+                    player_name(pdest), dest_flag, msg);
   conn_list_iterate(pdest->connections, pconn) {
     if (pconn != dest
         && pconn != sender
@@ -225,12 +270,15 @@ static void chat_msg_to_allies(struct connection *sender, char *msg)
   struct packet_chat_msg packet;
   struct event_cache_players *players = NULL;
   char sender_name[MAX_LEN_CHAT_NAME];
+  char sender_flag[MAX_LEN_CHAT_NAME];
 
   msg = skip_leading_spaces(msg);
   form_chat_name(sender, sender_name, sizeof(sender_name));
+  form_chat_flag(sender, sender_flag, sizeof(sender_flag));
 
-  package_chat_msg(&packet, sender, ftc_chat_ally,
-                   _("%s to allies: %s"), sender_name, msg);
+  package_chat_msg(&packet, sender, ftc_any, E_CHAT_MSG_ALLY,
+                   _("<span class='cht_ally_sndr'>%s %s<span class='cht_arw'>🠆</span>allies:</span><br>%s"),
+                    sender_flag, sender_name, msg);
 
   players_iterate(aplayer) {
     if (!pplayers_allied(sender->playing, aplayer)) {
@@ -261,7 +309,7 @@ static void chat_msg_to_global_observers(struct connection *sender,
   msg = skip_leading_spaces(msg);
   form_chat_name(sender, sender_name, sizeof(sender_name));
 
-  package_chat_msg(&packet, sender, ftc_chat_ally,
+  package_chat_msg(&packet, sender, ftc_any, E_CHAT_MSG_PUBLIC,
                    _("%s to global observers: %s"), sender_name, msg);
 
   conn_list_iterate(game.est_connections, dest_conn) {
@@ -282,12 +330,14 @@ static void chat_msg_to_all(struct connection *sender, char *msg)
 {
   struct packet_chat_msg packet;  
   char sender_name[MAX_LEN_CHAT_NAME];
-  
+  char sender_flag[MAX_LEN_CHAT_NAME];
+
   msg = skip_leading_spaces(msg);
   form_chat_name(sender, sender_name, sizeof(sender_name));
+  form_chat_flag(sender, sender_flag, sizeof(sender_flag));
   
-  package_chat_msg(&packet, sender, ftc_chat_public,
-                 "%s: %s", sender_name, msg);
+  package_chat_msg(&packet, sender, ftc_any, E_CHAT_MSG_PUBLIC,
+                 "%s %s:<br>%s", sender_flag, sender_name, msg);
   con_write(C_COMMENT, "%s", packet.message);
   lsend_packet_chat_msg(game.est_connections, &packet);
 

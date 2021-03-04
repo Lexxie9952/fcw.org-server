@@ -171,6 +171,10 @@ extern "C" {
 #define SPECENUM_VALUE132 E_UNIT_ACTION_ACTOR_FAILURE
 #define SPECENUM_VALUE133 E_UNIT_ACTION_TARGET_OTHER
 #define SPECENUM_VALUE134 E_UNIT_ACTION_TARGET_HOSTILE
+#define SPECENUM_VALUE135 E_CHAT_MSG_PUBLIC
+#define SPECENUM_VALUE136 E_CHAT_MSG_PRIVATE_SENT
+#define SPECENUM_VALUE137 E_CHAT_MSG_PRIVATE_RCVD
+#define SPECENUM_VALUE138 E_CHAT_MSG_ALLY
 /*
  * Note: If you add a new event, make sure you make a similar change
  * to the events array in "common/events.c" using GEN_EV, to
