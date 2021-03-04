@@ -663,18 +663,29 @@ input[type='number'] {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
-.nation_row_self {
-  color: lightgreen;
-}
+
 
 .nation_table_body tr td {
   padding-left:20px;
 }
-
-.nation_row_war {
-  color: #ff3333;
+.nation_row_self {
+  color: lightgreen;
 }
-
+.nation_row_war {
+  color: #f35f5f;
+}
+.nation_row_ceasefire {
+  color:#fffabb;
+}
+.nation_row_armistice {
+  color:#d2ffbd;
+}
+.nation_row_peace {
+  color:#eafffa;
+}
+.nation_row_alliance {
+  color:#90adff;
+}
 .nation_row_dead {
   color: #9e9e9e;
 }

@@ -96,7 +96,13 @@ function update_nation_screen()
     var plr_class = "";
     if (!client_is_observer() && client.conn.playing != null && player_id == client.conn.playing['playerno']) plr_class = "nation_row_self";
     if (!pplayer['is_alive']) plr_class = "nation_row_dead";
-    if (!client_is_observer() && diplstates[player_id] != null && diplstates[player_id] == DS_WAR) plr_class = "nation_row_war";
+    else if (!client_is_observer() && diplstates[player_id] != null) {
+      if (diplstates[player_id] == DS_WAR) plr_class = "nation_row_war";
+      else if (diplstates[player_id] == DS_ALLIANCE) plr_class = "nation_row_alliance";
+      else if (diplstates[player_id] == DS_CEASEFIRE) plr_class = "nation_row_ceasefire";
+      else if (diplstates[player_id] == DS_ARMISTICE) plr_class = "nation_row_armistice";
+      else if (diplstates[player_id] == DS_PEACE) plr_class = "nation_row_peace";
+    }
 
     nation_list_html += "<tr data-plrid='" + player_id + "' class='" + plr_class
 	   + "'><td>" + flag_html + "</td>";

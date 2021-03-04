@@ -220,7 +220,9 @@ OTHER:
    d. Capture Units (fixed an unknown server bug that allows this to work now.)
    e. Investigate City if discovered when dong it.
    f. Moving military units inside foreign territory with whom you have Cease-fire, Peace, Armistice:
-      NOTE, if you accept cease-fire while inside someone's territory, moving the units will give casus belli. Be out first. 
+      NOTE, if you accept cease-fire while inside someone's territory, moving the units will give casus belli. Be out first.
+   g. Formerly, casus belli lasted 2 turns: the turn of the incident and one after. mp2c now uses the new server setting 
+      casusbelliturns and defaults to 12.
 2. Improved tuning of terrain dispersion; less domination in some areas by a single terrain type.
 3. Balance Alignment of Resource Distribution (BARD. 1. On the first TC, BARD allocates a SMALL amount of:
    Berries, Spice, Peat, Oasis, Rubber, Gems, Elk, Furs, Ivory, and Iron, in order to enhance statistical
@@ -433,7 +435,8 @@ What this means for MP2 rules:
 59. Server settings armisticelength and ceasefirelength are now under the control of the GM.
 60. Two-way state of casus belli is shown in nations list in nations tab now. Mouse hover shows turns left.
 61. chat marks speaker with their flag. sent messages are right aligned, allied chat and global chat are center, incoming are left aligned. 
-
+62. added game.server.casusbelli turns for better control over casus belli. Formerly it was 2 turns (turn of incident and one after.)
+   Now it is configurable by GM, and multiple violations/aggrievances can push it beyond the default time length (12 for mp2c, 2 for all others.)
 These help with much more than Freeciv and other Full-screen apps. They help you with everything you do on your computer:
             Switch active Program   Flip to Last Program    Switch Browser tab   See all Programs on Workspace   Swap Workspaces
 Linux*      Alt-Tab                 Alt-ESC                 CTRL-Shift-Tab       🐧, ALT-F1                      CTRL-ALT-arrow
