@@ -5623,29 +5623,6 @@ reqs	=
       "Extra", "Pollution", "Local", FALSE
     }
 
-; This would bring back bridges in cities without Bridge Building,
-; but not get the trade bonus until BB discovered. Not needed now
-; since Quay was added.
-; collect trade from them until Bridge Building.
-;[effect_bridge_without_bridge_building]
-;type    = "Output_Add_Tile"
-;value	= -1
-;reqs	=
-;    { "type",      "name",            "range", "present"
-;      "Tech",      "Bridge Building", "Player", FALSE
-;      "CityTile",  "Center",          "Local",  TRUE
-;      "Extra",     "River",           "Local",  TRUE
-;      "OutputType","Trade",           "Local",  TRUE
-;
-;      ;Don't subtract a non-existent bonus.
-;      "Terrain",  "Arctic",     "Local", FALSE
-;      "Terrain",  "Forest",     "Local", FALSE
-;      "Terrain",  "Hills",      "Local", FALSE
-;      "Terrain",  "Jungle",     "Local", FALSE
-;      "Terrain",  "Mountains",  "Local", FALSE
-;      "Terrain",  "Swamp",      "Local", FALSE
-;    }
-
 [effect_pollution_fallout]
 type	= "Output_Tile_Punish_Pct"
 value	= 75
@@ -5695,6 +5672,42 @@ value	= -13                      ;80 minus 13%*80 = 70%
 reqs	=
     { "type", "name", "range", "present"
       "Action", "Poison City Escape", "Local", TRUE
+    }
+[effect_increased_sabotage_foreigners_in_non_original1]
+type	= "Action_Odds_Pct"
+value	= 13      ;// 13%*80% = +10.4%
+reqs	=
+    { "type",           "name",            "range","present"
+       "CityStatus",    "OwnedByOriginal", "City", FALSE
+       "MinForeignPct", "1",               "City", FALSE
+       "Action",        "Sabotage City",   "Local",TRUE
+    }
+[effect_increased_sabotage_foreigners_in_non_original2]
+type	= "Action_Odds_Pct"
+value	= 13      ;// 13%*80% = +10.4%
+reqs	=
+    { "type",           "name",            "range","present"
+       "CityStatus",    "OwnedByOriginal", "City", FALSE
+       "MinForeignPct", "1",               "City", FALSE
+       "Action", "Sabotage City Escape",   "Local", TRUE
+    }
+[effect_increased_sabotage_foreigners_in_non_original3]
+type	= "Action_Odds_Pct"
+value	= 13      ;// 13%*80% = +10.4%
+reqs	=
+    { "type",           "name",            "range","present"
+       "CityStatus",    "OwnedByOriginal", "City", FALSE
+       "MinForeignPct", "1",               "City", FALSE
+       "Action", "Targeted Sabotage City", "Local", TRUE
+    }
+[effect_increased_sabotage_foreigners_in_non_original4]
+type	= "Action_Odds_Pct"
+value	= 13      ;// 13%*80% = +10.4%
+reqs	=
+    { "type",           "name",            "range","present"
+       "CityStatus",    "OwnedByOriginal", "City", FALSE
+       "MinForeignPct", "1",               "City", FALSE
+       "Action", "Targeted Sabotage City Escape", "Local", TRUE
     }
 ;*********************************************************
 ; Bribe and Incite Costs *********************************

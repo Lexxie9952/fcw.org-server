@@ -2726,6 +2726,7 @@ set =
       "autoattack_style", 1, FALSE
       "barbarians", "DISABLED", FALSE
       "borders", "SEE_INSIDE", FALSE
+      "casusbelliturns", 12, FALSE       ; how many turns casus belli lasts after an incident, if not reset. will go +1 higher for further incidents. will be reset by any new non-aggression pact.
       "ceasefirelength", 15, FALSE
       "contactturns", 10, FALSE
       "conquercost", 0, FALSE
