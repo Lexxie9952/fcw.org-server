@@ -301,6 +301,7 @@ function handle_chat_msg(packet)
       break;
     case E_IMP_SOLD:
       if (!suppress_event_sound()) play_sound(soundset["e_imp_sold"]);
+      break;
     case E_CHAT_MSG_PRIVATE_RCVD:
       if (!suppress_event_sound()) play_sound("iphone1.ogg");
       break;
@@ -2315,7 +2316,6 @@ function suppress_event_sound()
 
   // uses global vars located in clinet.js:
   if (cur_time-game_launch_timer < event_sound_suppress_delay) {
-    console.log(cur_time-game_launch_timer+" < "+event_sound_suppress_delay)
     return true;
   }
   return false;
