@@ -443,19 +443,34 @@ function show_city_dialog(pcity)
 
   /* prepare city dialog for small screens. */
   if (!is_small_screen()) {
-    $("#city_tabs-u").hide();       // "Inside" tab for units, not needed on large screen.
+    $("#city_tabs-i").hide();       // "Inside" tab for units, not needed on large screen.
     $(".extra_tabs_small").remove();  // class identified for "Inside" tab for units, not needed on large screen.
     $("#mobile_cma_checkbox").remove();
     $("#ctg").html("<b>G</b>overnor"+(pcity.cma_enabled?" &#x1F539;":"")); // blue diamond to show governor active.
   } else {
+    // CMA tab elements: (tight fit)
+    $("#cma_surplus_hdr").css("font-size", "110%");
+    //$("#cma_surplus_hdr").html("Surplus");
+    $("#cma_priorities_hdr").css("font-size", "110%");
+    //$("#cma_priorities_hdr").html("Priorities");
+    $("#cma_status").css("font-size", "120%");
+    $(".mobile_remove").hide(); // don't use remove(), or it gets an undefined for allow disorder
+    $(".mobile_shrink").css({"padding": "2px", "margin":"1px"});
+    $(".mobile_shrink").css("font-size", "100%")
+    $("#btn_apply_cma").html("Set");
+    $("#btn_cma_refreshall").html("Refresh All");
+    $("#btn_cma_setall").html("Set All");
+    $("#btn_cma_saveall").html("Save All");
+    // Units inside city:
     var units_element = $("#city_improvements_panel").detach();  // Remove this from main tab and put it in "Inside" tab
     $('#city_units_tab').append(units_element);  // "Inside" tab:units inside
     $("#city_tabs").css( {"margin":"-21px", "margin-top":"-11px"} ); // Compact tabs for mobile fit
-    // Abbreviate tab title buttons to fit.
+    // Abbreviate all tab title buttons to fit:
     $("#ct0").html("Main");     $("#ct1").html("Prod");
     $("#ct2").html("Routes");   $("#ct3").html("Option");
     $("#ct4").html("Happy");    $("#cti").html("Inside");
     $("#ctg").html("Gov"+(pcity.cma_enabled?"&#x1F539;":""));
+    $("#cma_allow_disorder").remove();
    }
 
   $("#city_tabs").tabs({ active: city_tab_index});
@@ -852,7 +867,7 @@ function show_city_dialog(pcity)
     $("#city_supported_units_title").css( {"width":"4096px"} );
     $("#city_supported_units_list").css( {"width":"4096px"} );
     // Position adjustment hack
-    $("#city_tabs-u").css( {"margin-top":"-20px", "padding":"0px"} );
+    $("#city_tabs-i").css( {"margin-top":"-20px", "padding":"0px"} );
     $("#city_dialog_info").css( {"width":"110%", "padding":"0px"} );
     // Adjust vertical to remove 9 pixels of "slack"
     $("#city_overview_tab").css("height", ($("#city_overview_tab").height()-9) );
@@ -864,6 +879,12 @@ function show_city_dialog(pcity)
       $('#city_tabs').css( {"position":"static"} );
     }
   }
+}
+/**************************************************************************
+ Each city tab from city.hbs is set to call this when it's clicked.
+**************************************************************************/
+function city_change_tab(tab_num) {
+  city_tab_index = tab_num;
 }
 
 /**************************************************************************
