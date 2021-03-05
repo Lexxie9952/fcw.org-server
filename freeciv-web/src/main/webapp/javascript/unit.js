@@ -663,8 +663,14 @@ function get_unit_anim_offset(punit)
       if (punit['anim_list'].length == 1) {
         punit['anim_list'].splice(0, punit['anim_list'].length);
       }
+      // This will center the map on the unit EXACTLY when it finished its animation, but
+      // at TC it would jerk the map all over with focuslock on every unit that finished moving,
+      // unless we do some logic to make sure we only do it for our selected unit:
       if (focuslock && punit['anim_list'].length == 0) {
-        center_tile_mapcanvas(unit_tile(punit));
+        if (unit_is_only_unit_in_focus(punit) ) {  // avoid centering map as non-selected moving units move around.
+          center_tile_mapcanvas(unit_tile(punit));
+        }
+        else {}  //TODO if wanted: multiple units ordered to move at once, center on current_focus[0] only. TEST IT, was centering on alien movements too.
       }
     }
 
