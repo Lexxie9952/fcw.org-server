@@ -132,14 +132,14 @@ function setup_window_size ()
     $(".ui-tabs-anchor").css("padding", "7px");
     $("#freeciv_logo").hide();
     // Remove text from tabs: icons only:
-    $("#map_tab").children().html("<i class='fa fa-globe' aria-hidden='true'></i>");
-    $("#opt_tab").children().html("<i class='fa fa-cogs' aria-hidden='true'></i>");
-    $("#players_tab").children().html("<i class='fa fa-flag' aria-hidden='true'></i>");
-    $("#cities_tab").children().html("<i class='fa fa-fort-awesome' aria-hidden='true'></i>");
-    $("#tech_tab").children().html("<i class='fa fa-flask' aria-hidden='true'></i>");
-    $("#civ_tab").children().html("<i class='fa fa-university' aria-hidden='true'></i>");
-    $("#empire_tab").children().html("<i class='fa fa-binoculars' aria-hidden='true'></i>");
-    $("#hel_tab").children().html("<i class='fa fa-book' aria-hidden='true'></i>");
+    $("#map_tab").children().html("&#x1F30E;");
+    $("#empire_tab").children().html("&#9878;&#65039;");
+    $("#civ_tab").children().html("&#x1F3DB;&#xFE0F;");
+    $("#tech_tab").children().html("&#129514;");
+    $("#players_tab").children().html("&#x1F3F3;&#xFE0F;&#x200D;&#x1F308;");
+    $("#cities_tab").children().html("&#127984;");
+    $("#opt_tab").children().html("&#9881;&#65039;");
+    $("#hel_tab").children().html("&#128216;");
     $("#warcalc_tab").children().html("&#x1F3B2;")
     $("#button_national_units").html("&#9823;");
     $("#button_unit_homecity").html("&#x1F3E0;");
@@ -169,14 +169,14 @@ function setup_window_size ()
     $(".ui-dialog-titlebar").css({"font-size":"70%", "margin-left":"-3px"});
     $("#game_status_panel_bottom").css("font-size", "0.8em");
   } else {  // handle case where small window is resized to large again 
-    $("#map_tab").children().html("<i class='fa fa-globe' aria-hidden='true'></i> Map");
-    $("#opt_tab").children().html("<i class='fa fa-cogs' aria-hidden='true'></i> Prefs");
-    $("#players_tab").children().html("<i class='fa fa-flag' aria-hidden='true'></i> Nations");
-    $("#cities_tab").children().html("<i class='fa fa-fort-awesome' aria-hidden='true'></i> Cities");
-    $("#tech_tab").children().html("<i class='fa fa-flask' aria-hidden='true'></i> Tech");
-    $("#civ_tab").children().html("<i class='fa fa-university' aria-hidden='true'></i> Gov.");
-    $("#empire_tab").children().html("<i class='fa fa-binoculars' aria-hidden='true'></i> Empire");
-    $("#hel_tab").children().html("<i class='fa fa-book' aria-hidden='true'></i> Help");
+    $("#map_tab").children().html("&#x1F30E; Map");
+    $("#empire_tab").children().html("&#9878;&#65039; Empire");
+    $("#civ_tab").children().html("&#x1F3DB;&#xFE0F; Gov.");
+    $("#tech_tab").children().html("&#129514; Tech");
+    $("#players_tab").children().html("&#x1F3F3;&#xFE0F;&#x200D;&#x1F308; Nations");
+    $("#cities_tab").children().html("&#127984; Cities");
+    $("#opt_tab").children().html("&#9881;&#65039; Prefs");
+    $("#hel_tab").children().html("&#128216; Help");
   }
 
   if (overview_active) init_overview();
