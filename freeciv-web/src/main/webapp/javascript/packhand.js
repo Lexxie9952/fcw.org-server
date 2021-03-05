@@ -214,17 +214,18 @@ function handle_iPillage_event(message, tile_id)  // iPillage.
   var ptile = tiles[tile_id];
   var ptype;
   var delay = 0;
-  var cur_time = new Date().getTime();
+
+  message=message.substring(8); // removes "💥 Your ", leaving, "Ground Strike Fighter destroyed the Roman Quay with a Ground Strike"
 
   for (ptype_id in unit_types) {
     // Find out the unit_type who did this hostile deed !
     ptype = unit_types[ptype_id];
-    if (message.includes(ptype['name'])) {
-
+    if (message.startsWith(ptype['name'])) {
       // The alt sound is preferred for alternate attack types:
-      var sskey = ptype['sound_fight_alt'];  
+      var sskey = ptype['sound_fight_alt'];
       if (!sskey) sskey = ptype['sound_fight']; //fallback
       if (!soundset[sskey]) sskey = ptype['sound_fight']; //fallback
+      //console.log("calling playsound with sskey:"+sskey);
       play_hostile_event_sound(sskey, ptile, ptype);
 
       break;

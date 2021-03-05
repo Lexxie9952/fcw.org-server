@@ -5262,6 +5262,7 @@ bool unit_activity_handling_targeted(struct unit *punit,
               if (fc_rand(100) < odds) {
                 notify_player(unit_owner(punit), unit_tile(punit),
                           E_UNIT_ACTION_TARGET_HOSTILE, ftc_server,
+                          /* changing this string below requires changing substring extraction in packhand:handle_iPillage_event() */
                           _("💥 Your %s destroyed the %s %s with a %s."),
                           unit_link(punit),
                           (tile_owner(unit_tile(punit)) ? nation_adjective_for_player(tile_owner(unit_tile(punit))) : " " ), 
