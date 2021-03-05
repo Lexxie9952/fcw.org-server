@@ -2574,7 +2574,7 @@ graphic_alt   = "-"
 sound_move    = "m_dive_bomber"
 sound_move_alt = "m_escort_fighter"
 sound_fight   = "f_dive_bomber"
-sound_fight_alt = "Ground Strike"
+sound_fight_alt = "Dive Bombing"
 build_cost    = 60
 pop_cost      = 0
 attack        = 3
@@ -2597,7 +2597,7 @@ bonuses       =
      ; A4.5 vs all Surface Units 
      "CantReachAir",   "DefenseDividerPct",          50 
      "NonMil",         "DefenseDividerPct",          50 ; NonMil do not have CantReachAir flag
-     "AntiAir",        "DefenseDividerPct",          50 ; AntiAir do not hav CantReachAir flag
+     "AntiAir",        "DefenseDividerPct",          50 ; AntiAir do not have CantReachAir flag
 
      ; Cancel CantReachAir bonus on Bombers
      "FieldUnit",      "DefenseDividerPct",         -50 
