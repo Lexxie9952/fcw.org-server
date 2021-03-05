@@ -78,10 +78,7 @@ function update_animated_objects()
       update_unit_position(tile_end);
       anim_units_count--;
     }
-
   }
-
-
 }
 
 

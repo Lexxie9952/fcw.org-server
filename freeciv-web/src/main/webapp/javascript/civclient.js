@@ -245,6 +245,24 @@ function civclient_init()
     restore_chatbox_vals = tmp;
   }
 
+  draw_highlighted_pollution = simpleStorage.get('showpollution');
+  if (draw_highlighted_pollution == null)
+    draw_highlighted_pollution = false;
+
+  focuslock = simpleStorage.get('focuslock');
+  if (focuslock == null) {
+    if (is_small_screen() || is_touch_device())
+      focuslock = true;
+    else focuslock = false;
+  }
+
+  show_unit_movepct = simpleStorage.get('showMoves');
+  if (show_unit_movepct == null)
+    show_unit_movepct = false;
+  if (show_unit_movepct) {
+    hp_bar_offset = -5;
+  } else hp_bar_offset = 0;
+  
   // -------------------------------------------------------------------------------- 
   
   /* Initialze audio.js music player */
