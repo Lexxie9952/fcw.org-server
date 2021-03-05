@@ -291,7 +291,7 @@ sabotage	= 50
 sound		= "b_city_walls"
 sound_alt	= "b_generic"
 helptext	= _("\
-City Walls give a 3x bonus to every type of unit in a City, against attacks\
+City Walls give a 3× bonus to every type of unit in a City, against attacks\
  from Land units. However, this bonus is reduced when attacked by Catapults\
  and all upgrades thereof. City Walls are ineffective against attacks from\
  units which are not in the Land unit class: they are useless against Air,\
@@ -360,7 +360,7 @@ Courthouses reduce corruption by about half (60% rounded down),\
  Courthouses make 1 unhappy citizen content, unless the\
  citizen is unhappy about military activity).\
 "), _("\
- Cost to incite revolt in the city is 2x if empty and 4x if occupied.\
+ Cost to incite revolt in the city is 2× if empty and 4× if occupied.\
 "), _("\
  Diplomats can’t establish embassies unless you permit it through\
  Cease-fire or Peace. (Spies require a Police Station to block them.)\
@@ -435,18 +435,23 @@ sabotage	= 50
 sound		= "b_fortifications"
 sound_alt	= "b_generic"
 helptext	= _("\
-Fortifications give a 1.75x bonus to every unit in a City against attacks from Land\
- units. This bonus is reduced if attacked by Catapult or the units to which it upgrades.\
+Fortifications give 1.75× defense to every unit in a City vs. attacks by Land.\
+ This bonus is reduced if attacked by Catapult or the units to which it upgrades.\
  Fortifications prevent population loss when a defending unit is killed. \n\
 "), _("\
- Fortifications are a combination of trenches, palisades, earthen bulwarks and short walls,\
- so cannot be targeted by Siege Rams. If an enemy attempts sabotage, odds of success are halved. \n\
+Fortifications integrate with some kinds of terrain, raising the defense bonus\
+ of Swamp, Forest, and Jungle by +17%. This natural terrain bonus\
+ persists independently from ANY and ALL other considerations. (Forest and\
+ Swamp become 1.5× and Jungle becomes 1.67×.) \n\
 "), _("\
- ➤ Since City Walls expand beyond the perimeter of Fortifications, this improvement\
- offers no bonus when City Walls are in place―but provides a fallback if City Walls come down. \n\
- ➤ Material from old Fortifications is useful for building City Walls. You can later sell\
- Fortifications with full return of the gold cost, and put it toward City Walls with no loss\
- of investment.\
+Terrain changes make Fortifications unassailable by Siege Rams.\
+ If an enemy attempts sabotage, odds of success are halved. \n\
+"), _("\
+➤ This improvement offers no bonus when City Walls are in place, except for\
+ any bonus to the terrain. \n\
+➤ Material from Fortifications is directly useful in building City Walls. AFTER\
+ making City Walls, you can sell Fortifications with a full return of gold cost,\
+ making the later upgrade have no loss in investment.\
 ")
 
 [building_fusion_reactor]
@@ -1613,8 +1618,8 @@ When facing attacks by sea, Gibraltar Fortress brings defensive capabilities\
 1. Reduces cost Coastal Defense by 15, to 50 shields. \n\
 2. Reduces upkeep on Coastal Defense by 1 gold. \n\
 3. The city with Gibraltar Fortress gains a +100% defense bonus, for a total\
- of 3x defense against sea attacks. \n\ 
-4. All other cities with Coastal Defence gain +25% defense, for a total of 2.25x\
+ of 3× defense against sea attacks. \n\ 
+4. All other cities with Coastal Defence gain +25% defense, for a total of 2.25×\
  defense against sea attacks. \n\n\
 "), _("\
 Gibraltar Fortress must be built in a city with Coastal Defense, and is never obsolete.\

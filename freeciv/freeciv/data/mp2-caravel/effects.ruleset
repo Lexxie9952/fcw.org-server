@@ -2332,6 +2332,25 @@ reqs	=
     { "type", "name", "range"
       "Building", "Fortifications", "City"
     }
+[effect_fortifications_in_forest_swamp_jungle]
+type    = "Defend_Bonus"
+value = 17
+reqs  =
+    { "type", "name", "range", "present"
+      "Building", "Fortifications", "City", TRUE
+      "Terrain", "Mountains", "Local", FALSE 
+      "Terrain", "Hills",     "Local", FALSE 
+      "Terrain", "Grassland", "Local", FALSE 
+      "Terrain", "Plains",    "Local", FALSE
+      "Terrain", "Desert",    "Local", FALSE
+      "Terrain", "Tundra",    "Local", FALSE
+      "Terrain", "Arctic",    "Local", FALSE
+
+      ;How to get all Land type units by excluding all other types:
+      ;"UnitFlag", "AirAttacker", "Local", FALSE     ; all aircraft classes
+      ;"UnitFlag", "Missile", "Local", FALSE         ; all missiles
+      ;"UnitFlag", "BadCityDefender", "Local", FALSE ; all sea unit classes
+    }
 [effect_fortifications_vs_Land]
 type    = "Defend_Bonus"
 value	= 75  ; 1.75x vs most Land

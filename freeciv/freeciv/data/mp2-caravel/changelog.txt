@@ -58,7 +58,8 @@ BUILDINGS AND WONDERS:
    stack. And also same is Masonry for first, Construction for second. City Walls which cost 80 in Civ2, cost 65 now in early game, and
    75 after discovery of Steel. Fortifications for cities that get Walls later are not wasted investment. Selling Fortifications in a city
    with City Walls will recoup the full gold price of the Fortifications. Be sure to have the City Walls up first. In addition, if City Walls
-   are sabotaged, you can keep the Fortifications for weaker backup.
+   are sabotaged, you can keep the Fortifications for weaker backup. With some kinds of terrain, Fortifications modify, integrate, and work
+   with the terrain itself, raising the terrain defense bonus of Swamp, Forest, and Jungle to 1.5x, 1.5x, and 1.67x respectively (+17%) 
 6. Magna Carta, new wonder, creates a new government Constitutional Monarchy which is half between Monarchy and Republic. 
    for the price of Oracle, Eiffel Tower, and Statue of Zeus, you basically get those same effects and a Republic-ish government: 
       1 extra content, 1 free unit upkeep, 1 more content about military than Republic, extra trade on land tiles, ability to rapture.
@@ -437,6 +438,11 @@ What this means for MP2 rules:
 61. chat marks speaker with their flag. sent messages are right aligned, allied chat and global chat are center, incoming are left aligned. 
 62. added game.server.casusbelli turns for better control over casus belli. Formerly it was 2 turns (turn of incident and one after.)
    Now it is configurable by GM, and multiple violations/aggrievances can push it beyond the default time length (12 for mp2c, 2 for all others.)
+63. New Prefs option: Focus Lock, keeps the current selected unit centered on map (ALT-SHIFT-F). It's more of a preference on a PC, but might 
+    make a big improvement for mobile. On mobile it defaults to on.
+64. Prefs options for "Show pollution on map" and "Movement Point Display" can now be permanently set instead of temporarily.
+
+
 These help with much more than Freeciv and other Full-screen apps. They help you with everything you do on your computer:
             Switch active Program   Flip to Last Program    Switch Browser tab   See all Programs on Workspace   Swap Workspaces
 Linux*      Alt-Tab                 Alt-ESC                 CTRL-Shift-Tab       🐧, ALT-F1                      CTRL-ALT-arrow

@@ -1,4 +1,4 @@
-;: ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：’
+;: ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：’ ×
 ; Modifying this file:
 ; You should not modify this file except to make bugfixes or
 ; for other "maintenance".  If you want to make custom changes,
@@ -14,7 +14,7 @@
 ; unit with the relevant role that the player can build will be chosen.
 ; If no such unit can be found (eg Explorers that require Seafaring),
 ; then the first unit with this role will be chosen.
-;: ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：’
+;: ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：’ ×
 
 [datafile]
 description="Unit definitions for the MP2 ruleset."
@@ -748,8 +748,8 @@ Tribesmen are versatile.\
  and engage in primitive combat. They can’t conquer cities, and often\
  do not fight to the death (10 combat rounds).\n\
 Tribesmen move over terrain with no penalty, and do not respect nor exert ZOC.\
- They can work tiles at a rate slower than Workers. They have a 3x bonus at\
- hunting animals, and 2x defending against them.\n\
+ They can work tiles at a rate slower than Workers. They have a 3× bonus at\
+ hunting animals, and 2× defending against them.\n\
 After 2500BC (T15) your last Tribesmen get old and your nation settles into\
  city life. Tribesmen move ⅓ slower, see less, lose the recycle bonus, and can\
  no longer work tiles. After 2000BC they lose another ⅓ move.\
@@ -2056,7 +2056,7 @@ helptext      = _("\
 Catapults are large rock-throwing war machines.\
  The ballistic delivery of massive\
  stones diminishes the bonus of Fortifications and\
- City Walls by -25%, yielding a 1.5x and 2.75x bonus, respectively.\
+ City Walls by -25%, yielding a 1.5× and 2.75× bonus, respectively.\
  Catapults are weak defenders, and will need an escort to be effective.\
 ")
 
