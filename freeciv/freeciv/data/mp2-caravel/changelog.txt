@@ -451,6 +451,9 @@ What this means for MP2 rules:
     d. Doing a Cease-Fire or after casus belli is reset, sets a new one with a new length of time, as set by GM in game.server.ceasefirelength.  
     e. (b,c,d) give players the ability to choose separate combinations of excusing casus belli and re-affirming 
        cease-fire for a new time period.
+    f. De-jankification of all kinds of rare edge cases is tedious to explain but there are 2 charts for full disclosure at
+         diplhand.c line 545 and line 603. In general it's made to be softer more fluid and do what's logical in edge cases, rather than fall
+         and get stuck in one of the "stupid logic holes of freeciv diplomacy".
 59. Server settings armisticelength and ceasefirelength are now under the control of the GM.
 60. Two-way state of casus belli is shown in nations list in nations tab now. Mouse hover shows turns left.
 61. chat marks speaker with their flag. sent messages are right aligned, allied chat and global chat are center, incoming are left aligned. 
