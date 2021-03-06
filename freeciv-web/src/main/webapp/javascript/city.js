@@ -42,24 +42,6 @@ var worklist_dialog_active = false;
 var production_selection = [];
 var worklist_selection = [];
 
-// Discounted price lists from MP2 rules
-var communist_discounts = {
-"Riflemen": 5,
-"Dive Bomber": 10,
-"Armor": 10
-};
-var colossus_discounts = {
-  "Boat": 3,
-  "Trireme": 5,
-  "Galley": 5,
-  "Caravan": 5,
-  "Caravel": 5,
-  "Cargo Ship": 5
-};
-var appian_discounts = {
-  "Wagon": 5
-}
-
 // User definable row in city list:   *****************************
 var city_user_row_val = 0;  
 const CURV_NOTHING        = 0;
@@ -1016,62 +998,6 @@ function get_gold_cost_per_shield(pcity)
   remaining = total_shields - accumulated;
   gcps = buy_cost / remaining;
   return gcps.toFixed(2);
-}
-
-/**************************************************************************
-...Figures out discounts for units
-**************************************************************************/
-function get_universal_discount_price(ptype, pcity)
-{
-  var playerno;
-  if (!pcity) pcity = active_city;
-  if (!active_city) {
-    playerno = client.conn.playing.playerno;
-  } else playerno = pcity.owner;
-
-  // Since 'name' and 'build_cost' are the only fields checked and
-  // are universal to both improvements and units, we can adapt this
-  // for everything when needed: 
-  
-  // Apply MP2 communist discounts
-  if (client_rules_flag[CRF_MP2_SPECIAL_UNITS] && 
-      governments[players[playerno].government].name == "Communism") {
-    
-    if (communist_discounts[ptype['name']]) {
-      if (!client_rules_flag[CRF_MP2_C]) {
-        if (ptype['name'] == "Armor") return ptype['build_cost']
-      } 
-      return ptype['build_cost'] - communist_discounts[ptype['name']];
-    }
-  }
-  if (client_rules_flag[CRF_MP2_C]) {
-    // City Walls increase with Metallurgy
-    if (ptype['name'] == "City Walls"
-          && tech_known('Steel')) {
-            return ptype['build_cost'] + 10;
-    }
-    if (ptype['name'] == "Coastal Defense"
-        && player_has_wonder(playerno,
-           improvement_id_by_name(B_GIBRALTAR_FORTRESS))) {
-            return ptype['build_cost'] - 15;
-    }
-  }
-  
-  // Apply discounts for having Colossus
-  if (pcity && client_rules_flag[CRF_COLOSSUS_DISCOUNT] &&
-      city_has_building(pcity, improvement_id_by_name(B_COLOSSUS))) {
-
-    if (colossus_discounts[ptype['name']])
-        return ptype['build_cost'] - colossus_discounts[ptype['name']];      
-  }
-  // Apply discount for Appian Way
-  if (pcity && client_rules_flag[CRF_MP2_C] &&
-    city_has_building(pcity, improvement_id_by_name(B_APPIAN_WAY))) {
-      if (appian_discounts[ptype['name']])
-      return ptype['build_cost'] - appian_discounts[ptype['name']];      
-  }
-  // default, no discount:
-  return ptype['build_cost'];
 }
 
 /**************************************************************************
