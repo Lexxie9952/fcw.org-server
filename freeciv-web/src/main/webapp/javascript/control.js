@@ -1516,7 +1516,7 @@ function update_unit_order_commands()
       }
 
       if (terrain_name == "Forest") {
-        /* if (show_order_buttons==2) */ $("#order_forest_remove").show(); // not frequently used button
+        $("#order_forest_remove").show();
         $("#order_irrigate").hide();
         $("#order_build_farmland").hide();
 	      unit_actions["forest"] = {name: "Chop Forest (I)"};
@@ -5227,7 +5227,11 @@ function key_unit_well()
 **************************************************************************/
 function can_build_canal(punit, ptile)
 {
-  if (tile_terrain(ptile) == null) return false;
+  // TODO: Deprecate all pre-MP2C logic to simplify to the superior solution
+
+  if (typeof EXTRA_CANAL === "undefined") return 0;
+  if (tile_terrain(ptile) == null) return 0;
+  if (punit == null || ptile == null) return 0; 
 
   var is_lowland = (tile_terrain(ptile)['name'] != 'Hills'
                    && tile_terrain(ptile)['name'] != 'Mountains');
@@ -5237,30 +5241,34 @@ function can_build_canal(punit, ptile)
 
   // Check for water near:
   for (var dir = 0; dir < 8; dir++) {
+    // MP2C only allows CAdjacent on ALL checks below:
+    if (client_rules_flag[CRF_MP2_C] && !is_cardinal_dir(dir)) continue;
     /* Check if there is adjacent ocean/deep ocean/lake */
     var tile1 = mapstep(ptile, dir);
     if (tile1 != null && terrains[tile1['terrain']] != null) {
         if (terrains[tile1['terrain']]['name'] == "Lake"
         || terrains[tile1['terrain']]['name'] == "Ocean"
         || terrains[tile1['terrain']]['name'] == "Deep Ocean") {
-          water_near = EXTRA_CANAL;
+
+          water_near = EXTRA_CANAL;  // this is a double code for TRUE and what kind of canal can be made
           break;
         }
-        // CRF_EXTRA_QUAY says if ruleset has waterways, which can be made with river near:
-        else if ( client_rules_flag[CRF_EXTRA_QUAY] && tile_has_extra(tile1, EXTRA_RIVER) ) {
-          water_near = EXTRA_WATERWAY;
+        // MP2ag onward can build EXTRA_WATERWAY:
+        else if ( (client_rules_flag[CRF_EXTRA_QUAY]/* MP2ag+ */ && tile_has_extra(tile1, EXTRA_RIVER))  // a river is adjecent
+                          ||                              // OR...
+                   (client_rules_flag[CRF_MP2_C] && tile_has_extra(tile1, EXTRA_CANAL)) // a canal is CAdj.
+                ) {
+          water_near = EXTRA_WATERWAY; // this is a double code for TRUE and what kind of canal can be made
           break;
         }
     }
   }
 
-  if ((typeof EXTRA_CANAL !== "undefined")
-      && (punit != null && ptile != null)
-      && !tile_has_extra(ptile, EXTRA_CANAL)
-      && unit_can_do_action(punit, ACTION_ROAD)
-      && is_lowland
-      && water_near
-      && tech_known('Engineering')) {
+  if (  !tile_has_extra(ptile, EXTRA_CANAL)
+        && unit_can_do_action(punit, ACTION_ROAD)
+        && is_lowland
+        && water_near
+        && tech_known('Engineering')) {
 
         return water_near; // serves as a code for whether to make Canal or Waterway extra.
   }
@@ -5323,8 +5331,9 @@ function can_irrigate(punit, ptile)
 
   // Check central tile for water source:
   var water_near = tile_has_extra(ptile, EXTRA_RIVER) // irrigation is also a water source but, it's already irrigated! ;)
-      || (tile_has_extra(ptile, EXTRA_OASIS) && (client_rules_flag[CRF_OASIS_IRRIGATE]));
-
+      || (tile_has_extra(ptile, EXTRA_OASIS) && (client_rules_flag[CRF_OASIS_IRRIGATE]))
+      || ((client_rules_flag[CRF_MP2_C]) && tile_has_extra(ptile, EXTRA_CANAL))
+      || ((client_rules_flag[CRF_MP2_C]) && tile_has_extra(ptile, EXTRA_WATERWAY));
   // If no water on occupied tile, check cardinally adjacent:
   if (!water_near) {
     for (var dir = 1; dir < 7; dir++) {
@@ -5339,6 +5348,8 @@ function can_irrigate(punit, ptile)
          || terrain_name == "Deep Ocean"
          || tile_has_extra(cadj_tile, EXTRA_IRRIGATION)
          || tile_has_extra(cadj_tile, EXTRA_RIVER)
+         || (tile_has_extra(cadj_tile, EXTRA_CANAL) && (client_rules_flag[CRF_MP2_C]))
+         || (tile_has_extra(cadj_tile, EXTRA_WATERWAY) && (client_rules_flag[CRF_MP2_C]))   
          || (tile_has_extra(cadj_tile, EXTRA_OASIS) && (client_rules_flag[CRF_OASIS_IRRIGATE])) ) {
             water_near = true;
             break; // one adjacent water is all that's needed
