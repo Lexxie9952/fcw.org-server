@@ -248,12 +248,47 @@ OTHER:
    a small balance to pay for your higher bonus. Encourages more world-interconnectivity and intrigue. Marco Polo continues to take care of 
    micro-managing your other 3 routes you would have had under standard rules.
 
-MINOR AND MISC.
+MISC.
 ---------------
-Conscription bonus simplified - applies to infantry only.
 Traderoutes add a hard +1 trade to the city centre
 Commerce units simplified. All commerce can build wonders and do trade routes at all times under all conditions.
    Trade tech isn't needed for Trade routes. Trade tech simply increases Trade revenue higher rates.
+Ships cost 2x to bribe -- injured ships far from home had too low bribe costs for what you're getting, additionally, input showed a
+   split on whether ships should even be bribable at all.
+Damaged Submarine min_speed=4 (was 3); makes hit-and-run and escape somewhat more viable.
+Nuclear winter was patches of random arctic everywhere, now it a temperature downgrade of each affected tile to one level colder.
+Starting Caravans have all restrictions and complications removed. Can Help Wonder or Establish Trade Route (remember to set Home City first!)
+Camels move faster than people, Caravans get 2 7/9 moves. They can also carry 2 Goods units. 
+Capturable commerce units can't become uncapturable just by carrying Goods or being on same tile with other capturable commerce units.
+   This prevents mere cargo from making commerce units immune to capture.  Cargo becomes lost in a capture event: e.g., Caravan carrying
+   goods gets captured. Goods are lost, Caravan transfers ownership.
+Tribesmen become primitive generalists who can do a mediocre job at many things, rather than specialized to one thing like other units.
+   This makes them perfect start units for a primitive tribe to slowly get itself going: 
+      They can work tiles like Workers, but only contribute a half-worker turn instead of a full worker-turn.
+      They can now fight (A1D1 HP6), but at 60% the strength of a warrior, are not so amazing.
+      Semi-military, semi-civilian:
+         They cannot capture, expel, or conquer cities.
+         Like before, they are capturable and expellable.
+Workers now have 6hp, so they are not equal to a Warrior in combat, yet still can feel safer running for the hills or other defense terrain.
+Because Workers and Tribesmen are 6hp, the Warrior now becomes somewhat more meaningful as having primitive military ability.
+Coastal Defense is visible without middle-clicking for city info: it puts 4 cannon towers in the corners, and cannon placements along the walls.
+Masonry is not needed for Palace (simplification)
+Tribesmen, Diplomats, and Explorers can investigate cities without being spent. Let the games of ancient espionage and paranoia begin !
+Train goes from 1 gold upkeep to 0. Cost was too high for achieving parity for foot unit mobility on rails.
+Worker turns to irrigate swamp or plant forest go from 8 to 6½. In almost all cases, that means 7.
+CANALS
+   Formerly:
+      Coastal Canals could be made Adjacent to Ocean. 
+      Inland Canals could be made Adjacent to River.
+      results: canal length artificially limited, some glitch cases where diagonal canal doesn't really connect to Ocean.
+   Now:
+      Coastal Canals can be made CAdjacent to Ocean.
+      Inland Canals can be made CAdjacent to River OR Coastal Canal.
+      results: max canal length across an isthmus goes from 2 to 3, and all canals properly and visibly exit into Oceans.
+
+MINOR 
+------------------------
+Conscription bonus simplified - applies to infantry only.
 Galleon, like Caravel,Galley,etc., can enter Peace Waters but may not attack unless war declared: this ensures a naval vessel
    always exists which can bring commerce units to coastal cities; and realistically reflects the historic use of real Galleons.
 Spy Plane correctly made to be unreachable to propeller-based aircraft.
@@ -261,28 +296,11 @@ Can't make road-types while transported in foreign lands (road/quay/rail/maglev/
    move to mp2-brava
 +1/9 move bonus for v4+ aircraft was changed to +1, as it too frequently led to death of precious v4 units from tired attack on last move.
    move to MP2-brava
-Ships cost 2x to bribe -- injured ships far from home had too low bribe costs for what you're getting.
 Ram Ship can see 1 tile around it and travel on rivers - prevents unintended attacks when travelling diagonally.
    move to MP2-brava (except not the travel on river part)
-Damaged Submarine min_speed=4 (was 3); makes hit-and-run and escape somewhat more viable.
-Nuclear winter is was patches of random arctic everywhere, now is more of a temperature downgrade of each affected tile to one level colder.
 Fallout disappear chance changed from 20% to 15%
-Starting Caravans have all restrictions and complications removed. Can Help Wonder or Establish Trade Route (remember to set Home City first!)
-Camels move faster than people, Caravans get 2 7/9 moves. They can also carry 2 Goods units. 
-Capturable commerce units can't become uncapturable just by carrying Goods or being on same tile with other capturable commerce units.
-   Put another unit_type with them. This prevents mere cargo from making commerce units immune to capture.  Cargo becomes lost in capture 
-   event: e.g., Caravan carrying goods gets captured. Goods are lost, Caravan transfers ownership.
-Tribesmen gain 1 HP and can fight back. A1D1 HP6. It might be just enough for 2 of them to fight off 1 intruder unit, if one dies ;)
-   tribesmen also become somewhat primitive generalists who can do a mediocre job at many things, rather than specialized like other 
-      units.
-Workers now have 6hp, so they are not equal to a warrior in combat, but can still be safer if taking refuge in defensive terrain.
-With weaker units like Tribesmen and Warriors at 6hp in existence, the Warrior now becomes somewhat more meaningful in early game.
-Coastal Defense is visible without middle-clicking for city info.
-Masonry is not needed for Palace (simplification)
-Tribesmen, Diplomats, and Explorers can investigate cities without being spent. Let the games of ancient or mediaevel espionage and paranoia 
-   over it, begin !
-Train goes from 1 gold upkeep to 0. Cost was too high for achieving parity in foot unit mobility on rails.
-Getting on a train is < 3 moves rather than <= 2 moves. Effectively the same but is more clear for units who have partial move bonuses over 2mp.
+Small clarification: to use a train requires < 3 moves, not <= 2 moves. (Doesn't change who can use it, just clarifies rare cases.)
+Canals can serve as an irrigation source.
 
 SERVER UPGRADES:
 1. Special Unit Actions / Attacks:
