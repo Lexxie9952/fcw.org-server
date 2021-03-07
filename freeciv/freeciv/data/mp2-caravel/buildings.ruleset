@@ -565,7 +565,7 @@ obsolete_by	=
     { "type", "name", "range"
     }
 build_cost	= 180
-upkeep		= 4
+upkeep		= 3
 sabotage	= 100
 sound		= "b_hydro_plant"
 sound_alt	= "b_generic"
@@ -1368,6 +1368,44 @@ The Agōgē creates a culture of extreme fitness, and is famous for\
  their turn with +1 move. Obsolete by: Gunpowder.\
 ")
 
+[building_angkor_wat]
+name		= _("Angkor Wat")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",            "range",  "present", "quiet"
+      "Tech",     "Code of Laws",    "Player", TRUE,      FALSE
+      "Building", "Angkor Wat",      "Player", FALSE,     TRUE
+      "Building", "Hanging Gardens", "Player", FALSE,     FALSE
+      "Building","Mausoleum of Mausolos","Player",FALSE,  FALSE
+      "Gov", "Democracy",            "Player", FALSE,     TRUE
+      "Gov", "Theocracy",            "Player", FALSE,     TRUE
+      "Gov", "Communism",            "Player", FALSE,     TRUE
+      "Gov", "Nationalism",          "Player", FALSE,     TRUE      
+    }
+graphic	= "b.angkor_wat"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 200
+upkeep		= 0
+sabotage	= 0
+sound		= "w_angkor"
+sound_alt	= "w_generic"
+helptext	= _("\
+Angkor Wat is the glorious ancient city of\
+ splendor and culture. In Despotism and Monarchy,\
+ cities of size 3+ get the tile celebration bonus even if not celebrating.\
+ All cities gain +1 happy citizen. Work done on Jungle and Swamp tiles\
+ is 50% faster. In addition, the cost of Elephants is reduced by 5\
+ shields. \n\
+"), _("
+This Wonder is never obsolete, but it only has an effect in\
+ Despotism, Monarchies, and Republic.\ 
+"), _("
+Angkor Wat is a Tribe Wonder. You can build only one Tribe Wonder.\
+")
+
 [building_apollo_program]
 name		= _("Apollo Program")
 genus		= "SmallWonder"
@@ -1405,7 +1443,7 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 300
+build_cost	= 320
 upkeep		= 0
 sabotage	= 0
 sound		= "w_asmiths_trading_co"
@@ -1555,7 +1593,7 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 100
+build_cost	= 125
 upkeep		= 0
 sabotage	= 0
 sound		= "w_eiffel_tower"
@@ -1630,7 +1668,7 @@ name		= _("Great Wall")
 genus		= "SmallWonder"
 reqs	=
     { "type",     "name",       "range",  "present", "quiet"
-      "Tech",     "Masonry",    "Player", TRUE,      FALSE
+      "Tech",     "Construction", "Player", TRUE,      FALSE
       "Building", "Great Wall", "Player", FALSE,     TRUE
     }
 graphic	= "b.great_wall"
@@ -1665,6 +1703,8 @@ reqs	=
     { "type",     "name",            "range",  "present", "quiet"
       "Tech",     "Pottery",         "Player", TRUE,      FALSE
       "Building", "Hanging Gardens", "Player", FALSE,     TRUE
+      "Building", "Angkor Wat",      "Player", FALSE,     FALSE
+      "Building","Mausoleum of Mausolos","Player",FALSE,  FALSE
     }
 graphic	= "b.hanging_gardens"
 graphic_alt	= "-"
@@ -1682,7 +1722,10 @@ Makes two content citizens happy in every city in your nation.\
  In the event where there are no content citizens to get the\
  effect of Hanging Gardens, the wonder applies to unhappy citizens\
  (including those unhappy about military activity), making each content\
- then happy.  Gives +2 luxury in the city where it is built.\
+ then happy.  Gives +2 luxury in the city where it is built. \n\
+"), _("
+The Hanging Gardens are a Tribe Wonder. You can build only one Tribe Wonder. \n\
+"), _("
  Obsolete by: Steam Engine.\
 ")
 
@@ -1725,7 +1768,7 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 400
+build_cost	= 420
 upkeep		= 0
 sabotage	= 0
 sound		= "w_isaac_newtons_college"
@@ -1912,20 +1955,20 @@ sound		= "w_magna_carta"
 sound_alt	= "w_generic"
 helptext	= _("\
 Establishes the government Constitutional Monarchy, which makes Monarchy \
-half like representative government. \n\
+half like representative government. \
 "), _("
-Features: \n\
+Features：\n\
  ➣ +1 content citizen. \n\
- ➣ +1 trade on Land tiles that produce trade. (Sea tiles require celebration.) \n\ 
- ➣ Allows rapture in originally founded cities. \n\
- ➣ Allows making Peasants in the city it’s located. \n\ 
- ➣ Lets you build an extra infantry or Peasant per turn, without Conscription. \n\ 
+ ➣ +1 trade on Land tiles that produce trade. (Sea tiles require celebration.) \n\
+ ➣ Allows rapture in original cities. \n\
+ ➣ Allows Peasants in the city it’s located. \n\
+ ➣ Lets you build an extra infantry or Peasant per turn, without Conscription. \
 "), _("
-Penalties: \n\ 
+Setbacks：\n\
  ➣ One unit may be used for Martial Law. \n\
  ➣ One unit is free of upkeep. \n\
  ➣ 2 military units may be abroad. Each extra causes a discontent citizen. \n\
- ➣ Gives you a Senate, which can be ignored if King Richard’s Crusade \
+ ➣ Gives you a Senate, which can be ignored if both King Richard’s Crusade \
 and J.S. Bach’s Cathedral are owned.\
 ")
 
@@ -2063,8 +2106,8 @@ Makes two of your unhappy citizens content in every city\
 name		= _("Pyramids")
 genus		= "SmallWonder"
 reqs	=
-    { "type",     "name",     "range",  "present", "quiet"
-      "Tech",     "Masonry",  "Player", TRUE,      FALSE
+    { "type",     "name",        "range",  "present", "quiet"
+      "Tech",     "Mathematics", "Player", TRUE,      FALSE
       "Building", "Pyramids", "Player", FALSE,     TRUE
     }
 graphic	= "b.pyramids"
@@ -2072,15 +2115,16 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 160
+build_cost	= 200
 upkeep		= 0
 sabotage	= 0
 sound		= "w_pyramids"
 sound_alt	= "w_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
-Every city will gain +25% to its food storage when population changes.\
- In addition, the city with the Pyramids can rapture when celebrating.\
+Every city will gain +25% to its food storage when the city grows,\
+ starves, or is founded. In addition, the city with the Pyramids\
+ can rapture when celebrating.\
  This Wonder does not become obsolete.\
 ")
 
@@ -2107,6 +2151,33 @@ helptext	= _("\
 Makes all angry and unhappy citizens content in the city where it\
  is located, including citizens unhappy about military activity.\
  This Wonder does not become obsolete.\
+")
+
+[building_sphinx]
+name            = _("The Sphinx")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",                  "range",  "present", "quiet"
+       "Gov",     "Despotism",             "Player", TRUE,      FALSE
+    }
+graphic	= "b.sphinx"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+      "Tech", "Philosophy", "Player"
+    }
+build_cost	= 70
+upkeep		= 0
+sabotage	= 0
+sound		= "w_sphinx"
+sound_alt	= "w_generic"
+helptext	= _("\
+The Sphinx is said to watch over all citizens to ensure they are good.\
+ The result is loss of tile corruption penalties on all worked tiles in\
+ the city it is built. As a shared work of community art and culture, it\
+ adds +1 luxury. In addition, it reduces corruption in the city by\
+ half. \n\
+Obsolete by: Philosophy.\
 ")
 
 ;this should be wonder #65 if we counted correctly and need it for the "statue hack" to determine if player can get gov.
@@ -2207,7 +2278,7 @@ obsolete_by	=
     { "type", "name", "range"
       "Tech", "Mobile Warfare", "Player"
     }
-build_cost	= 300
+build_cost	= 310
 upkeep		= 0
 sabotage	= 0
 sound		= "w_sun_tzus_war_academy"

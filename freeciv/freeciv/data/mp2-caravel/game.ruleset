@@ -1412,6 +1412,7 @@ actor_reqs    =
       "UnitClass",     "AirProtect",     "Local",  FALSE
       "UnitFlag",      "NonMil",         "Local",  FALSE      ;Non-Military land class can't expel
       "UnitType",      "Warriors",       "Local",  FALSE      ;Warriors are too weak to expel
+      "UnitType",      "Tribesmen",      "Local",  FALSE      ;Tribesmen too.
       "UnitState",     "OnDomesticTile", "Local",  TRUE
       "DiplRel",       "Foreign",        "Local",  TRUE
       "DiplRel",       "Team",           "Local",  FALSE
@@ -2732,7 +2733,7 @@ set =
       "conquercost", 0, FALSE
       "diplomacy", "ALL", FALSE
       "diplgoldcost", 5, FALSE
-      "diplbulbcost", 5, FALSE
+      "diplbulbcost", 10, FALSE
       "dispersion", 0, FALSE
       "endspaceship", "ENABLED", FALSE 
       "foggedborders", TRUE, FALSE

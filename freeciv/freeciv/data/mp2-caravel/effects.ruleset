@@ -1697,7 +1697,8 @@ value   = 1
 reqs	=
     { "type",       "name",        "range", "present"
       "Gov",        "Monarchy",    "Player", TRUE
-      "Building",   "Magna Carta", "Player", FALSE
+      "Building",   "Magna Carta", "Player", FALSE ;handled separately by the wonder 
+      "Building",   "Angkor Wat",  "Player", FALSE ;handled separately by the wonder
       "OutputType", "Trade",       "Local",  TRUE
     }
 [effect_gov_tile_bonus_magna_carta_1]
@@ -1707,6 +1708,21 @@ reqs	=
     { "type",       "name",        "range", "present"
       "Gov",        "Monarchy",    "Player", TRUE
       "Building",   "Magna Carta", "Player", TRUE
+      "Building",   "Angkor Wat",  "Player", FALSE ;auto-provided by this wonder
+      "OutputType", "Trade",       "Local",  TRUE
+      "TerrainClass","Oceanic",    "Local",  FALSE
+    }
+;Handle the case where Angkor Wat doesn't increase because of city size.
+;Size 1-2 cities with Angkor Wat still get this as a Gov Bonus.
+[effect_gov_tile_bonus_magna_carta_1_angkor_wat_exception]
+type    = "Output_Inc_Tile"
+value   = 1
+reqs	=
+    { "type",       "name",        "range", "present"
+      "Gov",        "Monarchy",    "Player", TRUE
+      "Building",   "Magna Carta", "Player", TRUE
+      "Building",   "Angkor Wat",  "Player", TRUE
+      "MinSize",    "3",           "City",   FALSE
       "OutputType", "Trade",       "Local",  TRUE
       "TerrainClass","Oceanic",    "Local",  FALSE
     }
@@ -1717,6 +1733,7 @@ reqs  =
     { "type",         "name",        "range",  "present"
       "Gov",          "Monarchy",    "Player", TRUE
       "Building",     "Magna Carta", "Player", TRUE
+      "Building",     "Angkor Wat",  "Player", FALSE ;auto-provided by this wonder
       "OutputType",   "Trade",       "Local",  TRUE
       "TerrainClass", "Oceanic",     "Local",  TRUE
     }
@@ -3328,7 +3345,6 @@ reqs    =
     { "type", "name", "range", "present"
       "Building", "Ecclesiastical Palace", "City", TRUE
       "OutputType", "Trade", "Local", TRUE
-      "Building", "Palace", "City", FALSE
     }
 [effect_ecclesiastical_palace_1]
 type    = "Output_Waste_Pct"
@@ -3337,7 +3353,6 @@ reqs    =
     { "type", "name", "range", "present"
       "Building", "Ecclesiastical Palace", "City", TRUE
       "OutputType", "Shield", "local", TRUE
-      "Building", "Palace", "City", FALSE
     }
 [effect_ecclesiastical_palace_2]
 type    = "Spy_Resistant"
@@ -3345,7 +3360,6 @@ value   = 50
 reqs    =
     { "type", "name", "range", "present"
       "Building", "Ecclesiastical Palace", "City", TRUE
-      "Building", "Palace", "City", FALSE
     }
 [effect_ecclestiastical_palace_3]
 type    = "Make_Happy"
@@ -3422,7 +3436,6 @@ value	= 1
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Ecclesiastical Palace", "City", TRUE
-      "Building", "Palace", "City", FALSE
     }
 [effect_ecclesiastical_palace_2_sabotage]
 type    = "Building_Saboteur_Resistant"
@@ -4117,15 +4130,7 @@ reqs	=
       "Building", "University", "City"
       "OutputType", "Science", "Local"
     }
-;********************************************************************************* VISION BONUSES
-[effect_apollo_program]
-type    = "Enable_Space"
-value	= 1
-reqs	=
-    { "type", "name", "range", "survives"
-      "Building", "Apollo Program", "Player", TRUE
-    }
-
+;********************************************************************************* VISION BONUSES (non-wonder)
 [effect_telegraph_border_vision]
 type    = "Border_Vision"
 value   = 1
@@ -4307,7 +4312,138 @@ reqs	=
       "Tech", "Combustion", "Player"
       "UnitClass", "LandRail", "Local"
     }
-
+;************************************************************************ Adam Smith
+[effect_asmiths_trading_co]
+type    = "Upkeep_Free"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Building", "A.Smith's Trading Co.", "Player"
+    }
+;************************************************************************ Agoge of Sparta
+[effect_agoge_move_bonus_1]
+type    = "Move_Bonus"
+value	= 3
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Agōgē of Sparta", "Player", TRUE
+      "UnitFlag", "FootSoldier", "Local", TRUE 
+    }
+[effect_agoge_move_bonus_2]
+type    = "Move_Bonus"
+value	= 6    ; 3/9 + 6/9 = 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Agōgē of Sparta", "City", TRUE
+      "UnitFlag", "FootSoldier", "Local", TRUE 
+    }
+[effect_agoge_phalanx]
+type    = "Attack_Bonus"
+value   = 50  
+reqs    =
+    { "type", "name", "range", "present"
+      "Building", "Agōgē of Sparta", "Player", TRUE
+      "UnitType", "Phalanx", "Local", TRUE 
+    }
+[effect_agoge_pikemen]
+type    = "Attack_Bonus"
+value   = 50  
+reqs    =
+    { "type", "name", "range", "present"
+      "Building", "Agōgē of Sparta", "Player", TRUE
+      "UnitType", "Pikemen", "Local", TRUE 
+    }
+;************************************************************************ Angkor Wat
+[effect_angkor_wat_free_tile_bonus_monarchy]
+type    = "Output_Inc_Tile" ;free celebration tile output
+value   = 1
+reqs	=
+    { "type",       "name",       "range"
+      "Building",   "Angkor Wat", "Player"
+      "Gov",        "Monarchy",   "Player"
+      "OutputType", "Trade",      "Local"
+      "MinSize",    "3",          "City"
+    }
+[effect_angkor_wat_free_tile_bonus_despotism]
+type    = "Output_Penalty_Tile" ;free celebration tile output
+value   = 100
+reqs	=
+    { "type",       "name",       "range"
+      "Building",   "Angkor Wat", "Player"
+      "Gov",        "Despotism",  "Player"
+      "OutputType", "Trade",      "Local"
+      "MinSize",    "3",          "City"
+    }
+[effect_angkor_wat_happy]
+type    = "Make_Happy"
+value	= 1
+reqs	=
+    { "type",     "name",       "range", "present"
+      "Building", "Angkor Wat", "Player", TRUE
+      "Gov",      "Democracy",  "Player", FALSE
+      "Gov",      "Theocracy",  "Player", FALSE
+      "Gov",      "Communism",  "Player", FALSE
+      "Gov",      "Nationalism","Player", FALSE
+    }
+[effect_angkor_wat_jungleswamp_irrigate_bonus]
+type    = "Unit_Work_Pct"
+value   = 50
+reqs =
+    { "type",     "name",          "range","present"
+      "Building", "Angkor Wat",    "Player",TRUE
+      "Activity", "Irrigate",      "Local", TRUE
+      "UnitFlag", "Infra",         "Local", TRUE
+      "Terrain",  "Grassland",     "Local", FALSE ; exclude everything but Swamp/Jungle.
+      "Terrain",  "Plains",        "Local", FALSE
+      "Terrain",  "Desert",        "Local", FALSE
+      "Terrain",  "Tundra",        "Local", FALSE
+      "Terrain",  "Arctic",        "Local", FALSE
+      "Terrain",  "Forest",        "Local", FALSE
+      "Terrain",  "Hills",         "Local", FALSE
+      "Terrain",  "Mountains",     "Local", FALSE
+    }
+[effect_angkor_wat_jungleswamp_plant_bonus]
+type    = "Unit_Work_Pct"
+value   = 50
+reqs =
+    { "type",     "name",          "range","present"
+      "Building", "Angkor Wat",    "Player",TRUE
+      "Activity", "Mine",          "Local", TRUE
+      "UnitFlag", "Infra",         "Local", TRUE
+      "Terrain",  "Grassland",     "Local", FALSE ; exclude everything but Swamp/Jungle.
+      "Terrain",  "Plains",        "Local", FALSE
+      "Terrain",  "Desert",        "Local", FALSE
+      "Terrain",  "Tundra",        "Local", FALSE
+      "Terrain",  "Arctic",        "Local", FALSE
+      "Terrain",  "Forest",        "Local", FALSE
+      "Terrain",  "Hills",         "Local", FALSE
+      "Terrain",  "Mountains",     "Local", FALSE
+    }
+[effect_angkor_wat_elephant_discount]
+type    = "Unit_Build_Cost_Pct"
+value	  = -14 ; 36 - 5 = - 14%
+reqs    =
+    {
+      "type",     "name",       "range",  "present"
+      "Building", "Appian Way", "City",   TRUE
+      "UnitType", "Wagon",      "Local",  TRUE
+      "Tech",     "Railroad",   "Player", FALSE
+    }
+[effect_angkor_wat_culture]
+type    = "History"
+value	= 2
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Angkor Wat", "City", TRUE
+    }
+;************************************************************************ Apollo Program
+[effect_apollo_program]
+type    = "Enable_Space"
+value	= 1
+reqs	=
+    { "type", "name", "range", "survives"
+      "Building", "Apollo Program", "Player", TRUE
+    }
 ;************************************************************************ Appian Way
 [effect_appian_trade_revenue_bonus]
 type    = "Trade_Revenue_Bonus"     ; roughly 10% ?
@@ -4423,47 +4559,6 @@ reqs =
       "Building", "Appian Way",    "Player",TRUE
       "UnitFlag", "Infra",         "Local", TRUE
       "Activity", "Road",          "Local", TRUE
-    }
-;************************************************************************ Agoge of Sparta
-[effect_agoge_move_bonus_1]
-type    = "Move_Bonus"
-value	= 3
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Agōgē of Sparta", "Player", TRUE
-      "UnitFlag", "FootSoldier", "Local", TRUE 
-    }
-[effect_agoge_move_bonus_2]
-type    = "Move_Bonus"
-value	= 6    ; 3/9 + 6/9 = 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Agōgē of Sparta", "City", TRUE
-      "UnitFlag", "FootSoldier", "Local", TRUE 
-    }
-[effect_agoge_phalanx]
-type    = "Attack_Bonus"
-value   = 50  
-reqs    =
-    { "type", "name", "range", "present"
-      "Building", "Agōgē of Sparta", "Player", TRUE
-      "UnitType", "Phalanx", "Local", TRUE 
-    }
-[effect_agoge_pikemen]
-type    = "Attack_Bonus"
-value   = 50  
-reqs    =
-    { "type", "name", "range", "present"
-      "Building", "Agōgē of Sparta", "Player", TRUE
-      "UnitType", "Pikemen", "Local", TRUE 
-    }
-;************************************************************************ Adam Smith
-[effect_asmiths_trading_co]
-type    = "Upkeep_Free"
-value	= 1
-reqs	=
-    { "type", "name", "range"
-      "Building", "A.Smith's Trading Co.", "Player"
     }
 ;************************************************************************ Colossus
 [effect_colossus_tile_trade]
@@ -4867,30 +4962,6 @@ reqs	=
       "Building", "Marco Polo's Embassy", "Player"
       "OutputType", "Trade", "Local"
     }
-;************************************************************************ Michelangelo
-[effect_michelangelos_chapel]
-type    = "Make_Content"
-value	= 3
-reqs	=
-    { "type", "name", "range"
-      "Building", "Michelangelo's Chapel", "Player"
-    }
-[effect_michelangelos_chapel_1]
-type    = "Make_Content"
-value	= 1
-reqs	=
-    { "type", "name", "range"
-      "Tech", "Theology", "Player"
-      "Building", "Michelangelo's Chapel", "Player"
-    }
-[effect_michelangelos_chapel_2]
-type    = "Make_Content"
-value	= -1
-reqs	=
-    { "type", "name", "range"
-      "Building", "Michelangelo's Chapel", "Player"
-      "Gov", "Communism", "Player"
-    }
 ;************************************************************************ Mausoleum
 [effect_mausoleum_of_mausolos_1]
 type    = "Make_Content"
@@ -4933,6 +5004,102 @@ value	= 2
 reqs	=
     { "type", "name", "range"
       "Building", "Mausoleum of Mausolos", "City"
+    }
+;************************************************************************ Michelangelo
+[effect_michelangelos_chapel]
+type    = "Make_Content"
+value	= 3
+reqs	=
+    { "type", "name", "range"
+      "Building", "Michelangelo's Chapel", "Player"
+    }
+[effect_michelangelos_chapel_1]
+type    = "Make_Content"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Theology", "Player"
+      "Building", "Michelangelo's Chapel", "Player"
+    }
+[effect_michelangelos_chapel_2]
+type    = "Make_Content"
+value	= -1
+reqs	=
+    { "type", "name", "range"
+      "Building", "Michelangelo's Chapel", "Player"
+      "Gov", "Communism", "Player"
+    }
+;************************************************************************ Oracle
+[effect_oracle]
+type    = "Make_Content"
+value	= 2
+reqs	=
+    { "type", "name", "range"
+      "Building", "Temple", "City"
+      "Building", "Oracle", "Player"
+    }
+;************************************************************************ Pyramids
+[effect_pyramids]
+type    = "Growth_Food"
+value	= 25
+reqs	=
+    { "type", "name", "range"
+      "Building", "Pyramids", "Player"
+    }
+[effect_pyramids_1]
+type    = "Rapture_Grow"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Building", "Pyramids", "City"
+    }
+;************************************************************************ Sphinx
+[effect_sphinx_tile]
+type    = "Output_Penalty_Tile"
+value = 100
+reqs	=
+    { "type",     "name",       "range"
+      "Building", "The Sphinx", "City"
+    }
+[effect_sphinx_luxury]
+type    = "Output_Add_Tile"
+value = 1
+reqs	=
+    { "type",       "name",        "range"
+      "Building",   "The Sphinx",  "City"
+      "CityTile",   "Center",      "Local"
+      "OutputType", "Luxury",      "Local" 
+    }
+[effect_sphinx_corruption]
+type    = "Output_Waste_Pct"
+value	= 60
+reqs	=
+    { "type",       "name",       "range" 
+      "Building",   "The Sphinx", "City" 
+      "OutputType", "Trade",      "Local" 
+    }
+;************************************************************************ Shakespeare
+[effect_shakespeares_theatre]
+type    = "No_Unhappy"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Building", "Shakespeare's Theatre", "City"
+    }
+;************************************************************************ Statue of Liberty
+[effect_statue_of_liberty]
+type    = "Any_Government"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Building", "Statue of Liberty", "Player"
+    }
+[effect_statue_of_liberty_1]
+type    = "No_Anarchy"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Building", "Statue of Liberty", "Player"
     }
 ;************************************************************************ Statue of Zeus
 [effect_statue_of_zeus_content_nonrep]
@@ -4989,6 +5156,33 @@ value   = 1
 reqs    =
     { "type",     "name",           "range"
       "Building", "Statue of Zeus", "City"
+    }
+;************************************************************************ Sun Tzu
+[effect_sun_tzus_war_academy]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Sun Tzu's War Academy", "Player", TRUE
+      "UnitClass", "Land", "Local", TRUE
+      "UnitFlag", "NonMil", "Local", FALSE
+      "UnitFlag", "NoVeteran", "Local", FALSE
+    }
+[effect_sun_tzus_war_academy_1]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Sun Tzu's War Academy", "Player", TRUE
+      "UnitClass", "LandAirSea", "Local", TRUE
+    }
+[effect_sun_tzus_war_academy_2]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Sun Tzu's War Academy", "Player", TRUE
+      "UnitClass", "LandNoKill", "Local", TRUE
     }
 ;************************************************************************ Supreme Court
 [effect_supreme_court_corruption1]
@@ -5272,31 +5466,7 @@ reqs    =
     { "type", "name", "range"
       "Building", "Tesla's Laboratory", "Player"
     }
-;************************************************************************ Oracle
-[effect_oracle]
-type    = "Make_Content"
-value	= 2
-reqs	=
-    { "type", "name", "range"
-      "Building", "Temple", "City"
-      "Building", "Oracle", "Player"
-    }
-;************************************************************************ Pyramids
-[effect_pyramids]
-type    = "Growth_Food"
-value	= 25
-reqs	=
-    { "type", "name", "range"
-      "Building", "Pyramids", "Player"
-    }
-[effect_pyramids_1]
-type    = "Rapture_Grow"
-value	= 1
-reqs	=
-    { "type", "name", "range"
-      "Building", "Pyramids", "City"
-    }
- ;************************************************************************ The Internet
+;************************************************************************ The Internet
 [effect_internet]
 type    = "Output_Bonus"
 value	= 100
@@ -5305,56 +5475,6 @@ reqs	=
       "Building", "Research Lab", "City"
       "Building", "The Internet", "Player"
       "OutputType", "Science", "Local"
-    }
-;************************************************************************ Shakespeare
-[effect_shakespeares_theatre]
-type    = "No_Unhappy"
-value	= 1
-reqs	=
-    { "type", "name", "range"
-      "Building", "Shakespeare's Theatre", "City"
-    }
-;************************************************************************ Statue of Liberty
-[effect_statue_of_liberty]
-type    = "Any_Government"
-value	= 1
-reqs	=
-    { "type", "name", "range"
-      "Building", "Statue of Liberty", "Player"
-    }
-[effect_statue_of_liberty_1]
-type    = "No_Anarchy"
-value	= 1
-reqs	=
-    { "type", "name", "range"
-      "Building", "Statue of Liberty", "Player"
-    }
-;************************************************************************ Sun Tzu
-[effect_sun_tzus_war_academy]
-type    = "Veteran_Build"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Sun Tzu's War Academy", "Player", TRUE
-      "UnitClass", "Land", "Local", TRUE
-      "UnitFlag", "NonMil", "Local", FALSE
-      "UnitFlag", "NoVeteran", "Local", FALSE
-    }
-[effect_sun_tzus_war_academy_1]
-type    = "Veteran_Build"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Sun Tzu's War Academy", "Player", TRUE
-      "UnitClass", "LandAirSea", "Local", TRUE
-    }
-[effect_sun_tzus_war_academy_2]
-type    = "Veteran_Build"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Sun Tzu's War Academy", "Player", TRUE
-      "UnitClass", "LandNoKill", "Local", TRUE
     }
 
 ;************************************************************************ United Nations

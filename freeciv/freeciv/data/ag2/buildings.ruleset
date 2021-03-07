@@ -2216,6 +2216,7 @@ graphic	= "b.sphinx"
 graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
+      "Tech", "Philosophy", "Player"
     }
 build_cost	= 70
 upkeep		= 0
@@ -2227,7 +2228,8 @@ The Sphinx is said to watch over all citizens to ensure they are good.\
  The result is loss of tile corruption penalties on all worked tiles in\
  the city it is built. As a shared work of community art and culture, it\
  adds +1 luxury. In addition, it reduces corruption in the city by\
- half. This Wonder does not become obsolete.\
+ half. This Wonder does not become obsolete. \n\
+Obsolete by: Philosophy.\
 ")
 
 [building_united_nations]

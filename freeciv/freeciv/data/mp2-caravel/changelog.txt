@@ -53,13 +53,17 @@ BUILDINGS AND WONDERS:
 4. Courthouse prevents Diplomats (not Spies) from doing hostile Embassy without first cease-fire or peace.
 5. City Walls were sometimes too cheap, sometimes too expensive, sometimes too OP, etc., this was very similar to the issue with Fortresses 
    that was fixed earlier with the Fort/Fortress distinction. The new City Walls solution breaks into two types somewhat modeled on the 
-   Fort / Fortress solution now. City Fortifications are available with Masonry and provide 1.75x; City Walls come with Construction and 
-   remain 3x. Just as with Fort/Fortress, City Fortifications are cheaper/easier to build but not as strong. Also same is that they don't 
-   stack. And also same is Masonry for first, Construction for second. City Walls which cost 80 in Civ2, cost 65 now in early game, and
-   75 after discovery of Steel. Fortifications for cities that get Walls later are not wasted investment. Selling Fortifications in a city
-   with City Walls will recoup the full gold price of the Fortifications. Be sure to have the City Walls up first. In addition, if City Walls
-   are sabotaged, you can keep the Fortifications for weaker backup. With some kinds of terrain, Fortifications modify, integrate, and work
-   with the terrain itself, raising the terrain defense bonus of Swamp, Forest, and Jungle to 1.5x, 1.5x, and 1.67x respectively (+17%) 
+   Fort / Fortress solution now. 
+   City Fortifications are available with Masonry and provide 1.75x; 
+   City Walls come with Construction and remain 3x. (Same for Great Wall wonder.)
+   Just as with Fort/Fortress, City Fortifications are cheaper/easier to build but not as strong. Also same is that they don't 
+   stack. And also same is Masonry for first, Construction for second. 
+   City Walls which cost 80 in Civ2, cost 65 now in early game, and 75 after discovery of Steel.
+   Fortifications for cities that get Walls later are not lost investment. Selling Fortifications in a city with City Walls will recoup
+   the full gold price of the Fortifications. Be sure to have the City Walls made first. 
+   If City Walls are sabotaged, you can keep the Fortifications for a weaker backup.
+   With some kinds of terrain, Fortifications modify, integrate, and are built into the terrain itself: Swamp, Forest, Jungle.
+   This raises the terrain defense bonus of Swamp, Forest, and Jungle to 1.5x, 1.5x, and 1.67x respectively (+17%) 
 6. Magna Carta, new wonder, creates a new government Constitutional Monarchy which is half between Monarchy and Republic. 
    for the price of Oracle, Eiffel Tower, and Statue of Zeus, you basically get those same effects and a Republic-ish government: 
       1 extra content, 1 free unit upkeep, 1 more content about military than Republic, extra trade on land tiles, ability to rapture.
@@ -95,6 +99,20 @@ BUILDINGS AND WONDERS:
     game. It now becomes an extra commitment in cost to make existing coastal defenses stronger, which can recoup that cost if many coastal defenses 
     are made; also gives the one city it's built in a 3x defense against sea attacks, as an additional point of interest to balance out the new bombard 
     abilities of battleships. Cost: 330 (was 350)
+15. Pyramids gain from the server upgrade on EFT_GROWTH and confer 25% food to newly founded cities, now cost 200, and require Mathematics.
+16. Wonder price adjustments 
+    ** HG 210             
+    ** A.Smith 320 - it's powerful!          
+    ** Eiffel 125 - it was underpriced        
+    ** Isaac 420 - slightly discourage everyone doing isaac
+    ** Sun Tzu 310 - slightly discourage everyone having hardened units
+17. The Sphinx, cost 70, tech req: none, reduces tile corruption (anarchy/despotism), halves city corruption, gives +1 luxury to city.
+TRIBAL WONDERS are wonders that help define the charactertistics of your nation and may alter its strategic path and possibilities. 
+1. HG is now a Tribal Wonder. 
+2. Angkor Wat. +1 happy, all tiles in cities 3+ get celebration bonus when city is not celebrating, tile work on jungle/swamp 50% faster, 
+               cost of Elephants -5 shields.
+3. 
+
 
 GOVERNMENT RE-BALANCE:
 * ALL NON-REPRESENTATIVE GOVERNMENTS:
@@ -285,7 +303,7 @@ CANALS
       Coastal Canals can be made CAdjacent to Ocean.
       Inland Canals can be made CAdjacent to River OR Coastal Canal.
       results: max canal length across an isthmus goes from 2 to 3, and all canals properly and visibly exit into Oceans.
-
+      thanks to @Dino for figuring out some logic to do these things.
 MINOR 
 ------------------------
 Conscription bonus simplified - applies to infantry only.
@@ -454,6 +472,8 @@ What this means for MP2 rules:
     f. De-jankification of all kinds of rare edge cases is tedious to explain but there are 2 charts for full disclosure at
          diplhand.c line 545 and line 603. In general it's made to be softer more fluid and do what's logical in edge cases, rather than fall
          and get stuck in one of the "stupid logic holes of freeciv diplomacy".
+   Short answer: if you ask for the same type of pact as you had before, it will excuse casus belli if you have it, otherwise, if the pact 
+      expires very soon, it assumes you want to offer to renew it before expiration.
 59. Server settings armisticelength and ceasefirelength are now under the control of the GM.
 60. Two-way state of casus belli is shown in nations list in nations tab now. Mouse hover shows turns left.
 61. chat marks speaker with their flag. sent messages are right aligned, allied chat and global chat are center, incoming are left aligned. 
@@ -462,6 +482,8 @@ What this means for MP2 rules:
 63. New Prefs option: Focus Lock, keeps the current selected unit centered on map (ALT-SHIFT-F). It's more of a preference on a PC, but might 
     make a big improvement for mobile. On mobile it defaults to on.
 64. Prefs options for "Show pollution on map" and "Movement Point Display" can now be permanently set instead of temporarily.
+65. There was no way for EFT_GROWTH_FOOD to be applied at city founding and this is now fixed. Rulesets wanting old behaviour of no extra food 
+      in this situation, need to put a MinSize, "1", City condition into them.
 
 
 These help with much more than Freeciv and other Full-screen apps. They help you with everything you do on your computer:

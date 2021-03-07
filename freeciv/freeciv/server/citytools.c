@@ -1520,6 +1520,15 @@ void create_city(struct player *pplayer, struct tile *ptile,
   /* Set up citizens nationality. */
   citizens_init(pcity);
 
+  /* Get bonus effects for food stock. If undesired for a newly founded
+     city, ruleset can use MinSize, "", "City". This is preferable to 
+     hard-coding that no bonus on food_stock can occur for a new city,
+     which is clearly the most influential/important time to have it. */
+  int initial_food_pct = 
+    CLIP (0, get_city_bonus(pcity, EFT_GROWTH_FOOD), 100);
+  pcity->food_stock = (city_granary_size(1)
+                       * initial_food_pct) / 100;
+
   /* Place a worker at the is_city_center() is_free_worked().
    * It is possible to build a city on a tile that is already worked;
    * this will displace the worker on the newly-built city's tile -- Syela */
