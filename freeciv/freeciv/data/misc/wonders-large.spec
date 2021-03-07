@@ -95,6 +95,7 @@ sprites =
 		"b.manhattan_project", "wonders/manhattan_project"
 		"b.marco_polos_embassy", "wonders/marco_polos_embassy"
                 "b.mausoleum", "wonders/mausoleum_of_halicarnassus"
+                "b.medici_bank", "wonders/medici_bank"
 		"b.michelangelos_chapel", "wonders/michelangelos_chapel"
                 "b.olympics", "wonders/olympics"
 		"b.oracle", "wonders/oracle"
