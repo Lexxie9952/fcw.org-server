@@ -32,6 +32,7 @@ const B_COLOSSUS = "Colossus";
 const B_GIBRALTAR_FORTRESS = "Gibraltar Fortress"
 const B_LIGHTHOUSE = "Lighthouse";
 const B_MAGNA_CARTA = "Magna Carta";
+const B_MEDICI_BANK = "Medici Bank";
 const B_STATUE_OF_LIBERTY_NAME = "Statue of Liberty";
 const B_TESLAS_LABORATORY = "Tesla's Laboratory";
 

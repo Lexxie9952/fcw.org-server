@@ -279,7 +279,7 @@ function player_has_wonder(playerno, improvement_id)
 }
 /**************************************************************************
   returns true if the active player has the given wonder (improvement)
-  note, uses the string value of the wonder and fetches the id for you.
+  Note: uses the string value of the wonder and fetches the id for you.
 **************************************************************************/
 function has_wonder(wonder_name_str)
 {
