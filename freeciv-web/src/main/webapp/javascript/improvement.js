@@ -48,6 +48,10 @@ var communist_discounts = {
   "Dive Bomber": 10,
   "Armor": 10
   };
+var nationalist_discounts = {
+    "Police Station": 10
+    };
+  
   var colossus_discounts = {
     "Boat": 3,
     "Trireme": 5,
@@ -150,7 +154,7 @@ function get_universal_discount_price(ptype, pcity)
   // are universal to both improvements and units, we can adapt this
   // for everything when needed: 
   
-  // Apply MP2 communist discounts
+  // MP2 communist discounts
   if (client_rules_flag[CRF_MP2_SPECIAL_UNITS] && 
       governments[players[playerno].government].name == "Communism") {
     
@@ -161,6 +165,14 @@ function get_universal_discount_price(ptype, pcity)
       return ptype['build_cost'] - communist_discounts[ptype['name']];
     }
   }
+  // MP2 nationalist discounts
+  if (client_rules_flag[CRF_MP2_C] && 
+      governments[players[playerno].government].name == "Nationalism") {
+
+    if (nationalist_discounts[ptype['name']])    
+      return ptype['build_cost'] - nationalist_discounts[ptype['name']];
+  }
+  // MP2 City Walls and Coastal Defense:
   if (client_rules_flag[CRF_MP2_C]) {
     // City Walls increase with Metallurgy
     if (ptype['name'] == "City Walls"
@@ -173,20 +185,20 @@ function get_universal_discount_price(ptype, pcity)
             return ptype['build_cost'] - 15;
     }
   }
-  // Apply discounts for having Colossus
+  // MP2 discounts for having Colossus
   if (pcity && client_rules_flag[CRF_COLOSSUS_DISCOUNT] &&
       city_has_building(pcity, improvement_id_by_name(B_COLOSSUS))) {
 
     if (colossus_discounts[ptype['name']])
         return ptype['build_cost'] - colossus_discounts[ptype['name']];      
   }
-  // Apply discount for Appian Way
+  // MP2 discount for Appian Way
   if (pcity && client_rules_flag[CRF_MP2_C] &&
     city_has_building(pcity, improvement_id_by_name(B_APPIAN_WAY))) {
       if (appian_discounts[ptype['name']])
       return ptype['build_cost'] - appian_discounts[ptype['name']];      
   }
-  // Apply discount for Angkor Wat
+  // MP2 discount for Angkor Wat
   if (pcity && client_rules_flag[CRF_MP2_C] &&
     city_has_building(pcity, improvement_id_by_name(B_ANGKOR_WAT))) {
       if (angkorwat_discounts[ptype['name']])
