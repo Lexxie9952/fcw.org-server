@@ -37,8 +37,8 @@ flags =
 extra_flags =
   { "name", "helptxt"
       _("Quayable"), _("Allows Quays to be built.")
-      _("IrrigationSource"), _("Allows Irrigation.")
-      _("WaterwaySource"), _("Allows inland Canals.")
+      _("IrrigationSource"), _("Is a water source for Irrigation.")
+      _("WaterwaySource"), _("Is a water source for inland Canals.")
       _("Railable"), _("Allows Railroads to be built.")
   }
 
