@@ -2886,7 +2886,7 @@ int do_sell_building(struct player *pplayer, struct city *pcity,
     float sale_pct = 0;   // pct to add to sale price
 
     sale_pct = (float)
-      get_target_bonus_effects(NULL, NULL, NULL, pcity, pimprove, 
+      get_target_bonus_effects(NULL, pplayer, NULL, pcity, pimprove, 
                               city_tile(pcity), NULL, NULL, NULL,
                               NULL, NULL, EFT_IMPROVEMENT_SALE_PCT);
 
