@@ -173,6 +173,7 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
   case EFT_COINAGE_BONUS_PM:                   // not yet evaluated
   case EFT_IMPROVEMENT_SALE_PCT:               // not yet evaluated
   case EFT_GULAG:                              // not yet evaluated
+  case EFT_STACK_ESCAPE_PCT:                   // not yet evaluated
   case EFT_CAPITAL_CITY:
   case EFT_GOV_CENTER:
   case EFT_UPKEEP_FREE:

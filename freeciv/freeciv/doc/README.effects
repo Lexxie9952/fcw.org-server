@@ -513,6 +513,13 @@ SS_Structural, SS_Component and SS_Module
     Buildings which have this effect should probably not be given any other 
     effects.
 
+Stack_Escape_Pct
+    ADDS this percent to the default 50% chance to escape a stack if the stack 
+    is killed and the unit_type has the "CanEscape" flag. For example, 
+    a value of 50 would result in 50 + 50 = 100% chance to escape.
+    (NOT: 50 + (50% * 50) = 75%). "UnitType", "Local" is drawn from the 
+    defender/escaper, not the attacker. 
+
 Stealings_Ignore
     When determining how difficult it is to steal a tech from enemy, AMOUNT
     previous times tech has been stolen from the city is ignored. Negative amount

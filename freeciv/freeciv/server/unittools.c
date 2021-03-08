@@ -2661,40 +2661,59 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
         escaped = FALSE;
 
         if (unit_has_type_flag(vunit, UTYF_CANESCAPE)
-            && !unit_has_type_flag(pkiller, UTYF_CANKILLESCAPING)
+            && !unit_has_type_flag(pkiller, UTYF_CANKILLESCAPING) // TODO: should be a % chance to kill escaping, not hard-coded 100%
             && vunit->hp > 0
-            && vunit->moves_left > pkiller->moves_left
-            && fc_rand(2)) {
-          int curr_def_bonus;
-          int def_bonus = 0;
-          struct tile *dsttile = NULL;
-          int move_cost;
+            && vunit->moves_left >= pkiller->moves_left
+            /*&& fc_rand(2)*/) {
+          // CanEscape is possible. Adjust 50% base odds, based on ruleset effects:    
+          int escape_chance = 50 + get_target_bonus_effects(NULL,
+                                           vplayer,
+                                           pvictor,
+                                           tile_city(unit_tile(vunit)),
+                                           NULL,
+                                           unit_tile(vunit),
+                                           vunit,
+                                           unit_type_get(vunit),
+                                           NULL,
+                                           NULL,
+                                           action_by_number(ACTION_ATTACK),
+                                           EFT_STACK_ESCAPE_PCT);
+          // Charm the dice a tiny % based on who has more moves:                                 
+          escape_chance += (vunit->moves_left - pkiller->moves_left); 
+          // Roll the dice:
+          if (fc_rand(100)<escape_chance) {
+            // Successful roll: vunit will escape iff there is legal tile to escape.
+            int curr_def_bonus;
+            int def_bonus = 0;
+            struct tile *dsttile = NULL;
+            int move_cost;
 
-          fc_assert(vunit->hp > 0);
+            fc_assert(vunit->hp > 0);
 
-          adjc_iterate(&(wld.map), ptile, ptile2) {
-            if (can_exist_at_tile(&(wld.map), vunit->utype, ptile2)
-                && NULL == tile_city(ptile2)) {
-              move_cost = map_move_cost_unit(&(wld.map), vunit, ptile2);
-              if (pkiller->moves_left <= vunit->moves_left - move_cost
-                  && (is_allied_unit_tile(ptile2, pvictim)
-                      || unit_list_size(ptile2->units)) == 0) {
-                curr_def_bonus = tile_extras_defense_bonus(ptile2,
-                                                           vunit->utype);
-                if (def_bonus <= curr_def_bonus) {
-                  def_bonus = curr_def_bonus;
-                  dsttile = ptile2;
+            adjc_iterate(&(wld.map), ptile, ptile2) {
+              if (can_exist_at_tile(&(wld.map), vunit->utype, ptile2)
+                  && NULL == tile_city(ptile2)) {
+                move_cost = map_move_cost_unit(&(wld.map), vunit, ptile2);
+                if (pkiller->moves_left <= vunit->moves_left - move_cost
+                    && (is_allied_unit_tile(ptile2, pvictim)
+                        || unit_list_size(ptile2->units)) == 0) {
+                  curr_def_bonus = tile_extras_defense_bonus(ptile2,
+                                                            vunit->utype);
+                  if (def_bonus <= curr_def_bonus) {
+                    def_bonus = curr_def_bonus;
+                    dsttile = ptile2;
+                  }
                 }
               }
-            }
-          } adjc_iterate_end;
+            } adjc_iterate_end;
 
-          if (dsttile != NULL) {
-            move_cost = map_move_cost_unit(&(wld.map), vunit, dsttile);
-            unit_move(vunit, dsttile, move_cost, NULL, FALSE);
-            num_escaped[player_index(vplayer)]++;
-            escaped = TRUE;
-            unitcount--;
+            if (dsttile != NULL) {
+              move_cost = map_move_cost_unit(&(wld.map), vunit, dsttile);
+              unit_move(vunit, dsttile, move_cost, NULL, FALSE);
+              num_escaped[player_index(vplayer)]++;
+              escaped = TRUE;
+              unitcount--;
+            }
           }
         }
 

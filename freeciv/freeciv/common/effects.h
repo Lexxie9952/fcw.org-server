@@ -324,6 +324,10 @@ extern "C" {
 /* suppresses game.server.hangry based on reqs from game state */
 #define SPECENUM_VALUE127 EFT_GULAG
 #define SPECENUM_VALUE127NAME "Gulag"
+/* Pct modifier for chance to escape stack */
+#define SPECENUM_VALUE128 EFT_STACK_ESCAPE_PCT
+#define SPECENUM_VALUE128NAME "Stack_Escape_Pct"
+
 
 /* keep this last */
 #define SPECENUM_COUNT EFT_COUNT
