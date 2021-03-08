@@ -231,6 +231,7 @@ function city_force_income_update()
                ? 0.25 : 0;
             multiplier += city_has_building(pcity, improvement_id_by_name("Stock Exchange"))
                ? 0.25 : 0;
+            if (has_wonder(B_MEDICI_BANK)) multiplier *= 1.07;
           }      
           income += multiplier * pcity['surplus'][O_SHIELD];
           // Server rounds income to nearest integer but if it's exactly .5 it rounds randomly
