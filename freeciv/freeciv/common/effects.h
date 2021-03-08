@@ -316,8 +316,8 @@ extern "C" {
 #define SPECENUM_VALUE124 EFT_UNIT_WORK_PCT
 #define SPECENUM_VALUE124NAME "Unit_Work_Pct"
 /* adds val to the hard-coded 1:1 conversion of shields to gold */
-#define SPECENUM_VALUE125 EFT_COINAGE_BONUS_PCT
-#define SPECENUM_VALUE125NAME "Coinage_Bonus_Pct"
+#define SPECENUM_VALUE125 EFT_COINAGE_BONUS_PM
+#define SPECENUM_VALUE125NAME "Coinage_Bonus_Pm"
 /* bonus/penalty to gold acquired from selling a building */
 #define SPECENUM_VALUE126 EFT_IMPROVEMENT_SALE_PCT
 #define SPECENUM_VALUE126NAME "Improvement_Sale_Pct"

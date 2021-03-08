@@ -208,8 +208,8 @@ Civil_War_Chance
     creased by 5 for each city in civil disorder and reduced by 5 for each one
     celebrating.
 
-Coinage_Bonus_Pct
-    Adds a Percent to the default 1:1 conversion of shields to gold, when
+Coinage_Bonus_Pm
+    Adds a Permille to the default 1:1 conversion of shields to gold, when
     coinage is produced (or any other Improvement with the "Gold" flag,
     when the req vector is actively true). 
 

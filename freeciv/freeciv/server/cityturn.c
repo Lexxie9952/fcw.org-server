@@ -3073,13 +3073,13 @@ static bool city_build_building(struct player *pplayer, struct city *pcity)
     fc_assert(pcity->surplus[O_SHIELD] >= 0);
     /* pcity->before_change_shields already contains the surplus from
      * this turn. */
-    int bonus_pct = get_target_bonus_effects(NULL, NULL, NULL,
+    int bonus_permille = get_target_bonus_effects(NULL, pplayer, NULL,
                           pcity, pimprove, city_tile(pcity), NULL,
                           NULL, NULL, NULL, NULL,
-                          EFT_COINAGE_BONUS_PCT);
-    double coinage = pcity->before_change_shields*(100+bonus_pct);
+                          EFT_COINAGE_BONUS_PM);
+    double coinage = pcity->before_change_shields*(1000+bonus_permille);
     // Round to nearest int with 0.5 randomly decided up or down:
-    coinage = (coinage / 100) + (double)(49.000000001+fc_rand(2))/100; 
+    coinage = (coinage / 1000) + (double)(499.000000001+fc_rand(2))/1000; 
     notify_player(pplayer, city_tile(pcity), E_IMP_BUILD, ftc_server,
               _("[`shield`]➡[`gold`] %s %s renders %d shields to %d gold."),
               city_link(pcity), city_improvement_name_translation(pcity, pimprove),
