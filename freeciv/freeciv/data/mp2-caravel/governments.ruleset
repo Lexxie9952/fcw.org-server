@@ -273,13 +273,13 @@ Nationalism glorifies national supremacy over other peoples.\
 "), _("\
 Content cities get a +1 trade bonus on Land tiles only.\
  Celebrating cities also get Ocean tiles. Cities may rapture if founded under\
- the original national hegemony. Luxury suffers a 15% penalty.\
+ the original national hegemony. Luxury suffers a 10% penalty.\
  Science gets +10% in original cities.\n\
 "), _("\
 Each city gets 1 unit free of upkeep. The city with a Palace gets +15% production.\
  Original cities have a 3x incite cost, otherwise cost one third.\n\
 "), _("\
-Police Stations suppress +1 unhappy Foreign National.\
+Police Stations suppress +1 unhappy Foreign National and cost 10 shields less.\
  Five military units may impose martial law, affecting one citizen each.\
  Migrants can be made to help grow cities. Tile workers gain a ⅑ move\
  bonus and for every three worker turns of work put in, get a fourth\

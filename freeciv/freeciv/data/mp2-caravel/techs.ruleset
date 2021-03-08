@@ -315,7 +315,7 @@ req2     = "Invention"
 flags    = ""
 graphic     = "a.democracy"
 graphic_alt = "-"
-helptext = _("Allows government Democracy.")
+helptext = _("Obsoletes Code of Hammurabi. Allows government Democracy.")
 cost = 875
 
 [advance_economics]
@@ -546,7 +546,7 @@ flags    = ""
 graphic     = "a.magnetism"
 graphic_alt = "-"
 helptext = _("Obsoletes Caravel.")
-cost = 950
+cost = 875
 
 [advance_map_making]
 name     = _("Map Making")
@@ -630,7 +630,7 @@ req2     = "Code of Laws"
 flags    = ""
 graphic     = "a.monarchy"
 graphic_alt = "-"
-helptext = _("Allows government Monarchy.")
+helptext = _("Obsoletes Chand Baori, Ziggurat. Allows government Monarchy.")
 
 [advance_monotheism]
 name     = _("Monotheism")
@@ -687,7 +687,7 @@ req2     = "Literacy"
 flags    = ""
 graphic     = "a.philosophy"
 graphic_alt = "-"
-helptext = _("Bonus tech before 1600AD if no next tier techs are possessed.")
+helptext = _("Obsoletes Sphinx. Bonus tech before 1600AD if no next tier techs are possessed.")
 cost = 276
 
 [advance_physics]
@@ -774,7 +774,7 @@ req2     = "Steel"
 flags    = ""
 graphic     = "a.refining"
 graphic_alt = "-"
-helptext = _("Allows Arctic Oil Wells. Oil Wells on Oil get +1 shield after other bonuses.")
+helptext = _("Allows Arctic Oil Wells. Oil Wells on Oil get +1 shield.")
 cost = 3630
 
 [advance_refrigeration]
@@ -853,7 +853,7 @@ req2     = "University"
 flags    = ""
 graphic     = "a.steam_engine"
 graphic_alt = "-"
-helptext = _("Obsoletes Frigate, Hanging Gardens.")
+helptext = _("Obsoletes Frigate, Hanging Gardens. Ends Colossus discount on Commerce units.")
 cost = 1240
 
 [advance_steel]
@@ -893,7 +893,7 @@ req2     = "Industrialization"
 flags    = ""
 graphic     = "a.the_corporation"
 graphic_alt = "-"
-helptext = _("Obsoletes Caravan. Ends Colossus discount on Commerce units.")
+helptext = _("Obsoletes Caravan. +25% Coinage for Stock Exchange")
 cost = 2900
 
 [advance_the_republic]

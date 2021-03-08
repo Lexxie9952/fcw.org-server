@@ -2166,7 +2166,22 @@ target_reqs    =
        "Tech", "Alphabet","Player", FALSE
        "Tech", "Writing", "World",  FALSE
      }
-  
+
+[actionenabler_irrigate_src_city_chand_baori]
+action        = "Build Irrigation"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitFlag",      "CanHide",      "Local", FALSE
+      "Tech",          "Monarchy",     "Player",FALSE
+      "Gov",           "Despotism",    "Player",TRUE
+      "Building",      "Chand Baori",  "Player",TRUE
+    }
+target_reqs    =
+    { "type",        "name",     "range", "present"
+      "CityTile",    "Center",   "CAdjacent", TRUE
+    }
+
 [actionenabler_irrigate_src_ocean]
 action        = "Build Irrigation"
 actor_reqs    =

@@ -34,13 +34,17 @@ Brief Explanations of goals and challenges.
       resolved or finalized (air unit balance and mechanics, unreachable exploits, infinite rails, etc.)
       
 Focus goals for MP2-Caravel
-1. Increase splendor of the Bronze Age. Define your national race, characteristics, and unique path.
+1.  Increase splendor of the Bronze Age. Define your national race, characteristics, and unique path.
+1a. Increase progress in the ruleset goal that the variety of wonders is such that there are too many to build: if you try, say hello
+    to Horseys coming for you! Contunued enhancing of the "Too many wonders" characteristic continues to reduce the sameness or 
+    similarity in national characteristics and same strategies, especially among the "Wonderboy" players. Each nation has to 
+    carefully pick its diverse traits and advantages. Final result: more strategic breadth and variety, further progress toward 
+    the goal of "game of a lifetime", continued elimination of "golden path" traits of the game.
 2. Attempt the Final Re-balance of what 2x movement rates have done to foot units.
    Make Foot units a true tactical component again.
 3. Re-balance of Govs toward the vibe and vision of what we know it should be like.
 4. Enhance Trade routes and other mechanics to increase the Diplomatic / Economic bloc / Sovereign concerns of
    each individual nation:  Nerf mechanics forcing gang-alliance loyalties.
-
 
 BUILDINGS AND WONDERS:
 1. Colossus: +1 trade on city center, -5 cost on most commerce units built in that city. 2 notch or ~22% increase to trade in its city. Bug-fix: Now must be built adjacent to Ocean.
@@ -76,8 +80,9 @@ BUILDINGS AND WONDERS:
       expire/become obsolete, less trust from your neighbours.
 7. Barracks requirement is Warrior Code. Besides making sense and rewarding early discovery of that tech as a diverse strategy to pursue, it 
    balances out the longturn's format of giving starting gold and extra disbandable units.
-8. Coinage yields 3 gold per 2 shields, (1.5 gold per shield), so it now less "useless".
+8. Coinage yields 3 gold per 2 shields, (i.e., 1.5 gold per shield), so it no longer a "useless" feature taking up game space.
 8a. Marketplace, Bank, and Stock Exchange each add 0.25 to the conversion rate (1.75,2.00,2.25, respectively).
+      1. requires all earlier buildings present, 2. not Communist gov, 3. the final bonus for Stock Exchange also requires The Corporation
 9. New Wonder Appian Way:  Foot units, Chariots and Wagons get move bonus from Appian Way. City with Appian gets discounts on Wagons. 
       increases revenue from trade routes approx. 10%, gives +1 trade to every road tile in its home city, 
       workers +1/3 move and build roads at double speed
@@ -107,11 +112,21 @@ BUILDINGS AND WONDERS:
     ** Isaac 420 - slightly discourage everyone doing isaac
     ** Sun Tzu 310 - slightly discourage everyone having hardened units
 17. The Sphinx, cost 70, tech req: none, reduces tile corruption (anarchy/despotism), halves city corruption, gives +1 luxury to city.
+18. Marco Polo, as an embassy and outer relations/connections type of wonder, can't be lost in the conquest of a single city. 
+    This is especially fair since: this is the only wonder in the game that is "required", one might say. This provides fairness to 
+    all players who otherwise would prefer a "no wonder" strategy.
+19. Roman Colosseum added. Entertainers give 3 lux instead of 2, now equal in net trade to scientists or taxmen. Each city with an 
+   Amphitheater gains +1 happy and +1 luxury.
+20. Chand Baori 
+21. Medici Bank 
+22. Roman Colosseum
+23. Ziggurat.
+24. Code of Hammurabi, halves the gap between Despotism and Monarchy, and gives one content citizen.
 TRIBAL WONDERS are wonders that help define the charactertistics of your nation and may alter its strategic path and possibilities. 
 1. HG is now a Tribal Wonder. 
 2. Angkor Wat. +1 happy, all tiles in cities 3+ get celebration bonus when city is not celebrating, tile work on jungle/swamp 50% faster, 
                cost of Elephants -5 shields.
-3. 
+3. Mausoleum of Mausolos
 
 
 GOVERNMENT RE-BALANCE:
@@ -146,6 +161,8 @@ GOVERNMENT RE-BALANCE:
 4. Democacies can now be INCITED TO REVOLT, but cost is 3x.
 5. Democracy can't rapture with 10% or more foreign citizens.
 6. Also see, Hanging Gardens, Police Station, Women's Suffrage.
+* NATIONALISM
+1. New government, see manual for details.
 * FOREIGN NATIONALS:
 1. Half are unhappy, not one third.
 2. Fixed, was sometimes rounding up too high, the number of your own nationals in a newly conquered city.
@@ -261,14 +278,19 @@ OTHER:
 7. Added Bunker. Built on top of Fortress. a. Units inside can't be seen. b. Prevents Air and Missile attacks. 
    c. Prevents tile pillage (so Jet Bomber etc. can't remove it) d. Claims less surrounding tiles, doesn't see as far, no extra defense bonus.
    reqs: steel
-8. Trade re-balance. You've only got one trade route per city so we're going to make it mean something. One-time bonus for establishing is 
-   now standard freeciv bonus. Base route revenus is now 1.5x what it was before. But, minimum distance is 20 tiles... reaching out farther is 
-   a small balance to pay for your higher bonus. Encourages more world-interconnectivity and intrigue. Marco Polo continues to take care of 
-   micro-managing your other 3 routes you would have had under standard rules.
+8. Trade re-balance. You've only got one trade route per city so we're going to make it mean something. Trade and Project Honeycomb are now
+   ready to come into the game with some real meaning!
+   Traderoutes add a hard +1 trade to the city centre.
+   One-time gold bonus for establishing a trade route is now the standard freeciv bonus. It's a lot more, but it's only once per city. 
+   4x one-time gold bonus for establishing trade routes between capitals, if it's before Banking is discovered.
+   Base route revenues is now 50% higher than standard. With only one route instead of 4, this means you're still getting 
+      only 37.5% from trade routes as the former (OP) trade dynamics. But 37.% of OP is something substantial.
+      Marco Polo continues to take care of the other 3 routes you would have had under standard rules, keeping the game simpler.
+      For all these bonuses is a price to pay. Minimum distance for trade routes is now 20 tiles... reaching out farther is a small balance
+         to pay for your higher bonus. Encourages more world-interconnectivity and intrigue, and even banditry and piracy.
 
 MISC.
 ---------------
-Traderoutes add a hard +1 trade to the city centre
 Commerce units simplified. All commerce can build wonders and do trade routes at all times under all conditions.
    Trade tech isn't needed for Trade routes. Trade tech simply increases Trade revenue higher rates.
 Ships cost 2x to bribe -- injured ships far from home had too low bribe costs for what you're getting, additionally, input showed a
@@ -319,6 +341,7 @@ Ram Ship can see 1 tile around it and travel on rivers - prevents unintended att
 Fallout disappear chance changed from 20% to 15%
 Small clarification: to use a train requires < 3 moves, not <= 2 moves. (Doesn't change who can use it, just clarifies rare cases.)
 Canals can serve as an irrigation source.
+Magnetism tech costs 875, was 950. Halves the extra cost over Gunpowder. Further encourages Frigates before Ironclads.
 
 SERVER UPGRADES:
 1. Special Unit Actions / Attacks:

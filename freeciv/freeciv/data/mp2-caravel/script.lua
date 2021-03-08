@@ -255,6 +255,17 @@ end
 signal.connect("unit_lost", "unit_lost_callback")
 
 function building_built_callback(building, city)
+
+  if building:rule_name() == "Chand Baori" then
+    local owner = city.owner
+    local city_name = city.name
+
+    notify.player(owner, "Chand Baori's deep well gives %s a free river.", city_name)
+    city.tile:create_extra("River", NIL)
+    -- continue processing
+    return false
+  end
+
   if building:rule_name() == "Women's Suffrage​" and first_womens_suffrage < 1 then
     first_womens_suffrage = 1
     notify.event(nil, nil, E.SCRIPT,
