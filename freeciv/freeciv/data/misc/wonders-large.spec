@@ -99,6 +99,7 @@ sprites =
 		"b.michelangelos_chapel", "wonders/michelangelos_chapel"
                 "b.olympics", "wonders/olympics"
 		"b.oracle", "wonders/oracle"
+                "b.pax_dei", "wonders/pax_dei"
 		"b.pyramids", "wonders/pyramids"
                 "b.roman_colosseum", "wonders/colosseum"
 		"b.seti_program", "wonders/seti_program"
