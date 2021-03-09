@@ -948,46 +948,26 @@ function handle_ruleset_control(packet)
    */
 }
 /**************************************************************************
-  Adjust granularity combat scores. Have to hard code these until we get 
-  a better solution like, scores are all 1000x to start with.
+  Apply internal ruleset effects used for non-integer granular combat 
+  scores. Assures accuracy for: warcalc, manual helptext, city prod list,
+  etc.
 **************************************************************************/
 function handle_non_integer_combat_scores(key)
 {
-  /* Granularity placeholder solution, for units whose base combat strength is 
-    non-integer and achieve non-integer base score via a globally applied
-    bonus/penalty in units.ruleset. NOTE that this does not include another
-    method of achieving this through a v0 power_factor that is not 100. There
-    are use cases for both methods.
-  * Using v0 power_factor:  PROS: It is automatically calculated into warcalc
-    odds, and automatically adjusted to show in base combat strength level by the 
-    utype_real_base_attack_strength(ptype) wrappers for displaying base combat
-    strength to players. CONS: it's secretly "lying" about having lower/higher
-    vet power_factor, and ruleset is obliged to make power_factors behave exactly
-    the same as default standard instead of custom, so that one can suppress
-    showing custom hacky/confusing non-standard power_factors in the manual and
-    everything still washes out clean as far as game behaviour: user "knowledge"
-    of the "false" information will then be exactly verisimilitudinous to the
-    actual mechanics and they live in a nice simpler cleaner world unaware of the
-    hacky solution used to achieve it.
-  * Using handle_non_integer_combat_scores. PROS: Allows the ruleset to simply 
-    apply a global combat_strength bonus that achieves a non-integer base strength,
-    with his bonus/penalty simply 'hidden' in the ruleset. The reported strength
-    value will then be adjusted in this function to match, and everything is exactly
-    equal from this point out between actual mechanics and reported strength.  
-    CONS: You have to actually hard-code these exceptional non-integer strengthed
-    units into the function for each ruleset. You have to suppress (manually edit)
-    the generated ruleset html to not confusing report a bonus or penalty for 
-    every single unit_type this unit can enter combat with. 
-  * Using both. In some cases, the math is such that using only one would cause
-    bad rounding errors; e.g., the Falconeer with 20fp needs ultra-small values with
-    a finer precision than either method can achieve by itself, so it achieves this
-    by using both the (v0 != 100) method and a globally applied ruleset defense penalty
-    which is then hard-coded into the unit_type's local ['defense_strength'] property. */
-  var has_falconeers = false;
-
   if (unit_types[key]['name']=="Falconeers") {
     unit_types[key].defense_strength *= 0.5;
+    console.log("Ruleset has units with non-integer combat scores.")
   }
+  else if (unit_types[key]['name']=="Escort Fighter") {
+    unit_types[key].attack_strength += 0.5;
+  }
+  else if (unit_types[key]['name']=="Fighter") {
+    unit_types[key].defense_strength += 0.5; // easier than *= 1.666forever
+  }
+  else {
+    return; // skip message
+  }
+  console.log("Ruleset effects added to client warcalc data for "+unit_types[key]['name'])
 }
 
 /**************************************************************************
@@ -1724,11 +1704,13 @@ function handle_ruleset_unit(packet)
     packet['name'] = packet['name'].replace('?unit:', '');
 
   unit_types[packet['id']] = packet;
-  // Granularity placeholder solution, for units whose base combat strength is 
-  // non-integer and achieve non-integer base score via a globally applied
-  // bonus/penalty in units.ruleset.  
+
+  // Placeholder solution for units whose base combat strength is 
+  // non-integer and achievea  non-integer base score via a globally
+  // applied bonus/penalty in units.ruleset.
   if (client_rules_flag[CRF_MP2_C])
     handle_non_integer_combat_scores(packet['id']);
+  
 }
 
 /************************************************************************//**
