@@ -1671,6 +1671,10 @@ function update_unit_order_commands()
           cost_adjust -= 20; // 20% discount after Recycling Tech
         }
       }
+      if (client_rules_flag[CRF_MP2_C] && governments[client.conn.playing['government']]['name']=="Nationalism") {
+        cost_adjust -= 25; // 25% discount for government Nationalism.
+      }
+
       upgrade_cost = Math.floor(upgrade_cost * (100 + cost_adjust) / 100);
       /* *********************************************************************************************** */
 
