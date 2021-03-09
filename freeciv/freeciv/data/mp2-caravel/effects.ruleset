@@ -93,7 +93,7 @@ value   = 4
 ; with their original nation
 [effect_angry_conquered]
 type    = "Enemy_Citizen_Unhappy_Pct"
-value   = 50
+value   = 40
 
 ; Barbarian effects
 [effect_barb1]
@@ -641,8 +641,33 @@ reqs    =
     { "type", "name", "range"
       "UnitType", "Carrier", "Local"
     }
+; **************************** STACK ESCAPE ODDS ***************************
+[effect_base_stack_escape_odds] ; all stack escape units have 60% base odds.
+type    = "Stack_Escape_Pct"
+value   = 10 ; 50% → = 60%
 
-; *************************** Ruleset Fortify Bonus *********************** 
+[effect_submarine_stack_escape_odds]
+type    = "Stack_Escape_Pct"
+value   = 15 ; 60% → 75%
+reqs    =
+    { "type", "name", "range"
+      "UnitType", "Submarine", "Local"
+    }
+[effect_destroyer_stack_escape_odds]
+type    = "Stack_Escape_Pct"
+value   = 7 ; 60% → 67%
+reqs    =
+    { "type", "name", "range"
+      "UnitType", "Destroyer", "Local"
+    }
+[effect_missile_destroyer_stack_escape_odds]
+type    = "Stack_Escape_Pct"
+value   = 7 ; 60% → 67%
+reqs    =
+    { "type", "name", "range"
+      "UnitType", "Missile Destroyer", "Local"
+    }
+; *************************** RULESET FORTIFY BONUS  ************************ 
 [effect_fortified]
 type    = "Fortify_Defense_Bonus"
 value   = 50
@@ -1690,9 +1715,18 @@ reqs	=
       "Gov", "Nationalism", "Player"
       "UnitType", "Riflemen", "Local"
     }
-[effect_nationalism_vet_fighters]
-type    = "Veteran_Build"
-value   = 1
+;veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+[effect_nationalism_fighters_vet_promotion]
+type    = "Veteran_Combat"
+value   = 50 ;60 37.5 24 15 15 15 
+reqs	=
+    { "type",       "name",      "range"
+      "Gov", "Nationalism", "Player"
+      "UnitType", "Fighter", "Local"
+    }
+[effect_nationalism_divebomber_vet_promotion]
+type    = "Veteran_Combat"
+value   = 50 ;60 37.5 24 15 15 15
 reqs	=
     { "type",       "name",      "range"
       "Gov", "Nationalism", "Player"
@@ -1724,6 +1758,8 @@ reqs	=
       "Building",   "Angkor Wat",  "Player", FALSE ;handled separately by the wonder
       "OutputType", "Trade",       "Local",  TRUE
     }
+
+; Constitutional Monarchy gets trade bonus only on Land tiles unless celebrating.
 [effect_gov_tile_bonus_magna_carta_1]
 type    = "Output_Inc_Tile"
 value   = 1
@@ -1792,7 +1828,7 @@ reqs	=
       "OutputType", "Trade", "Local"
       "Gov", "Communism", "Player"
     }
-; Nationalism gets trade bons only on Land tiles unless celebrating.
+; Nationalism gets trade bonus only on Land tiles unless celebrating.
 [effect_gov_tile_bonus_7] 
 type    = "Output_Inc_Tile"
 value   = 1
@@ -1909,19 +1945,20 @@ reqs    =
     }
 [effect_bad_lux_nationalism]
 type    = "Output_Bonus_2"
-value   = -10
+value   = -15
 reqs    =
     { "type", "name", "range"
       "Gov", "Nationalism", "Player"
       "OutputType", "Luxury", "local"
     }
-[effect_sci_adjustment_nationalism] ; repairs 2/3 of the science lost from needing more lux
+[effect_sci_adjustment_nationalism]
 type    = "Output_Bonus_2"
-value   = 10
+value   = 15
 reqs    =
-    { "type", "name", "range"
-      "Gov", "Nationalism", "Player"
-      "OutputType", "Science", "local"
+    { "type",       "name",            "range"
+      "Gov",        "Nationalism",     "Player"
+      "OutputType", "Science",         "local"
+      "CityStatus", "OwnedByOriginal", "City"
     }
 ;**************************************************************************************************
 

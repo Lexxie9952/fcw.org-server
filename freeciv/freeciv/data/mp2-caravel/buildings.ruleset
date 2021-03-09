@@ -1726,9 +1726,10 @@ Gibraltar Fortress must be built in a city with Coastal Defense, and is never ob
 name		= _("Great Wall")
 genus		= "SmallWonder"
 reqs	=
-    { "type",     "name",       "range",  "present", "quiet"
-      "Tech",     "Construction", "Player", TRUE,      FALSE
-      "Building", "Great Wall", "Player", FALSE,     TRUE
+    { "type",     "name",          "range", "present","quiet"
+      "Tech",     "Construction",  "Player", TRUE,     FALSE
+      "Building", "Great Wall",    "Player", FALSE,    TRUE
+      "Tech",     "Machine Tools", "World",  FALSE,    FALSE 
     }
 graphic	= "b.great_wall"
 graphic_alt	= "-"
@@ -1750,9 +1751,7 @@ The Great Wall protects your cities with City Walls. It takes three\
 The Great Wall gives no extra effect when City Walls are already present.\
  However, regular City Walls still protect a city in which the Great\
  Wall has not yet activated. \n Warning! This Wonder is obsolete when\
- ANY nation in the world discovers Machine Tools. You may not know\
- which nations have Machine Tools. This makes it possible for you to\
- build an obsolete wonder!\
+ ANY nation in the world discovers Machine Tools.\
 ")
 
 [building_hanging_gardens]

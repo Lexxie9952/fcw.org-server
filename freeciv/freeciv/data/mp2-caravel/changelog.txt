@@ -162,9 +162,10 @@ GOVERNMENT RE-BALANCE:
 5. Democracy can't rapture with 10% or more foreign citizens.
 6. Also see, Hanging Gardens, Police Station, Women's Suffrage.
 * NATIONALISM
-1. New government, see manual for details.
+1. New government, see manual for details. An modern authoritarian warlike government that, on a one-for-one per capita population comparison, is quite economically
+   capable of competing with democracies.
 * FOREIGN NATIONALS:
-1. Half are unhappy, not one third.
+1. 40% are unhappy, increase from 34%.
 2. Fixed, was sometimes rounding up too high, the number of your own nationals in a newly conquered city.
 
 
@@ -192,6 +193,7 @@ UNITS/COMBAT/MECHANICS:
       Fanatics, Skirmish assault: 3 combat rounds, can hit up to 4 units, can kill no units, uses 1 5/9 moves. Now, can also assault conquered foreign-occupied cities.
       Marines, Bazooka attack: 3 combat rounds, can hit up to 4 units, can kill 1 unit, uses 1 5/9 moves, can hit oceanic (but not while transported)
       Battleship, Bombard attack: 3 combat rounds, 4 units, can kill 1, uses 5 moves.
+      Catapult, Cannon, Artillery, Howitzer can defend against bombard/ranged/special unit attacks at 4,5,6,7 combat rounds, respectively.
 2. iPILLAGE. Instant Pillage is tactically significant. Formerly, roads under rails couldn't be pillaged in one turn. Scorched Earth and Blitz tactics barely existed in the game.
       NOTE: iPillage Odds increase +5% per vet level.
       Dive Bomber - 50% odds, 1 selectable target, 7 move cost. 
@@ -209,8 +211,8 @@ UNITS/COMBAT/MECHANICS:
     Attack City Walls. 50% chance to destroy city walls (requires 1 full move point), odds halved against capitals.
     Ram Fortress:      attack on fortified walls is emulated by up to 4hp damage on each occupant, emulating a 0 to 80% reduction of Fortress defense bonus; which may be partly/fully repaired/recovered each successive turn.
     Two Rams will likely render Fortress defense into liability. Troops who remain in a Fortress facing two Siege Rams will be damaged and demoralized from breaches
-    and crushing stone debris. But, proactive defenders can pillage the Fortress and use its stone to improvise fortified structures. That is, render the tile into an
-    unrammable Fort which enjoys a 1.33x bonus protection from stack kill.
+    and crushing stone debris. But, proactive defenders can pillage the Fortress and use its stone to improvise fortified structures (a Fort, which is left after a Fortress is pillaged) 
+    That is, render the tile into an unrammable Fort which still gets a 1.33x bonus protection from stack kill.
     The net effect of this realistically emulates that Fortresses are dominant military presences until attackers take the time and wherewithal to get around 
     to protracted siege, whereafter they are still defendable but at a lesser bonus.
 2. Satellite: invisible, can investigate all cities (even with Police Station), has superior vision and movement. Requires Apollo Program.
@@ -223,10 +225,6 @@ UNITS/COMBAT/MECHANICS:
 8. A server flaw sometimes
    a. allowed military units to clean fallout and pollution. This fix affects ALL rulesets.
    b. For non-military units, only spies and worker types can pillage now. Excluded are: Caravans, Explorers, Diplomats, Pilgrims, Tribesmen, Trucks, Freight.
-9. Catapults and their upgrade line (Cannon, Artillery, Howitzer) are now the City Buster sub-class of land units. Each gets a growing +25% upgrade over 
-   the last, in how much of the Fortification/City Wall bonus it reduces. e.g., Catapult takes -25% from Fortifications and Wall bonuses. This represents their 
-   special unit ability, makes them all a more logical family progression (instead of all useless then howitzer is suddenly 0/1/black/white). It also helps these
-   slow units who were not used as much as historically, find more purpose in the game.
 SPIES/DIPLOMATS:
 9. Diplomatic units now defend a unit on a tile from hostile diplomatic acts (bribe/sabotage), the same as they defend a city from hostile diplomat attacks.
    a. In the case where bribe/sabotage isn't possible (i.e., other non-diplomat units > 1), no defense is necessary since it's "No action possible."
@@ -243,10 +241,20 @@ SPIES/DIPLOMATS:
       ~75% chance to succeed vs. protected city (varies slightly up or down with the vet levels of the spy units in combat.)
       causes casus belli on failure!
 11. Conquered cities with Foreigners have a +10% chance of success in sabotage actions.
-CITY-BUSTER
-1. Catapult > Cannon > Artillery > Howitzer is now an evolutionary sub-class of land units for Ballistic/Siege/City Busting as their 
+12. Base Stack Escape odds are 60%, not 50%. 50% is too coin-flip on live or die for anyone to really use or count on this bonus.
+      Higher, however, can give too much power to stacks. 
+12a. Destroyer types are fast and have 67% stack escape odds. Submarines are submerged and have 75% stack escape odds.
+13. Fighter is D3.5, Escort Fighter is A3.5.
+BALLiSTIC sub-class 
+1. Catapults and their upgrade line (Cannon, Artillery, Howitzer) are now the Ballstic sub-class of the Land unit class. This line of units gets an increasing +25% upgrade over 
+   the obsolete unit, in how much of the Fortification/City Wall bonus it reduces. Catapult takes -25% from Fortifications and Wall bonuses. This represents their 
+   special unit ability, makes them all a more logical family progression (instead of all -0% then Howitzer is suddenly -100% bonus). It also helps these
+   slow units fit much better into their historic realistic tactical uses, inside the game.
+2. Catapult > Cannon > Artillery > Howitzer is now an evolutionary sub-class of land units for Ballistic/Siege/City Busting as their 
    special unit ability or distinction. Each one gets a special bonus against City Defense improvements that progressively grows until
-   arriving at Howitzer. This does a lot for game balance and logic. 
+   arriving at Howitzer. This does a lot for game balance and logic.
+2. Ballistic sub-class special unit ability is that it can retaliate against ranged special unit attacks from other unit types. They may be 
+   weak defenders up close, but be careful shooting arrows or bazookas at them from far away, or you might regret it.
 
 OTHER:
 1.Casus Belli Expansions:
@@ -507,6 +515,8 @@ What this means for MP2 rules:
 64. Prefs options for "Show pollution on map" and "Movement Point Display" can now be permanently set instead of temporarily.
 65. There was no way for EFT_GROWTH_FOOD to be applied at city founding and this is now fixed. Rulesets wanting old behaviour of no extra food 
       in this situation, need to put a MinSize, "1", City condition into them.
+66. Stack Escape changed to be unit is of equal or greater moves than attacker. (was greater)
+67. New server effect "Stack_Escape_Pct" allows regulating odds of stack escape in certain situations, instead of hard-coded universal 50%, always.
 
 
 These help with much more than Freeciv and other Full-screen apps. They help you with everything you do on your computer:

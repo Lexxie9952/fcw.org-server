@@ -1,4 +1,4 @@
-;: ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：’ ×
+;：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：’ ×
 ; Modifying this file:
 ; You should not modify this file except to make bugfixes or
 ; for other "maintenance".  If you want to make custom changes,
@@ -14,7 +14,7 @@
 ; unit with the relevant role that the player can build will be chosen.
 ; If no such unit can be found (eg Explorers that require Seafaring),
 ; then the first unit with this role will be chosen.
-;: ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：’ ×
+;：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：’ ×
 
 [datafile]
 description="Unit definitions for the MP2 ruleset."
@@ -1342,7 +1342,7 @@ bonuses       =
      ;"WillNever", "DefenseDividerPct", -90    ;The way to change general attack score on everyone without using integer attack score.
      ;"WillNever", "DefenseMultiplierPct", -98 ;The way to change general defense score on everyone without using integer defense score.
      ;However, the value below is with using the custom veterancy level. For 20FP unit, a D 20% of A emulates emulates a D 2/3 of A. 
-     ;********* requires hard-coding fix to packhand.js:handle_non_integer_combat_scores() if changed: ******************************
+     ;********* requires hard-coding fix to packhand.js:handle_non_integer_combat_scores() if changed：******************************
      "WillNever", "DefenseMultiplierPct", -50 ;The way to change general defense score on everyone without using integer defense score. 
    }
 flags         = "FootSoldier", "Capturer", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "WillNever"
@@ -2046,6 +2046,7 @@ move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
+paratroopers_mr_sub = 8192 ; 00100,00,0000,000,0,0 - bbd_retal_rate=4, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -2056,8 +2057,12 @@ helptext      = _("\
 Catapults are large rock-throwing war machines.\
  The ballistic delivery of massive\
  stones diminishes the bonus of Fortifications and\
- City Walls by -25%, yielding a 1.5× and 2.75× bonus, respectively.\
- Catapults are weak defenders, and will need an escort to be effective.\
+ City Walls by -25%, yielding a 1.5× and 2.75× bonus, respectively. \n\
+"), _("
+Catapults are weak defenders, and will need an escort to be effective.\
+ Even so, it is better to rush attack them than do special unit attacks\
+ from range： when attacked from range or rammed in a Fortress, Catapults\
+ can retaliate for 4 rounds of combat.\
 ")
 
 [unit_siege_ram]
@@ -2081,7 +2086,7 @@ move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 1
 fuel          = 0
-city_size     = 507940  ; 011111,000,000,001001,00 = atk_bonus=8.75x, max_kills=0, targets=all, move_cost=9 frags, reserved = 00
+city_size     = 507960  ; 011111,000,000,001110,00 = atk_bonus=8.75x, max_kills=0, targets=all, move_cost=14 frags, reserved = 00
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -2094,7 +2099,7 @@ Siege Rams launch a tremendous thrusting force through\
  iron-capped timber shafts. They can break through City\
  Walls if they are not killed first. City Walls have counter\
  defenses, giving Siege Rams even odds of success. Wall\
- defense in capitals is twice as stiff——cutting odds to 25%.\n\
+ defense in capitals is twice as stiff—cutting odds to 25%.\n\
 Siege Rams may also ram Fortresses, doing up to 4hp of damage\
  on each occupant. This emulates damage to the Fortress defense\
  bonus, which is partly or fully repaired/recovered next turn.\n\
@@ -2102,7 +2107,7 @@ Siege Rams can only travel by road. They can carry 1 Land\
  unit as cargo：their slow pace means this serves more for\
  disguise or defense.\n\ 
 Siege Rams need an escort for protection. They need a minimum of\
- 1 move point to attack walls, and 1 1/9 points against a Fortress.\
+ 1 move point to attack a Fortress or City Walls.\
  Cities protected by the Great Wall are immune to Siege Rams.\n\
  The discovery of Metallurgy by any nation incapacitates Siege Rams.\
 ")
@@ -2129,6 +2134,7 @@ move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
+paratroopers_mr_sub = 10240 ; 00101,00,0000,000,0,0 - bbd_retal_rate=5, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -2143,9 +2149,11 @@ Cannons are huge guns that use gunpowder to fire massive metallic projectiles\
  much faster and more accurately than earlier ballistic weapons. The\
  aerial delivery of high speed massive metal gives an edge against\
  Fortifications and City Walls. The bonuses from those are reduced by\
- -50% to 1.25x and 2.5x, respectively.\
- While Cannons are strong attackers, they are also weak defenders. They\
- need an escort to be effective.\
+ -50% to 1.25x and 2.5x, respectively. \n\
+"), _("
+While Cannons are strong attackers, they are also weak defenders. Yet\
+ they are not without defensive purpose. They can retaliate 5 rounds\
+ of bombardment against special unit attacks from other units.\
 ")
 
 [unit_artillery]
@@ -2169,6 +2177,7 @@ move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
+paratroopers_mr_sub = 12288 ; 00110,00,0000,000,0,0 - bbd_retal_rate=6, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -2183,9 +2192,11 @@ Artillery are a major upgrade to Cannons, with doubled firepower. Accuracy\
  and projectile speed go to a whole new level. Thus, they have an\
  even greater bonus than their predecessors against Fortifications\
  and City Walls. Such bonuses are reduced -75%. This renders Fortifications\
- completely ineffective, and reduces the bonus from Walls down to 2.25x.\
- Like their predecessors, Artillery are poor at defense, and need an\
- escort to be effective.\
+ completely ineffective, and reduces the bonus from Walls down to 2.25x. \n\
+"), _("
+Like their predecessors, Artillery are poor at defense, and need an\
+ escort to be effective. However, they can retaliate 6 rounds of bombardment\
+ against special unit attacks from other units.\
 ")
 
 [unit_anti_aircraft]
@@ -2304,6 +2315,7 @@ move_rate     = 4
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
+paratroopers_mr_sub = 14336 ; 00111,00,0000,000,0,0 - bbd_retal_rate=7, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -2316,7 +2328,10 @@ roles         = ""
 helptext      = _("\
 Howitzers are upgraded Artillery with a terrifying increase to mobility and attack strength.\
  This is so much so, that Fortifications and City Walls are completely ineffective\
- against Howitzers. Howitzers are vulnerable when not escorted.\
+ against Howitzers. \n\
+"), _("
+While Howitzers are vulnerable when not escorted, they can retaliate 7 rounds of bombardment\
+ against special unit attacks from other units. This is a strong deterrent.\
 ")
 
 [unit_balloon]
@@ -2390,7 +2405,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "Unbribable", "HasNoZOC", "NeverProtects", "Bombarder", "Provoking"
+flags         = "Unbribable", "AirAttacker", "HasNoZOC", "NeverProtects", "Bombarder", "Provoking"
 roles         = ""
 helptext      = _("\
 As new technology inspires the upgrade of Balloons, the Zeppelin appears.\
@@ -2407,7 +2422,6 @@ NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 bombard_rate = 4
-
 
 [unit_airplane]
 name          = _("Airplane")
@@ -2480,6 +2494,7 @@ uk_gold       = 0
 targets       = "Air", "AirProtect", "Missile", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
+      "DefenseMultiplierPct", "AirAttacker", 17 ; defends at 3.5 (3*1.17=3.51) vs air attackers
    }
 flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape",
                 "AirProtector", "Provoking"
@@ -2536,6 +2551,14 @@ uk_gold       = 0
 targets       = "Air", "AirProtect", "Missile", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
+      ; attacks at 3.5, have to use flags carefully to include all with no overlap:
+     "DefenseDividerPct", "CantReachAir", 17          ; all land, sea, bombers: Except AAA, Mobile SAM, AEGIS
+     "DefenseDividerPct", "AntiAir", 17               ; AAA, Mobile SAM, AEGIS
+     "DefenseDividerPct", "NonMil", 17                ; All non-mil
+     "DefenseDividerPct", "AirAttacker", 17           ; Aircraft
+     "DefenseDividerPct", "Missile", 17               ; Missiles
+     ; Cancel CantReachAir bonus on Bombers
+     "FieldUnit",      "DefenseDividerPct",         -17
    }
 flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape", "AirProtector", "Provoking"
 veteran_names =
