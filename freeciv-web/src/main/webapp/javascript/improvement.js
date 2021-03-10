@@ -30,6 +30,7 @@ const B_ANGKOR_WAT = "Angkor Wat";
 const B_APPIAN_WAY = "Appian Way";
 const B_COLOSSUS = "Colossus";
 const B_GIBRALTAR_FORTRESS = "Gibraltar Fortress"
+const B_HOOVER_DAM = "Hoover Dam"
 const B_LIGHTHOUSE = "Lighthouse";
 const B_MAGNA_CARTA = "Magna Carta";
 const B_MEDICI_BANK = "Medici Bank";
@@ -172,17 +173,22 @@ function get_universal_discount_price(ptype, pcity)
     if (nationalist_discounts[ptype['name']])    
       return ptype['build_cost'] - nationalist_discounts[ptype['name']];
   }
-  // MP2 City Walls and Coastal Defense:
+  // MP2 Building Prices:
   if (client_rules_flag[CRF_MP2_C]) {
     // City Walls increase with Metallurgy
     if (ptype['name'] == "City Walls"
-          && tech_known('Steel')) {
+        && (player_invention_state(playerno, tech_id_by_name('Steel')) == TECH_KNOWN)) {
             return ptype['build_cost'] + 10;
     }
     if (ptype['name'] == "Coastal Defense"
         && player_has_wonder(playerno,
            improvement_id_by_name(B_GIBRALTAR_FORTRESS))) {
             return ptype['build_cost'] - 15;
+    }
+    if (ptype['name'] == "Hydro Plant"
+        && player_has_wonder(playerno,
+           improvement_id_by_name(B_HOOVER_DAM))) {
+            return ptype['build_cost'] - 5;
     }
   }
   // MP2 discounts for having Colossus
