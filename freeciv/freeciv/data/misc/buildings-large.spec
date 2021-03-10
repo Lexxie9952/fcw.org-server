@@ -63,4 +63,5 @@ sprites =
 		"b.temple", "buildings/temple"
 		"b.totem_pole", "buildings/totem_pole"
 		"b.university", "buildings/university"
+		"b.wind_farm",  "buildings/wind_farm"
 	}

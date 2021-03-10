@@ -76,6 +76,7 @@ sprites =
 		"b.cure_for_cancer", "wonders/cure_for_cancer"
 		"b.darwins_voyage", "wonders/darwins_voyage"
 		"b.eiffel_tower", "wonders/eiffel_tower"
+                "b.fusion_reactor_wonder", "wonders/fusion_reactor"
                 "b.genghis_khans_equestrian_school", "wonders/genghis_khans_equestrian_school"
                 "b.gibraltar_fortress", "wonders/gibraltar_fortress"
 		"b.great_library", "wonders/great_library"
