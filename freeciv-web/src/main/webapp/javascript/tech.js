@@ -684,6 +684,7 @@ function tech_mapview_mouse_click(e)
             function(){
                 send_player_research(swal_tech_id);
             });
+            setSwalTheme();
           }
           else send_player_research(ptech['id']);
         }

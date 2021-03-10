@@ -621,6 +621,7 @@ function show_send_private_message_dialog()
 
   if (pplayer == null) {
     swal("Please select a player to send a private message to first.");
+    setSwalTheme();
     return;
   }
 

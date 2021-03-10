@@ -32,6 +32,7 @@ function init_webgl_renderer()
 {
   if (!Detector.webgl) {
     swal("3D WebGL not supported by your browser or you don't have a 3D graphics card. Please go back and try the 2D version instead. ");
+    setSwalTheme();
     return;
   }
 

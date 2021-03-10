@@ -86,6 +86,7 @@ function civclient_init()
              window.location.href ='/';
            }
       );
+      setSwalTheme();
       return;
     } else if (action == 'pbem') {
       link_game_type = 'pbem';
@@ -109,11 +110,13 @@ function civclient_init()
 
   if (window.requestAnimationFrame == null) {
     swal("Please upgrade your browser.");
+    setSwalTheme();
     return;
   }
 
   if (is_longturn() && observing) {
     swal("LongTurn games can't be observed.");
+    setSwalTheme();
     return;
   }
 
@@ -306,8 +309,9 @@ function civclient_init()
             }
             init_common_intro_dialog();
         },
-        error: function (request, textStatus, errorThrown) {        
+        error: function (request, textStatus, errorThrown) {  
             swal("Error, can't get the game type!");
+            setSwalTheme();      
         }
     });    
   }

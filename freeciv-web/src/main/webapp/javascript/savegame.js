@@ -46,6 +46,7 @@ function save_game()
 
   if (saved_this_turn) {
     swal("You have already saved this turn, and you can only save once every turn each game-session.");
+    setSwalTheme();
     return;
   }
   // reset dialog page.
@@ -76,12 +77,14 @@ function save_game()
           remove_active_dialog("#save_dialog");
 					send_message("/save");
 					swal("Game saved.");
+          setSwalTheme();
 					}
 				}
 			});
 
   if (is_pbem()) {
     swal("Play-By-Email games can not be saved. Please use the end turn button.");
+    setSwalTheme();
     return;
   }
 
@@ -97,11 +100,13 @@ function quicksave()
 {
   if (is_pbem()) {
     swal("Play-By-Email games can not be saved. Please use the end turn button.");
+    setSwalTheme();
     return;
   }
 
   if (saved_this_turn) {
     swal("You have already saved this turn, and you can only save once every turn each game-session.");
+    setSwalTheme();
     return;
   }
 
@@ -129,6 +134,7 @@ function show_load_game_dialog()
    },
    error: function (request, textStatus, errorThrown) {
      swal("Loading game failed (listsavegames failed)");
+     setSwalTheme();
    }
   });
 }
@@ -165,6 +171,7 @@ function show_load_game_dialog_cb(savegames_data)
 		  var load_game_id = $('#selectable .ui-selected').index();
 		  if (load_game_id == -1) {
 		    swal("Unable to load savegame: no game selected.");
+        setSwalTheme();
 		  } else if ($('#selectable .ui-selected').text() != null){
             send_message("/load " + $('#selectable .ui-selected').text());
             game_loaded = true;
@@ -434,6 +441,7 @@ function show_scenario_dialog()
 	  			"Select scenario": function() {
 	  			    if ($('#selectable .ui-selected').index() == -1) {
 	  			        swal("Please select a scenario first.");
+                  setSwalTheme();
 	  			    } else {
                         scenario_activated = true;
                         load_game_check();

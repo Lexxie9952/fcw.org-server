@@ -1099,6 +1099,7 @@ function popup_sabotage_dialog(actor_unit, target_city, city_imprs, act_id)
   }
   if (battering_event) {
     swal("City has no City Walls.");
+    setSwalTheme();
     return;
   }
 

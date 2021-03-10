@@ -144,6 +144,7 @@ function check_browser_compatibility()
         $(window).off('beforeunload'); // remove "do you really want to leave?" pop-up
         window.location = 'https://www.google.com/chrome/';
     });
+    setSwalTheme();
   }
 }
 
@@ -1079,7 +1080,6 @@ function pregame_settings()
   });
 
   $('#password').change(function() {
-
     swal({   
       title: "Really set game password?",   
       text: "Setting a password on this game means that other players can not join this game " +
@@ -1105,6 +1105,7 @@ function pregame_settings()
         $("#metamessage_setting").prop('readonly', true);
         $("#password").prop('readonly', true);
      });
+     setSwalTheme();
    });
 
 
@@ -1191,6 +1192,7 @@ function pregame_settings()
     function(){
       webgl_benchmark_run();
     });
+    setSwalTheme();
   });
 
   if (renderer == RENDERER_WEBGL) {
@@ -1271,6 +1273,7 @@ function change_ruleset(to) {
     send_message("/set nationset all");
     if (chosen_nation != -1) {
       swal("Ruleset changed. You need to select your nation again.");
+      setSwalTheme();
     }
   }
 
@@ -1587,6 +1590,7 @@ function validate_username_callback()
              },
            error: function (request, textStatus, errorThrown) {
              swal("Login user failed.");
+             setSwalTheme();
            }
           });
         } else {
@@ -1606,6 +1610,7 @@ function validate_username_callback()
      console.log("For programmers and server admins: "
                  + "Please check if the meta server is running properly.");
      swal("Error. Please try again with a different name.");
+     setSwalTheme();
    }
   });
 
@@ -1675,6 +1680,7 @@ function show_new_user_account_dialog(gametype)
           });
     } else {
       swal("Captcha not available. This could be caused by a browser plugin.");
+      setSwalTheme();
     }
   }
 
@@ -1769,6 +1775,7 @@ function create_new_freeciv_user_account_request(action_type)
    error: function (request, textStatus, errorThrown) {
      $("#dialog").parent().show();
      swal("Creating new user failed.");
+     setSwalTheme();
    }
   });
 }
@@ -1825,11 +1832,13 @@ function handle_customized_nation(player_id)
 
   if (file == null) {
     swal("Please upload a image file!");
+    setSwalTheme();
     return;
   }
 
   if (!(window.FileReader)) {
     swal("Uploading files not supported");
+    setSwalTheme();
     return;
   }
 
@@ -1845,6 +1854,7 @@ function handle_customized_nation(player_id)
   } else {
     $.unblockUI();
     swal("Image file " + file.name + "  not supported: " + file.type);
+    setSwalTheme();
   }
 
 }
@@ -1923,16 +1933,19 @@ function forgot_pbem_password()
             password_reset_count++;
                     if (password_reset_count > 3) {
                       swal("Unable to reset password.");
+                      setSwalTheme();
                       return;
                     }
             var reset_email = $("#email_reset").val();
             var captcha = $("#g-recaptcha-response").val();
             if (reset_email == null || reset_email.length == 0) {
+              setSwalTheme();
               swal("Please fill in e-mail.");
               return;
             }
             if (captcha_site_key != '' && (captcha == null || captcha.length == 0)) {
               swal("Please fill complete the captcha.");
+              setSwalTheme();
               return;
             }
                     $.ajax({
@@ -1944,6 +1957,7 @@ function forgot_pbem_password()
                         },
                        error: function (request, textStatus, errorThrown) {
                          swal("Error, password was not reset.");
+                         setSwalTheme();
                        }
                       });
         }
@@ -1960,6 +1974,7 @@ function forgot_pbem_password()
           });
     } else {
       swal("Captcha not available. This could be caused by a browser plugin.");
+      setSwalTheme();
     }
   }
 
@@ -1986,8 +2001,10 @@ function google_signin_on_success(googleUser)
       $("#dialog").dialog('close');
     } else if (xhr.responseText == "Email not verified") {
       swal("Login failed. E-mail not verified.");
+      setSwalTheme();
     } else {
       swal("Login failed.");
+      setSwalTheme();
     }
   };
   xhr.send('idtoken=' + id_token + "&username=" + username);
@@ -2001,8 +2018,8 @@ function google_signin_on_success(googleUser)
 function google_signin_on_failure(error)
 {
   if (error['error'] == "popup_closed_by_user") return;
-
   swal("Unable to sign in with Google: " + JSON.stringify(error));
+  setSwalTheme();
   console.error("Unable to sign in with Google: " + JSON.stringify(error));
 
 }

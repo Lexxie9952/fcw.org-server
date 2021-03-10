@@ -202,6 +202,7 @@ function init_options_dialog()
     var new_timeout = parseInt($('#timeout_setting').val());
     if (new_timeout >= 1 && new_timeout <= 29) {
       swal("Invalid timeout specified. Must be 0 or more than 30 seconds.");
+      setSwalTheme();
     } else {
       send_message("/set timeout " + new_timeout);
     }

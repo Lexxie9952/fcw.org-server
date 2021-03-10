@@ -60,6 +60,7 @@ function network_init()
 {
   if (!("WebSocket" in window)) {
     swal("WebSockets not supported", "", "error");
+    setSwalTheme();
     return;
   }
 
@@ -119,8 +120,10 @@ function websocket_init()
    if (cur_time - last_user_action_time > kick_inactive_time) {
     swal("Inactivity Timeout", "Session closed: "+(kick_inactive_time/60000)
       +"min inactivity. Please reload the page to reconnect.", "error");
-   } else {
+      setSwalTheme();
+    } else {
       swal("Network Error", "Connection to server is closed. Please reload the page to restart. Sorry!", "error");
+      setSwalTheme();
       message_log.update({
         event: E_LOG_ERROR,
         message: "Error: connection to server is closed. Please reload the page to restart. Sorry!"
@@ -163,6 +166,7 @@ function check_websocket_ready()
 
     if (is_longturn() && google_user_token == null) {
       swal("Login failed.");
+      setSwalTheme();
       return;
     }
 

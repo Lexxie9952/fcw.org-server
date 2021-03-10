@@ -5744,6 +5744,7 @@ function request_unit_build_city()
              send_request(JSON.stringify(packet));
              setTimeout(update_active_units_dialog, update_focus_delay);
           });
+          setSwalTheme();
         }
       }
     }
@@ -5799,7 +5800,8 @@ function key_unit_disband()
     showCancelButton: true,
     confirmButtonColor: cb_color,
     confirmButtonText: cb_text,
-    closeOnConfirm: true
+    closeOnConfirm: true,
+    html: true
 },
   function(){
     var funits = get_units_in_focus();
@@ -5829,6 +5831,7 @@ function key_unit_disband()
     setTimeout(update_unit_focus, update_focus_delay);
     setTimeout(update_active_units_dialog, update_focus_delay+100);
   });
+  setSwalTheme();
   deactivate_goto(false);
 }
 
@@ -6743,4 +6746,14 @@ function openFullscreen() {
       $('html')[0].requestFullscreen();
     }
   });
+}
+/****************************************************************************
+ This function sets the color theme for swal colors that override the
+ .css file on game load.
+****************************************************************************/
+function setSwalTheme() {
+  // Sweet alert recolor for dark-theme (it overwrites civclient.css settings)
+  $(".confirm").css("color", "#060");
+  $(".cancel").css("color", "#600");
+  $(".sweet-alert").children().css("color", "#d4cfb9");
 }

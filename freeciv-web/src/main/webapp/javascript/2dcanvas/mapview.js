@@ -239,6 +239,7 @@ function init_cache_sprites()
   if (typeof tileset === 'undefined') {
     swal("Tileset not generated correctly. Run sync.sh in "
           + "freeciv-img-extract and recompile.");
+    setSwalTheme();
     return;
   }
 

@@ -1477,6 +1477,7 @@ function city_name_dialog(suggested_name, unit_id) {
 						if (name.length == 0 || name.length >= MAX_LEN_CITYNAME - 6
 						    || encodeURIComponent(name).length  >= MAX_LEN_CITYNAME - 6) {
 						  swal("City name is invalid. Please try a different shorter name.");
+              setSwalTheme();
 						  return;
 						}
 
@@ -1507,6 +1508,7 @@ function city_name_dialog(suggested_name, unit_id) {
       if (name.length == 0 || name.length >= MAX_LEN_CITYNAME - 6
         || encodeURIComponent(name).length  >= MAX_LEN_CITYNAME - 6) {
         swal("City name is invalid. Please try a different shorter name.");
+        setSwalTheme();
         return;
       }
       var actor_unit = game_find_unit_by_number(unit_id);
@@ -1531,6 +1533,7 @@ function city_name_dialog(suggested_name, unit_id) {
     if (name.length == 0 || name.length >= MAX_LEN_CITYNAME - 6
       || encodeURIComponent(name).length  >= MAX_LEN_CITYNAME - 6) {
       swal("City name is invalid. Please try a different shorter name.");
+      setSwalTheme();
       return;
     }
     var actor_unit = game_find_unit_by_number(unit_id);
@@ -1624,6 +1627,7 @@ function city_sell_improvement_in(city_id, improvement_id)
         //if (improvements[improvement_id].genus == GENUS_IMPROVEMENT)
          // play_sound(soundset["e_imp_sold"]);
     });
+  setSwalTheme();
 }
 /**************************************************************************
   Create text describing city growth.
@@ -1970,6 +1974,7 @@ function rename_city()
 						if (name.length == 0 || name.length >= MAX_LEN_NAME - 4
 						    || encodeURIComponent(name).length  >= MAX_LEN_NAME - 4) {
 						  swal("City name is invalid");
+              setSwalTheme();
 						  return;
 						}
 
@@ -2782,6 +2787,7 @@ function city_add_improv_to_worklist(city_id, z)
 
   // Show confirmation message for adding to worklist.
   swal("Sent order to add "+improvements[z]['name']+" to Worklist in "+cities[city_id]['name']);
+  setSwalTheme();
   active_superpanel_cityid = city_id;
 }
 
