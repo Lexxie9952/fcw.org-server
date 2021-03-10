@@ -156,9 +156,24 @@ Border_Vision
     Does nothing unless the borders setting is set to "Enabled". You can
     lock it if border vision rules are important to your ruleset.
 
-Building_Build_Cost_Pct
-    Percentage added to building building cost.
+Building_Build_Cost_Pct                 (EFT_IMPR_BUILD_COST_PCT)
+    Percentage added to building building cost. Multiple effects will layer over
+    each other in additive form. For example, two layers of Building_Build_Cost_Pct
+    at a value of 50 becomes a net effect of +100% -- or in other words, will double
+    the cost of a building. NOT 1.5 * 1.5 = 2.25 (i.e., not multiplicative).
 
+Building_Build_Cost_Pm                  (EFT_IMPR_BUILD_COST_PM)
+    ▷ If no Building_Build_Cost_Pct is active, then this effect by itself is 
+    an additive layer at the higher resolution of permille rather than percent,
+    letting you achieve specific discounts without "rounding holes". For example,
+    two layers of Building_Build_Cost_Pm at a value of 500 becomes a net effect of 
+    +1000‰ (i.e. +100%) -- or in other words, will double the cost of a building.
+    ▷ If Building_Build_Cost_Pct is active, this effect is a Permille multiplied
+    to the building build cost AFTER Building_Build_Cost_Pct has adjusted it. This
+    allows multiple additive layers through the former effect, then layering specific
+    multiplier effects over those. For example, Building_Build_Cost_Pct=50 and
+    Building_Build_Cost_Pm=500 will together result in a 1.5 * 1.5 = 2.25x building cost. 
+    
 Building_Buy_Cost_Pct
     Percentage added to building buy cost.
 
@@ -630,6 +645,9 @@ Upkeep_Factor
 Upkeep_Free
     Improvements with amount or less upkeep cost become free to upkeep (others 
     are unaffected).
+
+Upkeep_Reduce 
+    Reduces upkeep of specified building by value. (Use negative value to increase)
 
 Veteran_Build
     Increases the veteran class of newly created units of this type. The

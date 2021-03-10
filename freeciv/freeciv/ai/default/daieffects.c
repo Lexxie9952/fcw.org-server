@@ -587,6 +587,9 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
   case EFT_UNIT_BUILD_COST_PCT:
     v -= amount * 30;
     break;
+  case EFT_IMPR_BUILD_COST_PM:
+    v -= amount * 3;  /* per mille is 1/10th of a percent */
+  break;
   case EFT_IMPR_BUY_COST_PCT:
   case EFT_UNIT_BUY_COST_PCT:
     v -= amount * 25;

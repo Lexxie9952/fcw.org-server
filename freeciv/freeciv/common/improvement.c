@@ -249,8 +249,17 @@ const char *improvement_rule_name(const struct impr_type *pimprove)
 int impr_build_shield_cost(const struct city *pcity,
                            const struct impr_type *pimprove)
 {
-  int base = pimprove->build_cost
-    * (100 + get_building_bonus(pcity, pimprove, EFT_IMPR_BUILD_COST_PCT)) / 100;
+  /*int base = pimprove->build_cost
+      * (100 + get_building_bonus(pcity, pimprove, EFT_IMPR_BUILD_COST_PCT)) / 100; */
+
+  double bonus; /* note: EFT_IMPR_BUILD_COST_PM doesn't add, but multiplies over
+                  over whatever is first fetched from EFT_IMPR_BUILD_COST_PCT. This 
+                  allows layering specific multipliers over more general rate levels. */
+
+  bonus = (100 + (double)get_building_bonus(pcity, pimprove, EFT_IMPR_BUILD_COST_PCT)) / 100;
+  bonus *= ((1000 + (double)get_building_bonus(pcity, pimprove, EFT_IMPR_BUILD_COST_PM)) / 1000);  
+
+  int base = pimprove->build_cost * bonus;
 
   return MAX(base * game.info.shieldbox / 100, 1);
 }

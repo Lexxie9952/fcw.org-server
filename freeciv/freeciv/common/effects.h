@@ -327,6 +327,9 @@ extern "C" {
 /* Pct modifier for chance to escape stack */
 #define SPECENUM_VALUE128 EFT_STACK_ESCAPE_PCT
 #define SPECENUM_VALUE128NAME "Stack_Escape_Pct"
+/* Multiplied over and after Building_Build_Cost_Pct is (possibly) applied */
+#define SPECENUM_VALUE129 EFT_IMPR_BUILD_COST_PM
+#define SPECENUM_VALUE129NAME "Building_Build_Cost_Pm"
 
 
 /* keep this last */
