@@ -554,8 +554,12 @@ function show_city_dialog(pcity)
        // Now generate the special style adjustment for longer names, to reduce the font size and adjust margin:
        if (longest_word>7) long_name_font_reducer ="<div style='margin-left:-6px; font-size:"+reduction_pct+"%;'>";
 
-      var upkeep = (improvements[z]['upkeep']-uk_bonus) <= 0 ? "none": (improvements[z]['upkeep']);
-
+      // non-negative base upkeeps which are zero or negative after upkeep bonus will be zero upkeep ("none")
+      var upkeep = (improvements[z]['upkeep']-uk_bonus <= 0 && improvements[z]['upkeep'] >= 0) 
+                   ? "none" 
+      // positive upkeep OR upkeep that was already negative before bonus (so called "infra-support" improvement like wind plant which have neg. upkeep)             
+                   : (improvements[z]['upkeep']);
+                   
       improvements_html = improvements_html +
        "<div id='city_improvement_element'><div class='buildings_present' style='background: transparent url("
            + sprite['image-src'] +

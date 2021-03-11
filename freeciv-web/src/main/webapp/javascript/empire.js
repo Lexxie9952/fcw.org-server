@@ -988,15 +988,16 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
       if (!show_building) continue;
       // ------------------------------------------------------------------------------------------------
       var upkeep = improvements[z]['upkeep'];
-      if (upkeep<=upkeep_gold_bonus) upkeep = 0;  // Free upkeep effects
+      if (upkeep>=0 && upkeep<=upkeep_gold_bonus) upkeep = 0;  // Render free upkeep effects, only for non-negative upkeep buildings
       city_upkeep[city_id] += upkeep;
-      if (upkeep==0) upkeep = "";  // leave 0 upkeep blank
+      if (upkeep==0) upkeep = "";  // Leave 0 upkeep blank
       var sprite = get_improvement_image_sprite(improvements[z]);
 
       // Set display vars
       var opacity = 1;
       const border = "border:1px solid #000000;";
       var bg = upkeep>0 ? "background:#FEED " : "background:#FEED ";
+      var upkp_color = upkeep<0 ? "#77EF77" : "#FFD52C" // negative upkeep or "upkeep support buildings" get green.
       var title_text = "title='"+html_safe(pcity['name'])+":\n\nRIGHT-CLICK: Sell " + improvements[z]['name']+".'";
       var right_click_action = alt_click_method+"='city_sell_improvement_in(" +city_id+","+ z + ");' ";
       // Put improvement sprite in the cell:
@@ -1009,7 +1010,7 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
             + title_text 
             + right_click_action
             + "onclick='change_city_prod_to(event," +city_id+","+ z + ");'>"  
-            +"</span><span style='font-size:90%; color:#ffd52c'>"+upkeep+"</span></div>";
+            +"</span><span style='font-size:90%; color:"+upkp_color+"'>"+upkeep+"</span></div>";
     }
     empire_list_html += (improvements_html +"</td></tr>");      // Add the row
   }
