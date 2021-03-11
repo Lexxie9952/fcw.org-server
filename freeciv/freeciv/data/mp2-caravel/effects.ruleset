@@ -3038,9 +3038,10 @@ reqs	=
 type    = "Output_Bonus"
 value	= 50
 reqs	=
-    { "type", "name", "range"
-      "Building", "Factory", "City"
-      "OutputType", "Shield", "Local"
+    { "type",       "name",       "range", "present"
+      "Building",   "Factory",    "City",  TRUE
+      "Building",   "Hoover Dam", "City",  FALSE ;counts as factory
+      "OutputType", "Shield",     "Local", FALSE
     }
 
 [effect_granary]
@@ -3158,9 +3159,10 @@ reqs    =
 type    = "Output_Bonus"
 value	= 50
 reqs	=
-    { "type", "name", "range"
-      "Building", "Mfg. Plant", "City"
-      "OutputType", "Shield", "Local"
+    { "type",       "name",       "range", "present"
+      "Building",   "Mfg. Plant", "City",  TRUE
+      "Building",   "Hoover Dam", "City",  FALSE 
+      "OutputType", "Shield",     "Local", TRUE
     }
 
 [effect_offshore_platform]
@@ -3690,7 +3692,7 @@ reqs	=
       "Building", "Recycling Center", "City",  FALSE
       "Building", "Fusion Reactor",   "Player",FALSE
       "Building", "Solar Plant",      "City",  FALSE
-      "Building",   "Hoover Dam",     "City",  FALSE
+      "Building", "Hoover Dam",       "City",  FALSE
       "Building", "Nuclear Plant",    "City",  FALSE
     }
 ;---------------------------------------------------------

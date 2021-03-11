@@ -346,7 +346,7 @@ sound_alt	= "b_generic"
 helptext	= _("\
 Courthouses reduce corruption by about half (60% rounded down),\
  eliminate tile output penalties for Anarchy and Despotism, and\
- give +1 unit free of upkeep.\
+ give +1 shield of free unit upkeep.\
 "), _("\
  Diplomatic combat gets a bonus of ¼ of base odds. (At general base odds\
  of ½, odds of losing become：½ - ⅛ = ⅜). All other hostile diplomatic\
@@ -814,19 +814,19 @@ sabotage	= 100
 sound		= "b_wind_plant"
 sound_alt	= "b_generic"
 helptext	= _("\
-A Wind Plant boosts the production in a city by 5%. Admittedly, this is\
- modest. But in cost per yield it’s still competitive with other\
- Power Plants, especially considering its three major benefits: \n\
+A Wind Plant boosts the production in a city by 5%. This is\
+ modest; but in yield per cost it’s competitive with other\
+ Power Plants, when considering its unique benefits: \n\
 "), _("\
 ➤ The Wind Plant can co-exist with any other type of Power Plant, and\
  needs no Factory to be built.\  
 "), _("\
 ➤ Free Wind energy reduces the infrastructural upkeep of other buildings\
- in the city by -3, and gives free upkeep to two units supported by\
+ in the city by -3, while also giving 2 free shield upkeep for units supported by\
  the city. \n\
 "), _("\
-➤ A Wind Plant always reduces pollution from production by -5%, always\
- combining with any other pollution bonuses.\
+➤ A Wind Plant reduces pollution from production by -5%. It combines\
+ with any other pollution bonuses.\
 ")
 
 [building_police_station]
@@ -855,7 +855,7 @@ Police Stations neutralize the unhappiness caused by two military units or two\
 "), _("\
  Diplomatic combat gets a bonus of ¼ of base odds. (At general base odds\
  of ½, odds of losing become：½ - ⅛ = ⅜). All other hostile diplomatic\
- actions are 20% less effective (80% - 20% = 60%).\
+ actions are 20% less effective (e.g., 80% - 20% = 60%).\
 "), _("\
  Diplomats and Spies made in a city with Police Station gain +1 veteran level.\
 ")
@@ -1694,8 +1694,8 @@ sabotage	= 0
 sound		= "w_eiffel_tower"
 sound_alt	= "w_generic"
 helptext	= _("\
-All your cities support one unit free of\
- shield upkeep. This wonder is never obsolete.\
+The Eiffel Tower gives one free shield upkeep for units
+ to every city in your nation. This wonder is never obsolete.\
 ")
 
 [building_fusion_reactor]

@@ -525,6 +525,9 @@ What this means for MP2 rules:
       in this situation, need to put a MinSize, "1", City condition into them.
 66. Stack Escape changed to be unit is of equal or greater moves than attacker. (was greater)
 67. New server effect "Stack_Escape_Pct" allows regulating odds of stack escape in certain situations, instead of hard-coded universal 50%, always.
+68. New server feature to allow negative upkeep buildings. Allows improvements which gather infrastructural support to other buildings, 
+   e.g., wind mills, khan's tribute collection office, etc.
+
 
 These help with much more than Freeciv and other Full-screen apps. They help you with everything you do on your computer:
             Switch active Program   Flip to Last Program    Switch Browser tab   See all Programs on Workspace   Swap Workspaces
