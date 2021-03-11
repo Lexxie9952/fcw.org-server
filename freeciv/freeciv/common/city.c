@@ -1324,7 +1324,9 @@ int city_total_impr_gold_upkeep(const struct city *pcity)
       gold_needed += city_improvement_upkeep(pcity, pimprove);
   } city_built_iterate_end;
 
-  return gold_needed;
+  // Negative upkeep buildings provide infrastructural support on the
+  // upkeep of other buildings but can't result in negative gold_needed:
+  return gold_needed > 0 ? gold_needed : 0;
 }
 
 /**********************************************************************//**
@@ -1376,10 +1378,13 @@ int city_improvement_upkeep(const struct city *pcity,
     return 0;
 
   upkeep = b->upkeep;
-  if (upkeep <= get_building_bonus(pcity, b, EFT_UPKEEP_FREE)) {
+  /* For POSITIVE upkeep buildings, return 0 upkeep if they are within the
+     free upkeep threshold of EFT_UPKEEP_FREE. (Negative upkeep buildings
+     provide "infrastructural support" to the upkeep of other buildings) */
+  if (upkeep > 0 && upkeep <= get_building_bonus(pcity, b, EFT_UPKEEP_FREE)) {
     return 0;
   }
-  
+
   return upkeep;
 }
 
