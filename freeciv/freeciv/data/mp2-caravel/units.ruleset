@@ -2494,7 +2494,7 @@ uk_gold       = 0
 targets       = "Air", "AirProtect", "Missile", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
-      "DefenseMultiplierPct", "AirAttacker", 17 ; defends at 3.5 (3*1.17=3.51) vs air attackers
+      "AirAttacker", "DefenseMultiplierPct", 17 ; defends at 3.5 (3*1.17=3.51) vs air attackers
    }
 flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape",
                 "AirProtector", "Provoking"
@@ -2551,14 +2551,12 @@ uk_gold       = 0
 targets       = "Air", "AirProtect", "Missile", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
-      ; attacks at 3.5, have to use flags carefully to include all with no overlap:
-     "DefenseDividerPct", "CantReachAir", 17          ; all land, sea, bombers: Except AAA, Mobile SAM, AEGIS
-     "DefenseDividerPct", "AntiAir", 17               ; AAA, Mobile SAM, AEGIS
-     "DefenseDividerPct", "NonMil", 17                ; All non-mil
-     "DefenseDividerPct", "AirAttacker", 17           ; Aircraft
-     "DefenseDividerPct", "Missile", 17               ; Missiles
-     ; Cancel CantReachAir bonus on Bombers
-     "FieldUnit",      "DefenseDividerPct",         -17
+; Crease Base Attack of 3.5. Use flags to include all unit_types with no overlap:
+     "CantReachAir", "DefenseDividerPct", 17   ; all military Land, Sea, Bombers, EXCEPT AAA, Mobile SAM, AEGIS
+     "AntiAir",      "DefenseDividerPct", 17   ; AAA, Mobile SAM, AEGIS
+     "NonMil",       "DefenseDividerPct", 17   ; all NonMil units
+     "AirAttacker",  "DefenseDividerPct", 17   ; Aircraft (including Bombers)
+     "FieldUnit",    "DefenseDividerPct", -17  ; Cancel overlapped doubled bonus on Bombers.
    }
 flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape", "AirProtector", "Provoking"
 veteran_names =

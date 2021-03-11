@@ -1270,8 +1270,8 @@ Settlers, or Engineers with the \"clean pollution\" order.\
 "), _("\
 Pollution from production is likely to start becoming important as \
 your civilization becomes more industrialized, giving you buildings \
-such as Factory and Power Plant which boost production. Replacing a \
-Power Plant with cleaner forms of energy -- a Hydro Plant / Hoover \
+such as Factory and Coal Plant which boost production. Replacing a \
+Coal Plant with cleaner forms of energy -- a Hydro Plant / Hoover \
 Dam, Nuclear Plant, or Solar Plant -- will reduce pollution from \
 production, as will a Recycling Center or knowledge of \
 Environmentalism.\
@@ -2029,7 +2029,7 @@ reqs           =
 build_time     = 10
 removal_time   = 0
 native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine"
-flags          = "NativeTile", "Quayable", "IrrigationSource"
+flags          = "NativeTile", "Quayable", "IrrigationSource", "AutoOnCityCenter"
 helptext          = _("\
 Waterways are navigational channels that connect canals with rivers. Essentially, they're the same as canals.\
 ")

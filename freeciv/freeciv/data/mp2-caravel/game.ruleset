@@ -772,6 +772,7 @@ actor_reqs    =
 target_reqs  =
     { "type",        "name",      "range",  "present"
       "NationGroup", "Barbarian", "Player", FALSE
+      "MinForeignPct", "49",      "City",   FALSE ; < 50% foreign before occupied city has tech blueprints floating around
     }
 
 [actionenabler_steal_tech_random_esc]
@@ -788,6 +789,7 @@ actor_reqs    =
 target_reqs  =
     { "type",        "name",      "range",  "present"
       "NationGroup", "Barbarian", "Player", FALSE
+      "MinForeignPct", "49",      "City",   FALSE ; < 50% foreign before occupied city has tech blueprints floating around
     }
 
 [actionenabler_steal_tech_target]
@@ -804,6 +806,7 @@ actor_reqs    =
 target_reqs  =
     { "type",        "name",      "range",  "present"
       "NationGroup", "Barbarian", "Player", FALSE
+      "MinForeignPct", "49",      "City",   FALSE ; < 50% foreign before occupied city has tech blueprints floating around
     }
 
 [actionenabler_incite_city]

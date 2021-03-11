@@ -362,7 +362,7 @@ req2     = "Space Flight"
 flags    = ""
 graphic     = "a.environmentalism"
 graphic_alt = "-"
-helptext = _("-50% Pollution in all cities.")
+helptext = _("Reduces pollution from population by half.")
 cost = 8040
 
 [advance_espionage]

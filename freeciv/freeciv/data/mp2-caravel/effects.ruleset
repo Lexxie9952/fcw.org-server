@@ -2827,14 +2827,15 @@ reqs	=
       "Building", "Gibraltar Fortress", "Player", TRUE
       "Building", "Coastal Defense",    "Local",  TRUE
     }
-[effect_building_upkeep_gibratalar_fortress]
-type    = "Upkeep_Free"          ; 
-value   = 1
-reqs    =
-    { "type", "name", "range", "quiet"
-      "Building", "Gibraltar Fortress", "Player", TRUE
-      "Building", "Coastal Defense",    "Local",  TRUE
-    }
+;Waiting on an Effect which can compare or inject range value.    
+;[effect_building_upkeep_gibratalar_fortress]
+;type    = "Upkeep_Reduce"         
+;value   = 1
+;reqs    =
+;    { "type", "name", "range"
+;      "Building", "Gibraltar Fortress", "Player"
+;      "Building", "Coastal Defense",    "Local" 
+;    }
 ;------------------------------------------------------------
 
 [effect_amphitheatre]
@@ -2862,14 +2863,6 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Courthouse", "City", TRUE
       "OutputType", "Trade", "Local", TRUE
-    }
-[effect_courthouse_corruption2]
-type    = "Output_Waste_Pct"
-value	= 60
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Courthouse", "City", TRUE
-      "OutputType", "shield", "local", TRUE
     }
 [effect_courthouse_tile_corruption]         ; Removes output penalties (Despotism/Anarchy) for cities with courthouses
 type    = "Output_Penalty_Tile"
@@ -3050,29 +3043,6 @@ reqs	=
       "OutputType", "Shield", "Local"
     }
 
-[effect_fusion_reactor]
-type    = "Output_Bonus"
-value	= 75
-reqs	=
-    { "type", "name", "range"
-      "Building", "Fusion Reactor", "City"
-      "OutputType", "Shield", "Local"
-    }
-[effect_fusion_reactor1]
-type    = "Unit_Upkeep_Free_Per_City"
-value	= 5
-reqs	=
-    { "type",       "name",      "range"
-      "Building", "Fusion Reactor", "City", TRUE
-      "OutputType", "Shield", "Local"
-    }
-[effect_fusion_reactor2]
-type    = "City_Build_Slots"
-value   = 1
-reqs    =
-    { "type", "name", "range"
-      "Building", "Fusion Reactor", "City", TRUE
-    }
 [effect_granary]
 type    = "Growth_Food"
 value	= 50
@@ -3089,58 +3059,6 @@ reqs	=
       "TerrainClass", "Oceanic", "Local"
       "Building", "Harbour", "City"
       "OutputType", "Food", "Local"
-    }
-
-[effect_hydro_plant]
-type    = "Output_Bonus"
-value	= 25
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Factory", "City", TRUE
-      "Building", "Hydro Plant", "City", TRUE
-      "OutputType", "Shield", "Local", TRUE
-      "Building", "Hoover Dam", "Player", FALSE
-      "Building", "Nuclear Plant", "City", FALSE
-      "Building", "Solar Plant", "City", FALSE
-    }
-
-[effect_hydro_plant_1]
-type    = "Output_Bonus"
-value	= 25
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Mfg. Plant", "City", TRUE
-      "Building", "Hydro Plant", "City", TRUE
-      "OutputType", "Shield", "Local", TRUE
-      "Building", "Hoover Dam", "Player", FALSE
-      "Building", "Nuclear Plant", "City", FALSE
-      "Building", "Solar Plant", "City", FALSE
-    }
-
-[effect_hydro_plant_2]
-type    = "Pollu_Prod_Pct"
-value	= -25
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Factory", "City", TRUE
-      "Building", "Hydro Plant", "City", TRUE
-      "Building", "Recycling Center", "City", FALSE
-      "Building", "Hoover Dam", "Player", FALSE
-      "Building", "Nuclear Plant", "City", FALSE
-      "Building", "Solar Plant", "City", FALSE
-    }
-
-[effect_hydro_plant_3]
-type    = "Pollu_Prod_Pct"
-value	= -25
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Mfg. Plant", "City", TRUE
-      "Building", "Hydro Plant", "City", TRUE
-      "Building", "Recycling Center", "City", FALSE
-      "Building", "Hoover Dam", "Player", FALSE
-      "Building", "Nuclear Plant", "City", FALSE
-      "Building", "Solar Plant", "City", FALSE
     }
 
 [effect_library]
@@ -3190,7 +3108,6 @@ reqs    =
     { "type", "name", "range"
       "Tech", "Automobile", "Player"
     }
-
 [effect_pollu_pop_industrialization]
 type    = "Pollu_Pop_Pct_2"
 value	= 25
@@ -3198,7 +3115,6 @@ reqs    =
     { "type", "name", "range"
       "Tech", "Industrialization", "Player"
     }
-
 [effect_pollu_pop_mass_production]
 type    = "Pollu_Pop_Pct_2"
 value	= 25
@@ -3206,7 +3122,6 @@ reqs    =
     { "type", "name", "range"
       "Tech", "Mass Production", "Player"
     }
-
 [effect_pollu_pop_plastics]
 type    = "Pollu_Pop_Pct_2"
 value	= 25
@@ -3214,7 +3129,13 @@ reqs    =
     { "type", "name", "range"
       "Tech", "Plastics", "Player"
     }
-
+[effect_enviromentalism]
+type    = "Pollu_Pop_Pct_2"
+value   = -50
+reqs    =
+    { "type", "name", "range"
+      "Tech", "Environmentalism", "Player"
+    }
 [effect_mass_transit]
 type    = "Pollu_Pop_Pct"
 value	= -100
@@ -3240,54 +3161,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "Mfg. Plant", "City"
       "OutputType", "Shield", "Local"
-    }
-
-[effect_nuclear_plant]
-type    = "Output_Bonus"
-value	= 25
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Factory", "City", TRUE
-      "Building", "Nuclear Plant", "City", TRUE
-      "OutputType", "Shield", "Local", TRUE
-      "Building", "Hoover Dam", "Player", FALSE
-      "Building", "Solar Plant", "City", FALSE
-    }
-
-[effect_nuclear_plant_1]
-type    = "Output_Bonus"
-value	= 25
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Mfg. Plant", "City", TRUE
-      "Building", "Nuclear Plant", "City", TRUE
-      "OutputType", "Shield", "Local", TRUE
-      "Building", "Hoover Dam", "Player", FALSE
-      "Building", "Solar Plant", "City", FALSE
-    }
-
-[effect_nuclear_plant_2]
-type    = "Pollu_Prod_Pct"
-value	= -25
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Factory", "City", TRUE
-      "Building", "Nuclear Plant", "City", TRUE
-      "Building", "Recycling Center", "City", FALSE
-      "Building", "Hoover Dam", "Player", FALSE
-      "Building", "Solar Plant", "City", FALSE
-    }
-
-[effect_nuclear_plant_3]
-type    = "Pollu_Prod_Pct"
-value	= -25
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Mfg. Plant", "City", TRUE
-      "Building", "Nuclear Plant", "City", TRUE
-      "Building", "Recycling Center", "City", FALSE
-      "Building", "Hoover Dam", "Player", FALSE
-      "Building", "Solar Plant", "City", FALSE
     }
 
 [effect_offshore_platform]
@@ -3408,14 +3281,6 @@ reqs    =
     { "type", "name", "range", "present"
       "Building", "Ecclesiastical Palace", "City", TRUE
       "OutputType", "Trade", "Local", TRUE
-    }
-[effect_ecclesiastical_palace_1]
-type    = "Output_Waste_Pct"
-value   = 60
-reqs    =
-    { "type", "name", "range", "present"
-      "Building", "Ecclesiastical Palace", "City", TRUE
-      "OutputType", "Shield", "local", TRUE
     }
 [effect_ecclesiastical_palace_2]
 type    = "Spy_Resistant"
@@ -3724,88 +3589,371 @@ reqs	=
       "Building", "Port Facility", "City"
       "UnitClass", "Trireme", "Local"
     }
-
-[effect_power_plant]
+;************************************************************************** POWER PLANTS
+[effect_coal_plant]
 type    = "Output_Bonus"
-value	= 25
+value	= 20
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Factory", "City", TRUE
-      "Building", "Power Plant", "City", TRUE
-      "OutputType", "Shield", "Local", TRUE
-      "Building", "Hoover Dam", "Player", FALSE
-      "Building", "Nuclear Plant", "City", FALSE
-      "Building", "Hydro Plant", "City", FALSE
-      "Building", "Solar Plant", "City", FALSE
+    { "type",       "name",           "range", "present"
+      "Building",   "Factory",        "City",   TRUE
+      "Building",   "Coal Plant",     "City",   TRUE
+      "OutputType", "Shield",         "Local",  TRUE
+      "Building",   "Nuclear Plant",  "City",   FALSE
+      "Building",   "Hydro Plant",    "City",   FALSE
+      "Building",   "Hoover Dam",     "City",   FALSE
+      "Building",   "Fusion Reactor", "Player", FALSE
     }
-
-[effect_power_plant_1]
+[effect_coal_plant_1]
 type    = "Output_Bonus"
-value	= 25
+value	= 20
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Mfg. Plant", "City", TRUE
-      "Building", "Power Plant", "City", TRUE
-      "OutputType", "Shield", "Local", TRUE
-      "Building", "Hoover Dam", "Player", FALSE
-      "Building", "Nuclear Plant", "City", FALSE
-      "Building", "Hydro Plant", "City", FALSE
-      "Building", "Solar Plant", "City", FALSE
+    { "type",       "name",           "range", "present"
+      "Building",   "Mfg. Plant",     "City",   TRUE
+      "Building",   "Coal Plant",     "City",   TRUE
+      "OutputType", "Shield",         "Local",  TRUE
+      "Building",   "Nuclear Plant",  "City",   FALSE
+      "Building",   "Hydro Plant",    "City",   FALSE
+      "Building",   "Hoover Dam",     "City",   FALSE
+      "Building",   "Fusion Reactor", "Player", FALSE
     }
-
-[effect_recycling_center]
+[effect_coal_plant_upgrade_1] 
+type    = "Improvement_Sale_Pct"
+value = 80 ; full 'recycle value' after City Walls go up.
+reqs  =
+    { "type", "name", "range"
+      "Building", "Coal Plant", "Local"
+      "Building", "Hoover Dam", "City"
+    }
+[effect_coal_plant_upgrade_2] 
+type    = "Improvement_Sale_Pct"
+value = 80 ; full 'recycle value' after City Walls go up.
+reqs  =
+    { "type", "name", "range"
+      "Building", "Coal Plant", "Local"
+      "Building", "Hydro Plant", "City"
+    }
+[effect_coal_plant_upgrade_3] 
+type    = "Improvement_Sale_Pct"
+value = 80 ; full 'recycle value' after City Walls go up.
+reqs  =
+    { "type",     "name",          "range","present"
+      "Building", "Coal Plant",    "Local", TRUE
+      "Building", "Nuclear Plant", "City",  TRUE
+      "Building", "Hydro Plant",   "City",  FALSE
+      ;^ closes super rare loophole  
+    }
+;---------------------------------------------------------
+[effect_hydro_plant]
+type    = "Output_Bonus"
+value	= 20
+reqs	=
+    { "type",      "name",           "range", "present"
+      "Building",  "Factory",        "City",   TRUE
+      "Building",  "Hydro Plant",    "City",   TRUE
+      "OutputType","Shield",         "Local",  TRUE
+      "Building",  "Nuclear Plant",  "City",   FALSE
+      "Building",  "Hoover Dam",     "City",   FALSE
+      "Building",  "Fusion Reactor", "Player", FALSE
+    }
+[effect_hydro_plant_1]
+type    = "Output_Bonus"
+value	= 20
+reqs	=
+    { "type",      "name",          "range", "present"
+      "Building",  "Mfg. Plant",    "City",   TRUE
+      "Building",  "Hydro Plant",   "City",   TRUE
+      "OutputType","Shield",        "Local",  TRUE
+      "Building",  "Nuclear Plant", "City",   FALSE
+      "Building",  "Hoover Dam",    "City",   FALSE
+      "Building",  "Fusion Reactor","Player", FALSE
+    }
+[effect_hydro_plant_2]
+type    = "Pollu_Prod_Pct"
+value	= -25
+reqs	=
+    { "type",     "name",             "range", "present"
+      "Building", "Factory",          "City",  TRUE
+      "Building", "Hydro Plant",      "City",  TRUE
+      "Building", "Recycling Center", "City",  FALSE
+      "Building", "Fusion Reactor",   "Player",FALSE
+      "Building", "Solar Plant",      "City",  FALSE
+      "Building", "Hoover Dam",       "City",  FALSE
+      "Building", "Nuclear Plant",    "City",  FALSE
+    }
+[effect_hydro_plant_3]
+type    = "Pollu_Prod_Pct"
+value	= -25
+reqs	=
+    { "type",     "name",             "range", "present"
+      "Building", "Mfg. Plant",       "City",  TRUE
+      "Building", "Hydro Plant",      "City",  TRUE
+      "Building", "Recycling Center", "City",  FALSE
+      "Building", "Fusion Reactor",   "Player",FALSE
+      "Building", "Solar Plant",      "City",  FALSE
+      "Building",   "Hoover Dam",     "City",  FALSE
+      "Building", "Nuclear Plant",    "City",  FALSE
+    }
+;---------------------------------------------------------
+[effect_hoover_dam_city_1]
+type    = "Output_Bonus"
+value	= 154
+reqs	=
+    { "type",       "name",       "range"
+      "Building",   "Hoover Dam", "City"
+      "OutputType", "Shield",     "Local"
+    }
+[effect_hoover_dam_city_2]
+type    = "Pollu_Prod_Pct"
+value	= -50
+reqs	=
+    { "type",     "name",            "range", "present"
+      "Building", "Hoover Dam",      "City",   TRUE
+      "Building", "Recycling Center","City",   FALSE
+      "Building", "Solar Plant",     "City",   FALSE
+      "Building", "Fusion Reactor",  "Player", FALSE
+    }
+; _ _ _ Bonuses for Hydro Plants in other cities: _ _ _
+[effect_hoover_hydro_plant_bonus_1]
+type    = "Output_Bonus"
+value	= 7
+reqs	=
+    { "type",      "name",           "range", "present"
+      "Building",  "Hoover Dam",     "Player", TRUE
+      "Building",  "Hoover Dam",     "City",   FALSE
+      "Building",  "Factory",        "City",   TRUE
+      "Building",  "Hydro Plant",    "City",   TRUE
+      "OutputType","Shield",         "Local",  TRUE
+      "Building",  "Nuclear Plant",  "City",   FALSE
+      "Building",  "Fusion Reactor", "Player", FALSE
+    }
+[effect_hoover_hydro_plant_bonus_2]
+type    = "Output_Bonus"
+value	= 7
+reqs	=
+    { "type",      "name",          "range", "present"
+      "Building",  "Hoover Dam",    "Player", TRUE
+      "Building",  "Hoover Dam",    "City",   FALSE
+      "Building",  "Mfg. Plant",    "City",   TRUE
+      "Building",  "Hydro Plant",   "City",   TRUE
+      "OutputType","Shield",        "Local",  TRUE
+      "Building",  "Nuclear Plant", "City",   FALSE
+      "Building",  "Fusion Reactor","Player", FALSE
+    }
+;Hydro Plants cost less 
+[effect_hoover_dam_cheaper_hydro_plants]
+type    = "Building_Build_Cost_Pm"
+value   = -28; -0.028 * 175 = -4.9 shields (c rounds negative numbers to lower (more magnitude) value)
+reqs    =
+    { "type",     "name",           "range", "present"
+      "Building", "Hoover Dam" ,    "Player", TRUE
+      "Building", "Hydro Plant",    "Local",  TRUE
+    }
+;Waiting on an Effect which can compare or inject range value.
+;[effect_hoover_hydro_upkeep]
+;type    = "Upkeep_Reduce"
+;value   = 1
+;reqs    =
+;    { "type",      "name",          "range", "present"
+;      "Building",  "Hoover Dam",    "Player", TRUE
+;      "Building",  "Hydro Plant",   "Local",  TRUE
+;    }
+;---------------------------------------------------------
+[effect_nuclear_plant]
+type    = "Output_Bonus"
+value	= 30
+reqs	=
+    { "type",       "name",          "range", "present"
+      "Building",   "Factory",       "City",   TRUE
+      "Building",   "Nuclear Plant", "City",   TRUE
+      "OutputType", "Shield",        "Local",  TRUE
+      "Building",   "Hoover Dam",    "City",   FALSE
+      "Building",   "Fusion Reactor","Player", FALSE
+    }
+[effect_nuclear_plant_1]
+type    = "Output_Bonus"
+value	= 30
+reqs	=
+    { "type",      "name",           "range", "present"
+      "Building",  "Mfg. Plant",     "City",   TRUE
+      "Building",  "Nuclear Plant",  "City",   TRUE
+      "OutputType","Shield",         "Local",  TRUE
+      "Building",  "Fusion Reactor", "Player", FALSE
+      "Building",  "Hoover Dam",     "City",   FALSE
+    }
+[effect_nuclear_plant_2]
+type    = "Pollu_Prod_Pct"
+value	= -25
+reqs	=
+    { "type",     "name",             "range", "present"
+      "Building", "Factory",          "City",   TRUE
+      "Building", "Nuclear Plant",    "City",   TRUE
+      "Building", "Recycling Center", "City",   FALSE
+      "Building", "Fusion Reactor",   "Player", FALSE
+      "Building", "Hoover Dam",       "City",   FALSE
+      "Building", "Solar Plant",      "City",   FALSE
+    }
+[effect_nuclear_plant_3]
+type    = "Pollu_Prod_Pct"
+value	= -25
+reqs	=
+    { "type",     "name",             "range", "present"
+      "Building", "Mfg. Plant",       "City",   TRUE
+      "Building", "Nuclear Plant",    "City",   TRUE
+      "Building", "Recycling Center", "City",   FALSE
+      "Building", "Fusion Reactor",   "Player", FALSE
+      "Building", "Hoover Dam",       "City",   FALSE
+      "Building", "Solar Plant",      "City",   FALSE
+    }
+;---------------------------------------------------------
+[effect_fusion_reactor]
+type    = "Output_Bonus"
+value	= 40
+reqs	=
+    { "type",       "name",           "range", "present"
+      "Building",   "Fusion Reactor", "Player", TRUE
+      "Building",   "Factory",        "City",   TRUE
+      "OutputType", "Shield",         "Local",  TRUE
+    }
+[effect_fusion_reactor_1]
+type    = "Output_Bonus"
+value	= 40
+reqs	=
+    { "type",       "name",           "range", "present"
+      "Building",   "Fusion Reactor", "Player", TRUE
+      "Building",   "Mfg. Plant",     "City",   TRUE
+      "OutputType", "Shield",         "Local",  TRUE
+    }
+[effect_fusion_reactor_2]
+type    = "Pollu_Prod_Pct"
+value	= -80
+reqs	=
+    { "type",     "name",             "range", "present"
+      "Building", "Factory",          "City",   TRUE
+      "Building", "Fusion Reactor",   "Player", FALSE
+    }
+[effect_fusion_reactor_3]
+type    = "Unit_Upkeep_Free_Per_City"
+value	= 1
+reqs	=
+    { "type",       "name",           "range"
+      "Building",   "Fusion Reactor", "Player"
+      "OutputType", "Shield",         "Local"
+    }
+[effect_fusion_reactor_4]
+type    = "City_Build_Slots"
+value   = 1
+reqs    =
+    { "type", "name", "range"
+      "Building", "Fusion Reactor", "Player"
+    }
+;---------------------------------------------------------
+[effect_solar_plant]
+type    = "Output_Bonus"
+value	= 20
+reqs	=
+    { "type", "name", "range"
+      "Building", "Factory", "City"
+      "Building", "Solar Plant", "City"
+      "OutputType", "Shield", "Local"
+    }
+[effect_solar_plant_pollution_1]
+type    = "Pollu_Prod_Pct"
+value	= -75
+reqs	=
+    { "type",     "name",         "range", "present"
+      "Building", "Solar Plant",  "City",   TRUE
+      ;80% from Fusion Reactor is greater than 75% from Solar.
+      "Building","Fusion Reactor","Player", FALSE
+    }
+[effect_solar_plant_unit_upkeep]
+type    = "Unit_Upkeep_Free_Per_City"
+value	= 2
+ reqs	=
+    { "type",       "name",        "range"
+      "Building",   "Solar Plant", "City"
+      "OutputType", "Shield",      "Local"
+    }
+[effect_solar_plant_culture]
+type    = "History"
+value	= 1
+reqs	=
+    { "type",       "name",        "range"
+      "Building",   "Solar Plant", "City"
+    }
+;---------------------------------------------------------
+[effect_wind_plant]
+type    = "Output_Bonus"
+value	= 5
+reqs	=
+    { "type",       "name",       "range"
+      "Building",   "Wind Plant", "City"
+      "OutputType", "Shield",     "Local"
+    }
+[effect_wind_plant_pollution]
+type    = "Pollu_Prod_Pct"
+value	= -5
+reqs	=
+    { "type",     "name",       "range"
+      "Building", "Wind Plant", "City"
+    }
+[effect_wind_plant_unit_upkeep]
+type    = "Unit_Upkeep_Free_Per_City"
+value	= 2
+ reqs	=
+    { "type",       "name",        "range"
+      "Building",   "Solar Plant", "City"
+      "OutputType", "Shield",      "Local"
+    }
+;********************************************************************** RECYCLING CENTER
+; All pollution bonus effects are layered in Power Plants with nice
+; clean logic: each lower ones turn its effect off for better ones 
+; to take effect, all the way to the top. Finally we arrive at 
+; Recycling Center which has to do the heavy lifting on special 
+; combination rules of the ruleset:
+; ....
+; A Solar Plant combines with Recycling Center to eliminate 95%
+; pollution. A Fusion Reactor saves 80% instead of 66%, in which case
+; we prefer the Fuction Reactor's bonus. A Fusion reactor supercedes
+; the Solar Plant's 75% bonus but doesn't get the combination bonus, so
+; has to "unsupercede" in the case of Recycling and Solar both present:
+; ....
+; Case 1:  neither SP or FR is present. Highest in food chain, full 66%:
+[effect_recycling_center_1] 
 type    = "Pollu_Prod_Pct"
 value	= -66
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Recycling Center", "City", TRUE
-; A Solar Plant can give a stronger effect than a Recycling Center, in which
-; case we want only the Solar Plant's effect (not the addition of the two).
-      "Building", "Solar Plant", "City", FALSE
+      "Building", "Fusion Reactor", "Player", FALSE
+      "Building", "Solar Plant", "City",      FALSE
     }
-
-; Nasty special cases: where a Solar Plant is present but its effect is less
-; than that of a Recycling Center, top up so that the net effect is that of the
-; Recycling Center.
-; (This would be so much easier if effects could be combined by functions
-; other than addition...)
-
-; Factory and no Mfg. Plant: Solar Plant saves 50%, less than 66%; add 16%
-[effect_recycling_center_1]
+; Case 2: SP is present, FR is absent. Second highest in food chain,
+; and obligation to deliver on the 95% reduction effect:
+[effect_recycling_center_2] 
 type    = "Pollu_Prod_Pct"
-value	= -16
+value	= -20 ; Solar is higher and ACTIVE at -75%. -20 = -95%. 
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Recycling Center", "City", TRUE
-      "Building", "Solar Plant", "City", TRUE
-      "Building", "Factory", "City", TRUE
-      "Building", "Mfg. Plant", "City", FALSE
+      "Building", "Fusion Reactor", "Player", FALSE
+      "Building", "Solar Plant", "City",      TRUE
     }
-
-; Mfg. Plant and no Factory: Solar Plant saves 50%, less than 66%; add 16%
-[effect_recycling_center_2]
+; Case 3: SP and Fusion Reactor both present and higher on food chain.
+; Solar Plant "wakes up" from being superceded by Fusion Reactor to
+; deliver its promised 95% combinatorial bonus with Recycling Center:
+[effect_recycling_center_3] 
 type    = "Pollu_Prod_Pct"
-value	= -16
+value	= -15 ; Fusion reactor superceded to -80%. -15 = -95%
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Recycling Center", "City", TRUE
-      "Building", "Solar Plant", "City", TRUE
-      "Building", "Mfg. Plant", "City", TRUE
-      "Building", "Factory", "City", FALSE
+      "Building", "Fusion Reactor", "Player", TRUE
+      "Building", "Solar Plant", "City",      TRUE
     }
-
-; Neither Factory nor Mfg. Plant: Solar Plant saves 0%; add 66%
-[effect_recycling_center_3]
-type    = "Pollu_Prod_Pct"
-value	= -66
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Recycling Center", "City", TRUE
-      "Building", "Solar Plant", "City", TRUE
-      "Building", "Factory", "City", FALSE
-      "Building", "Mfg. Plant", "City", FALSE
-    }
-
+; Case 4: SP absent and Fusion Reactor present  
+; Fusion reactor is superceding Recycling Center:
+; DO NOTHING
+; ....
 ; Raw materials generated from Recycling add +2 base shields to city production.
 [effect_recycling_center_4]
 type    = "Output_Add_Tile"
@@ -3833,7 +3981,6 @@ reqs	=
       "Building", "Research Lab", "City"
       "OutputType", "Science", "Local"
     }
-
 [effect_research_lab_1]
 type    = "Output_Bonus"
 value	= 100
@@ -3904,7 +4051,6 @@ reqs    =
       "DiplRel", "Foreign", "Local", TRUE
       "DiplRel", "Team", "Local", FALSE
     }
-
 [effect_sdi_defense_1]
 type    = "Defend_Bonus"
 value	= 100
@@ -3922,7 +4068,6 @@ reqs	=
       "Building", "Aqueduct", "City"
       "Building", "Sewer System", "City"
     }
-
 [effect_sewer_system_health]
 type    = "Health_Pct"
 value	= 30
@@ -3930,44 +4075,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "Aqueduct", "City"
       "Building", "Sewer System", "City"
-    }
-
-[effect_solar_plant]
-type    = "Output_Bonus"
-value	= 25
-reqs	=
-    { "type", "name", "range"
-      "Building", "Factory", "City"
-      "Building", "Solar Plant", "City"
-      "OutputType", "Shield", "Local"
-    }
-
-[effect_solar_plant_1]
-type    = "Output_Bonus"
-value	= 25
-reqs	=
-    { "type", "name", "range"
-      "Building", "Mfg. Plant", "City"
-      "Building", "Solar Plant", "City"
-      "OutputType", "Shield", "Local"
-    }
-
-[effect_solar_plant_2]
-type    = "Pollu_Prod_Pct"
-value	= -50
-reqs	=
-    { "type", "name", "range"
-      "Building", "Factory", "City"
-      "Building", "Solar Plant", "City"
-    }
-
-[effect_solar_plant_3]
-type    = "Pollu_Prod_Pct"
-value	= -50
-reqs	=
-    { "type", "name", "range"
-      "Building", "Mfg. Plant", "City"
-      "Building", "Solar Plant", "City"
     }
 
 [effect_space_component]
@@ -4655,6 +4762,42 @@ reqs =
       "Terrain",  "Mountains",     "Local", FALSE
     }
 ;IrrigationSource of city is in game.ruleset
+;************************************************************************ Code of Hammurabi
+[effect_hammurabi_corruption_1]
+type    = "Output_Waste"
+value	= -11 ; 37-11 = 26
+reqs	=
+    { "type", "name", "range"
+      "Gov", "Despotism", "Player"
+      "Building", "Code of Hammurabi", "Player"
+      "OutputType", "Trade", "Local"
+    }
+[effect_hammurabi_corruption_2]
+type    = "Output_Waste_By_Distance"
+value	= -100 ; 400-100 = 300
+reqs	=
+    { "type", "name", "range"
+      "Gov", "Despotism", "Player"
+      "Building", "Code of Hammurabi", "Player"
+      "OutputType", "Trade", "Local"
+    }
+[effect_hammurabi_tile_bonus]  ; Code of Hammurabi removes tile penalty on lowlands tiles
+type    = "Output_Penalty_Tile"
+value   = 100
+reqs	=
+    { "type",         "name",            "range",   "present"
+      "Gov",          "Despotism",       "Player",  TRUE
+      "Building",     "Code of Hammurabi","Player", TRUE
+      "TerrainFlag",  "Low Land",         "Local",  TRUE
+    }
+[effect_hammurabi_content_no_temple]
+type    = "Make_Content"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Code of Hammurabi", "Player", TRUE
+      "Building", "Temple", "City", FALSE
+    }
 ;************************************************************************ Colossus
 [effect_colossus_tile_trade]
 type    = "Output_Inc_Tile"
@@ -4787,46 +4930,8 @@ value	= 1
       "Building", "Eiffel Tower", "Player"
       "OutputType", "Shield", "Local"
     }
-
-
-
-
-;************************************************************************ Code of Hammurabi
-[effect_hammurabi_corruption_1]
-type    = "Output_Waste"
-value	= -11 ; 37-11 = 26
-reqs	=
-    { "type", "name", "range"
-      "Gov", "Despotism", "Player"
-      "Building", "Code of Hammurabi", "Player"
-      "OutputType", "Trade", "Local"
-    }
-[effect_hammurabi_corruption_2]
-type    = "Output_Waste_By_Distance"
-value	= -100 ; 400-100 = 300
-reqs	=
-    { "type", "name", "range"
-      "Gov", "Despotism", "Player"
-      "Building", "Code of Hammurabi", "Player"
-      "OutputType", "Trade", "Local"
-    }
-[effect_hammurabi_tile_bonus]  ; Code of Hammurabi removes tile penalty on lowlands tiles
-type    = "Output_Penalty_Tile"
-value   = 100
-reqs	=
-    { "type",         "name",            "range",   "present"
-      "Gov",          "Despotism",       "Player",  TRUE
-      "Building",     "Code of Hammurabi","Player", TRUE
-      "TerrainFlag",  "Low Land",         "Local",  TRUE
-    }
-[effect_hammurabi_content_no_temple]
-type    = "Make_Content"
-value	= 1
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Code of Hammurabi", "Player", TRUE
-      "Building", "Temple", "City", FALSE
-    }
+;************************************************************************ Fusion Reactor
+; see POWER PLANTS section
 ;************************************************************************ Hanging Gardens
 [effect_hanging_gardens]
 type    = "Make_Happy"
@@ -4845,46 +4950,7 @@ reqs    =
       "OutputType", "Luxury", "Local"
     }
 ;************************************************************************ Hoover Dam
-[effect_hoover_dam]
-type    = "Output_Bonus"
-value	= 25
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Factory", "City", TRUE
-      "Building", "Hoover Dam", "Player", TRUE
-      "OutputType", "Shield", "Local", TRUE
-      "Building", "Solar Plant", "City", FALSE
-    }
-[effect_hoover_dam_1]
-type    = "Output_Bonus"
-value	= 25
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Mfg. Plant", "City", TRUE
-      "Building", "Hoover Dam", "Player", TRUE
-      "OutputType", "Shield", "Local", TRUE
-      "Building", "Solar Plant", "City", FALSE
-    }
-[effect_hoover_dam_2]
-type    = "Pollu_Prod_Pct"
-value	= -25
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Factory", "City", TRUE
-      "Building", "Hoover Dam", "Player", TRUE
-      "Building", "Recycling Center", "City", FALSE
-      "Building", "Solar Plant", "City", FALSE
-    }
-[effect_hoover_dam_3]
-type    = "Pollu_Prod_Pct"
-value	= -25
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Mfg. Plant", "City", TRUE
-      "Building", "Hoover Dam", "Player", TRUE
-      "Building", "Recycling Center", "City", FALSE
-      "Building", "Solar Plant", "City", FALSE
-    }
+; see POWER PLANTS section
 ;************************************************************************ Isaac Newton
 [effect_isaac_newtons_college]
 type    = "Output_Bonus"
@@ -5316,6 +5382,20 @@ reqs    =
       "Tech",     "Tactics",        "Player", FALSE
       "Building", "Magna Carta",    "Player", FALSE 
     }
+;Magna Carta + not rep. gov + not monarchy 
+;e.g., Theocracy who used to have Magna Carta:
+[effect_statue_of_zeus_content_nonrep2]
+type    = "Make_Content"
+value   = 1
+reqs    =
+    { "type", "name", "range", "present"
+      "Building", "Statue of Zeus", "Player", TRUE
+      "Gov",      "Republic",       "Player", FALSE
+      "Gov",      "Democracy",      "Player", FALSE
+      "Gov",      "Monarchy",       "Player", FALSE 
+      "Tech",     "Tactics",        "Player", FALSE
+      "Building", "Magna Carta",    "Player", TRUE
+    }
 [effect_statue_of_zeus_content_magna_carta]
 type    = "Make_Content_Mil"
 value   = 1
@@ -5395,14 +5475,6 @@ value	= 60
     { "type", "name", "range"
       "Building", "Supreme Court", "Player"
       "OutputType", "Trade", "Local"
-    }
-[effect_supreme_court_corruption2]
-type    = "Output_Waste_Pct"
-value	= 60
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Supreme Court", "Player", TRUE
-      "OutputType", "Shield", "local", TRUE
     }
 [effect_supreme_court_all_govs]   
 type    = "Make_Content" ; keeping in equal with courthouse
@@ -5896,14 +5968,6 @@ reqs	=
     { "type",     "name",                   "range", "present"
       "UnitType", "Siege Ram",              "Local", TRUE
       "Action",   "Targeted Sabotage City Escape", "Local", TRUE
-    }
-
-[effect_enviromentalism]
-type    = "Pollu_Prod_Pct"
-value   = -50
-reqs    =
-    { "type", "name", "range"
-      "Tech", "Environmentalism", "Player"
     }
 
 [effect_calendar_base]
@@ -6691,7 +6755,7 @@ reqs    =
     }
 ; Police Stations Cost less 
 [effect_nationalism_cheaper_police_stations]
-type    = "Building_Buy_Cost_Pct"
+type    = "Building_Build_Cost_Pct"
 value   = -20; 50-10 = 40
 reqs    =
     { "type",     "name",           "range", "present"

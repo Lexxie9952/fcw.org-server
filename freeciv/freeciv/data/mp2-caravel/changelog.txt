@@ -101,9 +101,8 @@ BUILDINGS AND WONDERS:
 14. Coastal Defense cost 65, upkeep 2. (Civ2: 80, 1). Micro-balances economic inflation effects and complaints C.D. is too cheap/strong/easy/common 
      for preventing naval attacks.
 14. Gibraltar Fortress was another "wonder in every city" that made the original improvement worthless, while itself adding no extra dynamic to the 
-    game. It now becomes an extra commitment in cost to make existing coastal defenses stronger, which can recoup that cost if many coastal defenses 
-    are made; also gives the one city it's built in a 3x defense against sea attacks, as an additional point of interest to balance out the new bombard 
-    abilities of battleships. Cost: 330 (was 350)
+    game. It now becomes an extra commitment in cost to make existing coastal defenses stronger; also gives the one city it's built in a 3x defense
+    against sea attacks, as an additional point of interest to balance out the new bombard abilities of battleships. Cost: 330 (was 350)
 15. Pyramids gain from the server upgrade on EFT_GROWTH and confer 25% food to newly founded cities, now cost 200, and require Mathematics.
 16. Wonder price adjustments 
     ** HG 210             
@@ -225,27 +224,12 @@ UNITS/COMBAT/MECHANICS:
 8. A server flaw sometimes
    a. allowed military units to clean fallout and pollution. This fix affects ALL rulesets.
    b. For non-military units, only spies and worker types can pillage now. Excluded are: Caravans, Explorers, Diplomats, Pilgrims, Tribesmen, Trucks, Freight.
-SPIES/DIPLOMATS:
-9. Diplomatic units now defend a unit on a tile from hostile diplomatic acts (bribe/sabotage), the same as they defend a city from hostile diplomat attacks.
-   a. In the case where bribe/sabotage isn't possible (i.e., other non-diplomat units > 1), no defense is necessary since it's "No action possible."
-   b. Where it is only the case of 1 diplomat vs. 1 enemy diplomat, they enter into diplomatic combat, the same as in a city.
-   c. Spies promotion odds increased to compensate for the weaker strength of their veterancy levels, to make it track more similar 
-      to other units for number of successful surviving actions.
-   d. Spies can investigate city from a transport, but not other actions.
-   e. Diplomats can investigate city without being spent.
-10. Investigate City is now no longer hard-coded in server to 100% success. What this means for MP2:
-   80% chance to COVERTLY SLIP past enemy diplomats/spies WITHOUT diplomatic combat. (100% if unprotected)
-   If slipped past OR defeated enemy diplomats in combat, 85% chance to succeed at investigating city.
-   FINAL ODDS: 
-      85% chance to investigate unprotected city
-      ~75% chance to succeed vs. protected city (varies slightly up or down with the vet levels of the spy units in combat.)
-      causes casus belli on failure!
-11. Conquered cities with Foreigners have a +10% chance of success in sabotage actions.
-12. Base Stack Escape odds are 60%, not 50%. 50% is too coin-flip on live or die for anyone to really use or count on this bonus.
+9. Base Stack Escape odds are 60%, not 50%. 50% is too coin-flip on live or die for anyone to really use or count on this bonus.
       Higher, however, can give too much power to stacks. 
-12a. Destroyer types are fast and have 67% stack escape odds. Submarines are submerged and have 75% stack escape odds.
-13. Fighter is D3.5, Escort Fighter is A3.5.
-BALLiSTIC sub-class 
+9a. Destroyer types are fast and have 67% stack escape odds. Submarines are submerged and have 75% stack escape odds.
+10. Fighter is D3.5, Escort Fighter is A3.5.
+
+BALLISTIC sub-class 
 1. Catapults and their upgrade line (Cannon, Artillery, Howitzer) are now the Ballstic sub-class of the Land unit class. This line of units gets an increasing +25% upgrade over 
    the obsolete unit, in how much of the Fortification/City Wall bonus it reduces. Catapult takes -25% from Fortifications and Wall bonuses. This represents their 
    special unit ability, makes them all a more logical family progression (instead of all -0% then Howitzer is suddenly -100% bonus). It also helps these
@@ -255,6 +239,27 @@ BALLiSTIC sub-class
    arriving at Howitzer. This does a lot for game balance and logic.
 2. Ballistic sub-class special unit ability is that it can retaliate against ranged special unit attacks from other unit types. They may be 
    weak defenders up close, but be careful shooting arrows or bazookas at them from far away, or you might regret it.
+
+SPIES/DIPLOMATS:
+1. Diplomatic units now defend a unit on a tile from hostile diplomatic acts (bribe/sabotage), the same as they defend a city from hostile diplomat attacks.
+   a. In the case where bribe/sabotage isn't possible (i.e., other non-diplomat units > 1), no defense is necessary since it's "No action possible."
+   b. Where it is only the case of 1 diplomat vs. 1 enemy diplomat, they enter into diplomatic combat, the same as in a city.
+   c. Spies promotion odds increased to compensate for the weaker strength of their veterancy levels, to make it track more similar 
+      to other units for number of successful surviving actions.
+   d. Spies can investigate city from a transport, but not other actions.
+   e. Diplomats can investigate city without being spent.
+2. Investigate City is now no longer hard-coded in server to 100% success. What this means for MP2:
+   80% chance to COVERTLY SLIP past enemy diplomats/spies WITHOUT diplomatic combat. (100% if unprotected)
+   If slipped past OR defeated enemy diplomats in combat, 85% chance to succeed at investigating city.
+   FINAL ODDS: 
+      85% chance to investigate unprotected city
+      ~75% chance to succeed vs. protected city (varies slightly up or down with the vet levels of the spy units in combat.)
+      causes casus belli on failure!
+3. Conquered cities with Foreigners have a +10% chance of success in sabotage actions.
+4. Cities with 50% or more foreign citizens are considered more occupied warzones, rather than cozy places where spies can 
+      steal weapons techs from scientists at the university there. No tech theft from a city that is half or more foreign.
+      This fixes some ridiculous cases where u couldn't conquer a city because ur afraid to give Mass Production to your enemy,
+      even though u could try as hard as hell to make sure no soldiers are carrying out tech briefcases on how to do Mass Prod.
 
 OTHER:
 1.Casus Belli Expansions:
@@ -350,6 +355,9 @@ Fallout disappear chance changed from 20% to 15%
 Small clarification: to use a train requires < 3 moves, not <= 2 moves. (Doesn't change who can use it, just clarifies rare cases.)
 Canals can serve as an irrigation source.
 Magnetism tech costs 875, was 950. Halves the extra cost over Gunpowder. Further encourages Frigates before Ironclads.
+Environmentalism "hack" to reduce production pollution by 50% was removed. It was a hacked misfit for flaws in other pollution reduction.
+   Now that other solutions exist for that, this advance reduces pollution from population by 50% instead.
+   Regarding production pollution, please see notes on how Power Plants, Recycling Center, Solar Plant, Wind Plant, and Fusion Reactor, layer together.
 
 SERVER UPGRADES:
 1. Special Unit Actions / Attacks:
@@ -517,7 +525,6 @@ What this means for MP2 rules:
       in this situation, need to put a MinSize, "1", City condition into them.
 66. Stack Escape changed to be unit is of equal or greater moves than attacker. (was greater)
 67. New server effect "Stack_Escape_Pct" allows regulating odds of stack escape in certain situations, instead of hard-coded universal 50%, always.
-
 
 These help with much more than Freeciv and other Full-screen apps. They help you with everything you do on your computer:
             Switch active Program   Flip to Last Program    Switch Browser tab   See all Programs on Workspace   Swap Workspaces

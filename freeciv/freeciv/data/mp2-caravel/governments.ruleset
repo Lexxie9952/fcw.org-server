@@ -234,7 +234,7 @@ ruler_female_title = _("?female:Comrade %s")
 helptext = _("\
 In Communism, all work, output, and goods are owned by the state.\
 "), _("\
-Each city gets 4 units free of upkeep. Buildings with 1 upkeep\
+Each city gets 4 shields of free unit upkeep. Buildings with 1 upkeep\
  are free. The city with a Palace gets +25% production.\
 "), _("\
 Riflemen cost 5 less; Armor and Dive Bombers, 10 less.\
@@ -276,7 +276,7 @@ Content cities get a +1 trade bonus on Land tiles only.\
  the original national hegemony. Luxury suffers a 15% penalty.\
  Government mandated Science gets +15% in original cities.\n\
 "), _("\
-Each city gets 1 unit free of upkeep. The city with a Palace gets +15% production.\
+Each city gets 1 shield of free unit upkeep. The city with a Palace gets +15% production.\
  Original cities have a 3x incite cost, otherwise cost one third.\n\
 "), _("\
 Police Stations suppress +1 unhappy Foreign National and cost 10 shields less.\

@@ -391,7 +391,6 @@ genus		= "Improvement"
 reqs	=
     { "type",         "name",         "range"
       "Tech",         "Fusion Power", "Player"
-      "Building",     "Fusion Reactor","City"
       "ServerSetting","nukes_major",  "World"
     }
 graphic	= "b.enrichment_facility"
@@ -406,8 +405,6 @@ sound		= "b_enrichment_facility"
 sound_alt	= "b_generic"
 helptext	= _("\
 Allows refining the fissile isotopes needed to create nuclear fusion weapons.\
- To make these weapons, a city requires an Enrichment Facility, which first\
- requires a Fusion Reactor.\
 ")
 
 [building_fortifications]
@@ -446,30 +443,6 @@ Terrain changes make Fortifications unassailable by Siege Rams.\
 ➤ Material from Fortifications is directly useful in building City Walls. AFTER\
  making City Walls, you can sell Fortifications with a full return of gold cost,\
  making the later upgrade have no loss in investment.\
-")
-
-[building_fusion_reactor]
-name		= _("Fusion Reactor")
-genus		= "Improvement"
-reqs	=
-    { "type", "name", "range"
-      "Tech", "Fusion Power", "Player"
-    }
-graphic	= "b.fusion_reactor"
-graphic_alt	= "-"
-obsolete_by	=
-    { "type", "name", "range"
-    }
-build_cost	= 200
-upkeep		= 4
-sabotage	= 100
-sound		= "b_fusion_reactor"
-sound_alt	= "b_generic"
-helptext	= _("\
-Increases the shield production in a city by +75% of base production levels.\
- Gives +5 free shield upkeep on units.\
-"), _("\
- This building lets you build one extra infantry unit per turn.\
 ")
 
 [building_granary]
@@ -543,39 +516,6 @@ You can build Homeland Security offices if you own the Supreme Court. Homeland S
  Supreme Court, it has no upkeep and cannot be sabotaged.\
 ")
 
-[building_hydro_plant]
-name		= _("Hydro Plant")
-genus		= "Improvement"
-reqs	=
-    { "type", "name", "range"
-      "Tech", "Electronics", "Player"
-      "Building", "Factory", "City"
-      "Extra", "River", "Adjacent"
-    }
-graphic	= "b.hydro_plant"
-graphic_alt	= "-"
-obsolete_by	=
-    { "type", "name", "range"
-    }
-build_cost	= 180
-upkeep		= 3
-sabotage	= 100
-sound		= "b_hydro_plant"
-sound_alt	= "b_generic"
-helptext	= _("\
-For each Factory or Mfg. Plant in a city, a Hydro Plant adds +25% to\
- base production, and reduces pollution from production by -25%.\
-"), _("\
-*If a city has either a Factory or Mfg. Plant, this makes a combined +75%\
- production bonus with a 25% decrease in pollution from production.\
-"), _("\
-*In a city with both a Factory and Mfg. Plant, this makes a combined +150%\
- production bonus with a 50% decrease in pollution from production.\
-"), _("\
-*Only one Power Plant, Hydro Plant, Nuclear Plant, or\
- Solar Plant can have an active effect in a city.\
-")
-
 [building_library]
 name		= _("Library")
 genus		= "Improvement"
@@ -624,7 +564,7 @@ Also increases the conversion rate of Coinage by +25%,\
 name		= _("Mass Transit")
 genus		= "Improvement"
 reqs	=
-    { "type", "name", "range"
+    { "type", "name",            "range"
       "Tech", "Mass Production", "Player"
     }
 graphic	= "b.mass_transit"
@@ -651,9 +591,9 @@ name		= _("Manufacturing Plant")
 rule_name = "Mfg. Plant"
 genus		= "Improvement"
 reqs	=
-    { "type", "name", "range"
-      "Tech", "Robotics", "Player"
-      "Building", "Factory", "City"
+    { "type",     "name",     "range"
+      "Tech",     "Robotics", "Player"
+      "Building", "Factory",  "City"
     }
 graphic	= "b.mfg_plant"
 graphic_alt	= "-"
@@ -680,38 +620,6 @@ The pollution reduction of a Hydro, Nuclear, or Solar Plant is applied one more\
  This building lets you build one extra infantry unit per turn.\
 ")
 
-[building_nuclear_plant]
-name		= _("Nuclear Plant")
-genus		= "Improvement"
-reqs	=
-    { "type", "name", "range"
-      "Tech", "Nuclear Power", "Player"
-      "Building", "Factory", "City"
-    }
-graphic	= "b.nuclear_plant"
-graphic_alt	= "-"
-obsolete_by	=
-    { "type", "name", "range"
-    }
-build_cost	= 120
-upkeep		= 2
-sabotage	= 100
-sound		= "b_nuclear_plant"
-sound_alt	= "b_generic"
-helptext	= _("\
-For each Factory or Mfg. Plant in a city, a Nuclear Plant adds +25% to\
- base production, and reduces pollution from production by -25%.\
-"), _("\
-*If a city has either a Factory or Mfg. Plant, this makes a combined +75%\
- production bonus with a 25% decrease in pollution from production.\
-"), _("\
-*In a city with both a Factory and Mfg. Plant, this makes a combined +150%\
- production bonus with a 50% decrease in pollution from production.\
-"), _("\
-*Only one Power Plant, Hydro Plant, Nuclear Plant, or\
- Solar Plant can have an active effect in a city.\
-")
-
 [building_offshore_platform]
 name		= _("Offshore Platform")
 genus		= "Improvement"
@@ -733,6 +641,192 @@ sound_alt	= "b_generic"
 helptext	= _("\
 Adds 1 extra production to all Oceanic tiles worked by a city.  The\
  city needs to be coastal to build this improvement.\
+")
+
+[building_coal_plant]
+name		= _("Coal Plant")
+genus		= "Improvement"
+reqs	=
+    { "type",     "name",         "range", "present"
+      "Tech",     "Refining",     "Player", TRUE
+      "Building", "Factory",      "City",   TRUE
+      ;Shortens Production List choices when unwanted:
+      "Building", "Hoover Dam",   "City",  FALSE
+      "Building","Fusion Reactor","Player",FALSE
+      "Building", "Hydro Plant",  "City",  FALSE
+      "Building", "Nuclear Plant","City",  FALSE
+
+    }
+graphic	= "b.power_plant"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 120
+upkeep		= 4
+sabotage	= 100
+sound		= "b_power_plant"
+sound_alt	= "b_generic"
+helptext	= _("\
+A Coal Plant boosts the +50% bonus of the Factory and Mfg. Plant to\
+ +70%. The extra production may lead to more pollution. \n\
+"), _("\
+➤ In a city with both a Factory and Mfg. Plant, this makes a combined +140%\
+ production bonus. \n\
+"), _("\
+➤ Only one Coal Plant, Hydro Plant, Nuclear Plant, or Fusion Reactor\
+ can have an active effect in a city.\
+")
+
+[building_hydro_plant]
+name		= _("Hydro Plant")
+genus		= "Improvement"
+reqs	=
+    { "type",     "name",         "range", "present"
+      "Tech",     "Electronics",  "Player",  TRUE
+      "Building", "Factory",      "City",    TRUE
+      "Extra",    "River",        "Adjacent",TRUE
+      "Building", "Hoover Dam",   "City",  FALSE
+      "Building","Fusion Reactor","Player",FALSE
+      "Building", "Nuclear Plant","City",  FALSE
+    }
+graphic	= "b.hydro_plant"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 175
+upkeep		= 3
+sabotage	= 100
+sound		= "b_hydro_plant"
+sound_alt	= "b_generic"
+helptext	= _("\
+A Hydro Plant boosts the +50% bonus of the Factory and Mfg. Plant to\
+ +70%. For each of those, it reduces pollution from production by -25%. \n\
+"), _("\
+➤ In a city with both a Factory and Mfg. Plant, this makes a combined +140%\
+ production bonus with a 50% decrease in pollution from production. \n\
+"), _("\
+➤ For both Factory and Mfg. Plant, -25% in production-based\
+ pollution cancels slightly more than the pollution generated by\
+ the 20% increase in production. \n\
+"), _("\
+➤ Only one Coal Plant, Hydro Plant, Nuclear Plant, or\
+ Fusion Reactor can have an active effect in a city. \n\
+"), _("\
+➤ The sale price of a Coal Plant becomes 90% original value\
+ instead of 50% original value, after a city has built a Hydro Plant.\
+")
+
+[building_nuclear_plant]
+name		= _("Nuclear Plant")
+genus		= "Improvement"
+reqs	=
+    { "type",     "name",         "range", "present"
+      "Tech",     "Nuclear Power","Player", TRUE
+      "Building", "Factory",      "City",   TRUE
+      "Building", "Hoover Dam",   "City",  FALSE
+      "Building","Fusion Reactor","Player",FALSE
+    }
+graphic	= "b.nuclear_plant"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 185
+upkeep		= 4
+sabotage	= 100
+sound		= "b_nuclear_plant"
+sound_alt	= "b_generic"
+helptext	= _("\
+A Nuclear Plant boosts the +50% bonus of the Factory and Mfg. Plant to\
+ +80%. For each of those, it reduces pollution from production by -25%. \n\
+"), _("\
+➤ In a city with both a Factory and Mfg. Plant, this makes a combined +160%\
+ production bonus with a 50% decrease in pollution from production. \n\
+"), _("\
+➤ For both Factory and Mfg. Plant, -25% in production-based\
+ pollution cancels most of the pollution generated by\
+ the 30% increase in production. \n\
+"), _("\
+➤ Only one Coal Plant, Hydro Plant, Nuclear Plant, or\
+ Fusion Reactor can have an active effect in a city. \n\
+"), _("\
+➤ The sale price of a Coal Plant becomes 90% original value\
+ instead of 50% original value, after a city has built a Nuclear Plant.\
+")
+
+[building_solar_plant]
+name		= _("Solar Plant")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Environmentalism", "Player"
+      "Building", "Factory", "City"
+    }
+graphic	= "b.solar_plant"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 150
+upkeep		= -3
+sabotage	= 100
+sound		= "b_solar_plant"
+sound_alt	= "b_generic"
+helptext	= _("\
+A Solar Plant boosts the production in a city by +20%. Although this is\
+ modest compared to other Power Plants, a Solar Plant has four major\
+ benefits: \n\
+"), _("\
+➤ The Solar Plant can co-exist with a Coal Plant, Hydro Plant,\
+ Nuclear Plant, or Fusion Reactor, adding its +20% bonus to the\
+ existing bonus.\  
+"), _("\
+➤ Free Solar energy reduces the infrastructural upkeep of other buildings\
+ in the city by -3, and gives free upkeep to two units supported by\
+ the city. \n\
+"), _("\
+➤ The pollution reduction from other kinds of Power Plants is replaced\
+ by the superior bonus of the Solar Plant, reducing Pollution from\
+ production by 75%. This makes Solar Plants an ideal improvement for\
+ cities which still use Coal Plants. \n\
+➤ A Solar Plant is the only kind of Power Plant whose bonus against\
+ Pollution can combine with a Recycling Center. Together, they reduce\
+ pollution from production by 95% !\
+")
+
+[building_wind_plant]
+name		= _("Wind Plant")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Environmentalism", "Player"
+    }
+graphic	= "b.wind_farm"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 60
+upkeep		= -3
+sabotage	= 100
+sound		= "b_wind_plant"
+sound_alt	= "b_generic"
+helptext	= _("\
+A Wind Plant boosts the production in a city by 5%. Admittedly, this is\
+ modest. But in cost per yield it’s still competitive with other\
+ Power Plants, especially considering its three major benefits: \n\
+"), _("\
+➤ The Wind Plant can co-exist with any other type of Power Plant, and\
+ needs no Factory to be built.\  
+"), _("\
+➤ Free Wind energy reduces the infrastructural upkeep of other buildings\
+ in the city by -3, and gives free upkeep to two units supported by\
+ the city. \n\
+"), _("\
+➤ A Wind Plant always reduces pollution from production by -5%, always\
+ combining with any other pollution bonuses.\
 ")
 
 [building_police_station]
@@ -790,38 +884,6 @@ Allows a city to build veteran sea units. Damaged sea units\
  restored.\
 ")
 
-[building_power_plant]
-name		= _("Power Plant")
-genus		= "Improvement"
-reqs	=
-    { "type", "name", "range"
-      "Tech", "Refining", "Player"
-      "Building", "Factory", "City"
-    }
-graphic	= "b.power_plant"
-graphic_alt	= "-"
-obsolete_by	=
-    { "type", "name", "range"
-    }
-build_cost	= 130
-upkeep		= 4
-sabotage	= 100
-sound		= "b_power_plant"
-sound_alt	= "b_generic"
-helptext	= _("\
-For each Factory or Mfg. Plant in a city, a Power Plant adds +25% to\
- base production. The extra production may lead to more pollution.\
-"), _("\
-*If a city has either a Factory or Mfg. Plant, this makes a combined +75%\
- production bonus.\
-"), _("\
-*In a city with both a Factory and Mfg. Plant, this makes a combined +150%\
- production bonus.\
-"), _("\
-*Only one Power Plant, Hydro Plant, Nuclear Plant, or\
- Solar Plant can have an active effect in a city.\
-")
-
 [building_radar_tower]
 name		= _("Radar Tower")
 genus		= "Improvement"
@@ -862,9 +924,14 @@ sabotage	= 100
 sound		= "b_recycling_center"
 sound_alt	= "b_generic"
 helptext	= _("\
-A Recycling Center reduces the pollution generated by\
- production in a city by -66%.  Supply of raw recycled\
- materials adds +2 producton to the city center tile.\
+A Recycling Center supercedes bonuses from Hydro and Nuclear\
+ Plants with its own superior bonus. It reduces pollution\
+ generated by production in a city by -66%. Supply of raw recycled\
+ materials adds +2 producton to the city center tile. \n\
+"), _("\
+When combined with a Solar Plant, pollution from production is\
+ nearly eliminated by -95%, leaving pollution from population\
+ as the only significant polluting factor.\ 
 ")
 
 [building_research_lab]
@@ -967,38 +1034,6 @@ Allows a city to grow larger than size 12.  An Aqueduct is first\
 ")
 ; There is also an effect to reduce the chance of plague, but you have to
 ; enable illness in game.ruleset for that to be relevant.
-
-[building_solar_plant]
-name		= _("Solar Plant")
-genus		= "Improvement"
-reqs	=
-    { "type", "name", "range"
-      "Tech", "Environmentalism", "Player"
-      "Building", "Factory", "City"
-    }
-graphic	= "b.solar_plant"
-graphic_alt	= "-"
-obsolete_by	=
-    { "type", "name", "range"
-    }
-build_cost	= 140
-upkeep		= 4
-sabotage	= 100
-sound		= "b_solar_plant"
-sound_alt	= "b_generic"
-helptext	= _("\
-For each Factory or Mfg. Plant in a city, a Solar Plant adds +25% to\
- base production, and reduces pollution from production by -50%.\
-"), _("\
-*If a city has either a Factory or Mfg. Plant, this makes a combined +75%\
- production bonus with a 50% decrease in pollution from production.\
-"), _("\
-*In a city with both a Factory and Mfg. Plant, this makes a combined +150%\
- production bonus with 100% elimination of all pollution from production.\
-"), _("\
-*Only one Power Plant, Hydro Plant, Nuclear Plant, or\
- Solar Plant can have an active effect in a city.\
-")
 
 [building_space_component]
 name		= _("Space Component")
@@ -1663,6 +1698,42 @@ All your cities support one unit free of\
  shield upkeep. This wonder is never obsolete.\
 ")
 
+[building_fusion_reactor]
+name		= _("Fusion Reactor")
+genus		= "SmallWonder"
+reqs	=
+    { "type",     "name",          "range", "present", "quiet"
+      "Building", "Fusion Reactor","Player", FALSE,    TRUE
+      "Tech",     "Fusion Power",  "Player", TRUE,     FALSE 
+    }
+graphic	= "b.fusion_reactor_wonder"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 700
+upkeep		= 0
+sabotage	= 100
+sound		= "b_fusion_reactor_wonder"
+sound_alt	= "b_generic"
+helptext	= _("\
+Replaces Power Plants with Fusion Reactor power in all your\
+ cities. This boosts the +50% bonus of a Factory or Mfg. Plant to +90%. \n\
+➤ In a city with both a Factory and Mfg. Plant present, there is a\
+ combined +180% production bonus. \n\
+"), _("\
+Pollution reduction from Recycling Center and Power Plants\
+ is upgraded to a higher bonus of a flat -80%. \n\
+"), _("\
+➤ Only one Coal Plant, Hydro Plant, Nuclear Plant, or Fusion\
+ Plant can have an active effect in a city. A nation that owns\
+ a Fusion Reactor can sell off all Power Plants and gain a\
+ large savings in ongoing upkeeps costs.\
+"), _("\
+➤ The Fusion Reactor's surplus power gives 1 free unit upkeep\
+ to every city in your nation, and 1 extra unit build slot.\
+")
+
 [building_genghis_khans_equestrian_school]
 name		= _("Genghis Khan's Equestrian School")
 genus		= "SmallWonder"
@@ -1712,11 +1783,10 @@ helptext	= _("\
 When facing attacks by sea, Gibraltar Fortress brings defensive capabilities\
  to cities with Coastal Defense, especially to the city in which it’s built：\n\
 "), _("\
-1. Reduces cost Coastal Defense by 15, to 50 shields. \n\
-2. Reduces upkeep on Coastal Defense by 1 gold. \n\
-3. The city with Gibraltar Fortress gains a +100% defense bonus, for a total\
- of 3× defense against sea attacks. \n\ 
-4. All other cities with Coastal Defence gain +25% defense, for a total of 2.25×\
+1. Reduces cost of Coastal Defense by 15, to 50 shields. \n\
+2. The city with Gibraltar Fortress gains a +100% defense bonus, for a total\
+ of 3× defense against sea attacks.\ 
+3. All other cities with Coastal Defence gain +25% defense, for a total of 2.25×\
  defense against sea attacks. \n\n\
 "), _("\
 Gibraltar Fortress must be built in a city with Coastal Defense, and is never obsolete.\
@@ -1802,15 +1872,27 @@ obsolete_by	=
     { "type", "name", "range"
     }
 build_cost	= 600
-upkeep		= 0
+upkeep		= -15
 sabotage	= 0
 sound		= "w_hoover_dam"
 sound_alt	= "w_generic"
 helptext	= _("\
-Works exactly as a Hydro Plant in all your cities.\
- (This reduces pollution and increases the effects\
- of Factories and Mfg. Plants.) Must be built adjacent\
- to a river. This wonder is never obsolete.\
+In the city it’s built, Hoover Dam counts exactly as a Hydro Plant,\
+ Factory, and Manufacturing Plant. If any of those buildings already\
+ exist there, they will have no effect and can be sold. \n\
+"), _("
+➤ This makes a combined +154% production bonus with a 50% decrease in\
+ pollution from production. \n\
+"), _("\
+In all other cities with a Hydro Plant, Hoover Dam increases their +20% production\
+ bonus for Factories and Mfg. Plants to +27%. In other words, it increases\
+ the effect of all your Hydro Plants by 35%. \n\
+"), _("
+Hoover Dam reduces the cost of other Hydro Plants by 5 shields. The\
+ excess power from Hoover Dam is so great that it has negative upkeep：\
+ enough to pay the upkeep on 5 more Hydro Plants for free.\
+"), _("
+Must be built adjacent to a river. This wonder is never obsolete.\
 ")
 
 [building_internet]
