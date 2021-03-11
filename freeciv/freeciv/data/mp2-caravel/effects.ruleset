@@ -3620,7 +3620,7 @@ reqs	=
     }
 [effect_coal_plant_upgrade_1] 
 type    = "Improvement_Sale_Pct"
-value = 80 ; full 'recycle value' after City Walls go up.
+value = 70 ; full 'recycle value' after City Walls go up.
 reqs  =
     { "type", "name", "range"
       "Building", "Coal Plant", "Local"
@@ -3628,7 +3628,7 @@ reqs  =
     }
 [effect_coal_plant_upgrade_2] 
 type    = "Improvement_Sale_Pct"
-value = 80 ; full 'recycle value' after City Walls go up.
+value = 70 ; full 'recycle value' after City Walls go up.
 reqs  =
     { "type", "name", "range"
       "Building", "Coal Plant", "Local"
@@ -3636,7 +3636,7 @@ reqs  =
     }
 [effect_coal_plant_upgrade_3] 
 type    = "Improvement_Sale_Pct"
-value = 80 ; full 'recycle value' after City Walls go up.
+value = 70 ; full 'recycle value' after City Walls go up.
 reqs  =
     { "type",     "name",          "range","present"
       "Building", "Coal Plant",    "Local", TRUE
@@ -4800,6 +4800,13 @@ reqs	=
       "Building", "Code of Hammurabi", "Player", TRUE
       "Building", "Temple", "City", FALSE
     }
+[effect_hammurabi_culture]
+type    = "History"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Building", "Code of Hammurabi", "City"
+    }
 ;************************************************************************ Colossus
 [effect_colossus_tile_trade]
 type    = "Output_Inc_Tile"
@@ -4950,6 +4957,13 @@ reqs    =
       "Building", "Hanging Gardens", "City"
       "CityTile", "Center", "Local"
       "OutputType", "Luxury", "Local"
+    }
+[effect_hanging_gardens_culture]
+type    = "History"
+value	= 1
+reqs	=
+    { "type", "name", "range"
+      "Building", "Hanging Gardens", "City"
     }
 ;************************************************************************ Hoover Dam
 ; see POWER PLANTS section
@@ -5166,40 +5180,337 @@ reqs	=
       "OutputType", "Trade", "Local"
     }
 ;************************************************************************ Mausoleum
-[effect_mausoleum_of_mausolos_1]
+; ╭╯╭╯╭╯╭╯╭╯╭╯ Devs: THIS IS WHY REQS NEED TO BE ABLE TO DO "OR" LOGIC!
+; .....................................
+; EFFECT CHART:   CH SC CW GW   result 
+;                  0  0  0  0           ✓
+;                  0  0  0  1   1c      ✓
+;                  0  0  1  0   1c      ✓
+;                  0  0  1  1   1c      ✓
+;                  0  1  0  0   1c      ✓
+;                  0  1  0  1   1c 1h   ✓
+;                  0  1  1  0   1c 1h   ✓
+;                  0  1  1  1   1c 1h   ✓
+;                  1  0  0  0   1c      ✓
+;                  1  0  0  1   1c 1h   ✓
+;                  1  0  1  0   1c 1h   ✓
+;                  1  0  1  1   1c 1h   ✓
+;                  1  1  0  0   1c      ✓
+;                  1  1  0  1   1c 1h   ✓
+;                  1  1  1  0   1c 1h   ✓
+;                  1  1  1  1   1c 1h   ✓
+; Yes, it's "brute force" but do we want 93% chance of human error? No.
+; Real reason: my brain exploded after multiple tries.
+[effect_mausoleum_of_mausolos_0001_c] ; 0001 = ---------------------CONTENT
 type    = "Make_Content"
 value   = 1
 reqs    =
-    { "type", "name", "range", "present"
-      "Building", "City Walls", "City", TRUE
-      "Building", "Great Wall", "Player", FALSE
-      "Building", "Mausoleum of Mausolos", "Player", TRUE
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   FALSE
+      "Building", "Supreme Court",        "Player", FALSE
+      "Building", "City Walls",           "City",   FALSE
+      "Building", "Great Wall",           "Player", TRUE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
     }
-;Great Wall counts as City Walls in every city.
-[effect_mausoleum_of_mausolos_1a]
+[effect_mausoleum_of_mausolos_0010_c] ; 0010 = ---------------------CONTENT
 type    = "Make_Content"
 value   = 1
 reqs    =
-    { "type", "name", "range"
-      "Building", "Great Wall", "Player"
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   FALSE
+      "Building", "Supreme Court",        "Player", FALSE
+      "Building", "City Walls",           "City",   TRUE
+      "Building", "Great Wall",           "Player", FALSE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    }
+[effect_mausoleum_of_mausolos_0011_c] ; 0011 = ---------------------CONTENT
+type    = "Make_Content"
+value   = 1
+reqs    =
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   FALSE
+      "Building", "Supreme Court",        "Player", FALSE
+      "Building", "City Walls",           "City",   TRUE
+      "Building", "Great Wall",           "Player", TRUE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    }
+[effect_mausoleum_of_mausolos_0100_c]  ; 0100 = ---------------------CONTENT
+type    = "Make_Content"
+value   = 1
+reqs    =
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   FALSE
+      "Building", "Supreme Court",        "Player", TRUE
+      "Building", "City Walls",           "City",   FALSE
+      "Building", "Great Wall",           "Player", FALSE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    }
+[effect_mausoleum_of_mausolos_0101_c] ; 0101 = -------------------HAPPY+CONTENT
+type    = "Make_Content"
+value   = 1
+reqs    =
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   FALSE
+      "Building", "Supreme Court",        "Player", TRUE
+      "Building", "City Walls",           "City",   FALSE
+      "Building", "Great Wall",           "Player", TRUE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    }
+[effect_mausoleum_of_mausolos_0101_H]
+type    = "Make_Happy"
+value   = 1
+reqs    =
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   FALSE
+      "Building", "Supreme Court",        "Player", TRUE
+      "Building", "City Walls",           "City",   FALSE
+      "Building", "Great Wall",           "Player", TRUE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    } 
+[effect_mausoleum_of_mausolos_0110_c] ; 0110 = -------------------HAPPY+CONTENT
+type    = "Make_Content"
+value   = 1
+reqs    =
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   FALSE
+      "Building", "Supreme Court",        "Player", TRUE
+      "Building", "City Walls",           "City",   TRUE
+      "Building", "Great Wall",           "Player", FALSE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    }
+[effect_mausoleum_of_mausolos_0110_H]
+type    = "Make_Happy"
+value   = 1
+reqs    =
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   FALSE
+      "Building", "Supreme Court",        "Player", TRUE
+      "Building", "City Walls",           "City",   TRUE
+      "Building", "Great Wall",           "Player", FALSE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    } 
+[effect_mausoleum_of_mausolos_0111_c] ; 0111 = -------------------HAPPY+CONTENT
+type    = "Make_Content"
+value   = 1
+reqs    =
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   FALSE
+      "Building", "Supreme Court",        "Player", TRUE
+      "Building", "City Walls",           "City",   TRUE
+      "Building", "Great Wall",           "Player", TRUE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    }
+[effect_mausoleum_of_mausolos_0111_H]
+type    = "Make_Happy"
+value   = 1
+reqs    =
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   FALSE
+      "Building", "Supreme Court",        "Player", TRUE
+      "Building", "City Walls",           "City",   TRUE
+      "Building", "Great Wall",           "Player", TRUE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    }
+[effect_mausoleum_of_mausolos_1000_c] ; 1000 = ---------------------CONTENT
+type    = "Make_Content"
+value   = 1
+reqs    =
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   TRUE
+      "Building", "Supreme Court",        "Player", FALSE
+      "Building", "City Walls",           "City",   FALSE
+      "Building", "Great Wall",           "Player", FALSE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    }
+[effect_mausoleum_of_mausolos_1001_c] ; 1001 = -------------------HAPPY+CONTENT
+type    = "Make_Content"
+value   = 1
+reqs    =
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   TRUE
+      "Building", "Supreme Court",        "Player", FALSE
+      "Building", "City Walls",           "City",   FALSE
+      "Building", "Great Wall",           "Player", TRUE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    }
+[effect_mausoleum_of_mausolos_1001_H]
+type    = "Make_Happy"
+value   = 1
+reqs    =
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   TRUE
+      "Building", "Supreme Court",        "Player", FALSE
+      "Building", "City Walls",           "City",   FALSE
+      "Building", "Great Wall",           "Player", TRUE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    }
+[effect_mausoleum_of_mausolos_1010_c] ; 1010 = -------------------HAPPY+CONTENT
+type    = "Make_Content"
+value   = 1
+reqs    =
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   TRUE
+      "Building", "Supreme Court",        "Player", FALSE
+      "Building", "City Walls",           "City",   TRUE
+      "Building", "Great Wall",           "Player", FALSE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    }
+[effect_mausoleum_of_mausolos_1010_H]
+type    = "Make_Happy"
+value   = 1
+reqs    =
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   TRUE
+      "Building", "Supreme Court",        "Player", FALSE
+      "Building", "City Walls",           "City",   TRUE
+      "Building", "Great Wall",           "Player", FALSE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    }
+[effect_mausoleum_of_mausolos_1011_c] ; 1011 = -------------------HAPPY+CONTENT
+type    = "Make_Content"
+value   = 1
+reqs    =
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   TRUE
+      "Building", "Supreme Court",        "Player", FALSE
+      "Building", "City Walls",           "City",   TRUE
+      "Building", "Great Wall",           "Player", TRUE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    }
+[effect_mausoleum_of_mausolos_1011_H]
+type    = "Make_Happy"
+value   = 1
+reqs    =
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   TRUE
+      "Building", "Supreme Court",        "Player", FALSE
+      "Building", "City Walls",           "City",   TRUE
+      "Building", "Great Wall",           "Player", TRUE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    }
+[effect_mausoleum_of_mausolos_1100_c] ; 1100 = ---------------------CONTENT
+type    = "Make_Content"
+value   = 1
+reqs    =
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   TRUE
+      "Building", "Supreme Court",        "Player", TRUE
+      "Building", "City Walls",           "City",   FALSE
+      "Building", "Great Wall",           "Player", FALSE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    }
+[effect_mausoleum_of_mausolos_1101_c] ; 1101 = -------------------HAPPY+CONTENT
+type    = "Make_Content"
+value   = 1
+reqs    =
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   TRUE
+      "Building", "Supreme Court",        "Player", TRUE
+      "Building", "City Walls",           "City",   FALSE
+      "Building", "Great Wall",           "Player", TRUE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    }
+[effect_mausoleum_of_mausolos_1101_H]
+type    = "Make_Happy"
+value   = 1
+reqs    =
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   TRUE
+      "Building", "Supreme Court",        "Player", TRUE
+      "Building", "City Walls",           "City",   FALSE
+      "Building", "Great Wall",           "Player", TRUE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    }
+[effect_mausoleum_of_mausolos_1110_c] ; 1110 = -------------------HAPPY+CONTENT
+type    = "Make_Content"
+value   = 1
+reqs    =
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   TRUE
+      "Building", "Supreme Court",        "Player", TRUE
+      "Building", "City Walls",           "City",   TRUE
+      "Building", "Great Wall",           "Player", FALSE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    }
+[effect_mausoleum_of_mausolos_1110_H]
+type    = "Make_Happy"
+value   = 1
+reqs    =
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   TRUE
+      "Building", "Supreme Court",        "Player", TRUE
+      "Building", "City Walls",           "City",   TRUE
+      "Building", "Great Wall",           "Player", FALSE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    }
+[effect_mausoleum_of_mausolos_1111_c] ; 1111 = -------------------HAPPY+CONTENT
+type    = "Make_Content"
+value   = 1
+reqs    =
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   TRUE
+      "Building", "Supreme Court",        "Player", TRUE
+      "Building", "City Walls",           "City",   TRUE
+      "Building", "Great Wall",           "Player", TRUE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    }
+[effect_mausoleum_of_mausolos_1111_H]
+type    = "Make_Happy"
+value   = 1
+reqs    =
+    { "type",     "name",                 "range", "present"
+      "Building", "Courthouse",           "City",   TRUE
+      "Building", "Supreme Court",        "Player", TRUE
+      "Building", "City Walls",           "City",   TRUE
+      "Building", "Great Wall",           "Player", TRUE
+      ; - - - - - - - - - - - - - - - - - - - - - - - - - -
+      "Building", "Mausoleum of Mausolos","Player", TRUE
+    }
+[effect_mausoleum_of_mausolos_bribe]
+type    = "Unit_Bribe_Cost_Pct"
+value	= 35
+reqs	=
+    { "type",     "name",                  "range"
       "Building", "Mausoleum of Mausolos", "Player"
     }
-[effect_mausoleum_of_mausolos_2]
-type    = "Make_Content"
-value   = 1
-reqs    =
-    { "type", "name", "range", "present"
-      "Building", "Courthouse", "City", TRUE
-      "Building", "Mausoleum of Mausolos", "Player", TRUE
+[effect_mausoleum_of_mausolos_half_courthouse]
+type    = "Output_Waste_Pct"
+value	= 30
+ reqs	=
+    { "type",       "name",          "range", "present"
+      "Building",   "Supreme Court", "Player", FALSE
+      "Building",   "Courthouse",    "City",   FALSE
+      "OutputType", "Trade",         "Local",  TRUE
     }
-;Mausoleum respects that Supreme Court counts as extra Courthouse in every city.
-[effect_mausoleum_of_mausolos_2a]
-type    = "Make_Content"
-value   = 1
-reqs    =
-    { "type", "name", "range"
-      "Building", "Supreme Court", "Player"
-      "Building", "Mausoleum of Mausolos", "Player"
+[effect_mausoleum_of_mausolos_investigate_resistance]
+type	= "Action_Odds_Pct"
+value	= -54 ; +7% - 54% = -47% ... -0.47 * 80 = 37.6% ... 80%-37.6% = 42.4% ... (85%/2 = 42.5%) ✓
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Investigate City", "Local", TRUE
     }
 [effect_mausoleum_of_mausolos_culture]
 type    = "History"
@@ -5208,6 +5519,8 @@ reqs	=
     { "type", "name", "range"
       "Building", "Mausoleum of Mausolos", "City"
     }
+
+;[effect_mausoleum_of_mausolos_incite] = blocked in game.ruleset actionenabler
 
 ;************************************************************************ Medici Bank
 [effect_medici_coins_bank]
@@ -5287,6 +5600,25 @@ reqs	=
       "Building", "Ziggurat", "City",   TRUE
       "Gov",      "Despotism","Player", TRUE
    
+    }
+;************************************************************************ Pax Dei
+[effect_pax_dei]
+type   = "Has_Senate"
+value  = 1
+reqs	=
+    { "type",     "name",      "range", "present"
+      "Building", "Pax Dei",   "World", TRUE
+      "Tech",     "Philosophy","Player",TRUE
+      "Tech",     "Theocracy", "World", FALSE
+    }
+[effect_pax_dei_unit_unhappiness]
+type    = "Unhappy_Factor"
+value	= 2
+reqs	=
+    { "type",     "name",      "range", "present"
+      "Building", "Pax Dei",   "World", TRUE
+      "Tech",     "Philosophy","Player",TRUE
+      "Tech",     "Theocracy", "World", FALSE
     }
 
 ;************************************************************************ Pyramids
@@ -5441,6 +5773,14 @@ value   = 1
 reqs    =
     { "type",     "name",           "range"
       "Building", "Statue of Zeus", "City"
+    }
+[effect_statue_of_zeus_3]
+type    = "Veteran_Combat"
+value	= 34  ; [50,33,20,15,15,15] → [67,44,26,20,20,20]
+reqs	=
+    { "type",     "name",           "range", "present"
+      "Building", "Statue of Zeus", "Player", TRUE
+      "Tech",     "The Republic",   "Player", FALSE
     }
 ;************************************************************************ Sun Tzu
 [effect_sun_tzus_war_academy]

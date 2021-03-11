@@ -46,14 +46,83 @@ Focus goals for MP2-Caravel
 4. Enhance Trade routes and other mechanics to increase the Diplomatic / Economic bloc / Sovereign concerns of
    each individual nation:  Nerf mechanics forcing gang-alliance loyalties.
 
-BUILDINGS AND WONDERS:
+WONDERS:
+========
 1. Colossus: +1 trade on city center, -5 cost on most commerce units built in that city. 2 notch or ~22% increase to trade in its city. Bug-fix: Now must be built adjacent to Ocean.
 2. Hanging Gardens now costs 210 and is obsolete by Steam Engine: 
    increase diversity of other early wonder strategies
    encourage Frigates before Ironclads
    more difficult for representative govs to rapture simultaneous to mid-game invasions
+3. Magna Carta, new wonder, creates a new government Constitutional Monarchy which is half between Monarchy and Republic. 
+   for the price of Oracle, Eiffel Tower, and Statue of Zeus, you basically get those same effects and a Republic-ish government: 
+      1 extra content, 1 free unit upkeep, 1 more content about military than Republic, extra trade on land tiles, ability to rapture.
+      One can also consider no lost turn of anarchy as a hidden discount in the 300 shield price. 
+      What you don't get: 1 free trade on water (unless celebrating), lower chance of civil war, 80% max tax, the ability to choose
+         those 300 shields went to some other more desired first investment than Oracle, Zeus, Eiffel Tower, as much trust from your
+         peaceful neighbours. 
+      What you get Republic that Republic doesn't, if it had spent 300 on Oracle, Eiffel Tower, and Zeus:  one free martial law,
+      keep your capital production bonus, the ability to still make 1) Oracle, Eiffel Tower, and Zeus; 2) Your "free" Oracle and Zeus won't
+      expire/become obsolete, less trust from your neighbours.
+4. New Wonder Appian Way:  Foot units, Chariots and Wagons get move bonus from Appian Way. City with Appian gets discounts on Wagons. 
+      increases revenue from trade routes approx. 10%, gives +1 trade to every road tile in its home city, 
+      workers +1/3 move and build roads at double speed
+5. Women's Suffrage small wonder combined with JSB small wonder made Democracy almost immune to the intended disadvantages it's supposed to have
+      to counterbalance its superior economy. Women's Suffrage now counts as +1 happy in every city. This will keep a city content from one military
+      but not necessarily help rapture it since rapture needs no unhappy; instead of formerly, 4 unhappy citizens about military all being forced
+      content.  This makes slightly tunes Democracies to perform better at Peace and not as well for war. However, this also represents another slight
+      nerf to democracy because once ONE player has it, it causes discontent in all representative governments which DON'T have it, thereby causing
+      an obligatory 300 shield expense for democracies OR a nerf of +1 unhappy person in all democracies without it.
+6. United Nations Wonder has new features which make it more globally interesting and strategic.
+      1. When someone violates a treaty with another player, United Nations will give the whole world casus belli against that player. 
+      2. Now that casus belli is tuned to work better, this opens up a lot more diplomatic intrigue and strategies from this wonder.
+      3. Cost 500, was 600.
+7. Statue of Zeus gains new ability, increases odds of veteran promotion by one third prior to discovery of Republic. 
+8. Gibraltar Fortress was another "wonder in every city" that made the original improvement worthless, while itself adding no extra dynamic to the 
+    game. It now becomes an extra commitment in cost to make existing coastal defenses stronger; also gives the one city it's built in a 3x defense
+    against sea attacks, as an additional point of interest to balance out the new bombard abilities of battleships. Cost: 330 (was 350)
+9. Hoover as small wonder made FOUR different improvements useless. This was an acceptable hack since Power Plants were one of the very 
+    few areas that was imbalanced in original Civ2. Now, all 4 power plants are well-balanced, uniquely useful, and create different Economic
+    paths and decisions regarding preferences over production/pollution/investment costs/tech priorities. Hoover is now a mega-production wonder
+    in its individual city while giving small bonuses to all hydro plants in other cities. See also: Power Plants.
+10. Fusion Reactor. The wonder model of "counts as x all cities" was moved from Hoover to The Fusion Reactor, which makes more sense. This model is 
+    now frowned on for small wonders but, in this case it makes sense in the very end game when no one wants to be messing with power 
+    plant upgrades in 75 cities. Not just for that reason: the major bonus of Fusion Power is selling off all the other power plants and going to 
+    lower upkeep, lower pollution, and instantly having fusion power in all newly acquired cities. 
+11. Pyramids gain from the server upgrade on EFT_GROWTH and confer 25% food to newly founded cities, now cost 200, and require Mathematics.
+12. Wonder price adjustments 
+    ** HG 210             
+    ** A.Smith 320 - it's powerful!          
+    ** Eiffel 125 - it was underpriced        
+    ** Isaac 420 - slightly discourage everyone doing isaac
+    ** Sun Tzu 310 - slightly discourage everyone having hardened units
+13. The Sphinx, cost 70, tech req: none, reduces tile corruption (anarchy/despotism), halves city corruption, gives +1 luxury to city.
+14. Marco Polo, as an embassy and outer relations/connections type of wonder, can't be lost in the conquest of a single city. 
+    This is especially fair since: this is the only wonder in the game that is "required", one might say. This provides fairness to 
+    all players who otherwise would prefer a "no wonder" strategy.
+15. Roman Colosseum added. Entertainers give 3 lux instead of 2, now equal in net trade to scientists or taxmen. Each city with an 
+   Amphitheater gains +1 happy and +1 luxury.
+16. Chand Baori 
+17. Medici Bank 
+18. Roman Colosseum
+19. Ziggurat.
+CIVIL WONDERS are wonders that help define the charactertistics of your race, nation, and culture, and may alter its strategic
+   path and possibilities. 
+1. HG is now a Civil Wonder. 
+2. Angkor Wat. +1 happy, all tiles in cities 3+ get celebration bonus when city is not celebrating, tile work on jungle/swamp 50% faster, 
+               irrigation of lowlands faster, cost of Elephants -5 shields.
+3. Mausoleum of Mausolos.
+4. Code of Hammurabi, halves the gap between Despotism and Monarchy, and gives one content citizen. CIVIL WONDER.
+
+BUILDINGS:
+==========
+1. Barracks requirement is Warrior Code. Besides making sense and rewarding early discovery of that tech as a diverse strategy to pursue, it 
+   balances out the longturn's format of giving starting gold and extra disbandable units.
+ a. Barracks II 35, Barracks III 40.
+2. Coinage yields 3 gold per 2 shields, (i.e., 1.5 gold per shield), so it no longer a "useless" feature taking up game space.
+ a. Marketplace, Bank, and Stock Exchange each add 0.25 to the conversion rate (1.75,2.00,2.25, respectively).
+      1. requires all earlier buildings present, 2. not Communist gov, 3. the final bonus for Stock Exchange also requires The Corporation
 3. Police Station prevents investigate city for all govs except Democracy.
-3a. Since Foreign Nationals are categorised as "discontent about military", Police Station now works on those for all governments (was Repub/Demo only)
+ a. Since Foreign Nationals are categorised as "discontent about military", Police Station now works on those for all governments (was Repub/Demo only)
 4. Courthouse prevents Diplomats (not Spies) from doing hostile Embassy without first cease-fire or peace.
 5. City Walls were sometimes too cheap, sometimes too expensive, sometimes too OP, etc., this was very similar to the issue with Fortresses 
    that was fixed earlier with the Fort/Fortress distinction. The new City Walls solution breaks into two types somewhat modeled on the 
@@ -68,65 +137,13 @@ BUILDINGS AND WONDERS:
    If City Walls are sabotaged, you can keep the Fortifications for a weaker backup.
    With some kinds of terrain, Fortifications modify, integrate, and are built into the terrain itself: Swamp, Forest, Jungle.
    This raises the terrain defense bonus of Swamp, Forest, and Jungle to 1.5x, 1.5x, and 1.67x respectively (+17%) 
-6. Magna Carta, new wonder, creates a new government Constitutional Monarchy which is half between Monarchy and Republic. 
-   for the price of Oracle, Eiffel Tower, and Statue of Zeus, you basically get those same effects and a Republic-ish government: 
-      1 extra content, 1 free unit upkeep, 1 more content about military than Republic, extra trade on land tiles, ability to rapture.
-      One can also consider no lost turn of anarchy as a hidden discount in the 300 shield price. 
-      What you don't get: 1 free trade on water (unless celebrating), lower chance of civil war, 80% max tax, the ability to choose
-         those 300 shields went to some other more desired first investment than Oracle, Zeus, Eiffel Tower, as much trust from your
-         peaceful neighbours. 
-      What you get Republic that Republic doesn't, if it had spent 300 on Oracle, Eiffel Tower, and Zeus:  one free martial law,
-      keep your capital production bonus, the ability to still make 1) Oracle, Eiffel Tower, and Zeus; 2) Your "free" Oracle and Zeus won't
-      expire/become obsolete, less trust from your neighbours.
-7. Barracks requirement is Warrior Code. Besides making sense and rewarding early discovery of that tech as a diverse strategy to pursue, it 
-   balances out the longturn's format of giving starting gold and extra disbandable units.
-8. Coinage yields 3 gold per 2 shields, (i.e., 1.5 gold per shield), so it no longer a "useless" feature taking up game space.
-8a. Marketplace, Bank, and Stock Exchange each add 0.25 to the conversion rate (1.75,2.00,2.25, respectively).
-      1. requires all earlier buildings present, 2. not Communist gov, 3. the final bonus for Stock Exchange also requires The Corporation
-9. New Wonder Appian Way:  Foot units, Chariots and Wagons get move bonus from Appian Way. City with Appian gets discounts on Wagons. 
-      increases revenue from trade routes approx. 10%, gives +1 trade to every road tile in its home city, 
-      workers +1/3 move and build roads at double speed
-10. Women's Suffrage small wonder combined with JSB small wonder made Democracy almost immune to the intended disadvantages it's supposed to have
-      to counterbalance its superior economy. Women's Suffrage now counts as +1 happy in every city. This will keep a city content from one military
-      but not necessarily help rapture it since rapture needs no unhappy; instead of formerly, 4 unhappy citizens about military all being forced
-      content.  This makes slightly tunes Democracies to perform better at Peace and not as well for war. However, this also represents another slight
-      nerf to democracy because once ONE player has it, it causes discontent in all representative governments which DON'T have it, thereby causing
-      an obligatory 300 shield expense for democracies OR a nerf of +1 unhappy person in all democracies without it.
-11. United Nations Wonder has new features which make it more globally interesting and strategic.
-      1. When someone violates a treaty with another player, United Nations will give the whole world casus belli against that player. 
-      2. Now that casus belli is tuned to work better, this opens up a lot more diplomatic intrigue and strategies from this wonder.
-      3. Cost 500, was 600.
-12. SAM Battery cost 80 (was 70) [100 in Civ2]
-13. Barracks II 35, Barracks III 40.
-14. Coastal Defense cost 65, upkeep 2. (Civ2: 80, 1). Micro-balances economic inflation effects and complaints C.D. is too cheap/strong/easy/common 
-     for preventing naval attacks.
-14. Gibraltar Fortress was another "wonder in every city" that made the original improvement worthless, while itself adding no extra dynamic to the 
-    game. It now becomes an extra commitment in cost to make existing coastal defenses stronger; also gives the one city it's built in a 3x defense
-    against sea attacks, as an additional point of interest to balance out the new bombard abilities of battleships. Cost: 330 (was 350)
-15. Pyramids gain from the server upgrade on EFT_GROWTH and confer 25% food to newly founded cities, now cost 200, and require Mathematics.
-16. Wonder price adjustments 
-    ** HG 210             
-    ** A.Smith 320 - it's powerful!          
-    ** Eiffel 125 - it was underpriced        
-    ** Isaac 420 - slightly discourage everyone doing isaac
-    ** Sun Tzu 310 - slightly discourage everyone having hardened units
-17. The Sphinx, cost 70, tech req: none, reduces tile corruption (anarchy/despotism), halves city corruption, gives +1 luxury to city.
-18. Marco Polo, as an embassy and outer relations/connections type of wonder, can't be lost in the conquest of a single city. 
-    This is especially fair since: this is the only wonder in the game that is "required", one might say. This provides fairness to 
-    all players who otherwise would prefer a "no wonder" strategy.
-19. Roman Colosseum added. Entertainers give 3 lux instead of 2, now equal in net trade to scientists or taxmen. Each city with an 
-   Amphitheater gains +1 happy and +1 luxury.
-20. Chand Baori 
-21. Medici Bank 
-22. Roman Colosseum
-23. Ziggurat.
-24. Code of Hammurabi, halves the gap between Despotism and Monarchy, and gives one content citizen.
-TRIBAL WONDERS are wonders that help define the charactertistics of your nation and may alter its strategic path and possibilities. 
-1. HG is now a Tribal Wonder. 
-2. Angkor Wat. +1 happy, all tiles in cities 3+ get celebration bonus when city is not celebrating, tile work on jungle/swamp 50% faster, 
-               cost of Elephants -5 shields.
-3. Mausoleum of Mausolos
-
+6. SAM Battery cost 80 (was 70) [100 in Civ2]
+7. Coastal Defense cost 65, upkeep 2. (Civ2: 80, 1). Micro-balances economic inflation effects and complaints C.D. is too cheap/strong/easy/common 
+     for preventing naval attacks. See also: Gibraltar Fortress.
+8. Power Plants refactoring. Formerly, each plant had identical characteristics in upkeep and output, with the only difference being that
+     you paid WAY more than it's worth to get less pollution. Now, each Power Plant has a different profile for output, pollution, upgrade
+     incentives, and so on. They fit together well in a meta-system, not just with themselves, but with other improvements. 
+  a. Solar Plant and the new Wind Plant are no longer (only one type can co-exist in the same city.)
 
 GOVERNMENT RE-BALANCE:
 * ALL NON-REPRESENTATIVE GOVERNMENTS:
@@ -166,7 +183,6 @@ GOVERNMENT RE-BALANCE:
 * FOREIGN NATIONALS:
 1. 40% are unhappy, increase from 34%.
 2. Fixed, was sometimes rounding up too high, the number of your own nationals in a newly conquered city.
-
 
 UNITS/COMBAT/MECHANICS:
 * FOOT UNITS
@@ -527,6 +543,12 @@ What this means for MP2 rules:
 67. New server effect "Stack_Escape_Pct" allows regulating odds of stack escape in certain situations, instead of hard-coded universal 50%, always.
 68. New server feature to allow negative upkeep buildings. Allows improvements which gather infrastructural support to other buildings, 
    e.g., wind mills, khan's tribute collection office, etc.
+69. Improvement super panel in city list now filters out obsolete buildings and buildings who tech req is 2 or more tiers away. This makes the 
+    list much more compact and easy to use.
+70. minor_nukes and major_nukes are not shown in tech tree unless the server setting allows them for that game. if you see it, you can build it!
+
+
+
 
 
 These help with much more than Freeciv and other Full-screen apps. They help you with everything you do on your computer:

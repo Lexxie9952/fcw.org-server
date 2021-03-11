@@ -1,5 +1,5 @@
 
-; Modifying this file:
+; Modifying this file：
 ; You should not modify this file except to make bugfixes or
 ; for other "maintenance".  If you want to make custom changes,
 ; you should create a new datadir subdirectory and copy this file
@@ -24,7 +24,7 @@ format_version=20
 
 ; /* <-- avoid gettext warnings
 ;
-; Tech classes:
+; Tech classes：
 ;
 ; First one is the default one.
 ; If there is none, tech classes feature is disabled
@@ -46,14 +46,14 @@ format_version=20
 
 ; /* <-- avoid gettext warnings
 ;
-; Below: The individual advances, one per section.
+; Below：The individual advances, one per section.
 ; The number can be variable, up to 250.
 ;
 ; The actual tag used (the * in [advance_*]) does not matter, except
 ; it must be unique within this file, and it may be used in debug
 ; output when reading this file.
 ;
-; Notes:
+; Notes：
 ;
 ; name          = translatable name as seen by user
 ; rule_name     = (optional) internal name for savegames, rulesets etc; if
@@ -99,7 +99,7 @@ format_version=20
 ; it should be listed as req1.
 ;
 ; As well as custom flags defined above, the following flag strings are
-; possible:
+; possible：
 ;
 ; "Bonus_Tech"          = player gets extra tech if reached first
 ; "Bridge"              = "Settler" unit types can build roads with

@@ -1,4 +1,4 @@
-; Modifying this file:
+; Modifying this file：
 ; You should not modify this file except to make bugfixes or
 ; for other "maintenance".  If you want to make custom changes,
 ; you should create a new datadir subdirectory and copy this file
@@ -23,7 +23,7 @@ format_version=20
 ; it must be unique within this file, and it may be used in debug
 ; output when reading this file.
 ;
-; Notes:
+; Notes
 ;
 ; name          = translatable name as seen by user
 ; rule_name     = (optional) internal name for savegames, rulesets etc; if
@@ -31,7 +31,7 @@ format_version=20
 ;                 the name used in savegames must not change, if you want
 ;                 to rename an item after a ruleset has been released, you
 ;                 should set "rule_name" to the original value of "name".
-; genus	        = genus; one of:
+; genus	        = genus; one of：
 ;                 "GreatWonder", "SmallWonder", "Improvement", "Special".
 ; reqs		= requirements to build the building (see effects.ruleset
 ;		  and README.effects for help on requirements)
@@ -650,7 +650,7 @@ reqs	=
     { "type",     "name",         "range", "present"
       "Tech",     "Refining",     "Player", TRUE
       "Building", "Factory",      "City",   TRUE
-      ;Shortens Production List choices when unwanted:
+      ;Shortens Production List choices when unwanted：
       "Building", "Hoover Dam",   "City",  FALSE
       "Building","Fusion Reactor","Player",FALSE
       "Building", "Hydro Plant",  "City",  FALSE
@@ -714,7 +714,7 @@ A Hydro Plant boosts the +50% bonus of the Factory and Mfg. Plant to\
 ➤ Only one Coal Plant, Hydro Plant, Nuclear Plant, or\
  Fusion Reactor can have an active effect in a city. \n\
 "), _("\
-➤ The sale price of a Coal Plant becomes 90% original value\
+➤ The sale price of a Coal Plant becomes 85% original value\
  instead of 50% original value, after a city has built a Hydro Plant.\
 ")
 
@@ -752,7 +752,7 @@ A Nuclear Plant boosts the +50% bonus of the Factory and Mfg. Plant to\
 ➤ Only one Coal Plant, Hydro Plant, Nuclear Plant, or\
  Fusion Reactor can have an active effect in a city. \n\
 "), _("\
-➤ The sale price of a Coal Plant becomes 90% original value\
+➤ The sale price of a Coal Plant becomes 85% original value\
  instead of 50% original value, after a city has built a Nuclear Plant.\
 ")
 
@@ -777,7 +777,7 @@ sound_alt	= "b_generic"
 helptext	= _("\
 A Solar Plant boosts the production in a city by +20%. Although this is\
  modest compared to other Power Plants, a Solar Plant has four major\
- benefits: \n\
+ benefits：\n\
 "), _("\
 ➤ The Solar Plant can co-exist with a Coal Plant, Hydro Plant,\
  Nuclear Plant, or Fusion Reactor, adding its +20% bonus to the\
@@ -816,7 +816,7 @@ sound_alt	= "b_generic"
 helptext	= _("\
 A Wind Plant boosts the production in a city by 5%. This is\
  modest; but in yield per cost it’s competitive with other\
- Power Plants, when considering its unique benefits: \n\
+ Power Plants, when considering its unique benefits： \n\
 "), _("\
 ➤ The Wind Plant can co-exist with any other type of Power Plant, and\
  needs no Factory to be built.\  
@@ -1081,7 +1081,7 @@ sound		= "b_space_module"
 sound_alt	= "b_generic"
 helptext	= _("\
 Space Modules are the most expensive parts of spaceships.  There\
- are three different types of Space Module:\
+ are three different types of Space Module：\
 "), _("\
 - Habitation Module：provides living space for 10,000 people.\
 "), _("\
@@ -1384,7 +1384,7 @@ sound		= "w_asmiths_trading_co"
 sound_alt	= "w_generic"
 helptext	= _("\
 In all your cities, Buildings with upkeep of 1 gold become free.\
- This Wonder also allows three new specialists:\
+ This Wonder also allows three new specialists：\
 "), _("
   * Each Laborer produces 1 production point for their city per turn;\
 "), _("
@@ -1427,16 +1427,16 @@ The Agōgē creates a culture of extreme fitness, and is famous for\
 name		= _("Angkor Wat")
 genus		= "SmallWonder"
 reqs	=
-    { "type",     "name",            "range",  "present", "quiet"
-      "Tech",     "Code of Laws",    "Player", TRUE,      FALSE
-      "Building", "Angkor Wat",      "Player", FALSE,     TRUE
-      "Building", "Hanging Gardens", "Player", FALSE,     TRUE
-      "Building","Mausoleum of Mausolos","Player",FALSE,  TRUE
-      "Building", "Code of Hammurabi","Player",FALSE,     TRUE
-      "Gov", "Democracy",            "Player", FALSE,     TRUE
-      "Gov", "Theocracy",            "Player", FALSE,     TRUE
-      "Gov", "Communism",            "Player", FALSE,     TRUE
-      "Gov", "Nationalism",          "Player", FALSE,     TRUE      
+    { "type",     "name",                "range","present","quiet"
+      "Tech",     "Code of Laws",        "Player", TRUE,    FALSE
+      "Building", "Angkor Wat",          "Player", FALSE,   TRUE
+      "Building", "Hanging Gardens",     "Player", FALSE,   TRUE
+      "Building","Mausoleum of Mausolos","Player", FALSE,   TRUE
+      "Building", "Code of Hammurabi",   "Player", FALSE,   TRUE
+      "Gov", "Democracy",                "Player", FALSE,   TRUE
+      "Gov", "Theocracy",                "Player", FALSE,   TRUE
+      "Gov", "Communism",                "Player", FALSE,   TRUE
+      "Gov", "Nationalism",              "Player", FALSE,   TRUE      
     }
 graphic	= "b.angkor_wat"
 graphic_alt	= "-"
@@ -1449,7 +1449,7 @@ sabotage	= 0
 sound		= "w_angkor"
 sound_alt	= "w_generic"
 helptext	= _("\
-Angkor Wat is the glorious ancient city of\
+Angkor Wat gives you the glorious ancient city of\
  splendor and culture. In Despotism and Monarchy,\
  cities of size 3+ get the tile celebration bonus even if not celebrating.\
  All cities gain +1 happy citizen. Work done on Jungle and Swamp tiles\
@@ -1459,7 +1459,7 @@ Angkor Wat is the glorious ancient city of\
 This Wonder is never obsolete, but it only has an effect in\
  Despotism, Monarchies, and Republic.\ 
 "), _("
-Angkor Wat is a Tribe Wonder. You can build only one Tribe Wonder.\
+Angkor Wat is a Civil Wonder. You can build only one Civil Wonder.\
 ")
 
 [building_apollo_program]
@@ -1581,13 +1581,13 @@ The Code of Hammurabi is a first step toward legal organized\
  civilization. It is a primitive version of later societal\
  advancements. In some ways, this Wonder closes the gap\
  between Despotism and Monarchy by exactly half. \n\
-Improvements to Despotism:\n\
-  • base corruption is 26% (was 37%)\n\
-  • distance corruption is 3% (was 4%)\n\
-  • penalties eliminated on Lowland tiles\n\
-Other bonus:\n\
+Improvements to Despotism：\n\
+  • base corruption is 26% (was 37%) \n\
+  • distance corruption is 3% (was 4%) \n\
+  • penalties eliminated on Lowland tiles. \n\
+Other bonus：\n\
   • cities with no Temple get +1 content citizen\n\n\
-The Code of Hammurabi is a Tribe Wonder. You can build only one Tribe Wonder. \n\
+The Code of Hammurabi is a Civil Wonder. You can build only one Civil Wonder. \n\
 Obsolete by：Democracy.\
 ")
 
@@ -1615,7 +1615,7 @@ helptext	= _("\
 In the city where this wonder is built, +1 trade is added to every tile\
  worked. The city center tile gets an additional +1 trade in\
  addition to the first bonus. Until you discover Steam Engine, the\
- Colossus city receives a discount on all Commerce units:\n\
+ Colossus city receives a discount on all Commerce units：\n\
  Boat：            7 shields. \n\
  Trireme：        15 shields. \n\
  Caravan, Galley：25 shields. \n\
@@ -1694,7 +1694,7 @@ sabotage	= 0
 sound		= "w_eiffel_tower"
 sound_alt	= "w_generic"
 helptext	= _("\
-The Eiffel Tower gives one free shield upkeep for units
+The Eiffel Tower gives one free shield upkeep for units\
  to every city in your nation. This wonder is never obsolete.\
 ")
 
@@ -1728,7 +1728,7 @@ Pollution reduction from Recycling Center and Power Plants\
 ➤ Only one Coal Plant, Hydro Plant, Nuclear Plant, or Fusion\
  Plant can have an active effect in a city. A nation that owns\
  a Fusion Reactor can sell off all Power Plants and gain a\
- large savings in ongoing upkeeps costs.\
+ large savings in ongoing upkeeps costs. \n\
 "), _("\
 ➤ The Fusion Reactor's surplus power gives 1 free unit upkeep\
  to every city in your nation, and 1 extra unit build slot.\
@@ -1828,11 +1828,12 @@ The Great Wall gives no extra effect when City Walls are already present.\
 name		= _("Hanging Gardens")
 genus		= "SmallWonder"
 reqs	=
-    { "type",     "name",            "range",  "present", "quiet"
-      "Tech",     "Pottery",         "Player", TRUE,      FALSE
-      "Building", "Hanging Gardens", "Player", FALSE,     TRUE
-      "Building", "Angkor Wat",      "Player", FALSE,     FALSE
-      "Building","Mausoleum of Mausolos","Player",FALSE,  FALSE
+    { "type",     "name",                "range", "present","quiet"
+      "Tech",     "Pottery",             "Player", TRUE,     FALSE
+      "Building", "Hanging Gardens",     "Player", FALSE,    TRUE
+      "Building", "Angkor Wat",          "Player", FALSE,    FALSE
+      "Building", "Code of Hammurabi",   "Player", FALSE,    FALSE
+      "Building","Mausoleum of Mausolos","Player", FALSE,    FALSE
     }
 graphic	= "b.hanging_gardens"
 graphic_alt	= "-"
@@ -1852,7 +1853,7 @@ Makes two content citizens happy in every city in your nation.\
  (including those unhappy about military activity), making each content\
  then happy.  Gives +2 luxury in the city where it is built. \n\
 "), _("
-The Hanging Gardens are a Tribe Wonder. You can build only one Tribe Wonder. \n\
+The Hanging Gardens are a Civil Wonder. You can build only one Civil Wonder. \n\
 "), _("
  Obsolete by：Steam Engine.\
 ")
@@ -1879,18 +1880,18 @@ sound_alt	= "w_generic"
 helptext	= _("\
 In the city it’s built, Hoover Dam counts exactly as a Hydro Plant,\
  Factory, and Manufacturing Plant. If any of those buildings already\
- exist there, they will have no effect and can be sold. \n\
+ exist in the city, they will have no effect and can be sold. \n\
 "), _("
-➤ This makes a combined +154% production bonus with a 50% decrease in\
- pollution from production. \n\
+In all cities with a Hydro Plant, Hoover Dam increases their +20% production\
+ bonus for each Factory and Mfg. Plant to +27%. (In other words, it increases\
+ the production bonus on your Hydro Plants by +35%.) \n\
+"), _("
+➤ In the city with Hoover Dam, the above bonuses make for a combined +154%\
+ production bonus, and a 50% decrease in pollution from production. \n\
 "), _("\
-In all other cities with a Hydro Plant, Hoover Dam increases their +20% production\
- bonus for Factories and Mfg. Plants to +27%. In other words, it increases\
- the effect of all your Hydro Plants by 35%. \n\
-"), _("
 Hoover Dam reduces the cost of other Hydro Plants by 5 shields. The\
- excess power from Hoover Dam is so great that it has negative upkeep：\
- enough to pay the upkeep on 5 more Hydro Plants for free.\
+ excess power from Hoover Dam is so great that in its home city, it\
+ supports up to 15 free upkeep for other buildings!\
 "), _("
 Must be built adjacent to a river. This wonder is never obsolete.\
 ")
@@ -2043,7 +2044,7 @@ sabotage	= 0
 sound		= "w_leonardos_workshop"
 sound_alt	= "w_generic"
 helptext	= _("\
-Upgrades two obsolete units per game turn. Obsolete by:\
+Upgrades two obsolete units per game turn. Obsolete by：\
  Automobile.\
 ")
 
@@ -2151,7 +2152,7 @@ upkeep		= 0
 sabotage	= 0
 sound		= "w_manhattan_project"
 sound_alt	= "w_generic"
-;helptext is set in client/helpdata.c:helptext_wonder()
+;helptext is set in client/helpdata.c.helptext_wonder()
 helptext	= _("\
 Allows all nations who know Nuclear Fission to make nuclear weapons.\
  This Wonder does not become obsolete.\
@@ -2188,7 +2189,7 @@ genus		= "SmallWonder"
 reqs	=
     { "type", "name",                      "range","present","quiet"
       "Tech", "Ceremonial Burial",         "Player", TRUE, FALSE
-      "Building","Mausoleum of Mausolos","Player",   FALSE, TRUE
+      "Building", "Mausoleum of Mausolos", "Player", FALSE, TRUE
       "Building", "Angkor Wat",            "Player", FALSE, TRUE
       "Building", "Hanging Gardens",       "Player", FALSE, TRUE
       "Building", "Code of Hammurabi",     "Player", FALSE, TRUE
@@ -2196,8 +2197,8 @@ reqs	=
 graphic         = "b.mausoleum"
 graphic_alt     = "-"
 obsolete_by	=
-    { "type", "name", "range", "survives"
-      "Tech", "Radio", "Player", FALSE
+    { "type", "name",      "range", "survives"
+      "Tech", "Radio",     "Player", FALSE
     }
 build_cost	= 200
 upkeep		= 0
@@ -2205,10 +2206,19 @@ sabotage	= 0
 sound		= "w_oracle"
 sound_alt	= "w_generic"
 helptext	= _("\
-With this wonder, City Walls and Courthouses each make one unhappy citizen\
- content in their city, unless that citizen is unhappy about military activity.\
- Also, no cities in the empire with this Wonder can be incited to revolt. \n\n\
-The Mausoleum is a Tribe Wonder. You can make only one Tribe Wonder. \n\
+The Mausoleum of Mausolos brings a spirit of prudence to your nation, giving\
+ subtle security and reduced corruption. This makes your people happier. \n\
+"), _("
+➤ Counts as half a Courthouse in all your cities with no Courthouse or\
+ Supreme Court. \n\
+➤ A Courthouse or City Walls gives each city +1 content citizen, unless
+ unhappy about military activity. \n\
+➤ Having both the above adds another +1 happy citizen. \n\
+➤ Adds +35% to the cost of bribing your units. \n\
+➤ Prevents your cities from being incited to revolt. \n\
+➤ Halves the odds of investigating your cities (85% / 2 = 43%). \n\
+"), _("
+The Mausoleum of Mausolos is a Civil Wonder. You can make only one Civil Wonder. \n\
 Obsolete by：Radio.\
 ")
 
@@ -2318,17 +2328,19 @@ Makes two of your unhappy citizens content in every city\
 
 [building_pax_dei]
 name		= _("Pax Dei")
-genus		= "SmallWonder"
+genus		= "GreatWonder"
 reqs	=
     { "type",     "name",          "range", "present",  "quiet"
       "Tech",     "Philosophy",    "Player", TRUE,      FALSE
       "Building", "Pax Dei",       "Player", FALSE,     TRUE
+      "Building", "Pax Dei",       "World",  FALSE,     TRUE
+      "Tech",     "Theocracy",     "World",  FALSE,     FALSE
     }
 graphic	= "b.pax_dei"
 graphic_alt	= "-"
 obsolete_by	=
-    { "type", "name", "range"
-      "Tech", "Theocracy", "World"    ;change to Gov,Theocracy,World when we make that a range.
+    { "type", "name",      "range", "survives"
+      "Tech", "Theocracy", "World",  FALSE   
     }
 build_cost	= 100
 upkeep		= 0
@@ -2336,14 +2348,17 @@ sabotage	= 0
 sound		= "w_pax_dei"
 sound_alt	= "w_generic"
 helptext	= _("\
-Pax Dei is a cultural wonder that makes people see the truth that war is not as\
- beneficial as Peace, and is furthermore contrary to their own religious and philosophical\
- values. The Pax Dei movement creates a cultural meme of praise, shame, and ostracism,\
- to be very effective at making war nearly impossible. But ultimately it fades when\
- the realities of hardcore theocratic values enter the world. All nations with Monotheism\
- gain a Senate for 13 turns, and +2 unhappy about military activity. When culture becomes\
- weary of the extortionist methods of Pax Dei, it may backfire on the movement’s founders.\
-Obsolete by：Theocracy.\ 
+Pax Dei is a social movement that uses heavy philosophical and religious pressure\
+ against war and violence. Praise, shame, and ostracism are socially applied to\
+ effectively make war nearly impossible. Pax Dei expires in 13 turns, when the\
+ culture grows weary of its heavy-handed methods. \n\
+"), _("\
+All nations with Philosophy gain +2 unhappy about each aggressive military unit,\
+ and a Senate for 13 turns. Nations with Monotheism fall completely under the
+ influence of Pax Dei, and are forbidden to attack in non-domestic territory!\
+ Be careful, sometimes Pax Dei may backfire on the movement’s founders! \n\
+"), _("\
+Obsolete when any nation discovers Theocracy.\
 ")
 
 [building_pyramids]
@@ -2502,8 +2517,11 @@ helptext	= _("\
 The powerful Zeus gives order and organization to both city and nation.\
  In every city in your nation, this Wonder neutralizes one unhappy\
  citizen caused by military units. (For governments who do not experience\
- discontent from military activity, it simply makes one citizen content.)\
- In the city the statue is located, it makes one citizen happy and provides\
+ discontent from military activity, it simply makes one citizen content.) \n\
+"), _("
+Before the discovery of The Republic, increases odds of promotion by one third. \n\
+"), _("
+In the city the statue is located, it makes one citizen happy and provides\
  free upkeep to 4 units. Except for one permanent happy citizen, the\
  discovery of Tactics makes the Statue of Zeus obsolete.\
 ")
@@ -2585,7 +2603,7 @@ helptext	= _("\
 The bounteous Artemis bestows a multitudinous benefaction to all cities\
  with Temples：+1 production, +1 luxury, +1 science, and +1 gold.\
  Requires a Temple in the city where it will be built. (This wonder also\
- recovers the lost bonus shield in cities built on resources of +1 shield:\
+ recovers the lost bonus shield in cities built on resources of +1 shield：\
  i.e. Grassland shield resource, Tundra fur.) Obsolete by：Computers.\
 ")
 
@@ -2630,7 +2648,7 @@ sabotage	= 0
 sound		= "w_united_nations"
 sound_alt	= "w_generic"
 helptext	= _("\
-Creates a World Senate with the following effects:\n\
+Creates a World Senate with the following effects：\n\
  1. Breaking of a treaty by any nation, will give casus belli to all other nations.\
  2. Prevents declarations of war in some circumstances.\
  3. If any city in the world is in revolt for more than two turns, its government\
@@ -2740,7 +2758,7 @@ sabotage	= 0
 sound		= "w_ziggurat"
 sound_alt	= "w_generic"
 helptext	= _("\
-The Ziggurat transfers the production bonus from your Palace to its own city,\
+The Ziggurat transfers the production bonus from your Palace to the Ziggurat city,\
  while gaining its own corruption reduction and happy bonus effects. \n \
 The Ziggurat gathers all ruling functions of early civilization into one\
  wondrous building. It counts as a Granary, Temple, and Barracks. Its defensive\
