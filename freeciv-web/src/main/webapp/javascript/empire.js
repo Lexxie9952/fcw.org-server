@@ -811,7 +811,7 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
         opacity = 1;
         border = "border:3px solid #000000;";
         bg     = "background:#FEED ";
-        title_text = "title='"+html_safe(pcity['name'])+":\n\nRIGHT-CLICK: Sell " + improvements[z]['name']+".'";
+        title_text = "title='"+html_safe(pcity['name'])+":\n\nRIGHT-CLICK: Sell " + html_safe(improvements[z]['name'])+".'";
         right_click_action = alt_click_method+"='city_sell_improvement_in(" +city_id+","+ z + ");' ";
       } else {
         if (!can_city_build_improvement_now(pcity, z)) {  // city has improvement but CAN'T MAKE IT
@@ -826,8 +826,8 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
           bg =     (is_city_making ? (product_finished ? "background:#BFBE " : "background:#8D87 ") : "background:#AD68 ");
           right_click_action = alt_click_method+"='city_change_prod_and_buy(null," +city_id+","+ z + ");' "
           title_text = is_city_making 
-            ? ("title='"+html_safe(pcity['name'])+verb+improvements[z]['name']+".\n\nRIGHT_CLICK: Buy "+improvements[z]['name']+"'")
-            : ("title='"+html_safe(pcity['name'])+":\n\nCLICK: Change production\n\nRIGHT-CLICK: Buy "+improvements[z]['name']+"'");   
+            ? ("title='"+html_safe(pcity['name'])+verb+improvements[z]['name']+".\n\nRIGHT_CLICK: Buy "+html_safe(improvements[z]['name'])+"'")
+            : ("title='"+html_safe(pcity['name'])+":\n\nCLICK: Change production\n\nRIGHT-CLICK: Buy "+html_safe(improvements[z]['name'])+"'");   
         }
       }
       if (!show_building) opacity = 0.21;  // we show a ghost ability to see grid.
@@ -998,7 +998,7 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
       const border = "border:1px solid #000000;";
       var bg = upkeep>0 ? "background:#FEED " : "background:#FEED ";
       var upkp_color = upkeep<0 ? "#77EF77" : "#FFD52C" // negative upkeep or "upkeep support buildings" get green.
-      var title_text = "title='"+html_safe(pcity['name'])+":\n\nRIGHT-CLICK: Sell " + improvements[z]['name']+".'";
+      var title_text = "title='"+html_safe(pcity['name'])+":\n\nRIGHT-CLICK: Sell " + html_safe(improvements[z]['name'])+".'";
       var right_click_action = alt_click_method+"='city_sell_improvement_in(" +city_id+","+ z + ");' ";
       // Put improvement sprite in the cell:
       improvements_html = improvements_html +
@@ -1419,8 +1419,7 @@ function create_worklist_improv_div()
       if (req_state != TECH_KNOWN) {
         if (req_state != TECH_PREREQS_KNOWN) continue; 
       }
-    } 
-  
+    }
     // Set cell colour/opacity based on player has tech_req
     if (improvements[z]['reqs'].length > 0) {
       if (player_invention_state(client.conn.playing, improvements[z]['reqs'][0]['value']) != TECH_KNOWN) {
@@ -1429,7 +1428,7 @@ function create_worklist_improv_div()
       }
       else bg = "background:#EFF4 ";
     } else bg = "background:#EFF4 ";  // some have no reqs
-    var title_text = "title='"+improvements[z]['name']+"\n\n"+constant_title;
+    var title_text = "title='"+html_safe(improvements[z]['name'])+"\n\n"+constant_title;
     var opacity = 1;
     const click_action = "onclick='handle_improv_clipboard(event, "+VUT_IMPROVEMENT+","+ z + ");' "; // copy/add/remove to clipboard < >/<shift>/<ctrl>
     // Put improvement sprite in the cell:
@@ -1489,7 +1488,19 @@ function create_worklist_wonder_div()
         continue;   
       }
     } //------------------------------------------------------------------
-    var title_text = "title='"+improvements[z]['name']+"\n\n"+constant_title;
+    // Great Wonders already built in the world.
+    if (improvements[z].genus == GENUS_GREAT_WONDER && world_has_wonder(improvements[z]['name'])) {
+      continue;
+    } //------------------------------------------------------------------
+    // Small Wonders which are only enabled after a duplicate-named Great Wonder has been built in the world
+    if (client_rules_flag[CRF_MP2_C]) {
+      if (improvements[z]['name'] == "Women's Suffrage"
+          && !world_has_wonder("Women's Suffrage​")/*zero-width space at end marks G.W.*/) {
+        continue;
+      }
+    } //------------------------------------------------------------------
+
+    var title_text = "title='"+html_safe(improvements[z]['name'])+"\n\n"+constant_title;
     const click_action = "onclick='handle_improv_clipboard(event, "+VUT_IMPROVEMENT+","+ z + ");' "; // copy/add/remove to clipboard < >/<shift>/<ctrl>
     // Put improvement sprite in the cell:
     improvements_html = improvements_html +

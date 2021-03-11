@@ -559,13 +559,13 @@ function show_city_dialog(pcity)
                    ? "none" 
       // positive upkeep OR upkeep that was already negative before bonus (so called "infra-support" improvement like wind plant which have neg. upkeep)             
                    : (improvements[z]['upkeep']);
-                   
+
       improvements_html = improvements_html +
        "<div id='city_improvement_element'><div class='buildings_present' style='background: transparent url("
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
-           + "title=\"" + cleaned_text(improvements[z]['helptext']) +"\n\nUpkeep: "+ upkeep + "\" "
+           + "title=\"" + html_safe(cleaned_text(improvements[z]['helptext'])) +"\n\nUpkeep: "+ upkeep + "\" "
 	   + "onclick='city_sell_improvement(" + z + ");'>"
            +"</div>"+ long_name_font_reducer+improvements[z]['name']+"</div>" + "</div>";
     }
@@ -2035,7 +2035,7 @@ function show_city_happy_tab()
 
   for (cause in causes) {
     // Cause text table cell with title
-    happy_tab_html += "<tr><td><div class='happy_cause_help' title='"+cause_titles[cause]+"'>";
+    happy_tab_html += "<tr><td><div class='happy_cause_help' title='"+html_safe(cause_titles[cause])+"'>";
     happy_tab_html += causes[cause] + "</div></td>"
     // Table cell of all the people
     happy_tab_html += "<td><div>";
@@ -2236,7 +2236,7 @@ function city_worklist_dialog(pcity)
      + (can_city_build_now(pcity, universal['kind'], universal['value']) ?
         "" : " cannot_build_item")
      + "' data-wlitem='" + j + "' "
-     + " title=\"" + cleaned_text(universal['helptext']) + "\">"
+     + " title=\"" + html_safe(cleaned_text(universal['helptext'])) + "\">"
      + "<td><div class='production_list_item_sub' "
            + "style=' background: transparent url("
            + sprite['image-src'] +
@@ -2444,7 +2444,8 @@ function populate_worklist_production_choices(pcity)
       production_html += "<tr class='prod_choice_list_item kindvalue_item"
        + (can_build ? "" : " cannot_build_item")
        + "' data-value='" + value + "' data-kind='" + kind + "'>"
-       + "<td><div class='production_list_item_sub' title=\"" + cleaned_text(production_list[a]['helptext']) + "\" style=' background: transparent url("
+       + "<td><div class='production_list_item_sub' title=\"" + html_safe(cleaned_text(production_list[a]['helptext']))
+           + "\" style=' background: transparent url("
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'"
@@ -3032,6 +3033,19 @@ function show_city_improvement_pane(city_id)
           continue;
         }
 
+        // Filter out OBSOLETE:
+        if (improvements[z]['obs_count'] > 0) {
+          if (player_invention_state(client.conn.playing, improvements[z]['obs_reqs'][0]['value']) == TECH_KNOWN) {
+            continue;
+          }
+        }
+        // UNREACHABLE and 2 techs away or more:  (TECHS_PREREQS_KNOWN is 1 away)
+        if (improvements[z]['reqs'].length > 0) {
+          if (player_invention_state(client.conn.playing, improvements[z]['reqs'][0]['value']) == TECH_UNKNOWN) {
+            continue;   
+          }
+        }
+
         if (!server_settings['nukes_major']['val'] && improvements[z]['name'] == "Enrichment Facility")
               continue; // major nukes set to OFF, don't show illegal prod choice.
           
@@ -3052,14 +3066,14 @@ function show_city_improvement_pane(city_id)
           opacity = 1;
           border = "border:3px solid #000000;"
           bg     = "background:#FEED ";
-          title_text = "title='"+html_safe(pcity['name'])+":\n\nRIGHT-CLICK: Sell " + improvements[z]['name']+"."+shift_click_text;
+          title_text = "title='"+html_safe(pcity['name'])+":\n\nRIGHT-CLICK: Sell " + html_safe(improvements[z]['name'])+"."+shift_click_text;
           right_click_action = "oncontextmenu='city_sell_improvement_in(" +city_id+","+ z + ");' ";
         } else {
           if (!can_city_build_improvement_now(pcity, z)) {  // doesn't have and can't build: faded
             opacity=0.35;
             border = "border:3px solid #231A13;"  
             bg =     "background:#9873 ";
-            title_text = "title='" + html_safe(pcity['name'])+": " + improvements[z]['name'] + " unavailable.\n\nRIGHT-CLICK: Add to worklist."+shift_click_text;
+            title_text = "title='" + html_safe(pcity['name'])+": " + html_safe(improvements[z]['name']) + " unavailable.\n\nRIGHT-CLICK: Add to worklist."+shift_click_text;
             right_click_action = "oncontextmenu='city_add_improv_to_worklist(" +city_id+","+ z + ");' ";
           } else {                  // doesn't have and CAN build - dark blue
             opacity = 1;
@@ -3067,8 +3081,8 @@ function show_city_improvement_pane(city_id)
             bg =     (is_city_making ? (product_finished ? "background:#BFBE " : "background:#8D87 ") : "background:#147F ");
             right_click_action = "oncontextmenu='city_change_prod_and_buy(null," +city_id+","+ z + ");' "
             title_text = is_city_making 
-              ? ("title='"+html_safe(pcity['name'])+verb+improvements[z]['name']+".\n\nRIGHT_CLICK: Buy "+improvements[z]['name']+shift_click_text)
-              : ("title='"+html_safe(pcity['name'])+":\n\nCLICK: Change production\n\nRIGHT-CLICK: Buy "+improvements[z]['name']+shift_click_text);   
+              ? ("title='"+html_safe(pcity['name'])+verb+html_safe(improvements[z]['name'])+".\n\nRIGHT_CLICK: Buy "+html_safe(improvements[z]['name'])+shift_click_text)
+              : ("title='"+html_safe(pcity['name'])+":\n\nCLICK: Change production\n\nRIGHT-CLICK: Buy "+html_safe(improvements[z]['name'])+shift_click_text);   
           }
         } 
         // Put improvement sprite in the cell:

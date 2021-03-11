@@ -288,6 +288,22 @@ function has_wonder(wonder_name_str)
 }
 
 /**************************************************************************
+  returns true if the any player in the world has the given Wonder
+  Note: uses the string value of the wonder and fetches the id for you.
+**************************************************************************/
+function world_has_wonder(wonder_name_str)
+{
+  for (player_id in players) {
+    if (player_has_wonder(client.conn.playing.playerno,
+        improvement_id_by_name(wonder_name_str))) {
+
+      return true;
+    }
+  }
+  return false;
+}
+
+/**************************************************************************
   Checks if a username is valid.
   Returns a textual reason for invalid names, null for valid ones.
 **************************************************************************/
