@@ -264,7 +264,7 @@ function utype_has_flag(ptype, flag)
 /**************************************************************************
 ...
 **************************************************************************/
-function get_units_from_tech(tech_id)
+function get_utypes_from_tech(tech_id)
 {
   var result = [];
 
