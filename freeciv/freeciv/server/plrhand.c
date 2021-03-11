@@ -2881,9 +2881,9 @@ struct player *civil_war(struct player *pplayer)
 
   notify_player(NULL, NULL, E_CIVIL_WAR, ftc_server,
                 /* TRANS: ... Danes ... Poles ... <7> cities. */
-                PL_("[`flag/%s`][`events/civilwar`]⚔️ Civil war partitions the %s;"
+                PL_("[`flag/%s`][`events/civilwar`]<br>⚔️ Civil war partitions the %s;"
                     " the %s now hold %d city [`flag/%s`]",
-                    "[`flag/%s`][`events/civilwar`]⚔️ Civil war partitions the %s;"
+                    "[`flag/%s`][`events/civilwar`]<br>⚔️ Civil war partitions the %s;"
                     " the %s now hold %d cities [`flag/%s`]",
                     i),
                 nation_of_player(pplayer)->flag_graphic_str,
