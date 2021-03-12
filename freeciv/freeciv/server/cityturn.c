@@ -244,6 +244,13 @@ void remove_obsolete_buildings_city(struct city *pcity, bool refresh)
                     improvement_name_translation(pimprove), sgold);
       sold = TRUE;
     }
+    if (game.server.pax_dei_set && game.server.pax_dei_counter==0) {
+      if (strcmp(improvement_rule_name(pimprove), "Pax Dei")==0) {
+        building_lost(pcity, pimprove, "obsolete", NULL);
+        notify_player(NULL, city_tile(pcity), E_TREATY_BROKEN, ftc_server,
+            _("⚠️ [`paxdei`] The Pax Dei movement became unpopular and came to an end."));
+      }
+    }
   } city_built_iterate_end;
 
   if (sold && refresh) {
@@ -3135,10 +3142,21 @@ static bool city_build_building(struct player *pplayer, struct city *pcity)
     if (is_great_wonder(pimprove)) {
       notify_player(NULL, city_tile(pcity), E_WONDER_BUILD, ftc_server,
                     _("💢[`%s`] The %s have finished building %s in %s."),
-                    city_improvement_name_translation(pcity, pimprove),
+                    improvement_name_translation(pimprove),
                     nation_plural_for_player(pplayer),
-                    city_improvement_name_translation(pcity, pimprove),
+                    improvement_name_translation(pimprove),
                     city_link(pcity));
+
+      if (improvement_has_flag(pimprove, IF_PAX_DEI_COUNTER) && !game.server.pax_dei_set) {
+          game.server.pax_dei_set = true; // pax_dei_counter = 13; (this is set at game start)
+          notify_player(NULL, city_tile(pcity), E_WONDER_BUILD, ftc_server,
+                  _("[`events/paxdei`]<br>[`dove`] For 13 turns (T%d-T%d), all nations with Philosophy "
+                    "have a Senate and +2 unhappy citizens for each aggressive "
+                    "unit. Armies in nations with Monotheism refuse to do battle "
+                    "unless defending domestic territory."
+                  ), game.info.turn+1,game.info.turn+game.server.pax_dei_counter);
+      }
+
     }
 
     notify_player(pplayer, city_tile(pcity), E_IMP_BUILD, ftc_server,

@@ -57,6 +57,13 @@ struct strvec;          /* Actually defined in "utility/string_vector.h". */
 /* Never destroyed by disasters */
 #define SPECENUM_VALUE3 IF_DISASTER_PROOF
 #define SPECENUM_VALUE3NAME "DisasterProof"
+/* Flag Triggers */
+#define SPECENUM_VALUE4 IF_PAX_DEI_COUNTER
+#define SPECENUM_VALUE4NAME "PaxDeiCounter"
+#define SPECENUM_VALUE5 IF_USER_FLAG_1
+#define SPECENUM_VALUE5NAME "User_Flag_1"
+#define SPECENUM_VALUE6 IF_USER_FLAG_2
+#define SPECENUM_VALUE6NAME "User_Flag_2"
 #define SPECENUM_COUNT IF_COUNT
 #define SPECENUM_BITVECTOR bv_impr_flags
 #include "specenum_gen.h"

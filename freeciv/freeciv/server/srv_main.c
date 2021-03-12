@@ -1476,6 +1476,18 @@ static void end_phase(void)
                     _("🚀 Automatically placed spaceship parts that were still not placed."));
     }
 
+    // Obsolete Pax Dei when it reaches the end of its counter. Has to happen here so that
+    // effects don't carry over into city effects during next turn production. Also,
+    // nicely integrates the handling of counter and obsoleting in one place!
+    if (game.server.pax_dei_set) {
+      int pax_dei_owner_id = game.info.great_wonder_owners[improvement_index(improvement_by_rule_name("Pax Dei"))];
+      if (pplayer == player_by_number(pax_dei_owner_id)) {
+        game.server.pax_dei_counter--;
+        if (game.server.pax_dei_counter==0) {
+          remove_obsolete_buildings(pplayer);
+        }
+      }
+    }
     update_city_activities(pplayer);
     city_thaw_workers_queue();
     pplayer->culture += nation_history_gain(pplayer);

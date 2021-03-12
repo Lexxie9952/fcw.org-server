@@ -1789,6 +1789,30 @@ static struct setting settings[] = {
            GAME_MAX_NUCLEAR_WINTER_PERCENT,
            GAME_DEFAULT_NUCLEAR_WINTER_PERCENT)
 
+  GEN_INT("pax_dei_counter", game.server.pax_dei_counter,
+           SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_RARE, ALLOW_BASIC, ALLOW_BASIC, // let GM reset it after re-load .sav game
+           N_("Pax Dei counter"),
+           N_("The turn length that Pax Dei will have effect when it gets "
+           "set. Pax Dei is set when a player builds the Pax Dei wonder; "
+           "or, at game start if the server setting 'pax_dei_set' was "
+           "enabled. Also see: 'pax_dei_set'."), NULL, NULL, NULL,
+           GAME_MIN_PAX_DEI_COUNTER,
+           GAME_MAX_PAX_DEI_COUNTER,
+           GAME_DEFAULT_PAX_DEI_COUNTER)
+
+  GEN_BOOL("pax_dei_set", game.server.pax_dei_set,
+           SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_RARE, ALLOW_BASIC, ALLOW_BASIC, // let GM reset it after re-load .sav game
+           N_("Whether the game considers Pax Dei in effect at game start."),
+           N_("Usually, this gets set in a game when the Pax Dei wonder is built. "
+              "However, it is possible to enable 'pax_dei_set' at game start."
+              "This activates the ruleset effects for the Pax Dei wonder at "
+              "game start, for exactly 'pax_dei_counter' # of turns. Note: this "
+              "intentionally disallows Pax Dei from being made by any player. "
+              "Thus, this setting can be used to enable Pax Dei wonder effects "
+              "at game start and/or completely disable the Pax Dei wonder in the "
+              "current game (if 'pax_dei_counter' is set to 0.) Also see: "
+              "'pax_dei_counter'."), NULL, NULL, GAME_DEFAULT_PAX_DEI_SET)   
+
   GEN_INT("mapseed", wld.map.server.seed_setting,
           SSET_MAP_GEN, SSET_INTERNAL, SSET_RARE,
 #ifdef FREECIV_WEB

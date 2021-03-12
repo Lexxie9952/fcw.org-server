@@ -862,6 +862,9 @@ bool great_wonder_is_available(const struct impr_type *pimprove)
 {
   fc_assert_ret_val(is_great_wonder(pimprove), FALSE);
 
+  if (strcmp(improvement_rule_name(pimprove), "Pax Dei") == 0
+      && game.server.pax_dei_set) return false;
+
   return (WONDER_NOT_OWNED
           == game.info.great_wonder_owners[improvement_index(pimprove)]);
 }
