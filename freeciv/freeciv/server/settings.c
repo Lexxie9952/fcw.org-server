@@ -1790,7 +1790,7 @@ static struct setting settings[] = {
            GAME_DEFAULT_NUCLEAR_WINTER_PERCENT)
 
   GEN_INT("pax_dei_counter", game.server.pax_dei_counter,
-           SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_RARE, ALLOW_BASIC, ALLOW_BASIC, // let GM reset it after re-load .sav game
+           SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_RARE, ALLOW_BASIC, ALLOW_ADMIN, // let GM reset it after re-load .sav game
            N_("Pax Dei counter"),
            N_("The turn length that Pax Dei will have effect when it gets "
            "set. Pax Dei is set when a player builds the Pax Dei wonder; "
@@ -1801,7 +1801,7 @@ static struct setting settings[] = {
            GAME_DEFAULT_PAX_DEI_COUNTER)
 
   GEN_BOOL("pax_dei_set", game.server.pax_dei_set,
-           SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_RARE, ALLOW_BASIC, ALLOW_BASIC, // let GM reset it after re-load .sav game
+           SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_RARE, ALLOW_BASIC, ALLOW_ADMIN, // let GM reset it after re-load .sav game
            N_("Whether the game considers Pax Dei in effect at game start."),
            N_("Usually, this gets set in a game when the Pax Dei wonder is built. "
               "However, it is possible to enable 'pax_dei_set' at game start."
