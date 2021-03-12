@@ -730,15 +730,28 @@ void handle_diplomacy_cancel_pact(struct player *pplayer,
   }
 
   diplcheck = pplayer_can_cancel_treaty(pplayer, pplayer2);
+  /* check what the new status will be */
+  new_type = cancel_pact_result(old_type);
 
   /* The senate may not allow you to break the treaty.  In this case you
    * must first dissolve the senate then you can break it. */
   if (diplcheck == DIPL_SENATE_BLOCKING) {
-    notify_player(pplayer, NULL, E_TREATY_BROKEN, ftc_server,
-                  _("❗📜 The senate will not allow you to break treaty "
-                    "with the %s.  You must either dissolve the senate "
-                    "or wait until a more timely moment."),
-                  nation_plural_for_player(pplayer2));
+    if (game.server.pax_dei_set && game.server.pax_dei_counter > 0) {
+      notify_player(NULL, NULL, E_TREATY_BROKEN, ftc_server,
+                    _("❗[`paxdei`]📜 The Pax Dei movement declares global shame on the "
+                    "%s for their unjustified request to %s %s. Pax Dei rejects their "
+                    "unrighteous petition and calls for confession!"),
+                    nation_plural_for_player(pplayer),
+                    (new_type == DS_WAR ? "declare war on the" : "break their treaty with the"),
+                    nation_plural_for_player(pplayer2));
+    }
+    else {
+      notify_player(pplayer, NULL, E_TREATY_BROKEN, ftc_server,
+                    _("❗📜 The senate will not allow you to break treaty "
+                      "with the %s. You must either dissolve the senate "
+                      "or wait until a more timely moment."),
+                    nation_plural_for_player(pplayer2));
+    }
     return;
   }
 
@@ -749,9 +762,6 @@ void handle_diplomacy_cancel_pact(struct player *pplayer,
   reject_all_treaties(pplayer);
   reject_all_treaties(pplayer2);
   /* else, breaking a treaty */
-
-  /* check what the new status will be */
-  new_type = cancel_pact_result(old_type);
 
   ds_plrplr2 = player_diplstate_get(pplayer, pplayer2);
   ds_plr2plr = player_diplstate_get(pplayer2, pplayer);
@@ -793,15 +803,35 @@ void handle_diplomacy_cancel_pact(struct player *pplayer,
    * will happen but the second one will fail. */
   if (get_player_bonus(pplayer, EFT_HAS_SENATE) > 0 && !repeat) {
     if (ds_plrplr2->has_reason_to_cancel > 0) {
+      if (game.server.pax_dei_set && game.server.pax_dei_counter > 0) {
+          notify_player(NULL, NULL, E_TREATY_BROKEN, ftc_server,
+                        _("✅[`paxdei`]📜 The Pax Dei movement declares the "
+                          "%s request to %s as righteous. They were shamefully provoked by "
+                          "the sinful deeds of the %s!"),
+                          nation_adjective_for_player(pplayer),
+                          (new_type == DS_WAR ? "declare war" : "break their treaty"),
+                          nation_plural_for_player(pplayer2));
+      }
+      else {
+          notify_player(pplayer, NULL, E_TREATY_BROKEN, ftc_server,
+                        _("✅📜 The senate passes your bill because of the "
+                          "constant provocations of the %s."),
+                          nation_plural_for_player(pplayer2));
+      }
+    } 
+    else if (new_type == DS_WAR) {
+      if (game.server.pax_dei_set && game.server.pax_dei_counter > 0) {
+          notify_player(NULL, NULL, E_TREATY_BROKEN, ftc_server,
+                        _("⚠️[`paxdei`]📜 The Pax Dei movement declares global shame on the %s "
+                          "for breaking their treaty to declare war on the %s. The %s must confess their crimes!"),
+                          nation_adjective_for_player(pplayer),
+                          nation_plural_for_player(pplayer2),
+                          nation_adjective_for_player(pplayer));
+      }
       notify_player(pplayer, NULL, E_TREATY_BROKEN, ftc_server,
-                    _("📜 The senate passes your bill because of the "
-                      "constant provocations of the %s."),
-                    nation_plural_for_player(pplayer2));
-    } else if (new_type == DS_WAR) {
-      notify_player(pplayer, NULL, E_TREATY_BROKEN, ftc_server,
-                    _("📜 The senate refuses to break treaty with the %s, "
-                      "but you have no trouble finding a new senate."),
-                    nation_plural_for_player(pplayer2));
+                _("✅📜 Your senate refuses to break treaty with the %s, "
+                  "but you have no trouble finding a new senate."),
+                nation_plural_for_player(pplayer2));
     }
   }
   if (new_type == DS_WAR) {
