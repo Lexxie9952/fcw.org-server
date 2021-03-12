@@ -2329,6 +2329,7 @@ Makes two of your unhappy citizens content in every city\
 [building_pax_dei]
 name		= _("Pax Dei")
 genus		= "GreatWonder"
+flags   = "PaxDeiCounter"
 reqs	=
     { "type",     "name",          "range", "present",  "quiet"
       "Tech",     "Philosophy",    "Player", TRUE,      FALSE
@@ -2342,23 +2343,25 @@ obsolete_by	=
     { "type", "name",      "range", "survives"
       "Tech", "Theocracy", "World",  FALSE   
     }
-build_cost	= 100
+build_cost	= 115
 upkeep		= 0
 sabotage	= 0
 sound		= "w_pax_dei"
 sound_alt	= "w_generic"
 helptext	= _("\
-Pax Dei is a social movement that uses heavy philosophical and religious pressure\
- against war and violence. Praise, shame, and ostracism are socially applied to\
- effectively make war nearly impossible. Pax Dei expires in 13 turns, when the\
- culture grows weary of its heavy-handed methods. \n\
+Pax Dei is a social movement that uses philosophical and religious pressure\
+ against war and violence. Shame and ostracism are socially applied to\
+ make war nearly impossible. Pax Dei expires in 13 turns, when the\
+ culture grows weary of its social pressures. \n\
 "), _("\
 All nations with Philosophy gain +2 unhappy about each aggressive military unit,\
- and a Senate for 13 turns. Nations with Monotheism fall completely under the
- influence of Pax Dei, and are forbidden to attack in non-domestic territory!\
- Be careful, sometimes Pax Dei may backfire on the movement’s founders! \n\
+ and a Senate for 13 turns. Nations with Monotheism fall completely under the\
+ influence of Pax Dei：armies will refuse to attack unless defending their own\
+ domestic territory! \n\
 "), _("\
-Obsolete when any nation discovers Theocracy.\
+Obsolete by: Theocracy, or 13 turns after built. \n\
+(The server settings 'pax_dei_counter' and 'pax_dei_set' may\
+ alter this wonder’s effects in specific games.)\
 ")
 
 [building_pyramids]

@@ -105,6 +105,8 @@ WONDERS:
 17. Medici Bank 
 18. Roman Colosseum
 19. Ziggurat.
+20. Pax Dei, a diplomatic/political intrigue or trump card to capture middle ages dynamics. Works as a (very) short-term kind of united nations, 
+   but can be used in devious ways as well.
 CIVIL WONDERS are wonders that help define the charactertistics of your race, nation, and culture, and may alter its strategic
    path and possibilities. 
 1. HG is now a Civil Wonder. 
@@ -272,8 +274,8 @@ SPIES/DIPLOMATS:
       ~75% chance to succeed vs. protected city (varies slightly up or down with the vet levels of the spy units in combat.)
       causes casus belli on failure!
 3. Conquered cities with Foreigners have a +10% chance of success in sabotage actions.
-4. Cities with 50% or more foreign citizens are considered more occupied warzones, rather than cozy places where spies can 
-      steal weapons techs from scientists at the university there. No tech theft from a city that is half or more foreign.
+4. Cities with 50% or more foreign citizens are considered occupied warzones, rather than cozy places where spies can 
+      steal weapons techs from scientists at the university. No tech theft from a city that is half or more foreign.
       This fixes some ridiculous cases where u couldn't conquer a city because ur afraid to give Mass Production to your enemy,
       even though u could try as hard as hell to make sure no soldiers are carrying out tech briefcases on how to do Mass Prod.
 
