@@ -5352,8 +5352,8 @@ function can_irrigate(punit, ptile)
          || terrain_name == "Deep Ocean"
          || tile_has_extra(cadj_tile, EXTRA_IRRIGATION)
          || tile_has_extra(cadj_tile, EXTRA_RIVER)
-         || (tile_has_extra(cadj_tile, EXTRA_CANAL) && (client_rules_flag[CRF_MP2_C]))
-         || (tile_has_extra(cadj_tile, EXTRA_WATERWAY) && (client_rules_flag[CRF_MP2_C]))   
+         || (client_rules_flag[CRF_MP2_C]) && (tile_has_extra(cadj_tile, EXTRA_CANAL))
+         || (client_rules_flag[CRF_MP2_C]) && (tile_has_extra(cadj_tile, EXTRA_WATERWAY))   
          || (tile_has_extra(cadj_tile, EXTRA_OASIS) && (client_rules_flag[CRF_OASIS_IRRIGATE])) ) {
             water_near = true;
             break; // one adjacent water is all that's needed
