@@ -2099,6 +2099,12 @@ void make_contact(struct player *pplayer1, struct player *pplayer2,
 
     ds_plr1plr2->type = new_state;
     ds_plr2plr1->type = new_state;
+    if (new_state == DS_WAR) {
+      // DS_WAR has nothing to cancel, this assures integrity for 
+      // expanding legacy diplomatic system to cover more cases:
+      ds_plr1plr2->has_reason_to_cancel = 0;
+      ds_plr2plr1->has_reason_to_cancel = 0;
+    }
     ds_plr1plr2->first_contact_turn = game.info.turn;
     ds_plr2plr1->first_contact_turn = game.info.turn;
     notify_player(pplayer1, ptile, E_FIRST_CONTACT, ftc_server,

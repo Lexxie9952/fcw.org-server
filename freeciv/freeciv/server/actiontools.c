@@ -65,6 +65,22 @@ static void action_give_casus_belli(struct player *offender,
 {
   int cb_now;
   int cb_turns = game.server.casusbelliturns;
+  
+  /* This would prevent casus belli for DS_NO_CONTACT and stop loophole
+  cases of Senate or Pax Dei approving breaking treaty for casus belli
+  events like incursions prior to meeting. However, since has_reason_to_cancel
+  is also a spam counter, it's not implemented yet here. Instead, after 
+  contact is made (which is needed to pursue war, after all), 
+  has_reason_to_cancel gets set to 0 right upon meeting and going into
+  DS_WAR.
+  if (player_diplstate_get(offender, victim_player)->type == DS_NO_CONTACT) {
+    // Caller functions let them know a casus belli was given as courtesy,
+    // but we don't set a casus belli if DS_NO_CONTACT, since there is 
+    // no reason_to_cancel anything at all. This keeps diplomacy system
+    // clean for future upgrades and features done to it.
+    return;
+  }
+  */
 
   if (int_outrage) {
     /* This action is seen as a reason for any other player, no matter who

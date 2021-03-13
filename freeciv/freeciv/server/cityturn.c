@@ -233,16 +233,27 @@ void remove_obsolete_buildings_city(struct city *pcity, bool refresh)
   bool sold = FALSE;
 
   city_built_iterate(pcity, pimprove) {
-    if (improvement_obsolete(pplayer, pimprove, pcity)
-        && can_city_sell_building(pcity, pimprove)) {
-      int sgold = do_sell_building(pplayer, pcity, pimprove, "obsolete");
-      notify_player(pplayer, city_tile(pcity), E_IMP_SOLD, ftc_server,
-                    PL_("[`gold`] %s sold %s [`%s`] (obsolete) for %d gold.",
-                        "[`gold`] %s sold %s [`%s`] (obsolete) for %d gold.",
-                        sgold),
-                    city_link(pcity), improvement_name_translation(pimprove),
-                    improvement_name_translation(pimprove), sgold);
-      sold = TRUE;
+    if (improvement_obsolete(pplayer, pimprove, pcity)) {
+      if (can_city_sell_building(pcity, pimprove)) {
+        int sgold = do_sell_building(pplayer, pcity, pimprove, "obsolete");
+        notify_player(pplayer, city_tile(pcity), E_IMP_SOLD, ftc_server,
+                      PL_("[`gold`] %s sold %s [`%s`] (obsolete) for %d gold.",
+                          "[`gold`] %s sold %s [`%s`] (obsolete) for %d gold.",
+                          sgold),
+                      city_link(pcity), improvement_name_translation(pimprove),
+                      improvement_name_translation(pimprove), sgold);
+        sold = TRUE;
+      }
+      // Handle Pax Dei is obsolete from tech but not from counter 
+      // (avoids wiping the building twice in the block further below):
+      else if (game.server.pax_dei_counter != 0 
+               && strcmp(improvement_rule_name(pimprove), "Pax Dei")==0) {
+      // pax_dei_set should always be true if you have the wonder, but if not,
+      // wipe it anyway 
+          building_lost(pcity, pimprove, "obsolete", NULL);
+          notify_player(NULL, city_tile(pcity), E_WONDER_OBSOLETE, ftc_server,
+              _("⚠️ [`paxdei`] Pax Dei is now obsolete."));
+      }
     }
     if (game.server.pax_dei_set && game.server.pax_dei_counter==0) {
       if (strcmp(improvement_rule_name(pimprove), "Pax Dei")==0) {
