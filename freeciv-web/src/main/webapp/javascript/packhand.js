@@ -393,9 +393,9 @@ function decode_user_hyperlinks(message)
       // Force lower case and remove white space and escape sequences
       freemoji_name = freemoji_name.toLowerCase();
       freemoji_name = freemoji_name.replace(/\s+/g, '');
-      freemoji_name = freemoji_name.replace('.', '');
-      freemoji_name = freemoji_name.replace('_', '');
-      freemoji_name = freemoji_name.replace("'", "");
+      freemoji_name = freemoji_name.replace(/./g, '');
+      freemoji_name = freemoji_name.replace(/_/g, '');
+      freemoji_name = freemoji_name.replace(/'/g, "");
 //      freemoji_name = freemoji_name.replace("​", ""); //0-width space. only ONE of these 3 is needed, TODO; find which works and remove the other 2
 //      freemoji_name = freemoji_name.replace("​&#8203;", "");
 //      freemoji_name = freemoji_name.replace("​%E2%80%B8", "");
