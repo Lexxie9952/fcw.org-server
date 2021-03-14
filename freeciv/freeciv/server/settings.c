@@ -1718,7 +1718,7 @@ static struct setting settings[] = {
           MAP_MIN_WETNESS, MAP_MAX_WETNESS, MAP_DEFAULT_WETNESS)
 
   GEN_INT("globalwarming", game.info.global_warming,
-           SSET_RULES, SSET_GEOLOGY, SSET_VITAL, ALLOW_NONE, ALLOW_BASIC,
+           SSET_RULES, SSET_GEOLOGY, SSET_VITAL, ALLOW_ADMIN, ALLOW_BASIC,
            N_("Global warming"),
            N_("If set to 0, Global Warming will not occur because of "
               "pollution. Otherwise, this setting modifies the strength of global "
@@ -1731,7 +1731,7 @@ static struct setting settings[] = {
            GAME_DEFAULT_GLOBAL_WARMING)
 
   GEN_INT("globalwarming_percent", game.server.global_warming_percent,
-           SSET_RULES, SSET_GEOLOGY, SSET_VITAL, ALLOW_NONE, ALLOW_BASIC,
+           SSET_RULES, SSET_GEOLOGY, SSET_VITAL, ALLOW_ADMIN, ALLOW_BASIC,
            N_("Global warming percent"),
            N_("The percentage by which to modify the default strength of global "
            "warming sensitivity. Specifically, a lower value causes a higher threshold " 
@@ -1742,7 +1742,7 @@ static struct setting settings[] = {
            GAME_DEFAULT_GLOBAL_WARMING_PERCENT)
 
   GEN_INT("nuclearwinter", game.info.nuclear_winter,
-           SSET_RULES, SSET_GEOLOGY, SSET_VITAL, ALLOW_NONE, ALLOW_BASIC,
+           SSET_RULES, SSET_GEOLOGY, SSET_VITAL, ALLOW_ADMIN, ALLOW_BASIC,
            N_("Nuclear winter"),
            N_("If set to 0, Nuclear Winter will not occur from the uncleaned "
               "nuclear fallout caused by nuclear explosions. Otherwise, this setting "
@@ -1756,7 +1756,7 @@ static struct setting settings[] = {
            GAME_DEFAULT_NUCLEAR_WINTER)
 
   GEN_BOOL("nukes_minor", game.server.nukes_minor,
-           SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+           SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
            N_("Allow Nuclear Detonations"),
            N_("If turned off, will not allow detonating nukes in rulesets "
               "which require the setting to be on in order to detonate "
@@ -1767,7 +1767,7 @@ static struct setting settings[] = {
            GAME_DEFAULT_NUKES_MINOR)
 
   GEN_BOOL("nukes_major", game.server.nukes_major,
-           SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+           SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
            N_("Allow players to create major thermonculear weapons."),
            N_("If turned off, this will have no effect on standard fission "
               "nuclear weapons; but in rulesets which require this setting "
@@ -1778,7 +1778,7 @@ static struct setting settings[] = {
            GAME_DEFAULT_NUKES_MAJOR)           
 
   GEN_INT("nuclearwinter_percent", game.server.nuclear_winter_percent,
-           SSET_RULES, SSET_GEOLOGY, SSET_VITAL, ALLOW_NONE, ALLOW_BASIC,
+           SSET_RULES, SSET_GEOLOGY, SSET_VITAL, ALLOW_ADMIN, ALLOW_BASIC,
            N_("Nuclear winter percent"),
            N_("The percentage by which to modify the default strength of nuclear "
            "winter sensitivity. Specifically, a lower value causes a higher threshold " 
@@ -1933,7 +1933,7 @@ static struct setting settings[] = {
 
   GEN_INT("ec_turns", game.server.event_cache.turns,
           SSET_RULES_FLEXIBLE, SSET_INTERNAL, SSET_SITUATIONAL,
-          ALLOW_NONE, ALLOW_BASIC,
+          ALLOW_ADMIN, ALLOW_BASIC,
           N_("Event cache for this number of turns"),
           N_("Event messages are saved for this number of turns. A value of "
              "0 deactivates the event cache."),
@@ -1942,7 +1942,7 @@ static struct setting settings[] = {
 
   GEN_INT("ec_max_size", game.server.event_cache.max_size,
           SSET_RULES_FLEXIBLE, SSET_INTERNAL, SSET_SITUATIONAL,
-          ALLOW_NONE, ALLOW_BASIC,
+          ALLOW_ADMIN, ALLOW_BASIC,
           N_("Size of the event cache"),
           N_("This defines the maximal number of events in the event cache."),
           NULL, NULL, NULL, GAME_MIN_EVENT_CACHE_MAX_SIZE,
@@ -1950,14 +1950,14 @@ static struct setting settings[] = {
 
   GEN_BOOL("ec_chat", game.server.event_cache.chat,
            SSET_RULES_FLEXIBLE, SSET_INTERNAL, SSET_SITUATIONAL,
-           ALLOW_NONE, ALLOW_BASIC,
+           ALLOW_ADMIN, ALLOW_BASIC,
            N_("Save chat messages in the event cache"),
            N_("If turned on, chat messages will be saved in the event "
               "cache."), NULL, NULL, GAME_DEFAULT_EVENT_CACHE_CHAT)
 
   GEN_BOOL("ec_info", game.server.event_cache.info,
            SSET_RULES_FLEXIBLE, SSET_INTERNAL, SSET_SITUATIONAL,
-           ALLOW_NONE, ALLOW_BASIC,
+           ALLOW_ADMIN, ALLOW_BASIC,
            N_("Print turn and time for each cached event"),
            /* TRANS: Don't translate the text between single quotes. */
            N_("If turned on, all cached events will be marked by the turn "
@@ -2037,7 +2037,7 @@ static struct setting settings[] = {
           GAME_DEFAULT_SCIENCEBOX)
 
   GEN_BOOL("multiresearch", game.server.multiresearch,
-          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
           N_("Allow researching multiple technologies"),
           N_("Allows switching to any technology without wasting old "
              "research. Bulbs are never transfered to new technology. "
@@ -2046,7 +2046,7 @@ static struct setting settings[] = {
           GAME_DEFAULT_MULTIRESEARCH)
 
   GEN_INT("techpenalty", game.server.techpenalty,
-          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
           N_("Percentage penalty when changing tech"),
           N_("If you change your current research technology, and you have "
              "positive research points, you lose this percentage of those "
@@ -2056,7 +2056,7 @@ static struct setting settings[] = {
           GAME_DEFAULT_TECHPENALTY)
 
   GEN_INT("techlost_recv", game.server.techlost_recv,
-          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
           N_("Chance to lose a technology while receiving it"),
           N_("The chance that learning a technology by treaty or theft "
              "will fail."),
@@ -2064,7 +2064,7 @@ static struct setting settings[] = {
           GAME_DEFAULT_TECHLOST_RECV)
 
   GEN_INT("techlost_donor", game.server.techlost_donor,
-          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
           N_("Chance to lose a technology while giving it"),
           N_("The chance that your civilization will lose a technology if "
              "you teach it to someone else by treaty, or if it is stolen "
@@ -2073,7 +2073,7 @@ static struct setting settings[] = {
           GAME_DEFAULT_TECHLOST_DONOR)
 
   GEN_INT("techleak", game.info.tech_leak_pct,
-          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
           N_("Tech leakage percent"),
           N_("The discount % on a tech's cost if 100% of nations know it. If no "
              "nations know it, there's no discount. If between 0% and 100%, cost " 
@@ -2082,7 +2082,7 @@ static struct setting settings[] = {
           GAME_DEFAULT_TECHLEAK)
 
   GEN_BOOL("team_pooled_research", game.info.team_pooled_research,
-           SSET_RULES, SSET_SCIENCE, SSET_VITAL, ALLOW_NONE, ALLOW_BASIC,
+           SSET_RULES, SSET_SCIENCE, SSET_VITAL, ALLOW_ADMIN, ALLOW_BASIC,
            N_("Team pooled research"),
            N_("If this setting is turned on, then the team mates will share "
               "the science research. Else, every player of the team will "
@@ -2090,7 +2090,7 @@ static struct setting settings[] = {
            NULL, NULL, GAME_DEFAULT_TEAM_POOLED_RESEARCH)
 
   GEN_INT("diplbulbcost", game.server.diplbulbcost,
-          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
           N_("Penalty when getting tech from treaty"),
           N_("For each technology you gain from a diplomatic treaty, you "
              "lose research points equal to this percentage of the cost to "
@@ -2100,7 +2100,7 @@ static struct setting settings[] = {
           GAME_MIN_DIPLBULBCOST, GAME_MAX_DIPLBULBCOST, GAME_DEFAULT_DIPLBULBCOST)
 
   GEN_INT("diplgoldcost", game.server.diplgoldcost,
-          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
           N_("Penalty when getting gold from treaty"),
           N_("When transferring gold in diplomatic treaties, this percentage "
              "of the agreed sum is lost to both parties; it is deducted from "
@@ -2109,7 +2109,7 @@ static struct setting settings[] = {
           GAME_MIN_DIPLGOLDCOST, GAME_MAX_DIPLGOLDCOST, GAME_DEFAULT_DIPLGOLDCOST)
 
   GEN_INT("conquercost", game.server.conquercost,
-          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
           N_("Penalty when getting tech from conquering"),
           N_("For each technology you gain by conquering an enemy city, you "
              "lose research points equal to this percentage of the cost to "
@@ -2120,7 +2120,7 @@ static struct setting settings[] = {
           GAME_DEFAULT_CONQUERCOST)
 
   GEN_INT("freecost", game.server.freecost,
-          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
           N_("Penalty when getting a free tech"),
           /* TRANS: The strings between single quotes are setting names and
            * shouldn't be translated. */
@@ -2134,7 +2134,7 @@ static struct setting settings[] = {
           GAME_MIN_FREECOST, GAME_MAX_FREECOST, GAME_DEFAULT_FREECOST)
 
   GEN_INT("techlossforgiveness", game.info.techloss_forgiveness,
-          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
           N_("Research point debt threshold for losing tech"),
           N_("When you have negative research points, and your shortfall is "
              "greater than this percentage of the cost of your current "
@@ -2146,7 +2146,7 @@ static struct setting settings[] = {
           GAME_DEFAULT_TECHLOSSFG)
 
  GEN_INT("techlossrestore", game.server.techloss_restore,
-         SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+         SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
          N_("Research points restored after losing a tech"),
          N_("When you lose a technology due to a negative research balance "
             "(see 'techlossforgiveness'), this percentage of its research "
@@ -2160,7 +2160,7 @@ static struct setting settings[] = {
 
   GEN_INT("foodbox", game.info.foodbox,
           SSET_RULES, SSET_ECONOMICS, SSET_SITUATIONAL,
-          ALLOW_NONE, ALLOW_BASIC,
+          ALLOW_ADMIN, ALLOW_BASIC,
           N_("Food required for a city to grow"),
           N_("This is the base amount of food required to grow a city. "
              "This value is multiplied by another factor that comes from "
@@ -2182,7 +2182,7 @@ static struct setting settings[] = {
 
   GEN_INT("shieldbox", game.info.shieldbox,
           SSET_RULES, SSET_ECONOMICS, SSET_SITUATIONAL,
-          ALLOW_NONE, ALLOW_BASIC,
+          ALLOW_ADMIN, ALLOW_BASIC,
           N_("Multiplier percentage for production costs"),
           N_("This affects how quickly units and buildings can be "
              "produced.  The base costs are multiplied by this value (as "
@@ -2223,7 +2223,7 @@ static struct setting settings[] = {
           GAME_DEFAULT_NOTRADESIZE)
 
   GEN_INT("tradeworldrelpct", game.info.trade_world_rel_pct,
-          SSET_RULES, SSET_ECONOMICS, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          SSET_RULES, SSET_ECONOMICS, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
           N_("How largely trade distance is relative to world size"),
           /* TRANS: The strings between single quotes are setting names and
            * shouldn't be translated. */
@@ -2238,7 +2238,7 @@ static struct setting settings[] = {
 
   GEN_INT("citymindist", game.info.citymindist,
           SSET_RULES, SSET_SOCIOLOGY, SSET_SITUATIONAL,
-          ALLOW_NONE, ALLOW_BASIC,
+          ALLOW_ADMIN, ALLOW_BASIC,
           N_("Minimum distance between cities"),
           N_("When a player attempts to found a new city, it is prevented "
              "if the distance from any existing city is less than this "
@@ -2251,28 +2251,28 @@ static struct setting settings[] = {
           GAME_DEFAULT_CITYMINDIST)
 
   GEN_BOOL("trading_tech", game.info.trading_tech,
-           SSET_RULES, SSET_SOCIOLOGY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+           SSET_RULES, SSET_SOCIOLOGY, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
            N_("Technology trading"),
            N_("If turned off, trading technologies in the diplomacy dialog "
               "is not allowed."), NULL, NULL,
            GAME_DEFAULT_TRADING_TECH)
 
   GEN_BOOL("trading_gold", game.info.trading_gold,
-           SSET_RULES, SSET_SOCIOLOGY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+           SSET_RULES, SSET_SOCIOLOGY, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
            N_("Gold trading"),
            N_("If turned off, trading gold in the diplomacy dialog "
               "is not allowed."), NULL, NULL,
            GAME_DEFAULT_TRADING_GOLD)
 
   GEN_BOOL("trading_city", game.info.trading_city,
-           SSET_RULES, SSET_SOCIOLOGY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+           SSET_RULES, SSET_SOCIOLOGY, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
            N_("City trading"),
            N_("If turned off, trading cities in the diplomacy dialog "
               "is not allowed."), NULL, NULL,
            GAME_DEFAULT_TRADING_CITY)
 
   GEN_ENUM("caravan_bonus_style", game.info.caravan_bonus_style,
-           SSET_RULES, SSET_ECONOMICS, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+           SSET_RULES, SSET_ECONOMICS, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
            N_("Caravan bonus style"),
            N_("The formula for the bonus when a caravan enters a city. "
               "CLASSIC bonuses are proportional to distance and trade "
@@ -2283,7 +2283,7 @@ static struct setting settings[] = {
            GAME_DEFAULT_CARAVAN_BONUS_STYLE)
 
   GEN_ENUM("trade_revenue_style", game.info.trade_revenue_style,
-          SSET_RULES, SSET_ECONOMICS, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          SSET_RULES, SSET_ECONOMICS, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
           N_("Trade revenue style"),
           N_("The formula for the trade a city receives from a traderoute. "
              "CLASSIC revenues depend on distance and trade with "
@@ -2294,7 +2294,7 @@ static struct setting settings[] = {
           GAME_DEFAULT_TRADE_REVENUE_STYLE)
 
     GEN_INT("trademindist", game.info.trademindist,
-          SSET_RULES, SSET_ECONOMICS, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          SSET_RULES, SSET_ECONOMICS, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
           N_("Minimum distance for trade routes"),
           N_("In order for two cities in the same civilization to establish "
              "a trade route, they must be at least this far apart on the "
@@ -2306,7 +2306,7 @@ static struct setting settings[] = {
 
   GEN_INT("rapturedelay", game.info.rapturedelay,
           SSET_RULES, SSET_SOCIOLOGY, SSET_SITUATIONAL,
-          ALLOW_NONE, ALLOW_BASIC,
+          ALLOW_ADMIN, ALLOW_BASIC,
           N_("Number of turns between rapture effect"),
           N_("Sets the number of turns between rapture growth of a city. "
              "If set to n a city will grow after celebrating for n+1 "
@@ -2317,7 +2317,7 @@ static struct setting settings[] = {
 
   GEN_INT("disasters", game.info.disasters,
           SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_VITAL,
-          ALLOW_NONE, ALLOW_BASIC,
+          ALLOW_ADMIN, ALLOW_BASIC,
           N_("Frequency of disasters"),
           N_("Affects how often random disasters happen to cities, "
              "if any are defined by the ruleset. The relative frequency "
@@ -2334,7 +2334,7 @@ static struct setting settings[] = {
            NULL, NULL, NULL, trait_dist_name, GAME_DEFAULT_TRAIT_DIST_MODE)
 
   GEN_INT("razechance", game.server.razechance,
-          SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
           N_("Chance for conquered building destruction"),
           N_("When a player conquers a city, each city improvement has this "
              "percentage chance to be destroyed."), NULL, NULL, NULL,
@@ -2354,7 +2354,7 @@ static struct setting settings[] = {
           GAME_DEFAULT_OCCUPYCHANCE)
 
   GEN_INT("armisticelength", game.server.armisticelength,
-          SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
+          SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL, ALLOW_ADMIN, ALLOW_BASIC,
           N_("Turn length of Armistice before state of Peace commences."),
           N_("This setting sets the turn length of the Armistice that occurs when "
             "two nations agree to a Peace treaty. Armistice is a state that comes "
@@ -2367,7 +2367,7 @@ static struct setting settings[] = {
           GAME_DEFAULT_ARMISTICELENGTH)
 
   GEN_INT("ceasefirelength", game.server.ceasefirelength,
-          SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
+          SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL, ALLOW_ADMIN, ALLOW_BASIC,
           N_("Turn length of Cease-Fire treaties before they expire."),
           N_("This setting sets how long Cease-Fire "
             "agreements will last, before they expire."),
@@ -2376,7 +2376,7 @@ static struct setting settings[] = {
           GAME_DEFAULT_CEASEFIRELENGTH)     
 
   GEN_INT("casusbelliturns", game.server.casusbelliturns,
-          SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
+          SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL, ALLOW_ADMIN, ALLOW_BASIC,
           N_("Length in turns of a first casus belli before it expires."),
           N_("If there is already a state of casus belli, additional "
           "incidents will simply refresh it to this value; or, if it is already "
@@ -2390,7 +2390,7 @@ static struct setting settings[] = {
           GAME_DEFAULT_CASUSBELLITURNS)
 
   GEN_BOOL("autoattack", game.server.autoattack, SSET_RULES_FLEXIBLE, SSET_MILITARY,
-           SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
+           SSET_SITUATIONAL, ALLOW_ADMIN, ALLOW_BASIC,
            N_("Turn on/off server-side autoattack"),
            N_("If set to on, units with moves left will automatically "
               "consider attacking enemy units that move adjacent to them."
@@ -2399,7 +2399,7 @@ static struct setting settings[] = {
 
   GEN_INT("autoattack_style", game.server.autoattack_style,
           SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL,
-          ALLOW_NONE, ALLOW_BASIC,
+          ALLOW_ADMIN, ALLOW_BASIC,
           N_("Style for server side autoattack."),
           N_("How the setting \"autoattack\" behaves, if enabled.\n "
              "(Some rulesets depend on non-default settings for this, in order "
@@ -2431,7 +2431,7 @@ static struct setting settings[] = {
            NULL, NULL, GAME_DEFAULT_KILLSTACK)
 
   GEN_BOOL("killcitizen", game.info.killcitizen,
-           SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+           SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
            N_("Reduce city population after attack"),
            N_("This setting indicates whether a city's population is reduced "
               "after a successful attack by an enemy unit. If this is "
@@ -2440,7 +2440,7 @@ static struct setting settings[] = {
            NULL, NULL, GAME_DEFAULT_KILLCITIZEN)
 
   GEN_INT("killcitizen_pct", game.server.killcitizen_pct,
-          SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
           N_("Odds of 'killcitizen' engagements killing a citizen "),
           N_("If setting 'killcitizen' is enabled, then this setting "
              "regulates the odds that a successful attack on a city will "
@@ -2450,7 +2450,7 @@ static struct setting settings[] = {
           GAME_DEFAULT_KILLCITIZEN_PCT)
 
   GEN_INT("killunhomed", game.server.killunhomed,
-          SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
           N_("Slowly kill units without home cities (e.g., starting units)"),
           N_("If greater than 0, then every unit without a homecity will "
              "lose hitpoints each turn. The number of hitpoints lost is "
@@ -2461,7 +2461,7 @@ static struct setting settings[] = {
           GAME_DEFAULT_KILLUNHOMED)
 
   GEN_INT("hangry", game.server.hangry,
-          SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
+          SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_SITUATIONAL, ALLOW_ADMIN, ALLOW_BASIC,
           N_("Starvation causes city disorder"),
           N_("If set to 0, starvation does not affect the mood of city "
             "citizens: there will be no disorder after famine. If set to positive, "
@@ -2469,7 +2469,7 @@ static struct setting settings[] = {
           NULL, NULL, NULL, GAME_MIN_HANGRY, GAME_MAX_HANGRY, GAME_DEFAULT_HANGRY)
 
   GEN_BOOL("fulldisorder", game.server.fulldisorder,
-           SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
+           SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_SITUATIONAL, ALLOW_ADMIN, ALLOW_BASIC,
            N_("Disorder prevents city production"),
            N_("This setting indicates whether disorder in a city prevents "
               "production. In the default case where it is disabled, "
@@ -2480,7 +2480,7 @@ static struct setting settings[] = {
 
   GEN_ENUM("borders", game.info.borders,
            SSET_RULES, SSET_MILITARY, SSET_SITUATIONAL,
-           ALLOW_NONE, ALLOW_BASIC,
+           ALLOW_ADMIN, ALLOW_BASIC,
            N_("National borders"),
            N_("If this is not disabled, then any land tiles around a "
               "city or border-claiming extra (like the classic ruleset's "
@@ -2492,7 +2492,7 @@ static struct setting settings[] = {
 
   GEN_ENUM("happyborders", game.info.happyborders,
            SSET_RULES, SSET_MILITARY, SSET_SITUATIONAL,
-           ALLOW_NONE, ALLOW_BASIC,
+           ALLOW_ADMIN, ALLOW_BASIC,
            N_("Units inside borders cause no unhappiness"),
            N_("If this is set, units will not cause unhappiness when "
               "inside your borders, or even allies borders, depending "
@@ -2501,14 +2501,14 @@ static struct setting settings[] = {
 
   GEN_ENUM("diplomacy", game.info.diplomacy,
            SSET_RULES, SSET_MILITARY, SSET_SITUATIONAL,
-           ALLOW_NONE, ALLOW_BASIC,
+           ALLOW_ADMIN, ALLOW_BASIC,
            N_("Ability to do diplomacy with other players"),
            N_("This setting controls the ability to do diplomacy with "
               "other players."),
            NULL, NULL, NULL, diplomacy_name, GAME_DEFAULT_DIPLOMACY)
 
   GEN_ENUM("citynames", game.server.allowed_city_names,
-           SSET_RULES, SSET_SOCIOLOGY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+           SSET_RULES, SSET_SOCIOLOGY, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
            N_("Allowed city names"),
            /* TRANS: The strings between double quotes are also translated
             * separately (they must match!). The strings between parentheses
@@ -2573,7 +2573,7 @@ static struct setting settings[] = {
    */
   GEN_ENUM("barbarians", game.server.barbarianrate,
            SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_VITAL,
-           ALLOW_NONE, ALLOW_BASIC,
+           ALLOW_ADMIN, ALLOW_BASIC,
            N_("Barbarian appearance frequency"),
            /* TRANS: The string between single quotes is a setting name and
             * should not be translated. */
@@ -2583,7 +2583,7 @@ static struct setting settings[] = {
 
   GEN_INT("onsetbarbs", game.server.onsetbarbarian,
           SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_VITAL,
-          ALLOW_NONE, ALLOW_BASIC,
+          ALLOW_ADMIN, ALLOW_BASIC,
           N_("Barbarian onset turn"),
           N_("Barbarians will not appear before this turn."),
           NULL, NULL, NULL,
@@ -2592,7 +2592,7 @@ static struct setting settings[] = {
 
   GEN_ENUM("looting", game.server.lootstyle,
            SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL,
-           ALLOW_NONE, ALLOW_BASIC,
+           ALLOW_ADMIN, ALLOW_BASIC,
            N_("Formula for loot from city conquest"),
            N_("This setting controls the formula for how much loot is captured "
               "from conquered cities."),
@@ -2600,7 +2600,7 @@ static struct setting settings[] = {
            lootstyle_name, GAME_DEFAULT_LOOTSTYLE)
 
   GEN_ENUM("revolentype", game.info.revolentype,
-           SSET_RULES, SSET_SOCIOLOGY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+           SSET_RULES, SSET_SOCIOLOGY, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
            N_("Way to determine revolution length"),
            N_("Which method is used in determining how long period of anarchy "
               "lasts when changing government. The actual value is set with "
@@ -2612,7 +2612,7 @@ static struct setting settings[] = {
 
   GEN_INT("revolen", game.server.revolution_length,
           SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_RARE,
-          ALLOW_NONE, ALLOW_BASIC,
+          ALLOW_ADMIN, ALLOW_BASIC,
           N_("Length of revolution"),
           N_("When changing governments, a period of anarchy will occur. "
              "Value of this setting, used the way 'revolentype' setting "
@@ -2622,7 +2622,7 @@ static struct setting settings[] = {
           GAME_DEFAULT_REVOLUTION_LENGTH)
 
   GEN_BOOL("fogofwar", game.info.fogofwar,
-           SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+           SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
            N_("Whether to enable fog of war"),
            N_("If this is enabled, only those units and cities within "
               "the vision range of your own units and cities will be "
@@ -2631,7 +2631,7 @@ static struct setting settings[] = {
            NULL, NULL, GAME_DEFAULT_FOGOFWAR)
 
   GEN_BOOL("foggedborders", game.server.foggedborders,
-           SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+           SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
            N_("Whether fog of war applies to border changes"),
            N_("If this setting is enabled, players will not be able "
               "to see changes in tile ownership if they do not have "
@@ -2641,7 +2641,7 @@ static struct setting settings[] = {
            NULL, NULL, GAME_DEFAULT_FOGGEDBORDERS)
 
   GEN_BOOL("hideouts", game.server.hideouts,
-           SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+           SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
            N_("Allows rulesets to elect to toggle hideouts"),
            N_("If this setting is enabled, then rulesets which optionally "
               "allow the base type \"Hideout\" will be instructed enable "
@@ -2650,7 +2650,7 @@ static struct setting settings[] = {
 
   GEN_BITWISE("airliftingstyle", game.info.airlifting_style,
               SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL,
-              ALLOW_NONE, ALLOW_BASIC, N_("Airlifting style"),
+              ALLOW_ADMIN, ALLOW_BASIC, N_("Airlifting style"),
               /* TRANS: The strings between double quotes are also
                * translated separately (they must match!). The strings
                * between parenthesis and in uppercase must not be
@@ -2669,7 +2669,7 @@ static struct setting settings[] = {
   
   GEN_INT("airliftdestdivisor", game.info.airlift_dest_divisor,
           SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL,
-          ALLOW_NONE, ALLOW_BASIC, N_("Airlifting destination divisor"),
+          ALLOW_ADMIN, ALLOW_BASIC, N_("Airlifting destination divisor"),
           N_("This sets the limit on the units a city can receive via "
              "airlift to its population divided by this number. "
              "When set to 0, the setting is toggled off."),
@@ -2678,7 +2678,7 @@ static struct setting settings[] = {
 
   GEN_INT("diplchance", game.server.diplchance,
           SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL,
-          ALLOW_NONE, ALLOW_BASIC,
+          ALLOW_ADMIN, ALLOW_BASIC,
           N_("Base chance for diplomats and spies to succeed"),
           N_("The base chance of a spy returning from a successful mission and "
              "the base chance of success for diplomats and spies."),
@@ -2687,7 +2687,7 @@ static struct setting settings[] = {
 
   GEN_BITWISE("victories", game.info.victory_conditions,
               SSET_RULES_FLEXIBLE, SSET_INTERNAL, SSET_VITAL,
-              ALLOW_NONE, ALLOW_BASIC,
+              ALLOW_ADMIN, ALLOW_BASIC,
               N_("What kinds of victories are possible"),
               /* TRANS: The strings between double quotes are also translated
                * separately (they must match!). The strings between single
@@ -2706,14 +2706,14 @@ static struct setting settings[] = {
               NULL, NULL, victory_conditions_name, GAME_DEFAULT_VICTORY_CONDITIONS)
 
   GEN_BOOL("endspaceship", game.server.endspaceship, SSET_RULES_FLEXIBLE,
-           SSET_SCIENCE, SSET_VITAL, ALLOW_NONE, ALLOW_BASIC,
+           SSET_SCIENCE, SSET_VITAL, ALLOW_ADMIN, ALLOW_BASIC,
            N_("Should the game end if the spaceship arrives?"),
            N_("If this option is turned on, the game will end with the "
               "arrival of a spaceship at Alpha Centauri."),
            NULL, NULL, GAME_DEFAULT_END_SPACESHIP)
 
   GEN_INT("spaceship_travel_time", game.server.spaceship_travel_time,
-           SSET_RULES_FLEXIBLE, SSET_SCIENCE, SSET_VITAL, ALLOW_NONE,
+           SSET_RULES_FLEXIBLE, SSET_SCIENCE, SSET_VITAL, ALLOW_ADMIN,
            ALLOW_BASIC,
            N_("Percentage to multiply spaceship travel time by"),
            N_("This percentage is multiplied onto the time it will take for "
@@ -2723,7 +2723,7 @@ static struct setting settings[] = {
 
   GEN_INT("civilwarsize", game.server.civilwarsize,
           SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_RARE,
-          ALLOW_NONE, ALLOW_BASIC,
+          ALLOW_ADMIN, ALLOW_BASIC,
           N_("Minimum number of cities for civil war"),
           N_("A civil war is triggered when a player has at least this "
              "many cities and the player's capital is captured. If "
@@ -2734,7 +2734,7 @@ static struct setting settings[] = {
 
   GEN_BOOL("restrictinfra", game.info.restrictinfra,
            SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_RARE,
-           ALLOW_NONE, ALLOW_BASIC,
+           ALLOW_ADMIN, ALLOW_BASIC,
            N_("Restrict the use of the infrastructure for enemy units"),
            N_("If this option is enabled, the use of roads and rails "
               "will be restricted for enemy units."), NULL, NULL,
@@ -2742,7 +2742,7 @@ static struct setting settings[] = {
 
   GEN_BOOL("universal_unload", game.info.universal_unload,
            SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_RARE,
-           ALLOW_NONE, ALLOW_BASIC,
+           ALLOW_ADMIN, ALLOW_BASIC,
            N_("Transported units unload the same regardless of tile nativity."),
            N_("This makes all transported units affected by terrain speed "
               "unload with the same behavior: unloading from native tiles "
@@ -2754,7 +2754,7 @@ static struct setting settings[] = {
   
   GEN_INT("unload_override", game.info.unload_override,
           SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_RARE,
-          ALLOW_NONE, ALLOW_BASIC,
+          ALLOW_ADMIN, ALLOW_BASIC,
           N_("Move fragment cost for unloading units from native tiles."),
           N_("When universal_unload is enabled, this option overrides the "
             " move fragment cost that universal_unload adds, when transported "
@@ -2777,7 +2777,7 @@ static struct setting settings[] = {
 
   GEN_INT("contactturns", game.server.contactturns,
           SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_RARE,
-          ALLOW_NONE, ALLOW_BASIC,
+          ALLOW_ADMIN, ALLOW_BASIC,
           N_("Turns until player contact is lost"),
           N_("Players may meet for diplomacy this number of turns "
              "after their units have last met, even when they do not have "
@@ -2850,7 +2850,7 @@ static struct setting settings[] = {
 
   GEN_BOOL("homecaughtunits", game.server.homecaughtunits,
            SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_RARE,
-           ALLOW_NONE, ALLOW_BASIC,
+           ALLOW_ADMIN, ALLOW_BASIC,
            N_("Give caught units a homecity"),
            /* TRANS: The string between single quotes is a setting name and
             * should not be translated. */
@@ -2860,7 +2860,7 @@ static struct setting settings[] = {
 
   GEN_BOOL("naturalcitynames", game.server.natural_city_names,
            SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_RARE,
-           ALLOW_NONE, ALLOW_BASIC,
+           ALLOW_ADMIN, ALLOW_BASIC,
            N_("Whether to use natural city names"),
            N_("If enabled, the default city names will be determined based "
               "on the surrounding terrain."),
@@ -2868,7 +2868,7 @@ static struct setting settings[] = {
 
   GEN_BOOL("migration", game.server.migration,
            SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_RARE,
-           ALLOW_NONE, ALLOW_BASIC,
+           ALLOW_ADMIN, ALLOW_BASIC,
            N_("Whether to enable citizen migration"),
            /* TRANS: The strings between single quotes are setting names
             * and should not be translated. */
@@ -2890,7 +2890,7 @@ static struct setting settings[] = {
 
   GEN_INT("mgr_turninterval", game.server.mgr_turninterval,
           SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_RARE,
-          ALLOW_NONE, ALLOW_BASIC,
+          ALLOW_ADMIN, ALLOW_BASIC,
           N_("Number of turns between migrations from a city"),
           /* TRANS: Do not translate 'migration' setting name. */
           N_("This setting controls the number of turns between migration "
@@ -2907,7 +2907,7 @@ static struct setting settings[] = {
 
   GEN_BOOL("mgr_foodneeded", game.server.mgr_foodneeded,
           SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_RARE,
-           ALLOW_NONE, ALLOW_BASIC,
+           ALLOW_ADMIN, ALLOW_BASIC,
            N_("Whether migration is limited by food"),
            /* TRANS: Do not translate 'migration' setting name. */
            N_("If this setting is enabled, citizens will not migrate to "
@@ -2918,7 +2918,7 @@ static struct setting settings[] = {
 
   GEN_INT("mgr_distance", game.server.mgr_distance,
           SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_RARE,
-          ALLOW_NONE, ALLOW_BASIC,
+          ALLOW_ADMIN, ALLOW_BASIC,
           N_("Maximum distance citizens may migrate"),
           /* TRANS: Do not translate 'migration' setting name. */
           N_("This setting controls how far citizens may look for a "
@@ -2933,7 +2933,7 @@ static struct setting settings[] = {
 
   GEN_INT("mgr_nationchance", game.server.mgr_nationchance,
           SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_RARE,
-          ALLOW_NONE, ALLOW_BASIC,
+          ALLOW_ADMIN, ALLOW_BASIC,
           N_("Percent probability for migration within the same nation"),
           /* TRANS: Do not translate 'migration' setting name. */
           N_("This setting controls how likely it is for citizens to "
@@ -2948,7 +2948,7 @@ static struct setting settings[] = {
 
   GEN_INT("mgr_worldchance", game.server.mgr_worldchance,
           SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_RARE,
-          ALLOW_NONE, ALLOW_BASIC,
+          ALLOW_ADMIN, ALLOW_BASIC,
           N_("Percent probability for migration between foreign cities"),
           /* TRANS: Do not translate 'migration' setting name. */
           N_("This setting controls how likely it is for migration "
@@ -2977,7 +2977,7 @@ static struct setting settings[] = {
    * players stop playing and look at the score.)
    */
   GEN_STRING("allowtake", game.server.allow_take,
-             SSET_META, SSET_NETWORK, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+             SSET_META, SSET_NETWORK, SSET_RARE, ALLOW_ADMIN, ALLOW_BASIC,
              N_("Players that users are allowed to take"),
              /* TRANS: the strings in double quotes are server command names
               * and should not be translated. */
@@ -3023,14 +3023,14 @@ static struct setting settings[] = {
            NULL, autotoggle_action, GAME_DEFAULT_AUTO_AI_TOGGLE)
 
   GEN_INT("endturn", game.server.end_turn,
-          SSET_META, SSET_SOCIOLOGY, SSET_VITAL, ALLOW_NONE, ALLOW_BASIC,
+          SSET_META, SSET_SOCIOLOGY, SSET_VITAL, ALLOW_ADMIN, ALLOW_BASIC,
           N_("Turn the game ends"),
           N_("The game will end at the end of the given turn."),
           NULL, endturn_callback, NULL,
           GAME_MIN_END_TURN, GAME_MAX_END_TURN, GAME_DEFAULT_END_TURN)
 
   GEN_BITWISE("revealmap", game.server.revealmap, SSET_GAME_INIT,
-              SSET_MILITARY, SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
+              SSET_MILITARY, SSET_SITUATIONAL, ALLOW_ADMIN, ALLOW_BASIC,
               N_("Reveal the map"),
               /* TRANS: The strings between double quotes are also translated
                * separately (they must match!). The strings between single
@@ -3047,7 +3047,7 @@ static struct setting settings[] = {
              NULL, NULL, revealmap_name, GAME_DEFAULT_REVEALMAP)
 
   GEN_INT("timeout", game.info.timeout,
-          SSET_META, SSET_INTERNAL, SSET_VITAL, ALLOW_NONE, ALLOW_BASIC,
+          SSET_META, SSET_INTERNAL, SSET_VITAL, ALLOW_ADMIN, ALLOW_BASIC,
           N_("Maximum seconds per turn"),
           /* TRANS: \"Turn Done\" refers to the client button; it is also
            * translated separately, the translation should be the same.
@@ -3066,7 +3066,7 @@ static struct setting settings[] = {
           GAME_MIN_TIMEOUT, GAME_MAX_TIMEOUT, GAME_DEFAULT_TIMEOUT)
 
   GEN_INT("first_timeout", game.info.first_timeout,
-          SSET_META, SSET_INTERNAL, SSET_VITAL, ALLOW_NONE, ALLOW_BASIC,
+          SSET_META, SSET_INTERNAL, SSET_VITAL, ALLOW_ADMIN, ALLOW_BASIC,
           N_("First turn timeout"),
           /* TRANS: The strings between single quotes are setting names and
            * should not be translated. */
@@ -3088,7 +3088,7 @@ static struct setting settings[] = {
 
   GEN_INT("unitwaittime", game.server.unitwaittime,
           SSET_RULES_FLEXIBLE, SSET_INTERNAL, SSET_VITAL,
-          ALLOW_NONE, ALLOW_BASIC,
+          ALLOW_ADMIN, ALLOW_BASIC,
           N_("Minimum time between unit actions over turn change"),
           /* TRANS: The string between single quotes is a setting name and
            * should not be translated. */
@@ -3105,7 +3105,7 @@ static struct setting settings[] = {
 
     GEN_INT("fortifywaittime", game.server.fortifywaittime,
           SSET_RULES_FLEXIBLE, SSET_INTERNAL, SSET_VITAL,
-          ALLOW_NONE, ALLOW_BASIC,
+          ALLOW_ADMIN, ALLOW_BASIC,
           N_("Time before a unit becomes fortified, if it began fortifying "
             "prior to turn change."),
           /* TRANS: The string between single quotes is a setting name and
@@ -3121,7 +3121,7 @@ static struct setting settings[] = {
 
   GEN_BITWISE("unitwaittime_style", game.server.unitwaittime_style,
               SSET_RULES_FLEXIBLE, SSET_INTERNAL, SSET_VITAL,
-              ALLOW_NONE, ALLOW_BASIC,
+              ALLOW_ADMIN, ALLOW_BASIC,
               N_("Unitwaittime style"),
               /* TRANS: The strings between double quotes are also translated
                * separately (they must match!). The strings between single
@@ -3143,7 +3143,7 @@ static struct setting settings[] = {
               NULL, NULL, unitwaittime_name, GAME_DEFAULT_UNITWAITTIME_STYLE)
 
   GEN_BOOL("zoc_purity", game.server.zoc_purity, SSET_RULES_FLEXIBLE, SSET_MILITARY,
-           SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
+           SSET_SITUATIONAL, ALLOW_ADMIN, ALLOW_BASIC,
            N_("Whether units who ignore ZoC lift ZOC for units who don't ignore ZoC."),
            N_("If ON, igZOC units do not negate ZoC for other units. "
               "This decreases exploits and increases importance " 
@@ -3208,7 +3208,7 @@ static struct setting settings[] = {
 
   GEN_BOOL("fixedlength", game.server.fixedlength,
            SSET_META, SSET_INTERNAL, SSET_SITUATIONAL,
-           ALLOW_NONE, ALLOW_BASIC,
+           ALLOW_ADMIN, ALLOW_BASIC,
            N_("Fixed-length turns play mode"),
            /* TRANS: \"Turn Done\" refers to the client button; it is also
             * translated separately, the translation should be the same. */
@@ -3219,7 +3219,7 @@ static struct setting settings[] = {
 
   GEN_STRING("demography", game.server.demography,
              SSET_META, SSET_INTERNAL, SSET_SITUATIONAL,
-             ALLOW_NONE, ALLOW_BASIC,
+             ALLOW_ADMIN, ALLOW_BASIC,
              N_("What is in the Demographics report"),
              /* TRANS: The strings between double quotes should be
               * translated. */
@@ -3345,7 +3345,7 @@ static struct setting settings[] = {
   GEN_BOOL("scorelog", game.server.scorelog,
            SSET_META, SSET_INTERNAL, SSET_SITUATIONAL,
 #ifdef FREECIV_WEB
-           ALLOW_NONE, ALLOW_CTRL,
+           ALLOW_ADMIN, ALLOW_CTRL,
 #else /* FREECIV_WEB */
            ALLOW_HACK, ALLOW_HACK,
 #endif /* FREECIV_WEB */
@@ -3400,7 +3400,7 @@ static struct setting settings[] = {
           GAME_MIN_KICK_TIME, GAME_MAX_KICK_TIME, GAME_DEFAULT_KICK_TIME)
 
   GEN_STRING("metamessage", game.server.meta_info.user_message,
-             SSET_META, SSET_INTERNAL, SSET_RARE, ALLOW_NONE, ALLOW_CTRL,
+             SSET_META, SSET_INTERNAL, SSET_RARE, ALLOW_ADMIN, ALLOW_CTRL,
              N_("Metaserver info line"),
              N_("User defined metaserver info line. For most of the time "
                 "a user defined metamessage will be used instead of an "
