@@ -6248,7 +6248,7 @@ function center_on_any_city()
 {
   var fallback_city;
 
-  if (!observing) {
+  if (!client_is_observer()) {
     for (var city_id in cities) {
       var pcity = cities[city_id];
       // Loop through all cities

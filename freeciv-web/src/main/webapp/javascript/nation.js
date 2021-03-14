@@ -31,6 +31,7 @@ function update_nation_screen()
   var total_players = 0;
   var no_humans = 0;
   var no_ais = 0;
+  const observer = client_is_observer();
 
   // Carefully set up display mode controls:  wide, reduced standard, tiny:
   var wide_screen = $(window).width()<1340 ? false : true;
@@ -94,9 +95,9 @@ function update_nation_screen()
     var flag_html = "<canvas id='nation_dlg_flags_" + player_id + "' width='29' height='20' class='nation_flags'></canvas>";
 
     var plr_class = "";
-    if (!client_is_observer() && client.conn.playing != null && player_id == client.conn.playing['playerno']) plr_class = "nation_row_self";
+    if (!observer && client.conn.playing != null && player_id == client.conn.playing['playerno']) plr_class = "nation_row_self";
     if (!pplayer['is_alive']) plr_class = "nation_row_dead";
-    else if (!client_is_observer() && diplstates[player_id] != null) {
+    else if (!observer && diplstates[player_id] != null) {
       if (diplstates[player_id] == DS_WAR) plr_class = "nation_row_war";
       else if (diplstates[player_id] == DS_ALLIANCE) plr_class = "nation_row_alliance";
       else if (diplstates[player_id] == DS_CEASEFIRE) plr_class = "nation_row_ceasefire";
@@ -123,13 +124,13 @@ function update_nation_screen()
           get_ai_level_text(pplayer) + " AI" : "Human") + "</td><td>"
 	   + (pplayer['is_alive'] ? "Alive" : "Dead") +  "</td>";
 
-    var our_cb = players[client.conn.playing['playerno']].diplstates[player_id]['has_reason_to_cancel'];
-    var their_cb = players[player_id].diplstates[client.conn.playing['playerno']]['has_reason_to_cancel'];  
+    var our_cb = !observer ? players[client.conn.playing['playerno']].diplstates[player_id]['has_reason_to_cancel'] : 0;
+    var their_cb = !observer ? players[player_id].diplstates[client.conn.playing['playerno']]['has_reason_to_cancel'] : 0;  
     var contact_time=0;
-    if (!client_is_observer() && client.conn.playing != null && diplstates[player_id] != null && player_id != client.conn.playing['playerno']) {
+    if (!observer && client.conn.playing != null && diplstates[player_id] != null && player_id != client.conn.playing['playerno']) {
       contact_time = pplayer.diplstates[client.conn.playing.playerno].contact_turns_left; //set this here because it needs the same 'if'
       
-      var pact_time = pplayer.diplstates[client.conn.playing.playerno].turns_left;
+      var pact_time = !observer ? pplayer.diplstates[client.conn.playing.playerno].turns_left : 0;
       var dstate = get_diplstate_text(diplstates[player_id]);
       if (dstate == "None") dstate = "<span style='font-size:1%; color:rgba(0,0,0,0);'>+</span>" + dstate; // sorting hack
       if (dstate!="Ceasefire" && dstate!="Armistice") pact_time=0; // don't show unless it's a real timer on an expiring pact.
@@ -169,7 +170,7 @@ function update_nation_screen()
     nation_list_html += "<td style='text-align:center;'>" + embassy_status + "</td>";
 
     nation_list_html += "<td>"
-    if (!client_is_observer() && client.conn.playing != null) {
+    if (!observer && client.conn.playing != null) {
       if (pplayer['gives_shared_vision'].isSet(client.conn.playing['playerno']) && client.conn.playing['gives_shared_vision'].isSet(player_id)) {
         nation_list_html += "Both ways"
       } else if (pplayer['gives_shared_vision'].isSet(client.conn.playing['playerno'])) {
