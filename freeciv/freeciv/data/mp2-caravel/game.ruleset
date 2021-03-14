@@ -3132,6 +3132,6 @@ set =
       "victories", "ALLIED|SPACERACE", FALSE
       "zoc_purity", "ENABLED", FALSE           ; igZOC units don't lift ZOC for units subject to ZOC
 ; TESTING ONLY, REMOVE FOR SURE: *(***************************************)
-      "fogofwar", FALSE, FALSE
-      "revealmap", "start", FALSE
+;      "fogofwar", FALSE, FALSE
+;      "revealmap", "start", FALSE
     }
