@@ -411,10 +411,10 @@ function cma_paste_clipboard() {
 
   for (var i = 0; i < O_LAST; i++) {
     var name = O_NAME[i];
-    $("#cma-val-slider"+name).slider({"value":_cma_val_sliders[i]});
-    $("#cma-min-slider"+name).slider({"value":_cma_val_sliders[i]});
+    $("#cma-val-slider-"+name).slider({"value":_cma_val_sliders[i]});
+    $("#cma-min-slider-"+name).slider({"value":_cma_val_sliders[i]});
   }
-  $("#cma-happy-slider"+name).slider({"value":_cma_happy_slider});
+  $("#cma-happy-slider").slider({"value":_cma_happy_slider});
 
   $("#cma_celebrate").prop("checked", _cma_celebrate);
   $("#cma_specialists").prop("checked", (!_cma_allow_specialists)); // suppress = !allow
