@@ -4749,7 +4749,7 @@ Goods can be used to Establish Trade Route or Enter Marketplace. They can\
  trade routes in one voyage. Also, Goods can Recycle Production with only\
  a 25% penalty.\n\
 "), _("\
-By themselves, Goods can only move onto a tiles with a City, Quay, Fortress,\
+By themselves, Goods can only move onto tiles with a City, Quay, Fortress,\
  or Naval Base. Commerce units, Tribesmen, and Galleons may carry them as cargo.\
 ")
 
