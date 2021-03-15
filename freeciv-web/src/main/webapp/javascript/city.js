@@ -3841,14 +3841,17 @@ function cma_clipboard_macro(event, called_by_CMA)
   // City List was caller with normal-Click || CMA tab called this function:
   var autoarrange = !(apply_once || save) || called_by_CMA;
 
+  var sent_orders = false;
   // Arrange tiles according to the CMA clipboard in all selected cities:
   if (apply_once || save) {
     for (var city_id in cities)  {
       if ($("#cb"+city_id).is(":checked")) {
         cma_paste_to_city_id(parseInt(city_id), apply_once);
         city_checkbox_states[city_id] = true;
+        sent_orders = true;
       } else city_checkbox_states[city_id] = false;
     }
+    play_sound( (sent_orders ? soundset["e_success"] : soundset["e_fail"]) );
     retain_checkboxes_on_update = true;
     return;
   }
@@ -3881,6 +3884,7 @@ function cma_clipboard_macro(event, called_by_CMA)
       // Emulate incoming server packet for CMA, so it is intercepted and processed properly.              
       packet = {"pid":25,"message":cities_string, "event":E_CITY_CMA_RELEASE};
       handle_chat_msg(packet);
+      play_sound(soundset["e_success"]);
       if (called_by_CMA) {
         $("#cma_unsaved_warning").html(cities_string);
         global_governor_message = cities_string;
@@ -3889,6 +3893,7 @@ function cma_clipboard_macro(event, called_by_CMA)
       packet = {"pid":25, "message":"&#x26A0;&#xFE0F; <b>Failed:</b> no cities were selected for tile refresh.",
                 "event":E_CITY_CMA_RELEASE};
       handle_chat_msg(packet);
+      play_sound(soundset["e_fail"]);
       global_governor_message = "&#x26A0;&#xFE0F; <b>Failed:</b> no goverened cities were found.";
     }
   }
