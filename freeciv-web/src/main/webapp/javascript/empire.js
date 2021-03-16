@@ -1206,7 +1206,9 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
     // Mobile users have to click empty row to append clipboard:
     //var empty_row_click = small_screen ? " onclick='tap_empty_production_row(event, "+city_id+")'" : "";
     // Now all users can click an empty row to append to clipboard
-    var empty_row_click = " title='CLICK: paste worklist\nCTRL-CLICK: clear worklist\nSHIFT-CLICK: copy worklist' onclick='tap_empty_production_row(event, "+city_id+")'";
+    var empty_row_click = is_small_screen() 
+                        ? " onclick='tap_empty_production_row(event, "+city_id+")'"
+                        : " title='CLICK: paste worklist\nCTRL-CLICK: clear worklist\nSHIFT-CLICK: copy worklist' onclick='tap_empty_production_row(event, "+city_id+")'";
     queue_html = "<tr class='cities_row;' style='border-bottom: 3px solid #000; height:"+rheight+"px;'>";
     queue_html += "<td style='cursor:pointer; font-size:85%; text-align:right; padding-right:10px;' onclick='javascript:show_city_dialog_by_id(" 
                       + pcity['id']+")' id='citycell"+city_id+"'>"+pcity['name']+"</td>";
@@ -1278,6 +1280,7 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
         }
       } // -----------------------------------------------------------------------------
       title_text += "CLICK: Remove\nCTRL-CLICK: Insert before\nSHIFT-CLICK: Add after'";
+      if (is_small_screen()) title_text = "";
 
       // Put improvement sprite in the cell:
       queue_html = queue_html +
