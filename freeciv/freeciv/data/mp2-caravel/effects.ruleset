@@ -646,6 +646,13 @@ reqs    =
 type    = "Stack_Escape_Pct"
 value   = 10 ; 50% → = 60%
 
+[effect_satellite_stack_escape_odds]
+type    = "Stack_Escape_Pct"
+value   = 40 ; 60% → 100%
+reqs    =
+    { "type", "name", "range"
+      "UnitType", "Satellite", "Local"
+    }
 [effect_submarine_stack_escape_odds]
 type    = "Stack_Escape_Pct"
 value   = 15 ; 60% → 75%
