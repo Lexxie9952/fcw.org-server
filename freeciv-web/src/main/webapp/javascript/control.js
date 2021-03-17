@@ -6701,6 +6701,9 @@ function check_mouse_drag_unit(ptile)
 **************************************************************************/
 function popup_fullscreen_enter_game_dialog()
 {
+  // Don't show popup for small screen, we set enter it elsewhere.
+  if (is_small_screen()) return;
+  
   id = "#fullscreen_dialog";
   remove_active_dialog(id);  /* Reset dialog page. */
   $("#fullscreen_dialog").css("white-space","pre-wrap"); // allow \n to work.
