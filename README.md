@@ -14,11 +14,7 @@ Currently known servers based on Freeciv-web:
 - [Freecivweb.org](https://www.freecivweb.org) - Full Freeciv-web
 - [moving borders](https://fcw.movingborders.es) (Everything except longturn and real-Earth)
 
-Freeciv WebGL 3D:
-![Freeciv-web](https://raw.githubusercontent.com/freeciv/freeciv-web/develop/freeciv-web/src/main/webapp/javascript/webgl/freeciv-webgl.png "Freeciv-web WebGL screenshot")
-
-Freeciv-web HTML5 version:
-![Freeciv-web](https://raw.githubusercontent.com/freeciv/freeciv-web/develop/scripts/freeciv-web-screenshot.png "Freeciv-web screenshot")
+![Freeciv-web](https://raw.githubusercontent.com/Lexxie9952/fcw.org-server/develop/fcw-2021.png "Freeciv-web screenshot")
 
 
 Overview
