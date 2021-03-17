@@ -144,11 +144,10 @@ function remove_city(pcity_id)
   var pcity = cities[pcity_id];
   if (pcity == null) return;
 
-  var update = client.conn.playing.playerno &&
-               city_owner(pcity).playerno == client.conn.playing.playerno;
+  var update = client.conn.playing.playerno && city_owner(pcity).playerno == client.conn.playing.playerno;
   var ptile = city_tile(cities[pcity_id]);
   delete cities[pcity_id];
-  update_city_position(ptile);
+
   if (update) {
     city_screen_updater.update();
     bulbs_output_updater.update();
