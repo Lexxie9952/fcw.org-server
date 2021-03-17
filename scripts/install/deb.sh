@@ -119,7 +119,4 @@ echo "==== Installing Handlebars ===="
 cd "${TMPINSTDIR}"
 sudo -H npm install handlebars@4.5.3 -g
 
-if [ "${FCW_INSTALL_MODE}" = TEST ]; then
-  ext_install_casperjs
-fi
 
