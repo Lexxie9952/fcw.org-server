@@ -49,7 +49,6 @@ dependencies="\
   swapspace \
   tar \
   unzip \
-  webp \
   zlib1g-dev \
 "
 
