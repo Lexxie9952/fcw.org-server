@@ -14,7 +14,7 @@ Currently known servers based on Freeciv-web:
 - [Freecivweb.org](https://www.freecivweb.org) - Full Freeciv-web
 - [moving borders](https://fcw.movingborders.es) (Everything except longturn and real-Earth)
 
-![Freeciv-web](https://raw.githubusercontent.com/Lexxie9952/fcw.org-server/develop/fcw-2021.png "Freeciv-web screenshot")
+![Freeciv-web](https://raw.githubusercontent.com/Lexxie9952/fcw.org-server/master/fcw-2021.png "Freeciv-web screenshot")
 
 
 Overview
