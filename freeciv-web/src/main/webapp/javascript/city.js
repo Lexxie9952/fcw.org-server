@@ -148,7 +148,7 @@ function remove_city(pcity_id)
                city_owner(pcity).playerno == client.conn.playing.playerno;
   var ptile = city_tile(cities[pcity_id]);
   delete cities[pcity_id];
-  if (renderer == RENDERER_WEBGL) update_city_position(ptile);
+  update_city_position(ptile);
   if (update) {
     city_screen_updater.update();
     bulbs_output_updater.update();
@@ -464,15 +464,11 @@ function show_city_dialog(pcity)
   $("#worklist_dialog_headline").unbind('click');
   $("#worklist_dialog_headline").click(function(ev) { ev.stopImmediatePropagation(); city_remove_current_prod()} );
 
-  var orig_renderer = renderer;
-  renderer = RENDERER_2DCANVAS;
   set_city_mapview_active();
 
   // Center map on area around city for when they leave the city
-  save_map_return_position(city_tile(pcity)); //save tile locations for shift-spacebar return position function
   center_tile_mapcanvas(city_tile(pcity));
   update_map_canvas(0, 0, mapview['store_width'], mapview['store_height']);
-  renderer = orig_renderer;
 
   var pop_string = is_small_screen() ? city_population(pcity)+"K" : numberWithCommas(city_population(pcity)*1000);
   var change_string = is_small_screen() ? "Growth:" : "Change in: ";
@@ -1387,7 +1383,7 @@ function close_city_dialog()
   if (active_city) {  // map will be centered on city that was being viewed
     center_tile_mapcanvas(city_tile(active_city));
     active_city = null;
-    if (renderer == RENDERER_2DCANVAS) update_map_canvas_full();
+    update_map_canvas_full();
   } 
 }
 
@@ -1532,7 +1528,7 @@ function city_name_dialog(suggested_name, unit_id) {
   blur_input_on_touchdevice();
   keyboard_input=false;
 
-  if (speech_recogntition_enabled || cardboard_vr_enabled) {
+  if (speech_recogntition_enabled) {
     var name = alphanumeric_cleaner_city_names($("#city_name_req").val());
     if (name.length == 0 || name.length >= MAX_LEN_CITYNAME - 6
       || encodeURIComponent(name).length  >= MAX_LEN_CITYNAME - 6) {

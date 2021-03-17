@@ -117,12 +117,7 @@ var end_turn_info_message_shown = false;
 function control_init()
 {
   touch_device = is_touch_device();
-
-  if (renderer == RENDERER_2DCANVAS) {
-    mapctrl_init_2d();
-  } else {
-    init_webgl_mapctrl();
-  }
+  mapctrl_init_2d();
 
   $(document).keydown(global_keyboard_listener);
   $(window).resize(mapview_window_resized);
@@ -199,7 +194,7 @@ function control_init()
   }, false);
 
   var context_options = {
-        selector: (renderer == RENDERER_2DCANVAS) ? '#canvas' : '#canvas_div' ,
+        selector: '#canvas',
 	    zIndex: 5000,
         autoHide: true,
         callback: function(key, options) {
@@ -224,7 +219,7 @@ function control_init()
     context_options['position'] = function(opt, x, y){
                                                 if (touch_device) return;
                                                 var new_top = mouse_y + $("#canvas_div").offset().top;
-                                                if (renderer == RENDERER_2DCANVAS) new_top = mouse_y + $("#canvas").offset().top;
+                                                new_top = mouse_y + $("#canvas").offset().top;
                                                 opt.$menu.css({top: new_top , left: mouse_x});
                                               };
   }
@@ -366,8 +361,7 @@ function control_init()
 ****************************************************************************/
 function is_touch_device()
 {
-  if(!cardboard_vr_enabled && ('ontouchstart' in window) || 'onmsgesturechange' in window
-      || window.DocumentTouch && document instanceof DocumentTouch) {
+  if('onmsgesturechange' in window || window.DocumentTouch && document instanceof DocumentTouch) {
     return true;
   } else {
     return false;
@@ -406,7 +400,7 @@ function mouse_moved_cb(e)
       mouse_y = e.clientY;
     }
   }
-  if (renderer == RENDERER_2DCANVAS && active_city == null && mapview_canvas != null
+  if (active_city == null && mapview_canvas != null
       && $("#canvas").length) {
     mouse_x = mouse_x - $("#canvas").offset().left;
     mouse_y = mouse_y - $("#canvas").offset().top;
@@ -418,22 +412,6 @@ function mouse_moved_cb(e)
 
       mapview['gui_x0'] += diff_x;
       mapview['gui_y0'] += diff_y;
-      touch_start_x = mouse_x;
-      touch_start_y = mouse_y;
-      update_mouse_cursor();
-    }
-  } else if (renderer == RENDERER_WEBGL && active_city == null && $("#canvas_div").length) {
-    mouse_x = mouse_x - $("#canvas_div").offset().left;
-    mouse_y = mouse_y - $("#canvas_div").offset().top;
-
-    if (mapview_mouse_movement && !goto_active) {
-      // move the mapview using mouse movement.
-      var spos = webgl_canvas_pos_to_map_pos(touch_start_x, touch_start_y);
-      var epos = webgl_canvas_pos_to_map_pos(mouse_x, mouse_y);
-      if (spos != null && epos != null) {
-        camera_look_at(camera_current_x + spos['x'] - epos['x'], camera_current_y, camera_current_z + spos['y'] - epos['y']);
-      }
-
       touch_start_x = mouse_x;
       touch_start_y = mouse_y;
       update_mouse_cursor();
@@ -472,12 +450,8 @@ function update_mouse_cursor()
   }
 
   //console.log("update_mouse_cursor() mmm:1 g_a:0, came_from_context_menu:"+came_from_context_menu);
-  var ptile;
-  if (renderer == RENDERER_2DCANVAS) {
-    ptile = canvas_pos_to_tile(mouse_x, mouse_y);
-  } else {
-    ptile = webgl_canvas_pos_to_tile(mouse_x, mouse_y);
-  }
+  var ptile = canvas_pos_to_tile(mouse_x, mouse_y);
+
 
   if (ptile == null) return; /* TO DO: this is the only way this function returns without forcing real_mouse_move_mode=false, presumably because
                                 if we're outside the map area, we don't change a thing for what mode is on inside that area. However, if there are
@@ -968,7 +942,6 @@ function advance_unit_focus(same_type)
     deactivate_goto(false);
     save_last_unit_focus();
     current_focus = []; /* Reset focus units. */
-    if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
     update_active_units_dialog();
     $("#game_unit_orders_default").hide();
 
@@ -1051,7 +1024,6 @@ function advance_focus_inactive_units()
     save_last_unit_focus();
     current_focus = []; /* Reset focus units. */
     waiting_units_list = []; /* Reset waiting units list */
-    if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
     update_active_units_dialog();
     $("#game_unit_orders_default").hide();
   }
@@ -2010,7 +1982,6 @@ function set_unit_focus(punit)
     current_focus = [];
   } else {
     current_focus[0] = punit;
-    if (renderer == RENDERER_WEBGL) update_unit_position(index_to_tile(punit['tile']));
   }
 
   if (punit) warcalc_set_default_vals(punit);
@@ -2037,10 +2008,6 @@ function click_unit_in_panel(e, punit)
       }
     }
 
-    // though doing the exact same thing as single-click, shift-click was losing the other units in the panel, so
-    // try to emulate everything else it does, as a test to get those units displayed in the panel even though
-    // not in focus:
-    if (renderer == RENDERER_WEBGL) update_unit_position ( index_to_tile(punit['tile']));
     auto_center_on_focus_unit();
 
     update_active_units_dialog(); //previously only doing this but it lost unselected units in the panel
@@ -2048,7 +2015,7 @@ function click_unit_in_panel(e, punit)
     // added these lines below to emulate same code as non-shift-click which doesn't lose units in the panel:
     update_unit_order_commands();
 
-    if (current_focus.length > 0 && $("#game_unit_orders_default").length > 0 && !cardboard_vr_enabled && show_order_buttons ) {
+    if (current_focus.length > 0 && $("#game_unit_orders_default").length > 0 && show_order_buttons ) {
       $("#game_unit_orders_default").show();
     }
   } else set_unit_focus_and_redraw(punit);
@@ -2065,11 +2032,9 @@ function set_unit_focus_and_redraw(punit)
 
   if (punit == null) {
     current_focus = [];
-    if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
   } else {
     current_focus[0] = punit;
     warcalc_set_default_vals(punit); // warcalc default vals as last clicked units
-    if (renderer == RENDERER_WEBGL) update_unit_position(index_to_tile(punit['tile']));
   }
 
   //shift-spacebar to return to last location:
@@ -2080,7 +2045,7 @@ function set_unit_focus_and_redraw(punit)
   auto_center_on_focus_unit();
   update_active_units_dialog();
   update_unit_order_commands();
-  if (current_focus.length > 0 && $("#game_unit_orders_default").length > 0 && !cardboard_vr_enabled && show_order_buttons ) {
+  if (current_focus.length > 0 && $("#game_unit_orders_default").length > 0 && show_order_buttons ) {
     $("#game_unit_orders_default").show();
   }
 }
@@ -2123,7 +2088,6 @@ function auto_center_on_focus_unit()
 
   if (ptile != null && auto_center_on_unit) {
     center_tile_mapcanvas(ptile);
-    update_unit_position(ptile);
   }
 }
 
@@ -2441,7 +2405,6 @@ function do_map_click(ptile, qtype, first_time_called)
     if (goto_active /*&& !touch_device*/) { //(allow clicking same tile when giving a Nuke order.)
       deactivate_goto(false);
     }
-    if (renderer == RENDERER_2DCANVAS) {
       if (!mouse_click_mod_key['shiftKey']) { // normal left-click
         /* CONDITIONS FOR SHOWING A CONTEXT MENU:
            1.Automatic context menu when clicking unit, if 'unit_click_menu' user PREF is on.
@@ -2465,7 +2428,6 @@ function do_map_click(ptile, qtype, first_time_called)
             came_from_context_menu = true;
           }
         }
-      }
     } else if (!mouse_click_mod_key['shiftKey'] && unit_click_menu) {
       // 3D handling of above. TO DO: test/integrate same 2D functionality above for 3D if appropriate
       if (pcity) {
@@ -2822,11 +2784,7 @@ function do_map_click(ptile, qtype, first_time_called)
 
           set_unit_focus_and_redraw(sunits[0]);
           if (city_click_goto_cooldown(ptile)) { // don't show contextmenu if in the cooldown period for a double tap GOTO
-            if (renderer == RENDERER_2DCANVAS) {
-              $("#canvas").contextMenu();
-            } else { //3D handling can potentially be made different later
-              $("#canvas_div").contextMenu();
-            }
+            $("#canvas").contextMenu();
           }
           return; // move the commented-out return from below up here
         } else if (!goto_active) { //if GOTO active then the click is a move command, not a show city command
@@ -2930,20 +2888,11 @@ function do_map_click(ptile, qtype, first_time_called)
         }
 
         if (touch_device) { // show context menu unless we clicked on a city prior to GOTO_COOLDOWN period
-          if (renderer == RENDERER_2DCANVAS) {
             if (pcity) {
               if (city_click_goto_cooldown(ptile)) $("#canvas").contextMenu();
             } else {
               $("#canvas").contextMenu();
             }
-          }
-          else {  // 3D handling, currently the same
-            if (pcity) {
-              if (city_click_goto_cooldown(ptile)) $("#canvas").contextMenu();
-            } else {
-              $("#canvas").contextMenu();
-            }
-          }
         }
       } else if (pcity == null && !mouse_click_mod_key['shiftKey']) {
         // clicked on a tile with units exclusively owned by other players.
@@ -3007,7 +2956,7 @@ function global_keyboard_listener(ev)
   }
   civclient_handle_key(keyboard_key, ev.keyCode, ev['ctrlKey'],  ev['altKey'], ev['shiftKey'], ev);
 
-  if (renderer == RENDERER_2DCANVAS) $("#canvas").contextMenu('hide');
+  $("#canvas").contextMenu('hide');
 }
 
 /**************************************************************************
@@ -3517,11 +3466,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       came_from_context_menu = false;
       /* Abort any context menu blocking. */
       context_menu_active = true;
-      if (renderer == RENDERER_2DCANVAS) {
-        $("#canvas").contextMenu(true);
-      } else {
-        $("#canvas_div").contextMenu(true);
-      }
+      $("#canvas").contextMenu(true);
 
       /* Abort target tile selection. */
       paradrop_active = false;
@@ -3540,7 +3485,6 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         save_last_unit_focus();
 
         current_focus = [];
-        if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
         clear_all_modes();
         $("#canvas_div").css("cursor", "default");
         goto_request_map = {};
@@ -3567,37 +3511,10 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       break;
 
     case 107:
-      //zoom in
-      if (renderer == RENDERER_WEBGL) {
-        let new_camera_dy = camera_dy - 60;
-        let new_camera_dx = camera_dx - 45;
-        let new_camera_dz = camera_dz - 45;
-        if (new_camera_dy < 350 || new_camera_dy > 1200) {
-          return;
-        } else {
-          camera_dx = new_camera_dx;
-          camera_dy = new_camera_dy;
-          camera_dz = new_camera_dz;
-        }
-        camera_look_at(camera_current_x, camera_current_y, camera_current_z);
-      }
       break;
 
     case 109:
       //zoom out
-      if (renderer == RENDERER_WEBGL) {
-        let new_camera_dy = camera_dy + 60;
-        let new_camera_dx = camera_dx + 45;
-        let new_camera_dz = camera_dz + 45;
-        if (new_camera_dy < 350 || new_camera_dy > 1200) {
-          return;
-        } else {
-          camera_dx = new_camera_dx;
-          camera_dy = new_camera_dy;
-          camera_dz = new_camera_dz;
-        }
-        camera_look_at(camera_current_x, camera_current_y, camera_current_z);
-      }
       break;
 
   }
@@ -6049,11 +5966,8 @@ function check_request_goto_path()
   if (goto_active && current_focus.length > 0
       && (prev_mouse_x != mouse_x || prev_mouse_y != mouse_y || prev_goto_tile<=LAST_FORCED_CHECK)) {
 
-    if (renderer == RENDERER_2DCANVAS) {
-      ptile = canvas_pos_to_tile(mouse_x, mouse_y);
-    } else {
-      ptile = webgl_canvas_pos_to_tile(mouse_x, mouse_y);
-    }
+    ptile = canvas_pos_to_tile(mouse_x, mouse_y);
+
     if (ptile != null) {
       if (ptile['tile'] != prev_goto_tile) {
         clear_goto_tiles(); // TO DO: goto tiles should not be in tiles[tild_id][goto_dir] which takes forever to clear, but their own array instead
@@ -6094,7 +6008,6 @@ function update_goto_path(goto_packet)
   // don't bother check goto for same tile unit is on
   if (ptile==goaltile) return;
 
-  if (renderer == RENDERER_2DCANVAS) {
     for (var i = 0; i < goto_packet['dir'].length; i++) {
       if (ptile == null) break;
       var dir = goto_packet['dir'][i];
@@ -6108,9 +6021,6 @@ function update_goto_path(goto_packet)
       ptile['goto_dir'] = dir;
       ptile = mapstep(ptile, dir);
     }
-  } else {
-    webgl_render_goto_line(ptile, goto_packet['dir']);
-  }
 
   current_goto_turns = goto_packet['turns'];
 
@@ -6145,11 +6055,9 @@ function show_goto_path(goto_packet)
 **************************************************************************/
 function center_tile_mapcanvas(ptile)
 {
-  if (renderer == RENDERER_2DCANVAS) {
-    center_tile_mapcanvas_2d(ptile);
-  } else {
-    center_tile_mapcanvas_3d(ptile);
-  }
+
+  center_tile_mapcanvas_2d(ptile);
+
 }
 
 /**************************************************************************
@@ -6157,13 +6065,7 @@ function center_tile_mapcanvas(ptile)
 **************************************************************************/
 function popit()
 {
-  var ptile;
-
-  if (renderer == RENDERER_2DCANVAS) {
-    ptile = canvas_pos_to_tile(mouse_x, mouse_y);
-  } else {
-    ptile = webgl_canvas_pos_to_tile(mouse_x, mouse_y);
-  }
+  var ptile = canvas_pos_to_tile(mouse_x, mouse_y);
 
   if (ptile == null) return;
 

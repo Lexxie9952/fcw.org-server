@@ -9,7 +9,7 @@
 				<li id="empire_tab" style="margin-right:0px;"><a href="#tabs-empire">&#9878;&#65039; Empire</a></li>
 				<li id="civ_tab" style="margin-right:0px;"><a href="#tabs-civ">&#x1F3DB;&#xFE0F; Gov.</a></li>
 				<li id="tech_tab" style="margin-right:0px;"><a id="tech_tab_item" href="#tabs-tec">&#129514; Tech</a></li>
-				<li id="players_tab" style="margin-right:0px;"><a href="#tabs-nat">&#x1F3F3;&#xFE0F;&#x200D;&#x1F308; Nations</a></li>
+				<li id="players_tab" style="margin-right:0px;"><a href="#tabs-nat">&#127479;&#127482; Nations</a></li>
 				<li id="cities_tab" style="margin-right:0px;"><a href="#tabs-cities">&#127984; Cities</a></li>
 				<li id="opt_tab" style="margin-right:0px;"><a href="#tabs-opt">&#9881;&#65039; Prefs</a></li>
 	<%--			<li id="chat_tab" style="margin-right:0px;"><a href="#tabs-chat">💬 Chat</a></li> --%>

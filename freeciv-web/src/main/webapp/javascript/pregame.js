@@ -802,10 +802,6 @@ function pregame_settings()
         "<tr id='anaglyph_enabled'><td id='anaglyph_label' style='min-width: 150px;'></td>" +
                 "<td><input type='checkbox' id='anaglyph_setting'>Enable Anaglyph 3D (Red+Cyan glasses) "+
                 "<br>"+
-        "<tr id='cardboard_vr_enabled'><td id='cardboard_vr_label' style='min-width: 150px;'></td>" +
-                "<td><input type='checkbox' id='cardboard_vr_setting'>Enable Virtual reality glasses with Google Cardboard. <i class='fa fa-info-circle' aria-hidden='true' "+
-                "title='You can use Google Cardboard glasses with your mobile phone. Use voice recognition to control the game. You must also manually disable screensavers in your device settings. Put your phone in the VR glasses when the game starts. BETA!'></i><br>"+
-                "<button id='show_voice_commands' type='button' class='voice button' style='padding:0px;'>Voice commands</button></td></tr>" +
         "</table>" +
       "</div>" +
 
@@ -959,13 +955,6 @@ function pregame_settings()
   }
 
   $("#cardboard_vr_label").prop("innerHTML", "3D Cardboard VR glasses:");
-  $('#cardboard_vr_setting').change(function() {
-    cardboard_vr_enabled = !cardboard_vr_enabled;
-    if (cardboard_vr_enabled) {
-      speech_enabled = true;
-      speech_recogntition_enabled = true;
-    }
-  });
 
   $("#anaglyph_label").prop("innerHTML", "3D Anaglyph glasses:");
   $('#anaglyph_setting').change(function() {
@@ -1195,12 +1184,7 @@ function pregame_settings()
     setSwalTheme();
   });
 
-  if (renderer == RENDERER_WEBGL) {
-    $(".benchmark").button();
-    $("#show_voice_commands").button();
-  } else {
-    $('[href="#pregame_settings_tabs-2"]').closest('li').hide();
-  }
+  $('[href="#pregame_settings_tabs-2"]').closest('li').hide();
 
   $('#speech_setting').change(function() {
     if ($('#speech_setting').prop('checked')) {
@@ -1233,8 +1217,7 @@ function pregame_settings()
   }
 
   $("#show_voice_commands").click(function() {
-   var previous_setting = cardboard_vr_enabled;
-   cardboard_vr_enabled = false;
+
    show_dialog_message("Voice commands",
      "<b>Voice command - Explanation:</b> <br>" +
      "T, Turn - Turn Done<br>" +
@@ -1258,7 +1241,6 @@ function pregame_settings()
      "W, West  - West<br>" +
      "North West, North East, South East, South West<br>"
       );
-    cardboard_vr_enabled = previous_setting;
   });
 
 
@@ -1295,27 +1277,6 @@ function show_intro_dialog(title, message) {
   var intro_html = message + "<br><br><table><tr><td>Player name:</td><td><input id='username_req' type='text' size='25' maxlength='31'></td></tr>"
       +  "<tr id='password_row' style='display:none;'><td>Password:</td><td id='password_td'></td></tr></table>"
     + " <br><br><span id='username_validation_result' style='display:none;'></span><br><br>";
-
-  if (renderer == RENDERER_WEBGL) {
-    try {
-      var gl = document.createElement('canvas').getContext('webgl',{ failIfMajorPerformanceCaveat: true });
-      if (!(platform.name == "Microsoft Edge") && !gl) {
-        show_dialog_message("WebGL not supported", "WebGL 3D with hardware acceleration is not supported. The 3D version will not work. Please try the 2D version.");
-        return;
-      }
-    } catch (err) {
-      console.error(err);
-    }
-    intro_html += "<span style='color: #800000;'><small>The 3D WebGL version of Freeciv-web requires WebGL 3D hardware. Graphics level: ";
-    if (graphics_quality == QUALITY_LOW) {
-      intro_html += "Low quality.";
-    } else if (graphics_quality == QUALITY_MEDIUM) {
-      intro_html += "Medium quality.";
-    } else {
-      intro_html += "High quality.";
-    }
-    intro_html += "</small></span>";
-  }
 
   $("#dialog").html(intro_html);
 
