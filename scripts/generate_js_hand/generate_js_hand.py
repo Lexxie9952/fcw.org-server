@@ -59,7 +59,7 @@ f.write("""
  
   if (p.length > 0) {
     if (debug_active) clinet_debug_collect();
-    if (renderer == RENDERER_2DCANVAS) update_map_canvas_check();
+    update_map_canvas_check();
   }
 
  } catch(err) {
