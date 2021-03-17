@@ -362,7 +362,6 @@ Rerun the sync-js-hand.js script.
 									<jsSourceInclude>*.js</jsSourceInclude>
 									<jsSourceInclude>libs/*.js</jsSourceInclude>
 									<jsSourceInclude>2dcanvas/*.js</jsSourceInclude>
-									<jsSourceInclude>webgl/*.js</jsSourceInclude>
 								</jsSourceIncludes>
 								<jsSourceExcludes>
 									<jsSourceExclude>frontpage.js</jsSourceExclude>
@@ -377,25 +376,7 @@ Rerun the sync-js-hand.js script.
 								<goal>minify</goal>
 							</goals>
 						</execution>
-						<!-- Create minified WebGL specific webgl-client.min.js -->
-						<execution>
-							<id>webgl-minify</id>
-							<configuration>
-								<jsSourceDir>javascript/webgl/libs/</jsSourceDir>
-								<jsFinalFile>webgl-client.js</jsFinalFile>
-								<jsSourceIncludes>
-									<jsSourceInclude>*.js</jsSourceInclude>
-								</jsSourceIncludes>
-								<jsSourceExcludes>
-									<jsSourceExclude>three.min.js</jsSourceExclude>
-									<jsSourceExclude>StereoEffect.js</jsSourceExclude>
-								</jsSourceExcludes>
-							</configuration>
-							<goals>
-								<goal>minify</goal>
-							</goals>
-						</execution>
-
+					
 						<execution>
 							<id>index-minify</id>
 							<configuration>
