@@ -4,7 +4,7 @@ ACLOCAL_AMFLAGS = -I m4 -I dependencies/m4
 AM_DIST_FORMATS = gzip xz zip
 
 if CLIENT
-CSUBDIRS = 
+CSUBDIRS = client
 else
 CSUBDIRS = 
 endif
