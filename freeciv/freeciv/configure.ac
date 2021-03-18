@@ -1699,16 +1699,6 @@ AC_CONFIG_FILES([Makefile
           ai/tex/Makefile
 	  tests/Makefile
   	  windows/Makefile
-	  client/Makefile
-	  client/agents/Makefile
-	  client/include/Makefile
-          client/gui-sdl2/Makefile
-	  client/gui-gtk-3.0/Makefile
-	  client/gui-gtk-3.22/Makefile
-          client/gui-gtk-4.0/Makefile
-          client/gui-qt/Makefile
-	  client/gui-stub/Makefile
-          client/luascript/Makefile
 	  server/Makefile
           server/advisors/Makefile
 	  server/generator/Makefile
@@ -1738,18 +1728,10 @@ AC_CONFIG_FILES([Makefile
 	  doc/sv/Makefile
           bootstrap/Makefile
           lua/Makefile
-          client/freeciv.desktop:bootstrap/freeciv.desktop.in
-          client/freeciv-gtk3.22.desktop:bootstrap/freeciv-gtk3.22.desktop.in
-          client/freeciv-sdl2.desktop:bootstrap/freeciv-sdl2.desktop.in
-          client/freeciv-qt.desktop:bootstrap/freeciv-qt.desktop.in
 	  server/freeciv-server.desktop:bootstrap/freeciv-server.desktop.in
 	  tools/freeciv-mp-gtk3.desktop:bootstrap/freeciv-mp-gtk3.desktop.in
 	  tools/freeciv-mp-qt.desktop:bootstrap/freeciv-mp-qt.desktop.in
 	  tools/ruledit/freeciv-ruledit.desktop:bootstrap/freeciv-ruledit.desktop.in
-          client/freeciv-gtk3.appdata.xml:bootstrap/freeciv-gtk3.appdata.xml.in
-          client/freeciv-gtk3.22.appdata.xml:bootstrap/freeciv-gtk3.22.appdata.xml.in
-          client/freeciv-sdl2.appdata.xml:bootstrap/freeciv-sdl2.appdata.xml.in
-          client/freeciv-qt.appdata.xml:bootstrap/freeciv-qt.appdata.xml.in
           server/freeciv-server.appdata.xml:bootstrap/freeciv-server.appdata.xml.in
           tools/freeciv-mp-gtk3.appdata.xml:bootstrap/freeciv-mp-gtk3.appdata.xml.in
           tools/freeciv-mp-qt.appdata.xml:bootstrap/freeciv-mp-qt.appdata.xml.in
