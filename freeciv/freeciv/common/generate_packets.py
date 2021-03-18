@@ -2060,5 +2060,150 @@ bool server_handle_packet(enum packet_type type, const void *packet,
 ''')
     f.close()
 
+    f=fc_open(target_root+"/client/packhand_gen.h")
+    f.write('''
+#ifndef FC__PACKHAND_GEN_H
+#define FC__PACKHAND_GEN_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+/* utility */
+#include "shared.h"
+
+/* common */
+#include "packets.h"
+
+bool client_handle_packet(enum packet_type type, const void *packet);
+
+''')
+    for p in packets:
+        if "sc" not in p.dirs: continue
+
+        a=p.name[len("packet_"):]
+        b=p.fields
+        #print len(p.fields),p.name
+        b=map(lambda x:"%s%s"%(x.get_handle_type(), x.name),b)
+        b=", ".join(b)
+        if not b:
+            b="void"
+        if p.handle_via_packet:
+            f.write('struct %s;\n'%p.name)
+            f.write('void handle_%s(const struct %s *packet);\n'%(a,p.name))
+        else:
+            f.write('void handle_%s(%s);\n'%(a,b))
+    f.write('''
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+
+#endif /* FC__PACKHAND_GEN_H */
+''')
+    f.close()
+
+    f=fc_open(target_root+"/server/hand_gen.c")
+    f.write('''
+
+#ifdef HAVE_CONFIG_H
+#include <fc_config.h>
+#endif
+
+/* common */
+#include "packets.h"
+
+#include "hand_gen.h"
+    
+bool server_handle_packet(enum packet_type type, const void *packet,
+                          struct player *pplayer, struct connection *pconn)
+{
+  switch(type) {
+''')
+    for p in packets:
+        if "cs" not in p.dirs: continue
+        if p.no_handle: continue
+        a=p.name[len("packet_"):]
+        c='((const struct %s *)packet)->'%p.name
+        b=[]
+        for x in p.fields:
+            y="%s%s"%(c,x.name)
+            if x.dataio_type=="worklist":
+                y="&"+y
+            b.append(y)
+        b=",\n      ".join(b)
+        if b:
+            b=",\n      "+b
+
+        if p.handle_via_packet:
+             if p.handle_per_conn:
+                 args="pconn, packet"
+             else:
+                 args="pplayer, packet"
+
+        else:
+            if p.handle_per_conn:
+                args="pconn"+b
+            else:
+                args="pplayer"+b
+
+        f.write('''  case %s:
+    handle_%s(%s);
+    return TRUE;
+
+'''%(p.type,a,args))
+    f.write('''  default:
+    return FALSE;
+  }
+}
+''')
+    f.close()
+
+    f=fc_open(target_root+"/client/packhand_gen.c")
+    f.write('''
+
+#ifdef HAVE_CONFIG_H
+#include <fc_config.h>
+#endif
+
+/* common */
+#include "packets.h"
+
+#include "packhand_gen.h"
+    
+bool client_handle_packet(enum packet_type type, const void *packet)
+{
+  switch(type) {
+''')
+    for p in packets:
+        if "sc" not in p.dirs: continue
+        if p.no_handle: continue
+        a=p.name[len("packet_"):]
+        c='((const struct %s *)packet)->'%p.name
+        b=[]
+        for x in p.fields:
+            y="%s%s"%(c,x.name)
+            if x.dataio_type=="worklist":
+                y="&"+y
+            b.append(y)
+        b=",\n      ".join(b)
+        if b:
+            b="\n      "+b
+
+        if p.handle_via_packet:
+            args="packet"
+        else:
+            args=b
+
+        f.write('''  case %s:
+    handle_%s(%s);
+    return TRUE;
+
+'''%(p.type,a,args))
+    f.write('''  default:
+    return FALSE;
+  }
+}
+''')
+    f.close()
 
 main()
