@@ -14,7 +14,7 @@ bin_PROGRAMS = freeciv-ruleup
 
 if SERVER
 if FCMANUAL
-bin_PROGRAMS += freeciv-manual
+#bin_PROGRAMS += freeciv-manual
 endif
 endif
 
