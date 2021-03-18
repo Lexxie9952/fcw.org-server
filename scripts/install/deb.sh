@@ -80,15 +80,12 @@ if [ "${FCW_INSTALL_MODE}" = TEST ]; then
   dependencies="${dependencies} xvfb"
 fi
 
-echo "==== Installing Updates and Dependencies ===="
+echo "==== Installing Dependencies ===="
 
 #workaround for msodbcsql17...
 sudo apt-mark hold msodbcsql17  containers-common || echo "workaround erred"
 
 
-
-echo "apt-get upgrade"
-sudo ${APT_GET} upgrade --with-new-pkgs
 echo "mysql setup..."
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password password ${DB_ROOT_PASSWORD}"
 sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again password ${DB_ROOT_PASSWORD}"
