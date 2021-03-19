@@ -178,7 +178,7 @@ static struct dem_row {
   {'O', N_("Pollution"),        get_pollution,    pollution_to_text,   TRUE },
   {'C', N_("Culture"),          get_culture,      culture_to_text,     TRUE },
   {'U', N_("Units Built"),      get_units_built,  units_to_text,       TRUE },
-  {'K', N_("Units Killed"),     get_units_killed, units_to_text,       FALSE },
+  {'K', N_("Units Killed"),     get_units_killed, units_to_text,       TRUE },
   {'D', N_("Units Lost"),       get_units_lost,   units_to_text,       TRUE },
 };
 
