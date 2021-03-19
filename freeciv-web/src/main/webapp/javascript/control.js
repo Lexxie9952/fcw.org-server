@@ -6647,7 +6647,7 @@ function openFullscreen() {
   }
   // clicking anywhere will restore you back!
   $('html').click( function() {
-    if(!document.fullscreenElement){
+    if(!document.fullscreenElement && $('html').length > 0 && $('html')[0].requestFullscreen !== "undefined"){
       $('html')[0].requestFullscreen();
     }
   });
