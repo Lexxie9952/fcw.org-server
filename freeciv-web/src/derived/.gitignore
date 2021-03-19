@@ -4,3 +4,8 @@
 # ...Except these
 !README.md
 !.gitignore
+!./webapp/man/ag7.bak.html
+!./webapp/man/mp2-brava7.bak.html
+!./webapp/man/mp2-caravel6.bak.html
+!./webapp/man/mp2-caravel7.bak.html
+
