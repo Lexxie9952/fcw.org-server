@@ -361,7 +361,9 @@ function control_init()
 ****************************************************************************/
 function is_touch_device()
 {
-  if(is_small_screen() || 'onmsgesturechange' in window || window.DocumentTouch && document instanceof DocumentTouch) {
+  if( ('ontouchstart' in window) 
+      || ('onmsgesturechange' in window)
+      || window.DocumentTouch && document instanceof DocumentTouch) {
     return true;
   } else {
     return false;
