@@ -2952,7 +2952,7 @@ Satellites orbit the Earth above the atmosphere. They are unreachable to anythin
  but missiles. Their orbital velocity allows them to circumnavigate the planet\
  in a couple turns. Telescopic cameras allow them to Investigate City, even if the\
  city has a Police Station. Satellites can’t be seen by others unless adjacent.\
- Satellites require Laser tech and the Apollo Program.\
+ Satellites require Laser tech and can only be built in the city with the Apollo Program.\
 "), _("
 NOTE： Due to game mechanics, Satellites block terrestrial movement\
  over a tile. This is solved by killing it with any Missile. To avoid\

@@ -1483,7 +1483,8 @@ sound_alt	= "w_generic"
 helptext	= _("\
 Allows you to start building spaceship parts in cities\
  with factories (assuming you have researched the necessary\
- technologies). With Laser tech, allows you to build a Satellite.\
+ technologies). With Laser tech, the city with the Apollo\
+ Program can build a Satellite.\
 ")
 
 [building_appian_way]
