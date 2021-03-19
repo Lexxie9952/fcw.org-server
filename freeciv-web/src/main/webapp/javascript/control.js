@@ -1225,6 +1225,7 @@ function update_unit_order_commands()
     var worker_type = false; // Handles civ2civ3 + mp2: these units have same orders as workers (join city already handled above):
     var infra_type = false;
     if (ptype['name'] == "Workers" || ptype['name'] == "Migrants"
+      || (ptype['name'] == "Tribesmen" && client_rules_flag[CRF_MP2_C])
       || (ptype['name'] =="Proletarians" && governments[client.conn.playing['government']]['name']=="Communism")) {
 
         worker_type = true;
