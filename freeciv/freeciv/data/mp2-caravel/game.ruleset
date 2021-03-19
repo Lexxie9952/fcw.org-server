@@ -628,6 +628,7 @@ action       = "Investigate City"
 actor_reqs    =
     { "type",         "name",          "range", "present"
       "UnitFlag",     "Diplomat",      "Local", TRUE
+      "UnitType",     "Siege Ram",     "Local", FALSE
       "UnitState",    "OnLivableTile", "Local", TRUE
       "MinMoveFrags", "1",             "Local", TRUE
       "DiplRel",      "Foreign",       "Local", TRUE
