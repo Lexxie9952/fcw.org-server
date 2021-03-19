@@ -1595,6 +1595,7 @@ function handle_begin_turn(packet)
 {
   if (!observing) {
     $("#turn_done_button").button("option", "disabled", false);
+    $("#turn_done_button").css({"background-color":"#ffff", "opacity":1, "color":"#000", "border-color": "#edd5"});
     if (is_small_screen()) {
       $("#turn_done_button").button("option", "label", "Done");
     } else {
@@ -1619,7 +1620,9 @@ function handle_end_turn(packet)
 {
   reset_unit_anim_list();
   if (!observing) {
+    $("#turn_done_button").css({"background-color":"#0006", "opacity":0.85, "color":"#edd", "border-color": "#edd5"});
     $("#turn_done_button").button( "option", "disabled", true);
+    $("#turn_done_button:disabled").css({"background-color":"#0006", "opacity":0.85, "color":"#edd", "border-color": "#edd5"});
   }
 }
 
