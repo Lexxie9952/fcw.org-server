@@ -4,8 +4,8 @@
 RULESETS=(civ2civ3 classic multiplayer mpplus mp2 ag mp2-brava mp2-caravel)
 TOPDIR="$( cd ../"$( dirname "${BASH_SOURCE[0]}" )" > /dev/null && pwd )"
 
-printf "\n**********************************************************************"
-printf "./build-rules.sh: DEPLOYED SERVER version of ruleset build script.\nNOTE: Use ./vbuild-rules.sh for vagrant installations."
+printf "\n**********************************************************************\n"
+printf "./build-rules.sh: DEPLOYED SERVER version of ruleset build script.\nNOTE: Use ./vbuild-rules.sh for vagrant installations.\n"
 printf "**********************************************************************\n"
 
 printf "\nUpdating rulesets...\n"
@@ -21,6 +21,6 @@ printf "\nRe-generating manuals\n"
        ${TOPDIR}/freeciv/freeciv/tools/freeciv-manual -r $r
    done
 
-printf "\n\n****** REMINDER: ************************************************************"
-printf "(1) ./clean-rules.sh is required to fix custom .html files that were overwritten."
+printf "\n\n****** REMINDER: ************************************************************\n"
+printf "(1) ./clean-rules.sh is required to fix custom .html files that were overwritten.\n"
 printf "(2) run ./build.sh to refresh and activate the new manuals.\n"
