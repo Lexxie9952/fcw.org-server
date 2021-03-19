@@ -35,9 +35,8 @@ var google_user_token = null;
 ****************************************************************************/
 function pregame_start_game()
 {
-  // This absolutely disgusting filthy dirty hack, successfully prevents the 
-  // keyboard from popping up on Mobile; even forcing an exit from fullscreen
-  // mode on Firefox Mobile and some other browsers.
+  // Successfully prevents the keyboard from popping up on Mobile; which also
+  // force-exits from Fullscreen on Firefox Mobile and some other browsers:
   if (is_touch_device()) $("#game_text_input").hide();
 
   if (client.conn['player_num'] == null) return;
@@ -52,32 +51,7 @@ function pregame_start_game()
   send_request(myJSONText);
 
   setup_window_size ();
-  // switching into game mode makes us lose part of our full screen, as tested
-  // on Android.  Make two delayed calls to allow everything to load, to toggle
-  // out and back in again, which removes the top status bar and gives us real
-  // full screen again.
 
-  /* Dirty hack testing saved in case we come back to more tests, but if it's
-     well past August 2019, you can delete this.
-  if (is_touch_device()) 
-  {
-    for (var i=0; i<=50; i++)
-    {
-      //setTimeout(function() { $("#game_text_input").blur(); }, i*200);
-    }
-    //setTimeout(function() { $("#fullscreen_button").click(); }, 10000);
-    //setTimeout(function() { $("#fullscreen_button").click(); }, 14000);
-
-    //setTimeout(function() { $("#game_text_input").show(); }, 8000);
-    //setTimeout(show_fullscreen_window, 11000);
-  } */
-
-  /*
-  $('html').click( function() {
-    if(!document.fullscreenElement){
-      $('html')[0].requestFullscreen();
-    }
-  });*/
   popup_fullscreen_enter_game_dialog();
 }
 
@@ -1210,11 +1184,12 @@ function show_intro_dialog(title, message) {
   var stored_password = simpleStorage.get("password", "");
   if (stored_password != null && stored_password != false) {
     $("#password_row").show();
-   // $("#password_td").html("<input id='password_req' type='password' size='25' maxlength='200'>  &nbsp; <a class='pwd_reset_2' href='#' style='color: #666666;'>Forgot password?</a>");
-   $("#password_td").remove(); // we don't have password reset at the moment. 
-   $("#password_req").val(stored_password);
-   // $(".pwd_reset_2").click(forgot_pbem_password);
-   $(".pwd_reset_2").remove();
+    $("#password_td").html("<input id='password_req' type='password' size='25' maxlength='200'>");
+    /* Original code that had "Forgot password?" linking to non-functional forgot_pbem_password() even though it's not PBEM
+    //$("#password_td").html("<input id='password_req' type='password' size='25' maxlength='200'>  &nbsp; <a class='pwd_reset_2' href='#' style='color: #666666;'>Forgot password?</a>");
+    //$(".pwd_reset_2").click(forgot_pbem_password); // why is it forgot_pbem_password() when this is singleplayer games?
+    */
+    $("#password_req").val(stored_password);
   }
   var join_game_customize_text = "";
   var join_game_title_text = "";
@@ -1248,44 +1223,26 @@ function show_intro_dialog(title, message) {
       },
       buttons:
       [
-        /* We can bring this button back but it requires a long explanation that it is a "QuickSTART" with no chance 
-         * to pick your nation, ruleset, map, or other settings. It is removed for now.
-        {
-          text : "Start Game",
-          title : "WARNING: Old rules. No chance to pick Nation, Map, number of players, or modern game version.",
-          click : function() {
-                     if (is_touch_device() || is_small_screen()) {
-                       BigScreen.toggle();  
-                     }
-          dialog_close_trigger = "button";
-          autostart = true;
-          validate_username_callback();
-          },
-          icons: { primary: "ui-icon-play" }
-        }, */
-        {
-          text : join_game_customize_text,
+        { text : join_game_customize_text,
           title : join_game_title_text,
           click : function() {
                     if (is_touch_device() || is_small_screen()) {
                       BigScreen.toggle();
                     }
-          dialog_close_trigger = "button";
-          validate_username_callback();
+            dialog_close_trigger = "button";
+            validate_username_callback();
+          },
+          icons : { primary: "ui-icon-gear" }
         },
-        icons : { primary: "ui-icon-gear" }
-        },
-              {
-                  text : "New user account",
-                  title : "An account is necessary if you want to save games or participate in Longturn multiplayer.",
-                  click : function() {
-                    show_new_user_account_dialog();
-                },
-                icons : { primary: "ui-icon-person" }
-              }
+        { text : "New user account",
+          title : "An account is necessary if you want to save games or participate in Longturn multiplayer.",
+          click : function() {
+            show_new_user_account_dialog();
+          },
+          icons : { primary: "ui-icon-person" }
+        }
       ]
-
-    });
+  });
 
   /* This hid the former start button that is now commented out above.
   if (($.getUrlVar('action') == "load" || $.getUrlVar('action') == "multi" || $.getUrlVar('action') == "earthload")
