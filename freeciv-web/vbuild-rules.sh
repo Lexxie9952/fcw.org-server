@@ -1,11 +1,11 @@
-#!/bin/bash
+11#!/bin/bash
 # builds Freeciv-web, copies the war file to Tomcat and builds the selected rulesets.
 
-RULESETS=(civ2civ3 classic multiplayer mpplus mp2 ag mp2-brava mp2-caravel)
+RULESETS=(ag mp2-brava mp2-caravel)
 TOPDIR="$( cd ../"$( dirname "${BASH_SOURCE[0]}" )" > /dev/null && pwd )"
 
 printf "\n**********************************************************************"
-printf "./build-rules.sh: DEPLOYED SERVER version of ruleset build script.\nNOTE: Use ./vbuild-rules.sh for vagrant installations."
+printf "./vbuild-rules.sh: VAGRANT version of ruleset build script.\nNOTE: Use ./build-rules.sh for non-local servers."
 printf "**********************************************************************\n"
 
 printf "\nUpdating rulesets...\n"
@@ -21,6 +21,9 @@ printf "\nRe-generating manuals\n"
        ${TOPDIR}/freeciv/freeciv/tools/freeciv-manual -r $r
    done
 
+# Vagrant install needs to copy these files into the tomcat webapp
+cp /vagrant/freeciv-web/src/derived/webapp/man/*.* /var/lib/tomcat8/webapps/freeciv-web/man/
+
 printf "\n\n****** REMINDER: ************************************************************"
-printf "(1) ./clean-rules.sh is required to fix custom .html files that were overwritten."
+printf "(1) ./vclean-rules.sh is required to fix custom .html files that were overwritten."
 printf "(2) run ./build.sh to refresh and activate the new manuals.\n"
