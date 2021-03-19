@@ -618,32 +618,32 @@ function ruledir_from_ruleset_name(ruleset_name, fall_back_dir)
 {
   /* HACK: find current ruleset dir based on its name. */
   switch (ruleset_name) {
-  case "Classic ruleset":
-    return "classic";
-  case "Civ2Civ3 ruleset":
-    return "civ2civ3";
-  case "Multiplayer ruleset":
-    return "multiplayer";
-  case "Webperimental":
-    return "webperimental";
-  case "Multiplayer-Plus ruleset":
-    return "mpplus";
-  case "Multiplayer-Evolution ruleset":
-    return "mp2";
-  case "Avant-garde":
-    return "ag";  
- default:
-    /* Prevent the need of hardcoding this client function for every new ruleset, by 
-       making a way for fall_back_dir to match the name of the ruleset automatically:
-       dir_name will be forced to lowercase and replace spaces with hyphen ("-")
-       In other words, in game.ruleset, name your ruleset the same as the dir name,
-       then you won't have to change this function. */
-    if (!fall_back_dir) {
-      fall_back_dir = ruleset_name.toLowerCase().replace(" ","-");
-    } 
-    console.log("Don't know the ruleset dir of \"" + ruleset_name
-                + "\". Guessing \"" + fall_back_dir + "\".");
-    return fall_back_dir; // af
+    case "Classic ruleset":
+      return "classic";
+    case "Civ2Civ3 ruleset":
+      return "civ2civ3";
+    case "Multiplayer ruleset":
+      return "multiplayer";
+    case "Webperimental":
+      return "webperimental";
+    case "Multiplayer-Plus ruleset":
+      return "mpplus";
+    case "Multiplayer-Evolution ruleset":
+      return "mp2";
+    case "Avant-garde":
+      return "ag";
+    default:
+      /* Prevent the need of hardcoding this client function for every new ruleset, by 
+        making a way for fall_back_dir to match the name of the ruleset automatically:
+        dir_name will be forced to lowercase and replace spaces with hyphen ("-")
+        In other words, in game.ruleset, name your ruleset the same as the dir name,
+        then you won't have to change this function. */
+      if (!fall_back_dir) {
+        fall_back_dir = ruleset_name.toLowerCase().replace(" ","-");
+      } 
+      console.log("Don't know the ruleset dir of \"" + ruleset_name
+                  + "\". Guessing \"" + fall_back_dir + "\".");
+      return fall_back_dir; // af
   }
 }
 
@@ -752,8 +752,8 @@ function pregame_settings()
           "<option value='FRACTURE'>Fracture map</option>" +
     "</select></td></tr>"
     + "</table><br>"+
-    "<span id='settings_info'><i>Freeciv-web can be customized using the command line in many " +
-          "other ways also. Type /help in the command line for more information.</i></span></div>" +
+    "<span id='settings_info'><i>Games can be customized in many more ways. " +
+          "Type /help in the command line for more info.</i></span></div>" +
       "<div id='pregame_settings_tabs-2'>" +
       "<table id='settings_table'>" +
         "<tr title='Font on map'><td>Font on map:</td>" +
@@ -768,7 +768,7 @@ function pregame_settings()
       "<div id='pregame_settings_tabs-4'></div>" +
       "<div id='pregame_settings_tabs-5'></div>"
     ;
-  $(id).html(dhtml);  
+  $(id).html(dhtml);
 
   $(id).attr("title", "Game Settings");
   $(id).dialog({
@@ -789,6 +789,8 @@ function pregame_settings()
   });
 
   $("#pregame_settings_tabs").tabs();
+  // This is a light panel. Override the css for dark panels.
+  $("#pregame_settings_tabs").children().css("color", "#000");
 
   if (game_info != null) {
     $("#aifill").val(game_info['aifill']);
@@ -806,24 +808,24 @@ function pregame_settings()
     $("#landmass").val(server_settings['landmass']['val']);
   }
     
-  if (server_settings['global_warming_percent'] != null
-      && server_settings['global_warming_percent']['val'] != null) {
-    $("#global_warming_percent").val(server_settings['global_warming_percent']['val']);
+  if (server_settings['globalwarming_percent'] != null
+      && server_settings['globalwarming_percent']['val'] != null) {
+    $("#global_warming_percent").val(server_settings['globalwarming_percent']['val']);
   }
     
-  if (server_settings['global_warming'] != null
-      && server_settings['global_warming']['val'] != null) {
-    $("#global_warming").val(server_settings['global_warming']['val']);
+  if (server_settings['globalwarming'] != null
+      && server_settings['globalwarming']['val'] != null) {
+    $("#global_warming").val(server_settings['globalwarming']['val']);
   }
     
-  if (server_settings['nuclear_winter_percent'] != null
-      && server_settings['nuclear_winter_percent']['val'] != null) {
-    $("#global_warming_percent").val(server_settings['nuclear_winter_percent']['val']);
+  if (server_settings['nuclearwinter_percent'] != null
+      && server_settings['nuclearwinter_percent']['val'] != null) {
+    $("#nuclear_winter_percent").val(server_settings['nuclearwinter_percent']['val']);
   }
     
-  if (server_settings['nuclear_winter'] != null
-      && server_settings['nuclear_winter']['val'] != null) {
-    $("#global_warming").val(server_settings['nuclear_winter']['val']);
+  if (server_settings['nuclearwinter'] != null
+      && server_settings['nuclearwinter']['val'] != null) {
+    $("#nuclear_winter").val(server_settings['nuclearwinter']['val']);
   }
 
   if (server_settings['specials'] != null
@@ -891,8 +893,7 @@ function pregame_settings()
   }
 
   if (ruleset_control != null) {
-    $("#ruleset").val(ruledir_from_ruleset_name(ruleset_control['name'],
-                                                "classic"));
+    $("#ruleset").val(ruledir_from_ruleset_name(ruleset_control['name'], ""));
   }
 
   if (scenario_info != null && scenario_info['is_scenario']) {
@@ -955,16 +956,16 @@ function pregame_settings()
   });
     
   $('#global_warming_percent').change(function() {
-    send_message("/set global_warming_percent " + $('#global_warming_percent').val());
+    send_message("/set globalwarming_percent " + $('#global_warming_percent').val());
   });
   $('#global_warming').change(function() {
-    send_message("/set global_warming " + $('#global_warming').val());
+    send_message("/set globalwarming " + $('#global_warming').val());
   });
-  $('#global_warming_percent').change(function() {
-    send_message("/set nuclear_winter_percent " + $('#nuclear_winter_percent').val());
+  $('#nuclear_winter_percent').change(function() {
+    send_message("/set nuclearwinter_percent " + $('#nuclear_winter_percent').val());
   });
   $('#nuclear_winter').change(function() {
-    send_message("/set nuclear_winter " + $('#nuclear_winter').val());
+    send_message("/set nuclearwinter " + $('#nuclear_winter').val());
   });
 
   $('#citymindist').change(function() {
