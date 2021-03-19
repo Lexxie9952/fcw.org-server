@@ -1109,31 +1109,6 @@ function pregame_settings()
   });
 
 
-  $('#graphics_quality').change(function() {
-    graphics_quality = parseFloat($('#graphics_quality').val());
-    simpleStorage.set("graphics_quality", graphics_quality);
-    load_count = 0;
-    webgl_preload();
-  });
-
-  $("#graphics_quality").val(graphics_quality);
-
-  $(".benchmark").click(function() {
-    swal({
-      title: "Run benchmark?",
-      text: "Do you want to run a benchmark now? This will start a new game and run measure the performance of a game playing for 30 turns.",
-      type: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#DD6B55",
-      confirmButtonText: "Yes, run benchmark!",
-      closeOnConfirm: true
-    },
-    function(){
-      webgl_benchmark_run();
-    });
-    setSwalTheme();
-  });
-
   $('#speech_setting').change(function() {
     if ($('#speech_setting').prop('checked')) {
       speech_enabled = true;
