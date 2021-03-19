@@ -711,11 +711,7 @@ function pregame_settings()
   var dhtml = "<div id='pregame_settings_tabs'>" +
       "   <ul>" +
       "     <li><a href='#pregame_settings_tabs-1'>Main</a></li>" +
-      "     <li><a href='#pregame_settings_tabs-2'>3D WebGL</a></li>" +
-      "     <li><a href='#pregame_settings_tabs-3'>Other</a></li>" +
-      //"     <li><a href='#pregame_settings_tabs-4'>Military</a></li>" +
-      //"     <li><a href='#pregame_settings_tabs-5'>Economic</a></li>" +
-      //"     <li><a href='#pregame_settings_tabs-6'>Costs</a></li>" +
+      "     <li><a href='#pregame_settings_tabs-2'>Other</a></li>" +
       "   </ul>"
       + "<div id='pregame_settings_tabs-1'><table id='settings_table'> "
       + "<tr title='Ruleset version'><td>Ruleset:</td>"
@@ -784,28 +780,7 @@ function pregame_settings()
     + "</table><br>"+
     "<span id='settings_info'><i>Freeciv-web can be customized using the command line in many " +
           "other ways also. Type /help in the command line for more information.</i></span></div>" +
-
-      "<div id='pregame_settings_tabs-2'>"+
-      "<br><span id='settings_info'><i>3D WebGL requires a fast computer with 3D graphics card, such as Nvidia GeForce and at least 3GB of RAM. " +
-      "Here you can configure the 3D WebGL version:</i></span><br><br>" +
-      "<table id='settings_table'>" +
-      "<tr title='Graphics quality level'><td>Graphics quality:</td>" +
-            "<td><select name='graphics_quality' id='graphics_quality'>" +
-              "<option value='1'>Low</option>" +
-              "<option value='2'>Medium</option>" +
-              "<option value='3'>High</option>" +
-              "</select></td></tr>"+
-      "<tr id='3d_antialiasing_enabled'><td id='3d_antialiasing_label' style='min-width: 150px;'><br></td>" +
-        "<td><input type='checkbox' id='3d_antialiasing_setting' checked>Enable antialiasing (game looks nicer, but is slower)</td></tr>" +
-        "<tr><td style='min-width: 150px;'>Benchmark of 3D WebGL version:</td>" +
-                "<td><button id='bechmark_run' type='button' class='benchmark button'>Run benchmark</button></td></tr>" +
-        "<tr id='anaglyph_enabled'><td id='anaglyph_label' style='min-width: 150px;'></td>" +
-                "<td><input type='checkbox' id='anaglyph_setting'>Enable Anaglyph 3D (Red+Cyan glasses) "+
-                "<br>"+
-        "</table>" +
-      "</div>" +
-
-      "<div id='pregame_settings_tabs-3'>" +
+      "<div id='pregame_settings_tabs-2'>" +
       "<table id='settings_table'>" +
         "<tr title='Font on map'><td>Font on map:</td>" +
       "<td><input type='text' name='mapview_font' id='mapview_font' size='28' maxlength='42' value='16px Helvetica, sans serif'></td></tr>" +
@@ -815,9 +790,9 @@ function pregame_settings()
         "<td><select name='voice' id='voice'></select></td></tr>" +
         "</table>" +
       "</div>" +
+      "<div id='pregame_settings_tabs-3'></div>" +
       "<div id='pregame_settings_tabs-4'></div>" +
-      "<div id='pregame_settings_tabs-5'></div>" +
-      "<div id='pregame_settings_tabs-6'></div>"
+      "<div id='pregame_settings_tabs-5'></div>"
     ;
   $(id).html(dhtml);  
 
@@ -927,24 +902,6 @@ function pregame_settings()
   $("#select_multiple_units_area").prop("title", "Select multiple units with right-click and drag");
   $("#select_multiple_units_label").prop("innerHTML", "Select multiple units with right-click and drag");
 
-  $("#3d_antialiasing_label").prop("innerHTML", "Antialiasing:");
-
-  var stored_antialiasing_setting = simpleStorage.get("antialiasing_setting", "");
-  if (stored_antialiasing_setting != null && stored_antialiasing_setting == "false") {
-      $("#3d_antialiasing_setting").prop("checked", false);
-      antialiasing_setting = false;
-  } else if (graphics_quality == QUALITY_LOW) {
-    antialiasing_setting = false;
-    simpleStorage.set("antialiasing_setting", "false");
-    $("#3d_antialiasing_setting").prop("checked", false);
-  }
-
-
-  $('#3d_antialiasing_setting').change(function() {
-    antialiasing_setting = !antialiasing_setting;
-    simpleStorage.set("antialiasing_setting", antialiasing_setting ? "true" : "false");
-  });
-
   if (is_speech_supported()) {
     $("#speech_setting").prop("checked", speech_enabled);
     $("#speech_label").prop("innerHTML", "Speech messages:");
@@ -953,13 +910,6 @@ function pregame_settings()
     $("#speech_label").prop("innerHTML", "Speech messages:");
     $("#speech_setting").parent().html("Speech Synthesis API is not supported or enabled in your browser.");
   }
-
-  $("#cardboard_vr_label").prop("innerHTML", "3D Cardboard VR glasses:");
-
-  $("#anaglyph_label").prop("innerHTML", "3D Anaglyph glasses:");
-  $('#anaglyph_setting').change(function() {
-    anaglyph_3d_enabled = !anaglyph_3d_enabled;
-  });
 
   if (server_settings['metamessage'] != null
       && server_settings['metamessage']['val'] != null) {
@@ -1183,8 +1133,6 @@ function pregame_settings()
     });
     setSwalTheme();
   });
-
-  $('[href="#pregame_settings_tabs-2"]').closest('li').hide();
 
   $('#speech_setting').change(function() {
     if ($('#speech_setting').prop('checked')) {
