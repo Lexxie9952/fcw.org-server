@@ -1442,6 +1442,7 @@ function validate_username_callback()
 
         $("#password_row").show();
         $("#password_req").focus();
+        $("#password_td").html("<input id='password_req' type='password' size='25' maxlength='200'>");
         //$("#password_td").html("<input id='password_req' type='password' size='25' maxlength='200'>  &nbsp; <a class='pwd_reset' href='#' style='color: #666666;'>Forgot password?</a>");
         //$(".pwd_reset").click(forgot_pbem_password);
         $(".pwd_reset").remove();
