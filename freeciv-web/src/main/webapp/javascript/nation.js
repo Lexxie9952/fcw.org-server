@@ -90,7 +90,7 @@ function update_nation_screen()
     if (is_longturn() && (client.conn.access_level != 5) && pplayer['name'].indexOf("NewAvailablePlayer") != -1) continue;
     total_players++;
 
-    var flag_html = "<canvas id='nation_dlg_flags_" + player_id + "' width='29' height='20' class='nation_flags'></canvas>";
+    var flag_html = "<canvas id='nation_dlg_flags_" + player_id + "' width='50' height='32' class='nation_flags'></canvas>";
 
     var plr_class = "";
     if (!observer && client.conn.playing != null && player_id == client.conn.playing['playerno']) plr_class = "nation_row_self";
@@ -221,7 +221,7 @@ function update_nation_screen()
     var flag_canvas = $('#nation_dlg_flags_' + player_id);
     if (flag_canvas.length > 0) {
       var flag_canvas_ctx = flag_canvas[0].getContext("2d");
-      var tag = "f." + nations[pplayer['nation']]['graphic_str'];
+      var tag = "f." + nations[pplayer['nation']]['graphic_str']+"-large";
       if (flag_canvas_ctx != null && sprites[tag] != null) {
         flag_canvas_ctx.drawImage(sprites[tag], 0, 0);
       }

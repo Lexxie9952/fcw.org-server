@@ -1153,4 +1153,4 @@ sprites =
 		"f.zulu", "flags/zulu"
 	}
 
-*include "override/flags.spec"
+;*include "override/flags.spec"

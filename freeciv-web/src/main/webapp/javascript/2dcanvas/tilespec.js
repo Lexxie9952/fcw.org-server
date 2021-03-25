@@ -747,8 +747,8 @@ function fill_unit_sprite_array(punit, num_stacked)
   // Shield
   var result = [get_unit_nation_flag_sprite(punit, unit_offset)];
   if (result[0]['offset_x']) {
-    result[0]['offset_x'] += UO_sx[id];  // adjust shield x placement
-    result[0]['offset_y'] -= UO_sy[id];  // adjust shield x placement
+    result[0]['offset_x'] += UO_sx[id];      // adjust shield x placement
+    result[0]['offset_y'] -= (UO_sy[id]-1);  // adjust shield y placement, black border overlaps black hp bar.
   }
 
   // Unit
