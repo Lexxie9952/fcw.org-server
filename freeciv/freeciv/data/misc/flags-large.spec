@@ -76,7 +76,7 @@ sprites =
 		"f.benin_ancient-large", "flags/benin_ancient-large"
 		"f.bhutan-large", "flags/bhutan-large"
 		"f.biafra-large", "flags/biafra-large"
-		"f.boer-large", "flags/boer"			; old south african
+		"f.boer-large", "flags/boer-large"			; old south african
 		"f.boii-large", "flags/boii-large"
 		"f.bolivia-large", "flags/bolivia-large"
 		"f.bophuthatswana-large", "flags/bophuthatswana-large"
@@ -116,7 +116,7 @@ sprites =
 		"f.cham-large", "flags/cham-large"
 		"f.chananea-large", "flags/chananea-large"
 		"f.chechnya-large", "flags/chechnya-large"
-		"f.cheyenne-large", "flags/cheyenne"		; used by Sioux
+		"f.cheyenne-large", "flags/cheyenne-large"		; used by Sioux
 		"f.chiapas-large", "flags/chiapas-large"
 		"f.chickasaw-large", "flags/chickasaw-large"
 		"f.chile-large", "flags/chile-large"
@@ -127,11 +127,11 @@ sprites =
 		"f.chrobatian-large", "flags/chrobatian-large"
 		"f.chumash-large", "flags/chumash-large"
 		"f.chuvashia-large", "flags/chuvashia-large"
-		"f.clatsop-large", "flags/clatsop"		; used by Chinook
+		"f.clatsop-large", "flags/clatsop-large"		; used by Chinook
 		"f.colombia-large", "flags/colombia-large"
 		"f.comanche-large", "flags/comanche-large"
 		"f.comoros-large", "flags/comoros-large"
-;		"f.constantine-large", "flags/constantine"	; alt. Byzantine
+;		"f.constantine-large", "flags/constantine-large"	; alt. Byzantine
 		"f.cornwall-large", "flags/cornwall-large"
 		"f.corsica-large", "flags/corsica-large"
 		"f.cossack-large", "flags/cossack-large"
@@ -243,7 +243,7 @@ sprites =
 		"f.iran_ancient-large", "flags/iran_ancient-large"
 		"f.iran-large", "flags/iran-large"
 		"f.iraq-large", "flags/iraq-large"
-;		"f.iraq_old-large", "flags/iraq_old"		; used by Babylonian
+;		"f.iraq_old-large", "flags/iraq_old-large"		; used by Babylonian
 		"f.ireland-large", "flags/ireland-large"
 		"f.iroquois-large", "flags/iroquois-large"
 		"f.israel-large", "flags/israel-large"
@@ -267,7 +267,7 @@ sprites =
 		"f.kashubia-large", "flags/kashubia-large"
 		"f.katanga-large", "flags/katanga-large"
 		"f.kazakhstan-large", "flags/kazakhstan-large"
-		"f.keetoowah-large", "flags/keetoowah"	; used by Cherokee
+		"f.keetoowah-large", "flags/keetoowah-large"	; used by Cherokee
 		"f.kenya-large", "flags/kenya-large"
 		"f.khazaria-large", "flags/khazaria-large"
 		"f.khmer-large", "flags/khmer-large"
@@ -285,7 +285,7 @@ sprites =
 		"f.kushan-large", "flags/kushan-large"
 		"f.kuwait-large", "flags/kuwait-large"
 		"f.kyrgyzstan-large", "flags/kyrgyzstan-large"
-		"f.labarum-large", "flags/labarum"		; used by Western Roman
+		"f.labarum-large", "flags/labarum-large"		; used by Western Roman
 		"f.laos-large", "flags/laos-large"
 		"f.latin_empire-large", "flags/latin_empire-large"
 		"f.latvia-large", "flags/latvia-large"
@@ -293,13 +293,13 @@ sprites =
 		"f.lendian-large", "flags/lendian-large"
 		"f.leon-large", "flags/leon-large"
 		"f.lesotho-large", "flags/lesotho-large"
-		"f.lesotho_old-large", "flags/lesotho_old"	; used by Sotho
+		"f.lesotho_old-large", "flags/lesotho_old-large"	; used by Sotho
 		"f.liberia-large", "flags/liberia-large"
 		"f.liburnian-large", "flags/liburnian-large"
 		"f.libya-large", "flags/libya-large"
 		"f.libya_old-large", "flags/libya_old-large"
 		"f.liechtenstein-large", "flags/liechtenstein-large"
-		"f.liguria-large", "flags/liguria"		; used by Genoese
+		"f.liguria-large", "flags/liguria-large"		; used by Genoese
 		"f.ligurian-large", "flags/ligurian-large"
 		"f.lipkatatar-large", "flags/lipkatatar-large"
 		"f.lippe-large", "flags/lippe-large"
@@ -384,7 +384,7 @@ sprites =
 		"f.novgorod-large", "flags/novgorod-large"
 		"f.nubia-large", "flags/nubia-large"
 		"f.numidia-large", "flags/numidia-large"
-		"f.nunavut-large", "flags/nunavut"		; used by Inuit
+		"f.nunavut-large", "flags/nunavut-large"		; used by Inuit
 		"f.nuu-chah-nulth-large", "flags/nuu-chah-nulth-large"
 		"f.occitania-large", "flags/occitania-large"
 		"f.ohlone-large", "flags/ohlone-large"
@@ -422,7 +422,7 @@ sprites =
 		"f.puerto_rico-large", "flags/puerto_rico-large"
 		"f.purhepecha-large", "flags/purhepecha-large"
 		"f.qatar-large", "flags/qatar-large"
-;		"f.qing-large", "flags/qing"			; alt Manchu
+;		"f.qing-large", "flags/qing-large"			; alt Manchu
 		"f.quebec-large", "flags/quebec-large"
 		"f.rapa_nui-large", "flags/rapa_nui-large"
 		"f.raramuri-large", "flags/raramuri-large"
@@ -430,7 +430,7 @@ sprites =
 		"f.rhineland-large", "flags/rhineland-large"
 		"f.rif-large", "flags/rif-large"
 		"f.romania-large", "flags/romania-large"
-		"f.rome-large", "flags/rome"			; Roman republic flag
+		"f.rome-large", "flags/rome-large"			; Roman republic flag
 		"f.russia-large", "flags/russia-large"
 		"f.rusyn-large", "flags/rusyn-large"
 		"f.rvn-large", "flags/rvn-large"
@@ -485,7 +485,7 @@ sprites =
 		"f.somaliland-large", "flags/somaliland-large"
 		"f.songhai-large", "flags/songhai-large"
 		"f.south_africa-large", "flags/south_africa-large"
-		"f.southern_cross-large", "flags/southern_cross" ; confederate battle flag
+		"f.southern_cross-large", "flags/southern_cross-large" ; confederate battle flag
 		"f.southern_sudan-large", "flags/southern_sudan-large"
 		"f.south_yemen-large", "flags/south_yemen-large"
 		"f.soviet-large", "flags/soviet-large"
@@ -493,7 +493,7 @@ sprites =
     "f.spartan-large", "flags/spartan-large"
 		"f.srilanka-large", "flags/srilanka-large"
 		"f.srivijaya-large", "flags/srivijaya-large"
-;		"f.stpatrick-large", "flags/stpatrick"	; Alternate Irish 
+;		"f.stpatrick-large", "flags/stpatrick-large"	; Alternate Irish 
 		"f.sudan-large", "flags/sudan-large"
 		"f.suebian-large", "flags/suebian-large"
 		"f.sumeria-large", "flags/sumeria-large"
@@ -541,13 +541,13 @@ sprites =
 		"f.unasur-large", "flags/unasur-large"
 		"f.united_kingdom-large", "flags/united_kingdom-large"
 		"f.united_nations-large", "flags/united_nations-large"
-		"f.unknown-large", "flags/unknown"		; hard-coded fallback
+		"f.unknown-large", "flags/unknown-large"		; hard-coded fallback
 		"f.urartu-large", "flags/urartu-large"
 		"f.uruguay-large", "flags/uruguay-large"
 		"f.usa-large", "flags/usa-large"
 		"f.uyghur-large", "flags/uyghur-large"
 		"f.uzbekistan-large", "flags/uzbekistan-large"
-		"f.valknut-large", "flags/valknut"		; used by Ostrogothic
+		"f.valknut-large", "flags/valknut-large"		; used by Ostrogothic
 		"f.vampire-large", "flags/vampire-large"
 		"f.vandal-large", "flags/vandal-large"
 		"f.vanuatu-large", "flags/vanuatu-large"
