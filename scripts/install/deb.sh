@@ -69,7 +69,7 @@ if ! apt-cache -qq show openjdk-11-jdk-headless > /dev/null; then
   sudo ${APT_GET} update
 fi
 
-if apt-cache -qq show tomcat8 > /dev/null; then
+if [ "$DEB_NO_TOMCAT" != "Y" ] && apt-cache -qq show tomcat8 > /dev/null; then
   dependencies="${dependencies} tomcat8 tomcat8-admin"
   INSTALLED_TOMCAT=Y
 else
