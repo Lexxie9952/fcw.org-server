@@ -1562,7 +1562,7 @@ AC_CONFIG_COMMANDS([fc_default-5],[[if test x`uname -s` = xBeOS ; then
      fi
    fi]],[[]])
 
-CFLAGS="$EXTRA_DEBUG_CFLAGS $CFLAGS -Werror -Wmissing-prototypes -Wmissing-declarations"   # Modified for FCW.
+CFLAGS="$EXTRA_DEBUG_CFLAGS -Werror -Wmissing-prototypes -Wmissing-declarations $CFLAGS"   # Modified for FCW.
 CXXFLAGS="$EXTRA_DEBUG_CXXFLAGS $CXXFLAGS"
 LDFLAGS="$EXTRA_DEBUG_LDFLAGS $LDFLAGS"
 
