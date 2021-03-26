@@ -28,7 +28,6 @@ RUN useradd -m docker && echo "docker:docker" | chpasswd && adduser docker sudo 
 ## Add relevant content - to be pruned in the future
 COPY .git /docker/.git
 COPY freeciv /docker/freeciv
-COPY freeciv-earth /docker/freeciv-earth
 COPY freeciv-proxy /docker/freeciv-proxy
 COPY freeciv-web /docker/freeciv-web
 COPY pbem /docker/pbem
@@ -38,7 +37,6 @@ COPY requirements.txt /docker/requirements.txt
 
 COPY scripts /docker/scripts
 COPY music /docker/music
-COPY blender /docker/blender
 COPY nginx /docker/nginx
 COPY config /docker/config
 
@@ -49,7 +47,7 @@ USER docker
 WORKDIR /docker/scripts/
 
 RUN DEBIAN_FRONTEND=noninteractive sudo apt-get update --yes --quiet && \
-    DEBIAN_FRONTEND=noninteractive install/install.sh --mode=TEST && \
+    DEBIAN_FRONTEND=noninteractive DEB_NO_TOMCAT=Y install/install.sh --mode=TEST && \
     DEBIAN_FRONTEND=noninteractive sudo apt-get clean --yes && \
     sudo rm --recursive --force /var/lib/apt/lists/*
 

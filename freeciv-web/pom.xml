@@ -354,8 +354,6 @@ Rerun the sync-js-hand.js script.
 									<jsSourceFile>../../../derived/webapp/javascript/packhand_gen.js</jsSourceFile>
 									<jsSourceFile>../../../derived/webapp/javascript/soundset_spec.js</jsSourceFile>
 									<jsSourceFile>../../../derived/webapp/javascript/2dcanvas/tileset_spec_amplio2.js</jsSourceFile>
-									<jsSourceFile>../../../derived/webapp/javascript/2dcanvas/tileset_spec_isotrident.js</jsSourceFile>
-									<jsSourceFile>../../../derived/webapp/javascript/2dcanvas/tileset_spec_trident.js</jsSourceFile>
 									<jsSourceFile>../../../../target/generated-sources/javascript/hbs-templates.js</jsSourceFile>
 								</jsSourceFiles>
 								<jsSourceIncludes>
