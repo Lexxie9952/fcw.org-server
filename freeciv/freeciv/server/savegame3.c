@@ -5598,7 +5598,7 @@ static bool sg_load_player_unit(struct loaddata *loading,
       punit->has_orders = TRUE;
       for (j = 0; j < len; j++) {
         struct unit_order *order = &punit->orders.list[j];
-        int order_tgt;
+        int order_sub_tgt;
         int order_extra;
 
         if (orders_unitstr[j] == '\0' || dir_unitstr[j] == '\0'
@@ -5666,9 +5666,9 @@ static bool sg_load_player_unit(struct loaddata *loading,
           break;
         }
 
-        order_tgt = secfile_lookup_int_default(loading->file, -1,
-                                               "%s.tgt_vec,%d",
-                                               unitstr, j);
+        order_sub_tgt = secfile_lookup_int_default(loading->file, -1,
+                                                   "%s.sub_tgt_vec,%d",
+                                                   unitstr, j);
         order_extra = secfile_lookup_int_default(loading->file, -1,
                                                  "%s.extra_vec,%d",
                                                  unitstr, j);
@@ -5677,28 +5677,28 @@ static bool sg_load_player_unit(struct loaddata *loading,
           switch ((enum gen_action)order->action) {
           case ACTION_SPY_TARGETED_SABOTAGE_CITY:
           case ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC:
-            /* Sabotage target is production (-1) or a building. */
-            if (!(order_tgt - 1 == -1
-                  || improvement_by_number(order_tgt - 1))) {
-              /* Sabotage target is invalid. */
+            /* Sabotage sub target is production (-1) or a building. */
+            if (!(order_sub_tgt - 1 == -1
+                  || improvement_by_number(order_sub_tgt - 1))) {
+              /* Sabotage sub target is invalid. */
               log_sg("Cannot find building %d for %s to sabotage",
-                     order_tgt, unit_rule_name(punit));
-              order->target = 0;
+                     order_sub_tgt, unit_rule_name(punit));
+              order->sub_target = 0;
             } else {
-              order->target = order_tgt;
+              order->sub_target = order_sub_tgt;
             }
             break;
           case ACTION_SPY_TARGETED_STEAL_TECH:
           case ACTION_SPY_TARGETED_STEAL_TECH_ESC:
-            if (order_tgt == A_NONE
-                || (!valid_advance_by_number(order_tgt)
-                    && order_tgt != A_FUTURE)) {
+            if (order_sub_tgt == A_NONE
+                || (!valid_advance_by_number(order_sub_tgt)
+                    && order_sub_tgt != A_FUTURE)) {
               /* Target tech is invalid. */
               log_sg("Cannot find tech %d for %s to steal",
-                     order_tgt, unit_rule_name(punit));
-              order->target = A_NONE;
+                     order_sub_tgt, unit_rule_name(punit));
+              order->sub_target = A_NONE;
             } else {
-              order->target = order_tgt;
+              order->sub_target = order_sub_tgt;
             }
             break;
           case ACTION_ESTABLISH_EMBASSY:
@@ -5762,11 +5762,11 @@ static bool sg_load_player_unit(struct loaddata *loading,
           case ACTION_MINE:
           case ACTION_IRRIGATE:
             /* These take an extra but no target. */
-            fc_assert_msg(order_tgt == -1,
-                          "Specified target for action %d unsupported.",
+            fc_assert_msg(order_sub_tgt == -1,
+                          "Specified sub target for action %d unsupported.",
                           order->action);
 
-            order->target = -1;
+            order->sub_target = -1;
 
             break;
           }
@@ -5994,7 +5994,7 @@ static void sg_save_player_units(struct savedata *saving,
       char orders_buf[len + 1], dir_buf[len + 1];
       char act_buf[len + 1];
       char action_buf[len + 1];
-      int tgt_vec[len];
+      int sub_tgt_vec[len];
       int extra_vec[len];
 
       last_order = len;
@@ -6011,7 +6011,7 @@ static void sg_save_player_units(struct savedata *saving,
         orders_buf[j] = order2char(punit->orders.list[j].order);
         dir_buf[j] = '?';
         act_buf[j] = '?';
-        tgt_vec[j] = -1;
+        sub_tgt_vec[j] = -1;
         extra_vec[j] = -1;
         action_buf[j] = '?';
         switch (punit->orders.list[j].order) {
@@ -6020,7 +6020,7 @@ static void sg_save_player_units(struct savedata *saving,
           dir_buf[j] = dir2char(punit->orders.list[j].dir);
           break;
         case ORDER_ACTIVITY:
-          tgt_vec[j] = -1;
+          sub_tgt_vec[j] = -1;
           extra_vec[j] = punit->orders.list[j].extra;
           act_buf[j] = activity2char(punit->orders.list[j].activity);
           break;
@@ -6034,7 +6034,7 @@ static void sg_save_player_units(struct savedata *saving,
           FC_STATIC_STRLEN_ASSERT(MAX_NUM_ACTIONS <= strlen(num_chars),
                                   can_not_encode_all_actions);
 
-          tgt_vec[j] = punit->orders.list[j].target;
+          sub_tgt_vec[j] = punit->orders.list[j].sub_target;
           extra_vec[j] = -1;
           if (direction8_is_valid(punit->orders.list[j].dir)) {
             /* The action target is on another tile. */
@@ -6053,13 +6053,13 @@ static void sg_save_player_units(struct savedata *saving,
       secfile_insert_str(saving->file, dir_buf, "%s.dir_list", buf);
       secfile_insert_str(saving->file, act_buf, "%s.activity_list", buf);
       secfile_insert_str(saving->file, action_buf, "%s.action_list", buf);
-      secfile_insert_int_vec(saving->file, tgt_vec, len,
-                             "%s.tgt_vec", buf);
+      secfile_insert_int_vec(saving->file, sub_tgt_vec, len,
+                             "%s.sub_tgt_vec", buf);
 
       /* Fill in dummy values for order targets so the registry will save
        * the unit table in a tabular format. */
       for (j = last_order; j < longest_order; j++) {
-        secfile_insert_int(saving->file, -1, "%s.tgt_vec,%d", buf, j);
+        secfile_insert_int(saving->file, -1, "%s.sub_tgt_vec,%d", buf, j);
       }
 
       secfile_insert_int_vec(saving->file, extra_vec, len,
@@ -6082,12 +6082,12 @@ static void sg_save_player_units(struct savedata *saving,
       secfile_insert_str(saving->file, "-", "%s.action_list", buf);
 
       /* The start of a vector has no number. */
-      secfile_insert_int(saving->file, -1, "%s.tgt_vec", buf);
+      secfile_insert_int(saving->file, -1, "%s.sub_tgt_vec", buf);
 
       /* Fill in dummy values for order targets so the registry will save
        * the unit table in a tabular format. */
       for (j = 1; j < longest_order; j++) {
-        secfile_insert_int(saving->file, -1, "%s.tgt_vec,%d", buf, j);
+        secfile_insert_int(saving->file, -1, "%s.sub_tgt_vec,%d", buf, j);
       }
 
       secfile_insert_int(saving->file, -1, "%s.extra_vec", buf);
