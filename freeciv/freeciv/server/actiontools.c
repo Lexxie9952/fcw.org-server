@@ -229,10 +229,11 @@ static void action_consequence_common(const struct action *paction,
     /* Give casus belli. */
     action_give_casus_belli(offender, victim_player, int_outrage);
 
-    // Avoid spam on incident messages. (Incident #2 will have h_r_t_c == 4)
-    if (player_diplstate_get(offender, victim_player)->has_reason_to_cancel >= cb_turns+1
-      || player_diplstate_get(victim_player, offender)->has_reason_to_cancel >= cb_turns+1) {
-        spam_limit = true;
+    if (offender && victim_player) {
+      if (player_diplstate_get(offender, victim_player)->has_reason_to_cancel >= cb_turns+1
+        || player_diplstate_get(victim_player, offender)->has_reason_to_cancel >= cb_turns+1) {
+          spam_limit = true;
+      }
     }
 
     /* Notify the involved players by sending them a message. */
