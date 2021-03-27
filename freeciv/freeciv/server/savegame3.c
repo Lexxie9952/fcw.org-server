@@ -5598,8 +5598,8 @@ static bool sg_load_player_unit(struct loaddata *loading,
       punit->has_orders = TRUE;
       for (j = 0; j < len; j++) {
         struct unit_order *order = &punit->orders.list[j];
+        bool action_wants_extra = FALSE;
         int order_sub_tgt;
-        int order_extra;
 
         if (orders_unitstr[j] == '\0' || dir_unitstr[j] == '\0'
 #ifndef FREECIV_DEV_SAVE_COMPAT_3_0
@@ -5669,9 +5669,6 @@ static bool sg_load_player_unit(struct loaddata *loading,
         order_sub_tgt = secfile_lookup_int_default(loading->file, -1,
                                                    "%s.sub_tgt_vec,%d",
                                                    unitstr, j);
-        order_extra = secfile_lookup_int_default(loading->file, -1,
-                                                 "%s.sub_tgt_vec,%d",
-                                                 unitstr, j);
 
         if (order->order == ORDER_PERFORM_ACTION) {
           switch ((enum gen_action)order->action) {
@@ -5687,8 +5684,6 @@ static bool sg_load_player_unit(struct loaddata *loading,
             } else {
               order->sub_target = order_sub_tgt;
             }
-            /* Reset building loaded to extra. */
-            order_extra = EXTRA_NONE;
             break;
           case ACTION_SPY_TARGETED_STEAL_TECH:
           case ACTION_SPY_TARGETED_STEAL_TECH_ESC:
@@ -5702,8 +5697,16 @@ static bool sg_load_player_unit(struct loaddata *loading,
             } else {
               order->sub_target = order_sub_tgt;
             }
-            /* Reset tech loaded to extra. */
-            order_extra = EXTRA_NONE;
+            break;
+          case ACTION_PILLAGE:
+          case ACTION_ROAD:
+          case ACTION_BASE:
+          case ACTION_MINE:
+          case ACTION_IRRIGATE:
+          case ACTION_CLEAN_POLLUTION:
+          case ACTION_CLEAN_FALLOUT:
+            /* These take an extra. */
+            action_wants_extra = TRUE;
             break;
           case ACTION_ESTABLISH_EMBASSY:
           case ACTION_ESTABLISH_EMBASSY_STAY:
@@ -5752,38 +5755,43 @@ static bool sg_load_player_unit(struct loaddata *loading,
           case ACTION_CONVERT:
           case ACTION_SPY_ATTACK:
           case ACTION_COUNT:
-            /* None of these can take an extra. */
-            fc_assert_msg(order_extra == EXTRA_NONE,
-                          "Specified extra for action %d unsupported.",
-                          order->action);
-            order_extra = EXTRA_NONE;
-            /* They can't take a target either, */
+            /* None of these can take a sub target. */
             fc_assert_msg(order_sub_tgt == -1,
                           "Specified sub target for action %d unsupported.",
                           order->action);
-            /* so fall through: */
-          case ACTION_CLEAN_POLLUTION:
-          case ACTION_CLEAN_FALLOUT:
-          case ACTION_PILLAGE:
-          case ACTION_ROAD:
-          case ACTION_BASE:
-          case ACTION_MINE:
-          case ACTION_IRRIGATE:
-            /* These take an extra. Reset extra loaded to sub_target. */
             order->sub_target = -1;
-
             break;
           }
         }
-        if (order_extra < 0 || order_extra >= loading->extra.size) {
-          if (order_extra != EXTRA_NONE) {
-            log_sg("Cannot find extra %d for %s to build",
-                   order_extra, unit_rule_name(punit));
+        if (order->order == ORDER_ACTIVITY || action_wants_extra) {
+          enum unit_activity act;
+
+          if (order_sub_tgt < 0 || order_sub_tgt >= loading->extra.size) {
+            if (order_sub_tgt != EXTRA_NONE) {
+              log_sg("Cannot find extra %d for %s to build",
+                     order_sub_tgt, unit_rule_name(punit));
+            }
+
+            order->sub_target = EXTRA_NONE;
+          } else {
+            order->sub_target = order_sub_tgt;
           }
 
-          order->extra = EXTRA_NONE;
-        } else {
-          order->extra = order_extra;
+          /* An action or an activity may require an extra target. */
+          if (action_wants_extra) {
+            act = action_id_get_activity(order->action);
+          } else {
+            act = order->activity;
+          }
+
+          if (unit_activity_is_valid(act)
+              && unit_activity_needs_target_from_client(act)
+              && order->sub_target == EXTRA_NONE) {
+            /* Missing required action extra target. */
+            free(punit->orders.list);
+            punit->orders.list = NULL;
+            punit->has_orders = FALSE;
+          }
         }
       }
     } else {
@@ -6021,7 +6029,7 @@ static void sg_save_player_units(struct savedata *saving,
           dir_buf[j] = dir2char(punit->orders.list[j].dir);
           break;
         case ORDER_ACTIVITY:
-          sub_tgt_vec[j] = punit->orders.list[j].extra;
+          sub_tgt_vec[j] = punit->orders.list[j].sub_target;
           act_buf[j] = activity2char(punit->orders.list[j].activity);
           break;
         case ORDER_PERFORM_ACTION:

@@ -206,7 +206,7 @@ static void dai_airlift(struct ai_type *ait, struct player *pplayer)
     UNIT_LOG(LOG_DEBUG, transported, "airlifted to defend %s",
              city_name_get(most_needed));
     unit_do_action(pplayer, transported->id, most_needed->id,
-                   EXTRA_NONE, 0, "", ACTION_AIRLIFT);
+                   0, "", ACTION_AIRLIFT);
   } while (TRUE);
 }
 
@@ -1949,7 +1949,7 @@ static void dai_caravan_goto(struct ai_type *ait, struct player *pplayer,
                TILE_XY(unit_tile(punit)),
                city_name_get(dest_city));
       unit_do_action(pplayer, punit->id, dest_city->id,
-                     EXTRA_NONE, 0, "", ACTION_HELP_WONDER);
+                     0, "", ACTION_HELP_WONDER);
     } else if (is_action_enabled_unit_on_city(ACTION_TRADE_ROUTE,
                                               punit, dest_city)) {
       log_base(LOG_CARAVAN, "%s %s[%d](%d,%d) creates trade route in %s",
@@ -1959,7 +1959,7 @@ static void dai_caravan_goto(struct ai_type *ait, struct player *pplayer,
                TILE_XY(unit_tile(punit)),
                city_name_get(dest_city));
       unit_do_action(pplayer, punit->id, dest_city->id,
-                     EXTRA_NONE, 0, "", ACTION_TRADE_ROUTE);
+                     0, "", ACTION_TRADE_ROUTE);
     } else if (is_action_enabled_unit_on_city(ACTION_MARKETPLACE,
                                               punit, dest_city)) {
       /* Get the one time bonus. */
@@ -1970,7 +1970,7 @@ static void dai_caravan_goto(struct ai_type *ait, struct player *pplayer,
                TILE_XY(unit_tile(punit)),
                city_name_get(dest_city));
       unit_do_action(pplayer, punit->id, dest_city->id,
-                     EXTRA_NONE, 0, "", ACTION_MARKETPLACE);
+                     0, "", ACTION_MARKETPLACE);
     } else {
       enum log_level level = LOG_NORMAL;
 
@@ -3019,7 +3019,8 @@ static void update_simple_ai_types(void)
 
     if (A_NEVER != punittype->require_advance
         && !utype_has_flag(punittype, UTYF_CIVILIAN)
-        && !uclass_has_flag(pclass, UCF_MISSILE)
+        && !utype_is_consumed_by_action(action_by_number(ACTION_ATTACK),
+                                        punittype)
         && !(pclass->adv.land_move == MOVE_NONE
              && !can_attack_non_native(punittype))
         && !utype_fuel(punittype)
@@ -3074,21 +3075,21 @@ void dai_units_ruleset_init(struct ai_type *ait)
     if (punittype->transport_capacity > 0) {
       struct unit_type_ai *utai = utype_ai_data(punittype, ait);
 
-      unit_class_iterate(pcargo) {
+      unit_type_iterate(pctype) {
+        struct unit_class *pcargo = utype_class(pctype);
+
         if (can_unit_type_transport(punittype, pcargo)) {
-          if (uclass_has_flag(pcargo, UCF_MISSILE)) {
+          if (utype_is_consumed_by_action(action_by_number(ACTION_ATTACK),
+                                          pctype)) {
             utai->missile_platform = TRUE;
           } else if (pclass->adv.sea_move != MOVE_NONE
               && pcargo->adv.land_move != MOVE_NONE) {
             if (pcargo->adv.sea_move != MOVE_FULL) {
               utai->ferry = TRUE;
             } else {
-              unit_type_iterate(pctype) {
-                if (utype_class(pctype) == pcargo
-                    && 0 != utype_fuel(pctype)) {
-                  utai->ferry = TRUE;
-                }
-              } unit_type_iterate_end;
+              if (0 != utype_fuel(pctype)) {
+                utai->ferry = TRUE;
+              }
             }
           }
 
@@ -3096,7 +3097,7 @@ void dai_units_ruleset_init(struct ai_type *ait)
             utai->carries_occupiers = TRUE;
           }
         }
-      } unit_class_iterate_end;
+      } unit_type_iterate_end;
     }
 
     /* Consider potential charges */

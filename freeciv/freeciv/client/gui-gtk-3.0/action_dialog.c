@@ -249,10 +249,8 @@ static void pillage_callback(GtkWidget *w, gpointer data)
 
   if (NULL != game_unit_by_number(args->actor_unit_id)
       && NULL != index_to_tile(&(wld.map), args->target_tile_id)) {
-    dsend_packet_unit_do_action(&client.conn,
-                                args->actor_unit_id,
-                                args->target_tile_id, args->value,
-                                0, "", ACTION_PILLAGE);
+    request_do_action(ACTION_PILLAGE, args->actor_unit_id,
+                      args->target_tile_id, args->value, "");
   }
 
   gtk_widget_destroy(act_sel_dialog);
@@ -269,10 +267,8 @@ static void road_callback(GtkWidget *w, gpointer data)
   if (NULL != game_unit_by_number(args->actor_unit_id)
       && NULL != index_to_tile(&(wld.map), args->target_tile_id)
       && NULL != extra_by_number(args->value)) {
-    dsend_packet_unit_do_action(&client.conn,
-                                args->actor_unit_id,
-                                args->target_tile_id, args->value,
-                                0, "", ACTION_ROAD);
+    request_do_action(ACTION_ROAD, args->actor_unit_id,
+                      args->target_tile_id, args->value, "");
   }
 
   gtk_widget_destroy(act_sel_dialog);
@@ -289,10 +285,8 @@ static void base_callback(GtkWidget *w, gpointer data)
   if (NULL != game_unit_by_number(args->actor_unit_id)
       && NULL != index_to_tile(&(wld.map), args->target_tile_id)
       && NULL != extra_by_number(args->value)) {
-    dsend_packet_unit_do_action(&client.conn,
-                                args->actor_unit_id,
-                                args->target_tile_id, args->value,
-                                0, "", ACTION_BASE);
+    request_do_action(ACTION_BASE, args->actor_unit_id,
+                      args->target_tile_id, args->value, "");
   }
 
   gtk_widget_destroy(act_sel_dialog);
@@ -309,10 +303,8 @@ static void mine_callback(GtkWidget *w, gpointer data)
   if (NULL != game_unit_by_number(args->actor_unit_id)
       && NULL != index_to_tile(&(wld.map), args->target_tile_id)
       && NULL != extra_by_number(args->value)) {
-    dsend_packet_unit_do_action(&client.conn,
-                                args->actor_unit_id,
-                                args->target_tile_id, args->value,
-                                0, "", ACTION_MINE);
+    request_do_action(ACTION_MINE, args->actor_unit_id,
+                      args->target_tile_id, args->value, "");
   }
 
   gtk_widget_destroy(act_sel_dialog);
@@ -329,10 +321,8 @@ static void irrigate_callback(GtkWidget *w, gpointer data)
   if (NULL != game_unit_by_number(args->actor_unit_id)
       && NULL != index_to_tile(&(wld.map), args->target_tile_id)
       && NULL != extra_by_number(args->value)) {
-    dsend_packet_unit_do_action(&client.conn,
-                                args->actor_unit_id,
-                                args->target_tile_id, args->value,
-                                0, "", ACTION_IRRIGATE);
+    request_do_action(ACTION_IRRIGATE, args->actor_unit_id,
+                      args->target_tile_id, args->value, "");
   }
 
   gtk_widget_destroy(act_sel_dialog);
@@ -1820,7 +1810,7 @@ static void act_sel_new_extra_tgt_callback(GtkWidget *w, gpointer data)
     /* Start with the extras at the tile */
     potential_targets = *tile_extras(tgt_tile);
 
-    extra_active_type_iterate(pextra) {
+    extra_type_re_active_iterate(pextra) {
       if (BV_ISSET(potential_targets, extra_number(pextra))) {
         /* This extra is at the tile. Can anything be done to it? */
         if (!(is_extra_removed_by(pextra, ERM_PILLAGE)
@@ -1842,7 +1832,7 @@ static void act_sel_new_extra_tgt_callback(GtkWidget *w, gpointer data)
           BV_SET(potential_targets, extra_number(pextra));
         }
       }
-    } extra_active_type_iterate_end;
+    } extra_type_re_active_iterate_end;
 
     select_tgt_extra(act_unit, tgt_tile, potential_targets, tgt_extra,
                      /* TRANS: GTK action selection dialog extra target

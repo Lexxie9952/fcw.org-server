@@ -2292,11 +2292,6 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
             _("\u27a4 Won't lose all movement when moving from non-native "
               "terrain to native terrain, or unloading from transport.\n"));
   }
-  if (!utype_is_consumed_by_action(action_by_number(ACTION_ATTACK), utype)
-      && utype_has_flag(utype, UTYF_ONEATTACK)) {
-    CATLSTR(buf, bufsz,
-	    _("\u27a4 Making an attack ends this unit's turn.\n"));
-  }
   if (utype_has_flag(utype, UTYF_CITYBUSTER)) {
     CATLSTR(buf, bufsz,
 	    _("\u27a4 Gets double firepower when attacking cities.\n"));
@@ -2621,6 +2616,12 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
                          "than a single move point left the attack power "
                          "is reduced accordingly.\n"));
         }
+        if (!utype_is_consumed_by_action(action_by_number(ACTION_ATTACK),
+                                         utype)
+            && utype_has_flag(utype, UTYF_ONEATTACK)) {
+          cat_snprintf(buf, bufsz,
+                       _("  \u2022 ends this unit's turn.\n"));
+        }
         break;
       case ACTION_CONVERT:
         cat_snprintf(buf, bufsz,
@@ -2751,8 +2752,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
      * UTYF_NO_VETERAN when writing this text. (Gna patch #4794) */
     CATLSTR(buf, bufsz, _("\u27a4 May acquire veteran status.\n"));
     if (utype_veteran_has_power_bonus(utype)) {
-      if ((!utype_can_do_action(utype, ACTION_NUKE)
-           && utype_can_do_action(utype, ACTION_ATTACK))
+      if (utype_can_do_action(utype, ACTION_ATTACK)
           || utype->defense_strength > 0) {
         CATLSTR(buf, bufsz,
                 _("  \u2022 Veterans have increased strength in combat.\n"));
