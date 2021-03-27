@@ -1486,7 +1486,7 @@ function city_name_dialog(suggested_name, unit_id) {
                                       "actor_id"    : unit_id,
                                       "target_id"   : actor_unit['tile'],
                                       "extra_id"    : EXTRA_NONE,
-                                      "value"       : 0,
+                                      "sub_tgt_id"  : 0,
                                       "name"        : encodeURIComponent(name),
                                       "action_type" : ACTION_FOUND_CITY};
 						send_request(JSON.stringify(packet));
@@ -1515,7 +1515,7 @@ function city_name_dialog(suggested_name, unit_id) {
                       "actor_id" : unit_id,
                       "target_id": actor_unit['tile'],
                       "extra_id" : EXTRA_NONE,
-                      "value" : 0,
+                      "sub_tgt_id" : 0,
                       "name" : encodeURIComponent(name),
                       "action_type": ACTION_FOUND_CITY};
       send_request(JSON.stringify(packet));
@@ -1540,7 +1540,7 @@ function city_name_dialog(suggested_name, unit_id) {
                       "actor_id" : unit_id,
                       "target_id": actor_unit['tile'],
                       "extra_id" : EXTRA_NONE,
-                      "value" : 0,
+                      "sub_tgt_id" : 0,
                       "name" : encodeURIComponent(name),
                       "action_type": ACTION_FOUND_CITY};
 	send_request(JSON.stringify(packet));

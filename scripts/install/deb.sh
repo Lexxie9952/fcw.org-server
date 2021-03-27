@@ -33,9 +33,9 @@ dependencies="\
   libtool \
   make \
   maven \
-  mysql-server \
+  default-mysql-server \
   nginx \
-  openjdk-8-jdk-headless \
+  openjdk-11-jdk-headless \
   patch \
   pkg-config \
   pngcrush \
@@ -58,8 +58,8 @@ APT_GET='DEBIAN_FRONTEND=noninteractive apt-get -y -qq -o=Dpkg::Use-Pty=0'
 
 sudo ${APT_GET} update
 
-if ! apt-cache -qq show openjdk-8-jdk-headless > /dev/null; then
-  echo "==== Adding openjdk-8 repo ===="
+if ! apt-cache -qq show openjdk-11-jdk-headless > /dev/null; then
+  echo "==== Adding openjdk-11 repo ===="
   if [ "${FCW_INSTALL_VND}" = Ubuntu ]; then
     sudo ${APT_GET} install --no-install-recommends python3-software-properties software-properties-common
     sudo add-apt-repository -y ppa:openjdk-r/ppa
@@ -69,7 +69,7 @@ if ! apt-cache -qq show openjdk-8-jdk-headless > /dev/null; then
   sudo ${APT_GET} update
 fi
 
-if apt-cache -qq show tomcat8 > /dev/null; then
+if [ "$DEB_NO_TOMCAT" != "Y" ] && apt-cache -qq show tomcat8 > /dev/null; then
   dependencies="${dependencies} tomcat8 tomcat8-admin"
   INSTALLED_TOMCAT=Y
 else
@@ -92,9 +92,9 @@ sudo debconf-set-selections <<< "mysql-server mysql-server/root_password_again p
 echo "apt-get install dependencies"
 sudo ${APT_GET} install --no-install-recommends ${dependencies}
 
-# Where default-jdk is v7, it may be installed with a higher priority than v8
+# Where default-jdk is older version, it may be installed with a higher priority than v11
 for n in java javac; do
-  sudo update-alternatives --set $n $(update-alternatives --query $n | sed -n 's/Alternative: \(.*java-8.*\)/\1/p' | head -n 1)
+  sudo update-alternatives --set $n $(update-alternatives --query $n | sed -n 's/Alternative: \(.*java-11.*\)/\1/p' | head -n 1)
 done
 
 if [ "${INSTALLED_TOMCAT}" = N ]; then

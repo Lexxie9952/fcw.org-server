@@ -48,7 +48,7 @@ if test x$EMERGENCY_VERSION != x ; then
   AC_DEFINE_UNQUOTED([EMERGENCY_VERSION], [$EMERGENCY_VERSION], [Emergency version])
 fi
 AC_DEFINE_UNQUOTED([VERSION_LABEL], ["${VERSION_LABEL}"], [Version label])
-AC_DEFINE_UNQUOTED([VERSION_STRING], ["${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}${EMERG_PART}${VERSION_LABEL}"], [Version string])
+AC_DEFINE_UNQUOTED([VERSION_STRING], ["${VERSION_STRING}"], [Version string])
 AC_DEFINE_UNQUOTED([IS_DEVEL_VERSION], [$IS_DEVEL_VERSION], [Is this a devel version])
 AC_DEFINE_UNQUOTED([IS_FREEZE_VERSION], [$IS_FREEZE_VERSION], [Is this a frozen version])
 AC_DEFINE_UNQUOTED([IS_BETA_VERSION], [$IS_BETA_VERSION], [Is this a beta version])
@@ -1456,9 +1456,9 @@ esac], [sys_lua=test])
 dnl There's wide divergence on what the pkg-config file for Lua is called
 dnl See http://lua-users.org/lists/lua-l/2008-09/msg00184.html
 if test "x$sys_lua" = "xtrue" || test "x$sys_lua" = "xtest" ; then
-  PKG_CHECK_MODULES([LUA], [lua5.3], [sys_lua=true],
-    [PKG_CHECK_MODULES([LUA], [lua-5.3], [sys_lua=true],
-      [PKG_CHECK_MODULES([LUA], [lua >= 5.3 lua < 5.4], [sys_lua=true],
+  PKG_CHECK_MODULES([LUA], [lua5.4], [sys_lua=true],
+    [PKG_CHECK_MODULES([LUA], [lua-5.4], [sys_lua=true],
+      [PKG_CHECK_MODULES([LUA], [lua >= 5.4 lua < 5.5], [sys_lua=true],
 [if test "x$sys_lua" = "xtrue" ; then
   AC_MSG_ERROR([Use of included lua disabled, and no lua found from system])
 fi
@@ -1475,8 +1475,8 @@ if test "x$sys_lua" != "xtrue" ; then
   fi
   AC_CHECK_FUNCS([popen pclose _longjmp _setjmp gmtime_r localtime_r])
 
-  LUA_CFLAGS="-I\$(top_srcdir)/dependencies/lua-5.3/src"
-  LUA_LIBS="\$(top_builddir)/dependencies/lua-5.3/src/liblua.la"
+  LUA_CFLAGS="-I\$(top_srcdir)/dependencies/lua-5.4/src"
+  LUA_LIBS="\$(top_builddir)/dependencies/lua-5.4/src/liblua.la"
 fi
 
 AC_SUBST([LUA_CFLAGS])
@@ -1562,7 +1562,7 @@ AC_CONFIG_COMMANDS([fc_default-5],[[if test x`uname -s` = xBeOS ; then
      fi
    fi]],[[]])
 
-CFLAGS="$EXTRA_DEBUG_CFLAGS $CFLAGS -Werror -Wmissing-prototypes -Wmissing-declarations"   # Modified for FCW.
+CFLAGS="$EXTRA_DEBUG_CFLAGS -Werror -Wmissing-prototypes -Wmissing-declarations $CFLAGS"   # Modified for FCW.
 CXXFLAGS="$EXTRA_DEBUG_CXXFLAGS $CXXFLAGS"
 LDFLAGS="$EXTRA_DEBUG_LDFLAGS $LDFLAGS"
 
@@ -1677,8 +1677,8 @@ AC_CONFIG_FILES([Makefile
 	  data/icons/Makefile
 	  utility/Makefile
 	  dependencies/Makefile
-	  dependencies/lua-5.3/Makefile
-          dependencies/lua-5.3/src/Makefile
+	  dependencies/lua-5.4/Makefile
+          dependencies/lua-5.4/src/Makefile
 	  dependencies/tolua-5.2/Makefile
 	  dependencies/tolua-5.2/src/Makefile
 	  dependencies/tolua-5.2/src/lib/Makefile

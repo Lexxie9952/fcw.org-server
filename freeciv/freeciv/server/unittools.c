@@ -2753,7 +2753,8 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
     else if (unitcount-1 <= MAX_SECONDARY_CASUALTIES_TO_REPORT
              && kill_counter <= MAX_KILLED_UNITS_TO_REPORT_TO_ALL_PLAYERS) {
         char dead_units_str[1024];
-        char killed_unit_str[128];
+        char killed_unit_str[512];
+
         memset(dead_units_str, '\0', sizeof(dead_units_str));
         // Make a string out of all the secondary casualty unit types and nationalities.
         for (int k = 0; k < kill_counter; k++) {
@@ -2882,8 +2883,9 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
           else if (num_killed[i]-1 <= MAX_SECONDARY_CASUALTIES_TO_REPORT
                    && kill_counter <= MAX_KILLED_UNITS_TO_REPORT_TO_ALL_PLAYERS) {
             char dead_units_str[1024];
-            char killed_unit_str[128];
+            char killed_unit_str[512];
             char plural_string[32];
+
             plural_string[0] = 0;
             memset(dead_units_str, '\0', sizeof(dead_units_str));
             for (int k = 0; k < kill_counter; k++) {
@@ -2943,8 +2945,9 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
                    && kill_counter <= MAX_KILLED_UNITS_TO_REPORT_TO_ALL_PLAYERS) 
             {
               char dead_units_str[1024];
-              char killed_unit_str[128];
+              char killed_unit_str[512];
               char plural_string[32];
+
               plural_string[0] = 0;
               memset(dead_units_str, '\0', sizeof(dead_units_str));
               for (int k = 0; k < kill_counter; k++) {
@@ -3079,7 +3082,7 @@ void package_unit(struct unit *punit, struct packet_unit_info *packet)
       packet->orders[i] = punit->orders.list[i].order;
       packet->orders_dirs[i] = punit->orders.list[i].dir;
       packet->orders_activities[i] = punit->orders.list[i].activity;
-      packet->orders_targets[i] = punit->orders.list[i].target;
+      packet->orders_sub_targets[i] = punit->orders.list[i].sub_target;
       packet->orders_extras[i] = punit->orders.list[i].extra;
       packet->orders_actions[i] = punit->orders.list[i].action;
     }
@@ -5247,7 +5250,7 @@ bool execute_orders(struct unit *punit, const bool fresh)
                                       unitid,
                                       tgt_id,
                                       order.extra,
-                                      order.target,
+                                      order.sub_target,
                                       name,
                                       order.action,
                                       ACT_REQ_PLAYER);
