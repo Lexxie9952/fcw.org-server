@@ -2751,8 +2751,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
      * UTYF_NO_VETERAN when writing this text. (Gna patch #4794) */
     CATLSTR(buf, bufsz, _("\u27a4 May acquire veteran status.\n"));
     if (utype_veteran_has_power_bonus(utype)) {
-      if ((!utype_can_do_action(utype, ACTION_NUKE)
-           && utype_can_do_action(utype, ACTION_ATTACK))
+      if (utype_can_do_action(utype, ACTION_ATTACK)
           || utype->defense_strength > 0) {
         CATLSTR(buf, bufsz,
                 _("  \u2022 Veterans have increased strength in combat.\n"));
