@@ -114,7 +114,7 @@ function update_nation_screen()
                       ? "<img class='lowered_gov' src='/images/e/"+governments[pplayer['government']]['name'].toLowerCase() + gov_modifier+".png'>" 
                       : "<img class='lowered_gov' src='/images/e/unknowngov.png'>"; 
     nation_list_html += "<td style='text-align:left;'>" + pplayer['name'] + "</td><td style='text-align:left;' title=\"" 
-          + nations[pplayer['nation']]['legend'] + "\">"
+          + html_safe(nations[pplayer['nation']]['legend']) + "\">"
           + gov_indicator + "&nbsp;" + nations[pplayer['nation']]['adjective']  + "</td>"
        + "<td class='nation_attitude'>" + col_love(pplayer) + "</td>"
        + "<td>" + get_score_text(pplayer) + "</td>"

@@ -295,11 +295,13 @@ function unobstruct_minimized_dialog_continer()
 
 /**************************************************************************
    Some strings such as those going into title attribute hovertext, etc.,
-   need to be html-safe and have encoding for some characters such a '
+   need to be html-safe and have encoding for some characters such ' "
 **************************************************************************/
 function html_safe(text)
 {
   text = text.replace(/'/g, "&#39;");
+  text = text.replace(/"/g, "&#34;");
+  
   return text;
 }
 
