@@ -901,7 +901,7 @@ static void unit_convert(struct unit *punit)
     transform_unit(punit, to_type, TRUE);
     notify_player(unit_owner(punit), unit_tile(punit),
                   E_UNIT_UPGRADED, ftc_server,
-                  _("&#8203;[`recycle`] %s converted to %s %s."),
+                  _("[`recycle`] %s converted to %s %s."),
                   utype_name_translation(from_type),
                   utype_name_translation(to_type), UNIT_EMOJI(punit));
   } else {
@@ -2595,8 +2595,8 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
     ransom = (pvictim->economic.gold >= game.server.ransom_gold) 
              ? game.server.ransom_gold : pvictim->economic.gold;
     notify_player(pvictor, unit_tile(pkiller), E_UNIT_WIN_ATT, ftc_server,
-                  PL_("&#8203;[`gold`] Barbarian leader%s captured; %d gold ransom paid.",
-                      "&#8203;[`gold`] Barbarian leader%s captured; %d gold ransom paid.",
+                  PL_("[`gold`] Barbarian leader%s captured; %d gold ransom paid.",
+                      "[`gold`] Barbarian leader%s captured; %d gold ransom paid.",
                       ransom),
                   punit_emoji, ransom);
     pvictor->economic.gold += ransom;
@@ -3228,14 +3228,20 @@ void send_all_known_units(struct conn_list *dest)
 
   If it isn't a city square or an ocean square then with 50% chance add
   some fallout, then notify the client about the changes.
+
+  'suppress' means do_nuke_tile will be called a second time for this
+    tile, or it's ground zero of a fusion explosion. This lets us know
+    to suppress double-redundant messaging and double-redundant
+    remove_city() calls.
 **************************************************************************/
-static void do_nuke_tile(struct player *pplayer, struct tile *ptile)
+static void do_nuke_tile(struct player *pplayer, struct tile *ptile,
+                         bool suppress)
 {
   struct city *pcity = NULL;
 
   unit_list_iterate_safe(ptile->units, punit) {
     notify_player(unit_owner(punit), ptile, E_UNIT_LOST_MISC, ftc_server,
-                  _("&#8203;[`nuclearexplosion`] Your %s %s %s nuked by %s."),
+                  _("[`nuclearexplosion`] Your %s %s %s nuked by %s."),
                   unit_tile_link(punit), UNIT_EMOJI(punit),
                   (is_unit_plural(punit) ? "were" : "was"),
                   pplayer == unit_owner(punit)
@@ -3243,7 +3249,7 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile)
                   : nation_plural_for_player(pplayer));
     if (unit_owner(punit) != pplayer) {
       notify_player(pplayer, ptile, E_NUKE, ftc_server,
-                    _("&#8203;[`nuclearexplosion`] The %s %s %s %s nuked."),
+                    _("[`nuclearexplosion`] The %s %s %s %s nuked."),
                     nation_adjective_for_player(unit_owner(punit)),
                     unit_tile_link(punit), UNIT_EMOJI(punit),
                     (is_unit_plural(punit) ? "were" : "was"));
@@ -3254,23 +3260,25 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile)
   pcity = tile_city(ptile);
 
   if (pcity) {
-    notify_player(city_owner(pcity), ptile, E_CITY_NUKED, ftc_server,
-                  _("&#8203;[`nuclearexplosion`] %s was nuked by %s."),
-                  city_link(pcity),
-                  pplayer == city_owner(pcity)
-                  ? _("yourself")
-                  : nation_plural_for_player(pplayer));
-
-    if (city_owner(pcity) != pplayer) {
-      notify_player(pplayer, ptile, E_CITY_NUKED, ftc_server,
-                    _("&#8203;[`nuclearexplosion`] You nuked %s."),
-                    city_link(pcity));
+    if (!suppress) {
+      notify_player(city_owner(pcity), ptile, E_CITY_NUKED, ftc_server,
+                    _("[`nuclearexplosion`] %s was nuked by %s."),
+                    city_link(pcity),
+                    pplayer == city_owner(pcity)
+                    ? _("yourself")
+                    : nation_plural_for_player(pplayer));
+    
+      if (city_owner(pcity) != pplayer) {
+        notify_player(pplayer, ptile, E_CITY_NUKED, ftc_server,
+                      _("[`nuclearexplosion`] You nuked %s."),
+                      city_link(pcity));
+      }
     }
 
     // Reduce city size by half.
 
-    // Half of one is zero: DESTROY IT
-    if (city_size_get(pcity) == 1) {
+    // Half of one is zero: DESTROY IT (but not on first pass)
+    if (city_size_get(pcity) == 1 && !suppress) {
       if (pcity) {
         int saved_id = pcity->id;
 
@@ -3280,7 +3288,7 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile)
 
         if (city_owner(pcity) != pplayer) {
           notify_player(pplayer, ptile, E_CITY_NUKED, ftc_server,
-          _("&#8203;[`nuclearexplosion`] %s was annihilated by a nuclear detonation."),
+          _("[`nuclearexplosion`] %s was annihilated by a nuclear detonation."),
             city_link(pcity));
         }
         script_server_signal_emit("city_destroyed", pcity, city_owner(pcity), pplayer);
@@ -3327,10 +3335,12 @@ void do_nuclear_explosion(struct player *pplayer, struct tile *ptile,
 //  } square_iterate_end;
 
   circle_dxyr_iterate(&(wld.map), ptile, max_radius_sq, ptile1, dx, dy, dr) {
-    do_nuke_tile(pplayer, ptile1);
+    do_nuke_tile(pplayer, ptile1, is_fusion); //is_fusion==true means suppress redundant remove_city() and notify_player() messages
     // Fusion detonation is double nasty, reduces to 1/4 pop:
-    if (is_fusion && tile_city(ptile1)) 
-      do_nuke_tile(pplayer, ptile1);
+    if (is_fusion && tile_city(ptile1)) {
+      bool suppress = (ptile==ptile1); // fusion @ ground zero! suppress remove_city and messages again: it's going to be annihilated further below
+      do_nuke_tile(pplayer, ptile1, suppress); // false==not first pass, go ahead and message/annihilate tiles.
+    }
   } circle_dxyr_iterate_end;
 
   script_server_signal_emit("nuke_exploded", 2, API_TYPE_TILE, ptile,
@@ -3343,7 +3353,7 @@ void do_nuclear_explosion(struct player *pplayer, struct tile *ptile,
               unit_name);
 
   // Direct ground-zero hit by Hydrogen-Bomb / Fusion warhead, etc.
-  if (is_fusion) {  // H-bomb
+  if (is_fusion) {  // H-bomb, etc.
     pcity = tile_city(ptile);
     if (pcity) {
       int saved_id = pcity->id;
@@ -3577,8 +3587,8 @@ static bool hut_get_limited(struct unit *punit)
   if (hut_chance != 0) {
     int cred = 25;
     notify_player(pplayer, unit_tile(punit), E_HUT_GOLD, ftc_server,
-                  PL_("&#8203;[`gold`] You found %d gold.",
-                      "&#8203;[`gold`] You found %d gold.", cred), cred);
+                  PL_("[`gold`] You found %d gold.",
+                      "[`gold`] You found %d gold.", cred), cred);
     pplayer->economic.gold += cred;
   } else if (city_exists_within_max_city_map(unit_tile(punit), TRUE)
              || unit_has_type_flag(punit, UTYF_GAMELOSS)) {
