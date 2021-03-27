@@ -793,7 +793,7 @@ A Solar Plant boosts the production in a city by +20%. Although this is\
  cities which still use Coal Plants. \n\
 ➤ A Solar Plant is the only kind of Power Plant whose bonus against\
  Pollution can combine with a Recycling Center. Together, they reduce\
- pollution from production by 95% !\
+ pollution from production by 90% !\
 ")
 
 [building_wind_plant]
@@ -825,8 +825,8 @@ A Wind Plant boosts the production in a city by 5%. This is\
  in the city by -3, while also giving 2 free shield upkeep for units supported by\
  the city. \n\
 "), _("\
-➤ A Wind Plant reduces pollution from production by -5%. It combines\
- with any other pollution bonuses.\
+➤ A Wind Plant reduces pollution from production by -10%. It combines\
+ with all other pollution bonuses.\
 ")
 
 [building_police_station]
@@ -930,8 +930,8 @@ A Recycling Center supercedes bonuses from Hydro and Nuclear\
  materials adds +2 producton to the city center tile. \n\
 "), _("\
 When combined with a Solar Plant, pollution from production is\
- nearly eliminated by -95%, leaving pollution from population\
- as the only significant polluting factor.\ 
+ nearly eliminated by -90%, leaving pollution from population\
+ as the only significant polluting factor.\
 ")
 
 [building_research_lab]
@@ -1246,11 +1246,12 @@ sabotage	= 100
 sound		= "b_totem_pole"
 sound_alt	= "b_generic"
 helptext	= _("\
-Gives one luxury to a city. The process of building a Totem\
- Pole can be more useful than completing it. It keeps your\
- tribe productive and can store shields toward future\
- buildings made possible by your first scientific discovery. \n\
-Obsolete by：Temple.\
+Gives two luxury to a city. In small tribal settlements, this can\
+ be more effective than a Temple for aiding celebration. \n\
+The process of building a Totem Pole is sometimes more useful than\
+ finishing it. It keeps your tribe productive by storing shields for\
+ completing a building after an upcoming scientific discovery. \n\
+Obsolete by：Temple, Ceremonial Burial.\
 ")
 
 [building_university]
@@ -1728,8 +1729,8 @@ Pollution reduction from Recycling Center and Power Plants\
 "), _("\
 ➤ Only one Coal Plant, Hydro Plant, Nuclear Plant, or Fusion\
  Plant can have an active effect in a city. A nation that owns\
- a Fusion Reactor can sell off all Power Plants and gain a\
- large savings in ongoing upkeeps costs. \n\
+ the Fusion Reactor can sell off all Power Plants and gain a\
+ large savings in ongoing upkeep costs. \n\
 "), _("\
 ➤ The Fusion Reactor's surplus power gives 1 free unit upkeep\
  to every city in your nation, and 1 extra unit build slot.\

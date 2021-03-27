@@ -136,7 +136,7 @@ value   = 2
 reqs    =
     { "type",       "name",            "range",  "present"
       "Specialist", "elvis",           "Local",  TRUE
-      "OutputType", "luxury",          "Local",  TRUE
+      "OutputType", "Luxury",          "Local",  TRUE
       "Building",   "Roman Colosseum", "Player", FALSE
     }
 [effect_elvis_roman_colosseum]
@@ -155,7 +155,7 @@ value   = 3
 reqs    =
     { "type", "name", "range"
       "Specialist", "scientist", "Local"
-      "OutputType", "science", "Local"
+      "OutputType", "Science", "Local"
     }
 
 [effect_taxman]
@@ -164,7 +164,7 @@ value   = 3
 reqs    =
     { "type", "name", "range"
       "Specialist", "taxman", "Local"
-      "OutputType", "gold", "Local"
+      "OutputType", "Gold", "Local"
     }
 
 [effect_merchant]
@@ -173,7 +173,7 @@ value   = 2
 reqs    =
     { "type", "name", "range"
       "Specialist", "merchant", "Local"
-      "OutputType", "trade", "Local"
+      "OutputType", "Trade", "Local"
       "Building", "A.Smith's Trading Co.", "Player"
     }
 [effect_merchant2]
@@ -182,16 +182,16 @@ value   = 1
 reqs    =
     { "type", "name", "range"
       "Specialist", "merchant", "Local"
-      "OutputType", "gold", "Local"
+      "OutputType", "Gold", "Local"
       "Building", "A.Smith's Trading Co.", "Player"
     }    
-[effect_worker]
+[effect_laborer]
 type    = "Specialist_Output"
 value   = 1
 reqs    =
     { "type", "name", "range"
       "Specialist", "worker", "Local"
-      "OutputType", "shield", "Local"
+      "OutputType", "Shield", "Local"
       "Building", "A.Smith's Trading Co.", "Player"
     }
 [effect_farmer]
@@ -200,7 +200,7 @@ value   = 1
 reqs    =
     { "type", "name", "range"
       "Specialist", "farmer", "Local"
-      "OutputType", "food", "Local"
+      "OutputType", "Food", "Local"
       "Building", "A.Smith's Trading Co.", "Player"
     }
 
@@ -361,7 +361,7 @@ reqs	=
       "OutputType", "Trade", "Local"
       "Terrain", "Tundra", "Local"
     }
-[effect_furs10]
+[effect_furs4]
 type    = "Output_Add_Tile"
 value	= 2
 reqs	=
@@ -370,7 +370,7 @@ reqs	=
       "OutputType", "Food", "Local"
       "Terrain", "Arctic", "Local"
     }
-[effect_furs12]
+[effect_furs5]
 type    = "Output_Add_Tile"
 value	= 1
 reqs	=
@@ -379,7 +379,7 @@ reqs	=
       "OutputType", "Shield", "Local"
       "Terrain", "Arctic", "Local"
     }
-[effect_furs13]
+[effect_furs6]
 type    = "Output_Add_Tile"
 value	= 3
 reqs	=
@@ -454,7 +454,7 @@ reqs	=
     { "type", "name", "range"
       "Extra", "Deer", "Local"
       "OutputType", "Food", "Local"
-    }
+   }
 [effect_wild_boar]
 type    = "Output_Add_Tile"
 value	= 3
@@ -474,7 +474,7 @@ reqs	=
       "Extra",      "Oil",      "Local", TRUE
       "OutputType", "Shield",   "Local", TRUE
     }
-;;;;; *****************************************************
+; *****************************************************
 
 ; Vision benefit from mountains (for every land unit)
 [effect_mountains_vision]
@@ -3048,7 +3048,7 @@ reqs	=
     { "type",       "name",       "range", "present"
       "Building",   "Factory",    "City",  TRUE
       "Building",   "Hoover Dam", "City",  FALSE ;counts as factory
-      "OutputType", "Shield",     "Local", FALSE
+      "OutputType", "Shield",     "Local", TRUE
     }
 
 [effect_granary]
@@ -3712,7 +3712,7 @@ reqs	=
       "OutputType", "Shield",     "Local"
     }
 [effect_hoover_dam_city_2]
-type    = "Pollu_Prod_Pct"
+type    = "Pollu_Prod_Pct" ;-25 for factory, -25 for mfg_plant
 value	= -50
 reqs	=
     { "type",     "name",            "range", "present"
@@ -3838,7 +3838,7 @@ value	= -80
 reqs	=
     { "type",     "name",             "range", "present"
       "Building", "Factory",          "City",   TRUE
-      "Building", "Fusion Reactor",   "Player", FALSE
+      "Building", "Fusion Reactor",   "Player", TRUE
     }
 [effect_fusion_reactor_3]
 type    = "Unit_Upkeep_Free_Per_City"
@@ -3900,7 +3900,7 @@ reqs	=
     }
 [effect_wind_plant_pollution]
 type    = "Pollu_Prod_Pct"
-value	= -5
+value	= -10
 reqs	=
     { "type",     "name",       "range"
       "Building", "Wind Plant", "City"
@@ -3920,7 +3920,7 @@ value	= 2
 ; Recycling Center which has to do the heavy lifting on special 
 ; combination rules of the ruleset:
 ; ....
-; A Solar Plant combines with Recycling Center to eliminate 95%
+; A Solar Plant combines with Recycling Center to eliminate 90%
 ; pollution. A Fusion Reactor saves 80% instead of 66%, in which case
 ; we prefer the Fuction Reactor's bonus. A Fusion reactor supercedes
 ; the Solar Plant's 75% bonus but doesn't get the combination bonus, so
@@ -3937,10 +3937,10 @@ reqs	=
       "Building", "Solar Plant", "City",      FALSE
     }
 ; Case 2: SP is present, FR is absent. Second highest in food chain,
-; and obligation to deliver on the 95% reduction effect:
+; and obligation to deliver on the 90% reduction effect:
 [effect_recycling_center_2] 
 type    = "Pollu_Prod_Pct"
-value	= -20 ; Solar is higher and ACTIVE at -75%. -20 = -95%. 
+value	= -15 ; Solar is higher and ACTIVE at -75%. -15 = -90%. 
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Recycling Center", "City", TRUE
@@ -3949,10 +3949,10 @@ reqs	=
     }
 ; Case 3: SP and Fusion Reactor both present and higher on food chain.
 ; Solar Plant "wakes up" from being superceded by Fusion Reactor to
-; deliver its promised 95% combinatorial bonus with Recycling Center:
+; deliver its promised 90% combinatorial bonus with Recycling Center:
 [effect_recycling_center_3] 
 type    = "Pollu_Prod_Pct"
-value	= -15 ; Fusion reactor superceded to -80%. -15 = -95%
+value	= -10 ; Fusion reactor superceded to -80%. -10 = -90%
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Recycling Center", "City", TRUE
@@ -4296,7 +4296,7 @@ reqs	=
 
 [effect_totem_pole]
 type    = "Output_Add_Tile"
-value   = 1
+value   = 2
 reqs    =
     { "type", "name", "range"
       "Building", "Totem Pole", "City"
@@ -4834,7 +4834,7 @@ reqs    =
     }
 [effect_colossus_trade_revenue_bonus]
 type    = "Trade_Revenue_Bonus"     ; roughly 10% ?
-value   = 528    ;; 22%-ish increase.
+value   = 528    ; 22%-ish increase.
 reqs =
     { "type", "name", "range", "present"
       "Building", "Colossus", "City", TRUE
