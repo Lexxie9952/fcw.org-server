@@ -116,7 +116,7 @@ f_strategic_bomber = "stdsounds/LrgExpl.ogg"          ; [warzone]
 f_submarine = "stdsounds/Splash.ogg"                  ; [warzone]
 f_transport = "stdsounds/splash-attack.ogg"           ; {  Lexxie  }
 f_trireme = "stdsounds/splash-attack.ogg"             ; {  Lexxie  }
-;f_warriors = ""
+f_warriors = "stdsounds/f_warrior.ogg"                ; ?
 f_zealots = "stdsounds/dragoon-cav-attack.ogg"        ; {  Lexxie  }
 
 ; iPillage sound_fight_alt, which doubles as message language and an sskey to the sound file:
@@ -195,6 +195,7 @@ m_strike_fighter = "stdsounds/jet3.ogg"               ; {  Lexxie  }
 m_submarine = "stdsounds/sub-move1.ogg"               ; {  Lexxie  }
 m_train = "stdsounds/m_train.ogg"                     ; {  Lexxie  }
 m_transport = "stdsounds/splash-move.ogg"             ; {  Lexxie  }
+m_tribesmen = "stdsounds/m_lightsteps.ogg"            ; ?
 m_trireme = "stdsounds/splash-move.ogg"               ; {  Lexxie  }
 ;m_warriors = ""
 
