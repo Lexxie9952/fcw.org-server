@@ -5707,8 +5707,6 @@ static bool sg_load_player_unit(struct loaddata *loading,
           case ACTION_CLEAN_FALLOUT:
             /* These take an extra. */
             action_wants_extra = TRUE;
-            /* FIXME: Validate that an extra target is there when
-             * expected. */
             break;
           case ACTION_ESTABLISH_EMBASSY:
           case ACTION_ESTABLISH_EMBASSY_STAY:
@@ -5766,6 +5764,8 @@ static bool sg_load_player_unit(struct loaddata *loading,
           }
         }
         if (order->order == ORDER_ACTIVITY || action_wants_extra) {
+          enum unit_activity act;
+
           if (order_sub_tgt < 0 || order_sub_tgt >= loading->extra.size) {
             if (order_sub_tgt != EXTRA_NONE) {
               log_sg("Cannot find extra %d for %s to build",
@@ -5775,6 +5775,22 @@ static bool sg_load_player_unit(struct loaddata *loading,
             order->sub_target = EXTRA_NONE;
           } else {
             order->sub_target = order_sub_tgt;
+          }
+
+          /* An action or an activity may require an extra target. */
+          if (action_wants_extra) {
+            act = action_id_get_activity(order->action);
+          } else {
+            act = order->activity;
+          }
+
+          if (unit_activity_is_valid(act)
+              && unit_activity_needs_target_from_client(act)
+              && order->sub_target == EXTRA_NONE) {
+            /* Missing required action extra target. */
+            free(punit->orders.list);
+            punit->orders.list = NULL;
+            punit->has_orders = FALSE;
           }
         }
       }
