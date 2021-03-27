@@ -251,8 +251,7 @@ void handle_unit_type_upgrade(struct player *pplayer, Unit_type_id uti)
       struct city *pcity = tile_city(unit_tile(punit));
 
       if (is_action_enabled_unit_on_city(paction->id, punit, pcity)
-          && unit_perform_action(pplayer, punit->id, pcity->id, EXTRA_NONE,
-                                 0, "",
+          && unit_perform_action(pplayer, punit->id, pcity->id, 0, "",
                                  paction->id, ACT_REQ_SS_AGENT)) {
         number_of_upgraded_units++;
       } else if (UU_NO_MONEY == unit_upgrade_test(punit, FALSE)) {
@@ -2442,12 +2441,14 @@ void handle_unit_action_query(struct connection *pc,
   action_type must be a valid action.
 **************************************************************************/
 void handle_unit_do_action(struct player *pplayer,
-                           const struct packet_unit_do_action *packet)
+                           const int actor_id,
+                           const int target_id,
+                           const int sub_tgt_id,
+                           const char *name,
+                           const action_id action_type)
 {
-  (void) unit_perform_action(pplayer, packet->actor_id, packet->target_id,
-                             packet->extra_id,
-                             packet->sub_tgt_id, packet->name,
-                             packet->action_type, ACT_REQ_PLAYER);
+  (void) unit_perform_action(pplayer, actor_id, target_id, sub_tgt_id, name,
+                             action_type, ACT_REQ_PLAYER);
 }
 
 /**********************************************************************//**
@@ -2458,12 +2459,11 @@ void handle_unit_do_action(struct player *pplayer,
 void unit_do_action(struct player *pplayer,
                     const int actor_id,
                     const int target_id,
-                    const int extra_id,
                     const int sub_tgt_id,
                     const char *name,
                     const action_id action_type)
 {
-  unit_perform_action(pplayer, actor_id, target_id, extra_id,
+  unit_perform_action(pplayer, actor_id, target_id,
                       sub_tgt_id, name, action_type, ACT_REQ_PLAYER);
 }
 
@@ -2479,7 +2479,6 @@ void unit_do_action(struct player *pplayer,
 bool unit_perform_action(struct player *pplayer,
                          const int actor_id,
                          const int target_id,
-                         const int extra_id,
                          const int sub_tgt_id,
                          const char *name,
                          const action_id action_type,
@@ -2500,11 +2499,14 @@ bool unit_perform_action(struct player *pplayer,
     return FALSE;
   }
 
-  if (extra_id != EXTRA_NONE) {
-    target_extra = extra_by_number(extra_id);
+  if (sub_tgt_id >= 0 && sub_tgt_id < MAX_EXTRA_TYPES
+      && sub_tgt_id != EXTRA_NONE) {
+    target_extra = extra_by_number(sub_tgt_id);
+    fc_assert(!(target_extra->disabled));
   } else {
     target_extra = NULL;
   }
+  /* FIXME: Validate that an extra target is there when expected. */
 
   paction = action_by_number(action_type);
 
@@ -4386,7 +4388,7 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
          && is_action_enabled_unit_on_city(ACTION_CONQUER_CITY,
                                            punit, pcity)
          && unit_perform_action(unit_owner(punit), punit->id, pcity->id,
-                                EXTRA_NONE, 0, "",
+                                0, "",
                                 ACTION_CONQUER_CITY, ACT_REQ_RULES))
         || (unit_move_handling(punit, def_tile, FALSE, TRUE, NULL))) {
       int mcost = MAX(0, full_moves - punit->moves_left - SINGLE_MOVE);
@@ -5585,21 +5587,23 @@ void handle_unit_orders(struct player *pplayer,
         }
         break;
       case ACTIVITY_BASE:
-        if (!is_extra_caused_by(extra_by_number(packet->extra[i]), EC_BASE)) {
+        if (!is_extra_caused_by(extra_by_number(packet->sub_target[i]),
+                                EC_BASE)) {
           log_error("handle_unit_orders() %s isn't a base. "
                     "Sent in order number %d from %s to unit number %d.",
-                    extra_rule_name(extra_by_number(packet->extra[i])), i,
-                    player_name(pplayer), packet->unit_id);
+                    extra_rule_name(extra_by_number(packet->sub_target[i])),
+                    i, player_name(pplayer), packet->unit_id);
 
           return;
         }
         break;
       case ACTIVITY_GEN_ROAD:
-        if (!is_extra_caused_by(extra_by_number(packet->extra[i]), EC_ROAD)) {
+        if (!is_extra_caused_by(extra_by_number(packet->sub_target[i]),
+                                EC_ROAD)) {
           log_error("handle_unit_orders() %s isn't a road. "
                     "Sent in order number %d from %s to unit number %d.",
-                    extra_rule_name(extra_by_number(packet->extra[i])), i,
-                    player_name(pplayer), packet->unit_id);
+                    extra_rule_name(extra_by_number(packet->sub_target[i])),
+                    i, player_name(pplayer), packet->unit_id);
 
           return;
         }
@@ -5626,7 +5630,7 @@ void handle_unit_orders(struct player *pplayer,
         return;
       }
 
-      if (packet->extra[i] == EXTRA_NONE
+      if (packet->sub_target[i] == EXTRA_NONE
           && unit_activity_needs_target_from_client(packet->activity[i])) {
         /* The orders system can't do server side target assignment for
          * this activity. */
@@ -5724,10 +5728,10 @@ void handle_unit_orders(struct player *pplayer,
       case ACTION_BASE:
       case ACTION_MINE:
       case ACTION_IRRIGATE:
-        if (packet->extra[i] == EXTRA_NONE
-            || (packet->extra[i] < 0
-                || packet->extra[i] >= game.control.num_extra_types)
-            || extra_by_number(packet->extra[i])->disabled) {
+        if (packet->sub_target[i] == EXTRA_NONE
+            || (packet->sub_target[i] < 0
+                || packet->sub_target[i] >= game.control.num_extra_types)
+            || extra_by_number(packet->sub_target[i])->disabled) {
           /* Target extra is invalid. */
 
           log_error("handle_unit_orders() can't do %s without a target. "
@@ -5848,7 +5852,6 @@ void handle_unit_orders(struct player *pplayer,
     punit->orders.list[i].dir = packet->dir[i];
     punit->orders.list[i].activity = packet->activity[i];
     punit->orders.list[i].sub_target = packet->sub_target[i];
-    punit->orders.list[i].extra = packet->extra[i];
     punit->orders.list[i].action = packet->action[i];
   }
 
@@ -5862,14 +5865,14 @@ void handle_unit_orders(struct player *pplayer,
 #ifdef FREECIV_DEBUG
   log_debug("Orders for unit %d: length:%d", packet->unit_id, length);
   for (i = 0; i < length; i++) {
-    log_debug("  %d,%s,%s,%d,%d",
+    log_debug("  %d,%s,%s,%d",
               packet->orders[i], dir_get_name(packet->dir[i]),
               packet->orders[i] == ORDER_PERFORM_ACTION ?
                 action_id_rule_name(packet->action[i]) :
                 packet->orders[i] == ORDER_ACTIVITY ?
                   unit_activity_name(packet->activity[i]) :
                   "no action/activity required",
-              packet->sub_target[i], packet->extra[i]);
+              packet->sub_target[i]);
   }
 #endif /* FREECIV_DEBUG */
 

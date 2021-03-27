@@ -2621,7 +2621,6 @@ function do_map_click(ptile, qtype, first_time_called)
         packet['dir'] = [];
         packet['activity'] = [];
         packet['sub_target'] = [];
-        packet['extra'] = [];
         packet['action'] = [];
         for (var i = 0; i < goto_path['length']; i++) {
           /* TODO: Have the server send the full orders instead of just the
@@ -2641,7 +2640,6 @@ function do_map_click(ptile, qtype, first_time_called)
           packet['dir'][i] = goto_path['dir'][i];
           packet['activity'][i] = ACTIVITY_LAST;
           packet['sub_target'][i] = 0;
-          packet['extra'][i] = EXTRA_NONE;
           packet['action'][i] = ACTION_COUNT;
         }
 
@@ -2664,7 +2662,6 @@ function do_map_click(ptile, qtype, first_time_called)
             packet['dir'][pos] = -1;
             packet['activity'][pos] = ACTIVITY_LAST;
             packet['sub_target'][pos] = 0;
-            packet['extra'][pos] = EXTRA_NONE;
             packet['action'][pos] = ACTION_COUNT;
           } else {
             /* Replace the existing last order with the final order */
@@ -4874,16 +4871,7 @@ function key_unit_upgrade()
     var punit = funits[i];
     var pcity = tile_city(index_to_tile(punit['tile']));
     var target_id = (pcity != null) ? pcity['id'] : 0;
-    var packet = {
-      "pid"         : packet_unit_do_action,
-      "actor_id"    : punit['id'],
-      "target_id"   : target_id,
-      "extra_id"    : EXTRA_NONE,
-      "sub_tgt_id"  : 0,
-      "name"        : "",
-      "action_type" : ACTION_UPGRADE_UNIT
-    };
-    send_request(JSON.stringify(packet));
+    request_unit_do_action(ACTION_UPGRADE_UNIT, punit['id'], target_id);
   }
   deactivate_goto(false);
   setTimeout(update_active_units_dialog, update_focus_delay*.85);
@@ -5464,14 +5452,7 @@ function key_unit_homecity()
     var pcity = tile_city(ptile);
 
     if (pcity != null) {
-      var packet = {"pid" : packet_unit_do_action,
-                    "actor_id" : punit['id'],
-                    "target_id": pcity['id'],
-                    "extra_id" : EXTRA_NONE,
-                    "sub_tgt_id" : 0,
-                    "name" : "",
-                    "action_type": ACTION_HOME_CITY};
-      send_request(JSON.stringify(packet));
+      request_unit_do_action(ACTION_HOME_CITY, punit['id'], pcity['id']);
       $("#order_change_homecity").hide();
     }
   }
@@ -5581,7 +5562,7 @@ function request_unit_cancel_orders(punit)
       dest_tile: punit.tile
     };
     packet.orders = packet.dir = packet.activity = packet.sub_target
-                  = packet.extra = packet.action = [];
+                  = packet.action = [];
     send_request(JSON.stringify(packet));
   }
 }
@@ -5669,6 +5650,31 @@ function request_unit_build_city()
       }
     }
   }
+}
+
+/**************************************************************************
+ * Send a request for an actor unit to do a specific action.
+ *
+ * @param action_id - action type to be requested
+ * @param actor_id - acting unit id
+ * @param target_id - target unit, city or tile
+ * @param [sub_tgt_id=0] - optional sub target. Only some actions take
+ *     a sub target. The sub target kind depends on the action. e.g.
+ *     the technology to steal from a city, the extra to
+ *     pillage at a tile, and the building to sabotage in a city.
+ * @param [name=""] - optional name, used by ACTION_FOUND_CITY
+**************************************************************************/
+function request_unit_do_action(action_id, actor_id, target_id, sub_tgt_id,
+                                name)
+{
+  send_request(JSON.stringify({
+    pid: packet_unit_do_action,
+    action_type: action_id,
+    actor_id: actor_id,
+    target_id: target_id,
+    sub_tgt_id: sub_tgt_id || 0,
+    name: name || ""
+  }));
 }
 
 /**************************************************************************
@@ -5835,7 +5841,6 @@ function key_unit_move_focus_index(dir, s)
       "dir"      : [dir],
       "activity" : [ACTIVITY_LAST],
       "sub_target": [0],
-      "extra"    : [EXTRA_NONE],
       "action"   : [ACTION_COUNT],
       "dest_tile": newtile['index']
     };

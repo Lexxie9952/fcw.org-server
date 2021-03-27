@@ -219,46 +219,19 @@ function act_sel_click_function(parent_id,
   case ACTION_MINE:
   case ACTION_IRRIGATE:
     return function() {
-      var packet = {
-        "pid"         : packet_unit_do_action,
-        "actor_id"    : actor_unit_id,
-        "target_id"   : tgt_id,
-        "extra_id"    : sub_tgt_id,
-        "sub_tgt_id"  : 0,
-        "name"        : "",
-        "action_type" : action_id
-      };
-      send_request(JSON.stringify(packet));
+      request_unit_do_action(action_id, actor_unit_id, tgt_id, sub_tgt_id);
       remove_active_dialog(parent_id);
     };
     case ACTION_ATTACK:
       return function() {
-        var packet = {
-          "pid"         : packet_unit_do_action,
-          "actor_id"    : actor_unit_id,
-          "target_id"   : tgt_id,
-          "extra_id"    : EXTRA_NONE,
-          "sub_tgt_id"  : 0,
-          "name"        : "",
-          "action_type" : action_id
-        };
-        send_request(JSON.stringify(packet));
+        request_unit_do_action(action_id, actor_unit_id, tgt_id, sub_tgt_id);
         // unit lost hp or died or promoted after attack, so update it:
         setTimeout(update_active_units_dialog, update_focus_delay);
         remove_active_dialog(parent_id);
-      };      
+      };
   default:
     return function() {
-      var packet = {
-        "pid"         : packet_unit_do_action,
-        "actor_id"    : actor_unit_id,
-        "target_id"   : tgt_id,
-        "extra_id"    : EXTRA_NONE,
-        "sub_tgt_id"  : 0,
-        "name"        : "",
-        "action_type" : action_id
-      };
-      send_request(JSON.stringify(packet));
+      request_unit_do_action(action_id, actor_unit_id, tgt_id, sub_tgt_id);
       remove_active_dialog(parent_id);
     };
   }
@@ -427,7 +400,6 @@ function popup_action_selection(actor_unit, action_probabilities,
             "dir"       : [dir],
             "activity"  : [ACTIVITY_LAST],
             "sub_target": [0],
-            "extra"     : [EXTRA_NONE],
             "action"    : [ACTION_COUNT],
             "dest_tile" : target_tile['index']
           };
@@ -479,33 +451,17 @@ function popup_action_selection(actor_unit, action_probabilities,
             text    : "Auto attack from now on!",
             title   : "Attack without showing this attack dialog in the future",
             click   : function() {
-                          var packet = {
-                              "pid"         : packet_unit_do_action,
-                              "actor_id"    : actor_unit['id'],
-                              "target_id"   : target_tile['index'],
-                              "extra_id"    : EXTRA_NONE,
-                              "sub_tgt_id"  : 0,
-                              "name"        : "",
-                              "action_type" : ACTION_ATTACK
-                            };
-                            send_request(JSON.stringify(packet));
-                            setTimeout(update_active_units_dialog, update_focus_delay);
-                            auto_attack = true;
-                            remove_active_dialog(id);
-                          }
+                request_unit_do_action(ACTION_ATTACK,
+                  actor_unit['id'], target_tile['index']);
+                setTimeout(update_active_units_dialog, update_focus_delay);
+                auto_attack = true;
+                remove_active_dialog(id);
+            }
           };
           buttons.push(button);
         } else {
-          var packet = {
-              "pid"         : packet_unit_do_action,
-              "actor_id"    : actor_unit['id'],
-              "target_id"   : target_tile['index'],
-              "extra_id"    : EXTRA_NONE,
-              "sub_tgt_id"  : 0,
-              "name"        : "",
-              "action_type" : ACTION_ATTACK
-            };
-            send_request(JSON.stringify(packet));
+            request_unit_do_action(ACTION_ATTACK,
+              actor_unit['id'], target_tile['index']);
             // unit lost hp or died or promoted after attack, so update it:
             setTimeout(update_active_units_dialog, update_focus_delay);
             return;
@@ -723,14 +679,7 @@ function popup_bribe_dialog(actor_unit, target_unit, cost, act_id)
   var close_button = {	"Close (𝗪)": function() {remove_active_dialog(id);}};
   var bribe_close_button = {	"Cancel (𝗪)": function() {remove_active_dialog(id);},
   				"Do it!": function() {
-      var packet = {"pid" : packet_unit_do_action,
-                    "actor_id" : actor_unit['id'],
-                    "target_id": target_unit['id'],
-                    "extra_id" : EXTRA_NONE,
-                    "sub_tgt_id" : 0,
-                    "name" : "",
-                    "action_type": act_id};
-      send_request(JSON.stringify(packet));
+      request_unit_do_action(act_id, actor_unit['id'], target_unit['id']);
       remove_active_dialog(id);
     }
   };
@@ -788,14 +737,7 @@ function popup_incite_dialog(actor_unit, target_city, cost, act_id)
   var close_button = {         'Close (𝗪)':    function() {remove_active_dialog(id);}};
   var incite_close_buttons = { 'Cancel (𝗪)': function() {remove_active_dialog(id);},
                                'Do it!': function() {
-                                 var packet = {"pid" : packet_unit_do_action,
-                                               "actor_id" : actor_unit['id'],
-                                               "target_id": target_city['id'],
-                                               "extra_id" : EXTRA_NONE,
-                                               "sub_tgt_id" : 0,
-                                               "name" : "",
-                                               "action_type": act_id};
-                                 send_request(JSON.stringify(packet));
+              request_unit_do_action(act_id, actor_unit['id'], target_city['id']);
 
                                  remove_active_dialog(id);
                                }
@@ -847,16 +789,7 @@ function popup_unit_upgrade_dlg(actor_unit, target_city, cost, act_id)
   var close_button = {          'Close (𝗪)':    function() {remove_active_dialog(id);}};
   var upgrade_close_buttons = { 'Cancel (𝗪)': function() {remove_active_dialog(id);},
                                 'Do it!': function() {
-                                  var packet = {
-                                    "pid" : packet_unit_do_action,
-                                    "actor_id" : actor_unit['id'],
-                                    "target_id": target_city['id'],
-                                    "extra_id" : EXTRA_NONE,
-                                    "sub_tgt_id" : 0,
-                                    "name" : "",
-                                    "action_type": act_id
-                                  };
-                                  send_request(JSON.stringify(packet));
+                      request_unit_do_action(act_id, actor_unit['id'], target_city['id']);
 
                                   remove_active_dialog(id);
                                 }
@@ -882,21 +815,14 @@ function popup_unit_upgrade_dlg(actor_unit, target_city, cost, act_id)
   Needed because of JavaScript's scoping rules.
 **************************************************************************/
 function create_steal_tech_button(parent_id, tech,
-                                  actor_unit_id, target_city_id,
-                                  action_id)
+                                  actor_id, city_id, action_id)
 {
   /* Create the initial button with this tech */
   var button = {
     text : tech['name'],
     click : function() {
-      var packet = {"pid" : packet_unit_do_action,
-        "actor_id" : actor_unit_id,
-        "target_id": target_city_id,
-        "extra_id" : EXTRA_NONE,
-        "sub_tgt_id" : tech['id'],
-        "name" : "",
-        "action_type": action_id};
 
+      request_unit_do_action(action_id, actor_id, city_id, tech['id']);
       send_request(JSON.stringify(packet));
       remove_active_dialog("#"+parent_id);
     }
@@ -965,16 +891,8 @@ function popup_steal_tech_selection_dialog(actor_unit, target_city,
                    text  : "At " + unit_types[actor_unit['type']]['name']
                            + "'s Discretion",
                    click : function() {
-                     var packet = {
-                       "pid" : packet_unit_do_action,
-                       "actor_id" : actor_unit['id'],
-                       "target_id": target_city['id'],
-                       "extra_id" : EXTRA_NONE,
-                       "sub_tgt_id" : 0,
-                       "name" : "",
-                       "action_type": untargeted_action_id};
-                     send_request(JSON.stringify(packet));
-
+                     request_unit_do_action(untargeted_action_id,
+                       actor_unit['id'], target_city['id']);
                      remove_active_dialog("#"+id);
                    }
                  });
@@ -1006,29 +924,19 @@ function popup_steal_tech_selection_dialog(actor_unit, target_city,
   Needed because of JavaScript's scoping rules.
 **************************************************************************/
 function create_sabotage_impr_button(improvement, parent_id,
-                                     actor_unit_id, target_city_id, act_id)
+                                     actor_id, city_id, act_id)
 {
   /* Create the initial button with this tech */
-  var button = {
+  return {
     text : improvement['name'],
     click : function() {
-      var packet = {
-        "pid"          : packet_unit_do_action,
-        "actor_id"     : actor_unit_id,
-        "target_id"    : target_city_id,
-        "extra_id"     : EXTRA_NONE,
-        "sub_tgt_id"   : encode_building_id(improvement['id']),
-        "name"         : "",
-        "action_type"  : act_id
-      };
-      send_request(JSON.stringify(packet));
+
+        request_unit_do_action(act_id, actor_id, city_id,
+                               encode_building_id(improvement['id']));
 
       remove_active_dialog("#" + parent_id);
     }
   };
-
-  /* The button is ready. */
-  return button;
 }
 
 /**************************************************************************
@@ -1071,17 +979,10 @@ function popup_sabotage_dialog(actor_unit, target_city, city_imprs, act_id)
                 if (city_imprs.isSet(i) && improvement['sabotage'] > 0) {
                   // City walls present! No need to make a button: we know they'd press it.
                   // Instead, just automate what would happen if they did press the button:
-                  var packet = {
-                    "pid"          : packet_unit_do_action,
-                    "actor_id"     : actor_unit['id'],
-                    "target_id"    : target_city['id'],
-                    "extra_id"     : EXTRA_NONE,
-                    "sub_tgt_id"   : encode_building_id(improvement['id']),
-                    "name"         : "",
-                    "action_type"  : act_id
-                  };
-                  send_request(JSON.stringify(packet));
-                  
+                    request_unit_do_action(act_id,
+                                           actor_unit['id'], target_city['id'],
+                                           encode_building_id(improvement['id']));
+
                   // We're done. Go home without making popup dialog.
                   return;
                 }
