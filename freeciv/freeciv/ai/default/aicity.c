@@ -1250,6 +1250,7 @@ static int action_target_neg_util(action_id act_id,
   case ACTION_NUKE:
   case ACTION_PARADROP:
   case ACTION_ATTACK:
+  case ACTION_SUICIDE_ATTACK:
   case ACTION_HEAL_UNIT:
   case ACTION_TRANSFORM_TERRAIN:
   case ACTION_IRRIGATE_TF:
