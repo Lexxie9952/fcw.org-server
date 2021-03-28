@@ -594,7 +594,7 @@ function chat_context_dialog_show(recipients) {
     row = document.createElement('tr');
     cell = document.createElement('td');
     flag_canvas = document.createElement('canvas');
-    flag_canvas.width = 29;
+    flag_canvas.width = 30;
     flag_canvas.height = 20;
     ctx = flag_canvas.getContext("2d");
     if (flag != null) {
@@ -678,14 +678,14 @@ function set_chat_direction(player_id) {
 
   if (player_id == null || player_id < 0) {
     player_id = null;
-    ctx.clearRect(0, 0, 29, 20);
+    ctx.clearRect(0, 0, 30, 20);
     ctx.font = "18px FontAwesome";
     ctx.fillStyle = "rgba(192, 192, 192, 1)";
     ctx.fillText(CHAT_ICON_EVERYBODY, 7, 15);
     player_name = 'everybody';
   } else if (client.conn.playing != null
              && player_id == client.conn.playing['playerno']) {
-    ctx.clearRect(0, 0, 29, 20);
+    ctx.clearRect(0, 0, 30, 20);
     ctx.font = "18px FontAwesome";
     ctx.fillStyle = "rgba(192, 192, 192, 1)";
     ctx.fillText(CHAT_ICON_ALLIES, 10, 16);
@@ -695,7 +695,7 @@ function set_chat_direction(player_id) {
     if (pplayer == null) return;
     player_name = pplayer['name']
                 + " of the " + nations[pplayer['nation']]['adjective'];
-    ctx.clearRect(0, 0, 29, 20);
+    ctx.clearRect(0, 0, 30, 20);
     var flag = sprites["f." + nations[pplayer['nation']]['graphic_str']];
     if (flag != null) {
       ctx.drawImage(flag, 0, 0);

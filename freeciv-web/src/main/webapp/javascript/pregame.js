@@ -222,7 +222,7 @@ function update_player_info_pregame_real()
       var nation_text = "";
       if (player['nation'] in nations) {
         nation_text = " - " + nations[player['nation']]['adjective'];
-        var flag_html = $("<canvas id='pregame_nation_flags_" + id + "' width='29' height='20' class='pregame_flags'></canvas>");
+        var flag_html = $("<canvas id='pregame_nation_flags_" + id + "' width='30' height='20' class='pregame_flags'></canvas>");
         $("#pregame_plr_"+id).prepend(flag_html);
         var flag_canvas = document.getElementById('pregame_nation_flags_' + id);
         if (flag_canvas == null) continue;
@@ -376,7 +376,7 @@ function pick_nation(player_id)
     if (pnation['is_playable'] && (!is_ongoing_longturn() || !(nation_id in player_nations))) {
       nations_html += "<div class='nation_pickme_line' onclick='select_nation(" + nation_id + ");'>"
              + "<div id='nation_" + nation_id + "' class='nation_choice'>"
-             + "<canvas id='pick_flag_" + nation_id + "' width='29' height='20' class='pick_nation_flags'></canvas>"
+             + "<canvas id='pick_flag_" + nation_id + "' width='30' height='20' class='pick_nation_flags'></canvas>"
              + pnation['adjective'] + "</div></div>";
       nation_name_list.push(pnation['adjective']);
     }
@@ -1638,7 +1638,7 @@ function show_customize_nation_dialog(player_id) {
 
   var message = "<br>New nation name: <input id='new_nation_adjective' type='text' size='30' value='" + pnation['adjective'] + "'><br><br>"
        + "Upload new flag: <input type='file' id='newFlagFileInput'><br><br>"
-       + "For best results scale the image to 29 x 20 pixels before uploading. <br><br>"
+       + "For best results scale the image to 30 x 20 pixels before uploading. <br><br>"
        + "(Note: the customized nation and flag will only be active during the current game session and will not be visible to other players.)";
 
   $("#dialog").html(message);
