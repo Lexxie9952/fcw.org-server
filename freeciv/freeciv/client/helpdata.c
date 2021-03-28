@@ -2610,14 +2610,14 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
                      utype_name_translation(utype->obsoleted_by));
         break;
       case ACTION_ATTACK:
+      case ACTION_SUICIDE_ATTACK:
         if (game.info.tired_attack) {
           cat_snprintf(buf, bufsz,
                        _("  \u2022 weaker when tired. If performed with less "
                          "than a single move point left the attack power "
                          "is reduced accordingly.\n"));
         }
-        if (!utype_is_consumed_by_action(action_by_number(ACTION_ATTACK),
-                                         utype)
+        if (action_has_result(paction, ACTION_ATTACK)
             && utype_has_flag(utype, UTYF_ONEATTACK)) {
           cat_snprintf(buf, bufsz,
                        _("  \u2022 ends this unit's turn.\n"));
@@ -2741,9 +2741,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
 #if 0
     /* Some units can never become veteran through combat in practice. */
     bool veteran_through_combat =
-      !((!utype_can_do_action(utype, ACTION_ATTACK)
-         || utype_is_consumed_by_action(action_by_number(ACTION_ATTACK),
-                                        utype))
+      !(!utype_can_do_action(utype, ACTION_ATTACK)
         && utype->defense_strength == 0);
 #endif
     /* FIXME: if we knew the raise chances on the client, we could be

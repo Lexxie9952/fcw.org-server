@@ -372,7 +372,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                 is enabled and the unit class is unreachable
 ;
 ; Following actions require extra fields:
-;  "Attack"
+;  "Attack" and "Suicide Attack"
 ;   attack = base attack strength
 ;  "Bombard"
 ;   attack       = base attack strength
