@@ -737,22 +737,23 @@ veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
 veteran_move_bonus = 3, 4, 5, 6, 7, 8, 9
 helptext      = _("\
-Tribesmen came before cities, specialization, and division of labor.\
- They help in nation-building by recycling into city production with\
- a 2× bonus, donating their life-work as 20 shields toward a building,\
- wonder, or coinage. They can’t recycle into units. ** Any change of\
- production target throws away their life-work! **\n\
-Tribesmen are versatile.\
- They can explore, make basic diplomatic contact, and freely Investigate\
- cities. They can carry Goods and enter nations with whom you are at Peace,\
- and engage in primitive combat. They can’t conquer cities, and often\
- do not fight to the death (10 combat rounds).\n\
-Tribesmen move over terrain with no penalty, and do not respect nor exert ZOC.\
- They can work tiles at a rate slower than Workers. They have a 3× bonus at\
- hunting animals, and 2× defending against them.\n\
-After 2500BC (T15) your last Tribesmen get old and your nation settles into\
- city life. Tribesmen move ⅓ slower, see less, lose the recycle bonus, and can\
- no longer work tiles. After 2000BC they lose another ⅓ move.\
+Tribesmen came before cities and specialized division of labor. They have\
+ primitive versatility. \n\
+Tribesmen can explore, moving over terrain with no penalty. They don’t obey\
+ or exert ZOC. They work tiles at half the rate of Workers. They have a 3×\
+ bonus at hunting wild animals, and defend at 2× against them. \n\
+Tribesmen can make basic diplomatic contact and freely Investigate\
+ cities. They can carry Goods and enter nations with whom you are at Peace.\
+ They can do primitive combat—they can’t conquer cities and only fight\
+ 10 combat rounds. \n\
+Tribesmen help build nations by recycling into city production with\
+ a 2× bonus, donating their life-work to any output except units.\
+ ** Changing production target loses their work! **\n\
+Tribesmen start with bonuses they lose as you become more civilized. For the\
+ first three turns they get a +⅓ move bonus. After 2500BC (T15), Tribesmen get\
+ old: they lose -⅓ move, see less, lose the recycle bonus, and can no longer\
+ work tiles. At such point they are still serviceable for weak defense, carrying\
+ Goods, making contact, and recycling for 10 shields.\
 ")
 
 ;A unique patch unit to provide fair starts regardless of lack of nearby water.
@@ -3154,7 +3155,7 @@ graphic_alt   = "-"
 sound_move    = "m_strike_fighter"
 sound_move_alt = "m_jet_fighter"
 sound_fight   = "f_fighter"
-sound_fight_alt = "Ground_Strike"
+sound_fight_alt = "ground_strike"
 build_cost    = 80
 pop_cost      = 0
 attack        = 7

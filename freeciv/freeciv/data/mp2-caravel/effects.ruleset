@@ -993,7 +993,16 @@ value   = 5
 type    = "Conquest_Tech_Pct"
 value   = 100
 
-;Tribesmen OLD AGE! -----------------------------------
+;Tribesmen------------------------------------------
+[effect_tribesmen_first_three_turns]
+type = "Move_Bonus"
+value = 3
+reqs =
+    {
+      "type",      "name",      "range", "present"
+      "UnitType",  "Tribesmen", "Local", TRUE
+      "MinYear",   "-3700",     "World", FALSE
+    }
 [effect_tribesmen_slow]
 type = "Move_Bonus"
 value = -3
@@ -1003,15 +1012,6 @@ reqs =
       "UnitType",  "Tribesmen", "Local"
       "MinYear",   "-2400",     "World"
     }
-[effect_tribesmen_slow2]
-type = "Move_Bonus"
-value = -3
-reqs =
-    {
-      "type",      "name",      "range"
-      "UnitType",  "Tribesmen", "Local"
-      "MinYear",   "-1900",     "World"
-    }
 [effect_tribesmen_glaucoma]
 type = "Unit_Vision_Radius_Sq"
 value = -1
@@ -1020,14 +1020,6 @@ reqs =
       "type",      "name",      "range"
       "UnitType",  "Tribesmen", "Local"
       "MinYear",   "-2400",     "World"
-    }
-[effect_physics_glaucoma2]
-type    = "Unit_Vision_Radius_Sq"
-value	= -1
-reqs	=
-    { "type",     "name",      "range"
-      "UnitType", "Tribesmen", "Local"
-      "MinYear",  "-1900",     "World"
     }
 ;------------------------------------------------------
 
