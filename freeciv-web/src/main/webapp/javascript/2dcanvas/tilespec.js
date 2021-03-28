@@ -2321,8 +2321,8 @@ function is_color_collision(color_a, color_b)
 
   if (color_a == null || color_b == null) return false;
 
-  var pcolor_a = color_rbg_to_list(color_a);
-  var pcolor_b = color_rbg_to_list(color_b);
+  var pcolor_a = color_rgb_to_list(color_a);
+  var pcolor_b = color_rgb_to_list(color_b);
 
   var color_distance = Math.sqrt( Math.pow(pcolor_a[0] - pcolor_b[0], 2)
 		  + Math.pow(pcolor_a[1] - pcolor_b[1], 2)
@@ -2334,7 +2334,7 @@ function is_color_collision(color_a, color_b)
 /****************************************************************************
 ...
 ****************************************************************************/
-function color_rbg_to_list(pcolor)
+function color_rgb_to_list(pcolor)
 {
   if (pcolor == null) return null;
   var color_rgb = pcolor.match(/\d+/g);
