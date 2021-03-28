@@ -634,10 +634,10 @@ actor_reqs    =
       "DiplRel",      "Foreign",       "Local", TRUE
       "UnitState",    "Transported",   "Local", FALSE
     }
-target_reqs  =
-    { "type",        "name",              "range",    "present"
-      "Building",    "Police Station",    "City",     FALSE
-    }
+;target_reqs  =
+;    { "type",        "name",              "range",    "present"
+;      "Building",    "Police Station",    "City",     FALSE
+;    }
 [actionenabler_investigate_city_tribesmen_explorer]
 action       = "Investigate City"
 actor_reqs    =
@@ -649,26 +649,27 @@ actor_reqs    =
       "DiplRel",      "Foreign",       "Local", TRUE
       "UnitState",    "Transported",   "Local", FALSE
     }
-target_reqs  =
-    { "type",        "name",              "range",    "present"
-      "Building",    "Police Station",    "City",     FALSE
-    }
+;target_reqs  =
+;    { "type",        "name",              "range",    "present"
+;      "Building",    "Police Station",    "City",     FALSE
+;    }
+;Democracy now irrelevant to action enabler, it just doesn't get the bonus in effects.ruleset.
 ;Democracy is unable to block Investigate City.
-[actionenabler_investigate_city_democracy]
-action       = "Investigate City"
-actor_reqs    =
-    { "type",         "name",          "range", "present"
-      "UnitFlag",     "Diplomat",      "Local", TRUE
-      "UnitState",    "OnLivableTile", "Local", TRUE
-      "MinMoveFrags", "1",             "Local", TRUE
-      "DiplRel",      "Foreign",       "Local", TRUE
-      "UnitState",    "Transported",   "Local", FALSE
-      "UnitFlag",     "Spy",           "Local", FALSE
-    }   
-target_reqs  =
-    { "type",        "name",          "range",    "present"
-      "Gov",         "Democracy",     "Player",   TRUE 
-    }
+;[actionenabler_investigate_city_democracy]
+;action       = "Investigate City"
+;actor_reqs    =
+;    { "type",         "name",          "range", "present"
+;      "UnitFlag",     "Diplomat",      "Local", TRUE
+;      "UnitState",    "OnLivableTile", "Local", TRUE
+;      "MinMoveFrags", "1",             "Local", TRUE
+;      "DiplRel",      "Foreign",       "Local", TRUE
+;      "UnitState",    "Transported",   "Local", FALSE
+;      "UnitFlag",     "Spy",           "Local", FALSE
+;    }   
+;target_reqs  =
+;    { "type",        "name",          "range",    "present"
+;      "Gov",         "Democracy",     "Player",   TRUE 
+;    }
 [actionenabler_investigate_city_satellite]
 action       = "Investigate City"
 actor_reqs    =

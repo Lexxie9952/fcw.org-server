@@ -3525,6 +3525,24 @@ reqs	=
       "Building", "Police Station", "City", TRUE
       "Action", "Incite City Escape", "Local", TRUE
     }
+[effect_police_station_investigate_resistance]
+type	= "Action_Odds_Pct"
+value	= -54 ; +7% - 54% = -47% ... -0.47 * 80 = 37.6% ... 80%-37.6% = 42.4% ... (85%/2 = 42.5%) ✓
+reqs	=
+    { "type",     "name",             "range"
+      "Building", "Police Station",   "City"
+      "Action",   "Investigate City", "Local"
+    }
+;Cancel out the above bonus for democracies:    
+[effect_police_station_investigate_democracy]
+type	= "Action_Resist_Pct"
+value	= -54 ; +7% - 54% = -47% ... -0.47 * 80 = 37.6% ... 80%-37.6% = 42.4% ... (85%/2 = 42.5%) ✓
+reqs	=
+    { "type",     "name",             "range"
+      "Building", "Police Station",   "City"
+      "Gov",      "Democracy",        "Player" ;Action_Resist_Pct uses target player.
+      "Action",   "Investigate City", "Local"
+    }
 
 [effect_port_facility]
 type    = "Veteran_Build"
@@ -5507,17 +5525,19 @@ reqs	=
 type    = "Output_Waste_Pct"
 value	= 30
  reqs	=
-    { "type",       "name",          "range", "present"
-      "Building",   "Supreme Court", "Player", FALSE
-      "Building",   "Courthouse",    "City",   FALSE
-      "OutputType", "Trade",         "Local",  TRUE
+    { "type",       "name",                   "range", "present"
+      "Building",   "Mausoleum of Mausolos",  "Player", TRUE
+      "Building",   "Supreme Court",          "Player", FALSE
+      "Building",   "Courthouse",             "City",   FALSE
+      "OutputType", "Trade",                  "Local",  TRUE
     }
 [effect_mausoleum_of_mausolos_investigate_resistance]
-type	= "Action_Odds_Pct"
-value	= -54 ; +7% - 54% = -47% ... -0.47 * 80 = 37.6% ... 80%-37.6% = 42.4% ... (85%/2 = 42.5%) ✓
+type	= "Action_Resist_Pct"
+value	= 54 ; +7% - 54% = -47% ... -0.47 * 80 = 37.6% ... 80%-37.6% = 42.4% ... (85%/2 = 42.5%) ✓
 reqs	=
-    { "type", "name", "range", "present"
-      "Action", "Investigate City", "Local", TRUE
+    { "type",     "name",                  "range", "present"
+      "Building", "Mausoleum of Mausolos", "Player",  TRUE
+      "Action",   "Investigate City",      "Local",   TRUE
     }
 [effect_mausoleum_of_mausolos_culture]
 type    = "History"

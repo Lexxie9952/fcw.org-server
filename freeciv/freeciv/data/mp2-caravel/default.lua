@@ -18,7 +18,7 @@ function _deflua_hut_get_gold(unit, gold)
     owner:change_gold(gold)
   elseif gold == 2 then  
     notify.event(owner, unit.tile, E.HUT_GOLD, PL_("[`gold`] You found medicinal herbs worth %d gold.",
-                                                  "[`gold`] You found medicinal herbs %d gold.", gold),
+                                                  "[`gold`] You found medicinal herbs worth %d gold.", gold),
                 gold)
     owner:change_gold(gold)
   elseif gold == 5 then  

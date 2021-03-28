@@ -695,9 +695,9 @@ tech_req      = "None"
 obsolete_by   = "None"
 graphic       = "u.tribesmen"
 graphic_alt   = "-"
-sound_move    = "m_worker"
-sound_move_alt = "m_generic"
-sound_fight   = "f_worker"
+sound_move    = "m_tribesmen"
+sound_move_alt = "m_worker"
+sound_fight   = "f_warriors"
 sound_fight_alt = "f_generic"
 build_cost    = 10
 pop_cost      = 0
@@ -3137,7 +3137,7 @@ roles         = ""
 helptext      = _("\
 Jet Fighters upgrade the Fighter with improved attack, defense, and range.\
 "), _("
-INTERCEPTOR：the Vigil order Jets Fighters auto-attack adjacent Air units if they\
+INTERCEPTOR：the Vigil order lets Jet Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 3 move points or less.\n\
 "), _("
 NOTE：GOTO disallows unit loss from lack of fuel. You\
