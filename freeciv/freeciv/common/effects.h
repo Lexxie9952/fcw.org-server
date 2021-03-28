@@ -330,8 +330,9 @@ extern "C" {
 /* Multiplied over and after Building_Build_Cost_Pct is (possibly) applied */
 #define SPECENUM_VALUE129 EFT_IMPR_BUILD_COST_PM
 #define SPECENUM_VALUE129NAME "Building_Build_Cost_Pm"
-
-
+/* Allows target to get bonus resistance in cases where req ranges can't modify */
+#define SPECENUM_VALUE130 EFT_ACTION_RESIST_PCT
+#define SPECENUM_VALUE130NAME "Action_Resist_Pct"
 /* keep this last */
 #define SPECENUM_COUNT EFT_COUNT
 #include "specenum_gen.h"

@@ -140,6 +140,16 @@ Action_Odds_Pct
     "Steal Tech", "Steal Tech Escape Expected", "Targeted Steal Tech" and
     "Targeted Steal Tech Escape Expected".
 
+Action_Resist_Pct
+    Provides a % resistance for the TARGET player of an Action in such cases
+    where the "Action_Odds_Pct" effect can only access req/ranges of the ACTOR
+    player. Example: the "Gov" of the target changes the odds, or the target 
+    owning a certain wonder changes the odds. Positive values decrease the
+    Action_Odds_Pct; negative values increase it. In other words, it acts 
+    in reverse of Action_Odds_Pct: "Player" range refers to the target
+    instead of the actor, and the value is subtracted rather than added.
+    NOTE: unit ranges still pertain to actor, not target.
+
 Airlift
     Allow airlift to/from a city.
 

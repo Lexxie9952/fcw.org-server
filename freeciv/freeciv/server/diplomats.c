@@ -250,13 +250,18 @@ bool diplomat_investigate(struct player *pplayer, struct unit *pdiplomat,
     if (your_roll >= game.server.diplchance) {
       // Didn't slip past:
       notify_player(cplayer, city_tile(pcity), E_ENEMY_DIPLOMAT_FAILED, ftc_server,
-                    _("💢 %s %s %s was discovered spying on %s!"),
-                    indefinite_article_for_word(nation_adjective_for_player(pplayer),true),
+                    _("💢 %s %s %s %s discovered spying on %s!"),
+                    (is_unit_plural(pdiplomat) 
+                       ? "" 
+                       : indefinite_article_for_word(nation_adjective_for_player(pplayer),true)),
                     nation_adjective_for_player(pplayer),
-                    unit_tile_link(pdiplomat), city_link(pcity));
+                    unit_tile_link(pdiplomat),
+                    (is_unit_plural(pdiplomat) ? "were" : "was"), city_link(pcity));
       notify_player(pplayer, city_tile(pcity), E_MY_DIPLOMAT_FAILED, ftc_server,
-                    _("💢 Our %s was discovered spying on %s."),
-                    unit_tile_link(pdiplomat), city_link(pcity)); 
+                    _("💢 Our %s %s discovered spying on %s."),
+                    unit_tile_link(pdiplomat),
+                    (is_unit_plural(pdiplomat) ? "were" : "was"),
+                    city_link(pcity)); 
               
       /* If you were seen, it could trigger a diplomatic incident even if you fail. */
       action_consequence_caught(paction, pplayer, act_utype, cplayer, city_tile(pcity), city_link(pcity));
@@ -271,13 +276,16 @@ bool diplomat_investigate(struct player *pplayer, struct unit *pdiplomat,
     if (diplomat_was_caught(pplayer, pdiplomat, pcity, cplayer,
                             paction)) {
       notify_player(pplayer, city_tile(pcity), E_MY_DIPLOMAT_FAILED, ftc_server,
-                    _(" ⚠️ Your %s %s was captured trying to "
+                    _(" ⚠️ Your %s %s %s captured trying to "
                       " investigate %s!"),
                     unit_tile_link(pdiplomat), UNIT_EMOJI(pdiplomat),
+                    (is_unit_plural(pdiplomat) ? "were" : "was"),
                     city_link(pcity));
       notify_player(cplayer, city_tile(pcity), E_ENEMY_DIPLOMAT_FAILED, ftc_server,
                     _(" 💥 You captured %s %s %s %s spying on %s!"),
-                    indefinite_article_for_word(nation_adjective_for_player(pplayer),false),
+                    (is_unit_plural(pdiplomat) 
+                      ? ""
+                      : indefinite_article_for_word(nation_adjective_for_player(pplayer),false)),
                     nation_adjective_for_player(pplayer),
                     unit_tile_link(pdiplomat), UNIT_EMOJI(pdiplomat),
                     city_link(pcity));
@@ -1775,37 +1783,60 @@ static bool diplomat_was_caught(struct player *act_player,
                                 struct player *tgt_player,
                                 const struct action *act)
 {
-  signed int odds;
+  signed int odds;            // base odds 
+  float action_odds = 0; // bonus/penalties to base odds.
 
   /* Take the odds from the diplchance setting. */
   odds = game.server.diplchance;
 
-  /* Let the Action_Odds_Pct effect modify the odds. The advantage of doing
-   * it this way in stead of rolling twice is that Action_Odds_Pct can
-   * increase the odds. */
+/* Former code, replaced by the 3 statements below. This only accounted
+ * for EFT_ACTION_ODDS_PCT:
   odds += ((odds
             * get_target_bonus_effects(NULL,
                                        act_player, tgt_player,
                                        tgt_city, NULL, NULL,
                                        act_unit, unit_type_get(act_unit),
                                        NULL, NULL, act,
+                                       EFT_ACTION_ODDS_PCT)) / 100); */
+
+  /* The Action_Odds_Pct effect modifies the odds. */
+  action_odds += (((float)odds
+            * (float)get_target_bonus_effects(NULL,
+                                       act_player, tgt_player,
+                                       tgt_city, NULL, NULL,
+                                       act_unit, unit_type_get(act_unit),
+                                       NULL, NULL, act,
                                        EFT_ACTION_ODDS_PCT))
            / 100);
+  /* The Action_Resist_Pct effect modifies the odds. The advantage of using this
+   * WITH Action_Odds_Pct: the target player can also modify the odds.
+   * TODO: caller passes target unit so we can check that too ? */
+  action_odds -= (((float)odds
+            * (float)get_target_bonus_effects(NULL,
+                                       tgt_player, act_player,
+                                       tgt_city, NULL, NULL,
+                                       act_unit, unit_type_get(act_unit),
+                                       NULL, NULL, act,
+                                       EFT_ACTION_RESIST_PCT))
+           / 100);
 
-  if (odds<0) odds=0;   // fc_rand 100% of time gives opposite result if odds<0
+  odds += action_odds;
+
+  if (odds<0) odds=0;   /* fc_rand 100% of time gives opposite result if odds<0 */
   int your_roll = (int)fc_rand(100);
-  // Notify players of odds to provide transparency of what's going on!
-  // Siege rams don't get "caught", but progress to next stage of sabotage resistance checking
+  /* Notify players of odds to provide transparency of what's going on!
+   * Siege rams don't get "caught", but progress to next stage of sabotage resistance checking */
   if (strcmp(utype_name_translation(unit_type_get(act_unit)), "Siege Ram")!=0) {
 
     notify_player(act_player, NULL, E_UNIT_ACTION_TARGET_OTHER, ftc_server,
                   _("<font color='#C0C0C0'><u>Operation Odds</u>: %d%%. %s</font>"),
                   odds, (your_roll < odds ? "<font color='#30D050'><b>SUCCESS!</b></font>"
                                           : "<font color='#E04040'><b>FAILED!</b></font>"));
-    // Don't report "Investigate City" if someone succeeded at doing it, because it means
-    // they may have slipped past detection. If you did discover them doing it in the phase
-    // before this, then you can figure out if you caught them or not by using logic.                                  
-    if (act->id != ACTION_SPY_INVESTIGATE_CITY || (your_roll >=odds)) {
+    /* Don't report "Investigate City" to defender if someone succeeds at it, because 
+     * they may have slipped past detection. If they didn't slip past detection, 
+       you'll know the result by whether you foil the action or not. */                                  
+    if ((act->id != ACTION_SPY_INVESTIGATE_CITY && act->id != ACTION_INV_CITY_SPEND)
+        || (your_roll >=odds)) {
       notify_player(tgt_player, NULL, E_UNIT_ACTION_TARGET_OTHER, ftc_server,
                   _("<font color='#C0C0C0'><u>Defense Odds</u> vs %s: %d%%. %s</font>"),
                   action_name_translation(act),
