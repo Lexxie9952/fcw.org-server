@@ -333,6 +333,8 @@ extern "C" {
 /* Allows target to get bonus resistance in cases where req ranges can't modify */
 #define SPECENUM_VALUE130 EFT_ACTION_RESIST_PCT
 #define SPECENUM_VALUE130NAME "Action_Resist_Pct"
+/* FCW does not have /common and needs to hard code any changes or re-ordering of the above in effects.js */
+/********************************************************************************************************~*/
 /* keep this last */
 #define SPECENUM_COUNT EFT_COUNT
 #include "specenum_gen.h"
