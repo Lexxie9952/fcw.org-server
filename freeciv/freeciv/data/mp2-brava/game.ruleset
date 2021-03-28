@@ -346,9 +346,8 @@ ui_name_attack = _("%sAttack%s")
 ; /* TRANS: _Bombard (100% chance of success). */
 ui_name_bombard = _("Range%sd Attack%s")
 
-;UPGRADE
 ; /* TRANS: _Explode Missile (100% chance of success). */
-;ui_name_suicide_attack = _("%sExplode Missile%s")
+ui_name_suicide_attack = _("%sExplode Missile%s")
 
 ; /* TRANS: _Conquer City (100% chance of success). */
 ui_name_conquer_city = _("%sConquer City%s")
@@ -1078,7 +1077,7 @@ action = "Attack"
 actor_reqs    =
     { "type",         "name",           "range", "present"
       "UnitFlag",     "NonMil",         "Local", FALSE
-;     "UnitClassFlag","Missile",        "Local", FALSE
+      "UnitClassFlag","Missile",        "Local", FALSE
       "UnitClassFlag","CargoRestrained","Local", FALSE
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
@@ -1091,7 +1090,7 @@ action = "Attack"
 actor_reqs    =
     { "type",         "name",           "range", "present"
       "UnitFlag",     "NonMil",         "Local", FALSE
-;     "UnitClassFlag","Missile",        "Local", FALSE
+      "UnitClassFlag","Missile",        "Local", FALSE
       "UnitClassFlag","CargoRestrained","Local", TRUE
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
@@ -1105,7 +1104,7 @@ action = "Attack"
 actor_reqs    =
     { "type",         "name",           "range", "present"
       "UnitFlag",     "NonMilAttack",   "Local", TRUE
-;     "UnitClassFlag","Missile",        "Local", FALSE
+      "UnitClassFlag","Missile",        "Local", FALSE
       "UnitClassFlag","CargoRestrained","Local", FALSE
       "MinMoveFrags", "1",              "Local", TRUE
       "UnitState",    "OnNativeTile",   "Local", TRUE
@@ -1117,7 +1116,7 @@ action = "Attack"
 actor_reqs    =
     { "type",          "name",    "range", "present"
       "UnitFlag",      "NonMil",  "Local", FALSE
-;      "UnitClassFlag","Missile", "Local", FALSE
+      "UnitClassFlag","Missile", "Local", FALSE
       "MinMoveFrags",  "1",       "Local", TRUE
       "UnitFlag",      "Marines", "Local", TRUE
       "DiplRel",       "War",     "Local", TRUE
@@ -1127,7 +1126,7 @@ action = "Attack"
 actor_reqs    =
     { "type",          "name",             "range", "present"
       "UnitFlag",      "NonMil",           "Local", FALSE
-;     "UnitClassFlag", "Missile",          "Local", FALSE
+      "UnitClassFlag", "Missile",          "Local", FALSE
       "MinMoveFrags",  "1",                "Local", TRUE
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
       "DiplRel",       "War",              "Local", TRUE
@@ -1137,23 +1136,21 @@ action = "Attack"
 actor_reqs    =
     { "type",          "name",             "range", "present"
       "UnitFlag",      "NonMilAttack",     "Local", TRUE
-;     "UnitClassFlag", "Missile",          "Local", FALSE
+      "UnitClassFlag", "Missile",          "Local", FALSE
       "MinMoveFrags",  "1",                "Local", TRUE
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
       "DiplRel",       "War",              "Local", TRUE
     }
 
-;/* REQUIRED after merge 
-;[actionenabler_explode_missile]
-;action = "Suicide Attack"
-;actor_reqs    =
-;    { "type",          "name",    "range", "present"
-;      "UnitFlag",      "NonMil",  "Local", FALSE
-;      "UnitClassFlag", "Missile", "Local", TRUE
-;      "MinMoveFrags",  "1",       "Local", TRUE
-;      "DiplRel",       "War",     "Local", TRUE
-;    }
-;*/
+[actionenabler_explode_missile]
+action = "Suicide Attack"
+actor_reqs    =
+    { "type",          "name",    "range", "present"
+      "UnitFlag",      "NonMil",  "Local", FALSE
+      "UnitClassFlag", "Missile", "Local", TRUE
+      "MinMoveFrags",  "1",       "Local", TRUE
+      "DiplRel",       "War",     "Local", TRUE
+    }
 ;---------------------------------------------------------------------------
 [actionenabler_conquer_city_native_unrestrained]
 action = "Conquer City"
