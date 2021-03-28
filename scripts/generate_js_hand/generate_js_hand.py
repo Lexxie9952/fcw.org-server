@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: latin-1 -*-
 ''' 
- Freeciv - Copyright (C) 2009 - Andreas Røsdal   andrearo@pvv.ntnu.no
+ Freeciv - Copyright (C) 2009 - Andreas Rï¿½sdal   andrearo@pvv.ntnu.no
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2, or (at your option)
@@ -44,6 +44,10 @@ function client_handle_packet(p)
  try {
   for (var i = 0; i < p.length; i++) {
     if (p[i] == null) continue;
+    if (DEBUG_LOG_PACKETS) {
+      var packet_str = JSON.stringify(p[i], null, 4);
+      console.log("PACKET: "+packet_str); // Logs output to dev tools console.
+    }
     var packet_type = p[i]['pid'];
     switch (packet_type) {
 """);
