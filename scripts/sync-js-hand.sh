@@ -33,7 +33,8 @@ mkdir -p "${DOCS_DEST}" "${JS_DEST}" "${SOUNDS_DEST}" "${GAME_DEST}" && \
 #/home/freeciv/freeciv-web/freeciv-web/target/freeciv-web/images/flags/fixed should be
 #used as a backup directory of all fixed flags, so they can be restored whenever
 #sync-with-flags.sh is called. Which we should always avoid, except during first time ./install.sh
-"${DIR}"/freeciv-img-extract/sync-with-flags.sh -f "${FREECIV_DIR}" -o "${WEBAPP_DIR}" && \
+#"${DIR}"/freeciv-img-extract/sync-with-flags.sh -f "${FREECIV_DIR}" -o "${WEBAPP_DIR}" && \
+"${DIR}"/freeciv-img-extract/sync.sh -f "${FREECIV_DIR}" -o "${WEBAPP_DIR}" && \
 "${DIR}"/helpdata_gen/ruleset_auto_gen.sh -f "${FREECIV_DIR}" -o "${WEBAPP_DIR}" && \
 "${DIR}"/generate_js_hand/generate_js_hand.py -f "${FREECIV_DIR}" -o "${WEBAPP_DIR}" && \
 "${DIR}"/gen_event_types/gen_event_types.py -f "${FREECIV_DIR}" -o "${WEBAPP_DIR}" && \
