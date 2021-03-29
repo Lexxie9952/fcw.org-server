@@ -915,6 +915,13 @@ bool diplomat_get_tech(struct player *pplayer, struct unit *pdiplomat,
                       " Your %s %s was caught and executed."),
                     city_link(pcity),
                     unit_tile_link(pdiplomat), UNIT_EMOJI(pdiplomat));
+      notify_player(cplayer, city_tile(pcity),
+                    E_ENEMY_DIPLOMAT_FAILED, ftc_server,
+                    _("The %s %s failed to steal technology again from %s. "
+                      "We were prepared for the attempt."),
+                    nation_adjective_for_player(pplayer),
+                    unit_tile_link(pdiplomat),
+                    city_link(pcity));
     } else {
       notify_player(pplayer, city_tile(pcity),
                     E_MY_DIPLOMAT_FAILED, ftc_server,
@@ -922,15 +929,16 @@ bool diplomat_get_tech(struct player *pplayer, struct unit *pdiplomat,
                       " steal tech from %s."),
                     unit_tile_link(pdiplomat), UNIT_EMOJI(pdiplomat),
                     city_link(pcity));
+      notify_player(cplayer, city_tile(pcity),
+                    E_ENEMY_DIPLOMAT_FAILED, ftc_server,
+                    _(" 💥 %s %s %s %s failed to steal tech from %s."),
+                    indefinite_article_for_word(nation_adjective_for_player(pplayer),false),
+                    nation_adjective_for_player(pplayer),
+                    UNIT_EMOJI(pdiplomat), unit_tile_link(pdiplomat),
+                    city_link(pcity));
     }
-    notify_player(cplayer, city_tile(pcity),
-                  E_ENEMY_DIPLOMAT_FAILED, ftc_server,
-                  _(" 💥 %s %s %s %s failed to steal tech from %s."),
-                  indefinite_article_for_word(nation_adjective_for_player(pplayer),false),
-                  nation_adjective_for_player(pplayer),
-                  UNIT_EMOJI(pdiplomat), unit_tile_link(pdiplomat),
-                  city_link(pcity));
-    /* this may cause a diplomatic incident */
+
+    /* This may cause a diplomatic incident */
     action_consequence_caught(paction, pplayer, act_utype, cplayer,
                               city_tile(pcity), city_link(pcity));
     wipe_unit(pdiplomat, ULR_CAUGHT, cplayer);
