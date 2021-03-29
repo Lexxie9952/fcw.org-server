@@ -1383,6 +1383,8 @@ bool transfer_city(struct player *ptaker, struct city *pcity,
 
   sync_cities();
 
+  CALL_FUNC_EACH_AI(city_info, pcity);
+
   return city_remains;
 }
 
