@@ -280,7 +280,7 @@ echo "==== Building freeciv ===="
 echo "Please be patient"
 cd "${basedir}"/freeciv && \
   ./prepare_freeciv.sh  && \
-  cd freeciv && make install || \
+  cd build && make install || \
   handle_error 5 "Failed to install freeciv"
 
 echo "==== Building freeciv-web ===="
