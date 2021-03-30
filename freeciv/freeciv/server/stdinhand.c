@@ -146,7 +146,8 @@ static bool read_init_script_real(struct connection *caller,
 static bool reset_command(struct connection *caller, char *arg, bool check,
                           int read_recursion);
 static bool default_command(struct connection *caller, char *arg, bool check);
-static bool lua_command(struct connection *caller, char *arg, bool check);
+static bool lua_command(struct connection *caller, char *arg, bool check,
+                        int read_recursion);
 static bool kick_command(struct connection *caller, char *name, bool check);
 static bool delegate_command(struct connection *caller, char *arg,
                              bool check);
@@ -4582,7 +4583,7 @@ static bool handle_stdin_input_real(struct connection *caller, char *str,
   case CMD_DEFAULT:
     return default_command(caller, arg, check);
   case CMD_LUA:
-    return lua_command(caller, arg, check);
+    return lua_command(caller, arg, check, read_recursion);
   case CMD_KICK:
     return kick_command(caller, arg, check);
   case CMD_DELEGATE:
@@ -4871,7 +4872,8 @@ static const char *lua_accessor(int i)
 /**********************************************************************//**
   Evaluate a line of lua script or a lua script file.
 **************************************************************************/
-static bool lua_command(struct connection *caller, char *arg, bool check)
+static bool lua_command(struct connection *caller, char *arg, bool check,
+                        int read_recursion)
 {
   FILE *script_file;
   const char extension[] = ".lua", *real_filename = NULL;
@@ -4925,7 +4927,12 @@ static bool lua_command(struct connection *caller, char *arg, bool check)
     /* Nothing to check. */
     break;
   case LUA_UNSAFE_CMD:
-    if (is_restricted(caller)) {
+    if (read_recursion > 0) {
+      cmd_reply(CMD_LUA, caller, C_FAIL,
+                _("Unsafe Lua code can only be run by explicit command."));
+      ret = FALSE;
+      goto cleanup;
+    } else if (is_restricted(caller)) {
       cmd_reply(CMD_LUA, caller, C_FAIL,
                 _("You aren't allowed to run unsafe Lua code."));
       ret = FALSE;
@@ -4933,7 +4940,12 @@ static bool lua_command(struct connection *caller, char *arg, bool check)
     }
     break;
   case LUA_UNSAFE_FILE:
-    if (is_restricted(caller)) {
+    if (read_recursion > 0) {
+      cmd_reply(CMD_LUA, caller, C_FAIL,
+                _("Unsafe Lua code can only be run by explicit command."));
+      ret = FALSE;
+      goto cleanup;
+    } else if (is_restricted(caller)) {
       cmd_reply(CMD_LUA, caller, C_FAIL,
                 _("You aren't allowed to run unsafe Lua code."));
       ret = FALSE;
