@@ -4,7 +4,7 @@ services:
   freeciv-web:
     image: freeciv/freeciv-web
     build: .
-    container_name: freeciv-web
+    container_name: fcw.org
     command: ["sleep", "infinity"]
     volumes:
       - "data:/var/lib/tomcat8/webapps/data"
