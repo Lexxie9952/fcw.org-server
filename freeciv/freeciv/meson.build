@@ -326,6 +326,11 @@ common_lib = library('freeciv',
 
 ais = static_library('fc_ai',
   'ai/classic/classicai.c',
+  'ai/tex/texai.c',
+  'ai/tex/texaicity.c',
+  'ai/tex/texaimsg.c',
+  'ai/tex/texaiplayer.c',
+  'ai/tex/texaiworld.c',
   'ai/default/aiair.c',
   'ai/default/aicity.c',
   'ai/default/aidata.c',
@@ -348,7 +353,7 @@ ais = static_library('fc_ai',
   include_directories: [server_inc, include_directories('ai/default')]
   )
 
-server_lib = static_library('libfc_server',
+server_lib = static_library('fc_server',
   'ai/aitraits.c',
   'ai/difficulty.c',
   'ai/handicaps.c',

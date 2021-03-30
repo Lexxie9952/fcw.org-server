@@ -53,7 +53,9 @@ Requirement types and supported ranges
 Achievement:   World, Alliance, Team, Player
 Action:        Local
 Activity:      Local
-Age:           Local, City                                             Target unit, city or player is in the game for at least so many turns.
+Age (of unit):   Local
+Age (of city):   City
+Age (of player): Player
 AI:            Player                                                  AI player difficulty level
 BaseFlag:      Local, Adjacent, CAdjacent, Traderoute, City
 Building:      World, Alliance, Team, Player, Continent, Traderoute,

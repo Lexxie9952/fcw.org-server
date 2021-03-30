@@ -444,11 +444,14 @@ void unit_bombs_unit(struct unit *attacker, struct unit *defender,
 **************************************************************************/
 void combat_veterans(struct unit *attacker, struct unit *defender)
 {
-  if (attacker->hp > 0) {
-    maybe_make_veteran(attacker); 
-  }
-  if (defender->hp > 0) {
-    maybe_make_veteran(defender); 
+  if (attacker->hp <= 0 || defender->hp <= 0
+      || !game.info.only_killing_makes_veteran) {
+    if (attacker->hp > 0) {
+      maybe_make_veteran(attacker);
+    }
+    if (defender->hp > 0) {
+      maybe_make_veteran(defender);
+    }
   }
 }
 
@@ -1902,6 +1905,7 @@ void transform_unit(struct unit *punit, const struct unit_type *to_unit,
   unit_refresh_vision(punit);
 
   CALL_PLR_AI_FUNC(unit_transformed, pplayer, punit, old_type);
+  CALL_FUNC_EACH_AI(unit_info, punit);
 
   send_unit_info(NULL, punit);
   conn_list_do_unbuffer(pplayer->connections);
