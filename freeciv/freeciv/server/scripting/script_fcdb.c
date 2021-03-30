@@ -30,6 +30,9 @@
 #ifdef HAVE_FCDB_MYSQL
 #include "ls_mysql.h"
 #endif
+#ifdef HAVE_FCDB_ODBC
+#include "ls_odbc.h"
+#endif
 #ifdef HAVE_FCDB_POSTGRES
 #include "ls_postgres.h"
 #endif
@@ -91,6 +94,11 @@ static struct fc_lua *fcl = NULL;
     - check if the user data was successful saved in the database.
   user_log(Connection pconn, Bool success):
     - check if the login attempt was successful logged.
+  user_delegate_to(Connection pconn, Player pplayer, String delegate):
+    - returns Bool, whether pconn is allowed to delegate player to delegate.
+  user_take(Connection requester, Connection taker, Player pplayer,
+            Bool observer):
+    - returns Bool, whether requester is allowed to attach taker to pplayer.
 
   If an error occurred, the functions return a non-NULL string error message
   as the last return value.
@@ -105,6 +113,12 @@ static void script_fcdb_functions_define(void)
   luascript_func_add(fcl, "user_save", TRUE, 2, 0, API_TYPE_CONNECTION,
                      API_TYPE_STRING);
   luascript_func_add(fcl, "user_log", TRUE, 2, 0, API_TYPE_CONNECTION,
+                     API_TYPE_BOOL);
+  luascript_func_add(fcl, "user_delegate_to", FALSE, 3, 1,
+                     API_TYPE_CONNECTION, API_TYPE_PLAYER, API_TYPE_STRING,
+                     API_TYPE_BOOL);
+  luascript_func_add(fcl, "user_take", FALSE, 4, 1, API_TYPE_CONNECTION,
+                     API_TYPE_CONNECTION, API_TYPE_PLAYER, API_TYPE_BOOL,
                      API_TYPE_BOOL);
 }
 
@@ -202,6 +216,10 @@ bool script_fcdb_init(const char *fcdb_luafile)
   tolua_fcdb_open(fcl->state);
 #ifdef HAVE_FCDB_MYSQL
   luaL_requiref(fcl->state, "ls_mysql", luaopen_luasql_mysql, 1);
+  lua_pop(fcl->state, 1);
+#endif
+#ifdef HAVE_FCDB_ODBC
+  luaL_requiref(fcl->state, "ls_odbc", luaopen_luasql_odbc, 1);
   lua_pop(fcl->state, 1);
 #endif
 #ifdef HAVE_FCDB_POSTGRES

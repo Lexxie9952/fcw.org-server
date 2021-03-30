@@ -115,7 +115,6 @@ function client_remove_unit(punit)
 {
   if (unit_is_in_focus(punit)) {
     current_focus = [];
-    if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
   }
 
   delete units[punit['id']];
@@ -568,7 +567,7 @@ function update_unit_anim_list(old_unit, new_unit)
 
   if (anim_units_count > anim_units_max) return;
 
-  if (renderer == RENDERER_2DCANVAS && !is_unit_visible(new_unit)) return;
+  if (!is_unit_visible(new_unit)) return;
 
   if (old_unit['anim_list'] == null) old_unit['anim_list'] = [];
 
@@ -614,15 +613,10 @@ function get_unit_anim_offset(punit)
 {
   var offset = {};
 
-  if (renderer == RENDERER_WEBGL) {
-    offset['x'] = 0;
-    offset['y'] = 0;
-    return offset;
-  }
-
   if (punit['anim_list'] != null && punit['anim_list'].length >= 2)  {
     var anim_tuple_src = punit['anim_list'][0];
     var anim_tuple_dst = punit['anim_list'][1];
+
     //var anim_tuple_dst = punit['anim_list'][2];
     var src_tile = index_to_tile(anim_tuple_src['tile']);
     var dst_tile = index_to_tile(anim_tuple_dst['tile']);
@@ -631,7 +625,17 @@ function get_unit_anim_offset(punit)
     anim_tuple_dst['i'] = anim_tuple_dst['i'] - 1;
 
     var i = Math.floor((anim_tuple_dst['i'] + 2 ) / 3);
-
+   /* EXPERIMENTAL: keeps unit in centre of map even while it's moving on a GOTO.
+      could be nice but conservatively not implemented for now, slightly jerky.
+    if (focuslock && unit_is_only_unit_in_focus(punit)) {
+      center_tile_mapcanvas(tiles[punit['anim_list'][0]['tile']]);
+      // if unit is center-locked, it never has non-centered-on-tile
+      //   placement on the way to the next tile: 
+      dst_tile = src_tile;
+      u_tile = src_tile;
+      i = 0;
+    }
+    */
     var r = map_to_gui_pos( src_tile['x'], src_tile['y']);
     var src_gx = r['gui_dx'];
     var src_gy = r['gui_dy'];
@@ -647,22 +651,26 @@ function get_unit_anim_offset(punit)
     var gui_dx = Math.floor((dst_gx - src_gx) * (i / ANIM_STEPS)) + (punit_gx - dst_gx);
     var gui_dy = Math.floor((dst_gy - src_gy) * (i / ANIM_STEPS)) + (punit_gy - dst_gy);
 
-
     if (i == 0) {
       punit['anim_list'].splice(0, 1);
-//      punit['anim_list'].splice(0, 2);
       if (punit['anim_list'].length == 1) {
-//      if (punit['anim_list'].length <= 2) {
         punit['anim_list'].splice(0, punit['anim_list'].length);
+      }
+      // This will center the map on the unit EXACTLY when it finished its animation, but
+      // at TC it would jerk the map all over with focuslock on every unit that finished moving,
+      // unless we do some logic to make sure we only do it for our selected unit:
+      if (focuslock && punit['anim_list'].length == 0) {
+        if (unit_is_only_unit_in_focus(punit) ) {  // avoid centering map as non-selected moving units move around.
+          center_tile_mapcanvas(unit_tile(punit));
+        }
+        else {}  //TODO if wanted: multiple units ordered to move at once, center on current_focus[0] only. TEST IT, was centering on alien movements too.
       }
     }
 
-
-    offset['x'] = - gui_dx ;
+    offset['x'] = - gui_dx;
     offset['y'] = - gui_dy;
-
-
-  } else {
+  } 
+  else {
     offset['x'] = 0;
     offset['y'] = 0;
     anim_units_count -= 1;
@@ -700,7 +708,6 @@ function get_unit_homecity_name(punit)
 function is_unit_visible(punit)
 {
   if (punit == null || punit['tile'] == null) return false;
-  if (renderer == RENDERER_WEBGL) return false;  // not supported by 3D version.
 
   var u_tile = index_to_tile(punit['tile']);
   var r = map_to_gui_pos(u_tile['x'], u_tile['y']);

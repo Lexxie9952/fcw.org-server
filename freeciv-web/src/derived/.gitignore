@@ -1,6 +1,17 @@
 # Ignore everything
-*
+webapp/docs/*
+webapp/images/*/*
+webapp/javascript/*
+webapp/sounds/*
+webapp/tileset/*
+webapp/man/*
 
 # ...Except these
 !README.md
 !.gitignore
+!webapp/images/flags
+!webapp/man/ag7.bak.html
+!webapp/man/mp2-brava7.bak.html
+!webapp/man/mp2-caravel6.bak.html
+!webapp/man/mp2-caravel7.bak.html
+

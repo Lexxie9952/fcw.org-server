@@ -105,7 +105,7 @@ function city_size_sum(playerno) {
 **************************************************************************/
 function update_game_status_panel() {
 
-  if (C_S_RUNNING != client_state() || cardboard_vr_enabled) return;
+  if (C_S_RUNNING != client_state() ) return;
 
   var status_html = "";
 

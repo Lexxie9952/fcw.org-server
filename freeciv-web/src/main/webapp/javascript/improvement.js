@@ -26,20 +26,47 @@ const B_PALACE_NAME = 'Palace';
 const B_ECC_PALACE_NAME = 'Ecclesiastical Palace';
 //--
 const B_ADAM_SMITH_NAME = "A.Smith's Trading Co.";
+const B_ANGKOR_WAT = "Angkor Wat";
 const B_APPIAN_WAY = "Appian Way";
 const B_COLOSSUS = "Colossus";
 const B_GIBRALTAR_FORTRESS = "Gibraltar Fortress"
+const B_HOOVER_DAM = "Hoover Dam"
 const B_LIGHTHOUSE = "Lighthouse";
 const B_MAGNA_CARTA = "Magna Carta";
+const B_MEDICI_BANK = "Medici Bank";
 const B_STATUE_OF_LIBERTY_NAME = "Statue of Liberty";
 const B_TESLAS_LABORATORY = "Tesla's Laboratory";
-
 
 var B_LAST = MAX_NUM_BUILDINGS;
 
 const improvements = {};
 /** @private */
 const improvements_name_index = {};
+
+// Discounted price lists from MP2 rules
+var communist_discounts = {
+  "Riflemen": 5,
+  "Dive Bomber": 10,
+  "Armor": 10
+  };
+var nationalist_discounts = {
+    "Police Station": 10
+    };
+  
+  var colossus_discounts = {
+    "Boat": 3,
+    "Trireme": 5,
+    "Galley": 5,
+    "Caravan": 5,
+    "Caravel": 5,
+    "Cargo Ship": 5
+  };
+  var appian_discounts = {
+    "Wagon": 5
+  }
+  var angkorwat_discounts = {
+    "Elephants": 5
+  }
 
 /**************************************************************************
  Prepare improvements for use, resetting state from any previous ruleset
@@ -112,3 +139,78 @@ function improvement_id_by_name(name)
     ? improvements_name_index[name]
     : -1;
 }
+
+/**************************************************************************
+...Figures out discounts for universals (units or buildings)
+**************************************************************************/
+function get_universal_discount_price(ptype, pcity)
+{
+  var playerno;
+  if (!pcity) pcity = active_city;
+  if (!active_city) {
+    playerno = client.conn.playing.playerno;
+  } else playerno = pcity.owner;
+
+  // Since 'name' and 'build_cost' are the only fields checked and
+  // are universal to both improvements and units, we can adapt this
+  // for everything when needed: 
+  
+  // MP2 communist discounts
+  if (client_rules_flag[CRF_MP2_SPECIAL_UNITS] && 
+      governments[players[playerno].government].name == "Communism") {
+    
+    if (communist_discounts[ptype['name']]) {
+      if (!client_rules_flag[CRF_MP2_C]) {
+        if (ptype['name'] == "Armor") return ptype['build_cost']
+      } 
+      return ptype['build_cost'] - communist_discounts[ptype['name']];
+    }
+  }
+  // MP2 nationalist discounts
+  if (client_rules_flag[CRF_MP2_C] && 
+      governments[players[playerno].government].name == "Nationalism") {
+
+    if (nationalist_discounts[ptype['name']])    
+      return ptype['build_cost'] - nationalist_discounts[ptype['name']];
+  }
+  // MP2 Building Prices:
+  if (client_rules_flag[CRF_MP2_C]) {
+    // City Walls increase with Metallurgy
+    if (ptype['name'] == "City Walls"
+        && (player_invention_state(playerno, tech_id_by_name('Steel')) == TECH_KNOWN)) {
+            return ptype['build_cost'] + 10;
+    }
+    if (ptype['name'] == "Coastal Defense"
+        && player_has_wonder(playerno,
+           improvement_id_by_name(B_GIBRALTAR_FORTRESS))) {
+            return ptype['build_cost'] - 15;
+    }
+    if (ptype['name'] == "Hydro Plant"
+        && player_has_wonder(playerno,
+           improvement_id_by_name(B_HOOVER_DAM))) {
+            return ptype['build_cost'] - 5;
+    }
+  }
+  // MP2 discounts for having Colossus
+  if (pcity && client_rules_flag[CRF_COLOSSUS_DISCOUNT] &&
+      city_has_building(pcity, improvement_id_by_name(B_COLOSSUS))) {
+
+    if (colossus_discounts[ptype['name']])
+        return ptype['build_cost'] - colossus_discounts[ptype['name']];      
+  }
+  // MP2 discount for Appian Way
+  if (pcity && client_rules_flag[CRF_MP2_C] &&
+    city_has_building(pcity, improvement_id_by_name(B_APPIAN_WAY))) {
+      if (appian_discounts[ptype['name']])
+      return ptype['build_cost'] - appian_discounts[ptype['name']];      
+  }
+  // MP2 discount for Angkor Wat
+  if (pcity && client_rules_flag[CRF_MP2_C] &&
+    city_has_building(pcity, improvement_id_by_name(B_ANGKOR_WAT))) {
+      if (angkorwat_discounts[ptype['name']])
+      return ptype['build_cost'] - angkorwat_discounts[ptype['name']];      
+  }
+  // default, no discount:
+  return ptype['build_cost'];
+}
+

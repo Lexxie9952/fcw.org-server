@@ -50,11 +50,6 @@ var seconds_to_phasedone_sync = 0;
 var dialog_close_trigger = "";
 var dialog_message_close_task;
 
-var RENDERER_2DCANVAS = 1;      // default HTML5 Canvas
-var RENDERER_WEBGL = 2;         // WebGL + Three.js
-var renderer = RENDERER_2DCANVAS;  // This variable specifies which map renderer to use, 2d Canvas or WebGL.
-
-
 /**************************************************************************
  Main starting point for Freeciv-web
 **************************************************************************/
@@ -86,6 +81,7 @@ function civclient_init()
              window.location.href ='/';
            }
       );
+      setSwalTheme();
       return;
     } else if (action == 'pbem') {
       link_game_type = 'pbem';
@@ -109,19 +105,17 @@ function civclient_init()
 
   if (window.requestAnimationFrame == null) {
     swal("Please upgrade your browser.");
+    setSwalTheme();
     return;
   }
 
   if (is_longturn() && observing) {
     swal("LongTurn games can't be observed.");
+    setSwalTheme();
     return;
   }
 
-  if ($.getUrlVar('renderer') == "webgl") {
-    renderer = RENDERER_WEBGL;
-  }
-  if (renderer == RENDERER_2DCANVAS) init_mapview();
-  if (renderer == RENDERER_WEBGL) init_webgl_renderer();
+  init_mapview();
 
   game_init();
   $('#tabs').tabs({ heightStyle: "fill" });
@@ -134,11 +128,7 @@ function civclient_init()
   statusTimerId = setInterval(update_game_status_panel, 6000);
 
   if (overviewTimerId == -1) {
-    if (renderer == RENDERER_WEBGL) {
-      OVERVIEW_REFRESH = 12000;
-    } else {
-      OVERVIEW_REFRESH = 6000;
-    }
+    OVERVIEW_REFRESH = 6000;
     overviewTimerId = setInterval(redraw_overview, OVERVIEW_REFRESH);
   }
 
@@ -245,6 +235,24 @@ function civclient_init()
     restore_chatbox_vals = tmp;
   }
 
+  draw_highlighted_pollution = simpleStorage.get('showpollution');
+  if (draw_highlighted_pollution == null)
+    draw_highlighted_pollution = false;
+
+  focuslock = simpleStorage.get('focuslock');
+  if (focuslock == null) {
+    if (is_small_screen() || is_touch_device())
+      focuslock = true;
+    else focuslock = false;
+  }
+
+  show_unit_movepct = simpleStorage.get('showMoves');
+  if (show_unit_movepct == null)
+    show_unit_movepct = false;
+  if (show_unit_movepct) {
+    hp_bar_offset = -5;
+  } else hp_bar_offset = 0;
+  
   // -------------------------------------------------------------------------------- 
   
   /* Initialze audio.js music player */
@@ -288,8 +296,9 @@ function civclient_init()
             }
             init_common_intro_dialog();
         },
-        error: function (request, textStatus, errorThrown) {        
+        error: function (request, textStatus, errorThrown) {  
             swal("Error, can't get the game type!");
+            setSwalTheme();      
         }
     });    
   }
@@ -423,8 +432,6 @@ function show_dialog_message(title, message)
 
   speak(title);
   speak(message);
-
-  if (cardboard_vr_enabled) return;
 
   $("#generic_dialog").html(message);
   $("#generic_dialog").attr("title", title);
@@ -639,10 +646,6 @@ function show_debug_info()
   }
   console.log("Network PING average (client): " + (sum / debug_client_speed_list.length) + " ms.  (Max: " + max +"ms.)");
 
-  if (renderer == RENDERER_WEBGL) {
-    console.log(maprenderer.info);
-  }
-
 }
 
 /**************************************************************************
@@ -687,101 +690,6 @@ function show_auth_dialog(packet) {
 		});
 
   $("#dialog").dialog('open');
-}
-
-/****************************************************************************
- Change between 2D isometric and 3D WebGL renderer.
-****************************************************************************/
-function switch_renderer()
-{
-  if (is_longturn()){
-    var game_port = $.getUrlVar('civserverport')
-    var stored_username = simpleStorage.get("username", "");
-    if (stored_username == null || stored_username == false) stored_username = "blank"
-    $.ajax({
-        type: 'POST',
-        url: "/validate_twit?username="+stored_username+"&type=3d_webgl&port="+game_port,
-    });                
-  }
-  else {
-    
-    $("#canvas_div").unbind();
-    if (renderer == RENDERER_WEBGL) {
-        //activate 2D isometric renderer
-        renderer = RENDERER_2DCANVAS;
-        $("#canvas_div").empty();
-        init_mapview();
-        set_default_mapview_active();
-        requestAnimationFrame(update_map_canvas_check, mapview_canvas);
-        mapctrl_init_2d();
-
-        for (var tile_id in tiles) {
-        if (tile_get_known(tiles[tile_id]) == TILE_KNOWN_SEEN) {
-            center_tile_mapcanvas(tiles[tile_id]);
-            break;
-        }
-        }
-
-        // reset 3D WebGL data
-        for (var tile_id in tiles) {
-        tiles[tile_id]['height'] = 0;
-        }
-        scene = null;
-        heightmap = {};
-        unit_positions = {};
-        city_positions = {};
-        city_label_positions = {};
-        city_walls_positions = {};
-        unit_flag_positions = {};
-        unit_label_positions = {};
-        unit_activities_positions = {};
-        unit_health_positions = {};
-        unit_healthpercentage_positions = {};
-        forest_positions = {};
-        jungle_positions = {};
-        tile_extra_positions = {};
-        road_positions = {};
-        rail_positions = {};
-        river_positions = {};
-        tiletype_palette = [];
-        meshes = {};
-        load_count = 0;
-
-    } else {
-        //activate 3D WebGL renderer
-        renderer = RENDERER_WEBGL;
-        load_count = 0;
-        mapview_model_width = Math.floor(MAPVIEW_ASPECT_FACTOR * map['xsize']);
-        mapview_model_height = Math.floor(MAPVIEW_ASPECT_FACTOR * map['ysize']);
-
-        set_default_mapview_active();
-        init_webgl_renderer();
-
-    }
-
-    $.contextMenu({
-            selector: (renderer == RENDERER_2DCANVAS) ? '#canvas' : '#canvas_div' ,
-            zIndex: 5000,
-            autoHide: true,
-            callback: function(key, options) {
-            handle_context_menu_callback(key);
-            },
-            build: function($trigger, e) {
-                if (!context_menu_active) {
-                context_menu_active = true;
-                return false;
-                }
-                var unit_actions = update_unit_order_commands();
-                return {
-                    callback: function(key, options) {
-                    handle_context_menu_callback(key);
-                    } ,
-                    items: unit_actions
-                };
-            }
-    });
-
-    }
 }
 
 /**************************************************************************

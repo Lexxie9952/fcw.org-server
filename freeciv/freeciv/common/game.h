@@ -181,6 +181,8 @@ struct civ_game {
       int num_phases;
       int occupychance;
       int onsetbarbarian;
+      bool pax_dei_set;
+      int pax_dei_counter;
       int pingtime;
       int pingtimeout;
       int ransom_gold;
@@ -439,6 +441,12 @@ extern struct world wld;
 #define GAME_DEFAULT_NUCLEAR_WINTER_PERCENT 100 // controls threshold/likelihood for it to happen
 #define GAME_MIN_NUCLEAR_WINTER_PERCENT 1   
 #define GAME_MAX_NUCLEAR_WINTER_PERCENT 10000
+
+#define GAME_DEFAULT_PAX_DEI_COUNTER  13  // Number of turns of Pax Dei counter when wonder is first built.
+#define GAME_MIN_PAX_DEI_COUNTER      0
+#define GAME_MAX_PAX_DEI_COUNTER      1000
+
+#define GAME_DEFAULT_PAX_DEI_SET   FALSE
 
 #define GAME_DEFAULT_BORDERS         BORDERS_ENABLED
 

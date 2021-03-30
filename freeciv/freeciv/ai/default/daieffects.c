@@ -170,9 +170,11 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
   case EFT_UNIT_RECOVER_PCT:                   // not yet evaluated
   case EFT_UNIT_UNHAPPY_COST:                  // not yet evaluated
   case EFT_PEACEFUL_FIELDUNIT_BONUS:           // not yet evaluated
-  case EFT_COINAGE_BONUS_PCT:                  // not yet evaluated
+  case EFT_COINAGE_BONUS_PM:                   // not yet evaluated
   case EFT_IMPROVEMENT_SALE_PCT:               // not yet evaluated
   case EFT_GULAG:                              // not yet evaluated
+  case EFT_STACK_ESCAPE_PCT:                   // not yet evaluated
+  case EFT_ACTION_RESIST_PCT:                  // not yet evaluated
   case EFT_CAPITAL_CITY:
   case EFT_GOV_CENTER:
   case EFT_UPKEEP_FREE:
@@ -586,6 +588,9 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
   case EFT_UNIT_BUILD_COST_PCT:
     v -= amount * 30;
     break;
+  case EFT_IMPR_BUILD_COST_PM:
+    v -= amount * 3;  /* per mille is 1/10th of a percent */
+  break;
   case EFT_IMPR_BUY_COST_PCT:
   case EFT_UNIT_BUY_COST_PCT:
     v -= amount * 25;

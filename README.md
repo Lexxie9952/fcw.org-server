@@ -14,11 +14,7 @@ Currently known servers based on Freeciv-web:
 - [Freecivweb.org](https://www.freecivweb.org) - Full Freeciv-web
 - [moving borders](https://fcw.movingborders.es) (Everything except longturn and real-Earth)
 
-Freeciv WebGL 3D:
-![Freeciv-web](https://raw.githubusercontent.com/freeciv/freeciv-web/develop/freeciv-web/src/main/webapp/javascript/webgl/freeciv-webgl.png "Freeciv-web WebGL screenshot")
-
-Freeciv-web HTML5 version:
-![Freeciv-web](https://raw.githubusercontent.com/freeciv/freeciv-web/develop/scripts/freeciv-web-screenshot.png "Freeciv-web screenshot")
+![Freeciv-web](https://raw.githubusercontent.com/Lexxie9952/fcw.org-server/master/fcw-2021.png "Freeciv-web screenshot")
 
 
 Overview
@@ -45,13 +41,6 @@ Freeciv-Web consists of these components:
   Implemented in Python.
 
 * [pbem](pbem) is play-by-email support. 
-
-* [freeciv-earth](freeciv-earth) is code to generate Freeciv savegames from a map captured from mapbox.
-
-Freeciv WebGL
--------------
-Freeciv WebGL is the 3D version, which uses the Three.js 3D engine. More info about the WebGL 3D version can be found for [developers](https://github.com/freeciv/freeciv-web/tree/develop/freeciv-web/src/main/webapp/javascript/webgl) and [3D artists](https://github.com/freeciv/freeciv-web/wiki/Contributing-Blender-models-for-Freeciv-WebGL).
-Developer: Andreas Røsdal [@andreasrosdal](http://www.github.com/andreasrosdal)  
 
 Running Freeciv-web on your computer
 ------------------------------------
@@ -197,8 +186,6 @@ Enjoy. The overall dockerfile and required changes to scripts needs some further
 Freeciv-Web continuous integration on Travis CI 
 -----------------------------------------------
 Freeciv-Web is built on Travis CI on every commit. This is the current build status: [![Build Status](https://api.travis-ci.org/freeciv/freeciv-web.png)](https://travis-ci.org/freeciv/freeciv-web)
-
-Freeciv-web has CasperJS tests which are run by Travis CI on every commit, and by Vagrant when creating a new image. The tests can be found in tests/freeciv-web-tests.js. Please make sure that patches and commits for Freeciv-web don't break the CasperJS tests. Thanks!
 
 Developers interested in Freeciv-web
 ------------------------------------

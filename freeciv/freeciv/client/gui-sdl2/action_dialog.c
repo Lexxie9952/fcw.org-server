@@ -1312,10 +1312,8 @@ static int pillage_callback(struct widget *pWidget)
     int sub_target_id = pDiplomat_Dlg->target_extra_id;
 
     popdown_diplomat_dialog();
-    dsend_packet_unit_do_action(&client.conn,
-                                actor_id,
-                                target_id, sub_target_id,
-                                0, "", ACTION_PILLAGE);
+    request_do_action(ACTION_PILLAGE, actor_id,
+                      target_id, sub_target_id, "");
   }
 
   return -1;
@@ -1332,10 +1330,8 @@ static int road_callback(struct widget *pWidget)
     int sub_target_id = pDiplomat_Dlg->target_extra_id;
 
     popdown_diplomat_dialog();
-    dsend_packet_unit_do_action(&client.conn,
-                                actor_id,
-                                target_id, sub_target_id,
-                                0, "", ACTION_ROAD);
+    request_do_action(ACTION_ROAD, actor_id,
+                      target_id, sub_target_id, "");
   }
 
   return -1;
@@ -1352,10 +1348,8 @@ static int base_callback(struct widget *pWidget)
     int sub_target_id = pDiplomat_Dlg->target_extra_id;
 
     popdown_diplomat_dialog();
-    dsend_packet_unit_do_action(&client.conn,
-                                actor_id,
-                                target_id, sub_target_id,
-                                0, "", ACTION_BASE);
+    request_do_action(ACTION_BASE, actor_id,
+                      target_id, sub_target_id, "");
   }
 
   return -1;
@@ -1372,10 +1366,8 @@ static int mine_callback(struct widget *pWidget)
     int sub_target_id = pDiplomat_Dlg->target_extra_id;
 
     popdown_diplomat_dialog();
-    dsend_packet_unit_do_action(&client.conn,
-                                actor_id,
-                                target_id, sub_target_id,
-                                0, "", ACTION_MINE);
+    request_do_action(ACTION_MINE, actor_id,
+                      target_id, sub_target_id, "");
   }
 
   return -1;
@@ -1392,10 +1384,8 @@ static int irrigate_callback(struct widget *pWidget)
     int sub_target_id = pDiplomat_Dlg->target_extra_id;
 
     popdown_diplomat_dialog();
-    dsend_packet_unit_do_action(&client.conn,
-                                actor_id,
-                                target_id, sub_target_id,
-                                0, "", ACTION_IRRIGATE);
+    request_do_action(ACTION_IRRIGATE, actor_id,
+                      target_id, sub_target_id, "");
   }
 
   return -1;
@@ -1429,6 +1419,23 @@ static int attack_callback(struct widget *pWidget)
 
     popdown_diplomat_dialog();
     request_do_action(ACTION_ATTACK,
+                      actor_id, target_id, 0, "");
+  }
+
+  return -1;
+}
+
+/**********************************************************************//**
+  User clicked "Suicide Attack"
+**************************************************************************/
+static int suicide_attack_callback(struct widget *pWidget)
+{
+  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+    int actor_id = MAX_ID - pWidget->ID;
+    int target_id = pWidget->data.tile->index;
+
+    popdown_diplomat_dialog();
+    request_do_action(ACTION_SUICIDE_ATTACK,
                       actor_id, target_id, 0, "");
   }
 
@@ -1670,6 +1677,7 @@ static const act_func af_map[ACTION_COUNT] = {
   [ACTION_NUKE] = nuke_callback,
   [ACTION_PARADROP] = paradrop_callback,
   [ACTION_ATTACK] = attack_callback,
+  [ACTION_SUICIDE_ATTACK] = suicide_attack_callback,
   [ACTION_TRANSFORM_TERRAIN] = transform_callback,
   [ACTION_IRRIGATE_TF] = irrig_tf_callback,
   [ACTION_MINE_TF] = mine_tf_callback,

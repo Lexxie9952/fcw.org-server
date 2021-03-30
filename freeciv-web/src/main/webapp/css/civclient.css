@@ -127,6 +127,8 @@ button {
 
 #turn_done_button {
   float: left;
+  margin-top: 0px;
+  padding:7px;
 }
 
 .main_menu_buttons {
@@ -1373,6 +1375,10 @@ li.tech-me_only::before {
   background: url('/images/bg.jpg');
 }
 */
+.sweet-alert {
+  background: #000 url(/images/bg-dark.jpg)
+}
+
 
 /*  These get put in chatbox classes, meaning we can define colours, fonts, indent, collapsing, all kinds of stuff 
     In addition, these could be intercepted and their names used as playsounds, where, if playsound not found, it just does nothing.
@@ -1396,7 +1402,7 @@ li.tech-me_only::before {
 }
 .e_chat_msg_ally {
   text-align: center;
-  color: #969ce0;
+  color: #a9aff1;
 }
 .cht_prv_sndr {
   color: #c79cae

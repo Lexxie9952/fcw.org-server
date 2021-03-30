@@ -152,6 +152,7 @@ files =
   "amplio2/units_oversize.spec",
   "amplio2/animals.spec",
   "amplio2/veterancy.spec",
+  "misc/flags.spec",
   "misc/flags-large.spec",
   "misc/buildings-large.spec",
   "misc/wonders-large.spec",

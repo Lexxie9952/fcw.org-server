@@ -215,7 +215,7 @@ static void count_my_units(struct player *pplayer)
     if (unit_has_type_flag(punit, UTYF_COAST_STRICT)) {
       adv->stats.units.coast_strict++;
     }
-    if (uclass_has_flag(pclass, UCF_MISSILE)) {
+    if (utype_can_do_action(unit_type_get(punit), ACTION_SUICIDE_ATTACK)) {
       adv->stats.units.missiles++;
     }
     if (unit_can_do_action(punit, ACTION_PARADROP)) {
@@ -344,7 +344,7 @@ bool adv_data_phase_init(struct player *pplayer, bool is_new_phase)
       }
 
       /* If our enemy builds missiles, worry about missile defence. */
-      if (uclass_has_flag(unit_class_get(punit), UCF_MISSILE)
+      if (utype_can_do_action(unit_type_get(punit), ACTION_SUICIDE_ATTACK)
           && unit_type_get(punit)->attack_strength > 1) {
         adv->threats.missile = TRUE;
       }
@@ -395,7 +395,7 @@ bool adv_data_phase_init(struct player *pplayer, bool is_new_phase)
       /* we don't need more explaining, we got the point */
       continue;
     }
-    if (tile_has_cause_extra(ptile, EC_HUT) 
+    if (hut_on_tile(ptile) 
         && (!has_handicap(pplayer, H_HUTS)
              || map_is_known(ptile, pplayer))) {
       adv->explore.land_done = FALSE;
@@ -851,6 +851,7 @@ void adv_best_government(struct player *pplayer)
 
           switch((enum gen_action)act) {
           case ACTION_ATTACK:
+          case ACTION_SUICIDE_ATTACK:
           case ACTION_SPY_INCITE_CITY:
           case ACTION_SPY_INCITE_CITY_ESC:
           case ACTION_CONQUER_CITY:

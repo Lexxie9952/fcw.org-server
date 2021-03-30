@@ -92,26 +92,7 @@ function handle_server_join_reply(packet)
       change_ruleset($.getUrlVar('ruleset'));
     }
 
-    if (renderer == RENDERER_WEBGL && !observing) {
-       if (graphics_quality == QUALITY_LOW) {
-         // WebGL renderer on mobile devices needs to use very little RAM.
-         send_message("/set size 2");
-       }
-       // Reduce the amount of rivers, it's kind of ugly at the moment.
-       send_message("/set wetness 25");
-
-       // Freeciv WebGL doesn't support map wrapping yet.
-       send_message("/set topology=");
-
-       // Less hills will be more user-friendly in 3D mode.
-       send_message("/set steepness 12");
-
-     }
-
     if (autostart) {
-      if (renderer == RENDERER_WEBGL) {
-        $.blockUI({ message: '<h2>Generating terrain map model...</h2>' });
-      }
       if (loadTimerId == -1) {
         wait_for_text("You are logged in as", pregame_start_game);
       } else {
@@ -122,8 +103,8 @@ function handle_server_join_reply(packet)
     }
 
   } else {
-
     swal("You were rejected from the game.", (packet['message'] || ""), "error");
+    setSwalTheme();
     client.conn.id = -1;/* not in range of conn_info id */
     set_client_page(PAGE_MAIN);
 
@@ -194,12 +175,6 @@ function handle_tile_info(packet)
   if (tiles != null) {
     packet['extras'] = new BitVector(packet['extras']);
 
-    if (renderer == RENDERER_WEBGL) {
-      var old_tile = $.extend({}, tiles[packet['tile']]);
-      webgl_update_tile_known(tiles[packet['tile']], packet);
-      update_tile_extras($.extend(old_tile, packet));
-    }
-
     tiles[packet['tile']] = $.extend(tiles[packet['tile']], packet);
   }
 }
@@ -214,17 +189,18 @@ function handle_iPillage_event(message, tile_id)  // iPillage.
   var ptile = tiles[tile_id];
   var ptype;
   var delay = 0;
-  var cur_time = new Date().getTime();
+
+  message=message.substring(8); // removes "💥 Your ", leaving, "Ground Strike Fighter destroyed the Roman Quay with a Ground Strike"
 
   for (ptype_id in unit_types) {
     // Find out the unit_type who did this hostile deed !
     ptype = unit_types[ptype_id];
-    if (message.includes(ptype['name'])) {
-
+    if (message.startsWith(ptype['name'])) {
       // The alt sound is preferred for alternate attack types:
-      var sskey = ptype['sound_fight_alt'];  
+      var sskey = ptype['sound_fight_alt'];
       if (!sskey) sskey = ptype['sound_fight']; //fallback
       if (!soundset[sskey]) sskey = ptype['sound_fight']; //fallback
+      //console.log("calling playsound with sskey:"+sskey);
       play_hostile_event_sound(sskey, ptile, ptype);
 
       break;
@@ -301,6 +277,7 @@ function handle_chat_msg(packet)
       break;
     case E_IMP_SOLD:
       if (!suppress_event_sound()) play_sound(soundset["e_imp_sold"]);
+      break;
     case E_CHAT_MSG_PRIVATE_RCVD:
       if (!suppress_event_sound()) play_sound("iphone1.ogg");
       break;
@@ -392,7 +369,8 @@ function decode_user_hyperlinks(message)
       freemoji_name = freemoji_name.toLowerCase();
       freemoji_name = freemoji_name.replace(/\s+/g, '');
       freemoji_name = freemoji_name.replace('.', '');
-      freemoji_name = freemoji_name.replace('_', '');
+      freemoji_name = freemoji_name.replace('_', '');   // TODO: /_/g and similar on others is causing blank freemoji string
+      freemoji_name = freemoji_name.replace('_', '');   // FIXME: hack for emoji with word<space>word<space>word
       freemoji_name = freemoji_name.replace("'", "");
 //      freemoji_name = freemoji_name.replace("​", ""); //0-width space. only ONE of these 3 is needed, TODO; find which works and remove the other 2
 //      freemoji_name = freemoji_name.replace("​&#8203;", "");
@@ -560,11 +538,6 @@ function handle_web_city_info_addition(packet)
   if (worklist_dialog_active && active_city != null) {
     city_worklist_dialog(active_city);
   }
-
-  if (renderer == RENDERER_WEBGL) {
-    update_city_position(index_to_tile(packet['tile']));
-  }
-
   /* Update active tabs affected by this info */
   bulbs_output_updater.update();
   var active_tab = $("#tabs").tabs("option", "active"); 
@@ -590,10 +563,6 @@ function handle_city_short_info(packet)
     cities[packet['id']] = packet;
   } else {
     cities[packet['id']] = $.extend(cities[packet['id']], packet);
-  }
-
-  if (renderer == RENDERER_WEBGL) {
-    update_city_position(index_to_tile(packet['tile']));
   }
 
   /* Update active tabs affected by this info */
@@ -717,15 +686,6 @@ function handle_map_info(packet)
   /* TODO: init_client_goto();*/
 
   mapdeco_init();
-
-  /* TODO: generate_citydlg_dimensions();*/
-
-  /* TODO: calculate_overview_dimensions();*/
-
-  if (renderer == RENDERER_WEBGL) {
-    mapview_model_width = Math.floor(MAPVIEW_ASPECT_FACTOR * map['xsize']);
-    mapview_model_height = Math.floor(MAPVIEW_ASPECT_FACTOR * map['ysize']);
-  }
 
 }
 
@@ -946,46 +906,26 @@ function handle_ruleset_control(packet)
    */
 }
 /**************************************************************************
-  Adjust granularity combat scores. Have to hard code these until we get 
-  a better solution like, scores are all 1000x to start with.
+  Apply internal ruleset effects used for non-integer granular combat 
+  scores. Assures accuracy for: warcalc, manual helptext, city prod list,
+  etc.
 **************************************************************************/
 function handle_non_integer_combat_scores(key)
 {
-  /* Granularity placeholder solution, for units whose base combat strength is 
-    non-integer and achieve non-integer base score via a globally applied
-    bonus/penalty in units.ruleset. NOTE that this does not include another
-    method of achieving this through a v0 power_factor that is not 100. There
-    are use cases for both methods.
-  * Using v0 power_factor:  PROS: It is automatically calculated into warcalc
-    odds, and automatically adjusted to show in base combat strength level by the 
-    utype_real_base_attack_strength(ptype) wrappers for displaying base combat
-    strength to players. CONS: it's secretly "lying" about having lower/higher
-    vet power_factor, and ruleset is obliged to make power_factors behave exactly
-    the same as default standard instead of custom, so that one can suppress
-    showing custom hacky/confusing non-standard power_factors in the manual and
-    everything still washes out clean as far as game behaviour: user "knowledge"
-    of the "false" information will then be exactly verisimilitudinous to the
-    actual mechanics and they live in a nice simpler cleaner world unaware of the
-    hacky solution used to achieve it.
-  * Using handle_non_integer_combat_scores. PROS: Allows the ruleset to simply 
-    apply a global combat_strength bonus that achieves a non-integer base strength,
-    with his bonus/penalty simply 'hidden' in the ruleset. The reported strength
-    value will then be adjusted in this function to match, and everything is exactly
-    equal from this point out between actual mechanics and reported strength.  
-    CONS: You have to actually hard-code these exceptional non-integer strengthed
-    units into the function for each ruleset. You have to suppress (manually edit)
-    the generated ruleset html to not confusing report a bonus or penalty for 
-    every single unit_type this unit can enter combat with. 
-  * Using both. In some cases, the math is such that using only one would cause
-    bad rounding errors; e.g., the Falconeer with 20fp needs ultra-small values with
-    a finer precision than either method can achieve by itself, so it achieves this
-    by using both the (v0 != 100) method and a globally applied ruleset defense penalty
-    which is then hard-coded into the unit_type's local ['defense_strength'] property. */
-  var has_falconeers = false;
-
   if (unit_types[key]['name']=="Falconeers") {
     unit_types[key].defense_strength *= 0.5;
+    console.log("Ruleset has units with non-integer combat scores.")
   }
+  else if (unit_types[key]['name']=="Escort Fighter") {
+    unit_types[key].attack_strength += 0.5;
+  }
+  else if (unit_types[key]['name']=="Fighter") {
+    unit_types[key].defense_strength += 0.5; // easier than *= 1.666forever
+  }
+  else {
+    return; // skip message
+  }
+  console.log("Ruleset effects added to client warcalc data for "+unit_types[key]['name'])
 }
 
 /**************************************************************************
@@ -1035,11 +975,9 @@ function handle_server_shutdown(packet)
 function handle_nuke_tile_info(packet)
 {
   var ptile = index_to_tile(packet['tile']);
-  if (renderer == RENDERER_WEBGL) {
-    render_nuclear_explosion(ptile);
-  } else {
-    ptile['nuke'] = 60;
-  }
+
+  ptile['nuke'] = 60;
+
   play_sound('nuclear_distant.ogg');
 
 }
@@ -1142,10 +1080,6 @@ function handle_unit_remove(packet)
   clear_tile_unit(punit);
   client_remove_unit(punit);
 
-  if (renderer == RENDERER_WEBGL) {
-    update_unit_position(index_to_tile(punit['tile']));
-  }
-
 }
 
 /* 100% complete */
@@ -1233,11 +1167,6 @@ function handle_unit_packet_common(packet_unit)
     }
   }
 
-  if (renderer == RENDERER_WEBGL) {
-    if (punit != null) update_unit_position(old_tile);
-    update_unit_position(index_to_tile(units[packet_unit['id']]['tile']));
-  }
-
   /* TODO: update various dialogs and mapview. */
 }
 
@@ -1250,13 +1179,8 @@ function handle_unit_combat_info(packet)
   var tile_x = tiles[attacker['tile']]['x'];
   var tile_y = tiles[attacker['tile']]['y'];
 
-  if (renderer == RENDERER_WEBGL) {
-    if (attacker_hp == 0) animate_explosion_on_tile(attacker['tile'], 0, false);
-    if (defender_hp == 0) animate_explosion_on_tile(defender['tile'], 0, false);
-      // TO DO: WEBGL is missing out on all this below, which we should put in after it's final
-  } 
-  
-  else {
+
+
       // Might be null/false if observer
       var pplayer = null;
       var player_nation = null;
@@ -1366,7 +1290,6 @@ function handle_unit_combat_info(packet)
           //setTimeout(update_unit_focus, 700);  // remove this if unit redraw still doesn't work
           // --------------------------------------------------------------------------------------------------------------------
         }
-      }
 }
 
 /**************************************************************************
@@ -1672,6 +1595,7 @@ function handle_begin_turn(packet)
 {
   if (!observing) {
     $("#turn_done_button").button("option", "disabled", false);
+    $("#turn_done_button").css({"background-color":"#ffff", "opacity":1, "color":"#000", "border-color": "#edd5"});
     if (is_small_screen()) {
       $("#turn_done_button").button("option", "label", "Done");
     } else {
@@ -1696,7 +1620,9 @@ function handle_end_turn(packet)
 {
   reset_unit_anim_list();
   if (!observing) {
+    $("#turn_done_button").css({"background-color":"#0006", "opacity":0.85, "color":"#edd", "border-color": "#edd5"});
     $("#turn_done_button").button( "option", "disabled", true);
+    $("#turn_done_button:disabled").css({"background-color":"#0006", "opacity":0.85, "color":"#edd", "border-color": "#edd5"});
   }
 }
 
@@ -1722,11 +1648,13 @@ function handle_ruleset_unit(packet)
     packet['name'] = packet['name'].replace('?unit:', '');
 
   unit_types[packet['id']] = packet;
-  // Granularity placeholder solution, for units whose base combat strength is 
-  // non-integer and achieve non-integer base score via a globally applied
-  // bonus/penalty in units.ruleset.  
+
+  // Placeholder solution for units whose base combat strength is 
+  // non-integer and achievea  non-integer base score via a globally
+  // applied bonus/penalty in units.ruleset.
   if (client_rules_flag[CRF_MP2_C])
     handle_non_integer_combat_scores(packet['id']);
+  
 }
 
 /************************************************************************//**
@@ -2315,7 +2243,6 @@ function suppress_event_sound()
 
   // uses global vars located in clinet.js:
   if (cur_time-game_launch_timer < event_sound_suppress_delay) {
-    console.log(cur_time-game_launch_timer+" < "+event_sound_suppress_delay)
     return true;
   }
   return false;

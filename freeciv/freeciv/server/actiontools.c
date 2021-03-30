@@ -48,7 +48,7 @@ void action_success_actor_consume(struct action *paction,
       wipe_unit(actor, ULR_DISBANDED, NULL);
     } else if (action_has_result(paction, ACTION_NUKE)) {
       wipe_unit(actor, ULR_DETONATED, NULL);
-    } else if (action_has_result(paction, ACTION_ATTACK)) {
+    } else if (action_has_result(paction, ACTION_SUICIDE_ATTACK)) {
       wipe_unit(actor, ULR_MISSILE, NULL);
     } else {
       wipe_unit(actor, ULR_USED, NULL);
@@ -65,6 +65,22 @@ static void action_give_casus_belli(struct player *offender,
 {
   int cb_now;
   int cb_turns = game.server.casusbelliturns;
+  
+  /* This would prevent casus belli for DS_NO_CONTACT and stop loophole
+  cases of Senate or Pax Dei approving breaking treaty for casus belli
+  events like incursions prior to meeting. However, since has_reason_to_cancel
+  is also a spam counter, it's not implemented yet here. Instead, after 
+  contact is made (which is needed to pursue war, after all), 
+  has_reason_to_cancel gets set to 0 right upon meeting and going into
+  DS_WAR.
+  if (player_diplstate_get(offender, victim_player)->type == DS_NO_CONTACT) {
+    // Caller functions let them know a casus belli was given as courtesy,
+    // but we don't set a casus belli if DS_NO_CONTACT, since there is 
+    // no reason_to_cancel anything at all. This keeps diplomacy system
+    // clean for future upgrades and features done to it.
+    return;
+  }
+  */
 
   if (int_outrage) {
     /* This action is seen as a reason for any other player, no matter who
@@ -213,10 +229,11 @@ static void action_consequence_common(const struct action *paction,
     /* Give casus belli. */
     action_give_casus_belli(offender, victim_player, int_outrage);
 
-    // Avoid spam on incident messages. (Incident #2 will have h_r_t_c == 4)
-    if (player_diplstate_get(offender, victim_player)->has_reason_to_cancel >= cb_turns+1
-      || player_diplstate_get(victim_player, offender)->has_reason_to_cancel >= cb_turns+1) {
-        spam_limit = true;
+    if (offender && victim_player) {
+      if (player_diplstate_get(offender, victim_player)->has_reason_to_cancel >= cb_turns+1
+        || player_diplstate_get(victim_player, offender)->has_reason_to_cancel >= cb_turns+1) {
+          spam_limit = true;
+      }
     }
 
     /* Notify the involved players by sending them a message. */
@@ -967,12 +984,12 @@ struct extra_type *action_tgt_tile_extra(const struct unit *actor,
                                          const struct tile *target_tile,
                                          bool accept_all_actions)
 {
-  extra_active_type_iterate(target) {
+  extra_type_re_active_iterate(target) {
     if (may_unit_act_vs_tile_extra(actor, target_tile, target,
                                    accept_all_actions)) {
       return target;
     }
-  } extra_active_type_iterate_end;
+  } extra_type_re_active_iterate_end;
 
   return NULL;
 }
@@ -1063,7 +1080,7 @@ action_auto_perf_unit_do(const enum action_auto_perf_cause cause,
 #define perform_action_to(act, actor, tgtid, tgt_extra)                   \
   if (unit_perform_action(unit_owner(actor),                              \
                           actor->id, tgtid, tgt_extra,                    \
-                          0, NULL, act, ACT_REQ_RULES)) {                 \
+                          NULL, act, ACT_REQ_RULES)) {                    \
     return action_by_number(act);                                         \
   }
 

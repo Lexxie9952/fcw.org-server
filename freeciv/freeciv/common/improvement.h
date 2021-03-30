@@ -57,6 +57,13 @@ struct strvec;          /* Actually defined in "utility/string_vector.h". */
 /* Never destroyed by disasters */
 #define SPECENUM_VALUE3 IF_DISASTER_PROOF
 #define SPECENUM_VALUE3NAME "DisasterProof"
+/* Flag Triggers */
+#define SPECENUM_VALUE4 IF_PAX_DEI_COUNTER
+#define SPECENUM_VALUE4NAME "PaxDeiCounter"
+#define SPECENUM_VALUE5 IF_USER_FLAG_1
+#define SPECENUM_VALUE5NAME "User_Flag_1"
+#define SPECENUM_VALUE6 IF_USER_FLAG_2
+#define SPECENUM_VALUE6NAME "User_Flag_2"
 #define SPECENUM_COUNT IF_COUNT
 #define SPECENUM_BITVECTOR bv_impr_flags
 #include "specenum_gen.h"
@@ -68,7 +75,7 @@ BV_DEFINE(bv_imprs, B_LAST);
 struct impr_type {
   Impr_type_id item_number;
   struct name_translation name;
-  bool disabled;                        /* Does not really exist - hole in improvements array */
+  bool ruledit_disabled;                /* Does not really exist - hole in improvements array */
   char graphic_str[MAX_LEN_NAME];	/* city icon of improv. */
   char graphic_alt[MAX_LEN_NAME];	/* city icon of improv. */
   struct requirement_vector reqs;
@@ -205,11 +212,11 @@ const struct impr_type *improvement_array_last(void);
   }									\
 }
 
-#define improvement_active_iterate(_p)                                  \
+#define improvement_re_active_iterate(_p)                               \
   improvement_iterate(_p) {                                             \
-    if (!_p->disabled) {
+    if (!_p->ruledit_disabled) {
 
-#define improvement_active_iterate_end                                  \
+#define improvement_re_active_iterate_end                               \
     }                                                                   \
   } improvement_iterate_end;
 

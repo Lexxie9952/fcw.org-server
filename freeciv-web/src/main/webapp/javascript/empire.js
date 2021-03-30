@@ -811,7 +811,7 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
         opacity = 1;
         border = "border:3px solid #000000;";
         bg     = "background:#FEED ";
-        title_text = "title='"+html_safe(pcity['name'])+":\n\nRIGHT-CLICK: Sell " + improvements[z]['name']+".'";
+        title_text = "title='"+html_safe(pcity['name'])+":\n\nRIGHT-CLICK: Sell " + html_safe(improvements[z]['name'])+".'";
         right_click_action = alt_click_method+"='city_sell_improvement_in(" +city_id+","+ z + ");' ";
       } else {
         if (!can_city_build_improvement_now(pcity, z)) {  // city has improvement but CAN'T MAKE IT
@@ -826,8 +826,8 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
           bg =     (is_city_making ? (product_finished ? "background:#BFBE " : "background:#8D87 ") : "background:#AD68 ");
           right_click_action = alt_click_method+"='city_change_prod_and_buy(null," +city_id+","+ z + ");' "
           title_text = is_city_making 
-            ? ("title='"+html_safe(pcity['name'])+verb+improvements[z]['name']+".\n\nRIGHT_CLICK: Buy "+improvements[z]['name']+"'")
-            : ("title='"+html_safe(pcity['name'])+":\n\nCLICK: Change production\n\nRIGHT-CLICK: Buy "+improvements[z]['name']+"'");   
+            ? ("title='"+html_safe(pcity['name'])+verb+improvements[z]['name']+".\n\nRIGHT_CLICK: Buy "+html_safe(improvements[z]['name'])+"'")
+            : ("title='"+html_safe(pcity['name'])+":\n\nCLICK: Change production\n\nRIGHT-CLICK: Buy "+html_safe(improvements[z]['name'])+"'");   
         }
       }
       if (!show_building) opacity = 0.21;  // we show a ghost ability to see grid.
@@ -988,16 +988,17 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
       if (!show_building) continue;
       // ------------------------------------------------------------------------------------------------
       var upkeep = improvements[z]['upkeep'];
-      if (upkeep<=upkeep_gold_bonus) upkeep = 0;  // Free upkeep effects
+      if (upkeep>=0 && upkeep<=upkeep_gold_bonus) upkeep = 0;  // Render free upkeep effects, only for non-negative upkeep buildings
       city_upkeep[city_id] += upkeep;
-      if (upkeep==0) upkeep = "";  // leave 0 upkeep blank
+      if (upkeep==0) upkeep = "";  // Leave 0 upkeep blank
       var sprite = get_improvement_image_sprite(improvements[z]);
 
       // Set display vars
       var opacity = 1;
       const border = "border:1px solid #000000;";
       var bg = upkeep>0 ? "background:#FEED " : "background:#FEED ";
-      var title_text = "title='"+html_safe(pcity['name'])+":\n\nRIGHT-CLICK: Sell " + improvements[z]['name']+".'";
+      var upkp_color = upkeep<0 ? "#77EF77" : "#FFD52C" // negative upkeep or "upkeep support buildings" get green.
+      var title_text = "title='"+html_safe(pcity['name'])+":\n\nRIGHT-CLICK: Sell " + html_safe(improvements[z]['name'])+".'";
       var right_click_action = alt_click_method+"='city_sell_improvement_in(" +city_id+","+ z + ");' ";
       // Put improvement sprite in the cell:
       improvements_html = improvements_html +
@@ -1009,7 +1010,7 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
             + title_text 
             + right_click_action
             + "onclick='change_city_prod_to(event," +city_id+","+ z + ");'>"  
-            +"</span><span style='font-size:90%; color:#ffd52c'>"+upkeep+"</span></div>";
+            +"</span><span style='font-size:90%; color:"+upkp_color+"'>"+upkeep+"</span></div>";
     }
     empire_list_html += (improvements_html +"</td></tr>");      // Add the row
   }
@@ -1205,7 +1206,9 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
     // Mobile users have to click empty row to append clipboard:
     //var empty_row_click = small_screen ? " onclick='tap_empty_production_row(event, "+city_id+")'" : "";
     // Now all users can click an empty row to append to clipboard
-    var empty_row_click = " title='CLICK: paste worklist\nCTRL-CLICK: clear worklist\nSHIFT-CLICK: copy worklist' onclick='tap_empty_production_row(event, "+city_id+")'";
+    var empty_row_click = is_small_screen() 
+                        ? " onclick='tap_empty_production_row(event, "+city_id+")'"
+                        : " title='CLICK: paste worklist\nCTRL-CLICK: clear worklist\nSHIFT-CLICK: copy worklist' onclick='tap_empty_production_row(event, "+city_id+")'";
     queue_html = "<tr class='cities_row;' style='border-bottom: 3px solid #000; height:"+rheight+"px;'>";
     queue_html += "<td style='cursor:pointer; font-size:85%; text-align:right; padding-right:10px;' onclick='javascript:show_city_dialog_by_id(" 
                       + pcity['id']+")' id='citycell"+city_id+"'>"+pcity['name']+"</td>";
@@ -1277,6 +1280,7 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
         }
       } // -----------------------------------------------------------------------------
       title_text += "CLICK: Remove\nCTRL-CLICK: Insert before\nSHIFT-CLICK: Add after'";
+      if (is_small_screen()) title_text = "";
 
       // Put improvement sprite in the cell:
       queue_html = queue_html +
@@ -1418,8 +1422,7 @@ function create_worklist_improv_div()
       if (req_state != TECH_KNOWN) {
         if (req_state != TECH_PREREQS_KNOWN) continue; 
       }
-    } 
-  
+    }
     // Set cell colour/opacity based on player has tech_req
     if (improvements[z]['reqs'].length > 0) {
       if (player_invention_state(client.conn.playing, improvements[z]['reqs'][0]['value']) != TECH_KNOWN) {
@@ -1428,7 +1431,7 @@ function create_worklist_improv_div()
       }
       else bg = "background:#EFF4 ";
     } else bg = "background:#EFF4 ";  // some have no reqs
-    var title_text = "title='"+improvements[z]['name']+"\n\n"+constant_title;
+    var title_text = "title='"+html_safe(improvements[z]['name'])+"\n\n"+constant_title;
     var opacity = 1;
     const click_action = "onclick='handle_improv_clipboard(event, "+VUT_IMPROVEMENT+","+ z + ");' "; // copy/add/remove to clipboard < >/<shift>/<ctrl>
     // Put improvement sprite in the cell:
@@ -1488,7 +1491,19 @@ function create_worklist_wonder_div()
         continue;   
       }
     } //------------------------------------------------------------------
-    var title_text = "title='"+improvements[z]['name']+"\n\n"+constant_title;
+    // Great Wonders already built in the world.
+    if (improvements[z].genus == GENUS_GREAT_WONDER && world_has_wonder(improvements[z]['name'])) {
+      continue;
+    } //------------------------------------------------------------------
+    // Small Wonders which are only enabled after a duplicate-named Great Wonder has been built in the world
+    if (client_rules_flag[CRF_MP2_C]) {
+      if (improvements[z]['name'] == "Women's Suffrage"
+          && !world_has_wonder("Women's Suffrage​")/*zero-width space at end marks G.W.*/) {
+        continue;
+      }
+    } //------------------------------------------------------------------
+
+    var title_text = "title='"+html_safe(improvements[z]['name'])+"\n\n"+constant_title;
     const click_action = "onclick='handle_improv_clipboard(event, "+VUT_IMPROVEMENT+","+ z + ");' "; // copy/add/remove to clipboard < >/<shift>/<ctrl>
     // Put improvement sprite in the cell:
     improvements_html = improvements_html +

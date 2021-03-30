@@ -747,8 +747,8 @@ function fill_unit_sprite_array(punit, num_stacked)
   // Shield
   var result = [get_unit_nation_flag_sprite(punit, unit_offset)];
   if (result[0]['offset_x']) {
-    result[0]['offset_x'] += UO_sx[id];  // adjust shield x placement
-    result[0]['offset_y'] -= UO_sy[id];  // adjust shield x placement
+    result[0]['offset_x'] += UO_sx[id];      // adjust shield x placement
+    result[0]['offset_y'] -= (UO_sy[id]-1);  // adjust shield y placement, black border overlaps black hp bar.
   }
 
   // Unit
@@ -2321,8 +2321,8 @@ function is_color_collision(color_a, color_b)
 
   if (color_a == null || color_b == null) return false;
 
-  var pcolor_a = color_rbg_to_list(color_a);
-  var pcolor_b = color_rbg_to_list(color_b);
+  var pcolor_a = color_rgb_to_list(color_a);
+  var pcolor_b = color_rgb_to_list(color_b);
 
   var color_distance = Math.sqrt( Math.pow(pcolor_a[0] - pcolor_b[0], 2)
 		  + Math.pow(pcolor_a[1] - pcolor_b[1], 2)
@@ -2334,7 +2334,7 @@ function is_color_collision(color_a, color_b)
 /****************************************************************************
 ...
 ****************************************************************************/
-function color_rbg_to_list(pcolor)
+function color_rgb_to_list(pcolor)
 {
   if (pcolor == null) return null;
   var color_rgb = pcolor.match(/\d+/g);

@@ -140,6 +140,16 @@ Action_Odds_Pct
     "Steal Tech", "Steal Tech Escape Expected", "Targeted Steal Tech" and
     "Targeted Steal Tech Escape Expected".
 
+Action_Resist_Pct
+    Provides a % resistance for the TARGET player of an Action in such cases
+    where the "Action_Odds_Pct" effect can only access req/ranges of the ACTOR
+    player. Example: the "Gov" of the target changes the odds, or the target 
+    owning a certain wonder changes the odds. Positive values decrease the
+    Action_Odds_Pct; negative values increase it. In other words, it acts 
+    in reverse of Action_Odds_Pct: "Player" range refers to the target
+    instead of the actor, and the value is subtracted rather than added.
+    NOTE: unit ranges still pertain to actor, not target.
+
 Airlift
     Allow airlift to/from a city.
 
@@ -156,9 +166,24 @@ Border_Vision
     Does nothing unless the borders setting is set to "Enabled". You can
     lock it if border vision rules are important to your ruleset.
 
-Building_Build_Cost_Pct
-    Percentage added to building building cost.
+Building_Build_Cost_Pct                 (EFT_IMPR_BUILD_COST_PCT)
+    Percentage added to building building cost. Multiple effects will layer over
+    each other in additive form. For example, two layers of Building_Build_Cost_Pct
+    at a value of 50 becomes a net effect of +100% -- or in other words, will double
+    the cost of a building. NOT 1.5 * 1.5 = 2.25 (i.e., not multiplicative).
 
+Building_Build_Cost_Pm                  (EFT_IMPR_BUILD_COST_PM)
+    ▷ If no Building_Build_Cost_Pct is active, then this effect by itself is 
+    an additive layer at the higher resolution of permille rather than percent,
+    letting you achieve specific discounts without "rounding holes". For example,
+    two layers of Building_Build_Cost_Pm at a value of 500 becomes a net effect of 
+    +1000‰ (i.e. +100%) -- or in other words, will double the cost of a building.
+    ▷ If Building_Build_Cost_Pct is active, this effect is a Permille multiplied
+    to the building build cost AFTER Building_Build_Cost_Pct has adjusted it. This
+    allows multiple additive layers through the former effect, then layering specific
+    multiplier effects over those. For example, Building_Build_Cost_Pct=50 and
+    Building_Build_Cost_Pm=500 will together result in a 1.5 * 1.5 = 2.25x building cost. 
+    
 Building_Buy_Cost_Pct
     Percentage added to building buy cost.
 
@@ -208,8 +233,8 @@ Civil_War_Chance
     creased by 5 for each city in civil disorder and reduced by 5 for each one
     celebrating.
 
-Coinage_Bonus_Pct
-    Adds a Percent to the default 1:1 conversion of shields to gold, when
+Coinage_Bonus_Pm
+    Adds a Permille to the default 1:1 conversion of shields to gold, when
     coinage is produced (or any other Improvement with the "Gold" flag,
     when the req vector is actively true). 
 
@@ -513,6 +538,13 @@ SS_Structural, SS_Component and SS_Module
     Buildings which have this effect should probably not be given any other 
     effects.
 
+Stack_Escape_Pct
+    ADDS this percent to the default 50% chance to escape a stack if the stack 
+    is killed and the unit_type has the "CanEscape" flag. For example, 
+    a value of 50 would result in 50 + 50 = 100% chance to escape.
+    (NOT: 50 + (50% * 50) = 75%). "UnitType", "Local" is drawn from the 
+    defender/escaper, not the attacker. 
+
 Stealings_Ignore
     When determining how difficult it is to steal a tech from enemy, AMOUNT
     previous times tech has been stolen from the city is ignored. Negative amount
@@ -623,6 +655,9 @@ Upkeep_Factor
 Upkeep_Free
     Improvements with amount or less upkeep cost become free to upkeep (others 
     are unaffected).
+
+Upkeep_Reduce 
+    Reduces upkeep of specified building by value. (Use negative value to increase)
 
 Veteran_Build
     Increases the veteran class of newly created units of this type. The

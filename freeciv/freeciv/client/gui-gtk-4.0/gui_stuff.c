@@ -599,16 +599,13 @@ void gui_dialog_new(struct gui_dialog **pdlg, GtkNotebook *notebook,
       dlg->v.window = window;
       g_signal_connect(window, "delete_event",
         G_CALLBACK(gui_dialog_delete_handler), dlg);
-      
+
     }
     break;
   case GUI_DIALOG_TAB:
     {
-      GtkWidget *hbox, *label, *button, *event_box;
-      gint w, h;
+      GtkWidget *hbox, *label, *button;
       gchar *buf;
-
-      gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &w, &h);
 
       hbox = gtk_grid_new();
 
@@ -624,7 +621,7 @@ void gui_dialog_new(struct gui_dialog **pdlg, GtkNotebook *notebook,
       button = gtk_button_new();
       gtk_button_set_relief(GTK_BUTTON(button), GTK_RELIEF_NONE);
       g_signal_connect_swapped(button, "clicked",
-	  G_CALLBACK(gui_dialog_delete_tab_handler), dlg);
+                               G_CALLBACK(gui_dialog_delete_tab_handler), dlg);
 
       buf = g_strdup_printf(_("Close Tab:\n%s"), _("Ctrl+W"));
       gtk_widget_set_tooltip_text(button, buf);
@@ -636,14 +633,10 @@ void gui_dialog_new(struct gui_dialog **pdlg, GtkNotebook *notebook,
 
       gtk_widget_show(hbox);
 
-      event_box = gtk_event_box_new();
-      gtk_event_box_set_visible_window(GTK_EVENT_BOX(event_box), FALSE);
-      gtk_container_add(GTK_CONTAINER(event_box), hbox);
-
-      gtk_notebook_append_page(GTK_NOTEBOOK(notebook), vbox, event_box);
+      gtk_notebook_append_page(GTK_NOTEBOOK(notebook), vbox, hbox);
       dlg->v.tab.handler_id =
-	g_signal_connect(notebook, "switch-page",
-	    G_CALLBACK(gui_dialog_switch_page_handler), dlg);
+        g_signal_connect(notebook, "switch-page",
+                         G_CALLBACK(gui_dialog_switch_page_handler), dlg);
       dlg->v.tab.child = vbox;
 
       gtk_style_context_add_provider(gtk_widget_get_style_context(label),
@@ -652,7 +645,7 @@ void gui_dialog_new(struct gui_dialog **pdlg, GtkNotebook *notebook,
       dlg->v.tab.label = label;
       dlg->v.tab.notebook = GTK_WIDGET(notebook);
 
-      g_signal_connect(event_box, "button-press-event",
+      g_signal_connect(hbox, "button-press-event",
                        G_CALLBACK(click_on_tab_callback), dlg);
     }
     break;

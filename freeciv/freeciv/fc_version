@@ -53,8 +53,7 @@ DEFAULT_FOLLOW_TAG=S3_1
 #   - No new mandatory capabilities can be added to the release branch; doing
 #     so would break network capability of supposedly "compatible" releases.
 #
-NETWORK_CAPSTRING_MANDATORY="+Freeciv.Web.Devel-3.1"
-NETWORK_CAPSTRING_OPTIONAL=""
+NETWORK_CAPSTRING="+Freeciv.Web.Devel-3.1"
 
 FREECIV_DISTRIBUTOR=""
 
@@ -78,7 +77,7 @@ if test x$EMERGENCY_VERSION != x ; then
   EMERG_PART=".${EMERGENCY_VERSION}"
 fi
 
+VERSION_STRING=${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}${EMERG_PART}${VERSION_LABEL}
 if test x$VERSION_SCRIPT_SILENT != xyes ; then
-  VERSION=${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}${EMERG_PART}${VERSION_LABEL}${VERSION_REV}
-  echo ${VERSION}
+  echo ${VERSION_STRING}${VERSION_REV}
 fi

@@ -342,8 +342,7 @@ static void option_color_select_callback(GtkButton *button, gpointer data)
 
   chooser = gtk_color_chooser_widget_new();
   g_object_set_data(G_OBJECT(dialog), "chooser", chooser);
-  gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), chooser,
-                     FALSE, FALSE);
+  gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), chooser);
   if (current_color) {
     gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(chooser), current_color);
   }
@@ -391,7 +390,7 @@ option_dialog_new(const char *name, const struct option_set *poptset)
                    G_CALLBACK(option_dialog_destroy_callback), pdialog);
 
   gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(pdialog->shell))),
-                     pdialog->notebook, TRUE, TRUE);
+                     pdialog->notebook);
 
   /* Add the options. */
   options_iterate(poptset, poption) {
@@ -488,7 +487,7 @@ static void option_dialog_option_add(struct option_dialog *pdialog,
                                      bool reorder_notebook)
 {
   const int category = option_category(poption);
-  GtkWidget *main_hbox, *label, *ebox, *w = NULL;
+  GtkWidget *main_hbox, *label, *w = NULL;
 
   fc_assert(NULL == option_get_gui_data(poption));
 
@@ -520,17 +519,14 @@ static void option_dialog_option_add(struct option_dialog *pdialog,
   }
   pdialog->box_children[category]++;
 
-  ebox = gtk_event_box_new();
-  gtk_widget_set_tooltip_text(ebox, option_help_text(poption));
-  gtk_container_add(GTK_CONTAINER(pdialog->vboxes[category]), ebox);
-  g_signal_connect(ebox, "button_press_event",
-                   G_CALLBACK(option_button_press_callback), poption);
-
   main_hbox = gtk_grid_new();
   label = gtk_label_new(option_description(poption));
   g_object_set(label, "margin", 2, NULL);
   gtk_container_add(GTK_CONTAINER(main_hbox), label);
-  gtk_container_add(GTK_CONTAINER(ebox), main_hbox);
+  gtk_widget_set_tooltip_text(main_hbox, option_help_text(poption));
+  g_signal_connect(main_hbox, "button_press_event",
+                   G_CALLBACK(option_button_press_callback), poption);
+  gtk_container_add(GTK_CONTAINER(pdialog->vboxes[category]), main_hbox);
 
   switch (option_type(poption)) {
   case OT_BOOLEAN:
@@ -653,13 +649,13 @@ static void option_dialog_option_add(struct option_dialog *pdialog,
     log_error("Failed to create a widget for option %d \"%s\".",
               option_number(poption), option_name(poption));
   } else {
-    g_object_set_data(G_OBJECT(w), "main_widget", ebox);
+    g_object_set_data(G_OBJECT(w), "main_widget", main_hbox);
     gtk_widget_set_hexpand(w, TRUE);
     gtk_widget_set_halign(w, GTK_ALIGN_END);
     gtk_container_add(GTK_CONTAINER(main_hbox), w);
   }
 
-  gtk_widget_show(ebox);
+  gtk_widget_show(main_hbox);
 
   /* Set as current value. */
   option_dialog_option_refresh(poption);

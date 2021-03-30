@@ -49,19 +49,12 @@ ext_install_tomcat8 () {
   sudo chmod -R g+r /var/lib/tomcat8/conf
   sudo chmod g+x /var/lib/tomcat8/conf
   sudo chown -R tomcat8 /var/lib/tomcat8/{webapps,work,temp,logs}
+  sudo chown tomcat8 /var/lib/tomcat8/bin/catalina.sh
+  sudo chmod u+s /var/lib/tomcat8/bin/catalina.sh
   sudo setfacl -m d:g:tomcat8:rwX /var/lib/tomcat8/webapps
 
   echo "export CATALINA_HOME=\"/var/lib/tomcat8\"" >> ~/.bashrc
   ext_installed[${#ext_installed[@]}]="tomcat8"
 }
 
-ext_install_casperjs () {
-  echo "==== Installing CasperJS for testing ===="
-  cd "${basedir}/tests"
-  curl -LOsS 'https://github.com/casperjs/casperjs/archive/1.1.4.zip'
-  unzip -qo 1.1.4.zip
-  rm 1.1.4.zip
-  sudo ln -sf "${basedir}/casperjs-1.1.4/bin/casperjs" /usr/local/bin/casperjs
-  ext_installed[${#ext_installed[@]}]="casperjs"
-}
 

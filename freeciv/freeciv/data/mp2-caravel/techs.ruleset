@@ -1,5 +1,5 @@
 
-; Modifying this file:
+; Modifying this file：
 ; You should not modify this file except to make bugfixes or
 ; for other "maintenance".  If you want to make custom changes,
 ; you should create a new datadir subdirectory and copy this file
@@ -24,7 +24,7 @@ format_version=20
 
 ; /* <-- avoid gettext warnings
 ;
-; Tech classes:
+; Tech classes：
 ;
 ; First one is the default one.
 ; If there is none, tech classes feature is disabled
@@ -46,14 +46,14 @@ format_version=20
 
 ; /* <-- avoid gettext warnings
 ;
-; Below: The individual advances, one per section.
+; Below：The individual advances, one per section.
 ; The number can be variable, up to 250.
 ;
 ; The actual tag used (the * in [advance_*]) does not matter, except
 ; it must be unique within this file, and it may be used in debug
 ; output when reading this file.
 ;
-; Notes:
+; Notes：
 ;
 ; name          = translatable name as seen by user
 ; rule_name     = (optional) internal name for savegames, rulesets etc; if
@@ -99,7 +99,7 @@ format_version=20
 ; it should be listed as req1.
 ;
 ; As well as custom flags defined above, the following flag strings are
-; possible:
+; possible：
 ;
 ; "Bonus_Tech"          = player gets extra tech if reached first
 ; "Bridge"              = "Settler" unit types can build roads with
@@ -315,7 +315,7 @@ req2     = "Invention"
 flags    = ""
 graphic     = "a.democracy"
 graphic_alt = "-"
-helptext = _("Allows government Democracy.")
+helptext = _("Obsoletes Code of Hammurabi. Allows government Democracy.")
 cost = 875
 
 [advance_economics]
@@ -362,7 +362,7 @@ req2     = "Space Flight"
 flags    = ""
 graphic     = "a.environmentalism"
 graphic_alt = "-"
-helptext = _("-50% Pollution in all cities.")
+helptext = _("Reduces pollution from population by half.")
 cost = 8040
 
 [advance_espionage]
@@ -546,7 +546,7 @@ flags    = ""
 graphic     = "a.magnetism"
 graphic_alt = "-"
 helptext = _("Obsoletes Caravel.")
-cost = 950
+cost = 875
 
 [advance_map_making]
 name     = _("Map Making")
@@ -630,7 +630,7 @@ req2     = "Code of Laws"
 flags    = ""
 graphic     = "a.monarchy"
 graphic_alt = "-"
-helptext = _("Allows government Monarchy.")
+helptext = _("Obsoletes Chand Baori, Ziggurat. Allows government Monarchy.")
 
 [advance_monotheism]
 name     = _("Monotheism")
@@ -687,7 +687,7 @@ req2     = "Literacy"
 flags    = ""
 graphic     = "a.philosophy"
 graphic_alt = "-"
-helptext = _("Bonus tech before 1600AD if no next tier techs are possessed.")
+helptext = _("Obsoletes Sphinx. Bonus tech before 1600AD if no next tier techs are possessed.")
 cost = 276
 
 [advance_physics]
@@ -774,7 +774,7 @@ req2     = "Steel"
 flags    = ""
 graphic     = "a.refining"
 graphic_alt = "-"
-helptext = _("Allows Arctic Oil Wells. Oil Wells on Oil get +1 shield after other bonuses.")
+helptext = _("Allows Arctic Oil Wells. Oil Wells on Oil get +1 shield.")
 cost = 3630
 
 [advance_refrigeration]
@@ -853,7 +853,7 @@ req2     = "University"
 flags    = ""
 graphic     = "a.steam_engine"
 graphic_alt = "-"
-helptext = _("Obsoletes Frigate, Hanging Gardens.")
+helptext = _("Obsoletes Frigate, Hanging Gardens. Ends Colossus discount on Commerce units.")
 cost = 1240
 
 [advance_steel]
@@ -893,7 +893,7 @@ req2     = "Industrialization"
 flags    = ""
 graphic     = "a.the_corporation"
 graphic_alt = "-"
-helptext = _("Obsoletes Caravan. Ends Colossus discount on Commerce units.")
+helptext = _("Obsoletes Caravan. +25% Coinage for Stock Exchange")
 cost = 2900
 
 [advance_the_republic]

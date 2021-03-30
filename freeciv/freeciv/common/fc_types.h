@@ -56,9 +56,9 @@ extern "C" {
 #define MAX_NUM_ACTION_AUTO_PERFORMERS 4
 #define MAX_NUM_MULTIPLIERS 15
 #define MAX_NUM_LEADERS MAX_NUM_ITEMS /* Used in the network protocol. */
-#define MAX_NUM_NATION_SETS 32 /* Used in the network protocol.
-                                * RULESET_NATION_SETS packet may become too big
-                                * if increased */
+#define MAX_NUM_NATION_SETS 32 // Used in the network protocol.
+                               // RULESET_NATION_SETS packet may become too big
+                               // if increased
 #define MAX_NUM_NATION_GROUPS 128 /* Used in the network protocol. */
 /* Used in the network protocol -- nation count is a UINT16 */
 #define MAX_NUM_NATIONS MAX_UINT16
@@ -70,7 +70,7 @@ extern "C" {
 #define MAX_LEN_NAME       48
 #define MAX_LEN_CITYNAME   50
 #define MAX_LEN_MAP_LABEL  64
-#define MAX_LEN_DEMOGRAPHY 16
+#define MAX_LEN_DEMOGRAPHY 32 // 19Mar2021 was 16 but we needed 17.
 #define MAX_LEN_ALLOW_TAKE 16
 #define MAX_LEN_GAME_IDENTIFIER 33
 #define MAX_GRANARY_INIS 24
@@ -741,7 +741,6 @@ typedef int server_setting_id;
 #define SPECENUM_COUNT ECAT_COUNT
 #include "specenum_gen.h"
 #define ECAT_NONE ECAT_COUNT
-#define ECAT_LAST ECAT_COUNT
 
 /* Used in the network protocol. */
 #define SPECENUM_NAME extra_cause

@@ -47,6 +47,21 @@ capabilities = "minimum-default-sets"
 global_init_techs=""
 global_init_buildings="Palace"
 
+[tileset]
+; If preferred tileset is set, clients that support the feature will suggest
+; using that tileset with the ruleset.
+; preferred = ""
+
+[soundset]
+; If preferred soundset is set, clients that support the feature will suggest
+; using that soundset with the ruleset.
+; preferred = ""
+
+[musicset]
+; If preferred musicset is set, clients that support the feature will suggest
+; using that musicset with the ruleset.
+; preferred = ""
+
 [civstyle]
 ; Parameters used to generalize the calculation of city granary size:
 ;   if city_size <= num_inis:
@@ -319,6 +334,9 @@ ui_name_airlift_unit = _("%sAirlift to City%s")
 
 ; /* TRANS: _Attack (100% chance of success). */
 ui_name_attack = _("%sAttack%s")
+
+; /* TRANS: _Explode Missile (100% chance of success). */
+ui_name_suicide_attack = _("%sExplode Missile%s")
 
 ; /* TRANS: _Conquer City (100% chance of success). */
 ui_name_conquer_city = _("%sConquer City%s")
@@ -654,31 +672,44 @@ actor_reqs    =
 [actionenabler_attack_native]
 action = "Attack"
 actor_reqs    =
-    { "type",         "name",         "range", "present"
-      "UnitFlag",     "NonMil",       "Local", FALSE
-      "MinMoveFrags", "1",            "Local", TRUE
-      "UnitState",    "OnNativeTile", "Local", TRUE
-      "DiplRel",      "War",          "Local", TRUE
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "NonMil",       "Local", FALSE
+      "UnitClassFlag", "Missile",      "Local", FALSE
+      "MinMoveFrags",  "1",            "Local", TRUE
+      "UnitState",     "OnNativeTile", "Local", TRUE
+      "DiplRel",       "War",          "Local", TRUE
     }
 
 [actionenabler_attack_marines]
 action = "Attack"
 actor_reqs    =
-    { "type",         "name",    "range", "present"
-      "UnitFlag",     "NonMil",  "Local", FALSE
-      "MinMoveFrags", "1",       "Local", TRUE
-      "UnitFlag",     "Marines", "Local", TRUE
-      "DiplRel",      "War",     "Local", TRUE
+    { "type",          "name",    "range", "present"
+      "UnitFlag",      "NonMil",  "Local", FALSE
+      "UnitClassFlag", "Missile", "Local", FALSE
+      "MinMoveFrags",  "1",       "Local", TRUE
+      "UnitFlag",      "Marines", "Local", TRUE
+      "DiplRel",       "War",     "Local", TRUE
     }
 
 [actionenabler_attack_att_from_non_native]
 action = "Attack"
 actor_reqs    =
-    { "type",         "name",   "range", "present"
-      "UnitFlag",     "NonMil", "Local", FALSE
-      "MinMoveFrags", "1",      "Local", TRUE
-      "UnitClass",    "Sea",    "Local", TRUE
-      "DiplRel",      "War",    "Local", TRUE
+    { "type",          "name",    "range", "present"
+      "UnitFlag",      "NonMil",  "Local", FALSE
+      "UnitClassFlag", "Missile", "Local", FALSE
+      "MinMoveFrags",  "1",       "Local", TRUE
+      "UnitClass",     "Sea",     "Local", TRUE
+      "DiplRel",       "War",     "Local", TRUE
+    }
+
+[actionenabler_explode_missile]
+action = "Suicide Attack"
+actor_reqs    =
+    { "type",          "name",    "range", "present"
+      "UnitFlag",      "NonMil",  "Local", FALSE
+      "UnitClassFlag", "Missile", "Local", TRUE
+      "MinMoveFrags",  "1",       "Local", TRUE
+      "DiplRel",       "War",     "Local", TRUE
     }
 
 [actionenabler_conquer_city_native]

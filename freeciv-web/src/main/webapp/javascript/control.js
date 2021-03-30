@@ -117,12 +117,7 @@ var end_turn_info_message_shown = false;
 function control_init()
 {
   touch_device = is_touch_device();
-
-  if (renderer == RENDERER_2DCANVAS) {
-    mapctrl_init_2d();
-  } else {
-    init_webgl_mapctrl();
-  }
+  mapctrl_init_2d();
 
   $(document).keydown(global_keyboard_listener);
   $(window).resize(mapview_window_resized);
@@ -199,7 +194,7 @@ function control_init()
   }, false);
 
   var context_options = {
-        selector: (renderer == RENDERER_2DCANVAS) ? '#canvas' : '#canvas_div' ,
+        selector: '#canvas',
 	    zIndex: 5000,
         autoHide: true,
         callback: function(key, options) {
@@ -224,7 +219,7 @@ function control_init()
     context_options['position'] = function(opt, x, y){
                                                 if (touch_device) return;
                                                 var new_top = mouse_y + $("#canvas_div").offset().top;
-                                                if (renderer == RENDERER_2DCANVAS) new_top = mouse_y + $("#canvas").offset().top;
+                                                new_top = mouse_y + $("#canvas").offset().top;
                                                 opt.$menu.css({top: new_top , left: mouse_x});
                                               };
   }
@@ -366,7 +361,8 @@ function control_init()
 ****************************************************************************/
 function is_touch_device()
 {
-  if(!cardboard_vr_enabled && ('ontouchstart' in window) || 'onmsgesturechange' in window
+  if( ('ontouchstart' in window) 
+      || ('onmsgesturechange' in window)
       || window.DocumentTouch && document instanceof DocumentTouch) {
     return true;
   } else {
@@ -406,7 +402,7 @@ function mouse_moved_cb(e)
       mouse_y = e.clientY;
     }
   }
-  if (renderer == RENDERER_2DCANVAS && active_city == null && mapview_canvas != null
+  if (active_city == null && mapview_canvas != null
       && $("#canvas").length) {
     mouse_x = mouse_x - $("#canvas").offset().left;
     mouse_y = mouse_y - $("#canvas").offset().top;
@@ -418,22 +414,6 @@ function mouse_moved_cb(e)
 
       mapview['gui_x0'] += diff_x;
       mapview['gui_y0'] += diff_y;
-      touch_start_x = mouse_x;
-      touch_start_y = mouse_y;
-      update_mouse_cursor();
-    }
-  } else if (renderer == RENDERER_WEBGL && active_city == null && $("#canvas_div").length) {
-    mouse_x = mouse_x - $("#canvas_div").offset().left;
-    mouse_y = mouse_y - $("#canvas_div").offset().top;
-
-    if (mapview_mouse_movement && !goto_active) {
-      // move the mapview using mouse movement.
-      var spos = webgl_canvas_pos_to_map_pos(touch_start_x, touch_start_y);
-      var epos = webgl_canvas_pos_to_map_pos(mouse_x, mouse_y);
-      if (spos != null && epos != null) {
-        camera_look_at(camera_current_x + spos['x'] - epos['x'], camera_current_y, camera_current_z + spos['y'] - epos['y']);
-      }
-
       touch_start_x = mouse_x;
       touch_start_y = mouse_y;
       update_mouse_cursor();
@@ -472,12 +452,8 @@ function update_mouse_cursor()
   }
 
   //console.log("update_mouse_cursor() mmm:1 g_a:0, came_from_context_menu:"+came_from_context_menu);
-  var ptile;
-  if (renderer == RENDERER_2DCANVAS) {
-    ptile = canvas_pos_to_tile(mouse_x, mouse_y);
-  } else {
-    ptile = webgl_canvas_pos_to_tile(mouse_x, mouse_y);
-  }
+  var ptile = canvas_pos_to_tile(mouse_x, mouse_y);
+
 
   if (ptile == null) return; /* TO DO: this is the only way this function returns without forcing real_mouse_move_mode=false, presumably because
                                 if we're outside the map area, we don't change a thing for what mode is on inside that area. However, if there are
@@ -618,7 +594,7 @@ function chat_context_dialog_show(recipients) {
     row = document.createElement('tr');
     cell = document.createElement('td');
     flag_canvas = document.createElement('canvas');
-    flag_canvas.width = 29;
+    flag_canvas.width = 30;
     flag_canvas.height = 20;
     ctx = flag_canvas.getContext("2d");
     if (flag != null) {
@@ -702,14 +678,14 @@ function set_chat_direction(player_id) {
 
   if (player_id == null || player_id < 0) {
     player_id = null;
-    ctx.clearRect(0, 0, 29, 20);
+    ctx.clearRect(0, 0, 30, 20);
     ctx.font = "18px FontAwesome";
     ctx.fillStyle = "rgba(192, 192, 192, 1)";
     ctx.fillText(CHAT_ICON_EVERYBODY, 7, 15);
     player_name = 'everybody';
   } else if (client.conn.playing != null
              && player_id == client.conn.playing['playerno']) {
-    ctx.clearRect(0, 0, 29, 20);
+    ctx.clearRect(0, 0, 30, 20);
     ctx.font = "18px FontAwesome";
     ctx.fillStyle = "rgba(192, 192, 192, 1)";
     ctx.fillText(CHAT_ICON_ALLIES, 10, 16);
@@ -719,7 +695,7 @@ function set_chat_direction(player_id) {
     if (pplayer == null) return;
     player_name = pplayer['name']
                 + " of the " + nations[pplayer['nation']]['adjective'];
-    ctx.clearRect(0, 0, 29, 20);
+    ctx.clearRect(0, 0, 30, 20);
     var flag = sprites["f." + nations[pplayer['nation']]['graphic_str']];
     if (flag != null) {
       ctx.drawImage(flag, 0, 0);
@@ -880,6 +856,19 @@ function unit_is_in_focus(cunit)
   }
   return false;
 }
+/****************************************************************************
+  Return TRUE iff this unit is the only unit in focus.
+****************************************************************************/
+function unit_is_only_unit_in_focus(cunit)
+{
+  var funits = get_units_in_focus();
+  if (funits.length == 0 || funits.length >= 2) return false;
+  var punit = funits[0];
+  if (punit['id'] == cunit['id']) {
+      return true;
+  }
+  return false;  
+}
 
 /****************************************************************************
   Returns a list of units in focus.
@@ -955,7 +944,6 @@ function advance_unit_focus(same_type)
     deactivate_goto(false);
     save_last_unit_focus();
     current_focus = []; /* Reset focus units. */
-    if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
     update_active_units_dialog();
     $("#game_unit_orders_default").hide();
 
@@ -1038,7 +1026,6 @@ function advance_focus_inactive_units()
     save_last_unit_focus();
     current_focus = []; /* Reset focus units. */
     waiting_units_list = []; /* Reset waiting units list */
-    if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
     update_active_units_dialog();
     $("#game_unit_orders_default").hide();
   }
@@ -1240,6 +1227,7 @@ function update_unit_order_commands()
     var worker_type = false; // Handles civ2civ3 + mp2: these units have same orders as workers (join city already handled above):
     var infra_type = false;
     if (ptype['name'] == "Workers" || ptype['name'] == "Migrants"
+      || (ptype['name'] == "Tribesmen" && client_rules_flag[CRF_MP2_C])
       || (ptype['name'] =="Proletarians" && governments[client.conn.playing['government']]['name']=="Communism")) {
 
         worker_type = true;
@@ -1329,11 +1317,9 @@ function update_unit_order_commands()
       $("#order_fortress").prop("title", "Build Fort (Shift-F)");
     } else if (UNIT_CAN_FORTRESS) { // Fortress over Bunker allowed, to remove it. (Bunkers are pillage-proof)
       if (TILE_HAS_BUNKER) {
-        console.log("Tile has bunker so setting REMOVE BUNKER to order name.")
         unit_actions["fortress"] = {name: "Remove Bunker (Shift-F)"}; 
         $("#order_fortress").prop("title", "Remove Bunker (Shift-F)");
       } else {
-        console.log("Tile thinks it has no Bunker so setting Build Fortress to order name.")
         unit_actions["fortress"] = {name: "Build Fortress (Shift-F)"}; 
         $("#order_fortress").prop("title", "Build Fortress (Shift-F)");
       }
@@ -1505,7 +1491,7 @@ function update_unit_order_commands()
       }
 
       if (terrain_name == "Forest") {
-        /* if (show_order_buttons==2) */ $("#order_forest_remove").show(); // not frequently used button
+        $("#order_forest_remove").show();
         $("#order_irrigate").hide();
         $("#order_build_farmland").hide();
 	      unit_actions["forest"] = {name: "Chop Forest (I)"};
@@ -1660,6 +1646,10 @@ function update_unit_order_commands()
           cost_adjust -= 20; // 20% discount after Recycling Tech
         }
       }
+      if (client_rules_flag[CRF_MP2_C] && governments[client.conn.playing['government']]['name']=="Nationalism") {
+        cost_adjust -= 25; // 25% discount for government Nationalism.
+      }
+
       upgrade_cost = Math.floor(upgrade_cost * (100 + cost_adjust) / 100);
       /* *********************************************************************************************** */
 
@@ -1763,20 +1753,10 @@ function update_unit_order_commands()
             "disband": {name: (disband_type ? "Recycle Unit (Shift-D)" : "Disband (Shift-D)")}
             });
 
-/* this code removed: it was inconsistently making context menu too large on mobile:
-  if (touch_device) {
-    $(".context-menu-list").css("width", "600px");
-    $(".context-menu-item").css("font-size", "220%");
-  } */
   $(".context-menu-list").css("z-index", 5000);
-
-//// these changes in control.js and game.js made container not clickable but children unclickable also
-  //$("#game_units_orders_default").css("pointer-events", "none"); //// container not clickable, force children to be clickable
-  //$("#game_units_orders_default").children().css("pointer-events", "auto"); //// container not clickable, force children to be clickable
 
   return unit_actions;
 }
-
 
 /**************************************************************************
 ...
@@ -2005,7 +1985,6 @@ function set_unit_focus(punit)
     current_focus = [];
   } else {
     current_focus[0] = punit;
-    if (renderer == RENDERER_WEBGL) update_unit_position(index_to_tile(punit['tile']));
   }
 
   if (punit) warcalc_set_default_vals(punit);
@@ -2032,10 +2011,6 @@ function click_unit_in_panel(e, punit)
       }
     }
 
-    // though doing the exact same thing as single-click, shift-click was losing the other units in the panel, so
-    // try to emulate everything else it does, as a test to get those units displayed in the panel even though
-    // not in focus:
-    if (renderer == RENDERER_WEBGL) update_unit_position ( index_to_tile(punit['tile']));
     auto_center_on_focus_unit();
 
     update_active_units_dialog(); //previously only doing this but it lost unselected units in the panel
@@ -2043,9 +2018,7 @@ function click_unit_in_panel(e, punit)
     // added these lines below to emulate same code as non-shift-click which doesn't lose units in the panel:
     update_unit_order_commands();
 
-    if (current_focus.length > 0 && $("#game_unit_orders_default").length > 0 && !cardboard_vr_enabled && show_order_buttons ) {
-      //$("#game_units_orders_default").css("pointer-events", "none"); //// these changes in control.js and game.js made container not clickable but children unclickable also
-      //$("#game_units_orders_default").children().css("pointer-events", "auto"); //// container not clickable, force children to be clickable
+    if (current_focus.length > 0 && $("#game_unit_orders_default").length > 0 && show_order_buttons ) {
       $("#game_unit_orders_default").show();
     }
   } else set_unit_focus_and_redraw(punit);
@@ -2062,11 +2035,9 @@ function set_unit_focus_and_redraw(punit)
 
   if (punit == null) {
     current_focus = [];
-    if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
   } else {
     current_focus[0] = punit;
     warcalc_set_default_vals(punit); // warcalc default vals as last clicked units
-    if (renderer == RENDERER_WEBGL) update_unit_position(index_to_tile(punit['tile']));
   }
 
   //shift-spacebar to return to last location:
@@ -2077,9 +2048,7 @@ function set_unit_focus_and_redraw(punit)
   auto_center_on_focus_unit();
   update_active_units_dialog();
   update_unit_order_commands();
-  if (current_focus.length > 0 && $("#game_unit_orders_default").length > 0 && !cardboard_vr_enabled && show_order_buttons ) {
-    //$("#game_units_orders_default").css("pointer-events", "none"); //// these changes in control.js and game.js made container not clickable but children unclickable also
-    //$("#game_units_orders_default").children().css("pointer-events", "auto"); //// container not clickable, force children to be clickable
+  if (current_focus.length > 0 && $("#game_unit_orders_default").length > 0 && show_order_buttons ) {
     $("#game_unit_orders_default").show();
   }
 }
@@ -2122,7 +2091,6 @@ function auto_center_on_focus_unit()
 
   if (ptile != null && auto_center_on_unit) {
     center_tile_mapcanvas(ptile);
-    update_unit_position(ptile);
   }
 }
 
@@ -2396,7 +2364,7 @@ function do_map_click(ptile, qtype, first_time_called)
   var pcity = tile_city(ptile);
   var player_has_own_unit_present = false;
 
-  //console.log("do_map_click(...) called.");
+  //console.log("do_map_click(...) called.");///
 
   // User can safely finish dragging map and releasing on ANY tile without incurring an action.
   if (real_mouse_move_mode == true) return;
@@ -2440,7 +2408,6 @@ function do_map_click(ptile, qtype, first_time_called)
     if (goto_active /*&& !touch_device*/) { //(allow clicking same tile when giving a Nuke order.)
       deactivate_goto(false);
     }
-    if (renderer == RENDERER_2DCANVAS) {
       if (!mouse_click_mod_key['shiftKey']) { // normal left-click
         /* CONDITIONS FOR SHOWING A CONTEXT MENU:
            1.Automatic context menu when clicking unit, if 'unit_click_menu' user PREF is on.
@@ -2464,7 +2431,6 @@ function do_map_click(ptile, qtype, first_time_called)
             came_from_context_menu = true;
           }
         }
-      }
     } else if (!mouse_click_mod_key['shiftKey'] && unit_click_menu) {
       // 3D handling of above. TO DO: test/integrate same 2D functionality above for 3D if appropriate
       if (pcity) {
@@ -2477,6 +2443,8 @@ function do_map_click(ptile, qtype, first_time_called)
       // Record the clicked unit to enable seeing if a unit is clicked twice.
       // 3 STATES: -1:Fresh, unit_id:last unit clicked is stored, -2:last unit was already clicked twice
       last_unit_clicked = (last_unit_clicked == -2) ? -1 : current_focus[0]['id'];
+      if (focuslock && current_focus) center_tile_mapcanvas(unit_tile(current_focus[0]));
+
       return; //our work is done here unless we did a shift-click
     }
   }
@@ -2652,8 +2620,7 @@ function do_map_click(ptile, qtype, first_time_called)
         packet['orders'] = [];
         packet['dir'] = [];
         packet['activity'] = [];
-        packet['target'] = [];
-        packet['extra'] = [];
+        packet['sub_target'] = [];
         packet['action'] = [];
         for (var i = 0; i < goto_path['length']; i++) {
           /* TODO: Have the server send the full orders instead of just the
@@ -2672,8 +2639,7 @@ function do_map_click(ptile, qtype, first_time_called)
 
           packet['dir'][i] = goto_path['dir'][i];
           packet['activity'][i] = ACTIVITY_LAST;
-          packet['target'][i] = 0;
-          packet['extra'][i] = EXTRA_NONE;
+          packet['sub_target'][i] = 0;
           packet['action'][i] = ACTION_COUNT;
         }
 
@@ -2695,8 +2661,7 @@ function do_map_click(ptile, qtype, first_time_called)
             packet['orders'][pos] = ORDER_LAST;
             packet['dir'][pos] = -1;
             packet['activity'][pos] = ACTIVITY_LAST;
-            packet['target'][pos] = 0;
-            packet['extra'][pos] = EXTRA_NONE;
+            packet['sub_target'][pos] = 0;
             packet['action'][pos] = ACTION_COUNT;
           } else {
             /* Replace the existing last order with the final order */
@@ -2732,6 +2697,7 @@ function do_map_click(ptile, qtype, first_time_called)
         }
         /* Send the order to move using the orders system. */
         send_request(JSON.stringify(packet));
+       /// if (focuslock) focuslock_unit(); should be handled by the unit animation movement now.
         if (punit['movesleft'] > 0 && !delayed_goto_active && punit['owner'] == client.conn.playing.playerno) {
           unit_move_sound_play(punit);
         } else if (!has_movesleft_warning_been_shown) {
@@ -2766,24 +2732,23 @@ function do_map_click(ptile, qtype, first_time_called)
     }
 
     deactivate_goto(true);
-    //update_unit_focus();  true in the line above advances unit focus after update_focus_delay # milliseconds
-
   }  // END OF GO TO HANDLING ----------------------------------------------------------------------------------------------
-   else if (paradrop_active && current_focus.length > 0) {
+  else if (paradrop_active && current_focus.length > 0) {
     punit = current_focus[0];
     packet = {
       "pid"         : packet_unit_do_action,
       "actor_id"    : punit['id'],
       "target_id"   : ptile['index'],
       "extra_id"    : EXTRA_NONE,
-      "value"       : 0,
+      "sub_tgt_id"  : 0,
       "name"        : "",
       "action_type" : ACTION_PARADROP
     };
     send_request(JSON.stringify(packet));
+    if (focuslock) focuslock_unit();
     paradrop_active = false;
-
-  } else if (airlift_active && current_focus.length > 0) {
+  } 
+  else if (airlift_active && current_focus.length > 0) {
     for (var a=0; a<current_focus.length; a++) {
       punit = current_focus[a];
       pcity = tile_city(ptile); // TO DO: remove? we set pcity at top
@@ -2793,7 +2758,7 @@ function do_map_click(ptile, qtype, first_time_called)
           "actor_id"    : punit['id'],
           "target_id"   : pcity['id'],
           "extra_id"    : EXTRA_NONE,
-          "value"       : 0,
+          "sub_tgt_id"  : 0,
           "name"        : "",
           "action_type" : ACTION_AIRLIFT
         };
@@ -2802,11 +2767,13 @@ function do_map_click(ptile, qtype, first_time_called)
     }
     airlift_active = false;
 
-  } else if (action_tgt_sel_active && current_focus.length > 0) {
+  } 
+  else if (action_tgt_sel_active && current_focus.length > 0) {
     request_unit_act_sel_vs(ptile);
     action_tgt_sel_active = false;
 
-  } else {
+  } 
+  else {
     if (pcity != null) { //if city clicked
       if (pcity['owner'] == client.conn.playing.playerno && !mouse_click_mod_key['shiftKey']) { //if city is your own
         //console.log("Clicked our own city.");
@@ -2817,11 +2784,7 @@ function do_map_click(ptile, qtype, first_time_called)
 
           set_unit_focus_and_redraw(sunits[0]);
           if (city_click_goto_cooldown(ptile)) { // don't show contextmenu if in the cooldown period for a double tap GOTO
-            if (renderer == RENDERER_2DCANVAS) {
-              $("#canvas").contextMenu();
-            } else { //3D handling can potentially be made different later
-              $("#canvas_div").contextMenu();
-            }
+            $("#canvas").contextMenu();
           }
           return; // move the commented-out return from below up here
         } else if (!goto_active) { //if GOTO active then the click is a move command, not a show city command
@@ -2859,10 +2822,10 @@ function do_map_click(ptile, qtype, first_time_called)
       if (!mouse_click_mod_key['shiftKey']) {
         set_unit_focus_and_redraw(null);
       }
-    } else if (sunits != null && sunits.length > 0 ) {
+    }
+    else if (sunits != null && sunits.length > 0 ) {
       // Clicked on a tile with units:
       // Check that one of the units belongs to player:
-
       var own_unit_index = -1; // -1 means player has none of own units present
 
       for (var u = 0; u < sunits.length; u++) {
@@ -2870,6 +2833,7 @@ function do_map_click(ptile, qtype, first_time_called)
           {
             own_unit_index = u; //player wants to select his own unit first, not a foreign unit
             player_has_own_unit_present = true;
+            if (!mouse_click_mod_key['shiftKey'] && focuslock) center_tile_mapcanvas(unit_tile(sunits[u]));
           }
           if (player_has_own_unit_present) break; // gets first visible unit in stack, not last
       }
@@ -2910,7 +2874,9 @@ function do_map_click(ptile, qtype, first_time_called)
           /* A single unit has been clicked with the mouse. */
           var unit = sunits[0];
           set_unit_focus_and_activate(unit);
-        } else { /* more than one unit is on the selected left-clicked tile. */
+
+        } 
+        else { /* more than one unit is on the selected left-clicked tile. */
             if (own_unit_index>=0) {
               set_unit_focus_and_redraw(sunits[own_unit_index]);
             }
@@ -2922,20 +2888,11 @@ function do_map_click(ptile, qtype, first_time_called)
         }
 
         if (touch_device) { // show context menu unless we clicked on a city prior to GOTO_COOLDOWN period
-          if (renderer == RENDERER_2DCANVAS) {
             if (pcity) {
               if (city_click_goto_cooldown(ptile)) $("#canvas").contextMenu();
             } else {
               $("#canvas").contextMenu();
             }
-          }
-          else {  // 3D handling, currently the same
-            if (pcity) {
-              if (city_click_goto_cooldown(ptile)) $("#canvas").contextMenu();
-            } else {
-              $("#canvas").contextMenu();
-            }
-          }
         }
       } else if (pcity == null && !mouse_click_mod_key['shiftKey']) {
         // clicked on a tile with units exclusively owned by other players.
@@ -2951,7 +2908,6 @@ function do_map_click(ptile, qtype, first_time_called)
       }
     }
   }
-
   paradrop_active = false;
   airlift_active = false;
   action_tgt_sel_active = false;
@@ -3000,7 +2956,7 @@ function global_keyboard_listener(ev)
   }
   civclient_handle_key(keyboard_key, ev.keyCode, ev['ctrlKey'],  ev['altKey'], ev['shiftKey'], ev);
 
-  if (renderer == RENDERER_2DCANVAS) $("#canvas").contextMenu('hide');
+  $("#canvas").contextMenu('hide');
 }
 
 /**************************************************************************
@@ -3134,7 +3090,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       if (shift) {
         auto_attack = !auto_attack;
         //simpleStorage.set('autoattack', auto_attack); //session only
-        add_client_message("Auto-attack set to "+(auto_attack ? "ON." : "OFF."));
+        add_client_message("<b>Shift-A</b>. Auto-attack set to "+(auto_attack ? "ON." : "OFF."));
       } else key_unit_auto_settle();
     break;
 
@@ -3188,7 +3144,13 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'F':
-      if (shift) {
+      if (alt && shift && !ctrl) {
+        focuslock = !focuslock;
+        the_event.preventDefault(); // override possible browser shortcut
+        add_client_message("<b>Alt-Shift-F</b>. Focus-lock set to "+(focuslock ? "ON." : "OFF."));
+        simpleStorage.set('focuslock', focuslock);
+      }
+      else if (shift) {
         key_unit_fortress();
       } else {
         key_unit_fortify();
@@ -3240,6 +3202,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       } else if (ctrl && alt && !shift) {
         the_event.preventDefault(); // override possible browser shortcut
         draw_highlighted_pollution = !draw_highlighted_pollution;
+        simpleStorage.set('showpollution', draw_highlighted_pollution);
       }
       else {
         if (current_focus.length>0) {
@@ -3386,7 +3349,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         show_unit_movepct = !show_unit_movepct;
         if (show_unit_movepct) hp_bar_offset = -5;
         else hp_bar_offset = 0;
-        //simpleStorage.set('showMoves', show_unit_movepct);
+        simpleStorage.set('showMoves', show_unit_movepct);
       } else if (alt && !shift && !ctrl) {
         the_event.preventDefault(); // override possible browser shortcut
         key_unit_move(DIR8_SOUTH);  // alt+M=1
@@ -3503,11 +3466,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       came_from_context_menu = false;
       /* Abort any context menu blocking. */
       context_menu_active = true;
-      if (renderer == RENDERER_2DCANVAS) {
-        $("#canvas").contextMenu(true);
-      } else {
-        $("#canvas_div").contextMenu(true);
-      }
+      $("#canvas").contextMenu(true);
 
       /* Abort target tile selection. */
       paradrop_active = false;
@@ -3526,7 +3485,6 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         save_last_unit_focus();
 
         current_focus = [];
-        if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
         clear_all_modes();
         $("#canvas_div").css("cursor", "default");
         goto_request_map = {};
@@ -3553,37 +3511,10 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       break;
 
     case 107:
-      //zoom in
-      if (renderer == RENDERER_WEBGL) {
-        let new_camera_dy = camera_dy - 60;
-        let new_camera_dx = camera_dx - 45;
-        let new_camera_dz = camera_dz - 45;
-        if (new_camera_dy < 350 || new_camera_dy > 1200) {
-          return;
-        } else {
-          camera_dx = new_camera_dx;
-          camera_dy = new_camera_dy;
-          camera_dz = new_camera_dz;
-        }
-        camera_look_at(camera_current_x, camera_current_y, camera_current_z);
-      }
       break;
 
     case 109:
       //zoom out
-      if (renderer == RENDERER_WEBGL) {
-        let new_camera_dy = camera_dy + 60;
-        let new_camera_dx = camera_dx + 45;
-        let new_camera_dz = camera_dz + 45;
-        if (new_camera_dy < 350 || new_camera_dy > 1200) {
-          return;
-        } else {
-          camera_dx = new_camera_dx;
-          camera_dy = new_camera_dy;
-          camera_dz = new_camera_dz;
-        }
-        camera_look_at(camera_current_x, camera_current_y, camera_current_z);
-      }
       break;
 
   }
@@ -4940,16 +4871,7 @@ function key_unit_upgrade()
     var punit = funits[i];
     var pcity = tile_city(index_to_tile(punit['tile']));
     var target_id = (pcity != null) ? pcity['id'] : 0;
-    var packet = {
-      "pid"         : packet_unit_do_action,
-      "actor_id"    : punit['id'],
-      "target_id"   : target_id,
-      "extra_id"    : EXTRA_NONE,
-      "value"       : 0,
-      "name"        : "",
-      "action_type" : ACTION_UPGRADE_UNIT
-    };
-    send_request(JSON.stringify(packet));
+    request_unit_do_action(ACTION_UPGRADE_UNIT, punit['id'], target_id);
   }
   deactivate_goto(false);
   setTimeout(update_active_units_dialog, update_focus_delay*.85);
@@ -5217,7 +5139,11 @@ function key_unit_well()
 **************************************************************************/
 function can_build_canal(punit, ptile)
 {
-  if (tile_terrain(ptile) == null) return false;
+  // TODO: Deprecate all pre-MP2C logic to simplify to the superior solution
+
+  if (typeof EXTRA_CANAL === "undefined") return 0;
+  if (tile_terrain(ptile) == null) return 0;
+  if (punit == null || ptile == null) return 0; 
 
   var is_lowland = (tile_terrain(ptile)['name'] != 'Hills'
                    && tile_terrain(ptile)['name'] != 'Mountains');
@@ -5227,30 +5153,34 @@ function can_build_canal(punit, ptile)
 
   // Check for water near:
   for (var dir = 0; dir < 8; dir++) {
+    // MP2C only allows CAdjacent on ALL checks below:
+    if (client_rules_flag[CRF_MP2_C] && !is_cardinal_dir(dir)) continue;
     /* Check if there is adjacent ocean/deep ocean/lake */
     var tile1 = mapstep(ptile, dir);
     if (tile1 != null && terrains[tile1['terrain']] != null) {
         if (terrains[tile1['terrain']]['name'] == "Lake"
         || terrains[tile1['terrain']]['name'] == "Ocean"
         || terrains[tile1['terrain']]['name'] == "Deep Ocean") {
-          water_near = EXTRA_CANAL;
+
+          water_near = EXTRA_CANAL;  // this is a double code for TRUE and what kind of canal can be made
           break;
         }
-        // CRF_EXTRA_QUAY says if ruleset has waterways, which can be made with river near:
-        else if ( client_rules_flag[CRF_EXTRA_QUAY] && tile_has_extra(tile1, EXTRA_RIVER) ) {
-          water_near = EXTRA_WATERWAY;
+        // MP2ag onward can build EXTRA_WATERWAY:
+        else if ( (client_rules_flag[CRF_EXTRA_QUAY]/* MP2ag+ */ && tile_has_extra(tile1, EXTRA_RIVER))  // a river is adjecent
+                          ||                              // OR...
+                   (client_rules_flag[CRF_MP2_C] && tile_has_extra(tile1, EXTRA_CANAL)) // a canal is CAdj.
+                ) {
+          water_near = EXTRA_WATERWAY; // this is a double code for TRUE and what kind of canal can be made
           break;
         }
     }
   }
 
-  if ((typeof EXTRA_CANAL !== "undefined")
-      && (punit != null && ptile != null)
-      && !tile_has_extra(ptile, EXTRA_CANAL)
-      && unit_can_do_action(punit, ACTION_ROAD)
-      && is_lowland
-      && water_near
-      && tech_known('Engineering')) {
+  if (  !tile_has_extra(ptile, EXTRA_CANAL)
+        && unit_can_do_action(punit, ACTION_ROAD)
+        && is_lowland
+        && water_near
+        && tech_known('Engineering')) {
 
         return water_near; // serves as a code for whether to make Canal or Waterway extra.
   }
@@ -5313,8 +5243,9 @@ function can_irrigate(punit, ptile)
 
   // Check central tile for water source:
   var water_near = tile_has_extra(ptile, EXTRA_RIVER) // irrigation is also a water source but, it's already irrigated! ;)
-      || (tile_has_extra(ptile, EXTRA_OASIS) && (client_rules_flag[CRF_OASIS_IRRIGATE]));
-
+      || (tile_has_extra(ptile, EXTRA_OASIS) && (client_rules_flag[CRF_OASIS_IRRIGATE]))
+      || ((client_rules_flag[CRF_MP2_C]) && tile_has_extra(ptile, EXTRA_CANAL))
+      || ((client_rules_flag[CRF_MP2_C]) && tile_has_extra(ptile, EXTRA_WATERWAY));
   // If no water on occupied tile, check cardinally adjacent:
   if (!water_near) {
     for (var dir = 1; dir < 7; dir++) {
@@ -5329,6 +5260,8 @@ function can_irrigate(punit, ptile)
          || terrain_name == "Deep Ocean"
          || tile_has_extra(cadj_tile, EXTRA_IRRIGATION)
          || tile_has_extra(cadj_tile, EXTRA_RIVER)
+         || (client_rules_flag[CRF_MP2_C] && (tile_has_extra(cadj_tile, EXTRA_CANAL)))
+         || (client_rules_flag[CRF_MP2_C] && (tile_has_extra(cadj_tile, EXTRA_WATERWAY)))   
          || (tile_has_extra(cadj_tile, EXTRA_OASIS) && (client_rules_flag[CRF_OASIS_IRRIGATE])) ) {
             water_near = true;
             break; // one adjacent water is all that's needed
@@ -5519,14 +5452,7 @@ function key_unit_homecity()
     var pcity = tile_city(ptile);
 
     if (pcity != null) {
-      var packet = {"pid" : packet_unit_do_action,
-                    "actor_id" : punit['id'],
-                    "target_id": pcity['id'],
-                    "extra_id" : EXTRA_NONE,
-                    "value" : 0,
-                    "name" : "",
-                    "action_type": ACTION_HOME_CITY};
-      send_request(JSON.stringify(packet));
+      request_unit_do_action(ACTION_HOME_CITY, punit['id'], pcity['id']);
       $("#order_change_homecity").hide();
     }
   }
@@ -5635,8 +5561,8 @@ function request_unit_cancel_orders(punit)
       vigilant: false,
       dest_tile: punit.tile
     };
-    packet.orders = packet.dir = packet.activity = packet.target
-                  = packet.extra = packet.action = [];
+    packet.orders = packet.dir = packet.activity = packet.sub_target
+                  = packet.action = [];
     send_request(JSON.stringify(packet));
   }
 }
@@ -5700,7 +5626,7 @@ function request_unit_build_city()
             "actor_id"    : punit['id'],
             "target_id"   : target_city['id'],
             "extra_id"    : EXTRA_NONE,
-            "value"       : 0,
+            "sub_tgt_id"  : 0,
             "name"        : "",
             "action_type" : ACTION_JOIN_CITY };
 
@@ -5719,10 +5645,36 @@ function request_unit_build_city()
              send_request(JSON.stringify(packet));
              setTimeout(update_active_units_dialog, update_focus_delay);
           });
+          setSwalTheme();
         }
       }
     }
   }
+}
+
+/**************************************************************************
+ * Send a request for an actor unit to do a specific action.
+ *
+ * @param action_id - action type to be requested
+ * @param actor_id - acting unit id
+ * @param target_id - target unit, city or tile
+ * @param [sub_tgt_id=0] - optional sub target. Only some actions take
+ *     a sub target. The sub target kind depends on the action. e.g.
+ *     the technology to steal from a city, the extra to
+ *     pillage at a tile, and the building to sabotage in a city.
+ * @param [name=""] - optional name, used by ACTION_FOUND_CITY
+**************************************************************************/
+function request_unit_do_action(action_id, actor_id, target_id, sub_tgt_id,
+                                name)
+{
+  send_request(JSON.stringify({
+    pid: packet_unit_do_action,
+    action_type: action_id,
+    actor_id: actor_id,
+    target_id: target_id,
+    sub_tgt_id: sub_tgt_id || 0,
+    name: name || ""
+  }));
 }
 
 /**************************************************************************
@@ -5774,7 +5726,8 @@ function key_unit_disband()
     showCancelButton: true,
     confirmButtonColor: cb_color,
     confirmButtonText: cb_text,
-    closeOnConfirm: true
+    closeOnConfirm: true,
+    html: true
 },
   function(){
     var funits = get_units_in_focus();
@@ -5792,7 +5745,7 @@ function key_unit_disband()
         "target_id"   : (target_city == null ? punit['id']
                                             : target_city['id']),
         "extra_id"    : EXTRA_NONE,
-        "value"       : 0,
+        "sub_tgt_id"  : 0,
         "name"        : "",
         "action_type" : (target_city == null ? ACTION_DISBAND_UNIT
                                             : ACTION_RECYCLE_UNIT)
@@ -5804,6 +5757,7 @@ function key_unit_disband()
     setTimeout(update_unit_focus, update_focus_delay);
     setTimeout(update_active_units_dialog, update_focus_delay+100);
   });
+  setSwalTheme();
   deactivate_goto(false);
 }
 
@@ -5840,7 +5794,7 @@ function key_unit_move(dir)
       "orders"   : [ORDER_ACTION_MOVE],
       "dir"      : [dir],
       "activity" : [ACTIVITY_LAST],
-      "target"   : [0],
+      "sub_target" : [0],
       "extra"    : [EXTRA_NONE],
       "action"   : [ACTION_COUNT],
       "dest_tile": newtile['index']
@@ -5850,6 +5804,8 @@ function key_unit_move(dir)
     if (punit['movesleft'] > 0 && punit['owner'] == client.conn.playing.playerno) unit_move_sound_play(punit);
   }
   deactivate_goto(true);
+  // later if option is set:
+  if (focuslock) focuslock_unit();
 }
 
 /**************************************************************************
@@ -5884,18 +5840,27 @@ function key_unit_move_focus_index(dir, s)
       "orders"   : [ORDER_ACTION_MOVE],
       "dir"      : [dir],
       "activity" : [ACTIVITY_LAST],
-      "target"   : [0],
-      "extra"    : [EXTRA_NONE],
+      "sub_target": [0],
       "action"   : [ACTION_COUNT],
       "dest_tile": newtile['index']
     };
 
     send_request(JSON.stringify(packet));
+    if (focuslock) focuslock_unit();
     remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
     if (punit['movesleft'] > 0 && punit['owner'] == client.conn.playing.playerno) unit_move_sound_play(punit);
   }
 
   deactivate_goto(true);
+}
+
+/**************************************************************************
+ ...Locks focus on the selected unit (keeping it center of map).
+    Called only when the player has set the focuslock Prefs Option to on.
+**************************************************************************/
+function focuslock_unit()
+{
+  setTimeout(auto_center_on_focus_unit,420);
 }
 
 /**************************************************************************
@@ -6009,11 +5974,8 @@ function check_request_goto_path()
   if (goto_active && current_focus.length > 0
       && (prev_mouse_x != mouse_x || prev_mouse_y != mouse_y || prev_goto_tile<=LAST_FORCED_CHECK)) {
 
-    if (renderer == RENDERER_2DCANVAS) {
-      ptile = canvas_pos_to_tile(mouse_x, mouse_y);
-    } else {
-      ptile = webgl_canvas_pos_to_tile(mouse_x, mouse_y);
-    }
+    ptile = canvas_pos_to_tile(mouse_x, mouse_y);
+
     if (ptile != null) {
       if (ptile['tile'] != prev_goto_tile) {
         clear_goto_tiles(); // TO DO: goto tiles should not be in tiles[tild_id][goto_dir] which takes forever to clear, but their own array instead
@@ -6054,7 +6016,6 @@ function update_goto_path(goto_packet)
   // don't bother check goto for same tile unit is on
   if (ptile==goaltile) return;
 
-  if (renderer == RENDERER_2DCANVAS) {
     for (var i = 0; i < goto_packet['dir'].length; i++) {
       if (ptile == null) break;
       var dir = goto_packet['dir'][i];
@@ -6068,9 +6029,6 @@ function update_goto_path(goto_packet)
       ptile['goto_dir'] = dir;
       ptile = mapstep(ptile, dir);
     }
-  } else {
-    webgl_render_goto_line(ptile, goto_packet['dir']);
-  }
 
   current_goto_turns = goto_packet['turns'];
 
@@ -6105,11 +6063,9 @@ function show_goto_path(goto_packet)
 **************************************************************************/
 function center_tile_mapcanvas(ptile)
 {
-  if (renderer == RENDERER_2DCANVAS) {
-    center_tile_mapcanvas_2d(ptile);
-  } else {
-    center_tile_mapcanvas_3d(ptile);
-  }
+
+  center_tile_mapcanvas_2d(ptile);
+
 }
 
 /**************************************************************************
@@ -6117,13 +6073,7 @@ function center_tile_mapcanvas(ptile)
 **************************************************************************/
 function popit()
 {
-  var ptile;
-
-  if (renderer == RENDERER_2DCANVAS) {
-    ptile = canvas_pos_to_tile(mouse_x, mouse_y);
-  } else {
-    ptile = webgl_canvas_pos_to_tile(mouse_x, mouse_y);
-  }
+  var ptile = canvas_pos_to_tile(mouse_x, mouse_y);
 
   if (ptile == null) return;
 
@@ -6208,7 +6158,7 @@ function center_on_any_city()
 {
   var fallback_city;
 
-  if (!observing) {
+  if (!client_is_observer()) {
     for (var city_id in cities) {
       var pcity = cities[city_id];
       // Loop through all cities
@@ -6661,6 +6611,9 @@ function check_mouse_drag_unit(ptile)
 **************************************************************************/
 function popup_fullscreen_enter_game_dialog()
 {
+  // Don't show popup for small screen, we set enter it elsewhere.
+  if (is_small_screen()) return;
+  
   id = "#fullscreen_dialog";
   remove_active_dialog(id);  /* Reset dialog page. */
   $("#fullscreen_dialog").css("white-space","pre-wrap"); // allow \n to work.
@@ -6702,8 +6655,18 @@ function openFullscreen() {
   }
   // clicking anywhere will restore you back!
   $('html').click( function() {
-    if(!document.fullscreenElement){
+    if(!document.fullscreenElement && $('html').length > 0 && $('html')[0].requestFullscreen !== "undefined"){
       $('html')[0].requestFullscreen();
     }
   });
+}
+/****************************************************************************
+ This function sets the color theme for swal colors that override the
+ .css file on game load.
+****************************************************************************/
+function setSwalTheme() {
+  // Sweet alert recolor for dark-theme (it overwrites civclient.css settings)
+  $(".confirm").css("color", "#060");
+  $(".cancel").css("color", "#600");
+  $(".sweet-alert").children().css("color", "#d4cfb9");
 }

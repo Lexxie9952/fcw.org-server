@@ -46,7 +46,7 @@ f.write("var soundset = {");
 for key in config['files']:
   f.write("\"" + key + "\" : " );
   f.write(config['files'][key].replace("stdsounds/","").split(";")[0]);
-  f.write(", ");
+  f.write(", \n");
 
 f.write("\"last\":null};");
 

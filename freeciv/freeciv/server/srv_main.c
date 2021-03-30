@@ -1290,24 +1290,6 @@ static void begin_phase(bool is_new_phase)
   } phase_players_iterate_end;
 
   if (is_new_phase) {
-    /* Try to avoid hiding events under a diplomacy dialog */
-    phase_players_iterate(pplayer) {
-      if (is_ai(pplayer)) {
-        CALL_PLR_AI_FUNC(diplomacy_actions, pplayer, pplayer);
-      }
-    } phase_players_iterate_end;
-
-    log_debug("Aistartturn");
-    ai_start_phase();
-  } else {
-    phase_players_iterate(pplayer) {
-      if (is_ai(pplayer)) {
-        CALL_PLR_AI_FUNC(restart_phase, pplayer, pplayer);
-      }
-    } phase_players_iterate_end;
-  }
-
-  if (is_new_phase) {
     /* Unit "end of turn" activities - of course these actually go at
      * the start of the turn! */
     unit_wait_list_clear(server.unit_waits);
@@ -1358,6 +1340,24 @@ static void begin_phase(bool is_new_phase)
   alive_phase_players_iterate(pplayer) {
     update_revolution(pplayer);
   } alive_phase_players_iterate_end;
+
+  if (is_new_phase) {
+    /* Try to avoid hiding events under a diplomacy dialog */
+    phase_players_iterate(pplayer) {
+      if (is_ai(pplayer)) {
+        CALL_PLR_AI_FUNC(diplomacy_actions, pplayer, pplayer);
+      }
+    } phase_players_iterate_end;
+
+    log_debug("Aistartturn");
+    ai_start_phase();
+  } else {
+    phase_players_iterate(pplayer) {
+      if (is_ai(pplayer)) {
+        CALL_PLR_AI_FUNC(restart_phase, pplayer, pplayer);
+      }
+    } phase_players_iterate_end;
+  }
 
   sanity_check();
 
@@ -1476,6 +1476,18 @@ static void end_phase(void)
                     _("🚀 Automatically placed spaceship parts that were still not placed."));
     }
 
+    // Obsolete Pax Dei when it reaches the end of its counter. Has to happen here so that
+    // effects don't carry over into city effects during next turn production. Also,
+    // nicely integrates the handling of counter and obsoleting in one place!
+    if (game.server.pax_dei_set) {
+      int pax_dei_owner_id = game.info.great_wonder_owners[improvement_index(improvement_by_rule_name("Pax Dei"))];
+      if (pplayer == player_by_number(pax_dei_owner_id)) {
+        game.server.pax_dei_counter--;
+        if (game.server.pax_dei_counter==0) {
+          remove_obsolete_buildings(pplayer);
+        }
+      }
+    }
     update_city_activities(pplayer);
     city_thaw_workers_queue();
     pplayer->culture += nation_history_gain(pplayer);

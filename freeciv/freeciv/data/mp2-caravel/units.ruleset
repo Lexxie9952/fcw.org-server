@@ -1,4 +1,4 @@
-;: ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：’
+;：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：’ ×
 ; Modifying this file:
 ; You should not modify this file except to make bugfixes or
 ; for other "maintenance".  If you want to make custom changes,
@@ -14,7 +14,7 @@
 ; unit with the relevant role that the player can build will be chosen.
 ; If no such unit can be found (eg Explorers that require Seafaring),
 ; then the first unit with this role will be chosen.
-;: ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：’
+;：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：’ ×
 
 [datafile]
 description="Unit definitions for the MP2 ruleset."
@@ -584,7 +584,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                  flag can use extra city_build_slots
 ;                  TO DO：make this a server UTYF flag that's used instead of Shield2Gold
 ; Following actions require extra fields:
-;  "Attack"
+;  "Attack" and "Suicide Attack"
 ;   attack = base attack strength
 ;  "Bombard"
 ;   attack       = base attack strength
@@ -695,15 +695,15 @@ tech_req      = "None"
 obsolete_by   = "None"
 graphic       = "u.tribesmen"
 graphic_alt   = "-"
-sound_move    = "m_worker"
-sound_move_alt = "m_generic"
-sound_fight   = "f_worker"
+sound_move    = "m_tribesmen"
+sound_move_alt = "m_worker"
+sound_fight   = "f_warriors"
 sound_fight_alt = "f_generic"
 build_cost    = 10
 pop_cost      = 0
 attack        = 1
 defense       = 1
-hitpoints     = 6
+hitpoints     = 8
 firepower     = 1
 move_rate     = 1
 vision_radius_sq = 5
@@ -737,22 +737,23 @@ veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
 veteran_move_bonus = 3, 4, 5, 6, 7, 8, 9
 helptext      = _("\
-Tribesmen came before cities, specialization, and division of labor.\
- They help in nation-building by recycling into city production with\
- a 2× bonus, donating their life-work as 20 shields toward a building,\
- wonder, or coinage. They can’t recycle into units. ** Any change of\
- production target throws away their life-work! **\n\
-Tribesmen are versatile.\
- They can explore, make basic diplomatic contact, and freely Investigate\
- cities. They can carry Goods and enter nations with whom you are at Peace,\
- and engage in primitive combat. They can’t conquer cities, and often\
- do not fight to the death (10 combat rounds).\n\
-Tribesmen move over terrain with no penalty, and do not respect nor exert ZOC.\
- They can work tiles at a rate slower than Workers. They have a 3x bonus at\
- hunting animals, and 2x defending against them.\n\
-After 2500BC (T15) your last Tribesmen get old and your nation settles into\
- city life. Tribesmen move ⅓ slower, see less, lose the recycle bonus, and can\
- no longer work tiles. After 2000BC they lose another ⅓ move.\
+Tribesmen came before cities and specialized division of labor. They have\
+ primitive versatility. \n\
+Tribesmen can explore, moving over terrain with no penalty. They don’t obey\
+ or exert ZOC. They work tiles at half the rate of Workers. They have a 3×\
+ bonus at hunting wild animals, and defend at 2× against them. \n\
+Tribesmen can make basic diplomatic contact and freely Investigate\
+ cities. They can carry Goods and enter nations with whom you are at Peace.\
+ They can do primitive combat—they can’t conquer cities and only fight\
+ 10 combat rounds. \n\
+Tribesmen help build nations by recycling into city production with\
+ a 2× bonus, donating their life-work to any output except units.\
+ ** Changing production target loses their work! **\n\
+Tribesmen start with bonuses they lose as you become more civilized. For the\
+ first three turns they get a +⅓ move bonus. After 2500BC (T15), Tribesmen get\
+ old: they lose -⅓ move, see less, lose the recycle bonus, and can no longer\
+ work tiles. At such point they are still serviceable for weak defense, carrying\
+ Goods, making contact, and recycling for 10 shields.\
 ")
 
 ;A unique patch unit to provide fair starts regardless of lack of nearby water.
@@ -772,7 +773,7 @@ build_cost    = 5
 pop_cost      = 0
 attack        = 0
 defense       = 1
-hitpoints     = 6
+hitpoints     = 8
 firepower     = 1
 move_rate     = 3
 vision_radius_sq = 4
@@ -956,7 +957,7 @@ build_cost    = 30
 pop_cost      = 0
 attack        = 0
 defense       = 1
-hitpoints     = 6
+hitpoints     = 8
 firepower     = 1
 move_rate     = 2
 vision_radius_sq = 4
@@ -1342,7 +1343,7 @@ bonuses       =
      ;"WillNever", "DefenseDividerPct", -90    ;The way to change general attack score on everyone without using integer attack score.
      ;"WillNever", "DefenseMultiplierPct", -98 ;The way to change general defense score on everyone without using integer defense score.
      ;However, the value below is with using the custom veterancy level. For 20FP unit, a D 20% of A emulates emulates a D 2/3 of A. 
-     ;********* requires hard-coding fix to packhand.js:handle_non_integer_combat_scores() if changed: ******************************
+     ;********* requires hard-coding fix to packhand.js:handle_non_integer_combat_scores() if changed：******************************
      "WillNever", "DefenseMultiplierPct", -50 ;The way to change general defense score on everyone without using integer defense score. 
    }
 flags         = "FootSoldier", "Capturer", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "WillNever"
@@ -2046,6 +2047,7 @@ move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
+paratroopers_mr_sub = 8192 ; 00100,00,0000,000,0,0 - bbd_retal_rate=4, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -2056,8 +2058,12 @@ helptext      = _("\
 Catapults are large rock-throwing war machines.\
  The ballistic delivery of massive\
  stones diminishes the bonus of Fortifications and\
- City Walls by -25%, yielding a 1.5x and 2.75x bonus, respectively.\
- Catapults are weak defenders, and will need an escort to be effective.\
+ City Walls by -25%, yielding a 1.5× and 2.75× bonus, respectively. \n\
+"), _("
+Catapults are weak defenders, and will need an escort to be effective.\
+ Even so, it is better to rush attack them than do special unit attacks\
+ from range： when attacked from range or rammed in a Fortress, Catapults\
+ can retaliate for 4 rounds of combat.\
 ")
 
 [unit_siege_ram]
@@ -2081,7 +2087,7 @@ move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 1
 fuel          = 0
-city_size     = 507940  ; 011111,000,000,001001,00 = atk_bonus=8.75x, max_kills=0, targets=all, move_cost=9 frags, reserved = 00
+city_size     = 507960  ; 011111,000,000,001110,00 = atk_bonus=8.75x, max_kills=0, targets=all, move_cost=14 frags, reserved = 00
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -2094,7 +2100,7 @@ Siege Rams launch a tremendous thrusting force through\
  iron-capped timber shafts. They can break through City\
  Walls if they are not killed first. City Walls have counter\
  defenses, giving Siege Rams even odds of success. Wall\
- defense in capitals is twice as stiff——cutting odds to 25%.\n\
+ defense in capitals is twice as stiff—cutting odds to 25%.\n\
 Siege Rams may also ram Fortresses, doing up to 4hp of damage\
  on each occupant. This emulates damage to the Fortress defense\
  bonus, which is partly or fully repaired/recovered next turn.\n\
@@ -2102,7 +2108,7 @@ Siege Rams can only travel by road. They can carry 1 Land\
  unit as cargo：their slow pace means this serves more for\
  disguise or defense.\n\ 
 Siege Rams need an escort for protection. They need a minimum of\
- 1 move point to attack walls, and 1 1/9 points against a Fortress.\
+ 1 move point to attack a Fortress or City Walls.\
  Cities protected by the Great Wall are immune to Siege Rams.\n\
  The discovery of Metallurgy by any nation incapacitates Siege Rams.\
 ")
@@ -2129,6 +2135,7 @@ move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
+paratroopers_mr_sub = 10240 ; 00101,00,0000,000,0,0 - bbd_retal_rate=5, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -2143,9 +2150,11 @@ Cannons are huge guns that use gunpowder to fire massive metallic projectiles\
  much faster and more accurately than earlier ballistic weapons. The\
  aerial delivery of high speed massive metal gives an edge against\
  Fortifications and City Walls. The bonuses from those are reduced by\
- -50% to 1.25x and 2.5x, respectively.\
- While Cannons are strong attackers, they are also weak defenders. They\
- need an escort to be effective.\
+ -50% to 1.25x and 2.5x, respectively. \n\
+"), _("
+While Cannons are strong attackers, they are also weak defenders. Yet\
+ they are not without defensive purpose. They can retaliate 5 rounds\
+ of bombardment against special unit attacks from other units.\
 ")
 
 [unit_artillery]
@@ -2169,6 +2178,7 @@ move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
+paratroopers_mr_sub = 12288 ; 00110,00,0000,000,0,0 - bbd_retal_rate=6, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -2183,9 +2193,11 @@ Artillery are a major upgrade to Cannons, with doubled firepower. Accuracy\
  and projectile speed go to a whole new level. Thus, they have an\
  even greater bonus than their predecessors against Fortifications\
  and City Walls. Such bonuses are reduced -75%. This renders Fortifications\
- completely ineffective, and reduces the bonus from Walls down to 2.25x.\
- Like their predecessors, Artillery are poor at defense, and need an\
- escort to be effective.\
+ completely ineffective, and reduces the bonus from Walls down to 2.25x. \n\
+"), _("
+Like their predecessors, Artillery are poor at defense, and need an\
+ escort to be effective. However, they can retaliate 6 rounds of bombardment\
+ against special unit attacks from other units.\
 ")
 
 [unit_anti_aircraft]
@@ -2304,6 +2316,7 @@ move_rate     = 4
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
+paratroopers_mr_sub = 14336 ; 00111,00,0000,000,0,0 - bbd_retal_rate=7, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -2316,7 +2329,10 @@ roles         = ""
 helptext      = _("\
 Howitzers are upgraded Artillery with a terrifying increase to mobility and attack strength.\
  This is so much so, that Fortifications and City Walls are completely ineffective\
- against Howitzers. Howitzers are vulnerable when not escorted.\
+ against Howitzers. \n\
+"), _("
+While Howitzers are vulnerable when not escorted, they can retaliate 7 rounds of bombardment\
+ against special unit attacks from other units. This is a strong deterrent.\
 ")
 
 [unit_balloon]
@@ -2390,7 +2406,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
-flags         = "Unbribable", "HasNoZOC", "NeverProtects", "Bombarder", "Provoking"
+flags         = "Unbribable", "AirAttacker", "HasNoZOC", "NeverProtects", "Bombarder", "Provoking"
 roles         = ""
 helptext      = _("\
 As new technology inspires the upgrade of Balloons, the Zeppelin appears.\
@@ -2407,7 +2423,6 @@ NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 bombard_rate = 4
-
 
 [unit_airplane]
 name          = _("Airplane")
@@ -2480,6 +2495,7 @@ uk_gold       = 0
 targets       = "Air", "AirProtect", "Missile", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
+      "AirAttacker", "DefenseMultiplierPct", 17 ; defends at 3.5 (3*1.17=3.51) vs air attackers
    }
 flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape",
                 "AirProtector", "Provoking"
@@ -2536,6 +2552,12 @@ uk_gold       = 0
 targets       = "Air", "AirProtect", "Missile", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 bonuses       =
    { "flag", "type", "value"
+; Crease Base Attack of 3.5. Use flags to include all unit_types with no overlap:
+     "CantReachAir", "DefenseDividerPct", 17   ; all military Land, Sea, Bombers, EXCEPT AAA, Mobile SAM, AEGIS
+     "AntiAir",      "DefenseDividerPct", 17   ; AAA, Mobile SAM, AEGIS
+     "NonMil",       "DefenseDividerPct", 17   ; all NonMil units
+     "AirAttacker",  "DefenseDividerPct", 17   ; Aircraft (including Bombers)
+     "FieldUnit",    "DefenseDividerPct", -17  ; Cancel overlapped doubled bonus on Bombers.
    }
 flags         = "AirAttacker", "Unbribable", "HasNoZOC", "CanEscape", "AirProtector", "Provoking"
 veteran_names =
@@ -2574,7 +2596,7 @@ graphic_alt   = "-"
 sound_move    = "m_dive_bomber"
 sound_move_alt = "m_escort_fighter"
 sound_fight   = "f_dive_bomber"
-sound_fight_alt = "Ground Strike"
+sound_fight_alt = "Dive Bomb"
 build_cost    = 60
 pop_cost      = 0
 attack        = 3
@@ -2597,7 +2619,7 @@ bonuses       =
      ; A4.5 vs all Surface Units 
      "CantReachAir",   "DefenseDividerPct",          50 
      "NonMil",         "DefenseDividerPct",          50 ; NonMil do not have CantReachAir flag
-     "AntiAir",        "DefenseDividerPct",          50 ; AntiAir do not hav CantReachAir flag
+     "AntiAir",        "DefenseDividerPct",          50 ; AntiAir do not have CantReachAir flag
 
      ; Cancel CantReachAir bonus on Bombers
      "FieldUnit",      "DefenseDividerPct",         -50 
@@ -2931,7 +2953,7 @@ Satellites orbit the Earth above the atmosphere. They are unreachable to anythin
  but missiles. Their orbital velocity allows them to circumnavigate the planet\
  in a couple turns. Telescopic cameras allow them to Investigate City, even if the\
  city has a Police Station. Satellites can’t be seen by others unless adjacent.\
- Satellites require Laser tech and the Apollo Program.\
+ Satellites require Laser tech and can only be built in the city with the Apollo Program.\
 "), _("
 NOTE： Due to game mechanics, Satellites block terrestrial movement\
  over a tile. This is solved by killing it with any Missile. To avoid\
@@ -3116,7 +3138,7 @@ roles         = ""
 helptext      = _("\
 Jet Fighters upgrade the Fighter with improved attack, defense, and range.\
 "), _("
-INTERCEPTOR：the Vigil order Jets Fighters auto-attack adjacent Air units if they\
+INTERCEPTOR：the Vigil order lets Jet Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 3 move points or less.\n\
 "), _("
 NOTE：GOTO disallows unit loss from lack of fuel. You\
@@ -3133,7 +3155,7 @@ graphic_alt   = "-"
 sound_move    = "m_strike_fighter"
 sound_move_alt = "m_jet_fighter"
 sound_fight   = "f_fighter"
-sound_fight_alt = "Ground Strike"
+sound_fight_alt = "ground_strike"
 build_cost    = 80
 pop_cost      = 0
 attack        = 7
@@ -4728,7 +4750,7 @@ Goods can be used to Establish Trade Route or Enter Marketplace. They can\
  trade routes in one voyage. Also, Goods can Recycle Production with only\
  a 25% penalty.\n\
 "), _("\
-By themselves, Goods can only move onto a tiles with a City, Quay, Fortress,\
+By themselves, Goods can only move onto tiles with a City, Quay, Fortress,\
  or Naval Base. Commerce units, Tribesmen, and Galleons may carry them as cargo.\
 ")
 

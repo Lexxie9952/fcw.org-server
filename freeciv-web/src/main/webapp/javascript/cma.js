@@ -48,35 +48,35 @@ var global_governor_message = "";     // for intercepting and displaying CMA mes
 
 
 const gov_help =
-"<b>BASICS:</b><br>City Governors help you manage cities. When city population changes, they arrange the citizens to work tiles in"
-+" order to best achieve the goals of the On-Screen Settings. If told, the Governor can change citizens to specialists and prevent disorder."
-+" By saving the On-Screen Settings, you order your Governor what kind of output to achieve. There are two kinds"
-+" of sliders: (<b>1</b>) <b>Minimum Surplus</b> orders a minimum floor to achieve. For example, {Food=3} tells the Governor to gather"
-+" at least +3 food. (<b>2</b>) <b>Output Priorities</b> tell the Governor which outputs to prioritize. For example,"
-+" {Science=2, Shield=1} values bulbs at double the value of shields. The Governor would select shields over bulbs only in cases where he gets more than 2"
-+" shields in exchange for 1 bulb. If you set goals that your Governor can't fulfill, he resigns and passes control back to you. In general,"
+"<b>BASICS:</b><br>City Governors help you manage cities. When city population changes, they arrange citizens to work the tiles "
++" that best achieve the goals of the On-Screen Settings. Governors can also change citizens to specialists and prevent disorder."
++" Saving the On-Screen Settings is how you hire a Governor to achieve certain output goals. There are two kinds"
++" of sliders: (<b>1</b>) <b>Minimum Surplus</b> sliders set the minimum floor to achieve. For example, {Food=3} tells the Governor to gather"
++" at least +3 food. (<b>2</b>) <b>Output Priorities</b> tell the Governor the priorities of outputs relative to each other. For example, setting"
++" {Science=2, Shield=1} will value science at 2x the value of shields. The Governor would select shields over bulbs only when he gets more than 2"
++" shields in exchange for 1 bulb. If you set goals the Governor can't fulfill, he resigns and passes control back to you. In general,"
 +" use 'Minimum Surpluses' as a fail-safe floor, and 'Output Priorities' to target preferred output.<br>"
 +" The <b>Force Celebrate</b> option orders your Governor to achieve celebration. Usually this needs a higher "
-+" national Luxury rate. You can less forcefully express a preference to celebrate by using the Happy slider.<br><b>NOTE:</b> In cities with"
-+" overlapping tiles, it's best to avoid competing with your Governor: manage both cities manually, or both via the Governor.<br><br>"
-+" <b>ADVANCED:</b><br><b>I. <u>TILE REFRESH</u>.</b> The Governor only re-arranges tiles when population changes, or a foreign military unit occupies"
++" national Luxury rate. You can less forcefully tune celebration with the Happy Factor slider.<br><b>NOTE:</b> In cities with"
++" overlapping tiles, it's best to avoid competing with your Governor: manage both cities manually, or give both a Governor.<br><br>"
++" <b>ADVANCED:</b><br><b>I. <u>TILE REFRESH</u>.</b> The Governor only re-arranges tiles when population changes or a foreign military unit occupies"
 +" a worked tile. The City Governor Tab can help you optimally refresh the tile arrangement"
 +" at other important times, such as: (<b>1</b>) New tile improvements"
-+" finished, such as Irrigation. (<b>2</b>) A new Building changes output bonuses. (<b>3</b>) Pollution. (<b>4</b>) Migration of wile animals. "
++" finished, such as Irrigation. (<b>2</b>) A new Building changes output bonuses. (<b>3</b>) Pollution. (<b>4</b>) Migration of wild animals. "
 +"  (<b>5</b>) Change in tax rates. (<b>6</b>) The turn before growth, to collect other resources instead of exceeding"
-+" the food surplus needed to grow.<br>You can manually request cities to refresh tiles: (<b>a</b>) In single cities, refresh tiles with the On-Screen settings by clicking"
-+" <b>Set Once</b>. In the city tile view, clicking the city-center-tile will also auto-arrange, using the existing Governor settings. "
-+" If the preference <b>Show Worked Tiles on Map</b> is selected, CTRL-SHIFT-clicking the city center will do the same as above. "
++" the food surplus needed to grow.<br>You can manually request cities to refresh tiles: (<b>a</b>) In single cities, refresh tiles with the On-Screen"
++" settings by clicking <b>Set Once</b>. In the city tile view, clicking the city-center-tile will also auto-arrange, using the existing Governor settings."
++" If the preference <b>Show Worked Tiles on Map</b>(SHIFT-W) is selected, CTRL-SHIFT-click on a city will do the same from the main map view."
 + "(<b>2</b>) You can click <b>Refresh All</b> to make all cities refresh their tiles according to their saved City Governor Settings."
 +" (<b>c</b>) In the City List, click the upper-left Clipboard button to <i>selectively</i> refresh tiles in checkbox-selected cities.<br>"
 +" <b>II. <u>COPY/PASTE CLIPBOARD</u>.<br></b> You may want to apply specific City Governor Settings to multiple cities."
 +" Advanced buttons let you do this. (<b>1</b>) <b>Copy</b> copies On-Screen Settings to the Clipboard."
 +" (<b>2</b>) <b>Paste</b> pastes the Clipboard to On-Screen Settings. (<b>3</b>) <b>Set Once</b> tells the Governor to refresh tiles according to"
-+" On-Screen Settings, <i>without</i> changing his current saved orders. (<b>4</b>) <b>Set All</b> dangerously tells ALL Governors in ALL Cities to"
++" On-Screen Settings, <i>without</i> changing his ongoing saved orders. (<b>4</b>) <b>Set All</b> dangerously tells ALL Governors in ALL Cities to"
 +" refresh their tiles according to the <u>Clipboard</u> Settings, <i>without</i> changing their current saved orders. (<b>5</b>) <b>Save All</b> dangerously"
 +" tells ALL Governors in ALL Cities to immediately adopt the <u>Clipboard</u> Settings as their new orders. (<b>6</b>) Instead of 'Set All'"
 +" or 'Save All', you can selectively Set or Save multiple cities via the upper-left Clipboard in the City List: (<b>a</b>) SHIFT-CLICK to <b>set</b>"
-+" selected cities to Clipboard Settings <i>without</i> changing orders. (<b>b</b>) CTRL-CLICK to <b>save</b> the Clipboard Settings to every selected city."
++" selected cities to Clipboard Settings <i>without</i> changing orders. (<b>b</b>) CTRL-CLICK to <b>save</b> the Clipboard Settings to every checkbox-selected city."
 +" <b>NOTE:</b> Be careful with advanced macro buttons! It's easy to confuse multiple origins (Clipboard or On-Screen Settings) and multiple destinations"
 +" (interim order, permanent order; one city, some cities, all cities, etc.)";
 /**************************************************************************
@@ -411,10 +411,10 @@ function cma_paste_clipboard() {
 
   for (var i = 0; i < O_LAST; i++) {
     var name = O_NAME[i];
-    $("#cma-val-slider"+name).slider({"value":_cma_val_sliders[i]});
-    $("#cma-min-slider"+name).slider({"value":_cma_val_sliders[i]});
+    $("#cma-val-slider-"+name).slider({"value":_cma_val_sliders[i]});
+    $("#cma-min-slider-"+name).slider({"value":_cma_min_sliders[i]});
   }
-  $("#cma-happy-slider"+name).slider({"value":_cma_happy_slider});
+  $("#cma-happy-slider").slider({"value":_cma_happy_slider});
 
   $("#cma_celebrate").prop("checked", _cma_celebrate);
   $("#cma_specialists").prop("checked", (!_cma_allow_specialists)); // suppress = !allow

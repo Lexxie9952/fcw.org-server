@@ -371,22 +371,20 @@ function update_tech_tree()
     }
 
     var tech_things = 0;
-    var prunits = get_units_from_tech(tech_id);
+    var prunits = get_utypes_from_tech(tech_id);
     for (var i = 0; i < prunits.length; i++) {
-      var punit = prunits[i];
-      var ptype = unit_type(punit);
+      var ptype = prunits[i];
 
       // Suppress nuclear units if server settings don't allow them:
-      /* TO DO:  this isn't working for some reason, make it work
-      if (ptype && utype_has_flag(ptype, UTYF_NUCLEAR)) {
+      if (utype_has_flag(ptype, UTYF_NUCLEAR)) {
         if (!server_settings['nukes_minor']['val']) continue; // Nukes totally turned off in this game, skip them
-        if (!server_settings['nukes_major']['val']) { // bombard_rate !=0 or !=-1 is a major nuke, skip if game settings have turned it off.
+        if (!server_settings['nukes_major']['val']) {
           if (ptype['bombard_rate']>0) continue;   // if major nukes are OFF, suppress illegal prod choice.
           if (ptype['bombard_rate']<-1) continue;  // if major nukes are OFF, suppress illegal prod choice.
         }
       }
-      */
-      var sprite = sprites[tileset_unit_type_graphic_tag(punit)];
+      
+      var sprite = sprites[tileset_unit_type_graphic_tag(ptype)];
       if (sprite != null) {
         tech_canvas_ctx.drawImage(sprite, x + 50 + ((tech_things++) * 30), y + 23, 28, 24);
       }
@@ -397,12 +395,16 @@ function update_tech_tree()
       var pimpr = primprovements[i];
 
       // Suppress improvements if server settings don't allow them:
-      /* TO DO:  this isn't working for some reason, make it work
-      if (!server_settings['nukes_major']['val']
-          && primprovements['name'] == "Enrichment Facility") {
-            continue; // if major nukes are OFF, suppress illegal prod choice.
+      if ((!server_settings['nukes_major']['val'] || !server_settings['nukes_minor']['val']) 
+            && pimpr['name'] == "Enrichment Facility") {
+              continue; // if major nukes are OFF, suppress illegal prod choice. if minor nukes are off, then major nukes have to be off.
       }
-      */
+      if (!server_settings['nukes_minor']['val']
+           && pimpr['name'] == "Manhattan Project") {
+        continue; // if minor nukes are OFF, suppress illegal prod choice.
+      }
+      if (pimpr.name != alphanumeric_cleaner(pimpr.name)) continue; // zero-width space, duplicate great/small wonder pair. no need to show both sprites.
+    
 
       var sprite = sprites[tileset_building_graphic_tag(pimpr)];
       if (sprite != null) {
@@ -511,7 +513,7 @@ function update_tech_screen()
       default:
         fs = "90%";
     } //hack to fit some techs on 768px screens
-    var tech_help_text = cleaned_text(techs[clicked_tech_id].helptext); // splice out the └ that Chrome renders for end of line 
+    var tech_help_text = html_safe(cleaned_text(techs[clicked_tech_id].helptext)); // splice out the └ that Chrome renders for end of line 
 
     if (touch_device) $("#tech_results").css("margin-left","-22px");
     $("#tech_result_text").html("<span style='font-size:"+fs+"' title='"+tech_help_text+"' id='tech_advance_helptext'>" + get_advances_text(clicked_tech_id)
@@ -528,7 +530,7 @@ function update_tech_screen()
       default:
         fs = "90%";
     } //hack to fit some techs on 768px screens
-    var research_help_text = cleaned_text(techs[client.conn.playing['researching']].helptext);
+    var research_help_text = html_safe(cleaned_text(techs[client.conn.playing['researching']].helptext));
 
     $("#tech_result_text").html("<span style='font-size:"+fs+"' title='"+research_help_text+"' id='tech_advance_helptext'>" + get_advances_text(client.conn.playing['researching'])
         +" "+(is_wide_screen ? "" /*research_help_text*/ : "") +"</span>");
@@ -575,10 +577,10 @@ function get_advances_text(tech_id)
   return tech_span(ptech.name, null, null) + ' (' + Math.floor(cost) + ')'
     + format_list_with_intro(' enables',
       [
-        format_list_with_intro('', get_units_from_tech(tech_id)
-          .map(unit => tech_span(unit.name, unit.id, null, cleaned_text(unit.helptext)))),  // strip linebreak markers
+        format_list_with_intro('', get_utypes_from_tech(tech_id)
+          .map(unit => tech_span(unit.name, unit.id, null, html_safe(cleaned_text(unit.helptext))))),
         format_list_with_intro('', get_improvements_from_tech(tech_id)
-          .map(impr => tech_span(impr.name, null, impr.id, cleaned_text(impr.helptext)))),
+          .map(impr => tech_span(impr.name, null, impr.id, html_safe(cleaned_text(impr.helptext))))),
         format_list_with_intro('', Object.keys(techs)
           .filter(is_valid_and_required)
           .map(tid => techs[tid])
@@ -684,6 +686,7 @@ function tech_mapview_mouse_click(e)
             function(){
                 send_player_research(swal_tech_id);
             });
+            setSwalTheme();
           }
           else send_player_research(ptech['id']);
         }
@@ -771,7 +774,6 @@ function queue_tech_gained_dialog(tech_gained_id)
 function show_tech_gained_dialog(tech_gained_id)
 {
   if (client_is_observer() || C_S_RUNNING != client_state()) return;
-  if (cardboard_vr_enabled) return;
 
   $("#tech_tab_item").css("color", "#aa0000");
   var pplayer = client.conn.playing;
@@ -917,16 +919,16 @@ function show_tech_info_dialog(tech_name, unit_type_id, improvement_id)
     if (tech_id != null) {
       message += "<b>"+tech_name+"</b>"+format_list_with_intro(' enables',
       [
-        format_list_with_intro('', get_units_from_tech(tech_id)
-          .map(unit => tech_span(unit.name, unit.id, null, cleaned_text(unit.helptext)))),  
+        format_list_with_intro('', get_utypes_from_tech(tech_id)
+          .map(unit => tech_span(unit.name, unit.id, null, html_safe(cleaned_text(unit.helptext))))),  
         format_list_with_intro('', get_improvements_from_tech(tech_id)
-          .map(impr => tech_span(impr.name, null, impr.id, cleaned_text(impr.helptext)))),
+          .map(impr => tech_span(impr.name, null, impr.id, html_safe(cleaned_text(impr.helptext))))),
         format_list_with_intro('', Object.keys(techs)
           .filter(is_valid_and_required)
           .map(tid => techs[tid])
           .map(tech => tech_span(tech.name, null, null)))
       ]) + '.<br>';
-      message += cleaned_text(techs[tech_id].helptext)+"<br><br>";
+      message += html_safe(cleaned_text(techs[tech_id].helptext))+"<br><br>";
     }
     message += "<b>Wikipedia on <a href='" + wikipedia_url
 	  + freeciv_wiki_docs[tech_name]['title']
@@ -1021,7 +1023,7 @@ function update_tech_dialog_cursor()
         //if ( ptech['name']=="Space Flight" || ptech['name']=="Automobile" || ptech['name']=="Rocketry") fs="80%;"; else fs="90%;"; //hack to fit 2 techs on 768px screens
        
         var is_wide_screen = $(window).width()<1590 ? false : true;
-        var tech_help_text = cleaned_text(techs[ptech['id']].helptext);  // splice out the └ that Chrome renders for end of line 
+        var tech_help_text = html_safe(cleaned_text(techs[ptech['id']].helptext));  // splice out the └ that Chrome renders for end of line 
     
         $("#tech_result_text").html("<span title='"+tech_help_text+"' style='margin-left:-4px; font-size:"+fs+"' id='tech_advance_helptext'>"+get_advances_text(ptech['id']) 
           + "</span><span style='color: #ffd588; font-size:"+fs+"'>&nbsp;"+ (is_wide_screen ? tech_help_text : "") + "</span>");

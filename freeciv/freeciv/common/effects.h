@@ -316,15 +316,25 @@ extern "C" {
 #define SPECENUM_VALUE124 EFT_UNIT_WORK_PCT
 #define SPECENUM_VALUE124NAME "Unit_Work_Pct"
 /* adds val to the hard-coded 1:1 conversion of shields to gold */
-#define SPECENUM_VALUE125 EFT_COINAGE_BONUS_PCT
-#define SPECENUM_VALUE125NAME "Coinage_Bonus_Pct"
+#define SPECENUM_VALUE125 EFT_COINAGE_BONUS_PM
+#define SPECENUM_VALUE125NAME "Coinage_Bonus_Pm"
 /* bonus/penalty to gold acquired from selling a building */
 #define SPECENUM_VALUE126 EFT_IMPROVEMENT_SALE_PCT
 #define SPECENUM_VALUE126NAME "Improvement_Sale_Pct"
 /* suppresses game.server.hangry based on reqs from game state */
 #define SPECENUM_VALUE127 EFT_GULAG
 #define SPECENUM_VALUE127NAME "Gulag"
-
+/* Pct modifier for chance to escape stack */
+#define SPECENUM_VALUE128 EFT_STACK_ESCAPE_PCT
+#define SPECENUM_VALUE128NAME "Stack_Escape_Pct"
+/* Multiplied over and after Building_Build_Cost_Pct is (possibly) applied */
+#define SPECENUM_VALUE129 EFT_IMPR_BUILD_COST_PM
+#define SPECENUM_VALUE129NAME "Building_Build_Cost_Pm"
+/* Allows target to get bonus resistance in cases where req ranges can't modify */
+#define SPECENUM_VALUE130 EFT_ACTION_RESIST_PCT
+#define SPECENUM_VALUE130NAME "Action_Resist_Pct"
+/* FCW does not have /common and needs to hard code any changes or re-ordering of the above in effects.js */
+/********************************************************************************************************~*/
 /* keep this last */
 #define SPECENUM_COUNT EFT_COUNT
 #include "specenum_gen.h"

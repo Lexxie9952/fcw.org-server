@@ -2702,8 +2702,7 @@ static enum fc_tristate is_unit_state(const struct unit *target_unit,
 
   /* Should never be reached */
   fc_assert_ret_val_msg(FALSE, TRI_NO,
-                        "Unsupported unit property \"%s\"",
-                        ustate_prop_name(uprop));
+                        "Unsupported unit property %d", uprop);
 }
 
 /**********************************************************************//**
@@ -3967,6 +3966,44 @@ int universal_build_shield_cost(const struct city *pcity,
     break;
   }
   return FC_INFINITY;
+}
+
+/**********************************************************************//**
+  Replaces all instances of the universal to_replace with replacement in
+  the requirement vector reqs and returns TRUE iff any requirements were
+  replaced.
+**************************************************************************/
+bool universal_replace_in_req_vec(struct requirement_vector *reqs,
+                                  const struct universal *to_replace,
+                                  const struct universal *replacement)
+{
+  bool changed = FALSE;
+
+  requirement_vector_iterate(reqs, preq) {
+    if (universal_is_mentioned_by_requirement(preq, to_replace)) {
+      preq->source = *replacement;
+      changed = TRUE;
+    }
+  } requirement_vector_iterate_end;
+
+  return changed;
+}
+
+/**********************************************************************//**
+  Returns TRUE iff the universal 'psource' is directly mentioned by any of
+  the requirements in 'reqs'.
+**************************************************************************/
+bool universal_is_mentioned_by_requirements(
+    const struct requirement_vector *reqs,
+    const struct universal *psource)
+{
+  requirement_vector_iterate(reqs, preq) {
+    if (universal_is_mentioned_by_requirement(preq, psource)) {
+      return TRUE;
+    }
+  } requirement_vector_iterate_end;
+
+  return FALSE;
 }
 
 /**********************************************************************//**

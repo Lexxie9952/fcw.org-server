@@ -220,8 +220,7 @@ void dai_manage_paratrooper(struct ai_type *ait, struct player *pplayer,
 
     if (ptile_dest) {
       if (unit_perform_action(unit_owner(punit),
-                              punit->id, tile_index(ptile_dest),
-                              EXTRA_NONE, 0, "",
+                              punit->id, tile_index(ptile_dest), 0, "",
                               ACTION_PARADROP, ACT_REQ_PLAYER)) {
 	/* successfull! */
         if (NULL == game_unit_by_number(sanity)) {
@@ -368,7 +367,7 @@ void dai_choose_paratrooper(struct ai_type *ait,
     }
 
     /* Temporary hack because pathfinding can't handle Fighters. */
-    if (!uclass_has_flag(utype_class(u_type), UCF_MISSILE)
+    if (!utype_can_do_action(u_type, ACTION_SUICIDE_ATTACK)
         && 1 == utype_fuel(u_type)) {
       continue;
     }

@@ -103,8 +103,17 @@ function generate_help_menu(key)
         + terrain['name'] + "</li>").appendTo("#help_terrain_ul");
     }
   } else if (key == "help_gen_improvements") {
+    // Alphabetically sort buildings (because some are unalphabetically grouped by similar type for prod list.)
+    var sortedBuildings = []; const impr_idx = 0;
     for (impr_id in improvements) {
-      improvement = improvements[impr_id];
+      sortedBuildings.push([impr_id, improvements[impr_id]]);
+    }
+    sortedBuildings.sort(function(a, b) {
+      return (a[1]['name'] > b[1]['name'] ? 1 : -1);
+    });
+    // done sorting
+    for (id in sortedBuildings) {
+      improvement = improvements[sortedBuildings[id][impr_idx]];
       if (is_wonder(improvement)) continue;
 
       // Suppress improvements if server settings don't allow them:

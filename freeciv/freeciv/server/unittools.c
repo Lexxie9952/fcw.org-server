@@ -901,7 +901,7 @@ static void unit_convert(struct unit *punit)
     transform_unit(punit, to_type, TRUE);
     notify_player(unit_owner(punit), unit_tile(punit),
                   E_UNIT_UPGRADED, ftc_server,
-                  _("&#8203;[`recycle`] %s converted to %s %s."),
+                  _("[`recycle`] %s converted to %s %s."),
                   utype_name_translation(from_type),
                   utype_name_translation(to_type), UNIT_EMOJI(punit));
   } else {
@@ -2595,8 +2595,8 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
     ransom = (pvictim->economic.gold >= game.server.ransom_gold) 
              ? game.server.ransom_gold : pvictim->economic.gold;
     notify_player(pvictor, unit_tile(pkiller), E_UNIT_WIN_ATT, ftc_server,
-                  PL_("&#8203;[`gold`] Barbarian leader%s captured; %d gold ransom paid.",
-                      "&#8203;[`gold`] Barbarian leader%s captured; %d gold ransom paid.",
+                  PL_("[`gold`] Barbarian leader%s captured; %d gold ransom paid.",
+                      "[`gold`] Barbarian leader%s captured; %d gold ransom paid.",
                       ransom),
                   punit_emoji, ransom);
     pvictor->economic.gold += ransom;
@@ -2661,40 +2661,59 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
         escaped = FALSE;
 
         if (unit_has_type_flag(vunit, UTYF_CANESCAPE)
-            && !unit_has_type_flag(pkiller, UTYF_CANKILLESCAPING)
+            && !unit_has_type_flag(pkiller, UTYF_CANKILLESCAPING) // TODO: should be a % chance to kill escaping, not hard-coded 100%
             && vunit->hp > 0
-            && vunit->moves_left > pkiller->moves_left
-            && fc_rand(2)) {
-          int curr_def_bonus;
-          int def_bonus = 0;
-          struct tile *dsttile = NULL;
-          int move_cost;
+            && vunit->moves_left >= pkiller->moves_left
+            /*&& fc_rand(2)*/) {
+          // CanEscape is possible. Adjust 50% base odds, based on ruleset effects:    
+          int escape_chance = 50 + get_target_bonus_effects(NULL,
+                                           vplayer,
+                                           pvictor,
+                                           tile_city(unit_tile(vunit)),
+                                           NULL,
+                                           unit_tile(vunit),
+                                           vunit,
+                                           unit_type_get(vunit),
+                                           NULL,
+                                           NULL,
+                                           action_by_number(ACTION_ATTACK),
+                                           EFT_STACK_ESCAPE_PCT);
+          // Charm the dice a tiny % based on who has more moves:                                 
+          escape_chance += (vunit->moves_left - pkiller->moves_left); 
+          // Roll the dice:
+          if (fc_rand(100)<escape_chance) {
+            // Successful roll: vunit will escape iff there is legal tile to escape.
+            int curr_def_bonus;
+            int def_bonus = 0;
+            struct tile *dsttile = NULL;
+            int move_cost;
 
-          fc_assert(vunit->hp > 0);
+            fc_assert(vunit->hp > 0);
 
-          adjc_iterate(&(wld.map), ptile, ptile2) {
-            if (can_exist_at_tile(&(wld.map), vunit->utype, ptile2)
-                && NULL == tile_city(ptile2)) {
-              move_cost = map_move_cost_unit(&(wld.map), vunit, ptile2);
-              if (pkiller->moves_left <= vunit->moves_left - move_cost
-                  && (is_allied_unit_tile(ptile2, pvictim)
-                      || unit_list_size(ptile2->units)) == 0) {
-                curr_def_bonus = tile_extras_defense_bonus(ptile2,
-                                                           vunit->utype);
-                if (def_bonus <= curr_def_bonus) {
-                  def_bonus = curr_def_bonus;
-                  dsttile = ptile2;
+            adjc_iterate(&(wld.map), ptile, ptile2) {
+              if (can_exist_at_tile(&(wld.map), vunit->utype, ptile2)
+                  && NULL == tile_city(ptile2)) {
+                move_cost = map_move_cost_unit(&(wld.map), vunit, ptile2);
+                if (pkiller->moves_left <= vunit->moves_left - move_cost
+                    && (is_allied_unit_tile(ptile2, pvictim)
+                        || unit_list_size(ptile2->units)) == 0) {
+                  curr_def_bonus = tile_extras_defense_bonus(ptile2,
+                                                            vunit->utype);
+                  if (def_bonus <= curr_def_bonus) {
+                    def_bonus = curr_def_bonus;
+                    dsttile = ptile2;
+                  }
                 }
               }
-            }
-          } adjc_iterate_end;
+            } adjc_iterate_end;
 
-          if (dsttile != NULL) {
-            move_cost = map_move_cost_unit(&(wld.map), vunit, dsttile);
-            unit_move(vunit, dsttile, move_cost, NULL, FALSE);
-            num_escaped[player_index(vplayer)]++;
-            escaped = TRUE;
-            unitcount--;
+            if (dsttile != NULL) {
+              move_cost = map_move_cost_unit(&(wld.map), vunit, dsttile);
+              unit_move(vunit, dsttile, move_cost, NULL, FALSE);
+              num_escaped[player_index(vplayer)]++;
+              escaped = TRUE;
+              unitcount--;
+            }
           }
         }
 
@@ -2734,7 +2753,8 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
     else if (unitcount-1 <= MAX_SECONDARY_CASUALTIES_TO_REPORT
              && kill_counter <= MAX_KILLED_UNITS_TO_REPORT_TO_ALL_PLAYERS) {
         char dead_units_str[1024];
-        char killed_unit_str[128];
+        char killed_unit_str[512];
+
         memset(dead_units_str, '\0', sizeof(dead_units_str));
         // Make a string out of all the secondary casualty unit types and nationalities.
         for (int k = 0; k < kill_counter; k++) {
@@ -2863,8 +2883,9 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
           else if (num_killed[i]-1 <= MAX_SECONDARY_CASUALTIES_TO_REPORT
                    && kill_counter <= MAX_KILLED_UNITS_TO_REPORT_TO_ALL_PLAYERS) {
             char dead_units_str[1024];
-            char killed_unit_str[128];
+            char killed_unit_str[512];
             char plural_string[32];
+
             plural_string[0] = 0;
             memset(dead_units_str, '\0', sizeof(dead_units_str));
             for (int k = 0; k < kill_counter; k++) {
@@ -2924,8 +2945,9 @@ void kill_unit(struct unit *pkiller, struct unit *punit, bool vet)
                    && kill_counter <= MAX_KILLED_UNITS_TO_REPORT_TO_ALL_PLAYERS) 
             {
               char dead_units_str[1024];
-              char killed_unit_str[128];
+              char killed_unit_str[512];
               char plural_string[32];
+
               plural_string[0] = 0;
               memset(dead_units_str, '\0', sizeof(dead_units_str));
               for (int k = 0; k < kill_counter; k++) {
@@ -3060,8 +3082,7 @@ void package_unit(struct unit *punit, struct packet_unit_info *packet)
       packet->orders[i] = punit->orders.list[i].order;
       packet->orders_dirs[i] = punit->orders.list[i].dir;
       packet->orders_activities[i] = punit->orders.list[i].activity;
-      packet->orders_targets[i] = punit->orders.list[i].target;
-      packet->orders_extras[i] = punit->orders.list[i].extra;
+      packet->orders_sub_targets[i] = punit->orders.list[i].sub_target;
       packet->orders_actions[i] = punit->orders.list[i].action;
     }
   } else {
@@ -3209,14 +3230,20 @@ void send_all_known_units(struct conn_list *dest)
 
   If it isn't a city square or an ocean square then with 50% chance add
   some fallout, then notify the client about the changes.
+
+  'suppress' means do_nuke_tile will be called a second time for this
+    tile, or it's ground zero of a fusion explosion. This lets us know
+    to suppress double-redundant messaging and double-redundant
+    remove_city() calls.
 **************************************************************************/
-static void do_nuke_tile(struct player *pplayer, struct tile *ptile)
+static void do_nuke_tile(struct player *pplayer, struct tile *ptile,
+                         bool suppress)
 {
   struct city *pcity = NULL;
 
   unit_list_iterate_safe(ptile->units, punit) {
     notify_player(unit_owner(punit), ptile, E_UNIT_LOST_MISC, ftc_server,
-                  _("&#8203;[`nuclearexplosion`] Your %s %s %s nuked by %s."),
+                  _("[`nuclearexplosion`] Your %s %s %s nuked by %s."),
                   unit_tile_link(punit), UNIT_EMOJI(punit),
                   (is_unit_plural(punit) ? "were" : "was"),
                   pplayer == unit_owner(punit)
@@ -3224,7 +3251,7 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile)
                   : nation_plural_for_player(pplayer));
     if (unit_owner(punit) != pplayer) {
       notify_player(pplayer, ptile, E_NUKE, ftc_server,
-                    _("&#8203;[`nuclearexplosion`] The %s %s %s %s nuked."),
+                    _("[`nuclearexplosion`] The %s %s %s %s nuked."),
                     nation_adjective_for_player(unit_owner(punit)),
                     unit_tile_link(punit), UNIT_EMOJI(punit),
                     (is_unit_plural(punit) ? "were" : "was"));
@@ -3235,23 +3262,25 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile)
   pcity = tile_city(ptile);
 
   if (pcity) {
-    notify_player(city_owner(pcity), ptile, E_CITY_NUKED, ftc_server,
-                  _("&#8203;[`nuclearexplosion`] %s was nuked by %s."),
-                  city_link(pcity),
-                  pplayer == city_owner(pcity)
-                  ? _("yourself")
-                  : nation_plural_for_player(pplayer));
-
-    if (city_owner(pcity) != pplayer) {
-      notify_player(pplayer, ptile, E_CITY_NUKED, ftc_server,
-                    _("&#8203;[`nuclearexplosion`] You nuked %s."),
-                    city_link(pcity));
+    if (!suppress) {
+      notify_player(city_owner(pcity), ptile, E_CITY_NUKED, ftc_server,
+                    _("[`nuclearexplosion`] %s was nuked by %s."),
+                    city_link(pcity),
+                    pplayer == city_owner(pcity)
+                    ? _("yourself")
+                    : nation_plural_for_player(pplayer));
+    
+      if (city_owner(pcity) != pplayer) {
+        notify_player(pplayer, ptile, E_CITY_NUKED, ftc_server,
+                      _("[`nuclearexplosion`] You nuked %s."),
+                      city_link(pcity));
+      }
     }
 
     // Reduce city size by half.
 
-    // Half of one is zero: DESTROY IT
-    if (city_size_get(pcity) == 1) {
+    // Half of one is zero: DESTROY IT (but not on first pass)
+    if (city_size_get(pcity) == 1 && !suppress) {
       if (pcity) {
         int saved_id = pcity->id;
 
@@ -3261,7 +3290,7 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile)
 
         if (city_owner(pcity) != pplayer) {
           notify_player(pplayer, ptile, E_CITY_NUKED, ftc_server,
-          _("&#8203;[`nuclearexplosion`] %s was annihilated by a nuclear detonation."),
+          _("[`nuclearexplosion`] %s was annihilated by a nuclear detonation."),
             city_link(pcity));
         }
         script_server_signal_emit("city_destroyed", pcity, city_owner(pcity), pplayer);
@@ -3308,10 +3337,12 @@ void do_nuclear_explosion(struct player *pplayer, struct tile *ptile,
 //  } square_iterate_end;
 
   circle_dxyr_iterate(&(wld.map), ptile, max_radius_sq, ptile1, dx, dy, dr) {
-    do_nuke_tile(pplayer, ptile1);
+    do_nuke_tile(pplayer, ptile1, is_fusion); //is_fusion==true means suppress redundant remove_city() and notify_player() messages
     // Fusion detonation is double nasty, reduces to 1/4 pop:
-    if (is_fusion && tile_city(ptile1)) 
-      do_nuke_tile(pplayer, ptile1);
+    if (is_fusion && tile_city(ptile1)) {
+      bool suppress = (ptile==ptile1); // fusion @ ground zero! suppress remove_city and messages again: it's going to be annihilated further below
+      do_nuke_tile(pplayer, ptile1, suppress); // false==not first pass, go ahead and message/annihilate tiles.
+    }
   } circle_dxyr_iterate_end;
 
   script_server_signal_emit("nuke_exploded", 2, API_TYPE_TILE, ptile,
@@ -3324,7 +3355,7 @@ void do_nuclear_explosion(struct player *pplayer, struct tile *ptile,
               unit_name);
 
   // Direct ground-zero hit by Hydrogen-Bomb / Fusion warhead, etc.
-  if (is_fusion) {  // H-bomb
+  if (is_fusion) {  // H-bomb, etc.
     pcity = tile_city(ptile);
     if (pcity) {
       int saved_id = pcity->id;
@@ -3558,8 +3589,8 @@ static bool hut_get_limited(struct unit *punit)
   if (hut_chance != 0) {
     int cred = 25;
     notify_player(pplayer, unit_tile(punit), E_HUT_GOLD, ftc_server,
-                  PL_("&#8203;[`gold`] You found %d gold.",
-                      "&#8203;[`gold`] You found %d gold.", cred), cred);
+                  PL_("[`gold`] You found %d gold.",
+                      "[`gold`] You found %d gold.", cred), cred);
     pplayer->economic.gold += cred;
   } else if (city_exists_within_max_city_map(unit_tile(punit), TRUE)
              || unit_has_type_flag(punit, UTYF_GAMELOSS)) {
@@ -3592,17 +3623,18 @@ static void unit_enter_hut(struct unit *punit)
     return;
   }
 
-  extra_type_by_category_iterate(ECAT_BONUS, pextra) {
+  extra_type_by_cause_iterate(EC_HUT, pextra) {
     if (tile_has_extra(ptile, pextra)) {
       pplayer->server.huts++;
 
       destroy_extra(ptile, pextra);
       update_tile_knowledge(unit_tile(punit));
 
+      /* FIXME: enable different classes
+       * to behave differently with different huts */
       if (behavior == HUT_FRIGHTEN) {
-        notify_player(pplayer, unit_tile(punit), E_HUT_BARB, ftc_server,
-                      _("Your overflight frightens the tribe;"
-                        " they scatter in terror."));
+        script_server_signal_emit("hut_frighten", punit,
+                                  extra_rule_name(pextra));
         return;
       }
   
@@ -3613,9 +3645,9 @@ static void unit_enter_hut(struct unit *punit)
       }
 
       /* FIXME: Should have parameter for hut extra type */
-      script_server_signal_emit("hut_enter", punit);
+      script_server_signal_emit("hut_enter", punit, extra_rule_name(pextra));
     }
-  } extra_type_by_category_iterate_end;
+  } extra_type_by_cause_iterate_end;
 
   send_player_info_c(pplayer, pplayer->connections); /* eg, gold */
   return;
@@ -4832,9 +4864,9 @@ bool execute_orders(struct unit *punit, const bool fresh)
                       || action_id_exists(order.action)),
                      continue);
 
-    pextra = (order.extra == EXTRA_NONE ?
+    pextra = (order.sub_target == EXTRA_NONE ?
                 NULL :
-                extra_by_number(order.extra));
+                extra_by_number(order.sub_target));
 
     switch (order.order) {
     case ORDER_MOVE:
@@ -5217,8 +5249,7 @@ bool execute_orders(struct unit *punit, const bool fresh)
       performed = unit_perform_action(pplayer,
                                       unitid,
                                       tgt_id,
-                                      order.extra,
-                                      order.target,
+                                      order.sub_target,
                                       name,
                                       order.action,
                                       ACT_REQ_PLAYER);

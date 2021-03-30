@@ -48,9 +48,10 @@ misc_files = [
   "space.spec",
   "editor.spec",
   "techs.spec",
-  "flags.spec",
   "treaty.spec",
-  "citybar.spec"
+  "citybar.spec",
+  "flags.spec",
+  "flags-large.spec"
 ]
 spec_files = {
   "amplio2" : [
@@ -78,30 +79,31 @@ spec_files = {
     "canal.spec",
     "maglev.spec",
     "seabridge.spec"
-  ],
-  "trident" : [
-    "auto_ll.spec",
-    "fog.spec",
-    "roads.spec",
-    "tiles.spec",
-    "cities.spec",
-    "explosions.spec",
-    "grid.spec",
-    "select.spec",
-    "units.spec"
-  ],
-  "isotrident" : [
-    "terrain1.spec",
-    "cities.spec",
-    "fog.spec",
-    "grid.spec",
-    "morecities.spec",
-    "nuke.spec",
-    "select.spec",
-    "terrain2.spec",
-    "tiles.spec",
-    "unitextras.spec"
   ]
+#,
+#  "trident" : [
+#    "auto_ll.spec",
+#    "fog.spec",
+#    "roads.spec",
+#    "tiles.spec",
+#    "cities.spec",
+#    "explosions.spec",
+#    "grid.spec",
+#    "select.spec",
+#    "units.spec"
+#  ],
+#  "isotrident" : [
+#    "terrain1.spec",
+#    "cities.spec",
+#    "fog.spec",
+#    "grid.spec",
+#    "morecities.spec",
+#    "nuke.spec",
+#    "select.spec",
+#    "terrain2.spec",
+#    "tiles.spec",
+#    "unitextras.spec"
+#  ]
 }
 def expand_spec_files(name, file_names):
   files = [path.join(freeciv_data_dir, name + ".tilespec")]
@@ -131,7 +133,7 @@ curr_x = 0;
 curr_y = 14;
 # Set size of tileset image manually depending on number of tiles.
 # Note!  Safari on iPhone doesn't support more than 3000000 pixels in a single image.
-tileset_height = 1126;
+tileset_height = 1400; #was 1126
 tileset_width = 2020; #was 1919;
 
 dither_types = ["t.l0.arctic1",  "t.l0.desert1", "t.l0.plains1", "t.l0.grassland1", "t.l0.forest1", "t.l0.jungle1", "t.l0.hills1", "t.l0.mountains1", "t.l0.tundra1", "t.l0.swamp1"];

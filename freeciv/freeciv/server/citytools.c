@@ -1383,6 +1383,8 @@ bool transfer_city(struct player *ptaker, struct city *pcity,
 
   sync_cities();
 
+  CALL_FUNC_EACH_AI(city_info, pcity);
+
   return city_remains;
 }
 
@@ -1519,6 +1521,15 @@ void create_city(struct player *pplayer, struct tile *ptile,
 
   /* Set up citizens nationality. */
   citizens_init(pcity);
+
+  /* Get bonus effects for food stock. If undesired for a newly founded
+     city, ruleset can use MinSize, "", "City". This is preferable to 
+     hard-coding that no bonus on food_stock can occur for a new city,
+     which is clearly the most influential/important time to have it. */
+  int initial_food_pct = 
+    CLIP (0, get_city_bonus(pcity, EFT_GROWTH_FOOD), 100);
+  pcity->food_stock = (city_granary_size(1)
+                       * initial_food_pct) / 100;
 
   /* Place a worker at the is_city_center() is_free_worked().
    * It is possible to build a city on a tile that is already worked;
@@ -2877,7 +2888,7 @@ int do_sell_building(struct player *pplayer, struct city *pcity,
     float sale_pct = 0;   // pct to add to sale price
 
     sale_pct = (float)
-      get_target_bonus_effects(NULL, NULL, NULL, pcity, pimprove, 
+      get_target_bonus_effects(NULL, pplayer, NULL, pcity, pimprove, 
                               city_tile(pcity), NULL, NULL, NULL,
                               NULL, NULL, EFT_IMPROVEMENT_SALE_PCT);
 

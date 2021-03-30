@@ -2147,8 +2147,8 @@ static bool img_save_magickwand(const struct img *pimg,
     }
 
     /* Show a line displaying the colors of alive players */
-    plrwidth = MAX(map_width / player_slot_count(), 1);
-    plroffset = (map_width - plrwidth * player_slot_count()) / 2;
+    plrwidth = map_width / MIN(map_width, player_count());
+    plroffset = (map_width - MIN(map_width, plrwidth * player_count())) / 2;
 
     imw = NewPixelRegionIterator(mw, IMG_BORDER_WIDTH,
                                  IMG_BORDER_HEIGHT + IMG_TEXT_HEIGHT

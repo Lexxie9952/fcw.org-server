@@ -203,11 +203,8 @@ function init_sprites()
     }
   } else {
     // already loaded
-    if (renderer == RENDERER_WEBGL) {
-      webgl_preload();
-    } else {
-      $.unblockUI();
-    }
+    $.unblockUI();
+
   }
 
 }
@@ -221,11 +218,9 @@ function preload_check()
 
   if (loaded_images == tileset_image_count) {
     init_cache_sprites();
-    if (renderer == RENDERER_WEBGL) {
-      webgl_preload();
-    } else {
-      $.unblockUI();
-    }
+
+    $.unblockUI();
+
   }
 }
 
@@ -239,6 +234,7 @@ function init_cache_sprites()
   if (typeof tileset === 'undefined') {
     swal("Tileset not generated correctly. Run sync.sh in "
           + "freeciv-img-extract and recompile.");
+    setSwalTheme();
     return;
   }
 
@@ -281,7 +277,7 @@ function mapview_window_resized ()
 
   if (active_city != null || !resize_enabled) return;
   setup_window_size();
-  if (renderer == RENDERER_2DCANVAS) update_map_canvas_full();
+  update_map_canvas_full();
 }
 
 /**************************************************************************
@@ -789,10 +785,9 @@ function set_default_mapview_active()
   if (show_compass) $("#compass").show();
   else $("#compass").hide();
 
-  if (renderer == RENDERER_2DCANVAS) {
-    mapview_canvas_ctx = mapview_canvas.getContext("2d");
-    mapview_canvas_ctx.font = canvas_text_font;
-  }
+  mapview_canvas_ctx = mapview_canvas.getContext("2d");
+  mapview_canvas_ctx.font = canvas_text_font;
+
 
   var active_tab = $('#tabs').tabs('option', 'active');
   if (active_tab == TAB_CITIES) { // cities dialog is active

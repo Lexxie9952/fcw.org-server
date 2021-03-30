@@ -386,5 +386,6 @@ function submit_player_rates()
     send_request(JSON.stringify(packet));
   } else {
     swal("Invalid tax rate values");
+    setSwalTheme();
   }
 }

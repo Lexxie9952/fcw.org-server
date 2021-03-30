@@ -55,7 +55,7 @@ void improvements_init(void)
     p->item_number = i;
     requirement_vector_init(&p->reqs);
     requirement_vector_init(&p->obsolete_by);
-    p->disabled = FALSE;
+    p->ruledit_disabled = FALSE;
   }
 }
 
@@ -249,8 +249,17 @@ const char *improvement_rule_name(const struct impr_type *pimprove)
 int impr_build_shield_cost(const struct city *pcity,
                            const struct impr_type *pimprove)
 {
-  int base = pimprove->build_cost
-    * (100 + get_building_bonus(pcity, pimprove, EFT_IMPR_BUILD_COST_PCT)) / 100;
+  /*int base = pimprove->build_cost
+      * (100 + get_building_bonus(pcity, pimprove, EFT_IMPR_BUILD_COST_PCT)) / 100; */
+
+  double bonus; /* note: EFT_IMPR_BUILD_COST_PM doesn't add, but multiplies over
+                  over whatever is first fetched from EFT_IMPR_BUILD_COST_PCT. This 
+                  allows layering specific multipliers over more general rate levels. */
+
+  bonus = (100 + (double)get_building_bonus(pcity, pimprove, EFT_IMPR_BUILD_COST_PCT)) / 100;
+  bonus *= ((1000 + (double)get_building_bonus(pcity, pimprove, EFT_IMPR_BUILD_COST_PM)) / 1000);  
+
+  int base = pimprove->build_cost * bonus;
 
   return MAX(base * game.info.shieldbox / 100, 1);
 }
@@ -852,6 +861,9 @@ bool great_wonder_is_destroyed(const struct impr_type *pimprove)
 bool great_wonder_is_available(const struct impr_type *pimprove)
 {
   fc_assert_ret_val(is_great_wonder(pimprove), FALSE);
+
+  if (strcmp(improvement_rule_name(pimprove), "Pax Dei") == 0
+      && game.server.pax_dei_set) return false;
 
   return (WONDER_NOT_OWNED
           == game.info.great_wonder_owners[improvement_index(pimprove)]);

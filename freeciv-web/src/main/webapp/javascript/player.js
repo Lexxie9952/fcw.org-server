@@ -279,12 +279,28 @@ function player_has_wonder(playerno, improvement_id)
 }
 /**************************************************************************
   returns true if the active player has the given wonder (improvement)
-  note, uses the string value of the wonder and fetches the id for you.
+  Note: uses the string value of the wonder and fetches the id for you.
 **************************************************************************/
 function has_wonder(wonder_name_str)
 {
   return player_has_wonder(client.conn.playing.playerno,
     improvement_id_by_name(wonder_name_str));
+}
+
+/**************************************************************************
+  returns true if the any player in the world has the given Wonder
+  Note: uses the string value of the wonder and fetches the id for you.
+**************************************************************************/
+function world_has_wonder(wonder_name_str)
+{
+  for (player_id in players) {
+    if (player_has_wonder(client.conn.playing.playerno,
+        improvement_id_by_name(wonder_name_str))) {
+
+      return true;
+    }
+  }
+  return false;
 }
 
 /**************************************************************************

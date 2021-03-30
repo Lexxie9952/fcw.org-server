@@ -82,7 +82,7 @@ struct extra_type
 {
   int id;
   struct name_translation name;
-  bool disabled;
+  bool ruledit_disabled;
   enum extra_category category;
   uint16_t causes;
   uint8_t rmcauses;
@@ -187,9 +187,6 @@ struct extra_type *rand_extra_for_tile(struct tile *ptile, enum extra_cause caus
 
 struct extra_type_list *extra_type_list_of_unit_hiders(void);
 
-void extra_to_category_list(struct extra_type *pextra, enum extra_category cat);
-struct extra_type_list *extra_type_list_for_category(enum extra_category cat);
-
 #define is_extra_caused_by(e, c) (e->causes & (1 << c))
 bool is_extra_caused_by_worker_action(const struct extra_type *pextra);
 bool is_extra_caused_by_action(const struct extra_type *pextra,
@@ -232,6 +229,9 @@ bool is_native_tile_to_extra(const struct extra_type *pextra,
                              const struct tile *ptile);
 bool extra_conflicting_on_tile(const struct extra_type *pextra,
                                const struct tile *ptile);
+/* This macro defines when there is an extra which is removed by entering.
+ * FIXME: invent a rmcause for this purpose and use it instead. */
+#define hut_on_tile(ptile) tile_has_cause_extra((ptile), EC_HUT)
 
 bool extra_has_flag(const struct extra_type *pextra, enum extra_flag_id flag);
 bool is_extra_flag_card_near(const struct tile *ptile,
@@ -281,11 +281,11 @@ bool player_knows_extra_exist(const struct player *pplayer,
   }                                               \
 }
 
-#define extra_active_type_iterate(_p)                         \
+#define extra_type_re_active_iterate(_p)                      \
   extra_type_iterate(_p) {                                    \
-    if (!_p->disabled) {
+    if (!_p->ruledit_disabled) {
 
-#define extra_active_type_iterate_end                         \
+#define extra_type_re_active_iterate_end                      \
     }                                                         \
   } extra_type_iterate_end;
 
@@ -316,17 +316,6 @@ bool player_knows_extra_exist(const struct player *pplayer,
 
 #define extra_type_by_rmcause_iterate_end                \
   } extra_type_list_iterate_rev_end                      \
-}
-
-#define extra_type_by_category_iterate(_cat, _extra)                \
-{                                                                   \
-  struct extra_type_list *_etl_##_extra = extra_type_list_for_category(_cat); \
-  if (_etl_##_extra != NULL) {                                              \
-    extra_type_list_iterate(_etl_##_extra, _extra) {
-
-#define extra_type_by_category_iterate_end                 \
-    } extra_type_list_iterate_end                          \
-  }                                                        \
 }
 
 #define extra_deps_iterate(_reqs, _dep)                 \

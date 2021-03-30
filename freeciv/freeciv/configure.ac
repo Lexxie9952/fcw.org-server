@@ -38,9 +38,6 @@ m4_include(fc_version)
 
 AC_ARG_VAR([FREECIV_LABEL_FORCE], [Forced version label format])
 
-VERSION_WITHOUT_LABEL=${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}${EMERG_PART}
-VERSION=${VERSION_WITHOUT_LABEL}${VERSION_LABEL}x
-
 AC_DEFINE_UNQUOTED([MAJOR_VERSION], [$MAJOR_VERSION], [Major version])
 AC_DEFINE_UNQUOTED([MINOR_VERSION], [$MINOR_VERSION], [Minor version])
 AC_DEFINE_UNQUOTED([PATCH_VERSION], [$PATCH_VERSION], [Patch version])
@@ -48,7 +45,7 @@ if test x$EMERGENCY_VERSION != x ; then
   AC_DEFINE_UNQUOTED([EMERGENCY_VERSION], [$EMERGENCY_VERSION], [Emergency version])
 fi
 AC_DEFINE_UNQUOTED([VERSION_LABEL], ["${VERSION_LABEL}"], [Version label])
-AC_DEFINE_UNQUOTED([VERSION_STRING], ["${MAJOR_VERSION}.${MINOR_VERSION}.${PATCH_VERSION}${EMERG_PART}${VERSION_LABEL}"], [Version string])
+AC_DEFINE_UNQUOTED([VERSION_STRING], ["${VERSION_STRING}"], [Version string])
 AC_DEFINE_UNQUOTED([IS_DEVEL_VERSION], [$IS_DEVEL_VERSION], [Is this a devel version])
 AC_DEFINE_UNQUOTED([IS_FREEZE_VERSION], [$IS_FREEZE_VERSION], [Is this a frozen version])
 AC_DEFINE_UNQUOTED([IS_BETA_VERSION], [$IS_BETA_VERSION], [Is this a beta version])
@@ -56,15 +53,6 @@ AC_DEFINE_UNQUOTED([NEXT_STABLE_VERSION], ["$NEXT_STABLE_VERSION"], [Version num
 AC_DEFINE_UNQUOTED([FREECIV_RELEASE_MONTH], [$RELEASE_MONTH], [Month next version will be released])
 AC_SUBST([MAJOR_VERSION])
 AC_SUBST([MINOR_VERSION])
-
-AC_DEFINE_UNQUOTED([NETWORK_CAPSTRING_MANDATORY],
-		   ["$NETWORK_CAPSTRING_MANDATORY"],
-		   [Network capability string])
-AC_SUBST([NETWORK_CAPSTRING_MANDATORY])
-AC_DEFINE_UNQUOTED([NETWORK_CAPSTRING_OPTIONAL],
-		   ["$NETWORK_CAPSTRING_OPTIONAL"],
-		   [Additional optional network capabilities])
-AC_SUBST([NETWORK_CAPSTRING_OPTIONAL])
 
 AC_DEFINE_UNQUOTED([DATASUBDIR],
                    ["$DATASUBDIR"],
@@ -115,16 +103,18 @@ FC_CHECK_SQLITE3([], [AC_MSG_ERROR([sqlite3 not found])])
 dnl set default values
 fcdb_all=no
 fcdb_mysql=no
+fcdb_odbc=no
 fcdb_postgres=no
 fcdb_sqlite3=no
 
 dnl checks for databases
 dnl all:                  Autodetect as many as possible [default].
 dnl mysql:                use mysql database
+dnl odbc:                 use odbc database
 dnl postgres:             use postgres database
 dnl comma-separated-list: Detect these or abort.
 AC_ARG_ENABLE([fcdb],
-  AS_HELP_STRING([--enable-fcdb[=no/all/mysql/postgres/sqlite3]],
+  AS_HELP_STRING([--enable-fcdb[=no/all/mysql/odbc/postgres/sqlite3]],
                  [database backends [sqlite3](no, or list)]),
 [databases=${enableval}],
 [databases=sqlite3])
@@ -136,6 +126,8 @@ for db in $(echo $databases | $SED 's/,/ /g') ; do
     fcdb_all=no
   elif test "x$db" = "xmysql" ; then
     fcdb_mysql=yes
+  elif test "x$db" = "xodbc" ; then
+    fcdb_odbc=yes
   elif test "x$db" = "xpostgres" ; then
     fcdb_postgres=yes
   elif test "x$db" = "xsqlite3" ; then
@@ -149,6 +141,10 @@ dnl checks for database mysql
 dnl sets FCDB_MYSQL(conditional), FCDB_MYSQL_CFLAGS
 FC_FCDB_MYSQL
 
+dnl checks for database odbc
+dnl sets FCDB_ODBC(conditional), FCDB_ODBC_CFLAGS
+FC_FCDB_ODBC
+
 dnl checks for database postgres
 dnl sets FCDB_POSTGRES(conditional), FCDB_POSTGRES_CFLAGS
 FC_FCDB_POSTGRES
@@ -158,8 +154,8 @@ dnl sets FCDB_SQLITE3(conditional), FCDB_SQLITE3_CFLAGS
 FC_FCDB_SQLITE3
 
 dnl check if a database backend is available
-if test "x$fcdb_mysql" = "xyes" || test "x$fcdb_postgres" = "xyes" \
-   || test "x$fcdb_sqlite3" = "xyes"; then
+if test "x$fcdb_mysql" = "xyes" || test "x$fcdb_odbc" = "xyes" \
+   || test "x$fcdb_postgres" = "xyes" || test "x$fcdb_sqlite3" = "xyes"; then
   enable_fcdb=yes
   AC_DEFINE([HAVE_FCDB], [1], [Database backend available])
 else
@@ -1245,7 +1241,6 @@ AC_SUBST([ruledit_cxxflags])
 AC_SUBST([ruledit_libs])
 AC_SUBST([SOUND_CFLAGS])
 AC_SUBST([SOUND_LIBS])
-AC_SUBST([VERSION_WITHOUT_LABEL])
 AC_SUBST([VERSION_LABEL])
 AC_SUBST([HOST_PATH_SEPARATOR])
 AC_SUBST([HOST_DIR_SEPARATOR])
@@ -1456,9 +1451,9 @@ esac], [sys_lua=test])
 dnl There's wide divergence on what the pkg-config file for Lua is called
 dnl See http://lua-users.org/lists/lua-l/2008-09/msg00184.html
 if test "x$sys_lua" = "xtrue" || test "x$sys_lua" = "xtest" ; then
-  PKG_CHECK_MODULES([LUA], [lua5.3], [sys_lua=true],
-    [PKG_CHECK_MODULES([LUA], [lua-5.3], [sys_lua=true],
-      [PKG_CHECK_MODULES([LUA], [lua >= 5.3 lua < 5.4], [sys_lua=true],
+  PKG_CHECK_MODULES([LUA], [lua5.4], [sys_lua=true],
+    [PKG_CHECK_MODULES([LUA], [lua-5.4], [sys_lua=true],
+      [PKG_CHECK_MODULES([LUA], [lua >= 5.4 lua < 5.5], [sys_lua=true],
 [if test "x$sys_lua" = "xtrue" ; then
   AC_MSG_ERROR([Use of included lua disabled, and no lua found from system])
 fi
@@ -1475,8 +1470,8 @@ if test "x$sys_lua" != "xtrue" ; then
   fi
   AC_CHECK_FUNCS([popen pclose _longjmp _setjmp gmtime_r localtime_r])
 
-  LUA_CFLAGS="-I\$(top_srcdir)/dependencies/lua-5.3/src"
-  LUA_LIBS="\$(top_builddir)/dependencies/lua-5.3/src/liblua.la"
+  LUA_CFLAGS="-I\$(top_srcdir)/dependencies/lua-5.4/src"
+  LUA_LIBS="\$(top_builddir)/dependencies/lua-5.4/src/liblua.la"
 fi
 
 AC_SUBST([LUA_CFLAGS])
@@ -1488,6 +1483,9 @@ if test x$enable_fcdb = xyes ; then
   LUASQL_LIBS="\$(top_builddir)/dependencies/luasql/src/libluasql_base.la"
   if test x$fcdb_mysql = xyes ; then
     LUASQL_LIBS="$LUASQL_LIBS \$(top_builddir)/dependencies/luasql/src/libluasql_mysql.la"
+  fi
+  if test x$fcdb_odbc = xyes ; then
+    LUASQL_LIBS="$LUASQL_LIBS \$(top_builddir)/dependencies/luasql/src/libluasql_odbc.la"
   fi
   if test x$fcdb_postgres = xyes ; then
     LUASQL_LIBS="$LUASQL_LIBS \$(top_builddir)/dependencies/luasql/src/libluasql_postgres.la"
@@ -1562,7 +1560,7 @@ AC_CONFIG_COMMANDS([fc_default-5],[[if test x`uname -s` = xBeOS ; then
      fi
    fi]],[[]])
 
-CFLAGS="$EXTRA_DEBUG_CFLAGS $CFLAGS -Werror -Wmissing-prototypes -Wmissing-declarations"   # Modified for FCW.
+CFLAGS="$EXTRA_DEBUG_CFLAGS -Werror -Wmissing-prototypes -Wmissing-declarations $CFLAGS"   # Modified for FCW.
 CXXFLAGS="$EXTRA_DEBUG_CXXFLAGS $CXXFLAGS"
 LDFLAGS="$EXTRA_DEBUG_LDFLAGS $LDFLAGS"
 
@@ -1677,8 +1675,8 @@ AC_CONFIG_FILES([Makefile
 	  data/icons/Makefile
 	  utility/Makefile
 	  dependencies/Makefile
-	  dependencies/lua-5.3/Makefile
-          dependencies/lua-5.3/src/Makefile
+	  dependencies/lua-5.4/Makefile
+          dependencies/lua-5.4/src/Makefile
 	  dependencies/tolua-5.2/Makefile
 	  dependencies/tolua-5.2/src/Makefile
 	  dependencies/tolua-5.2/src/lib/Makefile
@@ -1714,6 +1712,7 @@ AC_CONFIG_FILES([Makefile
 	  server/generator/Makefile
 	  server/scripting/Makefile
           tools/Makefile
+          tools/fcmp/Makefile
           tools/ruledit/Makefile
           tools/ruleutil/Makefile
           tools/shared/Makefile
@@ -1743,19 +1742,20 @@ AC_CONFIG_FILES([Makefile
           client/freeciv-sdl2.desktop:bootstrap/freeciv-sdl2.desktop.in
           client/freeciv-qt.desktop:bootstrap/freeciv-qt.desktop.in
 	  server/freeciv-server.desktop:bootstrap/freeciv-server.desktop.in
-	  tools/freeciv-mp-gtk3.desktop:bootstrap/freeciv-mp-gtk3.desktop.in
-	  tools/freeciv-mp-qt.desktop:bootstrap/freeciv-mp-qt.desktop.in
+	  tools/fcmp/freeciv-mp-gtk3.desktop:bootstrap/freeciv-mp-gtk3.desktop.in
+	  tools/fcmp/freeciv-mp-qt.desktop:bootstrap/freeciv-mp-qt.desktop.in
 	  tools/ruledit/freeciv-ruledit.desktop:bootstrap/freeciv-ruledit.desktop.in
           client/freeciv-gtk3.appdata.xml:bootstrap/freeciv-gtk3.appdata.xml.in
           client/freeciv-gtk3.22.appdata.xml:bootstrap/freeciv-gtk3.22.appdata.xml.in
           client/freeciv-sdl2.appdata.xml:bootstrap/freeciv-sdl2.appdata.xml.in
           client/freeciv-qt.appdata.xml:bootstrap/freeciv-qt.appdata.xml.in
           server/freeciv-server.appdata.xml:bootstrap/freeciv-server.appdata.xml.in
-          tools/freeciv-mp-gtk3.appdata.xml:bootstrap/freeciv-mp-gtk3.appdata.xml.in
-          tools/freeciv-mp-qt.appdata.xml:bootstrap/freeciv-mp-qt.appdata.xml.in
+          tools/fcmp/freeciv-mp-gtk3.appdata.xml:bootstrap/freeciv-mp-gtk3.appdata.xml.in
+          tools/fcmp/freeciv-mp-qt.appdata.xml:bootstrap/freeciv-mp-qt.appdata.xml.in
           tools/ruledit/freeciv-ruledit.appdata.xml:bootstrap/freeciv-ruledit.appdata.xml.in])
 AC_CONFIG_FILES([fcgui:bootstrap/fcgui.in], [chmod +x fcgui])
 AC_CONFIG_FILES([fcser:bootstrap/fcser.in], [chmod +x fcser])
+AC_CONFIG_FILES([fcruleup:bootstrap/fcruleup.in], [chmod +x fcruleup])
 if test "x$ruledit" = "xyes" ; then
   AC_CONFIG_FILES([fcruledit:bootstrap/fcruledit.in], [chmod +x fcruledit])
 fi
@@ -1803,6 +1803,7 @@ AC_MSG_NOTICE([
     AI modules support:    $enable_aimodules
     Database support:      $enable_fcdb
       mysql:                 $fcdb_mysql
+      odbc:                  $fcdb_odbc
       postgres:              $fcdb_postgres
       sqlite3:               $fcdb_sqlite3
 

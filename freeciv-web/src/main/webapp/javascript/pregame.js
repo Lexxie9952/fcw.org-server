@@ -35,9 +35,8 @@ var google_user_token = null;
 ****************************************************************************/
 function pregame_start_game()
 {
-  // This absolutely disgusting filthy dirty hack, successfully prevents the 
-  // keyboard from popping up on Mobile; even forcing an exit from fullscreen
-  // mode on Firefox Mobile and some other browsers.
+  // Successfully prevents the keyboard from popping up on Mobile; which also
+  // force-exits from Fullscreen on Firefox Mobile and some other browsers:
   if (is_touch_device()) $("#game_text_input").hide();
 
   if (client.conn['player_num'] == null) return;
@@ -52,32 +51,7 @@ function pregame_start_game()
   send_request(myJSONText);
 
   setup_window_size ();
-  // switching into game mode makes us lose part of our full screen, as tested
-  // on Android.  Make two delayed calls to allow everything to load, to toggle
-  // out and back in again, which removes the top status bar and gives us real
-  // full screen again.
 
-  /* Dirty hack testing saved in case we come back to more tests, but if it's
-     well past August 2019, you can delete this.
-  if (is_touch_device()) 
-  {
-    for (var i=0; i<=50; i++)
-    {
-      //setTimeout(function() { $("#game_text_input").blur(); }, i*200);
-    }
-    //setTimeout(function() { $("#fullscreen_button").click(); }, 10000);
-    //setTimeout(function() { $("#fullscreen_button").click(); }, 14000);
-
-    //setTimeout(function() { $("#game_text_input").show(); }, 8000);
-    //setTimeout(show_fullscreen_window, 11000);
-  } */
-
-  /*
-  $('html').click( function() {
-    if(!document.fullscreenElement){
-      $('html')[0].requestFullscreen();
-    }
-  });*/
   popup_fullscreen_enter_game_dialog();
 }
 
@@ -144,6 +118,7 @@ function check_browser_compatibility()
         $(window).off('beforeunload'); // remove "do you really want to leave?" pop-up
         window.location = 'https://www.google.com/chrome/';
     });
+    setSwalTheme();
   }
 }
 
@@ -247,7 +222,7 @@ function update_player_info_pregame_real()
       var nation_text = "";
       if (player['nation'] in nations) {
         nation_text = " - " + nations[player['nation']]['adjective'];
-        var flag_html = $("<canvas id='pregame_nation_flags_" + id + "' width='29' height='20' class='pregame_flags'></canvas>");
+        var flag_html = $("<canvas id='pregame_nation_flags_" + id + "' width='30' height='20' class='pregame_flags'></canvas>");
         $("#pregame_plr_"+id).prepend(flag_html);
         var flag_canvas = document.getElementById('pregame_nation_flags_' + id);
         if (flag_canvas == null) continue;
@@ -401,7 +376,7 @@ function pick_nation(player_id)
     if (pnation['is_playable'] && (!is_ongoing_longturn() || !(nation_id in player_nations))) {
       nations_html += "<div class='nation_pickme_line' onclick='select_nation(" + nation_id + ");'>"
              + "<div id='nation_" + nation_id + "' class='nation_choice'>"
-             + "<canvas id='pick_flag_" + nation_id + "' width='29' height='20' class='pick_nation_flags'></canvas>"
+             + "<canvas id='pick_flag_" + nation_id + "' width='30' height='20' class='pick_nation_flags'></canvas>"
              + pnation['adjective'] + "</div></div>";
       nation_name_list.push(pnation['adjective']);
     }
@@ -643,32 +618,32 @@ function ruledir_from_ruleset_name(ruleset_name, fall_back_dir)
 {
   /* HACK: find current ruleset dir based on its name. */
   switch (ruleset_name) {
-  case "Classic ruleset":
-    return "classic";
-  case "Civ2Civ3 ruleset":
-    return "civ2civ3";
-  case "Multiplayer ruleset":
-    return "multiplayer";
-  case "Webperimental":
-    return "webperimental";
-  case "Multiplayer-Plus ruleset":
-    return "mpplus";
-  case "Multiplayer-Evolution ruleset":
-    return "mp2";
-  case "Avant-garde":
-    return "ag";  
- default:
-    /* Prevent the need of hardcoding this client function for every new ruleset, by 
-       making a way for fall_back_dir to match the name of the ruleset automatically:
-       dir_name will be forced to lowercase and replace spaces with hyphen ("-")
-       In other words, in game.ruleset, name your ruleset the same as the dir name,
-       then you won't have to change this function. */
-    if (!fall_back_dir) {
-      fall_back_dir = ruleset_name.toLowerCase().replace(" ","-");
-    } 
-    console.log("Don't know the ruleset dir of \"" + ruleset_name
-                + "\". Guessing \"" + fall_back_dir + "\".");
-    return fall_back_dir; // af
+    case "Classic ruleset":
+      return "classic";
+    case "Civ2Civ3 ruleset":
+      return "civ2civ3";
+    case "Multiplayer ruleset":
+      return "multiplayer";
+    case "Webperimental":
+      return "webperimental";
+    case "Multiplayer-Plus ruleset":
+      return "mpplus";
+    case "Multiplayer-Evolution ruleset":
+      return "mp2";
+    case "Avant-garde":
+      return "ag";
+    default:
+      /* Prevent the need of hardcoding this client function for every new ruleset, by 
+        making a way for fall_back_dir to match the name of the ruleset automatically:
+        dir_name will be forced to lowercase and replace spaces with hyphen ("-")
+        In other words, in game.ruleset, name your ruleset the same as the dir name,
+        then you won't have to change this function. */
+      if (!fall_back_dir) {
+        fall_back_dir = ruleset_name.toLowerCase().replace(" ","-");
+      } 
+      console.log("Don't know the ruleset dir of \"" + ruleset_name
+                  + "\". Guessing \"" + fall_back_dir + "\".");
+      return fall_back_dir; // af
   }
 }
 
@@ -710,11 +685,7 @@ function pregame_settings()
   var dhtml = "<div id='pregame_settings_tabs'>" +
       "   <ul>" +
       "     <li><a href='#pregame_settings_tabs-1'>Main</a></li>" +
-      "     <li><a href='#pregame_settings_tabs-2'>3D WebGL</a></li>" +
-      "     <li><a href='#pregame_settings_tabs-3'>Other</a></li>" +
-      //"     <li><a href='#pregame_settings_tabs-4'>Military</a></li>" +
-      //"     <li><a href='#pregame_settings_tabs-5'>Economic</a></li>" +
-      //"     <li><a href='#pregame_settings_tabs-6'>Costs</a></li>" +
+      "     <li><a href='#pregame_settings_tabs-2'>Other</a></li>" +
       "   </ul>"
       + "<div id='pregame_settings_tabs-1'><table id='settings_table'> "
       + "<tr title='Ruleset version'><td>Ruleset:</td>"
@@ -781,34 +752,9 @@ function pregame_settings()
           "<option value='FRACTURE'>Fracture map</option>" +
     "</select></td></tr>"
     + "</table><br>"+
-    "<span id='settings_info'><i>Freeciv-web can be customized using the command line in many " +
-          "other ways also. Type /help in the command line for more information.</i></span></div>" +
-
-      "<div id='pregame_settings_tabs-2'>"+
-      "<br><span id='settings_info'><i>3D WebGL requires a fast computer with 3D graphics card, such as Nvidia GeForce and at least 3GB of RAM. " +
-      "Here you can configure the 3D WebGL version:</i></span><br><br>" +
-      "<table id='settings_table'>" +
-      "<tr title='Graphics quality level'><td>Graphics quality:</td>" +
-            "<td><select name='graphics_quality' id='graphics_quality'>" +
-              "<option value='1'>Low</option>" +
-              "<option value='2'>Medium</option>" +
-              "<option value='3'>High</option>" +
-              "</select></td></tr>"+
-      "<tr id='3d_antialiasing_enabled'><td id='3d_antialiasing_label' style='min-width: 150px;'><br></td>" +
-        "<td><input type='checkbox' id='3d_antialiasing_setting' checked>Enable antialiasing (game looks nicer, but is slower)</td></tr>" +
-        "<tr><td style='min-width: 150px;'>Benchmark of 3D WebGL version:</td>" +
-                "<td><button id='bechmark_run' type='button' class='benchmark button'>Run benchmark</button></td></tr>" +
-        "<tr id='anaglyph_enabled'><td id='anaglyph_label' style='min-width: 150px;'></td>" +
-                "<td><input type='checkbox' id='anaglyph_setting'>Enable Anaglyph 3D (Red+Cyan glasses) "+
-                "<br>"+
-        "<tr id='cardboard_vr_enabled'><td id='cardboard_vr_label' style='min-width: 150px;'></td>" +
-                "<td><input type='checkbox' id='cardboard_vr_setting'>Enable Virtual reality glasses with Google Cardboard. <i class='fa fa-info-circle' aria-hidden='true' "+
-                "title='You can use Google Cardboard glasses with your mobile phone. Use voice recognition to control the game. You must also manually disable screensavers in your device settings. Put your phone in the VR glasses when the game starts. BETA!'></i><br>"+
-                "<button id='show_voice_commands' type='button' class='voice button' style='padding:0px;'>Voice commands</button></td></tr>" +
-        "</table>" +
-      "</div>" +
-
-      "<div id='pregame_settings_tabs-3'>" +
+    "<span id='settings_info'><i>Games can be customized in many more ways. " +
+          "Type /help in the command line for more info.</i></span></div>" +
+      "<div id='pregame_settings_tabs-2'>" +
       "<table id='settings_table'>" +
         "<tr title='Font on map'><td>Font on map:</td>" +
       "<td><input type='text' name='mapview_font' id='mapview_font' size='28' maxlength='42' value='16px Helvetica, sans serif'></td></tr>" +
@@ -818,11 +764,11 @@ function pregame_settings()
         "<td><select name='voice' id='voice'></select></td></tr>" +
         "</table>" +
       "</div>" +
+      "<div id='pregame_settings_tabs-3'></div>" +
       "<div id='pregame_settings_tabs-4'></div>" +
-      "<div id='pregame_settings_tabs-5'></div>" +
-      "<div id='pregame_settings_tabs-6'></div>"
+      "<div id='pregame_settings_tabs-5'></div>"
     ;
-  $(id).html(dhtml);  
+  $(id).html(dhtml);
 
   $(id).attr("title", "Game Settings");
   $(id).dialog({
@@ -843,6 +789,8 @@ function pregame_settings()
   });
 
   $("#pregame_settings_tabs").tabs();
+  // This is a light panel. Override the css for dark panels.
+  $("#pregame_settings_tabs").children().css("color", "#000");
 
   if (game_info != null) {
     $("#aifill").val(game_info['aifill']);
@@ -860,24 +808,24 @@ function pregame_settings()
     $("#landmass").val(server_settings['landmass']['val']);
   }
     
-  if (server_settings['global_warming_percent'] != null
-      && server_settings['global_warming_percent']['val'] != null) {
-    $("#global_warming_percent").val(server_settings['global_warming_percent']['val']);
+  if (server_settings['globalwarming_percent'] != null
+      && server_settings['globalwarming_percent']['val'] != null) {
+    $("#global_warming_percent").val(server_settings['globalwarming_percent']['val']);
   }
     
-  if (server_settings['global_warming'] != null
-      && server_settings['global_warming']['val'] != null) {
-    $("#global_warming").val(server_settings['global_warming']['val']);
+  if (server_settings['globalwarming'] != null
+      && server_settings['globalwarming']['val'] != null) {
+    $("#global_warming").val(server_settings['globalwarming']['val']);
   }
     
-  if (server_settings['nuclear_winter_percent'] != null
-      && server_settings['nuclear_winter_percent']['val'] != null) {
-    $("#global_warming_percent").val(server_settings['nuclear_winter_percent']['val']);
+  if (server_settings['nuclearwinter_percent'] != null
+      && server_settings['nuclearwinter_percent']['val'] != null) {
+    $("#nuclear_winter_percent").val(server_settings['nuclearwinter_percent']['val']);
   }
     
-  if (server_settings['nuclear_winter'] != null
-      && server_settings['nuclear_winter']['val'] != null) {
-    $("#global_warming").val(server_settings['nuclear_winter']['val']);
+  if (server_settings['nuclearwinter'] != null
+      && server_settings['nuclearwinter']['val'] != null) {
+    $("#nuclear_winter").val(server_settings['nuclearwinter']['val']);
   }
 
   if (server_settings['specials'] != null
@@ -930,24 +878,6 @@ function pregame_settings()
   $("#select_multiple_units_area").prop("title", "Select multiple units with right-click and drag");
   $("#select_multiple_units_label").prop("innerHTML", "Select multiple units with right-click and drag");
 
-  $("#3d_antialiasing_label").prop("innerHTML", "Antialiasing:");
-
-  var stored_antialiasing_setting = simpleStorage.get("antialiasing_setting", "");
-  if (stored_antialiasing_setting != null && stored_antialiasing_setting == "false") {
-      $("#3d_antialiasing_setting").prop("checked", false);
-      antialiasing_setting = false;
-  } else if (graphics_quality == QUALITY_LOW) {
-    antialiasing_setting = false;
-    simpleStorage.set("antialiasing_setting", "false");
-    $("#3d_antialiasing_setting").prop("checked", false);
-  }
-
-
-  $('#3d_antialiasing_setting').change(function() {
-    antialiasing_setting = !antialiasing_setting;
-    simpleStorage.set("antialiasing_setting", antialiasing_setting ? "true" : "false");
-  });
-
   if (is_speech_supported()) {
     $("#speech_setting").prop("checked", speech_enabled);
     $("#speech_label").prop("innerHTML", "Speech messages:");
@@ -957,28 +887,13 @@ function pregame_settings()
     $("#speech_setting").parent().html("Speech Synthesis API is not supported or enabled in your browser.");
   }
 
-  $("#cardboard_vr_label").prop("innerHTML", "3D Cardboard VR glasses:");
-  $('#cardboard_vr_setting').change(function() {
-    cardboard_vr_enabled = !cardboard_vr_enabled;
-    if (cardboard_vr_enabled) {
-      speech_enabled = true;
-      speech_recogntition_enabled = true;
-    }
-  });
-
-  $("#anaglyph_label").prop("innerHTML", "3D Anaglyph glasses:");
-  $('#anaglyph_setting').change(function() {
-    anaglyph_3d_enabled = !anaglyph_3d_enabled;
-  });
-
   if (server_settings['metamessage'] != null
       && server_settings['metamessage']['val'] != null) {
     $("#metamessage").val(server_settings['metamessage']['val']);
   }
 
   if (ruleset_control != null) {
-    $("#ruleset").val(ruledir_from_ruleset_name(ruleset_control['name'],
-                                                "classic"));
+    $("#ruleset").val(ruledir_from_ruleset_name(ruleset_control['name'], ""));
   }
 
   if (scenario_info != null && scenario_info['is_scenario']) {
@@ -1041,16 +956,16 @@ function pregame_settings()
   });
     
   $('#global_warming_percent').change(function() {
-    send_message("/set global_warming_percent " + $('#global_warming_percent').val());
+    send_message("/set globalwarming_percent " + $('#global_warming_percent').val());
   });
   $('#global_warming').change(function() {
-    send_message("/set global_warming " + $('#global_warming').val());
+    send_message("/set globalwarming " + $('#global_warming').val());
   });
-  $('#global_warming_percent').change(function() {
-    send_message("/set nuclear_winter_percent " + $('#nuclear_winter_percent').val());
+  $('#nuclear_winter_percent').change(function() {
+    send_message("/set nuclearwinter_percent " + $('#nuclear_winter_percent').val());
   });
   $('#nuclear_winter').change(function() {
-    send_message("/set nuclear_winter " + $('#nuclear_winter').val());
+    send_message("/set nuclearwinter " + $('#nuclear_winter').val());
   });
 
   $('#citymindist').change(function() {
@@ -1079,7 +994,6 @@ function pregame_settings()
   });
 
   $('#password').change(function() {
-
     swal({   
       title: "Really set game password?",   
       text: "Setting a password on this game means that other players can not join this game " +
@@ -1105,6 +1019,7 @@ function pregame_settings()
         $("#metamessage_setting").prop('readonly', true);
         $("#password").prop('readonly', true);
      });
+     setSwalTheme();
    });
 
 
@@ -1169,37 +1084,6 @@ function pregame_settings()
   });
 
 
-  $('#graphics_quality').change(function() {
-    graphics_quality = parseFloat($('#graphics_quality').val());
-    simpleStorage.set("graphics_quality", graphics_quality);
-    load_count = 0;
-    webgl_preload();
-  });
-
-  $("#graphics_quality").val(graphics_quality);
-
-  $(".benchmark").click(function() {
-    swal({
-      title: "Run benchmark?",
-      text: "Do you want to run a benchmark now? This will start a new game and run measure the performance of a game playing for 30 turns.",
-      type: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#DD6B55",
-      confirmButtonText: "Yes, run benchmark!",
-      closeOnConfirm: true
-    },
-    function(){
-      webgl_benchmark_run();
-    });
-  });
-
-  if (renderer == RENDERER_WEBGL) {
-    $(".benchmark").button();
-    $("#show_voice_commands").button();
-  } else {
-    $('[href="#pregame_settings_tabs-2"]').closest('li').hide();
-  }
-
   $('#speech_setting').change(function() {
     if ($('#speech_setting').prop('checked')) {
       speech_enabled = true;
@@ -1231,8 +1115,7 @@ function pregame_settings()
   }
 
   $("#show_voice_commands").click(function() {
-   var previous_setting = cardboard_vr_enabled;
-   cardboard_vr_enabled = false;
+
    show_dialog_message("Voice commands",
      "<b>Voice command - Explanation:</b> <br>" +
      "T, Turn - Turn Done<br>" +
@@ -1256,7 +1139,6 @@ function pregame_settings()
      "W, West  - West<br>" +
      "North West, North East, South East, South West<br>"
       );
-    cardboard_vr_enabled = previous_setting;
   });
 
 
@@ -1271,6 +1153,7 @@ function change_ruleset(to) {
     send_message("/set nationset all");
     if (chosen_nation != -1) {
       swal("Ruleset changed. You need to select your nation again.");
+      setSwalTheme();
     }
   }
 
@@ -1293,27 +1176,6 @@ function show_intro_dialog(title, message) {
       +  "<tr id='password_row' style='display:none;'><td>Password:</td><td id='password_td'></td></tr></table>"
     + " <br><br><span id='username_validation_result' style='display:none;'></span><br><br>";
 
-  if (renderer == RENDERER_WEBGL) {
-    try {
-      var gl = document.createElement('canvas').getContext('webgl',{ failIfMajorPerformanceCaveat: true });
-      if (!(platform.name == "Microsoft Edge") && !gl) {
-        show_dialog_message("WebGL not supported", "WebGL 3D with hardware acceleration is not supported. The 3D version will not work. Please try the 2D version.");
-        return;
-      }
-    } catch (err) {
-      console.error(err);
-    }
-    intro_html += "<span style='color: #800000;'><small>The 3D WebGL version of Freeciv-web requires WebGL 3D hardware. Graphics level: ";
-    if (graphics_quality == QUALITY_LOW) {
-      intro_html += "Low quality.";
-    } else if (graphics_quality == QUALITY_MEDIUM) {
-      intro_html += "Medium quality.";
-    } else {
-      intro_html += "High quality.";
-    }
-    intro_html += "</small></span>";
-  }
-
   $("#dialog").html(intro_html);
 
   var stored_username = simpleStorage.get("username", "");
@@ -1323,11 +1185,12 @@ function show_intro_dialog(title, message) {
   var stored_password = simpleStorage.get("password", "");
   if (stored_password != null && stored_password != false) {
     $("#password_row").show();
-   // $("#password_td").html("<input id='password_req' type='password' size='25' maxlength='200'>  &nbsp; <a class='pwd_reset_2' href='#' style='color: #666666;'>Forgot password?</a>");
-   $("#password_td").remove(); // we don't have password reset at the moment. 
-   $("#password_req").val(stored_password);
-   // $(".pwd_reset_2").click(forgot_pbem_password);
-   $(".pwd_reset_2").remove();
+    $("#password_td").html("<input id='password_req' type='password' size='25' maxlength='200'>");
+    /* Original code that had "Forgot password?" linking to non-functional forgot_pbem_password() even though it's not PBEM
+    //$("#password_td").html("<input id='password_req' type='password' size='25' maxlength='200'>  &nbsp; <a class='pwd_reset_2' href='#' style='color: #666666;'>Forgot password?</a>");
+    //$(".pwd_reset_2").click(forgot_pbem_password); // why is it forgot_pbem_password() when this is singleplayer games?
+    */
+    $("#password_req").val(stored_password);
   }
   var join_game_customize_text = "";
   var join_game_title_text = "";
@@ -1361,44 +1224,26 @@ function show_intro_dialog(title, message) {
       },
       buttons:
       [
-        /* We can bring this button back but it requires a long explanation that it is a "QuickSTART" with no chance 
-         * to pick your nation, ruleset, map, or other settings. It is removed for now.
-        {
-          text : "Start Game",
-          title : "WARNING: Old rules. No chance to pick Nation, Map, number of players, or modern game version.",
-          click : function() {
-                     if (is_touch_device() || is_small_screen()) {
-                       BigScreen.toggle();  
-                     }
-          dialog_close_trigger = "button";
-          autostart = true;
-          validate_username_callback();
-          },
-          icons: { primary: "ui-icon-play" }
-        }, */
-        {
-          text : join_game_customize_text,
+        { text : join_game_customize_text,
           title : join_game_title_text,
           click : function() {
                     if (is_touch_device() || is_small_screen()) {
                       BigScreen.toggle();
                     }
-          dialog_close_trigger = "button";
-          validate_username_callback();
+            dialog_close_trigger = "button";
+            validate_username_callback();
+          },
+          icons : { primary: "ui-icon-gear" }
         },
-        icons : { primary: "ui-icon-gear" }
-        },
-              {
-                  text : "New user account",
-                  title : "An account is necessary if you want to save games or participate in Longturn multiplayer.",
-                  click : function() {
-                    show_new_user_account_dialog();
-                },
-                icons : { primary: "ui-icon-person" }
-              }
+        { text : "New user account",
+          title : "An account is necessary if you want to save games or participate in Longturn multiplayer.",
+          click : function() {
+            show_new_user_account_dialog();
+          },
+          icons : { primary: "ui-icon-person" }
+        }
       ]
-
-    });
+  });
 
   /* This hid the former start button that is now commented out above.
   if (($.getUrlVar('action') == "load" || $.getUrlVar('action') == "multi" || $.getUrlVar('action') == "earthload")
@@ -1587,6 +1432,7 @@ function validate_username_callback()
              },
            error: function (request, textStatus, errorThrown) {
              swal("Login user failed.");
+             setSwalTheme();
            }
           });
         } else {
@@ -1596,16 +1442,18 @@ function validate_username_callback()
 
         $("#password_row").show();
         $("#password_req").focus();
+        $("#password_td").html("<input id='password_req' type='password' size='25' maxlength='200'>");
         //$("#password_td").html("<input id='password_req' type='password' size='25' maxlength='200'>  &nbsp; <a class='pwd_reset' href='#' style='color: #666666;'>Forgot password?</a>");
         //$(".pwd_reset").click(forgot_pbem_password);
-        $(".pwd_reset").remove();
-        $("#password_td").remove(); // we don't have this option at the moment.
+        //$(".pwd_reset").remove();
+        //$("#password_td").remove(); // we don't have this option at the moment.
       }
     },
    error: function (request, textStatus, errorThrown) {
      console.log("For programmers and server admins: "
                  + "Please check if the meta server is running properly.");
      swal("Error. Please try again with a different name.");
+     setSwalTheme();
    }
   });
 
@@ -1675,6 +1523,7 @@ function show_new_user_account_dialog(gametype)
           });
     } else {
       swal("Captcha not available. This could be caused by a browser plugin.");
+      setSwalTheme();
     }
   }
 
@@ -1769,6 +1618,7 @@ function create_new_freeciv_user_account_request(action_type)
    error: function (request, textStatus, errorThrown) {
      $("#dialog").parent().show();
      swal("Creating new user failed.");
+     setSwalTheme();
    }
   });
 }
@@ -1788,7 +1638,7 @@ function show_customize_nation_dialog(player_id) {
 
   var message = "<br>New nation name: <input id='new_nation_adjective' type='text' size='30' value='" + pnation['adjective'] + "'><br><br>"
        + "Upload new flag: <input type='file' id='newFlagFileInput'><br><br>"
-       + "For best results scale the image to 29 x 20 pixels before uploading. <br><br>"
+       + "For best results scale the image to 30 x 20 pixels before uploading. <br><br>"
        + "(Note: the customized nation and flag will only be active during the current game session and will not be visible to other players.)";
 
   $("#dialog").html(message);
@@ -1825,11 +1675,13 @@ function handle_customized_nation(player_id)
 
   if (file == null) {
     swal("Please upload a image file!");
+    setSwalTheme();
     return;
   }
 
   if (!(window.FileReader)) {
     swal("Uploading files not supported");
+    setSwalTheme();
     return;
   }
 
@@ -1845,6 +1697,7 @@ function handle_customized_nation(player_id)
   } else {
     $.unblockUI();
     swal("Image file " + file.name + "  not supported: " + file.type);
+    setSwalTheme();
   }
 
 }
@@ -1923,16 +1776,19 @@ function forgot_pbem_password()
             password_reset_count++;
                     if (password_reset_count > 3) {
                       swal("Unable to reset password.");
+                      setSwalTheme();
                       return;
                     }
             var reset_email = $("#email_reset").val();
             var captcha = $("#g-recaptcha-response").val();
             if (reset_email == null || reset_email.length == 0) {
+              setSwalTheme();
               swal("Please fill in e-mail.");
               return;
             }
             if (captcha_site_key != '' && (captcha == null || captcha.length == 0)) {
               swal("Please fill complete the captcha.");
+              setSwalTheme();
               return;
             }
                     $.ajax({
@@ -1944,6 +1800,7 @@ function forgot_pbem_password()
                         },
                        error: function (request, textStatus, errorThrown) {
                          swal("Error, password was not reset.");
+                         setSwalTheme();
                        }
                       });
         }
@@ -1960,6 +1817,7 @@ function forgot_pbem_password()
           });
     } else {
       swal("Captcha not available. This could be caused by a browser plugin.");
+      setSwalTheme();
     }
   }
 
@@ -1986,8 +1844,10 @@ function google_signin_on_success(googleUser)
       $("#dialog").dialog('close');
     } else if (xhr.responseText == "Email not verified") {
       swal("Login failed. E-mail not verified.");
+      setSwalTheme();
     } else {
       swal("Login failed.");
+      setSwalTheme();
     }
   };
   xhr.send('idtoken=' + id_token + "&username=" + username);
@@ -2001,8 +1861,8 @@ function google_signin_on_success(googleUser)
 function google_signin_on_failure(error)
 {
   if (error['error'] == "popup_closed_by_user") return;
-
   swal("Unable to sign in with Google: " + JSON.stringify(error));
+  setSwalTheme();
   console.error("Unable to sign in with Google: " + JSON.stringify(error));
 
 }

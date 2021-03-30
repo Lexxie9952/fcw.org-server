@@ -42,11 +42,7 @@ extern GtkWidget *      bulb_label;
 extern GtkWidget *      sun_label;
 extern GtkWidget *      flake_label;
 extern GtkWidget *      government_label;
-extern GtkWidget *	econ_ebox;
-extern GtkWidget *	bulb_ebox;
-extern GtkWidget *	sun_ebox;
-extern GtkWidget *	flake_ebox;
-extern GtkWidget *	government_ebox;
+extern GtkWidget *	econ_widget;
 extern GtkWidget *      map_canvas;             /* GtkDrawingArea */
 extern GtkWidget *      overview_canvas;        /* GtkDrawingArea */
 extern GtkWidget *      overview_scrolled_window;        /* GtkScrolledWindow */
@@ -84,5 +80,7 @@ int screen_height(void);
 struct video_mode *resolution_request_get(void);
 
 bool is_gui_up(void);
+
+bool terminate_signal_processing(void);
 
 #endif  /* FC__GUI_MAIN_H */

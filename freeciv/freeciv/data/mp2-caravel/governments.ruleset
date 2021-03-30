@@ -234,7 +234,7 @@ ruler_female_title = _("?female:Comrade %s")
 helptext = _("\
 In Communism, all work, output, and goods are owned by the state.\
 "), _("\
-Each city gets 4 units free of upkeep. Buildings with 1 upkeep\
+Each city gets 4 shields of free unit upkeep. Buildings with 1 upkeep\
  are free. The city with a Palace gets +25% production.\
 "), _("\
 Riflemen cost 5 less; Armor and Dive Bombers, 10 less.\
@@ -274,17 +274,17 @@ Nationalism glorifies national supremacy over other peoples.\
 Content cities get a +1 trade bonus on Land tiles only.\
  Celebrating cities also get Ocean tiles. Cities may rapture if founded under\
  the original national hegemony. Luxury suffers a 15% penalty.\
- Science gets +10% in original cities.\n\
+ Government mandated Science gets +15% in original cities.\n\
 "), _("\
-Each city gets 1 unit free of upkeep. The city with a Palace gets +15% production.\
+Each city gets 1 shield of free unit upkeep. The city with a Palace gets +15% production.\
  Original cities have a 3x incite cost, otherwise cost one third.\n\
 "), _("\
-Police Stations suppress +1 unhappy Foreign National.\
+Police Stations suppress +1 unhappy Foreign National and cost 10 shields less.\
  Five military units may impose martial law, affecting one citizen each.\
  Migrants can be made to help grow cities. Tile workers gain a ⅑ move\
  bonus and for every three worker turns of work put in, get a fourth\
- worker turn free. Cost of upgrades is 25% less. Riflemen and Fighters are\
- produced at +1 vet level. Armor gets a +1 move bonus.\n\
+ worker turn free. Cost of upgrades is 25% less. Riflemen are produced at +1 vet\
+ level. Armor gets a +1 move bonus. Fighters and Dive Bombers have higher odds of promotion.\n\
 "), _("\
 No citizens are made unhappy by each aggressive unit.\n\
 8% Base corruption in capital,\n\

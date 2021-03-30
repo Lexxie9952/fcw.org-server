@@ -175,7 +175,7 @@ function play_combat_sound(unit)
 {
   if (!sounds_enabled) return;
   if (unit == null) return;
-  if (!is_unit_visible(unit) && renderer != RENDERER_WEBGL) 
+  if (!is_unit_visible(unit))
   {
     //console.error("skipped playing a sound because unit not visible or RENDERER_WEBGL");
     return;

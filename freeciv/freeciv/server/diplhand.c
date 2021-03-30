@@ -542,17 +542,35 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
           pgiver_seen_units = get_units_seen_via_ally(pgiver, pdest);
           pdest_seen_units = get_units_seen_via_ally(pdest, pgiver);
         }
-        ds_giverdest->type = DS_CEASEFIRE;
-        ds_destgiver->type = DS_CEASEFIRE;
-        if (!casus_belli) { // restting a casus belli doesn't reset the agreed period of cease-fire.
+        /* Agreeing a cease-fire can express two possibilities: (1) resetting casus belli or (2) renewal before expiring.
+
+            What happens in a new cease-fire, given all possible prior states before it's agreed? 
+               prior state-> | CEASE_FIRE             | WAR (!CEASE-FIRE)
+              ---------------|------------------------|-------------------
+              no casus belli | tl=15  (renewal)       | tl=15
+              casus belli    | tl=tl* (reset cb only) | tl=15
+
+                      { *exception: if (tl<=1) reset tl to tl=15 }    */
+        // Execute the pact according to the above chart:
+        bool reaffirmation = false;
+        if (old_diplstate == DS_CEASEFIRE && casus_belli) {
+          // Already cease-fire with casus belli? It's a request to re-affirm pact && reset casus belli
+          ds_giverdest->turns_left = (ds_giverdest->turns_left>1) 
+                                   ? ds_giverdest->turns_left : game.server.ceasefirelength;
+          ds_destgiver->turns_left = ds_giverdest->turns_left; // ensure equal pact length
+          reaffirmation = true;
+        }
+        else { // In all other cases the new pact wants the standard length of pact:
           ds_giverdest->turns_left = game.server.ceasefirelength;
           ds_destgiver->turns_left = game.server.ceasefirelength;
         }
-        // New non-aggression pacts don't start already having a casus belli, when created:
+        ds_giverdest->type = DS_CEASEFIRE;
+        ds_destgiver->type = DS_CEASEFIRE;
+        // In no cases do new non-aggression pacts start with already casus belli and having a reason to cancel:
         player_diplstate_get(pgiver, pdest)->has_reason_to_cancel = 0;
         player_diplstate_get(pdest, pgiver)->has_reason_to_cancel = 0;
 
-        if (!casus_belli) {
+        if (!reaffirmation) {
           notify_player(pgiver, NULL, E_TREATY_CEASEFIRE, ftc_server,
                         _("📜[`olivebranch`] You agree on a cease-fire with %s."),
                         player_name(pdest));
@@ -582,19 +600,46 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
           pgiver_seen_units = get_units_seen_via_ally(pgiver, pdest);
           pdest_seen_units = get_units_seen_via_ally(pdest, pgiver);
         }
-        ds_giverdest->type = DS_ARMISTICE;
-        ds_destgiver->type = DS_ARMISTICE;
-        if (!casus_belli) { // resetting a casus belli doesn't reset the armistice period
+        /*What happens in a new peace pact, given all possible prior states before it's agreed? 
+               prior state-> | ARMISTICE              | (!ARMISTICE && !PEACE) | PEACE
+              ---------------|------------------------|------------------------|-----------------
+              no casus belli | tl=15  (extension*)    | tl=15                  | shouldn't happen
+              casus belli    | tl=tl**(reset cb only) | tl=15                  | (reset cb only)
+
+          {  *extension: players saw some reason to want a longer armistice, so let them have it }
+          { **exception: if (tl<5) reset tl=5 so offending units can leave. Yes, arbitrary, but so was stupidly disallowing it. } */
+
+        if (casus_belli && (old_diplstate == DS_ARMISTICE)) {
+          // Q:existing armistice, no casus belli, what's the motive? A:extending the armistice, probably for units to still move.
+          ds_giverdest->turns_left = ds_giverdest->turns_left >= 5 
+                                   ? ds_giverdest->turns_left : 5;
+          ds_destgiver->turns_left = ds_giverdest->turns_left; // ensure equality
+
+          ds_giverdest->type = DS_ARMISTICE;
+          ds_destgiver->type = DS_ARMISTICE;
+        } 
+        else if (old_diplstate != DS_PEACE) {
           ds_giverdest->turns_left = game.server.armisticelength;
           ds_destgiver->turns_left = game.server.armisticelength;
+          
+          ds_giverdest->type = DS_ARMISTICE;
+          ds_destgiver->type = DS_ARMISTICE;
+        } else {
+          // unhandled cases: we got here because they have a PEACE deal already.
+          if (casus_belli) notify_player(pgiver, NULL, E_TREATY_PEACE, ftc_server, 
+                 _("Re-affirmation of Peace results in casus belli being withdrawn."));
+          else notify_player(pgiver, NULL, E_TREATY_PEACE, ftc_server, 
+                 _("Peace offered when there is already Peace and no casus belli. Please report this to developers!"));
         }
+        // All cases:
         ds_giverdest->max_state = dst_closest(DS_PEACE,
                                               ds_giverdest->max_state);
         ds_destgiver->max_state = dst_closest(DS_PEACE,
                                               ds_destgiver->max_state);
-        // New non-war treaties don't start with a casus belli violation, when created:
+        // In all cases, a new peace pact doesn't start with casus belli and already with a reason to cancel:
         player_diplstate_get(pgiver, pdest)->has_reason_to_cancel = 0;
         player_diplstate_get(pdest, pgiver)->has_reason_to_cancel = 0;
+
         notify_player(pgiver, NULL, E_TREATY_PEACE, ftc_server,
                       /* TRANS: ... the Poles ... Polish territory */
                       PL_("📜[`dove`] You agree on an armistice with the %s. In %d turn, "
@@ -640,6 +685,11 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
                                               ds_giverdest->max_state);
         ds_destgiver->max_state = dst_closest(DS_ALLIANCE,
                                               ds_destgiver->max_state);
+
+        // In all cases, a new alliance doesn't start with casus belli and already a reason to cancel:
+        player_diplstate_get(pgiver, pdest)->has_reason_to_cancel = 0;
+        player_diplstate_get(pdest, pgiver)->has_reason_to_cancel = 0;
+
         notify_player(pgiver, NULL, E_TREATY_ALLIANCE, ftc_server,
                       _("📜[`shield`] You agree on an alliance with %s."),
                       player_name(pdest));

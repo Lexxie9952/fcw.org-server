@@ -251,8 +251,7 @@ void handle_unit_type_upgrade(struct player *pplayer, Unit_type_id uti)
       struct city *pcity = tile_city(unit_tile(punit));
 
       if (is_action_enabled_unit_on_city(paction->id, punit, pcity)
-          && unit_perform_action(pplayer, punit->id, pcity->id, EXTRA_NONE,
-                                 0, "",
+          && unit_perform_action(pplayer, punit->id, pcity->id, 0, "",
                                  paction->id, ACT_REQ_SS_AGENT)) {
         number_of_upgraded_units++;
       } else if (UU_NO_MONEY == unit_upgrade_test(punit, FALSE)) {
@@ -724,6 +723,7 @@ static struct player *need_war_player_hlp(const struct unit *actor,
   case ACTION_BOMBARD:
   case ACTION_NUKE:
   case ACTION_ATTACK:
+  case ACTION_SUICIDE_ATTACK:
     /* Target is tile or unit stack but a city (or unit) can block it. */
     if ((!action_id_has_result_safe(act, ACTION_NUKE)
          || unit_tile(actor) != target_tile)
@@ -1108,6 +1108,7 @@ static struct ane_expl *expl_act_not_enabl(struct unit *punit,
     }
     break;
   case ACTION_ATTACK:
+  case ACTION_SUICIDE_ATTACK:
     action_custom = unit_attack_units_at_tile_result(punit, target_tile);
     break;
   case ACTION_CONQUER_CITY:
@@ -1306,6 +1307,7 @@ static struct ane_expl *expl_act_not_enabl(struct unit *punit,
                                        + unit_pop_value(punit))))) {
     explnat->kind = ANEK_CITY_POP_LIMIT;
   } else if ((action_id_has_result_safe(act_id, ACTION_NUKE)
+              || action_id_has_result_safe(act_id, ACTION_SUICIDE_ATTACK)
               || action_id_has_result_safe(act_id, ACTION_ATTACK))
              && action_custom != ATT_OK) {
     switch (action_custom) {
@@ -2442,12 +2444,14 @@ void handle_unit_action_query(struct connection *pc,
   action_type must be a valid action.
 **************************************************************************/
 void handle_unit_do_action(struct player *pplayer,
-                           const struct packet_unit_do_action *packet)
+                           const int actor_id,
+                           const int target_id,
+                           const int sub_tgt_id,
+                           const char *name,
+                           const action_id action_type)
 {
-  (void) unit_perform_action(pplayer, packet->actor_id, packet->target_id,
-                             packet->extra_id,
-                             packet->value, packet->name,
-                             packet->action_type, ACT_REQ_PLAYER);
+  (void) unit_perform_action(pplayer, actor_id, target_id, sub_tgt_id, name,
+                             action_type, ACT_REQ_PLAYER);
 }
 
 /**********************************************************************//**
@@ -2458,13 +2462,12 @@ void handle_unit_do_action(struct player *pplayer,
 void unit_do_action(struct player *pplayer,
                     const int actor_id,
                     const int target_id,
-                    const int extra_id,
-                    const int value,
+                    const int sub_tgt_id,
                     const char *name,
                     const action_id action_type)
 {
-  unit_perform_action(pplayer, actor_id, target_id, extra_id,
-                      value, name, action_type, ACT_REQ_PLAYER);
+  unit_perform_action(pplayer, actor_id, target_id,
+                      sub_tgt_id, name, action_type, ACT_REQ_PLAYER);
 }
 
 /**********************************************************************//**
@@ -2479,8 +2482,7 @@ void unit_do_action(struct player *pplayer,
 bool unit_perform_action(struct player *pplayer,
                          const int actor_id,
                          const int target_id,
-                         const int extra_id,
-                         const int value,
+                         const int sub_tgt_id,
                          const char *name,
                          const action_id action_type,
                          const enum action_requester requester)
@@ -2500,13 +2502,26 @@ bool unit_perform_action(struct player *pplayer,
     return FALSE;
   }
 
-  if (extra_id != EXTRA_NONE) {
-    target_extra = extra_by_number(extra_id);
+  if (sub_tgt_id >= 0 && sub_tgt_id < MAX_EXTRA_TYPES
+      && sub_tgt_id != EXTRA_NONE) {
+    target_extra = extra_by_number(sub_tgt_id);
+    fc_assert(!(target_extra->ruledit_disabled));
   } else {
     target_extra = NULL;
   }
 
   paction = action_by_number(action_type);
+
+  if (action_get_activity(paction) != ACTIVITY_LAST
+      && unit_activity_needs_target_from_client(
+           action_get_activity(paction))
+      && target_extra == NULL) {
+    /* Missing required action extra target. */
+    log_verbose("unit_perform_action() action %d requires action "
+                "but extra id %d is invalid.",
+                action_type, sub_tgt_id);
+    return FALSE;
+  }
 
   if (NULL == actor_unit) {
     /* Probably died or bribed. */
@@ -2689,7 +2704,7 @@ bool unit_perform_action(struct player *pplayer,
     /* Difference is caused by data in the action structure. */
     ACTION_STARTED_UNIT_CITY(action_type, actor_unit, pcity,
                              diplomat_sabotage(pplayer, actor_unit, pcity,
-                                               value - 1, paction));
+                                               sub_tgt_id - 1, paction));
     break;
   case ACTION_SPY_POISON:
   case ACTION_SPY_POISON_ESC:
@@ -2732,7 +2747,7 @@ bool unit_perform_action(struct player *pplayer,
     /* Difference is caused by data in the action structure. */
     ACTION_STARTED_UNIT_CITY(action_type, actor_unit, pcity,
                              diplomat_get_tech(pplayer, actor_unit, pcity,
-                                               value, paction));
+                                               sub_tgt_id, paction));
     break;
   case ACTION_SPY_STEAL_GOLD:
   case ACTION_SPY_STEAL_GOLD_ESC:
@@ -2815,6 +2830,8 @@ bool unit_perform_action(struct player *pplayer,
                                            paction, false));
     break;
   case ACTION_ATTACK:
+  case ACTION_SUICIDE_ATTACK:
+    /* Difference is caused by data in the action structure. */
     ACTION_STARTED_UNIT_UNITS(action_type, actor_unit, target_tile,
                               do_attack(actor_unit, target_tile, paction));
     break;
@@ -4386,7 +4403,7 @@ static bool do_attack(struct unit *punit, struct tile *def_tile,
          && is_action_enabled_unit_on_city(ACTION_CONQUER_CITY,
                                            punit, pcity)
          && unit_perform_action(unit_owner(punit), punit->id, pcity->id,
-                                EXTRA_NONE, 0, "",
+                                0, "",
                                 ACTION_CONQUER_CITY, ACT_REQ_RULES))
         || (unit_move_handling(punit, def_tile, FALSE, TRUE, NULL))) {
       int mcost = MAX(0, full_moves - punit->moves_left - SINGLE_MOVE);
@@ -5262,6 +5279,7 @@ bool unit_activity_handling_targeted(struct unit *punit,
               if (fc_rand(100) < odds) {
                 notify_player(unit_owner(punit), unit_tile(punit),
                           E_UNIT_ACTION_TARGET_HOSTILE, ftc_server,
+                          /* changing this string below requires changing substring extraction in packhand:handle_iPillage_event() */
                           _("💥 Your %s destroyed the %s %s with a %s."),
                           unit_link(punit),
                           (tile_owner(unit_tile(punit)) ? nation_adjective_for_player(tile_owner(unit_tile(punit))) : " " ), 
@@ -5584,21 +5602,23 @@ void handle_unit_orders(struct player *pplayer,
         }
         break;
       case ACTIVITY_BASE:
-        if (!is_extra_caused_by(extra_by_number(packet->extra[i]), EC_BASE)) {
+        if (!is_extra_caused_by(extra_by_number(packet->sub_target[i]),
+                                EC_BASE)) {
           log_error("handle_unit_orders() %s isn't a base. "
                     "Sent in order number %d from %s to unit number %d.",
-                    extra_rule_name(extra_by_number(packet->extra[i])), i,
-                    player_name(pplayer), packet->unit_id);
+                    extra_rule_name(extra_by_number(packet->sub_target[i])),
+                    i, player_name(pplayer), packet->unit_id);
 
           return;
         }
         break;
       case ACTIVITY_GEN_ROAD:
-        if (!is_extra_caused_by(extra_by_number(packet->extra[i]), EC_ROAD)) {
+        if (!is_extra_caused_by(extra_by_number(packet->sub_target[i]),
+                                EC_ROAD)) {
           log_error("handle_unit_orders() %s isn't a road. "
                     "Sent in order number %d from %s to unit number %d.",
-                    extra_rule_name(extra_by_number(packet->extra[i])), i,
-                    player_name(pplayer), packet->unit_id);
+                    extra_rule_name(extra_by_number(packet->sub_target[i])),
+                    i, player_name(pplayer), packet->unit_id);
 
           return;
         }
@@ -5625,7 +5645,7 @@ void handle_unit_orders(struct player *pplayer,
         return;
       }
 
-      if (packet->extra[i] == EXTRA_NONE
+      if (packet->sub_target[i] == EXTRA_NONE
           && unit_activity_needs_target_from_client(packet->activity[i])) {
         /* The orders system can't do server side target assignment for
          * this activity. */
@@ -5692,8 +5712,8 @@ void handle_unit_orders(struct player *pplayer,
       case ACTION_SPY_TARGETED_SABOTAGE_CITY:
       case ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC:
         /* Sabotage target is production (-1) or a building. */
-        if (!(packet->target[i] - 1 == -1
-              || improvement_by_number(packet->target[i] - 1))) {
+        if (!(packet->sub_target[i] - 1 == -1
+              || improvement_by_number(packet->sub_target[i] - 1))) {
           /* Sabotage target is invalid. */
 
           log_error("handle_unit_orders() can't do %s without a target. "
@@ -5706,9 +5726,9 @@ void handle_unit_orders(struct player *pplayer,
         break;
       case ACTION_SPY_TARGETED_STEAL_TECH:
       case ACTION_SPY_TARGETED_STEAL_TECH_ESC:
-        if (packet->target[i] == A_NONE
-            || (!valid_advance_by_number(packet->target[i])
-                && packet->target[i] != A_FUTURE)) {
+        if (packet->sub_target[i] == A_NONE
+            || (!valid_advance_by_number(packet->sub_target[i])
+                && packet->sub_target[i] != A_FUTURE)) {
           /* Target tech is invalid. */
 
           log_error("handle_unit_orders() can't do %s without a target. "
@@ -5723,10 +5743,10 @@ void handle_unit_orders(struct player *pplayer,
       case ACTION_BASE:
       case ACTION_MINE:
       case ACTION_IRRIGATE:
-        if (packet->extra[i] == EXTRA_NONE
-            || (packet->extra[i] < 0
-                || packet->extra[i] >= game.control.num_extra_types)
-            || extra_by_number(packet->extra[i])->disabled) {
+        if (packet->sub_target[i] == EXTRA_NONE
+            || (packet->sub_target[i] < 0
+                || packet->sub_target[i] >= game.control.num_extra_types)
+            || extra_by_number(packet->sub_target[i])->ruledit_disabled) {
           /* Target extra is invalid. */
 
           log_error("handle_unit_orders() can't do %s without a target. "
@@ -5774,6 +5794,7 @@ void handle_unit_orders(struct player *pplayer,
       case ACTION_HOME_CITY:
       case ACTION_UPGRADE_UNIT:
       case ACTION_ATTACK:
+      case ACTION_SUICIDE_ATTACK:
       case ACTION_CONQUER_CITY:
       case ACTION_PARADROP:
       case ACTION_AIRLIFT:
@@ -5846,8 +5867,7 @@ void handle_unit_orders(struct player *pplayer,
     punit->orders.list[i].order = packet->orders[i];
     punit->orders.list[i].dir = packet->dir[i];
     punit->orders.list[i].activity = packet->activity[i];
-    punit->orders.list[i].target = packet->target[i];
-    punit->orders.list[i].extra = packet->extra[i];
+    punit->orders.list[i].sub_target = packet->sub_target[i];
     punit->orders.list[i].action = packet->action[i];
   }
 
@@ -5861,14 +5881,14 @@ void handle_unit_orders(struct player *pplayer,
 #ifdef FREECIV_DEBUG
   log_debug("Orders for unit %d: length:%d", packet->unit_id, length);
   for (i = 0; i < length; i++) {
-    log_debug("  %d,%s,%s,%d,%d",
+    log_debug("  %d,%s,%s,%d",
               packet->orders[i], dir_get_name(packet->dir[i]),
               packet->orders[i] == ORDER_PERFORM_ACTION ?
                 action_id_rule_name(packet->action[i]) :
                 packet->orders[i] == ORDER_ACTIVITY ?
                   unit_activity_name(packet->activity[i]) :
                   "no action/activity required",
-              packet->target[i], packet->extra[i]);
+              packet->sub_target[i]);
   }
 #endif /* FREECIV_DEBUG */
 

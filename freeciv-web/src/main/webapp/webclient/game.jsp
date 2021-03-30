@@ -5,16 +5,16 @@
 		    
 			<ul id="tabs_menu">
 			    <div id="freeciv_logo" ></div>
-				<li id="map_tab" style="margin-right:0px;"><a href="#tabs-map"><i class="fa fa-globe" aria-hidden="true"></i> Map</a></li>
-				<li id="empire_tab" style="margin-right:0px;"><a href="#tabs-empire"><i class="fa fa-binoculars" aria-hidden="true"></i> Empire</a></li>
-				<li id="civ_tab" style="margin-right:0px;"><a href="#tabs-civ"><i class="fa fa-university" aria-hidden="true"></i> Gov.</a></li>
-				<li id="tech_tab" style="margin-right:0px;"><a id="tech_tab_item" href="#tabs-tec"><i class="fa fa-flask" aria-hidden="true"></i> Tech</a></li>
-				<li id="players_tab" style="margin-right:0px;"><a href="#tabs-nat"><i class="fa fa-flag" aria-hidden="true"></i> Nations</a></li>
-				<li id="cities_tab" style="margin-right:0px;"><a href="#tabs-cities"><i class="fa fa-fort-awesome" aria-hidden="true"></i> Cities</a></li>
-				<li id="opt_tab" style="margin-right:0px;"><a href="#tabs-opt"><i class="fa fa-cogs" aria-hidden="true"></i> Prefs</a></li>
-	<%--			<li id="chat_tab" style="margin-right:0px;"><a href="#tabs-chat"><i class="fa fa-commenting-o" aria-hidden="true"></i> Chat</a></li> --%>
-				<li id="hel_tab" style="margin-right:0px;"><a href="#tabs-hel"><i class="fa fa-book" aria-hidden="true"></i> Help</a></li>
-				<li id="warcalc_tab" style="margin-right:0px;"><a href="#tabs-warcalc"> &#x1F3B2;Odds</a></li>
+				<li id="map_tab" style="margin-right:0px;"><a href="#tabs-map">🌍 Map</a></li>
+				<li id="empire_tab" style="margin-right:0px;"><a href="#tabs-empire">&#9878;&#65039; Empire</a></li>
+				<li id="civ_tab" style="margin-right:0px;"><a href="#tabs-civ">&#x1F3DB;&#xFE0F; Gov.</a></li>
+				<li id="tech_tab" style="margin-right:0px;"><a id="tech_tab_item" href="#tabs-tec">&#129514; Tech</a></li>
+				<li id="players_tab" style="margin-right:0px;"><a href="#tabs-nat">&#127479;&#127482; Nations</a></li>
+				<li id="cities_tab" style="margin-right:0px;"><a href="#tabs-cities">&#127984; Cities</a></li>
+				<li id="opt_tab" style="margin-right:0px;"><a href="#tabs-opt">&#9881;&#65039; Prefs</a></li>
+	<%--			<li id="chat_tab" style="margin-right:0px;"><a href="#tabs-chat">💬 Chat</a></li> --%>
+				<li id="hel_tab" style="margin-right:0px;"><a href="#tabs-hel">📘 Help</a></li>
+				<li id="warcalc_tab" style="margin-right:0px;"><a href="#tabs-warcalc">&#x1F3B2;Odds</a></li>
 
                 <div id="game_status_panel_top"></div>
 

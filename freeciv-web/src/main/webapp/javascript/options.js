@@ -92,6 +92,7 @@ var show_warcalc = false;
 var show_unit_movepct = false; // show move-point bar on map units
 var show_compass = true; // show compass on map
 var hp_bar_offset = 0;    // if mp bar is shown, offset to bump up hp bar
+var focuslock = false;    // whether map centers and locks always on focused unit
 
 var save_options_on_exit = true;
 var fullscreen_mode = false;
@@ -201,6 +202,7 @@ function init_options_dialog()
     var new_timeout = parseInt($('#timeout_setting').val());
     if (new_timeout >= 1 && new_timeout <= 29) {
       swal("Invalid timeout specified. Must be 0 or more than 30 seconds.");
+      setSwalTheme();
     } else {
       send_message("/set timeout " + new_timeout);
     }
@@ -295,13 +297,19 @@ function init_options_dialog()
   $('#draw_highlighted_pollution').prop('checked', draw_highlighted_pollution);
   $('#draw_highlighted_pollution').change(function() {
     draw_highlighted_pollution = this.checked;
-    // don't store this to next session
+    simpleStorage.set('showpollution', draw_highlighted_pollution);
   });
   // CITY AIRLIFT COUNTER
   $('#airlift_setting').prop('checked', draw_city_airlift_counter);
   $('#airlift_setting').change(function() {
     draw_city_airlift_counter = this.checked;
     simpleStorage.set('airlift', draw_city_airlift_counter);
+  });
+  // FOCUS LOCK UNITS TO CENTER OF MAP
+  $('#focuslock_setting').prop('checked', focuslock);
+  $('#focuslock_setting').change(function() {
+    focuslock = this.checked;
+    simpleStorage.set('focuslock', focuslock);
   });
   // DRAW CITY MOOD ON MAP
   $('#draw_city_mood').prop('checked', draw_city_mood);
@@ -340,7 +348,7 @@ function init_options_dialog()
       show_unit_movepct = this.checked;
       if (show_unit_movepct) hp_bar_offset = -5;
       else hp_bar_offset = 0;
-      //simpleStorage.set('showMoves', show_unit_movepct); 
+      simpleStorage.set('showMoves', show_unit_movepct); 
     });
     // SHOW WARCALC TAB 
     $('#show_warcalc').prop('checked', show_warcalc);
@@ -377,22 +385,6 @@ function init_options_dialog()
    });
    //----------------------------------------------------------------^^USER OPTIONS^^
    $('#graphic_theme').change();
-
-  if (!is_longturn()) {
-    if (renderer == RENDERER_WEBGL) {
-        $("#switch_renderer_button").html("Use 2D HTML5 graphics");
-        $("#renderer_help").html("Switch to 2D isometric graphics.")
-    } else {
-        $("#switch_renderer_button").html("Use 3D WebGL graphics");
-        $("#renderer_help").html("Use 3D WebGL graphics. Make sure your computer<br> supports 3D WebGL graphics.")
-        $("#update_model_button").hide();
-    }
-
-    if (!Detector.webgl) {
-        $("#switch_renderer_button").hide();
-        $("#renderer_help").html("3D WebGL not supported.")
-    }
-  }
 
   if (is_longturn()) {
     $("#update_model_button").hide();

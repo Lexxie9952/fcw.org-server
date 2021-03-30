@@ -181,19 +181,12 @@ function generate_overview_hash(cols, rows) {
     }
   }
 
-  if (renderer == RENDERER_2DCANVAS) {
-    var r = base_canvas_to_map_pos(0, 0);
-    if (r != null) {
-      hash += r['map_x'];
-      hash += r['map_y'];
-    }
-  } else {
-    var ptile = webgl_canvas_pos_to_tile($(window).width() / 6, $(window).height() / 6);
-    if (ptile != null) {
-      hash += ptile['x'];
-      hash += ptile['y'];
-    }
+  var r = base_canvas_to_map_pos(0, 0);
+  if (r != null) {
+    hash += r['map_x'];
+    hash += r['map_y'];
   }
+
   return hash;
 }
 
@@ -206,8 +199,6 @@ function render_viewrect()
 
   var path = [];
 
-  if (renderer == RENDERER_2DCANVAS && mapview['gui_x0'] != 0 && mapview['gui_y0'] != 0) {
-
     var point = base_canvas_to_map_pos(0, 0);
     path.push([point.map_x, point.map_y]);
     point = base_canvas_to_map_pos(mapview['width'], 0);
@@ -216,26 +207,6 @@ function render_viewrect()
     path.push([point.map_x, point.map_y]);
     point = base_canvas_to_map_pos(0, mapview['height']);
     path.push([point.map_x, point.map_y]);
-
-  } else {
-
-    var w = $(window).width();
-    var h = $(window).height();
-
-    var ptile = webgl_canvas_pos_to_tile(w / 6, h / 6);
-    if (ptile == null) return;
-    path.push([ptile.x, ptile.y]);
-    var ptile = webgl_canvas_pos_to_tile(5 * w / 6, h / 6);
-    if (ptile == null) return;
-    path.push([ptile.x, ptile.y]);
-    var ptile = webgl_canvas_pos_to_tile(5 * w / 6, h - height_offset);
-    if (ptile == null) return;
-    path.push([ptile.x, ptile.y]);
-    var ptile = webgl_canvas_pos_to_tile(w / 6, h - height_offset);
-    if (ptile == null) return;
-    path.push([ptile.x, ptile.y]);
-
-  }
 
   var viewrect_canvas = document.getElementById('overview_viewrect');
   if (viewrect_canvas == null) return;
@@ -262,23 +233,6 @@ function render_viewrect()
     viewrect_ctx.translate(-2 * map.xsize, 0);
     add_closed_path(viewrect_ctx, path);
     viewrect_ctx.restore();
-  }
-
-  if (topo_has_flag(TF_WRAPY)) {
-    viewrect_ctx.translate(0, map.ysize);
-    add_closed_path(viewrect_ctx, path);
-    viewrect_ctx.translate(0, -2 * map.ysize);
-    add_closed_path(viewrect_ctx, path);
-    if (topo_has_flag(TF_WRAPX)) {
-      viewrect_ctx.translate(-map.xsize, 0);
-      add_closed_path(viewrect_ctx, path);
-      viewrect_ctx.translate(0, 2 * map.ysize);
-      add_closed_path(viewrect_ctx, path);
-      viewrect_ctx.translate(2 * map.xsize, 0);
-      add_closed_path(viewrect_ctx, path);
-      viewrect_ctx.translate(0, -2 * map.ysize);
-      add_closed_path(viewrect_ctx, path);
-    }
   }
 
   viewrect_ctx.stroke();
@@ -336,7 +290,7 @@ function generate_palette() {
     } else {
       var pcolor = nations[pplayer['nation']]['color'];
       if (pcolor != null) {
-        palette[palette_color_offset+(player_id % player_count)] = color_rbg_to_list(pcolor);
+        palette[palette_color_offset+(player_id % player_count)] = color_rgb_to_list(pcolor);
       } else {
         palette[palette_color_offset+(player_id % player_count)] = [0,0,0];
       }
@@ -404,7 +358,6 @@ function overview_clicked (x, y)
   var ptile = map_pos_to_tile(x1, y1);
   if (ptile != null) {
     //reposition events save the position to return to with shift-spacebar
-    save_map_return_position(ptile);
     center_tile_mapcanvas(ptile);
   }
 

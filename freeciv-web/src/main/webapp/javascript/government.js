@@ -329,9 +329,9 @@ function show_climate_dialog(rtype)
 {
   var title = "Climate Report";
   var message = "<br>";
-  var warm_toler = (game_info['warminglevel']*100)/server_settings['globalwarming_percent']['val'];
+  var warm_toler = Math.round((game_info['warminglevel']*100)/server_settings['globalwarming_percent']['val']);
   var warm_accum = game_info['globalwarming'] + warm_toler;
-  var cold_toler = (game_info['coolinglevel']*100)/server_settings['nuclearwinter_percent']['val'];
+  var cold_toler = Math.round((game_info['coolinglevel']*100)/server_settings['nuclearwinter_percent']['val']);
   var cold_accum = game_info['nuclearwinter'] + cold_toler;
 
   message += "<span title='IF global warming occurs, the impact strength on the surface tiles of the planet.\n0% = none.\n100% = normal.\n101-10000 = elevated.'>" 
