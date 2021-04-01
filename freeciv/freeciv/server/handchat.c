@@ -91,7 +91,8 @@ static void form_chat_flag(struct connection *pconn, char *buffer, size_t len)
     buffer[0] = '\0';
     //fc_snprintf(buffer, len, "​"); //zero-width space to avoid compiler error
   } else if (!pplayer || pconn->observer
-      || strcmp(player_name(pplayer), ANON_PLAYER_NAME) == 0) {
+      || strcmp(player_name(pplayer), ANON_PLAYER_NAME) == 0
+      || nation_of_player(pplayer) == NULL) {
     buffer[0] = '\0';
     //fc_snprintf(buffer, len, "​"); //zero-width space to avoid compiler error
   } else {
