@@ -155,11 +155,15 @@ w: return to map: close tab/window/pop-up
 space: de-select units, clear GOTO paths, exit drag-select
 shift-space: re-focus to previous map position
 ctrl-alt-space: paste smartlink to tile/unit under cursor
-ctrl-B: color-fill national territores
+ctrl-B: highlight borders with flags
+shift-B: toggle national colors on minimap: primary,secondary,tertiary,diplomatic state
+alt-shift-B: animate borders for visibility assistance
+alt-B: toggle between tri-color and bi-color borders
 shift-C: select all same type units on (c)ontinent
 ctrl-C:  city labels on/off
 ctrl-shift-C: cycle city info display mode on map
 ctrl-alt-D: disconnect (disconnected viewing mode)
+alt-shift-F: focus lock: center on active unit
 ctrl-G: map grid on/off
 ctrl-alt-shift-I: change style of the letter capital 'I'
 ctrl-L:  show airlift counter on cities
