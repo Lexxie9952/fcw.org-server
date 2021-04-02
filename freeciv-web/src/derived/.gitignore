@@ -10,6 +10,7 @@ webapp/man/*
 !README.md
 !.gitignore
 !webapp/images/flags
+!webapp/images/flags/*
 !webapp/man/ag7.bak.html
 !webapp/man/mp2-brava7.bak.html
 !webapp/man/mp2-caravel6.bak.html
