@@ -127,13 +127,20 @@ var highlight_our_names = "yellow";
 /* This option is currently set by the client - not by the user. */
 var update_city_text_in_refresh_tile = true;
 
+var draw_dashed_borders = false;
+var draw_tertiary_colors = false;
+var draw_thick_borders = false;
+var draw_moving_borders = false;
+var draw_border_flags = false;
+var minimap_color = 1;   // draw minimap in primary,secondary, or tertiary colors
+
 var draw_city_outlines = true;
 var draw_city_output = false;
 var draw_city_airlift_counter = false;
 var draw_highlighted_pollution = false;
 var draw_city_mood = false;
 var draw_map_grid = false;
-var draw_stacked_unit_mode = 0;
+var draw_stacked_unit_mode = 3;   // default to best mode: ring+small
   const dsum_BASIC = 0;  // normal large + for stacked unit sprite
   const dsum_RING  = 1;  // small + near hpbar for stacked unit sprite
   const dsum_SMALL = 2;  // ring around national shield for stacked unit sprite
@@ -193,7 +200,8 @@ function init_options_dialog()
 
   if (!is_pbem()) {
     var existing_timeout = game_info['timeout'];
-    if (existing_timeout == 0) $("#timeout_info").html("(0 = no timeout)");
+    if (existing_timeout == 0) $("#timeout_info").html("<i> (none)</i>");
+    else $("#timeout_info").html(" seconds");
     $("#timeout_setting").val(existing_timeout);
   } else {
     $("#timeout_setting_div").hide();
@@ -329,11 +337,35 @@ function init_options_dialog()
      scroll_narrow_x = this.checked;
      simpleStorage.set('xScroll', scroll_narrow_x); 
    });
-    // FILL BORDERS 
-    $('#fill_borders').prop('checked', fill_national_border);
+    // BORDER FLAGS
+    $('#fill_borders').prop('checked', draw_border_flags);
     $('#fill_borders').change(function() {
-      fill_national_border = this.checked;
-      //simpleStorage.set('fill_borders', fill_national_border); 
+      draw_border_flags = this.checked;
+      simpleStorage.set('borderFlags', draw_border_flags); 
+    });
+    // TRICOLORE BORDERS 
+    $('#tricolor_borders').prop('checked', draw_tertiary_colors);
+    $('#tricolor_borders').change(function() {
+      draw_tertiary_colors = this.checked;
+      simpleStorage.set('tricolore', draw_tertiary_colors); 
+    });
+    // THICK BORDERS
+    $('#thick_borders').prop('checked', draw_thick_borders);
+    $('#thick_borders').change(function() {
+      draw_thick_borders = this.checked;
+      simpleStorage.set('thickBorders', draw_thick_borders); 
+    });
+    // CLASSIC DASHED BORDERS (override) 
+    $('#dashed_borders').prop('checked', draw_dashed_borders);
+    $('#dashed_borders').change(function() {
+      draw_dashed_borders = this.checked;
+      simpleStorage.set('dashedBorders', draw_dashed_borders); 
+    });
+    // MOVING BORDERS 
+    $('#moving_borders').prop('checked', draw_moving_borders);
+    $('#moving_borders').change(function() {
+      draw_moving_borders = this.checked;
+      simpleStorage.set('movingBorders', draw_moving_borders); 
     });
     // SHOW EMPIRE TAB 
     $('#show_empire').prop('checked', show_empire_tab);
@@ -386,18 +418,19 @@ function init_options_dialog()
    //----------------------------------------------------------------^^USER OPTIONS^^
    $('#graphic_theme').change();
 
+  $("#title_setting_div").hide();
+
   if (is_longturn()) {
     $("#update_model_button").hide();
     $("#switch_renderer_button").hide();
     $("#renderer_help").hide();
     $("#save_button").hide();
-    $("#timeout_setting_div").hide();
-    $("#title_setting_div").hide();
     $("#surrender_button").hide();
   }
 
   if (is_supercow())     
     $("#save_button").show();
+    $("#timeout_setting_div").show(); // doesn't do anything yet, but one day we can change metamessage here.
 }
 
 function change_graphic_theme()

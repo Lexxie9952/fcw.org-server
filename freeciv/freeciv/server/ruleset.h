@@ -89,6 +89,8 @@ char *get_parser_buffer(void);
 #define RS_DEFAULT_CULTURE_VIC_LEAD      300
 #define RS_DEFAULT_CULTURE_MIGRATION_PML 50
 
+/* Changes to these two values must also change
+   const of same names in extras.js for FCW */
 #define RS_DEFAULT_EXTRA_APPEARANCE      15
 #define RS_DEFAULT_EXTRA_DISAPPEARANCE   15
 

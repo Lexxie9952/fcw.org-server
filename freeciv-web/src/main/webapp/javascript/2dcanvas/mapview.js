@@ -17,6 +17,8 @@
 
 ***********************************************************************/
 
+var border_anim = 0;
+const border_anim_delay = 750;  // frames
 var mapview_canvas_ctx = null;
 var mapview_canvas = null;
 var buffer_canvas_ctx = null;
@@ -614,8 +616,8 @@ function mapview_put_tile_label(pcanvas, tile, canvas_x, canvas_y) {
 
 /**************************************************************************
   Renders the national border lines onto the canvas.
-**************************************************************************/
-function mapview_put_border_line(pcanvas, dir, color, canvas_x, canvas_y) {
+**************************************************************************
+function mapview_put_border_line(pcanvas, dir, color, color2, color3, canvas_x, canvas_y) {
   var x = canvas_x + 47;
   var y = canvas_y + 3;
   pcanvas.strokeStyle = color;
@@ -636,11 +638,130 @@ function mapview_put_border_line(pcanvas, dir, color, canvas_x, canvas_y) {
   }
   pcanvas.closePath();
   pcanvas.stroke();
-
 }
+*/
 
 /**************************************************************************
   Renders the national border lines onto the canvas.
+**************************************************************************/
+function mapview_put_border_line(pcanvas, dir, color, color2, color3, canvas_x, canvas_y) {
+  var x = canvas_x + 47;
+  var y = canvas_y + 3;
+
+  const ddb = draw_dashed_borders;
+  const dtc = draw_tertiary_colors;
+  const dtb = draw_thick_borders;
+
+  mapview_canvas_ctx.lineWidth = dtb ? 3 : 2;
+  mapview_canvas_ctx.lineCap = 'butt';
+  pcanvas.beginPath();
+
+  if (ddb) {
+    mapview_canvas_ctx.setLineDash([4,4]);
+    switch (minimap_color) {
+      case 2: pcanvas.strokeStyle = color2; break;
+      case 3: pcanvas.strokeStyle = color3; break;
+      default: pcanvas.strokeStyle = color;
+    }
+  }
+  else {
+    mapview_canvas_ctx.setLineDash([]);
+    pcanvas.strokeStyle = dtc ? color3 : color;
+  }
+
+  if (draw_moving_borders) {
+    border_anim ++;
+    mapview_canvas_ctx.lineDashOffset = Math.trunc(border_anim/border_anim_delay);
+    if (border_anim>24*border_anim_delay)
+      border_anim=0;
+  }
+  
+  switch (dir) {
+    case DIR8_NORTH:
+      //primary
+      pcanvas.moveTo(x, y - 2, x + (tileset_tile_width / 2));
+      pcanvas.lineTo(x + (tileset_tile_width / 2),  y + (tileset_tile_height / 2) - 2);
+      pcanvas.stroke();
+      if (ddb) break;
+      //secondary
+      pcanvas.strokeStyle = color2;
+      mapview_canvas_ctx.setLineDash([6,6]);
+      pcanvas.moveTo(x, y - 2, x + (tileset_tile_width / 2));
+      pcanvas.lineTo(x + (tileset_tile_width / 2),  y + (tileset_tile_height / 2) - 2);
+      pcanvas.stroke();
+      if (!dtc) break;
+      //tertiary
+      pcanvas.strokeStyle = color;
+      mapview_canvas_ctx.setLineDash([6,18]);
+      pcanvas.moveTo(x, y - 2, x + (tileset_tile_width / 2));
+      pcanvas.lineTo(x + (tileset_tile_width / 2),  y + (tileset_tile_height / 2) - 2);
+      pcanvas.stroke();
+      break;
+    case DIR8_EAST:
+      //primary
+      pcanvas.moveTo(x - 3, y + tileset_tile_height - 3);
+      pcanvas.lineTo(x + (tileset_tile_width / 2) - 3,  y + (tileset_tile_height / 2) - 3);
+      pcanvas.stroke();
+      if (ddb) break;
+      //secondary
+      pcanvas.strokeStyle = color2;
+      mapview_canvas_ctx.setLineDash([6,6]);
+      pcanvas.moveTo(x - 3, y + tileset_tile_height - 3);
+      pcanvas.lineTo(x + (tileset_tile_width / 2) - 3,  y + (tileset_tile_height / 2) - 3);
+      pcanvas.stroke();
+      if (!dtc) break;
+      //tertiary
+      pcanvas.strokeStyle = color;
+      mapview_canvas_ctx.setLineDash([6,18]);
+      pcanvas.moveTo(x - 3, y + tileset_tile_height - 3);
+      pcanvas.lineTo(x + (tileset_tile_width / 2) - 3,  y + (tileset_tile_height / 2) - 3);
+      pcanvas.stroke();
+      break;
+    case DIR8_SOUTH:
+      //primary
+      pcanvas.moveTo(x - (tileset_tile_width / 2) + 3, y + (tileset_tile_height / 2) - 3);
+      pcanvas.lineTo(x + 3,  y + tileset_tile_height - 3);
+      pcanvas.stroke();
+      if (ddb) break;
+      //secondary
+      pcanvas.strokeStyle = color2;
+      mapview_canvas_ctx.setLineDash([6,6]);
+      pcanvas.moveTo(x - (tileset_tile_width / 2) + 3, y + (tileset_tile_height / 2) - 3);
+      pcanvas.lineTo(x + 3,  y + tileset_tile_height - 3);
+      pcanvas.stroke();
+      if (!dtc) break;
+      //tertiary
+      pcanvas.strokeStyle = color;
+      mapview_canvas_ctx.setLineDash([6,18]);
+      pcanvas.moveTo(x - (tileset_tile_width / 2) + 3, y + (tileset_tile_height / 2) - 3);
+      pcanvas.lineTo(x + 3,  y + tileset_tile_height - 3);
+      pcanvas.stroke();
+      break;
+    case DIR8_WEST:
+      //primary
+      pcanvas.moveTo(x - (tileset_tile_width / 2) + 3, y + (tileset_tile_height / 2) - 3);
+      pcanvas.lineTo(x + 3,  y - 3);
+      pcanvas.stroke();
+      if (ddb) break;
+      //secondary
+      pcanvas.strokeStyle = color2;
+      mapview_canvas_ctx.setLineDash([6,6]);
+      pcanvas.moveTo(x - (tileset_tile_width / 2) + 3, y + (tileset_tile_height / 2) - 3);
+      pcanvas.lineTo(x + 3,  y - 3);
+      pcanvas.stroke();
+      if (!dtc) break;
+      //tertiary
+      pcanvas.strokeStyle = color;
+      mapview_canvas_ctx.setLineDash([6,18]);
+      pcanvas.moveTo(x - (tileset_tile_width / 2) + 3, y + (tileset_tile_height / 2) - 3);
+      pcanvas.lineTo(x + 3,  y - 3);
+      pcanvas.stroke();
+      break;
+  }
+}
+
+/**************************************************************************
+  Fills the national territoy colors on the canvas.
 **************************************************************************/
 function mapview_territory_fill(pcanvas, color, canvas_x, canvas_y) {
   var x = canvas_x + 47;
@@ -648,15 +769,6 @@ function mapview_territory_fill(pcanvas, color, canvas_x, canvas_y) {
 
   pcanvas.beginPath();
   pcanvas.fillStyle = color;
-/*
-  pcanvas.moveTo(x, y - 2, x + (tileset_tile_width / 2));
-  pcanvas.lineTo(x + (tileset_tile_width / 2),  y + (tileset_tile_height / 2) - 2);
-  //pcanvas.moveTo(x - 3, y + tileset_tile_height - 3);
-  pcanvas.lineTo(x + (tileset_tile_width / 2) - 3,  y + (tileset_tile_height / 2) - 3);
-  //pcanvas.moveTo(x - (tileset_tile_width / 2) + 3, y + (tileset_tile_height / 2) - 3);
-  pcanvas.lineTo(x + 3,  y + tileset_tile_height - 3);
-  //pcanvas.moveTo(x - (tileset_tile_width / 2) + 3, y + (tileset_tile_height / 2) - 3);
-  pcanvas.lineTo(x + 3,  y - 3);*/
 
   pcanvas.moveTo(x,  y + (tileset_tile_height / 2));
   pcanvas.lineTo(x - (tileset_tile_width / 2),  y);

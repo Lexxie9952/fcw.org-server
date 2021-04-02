@@ -1053,7 +1053,7 @@ function show_observer_tech_dialog()
     }
   }
   $("#technologies").html(msg);
-  $("#technologies").css("color", "black");
+  $("#technologies").css("color", "#dcb");
 }
 
 /**************************************************************************

@@ -3095,20 +3095,32 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'B':
-      if (ctrl) {   //CTRL-B solid fill national borders
+      if (ctrl && !alt && !shift) {          // CTRL-B draw border flags
         the_event.stopPropagation();
-        fill_national_border = !fill_national_border;
-      }
-    else if (current_focus.length==1 &&   // check if single focused unit can found or join city
-    (utype_can_do_action(unit_type(current_focus[0]),ACTION_JOIN_CITY)
-    || utype_can_do_action(unit_type(current_focus[0]),ACTION_FOUND_CITY))) {
-
-        request_unit_build_city();
-    } else {   // otherwise hover over city while hitting B sends instant-buy command to it
+        draw_border_flags = !draw_border_flags;
+        simpleStorage.set('borderFlags', draw_border_flags); 
+      } else if (alt && !shift && !ctrl) {   // ALT-B tricolore mode
+        the_event.stopPropagation();
+        draw_tertiary_colors = !draw_tertiary_colors;
+        simpleStorage.set('tricolore', draw_tertiary_colors); 
+      } else if (alt && shift && !ctrl) {    // ALT-SHIFT-B moving borders
+        the_event.stopPropagation();
+        draw_moving_borders = !draw_moving_borders;
+        simpleStorage.set('movingBorders', draw_moving_borders); 
+      } else if (shift && !alt && !ctrl) {    // SHIFT-B show nations in their 1/2/3 colors
+        minimap_color ++;
+        if (minimap_color >= 4) { minimap_color = 0; }
+        palette = generate_palette();
+        force_redraw_overview();
+      } else if (current_focus.length==1 &&   // check if single focused unit can found or join city
+                 (utype_can_do_action(unit_type(current_focus[0]),ACTION_JOIN_CITY)
+                 || utype_can_do_action(unit_type(current_focus[0]),ACTION_FOUND_CITY))) {
+          request_unit_build_city();
+      } else {   // otherwise hover over city while hitting B sends instant-buy command to it
         var ptile = canvas_pos_to_tile(mouse_x, mouse_y); // get tile
         var pcity = tile_city(ptile); // check if it's a city
         if (pcity!=null) request_city_id_buy(pcity['id']); // send buy order
-    }
+      }
     break;
 
     case 'C':
@@ -3138,8 +3150,12 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'E':
-      if (shift) {
+      if (shift && !ctrl && !alt) {
         key_unit_airbase();
+      }
+      if (ctrl && shift) {
+        // show/hide the dev/debug messages sent from server to supercow users
+        $(".e_log_error").toggle();
       }
     break;
 

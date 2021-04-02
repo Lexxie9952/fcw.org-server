@@ -222,12 +222,12 @@ function update_player_info_pregame_real()
       var nation_text = "";
       if (player['nation'] in nations) {
         nation_text = " - " + nations[player['nation']]['adjective'];
-        var flag_html = $("<canvas id='pregame_nation_flags_" + id + "' width='30' height='20' class='pregame_flags'></canvas>");
+        var flag_html = $("<canvas id='pregame_nation_flags_" + id + "' width='45' height='30' class='pregame_flags'></canvas>");
         $("#pregame_plr_"+id).prepend(flag_html);
         var flag_canvas = document.getElementById('pregame_nation_flags_' + id);
         if (flag_canvas == null) continue;
         var flag_canvas_ctx = flag_canvas.getContext("2d");
-        var tag = "f." + nations[player['nation']]['graphic_str'];
+        var tag = "f." + nations[player['nation']]['graphic_str']+"-large";
         if (sprites[tag] != null && flag_canvas_ctx != null) {
           flag_canvas_ctx.drawImage(sprites[tag], 0, 0);
         }

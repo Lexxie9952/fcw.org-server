@@ -61,7 +61,7 @@ function update_nation_screen()
   console.log("Tiny:   "+tiny_screen);
   console.log("Scrollx:"+scroll_narrow_x);*/
 
-  var header_titles = ["Flag", "Color", "Player Name", "Nation", "Attitude", "Score", "AI/Human", "Alive", "Diplomatic state", "Embassy", "Shared Vision", "Team", "State&nbsp;"];
+  var header_titles = ["Flag", "Colors", "Player Name", "Nation", "Attitude", "Score", "AI/Human", "Alive", "Diplomatic state", "Embassy", "Shared Vision", "Team", "State&nbsp;"];
   if (redux_screen || tiny_screen)
     header_titles = ["Flag", " ", "Name", "Nation", "Mood", "Score", "Type", "Alive", "Relation", "Embassy", "Vision", "Team", "State&nbsp;"];
 
@@ -96,17 +96,20 @@ function update_nation_screen()
     if (!observer && client.conn.playing != null && player_id == client.conn.playing['playerno']) plr_class = "nation_row_self";
     if (!pplayer['is_alive']) plr_class = "nation_row_dead";
     else if (!observer && diplstates[player_id] != null) {
-      if (diplstates[player_id] == DS_WAR) plr_class = "nation_row_war";
+      if      (diplstates[player_id] == DS_WAR) plr_class = "nation_row_war";
       else if (diplstates[player_id] == DS_ALLIANCE) plr_class = "nation_row_alliance";
       else if (diplstates[player_id] == DS_CEASEFIRE) plr_class = "nation_row_ceasefire";
       else if (diplstates[player_id] == DS_ARMISTICE) plr_class = "nation_row_armistice";
       else if (diplstates[player_id] == DS_PEACE) plr_class = "nation_row_peace";
+      else plr_class = "nation_row_none";
     }
 
     nation_list_html += "<tr data-plrid='" + player_id + "' class='" + plr_class
 	   + "'><td>" + flag_html + "</td>";
-    nation_list_html += "<td><div style='background-color: " + nations[pplayer['nation']]['color']
-           + "; margin: 4px; width: 20px; height: 20px;'>"
+    nation_list_html += "<td><div style='background-color: " + nations[pplayer['nation']]['color'] +"; "
+           + "color: "+nations[pplayer['nation']]['color2']
+           + "; border-style: solid; border-color: "+nations[pplayer['nation']]['color3']
+           + "; margin: 4px; width: 20px; height: 20px;'>&#x25cf;"
            + "</div></td>";
 
     var gov_modifier = get_gov_modifier(player_id,false);

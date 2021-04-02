@@ -19,7 +19,9 @@
 
 var extras = {};
 
-var EXTRA_NONE = -1;
+const EXTRA_NONE = -1;
+const RS_DEFAULT_EXTRA_DISAPPEARANCE = 15;
+const RS_DEFAULT_EXTRA_APPEARANCE = 15;
 
 // see handle_ruleset_extra, where EXTRA_* variables are defines dynamically.
 

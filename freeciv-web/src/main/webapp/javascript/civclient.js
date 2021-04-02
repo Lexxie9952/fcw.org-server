@@ -207,7 +207,7 @@ function civclient_init()
 
   draw_stacked_unit_mode = simpleStorage.get('stackmode');
   if (draw_stacked_unit_mode == null) 
-    draw_stacked_unit_mode = dsum_BASIC;  // Default case
+    draw_stacked_unit_mode = 3;  // Default case
   
   draw_city_output = simpleStorage.get('drawTiles');
   if (draw_city_output == null) 
@@ -252,7 +252,26 @@ function civclient_init()
   if (show_unit_movepct) {
     hp_bar_offset = -5;
   } else hp_bar_offset = 0;
-  
+
+  draw_border_flags = simpleStorage.get('borderFlags');
+  if (draw_border_flags == null) 
+    draw_border_flags = false;  // Default case
+
+  draw_tertiary_colors = simpleStorage.get('tricolore');
+  if (draw_tertiary_colors == null) 
+    draw_tertiary_colors = false;  // Default case
+
+  draw_thick_borders = simpleStorage.get('thickBorders');
+  if (draw_thick_borders == null) 
+    draw_thick_borders = false;  // Default case
+
+  draw_dashed_borders = simpleStorage.get('dashedBorders');
+  if (draw_dashed_borders == null) 
+    draw_dashed_borders = false;  // Default case
+
+  draw_moving_borders = simpleStorage.get('movingBorders');
+  if (draw_moving_borders == null) 
+    draw_moving_borders = false;  // Default case
   // -------------------------------------------------------------------------------- 
   
   /* Initialze audio.js music player */
