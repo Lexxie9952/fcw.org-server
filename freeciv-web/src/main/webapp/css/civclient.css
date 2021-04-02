@@ -132,7 +132,8 @@ button {
 }
 
 .main_menu_buttons {
-  padding:10px
+  padding: 1px;
+  margin: 0px;
 }
 
 #freeciv_manual {  
@@ -603,7 +604,7 @@ input[type='number'] {
 }
 
 .setting_button {
-  width: 210px;
+/*  width: 140px; */
 }
 
 /* makes a button appear as a tab */
@@ -662,7 +663,7 @@ input[type='number'] {
 }
 
 .alternate-row-color tr:not(.ui-selected):nth-child(even) {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.015);
 }
 
 
@@ -691,6 +692,10 @@ input[type='number'] {
 .nation_row_dead {
   color: #9e9e9e;
 }
+.nation_row_none {
+  color: #d8d8d8;
+}
+
 
 #city_disband_options {
   padding: 10px;
@@ -1097,9 +1102,11 @@ input[type='number'] {
   text-align: right;
 }
 
-.inteldlg_tabs { 
-  margin: 0.5em 0em; 
-} 
+.inteldlg_tabs {
+  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;
+  margin: 0.5em 0em;
+  color: #dbd5d0;
+}
 
 .inteldlg_tabs > ul {
   max-height: 400px;
@@ -1113,6 +1120,11 @@ input[type='number'] {
   }
 }
 
+#intel_tabs {
+  background: url("/images/bg-dark.jpg") repeat scroll 0 0 ;
+  color: #dbd5d0;
+}
+
 #intel_tabs-technology ul {
   list-style-type: none;
   position: relative;
@@ -1120,11 +1132,11 @@ input[type='number'] {
 
 li.tech-them {
   font-weight: bold;
-  color: #001057;
+  color: #4061f7;
 }
 
 li.tech-me_only {
-  color: #6f3333;
+  color: #da5d5d;
   font-style: italic;
 }
 
@@ -1612,6 +1624,12 @@ li.tech-me_only::before {
 .e_bad_command {
   color: #aba5a5;
 }
+/* Prevent dev/debug messages from text-walling GMs. CTRL-E toggles in-game. */
+.e_log_error {
+  display: none;
+  font-size: 70%;
+  color: #F82;
+}
 
 /* Font Control over various game elements 
 *******************************************************************/
@@ -1764,3 +1782,102 @@ li.tech-me_only::before {
 body {
   font-family: Arial;
 }
+
+/* CSS Created by CSS CHECKBOX */
+/**********************************/
+/**** www.CSScheckbox.com *********/
+/*general styles for all CSS Checkboxes*/
+label {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  }
+  
+  input[type=checkbox].css-checkbox {
+      position: absolute; 
+      overflow: hidden; 
+      clip: rect(0 0 0 0); 
+      height:1px; 
+      width:1px; 
+      margin:-1px; 
+      padding:0;
+      border:0;
+  }
+  
+  input[type=checkbox].css-checkbox + label.css-label {
+    padding-left:20px;
+    height:15px; 
+    display:inline-block;
+    line-height:15px;
+    background-repeat:no-repeat;
+    background-position: 0 0;
+   /* font-size:15px; */
+    vertical-align:middle;
+    cursor:pointer;
+  }
+  
+  input[type=checkbox].css-checkbox:checked + label.css-label {
+    background-position: 0 -15px;
+  }
+  
+  .css-label{
+    background-image:url(/images/dark-check-green.png);
+  }
+  
+  .dark-check-cyan{background-image:url(/images/dark-check-cyan.png);}
+  .dark-check-green{background-image:url(/images/dark-check-green.png);}
+  .dark-check-orange{background-image:url(/images/dark-check-orange.png);}
+  .dark-check-red{background-image:url(/images/dark-check-red.png);}
+  .dark-check-white{background-image:url(/images/dark-check-white.png);}
+  .dark-check-blue{background-image:url(/images/dark-check-blue.png);}
+  
+  input[type=checkbox].css-checkbox.med + label.css-label.med {
+    padding-left:22px;
+      height:17px; 
+    display:inline-block;
+    line-height:17px;
+    background-repeat:no-repeat;
+    background-position: 0 0;
+   /* font-size:15px; */
+    vertical-align:middle;
+      cursor:pointer;
+  }
+  
+  input[type=checkbox].css-checkbox.med:checked + label.css-label.med {
+  
+      background-position: 0 -17px;
+  }
+  input[type=checkbox].css-checkbox.sme + label.css-label.sme {
+    padding-left:22px;
+      height:16px; 
+    display:inline-block;
+    line-height:16px;
+    background-repeat:no-repeat;
+    background-position: 0 0;
+  /*  font-size:15px; */
+    vertical-align:middle;
+      cursor:pointer;
+  }
+  
+  input[type=checkbox].css-checkbox.sme:checked + label.css-label.sme{
+  
+      background-position: 0 -16px;
+  }
+  input[type=checkbox].css-checkbox.lrg + label.css-label.lrg {
+    padding-left:22px;
+      height:20px; 
+    display:inline-block;
+    line-height:20px;
+    background-repeat:no-repeat;
+    background-position: 0 0;
+   /* font-size:15px; */
+    vertical-align:middle;
+      cursor:pointer;
+  }
+  
+  input[type=checkbox].css-checkbox.lrg:checked + label.css-label.lrg{
+      background-position: 0 -20px;
+  }  
