@@ -18,7 +18,7 @@ printf "\nRe-generating manuals\n"
    cd src/derived/webapp/man
    for r in ${RULESETS[@]}; do
       echo "Generating help manual for *********************************************** $r"    
-       ${TOPDIR}/freeciv/freeciv/tools/freeciv-manual -r $r
+       ${HOME}/freeciv/bin/freeciv-manual -r $r
    done
 
 printf "\n\n****** REMINDER: ************************************************************\n"
