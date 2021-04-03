@@ -61,6 +61,7 @@ priv_headers = [
 foreach hdr : pub_headers
   if c_compiler.has_header(hdr)
     pub_conf_data.set('FREECIV_HAVE_' + hdr.underscorify().to_upper(), 1)
+    priv_conf_data.set('HAVE_' + hdr.underscorify().to_upper(), 1)
   endif
 endforeach
 
@@ -86,7 +87,8 @@ common_inc = include_directories('dependencies/lua-5.3/src',
   'common/aicore')
 
 server_inc = [common_inc, include_directories('server', 'server/advisors',
-              'server/scripting', 'server/generator', 'ai', 'ai/classic')]
+              'server/scripting', 'server/generator', 'server/savegame',
+              'ai', 'ai/classic')]
 
 client_inc = [common_inc, include_directories('client', 'client/include',
               'client/luascript', 'client/agents')]
@@ -375,6 +377,10 @@ server_lib = static_library('fc_server',
   'server/generator/mapgen_utils.c',
   'server/generator/startpos.c',
   'server/generator/temperature_map.c',
+  'server/savegame/savecompat.c',
+  'server/savegame/savegame2.c',
+  'server/savegame/savegame3.c',
+  'server/savegame/savemain.c',
   'server/scripting/api_fcdb_auth.c',
   'server/scripting/api_fcdb_base.c',
   'server/scripting/api_server_base.c',
@@ -412,10 +418,6 @@ server_lib = static_library('fc_server',
   'server/rssanity.c',
   'server/ruleset.c',
   'server/sanitycheck.c',
-  'server/savecompat.c',
-  'server/savegame2.c',
-  'server/savegame3.c',
-  'server/savegame.c',
   'server/score.c',
   'server/sernet.c',
   'server/settings.c',
@@ -437,7 +439,8 @@ executable('freeciv-server',
   'server/civserver.c',
   include_directories: server_inc,
   link_with: [server_lib, common_lib, ais],
-  dependencies: [c_compiler.find_library('m')]
+  dependencies: [c_compiler.find_library('m')],
+  install: true
   )
 
 client_common = static_library('fc_client_common',
@@ -492,7 +495,7 @@ client_common = static_library('fc_client_common',
                  c_compiler.find_library('libSDL2_mixer')]
   )
 
-tool_lib = static_library('libfc_toolutil',
+tool_lib = static_library('fc_toolutil',
   'tools/ruleutil/comments.c',
   'tools/ruleutil/rulesave.c',
   'tools/shared/tools_fc_interface.c',
@@ -503,7 +506,8 @@ executable('freeciv-ruleup',
   'tools/ruleup.c',
   link_with: [common_lib, server_lib, tool_lib, ais],
   include_directories: tool_inc,
-  dependencies: [c_compiler.find_library('m')]
+  dependencies: [c_compiler.find_library('m')],
+  install: true
   )
 
 executable('freeciv-manual',
@@ -512,5 +516,30 @@ executable('freeciv-manual',
   link_with: [common_lib, server_lib, tool_lib, ais],
   include_directories: [tool_inc,
                         include_directories('client', 'client/include')],
-  dependencies: [c_compiler.find_library('m')]
+  dependencies: [c_compiler.find_library('m')],
+  install: true
+  )
+
+install_data(
+  'data/default/default.lua',
+  'data/default/nationlist.ruleset',
+  'data/default/ai_effects.ruleset',
+  install_dir : join_paths(get_option('datadir'), 'freeciv/default')
+  )
+
+install_data(
+  'data/civ2civ3/buildings.ruleset',
+  'data/civ2civ3/cities.ruleset',
+  'data/civ2civ3/effects.ruleset',
+  'data/civ2civ3/game.ruleset',
+  'data/civ2civ3/governments.ruleset',
+  'data/civ2civ3/nations.ruleset',
+  'data/civ2civ3/parser.lua',
+  'data/civ2civ3/README.civ2civ3',
+  'data/civ2civ3/script.lua',
+  'data/civ2civ3/styles.ruleset',
+  'data/civ2civ3/techs.ruleset',
+  'data/civ2civ3/terrain.ruleset',
+  'data/civ2civ3/units.ruleset',
+  install_dir : join_paths(get_option('datadir'), 'freeciv/civ2civ3')
   )
