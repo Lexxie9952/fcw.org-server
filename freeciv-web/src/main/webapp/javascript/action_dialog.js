@@ -647,7 +647,6 @@ function popup_action_selection(actor_unit, action_probabilities,
       buttons: buttons });
 
   $(id).dialog('open');
-  action_selection_in_progress_for = actor_unit['id'];
   is_more_user_input_needed = false;
   $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
   dialog_register(id, actor_unit['id'], true);
