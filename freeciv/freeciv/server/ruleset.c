@@ -194,7 +194,7 @@ static void send_ruleset_team_names(struct conn_list *dest);
 static bool load_ruleset_veteran(struct section_file *file,
                                  const char *path,
                                  struct veteran_system **vsystem, char *err,
-                                 size_t err_len);
+                                 size_t err_len, bool compat);
 
 char *script_buffer = NULL;
 char *parser_buffer = NULL;
@@ -1624,7 +1624,7 @@ static bool load_unit_names(struct section_file *file,
 static bool load_ruleset_veteran(struct section_file *file,
                                  const char *path,
                                  struct veteran_system **vsystem, char *err,
-                                 size_t err_len)
+                                 size_t err_len, bool compat)
 {
   const char **vlist_name;
   int *vlist_power, *vlist_raise, *vlist_wraise, *vlist_move;
@@ -1644,7 +1644,11 @@ static bool load_ruleset_veteran(struct section_file *file,
   vlist_power = secfile_lookup_int_vec(file, &count_power,
                                       "%s.veteran_power_fact", path);
   vlist_raise = secfile_lookup_int_vec(file, &count_raise,
-                                       "%s.veteran_raise_chance", path);
+                                       "%s.veteran_base_raise_chance", path);
+  if (vlist_raise == NULL && compat) {
+    vlist_raise = secfile_lookup_int_vec(file, &count_raise,
+                                         "%s.veteran_raise_chance", path);
+  }
   vlist_wraise = secfile_lookup_int_vec(file, &count_wraise,
                                         "%s.veteran_work_raise_chance",
                                         path);
@@ -1683,7 +1687,7 @@ static bool load_ruleset_veteran(struct section_file *file,
       /* Some sanity checks. */
       rs_sanity_veteran(path, "veteran_power_fact", i,
                         (vlist_power[i] < 0), vlist_power[i] = 0);
-      rs_sanity_veteran(path, "veteran_raise_chance", i,
+      rs_sanity_veteran(path, "veteran_base_raise_chance", i,
                         (vlist_raise[i] < 0), vlist_raise[i] = 0);
       rs_sanity_veteran(path, "veteran_work_raise_chance", i,
                         (vlist_wraise[i] < 0), vlist_wraise[i] = 0);
@@ -1702,7 +1706,7 @@ static bool load_ruleset_veteran(struct section_file *file,
         rs_sanity_veteran(path, "veteran_power_fact", i,
                           (vlist_power[i] < vlist_power[i - 1]),
                           vlist_power[i] = vlist_power[i - 1]);
-        rs_sanity_veteran(path, "veteran_raise_chance", i,
+        rs_sanity_veteran(path, "veteran_base_raise_chance", i,
                           (vlist_raise[i] != 0), vlist_raise[i] = 0);
         rs_sanity_veteran(path, "veteran_work_raise_chance", i,
                           (vlist_wraise[i] != 0), vlist_wraise[i] = 0);
@@ -1711,7 +1715,7 @@ static bool load_ruleset_veteran(struct section_file *file,
         rs_sanity_veteran(path, "veteran_power_fact", i,
                           (vlist_power[i] < vlist_power[i - 1]),
                           vlist_power[i] = vlist_power[i - 1]);
-        rs_sanity_veteran(path, "veteran_raise_chance", i,
+        rs_sanity_veteran(path, "veteran_base_raise_chance", i,
                           (vlist_raise[i] > 100), vlist_raise[i] = 100);
         rs_sanity_veteran(path, "veteran_work_raise_chance", i,
                           (vlist_wraise[i] > 100), vlist_wraise[i] = 100);
@@ -1758,7 +1762,8 @@ static bool load_ruleset_units(struct section_file *file,
   bool ok = TRUE;
 
   if (!load_ruleset_veteran(file, "veteran_system", &game.veteran, msg,
-                            sizeof(msg)) || game.veteran == NULL) {
+                            sizeof(msg), compat->compat_mode)
+      || game.veteran == NULL) {
     ruleset_error(LOG_ERROR, "Error loading the default veteran system: %s",
                   msg);
     ok = FALSE;
@@ -1867,6 +1872,12 @@ static bool load_ruleset_units(struct section_file *file,
         ok = FALSE;
         break;
       }
+      if (u->require_advance == A_NEVER) {
+        ruleset_error(LOG_ERROR, "%s lacks valid tech_req.",
+                      rule_name_get(&u->name));
+        ok = FALSE;
+        break;
+      }
       if (NULL != section_entry_by_name(psection, "gov_req")) {
         char tmp[200] = "\0";
         fc_strlcat(tmp, section_name(psection), sizeof(tmp));
@@ -1881,7 +1892,7 @@ static bool load_ruleset_units(struct section_file *file,
       }
 
       if (!load_ruleset_veteran(file, sec_name, &u->veteran,
-                                msg, sizeof(msg))) {
+                                msg, sizeof(msg), compat->compat_mode)) {
         ruleset_error(LOG_ERROR, "Error loading the veteran system: %s",
                       msg);
         ok = FALSE;
@@ -6980,7 +6991,7 @@ static void send_ruleset_units(struct conn_list *dest)
         sz_strlcpy(packet.veteran_name[i], untranslated_name(&vlevel->name));
         packet.power_fact[i] = vlevel->power_fact;
         packet.move_bonus[i] = vlevel->move_bonus;
-        packet.raise_chance[i] = vlevel->raise_chance;
+        packet.base_raise_chance[i] = vlevel->base_raise_chance;
         packet.work_raise_chance[i] = vlevel->work_raise_chance;
       }
     }
@@ -7973,7 +7984,7 @@ static void send_ruleset_game(struct conn_list *dest)
     sz_strlcpy(misc_p.veteran_name[i], untranslated_name(&vlevel->name));
     misc_p.power_fact[i] = vlevel->power_fact;
     misc_p.move_bonus[i] = vlevel->move_bonus;
-    misc_p.raise_chance[i] = vlevel->raise_chance;
+    misc_p.base_raise_chance[i] = vlevel->base_raise_chance;
     misc_p.work_raise_chance[i] = vlevel->work_raise_chance;
   }
 
