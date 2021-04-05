@@ -105,7 +105,7 @@ function websocket_init()
 
   ws.onmessage = function (event) {
      if (typeof client_handle_packet !== 'undefined') {
-       client_handle_packet(jQuery.parseJSON(event.data));
+       client_handle_packet(JSON.parse(event.data));
        if (DEBUG_LOG_PACKETS) 
          console.log("*** INCOMING PACKET>>>>>"+event.data);
         
