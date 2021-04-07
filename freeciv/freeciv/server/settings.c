@@ -1208,8 +1208,8 @@ static bool fortifywaittime_callback(int value, struct connection *caller,
 static bool mapsize_callback(int value, struct connection *caller,
                              char *reject_msg, size_t reject_msg_len)
 {
-  if (value == MAPSIZE_XYSIZE && MAP_IS_ISOMETRIC &&
-      wld.map.ysize % 2 != 0) {
+  if (value == MAPSIZE_XYSIZE && MAP_IS_ISOMETRIC
+      && wld.map.ysize % 2 != 0) {
     /* An isometric map needs a even ysize. Is is calculated automatically
      * for all settings but mapsize=XYSIZE. */
     settings_snprintf(reject_msg, reject_msg_len,
@@ -1266,8 +1266,8 @@ static bool ysize_callback(int value, struct connection *caller,
                         "%d tiles."), wld.map.xsize, value, size,
                         MAP_MAX_SIZE * 1000);
     return FALSE;
-  } else if (wld.map.server.mapsize == MAPSIZE_XYSIZE && MAP_IS_ISOMETRIC &&
-             value % 2 != 0) {
+  } else if (wld.map.server.mapsize == MAPSIZE_XYSIZE && MAP_IS_ISOMETRIC
+             && value % 2 != 0) {
     /* An isometric map needs a even ysize. Is is calculated automatically
      * for all settings but mapsize=XYSIZE. */
     settings_snprintf(reject_msg, reject_msg_len,
@@ -1285,9 +1285,9 @@ static bool ysize_callback(int value, struct connection *caller,
 static bool topology_callback(unsigned value, struct connection *caller,
                               char *reject_msg, size_t reject_msg_len)
 {
-  if (wld.map.server.mapsize == MAPSIZE_XYSIZE &&
-      ((value & (TF_ISO)) != 0 || (value & (TF_HEX)) != 0) &&
-      wld.map.ysize % 2 != 0) {
+  if (wld.map.server.mapsize == MAPSIZE_XYSIZE
+      && ((value & (TF_ISO)) != 0 || (value & (TF_HEX)) != 0)
+      && wld.map.ysize % 2 != 0) {
     /* An isometric map needs a even ysize. Is is calculated automatically
      * for all settings but mapsize=XYSIZE. */
     settings_snprintf(reject_msg, reject_msg_len,
