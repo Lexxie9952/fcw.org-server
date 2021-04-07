@@ -156,7 +156,8 @@ AC_DEFUN([FC_QT5_LINKTEST],
 dnl If $1 is Qt 5's moc command then $2 else $3
 AC_DEFUN([FC_QT5_IF_QT5_MOC],
   AS_IF([test "`$1 -v 2<&1 | grep -o 'Qt [[[0-9]]]\+'`" = "Qt 5" ||
-         test "`$1 -v 2<&1 | grep -o 'moc [[[0-9]]]\+'`" = "moc 5" ],
+         test "`$1 -v 2<&1 | grep -o 'moc [[[0-9]]]\+'`" = "moc 5" ||
+         test "`$1 -v 2<&1 | grep -o 'moc-qt[[[0-9]]]\+'`" = "moc-qt5"],
     [$2], [$3]))
 
 dnl Set MOCCMD to $1 if it is the Qt 5 "moc". If not run $2 parameter.
@@ -181,14 +182,3 @@ AC_DEFUN([FC_QT5_VALIDATE_MOC], [
   AS_IF([test "x$MOCCMD" = "x"],
     [AC_MSG_RESULT([not found]); $2],
     [AC_MSG_RESULT([$MOCCMD]); $1])])
-
-dnl Put the multiarch tuple of the host architecture in $MULTIARCH_TUPLE if it
-dnl can be found.
-AC_DEFUN([FC_MULTIARCH_TUPLE], [
-  # GCC has the --print-multiarch option
-  AS_IF(test "x$GCC" = "xyes", [
-    # unless it is an old version
-    AS_IF(($CC --print-multiarch >/dev/null 2>/dev/null),
-      [MULTIARCH_TUPLE=`$CC --print-multiarch`],
-      [MULTIARCH_TUPLE="$host_cpu-$host_os"])],
-    [MULTIARCH_TUPLE="$host_cpu-$host_os"])])

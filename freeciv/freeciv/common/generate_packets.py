@@ -664,7 +664,7 @@ field_addr.name = \"%(name)s\";
                 extra=""
             if self.dataio_type=="memory":
                 return '''%(extra)s
-  if (!DIO_GET(%(dataio_type)s, &din, &field_addr, real_packet->%(name)s, %(array_size_u)s)){
+  if (!DIO_GET(%(dataio_type)s, &din, &field_addr, real_packet->%(name)s, %(array_size_u)s)) {
     RECEIVE_PACKET_FIELD_ERROR(%(name)s);
   }'''%self.get_dict(vars())
             elif self.is_array==2 and self.dataio_type!="string" \
@@ -908,8 +908,8 @@ static char *stats_%(name)s_names[] = {%(names)s};
     # the delta_stats_report() function.
     def get_report_part(self):
         return '''
-  if (stats_%(name)s_sent > 0 &&
-      stats_%(name)s_discarded != stats_%(name)s_sent) {
+  if (stats_%(name)s_sent > 0
+      && stats_%(name)s_discarded != stats_%(name)s_sent) {
     log_test(\"%(name)s %%d out of %%d got discarded\",
       stats_%(name)s_discarded, stats_%(name)s_sent);
     for (i = 0; i < %(bits)d; i++) {
@@ -2112,11 +2112,11 @@ bool client_handle_packet(enum packet_type type, const void *packet);
 #include "packets.h"
 
 #include "hand_gen.h"
-    
+
 bool server_handle_packet(enum packet_type type, const void *packet,
                           struct player *pplayer, struct connection *pconn)
 {
-  switch(type) {
+  switch (type) {
 ''')
         for p in packets:
             if "cs" not in p.dirs: continue
@@ -2169,10 +2169,10 @@ bool server_handle_packet(enum packet_type type, const void *packet,
 #include "packets.h"
 
 #include "packhand_gen.h"
-    
+
 bool client_handle_packet(enum packet_type type, const void *packet)
 {
-  switch(type) {
+  switch (type) {
 ''')
         for p in packets:
             if "sc" not in p.dirs: continue

@@ -429,7 +429,7 @@ static void cmd_reply_no_such_player(enum command_id cmd,
 				     const char *name,
 				     enum m_pre_result match_result)
 {
-  switch(match_result) {
+  switch (match_result) {
   case M_PRE_EMPTY:
     cmd_reply(cmd, caller, C_SYNTAX,
 	      _("Name is empty, so cannot be a player."));
@@ -464,7 +464,7 @@ static void cmd_reply_no_such_conn(enum command_id cmd,
 				   const char *name,
 				   enum m_pre_result match_result)
 {
-  switch(match_result) {
+  switch (match_result) {
   case M_PRE_EMPTY:
     cmd_reply(cmd, caller, C_SYNTAX,
 	      _("Name is empty, so cannot be a connection."));
@@ -1248,7 +1248,7 @@ static void write_init_script(char *script_filename)
 {
   char real_filename[1024], buf[256];
   FILE *script_file;
-  
+
   interpret_tilde(real_filename, sizeof(real_filename), script_filename);
 
   if (is_reg_file_for_access(real_filename, TRUE)
@@ -1273,8 +1273,8 @@ static void write_init_script(char *script_filename)
     fprintf(script_file, "%s\n",
             ai_level_cmd(game.info.skill_level));
 
-    if (*srvarg.metaserver_addr != '\0' &&
-	((0 != strcmp(srvarg.metaserver_addr, DEFAULT_META_SERVER_ADDR)))) {
+    if (*srvarg.metaserver_addr != '\0'
+        && ((0 != strcmp(srvarg.metaserver_addr, DEFAULT_META_SERVER_ADDR)))) {
       fprintf(script_file, "metaserver %s\n", meta_addr_port());
     }
 
@@ -2163,7 +2163,7 @@ static bool show_settings(struct connection *caller,
 
   {
     const char *heading = NULL;
-    switch(level) {
+    switch (level) {
       case SSET_NONE:
         break;
       case SSET_CHANGED:
@@ -2207,7 +2207,7 @@ static bool show_settings(struct connection *caller,
   /* Update changed and locked levels. */
   settings_list_update();
 
-  switch(level) {
+  switch (level) {
   case SSET_NONE:
     /* Show _one_ setting. */
     fc_assert_ret_val(0 <= cmd, FALSE);
@@ -4505,7 +4505,7 @@ static bool handle_stdin_input_real(struct connection *caller, char *str,
     }
   }
 
-  switch(cmd) {
+  switch (cmd) {
   case CMD_REMOVE:
     return remove_player_command(caller, arg, check);
   case CMD_SAVE:
@@ -6964,7 +6964,7 @@ static bool show_list(struct connection *caller, char *arg)
     ind = LIST_PLAYERS;
   }
 
-  switch(ind) {
+  switch (ind) {
   case LIST_COLORS:
     show_colors(caller);
     return TRUE;

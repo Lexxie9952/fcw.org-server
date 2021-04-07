@@ -416,8 +416,9 @@ static void activated_topic(GtkTreeView *view, gpointer data)
   
   gtk_tree_model_get(model, &it, 1, &pitem, -1);
 
-  if (help_history_pos >= 0 &&
-      g_ptr_array_index(help_history, help_history_pos) == (gpointer) pitem) {
+  if (help_history_pos >= 0
+      && g_ptr_array_index(help_history, help_history_pos)
+      == (gpointer) pitem) {
     return;
   }
 
@@ -1482,7 +1483,7 @@ static void help_update_dialog(const struct help_item *pitem)
   help_box_hide();
   gtk_text_buffer_set_text(help_text, "", -1);
 
-  switch(pitem->type) {
+  switch (pitem->type) {
   case HELP_IMPROVEMENT:
     help_update_improvement(pitem, top);
     break;

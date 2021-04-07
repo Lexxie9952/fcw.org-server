@@ -118,8 +118,8 @@ void free_treaties(void)
 struct Treaty *find_treaty(struct player *plr0, struct player *plr1)
 {
   treaty_list_iterate(treaties, ptreaty) {
-    if ((ptreaty->plr0 == plr0 && ptreaty->plr1 == plr1) ||
-	(ptreaty->plr0 == plr1 && ptreaty->plr1 == plr0)) {
+    if ((ptreaty->plr0 == plr0 && ptreaty->plr1 == plr1)
+        || (ptreaty->plr0 == plr1 && ptreaty->plr1 == plr0)) {
       return ptreaty;
     }
   } treaty_list_iterate_end;
@@ -195,7 +195,7 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
       struct city *pcity = NULL;
 
       if (pclause->from == pplayer || is_pact_clause(pclause->type)) {
-	switch(pclause->type) {
+	switch (pclause->type) {
 	case CLAUSE_EMBASSY:
           if (player_has_real_embassy(pother, pplayer)) {
             log_error("%s tried to give embassy to %s, who already "
