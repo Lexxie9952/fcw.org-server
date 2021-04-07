@@ -1514,21 +1514,6 @@ function city_name_dialog(suggested_name, unit_id) {
 
   blur_input_on_touchdevice();
   keyboard_input=false;
-
-  if (speech_recogntition_enabled) {
-    var name = alphanumeric_cleaner_city_names($("#city_name_req").val());
-    if (name.length == 0 || name.length >= MAX_LEN_CITYNAME - 6
-      || encodeURIComponent(name).length  >= MAX_LEN_CITYNAME - 6) {
-      swal("City name is invalid. Please try a different shorter name.");
-      setSwalTheme();
-      return;
-    }
-    var actor_unit = game_find_unit_by_number(unit_id);
-    request_unit_do_action(ACTION_FOUND_CITY,
-      unit_id, actor_unit['tile'], 0, encodeURIComponent(name));
-	$("#city_name_dialog").remove();
-    keyboard_input=true;
-  }
 }
 
 /**************************************************************************
