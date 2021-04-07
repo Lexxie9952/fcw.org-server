@@ -2155,7 +2155,7 @@ static bool make_island(int islemass, int starters,
     lastplaced = i;
     if (i * 10 > islemass) {
       balance = i - islemass;
-    } else{
+    } else {
       balance = 0;
     }
 
