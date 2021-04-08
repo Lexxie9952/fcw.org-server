@@ -5804,6 +5804,15 @@ static bool load_ruleset_game(struct section_file *file, bool act,
     game.control.version[0] = '\0';
   }
 
+  pref_text = secfile_lookup_str_default(file, "", "about.alt_dir");
+  if (pref_text[0] != '\0') {
+    /* Alt directory definition found. */
+    sz_strlcpy(game.control.alt_dir, pref_text);
+  } else {
+    /* No alt directory information */
+    game.control.alt_dir[0] = '\0';
+  }
+
   pref_text = secfile_lookup_str_default(file, "", "about.summary");
   if (pref_text[0] != '\0') {
     int len;
@@ -5912,6 +5921,14 @@ static bool load_ruleset_game(struct section_file *file, bool act,
                                            "civstyle.food_cost");
     game.info.civil_war_enabled
       = secfile_lookup_bool_default(file, TRUE, "civstyle.civil_war_enabled");
+
+    game.info.civil_war_bonus_celebrating
+      = secfile_lookup_int_default(file, RS_DEFAULT_CIVIL_WAR_CELEB,
+                                   "civstyle.civil_war_bonus_celebrating");
+
+    game.info.civil_war_bonus_unhappy
+      = secfile_lookup_int_default(file, RS_DEFAULT_CIVIL_WAR_UNHAPPY,
+                                   "civstyle.civil_war_bonus_unhappy");
 
     game.info.paradrop_to_transport
       = secfile_lookup_bool_default(file, FALSE,
@@ -8059,13 +8076,21 @@ static void notify_ruleset_fallback(const char *msg)
 /**********************************************************************//**
   Loads the rulesets.
 **************************************************************************/
-bool load_rulesets(const char *restore, bool compat_mode,
+bool load_rulesets(const char *restore, const char *alt, bool compat_mode,
                    rs_conversion_logger logger,
                    bool act, bool buffer_script)
 {
   if (load_rulesetdir(game.server.rulesetdir, compat_mode, logger,
                       act, buffer_script)) {
     return TRUE;
+  }
+
+  if (alt != NULL) {
+    if (load_rulesetdir(alt, compat_mode, logger, act, buffer_script)) {
+      sz_strlcpy(game.server.rulesetdir, alt);
+
+      return TRUE;
+    }
   }
 
   /* Fallback to previous one. */

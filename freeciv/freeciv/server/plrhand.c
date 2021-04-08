@@ -28,6 +28,7 @@
 
 /* common */
 #include "citizens.h"
+#include "culture.h"
 #include "diptreaty.h"
 #include "government.h"
 #include "map.h"
@@ -1272,11 +1273,13 @@ static void package_player_info(struct player *plr,
     packet->science         = plr->economic.science;
     packet->luxury          = plr->economic.luxury;
     packet->revolution_finishes = plr->revolution_finishes;
+    packet->culture         = player_culture(plr);
   } else {
     packet->tax             = 0;
     packet->science         = 0;
     packet->luxury          = 0;
     packet->revolution_finishes = -1;
+    packet->culture         = 0;
   }
 
   if (info_level >= INFO_FULL
@@ -1288,9 +1291,9 @@ static void package_player_info(struct player *plr,
   }
 
   if (info_level >= INFO_FULL) {
-    packet->culture         = plr->culture;
+    packet->history         = plr->history;
   } else {
-    packet->culture         = 0;
+    packet->history         = 0;
   }
 
 #ifdef FREECIV_WEB
@@ -2714,8 +2717,8 @@ bool civil_war_possible(struct player *pplayer, bool conquering_city,
   Communism 	50%
   Republic  	40%
   Democracy 	30%
-   * In addition each city in disorder adds 5%, each celebrating city
-  subtracts 5% from the probability of a civil war.
+   * In addition each city in disorder adds and each celebrating city
+  subtracts from the probability of a civil war.
    * If you have at least 1 turns notice of the impending loss of
   your capital, you can hike luxuries up to the hightest value,
   and by this reduce the chance of a civil war.  In fact by
@@ -2736,10 +2739,10 @@ bool civil_war_triggered(struct player *pplayer)
   /* Now compute the contribution of the cities. */
   city_list_iterate(pplayer->cities, pcity) {
     if (city_unhappy(pcity)) {
-      prob += 5;
+      prob += game.info.civil_war_bonus_unhappy;
     }
     if (city_celebrating(pcity)) {
-      prob -= 5;
+      prob += game.info.civil_war_bonus_celebrating;
     }
   } city_list_iterate_end;
 

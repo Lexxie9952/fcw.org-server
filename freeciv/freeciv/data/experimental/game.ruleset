@@ -31,6 +31,12 @@ name = _("Experimental ruleset")
 ; There`s no separate versioning in rulesets part of main freeciv distribution
 ;version = ""
 
+; This ruleset will be renamed as "goldkeep" in a future version.
+; Set information of the future name so that once someone tries to load
+; savegame saved with this version to that future version, ruleset is
+; found from the directory it`s in.
+alt_dir = "goldkeep"
+
 ; Summary of the ruleset
 ; /* TRANS: In the client, this is displayed alongside the contents of
 ;    README.experimental, which are not localized. */
@@ -130,6 +136,12 @@ tech_loss_allow_holes     = TRUE
 
 ; Whether civil war is possible at all
 civil_war_enabled        = TRUE
+
+; How many percents each celebrating city affects chance of civil war
+civil_war_bonus_celebrating = -5
+
+; How many percents each unhappy city affects chance of civil war
+civil_war_bonus_unhappy     = 5
 
 ; Comma separated list of things to happen, in addition to death
 ; of owner, when gameloss unit dies

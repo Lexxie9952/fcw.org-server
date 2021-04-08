@@ -580,6 +580,8 @@ PACKET_GAME_INFO = 16; sc, is-info
   BOOL year_0_hack;
   UINT16 fragment_count;
   BOOL civil_war_enabled;
+  SINT16 civil_war_bonus_celebrating;
+  SINT16 civil_war_bonus_unhappy;
   BOOL paradrop_to_transport;
 end
 
@@ -895,6 +897,7 @@ PACKET_PLAYER_INFO = 51; sc, is-info
   UINT8 ai_skill_level;
   BARBARIAN_TYPE barbarian_type;
   BV_PLAYER gives_shared_vision;
+  UINT16 history;
   UINT16 culture;
   SINT16 love[MAX_NUM_PLAYER_SLOTS];
 
@@ -1894,6 +1897,7 @@ PACKET_RULESET_CONTROL = 155; sc, lsend
 
   STRING name[MAX_LEN_NAME];
   STRING version[MAX_LEN_NAME];
+  STRING alt_dir[MAX_LEN_NAME];
   UINT16 desc_length;
 end
 
@@ -2268,7 +2272,6 @@ end
  * the client, so that the test in server/srv_main.c in
  * the function is_client_edit_packet() is easy to write. */
 PACKET_EDIT_GAME = 218; cs, handle-per-conn, handle-via-packet
-  YEAR year;
   BOOL scenario;
   STRING scenario_name[256];
   STRING scenario_authors[MAX_LEN_PACKET / 3];
