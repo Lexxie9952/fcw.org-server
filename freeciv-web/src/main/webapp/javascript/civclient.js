@@ -63,7 +63,7 @@ $(document).ready(function() {
 function civclient_init()
 {
   $.blockUI.defaults['css']['backgroundColor'] = "#222";
-  $.blockUI.defaults['css']['color'] = "#fff";
+  $.blockUI.defaults['css']['color'] = default_dialog_text_color;
   $.blockUI.defaults['theme'] = true;
 
   var action = $.getUrlVar('action');
@@ -133,21 +133,6 @@ function civclient_init()
   }
 
   motd_init();
-
-  /* NOT NEEDED IF INTERNET EXPLORER WAS DEPRECATED
-   * Interner Explorer doesn't support Array.indexOf
-   * http://soledadpenades.com/2007/05/17/arrayindexof-in-internet-explorer/
-   
-  if(!Array.indexOf){
-	    Array.prototype.indexOf = function(obj){
-	        for(var i=0; i<this.length; i++){
-	            if(this[i]==obj){
-	                return i;
-	            }
-	        }
-	        return -1;
-	    };
-  }  */
 
   $('#tabs').css("height", $(window).height());
   $("#tabs-map").height("auto");
@@ -322,6 +307,17 @@ function civclient_init()
     });    
   }
   setup_window_size();
+  update_turn_change_timer(); // styles it for mobile or large screen.
+  // civclient.css refuses to do it, so we do it here:
+  $(".ui-dialog-titlebar-minimize").css({"background":"none","background-image":"none","margin-top":"1px", "margin-left": "0px",
+    "margin-right":"2px", "border":"none", "height":"16px"});
+  $(".ui-dialog-titlebar-maximize").css({"background":"none","background-image":"none","margin-top":"1px", "margin-left": "0px",
+    "margin-right":"2px", "border":"none", "height":"16px"});
+  $(".ui-dialog-titlebar-restore").css({"background":"none","background-image":"none","margin-top":"1px", "margin-left": "0px",
+    "margin-right":"2px", "border":"none", "height":"16px"});
+  $(".ui-dialog-titlebar-close").css({"background":"none","background-image":"none","margin-top":"1px", "margin-left": "0px",
+    "margin-right":"2px", "border":"none", "height":"16px"}); // solo el diablo sabe por que!
+
 }
 
 /**************************************************************************
@@ -572,10 +568,17 @@ function update_turn_change_timer()
         + (last_turn_change_time - turn_change_elapsed) + ")");
   } else {
     turn_change_elapsed = 0;
-    if (is_small_screen() )
+    if (is_small_screen()) {
       $("#turn_done_button").button("option", "label", "Done");
-    else
-      $("#turn_done_button").button("option", "label", "Turn Done"); 
+      $("#turn_done_button").css("font-size", "90%");
+      $("#turn_done_button_div").css("padding-right","0px");
+      $("#turn_done_button").css("padding-left", "3px");
+      $("#turn_done_button").css("padding-right", "3px");
+    }
+    else {
+      $("#turn_done_button").button("option", "label", "Turn Done");
+      $("#turn_done_button_div").css("padding-right","1px");
+    } 
   }
 }
 
