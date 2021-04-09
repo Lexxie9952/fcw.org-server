@@ -22,6 +22,9 @@
   CURRENTLY: Three most frequent dissimilar colors are rank-sorted.
   FORMERLY: The most common color in the flag was chosen.
 ****************************************************************************/
+
+const default_dialog_text_color = "#ccc";
+
 function assign_nation_color(nation_id)
 {
   const RED=0,GRN=1,BLU=2,OPQ=3;
