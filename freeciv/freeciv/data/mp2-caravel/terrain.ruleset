@@ -806,6 +806,7 @@ Tundra regions are cold and barren, only fit for mediocre agriculture and trade.
 
 [terrain_arctic]
 name                 = _("Arctic")
+rule_name            = "Glacier"
 graphic              = "arctic"
 graphic_alt          = "-"
 identifier           = "a"

@@ -40,7 +40,8 @@ description = *mp2-caravel/README.txt*
 
 ; What capabilities ruleset provides for the scenarios.
 ; mimimum-default-sets - Default units, terrains, buildings, etc
-capabilities = "minimum-default-sets"
+;capabilities = "minimum-default-sets"
+capabilities = "std-terrains"
 
 [options]
 global_init_techs=""
