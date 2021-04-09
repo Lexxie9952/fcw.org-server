@@ -105,6 +105,7 @@ function init_overview()
 
   $("#game_overview_panel").parent().css("overflow", "hidden");
 
+
   palette = generate_palette();
 
   redraw_overview();
@@ -120,7 +121,10 @@ function init_overview()
   $('#overview_map').on('dragstart', function(event) { event.preventDefault(); });
   // globe icon symbol
   $("#game_overview_panel").parent().children().not("#game_overview_panel").children().get(0).innerHTML 
-    = "<div style='font-size:97%; vertical-align:top;'><i class='fa fa-globe' aria-hidden='true'></i></div>";}
+    = "<div style='font-size:97%; vertical-align:top; font-family:Arial; margin-bottom: 1px;'><i class='fa fa-globe' aria-hidden='true'></i></div>";
+  // adjust minimize/maximize icons
+  $("#game_overview_panel").siblings().children().next().css("margin-top", "-7px");
+}
 
 /****************************************************************************
   Redraw the overview map.
