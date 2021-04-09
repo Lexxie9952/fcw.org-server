@@ -385,8 +385,12 @@ static void hard_code_oblig_hard_reqs(void)
                           "All action enablers for %s must require that "
                           "the actor isn't transporting another unit.",
                           ACTION_PARADROP, ACTION_AIRLIFT, ACTION_NONE);
+ 
+  /* IMPORTANT: FCW can't have this as hard req. FCW allows capturing
+     units with cargo. Cargo if capturable is returned as booty via
+     TP to nearest capturer city.
+     Why this is a hard requirement: Assumed in the code.
 
-  /* Why this is a hard requirement: Assumed in the code. */
   oblig_hard_req_register(req_from_values(VUT_UNITSTATE, REQ_RANGE_LOCAL,
                                           FALSE, TRUE, TRUE,
                                           USP_TRANSPORTING),
@@ -394,6 +398,7 @@ static void hard_code_oblig_hard_reqs(void)
                           "All action enablers for %s must require that "
                           "the target isn't transporting another unit.",
                           ACTION_CAPTURE_UNITS, ACTION_NONE);
+     IMPORTANT ^^                                                       */               
 }
 
 /**********************************************************************//**
