@@ -85,6 +85,7 @@
 
 #include "unittools.h"
 
+char encoded_unit_emoji[128];
 
 /* Tools for controlling the client vision of every unit when a unit
  * moves + script effects. See unit_move(). You can access this data with
