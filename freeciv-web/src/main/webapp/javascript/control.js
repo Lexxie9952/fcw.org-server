@@ -6636,7 +6636,7 @@ function popup_fullscreen_enter_game_dialog()
   $("<div id='fullscreen_dialog'></div>").appendTo("div#game_page");
 
   if (!is_small_screen())
-    $(id).html("<b>Enter Full Screen when you interact with game.</b><br><br><b>ALT-S</b> toggles Full Screen.<br><b>ESC</b> exits full screen.");
+    $(id).html("<b>Enters Full Screen when you interact with game.</b><br><br><b>ALT-S</b> toggles Full Screen.<br><b>ESC</b> exits full screen.");
   else 
     $(id).html("<b>Play in Full Screen Mode.");
 
@@ -6682,7 +6682,41 @@ function openFullscreen() {
 ****************************************************************************/
 function setSwalTheme() {
   // Sweet alert recolor for dark-theme (it overwrites civclient.css settings)
-  $(".confirm").css("color", "#060");
-  $(".cancel").css("color", "#600");
+  $(".confirm").css("color", "#5C5");
+  $(".cancel").css("color", "#C55");
   $(".sweet-alert").children().css("color", "#d4cfb9");
+}
+
+// Takes an onclick() on the invisible pane over tabs, hides the pane temporarily
+// and clicks the tab under it, then displays the pane again. So we don't have
+// to see stupid url preview links when we hover over our game tabs.
+function clickMask(ev, pane) {
+  x1 = ev.clientX;
+  y1 = ev.clientY;
+  ev.stopPropagation();
+
+  if (x1==0 && y1==0) return;
+
+  if (x1 !== undefined && y1 !== undefined)
+  {
+    if (pane==1) {
+      //$("#ixtjkiller1").hide();
+      $("#ixtjkiller1").css("pointer-events", "none");
+      //console.log(x1+","+y1);
+      jQuery(document.elementFromPoint(x1, y1)).click();
+      $("#ixtjkiller1").css("pointer-events", "auto");
+      //$("#ixtjkiller1").show();
+    }
+    else {
+      //$("#ixtjkiller2").hide();
+      $("#ixtjkiller2").css("pointer-events", "none");
+      //console.log(x1+","+y1);
+      jQuery(document.elementFromPoint(x1, y1)).click();
+      $("#ixtjkiller2").css("pointer-events", "auto");
+      //$("#ixtjkiller2").show();
+    }
+  }
+  //setTimeout( $("#ixtjkiller").show(), 200);
+
+  // TO DO: if failing from undefined x>n times, it just hides it so it works from now on.
 }
