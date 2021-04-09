@@ -174,7 +174,7 @@
   <td>
     <div title="(ALT-SHIFT-F) Keeps selected unit centered on map" class="main_menu_buttons">
       <input type='checkbox' class="css-checkbox" name='focuslock_setting' id='focuslock_setting'>
-      <label for="focuslock_setting" name="focuslock_setting_lbl" class="css-label dark-check-green"><font color="#e8f8e0">Focus-lock active units</font></label>
+      <label for="focuslock_setting" name="focuslock_setting_lbl" class="css-label dark-check-green"><font color="#e8f8e0">Focus-lock active unit</font></label>
    </div>
  </td>
 </tr>
@@ -204,7 +204,7 @@
   <td>
     <div title="Fits more info but may need scrolling" class="main_menu_buttons">
         <input type='checkbox' class="css-checkbox" name='scroll_narrow_x' id='scroll_narrow_x'>
-        <label for="scroll_narrow_x" name="scroll_narrow_x_lbl" class="css-label dark-check-green"><font color="#e8f8e0">Mobile: wider table rows</font></label>
+        <label for="scroll_narrow_x" name="scroll_narrow_x_lbl" class="css-label dark-check-green"><font color="#e8f8e0">Mobile: wider rows</font></label>
     </div>
   </td>
 </tr>
