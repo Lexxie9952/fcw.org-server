@@ -558,30 +558,32 @@ function handle_info_text_message(packet)
   message = message.replace(/Occupied with<br>\n/g,"Occupied with ");
   message = message.replace(/Not<br>\n/g,"Not ");
 
-  message = message.replace(/<br>\n<b>Hostile/g, " <b style='color:DarkRed'>Hostile");
-  message = message.replace(/<br>\nHostile/g, " <b style='color:DarkRed'>Hostile</b>");
-  message = message.replace(/<b>Hostile/g, "<b style='color:DarkRed'>Hostile");
+  message = message.replace(/<br>\n<b>Hostile/g, " <b class='black_shadow' style='color:d85454'>Hostile");
+  message = message.replace(/<br>\nHostile/g, " <b class='black_shadow' style='color:d85454'>Hostile</b>");
+  message = message.replace(/<b>Hostile/g, "<b class='black_shadow' style='color:d85454'>Hostile");
   
-  message = message.replace(/<br>\n<b>Friendly/g, " <b style='color:DarkGreen'>Friendly");
-  message = message.replace(/<br>\nFriendly/g, " <b style='color:DarkGreen'>Friendly</b>");
-  message = message.replace(/<b>Friendly/g, "<b style='color:DarkGreen'>Friendly");
+  message = message.replace(/<br>\n<b>Friendly/g, " <b class='black_shadow' style='color:#1b1'>Friendly");
+  message = message.replace(/<br>\nFriendly/g, " <b class='black_shadow' style='color:#1b1'>Friendly</b>");
+  message = message.replace(/<b>Friendly/g, "<b class='black_shadow' style='color:#1b1'>Friendly");
   
-  message = message.replace(/<br>\n<b>Neutral/g, " <b style='color:#134'>Neutral");
-  message = message.replace(/<br>\nNeutral/g, " <b style='color:#134'>Neutral</b>");
-  message = message.replace(/<b>Neutral/g, "<b style='color:#134'>Neutral");
+  message = message.replace(/<br>\n<b>Neutral/g, " <b class='black_shadow' style='color:#40a4d6'>Neutral");
+  message = message.replace(/<br>\nNeutral/g, " <b class='black_shadow' style='color:#40a4d6'>Neutral</b>");
+  message = message.replace(/<b>Neutral/g, "<b class='black_shadow' style='color:#40a4d6'>Neutral");
   
-  message = message.replace(/<br>\n<b>Mysterious/g, " <b style='color:#304'>Mysterious");
-  message = message.replace(/<br>\nMysterious/g, " <b style='color:#304'Mysterious</b>");
-  message = message.replace(/<b>Mysterious/g, "<b style='color:#304'>Mysterious");
+  message = message.replace(/<br>\n<b>Mysterious/g, " <b class='black_shadow' style='color:#9072de'>Mysterious");
+  message = message.replace(/<br>\nMysterious/g, " <b class='black_shadow' style='color:#9072de'Mysterious</b>");
+  message = message.replace(/<b>Mysterious/g, "<b class='black_shadow' style='color:#9072de'>Mysterious");
 
-  message = message.replace(/<br>\n<b>Peaceful/g, " <b style='color:#043'>Peaceful");
-  message = message.replace(/<br>\nPeaceful/g, " <b style='color:#043'Peaceful</b>");
-  message = message.replace(/<b>Peaceful/g, "<b style='color:#043'>Peaceful");
+  message = message.replace(/<br>\n<b>Peaceful/g, " <b class='black_shadow' style='color:#0b8'>Peaceful");
+  message = message.replace(/<br>\nPeaceful/g, " <b class='black_shadow' style='color:#0b8'Peaceful</b>");
+  message = message.replace(/<b>Peaceful/g, "<b class='black_shadow' style='color:#0b8'>Peaceful");
 
+  // needed to prevent a match and replacement below for 1 turn cease-fire.
+  message = message.replace(/11 turn cease-fire/g, "11 turn <b class='black_shadow' style='color:#790'>Cease-fire</b>");
   // show warning colour for 1 turn left on cease-fire
-  message = message.replace(/1 turn cease-fire/g,   "<b style='color:#610'><u>1 turn</u> Cease-fire</b>");
+  message = message.replace(/1 turn cease-fire/g,   "<b class='black_shadow' style='color:#b50'><u>1 turn</u> Cease-fire</b>");
   // standard cease-fire
-  message = message.replace(/turn cease-fire/g, "turn <b style='color:#340'>Cease-fire</b>");
+  message = message.replace(/turn cease-fire/g, "turn <b class='black_shadow' style='color:#790'>Cease-fire</b>");
 
   message = message.replace(/<br>\nunit/g, " unit");
   message = message.replace("<br>\n   with"," &#11088; with");
