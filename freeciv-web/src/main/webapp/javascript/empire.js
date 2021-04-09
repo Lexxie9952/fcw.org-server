@@ -145,8 +145,13 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
   //$("#empire_static").css({"height":"100%", "width":"100%"})
 
   // Set up panel functions for National Units
-  var panel_html = "<input type='checkbox' id='show_hp' title='Show hit points' name='cbHP' value='false' onclick='toggle_empire_show_hitpoints();'>HP"
-                  + "<input type='checkbox' id='show_mp' title='Show movement points' name='cbMP' value='false' onclick='toggle_empire_show_movepoints();'>Moves";
+  
+  var panel_html = "<input id='show_hp' type='checkbox' class='css-checkbox' title='Show hit points' name='chHP' value='false' onclick='toggle_empire_show_hitpoints();'>"
+  + "<label for='show_hp' name='show_hp_lbl' class='css-label dark-check-red'>HP</label>&ensp;"
+  + "<input id='show_mp' type='checkbox' class='css-checkbox' title='Show movement points' name='chMP' value='false' onclick='toggle_empire_show_movepoints();'>"
+  + "<label for='show_mp' name='show_mp_lbl' class='css-label dark-check-green'>Moves</label>";
+  //var panel_html = "<input type='checkbox' id='show_hp' title='Show hit points' name='cbHP' value='false' onclick='toggle_empire_show_hitpoints();'>HP"
+  //                + "<input type='checkbox' id='show_mp' title='Show movement points' name='cbMP' value='false' onclick='toggle_empire_show_movepoints();'>Moves";
   panel_html += "&nbsp;&nbsp;<button id='button_sorthp' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_sort_hp();'"
               + "title='Sort units rows by Hitpoints' style='padding:5px; margin-bottom:2px;'>&#x2943HP</button>";
   panel_html += "<button id='button_sortmp' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_sort_mp();'"
@@ -154,10 +159,14 @@ function empire_unit_homecity_screen(wide_screen,narrow_screen,small_screen,
   panel_html += "<button id='button_sortvet' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_sort_vet();'"
   + "title='Sort unit rows by Vet level' style='padding:5px; margin-bottom:2px;'>&#x2943Vet</button>";
   panel_html += "&nbsp;&nbsp;&nbsp;&nbsp; show upkeep: &nbsp;"
-                  + "<input type='checkbox' id='show_food' title='Show food upkeep' name='cbFU' value='false' onclick='toggle_empire_show_upkeep(\"food\");'>Food"
-                  + "<input type='checkbox' id='show_gold' title='Show gold upkeep' name='cbGU' value='false' onclick='toggle_empire_show_upkeep(\"gold\");'>Gold"
-                  + "<input type='checkbox' id='show_shield' title='Show shield upkeep' name='cbSU' value='false' onclick='toggle_empire_show_upkeep(\"shields\");'>Shield"
-                  + "<input type='checkbox' id='show_free' title='Show units with no upkeep' name='cbFR' value='false' onclick='toggle_empire_show_upkeep(\"free\");'>Free";
+                  + "<input type='checkbox' class='css-checkbox' id='show_food' title='Show food upkeep' name='cbFU' value='false' onclick='toggle_empire_show_upkeep(\"food\");'>"
+                  + "<label for='show_food' name='show_food_lbl' class='css-label dark-check-green'>Food</label>&ensp;"
+                  + "<input type='checkbox' class='css-checkbox' id='show_gold' title='Show gold upkeep' name='cbGU' value='false' onclick='toggle_empire_show_upkeep(\"gold\");'>"
+                  + "<label for='show_gold' name='show_gold_lbl' class='css-label dark-check-orange'>Gold</label>&ensp;"
+                  + "<input type='checkbox' class='css-checkbox' id='show_shield' title='Show shield upkeep' name='cbSU' value='false' onclick='toggle_empire_show_upkeep(\"shields\");'>"
+                  + "<label for='show_shield' name='show_shield_lbl' class='css-label dark-check-red'>Shield</label>&ensp;";
+  panel_html += "<input type='checkbox' class='css-checkbox' id='show_free' title='Show units with no upkeep' name='cbFR' value='false' onclick='toggle_empire_show_upkeep(\"free\");'>"
+                  + "<label for='show_free' name='show_free_lbl' class='css-label dark-check-white'>Free</label>";
 
   $("#empire_mode_panel").html(panel_html);
   $("#show_hp").prop("checked", empire_show_hitpoints);
@@ -427,8 +436,12 @@ function empire_unitcity_screen(wide_screen,narrow_screen,small_screen,
   //$("#empire_static").css({"height":"100%", "width":"100%"})
 
   // Set up panel functions for National Units
-  var panel_html = "<input type='checkbox' id='show_hp' title='Show hit points' name='cbHP' value='false' onclick='toggle_empire_show_hitpoints();'>HP"
-                  + "<input type='checkbox' id='show_mp' title='Show movement points' name='cbMP' value='false' onclick='toggle_empire_show_movepoints();'>Moves";
+  var panel_html = "<input id='show_hp' type='checkbox' class='css-checkbox' title='Show hit points' name='chHP' value='false' onclick='toggle_empire_show_hitpoints();'>"
+                 + "<label for='show_hp' name='show_hp_lbl' class='css-label dark-check-red'>HP</label>&ensp;"
+                 + "<input id='show_mp' type='checkbox' class='css-checkbox' title='Show movement points' name='chMP' value='false' onclick='toggle_empire_show_movepoints();'>"
+                 + "<label for='show_mp' name='show_mp_lbl' class='css-label dark-check-green'>Moves</label>";
+  //var panel_html = "<input type='checkbox' id='show_hp' title='Show hit points' name='cbHP' value='false' onclick='toggle_empire_show_hitpoints();'>HP"
+  //               + "<input type='checkbox' id='show_mp' title='Show movement points' name='cbMP' value='false' onclick='toggle_empire_show_movepoints();'>Moves";
   panel_html += "&nbsp;&nbsp;<button id='button_sorthp' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_sort_hp();'"
               + "title='Sort units rows by Hitpoints' style='padding:5px; margin-bottom:2px;'>&#x2943HP</button>";
   panel_html += "<button id='button_sortmp' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_sort_mp();'"
@@ -711,11 +724,18 @@ function empire_econ_improvements_screen(wide_screen,narrow_screen,small_screen,
   // Set up panel controls for Building display
   var abs_chxbox = "Absent Buildings"; var pres_chxbox = "Present Buildings"; var wndr_chxbox = "Wonders only &nbsp;";
   if (small_screen) { abs_chxbox = "Absent"; pres_chxbox = "Present"; wndr_chxbox = "Wonders "; }
-  var panel_html = "<input type='checkbox' id='show_pb' title='Show present buildings' name='cbPB' value='true' onclick='toggle_empire_show_present_buildings();'>"+pres_chxbox
-      + "<input type='checkbox' id='show_ab' title='Show absent buildings' name='cbAB' value='false' onclick='toggle_empire_show_absent_buildings();'>"+abs_chxbox
-      + "<input type='checkbox' id='show_wonders' title='Show wonders instead of buildings' name='cbSW' value='false' onclick='toggle_empire_show_wonders_only();'>"+wndr_chxbox
-      + "<input type='button' style='font-size:90%; padding:2px;' value='+1%' onclick='emp_bldgs_mag_plus1("+mag_factor+");'> "
-      + "<input type='button' style='font-size:90%; padding:2px;' value='-1%' onclick='emp_bldgs_mag_less1("+mag_factor+");'>Zoom ";
+
+  var panel_html = "<input id='show_pb' type='checkbox' class='css-checkbox' title='Show present buildings' name='cbPB' value='true' onclick='toggle_empire_show_present_buildings();'>"
+  + "<label for='show_pb' name='show_pb_lbl' class='css-label dark-check-green'>"+pres_chxbox+"</label>&ensp;"
+  + "<input id='show_ab' type='checkbox' class='css-checkbox' title='Show absent buildings' name='cbAB' value='false' onclick='toggle_empire_show_absent_buildings();'>"
+  + "<label for='show_ab' name='show_ab_lbl' class='css-label dark-check-red'>"+abs_chxbox+"</label>&ensp;"
+  + "<input id='show_wonders' type='checkbox' class='css-checkbox' title='Show wonders instead of buildings' name='cbSW' value='false' onclick='toggle_empire_show_wonders_only();'>"
+  + "<label for='show_wonders' name='show_wonders_lbl' class='css-label dark-check-cyan'>"+wndr_chxbox+"</label>&ensp;"
+  //var panel_html = "<input type='checkbox' id='show_pb' title='Show present buildings' name='cbPB' value='true' onclick='toggle_empire_show_present_buildings();'>"+pres_chxbox
+  //  + "<input type='checkbox' id='show_ab' title='Show absent buildings' name='cbAB' value='false' onclick='toggle_empire_show_absent_buildings();'>"+abs_chxbox
+  //  + "<input type='checkbox' id='show_wonders' title='Show wonders instead of buildings' name='cbSW' value='false' onclick='toggle_empire_show_wonders_only();'>"+wndr_chxbox
+      + "<input class='tiny_button' type='button' style='font-size:90%; padding:2px;' value='+1%' onclick='emp_bldgs_mag_plus1("+mag_factor+");'> "
+      + "<input class='tiny_button' type='button' style='font-size:90%; padding:2px;' value='-1%' onclick='emp_bldgs_mag_less1("+mag_factor+");'>Zoom ";
       
   $("#empire_mode_panel").html(panel_html);
   $("#show_pb").prop("checked", empire_show_present_buildings);
@@ -914,8 +934,8 @@ function empire_econ_upkeep_screen(wide_screen,narrow_screen,small_screen,
   var magnification = "zoom:"+mag_factor+"; -moz-transform:"+mag_factor+";";
 
   // Set up panel controls for Building display
-  var panel_html = "<input type='button' style='font-size:90%; padding:2px;' value='+2%' onclick='emp_upkp_mag_plus2("+mag_factor+");'> "
-                 + "<input type='button' style='font-size:90%; padding:2px;' value='-2%' onclick='emp_upkp_mag_less2("+mag_factor+");'>Zoom ";
+  var panel_html = "<input class='tiny_button' type='button' style='font-size:90%; padding:2px;' value='+2%' onclick='emp_upkp_mag_plus2("+mag_factor+");'> "
+                 + "<input class='tiny_button' type='button' style='font-size:90%; padding:2px;' value='-2%' onclick='emp_upkp_mag_less2("+mag_factor+");'>Zoom ";
   $("#empire_mode_panel").html(panel_html);
 
   $('#empire_scroll').css({"height": $(window).height()-160, "overflow-y":"scroll", "overflow-x":"hidden" });
@@ -1783,9 +1803,13 @@ function empire_unittype_screen(wide_screen,narrow_screen,small_screen,
   if (small_screen) $("#empire_title").hide();
   else $("#empire_title").show();
 
+  var panel_html = "<input id='show_hp' type='checkbox' class='css-checkbox' title='Show hit points' name='chHP' value='false' onclick='toggle_empire_show_hitpoints();'>"
+  + "<label for='show_hp' name='show_hp_lbl' class='css-label dark-check-red'>HP</label>&ensp;"
+  + "<input id='show_mp' type='checkbox' class='css-checkbox' title='Show movement points' name='chMP' value='false' onclick='toggle_empire_show_movepoints();'>"
+  + "<label for='show_mp' name='show_mp_lbl' class='css-label dark-check-green'>Moves</label>";
   // Set up panel functions for National Units
-  var panel_html = "<input type='checkbox' id='show_hp' title='Show hit points' name='cbHP' value='false' onclick='toggle_empire_show_hitpoints();'>HP"
-                 + "<input type='checkbox' id='show_mp' title='Show movement points' name='cbMP' value='false' onclick='toggle_empire_show_movepoints();'>Moves";
+  //var panel_html = "<input type='checkbox' id='show_hp' title='Show hit points' name='cbHP' value='false' onclick='toggle_empire_show_hitpoints();'>HP"
+  //               + "<input type='checkbox' id='show_mp' title='Show movement points' name='cbMP' value='false' onclick='toggle_empire_show_movepoints();'>Moves";
   panel_html += "&nbsp;&nbsp;<button id='button_sorthp' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_sort_hp();'"
               + "title='Sort units rows by Hitpoints' style='padding:5px; margin-bottom:2px;'>&#x2943HP</button>";
   panel_html += "<button id='button_sortmp' type='button' class='button ui-button ui-corner-all ui-widget' onclick='empire_sort_mp();'"
