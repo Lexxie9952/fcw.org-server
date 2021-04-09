@@ -186,6 +186,16 @@ signal.connect("hut_frighten", "_deflua_hut_frighten_callback")
   c) The player must run either a democracy or a communist society.
 ]]--
 
+-- Informs that the tribe has run away seeing your plane
+function _deflua_hut_frighten_callback(unit, extra)
+  local owner = unit.owner
+  notify.event(owner, unit.tile, E.HUT_BARB,
+               _("Your overflight frightens the tribe;"
+                 .. " they scatter in terror."))
+  return true
+end
+signal.connect("hut_frighten", "_deflua_hut_frighten_callback")
+
 function _deflua_make_partisans_callback(city, loser, winner, reason)
   if reason ~= 'conquest' or city:inspire_partisans(loser) <= 0 then
     return
