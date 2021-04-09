@@ -26,7 +26,3 @@ printf "\nCopying to Tomcat webapp\n"
 printf "\n\n****** REMINDER: ************************************************************\n"
 printf "(1) ./vclean-rules.sh is required to fix custom .html files that were overwritten.\n"
 printf "(2) run ./build.sh to refresh and activate the new manuals.\n"
-=======
-printf "\n\n****** REMINDER: ************************************************************\n"
-printf "(1) ./vclean-rules.sh is required to fix custom .html files that were overwritten.\n"
-printf "(2) run ./build.sh to refresh and activate the new manuals.\n"
