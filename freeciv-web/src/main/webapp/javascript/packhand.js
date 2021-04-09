@@ -644,6 +644,11 @@ function handle_web_player_info_addition(packet)
   if (is_tech_tree_init && tech_dialog_active) update_tech_screen();
 
   assign_nation_color(players[packet['playerno']]['nation']);
+
+  // Savegame can be considered loaded after last player packet is received
+  // and color processing is completed for their national colors:
+  if (packet['playerno'] == getLength(players)-1)
+    $.unblockUI();
 }
 
 /* 100% complete */
@@ -1523,9 +1528,9 @@ function handle_wonders_report()
         wonders[w]++;                                 // increment the count
     }
     if (wonders[w] > 0 && improvements[w].genus==1)  { // 1 is the genus code for small wonder
-      var color_marker = "<span>";
+      var color_marker = "<span style='text-shadow: 1px 1px #000'>";
       if (!client_is_observer() && player_has_wonder(client.conn.playing.playerno,w)) {
-        color_marker = "<span style='color: rgb(0,0,192);'>";
+        color_marker = "<span style='color: rgb(128,192,255); text-shadow: 1px 1px #000'>";
       }
       appended_message += "<tr><td>" + color_marker + improvements[w].name+"</span></td><td><b>"+wonders[w] + "</b></td></tr>";
     }
@@ -1594,7 +1599,7 @@ function handle_begin_turn(packet)
 {
   if (!observing) {
     $("#turn_done_button").button("option", "disabled", false);
-    $("#turn_done_button").css({"background-color":"#ffff", "opacity":1, "color":"#000", "border-color": "#edd5"});
+    $("#turn_done_button").css({"background-color":"#000f", "opacity":1, "color":"#ddd", "border-color": "#edd5"});
     if (is_small_screen()) {
       $("#turn_done_button").button("option", "label", "Done");
     } else {
