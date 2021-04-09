@@ -662,6 +662,7 @@ function show_ruleset_description_full() {
 
   $(id).dialog({
                  title   : ruleset_control['name'],
+                 color: default_dialog_text_color,
                  buttons : {
                    Close : function () {
                      $(id).dialog('close');
@@ -671,6 +672,7 @@ function show_ruleset_description_full() {
                                                          "height"),
                  width   : "80%"
                });
+  $(id).css("color", default_dialog_text_color);        
 }
 
 /****************************************************************************
@@ -773,6 +775,7 @@ function pregame_settings()
   $(id).attr("title", "Game Settings");
   $(id).dialog({
       bgiframe: true,
+      color: default_dialog_text_color,
       modal: true,
       width: is_small_screen() ? "98%" : "60%",
             height: is_small_screen() ?  $(window).height() - 40 : $(window).height() - 250,
@@ -789,8 +792,8 @@ function pregame_settings()
   });
 
   $("#pregame_settings_tabs").tabs();
-  // This is a light panel. Override the css for dark panels.
-  $("#pregame_settings_tabs").children().css("color", "#000");
+  // This is a light panel. Override the css for dark panels. NOT ANYMORE
+  //$("#pregame_settings_tabs").children().css("color", "#000");
 
   if (game_info != null) {
     $("#aifill").val(game_info['aifill']);
@@ -902,6 +905,7 @@ function pregame_settings()
   }
 
   $(id).dialog('open');
+  $(id).css("color", default_dialog_text_color);        
 
   $('#aifill').change(function() {
     if (parseInt($('#aifill').val()) <= 12) {
