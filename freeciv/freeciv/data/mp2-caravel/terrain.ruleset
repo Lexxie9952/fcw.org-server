@@ -791,8 +791,8 @@ clean_fallout_time   = 3
 animal               = "[Polar Bear]"
 warmer_wetter_result = "Grassland"
 warmer_drier_result  = "Plains"
-cooler_wetter_result = "Arctic"
-cooler_drier_result  = "Arctic"
+cooler_wetter_result = "Glacier"
+cooler_drier_result  = "Glacier"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
 flags                = "Starter", "NoBarbs", "CanHaveRiver", "Low Land"
 property_cold        = 17
@@ -1418,7 +1418,7 @@ reqs           =
       "Terrain", "Grassland", "Local", FALSE,    FALSE
       "Terrain", "Tundra",    "Local", FALSE,    FALSE
       "Terrain", "Desert",    "Local", FALSE,    FALSE
-      "Terrain", "Arctic",    "Local", FALSE,    FALSE
+      "Terrain", "Glacier",    "Local", FALSE,    FALSE
       "Tech", "Warrior Code", "Player",TRUE,     FALSE
       "TerrainClass","Land",  "Local", TRUE,     FALSE
       "UnitFlag","CanHide",   "Local", TRUE,     FALSE
@@ -2349,7 +2349,7 @@ rmact_gfx_alt  = "-"
 appearance_chance       = 4500  ;+45%
 appearance_reqs = 
     { "type",    "name",     "range",   "present"
-      "Terrain", "Arctic",   "Local",    TRUE
+      "Terrain", "Glacier",   "Local",    TRUE
       "TerrainClass","Oceanic","Adjacent",TRUE
       "MinYear", "-4000",    "World",    TRUE
       "MinYear", "-3900",    "World",    FALSE
@@ -2437,7 +2437,7 @@ rmact_gfx_alt  = "-"
 ;appearance_chance       = 0    ;55% no longer appears because too many permutations for layered bonuses not working.
 ;appearance_reqs = 
 ;    { "type",    "name",     "range",   "present"
-;      "Terrain", "Arctic",   "Local",    TRUE
+;      "Terrain", "Glacier",   "Local",    TRUE
 ;      "TerrainClass","Oceanic","Adjacent",FALSE
 ;      "MinYear", "-4000",    "World",    TRUE
 ;      "MinYear", "-3900",    "World",    FALSE
