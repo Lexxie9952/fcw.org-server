@@ -26,8 +26,8 @@ var C_S_OVER = 3;       /* Connected with game over. */
 var civclient_state = C_S_INITIAL;
 
 var endgame_player_info = [];
-var height_offset = 52;
-var width_offset = 10;
+var height_offset = 43;
+var width_offset = 0;
 
 /**************************************************************************
  Sets the client state (initial, pre, running, over etc).
@@ -124,14 +124,14 @@ function setup_window_size ()
     $(".ui-tabs-anchor").css("padding", "7px");
     $("#freeciv_logo").hide();
     // Remove text from tabs: icons only:
-    $("#map_tab").children().html("&#x1F30E;");
-    $("#empire_tab").children().html("&#9878;&#65039;");
-    $("#civ_tab").children().html("&#x1F3DB;&#xFE0F;");
-    $("#tech_tab").children().html("&#129514;");
-    $("#players_tab").children().html("&#x1F3F3;&#xFE0F;&#x200D;&#x1F308;");
-    $("#cities_tab").children().html("&#127984;");
-    $("#opt_tab").children().html("&#9881;&#65039;");
-    $("#hel_tab").children().html("&#128216;");
+    $("#map_tab").children().html("<img style='float:left' src='/images/map_tab_icon_m.png'>");
+    $("#empire_tab").children().html("<img style='float:left' src='/images/empire_tab_icon.png'>");
+    $("#civ_tab").children().html("<img style='float:left' src='/images/gov_tab_icon.png'>");
+    $("#tech_tab").children().html("<img style='float:left' src='/images/tech_tab_icon_m.png'>");
+    $("#players_tab").children().html("<img style='float:left' src='/images/nation_tab_icon.png'>");
+    $("#cities_tab").children().html("<img style='float:left' src='/images/cities_tab_icon.png'>");
+    $("#opt_tab").children().html("<img style='float:left' src='/images/prefs_tab_icon.png'>");
+    $("#hel_tab").children().html("<img style='float:left' src='/images/help_tab_icon_m.png'>");
     $("#warcalc_tab").children().html("&#x1F3B2;")
     $("#button_national_units").html("&#9823;");
     $("#button_unit_homecity").html("&#x1F3E0;");
@@ -161,21 +161,21 @@ function setup_window_size ()
     $(".ui-dialog-titlebar").css({"font-size":"70%", "margin-left":"-3px"});
     $("#game_status_panel_bottom").css("font-size", "0.8em");
   } else {  // handle case where small window is resized to large again 
-    $("#map_tab").children().html("&#x1F30E; Map");
-    $("#empire_tab").children().html("&#9878;&#65039; Empire");
-    $("#civ_tab").children().html("&#x1F3DB;&#xFE0F; Gov.");
-    $("#tech_tab").children().html("&#129514; Tech");
-    $("#players_tab").children().html("&#x1F3F3;&#xFE0F;&#x200D;&#x1F308; Nations");
-    $("#cities_tab").children().html("&#127984; Cities");
-    $("#opt_tab").children().html("&#9881;&#65039; Prefs");
-    $("#hel_tab").children().html("&#128216; Help");
+    $("#map_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/map_tab_icon.png'> Map");
+    $("#empire_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/empire_tab_icon.png'> Empire");
+    $("#civ_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/gov_tab_icon.png'> Gov.");
+    $("#tech_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/tech_tab_icon.png'> Tech");
+    $("#players_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/nation_tab_icon.png'> Nations");
+    $("#cities_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/cities_tab_icon.png'> Cities");
+    $("#opt_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/prefs_tab_icon.png'> Prefs");
+    $("#hel_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/help_tab_icon.png'> Help");
   }
 
   if (overview_active) init_overview();
   if (unitpanel_active) init_game_unit_panel();
 
   // Because CSS file is ignoring this style, we do it here:
-  $(".ui-tabs-tab").css("border-color","#777");
+  $(".ui-tabs-tab").css("border-color","#404040");
 }
 
 function client_state()
