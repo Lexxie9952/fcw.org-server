@@ -1303,6 +1303,7 @@ function dialog_register(id) {
   }).bind('dialogclose', function(event, ui) { 
     remove_active_dialog(id);
   });
+  $(id).css("color", default_dialog_text_color);
 }
 /**************************************************************************
   Create a close button (for multiple cascading dialogs)
