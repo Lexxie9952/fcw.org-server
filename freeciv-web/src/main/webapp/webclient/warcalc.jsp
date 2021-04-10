@@ -60,23 +60,23 @@
                 </tr>
                 <tr>
                     <th id="wcamsg" class="wcttmsg" title='Your own clicked unit is assumed as attacker.&#013;&#013;Only Veteran bonus is auto-calculated'>Attacker</th>
-                    <td align="center"><input autocomplete="off" style="color:#ffd2c2; width:55%; text-align:center;" id="id_astr" name="astr" type="number" value=""></td>
-                    <td align="center"><input autocomplete="off" style="color:#e4ffe4; width:55%; text-align:center;" id="id_ahp" name="ahp" type="number" value=""></td>
-                    <td align="center"><input autocomplete="off" style="width:55%; text-align:center;" id="id_afp" name="afp" type="number" value="1"></td>
+                    <td align="center"><input autocomplete="off" class="warcalc_input" style="color:#ffd2c2; width:55%; text-align:center;" id="id_astr" name="astr" type="number" value=""></td>
+                    <td align="center"><input autocomplete="off" class="warcalc_input" style="color:#e4ffe4; width:55%; text-align:center;" id="id_ahp" name="ahp" type="number" value=""></td>
+                    <td align="center"><input autocomplete="off" class="warcalc_input" style="width:55%; text-align:center;" id="id_afp" name="afp" type="number" value="1"></td>
                 </tr>
                 
                 <tr>
                     <th id="wcdmsg" class="wcttmsg" title='Foreign clicked units are assumed as defender.&#013;&#013;Veteran, Terrain, and Fortify bonuses are included.&#013;&#013;Not included:&#013; Base, Unit-type bonus, City modifiers'>Defender</th>
-                    <td align="center"><input autocomplete="off" style="color:#ffd2c2; width:55%; text-align:center;" id="id_dstr" name="dstr" type="number" value=""></td>
-                    <td align="center"><input autocomplete="off" style="color:#e4ffe4; width:55%; text-align:center;" id="id_dhp" name="dhp" type="number" value=""></td>
-                    <td align="center"><input autocomplete="off" style="width:55%; text-align:center;" id="id_dfp" name="dfp" type="number" value="1"></td>
+                    <td align="center"><input autocomplete="off" class="warcalc_input" style="color:#ffd2c2; width:55%; text-align:center;" id="id_dstr" name="dstr" type="number" value=""></td>
+                    <td align="center"><input autocomplete="off" class="warcalc_input" style="color:#e4ffe4; width:55%; text-align:center;" id="id_dhp" name="dhp" type="number" value=""></td>
+                    <td align="center"><input autocomplete="off" class="warcalc_input" style="width:55%; text-align:center;" id="id_dfp" name="dfp" type="number" value="1"></td>
                 </tr>
             </tbody>
         </table>
 
         <p style="text-align:center;">
             <input class="button" type="button" value="calculate" onClick="warcalc_compute();">
-            <input class="button" type="button" value="swap" onClick="warcalc_swap_roles();">
+            <input class="button" type="button" value="swap" title="Swaps selected Attacker and Defender units" onClick="warcalc_swap_roles();">
         </p>
 
         <p id="att_win" style="text-align:center;">&nbsp;<br>&nbsp;<br></p>
