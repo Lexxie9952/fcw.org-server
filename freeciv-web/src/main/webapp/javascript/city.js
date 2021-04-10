@@ -371,7 +371,7 @@ function show_city_dialog(pcity)
     } else {
       city_dialog_title += "<div id='scp_show' style='font-size:95%;cursor:copy;' title='Specialist Control Pane' "
       +"onclick='toggle_specialist_control_pane();'"
-      +"><img class='lowered_gov' src='/images/specialistpane.png'></div>";
+      +"><img class='lowered_gov' style='border-radius:2px' src='/images/specialistpane.png'></div>";
     }
   } 
   city_dialog_title += "</div>";
