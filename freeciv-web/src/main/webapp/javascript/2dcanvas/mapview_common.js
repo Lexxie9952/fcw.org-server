@@ -651,7 +651,6 @@ function update_map_canvas_full()
     }
 
     last_redraw_time = new Date().getTime();
-
   }
 }
 
