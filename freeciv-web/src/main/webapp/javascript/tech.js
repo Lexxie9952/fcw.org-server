@@ -237,16 +237,12 @@ function update_tech_tree()
       sequence = sequence - (sequence-sequence%9);               // This creates a colour number from 0-8 out of our "seed"
      
       if (sequence == 8) tech_canvas_ctx.strokeStyle =      'rgba(55, 83, 204, 0.83)';       // egyptian blue
-//      if (sequence == 8) tech_canvas_ctx.strokeStyle =      'rgba(45, 73, 194, 0.83)';       // egyptian blue
       else if (sequence == 7) tech_canvas_ctx.strokeStyle = 'rgba(81, 146, 187, 0.8)';       // teal
-//      else if (sequence == 7) tech_canvas_ctx.strokeStyle = 'rgba(61, 136, 167, 0.8)';       // teal
-//      else if (sequence == 6) tech_canvas_ctx.strokeStyle = 'rgba(82, 76, 61, 0.88)';        // olive
       else if (sequence == 6) tech_canvas_ctx.strokeStyle = 'rgba(112, 106, 88, 0.88)';      // olive
       else if (sequence == 5) tech_canvas_ctx.strokeStyle = 'rgba(138, 36, 78, 0.8)';        // wine
       else if (sequence == 4) tech_canvas_ctx.strokeStyle = 'rgba(161, 227, 243, 0.8)';      // faded light-cyan-grey
-//      else if (sequence == 3) tech_canvas_ctx.strokeStyle = 'rgba(30, 80, 80, 0.8)';         // faded sea-grey
       else if (sequence == 3) tech_canvas_ctx.strokeStyle = 'rgba(60, 187, 146, 0.8)';       // faded sea-green
-      else if (sequence == 2) tech_canvas_ctx.strokeStyle = 'rgba(10, 10, 30, 0.8)';         // midnight
+      else if (sequence == 2) tech_canvas_ctx.strokeStyle = 'rgba(0, 00, 25, 0.9)';         // midnight
       else if (sequence == 1) tech_canvas_ctx.strokeStyle = 'rgba(223, 223, 223, 0.8)';      // dim white
       else tech_canvas_ctx.strokeStyle =                    'rgba(189, 91, 79, 0.85)';       // coral
 
@@ -270,6 +266,7 @@ function update_tech_tree()
 
   tech_canvas_ctx.lineWidth = 1;
   const KNOWN_TECH_FRAME = 'rgb(179,179,179)';
+  const KNOWN_TECH_FILL = 'rgb(224,224,224)';   // #eee
   const CUR_TECH_FRAME = 'rgb(0, 0, 0)';
   const FUTURE_TECH_FRAME = 'rgb(255, 255, 255)';
   const POSSIBLE_TECH_FRAME = 'rgb(71, 92, 55)';
@@ -287,7 +284,7 @@ function update_tech_tree()
     if (player_invention_state(client.conn.playing, ptech['id']) == TECH_KNOWN) {
 
       var tag = tileset_tech_graphic_tag(ptech);
-      tech_canvas_ctx.fillStyle = 'rgb(245, 244, 241)';
+      tech_canvas_ctx.fillStyle = KNOWN_TECH_FILL;
       tech_canvas_ctx.fillRect(x-2, y-2, tech_item_width, tech_item_height);
       tech_canvas_ctx.strokeStyle = KNOWN_TECH_FRAME;
       tech_canvas_ctx.strokeRect(x-2, y-2, tech_item_width, tech_item_height);
@@ -1053,7 +1050,7 @@ function show_observer_tech_dialog()
     }
   }
   $("#technologies").html(msg);
-  $("#technologies").css("color", "black");
+  $("#technologies").css("color", "#dcb");
 }
 
 /**************************************************************************

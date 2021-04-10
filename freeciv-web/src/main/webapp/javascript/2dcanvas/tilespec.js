@@ -24,13 +24,24 @@ var UO_sx = [], UO_sy = [];             // Shield graphic
 var UO_vx = [], UO_vy = []; // Vet badge graphic
 var UO_mx = [], UO_my = []; // Multi-unit graphic (stacked "+" icon)
 
-var fill_national_border = false; // option to draw solid territorial area
 var num_cardinal_tileset_dirs = 4;
-var cardinal_tileset_dirs = [DIR8_NORTH, DIR8_EAST, DIR8_SOUTH, DIR8_WEST];
 
+var cardinal_tileset_dirs = [DIR8_NORTH, DIR8_EAST, DIR8_SOUTH, DIR8_WEST];
+var DIR4_TO_DIR8 = [ DIR8_NORTH, DIR8_SOUTH, DIR8_EAST, DIR8_WEST];
 var NUM_CORNER_DIRS = 4;
 
-var DIR4_TO_DIR8 = [ DIR8_NORTH, DIR8_SOUTH, DIR8_EAST, DIR8_WEST];
+var border_flag_offsets = {
+  // Cardinal
+  1: {"x": 56, "y": 13},  // north
+  4: {"x": 56, "y": 28},  // east
+  3: {"x": 26, "y": 13},  // west
+  6: {"x": 26, "y": 28},  // south
+  // Corners
+  2: {"x": 66, "y": 20},  // northeast
+  0: {"x": 42, "y":  6},  // northwest
+  5: {"x": 16, "y": 20},  // southwest
+  7: {"x": 42, "y": 34},  // southeast
+}
 
 var current_select_sprite = 0;
 var max_select_sprite = 4;
@@ -267,15 +278,13 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
         
         sprite_array = sprite_array.concat(fill_terrain_sprite_layer(2, ptile, pterrain, tterrain_near));
   
-        if (fill_national_border) 
-          sprite_array = sprite_array.concat(get_border_line_sprites(ptile));
-
         sprite_array = sprite_array.concat(fill_irrigation_sprite_array(ptile, pcity));
       }
     break;
 
     case LAYER_ROADS:
       if (ptile != null) {
+        // Roads and rivers
         sprite_array = sprite_array.concat(fill_road_rail_sprite_array(ptile, pcity));
       }
     break;
@@ -285,10 +294,7 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
         // TEST: borders moved from last sub-layer of LAYER_SPECIAL1 to here:
         //  it was drawing on top of resources, and seemed better here:
         if (draw_map_grid) sprite_array = sprite_array.concat(get_grid_line_sprites(ptile));
-        if (!fill_national_border) 
           sprite_array = sprite_array.concat(get_border_line_sprites(ptile));
-
-        ////sprite_array = sprite_array.concat(fill_road_rail_sprite_array(ptile, pcity));
 
         var spec_sprite = get_tile_specials_sprite(ptile);
         if (spec_sprite != null) sprite_array.push(spec_sprite);
@@ -321,9 +327,9 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
           sprite_array.push({"key" :
                               tileset_extra_id_graphic_tag(EXTRA_FALLOUT)});
         }
-        // moved to first sub-layer above
-        //if (draw_map_grid) sprite_array = sprite_array.concat(get_grid_line_sprites(ptile)); 
-        //sprite_array = sprite_array.concat(get_border_line_sprites(ptile));
+        // (Optional) frontier-facing flags on borders
+        if (draw_border_flags) 
+          sprite_array = sprite_array.concat(get_frontier_flag_sprites(ptile));
       }
     break;
 
@@ -995,36 +1001,126 @@ function fill_goto_line_sprite_array(ptile)
 }
 
 /**********************************************************************
-...
+  Thus function puts flags on the frontier-facing edge of border tiles.
+***********************************************************************/
+function get_frontier_flag_sprites(ptile) 
+{
+  var result = [];
+
+  var border_dirs = {};  // which directions have a border on them
+  var drawn_dirs  = {};  // which directions will get a flag sprite
+
+  for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
+    var dir = cardinal_tileset_dirs[i];
+    var checktile = mapstep(ptile, dir);
+
+    if (checktile != null && checktile['owner'] != null
+        && ptile['owner'] != null
+        && ptile['owner'] != checktile['owner']
+        && ptile['owner'] != 255 /* 255 indicates the tile is not owned by anyone. */
+        && players[ptile['owner']] != null) {
+    
+          var pnation = nations[players[ptile['owner']]['nation']];
+          /* Former filling of all land with semi-transparent nation color
+              var bcolor = pnation['color'].replace(")", ",0.15)").replace("rgb", "rgba");
+              result.push({"key" : "territory", "offset_x" : 0, "offset_y" : 0, "color": bcolor}); */
+
+          border_dirs[dir] = true;   
+    }
+  }
+  // Welcome to the LOGIC TREE! Which flags to draw on which BORDERS. 
+  // Step One. Orthogonal cardinal borders collapse their two flags into one in their shared corner:
+  if (border_dirs[DIR8_NORTH]) {
+    // North and East borders
+    if (border_dirs[DIR8_EAST]) {
+      drawn_dirs[DIR8_NORTHEAST] = true;
+      drawn_dirs[DIR8_NORTH] = false;
+      drawn_dirs[DIR8_EAST] = false;
+    }
+    // North and West borders
+    if (border_dirs[DIR8_WEST]) {
+      drawn_dirs[DIR8_NORTHWEST] = true;
+      drawn_dirs[DIR8_NORTH] = false;
+      drawn_dirs[DIR8_WEST] = false;
+    }
+  }
+  if (border_dirs[DIR8_SOUTH]) {
+    // South and East borders
+    if (border_dirs[DIR8_EAST]) {
+      drawn_dirs[DIR8_SOUTHEAST] = true;
+      drawn_dirs[DIR8_SOUTH] = false;
+      drawn_dirs[DIR8_EAST] = false;
+    }
+    // South and West borders
+    if (border_dirs[DIR8_WEST]) {
+      drawn_dirs[DIR8_SOUTHWEST] = true;
+      drawn_dirs[DIR8_SOUTH] = false;
+      drawn_dirs[DIR8_WEST] = false;
+    }
+  }
+  // Step Two. Indicate the cardinal frontiers to be drawn unless they were flagged above to not be drawn.
+  // If any cardinal frontier === undefined, it was NOT flagged to prohibit being drawn.
+  if (border_dirs[DIR8_NORTH] && drawn_dirs[DIR8_NORTH] === undefined)
+    drawn_dirs[DIR8_NORTH] = true;
+  if (border_dirs[DIR8_EAST] && drawn_dirs[DIR8_EAST] === undefined)
+    drawn_dirs[DIR8_EAST] = true;
+  if (border_dirs[DIR8_WEST] && drawn_dirs[DIR8_WEST] === undefined)
+    drawn_dirs[DIR8_WEST] = true;
+  if (border_dirs[DIR8_SOUTH] && drawn_dirs[DIR8_SOUTH] === undefined)
+    drawn_dirs[DIR8_SOUTH] = true;
+
+  // Step Three. Collapse double corners into the shared cardinal between them:
+  if (drawn_dirs[DIR8_NORTHEAST] && drawn_dirs[DIR8_NORTHWEST]) {
+    drawn_dirs[DIR8_NORTHEAST] = false;
+    drawn_dirs[DIR8_NORTHWEST] = false;
+    drawn_dirs[DIR8_NORTH] = true;      
+  }
+  else if (drawn_dirs[DIR8_NORTHEAST] && drawn_dirs[DIR8_SOUTHEAST]) {
+    drawn_dirs[DIR8_NORTHEAST] = false;
+    drawn_dirs[DIR8_SOUTHEAST] = false;
+    drawn_dirs[DIR8_EAST] = true;
+  }
+  else if (drawn_dirs[DIR8_SOUTHEAST] && drawn_dirs[DIR8_SOUTHWEST]) {
+    drawn_dirs[DIR8_SOUTHEAST] = false;
+    drawn_dirs[DIR8_SOUTHWEST] = false;
+    drawn_dirs[DIR8_SOUTH] = true;
+  }
+  else if (drawn_dirs[DIR8_SOUTHWEST] && drawn_dirs[DIR8_NORTHWEST]) {
+    drawn_dirs[DIR8_SOUTHWEST] = false;
+    drawn_dirs[DIR8_NORTHWEST] = false;
+    drawn_dirs[DIR8_WEST] = true;
+  }
+
+  for (const dir in drawn_dirs) {
+    if (drawn_dirs[dir]) {
+      result.push({"key" : "f." + pnation['graphic_str'],
+      "offset_x" : border_flag_offsets[dir].x,
+      "offset_y" : border_flag_offsets[dir].y,
+      "scale": 0.4}); // 30x20 -> 12x8
+    }
+  }
+  return result;
+}
+
+
+/**********************************************************************
+  Thus function pushes border-line sprites to the sprite array.
 ***********************************************************************/
 function get_border_line_sprites(ptile)
 {
   var result = [];
+  for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
+    var dir = cardinal_tileset_dirs[i];
+    var checktile = mapstep(ptile, dir);
 
-  // SPECIAL MODE: Filled in territory to show national area
-  if (fill_national_border
-    && ptile['owner'] != null
-    && ptile['owner'] != 255 /* 255 is a special constant indicating that the tile is not owned by anyone. */
-    && players[ptile['owner']] != null) {
-    
-    var pnation = nations[players[ptile['owner']]['nation']];
-    var bcolor = pnation['color'].replace(")", ",0.45)").replace("rgb", "rgba");
-
-    result.push({"key" : "territory", "offset_x" : 0, "offset_y" : 0, "color": bcolor});
-  } else {   // NORMAL MODE: NORMAL BORDERS
-    for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
-      var dir = cardinal_tileset_dirs[i];
-      var checktile = mapstep(ptile, dir);
-
-      if (checktile != null && checktile['owner'] != null
-          && ptile['owner'] != null
-          && ptile['owner'] != checktile['owner']
-          && ptile['owner'] != 255 /* 255 is a special constant indicating that the tile is not owned by anyone. */
-          && players[ptile['owner']] != null) {
-        var pnation = nations[players[ptile['owner']]['nation']];
-        result.push({"key" : "border", "dir" : dir,
-                    "color": pnation['color']});
-      }
+    if (checktile != null && checktile['owner'] != null
+        && ptile['owner'] != null
+        && ptile['owner'] != checktile['owner']
+        && ptile['owner'] != 255 /* 255 is a special constant indicating that the tile is not owned by anyone. */
+        && players[ptile['owner']] != null) {
+      var pnation = nations[players[ptile['owner']]['nation']];
+      result.push({"key" : "border", "dir" : dir,
+                    "color": pnation.color, "color2": pnation.color2, "color3": pnation.color3});
     }
   }
   return result;
@@ -1621,6 +1717,15 @@ function get_tile_specials_sprite(ptile)
   if (extra_id !== null) {
     const extra = extras[extra_id];
     if (extra != null) {
+      // Resources that disappear can't be knowable on fog of war tiles: e.g.,
+      // Deer, Boar, Fallout in rulesets where Fallout disappears over time. Server
+      // tells client that all extras have 15‱ (RS_DEFAULT_EXTRA_DISAPPEARANCE)
+      // to signal the chance is 0. So odds != RS_DEFAULT_EXTRA_DISAPPEARANCE
+      // means this extra can't show in fogofwar:
+      if (tile_get_known(ptile)==TILE_KNOWN_UNSEEN &&
+          extras[extra_id].disappearance_chance != RS_DEFAULT_EXTRA_DISAPPEARANCE)
+         return null;
+      // All other cases: return sprite for the extra:
       return  {"key" : extra['graphic_str']} ;
     }
   }
@@ -2261,90 +2366,6 @@ function fill_layer3_sprite_array(ptile, stacked, st_unit)
   return result_sprites; // returns empty array
 }
 
-/****************************************************************************
-  Assigns the nation's color based on the color of the flag, currently
-  the most common color in the flag is chosen.
-****************************************************************************/
-function assign_nation_color(nation_id)
-{
-
-  var nation = nations[nation_id];
-  if (nation == null || nation['color'] != null) return;
-
-  var flag_key = "f." + nation['graphic_str'];
-  var flag_sprite = sprites[flag_key];
-  if (flag_sprite == null) return;
-  var c = flag_sprite.getContext('2d');
-  var width = tileset[flag_key][2];
-  var height = tileset[flag_key][3];
-  var color_counts = {};
-  /* gets the flag image data, except for the black border. */
-  if (c == null) return;
-  var img_data = c.getImageData(1, 1, width-2, height-2).data;
-
-  /* count the number of each pixel's color */
-  for (var i = 0; i < img_data.length; i += 4) {
-    var current_color = "rgb(" + img_data[i] + "," + img_data[i+1] + ","
-                        + img_data[i+2] + ")";
-    if (current_color in color_counts) {
-      color_counts[current_color] = color_counts[current_color] + 1;
-    } else {
-      color_counts[current_color] = 1;
-    }
-  }
-
-  var max = -1;
-  var max_color = null;
-
-  for (var current_color in color_counts) {
-    if (color_counts[current_color] > max) {
-      max = color_counts[current_color];
-      max_color = current_color;
-    }
-  }
-
-
-
-  nation['color'] = max_color;
-  color_counts = null;
-  img_data = null;
-
-}
-
-
-/****************************************************************************
-...
-****************************************************************************/
-function is_color_collision(color_a, color_b)
-{
-  var distance_threshold = 20;
-
-  if (color_a == null || color_b == null) return false;
-
-  var pcolor_a = color_rgb_to_list(color_a);
-  var pcolor_b = color_rgb_to_list(color_b);
-
-  var color_distance = Math.sqrt( Math.pow(pcolor_a[0] - pcolor_b[0], 2)
-		  + Math.pow(pcolor_a[1] - pcolor_b[1], 2)
-		  + Math.pow(pcolor_a[2] - pcolor_b[2], 2));
-
-  return (color_distance <= distance_threshold);
-}
-
-/****************************************************************************
-...
-****************************************************************************/
-function color_rgb_to_list(pcolor)
-{
-  if (pcolor == null) return null;
-  var color_rgb = pcolor.match(/\d+/g);
-  color_rgb[0] = parseFloat(color_rgb[0]);
-  color_rgb[1] = parseFloat(color_rgb[1]);
-  color_rgb[2] = parseFloat(color_rgb[2]);
-  return color_rgb;
-}
-
-
 /**************************************************************************
  One step closer to all unit graphics having all their offsets defined in
  a file. This currently hard-codes it but the function could be easily 
@@ -2422,7 +2443,8 @@ function create_unit_offset_arrays()
           vx -= 15; vy += 8;
           break;
       case "Cavalry":
-          vx -= 2; vy -= 11;
+          vx += 1; vy -= 11;
+          dx += 4; dy -= 3;
           break;
       case "Chariot":
           sx = 8; 
@@ -2620,6 +2642,9 @@ function create_unit_offset_arrays()
           break;  
       case "War Galley":
           vx -= 4; vy += 3;
+          break;
+      case "Warriors":
+          dx -= 8; dy -= 3;
           break;
       case "Zeppelin":
           sx = -13; sy = 5;

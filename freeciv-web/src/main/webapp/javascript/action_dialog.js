@@ -991,7 +991,7 @@ function popup_sabotage_dialog(actor_unit, target_city, city_imprs, act_id)
     if (i==-1 || // can always sabotage production.
        (city_imprs.isSet(i) && improvement['sabotage'] > 0)) {
       /* The building is in the city. The probability of successfully
-       * sabotaging it as above zero. */
+       * sabotaging it is above zero. */
       buttons.push(create_sabotage_impr_button(improvement, id,
                                                actor_unit['id'],
                                                target_city['id'],
@@ -1303,6 +1303,7 @@ function dialog_register(id) {
   }).bind('dialogclose', function(event, ui) { 
     remove_active_dialog(id);
   });
+  $(id).css("color", default_dialog_text_color);
 }
 /**************************************************************************
   Create a close button (for multiple cascading dialogs)

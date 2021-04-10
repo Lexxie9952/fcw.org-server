@@ -46,6 +46,7 @@ EXTRA_DIST =	autogen.sh 			\
 		m4/gtk3-client.m4		\
 		m4/gtk3.22-client.m4		\
 		m4/gtk3x-client.m4		\
+		m4/host-cpu-c-abi.m4		\
 		m4/iconv.m4			\
 		m4/intlmacosx.m4		\
 		m4/lib-ld.m4			\
@@ -55,6 +56,7 @@ EXTRA_DIST =	autogen.sh 			\
 		m4/mysql.m4			\
 		m4/magickwand.m4		\
 		m4/mapimg-magickwand.m4		\
+		m4/multiarch.m4			\
 		m4/nls.m4			\
 		m4/no-client.m4			\
 		m4/pkg.m4			\
@@ -73,6 +75,8 @@ EXTRA_DIST =	autogen.sh 			\
 		m4/web-client.m4		\
 		m4/winsock2.m4			\
 		m4/testmatic.m4			\
+		meson.build			\
+		meson_options.txt		\
 		scripts/mapimg2anim		\
 		scripts/setup_auth_server.sh	\
 		scripts/diff_ignore		\

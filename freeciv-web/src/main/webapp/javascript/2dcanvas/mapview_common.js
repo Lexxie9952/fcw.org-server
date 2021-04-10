@@ -340,10 +340,12 @@ function update_map_canvas(canvas_x, canvas_y, width, height)
       var startLayer = Date.now();
     }*/   ///
     // set layer-specific canvas properties here.
+    
     if (layer == LAYER_SPECIAL1) {
-      mapview_canvas_ctx.lineWidth = 2;
-      mapview_canvas_ctx.lineCap = 'butt';
-      if (dashedSupport) mapview_canvas_ctx.setLineDash([4,4]);
+      // this is now done inside mapview_put_border_line().
+      ////mapview_canvas_ctx.lineWidth = 2;
+      ////mapview_canvas_ctx.lineCap = 'butt';
+      ////if (dashedSupport) mapview_canvas_ctx.setLineDash([4,4]);
     } else if (layer == LAYER_CITY1) {
       if (dashedSupport) mapview_canvas_ctx.setLineDash([]);
     }
@@ -556,7 +558,7 @@ function put_drawn_sprites(pcanvas, canvas_x, canvas_y, pdrawn, fog)
     if (pdrawn[i]['key'] == "city_text" ) {
       mapview_put_city_bar(pcanvas, pdrawn[i]['city'], canvas_x + offset_x, canvas_y + offset_y);
     } else if (pdrawn[i]['key'] == "border" ) {
-      mapview_put_border_line(pcanvas, pdrawn[i]['dir'], pdrawn[i]['color'], canvas_x, canvas_y);
+      mapview_put_border_line(pcanvas, pdrawn[i]['dir'], pdrawn[i]['color'], pdrawn[i]['color2'], pdrawn[i]['color3'], canvas_x, canvas_y);
     } else if (pdrawn[i]['key'] == "territory" ) {
       mapview_territory_fill(pcanvas, pdrawn[i]['color'], canvas_x, canvas_y);
     } else if (pdrawn[i]['key'] == "goto_line" ) {
@@ -649,7 +651,6 @@ function update_map_canvas_full()
     }
 
     last_redraw_time = new Date().getTime();
-
   }
 }
 

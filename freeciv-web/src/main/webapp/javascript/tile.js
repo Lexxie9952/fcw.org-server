@@ -160,32 +160,32 @@ function improve_tile_info_dialog(message)
     var has_river = "";
     var db = parseFloat(1) + parseFloat(ttype['defense_bonus'])/100;
     if (message.includes("River</b>")) {  // this exact string ensures no other text gives false positive
-      has_river = " (<span style='color:#025'><b>River</b></span>)";
+      has_river = " (<span style='color:#5d97ed;' class='black_shadow'><b>River</b></span>)";
       db *= (1+extras[EXTRA_RIVER]['defense_bonus']/100);
       db = Math.round((db + Number.EPSILON) * 100) / 100;
     }
-    added_text += "<span style='color:rgb("
-               +  Math.round(ttype['color_red']/2)+","+Math.round(ttype['color_green']/2)+","+Math.round(ttype['color_blue']/2)
+    added_text += "<span class='black_shadow' style='color:rgb("
+               + Math.max(Math.round(ttype['color_red']+20,255))+","+Math.max(Math.round(ttype['color_green']+20,255))+","+Math.max(Math.round(ttype['color_blue']+20,255))
                +  ")'><br><br><b>" + ttype['name'] + "</b>"+has_river+"<br></span>";
 
     added_text += "Defense Bonus: <b>" + db + "&times;</b> &nbsp;&nbsp;&nbsp; Movement Cost: <b>" + ttype['movement_cost'] + "</b><br>"
     
     if (ttype['irrigation_time']) {
-      added_text += "<span style='color:#013'>Irrigate:<b>" + Math.ceil(ttype['irrigation_time']/wt)+"</b></span>"
+      added_text += "<span class='black_shadow' style='color:#7da8ff'>Irrigate:<b>" + Math.ceil(ttype['irrigation_time']/wt)+"</b></span>"
       if (ttype['irrigation_food_incr']) added_text+= " (+"+ttype['irrigation_food_incr']+")";
     }
     if (ttype['irrigation_result'] && ttype['irrigation_result'] != tindex && ttype['irrigation_result'] != tinvalid) 
       added_text+="&#10145;"+terrains[ttype['irrigation_result']]['name']
 
     if (ttype['mining_time']) {
-      added_text += "&nbsp;&nbsp; <span style='color:#300'>Mine:<b>" + Math.ceil(ttype['mining_time']/wt)+"</b></span>";
+      added_text += "&nbsp;&nbsp; <span class='black_shadow' style='color:#c74859'>Mine:<b>" + Math.ceil(ttype['mining_time']/wt)+"</b></span>";
       if (ttype['mining_shield_incr']) added_text+= " (+"+ttype['mining_shield_incr']+")";
     }
     if (ttype['mining_result'] && ttype['mining_result'] != tindex && ttype['mining_result'] != tinvalid)
       added_text+="&#10145;"+terrains[ttype['mining_result']]['name']
 
     if (ttype['transform_time'])
-      added_text += "&nbsp;&nbsp; <span style='color:#430'>Transform:<b>" + Math.ceil(ttype['transform_time']/wt)+"</b></span>";
+      added_text += "&nbsp;&nbsp; <span class='black_shadow' style='color:#b3953d'>Transform:<b>" + Math.ceil(ttype['transform_time']/wt)+"</b></span>";
     if (ttype['transform_result'] && ttype['transform_result'] != tindex && ttype['transform_result'] != tinvalid)
       added_text+="&#10145;"+terrains[ttype['transform_result']]['name']
 

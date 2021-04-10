@@ -1,5 +1,5 @@
 <h1>Freeciv Help</h1>
-<img src='/static/images/frontpage-jumbotron.png' style="max-width: 50%;"><br><br>
+<img style='border-radius:10px' src='/static/images/frontpage-jumbotron.png' style="max-width: 50%;"><br><br>
 
 <b>Info Categories</b> are in the <b>left panel</b> for quick lookup.<br><br>
 

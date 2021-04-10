@@ -1,5 +1,5 @@
 
-project('freeciv', 'c', meson_version: '>= 0.36.0')
+project('freeciv', 'c', meson_version: '>= 0.44.0')
 
 priv_conf_data = configuration_data()
 pub_conf_data = configuration_data()
@@ -61,6 +61,7 @@ priv_headers = [
 foreach hdr : pub_headers
   if c_compiler.has_header(hdr)
     pub_conf_data.set('FREECIV_HAVE_' + hdr.underscorify().to_upper(), 1)
+    priv_conf_data.set('HAVE_' + hdr.underscorify().to_upper(), 1)
   endif
 endforeach
 
@@ -80,13 +81,14 @@ configure_file(input : 'gen_headers/meson_freeciv_config.h.in',
 add_global_arguments('-DHAVE_CONFIG_H',
                      language: 'c')
 
-common_inc = include_directories('dependencies/lua-5.3/src',
+common_inc = include_directories('dependencies/lua-5.4/src',
   'dependencies/tolua-5.2/include', 'dependencies/cvercmp',
   'utility', 'common', 'common/networking', 'common/scriptcore',
   'common/aicore')
 
 server_inc = [common_inc, include_directories('server', 'server/advisors',
-              'server/scripting', 'server/generator', 'ai', 'ai/classic')]
+              'server/scripting', 'server/generator', 'server/savegame',
+              'ai', 'ai/classic')]
 
 client_inc = [common_inc, include_directories('client', 'client/include',
               'client/luascript', 'client/agents')]
@@ -161,39 +163,38 @@ tolua_signal = custom_target('tolua_signal',
 
 fc_deps = static_library('fc_dependencies',
   'dependencies/cvercmp/cvercmp.c',
-  'dependencies/lua-5.3/src/lapi.c',
-  'dependencies/lua-5.3/src/lauxlib.c',
-  'dependencies/lua-5.3/src/lbaselib.c',
-  'dependencies/lua-5.3/src/lbitlib.c',
-  'dependencies/lua-5.3/src/lcode.c',
-  'dependencies/lua-5.3/src/lcorolib.c',
-  'dependencies/lua-5.3/src/lctype.c',
-  'dependencies/lua-5.3/src/ldblib.c',
-  'dependencies/lua-5.3/src/ldebug.c',
-  'dependencies/lua-5.3/src/ldo.c',
-  'dependencies/lua-5.3/src/ldump.c',
-  'dependencies/lua-5.3/src/lfunc.c',
-  'dependencies/lua-5.3/src/lgc.c',
-  'dependencies/lua-5.3/src/linit.c',
-  'dependencies/lua-5.3/src/liolib.c',
-  'dependencies/lua-5.3/src/llex.c',
-  'dependencies/lua-5.3/src/lmathlib.c',
-  'dependencies/lua-5.3/src/lmem.c',
-  'dependencies/lua-5.3/src/loadlib.c',
-  'dependencies/lua-5.3/src/lobject.c',
-  'dependencies/lua-5.3/src/lopcodes.c',
-  'dependencies/lua-5.3/src/loslib.c',
-  'dependencies/lua-5.3/src/lparser.c',
-  'dependencies/lua-5.3/src/lstate.c',
-  'dependencies/lua-5.3/src/lstring.c',
-  'dependencies/lua-5.3/src/lstrlib.c',
-  'dependencies/lua-5.3/src/ltable.c',
-  'dependencies/lua-5.3/src/ltablib.c',
-  'dependencies/lua-5.3/src/ltm.c',
-  'dependencies/lua-5.3/src/lundump.c',
-  'dependencies/lua-5.3/src/lutf8lib.c',
-  'dependencies/lua-5.3/src/lvm.c',
-  'dependencies/lua-5.3/src/lzio.c',
+  'dependencies/lua-5.4/src/lapi.c',
+  'dependencies/lua-5.4/src/lauxlib.c',
+  'dependencies/lua-5.4/src/lbaselib.c',
+  'dependencies/lua-5.4/src/lcode.c',
+  'dependencies/lua-5.4/src/lcorolib.c',
+  'dependencies/lua-5.4/src/lctype.c',
+  'dependencies/lua-5.4/src/ldblib.c',
+  'dependencies/lua-5.4/src/ldebug.c',
+  'dependencies/lua-5.4/src/ldo.c',
+  'dependencies/lua-5.4/src/ldump.c',
+  'dependencies/lua-5.4/src/lfunc.c',
+  'dependencies/lua-5.4/src/lgc.c',
+  'dependencies/lua-5.4/src/linit.c',
+  'dependencies/lua-5.4/src/liolib.c',
+  'dependencies/lua-5.4/src/llex.c',
+  'dependencies/lua-5.4/src/lmathlib.c',
+  'dependencies/lua-5.4/src/lmem.c',
+  'dependencies/lua-5.4/src/loadlib.c',
+  'dependencies/lua-5.4/src/lobject.c',
+  'dependencies/lua-5.4/src/lopcodes.c',
+  'dependencies/lua-5.4/src/loslib.c',
+  'dependencies/lua-5.4/src/lparser.c',
+  'dependencies/lua-5.4/src/lstate.c',
+  'dependencies/lua-5.4/src/lstring.c',
+  'dependencies/lua-5.4/src/lstrlib.c',
+  'dependencies/lua-5.4/src/ltable.c',
+  'dependencies/lua-5.4/src/ltablib.c',
+  'dependencies/lua-5.4/src/ltm.c',
+  'dependencies/lua-5.4/src/lundump.c',
+  'dependencies/lua-5.4/src/lutf8lib.c',
+  'dependencies/lua-5.4/src/lvm.c',
+  'dependencies/lua-5.4/src/lzio.c',
   'dependencies/tolua-5.2/src/lib/tolua_event.c',
   'dependencies/tolua-5.2/src/lib/tolua_is.c',
   'dependencies/tolua-5.2/src/lib/tolua_map.c',
@@ -321,11 +322,17 @@ common_lib = library('freeciv',
                  c_compiler.find_library('z'),
                  c_compiler.find_library('libcurl'),
                  c_compiler.find_library('libsqlite3'),
-                 dependency('threads')]
+                 dependency('threads')],
+  install : true
   )
 
 ais = static_library('fc_ai',
   'ai/classic/classicai.c',
+  'ai/tex/texai.c',
+  'ai/tex/texaicity.c',
+  'ai/tex/texaimsg.c',
+  'ai/tex/texaiplayer.c',
+  'ai/tex/texaiworld.c',
   'ai/default/aiair.c',
   'ai/default/aicity.c',
   'ai/default/aidata.c',
@@ -348,7 +355,7 @@ ais = static_library('fc_ai',
   include_directories: [server_inc, include_directories('ai/default')]
   )
 
-server_lib = static_library('libfc_server',
+server_lib = static_library('fc_server',
   'ai/aitraits.c',
   'ai/difficulty.c',
   'ai/handicaps.c',
@@ -370,6 +377,10 @@ server_lib = static_library('libfc_server',
   'server/generator/mapgen_utils.c',
   'server/generator/startpos.c',
   'server/generator/temperature_map.c',
+  'server/savegame/savecompat.c',
+  'server/savegame/savegame2.c',
+  'server/savegame/savegame3.c',
+  'server/savegame/savemain.c',
   'server/scripting/api_fcdb_auth.c',
   'server/scripting/api_fcdb_base.c',
   'server/scripting/api_server_base.c',
@@ -407,10 +418,6 @@ server_lib = static_library('libfc_server',
   'server/rssanity.c',
   'server/ruleset.c',
   'server/sanitycheck.c',
-  'server/savecompat.c',
-  'server/savegame2.c',
-  'server/savegame3.c',
-  'server/savegame.c',
   'server/score.c',
   'server/sernet.c',
   'server/settings.c',
@@ -432,8 +439,11 @@ executable('freeciv-server',
   'server/civserver.c',
   include_directories: server_inc,
   link_with: [server_lib, common_lib, ais],
-  dependencies: [c_compiler.find_library('m')]
+  dependencies: [c_compiler.find_library('m')],
+  install: true
   )
+
+if get_option('clients') != []
 
 client_common = static_library('fc_client_common',
   'client/agents/agents.c',
@@ -487,7 +497,68 @@ client_common = static_library('fc_client_common',
                  c_compiler.find_library('libSDL2_mixer')]
   )
 
-tool_lib = static_library('libfc_toolutil',
+endif
+
+if get_option('clients').contains('gtk3.22')
+
+gtk322_dep = dependency('gtk+-3.0', version : '>= 3.22')
+
+executable('freeciv-gtk3.22',
+  'client/gui-gtk-3.22/action_dialog.c',
+  'client/gui-gtk-3.22/canvas.c',
+  'client/gui-gtk-3.22/chatline.c',
+  'client/gui-gtk-3.22/choice_dialog.c',
+  'client/gui-gtk-3.22/citizensinfo.c',
+  'client/gui-gtk-3.22/citydlg.c',
+  'client/gui-gtk-3.22/cityrep.c',
+  'client/gui-gtk-3.22/cma_fe.c',
+  'client/gui-gtk-3.22/colors.c',
+  'client/gui-gtk-3.22/connectdlg.c',
+  'client/gui-gtk-3.22/dialogs.c',
+  'client/gui-gtk-3.22/diplodlg.c',
+  'client/gui-gtk-3.22/editgui.c',
+  'client/gui-gtk-3.22/editprop.c',
+  'client/gui-gtk-3.22/finddlg.c',
+  'client/gui-gtk-3.22/gamedlgs.c',
+  'client/gui-gtk-3.22/gotodlg.c',
+  'client/gui-gtk-3.22/graphics.c',
+  'client/gui-gtk-3.22/gui_main.c',
+  'client/gui-gtk-3.22/gui_stuff.c',
+  'client/gui-gtk-3.22/happiness.c',
+  'client/gui-gtk-3.22/helpdlg.c',
+  'client/gui-gtk-3.22/inputdlg.c',
+  'client/gui-gtk-3.22/inteldlg.c',
+  'client/gui-gtk-3.22/luaconsole.c',
+  'client/gui-gtk-3.22/mapctrl.c',
+  'client/gui-gtk-3.22/mapview.c',
+  'client/gui-gtk-3.22/menu.c',
+  'client/gui-gtk-3.22/messagedlg.c',
+  'client/gui-gtk-3.22/messagewin.c',
+  'client/gui-gtk-3.22/optiondlg.c',
+  'client/gui-gtk-3.22/pages.c',
+  'client/gui-gtk-3.22/plrdlg.c',
+  'client/gui-gtk-3.22/repodlgs.c',
+  'client/gui-gtk-3.22/soundset_dlg.c',
+  'client/gui-gtk-3.22/spaceshipdlg.c',
+  'client/gui-gtk-3.22/sprite.c',
+  'client/gui-gtk-3.22/theme_dlg.c',
+  'client/gui-gtk-3.22/themes.c',
+  'client/gui-gtk-3.22/tileset_dlg.c',
+  'client/gui-gtk-3.22/transportdlg.c',
+  'client/gui-gtk-3.22/unitselect.c',
+  'client/gui-gtk-3.22/unitselextradlg.c',
+  'client/gui-gtk-3.22/unitselunitdlg.c',
+  'client/gui-gtk-3.22/voteinfo_bar.c',
+  'client/gui-gtk-3.22/wldlg.c',
+  include_directories: client_inc,
+  dependencies: gtk322_dep,
+  link_with: client_common,
+  install: true
+  )
+
+endif
+
+tool_lib = static_library('fc_toolutil',
   'tools/ruleutil/comments.c',
   'tools/ruleutil/rulesave.c',
   'tools/shared/tools_fc_interface.c',
@@ -498,7 +569,8 @@ executable('freeciv-ruleup',
   'tools/ruleup.c',
   link_with: [common_lib, server_lib, tool_lib, ais],
   include_directories: tool_inc,
-  dependencies: [c_compiler.find_library('m')]
+  dependencies: [c_compiler.find_library('m')],
+  install: true
   )
 
 executable('freeciv-manual',
@@ -507,5 +579,105 @@ executable('freeciv-manual',
   link_with: [common_lib, server_lib, tool_lib, ais],
   include_directories: [tool_inc,
                         include_directories('client', 'client/include')],
-  dependencies: [c_compiler.find_library('m')]
+  dependencies: [c_compiler.find_library('m')],
+  install: true
+  )
+
+install_data(
+  'data/default/default.lua',
+  'data/default/nationlist.ruleset',
+  'data/default/ai_effects.ruleset',
+  install_dir : join_paths(get_option('datadir'), 'freeciv/default')
+  )
+
+rulesets = [
+  'civ2civ3',
+  'classic',
+  'multiplayer',
+  'alien',
+  'sandbox',
+  'civ1',
+  'civ2'
+  ]
+
+ruleset_files = [
+  'buildings.ruleset',
+  'cities.ruleset',
+  'effects.ruleset',
+  'game.ruleset',
+  'governments.ruleset',
+  'nations.ruleset',
+  'parser.lua',
+  'script.lua',
+  'styles.ruleset',
+  'techs.ruleset',
+  'terrain.ruleset',
+  'units.ruleset',
+  ]
+
+foreach rs : rulesets
+  foreach rsf : ruleset_files
+    install_data(
+      join_paths('data', rs, rsf),
+      install_dir : join_paths(get_option('datadir'), 'freeciv', rs)
+      )
+  endforeach
+endforeach
+
+install_data(
+  'data/civ2civ3/README.civ2civ3',
+  install_dir : join_paths(get_option('datadir'), 'freeciv/civ2civ3')
+  )
+
+install_data(
+  'data/classic/README.classic',
+  install_dir : join_paths(get_option('datadir'), 'freeciv/classic')
+  )
+
+install_data(
+  'data/multiplayer/README.multiplayer',
+  install_dir : join_paths(get_option('datadir'), 'freeciv/multiplayer')
+  )
+
+install_data(
+  'data/alien/README.alien',
+  install_dir : join_paths(get_option('datadir'), 'freeciv/alien')
+  )
+
+install_data(
+  'data/sandbox/README.sandbox',
+  install_dir : join_paths(get_option('datadir'), 'freeciv/sandbox')
+  )
+
+install_data(
+  'COPYING',
+  'NEWS',
+  'INSTALL',
+  'ChangeLog',
+  'doc/BUGS',
+  'doc/CodingStyle',
+  'doc/FAQ',
+  'doc/HACKING',
+  'doc/HOWTOPLAY',
+  'doc/README',
+  'doc/README.achievements',
+  'doc/README.actions',
+  'doc/README.agents',
+  'doc/README.AI',
+  'doc/README.AI_modules',
+  'doc/README.attributes',
+  'doc/README.delta',
+  'doc/README.effects',
+  'doc/README.fcdb',
+  'doc/README.governor',
+  'doc/README.graphics',
+  'doc/README.msys2',
+  'doc/README.nations',
+  'doc/README.packaging',
+  'doc/README.rulesets',
+  'doc/README.scorelog',
+  'doc/README.sound',
+  'doc/README.tilesets',
+  'doc/TODO',
+  install_dir : join_paths(get_option('datadir'), 'doc/freeciv')
   )

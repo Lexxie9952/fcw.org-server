@@ -863,6 +863,10 @@ static bool save_game_ruleset(const char *filename, const char *name)
   secfile_insert_str(sfile, game.control.name, "about.name");
   secfile_insert_str(sfile, game.control.version, "about.version");
 
+  if (game.control.alt_dir[0] != '\0') {
+    secfile_insert_str(sfile, game.control.alt_dir, "about.alt_dir");
+  }
+
   if (game.ruleset_summary != NULL) {
     struct entry *mod_entry;
 
@@ -921,6 +925,12 @@ static bool save_game_ruleset(const char *filename, const char *name)
   save_default_bool(sfile, game.info.civil_war_enabled,
                     TRUE,
                     "civstyle.civil_war_enabled", NULL);
+  save_default_int(sfile, game.info.civil_war_bonus_celebrating,
+                   RS_DEFAULT_CIVIL_WAR_CELEB,
+                   "civstyle.civil_war_bonus_celebrating", NULL);
+  save_default_int(sfile, game.info.civil_war_bonus_unhappy,
+                   RS_DEFAULT_CIVIL_WAR_UNHAPPY,
+                   "civstyle.civil_war_bonus_unhappy", NULL);
   save_default_bool(sfile, game.info.paradrop_to_transport,
                     FALSE,
                     "civstyle.paradrop_to_transport", NULL);
@@ -1099,6 +1109,15 @@ static bool save_game_ruleset(const char *filename, const char *name)
   save_default_bool(sfile, game.info.tired_attack,
                     RS_DEFAULT_TIRED_ATTACK,
                     "combat_rules.tired_attack", NULL);
+  save_default_bool(sfile, game.info.only_killing_makes_veteran,
+                    RS_DEFAULT_ONLY_KILLING_VETERAN,
+                    "combat_rules.only_killing_makes_veteran", NULL);
+  save_default_int(sfile, game.server.nuke_pop_loss_pct,
+                    RS_DEFAULT_NUKE_POP_LOSS_PCT,
+                    "combat_rules.nuke_pop_loss_pct", NULL);
+  save_default_int(sfile, game.server.nuke_defender_survival_chance_pct,
+                    RS_DEFAULT_NUKE_DEFENDER_SURVIVAL_CHANCE_PCT,
+                    "combat_rules.nuke_defender_survival_chance_pct", NULL);
   save_default_int(sfile, game.info.border_city_radius_sq,
                    RS_DEFAULT_BORDER_RADIUS_SQ_CITY,
                    "borders.radius_sq_city", NULL);
@@ -1617,7 +1636,7 @@ static bool save_nation(struct section_file *sfile, struct nation_type *pnat,
                                     + MAX_NUM_TERRAINS * (strlen(", ") + MAX_LEN_NAME));
 
     strcpy(city_str[set_count], nation_city_name(pncity));
-    switch(nation_city_river_preference(pncity)) {
+    switch (nation_city_river_preference(pncity)) {
     case NCP_DISLIKE:
       strcat(city_str[set_count], " (!river");
       list_started = TRUE;
@@ -1633,7 +1652,7 @@ static bool save_nation(struct section_file *sfile, struct nation_type *pnat,
     terrain_type_iterate(pterr) {
       const char *pref = NULL;
 
-      switch(nation_city_terrain_preference(pncity, pterr)) {
+      switch (nation_city_terrain_preference(pncity, pterr)) {
       case NCP_DISLIKE:
         pref = "!";
         break;
@@ -2464,7 +2483,7 @@ static bool save_veteran_system(struct section_file *sfile, const char *path,
   for (i = 0; i < vsystem->levels; i++) {
     vlist_name[i] = rule_name_get(&(vsystem->definitions[i].name));
     vlist_power[i] = vsystem->definitions[i].power_fact;
-    vlist_raise[i] = vsystem->definitions[i].raise_chance;
+    vlist_raise[i] = vsystem->definitions[i].base_raise_chance;
     vlist_wraise[i] = vsystem->definitions[i].work_raise_chance;
     vlist_move[i] = vsystem->definitions[i].move_bonus;
   }
@@ -2474,7 +2493,7 @@ static bool save_veteran_system(struct section_file *sfile, const char *path,
   secfile_insert_int_vec(sfile, vlist_power, vsystem->levels,
                          "%s.veteran_power_fact", path);
   secfile_insert_int_vec(sfile, vlist_raise, vsystem->levels,
-                         "%s.veteran_raise_chance", path);
+                         "%s.veteran_base_raise_chance", path);
   secfile_insert_int_vec(sfile, vlist_wraise, vsystem->levels,
                          "%s.veteran_work_raise_chance", path);
   secfile_insert_int_vec(sfile, vlist_move, vsystem->levels,

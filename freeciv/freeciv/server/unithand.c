@@ -382,7 +382,7 @@ static bool do_capture_units(struct player *pplayer,
   pcity = tile_city(pdesttile);
 
   // First, sanity unload all units to capture so they aren't transported by null units!
-  unit_list_iterate(pdesttile->units, pcargo) {
+  unit_list_iterate_safe(pdesttile->units, pcargo) {
 
     if (unit_transported(pcargo)) {
         /* Captured cargo must first be unloaded so it won't crash when its transport becomes null after capture */
@@ -395,15 +395,17 @@ static bool do_capture_units(struct player *pplayer,
         /*TRICKERY: just create a new cargo unit of same type in the closest city.*/
         struct city *new_home_city = find_closest_city(unit_tile(punit), NULL, unit_owner(punit), FALSE,
                                 FALSE, FALSE, TRUE, FALSE, NULL);
-        struct unit *new_unit;
-        new_unit = create_unit(pplayer, new_home_city->tile, pcargo->utype, 
-                          0, (game.server.homecaughtunits ? punit->homecity : IDENTITY_NUMBER_ZERO), 0);
-        if (new_unit) new_unit=NULL;
-        else return FALSE; // failsafe
-        
+        struct unit *new_unit = NULL;
+        if (new_home_city != NULL) {
+          new_unit = create_unit(pplayer, new_home_city->tile, pcargo->utype, 
+                            0, (game.server.homecaughtunits ? punit->homecity : IDENTITY_NUMBER_ZERO), 0);
+          if (new_unit) new_unit=NULL;
+          else return FALSE; // failsafe
+        }
+          
         notify_player(unit_owner(pcargo), pdesttile,
                     E_ENEMY_DIPLOMAT_BRIBE, ftc_server,
-                    _("⚠️ Your transported %s %s %s stolen when the %s ambushed %s %s."),
+                    _("⚠️ Your transported %s %s %s lost when the %s ambushed %s %s."),
                     unit_name_translation(pcargo), UNIT_EMOJI(pcargo), 
                     (is_unit_plural(pcargo) ? "were" : "was"),
                     nation_plural_for_player(pplayer),
@@ -422,19 +424,21 @@ static bool do_capture_units(struct player *pplayer,
                     unit_name_translation(pcargo),
                     unit_build_shield_cost_base(pcargo));
         *****************************************************************************/
-        notify_player(pplayer, pdesttile,
-                    E_ENEMY_DIPLOMAT_BRIBE, ftc_server,
-                    _("🎁 Captured %s %s %s confiscated as booty and taken to your nearest city, %s."),
-                    unit_name_translation(pcargo),
-                    UNIT_EMOJI(pcargo),
-                    (is_unit_plural(pcargo) ? "were" : "was"),
-                    city_link(new_home_city));
+        if (new_home_city != NULL) {
+          notify_player(pplayer, pdesttile,
+                      E_ENEMY_DIPLOMAT_BRIBE, ftc_server,
+                      _("🎁 Captured %s %s %s confiscated as booty and taken to your nearest city, %s."),
+                      unit_name_translation(pcargo),
+                      UNIT_EMOJI(pcargo),
+                      (is_unit_plural(pcargo) ? "were" : "was"),
+                      city_link(new_home_city));
+        }
 
         wipe_unit(pcargo, ULR_CAPTURED, pplayer);
 
         //return FALSE; //ultra-conservative escape to avoid seg-fault and make each confiscation take 1 move/ bring it back if bugs return.
       }
-  } unit_list_iterate_end;
+  } unit_list_iterate_safe_end;
 
   unit_list_iterate(pdesttile->units, to_capture) {
     struct player *uplayer = unit_owner(to_capture);
@@ -2654,7 +2658,7 @@ bool unit_perform_action(struct player *pplayer,
                    TRUE, requester);                                      \
   }
 
-  switch(action_type) {
+  switch (action_type) {
   case ACTION_SPY_BRIBE_UNIT:
     ACTION_STARTED_UNIT_UNIT(action_type, actor_unit, punit,
                              diplomat_bribe(pplayer, actor_unit, punit,

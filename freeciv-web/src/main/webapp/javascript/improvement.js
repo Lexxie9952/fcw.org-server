@@ -145,11 +145,11 @@ function improvement_id_by_name(name)
 **************************************************************************/
 function get_universal_discount_price(ptype, pcity)
 {
-  var playerno;
   if (!pcity) pcity = active_city;
-  if (!active_city) {
-    playerno = client.conn.playing.playerno;
-  } else playerno = pcity.owner;
+
+  var playerno;
+  if (!pcity) playerno = client.conn.playing.playerno;
+  else playerno = pcity.owner;
 
   // Since 'name' and 'build_cost' are the only fields checked and
   // are universal to both improvements and units, we can adapt this
@@ -177,7 +177,7 @@ function get_universal_discount_price(ptype, pcity)
   if (client_rules_flag[CRF_MP2_C]) {
     // City Walls increase with Metallurgy
     if (ptype['name'] == "City Walls"
-        && (player_invention_state(playerno, tech_id_by_name('Steel')) == TECH_KNOWN)) {
+        && (player_invention_state(players[playerno], tech_id_by_name('Steel')) == TECH_KNOWN)) {
             return ptype['build_cost'] + 10;
     }
     if (ptype['name'] == "Coastal Defense"

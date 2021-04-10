@@ -106,7 +106,6 @@
 #include "report.h"
 #include "ruleset.h"
 #include "sanitycheck.h"
-#include "savegame.h"
 #include "score.h"
 #include "sernet.h"
 #include "settings.h"
@@ -124,6 +123,9 @@
 #include "advbuilding.h"
 #include "advspace.h"
 #include "infracache.h"
+
+/* server/savegame */
+#include "savemain.h"
 
 /* server/scripting */
 #include "script_server.h"
@@ -977,7 +979,7 @@ static void update_diplomatics(void)
 
         if (state->type == DS_CEASEFIRE) {
           state->turns_left--;
-          switch(state->turns_left) {
+          switch (state->turns_left) {
           case 1:
             notify_player(plr1, NULL, E_DIPLOMACY, ftc_server,
                           _("💢 Concerned citizens point out that the cease-fire "
@@ -1490,7 +1492,7 @@ static void end_phase(void)
     }
     update_city_activities(pplayer);
     city_thaw_workers_queue();
-    pplayer->culture += nation_history_gain(pplayer);
+    pplayer->history += nation_history_gain(pplayer);
     research_get(pplayer)->researching_saved = A_UNKNOWN;
     /* reduce the number of bulbs by the amount needed for tech upkeep and
      * check for finished research */
@@ -1908,7 +1910,7 @@ void handle_report_req(struct connection *pconn, enum report_type type)
     return;
   }
 
-  switch(type) {
+  switch (type) {
   case REPORT_WONDERS_OF_THE_WORLD:
     report_wonders_of_the_world(dest);
     return;
@@ -3086,7 +3088,7 @@ static void srv_prepare(void)
       || !load_command(NULL, srvarg.load_filename, FALSE, TRUE)) {
     /* Rulesets are loaded on game initialization, but may be changed later
      * if /load or /rulesetdir is done. */
-    load_rulesets(NULL, FALSE, NULL, TRUE, FALSE);
+    load_rulesets(NULL, NULL, FALSE, NULL, TRUE, FALSE);
   }
 
   maybe_automatic_meta_message(default_meta_message_string());
@@ -3582,7 +3584,7 @@ void srv_main(void)
     fc_rand_uninit();
     server_game_init(FALSE);
     mapimg_reset();
-    load_rulesets(NULL, FALSE, NULL, TRUE, FALSE);
+    load_rulesets(NULL, NULL, FALSE, NULL, TRUE, FALSE);
     game.info.is_new_game = TRUE;
   } while (TRUE);
 

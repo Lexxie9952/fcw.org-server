@@ -26,6 +26,10 @@ ifeq ($(MIN_WIN_VER),)
 MIN_WIN_VER=0x0601
 endif
 
+ifeq ($(MAKE_PARAMS),)
+MAKE_PARAMS="-j2"
+endif
+
 INSTSUB=${ARCHDIR}
 
 # msys2 has dlls in...
@@ -156,7 +160,9 @@ SOUND_DLLS := \
 	libportaudio-2.dll \
 	libsndfile-1.dll \
 	libspeex-1.dll \
-	libmpg123-0.dll
+	libmpg123-0.dll \
+	libopusfile-0.dll \
+	libopus-0.dll
 
 COMMON_DLLS := \
 	libstdc++-6.dll \
@@ -196,13 +202,15 @@ COMMON_DLLS := \
 	libxml2-2.dll \
 	zlib1.dll \
 	libwinpthread-1.dll \
-	libicuuc62.dll \
-	libicudt62.dll \
+	libicuuc64.dll \
+	libicudt64.dll \
 	libsqlite3-0.dll \
 	exchndl.dll \
 	mgwhelp.dll \
 	libbrotlidec.dll \
 	libbrotlicommon.dll \
+	libreadline8.dll \
+	libtermcap-0.dll \
 	$(SOUND_DLLS)
 
 install-env-common:
@@ -248,16 +256,17 @@ SDL2_DLLS := \
 	SDL2_ttf.dll \
 	libjpeg-8.dll \
 	libtiff-5.dll \
-	libwebp-7.dll
+	libwebp-7.dll \
+	libzstd.dll
 
 install-env-sdl2: install-env-default-fcmp
 	# add DLLs
 	cp -R $(addprefix $(DLLPATH_PREFIX), $(SDL2_DLLS)) install-$(WINARCH)-$(GUI)/
 
 QT_DLLS := \
-	libicuin62.dll \
-	libicuuc62.dll \
-	libicudt62.dll \
+	libicuin64.dll \
+	libicuuc64.dll \
+	libicudt64.dll \
 	libpcre16-0.dll \
 	libharfbuzz-0.dll \
 	libsqlite3-0.dll \

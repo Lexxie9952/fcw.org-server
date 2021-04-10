@@ -199,7 +199,7 @@ function update_game_status_panel() {
     status_html += status_message + " &nbsp; &nbsp; &nbsp; &nbsp; ";  // pad to prevent turn done button overwrite.
   }
 
-  if ($(window).width() - sum_width() > 740) {   // was 800 but 740 is the space available on standard screen and it's adequate
+  if ($(window).width() - sum_width() > 880) {   // was 800 but 740 is the space available on standard screen and it's adequate
     if ($("#game_status_panel_top").length) {
       $("#game_status_panel_top").show();
       $("#game_status_panel_bottom").hide();
@@ -272,7 +272,12 @@ function sum_width()
 {
   var sum=0;
   $("#tabs_menu").children().each( function(){
-    if ($(this).is(":visible") && $(this).attr('id') != "game_status_panel_top") sum += $(this).width();
+    if ($(this).is(":visible") 
+        && $(this).attr('id') != "game_status_panel_top"
+        && $(this).attr('id').startsWith("ixtjkiller")) {
+        
+        sum += $(this).width();
+    }
   });
   return sum;
 }

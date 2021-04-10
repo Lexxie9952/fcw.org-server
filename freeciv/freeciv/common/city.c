@@ -1321,7 +1321,7 @@ int city_total_impr_gold_upkeep(const struct city *pcity)
   }
 
   city_built_iterate(pcity, pimprove) {
-      gold_needed += city_improvement_upkeep(pcity, pimprove);
+    gold_needed += city_improvement_upkeep(pcity, pimprove);
   } city_built_iterate_end;
 
   // Negative upkeep buildings provide infrastructural support on the
@@ -1353,10 +1353,10 @@ int city_total_unit_gold_upkeep(const struct city *pcity)
   Return TRUE iff the city has this building in it.
 **************************************************************************/
 bool city_has_building(const struct city *pcity,
-		       const struct impr_type *pimprove)
+                       const struct impr_type *pimprove)
 {
   if (NULL == pimprove) {
-    /* callers should ensure that any external data is tested with 
+    /* Callers should ensure that any external data is tested with 
      * valid_improvement_by_number() */
     return FALSE;
   }
@@ -1368,14 +1368,16 @@ bool city_has_building(const struct city *pcity,
   in the given city.
 **************************************************************************/
 int city_improvement_upkeep(const struct city *pcity,
-			    const struct impr_type *b)
+                            const struct impr_type *b)
 {
   int upkeep;
 
-  if (NULL == b)
+  if (NULL == b) {
     return 0;
-  if (is_wonder(b))
+  }
+  if (is_wonder(b)) {
     return 0;
+  }
 
   upkeep = b->upkeep;
   /* For POSITIVE upkeep buildings, return 0 upkeep if they are within the
@@ -1397,7 +1399,7 @@ int city_improvement_upkeep(const struct city *pcity,
   This can be used to calculate the benefits celebration would give.
 **************************************************************************/
 int city_tile_output(const struct city *pcity, const struct tile *ptile,
-		     bool is_celebrating, Output_type_id otype)
+                     bool is_celebrating, Output_type_id otype)
 {
   int prod;
   struct terrain *pterrain = tile_terrain(ptile);
@@ -1490,7 +1492,7 @@ int city_tile_output(const struct city *pcity, const struct tile *ptile,
   O_SHIELD, or O_TRADE).
 **************************************************************************/
 int city_tile_output_now(const struct city *pcity, const struct tile *ptile,
-			 Output_type_id otype)
+                         Output_type_id otype)
 {
   return city_tile_output(pcity, ptile, city_celebrating(pcity), otype);
 }
@@ -2141,63 +2143,67 @@ int city_turns_to_grow(const struct city *pcity)
 bool city_can_grow_to(const struct city *pcity, int pop_size)
 {
   return (get_city_bonus(pcity, EFT_SIZE_UNLIMIT) > 0
-	  || pop_size <= get_city_bonus(pcity, EFT_SIZE_ADJ));
+          || pop_size <= get_city_bonus(pcity, EFT_SIZE_ADJ));
 }
 
 /**********************************************************************//**
- is there an enemy city on this tile?
+  Is there an enemy city on this tile?
 **************************************************************************/
 struct city *is_enemy_city_tile(const struct tile *ptile,
-				const struct player *pplayer)
+                                const struct player *pplayer)
 {
   struct city *pcity = tile_city(ptile);
 
-  if (pcity && pplayers_at_war(pplayer, city_owner(pcity)))
+  if (pcity && pplayers_at_war(pplayer, city_owner(pcity))) {
     return pcity;
-  else
+  } else {
     return NULL;
+  }
 }
 
 /**********************************************************************//**
- is there an friendly city on this tile?
+  Is there an friendly city on this tile?
 **************************************************************************/
 struct city *is_allied_city_tile(const struct tile *ptile,
-				 const struct player *pplayer)
+                                 const struct player *pplayer)
 {
   struct city *pcity = tile_city(ptile);
 
-  if (pcity && pplayers_allied(pplayer, city_owner(pcity)))
+  if (pcity && pplayers_allied(pplayer, city_owner(pcity))) {
     return pcity;
-  else
+  } else {
     return NULL;
+  }
 }
 
 /**********************************************************************//**
- is there an enemy city on this tile?
+  Is there an enemy city on this tile?
 **************************************************************************/
 struct city *is_non_attack_city_tile(const struct tile *ptile,
-				     const struct player *pplayer)
+                                     const struct player *pplayer)
 {
   struct city *pcity = tile_city(ptile);
 
-  if (pcity && pplayers_non_attack(pplayer, city_owner(pcity)))
+  if (pcity && pplayers_non_attack(pplayer, city_owner(pcity))) {
     return pcity;
-  else
+  } else {
     return NULL;
+  }
 }
 
 /**********************************************************************//**
- is there an non_allied city on this tile?
+  Is there an non_allied city on this tile?
 **************************************************************************/
 struct city *is_non_allied_city_tile(const struct tile *ptile,
-				     const struct player *pplayer)
+                                     const struct player *pplayer)
 {
   struct city *pcity = tile_city(ptile);
 
-  if (pcity && !pplayers_allied(pplayer, city_owner(pcity)))
+  if (pcity && !pplayers_allied(pplayer, city_owner(pcity))) {
     return pcity;
-  else
+  } else {
     return NULL;
+  }
 }
 
 /**********************************************************************//**
@@ -2218,6 +2224,7 @@ bool is_friendly_city_near(const struct player *owner,
 {
   square_iterate(&(wld.map), ptile, 3, ptile1) {
     struct city *pcity = tile_city(ptile1);
+
     if (pcity && pplayers_allied(owner, city_owner(pcity))) {
       return TRUE;
     }
@@ -2227,7 +2234,7 @@ bool is_friendly_city_near(const struct player *owner,
 }
 
 /**********************************************************************//**
-  Return true iff a city exists within a city radius of the given 
+  Return TRUE iff a city exists within a city radius of the given 
   location. may_be_on_center determines if a city at x,y counts.
 **************************************************************************/
 bool city_exists_within_max_city_map(const struct tile *ptile,
@@ -2376,7 +2383,7 @@ void add_tax_income(const struct player *pplayer, int trade, int *output)
     rates[LUXURY] = game.info.forced_luxury;
     rates[TAX] = game.info.forced_gold;
   }
-  
+
   /* ANARCHY */
   if (government_of_player(pplayer) == game.government_during_revolution) {
     rates[SCIENCE] = 0;
@@ -2483,7 +2490,7 @@ static inline void set_city_bonuses(struct city *pcity)
   as workers are moved around, but does change when buildings are built,
   etc.
 
-  TODO: use the cached values elsethere in the code!
+  TODO: use the cached values elsewhere in the code!
 **************************************************************************/
 static inline void city_tile_cache_update(struct city *pcity)
 {

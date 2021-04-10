@@ -31,7 +31,10 @@ if ! cp -a overwrite/* freeciv ; then
 fi
 
 ( cd freeciv
-  ./autogen.sh --no-configure-run --disable-nls
-  ./configure CFLAGS="-O3" \
+  ./autogen.sh --no-configure-run --disable-nls )
+
+( mkdir -p build
+  cd build
+  ../freeciv/configure CFLAGS="-O3" \
               --enable-mapimg=magickwand --with-project-definition=../freeciv-web.project --enable-fcweb --enable-json --disable-delta-protocol --disable-nls --disable-fcmp --enable-freeciv-manual --disable-ruledit --enable-fcdb=no --enable-ai-static=classic --prefix=${HOME}/freeciv/ && make -s -j$(nproc)
 )

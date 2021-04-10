@@ -85,6 +85,7 @@
 
 #include "unittools.h"
 
+char encoded_unit_emoji[128];
 
 /* Tools for controlling the client vision of every unit when a unit
  * moves + script effects. See unit_move(). You can access this data with
@@ -278,7 +279,7 @@ static bool maybe_become_veteran_real(struct unit *punit, bool settler)
     /* The modification is tacked on as a multiplier to the base chance.
      * For example with a base chance of 50% for green units and a modifier
      * of +50% the end chance is 75%. */
-    chance = vlevel->raise_chance * mod / 100;
+    chance = vlevel->base_raise_chance * mod / 100;
   } else if (settler && unit_has_type_flag(punit, UTYF_SETTLERS)) {
     chance = vlevel->work_raise_chance;
   } else {
@@ -444,11 +445,14 @@ void unit_bombs_unit(struct unit *attacker, struct unit *defender,
 **************************************************************************/
 void combat_veterans(struct unit *attacker, struct unit *defender)
 {
-  if (attacker->hp > 0) {
-    maybe_make_veteran(attacker); 
-  }
-  if (defender->hp > 0) {
-    maybe_make_veteran(defender); 
+  if (attacker->hp <= 0 || defender->hp <= 0
+      || !game.info.only_killing_makes_veteran) {
+    if (attacker->hp > 0) {
+      maybe_make_veteran(attacker);
+    }
+    if (defender->hp > 0) {
+      maybe_make_veteran(defender);
+    }
   }
 }
 
@@ -1513,11 +1517,11 @@ void place_partisans(struct tile *pcenter, struct player *powner,
   (If specified cost is -1, then teleportation costs all movement.)
 **************************************************************************/
 bool teleport_unit_to_city(struct unit *punit, struct city *pcity,
-			  int move_cost, bool verbose)
+                           int move_cost, bool verbose)
 {
   struct tile *src_tile = unit_tile(punit), *dst_tile = pcity->tile;
 
-  if (city_owner(pcity) == unit_owner(punit)){
+  if (city_owner(pcity) == unit_owner(punit)) {
     log_verbose("Teleported %s %s from (%d,%d) to %s",
                 nation_rule_name(nation_of_unit(punit)),
                 unit_rule_name(punit), TILE_XY(src_tile), city_name_get(pcity));
@@ -1902,6 +1906,7 @@ void transform_unit(struct unit *punit, const struct unit_type *to_unit,
   unit_refresh_vision(punit);
 
   CALL_PLR_AI_FUNC(unit_transformed, pplayer, punit, old_type);
+  CALL_FUNC_EACH_AI(unit_info, punit);
 
   send_unit_info(NULL, punit);
   conn_list_do_unbuffer(pplayer->connections);
@@ -3240,8 +3245,16 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile,
                          bool suppress)
 {
   struct city *pcity = NULL;
+  int pop_loss;
+
+  pcity = tile_city(ptile);
 
   unit_list_iterate_safe(ptile->units, punit) {
+
+    /* unit in a city may survive */
+    if (pcity && fc_rand(100) < game.server.nuke_defender_survival_chance_pct) {
+      continue;
+    }
     notify_player(unit_owner(punit), ptile, E_UNIT_LOST_MISC, ftc_server,
                   _("[`nuclearexplosion`] Your %s %s %s nuked by %s."),
                   unit_tile_link(punit), UNIT_EMOJI(punit),
@@ -3259,7 +3272,6 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile,
     wipe_unit(punit, ULR_NUKE, pplayer);
   } unit_list_iterate_safe_end;
 
-  pcity = tile_city(ptile);
 
   if (pcity) {
     if (!suppress) {
@@ -3300,9 +3312,10 @@ static void do_nuke_tile(struct player *pplayer, struct tile *ptile,
         }
       }
     }
-    // Reduce size by half
+    // Reduce size by nuke_pop_loss_pct
     else {
-      city_reduce_size(pcity, city_size_get(pcity) / 2, pplayer, "nuke");
+      pop_loss = (game.server.nuke_pop_loss_pct * city_size_get(pcity)) / 100;
+      city_reduce_size(pcity, pop_loss, pplayer, "nuke");
       update_tile_knowledge(ptile);
     }
   }

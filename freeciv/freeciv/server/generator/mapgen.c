@@ -215,7 +215,7 @@ static bool test_wetness(const struct tile *ptile, wetness_c c)
 **************************************************************************/
 static bool test_miscellaneous(const struct tile *ptile, miscellaneous_c c)
 {
-  switch(c) {
+  switch (c) {
   case MC_NONE:
     return TRUE;
   case MC_LOW:
@@ -1415,7 +1415,7 @@ bool map_fractal_generate(bool autosize, struct unit_type *initial_unit)
       }
       break;
     case MAPGEN_ISLAND:
-      switch(wld.map.server.startpos) {
+      switch (wld.map.server.startpos) {
       case MAPSTARTPOS_DEFAULT:
       case MAPSTARTPOS_VARIABLE:
         log_verbose("Map generator chose startpos=SINGLE");
@@ -1442,7 +1442,7 @@ bool map_fractal_generate(bool autosize, struct unit_type *initial_unit)
         break;
       }
 
-      switch(mode) {
+      switch (mode) {
         case MAPSTARTPOS_SINGLE:
           log_verbose("Falling back to startpos=2or3");
           mode = MAPSTARTPOS_2or3;
@@ -2155,7 +2155,7 @@ static bool make_island(int islemass, int starters,
     lastplaced = i;
     if (i * 10 > islemass) {
       balance = i - islemass;
-    } else{
+    } else {
       balance = 0;
     }
 
@@ -2356,12 +2356,12 @@ static void mapgenerator3(void)
 
   landmass = (wld.map.xsize * (wld.map.ysize - 6) * wld.map.server.landpercent)/100;
   /* subtracting the arctics */
-  if (landmass > 3 * wld.map.ysize + player_count() * 3){
+  if (landmass > 3 * wld.map.ysize + player_count() * 3) {
     landmass -= 3 * wld.map.ysize;
   }
 
 
-  islandmass= (landmass)/(3 * bigislands);
+  islandmass = (landmass)/(3 * bigislands);
   if (islandmass < 4 * maxmassdiv6) {
     islandmass = (landmass)/(2 * bigislands);
   }
@@ -2383,14 +2383,14 @@ static void mapgenerator3(void)
     make_island(islandmass, 1, pstate, DMSIS);
   }
 
-  if (j == 500){
+  if (j == 500) {
     log_normal(_("Generator 3 didn't place all big islands."));
   }
-  
-  islandmass= (islandmass * 11)/8;
+
+  islandmass = (islandmass * 11) / 8;
   /*!PS: I'd like to mult by 3/2, but starters might make trouble then */
   if (islandmass < 2) {
-    islandmass= 2;
+    islandmass = 2;
   }
 
   while (checkmass > islandmass && ++j < 1500) {

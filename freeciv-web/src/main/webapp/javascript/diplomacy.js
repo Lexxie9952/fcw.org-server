@@ -430,6 +430,7 @@ function diplomacy_dialog_register(id, counterpart_id)
   });
 
   $(id).dialog('widget').position({my:"center top", at:"center top", of:window});
+  $(id).css("color", default_dialog_text_color);
 }
 /*********************************************************************** */
 function diplomacy_dialog_key_listener(ev)
@@ -458,7 +459,7 @@ function meeting_paint_custom_flag(nation, flag_canvas)
 }
 
 function create_clauses_menu(content) {
-  content.css('position', 'relative');
+  content.css({'position': 'relative', 'color': default_dialog_text_color});
   var children = content.children();
   var button = children.eq(0);
   var menu = children.eq(1);
@@ -470,7 +471,8 @@ function create_clauses_menu(content) {
        + parseFloat(button.css('paddingTop'))
        + parseFloat(button.css('paddingBottom'))
        + parseFloat(button.css('borderTopWidth')),
-    left: parseFloat(button.css('marginLeft'))
+    left: parseFloat(button.css('marginLeft')),
+    color: default_dialog_text_color
   });
   var menu_open = function () {
     menu.show();

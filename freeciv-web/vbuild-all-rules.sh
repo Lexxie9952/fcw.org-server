@@ -16,13 +16,13 @@ printf "\nRe-generating manuals\n"
    cd src/derived/webapp/man
    for r in ${RULESETS[@]}; do
       echo "Generating help manual for $r"    
-       ${TOPDIR}/freeciv/freeciv/tools/freeciv-manual -r $r
+       ${HOME}/freeciv/bin/freeciv-manual -r $r
    done
 
 # Vagrant install needs to copy these files into the tomcat webapp
 printf "\nCopying to Tomcat webapp\n"
    cp /vagrant/freeciv-web/src/derived/webapp/man/*.* /var/lib/tomcat8/webapps/freeciv-web/man/
 
-printf "\n\n****** REMINDER: ************************************************************"
-printf "(1) ./vclean-rules.sh is required to fix custom .html files that were overwritten."
+printf "\n\n****** REMINDER: ************************************************************\n"
+printf "(1) ./vclean-rules.sh is required to fix custom .html files that were overwritten.\n"
 printf "(2) run ./build.sh to refresh and activate the new manuals.\n"

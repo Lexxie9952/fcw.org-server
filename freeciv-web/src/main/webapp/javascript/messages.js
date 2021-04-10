@@ -94,10 +94,17 @@ function init_chatbox()
         // User resize saves size for next restore. Immediate reload needed to reset contained elements to new size.
         $( "#game_chatbox_panel" ).parent().resize( function(e,ui) { chatbox_restore("save");chatbox_restore("load");});
     }
-
-  $( "#game_chatbox_panel" ).parent().css("z-index","100"); // ensure it can always be opened/closed/never covered                                                         
+   
   $("#game_chatbox_panel").dialog('open');
   $(".chatbox_dialog").css("top", "52px");
+
+  $("#game_chatbox_panel").parent().css("z-index","100"); // ensure it can always be opened/closed/never covered
+  $("#game_chatbox_panel").parent().css("overflow", "hidden"); // make it immune to glitches making standard scrollbars (it already has a custom)
+  // This is how you override unknown css ghosts who think they're !important:
+  $( '#game_chatbox_panel' ).parent().each(function () {
+    this.style.setProperty( 'border', 'solid 1px', 'important' );
+    this.style.setProperty( 'border-color', '#4328', 'important' );
+  });
 
   if (is_small_screen()) {
     $(".ui-icon-pause").parent().hide();       // no restore button in mobile: hide button

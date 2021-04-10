@@ -40,7 +40,8 @@ description = *mp2-caravel/README.txt*
 
 ; What capabilities ruleset provides for the scenarios.
 ; mimimum-default-sets - Default units, terrains, buildings, etc
-capabilities = "minimum-default-sets"
+;capabilities = "minimum-default-sets"
+capabilities = "std-terrains"
 
 [options]
 global_init_techs=""
@@ -2495,7 +2496,7 @@ actor_reqs    =
     }
 target_reqs    =
     { "type",    "name",     "range"
-      "Terrain", "Arctic",  "Local"
+      "Terrain", "Glacier",  "Local"
     }
 [actionenabler_arctic_oil_prole]
 action        = "Build Mine"
@@ -2508,7 +2509,7 @@ actor_reqs    =
     }
 target_reqs    =
     { "type",    "name",     "range"
-      "Terrain", "Arctic",  "Local"
+      "Terrain", "Glacier",  "Local"
     }
 
 [actionenabler_irrigate_welldigger]

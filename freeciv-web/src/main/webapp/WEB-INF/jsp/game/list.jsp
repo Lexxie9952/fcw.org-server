@@ -70,30 +70,68 @@
 </script>
 	
 <style>
+	.input-group .form-control:first-child {
+			border-bottom-right-radius: 0;
+			border-top-right-radius: 0;
+			background: #000;
+			color: #ccc;
+			border-color: #444;
+			border-radius: 6px 0px 0px 6px;
+	}
+	.input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group {
+			background-color: #888;
+			background: #444;
+			color: #000;
+			border-color: #444;
+			text-shadow: 1px 1px #888;
+	}
+	a {
+    text-shadow: 1px 1px #000;
+	}
 	.nav-tabs {
 		margin-top: 5px;
 	}
 	.nav>li>a:hover {
-		background-color: #796f6f
+		background-color: #796f6f;
+		background: url('/images/bg.jpg');
+		color:  #eed;
+		text-shadow: 1px 1px #ccc
 	}
 	.nav-tabs>li>a {
 		background-color: #ecb66a;
 		text-transform: uppercase;
-		color: #fff;
-	    font-weight: 700;		
+		background: url('/images/bg.jpg');
+		color:  #eed;
+		font-weight: 700;
+		text-shadow: 1px 1px #000
 	}
 	.nav-tabs>li.active>a {
-		color: #fff;
+		background: url('/images/bg.jpg');
+		color: #eed;
+		text-shadow: 1px 1px #888
 	}
 	.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+			background: url('/images/bg-light.jpg');
 	    background-color: #be602d;
-	    color: #fff;
+	    color: #000;
+	}
+	.navbar-inverse {
+		background-color: #2220;
+		background: url('/images/bg-med-dark.png');
 	}
 	.tab-pane {
 		background-color: #fcf1e0;
+		background: url('/images/bg-med-dark.png');
+		color: #ccc;
 	}
-	.table {
-		background-color: #fcf1e0;
+	table {
+    border-collapse: collapse;
+    border-spacing: 0;
+		background: url(/images/bg-light.jpg);
+    color: #000;
+    font-weight: 600;
+    text-shadow: 1px 1px #bbb;
+		margin-top: -1px;
 	}
 	.table td {
 		vertical-align: middle;
@@ -126,6 +164,44 @@
 	#singleplayer-table td:last-child {
 		width: 140px;
 	}
+	body {
+		color: #ccc;
+  	background-image: url('/images/bg-dark.jpg'); 
+	}
+	.container {
+		background: none !important;
+		color: #ccc;
+	}
+	h1,h2,h3,h4,h5,h6 {
+		font-family: 'Freeciv', 'Segoe UI';
+		text-shadow: 1px 1px #222;
+	}
+	
+	@font-face {
+  font-family: Helvetica;
+  src: url('/fonts/arial.ttf');
+	}
+	@font-face {
+		font-family: Freeciv;
+		src: url('/fonts/freeciv.ttf');
+	}
+	@font-face {
+		font-family: FreecivSB;
+		src: url('/fonts/freeciv.m.ttf');
+	}
+	@font-face {
+		font-family: FreecivBold;
+		src: url('/fonts/freeciv.b.ttf');
+	}
+	@font-face {
+		font-family: FreecivBlack;
+		src: url('/fonts/freeciv.bl.ttf');
+	}
+	@font-face {
+		font-family: Arial;
+		src: url('/fonts/arial.ttf');
+	}
+
 </style>
 	
 	

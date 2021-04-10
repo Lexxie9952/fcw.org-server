@@ -48,8 +48,9 @@ The differences from the former default ruleset, 'classic', are listed in\
 description = *civ2civ3/README.civ2civ3*
 
 ; What capabilities ruleset provides for the scenarios.
-; mimimum-default-sets - Default units, terrains, buildings, etc
-capabilities = "minimum-default-sets"
+; See doc/README.rulesets for definitions of official capabilities
+; std-terrains         - At least standard set of terrains
+capabilities = "std-terrains"
 
 [options]
 global_init_techs=""
@@ -133,6 +134,12 @@ tech_loss_allow_holes     = FALSE
 ; Whether civil war is possible at all
 civil_war_enabled        = TRUE
 
+; How many percents each celebrating city affects chance of civil war
+civil_war_bonus_celebrating = -5
+
+; How many percents each unhappy city affects chance of civil war
+civil_war_bonus_unhappy     = 5
+
 ; Comma separated list of things to happen, in addition to death
 ; of owner, when gameloss unit dies
 ; "CivilWar"   - Part of the empire remains, controlled by a new player
@@ -211,6 +218,21 @@ slow_invasions = TRUE
 ; If this is set to FALSE units will attack with full strength even if they
 ; have only fractional moves left.
 tired_attack = TRUE
+
+; With some rules it`s possible that neither side of a combat dies.
+; Set this to TRUE if unit should never gain veterancy from such a combat.
+only_killing_makes_veteran = FALSE
+
+; Percentage of population lost by a city after nuclear attak. If set to
+; 100 city is destroyed along with all the units. If set to 0 city does not
+; loose population. Any value below 100 means the city can never be
+; destroyed completely using nuclear
+nuke_pop_loss_pct = 50
+
+; Percentage chance of a city defender surviving nuclear attack. When set
+; to 50 roughly half of defenders will survive nuclear attack. When set to
+; 0 no defenders will survive. When set to 100 all defenders will survive.
+nuke_defender_survival_chance_pct = 0
 
 [auto_attack]
 ; An auto attack may be triggered when another unit moves to an adjacent
@@ -689,9 +711,10 @@ actor_reqs    =
       "DiplRel", "Foreign", "Local", TRUE
     }
 target_reqs    =
-    { "type",   "name", "range", "present"
-      "UnitFlag", "Capturable", "Local", TRUE
-      "CityTile", "Center", "Local", FALSE
+    { "type",      "name",         "range", "present"
+      "UnitFlag",  "Capturable",   "Local", TRUE
+      "UnitState", "Transporting", "Local", FALSE
+      "CityTile",  "Center",       "Local", FALSE
     }
 
 [actionenabler_bombard]
@@ -1201,8 +1224,8 @@ fragments = 0
 ; Calendar fragment names. If name is missing, only a fragment number +1 (so human readable
 ; numbers begin from 1 and not 0) is shown.
 
-;fragment_name0 = "Jan"
-;fragment_name1 = "Feb"
+;fragment_name0 = _("Jan")
+;fragment_name1 = _("Feb")
 ; ...
 
 ; What labels are used for positive and negative years.

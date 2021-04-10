@@ -2477,7 +2477,7 @@ function do_map_click(ptile, qtype, first_time_called)
 
         if (goto_path) { // touch devices don't have a goto_path until they call this function twice. see: if (touch_device) below
           // Client circumvents FC Server has buggy GOTO for units which have UTYF_COAST + fuel:
-          if (unit_has_type_flag(punit, UTYF_COAST) && punit['fuel']>0 && !delayed_goto_active && goto_path !== "undefined") {
+          if (unit_has_type_flag(punit, UTYF_COAST) && punit['fuel']>0 && !delayed_goto_active /*&& goto_path !== "undefined"*/) {
             if (goto_path['dir'] && goto_path['dir'][0] && goto_path['dir'][0]==-1) {
               goto_path['dir'].shift();  // remove the first "refuel dir -1" on coastal fuel units so they don't freeze on refuel spots
               goto_path['length']--;     // correct the path length for the removed -1 "refuel dir"
@@ -3095,20 +3095,32 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'B':
-      if (ctrl) {   //CTRL-B solid fill national borders
+      if (ctrl && !alt && !shift) {          // CTRL-B draw border flags
         the_event.stopPropagation();
-        fill_national_border = !fill_national_border;
-      }
-    else if (current_focus.length==1 &&   // check if single focused unit can found or join city
-    (utype_can_do_action(unit_type(current_focus[0]),ACTION_JOIN_CITY)
-    || utype_can_do_action(unit_type(current_focus[0]),ACTION_FOUND_CITY))) {
-
-        request_unit_build_city();
-    } else {   // otherwise hover over city while hitting B sends instant-buy command to it
+        draw_border_flags = !draw_border_flags;
+        simpleStorage.set('borderFlags', draw_border_flags); 
+      } else if (alt && !shift && !ctrl) {   // ALT-B tricolore mode
+        the_event.stopPropagation();
+        draw_tertiary_colors = !draw_tertiary_colors;
+        simpleStorage.set('tricolore', draw_tertiary_colors); 
+      } else if (alt && shift && !ctrl) {    // ALT-SHIFT-B moving borders
+        the_event.stopPropagation();
+        draw_moving_borders = !draw_moving_borders;
+        simpleStorage.set('movingBorders', draw_moving_borders); 
+      } else if (shift && !alt && !ctrl) {    // SHIFT-B show nations in their 1/2/3 colors
+        minimap_color ++;
+        if (minimap_color >= 4) { minimap_color = 0; }
+        palette = generate_palette();
+        force_redraw_overview();
+      } else if (current_focus.length==1 &&   // check if single focused unit can found or join city
+                 (utype_can_do_action(unit_type(current_focus[0]),ACTION_JOIN_CITY)
+                 || utype_can_do_action(unit_type(current_focus[0]),ACTION_FOUND_CITY))) {
+          request_unit_build_city();
+      } else {   // otherwise hover over city while hitting B sends instant-buy command to it
         var ptile = canvas_pos_to_tile(mouse_x, mouse_y); // get tile
         var pcity = tile_city(ptile); // check if it's a city
         if (pcity!=null) request_city_id_buy(pcity['id']); // send buy order
-    }
+      }
     break;
 
     case 'C':
@@ -3138,8 +3150,12 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'E':
-      if (shift) {
+      if (shift && !ctrl && !alt) {
         key_unit_airbase();
+      }
+      if (ctrl && shift) {
+        // show/hide the dev/debug messages sent from server to supercow users
+        $(".e_log_error").toggle();
       }
     break;
 
@@ -6620,7 +6636,7 @@ function popup_fullscreen_enter_game_dialog()
   $("<div id='fullscreen_dialog'></div>").appendTo("div#game_page");
 
   if (!is_small_screen())
-    $(id).html("<b>Enter Full Screen when you interact with game.</b><br><br><b>ALT-S</b> toggles Full Screen.<br><b>ESC</b> exits full screen.");
+    $(id).html("<b>Enters Full Screen when you interact with game.</b><br><br><b>ALT-S</b> toggles Full Screen.<br><b>ESC</b> exits full screen.");
   else 
     $(id).html("<b>Play in Full Screen Mode.");
 
@@ -6666,7 +6682,41 @@ function openFullscreen() {
 ****************************************************************************/
 function setSwalTheme() {
   // Sweet alert recolor for dark-theme (it overwrites civclient.css settings)
-  $(".confirm").css("color", "#060");
-  $(".cancel").css("color", "#600");
+  $(".confirm").css("color", "#5C5");
+  $(".cancel").css("color", "#C55");
   $(".sweet-alert").children().css("color", "#d4cfb9");
+}
+
+// Takes an onclick() on the invisible pane over tabs, hides the pane temporarily
+// and clicks the tab under it, then displays the pane again. So we don't have
+// to see stupid url preview links when we hover over our game tabs.
+function clickMask(ev, pane) {
+  x1 = ev.clientX;
+  y1 = ev.clientY;
+  ev.stopPropagation();
+
+  if (x1==0 && y1==0) return;
+
+  if (x1 !== undefined && y1 !== undefined)
+  {
+    if (pane==1) {
+      //$("#ixtjkiller1").hide();
+      $("#ixtjkiller1").css("pointer-events", "none");
+      //console.log(x1+","+y1);
+      jQuery(document.elementFromPoint(x1, y1)).click();
+      $("#ixtjkiller1").css("pointer-events", "auto");
+      //$("#ixtjkiller1").show();
+    }
+    else {
+      //$("#ixtjkiller2").hide();
+      $("#ixtjkiller2").css("pointer-events", "none");
+      //console.log(x1+","+y1);
+      jQuery(document.elementFromPoint(x1, y1)).click();
+      $("#ixtjkiller2").css("pointer-events", "auto");
+      //$("#ixtjkiller2").show();
+    }
+  }
+  //setTimeout( $("#ixtjkiller").show(), 200);
+
+  // TO DO: if failing from undefined x>n times, it just hides it so it works from now on.
 }

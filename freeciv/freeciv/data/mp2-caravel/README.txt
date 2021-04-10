@@ -1,16 +1,16 @@
 MP2-Caravel ruleset
 -------------------------------------
 LINKS:
-<a href="https://freeciv.fandom.com/wiki/Multiplayer_II_Game_Manual" target="_blank">Full Game Manual</a>
+<a href="https://freeciv.fandom.com/wiki/Multiplayer_II:_Caravel,_Game_Manual" target="_blank">Full Game Manual, MP2-Caravel</a>
 <a href="https://freeciv.fandom.com/wiki/Multiplayer_II_Summary" target="_blank">Multiplayer II Summary</a>
 <a href="https://freeciv.fandom.com/wiki/Design_Log.mp2" target="_blank">Design Log</a>
 ...
-<a href="https://freeciv.fandom.com/wiki/Terrain.mp2#Terrain_Chart" target="_blank">Terrain</a>
-<a href="https://freecivweb.fandom.com/wiki/Bases.ag" target="_blank">Bases</a>
-<a href="https://freeciv.fandom.com/wiki/Combat.mp2" target="_blank">Combat</a>
-<a href="https://freeciv.fandom.com/wiki/Government.mp2" target="_blank">Governments</a>
-<a href="https://freeciv.fandom.com/wiki/Economy.mp2" target="_blank">Economy</a>
-<a href="https://freeciv.fandom.com/wiki/Diplomacy.mp2" target="_blank">Diplomacy</a>
+<a href="https://freeciv.fandom.com/wiki/Terrain.mp2c#Terrain_Chart" target="_blank">Terrain</a>
+<a href="https://freecivweb.fandom.com/wiki/Bases.mp2c" target="_blank">Bases</a>
+<a href="https://freeciv.fandom.com/wiki/Combat.mp2c" target="_blank">Combat</a>
+<a href="https://freeciv.fandom.com/wiki/Government.mp2c" target="_blank">Governments</a>
+<a href="https://freeciv.fandom.com/wiki/Economy.mp2c" target="_blank">Economy</a>
+<a href="https://freeciv.fandom.com/wiki/Diplomacy.mp2c" target="_blank">Diplomacy</a>
 <a href="https://freeciv.fandom.com/wiki/Diplomatic_Action_Chart.mp2" target="_blank">Diplomatic Odds Charts</a>
 ...
 <a href="https://freeciv.fandom.com/wiki/Defense_bonus_chart.mp2" target="_blank">Terrain+Base Defense Bonus Quick-Reference</a>
@@ -23,6 +23,6 @@ This ruleset began using MP2 as its base and added to it. Enjoy!
 -----------------------------
 Changelogs for MP2:
 -----------------------------
-<a href="https://freeciv.fandom.com/wiki/Multiplayer_II_Summary#Avant-Garde_MP2" target="_blank">Hotkeys and Mouse Control</a>
+<a href="https://freeciv.fandom.com/wiki/Multiplayer_II_Summary#Caravel_MP2" target="_blank">MP2 Caravel changelog</a>
 
 END.

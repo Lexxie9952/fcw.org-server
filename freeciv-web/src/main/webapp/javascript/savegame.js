@@ -173,9 +173,11 @@ function show_load_game_dialog_cb(savegames_data)
 		    swal("Unable to load savegame: no game selected.");
         setSwalTheme();
 		  } else if ($('#selectable .ui-selected').text() != null){
+            $.blockUI({ message: "<h1 style='text-align:center'><font color='#ccc'>Loading Savegame...</font>"
+            + "<br><center><img src='/images/loading.gif'></center></h1>",
+              color: default_dialog_text_color });
             send_message("/load " + $('#selectable .ui-selected').text());
             game_loaded = true;
-
 		    $("#dialog").dialog('close');
 		    $("#game_text_input").blur();
 		  }

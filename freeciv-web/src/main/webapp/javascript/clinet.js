@@ -95,7 +95,7 @@ function network_init()
 ****************************************************************************/
 function websocket_init()
 {
-  $.blockUI({ message: "<h2>Please wait while connecting to the server.</h2>" });
+  $.blockUI({ message: "<h1 style='text-align:center'><font color='#ccc'>Connecting...</font></h1>"});
   var proxyport = 1000 + parseFloat(civserverport);
   var ws_protocol = ('https:' == window.location.protocol) ? "wss://" : "ws://";
   var port = window.location.port ? (':' + window.location.port) : '';
@@ -105,7 +105,7 @@ function websocket_init()
 
   ws.onmessage = function (event) {
      if (typeof client_handle_packet !== 'undefined') {
-       client_handle_packet(jQuery.parseJSON(event.data));
+       client_handle_packet(JSON.parse(event.data));
        if (DEBUG_LOG_PACKETS) 
          console.log("*** INCOMING PACKET>>>>>"+event.data);
         

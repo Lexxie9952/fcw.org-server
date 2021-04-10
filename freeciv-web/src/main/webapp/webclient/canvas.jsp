@@ -4,10 +4,9 @@
  <image id="roads_image" style="display:none;">
  <canvas id="roads_canvas" style="display:none;"></canvas>
 
- <div id="mapview_canvas_div">
+ <div id="mapview_canvas_div" style="border:none; outline:none; padding:0px; margin:0px;">
     <%-- The main mapview canvas --%>  
-    <div id="canvas_div">
-
+    <div id="canvas_div" style="border:none; outline:none; padding:0px; margin:0px;">
     </div>
     
     <%-- Message chatbox --%>
@@ -17,7 +16,7 @@
       </div>
       <div id="game_chat_box">
         <canvas id="chat_direction" width="29" height="20" role="button"></canvas>
-        <input id="game_text_input" type="text" name="text_input" />
+        <input id="game_text_input" autocomplete="off" type="text" name="text_input" />
       </div>
     </div>
 

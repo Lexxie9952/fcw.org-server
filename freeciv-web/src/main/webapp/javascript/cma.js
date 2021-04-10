@@ -105,6 +105,23 @@ function show_city_governor_tab()
   create_cma_page();
   update_cma_state();
 
+  // These won't set inside civclient.css, so we do it here:
+  $(".ui-slider-handle").css("background", "url('/images/slider_prod.png')");
+  $(".ui-slider").css("background", "url('/images/string.png')");
+  $("#cma-val-slider-Food").children().css("background-image", "url('/images/slider_food.png')");
+  $("#cma-val-slider-Shield").children().css("background-image", "url('/images/slider_prod.png')");
+  $("#cma-val-slider-Trade").children().css("background-image", "url('/images/slider_trade.png')");
+  $("#cma-val-slider-Gold").children().css("background-image", "url('/images/slider_gold.png')");
+  $("#cma-val-slider-Luxury").children().css("background-image", "url('/images/slider_lux.png')");
+  $("#cma-val-slider-Science").children().css("background-image", "url('/images/slider_sci.png')");
+  $("#cma-happy-slider").children().css("background-image", "url('/images/slider_happy.png')");
+  $("#cma-min-slider-Food").children().css("background-image", "url('/images/slider_food.png')");
+  $("#cma-min-slider-Shield").children().css("background-image", "url('/images/slider_prod.png')");
+  $("#cma-min-slider-Trade").children().css("background-image", "url('/images/slider_trade.png')");
+  $("#cma-min-slider-Gold").children().css("background-image", "url('/images/slider_gold.png')");
+  $("#cma-min-slider-Luxury").children().css("background-image", "url('/images/slider_lux.png')");
+  $("#cma-min-slider-Science").children().css("background-image", "url('/images/slider_sci.png')");
+
   return true;
 }
 /**************************************************************************

@@ -23,7 +23,7 @@
 /* server/advisors */
 #include "infracache.h"
 
-/* threxpr */
+/* ai/tex */
 #include "texaiplayer.h"
 
 #include "texaiworld.h"
@@ -141,7 +141,7 @@ void texai_tile_info_recv(void *data)
 /**********************************************************************//**
   Send city information to the thread.
 **************************************************************************/
-static void texai_city_update(struct city *pcity, enum texaireqtype msgtype)
+static void texai_city_update(struct city *pcity, enum texaimsgtype msgtype)
 {
   if (texai_thread_running()) {
     struct texai_city_info_msg *info
@@ -191,7 +191,13 @@ void texai_city_info_recv(void *data, enum texaimsgtype msgtype)
     tile_set_worked(ptile, pcity);
   } else {
     pcity = idex_lookup_city(&texai_world, info->id);
-    pcity->owner = pplayer;
+
+    if (pcity != NULL) {
+      pcity->owner = pplayer;
+    } else {
+      log_error("Tex: requested change on city id %d that's not known.",
+                info->id);
+    }
   }
 }
 
@@ -225,26 +231,33 @@ void texai_city_destruction_recv(void *data)
   struct texai_id_msg *info = (struct texai_id_msg *)data;
   struct city *pcity = idex_lookup_city(&texai_world, info->id);
 
-  adv_city_free(pcity);
-  tile_set_worked(city_tile(pcity), NULL);
-  idex_unregister_city(&texai_world, pcity);
-  destroy_city_virtual(pcity);
+  if (pcity != NULL) {
+    adv_city_free(pcity);
+    tile_set_worked(city_tile(pcity), NULL);
+    idex_unregister_city(&texai_world, pcity);
+    destroy_city_virtual(pcity);
+  } else {
+    log_error("Tex: requested removal of city id %d that's not known.",
+              info->id);
+  }
 }
 
 /**********************************************************************//**
   Send unit information to the thread.
 **************************************************************************/
-static void texai_unit_update(struct unit *punit, enum texaireqtype msgtype)
+static void texai_unit_update(struct unit *punit, enum texaimsgtype msgtype)
 {
-  struct texai_unit_info_msg *info
-    = fc_malloc(sizeof(struct texai_unit_info_msg));
+  if (texai_thread_running()) {
+    struct texai_unit_info_msg *info
+      = fc_malloc(sizeof(struct texai_unit_info_msg));
 
-  info->id = punit->id;
-  info->owner = player_number(unit_owner(punit));
-  info->tindex = tile_index(unit_tile(punit));
-  info->type = utype_number(unit_type_get(punit));
+    info->id = punit->id;
+    info->owner = player_number(unit_owner(punit));
+    info->tindex = tile_index(unit_tile(punit));
+    info->type = utype_number(unit_type_get(punit));
 
-  texai_send_msg(msgtype, NULL, info);
+    texai_send_msg(msgtype, NULL, info);
+  }
 }
 
 /**********************************************************************//**
@@ -252,9 +265,15 @@ static void texai_unit_update(struct unit *punit, enum texaireqtype msgtype)
 **************************************************************************/
 void texai_unit_created(struct unit *punit)
 {
-  if (texai_thread_running()) {
-    texai_unit_update(punit, TEXAI_MSG_UNIT_CREATED);
-  }
+  texai_unit_update(punit, TEXAI_MSG_UNIT_CREATED);
+}
+
+/**********************************************************************//**
+  Unit (potentially) changed in main map.
+**************************************************************************/
+void texai_unit_changed(struct unit *punit)
+{
+  texai_unit_update(punit, TEXAI_MSG_UNIT_CHANGED);
 }
 
 /**********************************************************************//**
@@ -277,7 +296,7 @@ void texai_unit_info_recv(void *data, enum texaimsgtype msgtype)
     idex_register_unit(&texai_world, punit);
     unit_list_prepend(ptile->units, punit);
     unit_list_prepend(plr_data->units, punit);
-  } else {
+  } else if (msgtype == TEXAI_MSG_UNIT_MOVED) {
     struct tile *old_tile;
 
     punit = idex_lookup_unit(&texai_world, info->id);
@@ -287,6 +306,12 @@ void texai_unit_info_recv(void *data, enum texaimsgtype msgtype)
       unit_list_remove(old_tile->units, punit);
       unit_list_prepend(ptile->units, punit);
     }
+  } else {
+    fc_assert(msgtype == TEXAI_MSG_UNIT_CHANGED);
+
+    punit = idex_lookup_unit(&texai_world, info->id);
+
+    punit->utype = type;
   }
 
   unit_tile_set(punit, ptile);
@@ -313,13 +338,19 @@ void texai_unit_destruction_recv(void *data)
 {
   struct texai_id_msg *info = (struct texai_id_msg *)data;
   struct unit *punit = idex_lookup_unit(&texai_world, info->id);
-  struct texai_plr *plr_data = player_ai_data(punit->owner,
-                                              texai_get_self());
 
-  unit_list_remove(punit->tile->units, punit);
-  unit_list_remove(plr_data->units, punit);
-  idex_unregister_unit(&texai_world, punit);
-  unit_virtual_destroy(punit);
+  if (punit != NULL) {
+    struct texai_plr *plr_data = player_ai_data(punit->owner,
+                                                texai_get_self());
+
+    unit_list_remove(punit->tile->units, punit);
+    unit_list_remove(plr_data->units, punit);
+    idex_unregister_unit(&texai_world, punit);
+    unit_virtual_destroy(punit);
+  } else {
+    log_error("Tex: requested removal of unit id %d that's not known.",
+              info->id);
+  }
 }
 
 /**********************************************************************//**
@@ -346,8 +377,13 @@ void texai_unit_moved_recv(void *data)
   struct unit *punit = idex_lookup_unit(&texai_world, info->id);
   struct tile *ptile = index_to_tile(&(texai_world.map), info->tindex);
 
-  unit_list_remove(punit->tile->units, punit);
-  unit_list_prepend(ptile->units, punit);
+  if (punit != NULL) {
+    unit_list_remove(punit->tile->units, punit);
+    unit_list_prepend(ptile->units, punit);
 
-  unit_tile_set(punit, ptile);
+    unit_tile_set(punit, ptile);
+  } else {
+    log_error("Tex: requested moving of unit id %d that's not known.",
+              info->id);
+  }
 }

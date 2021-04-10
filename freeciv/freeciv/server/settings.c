@@ -1208,8 +1208,8 @@ static bool fortifywaittime_callback(int value, struct connection *caller,
 static bool mapsize_callback(int value, struct connection *caller,
                              char *reject_msg, size_t reject_msg_len)
 {
-  if (value == MAPSIZE_XYSIZE && MAP_IS_ISOMETRIC &&
-      wld.map.ysize % 2 != 0) {
+  if (value == MAPSIZE_XYSIZE && MAP_IS_ISOMETRIC
+      && wld.map.ysize % 2 != 0) {
     /* An isometric map needs a even ysize. Is is calculated automatically
      * for all settings but mapsize=XYSIZE. */
     settings_snprintf(reject_msg, reject_msg_len,
@@ -1266,8 +1266,8 @@ static bool ysize_callback(int value, struct connection *caller,
                         "%d tiles."), wld.map.xsize, value, size,
                         MAP_MAX_SIZE * 1000);
     return FALSE;
-  } else if (wld.map.server.mapsize == MAPSIZE_XYSIZE && MAP_IS_ISOMETRIC &&
-             value % 2 != 0) {
+  } else if (wld.map.server.mapsize == MAPSIZE_XYSIZE && MAP_IS_ISOMETRIC
+             && value % 2 != 0) {
     /* An isometric map needs a even ysize. Is is calculated automatically
      * for all settings but mapsize=XYSIZE. */
     settings_snprintf(reject_msg, reject_msg_len,
@@ -1285,9 +1285,9 @@ static bool ysize_callback(int value, struct connection *caller,
 static bool topology_callback(unsigned value, struct connection *caller,
                               char *reject_msg, size_t reject_msg_len)
 {
-  if (wld.map.server.mapsize == MAPSIZE_XYSIZE &&
-      ((value & (TF_ISO)) != 0 || (value & (TF_HEX)) != 0) &&
-      wld.map.ysize % 2 != 0) {
+  if (wld.map.server.mapsize == MAPSIZE_XYSIZE
+      && ((value & (TF_ISO)) != 0 || (value & (TF_HEX)) != 0)
+      && wld.map.ysize % 2 != 0) {
     /* An isometric map needs a even ysize. Is is calculated automatically
      * for all settings but mapsize=XYSIZE. */
     settings_snprintf(reject_msg, reject_msg_len,
@@ -1932,7 +1932,7 @@ static struct setting settings[] = {
              nationset_callback, nationset_action, GAME_DEFAULT_NATIONSET)
 
   GEN_INT("ec_turns", game.server.event_cache.turns,
-          SSET_RULES_FLEXIBLE, SSET_INTERNAL, SSET_SITUATIONAL,
+          SSET_META, SSET_INTERNAL, SSET_SITUATIONAL,
           ALLOW_NONE, ALLOW_BASIC,
           N_("Event cache for this number of turns"),
           N_("Event messages are saved for this number of turns. A value of "
@@ -1941,7 +1941,7 @@ static struct setting settings[] = {
           GAME_DEFAULT_EVENT_CACHE_TURNS)
 
   GEN_INT("ec_max_size", game.server.event_cache.max_size,
-          SSET_RULES_FLEXIBLE, SSET_INTERNAL, SSET_SITUATIONAL,
+          SSET_META, SSET_INTERNAL, SSET_SITUATIONAL,
           ALLOW_NONE, ALLOW_BASIC,
           N_("Size of the event cache"),
           N_("This defines the maximal number of events in the event cache."),
@@ -1949,14 +1949,14 @@ static struct setting settings[] = {
           GAME_MAX_EVENT_CACHE_MAX_SIZE, GAME_DEFAULT_EVENT_CACHE_MAX_SIZE)
 
   GEN_BOOL("ec_chat", game.server.event_cache.chat,
-           SSET_RULES_FLEXIBLE, SSET_INTERNAL, SSET_SITUATIONAL,
+           SSET_META, SSET_INTERNAL, SSET_SITUATIONAL,
            ALLOW_NONE, ALLOW_BASIC,
            N_("Save chat messages in the event cache"),
            N_("If turned on, chat messages will be saved in the event "
               "cache."), NULL, NULL, GAME_DEFAULT_EVENT_CACHE_CHAT)
 
   GEN_BOOL("ec_info", game.server.event_cache.info,
-           SSET_RULES_FLEXIBLE, SSET_INTERNAL, SSET_SITUATIONAL,
+           SSET_META, SSET_INTERNAL, SSET_SITUATIONAL,
            ALLOW_NONE, ALLOW_BASIC,
            N_("Print turn and time for each cached event"),
            /* TRANS: Don't translate the text between single quotes. */
@@ -4063,7 +4063,7 @@ static bool setting_enum_validate_base(const struct setting *pset,
 ****************************************************************************/
 static bool set_enum_value(struct setting *pset, int val)
 {
-  switch(pset->enumerator.store_size) {
+  switch (pset->enumerator.store_size) {
    case sizeof(int):
      {
        int *to_int = pset->enumerator.pvalue;
@@ -4099,7 +4099,7 @@ int read_enum_value(const struct setting *pset)
 {
   int val;
 
-  switch(pset->enumerator.store_size) {
+  switch (pset->enumerator.store_size) {
    case sizeof(int):
      val = *((int *)pset->enumerator.pvalue);
      break;

@@ -92,12 +92,12 @@
  *      "duplicates_ok")
  */
 
-#define SPEC_CAPSTR "+Freeciv-spec-Devel-2015-Mar-25"
+#define SPEC_CAPSTR "+Freeciv-spec-Devel-2019-Mar-09"
 /*
  * Individual spec file capabilities acceptable to this program:
  *
- * +Freeciv-2.3-spec
- *    - basic format for Freeciv versions 2.3.x; required
+ * +Freeciv-3.0-spec
+ *    - basic format for Freeciv versions 3.0.x; required
  */
 
 #define TILESPEC_SUFFIX ".tilespec"
@@ -6799,7 +6799,7 @@ int fill_basic_base_sprite_array(const struct tileset *t,
   if ((x) != NULL) {\
     ADD_SPRITE_FULL(x);\
   }\
-} while (0)
+} while (FALSE)
 
   /* Corresponds to LAYER_SPECIAL{1,2,3} order. */
   ADD_SPRITE_IF_NOT_NULL(t->sprites.extras[idx].u.bmf.background);
