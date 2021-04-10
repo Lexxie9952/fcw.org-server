@@ -1924,6 +1924,7 @@ input[type="text"], textarea {
 #city_improvements_panel {
   clear: left;
   width: 95%;
+  line-height:16px;
 }
 #prod_descr,
 #city_dialog,
