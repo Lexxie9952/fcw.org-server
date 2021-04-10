@@ -113,6 +113,8 @@ function unit_owner(punit)
 ****************************************************************************/
 function client_remove_unit(punit)
 {
+  control_unit_killed(punit);
+
   if (unit_is_in_focus(punit)) {
     current_focus = [];
   }
