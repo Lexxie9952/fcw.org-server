@@ -2477,7 +2477,7 @@ function do_map_click(ptile, qtype, first_time_called)
 
         if (goto_path) { // touch devices don't have a goto_path until they call this function twice. see: if (touch_device) below
           // Client circumvents FC Server has buggy GOTO for units which have UTYF_COAST + fuel:
-          if (unit_has_type_flag(punit, UTYF_COAST) && punit['fuel']>0 && !delayed_goto_active && goto_path !== "undefined") {
+          if (unit_has_type_flag(punit, UTYF_COAST) && punit['fuel']>0 && !delayed_goto_active /*&& goto_path !== "undefined"*/) {
             if (goto_path['dir'] && goto_path['dir'][0] && goto_path['dir'][0]==-1) {
               goto_path['dir'].shift();  // remove the first "refuel dir -1" on coastal fuel units so they don't freeze on refuel spots
               goto_path['length']--;     // correct the path length for the removed -1 "refuel dir"
