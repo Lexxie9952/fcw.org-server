@@ -263,17 +263,30 @@ input[type='number'] {
   margin-right: 0px;
   text-shadow: 2px 1px #000;
 }
+/* food shield trade: tile output styling for tile info window */
+.fbt,.sbt,.tbt {
+  padding-left: 3px;
+  padding-bottom: 1px;
+  border: 1px solid #0003;
+  border-radius: 2px;
+}
 .fbt {
   background-color: #00ee01;
   color: #000;
+  border-style: solid hidden solid solid;
 }
 .sbt {
   background-color: #e4e4e4;
   color: #000;
+  border-style: solid hidden solid solid !important;
+
 }
 .tbt {
   background-color: #ebde11;
   color: #000;
+  border-style: hidden solid hidden solid !important;
+  padding-right: 3px !important;
+  border-style: solid solid solid solid;
 }
 .black_shadow {
   text-shadow: 2px 1px black;
