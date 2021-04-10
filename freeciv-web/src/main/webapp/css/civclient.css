@@ -87,7 +87,7 @@ button {
 
 #overview_map {
   cursor:crosshair;
-  border: 1px solid #555555;
+  border: none;
   position: relative;
 }
 
@@ -918,7 +918,7 @@ input[type='number'] {
 }
 
 .overview_dialog .ui-dialog-titlebar, .unit_dialog .ui-dialog-titlebar, .chatbox_dialog .ui-dialog-titlebar  {
-  padding-bottom: 0px;
+  padding-bottom: 1px;
   padding-left: 4px;
   padding-top: 0px;
   font-size: 11px;
@@ -927,6 +927,17 @@ input[type='number'] {
   overflow: hidden;
   border-color: #432;
 }
+.overview_dialog {
+  padding: 4px 2px;
+  border-radius: 7px 7px 3px 3px;
+}
+#game_overview_panel {
+  padding: 0px;
+  padding-bottom: 2px;
+  margin-bottom: -5px;
+  overflow: hidden;
+}
+
 .chatbox_dialog .ui-dialog-titlebar {
   background: #432 url("/images//ui-widget-header.png") 100% 50% repeat-x;
 } /* theme classes 6 */
@@ -1138,11 +1149,6 @@ input[type='number'] {
 #cities_scroll {
   width: 100%;
   overflow: auto;
-}
-
-#game_overview_panel {
-  padding: 2px;
-  margin-bottom: -5px;
 }
 
 .negative_net_income {
