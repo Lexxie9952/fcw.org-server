@@ -519,6 +519,9 @@ input[type='number'] {
 .ui-dialog .ui-dialog-content {
   position: static;
 }
+#city_canvas_div {
+  border-radius: 6px;
+}
 #city_present_units, #city_supported_units, #city_improvements {
   float: left;
   height: 105px;
@@ -528,6 +531,7 @@ input[type='number'] {
   padding: 6px;
   margin: 5px;
   min-width: 300px;
+  border-radius: 6px;
 }
 #city_improvements {
   min-width: 280px;
@@ -692,7 +696,7 @@ input[type='number'] {
 }
 
 .ui-selected {
-  background-color: #bfd9dd;
+  background-color: #d8d8d8;
   color: black;
 }
 
@@ -745,6 +749,16 @@ input[type='number'] {
   color: #d8d8d8;
 }
 
+.nation_row_self.ui-selected,
+.nation_row_war.ui-selected,
+.nation_row_ceasefire.ui-selected,
+.nation_row_armistice.ui-selected,
+.nation_row_peace.ui-selected,
+.nation_row_alliance.ui-selected,
+.nation_row_dead.ui-selected,
+.nation_row_none.ui-selected {
+  color: var(--contrast_text_color);
+}
 
 #city_disband_options {
   padding: 10px;
