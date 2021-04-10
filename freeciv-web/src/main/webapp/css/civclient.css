@@ -359,6 +359,10 @@ input[type='number'] {
   text-align: right;
 }
 
+.warcalc_input {
+  border-radius: 1px;
+  border-color: #555;
+}
 
 /* numbers align digits in ISO accounting format */
 .number_element {
