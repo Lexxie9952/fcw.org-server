@@ -615,11 +615,15 @@ function mapview_put_tile_label(pcanvas, tile, canvas_x, canvas_y) {
 
 /**************************************************************************
   Renders the national border lines onto the canvas.
-**************************************************************************
-function mapview_put_border_line(pcanvas, dir, color, color2, color3, canvas_x, canvas_y) {
+**************************************************************************/
+function mapview_put_grid_line(pcanvas, dir, color, canvas_x, canvas_y) {
   var x = canvas_x + 47;
   var y = canvas_y + 3;
   pcanvas.strokeStyle = color;
+  mapview_canvas_ctx.lineWidth = 2;
+  mapview_canvas_ctx.lineDashOffset = 0;
+  mapview_canvas_ctx.setLineDash([4,4]);
+
   pcanvas.beginPath();
 
   if (dir == DIR8_NORTH) {
@@ -638,7 +642,6 @@ function mapview_put_border_line(pcanvas, dir, color, color2, color3, canvas_x, 
   pcanvas.closePath();
   pcanvas.stroke();
 }
-*/
 
 /**************************************************************************
   Renders the national border lines onto the canvas.

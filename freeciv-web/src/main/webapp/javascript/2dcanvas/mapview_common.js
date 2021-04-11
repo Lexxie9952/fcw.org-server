@@ -559,9 +559,11 @@ function put_drawn_sprites(pcanvas, canvas_x, canvas_y, pdrawn, fog)
       mapview_put_city_bar(pcanvas, pdrawn[i]['city'], canvas_x + offset_x, canvas_y + offset_y);
     } else if (pdrawn[i]['key'] == "border" ) {
       mapview_put_border_line(pcanvas, pdrawn[i]['dir'], pdrawn[i]['color'], pdrawn[i]['color2'], pdrawn[i]['color3'], canvas_x, canvas_y);
-    } else if (pdrawn[i]['key'] == "territory" ) {
+    } else if (pdrawn[i]['key'] == "mapgrid" ) {
+      mapview_put_grid_line(pcanvas, pdrawn[i]['dir'], pdrawn[i]['color'], canvas_x, canvas_y);
+    } /* else if (pdrawn[i]['key'] == "territory" ) {
       mapview_territory_fill(pcanvas, pdrawn[i]['color'], canvas_x, canvas_y);
-    } else if (pdrawn[i]['key'] == "goto_line" ) {
+    } */ else if (pdrawn[i]['key'] == "goto_line" ) {
       mapview_put_goto_line(pcanvas, pdrawn[i]['goto_dir'], canvas_x, canvas_y);
     } else if (pdrawn[i]['key'] == "tile_label" ) {
       mapview_put_tile_label(pcanvas, pdrawn[i]['tile'], canvas_x + offset_x, canvas_y + offset_y);
