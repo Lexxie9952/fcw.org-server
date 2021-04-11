@@ -126,7 +126,7 @@ static struct requirement_vector reqs_list;
 
 static bool load_rulesetdir(const char *rsdir, bool compat_mode,
                             rs_conversion_logger logger,
-                            bool act, bool buffer_script);
+                            bool act, bool buffer_script, bool load_luadata);
 static struct section_file *openload_ruleset_file(const char *whichset,
                                                   const char *rsdir);
 
@@ -8078,15 +8078,16 @@ static void notify_ruleset_fallback(const char *msg)
 **************************************************************************/
 bool load_rulesets(const char *restore, const char *alt, bool compat_mode,
                    rs_conversion_logger logger,
-                   bool act, bool buffer_script)
+                   bool act, bool buffer_script, bool load_luadata)
 {
   if (load_rulesetdir(game.server.rulesetdir, compat_mode, logger,
-                      act, buffer_script)) {
+                      act, buffer_script, load_luadata)) {
     return TRUE;
   }
 
   if (alt != NULL) {
-    if (load_rulesetdir(alt, compat_mode, logger, act, buffer_script)) {
+    if (load_rulesetdir(alt, compat_mode, logger, act, buffer_script,
+                        load_luadata)) {
       sz_strlcpy(game.server.rulesetdir, alt);
 
       return TRUE;
@@ -8095,7 +8096,7 @@ bool load_rulesets(const char *restore, const char *alt, bool compat_mode,
 
   /* Fallback to previous one. */
   if (restore != NULL) {
-    if (load_rulesetdir(restore, compat_mode, logger, act, buffer_script)) {
+    if (load_rulesetdir(restore, compat_mode, logger, act, buffer_script, TRUE)) {
       sz_strlcpy(game.server.rulesetdir, restore);
 
       notify_ruleset_fallback(_("Ruleset couldn't be loaded. Keeping previous one."));
@@ -8110,7 +8111,7 @@ bool load_rulesets(const char *restore, const char *alt, bool compat_mode,
   /* Fallback to default one, but not if that's what we tried already */
   if (strcmp(GAME_DEFAULT_RULESETDIR, game.server.rulesetdir)
       && (restore == NULL || strcmp(GAME_DEFAULT_RULESETDIR, restore))) {
-    if (load_rulesetdir(GAME_DEFAULT_RULESETDIR, FALSE, NULL, act, buffer_script)) {
+    if (load_rulesetdir(GAME_DEFAULT_RULESETDIR, FALSE, NULL, act, buffer_script, TRUE)) {
       /* We're in sane state as fallback ruleset loading succeeded,
        * but return failure to indicate that this is not what caller
        * wanted. */
@@ -8157,7 +8158,7 @@ void rulesets_deinit(void)
 **************************************************************************/
 static bool load_rulesetdir(const char *rsdir, bool compat_mode,
                             rs_conversion_logger logger,
-                            bool act, bool buffer_script)
+                            bool act, bool buffer_script, bool load_luadata)
 {
   struct section_file *techfile, *unitfile, *buildfile, *govfile, *terrfile;
   struct section_file *stylefile, *cityfile, *nationfile, *effectfile, *gamefile;
@@ -8197,7 +8198,11 @@ static bool load_rulesetdir(const char *rsdir, bool compat_mode,
   nationfile = openload_ruleset_file("nations", rsdir);
   effectfile = openload_ruleset_file("effects", rsdir);
   gamefile = openload_ruleset_file("game", rsdir);
-  game.server.luadata = openload_luadata_file(rsdir);
+  if (load_luadata) {
+    game.server.luadata = openload_luadata_file(rsdir);
+  } else {
+    game.server.luadata = NULL;
+  }
 
   if (techfile == NULL
       || buildfile  == NULL

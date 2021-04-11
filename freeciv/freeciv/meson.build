@@ -1,6 +1,10 @@
 
 project('freeciv', 'c', meson_version: '>= 0.44.0')
 
+if not get_option('ack_experimental')
+  error('Autotools are still the only fully supported way to build freeciv.\nSet configure option "ack_experimental" to true if you really want to do experimental meson build.')
+endif
+
 priv_conf_data = configuration_data()
 pub_conf_data = configuration_data()
 
@@ -497,6 +501,9 @@ client_common = static_library('fc_client_common',
                  c_compiler.find_library('libSDL2_mixer')]
   )
 
+install_data('data/helpdata.txt',
+             install_dir : join_paths(get_option('datadir'), 'freeciv'))
+
 endif
 
 if get_option('clients').contains('gtk3.22')
@@ -646,6 +653,7 @@ install_data(
 
 install_data(
   'data/sandbox/README.sandbox',
+  'data/sandbox/luadata.txt',
   install_dir : join_paths(get_option('datadir'), 'freeciv/sandbox')
   )
 
@@ -659,6 +667,7 @@ install_data(
   'doc/FAQ',
   'doc/HACKING',
   'doc/HOWTOPLAY',
+  'doc/INSTALL.meson',
   'doc/README',
   'doc/README.achievements',
   'doc/README.actions',
