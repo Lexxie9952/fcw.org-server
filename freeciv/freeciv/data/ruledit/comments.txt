@@ -418,9 +418,9 @@ utypes = "\
 ;                          multiplication with 2/3, etc.\n\
 ;                          Effectively increases *attack* by value percent.\n\
 ;                          Bonus is defined in attackers entry.\n\
-; \"FirePower1\"        = Defender firepower is reduced to value 1 when\n\
-;                       ever this has non-zero value.\n\
-;                       Bonus is defined in attackers entry.\n\
+; \"FirePower1\"           = Defender firepower is reduced to value 1 when\n\
+;                          ever this has non-zero value.\n\
+;                          Bonus is defined in attackers entry.\n\
 ;\n\
 ;\n\
 ; ** Flags **\n\
