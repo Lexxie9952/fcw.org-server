@@ -917,8 +917,9 @@ bool diplomat_get_tech(struct player *pplayer, struct unit *pdiplomat,
                     unit_tile_link(pdiplomat), UNIT_EMOJI(pdiplomat));
       notify_player(cplayer, city_tile(pcity),
                     E_ENEMY_DIPLOMAT_FAILED, ftc_server,
-                    _("The %s %s failed to steal technology again from %s. "
+                    _(" 💥 %s %s %s failed to steal technology again from %s. "
                       "We were prepared for the attempt."),
+                    indefinite_article_for_word(nation_adjective_for_player(pplayer),true),
                     nation_adjective_for_player(pplayer),
                     unit_tile_link(pdiplomat),
                     city_link(pcity));
@@ -932,7 +933,7 @@ bool diplomat_get_tech(struct player *pplayer, struct unit *pdiplomat,
       notify_player(cplayer, city_tile(pcity),
                     E_ENEMY_DIPLOMAT_FAILED, ftc_server,
                     _(" 💥 %s %s %s %s failed to steal tech from %s."),
-                    indefinite_article_for_word(nation_adjective_for_player(pplayer),false),
+                    indefinite_article_for_word(nation_adjective_for_player(pplayer),true),
                     nation_adjective_for_player(pplayer),
                     UNIT_EMOJI(pdiplomat), unit_tile_link(pdiplomat),
                     city_link(pcity));
