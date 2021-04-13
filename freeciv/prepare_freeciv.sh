@@ -35,6 +35,6 @@ fi
 
 ( mkdir -p build
   cd build
-  ../freeciv/configure CFLAGS="-O3" \
+  ../freeciv/configure CFLAGS="-O3 $CFLAGS" \
               --enable-mapimg=magickwand --with-project-definition=../freeciv-web.project --enable-fcweb --enable-json --disable-delta-protocol --disable-nls --disable-fcmp --enable-freeciv-manual --disable-ruledit --enable-fcdb=no --enable-ai-static=classic --prefix=${HOME}/freeciv/ && make -s -j$(nproc)
 )
