@@ -1538,12 +1538,14 @@ li.tech-me_only::before {
      this setting isn't "sticking" when done here. */
 }
 
-/* make colored bg tab underneath real tab strongly rounded to not peak through erroneously on some browsers */
+/* colored bg tab underneath real tab, get it out of the way. */
 .ui-tabs .ui-tabs-nav li {
-  border-radius: 20px 20px 0 0;
+  border-radius: 9px 9px 0 0;
+  background: none;
+  border: none;
 }
 #city_tabs .ui-tabs-nav li {
-  border-radius: 20px 20px 0 0;
+  border-radius: 9px 9px 0 0;
 }
 /**/
 
@@ -1622,6 +1624,13 @@ input[type="text"], textarea {
   list-style-type: none;
   margin: 0px;
  /* font-family: Consolas; */
+}
+
+#selectable li {
+/*  margin: 3px;
+  padding: .4em; */
+  cursor: pointer;
+  background: #0000003b;
 }
 
 /*  These get put in chatbox classes, meaning we can define colours, fonts, indent, collapsing, all kinds of stuff 
