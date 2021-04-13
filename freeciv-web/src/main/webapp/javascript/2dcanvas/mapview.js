@@ -18,7 +18,7 @@
 ***********************************************************************/
 
 var border_anim = 0;
-const border_anim_delay = 500;  // frames
+const border_anim_delay = 750;  // frames
 var mapview_canvas_ctx = null;
 var mapview_canvas = null;
 var buffer_canvas_ctx = null;
