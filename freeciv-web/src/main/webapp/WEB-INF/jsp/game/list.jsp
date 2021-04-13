@@ -7,7 +7,7 @@
 <%@include file="/WEB-INF/jsp/fragments/head.jsp"%>
 <style>
 #play-by-email-table {
-	font-family: Arial, Helvetica, 'Open Sans' !important;
+	font-family: Segoe;
 }
 </style>
 
@@ -38,7 +38,7 @@
 				
 				players = players.map(function (player) {
 					return player === currentPlayer
-						? '<b>' + player + '</b>'
+						? "<u><span style='font-weight:1000'>" + player + "</u>"
 						: player;
 				}).join(', ');
 				
