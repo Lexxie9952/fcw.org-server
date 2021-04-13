@@ -5,6 +5,11 @@
 <html lang="en">
 <head>
 <%@include file="/WEB-INF/jsp/fragments/head.jsp"%>
+<style>
+#play-by-email-table {
+	font-family: Arial, Helvetica, 'Open Sans' !important;
+}
+</style>
 
 <script>
 (function ($) {
