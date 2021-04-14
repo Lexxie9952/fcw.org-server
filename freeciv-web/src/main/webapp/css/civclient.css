@@ -1584,7 +1584,9 @@ input[type="text"], textarea {
   color: var(--default_text_color);
 }
 #pregame_text_input {
-  background-color: #000;
+  background: #111 !important;
+  background-color: #000 !important;
+  border-color: #777 !important;
 }
 #pregame_game_info {
   color: var(--default_text_color);
