@@ -249,7 +249,7 @@ reqs	=
     { "type",       "name",   "range"
       "Extra",      "Ivory",  "Local"
       "OutputType", "Food",   "Local"
-      "Terrain",    "Glacier", "Local"
+      "Terrain",    "Arctic", "Local"
     }
 [effect_ivory2]
 type    = "Output_Add_Tile"
@@ -258,7 +258,7 @@ reqs	=
     { "type",       "name",   "range"
       "Extra",      "Ivory",  "Local"
       "OutputType", "Shield", "Local"
-      "Terrain",    "Glacier", "Local"
+      "Terrain",    "Arctic", "Local"
     }
 [effect_ivory3]
 type    = "Output_Add_Tile"
@@ -267,7 +267,7 @@ reqs	=
     { "type",       "name",   "range"
       "Extra",      "Ivory",  "Local"
       "OutputType", "Trade",  "Local"
-      "Terrain",    "Glacier", "Local"
+      "Terrain",    "Arctic", "Local"
     }
 [effect_peat]
 type    = "Output_Add_Tile"
@@ -368,7 +368,7 @@ reqs	=
     { "type", "name", "range"
       "Extra", "Furs", "Local"
       "OutputType", "Food", "Local"
-      "Terrain", "Glacier", "Local"
+      "Terrain", "Arctic", "Local"
     }
 [effect_furs5]
 type    = "Output_Add_Tile"
@@ -377,7 +377,7 @@ reqs	=
     { "type", "name", "range"
       "Extra", "Furs", "Local"
       "OutputType", "Shield", "Local"
-      "Terrain", "Glacier", "Local"
+      "Terrain", "Arctic", "Local"
     }
 [effect_furs6]
 type    = "Output_Add_Tile"
@@ -386,7 +386,7 @@ reqs	=
     { "type", "name", "range"
       "Extra", "Furs", "Local"
       "OutputType", "Trade", "Local"
-      "Terrain", "Glacier", "Local"
+      "Terrain", "Arctic", "Local"
     }    
 [effect_elk]
 type    = "Output_Add_Tile"
@@ -2324,6 +2324,25 @@ reqs	=
       "Building", "Cathedral", "City", TRUE
       "Building", "Michelangelo's Chapel", "Player", TRUE
     }
+
+[effect_cathedral_ma3]
+type    = "Make_Content"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Cathedral", "City", TRUE
+      "Building", "Michelangelo's Chapel", "Player", TRUE
+    }
+
+[effect_cathedral_ma4]
+type    = "Make_Content"
+value	= -1
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Cathedral", "City", TRUE
+      "Gov", "Communism", "Player", TRUE
+      "Building", "Michelangelo's Chapel", "Player", TRUE
+    }
 ;==============================================================
 [effect_city_walls_vs_Land]
 type    = "Defend_Bonus"
@@ -2422,7 +2441,7 @@ reqs  =
       "Terrain", "Plains",    "Local", FALSE
       "Terrain", "Desert",    "Local", FALSE
       "Terrain", "Tundra",    "Local", FALSE
-      "Terrain", "Glacier",    "Local", FALSE
+      "Terrain", "Arctic",    "Local", FALSE
 
       ;How to get all Land type units by excluding all other types:
       ;"UnitFlag", "AirAttacker", "Local", FALSE     ; all aircraft classes
@@ -4590,7 +4609,7 @@ reqs =
       "Terrain",  "Plains",        "Local", FALSE
       "Terrain",  "Desert",        "Local", FALSE
       "Terrain",  "Tundra",        "Local", FALSE
-      "Terrain",  "Glacier",        "Local", FALSE
+      "Terrain",  "Arctic",        "Local", FALSE
       "Terrain",  "Forest",        "Local", FALSE
       "Terrain",  "Hills",         "Local", FALSE
       "Terrain",  "Mountains",     "Local", FALSE
@@ -4607,7 +4626,7 @@ reqs =
       "Terrain",  "Plains",        "Local", FALSE
       "Terrain",  "Desert",        "Local", FALSE
       "Terrain",  "Tundra",        "Local", FALSE
-      "Terrain",  "Glacier",        "Local", FALSE
+      "Terrain",  "Arctic",        "Local", FALSE
       "Terrain",  "Forest",        "Local", FALSE
       "Terrain",  "Hills",         "Local", FALSE
       "Terrain",  "Mountains",     "Local", FALSE
@@ -4777,7 +4796,7 @@ reqs =
       "Terrain",  "Forest",        "Local", FALSE
       "Terrain",  "Jungle",        "Local", FALSE
       "Terrain",  "Tundra",        "Local", FALSE
-      "Terrain",  "Glacier",        "Local", FALSE
+      "Terrain",  "Arctic",        "Local", FALSE
       "Terrain",  "Mountains",     "Local", FALSE
     }
 ;IrrigationSource of city is in game.ruleset
