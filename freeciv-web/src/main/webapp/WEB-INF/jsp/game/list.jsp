@@ -438,7 +438,7 @@
 									<th>Time left</th>
 								</tr>
 							</table>
-							<p>Current player is marked in bold.</p>
+							<p>Current player is marked in <b><u>bold underline</u></b>.</p>
 						</div>
 					</div>
 	
