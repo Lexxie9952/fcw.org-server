@@ -848,7 +848,8 @@ sound		= "b_police_station"
 sound_alt	= "b_generic"
 helptext	= _("\
 Police Stations neutralize the unhappiness caused by two military units or two\
- unhappy Foreign Nationals. Under Nationalism the effect is +1, affecting three\
+ unhappy Foreign Nationals. Their effect is identical with (ands adds with)
+ the effect of Martial Law. Under Nationalism the effect is +1, affecting three\
  citizens. Police Stations prevent Estalishing Embassy without first agreeing to\
  Cease-Fire or Peace. They also prevent Investigate City under all governments\
  except Democracy.\

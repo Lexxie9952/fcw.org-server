@@ -3154,6 +3154,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         key_unit_airbase();
       }
       if (ctrl && shift) {
+        the_event.preventDefault(); // override possible browser shortcut
         // show/hide the dev/debug messages sent from server to supercow users
         $(".e_log_error").toggle();
       }

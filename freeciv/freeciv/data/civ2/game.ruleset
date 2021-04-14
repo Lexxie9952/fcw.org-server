@@ -28,6 +28,12 @@ name = _("Civ2 ruleset")
 ; There`s no separate versioning in rulesets part of main freeciv distribution
 ;version = ""
 
+; When about to migrate ruleset under a new name in the future version, set
+; alt_dir to the name of that future directory. Then savegames saved with this
+; version of freeciv can find the ruleset from the correct place when loading
+; the savegame to the future version.
+;alt_dir = ""
+
 ; Summary of the ruleset
 summary = _("\
 You are playing with civ2 style rules. These are\
@@ -148,6 +154,10 @@ paradrop_to_transport    = FALSE
 ;            If still more gold is needed, then random units with gold
 ;            upkeep are disbanded.
 gold_upkeep_style = "City"
+
+; How many points of output one basic unit consists of. Typically you
+; want this to be some 10^n.
+output_granularity = 1
 
 [illness]
 ; Whether plagues (illness) are possible

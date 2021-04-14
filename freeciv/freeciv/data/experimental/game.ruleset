@@ -31,6 +31,11 @@ name = _("Experimental ruleset")
 ; There`s no separate versioning in rulesets part of main freeciv distribution
 ;version = ""
 
+; When about to migrate ruleset under a new name in the future version, set
+; alt_dir to the name of that future directory. Then savegames saved with this
+; version of freeciv can find the ruleset from the correct place when loading
+; the savegame to the future version.
+;
 ; This ruleset will be renamed as "goldkeep" in a future version.
 ; Set information of the future name so that once someone tries to load
 ; savegame saved with this version to that future version, ruleset is
@@ -176,6 +181,10 @@ paradrop_to_transport    = TRUE
 ;            If still more gold is needed, then random units with gold
 ;            upkeep are disbanded.
 gold_upkeep_style = "Mixed"
+
+; How many points of output one basic unit consists of. Typically you
+; want this to be some 10^n.
+output_granularity = 1
 
 [illness]
 ; Whether plagues (illness) are possible

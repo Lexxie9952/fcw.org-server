@@ -1,4 +1,4 @@
-11#!/bin/bash
+#!/bin/bash
 # builds Freeciv-web, copies the war file to Tomcat and builds the selected rulesets.
 
 RULESETS=(classic civ2civ3 multiplayer mpplus mp2 ag mp2-brava mp2-caravel)

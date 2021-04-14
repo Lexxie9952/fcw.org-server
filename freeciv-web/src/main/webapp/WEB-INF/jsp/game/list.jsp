@@ -5,6 +5,11 @@
 <html lang="en">
 <head>
 <%@include file="/WEB-INF/jsp/fragments/head.jsp"%>
+<style>
+#play-by-email-table {
+	font-family: Segoe;
+}
+</style>
 
 <script>
 (function ($) {
@@ -33,7 +38,7 @@
 				
 				players = players.map(function (player) {
 					return player === currentPlayer
-						? '<b>' + player + '</b>'
+						? "<u><span style='font-weight:1000'>" + player + "</u>"
 						: player;
 				}).join(', ');
 				

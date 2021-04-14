@@ -293,7 +293,7 @@ static bool manual_command(struct tag_types *tag_info)
   /* Reset aifill to zero */
   game.info.aifill = 0;
 
-  if (!load_rulesets(NULL, NULL, FALSE, NULL, FALSE, FALSE)) {
+  if (!load_rulesets(NULL, NULL, FALSE, NULL, FALSE, FALSE, FALSE)) {
     /* Failed to load correct ruleset */
     return FALSE;
   }
@@ -698,7 +698,7 @@ static bool manual_command(struct tag_types *tag_info)
                   utype_name_translation(putype->obsoleted_by));
         fprintf(doc, "%s", tag_info->subitem_end);
         fprintf(doc, tag_info->subitem_begin, "helptext");
-        helptext_unit(buf, sizeof(buf), NULL, "", putype);
+        helptext_unit(buf, sizeof(buf), NULL, NULL, putype);
         fprintf(doc, "%s", buf);
         fprintf(doc, "%s", tag_info->subitem_end);
         fprintf(doc, "%s", tag_info->item_end);

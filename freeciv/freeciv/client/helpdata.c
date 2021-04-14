@@ -1697,7 +1697,9 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
   struct unit_class *pclass;
   int fuel;
 
-  fc_assert_ret_val(NULL != buf && 0 < bufsz && NULL != user_text, NULL);
+  //had to change user_text to NULL in civmanual:701 call to avoid segfault here
+  //fc_assert_ret_val(NULL != buf && 0 < bufsz && NULL != user_text, NULL);
+  fc_assert_ret_val(NULL != buf && 0 < bufsz, NULL);
 
   if (!utype) {
     log_error("Unknown unit!");

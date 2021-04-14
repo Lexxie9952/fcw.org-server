@@ -2012,6 +2012,14 @@ static struct setting settings[] = {
              "much gold."), NULL, NULL, NULL,
           GAME_MIN_GOLD, GAME_MAX_GOLD, GAME_DEFAULT_GOLD)
 
+  GEN_INT("infrapoints", game.info.infrapoints,
+          SSET_GAME_INIT, SSET_ECONOMICS, SSET_VITAL,
+          ALLOW_NONE, ALLOW_BASIC,
+          N_("Starting infrapoints per player"),
+          N_("At the beginning of the game, each player is given this "
+             "many infrapoints."), NULL, NULL, NULL,
+          GAME_MIN_INFRA, GAME_MAX_INFRA, GAME_DEFAULT_INFRA)
+
   GEN_INT("techlevel", game.info.tech,
           SSET_GAME_INIT, SSET_SCIENCE, SSET_VITAL,
           ALLOW_NONE, ALLOW_BASIC,
@@ -2107,6 +2115,27 @@ static struct setting settings[] = {
              "the donor but not received by the recipient."),
           NULL, NULL, NULL,
           GAME_MIN_DIPLGOLDCOST, GAME_MAX_DIPLGOLDCOST, GAME_DEFAULT_DIPLGOLDCOST)
+
+  GEN_INT("incite_gold_loss_chance", game.server.incite_gold_loss_chance,
+          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          N_("Probability of gold loss during inciting revolt"),
+          N_("When unit trying to incite revolt is eliminated, half of the gold "
+             "(or quarter, if unit was caught), prepared to bribe citizens, "
+             "can be lost or captured by enemy."),
+          NULL, NULL, NULL,
+          GAME_MIN_INCITE_GOLD_LOSS_CHANCE, GAME_MAX_INCITE_GOLD_LOSS_CHANCE,
+          GAME_DEFAULT_INCITE_GOLD_LOSS_CHANCE)
+
+  GEN_INT("incite_gold_capt_chance", game.server.incite_gold_capt_chance,
+          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          N_("Probability of gold capture during inciting revolt"),
+          N_("When unit trying to incite revolt is eliminated and lose its "
+             "gold, there is chance that this gold would be captured by "
+             "city defender. Transfer tax would be applied, though. "
+             "This setting is irrevelant, if incite_gold_loss_chance is zero."),
+          NULL, NULL, NULL,
+          GAME_MIN_INCITE_GOLD_CAPT_CHANCE, GAME_MAX_INCITE_GOLD_CAPT_CHANCE,
+          GAME_DEFAULT_INCITE_GOLD_CAPT_CHANCE)
 
   GEN_INT("conquercost", game.server.conquercost,
           SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,

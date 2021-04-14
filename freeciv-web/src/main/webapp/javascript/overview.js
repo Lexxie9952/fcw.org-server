@@ -90,11 +90,11 @@ function init_overview()
                       if (new_width > max_overview_width) new_width = max_overview_width;
                       var new_height = OVERVIEW_TILE_SIZE * map['ysize'];
                       if (new_height > max_overview_height) new_height = max_overview_height;
-                      $(".overview_dialog").css({"height":(new_height+20),"width":(new_width+5)});
+                      $(".overview_dialog").css({"height":(new_height),"width":(new_width)});
 
                       $('#overview_map').width(new_width);
                       $('#overview_map').height(new_height);
-                      $(".overview_dialog").position({my: 'left bottom', at: 'left bottom', of: window, within: $("#game_page")});
+                      $(".overview_dialog").position({my: 'left bottom', at: 'left bottom', of: window, within: $("#tabs-map")});
                     },
                   "icons" : {
                     "minimize" : "ui-icon-circle-minus",
@@ -116,7 +116,7 @@ function init_overview()
   if (new_height > max_overview_height) new_height = max_overview_height;
   $('#overview_map').width(new_width);
   $('#overview_map').height(new_height);
-  $(".overview_dialog").position({my: 'left bottom', at: 'left bottom', of: window, within: $("#game_page")});
+  $(".overview_dialog").position({my: 'left bottom', at: 'left bottom', of: window, within: $("#tabs-map")});
 
   $('#overview_map').on('dragstart', function(event) { event.preventDefault(); });
   // globe icon symbol
@@ -124,6 +124,11 @@ function init_overview()
     = "<div style='font-size:97%; vertical-align:top; font-family:Arial; margin-bottom: 1px;'><i class='fa fa-globe' aria-hidden='true'></i></div>";
   // adjust minimize/maximize icons
   $("#game_overview_panel").siblings().children().next().css("margin-top", "-7px");
+  
+  // This affects the titlebar and map itself. Map is already square. Titlebar will lose rounding
+  // on lower corners but not top corners which are applied to its parent.  This removes annoying
+  // illusion that stone panel under the overviewmap is overwriting or invading the titlebar.
+  $(".overview_dialog").children().css("border-radius", "0px");
 }
 
 /****************************************************************************

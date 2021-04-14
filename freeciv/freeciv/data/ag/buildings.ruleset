@@ -1600,8 +1600,8 @@ Adds 100% of base science production to every city in your\
 name		= _("JTIDS")
 genus		= "SmallWonder"
 reqs	=
-    { "type", "name", "range"
-      "Tech", "Computers", "Player"
+    { "type", "name", "range", "present", "quiet"
+      "Tech", "Computers", "Player", TRUE, FALSE
       "Building", "JTIDS", "Player", FALSE, TRUE
     }
 graphic		= "b.seti_program"
