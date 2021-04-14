@@ -4777,6 +4777,7 @@ function create_connect_packet(packet)
   new_packet['orders'] = [];
   new_packet['dir'] = [];
   new_packet['activity'] = [];
+  new_packet['sub_target'] = [];
   new_packet['target'] = [];
   new_packet['extra'] = [];
   new_packet['action'] = [];
@@ -4788,36 +4789,58 @@ function create_connect_packet(packet)
   // Reconstruct packet with an order before each move, and one at the end.
   for (i=0; i<packet['length']+1; i++) {
     var upgrade_extra = extra_dep(punit,ptile,connect_extra);
-    //console.log("upgrade_extra=="+upgrade_extra)
+    console.log("upgrade_extra=="+upgrade_extra)
     // insert order before each move
-    if (upgrade_extra != -1) {
+    if (upgrade_extra != CONNECT_ACTION_ILLEGAL) {
       new_packet['orders'].push(ORDER_ACTIVITY);
       new_packet['dir'].push(0); // not a move
-      new_packet['activity'].push(connect_activity);
+
+      /* TODO: when we have ACTIVITY_CULTIVATE, function extra_dep() will figure out we're on forest
+       *  or swamp and return -2 flag for this code to activate. For now, connect-irrigation will
+       * just walk right over forests and swamps. */
+      if (upgrade_extra == -2) { // catch case of irrigate swamp or forest: i.e., drain or chop
+        //new_packet['activity'].push(ACTIVITY_CULTIVATE);
+      } 
+      else new_packet['activity'].push(connect_activity);
+    
       new_packet['target'].push(-1); //could set a connect_target for advanced commands
+      if (upgrade_extra==EXTRA_ROAD) new_packet['sub_target'].push(upgrade_extra);
+      else if (upgrade_extra==EXTRA_RIVER) new_packet['sub_target'].push(upgrade_extra);
+      else if (upgrade_extra==EXTRA_FARMLAND) new_packet['sub_target'].push(upgrade_extra);
+      else new_packet['sub_target'].push(0); //could set a connect_target for advanced commands
       new_packet['extra'].push(upgrade_extra);
       new_packet['action'].push(ACTION_COUNT); //could set a connect_ACTION for more commands
-    } else length--; // illegal order not inserted, cut one from length
-    // insert original packet move order
+    } 
+    else {
+      length--; // since illegal order not inserted, cut one from length
+    }
+    // now insert original packet move order
     if (i<packet['length']) {
       new_packet['orders'].push(packet['orders'][i]);
       new_packet['dir'].push(packet['dir'][i]);
       new_packet['activity'].push(packet['activity'][i]);
-      new_packet['target'].push(packet['target'][i]);
-      new_packet['extra'].push(packet['extra'][i]);
-      new_packet['action'].push(packet['action'][i]);
+      /* REMOVED: they segfault the new network protocol
+      * new_packet['target'].push(packet['target'][i]);
+      * new_packet['extra'].push(packet['extra'][i]);
+      * new_packet['action'].push(packet['action'][i]); */
+      new_packet['sub_target'].push(0);
+      new_packet['extra'].push(EXTRA_NONE);
+      new_packet['action'].push(ACTION_COUNT);
       ptile = mapstep(ptile, packet['dir'][i]); // iterate tile for next check
     }
   }
   new_packet['length'] = length;
-  //console.log(new_packet);
   return new_packet;
 }
+
 /**************************************************************************
   Figures out which extra to make for the Connect command on each tile
 **************************************************************************/
 function extra_dep(punit, ptile, extra_id)
 {
+  if (extra_id == EXTRA_ROAD && unit_type(punit)['name']=="Well-Digger")
+    extra_id = EXTRA_RIVER;
+
   //console.log("extra_dep called with extra_id=="+extra_id)
   if (extra_id == EXTRA_ROAD) {
     //console.log("  checking river and BB")
@@ -4829,7 +4852,7 @@ function extra_dep(punit, ptile, extra_id)
       if (player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) < TECH_KNOWN)
         if (!tile_has_extra(ptile, EXTRA_ROAD)) {
           //console.log("      no road: RETURN NULL")
-          return -1; // null flag means don't break sequence with an impossible order
+          return CONNECT_ACTION_ILLEGAL; // null flag means don't break sequence with an impossible order
         }
     }
     
@@ -4846,15 +4869,34 @@ function extra_dep(punit, ptile, extra_id)
 
     return EXTRA_MAGLEV;
   }
+  // Well-Digger makes rivers, not roads:
+  else if (extra_id == EXTRA_RIVER) {
+    if (tile_has_extra(ptile, EXTRA_RIVER)) {
+      return CONNECT_ACTION_ILLEGAL;  // already has a river, skip it
+    }
+    return EXTRA_RIVER;
+  }
+
   else if (extra_id == EXTRA_IRRIGATION) {
     //console.log("  checking irrigation")
-    if (player_invention_state(client.conn.playing, tech_id_by_name('Refrigeration')) < TECH_KNOWN)
-      return EXTRA_IRRIGATION;
-    if (!tile_has_extra(ptile, EXTRA_IRRIGATION))
-      return EXTRA_IRRIGATION;
-
-    return EXTRA_FARMLAND;
+    var can_irr = can_irrigate(punit, ptile);
+    // No refrigeration: irrigate or skip tile are the only choices:
+    if (player_invention_state(client.conn.playing, tech_id_by_name('Refrigeration')) < TECH_KNOWN) {
+      if (can_irr) return EXTRA_IRRIGATION;
+      else return CONNECT_ACTION_ILLEGAL; // skip this tile: later, some kind of special code for chop forest or drain swamp; will probably have to change activity not just extra though.
+    }
+    // Refrigeration: irrigate or skip a tile with no irrigation...
+    if (!tile_has_extra(ptile, EXTRA_IRRIGATION)) {
+      if (can_irr && tile_terrain(ptile)['name'] != "Swamp") return EXTRA_IRRIGATION;  // swamp thinks it can be irrigated but server thinks it can't? or we just didn't figure out special packet setup for it.
+      else return CONNECT_ACTION_ILLEGAL; // skip this tile: later, some kind of special code for chop forest or drain swamp; will probably have to change activity not just extra though.
+    }
+    // or make Farmland if possible
+    if (tile_has_extra(ptile, EXTRA_IRRIGATION) && !tile_has_extra(ptile, EXTRA_FARMLAND))
+      return EXTRA_FARMLAND;
+    // nothing is possible, skip tile:
+    else return CONNECT_ACTION_ILLEGAL;
   }
+
   return extra_id;
 }
 
