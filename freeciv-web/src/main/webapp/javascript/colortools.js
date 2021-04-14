@@ -17,14 +17,97 @@
 
 ***********************************************************************/
 
+
+const default_dialog_text_color = "#ccc";
+
+// National colors that aren't quite perfectly picked by the algorithm. Sometimes they're fine
+// but could be better for holistic integration with all the other nations. null indicates to
+// keep the algorithm's selection for that color.
+const override_colors = {
+  
+  "Alsatian": { "c1": "rgb(237, 41, 57)",  "c2": "rgb(255, 255, 255)", "c3": "rgb(255, 210, 3)"   },
+  "Armenian": { "c1": null,                "c2": null,                 "c3": "rgb(49, 79, 154)"   },
+  "Assyrian": { "c1": null,                "c2": "rgb(255, 102, 51)",  "c3": "rgb(0, 153, 255)"   },
+  "Australian": { "c1": null,              "c2": null,                 "c3": "rgb(237, 33, 36)"   },
+  "Austrian": { "c1": null,                "c2": null,                 "c3": "rgb(0, 0, 0)"       },
+  "Aztec":   { "c1": null,                 "c2": null,                 "c3": "rgb(54, 74, 144)"   },
+  "Barbadian": { "c1": null,               "c2": null,                 "c3": "rgb(10, 10, 0)"     },
+  "Belizean": { "c1": null,                "c2": null,                 "c3": "rgb(207, 17, 38)"   },
+  "Bhutanese": { "c1": null,               "c2": "rgb(248, 230, 198)", "c3": "rgb(226, 61, 40)"   },
+  "Canadian": { "c1": null,                "c2": null,                 "c3": "rgb(206, 42, 29)"   },
+  "Carantanian": { "c1": null,             "c2": "rgb(0, 0, 0)",       "c3": "rgb(255, 0, 0)"     },
+  "Carthaginian": { "c1": null,            "c2": null,                 "c3": "rgb(0, 25, 63)"     },
+  "Chola": { "c1": null,                   "c2": "rgb(0, 0, 0)",       "c3": null                 },
+  "Cypriot":   { "c1": null,               "c2": null,                 "c3": "rgb(0, 99, 77)"     },
+  "Dahomean": { "c1": null,                "c2": "rgb(20, 14, 5)",     "c3": null                 },
+  "Danish":   { "c1": null,                "c2": null,                 "c3": "rgb(208, 12, 51)"   },
+  "Dryad":   { "c1": null,                 "c2": "rgb(137, 200, 49)",  "c3": null                 },
+  "Equatoguinean":   { "c1": null,         "c2": null,                 "c3": "rgb(84, 103, 228)"  },
+  "Fijian":   { "c1": null,                "c2": null,                 "c3": "rgb(12, 10, 105)"   },
+  "Flemish":   { "c1": null,               "c2": "rgb(0, 0, 0)",       "c3": null                 },
+  "Formosan":   { "c1": "rgb(83, 83, 103)","c2": "rgb(255, 212, 42)",  "c3": "rgb(128, 0, 5)"     },
+  "Frankish":   { "c1": null,              "c2": null,                 "c3": "rgb(0, 0, 153)"     },
+  "Gaelic":   { "c1": null,                "c2": "rgb(231, 161, 10)",  "c3": null                 },
+  "Ghana":    { "c1": null,                "c2": "rgb(94, 48, 25)",    "c3": "rgb(170, 163, 157)" },
+  "Golden Horde":{ "c1": null,             "c2": "rgb(0, 0, 0)",       "c3": "rgb(212, 0, 0)"     },
+  "Gothic":   { "c1": null,                "c2": "rgb(253, 205, 0)",   "c3": null                 },
+  "Greek":    { "c1": null,                "c2": "rgb(0, 97, 243)",    "c3": "rgb(0, 102, 81)"    },
+  "Guanche":  { "c1": null,                "c2": "rgb(251, 251, 255)", "c3": null                 },
+  "Han":  { "c1": null,                    "c2": null,                 "c3": "rgb(246, 226, 4)"   },
+  "Hessian": { "c1": null,                 "c2": null,                 "c3": "rgb(0, 0, 0)"       },
+  "Holy Roman": { "c1": null,              "c2": "rgb(0, 0, 0)",       "c3": null                 },
+  "Indo-European":{ "c1": null,            "c2": "rgb(255, 204, 0)",   "c3": "rgb(214, 96, 22)"   },
+  "Italian Greek":{ "c1": null,            "c2": "rgb(33, 68, 120)",   "c3": null                 },
+  "Jaffna":{ "c1": null,                   "c2": "rgb(255, 255, 255)", "c3": null                 },
+  "Jolof":{ "c1": null,                    "c2": "rgb(227, 27, 35)",   "c3": null                 },
+  "Khazar":{ "c1": null,                   "c2": "rgb(223, 234, 248)", "c3": null                 },
+  "Knights Templar":{ "c1": null,          "c2": null,                 "c3": "rgb(255, 255, 255)" },
+  "Korean":   { "c1": "rgb(244, 232, 212)","c2": "rgb(63, 56, 169)",   "c3": "rgb(215, 93, 80)"   },
+  "Kushan":   { "c1": null,                "c2": "rgb(211, 209, 206)", "c3": null                 },
+  "Khwarezmian":{ "c1": null,              "c2": null,                 "c3": "rgb(35, 159, 67)"   },
+  "Latvian":   { "c1": null,               "c2": "rgb(253, 250, 250)", "c3": null                 },
+  "Lorrain":   { "c1": null,               "c2": null,                 "c3": "rgb(255, 255, 250)" },
+  "Macedon":{ "c1": null,                  "c2": "rgb(0, 0, 0)",       "c3": null                 },
+  "Marshallese":{ "c1": null,              "c2": "rgb(244, 245, 248)", "c3": "rgb(221, 117, 0)"   },
+  "Mauritian":{ "c1": "rgb(1, 42, 135)",   "c2": "rgb(22, 146, 83)",   "c3": null                 },
+  "Micronesian":   { "c1": null,           "c2": "rgb(255,255,255)",   "c3": null                 },
+  "Milanese":   { "c1": null,              "c2": null,                 "c3": "rgb(53, 172, 174)"  },
+  "Mitanni":   { "c1": null,               "c2": "rgb(210,210,210)",   "c3": "rgb(214, 158, 0)"   },
+  "Mixtec":   { "c1": null,                "c2": null,                 "c3": "rgb(128, 0, 128)"   },
+  "Mughal":{ "c1": null,                   "c2": "rgb(252, 209, 22)",  "c3": "rgb(206, 20, 15)"   },
+  "Muscovite":{ "c1": null,                "c2": "rgb(237, 217, 219)", "c3": null                 },
+  "Mwiska":{ "c1": null,                   "c2": null,                 "c3": "rgb(31, 26, 23)"    },
+  "New Zealand":{ "c1": null,              "c2": "rgb(207, 27, 26)",   "c3": "rgb(250, 250, 255)" },
+  "Norman":   { "c1": null,                "c2": "rgb(252, 239, 60)",  "c3": "rgb(209, 126, 30)"  },
+  "Paeonian":   { "c1": null,              "c2": "rgb(186, 56, 74)",   "c3": null                 },
+  "Pictish":   { "c1": null,               "c2": null,                 "c3": "rgb(106, 69, 69)"   },
+  "Rapa Nui":{ "c1": "rgb(248, 245, 224)", "c2": "rgb(215, 43, 6)",    "c3": null                 },
+  "Romansh": { "c1": "rgb(235, 230, 218)", "c2": "rgb(0, 0, 0)",       "c3": "rgb(0, 57, 173)"    },
+  "Ryukyuan":{ "c1": null,                 "c2": null,                 "c3": "rgb(0, 0, 200)"     },
+  "Samogitian":{ "c1": null,               "c2": null,                 "c3": "rgb(0, 0, 0)"       },
+  "Saudi":   { "c1": null,                 "c2": "rgb(228, 229, 229)", "c3": null                 },
+  "Shan":   { "c1": null,                  "c2": null,                 "c3": "rgb(58, 119, 40)"   },
+  "Somali":   { "c1": null,                "c2": "rgb(250, 253, 255)", "c3": null                 },
+  "Soviet":   { "c1": null,                "c2": "rgb(255, 215, 0)",   "c3": "rgb(204, 0, 0)"     },
+  "Silesian": { "c1": null,                "c2": null,                 "c3": "rgb(43, 82, 139)"   },
+  "Sumerian": { "c1": null,                "c2": "rgb(24, 72, 198)",   "c3": null                 },
+  "Toltec": { "c1": null,                  "c2": null,                 "c3": "rgb(25, 13, 17)"    },
+  "Tyrolian": { "c1": null,                "c2": "rgb(172, 29, 34)",   "c3": null                 },
+  "UN": { "c1": null,                      "c2": "rgb(250, 250, 250)", "c3": null                 },
+  "Volga Bulgar":{"c1": null,              "c2":"rgb(218, 37, 29)",    "c3": "rgb(243, 244, 208)" },
+  "Vampire": { "c1": null,                 "c2": "rgb(92, 0, 0)",      "c3": null                 },
+  "Venetian": { "c1": null,                "c2": "rgb(243, 244, 208)", "c3": null                 },
+  "Vermont": { "c1": null,                 "c2": "rgb(49, 71, 121)",   "c3": "rgb(240, 242, 245)" },
+  "West Indian": { "c1": null,             "c2": "rgb(255, 204, 0)",   "c3": null                 },
+  
+  "LAST": {}
+};
+
 /****************************************************************************
   Assigns the nation's colors based on the color of their flag, 
   CURRENTLY: Three most frequent dissimilar colors are rank-sorted.
   FORMERLY: The most common color in the flag was chosen.
 ****************************************************************************/
-
-const default_dialog_text_color = "#ccc";
-
 function assign_nation_color(nation_id)
 {
   const RED=0,GRN=1,BLU=2,OPQ=3;
@@ -114,7 +197,8 @@ function assign_nation_color(nation_id)
   nation['color3'] = sorted_colors[2].color;
   color_counts = null;
   img_data = null;
-  //console.log(nation.rule_name+" nation was assigned colors of "+nation['color']+", "+nation['color2']+", "+nation['color3']);
+  //console.log(nation.rule_name+":"+nation['color']+", "+nation['color2']+", "+nation['color3']);
+  override_color(nation.rule_name, nation_id);
 }
   /*****************************************************
    * Former algorithm -- just pick the most common color
@@ -258,5 +342,19 @@ function color_rgb_to_list(pcolor)
   color_rgb[1] = parseFloat(color_rgb[1]);
   color_rgb[2] = parseFloat(color_rgb[2]);
   return color_rgb;
+}
+
+/****************************************************************************
+...Overrides algorithmically picked national colors for some nations.
+****************************************************************************/
+function override_color(nation_name, nation_id) {
+  var nation = nations[nation_id];
+
+  if (override_colors[nation_name]) {
+    if (override_colors[nation_name]['c1']) nations[nation_id]['color']  = override_colors[nation_name]['c1'];
+    if (override_colors[nation_name]['c2']) nations[nation_id]['color2'] = override_colors[nation_name]['c2'];
+    if (override_colors[nation_name]['c3']) nations[nation_id]['color3'] = override_colors[nation_name]['c3'];
+    //console.log(nation.rule_name+": *OVERRIDE* >"+nations[nation_id]['color']+", "+nations[nation_id]['color2']+", "+nations[nation_id]['color3']);
+  }
 }
 
