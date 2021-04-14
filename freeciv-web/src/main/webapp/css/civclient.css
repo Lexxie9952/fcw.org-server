@@ -185,7 +185,8 @@ input[type='number'] {
   border-radius: 3px 3px 3px 3px;
   font-size:85%;
   background: #444;
-  color: rgb(216, 209, 196)
+  color: rgb(216, 209, 196);
+  border-color: rgb(111, 111, 111);
 }
 
 .helptext {
@@ -362,6 +363,8 @@ input[type='number'] {
 .warcalc_input {
   border-radius: 1px;
   border-color: #555;
+  background: #393939;
+  color: #fffff3;
 }
 
 /* numbers align digits in ISO accounting format */
