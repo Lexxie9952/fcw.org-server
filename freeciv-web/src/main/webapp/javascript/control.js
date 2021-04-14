@@ -4807,6 +4807,9 @@ function create_connect_packet(packet)
       if (upgrade_extra==EXTRA_ROAD) new_packet['sub_target'].push(upgrade_extra);
       else if (upgrade_extra==EXTRA_RIVER) new_packet['sub_target'].push(upgrade_extra);
       else if (upgrade_extra==EXTRA_FARMLAND) new_packet['sub_target'].push(upgrade_extra);
+      else if (upgrade_extra==EXTRA_RAIL) new_packet['sub_target'].push(upgrade_extra);
+      else if (upgrade_extra==EXTRA_MAGLEV) new_packet['sub_target'].push(upgrade_extra);
+      
       else new_packet['sub_target'].push(0); //could set a connect_target for advanced commands
       new_packet['extra'].push(upgrade_extra);
       new_packet['action'].push(ACTION_COUNT); //could set a connect_ACTION for more commands
