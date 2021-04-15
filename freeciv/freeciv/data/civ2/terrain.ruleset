@@ -314,9 +314,9 @@ flags                = "CanHaveRiver"
 property_dry         = 100
 property_tropical    = 50
 property_temperate   = 20
-color.r              = 214
-color.g              = 185
-color.b              = 106
+color.r              = 247
+color.g              = 222
+color.b              = 187
 helptext             = _("\
 Deserts are regions of extreme dryness, making agriculture and\
  trade very difficult.\
@@ -358,7 +358,7 @@ property_wet         = 20
 property_foliage     = 50
 property_temperate   = 50
 color.r              = 43
-color.g              = 107
+color.g              = 157
 color.b              = 19
 helptext             = _("\
 Forests are densely wooded, making agriculture somewhat\
@@ -398,9 +398,9 @@ native_to            = "Land", "Air", "Missile", "Helicopter"
 flags                = "Starter", "CanHaveRiver"
 property_green       = 50
 property_temperate   = 50
-color.r              = 11
-color.g              = 138
-color.b              = 4
+color.r              = 100
+color.g              = 178
+color.b              = 105
 helptext             = _("\
 Grasslands afford exceptional agricultural opportunities.\
 ")
@@ -438,9 +438,9 @@ native_to            = "Land", "Air", "Missile", "Helicopter"
 flags                = "Starter", "CanHaveRiver"
 property_green       = 50
 property_mountainous = 30
-color.r              = 24
-color.g              = 97
-color.b              = 5
+color.r              = 222
+color.g              = 230
+color.b              = 134
 helptext             = _("\
 In addition to being amenable to agriculture, Hills are frequently\
  rich in resources.\
@@ -480,9 +480,9 @@ flags                = "CanHaveRiver"
 property_foliage     = 50
 property_tropical    = 50
 property_wet         = 50
-color.r              = 55
-color.g              = 156
-color.b              = 38
+color.r              = 71
+color.g              = 227
+color.b              = 0
 helptext             = _("\
 Jungles are densely overgrown, making agriculture somewhat\
  problematic.\
@@ -520,9 +520,9 @@ cooler_drier_result  = "no"
 native_to            = "Land", "Air", "Missile", "Helicopter"
 flags                = "CanHaveRiver"
 property_mountainous = 70
-color.r              = 129
-color.g              = 127
-color.b              = 118
+color.r              = 160
+color.g              = 156
+color.b              = 170
 helptext             = _("\
 Mountains are regions of extreme altitude, making agriculture and\
  trade very difficult.\
@@ -562,9 +562,9 @@ flags                = "Starter", "CanHaveRiver"
 property_dry         = 50
 property_green       = 50
 property_temperate   = 50
-color.r              = 122
-color.g              = 156
-color.b              = 46
+color.r              = 161
+color.g              = 198
+color.b              = 80
 helptext             = _("\
 Plains are very broad, sparse regions, which makes trade slightly\
  inconvenient.\
@@ -605,9 +605,9 @@ property_wet         = 100
 property_tropical    = 10
 property_temperate   = 10
 property_cold        = 10
-color.r              = 48
-color.g              = 85
-color.b              = 97
+color.r              = 129
+color.g              = 179
+color.b              = 146
 helptext             = _("\
 Swamps suffer from an over-abundance of water, making agriculture\
  somewhat problematic.\
@@ -645,9 +645,9 @@ cooler_drier_result  = "Glacier"
 native_to            = "Land", "Air", "Missile", "Helicopter"
 flags                = "Starter", "NoBarbs", "CanHaveRiver"
 property_cold        = 50
-color.r              = 188
-color.g              = 188
-color.b              = 188
+color.r              = 206
+color.g              = 206
+color.b              = 206
 helptext             = _("\
 Tundra are broad, cold regions, fit for some agriculture and little\
  else.\

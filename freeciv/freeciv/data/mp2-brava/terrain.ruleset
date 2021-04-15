@@ -53,11 +53,11 @@ land_channel_requirement = 10
 
 ; Percentage of unfrozen tiles (no "Frozen" flag) required to be adjacent
 ; to a frozen tile before it can thaw (0-101; 0=anywhere, default 101=nowhere)
-thaw_requirement = 0
+thaw_requirement = 1   ;1 tile is 12.5% 
 
 ; Percentage of frozen tiles ("Frozen" flag) required to be adjacent to an
 ; unfrozen tile before it can freeze (0-101; 0=anywhere, default 101=nowhere)
-freeze_requirement = 0
+freeze_requirement = 1     ;1 tile is 12.5% 
 
 ; Bodies of water up to this size are considered freshwater lakes, if there is
 ; also terrain type(s) with flag "FreshWater" in the ruleset.
@@ -208,6 +208,28 @@ ocean_resources = FALSE
 ;
 ; */ <-- avoid gettext warnings
 
+; MAPGEN terrain deployment method:  ZONES, PARAMETERS. VALUES.
+; 1. ZONES are pre-decided definitions of regions over the map.
+;    ZONES are: plains (i.e. flat, not the terrain type), high elevation, wet, etc.
+; ZONES then get a random terrain on each tile according to the logic of a tri-partite PARAMETER system:
+; PARAMETERS are:   TARGET, PREFERRED, AVOID. PARAMETERS take VALUES which are:
+; VALUES:  MG_TEMPERATE, MG_GREEN, MG_MOUNTAINOUS, i.o.w., the percentages given by property_temperate, etc., in terrain items defined in ruleset.
+; Each parameter has a special logic.
+; TARGET = all terrains with the passed PARAMTER property will be considered and one will be picked at random based on the % values for each terrain.
+; PREFERRED =  only terrains with (some of) that property will be chosen.
+; AVOID = all terrains with any of that property will be blacklisted from appearing in this ZONE. 
+;
+; ZONES are:
+;  Plains:  MG_TEMPERATE, MG_GREEN, MG_MOUNTAINOUS.
+;  Cold:    MG_COLD, MG_UNUSED, MG_MOUNTAINOUS
+;  Frozen:  MG_FROZEN, MG_UNUSED, MG_MOUNTAINOUS
+;  Forest:  MG_FOLIAGE, MG_TEMPERATE, MG_TROPICAL
+;  Jungle:  MG_FOLIAGE, MG_TROPICAL, MG_COLD
+; Wetland:  MG_WET, MG_UNUSED, MG_FOLIAGE
+;  Desert:  MG_DRY, MG_TROPICAL, MG_COLD
+;Alt-desert: MG_DRY, MG_TROPICAL, MG_WET
+
+
 [terrain_inaccesible]
 name                 = _("Inaccessible")
 graphic              = "inaccessible"
@@ -262,7 +284,7 @@ trade                = 2
 resources            = "Fish"
 road_trade_incr_pct  = 0
 base_time            = 1
-road_time            = 12
+road_time            = 12       ; Sea Bridge
 irrigation_result    = "no"
 irrigation_food_incr = 0
 irrigation_time      = 0
@@ -282,9 +304,9 @@ cooler_drier_result  = "Tundra"
 native_to            = "Sea", "Air", "Balloon", "Missile", "Helicopter", "Trireme", "RiverShip", "Submarine", "AirProtect", "AirPillage", "Bomb"
 flags                = "NoCities", "NoBarbs", "NoPollution", "FreshWater", "NoZoc", "NoFortify"
 property_ocean_depth = 0
-color.r              = 46
-color.g              = 120
-color.b              = 182
+color.r              = 80
+color.g              = 176
+color.b              = 247
 helptext             = _("\
 Lakes are bodies of fresh water not connected to sea or ocean.\
 ")
@@ -303,7 +325,7 @@ trade                = 2
 resources            = "Fish", "Whales"
 road_trade_incr_pct  = 0
 base_time            = 1
-road_time            = 12
+road_time            = 12       ; Sea Bridge
 irrigation_result    = "no"
 irrigation_food_incr = 0
 irrigation_time      = 0
@@ -323,9 +345,9 @@ cooler_drier_result  = "Arctic"
 native_to            = "Sea", "Air", "Balloon", "Missile", "Helicopter", "Trireme", "RiverShip", "Submarine", "AirProtect", "AirPillage", "Bomb"
 flags                = "NoCities", "NoPollution", "UnsafeCoast", "NoZoc", "NoFortify"
 property_ocean_depth = 32
-color.r              = 0
-color.g              = 46
-color.b              = 137
+color.r              = 70
+color.g              = 146
+color.b              = 227
 helptext             = _("\
 Shallow oceans are mostly found near coastlines, and are often rich\
  sources of food and other resources.\
@@ -365,9 +387,9 @@ cooler_drier_result  = "no"
 native_to            =  "Trireme", "Sea", "Air", "Balloon", "Missile", "Helicopter", "RiverShip", "Submarine", "AirProtect", "AirPillage", "Bomb"
 flags                = "NoCities", "NoPollution", "UnsafeCoast", "NoZoc", "NoFortify"
 property_ocean_depth = 87
-color.r              = 0
-color.g              = 33
-color.b              = 129
+color.r              = 55
+color.g              = 125
+color.b              = 255
 helptext             = _("\
 Deep oceans cover much of the world away from coastlines, and only\
  seaworthy units can travel on them.\
@@ -407,9 +429,9 @@ cooler_drier_result  = "no"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Missile", "Helicopter", "AirProtect", "AirPillage", "Bomb"
 flags                = "NoBarbs", "NoCities", "CanHaveRiver", "Oil", "Frozen"
 property_frozen      = 23
-color.r              = 232
-color.g              = 232
-color.b              = 232
+color.r              = 238
+color.g              = 238
+color.b              = 238
 helptext             = _("\
 Arctic terrain is cold icy permafrost, found only in the far north or south.\
 "), _("\
@@ -452,9 +474,9 @@ flags                = "CanHaveRiver", "Oil", "Low Land"
 property_dry         = 75
 property_tropical    = 40
 property_temperate   = 26
-color.r              = 214
-color.g              = 185
-color.b              = 106
+color.r              = 247
+color.g              = 222
+color.b              = 187
 helptext             = _("\
 Deserts are very dry. Agriculture is difficult if not on a river or oasis. \
 "), _("\
@@ -501,7 +523,7 @@ property_wet         = 30
 property_foliage     = 50
 property_temperate   = 50
 color.r              = 43
-color.g              = 107
+color.g              = 157
 color.b              = 19
 helptext             = _("\
 Forests are densely wooded, providing lumber for production, but\
@@ -546,9 +568,9 @@ property_temperate   = 50
 property_cold        = 12
 property_dry         = 10
 property_tropical    = 20
-color.r              = 11
-color.g              = 138
-color.b              = 4
+color.r              = 100
+color.g              = 178
+color.b              = 105
 helptext             = _("\
 Grassland affords exceptional agricultural opportunities.\
 ")
@@ -591,9 +613,9 @@ property_mountainous = 35
 property_cold        = 35
 property_frozen      = 20
 property_dry         = 15
-color.r              = 24
-color.g              = 97
-color.b              = 5
+color.r              = 222
+color.g              = 230
+color.b              = 134
 helptext             = _("\
 Hills are frequently rich in resources. Difficult access makes\
  them good for defense but poor for trade.\
@@ -635,9 +657,9 @@ flags                = "CanHaveRiver", "Low Land"
 property_foliage     = 45
 property_tropical    = 50
 property_wet         = 45
-color.r              = 55
-color.g              = 156
-color.b              = 38
+color.r              = 71
+color.g              = 227
+color.b              = 0
 helptext             = _("\
 Jungles are densely overgrown but sometimes provide rich resources and good defense.\
 ")
@@ -677,9 +699,9 @@ native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Missile", "He
 flags                = "CanHaveRiver"
 property_mountainous = 65
 property_cold        = 50
-color.r              = 129
-color.g              = 127
-color.b              = 118
+color.r              = 160
+color.g              = 156
+color.b              = 170
 helptext             = _("\
 Mountains are regions of extreme altitude, excellent for defense but inferior\
  for trade and agriculture.\
@@ -725,9 +747,9 @@ property_cold        = 28
 property_tropical    = 10
 property_temperate   = 50
 property_mountainous = 15
-color.r              = 122
-color.g              = 156
-color.b              = 46
+color.r              = 161
+color.g              = 198
+color.b              = 80
 helptext             = _("\
 Plains are broad flat regions with decent potential for\
  agriculture, production, and trade.\
@@ -771,9 +793,9 @@ property_frozen      = 3
 property_tropical    = 10
 property_temperate   = 10
 property_cold        = 17
-color.r              = 48
-color.g              = 85
-color.b              = 97
+color.r              = 129
+color.g              = 179
+color.b              = 146
 helptext             = _("\
 Swamps suffer from an over-abundance of water, making agriculture\
  and trade problematic.\
@@ -814,9 +836,9 @@ native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Mi
 flags                = "Starter", "NoBarbs", "CanHaveRiver", "Low Land"
 property_cold        = 38
 property_frozen      = 45
-color.r              = 188
-color.g              = 188
-color.b              = 188
+color.r              = 206
+color.g              = 206
+color.b              = 206
 helptext             = _("\
 Tundra regions are cold and barren, only fit for mediocre agriculture and trade.\
 ")
