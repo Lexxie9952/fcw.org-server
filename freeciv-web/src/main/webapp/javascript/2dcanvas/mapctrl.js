@@ -509,6 +509,7 @@ function city_click_goto_cooldown(ptile)
 **************************************************************************/
 function handle_info_text_message(packet)
 {
+  // other functions: improve_tile_info_dialog (tile.js)
   var message = decodeURIComponent(packet['message']);
   var lines = message.split('\n');
 
@@ -538,7 +539,7 @@ function handle_info_text_message(packet)
         lines[i] = split_txt[1]
                  + "<a href='#' onclick='javascript:nation_table_select_player("
                  + pplayer['playerno']
-                 + ");' style='color:#134; font-weight:500;'>"
+                 + ");' class='nation_link'>"
                  + split_txt[2]
                  + "</a>"
                  + split_txt[3]
