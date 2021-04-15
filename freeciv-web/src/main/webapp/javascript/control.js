@@ -4789,7 +4789,7 @@ function create_connect_packet(packet)
   // Reconstruct packet with an order before each move, and one at the end.
   for (i=0; i<packet['length']+1; i++) {
     var upgrade_extra = extra_dep(punit,ptile,connect_extra);
-    console.log("upgrade_extra=="+upgrade_extra)
+    //console.log("upgrade_extra=="+upgrade_extra)
     // insert order before each move
     if (upgrade_extra != CONNECT_ACTION_ILLEGAL) {
       new_packet['orders'].push(ORDER_ACTIVITY);

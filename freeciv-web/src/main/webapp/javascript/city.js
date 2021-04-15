@@ -427,6 +427,8 @@ function show_city_dialog(pcity)
   $("#city_dialog").parent().css("overflow-y", "hidden");
 
   $("#game_text_input").blur();
+  // IXTJ killer: Prevent Firefox from focusing MAIN tab and giving a stupid url preview for the href="#"
+  document.activeElement.blur();
 
   /* prepare city dialog for small screens. */
   if (!is_small_screen()) {
