@@ -265,7 +265,37 @@ input[type='number'] {
   text-shadow: 2px 1px #000;
 }
 /* food shield trade: tile output styling for tile info window */
-.fbt,.sbt,.tbt {
+/* shortest length possible because astr_add_line() forces \n at column x */
+.f,.s,.t {
+  padding-bottom: 1px;
+  border: 1px solid #0003;
+  border-radius: 2px;
+  white-space: nowrap;
+  cursor: help;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+.f {
+  background-color: #00ee01;
+  color: #000;
+  border-style: solid hidden solid solid;
+}
+.s {
+  background-color: #e4e4e4;
+  color: #000;
+  border-style: solid hidden solid solid;
+}
+.t {
+  background-color: #ebde11;
+  color: #000;
+  border-style: solid solid solid solid;
+}
+/*********** KILL ME! After next prod server recompilation of C server
+ * that happens after 14April2021: C server put these classes in the 
+ * Tile Info pop-up, but they are now replaced by the above, whose 
+ * shorterness avoids forced newline in the middle of tile output text
+ * ********************************************************************/
+ .fbt,.sbt,.tbt {
   padding-left: 3px;
   padding-bottom: 1px;
   border: 1px solid #0003;
@@ -289,6 +319,8 @@ input[type='number'] {
   padding-right: 3px !important;
   border-style: solid solid solid solid;
 }
+/***************************************************** </end KILL_ME> */
+
 .black_shadow {
   text-shadow: 2px 1px black;
 }
@@ -946,7 +978,7 @@ input[type='number'] {
 } /* theme classes 6 */
 
 .ui-widget-content a {
-  color: #f8ff8a;
+  color: #9cf;
 }
 
 .govt_button {
@@ -1148,6 +1180,10 @@ input[type='number'] {
 #wiki_dialog {
   overflow: auto;
 }
+#wiki_dialog a {
+  color :#9cf;
+  text-shadow: 2px 1px #002850;
+}
 
 #cities_scroll {
   width: 100%;
@@ -1297,7 +1333,6 @@ li.tech-me_only::before {
   font-size: 14px;
   white-space: nowrap;
   z-index: 2000;
-
 }
 
 .dipl_div a {
@@ -1579,17 +1614,45 @@ html {
   scrollbar-shadow-color: #646464;
 }
 
+/* Tile info styles, can be used elsewhere too */
+.nation_link {
+  color: #9cf;
+  font-weight: 500;
+  text-shadow: 2px 1px #002850;
+}
+.highlight_irrigation {
+  color:#8db2ff;
+  text-shadow: 2px 1px #00af;
+}
+.highlight_mining {
+  color:#e76879;
+  text-shadow: 2px 1px #500f;
+}
+.highlight_transforming {
+  color:#f9bd4d;
+  text-shadow: 2px 1px #2c2707;
+}
+.highlight_roading {
+  color:#dbb992;
+  text-shadow: 2px 1px #311907;
+}
+
 input[type="text"], textarea {
   background-color : #111; 
   color: var(--default_text_color);
+  border-color: #aaa;
 }
 #pregame_text_input {
   background: #111 !important;
   background-color: #000 !important;
   border-color: #777 !important;
+  color: rgb(60, 190, 255);
 }
 #pregame_game_info {
   color: var(--default_text_color);
+}
+#pick_nation_dialog {
+  color: var(--default-text-color);
 }
 
 .sweet-alert {
