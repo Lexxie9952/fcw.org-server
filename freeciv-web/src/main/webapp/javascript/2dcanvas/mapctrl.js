@@ -537,11 +537,11 @@ function handle_info_text_message(packet)
       if (pplayer != null &&
           (client.conn.playing == null || pplayer != client.conn.playing)) {
         lines[i] = split_txt[1]
-                 + "<a href='#' onclick='javascript:nation_table_select_player("
+                 + "<span onclick='$(\"#generic_dialog\").parent().children().remove(); nation_table_select_player("
                  + pplayer['playerno']
-                 + ");' class='nation_link'>"
+                 + ");' class='nation_link' title='Select this player in the Nations Tab'>"
                  + split_txt[2]
-                 + "</a>"
+                 + "</span>"
                  + split_txt[3]
                  + ", "
                  + get_player_connection_status(pplayer)
