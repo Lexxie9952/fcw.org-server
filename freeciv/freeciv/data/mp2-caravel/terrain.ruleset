@@ -669,7 +669,9 @@ color.r              = 247
 color.g              = 222
 color.b              = 187
 helptext             = _("\
-Deserts are very dry. Agriculture is difficult if not on a river or oasis. \
+Deserts are very dry. Agriculture is difficult if not on a river or oasis. Cities on desert rivers\
+ get +1 extra food. Irrigated desert rivers give an extra +1 food over the usual bonus, even on a\
+ city center tile.\
 "), _("\
 Oil wells can be built when Construction is known.\
 ")
