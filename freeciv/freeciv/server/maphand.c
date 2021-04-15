@@ -2575,9 +2575,9 @@ static const char *get_tile_output_text(const struct tile *ptile,
     int before_bonus   = 0;
     char background_color[200];
     sprintf(&background_color[0], "<b class='%s'>",
-                                  (i == O_FOOD) ? "fbt" 
-                                                : (i==O_SHIELD ? "sbt"
-                                                : "tbt"));
+                                  (i == O_FOOD) ? "f" 
+                                                : (i==O_SHIELD ? "s"
+                                                : "t"));
 
     int x = city_tile_output(NULL, ptile, FALSE, i);
 
@@ -2592,21 +2592,21 @@ static const char *get_tile_output_text(const struct tile *ptile,
     }
 
     if (before_penalty > 0 && x > before_penalty) {
-      sprintf(output_text[i], "%s  %d↓", background_color, x-1);
+      sprintf(output_text[i], "%s%d↓", background_color, x-1);
       *is_raw = false;
     } 
     else if (before_bonus > 0 && x>0) {
-      sprintf(output_text[i], "%s  %d↑", background_color, x+before_bonus);
+      sprintf(output_text[i], "%s%d↑", background_color, x+before_bonus);
       *is_raw = false;
     }
     else {
-      sprintf(output_text[i], "%s  %d ", background_color, x);
+      sprintf(output_text[i], "%s%d", background_color, x);
     }
   }
   
   astr_clear(&str);
-  astr_add(&str, " %s %s %s ",
-                output_text[O_FOOD], output_text[O_SHIELD], output_text[O_TRADE]);
+  astr_add(&str, "%s</b>%s</b>%s</b>%s",
+                output_text[O_FOOD], output_text[O_SHIELD], output_text[O_TRADE], _("​"));
   return astr_str(&str);
 }
 
@@ -2731,9 +2731,9 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
   astr_add_line(&str, _("Food ▪ Production ▪ Trade (penalty:<b>↓</b> bonus:<b>↑</b>)"));
   bool is_raw = true;
   astr_add_line(&str, _("%s"), get_tile_output_text(ptile, pplayer, &is_raw));
-  astr_add_line(&str, _("</b></b></b>"));
+  //astr_add_line(&str, _("</b></b></b>"));
   if (!is_raw) {
-    astr_add(&str, _("(Raw value: %s)\n"), get_tile_base_output_text(ptile,pplayer));
+    astr_add(&str, _("\n(Raw value: %s)\n"), get_tile_base_output_text(ptile,pplayer));
   }
 
   extra_type_by_cause_iterate(EC_HUT, pextra) {
