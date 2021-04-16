@@ -427,16 +427,10 @@ function show_city_dialog(pcity)
   $("#city_dialog").parent().css("overflow-y", "hidden");
 
   $("#game_text_input").blur();
-  // IXTJ killer: Prevent Firefox from focusing MAIN tab and giving a stupid url preview for the href="#"
-  // focus on the Exit (W) button.
-  $("#city_dialog").next().children().children().first().next().next().next().next().focus();
-  $("#city_dialog").next().children().first().focus();
-  
-  /*
+  // IXTJ killer: Prevent Firefox from focusing MAIN tab to produce a stupid url preview for the href="#"
   document.activeElement.blur();
-  $("#city_dialog").focus();
-  $("#city_tabs").focus();
-  */
+  document.activeElement = $("#city_dialog").parent();
+  $("#city_dialog").parent().focus();
 
   /* prepare city dialog for small screens. */
   if (!is_small_screen()) {
@@ -4016,7 +4010,7 @@ function city_keyboard_listener(ev)
           chatbox_scroll_to_bottom(false);
           break;
       case 32:
-          ev.stopPropagation();
+          ev.stopImmediatePropagation();
           // SPACE - flip-flop between production/main screen
           // if not in one of those 2 screens, go to main screen
           if (city_tab_index > 1) city_tab_index = 0;
