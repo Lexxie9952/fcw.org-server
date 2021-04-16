@@ -428,7 +428,15 @@ function show_city_dialog(pcity)
 
   $("#game_text_input").blur();
   // IXTJ killer: Prevent Firefox from focusing MAIN tab and giving a stupid url preview for the href="#"
+  // focus on the Exit (W) button.
+  $("#city_dialog").next().children().children().first().next().next().next().next().focus();
+  $("#city_dialog").next().children().first().focus();
+  
+  /*
   document.activeElement.blur();
+  $("#city_dialog").focus();
+  $("#city_tabs").focus();
+  */
 
   /* prepare city dialog for small screens. */
   if (!is_small_screen()) {
@@ -630,7 +638,7 @@ function show_city_dialog(pcity)
       }
       $("#city_present_units_list").html(present_units_html);
       // trick to compensate for removed scrollbar clipping the top:
-      $("#city_present_units_list").css({"margin-top":"-20px","padding-top":"20px"});
+      $("#city_present_units_list").css({"margin-top":"-10px","padding-top":"20px"});
     }
   
 
@@ -659,7 +667,7 @@ function show_city_dialog(pcity)
     }
     $("#city_supported_units_list").html(supported_units_html);
     // trick to compensate for removed scrollbar clipping the top:
-    $("#city_supported_units_list").css({"margin-top":"-20px","padding-top":"20px"});
+    $("#city_supported_units_list").css({"margin-top":"-10px","padding-top":"20px"});
   }
   $(".game_unit_list_item").tooltip();
   $(".buildings_present").tooltip();
@@ -668,25 +676,25 @@ function show_city_dialog(pcity)
     var food_txt = ""; 
     if (pcity['surplus'][O_FOOD] > 0) food_txt += "+<b class='food_text'>";
     else if (pcity['surplus'][O_FOOD] < 0) food_txt += "<b class='negative_food_text'>";
-    else food_txt += "+<b>";
+    else food_txt += "<b>";
     food_txt += pcity['surplus'][O_FOOD] + "</b>";
     var food_txt2 = pcity['surplus'][O_FOOD]==pcity['prod'][O_FOOD] ? "" : "(" + pcity['prod'][O_FOOD] + ")";
 
     var shield_txt = "";
     if (pcity['surplus'][O_SHIELD] > 0) shield_txt += "+<b class='prod_text'>";
-    else shield_txt += "+<b>";
+    else shield_txt += "<b>";
     shield_txt += pcity['surplus'][O_SHIELD] + "</b>";
     var shield_txt2 = pcity['surplus'][O_SHIELD]==pcity['prod'][O_SHIELD] ? "" : "(" + pcity['prod'][O_SHIELD] + ")";
 
     var trade_txt = "";
     if (pcity['surplus'][O_TRADE] > 0) trade_txt += "+<b class='trade_text'>";
-    else trade_txt += "+<b>";
+    else trade_txt += "<b>";
     trade_txt += pcity['surplus'][O_TRADE] + "</b>";
     var trade_txt2 = pcity['surplus'][O_TRADE]==pcity['prod'][O_TRADE] ? "" : "(" + pcity['prod'][O_TRADE] + ")";
 
     var gold_txt = "";
     if (pcity['surplus'][O_GOLD] > 0) gold_txt += "+<b class='gold_text'>";
-    else gold_txt += "+<b>";
+    else gold_txt += "<b>";
     gold_txt += pcity['surplus'][O_GOLD] + "</b>";
     var gold_txt2 = pcity['surplus'][O_GOLD]==pcity['prod'][O_GOLD] ? "" : "(" + pcity['prod'][O_GOLD] + ")";
     
@@ -2209,7 +2217,7 @@ function city_worklist_dialog(pcity)
     }
   }
 
-  var worklist_html = "<table class='worklist_table'><tr><td>Type</td><td>Name</td><td>Cost</td></tr>";
+  var worklist_html = "<table class='worklist_table'><tr style='background-color:#0004'><td>Type</td><td>Name</td><td>Cost</td></tr>";
   for (var j = 0; j < universals_list.length; j++) {
     var universal = universals_list[j];
     var sprite = universal['sprite'];
@@ -2361,7 +2369,7 @@ function populate_worklist_production_choices(pcity)
   var small = is_small_screen();
 
   var production_list = generate_production_list();
-  var production_html = "<table class='worklist_table'><tr><td>Type</td><td>Name</td><td style='padding-right:30px; text-align:right'>Info</td><td>Cost</td></tr>";
+  var production_html = "<table class='worklist_table'><tr style='background-color:#0004'><td>Type</td><td>Name</td><td style='padding-right:30px; text-align:right'>Info</td><td>Cost</td></tr>";
   for (var a = 0; a < production_list.length; a++) {
     var sprite = production_list[a]['sprite'];
     if (sprite == null) {
