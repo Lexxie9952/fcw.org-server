@@ -196,6 +196,7 @@ input[type=number]::-webkit-outer-spin-button {
 input[type='number'] {
   -moz-appearance:textfield;
 }
+
 /*warcalc bonus adjusters, small empire tab buttons*/
 .tiny_button {
   padding: 2px;
@@ -1663,6 +1664,19 @@ a:focus { outline: thin dotted; border:none;}
 input[type="text"], textarea {
   background-color : #111; 
   color: var(--default_text_color);
+  border-color: #aaa;
+}
+input[type="password" i] {
+  -webkit-text-security: disc !important;
+  padding: 1px 2px;
+  background-color: #111 !important;
+  color: var(--default_text_color) !important;
+  border-color: #aaa;
+}
+input[type="email" i] {
+  padding: 1px 2px;
+  background-color: #111 !important;
+  color: var(--default_text_color) !important;
   border-color: #aaa;
 }
 #pregame_text_input {

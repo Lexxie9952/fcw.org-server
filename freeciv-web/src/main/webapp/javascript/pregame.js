@@ -1478,13 +1478,14 @@ function show_new_user_account_dialog(gametype)
                 + "<tr><td>Confim password:</td><td><input id='confirm_password' type='password' size='25'></td></tr></table><br>"
                 + "<div id='username_validation_result' style='display:none;'></div><br>"
                 + "Remember your username and password, since you will need this to log in later.<br><br>"
+                + "<u><i>You <b>can't recover</b> a lost password. Write it down or accept the 99% chance <b>you will lose your account</u>!</b></i>"
                 + (captcha_site_key != '' ? "Click to accept captcha to show that you are real human player:<br>" : "")
                 + "<div id='captcha_element'></div><br><br>"
                 + "<div><small><ul><li>It is free and safe to create a new account on Freeciv-web.</li>"
                 + "<li>A user account allows you to save and load games.</li>"
                 + "<li>Other players can use your username to start Play-by-email games with you.</li>"
-                + "<li>You will not receive any spam and your e-mail address will be kept safe. Your password is stored securely as a secure hash.</li>"
-                + "<li>You can <a href='#' onclick='javascript:close_pbem_account();' style='color: black;'>cancel</a> your account at any time if you want.</li>"
+                + "<li>You will NEVER receive spam. Your e-mail address will never be shared. Your password is stored securely as a secure hash <b>no one can recover</b>.</li>"
+                + "<li>You can <a href='#' onclick='javascript:close_pbem_account();'>cancel</a> your account at any time if you want.</li>"
                 + "</ul></small></div>";
 
   // reset dialog page.
