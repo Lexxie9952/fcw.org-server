@@ -426,14 +426,14 @@ input[type='number'] {
 }
 
 #city_viewport {
-/*  background-image: url('/images/bg-med-dark.png'); */
+/*  background-image: url('/images/bg-med-dark.jpg'); */
   overflow: auto;
 }
-/*
+
 #city_overview_tab {
-  background-image: url('/images/bg-dark.jpg');
+  background-image: url('/images/bg-med-dark.jpg');
 }
-*/
+
 .ui-dialog {
   border: 1px #432 solid;
   max-height: 100%;
@@ -561,15 +561,20 @@ input[type='number'] {
   float: left;
   height: 105px;
   overflow: auto; 
-  background:  url("/images/bg.jpg") repeat scroll 0 0 ; 
+  background:  url("/images/bg-med-light.jpg") repeat scroll 0 0 ;
+  color: var(--contrast_text_color) !important;
   border: 1px solid #444444;
   padding: 6px;
   margin: 5px;
   min-width: 300px;
   border-radius: 6px;
+  scrollbar-width: thin;
 }
 #city_improvements {
   min-width: 280px;
+}
+#city_improvements_list {
+  margin-top: -5px;
 }
 #city_improvements_title, #city_present_units_title, #city_supported_units_title {
   font-size: 90%;
@@ -580,15 +585,15 @@ input[type='number'] {
   margin: -7px -6px 7px -6px;
 }
 
-#city_improvement_element {
-  text-align: center; 
-  color: var(--default_text_color); 
-  width: 70px; 
-  cursor:pointer; 
-  cursor:hand;
-  float: left;
-}
 
+#city_improvement_element {
+  text-align: center;
+  color: var(--contrast_text_color);
+  width: 70px;
+  cursor: pointer;
+  float: left;
+  text-shadow: 1px 1px #0004;
+}
 
 .production_list_item {
   float: left;
@@ -600,7 +605,6 @@ input[type='number'] {
 
 .production_list_item_sub {
   cursor:pointer;
-  cursor:hand;
   float:left; 
 }
 
@@ -915,15 +919,16 @@ input[type='number'] {
   text-align: left; 
   font-size: 100%;
   cursor:pointer;
-  cursor:hand;
 }
 
 .worklist_table {
   width: 100%;
   border-spacing: 0px;
   border-collapse: separate;
+  font-family: SegoeSB;
+  text-shadow: 1px 1px #5554;
+  background-image: url(/images/bg-med-light.jpg);
 }
-
 #worklist_dialog_headline {
   width: 100%;
   height: 48px;
@@ -1069,7 +1074,6 @@ input[type='number'] {
 
 .chatbox_text_tileinfo {
   cursor:pointer;
-  cursor:hand;
 }
 
 /* city tabs will be on the bottom of the dialog. */
@@ -1314,19 +1318,16 @@ li.tech-me_only::before {
 .diplomacy_messages a {
   color: white;
 }
-
 .diplomacy_player_box {
   width: 50%;
   float: left;
   text-align:center;
 }
-
 .diplomacy_player_box h3 {
   clear: both;
   width: 100%;
   padding-top: 1em;
 }
-
 .dipl_div {
   float: left;
   text-align: left;
@@ -1334,56 +1335,33 @@ li.tech-me_only::before {
   white-space: nowrap;
   z-index: 2000;
 }
-
 .dipl_div a {
-  color: rgb(221, 209, 183);
+  color: rgb(202, 187, 153);
   text-decoration: none;
 }
-
 .dipl_add {
   z-index: 100;
 }
-
 .agree_self {
   float: left;
 }
-
 .agree_counterpart {
   float: right;
 }
-
 .diplomacy_gold {
   padding: 8px;
   font-size: 80%;
-  color: rgb(238, 222, 5)
+  color: rgb(253, 232, 0) !important;
 }
-
 .diplomacy_gold input {
-  height: 15px;
-  font-size: 14px;
-  width: 40px;
-}
-
-.menu-button-activator {
-  font-size: 14px;
-  float: left;
-  margin: 0 4px 40px 20px;
-  padding: .4em 1em;
-  text-decoration: none !important;
-  cursor: pointer;
-  position: relative;
+  height: 18px;
+  font-size: 15px;
+  width: 42px;
+  color: rgb(223, 221, 197) !important;
+  background-color: #222 !important;
+  border-color: #888;
   text-align: center;
 }
-
-.menu-button-activator .ui-icon {
-  position: absolute;
-  top: 50%;
-  margin-top: -8px;
-  left: auto;
-  margin-left: 0;
-  right: .2em;
-}
-
 .row_right {
   text-align: right;
 }
@@ -1498,21 +1476,31 @@ li.tech-me_only::before {
   color: var(--default_text_color);
 }
 
+/* Standard tool tips */
+/* jquery */
 .ui-tooltip {
   white-space: pre-line;
-  background-image: url('/images/bg.jpg') !important;
-  color: var(--default_text_color);
+  background-image: url('/images/bg-light.jpg') !important;
+  color: var(--contrast_text_color) !important;
+  /* box-shadow: none !important; 
+  box-shadow: 5px 5px 15px #000a, -.01em 0 .27em #ccc5 !important; */
+  box-shadow: 6px 6px 23px #000b !important;
+  text-shadow: 1px 1px #33222241 !important;
+  font-family: Segoe !important;
 }
 
 .ui-button, button {
   color: var(--default_text_color);
   font-family: Freeciv !important;
-  background: url('/images/bg-med-dark.png') #000;
+  background: url('/images/bg-med-dark.jpg') #000;
   border-color: #000;
+  box-shadow: "3px 3px 6px #000b" !important;
 }
 .ui-button:hover, button:hover {
   background: url('/images/bg-light.jpg') #000;
   color: #000 !important;
+  box-shadow: "4px 4px 7px #0008" !important;
+
 }
 .ui-button.ui-button-icon-only:not(#turn_done_button) {
   border: 1px solid;
@@ -1522,6 +1510,31 @@ li.tech-me_only::before {
 /* fixes position of dialog-close button */
 .ui-button-icon-only .ui-icon {
   margin-top: -10px;
+}
+.menu-button-activator {
+  float: left;
+  margin: 0 4px 40px 20px;
+  padding: .4em 1em;
+  text-decoration: none !important;
+  cursor: pointer;
+  position: relative;
+  text-align: center;
+  color: var(--default_text_color) !important;
+  border-color: #000 !important;
+  box-shadow: "3px 3px 6px #000b" !important;
+  font-family: Freeciv !important;
+  background: url('/images/bg-med-dark.jpg') #000 !important;
+}
+.menu-button-activator .ui-selected {
+  color: #fff !important;
+}
+.menu-button-activator .ui-icon {
+  position: absolute;
+  top: 50%;
+  margin-top: -8px;
+  left: auto;
+  margin-left: 0;
+  right: .2em;
 }
 
 .ui-dialog-titlebar-minimize,
@@ -1554,7 +1567,7 @@ li.tech-me_only::before {
 
 .ui-tabs-anchor {
   font-family: "Freeciv";
-  background: url('/images/bg-med-dark.png');
+  background: url('/images/bg-med-dark.jpg');
   color: var(--default_text_color) !important;
   border-color: #000;
   border-radius: 5px 5px 0 0;
@@ -1612,6 +1625,7 @@ html {
   scrollbar-track-color: #000;
   scrollbar-arrow-color: #000;
   scrollbar-shadow-color: #646464;
+  scrollbar-width: thin !important;
 }
 
 /* Tile info styles, can be used elsewhere too */
@@ -1619,6 +1633,8 @@ html {
   color: #9cf;
   font-weight: 500;
   text-shadow: 2px 1px #002850;
+  text-decoration: underline;
+  cursor: pointer;
 }
 .highlight_irrigation {
   color:#8db2ff;
@@ -1991,7 +2007,7 @@ input[type="text"], textarea {
 }
 .city_panel {
   /*
-  background: url("/images/bg-med-dark.png") repeat scroll 0 0 #222222; */
+  background: url("/images/bg-med-dark.jpg") repeat scroll 0 0 #222222; */
   padding-right: 30px;
   margin-top: 20px;
   font-family: Segoe;
@@ -2007,7 +2023,7 @@ input[type="text"], textarea {
 #city_improvements_panel {
   clear: left;
   width: 95%;
-  line-height:16px;
+  line-height:11px !important;
 }
 #prod_descr,
 #city_dialog,
@@ -2021,21 +2037,28 @@ input[type="text"], textarea {
 #city_foreigners {
   color: var(--default_text_color) !important;
 }
+#city_production_tab {
+  background: url("/images/bg-med-dark.jpg");
+}
 #city_current_worklist {
   width: 100%;
   float: left;
   overflow: auto;
-  background-color: rgba(40,40,40,0.4);
-  background-image: url("/images/bg.jpg");
+  /* background-color: rgba(40,40,40,0.4); */
+  background-image: url("/images/bg-med-light.jpg");
+  color: var(--contrast_text_color) !important;
   border: 1px solid black;
+  border-radius: 4px;
 }
 #worklist_production_choices {
   width: 100%;
   float: left;
   overflow: auto;
-  background-color: rgba(40,40,40,0.4);
-  background-image: url("/images/bg.jpg");
+  /* background-color: rgba(40,40,40,0.4); */
+  /*background-image: url("/images/bg-med-light.jpg");*/
+  color: var(--contrast_text_color) !important;
   border: 1px solid black;
+  border-radius: 4px;
 }
 
 #city_worklist_insert_btn,
@@ -2124,6 +2147,7 @@ body {
   font-family: Arial;
   border: none;
   outline: none;
+  scrollbar-width: thin !important;
 }
 
 /* CSS Created by CSS CHECKBOX */
