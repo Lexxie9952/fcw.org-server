@@ -1,5 +1,5 @@
 :root {
-  /* Chrome browser family, dark scrollbars: */
+  /* Chrome browser family: */
   color-scheme: dark;
 
   /* Also adjust: default_dialog_text_color in colortools.js */
@@ -7,21 +7,39 @@
   --contrast_text_color: #000;
 }
 
-/* default to dark theme, light text 
-* {
-  color: var(--default_text_color);
-}*/
-
 body
 {
   margin: 0px;
   background: #000000;
   overflow: hidden;
   width: 100%;
-  /* Firefox, dark scrollbars */
-  scrollbar-color: #55555a #333340;
   color: var(--default_text_color);
 }
+body, html, div {
+/* ***************** Scrollbars *****************/
+/* Firefox scrollbar */
+  scrollbar-color: #393812 #000 !important;
+  scrollbar-width: thin !important;
+}
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+  background: #000;
+}
+::-webkit-scrollbar-thumb {
+  background: #393812;
+/*	-webkit-border-radius:4px; */
+  -webkit-border-radius: 1ex;
+  -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+}
+::-webkit-scrollbar-thumb:hover{
+	background-color:#42411a;
+	-webkit-border-radius:4px;
+}
+::-webkit-scrollbar-corner {
+  background: #000;
+}
+/************************************************/
 
 button { 
   margin: .2em .2em .2em 0; 
@@ -160,7 +178,7 @@ button {
 .noscrollbars {
   overflow-y: scroll; 
   overflow-x: scroll;
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none !important; /* Firefox */
 }
 .noscrollbars::-webkit-scrollbar { /* WebKit */
   width: 0;
@@ -572,6 +590,7 @@ input[type='number'] {
 }
 #city_improvements {
   min-width: 280px;
+  overflow-y: hidden;
 }
 #city_improvements_list {
   margin-top: -5px;
@@ -1614,18 +1633,6 @@ a:focus { outline: thin dotted; border:none;}
 .citytab, .fcw_tab {
   margin-left:0px;
   margin-right:1px !important;
-}
-
-/* Firefox scrollbar */
-html {
-  scrollbar-face-color: #646464;
-  scrollbar-base-color: #646464;
-  scrollbar-3dlight-color: #646464;
-  scrollbar-highlight-color: #646464;
-  scrollbar-track-color: #000;
-  scrollbar-arrow-color: #000;
-  scrollbar-shadow-color: #646464;
-  scrollbar-width: thin !important;
 }
 
 /* Tile info styles, can be used elsewhere too */
