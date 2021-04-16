@@ -47,7 +47,7 @@
 	}
   .navbar-inverse {
 		background-color: #2220;
-		background: url(/images/bg-med-dark.png);
+		background: url(/images/bg-med-dark.jpg);
 	}
 	a {
     text-shadow: 1px 1px #000;/* !important;*/

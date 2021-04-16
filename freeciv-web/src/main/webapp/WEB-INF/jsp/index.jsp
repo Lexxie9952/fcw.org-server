@@ -42,7 +42,7 @@
 	}
 	#game-launcher .game-type {
 		width: 100%;
-		background: url('/images/bg-med-dark.png');
+		background: url('/images/bg-med-dark.jpg');
 		display: inline-table;
 		top: 0;
     border-radius: 20px 20px 20px 20px;
@@ -131,7 +131,7 @@
 	text-shadow: 1px 1px #777;
 	}
 	.dropdown-menu {
-  	background-image: url('/images/bg-med-dark.png');
+  	background-image: url('/images/bg-med-dark.jpg');
 		border-radius: 5px;
 		border: 2x solid #000e;
 	}
@@ -152,7 +152,7 @@
 	}
 	.navbar-inverse {
 		background-color: #2220;
-		background: url(/images/bg-med-dark.png);
+		background: url(/images/bg-med-dark.jpg);
 	}
 	body {
 		color: #ccc;

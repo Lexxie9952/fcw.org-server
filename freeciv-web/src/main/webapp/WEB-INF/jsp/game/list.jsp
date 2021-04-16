@@ -122,11 +122,11 @@
 	}
 	.navbar-inverse {
 		background-color: #2220;
-		background: url('/images/bg-med-dark.png');
+		background: url('/images/bg-med-dark.jpg');
 	}
 	.tab-pane {
 		background-color: #fcf1e0;
-		background: url('/images/bg-med-dark.png');
+		background: url('/images/bg-med-dark.jpg');
 		color: #ccc;
 	}
 	table {
