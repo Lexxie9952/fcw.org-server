@@ -6610,7 +6610,7 @@ function update_active_units_dialog()
     } else { // normal screen sizing of panel
       $("#game_unit_panel").parent().width(newwidth);
       $("#game_unit_panel").parent().height(newheight+6);  // third line of text is rare but needs 5 more px to not be clipped off (Lexxie)
-      $("#game_unit_panel").parent().css("left", ($(window).width() - newwidth) + "px");
+      $("#game_unit_panel").parent().css("left", ($(window).width() - newwidth -3) + "px");
       $("#game_unit_panel").parent().css("top", ($(window).height() - newheight - 20) + "px");
       $("#game_unit_panel").parent().css("background", "rgba(50,50,40,0.5)");
     }
