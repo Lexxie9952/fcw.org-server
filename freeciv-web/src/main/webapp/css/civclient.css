@@ -874,6 +874,7 @@ input[type='number'] {
   min-width: 320px;
   background-image: url('/images/bg-dark.jpg');
   color: rgb(226, 226, 226);
+  scrollbar-width: thin;
 }
 
 #tabs-hel.manual_doc {
@@ -882,7 +883,7 @@ input[type='number'] {
 }
 
 #tabs-hel.manual_doc a {
-  color: #8e8;
+  color: #9cf;
 }
 
 #tabs-hel.ui-icon, #tabs-hel.ui-widget-content .ui-icon {
@@ -1176,6 +1177,7 @@ input[type='number'] {
   color: white;
   background-color: rgba(0, 0, 0, 0.65);
   font-size: 86%;
+  line-height: 15px;
 }
 
 #active_unit_info span {
@@ -1184,6 +1186,7 @@ input[type='number'] {
 
 #game_unit_panel {
   margin-left: -8px;
+  /* padding: 0px replaces line above if not mobile */
 }
 
 #city_table {
@@ -1507,6 +1510,10 @@ li.tech-me_only::before {
   box-shadow: 6px 6px 23px #000b !important;
   text-shadow: 1px 1px #33222241 !important;
   font-family: Segoe !important;
+  line-height: 16px;
+}
+body div.ui-tooltip {
+  max-width: 360px;
 }
 
 .ui-button, button {
@@ -2007,6 +2014,24 @@ input[type="email" i] {
   /*font-family: Arial;*/
   line-height: 115%;
   font-size: 115%;
+}
+#help_city_improvements {
+  color: #8bf;
+}
+#help_wonders_of_the_world {
+  color: #fc9;
+}
+#help_units {
+  color: #e67;
+}
+#help_government {
+  color: #8b7;
+}
+#help_gen_ruleset {
+  color: #a6f
+}
+#help_controls {
+  color: #cd6;
 }
 
 #city_canvas_div {
