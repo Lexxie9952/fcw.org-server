@@ -955,7 +955,7 @@ sound		= "b_research_lab"
 sound_alt	= "b_generic"
 helptext	= _("\
 Adds +100% to base science output for each Library and University\
- in a city.\
+ in a city. \
 *In a city with a Library or University, the combined increase to science\
  output is +200%. \
 *In a city with a Library and a University, the combined increase\
@@ -1274,7 +1274,7 @@ sabotage	= 100
 sound		= "b_university"
 sound_alt	= "b_generic"
 helptext	= _("\
-Adds +150% to science output in a city with a Library.\
+Adds +150% to science output in a city with a Library. \
 "), _("\
 *A University and Library combine for a +250% increase\
  in science output.\
@@ -1388,12 +1388,12 @@ helptext	= _("\
 In all your cities, Buildings with upkeep of 1 gold become free.\
  This Wonder also allows three new specialists：\
 "), _("
-  * Each Laborer produces 1 production point for their city per turn;\
+  * Each Laborer produces 1 production point for their city per turn; \
 "), _("
   * Each Merchant produces 1 gold and 2 trade points per turn.\
- Trade is then distributed by your national tax rates.\
+ Trade is then distributed by your national tax rates. \
 "), _("
-  * Each Farmer provides 1 food for their city per turn;\
+  * Each Farmer provides 1 food for their city per turn; \
 "), _("
  This wonder is never obsolete.\
 ")
@@ -1459,7 +1459,7 @@ Angkor Wat gives you the glorious ancient city of\
  shields. \n\
 "), _("
 This Wonder is never obsolete, but it only has an effect in\
- Despotism, Monarchies, and Republic.\ 
+ Despotism, Monarchies, and Republic. \ 
 "), _("
 Angkor Wat is a Civil Wonder. You can build only one Civil Wonder.\
 ")
@@ -1788,7 +1788,7 @@ When facing attacks by sea, Gibraltar Fortress brings defensive capabilities\
 "), _("\
 1. Reduces cost of Coastal Defense by 15, to 50 shields. \n\
 2. The city with Gibraltar Fortress gains a +100% defense bonus, for a total\
- of 3× defense against sea attacks.\ 
+ of 3× defense against sea attacks. \n\
 3. All other cities with Coastal Defence gain +25% defense, for a total of 2.25×\
  defense against sea attacks. \n\n\
 "), _("\
@@ -2121,14 +2121,14 @@ sound		= "w_magna_carta"
 sound_alt	= "w_generic"
 helptext	= _("\
 Establishes the government Constitutional Monarchy, which makes Monarchy \
-half like representative government. \
+half like representative government. \n\
 "), _("
 Features：\n\
  ➣ +1 content citizen. \n\
  ➣ +1 trade on Land tiles that produce trade. (Sea tiles require celebration.) \n\
  ➣ Allows rapture in original cities. \n\
  ➣ Allows Peasants in the city it’s located. \n\
- ➣ Lets you build an extra infantry or Peasant per turn, without Conscription. \
+ ➣ Lets you build an extra infantry or Peasant per turn, without Conscription. \n\
 "), _("
 Setbacks：\n\
  ➣ One unit may be used for Martial Law. \n\
@@ -2275,7 +2275,7 @@ This Wonder counts as a Cathedral in all cities which lack one.\
  That is, it makes 3 unhappy citizens content in each city,\
  but does not affect citizens unhappy about military activity.\
  (Theology increases the effect by +1. Communist government\
- reduces the effect by -1.)\
+ reduces the effect by -1.) \
 "), _("
 In cities which already have a Cathedral, this Wonder enhances the\
  effects of the Cathedral, adding +1 happy citizen and +1 forced content.\
@@ -2415,8 +2415,7 @@ The Roman Colosseum centralizes and gives prestige to the entertainment\
  events of your empire. Every city with an Amphiteater gains +1 happy\
  citizen and +1 luxury. In all your cities, Entertainers add 3 luxury\
  instead of 2. This means your Entertainers equal the net trade value of\
- Taxmen, Scientists, and Merchants.\
-This Wonder is never obsolete.\
+ Taxmen, Scientists, and Merchants. This Wonder is never obsolete.\
 ")
 
 [building_shakespeares_theatre]
@@ -2656,7 +2655,7 @@ sound_alt	= "w_generic"
 helptext	= _("\
 Creates a World Senate with the following effects：\n\
  1. Breaking of a treaty by any nation, will give casus belli to all other nations.\
- 2. Prevents declarations of war in some circumstances.\
+ 2. May block declarations of war, as if each national government had a Senate.\
  3. If any city in the world is in revolt for more than two turns, its government\
   goes into Anarchy for a turn. This Wonder does not become obsolete.\
 ")
@@ -2764,12 +2763,12 @@ sabotage	= 0
 sound		= "w_ziggurat"
 sound_alt	= "w_generic"
 helptext	= _("\
-The Ziggurat transfers the production bonus from your Palace to the Ziggurat city,\
- while gaining its own corruption reduction and happy bonus effects. \n \
+The Ziggurat moves the production bonus from your Palace to the Ziggurat city,\
+ and gains the same corruption reduction and happy bonus effects. \n \
 The Ziggurat gathers all ruling functions of early civilization into one\
  wondrous building. It counts as a Granary, Temple, and Barracks. Its defensive\
- architecture counts as Fortifications while also giving the 1.75× defense\
- against any ship attack on its river location. \n\
+ architecture counts as Fortifications and also gives 1.75× defense\
+ against ship attacks. \n\
 The Ziggurat must be built adjacent to a river. \n\
 Obsolete by：Monarchy or switching from Despotism.\
 ")

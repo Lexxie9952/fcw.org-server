@@ -677,10 +677,10 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = "CitiesStartUnit"
 helptext      = _("\
-Settlers are your only means of founding new cities.\
+Settlers are your only means of founding new cities. \
 "), _("\
 Settlers can perform most of the terrain alterations as\
- Workers (but can’t build Airbases or Buoys).\
+ Workers (but can’t build Airbases or Buoys). \
 "), _("\
 Upkeep for Settlers costs food as well as production. A Settler\
  can die if its supporting city runs out of food. Settlers in a\
@@ -843,7 +843,7 @@ veteran_power_fact = 100
 veteran_move_bonus = 1
 roles         = "Settlers"
 helptext      = _("\
-Proletarians can only be controlled by Communist governments.\
+Proletarians can only be controlled by Communist governments. \
 "), _("\
 Communist States can assign Proletarians from one city to another, which transfers population\
  from one to the other. They can also be ordered to the same tasks as Workers. Proletarians\
@@ -984,11 +984,11 @@ veteran_power_fact = 100, 100, 100, 100
 veteran_move_bonus = 0, 1, 1, 1
 roles         = "Settlers", "WorkerStartUnit"
 helptext      = _("\
-Workers can improve terrain tiles. See the manual on Terrain for details.\
+Workers can improve terrain tiles. See the manual on Terrain for details. \
 "), _("\
 Masonry lets Workers build Forts. Construction lets them build Fortresses and\
  Oil Wells. Engineering lets them build Canals and Naval Bases. Radio lets them\
- build Airbases and Buoys, which Settlers cannot. Workers must be on a ship to build Buoys.\
+ build Airbases and Buoys, which Settlers cannot. Workers must be on a ship to build Buoys. \
 "), _("\
 Communism tech allows Communist governments to conscript Workers into Riflemen via the\
  Convert order. And vice versa.\
@@ -1070,7 +1070,7 @@ flags         = "FootSoldier", "CantReachAir", "Settlers", "CanHide", "MultiSlot
 roles         = "DefendOk", "DefendOkStartUnit", "FirstBuild", "Hut"
 helptext      = _("\
 The Warrior is the weakest military unit, but can also be very cost effective.\n\
-With the discovery of Conscription, Warriors can convert to Musketeers in any domestic city.\
+With the discovery of Conscription, Warriors can convert to Musketeers in any domestic city. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
@@ -1111,7 +1111,7 @@ flags         = "FootSoldier", "CantReachAir", "Settlers", "CanHide", "MultiSlot
 roles         = "DefendGood", "FirstBuild", "HutTech"
 helptext      = _("\
 The Phalanx is armored infantry, excellent for city defense. It is also valuable\
- for holding tactical positions： Phalanxes can attack while remaining fortified.\n\
+ for holding tactical positions： Phalanxes can attack while remaining fortified. \n\
  "), _("\
 If a Phalanx is fortified or has not moved this turn, it can Rumble enemy units\
  who move adjacent. (Newly arriving enemies get exposed to a Phalanx in tight turtle-shield\
@@ -1120,7 +1120,7 @@ If a Phalanx is fortified or has not moved this turn, it can Rumble enemy units\
  thrust at exposed outer ranks. Rumble attacks are meant to push and unsettle the enemy to\
  stop them from fortifying into a tactical position. The action goes for 3 rounds of combat,\
  uses 5/9 of a move point, and does not alter the fortified status of the Phalanx.\n\
-With the discovery of Conscription, Phalanxes can convert to Musketeers in any domestic city.\
+With the discovery of Conscription, Phalanxes can convert to Musketeers in any domestic city. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
@@ -1169,7 +1169,7 @@ Archers fight with bows and arrows. They have good offense and decent defense.\
  approach to a strategic location. (Volley Attack is not possible on Cities or Fortresses.)\
  Archers can do a retaliatory Volley attack against any unit which does a Special Unit Attack\
  on them.\n\
- With the discovery of Conscription, Archers can convert to Musketeers in any domestic city.\
+ With the discovery of Conscription, Archers can convert to Musketeers in any domestic city. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
@@ -1218,7 +1218,7 @@ Legions are feared for how they start battle：a Pilum Assault targets the\
  shields of the enemy. A pilum stuck in a shield renders it useless, leaving\
  the front line vulnerable to a full-on charge. The Pilum Assault does 1 round\
  of combat at 2× attack bonus on up to 2 units on the tile.\n\
- With the discovery of Conscription, Legions can convert to Musketeers in any domestic city.\
+ With the discovery of Conscription, Legions can convert to Musketeers in any domestic city. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
@@ -1263,7 +1263,7 @@ helptext      = _("\
 Long sharp pikes give Pikemen a counter to the height and mobility of mounted\
  units. They enjoy a 2× defense bonus against mounted units. Pikemen replace\
  the Phalanx as the preferred city defender.\n\
- With the discovery of Conscription, Pikemen can convert to Musketeers in any domestic city.\
+ With the discovery of Conscription, Pikemen can convert to Musketeers in any domestic city. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
@@ -1304,7 +1304,7 @@ helptext      = _("\
 Musketeers are infantry equipped with early firearms. They replace Pikemen as the preferred\
  city defender, and replace Archers and Legions for offensive foot soldiers.\
  The discovery of Labor Union allows upgrading Musketeers to Riflemen for free\
- in any domestic city.\
+ in any domestic city. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
@@ -1410,13 +1410,13 @@ flags         = "Fanatic", "FootSoldier", "Capturer", "CantReachAir", "Unbribabl
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
 Zealots are warriors devoted to a higher cause. Their faith\
- is strong and they cannot be bribed.\
+ is strong and they cannot be bribed. \
 "), _("\
 Theocratic nations can maintain Zealots without paying\
  their steep upkeep. (Zealots are unhappy if not under Theocracy,\
  requiring high upkeep to stay content.) Zealots\
  produced in a city with Ecclesiastical Palace are inspired by\
- fervorous faith to +1 higher veteran level.\
+ fervorous faith to +1 higher veteran level. \
 "), _("\
 Zealots zealously defend their homeland, and can do surprise skirmish\
  assaults to snipe and injure foreign occupants：Up to 4 invaders\
@@ -1458,7 +1458,7 @@ flags         = "MultiSlot", "IgTer", "IgZOC", "NoHome", "FootSoldier", "Capture
 roles         = "DefendGood", "DefendGoodStartUnit", "Partisan", "BarbarianTech"
 helptext      = _("\
 Partisans are guerilla fighters who can use the terrain to their advantage.  Like the Explorer\
- that they upgrade, they can slip through ZOC and live off the land with no upkeep.\
+ that they upgrade, they can slip through ZOC and live off the land with no upkeep. \
 "), _("\
 Proportional to city size, up to 8 Partisans appear when an enemy conquers your city. They\
  randomly fortify on any tile inside the circle defined by its workable radius. Partisans\
@@ -1506,10 +1506,10 @@ flags         = "MultiSlot", "FootSoldier", "Capturer", "CantReachAir", "Shield2
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
 Riflemen are World War-era infantry. They are good at defending cities and\
- strategic Fortresses. They also have good attack capability.\ 
+ strategic Fortresses. They also have good attack capability. \ 
 "), _("\
 Under Communism this unit costs 5 less. Also, Communism tech allows Communist\
- governments to de-commission Riflemen into Workers via the Convert order. And vice versa.\
+ governments to de-commission Riflemen into Workers via the Convert order. And vice versa. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
@@ -1547,7 +1547,7 @@ roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
 Alpine Troops are highly mobile units and\
  excellent defenders.  Similar to an Explorer, they\
- treat every land tile like a road were on it.\
+ treat every land tile like a road were on it. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
@@ -1613,7 +1613,7 @@ Marines are experts at all-terrain warfare. They are the strongest\
  units on the tile and killing a maximum of 1. Bazooka attacks can\
  be done to Oceanic tiles if the Marines are not transported.\n\
  Marines built in a city with an Airport, Port Facility, and Barracks III\
- receive an extra veteran level.\
+ receive an extra veteran level. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
@@ -1657,7 +1657,7 @@ Paratroopers are experts at airborne attacks.\
  immediately ready to act there. Beware dropping into unseen territory,\
  as Paratroopers landing on a tile occupied by enemy units will be lost.\
  Also note：Paradropping is assumed to be done from aircraft. Therefore,\
- Fighters on Vigil may auto-attack the tile you land on, if adjacent.\
+ Fighters on Vigil may auto-attack the tile you land on, if adjacent. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
@@ -1698,7 +1698,7 @@ flags         = "CantReachAir", "Shield2Gold", "MultiSlot", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
 Mechanized Infantry have the strongest general defense strength of any land unit.\
- They have decent attack strength in open field engagements, and excellent mobility.\
+ They have decent attack strength in open field engagements, and excellent mobility. \
 "), _("\
 \nUpkeep for Mechanized infantry is paid in gold instead of shields.\
 ")
@@ -3079,15 +3079,15 @@ roles         = ""
 helptext      = _("\
 Helicopters are the Air Cavalry of modern armies. They can attack multiple targets\
  and conquer cities. Unaffected by terrain, they are good for Partisan suppression.\
- They can transport Marines and AAA and are thus well-suited for commando ops.\n\
+ They can transport Marines and AAA and are thus well-suited for commando ops. \n\
 "), _("\
 For each turn not ended in a City, Base, or Carrier, 1hp is lost. +1 move\
- is awarded if starting a turn in a City or Airbase.\n\
+ is awarded if starting a turn in a City or Airbase. \n\
 "), _("\
 Helicopters fly low to avoid Interception. This invites attacks by ground units from\
  Riflemen onward. They are unreachable to Artillery types and get +50% defense\
  vs. foot units. Helicopters can be attacked by Sea from Ironclad onward.
-Helicopters can retaliate 3 rounds against Special Unit Attacks.\n\
+Helicopters can retaliate 3 rounds against Special Unit Attacks. \n\
 "), _("\
 Helicopters can transport one Marines or AAA unit.\
 ")
@@ -3921,7 +3921,7 @@ flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
 roles         = "Hunter"
 helptext      = _("\
 The Cruiser is a large and fast surface warship with equally strong offensive and defensive strength. More often than not, its\
- 2× ASW defence allows it to survive a Submarine attack.\
+ 2× ASW defence allows it to survive a Submarine attack. \
 "), _("\
 The main duties of the Cruiser are offensive strikes against lesser ships, and escorting weaker ships.\
 ")
@@ -4008,7 +4008,7 @@ helptext      = _("\
 The AEGIS Cruiser has an Anti-Air missile system. Radar and sonar\
  give superior vision and 2× defense bonus against Submarines.\
  The AEGIS can carry two Missiles, and is the only ship that can attack\
- Air and Missile units.\
+ Air and Missile units. \
 "), _("\
 Excellent vision and 3× Anti-Air bonus are ideal for scouting and escorting.\
 ")
@@ -4094,7 +4094,7 @@ helptext      = _("\
 Submarines are strong attackers but weak defenders. They can carry 8 Missiles.\
  They are unreachable by Air units, but do not block air attacks on surface ships.\
  Submarines can’t attack units on shore. Submarines can’t be seen by other players\
- unless they have a unit or city adjacent to it.\ 
+ unless they have a unit or city adjacent to it. \ 
 "), _("\
 Submarines have superior attrition rates when attacking in numbers. They excel\
  at hit-and-run against weaker ships.\
@@ -4137,7 +4137,7 @@ roles         = ""
 helptext      = _("\
 The Carrier is a mobile airport that can carry Air units, Helicopters, AAA, Marines, and Missiles.\
  Fighters can Vigil on a Carrier if they have enough moves and the Carrier has not moved since the\
- Vigil order was given.\
+ Vigil order was given. \
 "), _("\
 Carriers are very expensive and thus, usually protected by a fleet of scouts and escorts.\
 ")
@@ -4223,7 +4223,7 @@ helptext      = _("\
 If you have Nuclear Fission and the Manhattan Project has been built by any player, you can make Atom Bombs.\
  A Bomber can drop it within two tiles of its location. Unload the bomb and fly the Bomber out of range, then\
  attack the target (or detonate by pressing D twice.) The blast destroys ALL cardinally adjacent tiles. City population\
- is reduced by half. Land tiles may get nuclear fallout.\
+ is reduced by half. Land tiles may get nuclear fallout. \
 "), _("\
 Fallout reduces tile output and increases risk of nuclear winter.\
 ")
@@ -4370,7 +4370,7 @@ roles         = ""
 helptext      = _("\
 If you have Space Flight and the Manhattan Project has been built by any player, you can make Nuclear Missiles.\
  Nuclear blasts destroy ALL units in a 3×3 area. City population is reduced by half. Land tiles may get nuclear fallout.\
- Fallout reduces tile output and increases risk of nuclear winter.\
+ Fallout reduces tile output and increases risk of nuclear winter. \
 "), _("\
 If Fallout is cleaned on the turn it appears, the chance of nuclear winter is reduced.\
 ")
@@ -4522,7 +4522,7 @@ roles         = "DiplomatStartUnit"
 helptext      = _("\
 Spies can do what a Diplomat can, and also：• Survive ops\
  • Sabotage lone units • Poison city water • Steal specific tech\
- • Steal tech from cities more than once • Sabotage specific targets in cities.\
+ • Steal tech from cities more than once • Sabotage specific targets in cities. \
 "), _("\
 Spies who survive ops escape to the nearest friendly city. Spies have\
  a 25% advantage over Diplomats in combat：a base 75% chance to win.\
@@ -4706,7 +4706,7 @@ roles         = ""
 helptext      = _("\
 The Truck unit replaces the Caravan as the basic Commerce unit on Land. It moves at\
  more than twice the speed, but must stay on roads. Each Truck used to build a Wonder\
- will add 50 shields. See the entry on Caravan to read what Commerce units may do.\
+ will add 50 shields. See the entry on Caravan to read what Commerce units may do. \
 "), _("\
 Trucks allow units with 2 or less move points to travel your roads at\
 distances comparable to other units. Only Foot Soldiers can:\n1. (L)oad outside a City or Base;\n\
@@ -4748,7 +4748,7 @@ Goods are commodities.\
 Goods can be used to Establish Trade Route or Enter Marketplace. They can\
  be carried by Commerce units, allowing them to establish multiple\
  trade routes in one voyage. Also, Goods can Recycle Production with only\
- a 25% penalty.\n\
+ a 25% penalty. \n\
 "), _("\
 By themselves, Goods can only move onto tiles with a City, Quay, Fortress,\
  or Naval Base. Commerce units, Tribesmen, and Galleons may carry them as cargo.\
@@ -4872,9 +4872,9 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = "KingStartUnit"
 helptext      = _("\
-This is you. If you lose this unit, you lose the game.\
+This is you. If you lose this unit, you lose the game. \
 "), _("\
-Will not unleash barbarians from huts.\
+Will not unleash barbarians from huts. \
 "), _("\
 You can use the DO command to change the gender of the Leader.\
 ")
@@ -4918,9 +4918,9 @@ veteran_move_bonus = 0
 roles         = "KingStartUnit"
 helptext      = _("\
 (Alternate form of Leader. Behaves identically in-game.)\
- This is you. If you lose this unit, you lose the game.\
+ This is you. If you lose this unit, you lose the game. \
 "), _("\
-Will not unleash barbarians from huts.\
+Will not unleash barbarians from huts. \
 "), _("\
 You can use the DO command to change the gender of the Leader.\
 ")
@@ -4961,7 +4961,7 @@ veteran_move_bonus = 0
 roles         = "BarbarianLeader"
 helptext      = _("\
 One Barbarian Leader appears every time there is a barbarian uprising\
- somewhere in the world.\
+ somewhere in the world. \
 "), _("\
 When a Barbarian Leader is killed on a tile without any defending units,\
  the 100 gold ransom is paid, but only to land units and helicopters.\
@@ -5059,7 +5059,7 @@ Peasants can only be made in one city, but you can make more than one per\
 ;helptext      = _("\
 ;Swordsmen are ancient soldiers armed with sharpened bronze swords. Compared to Warriors,\
 ; they have a 50% bonus in attack and defense. NOTE：Warcalc will give this unit the same\
-; strength as a Warrior. You must enter this bonus manually.\
+; strength as a Warrior. You must enter this bonus manually. \
 ;"), _("\
 ;\nThe discovery of Banking changes upkeep from shields to gold.\
 ;")
@@ -5101,7 +5101,7 @@ Peasants can only be made in one city, but you can make more than one per\
 ; this virtual unit as cargo. Then the ship can send the\
 ; Sonar Ping virtual unit out to sea, manually directing the\
 ; focus of the sonar investigation. The virtual unit must end\
-; its turn back on the ship, or sonar capability is lost.\
+; its turn back on the ship, or sonar capability is lost. \
 ;"), _("\
 ;This unit can be made with other units in the same turn, and can be\
 ; made multiple times in a turn.\
@@ -5135,7 +5135,7 @@ uk_gold       = 0
 flags         = "NoBuild", "Cant_Fortify", "Unbribable", "IgZOC", "HasNoZOC", "SuperSpy", "NoVeteran", "Cant_Pillage"
 roles         = "Barbarian"
 helptext      = _("\
-Watch out for wild animals.\
+Watch out for wild animals. \
 "), _("\
 Wolves are mean wild ancestors of dogs, who hunt grasslands and hills.\
 ")
@@ -5167,7 +5167,7 @@ uk_gold       = 0
 flags         = "NoBuild", "Cant_Fortify", "Unbribable", "IgZOC", "HasNoZOC", "SuperSpy", "NoVeteran", "Cant_Pillage"
 roles         = "Barbarian"
 helptext      = _("\
-Watch out for wild animals.\
+Watch out for wild animals. \
 "), _("\
 Leopards are mean wild cats, who hunt in the forests.\
 ")
@@ -5199,7 +5199,7 @@ uk_gold       = 0
 flags         = "NoBuild", "Cant_Fortify", "Unbribable", "IgZOC", "HasNoZOC", "SuperSpy", "NoVeteran", "Cant_Pillage"
 roles         = "Barbarian"
 helptext      = _("\
-Watch out for wild animals.\
+Watch out for wild animals. \
 "), _("\
 Tigers are mean wild cats, who hunt in the jungles.\
 ")
@@ -5231,7 +5231,7 @@ uk_gold       = 0
 flags         = "NoBuild", "Cant_Fortify", "Unbribable", "IgZOC", "HasNoZOC", "SuperSpy", "NoVeteran", "Cant_Pillage"
 roles         = "Barbarian"
 helptext      = _("\
-Watch out for wild animals.\
+Watch out for wild animals. \
 "), _("\
 Lions hunt the savannahs and plains.\
 ")
@@ -5263,7 +5263,7 @@ uk_gold       = 0
 flags         = "NoBuild", "Cant_Fortify", "Unbribable", "IgZOC", "HasNoZOC", "SuperSpy", "NoVeteran", "Cant_Pillage"
 roles         = "Barbarian"
 helptext      = _("\
-Watch out for wild animals.\
+Watch out for wild animals. \
 "), _("\
 Bears live in the mountains.\
 ")
@@ -5295,7 +5295,7 @@ uk_gold       = 0
 flags         = "NoBuild", "Cant_Fortify", "Unbribable", "IgZOC", "HasNoZOC", "SuperSpy", "NoVeteran", "Cant_Pillage"
 roles         = "Barbarian"
 helptext      = _("\
-Watch out for wild animals.\
+Watch out for wild animals. \
 "), _("\
 Crocodiles live in the swamps, where they wait to catch and eat prey.\
 ")
@@ -5327,7 +5327,7 @@ uk_gold       = 0
 flags         = "NoBuild", "Cant_Fortify", "Unbribable", "IgZOC", "HasNoZOC", "SuperSpy", "NoVeteran", "Cant_Pillage"
 roles         = "Barbarian"
 helptext      = _("\
-Watch out for wild animals.\
+Watch out for wild animals. \
 "), _("\
 Hippos live in shallow smaller lakes.\
 ")
@@ -5359,7 +5359,7 @@ uk_gold       = 0
 flags         = "NoBuild", "Cant_Fortify", "Unbribable", "IgZOC", "HasNoZOC", "SuperSpy", "NoVeteran", "Cant_Pillage"
 roles         = "Barbarian"
 helptext      = _("\
-Watch out for wild animals.\
+Watch out for wild animals. \
 "), _("\
 Rhinos roam the edge of the deserts.\
 ")
@@ -5391,7 +5391,7 @@ uk_gold       = 0
 flags         = "NoBuild", "Cant_Fortify", "Unbribable", "IgZOC", "HasNoZOC", "SuperSpy", "NoVeteran", "Cant_Pillage"
 roles         = "Barbarian"
 helptext      = _("\
-Watch out for wild animals.\
+Watch out for wild animals. \
 "), _("\
 Polar Bears live in the tundra and frozen arctic. They think of people as food.\
 ")
@@ -5423,7 +5423,7 @@ uk_gold       = 0
 flags         = "NoBuild", "Cant_Fortify", "Unbribable", "IgZOC", "HasNoZOC", "SuperSpy", "NoVeteran", "Cant_Pillage"
 roles         = "Barbarian"
 helptext      = _("\
-Watch out for wild animals.\
+Watch out for wild animals. \
 "), _("\
 Giant Squids live out at sea; they do not come near shore or shallow waters. Avoid them at all costs.\
 ")

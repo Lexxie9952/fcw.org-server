@@ -441,8 +441,8 @@ color.r              = 43
 color.g              = 157
 color.b              = 19
 helptext             = _("\
-Forests are densely wooded, providing lumber for production, but\
- making agriculture somewhat problematic.\
+Forests are densely wooded, providing lumber for production — but\
+ making agriculture problematic.\
 ")
 
 [terrain_grassland]
@@ -488,7 +488,7 @@ color.r              = 100
 color.g              = 178
 color.b              = 105
 helptext             = _("\
-Grassland affords exceptional agricultural opportunities.\
+Grassland affords exceptional agricultural opportunities and decent trade.\
 ")
 
 [terrain_hills]
@@ -671,9 +671,9 @@ color.b              = 187
 helptext             = _("\
 Deserts are very dry. Agriculture is difficult if not on a river or oasis. Cities on desert rivers\
  get +1 extra food. Irrigated desert rivers give an extra +1 food over the usual bonus, even on a\
- city center tile.\
+ city center tile. \
 "), _("\
-Oil wells can be built when Construction is known.\
+Oil wells can be built when Construction is known. Refining gives +1 shield to Oil Wells built on Oil.\
 ")
 
 [terrain_mountains]
