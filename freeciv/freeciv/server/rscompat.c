@@ -255,16 +255,16 @@ static void effect_to_enabler(action_id action, struct section_file *file,
 
     if (compat->log_cb != NULL) {
       fc_snprintf(buf, sizeof(buf),
-                  "Converted effect %s to an action enabler. Make sure requirements "
+                  "Converted effect %s in %s to an action enabler. Make sure requirements "
                   "are correctly divided to actor and target requirements.",
-                  type);
+                  type, sec_name);
       compat->log_cb(buf);
     }
   } else if (value < 0) {
     if (compat->log_cb != NULL) {
       fc_snprintf(buf, sizeof(buf),
-                  "%s effect with negative value can't be automatically converted "
-                  "to an action enabler. Do that manually.", type);
+                  "%s effect with negative value in %s can't be automatically converted "
+                  "to an action enabler. Do that manually.", type, sec_name);
       compat->log_cb(buf);
     }
   }
@@ -283,11 +283,11 @@ bool rscompat_old_effect_3_1(const char *type, struct section_file *file,
       return TRUE;
     }
     if (!fc_strcasecmp(type, "Irrig_TF_Possible")) {
-      effect_to_enabler(ACTION_IRRIGATE_TF, file, sec_name, compat, type);
+      effect_to_enabler(ACTION_CULTIVATE, file, sec_name, compat, type);
       return TRUE;
     }
     if (!fc_strcasecmp(type, "Mining_TF_Possible")) {
-      effect_to_enabler(ACTION_MINE_TF, file, sec_name, compat, type);
+      effect_to_enabler(ACTION_PLANT, file, sec_name, compat, type);
       return TRUE;
     }
     if (!fc_strcasecmp(type, "Mining_Possible")) {

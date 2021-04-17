@@ -107,11 +107,11 @@ bool is_unit_reachable_at(const struct unit *defender,
 
   Unit can NOT attack if:
   1) its unit type is unable to perform any attack action.
-  2) it is not a fighter and defender is a flying unit (except city/airbase).
-  3) it is a ground unit without marine ability and it attacks from ocean.
-  4) it is a ground unit and it attacks a target on an ocean square or
+  2) it is a ground unit without marine ability and it attacks from ocean.
+  3) it is a ground unit and it attacks a target on an ocean square or
      it is a sailing unit without shore bombardment capability and it
      attempts to attack land.
+  4) it is not a fighter and defender is a flying unit (except city/airbase).
 
   Does NOT check:
   1) Moves left
@@ -131,12 +131,7 @@ enum unit_attack_result unit_attack_unit_at_tile_result(const struct unit *punit
     return ATT_NON_ATTACK;
   }
 
-  /* 2. Only fighters can attack planes, except in city or airbase attacks */
-  if (!is_unit_reachable_at(pdefender, punit, dest_tile)) {
-    return ATT_UNREACHABLE;
-  }
-
-  /* 3. Can't attack with ground unit from ocean, except for marines */
+  /* 2. Can't attack with ground unit from ocean, except for marines */
   if (!is_native_tile(unit_type_get(punit), unit_tile(punit))
       && !utype_can_do_act_when_ustate(unit_type_get(punit), ACTION_ATTACK,
                                        USP_NATIVE_TILE, FALSE)

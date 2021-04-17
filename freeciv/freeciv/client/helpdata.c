@@ -228,12 +228,12 @@ static bool insert_generated_text(char *outbuf, size_t outlen, const char *name)
         irrigation_result = 
           (pterrain->irrigation_result == pterrain
            || pterrain->irrigation_result == T_NONE
-           || !univs_have_action_enabler(ACTION_IRRIGATE_TF, NULL, &for_terr)) ? ""
+           || !univs_have_action_enabler(ACTION_CULTIVATE, NULL, &for_terr)) ? ""
            : terrain_name_translation(pterrain->irrigation_result);
         mining_result =
           (pterrain->mining_result == pterrain
            || pterrain->mining_result == T_NONE
-           || !univs_have_action_enabler(ACTION_MINE_TF, NULL, &for_terr)) ? ""
+           || !univs_have_action_enabler(ACTION_PLANT, NULL, &for_terr)) ? ""
            : terrain_name_translation(pterrain->mining_result);
         transform_result =
           (pterrain->transform_result == pterrain
@@ -292,6 +292,7 @@ static bool insert_generated_text(char *outbuf, size_t outlen, const char *name)
      *      author could express much more simply for the same result */
     {
       int time = -1, factor = -1;
+
       extra_type_by_rmcause_iterate(ERM_CLEANPOLLUTION, pextra) {
         if (pextra->removal_time == 0) {
           if (factor < 0) {
@@ -331,6 +332,7 @@ static bool insert_generated_text(char *outbuf, size_t outlen, const char *name)
 
     {
       int time = -1, factor = -1;
+
       extra_type_by_rmcause_iterate(ERM_CLEANFALLOUT, pextra) {
         if (pextra->removal_time == 0) {
           if (factor < 0) {
@@ -370,6 +372,7 @@ static bool insert_generated_text(char *outbuf, size_t outlen, const char *name)
 
     {
       int time = -1, factor = -1;
+
       extra_type_by_rmcause_iterate(ERM_PILLAGE, pextra) {
         if (pextra->removal_time == 0) {
           if (factor < 0) {
@@ -2186,9 +2189,9 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
         strvec_clear(extras_vec);
       }
     }
-    if (univs_have_action_enabler(ACTION_MINE_TF, &for_utype, NULL)) {
+    if (univs_have_action_enabler(ACTION_PLANT, &for_utype, NULL)) {
       CATLSTR(buf, bufsz, _("\u27a4 Can convert terrain to another type by "
-                            "mining.\n"));
+                            "planting.\n"));
     }
 
     if (utype_can_do_action(utype, ACTION_IRRIGATE)) {
@@ -2205,9 +2208,9 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
         strvec_clear(extras_vec);
       }
     }
-    if (univs_have_action_enabler(ACTION_IRRIGATE_TF, &for_utype, NULL)) {
+    if (univs_have_action_enabler(ACTION_CULTIVATE, &for_utype, NULL)) {
       CATLSTR(buf, bufsz, _("\u27a4 Can convert terrain to another type by "
-                            "irrigation.\n"));
+                            "cultivating.\n"));
     }
     if (univs_have_action_enabler(ACTION_TRANSFORM_TERRAIN, &for_utype, NULL)) {
       CATLSTR(buf, bufsz, _("\u27a4 Can transform terrain to another type.\n"));
@@ -3436,6 +3439,10 @@ void helptext_extra(char *buf, size_t bufsz, struct player *pplayer,
       }
       CATLSTR(buf, bufsz, reqsbuf);
     }
+  }
+
+  if (pextra->infracost > 0) {
+    cat_snprintf(buf, bufsz, _("Cost: %d\n"), pextra->infracost);
   }
 
   if (buf[group_start] != '\0') {

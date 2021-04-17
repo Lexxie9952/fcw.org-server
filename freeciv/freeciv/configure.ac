@@ -1203,6 +1203,11 @@ if test "x$ruledit" = "xtest" ; then
 fi
 AM_CONDITIONAL([RULEDIT], [test "x$ruledit" = "xyes"])
 
+dnl TODO: Make ruleup optional
+fcruleup=yes
+AM_CONDITIONAL([SRV_LIB],
+  [test "x$server" = "xyes" || test "x$fcmanual" = "xyes" || test "x$ruledit" = "xyes" || test "x$fcruleup" = "xyes"])
+
 AC_SUBST([gui_3d_libs])
 AC_SUBST([gui_gtk3_cflags])
 AC_SUBST([gui_gtk3_libs])
@@ -1728,6 +1733,7 @@ AC_CONFIG_FILES([Makefile
           doc/man/freeciv-manual.6
 	  doc/man/freeciv-modpack.6
 	  doc/man/freeciv-ruledit.6
+          doc/man/freeciv-ruleup.6
 	  doc/ca/Makefile
 	  doc/de/Makefile
 	  doc/fr/Makefile

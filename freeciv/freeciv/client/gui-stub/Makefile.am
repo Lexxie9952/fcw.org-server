@@ -39,6 +39,7 @@ libgui_stub_la_SOURCES = \
 	gui_stub.h	\
 	helpdlg.c	\
 	helpdlg.h	\
+	infradlg.c	\
 	inteldlg.c	\
 	inteldlg.h	\
 	luaconsole.c	\

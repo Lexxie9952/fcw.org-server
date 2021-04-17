@@ -792,8 +792,8 @@ static struct player *need_war_player_hlp(const struct unit *actor,
   case ACTION_HEAL_UNIT:
   case ACTION_CONQUER_CITY:
   case ACTION_TRANSFORM_TERRAIN:
-  case ACTION_IRRIGATE_TF:
-  case ACTION_MINE_TF:
+  case ACTION_CULTIVATE:
+  case ACTION_PLANT:
   case ACTION_PILLAGE:
   case ACTION_CLEAN_POLLUTION:
   case ACTION_CLEAN_FALLOUT:
@@ -2863,13 +2863,13 @@ bool unit_perform_action(struct player *pplayer,
                              unit_activity_handling(actor_unit,
                                                     ACTIVITY_TRANSFORM));
     break;
-  case ACTION_IRRIGATE_TF:
+  case ACTION_CULTIVATE:
     ACTION_STARTED_UNIT_TILE(action_type, actor_unit, target_tile,
                              unit_activity_handling_targeted(actor_unit,
                                                              ACTIVITY_IRRIGATE,
                                                              &target_extra));
     break;
-  case ACTION_MINE_TF:
+  case ACTION_PLANT:
     ACTION_STARTED_UNIT_TILE(action_type, actor_unit, target_tile,
                              unit_activity_handling_targeted(actor_unit,
                                                              ACTIVITY_MINE,
@@ -5804,8 +5804,8 @@ void handle_unit_orders(struct player *pplayer,
       case ACTION_AIRLIFT:
       case ACTION_HEAL_UNIT:
       case ACTION_TRANSFORM_TERRAIN:
-      case ACTION_IRRIGATE_TF:
-      case ACTION_MINE_TF:
+      case ACTION_CULTIVATE:
+      case ACTION_PLANT:
       case ACTION_PILLAGE:
       case ACTION_CLEAN_FALLOUT:
       case ACTION_CLEAN_POLLUTION:

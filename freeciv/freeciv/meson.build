@@ -18,6 +18,11 @@ priv_conf_data.set('DATADIR',
                    join_paths(get_option('prefix'), get_option('datadir')))
 priv_conf_data.set('DATASUBDIR', 'dev')
 
+if get_option('debug')
+  priv_conf_data.set('FREECIV_DEBUG', 1)
+  pub_conf_data.set('FREECIV_DEBUG', 1)
+endif
+
 c_compiler = meson.get_compiler('c')
 
 pub_headers = [
@@ -451,6 +456,11 @@ executable('freeciv-server',
   install: true
   )
 
+
+install_data(
+  'data/ruledit/comments.txt',
+  install_dir : join_paths(get_option('datadir'), 'freeciv/ruledit')
+  )
 
 nations = [
   'abkhaz',
@@ -1162,9 +1172,9 @@ install_data('data/amplio2/units.png',
 
 endif
 
-if get_option('clients').contains('gtk3.22')
-
 gtk322_dep = dependency('gtk+-3.0', version : '>= 3.22')
+
+if get_option('clients').contains('gtk3.22')
 
 executable('freeciv-gtk3.22',
   'client/gui-gtk-3.22/action_dialog.c',
@@ -1217,6 +1227,31 @@ executable('freeciv-gtk3.22',
   include_directories: client_inc,
   dependencies: gtk322_dep,
   link_with: client_common,
+  install: true
+  )
+
+endif
+
+if get_option('fcmp') != []
+
+fcmp_common = static_library('fcmp_common',
+  'tools/fcmp/download.c',
+  'tools/fcmp/modinst.c',
+  'tools/fcmp/mpcmdline.c',
+  'tools/fcmp/mpdb.c',
+  include_directories: tool_inc
+  )
+
+endif
+
+if get_option('fcmp').contains('gtk3')
+
+executable('freeciv-mp-gtk3',
+  'tools/fcmp/mpgui_gtk3.c',
+  include_directories: tool_inc,
+  dependencies: [gtk322_dep,
+                 c_compiler.find_library('libsqlite3')],
+  link_with: [common_lib, fcmp_common],
   install: true
   )
 
@@ -1351,6 +1386,7 @@ install_data(
   'doc/README.nations',
   'doc/README.packaging',
   'doc/README.rulesets',
+  'doc/README.scenarios',
   'doc/README.scorelog',
   'doc/README.sound',
   'doc/README.tilesets',

@@ -16,7 +16,7 @@ set -e
 uname -a
 
 # Based on fresh install of Ubuntu 14.04
-dependencies="gettext libgtk-3-dev libcurl4-openssl-dev libtool automake autoconf autotools-dev language-pack-en python3.5 liblzma-dev libicu-dev libsqlite3-dev qt5-default libsdl2-mixer-dev libsdl2-gfx-dev libsdl2-image-dev libsdl2-ttf-dev libmysqlclient-dev"
+dependencies="gettext libgtk-3-dev libcurl4-openssl-dev libtool automake autoconf autotools-dev language-pack-en python3.7 liblzma-dev libicu-dev libsqlite3-dev qt5-default libsdl2-mixer-dev libsdl2-gfx-dev libsdl2-image-dev libsdl2-ttf-dev libmysqlclient-dev"
 
 ## Dependencies
 echo "==== Installing Updates and Dependencies ===="
@@ -25,10 +25,15 @@ apt-get -y update
 echo "apt-get install dependencies"
 apt-get -y install ${dependencies}
 
+# Setup python3 to use
+update-alternatives --install /usr/bin/python python /usr/bin/python3 2
+update-alternatives --install /usr/bin/python python /usr/bin/python2 1
+update-alternatives --set python /usr/bin/python3
+
 # Configure and build Freeciv
 mkdir build
 cd build
-../autogen.sh CFLAGS="-O3" --enable-client=gtk3.22,gtk3,qt,sdl2,stub --enable-fcmp=cli,gtk3,qt --enable-freeciv-manual --enable-ai-static=classic,threaded,tex,stub --enable-fcdb=sqlite3,mysql --prefix=${HOME}/freeciv/ && make -s -j$(nproc)
+../autogen.sh CFLAGS="-O3" CXXFLAGS="-O3" --enable-client=gtk3.22,gtk3,qt,sdl2,stub --enable-fcmp=cli,gtk3,qt --enable-freeciv-manual --enable-ai-static=classic,threaded,tex,stub --enable-fcdb=sqlite3,mysql --prefix=${HOME}/freeciv/ && make -s -j$(nproc)
 sudo -u travis make install
 echo "Freeciv build successful!"
 

@@ -698,7 +698,11 @@ PACKET_CITY_INFO = 31; sc, lsend, is-game-info, force, cancel(PACKET_CITY_SHORT_
   UINT16 prod[O_LAST];
   SINT16 citizen_base[O_LAST];
   SINT16 usage[O_LAST];
-  UINT16 food_stock, shield_stock;
+
+  # Food stock can be temporarily negative while server is disbanding
+  # units which drain it by their upkeep.
+  SINT16 food_stock;
+  UINT16 shield_stock;
 
   UINT8 traderoute_count;
 
@@ -890,6 +894,7 @@ PACKET_PLAYER_INFO = 51; sc, is-info
 
   GOLD gold;
   PERCENT tax, science,luxury;
+  UINT32 infrapoints;
 
   UINT16 tech_upkeep;
   UINT16 science_cost;
@@ -1729,6 +1734,7 @@ PACKET_RULESET_EXTRA = 232; sc, lsend
   UINT8 build_time_factor;
   UINT8 removal_time;
   UINT8 removal_time_factor;
+  UINT16 infracost;
   UINT8 defense_bonus;
   EUS eus;
   BV_UNIT_CLASSES native_to;
