@@ -246,7 +246,7 @@
 								<th>Flag</th>
 								<th class="hidden-xs">Map</th>
 								<th>Player</th>
-								<th class="hidden-xs">Game details</th>
+								<th class="hidden-xs">Game Info</th>
 								<th class="hidden-xs">Players</th>
 								<th class="hidden-xs">Turn</th>
 								<th>Action</th>
@@ -269,9 +269,7 @@
 									<td class="hidden-xs">${game.turn}</td>
 									<td><a class="label label-success label-lg"
 										href="/webclient/?action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;type=${game.type}" title="Observe">
-											2D</a> <a class="label label-success label-lg"
-										href="/webclient/?renderer=webgl&amp;action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;type=${game.type}" title="Observe">
-											3D</a> <a class="label label-primary label-lg"
+											Observe</a> <a class="label label-primary label-lg"
 										href="/game/details?host=${game.host}&amp;port=${game.port}">
 											Info</a>
 									</td>
@@ -289,7 +287,7 @@
 						<table id="multiplayer-table" class="table">
 							<tr>
 								<th class="hidden-xs">Players</th>
-								<th>Message</th>
+								<th>Game Title</th>
 								<th>State</th>
 								<th class="hidden-xs">Turn</th>
 								<th>Action</th>
@@ -322,14 +320,11 @@
 											<c:otherwise>
                                                 <a class="label label-success label-lg"
 													href="/webclient/?action=multi&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
-													Play 2D</a>
+													Play</a>
 											<c:if test="${game.type} ne 'longturn'}">
 												<a class="label label-success label-lg"
 													href="/webclient/?action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
-													Observe 2D</a>
-												<a class="label label-success label-lg"
-													href="/webclient/?renderer=webgl&amp;action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
-													3D</a>
+													Observe</a>
 											</c:if>
 											</c:otherwise>
 										</c:choose>
@@ -351,7 +346,7 @@
 						<table id="longturn-table" class="table">
 							<tr>
 								<th class="hidden-xs">Players</th>
-								<th>Message</th>
+								<th>Game Info<br><span style="font-size:90%; font-weight:600; color: #3718c1"><i>Late-join bonus gold ensures FAIR-START&#8482; in the first 12 turns.</i></span></th>
 								<th>State</th>
 								<th class="hidden-xs">Turn</th>
 								<th>Action</th>
@@ -384,14 +379,11 @@
 											<c:otherwise>
                                                 <a class="label label-success label-lg"
 													href="/webclient/?action=multi&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
-													Play 2D</a>
+													Play</a>
 											<c:if test="${game.type} ne 'longturn'}">
 												<a class="label label-success label-lg"
 													href="/webclient/?action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
-													Observe 2D</a>
-												<a class="label label-success label-lg"
-													href="/webclient/?renderer=webgl&amp;action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
-													3D</a>
+													Observe</a>
 											</c:if>
 											</c:otherwise>
 										</c:choose>
