@@ -81,6 +81,21 @@ button {
 .nowrap {
   white-space: nowrap ;
 }
+/* Help Tab >> CONTROLS (Orders buttons, hotkeys) *****************
+/* regular text that will be centered in tables */
+.vctr {
+  color: var(--default_text_color);
+}
+/* highlights the actual hotkey sequence in different color */
+.hotkey {
+  color: #cc8080;
+  text-shadow:2px 2px #c1183750;
+}
+.ctrls_tbl tr td {
+  position: relative !important;
+  bottom: 3px !important;
+}
+/******************************************************************/
 
 #game_chat_box {
   width: 100%;
@@ -1673,14 +1688,14 @@ input[type="text"], textarea {
   color: var(--default_text_color);
   border-color: #aaa;
 }
-input[type="password" i] {
+input[type="password" i], #password {
   -webkit-text-security: disc !important;
   padding: 1px 2px;
   background-color: #111 !important;
   color: var(--default_text_color) !important;
   border-color: #aaa;
 }
-input[type="email" i] {
+input[type="email" i], #email {
   padding: 1px 2px;
   background-color: #111 !important;
   color: var(--default_text_color) !important;
