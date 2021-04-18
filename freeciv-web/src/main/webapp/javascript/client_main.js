@@ -176,6 +176,11 @@ function setup_window_size ()
 
   // Because CSS file is ignoring this style, we do it here:
   $(".ui-tabs-tab").css("border-color","#404040");
+
+  if (client_is_observer()) {
+    $("#tabs-cities").hide();
+    $("#tabs-empire").hide();
+  }
 }
 
 function client_state()
@@ -393,7 +398,8 @@ function update_metamessage_game_running_status()
 {
   if (client.conn.playing != null && !metamessage_changed) {
     var pplayer = client.conn.playing;
-    var metasuggest = nations[pplayer['nation']]['adjective'] + " | " + (governments[client.conn.playing['government']] != null ? governments[client.conn.playing['government']]['name'] : "-")
+    var rules = ruleset_control['name'];
+    var metasuggest = rules + " | " + nations[pplayer['nation']]['adjective'] + " | " + (governments[client.conn.playing['government']] != null ? governments[client.conn.playing['government']]['name'] : "-")
          + " | People:" + civ_population(client.conn.playing.playerno)
          + " | Score:" + pplayer['score'] + " | " + "Research:" + (techs[client.conn.playing['researching']] != null ? techs[client.conn.playing['researching']]['name'] : "-" );
     send_message("/metamessage " + metasuggest);
