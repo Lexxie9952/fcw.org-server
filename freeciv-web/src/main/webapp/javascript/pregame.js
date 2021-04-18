@@ -81,7 +81,6 @@ function observe()
     $("#observe_button").button("option", "label", "Don't observe");
     send_message("/observe");
   }
-
   observing = !observing;
 }
 /****************************************************************************
@@ -1281,8 +1280,8 @@ function show_intro_dialog(title, message) {
   });
 
   if ($.getUrlVar('action') == "observe") {
-    $(".ui-dialog-buttonset button").first().remove();
     $(".ui-dialog-buttonset button").first().button("option", "label", "Observe Game");
+    $(".ui-dialog-buttonset button").first().next().remove();
   }
 
   blur_input_on_touchdevice();
