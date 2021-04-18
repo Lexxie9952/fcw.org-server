@@ -369,7 +369,14 @@
 									</td>
 									<td>${game.message}</td>
 									<td>${game.state}</td>
-									<td class="hidden-xs">${game.turn}</td>
+									<td class="hidden-xs">
+											<c:if test="${game.turn lt 13}">
+												<span style="color: #3718c1">${game.turn}</span>
+											</c:if>
+											<c:if test="${game.turn > 12}">
+												${game.turn}
+											</c:if>
+									</td>
 									<td><c:choose>
 											<c:when test="${game.state != 'Running'}">
 												<a class="label label-success label-lg"
