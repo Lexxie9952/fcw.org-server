@@ -1708,7 +1708,8 @@ input[type="email" i], #email {
   color: rgb(60, 190, 255);
 }
 #pregame_game_info {
-  color: var(--default_text_color);
+  color: #e0c29a !important;
+  text-shadow: 1px 1px #000;
 }
 #pick_nation_dialog {
   color: var(--default-text-color);

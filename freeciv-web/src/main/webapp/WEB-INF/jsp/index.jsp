@@ -26,8 +26,8 @@
     color: #ccc;
     border-color: #444;
 		border-radius: 6px 0px 0px 6px;
-}
-.input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group {
+	}
+	.input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group {
     background-color: #888;
     background: #444;
     color: #000;
