@@ -367,11 +367,18 @@
 												</c:otherwise>
 										</c:choose>
 									</td>
-									<td>${game.message}</td>
+									<td class="hidden-xs">
+											<c:if test="${game.turn lt 13}">
+												<span style="color: #3718c1">${game.message}</span>
+											</c:if>
+											<c:if test="${game.turn > 12}">
+												${game.message}
+											</c:if>
+									</td>
 									<td>${game.state}</td>
 									<td class="hidden-xs">
 											<c:if test="${game.turn lt 13}">
-												<span style="color: #3718c1">${game.turn}</span>
+												<span style="color: #3718c1; text-shadow: 1px 1px #d9ceff;">${game.turn}</span>
 											</c:if>
 											<c:if test="${game.turn > 12}">
 												${game.turn}
