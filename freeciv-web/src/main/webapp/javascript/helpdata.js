@@ -240,7 +240,7 @@ function handle_help_menu_select( ui )
     clear_sidebar();
   } else if (selected_tag == "help_controls") {
     $.get( "/docs/controls.txt", function( data ) {
-      $("#help_info_page").html(data.replace(/\n/g, "<br>"));
+      $("#help_info_page").html(data.replace(/\n/g, ""));
     });
     clear_sidebar();
   } else {

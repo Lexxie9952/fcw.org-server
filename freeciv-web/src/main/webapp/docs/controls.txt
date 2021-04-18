@@ -1,244 +1,243 @@
+<style>
+td {
+  position: relative;
+  bottom: 3px;
+}
+</style>
 <h1>Controls</h1>
 
-The current and complete list of Freeciv-web controls can be found here:
+The current and complete list of Freeciv-web controls can be found here:<br>
 <a href="https://freeciv.fandom.com/wiki/Hotkeys.mp" target="_blank">Freeciv-web complete command list</a>
 
-<h2>Unit commands</h2>
-<img src="/images/orders/auto_settlers_default.png"> Auto Workers (A)
+<h2>Unit commands</h2><table><tr><td><img src="/images/orders/auto_settlers_default.png"></td><td><span class="vctr"> Auto Workers</td><td><span class="hotkey">A</span></span></td></tr>
 
-<img src="/images/orders/build_city_default.png"> Build city (B)
+<tr><td><img src="/images/orders/build_city_default.png"></td><td><span class="vctr"> Build city</td><td><span class="hotkey">B</span></span></td></tr>
 
-<img src="/images/orders/disband_default.png"> Disband unit (shift-D)
+<tr><td><img src="/images/orders/disband_default.png"></td><td><span class="vctr"> Disband unit</td><td><span class="hotkey">shift-D</span></span></td></tr>
 
-<img src="/images/orders/airbase.png"> Build Airbase, Radar Tower (shift-E)
+<tr><td><img src="/images/orders/airbase.png"></td><td><span class="vctr"> Build Airbase, Radar Tower</td><td><span class="hotkey">shift-E</span></span></td></tr>
 
-<img src="/images/orders/fortify_default.png"> Fortify (F)
+<tr><td><img src="/images/orders/fortify_default.png"></td><td><span class="vctr"> Fortify</td><td><span class="hotkey">F</span></span></td></tr>
 
-<img src="/images/orders/fortress.png"> Build Fort/Fortress or Buoy (shift-F)
+<tr><td><img src="/images/orders/fortress.png"></td><td><span class="vctr"> Build Fort/Fortress or Buoy</td><td><span class="hotkey">shift-F</span></span></td></tr>
 
-<img src="/images/orders/goto_default.png"> Goto (G) (Mouse Drag)
+<tr><td><img src="/images/orders/goto_default.png"></td><td><span class="vctr"> Goto</td><td><span class="hotkey">G</span></span></td></tr>
 
-<img src="/images/orders/rehome_default.png"> Change unit Homecity (H)
+<tr><td><img src="/images/orders/rehome_default.png"></td><td><span class="vctr"> Change unit Homecity</td><td><span class="hotkey">H</span></span></td></tr>
 
-<img src="/images/orders/hideout.png"> Make Hideout (shift-H)
+<tr><td><img src="/images/orders/hideout.png"></td><td><span class="vctr"> Make Hideout</td><td><span class="hotkey">shift-H</span></span></td></tr>
 
-<img src="/images/orders/irrigate_default.png"> Build Irrigation (I)
+<tr><td><img src="/images/orders/irrigate_default.png"></td><td><span class="vctr"> Build Irrigation</td><td><span class="hotkey">I</span></span></td></tr>
 
-<img src="/images/orders/irrigation.png"> Build Farmland (I)
+<tr><td><img src="/images/orders/irrigation.png"></td><td><span class="vctr"> Build Farmland</td><td><span class="hotkey">I</span></span></td></tr>
 
-<img src="/images/orders/forest_remove_default.png"> Chop Forest (I)
+<tr><td><img src="/images/orders/forest_remove_default.png"></td><td><span class="vctr"> Chop Forest</td><td><span class="hotkey">I</span></span></td></tr>
 
-<img src="/images/orders/vigil.png"> Vigil (Shift-I)
+<tr><td><img src="/images/orders/vigil.png"></td><td><span class="vctr"> Vigil</td><td><span class="hotkey">Shift-I</span></span></td></tr>
 
-<img src="/images/orders/no_orders.png"> No orders (J)
+<tr><td><img src="/images/orders/no_orders.png"></td><td><span class="vctr"> No orders</td><td><span class="hotkey">J</span></span></td></tr>
 
-<img src="/images/orders/cancel_orders.png"> Cancel orders (shift-J)
+<tr><td><img src="/images/orders/cancel_orders.png"></td><td><span class="vctr"> Cancel orders</td><td><span class="hotkey">shift-J</span></span></td></tr>
 
-<img src="/images/orders/load.png"> Load on Transport (L)
+<tr><td><img src="/images/orders/load.png"></td><td><span class="vctr"> Load on Transport</td><td><span class="hotkey">L</span></span></td></tr>
 
-<img src="/images/orders/airlift.png"> Airlift (shift-L)
+<tr><td><img src="/images/orders/airlift.png"></td><td><span class="vctr"> Airlift</td><td><span class="hotkey">shift-L</span></span></td></tr>
 
-<img src="/images/orders/mine_default.png"> Build Mine (M)
+<tr><td><img src="/images/orders/mine_default.png"></td><td><span class="vctr"> Build Mine</td><td><span class="hotkey">M</span></span></td></tr>
 
-<img src="/images/orders/oil_well.png"> Build Oil Well (M)
+<tr><td><img src="/images/orders/oil_well.png"></td><td><span class="vctr"> Build Oil Well</td><td><span class="hotkey">M</span></span></td></tr>
 
-<img src="/images/orders/forest_add_default.png"> Plant Forest (M)
+<tr><td><img src="/images/orders/forest_add_default.png"></td><td><span class="vctr"> Plant Forest</td><td><span class="hotkey">M</span></span></td></tr>
 
-<img src="/images/orders/swamp.png"> Make Swamp (M)
+<tr><td><img src="/images/orders/swamp.png"></td><td><span class="vctr"> Make Swamp</td><td><span class="hotkey">M</span></span></td></tr>
 
-<img src="/images/orders/navalbase.png"> Build Naval Base (shift-N)
+<tr><td><img src="/images/orders/navalbase.png"></td><td><span class="vctr"> Build Naval Base</td><td><span class="hotkey">shift-N</span></span></td></tr>
 
-<img src="/images/orders/nuke.png"> select Nuke target (shift-N)
+<tr><td><img src="/images/orders/nuke.png"></td><td><span class="vctr"> select Nuke target</td><td><span class="hotkey">shift-N</span></span></td></tr>
 
-<img src="/images/orders/transform_default.png"> Transform Terrain (O)
+<tr><td><img src="/images/orders/transform_default.png"></td><td><span class="vctr"> Transform Terrain</td><td><span class="hotkey">O</span></span></td></tr>
 
-<img src="/images/orders/convert.png"> Convert unit (shift-O)
+<tr><td><img src="/images/orders/convert.png"></td><td><span class="vctr"> Convert unit</td><td><span class="hotkey">shift-O</span></span></td></tr>
 
-<img src="/images/orders/pollution.png"> Remove Pollution (P)
+<tr><td><img src="/images/orders/pollution.png"></td><td><span class="vctr"> Remove Pollution</td><td><span class="hotkey">P</span></span></td></tr>
 
-<img src="/images/orders/paradrop.png"> Paradrop (P)
+<tr><td><img src="/images/orders/paradrop.png"></td><td><span class="vctr"> Paradrop</td><td><span class="hotkey">P</span></span></td></tr>
 
-<img src="/images/orders/pillage.png"> Pillage (shift-P)
+<tr><td><img src="/images/orders/pillage.png"></td><td><span class="vctr"> Pillage</td><td><span class="hotkey">shift-P</span></span></td></tr>
 
-<img src="/images/orders/quay.png"> Build Quay (Q)
+<tr><td><img src="/images/orders/quay.png"></td><td><span class="vctr"> Build Quay</td><td><span class="hotkey">Q</span></span></td></tr>
 
-<img src="/images/orders/road_default.png"> Build Road (R)
+<tr><td><img src="/images/orders/road_default.png"></td><td><span class="vctr"> Build Road</td><td><span class="hotkey">R</span></span></td></tr>
 
-<img src="/images/orders/railroad_default.png"> Build Railroad (R)
+<tr><td><img src="/images/orders/railroad_default.png"></td><td><span class="vctr"> Build Railroad</td><td><span class="hotkey">R</span></span></td></tr>
 
-<img src="/images/orders/maglev.png"> Build MagLev (R)
+<tr><td><img src="/images/orders/maglev.png"></td><td><span class="vctr"> Build MagLev</td><td><span class="hotkey">R</span></span></td></tr>
 
-<img src="/images/orders/well.png"> Dig Well (R)
+<tr><td><img src="/images/orders/seabridge.png"></td><td><span class="vctr"> Build Sea-Bridge</td><td><span class="hotkey">R</span></span></td></tr>
 
-<img src="/images/orders/canal.png"> Build Canal
+<tr><td><img src="/images/orders/well.png"></td><td><span class="vctr"> Dig Well</td><td><span class="hotkey">R</span></span></td></tr>
 
-<img src="/images/orders/sentry_default.png"> Sentry unit (S)
+<tr><td><img src="/images/orders/canal.png"></td><td><span class="vctr"> Build Canal</td><td>no key - use button or pop-up orders</span></td></tr>
 
-<img src="/images/orders/unload.png"> Unload Transport (T) (in city, quay, naval base)
+<tr><td><img src="/images/orders/sentry_default.png"></td><td><span class="vctr"> Sentry unit</td><td><span class="hotkey">S</span></span></td></tr>
 
-<img src="/images/orders/activate_cargo.png"> Activate Cargo units (shift-U) (outside city)
+<tr><td><img src="/images/orders/unload.png"></td><td><span class="vctr"> Unload Transport</td><td><span class="hotkey">T</span> &emsp;(in city, quay, naval base)</span></td></tr>
 
-<img src="/images/orders/upgrade.png"> Upgrade unit (U)
+<tr><td><img src="/images/orders/activate_cargo.png"></td><td><span class="vctr"> Activate Cargo units</td><td><span class="hotkey">shift-U</span> &emsp;(outside city)</span></td></tr>
 
-<img src="/images/orders/wait.png"> Wait (W) (Focus on next unit)
+<tr><td><img src="/images/orders/upgrade.png"></td><td><span class="vctr"> Upgrade unit</td><td><span class="hotkey">U</span></span></td></tr>
 
-<img src="/images/orders/auto_explore_default.png"> Auto explore (X)
+<tr><td><img src="/images/orders/wait.png"></td><td><span class="vctr"> Wait</td><td><span class="hotkey">W</span> &emsp;(focus on next unit)</span></td></tr>
 
-<img src="/images/orders/less_button.png"> <img src="/images/orders/more_button.png"> Less/More (Common Orders/All Orders)
-
-<img src="/images/orders/hide_button.png"> Hide Orders Buttons (use PREFS to show again)
-
-
-<h2>Keyboard Shortcuts for Units</h2>
-  a: (a)uto-settler  (settler/worker units)
-  A: (A)uto-attack - attack when moving, without asking
-  b: (b)uild city  (settler units)
-  c: (c)enter map on active unit
-  d: (d)o - select unit execution
-  E: build airbas(E)
-  f: (f)ortify unit  (military units)
-  F: build (F)ortress  (settler/worker units)
-  g: (g)o to tile  (then left-click mouse to select target tile)
-  G: delayed (G)oto (at turn change, reqs: unit with less than full moves)
-  h: set unit's (h)omecity  (to city on current tile)
-  H: make Hideout
-  i: build (i)rrigation or convert terrain  (settler/worker units)
-  I: v(I)gil: (I)ntercept and auto-attack adjacent air units
-alt-I: connect irrigation along path (alt-shift-I)
-  j: no orders - skip orders for this unit this turn 
-  J: cancel orders - clear current orders for this unit
-  k: next unit of same (k)ind awaiting orders
-  l: (l)oad unit as cargo onto transporting unit
-  L: airLift to city
-  m: build (m)ine or convert terrain  (settler/worker units)
-  n: clean (n)uclear fallout
-  N: explode (N)uclear
-  o: transf(o)rm terrain  (engineer unit)
-  O: c(O)nvert unit
-  p: clean (p)ollution  (settler/worker units)
-  p: (p)aradrop (paratroopers only)
-  P: (P)illage  (destroy terrain alteration)
-  q: build (q)uay
-  Q: select all units from the (Q)ueue awaiting orders (also filters multi-selections)
-  r: build (r)oad/railroad  (settler/worker units)
-alt-R: connect roads along path (alt-shift-R)
-  s: (s)entry unit
-  S: un(S)entry all units on tile
-  t: (t)ransport unload (in City, Naval Base, Quay; or Marines anywhere)
-  U: (u)nload, show, and activate all cargo units on transport 
-  v: select all units on same tile 
-  V: select all units of same TYPE on tile 
-alt-v: select all units NOT of this type on tile
-  x: unit auto e(x)plore
-  X: select all units of same TYPE globally
-alt-x: Chalkboard: private map for plans and notes. Alt/Shift-Ctrl click to mark with notes.
-  w: (w)ait: focus on next unit
-  w: <in other tab or pop-up dialog>: close dialog
-ESC: <In MAP tab>: Exit GOTO mode/Drag mode/Multi-select mode
-ESC: <In other tab>: Exit TAB, return to map.
-
-<h2>Unit Movement:</h2> Numpad, Cursors:
-  1: move south-west (alt-.)
-  2: move south (alt-,)
-  3: move south-east (alt-m)
-  4: move west (alt-j)
-  5: return focus to last focused unit (shift-<)
-  6: move east (alt-l)
-  7: move north-west (alt-u)
-  8: move north (alt-i)
-  9: move north-east (alt-o)
-double-tap drag: move unit 
-
-<h2>Other Keyboard Shortcuts:</h2>
-b: buy production in city under mouse cursor
-w: return to map: close tab/window/pop-up
-space: de-select units, clear GOTO paths, exit drag-select
-shift-space: re-focus to previous map position
-ctrl-alt-space: paste smartlink to tile/unit under cursor
-ctrl-B: highlight borders with flags
-shift-B: toggle national colors on minimap: primary,secondary,tertiary,diplomatic state
-alt-shift-B: animate borders for visibility assistance
-alt-B: toggle between tri-color and bi-color borders
-shift-C: select all same type units on (c)ontinent
-ctrl-C:  city labels on/off
-ctrl-shift-C: cycle city info display mode on map
-ctrl-alt-D: disconnect (disconnected viewing mode)
-alt-shift-F: focus lock: center on active unit
-ctrl-G: map grid on/off
-ctrl-alt-shift-I: change style of the letter capital 'I'
-ctrl-L:  show airlift counter on cities
-ctrl-M:  show city Mood on map
-shift-M: show unit moves left percentage on map
-ctrl-alt-P: highlight polluted tiles everywhere on map
-shift-R: revolution: choose new government
-alt-S: fullscreen mode
-shift-S: stack display mode (multiple tile units)
-ctrl-S: save game
-shift-T: change tax rates
-shift-W: show city tile production on map
-alt-W: war calculator
-alt-X: toggle Chalkboard (map notes marking mode) 
-...{Click, Shift-Click, Ctrl-Click, Alt-Click make user notes on the map}
-DEL: erase Chalkboard
-shift-Return: Turn done
-&apos; &nbsp; Focus on chat input area. (Restores if minimized)
-> &nbsp; Focus/find next dormant unit
-
-<h2>Main Map (Mouse):</h2>
-  Left-click on city:            Pop up city dialog
-  Left-click on unit:            Select a single unit
-Shift-click unit:                Add unit(s) on tile or panel to selection
-Ctrl-Shift click tile:           Select tile to be worked by city, on main map.
-
-  Right-click:                   Center tile in view
-  Right-click unit:              Unit Orders Menu (pop-up)
-  Right-click-and-drag:          Select units by area
-  Alt-click-and-drag:            Select units by area (same as above)
-Shift-Right-click:               Copy city's current production (or unit on map) to clipboard.
-Ctrl-Shift-Right-click:          Paste clipboard into city's current production target. 
-Ctrl-Alt-Right-click:            Paste into chat a smartlink to tile or unit under cursor
-
-  Middle-click:                  Show tile info  
-  Alt-right click                Show tile info (if mouse has no middle click)
-  Double-tap tile:               Show tile info (mobile/touch device only)
-
-  Double-tap map-and-drag:       Move the map 
-
-<h2>Tabs:</h2>
-W: map tab; escape window/tab/popup without exiting full screen
-alt-C: cities tab
-alt-E: empire tab
-alt-G: government tab
-alt-H: help tab
-alt-M: map tab 
-alt-N: nations tab 
-alt-P: preferences tab 
-alt-T: tech tab 
-
-<h2>Cities List:</h2>
-hover over city name: show all buildings in Super Panel
-click Building in Super Panel: change production to Building in hovered city 
-right-click Building in Super Panel: buy/sell Building in hovered city; (adds to worklist if can't buy) 
-shift-click Building in Super Panel: highlight ON/OFF all cities with this Building 
-ctrl-click Building in Super Panel: select/deselect all cities with this Building
-space: clear all highlighted and all selected cities
-
-<h2>City Dialog:</h2>
-Shift-click specialist:          Change ALL specialists of this type 
-Ctrl-click specialist:           Cycle through primary 3 specialists (not secondary specialists)
-Click on current production:     Remove current production; move worklist up.                          
-  Double-click:                  Add production selection to city worklist / queue (or SHIFT-click)
-  Alt-click:                     Change current production to production selection
-  Alt-Shift-click                Insert current selection at top of production worklist   
-Ctrl-double-click:               Change current city production (selection must already be highlighted)
+<tr><td><img src="/images/orders/auto_explore_default.png"></td><td><span class="vctr"> Auto explore</td><td><span class="hotkey">X</span></span></td></tr>
+</table>
+<img src="/images/orders/less_button.png"> <img src="/images/orders/more_button.png"><span class="vctr"> Less/More: toggle: common Orders / all orders</span>
+<br>
+<img src="/images/orders/hide_button.png"><span class="vctr"> Hide Orders Buttons: &emsp;(use PREFS to show again)</span>
 
 
- SPACE:                          Flip between Main View and Production View
- up arrow or M or V:             Main View
- down arrow or Q:                Production View (Queue)
- O:                              city Options
- left arrow:                     Previous View
- right arrow:                    Next View
- P:                              Preview City
- N:                              Next City
-
+<h2>Keyboard Shortcuts for Units</h2><table class="ctrls_tbl"><tr><td><tr><td><span class="hotkey">  a</span></td><td> (a)uto-settler  (settler/worker units)</td></tr>
+<tr><td><span class="hotkey">  A</span></td><td> (A)uto-attack - attack when moving, without asking</td></tr>
+<tr><td><span class="hotkey">  b</span></td><td> (b)uild city  (settler units)</td></tr>
+<tr><td><span class="hotkey">  c</span></td><td> (c)enter map on active unit</td></tr>
+<tr><td><span class="hotkey">  d</span></td><td> (d)o - select unit execution</td></tr>
+<tr><td><span class="hotkey">  E</span></td><td> build airbas(E)</td></tr>
+<tr><td><span class="hotkey">  f</span></td><td> (f)ortify unit  (military units)</td></tr>
+<tr><td><span class="hotkey">  F</span></td><td> build (F)ortress  (settler/worker units)</td></tr>
+<tr><td><span class="hotkey">  g</span></td><td> (g)o to tile  (then left-click mouse to select target tile)</td></tr>
+<tr><td><span class="hotkey">  G</span></td><td> delayed (G)oto (at turn change, reqs: unit with less than full moves)</td></tr>
+<tr><td><span class="hotkey">  h</span></td><td> set unit's (h)omecity  (to city on current tile)</td></tr>
+<tr><td><span class="hotkey">  H</span></td><td> make Hideout</td></tr>
+<tr><td><span class="hotkey">  i</span></td><td> build (i)rrigation or convert terrain  (settler/worker units)</td></tr>
+<tr><td><span class="hotkey">  I</span></td><td> v(I)gil: (I)ntercept and auto-attack adjacent air units</td></tr>
+<tr><td><span class="hotkey">alt-shift-I</span></td><td> connect irrigation along path</td></tr>
+<tr><td><span class="hotkey">  j</span></td><td> no orders - skip orders for this unit this turn </td></tr>
+<tr><td><span class="hotkey">  J</span></td><td> cancel orders - clear current orders for this unit</td></tr>
+<tr><td><span class="hotkey">  k</span></td><td> next unit of same (k)ind awaiting orders</td></tr>
+<tr><td><span class="hotkey">  l</span></td><td> (l)oad unit as cargo onto transporting unit</td></tr>
+<tr><td><span class="hotkey">  L</span></td><td> airLift to city</td></tr>
+<tr><td><span class="hotkey">  m</span></td><td> build (m)ine or convert terrain  (settler/worker units)</td></tr>
+<tr><td><span class="hotkey">  n</span></td><td> clean (n)uclear fallout</td></tr>
+<tr><td><span class="hotkey">  N</span></td><td> explode (N)uclear</td></tr>
+<tr><td><span class="hotkey">  o</span></td><td> transf(o)rm terrain  (engineer unit)</td></tr>
+<tr><td><span class="hotkey">  O</span></td><td> c(O)nvert unit</td></tr>
+<tr><td><span class="hotkey">  p</span></td><td> clean (p)ollution  (settler/worker units)</td></tr>
+<tr><td><span class="hotkey">  p</span></td><td> (p)aradrop (paratroopers only)</td></tr>
+<tr><td><span class="hotkey">  P</span></td><td> (P)illage  (destroy terrain alteration)</td></tr>
+<tr><td><span class="hotkey">  q</span></td><td> build (q)uay</td></tr>
+<tr><td><span class="hotkey">  Q</span></td><td> select all units from the (Q)ueue awaiting orders (also filters multi-selections)</td></tr>
+<tr><td><span class="hotkey">  r</span></td><td> build (r)oad/railroad  (settler/worker units)</td></tr>
+<tr><td><span class="hotkey">alt-shift-R</span></td><td> connect roads along path</td></tr>
+<tr><td><span class="hotkey">  s</span></td><td> (s)entry unit</td></tr>
+<tr><td><span class="hotkey">  S</span></td><td> un(S)entry all units on tile</td></tr>
+<tr><td><span class="hotkey">  t</span></td><td> (t)ransport unload (in City, Naval Base, Quay; or Marines anywhere)</td></tr>
+<tr><td><span class="hotkey">  U</span></td><td> (u)nload, show, and activate all cargo units on transport </td></tr>
+<tr><td><span class="hotkey">  v</span></td><td> select all units on same tile </td></tr>
+<tr><td><span class="hotkey">  V</span></td><td> select all units of same TYPE on tile </td></tr>
+<tr><td><span class="hotkey">alt-v</span></td><td> select all units NOT of this type on tile</td></tr>
+<tr><td><span class="hotkey">  x</span></td><td> unit auto e(x)plore</td></tr>
+<tr><td><span class="hotkey">  X</span></td><td> select all units of same TYPE globally</td></tr>
+<tr><td><span class="hotkey">  w</span></td><td> (w)ait: focus on next unit</td></tr>
+<tr><td><span class="hotkey">  w</span></td><td> <in other tab or pop-up dialog>: close dialog</td></tr>
+</table>
+<h2>Unit Movement:</h2> Numpad, Cursors:<table class="ctrls_tbl"><tr><td><tr><td><span class="hotkey">  1</span></td><td> move south-west (alt-.)</td></tr>
+<tr><td><span class="hotkey">  2</span></td><td> move south (alt-,)</td></tr>
+<tr><td><span class="hotkey">  3</span></td><td> move south-east (alt-m)</td></tr>
+<tr><td><span class="hotkey">  4</span></td><td> move west (alt-j)</td></tr>
+<tr><td><span class="hotkey">  5</span></td><td> return focus to last focused unit (shift-<)</td></tr>
+<tr><td><span class="hotkey">  6</span></td><td> move east (alt-l)</td></tr>
+<tr><td><span class="hotkey">  7</span></td><td> move north-west (alt-u)</td></tr>
+<tr><td><span class="hotkey">  8</span></td><td> move north (alt-i)</td></tr>
+<tr><td><span class="hotkey">  9</span></td><td> move north-east (alt-o)</td></tr>
+<tr><td><span class="hotkey">double-tap drag</span></td><td> move unit </td></tr>
+</table>
+<h2>Other Keyboard Shortcuts:</h2><table class="ctrls_tbl"><tr><td><span class="hotkey">b</span></td><td> Buy production in city under mouse cursor</td></tr>
+<tr><td><span class="hotkey">w</span></td><td> Return to map: close tab/window/pop-up</td></tr>
+<tr><td><span class="hotkey">space</span></td><td> De-select units, clear GOTO paths, exit drag-select</td></tr>
+<tr><td><span class="hotkey">shift-space</span></td><td> Re-focus to previous map position</td></tr>
+<tr><td><span class="hotkey">ctrl-alt-space</span></td><td> Paste smartlink to tile/unit under cursor</td></tr>
+<tr><td><span class="hotkey">ctrl-B</span></td><td> Highlight borders with flags</td></tr>
+<tr><td><span class="hotkey">shift-B</span></td><td> Toggle national colors on minimap: primary,secondary,tertiary,diplomatic state</td></tr>
+<tr><td><span class="hotkey">alt-shift-B</span></td><td> Animate borders for visibility assistance</td></tr>
+<tr><td><span class="hotkey">alt-B</span></td><td> Toggle between tri-color and bi-color borders</td></tr>
+<tr><td><span class="hotkey">shift-C</span></td><td> Select all same type units on (c)ontinent</td></tr>
+<tr><td><span class="hotkey">ctrl-C</span></td><td>  City labels on/off</td></tr>
+<tr><td><span class="hotkey">ctrl-shift-C</span></td><td> Cycle city info display mode on map</td></tr>
+<tr><td><span class="hotkey">ctrl-alt-D</span></td><td> Disconnect (disconnected viewing mode)</td></tr>
+<tr><td><span class="hotkey">alt-shift-F</span></td><td> Focus lock: center on active unit</td></tr>
+<tr><td><span class="hotkey">ctrl-G</span></td><td> Map grid on/off</td></tr>
+<tr><td><span class="hotkey">ctrl-alt-shift-I</span></td><td> Change style of the letter capital 'I'</td></tr>
+<tr><td><span class="hotkey">ctrl-L</span></td><td>  Show airlift counter on cities</td></tr>
+<tr><td><span class="hotkey">ctrl-M</span></td><td>  Show city Mood on map</td></tr>
+<tr><td><span class="hotkey">shift-M</span></td><td> Show unit moves left percentage on map</td></tr>
+<tr><td><span class="hotkey">ctrl-alt-P</span></td><td> Highlight polluted tiles everywhere on map</td></tr>
+<tr><td><span class="hotkey">shift-R</span></td><td> Revolution: choose new government</td></tr>
+<tr><td><span class="hotkey">alt-S</span></td><td> Fullscreen mode</td></tr>
+<tr><td><span class="hotkey">ESC</span></td><td> Exit Fullscreen mode.</td></tr>
+<tr><td><span class="hotkey">shift-S</span></td><td> Stack display mode (multiple units on tile)</td></tr>
+<tr><td><span class="hotkey">ctrl-S</span></td><td> Save game</td></tr>
+<tr><td><span class="hotkey">shift-T</span></td><td> Change tax rates</td></tr>
+<tr><td><span class="hotkey">shift-W</span></td><td> Show city tile production on map</td></tr>
+<tr><td><span class="hotkey">alt-W</span></td><td> War calculator</td></tr>
+<tr><td><span class="hotkey">alt-X</span></td><td> Toggle Chalkboard (private map notes, marking mode) </td></tr>
+<tr><td>&emsp;</td><td><span class="hotkey">Click &emsp;Shift-Click &emsp;Ctrl-Click &emsp;Alt-Click&emsp;</span> {Make user notes on the chalkboard-map}</td></tr>
+<tr><td><span class="hotkey">DEL</span></td><td> Erase Chalkboard</td></tr>
+<tr><td><span class="hotkey">shift-Return</span></td><td> Turn done</td></tr>
+<tr><td><span class="hotkey">&apos;</span></td><td>Focus on chat input area. (Restores if minimized)</td></tr>
+<tr><td><span class="hotkey">&lt;</span></td><td>Return focus to last focused unit (also numpad-5)</td></tr>
+<tr><td><span class="hotkey">></span></td><td>Focus/find next dormant unit</td></tr>
+</table>
+<h2>Main Map (Mouse):</h2><table class="ctrls_tbl"><tr><td><span class="hotkey">  Left-click</span> on city</td><td>            Pop up city dialog</td></tr>
+<tr><td><span class="hotkey">  Left-click</span> on unit</td><td>            Select a single unit</td></tr>
+<tr><td><span class="hotkey">Shift-click</span> unit</td><td>                Add unit(s) on tile or panel to selection</td></tr>
+<tr><td><span class="hotkey">Ctrl-Shift click</span> tile</td><td>           Select tile to be worked by city, on main map.</td></tr>
+<tr><td><span class="hotkey">  Right-click</span></td><td>                   Center tile in view</td></tr>
+<tr><td><span class="hotkey">  Right-click unit</span></td><td>              Unit Orders Menu (pop-up)</td></tr>
+<tr><td><span class="hotkey">  Right-click-and-drag</span></td><td>          Select units by area</td></tr>
+<tr><td><span class="hotkey">  Alt-click-and-drag</span></td><td>            Select units by area (same as above)</td></tr>
+<tr><td><span class="hotkey">Shift-Right-click</span></td><td>               Copy city's current production (or unit on map) to clipboard.</td></tr>
+<tr><td><span class="hotkey">Ctrl-Shift-Right-click</span></td><td>          Paste clipboard into city's current production target. </td></tr>
+<tr><td><span class="hotkey">Ctrl-Alt-Right-click</span></td><td>            Paste into chat a smartlink to tile or unit under cursor</td></tr>
+<tr><td><span class="hotkey">  Middle-click</span></td><td>                  Show tile info  </td></tr>
+<tr><td><span class="hotkey">  Alt-right click</span></td><td>                Show tile info (if mouse has no middle click)</td></tr>
+<tr><td><span class="hotkey">  Double-tap tile</span></td><td>               Show tile info (mobile/touch device only)</td></tr>
+<tr><td><span class="hotkey">  Double-tap map-and-drag</span></td><td>       Move the map </td></tr>
+</table>
+<h2>Tabs:</h2><table class="ctrls_tbl"><tr><td><span class="hotkey">W</span></td><td> Go to map tab; escape window/tab/popup without exiting full screen</td></tr>
+<tr><td><span class="hotkey">alt-C</span></td><td> Cities tab</td></tr>
+<tr><td><span class="hotkey">alt-E</span></td><td> Empire tab</td></tr>
+<tr><td><span class="hotkey">alt-G</span></td><td> Government tab</td></tr>
+<tr><td><span class="hotkey">alt-H</span></td><td> Help tab</td></tr>
+<tr><td><span class="hotkey">alt-N</span></td><td> Nations tab </td></tr>
+<tr><td><span class="hotkey">alt-P</span></td><td> Preferences tab </td></tr>
+<tr><td><span class="hotkey">alt-T</span></td><td> Tech tab </td></tr>
+</table>
+<h2>Cities List:</h2><table class="ctrls_tbl"><tr><td><span class="hotkey">hover on city name</span></td><td> Show all buildings in Super Panel</td></tr>
+<tr><td><span class="hotkey">click building in Super Panel</span></td><td> Change production to building in hovered city </td></tr>
+<tr><td><span class="hotkey">right-click building in Super Panel</span></td><td> Buy/Sell building in hovered city; (adds to worklist if can't buy)</td></tr> 
+<tr><td><span class="hotkey">shift-click building in Super Panel</span></td><td> Highlight ON/OFF all cities with this Building</td></tr> 
+<tr><td><span class="hotkey">ctrl-click building in Super Panel</span></td><td> Select/deselect all cities with this Building</td></tr>
+<tr><td><span class="hotkey">SPACE</span></td><td> Clear all highlighted and all selected cities</td></tr>
+</table>
+<h2>City Dialog:</h2><table class="ctrls_tbl"><tr><td><span class="hotkey">Shift-click specialist</span></td><td>          Change ALL specialists of this type </td></tr>
+<tr><td><span class="hotkey">Ctrl-click specialist</span></td><td>           Cycle through primary 3 specialists (not secondary specialists)</td></tr>
+<tr><td><span class="hotkey">Click current production</span></td><td>     Remove current production; move worklist up.</td></tr>
+<tr><td><span class="hotkey">Double-click</span></td><td>                  Add production selection to city worklist / queue (or SHIFT-click)</td></tr>
+<tr><td><span class="hotkey">Alt-click</span></td><td>                     Change current production to production selection</td></tr>
+<tr><td><span class="hotkey">Alt-Shift-click</span></td><td>                Insert current selection at top of production worklist</td></tr>
+<tr><td><span class="hotkey">Ctrl-double-click</span></td><td>               Change current city production (selection must already be highlighted)</td></tr>
+<tr><td><span class="hotkey">SPACE</span></td><td>                          Flip between Main view and Production view</td></tr>
+<tr><td><span class="hotkey"> up arrow</span>  or <span class="hotkey">M</span></td><td>             <b>M</b>ain view</td></tr>
+<tr><td><span class="hotkey"> down arrow</span> or <span class="hotkey">d</span></td><td>                Pro<b>d</b>uction view</td></tr> 
+<tr><td><span class="hotkey"> R</span></td><td>                              show city's trade <b>R</b>outes</td></tr>
+<tr><td><span class="hotkey"> O</span></td><td>                              city <b>O</b>ptions</td></tr>
+<tr><td><span class="hotkey"> H</span></td><td>                              citizen <b>H</b>appiness effects</td></tr>
+<tr><td><span class="hotkey"> G</span></td><td>                              city <b>G</b>overnor</td></tr>
+<tr><td><span class="hotkey"> P</span></td><td>                              <b>P</b>revious city</td></tr>
+<tr><td><span class="hotkey"> N</span></td><td>                              <b>N</b>ext city</td></tr>
+<tr><td><span class="hotkey"> B</span></td><td>                              <b>B</b>uy current production in city</td></tr>
+</table>
+<br>
+<br>
+<br>
+<br>
