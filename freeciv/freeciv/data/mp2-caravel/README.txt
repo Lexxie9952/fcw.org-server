@@ -1,7 +1,7 @@
 <u>MP2-Caravel ruleset</u>
 <a href="https://freeciv.fandom.com/wiki/Multiplayer_II:_Caravel,_Game_Manual" target="_blank">Full Game Manual, MP2-Caravel</a>
 <br>
-Most useful supplements to the in-game manual <i>(from the Full Game Manual)</i>:
+<u>Most useful supplements to the in-game manual</u> <i>(from the Full Game Manual)</i>:
 <a href="https://freeciv.fandom.com/wiki/Combat.mp2c" target="_blank">Combat</a>
 <a href="https://freeciv.fandom.com/wiki/Economy.mp2c" target="_blank">Economy</a>
 <a href="https://freeciv.fandom.com/wiki/Diplomacy.mp2c" target="_blank">Diplomacy</a>
