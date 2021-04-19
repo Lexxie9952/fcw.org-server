@@ -3391,6 +3391,8 @@ static bool load_ruleset_terrain(struct section_file *file,
 
         pextra->helptext = lookup_strvec(file, section, "helptext");
       }
+
+      rscompat_extra_adjust_3_1(compat, pextra);
     } extra_type_iterate_end;
   }
 
