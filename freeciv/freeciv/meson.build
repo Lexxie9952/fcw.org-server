@@ -18,10 +18,15 @@ priv_conf_data.set('DATADIR',
                    join_paths(get_option('prefix'), get_option('datadir')))
 priv_conf_data.set('DATASUBDIR', 'dev')
 
+priv_conf_data.set('IS_DEVEL_VERSION', 1)
+
 if get_option('debug')
   priv_conf_data.set('FREECIV_DEBUG', 1)
   pub_conf_data.set('FREECIV_DEBUG', 1)
 endif
+
+priv_conf_data.set('AUDIO_SDL', 1)
+priv_conf_data.set('AUDIO_SDL2', 1)
 
 c_compiler = meson.get_compiler('c')
 
@@ -1075,11 +1080,13 @@ client_common = static_library('fc_client_common',
   include_directories: client_inc,
   link_with: [common_lib],
   dependencies: [c_compiler.find_library('m'),
+                 c_compiler.find_library('libSDL2'),
                  c_compiler.find_library('libSDL2_mixer')]
   )
 
 install_data('data/helpdata.txt',
              'data/hexemplio.tilespec',
+             'data/stdmusic.musicspec',
              install_dir : join_paths(get_option('datadir'), 'freeciv'))
 
 install_data('data/misc/colors.tilespec',
@@ -1169,6 +1176,9 @@ install_data('data/amplio2/units.png',
              'data/amplio2/explosions.png',
              'data/amplio2/explosions.spec',
              install_dir : join_paths(get_option('datadir'), 'freeciv/amplio2'))
+
+install_data('data/stdmusic/CullamBruce-Lockhart--Dawning_Fanfare.ogg',
+             install_dir : join_paths(get_option('datadir'), 'freeciv/stdmusic'))
 
 endif
 

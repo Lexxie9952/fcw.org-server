@@ -88,6 +88,7 @@ char *get_parser_buffer(void);
 #define RS_DEFAULT_CULTURE_VIC_POINTS    1000
 #define RS_DEFAULT_CULTURE_VIC_LEAD      300
 #define RS_DEFAULT_CULTURE_MIGRATION_PML 50
+#define RS_DEFAULT_HISTORY_INTEREST_PML  0
 
 /* Changes to these two values must also change
    const of same names in extras.js for FCW */
