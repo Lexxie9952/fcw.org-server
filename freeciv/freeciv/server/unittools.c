@@ -946,8 +946,8 @@ void unit_activity_complete(struct unit *punit)
 {
   const enum unit_activity tile_changing_actions[] =
     { ACTIVITY_PILLAGE, ACTIVITY_GEN_ROAD, ACTIVITY_IRRIGATE, ACTIVITY_MINE,
-      ACTIVITY_BASE, ACTIVITY_TRANSFORM, ACTIVITY_POLLUTION,
-      ACTIVITY_FALLOUT, ACTIVITY_LAST };
+      ACTIVITY_BASE, ACTIVITY_CULTIVATE, ACTIVITY_PLANT, ACTIVITY_TRANSFORM,
+      ACTIVITY_POLLUTION, ACTIVITY_FALLOUT, ACTIVITY_LAST };
 
   bool unit_activity_done = FALSE;
   enum unit_activity activity = punit->activity;
@@ -1082,6 +1082,8 @@ void unit_activity_complete(struct unit *punit)
 
   case ACTIVITY_IRRIGATE:
   case ACTIVITY_MINE:
+  case ACTIVITY_CULTIVATE:
+  case ACTIVITY_PLANT:
   case ACTIVITY_TRANSFORM:
     if (total_activity_done(ptile, activity, punit->activity_target)) {
       struct terrain *old = tile_terrain(ptile);
@@ -1106,6 +1108,8 @@ void unit_activity_complete(struct unit *punit)
     update_tile_knowledge(ptile);
     if (ACTIVITY_IRRIGATE == activity
         || ACTIVITY_MINE == activity
+        || ACTIVITY_CULTIVATE == activity
+        || ACTIVITY_PLANT == activity
         || ACTIVITY_TRANSFORM == activity) {
       /* FIXME: As we might probably do the activity again, because of the
        * terrain change cycles, we need to treat these cases separatly.
@@ -1224,6 +1228,8 @@ static void update_unit_activity(struct unit *punit, time_t now)
   case ACTIVITY_MINE:
   case ACTIVITY_IRRIGATE:
   case ACTIVITY_PILLAGE:
+  case ACTIVITY_CULTIVATE:
+  case ACTIVITY_PLANT:
   case ACTIVITY_TRANSFORM:
   case ACTIVITY_FALLOUT:
   case ACTIVITY_BASE:
@@ -4223,6 +4229,8 @@ static void check_unit_activity(struct unit *punit)
   case ACTIVITY_POLLUTION:
   case ACTIVITY_MINE:
   case ACTIVITY_IRRIGATE:
+  case ACTIVITY_CULTIVATE:
+  case ACTIVITY_PLANT:
   case ACTIVITY_FORTIFIED:
   case ACTIVITY_FORTRESS:
   case ACTIVITY_PILLAGE:

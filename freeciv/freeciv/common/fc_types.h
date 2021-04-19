@@ -137,6 +137,10 @@ enum output_type_id {
 #define SPECENUM_VALUE19NAME N_("Road")
 #define SPECENUM_VALUE20 ACTIVITY_CONVERT
 #define SPECENUM_VALUE20NAME N_("Convert")
+#define SPECENUM_VALUE21 ACTIVITY_CULTIVATE
+#define SPECENUM_VALUE21NAME N_("Cultivate")
+#define SPECENUM_VALUE22 ACTIVITY_PLANT
+#define SPECENUM_VALUE22NAME N_("Plant")
 #define SPECENUM_COUNT ACTIVITY_LAST
 #include "specenum_gen.h"       // #13 above is now used as Vigil
 
