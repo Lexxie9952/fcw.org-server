@@ -774,6 +774,13 @@ function fill_unit_sprite_array(punit, num_stacked)
                     "offset_y" : activities['offset_y'] + unit_offset['y']+19 });
     }
   }
+  if (should_ask_server_for_actions(punit)) {
+    result.push({
+      "key"      : "unit.action_decision_want",
+      "offset_x" : unit_activity_offset_x + unit_offset['x'],
+      "offset_y" : -unit_activity_offset_y + unit_offset['y'],
+    });
+  }
   if (unit_offset['x'] == 0 && unit_offset['y'] == 0) { // if unit is moving, don't draw these
     // Move point bar
     if (show_unit_movepct && punit['movesleft']!=null) result.push(get_mp_sprite(punit));
@@ -814,6 +821,7 @@ function fill_unit_sprite_array(punit, num_stacked)
     veteran['offset_y'] -= (UO_vy[id] - unit_offset['y']); // bundle in unit_offset so badge moves with the unit
     result.push(veteran);
   }
+
   return result;
 }
 
