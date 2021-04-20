@@ -474,7 +474,7 @@ function popup_action_selection(actor_unit, action_probabilities,
           select_tgt_unit(actor_unit,
                           target_tile, tile_units(target_tile));
 
-          is_more_user_input_needed = true;
+          action_selection_restart = true;
           remove_action_selection_dialog(id, actor_unit['id'], true);
         } });
   }
@@ -489,7 +489,7 @@ function popup_action_selection(actor_unit, action_probabilities,
                            list_potential_target_extras(actor_unit,
                                                         target_tile));
 
-          is_more_user_input_needed = true;
+          action_selection_restart = true;
           remove_action_selection_dialog(id, actor_unit['id'], true);
         } });
   }
@@ -1399,12 +1399,10 @@ function remove_action_selection_dialog(id, actor_id, input_maybe_needed)
   remove_active_dialog(id);
 
   if (!input_maybe_needed) {
-    action_selection_no_longer_in_progress(actor_id);
+    act_sel_queue_done(actor_id);
   }
   else {
-    if (!is_more_user_input_needed) {
-      action_selection_no_longer_in_progress(actor_id);
-    }
+    act_sel_queue_may_be_done(actor_id);
   }
 }
 
