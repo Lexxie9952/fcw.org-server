@@ -54,7 +54,7 @@ function show_revolution_dialog()
   if (client.conn.playing == null) return;
 
   var gov_name = governments[client.conn.playing['government']]['name'];
-  if (gov_name == "Monarchy") gov_name = get_gov_modifier(client.conn.playing.playerno, true) + " " + gov_name;
+  if (gov_name == "Monarchy") gov_name = get_gov_modifier(client.conn.playing.playerno, "Monarchy", true) + " " + gov_name;
 
   var dhtml = "Current form of government: <b>" + gov_name
 	          + "</b><br>To start a revolution, select the new form of government:"
@@ -94,7 +94,7 @@ function init_civ_dialog()
     var tag = pnation['graphic_str'];
 
     var civ_description = "";
-    var gov_modifier = get_gov_modifier(client.conn.playing.playerno, true); if (gov_modifier) gov_modifier += " ";
+    var gov_modifier = get_gov_modifier(client.conn.playing.playerno, null, true); if (gov_modifier) gov_modifier += " ";
     if (!pnation['customized']) {
 	    civ_description += "<img src='/images/flags/" + tag + "-web" + get_tileset_file_extention() + "' width='180'>";
     }
@@ -132,7 +132,7 @@ function update_govt_dialog()
 
   $("#governments_list").html(governments_list_html);
 
-  var magna_carta = get_gov_modifier(client.conn.playing.playerno, false); // Allows secondary species of sub-governments
+  var magna_carta = get_gov_modifier(client.conn.playing.playerno, "Monarchy", false); // Allows secondary species of sub-governments
 
   var gov_modifier = "";
   for (govt_id in governments) {
@@ -405,13 +405,14 @@ function show_climate_dialog(rtype)
 /************************************************
 *
 ************************************************/
-function get_gov_modifier(playerno, uppercase) {
+function get_gov_modifier(playerno, gov_name, uppercase) {
   if (!client_rules_flag[CRF_MP2_C]) return "";
 
+  if (!gov_name) gov_name = governments[players[playerno]['government']]['name'];
   var gov_modifier = "";
    
   if (players[playerno].wonders[improvement_id_by_name(B_MAGNA_CARTA)]) {
-    gov_modifier = uppercase ? "Constitutional" : "constitutional";
+    if (gov_name == "Monarchy") gov_modifier = uppercase ? "Constitutional" : "constitutional";
   }
   return gov_modifier;
 }

@@ -1268,6 +1268,18 @@ input[type='number'] {
   color: #dbd5d0;
 }
 
+#intel_ruler {
+  color: #aba;
+}
+
+#intel_capital {
+  color: #aab;
+}
+
+#intel_researching {
+  color: #abb;
+}
+
 #intel_tabs-technology ul {
   list-style-type: none;
   position: relative;

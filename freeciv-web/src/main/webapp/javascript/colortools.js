@@ -24,7 +24,6 @@ const default_dialog_text_color = "#ccc";
 // but could be better for holistic integration with all the other nations. null indicates to
 // keep the algorithm's selection for that color.
 const override_colors = {
-  
   "Alsatian": { "c1": "rgb(237, 41, 57)",  "c2": "rgb(255, 255, 255)", "c3": "rgb(255, 210, 3)"   },
   "Armenian": { "c1": null,                "c2": null,                 "c3": "rgb(49, 79, 154)"   },
   "Assyrian": { "c1": null,                "c2": "rgb(255, 102, 51)",  "c3": "rgb(0, 153, 255)"   },
@@ -102,6 +101,33 @@ const override_colors = {
   
   "LAST": {}
 };
+
+const gov_colors = {
+  "Anarchy":                 {"1": "#fca364", "2": "#721100"},
+  "Tribal":                  {"1": "#5cf2f2", "2": "#bf8f00"},
+  "Tribalism":               {"1": "#5cf2f2", "2": "#bf8f00"},
+  "Despotism":               {"1": "#b08ffb", "2": "#240f61"},
+  "Monarchy":                {"1": "#6b72ee", "2": "#0011c2"},
+  "Constitutional Monarchy": {"1": "#3276ee", "2": "#83b0db"},
+  "Republic":                {"1": "#e2dc70", "2": "#c00000"},
+  "Democracy":               {"1": "#6aa1e2", "2": "#8789B6"},
+  "Fundamentalism":          {"1": "#ffff00", "2": "#000"},
+  "Theocracy":               {"1": "#E22864", "2": "#322487"},
+  "Communism":               {"1": "#EC0000", "2": "#747200"},  
+  "Nationalism":             {"1": "#ff720d", "2": "#fff17170"},  
+  "Federation":              {"1": "#d8d8d8", "2": "#6565e5"},  
+}
+
+/****************************************************************************
+  Returns either primary or secondary color of a government, based on 
+    'index'
+****************************************************************************/
+function color_gov_color(gov_name, index) 
+{
+  if (gov_colors[gov_name][index])
+    return gov_colors[gov_name][index];
+  else return default_dialog_text_color;
+}
 
 /****************************************************************************
   Assigns the nation's colors based on the color of their flag, 

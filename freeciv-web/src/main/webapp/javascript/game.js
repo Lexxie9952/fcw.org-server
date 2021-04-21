@@ -151,7 +151,7 @@ function update_game_status_panel() {
       status_html += "<span style='cursor:pointer;' onclick='javascript:show_revolution_dialog()'>";
       
       var gov_name = governments[client.conn.playing['government']]['name'];
-      var gov_modifier = get_gov_modifier(client.conn.playing.playerno, true);     
+      var gov_modifier = get_gov_modifier(client.conn.playing.playerno, "", true);     
       
       if (gov_name == "Anarchy") status_html += "<img class='lowered_gov' src='/images/gov.anarchy.png' title='Anarchy'>";
       else if (gov_name == "Despotism") status_html += "<img class='lowered_gov' src='/images/gov.despotism.png' title='Despotism'>";

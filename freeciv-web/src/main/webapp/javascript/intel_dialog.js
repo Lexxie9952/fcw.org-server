@@ -43,9 +43,9 @@ function show_intelligence_report_hearsay(pplayer)
 {
   var msg = "Ruler " + pplayer['name'] + "<br>";
   if (pplayer['government'] > 0) {
-    var gov_mod = get_gov_modifier(pplayer.playerno, true);
+    var gov_mod = get_gov_modifier(pplayer.playerno, "", true);
     var gov_name = governments[pplayer['government']]['name'];
-    if (gov_name == "Monarchy") gov_name = gov_mod + " " + gov_name;
+    if (gov_mod) gov_name = gov_mod + " " + gov_name;
     msg += "Government: " + gov_name + "<br>";
   }
 
@@ -76,10 +76,10 @@ function show_intelligence_report_embassy(pplayer)
 
   const capital = player_capital(pplayer);
 
-  var gov_mod = get_gov_modifier(pplayer.playerno, true);
+  var gov_mod = get_gov_modifier(pplayer.playerno, "", true);
   var gov_name = governments[pplayer['government']]['name'];
   const natl_adj = nations[pplayer['nation']]['adjective'];
-  if (gov_name == "Monarchy") gov_name = gov_mod + " " + gov_name;
+  if (gov_mod) gov_name = gov_mod + " " + gov_name;
 
   var intel_data = {
     ruler: pplayer['name'],
@@ -159,6 +159,10 @@ function show_intelligence_report_embassy(pplayer)
                      });
 
   $("#intel_dialog").dialog('open');
+
+  if (gov_name) 
+    $("#intel_gov").css({"color": color_gov_color(gov_name,1),
+                         "text-shadow": "1px 1px "+color_gov_color(gov_name,2)});
 
   /*************** Set up report UI for interacting with 3 classes of tech in the report ****************/
     // Refresh visibility for all 3 classes of tech, when showing a new report:

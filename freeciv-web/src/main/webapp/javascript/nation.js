@@ -112,7 +112,7 @@ function update_nation_screen()
            + "; margin: 4px; width: 20px; height: 20px;'>&#x25cf;"
            + "</div></td>";
 
-    var gov_modifier = get_gov_modifier(player_id,false);
+    var gov_modifier = get_gov_modifier(player_id, "", false);
     var gov_indicator = pplayer['government'] 
                       ? "<img class='lowered_gov' src='/images/e/"+governments[pplayer['government']]['name'].toLowerCase() + gov_modifier+".png'>" 
                       : "<img class='lowered_gov' src='/images/e/unknowngov.png'>"; 
