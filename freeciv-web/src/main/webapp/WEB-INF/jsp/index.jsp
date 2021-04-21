@@ -105,11 +105,14 @@
     color: rgb(54 80 100)
 	}
 	#game-launcher a.small { width: 130px;	}
-	.multiplayer-games th:last-child { width: 100px; }
-	.multiplayer-games a.label:last-child { margin-left: 3px; }
+	.multiplayer-games th:last-child { width: 80px; }
+	.multiplayer-games a.label:first-child { margin-right: 3px; }
 	.multiplayer-games .highlight { 
 		color: green;
 		font-weight: bold;
+	}
+	.table>tbody>tr>td {
+		padding: 2px;
 	}
 	.videoWrapper {
 	position: relative;
@@ -291,7 +294,7 @@
 			<div id="statistics" class="row">
 				<div class="col-md-12">
 					<div class="panel-freeciv statistics">
-						<h4><span id="statistics-singleplayer"><b>0</b></span> <fmt:message key="index-stats-singleplayer"/> <span id="statistics-multiplayer"><b>0</b></span> <fmt:message key="index-stats-multiplayer"/><br>
+						<h4 style="color:#6398d6"><span id="statistics-singleplayer"><b>0</b></span> <fmt:message key="index-stats-singleplayer"/> <span id="statistics-multiplayer"><b>0</b></span> <fmt:message key="index-stats-multiplayer"/><br>
 						<fmt:message key="index-stats-since"/></h4>
 
 					</div>
@@ -302,7 +305,7 @@
 
 
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-6" style="padding-left:0px; padding-right:0px">
 				<div class="panel-freeciv">
 					<h3>Multiplayer and One Turn per Day games:</h3>
 					<c:if test="${not empty games and fn:length(games) > 0}">
@@ -310,7 +313,7 @@
 							<thead>
 								<tr>
 									<th>Game name</th>
-									<th>State</th>
+									<th class="hidden-xs">State</th>
 									<th>Turn</th>
 									<th>Players</th>
 									<th>Actions</th>
@@ -319,46 +322,40 @@
 							<tbody>
 								<c:forEach items="${games}" var="game">
 									<tr class="${game.players > 0 && state == 'Pregame' ? 'highlight' : ''}">
-										<td>
+										<td style="color:#8ea7bf">
 										    <b>
 											  ${fn:replace(game.message, 'LongTurn', ' One Turn per Day ')}
 											</b>
 										</td>
-										<td>
+										<td class="hidden-xs">
 											${game.state}
 										</td>
-										<td>
+										<td style="text-align:center">
 											${game.turn}
 										</td>
-										<td>
+										<td style="text-align:center">
 											<c:choose>
 												<c:when test="${game.players == 0}">
 													None
 												</c:when>
 												<c:when test="${game.players == 1}">
-													1 player
+													1 <span class="hidden-xs">player</span>
 												</c:when>
 												<c:otherwise>
-													${game.players} players
+													${game.players} <span class="hidden-xs">players</span>
 												</c:otherwise>
 											</c:choose>
 										</td>			
 										<td>
 											<c:choose>
 												<c:when test="${game.state == 'Running' or game.state == 'Pregame'}">
-													<a  class="label label-success" href="/webclient/?action=multi&civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
-														Play
-													</a>
+													<a  class="label label-success" href="/webclient/?action=multi&civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">Play</a>
 												</c:when>
 												<c:otherwise>
-													<a class="label label-success" href="/webclient/?action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
-														Observe
-													</a>
+													<a class="label label-success" href="/webclient/?action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">Observe</a>
 												</c:otherwise>
 											</c:choose>
-											<a class="label label-primary" href="/game/details?host=${game.host}&amp;port=${game.port}">
-												Info
-											</a>
+											<a class="label label-primary" href="/game/details?host=${game.host}&amp;port=${game.port}">Info</a>
 										</td>
 									</tr>
 								</c:forEach>		
