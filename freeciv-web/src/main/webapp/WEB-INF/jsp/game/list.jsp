@@ -161,10 +161,10 @@
 		font-weight: bold;
 	}
 	#multiplayer-table td:last-child {
-		width: 290px;
+		width: 140px;
 	}
 	#longturn-table td:last-child {
-		width: 290px;
+		width: 110px;
 	}
 	#singleplayer-table td:last-child {
 		width: 140px;
@@ -215,7 +215,7 @@
 	<%@include file="/WEB-INF/jsp/fragments/header.jsp" %>
 	
 	<!-- Begin page content -->
-	<div id="content" class="container">
+	<div id="content" class="container" style="padding-left:0px; padding-right:0px;">
 		<div>
 			<ul class="nav nav-tabs hidden-xs" role="tablist">
 				<li role="presentation" class="${view == 'singleplayer' or empty view ? 'active' : ''}"><a href="#single-player-tab"
@@ -267,11 +267,8 @@
 									<td class="hidden-xs">${game.message}</td>
 									<td class="hidden-xs">${game.players}</td>
 									<td class="hidden-xs">${game.turn}</td>
-									<td><a class="label label-success label-lg"
-										href="/webclient/?action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;type=${game.type}" title="Observe">
-											Observe</a> <a class="label label-primary label-lg"
-										href="/game/details?host=${game.host}&amp;port=${game.port}">
-											Info</a>
+									<td><a class="label label-success label-lg" href="/webclient/?action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;type=${game.type}" title="Observe">Observe</a> 
+										<a class="label label-primary label-lg" href="/game/details?host=${game.host}&amp;port=${game.port}">Info</a>
 									</td>
 								</tr>
 							</c:forEach>
@@ -313,24 +310,17 @@
 									<td class="hidden-xs">${game.turn}</td>
 									<td><c:choose>
 											<c:when test="${game.state != 'Running'}">
-												<a class="label label-success label-lg"
-													href="/webclient/?action=multi&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
-													Play</a>
+												<a class="label label-success label-lg" href="/webclient/?action=multi&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">Play</a>
 											</c:when>
 											<c:otherwise>
-                                                <a class="label label-success label-lg"
-													href="/webclient/?action=multi&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
-													Play</a>
+                        <a class="label label-success label-lg" href="/webclient/?action=multi&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">Play</a>
 											<c:if test="${game.type} ne 'longturn'}">
 												<a class="label label-success label-lg"
-													href="/webclient/?action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
-													Observe</a>
+													href="/webclient/?action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">Observe</a>
 											</c:if>
 											</c:otherwise>
 										</c:choose>
-										<a class="label label-primary label-lg"	href="/game/details?host=${game.host}&amp;port=${game.port}">
-											Info
-										</a>
+										<a class="label label-primary label-lg"	href="/game/details?host=${game.host}&amp;port=${game.port}">Info</a>
 									</td>
 								</tr>
 							</c:forEach>
@@ -347,9 +337,9 @@
 							<tr>
 								<th class="hidden-xs">Players</th>
 								<th>Game Info<br><span style="font-size:90%; font-weight:600; color: #3718c1"><i>Late-join bonus gold ensures FAIR-START&#8482; in the first 12 turns.</i></span></th>
-								<th>State</th>
-								<th class="hidden-xs">Turn</th>
-								<th>Action</th>
+								<th style="text-align:center" class="hidden-xs">State</th>
+								<th style="text-align:right">Turn</th>
+								<th style="text-align:center">Action</th>
 							</tr>
 							<c:forEach items="${longturnGamesList}" var="game">
 								<tr
@@ -367,7 +357,7 @@
 												</c:otherwise>
 										</c:choose>
 									</td>
-									<td class="hidden-xs">
+									<td>
 											<c:if test="${game.turn lt 13}">
 												<span style="color: #3718c1">${game.message}</span>
 											</c:if>
@@ -375,8 +365,8 @@
 												${game.message}
 											</c:if>
 									</td>
-									<td>${game.state}</td>
-									<td class="hidden-xs">
+									<td class="hidden-xs" style="text-align:center">${game.state} <span style="color:#32587d; text-shadow:1px 1px #0001">${game.port}</span></td>
+									<td style="text-align:right">
 											<c:if test="${game.turn lt 13}">
 												<span style="color: #3718c1; text-shadow: 1px 1px #d9ceff;">${game.turn}</span>
 											</c:if>
@@ -386,24 +376,16 @@
 									</td>
 									<td><c:choose>
 											<c:when test="${game.state != 'Running'}">
-												<a class="label label-success label-lg"
-													href="/webclient/?action=multi&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
-													Play</a>
+												<a class="label label-success label-lg" href="/webclient/?action=multi&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">Play</a>
 											</c:when>
 											<c:otherwise>
-                                                <a class="label label-success label-lg"
-													href="/webclient/?action=multi&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
-													Play</a>
+                          <a class="label label-success label-lg" href="/webclient/?action=multi&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">Play</a>
 											<c:if test="${game.type} ne 'longturn'}">
-												<a class="label label-success label-lg"
-													href="/webclient/?action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
-													Observe</a>
+												<a class="label label-success label-lg" href="/webclient/?action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">Observe</a>
 											</c:if>
 											</c:otherwise>
 										</c:choose>
-										<a class="label label-primary label-lg"	href="/game/details?host=${game.host}&amp;port=${game.port}">
-											Info
-										</a>
+										<a class="label label-primary label-lg"	href="/game/details?host=${game.host}&amp;port=${game.port}">Info</a>
 									</td>
 								</tr>
 							</c:forEach>
