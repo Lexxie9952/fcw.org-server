@@ -1275,12 +1275,18 @@ input[type='number'] {
 
 li.tech-them {
   font-weight: bold;
-  color: #4061f7;
+  color: #a9d1a7;
+  cursor: alias;
 }
 
 li.tech-me_only {
-  color: #da5d5d;
+  color: #caa7a7;
   font-style: italic;
+  cursor: alias;
+}
+
+li.tech-both {
+  cursor: alias;
 }
 
 li.tech-them::before {
