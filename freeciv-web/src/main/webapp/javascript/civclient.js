@@ -245,6 +245,7 @@ function civclient_init()
   draw_tertiary_colors = simpleStorage.get('tricolore');
   if (draw_tertiary_colors == null) 
     draw_tertiary_colors = false;  // Default case
+  draw_border_mode |= draw_tertiary_colors;
 
   draw_thick_borders = simpleStorage.get('thickBorders');
   if (draw_thick_borders == null) 

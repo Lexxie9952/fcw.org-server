@@ -3101,7 +3101,9 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         simpleStorage.set('borderFlags', draw_border_flags); 
       } else if (alt && !shift && !ctrl) {   // ALT-B tricolore mode
         the_event.stopPropagation();
-        draw_tertiary_colors = !draw_tertiary_colors;
+        draw_border_mode ++;
+        if (draw_border_mode >= 3) draw_border_mode = 0;
+        draw_tertiary_colors = draw_border_mode & 1;
         simpleStorage.set('tricolore', draw_tertiary_colors); 
       } else if (alt && shift && !ctrl) {    // ALT-SHIFT-B moving borders
         the_event.stopPropagation();

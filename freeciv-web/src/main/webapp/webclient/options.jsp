@@ -137,7 +137,12 @@
         <label for="dashed_borders" name="dashed_borders_lbl" class="css-label dark-check-orange"><font color="#f0e0c0">Classic borders</font></label>
     </div>
   </td>
-    <td></td>
+    <td>
+      <div title="(ALT-B) Whether to draw borders" class="main_menu_buttons">
+        <input type='checkbox' class="css-checkbox" name='no_borders' id='no_borders' checked>
+        <label for="no_borders" name="no_borders_lbl" class="css-label dark-check-orange"><font color="#f0e0c0">No borders</font></label>
+      </div>
+    </td>
 </tr>
 
 <tr class="options_row">

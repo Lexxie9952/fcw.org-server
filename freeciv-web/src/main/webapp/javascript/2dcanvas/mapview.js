@@ -647,6 +647,7 @@ function mapview_put_grid_line(pcanvas, dir, color, canvas_x, canvas_y) {
   Renders the national border lines onto the canvas.
 **************************************************************************/
 function mapview_put_border_line(pcanvas, dir, color, color2, color3, canvas_x, canvas_y) {
+  if (draw_border_mode & 2) return;  // 2 is flag not to draw.
   var x = canvas_x + 47;
   var y = canvas_y + 3;
 

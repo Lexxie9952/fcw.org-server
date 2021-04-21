@@ -129,6 +129,7 @@ var update_city_text_in_refresh_tile = true;
 
 var draw_dashed_borders = false;
 var draw_tertiary_colors = false;
+var draw_border_mode = 0; // 0 = no tertiary, 1 = tertiary, 2 = no border at all */
 var draw_thick_borders = false;
 var draw_moving_borders = false;
 var draw_border_flags = false;
@@ -349,6 +350,7 @@ function init_options_dialog()
     $('#tricolor_borders').prop('checked', draw_tertiary_colors);
     $('#tricolor_borders').change(function() {
       draw_tertiary_colors = this.checked;
+      draw_border_mode |= 1;
       simpleStorage.set('tricolore', draw_tertiary_colors); 
     });
     // THICK BORDERS
@@ -362,6 +364,13 @@ function init_options_dialog()
     $('#dashed_borders').change(function() {
       draw_dashed_borders = this.checked;
       simpleStorage.set('dashedBorders', draw_dashed_borders); 
+    });
+    // NO BORDERS (override) 
+    $('#no_borders').prop('checked', (draw_border_mode & 2));
+    $('#no_borders').change(function() {
+      if (this.checked) draw_border_mode |= 2;
+      else draw_border_mode &= 1;
+      //simpleStorage.set('noBorders', draw_border_mode & 2); 
     });
     // MOVING BORDERS 
     $('#moving_borders').prop('checked', draw_moving_borders);
