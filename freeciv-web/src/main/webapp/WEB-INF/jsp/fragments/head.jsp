@@ -151,4 +151,24 @@
 	.nav {
 		font-size: 16px;
 	}
+	.dropdown-menu {
+  	background-image: url('/images/bg-med-dark.jpg');
+		border-radius: 5px;
+		border: 2x solid #000e;
+	}
+	.dropdown-menu .divider {
+			height: 1px;
+			margin: 5px 0;
+			border: 1px solid #000;
+			background-color: #000;
+	}
+	.dropdown-menu>li>a {
+			display: block;
+			padding: 3px 20px;
+			clear: both;
+			font-weight: normal;
+			line-height: 1.42857143;
+			color: #ccc;
+			white-space: nowrap;
+	}
 </style>
