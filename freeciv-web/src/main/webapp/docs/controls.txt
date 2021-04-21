@@ -190,6 +190,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <h2>Main Map (Mouse):</h2><table class="ctrls_tbl"><tr><td><span class="hotkey">  Left-click</span> on city</td><td>            Pop up city dialog</td></tr>
 <tr><td><span class="hotkey">  Left-click</span> on unit</td><td>            Select a single unit</td></tr>
 <tr><td><span class="hotkey">Shift-click</span> unit</td><td>                Add unit(s) on tile or panel to selection</td></tr>
+<tr><td><span class="hotkey">Ctrl-click</span> city</td><td>                 Clicks a city tile as if city isn't there, for selecting units inside it.</td></tr>
 <tr><td><span class="hotkey">Ctrl-Shift click</span> tile</td><td>           Select tile to be worked by city, on main map.</td></tr>
 <tr><td><span class="hotkey">  Right-click</span></td><td>                   Center tile in view</td></tr>
 <tr><td><span class="hotkey">  Right-click unit</span></td><td>              Unit Orders Menu (pop-up)</td></tr>
