@@ -380,7 +380,7 @@ function show_city_dialog(pcity)
       bgiframe: true,
       titleIsHtml: true,
 			modal: false,
-			width: is_small_screen() ? "98%" : "80%",
+			width: is_small_screen() ? "99%" : "80%",
                         height: is_small_screen() ? $(window).height() + 10 : $(window).height() - 80,
                         close : close_city_dialog,
             buttons: dialog_buttons
@@ -408,11 +408,34 @@ function show_city_dialog(pcity)
     // If there is another way to put unicode in these buttons, let me know! But you'd still
     // get problems with iPhone 5 and narrower screens auto-sizing elements to wrong size. 
     // We name these buttons here, after the buttons are resized and parent height is locked.
-    $("#city_dialog").next().children()[0].children[0].innerHTML = "&#9194;Last"
+    $("#city_dialog").next().children()[0].children[0].innerHTML = "&#9194;Last";
     $("#city_dialog").next().children()[0].children[1].innerHTML = "Next&#9193;"
     $("#city_dialog").next().children()[0].children[2].innerHTML = "Buy";
     $("#city_dialog").next().children()[0].children[3].innerHTML = "Name";
-
+    // Swipeleft Swiperight go to prev/next city:
+    /* TODO: when jquery.mobile.min.js is installed right, this will add swipe left/swipe right
+       for next/prev city. Just need to know how to install. ALSO, will be important to do the 
+       .off() function when city dialog exited. 
+    $("#city_dialog").next().children()[0].children[0].id="prev_city_button"; // give id to buttons so we can virtual click them
+    $("#city_dialog").next().children()[0].children[1].id="next_city_button"; // when we swipe left/right
+    $(document).on("swipeleft", "html", function(e) { console.log("SWIPE LEFT!!!") } )
+    $(document).on("swiperight", "html", function(e) { console.log("SWIPE RIGHT!!!") } )
+    */
+    // City worked tiles map canvas, tight fit positioning
+    $("#city_canvas_top_div").css("padding", "0px");
+    $("#city_canvas_top_div").css("margin", "0px");
+    $("#city_canvas_top_div").css("width", "100%");
+    $("#city_canvas_top_div").css("margin-left", "-5px");
+    
+    $("#city_panel").css("padding", "0px")
+    $("#city_dialog").addClass("noscrollbars");
+    $("#city_dialog").css("overflow-y", "hidden");
+    $("#city_dialog").css("overflow-x", "hidden"); // let children overflow if needed but not the whole dialog
+    $("#city_dialog_info").css("width", "100%");
+    $("#city_dialog_info").addClass("noscrollbars");
+    $("#city_viewport").addClass("noscrollbars");
+    $("#city_tabs_0").css("padding","0px");
+    $("#city_dialog").css("margin-left", "-3px");
   } else {
     // align "Change Production" and "Add to Worklist" buttons with the wood panel and tab selector buttons to their left.
     $("#prod_buttons").css({"margin-top": "39px", "margin-right": "2px"});
@@ -440,11 +463,15 @@ function show_city_dialog(pcity)
     $("#ctg").html("<u><b style='font-family:FreecivBlack'>G</b></u>overnor"+(pcity.cma_enabled?" &#x1F539;":"")); // blue diamond to show governor active.
   } else {
     // CMA tab elements: (tight fit)
-    $("#cma_surplus_hdr").css("font-size", "110%");
+    $("#cma_surplus_hdr").css("font-size", "105%");
     //$("#cma_surplus_hdr").html("Surplus");
-    $("#cma_priorities_hdr").css("font-size", "110%");
+    $("#cma_priorities_hdr").css("font-size", "105%");
     //$("#cma_priorities_hdr").html("Priorities");
-    $("#cma_status").css("font-size", "120%");
+    $("#cma_status").css({"font-size": "100%", "margin-top": "-8px"});
+    $("#btn_toggle_cma").prependTo($("#cma_status"));
+    $("#btn_cma_help").prependTo($("#cma_status"));
+    $("#btn_toggle_cma").css("padding", "4px");
+    $("#btn_cma_help").css("padding", "4px");
     $(".mobile_remove").hide(); // don't use remove(), or it gets an undefined for allow disorder
     $(".mobile_shrink").css({"padding": "2px", "margin":"1px", "margin-right":"-2px"});
     $(".mobile_shrink").css("font-size", "100%")
@@ -873,9 +900,11 @@ function show_city_dialog(pcity)
     $("#city_supported_units_list").css( {"width":"4096px"} );
     // Position adjustment hack
     $("#city_tabs-i").css( {"margin-top":"-20px", "padding":"0px"} );
-    $("#city_dialog_info").css( {"width":"110%", "padding":"0px"} );
+    $("#city_dialog_info").css( {"width":"100%", "padding":"0px"} );
     // Adjust vertical to remove 9 pixels of "slack"
     $("#city_overview_tab").css("height", ($("#city_overview_tab").height()-9) );
+    // Hide container for minimized windows when in city screen so they don't occlude things on mobile:
+    $("#dialog-extend-fixed-container").hide();
   }
   // Either/OR, worked better on iPad:
   if (is_small_screen() || touch_device) {
@@ -1406,7 +1435,11 @@ function close_city_dialog()
     center_tile_mapcanvas(city_tile(active_city));
     active_city = null;
     update_map_canvas_full();
-  } 
+  }
+
+  // Closing city dialog re-shows container for minimized windows:
+  if (is_small_screen())
+    $("#dialog-extend-fixed-container").show();
 }
 
 /**************************************************************************
