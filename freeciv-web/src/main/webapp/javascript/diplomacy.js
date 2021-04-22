@@ -327,7 +327,8 @@ function create_diplomacy_dialog(counterpart, template) {
   var title = "Diplomacy: " + counterpart['name']
 		 + " of the " + nations[counterpart['nation']]['adjective'];
 
-  var diplomacy_dialog = $("#diplomacy_dialog_" + counterpart_id);
+  var dialog_id = "#diplomacy_dialog_"+counterpart_id;   
+  var diplomacy_dialog = $(dialog_id);
 
   // Set dialog height - (more height is better for fitting more clauses)
   var dialog_height = 500; // 500 minimum
@@ -335,10 +336,10 @@ function create_diplomacy_dialog(counterpart, template) {
   if (dialog_height > 600) dialog_height = 600;  
 
   diplomacy_dialog.dialog({
-            title: title,
+      title: title,
 			bgiframe: true,
       modal: false,
-      width: is_small_screen() ? "90%" : "50%",
+      width: is_small_screen() ? "95%" : "50%",
       height: dialog_height,
 			buttons: {
 				"Accept treaty": function() {
@@ -362,7 +363,29 @@ function create_diplomacy_dialog(counterpart, template) {
              "restore" : "ui-icon-bullet"
            }});
 
-  diplomacy_dialog_register("#diplomacy_dialog_" + counterpart_id,counterpart_id);
+  diplomacy_dialog_register(dialog_id, counterpart_id);
+  
+  if (is_small_screen()) {
+    $(dialog_id).css("padding", "0px");
+    $(dialog_id).parent().children().first().css("font-size", "70%");
+    // Move give-gold input fields above clause dropdowns on narrow mobile screen:
+    $(".dipl_div").first().children().last().prependTo($(".dipl_div").first());
+    $(".dipl_div").last().children().last().prependTo($(".dipl_div").last());
+    // Push each side to farthest edge for more room
+    $(".dipl_div").first().css("float", "left");
+    $(".dipl_div").last().css("float", "right");
+    // Remove obtuse jquery margins from <a> buttons
+    $("div.dipl_div a").css("margin", "0px");
+    // Reduce huge h3 font on national leader names for more room
+    $(".diplomacy_player_box h3").css("font-size", "100%");
+    // Align each national leader to edge.
+    $(".diplomacy_player_box h3").first().css("text-align", "left");
+    $(".diplomacy_player_box h3").last().css("text-align", "right");
+    // Scale flags a little smaller so thumbs can fit next to them.
+    $(".flag_self,.flag_counterpart").css("transform","scale(.90)");
+    // Main treaty list box, do standard instead of huge font.
+    $(".diplomacy_messages").css("font-size", "100%");
+  }
 
   var nation = nations[pplayer['nation']];
   if (nation['customized']) {

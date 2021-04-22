@@ -882,6 +882,7 @@ function set_default_mapview_inactive()
   if (chatbox_active) {
     $("#game_chatbox_panel").parent().hide();
     $(".mobile_chatbox_dialog").hide();
+    $("#dialog-extend-fixed-container").hide();
   }
   //mapview_active = false;
 }
@@ -908,6 +909,9 @@ function set_default_mapview_active()
   if (active_tab == TAB_CITIES) { // cities dialog is active
     return;
   }
+
+  // Minimized windows (diplomacy windows)
+  $("#dialog-extend-fixed-container").show();
 
   if (!is_small_screen() && overview_active) {
     $("#game_overview_panel").parent().show();
