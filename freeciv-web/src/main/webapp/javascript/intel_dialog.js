@@ -155,7 +155,7 @@ function show_intelligence_report_embassy(pplayer)
 			title: "Intel Report: "
                              + nations[pplayer['nation']]['adjective']
                              + " Empire",
-                        width: "auto"
+                             width: is_small_screen() ? "91%" : "auto"
                      });
 
   $("#intel_dialog").dialog('open');
@@ -186,6 +186,9 @@ function show_intelligence_report_embassy(pplayer)
       event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-both").css("display", "none");
     });
   /*******************************/
+
+  if (is_small_screen())
+    $("#intel_tabs li").children().css("padding", "6px");
 
   dialog_register("#intel_dialog");
   
