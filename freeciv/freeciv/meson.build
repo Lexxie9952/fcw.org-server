@@ -12,6 +12,9 @@ pub_conf_data.set('FREECIV_AI_MOD_LAST', 3)
 priv_conf_data.set('LOCALEDIR',
                    join_paths(get_option('prefix'),
                               get_option('datadir'), 'locale'))
+priv_conf_data.set('BINDIR',
+                   join_paths(get_option('prefix'), get_option('bindir')))
+
 priv_conf_data.set('FREECIV_STORAGE_DIR', '~/.freeciv')
 pub_conf_data.set('FREECIV_STORAGE_DIR', '~/.freeciv')
 priv_conf_data.set('DATADIR',
@@ -85,6 +88,56 @@ endforeach
 foreach hdr : priv_headers
   if c_compiler.has_header(hdr)
     priv_conf_data.set('HAVE_' + hdr.underscorify().to_upper(), 1)
+  endif
+endforeach
+
+priv_functions = [
+  'fork',
+  'vfork',
+  'backtrace',
+  'bind',
+  'connect',
+  'fdopen',
+  'fileno',
+  'flock',
+  'ftime',
+  'getaddrinfo',
+  'gethostbyname',
+  'getline',
+  'getnameinfo',
+  'getpwuid',
+  'gmtime_r',
+  'inet_aton',
+  'inet_ntop',
+  'inet_pton',
+  'localtime_r',
+  'opendir',
+  'pclose',
+  'popen',
+  'putenv',
+  'select',
+  'setenv',
+  'snooze',
+  'strcasecoll',
+  'strcasestr',
+  'strcoll',
+  'strerror',
+  'stricoll',
+  'strstr',
+  'uname',
+  'usleep',
+  'vprintf',
+  'vsnprintf',
+  '_longjmp',
+  '_mkdir',
+  '_setjmp',
+  '_strcoll',
+  '_stricoll'
+  ]
+
+foreach func : priv_functions
+  if c_compiler.has_function(func)
+    priv_conf_data.set('HAVE_' + func.underscorify().to_upper(), 1)
   endif
 endforeach
 
@@ -351,7 +404,6 @@ ais = static_library('fc_ai',
   'ai/tex/texaiplayer.c',
   'ai/tex/texaiworld.c',
   'ai/default/aiair.c',
-  'ai/default/aicity.c',
   'ai/default/aidata.c',
   'ai/default/aidiplomat.c',
   'ai/default/aiferry.c',
@@ -365,6 +417,7 @@ ais = static_library('fc_ai',
   'ai/default/aitech.c',
   'ai/default/aitools.c',
   'ai/default/aiunit.c',
+  'ai/default/daicity.c',
   'ai/default/daidiplomacy.c',
   'ai/default/daidomestic.c',
   'ai/default/daieffects.c',
@@ -1111,6 +1164,7 @@ install_data('data/misc/colors.tilespec',
              'data/misc/cursors.spec',
              'data/misc/space.png',
              'data/misc/space.spec',
+             'data/misc/techs.png',
              'data/misc/techs.spec',
              'data/misc/treaty.png',
              'data/misc/treaty.spec',
@@ -1261,6 +1315,18 @@ executable('freeciv-mp-gtk3',
   include_directories: tool_inc,
   dependencies: [gtk322_dep,
                  c_compiler.find_library('libsqlite3')],
+  link_with: [common_lib, fcmp_common],
+  install: true
+  )
+
+endif
+
+if get_option('fcmp').contains('cli')
+
+executable('freeciv-mp-cli',
+  'tools/fcmp/mpcli.c',
+  include_directories: tool_inc,
+  dependencies: [c_compiler.find_library('libsqlite3')],
   link_with: [common_lib, fcmp_common],
   install: true
   )
