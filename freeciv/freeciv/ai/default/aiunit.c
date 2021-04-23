@@ -66,7 +66,6 @@
 
 /* ai/default */
 #include "aiair.h"
-#include "aicity.h"
 #include "aidata.h"
 #include "aidiplomat.h"
 #include "aiferry.h"
@@ -77,6 +76,7 @@
 #include "aiparatrooper.h"
 #include "aiplayer.h"
 #include "aitools.h"
+#include "daicity.h"
 #include "daimilitary.h"
 
 #include "aiunit.h"
@@ -1371,6 +1371,11 @@ int find_something_to_kill(struct ai_type *ait, struct player *pplayer,
 
       reserves = (acity_data->invasion.attack
                   - unit_list_size(acity->tile->units));
+
+      if (punit->id == 0) {
+        /* Real unit would add 1 to reserves once built. */
+        reserves++;
+      }
 
       if (0 < reserves && (unit_can_take_over(punit)
                            || 0 < acity_data->invasion.occupy)) {
