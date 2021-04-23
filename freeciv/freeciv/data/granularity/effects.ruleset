@@ -51,7 +51,7 @@ value   = 1
 
 [effect_max_rates_base]
 type    = "Max_Rates"
-value   = 40
+value   = 50
 
 [effect_base_size]
 type    = "Size_Adj"
@@ -74,3 +74,24 @@ value   = 1
 [effect_unhappysize]
 type    = "City_Unhappy_Size"
 value   = 4
+
+; Base max city size of 4
+[effect_city_size_limit_base]
+type    = "Size_Adj"
+value   = 4
+
+[effect_city_size_limit_fire]
+type    = "Size_Adj"
+value   = 2
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Fire", "Player"
+    }
+
+[effect_max_rates_government]
+type    = "Max_Rates"
+value   = 20
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Government", "Player"
+    }

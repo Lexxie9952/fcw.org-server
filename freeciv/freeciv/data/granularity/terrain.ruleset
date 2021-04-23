@@ -201,15 +201,15 @@ ocean_resources = FALSE
 ; helptext	       = optional help text string; should escape all raw
 ;		         newlines so that xgettext parsing works
 
-[terrain_generic]
-name                 = _("Generic")
-graphic              = "generic"
-graphic_alt	     = "grassland"
+[terrain_grassland]
+name                 = _("Grassland")
+graphic              = "grassland"
+graphic_alt	     = "-"
 identifier	     = "g"
 class                = "Land"
-movement_cost        = 1
+movement_cost        = 5
 defense_bonus        = 0
-food                 = 100
+food                 = 200
 shield               = 100
 trade                = 0
 resources            = "Generic Resource"
@@ -234,7 +234,7 @@ warmer_wetter_result = "no"
 warmer_drier_result  = "no"
 cooler_wetter_result = "no"
 cooler_drier_result  = "no"
-native_to            = "Generic"
+native_to            = "Land"
 flags                = "Starter", "CanHaveRiver"
 property_temperate   = 50
 property_green       = 50
@@ -242,7 +242,7 @@ color.r              = 200
 color.g              = 200
 color.b              = 200
 helptext	     = _("\
-This is only possible land terrain.\
+Grasslands afford exceptional agricultural opportunities.\
 ")
 
 [terrain_ocean]
@@ -251,7 +251,7 @@ graphic              = "coast"
 graphic_alt	     = "-"
 identifier	     = " "
 class                = "Oceanic"
-movement_cost        = 1
+movement_cost        = 5
 defense_bonus        = 0
 food                 = 100
 shield               = 100
@@ -278,7 +278,7 @@ warmer_wetter_result = "no"
 warmer_drier_result  = "no"
 cooler_wetter_result = "no"
 cooler_drier_result  = "no"
-native_to            = "Generic Ship"
+native_to            = "Sea"
 ;flags                =
 property_ocean_depth = 10
 color.r              = 50
