@@ -3113,6 +3113,7 @@ set =
       "dispersion", 0, FALSE
       "endspaceship", "ENABLED", FALSE 
       "foggedborders", TRUE, FALSE
+      "fixedlength", "ENABLED", TRUE      ; Turn done doesn't advance turn if there is a timeout.
       "freecost", 0, FALSE
       "fulldisorder", "ENABLED", FALSE    ; disorder fully halts one turn of production or buying in a city: closes lots of complex time-consuming micromanaged exploits one would feel obligated to do to be competitive
       "generator", "RANDOM", FALSE
