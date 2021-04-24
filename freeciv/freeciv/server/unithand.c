@@ -5564,9 +5564,7 @@ void handle_unit_orders(struct player *pplayer,
   }
 
   if (length) {
-    order_list = create_unit_orders(length, packet->orders, packet->dir,
-                                    packet->activity, packet->sub_target,
-                                    packet->action);
+    order_list = create_unit_orders(length, packet->orders);
     if (!order_list) {
       log_error("received invalid orders from %s for %s (%d).",
                 player_name(pplayer), unit_rule_name(punit), packet->unit_id);
@@ -5614,13 +5612,13 @@ void handle_unit_orders(struct player *pplayer,
   log_debug("Orders for unit %d: length:%d", packet->unit_id, length);
   for (i = 0; i < length; i++) {
     log_debug("  %d,%s,%s,%d",
-              packet->orders[i], dir_get_name(packet->dir[i]),
-              packet->orders[i] == ORDER_PERFORM_ACTION ?
-                action_id_rule_name(packet->action[i]) :
-                packet->orders[i] == ORDER_ACTIVITY ?
-                  unit_activity_name(packet->activity[i]) :
+              packet->orders[i].order, dir_get_name(packet->orders[i].dir),
+              packet->orders[i].order == ORDER_PERFORM_ACTION ?
+                action_id_rule_name(packet->orders[i].action) :
+                packet->orders[i].order == ORDER_ACTIVITY ?
+                  unit_activity_name(packet->orders[i].activity) :
                   "no action/activity required",
-              packet->sub_target[i]);
+              packet->orders[i].sub_target);
   }
 #endif /* FREECIV_DEBUG */
 

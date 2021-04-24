@@ -2355,7 +2355,7 @@ function worked_tile_click(ptile)
 }
 
 /**************************************************************************
- Handles everything when the user clicked a tile
+  Handles everything when the user clicked a tile
 **************************************************************************/
 function do_map_click(ptile, qtype, first_time_called)
 {
@@ -2616,31 +2616,37 @@ function do_map_click(ptile, qtype, first_time_called)
           "dest_tile": ptile['index']
         };
 
+        var order = {
+          "order"      : ORDER_LAST,
+          "activity"   : ACTIVITY_LAST,
+          "sub_target" : 0,
+          "action"     : ACTION_COUNT,
+          "dir"        : -1
+        };
+
         /* Add each individual order. */
         packet['orders'] = [];
-        packet['dir'] = [];
-        packet['activity'] = [];
-        packet['sub_target'] = [];
-        packet['action'] = [];
         for (var i = 0; i < goto_path['length']; i++) {
           /* TODO: Have the server send the full orders instead of just the
            * dir part. Use that data in stead. */
 
           if (goto_path['dir'][i] == -1) {
             /* Assume that this means refuel. */
-            packet['orders'][i] = ORDER_FULL_MP;
+            order['order'] = ORDER_FULL_MP;
           } else if (i + 1 != goto_path['length']) {
             /* Don't try to do an action in the middle of the path. */
-            packet['orders'][i] = ORDER_MOVE;
+            order['order'] = ORDER_MOVE;
           } else {
             /* It is OK to end the path in an action. */
-            packet['orders'][i] = ORDER_ACTION_MOVE;
+            order['order'] = ORDER_ACTION_MOVE;
           }
 
-          packet['dir'][i] = goto_path['dir'][i];
-          packet['activity'][i] = ACTIVITY_LAST;
-          packet['sub_target'][i] = 0;
-          packet['action'][i] = ACTION_COUNT;
+          order['dir'] = goto_path['dir'][i];
+          order['activity'] = ACTIVITY_LAST;
+          order['sub_target'] = 0;
+          order['action'] = ACTION_COUNT;
+
+          packet['orders'][i] = Object.assign({}, order);
         }
 
         if (goto_last_order != ORDER_LAST) {
@@ -2657,22 +2663,24 @@ function do_map_click(ptile, qtype, first_time_called)
             /* Increase orders length */
             packet['length'] = packet['length'] + 1;
 
-            /* Initialize the order to "empthy" values. */
-            packet['orders'][pos] = ORDER_LAST;
-            packet['dir'][pos] = -1;
-            packet['activity'][pos] = ACTIVITY_LAST;
-            packet['sub_target'][pos] = 0;
-            packet['action'][pos] = ACTION_COUNT;
+            /* Initialize the order to "empty" values. */
+            order['order'] = ORDER_LAST;
+            order['dir'] = -1;
+            order['activity'] = ACTIVITY_LAST;
+            order['sub_target'] = 0;
+            order['action'] = ACTION_COUNT;
           } else {
             /* Replace the existing last order with the final order */
             pos = packet['length'] - 1;
           }
 
           /* Set the final order. */
-          packet['orders'][pos] = goto_last_order;
+          order['order'] = goto_last_order;
 
           /* Perform the final action. */
-          packet['action'][pos] = goto_last_action;
+          order['action'] = goto_last_action;
+
+          packet['orders'][pos] = Object.assign({}, order);
         }
 
         /* The last order has now been used. Clear it. */
@@ -4762,12 +4770,20 @@ function key_unit_connect(extra_id)
     delayed_goto_active = false;
 }
 /**************************************************************************
- Reconstructs a goto orders packet with orders to build an extra on
-   each tile visited along the path. 
+  Reconstructs a goto orders packet with orders to build an extra on
+  each tile visited along the path. 
 **************************************************************************/
 function create_connect_packet(packet)
 {
   if (!packet) return;
+  var order = {
+    "order"      : ORDER_LAST,
+    "activity"   : ACTIVITY_LAST,
+    "sub_target" : 0,
+    "action"     : ACTION_COUNT,
+    "dir"        : -1
+  }
+    
   var new_packet = {   // Copy the meta data from original packet
           "pid"      : packet['pid'],
           "unit_id"  : packet['unit_id'],
@@ -4777,61 +4793,49 @@ function create_connect_packet(packet)
           "vigilant" : packet['vigilant'],
           "dest_tile": packet['dest_tile']    };
   new_packet['orders'] = [];
-  new_packet['dir'] = [];
-  new_packet['activity'] = [];
-  new_packet['sub_target'] = [];
-  new_packet['target'] = [];
-  new_packet['extra'] = [];
-  new_packet['action'] = [];
 
   var punit = units[packet['unit_id']];
   var ptile = tiles[punit['tile']];
   var length = new_packet['length'];
 
   // Reconstruct packet with an order before each move, and one at the end.
-  for (i=0; i<packet['length']+1; i++) {
-    var upgrade_extra = extra_dep(punit,ptile,connect_extra);
+  for (i = 0; i < packet['length'] + 1; i++) {
+    var upgrade_extra = extra_dep(punit, ptile, connect_extra);
     //console.log("upgrade_extra=="+upgrade_extra)
     // insert order before each move
     if (upgrade_extra != CONNECT_ACTION_ILLEGAL) {
-      new_packet['orders'].push(ORDER_ACTIVITY);
-      new_packet['dir'].push(0); // not a move
+      order['order'] = ORDER_ACTIVITY;
+      order['dir']   = 0; // Not a move
 
       /* TODO: when we have ACTIVITY_CULTIVATE, function extra_dep() will figure out we're on forest
        *  or swamp and return -2 flag for this code to activate. For now, connect-irrigation will
        * just walk right over forests and swamps. */
       if (upgrade_extra == -2) { // catch case of irrigate swamp or forest: i.e., drain or chop
-        //new_packet['activity'].push(ACTIVITY_CULTIVATE);
+        //order['activity'] = ACTIVITY_CULTIVATE;
       } 
-      else new_packet['activity'].push(connect_activity);
-    
-      new_packet['target'].push(-1); //could set a connect_target for advanced commands
-      if (upgrade_extra==EXTRA_ROAD) new_packet['sub_target'].push(upgrade_extra);
-      else if (upgrade_extra==EXTRA_RIVER) new_packet['sub_target'].push(upgrade_extra);
-      else if (upgrade_extra==EXTRA_FARMLAND) new_packet['sub_target'].push(upgrade_extra);
-      else if (upgrade_extra==EXTRA_RAIL) new_packet['sub_target'].push(upgrade_extra);
-      else if (upgrade_extra==EXTRA_MAGLEV) new_packet['sub_target'].push(upgrade_extra);
-      
-      else new_packet['sub_target'].push(0); //could set a connect_target for advanced commands
-      new_packet['extra'].push(upgrade_extra);
-      new_packet['action'].push(ACTION_COUNT); //could set a connect_ACTION for more commands
-    } 
+      else order['activity'] = connect_activity;
+
+      order['target'] = -1; // Could set a connect_target for advanced commands
+
+      if (upgrade_extra == EXTRA_ROAD
+          || upgrade_extra == EXTRA_RIVER
+          || upgrade_extra == EXTRA_FARMLAND
+          || upgrade_extra == EXTRA_RAIL
+          || upgrade_extra == EXTRA_MAGLEV)
+        order['sub_target'] = upgrade_extra;
+      else order['sub_target'] = 0; // Could set a connect_target for advanced commands
+      order['action'] = ACTION_COUNT; // Could set a connect_ACTION for more commands
+
+      new_packet['orders'].push(Object.assign({}, order));
+    }
     else {
       length--; // since illegal order not inserted, cut one from length
     }
-    // now insert original packet move order
-    if (i<packet['length']) {
+    // Now insert original packet move order
+    if (i < packet['length']) {
       new_packet['orders'].push(packet['orders'][i]);
-      new_packet['dir'].push(packet['dir'][i]);
-      new_packet['activity'].push(packet['activity'][i]);
-      /* REMOVED: they segfault the new network protocol
-      * new_packet['target'].push(packet['target'][i]);
-      * new_packet['extra'].push(packet['extra'][i]);
-      * new_packet['action'].push(packet['action'][i]); */
-      new_packet['sub_target'].push(0);
-      new_packet['extra'].push(EXTRA_NONE);
-      new_packet['action'].push(ACTION_COUNT);
-      ptile = mapstep(ptile, packet['dir'][i]); // iterate tile for next check
+
+      ptile = mapstep(ptile, packet['orders'][i]['dir']); // iterate tile for next check
     }
   }
   new_packet['length'] = length;
@@ -5848,6 +5852,14 @@ function key_unit_move(dir)
     }
 
     /* Send the order to move using the orders system. */
+    var order = {
+      "order"      : ORDER_ACTION_MOVE,
+      "dir"        : dir,
+      "activity"   : ACTIVITY_LAST,
+      "sub_target" : 0,
+      "action"     : ACTION_COUNT
+    };
+
     var packet = {
       "pid"      : packet_unit_orders,
       "unit_id"  : punit['id'],
@@ -5855,12 +5867,7 @@ function key_unit_move(dir)
       "length"   : 1,
       "repeat"   : false,
       "vigilant" : false,
-      "orders"   : [ORDER_ACTION_MOVE],
-      "dir"      : [dir],
-      "activity" : [ACTIVITY_LAST],
-      "sub_target" : [0],
-      "extra"    : [EXTRA_NONE],
-      "action"   : [ACTION_COUNT],
+      "orders"   : [order],
       "dest_tile": newtile['index']
     };
     send_request(JSON.stringify(packet));

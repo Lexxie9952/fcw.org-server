@@ -197,10 +197,6 @@ extern char encoded_unit_emoji[128];
 #define UNIT_EMOJI(punit) get_web_unit_icon((const struct unit*)punit, &encoded_unit_emoji[0])
 
 struct unit_order *create_unit_orders(int length,
-                                      const enum unit_orders *orders,
-                                      const enum direction8 *dir,
-                                      const enum unit_activity *activity,
-                                      const int *sub_target,
-                                      const action_id *action);
+                                      const struct unit_order *orders);
 
 #endif  /* FC__UNITTOOLS_H */
