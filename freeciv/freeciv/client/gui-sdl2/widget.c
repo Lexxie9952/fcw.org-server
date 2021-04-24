@@ -36,7 +36,6 @@
 /* gui-sdl2 */
 #include "colors.h"
 #include "graphics.h"
-#include "gui_iconv.h"
 #include "gui_id.h"
 #include "gui_main.h"
 #include "gui_tilespec.h"
@@ -321,6 +320,7 @@ Uint16 widget_pressed_action(struct widget *pWidget)
     case WT_ICON:
     case WT_ICON2:
       if (Main.event.type == SDL_KEYDOWN
+          || Main.event.type == SDL_FINGERDOWN
           || (Main.event.type == SDL_MOUSEBUTTONDOWN
               && Main.event.button.button == SDL_BUTTON_LEFT)) {
         set_wstate(pWidget, FC_WS_PRESSED);
@@ -341,6 +341,7 @@ Uint16 widget_pressed_action(struct widget *pWidget)
     case WT_EDIT:
     {
       if (Main.event.type == SDL_KEYDOWN
+          || Main.event.type == SDL_FINGERDOWN
           || (Main.event.type == SDL_MOUSEBUTTONDOWN
               && Main.event.button.button == SDL_BUTTON_LEFT)) {
         bool ret, loop = (get_wflags(pWidget) & WF_EDIT_LOOP);
@@ -370,6 +371,7 @@ Uint16 widget_pressed_action(struct widget *pWidget)
     case WT_VSCROLLBAR:
     case WT_HSCROLLBAR:
       if (Main.event.type == SDL_KEYDOWN
+          || Main.event.type == SDL_FINGERDOWN
           || (Main.event.type == SDL_MOUSEBUTTONDOWN
               && Main.event.button.button == SDL_BUTTON_LEFT)) {
         set_wstate(pWidget, FC_WS_PRESSED);
@@ -387,6 +389,7 @@ Uint16 widget_pressed_action(struct widget *pWidget)
     case WT_CHECKBOX:
     case WT_TCHECKBOX:
       if (Main.event.type == SDL_KEYDOWN
+          || Main.event.type == SDL_FINGERDOWN
           || (Main.event.type == SDL_MOUSEBUTTONDOWN
               && Main.event.button.button == SDL_BUTTON_LEFT)) {
         set_wstate(pWidget, FC_WS_PRESSED);
@@ -406,6 +409,7 @@ Uint16 widget_pressed_action(struct widget *pWidget)
       break;
     case WT_COMBO:
       if (Main.event.type == SDL_KEYDOWN
+          || Main.event.type == SDL_FINGERDOWN
           || (Main.event.type == SDL_MOUSEBUTTONDOWN
               && Main.event.button.button == SDL_BUTTON_LEFT)) {
         set_wstate(pWidget, FC_WS_PRESSED);
