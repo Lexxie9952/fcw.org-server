@@ -23,6 +23,7 @@ extern "C" {
 
 struct cm_parameter;
 struct worklist;
+struct unit_order;
 struct requirement;
 struct act_prob;
 
@@ -143,6 +144,8 @@ bool dio_get_cm_parameter_raw(struct data_in *din, struct cm_parameter *param)
     fc__attribute((nonnull (2)));
 bool dio_get_worklist_raw(struct data_in *din, struct worklist *pwl)
     fc__attribute((nonnull (2)));
+bool dio_get_unit_order_raw(struct data_in *din, struct unit_order *order)
+    fc__attribute((nonnull (2)));
 bool dio_get_requirement_raw(struct data_in *din, struct requirement *preq)
     fc__attribute((nonnull (2)));
 bool dio_get_action_probability_raw(struct data_in *din,
@@ -190,6 +193,8 @@ void dio_put_city_map_raw(struct raw_data_out *dout, const char *value);
 void dio_put_cm_parameter_raw(struct raw_data_out *dout,
                               const struct cm_parameter *param);
 void dio_put_worklist_raw(struct raw_data_out *dout, const struct worklist *pwl);
+void dio_put_unit_order_raw(struct raw_data_out *dout,
+                            const struct unit_order *order);
 void dio_put_requirement_raw(struct raw_data_out *dout, const struct requirement *preq);
 void dio_put_action_probability_raw(struct raw_data_out *dout,
                                     const struct act_prob *aprob);

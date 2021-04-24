@@ -304,6 +304,9 @@ extern const Activity_type_id tile_changing_activities[ACTIVITY_LAST];
   activity_type_list_iterate_end                                            \
 }
 
+bool are_unit_orders_equal(const struct unit_order *order1,
+                           const struct unit_order *order2);
+
 int unit_shield_value(const struct unit *punit,
                       const struct unit_type *punittype,
                       const struct action *paction);

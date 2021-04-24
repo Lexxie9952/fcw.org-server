@@ -27,6 +27,7 @@ extern "C" {
 #include "connection.h"
 
 struct cm_parameter;
+struct unit_order;
 struct worklist;
 struct requirement;
 
@@ -78,6 +79,9 @@ bool dio_get_cm_parameter_json(struct connection *pc, struct data_in *din,
 bool dio_get_worklist_json(struct connection *pc, struct data_in *din,
                            struct plocation *location,
                            struct worklist *pwl);
+bool dio_get_unit_order_json(struct connection *pc, struct data_in *din,
+                             struct plocation *location,
+                             struct unit_order *order);
 bool dio_get_requirement_json(struct connection *pc, struct data_in *din,
                               const struct plocation *location,
                               struct requirement *preq);
@@ -145,7 +149,10 @@ void dio_put_city_map_json(struct json_data_out *dout,
                            const char *value);
 void dio_put_cm_parameter_json(struct json_data_out *dout,
                                struct plocation *location,
-                               const struct cm_parameter *order);                           
+                               const struct cm_parameter *order);
+void dio_put_unit_order_json(struct json_data_out *dout,
+                             struct plocation *location,
+                             const struct unit_order *order);
 void dio_put_worklist_json(struct json_data_out *dout,
                            struct plocation *location,
                            const struct worklist *pwl);
