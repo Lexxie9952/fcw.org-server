@@ -1531,7 +1531,8 @@ function handle_wonders_report()
       if (!client_is_observer() && player_has_wonder(client.conn.playing.playerno,w)) {
         color_marker = "<span style='color: rgb(128,192,255); text-shadow: 1px 1px #000'>";
       }
-      appended_message += "<tr><td>" + color_marker + improvements[w].name+"</span></td><td><b>"+wonders[w] + "</b></td></tr>";
+      appended_message += "<tr style='cursor:default' title='"+html_safe(improvements[w].helptext)+"'>" 
+        + "<td>" + color_marker + improvements[w].name+"</span></td><td><b>"+wonders[w] + "</b></td></tr>";
     }
   }
   appended_message += "</table></div>";
