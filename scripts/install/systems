@@ -1,5 +1,6 @@
 # Install script for different systems
 # vendor[TAB]codename[TAB]script
+Ubuntu	focal	deb.sh
 Ubuntu	bionic	deb.sh
 Ubuntu	xenial	deb.sh
 Debian	stretch	deb.sh
