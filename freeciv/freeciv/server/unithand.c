@@ -1516,9 +1516,21 @@ static void explain_why_no_action_enabled(struct unit *punit,
     break;
   case ANEK_NO_WAR:
     notify_player(pplayer, unit_tile(punit), E_BAD_COMMAND, ftc_server,
-                  _("You must declare war on %s first.  Try using "
-                    "the Nations report."),
-                  player_name(explnat->no_war_with));
+                  _("💢 Your %s %s unable to aggress the <span class='nation_link'>tile</span>: "),
+                  unit_name_translation(punit),
+                  (is_unit_plural(punit) ? "are" : "is"));
+    notify_player(
+          pplayer, NULL, E_BAD_COMMAND, ftc_server,
+          _("You must "
+            "<span title='Declare war on %s.' class='nation_link' "
+            "onclick='nation_table_select_player(%d); $(&apos;#cancel_treaty_button&apos;).click()'>"
+            "declare war on %s</span> first. Use the "
+            "<span class='nation_link' onclick='nation_table_select_player(%d);'>"
+            "Nations</span> tab for diplomacy."),
+          player_name(explnat->no_war_with),
+          player_index(explnat->no_war_with),
+          player_name(explnat->no_war_with),
+          player_index(explnat->no_war_with));
     break;
   case ANEK_DOMESTIC:
     notify_player(pplayer, unit_tile(punit), E_BAD_COMMAND, ftc_server,
