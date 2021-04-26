@@ -301,7 +301,7 @@ function html_safe(text)
 {
   text = text.replace(/'/g, "&#39;");
   text = text.replace(/"/g, "&#34;");
-  
+  text = text.replace(/[\x03]/g,"\n");
   return text;
 }
 
