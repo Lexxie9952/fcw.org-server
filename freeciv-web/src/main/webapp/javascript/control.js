@@ -5880,7 +5880,7 @@ function key_unit_move(dir)
 }
 
 /**************************************************************************
- Move the unit s in the focused/selected stack in the specified direction.
+  Move the unit s in the focused/selected stack in the specified direction.
 **************************************************************************/
 function key_unit_move_focus_index(dir, s)
 {
@@ -5900,6 +5900,14 @@ function key_unit_move_focus_index(dir, s)
       return;
     }
 
+    var order = {
+      "order"      : ORDER_ACTION_MOVE,
+      "dir"        : dir,
+      "activity"   : ACTIVITY_LAST,
+      "sub_target" : 0,
+      "action"     : ACTION_COUNT
+    }
+
     /* Send the order to move using the orders system. */
     var packet = {
       "pid"      : packet_unit_orders,
@@ -5908,11 +5916,7 @@ function key_unit_move_focus_index(dir, s)
       "length"   : 1,
       "repeat"   : false,
       "vigilant" : false,
-      "orders"   : [ORDER_ACTION_MOVE],
-      "dir"      : [dir],
-      "activity" : [ACTIVITY_LAST],
-      "sub_target": [0],
-      "action"   : [ACTION_COUNT],
+      "orders"   : [order],
       "dest_tile": newtile['index']
     };
 
