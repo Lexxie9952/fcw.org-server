@@ -1359,14 +1359,14 @@ void request_orders_cleared(struct unit *punit)
 }
 
 /************************************************************************//**
-  Send a path as a goto or patrol route to the server.
+  Creates orders for a path as a goto or patrol route.
 ****************************************************************************/
-static void send_path_orders(struct unit *punit, struct pf_path *path,
-                             bool repeat, bool vigilant,
+static void make_path_orders(struct unit *punit, struct pf_path *path,
                              enum unit_orders orders,
-                             struct unit_order *final_order)
+                             struct unit_order *final_order,
+                             struct unit_order *order_list,
+                             int *length, int *dest_tile)
 {
-  struct packet_unit_orders p;
   int i;
   struct tile *old_tile;
 
@@ -1374,60 +1374,46 @@ static void send_path_orders(struct unit *punit, struct pf_path *path,
   fc_assert_ret_msg(unit_tile(punit) == path->positions[0].tile,
                     "Unit %d has moved without goto cancelation.",
                     punit->id);
-
-  if (path->length == 1 && final_order == NULL) {
-    return; /* No path at all, no need to spam the server. */
-  }
-
-  memset(&p, 0, sizeof(p));
-  p.unit_id = punit->id;
-  p.src_tile = tile_index(unit_tile(punit));
-  p.repeat = repeat;
-  p.vigilant = vigilant;
-
-  log_goto_packet("Orders for unit %d:", punit->id);
+  fc_assert_ret(length != NULL);
 
   /* We skip the start position. */
-  p.length = path->length - 1;
-  fc_assert(p.length < MAX_LEN_ROUTE);
+  *length = path->length - 1;
+  fc_assert(*length < MAX_LEN_ROUTE);
   old_tile = path->positions[0].tile;
-
-  log_goto_packet("  Repeat: %d. Vigilant: %d. Length: %d",
-                  p.repeat, p.vigilant, p.length);
 
   /* If the path has n positions it takes n-1 steps. */
   for (i = 0; i < path->length - 1; i++) {
     struct tile *new_tile = path->positions[i + 1].tile;
 
     if (same_pos(new_tile, old_tile)) {
-      p.orders[i].order = ORDER_FULL_MP;
-      p.orders[i].dir = DIR8_ORIGIN;
-      p.orders[i].activity = ACTIVITY_LAST;
-      p.orders[i].sub_target = -1;
-      p.orders[i].action = ACTION_NONE;
+      order_list[i].order = ORDER_FULL_MP;
+      order_list[i].dir = DIR8_ORIGIN;
+      order_list[i].activity = ACTIVITY_LAST;
+      order_list[i].sub_target = -1;
+      order_list[i].action = ACTION_NONE;
       log_goto_packet("  packet[%d] = wait: %d,%d", i, TILE_XY(old_tile));
     } else {
-      p.orders[i].order = orders;
-      p.orders[i].dir = get_direction_for_step(&(wld.map), old_tile, new_tile);
-      p.orders[i].activity = ACTIVITY_LAST;
-      p.orders[i].sub_target = -1;
-      p.orders[i].action = ACTION_NONE;
+      order_list[i].order = orders;
+      order_list[i].dir = get_direction_for_step(&(wld.map), old_tile, new_tile);
+      order_list[i].activity = ACTIVITY_LAST;
+      order_list[i].sub_target = -1;
+      order_list[i].action = ACTION_NONE;
       log_goto_packet("  packet[%d] = move %s: %d,%d => %d,%d",
-                      i, dir_get_name(p.orders[i].dir),
+                      i, dir_get_name(order_list[i].dir),
                       TILE_XY(old_tile), TILE_XY(new_tile));
     }
     old_tile = new_tile;
   }
 
   if (i > 0
-      && p.orders[i - 1].order == ORDER_MOVE
+      && order_list[i - 1].order == ORDER_MOVE
       && (is_non_allied_city_tile(old_tile, client_player()) != NULL
           || is_non_allied_unit_tile(old_tile, client_player()) != NULL)) {
     /* Won't be able to perform a regular move to the target tile... */
     if (!final_order) {
       /* ...and no final order exists. Choose what to do when the unit gets
        * there. */
-      p.orders[i - 1].order = ORDER_ACTION_MOVE;
+      order_list[i - 1].order = ORDER_ACTION_MOVE;
     } else {
       /* ...and a final order exist. Can't assume an action move. Did the
        * caller hope that the situation would change before the unit got
@@ -1444,18 +1430,71 @@ static void send_path_orders(struct unit *punit, struct pf_path *path,
 
   if (final_order) {
     /* Append the final order after moving to the target tile. */
-    p.orders[i].order = final_order->order;
-    p.orders[i].dir = final_order->dir;
-    p.orders[i].activity = (final_order->order == ORDER_ACTIVITY)
+    order_list[i].order = final_order->order;
+    order_list[i].dir = final_order->dir;
+    order_list[i].activity = (final_order->order == ORDER_ACTIVITY)
       ? final_order->activity : ACTIVITY_LAST;
-    p.orders[i].sub_target = final_order->sub_target;
-    p.orders[i].action = final_order->action;
-    p.length++;
+    order_list[i].sub_target = final_order->sub_target;
+    order_list[i].action = final_order->action;
+    (*length)++;
   }
 
-  p.dest_tile = tile_index(old_tile);
+  if (dest_tile) {
+    *dest_tile = tile_index(old_tile);
+  }
+}
+
+/************************************************************************//**
+  Send a path as a goto or patrol route to the server.
+****************************************************************************/
+static void send_path_orders(struct unit *punit, struct pf_path *path,
+                             bool repeat, bool vigilant,
+                             enum unit_orders orders,
+                             struct unit_order *final_order)
+{
+  struct packet_unit_orders p;
+
+  if (path->length == 1 && final_order == NULL) {
+    return; /* No path at all, no need to spam the server. */
+  }
+
+  memset(&p, 0, sizeof(p));
+  p.unit_id = punit->id;
+  p.src_tile = tile_index(unit_tile(punit));
+  p.repeat = repeat;
+  p.vigilant = vigilant;
+
+  log_goto_packet("Orders for unit %d:", punit->id);
+  log_goto_packet("  Repeat: %d. Vigilant: %d.",
+                  p.repeat, p.vigilant);
+
+  make_path_orders(punit, path, orders, final_order,
+                   p.orders, &p.length, &p.dest_tile);
 
   send_packet_unit_orders(&client.conn, &p);
+}
+
+/************************************************************************//**
+  Send a path as a goto or patrol rally orders to the server.
+****************************************************************************/
+static void send_rally_path_orders(struct city *pcity, struct unit *punit,
+                                   struct pf_path *path, bool vigilant,
+                                   enum unit_orders orders,
+                                   struct unit_order *final_order)
+{
+  struct packet_city_rally_point p;
+
+  memset(&p, 0, sizeof(p));
+  p.city_id = pcity->id;
+  p.vigilant = vigilant;
+
+  log_goto_packet("Rally orders for city %d:", pcity->id);
+  log_goto_packet("  Vigilant: %d.", p.vigilant);
+
+  make_path_orders(punit, path, orders, final_order,
+                   p.orders, &p.length, NULL);
+
+  send_packet_city_rally_point(&client.conn, &p);
 }
 
 /************************************************************************//**
@@ -1465,6 +1504,16 @@ void send_goto_path(struct unit *punit, struct pf_path *path,
 		    struct unit_order *final_order)
 {
   send_path_orders(punit, path, FALSE, FALSE, ORDER_MOVE, final_order);
+}
+
+/************************************************************************//**
+  Send an arbitrary rally path for the city to the server.
+****************************************************************************/
+void send_rally_path(struct city *pcity, struct unit *punit,
+                     struct pf_path *path, struct unit_order *final_order)
+{
+  send_rally_path_orders(pcity, punit, path, FALSE,
+                         ORDER_MOVE, final_order);
 }
 
 /************************************************************************//**
@@ -1487,6 +1536,47 @@ bool send_goto_tile(struct unit *punit, struct tile *ptile)
     pf_path_destroy(path);
     return TRUE;
   } else {
+    return FALSE;
+  }
+}
+
+/************************************************************************//**
+  Send rally orders for the city to move new units to the arbitrary tile.
+  Returns FALSE if no path is found for the currently produced unit type.
+****************************************************************************/
+bool send_rally_tile(struct city *pcity, struct tile *ptile)
+{
+  struct unit_type *putype;
+  struct unit *punit;
+
+  struct pf_parameter parameter;
+  struct pf_map *pfm;
+  struct pf_path *path;
+
+  /* Create a virtual unit of the type being produced by the city. */
+  if (pcity->production.kind != VUT_UTYPE) {
+    /* Can only give orders to units. */
+    return FALSE;
+  }
+  putype = pcity->production.value.utype;
+  punit = unit_virtual_create(
+    client_player(), pcity, putype,
+    city_production_unit_veteran_level(pcity, putype));
+
+  /* Use the unit to find a path to the destination tile. */
+  goto_fill_parameter_base(&parameter, punit);
+  pfm = pf_map_new(&parameter);
+  path = pf_map_path(pfm, ptile);
+  pf_map_destroy(pfm);
+
+  if (path) {
+    /* Send orders to server. */
+    send_rally_path(pcity, punit, path, NULL);
+    unit_virtual_destroy(punit);
+    pf_path_destroy(path);
+    return TRUE;
+  } else {
+    unit_virtual_destroy(punit);
     return FALSE;
   }
 }

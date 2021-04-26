@@ -181,23 +181,6 @@ const bv_extras *tile_extras_safe(const struct tile *ptile)
 }
 
 /************************************************************************//**
-  Adds base to tile.
-  FIXME: Should remove conflicting old base and return bool indicating that.
-****************************************************************************/
-void tile_add_base(struct tile *ptile, const struct base_type *pbase)
-{
-  tile_add_extra(ptile, base_extra_get(pbase));
-}
-
-/************************************************************************//**
-  Removes base from tile if such exist
-****************************************************************************/
-void tile_remove_base(struct tile *ptile, const struct base_type *pbase)
-{
-  tile_remove_extra(ptile, base_extra_get(pbase));
-}
-
-/************************************************************************//**
   Check if tile contains base providing effect
 ****************************************************************************/
 bool tile_has_base_flag(const struct tile *ptile, enum base_flag_id flag)
@@ -901,26 +884,6 @@ bool tile_has_river(const struct tile *ptile)
 }
 
 /************************************************************************//**
-  Adds road to tile
-****************************************************************************/
-void tile_add_road(struct tile *ptile, const struct road_type *proad)
-{
-  if (proad != NULL) {
-    tile_add_extra(ptile, road_extra_get(proad));
-  }
-}
-
-/************************************************************************//**
-  Removes road from tile if such exist
-****************************************************************************/
-void tile_remove_road(struct tile *ptile, const struct road_type *proad)
-{
-  if (proad != NULL) {
-    tile_remove_extra(ptile, road_extra_get(proad));
-  }
-}
-
-/************************************************************************//**
   Check if tile contains road providing effect
 ****************************************************************************/
 bool tile_has_road_flag(const struct tile *ptile, enum road_flag_id flag)
@@ -1066,6 +1029,7 @@ struct tile *tile_virtual_new(const struct tile *ptile)
   vtile->units = unit_list_new();
   vtile->worked = NULL;
   vtile->owner = NULL;
+  vtile->placing = NULL;
   vtile->extras_owner = NULL;
   vtile->claimer = NULL;
   vtile->spec_sprite = NULL;
@@ -1192,4 +1156,12 @@ bool tile_set_label(struct tile *ptile, const char *label)
   }
 
   return changed;
+}
+
+/************************************************************************//**
+  Is there a placing ongoing?
+****************************************************************************/
+bool tile_is_placing(const struct tile *ptile)
+{
+  return ptile->placing != NULL;
 }
