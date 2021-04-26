@@ -100,7 +100,8 @@ function show_intelligence_report_embassy(pplayer)
     if (players[pplayer.playerno].wonders[w] != 0  // player has wonder
         && improvements[w].genus <= 1   ) {  // 0==great wonder, 1==small wonder, 2==normal improv.
           intel_data['wndr'].push({
-            name: improvements[w].name
+            name: improvements[w].name,
+            helptext: html_safe(improvements[w].helptext)
           });
     }
   }
