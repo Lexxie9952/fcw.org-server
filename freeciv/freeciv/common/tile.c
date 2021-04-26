@@ -1029,6 +1029,7 @@ struct tile *tile_virtual_new(const struct tile *ptile)
   vtile->units = unit_list_new();
   vtile->worked = NULL;
   vtile->owner = NULL;
+  vtile->placing = NULL;
   vtile->extras_owner = NULL;
   vtile->claimer = NULL;
   vtile->spec_sprite = NULL;
@@ -1155,4 +1156,12 @@ bool tile_set_label(struct tile *ptile, const char *label)
   }
 
   return changed;
+}
+
+/************************************************************************//**
+  Is there a placing ongoing?
+****************************************************************************/
+bool tile_is_placing(const struct tile *ptile)
+{
+  return ptile->placing != NULL;
 }

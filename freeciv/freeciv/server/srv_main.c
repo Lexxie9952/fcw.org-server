@@ -1296,6 +1296,32 @@ static void begin_phase(bool is_new_phase)
      * the start of the turn! */
     unit_wait_list_clear(server.unit_waits);
 
+    whole_map_iterate(&(wld.map), ptile) {
+      if (ptile->placing != NULL) {
+        struct player *owner = NULL;
+
+        if (game.info.borders != BORDERS_DISABLED) {
+          owner = tile_owner(ptile);
+        } else {
+          struct city *pcity = tile_worked(ptile);
+
+          if (pcity != NULL) {
+            owner = city_owner(pcity);
+          }
+        }
+
+        if (owner == NULL) {
+          /* Abandoned extra placing, clear it. */
+          ptile->placing = NULL;
+        } else {
+          if (is_player_phase(owner, game.info.phase)) {
+            create_extra(ptile, ptile->placing, owner);
+            update_tile_knowledge(ptile);
+            ptile->placing = NULL;
+          }
+        }
+      }
+    } whole_map_iterate_end;    
     phase_players_iterate(pplayer) {
       update_unit_activities(pplayer);
       flush_packets();
