@@ -947,9 +947,9 @@ function get_what_can_unit_pillage_from(punit, ptile)
 
   if (terrains[ptile.terrain].pillage_time == 0) return targets;
   var unit_class = unit_classes[unit_types[punit.type].unit_class_id];
-  
+
   // Abort if unit can't pillage
-  if (!unit_class.flags.isSet(UCF_CAN_PILLAGE)) {
+  if (!utype_can_do_action(unit_type(punit), ACTION_PILLAGE)) {
     if (client_rules_flag[CRF_SURGICAL_PILLAGE]) {
       var ptype = unit_type(punit);
       if (ptype['name'] != "Ground Strike Fighter"
@@ -959,7 +959,7 @@ function get_what_can_unit_pillage_from(punit, ptile)
          ) {
         return targets;
       }
-    }  
+    }
     else return targets;  // abort: unit can't pillage
   }
 
