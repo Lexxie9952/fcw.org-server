@@ -4730,6 +4730,22 @@ function key_unit_irrigate()
 }
 
 /**************************************************************************
+  Tell the units in focus to cultivate.
+**************************************************************************/
+function key_unit_cultivate()
+{
+  var funits = get_units_in_focus();
+  for (var i = 0; i < funits.length; i++) {
+    var punit = funits[i];
+    request_new_unit_activity(punit, ACTIVITY_CULTIVATE, EXTRA_NONE);
+    // Focused unit got orders, make sure not on waiting_list now:
+    remove_unit_id_from_waiting_list(punit['id']);
+  }
+  deactivate_goto(false);
+  setTimeout(update_unit_focus, update_focus_delay);
+}
+
+/**************************************************************************
  Tell the units to remove pollution.
 **************************************************************************/
 function key_unit_pollution()
@@ -5071,6 +5087,22 @@ function key_unit_mine()
     var punit = funits[i];
     /* EXTRA_NONE -> server decides */
     request_new_unit_activity(punit, ACTIVITY_MINE, EXTRA_NONE);
+    // Unit received orders, don't ask orders later:
+    remove_unit_id_from_waiting_list(punit['id']);
+  }
+  deactivate_goto(false);
+  setTimeout(update_unit_focus, update_focus_delay);
+}
+
+/**************************************************************************
+  Tell the units in focus to plant.
+**************************************************************************/
+function key_unit_plant()
+{
+  var funits = get_units_in_focus();
+  for (var i = 0; i < funits.length; i++) {
+    var punit = funits[i];
+    request_new_unit_activity(punit, ACTIVITY_PLANT, EXTRA_NONE);
     // Unit received orders, don't ask orders later:
     remove_unit_id_from_waiting_list(punit['id']);
   }
