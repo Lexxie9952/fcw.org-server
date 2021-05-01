@@ -1447,6 +1447,11 @@ function get_unit_activity_sprite(punit)
                 "connect" : ((punit['orders_length']>0) ? true : false) 
                };
 
+    case ACTIVITY_CULTIVATE:
+       return {"key"      : "unit.irrigate",
+               "offset_x" : unit_activity_offset_x,
+               "offset_y" : - unit_activity_offset_y};
+
     case ACTIVITY_GOTO:
         return {"key" : "unit.goto",
             "offset_x" : unit_activity_offset_x,
@@ -1494,6 +1499,11 @@ function get_unit_activity_sprite(punit)
                              tileset_extra_id_activity_graphic_tag(act_tgt),
               "offset_x" : unit_activity_offset_x,
               "offset_y" : - unit_activity_offset_y};
+
+    case ACTIVITY_PLANT:
+       return {"key"      : "unit.plant",
+               "offset_x" : unit_activity_offset_x,
+               "offset_y" : - unit_activity_offset_y};
 
     case ACTIVITY_BASE:
       return {"key" : tileset_extra_id_activity_graphic_tag(act_tgt),
