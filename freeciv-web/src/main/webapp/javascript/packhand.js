@@ -1653,6 +1653,12 @@ function handle_ruleset_unit(packet)
 
   unit_types[packet['id']] = packet;
 
+  if (packet['build_reqs'].length > 0 && packet['build_reqs'][0]['type'] == VUT_GOVERNMENT) {
+    unit_types[packet['id']].gov_requirement = packet['build_reqs'][0]['value'];
+  } else {
+    unit_types[packet['id']].gov_requirement = GOV_LAST;
+  }
+
   // Placeholder solution for units whose base combat strength is 
   // non-integer and achievea  non-integer base score via a globally
   // applied bonus/penalty in units.ruleset.
