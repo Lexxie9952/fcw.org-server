@@ -1655,7 +1655,7 @@ function handle_ruleset_unit(packet)
 
   unit_types[packet['id']].gov_requirement = GOV_LAST;
   for (var i = 0; i < packet['build_reqs'].length; i++) {
-    if (packet['build_reqs'][i]['type'] == VUT_GOVERNMENT) {
+    if (packet['build_reqs'][i]['kind'] == VUT_GOVERNMENT) {
       unit_types[packet['id']].gov_requirement = packet['build_reqs'][i]['value'];
     }
   }
