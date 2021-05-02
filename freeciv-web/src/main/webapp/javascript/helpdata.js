@@ -453,12 +453,24 @@ function generate_help_text(key)
       msg += div_end;
     }
 
-    // IMPROVEMENT REQS
-    if (improvements[punit_type['impr_requirement']]) // if an impr_req exists to make this unit
-    {
+    // IMPROVEMENT REQ
+    var impr_reqs;
+    var first_req = true;
+    for (var i = 0; i < punit_type['build_reqs'].length; i++) {
+      if (punit_type['build_reqs'][i]['kind'] == VUT_IMPROVEMENT) {
+        var req = improvements[punit_type['build_reqs'][i]['value']]['name'];
+        if (first_req) {
+          impr_reqs = req;
+          first_req = false;
+        } else {
+          impr_reqs += ", " + req;
+        }
+      }
+    }
+    if (!first_req) { // if an impr_req exists to make this unit
       msg += "<div"+flex+" id='utype_fact_req_building'>";
       msg += span1 + "Building Reqs: " + span_end + span2;
-      msg += improvements[punit_type['impr_requirement']]['name'] + " ";
+      msg += impr_reqs + " ";
       msg +=  div_end;
     }
     // TECH REQS
