@@ -905,6 +905,32 @@ input[type='number'] {
   background-image: url("images/ui-icons_cb672b_256x240.png");
 }
 
+/* vet level charts in online manual */
+.vet_level {
+  border-spacing: 12px 0px;
+}
+table.vet_level td {
+  text-align: center;
+}
+table.vet_level th {
+  color: rgb(192, 206, 206) !important;
+  text-decoration: underline;
+}
+table.vet_level tr:nth-child(3) td {
+  color: #bcdabc;
+}
+table.vet_level tr:nth-child(4) td, 
+table.vet_level tr:nth-child(5) td, 
+table.vet_level tr:nth-child(6) td {
+  color: #dddd9f;
+}
+table.vet_level tr:nth-child(7) td, 
+table.vet_level tr:nth-child(8) td, 
+table.vet_level tr:nth-child(9) td {
+  color: #dbc2a1;
+}
+/***********/
+
 #worklist_heading {
   width: 100%;
   float: left;
