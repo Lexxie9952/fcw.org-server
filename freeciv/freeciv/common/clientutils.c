@@ -31,8 +31,14 @@
 
 /************************************************************************//**
   Creates the activity progress text for the given tile.
+
   Caller is responsible now for passing an int *, this empowers other
   code to also use this function to calculate turns left on the tile.
+
+  FIXME: This freeciv-web addition of turns pointer is buggy,
+         as if there's multiple activities going, number of turns is
+         returned just for one of them, and not any logically selected
+         one in that.
 ****************************************************************************/
 const char *concat_tile_activity_text(struct tile *ptile, int *turns)
 {

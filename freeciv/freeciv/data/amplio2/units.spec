@@ -137,8 +137,8 @@ tiles = { "row", "column", "tag"
   4,  5, "u.airplane"         ; Lexxie
   4,  6, "u.swordsmen"        ; Lexxie
   4,  7, "u.siege_ram"        ; Lexxie
-  4,  8, "u.satellite",       ; Lexxie
-  4,  9, "u.falconeers",      ; Lexxie
-  4, 10, "u.zealots",         ; Lexxie
+  4,  8, "u.satellite"        ; Lexxie
+  4,  9, "u.falconeers"       ; Lexxie
+  4, 10, "u.zealots"          ; Lexxie
   4, 11, "u.peasants"         ; Lexxie
 }
