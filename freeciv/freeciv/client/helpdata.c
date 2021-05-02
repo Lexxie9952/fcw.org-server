@@ -1340,19 +1340,6 @@ char *helptext_building(char *buf, size_t bufsz, struct player *pplayer,
                 /* TRANS: bullet point; note trailing space */
                 Q_("?bullet:\u2022 "));
 
-  unit_type_iterate(u) {
-    if (u->need_improvement == pimprove) {
-      if (A_NEVER != u->require_advance) {
-	cat_snprintf(buf, bufsz, _("\u2022 Allows %s (with %s).\n"),
-		     utype_name_translation(u),
-                     advance_name_translation(u->require_advance));
-      } else {
-	cat_snprintf(buf, bufsz, _("\u2022 Allows %s.\n"),
-		     utype_name_translation(u));
-      }
-    }
-  } unit_type_iterate_end;
-
   /* Actions that requires the building to target a city. */
   action_iterate(act) {
     /* Nothing is found yet. */
@@ -1899,12 +1886,6 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
       astr_free(&list);
     }
   } combat_bonus_list_iterate_end;
-
-  if (utype->need_improvement) {
-    cat_snprintf(buf, bufsz,
-                 _("\u27a4 Can only be built if there is %s in the city.\n"),
-                 improvement_name_translation(utype->need_improvement));
-  }
 
   /* Add requirement text for the unit type itself */
   requirement_vector_iterate(&utype->build_reqs, preq) {
