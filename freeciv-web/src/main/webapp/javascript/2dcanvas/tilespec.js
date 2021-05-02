@@ -2450,7 +2450,8 @@ function create_unit_offset_arrays()
           mx -= 6; my += 7; 
           break;
       case "Catapult":
-          vx -= 15; vy += 8;
+          vx -= 14; vy += 15;
+          dx +=2; dy -= 2;
           break;
       case "Cavalry":
           vx += 1; vy -= 11;
@@ -2490,7 +2491,8 @@ function create_unit_offset_arrays()
           dx -= 3; dy -= 4;
           break;
       case "Elephants":                     
-          vx -= 1; vy -= 16;
+          vx += 8; vy -= 9;
+          dx -= 6; dy -= 7;
           break;
       case "Escort Fighter":
           sx = 8;
