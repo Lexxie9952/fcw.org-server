@@ -338,12 +338,6 @@ bool diplomat_investigate(struct player *pplayer, struct unit *pdiplomat,
   } traderoute_packet_list_iterate_end;
   traderoute_packet_list_destroy(routes);
 
-  /* Charge a nominal amount of movement for this. */
-  (pdiplomat->moves_left)--;
-  if (pdiplomat->moves_left < 0) {
-    pdiplomat->moves_left = 0;
-  }
-
   /* this may cause a diplomatic incident */
   action_consequence_success(paction, pplayer,  act_utype, cplayer,
                              city_tile(pcity), city_link(pcity));
@@ -441,12 +435,6 @@ bool diplomat_embassy(struct player *pplayer, struct unit *pdiplomat,
                 _("💼 The %s have established an embassy in %s."),
                 nation_plural_for_player(pplayer),
                 city_link(pcity));
-
-  /* Charge a nominal amount of movement for this. */
-  (pdiplomat->moves_left)--;
-  if (pdiplomat->moves_left < 0) {
-    pdiplomat->moves_left = 0;
-  }
 
   /* this may cause a diplomatic incident */
   action_consequence_success(paction, pplayer, act_utype, cplayer,
