@@ -196,6 +196,10 @@ Building_Saboteur_Resistant
 Capital_City
     The city with this effect is the capital city.
 
+Action_Success_Actor_Move_Cost
+    The number of move fragments lost when a unit successfully performs an
+action. Evaluated and done after the action is successfully completed.
+
 Casus_Belli_Caught
     Checked when a player is caught trying to do an action. Will cause an
     incident with the intended victim player if the value is 1 or higher. The

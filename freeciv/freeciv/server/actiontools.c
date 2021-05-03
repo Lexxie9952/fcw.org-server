@@ -38,8 +38,8 @@ typedef void (*action_notify)(struct player *,
 /**********************************************************************//**
   Wipe an actor if the action it successfully performed consumed it.
 **************************************************************************/
-void action_success_actor_consume(struct action *paction,
-                                  int actor_id, struct unit *actor)
+static void action_success_actor_consume(struct action *paction,
+                                         int actor_id, struct unit *actor)
 {
   if (unit_is_alive(actor_id)
       && utype_is_consumed_by_action(paction, unit_type_get(actor))) {
@@ -54,6 +54,29 @@ void action_success_actor_consume(struct action *paction,
       wipe_unit(actor, ULR_USED, NULL);
     }
   }
+}
+
+/**********************************************************************//**
+  Pay the movement point cost of success.
+**************************************************************************/
+static void action_success_pay_mp(struct action *paction,
+                                  int actor_id, struct unit *actor)
+{
+  if (unit_is_alive(actor_id)) {
+    int spent_mp = unit_pays_mp_for_action(paction, actor);
+    actor->moves_left = MAX(0, actor->moves_left - spent_mp);
+    send_unit_info(NULL, actor);
+  }
+}
+
+/**********************************************************************//**
+  Make the actor that successfully performed the action pay the price.
+**************************************************************************/
+void action_success_actor_price(struct action *paction,
+                                int actor_id, struct unit *actor)
+{
+  action_success_actor_consume(paction, actor_id, actor);
+  action_success_pay_mp(paction, actor_id, actor);
 }
 
 /**********************************************************************//**
@@ -199,8 +222,8 @@ static void action_consequence_common(const struct action *paction,
   int cb_turns = game.server.casusbelliturns;
   bool spam_limit = false; // avoid excessive reporting of incidents.
 
-  /* The victim gets a casus belli if 1 or above. Everyone gets a casus
-   * belli if 1000 or above. */
+  /* The victim gets a casus belli if CASUS_BELLI_VICTIM or above. Everyone
+   * gets a casus belli if CASUS_BELLI_OUTRAGE or above. */
   casus_belli_amount =
       get_target_bonus_effects(NULL,
                                offender, victim_player,
@@ -215,16 +238,16 @@ static void action_consequence_common(const struct action *paction,
    notify_player(offender, victim_tile, E_ENEMY_DIPLOMAT_BRIBE, ftc_server,
                 _("Will '%s' cause an incident? %s. victim_player=%s"),
                 action_name_translation(paction),
-                (casus_belli_amount >= 1 ? "YES!" : "....no...."),
+                (casus_belli_amount >= CASUS_BELLI_VICTIM ? "YES!" : "....no...."),
                 victim_player ? victim_player->name : "NULL");                             
 */
-  if (casus_belli_amount >= 1) {
+  if (casus_belli_amount >= CASUS_BELLI_VICTIM) {
     /* In this situation the specified action provides a casus belli
      * against the actor. */
 
     /* International outrage: This isn't just between the offender and the
      * victim. */
-    const bool int_outrage = casus_belli_amount >= 1000;
+    const bool int_outrage = casus_belli_amount >= CASUS_BELLI_OUTRAGE;
 
     /* Give casus belli. */
     action_give_casus_belli(offender, victim_player, int_outrage);

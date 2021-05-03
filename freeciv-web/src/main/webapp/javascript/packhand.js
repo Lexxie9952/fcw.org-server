@@ -1032,7 +1032,7 @@ function handle_city_sabotage_list(packet)
                 + "the player. That is unimplemented.");
   }
 
-  popup_sabotage_dialog(game_find_unit_by_number(packet['diplomat_id']),
+  popup_sabotage_dialog(game_find_unit_by_number(packet['actor_id']),
                         game_find_city_by_number(packet['city_id']),
                         new BitVector(packet['improvements']),
                         packet['act_id']);
@@ -1300,17 +1300,17 @@ function handle_unit_combat_info(packet)
 **************************************************************************/
 function handle_unit_action_answer(packet)
 {
-  var diplomat_id = packet['diplomat_id'];
+  var actor_id = packet['actor_id'];
   var target_id = packet['target_id'];
   var cost = packet['cost'];
   var action_type = packet['action_type'];
 
   var target_city = game_find_city_by_number(target_id);
   var target_unit = game_find_unit_by_number(target_id);
-  var actor_unit = game_find_unit_by_number(diplomat_id);
+  var actor_unit = game_find_unit_by_number(actor_id);
 
   if (actor_unit == null) {
-    console.log("Bad actor unit (" + diplomat_id
+    console.log("Bad actor unit (" + actor_id
                 + ") in unit action answer.");
     return;
   }

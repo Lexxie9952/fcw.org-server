@@ -2156,6 +2156,23 @@ enum unit_upgrade_result unit_upgrade_info(const struct unit *punit,
 }
 
 /**********************************************************************//**
+  Returns the amount of movement points successfully performing the
+  specified action will consume in the actor unit.
+**************************************************************************/
+int unit_pays_mp_for_action(const struct action *paction,
+                            const struct unit *punit)
+{
+  return get_target_bonus_effects(NULL,
+                                  unit_owner(punit),
+                                  NULL,
+                                  unit_tile(punit)
+                                    ? tile_city(unit_tile(punit)) : NULL,
+                                  NULL, unit_tile(punit),
+                                  punit, unit_type_get(punit), NULL, NULL,
+                                  paction, EFT_ACTION_SUCCESS_MOVE_COST);
+}
+
+/**********************************************************************//**
   Does unit lose hitpoints each turn?
 **************************************************************************/
 bool is_losing_hp(const struct unit *punit)
