@@ -222,8 +222,8 @@ static void action_consequence_common(const struct action *paction,
   int cb_turns = game.server.casusbelliturns;
   bool spam_limit = false; // avoid excessive reporting of incidents.
 
-  /* The victim gets a casus belli if 1 or above. Everyone gets a casus
-   * belli if 1000 or above. */
+  /* The victim gets a casus belli if CASUS_BELLI_VICTIM or above. Everyone
+   * gets a casus belli if CASUS_BELLI_OUTRAGE or above. */
   casus_belli_amount =
       get_target_bonus_effects(NULL,
                                offender, victim_player,
@@ -238,16 +238,16 @@ static void action_consequence_common(const struct action *paction,
    notify_player(offender, victim_tile, E_ENEMY_DIPLOMAT_BRIBE, ftc_server,
                 _("Will '%s' cause an incident? %s. victim_player=%s"),
                 action_name_translation(paction),
-                (casus_belli_amount >= 1 ? "YES!" : "....no...."),
+                (casus_belli_amount >= CASUS_BELLI_VICTIM ? "YES!" : "....no...."),
                 victim_player ? victim_player->name : "NULL");                             
 */
-  if (casus_belli_amount >= 1) {
+  if (casus_belli_amount >= CASUS_BELLI_VICTIM) {
     /* In this situation the specified action provides a casus belli
      * against the actor. */
 
     /* International outrage: This isn't just between the offender and the
      * victim. */
-    const bool int_outrage = casus_belli_amount >= 1000;
+    const bool int_outrage = casus_belli_amount >= CASUS_BELLI_OUTRAGE;
 
     /* Give casus belli. */
     action_give_casus_belli(offender, victim_player, int_outrage);
