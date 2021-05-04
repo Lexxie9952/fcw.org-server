@@ -2447,6 +2447,32 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
       astr_free(&list);
     }
   }
+
+  /* Auto attack immunity. (auto_attack.will_never ruleset setting) */
+  if (server_setting_value_bool_get(
+        server_setting_by_name("autoattack"))) {
+    bool not_an_auto_attacker = TRUE;
+
+    action_auto_perf_iterate(auto_action) {
+      if (auto_action->cause != AAPC_UNIT_MOVED_ADJ) {
+        /* Not relevant for auto attack. */
+        continue;
+      }
+
+      if (requirement_fulfilled_by_unit_type(utype, &auto_action->reqs)) {
+        /* Can be forced to auto attack. */
+        not_an_auto_attacker = FALSE;
+        break;
+      }
+    } action_auto_perf_iterate_end;
+
+    if (not_an_auto_attacker) {
+      CATLSTR(buf, bufsz,
+              _("* Will never be forced (by the autoattack server setting)"
+                " to attack units moving to an adjacent tile.\n"));
+    }
+  }
+
   action_iterate(act) {
     struct action *paction = action_by_number(act);
 
@@ -2686,6 +2712,11 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
                      _("  %s adds %d production.\n"), BULLET,
                      utype_build_shield_cost_base(utype));
         break;
+      case ACTION_HEAL_UNIT:
+        cat_snprintf(buf, bufsz,
+                     _("  * restores up to 25%% of the target unit's"
+                       " hit points.\n"));
+        break;
       case ACTION_FOUND_CITY:
         if (game.scenario.prevent_new_cities) {
           cat_snprintf(buf, bufsz,
@@ -2754,6 +2785,32 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
                          utype->convert_time), BULLET,
                      utype_name_translation(utype->converted_to),
                      utype->convert_time);
+        break;
+      case ACTION_SPY_NUKE:
+      case ACTION_SPY_NUKE_ESC:
+      case ACTION_NUKE:
+        if (game.info.nuke_pop_loss_pct > 0) {
+          cat_snprintf(buf, bufsz,
+                       /* TRANS: percentage */
+                       _("  * %d%% of the population of each city inside"
+                         " the nuclear blast dies.\n"),
+                         game.info.nuke_pop_loss_pct);
+        }
+        if (game.info.nuke_defender_survival_chance_pct > 0) {
+          cat_snprintf(buf, bufsz,
+                       _("  * all units caught in the open by the nuclear"
+                         " blast dies.\n"));
+          cat_snprintf(buf, bufsz,
+                       /* TRANS: percentage */
+                       _("  * a unit caught in the nuclear blast while"
+                         " inside a city has a %d%% chance of survival.\n"),
+                         game.info.nuke_defender_survival_chance_pct);
+        } else {
+          cat_snprintf(buf, bufsz,
+                       _("  * all units caught in the nuclear blast"
+                         " dies.\n"));
+        }
+
         break;
       default:
         /* No action specific details. */
