@@ -160,7 +160,7 @@ static bool insert_veteran_help(char *outbuf, size_t outlen,
   if (veteran->levels == 1) {
     /* Only a single veteran level. Don't bother to name it. */
     if (nolevels) {
-      CATLSTR(outbuf, outlen, nolevels);
+      CATLSTR(outbuf, outlen, "%s", nolevels);
       return TRUE;
     } else {
       return FALSE;
@@ -169,7 +169,7 @@ static bool insert_veteran_help(char *outbuf, size_t outlen,
     int i;
     fc_assert_ret_val(veteran->definitions != NULL, FALSE);
     if (intro) {
-      CATLSTR(outbuf, outlen, intro);
+      CATLSTR(outbuf, outlen, "%s", intro);
       CATLSTR(outbuf, outlen, "\n\n");
     }
     /* raise_chance and work_raise_chance don't get to the client, so we
@@ -530,7 +530,7 @@ static void insert_allows_single(struct universal *psource,
   requirement_vector_iterate(psubjreqs, req) {
     if (!req->quiet && are_universals_equal(psource, &req->source)) {
       /* We're definitely going to print _something_. */
-      CATLSTR(buf, bufsz, prefix);
+      CATLSTR(buf, bufsz, "%s", prefix);
       if (req->present) {
         /* psource enables the subject, but other sources may
          * also be required (or required to be absent). */
@@ -1738,7 +1738,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
         "<b class='unit_desc' style='font-family:SegoeSB;line-height:115%%;font-size:115%%;'>%s</b>\n", _(text));
     } strvec_iterate_end;
   }
-  CATLSTR(buf, bufsz, user_text);
+  CATLSTR(buf, bufsz, "%s", user_text);
   CATLSTR(buf, bufsz, "<hr style='border-top: 1px solid #000'>");
 #endif
 
@@ -1808,8 +1808,8 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
       const char *helptxt = unit_class_flag_helptxt(flagid);
 
       if (helptxt != NULL) {
-        CATLSTR(buf, bufsz, BULLET_SPACE);
-        CATLSTR(buf, bufsz, _(helptxt));
+        CATLSTR(buf, bufsz, "%s", BULLET_SPACE);
+        CATLSTR(buf, bufsz, "%s", _(helptxt));
         CATLSTR(buf, bufsz, "\n");
       }
     }
@@ -1993,8 +1993,8 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
       const char *helptxt = unit_type_flag_helptxt(flagid);
 
       if (helptxt != NULL) {
-        CATLSTR(buf, bufsz, BULLET_SPACE);
-        CATLSTR(buf, bufsz, _(helptxt));
+        CATLSTR(buf, bufsz, "%s", BULLET_SPACE);
+        CATLSTR(buf, bufsz, "%s", _(helptxt));
         CATLSTR(buf, bufsz, "\n");
       }
     }
@@ -3117,8 +3117,8 @@ void helptext_advance(char *buf, size_t bufsz, struct player *pplayer,
       const char *helptxt = tech_flag_helptxt(flagid);
 
       if (helptxt != NULL) {
-        CATLSTR(buf, bufsz, BULLET_SPACE);
-        CATLSTR(buf, bufsz, _(helptxt));
+        CATLSTR(buf, bufsz, "%s", BULLET_SPACE);
+        CATLSTR(buf, bufsz, "%s", _(helptxt));
         CATLSTR(buf, bufsz, "\n");
       }
     }
@@ -3242,8 +3242,8 @@ void helptext_terrain(char *buf, size_t bufsz, struct player *pplayer,
       const char *helptxt = terrain_flag_helptxt(flagid);
 
       if (helptxt != NULL) {
-        CATLSTR(buf, bufsz, BULLET_SPACE);
-        CATLSTR(buf, bufsz, _(helptxt));
+        CATLSTR(buf, bufsz, "%s", BULLET_SPACE);
+        CATLSTR(buf, bufsz, "%s", _(helptxt));
         CATLSTR(buf, bufsz, "\n");
       }
     }
@@ -3558,7 +3558,7 @@ void helptext_extra(char *buf, size_t bufsz, struct player *pplayer,
       if (buildable) {
         CATLSTR(buf, bufsz, _("Requirements to build:\n"));
       }
-      CATLSTR(buf, bufsz, reqsbuf);
+      CATLSTR(buf, bufsz, "%s", reqsbuf);
     }
   }
 
@@ -3660,7 +3660,7 @@ void helptext_extra(char *buf, size_t bufsz, struct player *pplayer,
     } requirement_vector_iterate_end;
     if (reqsbuf[0] != '\0') {
       CATLSTR(buf, bufsz, _("Requirements to remove:\n"));
-      CATLSTR(buf, bufsz, reqsbuf);
+      CATLSTR(buf, bufsz, "%s", reqsbuf);
     }
   }
 
@@ -3686,7 +3686,7 @@ void helptext_extra(char *buf, size_t bufsz, struct player *pplayer,
     fc_snprintf(vrbuf, sizeof(vrbuf),
                 _("%s Visible only if %s known.\n"), BULLET,
                 advance_name_translation(advance_by_number(pextra->visibility_req)));
-    CATLSTR(buf, bufsz, vrbuf);
+    CATLSTR(buf, bufsz, "%s", vrbuf);
   }
 
   if (pextra->eus == EUS_HIDDEN) {
@@ -3792,8 +3792,8 @@ void helptext_extra(char *buf, size_t bufsz, struct player *pplayer,
       const char *helptxt = extra_flag_helptxt(flagid);
 
       if (helptxt != NULL) {
-        CATLSTR(buf, bufsz, BULLET_SPACE);
-        CATLSTR(buf, bufsz, _(helptxt));
+        CATLSTR(buf, bufsz, "%s", BULLET_SPACE);
+        CATLSTR(buf, bufsz, "%s", _(helptxt));
         CATLSTR(buf, bufsz, "\n");
       }
     }
@@ -3878,7 +3878,7 @@ void helptext_extra(char *buf, size_t bufsz, struct player *pplayer,
 
   if (user_text && user_text[0] != '\0') {
     CATLSTR(buf, bufsz, "\n\n");
-    CATLSTR(buf, bufsz, user_text);
+    CATLSTR(buf, bufsz, "%s", user_text);
   }
 }
 
@@ -3925,7 +3925,7 @@ void helptext_goods(char *buf, size_t bufsz, struct player *pplayer,
     fc_strlcat(buf, "\n", bufsz);
   }
 
-  CATLSTR(buf, bufsz, user_text);
+  CATLSTR(buf, bufsz, "%s", user_text);
 }
 
 /************************************************************************//**
@@ -3958,7 +3958,7 @@ void helptext_specialist(char *buf, size_t bufsz, struct player *pplayer,
     fc_strlcat(buf, "\n", bufsz);
   }
 
-  CATLSTR(buf, bufsz, user_text);
+  CATLSTR(buf, bufsz, "%s", user_text);
 }
 
 /************************************************************************//**
@@ -4818,7 +4818,7 @@ void helptext_nation(char *buf, size_t bufsz, struct nation_type *pnation,
     if (buf[0] != '\0') {
       CATLSTR(buf, bufsz, "\n");
     }
-    CATLSTR(buf, bufsz, user_text);
+    CATLSTR(buf, bufsz, "%s", user_text);
   }
 #undef PRINT_BREAK
 }
