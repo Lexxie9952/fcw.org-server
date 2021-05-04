@@ -3259,7 +3259,7 @@ void helptext_terrain(char *buf, size_t bufsz, struct player *pplayer,
   }
   if (user_text && user_text[0] != '\0') {
     CATLSTR(buf, bufsz, "\n\n");
-    CATLSTR(buf, bufsz, user_text);
+    CATLSTR(buf, bufsz, "%s", user_text);
   }
 }
 
