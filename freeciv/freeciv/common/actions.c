@@ -2970,19 +2970,11 @@ case ACTION_CLEAN_POLLUTION:
       /* Keep the old rules about Unreachable and disembarks. */
       return TRI_NO;
     }
-    if (!can_unit_survive_at_tile(&(wld.map), actor_unit, actor_tile)) {
-      /* Keep the old rules. */
-      return TRI_NO;
-    }
     break;
 
   case ACTION_TRANSPORT_UNLOAD:
     if (!can_unit_unload(target_unit, actor_unit)) {
       /* Keep the old rules about Unreachable and disembarks. */
-      return TRI_NO;
-    }
-    if (!can_unit_survive_at_tile(&(wld.map), target_unit, target_tile)) {
-      /* Keep the old rules. */
       return TRI_NO;
     }
     break;
