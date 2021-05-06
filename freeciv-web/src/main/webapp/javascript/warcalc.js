@@ -198,7 +198,7 @@ function warcalc_set_default_vals(punit)
   var power_fact = 100;
 
   // Assume a clicked player unit is being considered for an attacker
-  if (punit['owner'] == client.conn.playing.playerno) {
+  if (!client_is_observer() && punit['owner'] == client.conn.playing.playerno) {
     if (punit['veteran']) {
       if (ptype['veteran_levels'] > 0) {
         power_fact = ptype['power_fact'][punit['veteran']];
