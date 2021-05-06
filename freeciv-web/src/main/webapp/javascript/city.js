@@ -336,11 +336,11 @@ function show_city_dialog(pcity)
         });
         dialog_buttons = $.extend(dialog_buttons, {"Exit": close_city_dialog_trigger});
    }
-  
+   
   // CREATE THE TITLE AND THE SPECIALIST CONTROL PANE IN THE TITLE (for large screens) --------------------------------------
   var city_dialog_title = "<div><span style='float:left;margin-right:70px;'>"
                         + decodeURIComponent(pcity['name']) + " (" + pcity['size'] + ")</span>";
-  if (!is_small_screen() && !observing && client.conn.playing.playerno == pcity['owner'] && specialists != null && Object.keys(specialists) != null) {
+  if (!is_small_screen() && !client_is_observer() && client.conn.playing.playerno == pcity['owner'] && specialists != null && Object.keys(specialists) != null) {
     // Create specialist control pane in title bar.
     var num_specialists = Object.keys(specialists).length;
     if (client_rules_flag[CRF_ASMITH_SPECIALISTS]) {

@@ -178,6 +178,7 @@ function setup_window_size ()
   $(".ui-tabs-tab").css("border-color","#404040");
 
   if (client_is_observer()) {
+    observing = true;
     $("#tabs-cities").hide();
     $("#tabs-empire").hide();
   }
