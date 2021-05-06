@@ -2537,8 +2537,8 @@ function create_unit_offset_arrays()
           mx -= 6; my += 7;
           break;
       case "Horsemen":
-          dx -= 5; dy += 0;
-          vy -= 9;
+          dx -= 4; dy -= 3;
+          vx += 2; vy -= 10;
           break;
       case "Howitzer":
           dx -= 9;  dy += 1;
@@ -2559,7 +2559,7 @@ function create_unit_offset_arrays()
           vx += 9; vy += 16;
           break;
       case "Knights":
-          dx += 3; dy += 1;
+          dx += 3; dy -= 3;
           vx += 9; vy += 4;
           break;
       case "Legion":
