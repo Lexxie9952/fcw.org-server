@@ -153,13 +153,13 @@ function show_intelligence_report_embassy(pplayer)
   $("#intel_dialog").dialog({
 			bgiframe: true,
 			modal: true,
-			title: "Intel Report: "
-                             + nations[pplayer['nation']]['adjective']
-                             + " Empire",
+			title: "" + nations[pplayer['nation']]['adjective'] + " Intel Report",
                              width: is_small_screen() ? "91%" : "auto"
                      });
 
   $("#intel_dialog").dialog('open');
+  // Smaller titlebar font to fit long titles better:
+  $("#intel_dialog").parent().children().first().css("font-size", "85%");
 
   if (gov_name) 
     $("#intel_gov").css({"color": color_gov_color(gov_name,1),
