@@ -4141,8 +4141,10 @@ function key_unit_unload()
         var punit = units_on_tile[i];
         if (punit['transported'] && punit['transported_by'] > 0 &&
           punit['owner'] == client.conn.playing.playerno) {
-          request_unit_do_action(ACTION_TRANSPORT_ALIGHT, punit['id'],
+          if (unit_can_do_unload(punit)) {  
+            request_unit_do_action(ACTION_TRANSPORT_ALIGHT, punit['id'],
                                  punit['transported_by']);
+          }
         } else {
           request_unit_do_action(ACTION_TRANSPORT_UNLOAD,
                                  punit['transported_by'],
@@ -6766,9 +6768,16 @@ function setSwalTheme() {
   $(".sweet-alert").children().css("color", "#d4cfb9");
 }
 
-// Takes an onclick() on the invisible pane over tabs, hides the pane temporarily
-// and clicks the tab under it, then displays the pane again. So we don't have
-// to see stupid url preview links when we hover over our game tabs.
+/****************************************************************************
+ Takes an onclick() on the invisible pane over tabs, disables the pane's
+ clickability temporarily then clickks the tab under it, then displays the
+ pane again. This prevents browser authoritarianism in forcing stupid url
+ preview links when we hover over our game tabs.
+ NOTE: each pane needs a separate index. Current indices are:
+ 1 = main game tabs
+ 2 = city tabs
+ 3 = intel dialog tabs
+****************************************************************************/
 function clickMask(ev, pane) {
   x1 = ev.clientX;
   y1 = ev.clientY;
@@ -6778,24 +6787,11 @@ function clickMask(ev, pane) {
 
   if (x1 !== undefined && y1 !== undefined)
   {
-    if (pane==1) {
-      //$("#ixtjkiller1").hide();
-      $("#ixtjkiller1").css("pointer-events", "none");
-      //console.log(x1+","+y1);
+      $("#ixtjkiller"+pane).css("pointer-events", "none");
       jQuery(document.elementFromPoint(x1, y1)).click();
-      $("#ixtjkiller1").css("pointer-events", "auto");
-      //$("#ixtjkiller1").show();
-    }
-    else {
-      //$("#ixtjkiller2").hide();
-      $("#ixtjkiller2").css("pointer-events", "none");
-      //console.log(x1+","+y1);
-      jQuery(document.elementFromPoint(x1, y1)).click();
-      $("#ixtjkiller2").css("pointer-events", "auto");
-      //$("#ixtjkiller2").show();
-    }
+      $("#ixtjkiller"+pane).css("pointer-events", "auto");
   }
-  //setTimeout( $("#ixtjkiller").show(), 200);
-
-  // TO DO: if failing from undefined x>n times, it just hides it so it works from now on.
+  /* Possible TODO: if counter measures failing x>n times without successful
+     pane click-under, just remove all #ixtjkillern elements to fail over into
+     guaranteed working but with url preview */
 }
