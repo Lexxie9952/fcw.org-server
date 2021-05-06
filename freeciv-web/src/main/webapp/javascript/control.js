@@ -4133,12 +4133,7 @@ function key_unit_unload()
     else if (sunits[s]['transported']) { 
       //console.log("  sunit[i] is cargo)");
       if (unit_can_do_unload(sunits[s])) {
-        var packet = {
-          "pid"         : packet_unit_unload,
-          "cargo_id"    : sunits[s]['id'],
-          "transporter_id"   : sunits[s]['transported_by']
-        };
-        send_request(JSON.stringify(packet));
+        request_unit_do_action(ACTION_TRANSPORT_ALIGHT, sunits[s]['id'], sunits[s]['transported_by']);
         unloaded++;
       }
     }
@@ -4149,16 +4144,14 @@ function key_unit_unload()
       console.log("Indiscriminate loading of all tiles units engaged. Check logic conditions.");   
       for (var i = 0; i < units_on_tile.length; i++) {
         var punit = units_on_tile[i];
-        // old command prior to action_enabler ACTION_TRANSPORT_UNLOAD
-        if (punit['transported'] && punit['transported_by'] > 0 ) {
-          if (unit_can_do_unload(punit)) {
-            var packet = {
-              "pid"         : packet_unit_unload,
-              "cargo_id"    : punit['id'],
-              "transporter_id"   : punit['transported_by']
-            };
-            send_request(JSON.stringify(packet));
-          }
+        if (punit['transported'] && punit['transported_by'] > 0 &&
+          punit['owner'] == client.conn.playing.playerno) {
+          request_unit_do_action(ACTION_TRANSPORT_ALIGHT, punit['id'],
+                                 punit['transported_by']);
+        } else {
+          request_unit_do_action(ACTION_TRANSPORT_UNLOAD,
+                                 punit['transported_by'],
+                                 punit['id']);
         }
       } */
     }

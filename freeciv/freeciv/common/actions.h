@@ -157,12 +157,14 @@ extern "C" {
 #define SPECENUM_VALUE53NAME "Build Mine"
 #define SPECENUM_VALUE54 ACTION_IRRIGATE
 #define SPECENUM_VALUE54NAME "Build Irrigation"
-#define SPECENUM_VALUE55 ACTION_CLEAN_POLLUTION
-#define SPECENUM_VALUE55NAME "Clean Pollution"
-#define SPECENUM_VALUE56 ACTION_CLEAN_FALLOUT
-#define SPECENUM_VALUE56NAME "Clean Fallout"
-#define SPECENUM_VALUE57 ACTION_SPY_ATTACK
-#define SPECENUM_VALUE57NAME "Spy Attack"
+#define SPECENUM_VALUE55 ACTION_TRANSPORT_ALIGHT
+#define SPECENUM_VALUE55NAME "Transport Alight"
+#define SPECENUM_VALUE56 ACTION_CLEAN_POLLUTION
+#define SPECENUM_VALUE56NAME "Clean Pollution"
+#define SPECENUM_VALUE57 ACTION_CLEAN_FALLOUT
+#define SPECENUM_VALUE57NAME "Clean Fallout"
+#define SPECENUM_VALUE58 ACTION_SPY_ATTACK
+#define SPECENUM_VALUE58NAME "Spy Attack"
 #define SPECENUM_BITVECTOR bv_actions
 // ******************************************* new actions require being put in the "ugly hack" for unit_move casus belli at the end of effects.ruleset
 /* Limited by what values num2char() can store in unit orders in

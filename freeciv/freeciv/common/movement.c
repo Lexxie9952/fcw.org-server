@@ -191,6 +191,8 @@ if (strcmp(game.server.rulesetdir, "ag") == 0
   /* Do not just check if unit is transported.
    * Even transported units may step out from transport to fight,
    * if this is their native terrain. */
+  /* TODO: "Transport Alight" can't stop the transporter from unloading the
+   * unit. Check the same tile action enablers once they both are there. */
   return (can_unit_exist_at_tile(nmap, punit, unit_tile(punit))
           && (ptrans == NULL || can_unit_unload(punit, ptrans)));
 }
