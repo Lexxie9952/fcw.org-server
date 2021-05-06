@@ -4117,12 +4117,7 @@ function key_unit_unload()
         // If iterated tile unit is being transported by selected unit, then UNLOAD it!
         if (punit['transported'] && punit['transported_by'] == sunits[s]['id']) {
           if (unit_can_do_unload(punit)) {
-            var packet = {
-              "pid"         : packet_unit_unload,
-              "cargo_id"    : punit['id'],
-              "transporter_id"   : punit['transported_by']
-            };
-            send_request(JSON.stringify(packet));
+            request_unit_do_action(ACTION_TRANSPORT_UNLOAD, punit['transported_by'], punit['id']);
             unloaded++;
           }  
         }
