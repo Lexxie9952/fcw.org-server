@@ -380,7 +380,53 @@ static void hard_code_oblig_hard_reqs(void)
                           "All action enablers for %s must require that "
                           "the target isn't transporting another unit.",
                           ACTION_CAPTURE_UNITS, ACTION_NONE);
-     IMPORTANT ^^                                                       */               
+     IMPORTANT ^^                                                       */
+
+  /* Why this is a hard requirement: sanity. */
+  oblig_hard_req_register(req_from_values(VUT_UNITSTATE, REQ_RANGE_LOCAL,
+                                          FALSE, FALSE, TRUE,
+                                          USP_TRANSPORTING),
+                          TRUE,
+                          "All action enablers for %s must require that "
+                          "the target is transporting a unit.",
+                          ACTION_TRANSPORT_ALIGHT, ACTION_NONE);
+  oblig_hard_req_register(req_from_values(VUT_UNITSTATE, REQ_RANGE_LOCAL,
+                                          FALSE, FALSE, TRUE,
+                                          USP_TRANSPORTED),
+                          FALSE,
+                          "All action enablers for %s must require that "
+                          "the actor is transported.",
+                          ACTION_TRANSPORT_ALIGHT, ACTION_NONE);
+  oblig_hard_req_register(req_from_values(VUT_UNITSTATE, REQ_RANGE_LOCAL,
+                                          FALSE, FALSE, TRUE,
+                                          USP_LIVABLE_TILE),
+                          FALSE,
+                          "All action enablers for %s must require that "
+                          "the actor is on a livable tile.",
+                          ACTION_TRANSPORT_ALIGHT, ACTION_NONE);
+
+  /* Why this is a hard requirement: sanity. */
+  oblig_hard_req_register(req_from_values(VUT_UNITSTATE, REQ_RANGE_LOCAL,
+                                          FALSE, FALSE, TRUE,
+                                          USP_TRANSPORTING),
+                          FALSE,
+                          "All action enablers for %s must require that "
+                          "the actor is transporting a unit.",
+                          ACTION_TRANSPORT_UNLOAD, ACTION_NONE);
+  oblig_hard_req_register(req_from_values(VUT_UNITSTATE, REQ_RANGE_LOCAL,
+                                          FALSE, FALSE, TRUE,
+                                          USP_TRANSPORTED),
+                          TRUE,
+                          "All action enablers for %s must require that "
+                          "the target is transported.",
+                          ACTION_TRANSPORT_UNLOAD, ACTION_NONE);
+  oblig_hard_req_register(req_from_values(VUT_UNITSTATE, REQ_RANGE_LOCAL,
+                                          FALSE, FALSE, TRUE,
+                                          USP_LIVABLE_TILE),
+                          TRUE,
+                          "All action enablers for %s must require that "
+                          "the target is on a livable tile.",
+                          ACTION_TRANSPORT_UNLOAD, ACTION_NONE);
 }
 
 /**********************************************************************//**
@@ -678,6 +724,14 @@ static void hard_code_actions(void)
   actions[ACTION_IRRIGATE] =
       action_new(ACTION_IRRIGATE, ATK_TILE,
                  FALSE, ACT_TGT_COMPL_MANDATORY, TRUE, FALSE,
+                 0, 0, FALSE);
+  actions[ACTION_TRANSPORT_ALIGHT] =
+      action_new(ACTION_TRANSPORT_ALIGHT, ATK_UNIT,
+                 FALSE, ACT_TGT_COMPL_SIMPLE, TRUE, FALSE,
+                 0, 0, FALSE);
+  actions[ACTION_TRANSPORT_UNLOAD] =
+      action_new(ACTION_TRANSPORT_UNLOAD, ATK_UNIT,
+                 FALSE, ACT_TGT_COMPL_SIMPLE, TRUE, FALSE,
                  0, 0, FALSE);
   actions[ACTION_SPY_ATTACK] =
       action_new(ACTION_SPY_ATTACK,
@@ -1884,6 +1938,13 @@ action_actor_utype_hard_reqs_ok(const action_id wanted_action,
     }
     break;
 
+  case ACTION_TRANSPORT_UNLOAD:
+    if (actor_unittype->transport_capacity < 1) {
+      /* Reason: can't transport anything to unload. */
+      return FALSE;
+    }
+    break;
+
   case ACTION_ESTABLISH_EMBASSY:
   case ACTION_ESTABLISH_EMBASSY_STAY:
   case ACTION_SPY_INVESTIGATE_CITY:
@@ -1928,6 +1989,7 @@ action_actor_utype_hard_reqs_ok(const action_id wanted_action,
   case ACTION_CLEAN_POLLUTION:
   case ACTION_CLEAN_FALLOUT:  
   case ACTION_FORTIFY:
+  case ACTION_TRANSPORT_ALIGHT:
   case ACTION_SPY_ATTACK:
     /* No hard unit type requirements. */
     break;
@@ -2092,6 +2154,8 @@ action_hard_reqs_actor(const action_id wanted_action,
   case ACTION_BASE:
   case ACTION_MINE:
   case ACTION_IRRIGATE:
+  case ACTION_TRANSPORT_ALIGHT:
+  case ACTION_TRANSPORT_UNLOAD:
   case ACTION_SPY_ATTACK:
     /* No hard unit requirements. */
     break;
@@ -2900,6 +2964,20 @@ case ACTION_CLEAN_POLLUTION:
     }
     break;
   
+
+  case ACTION_TRANSPORT_ALIGHT:
+    if (!can_unit_unload(actor_unit, target_unit)) {
+      /* Keep the old rules about Unreachable and disembarks. */
+      return TRI_NO;
+    }
+    break;
+
+  case ACTION_TRANSPORT_UNLOAD:
+    if (!can_unit_unload(target_unit, actor_unit)) {
+      /* Keep the old rules about Unreachable and disembarks. */
+      return TRI_NO;
+    }
+    break;
 
   case ACTION_SPY_INVESTIGATE_CITY:
   case ACTION_INV_CITY_SPEND:
@@ -3916,6 +3994,12 @@ action_prob(const action_id wanted_action,
   case ACTION_MINE:
   case ACTION_IRRIGATE:
     chance = ACTPROB_CERTAIN;
+    break;
+  case ACTION_TRANSPORT_ALIGHT:
+    /* TODO */
+    break;
+  case ACTION_TRANSPORT_UNLOAD:
+    /* TODO */
     break;
   case ACTION_COUNT:
     fc_assert(wanted_action != ACTION_COUNT);
@@ -5172,6 +5256,10 @@ const char *action_ui_name_ruleset_var_name(int act)
     return "ui_name_build_mine";
   case ACTION_IRRIGATE:
     return "ui_name_irrigate";
+  case ACTION_TRANSPORT_ALIGHT:
+    return "ui_name_transport_alight";
+  case ACTION_TRANSPORT_UNLOAD:
+    return "ui_name_transport_unload";
   case ACTION_SPY_ATTACK:
     return "ui_name_spy_attack";  
   case ACTION_COUNT:
@@ -5360,6 +5448,12 @@ const char *action_ui_name_default(int act)
   case ACTION_IRRIGATE:
     /* TRANS: Build _Irrigation (100% chance of success). */
     return N_("Build %sIrrigation%s");
+  case ACTION_TRANSPORT_ALIGHT:
+    /* TRANS: _Alight (100% chance of success). */
+    return N_("%sAlight%s");
+  case ACTION_TRANSPORT_UNLOAD:
+    /* TRANS: _Unload (100% chance of success). */
+    return N_("%sUnload%s");
   case ACTION_SPY_ATTACK:
     /* TRANS: _Eliminate Diplomat (100% chance of success). */
     return N_("%sEliminate Diplomat%s");    
