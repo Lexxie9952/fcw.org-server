@@ -48,7 +48,7 @@ function show_pbem_dialog()
     + "<li>Standard Freeciv-web rules are used with some changes to map size, research speed, start units and gold to speed up games.</li>"  
     + "<li>Please complete your turn as soon as possible, and use at no longer than 7 days until you complete your turn.</li>"
     + "<li>Results of games with 2 players are stored to rank players.</li>"
-    + "<li>Please post feedback and arrange new games on the <a href='http://forum.freeciv.org/f/viewforum.php?f=24' style='color: black;' target='_new'>forum</a>.</li>"
+    + "<li>Please post feedback and arrange new games on <a href='https://discord.gg/ZHQGvWeUaP' target='_new'>Discord</a> and the <a href='http://forum.freeciv.org/f/viewforum.php?f=24' target='_new'>Forum</a>.</li>"
     + "<li id='user_count'></li></ul>"; 
   }
 
@@ -69,7 +69,7 @@ function show_pbem_dialog()
 				"Log In" : function() {
                                     login_pbem_user();
 				},
-				  "Account...": function() {
+				  "Deactivate": function() {
                                     close_pbem_account();
 				}
 

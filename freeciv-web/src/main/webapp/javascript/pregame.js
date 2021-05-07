@@ -60,12 +60,18 @@ function pregame_start_game()
 ****************************************************************************/
 function set_alternate_turns()
 {
+  console.log("set_alternate_turns -- setting phasemode; disabling diplomacy, AI.")
   send_message("/set phasemode player");
   send_message("/set minp 2");
   send_message("/set ec_chat=enabled");
   send_message("/set ec_info=enabled");
   send_message("/set ec_max_size=20000");
   send_message("/set ec_turns=32768");
+  // 7 May 2021: additional settings which disallow any diplomacy and AI players:
+  send_message("/set aifill 1");
+  send_message("/set civilwarsize 1000");
+  send_message("/set barbarians disabled");
+  send_message("/set contactturns=0");
 }
 
 /****************************************************************************
