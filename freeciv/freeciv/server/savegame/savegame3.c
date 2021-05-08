@@ -5943,12 +5943,14 @@ static bool sg_load_player_unit(struct loaddata *loading,
           switch ((enum gen_action)order->action) {
           case ACTION_SPY_TARGETED_SABOTAGE_CITY:
           case ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC:
-            /* Sabotage sub target is production (-1) or a building. */
+          case ACTION_STRIKE_BUILDING:
+            /* Sub target is production (-1) or a building. */
             if (!(order_sub_tgt - 1 == -1
                   || improvement_by_number(order_sub_tgt - 1))) {
-              /* Sabotage sub target is invalid. */
-              log_sg("Cannot find building %d for %s to sabotage",
-                     order_sub_tgt, unit_rule_name(punit));
+              /* Sub target is invalid. */
+              log_sg("Cannot find building %d for %s to %s",
+                     order_sub_tgt, unit_rule_name(punit),
+                     action_id_name_translation(order->action));
               order->sub_target = 0;
             } else {
               order->sub_target = order_sub_tgt;
@@ -6025,6 +6027,7 @@ static bool sg_load_player_unit(struct loaddata *loading,
           case ACTION_CONVERT:
           case ACTION_TRANSPORT_ALIGHT:
           case ACTION_TRANSPORT_UNLOAD:
+          case ACTION_TRANSPORT_DISEMBARK1:
           case ACTION_SPY_ATTACK:
           case ACTION_COUNT:
             /* None of these can take a sub target. */

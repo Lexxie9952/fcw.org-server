@@ -5634,10 +5634,11 @@ struct unit_order *create_unit_orders(int length,
       switch ((enum gen_action) orders[i].action) {
       case ACTION_SPY_TARGETED_SABOTAGE_CITY:
       case ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC:
-        /* Sabotage target is production (-1) or a building. */
+      case ACTION_STRIKE_BUILDING:
+        /* Sub target is production (-1) or a building. */
         if (!(orders[i].sub_target - 1 == -1
               || improvement_by_number(orders[i].sub_target - 1))) {
-          /* Sabotage target is invalid. */
+          /* Sub target is invalid. */
           log_error("at index %d, cannot do %s without a target.", i,
                     action_id_rule_name(orders[i].action));
           return NULL;
@@ -5720,6 +5721,7 @@ struct unit_order *create_unit_orders(int length,
       case ACTION_CONVERT:
       case ACTION_TRANSPORT_ALIGHT:
       case ACTION_TRANSPORT_UNLOAD:
+      case ACTION_TRANSPORT_DISEMBARK1:
         /* No validation required. */
         break;
       /* Invalid action. Should have been caught above. */

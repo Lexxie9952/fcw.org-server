@@ -325,13 +325,15 @@ static void hard_code_oblig_hard_reqs(void)
                           ACTION_CONQUER_CITY, ACTION_NONE);
 
   /* Why this is a hard requirement: a unit must move into a city to
-   * conquer it. */
+   * conquer it and move out of a transport to disembark from it. */
   oblig_hard_req_register(req_from_values(VUT_MINMOVES, REQ_RANGE_LOCAL,
                                           FALSE, FALSE, TRUE, 1),
                           FALSE,
                           "All action enablers for %s must require that "
                           "the actor has a movement point left.",
-                          ACTION_CONQUER_CITY, ACTION_NONE);
+                          ACTION_CONQUER_CITY,
+                          ACTION_TRANSPORT_DISEMBARK1,
+                          ACTION_NONE);
 
   /* Why this is a hard requirement: this eliminates the need to
    * check if units transported by the actor unit can exist at the
@@ -396,7 +398,9 @@ static void hard_code_oblig_hard_reqs(void)
                           FALSE,
                           "All action enablers for %s must require that "
                           "the actor is transported.",
-                          ACTION_TRANSPORT_ALIGHT, ACTION_NONE);
+                          ACTION_TRANSPORT_ALIGHT,
+                          ACTION_TRANSPORT_DISEMBARK1,
+                          ACTION_NONE);
   oblig_hard_req_register(req_from_values(VUT_UNITSTATE, REQ_RANGE_LOCAL,
                                           FALSE, FALSE, TRUE,
                                           USP_LIVABLE_TILE),
@@ -669,6 +673,10 @@ static void hard_code_actions(void)
                  ATK_UNITS,
                  TRUE, ACT_TGT_COMPL_SIMPLE, FALSE, TRUE,
                  1, 1, TRUE);
+  actions[ACTION_STRIKE_BUILDING] =
+      action_new(ACTION_STRIKE_BUILDING, ATK_CITY,
+                 TRUE, ACT_TGT_COMPL_MANDATORY, FALSE, FALSE,
+                 1, 1, FALSE);
   actions[ACTION_CONQUER_CITY] =
       action_new(ACTION_CONQUER_CITY, ATK_CITY,
                  TRUE, ACT_TGT_COMPL_SIMPLE, FALSE, TRUE,
@@ -733,6 +741,10 @@ static void hard_code_actions(void)
       action_new(ACTION_TRANSPORT_UNLOAD, ATK_UNIT,
                  FALSE, ACT_TGT_COMPL_SIMPLE, TRUE, FALSE,
                  0, 0, FALSE);
+  actions[ACTION_TRANSPORT_DISEMBARK1] =
+      action_new(ACTION_TRANSPORT_DISEMBARK1, ATK_TILE,
+                 FALSE, ACT_TGT_COMPL_SIMPLE, FALSE, TRUE,
+                 1, 1, FALSE);
   actions[ACTION_SPY_ATTACK] =
       action_new(ACTION_SPY_ATTACK,
                  ATK_UNITS,
@@ -1983,6 +1995,7 @@ action_actor_utype_hard_reqs_ok(const action_id wanted_action,
   case ACTION_HOME_CITY:
   case ACTION_PARADROP:
   case ACTION_AIRLIFT:
+  case ACTION_STRIKE_BUILDING:
   case ACTION_CONQUER_CITY:
   case ACTION_HEAL_UNIT:
   case ACTION_PILLAGE:
@@ -1990,6 +2003,7 @@ action_actor_utype_hard_reqs_ok(const action_id wanted_action,
   case ACTION_CLEAN_FALLOUT:  
   case ACTION_FORTIFY:
   case ACTION_TRANSPORT_ALIGHT:
+  case ACTION_TRANSPORT_DISEMBARK1:
   case ACTION_SPY_ATTACK:
     /* No hard unit type requirements. */
     break;
@@ -2102,6 +2116,13 @@ action_hard_reqs_actor(const action_id wanted_action,
     }
     break;
 
+  case ACTION_TRANSPORT_DISEMBARK1:
+    if (!can_unit_unload(actor_unit, unit_transport_get(actor_unit))) {
+      /* Keep the old rules about Unreachable and disembarks. */
+      return TRI_NO;
+    }
+    break;
+
   case ACTION_ESTABLISH_EMBASSY:
   case ACTION_ESTABLISH_EMBASSY_STAY:
   case ACTION_SPY_INVESTIGATE_CITY:
@@ -2141,6 +2162,7 @@ action_hard_reqs_actor(const action_id wanted_action,
   case ACTION_UPGRADE_UNIT:
   case ACTION_ATTACK:
   case ACTION_SUICIDE_ATTACK:
+  case ACTION_STRIKE_BUILDING:
   case ACTION_CONQUER_CITY:
   case ACTION_HEAL_UNIT:
   case ACTION_TRANSFORM_TERRAIN:
@@ -2979,6 +3001,27 @@ case ACTION_CLEAN_POLLUTION:
     }
     break;
 
+  case ACTION_TRANSPORT_DISEMBARK1:
+    if (!unit_can_move_to_tile(&(wld.map), actor_unit, target_tile,
+                               FALSE, FALSE)) {
+      /* Reason: involves moving to the tile. */
+      return TRI_NO;
+    }
+
+    /* We cannot move a transport into a tile that holds
+     * units or cities not allied with all of our cargo. */
+    if (get_transporter_capacity(actor_unit) > 0) {
+      unit_list_iterate(unit_tile(actor_unit)->units, pcargo) {
+        if (unit_contained_in(pcargo, actor_unit)
+            && (is_non_allied_unit_tile(target_tile, unit_owner(pcargo))
+                || is_non_allied_city_tile(target_tile,
+                                           unit_owner(pcargo)))) {
+           return TRI_NO;
+        }
+      } unit_list_iterate_end;
+    }
+    break;
+
   case ACTION_SPY_INVESTIGATE_CITY:
   case ACTION_INV_CITY_SPEND:
   case ACTION_SPY_POISON:
@@ -3001,6 +3044,7 @@ case ACTION_CLEAN_POLLUTION:
   case ACTION_EXPEL_UNIT:
   case ACTION_DISBAND_UNIT:
   case ACTION_CONVERT:
+  case ACTION_STRIKE_BUILDING:
     /* No known hard coded requirements. */
     break;
   case ACTION_COUNT:
@@ -3973,6 +4017,9 @@ action_prob(const action_id wanted_action,
       }
     }
     break;
+  case ACTION_STRIKE_BUILDING:
+    /* TODO */
+    break;
   case ACTION_CONQUER_CITY:
     /* No battle is fought first. */
     chance = ACTPROB_CERTAIN;
@@ -3999,6 +4046,9 @@ action_prob(const action_id wanted_action,
     /* TODO */
     break;
   case ACTION_TRANSPORT_UNLOAD:
+    /* TODO */
+    break;
+  case ACTION_TRANSPORT_DISEMBARK1:
     /* TODO */
     break;
   case ACTION_COUNT:
@@ -5228,6 +5278,8 @@ const char *action_ui_name_ruleset_var_name(int act)
     return "ui_name_attack";
   case ACTION_SUICIDE_ATTACK:
     return "ui_name_suicide_attack";
+  case ACTION_STRIKE_BUILDING:
+    return "ui_name_surgical_strike_building";
   case ACTION_CONQUER_CITY:
     return "ui_name_conquer_city";
   case ACTION_HEAL_UNIT:
@@ -5260,6 +5312,8 @@ const char *action_ui_name_ruleset_var_name(int act)
     return "ui_name_transport_alight";
   case ACTION_TRANSPORT_UNLOAD:
     return "ui_name_transport_unload";
+  case ACTION_TRANSPORT_DISEMBARK1:
+    return "ui_name_transport_disembark";
   case ACTION_SPY_ATTACK:
     return "ui_name_spy_attack";  
   case ACTION_COUNT:
@@ -5406,6 +5460,9 @@ const char *action_ui_name_default(int act)
   case ACTION_SUICIDE_ATTACK:
     /* TRANS: _Suicide Attack (100% chance of success). */
     return N_("%sSuicide Attack%s");
+  case ACTION_STRIKE_BUILDING:
+    /* TRANS: Surgical Str_ike Building (100% chance of success). */
+    return N_("Surgical Str%sike Building%s");
   case ACTION_CONQUER_CITY:
     /* TRANS: _Conquer City (100% chance of success). */
     return N_("%sConquer City%s");
@@ -5454,6 +5511,9 @@ const char *action_ui_name_default(int act)
   case ACTION_TRANSPORT_UNLOAD:
     /* TRANS: _Unload (100% chance of success). */
     return N_("%sUnload%s");
+  case ACTION_TRANSPORT_DISEMBARK1:
+    /* TRANS: _Disembark (100% chance of success). */
+    return N_("%sDisembark%s");
   case ACTION_SPY_ATTACK:
     /* TRANS: _Eliminate Diplomat (100% chance of success). */
     return N_("%sEliminate Diplomat%s");    

@@ -825,6 +825,23 @@ static void transport_alight_callback(GtkWidget *w, gpointer data)
 }
 
 /**********************************************************************//**
+  User selected "Transport Disembark" from the choice dialog
+**************************************************************************/
+static void disembark1_callback(GtkWidget *w, gpointer data)
+{
+  struct action_data *args = (struct action_data *)data;
+
+  if (NULL != game_unit_by_number(args->actor_unit_id)
+      && NULL != index_to_tile(&(wld.map), args->target_tile_id)) {
+    request_do_action(ACTION_TRANSPORT_DISEMBARK1, args->actor_unit_id,
+                      args->target_tile_id, 0, "");
+  }
+
+  gtk_widget_destroy(act_sel_dialog);
+  free(args);
+}
+
+/**********************************************************************//**
   User selected "Heal Unit" from choice dialog
 **************************************************************************/
 static void heal_unit_callback(GtkWidget *w, gpointer data)
@@ -1595,6 +1612,29 @@ static void spy_request_sabotage_esc_list(GtkWidget *w, gpointer data)
 }
 
 /**********************************************************************//**
+  Requests list of improvements for strike building, the return of which
+  will trigger the popup_sabotage_dialog() function.
+**************************************************************************/
+static void spy_request_strike_bld_list(GtkWidget *w, gpointer data)
+{
+  struct action_data *args = (struct action_data *)data;
+
+  if (NULL != game_unit_by_number(args->actor_unit_id)
+      && NULL != game_city_by_number(args->target_city_id)) {
+    request_action_details(ACTION_STRIKE_BUILDING,
+                           args->actor_unit_id,
+                           args->target_city_id);
+  }
+
+  /* Wait for the server's reply before moving on to the next unit that
+   * needs to know what action to take. */
+  is_more_user_input_needed = TRUE;
+
+  gtk_widget_destroy(act_sel_dialog);
+  free(args);
+}
+
+/**********************************************************************//**
   Pops-up the Spy sabotage dialog, upon return of list of
   available improvements requested by the above function.
 **************************************************************************/
@@ -2011,6 +2051,7 @@ static const GCallback af_map[ACTION_COUNT] = {
   [ACTION_HOME_CITY] = (GCallback)home_city_callback,
   [ACTION_UPGRADE_UNIT] = (GCallback)upgrade_callback,
   [ACTION_AIRLIFT] = (GCallback)airlift_callback,
+  [ACTION_STRIKE_BUILDING] = (GCallback)spy_request_strike_bld_list,
   [ACTION_CONQUER_CITY] = (GCallback)conquer_city_callback,
 
   /* Unit acting against a unit target. */
@@ -2040,6 +2081,7 @@ static const GCallback af_map[ACTION_COUNT] = {
   [ACTION_BASE] = (GCallback)base_callback,
   [ACTION_MINE] = (GCallback)mine_callback,
   [ACTION_IRRIGATE] = (GCallback)irrigate_callback,
+  [ACTION_TRANSPORT_DISEMBARK1] = (GCallback)disembark1_callback,
 
   /* Unit acting with no target except itself. */
   [ACTION_DISBAND_UNIT] = (GCallback)disband_unit_callback,

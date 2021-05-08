@@ -314,7 +314,7 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
     break;
   case EFT_ENABLE_NUKE:
     /* Treat nuke as a Cruise Missile upgrade */
-    v += 20 + ai->stats.units.missiles * 5;
+    v += 20 + ai->stats.units.suicide_attackers * 5;
     break;
   case EFT_ENABLE_SPACE:
     if (victory_enabled(VC_SPACERACE)) {
@@ -661,9 +661,13 @@ adv_want dai_effect_value(struct player *pplayer, struct government *gov,
     break;
   case EFT_ACTION_SUCCESS_MOVE_COST:
   case EFT_ACTION_SUCCESS_TARGET_MOVE_COST:
-    /* Someone may put MAX_MOVE_FRAGS in this effect to make sure that all
-     * movement is gone. */
-    v -= amount / (adv_want)MAX_MOVE_FRAGS;
+    {
+      /* Taking MAX_MOVE_FRAGS takes all the move fragments. */
+      adv_want move_fragment_cost = MIN(MAX_MOVE_FRAGS, amount);
+
+      /* Lose all movement => 1. */
+      v -= move_fragment_cost / (adv_want)MAX_MOVE_FRAGS;
+    }
     break;
   case EFT_COUNT:
     log_error("Bad effect type.");

@@ -560,6 +560,27 @@ static int spy_steal_maps_esc_callback(struct widget *pWidget)
   Requests up-to-date list of improvements, the return of
   which will trigger the popup_sabotage_dialog() function.
 **************************************************************************/
+static int spy_strike_bld_request(struct widget *pWidget)
+{
+  if (NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)
+      && NULL != game_city_by_number(
+              pDiplomat_Dlg->target_ids[ATK_CITY])) {
+    request_action_details(ACTION_STRIKE_BUILDING,
+                           pDiplomat_Dlg->actor_unit_id,
+                           pDiplomat_Dlg->target_ids[ATK_CITY]);
+    is_more_user_input_needed = TRUE;
+    popdown_diplomat_dialog();
+  } else {
+    popdown_diplomat_dialog();
+  }
+
+  return -1;
+}
+
+/**********************************************************************//**
+  Requests up-to-date list of improvements, the return of
+  which will trigger the popup_sabotage_dialog() function.
+**************************************************************************/
 static int spy_sabotage_request(struct widget *pWidget)
 {
   if (NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)
@@ -1197,6 +1218,23 @@ static int transport_alight_callback(struct widget *pWidget)
 }
 
 /**********************************************************************//**
+  User clicked "Transport Disembark"
+**************************************************************************/
+static int disembark1_callback(struct widget *pWidget)
+{
+  if (PRESSED_EVENT(Main.event)) {
+    int actor_id = MAX_ID - pWidget->ID;
+    int target_id = pWidget->data.tile->index;
+
+    popdown_diplomat_dialog();
+    request_do_action(ACTION_TRANSPORT_DISEMBARK1,
+                      actor_id, target_id, 0, "");
+  }
+
+  return -1;
+}
+
+/**********************************************************************//**
   User clicked "Capture Units"
 **************************************************************************/
 static int capture_units_callback(struct widget *pWidget)
@@ -1694,6 +1732,7 @@ static const act_func af_map[ACTION_COUNT] = {
   [ACTION_UPGRADE_UNIT] = upgrade_callback,
   [ACTION_AIRLIFT] = airlift_callback,
   [ACTION_CONQUER_CITY] = conquer_city_callback,
+  [ACTION_STRIKE_BUILDING] = spy_strike_bld_request,
 
   /* Unit acting against a unit target. */
   [ACTION_SPY_BRIBE_UNIT] = diplomat_bribe_callback,
@@ -1722,6 +1761,7 @@ static const act_func af_map[ACTION_COUNT] = {
   [ACTION_BASE] = base_callback,
   [ACTION_MINE] = mine_callback,
   [ACTION_IRRIGATE] = irrigate_callback,
+  [ACTION_TRANSPORT_DISEMBARK1] = disembark1_callback,
 
   /* Unit acting with no target except itself. */
   [ACTION_DISBAND_UNIT] = disband_unit_callback,

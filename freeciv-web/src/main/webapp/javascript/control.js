@@ -5852,7 +5852,7 @@ function key_unit_disband()
 }
 
 /**************************************************************************
- Move the unit(s) in focus in the specified direction.
+  Move the unit(s) in focus in the specified direction.
 **************************************************************************/
 function key_unit_move(dir)
 {
@@ -5870,6 +5870,16 @@ function key_unit_move(dir)
     }
     var newtile = mapstep(ptile, dir);
     if (newtile == null) {
+      return;
+    }
+
+    if (punit['transported']) {
+      if (unit_can_do_action(punit, ACTION_TRANSPORT_DISEMBARK1)) {
+        request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
+        request_unit_do_action(ACTION_TRANSPORT_DISEMBARK1, punit['id'],
+                               newtile['index']);
+        unit_move_sound_play(punit);
+      }
       return;
     }
 
@@ -5919,6 +5929,16 @@ function key_unit_move_focus_index(dir, s)
 
     var newtile = mapstep(ptile, dir);
     if (newtile == null) {
+      return;
+    }
+
+    if (punit['transported']) {
+      if (unit_can_do_action(punit, ACTION_TRANSPORT_DISEMBARK1)) {
+        request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
+        request_unit_do_action(ACTION_TRANSPORT_DISEMBARK1, punit['id'],
+                               newtile['index']);
+        unit_move_sound_play(punit);
+      }
       return;
     }
 

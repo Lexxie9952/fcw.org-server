@@ -302,6 +302,9 @@ ui_name_bribe_unit = _("%sBribe Enemy Unit%s")
 ; /* TRANS: _Use Court Physician (3% chance of success). */
 ui_name_heal_unit = _("%sUse Court Physician%s")
 
+; /* TRANS: _Use Royal Sapper (3% chance of success). */
+ui_name_surgical_strike_building = _("%sUse Royal Sapper%s")
+
 ; /* TRANS: _Deploy (3% chance of success). */
 ui_name_convert_unit = _("%sDeploy%s")
 
@@ -424,6 +427,9 @@ ui_name_transport_alight = _("%sAlight%s")
 
 ; /* TRANS: _Unload (100% chance of success). */
 ui_name_transport_unload = _("%sUnload%s")
+
+; /* TRANS: _Disembark (100% chance of success). */
+ui_name_transport_disembark = _("%sDisembark%s")
 
 ; Suppress automatic help text generation about what enables and/or
 ; disables the following actions.
@@ -865,6 +871,15 @@ actor_reqs    =
       "MinMoveFrags", "1", "Local", TRUE
     }
 
+[actionenabler_royal_sapper]
+action = "Surgical Strike Building"
+actor_reqs    =
+    { "type",     "name",         "range", "present"
+      "UnitFlag", "GameLoss",     "Local", TRUE
+      "DiplRel",  "War",          "Local", TRUE
+      "UnitState", "Transported", "Local", FALSE
+    }
+
 [actionenabler_heal]
 action = "Heal Unit"
 actor_reqs    =
@@ -1260,6 +1275,14 @@ target_reqs    =
     { "type",      "name",          "range"
       "UnitState", "OnLivableTile", "Local"
       "UnitState", "Transported",   "Local"
+    }
+
+[actionenabler_disembark]
+action        = "Transport Disembark"
+actor_reqs    =
+    { "type",         "name",        "range"
+      "UnitState",    "Transported", "Local"
+      "MinMoveFrags", "1",           "Local"
     }
 
 [borders]
