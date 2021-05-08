@@ -669,6 +669,10 @@ static void hard_code_actions(void)
                  ATK_UNITS,
                  TRUE, ACT_TGT_COMPL_SIMPLE, FALSE, TRUE,
                  1, 1, TRUE);
+  actions[ACTION_STRIKE_BUILDING] =
+      action_new(ACTION_STRIKE_BUILDING, ATK_CITY,
+                 TRUE, ACT_TGT_COMPL_MANDATORY, FALSE, FALSE,
+                 1, 1, FALSE);
   actions[ACTION_CONQUER_CITY] =
       action_new(ACTION_CONQUER_CITY, ATK_CITY,
                  TRUE, ACT_TGT_COMPL_SIMPLE, FALSE, TRUE,
@@ -1983,6 +1987,7 @@ action_actor_utype_hard_reqs_ok(const action_id wanted_action,
   case ACTION_HOME_CITY:
   case ACTION_PARADROP:
   case ACTION_AIRLIFT:
+  case ACTION_STRIKE_BUILDING:
   case ACTION_CONQUER_CITY:
   case ACTION_HEAL_UNIT:
   case ACTION_PILLAGE:
@@ -2141,6 +2146,7 @@ action_hard_reqs_actor(const action_id wanted_action,
   case ACTION_UPGRADE_UNIT:
   case ACTION_ATTACK:
   case ACTION_SUICIDE_ATTACK:
+  case ACTION_STRIKE_BUILDING:
   case ACTION_CONQUER_CITY:
   case ACTION_HEAL_UNIT:
   case ACTION_TRANSFORM_TERRAIN:
@@ -3001,6 +3007,7 @@ case ACTION_CLEAN_POLLUTION:
   case ACTION_EXPEL_UNIT:
   case ACTION_DISBAND_UNIT:
   case ACTION_CONVERT:
+  case ACTION_STRIKE_BUILDING:
     /* No known hard coded requirements. */
     break;
   case ACTION_COUNT:
@@ -3972,6 +3979,9 @@ action_prob(const action_id wanted_action,
         known = TRI_MAYBE;
       }
     }
+    break;
+  case ACTION_STRIKE_BUILDING:
+    /* TODO */
     break;
   case ACTION_CONQUER_CITY:
     /* No battle is fought first. */
@@ -5228,6 +5238,8 @@ const char *action_ui_name_ruleset_var_name(int act)
     return "ui_name_attack";
   case ACTION_SUICIDE_ATTACK:
     return "ui_name_suicide_attack";
+  case ACTION_STRIKE_BUILDING:
+    return "ui_name_surgical_strike_building";
   case ACTION_CONQUER_CITY:
     return "ui_name_conquer_city";
   case ACTION_HEAL_UNIT:
@@ -5406,6 +5418,9 @@ const char *action_ui_name_default(int act)
   case ACTION_SUICIDE_ATTACK:
     /* TRANS: _Suicide Attack (100% chance of success). */
     return N_("%sSuicide Attack%s");
+  case ACTION_STRIKE_BUILDING:
+    /* TRANS: Surgical Str_ike Building (100% chance of success). */
+    return N_("Surgical Str%sike Building%s");
   case ACTION_CONQUER_CITY:
     /* TRANS: _Conquer City (100% chance of success). */
     return N_("%sConquer City%s");
