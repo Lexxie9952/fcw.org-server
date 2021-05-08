@@ -128,10 +128,11 @@ var ACTION_MINE = 54;
 var ACTION_IRRIGATE = 55;
 var ACTION_TRANSPORT_ALIGHT = 56;
 var ACTION_TRANSPORT_UNLOAD = 57;
-var ACTION_CLEAN_POLLUTION = 58;
-var ACTION_CLEAN_FALLOUT = 59;
-var ACTION_SPY_ATTACK = 60;
-var ACTION_COUNT = 61;
+var ACTION_TRANSPORT_DISEMBARK1 = 58;
+var ACTION_CLEAN_POLLUTION = 59;
+var ACTION_CLEAN_FALLOUT = 60;
+var ACTION_SPY_ATTACK = 61;
+var ACTION_COUNT = 62;
 
 /* The action_decision enum */
 /* Doesn't need the player to decide what action to take. */
