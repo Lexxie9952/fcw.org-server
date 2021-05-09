@@ -238,36 +238,20 @@ static void action_consequence_common(const struct action *paction,
                                       const action_notify notify_global,
                                       const enum effect_type eft)
 {
-  int casus_belli_amount;
+  enum casus_belli_range cbr;
   int cb_turns = game.server.casusbelliturns;
   bool spam_limit = false; // avoid excessive reporting of incidents.
 
-  /* The victim gets a casus belli if CASUS_BELLI_VICTIM or above. Everyone
-   * gets a casus belli if CASUS_BELLI_OUTRAGE or above. */
-  casus_belli_amount =
-      get_target_bonus_effects(NULL,
-                               offender, victim_player,
-                               tile_city(victim_tile),
-                               NULL,
-                               victim_tile,
-                               NULL, offender_utype,
-                               NULL, NULL,
-                               paction,
-                               eft);
-/* DEBUG to catch all the casus belli that don't trigger properly
-   notify_player(offender, victim_tile, E_ENEMY_DIPLOMAT_BRIBE, ftc_server,
-                _("Will '%s' cause an incident? %s. victim_player=%s"),
-                action_name_translation(paction),
-                (casus_belli_amount >= CASUS_BELLI_VICTIM ? "YES!" : "....no...."),
-                victim_player ? victim_player->name : "NULL");                             
-*/
-  if (casus_belli_amount >= CASUS_BELLI_VICTIM) {
+  cbr = casus_belli_range_for(offender, offender_utype, victim_player,
+                              eft, paction, victim_tile);
+
+  if (cbr >= CBR_VICTIM_ONLY) {
     /* In this situation the specified action provides a casus belli
      * against the actor. */
 
     /* International outrage: This isn't just between the offender and the
      * victim. */
-    const bool int_outrage = casus_belli_amount >= CASUS_BELLI_OUTRAGE;
+    const bool int_outrage = (cbr == CBR_INTERNATIONAL_OUTRAGE);
 
     /* Give casus belli. */
     action_give_casus_belli(offender, victim_player, int_outrage);
