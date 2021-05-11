@@ -3914,14 +3914,9 @@ function key_unit_load()
         for (var i = 0; i < units_on_tile.length; i++) {
           var punit = units_on_tile[i];
           if (!punit['transported'] && punit != sunits[s] //can't load onto itself
-              && unit_could_possibly_load(punit, unit_type(punit), stype, get_unit_class(sunits[s]))) { 
-            var packet1 = {
-              "pid"              : packet_unit_load,
-              "cargo_id"         : punit['id'],
-              "transporter_id"   : sunits[s]['id'],
-              "transporter_tile" : punit['tile']
-            };
-            send_request(JSON.stringify(packet1));
+              && unit_could_possibly_load(punit, unit_type(punit), stype, get_unit_class(sunits[s]))) {
+            request_unit_do_action(ACTION_TRANSPORT_BOARD, punit['id'], sunits[s]['id']);
+
             // Loaded units don't ask orders later:
             remove_unit_id_from_waiting_list(punit['id']); 
             punit['done_moving'] = true; // in case server doesn't do it
@@ -4049,13 +4044,9 @@ function key_unit_load()
       }
 
       if (has_transport_unit && transporter_unit_id > 0 && punit['tile'] > 0) {
-        var packet = {
-          "pid"              : packet_unit_load,
-          "cargo_id"         : punit['id'],
-          "transporter_id"   : transporter_unit_id,
-          "transporter_tile" : punit['tile']
-        };
-        send_request(JSON.stringify(packet));
+        request_unit_do_action(ACTION_TRANSPORT_BOARD, punit['id'],
+                               transporter_unit_id);
+
         // Loaded units don't ask orders later:
         remove_unit_id_from_waiting_list(punit['id']); 
         punit['done_moving'] = true; // in case server doesn't do it
