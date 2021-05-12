@@ -325,7 +325,8 @@ static void hard_code_oblig_hard_reqs(void)
                           ACTION_CONQUER_CITY, ACTION_NONE);
 
   /* Why this is a hard requirement: a unit must move into a city to
-   * conquer it and move out of a transport to disembark from it. */
+   * conquer it, move into a transport to embark and move out of a transport
+   * to disembark from it. */
   oblig_hard_req_register(req_from_values(VUT_MINMOVES, REQ_RANGE_LOCAL,
                                           FALSE, FALSE, TRUE, 1),
                           FALSE,
@@ -333,6 +334,7 @@ static void hard_code_oblig_hard_reqs(void)
                           "the actor has a movement point left.",
                           ACTION_CONQUER_CITY,
                           ACTION_TRANSPORT_DISEMBARK1,
+                          ACTION_TRANSPORT_EMBARK,
                           ACTION_NONE);
 
   /* Why this is a hard requirement: this eliminates the need to
@@ -753,6 +755,10 @@ static void hard_code_actions(void)
       action_new(ACTION_SPY_ATTACK,
                  ATK_UNITS,
                  TRUE, ACT_TGT_COMPL_SIMPLE, FALSE, TRUE,
+                 1, 1, FALSE);
+  actions[ACTION_TRANSPORT_EMBARK] =
+      action_new(ACTION_TRANSPORT_EMBARK, ATK_UNIT,
+                 FALSE, ACT_TGT_COMPL_SIMPLE, FALSE, TRUE,
                  1, 1, FALSE);
 }
 
@@ -2007,6 +2013,7 @@ action_actor_utype_hard_reqs_ok(const action_id wanted_action,
   case ACTION_CLEAN_FALLOUT:  
   case ACTION_FORTIFY:
   case ACTION_TRANSPORT_BOARD:
+  case ACTION_TRANSPORT_EMBARK:
   case ACTION_TRANSPORT_ALIGHT:
   case ACTION_TRANSPORT_DISEMBARK1:
   case ACTION_SPY_ATTACK:
@@ -2122,6 +2129,7 @@ action_hard_reqs_actor(const action_id wanted_action,
     break;
 
   case ACTION_TRANSPORT_BOARD:
+  case ACTION_TRANSPORT_EMBARK:
     if (unit_transported(actor_unit)) {
       if (!can_unit_unload(actor_unit, unit_transport_get(actor_unit))) {
         /* Can't leave current transport. */
@@ -3035,6 +3043,36 @@ case ACTION_CLEAN_POLLUTION:
       return TRI_NO;
     }
 
+    /* We cannot move a transport into a tile that holds
+     * units or cities not allied with all of our cargo. */
+    if (get_transporter_capacity(actor_unit) > 0) {
+      unit_list_iterate(unit_tile(actor_unit)->units, pcargo) {
+        if (unit_contained_in(pcargo, actor_unit)
+            && (is_non_allied_unit_tile(target_tile, unit_owner(pcargo))
+                || is_non_allied_city_tile(target_tile,
+                                           unit_owner(pcargo)))) {
+           return TRI_NO;
+        }
+      } unit_list_iterate_end;
+    }
+    break;
+
+  case ACTION_TRANSPORT_EMBARK:
+    if (unit_transported(actor_unit)) {
+      if (target_unit == unit_transport_get(actor_unit)) {
+        /* Already inside this transport. */
+        return TRI_NO;
+      }
+    }
+    if (!could_unit_load(actor_unit, target_unit)) {
+      /* Keep the old rules. */
+      return TRI_NO;
+    }
+    if (!unit_can_move_to_tile(&(wld.map), actor_unit, target_tile,
+                               FALSE, FALSE)) {
+      /* Reason: involves moving to the tile. */
+      return TRI_NO;
+    }
     /* We cannot move a transport into a tile that holds
      * units or cities not allied with all of our cargo. */
     if (get_transporter_capacity(actor_unit) > 0) {
@@ -4073,6 +4111,9 @@ action_prob(const action_id wanted_action,
     /* TODO */
     break;
   case ACTION_TRANSPORT_BOARD:
+    /* TODO */
+    break;
+  case ACTION_TRANSPORT_EMBARK:
     /* TODO */
     break;
   case ACTION_TRANSPORT_UNLOAD:
@@ -5342,6 +5383,8 @@ const char *action_ui_name_ruleset_var_name(int act)
     return "ui_name_transport_alight";
   case ACTION_TRANSPORT_BOARD:
     return "ui_name_transport_board";
+  case ACTION_TRANSPORT_EMBARK:
+    return "ui_name_transport_embark";
   case ACTION_TRANSPORT_UNLOAD:
     return "ui_name_transport_unload";
   case ACTION_TRANSPORT_DISEMBARK1:
@@ -5543,6 +5586,9 @@ const char *action_ui_name_default(int act)
   case ACTION_TRANSPORT_BOARD:
     /* TRANS: _Board (100% chance of success). */
     return N_("%sBoard%s");
+  case ACTION_TRANSPORT_EMBARK:
+    /* TRANS: _Embark (100% chance of success). */
+    return N_("%sEmbark%s");
   case ACTION_TRANSPORT_UNLOAD:
     /* TRANS: _Unload (100% chance of success). */
     return N_("%sUnload%s");
