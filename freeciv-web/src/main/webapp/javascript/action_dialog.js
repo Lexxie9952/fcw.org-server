@@ -1229,13 +1229,7 @@ function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapac
                 + " C:" + tcapacity,
     disabled :  disable,
     click : function() {
-      var packet = {
-        "pid"              : packet_unit_load,
-        "cargo_id"         : actor,
-        "transporter_id"   : tid,
-        "transporter_tile" : ttile
-      };
-      send_request(JSON.stringify(packet));
+      request_unit_do_action(ACTION_TRANSPORT_BOARD, actor, tid);
       // Loaded units don't ask orders later:
       remove_unit_id_from_waiting_list(actor['id']); 
       actor['done_moving'] = true;

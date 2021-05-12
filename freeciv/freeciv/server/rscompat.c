@@ -282,6 +282,9 @@ static bool effect_list_compat_cb(struct effect *peffect, void *data)
       effect_req_append(peffect, req_from_str("Action", "Local", FALSE,
                                               FALSE, FALSE,
                                               "Transport Board"));
+      effect_req_append(peffect, req_from_str("Action", "Local", FALSE,
+                                              FALSE, FALSE,
+                                              "Transport Embark"));
     }
   }
 
@@ -512,6 +515,10 @@ void rscompat_postprocess(struct rscompat_info *info)
     action_enabler_add(enabler);
 
     enabler = action_enabler_new();
+    enabler->action = ACTION_TRANSPORT_EMBARK;
+    action_enabler_add(enabler);
+
+    enabler = action_enabler_new();
     enabler->action = ACTION_TRANSPORT_UNLOAD;
     action_enabler_add(enabler);
 
@@ -569,6 +576,47 @@ void rscompat_postprocess(struct rscompat_info *info)
    * the rules risks bad rules. A user that saves the ruleset rather than
    * using it risks an unexpected change on the next load and save. */
   autoadjust_ruleset_data();
+}
+
+/**********************************************************************//**
+  Replace deprecated auto_attack configuration.
+**************************************************************************/
+bool rscompat_auto_attack_3_1(struct rscompat_info *compat,
+                              struct action_auto_perf *auto_perf,
+                              size_t psize,
+                              enum unit_type_flag_id *protecor_flag)
+{
+  int i;
+
+  if (compat->ver_game < 20) {
+    /* Auto attack happens during war. */
+    requirement_vector_append(&auto_perf->reqs,
+                              req_from_values(VUT_DIPLREL,
+                                              REQ_RANGE_LOCAL,
+                                              FALSE, TRUE, TRUE, DS_WAR));
+
+    /* Needs a movement point to auto attack. */
+    requirement_vector_append(&auto_perf->reqs,
+                              req_from_values(VUT_MINMOVES,
+                                              REQ_RANGE_LOCAL,
+                                              FALSE, TRUE, TRUE, 1));
+
+    for (i = 0; i < psize; i++) {
+      /* Add each protecor_flag as a !present requirement. */
+      requirement_vector_append(&auto_perf->reqs,
+                                req_from_values(VUT_UTFLAG,
+                                                REQ_RANGE_LOCAL,
+                                                FALSE, FALSE, TRUE,
+                                                protecor_flag[i]));
+    }
+
+    auto_perf->alternatives[0] = ACTION_CAPTURE_UNITS;
+    auto_perf->alternatives[1] = ACTION_BOMBARD;
+    auto_perf->alternatives[2] = ACTION_ATTACK;
+    auto_perf->alternatives[3] = ACTION_SUICIDE_ATTACK;
+  }
+
+  return TRUE;
 }
 
 /**********************************************************************//**

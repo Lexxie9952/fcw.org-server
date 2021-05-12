@@ -242,10 +242,20 @@ nuke_defender_survival_chance_pct = 0
 ; An auto attack may be triggered when another unit moves to an adjacent
 ; tile and the autoattack server setting is enabled. The following details
 ; are ruleset controlled.
-;   will_never - units with this unit type flag will never auto attack.
+;   attack_actions - the actions to try during an auto attack in the order
+;                    they should be tried.
+;   if_attacker    - this requirement vector must be true before a unit even
+;                    considers to auto attack.
 
-; Not a good idea to nuke our own area.
-will_never = "Nuclear"
+attack_actions= "Capture Units", "Bombard", "Attack", "Suicide Attack"
+
+if_attacker =
+    { "type",         "name",    "range", "present"
+      "DiplRel",      "War",     "Local", TRUE
+      "MinMoveFrags", "1",       "Local", TRUE
+      ; Not a good idea to nuke our own area.
+      "UnitFlag",     "Nuclear", "Local", FALSE
+    }
 
 [actions]
 ; If force_trade_route is set to TRUE it is illegal for an actor unit to
@@ -413,6 +423,9 @@ ui_name_transport_unload = _("%sUnload%s")
 
 ; /* TRANS: _Disembark (100% chance of success). */
 ui_name_transport_disembark = _("%sDisembark%s")
+
+; /* TRANS: _Embark (100% chance of success). */
+ui_name_transport_embark = _("%sEmbark%s")
 
 ; Suppress automatic help text generation about what enables and/or
 ; disables the following actions.
@@ -1025,6 +1038,13 @@ action        = "Transport Disembark"
 actor_reqs    =
     { "type",         "name",        "range"
       "UnitState",    "Transported", "Local"
+      "MinMoveFrags", "1",           "Local"
+    }
+
+[actionenabler_embark]
+action        = "Transport Embark"
+actor_reqs    =
+    { "type",         "name",        "range"
       "MinMoveFrags", "1",           "Local"
     }
 

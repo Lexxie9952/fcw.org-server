@@ -5292,7 +5292,8 @@ void send_server_setting(struct conn_list *dest, const struct setting *pset)
   packet.id = setting_number(pset);                                         \
   packet.is_visible = setting_is_visible(pset, pconn);                      \
   packet.is_changeable = setting_is_changeable(pset, pconn, NULL, 0);       \
-  packet.initial_setting = game.info.is_new_game;
+  packet.initial_setting = game.info.is_new_game;                           \
+  packet.setdef = setting_get_setdef(pset);
 
   switch (setting_type(pset)) {
   case SST_BOOL:
@@ -5615,19 +5616,7 @@ void setting_changed(struct setting *pset)
 /************************************************************************//**
   Is the setting in changed state, or the default
 ****************************************************************************/
-enum setting_default_level setting_get_setdef(struct setting *pset)
+enum setting_default_level setting_get_setdef(const struct setting *pset)
 {
   return pset->setdef;
-}
-
-/************************************************************************//**
-  Compatibility function. In the very old times there was no concept of
-  'default' value outside setting initialization, all values were handled
-  like we now want to handle non-default ones.
-****************************************************************************/
-void settings_consider_all_changed(void)
-{
-  settings_iterate(SSET_ALL, pset) {
-    pset->setdef = SETDEF_CHANGED;
-  } settings_iterate_end;
 }

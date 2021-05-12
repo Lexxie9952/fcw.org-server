@@ -811,6 +811,20 @@ static void transport_board_callback(GtkWidget *w, gpointer data)
 }
 
 /**********************************************************************//**
+  User selected "Transport Embark" from the choice dialog
+**************************************************************************/
+static void embark_callback(GtkWidget *w, gpointer data)
+{
+  struct action_data *args = (struct action_data *)data;
+
+  request_do_action(ACTION_TRANSPORT_EMBARK, args->actor_unit_id,
+                    args->target_unit_id, 0, "");
+
+  gtk_widget_destroy(act_sel_dialog);
+  free(args);
+}
+
+/**********************************************************************//**
   User selected "Transport Unload" from choice dialog
 **************************************************************************/
 static void transport_unload_callback(GtkWidget *w, gpointer data)
@@ -1247,7 +1261,7 @@ static void create_advances_list(struct player *pplayer,
 
   spy_tech_shell = gtk_dialog_new_with_buttons(_("Steal Technology"),
                                                NULL, 0,
-                                               _("Cancel"), GTK_RESPONSE_CANCEL,
+                                               _("_Cancel"), GTK_RESPONSE_CANCEL,
                                                _("_Steal"), GTK_RESPONSE_ACCEPT,
                                                NULL);
   setup_dialog(spy_tech_shell, toplevel);
@@ -1429,7 +1443,7 @@ static void create_improvements_list(struct player *pplayer,
   
   spy_sabotage_shell = gtk_dialog_new_with_buttons(_("Sabotage Improvements"),
                                                    NULL, 0,
-                                                   _("Cancel"), GTK_RESPONSE_CANCEL,
+                                                   _("_Cancel"), GTK_RESPONSE_CANCEL,
                                                    _("_Sabotage"), GTK_RESPONSE_ACCEPT,
                                                    NULL);
   setup_dialog(spy_sabotage_shell, toplevel);
@@ -2077,6 +2091,7 @@ static const GCallback af_map[ACTION_COUNT] = {
   [ACTION_TRANSPORT_ALIGHT] = (GCallback)transport_alight_callback,
   [ACTION_TRANSPORT_UNLOAD] = (GCallback)transport_unload_callback,
   [ACTION_TRANSPORT_BOARD] = (GCallback)transport_board_callback,
+  [ACTION_TRANSPORT_EMBARK] = (GCallback)embark_callback,
 
   /* Unit acting against all units at a tile. */
   [ACTION_CAPTURE_UNITS] = (GCallback)capture_units_callback,
@@ -2135,7 +2150,7 @@ static void action_entry(GtkWidget *shl,
     return;
   }
 
-  label = action_prepare_ui_name(act_id, "",
+  label = action_prepare_ui_name(act_id, "_",
                                  act_probs[act_id],
                                  custom);
 
@@ -2166,7 +2181,7 @@ static void action_entry_update(GtkWidget *shl,
       action_prob_possible(act_probs[act_id]));
 
   /* The probability may have changed. */
-  label = action_prepare_ui_name(act_id, "",
+  label = action_prepare_ui_name(act_id, "_",
                                  act_probs[act_id], custom);
 
   tooltip = action_get_tool_tip(act_id,
@@ -2325,7 +2340,7 @@ void popup_action_selection(struct unit *actor_unit,
                             FALSE, FALSE)) {
     action_button_map[BUTTON_MOVE] =
         choice_dialog_get_number_of_buttons(shl);
-    choice_dialog_add(shl, _("Keep moving"),
+    choice_dialog_add(shl, _("_Keep moving"),
                       (GCallback)act_sel_keep_moving_callback,
                       data, FALSE, NULL);
   }
@@ -2355,13 +2370,13 @@ void popup_action_selection(struct unit *actor_unit,
 
   action_button_map[BUTTON_WAIT] =
       choice_dialog_get_number_of_buttons(shl);
-  choice_dialog_add(shl, _("Wait"),
+  choice_dialog_add(shl, _("_Wait"),
                     (GCallback)act_sel_wait_callback, data,
                     TRUE, NULL);
 
   action_button_map[BUTTON_CANCEL] =
       choice_dialog_get_number_of_buttons(shl);
-  choice_dialog_add(shl, _("Cancel"),
+  choice_dialog_add(shl, _("_Cancel"),
                     (GCallback)act_sel_cancel_callback, data,
                     FALSE, NULL);
 

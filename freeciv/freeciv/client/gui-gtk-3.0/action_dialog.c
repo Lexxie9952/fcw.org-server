@@ -811,6 +811,20 @@ static void transport_board_callback(GtkWidget *w, gpointer data)
 }
 
 /**********************************************************************//**
+  User selected "Transport Embark" from the choice dialog
+**************************************************************************/
+static void embark_callback(GtkWidget *w, gpointer data)
+{
+  struct action_data *args = (struct action_data *)data;
+
+  request_do_action(ACTION_TRANSPORT_EMBARK, args->actor_unit_id,
+                    args->target_unit_id, 0, "");
+
+  gtk_widget_destroy(act_sel_dialog);
+  free(args);
+}
+
+/**********************************************************************//**
   User selected "Transport Unload" from choice dialog
 **************************************************************************/
 static void transport_unload_callback(GtkWidget *w, gpointer data)
@@ -2083,6 +2097,7 @@ static const GCallback af_map[ACTION_COUNT] = {
   [ACTION_TRANSPORT_ALIGHT] = (GCallback)transport_alight_callback,
   [ACTION_TRANSPORT_UNLOAD] = (GCallback)transport_unload_callback,
   [ACTION_TRANSPORT_BOARD] = (GCallback)transport_board_callback,
+  [ACTION_TRANSPORT_EMBARK] = (GCallback)embark_callback,
 
   /* Unit acting against all units at a tile. */
   [ACTION_CAPTURE_UNITS] = (GCallback)capture_units_callback,
@@ -2141,7 +2156,7 @@ static void action_entry(GtkWidget *shl,
     return;
   }
 
-  label = action_prepare_ui_name(act_id, "",
+  label = action_prepare_ui_name(act_id, "_",
                                  act_probs[act_id],
                                  custom);
 
@@ -2172,7 +2187,7 @@ static void action_entry_update(GtkWidget *shl,
       action_prob_possible(act_probs[act_id]));
 
   /* The probability may have changed. */
-  label = action_prepare_ui_name(act_id, "",
+  label = action_prepare_ui_name(act_id, "_",
                                  act_probs[act_id], custom);
 
   tooltip = action_get_tool_tip(act_id,

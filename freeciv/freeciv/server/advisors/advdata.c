@@ -931,6 +931,7 @@ void adv_best_government(struct player *pplayer)
           case ACTION_TRANSPORT_UNLOAD:
           case ACTION_TRANSPORT_DISEMBARK1:
           case ACTION_TRANSPORT_BOARD:
+          case ACTION_TRANSPORT_EMBARK:
           case ACTION_CLEAN_POLLUTION:
           case ACTION_CLEAN_FALLOUT:
             /* Could be good. An embassy gives permanent contact. A trade
