@@ -179,8 +179,6 @@ extern "C" {
 #define SPECENUM_VALUE64NAME "Spy Attack"
 #define SPECENUM_BITVECTOR bv_actions
 // ******************************************* new actions require being put in the "ugly hack" for unit_move casus belli at the end of effects.ruleset
-/* Limited by what values num2char() can store in unit orders in
- * savegames. */
 #define SPECENUM_COUNT ACTION_COUNT
 #include "specenum_gen.h"
 
