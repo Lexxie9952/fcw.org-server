@@ -855,6 +855,7 @@ void adv_best_government(struct player *pplayer)
           case ACTION_SPY_INCITE_CITY:
           case ACTION_SPY_INCITE_CITY_ESC:
           case ACTION_CONQUER_CITY:
+          case ACTION_CONQUER_CITY2:
             bonus += 4;
             break;
           case ACTION_SPY_BRIBE_UNIT:
@@ -930,6 +931,7 @@ void adv_best_government(struct player *pplayer)
           case ACTION_TRANSPORT_ALIGHT:
           case ACTION_TRANSPORT_UNLOAD:
           case ACTION_TRANSPORT_DISEMBARK1:
+          case ACTION_TRANSPORT_DISEMBARK2:
           case ACTION_TRANSPORT_BOARD:
           case ACTION_TRANSPORT_EMBARK:
           case ACTION_CLEAN_POLLUTION:

@@ -191,6 +191,14 @@ improvement_factor = 1
 unit_factor = 2
 total_factor = 100
 
+[global_unit_options]
+; Shore landing style
+;  FALSE - normal movement
+;  TRUE  - (default) slow invasions by removing all
+;          movement points from ground units moving
+;          from ocean tile to land
+slow_invasions = FALSE
+
 [combat_rules]
 ; If tired_attack is set to TRUE, units that attack with less than a single
 ; move point (per move_fragments in terrain.ruleset) will have their attack
@@ -745,6 +753,14 @@ target_reqs    =
 
 [actionenabler_board]
 action        = "Transport Board"
+actor_reqs    =
+    { "type",    "name",       "range", "present"
+      "DiplRel", "Armistice",  "Local", FALSE
+      "DiplRel", "War",        "Local", FALSE
+      "DiplRel", "Cease-fire", "Local", FALSE
+      "DiplRel", "Peace",      "Local", FALSE
+      "DiplRel", "Never met",  "Local", FALSE
+    }
 
 [actionenabler_unload]
 action        = "Transport Unload"
@@ -761,16 +777,30 @@ target_reqs    =
 [actionenabler_disembark]
 action        = "Transport Disembark"
 actor_reqs    =
-    { "type",         "name",        "range"
-      "UnitState",    "Transported", "Local"
-      "MinMoveFrags", "1",           "Local"
+    { "type",         "name",        "range", "present"
+      "UnitState",    "Transported", "Local", TRUE
+      "MinMoveFrags", "1",           "Local", TRUE
+      ; use "Transport Alight" from inside the city
+      "CityTile",     "Center",      "Local", FALSE
     }
 
+; TODO: was transferring from a transport to a transport on an adjacent tile
+; legal?
 [actionenabler_embark]
 action        = "Transport Embark"
 actor_reqs    =
-    { "type",         "name",        "range"
-      "MinMoveFrags", "1",           "Local"
+    { "type",         "name",       "range", "present"
+      "MinMoveFrags", "1",          "Local", TRUE
+      "DiplRel",      "Armistice",  "Local", FALSE
+      "DiplRel",      "War",        "Local", FALSE
+      "DiplRel",      "Cease-fire", "Local", FALSE
+      "DiplRel",      "Peace",      "Local", FALSE
+      "DiplRel",      "Never met",  "Local", FALSE
+    }
+target_reqs    =
+    { "type",     "name",   "range", "present"
+      ; use "Transport Board" from inside the city
+      "CityTile", "Center", "Local", FALSE
     }
 
 [borders]
@@ -1087,6 +1117,9 @@ flags = "Bidirectional"
 ;
 ; type                   = Type of the clause, one of "Advance", "Gold", "Map", "Seamap",
 ;                          "City", "Ceasefire", "Peace", "Alliance", "Vision", "Embassy"
+; giver_reqs             = requirements that the giving side of the clause needs to fulfill
+;                          (see effects.ruleset and README.effects for help on requirements)
+; receiver_reqs          = requirements that the receiving side of the clause needs to fulfill
 ;
 ; */ <-- avoid gettext warnings
 

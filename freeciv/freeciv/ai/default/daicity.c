@@ -1190,6 +1190,7 @@ static int action_target_neg_util(action_id act_id,
   case ACTION_SPY_NUKE:
   case ACTION_SPY_NUKE_ESC:
   case ACTION_CONQUER_CITY:
+  case ACTION_CONQUER_CITY2:
   /* The ai will never destroy his own city to keep it out of enemy
    * hands. If it starts supporting it this value should change. */
   case ACTION_DESTROY_CITY:
@@ -1269,6 +1270,7 @@ static int action_target_neg_util(action_id act_id,
   case ACTION_TRANSPORT_BOARD:
   case ACTION_TRANSPORT_UNLOAD:
   case ACTION_TRANSPORT_DISEMBARK1:
+  case ACTION_TRANSPORT_DISEMBARK2:
   case ACTION_TRANSPORT_EMBARK:
   case ACTION_COUNT:
     fc_assert_msg(action_id_get_target_kind(act_id) == ATK_CITY,

@@ -880,6 +880,12 @@ bool dai_unit_attack(struct ai_type *ait, struct unit *punit, struct tile *ptile
     /* Choose "Conquer City". */
     unit_do_action(unit_owner(punit), punit->id, tcity->id,
                    0, "", ACTION_CONQUER_CITY);
+  } else if ((tcity = tile_city(ptile))
+             && is_action_enabled_unit_on_city(ACTION_CONQUER_CITY2,
+                                               punit, tcity)) {
+    /* Choose "Conquer City 2". */
+    unit_do_action(unit_owner(punit), punit->id, tcity->id,
+                   0, "", ACTION_CONQUER_CITY2);
   } else if (!can_unit_survive_at_tile(&(wld.map), punit, ptile)
              && ((ptrans = transporter_for_unit_at(punit, ptile)))
              && is_action_enabled_unit_on_unit(ACTION_TRANSPORT_EMBARK,
@@ -892,6 +898,11 @@ bool dai_unit_attack(struct ai_type *ait, struct unit *punit, struct tile *ptile
     /* "Transport Disembark". */
     unit_do_action(unit_owner(punit), punit->id, tile_index(ptile),
                    0, "", ACTION_TRANSPORT_DISEMBARK1);
+  } else if (is_action_enabled_unit_on_tile(ACTION_TRANSPORT_DISEMBARK2,
+                                            punit, ptile, NULL)) {
+    /* "Transport Disembark 2". */
+    unit_do_action(unit_owner(punit), punit->id, tile_index(ptile),
+                   0, "", ACTION_TRANSPORT_DISEMBARK2);
   } else {
     /* Other move. */
     (void) unit_move_handling(punit, ptile, FALSE, TRUE);
@@ -994,6 +1005,11 @@ bool dai_unit_move(struct ai_type *ait, struct unit *punit, struct tile *ptile)
     /* "Transport Disembark". */
     unit_do_action(unit_owner(punit), punit->id, tile_index(ptile),
                    0, "", ACTION_TRANSPORT_DISEMBARK1);
+  } if (is_action_enabled_unit_on_tile(ACTION_TRANSPORT_DISEMBARK2,
+                                       punit, ptile, NULL)) {
+     /* "Transport Disembark 2". */
+     unit_do_action(unit_owner(punit), punit->id, tile_index(ptile),
+                    0, "", ACTION_TRANSPORT_DISEMBARK2);
   } else {
     /* Other move. */
     (void) unit_move_handling(punit, ptile, FALSE, TRUE);

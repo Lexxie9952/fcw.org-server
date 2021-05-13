@@ -1015,6 +1015,14 @@ target_reqs    =
 
 [actionenabler_board]
 action        = "Transport Board"
+actor_reqs    =
+    { "type",    "name",       "range", "present"
+      "DiplRel", "Armistice",  "Local", FALSE
+      "DiplRel", "War",        "Local", FALSE
+      "DiplRel", "Cease-fire", "Local", FALSE
+      "DiplRel", "Peace",      "Local", FALSE
+      "DiplRel", "Never met",  "Local", FALSE
+    }
 
 [actionenabler_unload]
 action        = "Transport Unload"
@@ -1039,8 +1047,13 @@ actor_reqs    =
 [actionenabler_embark]
 action        = "Transport Embark"
 actor_reqs    =
-    { "type",         "name",        "range"
-      "MinMoveFrags", "1",           "Local"
+    { "type",         "name",       "range", "present"
+      "MinMoveFrags", "1",          "Local", TRUE
+      "DiplRel",      "Armistice",  "Local", FALSE
+      "DiplRel",      "War",        "Local", FALSE
+      "DiplRel",      "Cease-fire", "Local", FALSE
+      "DiplRel",      "Peace",      "Local", FALSE
+      "DiplRel",      "Never met",  "Local", FALSE
     }
 
 [borders]
@@ -1287,6 +1300,9 @@ name = _("Goods")
 ;
 ; type                   = Type of the clause, one of "Advance", "Gold", "Map", "Seamap",
 ;                          "City", "Ceasefire", "Peace", "Alliance", "Vision", "Embassy"
+; giver_reqs             = requirements that the giving side of the clause needs to fulfill
+;                          (see effects.ruleset and README.effects for help on requirements)
+; receiver_reqs          = requirements that the receiving side of the clause needs to fulfill
 ;
 ; */ <-- avoid gettext warnings
 

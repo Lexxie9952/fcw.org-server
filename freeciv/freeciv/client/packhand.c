@@ -4393,10 +4393,21 @@ void handle_ruleset_style(const struct packet_ruleset_style *p)
 void handle_ruleset_clause(const struct packet_ruleset_clause *p)
 {
   struct clause_info *info = clause_info_get(p->type);
+  int i;
 
   fc_assert_ret_msg(NULL != info, "Bad clause %d.", p->type);
 
   info->enabled = p->enabled;
+
+  for (i = 0; i < p->giver_reqs_count; i++) {
+    requirement_vector_append(&info->giver_reqs, p->giver_reqs[i]);
+  }
+  fc_assert(info->giver_reqs.size == p->giver_reqs_count);
+
+  for (i = 0; i < p->receiver_reqs_count; i++) {
+    requirement_vector_append(&info->receiver_reqs, p->receiver_reqs[i]);
+  }
+  fc_assert(info->receiver_reqs.size == p->receiver_reqs_count);
 }
 
 /************************************************************************//**
@@ -4690,6 +4701,7 @@ static action_id auto_attack_act(const struct act_prob *act_probs)
       case ACTION_TRANSPORT_EMBARK:
       case ACTION_TRANSPORT_UNLOAD:
       case ACTION_TRANSPORT_DISEMBARK1:
+      case ACTION_TRANSPORT_DISEMBARK2:
         /* Not interesting. */
         break;
       case ACTION_CAPTURE_UNITS:
@@ -4698,6 +4710,7 @@ static action_id auto_attack_act(const struct act_prob *act_probs)
       case ACTION_ATTACK:
       case ACTION_SUICIDE_ATTACK:
       case ACTION_CONQUER_CITY:
+      case ACTION_CONQUER_CITY2:
         /* An attack. */
         if (attack_action == ACTION_NONE) {
           /* No previous attack action found. */

@@ -1269,6 +1269,23 @@ static int disembark1_callback(struct widget *pWidget)
 }
 
 /**********************************************************************//**
+  User clicked "Transport Disembark 2"
+**************************************************************************/
+static int disembark2_callback(struct widget *pWidget)
+{
+  if (PRESSED_EVENT(Main.event)) {
+    int actor_id = MAX_ID - pWidget->ID;
+    int target_id = pWidget->data.tile->index;
+
+    popdown_diplomat_dialog();
+    request_do_action(ACTION_TRANSPORT_DISEMBARK2,
+                      actor_id, target_id, 0, "");
+  }
+
+  return -1;
+}
+
+/**********************************************************************//**
   User clicked "Capture Units"
 **************************************************************************/
 static int capture_units_callback(struct widget *pWidget)
@@ -1700,6 +1717,27 @@ static int conquer_city_callback(struct widget *pWidget)
 }
 
 /**********************************************************************//**
+  User clicked "Conquer City 2"
+**************************************************************************/
+static int conquer_city2_callback(struct widget *pWidget)
+{
+  if (PRESSED_EVENT(Main.event)) {
+    if (NULL != game_city_by_number(
+          pDiplomat_Dlg->target_ids[ATK_CITY])
+        && NULL != game_unit_by_number(pDiplomat_Dlg->actor_unit_id)) {
+      request_do_action(ACTION_CONQUER_CITY2,
+                        pDiplomat_Dlg->actor_unit_id,
+                        pDiplomat_Dlg->target_ids[ATK_CITY],
+                        0, "");
+    }
+
+    popdown_diplomat_dialog();
+  }
+
+  return -1;
+}
+
+/**********************************************************************//**
   Close diplomat dialog.
 **************************************************************************/
 static int diplomat_close_callback(struct widget *pWidget)
@@ -1766,6 +1804,7 @@ static const act_func af_map[ACTION_COUNT] = {
   [ACTION_UPGRADE_UNIT] = upgrade_callback,
   [ACTION_AIRLIFT] = airlift_callback,
   [ACTION_CONQUER_CITY] = conquer_city_callback,
+  [ACTION_CONQUER_CITY2] = conquer_city2_callback,
   [ACTION_STRIKE_BUILDING] = spy_strike_bld_request,
 
   /* Unit acting against a unit target. */
@@ -1798,6 +1837,7 @@ static const act_func af_map[ACTION_COUNT] = {
   [ACTION_MINE] = mine_callback,
   [ACTION_IRRIGATE] = irrigate_callback,
   [ACTION_TRANSPORT_DISEMBARK1] = disembark1_callback,
+  [ACTION_TRANSPORT_DISEMBARK2] = disembark2_callback,
 
   /* Unit acting with no target except itself. */
   [ACTION_DISBAND_UNIT] = disband_unit_callback,

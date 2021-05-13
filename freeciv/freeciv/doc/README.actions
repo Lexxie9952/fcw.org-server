@@ -423,6 +423,11 @@ Actions done by a unit against a city
  * the target must be foreign (!)
  * the target city contains 0 units (!)
 
+"Conquer City 2" - Conquer the target city.
+* UI name can be set using ui_name_conquer_city_2
+* A copy of "Conquer City".
+* See "Conquer City" for everything else.
+
 "Surgical Strike Building" - Destroy a specific building or the production.
  * UI name can be set using ui_name_surgical_strike_building
  * actor must be aware that the target exists
@@ -496,7 +501,7 @@ Actions done by a unit against another unit
    See unit_transport_check()
  * boarding won't cause a situation with more than 5 recursive transports
  * the target unit must be domestic, allied or on the same team as the
-   actor unit is.
+   actor unit is. (!)
  * target must be in a city or in a base native to it if the target's unit
    class has the Unreachable unit class flag and the actor's unit type
    doesn't list the target's unit class in the embarks field.
@@ -529,7 +534,7 @@ Actions done by a unit against another unit
    See unit_transport_check()
  * boarding won't cause a situation with more than 5 recursive transports
  * the target unit must be domestic, allied or on the same team as the
-   actor unit is.
+   actor unit is. (!)
  * target must be in a city or in a base native to it if the target's unit
    class has the Unreachable unit class flag and the actor's unit type
    doesn't list the target's unit class in the embarks field.
@@ -770,6 +775,11 @@ Actions done by a unit against a tile
   zone of control (ZOC)
 * the target tile can't contain any city or units not allied to the actor
   unit and all its cargo.
+
+"Transport Disembark 2" - Exit transport to target tile.
+* UI name can be set using ui_name_transport_disembark_2
+* A copy of "Transport Disembark".
+* See "Transport Disembark" for everything else.
 
 Actions done by a unit to it self
 =================================
