@@ -377,6 +377,7 @@ static void hard_code_oblig_hard_reqs(void)
                           "the actor has a movement point left.",
                           ACTION_CONQUER_CITY,
                           ACTION_TRANSPORT_DISEMBARK1,
+                          ACTION_TRANSPORT_DISEMBARK2,
                           ACTION_TRANSPORT_EMBARK,
                           ACTION_NONE);
 
@@ -445,6 +446,7 @@ static void hard_code_oblig_hard_reqs(void)
                           "the actor is transported.",
                           ACTION_TRANSPORT_ALIGHT,
                           ACTION_TRANSPORT_DISEMBARK1,
+                          ACTION_TRANSPORT_DISEMBARK2,
                           ACTION_NONE);
   oblig_hard_req_register(req_from_values(VUT_UNITSTATE, REQ_RANGE_LOCAL,
                                           FALSE, FALSE, TRUE,
@@ -798,6 +800,10 @@ static void hard_code_actions(void)
       action_new(ACTION_SPY_ATTACK,
                  ATK_UNITS,
                  TRUE, ACT_TGT_COMPL_SIMPLE, FALSE, TRUE,
+                 1, 1, FALSE);
+  actions[ACTION_TRANSPORT_DISEMBARK2] =
+      action_new(ACTION_TRANSPORT_DISEMBARK2, ATK_TILE,
+                 FALSE, ACT_TGT_COMPL_SIMPLE, FALSE, TRUE,
                  1, 1, FALSE);
   actions[ACTION_TRANSPORT_EMBARK] =
       action_new(ACTION_TRANSPORT_EMBARK, ATK_UNIT,
@@ -2059,6 +2065,7 @@ action_actor_utype_hard_reqs_ok(const action_id wanted_action,
   case ACTION_TRANSPORT_EMBARK:
   case ACTION_TRANSPORT_ALIGHT:
   case ACTION_TRANSPORT_DISEMBARK1:
+  case ACTION_TRANSPORT_DISEMBARK2:
   case ACTION_SPY_ATTACK:
     /* No hard unit type requirements. */
     break;
@@ -2182,6 +2189,7 @@ action_hard_reqs_actor(const action_id wanted_action,
     break;
 
   case ACTION_TRANSPORT_DISEMBARK1:
+  case ACTION_TRANSPORT_DISEMBARK2:
     if (!can_unit_unload(actor_unit, unit_transport_get(actor_unit))) {
       /* Keep the old rules about Unreachable and disembarks. */
       return TRI_NO;
@@ -3080,6 +3088,7 @@ case ACTION_CLEAN_POLLUTION:
     break;
 
   case ACTION_TRANSPORT_DISEMBARK1:
+  case ACTION_TRANSPORT_DISEMBARK2:
     if (!unit_can_move_to_tile(&(wld.map), actor_unit, target_tile,
                                FALSE, FALSE)) {
       /* Reason: involves moving to the tile. */
@@ -4163,6 +4172,7 @@ action_prob(const action_id wanted_action,
     /* TODO */
     break;
   case ACTION_TRANSPORT_DISEMBARK1:
+  case ACTION_TRANSPORT_DISEMBARK2:
     /* TODO */
     break;
   case ACTION_COUNT:
@@ -5436,6 +5446,8 @@ const char *action_ui_name_ruleset_var_name(int act)
     return "ui_name_transport_unload";
   case ACTION_TRANSPORT_DISEMBARK1:
     return "ui_name_transport_disembark";
+  case ACTION_TRANSPORT_DISEMBARK2:
+    return "ui_name_transport_disembark_2";
   case ACTION_SPY_ATTACK:
     return "ui_name_spy_attack";  
   case ACTION_COUNT:
@@ -5642,6 +5654,9 @@ const char *action_ui_name_default(int act)
   case ACTION_TRANSPORT_DISEMBARK1:
     /* TRANS: _Disembark (100% chance of success). */
     return N_("%sDisembark%s");
+  case ACTION_TRANSPORT_DISEMBARK2:
+    /* TRANS: _Disembark 2 (100% chance of success). */
+    return N_("%sDisembark 2%s");
   case ACTION_SPY_ATTACK:
     /* TRANS: _Eliminate Diplomat (100% chance of success). */
     return N_("%sEliminate Diplomat%s");    

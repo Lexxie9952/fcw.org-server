@@ -165,16 +165,18 @@ extern "C" {
 #define SPECENUM_VALUE57NAME "Transport Unload"
 #define SPECENUM_VALUE58 ACTION_TRANSPORT_DISEMBARK1
 #define SPECENUM_VALUE58NAME "Transport Disembark"
-#define SPECENUM_VALUE59 ACTION_TRANSPORT_BOARD
-#define SPECENUM_VALUE59NAME "Transport Board"
-#define SPECENUM_VALUE60 ACTION_TRANSPORT_EMBARK
-#define SPECENUM_VALUE60NAME "Transport Embark"
-#define SPECENUM_VALUE61 ACTION_CLEAN_POLLUTION
-#define SPECENUM_VALUE61NAME "Clean Pollution"
-#define SPECENUM_VALUE62 ACTION_CLEAN_FALLOUT
-#define SPECENUM_VALUE62NAME "Clean Fallout"
-#define SPECENUM_VALUE63 ACTION_SPY_ATTACK
-#define SPECENUM_VALUE63NAME "Spy Attack"
+#define SPECENUM_VALUE59 ACTION_TRANSPORT_DISEMBARK2
+#define SPECENUM_VALUE59NAME "Transport Disembark 2"
+#define SPECENUM_VALUE60 ACTION_TRANSPORT_BOARD
+#define SPECENUM_VALUE60NAME "Transport Board"
+#define SPECENUM_VALUE61 ACTION_TRANSPORT_EMBARK
+#define SPECENUM_VALUE61NAME "Transport Embark"
+#define SPECENUM_VALUE62 ACTION_CLEAN_POLLUTION
+#define SPECENUM_VALUE62NAME "Clean Pollution"
+#define SPECENUM_VALUE63 ACTION_CLEAN_FALLOUT
+#define SPECENUM_VALUE63NAME "Clean Fallout"
+#define SPECENUM_VALUE64 ACTION_SPY_ATTACK
+#define SPECENUM_VALUE64NAME "Spy Attack"
 #define SPECENUM_BITVECTOR bv_actions
 // ******************************************* new actions require being put in the "ugly hack" for unit_move casus belli at the end of effects.ruleset
 /* Limited by what values num2char() can store in unit orders in
