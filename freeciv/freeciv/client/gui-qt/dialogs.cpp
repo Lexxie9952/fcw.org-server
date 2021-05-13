@@ -137,6 +137,7 @@ static void unit_home_city(QVariant data1, QVariant data2);
 static void unit_upgrade(QVariant data1, QVariant data2);
 static void airlift(QVariant data1, QVariant data2);
 static void conquer_city(QVariant data1, QVariant data2);
+static void conquer_city2(QVariant data1, QVariant data2);
 static void heal_unit(QVariant data1, QVariant data2);
 static void transport_board(QVariant data1, QVariant data2);
 static void transport_embark(QVariant data1, QVariant data2);
@@ -210,6 +211,7 @@ static const QHash<action_id, pfcn_void> af_map_init(void)
   action_function[ACTION_UPGRADE_UNIT] = unit_upgrade;
   action_function[ACTION_AIRLIFT] = airlift;
   action_function[ACTION_CONQUER_CITY] = conquer_city;
+  action_function[ACTION_CONQUER_CITY2] = conquer_city2;
   action_function[ACTION_STRIKE_BUILDING] = spy_request_strike_bld_list;
 
   /* Unit acting against a unit target. */
@@ -1761,6 +1763,21 @@ static void conquer_city(QVariant data1, QVariant data2)
   if (NULL != game_unit_by_number(actor_id)
       && NULL != game_city_by_number(tgt_city_id)) {
     request_do_action(ACTION_CONQUER_CITY,
+                      actor_id, tgt_city_id, 0, "");
+  }
+}
+
+/***********************************************************************//**
+  Action "Conquer City 2" for choice dialog
+***************************************************************************/
+static void conquer_city2(QVariant data1, QVariant data2)
+{
+  int actor_id = data1.toInt();
+  int tgt_city_id = data2.toInt();
+
+  if (NULL != game_unit_by_number(actor_id)
+      && NULL != game_city_by_number(tgt_city_id)) {
+    request_do_action(ACTION_CONQUER_CITY2,
                       actor_id, tgt_city_id, 0, "");
   }
 }
