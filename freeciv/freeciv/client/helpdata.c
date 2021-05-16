@@ -2483,6 +2483,7 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
 
     if (utype_can_do_action(utype, act)) {
       const char *target_adjective;
+      char sub_target_text[100];
       const char *blockers[MAX_NUM_ACTIONS];
       int i = 0;
 
@@ -2510,11 +2511,20 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
           target_adjective = "";
         }
 
+        sub_target_text[0] = '\0';
+        if (action_get_sub_target_kind(paction) != ASTK_NONE) {
+          cat_snprintf(sub_target_text, sizeof(sub_target_text), _("%s "),
+                       _(action_sub_target_kind_name(
+                           action_get_sub_target_kind(paction))));
+        }
+
         cat_snprintf(buf, bufsz,
-                     /* TRANS: The first %s may be an adjective (that
-                      * includes a space). The next is the name of its
-                      * target kind. */
-                     _("  %s is done to %s%s.\n"), BULLET,
+                     /* TRANS: The first %s is the sub target kind. The next
+                      * may be an adjective (that includes a space). The
+                      * next is the name of the target kind.
+                      * Example: is done to extras on foreign tiles */
+                     _("  %s is done to %s%s%s.\n"), BULLET,
+                     sub_target_text,
                      target_adjective,
                      _(action_target_kind_name(
                          action_id_get_target_kind(act))));
