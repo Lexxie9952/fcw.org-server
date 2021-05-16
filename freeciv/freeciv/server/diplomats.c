@@ -952,12 +952,14 @@ bool diplomat_get_tech(struct player *pplayer, struct unit *pdiplomat,
              || action_has_result(paction, ACTION_SPY_STEAL_TECH_ESC))) {
       notify_player(pplayer, city_tile(pcity),
                     E_MY_DIPLOMAT_FAILED, ftc_server,
+                    /* TRANS: Paris was expecting ... Your Spy was caught */
                     _(" ⚠️ %s was expecting more tech thefts."
                       " Your %s %s was caught and executed."),
                     city_link(pcity),
                     unit_tile_link(pdiplomat), UNIT_EMOJI(pdiplomat));
       notify_player(cplayer, city_tile(pcity),
                     E_ENEMY_DIPLOMAT_FAILED, ftc_server,
+                    /* TRANS: The Belgian Spy ... from Paris */
                     _(" 💥 %s %s %s failed to steal technology again from %s. "
                       "We were prepared for the attempt."),
                     indefinite_article_for_word(nation_adjective_for_player(pplayer),true),
@@ -967,12 +969,14 @@ bool diplomat_get_tech(struct player *pplayer, struct unit *pdiplomat,
     } else {
       notify_player(pplayer, city_tile(pcity),
                     E_MY_DIPLOMAT_FAILED, ftc_server,
+                    /* TRANS: Your Spy was caught ... from %s. */
                     _(" ⚠️ Your %s %s was caught trying to "
                       " steal tech from %s."),
                     unit_tile_link(pdiplomat), UNIT_EMOJI(pdiplomat),
                     city_link(pcity));
       notify_player(cplayer, city_tile(pcity),
                     E_ENEMY_DIPLOMAT_FAILED, ftc_server,
+                    /* TRANS: The Belgian Spy ... from Paris */
                     _(" 💥 %s %s %s %s failed to steal tech from %s."),
                     indefinite_article_for_word(nation_adjective_for_player(pplayer),true),
                     nation_adjective_for_player(pplayer),

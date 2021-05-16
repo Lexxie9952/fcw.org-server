@@ -230,7 +230,9 @@ static void build_city_callback(GtkMenuItem *item, gpointer data);
 static void auto_settle_callback(GtkMenuItem *item, gpointer data);
 static void build_road_callback(GtkMenuItem *item, gpointer data);
 static void build_irrigation_callback(GtkMenuItem *item, gpointer data);
+static void cultivate_callback(GtkMenuItem *item, gpointer data);
 static void build_mine_callback(GtkMenuItem *item, gpointer data);
+static void plant_callback(GtkMenuItem *item, gpointer data);
 static void connect_road_callback(GtkMenuItem *item, gpointer data);
 static void connect_rail_callback(GtkMenuItem *item, gpointer data);
 static void connect_irrigation_callback(GtkMenuItem *item, gpointer data);
@@ -372,7 +374,7 @@ static struct menu_entry_info menu_entries[] =
     G_CALLBACK(show_city_full_bar_callback), MGROUP_SAFE },
   { "SHOW_CITY_NAMES", N_("City _Names"), GDK_KEY_n, GDK_CONTROL_MASK,
     G_CALLBACK(show_city_names_callback), MGROUP_SAFE },
-  { "SHOW_CITY_GROWTH", N_("City G_rowth"), GDK_KEY_r, GDK_CONTROL_MASK,
+  { "SHOW_CITY_GROWTH", N_("City G_rowth"), GDK_KEY_o, GDK_CONTROL_MASK,
     G_CALLBACK(show_city_growth_callback), MGROUP_SAFE },
   { "SHOW_CITY_PRODUCTIONS", N_("City _Production Levels"), GDK_KEY_p, GDK_CONTROL_MASK,
     G_CALLBACK(show_city_productions_callback), MGROUP_SAFE },
@@ -498,14 +500,18 @@ static struct menu_entry_info menu_entries[] =
     G_CALLBACK(build_road_callback), MGROUP_UNIT },
   { "BUILD_IRRIGATION", N_("Build _Irrigation"), GDK_KEY_i, 0,
     G_CALLBACK(build_irrigation_callback), MGROUP_UNIT },
+  { "CULTIVATE", N_("Cultivate"), GDK_KEY_i, GDK_SHIFT_MASK,
+    G_CALLBACK(cultivate_callback), MGROUP_UNIT },
   { "BUILD_MINE", N_("Build _Mine"), GDK_KEY_m, 0,
     G_CALLBACK(build_mine_callback), MGROUP_UNIT },
-  { "CONNECT_ROAD", N_("Connect With Roa_d"), GDK_KEY_r, GDK_SHIFT_MASK,
+  { "PLANT", N_("Plant"), GDK_KEY_m, GDK_SHIFT_MASK,
+    G_CALLBACK(plant_callback), MGROUP_UNIT },
+  { "CONNECT_ROAD", N_("Connect With Roa_d"), GDK_KEY_r, GDK_CONTROL_MASK,
     G_CALLBACK(connect_road_callback), MGROUP_UNIT },
-  { "CONNECT_RAIL", N_("Connect With Rai_l"), GDK_KEY_l, GDK_SHIFT_MASK,
+  { "CONNECT_RAIL", N_("Connect With Rai_l"), GDK_KEY_l, GDK_CONTROL_MASK,
     G_CALLBACK(connect_rail_callback), MGROUP_UNIT },
   { "CONNECT_IRRIGATION", N_("Connect With Irri_gation"),
-    GDK_KEY_i, GDK_SHIFT_MASK,
+    GDK_KEY_i, GDK_CONTROL_MASK,
     G_CALLBACK(connect_irrigation_callback), MGROUP_UNIT },
   { "TRANSFORM_TERRAIN", N_("Transf_orm Terrain"), GDK_KEY_o, 0,
     G_CALLBACK(transform_terrain_callback), MGROUP_UNIT },
@@ -1573,11 +1579,27 @@ static void build_irrigation_callback(GtkMenuItem *action, gpointer data)
 }
 
 /************************************************************************//**
+  Action "CULTIVATE" callback.
+****************************************************************************/
+static void cultivate_callback(GtkMenuItem *action, gpointer data)
+{
+  key_unit_cultivate();
+}
+
+/************************************************************************//**
   Action "BUILD_MINE" callback.
 ****************************************************************************/
 static void build_mine_callback(GtkMenuItem *action, gpointer data)
 {
   key_unit_mine();
+}
+
+/************************************************************************//**
+  Action "PLANT" callback.
+****************************************************************************/
+static void plant_callback(GtkMenuItem *action, gpointer data)
+{
+  key_unit_plant();
 }
 
 /************************************************************************//**
@@ -2246,8 +2268,12 @@ void real_menus_update(void)
                                             unit_can_est_trade_route_here)));
   menu_entry_set_sensitive("BUILD_IRRIGATION",
                            can_units_do_activity(punits, ACTIVITY_IRRIGATE));
+  menu_entry_set_sensitive("CULTIVATE",
+                           can_units_do_activity(punits, ACTIVITY_CULTIVATE));
   menu_entry_set_sensitive("BUILD_MINE",
                            can_units_do_activity(punits, ACTIVITY_MINE));
+  menu_entry_set_sensitive("PLANT",
+                           can_units_do_activity(punits, ACTIVITY_PLANT));
   menu_entry_set_sensitive("TRANSFORM_TERRAIN",
                            can_units_do_activity(punits, ACTIVITY_TRANSFORM));
   menu_entry_set_sensitive("FORTIFY",

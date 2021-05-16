@@ -971,7 +971,7 @@ void editor_apply_tool(const struct tile *ptile,
   case ETT_TERRAIN_SPECIAL:
   case ETT_ROAD:
   case ETT_MILITARY_BASE:
-    dsend_packet_edit_tile_extra(my_conn, tile, value, erase, size);
+    dsend_packet_edit_tile_extra(my_conn, tile, value, erase, apno, size);
     break;
 
   case ETT_UNIT:
@@ -1538,21 +1538,23 @@ void edit_buffer_copy(struct edit_buffer *ebuf, const struct tile *ptile)
       } extra_type_by_cause_iterate_end;
       break;
     case EBT_BASE:
-     extra_type_iterate(pextra) {
+      extra_type_iterate(pextra) {
         if (tile_has_extra(ptile, pextra)
             && is_extra_caused_by(pextra, EC_BASE)) {
           tile_add_extra(vtile, pextra);
           copied = TRUE;
         }
       } extra_type_iterate_end;
+      break;
     case EBT_ROAD:
-     extra_type_iterate(pextra) {
+      extra_type_iterate(pextra) {
         if (tile_has_extra(ptile, pextra)
             && is_extra_caused_by(pextra, EC_ROAD)) {
           tile_add_extra(vtile, pextra);
           copied = TRUE;
         }
       } extra_type_iterate_end;
+      break;
     case EBT_UNIT:
       unit_list_iterate(ptile->units, punit) {
         if (!punit) {
@@ -1623,6 +1625,11 @@ static void fill_tile_edit_packet(struct packet_edit_tile *packet,
   packet->terrain = pterrain
                     ? terrain_number(pterrain)
                     : terrain_count();
+  if (ptile->extras_owner != NULL) {
+    packet->eowner = player_number(ptile->extras_owner);
+  } else {
+    packet->eowner = MAP_TILE_OWNER_NULL;
+  }
 
   if (ptile->label == NULL) {
     packet->label[0] = '\0';

@@ -2587,10 +2587,22 @@ bool map_event_handler(SDL_Keysym key)
         }
         return FALSE;
 
-        /* show city growth Ctrl+r */
-      case SDLK_r:
+        /* show city growth Ctrl+o */
+        /* show pollution - Ctrl+Shift+o */
+      case SDLK_o:
         if (LCTRL || RCTRL) {
-          key_city_growth_toggle();
+          if (LSHIFT || RSHIFT) {
+            key_pollution_toggle();
+          } else {
+            key_city_growth_toggle();
+          }
+        }
+        return FALSE;
+
+        /* show bases - Ctrl+Shift+f */
+      case SDLK_f:
+        if ((LCTRL || RCTRL) && (LSHIFT || RSHIFT)) {
+          request_toggle_bases();
         }
         return FALSE;
 
@@ -2635,13 +2647,6 @@ bool map_event_handler(SDL_Keysym key)
         }
         return FALSE;
 
-        /* show bases - Ctrl+Shift+f */
-      case SDLK_f:
-        if ((LCTRL || RCTRL) && (LSHIFT || RSHIFT)) {
-          request_toggle_bases();
-        }
-        return FALSE;
-
         /* show resources - Ctrl+s */
       case SDLK_s:
         if (LCTRL || RCTRL) {
@@ -2653,13 +2658,6 @@ bool map_event_handler(SDL_Keysym key)
       case SDLK_h:
         if (LCTRL || RCTRL) {
           key_huts_toggle();
-        }
-        return FALSE;
-
-        /* show pollution - Ctrl+o */
-      case SDLK_o:
-        if (LCTRL || RCTRL) {
-          key_pollution_toggle();
         }
         return FALSE;
 

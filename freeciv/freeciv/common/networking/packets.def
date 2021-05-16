@@ -1279,6 +1279,7 @@ end
 
 PACKET_CLIENT_INFO = 119; cs, handle-per-conn
   GUI_TYPE gui;
+  UINT32 emerg_version;
   STRING distribution[MAX_LEN_NAME];
 end
 
@@ -2063,6 +2064,7 @@ PACKET_SCENARIO_INFO = 180; sc, handle-via-packet, handle-per-conn
 
   /* Unused at client side. */
   BOOL   have_resources;
+  STRING req_caps[257];
 end
 
 PACKET_SCENARIO_DESCRIPTION = 13; sc, handle-per-conn
@@ -2140,6 +2142,7 @@ PACKET_EDIT_TILE_EXTRA = 202; cs, handle-per-conn, dsend
   TILE tile; key
   EXTRA extra_type_id;
   BOOL removal;
+  PLAYER eowner;
   UINT8 size;
 end
 
@@ -2161,6 +2164,7 @@ PACKET_EDIT_TILE = 206; cs, handle-per-conn, handle-via-packet
   RESOURCE resource;
   TERRAIN terrain;
   NATION startpos_nation;
+  PLAYER eowner;
   STRING label[MAX_LEN_NAME];
 end
 
