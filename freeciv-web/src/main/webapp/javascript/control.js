@@ -4498,8 +4498,8 @@ function unit_can_sentry(punit)
     // 0==land,1==water.  Check the tile we're on: it might be a river on a tiny isle:
     var no_coast_near = tile_terrain(ptile)['tclass']; // 0==false if it's land
 
-    for (var t=0; t < num_cardinal_tileset_dirs; t++) {
-      var dir = cardinal_tileset_dirs[t];
+    for (var dir=0; dir < 8; dir++) {
+      //var dir = cardinal_tileset_dirs[t];
       var checktile = mapstep(ptile, dir);
       var pterrain = tile_terrain(checktile);
       // if NEITHER graphic_str NOR graphic_alt is 'coast', it's land:
