@@ -2484,8 +2484,8 @@ function create_unit_offset_arrays()
           mx += 2; my -= 2;
           break;
       case "Dragoons":
-          dx += 1; dy += 1;
-          vx -= 2; vy -= 10;
+          dx -= 3; dy -= 4;
+          vx -= 48; vy -= 16;
           break;
       case "Engineers":                     
           dx -= 3; dy -= 4;
