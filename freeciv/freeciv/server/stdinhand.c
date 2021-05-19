@@ -1708,17 +1708,18 @@ static void show_help_option(struct connection *caller,
 {
   char val_buf[256], def_buf[256];
   struct setting *pset = setting_by_number(id);
+  bool is_changed = setting_non_default(pset);
   const char *sethelp;
 
   if (setting_short_help(pset)) {
     cmd_reply(help_cmd, caller, C_COMMENT,
               /* TRANS: <untranslated name> - translated short help */
-              _("Option: %s  -  %s"), setting_name(pset),
+              _("Option: <font color='#fffabb'>%s</font>  -  %s"), setting_name(pset),
               _(setting_short_help(pset)));
   } else {
     cmd_reply(help_cmd, caller, C_COMMENT,
               /* TRANS: <untranslated name> */
-              _("Option: %s"), setting_name(pset));
+              _("Option: <font color='#fffabb'>%s</font>"), setting_name(pset));
   }
 
   sethelp = setting_extra_help(pset, FALSE);
@@ -1740,8 +1741,8 @@ static void show_help_option(struct connection *caller,
 
     switch (setting_type(pset)) {
     case SST_INT:
-      cmd_reply(help_cmd, caller, C_COMMENT, "%s %s, %s %d, %s %s, %s %d",
-                _("Value:"), val_buf,
+      cmd_reply(help_cmd, caller, C_COMMENT, "%s <font color='%s'>%s</font>, %s %d, %s %s, %s %d",
+                _("Value:"), (is_changed ? _("#90adff") : _("#d2ffbd'")), val_buf,
                 _("Minimum:"), setting_int_min(pset),
                 _("Default:"), def_buf,
                 _("Maximum:"), setting_int_max(pset));
@@ -1760,8 +1761,8 @@ static void show_help_option(struct connection *caller,
       /* Fall through. */
     case SST_BOOL:
     case SST_STRING:
-      cmd_reply(help_cmd, caller, C_COMMENT, "%s %s, %s %s",
-                _("Value:"), val_buf, _("Default:"), def_buf);
+      cmd_reply(help_cmd, caller, C_COMMENT, "%s <font color='%s'>%s</font>, %s %s",
+                _("Value:"), (is_changed ? _("#90adff") : _("#d2ffbd'")), val_buf, _("Default:"), def_buf);
       break;
     case SST_BITWISE:
       {
@@ -1774,8 +1775,8 @@ static void show_help_option(struct connection *caller,
           cmd_reply(help_cmd, caller, C_COMMENT, "- %s: \"%s\"",
                     value, setting_bitwise_bit(pset, i, TRUE));
         }
-        cmd_reply(help_cmd, caller, C_COMMENT, "%s %s",
-                  _("Value:"), val_buf);
+        cmd_reply(help_cmd, caller, C_COMMENT, "%s <font color='%s'>%s</font>",
+                  _("Value:"), (is_changed ? _("#90adff") : _("#d2ffbd'")), val_buf);
         cmd_reply(help_cmd, caller, C_COMMENT, "%s %s",
                   _("Default:"), def_buf);
       }
@@ -2277,7 +2278,8 @@ static bool show_settings(struct connection *caller,
 static void show_settings_one(struct connection *caller, enum command_id cmd,
                               struct setting *pset)
 {
-  char buf[MAX_LEN_CONSOLE_LINE] = "", value[MAX_LEN_CONSOLE_LINE] = "";
+  // char buf[MAX_LEN_CONSOLE_LINE] = ""      // no longer used
+  char value[512] = "";
   bool is_changed;
   static char prefix[OPTION_NAME_SPACE + 4 + 1] = "";
   char defaultness;
@@ -2288,15 +2290,16 @@ static void show_settings_one(struct connection *caller, enum command_id cmd,
   setting_value_name(pset, TRUE, value, sizeof(value));
 
   /* Wrap long option values, such as bitwise options */
-  fc_break_lines(value, LINE_BREAK - (sizeof(prefix)-1));
+  //fc_break_lines(value, LINE_BREAK - (sizeof(prefix)-1));
 
   if (prefix[0] == '\0') {
     memset(prefix, ' ', sizeof(prefix)-1);
   }
 
-  if (is_changed) {
-    /* Emphasizes the changed option. */
-    /* Apply tags to each line fragment. */
+  /* FCW disabled color tagging so it won't override client style sheets.
+  if (is_changed && FALSE) { 
+    // Emphasizes the changed option. 
+    // Apply tags to each line fragment.
     size_t startpos = 0;
     char *nl;
     do {
@@ -2312,6 +2315,7 @@ static void show_settings_one(struct connection *caller, enum command_id cmd,
       }
     } while (nl);
   }
+  */
 
   if (SST_INT == setting_type(pset)) {
     /* Add the range. */
@@ -2327,9 +2331,9 @@ static void show_settings_one(struct connection *caller, enum command_id cmd,
     defaultness = '=';
   }
 
-  cmd_reply_prefix(cmd, caller, C_COMMENT, prefix, "%-*s %c%c %s",
+  cmd_reply_prefix(cmd, caller, C_COMMENT, prefix, "<font color='#fffabb'>%-*s</font> %c%c <font color='%s'>%s</font>",
                    OPTION_NAME_SPACE, setting_name(pset),
-                   setting_status(caller, pset), defaultness,
+                   setting_status(caller, pset), defaultness, (is_changed ? _("#90adff") : _("#d2ffbd'")),
                    value);
 }
 
