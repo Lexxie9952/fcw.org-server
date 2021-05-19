@@ -3810,6 +3810,7 @@ void handle_ruleset_terrain(const struct packet_ruleset_terrain *p)
   }
   pterrain->transform_result = terrain_by_number(p->transform_result);
   pterrain->transform_time = p->transform_time;
+  pterrain->placing_time = p->placing_time;
   pterrain->pillage_time = p->pillage_time;
   pterrain->clean_pollution_time = p->clean_pollution_time;
   pterrain->clean_fallout_time = p->clean_fallout_time;
@@ -4721,6 +4722,8 @@ static action_id auto_attack_act(const struct act_prob *act_probs)
       case ACTION_CAPTURE_UNITS:
       case ACTION_BOMBARD:
       case ACTION_NUKE:
+      case ACTION_NUKE_CITY:
+      case ACTION_NUKE_UNITS:
       case ACTION_ATTACK:
       case ACTION_SUICIDE_ATTACK:
       case ACTION_CONQUER_CITY:

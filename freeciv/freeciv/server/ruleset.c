@@ -3008,6 +3008,11 @@ static bool load_ruleset_terrain(struct section_file *file,
         ok = FALSE;
         break;
       }
+
+      pterrain->placing_time = 1; /* default */
+      lookup_time(file, &pterrain->placing_time,
+                  tsection, "placing_time", filename, NULL, &ok);
+
       pterrain->pillage_time = 1; /* default */
       lookup_time(file, &pterrain->pillage_time,
                   tsection, "pillage_time", filename, NULL, &ok);
@@ -6277,6 +6282,10 @@ static bool load_ruleset_game(struct section_file *file, bool act,
                ACTION_CAPTURE_UNITS);
         BV_SET(action_by_number(ACTION_NUKE)->blocked_by,
                ACTION_CAPTURE_UNITS);
+        BV_SET(action_by_number(ACTION_NUKE_CITY)->blocked_by,
+               ACTION_CAPTURE_UNITS);
+        BV_SET(action_by_number(ACTION_NUKE_UNITS)->blocked_by,
+               ACTION_CAPTURE_UNITS);
         BV_SET(action_by_number(ACTION_SUICIDE_ATTACK)->blocked_by,
                ACTION_CAPTURE_UNITS);
         BV_SET(action_by_number(ACTION_ATTACK)->blocked_by,
@@ -6295,6 +6304,10 @@ static bool load_ruleset_game(struct section_file *file, bool act,
 
       if (force_bombard) {
         BV_SET(action_by_number(ACTION_NUKE)->blocked_by,
+               ACTION_BOMBARD);
+        BV_SET(action_by_number(ACTION_NUKE_CITY)->blocked_by,
+               ACTION_BOMBARD);
+        BV_SET(action_by_number(ACTION_NUKE_UNITS)->blocked_by,
                ACTION_BOMBARD);
         BV_SET(action_by_number(ACTION_SUICIDE_ATTACK)->blocked_by,
                ACTION_BOMBARD);
@@ -6321,6 +6334,22 @@ static bool load_ruleset_game(struct section_file *file, bool act,
                ACTION_NUKE);
         BV_SET(action_by_number(ACTION_CONQUER_CITY2)->blocked_by,
                ACTION_NUKE);
+        BV_SET(action_by_number(ACTION_SUICIDE_ATTACK)->blocked_by,
+               ACTION_NUKE_CITY);
+        BV_SET(action_by_number(ACTION_ATTACK)->blocked_by,
+               ACTION_NUKE_CITY);
+        BV_SET(action_by_number(ACTION_CONQUER_CITY)->blocked_by,
+               ACTION_NUKE_CITY);
+        BV_SET(action_by_number(ACTION_CONQUER_CITY2)->blocked_by,
+               ACTION_NUKE_CITY);
+        BV_SET(action_by_number(ACTION_SUICIDE_ATTACK)->blocked_by,
+               ACTION_NUKE_UNITS);
+        BV_SET(action_by_number(ACTION_ATTACK)->blocked_by,
+               ACTION_NUKE_UNITS);
+        BV_SET(action_by_number(ACTION_CONQUER_CITY)->blocked_by,
+               ACTION_NUKE_UNITS);
+        BV_SET(action_by_number(ACTION_CONQUER_CITY2)->blocked_by,
+               ACTION_NUKE_UNITS);
       }
 
       /* If the "Poison City" action or the "Poison City Escape" action
@@ -7415,6 +7444,7 @@ static void send_ruleset_terrain(struct conn_list *dest)
     packet.transform_result = (pterrain->transform_result
 			       ? terrain_number(pterrain->transform_result)
 			       : terrain_count());
+    packet.placing_time = pterrain->placing_time;
     packet.pillage_time = pterrain->pillage_time;
     packet.transform_time = pterrain->transform_time;
     packet.clean_pollution_time = pterrain->clean_pollution_time;

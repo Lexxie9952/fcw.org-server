@@ -5455,7 +5455,8 @@ static void sg_save_player_cities(struct savedata *saving,
       secfile_insert_int(saving->file, -1, "%s.rally_point_sub_tgt_vec",
                          buf);
       for (j = 1; j < rally_point_max_length; j++) {
-        secfile_insert_int(saving->file, -1, "%s.sub_tgt_vec,%d", buf, j);
+        secfile_insert_int(saving->file, -1, "%s.rally_point_sub_tgt_vec,%d",
+                           buf, j);
       }
     }
 
@@ -6055,6 +6056,8 @@ static bool sg_load_player_unit(struct loaddata *loading,
           case ACTION_SPY_NUKE:
           case ACTION_SPY_NUKE_ESC:
           case ACTION_NUKE:
+          case ACTION_NUKE_CITY:
+          case ACTION_NUKE_UNITS:
           case ACTION_DESTROY_CITY:
           case ACTION_EXPEL_UNIT:
           case ACTION_RECYCLE_UNIT:

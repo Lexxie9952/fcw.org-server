@@ -246,19 +246,32 @@ adv_want dai_action_value_unit_vs_city(struct action *paction,
     utility -= unit_build_shield_cost_base(actor_unit);
   } else {
     /* Not going to spend the unit so care about move fragment cost. */
+
     adv_want move_fragment_cost;
 
-    /* FIXME: The action performer function may charge more. */
-    /* FIXME: Potentially wrong result if the unit moves as a part of the
-     * action and EFT_ACTION_SUCCESS_MOVE_COST depends on the unit's
-     * location since this is evaluated *before* the unit moves. */
-    move_fragment_cost = unit_pays_mp_for_action(paction, actor_unit);
+    const struct unit_type *actor_utype = unit_type_get(actor_unit);
 
-    if (utype_pays_for_regular_move_to_tgt(paction,
-                                           unit_type_get(actor_unit))) {
-      /* Add the cost from the move. */
-      move_fragment_cost += map_move_cost_unit(&(wld.map), actor_unit,
-                                               city_tile(target_city));
+    /* FIXME: The action performer function may charge more. */
+    if (utype_is_moved_to_tgt_by_action(paction, actor_utype)) {
+      /* FIXME: doesn't catch all moved by action kinds. */
+
+      struct tile *actor_tile = unit_tile(actor_unit);
+      struct tile *target_tile = city_tile(target_city);
+
+      move_fragment_cost = utype_pays_mp_for_action_estimate(paction,
+                                                             actor_utype,
+                                                             actor_player,
+                                                             actor_tile,
+                                                             target_tile);
+    } else {
+      move_fragment_cost = unit_pays_mp_for_action(paction, actor_unit);
+
+      if (utype_pays_for_regular_move_to_tgt(paction,
+                                             unit_type_get(actor_unit))) {
+        /* Add the cost from the move. */
+        move_fragment_cost += map_move_cost_unit(&(wld.map), actor_unit,
+                                                 city_tile(target_city));
+      }
     }
 
     /* Taking MAX_MOVE_FRAGS takes all the move fragments. */
@@ -296,15 +309,35 @@ int dai_action_choose_sub_tgt_unit_vs_city(struct action *paction,
 
   if (action_has_result(paction, ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC)
       || action_has_result(paction, ACTION_SPY_TARGETED_SABOTAGE_CITY)) {
-    int count_impr = count_sabotagable_improvements(target_city);
+    /* Start with the city production. */
+    int tgt_impr = -1;
+    int tgt_impr_vul = 100;
 
-    if (count_impr > 0) {
-      /* TODO: consider target improvements in stead of always going after
-       * the current production. */
-      int tgt_impr = -1;
+    city_built_iterate(target_city, pimprove) {
+      /* How vulnerable the target building is. */
+      int impr_vul = pimprove->sabotage;
 
-      return tgt_impr + 1;
-    }
+      impr_vul -= (impr_vul
+                   * get_city_bonus(target_city, EFT_SABOTEUR_RESISTANT)
+                   / 100);
+
+      /* Can't be better than 100% */
+      impr_vul = MAX(impr_vul, 100);
+
+      /* Swap if better or equal probability of sabotage than
+       * production. */
+      /* TODO: More complex "better" than "listed later" and better or equal
+       * probability of success. It would probably be best to use utility
+       * like the rest of the Freeciv AI does. Building value *
+       * vulnerability + value from circumstances like an attacker that
+       * would like to get rid of a City Wall? */
+      if (impr_vul >= tgt_impr_vul) {
+        tgt_impr = improvement_number(pimprove);
+        tgt_impr_vul = impr_vul;
+      }
+    } city_built_iterate_end;
+
+    return tgt_impr + 1;
   }
 
   /* No sub target specified. */

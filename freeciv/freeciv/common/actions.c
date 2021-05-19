@@ -667,10 +667,19 @@ static void hard_code_actions(void)
                  0, 1, FALSE);
   actions[ACTION_NUKE] =
       action_new(ACTION_NUKE,
-                 /* FIXME: Target is actually Tile + Units + City */
                  ATK_TILE, ASTK_NONE,
                  TRUE, ACT_TGT_COMPL_SIMPLE,  TRUE, TRUE,
-                 0, 1, TRUE);
+                 0, 0, TRUE);
+  actions[ACTION_NUKE_CITY] =
+      action_new(ACTION_NUKE_CITY,
+                 ATK_CITY, ASTK_NONE,
+                 TRUE, ACT_TGT_COMPL_SIMPLE,  TRUE, TRUE,
+                 1, 1, TRUE);
+  actions[ACTION_NUKE_UNITS] =
+      action_new(ACTION_NUKE_UNITS,
+                 ATK_UNITS, ASTK_NONE,
+                 TRUE, ACT_TGT_COMPL_SIMPLE,  TRUE, TRUE,
+                 1, 1, TRUE);
   actions[ACTION_DESTROY_CITY] =
       action_new(ACTION_DESTROY_CITY, ATK_CITY, ASTK_NONE,
                  TRUE, ACT_TGT_COMPL_SIMPLE,  TRUE, TRUE,
@@ -2087,6 +2096,8 @@ action_actor_utype_hard_reqs_ok(const action_id wanted_action,
   case ACTION_SPY_NUKE:
   case ACTION_SPY_NUKE_ESC:
   case ACTION_NUKE:
+  case ACTION_NUKE_CITY:
+  case ACTION_NUKE_UNITS:
   case ACTION_DESTROY_CITY:
   case ACTION_EXPEL_UNIT:
   case ACTION_RECYCLE_UNIT:
@@ -2268,6 +2279,8 @@ action_hard_reqs_actor(const action_id wanted_action,
   case ACTION_SPY_NUKE:
   case ACTION_SPY_NUKE_ESC:
   case ACTION_NUKE:
+  case ACTION_NUKE_CITY:
+  case ACTION_NUKE_UNITS:
   case ACTION_DESTROY_CITY:
   case ACTION_EXPEL_UNIT:
   case ACTION_RECYCLE_UNIT:
@@ -2656,34 +2669,12 @@ is_action_possible(const action_id wanted_action,
 
     break;
 
-  case ACTION_NUKE:
-    if (actor_tile != target_tile) {
-      /* The old rules only restricted other tiles. Keep them for now. */
 
-      struct city *tcity;
-
-      if (actor_unit->moves_left <= 0) {
-        return TRI_NO;
-      }
-
-      if (!(tcity = tile_city(target_tile))
-          && !unit_list_size(target_tile->units)) {
-        return TRI_NO;
-      }
-
-      if (tcity && !pplayers_at_war(city_owner(tcity), actor_player)) {
-        return TRI_NO;
-      }
-
-      if (is_non_attack_unit_tile(target_tile, actor_player)) {
-        return TRI_NO;
-      }
-
-      if (!tcity
-          && (unit_attack_units_at_tile_result(actor_unit, target_tile)
-              != ATT_OK)) {
-        return TRI_NO;
-      }
+  case ACTION_NUKE_UNITS:
+    if (unit_attack_units_at_tile_result(actor_unit, target_tile)
+        != ATT_OK) {
+      /* Unreachable. */
+      return TRI_NO;
     }
 
     break;
@@ -3200,6 +3191,8 @@ case ACTION_CLEAN_POLLUTION:
   case ACTION_STEAL_MAPS_ESC:
   case ACTION_SPY_NUKE:
   case ACTION_SPY_NUKE_ESC:
+  case ACTION_NUKE:
+  case ACTION_NUKE_CITY:
   case ACTION_DESTROY_CITY:
   case ACTION_EXPEL_UNIT:
   case ACTION_DISBAND_UNIT:
@@ -4132,6 +4125,12 @@ action_prob(const action_id wanted_action,
     /* TODO */
     break;
   case ACTION_NUKE:
+    /* TODO */
+    break;
+  case ACTION_NUKE_CITY:
+    /* TODO */
+    break;
+  case ACTION_NUKE_UNITS:
     /* TODO */
     break;
   case ACTION_DESTROY_CITY:
@@ -5432,6 +5431,10 @@ const char *action_ui_name_ruleset_var_name(int act)
     return "ui_name_suitcase_nuke_escape";
   case ACTION_NUKE:
     return "ui_name_explode_nuclear";
+  case ACTION_NUKE_CITY:
+    return "ui_name_nuke_city";
+  case ACTION_NUKE_UNITS:
+    return "ui_name_nuke_units";
   case ACTION_DESTROY_CITY:
     return "ui_name_destroy_city";
   case ACTION_RECYCLE_UNIT:
@@ -5613,6 +5616,12 @@ const char *action_ui_name_default(int act)
   case ACTION_NUKE:
     /* TRANS: Explode _Nuclear (100% chance of success). */
     return N_("Explode %sNuclear%s");
+  case ACTION_NUKE_CITY:
+    /* TRANS: _Nuke City (100% chance of success). */
+    return N_("%sNuke City%s");
+  case ACTION_NUKE_UNITS:
+    /* TRANS: _Nuke Units (100% chance of success). */
+    return N_("%sNuke Units%s");
   case ACTION_DESTROY_CITY:
     /* TRANS: Destroy _City (100% chance of success). */
     return N_("Destroy %sCity%s");

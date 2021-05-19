@@ -97,6 +97,7 @@ static void spy_steal_maps(QVariant data1, QVariant data2);
 static void spy_steal_maps_esc(QVariant data1, QVariant data2);
 static void spy_nuke_city(QVariant data1, QVariant data2);
 static void spy_nuke_city_esc(QVariant data1, QVariant data2);
+static void nuke_city(QVariant data1, QVariant data2);
 static void destroy_city(QVariant data1, QVariant data2);
 static void diplomat_embassy(QVariant data1, QVariant data2);
 static void spy_embassy(QVariant data1, QVariant data2);
@@ -112,6 +113,7 @@ static void caravan_establish_trade(QVariant data1, QVariant data2);
 static void caravan_help_build(QVariant data1, QVariant data2);
 static void unit_recycle(QVariant data1, QVariant data2);
 static void capture_units(QVariant data1, QVariant data2);
+static void nuke_units(QVariant data1, QVariant data2);
 static void expel_unit(QVariant data1, QVariant data2);
 static void bombard(QVariant data1, QVariant data2);
 static void found_city(QVariant data1, QVariant data2);
@@ -213,6 +215,7 @@ static const QHash<action_id, pfcn_void> af_map_init(void)
   action_function[ACTION_CONQUER_CITY] = conquer_city;
   action_function[ACTION_CONQUER_CITY2] = conquer_city2;
   action_function[ACTION_STRIKE_BUILDING] = spy_request_strike_bld_list;
+  action_function[ACTION_NUKE_CITY] = nuke_city;
 
   /* Unit acting against a unit target. */
   action_function[ACTION_SPY_BRIBE_UNIT] = diplomat_bribe;
@@ -228,6 +231,7 @@ static const QHash<action_id, pfcn_void> af_map_init(void)
   /* Unit acting against all units at a tile. */
   action_function[ACTION_CAPTURE_UNITS] = capture_units;
   action_function[ACTION_BOMBARD] = bombard;
+  action_function[ACTION_NUKE_UNITS] = nuke_units;
 
   /* Unit acting against a tile. */
   action_function[ACTION_FOUND_CITY] = found_city;
@@ -862,7 +866,7 @@ void notify_dialog::calc_size(int &x, int &y)
   str_list << qcaption << qheadline;
 
   for (i = 0; i < str_list.count(); i++) {
-    x = qMax(x, fm.width(str_list.at(i)));
+    x = qMax(x, fm.horizontalAdvance(str_list.at(i)));
     y = y + 3 + fm.height();
   }
   x = x + 15;
@@ -2405,6 +2409,18 @@ static void disembark2(QVariant data1, QVariant data2)
 }
 
 /**********************************************************************//**
+  Action "Nuke Units" for choice dialog
+***************************************************************************/
+static void nuke_units(QVariant data1, QVariant data2)
+{
+  int actor_id = data1.toInt();
+  int target_id = data2.toInt();
+
+  request_do_action(ACTION_NUKE_UNITS, actor_id,
+                    target_id, 0, "");
+}
+
+/**********************************************************************//**
   Action capture units for choice dialog
 ***************************************************************************/
 static void capture_units(QVariant data1, QVariant data2)
@@ -2894,6 +2910,21 @@ static void spy_nuke_city_esc(QVariant data1, QVariant data2)
       && NULL != game_city_by_number(diplomat_target_id)) {
     request_do_action(ACTION_SPY_NUKE_ESC,
                       diplomat_id, diplomat_target_id, 0, "");
+  }
+}
+
+/***********************************************************************//**
+  Action "Nuke City" for choice dialog
+***************************************************************************/
+static void nuke_city(QVariant data1, QVariant data2)
+{
+  int actor_id = data1.toInt();
+  int target_id = data2.toInt();
+
+  if (NULL != game_unit_by_number(actor_id)
+      && NULL != game_city_by_number(target_id)) {
+    request_do_action(ACTION_NUKE_CITY,
+                      actor_id, target_id, 0, "");
   }
 }
 
@@ -4150,7 +4181,7 @@ void units_select::paint(QPainter *painter, QPaintEvent *event)
       info_font.setPointSize(i);
     }
     QFontMetrics qfm(info_font);
-    if (10 + qfm.width(str2) < width()) {
+    if (10 + qfm.horizontalAdvance(str2) < width()) {
       break;
     }
   }
