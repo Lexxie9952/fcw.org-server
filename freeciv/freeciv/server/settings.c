@@ -220,9 +220,11 @@ static bool set_enum_value(struct setting *pset, int val);
 static const struct sset_val_name *caravanbonusstyle_name(int caravanbonus)
 {
   switch (caravanbonus) {
+  /* TRANS: Description of caravan bonus style setting value. */
   NAME_CASE(CBS_CLASSIC, "CLASSIC", N_("Classic Freeciv"));
   NAME_CASE(CBS_LOGARITHMIC, "LOGARITHMIC", N_("Log^2 N style"));
   }
+
   return NULL;
 }
 
@@ -260,9 +262,11 @@ static const struct sset_val_name *topology_name(int topology_bit)
 static const struct sset_val_name *traderevenuestyle_name(int revenue_style)
 {
   switch (revenue_style) {
+  /* TRANS: Description of trade revenue style setting value. */
   NAME_CASE(TRS_CLASSIC, "CLASSIC", N_("Classic Freeciv"));
   NAME_CASE(TRS_SIMPLE, "SIMPLE", N_("Proportional to tile trade"));
   }
+
   return NULL;
 }
 
@@ -1493,7 +1497,7 @@ static struct setting settings[] = {
 
   GEN_BITWISE("topology", wld.map.topology_id, SSET_MAP_SIZE,
               SSET_GEOLOGY, SSET_VITAL, ALLOW_NONE, ALLOW_BASIC,
-              N_("Map topology index"),
+              N_("Map topology"),
 #ifdef FREECIV_WEB
               /* TRANS: Freeciv-web version of the help text. */
               N_("Freeciv-web maps are always two-dimensional. They may wrap "
