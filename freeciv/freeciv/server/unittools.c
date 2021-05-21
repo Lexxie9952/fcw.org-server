@@ -5654,9 +5654,8 @@ struct unit_order *create_unit_orders(int length,
       case ACTION_SPY_TARGETED_SABOTAGE_CITY:
       case ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC:
       case ACTION_STRIKE_BUILDING:
-        /* Sub target is production (-1) or a building. */
-        if (!(orders[i].sub_target - 1 == -1
-              || improvement_by_number(orders[i].sub_target - 1))) {
+        /* Sub target is a building. */
+        if (!improvement_by_number(orders[i].sub_target)) {
           /* Sub target is invalid. */
           log_error("at index %d, cannot do %s without a target.", i,
                     action_id_rule_name(orders[i].action));
@@ -5698,6 +5697,8 @@ struct unit_order *create_unit_orders(int length,
       case ACTION_SPY_STEAL_GOLD_ESC:
       case ACTION_SPY_SABOTAGE_CITY:
       case ACTION_SPY_SABOTAGE_CITY_ESC:
+      case ACTION_SPY_SABOTAGE_CITY_PRODUCTION:
+      case ACTION_SPY_SABOTAGE_CITY_PRODUCTION_ESC:
       case ACTION_SPY_STEAL_TECH:
       case ACTION_SPY_STEAL_TECH_ESC:
       case ACTION_SPY_INCITE_CITY:
@@ -5728,6 +5729,7 @@ struct unit_order *create_unit_orders(int length,
       case ACTION_UPGRADE_UNIT:
       case ACTION_ATTACK:
       case ACTION_SUICIDE_ATTACK:
+      case ACTION_STRIKE_PRODUCTION:
       case ACTION_CONQUER_CITY:
       case ACTION_CONQUER_CITY2:
       case ACTION_PARADROP:
