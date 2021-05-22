@@ -54,6 +54,8 @@ extern "C" {
 #define SPECENUM_VALUE2NAME N_("techs from")
 #define SPECENUM_VALUE3 ASTK_EXTRA
 #define SPECENUM_VALUE3NAME N_("extras on")
+#define SPECENUM_VALUE4 ASTK_EXTRA_NOT_THERE
+#define SPECENUM_VALUE4NAME N_("create extras on")
 #define SPECENUM_COUNT ASTK_COUNT
 #include "specenum_gen.h"
 
@@ -175,7 +177,7 @@ extern "C" {
 #define SPECENUM_VALUE56 ACTION_FORTIFY
 #define SPECENUM_VALUE56NAME "Fortify"
 #define SPECENUM_VALUE57 ACTION_ROAD
-#define SPECENUM_VALUE57NAME "Road"
+#define SPECENUM_VALUE57NAME "Build Road"
 #define SPECENUM_VALUE58 ACTION_CONVERT
 #define SPECENUM_VALUE58NAME "Convert Unit"
 #define SPECENUM_VALUE59 ACTION_BASE
