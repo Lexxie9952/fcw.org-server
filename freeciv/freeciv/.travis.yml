@@ -8,4 +8,71 @@ compiler:
 python:
   - "3.7"
 
-script: "sudo bash ./scripts/travis-build.sh"  
+jobs:
+  include:
+  - name: "normal"
+    addons:
+      apt:
+        sources:
+        - sourceline: 'ppa:kvilhaugsvik/backports'
+        packages:
+        - gettext
+        - libgtk-3-dev
+        - libcurl4-openssl-dev
+        - libtool
+        - automake
+        - autoconf
+        - autotools-dev
+        - language-pack-en
+        - python3.7
+        - liblzma-dev
+        - libicu-dev
+        - libsqlite3-dev
+        - qt5-default
+        - libsdl2-mixer-dev
+        - libsdl2-gfx-dev
+        - libsdl2-image-dev
+        - libsdl2-ttf-dev
+        - libmysqlclient-dev
+  - name: "dist"
+    addons:
+      apt:
+        packages:
+        - libtolua-dev
+        - gettext
+        - libtool
+        - automake
+        - autoconf
+        - autotools-dev
+        - python3.7
+        - liblzma-dev
+        - libicu-dev
+        - libsqlite3-dev
+  - name: "meson"
+    addons:
+      apt:
+        sources:
+        - sourceline: 'ppa:kvilhaugsvik/backports'
+        packages:
+        - meson
+        - libtolua-dev
+        - gettext
+        - libgtk-3-dev
+        - libcurl4-openssl-dev
+        - libtool
+        - automake
+        - autoconf
+        - autotools-dev
+        - language-pack-en
+        - python3.7
+        - liblzma-dev
+        - libicu-dev
+        - libsqlite3-dev
+        - qt5-default
+        - libsdl2-mixer-dev
+        - libsdl2-gfx-dev
+        - libsdl2-image-dev
+        - libsdl2-ttf-dev
+        - libmysqlclient-dev
+
+script: "sudo bash ./scripts/travis-build.sh ${TRAVIS_JOB_NAME}"
