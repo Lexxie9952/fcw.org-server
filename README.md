@@ -44,7 +44,8 @@ Freeciv-Web consists of these components:
 
 Running Freeciv-web on your computer
 ------------------------------------
-The recommended and probably easiest way is to use Vagrant on VirtualBox.
+The recommended and probably easiest way is to use Vagrant on VirtualBox.  
+[FCW Install Docs on Wiki](https://freecivweb.fandom.com/wiki/Freeciv-web_FCW_Install)  
 
 Whatever the method you choose, you'll have to check out Freeciv-web to a
 directory on your computer, by installing [Git](http://git-scm.com/) and
