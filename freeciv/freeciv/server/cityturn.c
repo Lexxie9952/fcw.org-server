@@ -2554,14 +2554,57 @@ static bool city_build_building(struct player *pplayer, struct city *pcity)
 }
 
 /**********************************************************************//**
+  Helper function to create one unit in a city.
+  Doesn't make any announcements.
+  This might destroy the city due to scripts (but not otherwise; in
+  particular, pop_cost is the caller's problem).
+  Returns the new unit (if it survived scripts).
+**************************************************************************/
+static struct unit *city_create_unit(struct city *pcity,
+                                     const struct unit_type *utype)
+{
+  struct player *pplayer = city_owner(pcity);
+  struct unit *punit;
+  int saved_unit_id;
+
+  punit = create_unit(pplayer, pcity->tile, utype,
+                      city_production_unit_veteran_level(pcity, utype),
+                      pcity->id, 0);
+  pplayer->score.units_built++;
+  saved_unit_id = punit->id;
+
+  /* If city has a rally point set, give the unit a move order. */
+  if (pcity->rally_point.length) {
+    punit->has_orders = TRUE;
+    punit->orders.length = pcity->rally_point.length;
+    punit->orders.vigilant = pcity->rally_point.vigilant;
+    punit->orders.list = fc_malloc(pcity->rally_point.length
+                                   * sizeof(struct unit_order));
+    memcpy(punit->orders.list, pcity->rally_point.orders,
+           pcity->rally_point.length * sizeof(struct unit_order));
+  }
+
+  /* This might destroy pcity and/or punit: */
+  script_server_signal_emit("unit_built", punit, pcity);
+
+  if (unit_is_alive(saved_unit_id)) {
+    return punit;
+  } else {
+    return NULL;
+  }
+}
+
+/**********************************************************************//**
   Build city units. Several units can be built in one turn if the effect
   City_Build_Slots is used.
+  Returns FALSE when the city is removed, TRUE otherwise.
 **************************************************************************/
 static bool city_build_unit(struct player *pplayer, struct city *pcity)
 {
   const struct unit_type *utype;
-  struct worklist *pwl = &pcity->worklist;;
+  struct worklist *pwl = &pcity->worklist;
   int unit_shield_cost, num_units, i;
+  int saved_city_id = pcity->id;
   struct universal target; ////
 
   fc_assert_ret_val(pcity->production.kind == VUT_UTYPE, FALSE);
@@ -2593,13 +2636,12 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
                 city_name_get(pcity), utype_rule_name(utype));
     script_server_signal_emit("unit_cant_be_built", utype, pcity,
                               "unavailable");
-    return TRUE;
+    return city_exist(saved_city_id);
   }
 
   if (pcity->shield_stock >= unit_shield_cost) {
     int pop_cost = utype_pop_value(utype);
     struct unit *punit;
-    int saved_city_id = pcity->id;
 
     /* Should we disband the city? -- Massimo */
     if (city_size_get(pcity) == pop_cost
@@ -2616,7 +2658,7 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
                     city_size_get(pcity), pop_cost);
       script_server_signal_emit("unit_cant_be_built", utype, pcity,
                                 "pop_cost");
-      return TRUE;
+      return city_exist(saved_city_id);
     }
 
     fc_assert(pop_cost == 0 || city_size_get(pcity) >= pop_cost);
@@ -2643,14 +2685,11 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
       // unit that can be made in it, given the number of city_build_slots.
 
       // CASE 1: producing current prod item
-      if (i==0) { 
+      if (i == 0) { 
                 // DEBUG notify_player(pplayer, city_tile(pcity), E_UNIT_BUILT_POP_COST,
                 //      ftc_server, _("  i=0 %s making %s."),
                 //      city_link(pcity), utype_name_translation(utype));
 
-        punit = create_unit(pplayer, pcity->tile, utype,
-                            city_production_unit_veteran_level(pcity, utype),
-                            pcity->id, 0);
       }
       // CASE 2: making an nth (ith) item AND the worklist still has unpopped items:
       else if (worklist_length(&pcity->worklist) > 0)    // >0 means we have another item in worklist
@@ -2673,11 +2712,8 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
         utype = target.value.utype;
         pop_cost = utype_pop_value(utype);
 
-        punit = create_unit(pplayer, pcity->tile, utype,
-                            city_production_unit_veteran_level(pcity, utype),
-                            pcity->id, 0);
         // potentially, this is a different type of unit -- make sure to set
-        // correct shield cost that will be deducted below                
+        // correct shield cost that will be deducted below
         unit_shield_cost = utype_build_shield_cost(pcity, utype);
       }
       // CASE 3: making an nth item and we ran out of stuff in the 
@@ -2686,22 +2722,23 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
         // DEBUG notify_player(pplayer, city_tile(pcity), E_UNIT_BUILT_POP_COST,
         // ftc_server, _("  i=%d BUT no worklist target. Using last of %s."),
         // i, utype_name_translation(utype));
-
-        punit = create_unit(pplayer, pcity->tile, utype,
-                            city_production_unit_veteran_level(pcity, utype),
-                            pcity->id, 0);
       }
-      pplayer->score.units_built++;
 
-      /* If city has a rally point set, give the unit a move order. */
-      if (pcity->rally_point.length) {
-        punit->has_orders = TRUE;
-        punit->orders.length = pcity->rally_point.length;
-        punit->orders.vigilant = pcity->rally_point.vigilant;
-        punit->orders.list = fc_malloc(pcity->rally_point.length
-                                       * sizeof(struct unit_order));
-	memcpy(punit->orders.list, pcity->rally_point.orders,
-               pcity->rally_point.length * sizeof(struct unit_order));
+      punit = city_create_unit(pcity, utype);
+
+      /* Check if the city still exists (script might have removed it).
+       * If not, we assume any effects / announcements done below were
+       * already replaced by the script if necessary. */
+      if (!city_exist(saved_city_id)) {
+        break;
+      }
+
+      if (punit) {
+        notify_player(pplayer, city_tile(pcity), E_UNIT_BUILT, ftc_server,
+                      /* TRANS: <city> is finished building <unit/building>. */
+                      _("🔨[`%s`] %s is finished building %s."),
+                      utype_name_translation(utype), city_link(pcity),
+                      utype_name_translation(utype));
       }
 
       /* After we created the unit remove the citizen. This will also
@@ -2714,12 +2751,6 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
       /* to eliminate micromanagement, we only subtract the unit's cost */
       pcity->before_change_shields -= unit_shield_cost;
       pcity->shield_stock -= unit_shield_cost;
-
-      notify_player(pplayer, city_tile(pcity), E_UNIT_BUILT, ftc_server,
-                    /* TRANS: <city> is finished building <unit/building>. */
-                    _("🔨[`%s`] %s is finished building %s."),
-                    utype_name_translation(utype), city_link(pcity),
-                    utype_name_translation(utype));
 
       if (pop_cost > 0) {
         /* Additional message if the unit has population cost. */
@@ -2735,13 +2766,6 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
                       city_link(pcity), city_size_get(pcity));
       }
 
-      script_server_signal_emit("unit_built", punit, pcity);
-
-      /* check if the city still exists */
-      if (!city_exist(saved_city_id)) {
-        break;
-      }
-
       if (i != 0 && worklist_length(pwl) > 0) {
         /* remove the build unit from the worklist; it has to be one less
          * than units build to preserve the next build target from the
@@ -2752,21 +2776,21 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
       }
     }
 
-    if (pcity->rally_point.length && !pcity->rally_point.persistent) {
-      pcity->rally_point.length = 0;
-      pcity->rally_point.persistent = FALSE;
-      pcity->rally_point.vigilant = FALSE;
-      free(pcity->rally_point.orders);
-      pcity->rally_point.orders = NULL;
-    }
-
     if (city_exist(saved_city_id)) {
+      if (pcity->rally_point.length && !pcity->rally_point.persistent) {
+        pcity->rally_point.length = 0;
+        pcity->rally_point.persistent = FALSE;
+        pcity->rally_point.vigilant = FALSE;
+        free(pcity->rally_point.orders);
+        pcity->rally_point.orders = NULL;
+      }
+
       /* Done building this unit; time to move on to the next. */
       choose_build_target(pplayer, pcity);
     }
   }
 
-  return TRUE;
+  return city_exist(saved_city_id);
 }
 
 /**********************************************************************//**
@@ -3566,6 +3590,7 @@ static bool city_illness_check(const struct city * pcity)
 
 /**********************************************************************//**
   Disband a city into the built unit, supported by the closest city.
+  Returns TRUE if the city was disbanded.
 **************************************************************************/
 static bool disband_city(struct city *pcity)
 {
@@ -3573,6 +3598,7 @@ static bool disband_city(struct city *pcity)
   struct tile *ptile = pcity->tile;
   struct city *rcity=NULL;
   const struct unit_type *utype = pcity->production.value.utype;
+  struct unit *punit;
   int saved_id = pcity->id;
 
   /* find closest city other than pcity */
@@ -3595,26 +3621,34 @@ static bool disband_city(struct city *pcity)
     }
   }
 
-  (void) create_unit(pplayer, ptile, utype,
-                    city_production_unit_veteran_level(pcity, utype),
-		     pcity->id, 0);
-  pplayer->score.units_built++;
+  punit = city_create_unit(pcity, utype);
 
-  /* Shift all the units supported by pcity (including the new unit)
-   * to rcity.  transfer_city_units does not make sure no units are
-   * left floating without a transport, but since all units are
-   * transferred this is not a problem. */
-  transfer_city_units(pplayer, pplayer, pcity->units_supported, rcity, 
-                      pcity, -1, TRUE);
+  /* "unit_built" script handler may have destroyed city. If so, we
+   * assume something sensible happened to its units, and that the
+   * script took care of announcing unit creation if required. */
+  if (city_exist(saved_id)) {
+    /* Shift all the units supported by pcity (including the new unit)
+     * to rcity.  transfer_city_units does not make sure no units are
+     * left floating without a transport, but since all units are
+     * transferred this is not a problem. */
+    transfer_city_units(pplayer, pplayer, pcity->units_supported, rcity, 
+                        pcity, -1, TRUE);
 
-  notify_player(pplayer, ptile, E_UNIT_BUILT, ftc_server,
-                /* TRANS: "<city> is disbanded into Settler." */
-                _("%s is disbanded into %s."), 
-                city_tile_link(pcity), utype_name_translation(utype));
+    if (punit) {
+      notify_player(pplayer, ptile, E_UNIT_BUILT, ftc_server,
+                    /* TRANS: "<city> is disbanded into Settler." */
+                    _("%s is disbanded into %s."), 
+                    city_tile_link(pcity), utype_name_translation(utype));
+    }
 
-  script_server_signal_emit("city_destroyed", pcity, pcity->owner, NULL);
+    script_server_signal_emit("city_destroyed", pcity, pcity->owner, NULL);
 
-  remove_city(pcity);
+    remove_city(pcity);
+
+    /* Since we've removed the city, we don't need to worry about
+     * charging for production, disabling rally points, etc. */
+  }
+
   return TRUE;
 }
 
