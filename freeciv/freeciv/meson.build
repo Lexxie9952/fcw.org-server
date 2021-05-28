@@ -48,7 +48,8 @@ pub_headers = [
   'sys/select.h',
   'netinet/in.h',
   'dirent.h',
-  'stdbool.h'
+  'stdbool.h',
+  'winsock2.h'
   ]
 
 priv_headers = [
@@ -135,7 +136,9 @@ priv_functions = [
   '_mkdir',
   '_setjmp',
   '_strcoll',
-  '_stricoll'
+  '_stricoll',
+  'fcntl',
+  'ioctl'
   ]
 
 foreach func : priv_functions
@@ -146,6 +149,7 @@ endforeach
 
 if host_system == 'windows'
   pub_conf_data.set('FREECIV_HAVE_TINYCTHR', 1)
+  pub_conf_data.set('FREECIV_HAVE_WINSOCK', 1)
 else
   pub_conf_data.set('FREECIV_HAVE_PTHREAD', 1)
 endif
@@ -169,7 +173,7 @@ else
 endif
 
 common_inc = include_directories(cross_inc_path,
-  'dependencies/lua-5.4/src',
+  'dependencies/lua-5.4/src', 'dependencies/tinycthread',
   'dependencies/tolua-5.2/include', 'dependencies/cvercmp',
   'utility', 'common', 'common/networking', 'common/scriptcore',
   'common/aicore')

@@ -4115,6 +4115,8 @@ void handle_ruleset_action(const struct packet_ruleset_action *p)
   sz_strlcpy(act->ui_name, p->ui_name);
   act->quiet = p->quiet;
 
+  act->actor_consuming_always = p->actor_consuming_always;
+
   act->actor_kind  = p->act_kind;
   act->target_kind = p->tgt_kind;
   act->sub_target_kind = p->sub_tgt_kind;
@@ -4718,6 +4720,11 @@ static action_id auto_attack_act(const struct act_prob *act_probs)
       case ACTION_TRANSPORT_DISEMBARK1:
       case ACTION_TRANSPORT_DISEMBARK2:
         /* Not interesting. */
+        break;
+      case ACTION_USER_ACTION1:
+      case ACTION_USER_ACTION2:
+      case ACTION_USER_ACTION3:
+        /* No idea. Assume not interesting. */
         break;
       case ACTION_CAPTURE_UNITS:
       case ACTION_BOMBARD:
