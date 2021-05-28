@@ -1436,7 +1436,6 @@ static int next_choice(struct cm_state *state, int oldchoice, bool negative_ok)
   return newchoice;
 }
 
-
 /************************************************************************//**
   Pick a sibling choice to the last choice.  This works down the branch to
   see if a choice that actually looks worse may actually be better.
