@@ -1924,7 +1924,8 @@ static bool diplomat_was_caught(struct player *act_player,
 
   odds += action_odds;
 
-  if (odds<0) odds=0;   /* fc_rand 100% of time gives opposite result if odds<0 */
+  if (odds<0) odds=0;       /* fc_rand 100% of time gives opposite result if odds<0 */
+  if (odds>100) odds=100;   /* report odds higher than 100 as simply 100 */
   int your_roll = (int)fc_rand(100);
   /* Notify players of odds to provide transparency of what's going on!
    * Siege rams don't get "caught", but progress to next stage of sabotage resistance checking */
