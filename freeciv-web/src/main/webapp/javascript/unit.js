@@ -39,8 +39,8 @@ var unit_bombard_attack_names = {
   "Fanatics":   "Skirmish Assault",
   "Zealots":    "Skirmish Assault",
   "Marines":    "Bazooka Attack",
-  "Zeppelin":   "Bomb Attack",
-  "Battleship": "Bombard Attack"
+  "Zeppelin":   "Bomb",
+  "Battleship": "Bombard"
 };
 
 // Determines if victory by this unit shows crossed swords or gunpowder explosion.
@@ -407,6 +407,7 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
       if (tclass.rule_name != "LandRail"
           && tclass.rule_name != "LandRoad"
           && ttype.name != "Cargo Ship"
+          && ttype.name != "Airplane"
           && ttype.name != "Transport") return false;
     } else { // the "Goods" unit which is also "Cargo" class:
       if (ttype.name != "Galleon"  && !utype_has_flag(ttype, UTYF_TRADEROUTE))
