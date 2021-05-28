@@ -94,17 +94,6 @@ function can_actor_unit_move(actor_unit, target_tile)
   return true;
 }
 
-/**************************************************************************
-  Encode a building ID for transfer in the sub_tgt_id field of
-  packet_unit_do_action for targeted sabotage city.
-**************************************************************************/
-function encode_building_id(building_id)
-{
-  /* Building ID is encoded in the value field by adding one so the
-   * building ID -1 (current production) can be transferred. */
-  return building_id + 1;
-}
-
 /***************************************************************************
   Returns a part of an action probability in a user readable format.
 ***************************************************************************/
@@ -936,7 +925,7 @@ function create_sabotage_impr_button(improvement, parent_id,
     click : function() {
 
         request_unit_do_action(act_id, actor_id, city_id,
-                               encode_building_id(improvement['id']));
+                               improvement['id']);
 
       remove_active_dialog("#" + parent_id);
     }
@@ -968,13 +957,8 @@ function popup_sabotage_dialog(actor_unit, target_city, city_imprs, act_id)
   $("#" + id).attr("title", "Pick Sabotage Target");
 
   /* List the alternatives */
-  for (var i = -1; i < ruleset_control['num_impr_types']; i++) {
-    var improvement;
-    if (i >= 0) improvement = improvements[i];
-    // "virtual improvement" id==-1, is the  code to sabotage production instead of building: 
-    else {
-      improvement = {"name": "Production", "id": -2, "sabotage": 100}; // code is -1 but encoding adds +=1.
-    }
+  for (var i = 0; i < ruleset_control['num_impr_types']; i++) {
+    var improvement = improvements[i];
 
               // Battering Rams can only select City Walls *********************************
               if (battering_event) {
@@ -985,15 +969,14 @@ function popup_sabotage_dialog(actor_unit, target_city, city_imprs, act_id)
                   // Instead, just automate what would happen if they did press the button:
                     request_unit_do_action(act_id,
                                            actor_unit['id'], target_city['id'],
-                                           encode_building_id(improvement['id']));
+                                           improvement['id']);
 
                   // We're done. Go home without making popup dialog.
                   return;
                 }
               } //****************************************************************************
 
-    if (i==-1 || // can always sabotage production.
-       (city_imprs.isSet(i) && improvement['sabotage'] > 0)) {
+    if (city_imprs.isSet(i) && improvement['sabotage'] > 0) {
       /* The building is in the city. The probability of successfully
        * sabotaging it is above zero. */
       buttons.push(create_sabotage_impr_button(improvement, id,
