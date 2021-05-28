@@ -6086,6 +6086,9 @@ static bool sg_load_player_unit(struct loaddata *loading,
           case ACTION_TRANSPORT_DISEMBARK2:
           case ACTION_TRANSPORT_BOARD:
           case ACTION_TRANSPORT_EMBARK:
+          case ACTION_USER_ACTION1:
+          case ACTION_USER_ACTION2:
+          case ACTION_USER_ACTION3:
           case ACTION_SPY_ATTACK:
           case ACTION_COUNT:
             /* None of these can take a sub target. */
