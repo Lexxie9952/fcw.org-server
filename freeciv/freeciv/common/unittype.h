@@ -577,6 +577,7 @@ struct bombard_stats {
   int bit_field;                  // raw bit field currently taken from unit_type.city_size
 
   int bombard_extra_range;        // Bit      0: RESERVED, whether this unit gets +1 extra range
+  bool bombard_stay_fortified;    // Bit      1: whether bombard action preserves fortified status
   int bombard_move_cost;          // Bits   2-7: Move fragments expended by performing a bombard action
   int bombard_primary_targets;    // Bits  8-10: Max # of targets on tile that are hit. (0==all)
   int bombard_primary_kills;      // Bits 11-13: Max # of kills possible on primary targets (0==none)
@@ -584,7 +585,6 @@ struct bombard_stats {
   int bombard_collateral_kills;   // RESERVED, # of collateral units who could possibly die (0==none)
   int bombard_collateral_rate_reduce;//RESERVED, reduction in bombard_rate for collateral target exposure
   int bombard_collateral_atk_mod; // RESERVED, adjustment to atk strength on collateral targets (e.g., -25)
-  bool bombard_stay_fortified;    // RESERVED, whether bombard action preserves fortified status
   int bombard_fortified_def_mod;  // RESERVED, additional defense bonus for targets IFF fortified
   int bombard_rate_range_mod;     // RESERVED, adjustment to bombard_rate for each 1 tile distance
   int bombard_atk_mod;            // RESERVED, % adjustment to attack strength when bombarding (-50 = -50%)
