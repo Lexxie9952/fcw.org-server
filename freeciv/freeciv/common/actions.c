@@ -870,7 +870,7 @@ static void hard_code_actions(void)
                  1, 1, FALSE);
   actions[ACTION_TRANSPORT_EMBARK] =
       action_new(ACTION_TRANSPORT_EMBARK, ATK_UNIT, ASTK_NONE,
-                 FALSE, ACT_TGT_COMPL_SIMPLE, FALSE, TRUE,
+                 FALSE, ACT_TGT_COMPL_SIMPLE, TRUE, TRUE,
                  1, 1, FALSE);
   actions[ACTION_SPY_ATTACK] =
       action_new(ACTION_SPY_ATTACK,
