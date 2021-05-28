@@ -891,12 +891,21 @@ bool city_reduce_size(struct city *pcity, citizens pop_loss,
 
   /* Update citizens. */
   citizens_update(pcity, NULL);
-  // https://www.hostedredmine.com/attachments/290980/0005-Freeze-citizen-assignments-in-update_city_activity-u.patch?utf8=✓&type=sbs
-  // patch on older version that froze worker outputs
-
+  
   /* Update number of people in each feelings category.
    * This also updates the city radius if needed. */
-  city_refresh(pcity);
+  if (game.server.city_output_style) {
+    // WYSIWYG city output during population change events:
+    if (!pcity->server.workers_frozen) {
+      city_refresh(pcity);
+    } else {
+      city_refresh_queue_add(pcity);
+    }
+  }
+  else {
+    // Classic city output during population change events:
+    city_refresh(pcity);
+  }
 
   auto_arrange_workers(pcity);
 
@@ -3422,8 +3431,16 @@ static void update_city_activity(struct city *pcity)
   is_happy = city_happy(pcity) && !pcity->hangry;
   is_celebrating = city_celebrating(pcity) && !pcity->hangry;
 
-  if (city_refresh(pcity)) {
-    auto_arrange_workers(pcity);
+  if (!game.server.city_output_style) {
+    /* default auto_arrange_rules */
+    if (city_refresh(pcity)) {
+      auto_arrange_workers(pcity);
+    }
+  }
+  else { /* WYSIWYG output prior to auto_arrange */
+     /* Freeze workers until outputs calculated */
+    city_freeze_workers(pcity);
+    pcity->server.needs_arrange |= city_refresh(pcity); 
   }
 
   /* Reporting of celebrations rewritten, copying the treatment of disorder below,
@@ -3569,8 +3586,15 @@ static void update_city_activity(struct city *pcity)
                     government_name_translation(gov));
       handle_player_change_government(pplayer, government_number(gov));
     }
-    if (city_refresh(pcity)) {
-      auto_arrange_workers(pcity);
+    if (!game.server.city_output_style) {
+      /* Classic auto-arrange mechanics */
+      if (city_refresh(pcity)) {
+        auto_arrange_workers(pcity);
+      }
+    }
+    else { /* WYSIWYG auto-arrange mechanics */
+      pcity->server.needs_arrange |= city_refresh(pcity);
+      city_thaw_workers(pcity);
     }
     sanity_check_city(pcity);
   }
