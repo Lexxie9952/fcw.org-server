@@ -319,6 +319,8 @@ function civclient_init()
   $(".ui-dialog-titlebar-close").css({"background":"none","background-image":"none","margin-top":"1px", "margin-left": "0px",
     "margin-right":"2px", "border":"none", "height":"16px"}); // solo el diablo sabe por que!
 
+  // Allows civclient.css to specify different styling for mobile vs. not mobile  
+  if (is_small_screen()) document.body.classList.add('mobile');
 }
 
 /**************************************************************************

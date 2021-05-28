@@ -1039,6 +1039,15 @@ table.vet_level tr:nth-child(9) td {
   margin-bottom: -5px;
   overflow: hidden;
 }
+/* Fixes unit panel for >100 units but requires 
+   hard-coding to add 
+   if (is_small_screen()) document.body.classList.add('mobile');
+*/  
+body:not(.mobile) .ui-dialog.unit_dialog {
+  overflow: auto !important;
+  height: auto !important;
+  max-height: 90%;
+}
 
 .chatbox_dialog .ui-dialog-titlebar {
   background: #432 url("/images//ui-widget-header.png") 100% 50% repeat-x;
