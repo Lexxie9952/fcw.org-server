@@ -140,6 +140,7 @@ struct civ_game {
       int base_incite_cost;
       int casusbelliturns;
       int ceasefirelength;
+      int city_output_style;
       int civilwarsize;
       int conquercost;
       int contactturns;
@@ -499,6 +500,10 @@ extern struct world wld;
 #define GAME_DEFAULT_CITYMINDIST     2
 #define GAME_MIN_CITYMINDIST         1
 #define GAME_MAX_CITYMINDIST         11
+
+#define GAME_DEFAULT_CITY_OUTPUT_STYLE 0
+#define GAME_MIN_CITY_OUTPUT_STYLE   0
+#define GAME_MAX_CITY_OUTPUT_STYLE   1
 
 #define GAME_DEFAULT_CIVILWARSIZE    10
 #define GAME_MIN_CIVILWARSIZE        2 /* can't split an empire of 1 city */

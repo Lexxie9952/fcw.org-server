@@ -357,6 +357,7 @@ static void game_defaults(bool keep_ruleset_value)
     game.server.barbarianrate     = GAME_DEFAULT_BARBARIANRATE;
     game.server.casusbelliturns   = GAME_DEFAULT_CASUSBELLITURNS;
     game.server.ceasefirelength   = GAME_DEFAULT_CEASEFIRELENGTH;
+    game.server.city_output_style = GAME_DEFAULT_CITY_OUTPUT_STYLE;
     game.server.civilwarsize      = GAME_DEFAULT_CIVILWARSIZE;
     game.server.connectmsg[0]     = '\0';
     game.server.conquercost       = GAME_DEFAULT_CONQUERCOST;

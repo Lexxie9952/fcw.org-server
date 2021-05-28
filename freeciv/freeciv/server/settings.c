@@ -2755,6 +2755,23 @@ static struct setting settings[] = {
           GAME_MIN_SPACESHIP_TRAVEL_TIME, GAME_MAX_SPACESHIP_TRAVEL_TIME,
           GAME_DEFAULT_SPACESHIP_TRAVEL_TIME)
 
+  GEN_INT("city_output_style", game.server.city_output_style,
+          SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_RARE,
+          ALLOW_NONE, ALLOW_BASIC,
+          N_("Whether to replace city output behavior with WYSIWYG"),
+          N_("With the default setting of 0 (disabled), classic behavior decides "
+             "city output when a city grows or shrinks: citizens are re-arranged "
+             "to new tiles and specialists AFTER food, shields, and luxury "
+             "are calculated, but BEFORE science and gold are calculated. This "
+             "gives a small bonus to growing cities, but has a side-effect of "
+             "overriding the science and gold outputs for the tile and specialist "
+             "choices the player selected in the city. \n"
+             "If this value is set to 1 (enabled), then city output is calculated "
+             "exactly according to the tiles and specialists the city selected "
+             "prior to growing or shrinking."), NULL, NULL, NULL,
+          GAME_MIN_CITY_OUTPUT_STYLE, GAME_MAX_CITY_OUTPUT_STYLE,
+          GAME_DEFAULT_CITY_OUTPUT_STYLE)
+
   GEN_INT("civilwarsize", game.server.civilwarsize,
           SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_RARE,
           ALLOW_NONE, ALLOW_BASIC,
