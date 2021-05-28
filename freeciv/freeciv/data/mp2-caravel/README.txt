@@ -14,8 +14,11 @@
 <a href="https://freeciv.fandom.com/wiki/Diplomatic_Action_Chart.mp2" target="_blank">Diplomatic Odds Charts</a>
 <a href="https://freeciv.fandom.com/wiki/Hotkeys.mp" target="_blank">Hotkeys and Mouse Control</a>
 <br>
-The MP2 Caravel ruleset is a modernized ruleset to take advantage of cutting-edge advancements in Freeciv Server development. 
+The MP2-Caravel ruleset is a modernized ruleset to take advantage of cutting-edge advancements in Freeciv Server development. 
 This ruleset began using MP2 as its base and added to it. Enjoy!
 <br>
-<u>Changelog for MP2 Caravel</u>:
-<a href="https://freeciv.fandom.com/wiki/Multiplayer_II_Summary#Caravel_MP2" target="_blank">MP2 Caravel changelog</a>
+<u>Changelog for MP2-Caravel</u>:
+<a href="https://freeciv.fandom.com/wiki/Multiplayer_II_Caravel_Summary" target="_blank">MP2 Caravel changelog</a>
+<br>
+<u>Design Log for MP2 Caravel</u>:
+<a href="https://freeciv.fandom.com/wiki/Design_Log.mp2c#Multiplayer_II:_Caravel_Design_Log" target="_blank">MP2 Caravel changelog</a>
