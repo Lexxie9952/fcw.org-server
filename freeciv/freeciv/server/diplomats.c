@@ -71,10 +71,13 @@ static bool diplomat_was_caught(struct player *act_player,
                                 struct city *tgt_city,
                                 struct player *tgt_player,
                                 const struct action *act);
-static void diplomat_escape(struct player *pplayer, struct unit *pdiplomat,
+static void diplomat_escape(struct player *pplayer,
+                            struct player *victim_player,
+                            struct unit *pdiplomat,
                             const struct city *pcity,
                             const struct action *paction);
 static void diplomat_escape_full(struct player *pplayer,
+                                 struct player *victim_player,
                                  struct unit *pdiplomat,
                                  bool city_related,
                                  struct tile *ptile,
@@ -188,7 +191,7 @@ bool spy_poison(struct player *pplayer, struct unit *pdiplomat,
   action_consequence_success(paction, pplayer, act_utype, cplayer, ctile, clink);
 
   /* Now lets see if the spy survives. */
-  diplomat_escape_full(pplayer, pdiplomat, TRUE, ctile, clink, paction);
+  diplomat_escape_full(pplayer, cplayer, pdiplomat, TRUE, ctile, clink, paction);
 
   return TRUE;
 }
@@ -301,7 +304,7 @@ bool spy_spread_plague(struct player *act_player, struct unit *act_unit,
                              tgt_player, tgt_tile, tgt_city_link);
 
   /* Try to escape. */
-  diplomat_escape_full(act_player, act_unit, TRUE,
+  diplomat_escape_full(act_player, tgt_player, act_unit, TRUE,
                        tgt_tile, tgt_city_link, paction);
 
   return TRUE;
@@ -678,7 +681,7 @@ bool spy_sabotage_unit(struct player *pplayer, struct unit *pdiplomat,
                              unit_tile(pvictim), victim_link);
 
   /* Now lets see if the spy survives. */
-  diplomat_escape(pplayer, pdiplomat, NULL, paction);
+  diplomat_escape(pplayer, uplayer, pdiplomat, NULL, paction);
 
   return TRUE;
 }
@@ -1130,7 +1133,7 @@ bool diplomat_get_tech(struct player *pplayer, struct unit *pdiplomat,
                              city_tile(pcity), city_link(pcity));
 
   /* Check if a spy survives her mission. */
-  diplomat_escape(pplayer, pdiplomat, pcity, paction);
+  diplomat_escape(pplayer, cplayer, pdiplomat, pcity, paction);
 
   return TRUE;
 }
@@ -1316,7 +1319,7 @@ bool diplomat_incite(struct player *pplayer, struct unit *pdiplomat,
    * _After_ transferring the city, or the city area is first fogged
    * when the diplomat is removed, and then unfogged when the city
    * is transferred. */
-  diplomat_escape_full(pplayer, pdiplomat, TRUE, ctile, clink, paction);
+  diplomat_escape_full(pplayer, cplayer, pdiplomat, TRUE, ctile, clink, paction);
 
   /* Update the players gold in the client */
   send_player_info_c(pplayer, pplayer->connections);
@@ -1619,7 +1622,7 @@ bool diplomat_sabotage(struct player *pplayer, struct unit *pdiplomat,
     return TRUE; // Siege Rams that survive, always escape.
   }
   /* Check if a spy survives her mission. */
-  diplomat_escape(pplayer, pdiplomat, pcity, paction);
+  diplomat_escape(pplayer, cplayer, pdiplomat, pcity, paction);
 
   return TRUE;
 }
@@ -1759,7 +1762,7 @@ bool spy_steal_gold(struct player *act_player, struct unit *act_unit,
                              tgt_player, tgt_tile, tgt_city_link);
 
   /* Try to escape. */
-  diplomat_escape_full(act_player, act_unit, TRUE,
+  diplomat_escape_full(act_player, tgt_player, act_unit, TRUE,
                        tgt_tile, tgt_city_link, paction);
 
   /* Update the players' gold in the client */
@@ -1873,7 +1876,7 @@ bool spy_steal_some_maps(struct player *act_player, struct unit *act_unit,
                              tgt_player, tgt_tile, tgt_city_link);
 
   /* Try to escape. */
-  diplomat_escape_full(act_player, act_unit, TRUE,
+  diplomat_escape_full(act_player, tgt_player, act_unit, TRUE,
                        tgt_tile, tgt_city_link, paction);
 
   return TRUE;
@@ -1965,7 +1968,7 @@ bool spy_nuke_city(struct player *act_player, struct unit *act_unit,
                 tgt_city_link);
 
   /* Try to escape before the blast. */
-  diplomat_escape_full(act_player, act_unit, TRUE,
+  diplomat_escape_full(act_player, tgt_player, act_unit, TRUE,
                        tgt_tile, tgt_city_link, paction);
 
   if (utype_is_consumed_by_action(paction, unit_type_get(act_unit))) {
@@ -2431,7 +2434,8 @@ static bool diplomat_infiltrate_tile(struct player *pplayer,
     - Escapes to home city.
     - Escapee may become a veteran.
 ****************************************************************************/
-static void diplomat_escape(struct player *pplayer, struct unit *pdiplomat,
+static void diplomat_escape(struct player *pplayer, struct player *victim_player,
+                            struct unit *pdiplomat,
                             const struct city *pcity,
                             const struct action *paction)
 {
@@ -2446,7 +2450,7 @@ static void diplomat_escape(struct player *pplayer, struct unit *pdiplomat,
     vlink = NULL;
   }
 
-  return diplomat_escape_full(pplayer, pdiplomat, pcity != NULL,
+  return diplomat_escape_full(pplayer, victim_player, pdiplomat, pcity != NULL,
                               ptile, vlink, paction);
 }
 
@@ -2460,6 +2464,7 @@ static void diplomat_escape(struct player *pplayer, struct unit *pdiplomat,
     - Escapee may become a veteran.
 ****************************************************************************/
 static void diplomat_escape_full(struct player *pplayer,
+                                 struct player *victim_player,
                                  struct unit *pdiplomat,
                                  bool city_related,
                                  struct tile *ptile,
@@ -2526,9 +2531,19 @@ static void diplomat_escape_full(struct player *pplayer,
                       " the mission in %s."),
                     unit_tile_link(pdiplomat), UNIT_EMOJI(pdiplomat),
                     vlink);
+      notify_player(victim_player, ptile, E_DIPLOMATIC_INCIDENT, ftc_server,
+                    _("⚠️ Enemy %s %s captured after completing"
+                      " the mission in %s."),
+                    unit_tile_link(pdiplomat), UNIT_EMOJI(pdiplomat),
+                    vlink);
+
     } else {
       notify_player(pplayer, ptile, E_MY_DIPLOMAT_FAILED, ftc_server,
                     _("⚠️ Your %s %s was captured after completing"
+                      " the mission."),
+                    unit_tile_link(pdiplomat), UNIT_EMOJI(pdiplomat));
+      notify_player(victim_player, ptile, E_DIPLOMATIC_INCIDENT, ftc_server,
+                    _("⚠️ Enemy %s %s captured after completing"
                       " the mission."),
                     unit_tile_link(pdiplomat), UNIT_EMOJI(pdiplomat));
     }
