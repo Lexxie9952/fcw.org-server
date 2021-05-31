@@ -524,7 +524,7 @@ static void notify_actor_success(struct player *receiver,
     notify_player(receiver, victim_tile,
                   E_DIPLOMATIC_INCIDENT, ftc_server,
                   /* TRANS: Suitcase Nuke ... San Francisco */
-                  _("⚠️ You caused an incident doing %s the %s."),
+                  _("⚠️ You caused an incident doing %s to the %s."),
                   action_name_translation(paction),
                   nation_adjective_for_player(victim_player));
     break;
