@@ -44,8 +44,8 @@ tiles = { "row", "column", "tag"
  1,  6, "base.navalbase_bg"
  2,  0, "base.radar_mg"
  2,  1, "base.quay_mg"
- ;2,  2, "base.castle_fg"        ; alternate castle (make hidden units seem more plausible)
- ;2,  3, "base.castle_bg"        ; but also hides too much terrain problematically
+ 2,  2, "base.castle2_fg" ; FULL castle (makes hidden units make sense because it's closed; but also hide terrain)
+ 2,  3, "base.castle2_bg" ; "Stronghold"/"Keep" with open courtyard. * Can be used with above in same ruleset. 
  2,  4, "base.castle_fg"
  2,  5, "base.castle_bg"
  2,  6, "base.bunker_mg"
