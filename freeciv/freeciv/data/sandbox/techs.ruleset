@@ -9,7 +9,7 @@
 
 [datafile]
 description="Sandbox technology data for Freeciv"
-options="Freeciv-ruleset-Devel-2017.Jan.02 +web-compatible"
+options="Freeciv-ruleset-Devel-2017.Jan.02 web-compatible"
 format_version=20
 
 [control]
