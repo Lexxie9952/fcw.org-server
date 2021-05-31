@@ -2436,6 +2436,9 @@ function create_unit_offset_arrays()
       case "Cannon":
           vx += 1; vy -= 4;
           break;
+      case "Caravan":
+          dx -= 0; dy -= 3;
+          break;
       case "Caravel":
           dx -= 3; dy -= 3;
           vx += 3; vy -= 3;
@@ -2476,6 +2479,9 @@ function create_unit_offset_arrays()
       case "Destroyer":
           dx -= 3; dy -= 3; 
           vx -= 13; vy += 12;
+          break;
+      case "Diplomat":
+          dx += 1; dy -= 2;
           break;
       case "Dive Bomber":
           sx = 8;
@@ -2563,7 +2569,7 @@ function create_unit_offset_arrays()
           vx += 9; vy += 4;
           break;
       case "Legion":
-          vx -= 5; vy -= 5;
+          vx += 1; vy -= 7;
           break;
       case "Marines":
           dx += 2; dy += 2;
@@ -2587,15 +2593,15 @@ function create_unit_offset_arrays()
           vx -= 3; vy -= 19;
           break;
       case "Phalanx":                     
-          dx += 1; dy -= 2;
-          vx += 1; vy -= 7;
+          dx += 0; dy -= 4;
+          vx +=2; vy -= 8;
           break;
       case "Paratroopers":
           vy -= 7;
           break;
       case "Pikemen":
-          dx += 1; dy += 3;
-          vx -= 1; vy -= 1;
+          dx-= 1; dy -= 7;
+          vx -= 1; vy -= 7;
           break;
       case "Riflemen":
           dx -= 4; dy -= 2;
