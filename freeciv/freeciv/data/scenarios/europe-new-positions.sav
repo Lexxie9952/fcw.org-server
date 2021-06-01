@@ -2,7 +2,7 @@
 [scenario]
 game_version=2939900
 is_scenario=TRUE
-name=_("Europe (classic/giant)")
+name=_("Europe Large V2")
 description=_("177x100 map of Europe, up to 50 players.")
 authors=_("Map: Lexxie, Christian Grothoff, Jerzy Klek, Mateusz Stefek, Daniel Markstedt\nStart positions: Jason Dorje Short, Mateusz Stefek, Rhue")
 save_random=FALSE
@@ -96,7 +96,7 @@ vars=$$
 
 [settings]
 set={"name","value","gamestart"
-"aifill",30,10
+"aifill",50,10
 "alltemperate",FALSE,FALSE
 "flatpoles",100,100
 "generator","SCENARIO","RANDOM"
