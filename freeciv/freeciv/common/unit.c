@@ -2304,7 +2304,8 @@ void unit_set_ai_data(struct unit *punit, const struct ai_type *ai,
 **************************************************************************/
 int unit_bribe_cost(struct unit *punit, struct player *briber)
 {
-  long int cost;
+  // Can't be integer: units costing < 10 would cause 0 bribe cost
+  float cost;
   int default_hp, dist = 0;
   ///struct city *capital; old code marked with ///
   struct tile *ptile = unit_tile(punit);
@@ -2334,7 +2335,7 @@ int unit_bribe_cost(struct unit *punit, struct player *briber)
   cost /= dist + 2;
 
   /* Consider the build cost. */
-  cost *= unit_build_shield_cost_base(punit) / 10;
+  cost *= (float)unit_build_shield_cost_base(punit) / 10;
 
   /* Rule set specific cost modification */
   cost += (cost
