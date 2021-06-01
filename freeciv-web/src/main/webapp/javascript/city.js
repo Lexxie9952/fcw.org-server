@@ -1665,11 +1665,10 @@ function city_turns_to_growth_text(pcity)
   } else if (turns > 1000000) {
     return " ";
   } else if (turns == -1) {
-    return small ? "<b>* <u>1 turn</u></b>" : "<b>* <u>1 turn</u></b>";  // plural to singular and bold message for starvation crisis
+    return small ? "&#9662; <b><u>1 turn</u></b>" : "&#9662; <b><u>1 turn</u></b>";  // plural to singular and bold message for starvation crisis
   } else if (turns < -1) {
-    return small ? "" + Math.abs(turns) : "" + Math.abs(turns) + " turns";
+    return small ? "&#9662; " + Math.abs(turns) : "&#9662; " + Math.abs(turns) + " turns";
   } else if (turns ==1) {
-  //  return small ? "<b>&nbsp;1 turn</b>" : "<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 turn</b>";
     return small ? "<b>&nbsp;1 turn</b>" : "<b>&nbsp;1 turn</b>";
 } else {
     return turns + " turns";
