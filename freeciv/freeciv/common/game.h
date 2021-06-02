@@ -137,6 +137,7 @@ struct civ_game {
       int autoattack_style;
       int autoupgrade_veteran_loss;
       enum barbarians_rate barbarianrate;
+      int blueprints;
       int base_incite_cost;
       int casusbelliturns;
       int ceasefirelength;
@@ -476,6 +477,10 @@ extern struct world wld;
 #define GAME_DEFAULT_DIPLCHANCE      80
 #define GAME_MIN_DIPLCHANCE          40
 #define GAME_MAX_DIPLCHANCE          100
+
+#define GAME_DEFAULT_BLUEPRINTS      0
+#define GAME_MIN_BLUEPRINTS          0
+#define GAME_MAX_BLUEPRINTS          100
 
 #define GAME_DEFAULT_FREECOST        0
 #define GAME_MIN_FREECOST            0

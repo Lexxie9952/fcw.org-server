@@ -355,6 +355,7 @@ static void game_defaults(bool keep_ruleset_value)
     game.server.autoattack        = GAME_DEFAULT_AUTOATTACK;
     game.server.autoattack_style  = GAME_DEFAULT_AUTOATTACK_STYLE;
     game.server.barbarianrate     = GAME_DEFAULT_BARBARIANRATE;
+    game.server.blueprints        = GAME_DEFAULT_BLUEPRINTS;
     game.server.casusbelliturns   = GAME_DEFAULT_CASUSBELLITURNS;
     game.server.ceasefirelength   = GAME_DEFAULT_CEASEFIRELENGTH;
     game.server.city_output_style = GAME_DEFAULT_CITY_OUTPUT_STYLE;

@@ -2054,7 +2054,7 @@ static struct setting settings[] = {
           N_("Allow researching multiple technologies"),
           N_("Allows switching to any technology without wasting old "
              "research. Bulbs are never transfered to new technology. "
-             "Techpenalty options are inefective after enabling that "
+             "Techpenalty options are ineffective after enabling that "
              "option."), NULL, NULL,
           GAME_DEFAULT_MULTIRESEARCH)
 
@@ -2141,6 +2141,30 @@ static struct setting settings[] = {
           NULL, NULL, NULL,
           GAME_MIN_INCITE_GOLD_CAPT_CHANCE, GAME_MAX_INCITE_GOLD_CAPT_CHANCE,
           GAME_DEFAULT_INCITE_GOLD_CAPT_CHANCE)
+
+  GEN_INT("blueprints", game.server.blueprints,
+          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          N_("Replaces Tech transfers with Blueprint transfers."),
+          /* TRANS: The strings between single quotes are setting names and
+           * shouldn't be translated. */
+          N_("To function, this setting needs 'multiresearch' to be enabled.\n\n"
+             "Trade, Theft, Conquest, Philosophy, etc. WILL NOT instantly give "
+             "you technology. Instead, you get technology Blueprints, which are "
+             "a bulb-credit toward one specific tech. Blueprints reduce the bulb "
+             "cost of a tech by a percentage. If blueprints=80 and Gunpowder=1000 "
+             "bulbs, then Gunpowder Blueprints reduce cost to 200 bulbs. \n"
+             "You can override the default 'blueprints' setting with: \n\n "
+             "'diplbulbcost' -- TECH TRADE \n "
+             "'conquercost' --  THEFT, CONQUEST \n "
+             "'freecost' -- PHILOSOPHY, HUTS, GREAT LIBRARY, etc. \n\n"
+             "diplbulbcost = 20. Set Blueprints to 80% for tech trades. \n"
+             "conquercost = 10. Set Blueprints to 90% for theft and conquest. \n"
+             "freecost = 1. Set Blueprints to 99% for free tech from Philosophy. \n\n"
+             "Ranges:\n "
+             "0     = Blueprints are disabled. \n "
+             "1-100 = The default discount percent after receiving Blueprints.\n"),
+          NULL, NULL, NULL,
+          GAME_MIN_BLUEPRINTS, GAME_MAX_BLUEPRINTS, GAME_DEFAULT_BLUEPRINTS)   
 
   GEN_INT("conquercost", game.server.conquercost,
           SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
