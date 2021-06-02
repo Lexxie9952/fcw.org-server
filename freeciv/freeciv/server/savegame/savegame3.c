@@ -7126,7 +7126,10 @@ static void sg_load_researches(struct loaddata *loading)
       }
     }
 
-    if (game.server.multiresearch) {
+    /* multiresearch and blueprints store separate bulb accounts for each
+       individual tech, for cases where bulbs are not and can not be 
+       transferred by selecting different techs to research */
+    if (game.server.multiresearch || game.server.blueprints) {
       vlist_research = fc_calloc(game.control.num_tech_types, sizeof(int));
       vlist_research = secfile_lookup_int_vec(loading->file, &count_res,
                                               "research.r%d.vbs", i);
@@ -7171,7 +7174,10 @@ static void sg_save_researches(struct savedata *saving)
                          "research.r%d.futuretech", i);
       secfile_insert_int(saving->file, presearch->bulbs_researching_saved,
                          "research.r%d.bulbs_before", i);
-      if (game.server.multiresearch) {
+      /* multiresearch and blueprints store separate bulb accounts for each
+         individual tech, for cases where bulbs are not and can not be 
+         transferred by selecting different techs to research */
+      if (game.server.multiresearch || game.server.blueprints) {
         vlist_research = fc_calloc(game.control.num_tech_types, sizeof(int));
         advance_index_iterate(A_FIRST, j) {
           vlist_research[j] = presearch->inventions[j].bulbs_researched_saved;

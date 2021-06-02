@@ -490,7 +490,8 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
           advance_name =  advance_name_translation(advance_by_number
                                                    (pclause->value));
           notify_player(pdest, NULL, E_TECH_GAIN, ftc_server,
-                        _("💡 You are taught the knowledge of %s."),
+                        _("💡 You are %s %s."),
+                        (game.server.blueprints ? _("given blueprints for") : _("taught the knowledge of")),
                         advance_name);
 
           if (tech_transfer(pdest, pgiver, pclause->value)) {
@@ -499,24 +500,32 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
             research_pretty_name(presearch, research_name,
                                  sizeof(research_name));
             notify_research(presearch, pdest, E_TECH_GAIN, ftc_server,
-                            _("💡 You have acquired %s thanks to the %s "
+                            _("💡 You have acquired %s%s thanks to the %s "
                               "treaty with the %s."),
+                            (game.server.blueprints ? _("blueprints for ") : _("")),
                             advance_name,
                             nation_adjective_for_player(pdest),
                             nation_plural_for_player(pgiver));
             notify_research_embassies
                 (presearch, pgiver, E_TECH_EMBASSY, ftc_server,
                  /* TRANS: Tech from another player */
-                 Q_("?fromplr:💡 The %s have acquired %s from the %s."),
+                 Q_("?fromplr:💡 The %s have acquired %s%s from the %s."),
                  research_name,
+                 (game.server.blueprints ? _("blueprints for ") : _("")),
                  advance_name,
                  nation_plural_for_player(pgiver));
-
-            script_tech_learned(presearch, pdest,
-                                advance_by_number(pclause->value), "traded");
-            research_apply_penalty(presearch, pclause->value,
-                                   game.server.diplbulbcost);
-            found_new_tech(presearch, pclause->value, FALSE, TRUE);
+            if (game.server.blueprints) { /* give blueprints instead of tech */
+              int blueprint_discount = game.server.diplbulbcost ?
+                                      100-game.server.diplbulbcost : game.server.blueprints;
+              found_new_blueprint(presearch, pclause->value, blueprint_discount);
+            }
+            else {   
+              script_tech_learned(presearch, pdest,
+                                  advance_by_number(pclause->value), "traded");
+              research_apply_penalty(presearch, pclause->value,
+                                    game.server.diplbulbcost);
+              found_new_tech(presearch, pclause->value, FALSE, TRUE);
+            }
           }
         }
         break;
