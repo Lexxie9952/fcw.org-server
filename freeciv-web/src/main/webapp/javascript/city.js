@@ -513,10 +513,15 @@ function show_city_dialog(pcity)
                        + change_string + city_turns_to_growth_text(pcity));
 
   var prod_type = get_city_production_type_sprite(pcity);
-  var prod_string = "<b>" + (prod_type != null ? prod_type['type']['name']+"</b>" : "None</b>");
-  if (is_small_screen() && prod_type != null && prod_type['type']['name'] != null && prod_type['type']['name'].length>18)
+  var prod_string = "";
+  if (prod_type != null) {
+    // Show an emoji to the left of the name of what the city is producing. Clicking it takes you to prod screen.
+    prod_string += html_emoji_from_universal(prod_type['type']['name'])+"&thinsp;";
+  }
+  prod_string += "<b>" + (prod_type != null ? prod_type['type']['name']+"</b>" : "None</b>");
+  if (is_small_screen() && prod_type != null && prod_type['type']['name'] != null && prod_type['type']['name'].length>16)
     prod_string = "<span style='font-size:90%'>" + prod_string + "</span>";
-  $("#city_production_overview").html(prod_string);
+  $("#city_production_overview").html("<span style='cursor:pointer' onclick='city_prod_tab();'>"+prod_string+"</span>");
 
   turns_to_complete = get_city_production_time(pcity);
 
@@ -2699,6 +2704,10 @@ function update_worklist_actions()
     $("#city_worklist_insert_btn").button("enable");
     $("#city_worklist_append_btn").button("enable");
     
+    if (production_selection.length == 1)
+      $("#city_worklist_change_btn").button("enable");
+    else
+      $("#city_worklist_change_btn").button("disable");
 
     if (production_selection.length == worklist_selection.length ||
         worklist_selection.length == 1) {
@@ -2711,6 +2720,7 @@ function update_worklist_actions()
     $("#prod_buttons").hide();
     $("#city_add_to_worklist_btn").button("disable");
     $("#city_worklist_insert_btn").button("disable");
+    $("#city_worklist_change_btn").button("disable");
     $("#city_worklist_append_btn").button("disable");
     $("#city_worklist_exchange_btn").button("disable");
   }
@@ -4123,10 +4133,18 @@ function city_keyboard_listener(ev)
     }
   }
 }
+/**************************************************************************
+ Switches to the city's prod tab
+**************************************************************************/
+function city_prod_tab()
+{
+  city_tab_index = 1;
+  $("#city_tabs").tabs({ active: city_tab_index});
+}
 
 /**************************************************************************
  Returns the 3d model name for the given city.
-**************************************************************************/
+**************************************************************************
 function city_to_3d_model_name(pcity)
 {
   var size = 0;
@@ -4151,7 +4169,7 @@ function city_to_3d_model_name(pcity)
   }
 
   return "city_" + city_style_name + "_" + size;
-}
+}*/
 
 /**************************************************************************
  Returns the city walls scale of for the given city.

@@ -961,13 +961,13 @@ table.vet_level tr:nth-child(9) td {
   padding: 0;
   margin: 0;
   width: 80%;
-  height: 10%;
+  height: 9%;
   min-height: 1.2em;
   max-height: 5em;
 }
 
 #worklist_control .wc_spacer {
-  height: 10%;
+  height: 8%;
   max-height: 5em;
 }
 
@@ -2177,6 +2177,7 @@ input[type="email" i], #email {
 }
 
 #city_worklist_insert_btn,
+#city_worklist_change_btn,
 #city_worklist_append_btn,
 #city_worklist_up_btn,
 #city_worklist_down_btn,
