@@ -272,6 +272,13 @@ function popup_action_selection(actor_unit, action_probabilities,
   remove_active_dialog(id);
   $("<div id='act_sel_dialog_" + actor_unit['id'] + "'></div>").appendTo("div#game_page");
 
+  if (action_selection_in_progress_for != IDENTITY_NUMBER_ZERO
+      && action_selection_in_progress_for != actor_unit['id']) {
+    console.log("Looks like unit %d has an action selection dialog open"
+                + " but a dialog for unit %d is about to be opened.",
+                action_selection_in_progress_for, actor_unit['id']);
+  }
+
   var actor_homecity = cities[actor_unit['homecity']];
 
   var buttons = [];
@@ -634,6 +641,8 @@ function popup_action_selection(actor_unit, action_probabilities,
       buttons: buttons });
 
   $(id).dialog('open');
+  action_selection_in_progress_for = actor_unit['id'];
+  is_more_user_input_needed = false;
   $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
   dialog_register(id);
 }
