@@ -236,17 +236,24 @@ function update_tech_tree()
       var sequence = 1+Math.round(dy/55)+Math.round(dx/45);      // Create a "seed" that bumps up as we span the canvas vertically and horizontally
       sequence = sequence - (sequence-sequence%9);               // This creates a colour number from 0-8 out of our "seed"
      
-      if (sequence == 8) tech_canvas_ctx.strokeStyle =      'rgba(55, 83, 204, 0.83)';       // egyptian blue
-      else if (sequence == 7) tech_canvas_ctx.strokeStyle = 'rgba(81, 146, 187, 0.8)';       // teal
-      else if (sequence == 6) tech_canvas_ctx.strokeStyle = 'rgba(112, 106, 88, 0.88)';      // olive
-      else if (sequence == 5) tech_canvas_ctx.strokeStyle = 'rgba(138, 36, 78, 0.8)';        // wine
-      else if (sequence == 4) tech_canvas_ctx.strokeStyle = 'rgba(161, 227, 243, 0.8)';      // faded light-cyan-grey
-      else if (sequence == 3) tech_canvas_ctx.strokeStyle = 'rgba(60, 187, 146, 0.8)';       // faded sea-green
-      else if (sequence == 2) tech_canvas_ctx.strokeStyle = 'rgba(0, 00, 25, 0.9)';         // midnight
-      else if (sequence == 1) tech_canvas_ctx.strokeStyle = 'rgba(223, 223, 223, 0.8)';      // dim white
-      else tech_canvas_ctx.strokeStyle =                    'rgba(189, 91, 79, 0.85)';       // coral
+      // known tech connecting to known tech: use black line
+      if (tech_known(ptech['rule_name']) && tech_known(techs[rid]['rule_name'])) {
+        tech_canvas_ctx.strokeStyle = 'rgb(88, 88, 88)';
+        tech_canvas_ctx.lineWidth = 1;
+      }
+      else { // else differentiate line colours to make tracing them easier
+        if (sequence == 8) tech_canvas_ctx.strokeStyle =      'rgba(55, 83, 204, 0.83)';       // egyptian blue
+        else if (sequence == 7) tech_canvas_ctx.strokeStyle = 'rgba(81, 146, 187, 0.8)';       // teal
+        else if (sequence == 6) tech_canvas_ctx.strokeStyle = 'rgba(121, 127, 82, 0.88)';      // olive
+        else if (sequence == 5) tech_canvas_ctx.strokeStyle = 'rgba(138, 36, 78, 0.8)';        // wine
+        else if (sequence == 4) tech_canvas_ctx.strokeStyle = 'rgba(161, 227, 243, 0.8)';      // faded light-cyan-grey
+        else if (sequence == 3) tech_canvas_ctx.strokeStyle = 'rgba(60, 187, 146, 0.8)';       // faded sea-green
+        else if (sequence == 2) tech_canvas_ctx.strokeStyle = 'rgba(0, 00, 45, 0.9)';         // midnight
+        else if (sequence == 1) tech_canvas_ctx.strokeStyle = 'rgba(223, 223, 223, 0.8)';      // dim white
+        else tech_canvas_ctx.strokeStyle =                    'rgba(189, 91, 79, 0.85)';       // coral
+        tech_canvas_ctx.lineWidth = 3;
+      }
 
-      tech_canvas_ctx.lineWidth = 3;
 
       var node_offset = 3;
       tech_canvas_ctx.beginPath();
