@@ -365,21 +365,7 @@ function decode_user_hyperlinks(message)
       var freemoji_name = message.substring(message.indexOf("[`") + 2, message.indexOf("`]"));
       var replace_me = "[`"+freemoji_name+"`]";
 
-      // Force lower case and remove white space and escape sequences
-      freemoji_name = freemoji_name.toLowerCase();
-      freemoji_name = freemoji_name.replace(/\s+/g, '');
-      freemoji_name = freemoji_name.replace('.', '');
-      freemoji_name = freemoji_name.replace('_', '');   // TODO: /_/g and similar on others is causing blank freemoji string
-      freemoji_name = freemoji_name.replace('_', '');   // FIXME: hack for emoji with word<space>word<space>word
-      freemoji_name = freemoji_name.replace("'", "");
-//      freemoji_name = freemoji_name.replace("​", ""); //0-width space. only ONE of these 3 is needed, TODO; find which works and remove the other 2
-//      freemoji_name = freemoji_name.replace("​&#8203;", "");
-//      freemoji_name = freemoji_name.replace("​%E2%80%B8", "");
-      // e.g., "A. Smith's Trading Co." will become "asmithstradingco.png"
-      
-      path = "/images/e/"+freemoji_name+".png";
-      element = "<img class='v' src='"+path+"'>";
-
+      var element = html_emoji_from_universal(freemoji_name);
       message = message.replace( replace_me, (element) );
   }
   
