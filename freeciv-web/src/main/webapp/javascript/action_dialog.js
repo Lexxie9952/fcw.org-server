@@ -1397,31 +1397,38 @@ function action_selection_close()
   var actor_unit_id = action_selection_in_progress_for;
 
   id = "#act_sel_dialog_" + actor_unit_id;
-  $(id).remove();
+  // Remove action selection dialog only if it exists:
+  if ($(id).length) remove_action_selection_dialog(id, actor_unit_id)
 
   id = "#bribe_unit_dialog_" + actor_unit_id;
-  $(id).remove();
+  // Remove action selection dialog only if it exists:
+  if ($(id).length) remove_action_selection_dialog(id, actor_unit_id)
 
   id = "#incite_city_dialog_" + actor_unit_id;
-  $(id).remove();
+  // Remove action selection dialog only if it exists:
+  if ($(id).length) remove_action_selection_dialog(id, actor_unit_id)
 
   id = "#upgrade_unit_dialog_" + actor_unit_id;
-  $(id).remove();
+  // Remove action selection dialog only if it exists:
+  if ($(id).length) remove_action_selection_dialog(id, actor_unit_id)
 
   id = "stealtech_dialog_" + actor_unit_id;
-  $(id).remove();
+  // Remove action selection dialog only if it exists:
+  if ($(id).length) remove_action_selection_dialog(id, actor_unit_id)
 
   id = "sabotage_impr_dialog_" + actor_unit_id;
-  $(id).remove();
+  // Remove action selection dialog only if it exists:
+  if ($(id).length) remove_action_selection_dialog(id, actor_unit_id)
 
   id = "#" + "sel_tgt_unit_dialog_" + actor_unit_id;
-  $(id).remove();
+  // Remove action selection dialog only if it exists:
+  if ($(id).length) remove_action_selection_dialog(id, actor_unit_id)
 
   id = "#" + "sel_tgt_extra_dialog_" + actor_unit_id;
-  $(id).remove();
+  // Remove action selection dialog only if it exists:
+  if ($(id).length) remove_action_selection_dialog(id, actor_unit_id)
 
   id = $("#city_name_dialog");
-  $(id).remove();
-
-  action_selection_no_longer_in_progress(actor_unit_id);
+  // Remove action selection dialog only if it exists:
+  if ($(id).length) remove_action_selection_dialog(id, actor_unit_id)
 }
