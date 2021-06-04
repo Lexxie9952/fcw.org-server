@@ -173,7 +173,8 @@ function act_sel_click_function(parent_id,
                                         cities[tgt_id],
                                         action_probabilities,
                                         action_id);
-      remove_active_dialog(parent_id);
+      is_more_user_input_needed = true;
+      remove_action_selection_dialog(parent_id, actor_unit_id, true);
     };
   case ACTION_SPY_TARGETED_SABOTAGE_CITY:
   case ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC:
@@ -190,7 +191,8 @@ function act_sel_click_function(parent_id,
         "disturb_player" : true
       };
       send_request(JSON.stringify(packet));
-      remove_active_dialog(parent_id);
+      is_more_user_input_needed = true;
+      remove_action_selection_dialog(parent_id, actor_unit_id, true);
     };
   case ACTION_FOUND_CITY:
     return function() {
@@ -200,7 +202,8 @@ function act_sel_click_function(parent_id,
         "unit_id" : actor_unit_id
       };
       send_request(JSON.stringify(packet));
-      remove_active_dialog(parent_id);
+      is_more_user_input_needed = true;
+      remove_action_selection_dialog(parent_id, actor_unit_id, true);
     };
   case ACTION_PILLAGE:
   case ACTION_ROAD:
@@ -209,19 +212,19 @@ function act_sel_click_function(parent_id,
   case ACTION_IRRIGATE:
     return function() {
       request_unit_do_action(action_id, actor_unit_id, tgt_id, sub_tgt_id);
-      remove_active_dialog(parent_id);
+      remove_action_selection_dialog(parent_id, actor_unit_id);
     };
-    case ACTION_ATTACK:
-      return function() {
-        request_unit_do_action(action_id, actor_unit_id, tgt_id, sub_tgt_id);
-        // unit lost hp or died or promoted after attack, so update it:
-        setTimeout(update_active_units_dialog, update_focus_delay);
-        remove_active_dialog(parent_id);
-      };
+  case ACTION_ATTACK:
+    return function() {
+      request_unit_do_action(action_id, actor_unit_id, tgt_id, sub_tgt_id);
+      // unit lost hp or died or promoted after attack, so update it:
+      setTimeout(update_active_units_dialog, update_focus_delay);
+      remove_action_selection_dialog(parent_id, actor_unit_id);
+    };
   default:
     return function() {
       request_unit_do_action(action_id, actor_unit_id, tgt_id, sub_tgt_id);
-      remove_active_dialog(parent_id);
+      remove_action_selection_dialog(parent_id, actor_unit_id);
     };
   }
 }
@@ -410,7 +413,7 @@ function popup_action_selection(actor_unit, action_probabilities,
           } else {
             send_request(JSON.stringify(packet));
           }
-          remove_active_dialog(id);
+          remove_action_selection_dialog(id, actor_unit['id']);
         } });
   }
 
@@ -424,7 +427,8 @@ function popup_action_selection(actor_unit, action_probabilities,
           select_tgt_unit(actor_unit,
                           target_tile, tile_units(target_tile));
 
-          remove_active_dialog(id);
+          is_more_user_input_needed = true;
+          remove_action_selection_dialog(id, actor_unit['id'], true);
         } });
   }
 
@@ -438,7 +442,8 @@ function popup_action_selection(actor_unit, action_probabilities,
                            list_potential_target_extras(actor_unit,
                                                         target_tile));
 
-          remove_active_dialog(id);
+          is_more_user_input_needed = true;
+          remove_action_selection_dialog(id, actor_unit['id'], true);
         } });
   }
 
@@ -455,7 +460,7 @@ function popup_action_selection(actor_unit, action_probabilities,
                   actor_unit['id'], target_tile['index']);
                 setTimeout(update_active_units_dialog, update_focus_delay);
                 auto_attack = true;
-                remove_active_dialog(id);
+                remove_action_selection_dialog(id, actor_unit['id']);
             }
           };
           buttons.push(button);
@@ -464,6 +469,7 @@ function popup_action_selection(actor_unit, action_probabilities,
               actor_unit['id'], target_tile['index']);
             // unit lost hp or died or promoted after attack, so update it:
             setTimeout(update_active_units_dialog, update_focus_delay);
+            //action_selection_no_longer_in_progress(actor_unit['id']);
             return;
         }
   }
@@ -473,7 +479,7 @@ function popup_action_selection(actor_unit, action_probabilities,
       "class" : 'act_sel_button',
       text    : 'Cancel (𝗪)',
       click   : function() {
-        remove_active_dialog(id);
+        remove_action_selection_dialog(id, actor_unit['id']);
       } });
 
   $(id).attr("title",
@@ -644,7 +650,7 @@ function popup_action_selection(actor_unit, action_probabilities,
   action_selection_in_progress_for = actor_unit['id'];
   is_more_user_input_needed = false;
   $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
-  dialog_register(id);
+  dialog_register(id, actor_unit['id'], true);
 }
 
 /**************************************************************************
@@ -678,11 +684,13 @@ function popup_bribe_dialog(actor_unit, target_unit, cost, act_id)
 
   $(id).html(dhtml);
 
-  var close_button = {	"Close (𝗪)": function() {remove_active_dialog(id);}};
-  var bribe_close_button = {	"Cancel (𝗪)": function() {remove_active_dialog(id);},
+  var close_button = {	"Close (𝗪)": function() {
+                        remove_action_selection_dialog(id, actor_unit['id']); }
+                     };
+  var bribe_close_button = {	"Cancel (𝗪)": function() { remove_action_selection_dialog(id, actor_unit['id']); },
   				"Do it!": function() {
       request_unit_do_action(act_id, actor_unit['id'], target_unit['id']);
-      remove_active_dialog(id);
+      remove_action_selection_dialog(id, actor_unit['id']);
     }
   };
 
@@ -696,7 +704,7 @@ function popup_bribe_dialog(actor_unit, target_unit, cost, act_id)
 
   $(id).dialog('open');
   $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
-  dialog_register(id);
+  dialog_register(id, actor_unit['id']);
 }
 
 /**************************************************************************
@@ -736,12 +744,11 @@ function popup_incite_dialog(actor_unit, target_city, cost, act_id)
 
   $(id).html(dhtml);
 
-  var close_button = {         'Close (𝗪)':    function() {remove_active_dialog(id);}};
-  var incite_close_buttons = { 'Cancel (𝗪)': function() {remove_active_dialog(id);},
+  var close_button = {         'Close (𝗪)':    function() {remove_action_selection_dialog(id, actor_unit['id']);}};
+  var incite_close_buttons = { 'Cancel (𝗪)': function() {remove_action_selection_dialog(id, actor_unit['id']);},
                                'Do it!': function() {
-              request_unit_do_action(act_id, actor_unit['id'], target_city['id']);
-
-                                 remove_active_dialog(id);
+                                          request_unit_do_action(act_id, actor_unit['id'], target_city['id']);
+                                          remove_action_selection_dialog(id, actor_unit['id']);
                                }
                              };
 
@@ -755,7 +762,7 @@ function popup_incite_dialog(actor_unit, target_city, cost, act_id)
 
   $(id).dialog('open');
   $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
-  dialog_register(id);
+  dialog_register(id, actor_unit['id']);
 }
 
 /**************************************************************************
@@ -788,12 +795,11 @@ function popup_unit_upgrade_dlg(actor_unit, target_city, cost, act_id)
 
   $(id).html(dhtml);
 
-  var close_button = {          'Close (𝗪)':    function() {remove_active_dialog(id);}};
-  var upgrade_close_buttons = { 'Cancel (𝗪)': function() {remove_active_dialog(id);},
+  var close_button = {          'Close (𝗪)':    function() {remove_action_selection_dialog(id, actor_unit['id']);}};
+  var upgrade_close_buttons = { 'Cancel (𝗪)': function() {remove_action_selection_dialog(id, actor_unit['id']);},
                                 'Do it!': function() {
-                      request_unit_do_action(act_id, actor_unit['id'], target_city['id']);
-
-                                  remove_active_dialog(id);
+                                  request_unit_do_action(act_id, actor_unit['id'], target_city['id']);
+                                  remove_action_selection_dialog(id, actor_unit['id']);
                                 }
                              };
 
@@ -808,7 +814,7 @@ function popup_unit_upgrade_dlg(actor_unit, target_city, cost, act_id)
 
   $(id).dialog('open');
   $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
-  dialog_register(id);
+  dialog_register(id, actor_unit['id']);
 }
 
 /**************************************************************************
@@ -826,7 +832,7 @@ function create_steal_tech_button(parent_id, tech,
 
       request_unit_do_action(action_id, actor_id, city_id, tech['id']);
       send_request(JSON.stringify(packet));
-      remove_active_dialog("#"+parent_id);
+      remove_action_selection_dialog("#"+parent_id, actor_id);
     }
   };
 
@@ -895,7 +901,7 @@ function popup_steal_tech_selection_dialog(actor_unit, target_city,
                    click : function() {
                      request_unit_do_action(untargeted_action_id,
                        actor_unit['id'], target_city['id']);
-                     remove_active_dialog("#"+id);
+                     remove_action_selection_dialog("#"+id, actor_unit['id']);
                    }
                  });
   }
@@ -904,7 +910,7 @@ function popup_steal_tech_selection_dialog(actor_unit, target_city,
   buttons.push({
                  text : 'Cancel (𝗪)',
                  click : function() {
-                  remove_active_dialog("#"+id);
+                  remove_action_selection_dialog("#"+id, actor_unit['id']);
                  }
                });
 
@@ -917,7 +923,7 @@ function popup_steal_tech_selection_dialog(actor_unit, target_city,
   /* Show the dialog. */
   $("#" + id).dialog('open');
   $("#" + id).dialog('widget').position({my:"center top", at:"center top", of:window})
-  dialog_register("#"+id);
+  dialog_register("#"+id, actor_unit['id']);
 }
 
 /**************************************************************************
@@ -932,11 +938,9 @@ function create_sabotage_impr_button(improvement, parent_id,
   return {
     text : improvement['name'],
     click : function() {
-
         request_unit_do_action(act_id, actor_id, city_id,
                                improvement['id']);
-
-      remove_active_dialog("#" + parent_id);
+        remove_action_selection_dialog("#" + parent_id, actor_id);
     }
   };
 }
@@ -1004,7 +1008,7 @@ function popup_sabotage_dialog(actor_unit, target_city, city_imprs, act_id)
   buttons.push({
                  text : 'Cancel (𝗪)',
                  click : function() {
-                  remove_active_dialog("#"+id);
+                  remove_action_selection_dialog("#"+id, actor_unit['id'])
                  }
                });
 
@@ -1017,7 +1021,7 @@ function popup_sabotage_dialog(actor_unit, target_city, city_imprs, act_id)
   /* Show the dialog. */
   $("#" + id).dialog('open');
   $("#" + id).dialog('widget').position({my:"center top", at:"center top", of:window})
-  dialog_register("#"+id);
+  dialog_register("#"+id, actor_unit['id']);
 }
 
 /**************************************************************************
@@ -1100,7 +1104,7 @@ function select_tgt_unit(actor_unit, target_tile, potential_tgt_units)
 
   $(id).dialog('open');
   $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
-  dialog_register(id);
+  dialog_register(id, actor_unit['id']);
 }
 
 /**************************************************************************
@@ -1230,7 +1234,7 @@ function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapac
       // for very last dialog, click advances unit focus
       if (dialog_num==last_dialog) setTimeout(function() {advance_unit_focus(false)}, 700);
 
-      remove_active_dialog(dialog_id);
+      remove_action_selection_dialog(dialog_id, actor['id'])
     }
   }
   return load_button;
@@ -1276,34 +1280,49 @@ function select_tgt_extra(actor_unit, target_unit,
 
   $(id).dialog('open');
   $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
-  dialog_register(id);
+  dialog_register(id, actor_unit['id']);
 }
 
 /**************************************************************************
  Registers a dialog as active, so that 'W' will close the most recent
  opened dialog (First In Last Out). Also binds the dialog close function
  to clean-up function remove_active_dialog(..)
+
+ Optional 'actor_id' is for actor units' Action Selection Dialogs to 
+ unregister themselves as no longer awaiting user action selection (which
+ the system needs to know for sorting the advancing of unit focus, etc.)
+
+ Optional 'input_maybe_needed' lets us know to unregister the
+ Action Selection Dialog if we might possibly be waiting for more user
+ input.
 **************************************************************************/
-function dialog_register(id) {
+function dialog_register(id, actor_id, input_maybe_needed) {
+  console.log("    dialog registered: "+id+"    actor:"+actor_id)
   $(id).dialog('widget').keydown(dialog_key_listener);
   active_dialogs.push(id);
   //close, cancel, and [x]
   $(id).dialog({ 
       autoOpen: true
-  }).bind('dialogclose', function(event, ui) { 
-    remove_active_dialog(id);
+  }).bind('dialogclose', function(event, ui) {
+    if (actor_id) {
+      remove_action_selection_dialog(id, actor_id, input_maybe_needed);
+    }
+    else {
+      remove_active_dialog(id);
+    }
   });
   $(id).css("color", default_dialog_text_color);
 }
+
 /**************************************************************************
   Create a close button (for multiple cascading dialogs)
-  (such as multiple dialogs for multiple units each getting a dialog)
-  Needed because of JavaScript's scoping rules.
+  (such as multiple dialogs for multiple units ordered to board a ship)
+  Needed as a function because of JavaScript's scoping rules.
 **************************************************************************/
 function create_a_close_button(parent_id)
 {
   var close_button = {text: "Cancel (𝗪)", click: function() {
-      remove_active_dialog(parent_id)
+      remove_active_dialog(parent_id);
   }};
   return close_button;
 }
@@ -1318,6 +1337,29 @@ function remove_active_dialog(id)
     active_dialogs.splice(index, 1);
   }    
   $(id).remove();
+}
+/**************************************************************************
+  Same as above but for unit action dialogs which also need to unregister
+  that the unit is no longer waiting for user input from the dialog.
+  Called when dialog close-binding function is triggered from the dialog
+  closing some other way than by hitting 'W'.
+
+  Optional 'input_maybe_needed' tells us to perform a check that
+  this unit has even more selections to make, and if so, not to
+  unregister that the unit is waiting on user input.
+**************************************************************************/
+function remove_action_selection_dialog(id, actor_id, input_maybe_needed)
+{
+  remove_active_dialog(id);
+
+  if (!input_maybe_needed) {
+    action_selection_no_longer_in_progress(actor_id);
+  }
+  else {
+    if (!is_more_user_input_needed) {
+      action_selection_no_longer_in_progress(actor_id);
+    }
+  }
 }
 
 /**************************************************************************

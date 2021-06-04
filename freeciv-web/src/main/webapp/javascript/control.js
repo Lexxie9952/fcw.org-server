@@ -838,6 +838,7 @@ function check_text_input(event,chatboxtextarea) {
 **************************************************************************/
 function action_selection_no_longer_in_progress(old_actor_id)
 {
+  console.log("    actor: %d recorded as no selection in progress.",old_actor_id)
   /* IDENTITY_NUMBER_ZERO is accepted for cases where the unit is gone
    * without a trace. */
   if (old_actor_id != action_selection_in_progress_for
