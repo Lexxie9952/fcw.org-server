@@ -2543,8 +2543,8 @@ function create_unit_offset_arrays()
           mx -= 6; my += 7;
           break;
       case "Horsemen":
-          dx -= 4; dy -= 3;
-          vx += 2; vy -= 10;
+          dx -= 3; dy -= 3;
+          vx -= 47; vy -= 16;
           break;
       case "Howitzer":
           dx -= 9;  dy += 1;
@@ -2593,14 +2593,14 @@ function create_unit_offset_arrays()
           vx -= 3; vy -= 19;
           break;
       case "Phalanx":                     
-          dx += 0; dy -= 4;
+          dx += 0; dy -= 3;
           vx +=2; vy -= 8;
           break;
       case "Paratroopers":
           vy -= 7;
           break;
       case "Pikemen":
-          dx-= 1; dy -= 7;
+          dx -= 1; dy -= 6;
           vx -= 1; vy -= 7;
           break;
       case "Riflemen":
@@ -2662,7 +2662,8 @@ function create_unit_offset_arrays()
           vx -= 4; vy += 3;
           break;
       case "Warriors":
-          dx -= 8; dy -= 3;
+          dx -= 3; dy -= 2;
+          vx -= 2; vy -= 2;
           break;
       case "Zeppelin":
           sx = -13; sy = 5;
