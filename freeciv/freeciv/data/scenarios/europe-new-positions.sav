@@ -2,9 +2,9 @@
 [scenario]
 game_version=2939900
 is_scenario=TRUE
-name=_("Europe Large V2")
-description=_("177x100 map of Europe, up to 50 players.")
-authors=_("Map: Lexxie, Christian Grothoff, Jerzy Klek, Mateusz Stefek, Daniel Markstedt\nStart positions: Jason Dorje Short, Mateusz Stefek, Rhue")
+name=_("Europe Large V2.01LT Random Start Positions")
+description=_("177x100 map of Europe, configured for Longturn")
+authors=_("FREECIV-WEB\nRANDOM START POSITIONS\nMust load ruleset before scenario.\nNOTE: when repo and server are same version, /scensave then diff to make this scenario default to MP2 rules.")
 save_random=FALSE
 players=FALSE
 startpos_nations=FALSE
@@ -18,7 +18,7 @@ options=" +version3"
 version=40
 reason="Scenario"
 revision="2.93.99-alpha"
-rulesetdir="default"
+rulesetdir="mp2-caravel"
 improvement_size=68
 improvement_vector="Airport","Aqueduct","Bank","Barracks","Barracks II","Barracks III","Cathedral","City Walls","Coastal Defense","Colosseum","Courthouse","Factory","Granary","Harbour","Hydro Plant","Library","Marketplace","Mass Transit","Mfg. Plant","Nuclear Plant","Offshore Platform","Palace","Police Station","Port Facility","Power Plant","Recycling Center","Research Lab","SAM Battery","SDI Defense","Sewer System","Solar Plant","Space Component","Space Module","Space Structural","Stock Exchange","Super Highways","Supermarket","Temple","University","Apollo Program","A.Smith's Trading Co.","Colossus","Copernicus' Observatory","Cure For Cancer","Darwin's Voyage","Eiffel Tower","Great Library","Great Wall","Hanging Gardens","Hoover Dam","Isaac Newton's College","J.S. Bach's Cathedral","King Richard's Crusade","Leonardo's Workshop","Lighthouse","Magellan's Expedition","Manhattan Project","Marco Polo's Embassy","Michelangelo's Chapel","Oracle","Pyramids","SETI Program","Shakespeare's Theatre","Statue of Liberty","Sun Tzu's War Academy","United Nations","Women's Suffrage","Coinage"
 technology_size=88
@@ -68,21 +68,21 @@ phase_mode="Concurrent"
 phase_mode_stored="Concurrent"
 phase=0
 scoreturn=20
-timeoutint=0
-timeoutintinc=0
-timeoutinc=0
-timeoutincmult=1
-timeoutcounter=1
+;timeoutint=0
+;timeoutintinc=0
+;timeoutinc=0
+;timeoutincmult=1
+;timeoutcounter=1
 turn=0
 year=-4000
 year_0_hack=FALSE
-globalwarming=0
-heating=0
-warminglevel=8
-nuclearwinter=0
-cooling=0
-coolinglevel=8
-random_seed=1499292452
+;globalwarming=0
+;heating=0
+;warminglevel=8
+;nuclearwinter=0
+;cooling=0
+;coolinglevel=8
+;random_seed=1499292452
 global_advances="1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
 save_players=FALSE
 save_known=FALSE
@@ -96,8 +96,34 @@ vars=$$
 
 [settings]
 set={"name","value","gamestart"
+;LONGTURN SERVER SETTINGS: prevents overriding .serv file
+;########################################################
+"compresstype", "xs", "xs"
+;"allowtake", "", ""
+"autotoggle",FALSE,FALSE
+"netwait",150,150
+"pingtime",30,30
+"pingtimeout",240,240
+"maxconnectionsperhost",500,500
+"threaded_save","ENABLED","ENABLED"
+"scorelog","DISABLED","DISABLED"
+"saveturns",1,1
+"autosaves","TURN|TIMER","TURN|TIMER"
+"savefrequency",60,60
+"metaconnection","persistent","persistent"
+"fixedlength","ENABLED","ENABLED"
+"ec_chat","ENABLED","ENABLED"
+"ec_info","ENABLED","ENABLED"
+"ec_max_size",5000,5000
+"ec_turns",7,7
+;LONGTURN TIME CONTROL OVERRIDES
+;################################
+"timeout",82800,82800
+"first_timeout",164400,164400
+;COMMENT OUT MOST SETTINGS, TO LET RULESET and SERV file keep their defaults:
+;##########################################################################################
 "aifill",50,10
-"alltemperate",FALSE,FALSE
+;"alltemperate",FALSE,FALSE
 "flatpoles",100,100
 "generator","SCENARIO","RANDOM"
 "landmass",45,30
@@ -106,21 +132,21 @@ set={"name","value","gamestart"
 "maxplayers",180,180
 "nationset","all","all"
 "naturalcitynames",FALSE,FALSE
-"metamessage","Scenario: Europe",""
-"revolentype","RANDOM","RANDOM"
+;"metamessage","Scenario: Europe",""
+;"revolentype","RANDOM","RANDOM"
 "separatepoles",TRUE,TRUE
 "singlepole",FALSE,FALSE
 "size",18,4
-"startpos","DEFAULT","DEFAULT"
-"startunits","DDDwwwAccca","cccwwwx"
-"steepness",30,30
+;"startpos","DEFAULT","DEFAULT"
+;"startunits","DDDwwwAccca","DDDwwwAccca"
+;"steepness",30,30
 "teamplacement","CLOSEST","CLOSEST"
-"techlevel",0,0
-"temperature",50,50
-"tilesperplayer",100,100
+;"techlevel",0,0
+;"temperature",50,50
+"tilesperplayer",250,250
 "tinyisles",FALSE,FALSE
-"topology","","WRAPX"
-"victories","","SPACERACE|ALLIED"
+"topology","",""
+;"victories","SPACERACE|ALLIED","SPACERACE|ALLIED"
 "wetness",50,50
 "xsize",177,64
 "ysize",100,64
@@ -241,190 +267,10 @@ t0096="  ppppphhmmmmdddddddddddhhhhdddddddddddddddddddddddddddhhhdddhdppp     ::
 t0097=" gpppphhhdddddddddddddddddddddddddddddddddddddddddddddhhdddddddppp    ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::  pphp+pddddddddddddddddddddddddddddddddddddd"
 t0098="ppddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddp     :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: gpghd+dddddddddddddddddddddddddddddddddddddd"
 t0099="ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddg    ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: phhpdddddddddddddddddddddddddddddddddddddddd"
-startpos_count=180
-startpos={"x","y","exclude","nations"
-10,75,FALSE,"Portuguese"
-113,44,FALSE,"Ukrainian#Kievan Rus'"
-106,64,FALSE,"Romanian"
-70,29,FALSE,"Danish"
-92,15,FALSE,"Finnish"
-82,54,FALSE,"Austrian"
-71,76,FALSE,"Italian#Papal#Roman"
-46,51,FALSE,"French"
-24,71,FALSE,"Spanish"
-83,17,FALSE,"Swedish"
-81,63,FALSE,"Croatian"
-55,41,FALSE,"Dutch"
-82,69,FALSE,"Bosnian-Herzegovinian"
-86,56,FALSE,"Hungarian#Hunnic"
-53,46,FALSE,"Belgian"
-91,64,FALSE,"Serbian#Moravian"
-75,49,FALSE,"Czech#Celtic#Chrobatian"
-120,24,FALSE,"Russian#Muscovite#Soviet"
-32,33,FALSE,"Irish#Gaelic"
-121,79,FALSE,"Turkish"
-101,87,FALSE,"Greek#Hellenic"
-158,81,FALSE,"Iraqi#Seleucid"
-57,60,FALSE,"Swiss#Helvetian"
-75,62,FALSE,"Slovenian"
-7,9,FALSE,"Icelandic"
-41,27,FALSE,"Scottish"
-94,26,FALSE,"Latvian#Curonian"
-84,55,FALSE,"Slovakian"
-94,18,FALSE,"Estonian"
-69,54,FALSE,"Bavarian#Holy Roman"
-44,41,FALSE,"English#British#Briton"
-63,90,FALSE,"Carthaginian#Vandalic#Tunisian"
-95,33,FALSE,"Lithuanian"
-99,71,FALSE,"Bulgarian"
-86,49,FALSE,"Polish#Vistulan"
-73,40,FALSE,"German#East German"  
-138,64,FALSE,"Abkhaz"
-89,77,FALSE,"Albanian"
-59,54,FALSE,"Alsatian"
-20,79,FALSE,"Andalusi"
-41,70,FALSE,"Andorran"
-70,41,FALSE,"Anhaltian#Saxon#Brandenburgian#Veletian"
-35,72,FALSE,"Aragonese"
-150,71,FALSE,"Armenian"
-18,61,FALSE,"Asturian"
-89,58,FALSE,"Avar"
-160,65,FALSE,"Azeri"
-61,53,FALSE,"Badian"
-158,19,FALSE,"Bashkir"
-31,68,FALSE,"Basque"
-100,36,FALSE,"Belarusian"
-49,47,FALSE,"Belgic"
-74,55,FALSE,"Boian"
-127,59,FALSE,"Bosporan"
-36,51,FALSE,"Breton"
-52,59,FALSE,"Burgundian#Gallic"
-59,51,FALSE,"Burgundic#Palatinate"
-113,74,FALSE,"Byzantine#Latin" 
-73,60,FALSE,"Carantanian"
-23,66,FALSE,"Castilian"
-43,73,FALSE,"Catalan"
-29,72,FALSE,"Celtiberian"
-150,56,FALSE,"Chechen"
-140,17,FALSE,"Chuvash"
-142,17,FALSE,"Tatar"
-135,60,FALSE,"Circassian"
-30,43,FALSE,"Cornish"
-60,73,FALSE,"Corsican"
-119,47,FALSE,"Cossack"
-103,94,FALSE,"Cretan"
-122,62,FALSE,"Crimean Tatar"
-84,40,FALSE,"Cuyavian"
-126,93,FALSE,"Cypriot#Turkish Cypriot"
-99,61,FALSE,"Dacian" 
-91,81,FALSE,"Epirote"
-68,72,FALSE,"Etruscan"
-37,7,FALSE,"Faroese"
-53,44,FALSE,"Flemish"
-66,69,FALSE,"Florentine"
-68,51,FALSE,"Franconian"
-51,47,FALSE,"Frankish"
-57,38,FALSE,"Frisian"
-73,63,FALSE,"Friulian"
-15,64,FALSE,"Galician"
-62,67,FALSE,"Genoese#Ligurian"
-149,67,FALSE,"Georgian"
-88,65,FALSE,"Gepid"
-55,47,FALSE,"German Belgian"
-67,39,FALSE,"Germanic"
-148,46,FALSE,"Golden Horde#Khazar"
-74,31,FALSE,"Gothic#Scanian"
-79,40,FALSE,"Greater Polish" 
-66,41,FALSE,"Hanoverian"
-67,36,FALSE,"Hanseatic"
-66,43,FALSE,"Hessian"
-25,78,FALSE,"Iberian"
-88,74,FALSE,"Illyrian"
-153,27,FALSE,"Indo-European"
-77,90,FALSE,"Italian Greek"
-141,52,FALSE,"Kalmyk"
-154,71,FALSE,"Karabakhi"
-112,8,FALSE,"Karelian"
-82,36,FALSE,"Kashubian#Teutonic"
-133,7,FALSE,"Komi"
-90,72,FALSE,"Kosovar"
-62,64,FALSE,"Langobardic#Milanese"
-95,44,FALSE,"Lendian"
-18,66,FALSE,"Leonese"
-78,68,FALSE,"Liburnian"
-64,57,FALSE,"Liechtensteiner" 
-92,38,FALSE,"Lipka Tatar"
-62,43,FALSE,"Lippian"
-55,54,FALSE,"Lorrain"
-55,51,FALSE,"Luxembourgish"
-97,80,FALSE,"Macedon"
-93,74,FALSE,"Macedonian#Paeonian"
-89,42,FALSE,"Mazovian"
-70,36,FALSE,"Mecklenburgian"
-83,79,FALSE,"Messapian"
-109,54,FALSE,"Moldovan"
-59,69,FALSE,"Monegasque"
-85,73,FALSE,"Montenegrin"
-137,22,FALSE,"Mordvin"
-75,79,FALSE,"Neapolitan"
-44,48,FALSE,"Norman"
-42,32,FALSE,"Northumbrian"
-68,17,FALSE,"Norwegian"
-107,20,FALSE,"Novgorodian"
-41,65,FALSE,"Occitan#Visigothic"
-62,38,FALSE,"Oldenburgian"
-84,36,FALSE,"Old Prussian"
-145,66,FALSE,"Ossetian"
-70,67,FALSE,"Ostrogothic#Western Roman"
-117,79,FALSE,"Ottoman"
-97,82,FALSE,"Pelasgian"
-42,24,FALSE,"Pictish"
-59,65,FALSE,"Piedmontese"
-87,34,FALSE,"Prussian"
-57,46,FALSE,"Rhenish"
-64,59,FALSE,"Romansh"
-86,51,FALSE,"Rusyn"
-72,73,FALSE,"Sabine"
-72,69,FALSE,"Sammarinese"
-77,78,FALSE,"Samnite"
-90,28,FALSE,"Samogitian"
-61,83,FALSE,"Sardinian"
-56,63,FALSE,"Savoyard"
-65,34,FALSE,"Schleswig-Holsteinian"
-36,25,FALSE,"Scottish Gaelic"
-133,51,FALSE,"Scythian"
-71,87,FALSE,"Sicilian"
-79,44,FALSE,"Silesian"
-97,41,FALSE,"Slavic"
-76,42,FALSE,"Sorbian"
-13,67,FALSE,"Suebian"
-105,73,FALSE,"Thracian"
-68,46,FALSE,"Thuringian"
-113,56,FALSE,"Transnistrian"
-99,59,FALSE,"Transylvanian#Vampire"
-68,60,FALSE,"Tyrolian"
-70,64,FALSE,"Venetian#Venetic"
-67,19,FALSE,"Viking"
-144,18,FALSE,"Volga Bulgar"
-145,35,FALSE,"Volga German"
-53,48,FALSE,"Walloon"
-35,39,FALSE,"Welsh"
-75,36,FALSE,"Western Pomeranian"
-59,43,FALSE,"Westphalian"
-64,53,FALSE,"Wuerttembergian"
-45,89,FALSE,"Algerian"
-12,91,FALSE,"Moroccan"
-55,93,FALSE,"Numidian"
-24,90,FALSE,"Riffian"
-135,98,FALSE,"Aramean#Syrian"
-149,79,FALSE,"Assyrian"
-155,80,FALSE,"Babylonian"
-126,80,FALSE,"Hittite#Luwian"
-152,76,FALSE,"Kurdish"
-116,90,FALSE,"Lycian"
-143,84,FALSE,"Mitanni"
-135,72,FALSE,"Pontic"
-}
+;startpos_count=180
+;startpos={"x","y","exclude","nations"
+;135,72,FALSE,"Pontic"
+;}
 e00_0000="000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
 e00_0001="000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
 e00_0002="000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"

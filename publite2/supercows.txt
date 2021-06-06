@@ -18,26 +18,16 @@
 # /wall The game is over!
 #  
 # **************************************************************************************************
-#UR10:qrtv:6014
-#UR11:SunrisePink:6008
-#UR12:Epiphany:6013
-#UR13:Canik:6016
-#G28:qrtv:6003
-#G30:qrtv:6015
-#G31:qrtv:6006
-# **************************************************************************************************
-Epiphany:6014
-qrtv:6014
-SunrisePink:6008
-Epiphany:6008
-qrtv:6008
-Epiphany:6013
-qrtv:6003
-Epiphany:6003
-Epiphany:6015
-qrtv:6015
-Epiphany:6006
-qrtv:6006
-Epiphany:6016
-qrtv:6016
-Canik:6016
+lexxie:6000
+lexxie:6001
+lexxie:6002
+lexxie:6003
+lexxie:6004
+lexxie:6005
+lexxie:6006
+lexxie:6007
+lexxie:6008
+lexxie:6009
+lexxie:6010
+lexxie:6011
+lexxie:6012
