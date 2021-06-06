@@ -518,7 +518,7 @@ function show_city_dialog(pcity)
     // Show an emoji to the left of the name of what the city is producing. Clicking it takes you to prod screen.
     prod_string += html_emoji_from_universal(prod_type['type']['name'])+"&thinsp;";
   }
-  prod_string += "<b>" + (prod_type != null ? prod_type['type']['name']+"</b>" : "None</b>");
+  prod_string += "<b style='color:#fed'>" + (prod_type != null ? prod_type['type']['name']+"</b>" : "None</b>");
   if (is_small_screen() && prod_type != null && prod_type['type']['name'] != null && prod_type['type']['name'].length>16)
     prod_string = "<span style='font-size:90%'>" + prod_string + "</span>";
   $("#city_production_overview").html("<span style='cursor:pointer' onclick='city_prod_tab();'>"+prod_string+"</span>");
