@@ -25,7 +25,7 @@ var scenarios = [
   {"img":"/images/world_small.png", "description":"The World (80x50)", "savegame":"earth-small"},
   {"img":"/images/world_big.png", "description":"The World (160x90)", "savegame":"earth-large"},
   {"img":"/images/hagworld.png", "description":"The World (120x60)", "savegame":"hagworld"},
-  {"img":"/images/europe.png", "description":"Large Europe v2.1LT (177x100) Longturn only", "savegame":"europe-new-positions"},
+  {"img":"/images/europe.png", "description":"Large Europe v2.01LT (177x100) LONGTURN ONLY. Up to 50 players", "savegame":"europe-new-positions"},
   {"img":"/images/europe.png", "description":"Large Europe v2 (177x100)", "savegame":"europe"},
   {"img":"/images/europe_1901.png", "description":"Europe 1901 WWI (177x100) up to 11 players", "savegame":"europe_1901"},
   {"img":"/images/british.png", "description":"British Isles (85x80)", "savegame":"british-isles"},
