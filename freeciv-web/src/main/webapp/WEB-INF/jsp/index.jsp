@@ -81,9 +81,7 @@
 	}
 	#game-launcher .btn {
 		display: inline-block;
-		color: rgb(255, 255, 255);
 		border: 0;
-		border-radius: 5px;
 		padding: 10px;
 		width: 230px;
 		display: block;
@@ -91,18 +89,27 @@
 		font-size: 20px;
 		text-transform: uppercase;
 		margin: 20px auto 10px;
-		background: #be602d;
-   text-shadow:
-    -0.5px -0.5px 0 #000,
-    0.5px -0.5px 0 #000,
-    -0.5px 0.5px 0 #000,
-    0.5px 0.5px 0 #000;
+
+		text-shadow: 1px 1px #091a38 !important;
+    color: #39f5;
+    border-radius: 13px;
+    background-image: url(/images/bg-med-light.jpg);
+    background: #c3ffff71;
+    box-shadow: 7px 7px 14px #1f2626, -7px -7px 14px #9bb5;
+    font-family: 'Freeciv';
+    letter-spacing: 0.3px;
 	}
 	/* overrides the above */
 	#game-launcher .btn {
     color: rgb(154 183 207);
 		text-shadow: 1px 1px #091a38 !important;
     color: rgb(54 80 100)
+	}
+	#game-launcher .btn:hover {
+		border-radius: 13px;
+    background: #788888;
+    box-shadow: inset 7px 7px 9px #464646, inset -7px -7px 9px #9ababa;
+    margin: 21px auto 9px;
 	}
 	#game-launcher a.small { width: 130px;	}
 	.multiplayer-games th:last-child { width: 80px; }
@@ -180,6 +187,7 @@
 	}
 	a {
     text-shadow: 1px 1px #000 !important;
+		color: #b1efef;
 	}
 	.name {
 		text-shadow: 1px 2px #777 !important;
@@ -294,7 +302,7 @@
 			<div id="statistics" class="row">
 				<div class="col-md-12">
 					<div class="panel-freeciv statistics">
-						<h4 style="color:#6398d6"><span id="statistics-singleplayer"><b>0</b></span> <fmt:message key="index-stats-singleplayer"/> <span id="statistics-multiplayer"><b>0</b></span> <fmt:message key="index-stats-multiplayer"/><br>
+						<h4 style="color:#63acd6"><span id="statistics-singleplayer"><b>0</b></span> <fmt:message key="index-stats-singleplayer"/> <span id="statistics-multiplayer"><b>0</b></span> <fmt:message key="index-stats-multiplayer"/><br>
 						<fmt:message key="index-stats-since"/></h4>
 
 					</div>

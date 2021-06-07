@@ -64,8 +64,17 @@
 		color: #ccc;
   	background-image: url('/images/bg-dark.jpg'); 
 	}
+	a {
+    text-shadow: 1px 1px #000 !important;
+		color: #b1efef;
+	}
+	a:hover {
+    text-shadow: 1px 1px #005 !important;
+    color: #dcb;
+    text-decoration: underline;
+	}
 	h1, h2, h3, h4, h5, h6 {
-		color: #BE602D;
+		color: #85afaf;
 		font-family: 'Freeciv', 'Segoe UI';
 		text-shadow: 1px 1px #222;
 	}
@@ -146,7 +155,7 @@
 	}
 	.ongoing-games-number {
 		margin-left: 5px;
-		background:#BE602D;
+		background:#be602d;
 	}
 	.nav {
 		font-size: 16px;
