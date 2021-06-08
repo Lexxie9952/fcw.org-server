@@ -299,15 +299,34 @@ static inline bool pf_normal_node_init(struct pf_normal_map *pfnm,
   if (TILE_UNKNOWN != node_known_type) {
     bool can_disembark;
 
-    /* Test if we can invade tile. */
-    if (!utype_has_flag(params->utype, UTYF_CIVILIAN)
-        && !player_can_invade_tile(params->owner, ptile)) {
-      /* Maybe overwrite node behavior. */
-      if (params->start_tile != ptile) {
-        node->behavior = TB_IGNORE;
-        return FALSE;
-      } else if (TB_NORMAL == node->behavior) {
-        node->behavior = TB_IGNORE;
+    /* Disallow military unit to invade tile that's illegal to invade */
+    if (!utype_has_flag(params->utype, UTYF_CIVILIAN)) {
+      if (!player_can_invade_tile(params->owner, ptile)) {
+        /* Maybe overwrite node behavior. */
+        if (params->start_tile != ptile) {
+          node->behavior = TB_IGNORE;
+          return FALSE;
+        } else if (TB_NORMAL == node->behavior) {
+          node->behavior = TB_IGNORE;
+        }
+      }
+    }
+    /* else, Civilian: can go anywhere EXCEPT the tile of a non-allied city UNLESS
+       the city is the last tile in the path: Establish embassy / trade route, etc.
+       TODO: add one more condition if it's the final tile, some kind of 
+       unit_can_do_action_when_arriving_at_tile(). This would prevent workers
+       et al., from getting valid goto paths whose final tile is a non-allied city.
+       NOTE: method below is FAR superior to old bug that allowed ANY civilian
+       to path over ANY city for ALL start,middle,final tiles of a path:      */
+    else if (tile_city(ptile) && ptile != final_tile) {
+      if (!pplayers_allied(params->owner, tile_city(ptile)->owner)) {
+        if (params->start_tile != ptile) {
+          /* Civilians can't go through non-allied cities */
+          node->behavior = TB_IGNORE;
+          return FALSE;
+        } else if (TB_NORMAL == node->behavior) {
+          node->behavior = TB_IGNORE;
+        }
       }
     }
 
