@@ -1801,7 +1801,9 @@ static void explain_why_no_action_enabled(struct unit *punit,
     fc__fallthrough; /* Fall through to unknown cause. */
   case ANEK_UNKNOWN:
     notify_player(pplayer, unit_tile(punit), E_BAD_COMMAND, ftc_server,
-                  _("No action possible."));
+                  _("💢 No action possible for %s %s."),
+                  unit_tile_link(punit),
+                  UNIT_EMOJI(punit));
     break;
   }
 
