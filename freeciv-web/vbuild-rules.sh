@@ -19,6 +19,7 @@ printf "\nRe-generating manuals\n"
    for r in ${RULESETS[@]}; do
       echo "Generating help manual for *********************************************** $r"    
        ${HOME}/freeciv/bin/freeciv-manual -r $r
+      printf "*************************************************************\n\n"
    done
 
 # Vagrant install needs to copy these files into the tomcat webapp

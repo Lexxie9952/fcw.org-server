@@ -15,8 +15,10 @@ printf "\nUpdating rulesets\n"
 printf "\nRe-generating manuals\n"
    cd src/derived/webapp/man
    for r in ${RULESETS[@]}; do
+      printf "\n"
       echo "Generating help manual for $r"    
        ${HOME}/freeciv/bin/freeciv-manual -r $r
+      printf "*************************************************************\n"
    done
 
 # Vagrant install needs to copy these files into the tomcat webapp
