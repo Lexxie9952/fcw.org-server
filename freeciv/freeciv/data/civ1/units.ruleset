@@ -10,7 +10,7 @@
 
 [datafile]
 description="Civ1-style unit_type data for Freeciv"
-options="+Freeciv-ruleset-Devel-2017.Jan.02"
+options="+Freeciv-ruleset-Devel-2017.Jan.02 web-compatible"
 format_version=20
 
 [control]
