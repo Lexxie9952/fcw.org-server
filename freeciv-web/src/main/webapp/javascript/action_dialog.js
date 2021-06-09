@@ -532,6 +532,15 @@ function popup_action_selection(actor_unit, action_probabilities,
       click   : function() {
         did_not_decide = true;
         remove_action_selection_dialog(id, actor_unit['id'], true);
+        /* 9.June.2021:
+           TO DO: clicking Wait for a single selected unit with action dialog, currently
+           just closes the dialog but doesn't advance unit focus. The line of code below 
+           would do that but is commented out because of a logic trap: You would never be
+           able to escaping looping between units who want decisions, because it only cycles
+           between those. So, if we ever think of some other logic for this, this is where 
+           we would put the code to handle it:
+           if (current_focus && current_focus.length == 1) advance_unit_focus(false);
+        */
       } });
 
   buttons.push({
