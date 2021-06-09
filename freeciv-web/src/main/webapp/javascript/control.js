@@ -1069,6 +1069,20 @@ function control_unit_killed(punit)
   }
 }
 
+/**********************************************************************//**
+  At least one unit may have been subtraced from the current focus
+**************************************************************************/
+function unit_may_have_lost_focus()
+{
+  if (action_selection_in_progress_for != IDENTITY_NUMBER_ZERO
+      /* No unit with the id of action_selection_in_progress_for is in
+       * focus. */
+      && (current_focus.findIndex(
+            unit => unit.id == action_selection_in_progress_for) == -1)) {
+    action_selection_close();
+  }
+}
+
 /**************************************************************************
  If there is no unit currently in focus, or if the current unit in
  focus should not be in focus, then get a new focus unit.
@@ -1180,6 +1194,7 @@ function advance_unit_focus(same_type)
     deactivate_goto(false);
     save_last_unit_focus();
     current_focus = []; /* Reset focus units. */
+    unit_may_have_lost_focus();
     update_active_units_dialog();
     $("#game_unit_orders_default").hide();
 
@@ -1261,6 +1276,7 @@ function advance_focus_inactive_units()
     deactivate_goto(false);
     save_last_unit_focus();
     current_focus = []; /* Reset focus units. */
+    unit_may_have_lost_focus();
     waiting_units_list = []; /* Reset waiting units list */
     update_active_units_dialog();
     $("#game_unit_orders_default").hide();
@@ -2217,6 +2233,7 @@ function set_unit_focus(punit)
   save_last_unit_focus();
 
   current_focus = [];
+  unit_may_have_lost_focus();
   if (punit == null) {
     current_focus = [];
   } else {
@@ -2245,6 +2262,7 @@ function click_unit_in_panel(e, punit)
         current_focus.push(punit);
       } else { // if unit is already in selection, shift-clicking removes it from selection
         current_focus.splice(index, 1);
+        unit_may_have_lost_focus();
       }
     }
 
@@ -2272,8 +2290,10 @@ function set_unit_focus_and_redraw(punit)
 
   if (punit == null) {
     current_focus = [];
+    unit_may_have_lost_focus();
   } else {
     current_focus[0] = punit;
+    unit_may_have_lost_focus();
     action_selection_next_in_focus(IDENTITY_NUMBER_ZERO);
     warcalc_set_default_vals(punit); // warcalc default vals as last clicked units
   }
@@ -3144,6 +3164,7 @@ function do_map_click(ptile, qtype, first_time_called)
         // clicked on a tile with units exclusively owned by other players.
         save_last_unit_focus();
         current_focus = [];
+        unit_may_have_lost_focus();
         for (i=0;i<sunits.length;i++)
           current_focus.push(sunits[i]);
         //current_focus = sunits;
@@ -3658,6 +3679,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         save_last_unit_focus();
 
         current_focus = [];
+        unit_may_have_lost_focus();
         if (penultimate_focus != null) {
           //current_focus.push(last_focus);
           set_unit_focus_and_redraw(penultimate_focus);
@@ -3695,6 +3717,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         save_last_unit_focus();
 
         current_focus = [];
+        unit_may_have_lost_focus();
         if (penultimate_focus != null) {
           //current_focus.push(last_focus);
           set_unit_focus_and_redraw(penultimate_focus);
@@ -3750,6 +3773,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         save_last_unit_focus();
 
         current_focus = [];
+        unit_may_have_lost_focus();
         clear_all_modes();
         $("#canvas_div").css("cursor", "default");
         goto_request_map = {};
@@ -4463,6 +4487,7 @@ function key_select_different_units_on_tile()
     save_last_unit_focus();
 
     current_focus = []; // since we're selecting everything BUT this, it has to unselect too
+    unit_may_have_lost_focus();
     var ptile = index_to_tile(punit['tile']);
     var ptype = punit['type'];
 
@@ -4497,6 +4522,7 @@ function key_select_same_global_type(continent_only)
     save_last_unit_focus();
 
     current_focus = [];  // clear focus to start adding new units to selection
+    unit_may_have_lost_focus();
 
     //console.log(units.length+" is units.length");
     // check every unit in the world
@@ -4543,6 +4569,7 @@ function key_filter_for_units_in_queue() {
         && punit['ai'] == false
         && punit['transported'] == false)) {
           current_focus.splice(i, 1);
+          unit_may_have_lost_focus();
       }
     }
   } else {
@@ -4618,8 +4645,10 @@ function key_unit_show_cargo()
   }
 
   // Now, swap selected transports for selected cargo IFF any cargo was selected.
-  if (new_current_focus && new_current_focus.length > 0) 
-   current_focus = new_current_focus;
+  if (new_current_focus && new_current_focus.length > 0) {
+    current_focus = new_current_focus;
+    unit_may_have_lost_focus();
+  }
 
   deactivate_goto(false);
   update_active_units_dialog();
