@@ -23,6 +23,53 @@ var actions = {};
 var auto_attack = false;
 var active_dialogs = [];
 
+var action_selection_restart = false;
+var did_not_decide = false;
+
+/**********************************************************************//**
+  Move the queue of units that need user input forward unless the current
+  unit is going to need more input.
+**************************************************************************/
+function act_sel_queue_may_be_done(actor_unit_id)
+{
+  if (!is_more_user_input_needed) {
+    /* The client isn't waiting for information for any unanswered follow
+     * up questions. */
+
+    if (action_selection_restart) {
+      /* The action selection dialog was closed but only so it can be
+       * redrawn with fresh data. */
+
+      action_selection_restart = false;
+    } else {
+      /* The action selection process is over, at least for now. */
+      action_selection_no_longer_in_progress(actor_unit_id);
+    }
+
+    if (did_not_decide) {
+      /* The action selection dialog was closed but the player didn't
+       * decide what the unit should do. */
+
+      /* Reset so the next action selection dialog does the right thing. */
+      did_not_decide = false;
+    } else {
+      /* An action, or no action at all, was selected. */
+      action_decision_clear_want(actor_unit_id);
+    }
+  }
+}
+
+/**********************************************************************//**
+  Move the queue of units that need user input forward since the
+  current unit doesn't require the extra input any more.
+**************************************************************************/
+function act_sel_queue_done(actor_unit_id)
+{
+  /* Stop waiting. Move on to the next queued unit. */
+  is_more_user_input_needed = false;
+  act_sel_queue_may_be_done(actor_unit_id);
+}
+
 /**************************************************************************
   Returns true iff the given action probability belongs to an action that
   may be possible.
