@@ -1523,12 +1523,14 @@ function city_name_dialog(suggested_name, unit_id) {
 			width: "300",
 			close: function() {
 				keyboard_input=true;
+                act_sel_queue_done(unit_id);
 			},
 			buttons: [	{
 					text: "Cancel",
 				        click: function() {
 						$("#city_name_dialog").remove();
                         keyboard_input=true;
+                        act_sel_queue_done(unit_id);
 					}
 				},{
 					text: "Ok",
@@ -1547,6 +1549,7 @@ function city_name_dialog(suggested_name, unit_id) {
                           encodeURIComponent(name));
 						$("#city_name_dialog").remove();
 						keyboard_input=true;
+                        act_sel_queue_done(unit_id);
 					}
 					}
 				]
@@ -1571,6 +1574,7 @@ function city_name_dialog(suggested_name, unit_id) {
         unit_id, actor_unit['tile'], 0, encodeURIComponent(name));
 	  $("#city_name_dialog").remove();
       keyboard_input=true;
+      act_sel_queue_done(unit_id);
     }
   });
 
