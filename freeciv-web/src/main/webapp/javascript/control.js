@@ -1079,7 +1079,7 @@ function unit_may_have_lost_focus()
        * focus. */
       && (current_focus.findIndex(
             unit => unit.id == action_selection_in_progress_for) == -1)) {
-    action_selection_close();
+    action_selection_close(true);
   }
 }
 

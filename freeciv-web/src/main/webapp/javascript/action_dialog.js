@@ -1457,10 +1457,14 @@ function dialog_key_listener(ev)
 /***********************************************************************//**
   Closes the action selection dialog
 ***************************************************************************/
-function action_selection_close()
+function action_selection_close(not_over)
 {
   var id;
   var actor_unit_id = action_selection_in_progress_for;
+
+  if (not_over) {
+    did_not_decide = true;
+  }
 
   id = "#act_sel_dialog_" + actor_unit_id;
   // Remove action selection dialog only if it exists:
