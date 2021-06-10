@@ -904,7 +904,6 @@ function handle_non_integer_combat_scores(key)
 {
   if (unit_types[key]['name']=="Falconeers") {
     unit_types[key].defense_strength *= 0.5;
-    console.log("Ruleset has units with non-integer combat scores.")
   }
   else if (unit_types[key]['name']=="Escort Fighter") {
     unit_types[key].attack_strength += 0.5;
@@ -915,7 +914,7 @@ function handle_non_integer_combat_scores(key)
   else {
     return; // skip message
   }
-  console.log("Ruleset effects added to client warcalc data for "+unit_types[key]['name'])
+  console.log("Non-integer combat strength added to warcalc data for "+unit_types[key]['name'])
 }
 
 /**************************************************************************
