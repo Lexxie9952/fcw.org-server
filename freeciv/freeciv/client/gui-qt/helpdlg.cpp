@@ -201,11 +201,12 @@ void help_dialog::showEvent(QShowEvent *event)
 {
   QList<int> sizes;
 
-  if (gui()->qt_settings.help_geometry.isNull() == false) {
+  if (!gui()->qt_settings.help_geometry.isNull()) {
     restoreGeometry(gui()->qt_settings.help_geometry);
     splitter->restoreState(gui()->qt_settings.help_splitter1);
   } else {
     QRect rect = QApplication::desktop()->screenGeometry();
+
     resize((rect.width() * 3) / 5, (rect.height() * 3) / 6);
     sizes << rect.width() / 10 << rect.width() / 3;
     splitter->setSizes(sizes);
@@ -328,7 +329,7 @@ void help_dialog::make_tree()
         break;
       }
 
-      if (icon.isNull() == false) {
+      if (!icon.isNull()) {
         item->setIcon(0, icon);
       }
 
@@ -417,7 +418,7 @@ void help_dialog::item_changed(QTreeWidgetItem *item, QTreeWidgetItem *prev)
 
   help_wdg->set_topic(topics_map[item]);
 
-  if (update_history == true) {
+  if (update_history) {
     history_pos++;
     item_history.append(item);
   } else {
@@ -634,6 +635,7 @@ void help_widget::add_info_label(const QString &text)
 {
   QLabel *label = new QLabel(text);
   label->setWordWrap(true);
+  label->setTextFormat(Qt::RichText);
   label->setProperty(fonts::help_label, "true");
   info_layout->addWidget(label);
 }
@@ -707,14 +709,15 @@ void help_widget::add_extras_of_act_for_terrain(struct terrain *pterr,
       tb->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
       tb->setTextFormat(Qt::RichText);
 
-      str = str + QString(label) 
+      str = str + QString(label)
             + link_me(extra_name_translation(pextra), HELP_EXTRA)
             + QString(helptext_extra_for_terrain_str(pextra, pterr, act))
+              .toHtmlEscaped()
             + "\n";
-            tb->setText(str.trimmed());
-            connect(tb, &QLabel::linkActivated,
-                    this, &help_widget::anchor_clicked);
-            info_layout->addWidget(tb);
+      tb->setText(str.trimmed());
+      connect(tb, &QLabel::linkActivated,
+              this, &help_widget::anchor_clicked);
+      info_layout->addWidget(tb);
     }
   } extra_type_by_cause_iterate_end;
 }
@@ -725,7 +728,7 @@ void help_widget::add_extras_of_act_for_terrain(struct terrain *pterr,
 QString help_widget::link_me(const char *str, help_page_type hpt)
 {
   QString s;
-  s = QString(str).replace(" ", "&nbsp;");
+  s = QString(str).toHtmlEscaped().replace(" ", "&nbsp;");
   return " <a href=" + QString::number(hpt)
             + "," + s + ">" + s + "</a> ";
 }
@@ -781,6 +784,7 @@ void help_widget::set_topic(const help_item *topic)
   for ( ; *title == ' '; ++title) {
     // Do nothing
   }
+  title_label->setTextFormat(Qt::PlainText);
   title_label->setText(title);
 
   undo_layout();
@@ -842,9 +846,9 @@ void help_widget::set_topic_other(const help_item *topic,
                                     const char *title)
 {
   if (topic->text) {
-    text_browser->setText(topic->text);
+    text_browser->setPlainText(topic->text);
   } else {
-    text_browser->setText(""); // Something better to do ?
+    text_browser->setPlainText(""); // Something better to do ?
   }
 }
 
@@ -866,7 +870,7 @@ void help_widget::set_topic_unit(const help_item *topic,
   if (utype) {
     helptext_unit(buffer, sizeof(buffer), client.conn.playing,
                   topic->text, utype);
-    text_browser->setText(buffer);
+    text_browser->setPlainText(buffer);
 
     // Create information panel
     show_info_panel();
@@ -917,6 +921,7 @@ void help_widget::set_topic_unit(const help_item *topic,
       QLabel *tb;
 
       tb = new QLabel(this);
+      /* TRANS: this and similar literal strings interpreted as (Qt) HTML */
       str = _("Requires");
       str = "<b>" + str + "</b> "
             + link_me(advance_name_translation(tech), HELP_TECH);
@@ -956,7 +961,8 @@ void help_widget::set_topic_unit(const help_item *topic,
         add_info_label(
           // TRANS: Current unit obsoleted by other unit
           QString(_("Obsoleted by %1."))
-          .arg(utype_name_translation(obsolete)));
+          .arg(utype_name_translation(obsolete))
+          .toHtmlEscaped());
       }
     } else {
       add_info_label(_("Never obsolete."));
@@ -987,7 +993,7 @@ void help_widget::set_topic_building(const help_item *topic,
   if (itype) {
     helptext_building(buffer, sizeof(buffer), client.conn.playing,
                       topic->text, itype);
-    text_browser->setText(buffer);
+    text_browser->setPlainText(buffer);
     show_info_panel();
     spr = get_building_sprite(tileset, itype);
     if (spr) {
@@ -995,12 +1001,13 @@ void help_widget::set_topic_building(const help_item *topic,
     }
     str = _("Cost:");
     str = "<b>" + str + "</b>" + " "
-          + QString::number(impr_build_shield_cost(NULL, itype));
+          + QString::number(impr_build_shield_cost(NULL, itype))
+            .toHtmlEscaped();
     add_info_label(str);
     if (!is_great_wonder(itype)) {
       str = _("Upkeep:");
       str = "<b>" + str + "</b>" + " "
-            + QString::number(itype->upkeep);
+            + QString::number(itype->upkeep).toHtmlEscaped();
       add_info_label(str);
     }
 
@@ -1022,7 +1029,7 @@ void help_widget::set_topic_building(const help_item *topic,
       break;
     } requirement_vector_iterate_end;
 
-    if (s1.isEmpty() == false) {
+    if (!s1.isEmpty()) {
       tb = new QLabel(this);
       str = _("Requirement:");
       str = "<b>" + str + "</b> " + s1;
@@ -1045,7 +1052,7 @@ void help_widget::set_topic_building(const help_item *topic,
 
     str = _("Obsolete by:");
     str = "<b>" + str + "</b> " + s2;
-    if (s2.isEmpty() == false) {
+    if (!s2.isEmpty()) {
       tb = new QLabel(this);
       tb->setProperty(fonts::help_label, "true");
       tb->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
@@ -1162,7 +1169,7 @@ void help_widget::set_topic_tech(const help_item *topic,
       info_panel_done();
       helptext_advance(buffer, sizeof(buffer), client.conn.playing,
                        topic->text, n);
-      text_browser->setText(buffer);
+      text_browser->setPlainText(buffer);
 
     }
   } else {
@@ -1235,10 +1242,12 @@ QLayout *help_widget::create_terrain_widget(const QString &title,
   layout->addWidget(label, 0, 0, 2, 1);
 
   label = new QLabel(title);
+  label->setTextFormat(Qt::PlainText);
   layout->addWidget(label, 0, 1, Qt::AlignBottom);
   label->setProperty(fonts::help_title, "true");
 
   label = new QLabel(legend);
+  label->setTextFormat(Qt::PlainText);
   layout->addWidget(label, 1, 1, Qt::AlignTop);
   label->setProperty(fonts::help_label, "true");
 
@@ -1277,7 +1286,7 @@ void help_widget::set_topic_terrain(const help_item *topic,
 
     helptext_terrain(buffer, sizeof(buffer), client.conn.playing,
                      topic->text, pterrain);
-    text_browser->setText(buffer);
+    text_browser->setPlainText(buffer);
 
     // Create information panel
     show_info_panel();
@@ -1320,7 +1329,7 @@ void help_widget::set_topic_terrain(const help_item *topic,
       str = N_("Irrig. Rslt/Time:");;
       str = str + link_me(terrain_name_translation(pterrain->irrigation_result),
                           HELP_TERRAIN)
-            + QString(buffer);
+            + QString(buffer).toHtmlEscaped();
       tb = new QLabel(this);
       tb->setProperty(fonts::help_label, "true");
       tb->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
@@ -1345,7 +1354,7 @@ void help_widget::set_topic_terrain(const help_item *topic,
       str = N_("Mine Rslt/Time:");;
       str = str + link_me(terrain_name_translation(pterrain->mining_result),
                           HELP_TERRAIN)
-            + QString(buffer);
+            + QString(buffer).toHtmlEscaped();
       tb = new QLabel(this);
       tb->setProperty(fonts::help_label, "true");
       tb->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
@@ -1369,7 +1378,7 @@ void help_widget::set_topic_terrain(const help_item *topic,
       str = N_("Trans. Rslt/Time:");
       str = str + link_me(terrain_name_translation(pterrain->transform_result),
                           HELP_TERRAIN)
-            + QString(buffer);
+            + QString(buffer).toHtmlEscaped();
       tb = new QLabel(this);
       tb->setProperty(fonts::help_label, "true");
       tb->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
@@ -1383,6 +1392,7 @@ void help_widget::set_topic_terrain(const help_item *topic,
     if (pterrain->irrigation_result == pterrain
         && pterrain->irrigation_time != 0
         && univs_have_action_enabler(ACTION_IRRIGATE, NULL, &for_terr)) {
+      /* TRANS: this and similar literal strings interpreted as (Qt) HTML */
       add_extras_of_act_for_terrain(pterrain, ACTIVITY_IRRIGATE, _("Build as irrigation"));
     }
     if (pterrain->mining_result == pterrain
@@ -1451,7 +1461,7 @@ void help_widget::set_topic_extra(const help_item *topic,
   if (pextra) {
     helptext_extra(buffer, sizeof(buffer), client.conn.playing,
                   topic->text, pextra);
-    text_browser->setText(buffer);
+    text_browser->setPlainText(buffer);
   } else {
     set_topic_other(topic, title);
   }
@@ -1468,7 +1478,7 @@ void help_widget::set_topic_specialist(const help_item *topic,
   if (pspec) {
     helptext_specialist(buffer, sizeof(buffer), client.conn.playing,
                         topic->text, pspec);
-    text_browser->setText(buffer);
+    text_browser->setPlainText(buffer);
   } else {
     set_topic_other(topic, title);
   }
@@ -1485,7 +1495,7 @@ void help_widget::set_topic_government(const help_item *topic,
   if (pgov) {
     helptext_government(buffer, sizeof(buffer), client.conn.playing,
                         topic->text, pgov);
-    text_browser->setText(buffer);
+    text_browser->setPlainText(buffer);
   } else {
     set_topic_other(topic, title);
   }
@@ -1501,7 +1511,7 @@ void help_widget::set_topic_nation(const help_item *topic,
   struct nation_type *pnation = nation_by_translated_plural(title);
   if (pnation) {
     helptext_nation(buffer, sizeof(buffer), pnation, topic->text);
-    text_browser->setText(buffer);
+    text_browser->setPlainText(buffer);
   } else {
     set_topic_other(topic, title);
   }

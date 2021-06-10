@@ -324,7 +324,7 @@ void qfc_dialog::paintEvent(QPaintEvent *event)
 ***************************************************************************/
 void qfc_dialog::mouseMoveEvent(QMouseEvent *event)
 {
-  if (moving_now == true) {
+  if (moving_now) {
     move(event->globalPos() - point);
   }
 }
@@ -430,7 +430,7 @@ races_dialog::races_dialog(struct player *pplayer,
 
   description = new QTextEdit;
   description->setReadOnly(true);
-  description->setText(_("Choose nation"));
+  description->setPlainText(_("Choose nation"));
   no_name->setTitle(_("Your leader name"));
 
   /**
@@ -599,7 +599,7 @@ void races_dialog::update_nationset_combo()
   if (popt) {
     s = nation_set_by_setting_value(option_str_get(popt));
     qnation_set->setCurrentIndex(nation_set_index(s));
-    qnation_set->setToolTip(nation_set_description(s));
+    qnation_set->setToolTip(_(nation_set_description(s)));
   }
 }
 
@@ -701,7 +701,7 @@ void races_dialog::nation_selected(const QItemSelection &selected,
   selected_nation = qvar.toInt();
 
   helptext_nation(buf, sizeof(buf), nation_by_number(selected_nation), NULL);
-  description->setText(buf);
+  description->setPlainText(buf);
   leader_name->clear();
   if (client.conn.playing == tplayer) {
     leader_name->addItem(client.conn.playing->name, true);
@@ -1511,7 +1511,7 @@ void choice_dialog::next_unit()
       new_target = ptgt;
       first = false;
     }
-    if (break_next == true) {
+    if (break_next) {
       new_target = ptgt;
       break;
     }
@@ -2789,7 +2789,9 @@ static void spy_steal_shared(QVariant data1, QVariant data2,
           && research_invention_state(vresearch, i) == TECH_KNOWN
           && research_invention_state(presearch, i) != TECH_KNOWN) {
         func = spy_steal_something;
-        str = research_advance_name_translation(presearch, i);
+        // Defeat keyboard shortcut mnemonics
+        str = QString(research_advance_name_translation(presearch, i))
+              .replace("&", "&&");
         cd->add_item(str, func, qv1, i);
       }
     } advance_index_iterate_end;
@@ -2799,7 +2801,7 @@ static void spy_steal_shared(QVariant data1, QVariant data2,
       astr_set(&stra, _("At %s's Discretion"),
                unit_name_translation(actor_unit));
       func = spy_steal_something;
-      str = astr_str(&stra);
+      str = QString(astr_str(&stra)).replace("&", "&&");
       cd->add_item(str, func, qv1, A_UNSET);
     }
 
@@ -3426,7 +3428,9 @@ void popup_sabotage_dialog(struct unit *actor, struct city *tcity,
   city_built_iterate(tcity, pimprove) {
     if (pimprove->sabotage > 0) {
       func = spy_sabotage;
-      str = city_improvement_name_translation(tcity, pimprove);
+      // Defeat keyboard shortcut mnemonics
+      str = QString(city_improvement_name_translation(tcity, pimprove))
+            .replace("&", "&&");
       qv2 = nr;
       cd->add_item(str, func, qv1, improvement_number(pimprove));
       nr++;
@@ -3438,7 +3442,7 @@ void popup_sabotage_dialog(struct unit *actor, struct city *tcity,
     astr_set(&stra, _("At %s's Discretion"),
              unit_name_translation(actor));
     func = spy_sabotage;
-    str = astr_str(&stra);
+    str = QString(astr_str(&stra)).replace("&", "&&");
     cd->add_item(str, func, qv1, B_LAST);
   }
 
@@ -3472,7 +3476,8 @@ void popup_pillage_dialog(struct unit *punit, bv_extras extras)
     BV_CLR(extras, what);
 
     func = pillage_something;
-    str = extra_name_translation(tgt);
+    // Defeat keyboard shortcut mnemonics
+    str = QString(extra_name_translation(tgt)).replace("&", "&&");
     qv1 = what;
     cd->add_item(str, func, qv1, qv2);
   }
@@ -4046,7 +4051,7 @@ void units_select::create_pixmap()
 
   update_units();
   if (unit_list.count() > 0) {
-  if (tileset_is_isometric(tileset) == false) {
+  if (!tileset_is_isometric(tileset)) {
     item_size.setWidth(tileset_unit_width(tileset));
     item_size.setHeight(tileset_unit_width(tileset));
   } else {
@@ -4082,7 +4087,7 @@ void units_select::create_pixmap()
     img = unit_pixmap->map_pixmap.toImage();
     crop = zealous_crop_rect(img);
     cropped_img = img.copy(crop);
-    if (tileset_is_isometric(tileset) == false) {
+    if (!tileset_is_isometric(tileset)) {
       img = cropped_img.scaled(tileset_unit_width(tileset),
                                tileset_unit_width(tileset),
                                Qt::KeepAspectRatio,
@@ -4255,7 +4260,7 @@ void units_select::paint(QPainter *painter, QPaintEvent *event)
       painter->drawText(10, height() - 5, str2);
     }
     /* draw scroll */
-    if (more == true) {
+    if (more) {
       int maxl = ((unit_count - 1) / 4) + 1;
       float page_height = 3.0f / maxl;
       float page_start = (static_cast<float>(show_line)) / maxl;
@@ -4348,7 +4353,7 @@ void units_select::wheelEvent(QWheelEvent *event)
 {
   int nr;
 
-  if (more == false && utile == NULL) {
+  if (!more && utile == NULL) {
     return;
   }
   nr = qCeil(static_cast<qreal>(unit_list_size(utile->units)) / 4) - 3;
@@ -4451,7 +4456,7 @@ void qtg_popup_combat_info(int attacker_unit_id, int defender_unit_id,
                            int attacker_hp, int defender_hp,
                            bool make_att_veteran, bool make_def_veteran)
 {
-  if (gui()->qt_settings.show_battle_log == true) {
+  if (gui()->qt_settings.show_battle_log) {
     hud_unit_combat* huc = new hud_unit_combat(attacker_unit_id,
                                                defender_unit_id,
                                                attacker_hp, defender_hp,

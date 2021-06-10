@@ -280,7 +280,7 @@ void hud_text::center_me()
   QPoint p;
 
   w = width();
-  if (bound_rect.isEmpty() == false) {
+  if (!bound_rect.isEmpty()) {
     setFixedSize(bound_rect.width(), bound_rect.height());
   }
   p = QPoint((parentWidget()->width() - w) / 2,
@@ -652,6 +652,7 @@ void hud_units::update_actions(unit_list *punits)
                                       " +%1 units", num-1))
                                   .arg(snum.toLocal8Bit().data());
   }
+  text_label.setTextFormat(Qt::PlainText);
   text_label.setText(text_str);
   font.setPixelSize((text_label.height() * 9) / 10);
   text_label.setFont(font);
@@ -721,8 +722,9 @@ void hud_units::update_actions(unit_list *punits)
   font_width = (fm->horizontalAdvance(move_pt_text) * 3) / 5;
   delete fm;
   p.setFont(font);
-  if (fraction1.isNull() == false) {
+  if (!fraction1.isNull()) {
     int t = 2 * font.pointSize();
+
     crop = QRect(bounding_rect.right() - font_width,
                  bounding_rect.top(), t, (t / 5) * 4);
     p.drawText(crop, Qt::AlignLeft | Qt::AlignBottom, fraction1);
@@ -836,10 +838,10 @@ void hud_action::paintEvent(QPaintEvent *event)
   p.drawPixmap(rx, *action_pixmap, ry);
   p.setPen(QColor(palette().color(QPalette::Text)));
   p.drawRect(rz);
-   if (focus == true) {
-     p.setCompositionMode(QPainter::CompositionMode_DestinationOver);
-     p.fillRect(rx, QColor(palette().color(QPalette::Highlight)));
-   }
+  if (focus) {
+    p.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+    p.fillRect(rx, QColor(palette().color(QPalette::Highlight)));
+  }
   p.end();
 
 }
@@ -1639,7 +1641,7 @@ QString popup_terrain_info(struct tile *ptile)
     }
   } extra_type_by_cause_iterate_end;
 
-  if (has_road == true) {
+  if (has_road) {
     ret = ret + QString(_("Movement cost: %1")).arg(move_text);
   } else {
     ret = ret + QString(_("Movement cost: %1")).arg(movement_cost);
@@ -1659,8 +1661,8 @@ void show_new_turn_info()
   struct research *research;
   int i;
 
-  if (client_has_player() == false
-      || gui()->qt_settings.show_new_turn_text == false) {
+  if (!client_has_player()
+      || !gui()->qt_settings.show_new_turn_text) {
     return;
   }
   close_list = gui()->mapview_wdg->findChildren<hud_text *>();
@@ -1738,7 +1740,7 @@ void hud_unit_combat::init_images(bool redraw)
                                       tileset_unit_height(tileset));
   defender_pixmap->map_pixmap.fill(Qt::transparent);
   if (defender != nullptr) {
-    if (redraw == false) {
+    if (!redraw) {
       put_unit(defender, defender_pixmap,  1.0, 0, 0);
     } else {
       put_unittype(type_defender, defender_pixmap, 1.0,  0, 0);
@@ -1762,7 +1764,7 @@ void hud_unit_combat::init_images(bool redraw)
                                       tileset_unit_height(tileset));
   attacker_pixmap->map_pixmap.fill(Qt::transparent);
   if (attacker != nullptr) {
-    if (redraw == false) {
+    if (!redraw) {
       put_unit(attacker, attacker_pixmap, 1,  0, 0);
     } else {
       put_unittype(type_attacker, attacker_pixmap, 1,  0, 0);
@@ -1858,7 +1860,7 @@ void hud_unit_combat::paintEvent(QPaintEvent *event)
   if (fading < 1.0) {
     p.setOpacity(fading);
   }
-  if (focus == true) {
+  if (focus) {
     p.fillRect(left, QColor(palette().color(QPalette::Highlight)));
     p.fillRect(right, QColor(palette().color(QPalette::Highlight)));
     c1.setAlpha(110);
@@ -2084,7 +2086,7 @@ void hud_battle_log::timerEvent(QTimerEvent *event)
 
   if (m_timer.elapsed() > 4000 && m_timer.elapsed() < 5000) {
     foreach (hudc, lhuc) {
-      if (hudc->get_focus() == true) {
+      if (hudc->get_focus()) {
         m_timer.restart();
         foreach (hupdate, lhuc) {
           hupdate->set_fading(1.0);

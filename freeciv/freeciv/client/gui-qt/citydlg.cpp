@@ -679,7 +679,7 @@ unit_item::unit_item(QWidget *parent, struct unit *punit,
   img = unit_pixmap->map_pixmap.toImage();
   crop = zealous_crop_rect(img);
   cropped_img = img.copy(crop);
-  if (tileset_is_isometric(tileset) == true) {
+  if (tileset_is_isometric(tileset)) {
     unit_img = cropped_img.scaledToHeight(tileset_unit_width(get_tileset())
                                           * isosize, Qt::SmoothTransformation);
   } else {
@@ -2041,10 +2041,10 @@ void city_dialog::change_production(bool next)
 ****************************************************************************/
 void city_dialog::update_happiness_button()
 {
-  if (happines_shown == false) {
-    happiness_button->setToolTip(_("Show happiness information"));
-  } else {
+  if (happines_shown) {
     happiness_button->setToolTip(_("Show city production"));
+  } else {
+    happiness_button->setToolTip(_("Show happiness information"));
   }
 }
 
@@ -2055,7 +2055,7 @@ void city_dialog::show_happiness()
 {
   setUpdatesEnabled(false);
 
-  if (happines_shown == false) {
+  if (!happines_shown) {
     leftbot_layout->replaceWidget(prod_unit_splitter,
                                   happiness_widget,
                                   Qt::FindDirectChildrenOnly);
@@ -2180,7 +2180,7 @@ void city_dialog::hideEvent(QHideEvent *event)
 ****************************************************************************/
 void city_dialog::showEvent(QShowEvent *event)
 {
-  if (gui()->qt_settings.city_geometry.isNull() == false) {
+  if (!gui()->qt_settings.city_geometry.isNull()) {
     restoreGeometry(gui()->qt_settings.city_geometry);
     prod_unit_splitter->restoreState(gui()->qt_settings.city_splitter1);
     central_left_splitter->restoreState(gui()->qt_settings.city_splitter2);
@@ -2408,7 +2408,7 @@ void city_dialog::update_sliders()
   QVariant qvar;
   QLabel *label;
 
-  if (cma_is_city_under_agent(pcity, &param) == false) {
+  if (!cma_is_city_under_agent(pcity, &param)) {
     if (cma_table->currentRow() == -1 || cmafec_preset_num() == 0) {
       return;
     }
@@ -2483,7 +2483,8 @@ void city_dialog::update_cma_tab()
     cma_result_pix->setPixmap(pix);
     cma_result_pix->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     /* TRANS: %1 is custom string chosen by player */
-    cma_result->setText(QString(_("<h3>Governor Enabled<br>(%1)</h3>")).arg(s));
+    cma_result->setText(QString(_("<h3>Governor Enabled<br>(%1)</h3>"))
+                        .arg(s.toHtmlEscaped()));
     cma_result->setAlignment(Qt::AlignCenter);
   } else {
     pix = style()->standardPixmap(QStyle::SP_DialogCancelButton);
@@ -3037,7 +3038,9 @@ void city_dialog::update_info_label()
 
     if (j != GROWTH && j != GRANARY && j != WASTE && j != CORRUPTION
         && j != STEAL) {
-      qlt[i]->setToolTip(QString(buf[2 * i + 1]));
+      qlt[i]->setToolTip("<pre>"
+                         + QString(buf[2 * i + 1]).toHtmlEscaped()
+                         + "</pre>");
     }
   }
 }
@@ -3563,7 +3566,9 @@ void city_dialog::update_title()
 {
   QString buf;
 
-  lcity_name->setText(QString(city_name_get(pcity)));
+  // Defeat keyboard shortcut mnemonics
+  lcity_name->setText(QString(city_name_get(pcity))
+                      .replace("&", "&&"));
 
   if (city_unhappy(pcity)) {
     /* TRANS: city dialog title */
@@ -3747,6 +3752,9 @@ bool fc_tooltip::eventFilter(QObject *obj, QEvent *ev)
   return false;
 }
 
+/**************************************************************************
+  'text' is assumed to have already been HTML-escaped if necessary
+**************************************************************************/
 QString bold(QString text)
 {
   return QString("<b>" + text + "</b>");
@@ -3779,13 +3787,13 @@ QString get_tooltip_improvement(impr_type *building, struct city *pcity,
   str = _("Obsolete by:");
   str = str + " " + s2;
   def_str = "<p style='white-space:pre'><b>"
-            + QString(improvement_name_translation(building))
+            + QString(improvement_name_translation(building)).toHtmlEscaped()
             + "</b>\n";
   def_str += QString(_("Cost: %1, Upkeep: %2\n"))
              .arg(impr_build_shield_cost(pcity,building))
-             .arg(upkeep);
+             .arg(upkeep).toHtmlEscaped();
   if (s1.compare(s2) != 0) {
-    def_str = def_str + str + "\n";
+    def_str = def_str + str.toHtmlEscaped() + "\n";
   }
   def_str = def_str + "\n";
   if (ext) {
@@ -3796,7 +3804,7 @@ QString get_tooltip_improvement(impr_type *building, struct city *pcity,
     str = cut_helptext(str);
     str = split_text(str, true);
     str = str.trimmed();
-    def_str = def_str + str;
+    def_str = def_str + str.toHtmlEscaped();
   }
   return def_str;
 }
@@ -3813,40 +3821,46 @@ QString get_tooltip_unit(struct unit_type *unit, bool ext)
   struct unit_type *obsolete;
   struct advance *tech;
 
-  def_str = "<b>" + QString(utype_name_translation(unit)) + "</b>\n";
+  def_str = "<b>"
+    + QString(utype_name_translation(unit)).toHtmlEscaped()
+    + "</b>\n";
   obsolete = unit->obsoleted_by;
   if (obsolete) {
     tech = obsolete->require_advance;
     obsolete_str = QString("</td></tr><tr><td colspan=\"3\">");
     if (tech && tech != advance_by_number(0)) {
+      /* TRANS: this and nearby literal strings are interpreted
+       * as (Qt) HTML */
       obsolete_str = obsolete_str + QString(_("Obsoleted by %1 (%2)."))
-                                      .arg(utype_name_translation(obsolete))
-                                      .arg(advance_name_translation(tech));
+          .arg(utype_name_translation(obsolete))
+          .arg(advance_name_translation(tech)).toHtmlEscaped();
     } else {
       obsolete_str = obsolete_str + QString(_("Obsoleted by %1."))
-                     .arg(utype_name_translation(obsolete));
+          .arg(utype_name_translation(obsolete)).toHtmlEscaped();
     }
   }
   def_str += "<table width=\"100\%\"><tr><td>"
              + bold(QString(_("Attack:"))) + " "
-             + QString::number(unit->attack_strength)
+             + QString::number(unit->attack_strength).toHtmlEscaped()
              + QString("</td><td>") + bold(QString(_("Defense:"))) + " "
-             + QString::number(unit->defense_strength)
+             + QString::number(unit->defense_strength).toHtmlEscaped()
              + QString("</td><td>") + bold(QString(_("Move:"))) + " "
-             + QString(move_points_text(unit->move_rate, TRUE))
+             + QString(move_points_text(unit->move_rate, TRUE)).toHtmlEscaped()
              + QString("</td></tr><tr><td>")
              + bold(QString(_("Cost:"))) + " "
              + QString::number(utype_build_shield_cost_base(unit))
+               .toHtmlEscaped()
              + QString("</td><td colspan=\"2\">")
              + bold(QString(_("Basic Upkeep:")))
-             + " " + QString(helptext_unit_upkeep_str(unit))
+             + " " + QString(helptext_unit_upkeep_str(unit)).toHtmlEscaped()
              + QString("</td></tr><tr><td>")
              + bold(QString(_("Hitpoints:"))) + " "
-             + QString::number(unit->hp)
+             + QString::number(unit->hp).toHtmlEscaped()
              + QString("</td><td>") + bold(QString(_("FirePower:"))) + " "
-             + QString::number(unit->firepower)
+             + QString::number(unit->firepower).toHtmlEscaped()
              + QString("</td><td>") + bold(QString(_("Vision:"))) + " "
              + QString::number((int) sqrt((double) unit->vision_radius_sq))
+               .toHtmlEscaped()
              + obsolete_str
              + QString("</td></tr></table><p style='white-space:pre'>");
   if (ext) {
@@ -3858,7 +3872,7 @@ QString get_tooltip_unit(struct unit_type *unit, bool ext)
                         buf2, unit);
     str = cut_helptext(str);
     str = split_text(str, true);
-    str = str.trimmed();
+    str = str.trimmed().toHtmlEscaped();
     def_str = def_str + str;
   }
   return def_str;
@@ -3896,7 +3910,7 @@ QString get_tooltip(QVariant qvar)
   ret_str = cut_helptext(str);
   ret_str = split_text(ret_str, true);
   ret_str = ret_str.trimmed();
-  ret_str = def_str + ret_str;
+  ret_str = def_str + ret_str.toHtmlEscaped();
 
   return ret_str;
 }
@@ -3948,7 +3962,7 @@ void city_production_delegate::paint(QPainter *painter,
 
   qvar = index.data();
 
-  if (qvar.isValid() == false) {
+  if (!qvar.isValid()) {
     return;
   }
 
@@ -3982,7 +3996,7 @@ void city_production_delegate::paint(QPainter *painter,
          * is_sea is used for is to set a color. */
         || utype_can_do_action(target->value.utype,
                                ACTION_SUICIDE_ATTACK)) {
-      if (is_sea == true) {
+      if (is_sea) {
         is_sea = false;
       }
       is_flying = true;
@@ -4047,7 +4061,7 @@ void city_production_delegate::paint(QPainter *painter,
 
   painter->restore();
 
-  if (free_sprite == TRUE) {
+  if (free_sprite) {
     qtg_free_sprite(sprite);
   }
 }
@@ -4206,7 +4220,7 @@ void city_production_model::populate()
         str = utype_name_translation(renegade->value.utype);
         sh.setX(qMax(sh.x(), fm.horizontalAdvance(str)));
 
-        if (show_units == true) {
+        if (show_units) {
           pi = new production_item(renegade, this);
           city_target_list << pi;
         }
@@ -4384,7 +4398,7 @@ void production_widget::prod_selected(const QItemSelection &sl,
   }
   index = indexes.at(0);
   qvar = index.data(Qt::UserRole);
-  if (qvar.isValid() == false) {
+  if (!qvar.isValid()) {
     return;
   }
   target = reinterpret_cast<universal *>(qvar.value<void *>());

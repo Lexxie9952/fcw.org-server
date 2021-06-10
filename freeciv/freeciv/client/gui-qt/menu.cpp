@@ -252,7 +252,7 @@ void trade_generator::calculate()
       tc->curr_tr_cities.clear();
       tc->done = false;
       foreach (ttc, cities) {
-        if (have_cities_trade_route(tc->city, ttc->city) == false
+        if (!have_cities_trade_route(tc->city, ttc->city)
             && can_establish_trade_route(tc->city, ttc->city)) {
           tc->poss_trade_num++;
           tc->pos_cities.append(ttc->city);
@@ -336,8 +336,8 @@ void trade_generator::discard()
 
   for (int i = j; i > -j; i--) {
     while ((tc = find_most_free())) {
-      if (discard_one(tc) == false) {
-        if (discard_any(tc, i) == false) {
+      if (!discard_one(tc)) {
+        if (!discard_any(tc, i)) {
           break;
         }
       }
@@ -494,7 +494,7 @@ void qfc_units_list::clear()
 **************************************************************************/
 void real_menus_init(void)
 {
-  if (game.client.ruleset_ready == false) {
+  if (!game.client.ruleset_ready) {
     return;
   }
   gui()->menu_bar->clear();
@@ -514,7 +514,7 @@ void real_menus_update(void)
 {
   if (C_S_RUNNING <= client_state()) {
     gui()->menuBar()->setVisible(true);
-    if (is_waiting_turn_change() == false) {
+    if (!is_waiting_turn_change()) {
       gui()->menu_bar->menus_sensitive();
       gui()->menu_bar->update_airlift_menu();
       gui()->menu_bar->update_roads_menu();
@@ -597,7 +597,9 @@ void gov_menu::create() {
   for (i = 0; i < gov_count; ++i) {
     gov = government_by_number(i);
     if (gov != revol_gov) { // Skip revolution goverment
-      action = addAction(government_name_translation(gov));
+      // Defeat keyboard shortcut mnemonics
+      action = addAction(QString(government_name_translation(gov))
+                         .replace("&", "&&"));
       // We need to keep track of the gov <-> action mapping to be able to
       // set enabled/disabled depending on available govs.
       actions.append(action);
@@ -762,7 +764,9 @@ void go_act_menu::create()
 
       /* Create and add the menu item. It will be hidden or shown based on
        * unit type.  */
-      item = addAction(action_id_name_translation(act_id));
+      item = addAction(
+        QString(action_id_name_translation(act_id))
+        .replace("&", "&&"));
       items.insert(item, act_id);
 
       /* Add the keyboard shortcuts for "Go to and..." menu items that
@@ -1185,7 +1189,9 @@ void mr_menu::setup_menus()
   menu_list.insertMulti(TRANSPORTER, act);
   connect(act, &QAction::triggered, this, &mr_menu::slot_unload_all);
   menu->addSeparator();
-  act = menu->addAction(action_id_name_translation(ACTION_HOME_CITY));
+  // Defeat keyboard shortcut mnemonics
+  act = menu->addAction(QString(action_id_name_translation(ACTION_HOME_CITY))
+                        .replace("&", "&&"));
   menu_list.insertMulti(HOMECITY, act);
   act->setShortcut(QKeySequence(shortcut_to_string(
                    fc_shortcuts::sc()->get_shortcut(SC_SETHOME))));
@@ -1211,11 +1217,13 @@ void mr_menu::setup_menus()
   act->setShortcut(QKeySequence(shortcut_to_string(
                    fc_shortcuts::sc()->get_shortcut(SC_FORTIFY))));
   connect(act, &QAction::triggered, this, &mr_menu::slot_unit_fortify);
-  act = menu->addAction(Q_(terrain_control.gui_type_base0));
+  act = menu->addAction(QString(Q_(terrain_control.gui_type_base0))
+                        .replace("&", "&&"));
   menu_list.insertMulti(FORTRESS, act);
   act->setShortcut(QKeySequence(tr("shift+f")));
   connect(act, &QAction::triggered, this, &mr_menu::slot_unit_fortress);
-  act = menu->addAction(Q_(terrain_control.gui_type_base1));
+  act = menu->addAction(QString(Q_(terrain_control.gui_type_base1))
+                        .replace("&", "&&"));
   menu_list.insertMulti(AIRBASE, act);
   act->setShortcut(QKeySequence(tr("shift+e")));
   connect(act, &QAction::triggered, this, &mr_menu::slot_unit_airbase);
@@ -1235,7 +1243,8 @@ void mr_menu::setup_menus()
 
   /* Work Menu */
   menu = this->addMenu(_("Work"));
-  act = menu->addAction(action_id_name_translation(ACTION_FOUND_CITY));
+  act = menu->addAction(QString(action_id_name_translation(ACTION_FOUND_CITY))
+                        .replace("&", "&&"));
   act->setShortcut(QKeySequence(shortcut_to_string(
                    fc_shortcuts::sc()->get_shortcut(SC_BUILDCITY))));
   menu_list.insertMulti(BUILD, act);
@@ -1301,11 +1310,13 @@ void mr_menu::setup_menus()
   menu_list.insertMulti(FALLOUT, act);
   act->setShortcut(QKeySequence(tr("n")));
   connect(act, &QAction::triggered, this, &mr_menu::slot_clean_fallout);
-  act = menu->addAction(action_id_name_translation(ACTION_HELP_WONDER));
+  act = menu->addAction(QString(action_id_name_translation(ACTION_HELP_WONDER))
+                        .replace("&", "&&"));
   act->setShortcut(QKeySequence(tr("b")));
   menu_list.insertMulti(BUILD_WONDER, act);
   connect(act, &QAction::triggered, this, &mr_menu::slot_build_city);
-  act = menu->addAction(action_id_name_translation(ACTION_TRADE_ROUTE));
+  act = menu->addAction(QString(action_id_name_translation(ACTION_TRADE_ROUTE))
+                        .replace("&", "&&"));
   act->setShortcut(QKeySequence(tr("r")));
   menu_list.insertMulti(ORDER_TRADEROUTE, act);
   connect(act, &QAction::triggered, this, &mr_menu::slot_build_road);
@@ -1744,7 +1755,9 @@ void mr_menu::update_airlift_menu()
         && !has_player_unit_type(utype_id)) {
       continue;
     }
-    act = airlift_menu->addAction(utype_name_translation(utype));
+    // Defeat keyboard shortcut mnemonics
+    act = airlift_menu->addAction(QString(utype_name_translation(utype))
+                                  .replace("&", "&&"));
     act->setCheckable(true);
     act->setData(utype_id);
     if (airlift_type_id == utype_id) {
@@ -1778,7 +1791,9 @@ void mr_menu::update_roads_menu()
   punits = get_units_in_focus();
   extra_type_by_cause_iterate(EC_ROAD, pextra) {
     if (pextra->buildable) {
-      act = roads_menu->addAction(extra_name_translation(pextra));
+      // Defeat keyboard shortcut mnemonics
+      act = roads_menu->addAction(QString(extra_name_translation(pextra))
+                                  .replace("&", "&&"));
       act->setData(pextra->id);
       connect(act, SIGNAL(triggered()),
               build_roads_mapper, SLOT(map()));
@@ -1823,7 +1838,9 @@ void mr_menu::update_bases_menu()
   punits = get_units_in_focus();
   extra_type_by_cause_iterate(EC_BASE, pextra) {
     if (pextra->buildable) {
-      act = bases_menu->addAction(extra_name_translation(pextra));
+      // Defeat keyboard shortcut mnemonics
+      act = bases_menu->addAction(QString(extra_name_translation(pextra))
+                                  .replace("&", "&&"));
       act->setData(pextra->id);
       connect(act, SIGNAL(triggered()),
               build_bases_mapper, SLOT(map()));
@@ -1891,12 +1908,12 @@ void mr_menu::menus_sensitive()
         }
         break;
       case NOT_4_OBS:
-        if (client_is_observer() == false) {
+        if (!client_is_observer()) {
           i.value()->setEnabled(true);
         }
         break;
       case MULTIPLIERS:
-        if (client_is_observer() == false && multiplier_count() > 0) {
+        if (!client_is_observer() && multiplier_count() > 0) {
           i.value()->setEnabled(true);
           i.value()->setVisible(true);
         } else {
@@ -1918,7 +1935,7 @@ void mr_menu::menus_sensitive()
     }
   }
 
-  if (can_client_issue_orders() == false || get_num_units_in_focus() == 0) {
+  if (!can_client_issue_orders() || get_num_units_in_focus() == 0) {
     return;
   }
 
@@ -1993,11 +2010,13 @@ void mr_menu::menus_sensitive()
           pterrain = tile_terrain(unit_tile(punit));
           if (pterrain->mining_result != T_NONE
               && pterrain->mining_result != pterrain) {
+            // Defeat keyboard shortcut mnemonics
             i.value()->setText(
-              QString(_("Transform to %1")).
-                      /* TRANS: Transfrom terrain to specific type */
-                      arg(QString(get_tile_change_menu_text
-                      (unit_tile(punit), ACTIVITY_MINE))));
+              /* TRANS: Transform terrain to specific type */
+              QString(_("Transform to %1"))
+              .arg(QString(get_tile_change_menu_text
+                           (unit_tile(punit), ACTIVITY_MINE)))
+              .replace("&", "&&"));
           } else if (units_have_type_flag(punits, UTYF_SETTLERS, TRUE)) {
             struct extra_type *pextra = NULL;
 
@@ -2012,9 +2031,11 @@ void mr_menu::menus_sensitive()
             } unit_list_iterate_end;
 
             if (pextra != NULL) {
-              /* TRANS: Build mine of specific type */
-              i.value()->setText(QString(_("Build %1"))
-                .arg(extra_name_translation(pextra)));
+              i.value()->setText(
+                /* TRANS: Build mine of specific type */
+                QString(_("Build %1"))
+                .arg(extra_name_translation(pextra))
+                .replace("&", "&&"));
             } else {
               i.value()->setText(QString(_("Build Mine")));
             }
@@ -2034,10 +2055,12 @@ void mr_menu::menus_sensitive()
           pterrain = tile_terrain(unit_tile(punit));
           if (pterrain->irrigation_result != T_NONE
               && pterrain->irrigation_result != pterrain) {
-            i.value()->setText(QString(_("Transform to %1")).
-                      /* TRANS: Transfrom terrain to specific type */
-                      arg(QString(get_tile_change_menu_text
-                      (unit_tile(punit), ACTIVITY_IRRIGATE))));
+            i.value()->setText(
+              /* TRANS: Transform terrain to specific type */
+              QString(_("Transform to %1"))
+              .arg(QString(get_tile_change_menu_text
+                           (unit_tile(punit), ACTIVITY_IRRIGATE)))
+              .replace("&", "&&"));
           } else if (units_have_type_flag(punits, UTYF_SETTLERS, TRUE)) {
             struct extra_type *pextra = NULL;
 
@@ -2052,9 +2075,11 @@ void mr_menu::menus_sensitive()
             } unit_list_iterate_end;
 
             if (pextra != NULL) {
-              /* TRANS: Build irrigation of specific type */
-              i.value()->setText(QString(_("Build %1"))
-                .arg(extra_name_translation(pextra)));
+              i.value()->setText(
+                /* TRANS: Build irrigation of specific type */
+                QString(_("Build %1"))
+                .arg(extra_name_translation(pextra))
+                .replace("&", "&&"));
             } else {
               i.value()->setText(QString(_("Build Irrigation")));
             }
@@ -2089,10 +2114,12 @@ void mr_menu::menus_sensitive()
           pterrain = tile_terrain(unit_tile(punit));
           if (pterrain->transform_result != T_NONE
               && pterrain->transform_result != pterrain) {
-            i.value()->setText(QString(_("Transform to %1")).
-                      /* TRANS: Transfrom terrain to specific type */
-                      arg(QString(get_tile_change_menu_text
-                              (unit_tile(punit), ACTIVITY_TRANSFORM))));
+            i.value()->setText(
+              /* TRANS: Transform terrain to specific type */
+              QString(_("Transform to %1"))
+              .arg(QString(get_tile_change_menu_text
+                           (unit_tile(punit), ACTIVITY_TRANSFORM)))
+              .replace("&", "&&"));
           } else {
             i.value()->setText(_("Transform Terrain"));
           }
@@ -2105,15 +2132,18 @@ void mr_menu::menus_sensitive()
         }
         if (city_on_tile
             && units_can_do_action(punits, ACTION_JOIN_CITY, true)) {
-          i.value()->setText(action_id_name_translation(ACTION_JOIN_CITY));
+          i.value()->setText(
+            QString(action_id_name_translation(ACTION_JOIN_CITY))
+            .replace("&", "&&"));
         } else {
-          i.value()->setText(action_id_name_translation(ACTION_FOUND_CITY));
+          i.value()->setText(
+            QString(action_id_name_translation(ACTION_FOUND_CITY))
+            .replace("&", "&&"));
         }
         break;
 
       case ROAD:
         {
-          char road_item[500];
           struct extra_type *pextra = nullptr;
 
           if (can_units_do_any_road(punits)) {
@@ -2128,9 +2158,11 @@ void mr_menu::menus_sensitive()
           } unit_list_iterate_end;
 
           if (pextra != nullptr) {
-            fc_snprintf(road_item, sizeof(road_item), _("Build %s"),
-                        extra_name_translation(pextra));
-            i.value()->setText(road_item);
+            i.value()->setText(
+              /* TRANS: Build road of specific type */
+              QString(_("Build %1"))
+              .arg(extra_name_translation(pextra))
+              .replace("&", "&&"));
           }
         }
         break;
@@ -2159,7 +2191,9 @@ void mr_menu::menus_sensitive()
           i.value()->setEnabled(true);
         }
         if (units_can_do_action(punits, ACTION_PARADROP, true)) {
-          i.value()->setText(action_id_name_translation(ACTION_PARADROP));
+          i.value()->setText(
+            QString(action_id_name_translation(ACTION_PARADROP))
+            .replace("&", "&&"));
         } else {
           i.value()->setText(_("Clean Pollution"));
         }
@@ -2263,7 +2297,9 @@ void mr_menu::menus_sensitive()
         break;
 
       case BUILD_WONDER:
-        i.value()->setText(action_id_name_translation(ACTION_HELP_WONDER));
+        i.value()->setText(
+          QString(action_id_name_translation(ACTION_HELP_WONDER))
+          .replace("&", "&&"));
         if (can_units_do(punits, unit_can_help_build_wonder_here)) {
           i.value()->setEnabled(true);
         }
@@ -2276,7 +2312,9 @@ void mr_menu::menus_sensitive()
         break;
 
       case ORDER_TRADEROUTE:
-        i.value()->setText(action_id_name_translation(ACTION_TRADE_ROUTE));
+        i.value()->setText(
+          QString(action_id_name_translation(ACTION_TRADE_ROUTE))
+          .replace("&", "&&"));
         if (can_units_do(punits, unit_can_est_trade_route_here)) {
           i.value()->setEnabled(true);
         }
@@ -3419,15 +3457,15 @@ void mr_menu::save_image()
   }
   map_canvas_resized(full_size_x, full_size_y);
   img_name = QString("FreeCiv-Turn%1").arg(game.info.turn);
-  if (client_has_player() == true) {
+  if (client_has_player()) {
     img_name = img_name + "-"
                 + QString(nation_plural_for_player(client_player()));
   }
   storage_path = freeciv_storage_dir();
   path = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
-  if (storage_path.isEmpty() == false && QDir(storage_path).isReadable()) {
+  if (!storage_path.isEmpty() && QDir(storage_path).isReadable()) {
     img_name = storage_path + DIR_SEPARATOR + img_name;
-  } else if (path.isEmpty() == false) {
+  } else if (!path.isEmpty()) {
     img_name = path + DIR_SEPARATOR + img_name;
   } else {
     img_name = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)
@@ -3472,7 +3510,7 @@ void mr_menu::save_game_as()
   current_file = QFileDialog::getSaveFileName(gui()->central_wdg,
                                               _("Save Game As..."),
                                               location, str);
-  if (current_file.isEmpty() == false) {
+  if (!current_file.isEmpty()) {
     send_save_game(current_file.toLocal8Bit().data());
   }
 }
