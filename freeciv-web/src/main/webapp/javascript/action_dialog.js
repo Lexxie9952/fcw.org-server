@@ -1500,5 +1500,14 @@ function action_selection_close(not_over)
 
   id = $("#city_name_dialog");
   // Remove action selection dialog only if it exists:
-  if ($(id).length) remove_action_selection_dialog(id, actor_unit_id)
+  if ($(id).length) $(id).remove();
+  /* previous code did this, but is potentially risky since city_name_dialog
+     is currently not a registered action selection dialog but rather, is an 
+     "off the registry" type of dialog:
+     if ($(id).length) remove_action_selection_dialog(id, actor_unit_id) */
+
+  if (not_over) {
+    /* Clean up just in case */
+    did_not_decide = false;
+  }
 }
