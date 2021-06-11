@@ -374,13 +374,13 @@ function generate_help_text(key)
       // hack to make manual properly display decimal attack strength on this unit
       //var as = punit_type['attack_strength'];
       // Display base attack relative to v0 vet power which may be non-100:
-      var as = utype_real_base_attack_strength(punit_type);
+      var as = fractionalize(utype_real_base_attack_strength(punit_type));
     msg += span1 + "Attack: " + span_end + span2 + as + div_end;
     // DEFENSE
     msg += "<div"+flex+" id='utype_fact_defense_str'>";
       //var ds = punit_type['defense_strength'];
       // Display base attack relative to v0 vet power which may be non-100:
-      var ds = utype_real_base_defense_strength(punit_type);
+      var ds = fractionalize(utype_real_base_defense_strength(punit_type));
     msg += span1 + "Defense: " + span_end + span2 + ds + div_end;
     // FIREPOWER
     msg += "<div"+flex+" id='utype_fact_firepower'>";
