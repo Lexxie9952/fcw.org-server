@@ -583,7 +583,7 @@ function get_advances_text(tech_id)
       [
         format_list_with_intro('', get_utypes_from_tech(tech_id)
           .map(unit => tech_span(unit.name, unit.id, null, 
-            "A:"+unit.attack_strength +" D:"+unit.defense_strength +(unit.firepower>1?" F:"+unit.firepower:"") +" H:"+unit.hp
+            "A:"+fractionalize(utype_real_base_attack_strength(unit)) +" D:"+fractionalize(utype_real_base_defense_strength(unit)) +(unit.firepower>1?" F:"+unit.firepower:"") +" H:"+unit.hp
             +" M:"+move_points_text(unit.move_rate+(unit.move_bonus[0]?unit.move_bonus[0]:0),true)+(unit.fuel?"("+unit.fuel+")":"") 
             +(unit.transport_capacity?" C:"+unit.transport_capacity:"") +" Cost:"+unit.build_cost +"\n\n"
             + html_safe(cleaned_text(unit.helptext))))),
