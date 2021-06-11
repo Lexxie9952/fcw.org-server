@@ -582,13 +582,20 @@ function get_advances_text(tech_id)
     + format_list_with_intro(' enables',
       [
         format_list_with_intro('', get_utypes_from_tech(tech_id)
-          .map(unit => tech_span(unit.name, unit.id, null, html_safe(cleaned_text(unit.helptext))))),
+          .map(unit => tech_span(unit.name, unit.id, null, 
+            "A:"+unit.attack_strength +" D:"+unit.defense_strength +(unit.firepower>1?" F:"+unit.firepower:"") +" H:"+unit.hp
+            +" M:"+move_points_text(unit.move_rate+(unit.move_bonus[0]?unit.move_bonus[0]:0),true)+(unit.fuel?"("+unit.fuel+")":"") 
+            +(unit.transport_capacity?" C:"+unit.transport_capacity:"") +" Cost:"+unit.build_cost +"\n\n"
+            + html_safe(cleaned_text(unit.helptext))))),
         format_list_with_intro('', get_improvements_from_tech(tech_id)
-          .map(impr => tech_span(impr.name, null, impr.id, html_safe(cleaned_text(impr.helptext))))),
+          .map(impr => tech_span(impr.name, null, impr.id,
+            "Cost:"+impr.build_cost+" Upkeep:"+impr.upkeep + "\n\n"
+            + html_safe(cleaned_text(impr.helptext))))),
         format_list_with_intro('', Object.keys(techs)
           .filter(is_valid_and_required)
           .map(tid => techs[tid])
-          .map(tech => tech_span(tech.name, null, null)))
+          .map(tech => tech_span(tech.name, null, null, tech.rule_name+" ("+Math.trunc(tech.cost)+") "
+          + uncapitalize(html_safe(cleaned_text(tech.helptext))))))
       ]) + '.';
 }
 
