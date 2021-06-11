@@ -376,6 +376,14 @@ function capitalize(s) {
 }
 
 /**************************************************************************
+   Capitalize first letter of string
+**************************************************************************/
+function uncapitalize(s) {
+  if (typeof s !== 'string') return "";
+  return s.charAt(0).toLowerCase() + s.slice(1)
+}
+
+/**************************************************************************
    Get the length of an Object list
 ***************************************************************************/
 function getLength(obj) {
