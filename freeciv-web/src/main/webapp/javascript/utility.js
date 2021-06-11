@@ -384,6 +384,24 @@ function uncapitalize(s) {
 }
 
 /**************************************************************************
+   Replaces decimals with common fractions 1/4, 1/2, 3/4, etc.
+**************************************************************************/
+function fractionalize(s) {
+
+  if (s.toString().endsWith(".5")) s = ""+Math.trunc(s) + "&#189;";
+  else if (s.toString().endsWith(".75")) s = "" + (Math.trunc(s) ? Math.trunc(s) : "") + "&#xBE;";
+  else if (s.toString().endsWith(".25")) s = "" + (Math.trunc(s) ? Math.trunc(s) : "") + "&#xBC;";
+  else if (s.toString().endsWith(".05")) s = "" + (Math.trunc(s) ? Math.trunc(s) : "") + "&#8203;1&#x2044;20";
+  else if (s.toString().endsWith(".1")) s = "" + (Math.trunc(s) ? Math.trunc(s) : "") + "&#x2152;";
+//  else if (s.toString().endsWith(".33")) s = "" + (Math.trunc(s) ? Math.trunc(s) : "") + "&#x2153;";
+//  else if (s.toString().endsWith(".34")) s = "" + (Math.trunc(s) ? Math.trunc(s) : "") + "&#x2153;";
+//  else if (s.toString().endsWith(".66")) s = "" + (Math.trunc(s) ? Math.trunc(s) : "") + "&#x2154;";
+//  else if (s.toString().endsWith(".67")) s = "" + (Math.trunc(s) ? Math.trunc(s) : "") + "&#x2154;";
+
+  return s;
+}
+
+/**************************************************************************
    Get the length of an Object list
 ***************************************************************************/
 function getLength(obj) {
