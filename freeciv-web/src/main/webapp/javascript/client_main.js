@@ -242,7 +242,7 @@ function show_new_game_message()
     show_hotseat_new_phase();
     return;
   } else if (is_pbem()) {
-    message = "Welcome " + username + "! It is now your turn to play. Each player will " +
+    message = "Welcome, " + capitalize(username) + "! It is now your turn to play. Each player will " +
       "get an e-mail when it is their turn to play, and can only play one turn at a time. " +
       "Click the end turn button to end your turn and let the next opponent play.";
     setTimeout(check_queued_tech_gained_dialog, 2500);
@@ -251,23 +251,31 @@ function show_new_game_message()
      return;
   }
   else if (is_longturn()) {
-    message = "Welcome " + username + "! This is a Longturn game, where you play one turn per day. " +
+    message = "Welcome, " + capitalize(username) + "! This is a Longturn game, where you play one turn per day. " +
     "Just do your moves, and come back tomorrow when the timer advances to the next turn! You may " +
     "bookmark this page to return. You can also find the game again at " + window.location.host + ".<br> "+
     "<font color='#90FFFF'>Freeciv is a game of diplomacy. Your nation is encouraged to talk to other nations. "+
     "Please click to join the <a href='https://discord.gg/Zj8UQSN' target='_new'>community Discord chat server</a>. "+
     "Players are responsible for following the #rules posted there. Be polite; please keep in-game talk "+
-    "related to the game; do not post spam to offsite links if you wish to remain in the game.</font> Good luck, have fun!"; 
+    "related to the game; do not post spam to offsite links if you wish to remain in the game.</font> Good luck, have fun!";
+
+    if (is_small_screen) {
+      message += "This is your message window that reports ongoing game events. " +
+      "<u style='color:#fde'>Tap the yellow <b>minimize button</b> at the top to enter the game</u>. You can return here to view " +
+      "game messages by hitting the maximize button.";
+    }
 
   } else if (is_small_screen()) {
-    message = "Welcome " + username + "! You lead a great civilization. Your task is to conquer the world!\n" +
-      "Please join the <a href='https://discord.gg/Zj8UQSN' target='_new'>community Discord chat server</a> "+
+    message = "Welcome, " + capitalize(username) + "! You lead a great civilization. Your task is to conquer the world!\n" +
+      "Please join the <a href='https://discord.gg/Zj8UQSN' target='_new'>community Discord chat server</a>. "+
       "Click on units for giving them orders, and drag units on the map to move them.\n" +
-      "Good luck, and have a lot of fun!";
+      "Good luck, and have a lot of fun!\n<br><br>This message window reports game events. " +
+      "<u style='color:#fde'>Tap the yellow <b>minimize button</b> at the top to enter the game</u>. You can return here to view " +
+      "game messages by hitting the maximize button."; 
 
   } else if (client.conn.playing != null && !game_loaded) {
     var pplayer = client.conn.playing;
-    var player_nation_text = "Welcome, " + username + ", ruler of the " + nations[pplayer['nation']]['adjective'] + " empire.";
+    var player_nation_text = "Welcome, " + capitalize(username) + ", ruler of the " + nations[pplayer['nation']]['adjective'] + " empire.";
 
     if (is_touch_device()) {
       message = player_nation_text + " Your\n" +
@@ -292,7 +300,7 @@ function show_new_game_message()
 
     }
   } else if (game_loaded) {
-    message = "Welcome back, " + username;
+    message = "Welcome back, " + capitalize(username);
     if (client.conn.playing != null) {
      message += " ruler of the " + nations[client.conn.playing['nation']]['adjective'] + " empire.";
     }
@@ -373,7 +381,7 @@ function update_metamessage_on_gamestart()
       && client.conn.playing['pid'] == players[0]['pid'] 
       && $.getUrlVar('action') == "new") {
     var pplayer = client.conn.playing;
-    var metasuggest = username + " ruler of the " + nations[pplayer['nation']]['adjective'] + ".";
+    var metasuggest = capitalize(username) + " ruler of the " + nations[pplayer['nation']]['adjective'] + ".";
     send_message("/metamessage " + metasuggest);
     setInterval(update_metamessage_game_running_status, 200000);
   }
