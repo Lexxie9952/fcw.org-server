@@ -1091,12 +1091,10 @@ function generate_production_list()
                         "helptext": cleaned_text(punit_type['helptext']),
                        "rule_name": punit_type['rule_name'],
                       "build_cost": get_universal_discount_price(punit_type),
-//                  "unit_details": "A<b>"+punit_type['attack_strength'] + "</b> " 
-//                                + "D<b>"+punit_type['defense_strength'] + "</b> " 
-                    "unit_details": "A<b>" + utype_real_base_attack_strength(punit_type)  
-                                  + "</b>D<b>" + utype_real_base_defense_strength(punit_type)                  
-                                  + "</b>F<b>"+punit_type['firepower'] 
-                                  + "</b>H<b>"+punit_type['hp'],
+                    "unit_details": "A<b style='font-family:Arial'>" + fractionalize(utype_real_base_attack_strength(punit_type))  
+                                  + "</b>D<b style='font-family:Arial'>" + fractionalize(utype_real_base_defense_strength(punit_type))                  
+                                  + (punit_type['firepower']>1 ? "F<b style='font-family:Arial'>"+punit_type['firepower']+"</b> " : "")
+                                  + "</b>H<b style='font-family:Arial'>"+punit_type['hp'],
                          "sprite" : get_unit_type_image_sprite(punit_type)});
 
     } else {
@@ -1106,15 +1104,14 @@ function generate_production_list()
 	                      "helptext": cleaned_text(punit_type['helptext']),
                        "rule_name": punit_type['rule_name'],
                       "build_cost": get_universal_discount_price(punit_type),
-//                    "unit_details": "A<b>"+punit_type['attack_strength'] + "</b> " 
-//                                  + "D<b>"+punit_type['defense_strength'] + "</b> " 
-                    "unit_details": "A<b>"+utype_real_base_attack_strength(punit_type) + "</b> " 
-                                  + "D<b>"+utype_real_base_defense_strength(punit_type) + "</b> " 
-                                  + "F<b>"+punit_type['firepower'] + "</b> "
-                                  + "H<b>"+punit_type['hp']+"</b> "
+                    "unit_details": "A<b style='font-family:Arial'>"+fractionalize(utype_real_base_attack_strength(punit_type)) + "</b> " 
+                                  + "D<b style='font-family:Arial'>"+fractionalize(utype_real_base_defense_strength(punit_type)) + "</b> " 
+                                  + (punit_type['firepower']>1 ? "F<b style='font-family:Arial'>"+punit_type['firepower']+"</b> " : "")
+                                  + "H<b style='font-family:Arial'>"+punit_type['hp']+"</b> "
                                   + "M<b style='font-family:Arial'>"
-                                  + move_points_text((parseInt(punit_type['move_rate'])+move_bonus), true)+"",
-                                 // punit_type['move_rate'] / SINGLE_MOVE + "",
+                                  + move_points_text((parseInt(punit_type['move_rate'])+move_bonus), true)+""
+                                    + (punit_type['fuel'] ? "</b><sub>"+punit_type['fuel']+"</sub>" : "</b>")
+                                  + (punit_type['transport_capacity'] ? " C<b style='font-family:Arial'>"+punit_type['transport_capacity']+"</b>" : "")+"",
                           "sprite": get_unit_type_image_sprite(punit_type)});
     }
   }
