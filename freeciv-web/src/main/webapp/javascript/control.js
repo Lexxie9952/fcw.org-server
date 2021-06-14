@@ -4381,7 +4381,7 @@ function key_unit_unload()
     else if (sunits[s]['transported']) { 
       //console.log("  sunit[i] is cargo)");
       if (unit_can_do_unload(sunits[s])) {
-        request_unit_do_action(ACTION_TRANSPORT_ALIGHT, sunits[s]['id'], sunits[s]['transported_by']);
+        request_unit_do_action(ACTION_TRANSPORT_DEBOARD, sunits[s]['id'], sunits[s]['transported_by']);
         unloaded++;
       }
     }
@@ -4395,7 +4395,7 @@ function key_unit_unload()
         if (punit['transported'] && punit['transported_by'] > 0 &&
           punit['owner'] == client.conn.playing.playerno) {
           if (unit_can_do_unload(punit)) {  
-            request_unit_do_action(ACTION_TRANSPORT_ALIGHT, punit['id'],
+            request_unit_do_action(ACTION_TRANSPORT_DEBOARD, punit['id'],
                                  punit['transported_by']);
           }
         } else {
