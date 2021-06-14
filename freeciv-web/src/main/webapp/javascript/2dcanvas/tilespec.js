@@ -2608,7 +2608,7 @@ function create_unit_offset_arrays()
           vy -= 7;
           break;
       case "Pikemen":
-          dx -= 1; dy -= 6;
+          dx += 1; dy -= 4;
           vx -= 1; vy -= 7;
           break;
       case "Riflemen":
