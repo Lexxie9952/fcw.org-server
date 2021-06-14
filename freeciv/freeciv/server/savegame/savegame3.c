@@ -6059,7 +6059,7 @@ static bool sg_load_player_unit(struct loaddata *loading,
           case ACTION_PLANT:
           case ACTION_FORTIFY:
           case ACTION_CONVERT:
-          case ACTION_TRANSPORT_ALIGHT:
+          case ACTION_TRANSPORT_DEBOARD:
           case ACTION_TRANSPORT_UNLOAD:
           case ACTION_TRANSPORT_DISEMBARK1:
           case ACTION_TRANSPORT_DISEMBARK2:

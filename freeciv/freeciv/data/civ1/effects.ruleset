@@ -1480,7 +1480,7 @@ reqs    =
 
 ; Civilization I took all remaining move fragments when a land unit
 ; disembarked from a ship. It didn't take all remaining more fragments when
-; the same land unit alighted a ship in the city it was in.
+; the same land unit deboarded a ship in the city it was in.
 ; Correct this rule if I'm wrong.
 [effect_action_success_move_cost_disembark]
 type    = "Action_Success_Actor_Move_Cost"

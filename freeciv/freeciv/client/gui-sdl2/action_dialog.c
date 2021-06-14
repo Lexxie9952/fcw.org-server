@@ -1256,16 +1256,16 @@ static int transport_unload_callback(struct widget *pWidget)
 }
 
 /**********************************************************************//**
-  User clicked "Transport Alight"
+  User clicked "Transport Deboard"
 **************************************************************************/
-static int transport_alight_callback(struct widget *pWidget)
+static int transport_deboard_callback(struct widget *pWidget)
 {
   if (PRESSED_EVENT(Main.event)) {
     int actor_id = MAX_ID - pWidget->ID;
     int target_id = pWidget->data.unit->id;
 
     popdown_diplomat_dialog();
-    request_do_action(ACTION_TRANSPORT_ALIGHT,
+    request_do_action(ACTION_TRANSPORT_DEBOARD,
                       actor_id, target_id, 0, "");
   }
 
@@ -1834,7 +1834,7 @@ static const act_func af_map[ACTION_COUNT] = {
   [ACTION_SPY_SABOTAGE_UNIT_ESC] = spy_sabotage_unit_esc_callback,
   [ACTION_HEAL_UNIT] = heal_unit_callback,
   [ACTION_EXPEL_UNIT] = expel_unit_callback,
-  [ACTION_TRANSPORT_ALIGHT] = transport_alight_callback,
+  [ACTION_TRANSPORT_DEBOARD] = transport_deboard_callback,
   [ACTION_TRANSPORT_UNLOAD] = transport_unload_callback,
   [ACTION_TRANSPORT_BOARD] = transport_board_callback,
   [ACTION_TRANSPORT_EMBARK] = transport_embark_callback,

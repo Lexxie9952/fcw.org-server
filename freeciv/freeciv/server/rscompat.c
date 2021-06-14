@@ -535,7 +535,7 @@ void rscompat_postprocess(struct rscompat_info *info)
     action_enabler_add(enabler);
 
     enabler = action_enabler_new();
-    enabler->action = ACTION_TRANSPORT_ALIGHT;
+    enabler->action = ACTION_TRANSPORT_DEBOARD;
     action_enabler_add(enabler);
 
     enabler = action_enabler_new();

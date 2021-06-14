@@ -4715,7 +4715,7 @@ static action_id auto_attack_act(const struct act_prob *act_probs)
       case ACTION_DISBAND_UNIT:
       case ACTION_FORTIFY:
       case ACTION_CONVERT:
-      case ACTION_TRANSPORT_ALIGHT:
+      case ACTION_TRANSPORT_DEBOARD:
       case ACTION_TRANSPORT_BOARD:
       case ACTION_TRANSPORT_EMBARK:
       case ACTION_TRANSPORT_UNLOAD:

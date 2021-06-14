@@ -2037,7 +2037,7 @@ void request_unit_unload(struct unit *pcargo)
       && can_unit_unload(pcargo, ptrans)
       && can_unit_survive_at_tile(&(wld.map), pcargo, unit_tile(pcargo))) {
     if (unit_owner(pcargo) == client.conn.playing) {
-      request_do_action(ACTION_TRANSPORT_ALIGHT,
+      request_do_action(ACTION_TRANSPORT_DEBOARD,
                         pcargo->id, ptrans->id, 0, "");
     } else {
       request_do_action(ACTION_TRANSPORT_UNLOAD,

@@ -449,14 +449,14 @@ static void hard_code_oblig_hard_reqs(void)
                           TRUE,
                           "All action enablers for %s must require that "
                           "the target is transporting a unit.",
-                          ACTION_TRANSPORT_ALIGHT, ACTION_NONE);
+                          ACTION_TRANSPORT_DEBOARD, ACTION_NONE);
   oblig_hard_req_register(req_from_values(VUT_UNITSTATE, REQ_RANGE_LOCAL,
                                           FALSE, FALSE, TRUE,
                                           USP_TRANSPORTED),
                           FALSE,
                           "All action enablers for %s must require that "
                           "the actor is transported.",
-                          ACTION_TRANSPORT_ALIGHT,
+                          ACTION_TRANSPORT_DEBOARD,
                           ACTION_TRANSPORT_DISEMBARK1,
                           ACTION_TRANSPORT_DISEMBARK2,
                           ACTION_NONE);
@@ -466,7 +466,7 @@ static void hard_code_oblig_hard_reqs(void)
                           FALSE,
                           "All action enablers for %s must require that "
                           "the actor is on a livable tile.",
-                          ACTION_TRANSPORT_ALIGHT, ACTION_NONE);
+                          ACTION_TRANSPORT_DEBOARD, ACTION_NONE);
 
   /* Why this is a hard requirement: sanity. */
   oblig_hard_req_register(req_from_values(VUT_UNITSTATE, REQ_RANGE_LOCAL,
@@ -854,8 +854,8 @@ static void hard_code_actions(void)
       action_new(ACTION_IRRIGATE, ATK_TILE, ASTK_EXTRA_NOT_THERE,
                  FALSE, ACT_TGT_COMPL_MANDATORY, TRUE, FALSE,
                  0, 0, FALSE);
-  actions[ACTION_TRANSPORT_ALIGHT] =
-      action_new(ACTION_TRANSPORT_ALIGHT, ATK_UNIT, ASTK_NONE,
+  actions[ACTION_TRANSPORT_DEBOARD] =
+      action_new(ACTION_TRANSPORT_DEBOARD, ATK_UNIT, ASTK_NONE,
                  FALSE, ACT_TGT_COMPL_SIMPLE, TRUE, FALSE,
                  0, 0, FALSE);
   actions[ACTION_TRANSPORT_BOARD] =
@@ -2220,7 +2220,7 @@ action_actor_utype_hard_reqs_ok(const action_id wanted_action,
   case ACTION_FORTIFY:
   case ACTION_TRANSPORT_BOARD:
   case ACTION_TRANSPORT_EMBARK:
-  case ACTION_TRANSPORT_ALIGHT:
+  case ACTION_TRANSPORT_DEBOARD:
   case ACTION_TRANSPORT_DISEMBARK1:
   case ACTION_TRANSPORT_DISEMBARK2:
   case ACTION_USER_ACTION1:
@@ -2419,7 +2419,7 @@ action_hard_reqs_actor(const action_id wanted_action,
   case ACTION_BASE:
   case ACTION_MINE:
   case ACTION_IRRIGATE:
-  case ACTION_TRANSPORT_ALIGHT:
+  case ACTION_TRANSPORT_DEBOARD:
   case ACTION_TRANSPORT_UNLOAD:
   case ACTION_USER_ACTION1:
   case ACTION_USER_ACTION2:
@@ -3214,7 +3214,7 @@ case ACTION_CLEAN_POLLUTION:
     break;
   
 
-  case ACTION_TRANSPORT_ALIGHT:
+  case ACTION_TRANSPORT_DEBOARD:
     if (!can_unit_unload(actor_unit, target_unit)) {
       /* Keep the old rules about Unreachable and disembarks. */
       return TRI_NO;
@@ -4353,7 +4353,7 @@ action_prob(const action_id wanted_action,
   case ACTION_IRRIGATE:
     chance = ACTPROB_CERTAIN;
     break;
-  case ACTION_TRANSPORT_ALIGHT:
+  case ACTION_TRANSPORT_DEBOARD:
     chance = ACTPROB_CERTAIN;
     break;
   case ACTION_TRANSPORT_BOARD:
@@ -5659,8 +5659,8 @@ const char *action_ui_name_ruleset_var_name(int act)
     return "ui_name_build_mine";
   case ACTION_IRRIGATE:
     return "ui_name_irrigate";
-  case ACTION_TRANSPORT_ALIGHT:
-    return "ui_name_transport_alight";
+  case ACTION_TRANSPORT_DEBOARD:
+    return "ui_name_transport_deboard";
   case ACTION_TRANSPORT_BOARD:
     return "ui_name_transport_board";
   case ACTION_TRANSPORT_EMBARK:
@@ -5895,9 +5895,9 @@ const char *action_ui_name_default(int act)
   case ACTION_IRRIGATE:
     /* TRANS: Build _Irrigation (100% chance of success). */
     return N_("Build %sIrrigation%s");
-  case ACTION_TRANSPORT_ALIGHT:
-    /* TRANS: _Alight (100% chance of success). */
-    return N_("%sAlight%s");
+  case ACTION_TRANSPORT_DEBOARD:
+    /* TRANS: _Deboard (100% chance of success). */
+    return N_("%sDeboard%s");
   case ACTION_TRANSPORT_BOARD:
     /* TRANS: _Board (100% chance of success). */
     return N_("%sBoard%s");
@@ -6002,7 +6002,7 @@ const char *action_min_range_ruleset_var_name(int act)
   case ACTION_BASE:
   case ACTION_MINE:
   case ACTION_IRRIGATE:
-  case ACTION_TRANSPORT_ALIGHT:
+  case ACTION_TRANSPORT_DEBOARD:
   case ACTION_TRANSPORT_BOARD:
   case ACTION_TRANSPORT_EMBARK:
   case ACTION_TRANSPORT_UNLOAD:
@@ -6098,7 +6098,7 @@ int action_min_range_default(int act)
   case ACTION_BASE:
   case ACTION_MINE:
   case ACTION_IRRIGATE:
-  case ACTION_TRANSPORT_ALIGHT:
+  case ACTION_TRANSPORT_DEBOARD:
   case ACTION_TRANSPORT_BOARD:
   case ACTION_TRANSPORT_EMBARK:
   case ACTION_TRANSPORT_UNLOAD:
@@ -6193,7 +6193,7 @@ const char *action_max_range_ruleset_var_name(int act)
   case ACTION_BASE:
   case ACTION_MINE:
   case ACTION_IRRIGATE:
-  case ACTION_TRANSPORT_ALIGHT:
+  case ACTION_TRANSPORT_DEBOARD:
   case ACTION_TRANSPORT_BOARD:
   case ACTION_TRANSPORT_EMBARK:
   case ACTION_TRANSPORT_UNLOAD:
@@ -6296,7 +6296,7 @@ int action_max_range_default(int act)
   case ACTION_BASE:
   case ACTION_MINE:
   case ACTION_IRRIGATE:
-  case ACTION_TRANSPORT_ALIGHT:
+  case ACTION_TRANSPORT_DEBOARD:
   case ACTION_TRANSPORT_BOARD:
   case ACTION_TRANSPORT_EMBARK:
   case ACTION_SPY_ATTACK:
@@ -6401,7 +6401,7 @@ const char *action_target_kind_ruleset_var_name(int act)
   case ACTION_BASE:
   case ACTION_MINE:
   case ACTION_IRRIGATE:
-  case ACTION_TRANSPORT_ALIGHT:
+  case ACTION_TRANSPORT_DEBOARD:
   case ACTION_TRANSPORT_BOARD:
   case ACTION_TRANSPORT_EMBARK:
   case ACTION_TRANSPORT_UNLOAD:
@@ -6500,7 +6500,7 @@ const char *action_actor_consuming_always_ruleset_var_name(action_id act)
   case ACTION_BASE:
   case ACTION_MINE:
   case ACTION_IRRIGATE:
-  case ACTION_TRANSPORT_ALIGHT:
+  case ACTION_TRANSPORT_DEBOARD:
   case ACTION_TRANSPORT_BOARD:
   case ACTION_TRANSPORT_EMBARK:
   case ACTION_TRANSPORT_UNLOAD:

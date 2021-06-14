@@ -5746,7 +5746,7 @@ struct unit_order *create_unit_orders(int length,
       case ACTION_CLEAN_POLLUTION:
       case ACTION_FORTIFY:
       case ACTION_CONVERT:
-      case ACTION_TRANSPORT_ALIGHT:
+      case ACTION_TRANSPORT_DEBOARD:
       case ACTION_TRANSPORT_UNLOAD:
       case ACTION_TRANSPORT_DISEMBARK1:
       case ACTION_TRANSPORT_DISEMBARK2:

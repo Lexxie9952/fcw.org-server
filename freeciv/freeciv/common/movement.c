@@ -193,12 +193,12 @@ if (strcmp(game.server.rulesetdir, "ag") == 0
    * if this is their native terrain. */
   return (can_unit_exist_at_tile(nmap, punit, unit_tile(punit))
           && (ptrans == NULL
-              /* Don't care if unloaded by the transport or alight itself */
+              /* Don't care if unloaded by the transport or deboard itself */
               /* FIXME: should being able to be unloaded by the transport
                * count as being able to defend (like it does now) or should
-               * a unit that can't alight be considered useless as a
+               * a unit that can't deboard be considered useless as a
                * defender? */
-              || can_unit_alight_or_be_unloaded(punit, ptrans)));
+              || can_unit_deboard_or_be_unloaded(punit, ptrans)));
 }
 
 /************************************************************************//**

@@ -881,7 +881,7 @@ bool utype_is_moved_to_tgt_by_action(const struct action *paction,
   case ACTION_HEAL_UNIT:
   case ACTION_FORTIFY:
   case ACTION_CONVERT:
-  case ACTION_TRANSPORT_ALIGHT:
+  case ACTION_TRANSPORT_DEBOARD:
   case ACTION_TRANSPORT_UNLOAD:
   case ACTION_TRANSPORT_BOARD:
   case ACTION_DESTROY_CITY:
