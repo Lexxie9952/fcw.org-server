@@ -266,6 +266,9 @@ ui_name_sabotage_city_escape = _("%sSabotage City Escape%s")
 ; /* TRANS: Industrial _Sabotage (3% chance of success). */
 ui_name_targeted_sabotage_city_escape = _("Targeted %sSabotage%s")
 
+; /* TRANS: Industrial _Sabotage Production (3% chance of success). */
+ui_name_sabotage_city_production_escape = _("Industrial %sSabotage Production%s")
+
 ; /* TRANS: Incite a _Revolt (3% chance of success). */
 ui_name_incite_city = _("Incite a %sRevolt%s")
 
@@ -323,8 +326,14 @@ ui_name_found_city = _("%sBuild City%s")
 ; /* TRANS: _Add to City (100% chance of success). */
 ui_name_join_city = _("%sAdd to City%s")
 
-; /* TRANS: Explode _Nuclear (100% chance of success). */
-ui_name_explode_nuclear = _("Explode %sNuclear%s")
+; /* TRANS: Explode _Nuclear In Place (100% chance of success). */
+ui_name_explode_nuclear = _("Explode %sNuclear In Place%s")
+
+; /* TRANS: _Nuke City (100% chance of success). */
+ui_name_nuke_city = _("%sNuke City%s")
+
+; /* TRANS: _Nuke Units (100% chance of success). */
+ui_name_nuke_units = _("%sNuke Units%s")
 
 ; /* TRANS: Destroy _City (100% chance of success). */
 ;ui_name_destroy_city = _("Destroy %sCity%s")                 ;ready to be enabled if we think of how
@@ -1330,7 +1339,7 @@ actor_reqs    =
     }
  
 [actionenabler_road]
-action        = "Road"
+action        = "Build Road"
 actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
@@ -1338,7 +1347,7 @@ actor_reqs    =
       "UnitType",      "Proletarians", "Local",   FALSE
     }
 [actionenabler_road_prole]
-action        = "Road"
+action        = "Build Road"
 actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
@@ -1346,7 +1355,7 @@ actor_reqs    =
       "Gov",           "Communism",     "Player", TRUE
     }
 [actionenabler_legion_road]
-action        = "Road"
+action        = "Build Road"
 actor_reqs    =
     { "type",          "name",          "range",   "present"
       "UnitFlag",      "Settlers",      "Local",   TRUE
@@ -1356,7 +1365,7 @@ actor_reqs    =
 ; Don't force legions to road BEFORE making a fortress 
 ; from fortress being "domestic national territory"
 [actionenabler_legion_road2]
-action        = "Road"
+action        = "Build Road"
 actor_reqs    =
     { "type",          "name",          "range",   "present"
       "UnitFlag",      "Settlers",      "Local",   TRUE
