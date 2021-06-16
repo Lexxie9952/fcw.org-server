@@ -527,7 +527,8 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
     }
   }
 
-  var text = decodeURIComponent(city['name'] + airlift_text).toUpperCase();
+  var cityname = show_citybar < 2 ? city['name'] : "";
+  var text = decodeURIComponent(cityname + airlift_text).toUpperCase();
   if (replace_capital_i) text = text.replace(/I/gi, "|");  // option to fix midget capital I for some bad sans-serif fonts
   var citybarinfo = mapview_get_citybar_num_and_color(city['id']);
   // "size" is now alternatively other things, based on which city_map_display_mode we're in:

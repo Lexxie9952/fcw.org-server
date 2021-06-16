@@ -3395,7 +3395,8 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 'C':
       if (ctrl && !shift && !alt) {
         the_event.preventDefault();          // override possible browser shortcut
-        show_citybar = !show_citybar;
+        show_citybar = show_citybar -1;
+        if (show_citybar < 0) show_citybar = 2;
       } else if (shift && !ctrl && !alt) {
           key_select_same_global_type(true); // true=same continent only
       } else if (ctrl && shift && !alt) {            // cycle citybar display mode
