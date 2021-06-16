@@ -257,6 +257,7 @@ function warcalc_get_defense_bonus(punit)
     power_fact *= (1+terrain['defense_bonus']/100);
     if (tile_has_extra(ptile, EXTRA_RIVER))
       power_fact *= (1+extras[EXTRA_RIVER]['defense_bonus']/100);
+      if (client_rules_flag[CRF_MP2_C]) power_fact += 50; // +0.5 river defense for rivers
   }
   if (punit['activity']==ACTIVITY_FORTIFIED) {
     if (!tile_city(ptile)) { // Units in a city get city bonus not fortify bonus

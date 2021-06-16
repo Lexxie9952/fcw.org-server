@@ -19,30 +19,30 @@
                 </tr>
                 <tr>
                     <th class="wcttmsg" id="wcth1" title='Attacker vs. Defender bonus appliers' style="font-size:90%">Attack&nbsp;</th>
-                    <td align="center"><input id="wca125" class="tiny_button" type="button" value="x1.25" onClick="wc_A(1.25);"></td>
+                    <td align="center"><input id="wca125" class="tiny_button" type="button" value="&#xD7;1.25" onClick="wc_A(1.25);"></td>
                     <td align="center"><input id="wca133" class="tiny_button" type="button" value="-" onClick="wc_A(1.33);" disabled></td>
-                    <td align="center"><input id="wca150" class="tiny_button" type="button" value="x1.5&nbsp;" onClick="wc_A(1.50);"></td>
+                    <td align="center"><input id="wca150" class="tiny_button" type="button" value="&#xD7;1.5&nbsp;" onClick="wc_A(1.50);"></td>
                     <td align="center"><input id="wca167" class="tiny_button" type="button" value="-" onClick="wc_A(1.67);" disabled></td>
-                    <td align="center"><input id="wca175" class="tiny_button" type="button" value="x1.75" onClick="wc_A(1.75);"></td>
-                    <td align="center"><input id="wca200" class="tiny_button" type="button" value="&nbsp;&nbsp;x2&nbsp;&nbsp;" onClick="wc_A(2.00);"></td>
-                    <td align="center"><input id="wca210" class="tiny_button" type="button" value="x2.1&nbsp;" onClick="wc_A(2.1);"></td>
-                    <td align="center"><input id="wca220" class="tiny_button" type="button" value="x2.2&nbsp;" onClick="wc_A(2.2);"></td>
-                    <td align="center"><input id="wca230" class="tiny_button" type="button" value="x2.3&nbsp;" onClick="wc_A(2.3);"></td>
+                    <td align="center"><input id="wca175" class="tiny_button" type="button" value="&#xD7;1.75" onClick="wc_A(1.75);"></td>
+                    <td align="center"><input id="wca200" class="tiny_button" type="button" value="&nbsp;&nbsp;&#xD7;2&nbsp;&nbsp;" onClick="wc_A(2.00);"></td>
+                    <td align="center"><input id="wca210" class="tiny_button" type="button" value="&#xD7;2.1&nbsp;" onClick="wc_A(2.1);"></td>
+                    <td align="center"><input id="wca220" class="tiny_button" type="button" value="&#xD7;2.2&nbsp;" onClick="wc_A(2.2);"></td>
+                    <td align="center"><input id="wca230" class="tiny_button" type="button" value="&#xD7;2.3&nbsp;" onClick="wc_A(2.3);"></td>
                 </tr>
                 <tr>
                     <th class="wcttmsg" id="wcth2" title='Defender vs. Attacker bonus appliers' style="font-size:90%">Defend&nbsp;</th>
-                    <td align="center"><input id="wc125" class="tiny_button" type="button" value="x1.25" onClick="wc_D(1.25);"></td>
-                    <td align="center"><input id="wc133" class="tiny_button" type="button" value="x1.33" onClick="wc_D(1.33);"></td>
-                    <td align="center"><input id="wc150" class="tiny_button" type="button" value="x1.5&nbsp;" onClick="wc_D(1.50);"></td>
-                    <td align="center"><input id="wc167" class="tiny_button" type="button" value="x1.67" onClick="wc_D(1.67);"></td>
-                    <td align="center"><input id="wc175" class="tiny_button" type="button" value="x1.75" onClick="wc_D(1.75);"></td>
-                    <td align="center"><input id="wc200" class="tiny_button" type="button" value="&nbsp;&nbsp;x2&nbsp;&nbsp;" onClick="wc_D(2.00);"></td>
-                    <td align="center"><input id="wc210" class="tiny_button" type="button" value="x2.1&nbsp;" onClick="wc_D(2.1);"></td>
-                    <td align="center"><input id="wc220" class="tiny_button" type="button" value="x2.2&nbsp;" onClick="wc_D(2.2);"></td>
-                    <td align="center"><input id="wc230" class="tiny_button" type="button" value="x2.3&nbsp;" onClick="wc_D(2.3);"></td>
-                    <td align="center"><input id="wc300" class="tiny_button" type="button" value="&nbsp;&nbsp;x3&nbsp;&nbsp;" onClick="wc_D(3.00);"></td>
-                    <td align="center"><input id="wc400" class="tiny_button" type="button" value="&nbsp;&nbsp;x4&nbsp;&nbsp;" onClick="wc_D(4.00);"></td>
-                    <td align="center"><input id="wc500" class="tiny_button" type="button" value="&nbsp;&nbsp;x5&nbsp;&nbsp;" onClick="wc_D(5.00);"></td>
+                    <td align="center"><input id="wc125" class="tiny_button" type="button" value="&#xD7;1.25" onClick="wc_D(1.25);"></td>
+                    <td align="center"><input id="wc133" class="tiny_button" type="button" value="&#xD7;1.33" onClick="wc_D(1.33);"></td>
+                    <td align="center"><input id="wc150" class="tiny_button" type="button" value="&#xD7;1.5&nbsp;" onClick="wc_D(1.50);"></td>
+                    <td align="center"><input id="wc167" class="tiny_button" type="button" value="&#xD7;1.67" onClick="wc_D(1.67);"></td>
+                    <td align="center"><input id="wc175" class="tiny_button" type="button" value="&#xD7;1.75" onClick="wc_D(1.75);"></td>
+                    <td align="center"><input id="wc200" class="tiny_button" type="button" value="&nbsp;&nbsp;&#xD7;2&nbsp;&nbsp;" onClick="wc_D(2.00);"></td>
+                    <td align="center"><input id="wc210" class="tiny_button" type="button" value="&#xD7;2.1&nbsp;" onClick="wc_D(2.1);"></td>
+                    <td align="center"><input id="wc220" class="tiny_button" type="button" value="&#xD7;2.2&nbsp;" onClick="wc_D(2.2);"></td>
+                    <td align="center"><input id="wc230" class="tiny_button" type="button" value="&#xD7;2.3&nbsp;" onClick="wc_D(2.3);"></td>
+                    <td align="center"><input id="wc300" class="tiny_button" type="button" value="&nbsp;&nbsp;&#xD7;3&nbsp;&nbsp;" onClick="wc_D(3.00);"></td>
+                    <td align="center"><input id="wc400" class="tiny_button" type="button" value="&nbsp;&nbsp;&#xD7;4&nbsp;&nbsp;" onClick="wc_D(4.00);"></td>
+                    <td align="center"><input id="wc500" class="tiny_button" type="button" value="&nbsp;&nbsp;&#xD7;5&nbsp;&nbsp;" onClick="wc_D(5.00);"></td>
                 </tr>
             </tbody>
     </table>
