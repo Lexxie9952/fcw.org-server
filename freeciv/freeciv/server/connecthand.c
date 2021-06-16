@@ -636,45 +636,68 @@ void send_conn_info_remove(struct conn_list *src, struct conn_list *dest)
 **************************************************************************/
 struct player *find_uncontrolled_player(struct connection *pconn)
 {
-/* TEAM GAME SETUP PATCH FOR GAMEMASTERS
-   This is perhaps not the best implementation. The problem was this:
-   for team games, not all players can be in prelaunch together. Therefore,
-   Gamemaster has to assign UNASSIGNED players to the names of the users 
-   who will eventually come. When players then joined for the first time, 
-   the players_iterate below this one was seeing the first unassigned 
-   player and overriding it, in spite of the fact the player->name was 
-   assigned to someone else. This players_iterate immediately below will 
-   intercept that first.  TO DO: is this the proper way to patch this? When 
-   a player logs in a second time it finds the player, but we are stuck here
-   the first time. Maybe the right way is for Gamemaster set up the player
-   the way it is on the second login, so this patch isn't needed. 
-  */
-    if (is_longturn() && pconn) {
-      players_iterate(played) {
-        // Hook new connection up to existing nation with same name
-        // (handles team game setups)
-        if (strcmp(pconn->username, played->name)==0) {
-          return played;
-        }
+/* Assign new connection to the player of same name.
+   Helps LT team game setup and GM player assignment */
+  if (is_longturn() && pconn) {
+    players_iterate(played) {
+      if (fc_strcasecmp(pconn->username, played->name) == 0) { 
+        return played;
       }
+    }
   } players_iterate_end;
-  /* ^^ end of TEAM GAME SETUP PATCH ^^ */
+/* ^^ end of Longturn / TEAM GAME SETUP PATCH ^^ */
 
+  if (!is_longturn()) {
+    players_iterate(played) {
+      if (!played->is_connected && !played->was_created) {
+        return played;
+      }
+    } players_iterate_end;
+    return NULL;
+  }
+
+/* Longturn: Select first unassigned nation, otherwise select random idler */
+  int idle_count = 0;
+  /* Turns 1-12: replace idle 3. T12+ increase idle cutoff until max cutoff of 10 */
+  int idle_cutoff = 3;
+  if (game.info.turn > 12) idle_cutoff += (game.info.turn - 12);
+  if (idle_cutoff > 10) idle_cutoff = 10;
+
+  struct player* idle_players[MAX_NUM_PLAYER_SLOTS];
+
+  /* Check for available unassigned nations, while popluating available idle player array */
+  players_iterate(played) {
+    if (!played->is_connected /* && !played->was_created >> lets Gamemaster create new spots */
+         && played->unassigned_user
+         && strncmp("UnavailablePlayer", played->name, 17) != 0
+         && played->is_alive) {
+      return played; /* return first available unassigned nation */
+    } else if (!played->unassigned_user 
+                && played->is_alive
+                && strncmp("UnavailablePlayer", played->name, 17) != 0
+                && played->nturns_idle >= idle_cutoff ) {
+      idle_players[idle_count++] = played; /* store and index the qualifying idler nations */
+    }
+  } players_iterate_end;
+
+  /* No unassigned spots anvailable. Randomly select an idler if there are any */
+  if (idle_count > 0) return idle_players[fc_rand(idle_count)];
+
+/* OLD universal code block: handles !longturn and longturn both
   players_iterate(played) {
     if (!is_longturn()) {
       if (!played->is_connected && !played->was_created) {
         return played;
       }
     } else {
-      if ((!played->is_connected /* && !played->was_created let Gamemaster create new spots to join */
+      if ((!played->is_connected // && !played->was_created let Gamemaster create new spots to join
       && played->unassigned_user && played->is_alive)
       || (!played->unassigned_user && played->is_alive
       && played->nturns_idle > 12 )) {
         return played;
       }
     }
-  } players_iterate_end;
-
+  } players_iterate_end; */
   return NULL;
 }
 
@@ -683,6 +706,29 @@ struct player *find_uncontrolled_player(struct connection *pconn)
 **************************************************************************/
 struct player *find_uncontrolled_idle_player_longturn(void)
 {
+  int idle_count = 0;
+  /* Turns 1-12: replace idle 3. T12+ increase idle cutoff until max cutoff of 10 */
+  int idle_cutoff = 3;
+  if (game.info.turn > 12) idle_cutoff += (game.info.turn - 12);
+  if (idle_cutoff > 10) idle_cutoff = 10;
+
+  struct player* idle_players[MAX_NUM_PLAYER_SLOTS];
+
+  /* Make array of available idle players */
+  players_iterate(played) {
+    if (!played->unassigned_user 
+                && played->is_alive
+                && strncmp("UnavailablePlayer", played->name, 17) != 0
+                && played->nturns_idle >= idle_cutoff ) {
+      idle_players[idle_count++] = played; /* store and index the qualifying idler nations */
+    }
+  } players_iterate_end;
+
+  /* Randomly select an idler if there are any */
+  if (idle_count > 0) return idle_players[fc_rand(idle_count)];
+
+  return NULL;
+  /* old code 
   players_iterate(played) {
       if (!played->unassigned_user && played->is_alive
       && played->nturns_idle > 12) {
@@ -690,7 +736,7 @@ struct player *find_uncontrolled_idle_player_longturn(void)
       }
   } players_iterate_end;
 
-  return NULL;
+  return NULL;   */
 }
 
 /**********************************************************************//**

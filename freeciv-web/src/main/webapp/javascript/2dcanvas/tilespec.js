@@ -2465,7 +2465,7 @@ function create_unit_offset_arrays()
           dx +=2; dy -= 2;
           break;
       case "Cavalry":
-          vx += 1; vy -= 11;
+          vx += 5; vy -= 15;
           dx += 4; dy -= 3;
           break;
       case "Chariot":
