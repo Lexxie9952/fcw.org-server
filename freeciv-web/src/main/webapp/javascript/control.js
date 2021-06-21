@@ -904,7 +904,7 @@ function ask_server_for_actions(punit)
 **************************************************************************/
 function action_selection_no_longer_in_progress(old_actor_id)
 {
-  console.log("    actor: %d recorded as no selection in progress.",old_actor_id)
+  //console.log("    actor: %d recorded as no selection in progress.",old_actor_id)
   /* IDENTITY_NUMBER_ZERO is accepted for cases where the unit is gone
    * without a trace. */
   if (old_actor_id != action_selection_in_progress_for
@@ -1137,12 +1137,17 @@ function update_unit_focus()
 **************************************************************************/
 function advance_unit_focus(same_type)
 {
-  var candidate;
+  var candidate = null;
   var i;
+
+  console.log("T%d. advance_unit_focus(). urgent_focus_queue[%d] waiting_units_list[%d]",
+              game_info.turn, urgent_focus_queue.length, waiting_units_list.length)
 
   if (client_is_observer()) return;
 
   if (urgent_focus_queue.length > 0) {
+    console.log("  urgent_focus_queue[%d] processing...", urgent_focus_queue.length)
+
     var focus_tile = (current_focus != null && current_focus.length > 0
                       ? current_focus[0]['tile']
                       : -1);
@@ -1170,26 +1175,37 @@ function advance_unit_focus(same_type)
 
     if (null != candidate) {
       urgent_focus_queue = unit_list_without(urgent_focus_queue, punit);
+      console.log("    removed candidate:%d urgent_focus_queue[%d]",candidate.id,urgent_focus_queue.length);
     }
+    console.log("    finished urgent_focus_queue[%d]. candidate:%d",urgent_focus_queue.length,(candidate?candidate.id:"null"));
   }
 
   if (candidate == null) {
     candidate = find_best_focus_candidate(false, same_type);
+    console.log("  non-urgent processing #1. urgent_focus_queue[%d] waiting_units_list[%d]",
+                 urgent_focus_queue.length, waiting_units_list.length);
+    console.log("    find_best_focus_candidate(false) yields candidate:%d",(candidate?candidate.id:"null"))
   }
 
   if (candidate == null) {
     candidate = find_best_focus_candidate(true, same_type);
+    console.log("  non-urgent processing #2. candidate:%d",(candidate?candidate.id:"null"));
+    console.log("    find_best_focus_candidate(true) yields candidate:%d",(candidate?candidate.id:"null"))
   }
 
   // remove state-blocking from leaving context menu
   came_from_context_menu = false;
 
   if (candidate != null) {
+    console.log("CLEAN-UP and EXIT for successful new candidate:%d\n",(candidate?candidate.id:"null"))
+    console.log(" ")
     clear_all_modes();
     clear_goto_tiles();   // TO DO: update mouse cursor function call too?
     save_last_unit_focus();
     set_unit_focus_and_redraw(candidate);
   } else {
+    console.log("NO FOCUS CANDIDATE FOUND. It's the end of the road, time for a drink.\n");
+    console.log(" ")
     /* Couldn't center on a unit, then try to center on a city... */
     deactivate_goto(false);
     save_last_unit_focus();
@@ -1215,6 +1231,7 @@ function advance_unit_focus(same_type)
     } else {
         $("#turn_done_button").button("option", "label", "<i class='fa fa-check-circle-o' style='color: green;'aria-hidden='true'></i> Turn Done");
     }
+    console.log("Reached END OF WAITING LISTS. end_turn_info_message_shown == (%s) ", end_turn_info_message_shown)
     if (!end_turn_info_message_shown) {
       end_turn_info_message_shown = true;
       message_log.update({ event: E_BEGINNER_HELP, message: "All units have moved, click the \"Turn Done\" button to end your turn."});

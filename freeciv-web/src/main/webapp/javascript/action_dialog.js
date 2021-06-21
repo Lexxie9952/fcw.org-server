@@ -1367,7 +1367,7 @@ function select_tgt_extra(actor_unit, target_unit,
  input.
 **************************************************************************/
 function dialog_register(id, actor_id, input_maybe_needed) {
-  console.log("    dialog registered: "+id+"    actor:"+actor_id)
+  //console.log("    dialog registered: "+id+"    actor:"+actor_id)
   $(id).dialog('widget').keydown(dialog_key_listener);
   active_dialogs.push(id);
   //close, cancel, and [x]
