@@ -334,9 +334,16 @@ extern "C" {
 /* Multiplied over and after Building_Build_Cost_Pct is (possibly) applied */
 #define SPECENUM_VALUE131 EFT_IMPR_BUILD_COST_PM
 #define SPECENUM_VALUE131NAME "Building_Build_Cost_Pm"
-/* Allows target to get bonus resistance in cases where req ranges can't modify */
+/* Allows target to get bonus resistance in cases where req ranges use target (not actor) */
 #define SPECENUM_VALUE132 EFT_ACTION_RESIST_PCT
 #define SPECENUM_VALUE132NAME "Action_Resist_Pct"
+/* Adds raw value bonus to city with addition, prior to Output_Bonus factors */
+#define SPECENUM_VALUE133 EFT_OUTPUT_ADD_BONUS
+#define SPECENUM_VALUE133NAME "Output_Add_Bonus"
+/* Adds raw value bonus to final defense bonus of the terrain (not multiply.) */
+#define SPECENUM_VALUE134 EFT_TERRAIN_DEFEND_ADD_BONUS
+#define SPECENUM_VALUE134NAME "Terrain_Defend_Add_Bonus"
+
 /* FCW does not have /common and needs to hard code any changes or re-ordering of the above in effects.js */
 /********************************************************************************************************~*/
 /* keep this last */

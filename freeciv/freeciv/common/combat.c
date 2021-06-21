@@ -500,6 +500,8 @@ static int get_defense_power(const struct unit *punit)
 
   if (uclass_has_flag(pclass, UCF_TERRAIN_DEFENSE)) {
     db = 100 + tile_terrain(ptile)->defense_bonus;
+    // additive bonus (not multiplied) cf. the real Civ2 river bonus
+    db += get_tile_bonus(ptile, punit, EFT_TERRAIN_DEFEND_ADD_BONUS);
     power = (power * db) / 100;
   }
 
@@ -623,6 +625,8 @@ int get_virtual_defense_power(const struct unit_type *att_type,
   db = POWER_FACTOR;
   if (uclass_has_flag(defclass, UCF_TERRAIN_DEFENSE)) {
     db += tile_terrain(ptile)->defense_bonus / (100 / POWER_FACTOR);
+    // additive bonus (not multiplied) cf. the real Civ2 river bonus
+    db += get_tile_bonus(ptile, vdef, EFT_TERRAIN_DEFEND_ADD_BONUS);
   }
   defensepower *= db;
   defensepower *= vlevel->power_fact / 100;

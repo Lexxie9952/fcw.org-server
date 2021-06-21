@@ -4191,6 +4191,7 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
 
         if (peffect->type == EFT_UPKEEP_FACTOR
             || peffect->type == EFT_UNIT_UPKEEP_FREE_PER_CITY
+            || peffect->type == EFT_OUTPUT_ADD_BONUS
             || peffect->type == EFT_OUTPUT_BONUS
             || peffect->type == EFT_OUTPUT_BONUS_2) {
           /* Effect can use or require any kind of output */
@@ -4594,6 +4595,12 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
         cat_snprintf(buf, bufsz,
                      /* TRANS: %s is list of output types, with 'and' */
                      _("%s %s production is increased %d%%.\n"), BULLET,
+                     astr_str(&outputs_and), peffect->value);
+        break;
+      case EFT_OUTPUT_ADD_BONUS:
+        cat_snprintf(buf, bufsz,
+                     /* TRANS: %s is list of output types, with 'and' */
+                     _("%s Final %s production is increased +%d.\n"), BULLET,
                      astr_str(&outputs_and), peffect->value);
         break;
       case EFT_OUTPUT_WASTE:
