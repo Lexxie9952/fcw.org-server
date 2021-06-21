@@ -105,6 +105,7 @@ static void adv_data_city_impr_calc(struct player *pplayer,
       case EFT_POLLU_PROD_PCT:
       case EFT_OUTPUT_BONUS:
       case EFT_OUTPUT_BONUS_2:
+      case EFT_OUTPUT_ADD_BONUS:
       case EFT_OUTPUT_WASTE_PCT:
       case EFT_UPKEEP_FREE:
 	requirement_vector_iterate(&peffect->reqs, preq) {
