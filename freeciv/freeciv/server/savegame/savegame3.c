@@ -4176,6 +4176,10 @@ static void sg_load_player_main(struct loaddata *loading,
   plr->score.culture =
     secfile_lookup_int_default(loading->file, 0,
                                "score%d.culture", plrno);
+  plr->score.traderoutes =
+    secfile_lookup_int_default(loading->file, 0,
+                               "score%d.traderoutes", plrno);
+
   plr->score.game =
     secfile_lookup_int_default(loading->file, 0,
                                "score%d.total", plrno);
@@ -4512,6 +4516,8 @@ static void sg_save_player_main(struct savedata *saving,
                      "score%d.units_lost", plrno);
   secfile_insert_int(saving->file, plr->score.culture,
                      "score%d.culture", plrno);
+  secfile_insert_int(saving->file, plr->score.traderoutes,
+                     "score%d.traderoutes", plrno);     
   secfile_insert_int(saving->file, plr->score.game,
                      "score%d.total", plrno);
 

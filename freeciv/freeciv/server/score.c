@@ -32,6 +32,7 @@
 #include "player.h"
 #include "research.h"
 #include "specialist.h"
+#include "traderoutes.h"
 #include "unit.h"
 #include "unitlist.h"
 
@@ -258,9 +259,6 @@ void calc_civ_score(struct player *pplayer)
   pplayer->score.content = 0;
   pplayer->score.unhappy = 0;
   pplayer->score.angry = 0;
-  specialist_type_iterate(sp) {
-    pplayer->score.specialists[sp] = 0;
-  } specialist_type_iterate_end;
   pplayer->score.wonders = 0;
   pplayer->score.techs = 0;
   pplayer->score.techout = 0;
@@ -270,12 +268,19 @@ void calc_civ_score(struct player *pplayer)
   pplayer->score.cities = 0;
   pplayer->score.units = 0;
   pplayer->score.pollution = 0;
-  pplayer->score.bnp = 0;
-  // This has to be calculated in a different phase or else gives wildly incorrect results
+  /* These are calculated here if (game.server.city_output_style !=WYSIWYG) */
+  if (!game.server.city_output_style) {
+    specialist_type_iterate(sp) {
+      pplayer->score.specialists[sp] = 0;
+    } specialist_type_iterate_end;
+    pplayer->score.bnp = 0;
+  }
+  /* This is never calculated after city growth so was commented out here */
   //pplayer->score.mfg = 0; 
   pplayer->score.literacy = 0;
   pplayer->score.spaceship = 0;
   pplayer->score.culture = player_culture(pplayer);
+  pplayer->score.traderoutes = 0;
 
   if (is_barbarian(pplayer)) {
     return;
@@ -288,14 +293,22 @@ void calc_civ_score(struct player *pplayer)
     pplayer->score.content += pcity->feel[CITIZEN_CONTENT][FEELING_FINAL];
     pplayer->score.unhappy += pcity->feel[CITIZEN_UNHAPPY][FEELING_FINAL];
     pplayer->score.angry += pcity->feel[CITIZEN_ANGRY][FEELING_FINAL];
-    specialist_type_iterate(sp) {
-      pplayer->score.specialists[sp] += pcity->specialists[sp];
-    } specialist_type_iterate_end;
     pplayer->score.population += city_population(pcity);
     pplayer->score.cities++;
     pplayer->score.pollution += pcity->pollution;
     pplayer->score.techout += pcity->prod[O_SCIENCE];
-    pplayer->score.bnp += pcity->surplus[O_TRADE];
+    /* These are calculated here if (game.server.city_output_style !=WYSIWYG) */
+    if (!game.server.city_output_style) {
+      specialist_type_iterate(sp) {
+        pplayer->score.specialists[sp] += pcity->specialists[sp];
+      } specialist_type_iterate_end;      
+      pplayer->score.bnp += pcity->surplus[O_TRADE];
+    }
+    
+    trade_routes_iterate(pcity, proute) {
+      pplayer->score.traderoutes += proute->value;
+    } trade_routes_iterate_end;
+    
     // This has to be calculated prior to update_city_activity or else gives wildly incorrect results
     //pplayer->score.mfg += pcity->surplus[O_SHIELD];
 

@@ -660,7 +660,15 @@ void update_city_activities(struct player *pplayer)
   n = city_list_size(pplayer->cities);
   gold = pplayer->economic.gold;
   pplayer->server.bulbs_last_turn = 0;
-  pplayer->score.mfg = 0;  //// have to calculate this before begin_turn due to new tile worker re-arrangement
+  /* Some score elements need to be computed BEFORE new tile-worker re-arrangement */
+  pplayer->score.mfg = 0;
+  /* For WYSIWYG output, score for trade and specialists is before tile re-arrange */
+  if (game.server.city_output_style) {
+    specialist_type_iterate(sp) {
+      pplayer->score.specialists[sp] = 0;
+    } specialist_type_iterate_end;
+    pplayer->score.bnp = 0;
+  }
 
   if (n > 0) {
     struct city *cities[n];
@@ -721,9 +729,15 @@ void update_city_activities(struct player *pplayer)
       /* update unit upkeep */
       city_units_upkeep(cities[r]);
       
-      // is this the right place?
-      //// accumulate the shields for score.mfg prior to updating city
-      pplayer->score.mfg += cities[r]->surplus[O_SHIELD]; 
+      /* Accumulate score elements which must be done prior to tile re-arrange */
+      pplayer->score.mfg += cities[r]->surplus[O_SHIELD];
+      /* These are calculated here IFF (game.server.city_output_style == WYSIWYG) */
+      if (game.server.city_output_style) {
+        specialist_type_iterate(sp) {
+          pplayer->score.specialists[sp] += cities[r]->specialists[sp];
+        } specialist_type_iterate_end;      
+        pplayer->score.bnp += cities[r]->surplus[O_TRADE];
+      }
 
       update_city_activity(cities[r]);
       cities[r] = cities[--i];

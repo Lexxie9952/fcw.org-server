@@ -113,6 +113,7 @@ struct player_score {
                          * by combat or otherwise. */
   int culture;
   int game;             /* Total score you get in player dialog. */
+  int traderoutes;      /* Total trade route income; used in demographics but not score */
 };
 
 struct player_ai {
