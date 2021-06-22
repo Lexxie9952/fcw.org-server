@@ -53,6 +53,15 @@ GENERAL
 [`war`]
 [`wheat`]
 
+SPECIALISTS
+-----------
+[`entertainer`]
+[`taxman`]
+[`scientist`]
+[`laborer`]
+[`merchant`]
+[`farmer`]
+
 BUILDINGS AND WONDERS
 ---------------------
 [`agoge`]
