@@ -261,7 +261,7 @@ Conquest_Tech_Pct
     former owner.
 
 Defend_Bonus
-    Increases defensive bonuses of units. Any unit requirements on this effect
+    Multiplies defensive bonuses of units. Any unit requirements on this effect
     will be applied to the _attacking_ unit. Attackers with "BadWallAttacker" flag
     will have their firepower set to 1.
 
@@ -435,11 +435,15 @@ Not_Tech_Source
 Nuke_Proof
     City is nuke proof.
 
+Output_Add_Bonus
+    City production is increased by adding raw amount. This happens prior 
+    to any Output_Bonus effects, which multiply on top of this.
+
 Output_Bonus
-    City production is increased by amount percent.
+    City production is multiplied by amount percent.
 
 Output_Bonus_2
-    City production is increased by amount percent after Output_Bonus, so is 
+    City production is multiplied by amount percent after Output_Bonus, so is 
     multiplicative with it.
 
 Output_Add_Tile
@@ -575,6 +579,17 @@ Tech_Upkeep_Free
     For tech upkeep style "Basic" this is total reduction, for tech upkeep
     style "Cities" this reduction is applied to every city.
 
+Terrain_Defend_Add_Bonus
+    Adds to the base of the terrain defense value. Unit requirements associate
+    with defending unit. Applied value is 1/100 in order to allow fractions.
+    For example, to give a +0.5 bonus like Civ2 has for rivers:
+        value = 50
+        reqs = "Extra", "River", "Local";         ...results in...     
+            Grassland 1.0   Grassland + River 1.5
+            Mountains 3.0   Mountains + River 3.5
+    NOTE: (For unit classes with "TerrainDefense" flag, this effect can be
+           used to add other defense effects.)
+
 Tile_Workable
     If value > 0, city can work target tile.
 
@@ -648,10 +663,11 @@ Unit_Vision_Radius_Sq
 
 Unit_Work_Frag_Bonus
     Adds a number of move fragments to the unit's work rate which accumulates
-    into its work target, per turn.   
+    into its work target, per turn. For example, value = 50 for a unit with
+    one movepoint, would do 3 points of work every two turns. 
 
 Unit_Work_Pct
-    Adds a percent to the unit's work work that accumulates into the work 
+    Adds a percent to the unit's work that accumulates into the work 
     target, per turn. For example: -100 (unit can't work here),
      -50 (works at half speed), 0 (no change), 100 (works at double speed.)
 
