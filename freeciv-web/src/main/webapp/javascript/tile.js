@@ -162,8 +162,8 @@ function improve_tile_info_dialog(message)
     var db = parseFloat(1) + parseFloat(ttype['defense_bonus'])/100;
     if (message.includes("River</b>")) {  // this exact string ensures no other text gives false positive
       has_river = " (<span style='color:#5d97ed;' class='black_shadow'><b>River</b></span>)";
-      db *= (1+extras[EXTRA_RIVER]['defense_bonus']/100);
       if (client_rules_flag[CRF_MP2_C]) db += 0.5;  // additive bonus as in for example real civ2, mp2c
+      else db *= (1+extras[EXTRA_RIVER]['defense_bonus']/100); 
       db = Math.round((db + Number.EPSILON) * 100) / 100;
     }
     added_text += "<span class='black_shadow' style='color:rgb("

@@ -251,13 +251,18 @@ function warcalc_get_defense_bonus(punit)
       power_fact = game_rules['power_fact'][punit['veteran']];
     }
   }
+
   if (unit_has_class_flag(punit, UCF_TERRAIN_DEFENSE)) {
     var ptile = tiles[punit['tile']];
     const terrain = terrains[ptile['terrain']];
-    power_fact *= (1+terrain['defense_bonus']/100);
-    if (tile_has_extra(ptile, EXTRA_RIVER))
-      power_fact *= (1+extras[EXTRA_RIVER]['defense_bonus']/100);
-      if (client_rules_flag[CRF_MP2_C]) power_fact += 50; // +0.5 river defense for rivers
+    var terrain_fact = (1+terrain['defense_bonus']/100);
+
+    if (tile_has_extra(ptile, EXTRA_RIVER)) {
+      if (client_rules_flag[CRF_MP2_C]) terrain_fact += 0.50; // +0.5 river defense for rivers
+      else terrain_fact *= (1+extras[EXTRA_RIVER]['defense_bonus']/100);
+    }
+
+    power_fact *= terrain_fact;
   }
   if (punit['activity']==ACTIVITY_FORTIFIED) {
     if (!tile_city(ptile)) { // Units in a city get city bonus not fortify bonus
