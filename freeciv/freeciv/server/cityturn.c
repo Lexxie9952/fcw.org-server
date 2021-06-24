@@ -1222,12 +1222,13 @@ static bool city_populate(struct city *pcity, struct player *nationality)
     if (game.server.hangry) {
       // but they're quiet about it in the gulag:
       int gulag = get_city_bonus(pcity, EFT_GULAG);
+      int gulag_force = pcity->martial_law + get_city_bonus(pcity, EFT_MAKE_CONTENT_MIL);
       /* Disorder from Famine conditions:
          1. No gulag effect = don't suppress disorder
-         2. martial_law < gulag effect. don't suppress disorder.
-         3. martial_law >= gulag effect. suppress disorder.
+         2. gulag_force < gulag effect. don't suppress disorder.
+         3. gulag_force >= gulag effect. suppress disorder.
          3. EFT_GULAG=100: always suppress disorder */
-      if ((!gulag || pcity->martial_law < gulag) && gulag != 100) {
+      if ((!gulag || gulag_force < gulag) && gulag != 100) {
         pcity->rapture = 0;
         pcity->was_happy = false;
         pcity->hangry++;
@@ -1235,7 +1236,7 @@ static bool city_populate(struct city *pcity, struct player *nationality)
           notify_player(city_owner(pcity), city_tile(pcity),
                         E_CITY_FAMINE, ftc_server,
                         _("Martial law force of %d not enough to suppress famine disorder in %s."),
-                         pcity->martial_law, city_link(pcity));          
+                         gulag_force, city_link(pcity));          
         }
         return true; // indicates city is hangry from starvation
       } else {
