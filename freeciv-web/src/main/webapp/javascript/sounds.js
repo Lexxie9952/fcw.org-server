@@ -98,6 +98,10 @@ function unit_move_sound_play(unit)
   // PARTIAL MOVE SOUNDS.  Some sounds are loud or long duration and shouldn't repeat for each step 
   if ( unit['movesleft'] < full_moves )  { 
     switch(ptype['name']) {
+      case "Armor":
+      case "Armor II":
+        move_sound = "pm_armor.ogg"
+        break;
       case "Medium Bomber":
       case "Heavy Bomber": 
       case "Strategic Bomber": 
