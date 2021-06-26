@@ -3702,7 +3702,7 @@ function update_city_screen()
        " <span id='city_improvements_hover_list'></span>"
      + " <span id='mass_production'></span>"    // mass-select functionality not available on mobile
      + " <button title='Change production in selected cities' class='button ui-button ui-corner-all ui-widget' style='padding:5px; margin:4px; font-size:70%; float:right;' onclick='mass_change_prod();'>Change &#x2611; to:</button>"
-     + " <button title='BUY in selected cities' class='button ui-button ui-corner-all ui-widget' style='padding:5px; margin:4px; font-size:70%; float:right;' onclick='buy_all_selected_cities();'>&#x2611; Buy selected</button>";
+     + " <button title='BUY in selected cities' class='button ui-button ui-corner-all ui-widget' style='padding:5px; margin:4px; font-size:70%; float:right;' onclick='request_buy_all_selected_cities();'>&#x2611; Buy selected</button>";
   } else $('#cities_title').css({"font-size":"100%"});
   $('#cities_title').html(title_text);
 
@@ -3932,9 +3932,68 @@ function cma_clipboard_macro(event, called_by_CMA)
   }
 }
 /**************************************************************************
+  Shows dialog to confirm a mass-purchase for every production item in
+  every selected city.
+**************************************************************************/
+function request_buy_all_selected_cities()
+{
+
+  var pplayer = client.conn.playing;
+
+  // compute total cost and item count
+  var total_cost = 0;
+  var item_count = 0;
+  var cost = 0;
+  for (var city_id in cities)  {
+    if ($("#cb"+city_id).is(":checked")) {
+      cost = cities[city_id]['buy_cost'];
+      total_cost += cost;
+      if (cost > 0) {item_count += 1;}
+    }
+  }
+
+  // reset dialog page.
+  remove_active_dialog("#dialog");
+  $("<div id='dialog'></div>").appendTo("div#game_page");
+  var buy_price_string = "Buying " + item_count + " items costs " + total_cost + " gold.";
+  var buy_question_string = "Buy " + item_count + " items for <b>" + total_cost + "</b> gold";
+
+  var treasury_text = "<br>Treasury contains " + pplayer['gold'] + " gold.";
+
+  if (total_cost == 0 || total_cost > pplayer['gold']) {
+    show_dialog_message("Purchase not possible, please change your selection accordingly.",
+      buy_price_string + treasury_text);
+    return;
+  }
+
+  var dhtml = buy_question_string + treasury_text;
+
+
+  $("#dialog").html(dhtml);
+
+  $("#dialog").attr("title", "Buy It!");
+  $("#dialog").dialog({
+			bgiframe: true,
+			modal: true,
+			width: is_small_screen() ? "95%" : "50%",
+			buttons: {
+				"Yes": function() {
+            send_buy_all_selected_cities();
+            remove_active_dialog("#dialog");
+				},
+				"No (𝗪)": function() {
+            remove_active_dialog("#dialog");
+				}
+			}
+		});
+
+  $("#dialog").dialog('open');
+  dialog_register("#dialog");
+}
+/**************************************************************************
   Buys (or attempts to buy) every production item in every selected city.
 **************************************************************************/
-function buy_all_selected_cities()
+function send_buy_all_selected_cities()
 {
   for (var city_id in cities)  {
     if ($("#cb"+city_id).is(":checked")) {
