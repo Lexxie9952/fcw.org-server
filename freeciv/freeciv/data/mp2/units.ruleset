@@ -29,6 +29,7 @@ format_version=20
 ; ************** MADE COMPATIBLE BETWEEN MP+ AND MP2 RULESETS AND POSSIBLY CLASSIC AND CIV2CIV3 SO THAT
 ; ************** THERE IS UNIFORMITY IN FCW CLIENT which checks these flags based on index #. Not keeping
 ; ************** uniformity results in loss of features as ability to check these flags would be lost.
+; *** if you remove one, make it "unused" and add to it later, so the index of the others does not mess up
 flags =
   { "name", "helptxt"
     _("Airbase")
@@ -59,7 +60,7 @@ flags =
     _("Expellable"), _("Can be peacefully expelled from foreign tiles.")
     _("AirProtector"), _("Is Unreachable AND can protect its tile from units unable to attack this unit.")
     _("CantReachAir"), _("Unable to attack air units.")
-    _("FortBuster"), _("Defending Forts get no bonus. +33% attack bonus vs. the 2x defense of a Fortress.")
+    _("FortBuster"), _("Defending Forts get no bonus. +33% attack bonus vs. the 2× defense of a Fortress.")
     _("FortressBuster"), _("Defending Fortresses get no bonus.")
     _("AntiAir"), _("Anti-Air bonus of this unit is less effective against Stealth, which has a 25% bonus against this unit.")
 ;;;   _("NeverProtects"), _("Does not protect other units on its tile.")   ; UNCOMMENT THIS IF NOT USING SCL'S PATCH FOR THIS FLAG
@@ -67,9 +68,14 @@ flags =
     _("MultiSlot"), _("Cities with proper requirements can produce more than one of these per turn.") ;uncomment if you don't have slot_control patch
     _("CanHide"), _("In appropriate terrain, this unit can make a Hideout, which will conceal all land units on the tile.")
     _("WillNever")
-    }
+;;; The following flag MUST be #34 position to work with hack in movement.c which allows transported AAA to defend on non-native:
+;;; this comment can be removed when we have some smarter way for unit_can_defend_here(..) to get ruleset control.
+    _("TransportDefender"), _("Can defend while transported on non-native tiles.")
+    _("NonMilAttack"), _("Has military capacity but for peaceful purposes, can enter territories with whom you are at Peace")
+    _("Cant_Pillage"), _("Unable to pillage tiles.")
+  }
 
-; Names for custom unit class flags. There can be up to 8 of these.
+; Names for custom unit class flags. There can be up to 12 of these.
 ; name          = rule name; In some circumstances user may see this
 ;                 as part of some sentences, so try to make it descriptive
 ;                 and sensible.
@@ -77,9 +83,11 @@ flags =
 ;                 with this flag (optional)
 class_flags =
   { "name", "helptxt"
+    _("AttFromNonNative"), _("Can launch attack from non-native tiles.")
+    _("Missile")
+    _("CanPillage")
     _("Airliftable"), _("Can be airlifted if it has remaining moves.")
     _("BorderPolice"), _("Military units from this class can peacefully expel certain foreign units.")
-    _("AttFromNonNative"), _("Can launch attack from non-native tiles.")
     _("CargoRestrained"), _("Can't attack as Cargo. Must first unload.")
   }
 
@@ -88,7 +96,7 @@ class_flags =
 veteran_names = _("green"), _("veteran"), _("hardened"), _("elite"), _("crack"), _("master"), _("champion")
 
 ; The percentage chance of increasing level through combat
-veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 
 ; The percentage chance of a settler/engineer increasing level through
 ; performing useful work (per turn)
@@ -400,7 +408,7 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ; veteran_names = Special veteran level for this unit. See the definitions in
 ;                 game.ruleset. All of the veteran_* entries have to have the
 ;                 same length!
-; veteran_raise_chance =
+; veteran_base_raise_chance =
 ; veteran_work_raise_chance =
 ; veteran_power_fact =
 ; veteran_move_bonus =
@@ -606,7 +614,7 @@ uk_gold       = 0
 flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "AddToCity", "Cities", "Cant_Fortify", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
@@ -653,7 +661,7 @@ uk_gold       = 2
 flags         = "Settlers", "Infra", "NonMil", "HasNoZOC", "Cant_Fortify", "Unique", "Well-Digger", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
@@ -698,7 +706,7 @@ uk_gold       = 0
 flags         = "Settlers", "Infra", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Airbase", "CanFortress", "CanRoad", "Proletarian"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 1
@@ -742,7 +750,7 @@ uk_gold       = 0
 flags         = "Fanatic", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
@@ -788,7 +796,7 @@ veteran_names =
   _("?vet_rank:army worker"),
   _("?vet_rank:army engineer"),
   _("?vet_rank:chief engineer")
-veteran_raise_chance = 0, 0, 0, 0
+veteran_base_raise_chance = 0, 0, 0, 0
 veteran_work_raise_chance = 0, 0, 0, 0
 veteran_power_fact = 100, 100, 100, 100
 veteran_move_bonus = 0, 1, 1, 1
@@ -832,7 +840,7 @@ uk_gold       = 0
 flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "Transform", "Airbase", "Cant_Fortify", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
@@ -1244,7 +1252,7 @@ veteran_names =
   _("?vet_rank:Commando"),
   _("?vet_rank:Green Beret"),
   _("?vet_rank:Navy SEAL")
-veteran_raise_chance = 60, 50, 40, 30, 20, 15, 0
+veteran_base_raise_chance = 60, 50, 40, 30, 20, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -1941,7 +1949,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -1995,7 +2003,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -2048,7 +2056,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -2100,7 +2108,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -2157,7 +2165,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -2175,8 +2183,8 @@ name          = _("AWACS")
 class         = "Air"
 tech_req      = "Advanced Flight"
 obsolete_by   = "None"
-graphic       = "u.awacs"
-graphic_alt   = "u.bomber"  ; backwards compatibility
+graphic       = "u.awacs_o"
+graphic_alt   = "u.awacs"
 sound_move    = "m_awacs"
 sound_move_alt = "m_generic"
 sound_fight   = "f_awacs"
@@ -2242,7 +2250,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -2295,7 +2303,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -2343,7 +2351,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -2401,7 +2409,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -2458,7 +2466,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -2692,7 +2700,6 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "Provoking", "CantReachAir", "Only_Native_Attack"
 roles         = "Hunter"
 helptext      = _("\
@@ -3249,7 +3256,6 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Helicopter"
 embarks       = "Submarine"
 disembarks    = "Submarine"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "HasNoZOC", "Unbribable", "CantReachAir", "Missile", "NeverBlocked"
@@ -3295,7 +3301,7 @@ flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC"
                 "NeverBlocked", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
@@ -3340,7 +3346,7 @@ targets       = "Balloon", "Helicopter", "Air", "AirProtect", "AirPillage", "Mis
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC", "Unbribable", "NeverBlocked"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
@@ -3388,7 +3394,7 @@ veteran_names =
   _("?diplomatic_rank:statesman"),
   _("?diplomatic_rank:plenipotentiary")
 
-veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 110, 115, 120, 125, 130, 135
 veteran_move_bonus = 0, 0, 0, 0, 0, 0, 0
@@ -3438,7 +3444,7 @@ veteran_names =
   _("?spy_level:neutralizer"),
   _("?spy_level:spymaster")
   
-veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 110, 115, 120, 125, 130, 135
 veteran_move_bonus = 0, 0, 0, 0, 0, 0, 0
@@ -3589,7 +3595,7 @@ flags         = "IgZOC", "NonMil", "HasNoZOC", "NoBuild", "NoHome", "SuperSpy",
                 "Provoking"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
@@ -3633,7 +3639,7 @@ flags         = "IgZOC", "NonMil", "HasNoZOC", "NoBuild", "NoHome", "SuperSpy",
                 "Provoking"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
@@ -3677,7 +3683,7 @@ flags         = "IgZOC", "NonMil", "HasNoZOC", "Unbribable",
                 "EvacuateFirst", "SuperSpy", "NoHome", "NoBuild"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0

@@ -106,7 +106,6 @@
 #include "report.h"
 #include "ruleset.h"
 #include "sanitycheck.h"
-#include "savegame.h"
 #include "score.h"
 #include "sernet.h"
 #include "settings.h"
@@ -124,6 +123,9 @@
 #include "advbuilding.h"
 #include "advspace.h"
 #include "infracache.h"
+
+/* server/savegame */
+#include "savemain.h"
 
 /* server/scripting */
 #include "script_server.h"
@@ -303,10 +305,13 @@ void srv_init(void)
   Handle client info packet
 **************************************************************************/
 void handle_client_info(struct connection *pc, enum gui_type gui,
-                        const char *distribution)
+                        int emerg_version, const char *distribution)
 {
   pc->client_gui = gui;
   log_debug("%s's client has %s gui.", pc->username, gui_type_name(gui));
+  if (emerg_version > 0) {
+    log_debug("It's emergency release .%d", emerg_version);
+  }
   if (strcmp(distribution, "")) {
     log_debug("It comes from %s distribution.", distribution);
   }
@@ -650,7 +655,7 @@ bool check_for_game_over(void)
       }
 
       notify_player(NULL, NULL, E_SPACESHIP, ftc_server,
-                    _("Notice: the %s spaceship will likely arrive at "
+                    _("🚀 Notice: the %s spaceship will likely arrive at "
                       "Alpha Centauri next turn."),
                     nation_adjective_for_player(pplayer));
     }
@@ -759,12 +764,28 @@ static void do_border_vision_effect(void)
 /**********************************************************************//**
   Handle environmental upsets, meaning currently pollution or fallout.
 **************************************************************************/
-static void update_environmental_upset(enum environment_upset_type type,
-                                       int *current, int *accum, int *level,
-                                       int percent,
+static void update_environmental_upset(enum environment_upset_type type,   // EUT_NUCLEAR_WINTER, etc.
+                                       int *current,          // &game.info.cooling        #fallout_tiles * nuclear_winter_percent
+                                                              // only used for weighing autosettler importance of cleaning fallout/pollution !
+                                       int *accum,            // &game.info.nuclearwinter  accumulates += #fallout_tiles each turn 
+                                       int *level,            // &game.info.coolinglevel   accum threshold to trigger climate change, also the per turn
+                                                              // "healing"/reduction of accum (game.info.nuclearwinter).
+                                       int percent,           // game.server.nuclear_winter_percent: inverse adjuster for the threshold/tolerance var above.
                                        void (*upset_action_fn)(int))
+
+/* NOTES:  1. accum accumulates AND reduces. problem tiles add, while coolinglevel reduces by x each turn, as a kind of tolerance threshold.
+           2. coolinglevel/warminglevel (*level): the threshold where triggering becomes possible, is the same as the tolerance (amount reduced from 
+              accumulation each turn), thus, "exceeding tolerance" leads past threshold because you are adding more than subtracting each turn.
+           3. game.info.cooling (*current) is set here and nuclear_winter_percent modifies it, but is never used except to weigh autosettler decisions,
+               which the zoltan patch will break if values other than 100 are used.
+           4. game.info.coolinglevel (*level) is set at game start. In common/game.c::game_map_init,
+                game.info.coolinglevel = (map_num_tiles() + 499) / 500; In this function below, it seems as if it grows every turn? did not find
+                somewhere else that changes it.
+
+   TO DO: 
+           1. Number of affected tiles proportionate to map size, not proportionate to (perimeter / 20) ?- see affected_tiles below. */
 {
-  int count;
+  int count;     // number of problem tiles which affect climate change
 
   count = 0;
   extra_type_iterate(cause) {
@@ -777,16 +798,75 @@ static void update_environmental_upset(enum environment_upset_type type,
     }
   } extra_type_iterate_end;
 
-  *current = (count * percent) / 100;
+  // THIS SECTION ASSUMES these settings were upgraded from bool to int in complementary commit/patch
+  //-------------------------------------------------------------------------------------------------
+
+  /* The higher the percent, the lower the threshold to trigger, and the lower the 'healing' reduction
+     effect on accumulation. The lower the percent, it's vice versa. */
+  int new_level = ((*level) * 100)/percent;  // min percent is 1 (server settings)
+  if (new_level<1) new_level = 1;  // prevent divide by zero, for huge values like percent==10000.                
+  
+  if (type == EUT_NUCLEAR_WINTER) {     // multiply in strength modifiers for climate change effects: 
+    count = (count * game.info.nuclear_winter) / 100;  // this would affect STRENGTH
+  } else { // global warming
+    count = (count * game.info.global_warming) / 100;  // this would affect STRENGTH
+  }
+  //--------------------------------------------------------------------------------------------------
   *accum += count;
-  if (*accum < *level) {
+
+
+  bool IPCC_report = ( (count*100/new_level)>20 || (*accum*100)/new_level > 25); // IPCC starts getting alarmed
+
+  *current = (count * percent) / 100;  // this does nothing
+
+
+  if (IPCC_report) {
+    notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
+                  _("—————————————————————————————<br>"
+                    "[`earth`] Scientists release IPCC report on <b>%s</b>:<br>"
+                    "—————————————————————————————<br>"),
+                    (type == EUT_GLOBAL_WARMING ? "☀️Global Warming" : "[`snowflake`]Nuclear Winter"));
+    notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
+                  _(""
+                    "Cumulative Impact  = %d units.<br>"
+                    "Climate Tolerance  = %d units.<br>"
+                    "—————————————————————————————<br>"
+                    "%s<br>"
+                    "—————————————————————————————<br>"),
+                    *accum,
+                    new_level,
+                    (*accum >= new_level ? "⚠️ <font color='#f44'>International action recommended to halt habitat destruction!</font>"
+                                         : "💢 <font color='#ddd'>Scientists recommend keeping impact below Climate Tolerance.</font>")
+    );
+  }
+
+  if (*accum < new_level) {
     *accum = 0;
-  } else {
-    *accum -= *level;
+  } 
+  else {
+    *accum -= new_level; 
+    // Basically, (polluted_tile_pct_of_map * 20) = chance of climate change,
+    // except in the the case it's within the Climate Tolerance:
     if (fc_rand((map_num_tiles() + 19) / 20) < *accum) {
-      upset_action_fn((wld.map.xsize / 10) + (wld.map.ysize / 10) + ((*accum) * 5));
+
+      // TO DO: server setting to control this:
+      int affected_tiles = (wld.map.xsize / 10) + (wld.map.ysize / 10) + (*accum) * 5;
+      int planet_pct = (100 * affected_tiles) / map_num_tiles() + 1;
+      if (planet_pct>100) planet_pct = 100;
+
+      upset_action_fn(affected_tiles);
+
       *accum = 0;
-      *level += (map_num_tiles() + 999) / 1000;
+
+      // Seems to be artificial increase each turn, does this make any sense?
+      // ... and should it also be adjusted by one of the modifiers ?
+      *level += (map_num_tiles() + 999) / 1000;  
+      if (IPCC_report) {
+      notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
+                  _("IPCC estimate: %d%% of the planet was affected.<br>"
+                   "————————————————————————————<br>"),
+                  planet_pct);
+      }
     }
   }
 
@@ -815,8 +895,8 @@ static void notify_illegal_armistice_units(struct player *phost,
 
     astr_set(&unitstr,
              /* TRANS: "... 2 military units in Norwegian territory." */
-             PL_("Warning: you still have %d military unit in %s territory.",
-                 "Warning: you still have %d military units in %s territory.",
+             PL_("💢 Warning: you still have %d military unit in %s territory.",
+                 "💢 Warning: you still have %d military units in %s territory.",
                  nunits),
              nunits, nation_adjective_for_player(phost));
     /* If there's one lousy unit left, we may as well include a link for it */
@@ -844,7 +924,7 @@ static void remove_illegal_armistice_units(struct player *plr1,
     if (tile_owner(unit_tile(punit)) == plr2
         && is_military_unit(punit)) {
       notify_player(plr1, unit_tile(punit), E_DIPLOMACY, ftc_server,
-                    _("Your %s was disbanded in accordance with "
+                    _("⚠️ Your %s was disbanded in accordance with "
                       "your peace treaty with the %s."),
                     unit_tile_link(punit),
                     nation_plural_for_player(plr2));
@@ -855,7 +935,7 @@ static void remove_illegal_armistice_units(struct player *plr1,
     if (tile_owner(unit_tile(punit)) == plr1
         && is_military_unit(punit)) {
       notify_player(plr2, unit_tile(punit), E_DIPLOMACY, ftc_server,
-                    _("Your %s was disbanded in accordance with "
+                    _("⚠️ Your %s was disbanded in accordance with "
                       "your peace treaty with the %s."),
                     unit_tile_link(punit),
                     nation_plural_for_player(plr1));
@@ -902,10 +982,10 @@ static void update_diplomatics(void)
 
         if (state->type == DS_CEASEFIRE) {
           state->turns_left--;
-          switch(state->turns_left) {
+          switch (state->turns_left) {
           case 1:
             notify_player(plr1, NULL, E_DIPLOMACY, ftc_server,
-                          _("Concerned citizens point out that the cease-fire "
+                          _("💢 Concerned citizens point out that the cease-fire "
                             "with %s will run out soon."), player_name(plr2));
             /* Message to plr2 will be done when plr1 and plr2 will be swapped.
              * Else, we will get a message duplication.  Note the case is not
@@ -914,12 +994,12 @@ static void update_diplomatics(void)
             break;
           case 0:
             notify_player(plr1, NULL, E_DIPLOMACY, ftc_server,
-                          _("The cease-fire with %s has run out. "
+                          _("⚔ The cease-fire with %s has run out. "
                             "You are now at war with the %s."),
                           player_name(plr2),
                           nation_plural_for_player(plr2));
             notify_player(plr2, NULL, E_DIPLOMACY, ftc_server,
-                          _("The cease-fire with %s has run out. "
+                          _("⚔ The cease-fire with %s has run out. "
                             "You are now at war with the %s."),
                           player_name(plr1),
                           nation_plural_for_player(plr1));
@@ -959,7 +1039,7 @@ static void update_diplomatics(void)
                   cancel2 = TRUE;
 
                   notify_player(plr3, NULL, E_TREATY_BROKEN, ftc_server,
-                                _("The cease-fire between %s and %s has run out. "
+                                _("⚔ The cease-fire between %s and %s has run out. "
                                   "They are at war. You cancel your alliance "
                                   "with %s."),
                                 plr1name, plr2name, plr2name);
@@ -969,7 +1049,7 @@ static void update_diplomatics(void)
                   cancel2 = FALSE;
 
                   notify_player(plr3, NULL, E_TREATY_BROKEN, ftc_server,
-                                _("The cease-fire between %s and %s has run out. "
+                                _("⚔ The cease-fire between %s and %s has run out. "
                                   "They are at war. You cancel your alliance "
                                   "with %s."),
                                 plr1name, plr2name, plr1name);
@@ -979,7 +1059,7 @@ static void update_diplomatics(void)
                   cancel2 = TRUE;
 
                   notify_player(plr3, NULL, E_TREATY_BROKEN, ftc_server,
-                                _("The cease-fire between %s and %s has run out. "
+                                _("⚔ The cease-fire between %s and %s has run out. "
                                   "They are at war. You cancel your alliance "
                                   "with both."),
                                 player_name(plr1),
@@ -1112,7 +1192,8 @@ static void begin_turn(bool is_new_turn)
 
     /* We build scores at the beginning of every turn.  We have to
      * build them at the beginning so that the AI can use the data,
-     * and we are sure to have it when we need it. */
+     * and we are sure to have it when we need it. Unfortunately this
+     * means score.mfg has to be calculated outside calc_civ_score function */
     players_iterate(pplayer) {
       calc_civ_score(pplayer);
     } players_iterate_end;
@@ -1214,28 +1295,46 @@ static void begin_phase(bool is_new_phase)
   } phase_players_iterate_end;
 
   if (is_new_phase) {
-    /* Try to avoid hiding events under a diplomacy dialog */
-    phase_players_iterate(pplayer) {
-      if (is_ai(pplayer)) {
-        CALL_PLR_AI_FUNC(diplomacy_actions, pplayer, pplayer);
-      }
-    } phase_players_iterate_end;
-
-    log_debug("Aistartturn");
-    ai_start_phase();
-  } else {
-    phase_players_iterate(pplayer) {
-      if (is_ai(pplayer)) {
-        CALL_PLR_AI_FUNC(restart_phase, pplayer, pplayer);
-      }
-    } phase_players_iterate_end;
-  }
-
-  if (is_new_phase) {
     /* Unit "end of turn" activities - of course these actually go at
      * the start of the turn! */
     unit_wait_list_clear(server.unit_waits);
 
+    whole_map_iterate(&(wld.map), ptile) {
+      if (ptile->placing != NULL) {
+        struct player *owner = NULL;
+
+        if (game.info.borders != BORDERS_DISABLED) {
+          owner = tile_owner(ptile);
+        } else {
+          struct city *pcity = tile_worked(ptile);
+
+          if (pcity != NULL) {
+            owner = city_owner(pcity);
+          }
+        }
+
+        if (owner == NULL) {
+          /* Abandoned extra placing, clear it. */
+          ptile->placing = NULL;
+        } else {
+          if (is_player_phase(owner, game.info.phase)) {
+            fc_assert(ptile->infra_turns > 0);
+
+            ptile->infra_turns--;
+            if (ptile->infra_turns <= 0) {
+              create_extra(ptile, ptile->placing, owner);
+              ptile->placing = NULL;
+
+              /* Since extra has been added, tile is certainly
+               * sent by update_tile_knowledge() including the
+               * placing info, though it would not sent it if placing
+               * were the only thing changed. */
+              update_tile_knowledge(ptile);
+            }
+          }
+        }
+      }
+    } whole_map_iterate_end;    
     phase_players_iterate(pplayer) {
       update_unit_activities(pplayer);
       flush_packets();
@@ -1283,6 +1382,24 @@ static void begin_phase(bool is_new_phase)
     update_revolution(pplayer);
   } alive_phase_players_iterate_end;
 
+  if (is_new_phase) {
+    /* Try to avoid hiding events under a diplomacy dialog */
+    phase_players_iterate(pplayer) {
+      if (is_ai(pplayer)) {
+        CALL_PLR_AI_FUNC(diplomacy_actions, pplayer, pplayer);
+      }
+    } phase_players_iterate_end;
+
+    log_debug("Aistartturn");
+    ai_start_phase();
+  } else {
+    phase_players_iterate(pplayer) {
+      if (is_ai(pplayer)) {
+        CALL_PLR_AI_FUNC(restart_phase, pplayer, pplayer);
+      }
+    } phase_players_iterate_end;
+  }
+
   sanity_check();
 
   game.tinfo.last_turn_change_time = (float)game.server.turn_change_time;
@@ -1328,10 +1445,23 @@ static void end_phase(void)
       int idx = multiplier_index(pmul);
 
       if (!multiplier_can_be_changed(pmul, pplayer)) {
-        pplayer->multipliers[idx] = pmul->def;
+        if (pplayer->multipliers[idx] != pmul->def) {
+          notify_player(pplayer, NULL, E_MULTIPLIER, ftc_server,
+                        _("%s restored to the default value %d"),
+                        multiplier_name_translation(pmul),
+                        pmul->def);
+          pplayer->multipliers[idx] = pmul->def;
+        }
       } else {
-        pplayer->multipliers[idx] =
-          pplayer->multipliers_target[idx];
+        if (pplayer->multipliers[idx] != pplayer->multipliers_target[idx]) {
+          notify_player(pplayer, NULL, E_MULTIPLIER, ftc_server,
+                        _("%s now at value %d"),
+                        multiplier_name_translation(pmul),
+                        pplayer->multipliers_target[idx]);
+
+          pplayer->multipliers[idx] =
+            pplayer->multipliers_target[idx];
+        }
       }
     } multipliers_iterate_end;
   } phase_players_iterate_end;
@@ -1384,12 +1514,24 @@ static void end_phase(void)
      * during this entire turn, autoplace them. */
     if (adv_spaceship_autoplace(pplayer, &pplayer->spaceship)) {
       notify_player(pplayer, NULL, E_SPACESHIP, ftc_server,
-                    _("Automatically placed spaceship parts that were still not placed."));
+                    _("🚀 Automatically placed spaceship parts that were still not placed."));
     }
 
+    // Obsolete Pax Dei when it reaches the end of its counter. Has to happen here so that
+    // effects don't carry over into city effects during next turn production. Also,
+    // nicely integrates the handling of counter and obsoleting in one place!
+    if (game.server.pax_dei_set) {
+      int pax_dei_owner_id = game.info.great_wonder_owners[improvement_index(improvement_by_rule_name("Pax Dei"))];
+      if (pplayer == player_by_number(pax_dei_owner_id)) {
+        game.server.pax_dei_counter--;
+        if (game.server.pax_dei_counter==0) {
+          remove_obsolete_buildings(pplayer);
+        }
+      }
+    }
     update_city_activities(pplayer);
     city_thaw_workers_queue();
-    pplayer->culture += nation_history_gain(pplayer);
+    pplayer->history += nation_history_gain(pplayer);
     research_get(pplayer)->researching_saved = A_UNKNOWN;
     /* reduce the number of bulbs by the amount needed for tech upkeep and
      * check for finished research */
@@ -1595,8 +1737,8 @@ static void end_turn(void)
            *       like in case of barbarian uprising */
           notify_player(tile_owner(ptile), ptile,
                         E_SPONTANEOUS_EXTRA, ftc_server,
-                        /* TRANS: Small Fish appears to (32, 72). */
-                        _("%s appears to %s."),
+                        /* TRANS: Small Fish appears at (32, 72). */
+                        _("%s appears at %s."),
                         extra_name_translation(pextra),
                         tile_link(ptile));
         }
@@ -1778,7 +1920,6 @@ void server_quit(void)
   generator_free();
   close_connections_and_socket();
   rulesets_deinit();
-  ruleset_choices_free();
   CALL_FUNC_EACH_AI(module_close);
   timing_log_free();
   registry_module_close();
@@ -1807,7 +1948,7 @@ void handle_report_req(struct connection *pconn, enum report_type type)
     return;
   }
 
-  switch(type) {
+  switch (type) {
   case REPORT_WONDERS_OF_THE_WORLD:
     report_wonders_of_the_world(dest);
     return;
@@ -2985,7 +3126,7 @@ static void srv_prepare(void)
       || !load_command(NULL, srvarg.load_filename, FALSE, TRUE)) {
     /* Rulesets are loaded on game initialization, but may be changed later
      * if /load or /rulesetdir is done. */
-    load_rulesets(NULL, FALSE, NULL, TRUE, FALSE);
+    load_rulesets(NULL, NULL, FALSE, NULL, TRUE, FALSE, TRUE);
   }
 
   maybe_automatic_meta_message(default_meta_message_string());
@@ -3018,7 +3159,7 @@ static void srv_scores(void)
   report_final_scores(NULL);
   show_map_to_all();
   notify_player(NULL, NULL, E_GAME_END, ftc_server,
-                _("The game is over..."));
+                _("🏆 The game is over..."));
   send_server_info_to_metaserver(META_INFO);
 
   if (game.server.save_nturns > 0
@@ -3249,6 +3390,7 @@ static void srv_ready(void)
       player_map_init(pplayer);
       pplayer->economic = player_limit_to_max_rates(pplayer);
       pplayer->economic.gold = game.info.gold;
+      pplayer->economic.infra_points = game.info.infrapoints;
     } players_iterate_end;
 
     /* Give initial technologies, as specified in the ruleset and the
@@ -3481,7 +3623,7 @@ void srv_main(void)
     fc_rand_uninit();
     server_game_init(FALSE);
     mapimg_reset();
-    load_rulesets(NULL, FALSE, NULL, TRUE, FALSE);
+    load_rulesets(NULL, NULL, FALSE, NULL, TRUE, FALSE, TRUE);
     game.info.is_new_game = TRUE;
   } while (TRUE);
 
@@ -3713,6 +3855,7 @@ bool is_longturn(void)
 /**********************************************************************//**
  Check if the connection is on the supercow list (admins and gamemasters
  who get cmdlevel hack, can observe and take over players)
+ FIXME! This method needs to be reviewed to prevent segmentation faults if the supercows file contains invalid text.
 **************************************************************************/
 bool is_supercow(struct connection * caller)
 {

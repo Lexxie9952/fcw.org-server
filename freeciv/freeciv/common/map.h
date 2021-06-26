@@ -621,8 +621,8 @@ moves. Includes MAP_MAX_LINEAR_SIZE because a map can be non wrapping. */
 #define MAP_MAX_SEED             (MAX_UINT32 >> 1)
 
 #define MAP_DEFAULT_LANDMASS     30
-#define MAP_MIN_LANDMASS         15
-#define MAP_MAX_LANDMASS         85
+#define MAP_MIN_LANDMASS         10
+#define MAP_MAX_LANDMASS         99
 
 #define MAP_DEFAULT_RICHES       250
 #define MAP_MIN_RICHES           0
@@ -655,6 +655,10 @@ moves. Includes MAP_MAX_LINEAR_SIZE because a map can be non wrapping. */
 #define MAP_DEFAULT_SINGLE_POLE    FALSE
 #define MAP_MIN_SINGLE_POLE        FALSE
 #define MAP_MAX_SINGLE_POLE        TRUE
+
+#define MAP_DEFAULT_POLAR_STRIP    TRUE
+#define MAP_MIN_POLAR_STRIP        FALSE 
+#define MAP_MAX_POLAR_STRIP        TRUE
 
 #define MAP_DEFAULT_ALLTEMPERATE   FALSE
 #define MAP_MIN_ALLTEMPERATE       FALSE

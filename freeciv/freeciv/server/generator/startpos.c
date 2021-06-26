@@ -200,7 +200,8 @@ static bool is_valid_start_pos(const struct tile *ptile, const void *dataptr)
   }
 
   /* Don't start on a hut. */
-  if (tile_has_cause_extra(ptile, EC_HUT)) {
+  /* FIXME: for HUT_NOTHING might be valid */
+  if (hut_on_tile(ptile)) {
     return FALSE;
   }
 

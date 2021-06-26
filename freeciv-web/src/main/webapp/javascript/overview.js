@@ -40,6 +40,7 @@ var COLOR_OVERVIEW_MY_UNIT = 4; /* yellow */
 var COLOR_OVERVIEW_ALLIED_UNIT = 5;
 var COLOR_OVERVIEW_ENEMY_UNIT = 6; /* red */
 var COLOR_OVERVIEW_VIEWRECT = 7; /* white */
+var COLOR_OVERVIEW_GENERIC = 8;  /* dull terrain, to show diplrelations better */
 
 var overview_hash = -1;
 var overview_current_state = null;
@@ -89,7 +90,7 @@ function init_overview()
                       if (new_width > max_overview_width) new_width = max_overview_width;
                       var new_height = OVERVIEW_TILE_SIZE * map['ysize'];
                       if (new_height > max_overview_height) new_height = max_overview_height;
-                      $(".overview_dialog").css({"height":(new_height+20),"width":(new_width+5)});
+                      $(".overview_dialog").css({"height":(new_height),"width":(new_width)});
 
                       $('#overview_map').width(new_width);
                       $('#overview_map').height(new_height);
@@ -103,6 +104,7 @@ function init_overview()
   if (overview_current_state == "minimized") $("#game_overview_panel").dialogExtend("minimize");
 
   $("#game_overview_panel").parent().css("overflow", "hidden");
+
 
   palette = generate_palette();
 
@@ -119,7 +121,15 @@ function init_overview()
   $('#overview_map').on('dragstart', function(event) { event.preventDefault(); });
   // globe icon symbol
   $("#game_overview_panel").parent().children().not("#game_overview_panel").children().get(0).innerHTML 
-    = "<div style='font-size:97%; vertical-align:top;'><i class='fa fa-globe' aria-hidden='true'></i></div>";}
+    = "<div style='font-size:97%; vertical-align:top; font-family:Arial; margin-bottom: 1px;'><i class='fa fa-globe' aria-hidden='true'></i></div>";
+  // adjust minimize/maximize icons
+  $("#game_overview_panel").siblings().children().next().css("margin-top", "-7px");
+  
+  // This affects the titlebar and map itself. Map is already square. Titlebar will lose rounding
+  // on lower corners but not top corners which are applied to its parent.  This removes annoying
+  // illusion that stone panel under the overviewmap is overwriting or invading the titlebar.
+  $(".overview_dialog").children().css("border-radius", "0px");
+}
 
 /****************************************************************************
   Redraw the overview map.
@@ -139,6 +149,18 @@ function redraw_overview()
     overview_hash = hash;
     render_viewrect();
   }
+}
+
+/****************************************************************************
+  Forces a redraw the overview map.
+****************************************************************************/
+function force_redraw_overview() 
+{
+  var hash = generate_overview_hash(map['xsize'], map['ysize'])
+  bmp_lib.render('overview_img', generate_overview_grid(map['xsize'], map['ysize']),
+                  palette);
+  overview_hash = hash;
+  render_viewrect();
 }
 
 
@@ -181,19 +203,12 @@ function generate_overview_hash(cols, rows) {
     }
   }
 
-  if (renderer == RENDERER_2DCANVAS) {
-    var r = base_canvas_to_map_pos(0, 0);
-    if (r != null) {
-      hash += r['map_x'];
-      hash += r['map_y'];
-    }
-  } else {
-    var ptile = webgl_canvas_pos_to_tile($(window).width() / 6, $(window).height() / 6);
-    if (ptile != null) {
-      hash += ptile['x'];
-      hash += ptile['y'];
-    }
+  var r = base_canvas_to_map_pos(0, 0);
+  if (r != null) {
+    hash += r['map_x'];
+    hash += r['map_y'];
   }
+
   return hash;
 }
 
@@ -206,8 +221,6 @@ function render_viewrect()
 
   var path = [];
 
-  if (renderer == RENDERER_2DCANVAS && mapview['gui_x0'] != 0 && mapview['gui_y0'] != 0) {
-
     var point = base_canvas_to_map_pos(0, 0);
     path.push([point.map_x, point.map_y]);
     point = base_canvas_to_map_pos(mapview['width'], 0);
@@ -216,26 +229,6 @@ function render_viewrect()
     path.push([point.map_x, point.map_y]);
     point = base_canvas_to_map_pos(0, mapview['height']);
     path.push([point.map_x, point.map_y]);
-
-  } else {
-
-    var w = $(window).width();
-    var h = $(window).height();
-
-    var ptile = webgl_canvas_pos_to_tile(w / 6, h / 6);
-    if (ptile == null) return;
-    path.push([ptile.x, ptile.y]);
-    var ptile = webgl_canvas_pos_to_tile(5 * w / 6, h / 6);
-    if (ptile == null) return;
-    path.push([ptile.x, ptile.y]);
-    var ptile = webgl_canvas_pos_to_tile(5 * w / 6, h - height_offset);
-    if (ptile == null) return;
-    path.push([ptile.x, ptile.y]);
-    var ptile = webgl_canvas_pos_to_tile(w / 6, h - height_offset);
-    if (ptile == null) return;
-    path.push([ptile.x, ptile.y]);
-
-  }
 
   var viewrect_canvas = document.getElementById('overview_viewrect');
   if (viewrect_canvas == null) return;
@@ -262,23 +255,6 @@ function render_viewrect()
     viewrect_ctx.translate(-2 * map.xsize, 0);
     add_closed_path(viewrect_ctx, path);
     viewrect_ctx.restore();
-  }
-
-  if (topo_has_flag(TF_WRAPY)) {
-    viewrect_ctx.translate(0, map.ysize);
-    add_closed_path(viewrect_ctx, path);
-    viewrect_ctx.translate(0, -2 * map.ysize);
-    add_closed_path(viewrect_ctx, path);
-    if (topo_has_flag(TF_WRAPX)) {
-      viewrect_ctx.translate(-map.xsize, 0);
-      add_closed_path(viewrect_ctx, path);
-      viewrect_ctx.translate(0, 2 * map.ysize);
-      add_closed_path(viewrect_ctx, path);
-      viewrect_ctx.translate(2 * map.xsize, 0);
-      add_closed_path(viewrect_ctx, path);
-      viewrect_ctx.translate(0, -2 * map.ysize);
-      add_closed_path(viewrect_ctx, path);
-    }
   }
 
   viewrect_ctx.stroke();
@@ -320,6 +296,7 @@ function generate_palette() {
   palette[COLOR_OVERVIEW_ALLIED_UNIT] = [255,0,0];
   palette[COLOR_OVERVIEW_ENEMY_UNIT] = [255,0,0];
   palette[COLOR_OVERVIEW_VIEWRECT] = [200,200,255];
+  palette[COLOR_OVERVIEW_GENERIC]  = [71,89,57];
   palette_terrain_offset = palette.length;
   for (var terrain_id in terrains) {
     var terrain = terrains[terrain_id];
@@ -334,9 +311,32 @@ function generate_palette() {
     if (pplayer['nation'] == -1) {
       palette[palette_color_offset+(player_id % player_count)] = [0,0,0];
     } else {
-      var pcolor = nations[pplayer['nation']]['color'];
+      var pcolor = null;
+      const observer = client_is_observer();
+      switch (minimap_color) {  // 'minimap_color' is user toggleable state for nation color display
+        case 0:  // diplomatic relations mode
+            if (observer || client.conn.playing == null) pcolor = [138,138,142];            // observer  = med grey = no relations to anyone
+            else if (!pplayer['is_alive']) pcolor = [48, 32, 32];                           // dead      = dark grey, reddish
+            else if (player_id == client.conn.playing['playerno']) pcolor = [55,128,255];   // self      = light blue
+            else if (!observer && diplstates[player_id] != null) {
+              if (diplstates[player_id] == DS_WAR) pcolor = [192,32,32];                    // war       = red
+              else if (diplstates[player_id] == DS_ALLIANCE) pcolor = [0,32,240];           // ally      = med blue
+              else if (diplstates[player_id] == DS_PEACE) pcolor = [0,202,32];              // peace     = green
+              else if (diplstates[player_id] == DS_ARMISTICE) pcolor = [105,197,32];        // armistice = green hinting olive
+              else if (diplstates[player_id] == DS_CEASEFIRE){pcolor = [160,192,32];        // ceasefire = ochre
+                if (pplayer.diplstates[client.conn.playing.playerno].turns_left 
+                   && pplayer.diplstates[client.conn.playing.playerno].turns_left <=3)
+                   pcolor = [222,192,32];                                                   // expiring cease-fire = yellow/orange (concerned citizens!)
+              }
+              else pcolor = [138,138,142]                                                   // no contact = grey
+            }
+            break;
+        case 2:  pcolor = nations[pplayer['nation']]['color2']; break;  // show secondary national colors mode
+        case 3:  pcolor = nations[pplayer['nation']]['color3']; break;  // show tertiary national colors mode
+        default: pcolor = nations[pplayer['nation']]['color'];          // default: just show primary national color
+      }
       if (pcolor != null) {
-        palette[palette_color_offset+(player_id % player_count)] = color_rbg_to_list(pcolor);
+        palette[palette_color_offset+(player_id % player_count)] = color_rgb_to_list(pcolor);
       } else {
         palette[palette_color_offset+(player_id % player_count)] = [0,0,0];
       }
@@ -381,12 +381,15 @@ function overview_tile_color(map_x, map_y)
     if (ptile['owner'] != null && ptile['owner'] != 255) {
       return palette_color_offset + ptile['owner'];
     } else {
+      if (minimap_color == 0 
+        // diplomatic relations mode: dull terrain color to just see relations
+          && !is_ocean_tile(ptile)) return COLOR_OVERVIEW_GENERIC; 
+
       return palette_terrain_offset + tile_terrain(ptile)['id'];
     }
   }
 
   return COLOR_OVERVIEW_UNKNOWN;
-
 }
 
 
@@ -404,7 +407,6 @@ function overview_clicked (x, y)
   var ptile = map_pos_to_tile(x1, y1);
   if (ptile != null) {
     //reposition events save the position to return to with shift-spacebar
-    save_map_return_position(ptile);
     center_tile_mapcanvas(ptile);
   }
 

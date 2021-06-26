@@ -46,13 +46,15 @@
 #include "plrhand.h"
 #include "notify.h"
 #include "sanitycheck.h"
-#include "savegame.h"
 #include "stdinhand.h"
 #include "techtools.h"
 #include "unittools.h"
 
 /* server/generator */
 #include "mapgen_utils.h"
+
+/* server/savegame */
+#include "savemain.h"
 
 #include "edithand.h"
 
@@ -320,9 +322,10 @@ void handle_edit_tile_terrain(struct connection *pc, int tile,
   argument controls whether to remove or add the given extra from the tile.
 ****************************************************************************/
 void handle_edit_tile_extra(struct connection *pc, int tile,
-                            int id, bool removal, int size)
+                            int id, bool removal, int eowner, int size)
 {
   struct tile *ptile_center;
+  struct player *plr_eowner;
 
   ptile_center = index_to_tile(&(wld.map), tile);
   if (!ptile_center) {
@@ -341,8 +344,15 @@ void handle_edit_tile_extra(struct connection *pc, int tile,
     return;
   }
 
+  if (eowner != MAP_TILE_OWNER_NULL) {
+    plr_eowner = player_by_number(eowner);
+  } else {
+    plr_eowner = NULL;
+  }
+
   conn_list_do_buffer(game.est_connections);
   square_iterate(&(wld.map), ptile_center, size - 1, ptile) {
+    ptile->extras_owner = plr_eowner;
     edit_tile_extra_handling(ptile, extra_by_number(id), removal, TRUE);
   } square_iterate_end;
   conn_list_do_unbuffer(game.est_connections);
@@ -355,6 +365,7 @@ void handle_edit_tile(struct connection *pc,
                       const struct packet_edit_tile *packet)
 {
   struct tile *ptile;
+  struct player *eowner;
   bool changed = FALSE;
 
   ptile = index_to_tile(&(wld.map), packet->tile);
@@ -363,6 +374,12 @@ void handle_edit_tile(struct connection *pc,
                 _("Cannot edit the tile because %d is not a valid "
                   "tile index on this map!"), packet->tile);
     return;
+  }
+
+  if (packet->eowner != MAP_TILE_OWNER_NULL) {
+    eowner = player_by_number(packet->eowner);
+  } else {
+    eowner = NULL;
   }
 
   /* Handle changes in extras. */
@@ -374,6 +391,11 @@ void handle_edit_tile(struct connection *pc,
         changed = TRUE;
       }
     } extra_type_iterate_end;
+  }
+
+  if (ptile->extras_owner != eowner) {
+    ptile->extras_owner = eowner;
+    changed = TRUE;
   }
 
   /* Handle changes in label */
@@ -557,7 +579,7 @@ void handle_edit_unit_remove_by_id(struct connection *pc, Unit_type_id id)
 void handle_edit_unit(struct connection *pc,
                       const struct packet_edit_unit *packet)
 {
-  struct unit_type *putype;
+  const struct unit_type *putype;
   struct unit *punit;
   int id;
   bool changed = FALSE;
@@ -1367,22 +1389,6 @@ void handle_edit_game(struct connection *pc,
                       const struct packet_edit_game *packet)
 {
   bool changed = FALSE;
-
-  if (packet->year != game.info.year) {
-
-    /* 'year' is stored in a signed short. */
-    const short min_year = -30000, max_year = 30000;
-
-    if (!(min_year <= packet->year && packet->year <= max_year)) {
-      notify_conn(pc->self, NULL, E_BAD_COMMAND, ftc_editor,
-                  _("Cannot set invalid game year %d. Valid year range "
-                    "is from %d to %d."),
-                  packet->year, min_year, max_year);
-    } else {
-      game.info.year = packet->year;
-      changed = TRUE;
-    }
-  }
 
   if (packet->scenario != game.scenario.is_scenario) {
     game.scenario.is_scenario = packet->scenario;

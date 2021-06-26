@@ -166,6 +166,15 @@ extern "C" {
 #define SPECENUM_VALUE127 E_BEGINNER_HELP
 #define SPECENUM_VALUE128 E_MY_UNIT_DID_HEAL
 #define SPECENUM_VALUE129 E_MY_UNIT_WAS_HEALED
+#define SPECENUM_VALUE130 E_MULTIPLIER
+#define SPECENUM_VALUE131 E_UNIT_ACTION_ACTOR_SUCCESS
+#define SPECENUM_VALUE132 E_UNIT_ACTION_ACTOR_FAILURE
+#define SPECENUM_VALUE133 E_UNIT_ACTION_TARGET_OTHER
+#define SPECENUM_VALUE134 E_UNIT_ACTION_TARGET_HOSTILE
+#define SPECENUM_VALUE135 E_CHAT_MSG_PUBLIC
+#define SPECENUM_VALUE136 E_CHAT_MSG_PRIVATE_SENT
+#define SPECENUM_VALUE137 E_CHAT_MSG_PRIVATE_RCVD
+#define SPECENUM_VALUE138 E_CHAT_MSG_ALLY
 /*
  * Note: If you add a new event, make sure you make a similar change
  * to the events array in "common/events.c" using GEN_EV, to
@@ -176,7 +185,7 @@ extern "C" {
 /* The sound system also generates "e_game_quit", although there's no
  * corresponding identifier E_GAME_QUIT. */
 #include "specenum_gen.h"
-/* the maximum number of enumerators is set in generate_specnum.py */
+/* the maximum number of enumerators is set in generate_specenum.py */
 
 extern enum event_type sorted_events[]; /* [E_COUNT], sorted by the
                                            translated message text */

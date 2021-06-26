@@ -99,6 +99,14 @@ extern "C" {
 #define fc__warn_unused_result
 #endif
 
+/* TODO: C++17 compilers (also other than g++) could use [[fallthrough]]
+   for C++ code */
+#if defined(__GNUC__) && __GNUC__ >= 7
+#define fc__fallthrough __attribute__((fallthrough))
+#else
+#define fc__fallthrough
+#endif
+
 #ifdef FREECIV_MSWINDOWS
 typedef long int fc_errno;
 #else
@@ -176,7 +184,7 @@ char fc_tolower(char c);
 
 const char *fc_basename(const char *path);
 
-static bool inline is_bigendian(void)
+static inline bool is_bigendian(void)
 {
 #ifdef WORDS_BIGENDIAN 
   return TRUE;

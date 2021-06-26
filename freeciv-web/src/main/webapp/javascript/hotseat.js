@@ -122,6 +122,7 @@ function add_hotseat_player()
 {
   if (num_hotseat_players >= 125) {
     swal("Support for more players is not available now.");
+    setSwalTheme();
     return;
   }
   num_hotseat_players += 1;
@@ -195,6 +196,7 @@ function show_hotseat_new_phase()
                                    if (hotseat_pwd[hotseat_players[hotseat_active_player]] != null
                                        && hotseat_pwd[hotseat_players[hotseat_active_player]] != $("#hotseat_pwd").val()) {
                                      swal("Invalid password.");
+                                     setSwalTheme();
                                      return;
                                    }
                                    dialog_close_trigger = "button";
@@ -230,6 +232,7 @@ function add_hotseat_password()
 
   if (hotseat_pwd[hotseat_players[hotseat_active_player]] != null) {
     swal("Password already set.");
+    setSwalTheme();
     return;
   }
   keyboard_input = false;

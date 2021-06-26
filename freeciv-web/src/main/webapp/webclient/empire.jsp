@@ -19,7 +19,7 @@
         <button id="button_empire_prod" type="button" class="button tab_emulator_button" onClick="change_empire_mode(5);"
         title="Production in all cities" >&#x1F528;National Production</button>
     </div>
-    <hr style="margin-top:-5px;">
+    <hr color="#432" style="margin-top:-4px;">
     <h2 style="margin-top:0px; margin-bottom:0px;" id="empire_title"></h2>
     
     <div id="empire_mode_panel"></div>

@@ -27,30 +27,47 @@ var server_settings = {};
  and global worklists.
 *****************************************************************/
 
+var Game_UID;   // (semi)-Unique-enough identifier for the particular game
+var myGameVars; // User persistent storage tied to a unique game
 // Hard-coded client behaviours specific to certain rulesets get custom ruleset flags (CRF)
 // assigned to them inside handle_ruleset_control() (packhand.js). You can then hard-code 
 // specific client behaviour by checking for (client_rules_flag & CRF_FLAG_NAME):
-var client_rules_flag          = []; // bit-flag for exceptional rules hard-coded into client
-const CRF_CARGO_HEURISTIC      =  0; // conventional ruleset generalisations for which cargo units go on which transports: filters a cleaner UI for transport loading
-const CRF_OASIS_IRRIGATE       =  1; // ruleset allows irrigating from oasis as a water source
-const CRF_ASMITH_SPECIALISTS   =  2; // six total specialists; but #4,#5,#6 are only active with A.Smith wonder
-const CRF_MP2_UNIT_CONVERSIONS =  3; // Leader,AAA,Worker,and Riflemen can do the unit CONVERT order
-const CRF_LEGION_WORK          =  4; // Legions can road and make forts
-const CRF_MASONRY_FORT         =  5; // Masonry tech allows building forts
-const CRF_CANALS               =  6; // Ruleset allows canals with Engineering
-const CRF_NO_UNIT_GOLD_UPKEEP  =  7; // Ruleset doesn't use gold upkeep on units, so don't show it.
-const CRF_MP2_SPECIAL_UNITS    =  8; // Special rules/filters for handling extra units introduced in MP2: Well-Digger, Queen, Pilgrim, Proletarians
-const CRF_COMMIE_BLDG_UPKEEP   =  9; // Used for calculating/showing upkeep from buildings accurately for communist government bonus (in some rulesets)
-const CRF_PACTS_SANS_EMBASSY   = 10; // Ruleset allows treaties without embassy if contact_turns>0 but only for limited pacts
-const CRF_TESLA_UPGRADE_DISCOUNT=11;//Ruleset has Tesla's Laboratory and gives a 20% discount on unit upgrades.
-const CRF_RADAR_TOWER          = 12; // Ruleset has improvement for building Radar Tower over Airbase.
-const CRF_EXTRA_HIDEOUT        = 13; // Ruleset has hideouts and hidden status.
-const CRF_EXTRA_QUAY           = 14; // Ruleset has Quay extra and Waterway Extra.
-const CRF_NO_WASTE             = 15; // Ruleset does not feature waste.
-const CRF_MINOR_NUKES          = 16; // Ruleset has minor nukes (fission, 3x3 area)
-const CRF_MAJOR_NUKES          = 17; // Ruleset has major nukes (fusion), which it may want to disable in some games.
-const CRF_DEMOCRACY_NONCORRUPT = 18; // Allows skipping past corruption display modes in rulesets where we know there's no corruption to show. 
-const CRF_LAST                 = 19;
+var client_rules_flag              = []; // bit-flag for exceptional rules hard-coded into client
+const CRF_CARGO_HEURISTIC          =  0; // conventional ruleset generalisations for which cargo units go on which transports: filters a cleaner UI for transport loading
+const CRF_OASIS_IRRIGATE           =  1; // ruleset allows irrigating from oasis as a water source
+const CRF_ASMITH_SPECIALISTS       =  2; // six total specialists; but #4,#5,#6 are only active with A.Smith wonder
+const CRF_MP2_UNIT_CONVERSIONS     =  3; // Leader,AAA,Worker,and Riflemen can do the unit CONVERT order
+const CRF_LEGION_WORK              =  4; // Legions can road and make forts
+const CRF_MASONRY_FORT             =  5; // Masonry tech allows building forts
+const CRF_CANALS                   =  6; // Ruleset allows canals with Engineering
+const CRF_NO_UNIT_GOLD_UPKEEP      =  7; // Ruleset doesn't use gold upkeep on units, so don't show it.
+const CRF_MP2_SPECIAL_UNITS        =  8; // Special rules/filters for handling MP2 units: Fanatics (skirmish), Well-Digger, Queen, Pilgrim, Proletarians
+const CRF_COMMIE_BLDG_UPKEEP       =  9; // Used for calculating/showing upkeep from buildings accurately for communist government bonus (in some rulesets)
+const CRF_PACTS_SANS_EMBASSY       = 10; // Ruleset allows treaties without embassy if contact_turns>0 but only for limited pacts
+const CRF_TESLA_UPGRADE_DISCOUNT   = 11;//Ruleset has Tesla's Laboratory and gives a 20% discount on unit upgrades.
+const CRF_RADAR_TOWER              = 12; // Ruleset has improvement for building Radar Tower over Airbase.
+const CRF_EXTRA_HIDEOUT            = 13; // Ruleset has hideouts and hidden status.
+const CRF_EXTRA_QUAY               = 14; // Ruleset has Quay extra and Waterway Extra.
+const CRF_NO_WASTE                 = 15; // Ruleset does not feature waste.
+const CRF_MINOR_NUKES              = 16; // Ruleset has minor nukes (fission, 3x3 area)
+const CRF_MAJOR_NUKES              = 17; // Ruleset has major nukes (fusion), which it may want to disable in some games.
+const CRF_SURGICAL_PILLAGE         = 18; // Allow special exception units without UCF_PILLAGE to pillage tiles.
+const CRF_MAGLEV                   = 19; // Ruleset has MAGLEVS
+const CRF_SIEGE_RAM                = 20; // Ruleset uses Siege Ram, which highjacks diplomatic sabotage popup to only allow City Wall sabotage.
+const CRF_MARINE_BASES             = 21; // Needed to optimize due to flaws in actionenablers/req
+const CRF_MARINE_RANGED            = 22; // Marines can do ranged attack
+const CRF_BSHIP_BOMBARD            = 23; // Battleships can Bombard
+const CRF_TRIREME_FUEL             = 24; // Trireme is fuel unit, client benefts from UI optimisations
+const CRF_RECYCLING_DISCOUNT       = 25;
+const CRF_SEABRIDGE                = 26;
+const CRF_COLOSSUS_DISCOUNT        = 27;
+const CRF_SPECIAL_UNIT_ATTACKS     = 28; // complex special one-way engagements enabled, mp2-caravel onward.
+const CRF_NO_BASES_ON_RIVERS       = 29;
+const CRF_MP2                      = 30; // rules flags for "minimum" mp2 ruleset, for when new feature came in.
+const CRF_MP2_A                    = 31; 
+const CRF_MP2_B                    = 32;
+const CRF_MP2_C                    = 33;
+const CRF_LAST                     = 34;
 
 var graphic_theme_path;
 
@@ -75,6 +92,7 @@ var show_warcalc = false;
 var show_unit_movepct = false; // show move-point bar on map units
 var show_compass = true; // show compass on map
 var hp_bar_offset = 0;    // if mp bar is shown, offset to bump up hp bar
+var focuslock = false;    // whether map centers and locks always on focused unit
 
 var save_options_on_exit = true;
 var fullscreen_mode = false;
@@ -109,13 +127,21 @@ var highlight_our_names = "yellow";
 /* This option is currently set by the client - not by the user. */
 var update_city_text_in_refresh_tile = true;
 
+var draw_dashed_borders = false;
+var draw_tertiary_colors = false;
+var draw_border_mode = 0; // 0 = no tertiary, 1 = tertiary, 2 = no border at all */
+var draw_thick_borders = false;
+var draw_moving_borders = false;
+var draw_border_flags = false;
+var minimap_color = 1;   // draw minimap in primary,secondary, or tertiary colors
+
 var draw_city_outlines = true;
 var draw_city_output = false;
 var draw_city_airlift_counter = false;
 var draw_highlighted_pollution = false;
 var draw_city_mood = false;
 var draw_map_grid = false;
-var draw_stacked_unit_mode = 0;
+var draw_stacked_unit_mode = 3;   // default to best mode: ring+small
   const dsum_BASIC = 0;  // normal large + for stacked unit sprite
   const dsum_RING  = 1;  // small + near hpbar for stacked unit sprite
   const dsum_SMALL = 2;  // ring around national shield for stacked unit sprite
@@ -167,15 +193,16 @@ function init_options_dialog()
   });
 
   $('#metamessage_setting').bind('keyup blur',function(){
-    var cleaned_text = $(this).val().replace(/[^a-zA-Z\s\-]/g,'');
-    if ($(this).val() != cleaned_text) {
-      $(this).val( cleaned_text ); }
+    var clean_text = $(this).val().replace(/[^a-zA-Z\s\-]/g,'');
+    if ($(this).val() != clean_text) {
+      $(this).val( clean_text ); }
     }
   );
 
   if (!is_pbem()) {
     var existing_timeout = game_info['timeout'];
-    if (existing_timeout == 0) $("#timeout_info").html("(0 = no timeout)");
+    if (existing_timeout == 0) $("#timeout_info").html("<i> (none)</i>");
+    else $("#timeout_info").html(" seconds");
     $("#timeout_setting").val(existing_timeout);
   } else {
     $("#timeout_setting_div").hide();
@@ -184,6 +211,7 @@ function init_options_dialog()
     var new_timeout = parseInt($('#timeout_setting').val());
     if (new_timeout >= 1 && new_timeout <= 29) {
       swal("Invalid timeout specified. Must be 0 or more than 30 seconds.");
+      setSwalTheme();
     } else {
       send_message("/set timeout " + new_timeout);
     }
@@ -251,6 +279,7 @@ function init_options_dialog()
   if (show_order_option==true) {
     show_order_buttons=1; // 1=frequent, 2 is verbose/complete mode
     $("#game_unit_orders_default").show();
+    update_unit_order_commands();
   }
   else { 
     show_order_buttons = 0;
@@ -261,6 +290,7 @@ function init_options_dialog()
     if (show_order_option==true) {
       show_order_buttons=2;
       $("#game_unit_orders_default").show();
+      update_unit_order_commands();
     }
     else {
       show_order_buttons = 0;
@@ -278,13 +308,19 @@ function init_options_dialog()
   $('#draw_highlighted_pollution').prop('checked', draw_highlighted_pollution);
   $('#draw_highlighted_pollution').change(function() {
     draw_highlighted_pollution = this.checked;
-    // don't store this to next session
+    simpleStorage.set('showpollution', draw_highlighted_pollution);
   });
   // CITY AIRLIFT COUNTER
   $('#airlift_setting').prop('checked', draw_city_airlift_counter);
   $('#airlift_setting').change(function() {
     draw_city_airlift_counter = this.checked;
     simpleStorage.set('airlift', draw_city_airlift_counter);
+  });
+  // FOCUS LOCK UNITS TO CENTER OF MAP
+  $('#focuslock_setting').prop('checked', focuslock);
+  $('#focuslock_setting').change(function() {
+    focuslock = this.checked;
+    simpleStorage.set('focuslock', focuslock);
   });
   // DRAW CITY MOOD ON MAP
   $('#draw_city_mood').prop('checked', draw_city_mood);
@@ -304,11 +340,43 @@ function init_options_dialog()
      scroll_narrow_x = this.checked;
      simpleStorage.set('xScroll', scroll_narrow_x); 
    });
-    // FILL BORDERS 
-    $('#fill_borders').prop('checked', fill_national_border);
+    // BORDER FLAGS
+    $('#fill_borders').prop('checked', draw_border_flags);
     $('#fill_borders').change(function() {
-      fill_national_border = this.checked;
-      //simpleStorage.set('fill_borders', fill_national_border); 
+      draw_border_flags = this.checked;
+      simpleStorage.set('borderFlags', draw_border_flags); 
+    });
+    // TRICOLORE BORDERS 
+    $('#tricolor_borders').prop('checked', draw_tertiary_colors);
+    $('#tricolor_borders').change(function() {
+      draw_tertiary_colors = this.checked;
+      draw_border_mode |= 1;
+      simpleStorage.set('tricolore', draw_tertiary_colors); 
+    });
+    // THICK BORDERS
+    $('#thick_borders').prop('checked', draw_thick_borders);
+    $('#thick_borders').change(function() {
+      draw_thick_borders = this.checked;
+      simpleStorage.set('thickBorders', draw_thick_borders); 
+    });
+    // CLASSIC DASHED BORDERS (override) 
+    $('#dashed_borders').prop('checked', draw_dashed_borders);
+    $('#dashed_borders').change(function() {
+      draw_dashed_borders = this.checked;
+      simpleStorage.set('dashedBorders', draw_dashed_borders); 
+    });
+    // NO BORDERS (override) 
+    $('#no_borders').prop('checked', (draw_border_mode & 2));
+    $('#no_borders').change(function() {
+      if (this.checked) draw_border_mode |= 2;
+      else draw_border_mode &= 1;
+      //simpleStorage.set('noBorders', draw_border_mode & 2); 
+    });
+    // MOVING BORDERS 
+    $('#moving_borders').prop('checked', draw_moving_borders);
+    $('#moving_borders').change(function() {
+      draw_moving_borders = this.checked;
+      simpleStorage.set('movingBorders', draw_moving_borders); 
     });
     // SHOW EMPIRE TAB 
     $('#show_empire').prop('checked', show_empire_tab);
@@ -323,7 +391,7 @@ function init_options_dialog()
       show_unit_movepct = this.checked;
       if (show_unit_movepct) hp_bar_offset = -5;
       else hp_bar_offset = 0;
-      //simpleStorage.set('showMoves', show_unit_movepct); 
+      simpleStorage.set('showMoves', show_unit_movepct); 
     });
     // SHOW WARCALC TAB 
     $('#show_warcalc').prop('checked', show_warcalc);
@@ -361,34 +429,19 @@ function init_options_dialog()
    //----------------------------------------------------------------^^USER OPTIONS^^
    $('#graphic_theme').change();
 
-  if (!is_longturn()) {
-    if (renderer == RENDERER_WEBGL) {
-        $("#switch_renderer_button").html("Use 2D HTML5 graphics");
-        $("#renderer_help").html("Switch to 2D isometric graphics.")
-    } else {
-        $("#switch_renderer_button").html("Use 3D WebGL graphics");
-        $("#renderer_help").html("Use 3D WebGL graphics. Make sure your computer<br> supports 3D WebGL graphics.")
-        $("#update_model_button").hide();
-    }
-
-    if (!Detector.webgl) {
-        $("#switch_renderer_button").hide();
-        $("#renderer_help").html("3D WebGL not supported.")
-    }
-  }
+  $("#title_setting_div").hide();
 
   if (is_longturn()) {
     $("#update_model_button").hide();
     $("#switch_renderer_button").hide();
     $("#renderer_help").hide();
     $("#save_button").hide();
-    $("#timeout_setting_div").hide();
-    $("#title_setting_div").hide();
     $("#surrender_button").hide();
   }
 
   if (is_supercow())     
     $("#save_button").show();
+    $("#timeout_setting_div").show(); // doesn't do anything yet, but one day we can change metamessage here.
 }
 
 function change_graphic_theme()

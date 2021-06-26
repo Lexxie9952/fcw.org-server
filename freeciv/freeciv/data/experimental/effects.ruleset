@@ -2728,6 +2728,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Action", "Found City", "Local", FALSE
       "Action", "Join City", "Local", FALSE
+      "Action", "Transport Board", "Local", FALSE
     }
 
 [effect_incident_caught_steal_tech]
@@ -2864,12 +2865,45 @@ reqs	=
       "Action", "Targeted Sabotage City Escape", "Local", TRUE
     }
 
+[effect_incident_success_sabotage_city_production]
+type	= "Casus_Belli_Success"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Sabotage City Production Escape", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
+
+[effect_sabotage_city_production_city_half_chance]
+type	= "Action_Odds_Pct"
+value	= -50
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Sabotage City Production Escape", "Local", TRUE
+    }
+
 [effect_incident_success_explode_nuke]
 type	= "Casus_Belli_Success"
 value	= 1
 reqs	=
     { "type", "name", "range", "present"
       "Action", "Explode Nuclear", "Local", TRUE
+    }
+
+[effect_incident_success_explode_nuke_city]
+type	= "Casus_Belli_Success"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Nuke City", "Local", TRUE
+    }
+
+[effect_incident_success_explode_nuke_units]
+type	= "Casus_Belli_Success"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Nuke Units", "Local", TRUE
     }
 
 ; Double (+100%) buy cost for Great Wonders
@@ -2879,4 +2913,20 @@ value   = 100
 reqs    =
     { "type", "name", "range"
       "BuildingGenus", "GreatWonder", "Local"
+    }
+
+[effect_action_success_move_cost_embassy]
+type    = "Action_Success_Actor_Move_Cost"
+value   = 1
+reqs    =
+    { "type", "name", "range", "present"
+      "Action", "Establish Embassy", "Local", TRUE
+    }
+
+[effect_action_success_move_cost_investigate]
+type    = "Action_Success_Actor_Move_Cost"
+value   = 1
+reqs    =
+    { "type", "name", "range", "present"
+      "Action", "Investigate City", "Local", TRUE
     }

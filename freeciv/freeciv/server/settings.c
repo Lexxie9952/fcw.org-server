@@ -220,9 +220,11 @@ static bool set_enum_value(struct setting *pset, int val);
 static const struct sset_val_name *caravanbonusstyle_name(int caravanbonus)
 {
   switch (caravanbonus) {
+  /* TRANS: Description of caravan bonus style setting value. */
   NAME_CASE(CBS_CLASSIC, "CLASSIC", N_("Classic Freeciv"));
   NAME_CASE(CBS_LOGARITHMIC, "LOGARITHMIC", N_("Log^2 N style"));
   }
+
   return NULL;
 }
 
@@ -260,9 +262,11 @@ static const struct sset_val_name *topology_name(int topology_bit)
 static const struct sset_val_name *traderevenuestyle_name(int revenue_style)
 {
   switch (revenue_style) {
+  /* TRANS: Description of trade revenue style setting value. */
   NAME_CASE(TRS_CLASSIC, "CLASSIC", N_("Classic Freeciv"));
   NAME_CASE(TRS_SIMPLE, "SIMPLE", N_("Proportional to tile trade"));
   }
+
   return NULL;
 }
 
@@ -466,6 +470,19 @@ static const struct sset_val_name *barbarians_name(int barbarians)
   NAME_CASE(BARBS_NORMAL, "NORMAL", N_("Normal rate of appearance"));
   NAME_CASE(BARBS_FREQUENT, "FREQUENT", N_("Frequent barbarian uprising"));
   NAME_CASE(BARBS_HORDES, "HORDES", N_("Raging hordes"));
+  }
+  return NULL;
+}
+
+/************************************************************************//**
+  Loot style setting names accessor.
+****************************************************************************/
+static const struct sset_val_name *lootstyle_name(int looting)
+{
+  switch (looting) {
+  NAME_CASE(LOOT_CLASSIC, "CLASSIC", N_("Classic loot formula"));
+  NAME_CASE(LOOT_OFF, "OFF", N_("Cities yield no loot"));
+  NAME_CASE(LOOT_BASE_TRADE, "BASE_TRADE", N_("Proportional to Base Trade"));
   }
   return NULL;
 }
@@ -1195,9 +1212,9 @@ static bool fortifywaittime_callback(int value, struct connection *caller,
 static bool mapsize_callback(int value, struct connection *caller,
                              char *reject_msg, size_t reject_msg_len)
 {
-  if (value == MAPSIZE_XYSIZE && MAP_IS_ISOMETRIC &&
-      wld.map.ysize % 2 != 0) {
-    /* An isometric map needs a even ysize. Is is calculated automatically
+  if (value == MAPSIZE_XYSIZE && MAP_IS_ISOMETRIC
+      && wld.map.ysize % 2 != 0) {
+    /* An isometric map needs a even ysize. It is calculated automatically
      * for all settings but mapsize=XYSIZE. */
     settings_snprintf(reject_msg, reject_msg_len,
                       _("For an isometric or hexagonal map the ysize must be "
@@ -1253,9 +1270,9 @@ static bool ysize_callback(int value, struct connection *caller,
                         "%d tiles."), wld.map.xsize, value, size,
                         MAP_MAX_SIZE * 1000);
     return FALSE;
-  } else if (wld.map.server.mapsize == MAPSIZE_XYSIZE && MAP_IS_ISOMETRIC &&
-             value % 2 != 0) {
-    /* An isometric map needs a even ysize. Is is calculated automatically
+  } else if (wld.map.server.mapsize == MAPSIZE_XYSIZE && MAP_IS_ISOMETRIC
+             && value % 2 != 0) {
+    /* An isometric map needs a even ysize. It is calculated automatically
      * for all settings but mapsize=XYSIZE. */
     settings_snprintf(reject_msg, reject_msg_len,
                       _("For an isometric or hexagonal map the ysize must be "
@@ -1272,10 +1289,10 @@ static bool ysize_callback(int value, struct connection *caller,
 static bool topology_callback(unsigned value, struct connection *caller,
                               char *reject_msg, size_t reject_msg_len)
 {
-  if (wld.map.server.mapsize == MAPSIZE_XYSIZE &&
-      ((value & (TF_ISO)) != 0 || (value & (TF_HEX)) != 0) &&
-      wld.map.ysize % 2 != 0) {
-    /* An isometric map needs a even ysize. Is is calculated automatically
+  if (wld.map.server.mapsize == MAPSIZE_XYSIZE
+      && ((value & (TF_ISO)) != 0 || (value & (TF_HEX)) != 0)
+      && wld.map.ysize % 2 != 0) {
+    /* An isometric map needs a even ysize. It is calculated automatically
      * for all settings but mapsize=XYSIZE. */
     settings_snprintf(reject_msg, reject_msg_len,
                       _("For an isometric or hexagonal map the ysize must be "
@@ -1480,7 +1497,7 @@ static struct setting settings[] = {
 
   GEN_BITWISE("topology", wld.map.topology_id, SSET_MAP_SIZE,
               SSET_GEOLOGY, SSET_VITAL, ALLOW_NONE, ALLOW_BASIC,
-              N_("Map topology index"),
+              N_("Map topology"),
 #ifdef FREECIV_WEB
               /* TRANS: Freeciv-web version of the help text. */
               N_("Freeciv-web maps are always two-dimensional. They may wrap "
@@ -1641,6 +1658,16 @@ static struct setting settings[] = {
               "a pole. This setting has no effect if the map wraps both "
               "directions."), NULL, NULL, MAP_DEFAULT_SINGLE_POLE)
 
+  GEN_BOOL("polarstrip", wld.map.server.polar_strip,
+           SSET_MAP_GEN, SSET_GEOLOGY, SSET_SITUATIONAL,
+           ALLOW_NONE, ALLOW_BASIC,
+           N_("Whether the map will generate polar strip(s)."),
+           N_("If this setting is disabled, then any geological settings that "
+              "normally generate polar strip(s) on the top and/or bottom of the  "
+              "map, will be forcibly suppressed. This does not suppress the "
+              "formation of natural continents and islands in these regions."),
+              NULL, NULL, MAP_DEFAULT_POLAR_STRIP)
+
   GEN_BOOL("alltemperate", wld.map.server.alltemperate, 
            SSET_MAP_GEN, SSET_GEOLOGY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
            N_("All the map is temperate"),
@@ -1694,28 +1721,42 @@ static struct setting settings[] = {
              "jungles, and rivers."), NULL, NULL, NULL,
           MAP_MIN_WETNESS, MAP_MAX_WETNESS, MAP_DEFAULT_WETNESS)
 
-  GEN_BOOL("globalwarming", game.info.global_warming,
+  GEN_INT("globalwarming", game.info.global_warming,
            SSET_RULES, SSET_GEOLOGY, SSET_VITAL, ALLOW_NONE, ALLOW_BASIC,
            N_("Global warming"),
-           N_("If turned off, global warming will not occur "
-              "as a result of pollution. This setting does not "
-              "affect pollution."), NULL, NULL,
+           N_("If set to 0, Global Warming will not occur because of "
+              "pollution. Otherwise, this setting modifies the strength of global "
+              "warming: the accumulated climate stress added each turn, which "
+              "also affects how many tiles will be transformed. 100 is "
+              "standard. Lower is less, higher is more. This setting does "
+              "not affect pollution."), NULL, NULL, NULL,
+           GAME_MIN_GLOBAL_WARMING,
+           GAME_MAX_GLOBAL_WARMING,
            GAME_DEFAULT_GLOBAL_WARMING)
 
   GEN_INT("globalwarming_percent", game.server.global_warming_percent,
            SSET_RULES, SSET_GEOLOGY, SSET_VITAL, ALLOW_NONE, ALLOW_BASIC,
            N_("Global warming percent"),
-           N_("This is a multiplier for the rate of accumulation of global "
-              "warming."), NULL, NULL, NULL,
+           N_("The percentage by which to modify the default strength of global "
+           "warming sensitivity. Specifically, a lower value causes a higher threshold " 
+           "for Pollution to trigger Global Warming, and a higher rate of ecologically "
+           "absorbing the cumulative climatic impact, each turn."), NULL, NULL, NULL,
            GAME_MIN_GLOBAL_WARMING_PERCENT,
            GAME_MAX_GLOBAL_WARMING_PERCENT,
            GAME_DEFAULT_GLOBAL_WARMING_PERCENT)
 
-  GEN_BOOL("nuclearwinter", game.info.nuclear_winter,
+  GEN_INT("nuclearwinter", game.info.nuclear_winter,
            SSET_RULES, SSET_GEOLOGY, SSET_VITAL, ALLOW_NONE, ALLOW_BASIC,
            N_("Nuclear winter"),
-           N_("If turned off, nuclear winter will not occur "
-              "as a result of nuclear war."), NULL, NULL,
+           N_("If set to 0, Nuclear Winter will not occur from the uncleaned "
+              "nuclear fallout caused by nuclear explosions. Otherwise, this setting "
+              "modifies the strength of nuclear winter: the accumulated climate "
+              "stress added each turn, which also affects how many tiles will be "
+              "transformed. 100 is standard. Lower is less, higher is more. This "
+              "setting does not affect likelihood of nuclear fallout from "
+              "detonation."), NULL, NULL, NULL,
+           GAME_MIN_NUCLEAR_WINTER,
+           GAME_MAX_NUCLEAR_WINTER,
            GAME_DEFAULT_NUCLEAR_WINTER)
 
   GEN_BOOL("nukes_minor", game.server.nukes_minor,
@@ -1743,11 +1784,38 @@ static struct setting settings[] = {
   GEN_INT("nuclearwinter_percent", game.server.nuclear_winter_percent,
            SSET_RULES, SSET_GEOLOGY, SSET_VITAL, ALLOW_NONE, ALLOW_BASIC,
            N_("Nuclear winter percent"),
-           N_("This is a multiplier for the rate of accumulation of nuclear "
-              "winter."), NULL, NULL, NULL,
+           N_("The percentage by which to modify the default strength of nuclear "
+           "winter sensitivity. Specifically, a lower value causes a higher threshold " 
+           "for Fallout to trigger Nuclear Winter, and also causes a higher rate of "
+           "ecologically absorbing the cumulative climatic impact on "
+           "each turn."), NULL, NULL, NULL,
            GAME_MIN_NUCLEAR_WINTER_PERCENT,
            GAME_MAX_NUCLEAR_WINTER_PERCENT,
            GAME_DEFAULT_NUCLEAR_WINTER_PERCENT)
+
+  GEN_INT("pax_dei_counter", game.server.pax_dei_counter,
+           SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_RARE, ALLOW_BASIC, ALLOW_ADMIN, // let GM reset it after re-load .sav game
+           N_("Pax Dei counter"),
+           N_("The turn length that Pax Dei will have effect when it gets "
+           "set. Pax Dei is set when a player builds the Pax Dei wonder; "
+           "or, at game start if the server setting 'pax_dei_set' was "
+           "enabled. Also see: 'pax_dei_set'."), NULL, NULL, NULL,
+           GAME_MIN_PAX_DEI_COUNTER,
+           GAME_MAX_PAX_DEI_COUNTER,
+           GAME_DEFAULT_PAX_DEI_COUNTER)
+
+  GEN_BOOL("pax_dei_set", game.server.pax_dei_set,
+           SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_RARE, ALLOW_BASIC, ALLOW_ADMIN, // let GM reset it after re-load .sav game
+           N_("Whether the game considers Pax Dei in effect at game start."),
+           N_("Usually, this gets set in a game when the Pax Dei wonder is built. "
+              "However, it is possible to enable 'pax_dei_set' at game start."
+              "This activates the ruleset effects for the Pax Dei wonder at "
+              "game start, for exactly 'pax_dei_counter' # of turns. Note: this "
+              "intentionally disallows Pax Dei from being made by any player. "
+              "Thus, this setting can be used to enable Pax Dei wonder effects "
+              "at game start and/or completely disable the Pax Dei wonder in the "
+              "current game (if 'pax_dei_counter' is set to 0.) Also see: "
+              "'pax_dei_counter'."), NULL, NULL, GAME_DEFAULT_PAX_DEI_SET)   
 
   GEN_INT("mapseed", wld.map.server.seed_setting,
           SSET_MAP_GEN, SSET_INTERNAL, SSET_RARE,
@@ -1792,7 +1860,8 @@ static struct setting settings[] = {
   GEN_INT("huts", wld.map.server.huts,
           SSET_MAP_ADD, SSET_GEOLOGY, SSET_VITAL, ALLOW_NONE, ALLOW_BASIC,
           N_("Amount of huts (bonus extras)"),
-          N_("Huts are tile extras that may be investigated by units. "
+          N_("Huts are tile extras that usually may be investigated by "
+             "units."
              "The server variable's scale is huts per thousand tiles."),
           huts_help, NULL, huts_action,
           MAP_MIN_HUTS, MAP_MAX_HUTS, MAP_DEFAULT_HUTS)
@@ -1868,7 +1937,7 @@ static struct setting settings[] = {
              nationset_callback, nationset_action, GAME_DEFAULT_NATIONSET)
 
   GEN_INT("ec_turns", game.server.event_cache.turns,
-          SSET_RULES_FLEXIBLE, SSET_INTERNAL, SSET_SITUATIONAL,
+          SSET_META, SSET_INTERNAL, SSET_SITUATIONAL,
           ALLOW_NONE, ALLOW_BASIC,
           N_("Event cache for this number of turns"),
           N_("Event messages are saved for this number of turns. A value of "
@@ -1877,7 +1946,7 @@ static struct setting settings[] = {
           GAME_DEFAULT_EVENT_CACHE_TURNS)
 
   GEN_INT("ec_max_size", game.server.event_cache.max_size,
-          SSET_RULES_FLEXIBLE, SSET_INTERNAL, SSET_SITUATIONAL,
+          SSET_META, SSET_INTERNAL, SSET_SITUATIONAL,
           ALLOW_NONE, ALLOW_BASIC,
           N_("Size of the event cache"),
           N_("This defines the maximal number of events in the event cache."),
@@ -1885,14 +1954,14 @@ static struct setting settings[] = {
           GAME_MAX_EVENT_CACHE_MAX_SIZE, GAME_DEFAULT_EVENT_CACHE_MAX_SIZE)
 
   GEN_BOOL("ec_chat", game.server.event_cache.chat,
-           SSET_RULES_FLEXIBLE, SSET_INTERNAL, SSET_SITUATIONAL,
+           SSET_META, SSET_INTERNAL, SSET_SITUATIONAL,
            ALLOW_NONE, ALLOW_BASIC,
            N_("Save chat messages in the event cache"),
            N_("If turned on, chat messages will be saved in the event "
               "cache."), NULL, NULL, GAME_DEFAULT_EVENT_CACHE_CHAT)
 
   GEN_BOOL("ec_info", game.server.event_cache.info,
-           SSET_RULES_FLEXIBLE, SSET_INTERNAL, SSET_SITUATIONAL,
+           SSET_META, SSET_INTERNAL, SSET_SITUATIONAL,
            ALLOW_NONE, ALLOW_BASIC,
            N_("Print turn and time for each cached event"),
            /* TRANS: Don't translate the text between single quotes. */
@@ -1948,6 +2017,14 @@ static struct setting settings[] = {
              "much gold."), NULL, NULL, NULL,
           GAME_MIN_GOLD, GAME_MAX_GOLD, GAME_DEFAULT_GOLD)
 
+  GEN_INT("infrapoints", game.info.infrapoints,
+          SSET_GAME_INIT, SSET_ECONOMICS, SSET_VITAL,
+          ALLOW_NONE, ALLOW_BASIC,
+          N_("Starting infrapoints per player"),
+          N_("At the beginning of the game, each player is given this "
+             "many infrapoints."), NULL, NULL, NULL,
+          GAME_MIN_INFRA, GAME_MAX_INFRA, GAME_DEFAULT_INFRA)
+
   GEN_INT("techlevel", game.info.tech,
           SSET_GAME_INIT, SSET_SCIENCE, SSET_VITAL,
           ALLOW_NONE, ALLOW_BASIC,
@@ -1977,7 +2054,7 @@ static struct setting settings[] = {
           N_("Allow researching multiple technologies"),
           N_("Allows switching to any technology without wasting old "
              "research. Bulbs are never transfered to new technology. "
-             "Techpenalty options are inefective after enabling that "
+             "Techpenalty options are ineffective after enabling that "
              "option."), NULL, NULL,
           GAME_DEFAULT_MULTIRESEARCH)
 
@@ -2043,6 +2120,51 @@ static struct setting settings[] = {
              "the donor but not received by the recipient."),
           NULL, NULL, NULL,
           GAME_MIN_DIPLGOLDCOST, GAME_MAX_DIPLGOLDCOST, GAME_DEFAULT_DIPLGOLDCOST)
+
+  GEN_INT("incite_gold_loss_chance", game.server.incite_gold_loss_chance,
+          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          N_("Probability of gold loss during inciting revolt"),
+          N_("When unit trying to incite revolt is eliminated, half of the gold "
+             "(or quarter, if unit was caught), prepared to bribe citizens, "
+             "can be lost or captured by enemy."),
+          NULL, NULL, NULL,
+          GAME_MIN_INCITE_GOLD_LOSS_CHANCE, GAME_MAX_INCITE_GOLD_LOSS_CHANCE,
+          GAME_DEFAULT_INCITE_GOLD_LOSS_CHANCE)
+
+  GEN_INT("incite_gold_capt_chance", game.server.incite_gold_capt_chance,
+          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          N_("Probability of gold capture during inciting revolt"),
+          N_("When unit trying to incite revolt is eliminated and lose its "
+             "gold, there is chance that this gold would be captured by "
+             "city defender. Transfer tax would be applied, though. "
+             "This setting is irrevelant, if incite_gold_loss_chance is zero."),
+          NULL, NULL, NULL,
+          GAME_MIN_INCITE_GOLD_CAPT_CHANCE, GAME_MAX_INCITE_GOLD_CAPT_CHANCE,
+          GAME_DEFAULT_INCITE_GOLD_CAPT_CHANCE)
+
+  GEN_INT("blueprints", game.server.blueprints,
+          SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          N_("Replaces Tech transfers with Blueprint transfers."),
+          /* TRANS: The strings between single quotes are setting names and
+           * shouldn't be translated. */
+          N_("To function, this setting needs 'multiresearch' to be enabled.\n\n"
+             "Trade, Theft, Conquest, Philosophy, etc. WILL NOT instantly give "
+             "you technology. Instead, you get technology Blueprints, which are "
+             "a bulb-credit toward one specific tech. Blueprints reduce the bulb "
+             "cost of a tech by a percentage. If blueprints=80 and Gunpowder=1000 "
+             "bulbs, then Gunpowder Blueprints reduce cost to 200 bulbs. \n"
+             "You can override the default 'blueprints' setting with: \n\n "
+             "'diplbulbcost' -- TECH TRADE \n "
+             "'conquercost' --  THEFT, CONQUEST \n "
+             "'freecost' -- PHILOSOPHY, HUTS, GREAT LIBRARY, etc. \n\n"
+             "diplbulbcost = 20. Set Blueprints to 80% for tech trades. \n"
+             "conquercost = 10. Set Blueprints to 90% for theft and conquest. \n"
+             "freecost = 1. Set Blueprints to 99% for free tech from Philosophy. \n\n"
+             "Ranges:\n "
+             "0     = Blueprints are disabled. \n "
+             "1-100 = The default discount percent after receiving Blueprints.\n"),
+          NULL, NULL, NULL,
+          GAME_MIN_BLUEPRINTS, GAME_MAX_BLUEPRINTS, GAME_DEFAULT_BLUEPRINTS)   
 
   GEN_INT("conquercost", game.server.conquercost,
           SSET_RULES, SSET_SCIENCE, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
@@ -2289,6 +2411,42 @@ static struct setting settings[] = {
           GAME_MIN_OCCUPYCHANCE, GAME_MAX_OCCUPYCHANCE,
           GAME_DEFAULT_OCCUPYCHANCE)
 
+  GEN_INT("armisticelength", game.server.armisticelength,
+          SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
+          N_("Turn length of Armistice before state of Peace commences."),
+          N_("This setting sets the turn length of the Armistice that occurs when "
+            "two nations agree to a Peace treaty. Armistice is a state that comes "
+            "when agreeing to Peace, in which units that may be in the other "
+            "nation's territory are given a certain number of turns to vacate the "
+            "territory without that possibly being grounds for casus belli or "
+            "the movement being disallowed without first declaring war. "),
+          NULL, NULL, NULL, 
+          GAME_MIN_ARMISTICELENGTH, GAME_MAX_ARMISTICELENGTH,
+          GAME_DEFAULT_ARMISTICELENGTH)
+
+  GEN_INT("ceasefirelength", game.server.ceasefirelength,
+          SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
+          N_("Turn length of Cease-Fire treaties before they expire."),
+          N_("This setting sets how long Cease-Fire "
+            "agreements will last, before they expire."),
+          NULL, NULL, NULL, 
+          GAME_MIN_CEASEFIRELENGTH, GAME_MAX_CEASEFIRELENGTH,
+          GAME_DEFAULT_CEASEFIRELENGTH)     
+
+  GEN_INT("casusbelliturns", game.server.casusbelliturns,
+          SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
+          N_("Length in turns of a first casus belli before it expires."),
+          N_("If there is already a state of casus belli, additional "
+          "incidents will simply refresh it to this value; or, if it is already "
+          "this value or greater, add an additional turn to the length. NOTE: "
+          "any new non-aggression treaty made after casus belli, is considered "
+          "to supercede violations of past treaties, and eliminate casus belli. "
+          "Thus, players may re-affirm a treaty that has casus belli on it, and "
+          "eliminate the casus belli status of that treaty."),
+          NULL, NULL, NULL, 
+          GAME_MIN_CASUSBELLITURNS, GAME_MAX_CASUSBELLITURNS,
+          GAME_DEFAULT_CASUSBELLITURNS)
+
   GEN_BOOL("autoattack", game.server.autoattack, SSET_RULES_FLEXIBLE, SSET_MILITARY,
            SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
            N_("Turn on/off server-side autoattack"),
@@ -2333,11 +2491,21 @@ static struct setting settings[] = {
   GEN_BOOL("killcitizen", game.info.killcitizen,
            SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
            N_("Reduce city population after attack"),
-           N_("This flag indicates whether a city's population is reduced "
+           N_("This setting indicates whether a city's population is reduced "
               "after a successful attack by an enemy unit. If this is "
               "disabled, population is never reduced. Even when this is "
               "enabled, only some units may kill citizens."),
            NULL, NULL, GAME_DEFAULT_KILLCITIZEN)
+
+  GEN_INT("killcitizen_pct", game.server.killcitizen_pct,
+          SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
+          N_("Odds of 'killcitizen' engagements killing a citizen "),
+          N_("If setting 'killcitizen' is enabled, then this setting "
+             "regulates the odds that a successful attack on a city will "
+             "engage that setting's functionality. See the 'killcitizen' "
+             "setting for more info."),
+          NULL, NULL, NULL, GAME_MIN_KILLCITIZEN_PCT, GAME_MAX_KILLCITIZEN_PCT,
+          GAME_DEFAULT_KILLCITIZEN_PCT)
 
   GEN_INT("killunhomed", game.server.killunhomed,
           SSET_RULES, SSET_MILITARY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
@@ -2349,6 +2517,24 @@ static struct setting settings[] = {
              "death of the unit."),
           NULL, NULL, NULL, GAME_MIN_KILLUNHOMED, GAME_MAX_KILLUNHOMED,
           GAME_DEFAULT_KILLUNHOMED)
+
+  GEN_INT("hangry", game.server.hangry,
+          SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
+          N_("Starvation causes city disorder"),
+          N_("If set to 0, starvation does not affect the mood of city "
+            "citizens: there will be no disorder after famine. If set to positive, "
+            "starvation causes disorder."),
+          NULL, NULL, NULL, GAME_MIN_HANGRY, GAME_MAX_HANGRY, GAME_DEFAULT_HANGRY)
+
+  GEN_BOOL("fulldisorder", game.server.fulldisorder,
+           SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_SITUATIONAL, ALLOW_NONE, ALLOW_BASIC,
+           N_("Disorder prevents city production"),
+           N_("This setting indicates whether disorder in a city prevents "
+              "production. In the default case where it is disabled, "
+              "a city is merely not allowed to buy units. If this "
+              "setting is enabled, cities in disorder can neither produce "
+              "nor buy anything."),
+           NULL, NULL, GAME_DEFAULT_FULLDISORDER)
 
   GEN_ENUM("borders", game.info.borders,
            SSET_RULES, SSET_MILITARY, SSET_SITUATIONAL,
@@ -2461,6 +2647,15 @@ static struct setting settings[] = {
           NULL, NULL, NULL,
           GAME_MIN_ONSETBARBARIAN, GAME_MAX_ONSETBARBARIAN, 
           GAME_DEFAULT_ONSETBARBARIAN)
+
+  GEN_ENUM("looting", game.server.lootstyle,
+           SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL,
+           ALLOW_NONE, ALLOW_BASIC,
+           N_("Formula for loot from city conquest"),
+           N_("This setting controls the formula for how much loot is captured "
+              "from conquered cities."),
+              NULL, NULL, NULL,
+           lootstyle_name, GAME_DEFAULT_LOOTSTYLE)
 
   GEN_ENUM("revolentype", game.info.revolentype,
            SSET_RULES, SSET_SOCIOLOGY, SSET_RARE, ALLOW_NONE, ALLOW_BASIC,
@@ -2583,6 +2778,23 @@ static struct setting settings[] = {
               "a spaceship to arrive at Alpha Centauri."), NULL, NULL, NULL,
           GAME_MIN_SPACESHIP_TRAVEL_TIME, GAME_MAX_SPACESHIP_TRAVEL_TIME,
           GAME_DEFAULT_SPACESHIP_TRAVEL_TIME)
+
+  GEN_INT("city_output_style", game.server.city_output_style,
+          SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_RARE,
+          ALLOW_NONE, ALLOW_BASIC,
+          N_("Whether to replace city output behavior with WYSIWYG"),
+          N_("With the default setting of 0 (disabled), classic behavior decides "
+             "city output when a city grows or shrinks: citizens are re-arranged "
+             "to new tiles and specialists AFTER food, shields, and luxury "
+             "are calculated, but BEFORE science and gold are calculated. This "
+             "gives a small bonus to growing cities, but has a side-effect of "
+             "overriding the science and gold outputs for the tile and specialist "
+             "choices the player selected in the city. \n"
+             "If this value is set to 1 (enabled), then city output is calculated "
+             "exactly according to the tiles and specialists the city selected "
+             "prior to growing or shrinking."), NULL, NULL, NULL,
+          GAME_MIN_CITY_OUTPUT_STYLE, GAME_MAX_CITY_OUTPUT_STYLE,
+          GAME_DEFAULT_CITY_OUTPUT_STYLE)
 
   GEN_INT("civilwarsize", game.server.civilwarsize,
           SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_RARE,
@@ -3097,9 +3309,14 @@ static struct setting settings[] = {
                 "    R = include Research Speed\n"
                 "    S = include Settled Area\n"
                 "    E = include Economics\n"
+                "    T = include Trade Routes\n"
+                "    s = include Specialists\n"
                 "    M = include Military Service\n"
                 "    O = include Pollution\n"
                 "    C = include Culture\n"
+                "    U = include Units Built\n"
+                "    K = include Units Killed\n"
+                "    D = include Units Lost\n"
                 "Additionally, the following characters control whether "
                 "or not certain columns are displayed in the report:\n"
                 "    q = display \"quantity\" column\n"
@@ -3260,7 +3477,7 @@ static struct setting settings[] = {
           GAME_MIN_KICK_TIME, GAME_MAX_KICK_TIME, GAME_DEFAULT_KICK_TIME)
 
   GEN_STRING("metamessage", game.server.meta_info.user_message,
-             SSET_META, SSET_INTERNAL, SSET_RARE, ALLOW_CTRL, ALLOW_CTRL,
+             SSET_META, SSET_INTERNAL, SSET_RARE, ALLOW_NONE, ALLOW_CTRL,
              N_("Metaserver info line"),
              N_("User defined metaserver info line. For most of the time "
                 "a user defined metamessage will be used instead of an "
@@ -3403,6 +3620,7 @@ static bool setting_is_free_to_change(const struct setting *pset,
     /* The special case didn't make it legal to change the setting. Don't
      * give up. It could still be legal. Fall through so the non special
      * cases are checked too. */
+    fc__fallthrough;
 
   case SSET_MAP_ADD:
   case SSET_PLAYERS:
@@ -3923,7 +4141,7 @@ static bool setting_enum_validate_base(const struct setting *pset,
 ****************************************************************************/
 static bool set_enum_value(struct setting *pset, int val)
 {
-  switch(pset->enumerator.store_size) {
+  switch (pset->enumerator.store_size) {
    case sizeof(int):
      {
        int *to_int = pset->enumerator.pvalue;
@@ -3959,7 +4177,7 @@ int read_enum_value(const struct setting *pset)
 {
   int val;
 
-  switch(pset->enumerator.store_size) {
+  switch (pset->enumerator.store_size) {
    case sizeof(int):
      val = *((int *)pset->enumerator.pvalue);
      break;
@@ -5122,7 +5340,8 @@ void send_server_setting(struct conn_list *dest, const struct setting *pset)
   packet.id = setting_number(pset);                                         \
   packet.is_visible = setting_is_visible(pset, pconn);                      \
   packet.is_changeable = setting_is_changeable(pset, pconn, NULL, 0);       \
-  packet.initial_setting = game.info.is_new_game;
+  packet.initial_setting = game.info.is_new_game;                           \
+  packet.setdef = setting_get_setdef(pset);
 
   switch (setting_type(pset)) {
   case SST_BOOL:
@@ -5445,19 +5664,7 @@ void setting_changed(struct setting *pset)
 /************************************************************************//**
   Is the setting in changed state, or the default
 ****************************************************************************/
-enum setting_default_level setting_get_setdef(struct setting *pset)
+enum setting_default_level setting_get_setdef(const struct setting *pset)
 {
   return pset->setdef;
-}
-
-/************************************************************************//**
-  Compatibility function. In the very old times there was no concept of
-  'default' value outside setting initialization, all values were handled
-  like we now want to handle non-default ones.
-****************************************************************************/
-void settings_consider_all_changed(void)
-{
-  settings_iterate(SSET_ALL, pset) {
-    pset->setdef = SETDEF_CHANGED;
-  } settings_iterate_end;
 }

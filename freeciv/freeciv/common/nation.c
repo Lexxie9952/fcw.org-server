@@ -42,6 +42,8 @@ struct nation_set {
   char description[MAX_LEN_MSG];
 };
 
+static const char *indef_articles[4] = {"a", "an", "A", "An"};
+
 static struct nation_type *nations = NULL;
 
 static int num_nation_sets;
@@ -168,6 +170,52 @@ const char *nation_plural_translation(const struct nation_type *pnation)
 const char *nation_adjective_for_player(const struct player *pplayer)
 {
   return nation_adjective_translation(nation_of_player(pplayer));
+}
+/************************************************************************//**
+  Return "a" or "an", optionally capitalized, based on the word passed. 
+****************************************************************************/
+const char *indefinite_article_for_word(const char *word, bool capitalize)
+{
+  // indef_articles[] = {'a', 'an', 'A', 'An'};
+  const char *vowels[10] = {"a", "e", "i", "o", "u",
+                            "A", "E", "I", "O", "U"};
+  int vowel_count = 10;
+
+  for (int i=0; i<vowel_count; i++) {
+    if (word[0] == vowels[i][0]) {  // use "an":
+      if (capitalize) return indef_articles[3];
+      else return indef_articles[1];
+    }
+  }
+  // use "a":
+  if (capitalize) return indef_articles[2];
+  else return indef_articles[0];
+}
+/************************************************************************//**
+  Return true if the word is probably plural
+  Works on all words of known rulesets, but not mice, children, or geese. ;)
+****************************************************************************/
+bool is_word_plural(const char *word)
+{
+  if (!word) return false;
+  int len = strlen(word);
+  if (len<3) return false;
+  if (strcmp(&word[len-2], "ss") == 0) return false; // -ss are singular
+  if (word[len-1] == 's') return true;
+  if (strcmp(&word[len-3], "men") == 0) return true;  // Pikemen, Riflemen, etc.
+  return false;
+
+  /* Exceptions I, currently commented because they don't come up:
+  if (strcmp(word, "AWACS") == 0) return false; // names end in small 's'
+  if (strcmp(word, "JTIDS") == 0) return false; // names end in small 's'
+  if (strcmp(word, "United Nations") == 0) return false; // debatable ;)*/
+  /* Exceptions II, currently not needed / unimportant.  if (len>=5) {
+  if (strcmp(&word[len-4], "s II") == 0)  return true;  // Barracks II, et similia
+  if (strcmp(&word[len-5], "s III") == 0) return true;  // Barracks III, et similia
+  if (strcmp(&word[len-5], "solos") == 0) return false; // Mausoleum of Mausolos
+  if (strcmp(&word[len-5], "temis") == 0) return false; // Temple of Artemis
+  if (strcmp(&word[len-4], "Zeus") == 0) return false;} // Statue of Zeus
+  the above don't come up or in the case of Barracks, plurality seems loose */
 }
 
 /************************************************************************//**

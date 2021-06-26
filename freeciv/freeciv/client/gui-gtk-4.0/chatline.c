@@ -140,9 +140,10 @@ static bool is_plain_public_message(const char *s)
 static void inputline_return(GtkEntry *w, gpointer data)
 {
   const char *theinput;
+  GtkEntryBuffer *buffer = gtk_entry_get_buffer(w);
 
-  theinput = gtk_entry_get_text(w);
-  
+  theinput = gtk_entry_buffer_get_text(buffer);
+
   if (*theinput) {
     if (client_state() == C_S_RUNNING
         && GUI_GTK_OPTION(allied_chat_only)
@@ -167,7 +168,7 @@ static void inputline_return(GtkEntry *w, gpointer data)
     history_pos=-1;
   }
 
-  gtk_entry_set_text(w, "");
+  gtk_entry_buffer_set_text(buffer, "", -1);
 }
 
 /**********************************************************************//**
@@ -382,13 +383,15 @@ static gboolean inputline_handler(GtkWidget *w, GdkEvent *ev)
   } else {
     /* Chatline history controls. */
     guint keyval;
+    GtkEntryBuffer *buffer = gtk_entry_get_buffer(GTK_ENTRY(w));
 
     gdk_event_get_keyval(ev, &keyval);
     switch (keyval) {
     case GDK_KEY_Up:
       if (history_pos < genlist_size(history_list) - 1) {
-        gtk_entry_set_text(GTK_ENTRY(w),
-                           genlist_get(history_list, ++history_pos));
+        gtk_entry_buffer_set_text(buffer,
+                                  genlist_get(history_list, ++history_pos),
+                                  -1);
         gtk_editable_set_position(GTK_EDITABLE(w), -1);
       }
       return TRUE;
@@ -399,10 +402,11 @@ static gboolean inputline_handler(GtkWidget *w, GdkEvent *ev)
       }
 
       if (history_pos >= 0) {
-        gtk_entry_set_text(GTK_ENTRY(w),
-                           genlist_get(history_list, history_pos));
+        gtk_entry_buffer_set_text(buffer,
+                                  genlist_get(history_list, history_pos),
+                                  -1);
       } else {
-        gtk_entry_set_text(GTK_ENTRY(w), "");
+        gtk_entry_buffer_set_text(buffer, "", -1);
       }
       gtk_editable_set_position(GTK_EDITABLE(w), -1);
       return TRUE;
@@ -700,12 +704,10 @@ static void set_cursor_if_appropriate(GtkTextView *text_view, gint x, gint y)
 
   /* Initialize the cursors. */
   if (!hand_cursor) {
-    hand_cursor = gdk_cursor_new_for_display(
-        gtk_widget_get_display(GTK_WIDGET(text_view)), GDK_HAND2);
+    hand_cursor = gdk_cursor_new_from_name("pointer", NULL);
   }
   if (!regular_cursor) {
-    regular_cursor = gdk_cursor_new_for_display(
-        gtk_widget_get_display(GTK_WIDGET(text_view)), GDK_XTERM);
+    regular_cursor = gdk_cursor_new_from_name("text", NULL);
   }
 
   gtk_text_view_get_iter_at_location(text_view, &iter, x, y);
@@ -725,13 +727,9 @@ static void set_cursor_if_appropriate(GtkTextView *text_view, gint x, gint y)
     hovering_over_link = hovering;
 
     if (hovering_over_link) {
-      gdk_window_set_cursor(gtk_text_view_get_window(text_view,
-                                                     GTK_TEXT_WINDOW_TEXT),
-                            hand_cursor);
+      gtk_widget_set_cursor(GTK_WIDGET(text_view), hand_cursor);
     } else {
-      gdk_window_set_cursor(gtk_text_view_get_window(text_view,
-                                                     GTK_TEXT_WINDOW_TEXT),
-                            regular_cursor);
+      gtk_widget_set_cursor(GTK_WIDGET(text_view), regular_cursor);
     }
   }
 
@@ -1152,16 +1150,16 @@ static void select_color_callback(GtkToolButton *button, gpointer data)
               (const char *) g_object_get_data(G_OBJECT(button),
                                                "color_info"));
   dialog = gtk_dialog_new_with_buttons(buf, NULL, GTK_DIALOG_MODAL,
-                                       _("Cancel"), GTK_RESPONSE_CANCEL,
-                                       _("Clear"), GTK_RESPONSE_REJECT,
-                                       _("OK"), GTK_RESPONSE_OK, NULL);
+                                       _("_Cancel"), GTK_RESPONSE_CANCEL,
+                                       _("C_lear"), GTK_RESPONSE_REJECT,
+                                       _("_OK"), GTK_RESPONSE_OK, NULL);
   setup_dialog(dialog, toplevel);
   g_object_set_data(G_OBJECT(dialog), "button", button);
   g_signal_connect(dialog, "response", G_CALLBACK(color_selected), data);
 
   chooser = gtk_color_chooser_widget_new();
   gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))),
-                     chooser, FALSE, FALSE);
+                     chooser);
   g_object_set_data(G_OBJECT(dialog), "chooser", chooser);
   if (current_color) {
     gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(chooser), current_color);
@@ -1359,7 +1357,7 @@ void chatline_init(void)
   toolkit.toolbar = toolbar;
 
   /* Bold button. */
-  item = gtk_tool_button_new(gtk_image_new_from_icon_name("format-text-bold", 0),
+  item = gtk_tool_button_new(gtk_image_new_from_icon_name("format-text-bold"),
                              _("Bold"));
 
   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
@@ -1369,7 +1367,7 @@ void chatline_init(void)
   gtk_widget_set_tooltip_text(GTK_WIDGET(item), _("Bold (Ctrl-B)"));
 
   /* Italic button. */
-  item = gtk_tool_button_new(gtk_image_new_from_icon_name("format-text-italic", 0),
+  item = gtk_tool_button_new(gtk_image_new_from_icon_name("format-text-italic"),
                              _("Italic"));
   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
   g_object_set_data(G_OBJECT(item), "text_tag_type",
@@ -1378,7 +1376,7 @@ void chatline_init(void)
   gtk_widget_set_tooltip_text(GTK_WIDGET(item), _("Italic (Ctrl-I)"));
 
   /* Strike button. */
-  item = gtk_tool_button_new(gtk_image_new_from_icon_name("format-text-strikethrough", 0),
+  item = gtk_tool_button_new(gtk_image_new_from_icon_name("format-text-strikethrough"),
                              _("Strikethrough"));
   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
   g_object_set_data(G_OBJECT(item), "text_tag_type",
@@ -1387,7 +1385,7 @@ void chatline_init(void)
   gtk_widget_set_tooltip_text(GTK_WIDGET(item), _("Strikethrough (Ctrl-S)"));
 
   /* Underline button. */
-  item = gtk_tool_button_new(gtk_image_new_from_icon_name("format-text-underline", 0),
+  item = gtk_tool_button_new(gtk_image_new_from_icon_name("format-text-underline"),
                              _("Underline"));
   gtk_toolbar_insert(GTK_TOOLBAR(toolbar), item, -1);
   g_object_set_data(G_OBJECT(item), "text_tag_type",

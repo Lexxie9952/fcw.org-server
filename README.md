@@ -1,9 +1,9 @@
 THE FREECIV-WEB PROJECT
 -----------------------
 
-[![Build Status](https://api.travis-ci.org/freeciv/freeciv-web.png)](https://travis-ci.org/freeciv/freeciv-web)
+[![Build Status](https://github.com/Lexxie9952/fcw.org-server/workflows/continuous%20integration/badge.svg)](https://github.com/Lexxie9952/fcw.org-server/actions?query=workflow%3A%22continuous+integration%22)
 [![Code Quality: Javascript](https://img.shields.io/lgtm/grade/javascript/g/freeciv/freeciv-web.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/freeciv/freeciv-web/context:javascript)
-[![Total Alerts](https://img.shields.io/lgtm/alerts/g/freeciv/freeciv-web.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/freeciv/freeciv-web/alerts)
+[![Total Alerts](https://img.shields.io/lgtm/alerts/g/freeciv/freeciv-web.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/freeciv/freeciv-web/alerts) [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
 Freeciv-web is an open-source turn-based strategy game. It can be played in any HTML5 capable web-browser and features in-depth game-play and a wide variety of game modes and options. Your goal is to build cities, collect resources, organize your government, and build an army, with the ultimate goal of creating the best civilization. You can play online against other players (multiplayer) or play by yourself against the computer. There is both a HTML5 2D version with isometric graphics and a 3D WebGL version of Freeciv-web. 
 
@@ -14,11 +14,7 @@ Currently known servers based on Freeciv-web:
 - [Freecivweb.org](https://www.freecivweb.org) - Full Freeciv-web
 - [moving borders](https://fcw.movingborders.es) (Everything except longturn and real-Earth)
 
-Freeciv WebGL 3D:
-![Freeciv-web](https://raw.githubusercontent.com/freeciv/freeciv-web/develop/freeciv-web/src/main/webapp/javascript/webgl/freeciv-webgl.png "Freeciv-web WebGL screenshot")
-
-Freeciv-web HTML5 version:
-![Freeciv-web](https://raw.githubusercontent.com/freeciv/freeciv-web/develop/scripts/freeciv-web-screenshot.png "Freeciv-web screenshot")
+![Freeciv-web](https://raw.githubusercontent.com/Lexxie9952/fcw.org-server/master/fcw-2021.png "Freeciv-web screenshot")
 
 
 Overview
@@ -46,16 +42,10 @@ Freeciv-Web consists of these components:
 
 * [pbem](pbem) is play-by-email support. 
 
-* [freeciv-earth](freeciv-earth) is code to generate Freeciv savegames from a map captured from mapbox.
-
-Freeciv WebGL
--------------
-Freeciv WebGL is the 3D version, which uses the Three.js 3D engine. More info about the WebGL 3D version can be found for [developers](https://github.com/freeciv/freeciv-web/tree/develop/freeciv-web/src/main/webapp/javascript/webgl) and [3D artists](https://github.com/freeciv/freeciv-web/wiki/Contributing-Blender-models-for-Freeciv-WebGL).
-Developer: Andreas Røsdal [@andreasrosdal](http://www.github.com/andreasrosdal)  
-
 Running Freeciv-web on your computer
 ------------------------------------
-The recommended and probably easiest way is to use Vagrant on VirtualBox.
+The recommended and probably easiest way is to use Vagrant on VirtualBox.  
+[FCW Install Docs on Wiki](https://freecivweb.fandom.com/wiki/Freeciv-web_FCW_Install)  
 
 Whatever the method you choose, you'll have to check out Freeciv-web to a
 directory on your computer, by installing [Git](http://git-scm.com/) and
@@ -154,7 +144,7 @@ Install this software if you are not running Freeciv-web with Vagrant:
 
 - pngcrush, required for freeciv-img-extract.  http://pmt.sourceforge.net/pngcrush/
 
-- Tornado 5.1 or later - http://www.tornadoweb.org/
+- Tornado 6.1 or later - http://www.tornadoweb.org/
 
 - Jansson 2.6 - http://www.digip.org/jansson/
 
@@ -173,11 +163,30 @@ Start and stop Freeciv-web with the following commands:
 
 All software components in Freeciv-web will log to the /logs sub-directory of the Freeciv-web installation.
 
+
+### Running Freeciv-web on Docker
+
+Freeciv-web can easily be built and run from Docker using `docker-compose`. Web is exposed on port 80 by default.
+
+ 1. Make sure you have both [Docker](https://www.docker.com/get-started) and [Docker Compose](https://docs.docker.com/compose/install/) installed using MOST CURRENT VERSION of both, and are using a CURRENT Docker storage driver. 
+ 
+    ("Problems regarding 'setfacl' have been reported when using (deprecated) 'aufs' as Docker storage driver. Please try using 'overlay2' instead. You can check the storage driver by running 'docker info' or 'docker info | grep Storage'.")
+
+ 2. Run the following from the freeciv-web directory:
+
+    ```sh
+    docker-compose up -d
+    ```
+
+ 3. Connect to docker via host machine using standard browser
+
+http://localhost/
+
+Enjoy. The overall dockerfile and required changes to scripts needs some further improvements.
+
 Freeciv-Web continuous integration on Travis CI 
 -----------------------------------------------
 Freeciv-Web is built on Travis CI on every commit. This is the current build status: [![Build Status](https://api.travis-ci.org/freeciv/freeciv-web.png)](https://travis-ci.org/freeciv/freeciv-web)
-
-Freeciv-web has CasperJS tests which are run by Travis CI on every commit, and by Vagrant when creating a new image. The tests can be found in tests/freeciv-web-tests.js. Please make sure that patches and commits for Freeciv-web don't break the CasperJS tests. Thanks!
 
 Developers interested in Freeciv-web
 ------------------------------------

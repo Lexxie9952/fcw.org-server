@@ -30,11 +30,11 @@
 #include "advdata.h"
 
 /* ai/default */
-#include "aicity.h"
 #include "aiferry.h"
 #include "aiplayer.h"
 #include "aisettler.h"
 #include "aiunit.h"
+#include "daicity.h"
 #include "daidiplomacy.h"
 #include "daieffects.h"
 
@@ -205,7 +205,7 @@ void dai_data_phase_begin(struct ai_type *ait, struct player *pplayer,
   unit_list_iterate(pplayer->units, punit) {
     struct tile *ptile = unit_tile(punit);
 
-    if (unit_has_type_flag(punit, UTYF_SETTLERS)) {
+    if (unit_has_type_flag(punit, UTYF_SETTLERS) && unit_has_type_flag(punit, UTYF_CIVILIAN)) {
       if (is_ocean_tile(ptile)) {
         ai->stats.ocean_workers[(int)-tile_continent(ptile)]++;
       } else {
@@ -218,10 +218,13 @@ void dai_data_phase_begin(struct ai_type *ait, struct player *pplayer,
   unit_list_iterate(pplayer->units, punit) {
     if ((unit_can_do_action(punit, ACTION_SPY_POISON)
          || unit_can_do_action(punit, ACTION_SPY_POISON_ESC)
+         || unit_can_do_action(punit, ACTION_SPY_SPREAD_PLAGUE)
          || unit_can_do_action(punit, ACTION_SPY_SABOTAGE_CITY)
          || unit_can_do_action(punit, ACTION_SPY_SABOTAGE_CITY_ESC)
          || unit_can_do_action(punit, ACTION_SPY_TARGETED_SABOTAGE_CITY)
          || unit_can_do_action(punit, ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC)
+         || unit_can_do_action(punit, ACTION_SPY_SABOTAGE_CITY_PRODUCTION)
+         || unit_can_do_action(punit, ACTION_SPY_SABOTAGE_CITY_PRODUCTION_ESC)
          || unit_can_do_action(punit, ACTION_SPY_INCITE_CITY)
          || unit_can_do_action(punit, ACTION_SPY_INCITE_CITY_ESC)
          || unit_can_do_action(punit, ACTION_ESTABLISH_EMBASSY)

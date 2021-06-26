@@ -12,7 +12,7 @@
 
 [datafile]
 description="Civ1-equivalent nations data for Freeciv"
-options="+Freeciv-ruleset-Devel-2017.Jan.02"
+options="+Freeciv-ruleset-Devel-2017.Jan.02 web-compatible"
 format_version=20
 
 ; This section contains meta information for freeciv-ruledit to recreate the ruleset
@@ -57,6 +57,11 @@ default_government = "Despotism"
 ;aggressive_min = 50
 ;aggressive_max = 50
 ;aggressive_default = 50
+
+; Value of trait "builder" defines how much AI wants to build buildings
+;builder_min = 50
+;builder_max = 50
+;builder_default = 50
 
 ; Descriptions of nation sets
 ; These are self-contained subsets of the available nations; one of these

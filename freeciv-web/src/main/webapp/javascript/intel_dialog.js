@@ -43,7 +43,10 @@ function show_intelligence_report_hearsay(pplayer)
 {
   var msg = "Ruler " + pplayer['name'] + "<br>";
   if (pplayer['government'] > 0) {
-    msg += "Government: " + governments[pplayer['government']]['name'] + "<br>";
+    var gov_mod = get_gov_modifier(pplayer.playerno, "", true);
+    var gov_name = governments[pplayer['government']]['name'];
+    if (gov_mod) gov_name = gov_mod + " " + gov_name;
+    msg += "Government: " + gov_name + "<br>";
   }
 
   if (pplayer['gold'] > 0) {
@@ -68,14 +71,19 @@ function show_intelligence_report_hearsay(pplayer)
 function show_intelligence_report_embassy(pplayer)
 {
   // reset dialog page.
-  $("#intel_dialog").remove();
+  remove_active_dialog("#intel_dialog");
   $("<div id='intel_dialog'></div>").appendTo("div#game_page");
 
   const capital = player_capital(pplayer);
 
+  var gov_mod = get_gov_modifier(pplayer.playerno, "", true);
+  var gov_name = governments[pplayer['government']]['name'];
+  const natl_adj = nations[pplayer['nation']]['adjective'];
+  if (gov_mod) gov_name = gov_mod + " " + gov_name;
+
   var intel_data = {
     ruler: pplayer['name'],
-    government: governments[pplayer['government']]['name'],
+    government: gov_name,
     capital: capital ? capital.name : '(capital unknown)',
     gold: pplayer['gold'],
     tax: pplayer['tax'] + '%',
@@ -92,7 +100,8 @@ function show_intelligence_report_embassy(pplayer)
     if (players[pplayer.playerno].wonders[w] != 0  // player has wonder
         && improvements[w].genus <= 1   ) {  // 0==great wonder, 1==small wonder, 2==normal improv.
           intel_data['wndr'].push({
-            name: improvements[w].name
+            name: improvements[w].name,
+            helptext: html_safe(improvements[w].helptext)
           });
     }
   }
@@ -144,13 +153,46 @@ function show_intelligence_report_embassy(pplayer)
   $("#intel_dialog").dialog({
 			bgiframe: true,
 			modal: true,
-			title: "Intel Report: "
-                             + nations[pplayer['nation']]['adjective']
-                             + " Empire",
-                        width: "auto"
+			title: "" + nations[pplayer['nation']]['adjective'] + " Intel Report",
+                             width: is_small_screen() ? "91%" : "auto"
                      });
 
   $("#intel_dialog").dialog('open');
+  // Smaller titlebar font to fit long titles better:
+  $("#intel_dialog").parent().children().first().css("font-size", "85%");
+
+  if (gov_name) 
+    $("#intel_gov").css({"color": color_gov_color(gov_name,1),
+                         "text-shadow": "1px 1px "+color_gov_color(gov_name,2)});
+
+  /*************** Set up report UI for interacting with 3 classes of tech in the report ****************/
+    // Refresh visibility for all 3 classes of tech, when showing a new report:
+    $("li.tech-them").css("display", "");
+    $("li.tech-me_only").css("display", "");
+    $("li.tech-both").css("display", "");
+
+    // Set helptext:
+    $("li.tech-them").attr("title",""+natl_adj+" have. We don't. CLICK to remove these from report.");
+    $("li.tech-me_only").attr("title","We have. "+natl_adj+" don't. CLICK to remove these from report.");
+    $("li.tech-both").attr("title", ""+natl_adj+" have and we have. CLICK to remove these from report.")
+
+    // Set that user may click one of the three classes of tech to remove it from report:
+    $("li.tech-them").on('click', function(event){
+      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-them").css("display", "none");
+    });
+    $("li.tech-me_only").on('click', function(event){
+      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-me_only").css("display", "none");
+    });
+    $("li.tech-both").on('click', function(event){
+      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-both").css("display", "none");
+    });
+  /*******************************/
+
+  if (is_small_screen())
+    $("#intel_tabs li").children().css("padding", "6px");
+
+  dialog_register("#intel_dialog");
+  
   $("#intel_tabs").tabs();
   $("#game_text_input").blur();
 }

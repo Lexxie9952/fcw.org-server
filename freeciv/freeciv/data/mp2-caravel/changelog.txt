@@ -1,0 +1,564 @@
+Brief Explanations of goals and challenges.
+   Simplicity vs. Complexity.
+      Unneeded complexity should be reduced. Where needed for balance it is acceptable, but look for 
+         other additions or modifications to ultimately reduce it.
+      Simplicity is ideal exactly up to the point where it doesn't create imbalance, spam, or golden 
+         path. Sometimes this can be obtained quite easily, other times it is difficult and first 
+         solutions to solve balance issues might be more complex then later ways are found to reduce it.
+   Balance, Playability, Realism, ideally all three, conflicts are resolved in that respective order.
+   Several other Manifesto points:
+      "Game of a lifetime", "Depth of strategy, diversity of strategy: i.e., reduce spamming contexts,
+      reduce/eliminate Golden Path formulas."
+
+   What motivates Ruleset additions
+      Obviously a lot of new things appear, which seems to be throwing "the kitchen sink into the rules
+      just for the fun of it." This is not what is happening. Everything is driven by #1 goal of balance,
+      and additions happen when the easiest way to achieve that is to add something. Some new additions 
+      rarely happen because of Playability and Realism, but most are because of Balance. We can't just 
+      throw in "Saw Mill" because it seems "cool", as this may affect the balance of every other thing.
+      Rather, when a balance issue is identified, sometimes the easiest way to solve it is through 
+      creating a "holistic" counterbalance. If that counterbalance also supplies more playability, fun,
+      and realism, THEN we add it.
+   Issues 
+      2x movement, side effect balancing.
+      Non-infinite rails, side effect balancing.
+      Rewonder 1.0, side effect balancing. Largest side effects:
+         1. overpowering the rapture-based govs.
+         2. "counts as a ... in every city" had rendered many improvements in the game useless, e.g. power plant, 
+            hydro plant, nuclear plant, police station, cathedral, courthouse, etc. One by one, these are being
+            morphed into more interesting layered effects instead of just "x in every city", which worked for
+            Great Wonders fine, but created a kind of exponential imbalance where the more powerful you were,
+            the more powerful you were (because the wonders represent cheaper and cheaper improvements), thus 
+            resulting in a more exaggerated power imbalance between players.
+   Almost all changes since MP2 started have been in response to these. Most smaller areas have already been 
+      resolved or finalized (air unit balance and mechanics, unreachable exploits, infinite rails, etc.)
+      
+Focus goals for MP2-Caravel
+1.  Increase splendor of the Bronze Age. Define your national race, characteristics, and unique path.
+1a. Increase progress in the ruleset goal that the variety of wonders is such that there are too many to build: if you try, say hello
+    to Horseys coming for you! Contunued enhancing of the "Too many wonders" characteristic continues to reduce the sameness or 
+    similarity in national characteristics and same strategies, especially among the "Wonderboy" players. Each nation has to 
+    carefully pick its diverse traits and advantages. Final result: more strategic breadth and variety, further progress toward 
+    the goal of "game of a lifetime", continued elimination of "golden path" traits of the game.
+2. Attempt the Final Re-balance of what 2x movement rates have done to foot units.
+   Make Foot units a true tactical component again.
+3. Re-balance of Govs toward the vibe and vision of what we know it should be like.
+4. Enhance Trade routes and other mechanics to increase the Diplomatic / Economic bloc / Sovereign concerns of
+   each individual nation:  Nerf mechanics forcing gang-alliance loyalties.
+
+WONDERS:
+========
+1. Colossus: +1 trade on city center, -5 cost on most commerce units built in that city. 2 notch or ~22% increase to trade in its city. Bug-fix: Now must be built adjacent to Ocean.
+2. Hanging Gardens now costs 210 and is obsolete by Steam Engine: 
+   increase diversity of other early wonder strategies
+   encourage Frigates before Ironclads
+   more difficult for representative govs to rapture simultaneous to mid-game invasions
+3. Magna Carta, new wonder, creates a new government Constitutional Monarchy which is half between Monarchy and Republic. 
+   for the price of Oracle, Eiffel Tower, and Statue of Zeus, you basically get those same effects and a Republic-ish government: 
+      1 extra content, 1 free unit upkeep, 1 more content about military than Republic, extra trade on land tiles, ability to rapture.
+      One can also consider no lost turn of anarchy as a hidden discount in the 300 shield price. 
+      What you don't get: 1 free trade on water (unless celebrating), lower chance of civil war, 80% max tax, the ability to choose
+         those 300 shields went to some other more desired first investment than Oracle, Zeus, Eiffel Tower, as much trust from your
+         peaceful neighbours. 
+      What you get Republic that Republic doesn't, if it had spent 300 on Oracle, Eiffel Tower, and Zeus:  one free martial law,
+      keep your capital production bonus, the ability to still make 1) Oracle, Eiffel Tower, and Zeus; 2) Your "free" Oracle and Zeus won't
+      expire/become obsolete, less trust from your neighbours.
+4. New Wonder Appian Way:  Foot units, Chariots and Wagons get move bonus from Appian Way. City with Appian gets discounts on Wagons. 
+      increases revenue from trade routes approx. 10%, gives +1 trade to every road tile in its home city, 
+      workers +1/3 move and build roads at double speed
+5. Women's Suffrage small wonder combined with JSB small wonder made Democracy almost immune to the intended disadvantages it's supposed to have
+      to counterbalance its superior economy. Women's Suffrage now counts as +1 happy in every city. This will keep a city content from one military
+      but not necessarily help rapture it since rapture needs no unhappy; instead of formerly, 4 unhappy citizens about military all being forced
+      content.  This makes slightly tunes Democracies to perform better at Peace and not as well for war. However, this also represents another slight
+      nerf to democracy because once ONE player has it, it causes discontent in all representative governments which DON'T have it, thereby causing
+      an obligatory 300 shield expense for democracies OR a nerf of +1 unhappy person in all democracies without it.
+6. United Nations Wonder has new features which make it more globally interesting and strategic.
+      1. When someone violates a treaty with another player, United Nations will give the whole world casus belli against that player. 
+      2. Now that casus belli is tuned to work better, this opens up a lot more diplomatic intrigue and strategies from this wonder.
+      3. Cost 500, was 600.
+7. Statue of Zeus gains new ability, increases odds of veteran promotion by one third prior to discovery of Republic. 
+8. Gibraltar Fortress was another "wonder in every city" that made the original improvement worthless, while itself adding no extra dynamic to the 
+    game. It now becomes an extra commitment in cost to make existing coastal defenses stronger; also gives the one city it's built in a 3x defense
+    against sea attacks, as an additional point of interest to balance out the new bombard abilities of battleships. Cost: 330 (was 350)
+9. Hoover as small wonder made FOUR different improvements useless. This was an acceptable hack since Power Plants were one of the very 
+    few areas that was imbalanced in original Civ2. Now, all 4 power plants are well-balanced, uniquely useful, and create different Economic
+    paths and decisions regarding preferences over production/pollution/investment costs/tech priorities. Hoover is now a mega-production wonder
+    in its individual city while giving small bonuses to all hydro plants in other cities. See also: Power Plants.
+10. Fusion Reactor. The wonder model of "counts as x all cities" was moved from Hoover to The Fusion Reactor, which makes more sense. This model is 
+    now frowned on for small wonders but, in this case it makes sense in the very end game when no one wants to be messing with power 
+    plant upgrades in 75 cities. Not just for that reason: the major bonus of Fusion Power is selling off all the other power plants and going to 
+    lower upkeep, lower pollution, and instantly having fusion power in all newly acquired cities. 
+11. Pyramids gain from the server upgrade on EFT_GROWTH and confer 25% food to newly founded cities, now cost 200, and require Mathematics.
+12. Wonder price adjustments 
+    ** HG 210             
+    ** A.Smith 320 - it's powerful!          
+    ** Eiffel 125 - it was underpriced        
+    ** Isaac 420 - slightly discourage everyone doing isaac
+    ** Sun Tzu 310 - slightly discourage everyone having hardened units
+13. The Sphinx, cost 70, tech req: none, reduces tile corruption (anarchy/despotism), halves city corruption, gives +1 luxury to city.
+14. Marco Polo, as an embassy and outer relations/connections type of wonder, can't be lost in the conquest of a single city. 
+    This is especially fair since: this is the only wonder in the game that is "required", one might say. This provides fairness to 
+    all players who otherwise would prefer a "no wonder" strategy.
+15. Roman Colosseum added. Entertainers give 3 lux instead of 2, now equal in net trade to scientists or taxmen. Each city with an 
+   Amphitheater gains +1 happy and +1 luxury.
+16. Chand Baori 
+17. Medici Bank 
+18. Roman Colosseum
+19. Ziggurat.
+20. Pax Dei, a diplomatic/political intrigue or trump card to capture middle ages dynamics. Works as a (very) short-term kind of united nations, 
+   but can be used in devious ways as well.
+CIVIL WONDERS are wonders that help define the charactertistics of your race, nation, and culture, and may alter its strategic
+   path and possibilities. 
+1. HG is now a Civil Wonder. 
+2. Angkor Wat. +1 happy, all tiles in cities 3+ get celebration bonus when city is not celebrating, tile work on jungle/swamp 50% faster, 
+               irrigation of lowlands faster, cost of Elephants -5 shields.
+3. Mausoleum of Mausolos.
+4. Code of Hammurabi, halves the gap between Despotism and Monarchy, and gives one content citizen. CIVIL WONDER.
+
+BUILDINGS:
+==========
+1. Barracks requirement is Warrior Code. Besides making sense and rewarding early discovery of that tech as a diverse strategy to pursue, it 
+   balances out the longturn's format of giving starting gold and extra disbandable units.
+ a. Barracks II 35, Barracks III 40.
+2. Coinage yields 3 gold per 2 shields, (i.e., 1.5 gold per shield), so it no longer a "useless" feature taking up game space.
+ a. Marketplace, Bank, and Stock Exchange each add 0.25 to the conversion rate (1.75,2.00,2.25, respectively).
+      1. requires all earlier buildings present, 2. not Communist gov, 3. the final bonus for Stock Exchange also requires The Corporation
+3. Police Station prevents investigate city for all govs except Democracy.
+ a. Since Foreign Nationals are categorised as "discontent about military", Police Station now works on those for all governments (was Repub/Demo only)
+4. Courthouse prevents Diplomats (not Spies) from doing hostile Embassy without first cease-fire or peace.
+5. City Walls were sometimes too cheap, sometimes too expensive, sometimes too OP, etc., this was very similar to the issue with Fortresses 
+   that was fixed earlier with the Fort/Fortress distinction. The new City Walls solution breaks into two types somewhat modeled on the 
+   Fort / Fortress solution now. 
+   City Fortifications are available with Masonry and provide 1.75x; 
+   City Walls come with Construction and remain 3x. (Same for Great Wall wonder.)
+   Just as with Fort/Fortress, City Fortifications are cheaper/easier to build but not as strong. Also same is that they don't 
+   stack. And also same is Masonry for first, Construction for second. 
+   City Walls which cost 80 in Civ2, cost 65 now in early game, and 75 after discovery of Steel.
+   Fortifications for cities that get Walls later are not lost investment. Selling Fortifications in a city with City Walls will recoup
+   the full gold price of the Fortifications. Be sure to have the City Walls made first. 
+   If City Walls are sabotaged, you can keep the Fortifications for a weaker backup.
+   With some kinds of terrain, Fortifications modify, integrate, and are built into the terrain itself: Swamp, Forest, Jungle.
+   This raises the terrain defense bonus of Swamp, Forest, and Jungle to 1.5x, 1.5x, and 1.67x respectively (+17%) 
+6. SAM Battery cost 80 (was 70) [100 in Civ2]
+7. Coastal Defense cost 65, upkeep 2. (Civ2: 80, 1). Micro-balances economic inflation effects and complaints C.D. is too cheap/strong/easy/common 
+     for preventing naval attacks. See also: Gibraltar Fortress.
+8. Power Plants refactoring. Formerly, each plant had identical characteristics in upkeep and output, with the only difference being that
+     you paid WAY more than it's worth to get less pollution. Now, each Power Plant has a different profile for output, pollution, upgrade
+     incentives, and so on. They fit together well in a meta-system, not just with themselves, but with other improvements. 
+  a. Solar Plant and the new Wind Plant are no longer (only one type can co-exist in the same city.)
+
+GOVERNMENT RE-BALANCE:
+* ALL NON-REPRESENTATIVE GOVERNMENTS:
+1. Courthouse gives +1 content to all govs, not just Democracy 
+2. Statue of Zeus makes 1 citizen content about military for govs who need that, and if not, simply 1 citizen content.
+* DESPOTISM
+   Gains new "Gulag" ability: can starve cities without disorder if 2 martial law units are there.
+* MONARCHY:
+   gets the option to build Magna Carta to become a half/hybrid between monarchy and republic characteristics, which opens 
+   up intriguing different strategies or counter-strategies to others. Magna Carta activates the new gov 
+* CONSTITUTIONAL MONARCHY
+* FUNDAMENTALISM:
+0. Renamed to Theocracy and re-balanced to be more competitive.
+1. Theocratic govs are harder to bribe, cost is 2x.
+2. Pilgrams have no pop_cost! Now, it's like buying rapture for 10 shields. Pilgrims use ONE city-build-slot instead of all.
+3. Government now gets the "generate partisans" effect.
+4. Fanatics renamed to Zealots, otherwise same unit, except:
+   a. They can skirmish assault cities which have foreign populations (e.g., your recently conquered city)
+   b. Available with Conscription, not Fundamentalism which is no longer a tech.
+5. -50% bulbs in exchange for free upkeep on temples/make_content buildings, was a harsh penalty. Changed to:  
+   a. Bonus/penalty is symmetric now: -20% for sci, +20% for gold.
+6. New unit Falconeer represents the Janissaries and Hand cannoneers employed by mediaevel theocratic orders.  
+* COMMUNISM:
+1. Proletarians have 1 pop_cost but add 2 pop. Same +1 net pop as Pilgrims, but can better use granary dynamics and magnify state populace control of "boom-town" growth. One city build slot used, not all.
+2. Communists: 10 shield discount on Armor I.
+3. Gains new "Gulag" ability: can starve cities without disorder if martial_law count is 3 or more. (each unit counts for 2, each police station for 2.)
+* DEMOCRACY:
+1. Democracy has base corruption level of 8%, (half of Republic/Monarchy)
+2. Democracy: corruption increases by 0.4% per tile from capital (1/5 that of most other govs (=2%))
+3. Democracies can now be BRIBED, but cost is 3x. 
+4. Democacies can now be INCITED TO REVOLT, but cost is 3x.
+5. Democracy can't rapture with 10% or more foreign citizens.
+6. Also see, Hanging Gardens, Police Station, Women's Suffrage.
+* NATIONALISM
+1. New government, see manual for details. An modern authoritarian warlike government that, on a one-for-one per capita population comparison, is quite economically
+   capable of competing with democracies.
+* FOREIGN NATIONALS:
+1. 40% are unhappy, increase from 34%.
+2. Fixed, was sometimes rounding up too high, the number of your own nationals in a newly conquered city.
+
+UNITS/COMBAT/MECHANICS:
+* FOOT UNITS
+1. "Hand-me-down upgrade bonus":
+   Early foot convert to Musketeers for free in domestic cities upon discovering Conscription.
+   Musketeers "        " Riflemen    "    "   "    "        "     "      "       Labor Union.
+2. Pre-feudal foot units (Warrior, Archer, Phalanx, Legion) cost 20% less.
+3. Feudal foot units (Pikemen) cost 10% less.
+4. Marines can now: build Fort/Airbase, but not Airbase in a Fort.
+      Gain +2 move frags per vet level
+      V2+ can do ranged Bazooka Attack for 3 rounds on up to 2 targets.
+      Note this does not represent superior range of Marines to other units/weaponry, but rather
+         special commando training for fast initiative surprise degradation tactics, concealment advantage, etc.
+      Marines cost 55 (was 60).
+5. Paratroopers A7 D5. Cost 55 (was 60)
+6. Partisans cost 45 (was 50).
+7. Shift from shield to gold upkeep for Infantry changed from Labor Union to Banking. Allows realistic foot soldier compositions to affect more of the game.
+* SPECIAL UNIT ABILITIES - This is a new MP2 design goal to increase tactical depth, unit diversity, playstyle variety, realism accuracy, and even further reduce "golden pathing" of military strategies.
+1. SPECIAL UNIT ATTACKS. Tactical depth blossoms: Now possible are: Hit-and-run tactics; multiple ranged attacks per turn; engagements with less than all units on the tile.
+      Phalanx, Rumble Attack: 3 combat rounds, stays fortified, can hit 1 unit, can kill no units, uses 5/9 moves, requires 1 move left, requires fortified or not moved prior.
+      Legion, Pilum Assault: 1 combat round, 2x attack, can hit 2 units, can kill 2 units, uses 1 move.
+      Archers, Volley attack: 2 combat rounds (was 1), stays fortified, can hit up to 7 units (was unlimited), can kill no units, uses 1 5/9 moves (was turn loss), can attack water.
+      Fanatics, Skirmish assault: 3 combat rounds, can hit up to 4 units, can kill no units, uses 1 5/9 moves. Now, can also assault conquered foreign-occupied cities.
+      Marines, Bazooka attack: 3 combat rounds, can hit up to 4 units, can kill 1 unit, uses 1 5/9 moves, can hit oceanic (but not while transported)
+      Battleship, Bombard attack: 3 combat rounds, 4 units, can kill 1, uses 5 moves.
+      Catapult, Cannon, Artillery, Howitzer can defend against bombard/ranged/special unit attacks at 4,5,6,7 combat rounds, respectively.
+2. iPILLAGE. Instant Pillage is tactically significant. Formerly, roads under rails couldn't be pillaged in one turn. Scorched Earth and Blitz tactics barely existed in the game.
+      NOTE: iPillage Odds increase +5% per vet level.
+      Dive Bomber - 50% odds, 1 selectable target, 7 move cost. 
+      Ground Strike Fighter - 75% odds, 1 selectable target, 3 moves cost.
+      Armor I/II - 75% odds, 1 selectable target, 2 move cost.
+      Strategic Bomber - 60% odds, 1 random target, 3 move cost.
+      Jet Bomber - 75% odds, 2 random targets, 3 move cost.
+3. SPECIAL STANDARD ATTACKS
+      Phalanx and Marines can stay fortified during attack.
+* PRICE CHANGES
+    Pre-feudal units -20% foot, -10% mounted. Catapult 34.
+    Feudal:          -10% foot, -5% mounted.  Armor II: 85 (was 80)
+* UNITS:
+1. Siege Ram: Must use roads. SPECIAL UNIT ATTACKS:
+    Attack City Walls. 50% chance to destroy city walls (requires 1 full move point), odds halved against capitals.
+    Ram Fortress:      attack on fortified walls is emulated by up to 4hp damage on each occupant, emulating a 0 to 80% reduction of Fortress defense bonus; which may be partly/fully repaired/recovered each successive turn.
+    Two Rams will likely render Fortress defense into liability. Troops who remain in a Fortress facing two Siege Rams will be damaged and demoralized from breaches
+    and crushing stone debris. But, proactive defenders can pillage the Fortress and use its stone to improvise fortified structures (a Fort, which is left after a Fortress is pillaged) 
+    That is, render the tile into an unrammable Fort which still gets a 1.33x bonus protection from stack kill.
+    The net effect of this realistically emulates that Fortresses are dominant military presences until attackers take the time and wherewithal to get around 
+    to protracted siege, whereafter they are still defendable but at a lesser bonus.
+2. Satellite: invisible, can investigate all cities (even with Police Station), has superior vision and movement. Requires Apollo Program.
+3. Zeppelin:  upgrades balloon, greater vision/movement/fuel, some limited attack capabilities, can do limited bombing.
+4. Helicopter fixed, correctly susceptible to SAM Battery not City Walls (fixes a nerf of 3x for a land unit not from original game)
+   this fix was retroactive to AG and Brava also, as it was a really bad treason against the branch's DNA.
+5. Battleship gets ranged attack: 3 rounds, can hit up to 4 units, can kill up to 1 unit, uses 5 moves.
+6. Truck replaces Freight. Changes: Road only, moves: 6, can carry 3 land units. load/unload rules same as Train.
+7. Discovery of Recycling reduces unit upgrades 20%, stacks with other discounts.
+8. A server flaw sometimes
+   a. allowed military units to clean fallout and pollution. This fix affects ALL rulesets.
+   b. For non-military units, only spies and worker types can pillage now. Excluded are: Caravans, Explorers, Diplomats, Pilgrims, Tribesmen, Trucks, Freight.
+9. Base Stack Escape odds are 60%, not 50%. 50% is too coin-flip on live or die for anyone to really use or count on this bonus.
+      Higher, however, can give too much power to stacks. 
+9a. Destroyer types are fast and have 67% stack escape odds. Submarines are submerged and have 75% stack escape odds.
+10. Fighter is D3.5, Escort Fighter is A3.5.
+
+BALLISTIC sub-class 
+1. Catapults and their upgrade line (Cannon, Artillery, Howitzer) are now the Ballstic sub-class of the Land unit class. This line of units gets an increasing +25% upgrade over 
+   the obsolete unit, in how much of the Fortification/City Wall bonus it reduces. Catapult takes -25% from Fortifications and Wall bonuses. This represents their 
+   special unit ability, makes them all a more logical family progression (instead of all -0% then Howitzer is suddenly -100% bonus). It also helps these
+   slow units fit much better into their historic realistic tactical uses, inside the game.
+2. Catapult > Cannon > Artillery > Howitzer is now an evolutionary sub-class of land units for Ballistic/Siege/City Busting as their 
+   special unit ability or distinction. Each one gets a special bonus against City Defense improvements that progressively grows until
+   arriving at Howitzer. This does a lot for game balance and logic.
+2. Ballistic sub-class special unit ability is that it can retaliate against ranged special unit attacks from other unit types. They may be 
+   weak defenders up close, but be careful shooting arrows or bazookas at them from far away, or you might regret it.
+
+SPIES/DIPLOMATS:
+1. Diplomatic units now defend a unit on a tile from hostile diplomatic acts (bribe/sabotage), the same as they defend a city from hostile diplomat attacks.
+   a. In the case where bribe/sabotage isn't possible (i.e., other non-diplomat units > 1), no defense is necessary since it's "No action possible."
+   b. Where it is only the case of 1 diplomat vs. 1 enemy diplomat, they enter into diplomatic combat, the same as in a city.
+   c. Spies promotion odds increased to compensate for the weaker strength of their veterancy levels, to make it track more similar 
+      to other units for number of successful surviving actions.
+   d. Spies can investigate city from a transport, but not other actions.
+   e. Diplomats can investigate city without being spent.
+2. Investigate City is now no longer hard-coded in server to 100% success. What this means for MP2:
+   80% chance to COVERTLY SLIP past enemy diplomats/spies WITHOUT diplomatic combat. (100% if unprotected)
+   If slipped past OR defeated enemy diplomats in combat, 85% chance to succeed at investigating city.
+   FINAL ODDS: 
+      85% chance to investigate unprotected city
+      ~75% chance to succeed vs. protected city (varies slightly up or down with the vet levels of the spy units in combat.)
+      causes casus belli on failure!
+3. Conquered cities with Foreigners have a +10% chance of success in sabotage actions.
+4. Cities with 50% or more foreign citizens are considered occupied warzones, rather than cozy places where spies can 
+      steal weapons techs from scientists at the university. No tech theft from a city that is half or more foreign.
+      This fixes some ridiculous cases where u couldn't conquer a city because ur afraid to give Mass Production to your enemy,
+      even though u could try as hard as hell to make sure no soldiers are carrying out tech briefcases on how to do Mass Prod.
+
+OTHER:
+1.Casus Belli Expansions:
+   a. In a foreign territory casus belli is given by:  Transforming Terrain, Building Base, or making road-types (road,rail,quay,canal,etc.)
+   b. Bribe enemy unit.
+   c. Found City on foreign territory (i.e., in a Fort.)
+   d. Capture Units (fixed an unknown server bug that allows this to work now.)
+   e. Investigate City if discovered when dong it.
+   f. Moving military units inside foreign territory with whom you have Cease-fire, Peace, Armistice:
+      NOTE, if you accept cease-fire while inside someone's territory, moving the units will give casus belli. Be out first.
+   g. Formerly, casus belli lasted 2 turns: the turn of the incident and one after. mp2c now uses the new server setting 
+      casusbelliturns and defaults to 12.
+2. Improved tuning of terrain dispersion; less domination in some areas by a single terrain type.
+3. Balance Alignment of Resource Distribution (BARD. 1. On the first TC, BARD allocates a SMALL amount of:
+   Berries, Spice, Peat, Oasis, Rubber, Gems, Elk, Furs, Ivory, and Iron, in order to enhance statistical
+   balance in each climactic region. Typically this is less than a 4% chance per tile, with exact value tuned to regional
+   geographic balance. (Swamp and Arctic get somewhat more.) 2. BARD overcomes the map generator's forced 35%
+   chance a tile gets a resource, regardless of terrain, resource type, or scarcity of nearby resources on other tiles.
+   3. BARD discourages settling on the first turn, giving one turn of "oxygen" for all players to look around before settling
+   their cities. This was preferred to proposals to disallow settling on first turn, or to exaggerate inconsistent special
+   exception bonuses for starting moves, exceptions to terrain movement penalties for x turns, etc., etc.
+3a. Furs can now exist on Arctic terrain. This provides more balance to the worst terrain type in the game.
+4. "Blood for Oil":  After Refining, Oil Wells built on Oil get +1 shield after other bonuses. 
+     (Previously, it was arguably better to irrigate rather than mine.) Oil tiles with more value are now more worth fighting for.
+5. Monotheism 384 (was 415), Theology 600 (was 725), Theocracy 725
+6. Added Castle. Built on top of Fortress. a. Units inside can't be seen. b. Moat prevents Siege Rams. c. Claims more surrounding tiles. d. Sees farther.
+ e. No extra defense bonus.
+   reqs: Construction, Feudalism. Obsolete by: Gunpowder.
+7. Added Bunker. Built on top of Fortress. a. Units inside can't be seen. b. Prevents Air and Missile attacks. 
+   c. Prevents tile pillage (so Jet Bomber etc. can't remove it) d. Claims less surrounding tiles, doesn't see as far, no extra defense bonus.
+   reqs: steel
+8. Trade re-balance. You've only got one trade route per city so we're going to make it mean something. Trade and Project Honeycomb are now
+   ready to come into the game with some real meaning!
+   Traderoutes add a hard +1 trade to the city centre.
+   One-time gold bonus for establishing a trade route is now the standard freeciv bonus. It's a lot more, but it's only once per city. 
+   4x one-time gold bonus for establishing trade routes between capitals, if it's before Banking is discovered.
+   Base route revenues is now 50% higher than standard. With only one route instead of 4, this means you're still getting 
+      only 37.5% from trade routes as the former (OP) trade dynamics. But 37.% of OP is something substantial.
+      Marco Polo continues to take care of the other 3 routes you would have had under standard rules, keeping the game simpler.
+      For all these bonuses is a price to pay. Minimum distance for trade routes is now 20 tiles... reaching out farther is a small balance
+         to pay for your higher bonus. Encourages more world-interconnectivity and intrigue, and even banditry and piracy.
+
+MISC.
+---------------
+Commerce units simplified. All commerce can build wonders and do trade routes at all times under all conditions.
+   Trade tech isn't needed for Trade routes. Trade tech simply increases Trade revenue higher rates.
+Ships cost 2x to bribe -- injured ships far from home had too low bribe costs for what you're getting, additionally, input showed a
+   split on whether ships should even be bribable at all.
+Damaged Submarine min_speed=4 (was 3); makes hit-and-run and escape somewhat more viable.
+Nuclear winter was patches of random arctic everywhere, now it a temperature downgrade of each affected tile to one level colder.
+Starting Caravans have all restrictions and complications removed. Can Help Wonder or Establish Trade Route (remember to set Home City first!)
+Camels move faster than people, Caravans get 2 7/9 moves. They can also carry 2 Goods units. 
+Capturable commerce units can't become uncapturable just by carrying Goods or being on same tile with other capturable commerce units.
+   This prevents mere cargo from making commerce units immune to capture.  Cargo becomes lost in a capture event: e.g., Caravan carrying
+   goods gets captured. Goods are lost, Caravan transfers ownership.
+Tribesmen become primitive generalists who can do a mediocre job at many things, rather than specialized to one thing like other units.
+   This makes them perfect start units for a primitive tribe to slowly get itself going: 
+      They can work tiles like Workers, but only contribute a half-worker turn instead of a full worker-turn.
+      They can now fight (A1D1 HP6), but at 60% the strength of a warrior, are not so amazing.
+      Semi-military, semi-civilian:
+         They cannot capture, expel, or conquer cities.
+         Like before, they are capturable and expellable.
+Workers now have 6hp, so they are not equal to a Warrior in combat, yet still can feel safer running for the hills or other defense terrain.
+Because Workers and Tribesmen are 6hp, the Warrior now becomes somewhat more meaningful as having primitive military ability.
+Coastal Defense is visible without middle-clicking for city info: it puts 4 cannon towers in the corners, and cannon placements along the walls.
+Masonry is not needed for Palace (simplification)
+Tribesmen, Diplomats, and Explorers can investigate cities without being spent. Let the games of ancient espionage and paranoia begin !
+Train goes from 1 gold upkeep to 0. Cost was too high for achieving parity for foot unit mobility on rails.
+Worker turns to irrigate swamp or plant forest go from 8 to 6½. In almost all cases, that means 7.
+CANALS
+   Formerly:
+      Coastal Canals could be made Adjacent to Ocean. 
+      Inland Canals could be made Adjacent to River.
+      results: canal length artificially limited, some glitch cases where diagonal canal doesn't really connect to Ocean.
+   Now:
+      Coastal Canals can be made CAdjacent to Ocean.
+      Inland Canals can be made CAdjacent to River OR Coastal Canal.
+      results: max canal length across an isthmus goes from 2 to 3, and all canals properly and visibly exit into Oceans.
+      thanks to @Dino for figuring out some logic to do these things.
+MINOR 
+------------------------
+Conscription bonus simplified - applies to infantry only.
+Galleon, like Caravel,Galley,etc., can enter Peace Waters but may not attack unless war declared: this ensures a naval vessel
+   always exists which can bring commerce units to coastal cities; and realistically reflects the historic use of real Galleons.
+Spy Plane correctly made to be unreachable to propeller-based aircraft.
+Can't make road-types while transported in foreign lands (road/quay/rail/maglev/canal)
+   move to mp2-brava
++1/9 move bonus for v4+ aircraft was changed to +1, as it too frequently led to death of precious v4 units from tired attack on last move.
+   move to MP2-brava
+Ram Ship can see 1 tile around it and travel on rivers - prevents unintended attacks when travelling diagonally.
+   move to MP2-brava (except not the travel on river part)
+Fallout disappear chance changed from 20% to 15%
+Small clarification: to use a train requires < 3 moves, not <= 2 moves. (Doesn't change who can use it, just clarifies rare cases.)
+Canals can serve as an irrigation source.
+Magnetism tech costs 875, was 950. Halves the extra cost over Gunpowder. Further encourages Frigates before Ironclads.
+Environmentalism "hack" to reduce production pollution by 50% was removed. It was a hacked misfit for flaws in other pollution reduction.
+   Now that other solutions exist for that, this advance reduces pollution from population by 50% instead.
+   Regarding production pollution, please see notes on how Power Plants, Recycling Center, Solar Plant, Wind Plant, and Fusion Reactor, layer together.
+
+SERVER UPGRADES:
+1. Special Unit Actions / Attacks:
+   a. can optionally specify a move cost up to 7 moves points.
+   b. can optionally specify a limit to number of units on tile which can be hit
+   c. can optionally specify a maximum number of units who can be potentially killed
+   d. can optionally specify a unit stays fortified when doing the action.
+2. Population units can specify pop-cost and add-pop differently. 
+3. Non-diplomatic units can be made to enter "direct combat with buildings": e.g., Siege Ram vs. City Walls. 
+5. Bulb cost displays now reflect non-default sciencebox settings 
+6. Fixed design flaw in server that made pop-cost units take up all a city's build slots.  
+7. Made units-display in lower-right update correctly more often (not showing dead/spent/disbanded units.) Please report any exceptional cases.
+8. Fixed possibilities for some rare backdoors.
+9. DIPLOMATIC ACTION REPORTING TRANSPARENCY: all diplomatic actions show the odds and results for all stages to both contestants.
+10. Unit vision range now reported in raw tile units rather than square of radius.
+11. Fortresses and Naval Bases show a flag of who owns them to prevent confusion, fixed first version incorrectly showed a buoy.
+12. Fixed variety of small quirks/inconsistencies in loading/unloading of transports.
+13. Added ability for rulesets to include the "Sea Bridge" improvement over water. Must be CAdjacent on lake or ocean (not deep ocean)
+16. Hovering over a Special Unit Attack button in the Attack pop-up window, now gives info-text for all its special traits and requirements (from mp2-c onward)
+17. Fixed rounding errors in displayed upgrade costs on client side.
+18. Fixed upstream server bug that didn't allow capture units to trigger casus belli.
+19. Added ability for effects to be triggered by unit activity states (instead of only completed actions.)
+20. There was a hidden flaw in 3.0 server, any unit who can do ANYTHING to a tile gets magic bonus to also clean pollution and fallout. 
+      This was affecting foot soldiers (who can make hideouts) so we went with the flow. But now this flaw is fixed, and we're back to the
+      classical orthodoxy:  only non-military tile workers can clean fallout and pollution (worker, engineer, settler, proletarian)
+21. A bug in main freeciv server caused climate change to lag, often not completing for several minutes, with a high probability of crashing.  This exists in all
+    versions of freeciv but FCW had to hard-code global warming out because the problem was exponentially worse on larger maps.
+    This now has following fixes and upgrades:
+    1. New settings for STRENGTH of nuclear winter and global warming exist (how much of earth is affected if triggered.)
+    2. New percent setting allows adjusting the threshold that triggers climate events, and the tolerance/absorption of the earth to diminish 
+       the accumulation of impact over time.
+    3. TC Climate Change processing takes onyl seconds instead of several minutes.
+    4. It doesn't crash.
+    5. Note: the defaults for these settings were always ON in all games, they were just not triggered because a patch prevented their 
+       execution to prevent crashing. So, be careful of global warming.
+    6. New feature: IPCC report gives transparency on risk of climate change if the risk starts to escalate.  
+    7. Climate Report is now in Gov tab.
+22. Landmass can be set from 10 to 99 (was 15 to 85)
+UI / Ease of use / Macro-management mechanics.
+23. Mass select Airlift: you can select multiple units and give them simultaneous airlift command, which will execute in sequential order if each is legal.
+    This upgrades one-at-a-time airlifting.
+24 Intelligent Load/Unload/Activate Cargo are now upgraded to work holistically with each other.
+   UNLOAD TRANSPORT 'T':
+    a. 'T' tells a selected Transport(s) to unload their specific cargo.
+    b. 'T' tells selected Cargo to unload from their Transports. 
+   LOAD 'L': 
+    a. 'L' Load selected units on Transport(s).
+    b. 'L' Load ONE selected Transport with all units on the tile which it can legally take as cargo. ("Cargo Scoop")
+    c. 'L' Transfer selected Cargo units to other Transports IFF such action would be legal if the cargo can legally unload then reload. 
+    d. 'L' command given at Sea, to tell selected Cargo to move to a new Transport, is legal if current Transport has moved no more than 4
+        moves and has at least 3 moves left.
+    
+    has used half or more of its 
+           moves AND has more than 3 moves left. This may seem complex but it is a "Sweet spot" compromise to allow legitimate "Transport transfer"
+           while hindering the "Transport shuffle" exploit.
+   SELECT CARGO on TRANSPORT 'U':
+    a. 'U' command will only select Cargo units on the SELECTED Transport(s).
+    b. If no Transport is selected, 'U' commamnd does its old behaviour to select ALL cargo units on the tile.
+   What no longer happens:
+   1. 'T' will never do as previously, it unloaded ALL cargo on same tile, making multiple load/unload operations tedious.
+   2. 'U' command will never select all cargo on same tile, only on selected Transports.
+   3. 'L' command won't disallow swapping Cargo between Transports in cities because you didn't take the extra step of unloading first.
+   4. 'L' command doesn't force you to click-select every unit you want to load. Now you can select the Transport who scoops up all legal units instead.
+24a. Can "Transport swap" Land-type cargo units in
+   1) where it's legal to unload anyway, to save an extra step (cities, naval bases, quays)
+   2) in sea units who have enough moves (see 24.'L.d.)
+25. iPillage - this uses the server's new surgical strike pillage feature, where tiles can be destroyed in real-time on par with everything else
+    (buildingis, units, etc.)  iPillage brings Scorched Earth and Blitzkrieg into the game; gives Air Strikes more of a real purpose, increases 
+    the tactical importance of Vigil, as well as the placement of Forts, more Foot soldiers, and AAA, to protect regional infrastructure. 
+    Features can be set for each unit:
+      success odds, move cost, pin-point single target, or multiple random targets in one strike.
+      note: the documented iPillage odds go up +5% for each veteran level.
+26. Added "gold per shield" info to the City screen (custom user column) and on pop-up window to buy item.
+27. Added option to enter Full Screen (full immersion) like every non-browser game, when the game launches. ESC is now dedicated to exiting 
+    Full Immersion (ALT-S or Options>>Full Screen) to re-enter. You are no longer required to hit ESC to exit tabs and pop-up windows, and lose 
+    full screen display. Instead, the command to exit any tab or pop-up window is "W" for (W)ithdraw (W)indow. This now allows the game to default 
+    into an orthodox full screen experience like Freeciv Native Client and EVERY OTHER GAME, instead of being a "second class browser game."
+   Recommended: become familiar with your OS's hotkeys, which better enable you to navigate while having a fullscreen process:
+28. Fortify given to non-fortifiable units will sentry them instead, and if they can't sentry, they will be given "No Orders" (J) and stay put.
+    This turns the F key into the magic spam key for making unit(s) stay put and select their best option on the tile. It allows giving F
+    to a large stack and every unit who can fortify will, while sentrying the rest, so you can move on, and maybe spam F again, rapidly.
+    Reason: quicker/easier micro-management during late game.
+28a. Sentry given to non-sentryable units will NO-ORDERS them instead.
+29. Triremes on sentry on all legal refueling spots (formerly could not sentry on coastline.)
+30. Size 1 cities aren't impervious to infinite nukes while every other city is cut in half each time. Now s1 cities die if nuked.
+31. Investigate City now has:
+     1. "diplchance" odds (80%) of avoiding diplomatic battle even if enemy spy is present (was 100%) - "Covert Slip Attempt"
+     2. Then [possibly] diplomatic battle,
+     3. Then "diplchance"+(ruleset odds) chance to succeed. MP2 gives a +5% over base diplchance of 80, or 85% chance to succeed at this phase.
+What this means for MP2 rules: 
+   80% chance to slip past enemy diplomats/spies without diplomatic combat. (100% if unprotected)
+   If slipped past OR defeated enemy diplomats in combat, 85% chance to succeed at investigating city.
+   Thus, 85% chance to investigate unprotected city, and about 75% chance to succeed vs. protected city (plus or minus with vet levels of spies.)
+32. Spies could only sabotage city production at random but not targeted. This was fixed: targeted sabotage now lists "Production" as one of the 
+   choices along with the improvements.
+33. Info-codes. Special info symbols mark the messages you get in the chat window, to make it easier/faster to scan and read important events,
+    or to scroll back to find again.
+34. 3 NEW DEMOGRAPHICS statistics: Units Built, Units Killed, Units Lost. We can also select which rows in demographics report to show, and also 
+    which of 3 columns to turn on (your quantitative score, your rank, who is #1 and their quantitative score [if you have embassy])
+35. Discovery of new government gives instant click-link icon to change government, in the chat window.
+36. Recycling Unit is smarter to differentiate single or plural simultaneous; and differentiate a disbanding from a recycling into production. Also new 
+   Orders button for Recycle/Disband has same intelligence to it.
+37 CTRL-click: clicks a tile as if a city is not there: good for selecting units without extra UI fussing (going inside a city to pick the unit etc.)
+38. Special retaliation ability: units defending from ranged attacks now have the potential to retaliate if they also can range attack...
+    "ranged defense".  This opens up new tactics currently given only to units that benefit from big balance improvement from it 
+    (Archer, Battleship, Helicopter.) Note that ranged defense requires there to be move points left.
+        one Bship bombards 2, now they have 37 hp and 1 Bship beats both. This prevents such possibilities and indeed, 
+        the 2 battleships properly retaliate leaving the single Bship in worse, not better condition. This dynamic is
+        carefully used to allow deeper level of tactics for some units and to slightly buff units whose special
+        role abilities were represented weaker than the realistic and tactical use they should have.
+39. fixed rounding errors in calculation of move points on damaged units.
+40. adding a pop unit to a city arranges tiles by its CMA (server default or governor) instead of making entertainer.
+40a. fixed small bug where ranged attacks did not reduce movement points of damaged units.
+41. TC reports on UWT activity delays now only report activities that finish this turn; Not anymore, e.g., transform or mine that finishes on a future turn.
+42. possibly fixed spurious message re:UWT
+43. Note, unit emoji are not for gimmick fun, but:
+      a) help you scan a long list of info to parse it or find the right info, 
+      b) the ACTOR unit has the emoji before the name, the TARGET unit has the emoji after the name (after getting the habit, this helps a lot with #1)
+44. Middle-click in tech screen for setting future goal, doesn't slip into scroll-pane mode.  Alt-right click now works as middle click in tech screen
+45. defending units lost in cities, now inform the player what city they were in when they were lost, so they can know better where the attack was 
+      without having to click the text link.
+47. chatbox scrolling to end of page after getting a message, was sometimes slow and lazy, just like that person that does most of the job but 
+   quits before it's done. now after a certain time of getting a new message and scrolling it, it is force snapped to the bottom.
+48. every event in chat that took place somewhere on the map, is a link to center the map there, AND will select the unit there if there is one, 
+      OR else make a signal marker to identify the exact tile.
+49. Poisoning a size 1 city eliminates it. (all rulesets)
+50. Kill-stack events sometimes left you ignorant, seeing "Killed the Riflemen and 5 other units!".  Now, up to 6 other unit kills are reported in a kill-stack,
+   individually, before it will start to just say (and x other units!)
+51. CITY GOVERNOR, with advanced features not found in native client or upstream server.
+52. fixed, sound effect for sold building only happens when server confirms it's really a legal sale.
+53. server has new effect rulesets can use, for increasing/decreasing the work rate of units.
+54. units fortifying inside a hideout now have aqua fortifying icon to show they're in a hideout, similar to sentry and (already) fortified.
+55. new server settings hangry and fulldisorder. 
+      hangry - fixes a logic flaw in TC processing, where people were happier starving with lux, than being fed to avoid starvation and death.
+      fulldisorder - closes a couple exploits/loopholes where heavy micromanagement of disorder gains a competitive edge.
+                     disorder is very simple now: all production and purchasing power for 1 turn is stopped if disorder is not prevented before TC;
+                     like celebration, when disorder status occurs, the effects of it are felt on the turn when it's reached (i.e., the TC after it happens) 
+                     2. conquered cities count as a kind of disorder as far as being able to produce anything after conquest, and/or also toward 
+                        the rule of 2 turns of disorder causing anarchy to democracy.
+56. fixed a bug that was not giving score for small wonders
+57. full 2-way casus belli status displayed in nations tab.
+58. Diplomacy Pacts Upgrades:
+    a. You may forget or excuse a casus belli, possibly from some verbal agreement over an action or maneuver which generates a casus belli,
+       simply by doing another Cease-Fire, or Peace. This clears the casus belli or "forgives past casus belli".
+    b. When a Cease-Fire has 3 or less turns left, you may create a new one, instead of being forced to wait for it to expire into war.
+    c. Doing a Cease-Fire or Peace agreement when you already have one but there is casus belli, will not reset the length of the agreement, 
+       but only pardon the casus belli.
+    d. Doing a Cease-Fire or after casus belli is reset, sets a new one with a new length of time, as set by GM in game.server.ceasefirelength.  
+    e. (b,c,d) give players the ability to choose separate combinations of excusing casus belli and re-affirming 
+       cease-fire for a new time period.
+    f. De-jankification of all kinds of rare edge cases is tedious to explain but there are 2 charts for full disclosure at
+         diplhand.c line 545 and line 603. In general it's made to be softer more fluid and do what's logical in edge cases, rather than fall
+         and get stuck in one of the "stupid logic holes of freeciv diplomacy".
+   Short answer: if you ask for the same type of pact as you had before, it will excuse casus belli if you have it, otherwise, if the pact 
+      expires very soon, it assumes you want to offer to renew it before expiration.
+59. Server settings armisticelength and ceasefirelength are now under the control of the GM.
+60. Two-way state of casus belli is shown in nations list in nations tab now. Mouse hover shows turns left.
+61. chat marks speaker with their flag. sent messages are right aligned, allied chat and global chat are center, incoming are left aligned. 
+62. added game.server.casusbelli turns for better control over casus belli. Formerly it was 2 turns (turn of incident and one after.)
+   Now it is configurable by GM, and multiple violations/aggrievances can push it beyond the default time length (12 for mp2c, 2 for all others.)
+63. New Prefs option: Focus Lock, keeps the current selected unit centered on map (ALT-SHIFT-F). It's more of a preference on a PC, but might 
+    make a big improvement for mobile. On mobile it defaults to on.
+64. Prefs options for "Show pollution on map" and "Movement Point Display" can now be permanently set instead of temporarily.
+65. There was no way for EFT_GROWTH_FOOD to be applied at city founding and this is now fixed. Rulesets wanting old behaviour of no extra food 
+      in this situation, need to put a MinSize, "1", City condition into them.
+66. Stack Escape changed to be unit is of equal or greater moves than attacker. (was greater)
+67. New server effect "Stack_Escape_Pct" allows regulating odds of stack escape in certain situations, instead of hard-coded universal 50%, always.
+68. New server feature to allow negative upkeep buildings. Allows improvements which gather infrastructural support to other buildings, 
+   e.g., wind mills, khan's tribute collection office, etc.
+69. Improvement super panel in city list now filters out obsolete buildings and buildings who tech req is 2 or more tiers away. This makes the 
+    list much more compact and easy to use.
+70. minor_nukes and major_nukes are not shown in tech tree unless the server setting allows them for that game. if you see it, you can build it!
+
+
+
+
+
+These help with much more than Freeciv and other Full-screen apps. They help you with everything you do on your computer:
+            Switch active Program   Flip to Last Program    Switch Browser tab   See all Programs on Workspace   Swap Workspaces
+Linux*      Alt-Tab                 Alt-ESC                 CTRL-Shift-Tab       🐧, ALT-F1                      CTRL-ALT-arrow
+Windows     Alt-Tab                 Alt-ESC                 CTRL-Shift-Tab       Three fingers up, ⊞-tab        ⊞-CTRL-arrow, four finger side swipe 
+Mac         ⌘-Tab                  ⌘-Shift-Tab            CTRL-Tab             Three fingers up, F3            4 finger side-swipe
+
+
+ 
+   Every other type of transported-scenario, swapping is not allowed.

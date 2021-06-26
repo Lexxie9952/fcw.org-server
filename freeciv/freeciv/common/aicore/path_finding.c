@@ -96,6 +96,9 @@ struct pf_map {
 /* Down-cast macro. */
 #define PF_MAP(pfm) ((struct pf_map *) (pfm))
 
+/* the easiest way to keep track of dest_tile during recursive mayhem */
+static struct tile *final_tile;
+
 /* ========================== Common functions =========================== */
 
 /************************************************************************//**
@@ -296,15 +299,34 @@ static inline bool pf_normal_node_init(struct pf_normal_map *pfnm,
   if (TILE_UNKNOWN != node_known_type) {
     bool can_disembark;
 
-    /* Test if we can invade tile. */
-    if (!utype_has_flag(params->utype, UTYF_CIVILIAN)
-        && !player_can_invade_tile(params->owner, ptile)) {
-      /* Maybe overwrite node behavior. */
-      if (params->start_tile != ptile) {
-        node->behavior = TB_IGNORE;
-        return FALSE;
-      } else if (TB_NORMAL == node->behavior) {
-        node->behavior = TB_IGNORE;
+    /* Disallow military unit to invade tile that's illegal to invade */
+    if (!utype_has_flag(params->utype, UTYF_CIVILIAN)) {
+      if (!player_can_invade_tile(params->owner, ptile)) {
+        /* Maybe overwrite node behavior. */
+        if (params->start_tile != ptile) {
+          node->behavior = TB_IGNORE;
+          return FALSE;
+        } else if (TB_NORMAL == node->behavior) {
+          node->behavior = TB_IGNORE;
+        }
+      }
+    }
+    /* else, Civilian: can go anywhere EXCEPT the tile of a non-allied city UNLESS
+       the city is the last tile in the path: Establish embassy / trade route, etc.
+       TODO: add one more condition if it's the final tile, some kind of 
+       unit_can_do_action_when_arriving_at_tile(). This would prevent workers
+       et al., from getting valid goto paths whose final tile is a non-allied city.
+       NOTE: method below is FAR superior to old bug that allowed ANY civilian
+       to path over ANY city for ALL start,middle,final tiles of a path:      */
+    else if (tile_city(ptile) && ptile != final_tile) {
+      if (!pplayers_allied(params->owner, tile_city(ptile)->owner)) {
+        if (params->start_tile != ptile) {
+          /* Civilians can't go through non-allied cities */
+          node->behavior = TB_IGNORE;
+          return FALSE;
+        } else if (TB_NORMAL == node->behavior) {
+          node->behavior = TB_IGNORE;
+        }
       }
     }
 
@@ -363,13 +385,17 @@ static inline bool pf_normal_node_init(struct pf_normal_map *pfnm,
         && !params->get_zoc(params->owner, ptile, params->map)) {
       node->zoc_number = (0 < unit_list_size(ptile->units)
                           ? ZOC_ALLIED : ZOC_NO);
-      ////
+      /* this was a way to check zoc_purity but if zoc_purity was
+         on, it was disallowing pathing to the final enemy occupied tile
+         even if that would be an action like bribe or attack. if we 
+         figure out why, we could re-implement this method instead of
+         the zoc_purity_disallowed() function:
       if (game.server.zoc_purity) {
         if (unit_list_size(ptile->units)>0) {
           node->zoc_number = (is_allied_unit_tile_zoc_pure(ptile,params->owner)
                 ? ZOC_ALLIED : ZOC_NO);
         }
-      }                 
+      }*/               
 
 
 #ifdef ZERO_VARIABLES_FOR_SEARCHING
@@ -600,6 +626,55 @@ static bool pf_jumbo_map_iterate(struct pf_map *pfm)
 
   return TRUE;
 }
+/************************************************************************//**
+  Called by the pf_____map_iterate functions when zoc_purity is enabled, 
+    in order to check for the more restrictive conditions which would
+    enforce ZoC under that server setting.
+****************************************************************************/
+static bool zoc_purity_disallowed(int zoc_num_src, 
+                                  int zoc_num_dest,
+                                  struct tile *tile, 
+                                  struct tile *tile1, 
+                                  const struct player *pplayer)
+{
+/* (zoc_num_srv != ZOC_MINE && zoc_num_dest == ZOC_ALLIED) is synonymous
+   with ZOC_NO, IFF there are no friendly non-igzoc units on the tile, (UNLESS
+   the final tile which we may be only doing an action upon instead of actual
+   movement */
+
+  if (zoc_num_src != ZOC_MINE && zoc_num_dest == ZOC_ALLIED) {
+    if (unit_list_size(tile1->units)>0) { // units on tile - likely unneeded: ZOC_ALLIED only happens with units on tile
+      if (!is_allied_unit_tile_allowing_movement(tile1, pplayer)) {  // no allied non-igzoc units on tile
+        if (tile1 != final_tile) {  // not final tile of path (which would prompt action popup, not zoc movement blocking)
+          return true;
+        }
+        else {  // final tile with units on it, case handling is very different from normal:
+                // 1. enemy unit:      allow because it attempts an action popup, not a movement
+                // 2. friendly unit:   disallow because no allied non-igzoc unit is present
+                // 3. non-allied city: allow (gives action-prompt or no action possible msg)
+                // 4. allied city:     allow because movement into friendly cities is legal UNLESS
+                // 5. allied city with non-allied units inside: disallow
+                if ( (!tile_city(tile1) &&                     // city: movement inside or attempted action popup allowed
+                      !is_non_allied_unit_tile(tile1, pplayer)) // enemy on final tile: attempted action popup allowed
+                      // || (allied city with non-allied units inside it)
+                      // || our_own_unit - units are present and it's not non-allied so this term is superfluous?
+                    ) {
+                      /* at this point, we know:
+                        zoc_purity is on,
+                        the proposed destination tile has no allied non-igzoc units on it,
+                        we're not coming from a tile with ZOC_MINE,
+                        we're on the final tile of the path,
+                        units are on the tile,
+                        they're not enemy units we could do an action on,
+                        there is no city there to do a final action on */
+                        return true;  // so it's an illegal path
+                    }
+        }
+      }
+    }
+  }
+  return false;
+}
 
 /************************************************************************//**
   Primary method for iterative path-finding.
@@ -626,6 +701,7 @@ static bool pf_normal_map_iterate(struct pf_map *pfm)
   const struct pf_parameter *params = pf_map_parameter(pfm);
   int cost_of_path;
   enum pf_move_scope scope = node->move_scope;
+  const struct player *pplayer = params->owner;   /* needed for zoc_purity */
 
   /* There is no exit from DONT_LEAVE tiles! */
   if (node->behavior != TB_DONT_LEAVE
@@ -667,8 +743,47 @@ static bool pf_normal_map_iterate(struct pf_map *pfm)
 
       /* Is the move ZOC-ok? */
       if (node->zoc_number != ZOC_MINE && node1->zoc_number == ZOC_NO) {
-        continue;
+        continue; // universally forbidden regardless of zoc_purity setting
       }
+      /* Is the move ZOC-ok if zoc_purity is enabled? */
+      if (game.server.zoc_purity) {
+        if (zoc_purity_disallowed(node->zoc_number,node1->zoc_number,tile,tile1,pplayer))
+          continue;  // forbidden
+      }
+      /*
+      if (game.server.zoc_purity) {
+        if (node->zoc_number != ZOC_MINE && node1->zoc_number == ZOC_ALLIED) {
+          if (unit_list_size(tile1->units)>0) { // units on tile - likely unneeded: ZOC_ALLIED only happens with units on tile
+            if (!is_allied_unit_tile_allowing_movement(tile1, pplayer)) {  // no allied non-igzoc units on tile
+              if (tile1 != final_tile) {  // not final tile of path (which would prompt action popup, not zoc movement blocking)
+                continue;
+              }
+              else {  // final tile with units on it, case handling is very different from normal:
+                      // 1. enemy unit:      allow because it attempts an action popup, not a movement
+                      // 2. friendly unit:   disallow because no allied non-igzoc unit is present
+                      // 3. non-allied city: allow (gives action-prompt or no action possible msg)
+                      // 4. allied city:     allow because movement into friendly cities is legal UNLESS
+                      // 5. allied city with non-allied units inside: disallow
+                      if ( (!tile_city(tile1) &&                     // city: movement inside or attempted action popup allowed
+                           !is_non_allied_unit_tile(tile1, pplayer)) // enemy on final tile: attempted action popup allowed
+                           // || (allied city with non-allied units inside it)
+                           // || our_own_unit - units are present and it's not non-allied so this term is superfluous?
+                         ) {
+                           // at this point, we know:
+                           //   zoc_purity is on,
+                           //   the proposed destination tile has no allied non-igzoc units on it,
+                           //   we're not coming from a tile with ZOC_MINE,
+                           //   we're on the final tile of the path,
+                           //   units are on the tile,
+                           //   they're not enemy units we could do an action on,
+                           //   there is no city there to do a final action on 
+                              continue;  // so it's an illegal path
+                         }
+              }
+            }
+          }
+        }
+      }*/
 
       /* Evaluate the cost of the move. */
       if (PF_ACTION_NONE != node1->action) {
@@ -680,7 +795,10 @@ static bool pf_normal_map_iterate(struct pf_map *pfm)
         /* action move cost depends on action and unit type. */
         if (node1->action == PF_ACTION_ATTACK
             && (utype_has_flag(params->utype, UTYF_ONEATTACK)
-                || uclass_has_flag(utype_class(params->utype), UCF_MISSILE))) {
+                || utype_can_do_action(params->utype,
+                                       ACTION_SUICIDE_ATTACK))) {
+          /* Assume that the attack will be a suicide attack even if a
+           * regular attack may be legal. */
           cost = params->move_rate;
         } else {
           cost = SINGLE_MOVE;
@@ -759,6 +877,11 @@ static inline bool pf_normal_map_iterate_until(struct pf_normal_map *pfnm,
 {
   struct pf_map *pfm = PF_MAP(pfnm);
   struct pf_normal_node *node = pfnm->lattice + tile_index(ptile);
+
+  /* A global var!! Because otherwise we have to rewrite every
+     function, parameter list, function pointer, and macro for the entire
+     recursive pathfinding system, just to access one little needed info! */
+  final_tile = ptile;
 
   if (NULL == pf_map_parameter(pfm)->get_costs) {
     /* Start position is handled in every function calling this function. */
@@ -1503,9 +1626,7 @@ static bool pf_danger_map_iterate(struct pf_map *pfm)
   int tindex = tile_index(tile);
   struct pf_danger_node *node = pfdm->lattice + tindex;
   enum pf_move_scope scope = node->move_scope;
-  /////
-  const struct player *pplayer = params->owner;
-
+  const struct player *pplayer = params->owner;   /* needed for zoc_purity */
 
   /* The previous position is defined by 'tile' (tile pointer), 'node'
    * (the data of the tile for the pf_map), and index (the index of the
@@ -1574,18 +1695,11 @@ static bool pf_danger_map_iterate(struct pf_map *pfm)
         if (node->zoc_number != ZOC_MINE && node1->zoc_number == ZOC_NO) {
           continue;
         } 
-        // further check ZoC if ZoC purity is on, because node1->zoc_number doesn't
-        // have ZOC_NO if occupied only by friendly igzoc units
-        ///// 
-        // sadly this didn't work
-        /*
-        if (game.server.zoc_purity && node->zoc_number != ZOC_MINE) {
-          if (unit_list_size(tile1->units)>0) {
-            if (!is_allied_unit_tile_allowing_movement(tile1, pplayer))
-              continue;
-          }
-        } */
-        
+        /* Is the move ZOC-ok if zoc_purity is enabled? */
+        if (game.server.zoc_purity) {
+          if (zoc_purity_disallowed(node->zoc_number,node1->zoc_number,tile,tile1,pplayer))
+            continue;  // forbidden
+        }
 
         /* Evaluate the cost of the move. */
         if (PF_ACTION_NONE != node1->action) {
@@ -1597,8 +1711,10 @@ static bool pf_danger_map_iterate(struct pf_map *pfm)
           /* action move cost depends on action and unit type. */
           if (node1->action == PF_ACTION_ATTACK
               && (utype_has_flag(params->utype, UTYF_ONEATTACK)
-                  || uclass_has_flag(utype_class(params->utype),
-                                     UCF_MISSILE))) {
+                  || utype_can_do_action(params->utype,
+                                         ACTION_SUICIDE_ATTACK))) {
+            /* Assume that the attack will be a suicide attack even if a
+             * regular attack may be legal. */
             cost = params->move_rate;
           } else {
             cost = SINGLE_MOVE;
@@ -1778,6 +1894,11 @@ static inline bool pf_danger_map_iterate_until(struct pf_danger_map *pfdm,
 {
   struct pf_map *pfm = PF_MAP(pfdm);
   struct pf_danger_node *node = pfdm->lattice + tile_index(ptile);
+
+  /* A global var!! Because otherwise we have to rewrite every
+     function, parameter list, function pointer, and macro for the entire
+     recursive pathfinding system, just to access one little needed info! */
+  final_tile = ptile;
 
   /* Start position is handled in every function calling this function. */
 
@@ -1990,10 +2111,10 @@ struct pf_fuel_node {
                                  * FIXME: this is right only for units with
                                  * constant move costs! */
   unsigned short extra_tile;    /* EC */
-  unsigned char cost_to_here[DIR8_MAGIC_MAX]; /* Step cost[dir to here] */
+  unsigned short cost_to_here[DIR8_MAGIC_MAX]; /* Step cost[dir to here] */
 
   /* Segment leading across the danger area back to the nearest safe node:
-   * need to remeber costs and stuff. */
+   * need to remember costs and stuff. */
   struct pf_fuel_pos *pos;
   /* Optimal segment to follow to get there (when node is processed). */
   struct pf_fuel_pos *segment;
@@ -2186,13 +2307,13 @@ static inline bool pf_fuel_node_init(struct pf_fuel_map *pffm,
         && !params->get_zoc(params->owner, ptile, params->map)) {
       node->zoc_number = (0 < unit_list_size(ptile->units)
                           ? ZOC_ALLIED : ZOC_NO);
-      ////
+      /* ////
       if (game.server.zoc_purity) {
         if (unit_list_size(ptile->units)>0) {
           node->zoc_number = (is_allied_unit_tile_zoc_pure(ptile,params->owner)
                 ? ZOC_ALLIED : ZOC_NO);
         }
-      }       
+      }   */     
 
 #ifdef ZERO_VARIABLES_FOR_SEARCHING
     } else {
@@ -2594,7 +2715,7 @@ static inline bool
 pf_fuel_map_attack_is_possible(const struct pf_parameter *param,
                                int moves_left, int moves_left_req)
 {
-  if (uclass_has_flag(utype_class(param->utype), UCF_MISSILE)) {
+  if (utype_can_do_action(param->utype, ACTION_SUICIDE_ATTACK)) {
     /* Case missile */
     return TRUE;
   } else if (utype_has_flag(param->utype, UTYF_ONEATTACK)) {
@@ -2660,6 +2781,7 @@ static bool pf_fuel_map_iterate(struct pf_map *pfm)
   enum pf_move_scope scope = node->move_scope;
   int priority, waited_priority;
   bool waited = FALSE;
+  const struct player *pplayer = params->owner;   /* needed for zoc_purity */
 
   /* The previous position is defined by 'tile' (tile pointer), 'node'
    * (the data of the tile for the pf_map), and index (the index of the
@@ -2734,6 +2856,11 @@ static bool pf_fuel_map_iterate(struct pf_map *pfm)
         if (node->zoc_number != ZOC_MINE && node1->zoc_number == ZOC_NO) {
           continue;
         }
+        /* Is the move ZOC-ok if zoc_purity is enabled? */
+        if (game.server.zoc_purity) {
+          if (zoc_purity_disallowed(node->zoc_number,node1->zoc_number,tile,tile1,pplayer))
+            continue;  // forbidden
+        }
 
         cost = node1->cost_to_here[dir];
         if (0 == cost) {
@@ -2748,8 +2875,10 @@ static bool pf_fuel_map_iterate(struct pf_map *pfm)
             /* action move cost depends on action and unit type. */
             if (node1->action == PF_ACTION_ATTACK
                 && (utype_has_flag(params->utype, UTYF_ONEATTACK)
-                    || uclass_has_flag(utype_class(params->utype),
-                                       UCF_MISSILE))) {
+                    || utype_can_do_action(params->utype,
+                                           ACTION_SUICIDE_ATTACK))) {
+              /* Assume that the attack will be a suicide attack even if a
+               * regular attack may be legal. */
               cost = params->move_rate;
             } else {
               cost = SINGLE_MOVE;
@@ -2760,15 +2889,23 @@ static bool pf_fuel_map_iterate(struct pf_map *pfm)
             cost = params->get_MC(tile, scope, tile1, node1->move_scope,
                                   params);
           }
+
+          if (cost == FC_INFINITY) {
+            /* tile_move_cost_ptrs() uses FC_INFINITY to flag that all
+             * movement is spent, e.g., when disembarking from transport. */
+            cost = params->move_rate;
+          }
+
 #ifdef PF_DEBUG
           fc_assert(1 << (8 * sizeof(node1->cost_to_here[dir])) > cost + 2);
           fc_assert(0 < cost + 2);
-#endif
+#endif /* PF_DEBUG */
+
           node1->cost_to_here[dir] = cost + 2;
           if (cost == PF_IMPOSSIBLE_MC) {
             continue;
           }
-        } else if (cost == PF_IMPOSSIBLE_MC - 2) {
+        } else if (cost == PF_IMPOSSIBLE_MC + 2) {
           continue;
         } else {
           cost -= 2;
@@ -2779,7 +2916,7 @@ static bool pf_fuel_map_iterate(struct pf_map *pfm)
 
         moves_left = loc_moves_left - cost;
         if (moves_left < node1->moves_left_req
-            && (!uclass_has_flag(utype_class(params->utype), UCF_MISSILE)
+            && (!utype_can_do_action(params->utype, ACTION_SUICIDE_ATTACK)
                 || 0 > moves_left)) {
           /* We don't have enough moves left, but missiles
            * can do suicidal attacks. */
@@ -2827,7 +2964,8 @@ static bool pf_fuel_map_iterate(struct pf_map *pfm)
         /* Step 1: We test if this route is the best to this tile, by a
          * direct way, not taking in account waiting. */
 
-        if (NS_INIT == node1->status || cost_of_path < old_cost_of_path) {
+        if (NS_INIT == node1->status
+            || (node1->status == NS_NEW && cost_of_path < old_cost_of_path)) {
           /* We are reaching this node for the first time, or we found a
            * better route to 'tile1', or we would have more moves lefts
            * at previous position. Let's register 'tindex1' to the
@@ -2937,6 +3075,7 @@ static bool pf_fuel_map_iterate(struct pf_map *pfm)
     } else {
 #ifdef PF_DEBUG
       bool success = map_index_pq_remove(pffm->queue, &tindex);
+
       fc_assert(TRUE == success);
 #else
       map_index_pq_remove(pffm->queue, &tindex);
@@ -2946,9 +3085,10 @@ static bool pf_fuel_map_iterate(struct pf_map *pfm)
       tile = index_to_tile(params->map, tindex);
       pfm->tile = tile;
       node = pffm->lattice + tindex;
+
 #ifdef PF_DEBUG
       fc_assert(NS_PROCESSED != node->status);
-#endif
+#endif /* PF_DEBUG */
 
       if (NS_WAITING != node->status && !pf_fuel_node_dangerous(node)) {
         /* Node status step C. and D. */
@@ -2989,6 +3129,11 @@ static inline bool pf_fuel_map_iterate_until(struct pf_fuel_map *pffm,
 {
   struct pf_map *pfm = PF_MAP(pffm);
   struct pf_fuel_node *node = pffm->lattice + tile_index(ptile);
+
+  /* A global var!! Because otherwise we have to rewrite every
+     function, parameter list, function pointer, and macro for the entire
+     recursive pathfinding system, just to access one little needed info! */
+  final_tile = ptile;
 
   /* Start position is handled in every function calling this function. */
 
@@ -3831,7 +3976,7 @@ pf_reverse_map_utype_pos(struct pf_reverse_map *pfrm,
   /* Fill parameter. */
   param->start_tile = ptile;
   param->move_rate = utype_move_rate(punittype, ptile, pplayer,
-                                     veteran_level, punittype->hp);
+                                     veteran_level, punittype->hp, NULL);
   param->moves_left_initially = param->move_rate;
   param->utype = punittype;
   return pf_reverse_map_pos(pfrm, param);

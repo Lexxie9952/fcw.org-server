@@ -17,6 +17,7 @@
 
 ***********************************************************************/
 
+income_calculated_by_client = false;
 
 var cities = {};
 var city_rules = {};
@@ -43,24 +44,27 @@ var worklist_selection = [];
 
 // User definable row in city list:   *****************************
 var city_user_row_val = 0;  
-const CURV_NOTHING      = 0;
-const CURV_CORRUPTION   = 1;
-const CURV_POLLUTION    = 2;
-const CURV_TRADE_REVENUE= 3;
-const CURV_FOREIGNERS   = 4;
-const CURV_TURN_FOUNDED = 5;
-const CURV_LAST         = 6;
+const CURV_NOTHING        = 0;
+const CURV_CORRUPTION     = 1;
+const CURV_POLLUTION      = 2;
+const CURV_TRADE_REVENUE  = 3;
+const CURV_GOLD_PER_SHIELD= 4;
+const CURV_FOREIGNERS     = 5;
+const CURV_TURN_FOUNDED   = 6;
+const CURV_LAST           = 7;
 const clkmsg = "\n\nClick column to change info category.";
 const CURV_icons = ["/images/city_user_row.png",
                     "/images/corrupt.png",
                     "/images/pollution.png",
                     "/images/camel.png",
+                    "/images/goldpershield.png",
                     "/images/foreigner.png",
                     "/images/stone_henge.png"];
 const CURV_title = ["User Info Column:\nClick column below to choose",
                     "Corruption"+clkmsg,
                     "Pollution Probability"+clkmsg,
                     "Trade from Trade Routes"+clkmsg,
+                    "Gold cost per Shield"+clkmsg,
                     "Foreign Citizens"+clkmsg,
                     "Turn Founded"+clkmsg];
 
@@ -140,11 +144,10 @@ function remove_city(pcity_id)
   var pcity = cities[pcity_id];
   if (pcity == null) return;
 
-  var update = client.conn.playing.playerno &&
-               city_owner(pcity).playerno == client.conn.playing.playerno;
+  var update = client.conn.playing.playerno && city_owner(pcity).playerno == client.conn.playing.playerno;
   var ptile = city_tile(cities[pcity_id]);
   delete cities[pcity_id];
-  if (renderer == RENDERER_WEBGL) update_city_position(ptile);
+
   if (update) {
     city_screen_updater.update();
     bulbs_output_updater.update();
@@ -199,19 +202,45 @@ function findLongestWord(str) {
 
 /**************************************************************************
  Server has web_player_info packet to update player income, but we don't
-  get updated after incoming city info packets. When we don't get the info
-  we can use this.
+  get refreshed info after incoming city info packets. When we don't get
+  the info we can calculate it client-side.
 **************************************************************************/
 function city_force_income_update()
 {
   if (observing) return;
 
   var income = 0;
+  // Go through all cities
   for (cid in cities) {
-    if (cities[cid]['owner'] == client.conn.playing.playerno) {
-      income += cities[cid]['surplus'][O_GOLD];
+    var pcity = cities[cid];
+    // Look at player cities only
+    if (pcity['owner'] == client.conn.playing.playerno && pcity['surplus'] != null) {
+      // add net gold income from tax collection
+      income += pcity['surplus'][O_GOLD];
+
+      // add net gold income from Coinage, if applicable
+      if (pcity['production_kind'] == VUT_IMPROVEMENT) {
+        if (improvements[pcity['production_value']]['name'] == "Coinage") {
+          var multiplier = 1.0;
+          if (client_rules_flag[CRF_MP2_C]) {
+            multiplier = 1.5;
+            multiplier += city_has_building(pcity, improvement_id_by_name("Marketplace"))
+               ? 0.25 : 0;
+            multiplier += city_has_building(pcity, improvement_id_by_name("Bank"))
+               ? 0.25 : 0;
+            multiplier += city_has_building(pcity, improvement_id_by_name("Stock Exchange"))
+               ? 0.25 : 0;
+            if (has_wonder(B_MEDICI_BANK)) multiplier *= 1.07;
+          }      
+          income += multiplier * pcity['surplus'][O_SHIELD];
+          // Server rounds income to nearest integer but if it's exactly .5 it rounds randomly
+          if (Math.round(income)-income != .5) income = Math.round(income); 
+          income_calculated_by_client = true;
+        }
+      }
     }
   }
+
   client.conn.playing['expected_income'] = income;
   income_needs_refresh = false;
 }
@@ -221,13 +250,22 @@ function city_force_income_update()
 **************************************************************************/
 function show_city_dialog(pcity)
 {
+  const playerno = pcity.owner;
   //console.log("show_city_dialog() called.")
   //console.log("    caller is " + show_city_dialog.caller.toString().substring(0,35));
-
   var turns_to_complete;
   var sprite;
   //var shield_sprite;
   var punit;
+
+  var the_time = new Date().getTime();
+  var from_tab = null;
+  // We got here from updating the City Governor. Don't override
+  // back to main city overview view.
+  if (the_time-gov_refresh_timer < 1100) {
+    city_tab_index = 6;
+    $("#ctg").click();
+  }
 
   if (active_city != pcity || active_city == null) {
     city_prod_clicks = 0;
@@ -252,26 +290,31 @@ function show_city_dialog(pcity)
 
   show_city_traderoutes();
   show_city_happy_tab();
+  // Attempt to show city governor tab button, and hide it if
+  // city governor tab is not allowed to generate:
+  if (show_city_governor_tab() == false) {
+    $("#ctg").parent().hide()
+  }
 
   var dialog_buttons = {};
 
   if (!is_small_screen() && !touch_device) {
     dialog_buttons = $.extend(dialog_buttons,
       {
-       "Previous city (P)" : function() {
+        "Previous city" : function() {
          previous_city();
        },
-       "Next city (N)" : function() {
+       "Next city" : function() {
          next_city();
        },
-       "Buy (B)" : function() {
+       "Buy" : function() {
          request_city_buy();
        },
        "Rename" : function() {
          rename_city();
        }
      });
-     dialog_buttons = $.extend(dialog_buttons, {"Exit": close_city_dialog_trigger});
+     dialog_buttons = $.extend(dialog_buttons, {"Exit (𝗪)": close_city_dialog_trigger});
   } else {   // small screen control buttons
        dialog_buttons = $.extend(dialog_buttons,
          {
@@ -293,16 +336,16 @@ function show_city_dialog(pcity)
         });
         dialog_buttons = $.extend(dialog_buttons, {"Exit": close_city_dialog_trigger});
    }
-  
+   
   // CREATE THE TITLE AND THE SPECIALIST CONTROL PANE IN THE TITLE (for large screens) --------------------------------------
   var city_dialog_title = "<div><span style='float:left;margin-right:70px;'>"
                         + decodeURIComponent(pcity['name']) + " (" + pcity['size'] + ")</span>";
-  if (!is_small_screen() && !observing && client.conn.playing.playerno == pcity['owner']) {
+  if (!is_small_screen() && !client_is_observer() && client.conn.playing.playerno == pcity['owner'] && specialists != null && Object.keys(specialists) != null) {
     // Create specialist control pane in title bar.
     var num_specialists = Object.keys(specialists).length;
     if (client_rules_flag[CRF_ASMITH_SPECIALISTS]) {
       // client has no way to check reqs for extended specialists
-      if ( !player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_ADAM_SMITH_NAME)) ) {
+      if ( !player_has_wonder(playerno, improvement_id_by_name(B_ADAM_SMITH_NAME)) ) {
         num_specialists = 3; // need A.Smith get access specialists 4-6
       }
     }
@@ -328,7 +371,7 @@ function show_city_dialog(pcity)
     } else {
       city_dialog_title += "<div id='scp_show' style='font-size:95%;cursor:copy;' title='Specialist Control Pane' "
       +"onclick='toggle_specialist_control_pane();'"
-      +">&#x1F465;</div>";
+      +"><img class='lowered_gov' style='border-radius:2px' src='/images/specialistpane.png'></div>";
     }
   } 
   city_dialog_title += "</div>";
@@ -337,7 +380,7 @@ function show_city_dialog(pcity)
       bgiframe: true,
       titleIsHtml: true,
 			modal: false,
-			width: is_small_screen() ? "98%" : "80%",
+			width: is_small_screen() ? "99%" : "80%",
                         height: is_small_screen() ? $(window).height() + 10 : $(window).height() - 80,
                         close : close_city_dialog,
             buttons: dialog_buttons
@@ -365,32 +408,87 @@ function show_city_dialog(pcity)
     // If there is another way to put unicode in these buttons, let me know! But you'd still
     // get problems with iPhone 5 and narrower screens auto-sizing elements to wrong size. 
     // We name these buttons here, after the buttons are resized and parent height is locked.
-    $("#city_dialog").next().children()[0].children[0].innerHTML = "&#9194;Last"
+    $("#city_dialog").next().children()[0].children[0].innerHTML = "&#9194;Last";
     $("#city_dialog").next().children()[0].children[1].innerHTML = "Next&#9193;"
     $("#city_dialog").next().children()[0].children[2].innerHTML = "Buy";
     $("#city_dialog").next().children()[0].children[3].innerHTML = "Name";
-
+    // Swipeleft Swiperight go to prev/next city:
+    /* TODO: when jquery.mobile.min.js is installed right, this will add swipe left/swipe right
+       for next/prev city. Just need to know how to install. ALSO, will be important to do the 
+       .off() function when city dialog exited. 
+    $("#city_dialog").next().children()[0].children[0].id="prev_city_button"; // give id to buttons so we can virtual click them
+    $("#city_dialog").next().children()[0].children[1].id="next_city_button"; // when we swipe left/right
+    $(document).on("swipeleft", "html", function(e) { console.log("SWIPE LEFT!!!") } )
+    $(document).on("swiperight", "html", function(e) { console.log("SWIPE RIGHT!!!") } )
+    */
+    // City worked tiles map canvas, tight fit positioning
+    $("#city_canvas_top_div").css("padding", "0px");
+    $("#city_canvas_top_div").css("margin", "0px");
+    $("#city_canvas_top_div").css("width", "100%");
+    $("#city_canvas_top_div").css("margin-left", "-5px");
+    
+    $("#city_panel").css("padding", "0px")
+    $("#city_dialog").addClass("noscrollbars");
+    $("#city_dialog").css("overflow-y", "hidden");
+    $("#city_dialog").css("overflow-x", "hidden"); // let children overflow if needed but not the whole dialog
+    $("#city_dialog_info").css("width", "100%");
+    $("#city_dialog_info").addClass("noscrollbars");
+    $("#city_viewport").addClass("noscrollbars");
+    $("#city_tabs_0").css("padding","0px");
+    $("#city_dialog").css("margin-left", "-3px");
+  } else {
+    // align "Change Production" and "Add to Worklist" buttons with the wood panel and tab selector buttons to their left.
+    $("#prod_buttons").css({"margin-top": "39px", "margin-right": "2px"});
+    if (!touch_device) { // Highlight keyboard shortcuts for large screens with keyboards (i.e. not touch device)
+      $("#city_dialog").next().children().children().first().html("<u><b style='font-family: FreecivBlack'>P</b></u>revious City");
+      $("#city_dialog").next().children().children().first().next().html("<u><b style='font-family: FreecivBlack'>N</b></u>ext City");
+      $("#city_dialog").next().children().children().first().next().next().html("<u><b style='font-family: FreecivBlack'>B</b></u>uy");
+    }
   }
   $("#city_dialog").dialog('open');
+  // prevent tooltip from janking the layout on some helptext
+  $("#city_dialog").parent().css("overflow-y", "hidden");
+
   $("#game_text_input").blur();
+  // IXTJ killer: Prevent Firefox from focusing MAIN tab to produce a stupid url preview for the href="#"
+  document.activeElement.blur();
+  document.activeElement = $("#city_dialog").parent();
+  $("#city_dialog").parent().focus();
 
   /* prepare city dialog for small screens. */
   if (!is_small_screen()) {
-    //$("#city_tabs-5").remove();     // whatever this tab was, it was removed
-    $("#city_tabs-6").remove();       // "Inside" tab for units, not needed on large screen.
+    $("#city_tabs-i").hide();       // "Inside" tab for units, not needed on large screen.
     $(".extra_tabs_small").remove();  // class identified for "Inside" tab for units, not needed on large screen.
     $("#mobile_cma_checkbox").remove();
+    $("#ctg").html("<u><b style='font-family:FreecivBlack'>G</b></u>overnor"+(pcity.cma_enabled?" &#x1F539;":"")); // blue diamond to show governor active.
   } else {
-    //$("#city_tabs-4").remove();     // Options tab formerly removed; made inconsistent tab indices
-    //$(".extra_tabs_big").remove();  // Options tab formerly removed; disallowed disbanding s1 cities on mobile!
-    //$("#city_stats").hide();        // There was no need to hide city stats info after moving units to its own tab
+    // CMA tab elements: (tight fit)
+    $("#cma_surplus_hdr").css("font-size", "105%");
+    //$("#cma_surplus_hdr").html("Surplus");
+    $("#cma_priorities_hdr").css("font-size", "105%");
+    //$("#cma_priorities_hdr").html("Priorities");
+    $("#cma_status").css({"font-size": "100%", "margin-top": "-8px"});
+    $("#btn_toggle_cma").prependTo($("#cma_status"));
+    $("#btn_cma_help").prependTo($("#cma_status"));
+    $("#btn_toggle_cma").css("padding", "4px");
+    $("#btn_cma_help").css("padding", "4px");
+    $(".mobile_remove").hide(); // don't use remove(), or it gets an undefined for allow disorder
+    $(".mobile_shrink").css({"padding": "2px", "margin":"1px", "margin-right":"-2px"});
+    $(".mobile_shrink").css("font-size", "100%")
+    $("#btn_apply_cma").html("Set");
+    $("#btn_cma_refreshall").html("Refresh All");
+    $("#btn_cma_setall").html("Set All");
+    $("#btn_cma_saveall").html("Save All");
+    // Units inside city:
     var units_element = $("#city_improvements_panel").detach();  // Remove this from main tab and put it in "Inside" tab
     $('#city_units_tab').append(units_element);  // "Inside" tab:units inside
     $("#city_tabs").css( {"margin":"-21px", "margin-top":"-11px"} ); // Compact tabs for mobile fit
-    // Abbreviate tab title buttons to fit.
+    // Abbreviate all tab title buttons to fit:
     $("#ct0").html("Main");     $("#ct1").html("Prod");
     $("#ct2").html("Routes");   $("#ct3").html("Option");
-    $("#ct4").html("Happy");    $("#ct5").html("Inside"); 
+    $("#ct4").html("Happy");    $("#cti").html("Inside");
+    $("#ctg").html("Gov"+(pcity.cma_enabled?"&#x1F539;":""));
+    $("#cma_allow_disorder").remove();
    }
 
   $("#city_tabs").tabs({ active: city_tab_index});
@@ -401,28 +499,29 @@ function show_city_dialog(pcity)
   $("#worklist_dialog_headline").unbind('click');
   $("#worklist_dialog_headline").click(function(ev) { ev.stopImmediatePropagation(); city_remove_current_prod()} );
 
-  var orig_renderer = renderer;
-  renderer = RENDERER_2DCANVAS;
   set_city_mapview_active();
 
   // Center map on area around city for when they leave the city
-  save_map_return_position(city_tile(pcity)); //save tile locations for shift-spacebar return position function
   center_tile_mapcanvas(city_tile(pcity));
   update_map_canvas(0, 0, mapview['store_width'], mapview['store_height']);
-  renderer = orig_renderer;
 
   var pop_string = is_small_screen() ? city_population(pcity)+"K" : numberWithCommas(city_population(pcity)*1000);
-  var change_string = is_small_screen() ? "Growth:" : "Change in: ";
+  var change_string = pcity['granary_turns'] < 0 ? "Starves in: " : "Growth in: ";
   $("#city_size").html("Population: "+ pop_string + "<br>"
                        + "Size: " + pcity['size'] + "<br>"
                        + "Grain: " + pcity['food_stock'] + "/" + pcity['granary_size'] + "<br>"
                        + change_string + city_turns_to_growth_text(pcity));
 
   var prod_type = get_city_production_type_sprite(pcity);
-  var prod_string = "<b>" + (prod_type != null ? prod_type['type']['name']+"</b>" : "None</b>");
-  if (is_small_screen() && prod_type != null && prod_type['type']['name'].length>18) 
+  var prod_string = "";
+  if (prod_type != null) {
+    // Show an emoji to the left of the name of what the city is producing. Clicking it takes you to prod screen.
+    prod_string += html_emoji_from_universal(prod_type['type']['name'])+"&thinsp;";
+  }
+  prod_string += "<b style='color:#fed'>" + (prod_type != null ? prod_type['type']['name']+"</b>" : "None</b>");
+  if (is_small_screen() && prod_type != null && prod_type['type']['name'] != null && prod_type['type']['name'].length>16)
     prod_string = "<span style='font-size:90%'>" + prod_string + "</span>";
-  $("#city_production_overview").html(prod_string);
+  $("#city_production_overview").html("<span style='cursor:pointer' onclick='city_prod_tab();'>"+prod_string+"</span>");
 
   turns_to_complete = get_city_production_time(pcity);
 
@@ -485,20 +584,24 @@ function show_city_dialog(pcity)
        // Also move long names 6px left to use unused margin space.
        long_name_font_reducer = "<div>"; // Default to a plain div with no style adjustment.
        longest_word = findLongestWord(improvements[z]['name']); // Find longest word in city improvement name
-       if (improvements[z]['name'].length==10) longest_word = 10; // Two word names 10 long don't get new line, so treat like 1 word.
+       if (improvements[z]['name'] != null && improvements[z]['name'].length==10) longest_word = 10; // Two word names 10 long don't get new line, so treat like 1 word.
        reduction_pct = 100-(longest_word-7)*5;    // For words over 7 in length, reduce font 5% for each letter over 7 length.
        if (reduction_pct<70) reduction_pct = 70;  // Maximum 30% reduction in size.
        // Now generate the special style adjustment for longer names, to reduce the font size and adjust margin:
        if (longest_word>7) long_name_font_reducer ="<div style='margin-left:-6px; font-size:"+reduction_pct+"%;'>";
 
-      var upkeep = (improvements[z]['upkeep']-uk_bonus) <= 0 ? "none": (improvements[z]['upkeep']);
+      // non-negative base upkeeps which are zero or negative after upkeep bonus will be zero upkeep ("none")
+      var upkeep = (improvements[z]['upkeep']-uk_bonus <= 0 && improvements[z]['upkeep'] >= 0) 
+                   ? "none" 
+      // positive upkeep OR upkeep that was already negative before bonus (so called "infra-support" improvement like wind plant which have neg. upkeep)             
+                   : (improvements[z]['upkeep']);
 
       improvements_html = improvements_html +
        "<div id='city_improvement_element'><div class='buildings_present' style='background: transparent url("
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;float:left; '"
-           + "title=\"" + improvements[z]['helptext'].replace(stripChar, "") +"\n\nUpkeep: "+ upkeep + "\" "
+           + "title=\"" + html_safe(cleaned_text(improvements[z]['helptext'])) +"\n\nUpkeep: "+ upkeep + "\" "
 	   + "onclick='city_sell_improvement(" + z + ");'>"
            +"</div>"+ long_name_font_reducer+improvements[z]['name']+"</div>" + "</div>";
     }
@@ -561,7 +664,7 @@ function show_city_dialog(pcity)
       }
       $("#city_present_units_list").html(present_units_html);
       // trick to compensate for removed scrollbar clipping the top:
-      $("#city_present_units_list").css({"margin-top":"-20px","padding-top":"20px"});
+      $("#city_present_units_list").css({"margin-top":"-10px","padding-top":"20px"});
     }
   
 
@@ -590,37 +693,51 @@ function show_city_dialog(pcity)
     }
     $("#city_supported_units_list").html(supported_units_html);
     // trick to compensate for removed scrollbar clipping the top:
-    $("#city_supported_units_list").css({"margin-top":"-20px","padding-top":"20px"});
+    $("#city_supported_units_list").css({"margin-top":"-10px","padding-top":"20px"});
   }
   $(".game_unit_list_item").tooltip();
   $(".buildings_present").tooltip();
 
   if ('prod' in pcity && 'surplus' in pcity) {
-    var food_txt = pcity['prod'][O_FOOD] + " ( ";
-    if (pcity['surplus'][O_FOOD] > 0) food_txt += "+";
-    food_txt += pcity['surplus'][O_FOOD] + ")";
+    var food_txt = ""; 
+    if (pcity['surplus'][O_FOOD] > 0) food_txt += "+<b class='food_text'>";
+    else if (pcity['surplus'][O_FOOD] < 0) food_txt += "<b class='negative_food_text'>";
+    else food_txt += "<b>";
+    food_txt += pcity['surplus'][O_FOOD] + "</b>";
+    var food_txt2 = pcity['surplus'][O_FOOD]==pcity['prod'][O_FOOD] ? "" : "(" + pcity['prod'][O_FOOD] + ")";
 
-    var shield_txt = pcity['prod'][O_SHIELD] + " ( ";
-    if (pcity['surplus'][O_SHIELD] > 0) shield_txt += "+";
-    shield_txt += pcity['surplus'][O_SHIELD] + ")";
+    var shield_txt = "";
+    if (pcity['surplus'][O_SHIELD] > 0) shield_txt += "+<b class='prod_text'>";
+    else shield_txt += "<b>";
+    shield_txt += pcity['surplus'][O_SHIELD] + "</b>";
+    var shield_txt2 = pcity['surplus'][O_SHIELD]==pcity['prod'][O_SHIELD] ? "" : "(" + pcity['prod'][O_SHIELD] + ")";
 
-    var trade_txt = pcity['prod'][O_TRADE] + " ( ";
-    if (pcity['surplus'][O_TRADE] > 0) trade_txt += "+";
-    trade_txt += pcity['surplus'][O_TRADE] + ")";
+    var trade_txt = "";
+    if (pcity['surplus'][O_TRADE] > 0) trade_txt += "+<b class='trade_text'>";
+    else trade_txt += "<b>";
+    trade_txt += pcity['surplus'][O_TRADE] + "</b>";
+    var trade_txt2 = pcity['surplus'][O_TRADE]==pcity['prod'][O_TRADE] ? "" : "(" + pcity['prod'][O_TRADE] + ")";
 
-    var gold_txt = pcity['prod'][O_GOLD] + " ( ";
-    if (pcity['surplus'][O_GOLD] > 0) gold_txt += "+";
-    gold_txt += pcity['surplus'][O_GOLD] + ")";
+    var gold_txt = "";
+    if (pcity['surplus'][O_GOLD] > 0) gold_txt += "+<b class='gold_text'>";
+    else gold_txt += "<b>";
+    gold_txt += pcity['surplus'][O_GOLD] + "</b>";
+    var gold_txt2 = pcity['surplus'][O_GOLD]==pcity['prod'][O_GOLD] ? "" : "(" + pcity['prod'][O_GOLD] + ")";
+    
+    var luxury_txt = pcity['surplus'][O_LUXURY] > 0 ? "<b class='lux_text'>" : "";
+    luxury_txt += pcity['surplus'][O_LUXURY] + "</b>";
+    var luxury_txt2 = pcity['surplus'][O_LUXURY]==pcity['prod'][O_LUXURY] ? "" : "(" + pcity['prod'][O_LUXURY] + ")";
 
-    var luxury_txt = pcity['prod'][O_LUXURY];
-    var science_txt = pcity['prod'][O_SCIENCE];
-
-    $("#city_food").html(food_txt);
-    $("#city_prod").html(shield_txt);
-    $("#city_trade").html(trade_txt);
-    $("#city_gold").html(gold_txt);
-    $("#city_luxury").html(luxury_txt);
-    $("#city_science").html(science_txt);
+    var science_txt = pcity['surplus'][O_SCIENCE] > 0 ? "<b class='sci_text'>" : "";
+    science_txt += pcity['surplus'][O_SCIENCE] + "</b>";
+    var science_txt2 = pcity['surplus'][O_SCIENCE]==pcity['prod'][O_SCIENCE] ? "" : "(" + pcity['prod'][O_SCIENCE] + ")";
+ 
+    $("#city_food").html(food_txt);      $("#city_food2").html(food_txt2);
+    $("#city_prod").html(shield_txt);    $("#city_prod2").html(shield_txt2);
+    $("#city_trade").html(trade_txt);    $("#city_trade2").html(trade_txt2);
+    $("#city_gold").html(gold_txt);      $("#city_gold2").html(gold_txt2);
+    $("#city_luxury").html(luxury_txt);  $("#city_luxury2").html(luxury_txt2);
+    $("#city_science").html(science_txt);$("#city_science2").html(science_txt2);
     $("#city_corruption").html(pcity['waste'][O_TRADE]);
     // Don't show Waste if ruleset has special flag that it doesn't have it:
     if (client_rules_flag[CRF_NO_WASTE]) $("#city_waste_row").remove();
@@ -639,7 +756,7 @@ function show_city_dialog(pcity)
   for (var s = 0; s < citizen_types.length; s++) {
 
     // The line right below the line below this, was throwing undefined errors, test hack to see if this avoids it:
-    if (pcity == null || pcity['ppl_' + citizen_types[s]].length<1 || pcity['ppl_' + citizen_types[s]] == null) continue;
+    if (pcity == null || (pcity['ppl_' + citizen_types[s]] != null && pcity['ppl_' + citizen_types[s]].length<1) || pcity['ppl_' + citizen_types[s]] == null) continue;
     if (pcity['ppl_' + citizen_types[s]] == null) continue;
     for (var i = 0; i < pcity['ppl_' + citizen_types[s]][FEELING_FINAL]; i ++) {
       sprite = get_specialist_image_sprite("citizen." + citizen_types[s] + "_"
@@ -686,19 +803,19 @@ function show_city_dialog(pcity)
   
   $('.city_dialog_rapture_citizen').tooltip({position: { my:"center bottom", at: "center top-4"}});  
   
-  var city_surplus_colour = "#000000";
+  var city_surplus_colour = "#d7d4cf"; // default non-negative non-positive value (i.e. zero)
   var city_surplus_sign = "";
   
   if (pcity['surplus'][O_FOOD] > 0) {
-      city_surplus_colour = "#007800";
+      city_surplus_colour = "#9bff7d"; // surplus food
       city_surplus_sign = "+";
   }
 
   else if (pcity['surplus'][O_FOOD] < 0) {
-      city_surplus_colour = "#AC002F";
+      city_surplus_colour = "#c55c55"; // deficit food
   }
   
-  var rapture_food_status_html = "<div><div style='float:left;background: transparent url(/images/wheat.png);width:20px;height:20px;'></div><div style='margin-left:4px;float:left;color:"+city_surplus_colour+";'</div>"+city_surplus_sign+pcity['surplus'][O_FOOD]+"</div></div>"
+  var rapture_food_status_html = "<div><div style='float:left;background: transparent url(/images/wheat.png);width:20px;height:20px;'></div><div style='margin-left:4px;float:left;color:"+city_surplus_colour+";'</div><b>"+city_surplus_sign+pcity['surplus'][O_FOOD]+"</b></div></div>"
 
   // Calculate colour code for rapture status
   var rapture_status_class="";
@@ -752,7 +869,7 @@ function show_city_dialog(pcity)
   var foreigners_html = "<div id='city_foreigners'>"+spacer+"Citizen nationality:";
   if (pcity['nationalities_count']>0) { // foreigners present !
     for (ethnicity in pcity['nation_id']) {
-      var epop = pcity['nation_citizens'][ethnicity] == pcity['size'] ? "<font color='#005200''>ALL</font>" : pcity['nation_citizens'][ethnicity]; 
+      var epop = pcity['nation_citizens'][ethnicity] == pcity['size'] ? "<font color='#55cc55''>ALL</font>" : pcity['nation_citizens'][ethnicity]; 
       foreigners_html += " &bull; " + nations[ players[pcity['nation_id'][ethnicity]]['nation'] ]['adjective']
                       + ": <b>" + epop + "</b>";
     }
@@ -787,10 +904,12 @@ function show_city_dialog(pcity)
     $("#city_supported_units_title").css( {"width":"4096px"} );
     $("#city_supported_units_list").css( {"width":"4096px"} );
     // Position adjustment hack
-    $("#city_tabs-6").css( {"margin-top":"-20px", "padding":"0px"} );
-    $("#city_dialog_info").css( {"width":"110%", "padding":"0px"} );
+    $("#city_tabs-i").css( {"margin-top":"-20px", "padding":"0px"} );
+    $("#city_dialog_info").css( {"width":"100%", "padding":"0px"} );
     // Adjust vertical to remove 9 pixels of "slack"
     $("#city_overview_tab").css("height", ($("#city_overview_tab").height()-9) );
+    // Hide container for minimized windows when in city screen so they don't occlude things on mobile:
+    $("#dialog-extend-fixed-container").hide();
   }
   // Either/OR, worked better on iPad:
   if (is_small_screen() || touch_device) {
@@ -799,6 +918,12 @@ function show_city_dialog(pcity)
       $('#city_tabs').css( {"position":"static"} );
     }
   }
+}
+/**************************************************************************
+ Each city tab from city.hbs is set to call this when it's clicked.
+**************************************************************************/
+function city_change_tab(tab_num) {
+  city_tab_index = tab_num;
 }
 
 /**************************************************************************
@@ -849,7 +974,7 @@ function get_city_production_time(pcity)
 
   if (pcity['production_kind'] == VUT_UTYPE) {
     var punit_type = unit_types[pcity['production_value']];
-    return city_turns_to_build(pcity, punit_type, true);
+    return city_turns_to_build(pcity, punit_type, true, true);
   }
 
   if (pcity['production_kind'] == VUT_IMPROVEMENT) {
@@ -858,7 +983,7 @@ function get_city_production_time(pcity)
       return FC_INFINITY;
     }
 
-    return city_turns_to_build(pcity, improvement, true);
+    return city_turns_to_build(pcity, improvement, true, false);
   }
 
   return FC_INFINITY;
@@ -905,21 +1030,52 @@ function get_production_progress(pcity)
 }
 
 /**************************************************************************
+ Returns the gold cost per shield to buy off current city prod target
+**************************************************************************/
+function get_gold_cost_per_shield(pcity)
+{
+  var accumulated = pcity['shield_stock'], // shields invested
+      buy_cost = pcity['buy_cost'],        // gold cost to buy product
+      total_shields = 0, // total shield cost of product
+      remaining = 0,     // remaining shields
+      gcps = 0;          // gold cost per shield
+
+  if (buy_cost == 0) return "No";  // can't buy
+
+  if (pcity['production_kind'] == VUT_UTYPE) {
+    var punit_type = unit_types[pcity['production_value']];
+    total_shields = universal_build_shield_cost(pcity, punit_type);
+  }
+  else if (pcity['production_kind'] == VUT_IMPROVEMENT) {
+    var improvement = improvements[pcity['production_value']];
+    if (improvement['name'] != "Coinage")
+      total_shields = universal_build_shield_cost(pcity, improvement);
+  }
+
+  remaining = total_shields - accumulated;
+  gcps = buy_cost / remaining;
+  return gcps.toFixed(2);
+}
+
+/**************************************************************************
 ...
 **************************************************************************/
 function generate_production_list()
 {
   var production_list = [];
-  
+  const gov_id = players[client.conn.playing.playerno].government;
+
+  // THIS was a clean-up of DIRTY hard-coding. If it fails, see commits for 23Feb2021 to revert.
   for (var unit_type_id in unit_types) {
     var punit_type = unit_types[unit_type_id];
-    
-    /* FIXME: web client doesn't support unit flags yet, so this is a hack: */
-    if (punit_type['name'] == "Barbarian Leader" || punit_type['name'] == "Leader" || punit_type['name'] == "Queen" 
-      || (punit_type['name'] == "Proletarians" && governments[players[client.conn.playing.playerno].government].name != "Communism")
-      || (punit_type['name'] == "Pilgrims" && governments[players[client.conn.playing.playerno].government].name != "Fundamentalism") )
-       continue;
 
+    if (utype_has_flag(punit_type, UTYF_NOBUILD)) continue;  
+
+    if (punit_type.government_req < GOV_LAST) {         // IF Unit has a government requirement
+      if (punit_type.goverment_req != gov_id) continue; // gov_req != player's GOV: can't build
+    }
+
+    // Exclude major nukes and minor nukes based on whether server settings say to do so:
     if (utype_has_flag(punit_type, UTYF_NUCLEAR)) {
       if (!server_settings['nukes_minor']['val']) continue; // Nukes totally turned off in this game, skip them
       if (!server_settings['nukes_major']['val']) { // bombard_rate !=0 or !=-1 is a major nuke, skip if game settings have turned it off.
@@ -932,33 +1088,37 @@ function generate_production_list()
     {
       production_list.push({"kind": VUT_UTYPE, "value" : punit_type['id'],
                             "text": punit_type['name'],
-                        "helptext": punit_type['helptext'].replace(stripChar, ""),
-                        "rule_name": punit_type['rule_name'],
-                        "build_cost": punit_type['build_cost'],
-                        "unit_details": "A<b>"+punit_type['attack_strength']  
-                        + "</b>D<b>"+punit_type['defense_strength']  
-                        + "</b>F<b>"+punit_type['firepower'] 
-                        + "</b>H<b>"+punit_type['hp'],
+                        "helptext": cleaned_text(punit_type['helptext']),
+                       "rule_name": punit_type['rule_name'],
+                      "build_cost": get_universal_discount_price(punit_type),
+                    "unit_details": "A<b style='font-family:Arial'>" + fractionalize(utype_real_base_attack_strength(punit_type))  
+                                  + "</b>D<b style='font-family:Arial'>" + fractionalize(utype_real_base_defense_strength(punit_type))                  
+                                  + (punit_type['firepower']>1 ? "F<b style='font-family:Arial'>"+punit_type['firepower']+"</b> " : "")
+                                  + "</b>H<b style='font-family:Arial'>"+punit_type['hp'],
                          "sprite" : get_unit_type_image_sprite(punit_type)});
 
     } else {
+      var move_bonus = parseInt(punit_type['move_bonus'][0]) ? parseInt(punit_type['move_bonus'][0]) : 0; 
       production_list.push({"kind": VUT_UTYPE, "value" : punit_type['id'],
                             "text": punit_type['name'],
-	                      "helptext": punit_type['helptext'].replace(stripChar, ""),
+	                      "helptext": cleaned_text(punit_type['helptext']),
                        "rule_name": punit_type['rule_name'],
-                      "build_cost": punit_type['build_cost'],
-                    "unit_details": "A<b>"+punit_type['attack_strength'] + "</b> " 
-                                  + "D<b>"+punit_type['defense_strength'] + "</b> " 
-                                  + "F<b>"+punit_type['firepower'] + "</b> "
-                                  + "H<b>"+punit_type['hp']+"</b> "
-                                  + "M<b>"+punit_type['move_rate'] / SINGLE_MOVE + "",
+                      "build_cost": get_universal_discount_price(punit_type),
+                    "unit_details": "A<b style='font-family:Arial'>"+fractionalize(utype_real_base_attack_strength(punit_type)) + "</b> " 
+                                  + "D<b style='font-family:Arial'>"+fractionalize(utype_real_base_defense_strength(punit_type)) + "</b> " 
+                                  + (punit_type['firepower']>1 ? "F<b style='font-family:Arial'>"+punit_type['firepower']+"</b> " : "")
+                                  + "H<b style='font-family:Arial'>"+punit_type['hp']+"</b> "
+                                  + "M<b style='font-family:Arial'>"
+                                  + move_points_text((parseInt(punit_type['move_rate'])+move_bonus), true)+""
+                                    + (punit_type['fuel'] ? "</b><sub>"+punit_type['fuel']+"</sub>" : "</b>")
+                                  + (punit_type['transport_capacity'] ? " C<b style='font-family:Arial'>"+punit_type['transport_capacity']+"</b>" : "")+"",
                           "sprite": get_unit_type_image_sprite(punit_type)});
     }
   }
 
   for (var improvement_id in improvements) {
     var pimprovement = improvements[improvement_id];
-    var build_cost = pimprovement['build_cost'];
+    var build_cost = universal_build_shield_cost(active_city, pimprovement);
     var building_details = pimprovement['upkeep'];
     if (pimprovement['name'] == "Coinage") {
         build_cost = "-";
@@ -972,11 +1132,20 @@ function generate_production_list()
     else if (!server_settings['nukes_minor']['val']
              && pimprovement['name'] == "Manhattan Project") {
           continue; // if major nukes are OFF, suppress illegal prod choice.
-    }
+    } 
+    // Suppress improvements with special obsolete conditions
+    if ((ruleset_control['name']=="Multiplayer-Evolution ruleset"
+               || ruleset_control['name'].startsWith("Avant-garde")
+               || ruleset_control['name'].startsWith("MP2")) // from MP2 Brava onward all MP2 rules start with "MP2"
+               && pimprovement['name'] == "Great Wall"
+               && player_invention_state(client.conn.playing, tech_id_by_name('Machine Tools')) == TECH_KNOWN) {
+                 continue;
+    } 
+              
     production_list.push({"kind": VUT_IMPROVEMENT,
                          "value": pimprovement['id'],
                           "text": pimprovement['name'],
-                      "helptext": pimprovement['helptext'].replace(stripChar, ""),
+                      "helptext": cleaned_text(pimprovement['helptext']),
                      "rule_name": pimprovement['rule_name'],
                     "build_cost": build_cost,
                   "unit_details": building_details,
@@ -1072,6 +1241,8 @@ function city_has_building(pcity, improvement_id)
 **************************************************************************/
 function city_has_building_in_queue(pcity, improvement_id)
 {
+  if (pcity == null || pcity['worklist'] == null) return false;
+
   // Go through each item in worklist looking for improvement
   for (var z = -1; z < pcity['worklist'].length; z++) { // current prod is not in worklist array but separate, so start at -1
     // Get item from current prod or future worklist---------
@@ -1095,7 +1266,7 @@ function city_has_building_in_queue(pcity, improvement_id)
  Calculates the turns which are needed to build the requested
  improvement in the city.  GUI Independent.
 **************************************************************************/
-function city_turns_to_build(pcity, target, include_shield_stock)
+function city_turns_to_build(pcity, target, include_shield_stock, is_unit)
 {
   var city_shield_surplus =  pcity['surplus'][O_SHIELD];
   var city_shield_stock = include_shield_stock ? pcity['shield_stock'] : 0;
@@ -1151,7 +1322,7 @@ function request_city_buy()
   var pplayer = client.conn.playing;
 
   // reset dialog page.
-  $("#dialog").remove();
+  remove_active_dialog("#dialog");
   $("<div id='dialog'></div>").appendTo("div#game_page");
   var buy_price_string = "";
   var buy_question_string = "";
@@ -1160,25 +1331,26 @@ function request_city_buy()
     var punit_type = unit_types[pcity['production_value']];
     if (punit_type != null) {
       buy_price_string = punit_type['name'] + " costs " + pcity['buy_cost'] + " gold.";
-      buy_question_string = "Buy " + punit_type['name'] + " for " + pcity['buy_cost'] + " gold?";
+      buy_question_string = "Buy " + punit_type['name'] + " for <b>" + pcity['buy_cost'] + "</b> gold";
     }
   } else {
     var improvement = improvements[pcity['production_value']];
     if (improvement != null) {
       buy_price_string = improvement['name'] + " costs " + pcity['buy_cost'] + " gold.";
-      buy_question_string = "Buy " + improvement['name'] + " for " + pcity['buy_cost'] + " gold?";
+      buy_question_string = "Buy " + improvement['name'] + " for <b>" + pcity['buy_cost'] + "</b> gold";
     }
   }
 
+  var cost_per_shield_text = " @ "+get_gold_cost_per_shield(pcity)+"g/shield ?";
   var treasury_text = "<br>Treasury contains " + pplayer['gold'] + " gold.";
 
-  if (pcity['buy_cost'] > pplayer['gold']) {
-    show_dialog_message("Buy It!",
+  if (pcity['buy_cost'] == 0 || pcity['buy_cost'] > pplayer['gold']) {
+    show_dialog_message("Purchase not possible",
       buy_price_string + treasury_text);
     return;
   }
 
-  var dhtml = buy_question_string + treasury_text;
+  var dhtml = buy_question_string + cost_per_shield_text + treasury_text;
 
 
   $("#dialog").html(dhtml);
@@ -1190,19 +1362,18 @@ function request_city_buy()
 			width: is_small_screen() ? "95%" : "50%",
 			buttons: {
 				"Yes": function() {
-						send_city_buy();
-						$("#dialog").dialog('close');
+            send_city_buy();
+            remove_active_dialog("#dialog");
 				},
-				"No": function() {
-						$("#dialog").dialog('close');
-
+				"No (𝗪)": function() {
+            remove_active_dialog("#dialog");
 				}
 			}
 		});
 
   $("#dialog").dialog('open');
+  dialog_register("#dialog");
 }
-
 
 /**************************************************************************
  Buy whatever is being built in the city.
@@ -1265,8 +1436,12 @@ function close_city_dialog()
   if (active_city) {  // map will be centered on city that was being viewed
     center_tile_mapcanvas(city_tile(active_city));
     active_city = null;
-    if (renderer == RENDERER_2DCANVAS) update_map_canvas_full();
-  } 
+    update_map_canvas_full();
+  }
+
+  // Closing city dialog re-shows container for minimized windows:
+  if (is_small_screen())
+    $("#dialog-extend-fixed-container").show();
 }
 
 /**************************************************************************
@@ -1274,14 +1449,28 @@ function close_city_dialog()
 **************************************************************************/
 function do_city_map_click(ptile)
 {
+  // updated==if cityhand.c:handle_city_specialist() looks at
+  // the top 3 bits in city_id for the type of specialst to make:
+  var updated = true; 
+
   var packet = null;
-  if (ptile['worked'] == active_city['id']) {
+  var city_id = active_city['id'];
+  if (ptile['worked'] == city_id) {
+    // Server defaults to make tile-worker into an entertainer.
+    // Override it if user has a selected_specialist type:
+    if (updated) { // only run this feature on updated server
+      var s = selected_specialist;
+      if (s >= 4) {city_id += 32768; s-= 4;}
+      if (s >= 2) {city_id += 16384; s-= 2;}
+      if (s >= 1) {city_id +=  8192;       }
+    }
     packet = {"pid"     : packet_city_make_specialist,
-              "city_id" : active_city['id'],
-              "tile_id" : ptile['index']};
+              "city_id" : city_id,
+              "tile_id" : ptile['index']
+             };
   } else {
     packet = {"pid"     : packet_city_make_worker,
-              "city_id" : active_city['id'],
+              "city_id" : city_id,
               "tile_id" : ptile['index']};
   }
   send_request(JSON.stringify(packet));
@@ -1311,8 +1500,8 @@ function city_name_dialog(suggested_name, unit_id) {
   $("#city_name_dialog").remove();
   $("<div id='city_name_dialog'></div>").appendTo("div#game_page");
 
-  $("#city_name_dialog").html($("<div>What should we call our new city?</div>"
-                              + "<input id='city_name_req' type='text'>"));
+  $("#city_name_dialog").html($("<div>What shall we call our new city?</div>"
+                              + "<input id='city_name_req' type='text' spellcheck='false'>"));
 
   /* A suggested city name can contain an apostrophe ("'"). That character
    * is also used for single quotes. It shouldn't be added unescaped to a
@@ -1331,35 +1520,33 @@ function city_name_dialog(suggested_name, unit_id) {
 			width: "300",
 			close: function() {
 				keyboard_input=true;
+                act_sel_queue_done(unit_id);
 			},
 			buttons: [	{
 					text: "Cancel",
 				        click: function() {
 						$("#city_name_dialog").remove();
                         keyboard_input=true;
+                        act_sel_queue_done(unit_id);
 					}
 				},{
 					text: "Ok",
 				        click: function() {
-						var name = alphanumeric_cleaner($("#city_name_req").val());
+						var name = alphanumeric_cleaner_city_names($("#city_name_req").val());
 						if (name.length == 0 || name.length >= MAX_LEN_CITYNAME - 6
 						    || encodeURIComponent(name).length  >= MAX_LEN_CITYNAME - 6) {
 						  swal("City name is invalid. Please try a different shorter name.");
+              setSwalTheme();
 						  return;
 						}
 
                         var actor_unit = game_find_unit_by_number(unit_id);
-
-                        var packet = {"pid"         : packet_unit_do_action,
-                                      "actor_id"    : unit_id,
-                                      "target_id"   : actor_unit['tile'],
-                                      "extra_id"    : EXTRA_NONE,
-                                      "value"       : 0,
-                                      "name"        : encodeURIComponent(name),
-                                      "action_type" : ACTION_FOUND_CITY};
-						send_request(JSON.stringify(packet));
+                        request_unit_do_action(ACTION_FOUND_CITY,
+                          unit_id, actor_unit['tile'], 0,
+                          encodeURIComponent(name));
 						$("#city_name_dialog").remove();
 						keyboard_input=true;
+                        act_sel_queue_done(unit_id);
 					}
 					}
 				]
@@ -1368,51 +1555,28 @@ function city_name_dialog(suggested_name, unit_id) {
   $("#city_name_req").attr('maxlength', "30");
 
   $("#city_name_dialog").dialog('open');
+  $("#city_name_dialog").css('color', default_dialog_text_color);
 
   $('#city_name_dialog').keyup(function(e) {
     if (e.keyCode == 13) {
-      var name = alphanumeric_cleaner($("#city_name_req").val());
+      var name = alphanumeric_cleaner_city_names($("#city_name_req").val());
       if (name.length == 0 || name.length >= MAX_LEN_CITYNAME - 6
         || encodeURIComponent(name).length  >= MAX_LEN_CITYNAME - 6) {
         swal("City name is invalid. Please try a different shorter name.");
+        setSwalTheme();
         return;
       }
       var actor_unit = game_find_unit_by_number(unit_id);
-      var packet = {"pid" : packet_unit_do_action,
-                      "actor_id" : unit_id,
-                      "target_id": actor_unit['tile'],
-                      "extra_id" : EXTRA_NONE,
-                      "value" : 0,
-                      "name" : encodeURIComponent(name),
-                      "action_type": ACTION_FOUND_CITY};
-      send_request(JSON.stringify(packet));
+      request_unit_do_action(ACTION_FOUND_CITY,
+        unit_id, actor_unit['tile'], 0, encodeURIComponent(name));
 	  $("#city_name_dialog").remove();
       keyboard_input=true;
+      act_sel_queue_done(unit_id);
     }
   });
 
   blur_input_on_touchdevice();
   keyboard_input=false;
-
-  if (speech_recogntition_enabled || cardboard_vr_enabled) {
-    var name = alphanumeric_cleaner($("#city_name_req").val());
-    if (name.length == 0 || name.length >= MAX_LEN_CITYNAME - 6
-      || encodeURIComponent(name).length  >= MAX_LEN_CITYNAME - 6) {
-      swal("City name is invalid. Please try a different shorter name.");
-      return;
-    }
-    var actor_unit = game_find_unit_by_number(unit_id);
-    var packet = {"pid" : packet_unit_do_action,
-                      "actor_id" : unit_id,
-                      "target_id": actor_unit['tile'],
-                      "extra_id" : EXTRA_NONE,
-                      "value" : 0,
-                      "name" : encodeURIComponent(name),
-                      "action_type": ACTION_FOUND_CITY};
-	send_request(JSON.stringify(packet));
-	$("#city_name_dialog").remove();
-    keyboard_input=true;
-  }
 }
 
 /**************************************************************************
@@ -1488,8 +1652,11 @@ function city_sell_improvement_in(city_id, improvement_id)
                     "build_id": improvement_id};
         send_request(JSON.stringify(packet));
         active_superpanel_cityid = city_id;
-        play_sound(soundset["e_imp_sold"]);
+        // Play sound for normal building sale but not wonders (which can't happen)
+        //if (improvements[improvement_id].genus == GENUS_IMPROVEMENT)
+         // play_sound(soundset["e_imp_sold"]);
     });
+  setSwalTheme();
 }
 /**************************************************************************
   Create text describing city growth.
@@ -1504,12 +1671,12 @@ function city_turns_to_growth_text(pcity)
   } else if (turns > 1000000) {
     return " ";
   } else if (turns == -1) {
-    return small ? "<b>*starves in 1</b>" : "<b>* Starving in 1 turn</b>";  // plural to singular and bold message for starvation crisis
+    return small ? "&#9662; <b><u>1 turn</u></b>" : "&#9662; <b><u>1 turn</u></b>";  // plural to singular and bold message for starvation crisis
   } else if (turns < -1) {
-    return small ? "starves in " + Math.abs(turns) : "Starving in " + Math.abs(turns) + " turns";
+    return small ? "&#9662; " + Math.abs(turns) : "&#9662; " + Math.abs(turns) + " turns";
   } else if (turns ==1) {
-    return small ? "<b>&nbsp;1 turn</b>" : "<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 turn</b>";
-  } else {
+    return small ? "<b>&nbsp;1 turn</b>" : "<b>&nbsp;1 turn</b>";
+} else {
     return turns + " turns";
   }
 }
@@ -1729,6 +1896,7 @@ function city_select_specialist(event, to_specialist_id)
 **************************************************************************/
 function city_change_specialist(event, city_id, from_specialist_id)
 {
+  var updated = 1;  // 0=running on un-updated server, 1=server was updated
   var city_message;
   var to_specialist_id;
   var num_specialists = Object.keys(specialists).length;
@@ -1757,16 +1925,20 @@ function city_change_specialist(event, city_id, from_specialist_id)
     city_message = {"pid": packet_city_change_specialist,
     "city_id" : city_id,
     "from" : from_specialist_id,
-    "to" : to_specialist_id}; 
+    "to" : (event.shiftKey ? (to_specialist_id+100*updated) : to_specialist_id)};
+    // adding 100 to the specialist code tells it to change all specialists.
+    // this maintains compatibility to old versions
   }
 
   send_request(JSON.stringify(city_message));
-  
-  // shift-click: change all specialists of this type 
-  if (event.shiftKey) { // for every specialist of this type, send another packet.
-    for (var s=1; s<cities[city_id].specialists[from_specialist_id]; s++) { // start at s=1, because we already sent one packet
-      send_request(JSON.stringify(city_message));
-     }
+  if (!updated) {
+  /* old method: send packets one-at-a-time to change all specialists
+     if using shift-click to change all specialists of this type */ 
+    if (event.shiftKey) { // for every specialist of this type, send another packet.
+      for (var s=1; s<cities[city_id].specialists[from_specialist_id]; s++) { // start at s=1, because we already sent one packet
+        send_request(JSON.stringify(city_message));
+      }
+    }
   }
 }
 
@@ -1805,7 +1977,7 @@ function rename_city()
   $("<div id='city_name_dialog'></div>").appendTo("div#game_page");
 
   $("#city_name_dialog").html($("<div>What should we call this city?</div>"
-                                + "<input id='city_name_req' type='text'>"));
+                                + "<input id='city_name_req' type='text' spellcheck='false'>"));
   /* The city name can contain an apostrophe ("'"). That character is also
    * used for single quotes. It shouldn't be added unescaped to a
    * string that later is interpreted as HTML. */
@@ -1827,10 +1999,11 @@ function rename_city()
 				},{
 					text: "Ok",
 				        click: function() {
-						var name = alphanumeric_cleaner($("#city_name_req").val());
+						var name = alphanumeric_cleaner_city_names($("#city_name_req").val());
 						if (name.length == 0 || name.length >= MAX_LEN_NAME - 4
 						    || encodeURIComponent(name).length  >= MAX_LEN_NAME - 4) {
 						  swal("City name is invalid");
+              setSwalTheme();
 						  return;
 						}
 
@@ -1845,10 +2018,11 @@ function rename_city()
   $("#city_name_req").attr('maxlength', "30");
 
   $("#city_name_dialog").dialog('open');
+  $("#city_name_dialog").css('color', default_dialog_text_color);
 
   $('#city_name_dialog').keyup(function(e) {
     if (e.keyCode == 13) {
-      var name = alphanumeric_cleaner($("#city_name_req").val());
+      var name = alphanumeric_cleaner_city_names($("#city_name_req").val());
       var packet = {"pid" : packet_city_rename, "name" : encodeURIComponent(name), "city_id" : active_city['id'] };
       send_request(JSON.stringify(packet));
       $("#city_name_dialog").remove();
@@ -1887,7 +2061,7 @@ function show_city_happy_tab()
 
   for (cause in causes) {
     // Cause text table cell with title
-    happy_tab_html += "<tr><td><div class='happy_cause_help' title='"+cause_titles[cause]+"'>";
+    happy_tab_html += "<tr><td><div class='happy_cause_help' title='"+html_safe(cause_titles[cause])+"'>";
     happy_tab_html += causes[cause] + "</div></td>"
     // Table cell of all the people
     happy_tab_html += "<td><div>";
@@ -2053,12 +2227,12 @@ function city_worklist_dialog(pcity)
       if (kind == null || value == null || work_item.length == 0) continue;
       if (kind == VUT_IMPROVEMENT) {
         var pimpr = improvements[value];
-	var build_cost = pimpr['build_cost'];
+	var build_cost = universal_build_shield_cost(pcity,pimpr);
 	if (pimpr['name'] == "Coinage") build_cost = "-";
 	universals_list.push({"name" : pimpr['name'],
 		"kind" : kind,
 		"value" : value,
-		"helptext" : pimpr['helptext'].replace(stripChar, ""),
+		"helptext" : cleaned_text(pimpr['helptext']),
 		"build_cost" : build_cost,
 		"sprite" : get_improvement_image_sprite(pimpr)});
       } else if (kind == VUT_UTYPE) {
@@ -2066,8 +2240,8 @@ function city_worklist_dialog(pcity)
         universals_list.push({"name" : putype['name'],
 		"kind" : kind,
 		"value" : value,
-		"helptext" : putype['helptext'].replace(stripChar, ""),
-		"build_cost" : putype['build_cost'],
+		"helptext" : cleaned_text(putype['helptext']),
+		"build_cost" : get_universal_discount_price(putype, pcity),
 		"sprite" : get_unit_type_image_sprite(putype)});
       } else {
         console.log("unknown kind: " + kind);
@@ -2075,7 +2249,7 @@ function city_worklist_dialog(pcity)
     }
   }
 
-  var worklist_html = "<table class='worklist_table'><tr><td>Type</td><td>Name</td><td>Cost</td></tr>";
+  var worklist_html = "<table class='worklist_table'><tr style='background-color:#0004'><td>Type</td><td>Name</td><td>Cost</td></tr>";
   for (var j = 0; j < universals_list.length; j++) {
     var universal = universals_list[j];
     var sprite = universal['sprite'];
@@ -2088,7 +2262,7 @@ function city_worklist_dialog(pcity)
      + (can_city_build_now(pcity, universal['kind'], universal['value']) ?
         "" : " cannot_build_item")
      + "' data-wlitem='" + j + "' "
-     + " title=\"" + universal['helptext'] + "\">"
+     + " title=\"" + html_safe(cleaned_text(universal['helptext'])) + "\">"
      + "<td><div class='production_list_item_sub' "
            + "style=' background: transparent url("
            + sprite['image-src'] +
@@ -2096,7 +2270,7 @@ function city_worklist_dialog(pcity)
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'"
            +"></div></td>"
      + "<td class='prod_choice_name'>" + universal['name'] + "</td>"
-     + "<td class='prod_choice_cost'>" + universal['build_cost'] + "</td></tr>";
+     + "<td class='prod_choice_cost'>" + universal['build_cost']+"</td></tr>";
   }
   worklist_html += "</table>";
   $("#city_current_worklist").html(worklist_html);
@@ -2223,10 +2397,11 @@ function city_worklist_dialog(pcity)
 **************************************************************************/
 function populate_worklist_production_choices(pcity)    
 {
+  const gov_id = players[client.conn.playing.playerno].government;
   var small = is_small_screen();
 
   var production_list = generate_production_list();
-  var production_html = "<table class='worklist_table'><tr><td>Type</td><td>Name</td><td style='padding-right:30px; text-align:right'>Info</td><td>Cost</td></tr>";
+  var production_html = "<table class='worklist_table'><tr style='background-color:#0004'><td>Type</td><td>Name</td><td style='padding-right:30px; text-align:right'>Info</td><td>Cost</td></tr>";
   for (var a = 0; a < production_list.length; a++) {
     var sprite = production_list[a]['sprite'];
     if (sprite == null) {
@@ -2248,16 +2423,6 @@ function populate_worklist_production_choices(pcity)
           && city_has_building_in_queue(pcity, value)) {
             can_build=false;
       }
-      // Suppress Enrichment Facility if major nukes are disabled
-      // these are now suppressed when prod list is first generated.
-      //else if (improvements[value]['name'] == "Enrichment Facility"
-      //         && !server_settings['nukes_major']['val']) {
-      //      can_build = false; // if major nukes are OFF, suppress illegal prod choice.
-      //}
-      //else if (improvements[value]['name'] == "Manhattan Project"
-      //        && !server_settings['nukes_minor']['val']) {
-      //      can_build = false; // if major nukes are OFF, suppress illegal prod choice.
-      //}
     }
 
     var can_build_later = false; // flag for items buildable after tech discovery or making a pre-req building
@@ -2279,13 +2444,19 @@ function populate_worklist_production_choices(pcity)
           } 
         }
       } else if (kind == VUT_UTYPE) {
-        // player is researching the tech for the unit, so let them queue it
+        // Player is researching the tech for the unit, so we usually will let them queue it later in list:
         if (unit_types[value]['tech_requirement'] == techs[client.conn.playing['researching']]['id']) {
-          can_build_later = true;
-          // (hack: don't queue future sea units until we can check for landlocked vs. river/ocean adjacent cities)
+          if (unit_types[value].gov_requirement < GOV_LAST && unit_types[value].gov_requirement != gov_id) {
+            /* ...unless there is also a Govt req for it, e.g., Fanatics, and they aren't the right Gov:  */
+            can_build_later = false;
+          } 
+          else can_build_later = true;
+          /* ...unless it's a ship and someone wants to hard-code for checking landlocked, river, canal, ocean, and compare to 
+             unit_class native types and all that jazz which gets very complex and performance laggy for every unit in the list:  */ 
           var class_name = unit_classes[unit_types[value]['unit_class_id']]['name'].replace("?unitclass:","");
           if (class_name == "Sea" || class_name == "RiverShip" || class_name == "Submarine" || class_name == "Trireme") 
             can_build_later = false;
+          // TODO: make the above block re-usable in a separate function so super panel and empire tabs use it too.  
         }
       }
     }
@@ -2299,7 +2470,8 @@ function populate_worklist_production_choices(pcity)
       production_html += "<tr class='prod_choice_list_item kindvalue_item"
        + (can_build ? "" : " cannot_build_item")
        + "' data-value='" + value + "' data-kind='" + kind + "'>"
-       + "<td><div class='production_list_item_sub' title=\"" + production_list[a]['helptext'] + "\" style=' background: transparent url("
+       + "<td><div class='production_list_item_sub' title=\"" + html_safe(cleaned_text(production_list[a]['helptext']))
+           + "\" style=' background: transparent url("
            + sprite['image-src'] +
            ");background-position:-" + sprite['tileset-x'] + "px -" + sprite['tileset-y']
            + "px;  width: " + sprite['width'] + "px;height: " + sprite['height'] + "px;'"
@@ -2309,14 +2481,16 @@ function populate_worklist_production_choices(pcity)
        if (kind == VUT_UTYPE /*&& !small*/) {
           production_html += "<td title='Attack/Defence/Firepower, Hitpoints' class='prod_choice_info' "
           + "style='padding-right:30px; text-align:right'>" 
-          + production_list[a]['unit_details'] + "</td>";
+          + production_list[a]['unit_details'] + "</td>"
+          + "<td class='prod_choice_cost'>" + get_universal_discount_price(unit_types[value],pcity) + "</td></tr>";
        }
        else if (kind == VUT_IMPROVEMENT /*&& !small*/) {
           production_html += "<td title='Upkeep' class='prod_choice_info' " 
           + "style='padding-right:30px; text-align:right'>" 
-          + production_list[a]['unit_details'] + "</td>";
+          + production_list[a]['unit_details'] + "</td>"
+          + "<td class='prod_choice_cost'>" + production_list[a]['build_cost'] + "</td></tr>";
        }
-          production_html += "<td class='prod_choice_cost'>" + production_list[a]['build_cost'] + "</td></tr>";
+          //moved above production_html += "<td class='prod_choice_cost'>" + production_list[a]['build_cost'] + "</td></tr>";
      }
   }
   production_html += "</table>";
@@ -2365,6 +2539,35 @@ function populate_worklist_production_choices(pcity)
 
     });
   }
+  if (small) $("#info_city_prod").hide();
+  else {
+    $("#info_city_prod").html("&#x2753;");
+    $("#info_city_prod").css('cursor', "help");
+    
+    //$('#info_city_prod').css("overflow", "visible");
+    //$('#info_city_prod').parent().css("overflow", "visible");
+    var city_prod_help = 
+    "CLICK Current Production    Remove\n"+
+    "DOUBLE CLICK Worklist       Remove Item\n"+
+    "ALT CLICK Prod.Choice         Replace Current Production\n"+
+    "SHIFT CLICK Prod.Choice      Add to Worklist\n"+
+    "DOUBLE CLICK Prod.Choice    \"     \"        \"\n"+
+    "CTRL CLICK Items                  Select multiple items\n"+
+    "DOUBLE-TAP DRAG Items         \"           \"       \"\n"+
+    "/\\  UP ARROW                       Flip to City Overview\n"+
+    "\\/  DOWN ARROW                Flip to City Production\n"+
+    "<SPACE>                             Flip Overview/Production\n"+
+    "B     Buy Current Production\n"+
+    "N    Next City\n"+
+    "P     Previous City\n"+
+    "\n"+
+    "Top Left:    Current Production\n"+
+    "Left Side:   Worklist Items\n"+
+    "Right Side: Production Choices";
+
+    $("#info_city_prod").prop('title', city_prod_help);
+  }
+  
 }
 
 /**************************************************************************
@@ -2497,8 +2700,15 @@ function update_worklist_actions()
   }
 
   if (production_selection.length > 0) {
+    $("#prod_buttons").show();
     $("#city_add_to_worklist_btn").button("enable");
     $("#city_worklist_insert_btn").button("enable");
+    $("#city_worklist_append_btn").button("enable");
+    
+    if (production_selection.length == 1)
+      $("#city_worklist_change_btn").button("enable");
+    else
+      $("#city_worklist_change_btn").button("disable");
 
     if (production_selection.length == worklist_selection.length ||
         worklist_selection.length == 1) {
@@ -2508,8 +2718,11 @@ function update_worklist_actions()
     }
 
   } else {
+    $("#prod_buttons").hide();
     $("#city_add_to_worklist_btn").button("disable");
     $("#city_worklist_insert_btn").button("disable");
+    $("#city_worklist_change_btn").button("disable");
+    $("#city_worklist_append_btn").button("disable");
     $("#city_worklist_exchange_btn").button("disable");
   }
 
@@ -2525,6 +2738,8 @@ function update_worklist_actions()
 **************************************************************************/
 function send_city_worklist(city_id)
 {
+  if (cities[city_id] == null) return;
+
   var worklist = cities[city_id]['worklist'];
   var overflow = worklist.length - MAX_LEN_WORKLIST;
   if (overflow > 0) {
@@ -2608,6 +2823,7 @@ function city_add_improv_to_worklist(city_id, z)
 
   // Show confirmation message for adding to worklist.
   swal("Sent order to add "+improvements[z]['name']+" to Worklist in "+cities[city_id]['name']);
+  setSwalTheme();
   active_superpanel_cityid = city_id;
 }
 
@@ -2777,7 +2993,7 @@ function city_exchange_worklist_task()
   var task_l = worklist_selection.length;
   if (prod_l === task_l) {
     for (i = 0; i < prod_l; i++) {
-      if (same &&
+      if (same && wl[worklist_selection[i]] != null &&
           (wl[worklist_selection[i]].kind !== production_selection[i].kind ||
            wl[worklist_selection[i]].value !== production_selection[i].value)) {
         same = false;
@@ -2848,6 +3064,19 @@ function show_city_improvement_pane(city_id)
           continue;
         }
 
+        // Filter out OBSOLETE:
+        if (improvements[z]['obs_count'] > 0) {
+          if (player_invention_state(client.conn.playing, improvements[z]['obs_reqs'][0]['value']) == TECH_KNOWN) {
+            continue;
+          }
+        }
+        // UNREACHABLE and 2 techs away or more:  (TECHS_PREREQS_KNOWN is 1 away)
+        if (improvements[z]['reqs'].length > 0) {
+          if (player_invention_state(client.conn.playing, improvements[z]['reqs'][0]['value']) == TECH_UNKNOWN) {
+            continue;   
+          }
+        }
+
         if (!server_settings['nukes_major']['val'] && improvements[z]['name'] == "Enrichment Facility")
               continue; // major nukes set to OFF, don't show illegal prod choice.
           
@@ -2857,7 +3086,7 @@ function show_city_improvement_pane(city_id)
         var is_city_making = (pcity['production_kind'] == VUT_IMPROVEMENT && pcity['production_value']==z);
         if (is_city_making) { // colour code currently produced items which are bought/finished
           var shields_invested = pcity['shield_stock'];
-          if (shields_invested>=improvements[z]['build_cost']) {
+          if (shields_invested>=universal_build_shield_cost(pcity,improvements[z])) {
             product_finished=true;
             var verb = " is finishing ";
           } 
@@ -2868,14 +3097,14 @@ function show_city_improvement_pane(city_id)
           opacity = 1;
           border = "border:3px solid #000000;"
           bg     = "background:#FEED ";
-          title_text = "title='"+html_safe(pcity['name'])+":\n\nRIGHT-CLICK: Sell " + improvements[z]['name']+"."+shift_click_text;
+          title_text = "title='"+html_safe(pcity['name'])+":\n\nRIGHT-CLICK: Sell " + html_safe(improvements[z]['name'])+"."+shift_click_text;
           right_click_action = "oncontextmenu='city_sell_improvement_in(" +city_id+","+ z + ");' ";
         } else {
           if (!can_city_build_improvement_now(pcity, z)) {  // doesn't have and can't build: faded
             opacity=0.35;
             border = "border:3px solid #231A13;"  
             bg =     "background:#9873 ";
-            title_text = "title='" + html_safe(pcity['name'])+": " + improvements[z]['name'] + " unavailable.\n\nRIGHT-CLICK: Add to worklist."+shift_click_text;
+            title_text = "title='" + html_safe(pcity['name'])+": " + html_safe(improvements[z]['name']) + " unavailable.\n\nRIGHT-CLICK: Add to worklist."+shift_click_text;
             right_click_action = "oncontextmenu='city_add_improv_to_worklist(" +city_id+","+ z + ");' ";
           } else {                  // doesn't have and CAN build - dark blue
             opacity = 1;
@@ -2883,8 +3112,8 @@ function show_city_improvement_pane(city_id)
             bg =     (is_city_making ? (product_finished ? "background:#BFBE " : "background:#8D87 ") : "background:#147F ");
             right_click_action = "oncontextmenu='city_change_prod_and_buy(null," +city_id+","+ z + ");' "
             title_text = is_city_making 
-              ? ("title='"+html_safe(pcity['name'])+verb+improvements[z]['name']+".\n\nRIGHT_CLICK: Buy "+improvements[z]['name']+shift_click_text)
-              : ("title='"+html_safe(pcity['name'])+":\n\nCLICK: Change production\n\nRIGHT-CLICK: Buy "+improvements[z]['name']+shift_click_text);   
+              ? ("title='"+html_safe(pcity['name'])+verb+html_safe(improvements[z]['name'])+".\n\nRIGHT_CLICK: Buy "+html_safe(improvements[z]['name'])+shift_click_text)
+              : ("title='"+html_safe(pcity['name'])+":\n\nCLICK: Change production\n\nRIGHT-CLICK: Buy "+html_safe(improvements[z]['name'])+shift_click_text);   
           }
         } 
         // Put improvement sprite in the cell:
@@ -3138,14 +3367,16 @@ function update_city_screen()
         + "<th title='"+CURV_title[city_user_row_val]+"' class='non_priority' style='text-align:right;padding-left:0px;padding-right:30px;'><img class='lowered_gov' src='"+CURV_icons[city_user_row_val]+"'></th>"
     //    + "<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>"
         + "<th title='Gold' class='gold_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/gold.png'></th>"
-        + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='lowered_gov' src='/images/lux.png'></th>"
+        + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='lowered_gov' src='/images/luxury2.png'></th>"
         + "<th title='Science (bulbs)' class='sci_text' style='text-align:right'><img class='lowered_gov' src='/images/sci.png'></th>"
         + "<th style='text-align:right;'>Grows In"+updown_sort_arrows+"</th><th style='text-align:right;'>Granary"
               +updown_sort_arrows+"</th><th style='text-align:right;' title='Click to change'>Producing"+updown_sort_arrows+"</th>"
         + "<th style='text-align:right;' title='Turns to finish &nbsp;&nbsp; Prod completed/needed'>Turns"+updown_sort_arrows
               +"&nbsp; Progress</th><th style='text-align:right;' title='Click to buy'>Cost"+updown_sort_arrows+"</th>"
-        + "<th style='text-align:left;'><input type='checkbox' id='master_checkbox' title='CLICK:  Toggle all cities\n\nSHIFT-CLICK:  Toggle highlighted cities' name='cbAll' value='false' onclick='toggle_city_row_selections(event);'></th>"
-        + "</tr></thead><tbody>";
+        + "<th style='text-align:left;'><input type='checkbox' class='css-checkbox' id='master_checkbox' title='CLICK:  Toggle all cities\n\nSHIFT-CLICK:  Toggle highlighted cities' name='cbAll' value='false' onclick='toggle_city_row_selections(event);'>"
+        + "<label title='CLICK:  Toggle all cities\n\nSHIFT-CLICK:  Toggle highlighted cities' for='master_checkbox' name='master_checkbox_lbl' class='css-label dark-check-white'></label></th>"
+        + "</tr></thead><tbody class='alternate-row-color'>";    
+        
   } else if (redux_screen) // semi-standard rendition of the above with minor trimming
   { // -1 column (selection box). Economised columns: Sort Arrows, Grows In>>Grows, Name of Production/Image >> Image only, Turns/Progress>>Progress
     //console.log("MODE: Reduced Standard")
@@ -3158,7 +3389,7 @@ function update_city_screen()
     + "<th title='Trade' class='trade_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/trade.png'></th>"
     + "<th>&nbsp;&nbsp;&nbsp;&nbsp;</th>"
     + "<th title='Gold' class='gold_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/gold.png'></th>"
-    + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='lowered_gov' src='/images/lux.png'></th>"
+    + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='lowered_gov' src='/images/luxury2.png'></th>"
     + "<th title='Science (bulbs)' class='sci_text' style='text-align:right'><img class='lowered_gov' src='/images/sci.png'></th>"
     /*+ "<th style='text-align:right;'>Grows"+"</th><th style='text-align:right;'>Grain"*/
     + ( (!tiny_screen) ? ("<th style='text-align:right;'>Grows"+"</th><th style='text-align:right;'>Grain")
@@ -3170,7 +3401,7 @@ function update_city_screen()
     /*+ "Progress</th><th style='padding-right:1em; text-align:right;' title='Click to buy'>Cost"+"</th>"*/
     + ( (!tiny_screen) ? ("Progress</th><th style='padding-right:1em; text-align:right;' title='Click to buy'>Cost"+"</th>")
                        : ("in</th><th style='padding-right:1em; text-align:right;'>Cost"+"</th>") )
-    + ( (!tiny_screen) ? ("<th style='text-align:left;'><input type='checkbox' id='master_checkbox' title='CLICK:  Toggle all cities\n\nSHIFT-CLICK:  Toggle highlighted cities' name='cbAll' value='false' onclick='toggle_city_row_selections(event);'></th>")
+    + ( (!tiny_screen) ? ("<th style='text-align:left;'><input type='checkbox' class='css_checkbox' id='master_checkbox' title='CLICK:  Toggle all cities\n\nSHIFT-CLICK:  Toggle highlighted cities' name='cbAll' value='false' onclick='toggle_city_row_selections(event);'></th>")
                      : "" )   // skip checkbox column for tiny redux mode
     + "</tr></thead><tbody>";
   } else {  // tiny - brutally cut non-crucial info
@@ -3185,7 +3416,7 @@ function update_city_screen()
     + "<th title='Trade' class='trade_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/trade.png'></th>"
     + "<th>&nbsp;&nbsp;&nbsp;</th>"
     + "<th title='Gold' class='gold_text' style='text-align:right;padding-right:0px;'><img class='lowered_gov' src='/images/gold.png'></th>"
-    + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='lowered_gov' src='/images/lux.png'></th>"
+    + "<th title='Luxury' class='lux_text' style='text-align:right;padding-right:0px'><img class='lowered_gov' src='/images/luxury2.png'></th>"
     + "<th title='Science (bulbs)' class='sci_text' style='text-align:right'><img class='lowered_gov' src='/images/sci.png'></th>"
     + "<th style='text-align:center;'>Grow"+"</th><th style='text-align:right;'>Food"
           +"</th><th style='text-align:right;' title='Click to change'>Build"+"</th>"
@@ -3343,7 +3574,12 @@ function update_city_screen()
             const rev = get_city_traderoute_revenue(pcity['id']);
             city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
               + "<span style='color:#fdff7d;'>" + (rev<1 ? " " : rev) + "</span>" +  "</td>";
-            break;  
+            break;
+          case CURV_GOLD_PER_SHIELD:
+            const gcps = get_gold_cost_per_shield(pcity);
+            city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
+            + "<span style='color:#fdff7d;'>" + (gcps=="No" ? " " : gcps) + "</span>" +  "</td>";
+            break;
           case CURV_TURN_FOUNDED:
             city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
               + "<span style='color:#999'>" + pcity['turn_founded'] +"</span>" +  "</td>";
@@ -3355,7 +3591,7 @@ function update_city_screen()
             break;
           default:
             city_user = "<td class='non_priority' style='text-align:right; padding-right:32px' onclick='javascript:change_city_user_row(" + pcity['id'] + ");'>"
-            + "<span style='color:#0000'>0</span></td>";
+            + "<span style='color:#ffff'>0</span></td>";
           }
 
         // Calculate turns to grow or " " if not growing
@@ -3422,11 +3658,16 @@ function update_city_screen()
                   +"</div></div>";
         }   
         
+        // City name: Capital markers and CMA markers, length shortening for tiny screen
+        city_name = "";
+        if (is_capital(pcity)) city_name += "<span title='Capital' style='color:cyan'>&#9733; </span>";
+        if (city_has_building(pcity, improvement_id_by_name(B_ECC_PALACE_NAME))) city_name += "<span title='Ecclesiastic Capital' style='color:yellow'>&#x2CE9; </span>";
         // tiny mobile: abbreviate city name to first 11 letters plus small "..."
-        city_name = ( (tiny_screen && pcity['name'].length>11) 
+        city_name += ( (tiny_screen && pcity['name'].length>11) 
               ? (pcity['name'].substring(0,10) + "<span style='font-size:66%;'>&#x22ef;</span></td>") 
-              : (pcity['name'] + "</td>") );
-        
+              : (pcity['name'] + (pcity.cma_enabled ? "<span title='Governor controlled'> &#x1F539;</span>" :"")+ "</td>") );  
+                 // added CMA blue diamond to show if city governor present
+                
         city_list_html += "<tr class='cities_row' id='cities_list_" + pcity['id'] + "'>"
                 + td_hover_html + city_name + "</td>" // tiny mobile: abbreviate city name to first 11 letters plus "..."
                 + td_click_html + city_size_string + "</td>"
@@ -3448,14 +3689,14 @@ function update_city_screen()
                                                       : turns_to_complete_str.replace("turns", "")+"</td>")   )     
                 + ( (wide_screen || redux_screen) ? (td_buy_html+city_buy_cost+"</td>") : "" )
                 + ( !tiny_screen 
-                    ? "<td style='text-align:left;'><input type='checkbox' oncontextmenu='set_mass_prod_city("+pcity['id']+");' id='cb"+pcity['id']+"' value=''></td>"          
+                    ? "<td style='text-align:left;'><input type='checkbox' class='css-checkbox' oncontextmenu='set_mass_prod_city("+pcity['id']+");' id='cb"+pcity['id']+"' value=''><label for='cb"+pcity['id']+"' name='cb_lbl"+pcity['id']+"' class='css-label dark-check-cyan'></label></td>"          
                     : "" )
         city_list_html += "</tr>";
     }
   }
 
   // Title Header Area:
-  var title_text = "<span style='text-align:left; float:left; padding-right:10px;'>Your Cities ("+count+")</span>";
+  var title_text = "<span id='cities_title_cma_panel' style='text-align:left; float:left; padding-right:10px;'>Your Cities ("+count+")</span>";
   if (!is_small_screen() ) {
     title_text +=
        " <span id='city_improvements_hover_list'></span>"
@@ -3463,7 +3704,13 @@ function update_city_screen()
      + " <button title='Change production in selected cities' class='button ui-button ui-corner-all ui-widget' style='padding:5px; margin:4px; font-size:70%; float:right;' onclick='mass_change_prod();'>Change &#x2611; to:</button>"
      + " <button title='BUY in selected cities' class='button ui-button ui-corner-all ui-widget' style='padding:5px; margin:4px; font-size:70%; float:right;' onclick='buy_all_selected_cities();'>&#x2611; Buy selected</button>";
   } else $('#cities_title').css({"font-size":"100%"}); 
-  $('#cities_title').html(title_text); 
+  $('#cities_title').html(title_text);
+
+  if (power_cma==true) {
+    var power_panel =
+      "<button title='Click: Refresh tile arrangement in selected cities.\nCTRL-Click: Save Governor Clipboard to selected cities.\nShift-Click: Use Governor Clipboard to arrange tiles, without saving.' class='button ui-button ui-corner-all ui-widget' style='padding:1px; margin:1px; font-size:100%; float:left;' onclick='cma_clipboard_macro(event,false);'>&#x1F4CB; "+count+" Cities</button>";
+    $("#cities_title_cma_panel").html(power_panel);
+  }
   
   city_list_html += "</tbody></table>";
   $("#cities_list").html(city_list_html);
@@ -3546,14 +3793,6 @@ function change_city_user_row(city_id)
 {
   city_user_row_val ++;
 
-  // Skip corruption display for Democracies in rulesets where it has no corruption
-  if (client_rules_flag[CRF_DEMOCRACY_NONCORRUPT]
-    && !client_is_observer() 
-    && governments[players[client.conn.playing.playerno].government].name == "Democracy"
-    && city_user_row_val == CURV_CORRUPTION) {
-      city_user_row_val ++;  // skip over showing corruption in democracy
-  }
-
   if (city_user_row_val >= CURV_LAST)
     city_user_row_val = 0;
 
@@ -3613,6 +3852,86 @@ function toggle_city_row_selections(event)
 }
 
 /**************************************************************************
+  Depending on parameters,
+  1. Auto-arranges tiles in selected cities using the CMA Clipboard,
+  2. Saves the CMA Clipboard as a new Governor in all selected cities,
+  3. Auto-arranges tiles in selected cities, which will either use 
+     their Governor if enabled, or the server's default CMA if not.
+  ...   
+  'called_by_CMA' parameter means the CMA tab called this function
+  to auto-arrange tiles in all cities with governors, instead of all
+  cities that were selected in the Cities List.
+**************************************************************************/
+function cma_clipboard_macro(event, called_by_CMA)
+{
+  var apply_once = false, save = false;
+  if (!event) event = new Event(""); // avoid null exceptions if called by CMA tab.
+
+  // City_List was caller, Shift-Click to apply Clipboard settings without Save:
+  if (event.ctrlKey) save = true;
+  // City List was caller, CTRL-Click to save Clipboard as governor:
+  else if (event.shiftKey) apply_once = true;
+  // City List was caller with normal-Click || CMA tab called this function:
+  var autoarrange = !(apply_once || save) || called_by_CMA;
+
+  var sent_orders = false;
+  // Arrange tiles according to the CMA clipboard in all selected cities:
+  if (apply_once || save) {
+    for (var city_id in cities)  {
+      if ($("#cb"+city_id).is(":checked")) {
+        cma_paste_to_city_id(parseInt(city_id), apply_once);
+        city_checkbox_states[city_id] = true;
+        sent_orders = true;
+      } else city_checkbox_states[city_id] = false;
+    }
+    play_sound( (sent_orders ? soundset["e_success"] : soundset["e_fail"]) );
+    retain_checkboxes_on_update = true;
+    return;
+  }
+  // Refresh tiles according to their current CMA (or server default CMA):
+  else if (autoarrange) {
+    var cities_string="";
+    var count = 0;
+    for (var city_id in cities)  {
+       // if City List was caller, selected cities only:
+      if ($("#cb"+city_id).is(":checked")
+        // if CMA tab was caller, all governed cities:
+        || (called_by_CMA && cities[city_id].cma_enabled) 
+         ) {
+        // Emulates clicking the city centre, causing auto-arrange tiles:
+        var packet = {"pid"     : packet_city_make_specialist,
+                      "city_id" : parseInt(city_id),
+                      "tile_id" : city_tile(cities[city_id]).index
+                     };
+        send_request(JSON.stringify(packet));
+        city_checkbox_states[city_id] = true;
+        count++;
+        cities_string += cities[city_id].name+", "
+      } else city_checkbox_states[city_id] = false;
+    }
+    retain_checkboxes_on_update = true;
+    if (count) {
+      if (count>5) cities_string = ""+count+" cities, "
+      cities_string = "&#x1F539; Ordered Governor to refresh tiles in <font color='yellow'>"+cities_string
+                    + "</font>using existing Governor settings.";
+      // Emulate incoming server packet for CMA, so it is intercepted and processed properly.              
+      packet = {"pid":25,"message":cities_string, "event":E_CITY_CMA_RELEASE};
+      handle_chat_msg(packet);
+      play_sound(soundset["e_success"]);
+      if (called_by_CMA) {
+        $("#cma_unsaved_warning").html(cities_string);
+        global_governor_message = cities_string;
+      }
+    } else {
+      packet = {"pid":25, "message":"&#x26A0;&#xFE0F; <b>Failed:</b> no cities were selected for tile refresh.",
+                "event":E_CITY_CMA_RELEASE};
+      handle_chat_msg(packet);
+      play_sound(soundset["e_fail"]);
+      global_governor_message = "&#x26A0;&#xFE0F; <b>Failed:</b> no goverened cities were found.";
+    }
+  }
+}
+/**************************************************************************
   Buys (or attempts to buy) every production item in every selected city.
 **************************************************************************/
 function buy_all_selected_cities()
@@ -3635,7 +3954,7 @@ function mass_change_prod()
   //console.log("  mass_change_prod() called")
   var c = prod_selection_city;  // the city to model for what all others should produce
   for (var city_id in cities)  {
-    if ($("#cb"+city_id).is(":checked")) {     
+    if ($("#cb"+city_id).is(":checked") && cities[city_id] != null && cities[c] != null) {
       send_city_change(cities[city_id].id, cities[c].production_kind,cities[c].production_value);
       city_checkbox_states[city_id] = true;
     } else city_checkbox_states[city_id] = false;
@@ -3734,7 +4053,7 @@ function city_keyboard_listener(ev)
           chatbox_scroll_to_bottom(false);
           break;
       case 32:
-          ev.stopPropagation();
+          ev.stopImmediatePropagation();
           // SPACE - flip-flop between production/main screen
           // if not in one of those 2 screens, go to main screen
           if (city_tab_index > 1) city_tab_index = 0;
@@ -3743,36 +4062,59 @@ function city_keyboard_listener(ev)
           break;
         }
     switch (keyboard_key) {
-       case 'P':
-         ev.stopPropagation();
-         previous_city();
-         break;
+      case 'P':
+        ev.stopPropagation();
+        previous_city();
+        break;
 
-       case 'V':
-       case 'M':
-          ev.stopPropagation();
-          city_tab_index = 0;  // Main screen / View
-          $("#city_tabs").tabs({ active: city_tab_index});
-          break;
+      case 'V':
+      case 'M':
+        ev.stopPropagation();
+        city_tab_index = 0;  // Main screen / View
+        $("#city_tabs").tabs({ active: city_tab_index});
+        break;
     
-       case 'Q':
-         ev.stopPropagation();
-         city_tab_index = 1;  // Production screen
-         $("#city_tabs").tabs({ active: city_tab_index});
-         break;
+      case 'D':
+        ev.stopPropagation();
+        city_tab_index = 1;  // Production screen
+        $("#city_tabs").tabs({ active: city_tab_index});
+        break;
 
-       case 'T':
-       case 'R':
-          ev.stopPropagation();
-          city_tab_index = 2;  // Trade routes
-          $("#city_tabs").tabs({ active: city_tab_index});
-          break;
-       
-       case 'O':
-          ev.stopPropagation();
-          city_tab_index = 3;  // Options/Settings
-          $("#city_tabs").tabs({ active: city_tab_index});
-          break;
+      case 'T':
+      case 'R':
+        ev.stopPropagation();
+        city_tab_index = 2;  // Trade routes
+        $("#city_tabs").tabs({ active: city_tab_index});
+        break;
+
+      case 'O':
+        ev.stopPropagation();
+        city_tab_index = 3;  // Options/Settings
+        $("#city_tabs").tabs({ active: city_tab_index});
+        break;
+
+      case 'H':
+        ev.stopPropagation();
+        city_tab_index = 4;  // Happy
+        $("#city_tabs").tabs({ active: city_tab_index});
+        break;
+
+      // The following 2 tabs remove under certain conditions
+      // and don't have reliable tab index because of it.
+      // However, an artificial click is done to ensure transition.  
+      case 'G':
+        ev.stopPropagation();
+        city_tab_index = 5;
+        $("#city_tabs").tabs({ active: city_tab_index});
+        $("#ctg").click();
+        break;
+
+      case 'I':
+        ev.stopPropagation();
+        city_tab_index = 6;
+        $("#city_tabs").tabs({ active: city_tab_index});
+        $("#cti").click();
+        break;
 
        case 'W': // same command as ESC above (code 27)
          ev.stopPropagation();
@@ -3792,10 +4134,18 @@ function city_keyboard_listener(ev)
     }
   }
 }
+/**************************************************************************
+ Switches to the city's prod tab
+**************************************************************************/
+function city_prod_tab()
+{
+  city_tab_index = 1;
+  $("#city_tabs").tabs({ active: city_tab_index});
+}
 
 /**************************************************************************
  Returns the 3d model name for the given city.
-**************************************************************************/
+**************************************************************************
 function city_to_3d_model_name(pcity)
 {
   var size = 0;
@@ -3820,7 +4170,7 @@ function city_to_3d_model_name(pcity)
   }
 
   return "city_" + city_style_name + "_" + size;
-}
+}*/
 
 /**************************************************************************
  Returns the city walls scale of for the given city.

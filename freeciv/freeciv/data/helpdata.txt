@@ -138,10 +138,11 @@ the above list.\
 "), _("\
  3. Deciding which units to build first.\
 \n\n\
-    After building one or two Warrior units, start building \
-Settlers.  Settlers are best put to use founding new cities; \
-while they can also build agricultural improvements (see the \
-next section), it is better to use Workers for this when \
+    After building one or two Warrior units, start building Settlers.  \
+Settlers take city population, but if you picked a good city site, \
+your city should be big enough by now.  Settlers are best put to use \
+founding new cities; while they can also build agricultural improvements \
+(see the next section), it is better to use Workers for this when \
 available, as unlike Settlers, Workers do not consume food from \
 their parent city.  Keep in mind that a large population increases \
 both the amount of productivity and your civilization's research \
@@ -221,7 +222,9 @@ will pop up.\
 vision, advances, cities, or gold), embassies, or binding pacts \
 such as a cease-fire or peace.  There is no need to trade like for \
 like; you can trade, say, an advance or city for gold - you can \
-consider this buying and selling.\
+consider this buying and selling.  Each player builds a list of offered \
+items.  To remove an item from the list, double-click on it.  \
+When both players indicate satisfaction, the pact is concluded.\
 "), _("\
     Pacts affect where your units can go and what they can do, \
 and a pact with one nation can affect your relations with others.  \
@@ -504,6 +507,14 @@ appear in their city when complete -- units appear on the map while \
 improvements and wonders are added to their city's list of structures. \
 Any leftover production points remain available to be applied towards \
 the next project.\
+"), _("\
+Some units, such as Settlers, are built from city population as well \
+as production points; the city size will reduce when the unit is built. \
+By default, a city will not finish building a unit that would take \
+all of the city's remaining population; in this case, production points \
+will continue to accumulate until the city is of sufficient size. You \
+can allow a city to be disbanded from the city's dialog; however, you \
+cannot disband your last city this way.\
 "), _("\
 In the classic ruleset, a city can build at most one product per turn, \
 regardless of its production surplus. However, in some rulesets, \
@@ -1621,12 +1632,14 @@ Unit Orders:\n\
   G: return unit to nearest friendly city\n\
   h: set unit's (h)omecity  (to city on current tile)\n\
   i: build (i)rrigation or convert terrain  (settler/worker units)\n\
-  I: connect current and target tile with (I)rrigation\n\
-  I: set an (I)rrigation waypoint  (when connecting with irrigation)\n\
+  I: change terrain by cultivating\n\
+  Ctrl+I: connect current and target tile with (I)rrigation\n\
+  Ctrl+I: set an (I)rrigation waypoint  (when connecting with irrigation)\n\
   l: (l)oad unit on transporter\n\
-  L: connect current and target tile with rai(L)\n\
-  L: set a rai(L) waypoint  (when connecting with rail)\n\
+  Ctrl+L: connect current and target tile with rai(L)\n\
+  Ctrl+L: set a rai(L) waypoint  (when connecting with rail)\n\
   m: build (m)ine or convert terrain  (settler/worker units)\n\
+  M: change terrain by planting\n\
   n: clean (n)uclear fallout\n\
   N: explode (N)uclear\n\
   o: transf(o)rm terrain  (engineer unit)\n\
@@ -1638,8 +1651,8 @@ Unit Orders:\n\
   q: add a patrol waypoint  (when in patrol mode)\n\
   r: build (r)oad/railroad  (settler/worker units)\n\
   r: establish trade (r)oute  (caravan units)\n\
-  R: connect current and target tile with (R)oad\n\
-  R: set a (R)oad waypoint  (when connecting with road)\n\
+  Ctrl+R: connect current and target tile with (R)oad\n\
+  Ctrl+R: set a (R)oad waypoint  (when connecting with road)\n\
   s: (s)entry unit\n\
   S: un(S)entry all units on tile\n\
   t: unit go (t)o/airlift to city\n\
@@ -1673,6 +1686,7 @@ Unit Movement:\n\
 "), _("\
 Main Map (Keys):\n\
 ================\n\
+  Some clients support zooming/scaling the map graphics with the + and - keys.\n\
   c: (c)enter view on active unit\n\
     Shift-home: center view on capital\n\
   Shift-arrows: scroll map\n\
@@ -1682,7 +1696,7 @@ Main Map (Keys):\n\
   Ctrl-G: show/hide map grid lines\n\
   Ctrl-N: show/hide city names\n\
   Ctrl-P: show/hide city production\n\
-  Ctrl-R: show/hide city growth\n\
+  Ctrl-O: show/hide city growth\n\
   Ctrl-W: show/hide city output\n\
   Ctrl-Y: show/hide city outlines\n\
 "), _("\

@@ -32,6 +32,9 @@ var SPECENUM_COUNT = 10;
 var clause_infos = {};
 var diplomacy_clause_map = {};
 
+// sneaky way to send second parameter to key listener.
+var last_dialog_counterpart = -1; 
+
 /**************************************************************************
  ...
 **************************************************************************/
@@ -48,7 +51,6 @@ function diplomacy_init_meeting_req(counterpart)
 **************************************************************************/
 function show_diplomacy_dialog(counterpart)
 {
- if (cardboard_vr_enabled) return;
  var pplayer = players[counterpart];
  create_diplomacy_dialog(pplayer, Handlebars.templates['diplomacy_meeting']);
 }
@@ -240,6 +242,10 @@ function client_diplomacy_clause_string(counterpart, giver, type, value)
   var pplayer = players[giver];
   var nation = nations[pplayer['nation']]['adjective'];
 
+  var cb1 = players[counterpart].diplstates[giver]['has_reason_to_cancel'];
+  var cb2 = players[giver].diplstates[counterpart]['has_reason_to_cancel'];  
+  const casus_belli = cb1 || cb2;
+
   switch (type) {
   case CLAUSE_ADVANCE:
     var ptech = techs[value];
@@ -253,7 +259,6 @@ function client_diplomacy_clause_string(counterpart, giver, type, value)
       return "The " + nation + " give unknown city.";
     }
     break;
-
   case CLAUSE_GOLD:
     if (giver == client.conn.playing['playerno']) {
       $("#self_gold_" + counterpart).val(value);
@@ -266,11 +271,11 @@ function client_diplomacy_clause_string(counterpart, giver, type, value)
   case CLAUSE_SEAMAP:
     return "The " + nation + " give their seamap";
   case CLAUSE_CEASEFIRE:
-    return "The parties agree on a cease-fire";
+    return casus_belli ? "The parties re-affirm cease-fire." : "The parties agree on a cease-fire";
   case CLAUSE_PEACE:
-    return "The parties agree on a peace";
+    return casus_belli ? "The parties re-affirm peace" : "The parties agree on a peace";
   case CLAUSE_ALLIANCE:
-    return "The parties create an alliance";
+    return casus_belli ? "The parties re-affirm the alliance" : "The parties create an alliance";
   case CLAUSE_VISION:
     return "The " + nation + " give shared vision";
   case CLAUSE_EMBASSY:
@@ -322,7 +327,8 @@ function create_diplomacy_dialog(counterpart, template) {
   var title = "Diplomacy: " + counterpart['name']
 		 + " of the " + nations[counterpart['nation']]['adjective'];
 
-  var diplomacy_dialog = $("#diplomacy_dialog_" + counterpart_id);
+  var dialog_id = "#diplomacy_dialog_"+counterpart_id;   
+  var diplomacy_dialog = $(dialog_id);
 
   // Set dialog height - (more height is better for fitting more clauses)
   var dialog_height = 500; // 500 minimum
@@ -330,16 +336,16 @@ function create_diplomacy_dialog(counterpart, template) {
   if (dialog_height > 600) dialog_height = 600;  
 
   diplomacy_dialog.dialog({
-            title: title,
+      title: title,
 			bgiframe: true,
       modal: false,
-      width: is_small_screen() ? "90%" : "50%",
+      width: is_small_screen() ? "95%" : "50%",
       height: dialog_height,
 			buttons: {
 				"Accept treaty": function() {
 				    accept_treaty_req(counterpart_id);
 				},
-				"Cancel meeting" : function() {
+				"Cancel meeting (𝗪)" : function() {
 				    cancel_meeting_req(counterpart_id);
 				}
 			},
@@ -356,6 +362,30 @@ function create_diplomacy_dialog(counterpart, template) {
              "minimize" : "ui-icon-circle-minus",
              "restore" : "ui-icon-bullet"
            }});
+
+  diplomacy_dialog_register(dialog_id, counterpart_id);
+  
+  if (is_small_screen()) {
+    $(dialog_id).css("padding", "0px");
+    $(dialog_id).parent().children().first().css("font-size", "70%");
+    // Move give-gold input fields above clause dropdowns on narrow mobile screen:
+    $(".dipl_div").first().children().last().prependTo($(".dipl_div").first());
+    $(".dipl_div").last().children().last().prependTo($(".dipl_div").last());
+    // Push each side to farthest edge for more room
+    $(".dipl_div").first().css("float", "left");
+    $(".dipl_div").last().css("float", "right");
+    // Remove obtuse jquery margins from <a> buttons
+    $("div.dipl_div a").css("margin", "0px");
+    // Reduce huge h3 font on national leader names for more room
+    $(".diplomacy_player_box h3").css("font-size", "100%");
+    // Align each national leader to edge.
+    $(".diplomacy_player_box h3").first().css("text-align", "left");
+    $(".diplomacy_player_box h3").last().css("text-align", "right");
+    // Scale flags a little smaller so thumbs can fit next to them.
+    $(".flag_self,.flag_counterpart").css("transform","scale(.90)");
+    // Main treaty list box, do standard instead of huge font.
+    $(".diplomacy_messages").css("font-size", "100%");
+  }
 
   var nation = nations[pplayer['nation']];
   if (nation['customized']) {
@@ -406,6 +436,43 @@ function create_diplomacy_dialog(counterpart, template) {
   diplomacy_dialog.parent().css("z-index", 1000);
 }
 
+/**************************************************************************
+ Custom registration for diplomacy dialog, so that proper cleanup triggered
+ when player hits 'W' to close pop-up dialog.  
+**************************************************************************/
+function diplomacy_dialog_register(id, counterpart_id) 
+{
+  $(id).dialog('widget').keydown(
+    function() {
+      //sneaky way to send a parameter to key listener
+      last_dialog_counterpart = counterpart_id;
+      diplomacy_dialog_key_listener(event);
+    });
+  $(id).dialog({ autoOpen: true }).bind('dialogclose', function(event, ui) { 
+    cancel_meeting_req(counterpart_id);
+  });
+
+  $(id).dialog('widget').position({my:"center top", at:"center top", of:window});
+  $(id).css("color", default_dialog_text_color);
+}
+/*********************************************************************** */
+function diplomacy_dialog_key_listener(ev)
+{
+/* Get counterpart_id from global var that was set microseconds ago by
+   the wrapper to this (since keylistener can't take a second parameter): */
+  counterpart_id = last_dialog_counterpart;  
+  // Check if focus is in chat field, where these keyboard events are ignored.
+  if ($('input:focus').length > 0 || !keyboard_input) return;
+  if (C_S_RUNNING != client_state()) return;
+
+  var keyboard_key = String.fromCharCode(ev.keyCode).toUpperCase();
+  if (keyboard_key == 'W') {
+        ev.stopPropagation();
+        cancel_meeting_req(counterpart_id);
+  }
+}
+/************************************************************************ */
+
 function meeting_paint_custom_flag(nation, flag_canvas)
 {
   var tag = "f." + nation['graphic_str'];
@@ -415,7 +482,7 @@ function meeting_paint_custom_flag(nation, flag_canvas)
 }
 
 function create_clauses_menu(content) {
-  content.css('position', 'relative');
+  content.css({'position': 'relative', 'color': default_dialog_text_color});
   var children = content.children();
   var button = children.eq(0);
   var menu = children.eq(1);
@@ -427,7 +494,8 @@ function create_clauses_menu(content) {
        + parseFloat(button.css('paddingTop'))
        + parseFloat(button.css('paddingBottom'))
        + parseFloat(button.css('borderTopWidth')),
-    left: parseFloat(button.css('marginLeft'))
+    left: parseFloat(button.css('marginLeft')),
+    color: default_dialog_text_color
   });
   var menu_open = function () {
     menu.show();
@@ -511,13 +579,15 @@ function meeting_template_data(embassy_meeting, giver, taker)
     clauses = [];
     for (var tech_id in techs) {
       if (player_invention_state(giver, tech_id) == TECH_KNOWN
-          && (player_invention_state(taker, tech_id) == TECH_UNKNOWN
-              || player_invention_state(taker, tech_id) == TECH_PREREQS_KNOWN)) {
-        clauses.push({
-          type: CLAUSE_ADVANCE,
-          value: tech_id,
-          name: techs[tech_id]['name']
-        });
+            && (
+                 (player_invention_state(taker, tech_id) == TECH_UNKNOWN && game_info['tech_trade_allow_holes'])
+                  || player_invention_state(taker, tech_id) == TECH_PREREQS_KNOWN)
+               ) {
+          clauses.push({
+            type: CLAUSE_ADVANCE,
+            value: tech_id,
+            name: techs[tech_id]['name']
+          });
       }
     }
     if (clauses.length > 0) {

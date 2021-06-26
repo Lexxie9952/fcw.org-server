@@ -122,7 +122,7 @@ int overview_canvas_store_width = OVERVIEW_CANVAS_STORE_WIDTH;
 int overview_canvas_store_height = OVERVIEW_CANVAS_STORE_HEIGHT;
 
 GtkWidget *toplevel;
-GdkWindow *root_window;
+GdkSurface *root_window;
 GtkWidget *toplevel_tabs;
 GtkWidget *top_vbox;
 GtkWidget *top_notebook, *bottom_notebook, *right_notebook;
@@ -151,11 +151,7 @@ GtkWidget *unit_info_label;
 GtkWidget *unit_info_box;
 GtkWidget *unit_info_frame;
 
-GtkWidget *econ_ebox;
-GtkWidget *bulb_ebox;
-GtkWidget *sun_ebox;
-GtkWidget *flake_ebox;
-GtkWidget *government_ebox;
+GtkWidget *econ_widget;
 
 const char *const gui_character_encoding = "UTF-8";
 const bool gui_use_transliteration = FALSE;
@@ -163,11 +159,8 @@ const bool gui_use_transliteration = FALSE;
 static GtkWidget *main_menubar;
 static GtkWidget *unit_image_table;
 static GtkWidget *unit_image;
-static GtkWidget *unit_image_button;
 static GtkWidget *unit_below_image[MAX_NUM_UNITS_BELOW];
-static GtkWidget *unit_below_image_button[MAX_NUM_UNITS_BELOW];
 static GtkWidget *more_arrow_pixmap;
-static GtkWidget *more_arrow_pixmap_button;
 static GtkWidget *more_arrow_pixmap_container;
 
 static int unit_id_top;
@@ -308,7 +301,7 @@ static void parse_options(int argc, char **argv)
       free(option);
     }
     /* Can't check against unknown options, as those might be gtk options */
-    /* TODO: gtk+ is about to drop its commandline options anyway,
+    /* TODO: gtk is about to drop its commandline options anyway,
      *       so we can stop supporting them and have error checking
      *       added here. */
 
@@ -372,7 +365,7 @@ gboolean map_canvas_focus(void)
 }
 
 /**********************************************************************//**
-  In GTK+ keyboard events are recursively propagated from the hierarchy
+  In GTK keyboard events are recursively propagated from the hierarchy
   parent down to its children. Sometimes this is not what we want.
   E.g. The inputline is active, the user presses the 's' key, we want it
   to be sent to the inputline, but because the main menu is further up
@@ -875,8 +868,28 @@ static GtkWidget *detached_widget_new(void)
 static GtkWidget *detached_widget_fill(GtkWidget *tearbox)
 {
   GtkWidget *b, *fillbox;
+  static GtkCssProvider *detach_button_provider = NULL;
+
+  if (detach_button_provider == NULL) {
+    detach_button_provider = gtk_css_provider_new();
+
+    /* These toggle buttons run vertically down the side of many UI
+     * elements, so they need to be thin horizontally. */
+    gtk_css_provider_load_from_data(detach_button_provider,
+                                    ".detach_button {\n"
+                                    "  padding: 0px 0px 0px 0px;\n"
+                                    "  min-width: 6px;\n"
+                                    "}",
+                                    -1);
+  }
 
   b = gtk_toggle_button_new();
+  gtk_style_context_add_provider(gtk_widget_get_style_context(b),
+                                 GTK_STYLE_PROVIDER(detach_button_provider),
+                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_add_class(gtk_widget_get_style_context(b),
+                              "detach_button");
+
   gtk_container_add(GTK_CONTAINER(tearbox), b);
   g_signal_connect(b, "toggled", G_CALLBACK(tearoff_callback), tearbox);
 
@@ -921,12 +934,8 @@ static void populate_unit_image_table(void)
    * in reset_unit_table. */
   unit_image = gtk_image_new();
   g_object_ref(unit_image);
-  unit_image_button = gtk_event_box_new();
-  gtk_event_box_set_visible_window(GTK_EVENT_BOX(unit_image_button), FALSE);
-  g_object_ref(unit_image_button);
-  gtk_container_add(GTK_CONTAINER(unit_image_button), unit_image);
-  gtk_grid_attach(GTK_GRID(table), unit_image_button, 0, 0, 1, 1);
-  g_signal_connect(unit_image_button, "button_press_event",
+  gtk_grid_attach(GTK_GRID(table), unit_image, 0, 0, 1, 1);
+  g_signal_connect(unit_image, "button_press_event",
                    G_CALLBACK(select_unit_image_callback), 
                    GINT_TO_POINTER(-1));
 
@@ -935,17 +944,12 @@ static void populate_unit_image_table(void)
     for (i = 0; i < num_units_below; i++) {
       unit_below_image[i] = gtk_image_new();
       g_object_ref(unit_below_image[i]);
-      unit_below_image_button[i] = gtk_event_box_new();
-      g_object_ref(unit_below_image_button[i]);
-      gtk_event_box_set_visible_window(GTK_EVENT_BOX(unit_below_image_button[i]), FALSE);
-      gtk_container_add(GTK_CONTAINER(unit_below_image_button[i]),
-                        unit_below_image[i]);
-      g_signal_connect(unit_below_image_button[i],
+      g_signal_connect(unit_below_image[i],
                        "button_press_event",
                        G_CALLBACK(select_unit_image_callback),
                        GINT_TO_POINTER(i));
 
-      gtk_grid_attach(GTK_GRID(table), unit_below_image_button[i],
+      gtk_grid_attach(GTK_GRID(table), unit_below_image[i],
                       i, 1, 1, 1);
     }
   }
@@ -954,13 +958,7 @@ static void populate_unit_image_table(void)
   pix = sprite_get_pixbuf(get_arrow_sprite(tileset, ARROW_RIGHT));
   more_arrow_pixmap = gtk_image_new_from_pixbuf(pix);
   g_object_ref(more_arrow_pixmap);
-  more_arrow_pixmap_button = gtk_event_box_new();
-  g_object_ref(more_arrow_pixmap_button);
-  gtk_event_box_set_visible_window(GTK_EVENT_BOX(more_arrow_pixmap_button),
-                                   FALSE);
-  gtk_container_add(GTK_CONTAINER(more_arrow_pixmap_button),
-                    more_arrow_pixmap);
-  g_signal_connect(more_arrow_pixmap_button,
+  g_signal_connect(more_arrow_pixmap,
                    "button_press_event",
                    G_CALLBACK(select_more_arrow_pixmap_callback), NULL);
   /* An extra layer so that we can hide the clickable button but keep
@@ -971,7 +969,7 @@ static void populate_unit_image_table(void)
   gtk_widget_set_valign(more_arrow_pixmap_container, GTK_ALIGN_CENTER);
   g_object_ref(more_arrow_pixmap_container);
   gtk_container_add(GTK_CONTAINER(more_arrow_pixmap_container),
-                    more_arrow_pixmap_button);
+                    more_arrow_pixmap);
   gtk_widget_set_size_request(more_arrow_pixmap_container,
                               gdk_pixbuf_get_width(pix), -1);
   g_object_unref(G_OBJECT(pix));
@@ -994,25 +992,22 @@ static void populate_unit_image_table(void)
 **************************************************************************/
 static void free_unit_table(void)
 {
-  if (unit_image_button) {
+  if (unit_image) {
     gtk_container_remove(GTK_CONTAINER(unit_image_table),
-                         unit_image_button);
+                         unit_image);
     g_object_unref(unit_image);
-    g_object_unref(unit_image_button);
     if (!GUI_GTK_OPTION(small_display_layout)) {
       int i;
 
       for (i = 0; i < num_units_below; i++) {
         gtk_container_remove(GTK_CONTAINER(unit_image_table),
-                             unit_below_image_button[i]);
+                             unit_below_image[i]);
         g_object_unref(unit_below_image[i]);
-        g_object_unref(unit_below_image_button[i]);
       }
     }
     gtk_container_remove(GTK_CONTAINER(unit_image_table),
                          more_arrow_pixmap_container);
     g_object_unref(more_arrow_pixmap);
-    g_object_unref(more_arrow_pixmap_button);
     g_object_unref(more_arrow_pixmap_container);
   }
 }
@@ -1036,7 +1031,7 @@ void reset_unit_table(void)
    * arrow to go away, both by expicitly hiding it and telling it to
    * do so (this will be reset immediately afterwards if necessary,
    * but we have to make the *internal* state consistent). */
-  gtk_widget_hide(more_arrow_pixmap_button);
+  gtk_widget_hide(more_arrow_pixmap);
   set_unit_icons_more_arrow(FALSE);
   if (get_num_units_in_focus() == 1) {
     set_unit_icon(-1, head_of_units_in_focus());
@@ -1103,11 +1098,19 @@ static void setup_canvas_color_for_state(GtkStateFlags state)
 #endif
 
 /**********************************************************************//**
+  Callback that just returns TRUE.
+**************************************************************************/
+bool terminate_signal_processing(void)
+{
+  return TRUE;
+}
+
+/**********************************************************************//**
   Do the heavy lifting for the widget setup.
 **************************************************************************/
 static void setup_widgets(void)
 {
-  GtkWidget *page, *ebox, *hgrid, *hgrid2, *label;
+  GtkWidget *page, *hgrid, *hgrid2, *label;
   GtkWidget *frame, *table, *table2, *paned, *hpaned, *sw, *text;
   GtkWidget *button, *view, *vgrid, *right_vbox = NULL;
   int i;
@@ -1122,7 +1125,7 @@ static void setup_widgets(void)
 
   /* stop mouse wheel notebook page switching. */
   g_signal_connect(notebook, "scroll_event",
-		   G_CALLBACK(gtk_true), NULL);
+                   G_CALLBACK(terminate_signal_processing), NULL);
 
   toplevel_tabs = notebook;
   gtk_notebook_set_show_tabs(GTK_NOTEBOOK(notebook), FALSE);
@@ -1162,6 +1165,8 @@ static void setup_widgets(void)
   gtk_notebook_append_page(GTK_NOTEBOOK(notebook), page, NULL);
 
   top_vbox = gtk_grid_new();
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(top_vbox),
+                                 GTK_ORIENTATION_VERTICAL);
   gtk_grid_set_row_spacing(GTK_GRID(top_vbox), 5);
   hgrid = gtk_grid_new();
 
@@ -1169,6 +1174,8 @@ static void setup_widgets(void)
     /* The window is divided into two horizontal panels: overview +
      * civinfo + unitinfo, main view + message window. */
     right_vbox = gtk_grid_new();
+    gtk_orientable_set_orientation(GTK_ORIENTABLE(right_vbox),
+                                   GTK_ORIENTATION_VERTICAL);
     gtk_container_add(GTK_CONTAINER(hgrid), right_vbox);
 
     paned = gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
@@ -1188,7 +1195,7 @@ static void setup_widgets(void)
     gtk_paned_pack1(GTK_PANED(paned), top_vbox, TRUE, FALSE);
     gtk_container_add(GTK_CONTAINER(top_vbox), hgrid);
 
-    /* Overview size designed for netbooks. */
+    /* Overview size designed for big displays (desktops). */
     overview_canvas_store_width = OVERVIEW_CANVAS_STORE_WIDTH;
     overview_canvas_store_height = OVERVIEW_CANVAS_STORE_HEIGHT;
   }
@@ -1198,7 +1205,10 @@ static void setup_widgets(void)
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vgrid),
                                  GTK_ORIENTATION_VERTICAL);
   gtk_grid_set_column_spacing(GTK_GRID(vgrid), 3);
-  gtk_container_add(GTK_CONTAINER(hgrid), vgrid);
+  /* Put vgrid to the left of anything else in hgrid -- right_vbox is either
+   * the chat/messages pane, or NULL which is OK */
+  gtk_grid_attach_next_to(GTK_GRID(hgrid), vgrid, right_vbox,
+                          GTK_POS_LEFT, 1, 1);
 
   /* overview canvas */
   ahbox = detached_widget_new();
@@ -1245,6 +1255,8 @@ static void setup_widgets(void)
   gtk_container_add(GTK_CONTAINER(vgrid), ahbox);
   gtk_widget_set_hexpand(ahbox, FALSE);
   avbox = detached_widget_fill(ahbox);
+  gtk_widget_set_vexpand(avbox, TRUE);
+  gtk_widget_set_valign(avbox, GTK_ALIGN_FILL);
 
   /* Info on player's civilization, when game is running. */
   frame = gtk_frame_new("");
@@ -1253,14 +1265,10 @@ static void setup_widgets(void)
   main_frame_civ_name = frame;
 
   vgrid = gtk_grid_new();
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(vgrid),
+                                 GTK_ORIENTATION_VERTICAL);
   gtk_container_add(GTK_CONTAINER(frame), vgrid);
   gtk_widget_set_hexpand(vgrid, TRUE);
-
-  ebox = gtk_event_box_new();
-  gtk_event_box_set_visible_window(GTK_EVENT_BOX(ebox), FALSE);
-  g_signal_connect(ebox, "button_press_event",
-                   G_CALLBACK(show_info_popup), NULL);
-  gtk_container_add(GTK_CONTAINER(vgrid), ebox);
 
   label = gtk_label_new(NULL);
   gtk_widget_set_halign(label, GTK_ALIGN_START);
@@ -1269,7 +1277,9 @@ static void setup_widgets(void)
   gtk_widget_set_margin_end(label, 2);
   gtk_widget_set_margin_top(label, 2);
   gtk_widget_set_margin_bottom(label, 2);
-  gtk_container_add(GTK_CONTAINER(ebox), label);
+  g_signal_connect(label, "button_press_event",
+                   G_CALLBACK(show_info_popup), NULL);
+  gtk_container_add(GTK_CONTAINER(vgrid), label);
   main_label_info = label;
 
   /* Production status */
@@ -1279,53 +1289,43 @@ static void setup_widgets(void)
   gtk_container_add(GTK_CONTAINER(avbox), table);
 
   /* citizens for taxrates */
-  ebox = gtk_event_box_new();
-  gtk_event_box_set_visible_window(GTK_EVENT_BOX(ebox), FALSE);
-  gtk_grid_attach(GTK_GRID(table), ebox, 0, 0, 10, 1);
-  econ_ebox = ebox;
-
   table2 = gtk_grid_new();
-  gtk_container_add(GTK_CONTAINER(ebox), table2);
+  gtk_grid_attach(GTK_GRID(table), table2, 0, 0, 10, 1);
+  econ_widget = table2;
 
   for (i = 0; i < 10; i++) {
-    ebox = gtk_event_box_new();
-    gtk_event_box_set_visible_window(GTK_EVENT_BOX(ebox), FALSE);
-
-    gtk_grid_attach(GTK_GRID(table2), ebox, i, 0, 1, 1);
-
-    g_signal_connect(ebox, "button_press_event",
-                     G_CALLBACK(taxrates_callback), GINT_TO_POINTER(i));
-
     spr = i < 5 ? get_tax_sprite(tileset, O_SCIENCE) : get_tax_sprite(tileset, O_GOLD);
-    econ_label[i] = gtk_image_new_from_surface(spr->surface);
-    gtk_container_add(GTK_CONTAINER(ebox), econ_label[i]);
+    econ_label[i] = image_new_from_surface(spr->surface);
+    g_signal_connect(econ_label[i], "button_press_event",
+                     G_CALLBACK(taxrates_callback), GINT_TO_POINTER(i));
+    gtk_grid_attach(GTK_GRID(table2), econ_label[i], i, 0, 1, 1);
   }
 
   /* science, environmental, govt, timeout */
   spr = client_research_sprite();
   if (spr != NULL) {
-    bulb_label = gtk_image_new_from_surface(spr->surface);
+    bulb_label = image_new_from_surface(spr->surface);
   } else {
     bulb_label = gtk_image_new();
   }
 
   spr = client_warming_sprite();
   if (spr != NULL) {
-    sun_label = gtk_image_new_from_surface(spr->surface);
+    sun_label = image_new_from_surface(spr->surface);
   } else {
     sun_label = gtk_image_new();
   }
 
   spr = client_cooling_sprite();
   if (spr != NULL) {
-    flake_label = gtk_image_new_from_surface(spr->surface);
+    flake_label = image_new_from_surface(spr->surface);
   } else {
     flake_label = gtk_image_new();
   }
 
   spr = client_government_sprite();
   if (spr != NULL) {
-    government_label = gtk_image_new_from_surface(spr->surface);
+    government_label = image_new_from_surface(spr->surface);
   } else {
     government_label = gtk_image_new();
   }
@@ -1333,26 +1333,19 @@ static void setup_widgets(void)
   for (i = 0; i < 4; i++) {
     GtkWidget *w;
 
-    ebox = gtk_event_box_new();
-    gtk_event_box_set_visible_window(GTK_EVENT_BOX(ebox), FALSE);
-
     switch (i) {
     case 0:
       w = bulb_label;
-      bulb_ebox = ebox;
       break;
     case 1:
       w = sun_label;
-      sun_ebox = ebox;
       break;
     case 2:
       w = flake_label;
-      flake_ebox = ebox; 
       break;
     default:
     case 3:
       w = government_label;
-      government_ebox = ebox;
       break;
     }
 
@@ -1362,8 +1355,7 @@ static void setup_widgets(void)
     gtk_widget_set_margin_end(w, 0);
     gtk_widget_set_margin_top(w, 0);
     gtk_widget_set_margin_bottom(w, 0);
-    gtk_container_add(GTK_CONTAINER(ebox), w);
-    gtk_grid_attach(GTK_GRID(table), ebox, i, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(table), w, i, 1, 1, 1);
   }
 
   timeout_label = gtk_label_new("");
@@ -1445,6 +1437,8 @@ static void setup_widgets(void)
     gtk_paned_pack1(GTK_PANED(paned), top_notebook, TRUE, FALSE);
   } else if (GUI_GTK_OPTION(message_chat_location) == GUI_GTK_MSGCHAT_MERGED) {
     right_vbox = gtk_grid_new();
+    gtk_orientable_set_orientation(GTK_ORIENTABLE(right_vbox),
+                                   GTK_ORIENTATION_VERTICAL);
 
     gtk_container_add(GTK_CONTAINER(right_vbox), top_notebook);
     gtk_container_add(GTK_CONTAINER(right_vbox), ingame_votebar);
@@ -1732,10 +1726,9 @@ void ui_main(int argc, char **argv)
   g_signal_connect(toplevel, "key_press_event",
                    G_CALLBACK(toplevel_handler), NULL);
 
-  gtk_window_set_role(GTK_WINDOW(toplevel), "toplevel");
   gtk_widget_realize(toplevel);
   gtk_widget_set_name(toplevel, "Freeciv");
-  root_window = gtk_widget_get_window(toplevel);
+  root_window = gtk_widget_get_surface(toplevel);
 
   if (!GUI_GTK_OPTION(migrated_from_gtk3_22)) {
     migrate_options_from_gtk3_22();
@@ -1750,7 +1743,7 @@ void ui_main(int argc, char **argv)
   g_signal_connect(toplevel, "delete_event",
                    G_CALLBACK(quit_dialog_callback), NULL);
 
-  /* Disable GTK+ cursor key focus movement */
+  /* Disable GTK cursor key focus movement */
   sig = g_signal_lookup("focus", GTK_TYPE_WIDGET);
   g_signal_handlers_disconnect_matched(toplevel, G_SIGNAL_MATCH_ID, sig,
                                        0, 0, 0, 0);
@@ -1789,9 +1782,10 @@ void ui_main(int argc, char **argv)
 #ifndef FREECIV_MSWINDOWS
   {
     GdkPixbuf *pixbuf = sprite_get_pixbuf(get_icon_sprite(tileset, ICON_FREECIV));
+    GdkTexture *icon = gdk_texture_new_for_pixbuf(pixbuf);
 
     /* Only call this after tileset_load_tiles is called. */
-    gtk_window_set_icon(GTK_WINDOW(toplevel), pixbuf);
+    gtk_window_set_icon(GTK_WINDOW(toplevel), icon);
     g_object_unref(pixbuf);
   }
 #endif /* FREECIV_MSWINDOWS */
@@ -1913,15 +1907,15 @@ void set_unit_icons_more_arrow(bool onoff)
 {
   static bool showing = FALSE;
 
-  if (!more_arrow_pixmap_button) {
+  if (!more_arrow_pixmap) {
     return;
   }
 
   if (onoff && !showing) {
-    gtk_widget_show(more_arrow_pixmap_button);
+    gtk_widget_show(more_arrow_pixmap);
     showing = TRUE;
   } else if (!onoff && showing) {
-    gtk_widget_hide(more_arrow_pixmap_button);
+    gtk_widget_hide(more_arrow_pixmap);
     showing = FALSE;
   }
 }
@@ -2023,7 +2017,7 @@ static gboolean show_info_popup(GtkWidget *w, GdkEvent *ev, gpointer data)
     gtk_widget_show(p);
 
     gdk_seat_grab(gdk_device_get_seat(gdk_event_get_device(ev)),
-                  gtk_widget_get_window(p),
+                  gtk_widget_get_surface(p),
                   GDK_SEAT_CAPABILITY_ALL_POINTING,
                   TRUE, NULL, (GdkEvent *)ev, NULL, NULL);
     gtk_grab_add(p);
@@ -2105,7 +2099,7 @@ void remove_net_input(void)
 {
   g_source_remove(srv_id);
   g_io_channel_unref(srv_channel);
-  gdk_window_set_cursor(root_window, NULL);
+  gtk_widget_set_cursor(toplevel, NULL);
 }
 
 /**********************************************************************//**
@@ -2317,7 +2311,7 @@ static void allied_chat_button_toggled(GtkToggleButton *button,
 **************************************************************************/
 void insert_client_build_info(char *outbuf, size_t outlen)
 {
-  cat_snprintf(outbuf, outlen, _("\nBuilt against gtk+ %d.%d.%d, using %d.%d.%d"
+  cat_snprintf(outbuf, outlen, _("\nBuilt against gtk %d.%d.%d, using %d.%d.%d"
                                  "\nBuilt against glib %d.%d.%d, using %d.%d.%d"),
                GTK_MAJOR_VERSION, GTK_MINOR_VERSION, GTK_MICRO_VERSION,
                gtk_get_major_version(), gtk_get_minor_version(), gtk_get_micro_version(),

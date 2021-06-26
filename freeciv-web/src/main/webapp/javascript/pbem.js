@@ -48,7 +48,7 @@ function show_pbem_dialog()
     + "<li>Standard Freeciv-web rules are used with some changes to map size, research speed, start units and gold to speed up games.</li>"  
     + "<li>Please complete your turn as soon as possible, and use at no longer than 7 days until you complete your turn.</li>"
     + "<li>Results of games with 2 players are stored to rank players.</li>"
-    + "<li>Please post feedback and arrange new games on the <a href='http://forum.freeciv.org/f/viewforum.php?f=24' style='color: black;' target='_new'>forum</a>.</li>"
+    + "<li>Please post feedback and arrange new games on <a href='https://discord.gg/ZHQGvWeUaP' target='_new'>Discord</a> and the <a href='http://forum.freeciv.org/f/viewforum.php?f=24' target='_new'>Forum</a>.</li>"
     + "<li id='user_count'></li></ul>"; 
   }
 
@@ -69,7 +69,7 @@ function show_pbem_dialog()
 				"Log In" : function() {
                                     login_pbem_user();
 				},
-				  "Account...": function() {
+				  "Deactivate": function() {
                                     close_pbem_account();
 				}
 
@@ -105,7 +105,7 @@ function login_pbem_user()
   var title = "Log in";
   var message = "Log in to your Freeciv-web user account:<br><br>"
                 + "<table><tr><td>Username:</td><td><input id='username' type='text' size='25' maxlength='30' onkeyup='return forceLower(this);'></td></tr>"  
-                + "<tr><td>Password:</td><td><input id='password' type='password' size='25'> &nbsp; <a class='pwd_reset' href='#' style='color: #666666;'>Forgot password?</a></td></tr></table><br><br>"
+                + "<tr><td>Password:</td><td><input id='password' type='password' size='25'> &nbsp;"+/* <a class='pwd_reset' href='#' style='color: #666666;'>Forgot password?</a>*/"</td></tr></table><br><br>"
                 + "<div id='username_validation_result' style='display:none;'></div><br><br>";
 
   // reset dialog page.
@@ -182,10 +182,12 @@ function login_pbem_user_request()
        },
      error: function (request, textStatus, errorThrown) {
        swal("Login user failed. ");
+       setSwalTheme();
      }
     });
   } else {
     swal("Invalid password");
+    setSwalTheme();
   }
 }
 
@@ -325,10 +327,12 @@ function create_new_pbem_game()
       swal("You have already invited " + check_opponent + ". There is no "
           + "need to invite multiple times. It can take some time before "
           + "the invitation email arrives to " + check_opponent);
+      setSwalTheme();
       return;
     }
 
     if (check_opponent == username) {
+      setSwalTheme();
       swal("No playing with yourself please.");
       return;
     }
@@ -344,7 +348,7 @@ function create_new_pbem_game()
 
         } else if (data == "user_does_not_exist") {
           swal("Opponent does not exist. Please try another username.");
-
+          setSwalTheme();
         } else if (data != null && data.length > 3) {
           opponents.push(data);
           network_init();
@@ -362,10 +366,12 @@ function create_new_pbem_game()
 
         } else {
           swal("Problem starting new pbem game.");
+          setSwalTheme();
         }
       },
      error: function (request, textStatus, errorThrown) {
        swal("Opponent does not exist. Please try another username.");
+       setSwalTheme();
      }
     });
 
@@ -381,10 +387,12 @@ function create_new_pbem_game()
 
     for (var i = 0; i < opponents.length; i++) {
       if (opponents[i].length < 1) {
-        swal("Please fill inn all players names.");
+        swal("Please fill in all players names.");
+        setSwalTheme();
         return;
       } else if (opponents[i].indexOf("@") != -1) {
         swal("Please specify the username of the other player, not their e-mail address.");
+        setSwalTheme();
         return;
       } else {
        $.ajax({
@@ -394,6 +402,7 @@ function create_new_pbem_game()
          success: function(data, textStatus, request) {
            if (data == "user_does_not_exist") {
              swal("Opponent does not exist. Please try another username.");
+             setSwalTheme();
              game_start_ready = false;
            } else {
              pbem_ready_players = pbem_ready_players + 1;
@@ -433,9 +442,11 @@ function send_pbem_invitation(email)
              + "receive an e-mail when it is your turn to play. Now "  
              + "you can wait for the other player.");
        $("#opponent").val("")
+       setSwalTheme();
       },
    error: function (request, textStatus, errorThrown) {
      swal("Error: Unable to invite the opponent.");
+     setSwalTheme();
    }
   });
 
@@ -456,6 +467,7 @@ function create_pbem_players()
 
     } else {
       swal("Error: invalid opponent selected.");
+      setSwalTheme();
     }
   } else {
     setTimeout(create_pbem_players, 500);
@@ -600,10 +612,11 @@ function request_deactivate_account()
    url: "/deactivate_user?username=" + usr + "&sha_password=" + sha_password,
    success: function(data, textStatus, request){
        swal("User account has been deactivated!");
-
+       setSwalTheme();
      },
    error: function (request, textStatus, errorThrown) {
      swal("deactivate user failed.");
+     setSwalTheme();
    }
   });
 
@@ -619,6 +632,7 @@ function pbem_duplicate_turn_play_check()
     var previously_played = simpleStorage.get("pbem_" + pbem_savegame, "");
     if (previously_played != null) {
       swal("This Play-By-Email turn has already been played and can't be played again. Sorry!");
+      setSwalTheme();
       return true;
     } else {
       return false;

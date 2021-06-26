@@ -108,7 +108,7 @@ void popup_notify_dialog(const char *caption, const char *headline,
   gui_dialog_new(&shell, GTK_NOTEBOOK(bottom_notebook), NULL, TRUE);
   gui_dialog_set_title(shell, caption);
 
-  gui_dialog_add_button(shell, "window-close", _("Close"),
+  gui_dialog_add_button(shell, "window-close", _("_Close"),
                         GTK_RESPONSE_CLOSE);
   gui_dialog_set_default_response(shell, GTK_RESPONSE_CLOSE);
 
@@ -200,7 +200,7 @@ void popup_notify_goto_dialog(const char *headline, const char *lines,
 
   if (ptile == NULL) {
     shell = gtk_dialog_new_with_buttons(headline, NULL, 0,
-                                        _("Close"), GTK_RESPONSE_CLOSE,
+                                        _("_Close"), GTK_RESPONSE_CLOSE,
                                         NULL);
   } else {
     struct city *pcity = tile_city(ptile);
@@ -209,12 +209,12 @@ void popup_notify_goto_dialog(const char *headline, const char *lines,
       shell = gtk_dialog_new_with_buttons(headline, NULL, 0,
                                           _("Goto _Location"), 1,
                                           _("I_nspect City"), 2,
-                                          _("Close"), GTK_RESPONSE_CLOSE,
+                                          _("_Close"), GTK_RESPONSE_CLOSE,
                                           NULL);
     } else {
       shell = gtk_dialog_new_with_buttons(headline, NULL, 0,
                                           _("Goto _Location"), 1,
-                                          _("Close"), GTK_RESPONSE_CLOSE,
+                                          _("_Close"), GTK_RESPONSE_CLOSE,
                                           NULL);
     }
   }
@@ -251,7 +251,7 @@ void popup_connect_msg(const char *headline, const char *message)
   gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(shell))), label);
   gtk_widget_show(label);
 
-  gtk_dialog_add_button(GTK_DIALOG(shell), _("Close"),GTK_RESPONSE_CLOSE);
+  gtk_dialog_add_button(GTK_DIALOG(shell), _("_Close"),GTK_RESPONSE_CLOSE);
 
   g_signal_connect(shell, "response", G_CALLBACK(notify_connect_msg_response),
                    NULL);
@@ -314,9 +314,9 @@ static void pillage_callback(GtkWidget *dlg, gint arg)
   is_showing_pillage_dialog = FALSE;
 
   if (arg == GTK_RESPONSE_YES) {
-    int act_id = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(dlg),
-                                                   "actor"));
-    struct unit *actor = game_unit_by_number(act_id);
+    int au_id = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(dlg),
+                                                  "actor"));
+    struct unit *actor = game_unit_by_number(au_id);
 
     int tgt_id = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(dlg),
                                                    "target"));
@@ -516,6 +516,8 @@ static void select_nation(int nation,
                           const char *leadername, bool is_male,
                           int style_id)
 {
+  GtkEntryBuffer *buffer = gtk_entry_get_buffer(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(races_leader))));
+
   selected_nation = nation;
 
   /* Refresh the available leaders. */
@@ -525,8 +527,7 @@ static void select_nation(int nation,
 
     /* Select leader name and sex. */
     if (leadername) {
-      gtk_entry_set_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(races_leader))),
-                         leadername);
+      gtk_entry_buffer_set_text(buffer, leadername, -1);
       /* Assume is_male is valid too. */
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(races_sex[is_male]),
                                    TRUE);
@@ -577,8 +578,7 @@ static void select_nation(int nation,
   } else {
     /* No nation selected. Blank properties and make controls insensitive. */
     /* Leader name */
-    gtk_entry_set_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(races_leader))),
-                       "");
+    gtk_entry_buffer_set_text(buffer, "", -1);
     /* Leader sex (*shrug*) */
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(races_sex[0]), TRUE);
     /* City style */
@@ -871,11 +871,11 @@ static void create_races_dialog(struct player *pplayer)
   shell = gtk_dialog_new_with_buttons(title,
                                       NULL,
                                       0,
-                                      _("Cancel"),
+                                      _("_Cancel"),
                                       GTK_RESPONSE_CANCEL,
                                       _("_Random Nation"),
                                       GTK_RESPONSE_NO, /* arbitrary */
-                                      _("Ok"),
+                                      _("_OK"),
                                       GTK_RESPONSE_ACCEPT,
                                       NULL);
   races_shell = shell;
@@ -1334,7 +1334,7 @@ static void races_leader_callback(void)
   const gchar *name;
 
   name =
-    gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(races_leader))));
+    gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(races_leader)))));
 
   if (selected_nation != -1
       &&(pleader = nation_leader_by_name(nation_by_number(selected_nation),
@@ -1406,7 +1406,8 @@ static void races_response(GtkWidget *w, gint response, gpointer data)
       return;
     }
 
-    s = gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(races_leader))));
+    s = gtk_entry_buffer_get_text(gtk_entry_get_buffer(
+                                      GTK_ENTRY(gtk_bin_get_child(GTK_BIN(races_leader)))));
 
     /* Perform a minimum of sanity test on the name. */
     /* This could call is_allowed_player_name if it were available. */
@@ -1580,16 +1581,4 @@ void popup_combat_info(int attacker_unit_id, int defender_unit_id,
                        int attacker_hp, int defender_hp,
                        bool make_att_veteran, bool make_def_veteran)
 {
-}
-
-/**********************************************************************//**
-  Popup dialog showing given image and text,
-  start playing given sound, stop playing sound when popup is closed.
-  Take all space available to show image if fullsize is set.
-  If there are other the same popups show them in queue.
-***************************************************************************/
-void show_img_play_snd(const char *img_path, const char *snd_path,
-                       const char *desc, bool fullsize)
-{
-  /* PORTME */
 }

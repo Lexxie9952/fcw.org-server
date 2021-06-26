@@ -95,6 +95,7 @@ struct civ_map {
       bool separatepoles;
       int flatpoles;
       bool single_pole;
+      bool polar_strip;
       bool alltemperate;
       int temperature;
       int wetness;

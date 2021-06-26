@@ -152,11 +152,11 @@ multipler_rates_dialog::multipler_rates_dialog(QWidget *parent,
     slider = new QSlider(Qt::Horizontal, this);
     slider->setMinimum(mult_to_scale(pmul, pmul->start));
     slider->setMaximum(mult_to_scale(pmul, pmul->stop));
-    slider->setValue(val);
+    slider->setValue(mult_to_scale(pmul, val));
     connect(slider, &QAbstractSlider::valueChanged,
             this, &multipler_rates_dialog::slot_set_value);
     slider_list.append(slider);
-    label = new QLabel(QString::number(val));
+    label = new QLabel(QString::number(mult_to_scale(pmul, val)));
     hb->addWidget(slider);
     slider->setEnabled(multiplier_can_be_changed(pmul, client_player()));
     hb->addWidget(label);
@@ -421,12 +421,12 @@ void fc_double_edge::mouseMoveEvent(QMouseEvent *event)
   x_max = static_cast<float>(current_max) / 10 *
           ((width() - 1) - 2 * cursor_size) + cursor_size;
 
-  on_min = (((x_mouse > (x_min - cursor_size * 1.1)) &&
-             (x_mouse < (x_min + cursor_size * 1.1)))
+  on_min = (((x_mouse > (x_min - cursor_size * 1.1))
+             && (x_mouse < (x_min + cursor_size * 1.1)))
             && (!on_max))
            || (moved == 1);
-  on_max = (((x_mouse > (x_max - cursor_size * 1.1)) &&
-             (x_mouse < (x_max + cursor_size * 1.1)))
+  on_max = (((x_mouse > (x_max - cursor_size * 1.1))
+             && (x_mouse < (x_max + cursor_size * 1.1)))
             && !on_min)
            || (moved == 2);
   if (event->buttons() & Qt::LeftButton) {

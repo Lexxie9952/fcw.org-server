@@ -389,9 +389,8 @@ int client_main(int argc, char *argv[])
       cmdhelp_add(help, "d",
                   /* TRANS: "debug" is exactly what user must type, do not translate. */
                   _("debug LEVEL"),
-                  _("Set debug log level (%d to %d, or "
-                    "%d:file1,min,max:...)"), LOG_FATAL, LOG_DEBUG,
-                  LOG_DEBUG);
+                  _("Set debug log level (one of f,e,w,n,v,d, or "
+                    "d:file1,min,max:...)"));
 #else  /* FREECIV_DEBUG */
       cmdhelp_add(help, "d",
                   /* TRANS: "debug" is exactly what user must type, do not translate. */
@@ -1047,7 +1046,7 @@ void client_remove_all_cli_conn(void)
 /**********************************************************************//**
   Send attribute block.
 **************************************************************************/
-void send_attribute_block_request()
+void send_attribute_block_request(void)
 {
   send_packet_player_attribute_block(&client.conn);
 }
@@ -1345,9 +1344,9 @@ struct player *client_player(void)
   Return the vision of the player on a tile. Client version of
   ./server/maphand/map_is_known_and_seen().
 **************************************************************************/
-static bool client_map_is_known_and_seen(const struct tile *ptile,
-                                         const struct player *pplayer,
-                                         enum vision_layer vlayer)
+bool client_map_is_known_and_seen(const struct tile *ptile,
+                                  const struct player *pplayer,
+                                  enum vision_layer vlayer)
 {
   return dbv_isset(&pplayer->client.tile_vision[vlayer], tile_index(ptile));
 }

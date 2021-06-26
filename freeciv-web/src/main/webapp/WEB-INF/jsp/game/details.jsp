@@ -12,6 +12,50 @@
 		.table th {
 			text-align: center;
 		}
+		.dropdown-menu {
+			background-image: url('/images/bg-med-dark.jpg');
+			border-radius: 5px;
+			border: 2x solid #000e;
+		}
+		.dropdown-menu .divider {
+				height: 1px;
+				margin: 5px 0;
+				border: 1px solid #000;
+				background-color: #000;
+		}
+		.dropdown-menu>li>a {
+				display: block;
+				padding: 3px 20px;
+				clear: both;
+				font-weight: normal;
+				line-height: 1.42857143;
+				color: #ccc;
+				white-space: nowrap;
+		}
+		.navbar-inverse {
+			background-color: #2220;
+			background: url(/images/bg-med-dark.jpg);
+		}
+		h1,h2,h3,h4,h5,h6 {
+			font-family: 'Freeciv', 'Segoe UI';
+			text-shadow: 1px 1px #222;
+		}
+		body {
+			color: #ccc;
+			background-image: url('/images/bg-dark.jpg'); 
+		}
+		@font-face {
+			font-family: Freeciv;
+			src: url('/fonts/freeciv.ttf');
+		}
+		@font-face {
+			font-family: Arial;
+			src: url('/fonts/arial.ttf');
+		}
+		@font-face {
+		font-family: Segoe;
+		src: url('/fonts/seg.ttf');
+		}
 	</style>
 	<script>
 		/****************************************************************************
@@ -150,7 +194,7 @@
 										<td>${patches}</td>
 										<td>${capability}</td>
 										<td>${state}</td>
-										<td>${ruleset}</td>
+										<td style="color: #be600d">${ruleset}</td>
 										<td>${serverid}</td>
 									</tr>
 								</tbody>
@@ -173,7 +217,7 @@
 											<th>Type</th>
 										</tr>
 									</thead>
-									<tbody>
+									<tbody style="background: url(/images/bg.jpg)">
 										<c:forEach items="${players}" var="player">
 										    <c:if test="${fn:contains(player.name, 'NewAvailablePlayer') == false}">
     											<tr>
@@ -182,7 +226,7 @@
 			    	   										<img src="/images/flags/${player.flag}-web.png" alt="${player.flag}" width="50">
     				   									</c:if>
 	    			   								</td>
-		    										<td>${player.name}</td>
+		    										<td style="color: #ffae67; text-shadow: 1px 1px #3d2e20;">${player.name}</td>
 			    									<td>${player.nation}</td>
 				    								<td>${player.user}</td>
 					    							<td>${player.type}</td>
@@ -212,7 +256,7 @@
 				
 				<!-- variables -->
 				<div class="row">
-					<div class="center-block" style="width: 200px;">
+					<div class="center-block" style="width: 250px;">
 						<c:if test="${fn:length(variables) > 0}">
 							<div class="table-responsive">
 								<table class="table">
@@ -225,7 +269,7 @@
 									<tbody>
 										<c:forEach items="${variables}" var="variable">
 											<tr>
-												<td>${variable.name}</td> <!-- flag goes here -->
+												<td style="color: #be600d">${variable.name}</td> <!-- flag goes here -->
 												<td>${variable.value}</td>
 											</tr>
 										</c:forEach>

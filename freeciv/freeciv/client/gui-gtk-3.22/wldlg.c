@@ -217,13 +217,13 @@ static GtkWidget *create_worklists_report(void)
   shell = gtk_dialog_new_with_buttons(_("Edit worklists"),
                                       NULL,
                                       0,
-                                      _("New"),
+                                      _("_New"),
                                       WORKLISTS_NEW,
-                                      _("Delete"),
+                                      _("_Delete"),
                                       WORKLISTS_DELETE,
-                                      _("Properties"),
+                                      _("_Properties"),
                                       WORKLISTS_PROPERTIES,
-                                      _("Close"),
+                                      _("_Close"),
                                       WORKLISTS_CLOSE,
                                       NULL);
   setup_dialog(shell, toplevel);
@@ -398,7 +398,7 @@ static void popup_worklist(struct global_worklist *pgwl)
     shell = gtk_dialog_new_with_buttons(global_worklist_name(pgwl),
                                         GTK_WINDOW(worklists_shell),
                                         GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        _("Close"),
+                                        _("_Close"),
                                         GTK_RESPONSE_CLOSE,
                                         NULL);
     gtk_window_set_role(GTK_WINDOW(shell), "worklist");
@@ -1347,7 +1347,6 @@ void refresh_worklist(GtkWidget *editor)
   } else {
     selected = FALSE;
   }
-  gtk_list_store_clear(ptr->src);
 
   /* These behave just right if ptr->pcity is NULL -> in case of global
    * worklist. */
@@ -1355,20 +1354,48 @@ void refresh_worklist(GtkWidget *editor)
                                                       ptr->future);
   name_and_sort_items(targets, targets_used, items, FALSE, ptr->pcity);
 
+  /* Re-purpose existing items in the list store -- this avoids the
+   * UI jumping around (especially as the set of source tasks doesn't
+   * actually change much in practice). */
+  model = GTK_TREE_MODEL(ptr->src);
+  exists = gtk_tree_model_get_iter_first(model, &it);
+
   path = NULL;
   for (i = 0; i < targets_used; i++) {
-    gtk_list_store_append(ptr->src, &it);
+    if (!exists) {
+      gtk_list_store_append(ptr->src, &it);
+    }
+
     gtk_list_store_set(ptr->src, &it, 0, (gint) cid_encode(items[i].item), -1);
 
     if (selected && cid_encode(items[i].item) == id) {
       path = gtk_tree_model_get_path(GTK_TREE_MODEL(ptr->src), &it);
     }
+
+    if (exists) {
+      exists = gtk_tree_model_iter_next(model, &it);
+    }
   }
+
+  /* If the list got shorter, delete any excess items. */
+  if (exists) {
+    GtkTreeIter it_next;
+    bool more;
+
+    do {
+      it_next = it;
+      more = gtk_tree_model_iter_next(model, &it_next);
+
+      gtk_list_store_remove(ptr->src, &it);
+      it = it_next;
+    } while (more);
+  }
+
+  /* Select the same item that was previously selected, if any. */
   if (path) {
     gtk_tree_view_set_cursor(GTK_TREE_VIEW(ptr->src_view), path, NULL, FALSE);
     gtk_tree_path_free(path);
   }
-
 
   /* refresh target worklist. */
   model = GTK_TREE_MODEL(ptr->dst);

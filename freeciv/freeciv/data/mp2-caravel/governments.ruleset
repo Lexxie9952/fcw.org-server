@@ -1,0 +1,323 @@
+
+; Modifying this file:
+; You should not modify this file except to make bugfixes or
+; for other "maintenance".  If you want to make custom changes
+; you should create a new datadir subdirectory and copy this file
+; into that directory, and then modify that copy.  Then use the
+; command "rulesetdir <mysubdir>" in the server to have freeciv
+; use your new customized file.
+
+; Note that the freeciv AI may not cope well with anything more
+; than minor changes.
+
+[datafile]
+description="Governments data for Freeciv"
+options="+Freeciv-ruleset-Devel-2017.Jan.02 web-compatible"
+format_version=20
+
+[governments]
+during_revolution="Anarchy"
+
+; /* <-- avoid gettext warnings
+;
+; Below: The individual government types, one per section.
+;
+; The actual tag used (the * in [government_*]) does not matter, except
+; it must be unique within this file, and it may be used in debug
+; output when reading this file.
+;
+; For the "official" rulesets, the order of these sections should not
+; be changed because that would break backward compatability with
+; savegames.  (In particular, if Theocracy is added to default
+; ruleset, should be added at end.)
+;
+; Notes on fields:
+;
+; name         = translatable name as seen by user
+; rule_name    = (optional) internal name for savegames, rulesets etc; if
+;                not present, "name" is used for this purpose too. Since
+;                the name used in savegames must not change, if you want
+;                to rename an item after a ruleset has been released, you
+;                should set "rule_name" to the original value of "name".
+; reqs         = requirements for this government (see README.effects)
+; graphic      = tag specifing preferred graphic
+; graphic_alt  = alternate graphics tag if preferred is not found;
+;                should be a standard tag if preferred is not;
+;                otherwise may be "-"
+; ai_better    = AI will not consider this government for use if the
+;                government listed here is available
+; ruler_male_title   = The default male ruler title for the government type.
+;                      It's a format string where name of the ruler is marked
+;                      by '%s'.
+;                      Individual nations may override this by their
+;                      own title.
+; ruler_female_title = The default female ruler title for the government type.
+;                      See above ruler_male_title.
+; helptext     = optional help text string; should escape all raw newlines
+;                so that xgettext parsing works
+;
+; */ <-- avoid gettext warnings
+
+;------------------------------------------------------------------------
+[government_anarchy]
+
+name        = _("Anarchy")
+; No reqs
+graphic     = "gov.anarchy"
+graphic_alt = "-"
+
+ruler_male_title = _("Warlord %s")
+ruler_female_title = _("Warlady %s")
+
+helptext = _("\
+Anarchy is simply the absence of any recognizable government.\
+ Citizens are disorganized and unproductive, and will spend all\
+ income as quickly as possible, rather than paying taxes or\
+ conducting research. Under Anarchy, tiles suffer a -1 tile output\
+ penalty if they produce 3 or more of any resource.\
+"), _("\
+Anarchy offers slightly less corruption than Despotism,\
+ but slightly more unhappiness. \n\
+"), _("\
+No citizens are made unhappy by each aggressive unit.\n\
+25% Base corruption in cities\n\
+2% Extra corruption per each tile in distance from capital\n\
+")
+
+;------------------------------------------------------------------------
+[government_despotism]
+
+name        = _("Despotism")
+; No reqs
+graphic     = "gov.despotism"
+graphic_alt = "-"
+ai_better   = "Monarchy"
+
+ruler_male_title = _("Chief %s")
+ruler_female_title = _("?female:Chief %s")
+
+helptext = _("\
+Under Despotism, you are the absolute ruler of your people.  Your\
+ control over your citizens is maintained largely by martial law.\
+ Under Despotism, tiles suffer a -1 tile output penalty if they\
+ produce 3 resource points. \
+"), _("\
+Despotism suffers the highest level of corruption of all\
+ forms of government.\n\ \
+"), _("\
+Gulag：You can starve cities without disorder, with 2 martial law units. \n\
+No citizens are made unhappy by each aggressive unit. \n\
+37% Base corruption in cities \n\
+4% Extra corruption per each tile in distance from capital \n\
+")
+
+;------------------------------------------------------------------------
+[government_monarchy]
+
+name        = _("Monarchy")
+reqs = { "type", "name", "range"
+         "tech", "Monarchy", "Player"
+       }
+graphic     = "gov.monarchy"
+graphic_alt = "-"
+ai_better   = "Communism"
+
+ruler_male_title = _("King %s")
+ruler_female_title = _("Queen %s")
+
+helptext = _("\
+Under Monarchy, a king or queen serves as a hereditary figurehead\
+ for your government. \
+"), _("\
+Monarchy suffers the same small amount of corruption that\
+ the Republic does. \
+"), _("\
+No citizens are made unhappy by each aggressive unit. \n\
+15% Base corruption in cities \n\
+2% Extra corruption per each tile in distance from capital \n\
+")
+
+;------------------------------------------------------------------------
+[government_republic]
+
+name        = _("Republic")
+reqs = { "type", "name", "range"
+         "tech", "The Republic", "Player"
+       }
+graphic     = "gov.republic"
+graphic_alt = "-"
+
+ruler_male_title = _("President %s")
+ruler_female_title = _("?female:President %s")
+
+helptext = _("\
+Under a Republican government, citizens hold an election to select a\
+ representative who will govern them; since elected leaders must\
+ remain popular to remain in control, citizens are given a greater\
+ degree of freedom.  Citizens under the Republic become unhappy\
+ easily, but the self-sufficiency of your citizens allows high levels\
+ of trade. \n\
+"), _("\
+1 citizen is made unhappy by each aggressive unit*. \n\
+     (* first aggressive unit does not cause unhappy)\n\
+15% Base corruption in cities\n\
+2% Extra corruption per each tile in distance from capital\n\
+")
+
+;------------------------------------------------------------------------
+[government_democracy]
+
+name        = _("Democracy")
+reqs = { "type", "name", "range"
+         "tech", "Democracy", "Player"
+       }
+graphic     = "gov.democracy"
+graphic_alt = "-"
+
+ruler_male_title = _("Prime Minister %s")
+ruler_female_title = _("?female:Prime Minister %s")
+
+helptext = _("\
+Under Democracy, citizens govern directly by voting on issues.\
+ Democracy offers the highest level of trade. Base corruption\
+ is half that of Republic or Monarchy, and corruption from distance to\
+ a capital is very low. Citizens become very upset during wars.\
+ Democracy revolts to Anarchy if any city remains in disorder for two turns.\
+ Cities and units belonging to Democracy have triple the cost\
+ to incite or bribe, respectively. \n\
+"), _("\
+2 citizens are made unhappy by each aggressive unit. \n\
+8% Base corruption in cities\n\
+0.4% Extra corruption per each tile in distance from capital\n\
+")
+
+;------------------------------------------------------------------------
+[government_theocracy]
+
+name        = _("Theocracy")
+reqs = { "type", "name", "range"
+         "tech", "Theocracy", "Player"
+       }
+graphic     = "gov.theocracy"
+graphic_alt = "-"
+
+ruler_male_title = _("High Priest %s")
+ruler_female_title = _("High Priestess %s")
+
+helptext = _("\
+Theocracy is formed on religious beliefs which are the law of the land. \
+"), _("\
+The people are devoted and often willing to die for their faith. Cities very\
+ near a capital have very low corruption. Cost for enemies to incite cities or\
+ bribe units is 2x, but Zealots cannot be bribed. Enemies cannot establish\
+ embassies without first making Ceasefire or Peace. \
+"), _("\
+Improvements that appease unhappy citizens produce 1 gold in tithes for each\
+ citizen appeased. Tithes also boost gold income by +20%, but science output\
+ suffers -20%. Palace gives +50% to gold income in its city. In cities, two\
+ military units may impose martial law, affecting one citizen each. Pilgrims\
+ can be made to migrate and grow cities. \n\
+"), _("\
+No citizens are made unhappy by each aggressive unit. \n\
+2% Base corruption in cities\n\
+2% Extra corruption per each tile in distance from capital\n\
+")
+
+;------------------------------------------------------------------------
+[government_communism]
+
+name        = _("Communism")
+reqs = { "type", "name", "range"
+         "tech", "Communism", "Player"
+       }
+graphic     = "gov.communism"
+graphic_alt = "-"
+
+ruler_male_title = _("Comrade %s")
+ruler_female_title = _("?female:Comrade %s")
+
+helptext = _("\
+In Communism, all work, output, and goods are owned by the state.\
+"), _("\
+Each city gets 4 shields of free unit upkeep. Buildings with 1 upkeep\
+ are free. The city with a Palace gets +25% production. \
+"), _("\
+Riflemen cost 5 less; Armor and Dive Bombers, 10 less.\
+ Diplomats and Spies get +1 vet level. The effect of\
+ Cathedrals and Michelangelo is reduced -1. \
+"), _("\
+Communists can transfer Proletarians between cities to\
+ re-distribute population, or use them as workers on\
+ State projects. The Communism tech allows a Communist government\
+ to convert Workers to Riflemen and vice versa, if in domestic\
+ territory and possessing the necessary tech. \n\
+"), _("\
+Gulag：You can starve cities without disorder, with 2 martial law units. \n\
+No citizens are made unhappy by aggressive units. \n\
+20% Base corruption in cities \n\
+No Extra corruption per each tile in distance from capital \n\
+")
+
+;------------------------------------------------------------------------
+[government_nationalism]
+
+name        = _("Nationalism")
+reqs = { "type", "name", "range"
+         "tech", "Nationalism", "Player"
+       }
+graphic     = "gov.nationalism"
+graphic_alt = "-"
+
+ruler_male_title = _("Dictator %s")
+ruler_female_title = _("Dictator %s")
+
+helptext = _("\
+Nationalism glorifies national supremacy over other peoples.\
+ Zealous citizens and corporatations align under a dictator\
+ who rules over a unified populace, military, and isolationist economy. \n\
+"), _("\
+Content cities get a +1 trade bonus on Land tiles only.\
+ Celebrating cities also get Ocean tiles. Cities may rapture if founded under\
+ the original national hegemony. Luxury suffers a 15% penalty.\
+ Government mandated Science gets +15% in original cities. \n\
+"), _("\
+Each city gets 1 shield of free unit upkeep. The city with a Palace gets +15% production.\
+ Original cities have a 3x incite cost, otherwise cost one third. \n\
+"), _("\
+Police Stations suppress +1 unhappy Foreign National and cost 10 shields less.\
+ Five military units may impose martial law, affecting one citizen each.\
+ Migrants can be made to help grow cities. Tile workers gain a ⅑ move\
+ bonus and for every three worker turns of work put in, get a fourth\
+ worker turn free. Cost of upgrades is 25% less. Riflemen are produced at +1 vet\
+ level. Armor gets a +1 move bonus. Fighters and Dive Bombers have higher odds of promotion. \n\
+"), _("\
+No citizens are made unhappy by each aggressive unit.\n\
+8% Base corruption in capital,\n\
+2% Extra corruption per each tile in distance from capital\n\
+")
+
+; /* <-- avoid gettext warnings
+;
+; Multipliers (aka policies)
+;
+; name                    = translatable name as seen by user
+; rule_name               = (optional) internal name for savegames, rulesets
+;                           etc; if not present, "name" is used for this
+;                           purpose too. Since the name used in savegames must
+;                           not change, if you want to rename an item after a
+;                           ruleset has been released, you should set
+;                           "rule_name" to the original value of "name".
+; default                 = default value (as presented in UI)
+; start                   = minimum value (as presented in UI)
+; stop                    = maximum value (as presented in UI)
+; step                    = minimum increase/decrease (as presented in UI)
+; offset                  = offset/factor control how UI values are turned
+; factor                  = into effect values for use in effects.ruleset.
+;                           effect_value = (ui_value + offset) * (factor/100)
+;                           Optional; by default offset=0, factor=100, so
+;                           that UI values are used as-is.
+; reqs                    = requirements for adjusting this policy (see README.effects)
+; helptext                = optional help text string; should escape all raw
+;                           newlines so that xgettext parsing works
+;
+; */ <-- avoid gettext warnings

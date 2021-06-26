@@ -63,6 +63,7 @@ function mapdeco_init()
 **************************************************************************/
 function center_tile_mapcanvas_2d(ptile)
 {
+  if (ptile == null) return;
   var r = map_to_gui_pos(ptile['x'], ptile['y']);
   var gui_x = r['gui_dx'];
   var gui_y = r['gui_dy'];
@@ -102,6 +103,10 @@ function center_tile_id_click(ptile_id)
   var sunits = tile_units(tiles[ptile_id]);
   if (sunits != null && sunits.length > 0)  // if units on tile
     set_unit_focus_and_redraw(sunits[0]);
+  else {   // no unit here, so make a marker
+    explosion_anim_map[ptile_id] = 50;
+    show_tile_marker_instead[ptile_id] = true;
+  }
   return;
 }
 
@@ -335,10 +340,12 @@ function update_map_canvas(canvas_x, canvas_y, width, height)
       var startLayer = Date.now();
     }*/   ///
     // set layer-specific canvas properties here.
+    
     if (layer == LAYER_SPECIAL1) {
-      mapview_canvas_ctx.lineWidth = 2;
-      mapview_canvas_ctx.lineCap = 'butt';
-      if (dashedSupport) mapview_canvas_ctx.setLineDash([4,4]);
+      // this is now done inside mapview_put_border_line().
+      ////mapview_canvas_ctx.lineWidth = 2;
+      ////mapview_canvas_ctx.lineCap = 'butt';
+      ////if (dashedSupport) mapview_canvas_ctx.setLineDash([4,4]);
     } else if (layer == LAYER_CITY1) {
       if (dashedSupport) mapview_canvas_ctx.setLineDash([]);
     }
@@ -420,6 +427,51 @@ function update_map_canvas(canvas_x, canvas_y, width, height)
     if (!stop_checking) {
       layer_elapsed[layer] = Date.now() - startLayer;
     } */
+  }
+
+  if (draw_city_traderoutes) {
+    for (city_id in cities) {
+      if (cities[city_id]['traderoute_count']>0) {
+        for (tr = 0; tr < cities[city_id]['traderoute_count']; tr++) {
+          if (city_trade_routes[city_id][tr]) {
+            var correct_x, src=city_id, dest=city_trade_routes[city_id][tr]['partner'];
+            src_x = tiles[cities[src]['tile']]['x'];
+            src_y = tiles[cities[src]['tile']]['y'];
+            dest_x = tiles[cities[dest]['tile']]['x'];
+            dest_y = tiles[cities[dest]['tile']]['y'];
+            if (dest_x < src_x) { // always do dest is east of src (to handle dateline wrapx)
+              tmp_x = dest_x; dest_x = src_x; src_x = tmp_x;
+              tmp_y = dest_y; dest_y = src_y; src_y = tmp_y;
+            }
+            if (topo_has_flag(TF_WRAPX)) { /* Handle Wrapx other dir creates a shorter line path */
+              xs = map['xsize'];
+              // figure out if opposite path across international date line is shorter
+              if (dest_x > src_x) // destination is "east" of source in raw value
+              { // if distance(west-to-east) > distance(east-to-west) then crossing dateline is shortest path:
+                if (Math.abs(dest_x-src_x) > Math.abs( (src_x+xs)-dest_x) ) {
+                  correct_x = -1*(xs-dest_x);
+                }
+              }
+            }
+            var from = map_to_gui_pos(src_x+1, src_y);
+            var to = map_to_gui_pos(dest_x+1, dest_y);
+          //  if (correct_x < -1) { // going west to reach dest is shorter
+          //    to = map_to_gui_pos(1, dest_y); // set dest_x=1 to adjust negative/west to get pixel coords
+          //    console.log(to);
+          //    to['gui_dx'] = (parseInt(to['gui_dx'],10) + (tileset_tile_width/2) * correct_x); // 48 left for every tile
+          //    to['gui_dy'] = (parseInt(to['gui_dy'],10) + (tileset_tile_height/2) * correct_x); // 24 up for every tile
+          //    console.log(to);
+          //  } 
+            mapview_canvas_ctx.lineWidth = 3;
+            mapview_canvas_ctx.strokeStyle = 'rgb(255,0,255)';
+            mapview_canvas_ctx.beginPath();
+            mapview_canvas_ctx.moveTo(from['gui_dx']-mapview.gui_x0, from['gui_dy']-mapview.gui_y0);
+            mapview_canvas_ctx.lineTo(to['gui_dx']-mapview.gui_x0,   to['gui_dy']-mapview.gui_y0);  
+            mapview_canvas_ctx.stroke();
+          }
+        }
+      }
+    }
   }
 
   if (map_select_active && map_select_setting_enabled) {
@@ -506,10 +558,12 @@ function put_drawn_sprites(pcanvas, canvas_x, canvas_y, pdrawn, fog)
     if (pdrawn[i]['key'] == "city_text" ) {
       mapview_put_city_bar(pcanvas, pdrawn[i]['city'], canvas_x + offset_x, canvas_y + offset_y);
     } else if (pdrawn[i]['key'] == "border" ) {
-      mapview_put_border_line(pcanvas, pdrawn[i]['dir'], pdrawn[i]['color'], canvas_x, canvas_y);
-    } else if (pdrawn[i]['key'] == "territory" ) {
+      mapview_put_border_line(pcanvas, pdrawn[i]['dir'], pdrawn[i]['color'], pdrawn[i]['color2'], pdrawn[i]['color3'], canvas_x, canvas_y);
+    } else if (pdrawn[i]['key'] == "mapgrid" ) {
+      mapview_put_grid_line(pcanvas, pdrawn[i]['dir'], pdrawn[i]['color'], canvas_x, canvas_y);
+    } /* else if (pdrawn[i]['key'] == "territory" ) {
       mapview_territory_fill(pcanvas, pdrawn[i]['color'], canvas_x, canvas_y);
-    } else if (pdrawn[i]['key'] == "goto_line" ) {
+    } */ else if (pdrawn[i]['key'] == "goto_line" ) {
       mapview_put_goto_line(pcanvas, pdrawn[i]['goto_dir'], canvas_x, canvas_y);
     } else if (pdrawn[i]['key'] == "tile_label" ) {
       mapview_put_tile_label(pcanvas, pdrawn[i]['tile'], canvas_x + offset_x, canvas_y + offset_y);
@@ -599,7 +653,6 @@ function update_map_canvas_full()
     }
 
     last_redraw_time = new Date().getTime();
-
   }
 }
 
@@ -610,11 +663,11 @@ function update_map_canvas_check()
 {
   if (/*mapview_active==false ||*/ freeze) return;  // (freeze currently used for tax sliders)
   var time = new Date().getTime() - last_redraw_time;
-  if (time > MAPVIEW_REFRESH_INTERVAL && renderer == RENDERER_2DCANVAS) {
+  if (time > MAPVIEW_REFRESH_INTERVAL) {
     update_map_canvas_full();
   }
   try {
-    if (renderer == RENDERER_2DCANVAS && window.requestAnimationFrame != null) requestAnimationFrame(update_map_canvas_check);
+    if (window.requestAnimationFrame != null) requestAnimationFrame(update_map_canvas_check);
   } catch (e) {
     if (e.name == 'NS_ERROR_NOT_AVAILABLE') {
       setTimeout(update_map_canvas_check, 100);

@@ -38,7 +38,7 @@
 /**********************************************************************//**
   Setup the gui callback table.
 **************************************************************************/
-void setup_gui_funcs()
+void setup_gui_funcs(void)
 {
   struct gui_funcs *funcs = get_gui_funcs();
 
@@ -115,6 +115,8 @@ void setup_gui_funcs()
   funcs->city_dialog_is_open = gui_city_dialog_is_open;
 
   funcs->request_transport = gui_request_transport;
+
+  funcs->update_infra_dialog = gui_update_infra_dialog;
 
   funcs->gui_load_theme = gui_gui_load_theme;
   funcs->gui_clear_theme = gui_gui_clear_theme;

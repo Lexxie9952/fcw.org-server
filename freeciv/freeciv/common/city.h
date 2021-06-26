@@ -26,6 +26,7 @@ extern "C" {
 #include "name_translation.h"
 #include "improvement.h"
 #include "traderoutes.h"
+#include "unit.h"
 #include "unitlist.h"
 #include "vision.h"
 #include "workertask.h"
@@ -47,7 +48,7 @@ enum production_class_type {
  * Used in the network protocol.
  */
 #define SPECENUM_NAME city_options
-/* If building a settler at size 1 disbands the city */
+/* If unit production (e.g. settler) is allowed to disband a small city */
 #define SPECENUM_VALUE0 CITYO_DISBAND
 #define SPECENUM_VALUE0NAME "Disband"
 /* If new citizens are science specialists */
@@ -302,6 +303,8 @@ struct tile_cache; /* defined and only used within city.c */
 
 struct adv_city; /* defined in ./server/advisors/infracache.h */
 
+struct cm_parameter; /* defined in ./common/aicore/cm.h */
+
 #pragma pack(push, 1)
 struct city {
   char name[MAX_LEN_CITYNAME];
@@ -362,7 +365,8 @@ struct city {
   bool did_sell;
   bool was_happy;
 
-  int anarchy;                  /* anarchy rounds count */ 
+  int anarchy;                  /* anarchy rounds count */
+  int hangry;                   /* hangry rounds count */
   int rapture;                  /* rapture rounds count */ 
   int turn_founded;
   int turn_last_built;
@@ -390,6 +394,17 @@ struct city {
   struct worker_task_list *task_reqs;
   
   int steal; /* diplomats steal once; for spies, gets harder */
+
+  struct cm_parameter *cm_parameter;
+
+  struct {
+    int length;
+    /* If true, rally point is active until owner cancels or loses city. */
+    bool persistent;
+    /* Orders should be cleared if an enemy is met. */
+    bool vigilant;
+    struct unit_order *orders;
+  } rally_point;
 
   union {
     struct {
@@ -551,21 +566,21 @@ bool city_is_occupied(const struct city *pcity);
 /* city related improvement and unit functions */
 
 int city_improvement_upkeep(const struct city *pcity,
-			    const struct impr_type *pimprove);
+			                      const struct impr_type *pimprove);
 
 bool can_city_build_improvement_direct(const struct city *pcity,
-				       struct impr_type *pimprove);
+				                               const struct impr_type *pimprove);
 bool can_city_build_improvement_later(const struct city *pcity,
-				      struct impr_type *pimprove);
+				                              const struct impr_type *pimprove);
 bool can_city_build_improvement_now(const struct city *pcity,
-				    struct impr_type *pimprove);
+				                            const struct impr_type *pimprove);
 
 bool can_city_build_unit_direct(const struct city *pcity,
-				const struct unit_type *punittype);
+				                        const struct unit_type *punittype);
 bool can_city_build_unit_later(const struct city *pcity,
-			       const struct unit_type *punittype);
+			                         const struct unit_type *punittype);
 bool can_city_build_unit_now(const struct city *pcity,
-			     const struct unit_type *punittype);
+			                       const struct unit_type *punittype);
 
 bool can_city_build_direct(const struct city *pcity,
                            const struct universal *target);
@@ -587,6 +602,8 @@ bool city_got_defense_effect(const struct city *pcity,
 int city_production_build_shield_cost(const struct city *pcity);
 bool city_production_build_units(const struct city *pcity,
                                  bool add_production, int *num_units);
+int city_production_unit_veteran_level(struct city *pcity,
+                                       const struct unit_type *punittype);
 
 bool city_production_has_flag(const struct city *pcity,
                               enum impr_flag_id flag);
@@ -609,7 +626,7 @@ void city_choose_build_default(struct city *pcity);
 /* textual representation of buildings */
 
 const char *city_improvement_name_translation(const struct city *pcity,
-					      struct impr_type *pimprove);
+					                                    const struct impr_type *pimprove);
 const char *city_production_name_translation(const struct city *pcity);
 
 /* city map functions */
@@ -710,6 +727,7 @@ void city_styles_free(void);
 
 void add_tax_income(const struct player *pplayer, int trade, int *output);
 int get_city_tithes_bonus(const struct city *pcity);
+int get_city_add_bonus(const struct city *pcity, Output_type_id otype);
 int city_pollution_types(const struct city *pcity, int shield_total,
 			 int *pollu_prod, int *pollu_pop, int *pollu_mod);
 int city_pollution(const struct city *pcity, int shield_total);

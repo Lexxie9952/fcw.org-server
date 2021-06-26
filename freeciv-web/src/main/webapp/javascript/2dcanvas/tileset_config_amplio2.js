@@ -138,11 +138,17 @@ ts_tiles['floor']['layer1_sprite_type'] = "corner";
 
 ts_tiles['arctic'] = {};
 //; treated as water for ice cliffs
-ts_tiles['arctic']['is_blended'] = 0;
-ts_tiles['arctic']['num_layers'] = 3;
-ts_tiles['arctic']['layer0_match_type'] = "shallow";
-ts_tiles['arctic']['layer1_match_type'] = "ice";
-ts_tiles['arctic']['layer2_match_type'] = "ice";
+;ts_tiles['arctic']['is_blended'] = 0;
+;ts_tiles['arctic']['num_layers'] = 3;
+;ts_tiles['arctic']['layer0_match_type'] = "shallow";
+;ts_tiles['arctic']['layer1_match_type'] = "ice";
+;ts_tiles['arctic']['layer2_match_type'] = "ice";
+;ts_tiles['arctic']['mine_sprite'] = "tx.oil_mine";
+
+ts_tiles['arctic'] = {};
+ts_tiles['arctic']['is_blended'] = 1;
+ts_tiles['arctic']['num_layers'] = 1;
+ts_tiles['arctic']['layer0_match_type'] = "land";
 ts_tiles['arctic']['mine_sprite'] = "tx.oil_mine";
 
 ts_tiles['desert'] = {};
@@ -217,7 +223,7 @@ var tile_types_setup =
 "l0.floor":	{"match_style":MATCH_FULL,"sprite_type":CELL_CORNER,"mine_tag":"(null)","match_indices":3,"match_index":[1,0,2],"dither":false},
 "l1.floor":	{"match_style":MATCH_PAIR,"sprite_type":CELL_CORNER,"mine_tag":"(null)","match_indices":2,"match_index":[3,4],"dither":false},
 //"l0.arctic":	{"match_style":MATCH_NONE,"sprite_type":CELL_WHOLE,"mine_tag":"tx.oil_mine","match_indices":1,"match_index":[0],"dither":false},
-"l0.arctic":	{"match_style":MATCH_NONE,"sprite_type":CELL_WHOLE,"mine_tag":"tx.oil_mine","match_indices":1,"match_index":[2],"dither":false},
+"l0.arctic":	{"match_style":MATCH_NONE,"sprite_type":CELL_WHOLE,"mine_tag":"tx.oil_mine","match_indices":1,"match_index":[2],"dither":true},
 "l0.desert":	{"match_style":MATCH_NONE,"sprite_type":CELL_WHOLE,"mine_tag":"tx.oil_mine","match_indices":1,"match_index":[2],"dither":true},
 "l0.forest":	{"match_style":MATCH_NONE,"sprite_type":CELL_WHOLE,"mine_tag":"(null)","match_indices":1,"match_index":[2],"dither":true},
 "l1.forest":	{"match_style":MATCH_SAME,"sprite_type":CELL_WHOLE,"mine_tag":"(null)","match_indices":2,"match_index":[0,0],"dither":false},
@@ -456,3 +462,42 @@ var cellgroup_map =
 "floor.105":"t.l0.cellgroup_d_l_l_l",
 "floor.106":"t.l0.cellgroup_l_l_l_d",
 "floor.107":"t.l0.cellgroup_l_d_l_l"};
+
+var icegroup_map =
+{"arctic.1":"t.l1.coast_cell_d_i_i_i",
+"arctic.2":"t.l1.coast_cell_d_i_i_w",
+"arctic.3":"t.l1.coast_cell_d_i_w_i",
+"arctic.4":"t.l1.coast_cell_d_i_w_w",
+"arctic.5":"t.l1.coast_cell_d_w_i_i",
+"arctic.6":"t.l1.coast_cell_d_w_i_w",
+"arctic.7":"t.l1.coast_cell_d_w_w_i",
+"arctic.8":"t.l1.coast_cell_d_w_w_w",
+"arctic.9":"t.l1.coast_cell_l_i_i_i",
+"arctic.10":"t.l1.coast_cell_l_i_i_w",
+"arctic.11":"t.l1.coast_cell_l_i_w_i",
+"arctic.12":"t.l1.coast_cell_l_i_w_w",
+"arctic.13":"t.l1.coast_cell_l_w_i_i",
+"arctic.14":"t.l1.coast_cell_l_w_i_w",
+"arctic.15":"t.l1.coast_cell_l_w_w_i",
+"arctic.16":"t.l1.coast_cell_l_w_w_w",
+"arctic.17":"t.l1.coast_cell_r_i_i_i",
+"arctic.18":"t.l1.coast_cell_r_i_i_w",
+"arctic.19":"t.l1.coast_cell_r_i_w_i",
+"arctic.20":"t.l1.coast_cell_r_i_w_w",
+"arctic.21":"t.l1.coast_cell_r_w_i_i",
+"arctic.22":"t.l1.coast_cell_r_w_i_w",
+"arctic.23":"t.l1.coast_cell_r_w_w_i",
+"arctic.24":"t.l1.coast_cell_r_w_w_w",
+"arctic.25":"t.l1.coast_cell_u_i_i_i",
+"arctic.26":"t.l1.coast_cell_u_i_i_w",
+"arctic.27":"t.l1.coast_cell_u_i_w_i",
+"arctic.28":"t.l1.coast_cell_u_i_w_w",
+"arctic.29":"t.l1.coast_cell_u_w_i_i",
+"arctic.30":"t.l1.coast_cell_u_w_i_w",
+"arctic.31":"t.l1.coast_cell_u_w_w_i",
+"arctic.32":"t.l1.coast_cell_u_w_w_w"};
+
+
+
+
+

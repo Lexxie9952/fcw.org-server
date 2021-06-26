@@ -105,7 +105,7 @@ function city_size_sum(playerno) {
 **************************************************************************/
 function update_game_status_panel() {
 
-  if (C_S_RUNNING != client_state() || cardboard_vr_enabled) return;
+  if (C_S_RUNNING != client_state() ) return;
 
   var status_html = "";
 
@@ -122,10 +122,13 @@ function update_game_status_panel() {
     var sci = client.conn.playing['science'];
 
     if (income_needs_refresh) city_force_income_update();
-    var net_income = pplayer['expected_income'];
+
+    var net_income = pplayer['expected_income'].toString();
+    var income_str = (net_income.slice(-2) == ".5") ? (net_income.substring(0, net_income.length - 2) + "</b>&#189<b>") : net_income;
+
     if (pplayer['expected_income'] > 0) {
-      net_income = "+" + pplayer['expected_income'];
-    }
+      net_income = "+" + income_str;
+    } else net_income = income_str;
 
     // PUT FLAG TO LEFT OF NATION NAME
     if (!is_small_screen()) {
@@ -148,16 +151,19 @@ function update_game_status_panel() {
       status_html += "<span style='cursor:pointer;' onclick='javascript:show_revolution_dialog()'>";
       
       var gov_name = governments[client.conn.playing['government']]['name'];
+      var gov_modifier = get_gov_modifier(client.conn.playing.playerno, "", true);     
       
       if (gov_name == "Anarchy") status_html += "<img class='lowered_gov' src='/images/gov.anarchy.png' title='Anarchy'>";
       else if (gov_name == "Despotism") status_html += "<img class='lowered_gov' src='/images/gov.despotism.png' title='Despotism'>";
-      else if (gov_name == "Monarchy") status_html += "<img class='lowered_gov' src='/images/gov.monarchy.png' title='Monarchy'>";
+      else if (gov_name == "Monarchy") status_html += "<img class='lowered_gov' src='/images/gov.monarchy"+gov_modifier+".png' title='"+gov_modifier+" Monarchy'>";
       else if (gov_name == "Communism") status_html += "<img class='lowered_gov' src='/images/gov.communism.png' title='Communism'>";
       else if (gov_name == "Republic") status_html += "<img class='lowered_gov' src='/images/gov.republic.png' title='Republic'>";
       else if (gov_name == "Democracy") status_html += "<img class='lowered_gov' src='/images/gov.democracy.png' title='Democracy'>";
       else if (gov_name == "Fundamentalism") status_html += "<img class='lowered_gov' src='/images/gov.fundamentalism.png' title='Fundamentalism'>";
+      else if (gov_name == "Theocracy") status_html += "<img class='lowered_gov' src='/images/gov.theocracy.png' title='Theocracy'>";
       else if (gov_name.startsWith("Tribal")) status_html += "<img class='lowered_gov' src='/images/gov.tribalism.png' title='Tribalism'>";
       else if (gov_name == "Federation") status_html += "<img class='lowered_gov' src='/images/gov.federation.png' title='Federation'>";
+      else if (gov_name == "Nationalism") status_html += "<img class='lowered_gov' src='/images/gov.nationalism.png' title='Nationalism'>";
       else status_html += "<img class='lowered_gov' src='/images/gov.despotism.png' title='"+gov_name+"'>"; // other gov/custom ruleset
     }
     status_html += "</span>";
@@ -171,7 +177,8 @@ function update_game_status_panel() {
     var income_color = "<b";
     // colour for positive/zero/negative income
     if (pplayer['expected_income'] < 0) income_color += " class='negative_net_income' title='Deficit'";
-    else if (pplayer['expected_income'] > 0) income_color += " style='color:#89c06a' title='Income'"
+    else if (pplayer['expected_income'] > 0) income_color += income_calculated_by_client 
+       ? " style='color:#89c06a' title='Income'" : " style='color:#a2b095' title='Income'" // slight hint whether accurate client calc or from server.
     
     status_html += "<b style='color:#ffde80; cursor:default;' title='Gold'>"+pplayer['gold'] 
     + "</b> "+income_color+" style='cursor:default;'>" + net_income + "</b>"+"  &nbsp;&nbsp;";
@@ -192,7 +199,7 @@ function update_game_status_panel() {
     status_html += status_message + " &nbsp; &nbsp; &nbsp; &nbsp; ";  // pad to prevent turn done button overwrite.
   }
 
-  if ($(window).width() - sum_width() > 740) {   // was 800 but 740 is the space available on standard screen and it's adequate
+  if ($(window).width() - sum_width() > 880) {   // was 800 but 740 is the space available on standard screen and it's adequate
     if ($("#game_status_panel_top").length) {
       $("#game_status_panel_top").show();
       $("#game_status_panel_bottom").hide();
@@ -265,7 +272,12 @@ function sum_width()
 {
   var sum=0;
   $("#tabs_menu").children().each( function(){
-    if ($(this).is(":visible") && $(this).attr('id') != "game_status_panel_top") sum += $(this).width();
+    if ($(this).is(":visible") 
+        && $(this).attr('id') != "game_status_panel_top"
+        && $(this).attr('id').startsWith("ixtjkiller")) {
+        
+        sum += $(this).width();
+    }
   });
   return sum;
 }

@@ -49,7 +49,6 @@
 #include "dialogs.h"
 #include "gotodlg.h"
 #include "graphics.h"
-#include "gui_iconv.h"
 #include "gui_id.h"
 #include "gui_main.h"
 #include "gui_tilespec.h"
@@ -69,6 +68,8 @@ static struct widget *pOrder_Automate_Unit_Button;
 static struct widget *pOrder_Build_AddTo_City_Button;
 static struct widget *pOrder_Mine_Button;
 static struct widget *pOrder_Irrigation_Button;
+static struct widget *pOrder_Cultivate_Button;
+static struct widget *pOrder_Plant_Button;
 static struct widget *pOrder_Road_Button;
 static struct widget *pOrder_Transform_Button;
 static struct widget *pOrder_Trade_Button;
@@ -87,9 +88,7 @@ static struct widget *pOrder_Trade_Button;
 **************************************************************************/
 static int unit_order_callback(struct widget *pOrder_Widget)
 {
-  if (Main.event.type == SDL_KEYDOWN
-      || (Main.event.type == SDL_MOUSEBUTTONDOWN
-          && Main.event.button.button == SDL_BUTTON_LEFT)) {
+  if (PRESSED_EVENT(Main.event)) {
     struct unit *pUnit = head_of_units_in_focus();
 
     set_wstate(pOrder_Widget, FC_WS_SELECTED);
@@ -117,8 +116,14 @@ static int unit_order_callback(struct widget *pOrder_Widget)
     case ID_UNIT_ORDER_IRRIGATE:
       key_unit_irrigate();
       break;
+    case ID_UNIT_ORDER_CULTIVATE:
+      key_unit_cultivate();
+      break;
     case ID_UNIT_ORDER_MINE:
       key_unit_mine();
+      break;
+    case ID_UNIT_ORDER_PLANT:
+      key_unit_plant();
       break;
     case ID_UNIT_ORDER_TRANSFORM:
       key_unit_transform();
@@ -553,7 +558,8 @@ void create_units_order_widgets(void)
   /* --------- */
 
   /* Connect irrigation */
-  fc_snprintf(cBuf, sizeof(cBuf),"%s (%s)", _("Connect With Irrigation"), "Shift+I");
+  fc_snprintf(cBuf, sizeof(cBuf),"%s (%s)", _("Connect With Irrigation"),
+              "Ctrl+I");
   pBuf = create_themeicon(current_theme->OAutoConnect_Icon, Main.gui,
                           WF_HIDDEN | WF_RESTORE_BACKGROUND
                           | WF_WIDGET_HAS_INFO_LABEL);
@@ -561,7 +567,7 @@ void create_units_order_widgets(void)
   pBuf->action = unit_order_callback;
   pBuf->info_label = create_utf8_from_char(cBuf, adj_font(10));
   pBuf->key = SDLK_i;
-  pBuf->mod = KMOD_SHIFT;
+  pBuf->mod = KMOD_CTRL;
   add_to_gui_list(ID_UNIT_ORDER_CONNECT_IRRIGATE, pBuf);
   /* --------- */
 
@@ -572,7 +578,7 @@ void create_units_order_widgets(void)
     fc_snprintf(cBuf, sizeof(cBuf),
                 _("Connect With %s (%s)"),
                 extra_name_translation(road_extra_get(proad)),
-                "Shift+R");
+                "Ctrl+R");
     pBuf = create_themeicon(current_theme->OAutoConnect_Icon, Main.gui,
                             WF_HIDDEN | WF_RESTORE_BACKGROUND
                             | WF_WIDGET_HAS_INFO_LABEL);
@@ -580,7 +586,7 @@ void create_units_order_widgets(void)
     pBuf->action = unit_order_callback;
     pBuf->info_label = create_utf8_from_char(cBuf, adj_font(10));
     pBuf->key = SDLK_r;
-    pBuf->mod = KMOD_SHIFT;
+    pBuf->mod = KMOD_CTRL;
     add_to_gui_list(ID_UNIT_ORDER_CONNECT_ROAD, pBuf);
   }
   /* --------- */
@@ -591,7 +597,7 @@ void create_units_order_widgets(void)
     fc_snprintf(cBuf, sizeof(cBuf),
                 _("Connect With %s (%s)"),
                 extra_name_translation(road_extra_get(prail)),
-                "Shift+L");
+                "Ctrl+L");
     pBuf = create_themeicon(current_theme->OAutoConnect_Icon, Main.gui,
                             WF_HIDDEN | WF_RESTORE_BACKGROUND
                             | WF_WIDGET_HAS_INFO_LABEL);
@@ -599,7 +605,7 @@ void create_units_order_widgets(void)
     pBuf->action = unit_order_callback;
     pBuf->info_label = create_utf8_from_char(cBuf, adj_font(10));
     pBuf->key = SDLK_l;
-    pBuf->mod = KMOD_SHIFT;
+    pBuf->mod = KMOD_CTRL;
     add_to_gui_list(ID_UNIT_ORDER_CONNECT_RAILROAD, pBuf);
   }
   /* --------- */
@@ -817,7 +823,7 @@ void create_units_order_widgets(void)
   add_to_gui_list(ID_UNIT_ORDER_MINE, pBuf);
 
   pOrder_Mine_Button = pBuf;
-  /* --------- */    
+  /* --------- */
 
   /* Build Irrigation */
   fc_snprintf(cBuf, sizeof(cBuf),"%s (%s)", _("Build Irrigation"), "I");
@@ -831,7 +837,37 @@ void create_units_order_widgets(void)
   add_to_gui_list(ID_UNIT_ORDER_IRRIGATE, pBuf);
 
   pOrder_Irrigation_Button = pBuf;
-  /* --------- */    
+  /* --------- */
+
+  /* Cultivate */
+  fc_snprintf(cBuf, sizeof(cBuf),"%s (%s)", _("Cultivate"), "Shift+I");
+  pBuf = create_themeicon(current_theme->OCultivate_Icon, Main.gui,
+                          WF_HIDDEN | WF_RESTORE_BACKGROUND
+                          | WF_WIDGET_HAS_INFO_LABEL);
+  set_wstate(pBuf, FC_WS_NORMAL);
+  pBuf->action = unit_order_callback;
+  pBuf->key = SDLK_i;
+  pBuf->mod = KMOD_SHIFT;
+  pBuf->info_label = create_utf8_from_char(cBuf, adj_font(10));
+  add_to_gui_list(ID_UNIT_ORDER_CULTIVATE, pBuf);
+
+  pOrder_Cultivate_Button = pBuf;
+  /* --------- */
+
+  /* Plant */
+  fc_snprintf(cBuf, sizeof(cBuf),"%s (%s)", _("Plant"), "Shift+M");
+  pBuf = create_themeicon(current_theme->OPlant_Icon, Main.gui,
+                          WF_HIDDEN | WF_RESTORE_BACKGROUND
+                          | WF_WIDGET_HAS_INFO_LABEL);
+  set_wstate(pBuf, FC_WS_NORMAL);
+  pBuf->action = unit_order_callback;
+  pBuf->key = SDLK_m;
+  pBuf->mod = KMOD_SHIFT;
+  pBuf->info_label = create_utf8_from_char(cBuf, adj_font(10));
+  add_to_gui_list(ID_UNIT_ORDER_PLANT, pBuf);
+
+  pOrder_Plant_Button = pBuf;
+  /* --------- */
 
   /* Establish Trade route */
   fc_snprintf(cBuf, sizeof(cBuf), "%s (%s)",
@@ -1218,6 +1254,30 @@ void real_menus_update(void)
         clear_wflag(pOrder_Mine_Button, WF_HIDDEN);
       } else {
         set_wflag(pOrder_Mine_Button, WF_HIDDEN);
+      }
+
+      if (can_unit_do_activity(pUnit, ACTIVITY_CULTIVATE)) {
+        time = tile_activity_time(ACTIVITY_CULTIVATE, unit_tile(pUnit), NULL);
+        fc_snprintf(cBuf, sizeof(cBuf),"%s %s (%s) %d %s",
+                    _("Cultivate to"),
+                    terrain_name_translation(pTerrain->irrigation_result),
+                    "Shift+I", time, PL_("turn", "turns", time));
+        copy_chars_to_utf8_str(pOrder_Cultivate_Button->info_label, cBuf);
+        clear_wflag(pOrder_Cultivate_Button, WF_HIDDEN);
+      } else {
+        set_wflag(pOrder_Cultivate_Button, WF_HIDDEN);
+      }
+
+      if (can_unit_do_activity(pUnit, ACTIVITY_PLANT)) {
+        time = tile_activity_time(ACTIVITY_PLANT, unit_tile(pUnit), NULL);
+        fc_snprintf(cBuf, sizeof(cBuf),"%s %s (%s) %d %s",
+                    _("Plant to"),
+                    terrain_name_translation(pTerrain->mining_result),
+                    "Shift+M", time, PL_("turn", "turns", time));
+        copy_chars_to_utf8_str(pOrder_Plant_Button->info_label, cBuf);
+        clear_wflag(pOrder_Plant_Button, WF_HIDDEN);
+      } else {
+        set_wflag(pOrder_Plant_Button, WF_HIDDEN);
       }
 
       if (can_unit_do_activity(pUnit, ACTIVITY_TRANSFORM)) {

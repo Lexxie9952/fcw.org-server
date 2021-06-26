@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = advisors generator scripting
+SUBDIRS = advisors generator savegame scripting
 
 if FREECIV_WEB
 srvbin = freeciv-web
@@ -23,6 +23,7 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/utility \
 	-I$(srcdir)/advisors \
 	-I$(srcdir)/generator \
+	-I$(srcdir)/savegame \
 	-I$(srcdir)/scripting \
 	-I$(top_srcdir)/dependencies/tinycthread \
 	$(FCDB_MYSQL_CFLAGS) $(FCDB_POSTGRES_CFLAGS) $(FCDB_SQLITE3_CFLAGS)
@@ -73,6 +74,7 @@ libfreeciv_srv_la_SOURCES = \
 		handchat.h	\
 		hand_gen.c	\
 		hand_gen.h	\
+		infrapts.c	\
 		maphand.c	\
 		maphand.h	\
 		meta.c		\
@@ -93,14 +95,6 @@ libfreeciv_srv_la_SOURCES = \
 		ruleset.h	\
 		sanitycheck.c	\
 		sanitycheck.h	\
-		savecompat.c	\
-		savecompat.h	\
-		savegame.c	\
-		savegame.h	\
-		savegame2.c	\
-		savegame2.h	\
-		savegame3.c	\
-		savegame3.h	\
 		score.c		\
 		score.h		\
 		sernet.c	\
@@ -157,6 +151,7 @@ srvlibs = \
  $(top_builddir)/ai/libaicommon.la \
  $(top_builddir)/server/advisors/libadvisors.la \
  $(top_builddir)/server/generator/libgenerator.la \
+ $(top_builddir)/server/savegame/libsavegame.la \
  $(top_builddir)/server/scripting/libscripting_fcdb.la \
  $(top_builddir)/server/scripting/libscripting_server.la
 

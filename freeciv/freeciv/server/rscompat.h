@@ -1,4 +1,4 @@
-/********************************************************************** 
+/***********************************************************************
  Freeciv - Copyright (C) 1996 - A Kjeldberg, L Gregersen, P Unold
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ extern "C" {
 /* server */
 #include "ruleset.h"
 
-#define RULESET_COMPAT_CAP "+Freeciv-ruleset-Devel-2015.January.14"
+#define RULESET_COMPAT_CAP "+Freeciv-3.0-ruleset"
 
 struct rscompat_info
 {
@@ -58,6 +58,10 @@ struct requirement_vector *lookup_req_list(struct section_file *file,
                                            const char *rfor);
 
 /* Functions specific to 3.0 -> 3.1 transition */
+bool rscompat_auto_attack_3_1(struct rscompat_info *compat,
+                              struct action_auto_perf *auto_perf,
+                              size_t psize,
+                              enum unit_type_flag_id *protecor_flag);
 const char *rscompat_req_type_name_3_1(const char *type, const char *range,
                                        bool survives, bool present,
                                        bool quiet, const char *value);
@@ -67,6 +71,8 @@ const char *rscompat_utype_flag_name_3_1(struct rscompat_info *info,
                                          const char *old_type);
 bool rscompat_old_effect_3_1(const char *type, struct section_file *file,
                              const char *sec_name, struct rscompat_info *compat);
+void rscompat_extra_adjust_3_1(struct rscompat_info *compat,
+                               struct extra_type *pextra);
 
 #ifdef __cplusplus
 }

@@ -15,18 +15,21 @@
 #include <fc_config.h>
 #endif
 
-#include <stdlib.h>		/* getenv() */
+#include <stdlib.h>             /* getenv() */
+
+/* gen_headers */
+#include "version_gen.h"
 
 /* utility */
 #include "support.h"
 
 /* common */
-#include "connection.h"		/* MAX_LEN_CAPSTR */
+#include "connection.h"	        /* MAX_LEN_CAPSTR */
 
 #include "capstr.h"
 
 static char our_capability_internal[MAX_LEN_CAPSTR];
-const char * const our_capability = our_capability_internal;
+const char *const our_capability = our_capability_internal;
 
 /* Capabilities: original author: Mitch Davis (mjd@alphalink.com.au)
  *

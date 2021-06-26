@@ -264,11 +264,17 @@ const char *tileset_description(struct tileset *t)
   return NULL;
 }
 
+/**********************************************************************//**
+  Mostly a client stub.
+**************************************************************************/
 enum client_states client_state(void)
 {
   return C_S_INITIAL;
 }
 
+/**********************************************************************//**
+  Mostly a client stub.
+**************************************************************************/
 bool client_nation_is_in_current_set(const struct nation_type *pnation)
 {
   /* Currently, there is no way to select a nation set for freeciv-manual.
@@ -293,7 +299,7 @@ static bool manual_command(struct tag_types *tag_info)
   /* Reset aifill to zero */
   game.info.aifill = 0;
 
-  if (!load_rulesets(NULL, FALSE, NULL, FALSE, FALSE)) {
+  if (!load_rulesets(NULL, NULL, FALSE, NULL, FALSE, FALSE, FALSE)) {
     /* Failed to load correct ruleset */
     return FALSE;
   }
@@ -672,8 +678,8 @@ static bool manual_command(struct tag_types *tag_info)
                 move_points_text(putype->move_rate, TRUE));
         fprintf(doc, "%s", tag_info->subitem_end);
         fprintf(doc, tag_info->subitem_begin, "vision");
-        fprintf(doc, _("Vision: %d"),
-                (int)sqrt((double)putype->vision_radius_sq));
+        fprintf(doc, _("Vision: %.2f tiles"),
+                sqrt((double)putype->vision_radius_sq));
         fprintf(doc, "%s", tag_info->subitem_end);
         fprintf(doc, tag_info->subitem_begin, "attack");
         fprintf(doc, _("Attack: %d"),
@@ -699,6 +705,9 @@ static bool manual_command(struct tag_types *tag_info)
         fprintf(doc, "%s", tag_info->subitem_end);
         fprintf(doc, tag_info->subitem_begin, "helptext");
         helptext_unit(buf, sizeof(buf), NULL, "", putype);
+        /* had to do this and top of helptext_unit() to avoid mystery segfault
+           but it mysteriously fixed itself later:
+        helptext_unit(buf, sizeof(buf), NULL, NULL, putype); */
         fprintf(doc, "%s", buf);
         fprintf(doc, "%s", tag_info->subitem_end);
         fprintf(doc, "%s", tag_info->item_end);
@@ -841,8 +850,8 @@ int main(int argc, char **argv)
     cmdhelp_add(help, "d",
                   /* TRANS: "debug" is exactly what user must type, do not translate. */
                 _("debug NUM"),
-                _("Set debug log level (%d to %d, or %d:file1,min,max:...)"),
-                LOG_FATAL, LOG_DEBUG, LOG_DEBUG);
+                _("Set debug log level (one of f,e,w,n,v,d, "
+                  "or d:file1,min,max:...)"));
 #else  /* FREECIV_DEBUG */
     cmdhelp_add(help, "d",
                   /* TRANS: "debug" is exactly what user must type, do not translate. */

@@ -24,7 +24,6 @@
 #include "autosettlers.h"
 
 /* ai/default */
-#include "aicity.h"
 #include "aidata.h"
 #include "aiferry.h"
 #include "aihand.h"
@@ -33,6 +32,7 @@
 #include "aisettler.h"
 #include "aitools.h"
 #include "aiunit.h"
+#include "daicity.h"
 #include "daidiplomacy.h"
 #include "daidomestic.h"
 #include "daimilitary.h"
@@ -324,7 +324,7 @@ static void cai_ferry_init_ferry(struct unit *ferry)
 /**********************************************************************//**
   Call default ai with classic ai type as parameter.
 **************************************************************************/
-static void cai_ferry_transformed(struct unit *ferry, struct unit_type *old)
+static void cai_ferry_transformed(struct unit *ferry, const struct unit_type *old)
 {
   struct ai_type *deftype = classic_ai_get_self();
 
@@ -683,6 +683,8 @@ bool fc_ai_classic_setup(struct ai_type *ai)
   /* ai->funcs.refresh = NULL; */
 
   /* ai->funcs.tile_info = NULL; */
+  /* ai->funcs.city_info = NULL; */
+  /* ai->funcs.unit_info = NULL; */
 
   return TRUE;
 }

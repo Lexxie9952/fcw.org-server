@@ -26,6 +26,10 @@ ifeq ($(MIN_WIN_VER),)
 MIN_WIN_VER=0x0601
 endif
 
+ifeq ($(MAKE_PARAMS),)
+MAKE_PARAMS="-j2"
+endif
+
 INSTSUB=${ARCHDIR}
 
 # msys2 has dlls in...
@@ -35,19 +39,11 @@ DLLPATH_PREFIX=/$(ARCHDIR)/bin/
 # Make rules
 #
 
-# by default build all installers that are buildable with current msys2 environment
+# by default build all installers.
 all: gtk3.22-installer sdl2-installer ruledit-installer qt-installer
 
 gtk3.22-installer:
 	make GUI=gtk3.22 FCMP=gtk3 EXTRA_CONFIG="--disable-ruledit $(EXTRA_CONFIG)" wrap-gtk3.22
-
-# These are what can be built in current official environment version
-buildable-win32: gtk3.22-installer sdl2-installer ruledit-installer qt-installer
-
-buildable-win64: gtk3.22-installer sdl2-installer ruledit-installer qt-installer
-
-# See comments on 'snapshot' target why this wrapping is needed
-buildable: buildable-$(WINARCH)
 
 sdl2-installer:
 	make GUI=sdl2 FCMP=gtk3 EXTRA_CONFIG="--disable-ruledit $(EXTRA_CONFIG)" wrap-sdl2
@@ -60,11 +56,10 @@ ruledit-installer:
 
 # Autogen.sh here will make ./win_arch.sh to work.
 # The $(WINACRH) value we got for this run is not good. The new run
-# launched from this target will pick correct value, and can make 'buildable' target
-# to depend on correct arch version.
+# launched from this target will pick correct value.
 snapshot:
 	cd ../.. ; ./autogen.sh --no-configure-run
-	make VERSION_REVTYPE="git" EXTRA_CONFIG="--enable-gitrev --with-project-definition=../../../bootstrap/snapshot.project" buildable
+	make VERSION_REVTYPE="git" EXTRA_CONFIG="--enable-gitrev --with-project-definition=../../../bootstrap/snapshot.project" all
 
 
 # configure Freeciv
@@ -73,13 +68,13 @@ configure-freeciv-common:
 	# create build directory
 	mkdir -p build-$(WINARCH)-$(GUI)
 	# configure
-	cd build-$(WINARCH)-$(GUI); ../../../configure FREECIV_LABEL_FORCE="<base>-msys2" CPPFLAGS="-D_WIN32_WINNT=$(MIN_WIN_VER)" --enable-client=$(GUI) --with-followtag="windows-S3_1" --with-tinycthread --without-readline --disable-sys-lua --enable-fcdb=sqlite3 --with-sqlite3-prefix=/$(ARCHDIR) --enable-fcmp=$(FCMP) $(EXTRA_CONFIG)
+	cd build-$(WINARCH)-$(GUI); ../../../configure FREECIV_LABEL_FORCE="<base>-msys2" CPPFLAGS="-D_WIN32_WINNT=$(MIN_WIN_VER)" --enable-client=$(GUI) --with-followtag="windows-S3_1" --with-tinycthread --without-readline --disable-sys-lua --enable-fcdb=sqlite3 --with-sqlite3-prefix=/$(ARCHDIR) --enable-fcmp=$(FCMP) --with-cacert-path="./ssl/certs/ca-bundle.crt" $(EXTRA_CONFIG)
 
 configure-freeciv-ruledit:
 	# create build directory
 	mkdir -p build-$(WINARCH)-ruledit
 	# configure
-	cd build-$(WINARCH)-ruledit; ../../../configure FREECIV_LABEL_FORCE="<base>-msys2" CPPFLAGS="-D_WIN32_WINNT=$(MIN_WIN_VER)" --disable-client --disable-server --disable-fcmp --disable-freeciv-manual --disable-sys-lua --enable-ruledit --enable-ai-static=stub --with-qt5-includes=/$(ARCHDIR)/include --with-qt5-libs=/$(ARCHDIR)/lib $(EXTRA_CONFIG)
+	cd build-$(WINARCH)-ruledit; ../../../configure FREECIV_LABEL_FORCE="<base>-msys2" CPPFLAGS="-D_WIN32_WINNT=$(MIN_WIN_VER)" --disable-client --disable-server --disable-fcmp --disable-freeciv-manual --disable-sys-lua --enable-ruledit --enable-ai-static=stub --with-cacert-path="./ssl/certs/ca-bundle.crt" --with-qt5-includes=/$(ARCHDIR)/include --with-qt5-libs=/$(ARCHDIR)/lib $(EXTRA_CONFIG)
 
 # install Freeciv
 
@@ -156,7 +151,9 @@ SOUND_DLLS := \
 	libportaudio-2.dll \
 	libsndfile-1.dll \
 	libspeex-1.dll \
-	libmpg123-0.dll
+	libmpg123-0.dll \
+	libopusfile-0.dll \
+	libopus-0.dll
 
 COMMON_DLLS := \
 	libstdc++-6.dll \
@@ -196,18 +193,22 @@ COMMON_DLLS := \
 	libxml2-2.dll \
 	zlib1.dll \
 	libwinpthread-1.dll \
-	libicuuc62.dll \
-	libicudt62.dll \
+	libicuuc64.dll \
+	libicudt64.dll \
 	libsqlite3-0.dll \
 	exchndl.dll \
 	mgwhelp.dll \
 	libbrotlidec.dll \
 	libbrotlicommon.dll \
+	libreadline8.dll \
+	libtermcap-0.dll \
 	$(SOUND_DLLS)
 
 install-env-common:
 	# add DLLs
 	cp -R $(addprefix $(DLLPATH_PREFIX), $(COMMON_DLLS)) install-$(WINARCH)-$(GUI)/
+	mkdir -p install-$(WINARCH)-$(GUI)/ssl/certs
+	cp -R /$(ARCHDIR)/ssl/certs/ca-bundle.crt install-$(WINARCH)-$(GUI)/ssl/certs/
 
 DEFAULT_FCMP_DLLS := \
 	libgdk-3-0.dll \
@@ -248,16 +249,17 @@ SDL2_DLLS := \
 	SDL2_ttf.dll \
 	libjpeg-8.dll \
 	libtiff-5.dll \
-	libwebp-7.dll
+	libwebp-7.dll \
+	libzstd.dll
 
 install-env-sdl2: install-env-default-fcmp
 	# add DLLs
 	cp -R $(addprefix $(DLLPATH_PREFIX), $(SDL2_DLLS)) install-$(WINARCH)-$(GUI)/
 
 QT_DLLS := \
-	libicuin62.dll \
-	libicuuc62.dll \
-	libicudt62.dll \
+	libicuin64.dll \
+	libicuuc64.dll \
+	libicudt64.dll \
 	libpcre16-0.dll \
 	libharfbuzz-0.dll \
 	libsqlite3-0.dll \
@@ -269,7 +271,9 @@ QT_DLLS := \
 	libpcre2-16-0.dll \
 	libunistring-2.dll \
 	libbrotlidec.dll \
-	libbrotlicommon.dll
+	libbrotlicommon.dll \
+	libdouble-conversion.dll \
+	libzstd.dll
 
 install-env-qt: install-env-common
 	# add DLLs
@@ -314,7 +318,9 @@ RULEDIT_DLLS := \
 	zlib1.dll \
 	libwinpthread-1.dll \
 	libgraphite2.dll \
-	libpcre-1.dll
+	libpcre-1.dll \
+	libdouble-conversion.dll \
+	libzstd.dll
 
 install-env-ruledit:
 	# add DLLs

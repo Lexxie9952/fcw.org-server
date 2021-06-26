@@ -39,8 +39,9 @@
 /* ai/default */
 #include "aidata.h"
 
-/* ai/threxpr */
+/* ai/tex */
 #include "texaimsg.h"
+#include "texaiplayer.h"
 
 #include "texaicity.h"
 
@@ -184,6 +185,7 @@ static void texai_tile_worker_task_select(struct player *pplayer,
     unit_list_iterate(ptile->units, punit) {
       if (unit_owner(punit) == pplayer
           && unit_has_type_flag(punit, UTYF_SETTLERS)
+          && unit_has_type_flag(punit, UTYF_CIVILIAN)
           && punit->activity == action_id_get_activity(act)) {
         consider = FALSE;
         break;
@@ -310,6 +312,7 @@ static void texai_tile_worker_task_select(struct player *pplayer,
       unit_list_iterate(ptile->units, punit) {
         if (unit_owner(punit) == pplayer
             && unit_has_type_flag(punit, UTYF_SETTLERS)
+            && unit_has_type_flag(punit, UTYF_CIVILIAN)
             && punit->activity == act) {
           consider = FALSE;
           break;
@@ -437,7 +440,7 @@ static bool texai_city_worker_task_select(struct ai_type *ait,
 
   switch (limit) {
   case TWTL_CURRENT_UNITS:
-    units = pplayer->units;
+    units = texai_player_units(pplayer);
     state.wants = NULL;
     break;
   case TWTL_BUILDABLE_UNITS:

@@ -309,7 +309,16 @@ bool script_server_init(void)
   api_specenum_open(fcl_main->state);
   tolua_game_open(fcl_main->state);
   tolua_signal_open(fcl_main->state);
+
+#ifdef MESON_BUILD
+  /* Tolua adds 'tolua_' prefix to _open() function names,
+   * and we can't pass it a basename where the original
+   * 'tolua_' has been stripped when generating from meson. */
+  tolua_tolua_server_open(fcl_main->state);
+#else  /* MESON_BUILD */
   tolua_server_open(fcl_main->state);
+#endif /* MESON_BUILD */
+
   tolua_common_z_open(fcl_main->state);
 
   script_server_code_init();
@@ -333,7 +342,16 @@ bool script_server_init(void)
   tolua_common_a_open(fcl_unsafe->state);
   api_specenum_open(fcl_unsafe->state);
   tolua_game_open(fcl_unsafe->state);
+
+#ifdef MESON_BUILD
+  /* Tolua adds 'tolua_' prefix to _open() function names,
+   * and we can't pass it a basename where the original
+   * 'tolua_' has been stripped when generating from meson. */
+  tolua_tolua_server_open(fcl_unsafe->state);
+#else  /* MESON_BUILD */
   tolua_server_open(fcl_unsafe->state);
+#endif /* MESON_BUILD */
+
   tolua_common_z_open(fcl_unsafe->state);
 
   luascript_signal_init(fcl_unsafe);
@@ -474,8 +492,10 @@ static void script_server_signals_create(void)
                                  API_TYPE_CITY, API_TYPE_PLAYER, API_TYPE_PLAYER);
   deprecate_signal(depr, "city_lost", "city_transferred", "2.6");
 
-  luascript_signal_create(fcl_main, "hut_enter", 1,
-                          API_TYPE_UNIT);
+  luascript_signal_create(fcl_main, "hut_enter", 2,
+                          API_TYPE_UNIT, API_TYPE_STRING);
+  luascript_signal_create(fcl_main, "hut_frighten", 2,
+                          API_TYPE_UNIT, API_TYPE_STRING);
 
   luascript_signal_create(fcl_main, "unit_lost", 3,
                           API_TYPE_UNIT, API_TYPE_PLAYER, API_TYPE_STRING);

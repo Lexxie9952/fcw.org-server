@@ -640,11 +640,16 @@ char *mapimg_help(const char *cmdname)
   /* Possible 'show' settings. */
   for (showplr = show_player_begin(); showplr != show_player_end();
        showplr = show_player_next(showplr)) {
-    char name[10];
-    fc_snprintf(name, sizeof(name), "'%s'", show_player_name(showplr));
-    astr_add(&str_showplr, " - %-9s %s", name, showname_help(showplr));
-    if (showplr != show_player_max()) {
-      astr_add(&str_showplr, "\n");
+    const char *nameptr = show_player_name(showplr);
+
+    if (nameptr != NULL) {
+      char name[10];
+
+      fc_snprintf(name, sizeof(name), "'%s'", nameptr);
+      astr_add(&str_showplr, " - %-9s %s", name, showname_help(showplr));
+      if (showplr != show_player_max()) {
+        astr_add(&str_showplr, "\n");
+      }
     }
   }
 
@@ -1159,6 +1164,7 @@ const struct strvec *mapimg_get_format_list(void)
            format = imageformat_next(format)) {
         if (toolkit->formats & format) {
           char str_format[64];
+
           fc_snprintf(str_format, sizeof(str_format), "%s|%s",
                       imagetool_name(tool), imageformat_name(format));
           strvec_append(format_list, str_format);
@@ -1415,7 +1421,7 @@ bool mapimg_create(struct mapdef *pmapdef, bool force, const char *savename,
 /************************************************************************//**
   Create images which shows all map colors (playercolor, terrain colors). One
   image is created for each supported toolkit and image format. The filename
-  will be <basename as used for savegames>-colortest-<tookit>.<format>.
+  will be <basename as used for savegames>-colortest-<toolkit>.<format>.
 ****************************************************************************/
 bool mapimg_colortest(const char *savename, const char *path)
 {
@@ -1497,11 +1503,16 @@ bool mapimg_colortest(const char *savename, const char *path)
          format = imageformat_next(format)) {
       if (toolkit->formats & format) {
         char buf[128];
+        const char *tname = imagetool_name(tool);
 
         /* Set the image format. */
         pmapdef->format = format;
 
-        fc_snprintf(buf, sizeof(buf), "colortest-%s", imagetool_name(tool));
+        if (tname != NULL) {
+          fc_snprintf(buf, sizeof(buf), "colortest-%s", tname);
+        } else {
+          fc_snprintf(buf, sizeof(buf), "colortest");
+        }
         /* filename for color test */
         generate_save_name(savename, mapimgfile, sizeof(mapimgfile), buf);
 
@@ -1756,7 +1767,13 @@ static char *mapimg_generate_name(struct mapdef *pmapdef)
   for (layer = mapimg_layer_begin(); layer != mapimg_layer_end();
        layer = mapimg_layer_next(layer)) {
     if (pmapdef->layers[layer]) {
-      cat_snprintf(mapstr, sizeof(mapstr), "%s", mapimg_layer_name(layer));
+      const char *lname = mapimg_layer_name(layer);
+
+      if (lname != NULL) {
+        cat_snprintf(mapstr, sizeof(mapstr), "%s", lname);
+      } else {
+        cat_snprintf(mapstr, sizeof(mapstr), "-");
+      }
     } else {
       cat_snprintf(mapstr, sizeof(mapstr), "-");
     }
@@ -2147,8 +2164,8 @@ static bool img_save_magickwand(const struct img *pimg,
     }
 
     /* Show a line displaying the colors of alive players */
-    plrwidth = MAX(map_width / player_slot_count(), 1);
-    plroffset = (map_width - plrwidth * player_slot_count()) / 2;
+    plrwidth = map_width / MIN(map_width, player_count());
+    plroffset = (map_width - MIN(map_width, plrwidth * player_count())) / 2;
 
     imw = NewPixelRegionIterator(mw, IMG_BORDER_WIDTH,
                                  IMG_BORDER_HEIGHT + IMG_TEXT_HEIGHT

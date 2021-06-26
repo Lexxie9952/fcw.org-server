@@ -28,8 +28,13 @@ tilesets, so substitutes may be used.
 Main features relative to civ2civ3 ruleset
 ------------------------------------------
 
-Nuke Upkeep:
-If nuke upkeep cannot be paid, they explode in place.
+Nukes:
+The Nuclear has lost its Explode Nuclear In Place ability. It can still do
+Nuke Units and Nuke City.
+The new unit type ICBM has been added. It requires Fusion Power.
+ICBM can do Nuke Target Tile - targeting any tile at the map no matter how
+distant.
+If ICBM upkeep cannot be paid, they explode in place.
 
 Airlifting:
 Light weight units can be airlifted once Flight is known. Medium weight
@@ -42,6 +47,10 @@ Airport allows a city to airlift one more unit per turn.
 
 Map Stealing:
 Spies can steal other player's world map
+
+Spy elimination:
+A Spy can eliminate non allied spies and diplomats out in the open without
+also trying to perform any other action.
 
 Border Vision:
 Border Vision is gained mid-game once Electricity is known
@@ -126,3 +135,23 @@ of the conqueror.
 
 Combat Rounds
 Each combat lasts 15 rounds at max, even if neither side dies in that time.
+
+Caravel needs supplies
+Caravel needs to spend at least every third turn change next to a land tile
+to load supplies for the crew. Otherwise the unit is lost.
+
+Multiresearch enabled
+When switching research, already accumulated bulbs are not transferred to
+the new technology but are remembered towards previous research.
+
+Tech trading requirement
+Treaties cannot have tech clauses before both sides know Writing.
+
+Plague
+Double probability for a plague spreading along a trade route. Enemy spies
+can release plague samples found in a target city's Research Lab.
+
+Disrupt Supply Lines
+Some units can disrupt the supply lines of enemy units. This removes 1 MP
+from the target unit at the cost of one move fragment for the unit doing the
+disrupting.

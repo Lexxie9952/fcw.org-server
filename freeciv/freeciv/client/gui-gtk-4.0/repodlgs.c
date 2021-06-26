@@ -414,7 +414,7 @@ static void science_report_update(struct science_report *preport)
   text = get_science_target_text(&pct);
   gtk_progress_bar_set_text(preport->progress_bar, text);
   gtk_progress_bar_set_fraction(preport->progress_bar, pct);
-  /* Work around GTK+ refresh bug? */
+  /* Work around GTK refresh bug? */
   gtk_widget_queue_resize(GTK_WIDGET(preport->progress_bar));
 
   /* Update reachable techs. */
@@ -563,7 +563,7 @@ static void science_report_init(struct science_report *preport)
   /* TRANS: Research report title */
   gui_dialog_set_title(preport->shell, _("Research"));
 
-  gui_dialog_add_button(preport->shell, "window-close", _("Close"),
+  gui_dialog_add_button(preport->shell, "window-close", _("_Close"),
                         GTK_RESPONSE_CLOSE);
   gui_dialog_set_default_response(preport->shell, GTK_RESPONSE_CLOSE);
 
@@ -1161,7 +1161,7 @@ static void economy_report_init(struct economy_report *preport)
   gtk_widget_set_margin_bottom(label, 5);
   preport->label = GTK_LABEL(label);
 
-  gui_dialog_add_button(preport->shell, "window-close", _("Close"),
+  gui_dialog_add_button(preport->shell, "window-close", _("_Close"),
                         GTK_RESPONSE_CLOSE);
 
   button = gui_dialog_add_button(preport->shell, NULL, _("_Disband"),
@@ -1683,7 +1683,7 @@ static void units_report_init(struct units_report *preport)
     }
   }
 
-  gui_dialog_add_button(preport->shell, "window-close", _("Close"),
+  gui_dialog_add_button(preport->shell, "window-close", _("_Close"),
                         GTK_RESPONSE_CLOSE);
 
   button = gui_dialog_add_button(preport->shell, NULL, _("_Upgrade"),

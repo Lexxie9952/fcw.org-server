@@ -243,7 +243,7 @@ void client_diplomacy_clause_string(char *buf, int bufsiz,
 {
   struct city *pcity;
 
-  switch(pclause->type) {
+  switch (pclause->type) {
   case CLAUSE_ADVANCE:
     fc_snprintf(buf, bufsiz, _("The %s give %s"),
                 nation_plural_for_player(pclause->from),
@@ -1408,8 +1408,6 @@ bool mapimg_client_define(void)
   for (layer = mapimg_layer_begin(); layer != mapimg_layer_end();
        layer = mapimg_layer_next(layer)) {
     if (gui_options.mapimg_layer[layer]) {
-      cat_snprintf(mi_map, sizeof(mi_map), "%s",
-                   mapimg_layer_name(layer));
       mi_map[map_pos++] = mapimg_layer_name(layer)[0];
     }
   }

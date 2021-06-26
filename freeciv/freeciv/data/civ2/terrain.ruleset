@@ -12,7 +12,7 @@
 
 [datafile]
 description="Civ2 tile_type data for Freeciv"
-options="+Freeciv-ruleset-Devel-2017.Jan.02"
+options="+Freeciv-ruleset-Devel-2017.Jan.02 web-compatible"
 format_version=20
 
 [control]
@@ -134,6 +134,10 @@ pythagorean_diagonal = FALSE
 ;                        terrain rule_name -- transformation changes to that
 ;                          terrain
 ; transform_time       = time to transform; if 0, cannot transform
+; placing_time         = time for 'placing' an extra; if 0, cannot place
+;                        Nonzero values only affect extras with build_time 0.
+;                        Such extras can modify time with build_time_factor.
+;                        Default is 1.
 ; pillage_time         = time to pillage extra from the tile (0 = impossible)
 ;                        Nonzero values only affect extras with removal_time 0.
 ; clean_pollution_time = time for 'clean pollution' activity (0 = impossible)
@@ -314,9 +318,9 @@ flags                = "CanHaveRiver"
 property_dry         = 100
 property_tropical    = 50
 property_temperate   = 20
-color.r              = 214
-color.g              = 185
-color.b              = 106
+color.r              = 247
+color.g              = 222
+color.b              = 187
 helptext             = _("\
 Deserts are regions of extreme dryness, making agriculture and\
  trade very difficult.\
@@ -358,7 +362,7 @@ property_wet         = 20
 property_foliage     = 50
 property_temperate   = 50
 color.r              = 43
-color.g              = 107
+color.g              = 157
 color.b              = 19
 helptext             = _("\
 Forests are densely wooded, making agriculture somewhat\
@@ -398,9 +402,9 @@ native_to            = "Land", "Air", "Missile", "Helicopter"
 flags                = "Starter", "CanHaveRiver"
 property_green       = 50
 property_temperate   = 50
-color.r              = 11
-color.g              = 138
-color.b              = 4
+color.r              = 100
+color.g              = 178
+color.b              = 105
 helptext             = _("\
 Grasslands afford exceptional agricultural opportunities.\
 ")
@@ -438,9 +442,9 @@ native_to            = "Land", "Air", "Missile", "Helicopter"
 flags                = "Starter", "CanHaveRiver"
 property_green       = 50
 property_mountainous = 30
-color.r              = 24
-color.g              = 97
-color.b              = 5
+color.r              = 222
+color.g              = 230
+color.b              = 134
 helptext             = _("\
 In addition to being amenable to agriculture, Hills are frequently\
  rich in resources.\
@@ -480,9 +484,9 @@ flags                = "CanHaveRiver"
 property_foliage     = 50
 property_tropical    = 50
 property_wet         = 50
-color.r              = 55
-color.g              = 156
-color.b              = 38
+color.r              = 71
+color.g              = 227
+color.b              = 0
 helptext             = _("\
 Jungles are densely overgrown, making agriculture somewhat\
  problematic.\
@@ -520,9 +524,9 @@ cooler_drier_result  = "no"
 native_to            = "Land", "Air", "Missile", "Helicopter"
 flags                = "CanHaveRiver"
 property_mountainous = 70
-color.r              = 129
-color.g              = 127
-color.b              = 118
+color.r              = 160
+color.g              = 156
+color.b              = 170
 helptext             = _("\
 Mountains are regions of extreme altitude, making agriculture and\
  trade very difficult.\
@@ -562,9 +566,9 @@ flags                = "Starter", "CanHaveRiver"
 property_dry         = 50
 property_green       = 50
 property_temperate   = 50
-color.r              = 122
-color.g              = 156
-color.b              = 46
+color.r              = 161
+color.g              = 198
+color.b              = 80
 helptext             = _("\
 Plains are very broad, sparse regions, which makes trade slightly\
  inconvenient.\
@@ -605,9 +609,9 @@ property_wet         = 100
 property_tropical    = 10
 property_temperate   = 10
 property_cold        = 10
-color.r              = 48
-color.g              = 85
-color.b              = 97
+color.r              = 129
+color.g              = 179
+color.b              = 146
 helptext             = _("\
 Swamps suffer from an over-abundance of water, making agriculture\
  somewhat problematic.\
@@ -645,9 +649,9 @@ cooler_drier_result  = "Glacier"
 native_to            = "Land", "Air", "Missile", "Helicopter"
 flags                = "Starter", "NoBarbs", "CanHaveRiver"
 property_cold        = 50
-color.r              = 188
-color.g              = 188
-color.b              = 188
+color.r              = 206
+color.g              = 206
+color.b              = 206
 helptext             = _("\
 Tundra are broad, cold regions, fit for some agriculture and little\
  else.\
@@ -814,7 +818,11 @@ shield      = 3
 [extraui]
 
 ; Player visible names of the base gui types.
+
+; ui_name_base_fortress refers to all bases that have gui_type "Fortress"
 ui_name_base_fortress = _("?gui_type:Build Land base")
+
+; ui_name_base_airbase refers to all bases that have gui_type "Airbase"
 ui_name_base_airbase = _("?gui_type:Build Airforce base")
 
 ; /* <-- avoid gettext warnings
@@ -841,8 +849,10 @@ ui_name_base_airbase = _("?gui_type:Build Airforce base")
 ;                           (the last three require a corresponding
 ;                           [resource_*] / [base_*] / [road_*] section)
 ; rmcauses                = events that can remove extra type.
-;                           "CleanPollution", "CleanFallout", "Pillage", or
-;                           "Disappear"
+;                           "CleanPollution", "CleanFallout", "Pillage",
+;                           "Disappear", or "Enter"
+; infracost               = Number of infrapoints it costs to place this
+;                           extra. 0 means extra cannot be placed. Default is 1
 ; graphic                 = tag specifying preferred graphic
 ; graphic_alt             = tag for alternate graphic if preferred graphic is
 ;                           not present. Can use eg "-" for no alternate
@@ -867,6 +877,10 @@ ui_name_base_airbase = _("?gui_type:Build Airforce base")
 ; buildable               = Can extra be built? Defaults to TRUE if extra has
 ;                           any causes indicating it can result from worker
 ;                           activity.
+;                           If extra is not buildable, it can appear in game
+;                           only if placed in the editor, it's placed by
+;                           map generator, or on city tile if the extra
+;                           also has "AlwaysOnCityCenter" flag set.
 ; generated               = Can map generator place the extra? Applicable
 ;                           for Hut, Resource, and River extras.
 ; build_time              = how long it takes a unit to build this extra.
@@ -1055,7 +1069,7 @@ name           = _("Minor Tribe Village")
 rule_name      = "Hut"
 category       = "Bonus"
 causes         = "Hut"
-;rmcauses       = ""
+rmcauses       = "Enter"
 graphic        = "tx.village"
 graphic_alt    = "-"
 activity_gfx   = "None"
@@ -1105,7 +1119,9 @@ conflicts      = "Mine"
 helptext       = _("\
 Once Refrigeration is known, irrigation systems can be upgraded to \
 farmland by irrigating them a second time; if the city working the tile \
-has a Supermarket, a farmland tile provides 50% more food.\
+has a Supermarket, a farmland tile provides 50% more food. (Hence, \
+farmland is only useful on tiles which with irrigation yield 2 or more \
+food.)\
 "), _("\
 Like irrigation, farmland is incompatible with mines.\
 ")
@@ -1553,6 +1569,7 @@ rmact_gfx_alt  = "-"
 ;                           (must have "Base" in its causes)
 ; gui_type                = How gui should handle this base.
 ;                           Value can be "Fortress", "Airbase", or "Other"
+;                           See also [extraui] section
 ; border_sq               = Base will claim land ownership up to this radius,
 ;                           -1 to disable. If enabled, base cannot exist in
 ;                           city tile.

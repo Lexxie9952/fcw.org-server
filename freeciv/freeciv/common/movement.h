@@ -18,10 +18,13 @@ extern "C" {
 #endif /* __cplusplus */
 
 #include "fc_types.h"
+#include "map.h"
 #include "tile.h"
 
 #define SINGLE_MOVE     (terrain_control.move_fragments)
 #define MOVE_COST_IGTER (terrain_control.igter_cost)
+/* packets.def MOVEFRAGS */
+#define MAX_MOVE_FRAGS  65535
 
 struct unit_type;
 struct terrain;
@@ -49,7 +52,7 @@ enum unit_move_result {
 
 int utype_move_rate(const struct unit_type *utype, const struct tile *ptile,
                     const struct player *pplayer, int veteran_level,
-                    int hitpoints);
+                    int hitpoints, const struct unit *punit);
 int unit_move_rate(const struct unit *punit);
 int utype_unknown_move_cost(const struct unit_type *utype);
 
@@ -99,8 +102,6 @@ bool can_step_taken_wrt_to_zoc(const struct unit_type *punittype,
                                const struct tile *src_tile,
                                const struct tile *dst_tile,
                                const struct civ_map *zmap);
-bool zoc_ok_move(const struct unit *punit, const struct tile *ptile,
-                 const struct civ_map *zmap);
 bool unit_can_move_to_tile(const struct civ_map *nmap,
                            const struct unit *punit,
                            const struct tile *ptile,

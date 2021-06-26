@@ -22,18 +22,23 @@
 
 void action_consequence_caught(const struct action *paction,
                                struct player *offender,
+                               const struct unit_type *offender_utype,
                                struct player *victim_player,
                                const struct tile *victim_tile,
                                const char *victim_link);
 
 void action_consequence_success(const struct action *paction,
                                 struct player *offender,
+                                const struct unit_type *offender_utype,
                                 struct player *victim_player,
                                 const struct tile *victim_tile,
                                 const char *victim_link);
 
-void action_success_actor_consume(struct action *paction,
-                                  int actor_id, struct unit *actor);
+void action_success_target_pay_mp(struct action *paction,
+                                  int target_id, struct unit *target);
+
+void action_success_actor_price(struct action *paction,
+                                int actor_id, struct unit *actor);
 
 struct city *action_tgt_city(struct unit *actor, struct tile *target_tile,
                              bool accept_all_actions);

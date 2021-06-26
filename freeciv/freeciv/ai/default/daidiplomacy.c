@@ -56,12 +56,12 @@
 #include "handicaps.h"
 
 /* ai/default */
-#include "aicity.h"
 #include "aidata.h"
 #include "ailog.h"
 #include "aiplayer.h"
 #include "aiunit.h"
 #include "aitools.h"
+#include "daicity.h"
 #include "daimilitary.h"
 
 #include "daidiplomacy.h"
@@ -218,48 +218,49 @@ static int compute_tech_sell_price(struct ai_type *ait,
                                    struct player *giver, struct player *taker,
                                    int tech_id, bool *is_dangerous)
 {
-    int worth;
-    
-    worth = dai_goldequiv_tech(ait, taker, tech_id);
-    
-    *is_dangerous = FALSE;
-    
-    /* Share and expect being shared brotherly between allies */
-    if (pplayers_allied(giver, taker)) {
-      worth /= 2;
-    }
-    if (players_on_same_team(giver, taker)) {
-      return 0;
+  int worth;
+
+  worth = dai_goldequiv_tech(ait, taker, tech_id);
+
+  *is_dangerous = FALSE;
+
+  /* Share and expect being shared brotherly between allies */
+  if (pplayers_allied(giver, taker)) {
+    worth /= 2;
+  }
+  if (players_on_same_team(giver, taker)) {
+    return 0;
+  }
+
+  /* Do not bother wanting a tech that we already have. */
+  if (research_invention_state(research_get(taker), tech_id)
+      == TECH_KNOWN) {
+    return 0;
+  }
+
+  /* Calculate in tech leak to our opponents, guess 50% chance */
+  players_iterate_alive(eplayer) {
+    if (eplayer == giver
+        || eplayer == taker
+        || research_invention_state(research_get(eplayer),
+                                    tech_id) == TECH_KNOWN) {
+      continue;
     }
 
-    /* Do not bother wanting a tech that we already have. */
-    if (research_invention_state(research_get(taker), tech_id)
-        == TECH_KNOWN) {
-      return 0;
+    /* Don't risk it falling into enemy hands */
+    if (pplayers_allied(taker, eplayer)
+        && adv_is_player_dangerous(giver, eplayer)) {
+      *is_dangerous = TRUE;
     }
 
-    /* Calculate in tech leak to our opponents, guess 50% chance */
-    players_iterate_alive(eplayer) {
-      if (eplayer == giver
-          || eplayer == taker
-          || research_invention_state(research_get(eplayer),
-                                      tech_id) == TECH_KNOWN) {
-        continue;
-      }
+    if (pplayers_allied(taker, eplayer)
+        && !pplayers_allied(giver, eplayer)) {
+      /* Taker can enrichen his side with this tech */
+      worth += dai_goldequiv_tech(ait, eplayer, tech_id) / 4;
+    }
+  } players_iterate_alive_end;
 
-      /* Don't risk it falling into enemy hands */
-      if (pplayers_allied(taker, eplayer) &&
-          adv_is_player_dangerous(giver, eplayer)) {
-        *is_dangerous = TRUE;
-      }
-      
-      if (pplayers_allied(taker, eplayer) &&
-          !pplayers_allied(giver, eplayer)) {
-        /* Taker can enrichen his side with this tech */
-        worth += dai_goldequiv_tech(ait, eplayer, tech_id) / 4;
-      }
-    } players_iterate_alive_end;
-    return worth;
+  return worth;
 }
 
 /******************************************************************//**
@@ -797,7 +798,7 @@ static int dai_war_desire(struct ai_type *ait, struct player *pplayer,
     } city_built_iterate_end;
   } city_list_iterate_end;
   unit_list_iterate(target->units, punit) {
-    struct unit_type *ptype = unit_type_get(punit);
+    const struct unit_type *ptype = unit_type_get(punit);
 
     fear += ATTACK_POWER(ptype);
 
@@ -807,7 +808,7 @@ static int dai_war_desire(struct ai_type *ait, struct player *pplayer,
     }
   } unit_list_iterate_end;
   unit_list_iterate(pplayer->units, punit) {
-    struct unit_type *ptype = unit_type_get(punit);
+    const struct unit_type *ptype = unit_type_get(punit);
 
     fear -= ATTACK_POWER(ptype) / 2;
 
@@ -1373,7 +1374,7 @@ static void dai_go_to_war(struct ai_type *ait, struct player *pplayer,
   in which time the AI will refuse to make treaties. This is to make
   the AI more stubborn.
 **********************************************************************/
-void static war_countdown(struct ai_type *ait, struct player *pplayer,
+static void war_countdown(struct ai_type *ait, struct player *pplayer,
                           struct player *target,
                           int countdown, enum war_reason reason)
 {
@@ -1885,7 +1886,7 @@ bool dai_on_war_footing(struct ai_type *ait, struct player *pplayer)
 void dai_incident(struct ai_type *ait, enum incident_type type,
                   struct player *violator, struct player *victim)
 {
-  switch(type) {
+  switch (type) {
     case INCIDENT_DIPLOMAT:
       dai_incident_diplomat(violator, victim);
       break;

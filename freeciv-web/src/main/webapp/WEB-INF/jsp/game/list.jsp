@@ -5,6 +5,11 @@
 <html lang="en">
 <head>
 <%@include file="/WEB-INF/jsp/fragments/head.jsp"%>
+<style>
+#play-by-email-table {
+	font-family: Segoe;
+}
+</style>
 
 <script>
 (function ($) {
@@ -33,7 +38,7 @@
 				
 				players = players.map(function (player) {
 					return player === currentPlayer
-						? '<b>' + player + '</b>'
+						? "<u><span style='font-weight:1000'>" + player + "</u>"
 						: player;
 				}).join(', ');
 				
@@ -70,30 +75,68 @@
 </script>
 	
 <style>
+	.input-group .form-control:first-child {
+			border-bottom-right-radius: 0;
+			border-top-right-radius: 0;
+			background: #000;
+			color: #ccc;
+			border-color: #444;
+			border-radius: 6px 0px 0px 6px;
+	}
+	.input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group {
+			background-color: #888;
+			background: #444;
+			color: #000;
+			border-color: #444;
+			text-shadow: 1px 1px #888;
+	}
+	a {
+    text-shadow: 1px 1px #000;
+	}
 	.nav-tabs {
 		margin-top: 5px;
 	}
 	.nav>li>a:hover {
-		background-color: #796f6f
+		background-color: #796f6f;
+		background: url('/images/bg.jpg');
+		color:  #eed;
+		text-shadow: 1px 1px #ccc
 	}
 	.nav-tabs>li>a {
 		background-color: #ecb66a;
 		text-transform: uppercase;
-		color: #fff;
-	    font-weight: 700;		
+		background: url('/images/bg.jpg');
+		color:  #eed;
+		font-weight: 700;
+		text-shadow: 1px 1px #000
 	}
 	.nav-tabs>li.active>a {
-		color: #fff;
+		background: url('/images/bg.jpg');
+		color: #eed;
+		text-shadow: 1px 1px #888
 	}
 	.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+			background: url('/images/bg-light.jpg');
 	    background-color: #be602d;
-	    color: #fff;
+	    color: #000;
+	}
+	.navbar-inverse {
+		background-color: #2220;
+		background: url('/images/bg-med-dark.jpg');
 	}
 	.tab-pane {
 		background-color: #fcf1e0;
+		background: url('/images/bg-med-dark.jpg');
+		color: #ccc;
 	}
-	.table {
-		background-color: #fcf1e0;
+	table {
+    border-collapse: collapse;
+    border-spacing: 0;
+		background: url(/images/bg-light.jpg);
+    color: #000;
+    font-weight: 600;
+    text-shadow: 1px 1px #bbb;
+		margin-top: -1px;
 	}
 	.table td {
 		vertical-align: middle;
@@ -118,14 +161,52 @@
 		font-weight: bold;
 	}
 	#multiplayer-table td:last-child {
-		width: 290px;
+		width: 140px;
 	}
 	#longturn-table td:last-child {
-		width: 290px;
+		width: 110px;
 	}
 	#singleplayer-table td:last-child {
 		width: 140px;
 	}
+	body {
+		color: #ccc;
+  	background-image: url('/images/bg-dark.jpg'); 
+	}
+	.container {
+		background: none !important;
+		color: #ccc;
+	}
+	h1,h2,h3,h4,h5,h6 {
+		font-family: 'Freeciv', 'Segoe UI';
+		text-shadow: 1px 1px #222;
+	}
+	
+	@font-face {
+  font-family: Helvetica;
+  src: url('/fonts/arial.ttf');
+	}
+	@font-face {
+		font-family: Freeciv;
+		src: url('/fonts/freeciv.ttf');
+	}
+	@font-face {
+		font-family: FreecivSB;
+		src: url('/fonts/freeciv.m.ttf');
+	}
+	@font-face {
+		font-family: FreecivBold;
+		src: url('/fonts/freeciv.b.ttf');
+	}
+	@font-face {
+		font-family: FreecivBlack;
+		src: url('/fonts/freeciv.bl.ttf');
+	}
+	@font-face {
+		font-family: Arial;
+		src: url('/fonts/arial.ttf');
+	}
+
 </style>
 	
 	
@@ -134,7 +215,7 @@
 	<%@include file="/WEB-INF/jsp/fragments/header.jsp" %>
 	
 	<!-- Begin page content -->
-	<div id="content" class="container">
+	<div id="content" class="container" style="padding-left:0px; padding-right:0px;">
 		<div>
 			<ul class="nav nav-tabs hidden-xs" role="tablist">
 				<li role="presentation" class="${view == 'singleplayer' or empty view ? 'active' : ''}"><a href="#single-player-tab"
@@ -165,7 +246,7 @@
 								<th>Flag</th>
 								<th class="hidden-xs">Map</th>
 								<th>Player</th>
-								<th class="hidden-xs">Game details</th>
+								<th class="hidden-xs">Game Info</th>
 								<th class="hidden-xs">Players</th>
 								<th class="hidden-xs">Turn</th>
 								<th>Action</th>
@@ -186,13 +267,8 @@
 									<td class="hidden-xs">${game.message}</td>
 									<td class="hidden-xs">${game.players}</td>
 									<td class="hidden-xs">${game.turn}</td>
-									<td><a class="label label-success label-lg"
-										href="/webclient/?action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;type=${game.type}" title="Observe">
-											2D</a> <a class="label label-success label-lg"
-										href="/webclient/?renderer=webgl&amp;action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;type=${game.type}" title="Observe">
-											3D</a> <a class="label label-primary label-lg"
-										href="/game/details?host=${game.host}&amp;port=${game.port}">
-											Info</a>
+									<td><a class="label label-success label-lg" href="/webclient/?action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;type=${game.type}" title="Observe">Observe</a> 
+										<a class="label label-primary label-lg" href="/game/details?host=${game.host}&amp;port=${game.port}">Info</a>
 									</td>
 								</tr>
 							</c:forEach>
@@ -208,7 +284,7 @@
 						<table id="multiplayer-table" class="table">
 							<tr>
 								<th class="hidden-xs">Players</th>
-								<th>Message</th>
+								<th>Game Title</th>
 								<th>State</th>
 								<th class="hidden-xs">Turn</th>
 								<th>Action</th>
@@ -234,27 +310,17 @@
 									<td class="hidden-xs">${game.turn}</td>
 									<td><c:choose>
 											<c:when test="${game.state != 'Running'}">
-												<a class="label label-success label-lg"
-													href="/webclient/?action=multi&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
-													Play</a>
+												<a class="label label-success label-lg" href="/webclient/?action=multi&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">Play</a>
 											</c:when>
 											<c:otherwise>
-                                                <a class="label label-success label-lg"
-													href="/webclient/?action=multi&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
-													Play 2D</a>
+                        <a class="label label-success label-lg" href="/webclient/?action=multi&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">Play</a>
 											<c:if test="${game.type} ne 'longturn'}">
 												<a class="label label-success label-lg"
-													href="/webclient/?action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
-													Observe 2D</a>
-												<a class="label label-success label-lg"
-													href="/webclient/?renderer=webgl&amp;action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
-													3D</a>
+													href="/webclient/?action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">Observe</a>
 											</c:if>
 											</c:otherwise>
 										</c:choose>
-										<a class="label label-primary label-lg"	href="/game/details?host=${game.host}&amp;port=${game.port}">
-											Info
-										</a>
+										<a class="label label-primary label-lg"	href="/game/details?host=${game.host}&amp;port=${game.port}">Info</a>
 									</td>
 								</tr>
 							</c:forEach>
@@ -270,10 +336,10 @@
 						<table id="longturn-table" class="table">
 							<tr>
 								<th class="hidden-xs">Players</th>
-								<th>Message</th>
-								<th>State</th>
-								<th class="hidden-xs">Turn</th>
-								<th>Action</th>
+								<th>Game Info<br><span style="font-size:90%; font-weight:600; color: #3718c1"><i>Late-join bonus gold ensures FAIR-START&#8482; in the first 12 turns.</i></span></th>
+								<th style="text-align:center" class="hidden-xs">State</th>
+								<th style="text-align:right">Turn</th>
+								<th style="text-align:center">Action</th>
 							</tr>
 							<c:forEach items="${longturnGamesList}" var="game">
 								<tr
@@ -291,32 +357,35 @@
 												</c:otherwise>
 										</c:choose>
 									</td>
-									<td>${game.message}</td>
-									<td>${game.state}</td>
-									<td class="hidden-xs">${game.turn}</td>
+									<td>
+											<c:if test="${game.turn lt 13}">
+												<span style="color: #3718c1">${game.message}</span>
+											</c:if>
+											<c:if test="${game.turn > 12}">
+												${game.message}
+											</c:if>
+									</td>
+									<td class="hidden-xs" style="text-align:center">${game.state} <span style="color:#32587d; text-shadow:1px 1px #0001">${game.port}</span></td>
+									<td style="text-align:right">
+											<c:if test="${game.turn lt 13}">
+												<span style="color: #3718c1; text-shadow: 1px 1px #d9ceff;">${game.turn}</span>
+											</c:if>
+											<c:if test="${game.turn > 12}">
+												${game.turn}
+											</c:if>
+									</td>
 									<td><c:choose>
 											<c:when test="${game.state != 'Running'}">
-												<a class="label label-success label-lg"
-													href="/webclient/?action=multi&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
-													Play</a>
+												<a class="label label-success label-lg" href="/webclient/?action=multi&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">Play</a>
 											</c:when>
 											<c:otherwise>
-                                                <a class="label label-success label-lg"
-													href="/webclient/?action=multi&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
-													Play 2D</a>
+                          <a class="label label-success label-lg" href="/webclient/?action=multi&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">Play</a>
 											<c:if test="${game.type} ne 'longturn'}">
-												<a class="label label-success label-lg"
-													href="/webclient/?action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
-													Observe 2D</a>
-												<a class="label label-success label-lg"
-													href="/webclient/?renderer=webgl&amp;action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">
-													3D</a>
+												<a class="label label-success label-lg" href="/webclient/?action=observe&amp;civserverport=${game.port}&amp;civserverhost=${game.host}&amp;multi=true&amp;type=${game.type}">Observe</a>
 											</c:if>
 											</c:otherwise>
 										</c:choose>
-										<a class="label label-primary label-lg"	href="/game/details?host=${game.host}&amp;port=${game.port}">
-											Info
-										</a>
+										<a class="label label-primary label-lg"	href="/game/details?host=${game.host}&amp;port=${game.port}">Info</a>
 									</td>
 								</tr>
 							</c:forEach>
@@ -357,7 +426,7 @@
 									<th>Time left</th>
 								</tr>
 							</table>
-							<p>Current player is marked in bold.</p>
+							<p>Current player is marked in <b><u>bold underline</u></b>.</p>
 						</div>
 					</div>
 	

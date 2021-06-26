@@ -20,6 +20,12 @@ name = _("Stub")
 ; Versioning of the ruleset
 ;version = ""
 
+; When about to migrate ruleset under a new name in the future version, set
+; alt_dir to the name of that future directory. Then savegames saved with this
+; version of freeciv can find the ruleset from the correct place when loading
+; the savegame to the future version.
+;alt_dir = ""
+
 ; Summary of the ruleset
 summary = _("\
 This ruleset is meant to be used as starting point for \
@@ -36,6 +42,21 @@ capabilities = ""
 [options]
 global_init_techs=""
 global_init_buildings=""
+
+[tileset]
+; If preferred tileset is set, clients that support the feature will suggest
+; using that tileset with the ruleset.
+; preferred = ""
+
+[soundset]
+; If preferred soundset is set, clients that support the feature will suggest
+; using that soundset with the ruleset.
+; preferred = ""
+
+[musicset]
+; If preferred musicset is set, clients that support the feature will suggest
+; using that musicset with the ruleset.
+; preferred = ""
 
 [civstyle]
 ; Value added to city pollution
@@ -100,6 +121,12 @@ tech_loss_allow_holes     = TRUE
 ; Whether civil war is possible at all
 civil_war_enabled        = TRUE
 
+; How many percents each celebrating city affects chance of civil war
+civil_war_bonus_celebrating = 0
+
+; How many percents each unhappy city affects chance of civil war
+civil_war_bonus_unhappy     = 0
+
 ; Comma separated list of things to happen, in addition to death
 ; of owner, when gameloss unit dies
 ; "CivilWar"   - Part of the empire remains, controlled by a new player
@@ -132,6 +159,10 @@ paradrop_to_transport    = FALSE
 ;            If still more gold is needed, then random units with gold
 ;            upkeep are disbanded.
 gold_upkeep_style = "City"
+
+; How many points of output one basic unit consists of. Typically you
+; want this to be some 10^n.
+output_granularity = 1
 
 [illness]
 ; Whether plagues (illness) are possible
@@ -180,14 +211,35 @@ slow_invasions = TRUE
 ; have only fractional moves left.
 tired_attack = FALSE
 
+; With some rules it`s possible that neither side of a combat dies.
+; Set this to TRUE if unit should never gain veterancy from such a combat.
+only_killing_makes_veteran = FALSE
+
+; Percentage of population lost by a city after nuclear attak. If set to
+; 100 city is destroyed along with all the units. If set to 0 city does not
+; loose population. Any value below 100 means the city can never be
+; destroyed completely using nuclear
+nuke_pop_loss_pct = 50
+
+; Percentage chance of a city defender surviving nuclear attack. When set
+; to 50 roughly half of defenders will survive nuclear attack. When set to
+; 0 no defenders will survive. When set to 100 all defenders will survive.
+nuke_defender_survival_chance_pct = 0
+
 [auto_attack]
 ; An auto attack may be triggered when another unit moves to an adjacent
 ; tile and the autoattack server setting is enabled. The following details
 ; are ruleset controlled.
-;   will_never - units with this unit type flag will never auto attack.
+;   attack_actions - the actions to try during an auto attack in the order
+;                    they should be tried.
+;   if_attacker    - this requirement vector must be true before a unit even
+;                    considers to auto attack.
 
-; Not a good idea to nuke our own area.
-;will_never = "Nuclear"
+;attack_actions= "Capture Units", "Bombard", "Attack", "Suicide Attack"
+
+;if_attacker =
+;    { "type",         "name",    "range", "present"
+;    }
 
 [actions]
 ; If force_trade_route is set to TRUE it is illegal for an actor unit to
@@ -221,6 +273,42 @@ force_explode_nuclear = FALSE
 ; distance.
 bombard_max_range = 1
 
+; The maximum distance from the actor unit to the target of the "Bombard 2"
+; action. The value 1 means that the targets must be on a tile adjacent to
+; the actor unit. The special value "unlimited" lifts the maximum distance
+; restriction. The maximum distance can`t be smaller than the minimum
+; distance.
+bombard_2_max_range = 1
+
+; The maximum distance from the actor unit to the target of the "Bombard 3"
+; action. The value 1 means that the targets must be on a tile adjacent to
+; the actor unit. The special value "unlimited" lifts the maximum distance
+; restriction. The maximum distance can`t be smaller than the minimum
+; distance.
+bombard_3_max_range = 1
+
+; The maximum distance from the actor unit to the target of the
+; "Explode Nuclear" action. The value 0 means that the target tile must be
+; the tile of the actor unit. The value 1 means that the tile must be a tile
+; adjacent to the actor unit. The special value "unlimited" lifts the
+; maximum distance restriction. The maximum distance can`t be smaller than
+; the minimum distance.
+explode_nuclear_max_range = 0
+
+; The maximum distance from the actor unit to the target of the
+; "Nuke City" action. The value 1 means that the tile must be a tile
+; adjacent to the actor unit. The special value "unlimited" lifts the
+; maximum distance restriction. The maximum distance can`t be smaller than
+; the minimum distance.
+nuke_city_max_range = 1
+
+; The maximum distance from the actor unit to the target of the
+; "Nuke Units" action. The value 1 means that the tile must be a tile
+; adjacent to the actor unit. The special value "unlimited" lifts the
+; maximum distance restriction. The maximum distance can`t be smaller than
+; the minimum distance.
+nuke_units_max_range = 1
+
 ; What each action should be called when showing them to the player.
 ; The first %s should be before the mnemonic of the action. A Freeciv client
 ; that supports mnemonics will replace it with the in-band signal that marks
@@ -248,6 +336,15 @@ bombard_max_range = 1
 ; No enabled actions
 ; [actionenabler_embassy]
 ; action = "Establish Embassy"
+
+; Blank ruleset defined user actions.
+; See the section "Ruleset defined actions" is doc/README.actions
+; Example: set up "User Action 1"
+;ui_name_user_action_1                = _("%sDisrupt Supply Lines%s")
+;user_action_1_target_kind            = "individual units"
+;user_action_1_min_range              = 1
+;user_action_1_max_range              = 3
+;user_action_1_actor_consuming_always = FALSE
 
 ; Suppress automatic help text generation about what enables and/or
 ; disables the following actions.
@@ -336,6 +433,11 @@ victory_min_points = 1000
 ; How big lead relative to second best player is needed for victory
 victory_lead_pct   = 200
 
+; How much existing history grows each turn. This makes older history
+; of the same original value more valuable as newer history, as it has
+; gained more interest.
+history_interest_pml = 0
+
 ; How much each culture point affects the migration
 ; from/to the city. Each culture point count as this many permilles
 ; of a migration point.
@@ -356,8 +458,8 @@ fragments = 0
 ; Calendar fragment names. If name is missing, only a fragment number +1 (so human readable
 ; numbers begin from 1 and not 0) is shown.
 
-;fragment_name0 = "Jan"
-;fragment_name1 = "Feb"
+;fragment_name0 = _("Jan")
+;fragment_name1 = _("Feb")
 ; ...
 
 ; What labels are used for positive and negative years.
@@ -503,6 +605,9 @@ name = _("Goods")
 ;
 ; type                   = Type of the clause, one of "Advance", "Gold", "Map", "Seamap",
 ;                          "City", "Ceasefire", "Peace", "Alliance", "Vision", "Embassy"
+; giver_reqs             = requirements that the giving side of the clause needs to fulfill
+;                          (see effects.ruleset and README.effects for help on requirements)
+; receiver_reqs          = requirements that the receiving side of the clause needs to fulfill
 ;
 ; */ <-- avoid gettext warnings
 

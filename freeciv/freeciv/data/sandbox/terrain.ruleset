@@ -12,7 +12,7 @@
 
 [datafile]
 description="Sandbox terrain data for Freeciv"
-options="Freeciv-ruleset-Devel-2017.Jan.02 +web-compatible"
+options="Freeciv-ruleset-Devel-2017.Jan.02 web-compatible"
 format_version=20
 
 [control]
@@ -147,6 +147,10 @@ ocean_resources = FALSE
 ;                        terrain rule_name -- transformation changes to that
 ;                          terrain
 ; transform_time       = time to transform; if 0, cannot transform
+; placing_time         = time for 'placing' an extra; if 0, cannot place
+;                        Nonzero values only affect extras with build_time 0.
+;                        Such extras can modify time with build_time_factor.
+;                        Default is 1.
 ; pillage_time         = time to pillage extra from the tile (0 = impossible)
 ;                        Nonzero values only affect extras with removal_time 0.
 ; clean_pollution_time = time for 'clean pollution' activity (0 = impossible)
@@ -289,9 +293,9 @@ cooler_drier_result  = "no"
 native_to            = "Sea", "Air", "Missile", "Helicopter", "Trireme"
 flags                = "NoCities", "NoBarbs", "NoPollution", "FreshWater", "NoZoc", "NoFortify"
 property_ocean_depth = 0
-color.r              = 46
-color.g              = 120
-color.b              = 182
+color.r              = 80
+color.g              = 176
+color.b              = 247
 helptext             = _("\
 Lakes are substantial bodies of fresh water.\
 ")
@@ -332,9 +336,9 @@ cooler_drier_result  = "no"
 native_to            = "Sea", "Air", "Missile", "Helicopter", "Trireme"
 flags                = "NoCities", "UnsafeCoast", "NoZoc", "NoFortify", "Sea"
 property_ocean_depth = 32
-color.r              = 0
-color.g              = 46
-color.b              = 137
+color.r              = 70
+color.g              = 146
+color.b              = 227
 helptext             = _("\
 Shallow oceans are mostly found near coastlines, and are often rich\
  sources of food and other resources.\
@@ -376,9 +380,9 @@ cooler_drier_result  = "no"
 native_to            = "Sea", "Air", "Missile", "Helicopter"
 flags                = "NoCities", "NoPollution", "UnsafeCoast", "NoZoc", "NoFortify", "Sea"
 property_ocean_depth = 87
-color.r              = 0
-color.g              = 33
-color.b              = 129
+color.r              = 55
+color.g              = 125
+color.b              = 255
 helptext             = _("\
 Deep oceans cover much of the world away from coastlines, and only\
  seaworthy units (not including Triremes) can travel on them.\
@@ -420,9 +424,9 @@ cooler_drier_result  = "no"
 native_to            = "Land", "Small Land", "Big Land", "Air", "Missile", "Helicopter"
 flags                = "NoBarbs", "NoCities", "CanHaveRiver", "Oil", "Frozen"
 property_frozen      = 100
-color.r              = 232
-color.g              = 232
-color.b              = 232
+color.r              = 238
+color.g              = 238
+color.b              = 238
 helptext             = _("\
 Glaciers are found only in the most northerly or southerly\
  reaches of the world.  They are very cold, and hence difficult to\
@@ -467,12 +471,16 @@ flags                = "CanHaveRiver", "Oil"
 property_dry         = 100
 property_tropical    = 50
 property_temperate   = 20
-color.r              = 214
-color.g              = 185
-color.b              = 106
+color.r              = 247
+color.g              = 222
+color.b              = 187
 helptext             = _("\
 Deserts are regions of extreme dryness, making agriculture and\
  trade very difficult.\
+"), _("\
+Deserts can be irrigated for a small amount of extra food, but without\
+ an oasis or river, bare desert cannot be further improved with\
+ farmland.\
 "), _("\
 Rivers bring fertile soil to deserts; on a desert river not already\
  benefiting from an oasis, building irrigation will yield two extra food\
@@ -519,7 +527,7 @@ property_wet         = 20
 property_foliage     = 50
 property_temperate   = 50
 color.r              = 43
-color.g              = 107
+color.g              = 157
 color.b              = 19
 helptext             = _("\
 Forests are densely wooded, making agriculture somewhat\
@@ -563,9 +571,9 @@ native_to            = "Land", "Small Land", "Big Land", "Air", "Missile", "Heli
 flags                = "Starter", "CanHaveRiver"
 property_green       = 50
 property_temperate   = 50
-color.r              = 11
-color.g              = 138
-color.b              = 4
+color.r              = 100
+color.g              = 178
+color.b              = 105
 helptext             = _("\
 Grasslands afford exceptional agricultural opportunities.\
 ")
@@ -607,9 +615,9 @@ native_to            = "Land", "Small Land", "Big Land", "Air", "Missile", "Heli
 flags                = "Starter", "CanHaveRiver"
 property_green       = 50
 property_mountainous = 30
-color.r              = 24
-color.g              = 97
-color.b              = 5
+color.r              = 222
+color.g              = 230
+color.b              = 134
 helptext             = _("\
 In addition to being amenable to agriculture, Hills are frequently\
  rich in resources.\
@@ -656,9 +664,9 @@ flags                = "CanHaveRiver", "DifficultLanding"
 property_foliage     = 50
 property_tropical    = 50
 property_wet         = 50
-color.r              = 55
-color.g              = 156
-color.b              = 38
+color.r              = 71
+color.g              = 227
+color.b              = 0
 helptext             = _("\
 Jungles are densely overgrown, making agriculture somewhat\
  problematic. Big Land units may not move into jungle without\
@@ -701,9 +709,9 @@ cooler_drier_result  = "no"
 native_to            = "Land", "Small Land", "Air", "Missile", "Helicopter"
 flags                = "NoCities", "CanHaveRiver"
 property_mountainous = 70
-color.r              = 129
-color.g              = 127
-color.b              = 118
+color.r              = 160
+color.g              = 156
+color.b              = 170
 helptext             = _("\
 Mountains are regions of extreme altitude, making agriculture and\
  trade very difficult.\
@@ -751,9 +759,9 @@ native_to            = "Land", "Small Land", "Big Land", "Air", "Missile", "Heli
 flags                = "Starter", "CanHaveRiver"
 property_green       = 50
 property_temperate   = 50
-color.r              = 122
-color.g              = 156
-color.b              = 46
+color.r              = 161
+color.g              = 198
+color.b              = 80
 helptext             = _("\
 Plains are very broad, sparse regions, which makes trade slightly\
  inconvenient.\
@@ -798,9 +806,9 @@ property_wet         = 100
 property_tropical    = 10
 property_temperate   = 10
 property_cold        = 10
-color.r              = 48
-color.g              = 85
-color.b              = 97
+color.r              = 129
+color.g              = 179
+color.b              = 146
 helptext             = _("\
 Swamps suffer from an over-abundance of water, making agriculture\
  somewhat problematic. Big Land units may not move in swamps without\
@@ -843,9 +851,9 @@ cooler_drier_result  = "Desert"
 flags                = "NoBarbs", "CanHaveRiver"
 native_to            = "Land", "Small Land", "Big Land", "Air", "Missile", "Helicopter"
 property_cold        = 50
-color.r              = 188
-color.g              = 188
-color.b              = 188
+color.r              = 206
+color.g              = 206
+color.b              = 206
 helptext             = _("\
 Tundra are broad, cold regions, fit for some agriculture and little\
  else.\
@@ -1014,7 +1022,11 @@ shield      = 3 ; glacier used to have 4
 [extraui]
 
 ; Player visible names of the base gui types.
+
+; ui_name_base_fortress refers to all bases that have gui_type "Fortress"
 ui_name_base_fortress = _("?gui_type:Build Fort/Fortress/Buoy")
+
+; ui_name_base_airbase refers to all bases that have gui_type "Airbase"
 ui_name_base_airbase = _("?gui_type:Build Airstrip/Airbase")
 
 ; /* <-- avoid gettext warnings
@@ -1041,8 +1053,10 @@ ui_name_base_airbase = _("?gui_type:Build Airstrip/Airbase")
 ;                           (the last three require a corresponding
 ;                           [resource_*] / [base_*] / [road_*] section)
 ; rmcauses                = events that can remove extra type.
-;                           "CleanPollution", "CleanFallout", "Pillage", or
-;                           "Disappear"
+;                           "CleanPollution", "CleanFallout", "Pillage",
+;                           "Disappear", or "Enter"
+; infracost               = Number of infrapoints it costs to place this
+;                           extra. 0 means extra cannot be placed. Default is 1
 ; graphic                 = tag specifying preferred graphic
 ; graphic_alt             = tag for alternate graphic if preferred graphic is
 ;                           not present. Can use eg "-" for no alternate
@@ -1067,6 +1081,10 @@ ui_name_base_airbase = _("?gui_type:Build Airstrip/Airbase")
 ; buildable               = Can extra be built? Defaults to TRUE if extra has
 ;                           any causes indicating it can result from worker
 ;                           activity.
+;                           If extra is not buildable, it can appear in game
+;                           only if placed in the editor, it's placed by
+;                           map generator, or on city tile if the extra
+;                           also has "AlwaysOnCityCenter" flag set.
 ; generated               = Can map generator place the extra? Applicable
 ;                           for Hut, Resource, and River extras.
 ; build_time              = how long it takes a unit to build this extra.
@@ -1324,7 +1342,7 @@ name           = _("Minor Tribe Village")
 rule_name      = "Hut"
 category       = "Bonus"
 causes         = "Hut"
-;rmcauses       = ""
+rmcauses       = "Enter"
 graphic        = "tx.village"
 graphic_alt    = "-"
 activity_gfx   = "None"
@@ -1354,15 +1372,14 @@ by other aircraft will cause the villagers to take fright and disband.\
 name             = _("Hermit's Place")
 rule_name        = "Hermit"
 category         = "Bonus"
-causes           = "Appear", "Hut"
-;rmcauses         = ""
+causes           = "Appear"
+rmcauses         = "Enter"
 graphic          = "tx.hermit"
 graphic_alt      = "tx.village"
 activity_gfx     = "None"
 act_gfx_alt      = "-"
 rmact_gfx        = "None"
 rmact_gfx_alt    = "-"
-generated        = FALSE
 appearance_reqs  =
     { "type", "name", "range", "present", "quiet"
       "TerrainClass", "Land", "Local", TRUE, FALSE
@@ -1406,7 +1423,9 @@ conflicts      = "Mine", "Oil Well"
 helptext       = _("\
 Once Refrigeration is known, irrigation systems can be upgraded to \
 farmland by irrigating them a second time; if the city working the tile \
-has a Supermarket, a farmland tile provides 50% more food.\
+has a Supermarket, a farmland tile provides 50% more food. (Hence, \
+farmland is only useful on tiles which with irrigation yield 2 or more \
+food.)\
 "), _("\
 Farmland on a tile prevents any trade bonus from Super Highways.\
 "), _("\
@@ -2079,6 +2098,7 @@ rmact_gfx_alt  = "-"
 ;                           (must have "Base" in its causes)
 ; gui_type                = How gui should handle this base.
 ;                           Value can be "Fortress", "Airbase", or "Other"
+;                           See also [extraui] section
 ; border_sq               = Base will claim land ownership up to this radius,
 ;                           -1 to disable. If enabled, base cannot exist in
 ;                           city tile.

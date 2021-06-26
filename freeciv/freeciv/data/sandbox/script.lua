@@ -24,39 +24,42 @@ end
 
 signal.connect("city_destroyed", "city_destroyed_callback")
 
--- Unit enters Hermit`s Nest
-function hermit_nest(unit)
-  if unit.tile:has_extra("Hermit") then
+-- Unit enters Hermit`s Place
+function hermit_nest(unit, extra)
+  if extra == "Hermit" then
     local chance = random(0, 5)
 
     notify.event(unit.owner, unit.tile, E.SCRIPT,
                  _("You found Hermit's Place."))
 
     if chance <= 3 then
-      local tech = unit.owner:give_technology(nil, 20, "hut")
+      local tech = unit.owner:give_tech(nil, 20, false, "hut")
+      notify.event(unit.owner, unit.tile, E.HUT_TECH,
+                 _("Secluded studies have led the Hermit to "
+                   .. "the discovery of %s!"),
+                 tech:name_translation())
+    else
+      notify.event(unit.owner, unit.tile, E.HUT_BARB_CITY_NEAR,
+                 _("The Hermit has left nothing useful."))
     end
 
-    return false
+    return true
   end
 end
 
 signal.connect("hut_enter", "hermit_nest")
 
--- Horseback riding researched
-function horseback_callback(tech_type, player, source)
-  local img = string.format("%s%s%s", game.rulesetdir(),
-                            "/", "resources/horseman.jpg")
-  local snd = string.format("%s%s%s", game.rulesetdir(),
-                            "/", "resources/horse.ogg")
-  if (tech_type == find.tech_type("Horseback Riding"))
-    then
-    server.showimg_playsnd(player, img, snd,
-                           "Better to run than curse the road", true)
+function hermit_nest_blown(unit, extra)
+  if extra == "Hermit" then
+    notify.event(unit.owner, unit.tile, E.HUT_BARB,
+                 _("Your %s has overflied a Hermit's Place" 
+                   .. " and destroyed it!"), unit.utype:name_translation())
+    -- do not process default.lua
+    return true
   end
-  return false
 end
 
-signal.connect('tech_researched', 'horseback_callback')
+signal.connect("hut_frighten", "hermit_nest_blown")
 
 -- Check if there is certain terrain in ANY CAdjacent tile.
 function adjacent_to(tile, terrain_name)
@@ -373,3 +376,36 @@ function place_map_labels()
 end
 
 signal.connect("map_generated", "place_map_labels")
+
+-- Only notifications needs Lua
+function notify_unit_unit(action, actor, target)
+  -- Notify actor
+  notify.event(actor.owner, target.tile,
+               E.UNIT_ACTION_ACTOR_SUCCESS,
+               -- /* TRANS: Your Marines does Disrupt Supply Lines to American Armor. */
+               _("Your %s does %s to %s %s."),
+               actor.utype:name_translation(),
+               action:name_translation(),
+               target.owner.nation:name_translation(),
+               target.utype:name_translation())
+
+  -- Notify target
+  notify.event(target.owner, actor.tile,
+               E.UNIT_ACTION_TARGET_HOSTILE,
+               -- /* TRANS: German Paratroopers does Disrupt Supply Lines to your Armor. */
+               _("%s %s does %s to your %s."),
+               actor.owner.nation:name_translation(),
+               actor.utype:name_translation(),
+               action:name_translation(),
+               target.utype:name_translation())
+end
+
+-- Handle unit targeted unit action start
+function action_started_unit_unit_callback(action, actor, target)
+  if action:rule_name() == "User Action 1" then
+    -- Disrupt Supply Lines
+    notify_unit_unit(action, actor, target)
+  end
+end
+
+signal.connect("action_started_unit_unit", "action_started_unit_unit_callback")

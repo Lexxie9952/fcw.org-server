@@ -45,8 +45,8 @@ function _deflua_hut_get_tech(unit)
                  owner.nation:plural_translation(),
                  tech:name_translation())
     notify.research_embassies(owner, E.TECH_EMBASSY,
-                 -- /* TRANS: first %s is leader or team name */
-                 _("%s has acquired %s from ancient scrolls of wisdom."),
+                 -- /* TRANS: first %s is nation plural or team name */
+                 _("The %s have acquired %s from ancient scrolls of wisdom."),
                  owner:research_name_translation(),
                  tech:name_translation())
     return true
@@ -58,19 +58,19 @@ end
 -- Get a mercenary unit from entering a hut.
 function _deflua_hut_get_mercenaries(unit)
   local owner = unit.owner
-  local type = find.role_unit_type('HutTech', owner)
+  local utype = find.role_unit_type('HutTech', owner)
 
-  if not type or not type:can_exist_at_tile(unit.tile) then
-    type = find.role_unit_type('Hut', nil)
-    if not type or not type:can_exist_at_tile(unit.tile) then
-      type = nil
+  if not utype or not utype:can_exist_at_tile(unit.tile) then
+    utype = find.role_unit_type('Hut', nil)
+    if not utype or not utype:can_exist_at_tile(unit.tile) then
+      utype = nil
     end
   end
 
-  if type then
+  if utype then
     notify.event(owner, unit.tile, E.HUT_MERC,
                  _("A band of friendly mercenaries joins your cause."))
-    owner:create_unit(unit.tile, type, 0, unit:get_homecity(), -1)
+    owner:create_unit(unit.tile, utype, 0, unit:get_homecity(), -1)
     return true
   else
     return false
@@ -104,12 +104,12 @@ end
 -- Unit may die: returns true if unit is alive
 function _deflua_hut_get_barbarians(unit)
   local tile = unit.tile
-  local type = unit.utype
+  local utype = unit.utype
   local owner = unit.owner
 
   if server.setting.get("barbarians") == "DISABLED"
     or unit.tile:city_exists_within_max_city_map(true)
-    or type:has_flag('Gameloss') then
+    or utype:has_flag('Gameloss') then
       notify.event(owner, unit.tile, E.HUT_BARB_CITY_NEAR,
                    _("An abandoned village is here."))
     return true
@@ -122,7 +122,7 @@ function _deflua_hut_get_barbarians(unit)
   else
     notify.event(owner, tile, E.HUT_BARB_KILLED,
                   _("Your %s has been killed by barbarians!"),
-                  type:name_translation());
+                  utype:name_translation());
   end
   return alive
 end
@@ -158,6 +158,15 @@ end
 
 signal.connect("hut_enter", "_deflua_hut_enter_callback")
 
+-- Informs that the tribe has run away seeing your plane
+function _deflua_hut_frighten_callback(unit, extra)
+  local owner = unit.owner
+  notify.event(owner, unit.tile, E.HUT_BARB,
+               _("Your overflight frightens the tribe;"
+                 .. " they scatter in terror."))
+  return true
+end
+signal.connect("hut_frighten", "_deflua_hut_frighten_callback")
 
 --[[
   Make partisans around conquered city

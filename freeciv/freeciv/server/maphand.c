@@ -103,13 +103,17 @@ static bool is_terrain_ecologically_wet(struct tile *ptile)
 **************************************************************************/
 void global_warming(int effect)
 {
-  return; //disabled, causes problems.
+  // return; //disabled, causes problems.
+
+  // It can take a while so notify first.
+  notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
+                _("[`events/globalwarming`]<br>🌞 Global warming is occurring! "
+                  "Coastlines are flooding. Hotter climate is "
+                  "affecting vegetation."));
+
   climate_change(TRUE, effect);
   notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
-                _("Global warming has occurred!"));
-  notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
-                _("Coastlines have been flooded and vast "
-                  "ranges of grassland have become deserts."));
+                _("Climate change completed."));
 }
 
 /**********************************************************************//**
@@ -117,43 +121,49 @@ void global_warming(int effect)
 **************************************************************************/
 void nuclear_winter(int effect)
 {
+  // It can take a while so notify first.                
+  notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
+                _("[`events/nuclearwinter`]<br>⚠️ Nuclear winter is happening!<br>"
+                  "Wetlands are drying. Ranges of plains and "
+                  "Grassland may become tundra."));
+
   climate_change(FALSE, effect);
   notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
-                _("Nuclear winter has occurred!"));
-  notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server,
-                _("Wetlands have dried up and vast "
-                  "ranges of grassland have become tundra."));
+              _("Climate change completed."));
 }
 
 /**********************************************************************//**
-  Do a climate change. Global warming occurred if 'warming' is TRUE, else
-  there is a nuclear winter.
+  Do a climate change. Global Warming occurred if 'warming' is TRUE, else
+  there is a Nuclear Winter.
 **************************************************************************/
 void climate_change(bool warming, int effect)
 {
   int k = map_num_tiles();
   bool used[k];
   memset(used, 0, sizeof(used));
+  struct terrain *wetter, *drier; // moved up from below
 
   log_verbose("Climate change: %s (%d)",
               warming ? "Global warming" : "Nuclear winter", effect);
 
-  while (effect > 0 && (k--) > 0) {
+  while (effect > 0 && (k--) > 1) {
     struct terrain *old, *candidates[2], *new;
     struct tile *ptile;
     int i;
 
+    // If we can't find an unused tile after 30 tries then escape from lag hell: 
+    int iteration_escape = 30;  
     do {
       /* We want to transform a tile at most once due to a climate change. */
       ptile = rand_map_pos(&(wld.map));
-    } while (used[tile_index(ptile)]);
+    } while (used[tile_index(ptile)] && --iteration_escape > 0);
     used[tile_index(ptile)] = TRUE;
 
     old = tile_terrain(ptile);
     /* Prefer the transformation that's appropriate to the ambient moisture,
      * but be prepared to fall back in exceptional circumstances */
-    {
-      struct terrain *wetter, *drier;
+// {  11Jan2021: COMMENTED CODE RELOCATED UP: Prevented crashes and faster.
+      // struct terrain *wetter, *drier;
       wetter = warming ? old->warmer_wetter_result : old->cooler_wetter_result;
       drier  = warming ? old->warmer_drier_result  : old->cooler_drier_result;
       if (is_terrain_ecologically_wet(ptile)) {
@@ -163,7 +173,7 @@ void climate_change(bool warming, int effect)
         candidates[0] = drier;
         candidates[1] = wetter;
       }
-    }
+ // }
 
     /* If the preferred transformation is ruled out for some exceptional reason
      * specific to this tile, fall back to the other, rather than letting this
@@ -202,7 +212,10 @@ void climate_change(bool warming, int effect)
 
       /* Really change the terrain. */
       tile_change_terrain(ptile, new);
-      check_terrain_change(ptile, old);
+
+      terrain_change_check(ptile, old, false); 
+        // false == don't re-calculate continents every time
+
       update_tile_knowledge(ptile);
 
       /* Check the unit activities. */
@@ -216,6 +229,9 @@ void climate_change(bool warming, int effect)
       effect--;
     }
   }
+
+  assign_continent_numbers();
+  send_all_known_tiles(NULL);
 }
 
 /**********************************************************************//**
@@ -296,14 +312,14 @@ void upgrade_all_city_extras(struct player *pplayer, bool discovery)
     if (discovery) {
       if (percent >= 75) {
         notify_player(pplayer, NULL, E_TECH_GAIN, ftc_server,
-                      _("New hope sweeps like fire through the country as "
+                      _("💡 New hope sweeps like fire through the country as "
                         "the discovery of new infrastructure building technology "
                         "is announced."));
       }
     } else {
       if (percent >= 75) {
         notify_player(pplayer, NULL, E_TECH_GAIN, ftc_server,
-                      _("The people are pleased to hear that your "
+                      _("💡 The people are pleased to hear that your "
                         "scientists finally know about new infrastructure building "
                         "technology."));
       }
@@ -311,12 +327,12 @@ void upgrade_all_city_extras(struct player *pplayer, bool discovery)
 
     if (multiple_types) {
       notify_player(pplayer, NULL, E_TECH_GAIN, ftc_server,
-                    _("Workers spontaneously gather and upgrade all "
-                      "possible cities with better infrastructure."));
+                    _("💡 With new tech, Workers upgrade appropriate "
+                      "cities with better infrastructure."));
     } else {
       notify_player(pplayer, NULL, E_TECH_GAIN, ftc_server,
-                    _("Workers spontaneously gather and upgrade all "
-                      "possible cities with %s."), extra_name_translation(upgradet));
+                    _("💡 With new tech, Workers upgrade appropriate "
+                      "cities with %s."), extra_name_translation(upgradet));
     }
   }
 
@@ -522,6 +538,9 @@ void send_tile_info(struct conn_list *dest, struct tile *ptile,
       info.resource = (NULL != tile_resource(ptile))
                        ? extra_number(tile_resource(ptile))
                        : MAX_EXTRA_TYPES;
+      info.placing = (NULL != ptile->placing)
+                      ? extra_number(ptile->placing)
+                      : -1;
 
       if (pplayer != NULL) {
 	info.extras = map_get_player_tile(ptile, pplayer)->extras;
@@ -559,6 +578,7 @@ void send_tile_info(struct conn_list *dest, struct tile *ptile,
       info.resource = (NULL != plrtile->resource)
                        ? extra_number(plrtile->resource)
                        : MAX_EXTRA_TYPES;
+      info.placing = -1;
 
       info.extras = plrtile->extras;
 
@@ -581,6 +601,7 @@ void send_tile_info(struct conn_list *dest, struct tile *ptile,
                       ? terrain_number(tile_terrain(ptile))
                       : terrain_count();
       info.resource = MAX_EXTRA_TYPES;
+      info.placing = -1;
 
       if (!is_longturn()) {info.extras = ptile->extras; } else {BV_CLR_ALL(info.extras); } //WebGL client needs to know which tiles are rivers on game start.
 
@@ -1193,8 +1214,8 @@ void remove_player_from_maps(struct player *pplayer)
       aplrtile = map_get_player_tile(ptile, aplayer);
 
       /* Free vision sites (cities) for removed and other players */
-      if (aplrtile && aplrtile->site &&
-          vision_site_owner(aplrtile->site) == pplayer) {
+      if (aplrtile && aplrtile->site
+          && vision_site_owner(aplrtile->site) == pplayer) {
         change_playertile_site(aplrtile, NULL);
         changed = TRUE;
       }
@@ -1324,16 +1345,11 @@ struct player_tile *map_get_player_tile(const struct tile *ptile,
 bool update_player_tile_knowledge(struct player *pplayer, struct tile *ptile)
 {
   struct player_tile *plrtile = map_get_player_tile(ptile, pplayer);
-  bool plrtile_owner_valid = game.server.foggedborders
-                             && !map_is_known_and_seen(ptile, pplayer, V_MAIN);
-  struct player *owner = plrtile_owner_valid
-                         ? plrtile->owner
-                         : tile_owner(ptile);
 
   if (plrtile->terrain != ptile->terrain
       || !BV_ARE_EQUAL(plrtile->extras, ptile->extras)
       || plrtile->resource != ptile->resource
-      || owner != tile_owner(ptile)
+      || plrtile->owner != tile_owner(ptile)
       || plrtile->extras_owner != extra_owner(ptile)) {
     plrtile->terrain = ptile->terrain;
     extra_type_iterate(pextra) {
@@ -1344,9 +1360,7 @@ bool update_player_tile_knowledge(struct player *pplayer, struct tile *ptile)
       }
     } extra_type_iterate_end;
     plrtile->resource = ptile->resource;
-    if (plrtile_owner_valid) {
-      plrtile->owner = tile_owner(ptile);
-    }
+    plrtile->owner = tile_owner(ptile);
     plrtile->extras_owner = extra_owner(ptile);
 
     return TRUE;
@@ -1750,7 +1764,13 @@ static void check_units_single_tile(struct tile *ptile)
                         E_UNIT_RELOCATED, ftc_server,
                         _("Moved your %s due to changing terrain."),
                         unit_link(punit));
-          unit_alive = unit_move(punit, ptile2, 0, NULL, FALSE);
+          /* TODO: should a unit be able to bounce to a transport like is
+           * done below? What if the unit can't legally enter the transport,
+           * say because the transport is Unreachable and the unit doesn't
+           * have it in its embarks field or because "Transport Embark"
+           * isn't enabled? Kept like it was to preserve the old rules for
+           * now. -- Sveinung */
+          unit_alive = unit_move(punit, ptile2, 0, NULL, TRUE, FALSE);
           if (unit_alive && punit->activity == ACTIVITY_SENTRY) {
             unit_activity_handling(punit, ACTIVITY_IDLE);
           }
@@ -1765,7 +1785,7 @@ static void check_units_single_tile(struct tile *ptile)
                     unit_rule_name(punit), TILE_XY(unit_tile(punit)));
         notify_player(unit_owner(punit), unit_tile(punit),
                       E_UNIT_LOST_MISC, ftc_server,
-                      _("Disbanded your %s due to changing terrain."),
+                      _("⚠️ Disbanded your %s due to changing terrain."),
                       unit_tile_link(punit));
         wipe_unit(punit, ULR_NONNATIVE_TERR, NULL);
       }
@@ -1846,12 +1866,27 @@ void fix_tile_on_terrain_change(struct tile *ptile,
 }
 
 /**********************************************************************//**
-  Handles local and global side effects for a terrain change for a single
-  tile.
+  Handles local and global side effects for terrain change to a single
+  tile. (This is now a wrapper to keep compatibility for other callers.)
+  
   Call this in the server immediately after calling tile_change_terrain.
   Assumes an in-game terrain change (e.g., by workers/engineers).
 **************************************************************************/
 void check_terrain_change(struct tile *ptile, struct terrain *oldter)
+{
+  terrain_change_check(ptile, oldter, true); 
+     //      __, __, true == recalc continents if needed.
+}
+
+/**********************************************************************//**
+  Wrapped version of the above. Provides the ability for climate_change
+  function to call this for thousands of repetitions without redundantly
+  re-calculating the continents every time, even recursively while 
+  changing lakes. This eliminates more than half of the lag for Freeciv's
+  biggest performance hog.
+**************************************************************************/
+void terrain_change_check(struct tile *ptile, struct terrain *oldter,
+                          bool do_continent_recalc)
 {
   struct terrain *newter = tile_terrain(ptile);
   struct tile *claimer;
@@ -1894,13 +1929,17 @@ void check_terrain_change(struct tile *ptile, struct terrain *oldter)
 
         /* Recursive, but as lakes are of limited size, this
          * won't recurse so much as to cause stack problems. */
-        check_terrain_change(atile, aold);
+        // 11Jan2021: "Famous last words" !! It was recursively calling
+        // assign_continent_numbers(..) and send_all_known_tiles(..) !!!
+        terrain_change_check(atile, aold, do_continent_recalc);
         update_tile_knowledge(atile);
       }
     } adjc_iterate_end;
   }
 
-  if (need_to_reassign_continents(oldter, newter)) {
+  //notify_player(NULL, NULL, E_GLOBAL_ECO, ftc_server, _("   STAGE 2..."));
+
+  if (do_continent_recalc && need_to_reassign_continents(oldter, newter)) {
     assign_continent_numbers();
     send_all_known_tiles(NULL);
   }
@@ -2513,39 +2552,72 @@ void give_distorted_map(struct player *pfrom, struct player *pto,
   unbuffer_shared_vision(pto);
 }
 
+
 /****************************************************************************
   Return a (static) string with a tile's food/prod/trade
 ****************************************************************************/
-static const char *get_tile_output_text(const struct tile *ptile, 
+static const char *get_tile_base_output_text(const struct tile *ptile, 
 		                        struct player *pplayer)
 {
   static struct astring str = ASTRING_INIT;
+  int i; char output_text[O_LAST][30];
+  for (i = 0; i < O_LAST; i++) {
+    int x = city_tile_output(NULL, ptile, FALSE, i);
+    sprintf(output_text[i], "%d", x);
+  }
+  astr_clear(&str);
+  astr_add(&str, "%s▪%s▪%s", output_text[O_FOOD], output_text[O_SHIELD], output_text[O_TRADE]);
+  return astr_str(&str);
+}
+
+/****************************************************************************
+  Return a (static) string with a tile's food/prod/trade
+  bool is_raw lets caller know if there were bonuses or penalties.
+****************************************************************************/
+static const char *get_tile_output_text(const struct tile *ptile, 
+		                        struct player *pplayer, bool *is_raw)
+{
+  static struct astring str = ASTRING_INIT;
   int i;
-  char output_text[O_LAST][16];
+  char output_text[O_LAST][1024];
 
   for (i = 0; i < O_LAST; i++) {
     int before_penalty = 0;
+    int before_bonus   = 0;
+    char background_color[200];
+    sprintf(&background_color[0], "<b class='%s'>",
+                                  (i == O_FOOD) ? "f" 
+                                                : (i==O_SHIELD ? "s"
+                                                : "t"));
+
     int x = city_tile_output(NULL, ptile, FALSE, i);
 
     if (NULL != pplayer) {
       before_penalty = get_player_output_bonus(pplayer,
                                                get_output_type(i),
                                                EFT_OUTPUT_PENALTY_TILE);
+
+      before_bonus = get_player_output_bonus(pplayer, get_output_type(i), EFT_OUTPUT_INC_TILE);
+/*  EFT_OUTPUT_INC_TILE_CELEBRATE ? for nonrep govs
+    EFT_OUTPUT_ADD_TILE colossus, artemis maybe, */
     }
 
     if (before_penalty > 0 && x > before_penalty) {
-      fc_snprintf(output_text[i], sizeof(output_text[i]), "%d(-1)", x);
-    } else {
-      fc_snprintf(output_text[i], sizeof(output_text[i]), "%d", x);
+      sprintf(output_text[i], "%s%d↓", background_color, x-1);
+      *is_raw = false;
+    } 
+    else if (before_bonus > 0 && x>0) {
+      sprintf(output_text[i], "%s%d↑", background_color, x+before_bonus);
+      *is_raw = false;
+    }
+    else {
+      sprintf(output_text[i], "%s%d", background_color, x);
     }
   }
   
   astr_clear(&str);
-  astr_add_line(&str, "%s/%s/%s",
-                output_text[O_FOOD],
-		output_text[O_SHIELD],
-		output_text[O_TRADE]);
-
+  astr_add(&str, "%s</b>%s</b>%s</b>%s",
+                output_text[O_FOOD], output_text[O_SHIELD], output_text[O_TRADE], _("​"));
   return astr_str(&str);
 }
 
@@ -2582,8 +2654,9 @@ static inline void get_full_nation(char *buf, int buflen,
 
 
 /****************************************************************************
-  For AIs, fill the buffer with their player name prefixed with "AI". For
-  humans, just fill it with their username.
+  For AIs, fill the buffer with their player name suffixed with "(A.I.)".
+  For humans, just fill it with their username. Changed from prefix of "AI"
+  which always looked like Arabic "Al <name>".
 ****************************************************************************/
 static inline void get_full_username(char *buf, int buflen,
                                      const struct player *pplayer)
@@ -2599,7 +2672,7 @@ static inline void get_full_username(char *buf, int buflen,
 
   if (is_ai(pplayer)) {
     /* TRANS: "AI <player name>" */
-    fc_snprintf(buf, buflen, _("AI %s"), pplayer->name);
+    fc_snprintf(buf, buflen, _("%s (A.I.)"), pplayer->name);
   } else {
     fc_strlcpy(buf, pplayer->username, buflen);
   }
@@ -2624,6 +2697,8 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
     vision_type = TILE_UNKNOWN;
   }
   const char *activity_text;
+  int dummy=0; // int * param needed to fetch turns remaining for work
+
   if (ptile == NULL || !ptile || !pplayer || pplayer == NULL) return NULL; 
   struct city *pcity = tile_city(ptile);
   const char *diplo_nation_plural_adjectives[DS_LAST] =
@@ -2642,7 +2717,7 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
   int tile_x, tile_y, nat_x, nat_y;
 
   char bold[10],unbold[10];
-  sprintf(bold, "\0"); sprintf(unbold, "\0");
+  sprintf(bold, "%c", '\0'); sprintf(unbold, "%c", '\0');
 #ifdef FREECIV_WEB
   sprintf(bold, "<b>"); sprintf(unbold, "</b>");
 #endif /* FREECIV_WEB */
@@ -2660,15 +2735,21 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
   // Sorry, that's all there is to know.
   if (vision_type == TILE_UNKNOWN) goto done;
 
-  astr_add_line(&str, _("Terrain: %s"), tile_get_info_text(ptile, TRUE, 0));
+  astr_add_line(&str, _("Terrain: <b>%s</b>"), tile_get_info_text(ptile, TRUE, 0));
   // Sorry, that's all there is to know.
   if (vision_type == TILE_KNOWN_UNSEEN) goto done;
 
-  astr_add_line(&str, _("Food/Prod/Trade: %s%s%s"), bold,
-       get_tile_output_text(ptile, pplayer), unbold);
+  astr_add_line(&str, _("Food ▪ Production ▪ Trade (penalty:<b>↓</b> bonus:<b>↑</b>)"));
+  bool is_raw = true;
+  astr_add_line(&str, _("%s"), get_tile_output_text(ptile, pplayer, &is_raw));
+  //astr_add_line(&str, _("</b></b></b>"));
+  if (!is_raw) {
+    astr_add(&str, _("\n(Raw value: %s)\n"), get_tile_base_output_text(ptile,pplayer));
+  }
+
   extra_type_by_cause_iterate(EC_HUT, pextra) {
     if (tile_has_extra(ptile, pextra)) {
-      astr_add_line(&str, "%s", extra_name_translation(pextra));
+      astr_add_line(&str, "<b>%s</b>", extra_name_translation(pextra));
     }
   } extra_type_by_cause_iterate_end;
   if (BORDERS_DISABLED != game.info.borders && !pcity) {
@@ -2678,7 +2759,7 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
     get_full_nation(nation, sizeof(nation), owner);
 
     if (NULL != pplayer && owner == pplayer) {
-      astr_add_line(&str, _("Our territory"));
+      astr_add_line(&str, _("<b>Our territory</b>"));
     } else if (NULL != owner && NULL == pplayer) {
       /* TRANS: "Territory of <username> (<nation + team>)" */
       astr_add_line(&str, _("Territory of %s%s (%s)%s"), bold, username, nation, unbold);
@@ -2775,7 +2856,6 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
       astr_add_line(&str, _("   with %s%s%s."),bold,astr_str(&list),unbold);
       astr_free(&list);
     }
-
   }
   {
     const char *infratext = get_infrastructure_text(ptile->extras);
@@ -2783,13 +2863,13 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
       astr_add_line(&str, _("Infrastructure: %s%s%s"), bold, infratext, unbold);
     }
   }
-  activity_text = concat_tile_activity_text(ptile);
+  activity_text = concat_tile_activity_text(ptile, &dummy);
   if (strlen(activity_text) > 0) {
     astr_add_line(&str, _("Activity: %s%s%s"), bold, activity_text, unbold);
   }
   if (punit != NULL && pcity == NULL) {
     struct player *owner = unit_owner(punit);
-    struct unit_type *ptype = unit_type_get(punit);
+    const struct unit_type *ptype = unit_type_get(punit);
 
     get_full_username(username, sizeof(username), owner);
     get_full_nation(nation, sizeof(nation), owner);
@@ -2830,13 +2910,32 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
       }
     }
 
+    // Info reserved for unit's owner: UWT and exact bribe cost:
     if (unit_owner(punit) == pplayer) {
-      /* Show bribe cost for own units. */
+      /* Show bribe cost for own units and UWT for own units. */
+      ///////////UWT GOES HERE:
+      if (game.server.unitwaittime > 0) {
+        if (punit->server.action_timestamp > 0) {
+          int dt = time(NULL) - punit->server.action_timestamp;
+          if (dt < game.server.unitwaittime) {
+            char uwt_msg[64];
+            format_time_duration(game.server.unitwaittime - dt, uwt_msg, sizeof(uwt_msg));
+            if (punit->server.action_turn == game.info.turn - 1) {
+              astr_add_line(&str, _("Wait Time left this turn: %s%s%s"), bold, uwt_msg, unbold);
+            }
+            else { // assume order was given this turn
+              astr_add_line(&str, _("Wait Time left this turn:   %sNone.%s"),bold,unbold);
+              astr_add_line(&str, _("Wait for next turn expires: %s%s%s"), bold, uwt_msg, unbold);
+            }
+          }
+        }
+      }
       astr_add_line(&str, _("Bribe cost: %s%d%s"), bold, unit_bribe_cost(punit, pplayer), unbold);
-    } else {
-      /* We can only give an (lower) boundary for units of other players. */
-      astr_add_line(&str, _("Estimated bribe cost: > %s%d%s"),
-                    bold, unit_bribe_cost(punit, pplayer), unbold);
+    } 
+    else {
+         /* We can only give an (lower) boundary for units of other players. */
+         astr_add_line(&str, _("Estimated bribe cost: > %s%d%s"),
+                       bold, unit_bribe_cost(punit, pplayer), unbold);
     }
 
     if ((NULL == pplayer || owner == pplayer)

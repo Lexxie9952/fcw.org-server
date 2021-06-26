@@ -16,7 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ***********************************************************************/
-
+var game_launch_timer = new Date().getTime();
+const event_sound_suppress_delay = 15000; // suppress event sounds for 15 seconds after launch
 
 var error_shown = false;
 var syncTimerId = -1;
@@ -59,6 +60,7 @@ function network_init()
 {
   if (!("WebSocket" in window)) {
     swal("WebSockets not supported", "", "error");
+    setSwalTheme();
     return;
   }
 
@@ -93,7 +95,7 @@ function network_init()
 ****************************************************************************/
 function websocket_init()
 {
-  $.blockUI({ message: "<h2>Please wait while connecting to the server.</h2>" });
+  $.blockUI({ message: "<h1 style='text-align:center'><font color='#ccc'>Connecting...</font></h1>"});
   var proxyport = 1000 + parseFloat(civserverport);
   var ws_protocol = ('https:' == window.location.protocol) ? "wss://" : "ws://";
   var port = window.location.port ? (':' + window.location.port) : '';
@@ -103,7 +105,7 @@ function websocket_init()
 
   ws.onmessage = function (event) {
      if (typeof client_handle_packet !== 'undefined') {
-       client_handle_packet(jQuery.parseJSON(event.data));
+       client_handle_packet(JSON.parse(event.data));
        if (DEBUG_LOG_PACKETS) 
          console.log("*** INCOMING PACKET>>>>>"+event.data);
         
@@ -118,8 +120,10 @@ function websocket_init()
    if (cur_time - last_user_action_time > kick_inactive_time) {
     swal("Inactivity Timeout", "Session closed: "+(kick_inactive_time/60000)
       +"min inactivity. Please reload the page to reconnect.", "error");
-   } else {
+      setSwalTheme();
+    } else {
       swal("Network Error", "Connection to server is closed. Please reload the page to restart. Sorry!", "error");
+      setSwalTheme();
       message_log.update({
         event: E_LOG_ERROR,
         message: "Error: connection to server is closed. Please reload the page to restart. Sorry!"
@@ -162,6 +166,7 @@ function check_websocket_ready()
 
     if (is_longturn() && google_user_token == null) {
       swal("Login failed.");
+      setSwalTheme();
       return;
     }
 
@@ -201,6 +206,36 @@ function network_stop()
 function send_request(packet_payload)
 {
   if (ws != null) {
+
+    //console.log("Received outgoing pid=="+object_packet['pid'])
+    /* workaround current 3.1 server uses actionenablers to filter activities
+       legality. The actions being sent to the client after a (D)o Action 
+       render unit_do_action requests in the user dialog, which the server
+       rejects because it wants the request as a change_activity packet. 
+       TO DO: remove when upstream fixes this. */
+
+    var object_packet = JSON.parse(packet_payload);
+    if ( (object_packet['pid'] == packet_unit_do_action) // 84
+      && (object_packet['action_type']== ACTION_CLEAN_POLLUTION
+          || object_packet['action_type'] == ACTION_CLEAN_FALLOUT)
+       )
+        { // change do_action request to a change_activity request
+          console.log("Client forced to circumvent server's suggested packet_unit_do_action as a packet_unit_change_activity.")
+
+          object_packet['pid'] = packet_unit_change_activity; // 222
+          object_packet['unit_id'] = object_packet['actor_id'];
+          object_packet['activity'] = (object_packet['action_type']==ACTION_CLEAN_POLLUTION ? ACTIVITY_POLLUTION : ACTIVITY_FALLOUT);
+          object_packet['target'] = -1;
+          delete object_packet.actor_id;  // remove keys not present in packet_unit_change_activity
+          delete object_packet.target_id;
+          delete object_packet.extra_id;
+          delete object_packet.value;
+          delete object_packet.name;
+          delete object_packet.action_type;
+          packet_payload = JSON.stringify(object_packet);
+        }
+        /* END Client workaround of 3.1 server bug ******************************/
+
     ws.send(packet_payload);
   }
 

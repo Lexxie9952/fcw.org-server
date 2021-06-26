@@ -78,6 +78,7 @@ struct research {
     bool root_reqs_known;
     bv_techs required_techs;
     int num_required_techs, bulbs_required, bulbs_researched_saved;
+    //bool blueprint_conquest, blueprint_diplomacy, blueprint_free /* huts,great library parasite*/
   } inventions[A_LAST];
 
   /* Tech goal (similar to worklists; when one tech is researched the next

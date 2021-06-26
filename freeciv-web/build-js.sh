@@ -12,7 +12,6 @@ echo target/freeciv-web/javascript/webgl/libs/webgl-client* "${FCW_DEST}"/javasc
 # update timestamp to clear browser cache.
 sed -i.bak -e "s/ts=\"/ts=\"1/" -e "s/\?ts=/\?ts=1/" "${FCW_DEST}"/webclient/index.jsp
 
-cp src/main/webapp/javascript/webgl/shaders/*.* "${FCW_DEST}"/javascript/webgl/shaders/
 
 # let user know when it's finished
 echo $'\a'

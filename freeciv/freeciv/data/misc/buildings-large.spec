@@ -2,7 +2,7 @@
 [spec]
 
 ; Format and options of this spec file:
-options = "+Freeciv-spec-Devel-2015-Mar-25"
+options = "+Freeciv-spec-Devel-2019-Jul-03"
 
 [info]
 
@@ -31,6 +31,7 @@ sprites =
 		"b.ecclesiastical_palace", "buildings/ecclesiastical_palace"
 		"b.enrichment_facility", "buildings/enrichment_facility"
 		"b.factory", "buildings/factory"
+		"b.fortifications", "buildings/fortifications"
 		"b.fusion_reactor", "buildings/fusion_reactor"
 		"b.granary", "buildings/granary"
 		"b.harbour", "buildings/harbor"
@@ -60,5 +61,7 @@ sprites =
 		"b.super_highways", "buildings/super_highways"
 		"b.supermarket", "buildings/supermarket"
 		"b.temple", "buildings/temple"
+		"b.totem_pole", "buildings/totem_pole"
 		"b.university", "buildings/university"
+		"b.wind_farm",  "buildings/wind_farm"
 	}

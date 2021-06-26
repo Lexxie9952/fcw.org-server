@@ -152,7 +152,7 @@ static void make_rivers(void);
 
 static void river_types_init(void);
 
-#define HAS_POLES (wld.map.server.temperature < 70 && !wld.map.server.alltemperate)
+#define HAS_POLES (wld.map.server.temperature < 70 && !wld.map.server.alltemperate && wld.map.server.polar_strip)
 
 /* These are the old parameters of terrains types in %
    TODO: they depend on the hardcoded terrains */
@@ -215,7 +215,7 @@ static bool test_wetness(const struct tile *ptile, wetness_c c)
 **************************************************************************/
 static bool test_miscellaneous(const struct tile *ptile, miscellaneous_c c)
 {
-  switch(c) {
+  switch (c) {
   case MC_NONE:
     return TRUE;
   case MC_LOW:
@@ -312,10 +312,14 @@ static void make_relief(void)
                          pick_terrain(MG_MOUNTAINOUS, fc_rand(10) < 4
                                       ? MG_UNUSED : MG_GREEN, MG_UNUSED));
       } else {
-        /* Prefer mountains hills to in cold regions. */
+        /* Prefer mountains hills to in cold regions. 
         tile_set_terrain(ptile,
                          pick_terrain(MG_MOUNTAINOUS, MG_UNUSED,
                                       fc_rand(10) < 8 ? MG_GREEN : MG_UNUSED));
+        NO, cold startpos is worse already, WTF were you thinking? */
+        // Prefer Hills to Mountains in cold regions:
+        tile_set_terrain(ptile,
+                         pick_terrain(MG_MOUNTAINOUS, MG_GREEN, MG_UNUSED));
       }
       map_set_placed(ptile);
     }
@@ -1397,6 +1401,7 @@ bool map_fractal_generate(bool autosize, struct unit_type *initial_unit)
       fc_assert_msg(FALSE,
                     "Fair island generator failed to allocated "
                     "start positions!");
+      break;
     case MAPGEN_SCENARIO:
     case MAPGEN_RANDOM:
     case MAPGEN_FRACTURE:
@@ -1411,7 +1416,7 @@ bool map_fractal_generate(bool autosize, struct unit_type *initial_unit)
       }
       break;
     case MAPGEN_ISLAND:
-      switch(wld.map.server.startpos) {
+      switch (wld.map.server.startpos) {
       case MAPSTARTPOS_DEFAULT:
       case MAPSTARTPOS_VARIABLE:
         log_verbose("Map generator chose startpos=SINGLE");
@@ -1438,7 +1443,7 @@ bool map_fractal_generate(bool autosize, struct unit_type *initial_unit)
         break;
       }
 
-      switch(mode) {
+      switch (mode) {
         case MAPSTARTPOS_SINGLE:
           log_verbose("Falling back to startpos=2or3");
           mode = MAPSTARTPOS_2or3;
@@ -1474,25 +1479,28 @@ bool map_fractal_generate(bool autosize, struct unit_type *initial_unit)
 static void adjust_terrain_param(void)
 {
   int polar = 2 * ICE_BASE_LEVEL * wld.map.server.landpercent / MAX_COLATITUDE;
-  float factor = (100.0 - polar - wld.map.server.steepness * 0.8 ) / 10000;
+  float mount_factor = (100.0 - polar - 30 * 0.8) / 10000;
+  float factor = (100.0 - polar - wld.map.server.steepness * 0.8) / 10000;
 
-
-  mountain_pct = factor * wld.map.server.steepness * 90;
+  mountain_pct = mount_factor * wld.map.server.steepness * 90;
 
   /* 27 % if wetness == 50 & */
-  forest_pct = factor * (wld.map.server.wetness * 40 + 700) ; 
-  jungle_pct = forest_pct * (MAX_COLATITUDE - TROPICAL_LEVEL) /
-               (MAX_COLATITUDE * 2);
+  forest_pct = factor * (wld.map.server.wetness * 40 + 700);
+  jungle_pct = forest_pct * (MAX_COLATITUDE - TROPICAL_LEVEL)
+    / (MAX_COLATITUDE * 2);
   forest_pct -= jungle_pct;
 
-  /* 3 - 11 % */
-  river_pct = (100 - polar) * (3 + wld.map.server.wetness / 12) / 100;
+  /* 3 - 11 %    if wetness == 50 then 7% */
+  // NOT ENOUGH RIVERS: river_pct = (100 - polar) * (3 + wld.map.server.wetness / 12) / 100;
+  
+  /* 5 - 17 %    if wetness == 50 then 11% */
+  river_pct = (100 - polar) * (5 + wld.map.server.wetness / 8) / 100;  // much nicer
 
   /* 7 %  if wetness == 50 && temperature == 50 */
   swamp_pct = factor * MAX(0, (wld.map.server.wetness * 12 - 150
                                + wld.map.server.temperature * 10));
   desert_pct = factor * MAX(0, (wld.map.server.temperature * 15 - 250
-                                + (100 - wld.map.server.wetness) * 10)) ;
+                                + (100 - wld.map.server.wetness) * 10));
 }
 
 /**********************************************************************//**
@@ -1504,14 +1512,14 @@ static bool near_safe_tiles(struct tile *ptile)
   square_iterate(&(wld.map), ptile, 1, tile1) {
     if (!terrain_has_flag(tile_terrain(tile1), TER_UNSAFE_COAST)) {
       return TRUE;
-    }	
+    }
   } square_iterate_end;
 
   return FALSE;
 }
 
 /**********************************************************************//**
-  this function spreads out huts on the map, a position can be used for a
+  This function spreads out huts on the map, a position can be used for a
   hut if there isn't another hut close and if it's not on the ocean.
 **************************************************************************/
 static void make_huts(int number)
@@ -2148,7 +2156,7 @@ static bool make_island(int islemass, int starters,
     lastplaced = i;
     if (i * 10 > islemass) {
       balance = i - islemass;
-    } else{
+    } else {
       balance = 0;
     }
 
@@ -2349,12 +2357,12 @@ static void mapgenerator3(void)
 
   landmass = (wld.map.xsize * (wld.map.ysize - 6) * wld.map.server.landpercent)/100;
   /* subtracting the arctics */
-  if (landmass > 3 * wld.map.ysize + player_count() * 3){
+  if (landmass > 3 * wld.map.ysize + player_count() * 3) {
     landmass -= 3 * wld.map.ysize;
   }
 
 
-  islandmass= (landmass)/(3 * bigislands);
+  islandmass = (landmass)/(3 * bigislands);
   if (islandmass < 4 * maxmassdiv6) {
     islandmass = (landmass)/(2 * bigislands);
   }
@@ -2376,14 +2384,14 @@ static void mapgenerator3(void)
     make_island(islandmass, 1, pstate, DMSIS);
   }
 
-  if (j == 500){
+  if (j == 500) {
     log_normal(_("Generator 3 didn't place all big islands."));
   }
-  
-  islandmass= (islandmass * 11)/8;
+
+  islandmass = (islandmass * 11) / 8;
   /*!PS: I'd like to mult by 3/2, but starters might make trouble then */
   if (islandmass < 2) {
-    islandmass= 2;
+    islandmass = 2;
   }
 
   while (checkmass > islandmass && ++j < 1500) {
@@ -3541,6 +3549,7 @@ static bool map_generate_fair_islands(void)
       switch (wld.map.server.team_placement) {
       case TEAM_PLACEMENT_DISABLED:
         fc_assert(wld.map.server.team_placement != TEAM_PLACEMENT_DISABLED);
+        break;
       case TEAM_PLACEMENT_CLOSEST:
       case TEAM_PLACEMENT_CONTINENT:
         for (j = 0; j < wld.map.num_iterate_outwards_indices; j++) {

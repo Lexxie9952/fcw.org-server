@@ -25,6 +25,6 @@ struct unit_type *dai_wants_role_unit(struct ai_type *ait, struct player *pplaye
 struct unit_type *dai_wants_defender_against(struct ai_type *ait,
                                              struct player *pplayer,
                                              struct city *pcity,
-                                             struct unit_type *att, int want);
+                                             const struct unit_type *att, int want);
 
 #endif  /* FC__AITECH_H */

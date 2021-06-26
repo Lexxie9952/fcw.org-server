@@ -333,17 +333,16 @@ static void option_color_select_callback(GtkButton *button, gpointer data)
 
   dialog = gtk_dialog_new_with_buttons(_("Select a color"), NULL,
                                        GTK_DIALOG_MODAL,
-                                       _("Cancel"), GTK_RESPONSE_CANCEL,
-                                       _("Clear"), GTK_RESPONSE_REJECT,
-                                       _("OK"), GTK_RESPONSE_OK, NULL);
+                                       _("_Cancel"), GTK_RESPONSE_CANCEL,
+                                       _("C_lear"), GTK_RESPONSE_REJECT,
+                                       _("_OK"), GTK_RESPONSE_OK, NULL);
   setup_dialog(dialog, toplevel);
   g_signal_connect(dialog, "response",
                    G_CALLBACK(color_selector_response_callback), button);
 
   chooser = gtk_color_chooser_widget_new();
   g_object_set_data(G_OBJECT(dialog), "chooser", chooser);
-  gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), chooser,
-                     FALSE, FALSE);
+  gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), chooser);
   if (current_color) {
     gtk_color_chooser_set_rgba(GTK_COLOR_CHOOSER(chooser), current_color);
   }
@@ -364,12 +363,12 @@ option_dialog_new(const char *name, const struct option_set *poptset)
   pdialog = fc_malloc(sizeof(*pdialog));
   pdialog->poptset = poptset;
   pdialog->shell = gtk_dialog_new_with_buttons(name, NULL, 0,
-                                               _("Cancel"), RESPONSE_CANCEL,
-                                               _("Save"), RESPONSE_SAVE,
-                                               _("Refresh"), RESPONSE_REFRESH,
+                                               _("_Cancel"), RESPONSE_CANCEL,
+                                               _("_Save"), RESPONSE_SAVE,
+                                               _("_Refresh"), RESPONSE_REFRESH,
                                                _("Reset"), RESPONSE_RESET,
-                                               _("Apply"), RESPONSE_APPLY,
-                                               _("OK"), RESPONSE_OK, NULL);
+                                               _("_Apply"), RESPONSE_APPLY,
+                                               _("_OK"), RESPONSE_OK, NULL);
   pdialog->notebook = gtk_notebook_new();
   pdialog->vboxes = fc_calloc(CATEGORY_NUM, sizeof(*pdialog->vboxes));
   pdialog->box_children = fc_calloc(CATEGORY_NUM,
@@ -391,7 +390,7 @@ option_dialog_new(const char *name, const struct option_set *poptset)
                    G_CALLBACK(option_dialog_destroy_callback), pdialog);
 
   gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(pdialog->shell))),
-                     pdialog->notebook, TRUE, TRUE);
+                     pdialog->notebook);
 
   /* Add the options. */
   options_iterate(poptset, poption) {
@@ -488,7 +487,7 @@ static void option_dialog_option_add(struct option_dialog *pdialog,
                                      bool reorder_notebook)
 {
   const int category = option_category(poption);
-  GtkWidget *main_hbox, *label, *ebox, *w = NULL;
+  GtkWidget *main_hbox, *label, *w = NULL;
 
   fc_assert(NULL == option_get_gui_data(poption));
 
@@ -520,17 +519,14 @@ static void option_dialog_option_add(struct option_dialog *pdialog,
   }
   pdialog->box_children[category]++;
 
-  ebox = gtk_event_box_new();
-  gtk_widget_set_tooltip_text(ebox, option_help_text(poption));
-  gtk_container_add(GTK_CONTAINER(pdialog->vboxes[category]), ebox);
-  g_signal_connect(ebox, "button_press_event",
-                   G_CALLBACK(option_button_press_callback), poption);
-
   main_hbox = gtk_grid_new();
   label = gtk_label_new(option_description(poption));
   g_object_set(label, "margin", 2, NULL);
   gtk_container_add(GTK_CONTAINER(main_hbox), label);
-  gtk_container_add(GTK_CONTAINER(ebox), main_hbox);
+  gtk_widget_set_tooltip_text(main_hbox, option_help_text(poption));
+  g_signal_connect(main_hbox, "button_press_event",
+                   G_CALLBACK(option_button_press_callback), poption);
+  gtk_container_add(GTK_CONTAINER(pdialog->vboxes[category]), main_hbox);
 
   switch (option_type(poption)) {
   case OT_BOOLEAN:
@@ -653,13 +649,13 @@ static void option_dialog_option_add(struct option_dialog *pdialog,
     log_error("Failed to create a widget for option %d \"%s\".",
               option_number(poption), option_name(poption));
   } else {
-    g_object_set_data(G_OBJECT(w), "main_widget", ebox);
+    g_object_set_data(G_OBJECT(w), "main_widget", main_hbox);
     gtk_widget_set_hexpand(w, TRUE);
     gtk_widget_set_halign(w, GTK_ALIGN_END);
     gtk_container_add(GTK_CONTAINER(main_hbox), w);
   }
 
-  gtk_widget_show(ebox);
+  gtk_widget_show(main_hbox);
 
   /* Set as current value. */
   option_dialog_option_refresh(poption);
@@ -715,10 +711,11 @@ static inline void option_dialog_option_str_set(struct option *poption,
                                                 const char *string)
 {
   if (NULL != option_str_values(poption)) {
-    gtk_entry_set_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN
-                       (option_get_gui_data(poption)))), string);
+    gtk_entry_buffer_set_text(gtk_entry_get_buffer(GTK_ENTRY(gtk_bin_get_child(GTK_BIN
+                                          (option_get_gui_data(poption))))), string, -1);
   } else {
-    gtk_entry_set_text(GTK_ENTRY(option_get_gui_data(poption)), string);
+    gtk_entry_buffer_set_text(gtk_entry_get_buffer(GTK_ENTRY(option_get_gui_data(poption))),
+                              string, -1);
   }
 }
 
@@ -769,8 +766,8 @@ static inline void option_dialog_option_bitwise_set(struct option *poption,
 static inline void option_dialog_option_font_set(struct option *poption,
                                                  const char *font)
 {
-  gtk_font_button_set_font_name(GTK_FONT_BUTTON
-                                (option_get_gui_data(poption)), font);
+  gtk_font_chooser_set_font(GTK_FONT_CHOOSER
+                            (option_get_gui_data(poption)), font);
 }
 
 /************************************************************************//**
@@ -900,10 +897,12 @@ static void option_dialog_option_apply(struct option *poption)
 
   case OT_STRING:
     if (NULL != option_str_values(poption)) {
-      (void) option_str_set(poption, gtk_entry_get_text
-                            (GTK_ENTRY(gtk_bin_get_child(GTK_BIN(w)))));
+      (void) option_str_set(poption, gtk_entry_buffer_get_text(
+                                        gtk_entry_get_buffer(
+                                           GTK_ENTRY(gtk_bin_get_child(GTK_BIN(w))))));
     } else {
-      (void) option_str_set(poption, gtk_entry_get_text(GTK_ENTRY(w)));
+      (void) option_str_set(poption, gtk_entry_buffer_get_text(
+                                                 gtk_entry_get_buffer(GTK_ENTRY(w))));
     }
     break;
 
@@ -938,8 +937,8 @@ static void option_dialog_option_apply(struct option *poption)
     break;
 
   case OT_FONT:
-    (void) option_font_set(poption, gtk_font_button_get_font_name
-                           (GTK_FONT_BUTTON(w)));
+    (void) option_font_set(poption, gtk_font_chooser_get_font
+                           (GTK_FONT_CHOOSER(w)));
     break;
 
   case OT_COLOR:

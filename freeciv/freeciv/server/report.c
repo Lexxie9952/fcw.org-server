@@ -139,6 +139,11 @@ static int get_economics(const struct player *pplayer);
 static int get_pollution(const struct player *pplayer);
 static int get_mil_service(const struct player *pplayer);
 static int get_culture(const struct player *pplayer);
+static int get_units_built(const struct player *pplayer);
+static int get_units_killed(const struct player *pplayer);
+static int get_units_lost(const struct player *pplayer);
+static int get_trade(const struct player *pplayer);
+static int get_specialists(const struct player *pplayer);
 
 static const char *area_to_text(int value);
 static const char *percent_to_text(int value);
@@ -148,6 +153,8 @@ static const char *science_to_text(int value);
 static const char *mil_service_to_text(int value);
 static const char *pollution_to_text(int value);
 static const char *culture_to_text(int value);
+static const char *units_to_text(int value);
+static const char *citizens_to_text(int value);
 
 #define GOOD_PLAYER(p) ((p)->is_alive && !is_barbarian(p))
 
@@ -159,19 +166,23 @@ static struct dem_row {
   const char *name;
   int (*get_value) (const struct player *);
   const char *(*to_text) (int);
-  bool greater_values_are_better;
+  bool greater_values_are_better; /* use FALSE when lower is better */
 } rowtable[] = {
-  {'N', N_("Population"),       get_population,  population_to_text,  TRUE },
-  {'A', N_("Land Area"),        get_landarea,    area_to_text,        TRUE },
-  {'S', N_("Settled Area"),     get_settledarea, area_to_text,        TRUE },
-  {'R', N_("Research Speed"),   get_research,    science_to_text,     TRUE },
-  /* TRANS: How literate people are. */
-  {'L', N_("?ability:Literacy"), get_literacy,    percent_to_text,     TRUE },
-  {'P', N_("Production"),       get_production,  production_to_text,  TRUE },
-  {'E', N_("Economics"),        get_economics,   economics_to_text,   TRUE },
-  {'M', N_("Military Service"), get_mil_service, mil_service_to_text, FALSE },
-  {'O', N_("Pollution"),        get_pollution,   pollution_to_text,   FALSE },
-  {'C', N_("Culture"),          get_culture,     culture_to_text,     TRUE }
+  {'N', N_("<td><img class='v' src='/images/e/peasants.png'></td> <td>Population</td>"),       get_population,   population_to_text,  TRUE },
+  {'A', N_("<td><img class='v' src='/images/e/earth.png'></td> <td>Land Area</td>"),           get_landarea,     area_to_text,        TRUE },
+  {'S', N_("<td><img class='v' src='/images/e/settlers.png'></td> <td>Settled Area</td>"),     get_settledarea,  area_to_text,        TRUE },
+  {'R', N_("<td><img class='v' src='/images/e/science.png'></td> <td>Research Speed</td>"),    get_research,     science_to_text,     TRUE },
+  {'L', N_("<td><img class='v' src='/images/e/library.png'></td> <td>Literacy</td>"),          get_literacy,     percent_to_text,     TRUE },
+  {'P', N_("<td><img class='v' src='/images/e/shield.png'></td> <td>Production</td>"),         get_production,   production_to_text,  TRUE },
+  {'E', N_("<td><img class='v' src='/images/e/coinage.png'></td> <td>Economics</td>"),         get_economics,    economics_to_text,   TRUE },
+  {'T', N_("<td><img class='v' src='/images/e/camel.png'></td> <td>Trade Routes</td>"),        get_trade,        economics_to_text,   TRUE },
+  {'s', N_("<td><img class='v' src='/images/e/taxman.png'></td> <td>Specialists</td>"),        get_specialists,  citizens_to_text,    TRUE },
+  {'M', N_("<td><img class='v' src='/images/e/v6.png'></td> <td>Military Service</td>"),       get_mil_service,  mil_service_to_text, TRUE },
+  {'O', N_("<td><img class='v' src='/images/e/pollution.png'></td> <td>Pollution</td>"),       get_pollution,    pollution_to_text,   TRUE },
+  {'C', N_("<td><img class='v' src='/images/e/amphitheater.png'></td> <td>Culture</td>"),      get_culture,      culture_to_text,     TRUE },
+  {'U', N_("<td><img class='v' src='/images/e/hammer.png'></td> <td>Units Built</td>"),        get_units_built,  units_to_text,       TRUE },
+  {'K', N_("<td><img class='v' src='/images/e/war.png'></td> <td>Units Killed</td>"),          get_units_killed, units_to_text,       TRUE },
+  {'D', N_("<td><img class='v' src='/images/e/headstone.png'></td> <td>Units Lost</td>"),      get_units_lost,   units_to_text,       TRUE },
 };
 
 /* Demographics columns. */
@@ -241,7 +252,7 @@ static void historian_generic(struct history_report *report,
   report->turn = game.info.turn;
   players_iterate(pplayer) {
     if (GOOD_PLAYER(pplayer)) {
-      switch(which_news) {
+      switch (which_news) {
       case HISTORIAN_RICHEST:
 	size[j].value = pplayer->economic.gold;
 	break;
@@ -381,10 +392,10 @@ void report_top_five_cities(struct conn_list *dest)
 
     wonders = nr_wonders(size[i].city);
     if (wonders == 0) {
-      cat_snprintf(buffer, sizeof(buffer), _("with no wonders\n"));
+      cat_snprintf(buffer, sizeof(buffer), _("with no Great Wonders\n"));
     } else {
       cat_snprintf(buffer, sizeof(buffer),
-		   PL_("with %d wonder\n", "with %d wonders\n", wonders),
+		   PL_("with %d Great Wonder\n", "with %d Great Wonders\n", wonders),
 		   wonders);}
   }
   page_conn(dest, _("Traveler's Report:"),
@@ -478,6 +489,20 @@ static int get_population(const struct player *pplayer)
 }
 
 /**********************************************************************//**
+  Population of player
+**************************************************************************/
+static int get_specialists(const struct player *pplayer)
+{
+  int total = 0;
+
+  specialist_type_iterate(sp) {
+    total += pplayer->score.specialists[sp];
+  } specialist_type_iterate_end;
+
+  return total;
+}
+
+/**********************************************************************//**
   Number of citizen units of player
 **************************************************************************/
 static int get_pop(const struct player *pplayer)
@@ -531,6 +556,14 @@ static int get_production(const struct player *pplayer)
 static int get_economics(const struct player *pplayer)
 {
   return pplayer->score.bnp;
+}
+
+/**********************************************************************//**
+  Base trade from trade routes of player
+**************************************************************************/
+static int get_trade(const struct player *pplayer)
+{
+  return pplayer->score.traderoutes;
 }
 
 /**********************************************************************//**
@@ -880,6 +913,26 @@ static const char *culture_to_text(int value)
 }
 
 /**********************************************************************//**
+  Construct string containing value followed by unit suitable for
+  units built/killed/lost stats.
+**************************************************************************/
+static const char *units_to_text(int value)
+{
+  /* TRANS: Unit(s) quantity for built/killed/lost */
+  return value_units(value, PL_(" unit", " units", value));  
+}
+
+/**********************************************************************//**
+  Construct string containing value followed by unit suitable for
+  number of citizens.
+**************************************************************************/
+static const char *citizens_to_text(int value)
+{
+  /* TRANS: Unit(s) quantity for built/killed/lost */
+  return value_units(value, PL_(" citizen", " citizens", value));  
+}
+
+/**********************************************************************//**
   Construct one demographics line.
 **************************************************************************/
 static void dem_line_item(char *outptr, size_t out_size,
@@ -889,9 +942,9 @@ static void dem_line_item(char *outptr, size_t out_size,
   if (NULL != pplayer && BV_ISSET(selcols, DEM_COL_QUANTITY)) {
     const char *text = prow->to_text(prow->get_value(pplayer));
 
-    cat_snprintf(outptr, out_size, " %s", text);
+    cat_snprintf(outptr, out_size, " <td>%s</td>", text);
     cat_snprintf(outptr, out_size, "%*s",
-                 18 - (int) get_internal_string_length(text), "");
+                 128 - (int) get_internal_string_length(text), "");
   }
 
   if (NULL != pplayer && BV_ISSET(selcols, DEM_COL_RANK)) {
@@ -908,7 +961,7 @@ static void dem_line_item(char *outptr, size_t out_size,
       }
     } players_iterate_end;
 
-    cat_snprintf(outptr, out_size, _("(ranked %d)"), place);
+    cat_snprintf(outptr, out_size, _("<td>#%d</td>"), place);
   }
    
   if (NULL == pplayer || BV_ISSET(selcols, DEM_COL_BEST)) {
@@ -931,7 +984,7 @@ static void dem_line_item(char *outptr, size_t out_size,
     if (NULL == pplayer
         || (player_has_embassy(pplayer, best_player)
             && (pplayer != best_player))) {
-      cat_snprintf(outptr, out_size, "   %s: %s",
+      cat_snprintf(outptr, out_size, "<td>   %s: %s</td>",
 		   nation_plural_for_player(best_player),
 		   prow->to_text(prow->get_value(best_player)));
     }
@@ -995,8 +1048,8 @@ bool is_valid_demography(const char *demography, int *error)
 **************************************************************************/
 void report_demographics(struct connection *pconn)
 {
-  char civbuf[1024];
-  char buffer[4096];
+  char civbuf[2048];
+  char buffer[8192];
   unsigned int i;
   bool anyrows;
   bv_cols selcols;
@@ -1039,17 +1092,20 @@ void report_demographics(struct connection *pconn)
   }
 
   buffer[0] = '\0';
+  cat_snprintf(buffer, sizeof(buffer), "<table class='dem_table'>");
+
   for (i = 0; i < ARRAY_SIZE(rowtable); i++) {
     if (strchr(game.server.demography, rowtable[i].key)) {
       const char *name = Q_(rowtable[i].name);
 
-      cat_snprintf(buffer, sizeof(buffer), "%s", name);
+      cat_snprintf(buffer, sizeof(buffer), "<tr>%s", name);
       cat_snprintf(buffer, sizeof(buffer), "%*s",
-                   18 - (int) get_internal_string_length(name), "");
+                   128 - (int) get_internal_string_length(name), "");
       dem_line_item(buffer, sizeof(buffer), pplayer, &rowtable[i], selcols);
-      sz_strlcat(buffer, "\n");
+      sz_strlcat(buffer, "</tr>");
     }
   }
+  cat_snprintf(buffer, sizeof(buffer), "</table>");
 
   page_conn(pconn->self, _("Demographics Report:"), civbuf, buffer);
 }
@@ -1444,12 +1500,16 @@ void log_civ_score_now(void)
 
   players_iterate(pplayer) {
     struct plrdata_slot *plrdata = score_log->plrdata + player_index(pplayer);
+
     if (plrdata->name == NULL && GOOD_PLAYER(pplayer)) {
       switch (game.server.scoreloglevel) {
       case SL_HUMANS:
         if (is_ai(pplayer)) {
           break;
         }
+
+        fc__fallthrough; /* No break - continue to actual implementation
+                          * in SL_ALL case if reached here */
       case SL_ALL:
         fprintf(score_log->fp, "addplayer %d %d %s\n", game.info.turn,
               player_number(pplayer), player_name(pplayer));
@@ -1468,6 +1528,9 @@ void log_civ_score_now(void)
           /* If a human player toggled into AI mode, don't break. */
           break;
         }
+
+        fc__fallthrough; /* No break - continue to actual implementation
+                          * in SL_ALL case if reached here */
       case SL_ALL:
         if (strcmp(plrdata->name, player_name(pplayer)) != 0) {
           log_debug("player names does not match '%s' != '%s'", plrdata->name,

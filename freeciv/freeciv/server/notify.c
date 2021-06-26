@@ -104,9 +104,10 @@ static void package_event_full(struct packet_chat_msg *packet,
 void vpackage_chat_msg(struct packet_chat_msg *packet,
                        const struct connection *sender,
                        const struct ft_color color,
+                       const enum event_type msgclass,
                        const char *format, va_list vargs)
 {
-  package_event_full(packet, NULL, E_CHAT_MSG, sender, color, format, vargs);
+  package_event_full(packet, NULL, msgclass, sender, ftc_any, format, vargs);
 }
 
 /**********************************************************************//**
@@ -123,12 +124,13 @@ void vpackage_chat_msg(struct packet_chat_msg *packet,
 void package_chat_msg(struct packet_chat_msg *packet,
                       const struct connection *sender,
                       const struct ft_color color,
+                      const enum event_type msgclass,
                       const char *format, ...)
 {
   va_list args;
 
   va_start(args, format);
-  vpackage_chat_msg(packet, sender, color, format, args);
+  vpackage_chat_msg(packet, sender, ftc_any, msgclass, format, args);
   va_end(args);
 }
 

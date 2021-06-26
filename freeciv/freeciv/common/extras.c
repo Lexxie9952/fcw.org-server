@@ -32,7 +32,6 @@ static struct extra_type extras[MAX_EXTRA_TYPES];
 
 static struct user_flag user_extra_flags[MAX_NUM_USER_EXTRA_FLAGS];
 
-static struct extra_type_list *category_extra[ECAT_COUNT];
 static struct extra_type_list *caused_by[EC_LAST];
 static struct extra_type_list *removed_by[ERM_COUNT];
 static struct extra_type_list *unit_hidden;
@@ -49,9 +48,6 @@ void extras_init(void)
   }
   for (i = 0; i < ERM_COUNT; i++) {
     removed_by[i] = extra_type_list_new();
-  }
-  for (i = 0; i < ECAT_COUNT; i++) {
-    category_extra[i] = extra_type_list_new();
   }
   unit_hidden = extra_type_list_new();
 
@@ -70,7 +66,7 @@ void extras_init(void)
     extras[i].causes = 0;
     extras[i].rmcauses = 0;
     extras[i].helptext = NULL;
-    extras[i].disabled = FALSE;
+    extras[i].ruledit_disabled = FALSE;
     extras[i].visibility_req = A_NONE;
   }
 }
@@ -109,11 +105,6 @@ void extras_free(void)
   for (i = 0; i < ERM_COUNT; i++) {
     extra_type_list_destroy(removed_by[i]);
     removed_by[i] = NULL;
-  }
-
-  for (i = 0; i < ECAT_COUNT; i++) {
-    extra_type_list_destroy(category_extra[i]);
-    category_extra[i] = NULL;
   }
 
   extra_type_list_destroy(unit_hidden);
@@ -250,16 +241,6 @@ struct extra_type_list *extra_type_list_by_cause(enum extra_cause cause)
 }
 
 /************************************************************************//**
-  Returns extra types of the category.
-****************************************************************************/
-struct extra_type_list *extra_type_list_for_category(enum extra_category cat)
-{
-  fc_assert(cat < ECAT_LAST);
-
-  return category_extra[cat];
-}
-
-/************************************************************************//**
   Returns extra types that hide units.
 ****************************************************************************/
 struct extra_type_list *extra_type_list_of_unit_hiders(void)
@@ -304,16 +285,6 @@ void extra_to_caused_by_list(struct extra_type *pextra, enum extra_cause cause)
   fc_assert(cause < EC_LAST);
 
   extra_type_list_append(caused_by[cause], pextra);
-}
-
-/************************************************************************//**
-  Add extra type to list of extras of a category
-****************************************************************************/
-void extra_to_category_list(struct extra_type *pextra, enum extra_category cat)
-{
-  fc_assert(cat < ECAT_LAST);
-
-  extra_type_list_append(category_extra[cat], pextra);
 }
 
 /************************************************************************//**
@@ -450,6 +421,51 @@ bool player_can_build_extra(const struct extra_type *pextra,
 }
 
 /************************************************************************//**
+  Tells if player can place extra on tile.
+****************************************************************************/
+bool player_can_place_extra(const struct extra_type *pextra,
+                            const struct player *pplayer,
+                            const struct tile *ptile)
+{
+  if (pextra->infracost == 0) {
+    return FALSE;
+  }
+
+  if (ptile->placing != NULL) {
+    /* Already placing something */
+    return FALSE;
+  }
+
+  if (tile_terrain(ptile)->placing_time <= 0) {
+    /* Can't place to this terrain */
+    return FALSE;
+  }
+
+  if (game.info.borders != BORDERS_DISABLED) {
+    if (tile_owner(ptile) != pplayer) {
+      return FALSE;
+    }
+  } else {
+    struct city *pcity = tile_worked(ptile);
+
+    if (pcity == NULL || city_owner(pcity) != pplayer) {
+      return FALSE;
+    }
+  }
+
+  /* Placing extras is not allowed to tiles where also workers do changes. */
+  unit_list_iterate(ptile->units, punit) {
+    tile_changing_activities_iterate(act) {
+      if (punit->activity == act) {
+        return FALSE;
+      }
+    } tile_changing_activities_iterate_end;
+  } unit_list_iterate_end;
+
+  return player_can_build_extra(pextra, pplayer, ptile);
+}
+
+/************************************************************************//**
   Tells if unit can build extra on tile.
 ****************************************************************************/
 bool can_build_extra(const struct extra_type *pextra,
@@ -511,6 +527,7 @@ bool player_can_remove_extra(const struct extra_type *pextra,
     return FALSE;
   }
 
+  /* For huts, it's not checked if player has any non-HUT_NOTHING units */
   return are_reqs_active(pplayer, tile_owner(ptile), NULL, NULL, ptile,
                          NULL, NULL, NULL, NULL, NULL, &pextra->rmreqs,
                          RPT_POSSIBLE);
@@ -518,22 +535,20 @@ bool player_can_remove_extra(const struct extra_type *pextra,
 
 /************************************************************************//**
   Tells if unit can remove extra from tile.
+  Does not examine action requirements if an action is required for it.
 ****************************************************************************/
 bool can_remove_extra(struct extra_type *pextra,
                       const struct unit *punit,
                       const struct tile *ptile)
 {
-  struct player *pplayer;
 
   if (!can_extra_be_removed(pextra, ptile)) {
     return FALSE;
-  } 
+  }
 
-  pplayer = unit_owner(punit);
-
-  return are_reqs_active(pplayer, tile_owner(ptile), NULL, NULL, ptile,
-                         punit, unit_type_get(punit), NULL, NULL, NULL,
-                         &pextra->rmreqs, RPT_CERTAIN);
+  return are_reqs_active(unit_owner(punit), tile_owner(ptile), NULL, NULL,
+                         ptile, punit, unit_type_get(punit), NULL, NULL,
+                         NULL, &pextra->rmreqs, RPT_CERTAIN);
 }
 
 /************************************************************************//**
@@ -597,6 +612,63 @@ bool extra_conflicting_on_tile(const struct extra_type *pextra,
     }
   } extra_type_iterate_end;
 
+  return FALSE;
+}
+
+/************************************************************************//**
+  Returns TRUE iff an extra on the tile is a hut (removed by entering).
+  The effect of entering is handled by unit_enter_hut() in unittools.c
+****************************************************************************/
+bool hut_on_tile(const struct tile *ptile)
+{
+  extra_type_by_rmcause_iterate(ERM_ENTER, extra) {
+    if (tile_has_extra(ptile, extra)) {
+      return TRUE;
+    }
+  } extra_type_by_rmcause_iterate_end;
+
+  return FALSE;
+}
+
+/************************************************************************//**
+  Returns TRUE iff the unit can enter any hut on the tile.
+  For the unit, tests only its class and its owner.
+****************************************************************************/
+bool unit_can_enter_hut(const struct unit *punit,
+                        const struct tile *ptile)
+{
+  if (HUT_NORMAL != unit_class_get(punit)->hut_behavior) {
+    return FALSE;
+  }
+  extra_type_by_rmcause_iterate(ERM_ENTER, extra) {
+    if (tile_has_extra(ptile, extra)
+    && are_reqs_active(unit_owner(punit), tile_owner(ptile), NULL, NULL,
+                       ptile, NULL, NULL, NULL, NULL, NULL, &extra->rmreqs,
+                       RPT_POSSIBLE)){
+      return TRUE;
+    }
+  } extra_type_by_rmcause_iterate_end;
+  return FALSE;
+}
+
+/************************************************************************//**
+  Returns TRUE iff the unit can enter or frighten any hut on the tile.
+  For the unit, tests only its class and its owner.
+****************************************************************************/
+bool unit_can_displace_hut(const struct unit *punit,
+                           const struct tile *ptile)
+{
+  if (HUT_NOTHING == unit_class_get(punit)->hut_behavior) {
+    return FALSE;
+  }
+  extra_type_by_rmcause_iterate(ERM_ENTER, extra) {
+    if (tile_has_extra(ptile, extra)
+    && are_reqs_active(unit_owner(punit), tile_owner(ptile), NULL, NULL,
+                       ptile, NULL, NULL, NULL, NULL, NULL, &extra->rmreqs,
+                       RPT_POSSIBLE)){
+      return TRUE;
+    }
+  } extra_type_by_rmcause_iterate_end;
   return FALSE;
 }
 
@@ -885,7 +957,7 @@ bool is_extra_removed_by_action(const struct extra_type *pextra,
 ****************************************************************************/
 enum extra_cause activity_to_extra_cause(enum unit_activity act)
 {
-  switch(act) {
+  switch (act) {
   case ACTIVITY_IRRIGATE:
     return EC_IRRIGATION;
   case ACTIVITY_MINE:
@@ -906,7 +978,7 @@ enum extra_cause activity_to_extra_cause(enum unit_activity act)
 ****************************************************************************/
 enum extra_rmcause activity_to_extra_rmcause(enum unit_activity act)
 {
-  switch(act) {
+  switch (act) {
   case ACTIVITY_PILLAGE:
     return ERM_PILLAGE;
   case ACTIVITY_POLLUTION:

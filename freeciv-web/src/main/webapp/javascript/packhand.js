@@ -22,6 +22,8 @@
 // keeps track of when our info for this is fresh from either source. 
 var income_needs_refresh = false;
 
+var last_ground_attack_time = 0;
+
 /* Freeciv Web Client.
    This file contains the handling-code for packets from the civserver.
 */
@@ -71,15 +73,15 @@ function handle_server_join_reply(packet)
     client.conn.id = packet['conn_id'];
 
     if (get_client_page() == PAGE_MAIN
-  || get_client_page() == PAGE_NETWORK
-  || get_client_page() == PAGE_GGZ) {
+        || get_client_page() == PAGE_NETWORK) {
       set_client_page(PAGE_START);
     }
 
     client_info = {
-      "pid"          : packet_client_info,
-      "gui"          : GUI_WEB,
-      "distribution" : ""
+      "pid"           : packet_client_info,
+      "gui"           : GUI_WEB,
+      "emerg_version" : 0,
+      "distribution"  : ""
     };
     send_request(JSON.stringify(client_info));
 
@@ -90,26 +92,7 @@ function handle_server_join_reply(packet)
       change_ruleset($.getUrlVar('ruleset'));
     }
 
-    if (renderer == RENDERER_WEBGL && !observing) {
-       if (graphics_quality == QUALITY_LOW) {
-         // WebGL renderer on mobile devices needs to use very little RAM.
-         send_message("/set size 2");
-       }
-       // Reduce the amount of rivers, it's kind of ugly at the moment.
-       send_message("/set wetness 25");
-
-       // Freeciv WebGL doesn't support map wrapping yet.
-       send_message("/set topology=");
-
-       // Less hills will be more user-friendly in 3D mode.
-       send_message("/set steepness 12");
-
-     }
-
     if (autostart) {
-      if (renderer == RENDERER_WEBGL) {
-        $.blockUI({ message: '<h2>Generating terrain map model...</h2>' });
-      }
       if (loadTimerId == -1) {
         wait_for_text("You are logged in as", pregame_start_game);
       } else {
@@ -120,8 +103,8 @@ function handle_server_join_reply(packet)
     }
 
   } else {
-
     swal("You were rejected from the game.", (packet['message'] || ""), "error");
+    setSwalTheme();
     client.conn.id = -1;/* not in range of conn_info id */
     set_client_page(PAGE_MAIN);
 
@@ -192,16 +175,67 @@ function handle_tile_info(packet)
   if (tiles != null) {
     packet['extras'] = new BitVector(packet['extras']);
 
-    if (renderer == RENDERER_WEBGL) {
-      var old_tile = $.extend({}, tiles[packet['tile']]);
-      webgl_update_tile_known(tiles[packet['tile']], packet);
-      update_tile_extras($.extend(old_tile, packet));
-    }
-
     tiles[packet['tile']] = $.extend(tiles[packet['tile']], packet);
   }
 }
 
+
+/**************************************************************************
+  intercepts the E_UNIT_ACTION_TARGET_HOSTILE event which is only used
+  for ground attacks, then processes what needs to happen from it. 
+**************************************************************************/
+function handle_iPillage_event(message, tile_id)  // iPillage.
+{
+  var ptile = tiles[tile_id];
+  var ptype;
+  var delay = 0;
+
+  message=message.substring(8); // removes "💥 Your ", leaving, "Ground Strike Fighter destroyed the Roman Quay with a Ground Strike"
+
+  for (ptype_id in unit_types) {
+    // Find out the unit_type who did this hostile deed !
+    ptype = unit_types[ptype_id];
+    if (message.startsWith(ptype['name'])) {
+      // The alt sound is preferred for alternate attack types:
+      var sskey = ptype['sound_fight_alt'];
+      if (!sskey) sskey = ptype['sound_fight']; //fallback
+      if (!soundset[sskey]) sskey = ptype['sound_fight']; //fallback
+      //console.log("calling playsound with sskey:"+sskey);
+      play_hostile_event_sound(sskey, ptile, ptype);
+
+      break;
+    }
+  }
+  // Activate explosion on the tile also.
+  delay = 500; // synchronise explosion with sound effect
+  // times for each unit are in the top of unit.js:
+  if (ptype && unit_pillage_sound_delay_times[ptype.rule_name])
+    delay += unit_pillage_sound_delay_times[ptype.rule_name];
+
+  delayed_explosion(tile_id, delay);
+}
+function delayed_explosion(tile_id, delay_ms) {
+  setTimeout(() => { delayed_explosion_helper(tile_id);}, delay_ms);
+}
+function delayed_explosion_helper(tile_id) {
+  explosion_anim_map[tile_id] = 25;
+  anim_swords_instead[tile_id] = false;
+}
+
+/**************************************************************************
+ Intercepts server messages about city governor and puts them in the 
+ Governor tab where they can be read in timely manner, since map chatbox
+ is not open during this time.
+**************************************************************************/
+function handle_city_governor_event(message)
+{
+  global_governor_message = message;
+  global_governor_message = "<b>"+global_governor_message+"</b>";
+  $("#cma_unsaved_warning").html(global_governor_message);
+  $("#cma_unsaved_warning").show();
+  // Put an expiration on it.
+  setTimeout(function() { global_governor_message=""; }, 10000);
+}
 
 /**************************************************************************
  100% complete.
@@ -211,13 +245,44 @@ function handle_chat_msg(packet)
   var message = packet['message'];
   var event = packet['event'];
   var conn_id = packet['conn_id'];
-  var ptile = packet['tile'];
+  var tile_id = packet['tile'];
+
+  const DEFAULT_OFF_WHITE_COLOR = "#D0C8C0";
+
+  // Dirty way to remove the server forcing blinding white font tags into every 
+  // event we get, disallowing us to set the classes ourselves!
+  // TODO: find out where the server is doing this and remove it: it will
+  // decrease bandwidth volume also!
+  
+  
+  /* Shouldn't be needed anymore:
+  if (event != E_CHAT_MSG) message.replace('<font color="#FFFFFF">', '');
+  else message.replace("#FFFFFF", DEFAULT_OFF_WHITE_COLOR);
+  */
 
   if (message == null) return;
   if (event == null || event < 0 || event >= E_UNDEFINED) {
     console.log('Undefined message event type');
     console.log(packet);
     packet['event'] = E_UNDEFINED;
+  }
+
+  /* Event interceptions... used to trigger client processing */
+  switch (event) {
+    case E_UNIT_ACTION_TARGET_HOSTILE:
+      handle_iPillage_event(message, tile_id);
+      break;
+    case E_CITY_CMA_RELEASE:
+      handle_city_governor_event(message);
+      break;
+    case E_IMP_SOLD:
+      if (!suppress_event_sound()) play_sound(soundset["e_imp_sold"]);
+      break;
+    case E_CHAT_MSG_PRIVATE_RCVD:
+      if (!suppress_event_sound()) play_sound("iphone1.ogg");
+      break;
+    //case E_CHAT_MSG_PRIVATE_SENT:
+    //  break;
   }
 
   if (connections[conn_id] == null) {
@@ -230,26 +295,27 @@ function handle_chat_msg(packet)
         if (message.indexOf("/metamessage") != -1) return;  //don't spam message dialog on game start.
         if (message.indexOf("Metaserver message string") != -1) return;  //don't spam message dialog on game start.
 
-        if (ptile != null && ptile > 0) {
+        if (tile_id != null && tile_id > 0) {
         message = "<span class='chatbox_text_tileinfo' "
-            + "onclick='center_tile_id_click(" + ptile + ");'>" + message.replace("FFFFFF", "B0F0FF") + "</span>";
+            + "onclick='center_tile_id_click(" + tile_id + ");'>" + message.replace(DEFAULT_OFF_WHITE_COLOR, "B0F0FF") + "</span>";
         }
 
     if (is_speech_supported()) speak(message);
     }
   }
 
-  if (message.includes("%%")) message = decode_user_hyperlinks(message);
+  if (message.includes("%%") || message.includes("[`")) message = decode_user_hyperlinks(message);
 
   packet['message'] = message;
   add_chatbox_text(packet);
 
   // Do sounds for special messages
   //console.log("Event type = "+packet['event']);
+  // TODO: these can now go into event interceptor above by looking at event class instead of here.
   if (packet['event']==1 || packet['event']==77) /* 1==E_CITY_LOST, 77==E_UNIT_WIN_ATT, there are in events.h and are the two
   types of event that come back for cities being conquered by someone.*/
   {
-    if (message.includes("; your lootings accumulate to ")) play_sound(soundset["e_victor"]);
+    if (message.includes(" your lootings accumulate to ")) play_sound(soundset["e_victor"]);
     else if (message.includes("You have liberated ")) play_sound(soundset["e_liberate"]);
     else if (message.includes(" gold from the city.")) play_sound(soundset["e_conquer"]);
   }
@@ -263,7 +329,8 @@ function handle_chat_msg(packet)
 function recenter_flare_tile(tile_id)
 {
   center_tile_id(tile_id);
-  explosion_anim_map[tile_id] = 25;
+  explosion_anim_map[tile_id] = 50;
+  show_tile_marker_instead[tile_id] = true;
 }
 
 /**************************************************************************
@@ -277,21 +344,34 @@ function decode_user_hyperlinks(message)
   // to onself, it is probably a SafeLink. SafeLinks are forced to go to oneself only. 
   // In any case, all links in messages going from oneself to oneself will be interpreted
   // as such. Therefore, if this is the case, repackage the presentation of this message here:
+  /* Old code for fixing historic chat messages and Private Links.
   if (client.conn.playing && client.conn.playing['name']) {
     pname = client.conn.playing.name;
     // Historic message from oneself to oneself
     if (message.includes("{"+pname+" -> ")) {
       message = message.replace("{"+pname+" -> "+pname+"}: ", "<font color='#AFA8A8'>{Private Link}: </font>");
-      message = message.replace("#A020F0","#FFFFFF"); //private msg colour triggers sound: remove
+      message = message.replace("#A020F0",DEFAULT_OFF_WHITE_COLOR); //private msg colour triggers sound: remove
     } else if (message.includes("->{"+pname+"}: ")) {  // Real-time message from oneself to oneself}
       message = message.replace("->{"+pname+"}: ", "<font color='#AFA8A8'>{Private Link}: </font>");
-      message = message.replace("#A020F0","#FFFFFF"); //private msg colour triggers sound: remove
+      message = message.replace("#A020F0",DEFAULT_OFF_WHITE_COLOR); //private msg colour triggers sound: remove
     }
-  }
+  }*/
 
+  // Freemoji:  (emoji/info icons, etc.)
+  var assert_escape = 0;
+  while (message.includes("[`")) {
+      if (assert_escape++ > 20) break; // insurance against freaky or erroneous markups
+
+      var freemoji_name = message.substring(message.indexOf("[`") + 2, message.indexOf("`]"));
+      var replace_me = "[`"+freemoji_name+"`]";
+
+      var element = html_emoji_from_universal(freemoji_name);
+      message = message.replace( replace_me, (element) );
+  }
+  
   // EXTRACT ENCODED TILE LINKS
   if (message.includes("%%tile")) {
-    var assert_escape = 0;
+    assert_escape = 0;
     var tile_x, tile_y, tile_link;
     var tile_extract, tile_id;
     var pcity, city_name;
@@ -316,9 +396,9 @@ function decode_user_hyperlinks(message)
     }
   }  // TO DO: Hover text the territory info, terrain type
 
-  // EXTRACT ENCODED UNIT LINK
+  // EXTRACT ENCODED UNIT LINK... TODO... 4Mar2021 and previous commits over the month broke this to only give coordinates.
   if (message.includes("%%unit")) {
-    var assert_escape = 0;
+    assert_escape = 0;
     var unit_link, unit_name;
     var unit_extract, unit_id;
 
@@ -433,7 +513,6 @@ function handle_web_city_info_addition(packet)
   packet = cities[packet['id']];
 
   /* Continue with the city_info processing. */
-
   if (active_city != null) {
     show_city_dialog(active_city);
   }
@@ -445,11 +524,6 @@ function handle_web_city_info_addition(packet)
   if (worklist_dialog_active && active_city != null) {
     city_worklist_dialog(active_city);
   }
-
-  if (renderer == RENDERER_WEBGL) {
-    update_city_position(index_to_tile(packet['tile']));
-  }
-
   /* Update active tabs affected by this info */
   bulbs_output_updater.update();
   var active_tab = $("#tabs").tabs("option", "active"); 
@@ -475,10 +549,6 @@ function handle_city_short_info(packet)
     cities[packet['id']] = packet;
   } else {
     cities[packet['id']] = $.extend(cities[packet['id']], packet);
-  }
-
-  if (renderer == RENDERER_WEBGL) {
-    update_city_position(index_to_tile(packet['tile']));
   }
 
   /* Update active tabs affected by this info */
@@ -553,6 +623,7 @@ function handle_web_player_info_addition(packet)
       update_game_status_panel();
       update_net_income();
       income_needs_refresh = false;
+      income_calculated_by_client = false;
     }
   }
   update_player_info_pregame();
@@ -560,6 +631,11 @@ function handle_web_player_info_addition(packet)
   if (is_tech_tree_init && tech_dialog_active) update_tech_screen();
 
   assign_nation_color(players[packet['playerno']]['nation']);
+
+  // Savegame can be considered loaded after last player packet is received
+  // and color processing is completed for their national colors:
+  if (packet['playerno'] == getLength(players)-1)
+    $.unblockUI();
 }
 
 /* 100% complete */
@@ -602,15 +678,6 @@ function handle_map_info(packet)
 
   mapdeco_init();
 
-  /* TODO: generate_citydlg_dimensions();*/
-
-  /* TODO: calculate_overview_dimensions();*/
-
-  if (renderer == RENDERER_WEBGL) {
-    mapview_model_width = Math.floor(MAPVIEW_ASPECT_FACTOR * map['xsize']);
-    mapview_model_height = Math.floor(MAPVIEW_ASPECT_FACTOR * map['ysize']);
-  }
-
 }
 
 /* 100% complete */
@@ -652,21 +719,33 @@ function handle_ruleset_control(packet)
 {
   ruleset_control = packet;
 
+  // Set Flags for hard-coded client behaviors/optimisations specific to rulesets: *************************
   for (i=0;i<CRF_LAST;i++)
     client_rules_flag[i] = false; // reset, maybe loading new rules
 
   client_rules_flag[CRF_MINOR_NUKES]=true; // all known rules have 3x3 fission nukes at this time
 
-  // Flags for hard-coded client behaviors/optimisations specific to rulesets:
-  switch (ruleset_control['name']) {
+  var rules = ruleset_control['name'];
+
+  // Establish legacy compatibility for all MP2 rulesets from Brava onward: 
+  if (rules.startsWith("MP2")) {
+    rules = "MP2";
+  }
+  // Legacy rules block:
+  switch (rules) {
+    case "MP2":
+    case "Avant-garde 2":
     case "Avant-garde":
+      client_rules_flag[CRF_MP2_A]=true;
       client_rules_flag[CRF_RADAR_TOWER]=true;
       client_rules_flag[CRF_EXTRA_HIDEOUT]=true;
       client_rules_flag[CRF_EXTRA_QUAY]=true;
       client_rules_flag[CRF_MAJOR_NUKES]=true; // ruleset has them and server setting to disallow them
+      client_rules_flag[CRF_SURGICAL_PILLAGE]=true;
       $("#order_airbase").attr("title", "Build Airbase/Radar (Shift-E)");
 
     case "Multiplayer-Evolution ruleset":
+      client_rules_flag[CRF_MP2]=true;
       client_rules_flag[CRF_CARGO_HEURISTIC]=true;
       client_rules_flag[CRF_ASMITH_SPECIALISTS]=true;
       client_rules_flag[CRF_OASIS_IRRIGATE]=true;
@@ -674,13 +753,13 @@ function handle_ruleset_control(packet)
       client_rules_flag[CRF_LEGION_WORK]=true
       client_rules_flag[CRF_MASONRY_FORT]=true;
       client_rules_flag[CRF_CANALS]=true;
-   // client_rules_flag[CRF_NO_UNIT_GOLD_UPKEEP]=true;
       client_rules_flag[CRF_MP2_SPECIAL_UNITS]=true;
       client_rules_flag[CRF_COMMIE_BLDG_UPKEEP]=true;
       client_rules_flag[CRF_PACTS_SANS_EMBASSY]=true;
       client_rules_flag[CRF_TESLA_UPGRADE_DISCOUNT]=true;
       client_rules_flag[CRF_NO_WASTE]=true;
-      client_rules_flag[CRF_DEMOCRACY_NONCORRUPT] = true;
+      client_rules_flag[CRF_MAGLEV] = true;
+      client_rules_flag[CRF_TRIREME_FUEL] = true;
     break;
 
     case "Multiplayer-Plus ruleset":
@@ -688,26 +767,46 @@ function handle_ruleset_control(packet)
       client_rules_flag[CRF_NO_UNIT_GOLD_UPKEEP]=true;
       client_rules_flag[CRF_PACTS_SANS_EMBASSY]=true;
       client_rules_flag[CRF_NO_WASTE]=true;
-      client_rules_flag[CRF_DEMOCRACY_NONCORRUPT] = true;
     break;
 
     case "Multiplayer ruleset":
       client_rules_flag[CRF_CARGO_HEURISTIC]=true;
       client_rules_flag[CRF_NO_UNIT_GOLD_UPKEEP]=true;
       client_rules_flag[CRF_NO_WASTE]=true;
-      client_rules_flag[CRF_DEMOCRACY_NONCORRUPT] = true;
     break;
 
     case "Classic ruleset":
       client_rules_flag[CRF_CARGO_HEURISTIC]=true;
       client_rules_flag[CRF_NO_UNIT_GOLD_UPKEEP]=true;
       client_rules_flag[CRF_NO_WASTE]=true;
-      client_rules_flag[CRF_DEMOCRACY_NONCORRUPT] = true;
     break;
 
     case "Civ2Civ3 ruleset":
+      client_rules_flag[CRF_MAGLEV] = true;
     case "Sandbox ruleset":
-      client_rules_flag[CRF_COMMIE_BLDG_UPKEEP]=true;
+      client_rules_flag[CRF_NO_BASES_ON_RIVERS] = true;
+      client_rules_flag[CRF_COMMIE_BLDG_UPKEEP] = true;
+    break;
+  }
+  /* Flags for hard-coded client behaviors/optimisations specific to rulesets,
+     for MP2 Brava and onward:  ALSO, if a setting becomes false in later version
+     these client_rules_flag[_] =false statements go here to avoid the chronologic
+     override logic above */
+  switch (ruleset_control['name']) {
+    case "MP2 Caravel":
+      client_rules_flag[CRF_MP2_C] = true;
+      client_rules_flag[CRF_SIEGE_RAM] = true;
+      client_rules_flag[CRF_MARINE_BASES] = true;
+      client_rules_flag[CRF_MARINE_RANGED] = true;
+      client_rules_flag[CRF_BSHIP_BOMBARD] = true;
+      client_rules_flag[CRF_RECYCLING_DISCOUNT] = true;      
+      client_rules_flag[CRF_COLOSSUS_DISCOUNT] = true;      
+      client_rules_flag[CRF_SPECIAL_UNIT_ATTACKS] = true;      
+
+      case "MP2 Brava":
+      // flags for brava that don't override/contradict caravel
+      client_rules_flag[CRF_SEABRIDGE] = true;
+      client_rules_flag[CRF_MP2_B] = true;
     break;
   }
 
@@ -748,17 +847,28 @@ function handle_ruleset_control(packet)
     if (ename == "Railroad") delete window["EXTRA_RAIL"];
     else if (ename == "Oil Well") delete window["EXTRA_OIL_WELL"];
     else if (ename == "Minor Tribe Village") delete window["EXTRA_HUT"];
+    else if (typeof EXTRA_SEABRIDGE !== 'undefined') {
+      if (ename == "Sea Bridge") delete window["EXTRA_SEABRIDGE"];
+    }
     else if (typeof EXTRA_FORT !== 'undefined') { //makes sure it's defined first
       if (ename == "Fort") delete window["EXTRA_FORT"]; ///// 
     } else if (typeof EXTRA_NAVALBASE !== 'undefined') {
         if (ename =="Naval Base") delete window["EXTRA_NAVALBASE"]
-    } 
+    } else if (typeof EXTRA_CASTLE !== 'undefined') {
+      if (ename =="Castle") delete window["EXTRA_CASTLE"]
+    } else if (typeof EXTRA_BUNKER !== 'undefined') {
+      if (ename =="Castle") delete window["EXTRA_BUNKER"]
+    }
   }
   extras = {};
 
   /* Reset legal diplomatic clauses. */
   clause_infos = {};
 
+  // Granularity. From MP2_C onward, some units may have non-integer attack scores.
+  // Put these into the client stored data for unit_types so that warcalc and helptext
+  // will show perfect info:
+  
   /* TODO: implement rest.
    * Some ruleset packets don't have handlers *yet*. Remember to clean up
    * when they are implemented:
@@ -775,7 +885,6 @@ function handle_ruleset_control(packet)
    *   handle_ruleset_terrain_flag
    *   handle_ruleset_achievement
    *   handle_ruleset_tech_flag
-   *   handle_ruleset_action_enabler
    *   handle_ruleset_nation_sets
    *   handle_ruleset_style
    *   handle_ruleset_music
@@ -785,7 +894,27 @@ function handle_ruleset_control(packet)
    *   handle_rulesets_ready
    *   handle_nation_availability
    */
-
+}
+/**************************************************************************
+  Apply internal ruleset effects used for non-integer granular combat 
+  scores. Assures accuracy for: warcalc, manual helptext, city prod list,
+  etc.
+**************************************************************************/
+function handle_non_integer_combat_scores(key)
+{
+  if (unit_types[key]['name']=="Falconeers") {
+    unit_types[key].defense_strength *= 0.5;
+  }
+  else if (unit_types[key]['name']=="Escort Fighter") {
+    unit_types[key].attack_strength += 0.5;
+  }
+  else if (unit_types[key]['name']=="Fighter") {
+    unit_types[key].defense_strength += 0.5; // easier than *= 1.666forever
+  }
+  else {
+    return; // skip message
+  }
+  console.log("Non-integer combat strength added to warcalc data for "+unit_types[key]['name'])
 }
 
 /**************************************************************************
@@ -835,11 +964,9 @@ function handle_server_shutdown(packet)
 function handle_nuke_tile_info(packet)
 {
   var ptile = index_to_tile(packet['tile']);
-  if (renderer == RENDERER_WEBGL) {
-    render_nuclear_explosion(ptile);
-  } else {
-    ptile['nuke'] = 60;
-  }
+
+  ptile['nuke'] = 60;
+
   play_sound('nuclear_distant.ogg');
 
 }
@@ -881,8 +1008,8 @@ function handle_city_name_suggestion_info(packet)
 }
 
 /**************************************************************************
-  Handle the response the a request asking what buildings a potential
-  victim of targeted sabotage city victim.
+  PID 45. Handle the response the a request asking what buildings a
+  potential victim of targeted sabotage city victim.
 **************************************************************************/
 function handle_city_sabotage_list(packet)
 {
@@ -891,7 +1018,7 @@ function handle_city_sabotage_list(packet)
                 + "the player. That is unimplemented.");
   }
 
-  popup_sabotage_dialog(game_find_unit_by_number(packet['diplomat_id']),
+  popup_sabotage_dialog(game_find_unit_by_number(packet['actor_id']),
                         game_find_city_by_number(packet['city_id']),
                         new BitVector(packet['improvements']),
                         packet['act_id']);
@@ -930,21 +1057,18 @@ function handle_unit_remove(packet)
     return;
   }
 
-  var funits = get_units_in_focus();
-  if (funits != null && funits.length == 1 && funits[0]['id'] == packet['unit_id']) {
-    /* if the unit in focus is removed, then advance the unit focus. */
-    advance_unit_focus(false);
+  /* Close the action selection dialog if the actor unit is lost */
+  if (action_selection_in_progress_for === punit.id) {
+    action_selection_close();
+    /* Open another action selection dialog if there are other actors in the
+     * current selection that want a decision. */
+    action_selection_next_in_focus(punit.id);
   }
 
-  /* TODO: Close diplomat dialog if the diplomat is lost */
   /* TODO: Notify agents. */
 
   clear_tile_unit(punit);
   client_remove_unit(punit);
-
-  if (renderer == RENDERER_WEBGL) {
-    update_unit_position(index_to_tile(punit['tile']));
-  }
 
 }
 
@@ -1007,19 +1131,27 @@ function handle_unit_packet_common(packet_unit)
 
   if (units[packet_unit['id']] == null) {
     /* This is a new unit. */
-    unit_actor_wants_input(packet_unit);
+    if (should_ask_server_for_actions(packet_unit)) {
+      action_decision_request(packet_unit);
+    }
     packet_unit['anim_list'] = [];
     units[packet_unit['id']] = packet_unit;
     units[packet_unit['id']]['facing'] = 6;
   } else {
-    if (units[packet_unit['id']]['action_decision_want']
-        != packet_unit['action_decision_want']) {
-      /* The unit's action_decision_want has changed. */
-      unit_actor_wants_input(packet_unit);
+    if (punit['action_decision_want'] != packet_unit['action_decision_want']
+        && should_ask_server_for_actions(packet_unit)) {
+      /* The unit wants the player to decide. */
+      action_decision_request(packet_unit);
     }
 
     update_unit_anim_list(units[packet_unit['id']], packet_unit);
     units[packet_unit['id']] = $.extend(units[packet_unit['id']], packet_unit);
+
+    for (var i = 0; i < current_focus.length; i++) {
+      if (current_focus[i]['id'] == packet_unit['id']) {
+        $.extend(current_focus[i], packet_unit);
+      }
+    }
   }
 
   update_tile_unit(units[packet_unit['id']]);
@@ -1031,11 +1163,6 @@ function handle_unit_packet_common(packet_unit)
     if (current_focus[0]['done_moving'] != packet_unit['done_moving']) {
       update_unit_focus();
     }
-  }
-
-  if (renderer == RENDERER_WEBGL) {
-    if (punit != null) update_unit_position(old_tile);
-    update_unit_position(index_to_tile(units[packet_unit['id']]['tile']));
   }
 
   /* TODO: update various dialogs and mapview. */
@@ -1050,13 +1177,8 @@ function handle_unit_combat_info(packet)
   var tile_x = tiles[attacker['tile']]['x'];
   var tile_y = tiles[attacker['tile']]['y'];
 
-  if (renderer == RENDERER_WEBGL) {
-    if (attacker_hp == 0) animate_explosion_on_tile(attacker['tile'], 0);
-    if (defender_hp == 0) animate_explosion_on_tile(defender['tile'], 0);
-    // TO DO: WEBGL is missing out on all this below, which we should put in after it's final
-  } 
-  
-  else {
+
+
       // Might be null/false if observer
       var pplayer = null;
       var player_nation = null;
@@ -1075,15 +1197,21 @@ function handle_unit_combat_info(packet)
 
       // When an attacker loses, play sound for defender if: a combatant is visible OR the player was involved in the battle. 
       if (attacker_hp == 0 && (combatant_visible || player_is_combatant) )  {
-        if (combatant_visible) explosion_anim_map[attacker['tile']] = 25;
+        var win_type = unit_type(defender)['name'];
+        var swords = (units_pregunpowder.indexOf(win_type) >= 0);
+        if (combatant_visible) explosion_anim_map[attacker['tile']] = 25 - swords*1;
+        anim_swords_instead[attacker['tile']] = swords; 
 
         if (!combat_sound_special_case(attacker,attacker_hp,defender) ) // this function lets us program special cases sounds
           play_combat_sound(defender); //attacker lost, player defender combat sound
       }
       // When a defender loses, play sound for attacker if: a combatant is visible OR the player was involved in the battle.
       if (defender_hp == 0  && (combatant_visible || player_is_combatant) ) {
-        if (combatant_visible) explosion_anim_map[defender['tile']] = 25;
-        
+        var win_type = unit_type(attacker)['name'];
+        var swords = (units_pregunpowder.indexOf(win_type) >= 0);
+        if (combatant_visible) explosion_anim_map[defender['tile']] = 25 - swords*1;
+        anim_swords_instead[defender['tile']] = swords; 
+
         if (!combat_sound_special_case(attacker,attacker_hp,defender) ) // this function lets us program special cases sounds
           play_combat_sound(attacker); //defender lost, player attacker combat sound
       }
@@ -1094,7 +1222,7 @@ function handle_unit_combat_info(packet)
         play_combat_sound(defender); 
         
         //update_map_canvas_full();
-
+/*
         // Construct the names of the defender unit: e.g., "Your Cannon", "French Cavalry", etc.
         var defend_unit = "the " + nations[defender_nation]['adjective'];
         if (nations[defender_nation]['adjective']==player_nation) defend_unit = "your";
@@ -1129,9 +1257,10 @@ function handle_unit_combat_info(packet)
 
           scrollDiv.appendChild(item); 
           chatbox_scroll_to_bottom(true);
-
+*/
           // New packet style coming back for a no-victory battle wasn't getting interpreted and redrawn
           // We will hard-code in here the new unit infos so redraw will work:
+/*          
           units[packet['attacker_unit_id']]['hp'] = attacker_hp;
           units[packet['defender_unit_id']]['hp'] = defender_hp;
 
@@ -1144,22 +1273,21 @@ function handle_unit_combat_info(packet)
           // what is 99% likely true, that the unit has 0 moves left, instead of 100% certainly false, that it has full movesleft:
           units[packet['attacker_unit_id']]['movesleft'] = 0;
           units[packet['defender_unit_id']]['movesleft'] = 0;  //packet 63 will reset these when it finally comes, likely to 0.
-          
+*/          
           // TO DO: send harmless action/info refresh on the unit such as a shift-J or unit info inquiry etc., using 
           // var packet_unit_do_action = 84 (or other?) ...  to provoke the server to come back with a packet 63, in order 
           // to get the proper move points that are remaining for the player's unit... this will make all the hacky junk above superfluous.
-           
+/*           
           // Forced redraw:
           update_tile_unit(units[packet['attacker_unit_id']]);   
           update_tile_unit(units[packet['defender_unit_id']]);
           auto_center_on_focus_unit();
           update_active_units_dialog();
           update_unit_order_commands();
+*/
           //setTimeout(update_unit_focus, 700);  // remove this if unit redraw still doesn't work
           // --------------------------------------------------------------------------------------------------------------------
         }
-      }
-    } 
 }
 
 /**************************************************************************
@@ -1167,18 +1295,19 @@ function handle_unit_combat_info(packet)
 **************************************************************************/
 function handle_unit_action_answer(packet)
 {
-  var diplomat_id = packet['diplomat_id'];
+  var actor_id = packet['actor_id'];
   var target_id = packet['target_id'];
   var cost = packet['cost'];
   var action_type = packet['action_type'];
 
   var target_city = game_find_city_by_number(target_id);
   var target_unit = game_find_unit_by_number(target_id);
-  var actor_unit = game_find_unit_by_number(diplomat_id);
+  var actor_unit = game_find_unit_by_number(actor_id);
 
   if (actor_unit == null) {
-    console.log("Bad actor unit (" + diplomat_id
+    console.log("Bad actor unit (" + actor_id
                 + ") in unit action answer.");
+    act_sel_queue_done(diplomat_id);
     return;
   }
 
@@ -1191,6 +1320,7 @@ function handle_unit_action_answer(packet)
     if (target_unit == null) {
       console.log("Bad target unit (" + target_id
                   + ") in unit action answer.");
+      act_sel_queue_done(diplomat_id);
       return;
     } else {
       popup_bribe_dialog(actor_unit, target_unit, cost, action_type);
@@ -1201,6 +1331,7 @@ function handle_unit_action_answer(packet)
     if (target_city == null) {
       console.log("Bad target city (" + target_id
                   + ") in unit action answer.");
+      act_sel_queue_done(diplomat_id);
       return;
     } else {
       popup_incite_dialog(actor_unit, target_city, cost, action_type);
@@ -1210,6 +1341,7 @@ function handle_unit_action_answer(packet)
     if (target_city == null) {
       console.log("Bad target city (" + target_id
                   + ") in unit action answer.");
+      act_sel_queue_done(diplomat_id);
       return;
     } else {
       popup_unit_upgrade_dlg(actor_unit, target_city, cost, action_type);
@@ -1220,34 +1352,7 @@ function handle_unit_action_answer(packet)
   } else {
     console.log("unit_action_answer: Invalid answer.");
   }
-}
-
-/**************************************************************************
-  Handle server request for user input about diplomat action to do.
-**************************************************************************/
-function unit_actor_wants_input(pdiplomat)
-{
-  if (observing || client.conn.playing == null) return;
-
-  if (pdiplomat['action_decision_want'] == null
-      || pdiplomat['owner'] != client.conn.playing['playerno']) {
-    /* No authority to decide for this unit. */
-    return;
-  }
-
-  if (pdiplomat['action_decision_want'] == ACT_DEC_NOTHING) {
-    /* The unit doesn't want a decision. */
-    return;
-  }
-
-  if (pdiplomat['action_decision_want'] == ACT_DEC_PASSIVE
-      && !popup_actor_arrival) {
-    /* The player isn't interested in getting a pop up for a mere
-     * arrival. */
-    return;
-  }
-
-  process_diplomat_arrival(pdiplomat, pdiplomat['action_decision_tile']);
+  act_sel_queue_done(diplomat_id);
 }
 
 /**************************************************************************
@@ -1280,25 +1385,14 @@ function handle_unit_actions(packet)
     });
   }
 
-  if (disturb_player) {
-    /* Clear the unit's action_decision_want. This was the reply to a
-     * foreground request caused by it. Freeciv-web doesn't save open
-     * action selection dialogs. It doesn't even wait for any other action
-     * selection dialog to be answered before requesting data for the next
-     * one. This lack of a queue allows it to be cleared here. */
-
-    var unqueue = {
-      "pid"     : packet_unit_sscs_set,
-      "unit_id" : actor_unit_id,
-      "type"    : USSDT_UNQUEUE,
-      "value"   : IDENTITY_NUMBER_ZERO
-    };
-    send_request(JSON.stringify(unqueue));
-  }
-
   if (hasActions && disturb_player) {
     popup_action_selection(pdiplomat, action_probabilities,
                            ptile, target_extra, target_unit, target_city);
+  } else if (disturb_player) {
+    /* Nothing to do. */
+    action_selection_no_longer_in_progress(actor_unit_id);
+    action_decision_clear_want(actor_unit_id);
+    action_selection_next_in_focus(actor_unit_id);
   } else if (hasActions) {
     /* This was a background request. */
 
@@ -1394,11 +1488,12 @@ function handle_wonders_report()
         wonders[w]++;                                 // increment the count
     }
     if (wonders[w] > 0 && improvements[w].genus==1)  { // 1 is the genus code for small wonder
-      var color_marker = "<span>";
+      var color_marker = "<span style='text-shadow: 1px 1px #000'>";
       if (!client_is_observer() && player_has_wonder(client.conn.playing.playerno,w)) {
-        color_marker = "<span style='color: rgb(0,0,192);'>";
+        color_marker = "<span style='color: rgb(128,192,255); text-shadow: 1px 1px #000'>";
       }
-      appended_message += "<tr><td>" + color_marker + improvements[w].name+"</span></td><td><b>"+wonders[w] + "</b></td></tr>";
+      appended_message += "<tr style='cursor:default' title='"+html_safe(improvements[w].helptext)+"'>" 
+        + "<td>" + color_marker + improvements[w].name+"</span></td><td><b>"+wonders[w] + "</b></td></tr>";
     }
   }
   appended_message += "</table></div>";
@@ -1465,6 +1560,7 @@ function handle_begin_turn(packet)
 {
   if (!observing) {
     $("#turn_done_button").button("option", "disabled", false);
+    $("#turn_done_button").css({"background-color":"#000f", "opacity":1, "color":"#ddd", "border-color": "#edd5"});
     if (is_small_screen()) {
       $("#turn_done_button").button("option", "label", "Done");
     } else {
@@ -1489,7 +1585,9 @@ function handle_end_turn(packet)
 {
   reset_unit_anim_list();
   if (!observing) {
+    $("#turn_done_button").css({"background-color":"#0006", "opacity":0.85, "color":"#edd", "border-color": "#edd5"});
     $("#turn_done_button").button( "option", "disabled", true);
+    $("#turn_done_button:disabled").css({"background-color":"#0006", "opacity":0.85, "color":"#edd", "border-color": "#edd5"});
   }
 }
 
@@ -1515,6 +1613,20 @@ function handle_ruleset_unit(packet)
     packet['name'] = packet['name'].replace('?unit:', '');
 
   unit_types[packet['id']] = packet;
+
+  unit_types[packet['id']].gov_requirement = GOV_LAST;
+  for (var i = 0; i < packet['build_reqs'].length; i++) {
+    if (packet['build_reqs'][i]['kind'] == VUT_GOVERNMENT) {
+      unit_types[packet['id']].gov_requirement = packet['build_reqs'][i]['value'];
+    }
+  }
+
+  // Placeholder solution for units whose base combat strength is 
+  // non-integer and achievea  non-integer base score via a globally
+  // applied bonus/penalty in units.ruleset.
+  if (client_rules_flag[CRF_MP2_C])
+    handle_non_integer_combat_scores(packet['id']);
+  
 }
 
 /************************************************************************//**
@@ -1604,6 +1716,8 @@ function handle_ruleset_tech_flag(packet)
 function handle_ruleset_government(packet)
 {
   governments[packet['id']] = packet;
+  // Track number of governments for ruleset:
+  GOV_LAST =  Object.keys(governments).length; // length = last_index+1 because 0-based
 }
 
 /* 100% complete */
@@ -1771,7 +1885,6 @@ function handle_goto_path(packet)
 
 /**************************************************************************
   Receive general information about a server setting.
-
   Setting data type specific information comes in a follow up packet.
 **************************************************************************/
 function handle_server_setting_const(packet)
@@ -1786,7 +1899,6 @@ function handle_server_setting_const(packet)
 
 /**************************************************************************
   Receive general information about a server setting.
-
   This is a follow up packet with data type specific information.
 **************************************************************************/
 function handle_server_setting_int(packet)
@@ -1796,7 +1908,6 @@ function handle_server_setting_int(packet)
 
 /**************************************************************************
   Receive general information about a server setting.
-
   This is a follow up packet with data type specific information.
 **************************************************************************/
 function handle_server_setting_enum(packet)
@@ -1806,7 +1917,6 @@ function handle_server_setting_enum(packet)
 
 /**************************************************************************
   Receive general information about a server setting.
-
   This is a follow up packet with data type specific information.
 **************************************************************************/
 function handle_server_setting_bitwise(packet)
@@ -1816,7 +1926,6 @@ function handle_server_setting_bitwise(packet)
 
 /**************************************************************************
   Receive general information about a server setting.
-
   This is a follow up packet with data type specific information.
 **************************************************************************/
 function handle_server_setting_bool(packet)
@@ -1826,12 +1935,46 @@ function handle_server_setting_bool(packet)
 
 /**************************************************************************
   Receive general information about a server setting.
-
   This is a follow up packet with data type specific information.
 **************************************************************************/
 function handle_server_setting_str(packet)
 {
   $.extend(server_settings[packet['id']], packet);
+}
+
+/**************************************************************************
+  Makes a game UID that is browser persistent, so user data specific 
+  to a game can be remembered on client.
+**************************************************************************/
+function handle_game_uid()
+{
+  /* TODO: Currently, we just call this every time the user toggles Alt-X
+    * to go into chalkboard mode. That's bad because we might want to start
+    * using the UID for saving other game-specific info on the client side.
+    * Ideally we would not create a Game_UID on the client side but rather,
+    * pull it from server_settings or game_info. Or alternatively, find some 
+    * unique point/event/trigger during game load or game start that we know 
+    * only happens once and happens AFTER we have received a packet with the
+    * server_settings loaded, since those are needed to create the Game_UID. */
+  if (! (server_settings && Object.keys(server_settings).length > 0) ) return;
+  if (is_longturn() 
+      && server_settings['metamessage']
+      && server_settings['metamessage']['val']) {
+        
+        Game_UID = server_settings['metamessage']['val']; 
+  }
+  else {
+    Game_UID = server_settings['xsize']['val'] * server_settings['ysize']['val']
+              + server_settings['xsize']['val'] + server_settings['ysize']['val'];
+    if (client.conn.playing) {
+      Game_UID += client.conn.playing['name'] + client.conn.playing['nation']
+      + client.conn.playing['playerno'];
+    }          
+  }
+  Game_UID = getHash(Game_UID.toString()); // get UID
+
+  myGameVars = simpleStorage.get(Game_UID); // get persistent data for UID
+  if (!myGameVars) myGameVars = {};
 }
 
 function handle_server_setting_control(packet)
@@ -1870,7 +2013,8 @@ function handle_player_diplstate(packet)
   players[packet['plr1']].diplstates[packet['plr2']] = {
     state: packet['type'],
     turns_left: packet['turns_left'],
-    contact_turns_left: packet['contact_turns_left']
+    contact_turns_left: packet['contact_turns_left'],
+    has_reason_to_cancel: packet['has_reason_to_cancel']
   };
 }
 
@@ -1898,10 +2042,14 @@ function handle_ruleset_extra(packet)
     if (packet['name'] == "Naval Base") window["EXTRA_NAVALBASE"] = packet['id']; /////
   } */
 
+  if (packet['name'] == "Sea Bridge") window['EXTRA_SEABRIDGE'] = packet['id'];
   if (packet['name'] == "Naval Base") window["EXTRA_NAVALBASE"] = packet['id']; /////
   if (packet['name'] == "Railroad") window["EXTRA_RAIL"] = packet['id'];
   if (packet['name'] == "Oil Well") window["EXTRA_OIL_WELL"] = packet['id'];
   if (packet['name'] == "Minor Tribe Village") window["EXTRA_HUT"] = packet['id'];
+  if (packet['name'] == "Castle") window["EXTRA_CASTLE"] = packet['id'];
+  if (packet['name'] == "Bunker") window["EXTRA_BUNKER"] = packet['id'];
+
 }
 
 /**************************************************************************
@@ -1922,9 +2070,21 @@ function handle_ruleset_road(packet)
   /* TODO: Implement */
 }
 
+/************************************************************************//**
+  Handle a packet about a particular action enabler.
+****************************************************************************/
 function handle_ruleset_action_enabler(packet)
 {
-  /* TODO: Implement */
+  var paction = actions[packet.enabled_action];
+
+  if (paction === undefined) {
+    console.log("Unknown action " + packet.action + " for enabler ");
+    console.log(packet);
+    return;
+  }
+
+  /* Store the enabler in its action. */
+  paction.enablers.push(packet);
 }
 
 function handle_ruleset_nation_sets(packet)
@@ -2017,6 +2177,7 @@ function handle_play_music(packet)
 function handle_ruleset_action(packet)
 {
   actions[packet['id']] = packet;
+  packet["enablers"] = [];
 }
 
 /**************************************************************************
@@ -2053,4 +2214,21 @@ function handle_achievement_info(packet)
 function handle_team_name_info(packet)
 {
   /* TODO: implement */
+}
+
+/************************************************************************//**
+  Returns true if the sound of an event in the chat_log history should not
+  be played because the client is in a cooldown after launch, and not 
+  wanting to hear repeated events from long past turns (e.g., chat messages,
+  sold buildings, etc.)
+****************************************************************************/
+function suppress_event_sound()
+{
+  var cur_time = new Date().getTime();
+
+  // uses global vars located in clinet.js:
+  if (cur_time-game_launch_timer < event_sound_suppress_delay) {
+    return true;
+  }
+  return false;
 }

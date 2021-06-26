@@ -38,7 +38,8 @@ extern "C" {
 
 /* A description of the goal. */
 struct cm_parameter {
-  int minimal_surplus[O_LAST];
+  signed int minimal_surplus[O_LAST];
+  bool max_growth;
   bool require_happy;
   bool allow_disorder;
   bool allow_specialists;
@@ -73,8 +74,8 @@ void cm_result_destroy(struct cm_result *result);
  * the actual city setting.
  */
 void cm_query_result(struct city *pcity,
-		     const struct cm_parameter *const parameter,
-		     struct cm_result *result, bool negative_ok);
+                     const struct cm_parameter *const parameter,
+                     struct cm_result *result, bool negative_ok);
 
 /*
  * Call this function if the city has changed. To be safe call it
@@ -84,9 +85,9 @@ void cm_clear_cache(struct city *pcity);
 
 /***************** utility methods *************************************/
 bool cm_are_parameter_equal(const struct cm_parameter *const p1,
-			    const struct cm_parameter *const p2);
+                            const struct cm_parameter *const p2);
 void cm_copy_parameter(struct cm_parameter *dest,
-		       const struct cm_parameter *const src);
+                       const struct cm_parameter *const src);
 void cm_init_parameter(struct cm_parameter *dest);
 void cm_init_emergency_parameter(struct cm_parameter *dest);
 
@@ -95,6 +96,7 @@ void cm_print_result(const struct cm_result *result);
 
 int cm_result_citizens(const struct cm_result *result);
 int cm_result_specialists(const struct cm_result *result);
+int cm_nonlux_result_specialists(const struct cm_result *result);
 int cm_result_workers(const struct cm_result *result);
 
 void cm_result_from_main_map(struct cm_result *result,

@@ -22,6 +22,7 @@
 /* utility */
 #include "fcintl.h"
 #include "log.h"
+#include "mem.h"
 #include "rand.h"
 #include "support.h"
 
@@ -36,6 +37,9 @@
 #include "unit.h"
 #include "worklist.h"
 
+/* common/aicore */
+#include "cm.h"
+
 /* server */
 #include "citytools.h"
 #include "cityturn.h"
@@ -43,6 +47,7 @@
 #include "plrhand.h"
 #include "sanitycheck.h"
 #include "unithand.h"
+#include "unittools.h"
 
 #include "cityhand.h"
 
@@ -100,9 +105,16 @@ void handle_city_change_specialist(struct player *pplayer, int city_id,
 				   Specialist_type_id to)
 {
   struct city *pcity = player_city_by_number(pplayer, city_id);
-
   if (!pcity) {
     return;
+  }
+  
+  bool change_all = false;
+  /* Adding 100 to Specialist_type_id "to", requests to change all specialists.
+    Semi-ugly but maintains compatibility between client/server versions. */
+  if (to >= 100) {
+    to -= 100;
+    change_all = true;
   }
 
   if (to < 0 || to >= specialist_count()
@@ -115,8 +127,13 @@ void handle_city_change_specialist(struct player *pplayer, int city_id,
     return;
   }
 
-  pcity->specialists[from]--;
-  pcity->specialists[to]++;
+  if (change_all) {
+    pcity->specialists[to] += pcity->specialists[from];
+    pcity->specialists[from] = 0;
+  } else {
+    pcity->specialists[from]--;
+    pcity->specialists[to]++;
+  }
 
   city_refresh(pcity);
   sanity_check_city(pcity);
@@ -129,8 +146,21 @@ void handle_city_change_specialist(struct player *pplayer, int city_id,
 void handle_city_make_specialist(struct player *pplayer,
                                  int city_id, int tile_id)
 {
+  int specalist_to = DEFAULT_SPECIALIST;
+
+#ifdef FREECIV_WEB
+  // FCW uses top 3 bits to represent default specialist, thus city_id is really
+  // a 12-bit number. Perhaps later we should just send a specalist_to param
+  // if we ever have games over 8000 cities.  But for now this maintains packet
+  // compatibility
+  if (city_id > 32768) {city_id -= 32768; specalist_to += 4;}
+  if (city_id > 16384) {city_id -= 16384; specalist_to += 2;}
+  if (city_id >  8192) {city_id -=  8192; specalist_to += 1;}
+#endif
+
   struct tile *ptile = index_to_tile(&(wld.map), tile_id);
   struct city *pcity = player_city_by_number(pplayer, city_id);
+
 
   if (NULL == pcity) {
     /* Probably lost. */
@@ -154,7 +184,7 @@ void handle_city_make_specialist(struct player *pplayer,
     auto_arrange_workers(pcity);
   } else if (tile_worked(ptile) == pcity) {
     city_map_update_empty(pcity, ptile);
-    pcity->specialists[DEFAULT_SPECIALIST]++;
+    pcity->specialists[specalist_to]++;
   } else {
     log_verbose("handle_city_make_specialist() not working (%d, %d) "
                 "\"%s\".", TILE_XY(ptile), city_name_get(pcity));
@@ -254,14 +284,13 @@ void really_handle_city_sell(struct player *pplayer, struct city *pcity,
   }
 
   pcity->did_sell=TRUE;
-  price = impr_sell_gold(pimprove);
+  price = do_sell_building(pplayer, pcity, pimprove, "sold");
   notify_player(pplayer, pcity->tile, E_IMP_SOLD, ftc_server,
-                PL_("You sell %s in %s for %d gold.",
-                    "You sell %s in %s for %d gold.", price),
+                PL_("[`gold`] You sell %s in %s for %d gold.",
+                    "[`gold`] You sell %s in %s for %d gold.", price),
                 improvement_name_translation(pimprove),
                 city_link(pcity), price);
-  do_sell_building(pplayer, pcity, pimprove, "sold");
-
+  
   city_refresh(pcity);
 
   /* If we sold the walls the other players should see it */
@@ -315,9 +344,15 @@ void really_handle_city_buy(struct player *pplayer, struct city *pcity)
     return;
   }
 
-  if (VUT_UTYPE == pcity->production.kind && pcity->anarchy != 0) {
+  if (VUT_UTYPE == pcity->production.kind && pcity->anarchy != 0 && pcity->hangry != 0) {
     notify_player(pplayer, pcity->tile, E_BAD_COMMAND, ftc_server,
-                  _("Can't buy units when city is in disorder."));
+                  _("😡 Can't buy units when city is in disorder."));
+    return;
+  }
+  if (game.server.fulldisorder && VUT_IMPROVEMENT == pcity->production.kind 
+      && pcity->anarchy != 0 && pcity->hangry != 0) {
+    notify_player(pplayer, pcity->tile, E_BAD_COMMAND, ftc_server,
+                  _("😡 Can't buy buildings when city is in disorder."));
     return;
   }
 
@@ -345,8 +380,8 @@ void really_handle_city_buy(struct player *pplayer, struct city *pcity)
     return;
   }
 
-  pplayer->economic.gold-=cost;
-  if (pcity->shield_stock < total){
+  pplayer->economic.gold -= cost;
+  if (pcity->shield_stock < total) {
     /* As we never put penalty on disbanded_shields, we can
      * fully well add the missing shields there. */
     pcity->disbanded_shields += total - pcity->shield_stock;
@@ -358,15 +393,15 @@ void really_handle_city_buy(struct player *pplayer, struct city *pcity)
   if (VUT_UTYPE == pcity->production.kind) {
     notify_player(pplayer, pcity->tile, E_UNIT_BUY, ftc_server,
                   /* TRANS: bought an unit. */
-                  Q_("?unit:You bought %s in %s."),
+                  Q_("?unit:[`gold`] You bought %s in %s for %d gold."),
                   utype_name_translation(pcity->production.value.utype),
-                  city_name_get(pcity));
+                  city_name_get(pcity), cost);
   } else if (VUT_IMPROVEMENT == pcity->production.kind) {
     notify_player(pplayer, pcity->tile, E_IMP_BUY, ftc_server,
                   /* TRANS: bought an improvement .*/
-                  Q_("?improvement:You bought %s in %s."),
+                  Q_("?improvement:[`gold`] You bought %s in %s for %d gold."),
                   improvement_name_translation(pcity->production.value.building),
-                  city_name_get(pcity));
+                  city_name_get(pcity), cost);
   }
 
   conn_list_do_buffer(pplayer->connections);
@@ -513,6 +548,212 @@ void handle_city_options_req(struct player *pplayer, int city_id,
   }
 
   pcity->city_options = options;
+
+  send_city_info(pplayer, pcity);
+}
+
+/**********************************************************************//**
+  Handles a request to set city manager parameter.
+**************************************************************************/
+void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
+                         bool apply_once, struct cm_parameter parameter)
+{
+  struct city *pcity = player_city_by_number(pplayer, city_id);
+
+/* debug
+      notify_player(city_owner(pcity), city_tile(pcity),
+            E_CITY_PRODUCTION_CHANGED, ftc_server,
+            _("handle_city_manager received CMA parameter:\n"
+              "apply_once         %d\n"
+              "allow_disorder:    %d\n"
+              "allow_specialists: %d\n"
+              "max_growth:        %d\n"
+              "happy_factor:      %d\n"
+              "require_happy:     %d\n"
+              "factors:           %d,%d,%d,%d,%d,%d\n"
+              "min.surplus:       %d,%d,%d,%d,%d,%d\n"),
+              apply_once,
+              parameter.allow_disorder,
+              parameter.allow_specialists,
+              parameter.max_growth,
+              parameter.happy_factor,
+              parameter.require_happy,
+              parameter.factor[0],parameter.factor[1],parameter.factor[2],parameter.factor[3],parameter.factor[4],parameter.factor[5],
+              parameter.minimal_surplus[0],parameter.minimal_surplus[1],parameter.minimal_surplus[2],parameter.minimal_surplus[3],
+                parameter.minimal_surplus[4],parameter.minimal_surplus[5]);
+                */
+
+  if (NULL == pcity) {
+    /* Probably lost. */
+    log_verbose("handle_city_manager() bad city number %d.", city_id);
+    return;
+  }
+
+  // User requested a normal change to city governor, which we'll do here:
+  if (apply_once==false) {
+    // User is requesting to release the governor:
+    if (!enabled) {
+      if (pcity->cm_parameter) {
+        free(pcity->cm_parameter);
+        pcity->cm_parameter = NULL;
+        send_city_info(pplayer, pcity);
+        notify_player(city_owner(pcity), city_tile(pcity),
+              E_CITY_CMA_RELEASE, ftc_server,
+              _("🔹 Retired the Governor in %s."),
+              city_link(pcity));
+      }
+      return;
+    }
+    // User is requesting to apply a new city governor:
+    if (!pcity->cm_parameter) {
+      pcity->cm_parameter = fc_calloc(1, sizeof(struct cm_parameter));
+    }
+    cm_copy_parameter(pcity->cm_parameter, &parameter);
+    auto_arrange_workers(pcity);
+    sync_cities();
+    send_city_info(pplayer, pcity);
+    if (pcity->cm_parameter) { // notify only if successful.
+      notify_player(city_owner(pcity), city_tile(pcity),
+                E_CITY_CMA_RELEASE, ftc_server,
+                _("🔹 Governor successfully assigned to %s."),
+                city_link(pcity));
+    }
+    return;
+  }
+
+  // User requested to apply this parameter only one time, without altering any of the current configuration.
+  else {   
+      struct cm_parameter backup_parameter;
+      bool was_enabled = false;  // whether governor was formerly on or not
+
+      if (!pcity->cm_parameter) {
+        // wasn't enabled, so create a new parameter for this city.
+        pcity->cm_parameter = fc_calloc(1, sizeof(struct cm_parameter));
+        // There will be no backup paramter because was_enabled will be false.
+      } else {
+         // was enabled: remember that fact, and how it used to be so we can re-apply it after:
+        was_enabled = true;
+        backup_parameter = *(pcity->cm_parameter);
+        //cm_copy_parameter(&backup_parameter, pcity->cm_parameter);
+      }
+      // Now arrange the city, once, according to the user supplied parameter:
+      cm_copy_parameter(pcity->cm_parameter, &parameter);
+      auto_arrange_workers(pcity);
+
+      // Handle all the permutations of accepted/rejected parameter based on former
+      // state of the city:
+
+      // Cases where the city had no former CMA:
+      if (!was_enabled) {
+         /* CASE 1. CMA wasn't enabled and temporary order was accepted. Disable 
+            the "virtual temporary" CMA while thanking it for arranging our tiles */
+         if (pcity->cm_parameter) {
+          free(pcity->cm_parameter);
+          pcity->cm_parameter = NULL;
+          send_city_info(pplayer, pcity);
+          notify_player(city_owner(pcity), city_tile(pcity),
+                      E_CITY_CMA_RELEASE, ftc_server,
+                      _("🔹 %s, which has no Governor, has accepted your interim orders."),
+                      city_link(pcity));
+          return;
+        }
+        /* CASE 2: CMA wasn't enabled and temporary order was rejected.
+           Help player to make sense of what happened. */ 
+        else {
+          send_city_info(pplayer, pcity);
+          notify_player(city_owner(pcity), city_tile(pcity),
+                      E_CITY_CMA_RELEASE, ftc_server,
+                      _("🔹 (Interim Orders for %s were not attainable.)"),
+                      city_link(pcity));
+          return;
+        }
+      }
+      /* CMA was enabled before: undo virtual temporary cm_parameter and restore 
+         everything how it used to be: */
+      else {
+        /* CASE 3. CMA was enabled before and if it is still enabled, it means 
+           temporary orders were accepted. */
+        if (pcity->cm_parameter) {
+          // Restore the old parameter  
+          cm_copy_parameter(pcity->cm_parameter, &backup_parameter);
+          sync_cities();
+          send_city_info(pplayer, pcity);
+          notify_player(city_owner(pcity), city_tile(pcity),
+                      E_CITY_CMA_RELEASE, ftc_server,
+                      _("🔹 Interim orders accepted by the Governor of %s."),
+                      city_link(pcity));
+          return;
+        }
+        /* CASE 4. CMA was enabled before and now it's disabled. This means the
+           city released the virtual temporary governor and disabled the city's
+           CMA. Clean up and restore everything back to sensibility. */  
+        else { 
+            /* Construct the backup cm_parameter as if it's the creation of a whole
+              new Governor. */
+            if (!pcity->cm_parameter) {
+              pcity->cm_parameter = fc_calloc(1, sizeof(struct cm_parameter));
+            }
+            cm_copy_parameter(pcity->cm_parameter, &backup_parameter);
+            auto_arrange_workers(pcity); // Back to how we were before failing 
+            sync_cities();
+            send_city_info(pplayer, pcity);
+            notify_player(city_owner(pcity), city_tile(pcity),
+                      E_CITY_CMA_RELEASE, ftc_server,
+                      _("🔹 Failed interim orders means the old Governor of %s was re-hired."),
+                      city_link(pcity));
+            return;
+        }
+      }      
+  }
+}
+
+/**********************************************************************//**
+  Handles a request to set city rally point for new units.
+**************************************************************************/
+void handle_city_rally_point(struct player *pplayer,
+                             int city_id, int length,
+                             bool persistent, bool vigilant,
+                             const struct unit_order *orders)
+{
+  struct city *pcity = player_city_by_number(pplayer, city_id);
+  struct unit_order *checked_orders;
+
+  if (NULL == pcity) {
+    /* Probably lost. */
+    log_verbose("handle_city_rally_point() bad city number %d.",
+                city_id);
+    return;
+  }
+
+  if (0 > length || MAX_LEN_ROUTE < length) {
+    /* Shouldn't happen */
+    log_error("handle_city_rally_point() invalid packet length %d (max %d)",
+              length, MAX_LEN_ROUTE);
+    return;
+  }
+
+  pcity->rally_point.length = length;
+
+  if (length == 0) {
+    pcity->rally_point.vigilant = FALSE;
+    pcity->rally_point.persistent = FALSE;
+    if (pcity->rally_point.orders) {
+      free(pcity->rally_point.orders);
+      pcity->rally_point.orders = NULL;
+    }
+  } else {
+    checked_orders = create_unit_orders(length, orders);
+    if (!checked_orders) {
+      pcity->rally_point.length = 0;
+      log_error("invalid rally point orders for city number %d.",
+                city_id);
+      return;
+    }
+
+    pcity->rally_point.persistent = persistent;
+    pcity->rally_point.vigilant = vigilant;
+    pcity->rally_point.orders = checked_orders;
+  }
 
   send_city_info(pplayer, pcity);
 }

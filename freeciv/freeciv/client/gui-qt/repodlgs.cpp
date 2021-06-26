@@ -131,6 +131,7 @@ unittype_item::unittype_item(QWidget *parent,
   upgrade_button.setVisible(false);
   connect(&upgrade_button, &QAbstractButton::pressed, this, &unittype_item::upgrade_units);
   hbox_top->addWidget(&upgrade_button, 0, Qt::AlignLeft);
+  label_info_unit.setTextFormat(Qt::PlainText);
   hbox_top->addWidget(&label_info_unit);
   vbox_main->addLayout(hbox_top);
   vbox->addWidget(&label_info_active);
@@ -772,7 +773,8 @@ void research_diagram::mouseMoveEvent(QMouseEvent *event)
         tt_text = QString(buffer);
         def_str = "<p style='white-space:pre'><b>"
                   + QString(advance_name_translation(
-                            advance_by_number(rttp->tech_id))) + "</b>\n";
+                            advance_by_number(rttp->tech_id))).toHtmlEscaped()
+                  + "</b>\n";
       } else if (rttp->timpr != nullptr) {
         def_str = get_tooltip_improvement(rttp->timpr, nullptr);
         tt_text = helptext_building(buffer, sizeof(buffer),
@@ -789,16 +791,17 @@ void research_diagram::mouseMoveEvent(QMouseEvent *event)
         tt_text = QString(buffer);
         tt_text = cut_helptext(tt_text);
         def_str = "<p style='white-space:pre'><b>"
-                  + QString(government_name_translation(rttp->tgov)) + "</b>\n";
+            + QString(government_name_translation(rttp->tgov)).toHtmlEscaped()
+            + "</b>\n";
       } else {
         return;
       }
       tt_text = split_text(tt_text, true);
-      tt_text = def_str + tt_text;
+      tt_text = def_str + tt_text.toHtmlEscaped();
       tooltip_text = tt_text.trimmed();
       tooltip_rect = rttp->rect;
       tooltip_pos = event->globalPos();
-      if (QToolTip::isVisible() == false && timer_active == false) {
+      if (!QToolTip::isVisible() && !timer_active) {
         timer_active = true;
         QTimer::singleShot(500, this, SLOT(show_tooltip()));
       }
@@ -1169,7 +1172,7 @@ void real_science_report_dialog_update(void *unused)
    str = " ";
  }
 
-  if (blk == true) {
+  if (blk) {
     gui()->sw_science->keep_blinking = true;
     gui()->sw_science->set_custom_labels(str);
     gui()->sw_science->sblink();
@@ -1287,10 +1290,10 @@ void eco_report::update_report()
 
     pix = NULL;
     sprite = get_building_sprite(tileset, pimprove);
-    if (sprite != NULL){
+    if (sprite != NULL) {
       pix = sprite->pm;
     }
-    if (pix != NULL){
+    if (pix != NULL) {
       pix_scaled = pix->scaledToHeight(h);
     } else {
       pix_scaled.fill();
@@ -1335,7 +1338,7 @@ void eco_report::update_report()
 
     pix = NULL;
     sprite = get_unittype_sprite(tileset, putype, direction8_invalid());
-    if (sprite != NULL){
+    if (sprite != NULL) {
       pix = sprite->pm;
     }
     id = cid_encode_unit(putype);
@@ -1346,7 +1349,7 @@ void eco_report::update_report()
       item->setTextAlignment(Qt::AlignHCenter);
       switch (j) {
       case 0:
-        if (pix != NULL){
+        if (pix != NULL) {
           pix_scaled = pix->scaledToHeight(h);
           item->setData(Qt::DecorationRole, pix_scaled);
         }
@@ -1613,8 +1616,8 @@ void endgame_report::update_report(const struct packet_endgame_player *packet)
         break;
       case 1:
         pix = get_nation_flag_sprite(tileset, nation_of_player(pplayer))->pm;
-        if (pix != NULL){
-        item->setData(Qt::DecorationRole, *pix);
+        if (pix != NULL) {
+          item->setData(Qt::DecorationRole, *pix);
         }
         break;
       case 2:
@@ -1642,7 +1645,7 @@ void science_report_dialog_popup(bool raise)
   int i;
   QWidget *w;
 
-  if (client_is_global_observer()){
+  if (client_is_global_observer()) {
     return;
   }
   if (!gui()->is_repo_dlg_open("SCI")) {
@@ -1697,7 +1700,7 @@ void economy_report_dialog_popup(bool raise)
     i = gui()->gimme_index_of("ECO");
     fc_assert(i != -1);
     w = gui()->game_tab_widget->widget(i);
-    if (w->isVisible() == true) {
+    if (w->isVisible()) {
       gui()->game_tab_widget->setCurrentIndex(0);
       return;
     }

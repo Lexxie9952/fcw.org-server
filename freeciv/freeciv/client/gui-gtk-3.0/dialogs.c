@@ -320,9 +320,9 @@ static void pillage_callback(GtkWidget *dlg, gint arg)
   is_showing_pillage_dialog = FALSE;
 
   if (arg == GTK_RESPONSE_YES) {
-    int act_id = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(dlg),
-                                                   "actor"));
-    struct unit *actor = game_unit_by_number(act_id);
+    int au_id = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(dlg),
+                                                  "actor"));
+    struct unit *actor = game_unit_by_number(au_id);
 
     int tgt_id = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(dlg),
                                                    "target"));
@@ -1580,16 +1580,4 @@ void popup_combat_info(int attacker_unit_id, int defender_unit_id,
                        int attacker_hp, int defender_hp,
                        bool make_att_veteran, bool make_def_veteran)
 {
-}
-
-/**********************************************************************//**
-  Popup dialog showing given image and text,
-  start playing given sound, stop playing sound when popup is closed.
-  Take all space available to show image if fullsize is set.
-  If there are other the same popups show them in queue.
-***************************************************************************/
-void show_img_play_snd(const char *img_path, const char *snd_path,
-                       const char *desc, bool fullsize)
-{
-  /* PORTME */
 }

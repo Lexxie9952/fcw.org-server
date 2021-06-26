@@ -21,16 +21,19 @@ var saved_this_turn = false;
 var game_loaded = false;
 
 var scenarios = [
-  {"img":"/images/world_small.png", "description":"The World - Small world map, 80x50 map of the Earth", "savegame":"earth-small"},
-  {"img":"/images/world_big.png", "description":"The World - Large world map, 160x90 map of the Earth", "savegame":"earth-large"},
-  {"img":"/images/iberian.png", "description":"Iberian Peninsula - 136x100 map of Spain and Portugal", "savegame":"iberian-peninsula"},
-  {"img":"/images/france.png", "description":"France - Large (140x90)", "savegame":"france"},
-  {"img":"/images/japan.png", "description":"Japan - Medium (88x100)", "savegame":"japan"},
-  {"img":"/images/italy.png", "description":"Italy - Medium (100x100)", "savegame":"italy"},
-  {"img":"/images/america.png", "description":"North America - 116x100 map of North America", "savegame":"north_america"},
-  {"img":"/images/british.png", "description":"British Isles - Medium (85x80)", "savegame":"british-isles"},
-  {"img":"/images/hagworld.png", "description":"The World - Classic-style 120x60 map of the Earth", "savegame":"hagworld"},
-  {"img":"/images/europe.png", "description":"Very large map of Europe, 200x100", "savegame":"europe"}
+  {"img":"/images/tutorial.png", "description":"Tutorial", "savegame":"tutorial"},
+  {"img":"/images/world_small.png", "description":"The World (80x50)", "savegame":"earth-small"},
+  {"img":"/images/world_big.png", "description":"The World (160x90)", "savegame":"earth-large"},
+  {"img":"/images/hagworld.png", "description":"The World (120x60)", "savegame":"hagworld"},
+  {"img":"/images/europe.png", "description":"Large Europe v2.01LT (177x100) LONGTURN ONLY. Up to 50 players", "savegame":"europe-new-positions"},
+  {"img":"/images/europe.png", "description":"Large Europe v2 (177x100)", "savegame":"europe"},
+  {"img":"/images/europe_1901.png", "description":"Europe 1901 WWI (177x100) up to 11 players", "savegame":"europe_1901"},
+  {"img":"/images/british.png", "description":"British Isles (85x80)", "savegame":"british-isles"},
+  {"img":"/images/iberian.png", "description":"Iberian Peninsula (136x100) Spain and Portugal", "savegame":"iberian-peninsula"},
+  {"img":"/images/france.png", "description":"France (140x90)", "savegame":"france"},
+  {"img":"/images/italy.png", "description":"Italy (100x100)", "savegame":"italy"},
+  {"img":"/images/japan.png", "description":"Japan (88x100)", "savegame":"japan"},
+  {"img":"/images/america.png", "description":"North America (116x100)", "savegame":"north_america"},
 ];
 
 var scenario_info = null;
@@ -46,10 +49,11 @@ function save_game()
 
   if (saved_this_turn) {
     swal("You have already saved this turn, and you can only save once every turn each game-session.");
+    setSwalTheme();
     return;
   }
   // reset dialog page.
-  $("#save_dialog").remove();
+  remove_active_dialog("#save_dialog");
   $("<div id='save_dialog'></div>").appendTo("div#game_page");
 
   var dhtml = "<span id='settings_info'><i>You can save your current game here. "
@@ -73,19 +77,22 @@ function save_game()
                         },
 			buttons: {
 				"Save Game": function() {
-					$("#save_dialog").dialog('close');
+          remove_active_dialog("#save_dialog");
 					send_message("/save");
 					swal("Game saved.");
+          setSwalTheme();
 					}
 				}
 			});
 
   if (is_pbem()) {
     swal("Play-By-Email games can not be saved. Please use the end turn button.");
+    setSwalTheme();
     return;
   }
 
   $("#save_dialog").dialog('open');
+  dialog_register("#save_dialog");
   saved_this_turn = true;
 }
 
@@ -96,17 +103,19 @@ function quicksave()
 {
   if (is_pbem()) {
     swal("Play-By-Email games can not be saved. Please use the end turn button.");
+    setSwalTheme();
     return;
   }
 
   if (saved_this_turn) {
     swal("You have already saved this turn, and you can only save once every turn each game-session.");
+    setSwalTheme();
     return;
   }
 
   send_message("/save");
   message_log.update({
-    event: E_SCRIPT,
+    event: E_REPORT, // chosen for whiteness
     message: "Game saved."
   });
   saved_this_turn = true;
@@ -128,6 +137,7 @@ function show_load_game_dialog()
    },
    error: function (request, textStatus, errorThrown) {
      swal("Loading game failed (listsavegames failed)");
+     setSwalTheme();
    }
   });
 }
@@ -164,10 +174,13 @@ function show_load_game_dialog_cb(savegames_data)
 		  var load_game_id = $('#selectable .ui-selected').index();
 		  if (load_game_id == -1) {
 		    swal("Unable to load savegame: no game selected.");
+        setSwalTheme();
 		  } else if ($('#selectable .ui-selected').text() != null){
+            $.blockUI({ message: "<h1 style='text-align:center'><font color='#ccc'>Loading Savegame...</font>"
+            + "<br><center><img src='/images/loading.gif'></center></h1>",
+              color: default_dialog_text_color });
             send_message("/load " + $('#selectable .ui-selected').text());
             game_loaded = true;
-
 		    $("#dialog").dialog('close');
 		    $("#game_text_input").blur();
 		  }
@@ -433,6 +446,7 @@ function show_scenario_dialog()
 	  			"Select scenario": function() {
 	  			    if ($('#selectable .ui-selected').index() == -1) {
 	  			        swal("Please select a scenario first.");
+                  setSwalTheme();
 	  			    } else {
                         scenario_activated = true;
                         load_game_check();
@@ -444,6 +458,6 @@ function show_scenario_dialog()
 		});
   $("#selectable").selectable();
   $("#dialog").dialog('open');
+  $(".ui-dialog-buttonset").children().last().attr("title", "Note: set your ruleset BEFORE loading scenario");
   $("#game_text_input").blur();
-
 }

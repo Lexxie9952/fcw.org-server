@@ -48,9 +48,10 @@ misc_files = [
   "space.spec",
   "editor.spec",
   "techs.spec",
-  "flags.spec",
   "treaty.spec",
-  "citybar.spec"
+  "citybar.spec",
+  "flags.spec",
+  "flags-large.spec"
 ]
 spec_files = {
   "amplio2" : [
@@ -59,6 +60,7 @@ spec_files = {
     "cities.spec",
     "bases.spec",
     "explosions.spec",
+    "swords.spec",
     "fog.spec",
     "grid.spec",
     "nuke.spec",
@@ -70,35 +72,38 @@ spec_files = {
     "tiles.spec",
     "units.spec",
     "units_oversize.spec",
+    "animals.spec",
     "upkeep.spec",
     "veterancy.spec",
     "water.spec",
     "canal.spec",
-    "maglev.spec"
-  ],
-  "trident" : [
-    "auto_ll.spec",
-    "fog.spec",
-    "roads.spec",
-    "tiles.spec",
-    "cities.spec",
-    "explosions.spec",
-    "grid.spec",
-    "select.spec",
-    "units.spec"
-  ],
-  "isotrident" : [
-    "terrain1.spec",
-    "cities.spec",
-    "fog.spec",
-    "grid.spec",
-    "morecities.spec",
-    "nuke.spec",
-    "select.spec",
-    "terrain2.spec",
-    "tiles.spec",
-    "unitextras.spec"
+    "maglev.spec",
+    "seabridge.spec"
   ]
+#,
+#  "trident" : [
+#    "auto_ll.spec",
+#    "fog.spec",
+#    "roads.spec",
+#    "tiles.spec",
+#    "cities.spec",
+#    "explosions.spec",
+#    "grid.spec",
+#    "select.spec",
+#    "units.spec"
+#  ],
+#  "isotrident" : [
+#    "terrain1.spec",
+#    "cities.spec",
+#    "fog.spec",
+#    "grid.spec",
+#    "morecities.spec",
+#    "nuke.spec",
+#    "select.spec",
+#    "terrain2.spec",
+#    "tiles.spec",
+#    "unitextras.spec"
+#  ]
 }
 def expand_spec_files(name, file_names):
   files = [path.join(freeciv_data_dir, name + ".tilespec")]
@@ -128,10 +133,10 @@ curr_x = 0;
 curr_y = 14;
 # Set size of tileset image manually depending on number of tiles.
 # Note!  Safari on iPhone doesn't support more than 3000000 pixels in a single image.
-tileset_height = 1126;
+tileset_height = 1400; #was 1126
 tileset_width = 2020; #was 1919;
 
-dither_types = ["t.l0.desert1", "t.l0.plains1", "t.l0.grassland1", "t.l0.forest1", "t.l0.jungle1", "t.l0.hills1", "t.l0.mountains1", "t.l0.tundra1", "t.l0.swamp1"];
+dither_types = ["t.l0.arctic1",  "t.l0.desert1", "t.l0.plains1", "t.l0.grassland1", "t.l0.forest1", "t.l0.jungle1", "t.l0.hills1", "t.l0.mountains1", "t.l0.tundra1", "t.l0.swamp1"];
 print("Freeciv-img-extract running with PIL ");
 tileset = Image.new('RGBA', (tileset_width, tileset_height), (0, 0, 0, 0));
 mask_image = None;
@@ -348,6 +353,10 @@ for tileset_id in sorted(files.keys()):
             tag = str(dir) + src_key[5:].replace("1", "") + "_" + alt_key[5:].replace("1", "");
             src_img = dither_map[src_key].copy();
             alt_img = dither_map[alt_key].copy();
+            if (tag.find("arctic") > 0):
+              src_img.paste(alt_img, None, dither_mask);
+              #double dithering for arctic reduces biting contrast.
+
             src_img.paste(alt_img, None, dither_mask);
 
             (WZ, HZ) = src_img.size;

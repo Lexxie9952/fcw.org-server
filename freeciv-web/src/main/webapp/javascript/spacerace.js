@@ -43,7 +43,7 @@ function show_spaceship_dialog()
 
   if (client_is_observer()) return;
 
-  console.log(spaceship_info[client.conn.playing['playerno']]);
+  //console.log(spaceship_info[client.conn.playing['playerno']]);
 
   var spaceship = spaceship_info[client.conn.playing['playerno']];
 
@@ -67,7 +67,7 @@ function show_spaceship_dialog()
 
   message += "<br>For help, see the Space Race page in the manual.<br>";
 
-  $("#dialog").remove();
+  remove_active_dialog("#dialog");
   $("<div id='dialog'></div>").appendTo("div#game_page");
 
   $("#dialog").html(message);
@@ -77,18 +77,19 @@ function show_spaceship_dialog()
 			modal: true,
 			width: is_small_screen() ? "90%" : "40%",
 			buttons: {
-				Close: function() {
-					$("#dialog").dialog('close');
+				'Close (𝗪)': function() {
+                remove_active_dialog("#dialog");
 			        },
 			         Launch : function() {
-					$("#dialog").dialog('close');
-					launch_spaceship();
-					set_default_mapview_active();
+                remove_active_dialog("#dialog");
+			      		launch_spaceship();
+					      set_default_mapview_active();
 				}
 			}
 		});
 
   $("#dialog").dialog('open');
+  dialog_register("#dialog");
 
   if (spaceship['sship_state'] != SSHIP_STARTED || spaceship['success_rate'] == 0) $(".ui-dialog-buttonpane button:contains('Launch')").button("disable");
 

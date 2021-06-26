@@ -12,7 +12,7 @@
 
 [datafile]
 description="Civ1 tile_type data for Freeciv"
-options="+Freeciv-ruleset-Devel-2017.Jan.02"
+options="+Freeciv-ruleset-Devel-2017.Jan.02 web-compatible"
 format_version=20
 
 [control]
@@ -134,6 +134,10 @@ igter_cost = 1
 ;                        terrain rule_name -- transformation changes to that
 ;                          terrain
 ; transform_time       = time to transform; if 0, cannot transform
+; placing_time         = time for 'placing' an extra; if 0, cannot place
+;                        Nonzero values only affect extras with build_time 0.
+;                        Such extras can modify time with build_time_factor.
+;                        Default is 1.
 ; pillage_time         = time to pillage extra from the tile (0 = impossible)
 ;                        Nonzero values only affect extras with removal_time 0.
 ; clean_pollution_time = time for 'clean pollution' activity (0 = impossible)
@@ -232,9 +236,9 @@ cooler_drier_result  = "no"
 native_to            = "Sea", "Air", "Missile"
 flags                = "UnsafeCoast", "NoCities", "NoZoc", "NoFortify"
 property_ocean_depth = 36
-color.r              = 0
-color.g              = 46
-color.b              = 137
+color.r              = 55
+color.g              = 125
+color.b              = 255
 helptext             = _("\
 Oceans cover much of the world.\
 "), _("\
@@ -275,9 +279,9 @@ cooler_drier_result  = "no"
 native_to            = "Land", "Air", "Missile"
 flags                = "NoBarbs", "Frozen"
 property_frozen      = 100
-color.r              = 232
-color.g              = 232
-color.b              = 232
+color.r              = 238
+color.g              = 238
+color.b              = 238
 helptext             = _("\
 Arctic tiles are found only in the most northerly or southerly\
  reaches of the world.  They are very cold, and hence difficult to\
@@ -317,9 +321,9 @@ native_to            = "Land", "Air", "Missile"
 property_dry         = 100
 property_tropical    = 50
 property_temperate   = 20
-color.r              = 214
-color.g              = 185
-color.b              = 106
+color.r              = 247
+color.g              = 222
+color.b              = 187
 helptext             = _("\
 Deserts are regions of extreme dryness, making agriculture and\
  trade very difficult.\
@@ -361,7 +365,7 @@ property_wet         = 20
 property_foliage     = 50
 property_temperate   = 50
 color.r              = 43
-color.g              = 107
+color.g              = 157
 color.b              = 19
 helptext             = _("\
 Forests are densely wooded, making agriculture somewhat\
@@ -401,9 +405,9 @@ native_to            = "Land", "Air", "Missile"
 flags                = "Starter", "CanHaveRiver"
 property_green       = 50
 property_temperate   = 50
-color.r              = 11
-color.g              = 138
-color.b              = 4
+color.r              = 100
+color.g              = 178
+color.b              = 105
 helptext             = _("\
 Grasslands afford exceptional agricultural opportunities.\
 ")
@@ -441,9 +445,9 @@ native_to            = "Land", "Air", "Missile"
 flags                = "Starter"
 property_green       = 10
 property_mountainous = 30
-color.r              = 24
-color.g              = 97
-color.b              = 5
+color.r              = 222
+color.g              = 230
+color.b              = 134
 helptext             = _("\
 In addition to being amenable to agriculture, Hills are frequently\
  rich in resources.\
@@ -485,9 +489,9 @@ cooler_drier_result  = "Tundra"
 native_to     	     = "Land", "Air", "Missile"
 property_foliage     = 50
 property_tropical    = 50
-color.r              = 55
-color.g              = 156
-color.b              = 38
+color.r              = 71
+color.g              = 227
+color.b              = 0
 helptext             = _("\
 Jungles are densely overgrown, making agriculture somewhat\
  problematic.\
@@ -524,9 +528,9 @@ cooler_wetter_result = "no"
 cooler_drier_result  = "no"
 native_to            = "Land", "Air", "Missile"
 property_mountainous = 70
-color.r              = 129
-color.g              = 127
-color.b              = 118
+color.r              = 160
+color.g              = 156
+color.b              = 170
 helptext             = _("\
 Mountains are regions of extreme altitude, making agriculture and\
  trade very difficult.\
@@ -569,9 +573,9 @@ native_to            = "Land", "Air", "Missile"
 flags                = "Starter"
 property_green       = 50
 property_temperate   = 50
-color.r              = 122
-color.g              = 156
-color.b              = 46
+color.r              = 161
+color.g              = 198
+color.b              = 80
 helptext             = _("\
 Plains are very broad, sparse regions, which makes trade slightly\
  inconvenient.\
@@ -611,9 +615,9 @@ property_wet         = 100
 property_tropical    = 10
 property_temperate   = 10
 property_cold        = 10
-color.r              = 48
-color.g              = 85
-color.b              = 97
+color.r              = 129
+color.g              = 179
+color.b              = 146
 helptext             = _("\
 Swamps suffer from an over-abundance of water, making agriculture\
  somewhat problematic.\
@@ -651,9 +655,9 @@ cooler_drier_result  = "Arctic"
 native_to            = "Land", "Air", "Missile"
 flags                = "Starter", "NoBarbs"
 property_cold        = 50
-color.r              = 188
-color.g              = 188
-color.b              = 188
+color.r              = 206
+color.g              = 206
+color.b              = 206
 helptext             = _("\
 Tundra are broad, cold regions, fit for some agriculture and little\
  else.\
@@ -743,7 +747,11 @@ food        = 2
 [extraui]
 
 ; Player visible names of the base gui types.
+
+; ui_name_base_fortress refers to all bases that have gui_type "Fortress"
 ui_name_base_fortress = _("?gui_type:Build Fortress")
+
+; ui_name_base_airbase refers to all bases that have gui_type "Airbase"
 ui_name_base_airbase = _("?gui_type:Build None")
 
 ; /* <-- avoid gettext warnings
@@ -770,8 +778,10 @@ ui_name_base_airbase = _("?gui_type:Build None")
 ;                           (the last three require a corresponding
 ;                           [resource_*] / [base_*] / [road_*] section)
 ; rmcauses                = events that can remove extra type.
-;                           "CleanPollution", "CleanFallout", "Pillage", or
-;                           "Disappear"
+;                           "CleanPollution", "CleanFallout", "Pillage",
+;                           "Disappear", or "Enter"
+; infracost               = Number of infrapoints it costs to place this
+;                           extra. 0 means extra cannot be placed. Default is 1
 ; graphic                 = tag specifying preferred graphic
 ; graphic_alt             = tag for alternate graphic if preferred graphic is
 ;                           not present. Can use eg "-" for no alternate
@@ -796,6 +806,10 @@ ui_name_base_airbase = _("?gui_type:Build None")
 ; buildable               = Can extra be built? Defaults to TRUE if extra has
 ;                           any causes indicating it can result from worker
 ;                           activity.
+;                           If extra is not buildable, it can appear in game
+;                           only if placed in the editor, it's placed by
+;                           map generator, or on city tile if the extra
+;                           also has "AlwaysOnCityCenter" flag set.
 ; generated               = Can map generator place the extra? Applicable
 ;                           for Hut, Resource, and River extras.
 ; build_time              = how long it takes a unit to build this extra.
@@ -951,8 +965,8 @@ Pollution from production is likely to start becoming important as \
 your civilization becomes more industrialized, giving you buildings \
 such as Factory and Power Plant which boost production. Replacing a \
 Power Plant with cleaner forms of energy -- a Hydro Plant / Hoover \
-Dam, Nuclear Plant, or Solar Plant -- will reduce pollution from \
-production, as will a Recycling Center.\
+Dam or Nuclear Plant -- will reduce pollution from production, as \
+will a Recycling Center.\
 "), _("\
 The city's population starts adding to pollution with the discovery of \
 Industrialization, and Automobile, Mass Production, and Plastics make \
@@ -983,7 +997,7 @@ name           = _("Minor Tribe Village")
 rule_name      = "Hut"
 category       = "Bonus"
 causes         = "Hut"
-;rmcauses       = ""
+rmcauses       = "Enter"
 graphic        = "tx.village"
 graphic_alt    = "-"
 activity_gfx   = "None"
@@ -1085,28 +1099,25 @@ act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 reqs           =
-    { "type", "name", "range"
-      "Tech", "Railroad", "Player"
-      "Extra", "Road", "Local"
-      "UnitFlag", "Settlers", "Local"
-      "TerrainClass", "Land", "Local"
+    { "type", "name", "range", "present"
+      "Tech", "Railroad", "Player", TRUE
+      "Extra", "Road", "Local", TRUE
+      "UnitFlag", "Settlers", "Local", TRUE
+      "TerrainClass", "Land", "Local", TRUE
+      "CityTile", "Center", "Local", FALSE
     }
 build_time     = 3
 removal_time   = 0
 native_to      = "Land"
-flags          = "AutoOnCityCenter"
 bridged_over   = "River"
 helptext       = _("\
 Once you learn the Railroad technology, you may upgrade your roads\
  to railroads. Units expend no movement points when moving along a\
  railroad; you may ride a railroad indefinitely. (As may your enemies!)\
 "), _("\
-A railroad also increases by half (rounding down) all resources produced\
- by a tile. A tile whose road is upgraded to a railroad retains any trade\
- bonus from the road as well.\
-"), _("\
-City center tiles with roads are automatically upgraded to railroads\
- when you learn the Railroad technology.\
+A railroad also increases by half (rounding down) all kinds of resources\
+ produced by a tile. A tile whose road is upgraded to a railroad retains\
+ any trade bonus from the road as well.\
 ")
 
 [extra_river]
@@ -1125,7 +1136,7 @@ buildable      = FALSE
 native_to      = "Land"
 flags          = "NaturalDefense"
 helptext       = _("\
-Any land terrain type may have a River on it.\
+A grassland tile may have a River on it.\
 "), _("\
 Roads and railroads can only be built on River tiles if your\
  civilization has learned Bridge Building technology.\
@@ -1274,6 +1285,7 @@ rmact_gfx_alt  = "-"
 ;                           (must have "Base" in its causes)
 ; gui_type                = How gui should handle this base.
 ;                           Value can be "Fortress", "Airbase", or "Other"
+;                           See also [extraui] section
 ; border_sq               = Base will claim land ownership up to this radius,
 ;                           -1 to disable. If enabled, base cannot exist in
 ;                           city tile.

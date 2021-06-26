@@ -859,8 +859,28 @@ static GtkWidget *detached_widget_new(void)
 static GtkWidget *detached_widget_fill(GtkWidget *tearbox)
 {
   GtkWidget *b, *fillbox;
+  static GtkCssProvider *detach_button_provider = NULL;
+
+  if (detach_button_provider == NULL) {
+    detach_button_provider = gtk_css_provider_new();
+
+    /* These toggle buttons run vertically down the side of many UI
+     * elements, so they need to be thin horizontally. */
+    gtk_css_provider_load_from_data(detach_button_provider,
+                                    ".detach_button {\n"
+                                    "  padding: 0px 0px 0px 0px;\n"
+                                    "  min-width: 6px;\n"
+                                    "}",
+                                    -1, NULL);
+  }
 
   b = gtk_toggle_button_new();
+  gtk_style_context_add_provider(gtk_widget_get_style_context(b),
+                                 GTK_STYLE_PROVIDER(detach_button_provider),
+                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_add_class(gtk_widget_get_style_context(b),
+                              "detach_button");
+
   gtk_container_add(GTK_CONTAINER(tearbox), b);
   g_signal_connect(b, "toggled", G_CALLBACK(tearoff_callback), tearbox);
 
@@ -1148,6 +1168,8 @@ static void setup_widgets(void)
   gtk_notebook_append_page(GTK_NOTEBOOK(notebook), page, NULL);
 
   top_vbox = gtk_grid_new();
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(top_vbox),
+                                 GTK_ORIENTATION_VERTICAL);
   gtk_grid_set_row_spacing(GTK_GRID(top_vbox), 5);
   hgrid = gtk_grid_new();
 
@@ -1155,6 +1177,8 @@ static void setup_widgets(void)
     /* The window is divided into two horizontal panels: overview +
      * civinfo + unitinfo, main view + message window. */
     right_vbox = gtk_grid_new();
+    gtk_orientable_set_orientation(GTK_ORIENTABLE(right_vbox),
+                                   GTK_ORIENTATION_VERTICAL);
     gtk_container_add(GTK_CONTAINER(hgrid), right_vbox);
 
     paned = gtk_paned_new(GTK_ORIENTATION_HORIZONTAL);
@@ -1174,7 +1198,7 @@ static void setup_widgets(void)
     gtk_paned_pack1(GTK_PANED(paned), top_vbox, TRUE, FALSE);
     gtk_container_add(GTK_CONTAINER(top_vbox), hgrid);
 
-    /* Overview size designed for netbooks. */
+    /* Overview size designed for big displays (desktops). */
     overview_canvas_store_width = OVERVIEW_CANVAS_STORE_WIDTH;
     overview_canvas_store_height = OVERVIEW_CANVAS_STORE_HEIGHT;
   }
@@ -1184,7 +1208,10 @@ static void setup_widgets(void)
   gtk_orientable_set_orientation(GTK_ORIENTABLE(vgrid),
                                  GTK_ORIENTATION_VERTICAL);
   gtk_grid_set_column_spacing(GTK_GRID(vgrid), 3);
-  gtk_container_add(GTK_CONTAINER(hgrid), vgrid);
+  /* Put vgrid to the left of anything else in hgrid -- right_vbox is either
+   * the chat/messages pane, or NULL which is OK */
+  gtk_grid_attach_next_to(GTK_GRID(hgrid), vgrid, right_vbox,
+                          GTK_POS_LEFT, 1, 1);
 
   /* overview canvas */
   ahbox = detached_widget_new();
@@ -1231,6 +1258,8 @@ static void setup_widgets(void)
   gtk_container_add(GTK_CONTAINER(vgrid), ahbox);
   gtk_widget_set_hexpand(ahbox, FALSE);
   avbox = detached_widget_fill(ahbox);
+  gtk_widget_set_vexpand(avbox, TRUE);
+  gtk_widget_set_valign(avbox, GTK_ALIGN_FILL);
 
   /* Info on player's civilization, when game is running. */
   frame = gtk_frame_new("");
@@ -1239,6 +1268,8 @@ static void setup_widgets(void)
   main_frame_civ_name = frame;
 
   vgrid = gtk_grid_new();
+  gtk_orientable_set_orientation(GTK_ORIENTABLE(vgrid),
+                                 GTK_ORIENTATION_VERTICAL);
   gtk_container_add(GTK_CONTAINER(frame), vgrid);
   gtk_widget_set_hexpand(vgrid, TRUE);
 
@@ -1433,6 +1464,8 @@ static void setup_widgets(void)
     gtk_paned_pack1(GTK_PANED(paned), top_notebook, TRUE, FALSE);
   } else if (GUI_GTK_OPTION(message_chat_location) == GUI_GTK_MSGCHAT_MERGED) {
     right_vbox = gtk_grid_new();
+    gtk_orientable_set_orientation(GTK_ORIENTABLE(right_vbox),
+                                   GTK_ORIENTATION_VERTICAL);
 
     gtk_container_add(GTK_CONTAINER(right_vbox), top_notebook);
     gtk_container_add(GTK_CONTAINER(right_vbox), ingame_votebar);

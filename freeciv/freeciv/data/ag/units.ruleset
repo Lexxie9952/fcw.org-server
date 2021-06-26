@@ -68,6 +68,9 @@ flags =
     _("MultiSlot"), _("Cities with proper requirements can produce more than one of these per turn.") ;uncomment if you don't have slot_control patch
     _("CanHide"), _("In appropriate terrain, this unit can make a Hideout, which will conceal all land units on the tile.")
     _("WillNever")
+;;; The following flag MUST be #34 position to work with hack in movement.c which allows transported AAA to defend on non-native:
+;;; this comment can be removed when we have some smarter way for unit_can_defend_here(..) to get ruleset control.
+    _("TransportDefender"), _("Can defend while transported on non-native tiles.")
   }
 
 ; Names for custom unit class flags. There can be up to 8 of these.
@@ -89,7 +92,7 @@ class_flags =
 veteran_names = _("green"), _("veteran"), _("hardened"), _("elite"), _("crack"), _("master"), _("champion")
 
 ; The percentage chance of increasing level through combat
-veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 
 ; The percentage chance of a settler/engineer increasing level through
 ; performing useful work (per turn)
@@ -404,7 +407,7 @@ flags         = "Unreachable", "DoesntOccupyTile", "Airliftable"
 ; veteran_names = Special veteran level for this unit. See the definitions in
 ;                 game.ruleset. All of the veteran_* entries have to have the
 ;                 same length!
-; veteran_raise_chance =
+; veteran_base_raise_chance =
 ; veteran_work_raise_chance =
 ; veteran_power_fact =
 ; veteran_move_bonus =
@@ -611,7 +614,7 @@ uk_gold       = 0
 flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "AddToCity", "Cities", "Cant_Fortify", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
@@ -658,7 +661,7 @@ uk_gold       = 2
 flags         = "Settlers", "Infra", "NonMil", "HasNoZOC", "Cant_Fortify", "Unique", "Well-Digger", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
@@ -700,10 +703,12 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 1
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+disembarks    = "Helicopter"
 flags         = "Settlers", "Infra", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable", "Airbase", "CanFortress", "CanRoad", "Proletarian"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 1
@@ -744,10 +749,12 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 2
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+disembarks    = "Helicopter"
 flags         = "Fanatic", "Cant_Fortify", "NonMil", "HasNoZOC", "AddToCity", "Capturable", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
@@ -786,6 +793,8 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+disembarks    = "Helicopter"
 flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "Airbase", "Cant_Fortify", "Capturable", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names =
@@ -793,7 +802,7 @@ veteran_names =
   _("?vet_rank:army worker"),
   _("?vet_rank:army engineer"),
   _("?vet_rank:chief engineer")
-veteran_raise_chance = 0, 0, 0, 0
+veteran_base_raise_chance = 0, 0, 0, 0
 veteran_work_raise_chance = 0, 0, 0, 0
 veteran_power_fact = 100, 100, 100, 100
 veteran_move_bonus = 0, 1, 1, 1
@@ -834,10 +843,12 @@ uk_happy      = 0
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+disembarks    = "Helicopter"
 flags         = "Settlers", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "Transform", "Airbase", "Cant_Fortify", "Expellable"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
@@ -1047,6 +1058,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+disembarks    = "Helicopter"
 flags         = "FootSoldier", "Capturer", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild",
                 "BarbarianTech", "BarbarianBuildTech", "BarbarianSeaTech"
@@ -1083,6 +1096,8 @@ uk_happy      = 2
 uk_shield     = 2
 uk_food       = 0
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+disembarks    = "Helicopter"
 targets       = "Balloon", "Helicopter"
 flags         = "Fanatic", "FootSoldier", "Capturer", "CantReachAir", "Unbribable", "Bombarder",
                 "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
@@ -1130,6 +1145,8 @@ uk_happy      = 1
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+disembarks    = "Helicopter"
 targets       = "Balloon", "Helicopter"
 flags         = "MultiSlot", "IgTer", "IgZOC", "NoHome", "FootSoldier", "Capturer", "CantReachAir",
                 "Shield2Gold", "Settlers", "CanHide", "WillNever"
@@ -1173,6 +1190,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+disembarks    = "Helicopter"
 targets       = "Balloon", "Helicopter"
 flags         = "MultiSlot", "IgTer", "FootSoldier", "Capturer", "CantReachAir", "Shield2Gold", "Settlers", "CanHide", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit"
@@ -1211,6 +1230,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+disembarks    = "Helicopter"
 targets       = "Balloon", "Helicopter"
 flags         = "MultiSlot", "FootSoldier", "Capturer", "CantReachAir", "Shield2Gold", "Settlers", "CanHide", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
@@ -1262,10 +1283,10 @@ veteran_names =
   _("?vet_rank:Commando"),
   _("?vet_rank:Green Beret"),
   _("?vet_rank:Navy SEAL")
-veteran_raise_chance = 60, 50, 40, 30, 20, 15, 0
+veteran_base_raise_chance = 60, 50, 40, 30, 20, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
-veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+veteran_move_bonus = 0, 0, 0, 1, 1, 1, 1
 roles         = "DefendOk", "DefendOkStartUnit", "BarbarianSeaTech"
 helptext      = _("\
 Marines are experts at amphibious war. They are the strongest\
@@ -1305,6 +1326,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+disembarks    = "Helicopter"
 targets       = "Balloon", "Helicopter"
 flags         = "Paratroopers", "FootSoldier", "Capturer", "CantReachAir", "Provoking",
                 "Shield2Gold", "MultiSlot", "Settlers", "CanHide", "WillNever"
@@ -1316,8 +1339,7 @@ Paratroopers are experts at airborne attacks.\
  immediately ready to act there. Beware dropping into unseen territory,\
  as Paratroopers landing on a tile occupied by enemy units will be lost.\
  Also note: Paradropping is assumed to be done from aircraft. Therefore,\
- Fighters on Vigil on adjacent tiles can auto-attack the tile you land on,
- if adjacent.\
+ Fighters on Vigil may auto-attack the tile you land on, if adjacent.\
 "), _("\
 \nThe discovery of Labor Union changes upkeep from shields to gold.\
 ")
@@ -1351,6 +1373,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+;disembarks    = "Helicopter"
 targets       = "Balloon", "Helicopter"
 flags         = "CantReachAir", "Shield2Gold", "MultiSlot", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit"
@@ -1625,6 +1649,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+;disembarks    = "Helicopter"
 targets       = "Balloon", "Helicopter"
 flags         = "CantReachAir", "FortBuster", "WillNever"
 roles         = "AttackFastStartUnit", "Hunter"
@@ -1660,6 +1686,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+;disembarks    = "Helicopter"
 targets       = "Balloon", "Helicopter"
 bonuses       =
    { "flag", "type", "value"
@@ -1733,6 +1761,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+disembarks    = "Helicopter"
 flags         = "CantReachAir", "WillNever"
 roles         = "BarbarianTech", "BarbarianBuildTech"
 helptext      = _("\
@@ -1765,6 +1795,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+disembarks    = "Helicopter"
 targets       = "Balloon"
 flags         = "CantReachAir", "WillNever"
 roles         = ""
@@ -1808,13 +1840,13 @@ bonuses       =
      "AirAttacker", "DefenseDivider", 1
      "AirAttacker", "DefenseMultiplier", 1
    }
-flags         = "NeverBlocked", "AntiAir", "Marines", "WillNever"
+flags         = "NeverBlocked", "AntiAir", "Marines", "WillNever", "TransportDefender"
 roles         = ""
 helptext      = _("\
 Anti-Aircraft Artillery (AAA) can attack almost anything from anywhere. AAA get a\
- 2x bonus against Air units. They are often used by Marines in combined ops because\
- they can be transported on any unit that can carry Marines, can attack from or to non-native\
- tiles, and do not lose a turn when unloading. (AAA cannot attack Submarines, Missiles,\
+ 2x bonus against Air units. AAA qualify as weaponry for Marines and have the same\
+ abilities: they can be transported on any unit that carries Marines, can attack from\
+ or to non-native tiles, and do not lose a turn when unloading. (AAA cannot attack Submarines, Missiles,\
  or Jet Bombers.)\
 "), _("
 After Space Flight and 10 turns of service, AAA can be retrofitted to\
@@ -1846,6 +1878,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+disembarks    = "Helicopter"
 targets       = "Air", "AirProtect", "AirPillage", "Balloon", "Helicopter"
 cargo         = "Missile"
 bonuses       =
@@ -1890,6 +1924,8 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+disembarks    = "Helicopter"
 targets       = "Balloon"
 flags         = "CantReachAir", "WillNever"
 roles         = ""
@@ -1975,7 +2011,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -2030,7 +2066,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -2096,7 +2132,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -2160,7 +2196,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -2217,7 +2253,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -2274,7 +2310,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -2292,8 +2328,8 @@ name          = _("AWACS")
 class         = "Air"
 tech_req      = "Radar"
 obsolete_by   = "None"
-graphic       = "u.awacs"
-graphic_alt   = "u.bomber"  ; backwards compatibility
+graphic       = "u.awacs_o"
+graphic_alt   = "u.awacs"
 sound_move    = "m_awacs"
 sound_move_alt = "m_generic"
 sound_fight   = "f_awacs"
@@ -2320,6 +2356,70 @@ The AWACS has great fuel capacity for long range flights, and advanced radar tha
 "), _("
 NOTE: GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
+")
+
+[unit_transport_helicopter]
+; /* TRANS: unit type */
+name          = _("Transport Helicopter")
+class         = "Helicopter"
+tech_req      = "Combined Arms"
+obsolete_by   = "None"
+graphic       = "u.t_helicopter"
+graphic_alt   = "u.helicopter"
+sound_move    = "m_helicopter"
+sound_move_alt = "m_generic"
+sound_fight   = "f_helicopter"
+sound_fight_alt = "f_generic"
+build_cost    = 90
+pop_cost      = 0
+attack        = 0
+defense       = 3
+hitpoints     = 21
+firepower     = 2
+move_rate     = 12
+vision_radius_sq = 12
+transport_cap = 3
+fuel          = 0
+uk_happy      = 1
+uk_shield     = 1
+uk_food       = 0
+uk_gold       = 0
+bonuses       =
+   { "flag", "type", "value"
+      "FootSoldier", "DefenseMultiplierPct", 50   ; all Infantry (Foot and Mech.)
+      "Horse", "DefenseMultiplierPct", 50
+      ;Cavalry is covered by it getting a separate "attack bonus of -50%"
+   }
+cargo         = "Land", "LandAirSea", "LandNoKill"
+flags         = "Helicopter", "AirAttacker", "Unbribable", "Provoking",
+                "CanEscape", "WillNever", "HasNoZOC"
+                ; Tranport Heli is provoking; Fighters don't like them.
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:ace"),
+  _("?vet_rank:top gun")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
+roles         = ""
+helptext      = _("\
+Transport Helicopters can carry three land units.\
+"), _("\
+ Foot and artillery types can unload on any tile. Other types\
+ need a refuel-tile. Unloading on a non-refuel tile loses all moves\
+ (except Marines)\n.\
+"), _("\
+ Helicopters lose 1 hp for each turn not ended in a City, Base, or Carrier. +1 move\
+ is awarded if starting a turn in a City or Airbase.\n\
+"), _("\
+ All Helicopters can be attacked by land from Riflemen onward; by sea from Ironclad\
+ onward; get +50% defence vs. foot units; and are unreachable to artillery types.\
+ Unlike attack Helicopters, Transport Helicopters are intercepted by Fighters on vigil.\
 ")
 
 [unit_helicopter]
@@ -2369,7 +2469,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -2377,14 +2477,14 @@ roles         = ""
 helptext      = _("\
 Helicopters are the Air Cavalry of modern armies. They can attack multiple targets\
  and conquer cities. Unaffected by terrain, they are good for Partisan suppression.\
- They can transport specialized units, making them well-suited for commando ops.\n\
+ They can transport Marines and AAA and are thus well-suited for commando ops.\n\
 "), _("\
-Helicopters lose 1 hp for each turn not ended in a City, Base, or Carrier. +1 move point\
- is awarded if starting its turn in a City or Airbase.\n\
+For each turn not ended in a City, Base, or Carrier, 1hp is lost. +1 move\
+ is awarded if starting a turn in a City or Airbase.\n\
 "), _("\
 Helicopters fly low to avoid Interception. This invites attacks by ground units from\
- Riflemen onward. Even so, they are unreachable to Artillery types and get a 50% defense\
- bonus against units on foot. City Walls get a defense bonus against them;\
+ Riflemen onward. They are unreachable to Artillery types and get +50% defense\
+ vs. foot units. City Walls get a defense bonus against them;\
  SAM Batteries do not. Helicopters can be attacked by Sea from Ironclad onward.\n\
 "), _("\
 Helicopters can transport one Marines or AAA unit.\
@@ -2428,7 +2528,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -2483,7 +2583,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -2492,7 +2592,8 @@ helptext      = _("\
 Ground Strike Fighters upgrade the Dive Bomber. They cannot block attacks on other\
  units on their tile, nor engage against Fighters. However, like the Dive Bomber,\
  they can interdict ZoC over land tiles. High fuel capacity allows two turns in the\
- air. No unit can stop this unit from attacking surface units on a tile. This is a\
+ air. No unit can stop this unit from attacking surface units on a tile. This unit\
+ can also do pinpointed surgical strikes to pillage tiles. This aircraft is a\
  specialized niche unit. It is not an interceptor.\n\
 NOTE: GOTO prevents unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
@@ -2534,7 +2635,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -2590,7 +2691,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -2650,7 +2751,7 @@ veteran_names =
   _("?vet_rank:crack"),
   _("?vet_rank:ace"),
   _("?vet_rank:top gun")
-veteran_raise_chance = 40, 25, 16, 10, 10, 10, 0
+veteran_base_raise_chance = 40, 25, 16, 10, 10, 10, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
@@ -3316,7 +3417,7 @@ sound_move    = "m_carrier"
 sound_move_alt = "m_generic"
 sound_fight   = "f_carrier"
 sound_fight_alt = "f_generic"
-build_cost    = 160
+build_cost    = 155
 pop_cost      = 0
 attack        = 1
 defense       = 9
@@ -3324,7 +3425,7 @@ hitpoints     = 40
 firepower     = 2
 move_rate     = 10
 vision_radius_sq = 12
-transport_cap = 8
+transport_cap = 9
 fuel          = 0
 uk_happy      = 1
 uk_shield     = 1
@@ -3445,7 +3546,6 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-targets       = "Balloon", "Helicopter"
 embarks       = "Submarine"
 disembarks    = "Submarine"
 flags         = "NeverProtects", "FieldUnit", "OneAttack", "HasNoZOC", "Unbribable",
@@ -3492,7 +3592,7 @@ flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC"
                 "NeverBlocked", "WillNever", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
@@ -3539,7 +3639,7 @@ flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC"
                 "NeverBlocked", "WillNever", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
@@ -3589,7 +3689,7 @@ flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC"
                 "NeverBlocked", "WillNever", "Unique", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
@@ -3640,7 +3740,7 @@ flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC"
                 "NeverBlocked", "WillNever", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
@@ -3687,7 +3787,7 @@ flags         = "NeverProtects", "FieldUnit", "OneAttack", "Nuclear", "HasNoZOC"
                 "NeverBlocked", "WillNever", "NoVeteran"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
@@ -3727,6 +3827,8 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+disembarks    = "Helicopter"
 flags         = "Diplomat", "IgZOC", "NonMil", "HasNoZOC", "Expellable"
 veteran_names =
   _("?diplomatic_rank:attaché"),
@@ -3737,7 +3839,7 @@ veteran_names =
   _("?diplomatic_rank:statesman"),
   _("?diplomatic_rank:plenipotentiary")
 
-veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 110, 115, 120, 125, 130, 135
 veteran_move_bonus = 0, 0, 0, 0, 0, 0, 0
@@ -3776,6 +3878,8 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+disembarks    = "Helicopter"
 flags         = "Diplomat", "IgZOC", "NonMil", "HasNoZOC", "Spy", "Expellable"
 veteran_names =
   _("?spy_level:informant"),
@@ -3786,7 +3890,7 @@ veteran_names =
   _("?spy_level:neutralizer"),
   _("?spy_level:spymaster")
   
-veteran_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 110, 115, 120, 125, 130, 135
 veteran_move_bonus = 0, 0, 0, 0, 0, 0, 0
@@ -3826,6 +3930,8 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+disembarks    = "Helicopter"
 flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Shield2Gold"
 roles         = "AttackStrongStartUnit"  ;note: MP2 doesn't start games with ASSU's so has co-opted this for caravan start unit.
 helptext      = _("\
@@ -3899,6 +4005,8 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+disembarks    = "Helicopter"
 flags         = "IgTer", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable"
 roles         = "Explorer", "ExplorerStartUnit"
 helptext      = _("\
@@ -3932,11 +4040,13 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+disembarks    = "Helicopter"
 flags         = "IgZOC", "NonMil", "HasNoZOC", "NoBuild", "NoHome", "SuperSpy", 
                 "EvacuateFirst", "Unbribable", "GameLoss", "Unique", "WillNever"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
@@ -3975,11 +4085,13 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
+embarks       = "Helicopter"    ; transport helicopter only
+disembarks    = "Helicopter"
 flags         = "IgZOC", "NonMil", "HasNoZOC", "NoBuild", "NoHome", "SuperSpy", 
                 "EvacuateFirst", "Unbribable", "GameLoss", "Unique", "WillNever"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
@@ -4023,7 +4135,7 @@ flags         = "IgZOC", "NonMil", "HasNoZOC", "Unbribable", "WillNever",
                 "EvacuateFirst", "SuperSpy", "NoHome", "NoBuild"
 ; No veteran levels (level name is never displayed)
 veteran_names = _("green")
-veteran_raise_chance = 0
+veteran_base_raise_chance = 0
 veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0

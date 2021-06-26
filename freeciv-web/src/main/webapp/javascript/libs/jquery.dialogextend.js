@@ -99,7 +99,7 @@
         "right": "auto",
         "margin": 0
       }).find(".ui-icon").removeClass("ui-icon-closethick").addClass(this.options.icons.close).end().appendTo(buttonPane).end();
-      buttonPane.append('<a class="ui-dialog-titlebar-restore ui-corner-all ui-state-default" href="#"><span class="ui-icon ' + this.options.icons.restore + '" title="restore">restore</span></a>').find('.ui-dialog-titlebar-restore').attr("role", "button").mouseover(function() {
+      buttonPane.append('<span class="ui-dialog-titlebar-restore ui-corner-all ui-state-default" style="cursor:pointer; float:left"><span class="ui-icon ' + this.options.icons.restore + '" title="restore">restore</span></span>').find('.ui-dialog-titlebar-restore').attr("role", "button").mouseover(function() {
         return $(this).addClass("ui-state-hover");
       }).mouseout(function() {
         return $(this).removeClass("ui-state-hover");
@@ -133,7 +133,7 @@
         _this = this;
 
       buttonPane = $(this.element[0]).dialog("widget").find('.ui-dialog-titlebar-buttonpane');
-      return buttonPane.append('<a class="ui-dialog-titlebar-' + name + ' ui-corner-all ui-state-default" href="#" title="' + name + '"><span class="ui-icon ' + this.options.icons[name] + '">' + name + '</span></a>').find(".ui-dialog-titlebar-" + name).attr("role", "button").mouseover(function() {
+      return buttonPane.append('<span class="ui-dialog-titlebar-' + name + ' ui-corner-all ui-state-default" style="cursor:pointer; float:left;" title="' + name + '"><span class="ui-icon ' + this.options.icons[name] + '">' + name + '</span></span>').find(".ui-dialog-titlebar-" + name).attr("role", "button").mouseover(function() {
         return $(this).addClass("ui-state-hover");
       }).mouseout(function() {
         return $(this).removeClass("ui-state-hover");

@@ -56,9 +56,9 @@ extern "C" {
 #define MAX_NUM_ACTION_AUTO_PERFORMERS 4
 #define MAX_NUM_MULTIPLIERS 15
 #define MAX_NUM_LEADERS MAX_NUM_ITEMS /* Used in the network protocol. */
-#define MAX_NUM_NATION_SETS 32 /* Used in the network protocol.
-                                * RULESET_NATION_SETS packet may become too big
-                                * if increased */
+#define MAX_NUM_NATION_SETS 32 // Used in the network protocol.
+                               // RULESET_NATION_SETS packet may become too big
+                               // if increased
 #define MAX_NUM_NATION_GROUPS 128 /* Used in the network protocol. */
 /* Used in the network protocol -- nation count is a UINT16 */
 #define MAX_NUM_NATIONS MAX_UINT16
@@ -70,7 +70,7 @@ extern "C" {
 #define MAX_LEN_NAME       48
 #define MAX_LEN_CITYNAME   50
 #define MAX_LEN_MAP_LABEL  64
-#define MAX_LEN_DEMOGRAPHY 16
+#define MAX_LEN_DEMOGRAPHY 32 // 19Mar2021 was 16 but we needed 17.
 #define MAX_LEN_ALLOW_TAKE 16
 #define MAX_LEN_GAME_IDENTIFIER 33
 #define MAX_GRANARY_INIS 24
@@ -96,49 +96,53 @@ enum output_type_id {
 /* Changing this enum will break savegame and network compatability. */
 #define SPECENUM_NAME unit_activity
 #define SPECENUM_VALUE0 ACTIVITY_IDLE
-#define SPECENUM_VALUE0NAME "Idle"
+#define SPECENUM_VALUE0NAME N_("Idle")
 #define SPECENUM_VALUE1 ACTIVITY_POLLUTION
-#define SPECENUM_VALUE1NAME "Pollution"
+#define SPECENUM_VALUE1NAME N_("Pollution")
 #define SPECENUM_VALUE2 ACTIVITY_OLD_ROAD
 #define SPECENUM_VALUE2NAME "Unused Road"
 #define SPECENUM_VALUE3 ACTIVITY_MINE
-#define SPECENUM_VALUE3NAME "Mine"
+#define SPECENUM_VALUE3NAME N_("Mine")
 #define SPECENUM_VALUE4 ACTIVITY_IRRIGATE
-#define SPECENUM_VALUE4NAME "Irrigate"
+#define SPECENUM_VALUE4NAME N_("Irrigate")
 #define SPECENUM_VALUE5 ACTIVITY_FORTIFIED
-#define SPECENUM_VALUE5NAME "Fortified"
+#define SPECENUM_VALUE5NAME N_("Fortified")
 #define SPECENUM_VALUE6 ACTIVITY_FORTRESS
-#define SPECENUM_VALUE6NAME "Fortress"
+#define SPECENUM_VALUE6NAME N_("Fortress")
 #define SPECENUM_VALUE7 ACTIVITY_SENTRY
-#define SPECENUM_VALUE7NAME "Sentry"
+#define SPECENUM_VALUE7NAME N_("Sentry")
 #define SPECENUM_VALUE8 ACTIVITY_OLD_RAILROAD
 #define SPECENUM_VALUE8NAME "Unused Railroad"
 #define SPECENUM_VALUE9 ACTIVITY_PILLAGE
-#define SPECENUM_VALUE9NAME "Pillage"
+#define SPECENUM_VALUE9NAME N_("Pillage")
 #define SPECENUM_VALUE10 ACTIVITY_GOTO
-#define SPECENUM_VALUE10NAME "Goto"
+#define SPECENUM_VALUE10NAME N_("Goto")
 #define SPECENUM_VALUE11 ACTIVITY_EXPLORE
-#define SPECENUM_VALUE11NAME "Explore"
+#define SPECENUM_VALUE11NAME N_("Explore")
 #define SPECENUM_VALUE12 ACTIVITY_TRANSFORM
-#define SPECENUM_VALUE12NAME "Transform"
-#define SPECENUM_VALUE13 ACTIVITY_UNKNOWN    // now used as Vigil
+#define SPECENUM_VALUE12NAME N_("Transform")
+#define SPECENUM_VALUE13 ACTIVITY_UNKNOWN
 #define SPECENUM_VALUE13NAME "Unused"
 #define SPECENUM_VALUE14 ACTIVITY_AIRBASE
 #define SPECENUM_VALUE14NAME "Unused Airbase"
 #define SPECENUM_VALUE15 ACTIVITY_FORTIFYING
-#define SPECENUM_VALUE15NAME "Fortifying"
+#define SPECENUM_VALUE15NAME N_("Fortifying")
 #define SPECENUM_VALUE16 ACTIVITY_FALLOUT
-#define SPECENUM_VALUE16NAME "Fallout"
+#define SPECENUM_VALUE16NAME N_("Fallout")
 #define SPECENUM_VALUE17 ACTIVITY_PATROL_UNUSED
 #define SPECENUM_VALUE17NAME "Unused Patrol"
 #define SPECENUM_VALUE18 ACTIVITY_BASE
-#define SPECENUM_VALUE18NAME "Base"
+#define SPECENUM_VALUE18NAME N_("Base")
 #define SPECENUM_VALUE19 ACTIVITY_GEN_ROAD
-#define SPECENUM_VALUE19NAME "Road"
+#define SPECENUM_VALUE19NAME N_("Road")
 #define SPECENUM_VALUE20 ACTIVITY_CONVERT
-#define SPECENUM_VALUE20NAME "Convert"
+#define SPECENUM_VALUE20NAME N_("Convert")
+#define SPECENUM_VALUE21 ACTIVITY_CULTIVATE
+#define SPECENUM_VALUE21NAME N_("Cultivate")
+#define SPECENUM_VALUE22 ACTIVITY_PLANT
+#define SPECENUM_VALUE22NAME N_("Plant")
 #define SPECENUM_COUNT ACTIVITY_LAST
-#include "specenum_gen.h"
+#include "specenum_gen.h"       // #13 above is now used as Vigil
 
 /* Happens at once, not during turn change. */
 #define ACT_TIME_INSTANTANEOUS (-1)
@@ -182,9 +186,9 @@ struct action;
 
 /* Changing these will break network compatibility. */
 #define SP_MAX 20
-#define MAX_NUM_REQS 20
+#define MAX_NUM_REQS 100
 
-#define MAX_NUM_RULESETS 16 /* Used in the network protocol. */
+#define MAX_NUM_RULESETS 63 /* Used in the network protocol. */
 #define MAX_RULESET_NAME_LENGTH 64 /* Used in the network protocol. */
 #define RULESET_SUFFIX ".serv"
 
@@ -245,6 +249,19 @@ typedef int Unit_Class_id;
  * cannot use specenum function call direction8_max(). */
 #define DIR8_MAGIC_MAX 8
 
+/* The victim gets a casus belli if EFT_CASUS_BELLI_* is equal to or above
+ * CASUS_BELLI_VICTIM. To change this value you must update the
+ * documentation of each Casus_Belli_* effect in
+ * doc/README.effects, update existing rulesets and add ruleset
+ * compatibility code to server/rscompat.c. */
+#define CASUS_BELLI_VICTIM 1
+/* International outrage: Everyone gets a casus belli if EFT_CASUS_BELLI_*
+ * is equal to or above CASUS_BELLI_OUTRAGE. To change this value you must
+ * update the documentation of each Casus_Belli_* effect in
+ * doc/README.effects, update existing rulesets and add ruleset
+ * compatibility code to server/rscompat.c. */
+#define CASUS_BELLI_OUTRAGE 1000
+
 /* Used in the network protocol. */
 /* server/commands.c must match these */
 #define SPECENUM_NAME ai_level
@@ -286,7 +303,7 @@ typedef int Unit_Class_id;
 #include "specenum_gen.h"
 
 /*
- * Citytile requirement types. 
+ * CityTile requirement types.
  *
  * Used in the network protocol
  */
@@ -296,6 +313,17 @@ typedef int Unit_Class_id;
 #define SPECENUM_VALUE1 CITYT_CLAIMED
 #define SPECENUM_VALUE1NAME "Claimed"
 #define SPECENUM_COUNT CITYT_LAST
+#include "specenum_gen.h"
+
+/*
+ * CityStatus requirement types.
+ *
+ * Used in the network protocol
+ */
+#define SPECENUM_NAME citystatus_type
+#define SPECENUM_VALUE0 CITYS_OWNED_BY_ORIGINAL
+#define SPECENUM_VALUE0NAME "OwnedByOriginal"
+#define SPECENUM_COUNT CITYS_LAST
 #include "specenum_gen.h"
 
 /*
@@ -316,6 +344,12 @@ typedef int Unit_Class_id;
 #define SPECENUM_VALUE4NAME "HasHomeCity"
 #define SPECENUM_VALUE5 USP_NATIVE_TILE
 #define SPECENUM_VALUE5NAME "OnNativeTile"
+#define SPECENUM_VALUE6 USP_NATIVE_EXTRA
+#define SPECENUM_VALUE6NAME "InNativeExtra"
+#define SPECENUM_VALUE7 USP_MOVED_THIS_TURN
+#define SPECENUM_VALUE7NAME "MovedThisTurn"
+#define SPECENUM_VALUE8 USP_FORTIFIED
+#define SPECENUM_VALUE8NAME "Fortified"
 #define SPECENUM_COUNT USP_COUNT
 #include "specenum_gen.h"
 
@@ -367,13 +401,13 @@ enum req_problem_type {
 typedef union {
   struct advance *advance;
   struct government *govern;
-  struct impr_type *building;
+  const struct impr_type *building;
   struct nation_type *nation;
   struct nation_type *nationality;
   struct specialist *specialist;
   struct terrain *terrain;
   struct unit_class *uclass;
-  struct unit_type *utype;
+  const struct unit_type *utype;
   struct extra_type *extra;
   struct achievement *achievement;
   struct nation_group *nationgroup;
@@ -383,8 +417,10 @@ typedef union {
 
   enum ai_level ai_level;
   enum citytile_type citytile;
+  enum citystatus_type citystatus;
   int minsize;
   int minculture;
+  int minforeignpct;
   int minyear;
   int mincalfrag;
   Output_type_id outputtype;
@@ -400,6 +436,7 @@ typedef union {
   int diplrel;                          /* enum diplstate_type or
                                            enum diplrel_other */
   enum ustate_prop unit_state;
+  enum unit_activity activity;
   enum impr_genus_id impr_genus;
   int minmoves;
   int max_tile_units;
@@ -506,6 +543,12 @@ typedef union {
 #define SPECENUM_VALUE41NAME "MinCalFrag"
 #define SPECENUM_VALUE42 VUT_SERVERSETTING
 #define SPECENUM_VALUE42NAME "ServerSetting"
+#define SPECENUM_VALUE43 VUT_CITYSTATUS
+#define SPECENUM_VALUE43NAME "CityStatus"
+#define SPECENUM_VALUE44 VUT_MINFOREIGNPCT
+#define SPECENUM_VALUE44NAME "MinForeignPct"
+#define SPECENUM_VALUE45 VUT_ACTIVITY
+#define SPECENUM_VALUE45NAME "Activity"
 /* Keep this last. */
 #define SPECENUM_COUNT VUT_COUNT
 #include "specenum_gen.h"
@@ -715,7 +758,6 @@ typedef int server_setting_id;
 #define SPECENUM_COUNT ECAT_COUNT
 #include "specenum_gen.h"
 #define ECAT_NONE ECAT_COUNT
-#define ECAT_LAST ECAT_COUNT
 
 /* Used in the network protocol. */
 #define SPECENUM_NAME extra_cause
@@ -759,6 +801,8 @@ FC_STATIC_ASSERT(EC_COUNT < 16, extra_causes_over_limit);
 #define SPECENUM_VALUE2NAME "CleanFallout"
 #define SPECENUM_VALUE3 ERM_DISAPPEARANCE
 #define SPECENUM_VALUE3NAME "Disappear"
+#define SPECENUM_VALUE4 ERM_ENTER
+#define SPECENUM_VALUE4NAME "Enter"
 #define SPECENUM_COUNT ERM_COUNT
 #define SPECENUM_BITVECTOR bv_rmcauses
 #include "specenum_gen.h"
@@ -978,6 +1022,8 @@ enum spaceship_place_type {
 
 typedef float adv_want;
 #define ADV_WANT_PRINTF "%f"
+
+enum setting_default_level { SETDEF_INTERNAL, SETDEF_RULESET, SETDEF_CHANGED };
 
 #ifdef __cplusplus
 }

@@ -128,10 +128,12 @@ int city_gold_worth(struct city *pcity)
   } output_type_iterate_end;
   unit_list_iterate(pcity->units_supported, punit) {
     if (same_pos(unit_tile(punit), pcity->tile)) {
-      struct unit_type *punittype = unit_type_get(punit)->obsoleted_by;
+      const struct unit_type *punittype = unit_type_get(punit)->obsoleted_by;
 
       if (punittype && can_city_build_unit_direct(pcity, punittype)) {
-        worth += unit_disband_shields(punit); /* obsolete, candidate for disbanding */
+        /* obsolete, candidate for disbanding */
+        worth += unit_shield_value(punit, unit_type_get(punit),
+                                   action_by_number(ACTION_RECYCLE_UNIT));
       } else {
         worth += unit_build_shield_cost(pcity, punit); /* good stuff */
       }

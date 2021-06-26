@@ -19,7 +19,7 @@ format_version=20
 [ruledit]
 
 ; Which file to read description in from.
-description_file = "maptest/README.maptest"
+description_file = "ag/README.ag"
 
 [about]
 ; Ruleset name
@@ -31,12 +31,12 @@ name = _("Avant-garde")
 
 ; Summary of the ruleset
 ; /* TRANS: In the client, this is displayed alongside the contents of
-;    README.maptest, which are not localized. */
+;    README.ag, which are not localized. */
 summary = _("")
 
 ; Detailed description
 ; When updating this, update also desciption_file in [ruledit] section to match
-description = *maptest/README.maptest*
+description = *ag/README.ag*
 
 ; What capabilities ruleset provides for the scenarios.
 ; mimimum-default-sets - Default units, terrains, buildings, etc
@@ -203,8 +203,8 @@ tired_attack = TRUE
 ; are ruleset controlled.
 ;   will_never - units with this unit type flag will never auto attack.
 
-; Not a good idea to nuke our own area.
-will_never = "Nuclear"
+; Non-fighters don't auto-attack.
+will_never = "WillNever"
 
 [actions]
 ; If force_trade_route is set to TRUE it is illegal for an actor unit to
@@ -263,7 +263,7 @@ ui_name_sabotage_city = _("%sSabotage City%s")
 ui_name_sabotage_city_escape = _("%sSabotage City Escape%s")
 
 ; /* TRANS: Industrial _Sabotage (3% chance of success). */
-ui_name_targeted_sabotage_city_escape = _("Industrial %sSabotage%s")
+ui_name_targeted_sabotage_city_escape = _("Targeted %sSabotage%s")
 
 ; /* TRANS: Incite a _Revolt (3% chance of success). */
 ui_name_incite_city = _("Incite a %sRevolt%s")
@@ -290,7 +290,7 @@ ui_name_steal_tech = _("Steal %sTechnology%s")
 ui_name_steal_tech_escape = _("Steal %sTechnology and Escape%s")
 
 ; /* TRANS: Indus_trial Espionage (3% chance of success). */
-ui_name_targeted_steal_tech_escape = _("Indus%strial Espionage%s")
+ui_name_targeted_steal_tech_escape = _("Tar%sgeted Tech Theft%s")
 
 ; /* TRANS: Steal _Map Fragments and Escape (3% chance of success). */
 ui_name_steal_maps_escape = _("Steal %sMap Fragments and Escape%s")
@@ -373,6 +373,7 @@ ui_name_conquer_city = _("%sConquer City%s")
 
 ; /* TRANS: Build _Canal (100% chance of success). */
  ui_name_canal = _("Build %Canal%s")
+ ui_name_waterway = _("Build Water%way%s")
 
 ; /* TRANS: _Build Base (100% chance of success). */
  ui_name_build_base = _("%sBuild Base%s")
@@ -382,6 +383,10 @@ ui_name_conquer_city = _("%sConquer City%s")
 
 ; /* TRANS: Build _Irrigation (100% chance of success). */
  ui_name_irrigate = _("Build %sIrrigation%s")
+
+; NOT IMPLEMENTED IN SERVER YET
+ ; /* TRANS: _Unload (100% chance of success). */
+;ui_name_transport_unload = _("%sUnload%s")
 
 ; Suppress automatic help text generation about what enables and/or
 ; disables the following actions.
@@ -567,27 +572,30 @@ actor_reqs    =
       "UnitState", "OnLivableTile", "Local", TRUE
       "MinMoveFrags", "1", "Local", TRUE
       "DiplRel", "Foreign", "Local", TRUE
+      "UnitState",    "Transported",    "Local", FALSE
       "UnitFlag", "Spy", "Local", FALSE
     }
 
 [actionenabler_investigate_city_spy]
 action       = "Investigate City"
 actor_reqs    =
-    { "type",   "name", "range"
-      "UnitFlag", "Spy", "Local"
-      "UnitState", "OnLivableTile", "Local"
-      "MinMoveFrags", "1", "Local"
-      "DiplRel", "Foreign", "Local"
+    { "type",   "name", "range", "present"
+      "UnitFlag", "Spy", "Local", TRUE
+      "UnitState", "OnLivableTile", "Local", TRUE
+      "MinMoveFrags", "1", "Local", TRUE
+      "UnitState",    "Transported", "Local", FALSE
+      "DiplRel", "Foreign", "Local", TRUE
     }
 
 [actionenabler_poison_city]
 action = "Poison City Escape"
 actor_reqs    =
-    { "type",   "name", "range"
-      "UnitFlag", "Spy", "Local"
-      "DiplRel", "War", "Local"
-      "UnitState", "OnLivableTile", "Local"
-      "MinMoveFrags", "1", "Local"
+    { "type",   "name", "range", "present"
+      "UnitFlag", "Spy", "Local", TRUE
+      "UnitState",    "Transported", "Local", FALSE
+      "DiplRel", "War", "Local", TRUE
+      "UnitState", "OnLivableTile", "Local", TRUE
+      "MinMoveFrags", "1", "Local", TRUE
     }
 target_reqs    =
     { "type",   "name", "range"
@@ -597,11 +605,12 @@ target_reqs    =
 [actionenabler_steal_maps_escape]
 action = "Steal Maps Escape"
 actor_reqs    =
-    { "type",   "name", "range"
-      "UnitFlag", "Spy", "Local"
-      "UnitState", "OnLivableTile", "Local"
-      "MinMoveFrags", "1", "Local"
-      "DiplRel", "Foreign", "Local"
+    { "type",   "name", "range", "present"
+      "UnitFlag", "Spy", "Local", TRUE
+      "UnitState", "OnLivableTile", "Local", TRUE
+      "MinMoveFrags", "1", "Local", TRUE
+      "DiplRel", "Foreign", "Local", TRUE
+      "UnitState",    "Transported",    "Local", FALSE
     }
 target_reqs  =
     { "type",   "name", "range", "present"
@@ -610,11 +619,12 @@ target_reqs  =
 [actionenabler_steal_maps]
 action = "Steal Maps"
 actor_reqs    =
-    { "type",   "name", "range"
+    { "type",   "name", "range", "present"
       "UnitFlag", "Diplomat", "Local"
       "UnitState", "OnLivableTile", "Local"
       "MinMoveFrags", "1", "Local"
       "DiplRel", "Foreign", "Local"
+      "UnitState",    "Transported",    "Local", FALSE
     }
 target_reqs  =
     { "type",   "name", "range", "present"
@@ -630,6 +640,7 @@ actor_reqs    =
       "UnitState",    "OnLivableTile", "Local", TRUE
       "MinMoveFrags", "1",             "Local", TRUE
       "DiplRel",      "Foreign",       "Local", TRUE
+      "UnitState",    "Transported",    "Local", FALSE
     }
 target_reqs  =
     { "type",        "name",      "range",  "present"
@@ -639,11 +650,12 @@ target_reqs  =
 [actionenabler_steal_tech_random_esc]
 action = "Steal Tech Escape Expected"
 actor_reqs    =
-    { "type",         "name",          "range"
-      "UnitFlag",     "Spy",           "Local"
-      "UnitState",    "OnLivableTile", "Local"
-      "MinMoveFrags", "1",             "Local"
-      "DiplRel",      "Foreign",       "Local"
+    { "type",         "name",          "range", "present"
+      "UnitFlag",     "Spy",           "Local", TRUE
+      "UnitState",    "OnLivableTile", "Local", TRUE
+      "MinMoveFrags", "1",             "Local", TRUE
+      "DiplRel",      "Foreign",       "Local", TRUE
+      "UnitState",    "Transported",    "Local", FALSE
     }
 target_reqs  =
     { "type",        "name",      "range",  "present"
@@ -653,11 +665,12 @@ target_reqs  =
 [actionenabler_steal_tech_target]
 action = "Targeted Steal Tech Escape Expected"
 actor_reqs    =
-    { "type",         "name",          "range"
-      "UnitFlag",     "Spy",           "Local"
-      "UnitState",    "OnLivableTile", "Local"
-      "MinMoveFrags", "1",             "Local"
-      "DiplRel",      "Foreign",       "Local"
+    { "type",         "name",          "range", "present"
+      "UnitFlag",     "Spy",           "Local", TRUE
+      "UnitState",    "OnLivableTile", "Local", TRUE
+      "MinMoveFrags", "1",             "Local", TRUE
+      "DiplRel",      "Foreign",       "Local", TRUE
+      "UnitState",    "Transported",    "Local", FALSE
     }
 target_reqs  =
     { "type",        "name",      "range",  "present"
@@ -675,6 +688,7 @@ actor_reqs    =
       "MinMoveFrags", "1",             "Local", TRUE
       "DiplRel",      "Foreign",       "Local", TRUE
       "UnitFlag",     "Spy",           "Local", FALSE
+      "UnitState",    "Transported",    "Local", FALSE
     }
 target_reqs  =
     { "type",     "name",      "range",  "present"
@@ -694,6 +708,7 @@ actor_reqs    =
       "UnitState",    "OnLivableTile", "Local", TRUE
       "MinMoveFrags", "1",             "Local", TRUE
       "DiplRel",      "Foreign",       "Local", TRUE
+      "UnitState",    "Transported",    "Local", FALSE
     }
 target_reqs  =
     { "type",     "name",      "range",  "present"
@@ -817,24 +832,36 @@ target_reqs    =
       "BuildingGenus", "SmallWonder", "Local", TRUE
 ;     "Building", "Palace", "Local", FALSE
     }
-
+; Allow no-home commerce units to be used on a first wonder: 
+[actionenabler_help_build_wonder_starting_caravan]
+action = "Help Wonder"
+actor_reqs    =
+    { "type",   "name", "range", "present"
+      "UnitFlag", "HelpWonder", "Local", TRUE
+      "UnitState", "HasHomeCity", "Local", FALSE
+      "DiplRel", "War", "Local", FALSE
+    }
+target_reqs    =
+    { "type",   "name", "range", "present"
+      "BuildingGenus", "SmallWonder", "Local", TRUE
+    }
 
 [actionenabler_recycle_unit]
 action = "Recycle Unit"
 actor_reqs    =
-    { "type",   "name", "range", "present"
-      "UnitFlag", "EvacuateFirst", "Local", FALSE
-      "DiplRel",  "War",        "Local", FALSE
-      "DiplRel",  "Cease-fire", "Local", FALSE
-      "DiplRel",  "Armistice",  "Local", FALSE
-      "DiplRel",  "Peace",      "Local", FALSE
+    { "type",     "name",         "range", "present", "quiet"
+      "UnitFlag", "EvacuateFirst","Local", FALSE,     TRUE
+      "DiplRel",  "War",          "Local", FALSE,     TRUE
+      "DiplRel",  "Cease-fire",   "Local", FALSE,     TRUE
+      "DiplRel",  "Armistice",    "Local", FALSE,     TRUE
+      "DiplRel",  "Peace",        "Local", FALSE,     TRUE
     }
 
 [actionenabler_disband_unit]
 action = "Disband Unit"
 actor_reqs    =
-    { "type",   "name", "range", "present"
-      "UnitFlag", "EvacuateFirst", "Local", FALSE
+    { "type",     "name",           "range", "present", "quiet"
+      "UnitFlag", "EvacuateFirst",  "Local", FALSE,     TRUE
     }
 
 ;CAPTURING LAND UNITS a "Capturer" must get a "Capturable" but not on a mountain.
@@ -842,7 +869,8 @@ actor_reqs    =
 action = "Capture Units"
 actor_reqs    =
     { "type",   "name", "range", "present"
-      "UnitFlag", "Capturer", "Local", TRUE      
+      "UnitFlag", "Capturer", "Local", TRUE
+      "UnitState", "Transported", "Local", FALSE
 ;     "DiplRel", "War", "Local", TRUE             ;NAH 
       "MinMoveFrags", "1", "Local", TRUE
       "DiplRel", "Foreign", "Local", TRUE
@@ -864,12 +892,12 @@ target_reqs    =
 [actionenabler_archer_bombard] ;****
 action = "Bombard"
 actor_reqs    =
-    { "type",         "name",        "range", "present"
-      "UnitFlag",     "Bombarder",   "Local", TRUE
+    { "type",         "name",         "range", "present"
+      "UnitFlag",     "Bombarder",    "Local", TRUE
       "UnitType",     "Archers",      "Local", TRUE
 ;      "UnitState",    "Transported", "Local", FALSE
-      "MinMoveFrags", "1",           "Local", TRUE
-      "DiplRel",      "War",         "Local", TRUE
+      "MinMoveFrags", "1",            "Local", TRUE
+      "DiplRel",      "War",          "Local", TRUE
    }
 target_reqs    =
     { "type",   "name", "range", "present"
@@ -883,14 +911,14 @@ target_reqs    =
 [actionenabler_fanatic_bombard] ;****
 action = "Bombard"
 actor_reqs    =
-    { "type",         "name",        "range", "present"
-      "UnitFlag",     "Bombarder",   "Local", TRUE
-      "UnitType",     "Fanatics",      "Local", TRUE
-;      "UnitState",    "Transported", "Local", FALSE
+    { "type",         "name",           "range", "present"
+      "UnitFlag",     "Bombarder",      "Local",  TRUE
+      "UnitType",     "Fanatics",       "Local",  TRUE
       "UnitState",    "OnDomesticTile", "Local",  TRUE
-      "MinMoveFrags", "1",           "Local", TRUE
-      "DiplRel",      "War",         "Local", TRUE
+      "MinMoveFrags", "1",              "Local",  TRUE
+      "DiplRel",      "War",            "Local",  TRUE
       "Gov",          "Fundamentalism", "Player", TRUE
+;      "UnitState",   "Transported",    "Local",  FALSE
    }
 target_reqs    =
     { "type",   "name", "range", "present"
@@ -1004,8 +1032,9 @@ target_reqs    =
 [actionenabler_nuke]
 action = "Explode Nuclear"
 actor_reqs    =
-    { "type",   "name", "range", "present"
-      "UnitFlag", "Nuclear", "Local", TRUE
+    { "type",         "name",       "range", "present", "quiet"
+      "UnitFlag",     "Nuclear",    "Local",  TRUE,     FALSE
+      "ServerSetting","nukes_minor","World",  TRUE,     FALSE
     }
 
 ;DESTROY CITY
@@ -1174,6 +1203,16 @@ actor_reqs    =
 ; REMOVE LINE BELOW TO ALLOW GIVING UNITS TO ALLIES THROUGH HOME CITY COMMAND
       "DiplRel",   "Foreign",  "Local", FALSE
     }
+; Allow no-home caravans to be "homed" so they can be used for a Trade Route:
+[actionenabler_change_home_commerce]
+action = "Home City"
+actor_reqs    =
+    { "type",      "name",        "range", "present"
+      "UnitFlag",  "NoHome",      "Local", FALSE
+      "UnitFlag",  "TradeRoute",  "Local", TRUE
+; REMOVE LINE BELOW TO ALLOW GIVING UNITS TO ALLIES THROUGH HOME CITY COMMAND
+      "DiplRel",   "Foreign",  "Local", FALSE
+    }
 
 [actionenabler_paradrop_base]
 action = "Paradrop Unit"
@@ -1230,7 +1269,8 @@ action        = "Irrigate TF"
 actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitType",      "Legion",       "Local", FALSE
+      "UnitFlag",      "CanHide",      "Local", FALSE
+;      "UnitType",      "Legion",       "Local", FALSE
       "UnitType",      "Proletarians", "Local", FALSE
     }
 [actionenabler_irrigate_tf_prole]
@@ -1247,7 +1287,8 @@ action        = "Mine TF"
 actor_reqs    =
     { "type",          "name",        "range", "present"
       "UnitFlag",      "Settlers",    "Local", TRUE
-      "UnitType",      "Legion",      "Local", FALSE 
+      "UnitFlag",      "CanHide",      "Local", FALSE
+;      "UnitType",      "Legion",      "Local", FALSE 
       "UnitType",      "Proletarians","Local", FALSE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
       "CityTile",      "Center",      "Local", FALSE
@@ -1266,7 +1307,8 @@ action        = "Mine TF"
 actor_reqs    =
     { "type",          "name",      "range", "present"
       "UnitFlag",      "Settlers",  "Local", TRUE
-      "UnitType",      "Legion",    "Local", FALSE
+;      "UnitType",      "Legion",    "Local", FALSE
+      "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
       "UnitType",      "Proletarians", "Local", FALSE
       "CityTile",      "Center",    "Local", TRUE
@@ -1280,21 +1322,28 @@ actor_reqs    =
     { "type",          "name",         "range"
       "UnitClassFlag", "CanPillage",   "Local"
     }
- 
+[actionenabler_pillage2]
+action        = "Pillage"
+actor_reqs    =
+    { "type",     "name",                  "range"
+      "UnitType", "Ground Strike Fighter", "Local"
+    }
+
 [actionenabler_fortify]
 action        = "Fortify"
 actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitClassFlag", "CanFortify",   "Local", TRUE
       "UnitFlag",      "Cant_Fortify", "Local", FALSE
+      "UnitClass",     "AirProtect",   "Local", FALSE
     }
- 
+
 [actionenabler_road]
 action        = "Road"
 actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
-      "UnitType",      "Legion",       "Local",   FALSE
+      "UnitFlag",      "CanHide",      "Local",   FALSE
       "UnitType",      "Proletarians", "Local",   FALSE
     }
 [actionenabler_road_prole]
@@ -1340,6 +1389,25 @@ actor_reqs    =
       "UnitType",      "Proletarians",    "Local",  TRUE
       "Gov",           "Communism",       "Player", TRUE
      }
+[actionenabler_build_hideout_domestic]
+action        = "Build Base"
+actor_reqs    =
+    { "type",          "name",            "range", "present"
+       "UnitFlag",      "CanHide",         "Local",  TRUE
+       "UnitState",     "OnLivableTile",   "Local",  TRUE
+       "DiplRel",       "Foreign",         "Local",  FALSE
+    }
+[actionenabler_build_hideout_unclaimed]
+action        = "Build Base"
+actor_reqs    =
+    { "type",          "name",            "range", "present"
+       "UnitFlag",      "CanHide",         "Local",  TRUE
+       "UnitState",     "OnLivableTile",   "Local",  TRUE
+    }
+target_reqs    =
+    { "type",   "name", "range", "present"
+      "CityTile", "Claimed", "Local", FALSE
+    }
 
 [actionenabler_mining]
 action        = "Build Mine"
@@ -1347,7 +1415,8 @@ actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitFlag",      "Well-Digger",  "Local",   FALSE
-      "UnitType",      "Legion",       "Local",   FALSE
+;      "UnitType",      "Legion",       "Local",   FALSE
+      "UnitFlag",      "CanHide",      "Local",   FALSE
       "UnitType",      "Proletarians", "Local",   FALSE
     }
 target_reqs    =
@@ -1372,7 +1441,8 @@ action        = "Build Mine"
 actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
-      "UnitType",      "Legion",       "Local",   FALSE
+;      "UnitType",      "Legion",       "Local",   FALSE
+      "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitType",      "Proletarians", "Local",   FALSE
       "UnitFlag",      "Well-Digger",  "Local",   FALSE
       "Tech",          "Construction", "Player",  TRUE
@@ -1400,7 +1470,8 @@ action        = "Build Mine"
 actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
-      "UnitType",      "Legion",       "Local",   FALSE
+;      "UnitType",      "Legion",       "Local",   FALSE
+      "UnitFlag",      "CanHide",      "Local",   FALSE
       "UnitType",      "Proletarians", "Local",   FALSE
       "UnitFlag",      "Well-Digger",  "Local",   FALSE
       "Tech",          "Refining",     "Player",  TRUE
@@ -1445,7 +1516,8 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
-      "UnitType",      "Legion",       "Local", FALSE
+;      "UnitType",      "Legion",       "Local", FALSE
+      "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitType",      "Proletarians", "Local", FALSE
     }
 target_reqs    =
@@ -1465,20 +1537,22 @@ target_reqs    =
       "TerrainClass", "Oceanic", "CAdjacent", TRUE
     }
  
-[actionenabler_irrigate_src_river]
+[actionenabler_irrigate_src_river] ;canal and waterway too
 action        = "Build Irrigation"
 actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitType",      "Legion",       "Local", FALSE
+;      "UnitType",      "Legion",       "Local", FALSE
+      "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitType",      "Proletarians", "Local", FALSE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
     }
 target_reqs    =
     { "type",    "name",     "range", "present"
-      "Extra",   "River",    "CAdjacent", TRUE
+      "ExtraFlag", "IrrigationSource", "CAdjacent", TRUE
+;      "Extra",   "River",    "CAdjacent", TRUE
     }
-[actionenabler_irrigate_src_river_prole]
+[actionenabler_irrigate_src_river_prole] ;canal and water way too
 action        = "Build Irrigation"
 actor_reqs    =
     { "type",          "name",         "range", "present"
@@ -1488,7 +1562,8 @@ actor_reqs    =
     }
 target_reqs    =
     { "type",    "name",     "range", "present"
-      "Extra",   "River",    "CAdjacent", TRUE
+      "ExtraFlag", "IrrigationSource", "CAdjacent", TRUE
+;      "Extra",   "River",    "CAdjacent", TRUE
     }
 
 [actionenabler_irrigate_src_oasis]
@@ -1496,7 +1571,8 @@ action        = "Build Irrigation"
 actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
-      "UnitType",      "Legion",       "Local", FALSE
+;      "UnitType",      "Legion",       "Local", FALSE
+      "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitType",      "Proletarians", "Local", FALSE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
     }
@@ -1524,7 +1600,8 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
       "UnitType",      "Proletarians", "Local", FALSE
-      "UnitType",      "Legion",       "Local", FALSE
+;      "UnitType",      "Legion",       "Local", FALSE
+      "UnitFlag",      "CanHide",      "Local", FALSE
     }
 target_reqs    =
     { "type",    "name",       "range", "present"
@@ -1542,6 +1619,19 @@ target_reqs    =
     { "type",    "name",       "range", "present"
       "Extra",   "Irrigation", "CAdjacent", TRUE
     }
+
+; NOT IMPLEMENTED IN SERVER YET
+;[actionenabler_unload]
+;action        = "Transport Unload"
+;actor_reqs    =
+;    { "type",      "name",         "range"
+;      "UnitState", "Transporting", "Local"
+;    }
+;target_reqs    =
+;    { "type",      "name",          "range"
+;      "UnitState", "OnLivableTile", "Local"
+;      "UnitState", "Transported",   "Local"
+;    }
 
 [borders]
 ; Base border radius from city.
@@ -1599,7 +1689,7 @@ base_tech_cost   = 20
 ; "Normal Players" - Technology cost is reduced depending on the number of
 ;                    normal players (human and AI) which already know the
 ;                    tech.
-tech_leakage = "None"
+tech_leakage = "All Players"
 
 ; Method of paying tech upkeep
 ; "None"   - no upkeep
@@ -1942,33 +2032,48 @@ names =
 
 set =
     { "name", "value", "lock"
+      "mapsize", "PLAYER", FALSE
+      "tilesperplayer", 300, FALSE
       "netwait", 20, FALSE
       "nettimeout", 120, FALSE
       "pingtime", 30, FALSE
       "pingtimeout", 240, FALSE
       "restrictinfra", "ENABLED", FALSE
       "alltemperate", FALSE, FALSE
+      "aifill", 6, FALSE
       "airliftingstyle", "FROM_ALLIES|TO_ALLIES", FALSE
       "airliftdestdivisor", 3, FALSE
+      "autoattack", "enabled", FALSE
+      "autoattack_style", 1, FALSE
       "barbarians", "DISABLED", FALSE
       "borders", "SEE_INSIDE", FALSE
       "contactturns", 10, FALSE
       "diplomacy", "ALL", FALSE
-      "dispersion", 2, FALSE
-      "endturn", 365, FALSE
+      "dispersion", 0, FALSE
+;      "endturn", 365, FALSE
       "foggedborders", TRUE, FALSE
+      "fogofwar", "DISABLED", FALSE
+      "generator", "RANDOM", FALSE
       "gold", 100, FALSE
+      "hideouts", TRUE, FALSE
       "huts", 0, FALSE
+      "landmass", 63, FALSE
       "minplayers", 0, FALSE
       "move_bonus_in_frags", "ENABLED", TRUE   ;locked
       "nationset", "all", FALSE 
       "nuclearwinter_percent", 20, FALSE
+      "nukes_minor", "ENABLED", FALSE      ; set to DISABLED to completely disallow nuclear detonations
+      "nukes_major", "DISABLED", FALSE     ; set to ENABLED to allow nuclear fusion weapons
+      "revealmap", "START", FALSE
       "revolen", 1, FALSE
       "separatepoles", FALSE, FALSE
+      "slot_control", TRUE, FALSE         ; multiple units per turn
+      "slot_control_style", 1, FALSE      ; 1 = Shield2Gold units only
       "spaceship_travel_time", 225, FALSE
       "specials", 350, FALSE
       "startpos", "SINGLE", FALSE
       "startunits", "cccwwwxxaA", FALSE
+      "techleak", 25, FALSE
       "techpenalty", 0, FALSE
       "tinyisles", FALSE, FALSE
       "trademindist", 12, FALSE
@@ -1979,15 +2084,5 @@ set =
       "unload_override", 0, FALSE    ;0=native unloading same as non-native. 1+ = move_fragment cost for unloading.
       "unreachableprotects", "ENABLED", FALSE
       "unitwaittime_style", "ACTIVITIES|FORTIFY|DELAYGOTO", FALSE
-;    ***** RELEVANT SETTINGS FOR MAP TESTING
-      "generator", "FRACTAL", FALSE   ; fractal random island fair fracture
-      "landmass", 63, FALSE
-      "mapsize", "PLAYER", FALSE      ; player fullsize (in k-tiles uses size) xysize (uses xsize ysize)
-;     "xsize", 180, FALSE
-;     "ysize", 180, FALSE
-;     "startpos", "DEFAULT", FALSE    ; default single (one per cont.) 2or3 all (all on one) variable (depending on size of cont.)
-      "tilesperplayer", 300, FALSE
-      "aifill", 40, FALSE
-      "revealmap", "START", false
-      "fogofwar", "DISABLED", false
+      "zoc_purity", "ENABLED", FALSE           ; igZOC units don't lift ZOC for units subject to ZOC
     }

@@ -59,7 +59,7 @@ static struct SMALL_DLG  *pPlayers_Dlg = NULL;
 **************************************************************************/
 static int exit_players_dlg_callback(struct widget *pWidget)
 {
-  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+  if (PRESSED_EVENT(Main.event)) {
     popdown_players_dialog();
     flush_dirty();
   }
@@ -74,27 +74,32 @@ static int player_callback(struct widget *pWidget)
 {
   struct player *pPlayer = pWidget->data.player;
 
-  switch(Main.event.button.button) {
+  if (Main.event.type == SDL_MOUSEBUTTONDOWN) {
+    switch (Main.event.button.button) {
 #if 0
-      case SDL_BUTTON_LEFT:
+    case SDL_BUTTON_LEFT:
 
-        break;
-      case SDL_BUTTON_MIDDLE:
+      break;
+    case SDL_BUTTON_MIDDLE:
 
-        break;
+      break;
 #endif /* 0 */
     case SDL_BUTTON_RIGHT:
       if (can_intel_with_player(pPlayer)) {
-	popdown_players_dialog();
+        popdown_players_dialog();
         popup_intel_dialog(pPlayer);
-	return -1;
+        return -1;
       }
-    break;
+      break;
     default:
       popdown_players_dialog();
       popup_diplomacy_dialog(pPlayer);
       return -1;
-    break;
+      break;
+    }
+  } else if (PRESSED_EVENT(Main.event)) {
+    popdown_players_dialog();
+    popup_diplomacy_dialog(pPlayer);
   }
 
   return -1;
@@ -105,7 +110,7 @@ static int player_callback(struct widget *pWidget)
 **************************************************************************/
 static int players_window_dlg_callback(struct widget *pWindow)
 {
-  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+  if (PRESSED_EVENT(Main.event)) {
     if (move_window_group_dialog(pPlayers_Dlg->pBeginWidgetList, pWindow)) {
       select_window_group_dialog(pPlayers_Dlg->pBeginWidgetList, pWindow);
       players_dialog_update();
@@ -124,7 +129,7 @@ static int players_window_dlg_callback(struct widget *pWindow)
 **************************************************************************/
 static int toggle_draw_war_status_callback(struct widget *pWidget)
 {
-  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+  if (PRESSED_EVENT(Main.event)) {
     /* exit button -> neutral -> war -> casefire -> peace -> alliance */
     struct widget *pPlayer = pPlayers_Dlg->pEndWidgetList->prev->prev->prev->prev->prev->prev;
 
@@ -145,7 +150,7 @@ static int toggle_draw_war_status_callback(struct widget *pWidget)
 **************************************************************************/
 static int toggle_draw_ceasefire_status_callback(struct widget *pWidget)
 {
-  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+  if (PRESSED_EVENT(Main.event)) {
     /* exit button -> neutral -> war -> casefire -> peace -> alliance */
     struct widget *pPlayer = pPlayers_Dlg->pEndWidgetList->prev->prev->prev->prev->prev->prev;
 
@@ -166,7 +171,7 @@ static int toggle_draw_ceasefire_status_callback(struct widget *pWidget)
 **************************************************************************/
 static int toggle_draw_peace_status_callback(struct widget *pWidget)
 {
-  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+  if (PRESSED_EVENT(Main.event)) {
     /* exit button -> neutral -> war -> casefire -> peace -> alliance */
     struct widget *pPlayer = pPlayers_Dlg->pEndWidgetList->prev->prev->prev->prev->prev->prev;
 
@@ -187,7 +192,7 @@ static int toggle_draw_peace_status_callback(struct widget *pWidget)
 **************************************************************************/
 static int toggle_draw_alliance_status_callback(struct widget *pWidget)
 {
-  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+  if (PRESSED_EVENT(Main.event)) {
     /* exit button -> neutral -> war -> casefire -> peace -> alliance */
     struct widget *pPlayer = pPlayers_Dlg->pEndWidgetList->prev->prev->prev->prev->prev->prev;
 
@@ -208,7 +213,7 @@ static int toggle_draw_alliance_status_callback(struct widget *pWidget)
 **************************************************************************/
 static int toggle_draw_neutral_status_callback(struct widget *pWidget)
 {
-  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+  if (PRESSED_EVENT(Main.event)) {
     /* exit button -> neutral -> war -> casefire -> peace -> alliance */
     struct widget *pPlayer = pPlayers_Dlg->pEndWidgetList->prev->prev->prev->prev->prev->prev;
 
@@ -258,18 +263,18 @@ void real_players_dialog_update(void *unused)
       for (i = 0; i < num_player_dlg_columns; i++) {
         if (player_dlg_columns[i].show) {
           switch (player_dlg_columns[i].type) {
-            case COL_TEXT:
-            case COL_RIGHT_TEXT:
-              astr_add_line(&astr, "%s: %s", player_dlg_columns[i].title,
-                                             player_dlg_columns[i].func(pPlayer));
-              break;
-            case COL_BOOLEAN:
-              astr_add_line(&astr, "%s: %s", player_dlg_columns[i].title,
-                            player_dlg_columns[i].bool_func(pPlayer) ?
-                              _("Yes") : _("No"));
-              break;
-            default:
-              break;
+          case COL_TEXT:
+          case COL_RIGHT_TEXT:
+            astr_add_line(&astr, "%s: %s", player_dlg_columns[i].title,
+                          player_dlg_columns[i].func(pPlayer));
+            break;
+          case COL_BOOLEAN:
+            astr_add_line(&astr, "%s: %s", player_dlg_columns[i].title,
+                          player_dlg_columns[i].bool_func(pPlayer) ?
+                          _("Yes") : _("No"));
+            break;
+          default:
+            break;
           }
         }
       }
@@ -610,7 +615,7 @@ static int players_nations_window_dlg_callback(struct widget *pWindow)
 **************************************************************************/
 static int exit_players_nations_dlg_callback(struct widget *pWidget)
 {
-  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+  if (PRESSED_EVENT(Main.event)) {
     popdown_players_nations_dialog();
     flush_dirty();
   }
@@ -626,27 +631,33 @@ static int player_nation_callback(struct widget *pWidget)
   struct player *pPlayer = pWidget->data.player;
 
   popdown_players_nations_dialog();
-  switch(Main.event.button.button) {
+  if (Main.event.type == SDL_MOUSEBUTTONDOWN) {
+    switch (Main.event.button.button) {
 #if 0
-  case SDL_BUTTON_LEFT:
+    case SDL_BUTTON_LEFT:
 
-    break;
-  case SDL_BUTTON_MIDDLE:
+      break;
+    case SDL_BUTTON_MIDDLE:
 
-    break;
+      break;
 #endif /* 0 */
-  case SDL_BUTTON_RIGHT:
-    if (can_intel_with_player(pPlayer)) {
-      popup_intel_dialog(pPlayer);
-    } else {
-      flush_dirty();
+    case SDL_BUTTON_RIGHT:
+      if (can_intel_with_player(pPlayer)) {
+        popup_intel_dialog(pPlayer);
+      } else {
+        flush_dirty();
+      }
+      break;
+    default:
+      if (pPlayer != client.conn.playing) {
+        popup_diplomacy_dialog(pPlayer);
+      }
+      break;
     }
-    break;
-  default:
+  } else if (PRESSED_EVENT(Main.event)) {
     if (pPlayer != client.conn.playing) {
       popup_diplomacy_dialog(pPlayer);
     }
-    break;
   }
 
   return -1;

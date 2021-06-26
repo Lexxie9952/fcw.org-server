@@ -32,6 +32,7 @@
 #include "player.h"
 #include "research.h"
 #include "specialist.h"
+#include "traderoutes.h"
 #include "unit.h"
 #include "unitlist.h"
 
@@ -250,7 +251,7 @@ static void get_player_landarea(struct claim_map *pcmap,
 void calc_civ_score(struct player *pplayer)
 {
   const struct research *presearch;
-  struct city *wonder_city;
+  //struct city *wonder_city;
   int landarea = 0, settledarea = 0;
   static struct claim_map cmap;
 
@@ -258,9 +259,6 @@ void calc_civ_score(struct player *pplayer)
   pplayer->score.content = 0;
   pplayer->score.unhappy = 0;
   pplayer->score.angry = 0;
-  specialist_type_iterate(sp) {
-    pplayer->score.specialists[sp] = 0;
-  } specialist_type_iterate_end;
   pplayer->score.wonders = 0;
   pplayer->score.techs = 0;
   pplayer->score.techout = 0;
@@ -270,11 +268,19 @@ void calc_civ_score(struct player *pplayer)
   pplayer->score.cities = 0;
   pplayer->score.units = 0;
   pplayer->score.pollution = 0;
-  pplayer->score.bnp = 0;
-  pplayer->score.mfg = 0;
+  /* These are calculated here if (game.server.city_output_style !=WYSIWYG) */
+  if (!game.server.city_output_style) {
+    specialist_type_iterate(sp) {
+      pplayer->score.specialists[sp] = 0;
+    } specialist_type_iterate_end;
+    pplayer->score.bnp = 0;
+  }
+  /* This is never calculated after city growth so was commented out here */
+  //pplayer->score.mfg = 0; 
   pplayer->score.literacy = 0;
   pplayer->score.spaceship = 0;
   pplayer->score.culture = player_culture(pplayer);
+  pplayer->score.traderoutes = 0;
 
   if (is_barbarian(pplayer)) {
     return;
@@ -287,19 +293,35 @@ void calc_civ_score(struct player *pplayer)
     pplayer->score.content += pcity->feel[CITIZEN_CONTENT][FEELING_FINAL];
     pplayer->score.unhappy += pcity->feel[CITIZEN_UNHAPPY][FEELING_FINAL];
     pplayer->score.angry += pcity->feel[CITIZEN_ANGRY][FEELING_FINAL];
-    specialist_type_iterate(sp) {
-      pplayer->score.specialists[sp] += pcity->specialists[sp];
-    } specialist_type_iterate_end;
     pplayer->score.population += city_population(pcity);
     pplayer->score.cities++;
     pplayer->score.pollution += pcity->pollution;
     pplayer->score.techout += pcity->prod[O_SCIENCE];
-    pplayer->score.bnp += pcity->surplus[O_TRADE];
-    pplayer->score.mfg += pcity->surplus[O_SHIELD];
+    /* These are calculated here if (game.server.city_output_style !=WYSIWYG) */
+    if (!game.server.city_output_style) {
+      specialist_type_iterate(sp) {
+        pplayer->score.specialists[sp] += pcity->specialists[sp];
+      } specialist_type_iterate_end;      
+      pplayer->score.bnp += pcity->surplus[O_TRADE];
+    }
+    
+    trade_routes_iterate(pcity, proute) {
+      pplayer->score.traderoutes += proute->value;
+    } trade_routes_iterate_end;
+    
+    // This has to be calculated prior to update_city_activity or else gives wildly incorrect results
+    //pplayer->score.mfg += pcity->surplus[O_SHIELD];
 
     bonus = get_final_city_output_bonus(pcity, O_SCIENCE) - 100;
     bonus = CLIP(0, bonus, 100);
     pplayer->score.literacy += (city_population(pcity) * bonus) / 100;
+
+    // Wonders moved from below because small wonders deserve a score too.
+    city_built_iterate(pcity, pimprove) {
+      if (is_wonder(pimprove) && player_owns_city(pplayer, pcity)) {
+        pplayer->score.wonders++;
+      }
+    } city_built_iterate_end;
   } city_list_iterate_end;
 
   build_landarea_map(&cmap);
@@ -322,13 +344,8 @@ void calc_civ_score(struct player *pplayer)
     }
   } unit_list_iterate_end
 
-  improvement_iterate(i) {
-    if (is_great_wonder(i)
-        && (wonder_city = city_from_great_wonder(i))
-        && player_owns_city(pplayer, wonder_city)) {
-      pplayer->score.wonders++;
-    }
-  } improvement_iterate_end;
+  // see commit around 27Feb2021 for what this used to be (Great Wonders only)
+  // this is now handled inside the city_list_iterate above.
 
   pplayer->score.spaceship = pplayer->spaceship.state;
 
@@ -350,7 +367,7 @@ static int get_units_score(const struct player *pplayer)
 int get_civ_score(const struct player *pplayer)
 {
   /* We used to count pplayer->score.happy here too, but this is too easily
-   * manipulated by players at the endrturn. */
+   * manipulated by players at the endturn. */
   return (total_player_citizens(pplayer)
           + pplayer->score.techs * 2
           + pplayer->score.wonders * 5

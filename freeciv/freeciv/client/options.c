@@ -4122,6 +4122,7 @@ struct server_option {
   bool desired_sent;
   bool is_changeable;
   bool is_visible;
+  enum setting_default_level setdef;
 
   union {
     /* OT_BOOLEAN type option. */
@@ -4320,6 +4321,7 @@ void handle_server_setting_const
 ****************************************************************************/
 #define handle_server_setting_common(psoption, packet)                      \
   psoption->is_changeable = packet->is_changeable;                          \
+  psoption->setdef = packet->setdef;                                        \
   if (psoption->is_visible != packet->is_visible) {                         \
     if (psoption->is_visible) {                                             \
       need_gui_remove = TRUE;                                               \
@@ -5472,7 +5474,7 @@ static void settable_options_load(struct section_file *sf)
   entries = section_entries(psection);
   entry_list_iterate(entries, pentry) {
     string = NULL;
-    switch (entry_type(pentry)) {
+    switch (entry_type_get(pentry)) {
     case ENTRY_BOOL:
       if (entry_bool_get(pentry, &bval)) {
         fc_strlcpy(buf, bval ? "enabled" : "disabled", sizeof(buf));
@@ -5494,6 +5496,9 @@ static void settable_options_load(struct section_file *sf)
     case ENTRY_FLOAT:
     case ENTRY_FILEREFERENCE:
       /* Not supported yet */
+      break;
+    case ENTRY_ILLEGAL:
+      fc_assert(entry_type_get(pentry) != ENTRY_ILLEGAL);
       break;
     }
 

@@ -30,24 +30,26 @@ const UCF_TERRAIN_SPEED = 0;
 const UCF_TERRAIN_DEFENSE = 1;
 const UCF_DAMAGE_SLOWS = 2;
 const UCF_CAN_OCCUPY_CITY = 3;
-const UCF_MISSILE = 4;
-const UCF_BUILD_ANYWHERE = 5;
-const UCF_UNREACHABLE = 6;
-const UCF_COLLECT_RANSOM = 7;
-const UCF_ZOC = 8;
-const UCF_CAN_FORTIFY = 9;
-const UCF_CAN_PILLAGE = 10;
-const UCF_DOESNT_OCCUPY_TILE = 11;
-const UCF_ATTACK_NON_NATIVE = 12;
-const UCF_KILLCITIZEN = 13;
-const UCF_USER_FLAG_1 = 14;
-const UCF_USER_FLAG_2 = 15;
-const UCF_USER_FLAG_3 = 16;
-const UCF_USER_FLAG_4 = 17;
-const UCF_USER_FLAG_5 = 18;
-const UCF_USER_FLAG_6 = 19;
-const UCF_USER_FLAG_7 = 20;
-const UCF_USER_FLAG_8 = 21;
+const UCF_BUILD_ANYWHERE = 4;
+const UCF_UNREACHABLE = 5;
+const UCF_COLLECT_RANSOM = 6;
+const UCF_ZOC = 7;
+const UCF_CAN_FORTIFY = 8;
+const UCF_DOESNT_OCCUPY_TILE = 9;
+const UCF_ATTACK_NON_NATIVE = 10;
+const UCF_KILLCITIZEN = 11;
+const UCF_USER_FLAG_1 = 12;
+const UCF_USER_FLAG_2 = 13;
+const UCF_USER_FLAG_3 = 14;
+const UCF_USER_FLAG_4 = 15;
+const UCF_USER_FLAG_5 = 16;
+const UCF_USER_FLAG_6 = 17;
+const UCF_USER_FLAG_7 = 18;
+const UCF_USER_FLAG_8 = 19;
+const UCF_USER_FLAG_9 = 20;
+const UCF_USER_FLAG_10 = 21;
+const UCF_USER_FLAG_11 = 22;
+const UCF_USER_FLAG_12 = 23;
 // Custom unit class flags (MP2 sequence/order; TO DO: universalize/uniform order in other rules)
 const UCF_AIRLIFTABLE = UCF_USER_FLAG_1;
 const UCF_BORDERPOLICE = UCF_USER_FLAG_2;
@@ -70,7 +72,7 @@ const UTYF_COAST = 12;                    /* Can 'refuel' at coast - meaningless
 const UTYF_SHIELD2GOLD = 13;              /* Upkeep can switch from shield to gold */
 const UTYF_SPY = 14;                      /* Strong in diplomatic battles */
 const UTYF_ONLY_NATIVE_ATTACK = 15;       /* Cannot attack vs non-native tiles even if class can */
-const UTYF_FANATIC = 16;                  /* Only Fundamentalist government can build these units. */
+const UTYF_FANATIC = 16;                  /* Only Fundamentalist/Theocratic government can build these units. */
 const UTYF_GAMELOSS = 17;                 /* Losing this unit means losing the game */
 const UTYF_UNIQUE = 18;                   /* A player can only have one unit of this type */
 const UTYF_EVAC_FIRST = 19;               /* When a transport with this unit ist lost the game rescues this type first */
@@ -88,11 +90,12 @@ const UTYF_NEWCITY_GAMES_ONLY = 29;       /* Unit can't be built in scenarios wh
 const UTYF_CANESCAPE = 30;                /* 50% chance to escape when killstack occours if more moves remaining than attacker */
 const UTYF_CANKILLESCAPING = 31;          /* Can kill escaping units */
 const UTYF_NEVER_BLOCKED = 32;            /* Overrides unreachable_protects server setting for attacker */
-const UTYF_USER_FLAG_1 = 33;                /* Reserved for replacing Shield2Gold as flag for using multiple city_build_slots */
-const UTYF_USER_FLAG_2 = 34;                  /* Can make hideouts */
-const UTYF_USER_FLAG_3 = 35;                /* Will never autoattack */
-const UTYF_USER_FLAG_4 = 36;
-const UTYF_USER_FLAG_5 = 37;
+                                          /* some of these USER_FLAG may be mis-aligned, some of these may have hard-coded behaviour*/
+const UTYF_USER_FLAG_1 = 33;              /* Reserved for replacing Shield2Gold as flag for using multiple city_build_slots */
+const UTYF_USER_FLAG_2 = 34;              /* Can make hideouts */
+const UTYF_USER_FLAG_3 = 35;              /* Will never autoattack */
+const UTYF_USER_FLAG_4 = 36;              /* Transport Defender: will defend stack as cargo even on non-native tiles FLAG=34 on server */ 
+const UTYF_USER_FLAG_5 = 37;              /* Non-Mil Attack - as NonMil can enter Peace tiles, but if not at Peace, can attack e.g., Trireme */
 const UTYF_USER_FLAG_6 = 38;
 const UTYF_USER_FLAG_7 = 39;
 const UTYF_USER_FLAG_8 = 40;
@@ -133,7 +136,7 @@ const UTYF_AIRBASE = UTYF_USER_FLAG_1         // Can make Airbase
 const UTYF_TRANSFORM = UTYF_USER_FLAG_2       // Can do advanced Terrain transformations
 const UTYF_CANROAD = UTYF_USER_FLAG_3         // Able to build Roads
 const UTYF_CANFORTRESS = UTYF_USER_FLAG_4     // Can build Forts and Fortresses
-const UTYF_BOMBERDER = UTYF_USER_FLAG_5       // Can safely conduct Ranged Attacks
+const UTYF_BOMBARDER = UTYF_USER_FLAG_5       // Can safely conduct Ranged Attacks
 const UTYF_AIRATTACKER = UTYF_USER_FLAG_6     // AEGIS Cruiser has defense bonus against this unit
 const UTYF_HORSE = UTYF_USER_FLAG_7           // Attack halue half vs. Pikemen. Knights defend at 3 against this unit
 const UTYF_FOOTSOLDIER = UTYF_USER_FLAG_8     // Knights defend at 2 when attacked by this unit
@@ -162,6 +165,7 @@ const UTYF_ANTIAIR = UTYF_USER_FLAG_30;       // Anti-Air unit. e.g., AEGIS, AAA
 const UTYF_MULTISLOT = UTYF_USER_FLAG_31;     /* Reserved for replacing Shield2Gold as flag for using multiple city_build_slots */
 const UTYF_CANHIDE = UTYF_USER_FLAG_32;       /* Can make hideouts */
 const UTYF_WILLNEVER = UTYF_USER_FLAG_33;     // Doesn't auto-attack.
+const UTYF_TRANSPORTDEFENDER = UTYF_USER_FLAG_34 // Can defend while transported on non-native tiles //
 /**********************************************************************//**
   Return true iff units of the given type can do the specified generalized
   (ruleset defined) action enabler controlled action.
@@ -262,7 +266,7 @@ function utype_has_flag(ptype, flag)
 /**************************************************************************
 ...
 **************************************************************************/
-function get_units_from_tech(tech_id)
+function get_utypes_from_tech(tech_id)
 {
   var result = [];
 
@@ -274,3 +278,49 @@ function get_units_from_tech(tech_id)
   }
   return result;
 }
+
+/************************************************************************ 
+ * Returns the REAL base attack strength of a unit based on its v0 vet
+ * power level.
+*************************************************************************/
+function utype_real_base_attack_strength(ptype) {
+  // no custom power_fact means default of 100%:
+  if (ptype.power_fact[0] === undefined) return ptype.attack_strength;
+
+  var adjusted = ptype.attack_strength * ptype.power_fact[0];
+  // round to 3 decimals
+  adjusted *= 10; // already 100x higher from power_fect, so make 1000x
+  adjusted = Math.round(adjusted) / 1000;
+  return adjusted;
+}
+/************************************************************************ 
+ * Same as above, for base defense strength.
+*************************************************************************/
+function utype_real_base_defense_strength(ptype) {
+  // no custom power_fact means default of 100%:
+  if (ptype.power_fact[0] === undefined) return ptype.defense_strength;
+
+  var adjusted = ptype.defense_strength * ptype.power_fact[0];
+  // round to 3 decimals
+  adjusted *= 10; // already 100x higher from power_fect, so make 1000x
+  adjusted = Math.round(adjusted) / 1000;
+  return adjusted;
+}
+
+/************************************************************************ 
+ * Returns the "real" base move rate of a unit, since v0 veteran level
+ * can be used to achieve non-integer values for base movement.
+ * Return value is in move_frags.
+*************************************************************************/
+function utype_real_base_move_rate(punit_type)
+{
+  var move_bonus = parseInt(punit_type['move_bonus'][0]) 
+                 ? parseInt(punit_type['move_bonus'][0]) 
+                 : 0;
+  var move_rate  = parseInt(punit_type['move_rate']);
+
+  return move_bonus + move_rate;
+}
+
+
+

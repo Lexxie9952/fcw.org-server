@@ -33,12 +33,15 @@ var current_government;
 var rate_updater_interval;
 var rates_changed=false;
 
+var sliders_adjusted = false;
+
 
 /**************************************************************************
   ...
 **************************************************************************/
 function show_tax_rates_dialog()
 {
+  sliders_adjusted = false;
   if (client_is_observer()) return;
   
   var id = "#rates_dialog";
@@ -52,39 +55,51 @@ function show_tax_rates_dialog()
 
   $("<div id='rates_dialog'></div>").appendTo("div#game_page");
 
-  var dhtml = "<h2>Select tax, luxury and science rates</h2>"
+  var panel_html = "<input id='show_hp' type='checkbox' class='css-checkbox' title='Show hit points' name='chHP' value='false' onclick='toggle_empire_show_hitpoints();'>"
+  + "<label for='show_hp' name='show_hp_lbl' class='css-label dark-check-red'>HP</label>&ensp;"
+
+  var dhtml = "<h2>Disburse taxes to:</h2>"
     + "<form name='rates'><table border='0' style='color: #ffffff;'>"
-    + "<tr> <td><span>Tax:</td> <td> <div class='slider' id='slider-tax' tabIndex='1'></div>"
-    + "</td><td>"
-    + "<div id='tax_result' style='float:left;'></div></td>"
-    + "<td> <INPUT TYPE='CHECKBOX' NAME='lock'>Lock</td></tr>"
-    + "<tr><td>Luxury:</td><td><div class='slider' id='slider-lux' tabIndex='1'></div>"
-    + "</td><td> <div id='lux_result' style='float:left;'></div>"
-    + "</td><td><INPUT TYPE='CHECKBOX' NAME='lock'>Lock</td></tr>"
-    + "<tr><td>Science:</td><td><div class='slider' id='slider-sci' tabIndex='1'></div>"
-    + "</td><td><div id='sci_result' style='float:left;'></div>"
-    + "</td><td><INPUT TYPE='CHECKBOX' NAME='lock'>Lock</td></tr>"
+    + "<tr> <td>Treasury:</td>"
+    + "<td> <div class='slider' id='slider-tax' tabIndex='1'></div></td>"
+    + "<td><div id='tax_result' class='gold_text' style='float:left;'></div></td>"
+    + "<td> <INPUT id='lock_gold' class='css-checkbox' TYPE='CHECKBOX' NAME='lock'>"
+    + "<label for='lock_gold' name='lock_gold_lbl' class='css-label dark-check-orange'>Lock</label></td></tr>"
+
+    + "<tr> <td>Luxury:</td><td><div class='slider' id='slider-lux' tabIndex='1'></div></td>"
+    + "<td> <div id='lux_result' class='lux_text' style='float:left;'></div></td>"
+    + "<td><INPUT id='lock_lux' class='css-checkbox' TYPE='CHECKBOX' NAME='lock'>"
+    + "<label for='lock_lux' name='lock_lux_lbl' class='css-label dark-check-purple'>Lock</label></td></tr>"
+
+    + "<tr><td>Science:</td><td><div class='sci_handle slider' id='slider-sci' tabIndex='1'></div></td>"
+    + "<td><div id='sci_result' class='sci_text' style='float:left;'></div></td>"
+    + "<td><INPUT id='lock_sci' class='css-checkbox' TYPE='CHECKBOX' NAME='lock'>"
+    + "<label for='lock_sci' name='lock_sci_lbl' class='css-label dark-check-cyan'>Lock</label></td></tr>"
     + "</table></form>"
-    + "<div id='max_tax_rate' style='margin:10px;'>"
-    + "</div><div style='margin:10px;'>"
-    + "Net income: <span id='income_info'></span><br>"
-    + "Research: <span id='bulbs_info'></span></div>";
 
-  $(id).html(dhtml);
+    + "<table style='margin:10px; text-align:right;'>"
+    + "<tr><td>Net Income: </td><td><span class='gold_text' id='income_info'></span></td></tr>"
+    + "<tr><td>Research:  </td> <td><span class='sci_text' id='bulbs_info'></span></td></tr>"
+    + "</table>"
+    
+    + "<div id='max_tax_rate' style='text-align:center; margin:10px;'></div>";
 
-  $(id).attr("title", "Change your tax rates!");
+  $(id).html(dhtml); 
+
+  $(id).attr("title", "Tax rates");
   $(id).dialog({
 			bgiframe: true,
       modal: true,
       dialogClass: 'rate_slider',
       width: is_small_screen() ? "90%" : "40%",
 			  buttons: {
-				"Done" : function() {
+				"Done (𝗪)" : function() {
           submit_player_rates();
           close_rates_dialog();
-				}
-			  }
+				}}
   });
+  $(id).dialog('widget').keydown(tax_rate_key_listener);
+  $(id).css("color", default_dialog_text_color);
 
   //$(".rate_slider").css("z-index", 201);
 
@@ -94,6 +109,33 @@ function show_tax_rates_dialog()
   freeze=true; // turn off updates to cities,empire,tech,map tabs
 
   rate_updater_interval = setInterval(rate_refresh, 500);
+}
+function tax_rate_key_listener(ev)
+{
+    // Check if focus is in chat field, where these keyboard events are ignored.
+    if ($('input:focus').length > 0 || !keyboard_input) return;
+    if (C_S_RUNNING != client_state()) return;
+    var keyboard_key = String.fromCharCode(ev.keyCode).toUpperCase();
+    var key_code = ev.keyCode;
+  
+    switch (key_code) {
+      case 13: //hit enter on 'Done'
+        ev.stopPropagation();
+        clearInterval(rate_updater_interval);
+        rate_output_update=null;
+        $("#rates_dialog").dialog('close');
+        $("#rates_dialog").remove();
+        break;
+    }
+    switch (keyboard_key) {
+      case 'W':
+        ev.stopPropagation();
+        clearInterval(rate_updater_interval);
+        rate_output_update=null;
+        $("#rates_dialog").dialog('close');
+        $("#rates_dialog").remove();
+        break;
+    }
 }
 
 /**************************************************************************
@@ -110,6 +152,11 @@ function rate_refresh()
   // this might be needed iff something else isn't updating for us, otherwise remove, needs a test <<<<<<<<<<<<<<<<<<<<<<<
   update_net_income();
   update_net_bulbs();
+  if (!sliders_adjusted) {
+    $("#slider-tax").children().next().next().css("background-image", "url('/images/slider_gold.png')");
+    $("#slider-lux").children().next().next().css("background-image", "url('/images/slider_lux.png')");
+    $("#slider-sci").children().next().next().css("background-image", "url('/images/slider_sci.png')");  
+  }
 }
 
 /**************************************************************************
@@ -117,7 +164,7 @@ function rate_refresh()
 **************************************************************************/
 function update_rates_dialog()
 {
-  if (client_is_observer()) return;
+  if (client_is_observer() || client.conn.playing == null) return;
 
   maxrate = government_max_rate(client.conn.playing['government']);
 
@@ -131,7 +178,7 @@ function update_rates_dialog()
 
   var govt = governments[client.conn.playing['government']];
 
-  $("#max_tax_rate").html("<i>" + govt['name'] + " max rate: " + maxrate + "</i>");
+  $("#max_tax_rate").html("<i style='color:#a88'>" + govt['name'] + " max rate: &nbsp;</i>" + maxrate + "%");
   update_net_income();
   update_net_bulbs();
 }
@@ -358,5 +405,6 @@ function submit_player_rates()
     send_request(JSON.stringify(packet));
   } else {
     swal("Invalid tax rate values");
+    setSwalTheme();
   }
 }

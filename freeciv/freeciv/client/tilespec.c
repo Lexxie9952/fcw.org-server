@@ -76,12 +76,12 @@
 
 #include "tilespec.h"
 
-#define TILESPEC_CAPSTR "+Freeciv-tilespec-Devel-2016-Jun-07 duplicates_ok"
+#define TILESPEC_CAPSTR "+Freeciv-tilespec-Devel-2019-Jul-03 duplicates_ok"
 /*
  * Tilespec capabilities acceptable to this program:
  *
- * +Freeciv-2.4-tilespec
- *    - basic format for Freeciv versions 2.4.x; required
+ * +Freeciv-3.1-tilespec
+ *    - basic format for Freeciv versions 3.1.x; required
  *
  * +Freeciv-tilespec-Devel-YYYY.MMM.DD
  *    - tilespec of the development version at the given data
@@ -92,12 +92,12 @@
  *      "duplicates_ok")
  */
 
-#define SPEC_CAPSTR "+Freeciv-spec-Devel-2015-Mar-25"
+#define SPEC_CAPSTR "+Freeciv-spec-Devel-2019-Jul-03"
 /*
  * Individual spec file capabilities acceptable to this program:
  *
- * +Freeciv-2.3-spec
- *    - basic format for Freeciv versions 2.3.x; required
+ * +Freeciv-3.1-spec
+ *    - basic format for Freeciv versions 3.1.x; required
  */
 
 #define TILESPEC_SUFFIX ".tilespec"
@@ -3475,7 +3475,7 @@ static bool tileset_setup_unit_direction(struct tileset *t,
 /************************************************************************//**
   Try to setup all unit type sprites from single tag
 ****************************************************************************/
-bool static tileset_setup_unit_type_from_tag(struct tileset *t,
+static bool tileset_setup_unit_type_from_tag(struct tileset *t,
                                              int uidx, const char *tag)
 {
   bool has_icon, facing_sprites = TRUE;
@@ -4285,12 +4285,18 @@ static int fill_unit_sprite_array(const struct tileset *t,
         s = t->sprites.extras[extra_index(punit->activity_target)].activity;
       }
       break;
+    case ACTIVITY_PLANT:
+      s = t->sprites.unit.plant;
+      break;
     case ACTIVITY_IRRIGATE:
      if (punit->activity_target == NULL) {
         s = t->sprites.unit.irrigate;
       } else {
         s = t->sprites.extras[extra_index(punit->activity_target)].activity;
       }
+      break;
+    case ACTIVITY_CULTIVATE:
+      s = t->sprites.unit.irrigate;
       break;
     case ACTIVITY_POLLUTION:
     case ACTIVITY_FALLOUT:
@@ -4774,9 +4780,9 @@ static int fill_city_overlays_sprite_array(const struct tileset *t,
       const int ox = t->type == TS_ISOMETRIC ? t->normal_tile_width / 3 : 0;
       const int oy = t->type == TS_ISOMETRIC ? -t->normal_tile_height / 3 : 0;
 
-      food = CLIP(0, food, NUM_TILES_DIGITS - 1);
-      shields = CLIP(0, shields, NUM_TILES_DIGITS - 1);
-      trade = CLIP(0, trade, NUM_TILES_DIGITS - 1);
+      food = CLIP(0, food / game.info.granularity, NUM_TILES_DIGITS - 1);
+      shields = CLIP(0, shields / game.info.granularity, NUM_TILES_DIGITS - 1);
+      trade = CLIP(0, trade / game.info.granularity, NUM_TILES_DIGITS - 1);
 
       ADD_SPRITE(t->sprites.city.tile_foodnum[food], TRUE, ox, oy);
       ADD_SPRITE(t->sprites.city.tile_shieldnum[shields], TRUE, ox, oy);
@@ -5378,6 +5384,7 @@ static int fill_goto_sprite_array(const struct tileset *t,
 
 /************************************************************************//**
   Should the given extra be drawn
+  FIXME: Some extras can not be switched
 ****************************************************************************/
 static bool is_extra_drawing_enabled(struct extra_type *pextra)
 {
@@ -5408,7 +5415,7 @@ static bool is_extra_drawing_enabled(struct extra_type *pextra)
     }
     no_disable = FALSE;
   }
-  if (is_extra_caused_by(pextra, EC_HUT)) {
+  if (is_extra_removed_by(pextra, ERM_ENTER)) {
     if (gui_options.draw_huts) {
       return TRUE;
     }
@@ -5877,18 +5884,19 @@ int fill_sprite_array(struct tileset *t,
     /* City size.  Drawing this under fog makes it hard to read. */
     if (pcity && gui_options.draw_cities && !gui_options.draw_full_citybar) {
       bool warn = FALSE;
+      unsigned int size = city_size_get(pcity);
 
-      ADD_SPRITE(t->sprites.city.size[city_size_get(pcity) % 10], FALSE,
+      ADD_SPRITE(t->sprites.city.size[size % 10], FALSE,
                  FULL_TILE_X_OFFSET + t->city_size_offset_x,
                  FULL_TILE_Y_OFFSET + t->city_size_offset_y);
-      if (10 <= city_size_get(pcity)) {
-        ADD_SPRITE(t->sprites.city.size_tens[(city_size_get(pcity) / 10) 
+      if (10 <= size) {
+        ADD_SPRITE(t->sprites.city.size_tens[(size / 10)
                    % 10], FALSE,
                    FULL_TILE_X_OFFSET + t->city_size_offset_x,
                    FULL_TILE_Y_OFFSET + t->city_size_offset_y);
-        if (100 <= city_size_get(pcity)) {
+        if (100 <= size) {
           struct sprite *sprite =
-              t->sprites.city.size_hundreds[(city_size_get(pcity) / 100) % 10];
+            t->sprites.city.size_hundreds[(size / 100) % 10];
 
           if (NULL != sprite) {
             ADD_SPRITE(sprite, FALSE,
@@ -5897,7 +5905,7 @@ int fill_sprite_array(struct tileset *t,
           } else {
             warn = TRUE;
           }
-          if (1000 <= city_size_get(pcity)) {
+          if (1000 <= size) {
             warn = TRUE;
           }
         }
@@ -5910,7 +5918,7 @@ int fill_sprite_array(struct tileset *t,
         if (0 != strcmp(last_reported, t->name)) {
           log_normal(_("Tileset \"%s\" doesn't support big cities size, "
                        "such as %d. Size not displayed as expected."),
-                     t->name, city_size_get(pcity));
+                     t->name, size);
           sz_strlcpy(last_reported, t->name);
         }
       }
@@ -5958,6 +5966,11 @@ int fill_sprite_array(struct tileset *t,
                          FULL_TILE_Y_OFFSET + t->activity_offset_y);
             }
             break;
+          case ACTIVITY_PLANT:
+            ADD_SPRITE(t->sprites.unit.plant,
+                       TRUE, FULL_TILE_X_OFFSET + t->activity_offset_x,
+                       FULL_TILE_Y_OFFSET + t->activity_offset_y);
+            break;
           case ACTIVITY_IRRIGATE:
             if (ptask->tgt == NULL) {
               ADD_SPRITE(t->sprites.unit.irrigate,
@@ -5968,6 +5981,11 @@ int fill_sprite_array(struct tileset *t,
                          TRUE, FULL_TILE_X_OFFSET + t->activity_offset_x,
                          FULL_TILE_Y_OFFSET + t->activity_offset_y);
             }
+            break;
+          case ACTIVITY_CULTIVATE:
+            ADD_SPRITE(t->sprites.unit.irrigate,
+                       TRUE, FULL_TILE_X_OFFSET + t->activity_offset_x,
+                       FULL_TILE_Y_OFFSET + t->activity_offset_y);
             break;
           case ACTIVITY_GEN_ROAD:
             ADD_SPRITE(t->sprites.extras[extra_index(ptask->tgt)].activity,
@@ -6003,6 +6021,18 @@ int fill_sprite_array(struct tileset *t,
       if (NULL != map_startpos_get(ptile)) {
         /* FIXME: Use a more representative sprite. */
         ADD_SPRITE_SIMPLE(t->sprites.user.attention);
+      }
+    }
+    break;
+
+  case LAYER_INFRAWORK:
+    if (ptile != NULL && ptile->placing != NULL) {
+      const int id = extra_index(ptile->placing);
+
+      if (t->sprites.extras[id].activity != NULL) {
+        ADD_SPRITE(t->sprites.extras[id].activity,
+                   TRUE, FULL_TILE_X_OFFSET + t->activity_offset_x,
+                   FULL_TILE_Y_OFFSET + t->activity_offset_y);
       }
     }
     break;
@@ -6585,6 +6615,7 @@ void tileset_use_preferred_theme(const struct tileset *t)
   case GUI_GTK3x:
     default_theme_name = gui_options.gui_gtk4_default_theme_name;
     default_theme_name_sz = sizeof(gui_options.gui_gtk4_default_theme_name);
+    break;
   case GUI_SDL2:
     default_theme_name = gui_options.gui_sdl2_default_theme_name;
     default_theme_name_sz = sizeof(gui_options.gui_sdl2_default_theme_name);
@@ -6799,7 +6830,7 @@ int fill_basic_base_sprite_array(const struct tileset *t,
   if ((x) != NULL) {\
     ADD_SPRITE_FULL(x);\
   }\
-} while (0)
+} while (FALSE)
 
   /* Corresponds to LAYER_SPECIAL{1,2,3} order. */
   ADD_SPRITE_IF_NOT_NULL(t->sprites.extras[idx].u.bmf.background);
@@ -6853,6 +6884,7 @@ bool tileset_layer_in_category(enum mapview_layer layer,
   case LAYER_GOTO:
   case LAYER_WORKERTASK:
   case LAYER_EDITOR:
+  case LAYER_INFRAWORK:
     return FALSE;
   case LAYER_COUNT:
     break; /* and fail below */

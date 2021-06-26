@@ -74,7 +74,7 @@ static bool is_unit_reachable_by_unit(const struct unit *defender,
                                       const struct unit *attacker)
 {
   struct unit_class *dclass = unit_class_get(defender);
-  struct unit_type *atype = unit_type_get(attacker);
+  const struct unit_type *atype = unit_type_get(attacker);
 
   return BV_ISSET(atype->targets, uclass_index(dclass));
 }
@@ -107,11 +107,11 @@ bool is_unit_reachable_at(const struct unit *defender,
 
   Unit can NOT attack if:
   1) its unit type is unable to perform any attack action.
-  2) it is not a fighter and defender is a flying unit (except city/airbase).
-  3) it is a ground unit without marine ability and it attacks from ocean.
-  4) it is a ground unit and it attacks a target on an ocean square or
+  2) it is a ground unit without marine ability and it attacks from ocean.
+  3) it is a ground unit and it attacks a target on an ocean square or
      it is a sailing unit without shore bombardment capability and it
      attempts to attack land.
+  4) it is not a fighter and defender is a flying unit (except city/airbase).
 
   Does NOT check:
   1) Moves left
@@ -124,20 +124,19 @@ enum unit_attack_result unit_attack_unit_at_tile_result(const struct unit *punit
 {
   /* 1. Can we attack _anything_ ? */
   if (!(utype_can_do_action(unit_type_get(punit), ACTION_ATTACK)
-        /* Needed because ACTION_NUKE uses this when evaluating its hard
-         * requirements. */
-        || utype_can_do_action(unit_type_get(punit), ACTION_NUKE))) {
+        || utype_can_do_action(unit_type_get(punit), ACTION_SUICIDE_ATTACK)
+        /* Needed because ACTION_NUKE_UNITS uses this when evaluating its
+         * hard requirements. */
+        || utype_can_do_action(unit_type_get(punit), ACTION_NUKE_UNITS))) {
     return ATT_NON_ATTACK;
   }
 
-  /* 2. Only fighters can attack planes, except in city or airbase attacks */
-  if (!is_unit_reachable_at(pdefender, punit, dest_tile)) {
-    return ATT_UNREACHABLE;
-  }
-
-  /* 3. Can't attack with ground unit from ocean, except for marines */
+  /* 2. Can't attack with ground unit from ocean, except for marines */
   if (!is_native_tile(unit_type_get(punit), unit_tile(punit))
       && !utype_can_do_act_when_ustate(unit_type_get(punit), ACTION_ATTACK,
+                                       USP_NATIVE_TILE, FALSE)
+      && !utype_can_do_act_when_ustate(unit_type_get(punit),
+                                       ACTION_SUICIDE_ATTACK,
                                        USP_NATIVE_TILE, FALSE)) {
     return ATT_NONNATIVE_SRC;
   }
@@ -501,6 +500,8 @@ static int get_defense_power(const struct unit *punit)
 
   if (uclass_has_flag(pclass, UCF_TERRAIN_DEFENSE)) {
     db = 100 + tile_terrain(ptile)->defense_bonus;
+    // additive bonus (not multiplied) cf. the real Civ2 river bonus
+    db += get_tile_bonus(ptile, punit, EFT_TERRAIN_DEFEND_ADD_BONUS);
     power = (power * db) / 100;
   }
 
@@ -537,13 +538,14 @@ May be called with a non-existing att_type to avoid any unit type
 effects.
 ***********************************************************************/
 static int defense_multiplication(const struct unit_type *att_type,
-                                  const struct unit_type *def_type,
+                                  const struct unit *def,
                                   const struct player *def_player,
                                   const struct tile *ptile,
-                                  int defensepower, bool fortified)
+                                  int defensepower)
 {
-  struct city *pcity = tile_city(ptile);
+  ///+++struct city *pcity = tile_city(ptile);
   int mod;
+  const struct unit_type *def_type = unit_type_get(def);
 
   fc_assert_ret_val(NULL != def_type, 0);
 
@@ -569,12 +571,18 @@ static int defense_multiplication(const struct unit_type *att_type,
 
   defensepower +=
     defensepower * tile_extras_defense_bonus(ptile, def_type) / 100;
-
-  if ((pcity || fortified)
+  /* //+++
+  if ((pcity || def->activity == ACTIVITY_FORTIFIED)
       && uclass_has_flag(utype_class(def_type), UCF_CAN_FORTIFY)
       && !utype_has_flag(def_type, UTYF_CANT_FORTIFY)) {
     defensepower = (defensepower * 3) / 2;
-  }
+  }*/ // old hard coded 0.5 bonus for fortified or in city, now uses:
+  defensepower = defensepower
+  * (100
+      + get_target_bonus_effects(NULL, unit_owner(def), NULL,
+                                tile_city(ptile), NULL, ptile, def,
+                                unit_type_get(def), NULL, NULL, NULL,
+                                EFT_FORTIFY_DEFENSE_BONUS)) / 100;
 
   return defensepower;
 }
@@ -584,15 +592,17 @@ static int defense_multiplication(const struct unit_type *att_type,
  depend on the attacker.
 ***********************************************************************/
 int get_virtual_defense_power(const struct unit_type *att_type,
-			      const struct unit_type *def_type,
-			      const struct player *def_player,
-			      const struct tile *ptile,
-			      bool fortified, int veteran)
+			                        const struct unit_type *def_type,
+			                        struct player *def_player,
+			                        struct tile *ptile,
+			                        bool fortified, int veteran)
 {
   int defensepower = def_type->defense_strength;
   int db;
   const struct veteran_level *vlevel;
   struct unit_class *defclass;
+  struct unit *vdef;
+  int def;
 
   fc_assert_ret_val(def_type != NULL, 0);
 
@@ -606,9 +616,17 @@ int get_virtual_defense_power(const struct unit_type *att_type,
 
   defclass = utype_class(def_type);
 
+  vdef = unit_virtual_create(def_player, NULL, def_type, veteran);
+  unit_tile_set(vdef, ptile);
+  if (fortified) {
+    vdef->activity = ACTIVITY_FORTIFIED;
+  }
+
   db = POWER_FACTOR;
   if (uclass_has_flag(defclass, UCF_TERRAIN_DEFENSE)) {
     db += tile_terrain(ptile)->defense_bonus / (100 / POWER_FACTOR);
+    // additive bonus (not multiplied) cf. the real Civ2 river bonus
+    db += get_tile_bonus(ptile, vdef, EFT_TERRAIN_DEFEND_ADD_BONUS);
   }
   defensepower *= db;
   defensepower *= vlevel->power_fact / 100;
@@ -616,9 +634,12 @@ int get_virtual_defense_power(const struct unit_type *att_type,
     defensepower = defensepower * defclass->non_native_def_pct / 100;
   }
 
-  return defense_multiplication(att_type, def_type, def_player,
-                                ptile, defensepower,
-                                fortified);
+  def = defense_multiplication(att_type, vdef, def_player,
+                               ptile, defensepower);
+
+  unit_virtual_destroy(vdef);
+
+  return def;
 }
 
 /*******************************************************************//**
@@ -630,10 +651,9 @@ int get_total_defense_power(const struct unit *attacker,
 			    const struct unit *defender)
 {
   return defense_multiplication(unit_type_get(attacker),
-                                unit_type_get(defender),
+                                defender,
                                 unit_owner(defender), unit_tile(defender),
-                                get_defense_power(defender),
-                                defender->activity == ACTIVITY_FORTIFIED);
+                                get_defense_power(defender));
 }
 
 /*******************************************************************//**
@@ -642,18 +662,32 @@ int get_total_defense_power(const struct unit *attacker,
   bonuses.
 ***********************************************************************/
 int get_fortified_defense_power(const struct unit *attacker,
-                                const struct unit *defender)
+                                struct unit *defender)
 {
-  struct unit_type *att_type = NULL;
+  const struct unit_type *att_type = NULL;
+  enum unit_activity real_act;
+  int def;
+  const struct unit_type *utype;
 
   if (attacker != NULL) {
     att_type = unit_type_get(attacker);
   }
 
-  return defense_multiplication(att_type, unit_type_get(defender),
-                                unit_owner(defender), unit_tile(defender),
-                                get_defense_power(defender),
-                                TRUE);
+  real_act = defender->activity;
+  ///+++defender->activity = ACTIVITY_FORTIFIED; >>> now becomes:
+  utype = unit_type_get(defender);
+  if (uclass_has_flag(utype_class(utype), UCF_CAN_FORTIFY)
+      && !utype_has_flag(utype, UTYF_CANT_FORTIFY)) {
+    defender->activity = ACTIVITY_FORTIFIED;
+  } //
+
+  def = defense_multiplication(att_type, defender,
+                               unit_owner(defender), unit_tile(defender),
+                               get_defense_power(defender));
+
+  defender->activity = real_act;
+
+  return def;
 }
 
 /*******************************************************************//**

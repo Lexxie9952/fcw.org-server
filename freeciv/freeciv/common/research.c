@@ -149,6 +149,7 @@ const char *research_rule_name(const struct research *presearch)
 
 /************************************************************************//**
   Returns the name of the research owner: a player name or a team name.
+  For most uses you probably want research_pretty_name() instead.
 ****************************************************************************/
 const char *research_name_translation(const struct research *presearch)
 {
@@ -238,22 +239,21 @@ const char *research_advance_rule_name(const struct research *presearch,
 {
   if (A_FUTURE == tech && NULL != presearch) {
     const int no = presearch->future_tech;
-    char buffer[256];
     const char *name;
 
     name = strvec_get(future_rule_name, no);
-    if (name != NULL) {
-      /* Already stored in string vector. */
-      return name;
+    if (name == NULL) {
+      char buffer[256];
+
+      /* NB: 'presearch->future_tech == 0' means "Future Tech. 1". */
+      fc_snprintf(buffer, sizeof(buffer), "%s %d",
+                  rule_name_get(&advance_future_name),
+                  no + 1);
+      name = research_future_set_name(future_rule_name, no, buffer);
     }
 
-    /* NB: 'presearch->future_tech == 0' means "Future Tech. 1". */
-    fc_snprintf(buffer, sizeof(buffer), "%s %d",
-                rule_name_get(&advance_future_name),
-                no + 1);
-    name = research_future_set_name(future_rule_name, no, buffer);
     fc_assert(name != NULL);
-    fc_assert(name != buffer);
+
     return name;
   }
 
@@ -272,20 +272,19 @@ research_advance_name_translation(const struct research *presearch,
 {
   if (A_FUTURE == tech && NULL != presearch) {
     const int no = presearch->future_tech;
-    char buffer[256];
     const char *name;
 
     name = strvec_get(future_name_translation, no);
-    if (name != NULL) {
-      /* Already stored in string vector. */
-      return name;
+    if (name == NULL) {
+      char buffer[256];
+
+      /* NB: 'presearch->future_tech == 0' means "Future Tech. 1". */
+      fc_snprintf(buffer, sizeof(buffer), _("Future Tech. %d"), no + 1);
+      name = research_future_set_name(future_name_translation, no, buffer);
     }
 
-    /* NB: 'presearch->future_tech == 0' means "Future Tech. 1". */
-    fc_snprintf(buffer, sizeof(buffer), _("Future Tech. %d"), no + 1);
-    name = research_future_set_name(future_name_translation, no, buffer);
     fc_assert(name != NULL);
-    fc_assert(name != buffer);
+
     return name;
   }
 
@@ -898,6 +897,8 @@ int research_total_bulbs_required(const struct research *presearch,
       break;
     }
 
+    fc_assert(presearch != NULL);
+    fc__fallthrough; /* No break; Fallback to using preset cost. */
   case TECH_COST_CLASSIC:
   case TECH_COST_CLASSIC_PRESET:
   case TECH_COST_EXPERIMENTAL:

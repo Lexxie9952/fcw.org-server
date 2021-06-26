@@ -12,7 +12,7 @@
 
 [datafile]
 description="Sandbox buildings data for Freeciv"
-options="Freeciv-ruleset-Devel-2017.Jan.02 +web-compatible"
+options="Freeciv-ruleset-Devel-2017.Jan.02 web-compatible"
 format_version=20
 
 ; /* <-- avoid gettext warnings
@@ -253,9 +253,10 @@ sound_alt	= "b_generic"
 helptext	= _("\
 With a Barracks, each new land unit built in a city will\
  automatically have Veteran status, which means that its attack and\
- defense strengths are increased by 50%.  Also, damaged land units\
- which stay in town for one full turn without moving are completely\
- restored.\
+ defense strengths are increased by 50%.\
+"), _("\
+Also, damaged land units which stay in town for one full turn\
+ without moving are completely restored.\
 ")
 
 [building_barracks_ii]
@@ -281,9 +282,10 @@ sound_alt	= "b_generic"
 helptext	= _("\
 With a Barracks, each new land unit built in a city will\
  automatically have Veteran status, which means that its attack and\
- defense strengths are increased by 50%.  Also, damaged land units\
- which stay in town for one full turn without moving are completely\
- restored.\
+ defense strengths are increased by 50%.\
+"), _("\
+Also, damaged land units which stay in town for one full turn\
+ without moving are completely restored.\
 ")
 
 [building_barracks_iii]
@@ -307,9 +309,10 @@ sound_alt	= "b_generic"
 helptext	= _("\
 With a Barracks, each new land unit built in a city will\
  automatically have Veteran status, which means that its attack and\
- defense strengths are increased by 50%.  Also, damaged land units\
- which stay in town for one full turn without moving are completely\
- restored.\
+ defense strengths are increased by 50%.\
+"), _("\
+Also, damaged land units which stay in town for one full turn\
+ without moving are completely restored.\
 ")
 
 [building_cathedral]
@@ -1849,11 +1852,11 @@ sabotage	= 0
 sound		= "w_oracle"
 sound_alt	= "w_generic"
 helptext	= _("\
-Reduces the unhappiness caused by aggressively deployed military \
-units owned by the city by 1 -- in other words, it neutralizes the \
-unhappiness caused by a single military unit (except under Democracy, \
-where a single unit makes two citizens unhappy). Each city also avoids \
-one shield of upkeep for units.\
+Reduces by 1 the unhappiness caused by one aggressively deployed \
+military unit per city -- in other words, in each city it neutralizes \
+the unhappiness caused by a single military unit (except under \
+Democracy, where it just halves the unhappiness from that unit). \
+Each city also avoids one shield of upkeep for units.\
 ")
 
 [building_temple_of_artemis]

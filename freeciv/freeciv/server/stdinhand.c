@@ -70,7 +70,6 @@
 #include "report.h"
 #include "ruleset.h"
 #include "sanitycheck.h"
-#include "savegame.h"
 #include "score.h"
 #include "sernet.h"
 #include "settings.h"
@@ -78,6 +77,9 @@
 #include "srv_main.h"
 #include "techtools.h"
 #include "voting.h"
+
+/* server/savegame */
+#include "savemain.h"
 
 /* server/scripting */
 #include "script_server.h"
@@ -146,7 +148,8 @@ static bool read_init_script_real(struct connection *caller,
 static bool reset_command(struct connection *caller, char *arg, bool check,
                           int read_recursion);
 static bool default_command(struct connection *caller, char *arg, bool check);
-static bool lua_command(struct connection *caller, char *arg, bool check);
+static bool lua_command(struct connection *caller, char *arg, bool check,
+                        int read_recursion);
 static bool kick_command(struct connection *caller, char *name, bool check);
 static bool delegate_command(struct connection *caller, char *arg,
                              bool check);
@@ -426,7 +429,7 @@ static void cmd_reply_no_such_player(enum command_id cmd,
 				     const char *name,
 				     enum m_pre_result match_result)
 {
-  switch(match_result) {
+  switch (match_result) {
   case M_PRE_EMPTY:
     cmd_reply(cmd, caller, C_SYNTAX,
 	      _("Name is empty, so cannot be a player."));
@@ -461,7 +464,7 @@ static void cmd_reply_no_such_conn(enum command_id cmd,
 				   const char *name,
 				   enum m_pre_result match_result)
 {
-  switch(match_result) {
+  switch (match_result) {
   case M_PRE_EMPTY:
     cmd_reply(cmd, caller, C_SYNTAX,
 	      _("Name is empty, so cannot be a connection."));
@@ -1237,6 +1240,17 @@ static bool read_init_script_real(struct connection *caller,
 }
 
 /**********************************************************************//**
+  Return a list of init scripts found on the data path.
+  Caller should free.
+  These are conventionally scripts that load rulesets (generally
+  containing just a 'rulesetdir' command).
+**************************************************************************/
+struct strvec *get_init_script_choices(void)
+{
+  return fileinfolist(get_data_dirs(), RULESET_SUFFIX);
+}
+
+/**********************************************************************//**
   Write current settings to new init script.
 
   (Should this take a 'caller' argument for output? --dwp)
@@ -1245,7 +1259,7 @@ static void write_init_script(char *script_filename)
 {
   char real_filename[1024], buf[256];
   FILE *script_file;
-  
+
   interpret_tilde(real_filename, sizeof(real_filename), script_filename);
 
   if (is_reg_file_for_access(real_filename, TRUE)
@@ -1270,8 +1284,8 @@ static void write_init_script(char *script_filename)
     fprintf(script_file, "%s\n",
             ai_level_cmd(game.info.skill_level));
 
-    if (*srvarg.metaserver_addr != '\0' &&
-	((0 != strcmp(srvarg.metaserver_addr, DEFAULT_META_SERVER_ADDR)))) {
+    if (*srvarg.metaserver_addr != '\0'
+        && ((0 != strcmp(srvarg.metaserver_addr, DEFAULT_META_SERVER_ADDR)))) {
       fprintf(script_file, "metaserver %s\n", meta_addr_port());
     }
 
@@ -1705,17 +1719,18 @@ static void show_help_option(struct connection *caller,
 {
   char val_buf[256], def_buf[256];
   struct setting *pset = setting_by_number(id);
+  bool is_changed = setting_non_default(pset);
   const char *sethelp;
 
   if (setting_short_help(pset)) {
     cmd_reply(help_cmd, caller, C_COMMENT,
               /* TRANS: <untranslated name> - translated short help */
-              _("Option: %s  -  %s"), setting_name(pset),
+              _("Option: <font color='#fffabb'>%s</font>  -  %s"), setting_name(pset),
               _(setting_short_help(pset)));
   } else {
     cmd_reply(help_cmd, caller, C_COMMENT,
               /* TRANS: <untranslated name> */
-              _("Option: %s"), setting_name(pset));
+              _("Option: <font color='#fffabb'>%s</font>"), setting_name(pset));
   }
 
   sethelp = setting_extra_help(pset, FALSE);
@@ -1737,8 +1752,8 @@ static void show_help_option(struct connection *caller,
 
     switch (setting_type(pset)) {
     case SST_INT:
-      cmd_reply(help_cmd, caller, C_COMMENT, "%s %s, %s %d, %s %s, %s %d",
-                _("Value:"), val_buf,
+      cmd_reply(help_cmd, caller, C_COMMENT, "%s <font color='%s'>%s</font>, %s %d, %s %s, %s %d",
+                _("Value:"), (is_changed ? _("#90adff") : _("#d2ffbd'")), val_buf,
                 _("Minimum:"), setting_int_min(pset),
                 _("Default:"), def_buf,
                 _("Maximum:"), setting_int_max(pset));
@@ -1757,8 +1772,8 @@ static void show_help_option(struct connection *caller,
       /* Fall through. */
     case SST_BOOL:
     case SST_STRING:
-      cmd_reply(help_cmd, caller, C_COMMENT, "%s %s, %s %s",
-                _("Value:"), val_buf, _("Default:"), def_buf);
+      cmd_reply(help_cmd, caller, C_COMMENT, "%s <font color='%s'>%s</font>, %s %s",
+                _("Value:"), (is_changed ? _("#90adff") : _("#d2ffbd'")), val_buf, _("Default:"), def_buf);
       break;
     case SST_BITWISE:
       {
@@ -1771,8 +1786,8 @@ static void show_help_option(struct connection *caller,
           cmd_reply(help_cmd, caller, C_COMMENT, "- %s: \"%s\"",
                     value, setting_bitwise_bit(pset, i, TRUE));
         }
-        cmd_reply(help_cmd, caller, C_COMMENT, "%s %s",
-                  _("Value:"), val_buf);
+        cmd_reply(help_cmd, caller, C_COMMENT, "%s <font color='%s'>%s</font>",
+                  _("Value:"), (is_changed ? _("#90adff") : _("#d2ffbd'")), val_buf);
         cmd_reply(help_cmd, caller, C_COMMENT, "%s %s",
                   _("Default:"), def_buf);
       }
@@ -2160,7 +2175,7 @@ static bool show_settings(struct connection *caller,
 
   {
     const char *heading = NULL;
-    switch(level) {
+    switch (level) {
       case SSET_NONE:
         break;
       case SSET_CHANGED:
@@ -2204,7 +2219,7 @@ static bool show_settings(struct connection *caller,
   /* Update changed and locked levels. */
   settings_list_update();
 
-  switch(level) {
+  switch (level) {
   case SSET_NONE:
     /* Show _one_ setting. */
     fc_assert_ret_val(0 <= cmd, FALSE);
@@ -2274,7 +2289,8 @@ static bool show_settings(struct connection *caller,
 static void show_settings_one(struct connection *caller, enum command_id cmd,
                               struct setting *pset)
 {
-  char buf[MAX_LEN_CONSOLE_LINE] = "", value[MAX_LEN_CONSOLE_LINE] = "";
+  // char buf[MAX_LEN_CONSOLE_LINE] = ""      // no longer used
+  char value[512] = "";
   bool is_changed;
   static char prefix[OPTION_NAME_SPACE + 4 + 1] = "";
   char defaultness;
@@ -2285,15 +2301,16 @@ static void show_settings_one(struct connection *caller, enum command_id cmd,
   setting_value_name(pset, TRUE, value, sizeof(value));
 
   /* Wrap long option values, such as bitwise options */
-  fc_break_lines(value, LINE_BREAK - (sizeof(prefix)-1));
+  //fc_break_lines(value, LINE_BREAK - (sizeof(prefix)-1));
 
   if (prefix[0] == '\0') {
     memset(prefix, ' ', sizeof(prefix)-1);
   }
 
-  if (is_changed) {
-    /* Emphasizes the changed option. */
-    /* Apply tags to each line fragment. */
+  /* FCW disabled color tagging so it won't override client style sheets.
+  if (is_changed && FALSE) { 
+    // Emphasizes the changed option. 
+    // Apply tags to each line fragment.
     size_t startpos = 0;
     char *nl;
     do {
@@ -2309,6 +2326,7 @@ static void show_settings_one(struct connection *caller, enum command_id cmd,
       }
     } while (nl);
   }
+  */
 
   if (SST_INT == setting_type(pset)) {
     /* Add the range. */
@@ -2324,9 +2342,9 @@ static void show_settings_one(struct connection *caller, enum command_id cmd,
     defaultness = '=';
   }
 
-  cmd_reply_prefix(cmd, caller, C_COMMENT, prefix, "%-*s %c%c %s",
+  cmd_reply_prefix(cmd, caller, C_COMMENT, prefix, "<font color='#fffabb'>%-*s</font> %c%c <font color='%s'>%s</font>",
                    OPTION_NAME_SPACE, setting_name(pset),
-                   setting_status(caller, pset), defaultness,
+                   setting_status(caller, pset), defaultness, (is_changed ? _("#90adff") : _("#d2ffbd'")),
                    value);
 }
 
@@ -2410,7 +2428,7 @@ static bool team_command(struct connection *caller, char *str, bool check)
             give_shared_vision(p1,p2);
 
             cmd_reply(CMD_TEAM, caller, C_OK, _("   %s teamed with %s."),
-              player_name(p1), player_name(p2), diplstate->type);
+              player_name(p1), player_name(p2)/*, diplstate->type*/);
           }
         }
       } players_iterate_end;
@@ -2437,7 +2455,7 @@ static bool name_command(struct connection *caller, char *str, bool check)
   char *arg[2];
   int ntokens = 0, i;
   bool res = FALSE;
-  struct team_slot *tslot;
+  // struct team_slot *tslot;  was throwing unused warning
 
   if (str != NULL || strlen(str) > 0) {
     sz_strlcpy(buf, str);
@@ -3155,25 +3173,20 @@ static bool set_command(struct connection *caller, char *str, bool check)
 }
 
 /**********************************************************************//**
-  Check game.allow_take for permission to take or observe a player.
+  Check game.allow_take and fcdb if enabled for permission to take or
+  observe a player.
 
   NB: If this function returns FALSE, then callers expect that 'msg' will
   be filled in with a NULL-terminated string containing the reason.
 **************************************************************************/
-static bool is_allowed_to_take(struct player *pplayer, bool will_obs, 
+static bool is_allowed_to_take(struct connection *requester,
+                               struct connection *taker,
+                               struct player *pplayer, bool will_obs,
                                char *msg, size_t msg_len)
 {
   const char *allow;
 
-  if (!pplayer && will_obs) {
-    /* Global observer. */
-    if (!(allow = strchr(game.server.allow_take,
-                         (game.info.is_new_game ? 'O' : 'o')))) {
-      fc_strlcpy(msg, _("Sorry, one can't observe globally in this game."),
-                msg_len);
-      return FALSE;
-    }
-  } else if (!pplayer && !will_obs) {
+  if (!pplayer && !will_obs) {
     /* Auto-taking a new player */
 
     if (game_was_started()) {
@@ -3205,6 +3218,27 @@ static bool is_allowed_to_take(struct player *pplayer, bool will_obs,
 
     return TRUE;
 
+  }
+
+#ifdef HAVE_FCDB
+  if (srvarg.fcdb_enabled) {
+    bool ok = FALSE;
+
+    if (script_fcdb_call("user_take", requester, taker, pplayer, will_obs,
+			 &ok) && ok) {
+      return TRUE;
+    }
+  }
+#endif
+
+  if (!pplayer && will_obs) {
+    /* Global observer. */
+    if (!(allow = strchr(game.server.allow_take,
+                         (game.info.is_new_game ? 'O' : 'o')))) {
+      fc_strlcpy(msg, _("Sorry, one can't observe globally in this game."),
+                msg_len);
+      return FALSE;
+    }
   } else if (is_barbarian(pplayer)) {
     if (!(allow = strchr(game.server.allow_take, 'b'))) {
       if (will_obs) {
@@ -3349,7 +3383,7 @@ bool observe_command(struct connection *caller, char *str, bool check)
   /******** PART II: do the observing ********/
 
   /* check allowtake for permission */
-  if (!caller->supercow && !is_allowed_to_take(pplayer, TRUE, msg, sizeof(msg))) {
+  if (!caller->supercow && !is_allowed_to_take(caller, pconn, pplayer, TRUE, msg, sizeof(msg))) {
     cmd_reply(CMD_OBSERVE, caller, C_FAIL, "%s", msg);
     goto end;
   }
@@ -3511,7 +3545,7 @@ static bool take_command(struct connection *caller, char *str, bool check)
   }
 
   /* check allowtake for permission */
-  if (!caller->supercow && !is_allowed_to_take(pplayer, FALSE, msg, sizeof(msg))) {
+  if (!caller->supercow && !is_allowed_to_take(caller, pconn, pplayer, FALSE, msg, sizeof(msg))) {
     cmd_reply(CMD_TAKE, caller, C_FAIL, "%s", msg);
     goto end;
   }
@@ -4013,7 +4047,7 @@ static bool set_rulesetdir(struct connection *caller, char *str, bool check,
 
     /* load the ruleset (and game settings defined in the ruleset) */
     player_info_freeze();
-    if (!load_rulesets(old, FALSE, NULL, TRUE, FALSE)) {
+    if (!load_rulesets(old, NULL, FALSE, NULL, TRUE, FALSE, TRUE)) {
       success = FALSE;
 
       /* While loading of the requested ruleset failed, we might
@@ -4486,7 +4520,7 @@ static bool handle_stdin_input_real(struct connection *caller, char *str,
     }
   }
 
-  switch(cmd) {
+  switch (cmd) {
   case CMD_REMOVE:
     return remove_player_command(caller, arg, check);
   case CMD_SAVE:
@@ -4566,7 +4600,7 @@ static bool handle_stdin_input_real(struct connection *caller, char *str,
   case CMD_DEFAULT:
     return default_command(caller, arg, check);
   case CMD_LUA:
-    return lua_command(caller, arg, check);
+    return lua_command(caller, arg, check, read_recursion);
   case CMD_KICK:
     return kick_command(caller, arg, check);
   case CMD_DELEGATE:
@@ -4855,7 +4889,8 @@ static const char *lua_accessor(int i)
 /**********************************************************************//**
   Evaluate a line of lua script or a lua script file.
 **************************************************************************/
-static bool lua_command(struct connection *caller, char *arg, bool check)
+static bool lua_command(struct connection *caller, char *arg, bool check,
+                        int read_recursion)
 {
   FILE *script_file;
   const char extension[] = ".lua", *real_filename = NULL;
@@ -4909,7 +4944,12 @@ static bool lua_command(struct connection *caller, char *arg, bool check)
     /* Nothing to check. */
     break;
   case LUA_UNSAFE_CMD:
-    if (is_restricted(caller)) {
+    if (read_recursion > 0) {
+      cmd_reply(CMD_LUA, caller, C_FAIL,
+                _("Unsafe Lua code can only be run by explicit command."));
+      ret = FALSE;
+      goto cleanup;
+    } else if (is_restricted(caller)) {
       cmd_reply(CMD_LUA, caller, C_FAIL,
                 _("You aren't allowed to run unsafe Lua code."));
       ret = FALSE;
@@ -4917,7 +4957,12 @@ static bool lua_command(struct connection *caller, char *arg, bool check)
     }
     break;
   case LUA_UNSAFE_FILE:
-    if (is_restricted(caller)) {
+    if (read_recursion > 0) {
+      cmd_reply(CMD_LUA, caller, C_FAIL,
+                _("Unsafe Lua code can only be run by explicit command."));
+      ret = FALSE;
+      goto cleanup;
+    } else if (is_restricted(caller)) {
       cmd_reply(CMD_LUA, caller, C_FAIL,
                 _("You aren't allowed to run unsafe Lua code."));
       ret = FALSE;
@@ -5093,10 +5138,13 @@ static bool delegate_command(struct connection *caller, char *arg,
     for (valid_args = delegate_args_begin();
          valid_args != delegate_args_end();
          valid_args = delegate_args_next(valid_args)) {
-      cat_snprintf(buf, sizeof(buf), "'%s'",
-                   delegate_args_name(valid_args));
-      if (valid_args != delegate_args_max()) {
-        cat_snprintf(buf, sizeof(buf), ", ");
+      const char *name = delegate_args_name(valid_args);
+
+      if (name != NULL) {
+        cat_snprintf(buf, sizeof(buf), "'%s'", name);
+        if (valid_args != delegate_args_max()) {
+          cat_snprintf(buf, sizeof(buf), ", ");
+        }
       }
     }
 
@@ -5192,44 +5240,9 @@ static bool delegate_command(struct connection *caller, char *arg,
     }
     break;
   case DELEGATE_TO:
-    /* delegate to <username> [player] */
-    if (ntokens > 1) {
-      username = tokens[1];
-    } else {
-      cmd_reply(CMD_DELEGATE, caller, C_SYNTAX,
-                _("Please specify a user to whom control is to be delegated."));
-      ret = FALSE;
-      goto cleanup;
-    }
-    if (ntokens > 2) {
-      if (!caller || conn_get_access(caller) >= ALLOW_ADMIN) {
-        player_specified = TRUE;
-        dplayer = player_by_name_prefix(tokens[2], &result);
-        if (!dplayer) {
-          cmd_reply_no_such_player(CMD_DELEGATE, caller, tokens[2], result);
-          ret = FALSE;
-          goto cleanup;
-        }
-      } else {
-        cmd_reply(CMD_DELEGATE, caller, C_SYNTAX,
-                  _("Command level '%s' or greater needed to modify "
-                    "others' delegations."), cmdlevel_name(ALLOW_ADMIN));
-        ret = FALSE;
-        goto cleanup;
-      }
-    } else {
-      dplayer = conn_controls_player(caller) ? conn_get_player(caller) : NULL;
-      if (!dplayer) {
-        cmd_reply(CMD_DELEGATE, caller, C_FAIL,
-                  _("You do not control a player."));
-        ret = FALSE;
-        goto cleanup;
-      }
-    }
     break;
   }
-
-  /* All checks done to this point will give pretty much the same result at
+   /* All checks done to this point will give pretty much the same result at
    * any time. Checks after this point are more likely to vary over time. */
   if (check) {
     ret = TRUE;
@@ -5238,6 +5251,48 @@ static bool delegate_command(struct connection *caller, char *arg,
 
   switch (ind) {
   case DELEGATE_TO:
+    /* delegate to <username> [player] */
+    if (ntokens > 1) {
+      username = tokens[1];
+    } else {
+      cmd_reply(CMD_DELEGATE, caller, C_SYNTAX,
+                _("Please specify a user to whom control is to be delegated."));
+      ret = FALSE;
+      break;
+    }
+    if (ntokens > 2) {
+      player_specified = TRUE;
+      dplayer = player_by_name_prefix(tokens[2], &result);
+      if (!dplayer) {
+        cmd_reply_no_such_player(CMD_DELEGATE, caller, tokens[2], result);
+        ret = FALSE;
+        break;
+      }
+#ifndef HAVE_FCDB
+      if (caller && conn_get_access(caller) < ALLOW_ADMIN) {
+#else
+      if (caller && conn_get_access(caller) < ALLOW_ADMIN
+          && !(srvarg.fcdb_enabled
+               && script_fcdb_call("user_delegate_to", caller, dplayer,
+                                   username, &ret) && ret)) {
+#endif
+        cmd_reply(CMD_DELEGATE, caller, C_SYNTAX,
+                  _("Command level '%s' or greater or special permission "
+                    "needed to modify others' delegations."),
+                  cmdlevel_name(ALLOW_ADMIN));
+        ret = FALSE;
+        break;
+      }
+    } else {
+      dplayer = conn_controls_player(caller) ? conn_get_player(caller) : NULL;
+      if (!dplayer) {
+        cmd_reply(CMD_DELEGATE, caller, C_FAIL,
+                  _("You do not control a player."));
+        ret = FALSE;
+        break;
+      }
+    }
+
     /* Delegate control of player to another user. */
     fc_assert_ret_val(dplayer, FALSE);
     fc_assert_ret_val(username != NULL, FALSE);
@@ -5274,7 +5329,7 @@ static bool delegate_command(struct connection *caller, char *arg,
                     "a delegated player yourself."));
       }
       ret = FALSE;
-      goto cleanup;
+      break;
     }
 
     /* Forbid delegation to player's original owner
@@ -5298,7 +5353,7 @@ static bool delegate_command(struct connection *caller, char *arg,
                     "delegation."));
       }
       ret = FALSE;
-      goto cleanup;
+      break;
     }
 
     /* FIXME: if control was already delegated to someone else, that
@@ -5309,7 +5364,6 @@ static bool delegate_command(struct connection *caller, char *arg,
               _("Control of player '%s' delegated to user %s."),
               player_name(dplayer), username);
     ret = TRUE;
-    goto cleanup;
     break;
 
   case DELEGATE_SHOW:
@@ -5327,7 +5381,6 @@ static bool delegate_command(struct connection *caller, char *arg,
                 player_name(dplayer), player_delegation_get(dplayer));
     }
     ret = TRUE;
-    goto cleanup;
     break;
 
   case DELEGATE_CANCEL:
@@ -5337,7 +5390,7 @@ static bool delegate_command(struct connection *caller, char *arg,
                 _("No delegation defined for '%s'."),
                 player_name(dplayer));
       ret = FALSE;
-      goto cleanup;
+      break;
     }
 
     if (player_delegation_active(dplayer)) {
@@ -5356,7 +5409,7 @@ static bool delegate_command(struct connection *caller, char *arg,
                                       pdelegate->server.delegation.observer));
         cmd_reply(CMD_DELEGATE, caller, C_FAIL, _("Unexpected failure."));
         ret = FALSE;
-        goto cleanup;
+        break;
       }
       notify_conn(pdelegate->self, NULL, E_CONNECTION, ftc_server,
                   _("Your delegated control of player '%s' was canceled."),
@@ -5367,7 +5420,6 @@ static bool delegate_command(struct connection *caller, char *arg,
     cmd_reply(CMD_DELEGATE, caller, C_OK, _("Delegation of '%s' canceled."),
               player_name(dplayer));
     ret = TRUE;
-    goto cleanup;
     break;
 
   case DELEGATE_TAKE:
@@ -5382,7 +5434,7 @@ static bool delegate_command(struct connection *caller, char *arg,
                   "Use '/delegate restore' to relinquish control of your "
                   "current player first."));
       ret = FALSE;
-      goto cleanup;
+      break;
     }
 
     /* Don't allow 'put aside' players to be delegated; the invariant is
@@ -5396,7 +5448,7 @@ static bool delegate_command(struct connection *caller, char *arg,
                   "yourself. Use '/delegate cancel' to cancel your own "
                   "delegation first."));
       ret = FALSE;
-      goto cleanup;
+      break;
     }
 
     /* Taking your own player makes no sense. */
@@ -5405,7 +5457,7 @@ static bool delegate_command(struct connection *caller, char *arg,
       cmd_reply(CMD_DELEGATE, caller, C_FAIL, _("You already control '%s'."),
                 player_name(conn_get_player(caller)));
       ret = FALSE;
-      goto cleanup;
+      break;
     }
 
     if (!player_delegation_get(dplayer)
@@ -5414,7 +5466,7 @@ static bool delegate_command(struct connection *caller, char *arg,
                 _("Control of player '%s' has not been delegated to you."),
                 player_name(dplayer));
       ret = FALSE;
-      goto cleanup;
+      break;
     }
 
     /* If the player is controlled by another user, fail. */
@@ -5423,7 +5475,7 @@ static bool delegate_command(struct connection *caller, char *arg,
                 _("Another user already controls player '%s'."),
                 player_name(dplayer));
       ret = FALSE;
-      goto cleanup;
+      break;
     }
 
     if (!connection_delegate_take(caller, dplayer)) {
@@ -5432,14 +5484,13 @@ static bool delegate_command(struct connection *caller, char *arg,
                 caller->username, player_name(dplayer));
       cmd_reply(CMD_DELEGATE, caller, C_FAIL, _("Unexpected failure."));
       ret = FALSE;
-      goto cleanup;
+      break;
     }
 
     cmd_reply(CMD_DELEGATE, caller, C_OK,
               _("%s is now controlling player '%s'."), caller->username,
               player_name(conn_get_player(caller)));
     ret = TRUE;
-    goto cleanup;
     break;
 
   case DELEGATE_RESTORE:
@@ -5451,7 +5502,7 @@ static bool delegate_command(struct connection *caller, char *arg,
       cmd_reply(CMD_DELEGATE, caller, C_FAIL,
                 _("You are not currently controlling a delegated player."));
       ret = FALSE;
-      goto cleanup;
+      break;
     }
 
     if (!connection_delegate_restore(caller)) {
@@ -5462,7 +5513,7 @@ static bool delegate_command(struct connection *caller, char *arg,
                                     caller->server.delegation.observer));
       cmd_reply(CMD_DELEGATE, caller, C_FAIL, _("Unexpected failure."));
       ret = FALSE;
-      goto cleanup;
+      break;
     }
 
     cmd_reply(CMD_DELEGATE, caller, C_OK,
@@ -5471,7 +5522,6 @@ static bool delegate_command(struct connection *caller, char *arg,
               _("%s is now connected as %s."), caller->username,
               delegate_player_str(conn_get_player(caller), caller->observer));
     ret = TRUE;
-    goto cleanup;
     break;
   }
 
@@ -6737,6 +6787,29 @@ void show_players(struct connection *caller)
 }
 
 /**********************************************************************//**
+  List rulesets (strictly, .serv init script files that conventionally
+  accompany rulesets).
+**************************************************************************/
+static void show_rulesets(struct connection *caller)
+{
+  struct strvec *serv_list;
+
+  cmd_reply(CMD_LIST, caller, C_COMMENT,
+            /* TRANS: don't translate text between '' */
+            _("List of rulesets available with '%sread' command:"),
+	    (caller ? "/" : ""));
+  cmd_reply(CMD_LIST, caller, C_COMMENT, horiz_line);
+
+  serv_list = get_init_script_choices();
+  strvec_iterate(serv_list, s) {
+    cmd_reply(CMD_LIST, caller, C_COMMENT, "%s", s);
+  } strvec_iterate_end;
+  strvec_destroy(serv_list);
+
+  cmd_reply(CMD_LIST, caller, C_COMMENT, horiz_line);
+}
+
+/**********************************************************************//**
   List scenarios. We look both in the DATA_PATH and DATA_PATH/scenario
 **************************************************************************/
 static void show_scenarios(struct connection *caller)
@@ -6873,26 +6946,28 @@ static void show_colors(struct connection *caller)
   '/list' arguments
 **************************************************************************/
 #define SPECENUM_NAME list_args
-#define SPECENUM_VALUE0     LIST_COLORS
-#define SPECENUM_VALUE0NAME "colors"
-#define SPECENUM_VALUE1     LIST_CONNECTIONS
-#define SPECENUM_VALUE1NAME "connections"
-#define SPECENUM_VALUE2     LIST_DELEGATIONS
-#define SPECENUM_VALUE2NAME "delegations"
-#define SPECENUM_VALUE3     LIST_IGNORE
-#define SPECENUM_VALUE3NAME "ignored users"
-#define SPECENUM_VALUE4     LIST_MAPIMG
-#define SPECENUM_VALUE4NAME "map image definitions"
-#define SPECENUM_VALUE5     LIST_PLAYERS
-#define SPECENUM_VALUE5NAME "players"
-#define SPECENUM_VALUE6     LIST_SCENARIOS
-#define SPECENUM_VALUE6NAME "scenarios"
-#define SPECENUM_VALUE7     LIST_NATIONSETS
-#define SPECENUM_VALUE7NAME "nationsets"
-#define SPECENUM_VALUE8     LIST_TEAMS
-#define SPECENUM_VALUE8NAME "teams"
-#define SPECENUM_VALUE9     LIST_VOTES
-#define SPECENUM_VALUE9NAME "votes"
+#define SPECENUM_VALUE0      LIST_COLORS
+#define SPECENUM_VALUE0NAME  "colors"
+#define SPECENUM_VALUE1      LIST_CONNECTIONS
+#define SPECENUM_VALUE1NAME  "connections"
+#define SPECENUM_VALUE2      LIST_DELEGATIONS
+#define SPECENUM_VALUE2NAME  "delegations"
+#define SPECENUM_VALUE3      LIST_IGNORE
+#define SPECENUM_VALUE3NAME  "ignored users"
+#define SPECENUM_VALUE4      LIST_MAPIMG
+#define SPECENUM_VALUE4NAME  "map image definitions"
+#define SPECENUM_VALUE5      LIST_PLAYERS
+#define SPECENUM_VALUE5NAME  "players"
+#define SPECENUM_VALUE6      LIST_RULESETS
+#define SPECENUM_VALUE6NAME  "rulesets"
+#define SPECENUM_VALUE7      LIST_SCENARIOS
+#define SPECENUM_VALUE7NAME  "scenarios"
+#define SPECENUM_VALUE8      LIST_NATIONSETS
+#define SPECENUM_VALUE8NAME  "nationsets"
+#define SPECENUM_VALUE9      LIST_TEAMS
+#define SPECENUM_VALUE9NAME  "teams"
+#define SPECENUM_VALUE10     LIST_VOTES
+#define SPECENUM_VALUE10NAME "votes"
 #include "specenum_gen.h"
 
 /**********************************************************************//**
@@ -6929,7 +7004,7 @@ static bool show_list(struct connection *caller, char *arg)
     ind = LIST_PLAYERS;
   }
 
-  switch(ind) {
+  switch (ind) {
   case LIST_COLORS:
     show_colors(caller);
     return TRUE;
@@ -6946,6 +7021,9 @@ static bool show_list(struct connection *caller, char *arg)
     return TRUE;
   case LIST_PLAYERS:
     show_players(caller);
+    return TRUE;
+  case LIST_RULESETS:
+    show_rulesets(caller);
     return TRUE;
   case LIST_SCENARIOS:
     show_scenarios(caller);

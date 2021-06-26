@@ -54,7 +54,7 @@ handle_error () {
   >&2 echo "${msg}"
   >&2 echo "${stars// /*}"
   >&2 echo
-  exit $status
+  exit 1 
 }
 
 while :; do
@@ -280,7 +280,7 @@ echo "==== Building freeciv ===="
 echo "Please be patient"
 cd "${basedir}"/freeciv && \
   ./prepare_freeciv.sh  && \
-  cd freeciv && make install || \
+  cd build && make install || \
   handle_error 5 "Failed to install freeciv"
 
 echo "==== Building freeciv-web ===="
@@ -295,16 +295,18 @@ echo "${mig_scripts[-1]}" > checkpoint
 mkdir -p "${basedir}/freeciv-web/src/derived/webapp" && \
 "${basedir}"/scripts/sync-js-hand.sh \
   -f "${basedir}/freeciv/freeciv" \
+  -i "${HOME}/freeciv" \
   -o "${basedir}/freeciv-web/src/derived/webapp" \
   -d "${TOMCAT_HOME}/webapps/data" || \
   handle_error 6 "Failed to synchronize freeciv project"
   
-if [ "${FCW_INSTALL_MODE}" = TEST ]; then
-  echo "==== Removing Google authorization in longturn games ===="
-  cd "${basedir}"/scripts && \
-  ./flip-google-authorization.sh || \
-  handle_error 8 "Patching failed!"  
-fi
+# Patching for local testing of longturn games has been removed/disabled, because the patch needs updating and this is a hacky solution.
+#if [ "${FCW_INSTALL_MODE}" = TEST ]; then
+#  echo "==== Removing Google authorization in longturn games ===="
+#  cd "${basedir}"/scripts && \
+#  ./flip-google-authorization.sh || \
+#  handle_error 8 "Patching failed!"  
+#fi
 
 cd "${basedir}"/freeciv-web && \
   ./build.sh -B || \

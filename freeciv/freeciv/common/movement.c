@@ -37,6 +37,8 @@
 
 #include "movement.h"
 
+//#include "../server/notify.h"   // use for debug
+
 /************************************************************************//**
   This function calculates the move rate of the unit, taking into account
   the penalty for reduced hitpoints, the active effects, and any veteran
@@ -46,11 +48,12 @@
 ****************************************************************************/
 int utype_move_rate(const struct unit_type *utype, const struct tile *ptile,
                     const struct player *pplayer, int veteran_level,
-                    int hitpoints)
+                    int hitpoints, const struct unit *punit)
 {
   const struct unit_class *uclass;
   const struct veteran_level *vlevel;
   int base_move_rate, move_rate;
+  float rounded_move_rate;  // don't make a unit with 1.88 moves get 1 move ;)
 
   fc_assert_ret_val(NULL != utype, 0);
   fc_assert_ret_val(NULL != pplayer, 0);
@@ -62,19 +65,34 @@ int utype_move_rate(const struct unit_type *utype, const struct tile *ptile,
   move_rate = base_move_rate;
 
   if (uclass_has_flag(uclass, UCF_DAMAGE_SLOWS)) {
-    /* Scale the MP based on how many HP the unit has. */
-    move_rate = (move_rate * hitpoints) / utype->hp;
+    /* Scale the MP based on how many HP the unit has...
+     * Rounding is required!! Or multiple rounding errors keep compounding!
+     * (e.g., damaged unit lost frag from round error, attacked then lost
+     * frag from round error, defended then lost frag from round error.)
+     * Rounding to nearest whole averages to zero error over time, with a
+     * max.error of 0.5frag instead of 0.88frag[9fr] or .83frag[6fr]) */
+    rounded_move_rate = ((float)move_rate * (float)hitpoints) / (float)utype->hp + 0.50;
+    move_rate = (int)rounded_move_rate;
   }
 
-  /* Add on effects bonus (Magellan's Expedition, Lighthouse,
-   * Nuclear Power). */
-  if (game.server.move_bonus_in_frags) {
-    /* ruleset awards move bonuses in frags */
-    move_rate += get_unittype_bonus(pplayer, ptile, utype, EFT_MOVE_BONUS);
-  } else {
-    /* ruleset awards move bonuses in whole moves */
-    move_rate += (get_unittype_bonus(pplayer, ptile, utype, EFT_MOVE_BONUS)
-                * SINGLE_MOVE);
+  // If we know the punit, be inclusive of other effects (e.g., UnitState, DiplRel)
+  if (punit) {  
+    if (game.server.move_bonus_in_frags) {
+      move_rate += get_unit_bonus(punit, EFT_MOVE_BONUS);
+    } else {
+      move_rate += (get_unit_bonus(punit, EFT_MOVE_BONUS) * SINGLE_MOVE);
+    }
+  } 
+  else { // Otherwise we can only get bonuses for unittype
+    /* Add on effects bonus (Magellan's Expedition, Lighthouse, Nuclear Power). */
+    if (game.server.move_bonus_in_frags) {
+      /* ruleset awards move bonuses in frags */
+      move_rate += get_unittype_bonus(pplayer, ptile, utype, EFT_MOVE_BONUS);
+    } else {
+      /* ruleset awards move bonuses in whole moves */
+      move_rate += (get_unittype_bonus(pplayer, ptile, utype, EFT_MOVE_BONUS)
+                  * SINGLE_MOVE);
+    }
   }
 
   /* Don't let the move_rate be less than min_speed unless the base_move_rate is
@@ -95,7 +113,7 @@ int unit_move_rate(const struct unit *punit)
   fc_assert_ret_val(NULL != punit, 0);
 
   return utype_move_rate(unit_type_get(punit), unit_tile(punit),
-                         unit_owner(punit), punit->veteran, punit->hp);
+                         unit_owner(punit), punit->veteran, punit->hp, punit);
 }
 
 /************************************************************************//**
@@ -155,11 +173,32 @@ bool unit_can_defend_here(const struct civ_map *nmap, const struct unit *punit)
 {
   struct unit *ptrans = unit_transport_get(punit);
 
+/* Hack - There was no way for ruleset utype flags to set a unit to defend
+   while transported on non-native tiles. This uses UTYF_USER_FLAG_34 to 
+   do so IFF using AG or MP2 rulesetdir. TODO: Switch from user flag.
+   Make a new standard utype flag, UTYF_TRANSPORT_DEFEND. Remove the whole
+   #ifdef block and replace with this single line:
+   if (unit_has_type_flag(punit, UTYF_TRANSPORT_DEFENDER)) return true;
+*/
+#ifdef FREECIV_WEB
+// some units always defend while transported, regardless of terrain type:
+if (strcmp(game.server.rulesetdir, "ag") == 0
+ || strcmp(game.server.rulesetdir, "mp2") == 0) {
+    if (unit_has_type_flag(punit, UTYF_USER_FLAG_34)) return true;
+ }
+#endif
+
   /* Do not just check if unit is transported.
    * Even transported units may step out from transport to fight,
    * if this is their native terrain. */
   return (can_unit_exist_at_tile(nmap, punit, unit_tile(punit))
-          && (ptrans == NULL || can_unit_unload(punit, ptrans)));
+          && (ptrans == NULL
+              /* Don't care if unloaded by the transport or deboard itself */
+              /* FIXME: should being able to be unloaded by the transport
+               * count as being able to defend (like it does now) or should
+               * a unit that can't deboard be considered useless as a
+               * defender? */
+              || can_unit_deboard_or_be_unloaded(punit, ptrans)));
 }
 
 /************************************************************************//**
@@ -181,6 +220,10 @@ bool can_attack_from_non_native(const struct unit_type *utype)
 {
   return (utype_can_do_act_when_ustate(utype, ACTION_ATTACK,
                                        USP_NATIVE_TILE, FALSE)
+          || utype_can_do_act_when_ustate(utype, ACTION_SUICIDE_ATTACK,
+                                          USP_NATIVE_TILE, FALSE)
+          || utype_can_do_act_when_ustate(utype, ACTION_CONQUER_CITY2,
+                                          USP_LIVABLE_TILE, FALSE)
           || utype_can_do_act_when_ustate(utype, ACTION_CONQUER_CITY,
                                           USP_LIVABLE_TILE, FALSE));
 }
@@ -450,6 +493,11 @@ bool can_unit_survive_at_tile(const struct civ_map *nmap,
     return TRUE;
   }
 
+  if (unit_has_type_flag(punit, UTYF_COAST) && is_safe_ocean(nmap, ptile)) {
+    /* Refueling coast */
+    return TRUE;
+  }
+
   if (utype_fuel(unit_type_get(punit))) {
     /* Unit requires fuel and this is not refueling tile */
     return FALSE;
@@ -498,31 +546,6 @@ bool can_step_taken_wrt_to_zoc(const struct unit_type *punittype,
 
   return (is_my_zoc(unit_owner, src_tile, zmap)
 	  || is_my_zoc(unit_owner, dst_tile, zmap));
-}
-
-/************************************************************************//**
-  See can_step_take_wrt_to_zoc().  This function is exactly the same but
-  it takes a unit instead of a unittype and player.
-****************************************************************************/
-static bool zoc_ok_move_gen(const struct unit *punit,
-                            const struct tile *src_tile,
-                            const struct tile *dst_tile,
-                            const struct civ_map *zmap)
-{
-  return can_step_taken_wrt_to_zoc(unit_type_get(punit), unit_owner(punit),
-				   src_tile, dst_tile, zmap);
-}
-
-/************************************************************************//**
-  Returns whether the unit can safely move from its current position to
-  the adjacent dst_tile.  This function checks only ZOC.
-
-  See can_step_taken_wrt_to_zoc().
-****************************************************************************/
-bool zoc_ok_move(const struct unit *punit, const struct tile *dst_tile,
-                 const struct civ_map *zmap)
-{
-  return zoc_ok_move_gen(punit, unit_tile(punit), dst_tile, zmap);
 }
 
 /************************************************************************//**

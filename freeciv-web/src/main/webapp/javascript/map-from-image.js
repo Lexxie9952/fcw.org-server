@@ -86,12 +86,14 @@ function handle_map_image_upload()
   if (file == null) {
     $.unblockUI();
     swal("Please upload a image file!");
+    setSwalTheme();
     return;
   }
 
   if (!(window.FileReader)) {
     $.unblockUI();
     swal("Uploading files not supported");
+    setSwalTheme();
     return;
   }
 
@@ -107,6 +109,7 @@ function handle_map_image_upload()
   } else {
     $.unblockUI();
     swal("Image file " + file.name + "  not supported: " + file.type);
+    setSwalTheme();
     console.error("Image file not supported: " + file.type);
   }
 
@@ -149,10 +152,12 @@ function handle_image_ctx(ctx)
     send_message_delayed("/load " + savegame, 1200);
     setTimeout(load_game_toggle, 1300);
     swal("Game map created from the image you uploaded. Game ready to start.");
+    setSwalTheme();
     $.unblockUI();
   })
   .fail(function() {
     swal("Something failed. Please try again later!");
+    setSwalTheme();
     $.unblockUI();
 
   })
