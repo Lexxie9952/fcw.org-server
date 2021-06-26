@@ -1056,6 +1056,29 @@ function get_gold_cost_per_shield(pcity)
   gcps = buy_cost / remaining;
   return gcps.toFixed(2);
 }
+/**************************************************************************
+ Returns the remaining shields left on a city's production target
+**************************************************************************/
+function get_shields_remaining(pcity)
+{
+  var accumulated = pcity['shield_stock'], // shields invested
+  total_shields = 0, // total shield cost of product
+  remaining = 0;     // remaining shields
+
+  if (pcity['production_kind'] == VUT_UTYPE) {
+    var punit_type = unit_types[pcity['production_value']];
+    total_shields = universal_build_shield_cost(pcity, punit_type);
+  }
+  else if (pcity['production_kind'] == VUT_IMPROVEMENT) {
+    var improvement = improvements[pcity['production_value']];
+    if (improvement['name'] != "Coinage")
+      total_shields = universal_build_shield_cost(pcity, improvement);
+  }
+
+  remaining = total_shields - accumulated;
+
+  return remaining > 0 ? remaining : 0;
+}
 
 /**************************************************************************
 ...
@@ -3943,16 +3966,19 @@ function request_buy_all_selected_cities()
   var total_cost = 0;
   var item_count = 0;
   var cost = 0;
+  var total_shields = 0;
   for (var city_id in cities)  {
     if ($("#cb"+city_id).is(":checked")) {
       cost = cities[city_id]['buy_cost'];
       total_cost += cost;
+      total_shields += get_shields_remaining(cities[city_id]);
       if (cost > 0) {item_count += 1;}
     }
   }
 
+  var plural = item_count > 1 ? true : false
+
   if (total_cost == 0 || total_cost > pplayer['gold']) {
-    var plural = item_count > 1 ? true : false
     var title_string = total_cost == 0 ? "Nothing to Buy!" : "Not Enough Gold!";
     var rejection_string = total_cost == 0 ? "Cost of selected purchase is 0." : 
       total_cost +" gold for " + item_count + " item" + (plural ? "s" :"") 
@@ -3973,7 +3999,10 @@ function request_buy_all_selected_cities()
   // reset dialog page.
   remove_active_dialog("#dialog");
   $("<div id='dialog'></div>").appendTo("div#game_page");
-  var buy_question_string = "Buy " + item_count + " items for <b>" + total_cost + "</b> gold";
+  var gcps = total_cost / total_shields;
+  var buy_question_string = "Buy " + item_count + " item"+(plural?"s":"")
+                          +" for <b>" + total_cost + "</b> gold @ "
+                          + gcps.toFixed(2)+"g/shield ?";
   var treasury_text = "<br>Treasury contains " + pplayer['gold'] + " gold.";  
   var dhtml = buy_question_string + treasury_text;
 
