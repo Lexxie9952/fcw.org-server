@@ -16,7 +16,7 @@
 #endif
 
 
-//Qt
+// Qt
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QGridLayout>
@@ -114,8 +114,12 @@ fc_shortcut default_shortcuts[] = {
     _("Set Home City") },
   {SC_BUILDMINE, Qt::Key_M, Qt::AllButtons, Qt::NoModifier,
     _("Build Mine") },
+  {SC_PLANT, Qt::Key_M, Qt::AllButtons, Qt::ShiftModifier,
+    _("Plant") },
   {SC_BUILDIRRIGATION, Qt::Key_I, Qt::AllButtons, Qt::NoModifier,
     _("Build Irrigation") },
+  {SC_CULTIVATE, Qt::Key_I, Qt::AllButtons, Qt::ShiftModifier,
+    _("Cultivate") },
   {SC_BUILDROAD, Qt::Key_R, Qt::AllButtons, Qt::NoModifier,
     _("Build Road") },
   {SC_BUILDCITY, Qt::Key_B, Qt::AllButtons, Qt::NoModifier,
@@ -285,7 +289,7 @@ void fc_shortcuts::init_default(bool read)
   if (read) {
     suc = read_shortcuts();
   }
-  if (suc == false) {
+  if (!suc) {
     for (i = 0 ; i < num_shortcuts; i++) {
       s = new fc_shortcut();
       s->id = default_shortcuts[i].id;
@@ -374,7 +378,7 @@ void fc_shortcut_popup::closeEvent(QCloseEvent *ev)
   fc_sc_button *scp;
 
   if (sc != nullptr) {
-    if (check_if_exist() == false) {
+    if (!check_if_exist()) {
       scp = reinterpret_cast<fc_sc_button *>(parentWidget());
       scp->setText(shortcut_to_string(scp->sc));
       fc_shortcuts::sc()->set_shortcut(sc);
@@ -406,10 +410,10 @@ bool fc_shortcut_popup::check_if_exist()
       }
       id++;
     }
-    if (desc.isEmpty() == true) {
+    if (desc.isEmpty()) {
       desc = gui()->menu_bar->shortcut_exist(sc);
     }
-    if (desc.isEmpty() == false) {
+    if (!desc.isEmpty()) {
       fc_sc_button *fsb;
       fsb = qobject_cast<fc_sc_button*>(parentWidget());
       fsb->show_info(desc);
@@ -563,7 +567,7 @@ fc_shortcuts_dialog::~fc_shortcuts_dialog()
 }
 
 /**********************************************************************//**
-  Inits shortut dialog layout
+  Inits shortcut dialog layout
 **************************************************************************/
 void fc_shortcuts_dialog::init()
 {

@@ -11,7 +11,7 @@
 
 WINBUILD_VERSION="2.3.2"
 MIN_WINVER=0x0601 # Windows 7
-CROSSER_FEATURE_LEVEL=1.6
+CROSSER_FEATURE_LEVEL=1.8
 
 if test "x$1" = x || test "x$1" = "x-h" || test "x$1" = "x--help" ; then
   echo "Usage: $0 <crosser dir> [gui]"
@@ -46,6 +46,13 @@ FLVL=$(grep "FeatureLevel=" $DLLSPATH/crosser.txt | sed -e 's/FeatureLevel="//' 
 
 if test "x$FLVL" != "x$CROSSER_FEATURE_LEVEL" ; then
   echo "Crosser feature level \"$FLVL\", required \"$CROSSER_FEATURE_LEVEL\"!"
+  exit 1
+fi
+
+CSET=$(grep "Set=" $DLLSPATH/crosser.txt | sed -e 's/Set="//' -e 's/"//')
+
+if test "x$CSET" != "xcurrent" ; then
+  echo "Crosser set is \"$CSET\", only \"current\" is supported!"
   exit 1
 fi
 
@@ -147,6 +154,8 @@ then
   echo "Configure failed" >&2
   exit 1
 fi
+
+rm -R "$INSTALL_DIR"
 
 if ! make $MAKE_PARAMS DESTDIR="$INSTALL_DIR" clean install
 then

@@ -2,7 +2,7 @@
 [tilespec]
 
 ; Format and options of this tilespec file:
-options = "+Freeciv-tilespec-Devel-2016-Jun-07"
+options = "+Freeciv-tilespec-Devel-2019-Jul-03"
 
 ; A simple name for the tileset specified by this file:
 name = "Isophex"
@@ -125,7 +125,8 @@ tilelabel_offset_y = 10
 ;  "FocusUnit",  ; The focused unit(s).
 ;  "Goto",       ; Goto turn count and intermediate points, *not* goto lines.
 ;  "WorkerTask", ; The unit task indicators ("G", "S", ...).
-;  "Editor"      ; Editor stuff (selected tile and start points).
+;  "Editor",     ; Editor stuff (selected tile and start points).
+;  "InfraWork"   ; Icons for the extras being placed.
 
 ; This is special because it gets freed and reloaded as required:
 main_intro_file    = "misc/intro"
@@ -150,6 +151,7 @@ files =
   "misc/specialists.spec",
   "misc/buildings.spec",
   "trident/units.spec",
+  "trident/extra_units.spec",
   "isotrident/unitextras.spec",
   "misc/flags.spec",
   "misc/shields.spec",

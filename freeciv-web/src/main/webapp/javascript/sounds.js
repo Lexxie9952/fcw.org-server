@@ -65,9 +65,38 @@ function unit_move_sound_play(unit)
   var ptype = unit_type(unit);
   move_sound = soundset[ptype['sound_move']];  
 
-  // PARTIAL MOVE SOUNDS.  Some units are loud and/or often move one tile at a time. 
-  // Use "partial move sounds" to avoid annoyance:
-  if ( unit['movesleft'] < ptype['move_rate'] )  { 
+  // Figure out if this unit is moving for the first time or has already moved
+  var full_moves = ptype['move_rate'];
+  var used_moves = full_moves - unit['movesleft'];
+
+  // Negative used_moves means move bonus in effect. Adjust full_moves to properly reflect move bonus:
+  if (used_moves<0) {  
+    if (ptype['name']=="Train") {
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Electricity')) == TECH_KNOWN) 
+        full_moves += 9;
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Combustion')) == TECH_KNOWN) 
+        full_moves += 9;
+    }
+    /* unnecessary, since we set this unit to simply always use partial move sound even with full moves
+    if (ptype['name']=="Airplane") {
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Radio')) == TECH_KNOWN) 
+        full_moves += 18;
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Advanced Flight')) == TECH_KNOWN) 
+        full_moves += 18;
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Radar')) == TECH_KNOWN) 
+        full_moves += 18;
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Rocketry')) == TECH_KNOWN) 
+        full_moves += 18;
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Avionics')) == TECH_KNOWN) 
+        full_moves += 18;
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Space Flight')) == TECH_KNOWN) 
+        full_moves += 18;
+    }
+    */
+  }
+  
+  // PARTIAL MOVE SOUNDS.  Some sounds are loud or long duration and shouldn't repeat for each step 
+  if ( unit['movesleft'] < full_moves )  { 
     switch(ptype['name']) {
       case "Medium Bomber":
       case "Heavy Bomber": 
@@ -75,7 +104,14 @@ function unit_move_sound_play(unit)
       case "Bomber":
         move_sound = "pm_prop_bombers.ogg"; 
         break;
+      case "Cruise Missile":
+      case "Nuclear Missile":
+      case "Nuclear":
+      case "Tactical Nuke":
+        move_sound = null;
+        break;
       case "Dive Bomber":
+      case "Airplane":
       case "Fighter":  
       case "Escort Fighter":
         move_sound = "pm_prop_fighters.ogg";
@@ -88,20 +124,48 @@ function unit_move_sound_play(unit)
         move_sound = "pm-large-jets.ogg";
         break;
       case "Helicopter":
+      case "Transport Helicopter":
         move_sound = "pm_heli.ogg";
         break;
-
-
-      // TO DO: Helicopter, Armor, Cruise Missile, Nuclear 
+      case "Train":
+        move_sound = "pm_train.ogg";
+        break;
+      // TO DO: Armor, Cruise Missile, Nuclear 
     }
   }
-
   // PLAY MOVE SOUND
   if (move_sound != null) {
     play_sound(move_sound);
   } else if (soundset[ptype['sound_move_alt']] != null) {
     play_sound(soundset[ptype['sound_move_alt']]);
   }
+}
+
+
+/**************************************************************************
+ Plays the hostile event sound specified by 'key' if that tile is visible
+ to the player (which we know only by if units are visible on that tile.)
+**************************************************************************/
+function play_hostile_event_sound(key, ptile, ptype) 
+{
+  if (!sounds_enabled) return;
+
+  var funits = tile_units(ptile);
+  if (!funits) return;
+
+  if (soundset == null) {
+    console.error("Soundset not found.");
+    return;
+  }
+
+  if (soundset[key] != null) {
+    play_sound(soundset[key]);
+  }
+
+  /*
+  var pclass = unit_classes[ptype['unit_class_id']];
+  if (pclass['rule_name'].startsWith("Air")) {
+  }*/
 }
 
 /**************************************************************************
@@ -111,7 +175,7 @@ function play_combat_sound(unit)
 {
   if (!sounds_enabled) return;
   if (unit == null) return;
-  if (!is_unit_visible(unit) && renderer != RENDERER_WEBGL) 
+  if (!is_unit_visible(unit))
   {
     //console.error("skipped playing a sound because unit not visible or RENDERER_WEBGL");
     return;

@@ -26,8 +26,8 @@ var C_S_OVER = 3;       /* Connected with game over. */
 var civclient_state = C_S_INITIAL;
 
 var endgame_player_info = [];
-var height_offset = 52;
-var width_offset = 10;
+var height_offset = 43;
+var width_offset = 0;
 
 /**************************************************************************
  Sets the client state (initial, pre, running, over etc).
@@ -58,16 +58,10 @@ function set_client_state(newstate)
       /* remove context menu from pregame. */
       $(".context-menu-root").remove();
 
-      if (renderer == RENDERER_WEBGL) {
-        init_webgl_mapview();
-      }
-
       if (observing || $.getUrlVar('action') == "multi" || is_longturn() || game_loaded) {
         center_on_any_city();
         advance_unit_focus(false);
       }
-
-      if (speech_recogntition_enabled) speech_recogntition_init()
 
       break;
     case C_S_OVER:
@@ -91,20 +85,18 @@ function setup_window_size ()
   var new_mapview_width = winWidth - width_offset;
   var new_mapview_height = winHeight - height_offset;
 
-  if (renderer == RENDERER_2DCANVAS) {
-    mapview_canvas.width = new_mapview_width;
-    mapview_canvas.height = new_mapview_height;
-    buffer_canvas.width = Math.floor(new_mapview_width * 1.5);
-    buffer_canvas.height = Math.floor(new_mapview_height * 1.5);
+  mapview_canvas.width = new_mapview_width;
+  mapview_canvas.height = new_mapview_height;
+  buffer_canvas.width = Math.floor(new_mapview_width * 1.5);
+  buffer_canvas.height = Math.floor(new_mapview_height * 1.5);
 
-    mapview['width'] = new_mapview_width;
-    mapview['height'] = new_mapview_height;
-    mapview['store_width'] = new_mapview_width;
-    mapview['store_height'] = new_mapview_height;
+  mapview['width'] = new_mapview_width;
+  mapview['height'] = new_mapview_height;
+  mapview['store_width'] = new_mapview_width;
+  mapview['store_height'] = new_mapview_height;
 
-    mapview_canvas_ctx.font = canvas_text_font;
-    buffer_canvas_ctx.font = canvas_text_font;
-  }
+  mapview_canvas_ctx.font = canvas_text_font;
+  buffer_canvas_ctx.font = canvas_text_font;
 
   $("#pregame_message_area").height( new_mapview_height - 105
                                         - $("#pregame_game_info").outerHeight());
@@ -132,14 +124,14 @@ function setup_window_size ()
     $(".ui-tabs-anchor").css("padding", "7px");
     $("#freeciv_logo").hide();
     // Remove text from tabs: icons only:
-    $("#map_tab").children().html("<i class='fa fa-globe' aria-hidden='true'></i>");
-    $("#opt_tab").children().html("<i class='fa fa-cogs' aria-hidden='true'></i>");
-    $("#players_tab").children().html("<i class='fa fa-flag' aria-hidden='true'></i>");
-    $("#cities_tab").children().html("<i class='fa fa-fort-awesome' aria-hidden='true'></i>");
-    $("#tech_tab").children().html("<i class='fa fa-flask' aria-hidden='true'></i>");
-    $("#civ_tab").children().html("<i class='fa fa-university' aria-hidden='true'></i>");
-    $("#empire_tab").children().html("<i class='fa fa-binoculars' aria-hidden='true'></i>");
-    $("#hel_tab").children().html("<i class='fa fa-book' aria-hidden='true'></i>");
+    $("#map_tab").children().html("<img style='float:left' src='/images/map_tab_icon_m.png'>");
+    $("#empire_tab").children().html("<img style='float:left' src='/images/empire_tab_icon.png'>");
+    $("#civ_tab").children().html("<img style='float:left' src='/images/gov_tab_icon.png'>");
+    $("#tech_tab").children().html("<img style='float:left' src='/images/tech_tab_icon_m.png'>");
+    $("#players_tab").children().html("<img style='float:left' src='/images/nation_tab_icon.png'>");
+    $("#cities_tab").children().html("<img style='float:left' src='/images/cities_tab_icon.png'>");
+    $("#opt_tab").children().html("<img style='float:left' src='/images/prefs_tab_icon.png'>");
+    $("#hel_tab").children().html("<img style='float:left' src='/images/help_tab_icon_m.png'>");
     $("#warcalc_tab").children().html("&#x1F3B2;")
     $("#button_national_units").html("&#9823;");
     $("#button_unit_homecity").html("&#x1F3E0;");
@@ -169,18 +161,27 @@ function setup_window_size ()
     $(".ui-dialog-titlebar").css({"font-size":"70%", "margin-left":"-3px"});
     $("#game_status_panel_bottom").css("font-size", "0.8em");
   } else {  // handle case where small window is resized to large again 
-    $("#map_tab").children().html("<i class='fa fa-globe' aria-hidden='true'></i> Map");
-    $("#opt_tab").children().html("<i class='fa fa-cogs' aria-hidden='true'></i> Prefs");
-    $("#players_tab").children().html("<i class='fa fa-flag' aria-hidden='true'></i> Nations");
-    $("#cities_tab").children().html("<i class='fa fa-fort-awesome' aria-hidden='true'></i> Cities");
-    $("#tech_tab").children().html("<i class='fa fa-flask' aria-hidden='true'></i> Tech");
-    $("#civ_tab").children().html("<i class='fa fa-university' aria-hidden='true'></i> Gov.");
-    $("#empire_tab").children().html("<i class='fa fa-binoculars' aria-hidden='true'></i> Empire");
-    $("#hel_tab").children().html("<i class='fa fa-book' aria-hidden='true'></i> Help");
+    $("#map_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/map_tab_icon.png'> Map");
+    $("#empire_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/empire_tab_icon.png'> Empire");
+    $("#civ_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/gov_tab_icon.png'> Gov.");
+    $("#tech_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/tech_tab_icon.png'> Tech");
+    $("#players_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/nation_tab_icon.png'> Nations");
+    $("#cities_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/cities_tab_icon.png'> Cities");
+    $("#opt_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/prefs_tab_icon.png'> Prefs");
+    $("#hel_tab").children().html("<img style='float:left; margin-right:5px;' src='/images/help_tab_icon.png'> Help");
   }
 
   if (overview_active) init_overview();
   if (unitpanel_active) init_game_unit_panel();
+
+  // Because CSS file is ignoring this style, we do it here:
+  $(".ui-tabs-tab").css("border-color","#404040");
+
+  if (client_is_observer()) {
+    observing = true;
+    $("#tabs-cities").hide();
+    $("#tabs-empire").hide();
+  }
 }
 
 function client_state()
@@ -241,7 +242,7 @@ function show_new_game_message()
     show_hotseat_new_phase();
     return;
   } else if (is_pbem()) {
-    message = "Welcome " + username + "! It is now your turn to play. Each player will " +
+    message = "Welcome, " + capitalize(username) + "! It is now your turn to play. Each player will " +
       "get an e-mail when it is their turn to play, and can only play one turn at a time. " +
       "Click the end turn button to end your turn and let the next opponent play.";
     setTimeout(check_queued_tech_gained_dialog, 2500);
@@ -250,23 +251,31 @@ function show_new_game_message()
      return;
   }
   else if (is_longturn()) {
-    message = "Welcome " + username + "! This is a Longturn game, where you play one turn per day. " +
+    message = "Welcome, " + capitalize(username) + "! This is a Longturn game, where you play one turn per day. " +
     "Just do your moves, and come back tomorrow when the timer advances to the next turn! You may " +
     "bookmark this page to return. You can also find the game again at " + window.location.host + ".<br> "+
     "<font color='#90FFFF'>Freeciv is a game of diplomacy. Your nation is encouraged to talk to other nations. "+
     "Please click to join the <a href='https://discord.gg/Zj8UQSN' target='_new'>community Discord chat server</a>. "+
     "Players are responsible for following the #rules posted there. Be polite; please keep in-game talk "+
-    "related to the game; do not post spam to offsite links if you wish to remain in the game.</font> Good luck, have fun!"; 
+    "related to the game; do not post spam to offsite links if you wish to remain in the game.</font> Good luck, have fun!";
+
+    if (is_small_screen) {
+      message += "This is your message window that reports ongoing game events. " +
+      "<u style='color:#fde'>Tap the yellow <b>minimize button</b> at the top to enter the game</u>. You can return here to view " +
+      "game messages by hitting the maximize button.";
+    }
 
   } else if (is_small_screen()) {
-    message = "Welcome " + username + "! You lead a great civilization. Your task is to conquer the world!\n" +
-      "Please join the <a href='https://discord.gg/Zj8UQSN' target='_new'>community Discord chat server</a> "+
+    message = "Welcome, " + capitalize(username) + "! You lead a great civilization. Your task is to conquer the world!\n" +
+      "Please join the <a href='https://discord.gg/Zj8UQSN' target='_new'>community Discord chat server</a>. "+
       "Click on units for giving them orders, and drag units on the map to move them.\n" +
-      "Good luck, and have a lot of fun!";
+      "Good luck, and have a lot of fun!\n<br><br>This message window reports game events. " +
+      "<u style='color:#fde'>Tap the yellow <b>minimize button</b> at the top to enter the game</u>. You can return here to view " +
+      "game messages by hitting the maximize button."; 
 
   } else if (client.conn.playing != null && !game_loaded) {
     var pplayer = client.conn.playing;
-    var player_nation_text = "Welcome, " + username + " ruler of the " + nations[pplayer['nation']]['adjective'] + " empire.";
+    var player_nation_text = "Welcome, " + capitalize(username) + ", ruler of the " + nations[pplayer['nation']]['adjective'] + " empire.";
 
     if (is_touch_device()) {
       message = player_nation_text + " Your\n" +
@@ -291,7 +300,7 @@ function show_new_game_message()
 
     }
   } else if (game_loaded) {
-    message = "Welcome back, " + username;
+    message = "Welcome back, " + capitalize(username);
     if (client.conn.playing != null) {
      message += " ruler of the " + nations[client.conn.playing['nation']]['adjective'] + " empire.";
     }
@@ -299,7 +308,7 @@ function show_new_game_message()
     return;
   }
 
-  message_log.update({ event: E_CONNECTION, message: message });
+  message_log.update({ event: E_FIRST_CONTACT, message: message });
 }
 
 /**************************************************************************
@@ -372,18 +381,14 @@ function update_metamessage_on_gamestart()
       && client.conn.playing['pid'] == players[0]['pid'] 
       && $.getUrlVar('action') == "new") {
     var pplayer = client.conn.playing;
-    var metasuggest = username + " ruler of the " + nations[pplayer['nation']]['adjective'] + ".";
+    var metasuggest = capitalize(username) + " ruler of the " + nations[pplayer['nation']]['adjective'] + ".";
     send_message("/metamessage " + metasuggest);
     setInterval(update_metamessage_game_running_status, 200000);
   }
 
   if ($.getUrlVar('action') == "new" || $.getUrlVar('action') == "earthload" 
       || $.getUrlVar('scenario') == "true") {
-    if (renderer == RENDERER_2DCANVAS) {
-      $.post("/freeciv_time_played_stats?type=single2d").fail(function() {});
-    } else {
-      $.post("/freeciv_time_played_stats?type=single3d").fail(function() {});
-    }
+    $.post("/freeciv_time_played_stats?type=single2d").fail(function() {});
   }
   if ($.getUrlVar('action') == "multi" && client.conn.playing != null
       && client.conn.playing['pid'] == players[0]['pid'] && !is_longturn()) {
@@ -402,7 +407,8 @@ function update_metamessage_game_running_status()
 {
   if (client.conn.playing != null && !metamessage_changed) {
     var pplayer = client.conn.playing;
-    var metasuggest = nations[pplayer['nation']]['adjective'] + " | " + (governments[client.conn.playing['government']] != null ? governments[client.conn.playing['government']]['name'] : "-")
+    var rules = ruleset_control['name'];
+    var metasuggest = rules + " | " + nations[pplayer['nation']]['adjective'] + " | " + (governments[client.conn.playing['government']] != null ? governments[client.conn.playing['government']]['name'] : "-")
          + " | People:" + civ_population(client.conn.playing.playerno)
          + " | Score:" + pplayer['score'] + " | " + "Research:" + (techs[client.conn.playing['researching']] != null ? techs[client.conn.playing['researching']]['name'] : "-" );
     send_message("/metamessage " + metasuggest);

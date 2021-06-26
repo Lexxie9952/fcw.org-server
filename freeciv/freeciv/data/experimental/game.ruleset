@@ -31,6 +31,17 @@ name = _("Experimental ruleset")
 ; There`s no separate versioning in rulesets part of main freeciv distribution
 ;version = ""
 
+; When about to migrate ruleset under a new name in the future version, set
+; alt_dir to the name of that future directory. Then savegames saved with this
+; version of freeciv can find the ruleset from the correct place when loading
+; the savegame to the future version.
+;
+; This ruleset will be renamed as "goldkeep" in a future version.
+; Set information of the future name so that once someone tries to load
+; savegame saved with this version to that future version, ruleset is
+; found from the directory it`s in.
+alt_dir = "goldkeep"
+
 ; Summary of the ruleset
 ; /* TRANS: In the client, this is displayed alongside the contents of
 ;    README.experimental, which are not localized. */
@@ -46,12 +57,28 @@ classic ruleset can be found in README.experimental.\
 description = *experimental/README.experimental*
 
 ; What capabilities ruleset provides for the scenarios.
-; mimimum-default-sets - Default units, terrains, buildings, etc
-capabilities = "minimum-default-sets"
+; See doc/README.rulesets for definitions of official capabilities
+; std-terrains         - At least standard set of terrains
+capabilities = "std-terrains"
 
 [options]
 global_init_techs=""
 global_init_buildings="Palace"
+
+[tileset]
+; If preferred tileset is set, clients that support the feature will suggest
+; using that tileset with the ruleset.
+; preferred = ""
+
+[soundset]
+; If preferred soundset is set, clients that support the feature will suggest
+; using that soundset with the ruleset.
+; preferred = ""
+
+[musicset]
+; If preferred musicset is set, clients that support the feature will suggest
+; using that musicset with the ruleset.
+; preferred = ""
 
 [civstyle]
 ; Value added to city pollution
@@ -116,6 +143,12 @@ tech_loss_allow_holes     = TRUE
 ; Whether civil war is possible at all
 civil_war_enabled        = TRUE
 
+; How many percents each celebrating city affects chance of civil war
+civil_war_bonus_celebrating = -5
+
+; How many percents each unhappy city affects chance of civil war
+civil_war_bonus_unhappy     = 5
+
 ; Comma separated list of things to happen, in addition to death
 ; of owner, when gameloss unit dies
 ; "CivilWar"   - Part of the empire remains, controlled by a new player
@@ -148,6 +181,10 @@ paradrop_to_transport    = TRUE
 ;            If still more gold is needed, then random units with gold
 ;            upkeep are disbanded.
 gold_upkeep_style = "Mixed"
+
+; How many points of output one basic unit consists of. Typically you
+; want this to be some 10^n.
+output_granularity = 1
 
 [illness]
 ; Whether plagues (illness) are possible
@@ -195,14 +232,39 @@ slow_invasions = TRUE
 ; have only fractional moves left.
 tired_attack = FALSE
 
+; With some rules it`s possible that neither side of a combat dies.
+; Set this to TRUE if unit should never gain veterancy from such a combat.
+only_killing_makes_veteran = FALSE
+
+; Percentage of population lost by a city after nuclear attak. If set to
+; 100 city is destroyed along with all the units. If set to 0 city does not
+; loose population. Any value below 100 means the city can never be
+; destroyed completely using nuclear
+nuke_pop_loss_pct = 50
+
+; Percentage chance of a city defender surviving nuclear attack. When set
+; to 50 roughly half of defenders will survive nuclear attack. When set to
+; 0 no defenders will survive. When set to 100 all defenders will survive.
+nuke_defender_survival_chance_pct = 0
+
 [auto_attack]
 ; An auto attack may be triggered when another unit moves to an adjacent
 ; tile and the autoattack server setting is enabled. The following details
 ; are ruleset controlled.
-;   will_never - units with this unit type flag will never auto attack.
+;   attack_actions - the actions to try during an auto attack in the order
+;                    they should be tried.
+;   if_attacker    - this requirement vector must be true before a unit even
+;                    considers to auto attack.
 
-; Not a good idea to nuke our own area.
-will_never = "Nuclear"
+attack_actions= "Capture Units", "Bombard", "Attack", "Suicide Attack"
+
+if_attacker =
+    { "type",         "name",    "range", "present"
+      "DiplRel",      "War",     "Local", TRUE
+      "MinMoveFrags", "1",       "Local", TRUE
+      ; Not a good idea to nuke our own area.
+      "UnitFlag",     "Nuclear", "Local", FALSE
+    }
 
 [actions]
 ; If force_trade_route is set to TRUE it is illegal for an actor unit to
@@ -236,6 +298,49 @@ poison_empties_food_stock = FALSE
 ; distance.
 bombard_max_range = 1
 
+; The maximum distance from the actor unit to the target of the "Bombard 2"
+; action. The value 1 means that the targets must be on a tile adjacent to
+; the actor unit. The special value "unlimited" lifts the maximum distance
+; restriction. The maximum distance can`t be smaller than the minimum
+; distance.
+bombard_2_max_range = 1
+
+; The maximum distance from the actor unit to the target of the "Bombard 3"
+; action. The value 1 means that the targets must be on a tile adjacent to
+; the actor unit. The special value "unlimited" lifts the maximum distance
+; restriction. The maximum distance can`t be smaller than the minimum
+; distance.
+bombard_3_max_range = 1
+
+; The maximum distance from the actor unit to the target of the
+; "Explode Nuclear" action. The value 0 means that the target tile must be
+; the tile of the actor unit. The value 1 means that the tile must be a tile
+; adjacent to the actor unit. The special value "unlimited" lifts the
+; maximum distance restriction. The maximum distance can`t be smaller than
+; the minimum distance.
+explode_nuclear_max_range = 0
+
+; The maximum distance from the actor unit to the target of the
+; "Nuke City" action. The value 1 means that the tile must be a tile
+; adjacent to the actor unit. The special value "unlimited" lifts the
+; maximum distance restriction. The maximum distance can`t be smaller than
+; the minimum distance.
+nuke_city_max_range = 1
+
+; The maximum distance from the actor unit to the target of the
+; "Nuke Units" action. The value 1 means that the tile must be a tile
+; adjacent to the actor unit. The special value "unlimited" lifts the
+; maximum distance restriction. The maximum distance can`t be smaller than
+; the minimum distance.
+nuke_units_max_range = 1
+
+; The maximum distance from the actor unit to the target of the "Airlift Unit"
+; action. The value 1 means that the targets must be on a tile adjacent to
+; the actor unit. The special value "unlimited" lifts the maximum distance
+; restriction. The maximum distance can`t be smaller than the minimum
+; distance.
+airlift_max_range = "unlimited"
+
 ; What each action should be called when showing them to the player.
 ; The first %s should be before the mnemonic of the action. A Freeciv client
 ; that supports mnemonics will replace it with the in-band signal that marks
@@ -259,6 +364,9 @@ ui_name_sabotage_city_escape = _("%sSabotage City Escape%s")
 
 ; /* TRANS: Industrial _Sabotage (3% chance of success). */
 ui_name_targeted_sabotage_city_escape = _("Industrial %sSabotage%s")
+
+; /* TRANS: Industrial _Sabotage Production (3% chance of success). */
+ui_name_sabotage_city_production_escape = _("Industrial %sSabotage Production%s")
 
 ; /* TRANS: Incite a _Revolt (3% chance of success). */
 ui_name_incite_city = _("Incite a %sRevolt%s")
@@ -308,8 +416,14 @@ ui_name_found_city = _("%sBuild City%s")
 ; /* TRANS: _Add to City (100% chance of success). */
 ui_name_join_city = _("%sAdd to City%s")
 
-; /* TRANS: Explode _Nuclear (100% chance of success). */
-ui_name_explode_nuclear = _("Explode %sNuclear%s")
+; /* TRANS: Explode _Nuclear In Place (100% chance of success). */
+ui_name_explode_nuclear = _("Explode %sNuclear In Place%s")
+
+; /* TRANS: _Nuke City (100% chance of success). */
+ui_name_nuke_city = _("%sNuke City%s")
+
+; /* TRANS: _Nuke Units (100% chance of success). */
+ui_name_nuke_units = _("%sNuke Units%s")
 
 ; /* TRANS: Set _Home City (100% chance of success). */
 ui_name_home_city = _("Set %sHome City%s")
@@ -326,17 +440,20 @@ ui_name_airlift_unit = _("%sAirlift to City%s")
 ; /* TRANS: _Attack (100% chance of success). */
 ui_name_attack = _("%sAttack%s")
 
+; /* TRANS: _Explode Missile (100% chance of success). */
+ui_name_suicide_attack = _("%sExplode Missile%s")
+
 ; /* TRANS: _Conquer City (100% chance of success). */
 ui_name_conquer_city = _("%sConquer City%s")
 
 ; /* TRANS: _Transform Terrain (3% chance of success). */
 ui_name_transform_terrain = _("%sTransform Terrain%s")
 
-; /* TRANS: Transform by _Irrigate (3% chance of success). */
-ui_name_irrigate_tf = _("Transform by %sIrrigate%s")
+; /* TRANS: Transform by _Cultivating (3% chance of success). */
+ui_name_cultivate = _("Transform by %sCultivating%s")
 
-; /* TRANS: Transform by _Mine (3% chance of success). */
-ui_name_mine_tf = _("Transform by %sMine%s")
+; /* TRANS: Transform by _Planting (3% chance of success). */
+ui_name_plant = _("Transform by %sPlanting%s")
 
 ; /* TRANS: Pilla_ge (100% chance of success). */
 ui_name_pillage = _("Pilla%sge%s")
@@ -355,6 +472,30 @@ ui_name_build_mine = _("Build %sMine%s")
 
 ; /* TRANS: Build _Irrigation (100% chance of success). */
 ui_name_irrigate = _("Build %sIrrigation%s")
+
+; /* TRANS: _Deboard (100% chance of success). */
+ui_name_transport_deboard = _("%sDeboard%s")
+
+; /* TRANS: _Board (100% chance of success). */
+ui_name_transport_board = _("%sBoard%s")
+
+; /* TRANS: _Unload (100% chance of success). */
+ui_name_transport_unload = _("%sUnload%s")
+
+; /* TRANS: _Disembark (100% chance of success). */
+ui_name_transport_disembark = _("%sDisembark%s")
+
+; /* TRANS: _Embark (100% chance of success). */
+ui_name_transport_embark = _("%sEmbark%s")
+
+; Blank ruleset defined user actions.
+; See the section "Ruleset defined actions" is doc/README.actions
+; Example: set up "User Action 1"
+;ui_name_user_action_1                = _("%sDisrupt Supply Lines%s")
+;user_action_1_target_kind            = "individual units"
+;user_action_1_min_range              = 1
+;user_action_1_max_range              = 3
+;user_action_1_actor_consuming_always = FALSE
 
 ; Suppress automatic help text generation about what enables and/or
 ; disables the following actions.
@@ -401,6 +542,16 @@ actor_reqs    =
 
 [actionenabler_sabotage_city_target]
 action = "Targeted Sabotage City Escape"
+actor_reqs    =
+    { "type",         "name",          "range"
+      "DiplRel",      "War",           "Local"
+      "UnitFlag",     "Spy",           "Local"
+      "UnitState",    "OnLivableTile", "Local"
+      "MinMoveFrags", "1",             "Local"
+    }
+
+[actionenabler_sabotage_city_production]
+action = "Sabotage City Production Escape"
 actor_reqs    =
     { "type",         "name",          "range"
       "DiplRel",      "War",           "Local"
@@ -682,24 +833,48 @@ actor_reqs    =
       "UnitFlag", "Nuclear", "Local", TRUE
     }
 
+[actionenabler_nuke_city]
+action="Nuke City"
+actor_reqs=
+    { "type",         "name",    "range"
+      "UnitFlag",     "Nuclear", "Local"
+      "MinMoveFrags", "1",       "Local"
+      "DiplRel",      "War",     "Local"
+    }
+
+[actionenabler_nuke_units]
+action="Nuke Units"
+actor_reqs=
+    { "type",         "name",    "range"
+      "UnitFlag",     "Nuclear", "Local"
+      "MinMoveFrags", "1",       "Local"
+      "DiplRel",      "War",     "Local"
+    }
+target_reqs=
+    { "type",     "name",   "range", "present"
+      "CityTile", "Center", "Local", FALSE
+    }
+
 [actionenabler_attack_native]
 action = "Attack"
 actor_reqs    =
-    { "type",         "name",         "range", "present"
-      "UnitFlag",     "NonMil",       "Local", FALSE
-      "MinMoveFrags", "1",            "Local", TRUE
-      "UnitState",    "OnNativeTile", "Local", TRUE
-      "DiplRel",      "War",          "Local", TRUE
+    { "type",          "name",         "range", "present"
+      "UnitFlag",      "NonMil",       "Local", FALSE
+      "UnitClassFlag", "Missile",      "Local", FALSE
+      "MinMoveFrags",  "1",            "Local", TRUE
+      "UnitState",     "OnNativeTile", "Local", TRUE
+      "DiplRel",       "War",          "Local", TRUE
     }
 
 [actionenabler_attack_marines]
 action = "Attack"
 actor_reqs    =
-    { "type",         "name",    "range", "present"
-      "UnitFlag",     "NonMil",  "Local", FALSE
-      "MinMoveFrags", "1",       "Local", TRUE
-      "UnitFlag",     "Marines", "Local", TRUE
-      "DiplRel",      "War",     "Local", TRUE
+    { "type",          "name",    "range", "present"
+      "UnitFlag",      "NonMil",  "Local", FALSE
+      "UnitClassFlag", "Missile", "Local", FALSE
+      "MinMoveFrags",  "1",       "Local", TRUE
+      "UnitFlag",      "Marines", "Local", TRUE
+      "DiplRel",       "War",     "Local", TRUE
     }
 
 [actionenabler_attack_att_from_non_native]
@@ -707,9 +882,20 @@ action = "Attack"
 actor_reqs    =
     { "type",          "name",             "range", "present"
       "UnitFlag",      "NonMil",           "Local", FALSE
+      "UnitClassFlag", "Missile",          "Local", FALSE
       "MinMoveFrags",  "1",                "Local", TRUE
       "UnitClassFlag", "AttFromNonNative", "Local", TRUE
       "DiplRel",       "War",              "Local", TRUE
+    }
+
+[actionenabler_explode_missile]
+action = "Suicide Attack"
+actor_reqs    =
+    { "type",          "name",    "range", "present"
+      "UnitFlag",      "NonMil",  "Local", FALSE
+      "UnitClassFlag", "Missile", "Local", TRUE
+      "MinMoveFrags",  "1",       "Local", TRUE
+      "DiplRel",       "War",     "Local", TRUE
     }
 
 [actionenabler_conquer_city_native]
@@ -807,15 +993,15 @@ actor_reqs    =
       "UnitFlag",      "Transform",    "Local"
     }
 
-[actionenabler_irrigate_tf]
-action        = "Irrigate TF"
+[actionenabler_cultivate]
+action        = "Cultivate"
 actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
     }
 
-[actionenabler_mine_tf]
-action        = "Mine TF"
+[actionenabler_plant]
+action        = "Plant"
 actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
@@ -837,7 +1023,7 @@ actor_reqs    =
     }
 
 [actionenabler_road]
-action        = "Road"
+action        = "Build Road"
 actor_reqs    =
     { "type",          "name",         "range"
       "UnitFlag",      "Settlers",     "Local"
@@ -916,6 +1102,61 @@ actor_reqs    =
 target_reqs    =
     { "type",    "name",       "range"
       "Extra",   "Irrigation", "CAdjacent"
+    }
+
+[actionenabler_deboard]
+action        = "Transport Deboard"
+actor_reqs    =
+    { "type",      "name",          "range"
+      "UnitState", "OnLivableTile", "Local"
+      "UnitState", "Transported",   "Local"
+    }
+target_reqs    =
+    { "type",      "name",         "range"
+      "UnitState", "Transporting", "Local"
+    }
+
+[actionenabler_board]
+action        = "Transport Board"
+actor_reqs    =
+    { "type",    "name",       "range", "present"
+      "DiplRel", "Armistice",  "Local", FALSE
+      "DiplRel", "War",        "Local", FALSE
+      "DiplRel", "Cease-fire", "Local", FALSE
+      "DiplRel", "Peace",      "Local", FALSE
+      "DiplRel", "Never met",  "Local", FALSE
+    }
+
+[actionenabler_unload]
+action        = "Transport Unload"
+actor_reqs    =
+    { "type",      "name",         "range"
+      "UnitState", "Transporting", "Local"
+    }
+target_reqs    =
+    { "type",      "name",          "range"
+      "UnitState", "OnLivableTile", "Local"
+      "UnitState", "Transported",   "Local"
+    }
+
+[actionenabler_disembark]
+action        = "Transport Disembark"
+actor_reqs    =
+    { "type",         "name",        "range"
+      "UnitState",    "Transported", "Local"
+      "MinMoveFrags", "1",           "Local"
+    }
+
+[actionenabler_embark]
+action        = "Transport Embark"
+actor_reqs    =
+    { "type",         "name",       "range", "present"
+      "MinMoveFrags", "1",          "Local", TRUE
+      "DiplRel",      "Armistice",  "Local", FALSE
+      "DiplRel",      "War",        "Local", FALSE
+      "DiplRel",      "Cease-fire", "Local", FALSE
+      "DiplRel",      "Peace",      "Local", FALSE
+      "DiplRel",      "Never met",  "Local", FALSE
     }
 
 [borders]
@@ -999,6 +1240,11 @@ victory_min_points = 15000
 ; How big lead relative to second best player is needed for victory
 victory_lead_pct   = 200
 
+; How much existing history grows each turn. This makes older history
+; of the same original value more valuable as newer history, as it has
+; gained more interest.
+history_interest_pml = 0
+
 ; How much each culture point affects the migration
 ; from/to the city. Each culture point count as this many permilles
 ; of a migration point.
@@ -1019,8 +1265,8 @@ fragments = 0
 ; Calendar fragment names. If name is missing, only a fragment number +1 (so human readable
 ; numbers begin from 1 and not 0) is shown.
 
-;fragment_name0 = "Jan"
-;fragment_name1 = "Feb"
+;fragment_name0 = _("Jan")
+;fragment_name1 = _("Feb")
 ; ...
 
 ; What labels are used for positive and negative years.
@@ -1203,6 +1449,9 @@ name = _("Goods")
 ;
 ; type                   = Type of the clause, one of "Advance", "Gold", "Map", "Seamap",
 ;                          "City", "Ceasefire", "Peace", "Alliance", "Vision", "Embassy"
+; giver_reqs             = requirements that the giving side of the clause needs to fulfill
+;                          (see effects.ruleset and README.effects for help on requirements)
+; receiver_reqs          = requirements that the receiving side of the clause needs to fulfill
 ;
 ; */ <-- avoid gettext warnings
 

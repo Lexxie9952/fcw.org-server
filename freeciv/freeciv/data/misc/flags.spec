@@ -2,7 +2,7 @@
 [spec]
 
 ; Format and options of this spec file:
-options = "+Freeciv-spec-Devel-2015-Mar-25"
+options = "+Freeciv-spec-Devel-2019-Jul-03"
 
 [info]
 
@@ -928,6 +928,7 @@ sprites =
 		"f.muskogee", "flags/muskogee"
 		"f.mwiska", "flags/mwiska"
 		"f.myanmar", "flags/myanmar"
+		"f.myanmar_old", "flags/myanmar_old"
 		"f.nagorno_karabakh", "flags/nagorno_karabakh"
 		"f.namibia", "flags/namibia"
 		"f.naples", "flags/naples"
@@ -1153,4 +1154,4 @@ sprites =
 		"f.zulu", "flags/zulu"
 	}
 
-*include "override/flags.spec"
+;*include "override/flags.spec"

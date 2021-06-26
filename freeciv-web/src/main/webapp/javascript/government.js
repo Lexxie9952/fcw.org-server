@@ -25,6 +25,9 @@ var REPORT_TOP_5_CITIES = 1;
 var REPORT_DEMOGRAPHIC = 2;
 var REPORT_ACHIEVEMENTS = 3;
 
+var GOV_LAST = -1; // set in handle_ruleset_government() when server tells us the ruleset.
+                   // -1 causes a failsafe for checking gov_requirement on whether units
+                   // can be built, so worst case is displaying units you can't make with cur_gov.
 
 /**************************************************************************
    ...
@@ -45,16 +48,19 @@ function show_revolution_dialog()
   }
 
   var id = "#revolution_dialog";
-  $(id).remove();
+  remove_active_dialog(id);
   $("<div id='revolution_dialog'></div>").appendTo("div#game_page");
 
   if (client.conn.playing == null) return;
 
-  var dhtml = "Current form of government: " + governments[client.conn.playing['government']]['name']
-	  + "<br>To start a revolution, select the new form of government:"
-  + "<p><div id='governments' >"
-  + "<div id='governments_list'>"
-  + "</div></div><br> ";
+  var gov_name = governments[client.conn.playing['government']]['name'];
+  if (gov_name == "Monarchy") gov_name = get_gov_modifier(client.conn.playing.playerno, "Monarchy", true) + " " + gov_name;
+
+  var dhtml = "Current form of government: <b>" + gov_name
+	          + "</b><br>To start a revolution, select the new form of government:"
+            + "<p><div id='governments' >"
+            + "<div id='governments_list'>"
+            + "</div></div><br> ";
 
   $(id).html(dhtml);
 
@@ -65,17 +71,15 @@ function show_revolution_dialog()
 			width: is_small_screen() ? "99%" : revo_width,
 			height: is_small_screen() ? $(window).height() - 40 : (revo_height+extended_height),
 			  buttons: {
-				"Start revolution!" : function() {
-					start_revolution();
-					$("#revolution_dialog").dialog('close');
-				}
+          "Start revolution!" : function() {
+            start_revolution();
+            remove_active_dialog("#revolution_dialog");
+				  }
 			  }
-
   });
 
-
+  dialog_register(id);
   update_govt_dialog();
-
 }
 
 /**************************************************************************
@@ -90,19 +94,19 @@ function init_civ_dialog()
     var tag = pnation['graphic_str'];
 
     var civ_description = "";
+    var gov_modifier = get_gov_modifier(client.conn.playing.playerno, null, true); if (gov_modifier) gov_modifier += " ";
     if (!pnation['customized']) {
 	    civ_description += "<img src='/images/flags/" + tag + "-web" + get_tileset_file_extention() + "' width='180'>";
-	}
+    }
 
     civ_description += "<br><div>" + pplayer['name'] + " rules the " + nations[pplayer['nation']]['adjective']
-	    + " with the form of government: " + governments[client.conn.playing['government']]['name']
+	    + " with the form of government: " + gov_modifier + governments[client.conn.playing['government']]['name']
 	    + "</div><br>";
     $("#nation_title").html("The " + nations[pplayer['nation']]['adjective'] + " nation");
     $("#civ_dialog_text").html(civ_description);
 
   } else {
     $("#civ_dialog_text").html("This dialog isn't available as observer.");
-
   }
 
 }
@@ -123,30 +127,38 @@ function update_govt_dialog()
     govt = governments[govt_id];
     governments_list_html += "<button class='govt_button' id='govt_id_" + govt['id'] + "' "
 	                  + "onclick='set_req_government(" + govt['id'] + ");' "
-			  + "title='" + govt['helptext'] + "'>" +  govt['name'] + "</button>";
+			  + "title='" + cleaned_text(govt['helptext']) + "'>" +  govt['name'] + "</button>";
   }
 
   $("#governments_list").html(governments_list_html);
 
-  for (govt_id in governments) {
-    govt = governments[govt_id];
-    if (!can_player_get_gov(govt_id)) {
-      $("#govt_id_" + govt['id'] ).button({ disabled: true, label: govt['name'], icons: {primary: govt['rule_name']} });
-    } else if (requested_gov == govt_id) {
-    $("#govt_id_" + govt['id'] ).button({label: govt['name'], icons: {primary: govt['rule_name']}}).css("background", "green");
-    } else if (client.conn.playing['government'] == govt_id) {
-      $("#govt_id_" + govt['id'] ).button({label: govt['name'], icons: {primary: govt['rule_name']}}).css("background", "#BBBBFF").css("font-weight", "bolder");
-    } else {
-      $("#govt_id_" + govt['id'] ).button({label: govt['name'], icons: {primary: govt['rule_name']}});
-    }
+  var magna_carta = get_gov_modifier(client.conn.playing.playerno, "Monarchy", false); // Allows secondary species of sub-governments
 
+  var gov_modifier = "";
+  for (govt_id in governments) {
+    govt = governments[govt_id]; 
+    gov_modifier = (govt['name'] == "Monarchy" ? magna_carta : "");
+
+    label_html = "<img class='lowered_gov' src='/images/e/"+govt['name'].toLowerCase()+gov_modifier+".png'>&nbsp;&nbsp;&nbsp;"
+               + capitalize(gov_modifier) + " " + govt['name']
+               + "<img src='/images/e/techs/"+govt['name'].toLowerCase()+gov_modifier+".png' style='margin:-8px;margin-top:-9x;float:right;' "
+               + "width='36px' height='36px'>"
+    if (!can_player_get_gov(govt_id)) {
+      $("#govt_id_" + govt['id'] ).button({ disabled: true, label: label_html});
+    } else if (requested_gov == govt_id) {
+    $("#govt_id_" + govt['id'] ).button({label: label_html}).css({"background": "url('/images/bg-light.jpg')", color: "black"});
+    } else if (client.conn.playing['government'] == govt_id) {
+      $("#govt_id_" + govt['id'] ).button({label: label_html}).css("background", "url('/images/black-bg.png')").css("font-weight", "bolder");
+    } else {
+      $("#govt_id_" + govt['id'] ).button({label: label_html});
+    }
   }
-  $(".govt_button").tooltip();
+  /*$(".govt_button").tooltip();
   $(".govt_button").tooltip({
     open: function (event, ui) {
         ui.tooltip.css({"max-width":"100%", "width":"88%", "margin-top":"15px", "margin-left":"-95px", "overflow":"visible"});
     }
-});
+});*/
 }
 
 
@@ -164,58 +176,61 @@ function start_revolution()
           }
         }    
       }
+      var cur_gov = governments[client.conn.playing['government']]['id'];
+      if (do_worklists(cur_gov, governments[requested_gov]['id']))
+        setTimeout(send_player_change_government(requested_gov),1500); // delay to remove Fanatics from 134 cities;
+      else send_player_change_government(requested_gov);
+      requested_gov = -1;
 
-      var cur_gov = governments[client.conn.playing['government']];
+      /* old code for calling do_worklists, used strings as gov identifiers.
+         new code wants id to do a cleaner check */
+      /*var cur_gov = governments[client.conn.playing['government']];
       if (do_worklists(cur_gov['name'], governments[requested_gov]['name']))
         setTimeout(send_player_change_government(requested_gov),800);
       else send_player_change_government(requested_gov);
-      requested_gov = -1;
+      requested_gov = -1;*/
   }
 }
 
 /**************************************************************************
-   ...
+   When changing government, clear illegal production from worklist
 **************************************************************************/
-function do_worklists(cur_gov, new_gov)
+function do_worklists(cur_gov_id, new_gov_id)
 {
   var altered = false;
 
+  // THIS was a clean-up of DIRTY hard-coding. If it fails, see commits for 23Feb2021 to revert.
   for (city_id in cities) {
     var pcity=cities[city_id];
-    if (pcity['owner'] != client.conn.playing.playerno) continue;
-     
-    if (cur_gov == "Fundamentalism" && new_gov != "Fundamentalism") {
-      if (pcity['worklist'] != null && pcity['worklist'].length != 0) {
-        var before = pcity['worklist'].length;
-        pcity['worklist'] = pcity['worklist'].filter(list_item => !(list_item['kind']==VUT_UTYPE && unit_types[list_item['value']]['name'] == "Fanatics") );
-        pcity['worklist'] = pcity['worklist'].filter(list_item => !(list_item['kind']==VUT_UTYPE && unit_types[list_item['value']]['name'] == "Pilgrims") );
-        if (before != pcity['worklist'].length) {send_city_worklist(pcity['id']);altered = true;}
-      }
-      if (pcity['production_kind']==VUT_UTYPE && (unit_types[pcity['production_value']]['name'] == "Fanatics"
-          || unit_types[pcity['production_value']]['name'] == "Pilgrims")) {
-        altered=true;
-        if (pcity['worklist'] != null && pcity['worklist'].length) {
-          send_city_change(pcity['id'],pcity['worklist'][0]['kind'],pcity['worklist'][0]['value']);
-          pcity['worklist'].shift();
-          send_city_worklist(pcity['id']);
-        } else {send_city_change(pcity['id'], VUT_IMPROVEMENT, Object.keys(improvements).length-1);}
-      }
-    } else if (cur_gov == "Communism" && new_gov != "Communism") {
-      if (pcity['worklist'] != null && pcity['worklist'].length != 0) {
-        var before = pcity['worklist'].length;
-        pcity['worklist'] = pcity['worklist'].filter(list_item => !(list_item['kind']==VUT_UTYPE && unit_types[list_item['value']]['name'] == "Proletarians") );
-        if (before != pcity['worklist'].length) {send_city_worklist(pcity['id']);altered = true;}
-      }
-      if (pcity['production_kind']==VUT_UTYPE && unit_types[pcity['production_value']]['name'] == "Proletarians") {
-        altered=true;
-        if (pcity['worklist'] != null && pcity['worklist'].length) {
-          send_city_change(pcity['id'],pcity['worklist'][0]['kind'],pcity['worklist'][0]['value']);
-          pcity['worklist'].shift();
-          send_city_worklist(pcity['id']);
-        } else {send_city_change(pcity['id'], VUT_IMPROVEMENT, Object.keys(improvements).length-1);}
+    if (pcity['owner'] != client.conn.playing.playerno) continue;             // don't bother with unowned cities
+    if (pcity['worklist'] == null || pcity['worklist'].length == 0) continue; // don't bother with null worklists
+    var prev_worklist_len = pcity['worklist'].length;
+    var cur_prod_is_legal = true;
+    for (ut_id in unit_types) {
+      if (unit_types[ut_id].gov_requirement < GOV_LAST && unit_types[ut_id].gov_requirement != new_gov_id) {
+        // We have iterated to a unit type that is not allowed under the new gov. Force wipe it from the worklist.
+        pcity['worklist'] = pcity['worklist'].filter(list_item => !(list_item['kind']==VUT_UTYPE && list_item['value'] == ut_id));
+        if (pcity['production_kind']==VUT_UTYPE && pcity['production_value'] == ut_id) {
+          // Current prod in this city is of the illegal type. Flag it to take action AFTER everything in worklist got purged.
+          altered=true;
+          cur_prod_is_legal=false;
+        }
       }
     }
-  }  
+    // If illegal types were removed from worklist, tell the server our new worklist for this city. 
+    if (prev_worklist_len != pcity['worklist'].length) {
+      send_city_worklist(pcity['id']);
+      altered = true; // lets caller know we might be making heavy server traffic on changing lots of worklists
+    }
+    // Only after worklist is purged remove illegal current_production:    (to avoid it became null or bumping up another illegal unit to cur_prod)
+    if (!cur_prod_is_legal) {
+      if (pcity['worklist'] != null && pcity['worklist'].length) {
+        send_city_change(pcity['id'],pcity['worklist'][0]['kind'],pcity['worklist'][0]['value']);
+        pcity['worklist'].shift();
+        send_city_worklist(pcity['id']);
+      } else {send_city_change(pcity['id'], VUT_IMPROVEMENT, Object.keys(improvements).length-1);}
+    }
+  }
   return altered;
 }
 
@@ -245,33 +260,29 @@ function send_player_change_government(govt_id)
 **************************************************************************/
 function government_max_rate(govt_id)
 {
-  if (govt_id == 0) {
-    // Anarchy
+  var govt = governments[govt_id]['name'];
+  if (govt == "Anarchy") {
     return 100;
-  } else if (govt_id == 1) {
-    //Despotism
+  } else if (govt == "Despotism") {
     return 60;
-  } else if (govt_id == 2) {
-    // Monarchy
+  } else if (govt == "Monarchy") {
     return 70;
-  } else if (govt_id == 3) {
-    //Communism
+  } else if (govt == "Communism") {
     return 80;
-  } else if (govt_id == 4) {
-    //Republic
+  } else if (govt == "Republic") {
     return 80;
-  } else if (govt_id == 5) {
-    //Democracy
+  } else if (govt == "Democracy") {
     return 100;
-  } else if (govt_id == 6) {
-      //Fundamentalism
-      return 80;
-  } else if (govt_id == 7) {
-        //Tribalism
-        return 60;
-  } else if (govt_id == 8) {
-    //Federation
+  } else if (govt == "Fundamentalism") {
+    return 80;
+  } else if (govt == "Tribalism") {
+    return 60;
+  } else if (govt == "Federation") {
     return 90;
+  } else if (govt == "Nationalism") {
+    return 90;
+  } else if (govt == "Theocracy") {
+    return 80;
   } else {
     // this should not happen
     return 100;
@@ -307,4 +318,101 @@ function request_report(rtype)
   var packet = {"pid"  : packet_report_req,
                 "type" : rtype};
   send_request(JSON.stringify(packet));
+}
+
+
+
+/**************************************************************************
+ ...
+**************************************************************************/
+function show_climate_dialog(rtype)
+{
+  var title = "Climate Report";
+  var message = "<br>";
+  var warm_toler = Math.round((game_info['warminglevel']*100)/server_settings['globalwarming_percent']['val']);
+  var warm_accum = game_info['globalwarming'] + warm_toler;
+  var cold_toler = Math.round((game_info['coolinglevel']*100)/server_settings['nuclearwinter_percent']['val']);
+  var cold_accum = game_info['nuclearwinter'] + cold_toler;
+
+  message += "<span title='IF global warming occurs, the impact strength on the surface tiles of the planet.\n0% = none.\n100% = normal.\n101-10000 = elevated.'>" 
+          +"<b>Global Warming Strength</b>:&nbsp; " + game_info['global_warming'] +"%"
+          + "</span><br>";
+
+  message += "<span title='The current cumulative impact of existing pollution over recent turns, possibly accumulating higher beyond the tolerance to trigger Global Warming. A certain amount will naturally disperse each turn, if the impact caused by existing pollution is not greater.'>"
+          +"<b>Global Warming Impact</b>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " 
+          + (game_info['globalwarming'] > 0 ? warm_accum : "<span title='The impact is below tolerance or a major climate disaster has recently reset the climate models.'>[unknown]</span>") 
+          + "<span title='One unit of Accumulated Climate Stress, whether in measuring impact to climate, or tolerance to the stress.'> ACS</span>"
+          + "</span><br>";
+
+  message += "<span title='The current tolerance of the climate after exposure to recent impacts. This represents the natural reduction per turn that the Earth can ecologically absorb and process, and thus, also the tolerance beyond which global warming has a chance to trigger.'>"
+          +"<b>Global Warming Tolerance</b>: " + warm_toler
+          + "<span title='One unit of Accumulated Climate Stress, whether in measuring impact to climate, or tolerance to that stress.'> ACS </span>"
+          + "</span><br>";
+
+  message += "<span title='This is a server setting. Higher numbers make Global Warming more likely, by altering the Global Warming Tolerance shown above. Default of 100% = unchanged.'>"
+          +"<b>Global Warming Percent</b>:&nbsp;&nbsp;&nbsp; " + server_settings['globalwarming_percent']['val']
+          + "%</span><br><br>";
+
+  if (game_info['globalwarming'] > game_info['warminglevel'])
+      message += "Scientists recommend immediate international action to halt habitat destruction from Global Warming!!<br><br>"
+  else if (game_info['globalwarming'] > game_info['warminglevel'] *.5)
+      message += "Scientists are concerned that pollution impact is too close to Climate Tolerance levels.<br><br>"
+
+  message += "<br><span title='IF nuclear winter occurs, the impact strength on the surface tiles of the planet.\n0% = none.\n100% = normal.\n101-10000 = elevated.'>"
+          + "<b>Nuclear Winter Strength</b>:&nbsp; " + game_info['nuclear_winter']+"%"
+          + "</span><br>";
+
+  message += "<span title='The current cumulative impact of existing fallout over recent turns, possibly accumulating higher beyond the tolerance to trigger Nuclear Winter. A certain amount will naturally disperse each turn, if the impact caused by existing fallout is not greater.'>"
+          + "<b>Nuclear Winter Impact</b>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " 
+          + (game_info['nuclearwinter'] > 0 ? cold_accum : "<span title='The impact is below tolerance or a major climate disaster has recently reset the climate models.'>[unknown]</span>")
+          + "<span title='One unit of Accumulated Climate Stress, whether in measuring impact to climate, or tolerance to that stress.'> ACS </span>"
+          + "</span><br>";
+
+  message += "<span title='The current tolerance of the climate after exposure to recent impacts. This represents the natural reduction per turn that the Earth can ecologically absorb and process, and thus, also the tolerance beyond which nuclear winter has a chance to trigger.'>"
+          + "<b>Nuclear Winter Tolerance</b>: " + cold_toler
+          + "<span title='One unit of Accumulated Climate Stress, whether in measuring impact to climate, or tolerance to that stress.'> ACS </span>"
+          + "</span><br>";
+
+  message += "<span title='This is a server setting. Higher numbers make Nuclear Winter more likely, by altering the Nuclear Winter Tolerance shown above. Default of 100% = unchanged.'>"
+          +"<b>Nuclear Winter Percent</b>:&nbsp;&nbsp;&nbsp; " + server_settings['nuclearwinter_percent']['val'] 
+          + "%</span><br><br>";
+        
+  if (game_info['nuclearwinter'] > game_info['coolinglevel'])
+      message += "Scientists recommend immediate international action to halt habitat destruction from Nuclear Winter!!<br>"
+  else if (game_info['nuclearwinter'] > game_info['coolinglevel'] *.5)
+      message += "Scientists are concerned that fallout impact is too close to Climate Tolerance levels.<br>"
+
+  remove_active_dialog("#dialog");
+  $("<div id='dialog'></div>").appendTo("div#game_page");
+
+  $("#dialog").html(message);
+  $("#dialog").attr("title", title);
+  $("#dialog").dialog({
+      bgiframe: true,
+      modal: true,
+      width: is_small_screen() ? "90%" : "40%",
+      buttons: {
+        'Close (𝗪)': function() {
+          remove_active_dialog("#dialog");
+        }
+      }
+    });
+
+  $("#dialog").dialog('open');
+  dialog_register("#dialog");
+}
+
+/************************************************
+*
+************************************************/
+function get_gov_modifier(playerno, gov_name, uppercase) {
+  if (!client_rules_flag[CRF_MP2_C]) return "";
+
+  if (!gov_name) gov_name = governments[players[playerno]['government']]['name'];
+  var gov_modifier = "";
+   
+  if (players[playerno].wonders[improvement_id_by_name(B_MAGNA_CARTA)]) {
+    if (gov_name == "Monarchy") gov_modifier = uppercase ? "Constitutional" : "constitutional";
+  }
+  return gov_modifier;
 }

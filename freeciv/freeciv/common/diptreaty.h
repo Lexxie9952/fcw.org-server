@@ -18,6 +18,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 /* utility */
+#include "requirements.h"
 #include "support.h"            /* bool type */
 
 /* Used in the network protocol */
@@ -52,6 +53,8 @@ struct clause_info
 {
   enum clause_type type;
   bool enabled;
+  struct requirement_vector giver_reqs;
+  struct requirement_vector receiver_reqs;
 };
 
 /* For when we need to iterate over treaties */
@@ -94,6 +97,9 @@ void clear_treaty(struct Treaty *ptreaty);
 void clause_infos_init(void);
 void clause_infos_free(void);
 struct clause_info *clause_info_get(enum clause_type type);
+
+bool clause_enabled(enum clause_type type, struct player *from,
+                    struct player *to);
 
 #ifdef __cplusplus
 }

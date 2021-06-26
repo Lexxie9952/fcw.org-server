@@ -39,8 +39,8 @@
 **************************************************************************/
 static bool sanity_check_metadata(void)
 {
-  if (game.ruleset_summary != NULL &&
-      strlen(game.ruleset_summary) > MAX_LEN_CONTENT) {
+  if (game.ruleset_summary != NULL
+      && strlen(game.ruleset_summary) > MAX_LEN_CONTENT) {
     log_error("Too long ruleset summary. It can be only %d bytes long. "
               "Put longer explanations to ruleset description.",
               MAX_LEN_CONTENT);
@@ -154,7 +154,7 @@ static bool sanity_check_req_individual(struct requirement *preq,
      * It can't be done in req_from_str(), as we may not have
      * loaded all building information at that time. */
     {
-      struct impr_type *pimprove = preq->source.value.building;
+      const struct impr_type *pimprove = preq->source.value.building;
       if (preq->range == REQ_RANGE_WORLD && !is_great_wonder(pimprove)) {
         log_error("%s: World-ranged requirement not supported for "
                   "%s (only great wonders supported)", list_for,
@@ -277,9 +277,11 @@ static bool sanity_check_req_set(int reqs_of_type[], int local_reqs_of_type[],
      case VUT_UTYPE:
      case VUT_UCLASS:
      case VUT_ACTION:
+     case VUT_ACTIVITY:
      case VUT_OTYPE:
      case VUT_SPECIALIST:
      case VUT_MINSIZE: /* Breaks nothing, but has no sense either */
+     case VUT_MINFOREIGNPCT:
      case VUT_MINMOVES: /* Breaks nothing, but has no sense either */
      case VUT_MINVETERAN: /* Breaks nothing, but has no sense either */
      case VUT_MINHP: /* Breaks nothing, but has no sense either */
@@ -290,6 +292,7 @@ static bool sanity_check_req_set(int reqs_of_type[], int local_reqs_of_type[],
      case VUT_CITYTILE:
      case VUT_STYLE:
      case VUT_IMPR_GENUS:
+     case VUT_CITYSTATUS:
        /* There can be only one requirement of these types (with current
         * range limitations)
         * Requirements might be identical, but we consider multiple
@@ -437,6 +440,41 @@ static bool effect_list_sanity_cb(struct effect *peffect, void *data)
 {
   int one_tile = -1; /* TODO: Determine correct value from effect.
                       *       -1 disables checking */
+
+  if (peffect->type == EFT_ACTION_SUCCESS_TARGET_MOVE_COST) {
+    /* Only unit targets can pay in move fragments. */
+    requirement_vector_iterate(&peffect->reqs, preq) {
+      if (preq->source.kind == VUT_ACTION) {
+        if (action_get_target_kind(preq->source.value.action) != ATK_UNIT) {
+          /* TODO: support for ATK_UNITS could be added. That would require
+           * manually calling action_success_target_pay_mp() in each
+           * supported unit stack targeted action performer (like
+           * action_consequence_success() does) or to have the unit stack
+           * targeted actions return a list of targets. */
+          log_error("The effect Action_Success_Target_Move_Cost has the"
+                    " requirement {%s} but the action %s isn't"
+                    " (single) unit targeted.",
+                    req_to_fstring(preq),
+                    universal_rule_name(&preq->source));
+          return FALSE;
+        }
+      }
+    } requirement_vector_iterate_end;
+  } else if (peffect->type == EFT_ACTION_SUCCESS_MOVE_COST) {
+    /* Only unit actors can pay in move fragments. */
+    requirement_vector_iterate(&peffect->reqs, preq) {
+      if (preq->source.kind == VUT_ACTION && preq->present) {
+        if (action_get_actor_kind(preq->source.value.action) != AAK_UNIT) {
+          log_error("The effect Action_Success_Actor_Move_Cost has the"
+                    " requirement {%s} but the action %s isn't"
+                    " performed by a unit.",
+                    req_to_fstring(preq),
+                    universal_rule_name(&preq->source));
+          return FALSE;
+        }
+      }
+    } requirement_vector_iterate_end;
+  }
 
   return sanity_check_req_vec(&peffect->reqs, TRUE, one_tile,
                               effect_type_name(peffect->type));
@@ -816,7 +854,7 @@ bool sanity_check_ruleset_data(bool ignore_retired)
   num_utypes = game.control.num_unit_types;
   unit_type_iterate(putype) {
     int chain_length = 0;
-    struct unit_type *upgraded = putype;
+    const struct unit_type *upgraded = putype;
 
     while (upgraded != NULL) {
       upgraded = upgraded->obsoleted_by;
@@ -945,6 +983,14 @@ bool sanity_check_ruleset_data(bool ignore_retired)
       ruleset_error(LOG_ERROR,
                     "Extras have conflicting or invalid removal requirements!");
       ok = FALSE;
+    }
+    if ((requirement_vector_size(&pextra->rmreqs) > 0)
+        && !(pextra->rmcauses
+             & (ERM_ENTER | ERM_CLEANPOLLUTION
+                | ERM_CLEANFALLOUT | ERM_PILLAGE))) {
+      ruleset_error(LOG_WARN,
+                    "Requirements for extra removal defined but not "
+                    "a valid remove cause!");
     }
   } extra_type_iterate_end;
 
@@ -1111,6 +1157,33 @@ bool sanity_check_ruleset_data(bool ignore_retired)
     } action_enabler_list_iterate_end;
   } action_iterate_end;
 
+  /* Auto attack */
+  {
+    struct action_auto_perf *auto_perf;
+
+    auto_perf = action_auto_perf_slot_number(ACTION_AUTO_MOVED_ADJ);
+
+    action_auto_perf_actions_iterate(auto_perf, act_id) {
+      struct action *paction = action_by_number(act_id);
+
+      if (!(action_has_result(paction, ACTION_CAPTURE_UNITS)
+            || action_has_result(paction, ACTION_BOMBARD)
+            || action_has_result(paction, ACTION_BOMBARD2)
+            || action_has_result(paction, ACTION_BOMBARD3)
+            || action_has_result(paction, ACTION_ATTACK)
+            || action_has_result(paction, ACTION_SUICIDE_ATTACK))) {
+        /* Only allow removing and changing the order of old auto
+         * attack actions for now. Other actions need more testing and
+         * fixing of issues caused by a worst case action probability of
+         * 0%. */
+        ruleset_error(LOG_ERROR, "auto_attack: %s not supported in"
+                                 " attack_actions.",
+                      action_rule_name(paction));
+        ok = FALSE;
+      }
+    } action_auto_perf_actions_iterate_end;
+  }
+
   /* There must be basic city style for each nation style to start with */
   styles_iterate(pstyle) {
     if (basic_city_style_for_style(pstyle) < 0) {
@@ -1275,6 +1348,9 @@ bool autoadjust_ruleset_data(void)
        * tile has no units remains hard coded. Kept "just in case" that
        * changes. */
       { ACTION_CONQUER_CITY, ACTION_ATTACK },
+      { ACTION_CONQUER_CITY2, ACTION_ATTACK },
+      { ACTION_CONQUER_CITY, ACTION_SUICIDE_ATTACK },
+      { ACTION_CONQUER_CITY2, ACTION_SUICIDE_ATTACK },
     };
 
     int i;

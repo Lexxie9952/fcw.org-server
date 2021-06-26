@@ -169,7 +169,7 @@ const char *big_int_to_text(unsigned int mantissa, unsigned int exponent)
   ptr = &buf[sizeof(buf)];
   *(--ptr) = '\0';
 
-  while (mantissa != 0 && exponent >= 0) {
+  while (mantissa != 0) {
     int dig;
 
     if (ptr <= buf + seplen) {
@@ -286,7 +286,7 @@ bool is_ascii_name(const char *name)
     }
     for (j = 0; illegal_chars[j]; j++) {
       if (name[i] == illegal_chars[j]) {
-	return FALSE;
+      	return FALSE;
       }
     }
   }
@@ -520,6 +520,39 @@ bool str_to_int(const char *str, int *pint)
   }
 
   return ('\0' == *str && (NULL == pint || 1 == sscanf(start, "%d", pint)));
+}
+
+/************************************************************************//**
+  Convert 'str' to it's unsigned int reprentation if possible. 'pint' can be NULL,
+  then it will only test 'str' only contains an unsigned integer number.
+****************************************************************************/
+bool str_to_uint(const char *str, unsigned int *pint)
+{
+  const char *start;
+
+  fc_assert_ret_val(NULL != str, FALSE);
+
+  while (fc_isspace(*str)) {
+    /* Skip leading spaces. */
+    str++;
+  }
+
+  start = str;
+  if ('+' == *str) {
+    /* Handle sign. */
+    str++;
+  }
+  while (fc_isdigit(*str)) {
+    /* Digits. */
+    str++;
+  }
+
+  while (fc_isspace(*str)) {
+    /* Ignore trailing spaces. */
+    str++;
+  }
+
+  return ('\0' == *str && (NULL == pint || 1 == sscanf(start, "%u", pint)));
 }
 
 /************************************************************************//**
@@ -1696,7 +1729,7 @@ bool make_dir(const char *pathname)
     dir = strchr(dir, DIR_SEPARATOR_CHAR);
     /* We set the current / with 0, and restore it afterwards */
     if (dir) {
-      *dir = 0;
+      *dir = '\0';
     }
 
 #ifdef FREECIV_MSWINDOWS
@@ -2023,7 +2056,7 @@ bool wildcard_fit_string(const char *pattern, const char *test)
       break;
     case '\\':
       pattern++;
-      /* break; not missing. */
+      fc__fallthrough; /* No break */
     default:
       if (*pattern != *test) {
         return FALSE;
@@ -2238,7 +2271,7 @@ static size_t extract_escapes(const char *format, char *escapes,
 {
   static const char format_escapes[] = {
     '*', 'd', 'i', 'o', 'u', 'x', 'X', 'e', 'E', 'f',
-    'F', 'g', 'G', 'a', 'A', 'c', 's', 'p', 'n',
+    'F', 'g', 'G', 'a', 'A', 'c', 's', 'p', 'n', '\0'
   };
   bool reordered = FALSE;
   size_t num = 0;

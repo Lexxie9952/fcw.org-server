@@ -105,6 +105,7 @@ static void adv_data_city_impr_calc(struct player *pplayer,
       case EFT_POLLU_PROD_PCT:
       case EFT_OUTPUT_BONUS:
       case EFT_OUTPUT_BONUS_2:
+      case EFT_OUTPUT_ADD_BONUS:
       case EFT_OUTPUT_WASTE_PCT:
       case EFT_UPKEEP_FREE:
 	requirement_vector_iterate(&peffect->reqs, preq) {
@@ -215,8 +216,8 @@ static void count_my_units(struct player *pplayer)
     if (unit_has_type_flag(punit, UTYF_COAST_STRICT)) {
       adv->stats.units.coast_strict++;
     }
-    if (uclass_has_flag(pclass, UCF_MISSILE)) {
-      adv->stats.units.missiles++;
+    if (utype_can_do_action(unit_type_get(punit), ACTION_SUICIDE_ATTACK)) {
+      adv->stats.units.suicide_attackers++;
     }
     if (unit_can_do_action(punit, ACTION_PARADROP)) {
       adv->stats.units.paratroopers++;
@@ -257,9 +258,13 @@ bool is_adv_data_phase_open(struct player *pplayer)
 bool adv_data_phase_init(struct player *pplayer, bool is_new_phase)
 {
   struct adv_data *adv = pplayer->server.adv;
-  int i;
-  int nuke_units;
   bool danger_of_nukes;
+  static action_id nuke_actions[] = {
+    /* Conventional nukes */
+    ACTION_NUKE, ACTION_NUKE_CITY, ACTION_NUKE_UNITS,
+    /* TODO: worry about spy nuking too? */
+    ACTION_NONE
+  };
 
   fc_assert_ret_val(adv != NULL, FALSE);
 
@@ -270,7 +275,6 @@ bool adv_data_phase_init(struct player *pplayer, bool is_new_phase)
 
   TIMING_LOG(AIT_AIDATA, TIMER_START);
 
-  nuke_units = num_role_units(action_id_get_role(ACTION_NUKE));
   danger_of_nukes = FALSE;
 
   /*** Threats ***/
@@ -344,26 +348,33 @@ bool adv_data_phase_init(struct player *pplayer, bool is_new_phase)
       }
 
       /* If our enemy builds missiles, worry about missile defence. */
-      if (uclass_has_flag(unit_class_get(punit), UCF_MISSILE)
+      if (utype_can_do_action(unit_type_get(punit), ACTION_SUICIDE_ATTACK)
           && unit_type_get(punit)->attack_strength > 1) {
-        adv->threats.missile = TRUE;
+        adv->threats.suicide_attack = TRUE;
       }
 
       /* If he builds nukes, worry a lot. */
-      if (unit_can_do_action(punit, ACTION_NUKE)) {
-        danger_of_nukes = TRUE;
-      }
+      action_list_iterate(nuke_actions, act_id) {
+        if (unit_can_do_action(punit, act_id)) {
+          danger_of_nukes = TRUE;
+        }
+      } action_list_iterate_end;
     } unit_list_iterate_end;
 
     /* Check for nuke capability */
-    for (i = 0; i < nuke_units; i++) {
-      struct unit_type *nuke =
-          get_role_unit(action_id_get_role(ACTION_NUKE), i);
+    action_list_iterate(nuke_actions, act_id) {
+      int i;
+      int nuke_units = num_role_units(action_id_get_role(act_id));
 
-      if (can_player_build_unit_direct(aplayer, nuke)) { 
-        adv->threats.nuclear = 1;
+      for (i = 0; i < nuke_units; i++) {
+        struct unit_type *nuke =
+            get_role_unit(action_id_get_role(act_id), i);
+
+        if (can_player_build_unit_direct(aplayer, nuke)) {
+          adv->threats.nuclear = 1;
+        }
       }
-    }
+    } action_list_iterate_end;
   } players_iterate_end;
 
   /* Increase from fear to terror if opponent actually has nukes */
@@ -395,7 +406,7 @@ bool adv_data_phase_init(struct player *pplayer, bool is_new_phase)
       /* we don't need more explaining, we got the point */
       continue;
     }
-    if (tile_has_cause_extra(ptile, EC_HUT) 
+    if (hut_on_tile(ptile) 
         && (!has_handicap(pplayer, H_HUTS)
              || map_is_known(ptile, pplayer))) {
       adv->explore.land_done = FALSE;
@@ -849,11 +860,13 @@ void adv_best_government(struct player *pplayer)
             continue;
           }
 
-          switch((enum gen_action)act) {
+          switch ((enum gen_action)act) {
           case ACTION_ATTACK:
+          case ACTION_SUICIDE_ATTACK:
           case ACTION_SPY_INCITE_CITY:
           case ACTION_SPY_INCITE_CITY_ESC:
           case ACTION_CONQUER_CITY:
+          case ACTION_CONQUER_CITY2:
             bonus += 4;
             break;
           case ACTION_SPY_BRIBE_UNIT:
@@ -862,8 +875,8 @@ void adv_best_government(struct player *pplayer)
           case ACTION_TRANSFORM_TERRAIN:
             bonus += 1.5;
             break;
-          case ACTION_IRRIGATE_TF:
-          case ACTION_MINE_TF:
+          case ACTION_CULTIVATE:
+          case ACTION_PLANT:
             bonus += 0.3;
             break;
           case ACTION_PILLAGE:
@@ -873,12 +886,15 @@ void adv_best_government(struct player *pplayer)
           case ACTION_INV_CITY_SPEND:
           case ACTION_SPY_POISON:
           case ACTION_SPY_POISON_ESC:
+          case ACTION_SPY_SPREAD_PLAGUE:
           case ACTION_SPY_STEAL_GOLD:
           case ACTION_SPY_STEAL_GOLD_ESC:
           case ACTION_SPY_SABOTAGE_CITY:
           case ACTION_SPY_SABOTAGE_CITY_ESC:
           case ACTION_SPY_TARGETED_SABOTAGE_CITY:
           case ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC:
+          case ACTION_SPY_SABOTAGE_CITY_PRODUCTION:
+          case ACTION_SPY_SABOTAGE_CITY_PRODUCTION_ESC:
           case ACTION_SPY_STEAL_TECH:
           case ACTION_SPY_STEAL_TECH_ESC:
           case ACTION_SPY_TARGETED_STEAL_TECH:
@@ -889,11 +905,18 @@ void adv_best_government(struct player *pplayer)
           case ACTION_STEAL_MAPS:
           case ACTION_STEAL_MAPS_ESC:
           case ACTION_BOMBARD:
+          case ACTION_BOMBARD2:
+          case ACTION_BOMBARD3:
           case ACTION_SPY_NUKE:
           case ACTION_SPY_NUKE_ESC:
           case ACTION_NUKE:
+          case ACTION_NUKE_CITY:
+          case ACTION_NUKE_UNITS:
           case ACTION_DESTROY_CITY:
           case ACTION_EXPEL_UNIT:
+          case ACTION_STRIKE_BUILDING:
+          case ACTION_STRIKE_PRODUCTION:
+          case ACTION_SPY_ATTACK:
             /* Being a target of this is usually undesireable */
             /* TODO: Individual and well balanced values. */
             bonus += 0.1;
@@ -907,6 +930,12 @@ void adv_best_government(struct player *pplayer)
             /* Wants the ability to do this to it self. Don't want others
              * to target it. Do nothing since action_immune_government()
              * doesn't separate based on who the actor is. */
+            break;
+
+          case ACTION_USER_ACTION1:
+          case ACTION_USER_ACTION2:
+          case ACTION_USER_ACTION3:
+            /* Ruleset defined */
             break;
 
           case ACTION_ESTABLISH_EMBASSY:
@@ -924,6 +953,14 @@ void adv_best_government(struct player *pplayer)
           case ACTION_BASE:
           case ACTION_MINE:
           case ACTION_IRRIGATE:
+          case ACTION_TRANSPORT_DEBOARD:
+          case ACTION_TRANSPORT_UNLOAD:
+          case ACTION_TRANSPORT_DISEMBARK1:
+          case ACTION_TRANSPORT_DISEMBARK2:
+          case ACTION_TRANSPORT_BOARD:
+          case ACTION_TRANSPORT_EMBARK:
+          case ACTION_CLEAN_POLLUTION:
+          case ACTION_CLEAN_FALLOUT:
             /* Could be good. An embassy gives permanent contact. A trade
              * route gives gold per turn. Join city gives population. Help
              * wonder gives shields. */

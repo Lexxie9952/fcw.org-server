@@ -2,7 +2,7 @@
 [spec]
 
 ; Format and options of this spec file: 
-options = "+Freeciv-spec-Devel-2015-Mar-25"
+options = "+Freeciv-spec-Devel-2019-Jul-03"
 
 [info]
 
@@ -56,12 +56,12 @@ tiles = { "row", "column", "tag"
   0,  4, "u.cannon"		  ; [Lexxie]
   0,  5, "u.caravan"		; [Alex] & [CT]
   0,  6, "u.carrier"		; [Nemo] & [Lexxie]
-  0,  7, "u.catapult"		; [CT] & [Lexxie]
+  0,  7, "u.catapult"		; [Lexxie]
   0,  8, "u.horsemen"		; [GB] & [Lexxie]
   0,  9, "u.chariot"		; [BB] & [GB] & [Lexxie]
   0, 10, "u.cruiser"		; [Nemo] & [Lexxie]
   0, 11, "u.diplomat"		; [Nemo] & [Lexxie]
-  0, 12, "u.fighter"		; [Sor] & [Lexxie]
+  0, 12, "u.fighter"		; [Lexxie]
   0, 13, "u.frigate"		; [BB]
   0, 14, "u.ironclad"		; [Nemo] & [Lexxie]
   0, 15, "u.knights"		; [BB] & [Lexxie]
@@ -70,27 +70,27 @@ tiles = { "row", "column", "tag"
   0, 18, "u.warriors"		; [GB] & [Lexxie]
   0, 19, "u.musketeers" ; [Lexxie]
   1,  0, "u.nuclear"		; [Nemo] & [CS] & [Lexxie]
-  1,  1, "u.phalanx"		; [GB] & [CT] & [Lexxie]
+  1,  1, "u.phalanx"		; [Lexxie]
   1,  2, "u.riflemen"		; [Lexxie]
-  1,  3, "u.caravel"		; [BB]
+  1,  3, "u.caravel"		; [Lexxie]
   1,  4, "u.settlers"		; [MHN] & [Lexxie]
-  1,  5, "u.submarine"	; [GP]
-  1,  6, "u.transport"	; [Nemo]
+  1,  5, "u.submarine"	; [GP] & [Lexxie]
+  1,  6, "u.transport"	; [Nemo] & [Lexxie]
   1,  7, "u.trireme"		; [BB]
   1,  8, "u.archers"		; [GB] & [Lexxie]
   1,  9, "u.cavalry"		; [Lexxie]
-  1, 10, "u.cruise_missile"	; [CS] & [Lexxie]
+  1, 10, "u.cruise_missile"	; [Lexxie]
   1, 11, "u.destroyer"	  	; [Nemo] & [Lexxie]
-  1, 12, "u.dragoons"		    ; [GB]
+  1, 12, "u.dragoons"		    ; [GB] & [Lexxie]
   1, 13, "u.explorer"		    ; [Alex] & [CT] & [Lexxie]
-  1, 14, "u.freight"		    ; [CT] & qwm
+  1, 14, "u.freight"		    ; [CT] & qwm & [Lexxie] - This new graphic is NOT MP2_C onward, Freight unit.
   1, 15, "u.galleon"		    ; [BB]
   1, 16, "u.partisan"		    ; [BB] & [CT] & [Lexxie]
   1, 17, "u.pikemen"		    ; [T] & [Lexxie]
   1, 18, "u.escort_fighter" ; [Lexxie]
   1, 19, "u.medium_bomber"  ; [Lexxie]
   2,  0, "u.marines"		    ; [GB] & [Lexxie]
-;  2,  1, "u.spy"		        ; [EW] & [CT] & [Lexxie]
+  2,  1, "u.amphorae"       ; [Lexxie]
   2,  2, "u.engineers"		  ; [Nemo] & [CT] & [Lexxie]
   2,  3, "u.artillery"	   	; [Lexxie]
   2,  4, "u.helicopter"		  ; [T] & [Lexxie]
@@ -107,19 +107,20 @@ tiles = { "row", "column", "tag"
   2, 15, "u.leader"		      ; [GB]
   2, 16, "u.barbarian_leader"	; FiftyNine
   2, 17, "u.migrants"		    ; Eleazar
-  2, 18, "u.anti_aircraft"    ; [Lexxie] 
+  2, 18, "u.anti_aircraft"    ; [Lexxie]
+  2, 19, "u.tribesmen"        ; [Lexxie]
   3,  0, "u.well_digger"		  ; [Lexxie]
   3,  1, "u.balloon"          ; [Lexxie]
   3,  2, "u.missile_destroyer" ; [Lexxie]
-  3,  3, "u.war_galley"       
+  3,  3, "u.war_galley"       ; ???
   3,  4, "u.longboat"         ; Lexxie
-; 3,  5, "u.battleship"      ; Lexxie
+  3,  5, "u.container"        ; Lexxie      ; Is the Freight graphic for MP2 onward (not u.freight--preserves ammplio2 compatibility for other rules)
   3,  6, "u.atom_bomb"        ; Lexxie  
   3,  7, "u.galley"           ; Lexxie
   3,  8, "u.jet_fighter"      ; [Nemo] & [AHS] & [Lexxie]
   3,  9, "u.ram_ship"         ; Lexxie
   3, 10, "u.armor_ii"         ; Wahazar & Lexxie
-  3, 11, "u.boat"              ; Lexxie
+  3, 11, "u.boat"             ; Lexxie
   3, 12, "u.cargo_ship"       ; Lexxie
   3, 13, "u.mobile_sam"       ; Lexxie
   3, 14, "u.proletarian"	    ; Lexxie
@@ -128,8 +129,16 @@ tiles = { "row", "column", "tag"
   3, 17, "u.pilgrims"		      ; Lexxie
   3, 18, "u.queen"            ; Lexxie 
   3, 19, "u.hbomb"            ; Lexxie
-  4, 0,  "u.tnuke"            ; Lexxie
-  4, 1,  "u.ddomb"            ; Lexxie
-  4,  2, "u.spy"            ; Lexxie
-
+  4,  0, "u.tnuke"            ; Lexxie
+  4,  1, "u.ddomb"            ; Lexxie  Doomsday Bomb, should've been ddbomb
+  4,  2, "u.spy"              ; Lexxie
+  4,  3, "u.train"            ; Lexxie
+  4,  4, "u.t_helicopter"     ; Lexxie
+  4,  5, "u.airplane"         ; Lexxie
+  4,  6, "u.swordsmen"        ; Lexxie
+  4,  7, "u.siege_ram"        ; Lexxie
+  4,  8, "u.satellite"        ; Lexxie
+  4,  9, "u.falconeers"       ; Lexxie
+  4, 10, "u.zealots"          ; Lexxie
+  4, 11, "u.peasants"         ; Lexxie
 }

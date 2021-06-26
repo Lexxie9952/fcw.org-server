@@ -85,7 +85,7 @@ static void set_hscales(const struct cm_parameter *const parameter,
 /**********************************************************************//**
   Initialize cma front end system
 **************************************************************************/
-void cma_fe_init()
+void cma_fe_init(void)
 {
   dialog_list = dialog_list_new();
 }
@@ -93,7 +93,7 @@ void cma_fe_init()
 /**********************************************************************//**
   Free resources allocated for cma front end system
 **************************************************************************/
-void cma_fe_done()
+void cma_fe_done(void)
 {
   dialog_list_destroy(dialog_list);
 }
@@ -316,7 +316,8 @@ struct cma_dialog *create_cma_dialog(struct city *pcity, bool tiny)
                    G_CALLBACK(cma_add_preset_callback), pdialog);
   pdialog->add_preset_command = button;
 
-  pdialog->del_preset_command = icon_label_button_new("edit-delete", _("Delete"));
+  pdialog->del_preset_command = icon_label_button_new("edit-delete",
+                                                      _("_Delete"));
   gtk_container_add(GTK_CONTAINER(hbox), pdialog->del_preset_command);
   g_signal_connect(pdialog->del_preset_command, "clicked",
                    G_CALLBACK(cma_del_preset_callback), pdialog);

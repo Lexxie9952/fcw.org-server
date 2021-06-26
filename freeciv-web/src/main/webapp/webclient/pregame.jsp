@@ -16,7 +16,7 @@
   <ol id="pregame_message_area"></ol>
   <div id="pregame_chat_box" style="margin-bottom:20px">
     <i class="fa fa-commenting-o fa-2" aria-hidden="true" style="color: white; font-size: 160%;"></i>
-    <input id="pregame_text_input" style="width:80%" type="text" name="text_input" value=">" />
+    <input id="pregame_text_input" style="width:75.5%" spellcheck="false" autocomplete="off" type="text" name="text_input" value=">" />
   </div>
 </div>
 

@@ -7,10 +7,12 @@ noinst_LTLIBRARIES = \
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/utility \
 	-I$(top_srcdir)/common \
+	-I$(top_srcdir)/common/aicore \
 	-I$(top_srcdir)/common/networking \
 	-I$(top_srcdir)/common/scriptcore \
 	-I$(top_srcdir)/server \
 	-I$(top_srcdir)/server/generator \
+	-I$(top_srcdir)/server/savegame \
 	-I$(top_srcdir)/ai \
 	-I$(top_srcdir)/dependencies/tinycthread \
 	$(FCDB_MYSQL_CFLAGS) $(FCDB_POSTGRES_CFLAGS) $(FCDB_SQLITE_CFLAGS) \

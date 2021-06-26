@@ -18,10 +18,77 @@
         font-size: 130%;
         text-transform: capitalize;
     }
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+		background: url(/images/bg-light.jpg);
+    color: #000;
+    font-weight: 600;
+    text-shadow: 1px 1px #bbb;
+	}
 
-    .score_row {
-      border-bottom: 1px solid black;
-    }
+  .score_row {
+    border-bottom: 1px solid black;
+  }
+  .input-group .form-control:first-child {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    background: #000;
+    color: #ccc;
+    border-color: #444;
+    border-radius: 6px 0px 0px 6px;
+	}
+	.input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group {
+    background-color: #888;
+    background: #444;
+    color: #000;
+    border-color: #444;
+    text-shadow: 1px 1px #888;
+	}
+  .navbar-inverse {
+		background-color: #2220;
+		background: url(/images/bg-med-dark.jpg);
+	}
+	a {
+    text-shadow: 1px 1px #000;/* !important;*/
+	}
+  h1,h2,h3,h4,h5,h6 {
+		font-family: 'Freeciv', 'Segoe UI';
+		text-shadow: 1px 1px #222;
+	}
+  body {
+		color: #ccc;
+  	background-image: url('/images/bg-dark.jpg'); 
+	}
+	.container {
+		background: none !important;
+		color: #ccc;
+	}
+  
+	@font-face {
+  font-family: Helvetica;
+  src: url('/fonts/arial.ttf');
+	}
+	@font-face {
+		font-family: Freeciv;
+		src: url('/fonts/freeciv.ttf');
+	}
+	@font-face {
+		font-family: FreecivSB;
+		src: url('/fonts/freeciv.m.ttf');
+	}
+	@font-face {
+		font-family: FreecivBold;
+		src: url('/fonts/freeciv.b.ttf');
+	}
+	@font-face {
+		font-family: FreecivBlack;
+		src: url('/fonts/freeciv.bl.ttf');
+	}
+	@font-face {
+		font-family: Arial;
+		src: url('/fonts/arial.ttf');
+	}
 
 </style>
 

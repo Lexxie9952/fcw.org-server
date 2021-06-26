@@ -100,7 +100,42 @@ reqs    =
       "Specialist", "taxman", "Local"
       "OutputType", "gold", "Local"
     }
+; *************************** Ruleset Fortify Bonus *********************** 
+[effect_fortified]
+type    = "Fortify_Defense_Bonus"
+value   = 50
+reqs    =
+    { "type", "name", "range"
+      "UnitState", "Fortified", "Local"
+    }
 
+[effect_city_fortified]
+type    = "Fortify_Defense_Bonus"
+value   = 50
+reqs    =
+    { "type",          "name",         "range", "present"
+      "CityTile",      "Center",       "Local", TRUE
+      "UnitState",     "Fortified",    "Local", FALSE
+      "UnitClassFlag", "CanFortify",   "Local", TRUE
+      "UnitFlag",      "Cant_Fortify", "Local", FALSE
+    }
+; ****************************** RECYCLE SHIELDS **************************
+[effect_unit_shield_value_recycle]
+type    = "Unit_Shield_Value_Pct"
+value   = -50
+reqs    =
+    { "type",   "name",         "range", "present"
+      "Action", "Recycle Unit", "Local", TRUE
+    }
+
+[effect_unit_shield_value_in_upgrade_price_calc]
+type    = "Unit_Shield_Value_Pct"
+value   = -50
+reqs    =
+    { "type",   "name",         "range", "present"
+      "Action", "Upgrade Unit", "Local", TRUE
+    }
+; *************************************************************************
 
 ; Vision benefit from fortress watchtowers
 [effect_fortress_vision]
@@ -2380,6 +2415,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Action", "Found City", "Local", FALSE
       "Action", "Join City", "Local", FALSE
+      "Action", "Transport Board", "Local", FALSE
     }
 
 [effect_incident_caught_steal_tech]
@@ -2516,12 +2552,45 @@ reqs	=
       "Action", "Targeted Sabotage City Escape", "Local", TRUE
     }
 
+[effect_incident_success_sabotage_city_production]
+type	= "Casus_Belli_Success"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Sabotage City Production Escape", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
+
+[effect_sabotage_city_production_city_half_chance]
+type	= "Action_Odds_Pct"
+value	= -50
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Sabotage City Production Escape", "Local", TRUE
+    }
+
 [effect_incident_success_explode_nuke]
 type	= "Casus_Belli_Success"
 value	= 1
 reqs	=
     { "type", "name", "range", "present"
       "Action", "Explode Nuclear", "Local", TRUE
+    }
+
+[effect_incident_success_explode_nuke_city]
+type	= "Casus_Belli_Success"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Nuke City", "Local", TRUE
+    }
+
+[effect_incident_success_explode_nuke_units]
+type	= "Casus_Belli_Success"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Nuke Units", "Local", TRUE
     }
 
 ; Double (+100%) buy cost for Great Wonders
@@ -2541,4 +2610,20 @@ reqs    =
     { "type", "name", "range", "present"
       "BuildingGenus", "SmallWonder", "Local", TRUE
       "Building", "Palace", "Local", FALSE
+    }
+
+[effect_action_success_move_cost_embassy]
+type    = "Action_Success_Actor_Move_Cost"
+value   = 1
+reqs    =
+    { "type", "name", "range", "present"
+      "Action", "Establish Embassy", "Local", TRUE
+    }
+
+[effect_action_success_move_cost_investigate]
+type    = "Action_Success_Actor_Move_Cost"
+value   = 1
+reqs    =
+    { "type", "name", "range", "present"
+      "Action", "Investigate City", "Local", TRUE
     }

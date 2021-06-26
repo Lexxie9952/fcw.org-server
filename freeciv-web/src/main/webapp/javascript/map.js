@@ -455,18 +455,10 @@ function dir_ccw(dir)
 **************************************************************************/
 function clear_goto_tiles()
 {
-  if (renderer == RENDERER_2DCANVAS) {
     for (var x = 0; x < map['xsize']; x++) {
       for (var y = 0; y < map['ysize']; y++) {
         tiles[x + y * map['xsize']]['goto_dir'] = null;
       }
     }
-  } else {
-    if (scene != null && goto_lines != null) {
-      for (var i = 0; i < goto_lines.length; i++) {
-        scene.remove(goto_lines[i]);
-      }
-      goto_lines = [];
-    }
-  }
+
 }

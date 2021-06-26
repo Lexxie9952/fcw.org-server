@@ -115,7 +115,7 @@ static void tech_researched(struct research *research)
   /* Players will be notified when new tech is chosen. */
   notify_research_embassies
       (research, NULL, E_TECH_EMBASSY, ftc_server,
-       _("The %s have researched %s."),
+       _("💡 The %s have researched %s."),
        research_name,
        research_advance_name_translation(research, tech));
 
@@ -199,20 +199,23 @@ void do_tech_parasite_effect(struct player *pplayer)
   notify_player(pplayer, NULL, E_TECH_GAIN, ftc_server,
                 /* TRANS: Tech from source of an effect
                  * (Great Library) */
-                Q_("?fromeffect:%s acquired from %s!"),
+                Q_("?fromeffect:💡 %s%s acquired from %s!"),
+                (game.server.blueprints ? _("blueprints for ") : _("")),
                 advance_name,
                 astr_str(&effects));
   notify_research(presearch, pplayer, E_TECH_GAIN, ftc_server,
                   /* TRANS: Tech from source of an effect
                    * (Great Library) */
-                  Q_("?fromeffect:%s acquired from %s's %s!"),
+                  Q_("?fromeffect:💡 %s%s acquired from %s's %s!"),
+                  (game.server.blueprints ? _("blueprints for ") : _("")),
                   advance_name,
                   player_name(pplayer),
                   astr_str(&effects));
   notify_research_embassies(presearch, NULL, E_TECH_EMBASSY, ftc_server,
                             /* TRANS: Tech from source of an effect
                              * (Great Library) */
-                            Q_("?fromeffect:The %s have acquired %s from %s."),
+                            Q_("?fromeffect:💡 The %s have acquired %s%s from %s."),
+                            (game.server.blueprints ? _("blueprints for ") : _("")),
                             research_name,
                             advance_name,
                             astr_str(&effects));
@@ -220,14 +223,19 @@ void do_tech_parasite_effect(struct player *pplayer)
   effect_list_destroy(plist);
   astr_free(&effects);
 
-  /* Really get tech. */
-  research_apply_penalty(presearch, tech, game.server.freecost);
-  found_new_tech(presearch, tech, FALSE, TRUE);
-
-  research_players_iterate(presearch, member) {
-    script_server_signal_emit("tech_researched", advance_by_number(tech),
-                              member, "stolen");
-  } research_players_iterate_end;
+  if (game.server.blueprints) { /* Give blueprints instead of tech */
+    int blueprint_discount = game.server.freecost ?
+                             100-game.server.freecost : game.server.blueprints;
+    found_new_blueprint(presearch, tech, blueprint_discount);
+  }
+  else { /* Really get tech. */
+    research_apply_penalty(presearch, tech, game.server.freecost);
+    found_new_tech(presearch, tech, FALSE, TRUE);
+    research_players_iterate(presearch, member) {
+      script_server_signal_emit("tech_researched", advance_by_number(tech),
+                                member, "stolen");
+    } research_players_iterate_end;
+  }
 }
 
 /************************************************************************//**
@@ -308,6 +316,69 @@ void send_research_info(const struct research *presearch,
   } conn_list_iterate_end;
 }
 
+
+/************************************************************************//**
+  Player receives a blueprint for a technology (from somewhere). Credit 
+  game.server.blueprints number of bulbs toward the 'multiresearch' bulb
+  account for the technology, if applicable. Handle other processing
+  events.
+  Returns a code indicating the consequences of the blueprint acquisition:
+  0 - Got not bulbs because already had more than blueprint award
+  1 - Got extra bulbs from the blueprints
+  2 - Got enough bulbs from blueprints to discover the tech.
+****************************************************************************/
+int found_new_blueprint(struct research *research,
+                        Tech_type_id tech,
+                        int blueprint_discount)
+{
+  char research_name[MAX_LEN_NAME * 2];
+  research_pretty_name(research, research_name, sizeof(research_name));
+
+  /* blueprint_discount of 100 results in acquisition of tech */
+  if (blueprint_discount >= 100) { /* Notify parties who have intel of the event. */
+  notify_research_embassies(research, NULL, E_TECH_EMBASSY, ftc_server,
+       _("💡 The %s have acquired %s from blueprints."),
+       research_name, research_advance_name_translation(research, tech));
+    /* really give the tech */   
+    found_new_tech(research, tech, FALSE, TRUE);
+    return 2;
+  }
+
+  /* blueprint_discount 1-100 possibly credits bulbs for the tech */
+  if (blueprint_discount > 0 && blueprint_discount < 100) {
+    /* Calculate the bulb credit of the blueprint, with fair rounding */
+    int cost = research_total_bulbs_required(research, tech, FALSE);
+    float award = cost * ((float)blueprint_discount / 100);
+    int credit = (int)(award + 0.5);
+    /* if blueprint credit exceeds current research, award bulb credit */
+    if (credit > research->inventions[tech].bulbs_researched_saved) {
+      research->inventions[tech].bulbs_researched_saved = credit;
+      
+      if (tech == research->researching) {
+        /* Received a blueprint for current research. Problem: you can't
+           transfer blueprint bulbs from current research to a new tech.
+           Therefore, we can only do this if multiresearch is set to on.*/
+        if (game.server.multiresearch && research->bulbs_researched < credit) {
+          research->bulbs_researched = credit;
+        }
+      }
+      notify_research_embassies(research, NULL, E_TECH_EMBASSY, ftc_server,
+       _("💡 The %s received blueprints for %s."),
+       research_name,
+       research_advance_name_translation(research, tech));
+
+      return 1;
+    }    
+  }
+  research_players_iterate(research, pplayer) {
+      notify_player(pplayer, NULL, E_MY_DIPLOMAT_FAILED, ftc_server,
+                      _("💢 The %s blueprints were useless."),
+                      research_advance_name_translation(research, tech));
+  } research_players_iterate_end;
+
+  return 0; // TODO: define macro codes. See comments at head of function
+}
+
 /************************************************************************//**
   Players sharing the research have got a new technology (from somewhere).
   'was_discovery' is passed on to upgrade_city_extras. Logging and
@@ -349,7 +420,7 @@ void found_new_tech(struct research *presearch, Tech_type_id tech_found,
             && is_great_wonder(pimprove)
             && (pcity = city_from_great_wonder(pimprove))) {
           notify_player(city_owner(pcity), NULL, E_WONDER_OBSOLETE, ftc_server,
-                        _("Discovery of %s OBSOLETES %s in %s!"), 
+                        _("⚠️ Discovery of %s OBSOLETES %s in %s!"), 
                         research_advance_name_translation
                             (research_get(city_owner(pcity)), tech_found),
                         improvement_name_translation(pimprove),
@@ -439,15 +510,34 @@ void found_new_tech(struct research *presearch, Tech_type_id tech_found,
        * that world-ranged effects will not be updated immediately. */
       unit_list_refresh_vision(aplayer->units);
 
-      /* Notify a player about new governments available */
       governments_iterate(pgov) {
         if (!could_switch[i][government_index(pgov)]
             && can_change_to_government(aplayer, pgov)) {
-          notify_player(aplayer, NULL, E_NEW_GOVERNMENT, ftc_server,
-                        _("Discovery of %s makes the government form %s"
-                          " available. You may want to start a revolution."),
-                        advance_name,
-                        government_name_translation(pgov));
+          /* Notify player about new governments available: */
+          char info_emoji[256];
+          if ((strcmp(government_name_translation(pgov),"Monarchy")==0)
+           || (strcmp(government_name_translation(pgov),"Republic")==0)
+           || (strcmp(government_name_translation(pgov),"Democracy")==0)
+           || (strcmp(government_name_translation(pgov),"Fundamentalism")==0)
+           || (strcmp(government_name_translation(pgov),"Theocracy")==0)
+           || (strcmp(government_name_translation(pgov),"Communism")==0)
+           || (strcmp(government_name_translation(pgov),"Nationalism")==0)
+           || (strcmp(government_name_translation(pgov),"Federation")==0) )
+          {
+            sprintf(info_emoji,  "<span onclick='javascript:show_revolution_dialog()' style='cursor:pointer;'>[`%s`]",
+              government_name_translation(pgov));
+          }
+          else {
+            sprintf(info_emoji,  "<span onclick='javascript:show_revolution_dialog()' style='cursor:pointer;'>🟢");
+          }
+
+          if (strcmp(advance_name, government_name_translation(pgov))==0) {
+            notify_player(aplayer, NULL, E_NEW_GOVERNMENT, ftc_server,
+                        _("%s Discovery of %s allows you to change government.</span><br>"),
+                        info_emoji, advance_name);
+          } else notify_player(aplayer, NULL, E_NEW_GOVERNMENT, ftc_server,
+                        _("%s Discovery of %s enables the %s government.</span><br>"),
+                        info_emoji, advance_name, government_name_translation(pgov));
         }
       } governments_iterate_end;
     }
@@ -490,9 +580,9 @@ void found_new_tech(struct research *presearch, Tech_type_id tech_found,
      * before really picking the new technology. */
     if (A_UNSET != next_tech) {
       notify_research(presearch, NULL, E_TECH_LEARNED, ftc_server,
-                      _("Learned %s. Our scientists focus on %s; "
+                      _("&#8203;[`techs/%s`] Learned %s.<br>💡 Scientists now focus on %s; "
                         "goal is %s."),
-                      advance_name,
+                      advance_name, advance_name,
                       research_advance_name_translation(presearch,
                                                         next_tech),
                       research_advance_name_translation
@@ -514,13 +604,12 @@ void found_new_tech(struct research *presearch, Tech_type_id tech_found,
 
       if (A_UNSET == next_tech) {
         notify_research(presearch, NULL, E_TECH_LEARNED, ftc_server,
-                        _("Learned %s. Scientists "
-                          "do not know what to research next."),
-                        advance_name);
+                        _("&#8203;[`techs/%s`] Learned %s.<br><span style='cursor:pointer' onclick='click_tech_tab()'>💡 Scientists ask what to research next.</span>"),
+                        advance_name, advance_name);
       } else {
         notify_research(presearch, NULL, E_TECH_LEARNED, ftc_server,
-                        _("Learned %s. Scientists choose to research %s."),
-                        advance_name,
+                        _("&#8203;[`techs/%s`] Learned %s.<br>💡 Our scientists' new goal is %s."),
+                        advance_name, advance_name,
                         research_advance_name_translation(presearch,
                                                           next_tech));
       }
@@ -558,13 +647,13 @@ void found_new_tech(struct research *presearch, Tech_type_id tech_found,
       /* FIXME: "your" when it was just civilization of one of the players
        * sharing the reseach. */
       notify_research(presearch, NULL, E_TECH_GAIN, ftc_server,
-                      _("Great scientists from all the "
+                      _("&#8203;[`techs/%s`] Scientists from all the "
                         "world join your civilization: you learn "
-                        "%s immediately."), radv_name);
+                        "%s immediately."), radv_name, radv_name);
     }
     /* TODO: Ruleset should be able to customize this message too */
     notify_research_embassies(presearch, NULL, E_TECH_EMBASSY, ftc_server,
-                              _("%s acquire %s as a result of learning %s."),
+                              _("💡 %s acquire %s as a result of learning %s."),
                               research_name, radv_name, advance_name);
   }
 }
@@ -655,7 +744,7 @@ void update_bulbs(struct player *pplayer, int bulbs, bool check_tech)
         /* Make notification after losing the research, in case it is
          * a future tech (for getting the right tech number). */
         notify_research(research, NULL, E_TECH_LOST, ftc_server,
-                        _("Insufficient science output. We lost %s."),
+                        _("⚠️ Insufficient science output. We lost %s."),
                         research_advance_name_translation(research, tech));
       }
     }
@@ -776,7 +865,7 @@ static void research_tech_lost(struct research *presearch, Tech_type_id tech)
     /* Notify after decreasing the future tech counter, to get the right
      * tech number in the message. */
     notify_research_embassies(presearch, NULL, E_TECH_EMBASSY, ftc_server,
-                              _("The %s have lost %s."),
+                              _("💢 The %s have lost %s."),
                               research_name,
                               research_advance_name_translation(presearch,
                                                                 tech));
@@ -788,7 +877,7 @@ static void research_tech_lost(struct research *presearch, Tech_type_id tech)
   fc_assert_ret(valid_advance_by_number(tech));
   notify_research_embassies(presearch, NULL, E_TECH_EMBASSY, ftc_server,
                             /* TRANS: technology loss */
-                            _("The %s have lost %s."),
+                            _("💢 The %s have lost %s."),
                             research_name,
                             research_advance_name_translation(presearch,
                                                               tech));
@@ -810,7 +899,7 @@ static void research_tech_lost(struct research *presearch, Tech_type_id tech)
       struct government *pgov = pick_random_government(pplayer);
 
       notify_player(pplayer, NULL, E_NEW_GOVERNMENT, ftc_server,
-                    _("The required technology for our government '%s' "
+                    _("⚠️ The required technology for our government '%s' "
                       "was lost. The citizens have started a "
                       "revolution into '%s'."),
                     government_name_translation(government_of_player
@@ -826,7 +915,7 @@ static void research_tech_lost(struct research *presearch, Tech_type_id tech)
       struct government *pgov = pick_random_government(pplayer);
 
       notify_player(pplayer, NULL, E_NEW_GOVERNMENT, ftc_server,
-                    _("The required technology for our new government "
+                    _("⚠️ The required technology for our new government "
                       "'%s' was lost. The citizens chose '%s' as new "
                       "target government."),
                     government_name_translation(pplayer->target_government),
@@ -854,7 +943,7 @@ static void research_tech_lost(struct research *presearch, Tech_type_id tech)
           && !can_city_build_unit_now(pcity, pcity->production.value.utype)) {
         notify_player(pplayer, city_tile(pcity),
                       E_CITY_CANTBUILD, ftc_server,
-                      _("%s can't build %s. The required technology was "
+                      _("⚠️ %s can't build %s. The required technology was "
                         "lost."),
                       city_link(pcity),
                       utype_name_translation(pcity->production.value.utype));
@@ -867,7 +956,7 @@ static void research_tech_lost(struct research *presearch, Tech_type_id tech)
                                              pcity->production.value.building)) {
         notify_player(pplayer, city_tile(pcity),
                       E_CITY_CANTBUILD, ftc_server,
-                      _("%s can't build %s. The required technology was "
+                      _("⚠️ %s can't build %s. The required technology was "
                         "lost."),
                       city_link(pcity),
                       improvement_name_translation
@@ -1032,7 +1121,7 @@ void choose_tech_goal(struct research *presearch, Tech_type_id tech)
    * choose_random_tech() should be called here. */
   presearch->tech_goal = tech;
   notify_research(presearch, NULL, E_TECH_GOAL, ftc_server,
-                  _("Future technology goal is %s."),
+                  _("💡 Future technology goal is %s."),
                   research_advance_name_translation(presearch, tech));
 }
 
@@ -1242,32 +1331,44 @@ Tech_type_id steal_a_tech(struct player *pplayer, struct player *victim,
   advance_name = research_advance_name_translation(presearch, stolen_tech);
   research_pretty_name(presearch, research_name, sizeof(research_name));
   notify_player(pplayer, NULL, E_MY_DIPLOMAT_THEFT, ftc_server,
-                _("You steal %s from the %s."),
+                _("💡 You steal %s%s from the %s."),
+                (game.server.blueprints ? _("blueprints for ") : _("")),
                 advance_name,
                 nation_plural_for_player(victim));
   notify_research(presearch, pplayer, E_TECH_GAIN, ftc_server,
-                  _("The %s stole %s from the %s and shared it with you."),
+                  _("💡 The %s stole %s%s from the %s and shared it with you."),
                   nation_plural_for_player(pplayer),
+                  (game.server.blueprints ? _("blueprints for ") : _("")),
                   advance_name,
                   nation_plural_for_player(victim));
 
   notify_player(victim, NULL, E_ENEMY_DIPLOMAT_THEFT, ftc_server,
-                _("The %s stole %s from you!"),
+                _("⚠️ The %s stole %s%s from you!"),
                 nation_plural_for_player(pplayer),
+                (game.server.blueprints ? _("blueprints for ") : _("")),
                 advance_name);
 
   notify_research_embassies(presearch, victim, E_TECH_EMBASSY, ftc_server,
-                            _("The %s have stolen %s from the %s."),
+                            _("💢 The %s have stolen %s%s from the %s."),
                             research_name,
+                            (game.server.blueprints ? _("blueprints for ") : _("")),
                             advance_name,
                             nation_plural_for_player(victim));
 
   if (tech_transfer(pplayer, victim, stolen_tech)) {
-    research_apply_penalty(presearch, stolen_tech, game.server.conquercost);
-    found_new_tech(presearch, stolen_tech, FALSE, TRUE);
-    script_tech_learned(presearch, pplayer, advance_by_number(stolen_tech),
-                        "stolen");
-    return stolen_tech;
+    if (game.server.blueprints) { /* give blueprints instead of tech */
+      int blueprint_discount = game.server.conquercost ?
+                               100-game.server.conquercost : game.server.blueprints;
+      found_new_blueprint(presearch, stolen_tech, blueprint_discount);
+      return stolen_tech;
+    }
+    else {                        /* normal transfer of tech */
+      research_apply_penalty(presearch, stolen_tech, game.server.conquercost);
+      found_new_tech(presearch, stolen_tech, FALSE, TRUE);
+      script_tech_learned(presearch, pplayer, advance_by_number(stolen_tech),
+                          "stolen");
+      return stolen_tech;
+    }
   }
 
   return A_NONE;
@@ -1365,11 +1466,11 @@ static void forget_tech_transfered(struct player *pplayer, Tech_type_id tech)
   /* Make notification after losing the research, in case it is a future
    * tech (for getting the right tech number). */
   notify_player(pplayer, NULL, E_TECH_LOST, ftc_server,
-                _("Too bad! You made a mistake transferring the tech %s and "
+                _("⚠️ Too bad! You made a mistake transferring the tech %s and "
                   "lost it."),
                 research_advance_name_translation(presearch, tech));
   notify_research(presearch, pplayer, E_TECH_LOST, ftc_server,
-                  _("Too bad! The %s made a mistake transferring the tech "
+                  _("⚠️ Too bad! The %s made a mistake transferring the tech "
                     "%s and lost it."),
                 nation_plural_for_player(pplayer),
                 research_advance_name_translation(presearch, tech));
@@ -1377,7 +1478,7 @@ static void forget_tech_transfered(struct player *pplayer, Tech_type_id tech)
 
 /************************************************************************//**
   Check if the tech is lost by the donor or receiver. Returns if the
-  receiver gets a new tech.
+  receiver gets a new tech (or blueprint for the tech.)
 ****************************************************************************/
 bool tech_transfer(struct player *plr_recv, struct player *plr_donor,
                    Tech_type_id tech)

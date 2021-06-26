@@ -177,7 +177,7 @@ struct resource_type {
 struct terrain {
   int item_number;
   struct name_translation name;
-  bool disabled; /* Does not really exist - hole in terrain array */
+  bool ruledit_disabled; /* Does not really exist - hole in terrain array */
   char graphic_str[MAX_LEN_NAME];	/* add tile_ prefix */
   char graphic_alt[MAX_LEN_NAME];
 
@@ -208,13 +208,15 @@ struct terrain {
   int mining_shield_incr;
   int mining_time;
 
+  int placing_time;
+
   struct terrain *transform_result;
   int transform_time;
   int clean_pollution_time;
   int clean_fallout_time;
   int pillage_time;
 
-  struct unit_type *animal;
+  const struct unit_type *animal;
 
   /* May be NULL if the transformation is impossible. */
   struct terrain *warmer_wetter_result, *warmer_drier_result;
@@ -352,11 +354,11 @@ const struct terrain *terrain_array_last(void);
   }									\
 }
 
-#define terrain_active_iterate(_p)                         \
+#define terrain_re_active_iterate(_p)                      \
   terrain_type_iterate(_p) {                               \
-    if (!_p->disabled) {
+    if (!_p->ruledit_disabled) {
 
-#define terrain_active_iterate_end                         \
+#define terrain_re_active_iterate_end                      \
     }                                                      \
   } terrain_type_iterate_end;
 

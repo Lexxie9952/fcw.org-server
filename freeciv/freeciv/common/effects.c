@@ -554,7 +554,7 @@ static bool is_effect_prevented(const struct player *target_player,
   prob_type CERTAIN or POSSIBLE is answer to function name.
 **************************************************************************/
 bool is_building_replaced(const struct city *pcity,
-                          struct impr_type *pimprove,
+                          const struct impr_type *pimprove,
                           const enum req_problem_type prob_type)
 {
   struct effect_list *plist;
@@ -870,7 +870,7 @@ int get_tile_bonus(const struct tile *ptile, const struct unit *punit,
                    enum effect_type etype)
 {
   struct player *pplayer = NULL;
-  struct unit_type *utype = NULL;
+  const struct unit_type *utype = NULL;
 
   if (!initialized) {
     return 0;
@@ -968,7 +968,7 @@ int get_current_construction_bonus(const struct city *pcity,
   Problem type tells if we need to be CERTAIN about bonus before counting
   it or is POSSIBLE bonus enough.
 **************************************************************************/
-int get_potential_improvement_bonus(struct impr_type *pimprove,
+int get_potential_improvement_bonus(const struct impr_type *pimprove,
                                     const struct city *pcity,
                                     enum effect_type effect_type,
                                     const enum req_problem_type prob_type)

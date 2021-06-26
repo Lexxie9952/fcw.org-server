@@ -118,7 +118,7 @@ end
 
 -- Randomly choose a hut event
 function _deflua_hut_enter_callback(unit)
-  local chance = random(0, 7)
+  local chance = random(0, 6)
   local alive = true
 
   if chance == 0 or chance == 1 then
@@ -142,6 +142,16 @@ function _deflua_hut_enter_callback(unit)
 end
 
 signal.connect("hut_enter", "_deflua_hut_enter_callback")
+
+-- Informs that the tribe has run away seeing your plane
+function _deflua_hut_frighten_callback(unit, extra)
+  local owner = unit.owner
+  notify.event(owner, unit.tile, E.HUT_BARB,
+               _("Your overflight frightens the tribe;"
+                 .. " they scatter in terror."))
+  return true
+end
+signal.connect("hut_frighten", "_deflua_hut_frighten_callback")
 
 
 --[[

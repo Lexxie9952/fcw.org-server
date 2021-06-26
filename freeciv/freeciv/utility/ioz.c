@@ -684,9 +684,9 @@ char *fz_fgets(char *buffer, int size, fz_FILE *fp)
           last_read = BZ2_bzRead(&fp->u.bz2.error, fp->u.bz2.file,
                                  buffer + i, 1);
         }
-        if (fp->u.bz2.error != BZ_OK &&
-            (fp->u.bz2.error != BZ_STREAM_END ||
-             i == 0)) {
+        if (fp->u.bz2.error != BZ_OK
+            && (fp->u.bz2.error != BZ_STREAM_END
+                || i == 0)) {
           retval = NULL;
         } else {
           retval = buffer;
@@ -930,7 +930,7 @@ const char *fz_strerror(fz_FILE *fp)
       static char xzerror[50];
       char *cleartext = NULL;
 
-      switch(fp->u.xz.error) {
+      switch (fp->u.xz.error) {
        case LZMA_OK:
          cleartext = "OK";
          break;
@@ -986,7 +986,7 @@ const char *fz_strerror(fz_FILE *fp)
        * - Some of them provide usable information to user
        * - Messages still contain numerical error code for developers
        */
-      switch(fp->u.bz2.error) {
+      switch (fp->u.bz2.error) {
        case BZ_OK:
          cleartext = "OK";
          break;

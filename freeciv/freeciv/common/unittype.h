@@ -24,6 +24,7 @@ extern "C" {
 /* common */
 #include "fc_types.h"
 #include "name_translation.h"
+#include "requirements.h"
 
 struct astring;         /* Actually defined in "utility/astring.h". */
 struct strvec;          /* Actually defined in "utility/string_vector.h". */
@@ -62,41 +63,41 @@ struct ai_type;
 /* Can occupy enemy cities */
 #define SPECENUM_VALUE3 UCF_CAN_OCCUPY_CITY
 #define SPECENUM_VALUE3NAME N_("?uclassflag:CanOccupyCity")
-#define SPECENUM_VALUE4 UCF_MISSILE
-#define SPECENUM_VALUE4NAME N_("?uclassflag:Missile")
-#define SPECENUM_VALUE5 UCF_BUILD_ANYWHERE
-#define SPECENUM_VALUE5NAME N_("?uclassflag:BuildAnywhere")
-#define SPECENUM_VALUE6 UCF_UNREACHABLE
-#define SPECENUM_VALUE6NAME N_("?uclassflag:Unreachable")
+#define SPECENUM_VALUE4 UCF_BUILD_ANYWHERE
+#define SPECENUM_VALUE4NAME N_("?uclassflag:BuildAnywhere")
+#define SPECENUM_VALUE5 UCF_UNREACHABLE
+#define SPECENUM_VALUE5NAME N_("?uclassflag:Unreachable")
 /* Can collect ransom from barbarian leader */
-#define SPECENUM_VALUE7 UCF_COLLECT_RANSOM
-#define SPECENUM_VALUE7NAME N_("?uclassflag:CollectRansom")
+#define SPECENUM_VALUE6 UCF_COLLECT_RANSOM
+#define SPECENUM_VALUE6NAME N_("?uclassflag:CollectRansom")
 /* Is subject to ZOC */
-#define SPECENUM_VALUE8 UCF_ZOC
-#define SPECENUM_VALUE8NAME N_("?uclassflag:ZOC")
+#define SPECENUM_VALUE7 UCF_ZOC
+#define SPECENUM_VALUE7NAME N_("?uclassflag:ZOC")
 /* Can fortify on land squares */
-#define SPECENUM_VALUE9 UCF_CAN_FORTIFY
-#define SPECENUM_VALUE9NAME N_("?uclassflag:CanFortify")
-#define SPECENUM_VALUE10 UCF_CAN_PILLAGE
-#define SPECENUM_VALUE10NAME N_("?uclassflag:CanPillage")
+#define SPECENUM_VALUE8 UCF_CAN_FORTIFY
+#define SPECENUM_VALUE8NAME N_("?uclassflag:CanFortify")
 /* Cities can still work tile when enemy unit on it */
-#define SPECENUM_VALUE11 UCF_DOESNT_OCCUPY_TILE
-#define SPECENUM_VALUE11NAME N_("?uclassflag:DoesntOccupyTile")
+#define SPECENUM_VALUE9 UCF_DOESNT_OCCUPY_TILE
+#define SPECENUM_VALUE9NAME N_("?uclassflag:DoesntOccupyTile")
 /* Can attack against units on non-native tiles */
-#define SPECENUM_VALUE12 UCF_ATTACK_NON_NATIVE
-#define SPECENUM_VALUE12NAME N_("?uclassflag:AttackNonNative")
+#define SPECENUM_VALUE10 UCF_ATTACK_NON_NATIVE
+#define SPECENUM_VALUE10NAME N_("?uclassflag:AttackNonNative")
 /* Kills citizens upon successful attack against a city */
-#define SPECENUM_VALUE13 UCF_KILLCITIZEN
-#define SPECENUM_VALUE13NAME N_("?uclassflag:KillCitizen")
+#define SPECENUM_VALUE11 UCF_KILLCITIZEN
+#define SPECENUM_VALUE11NAME N_("?uclassflag:KillCitizen")
 
-#define SPECENUM_VALUE14 UCF_USER_FLAG_1
-#define SPECENUM_VALUE15 UCF_USER_FLAG_2
-#define SPECENUM_VALUE16 UCF_USER_FLAG_3
-#define SPECENUM_VALUE17 UCF_USER_FLAG_4
-#define SPECENUM_VALUE18 UCF_USER_FLAG_5
-#define SPECENUM_VALUE19 UCF_USER_FLAG_6
-#define SPECENUM_VALUE20 UCF_USER_FLAG_7
-#define SPECENUM_VALUE21 UCF_USER_FLAG_8
+#define SPECENUM_VALUE12 UCF_USER_FLAG_1
+#define SPECENUM_VALUE13 UCF_USER_FLAG_2
+#define SPECENUM_VALUE14 UCF_USER_FLAG_3
+#define SPECENUM_VALUE15 UCF_USER_FLAG_4
+#define SPECENUM_VALUE16 UCF_USER_FLAG_5
+#define SPECENUM_VALUE17 UCF_USER_FLAG_6
+#define SPECENUM_VALUE18 UCF_USER_FLAG_7
+#define SPECENUM_VALUE19 UCF_USER_FLAG_8
+#define SPECENUM_VALUE20 UCF_USER_FLAG_9
+#define SPECENUM_VALUE21 UCF_USER_FLAG_10
+#define SPECENUM_VALUE22 UCF_USER_FLAG_11
+#define SPECENUM_VALUE23 UCF_USER_FLAG_12
 
 /* keep this last */
 #define SPECENUM_COUNT UCF_COUNT
@@ -104,7 +105,7 @@ struct ai_type;
 #define SPECENUM_BITVECTOR bv_unit_class_flags
 #include "specenum_gen.h"
 
-#define UCF_LAST_USER_FLAG UCF_USER_FLAG_8
+#define UCF_LAST_USER_FLAG UCF_USER_FLAG_12
 #define MAX_NUM_USER_UCLASS_FLAGS (UCF_LAST_USER_FLAG                     \
                                    - UCF_USER_FLAG_1 + 1)
 
@@ -131,7 +132,7 @@ struct unit_class_list;
 struct unit_class {
   Unit_Class_id item_number;
   struct name_translation name;
-  bool disabled;
+  bool ruledit_disabled;
   enum unit_move_type move_type;
   int min_speed;           /* Minimum speed after damage and effects */
   int hp_loss_pct;         /* Percentage of hitpoints lost each turn not in city or airbase */
@@ -159,7 +160,7 @@ struct unit_class {
  * for bits, though unit_type.flags is still a bitfield, and code
  * which uses unit_has_type_flag() without twiddling bits is unchanged.
  * (It is easier to go from i to (1<<i) than the reverse.)
- * See data/default/units.ruleset for documentation of their effects.
+ * See data/classic/units.ruleset for documentation of their effects.
  * Change the array *flag_names[] in unittype.c accordingly.
  * Used in the network protocol.
  */
@@ -211,7 +212,7 @@ struct unit_class {
 /* Cannot attack vs non-native tiles even if class can */
 #define SPECENUM_VALUE15 UTYF_ONLY_NATIVE_ATTACK
 #define SPECENUM_VALUE15NAME N_("?unitflag:Only_Native_Attack")
-/* Only Fundamentalist government can build these units */
+/* Only Fundamentalist/Theocratic government can build these units */
 #define SPECENUM_VALUE16 UTYF_FANATIC
 #define SPECENUM_VALUE16NAME N_("?unitflag:Fanatic")
 /* Losing this unit means losing the game */
@@ -345,7 +346,7 @@ struct unit_class {
 /* can be found in hut */
 #define SPECENUM_VALUE79 L_HUT
 #define SPECENUM_VALUE79NAME N_("?unitflag:Hut")
-/* can be found in hut, global tech required */
+/* can be found in hut, tech required */
 #define SPECENUM_VALUE80 L_HUT_TECH
 #define SPECENUM_VALUE80NAME N_("?unitflag:HutTech")
 /* is created in Partisan circumstances */
@@ -469,7 +470,7 @@ struct veteran_level {
   struct name_translation name; /* level/rank name */
   int power_fact; /* combat/work speed/diplomatic power factor (in %) */
   int move_bonus;
-  int raise_chance; /* server only */
+  int base_raise_chance; /* server only */
   int work_raise_chance; /* server only */
 };
 
@@ -482,7 +483,7 @@ struct veteran_system {
 struct unit_type {
   Unit_type_id item_number;
   struct name_translation name;
-  bool disabled;                        /* Does not really exist - hole in improvments array */
+  bool ruledit_disabled;              /* Does not really exist - hole in improvments array */
   char graphic_str[MAX_LEN_NAME];
   char graphic_alt[MAX_LEN_NAME];
   char sound_move[MAX_LEN_NAME];
@@ -497,8 +498,7 @@ struct unit_type {
   int unknown_move_cost; /* See utype_unknown_move_cost(). */
 
   struct advance *require_advance;	/* may be NULL */
-  struct impr_type *need_improvement;	/* may be NULL */
-  struct government *need_government;	/* may be NULL */
+  struct requirement_vector build_reqs;
 
   int vision_radius_sq;
   int transport_capacity;
@@ -507,8 +507,8 @@ struct unit_type {
   struct combat_bonus_list *bonuses;
 
 #define U_NOT_OBSOLETED (NULL)
-  struct unit_type *obsoleted_by;
-  struct unit_type *converted_to;
+  const struct unit_type *obsoleted_by;
+  const struct unit_type *converted_to;
   int convert_time;
   int fuel;
 
@@ -531,6 +531,10 @@ struct unit_type {
 
   /* Values for founding cities */
   int city_size;
+  #define utype_bombard_flags city_size
+// TO DO: when save game compatibility breaks, add lots of separate vars
+// and even some unused ones for other things so we don't get this problem
+// with later upgrades.
 
   int city_slots;
 
@@ -566,12 +570,85 @@ struct unit_type {
   void *ais[FREECIV_AI_MOD_LAST];
 };
 
+/************************************************************************
+ * BOMBARD MECHANICS ADDITION 
+ * **********************************************************************/
+struct bombard_stats {
+  int bit_field;                  // raw bit field currently taken from unit_type.city_size
+
+  int bombard_extra_range;        // Bit      0: RESERVED, whether this unit gets +1 extra range
+  bool bombard_stay_fortified;    // Bit      1: whether bombard action preserves fortified status
+  int bombard_move_cost;          // Bits   2-7: Move fragments expended by performing a bombard action
+  int bombard_primary_targets;    // Bits  8-10: Max # of targets on tile that are hit. (0==all)
+  int bombard_primary_kills;      // Bits 11-13: Max # of kills possible on primary targets (0==none)
+  int bombard_collateral_targets; // RESERVED, # of secondary units who receive (lesser) damage
+  int bombard_collateral_kills;   // RESERVED, # of collateral units who could possibly die (0==none)
+  int bombard_collateral_rate_reduce;//RESERVED, reduction in bombard_rate for collateral target exposure
+  int bombard_collateral_atk_mod; // RESERVED, adjustment to atk strength on collateral targets (e.g., -25)
+  int bombard_fortified_def_mod;  // RESERVED, additional defense bonus for targets IFF fortified
+  int bombard_rate_range_mod;     // RESERVED, adjustment to bombard_rate for each 1 tile distance
+  int bombard_atk_mod;            // RESERVED, % adjustment to attack strength when bombarding (-50 = -50%)
+  int bombard_atk_range_mod;      // RESERVED, % adjustment to attack strength for tile distance beyond dist==1
+
+  // RESERVED for later use
+  struct name_translation name;       // unique name for this type of ranged attack
+  char sound_fight[MAX_LEN_NAME];     // different sound for bombardment
+  char sound_fight_alt[MAX_LEN_NAME]; 
+};
+
+void unit_get_bombard_stats(struct bombard_stats *pstats, const struct unit *punit);
+void utype_get_bombard_stats(struct bombard_stats *pstats, const struct unit_type *ptype);
+/************************************************************************
+ * EXTRA STATS ADDITION: paradrop vars are bit fields, dirty way to 
+ * maintain savegame compat. TO DO: next major upgrade, create more 
+ * blank fields.
+ * **********************************************************************/
+struct extra_unit_stats {
+  int bit_field;                  // raw bit field currently taken from unit_type.city_size
+
+  bool attack_stay_fortified;     // Bit 0
+  bool iPillage;                  // Bit 1    - Whether pillage can be done instantly
+  int  iPillage_moves;            // Bits 2-4 - Moves expended from an iPillage 
+  
+  int iPillage_odds;              // Bits 5-8 - odds of success expressed as 100-(6*)
+  int iPillage_random_targets;    // Bit 9-10:  non-zero==randomly pick x targets. 0==user select target.
+  int bombard_retaliate_rounds;   // Bits 11-15:number of rounds of bombard retaliation when bombarded
+    /****** NOTE ****** A retaliator should be aware to also set the following bombard_stats,
+       which are used in its retaliation but do NOT enable initiated bombardment, per se:
+                                           bombard_primary_targets 
+                                           bombard_primary_kills
+                                           bombard_atk_mod */
+
+  // Candidates for future inclusions:
+  /*
+  int attack_extra_range;         // ability to attack a non-adjacent tile
+  int attack_move_cost;           // could even be negative frags, overrides hard-coded val of 1
+  int tired_penalty_adjust;       // some ratio for giving unique stats for tired attack
+  int attack_primary_kills;       // can't kill more than this in a stack kill event
+  int attack_collateral_targets;  // number of non-kills in a stack death that can be damaged
+  int attack_collateral_damage_pct;// % hitpoints lost to collateral units
+ 
+  int stealth_terrain_type[3];     // index to terrain types this unit becomes "stealth" in
+  int stealth_terrain_class;       // terrain class this unit comes stealth in OR'd with above
+
+  int move_rate_adjust_factor1;    // some kind of move bonuses/special dynamics to partially compensate 2x distortion
+  int move_rate_adjust_factor2;    // e.g., "is considered to have x extra fragments when doing an attack"
+                                   // gains x extra fragments when moving on specific extra
+                                   // or, has x extra moves without being able to attack/having tired attack, even better.
+  int instafortify_move_rate;      // a previously fortified unit(?) can re-fortify instantly if it moved less than this
+ */
+ };
+void unit_get_extra_stats(struct extra_unit_stats *pstats, const struct unit *punit); // maintain this as identical to same func. in unit.js
+void utype_get_extra_stats(struct extra_unit_stats *pstats, const struct unit_type *ptype); // maintain this as identical to same func. in unit.js
+bool unit_can_iPillage(const struct unit *punit);
+bool utype_can_iPillage(const struct unit_type *ptype);
+
 /* General unit and unit type (matched) routines */
 Unit_type_id utype_count(void);
 Unit_type_id utype_index(const struct unit_type *punittype);
 Unit_type_id utype_number(const struct unit_type *punittype);
 
-struct unit_type *unit_type_get(const struct unit *punit);
+const struct unit_type *unit_type_get(const struct unit *punit);
 struct unit_type *utype_by_number(const Unit_type_id id);
 
 struct unit_type *unit_type_by_rule_name(const char *name);
@@ -636,17 +713,32 @@ bool can_utype_do_act_if_tgt_diplrel(const struct unit_type *punit_type,
                                      const int prop,
                                      const bool is_there);
 
-bool utype_may_act_move_frags(struct unit_type *punit_type,
+bool utype_may_act_move_frags(const struct unit_type *punit_type,
                               const action_id act_id,
                               const int move_fragments);
 
-bool utype_may_act_tgt_city_tile(struct unit_type *punit_type,
+bool utype_may_act_tgt_city_tile(const struct unit_type *punit_type,
                                  const action_id act_id,
                                  const enum citytile_type prop,
                                  const bool is_there);
 
 bool utype_is_consumed_by_action(const struct action *paction,
                                  const struct unit_type *utype);
+
+bool utype_is_moved_to_tgt_by_action(const struct action *paction,
+                                     const struct unit_type *utype);
+
+bool utype_pays_for_regular_move_to_tgt(const struct action *paction,
+                                        const struct unit_type *utype);
+
+int utype_pays_mp_for_action_base(const struct action *paction,
+                                  const struct unit_type *putype);
+
+int utype_pays_mp_for_action_estimate(const struct action *paction,
+                                      const struct unit_type *putype,
+                                      const struct player *act_player,
+                                      const struct tile *act_tile,
+                                      const struct tile *tgt_tile);
 
 /* Functions to operate on various flag and roles. */
 typedef bool (*role_unit_callback)(struct unit_type *ptype, void *data);
@@ -728,9 +820,6 @@ void veteran_system_definition(struct veteran_system *vsystem, int level,
                                int vlist_move, int vlist_raise,
                                int vlist_wraise);
 
-int unit_disband_shields(const struct unit *punit);
-int utype_disband_shields(const struct unit_type *punittype);
-
 int unit_pop_value(const struct unit *punit);
 int utype_pop_value(const struct unit_type *punittype);
 
@@ -742,8 +831,8 @@ int utype_upkeep_cost(const struct unit_type *ut, struct player *pplayer,
                       Output_type_id otype);
 int utype_happy_cost(const struct unit_type *ut, const struct player *pplayer);
 
-struct unit_type *can_upgrade_unittype(const struct player *pplayer,
-				       struct unit_type *punittype);
+const struct unit_type *can_upgrade_unittype(const struct player *pplayer,
+				                                     const struct unit_type *punittype);
 int unit_upgrade_price(const struct player *pplayer,
 		       const struct unit_type *from,
 		       const struct unit_type *to);
@@ -760,7 +849,7 @@ bool can_player_build_unit_now(const struct player *p,
 
 #define utype_fuel(ptype) (ptype)->fuel
 
-bool utype_is_cityfounder(struct unit_type *utype);
+bool utype_is_cityfounder(const struct unit_type *utype);
 
 /* Initialization and iteration */
 void unit_types_init(void);
@@ -782,11 +871,11 @@ const struct unit_type *unit_type_array_last(void);
   }									\
 }
 
-#define unit_active_type_iterate(_p)                                    \
+#define unit_type_re_active_iterate(_p)                                 \
   unit_type_iterate(_p) {                                               \
-    if (!_p->disabled) {
+    if (!_p->ruledit_disabled) {
 
-#define unit_active_type_iterate_end                                    \
+#define unit_type_re_active_iterate_end                                 \
     }                                                                   \
   } unit_type_iterate_end;
 
@@ -819,11 +908,11 @@ const struct unit_class *unit_class_array_last(void);
   }									\
 }
 
-#define unit_active_class_iterate(_p)                                    \
+#define unit_class_re_active_iterate(_p)                                 \
   unit_class_iterate(_p) {                                               \
-    if (!_p->disabled) {
+    if (!_p->ruledit_disabled) {
 
-#define unit_active_class_iterate_end                                    \
+#define unit_class_re_active_iterate_end                                 \
     }                                                                    \
   } unit_class_iterate_end;
 

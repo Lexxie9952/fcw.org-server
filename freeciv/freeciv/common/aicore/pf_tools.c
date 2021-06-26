@@ -695,9 +695,11 @@ pft_enable_default_actions(struct pf_parameter *parameter)
     }
     if (utype_can_do_action(parameter->utype, ACTION_SPY_POISON)
         || utype_can_do_action(parameter->utype, ACTION_SPY_POISON_ESC)
+        || utype_can_do_action(parameter->utype, ACTION_SPY_SPREAD_PLAGUE)
         || utype_can_do_action(parameter->utype, ACTION_SPY_SABOTAGE_UNIT)
         || utype_can_do_action(parameter->utype, ACTION_SPY_SABOTAGE_UNIT_ESC)
         || utype_can_do_action(parameter->utype, ACTION_SPY_BRIBE_UNIT)
+        || utype_can_do_action(parameter->utype, ACTION_SPY_ATTACK)
         || utype_can_do_action(parameter->utype, ACTION_SPY_SABOTAGE_CITY)
         || utype_can_do_action(parameter->utype,
                                ACTION_SPY_SABOTAGE_CITY_ESC)
@@ -705,6 +707,10 @@ pft_enable_default_actions(struct pf_parameter *parameter)
                                ACTION_SPY_TARGETED_SABOTAGE_CITY)
         || utype_can_do_action(parameter->utype,
                                ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC)
+        || utype_can_do_action(parameter->utype,
+                               ACTION_SPY_SABOTAGE_CITY_PRODUCTION)
+        || utype_can_do_action(parameter->utype,
+                               ACTION_SPY_SABOTAGE_CITY_PRODUCTION_ESC)
         || utype_can_do_action(parameter->utype, ACTION_SPY_INCITE_CITY)
         || utype_can_do_action(parameter->utype, ACTION_SPY_INCITE_CITY_ESC)
         || utype_can_do_action(parameter->utype, ACTION_SPY_STEAL_TECH)
@@ -755,7 +761,7 @@ pft_fill_utype_default_parameter(struct pf_parameter *parameter,
   parameter->start_tile = pstart_tile;
   parameter->moves_left_initially = punittype->move_rate;
   parameter->move_rate = utype_move_rate(punittype, pstart_tile, powner,
-                                         veteran_level, punittype->hp);
+                                         veteran_level, punittype->hp, NULL);
   if (utype_fuel(punittype)) {
     parameter->fuel_left_initially = utype_fuel(punittype);
     parameter->fuel = utype_fuel(punittype);
@@ -779,7 +785,7 @@ pft_fill_unit_default_parameter(struct pf_parameter *parameter,
                                 const struct unit *punit)
 {
   const struct unit *ptrans = unit_transport_get(punit);
-  struct unit_type *ptype = unit_type_get(punit);
+  const struct unit_type *ptype = unit_type_get(punit);
 
   pft_fill_default_parameter(parameter, ptype);
 

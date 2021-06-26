@@ -7,7 +7,7 @@
 #
 # Changelog:
 # * also look for SDL2.framework under Mac OS X
-# * Taken to Freeciv from SDL release 2.0.8 - modified to work together with sdl1.2
+# * Taken to Freeciv from SDL release 2.0.10 - modified to work together with sdl1.2
 
 # serial 1.0.2
 
@@ -82,7 +82,7 @@ AC_ARG_VAR(SDL2_FRAMEWORK, [Path to SDL2.framework])
         done
       fi
 
-      if test -d $sdl2_framework; then
+      if test x"$sdl2_framework" != x && test -d "$sdl2_framework"; then
         AC_MSG_RESULT($sdl2_framework)
         sdl2_framework_dir=`dirname $sdl2_framework`
         SDL_CFLAGS="-F$sdl2_framework_dir -Wl,-framework,SDL2 -I$sdl2_framework/include"

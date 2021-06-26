@@ -50,11 +50,6 @@ var seconds_to_phasedone_sync = 0;
 var dialog_close_trigger = "";
 var dialog_message_close_task;
 
-var RENDERER_2DCANVAS = 1;      // default HTML5 Canvas
-var RENDERER_WEBGL = 2;         // WebGL + Three.js
-var renderer = RENDERER_2DCANVAS;  // This variable specifies which map renderer to use, 2d Canvas or WebGL.
-
-
 /**************************************************************************
  Main starting point for Freeciv-web
 **************************************************************************/
@@ -68,7 +63,7 @@ $(document).ready(function() {
 function civclient_init()
 {
   $.blockUI.defaults['css']['backgroundColor'] = "#222";
-  $.blockUI.defaults['css']['color'] = "#fff";
+  $.blockUI.defaults['css']['color'] = default_dialog_text_color;
   $.blockUI.defaults['theme'] = true;
 
   var action = $.getUrlVar('action');
@@ -86,6 +81,7 @@ function civclient_init()
              window.location.href ='/';
            }
       );
+      setSwalTheme();
       return;
     } else if (action == 'pbem') {
       link_game_type = 'pbem';
@@ -109,19 +105,17 @@ function civclient_init()
 
   if (window.requestAnimationFrame == null) {
     swal("Please upgrade your browser.");
+    setSwalTheme();
     return;
   }
 
   if (is_longturn() && observing) {
     swal("LongTurn games can't be observed.");
+    setSwalTheme();
     return;
   }
 
-  if ($.getUrlVar('renderer') == "webgl") {
-    renderer = RENDERER_WEBGL;
-  }
-  if (renderer == RENDERER_2DCANVAS) init_mapview();
-  if (renderer == RENDERER_WEBGL) init_webgl_renderer();
+  init_mapview();
 
   game_init();
   $('#tabs').tabs({ heightStyle: "fill" });
@@ -134,30 +128,11 @@ function civclient_init()
   statusTimerId = setInterval(update_game_status_panel, 6000);
 
   if (overviewTimerId == -1) {
-    if (renderer == RENDERER_WEBGL) {
-      OVERVIEW_REFRESH = 12000;
-    } else {
-      OVERVIEW_REFRESH = 6000;
-    }
+    OVERVIEW_REFRESH = 6000;
     overviewTimerId = setInterval(redraw_overview, OVERVIEW_REFRESH);
   }
 
   motd_init();
-
-  /* NOT NEEDED IF INTERNET EXPLORER WAS DEPRECATED
-   * Interner Explorer doesn't support Array.indexOf
-   * http://soledadpenades.com/2007/05/17/arrayindexof-in-internet-explorer/
-   
-  if(!Array.indexOf){
-	    Array.prototype.indexOf = function(obj){
-	        for(var i=0; i<this.length; i++){
-	            if(this[i]==obj){
-	                return i;
-	            }
-	        }
-	        return -1;
-	    };
-  }  */
 
   $('#tabs').css("height", $(window).height());
   $("#tabs-map").height("auto");
@@ -217,7 +192,7 @@ function civclient_init()
 
   draw_stacked_unit_mode = simpleStorage.get('stackmode');
   if (draw_stacked_unit_mode == null) 
-    draw_stacked_unit_mode = dsum_BASIC;  // Default case
+    draw_stacked_unit_mode = 3;  // Default case
   
   draw_city_output = simpleStorage.get('drawTiles');
   if (draw_city_output == null) 
@@ -245,6 +220,44 @@ function civclient_init()
     restore_chatbox_vals = tmp;
   }
 
+  draw_highlighted_pollution = simpleStorage.get('showpollution');
+  if (draw_highlighted_pollution == null)
+    draw_highlighted_pollution = false;
+
+  focuslock = simpleStorage.get('focuslock');
+  if (focuslock == null) {
+    if (is_small_screen() || is_touch_device())
+      focuslock = true;
+    else focuslock = false;
+  }
+
+  show_unit_movepct = simpleStorage.get('showMoves');
+  if (show_unit_movepct == null)
+    show_unit_movepct = false;
+  if (show_unit_movepct) {
+    hp_bar_offset = -5;
+  } else hp_bar_offset = 0;
+
+  draw_border_flags = simpleStorage.get('borderFlags');
+  if (draw_border_flags == null) 
+    draw_border_flags = false;  // Default case
+
+  draw_tertiary_colors = simpleStorage.get('tricolore');
+  if (draw_tertiary_colors == null) 
+    draw_tertiary_colors = false;  // Default case
+  draw_border_mode |= draw_tertiary_colors;
+
+  draw_thick_borders = simpleStorage.get('thickBorders');
+  if (draw_thick_borders == null) 
+    draw_thick_borders = false;  // Default case
+
+  draw_dashed_borders = simpleStorage.get('dashedBorders');
+  if (draw_dashed_borders == null) 
+    draw_dashed_borders = false;  // Default case
+
+  draw_moving_borders = simpleStorage.get('movingBorders');
+  if (draw_moving_borders == null) 
+    draw_moving_borders = false;  // Default case
   // -------------------------------------------------------------------------------- 
   
   /* Initialze audio.js music player */
@@ -288,12 +301,26 @@ function civclient_init()
             }
             init_common_intro_dialog();
         },
-        error: function (request, textStatus, errorThrown) {        
+        error: function (request, textStatus, errorThrown) {  
             swal("Error, can't get the game type!");
+            setSwalTheme();      
         }
     });    
   }
   setup_window_size();
+  update_turn_change_timer(); // styles it for mobile or large screen.
+  // civclient.css refuses to do it, so we do it here:
+  $(".ui-dialog-titlebar-minimize").css({"background":"none","background-image":"none","margin-top":"1px", "margin-left": "0px",
+    "margin-right":"2px", "border":"none", "height":"16px"});
+  $(".ui-dialog-titlebar-maximize").css({"background":"none","background-image":"none","margin-top":"1px", "margin-left": "0px",
+    "margin-right":"2px", "border":"none", "height":"16px"});
+  $(".ui-dialog-titlebar-restore").css({"background":"none","background-image":"none","margin-top":"1px", "margin-left": "0px",
+    "margin-right":"2px", "border":"none", "height":"16px"});
+  $(".ui-dialog-titlebar-close").css({"background":"none","background-image":"none","margin-top":"1px", "margin-left": "0px",
+    "margin-right":"2px", "border":"none", "height":"16px"}); // solo el diablo sabe por que!
+
+  // Allows civclient.css to specify different styling for mobile vs. not mobile  
+  if (is_small_screen()) document.body.classList.add('mobile');
 }
 
 /**************************************************************************
@@ -372,9 +399,9 @@ function init_common_intro_dialog() {
     
   } else {
     show_intro_dialog("Singleplayer vs. Freeciv AI",
-      "<br>Creating an account is optional. Saved games need an account."+
-      " (<a class='pwd_reset' href='#' style='color: #404A6F;'>Forgot password?</a>) Have fun! <br>");
-      $(".pwd_reset").click(forgot_pbem_password); 
+      "<br>Creating an account is optional. Saved games need an account."); 
+      //+" (<a class='pwd_reset' href='#' style='color: #404A6F;'>Forgot password?</a>) Have fun! <br>");
+      //$(".pwd_reset").click(forgot_pbem_password); 
   }
   $("#pregame_message_area").html("<b>Game</b>: Select rules and game settings.<br>"+
   "<b>Load</b>: Load saved game.<br>"+
@@ -400,7 +427,7 @@ function init_common_intro_dialog() {
  Closes a generic message dialog.
 **************************************************************************/
 function close_dialog_message() {
-  $("#generic_dialog").dialog('close');
+  remove_active_dialog("#generic_dialog");
   $(this).off("keypress");
 }
 
@@ -418,13 +445,11 @@ function show_dialog_message(title, message)
     message = improve_tile_info_dialog(message);
 
   // reset dialog page.
-  $("#generic_dialog").remove();
+  remove_active_dialog("#generic_dialog");
   $("<div id='generic_dialog'></div>").appendTo("div#game_page");
 
   speak(title);
   speak(message);
-
-  if (cardboard_vr_enabled) return;
 
   $("#generic_dialog").html(message);
   $("#generic_dialog").attr("title", title);
@@ -434,7 +459,7 @@ function show_dialog_message(title, message)
 			width: is_small_screen() ? "90%" : "50%",
 			close: closing_dialog_message,
 			buttons: {
-				Ok: close_dialog_message
+				"OK (𝗪)": close_dialog_message
 			}
 		}).dialogExtend({
                    "minimizable" : true,
@@ -454,6 +479,8 @@ function show_dialog_message(title, message)
   });
 
   $("#generic_dialog").dialog('open');
+  dialog_register("#generic_dialog");
+
   $("#game_text_input").blur();
 
   if (title=="Tile Information")
@@ -544,10 +571,17 @@ function update_turn_change_timer()
         + (last_turn_change_time - turn_change_elapsed) + ")");
   } else {
     turn_change_elapsed = 0;
-    if (is_small_screen() )
+    if (is_small_screen()) {
       $("#turn_done_button").button("option", "label", "Done");
-    else
-      $("#turn_done_button").button("option", "label", "Turn Done"); 
+      $("#turn_done_button").css("font-size", "90%");
+      $("#turn_done_button_div").css("padding-right","0px");
+      $("#turn_done_button").css("padding-left", "3px");
+      $("#turn_done_button").css("padding-right", "3px");
+    }
+    else {
+      $("#turn_done_button").button("option", "label", "Turn Done");
+      $("#turn_done_button_div").css("padding-right","1px");
+    } 
   }
 }
 
@@ -637,10 +671,6 @@ function show_debug_info()
   }
   console.log("Network PING average (client): " + (sum / debug_client_speed_list.length) + " ms.  (Max: " + max +"ms.)");
 
-  if (renderer == RENDERER_WEBGL) {
-    console.log(maprenderer.info);
-  }
-
 }
 
 /**************************************************************************
@@ -687,101 +717,6 @@ function show_auth_dialog(packet) {
   $("#dialog").dialog('open');
 }
 
-/****************************************************************************
- Change between 2D isometric and 3D WebGL renderer.
-****************************************************************************/
-function switch_renderer()
-{
-  if (is_longturn()){
-    var game_port = $.getUrlVar('civserverport')
-    var stored_username = simpleStorage.get("username", "");
-    if (stored_username == null || stored_username == false) stored_username = "blank"
-    $.ajax({
-        type: 'POST',
-        url: "/validate_twit?username="+stored_username+"&type=3d_webgl&port="+game_port,
-    });                
-  }
-  else {
-    
-    $("#canvas_div").unbind();
-    if (renderer == RENDERER_WEBGL) {
-        //activate 2D isometric renderer
-        renderer = RENDERER_2DCANVAS;
-        $("#canvas_div").empty();
-        init_mapview();
-        set_default_mapview_active();
-        requestAnimationFrame(update_map_canvas_check, mapview_canvas);
-        mapctrl_init_2d();
-
-        for (var tile_id in tiles) {
-        if (tile_get_known(tiles[tile_id]) == TILE_KNOWN_SEEN) {
-            center_tile_mapcanvas(tiles[tile_id]);
-            break;
-        }
-        }
-
-        // reset 3D WebGL data
-        for (var tile_id in tiles) {
-        tiles[tile_id]['height'] = 0;
-        }
-        scene = null;
-        heightmap = {};
-        unit_positions = {};
-        city_positions = {};
-        city_label_positions = {};
-        city_walls_positions = {};
-        unit_flag_positions = {};
-        unit_label_positions = {};
-        unit_activities_positions = {};
-        unit_health_positions = {};
-        unit_healthpercentage_positions = {};
-        forest_positions = {};
-        jungle_positions = {};
-        tile_extra_positions = {};
-        road_positions = {};
-        rail_positions = {};
-        river_positions = {};
-        tiletype_palette = [];
-        meshes = {};
-        load_count = 0;
-
-    } else {
-        //activate 3D WebGL renderer
-        renderer = RENDERER_WEBGL;
-        load_count = 0;
-        mapview_model_width = Math.floor(MAPVIEW_ASPECT_FACTOR * map['xsize']);
-        mapview_model_height = Math.floor(MAPVIEW_ASPECT_FACTOR * map['ysize']);
-
-        set_default_mapview_active();
-        init_webgl_renderer();
-
-    }
-
-    $.contextMenu({
-            selector: (renderer == RENDERER_2DCANVAS) ? '#canvas' : '#canvas_div' ,
-            zIndex: 5000,
-            autoHide: true,
-            callback: function(key, options) {
-            handle_context_menu_callback(key);
-            },
-            build: function($trigger, e) {
-                if (!context_menu_active) {
-                context_menu_active = true;
-                return false;
-                }
-                var unit_actions = update_unit_order_commands();
-                return {
-                    callback: function(key, options) {
-                    handle_context_menu_callback(key);
-                    } ,
-                    items: unit_actions
-                };
-            }
-    });
-
-    }
-}
-
 /**************************************************************************
  Is this a LongTurn game?
 **************************************************************************/
@@ -803,7 +738,7 @@ function is_supercow()
 *************************************************************************/
 function is_ongoing_longturn()
 {
-  return is_longturn() && game_info['turn'] > 0;
+  return is_longturn() && game_info != null && game_info['turn'] > 0;
 }
 
 /**************************************************************************

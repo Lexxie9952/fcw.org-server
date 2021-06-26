@@ -52,6 +52,9 @@
 #include "unitlist.h"
 #include "vision.h"
 
+/* common/aicore */
+#include "cm.h"
+
 /* common/scriptcore */
 #include "luascript_types.h"
 
@@ -359,7 +362,7 @@ static const char *search_for_city_name(struct tile *ptile,
 bool is_allowed_city_name(struct player *pplayer, const char *cityname,
 			  char *error_buf, size_t bufsz)
 {
-  struct connection *pconn = conn_by_user(pplayer->username);
+  //struct connection *pconn = conn_by_user(pplayer->username);
 
   /* Mode 1: A city name has to be unique for each player. */
   if (CNM_PLAYER_UNIQUE == game.server.allowed_city_names
@@ -560,24 +563,9 @@ const char *city_name_suggestion(struct player *pplayer, struct tile *ptile)
 ****************************************************************************/
 int build_points_left(struct city *pcity)
 {
-  int cost = impr_build_shield_cost(pcity, pcity->production.value.building);
+  int cost = city_production_build_shield_cost(pcity);
 
   return cost - pcity->shield_stock;
-}
-
-/************************************************************************//**
-  How many veteran levels will created unit of this type get?
-****************************************************************************/
-int do_make_unit_veteran(struct city *pcity,
-                         const struct unit_type *punittype)
-{
-  int levels = get_unittype_bonus(city_owner(pcity), pcity->tile, punittype,
-                                  EFT_VETERAN_BUILD);
-  int max_levels = utype_veteran_levels(punittype) - 1;
-
-  levels = CLIP(0, levels, max_levels);
-
-  return levels;
 }
 
 /************************************************************************//**
@@ -656,7 +644,7 @@ static void transfer_unit(struct unit *punit, struct city *tocity,
       if (verbose) {
         notify_player(from_player, unit_tile(punit),
                       E_UNIT_RELOCATED, ftc_server,
-		      _("Transferred %s in %s from %s to %s."),
+		      _("🎁 Transferred %s in %s from %s to %s."),
 		      unit_link(punit),
 		      city_link(in_city),
 		      nation_plural_for_player(from_player),
@@ -670,7 +658,7 @@ static void transfer_unit(struct unit *punit, struct city *tocity,
       if (verbose) {
         notify_player(from_player, unit_tile(punit),
                       E_UNIT_RELOCATED, ftc_server,
-                      _("Transferred %s from %s to %s."),
+                      _("🎁 Transferred %s from %s to %s."),
 		      unit_link(punit),
 		      nation_plural_for_player(from_player),
 		      nation_plural_for_player(to_player));
@@ -684,7 +672,7 @@ static void transfer_unit(struct unit *punit, struct city *tocity,
         notify_player(from_player, unit_tile(punit),
                       E_UNIT_LOST_MISC, ftc_server,
                       /* TRANS: Polish Destroyer ... German <city> */
-                      _("%s %s lost in transfer to %s %s"),
+                      _("⚠️ %s %s lost in transfer to %s %s"),
                       nation_adjective_for_player(from_player),
                       unit_tile_link(punit),
                       nation_adjective_for_player(to_player),
@@ -814,7 +802,7 @@ void transfer_city_units(struct player *pplayer, struct player *pvictim,
       if (verbose) {
         notify_player(unit_owner(vunit), unit_tile(vunit),
                       E_UNIT_LOST_MISC, ftc_server,
-                      _("%s lost along with control of %s."),
+                      _("⚠️ %s lost along with control of %s."),
                       unit_tile_link(vunit), name);
       }
       wipe_unit(vunit, ULR_CITY_LOST, NULL);
@@ -1223,6 +1211,12 @@ bool transfer_city(struct player *ptaker, struct city *pcity,
     /* Update the city's trade routes. */
     reestablish_city_trade_routes(pcity);
 
+    /* Clear CMA. */
+    if (pcity->cm_parameter) {
+      free(pcity->cm_parameter);
+      pcity->cm_parameter = NULL;
+    }
+
     city_refresh(pcity);
   }
 
@@ -1270,18 +1264,18 @@ bool transfer_city(struct player *ptaker, struct city *pcity,
       const char *clink = city_link(pcity);
 
       notify_player(ptaker, pcenter, E_CITY_TRANSFER, ftc_server,
-                    _("The people in %s are stunned by your "
+                    _("💡 The people in %s are stunned by your "
                       "technological insight!"),
                     clink);
 
       if (upgradet != NULL) {
         notify_player(ptaker, pcenter, E_CITY_TRANSFER, ftc_server,
-                      _("Workers spontaneously gather and upgrade "
+                      _("💡 With new tech, Workers upgrade "
                         "%s with %s."),
                       clink, extra_name_translation(upgradet));
       } else {
         notify_player(ptaker, pcenter, E_CITY_TRANSFER, ftc_server,
-                      _("Workers spontaneously gather and upgrade "
+                      _("💡 Workers spontaneously gather and upgrade "
                         "%s infrastructure."),
                       clink);
       }
@@ -1374,6 +1368,8 @@ bool transfer_city(struct player *ptaker, struct city *pcity,
 
   sync_cities();
 
+  CALL_FUNC_EACH_AI(city_info, pcity);
+
   return city_remains;
 }
 
@@ -1417,9 +1413,9 @@ void city_build_free_buildings(struct city *pcity)
 
     pimprove = improvement_by_number(n);
     fc_assert_action(!is_great_wonder(pimprove), continue);
-    if (first_city ||
-        (game.server.savepalace
-         && improvement_has_flag(pimprove, IF_SAVE_SMALL_WONDER))) {
+    if (first_city
+        || (game.server.savepalace
+            && improvement_has_flag(pimprove, IF_SAVE_SMALL_WONDER))) {
       city_add_improvement(pcity, pimprove);
       if (is_small_wonder(pimprove)) {
         has_small_wonders = TRUE;
@@ -1437,9 +1433,9 @@ void city_build_free_buildings(struct city *pcity)
     }
 
     pimprove = improvement_by_number(n);
-    if (first_city ||
-        (game.server.savepalace
-         && improvement_has_flag(pimprove, IF_SAVE_SMALL_WONDER))) {
+    if (first_city
+        || (game.server.savepalace
+            && improvement_has_flag(pimprove, IF_SAVE_SMALL_WONDER))) {
       city_add_improvement(pcity, pimprove);
       if (is_small_wonder(pimprove)) {
         has_small_wonders = TRUE;
@@ -1510,6 +1506,15 @@ void create_city(struct player *pplayer, struct tile *ptile,
 
   /* Set up citizens nationality. */
   citizens_init(pcity);
+
+  /* Get bonus effects for food stock. If undesired for a newly founded
+     city, ruleset can use MinSize, "", "City". This is preferable to 
+     hard-coding that no bonus on food_stock can occur for a new city,
+     which is clearly the most influential/important time to have it. */
+  int initial_food_pct = 
+    CLIP (0, get_city_bonus(pcity, EFT_GROWTH_FOOD), 100);
+  pcity->food_stock = (city_granary_size(1)
+                       * initial_food_pct) / 100;
 
   /* Place a worker at the is_city_center() is_free_worked().
    * It is possible to build a city on a tile that is already worked;
@@ -1586,7 +1591,7 @@ void create_city(struct player *pplayer, struct tile *ptile,
   sync_cities(); /* Will also send pwork. */
 
   notify_player(pplayer, ptile, E_CITY_BUILD, ftc_server,
-		_("You have founded %s."),
+		_("🏰 You have founded %s."),
 		city_link(pcity));
   maybe_make_contact(ptile, city_owner(pcity));
 
@@ -1663,7 +1668,7 @@ void remove_city(struct city *pcity)
   /* make sure ships are not left on land when city is removed. */
   unit_list_iterate_safe(pcenter->units, punit) {
     bool moved;
-    struct unit_type *punittype = unit_type_get(punit);
+    const struct unit_type *punittype = unit_type_get(punit);
 
     if (is_native_tile(punittype, pcenter)) {
       continue;
@@ -1672,10 +1677,22 @@ void remove_city(struct city *pcity)
     unit_activity_handling(punit, ACTIVITY_IDLE);
     moved = FALSE;
     adjc_iterate(&(wld.map), pcenter, tile1) {
+      struct unit *ptrans;
       if (!moved && is_native_tile(punittype, tile1)) {
         if (adv_could_unit_move_to_tile(punit, tile1) == 1) {
           /* Move */
-          moved = unit_move_handling(punit, tile1, FALSE, TRUE, NULL);
+          if (!can_unit_survive_at_tile(&(wld.map), punit, tile1)
+              && ((ptrans = transporter_for_unit_at(punit, tile1)))
+              && is_action_enabled_unit_on_unit(ACTION_TRANSPORT_EMBARK,
+                                                punit, ptrans)) {
+            /* "Transport Embark". */
+            moved = unit_perform_action(unit_owner(punit), punit->id,
+                                        ptrans->id, 0, "",
+                                        ACTION_TRANSPORT_EMBARK,
+                                        ACT_REQ_RULES);
+          } else {
+            moved = unit_move_handling(punit, tile1, FALSE, TRUE);
+          }
           if (moved) {
             notify_player(unit_owner(punit), tile1,
                           E_UNIT_RELOCATED, ftc_server,
@@ -1691,7 +1708,7 @@ void remove_city(struct city *pcity)
     if (!moved) {
       notify_player(unit_owner(punit), unit_tile(punit),
                     E_UNIT_LOST_MISC, ftc_server,
-                    _("When %s was disbanded your %s could not "
+                    _("⚠️ When %s was disbanded your %s could not "
                       "get out, and it was therefore lost."),
                     ctl,
                     unit_tile_link(punit));
@@ -1724,7 +1741,7 @@ void remove_city(struct city *pcity)
               && !is_city_channel_tile(pclass, piter, pcenter)) {
             notify_player(unit_owner(punit), unit_tile(punit),
                           E_UNIT_LOST_MISC, ftc_server,
-                          _("When %s was disbanded your %s in %s was trapped, "
+                          _("⚠️ When %s was disbanded your %s in %s was trapped, "
                             "and it was therefore lost."),
                           ctl,
                           unit_tile_link(punit),
@@ -1922,10 +1939,10 @@ bool unit_conquer_city(struct unit *punit, struct city *pcity)
     int saved_id = pcity->id;
 
     notify_player(pplayer, city_tile(pcity), E_UNIT_WIN_ATT, ftc_server,
-                  _("You destroy %s completely."),
+                  _("💥 You destroy %s completely."),
                   city_tile_link(pcity));
     notify_player(cplayer, city_tile(pcity), E_CITY_LOST, ftc_server,
-                  _("%s has been destroyed by %s."), 
+                  _("⚠️ %s has been destroyed by %s."), 
                   city_tile_link(pcity), player_name(pplayer));
     script_server_signal_emit("city_destroyed", pcity, cplayer, pplayer);
 
@@ -1940,10 +1957,21 @@ bool unit_conquer_city(struct unit *punit, struct city *pcity)
     return TRUE;
   }
 
-  coins = cplayer->economic.gold;
-  coins = MIN(coins,
-              fc_rand((coins / 20) + 1)
-              + (coins * (city_size_get(pcity))) / 200);
+  /* Calculate the loot! */
+  switch (game.server.lootstyle) {
+    case LOOT_OFF:
+      coins = 0;
+      break;
+    case LOOT_BASE_TRADE:
+      coins = MIN(cplayer->economic.gold,
+                  pcity->surplus[O_TRADE]);
+      break;
+    default: /* case LOOT_CLASSIC:*/
+      coins = cplayer->economic.gold;
+      coins = MIN(coins,
+                  fc_rand((coins / 20) + 1)
+                  + (coins * (city_size_get(pcity))) / 200);
+  }
   pplayer->economic.gold += coins;
   cplayer->economic.gold -= coins;
   send_player_info_c(pplayer, pplayer->connections);
@@ -1951,52 +1979,52 @@ bool unit_conquer_city(struct unit *punit, struct city *pcity)
   if (pcity->original != pplayer) {
     if (coins > 0) {
       notify_player(pplayer, city_tile(pcity), E_UNIT_WIN_ATT, ftc_server,
-		    PL_("You conquer %s; your lootings accumulate"
+		    PL_("💥 You conquer %s; [`gold`] your lootings accumulate"
 			" to %d gold!",
-			"You conquer %s; your lootings accumulate"
+			"💥 You conquer %s; [`gold`] your lootings accumulate"
 			" to %d gold!", coins), 
 		    city_link(pcity),
 		    coins);
       notify_player(cplayer, city_tile(pcity), E_CITY_LOST, ftc_server,
-		    PL_("%s conquered %s and looted %d gold"
+		    PL_("⚠️ %s conquered %s and looted %d gold"
 			" from the city.",
-			"%s conquered %s and looted %d gold"
+			"⚠️ %s conquered %s and looted %d gold"
 			" from the city.", coins),
 		    player_name(pplayer),
 		    city_link(pcity),
 		    coins);
     } else {
       notify_player(pplayer, city_tile(pcity), E_UNIT_WIN_ATT, ftc_server,
-		    _("You conquer %s."),
+		    _("💥 You conquer %s."),
 		    city_link(pcity));
       notify_player(cplayer, city_tile(pcity), E_CITY_LOST, ftc_server,
-		    _("%s conquered %s."),
+		    _("⚠️ %s conquered %s."),
 		    player_name(pplayer),
 		    city_link(pcity));
     }
   } else {
     if (coins > 0) {
       notify_player(pplayer, city_tile(pcity), E_UNIT_WIN_ATT, ftc_server,
-		    PL_("You have liberated %s!"
-			" Lootings accumulate to %d gold.",
-			"You have liberated %s!"
-			" Lootings accumulate to %d gold.", coins),
+		    PL_("💥 You have liberated %s!"
+			" [`gold`] Lootings accumulate to %d gold.",
+			"💥 You have liberated %s!"
+			" [`gold`] Lootings accumulate to %d gold.", coins),
 		    city_link(pcity),
 		    coins);
       notify_player(cplayer, city_tile(pcity), E_CITY_LOST, ftc_server,
-		    PL_("%s liberated %s and looted %d gold"
+		    PL_("⚠️ %s liberated %s and looted %d gold"
 			" from the city.",
-			"%s liberated %s and looted %d gold"
+			"⚠️ %s liberated %s and looted %d gold"
 			" from the city.", coins),
 		    player_name(pplayer),
 		    city_link(pcity),
 		    coins);
     } else {
       notify_player(pplayer, city_tile(pcity), E_UNIT_WIN_ATT, ftc_server,
-		    _("You have liberated %s!"),
+		    _("💥 You have liberated %s!"),
 		    city_link(pcity));
       notify_player(cplayer, city_tile(pcity), E_CITY_LOST, ftc_server,
-		    _("%s liberated %s."),
+		    _("💥 %s liberated %s."),
 		    player_name(pplayer),
 		    city_link(pcity));
     }
@@ -2013,6 +2041,18 @@ bool unit_conquer_city(struct unit *punit, struct city *pcity)
    * free buildings such as palaces? */
   city_remains = transfer_city(pplayer, pcity, 0, TRUE, TRUE, TRUE,
                                !is_barbarian(pplayer));
+
+  /* Conquered cities are SUPPOSED to be in Disorder. We will start like the 
+     older freeciv and just hard-code in the proper behaviour, then allow people
+     to make settings / effects / or some other options to allow rulesets and players
+     to adjust later. For now the choice was correct behaviour or incorrect behavior,
+     and we had to choose the former
+     See sentence #3 at https://civilization.fandom.com/wiki/Civil_disorder_(Civ2) */
+  // For now, allow rulesets to specifically turn it off with EFT_GULAG:
+  //if (!game.server.disorder_in_conquered && !get_city_bonus(pcity, EFT_???) {
+    if (game.server.fulldisorder)
+      pcity->anarchy++;
+  //}
 
   if (city_remains) {
     /* reduce size should not destroy this city */
@@ -2450,6 +2490,12 @@ void package_city(struct city *pcity, struct packet_city_info *packet,
     tri_packet->index = i;
     tri_packet->partner = proute->partner;
     tri_packet->value = proute->value;
+
+#ifdef FREECIV_WEB // freeciv web doesn't have /common files to go figure out trade_route bonus percent, the final trade value should just come in packet
+    tri_packet->value = proute->value
+        * (100 + get_city_bonus(pcity, EFT_TRADEROUTE_PCT)) / 100;   ////////// test outgoing packets contain adjusted trade value with bonuses
+#endif
+
     tri_packet->direction = proute->dir;
     tri_packet->goods = goods_number(proute->goods);
 
@@ -2502,6 +2548,14 @@ void package_city(struct city *pcity, struct packet_city_info *packet,
   packet->city_image = get_city_bonus(pcity, EFT_CITY_IMAGE);
   packet->steal = pcity->steal;
 
+  if (pcity->cm_parameter) {
+    packet->cma_enabled = TRUE;
+    cm_copy_parameter(&packet->cm_parameter, pcity->cm_parameter);
+  } else {
+    packet->cma_enabled = FALSE;
+    memset(&packet->cm_parameter, 0, sizeof(packet->cm_parameter));
+  }
+
   improvement_iterate(pimprove) {
     can_build_impr_buf[improvement_index(pimprove)] = 
 	    can_city_build_improvement_now(pcity, pimprove)
@@ -2518,6 +2572,14 @@ void package_city(struct city *pcity, struct packet_city_info *packet,
   can_build_unit_buf[utype_count()] = '\0';
   sz_strlcpy(packet->can_build_unit, can_build_unit_buf);
 
+
+  packet->rally_point_length = pcity->rally_point.length;
+  packet->rally_point_persistent = pcity->rally_point.persistent;
+  packet->rally_point_vigilant = pcity->rally_point.vigilant;
+  if (pcity->rally_point.length) {
+    memcpy(packet->rally_point_orders, pcity->rally_point.orders,
+           pcity->rally_point.length * sizeof(struct unit_order));
+  }
 
   BV_CLR_ALL(packet->improvements);
   improvement_iterate(pimprove) {
@@ -2581,7 +2643,7 @@ bool update_dumb_city(struct player *pplayer, struct city *pcity)
   /* pcity->client.occupied isn't used at the server, so we go straight to the
    * unit list to check the occupied status. */
   bool occupied = (unit_list_size(pcenter->units) > 0);
-  bool walls = city_got_citywalls(pcity);
+  int walls = city_got_citywalls(pcity);
   bool happy = city_happy(pcity);
   bool unhappy = city_unhappy(pcity);
   int style = pcity->style;
@@ -2690,12 +2752,12 @@ static void announce_trade_route_removal(struct city *pc1, struct city *pc2,
     if (source_gone) {
       notify_player(plr2, city_tile(pc2),
                     E_CARAVAN_ACTION, ftc_server,
-                    _("Trade between %s and %s lost along with city."),
+                    _("⚠️ Trade between %s and %s lost along with city."),
                     city1_link, city2_link);
     } else {
       notify_player(plr1, city_tile(pc1),
                     E_CARAVAN_ACTION, ftc_server,
-                    _("Trade route between %s and %s canceled."),
+                    _("💢 Trade route between %s and %s canceled."),
                     city1_link, city2_link);
     }
   } else {
@@ -2703,7 +2765,7 @@ static void announce_trade_route_removal(struct city *pc1, struct city *pc2,
       notify_player(plr2, city_tile(pc2),
                     E_CARAVAN_ACTION, ftc_server,
                     /* TRANS: "...between Spanish city Madrid and Paris..." */
-                    _("Trade between %s city %s and %s lost along with "
+                    _("💢 Trade between %s city %s and %s lost along with "
                       "their city."),
                     nation_adjective_for_player(plr1), city1_link, city2_link);
       /* It's implicit to removed city's owner that that city no longer
@@ -2711,13 +2773,13 @@ static void announce_trade_route_removal(struct city *pc1, struct city *pc2,
     } else {
       notify_player(plr2, city_tile(pc2),
                     E_CARAVAN_ACTION, ftc_server,
-                    _("Sorry, the %s canceled the trade route "
+                    _("💢 Sorry, the %s canceled the trade route "
                       "from %s to your city %s."),
                     nation_plural_for_player(plr1), city1_link, city2_link);
       notify_player(plr1, city_tile(pc1),
                     E_CARAVAN_ACTION, ftc_server,
                     /* TRANS: "...from Paris to Spanish city Madrid." */
-                    _("We canceled the trade route "
+                    _("⚠💢 We canceled the trade route "
                       "from %s to %s city %s."),
                     city1_link, nation_adjective_for_player(plr2), city2_link);
     }
@@ -2816,19 +2878,51 @@ void establish_trade_route(struct city *pc1, struct city *pc2)
   }
 }
 
+/**********************************************************************//**
+  Give the city a plague.
+**************************************************************************/
+void city_illness_strike(struct city *pcity)
+{
+  notify_player(city_owner(pcity), city_tile(pcity), E_CITY_PLAGUE,
+                ftc_server,
+                _("➖ %s has been struck by a plague! Population lost!"),
+                city_link(pcity));
+  city_reduce_size(pcity, 1, NULL, "plague");
+  pcity->turn_plague = game.info.turn;
+
+  /* recalculate illness */
+  pcity->server.illness
+    = city_illness_calc(pcity, NULL, NULL, &(pcity->illness_trade),
+                        NULL);
+}
+
 /************************************************************************//**
-  Sell the improvement from the city, and give the player the owner.  Not
-  all buildings can be sold.
+  Sell the improvement from the city, and give the player the gold.  Not
+  all buildings can be sold. Returns the price if sold or 0 if not possible,
+  so the caller function didn't have to check twice (like it did before.)
 
   I guess the player should always be the city owner?
 ****************************************************************************/
-void do_sell_building(struct player *pplayer, struct city *pcity,
+int do_sell_building(struct player *pplayer, struct city *pcity,
                       struct impr_type *pimprove, const char *reason)
 {
   if (can_city_sell_building(pcity, pimprove)) {
-    pplayer->economic.gold += impr_sell_gold(pimprove);
+    const int ROUND = 50; // round to nearest int.
+    float sale_pct = 0;   // pct to add to sale price
+
+    sale_pct = (float)
+      get_target_bonus_effects(NULL, pplayer, NULL, pcity, pimprove, 
+                              city_tile(pcity), NULL, NULL, NULL,
+                              NULL, NULL, EFT_IMPROVEMENT_SALE_PCT);
+
+    int price = ((float)impr_sell_gold(pimprove)
+                                * (100 + sale_pct) + ROUND) / 100;
+
+    pplayer->economic.gold += price;
     building_lost(pcity, pimprove, reason, NULL);
+    return price;
   }
+  return 0;
 }
 
 /************************************************************************//**
@@ -2904,7 +2998,7 @@ void city_units_upkeep(const struct city *pcity)
 {
   int free_uk[O_LAST];
   int cost;
-  struct unit_type *ut;
+  const struct unit_type *ut;
   struct player *plr;
   bool update;
 
@@ -2975,8 +3069,9 @@ void change_build_target(struct player *pplayer, struct city *pcity,
        don't announce that the player has *stopped* building that wonder. 
        */
     notify_player(NULL, city_tile(pcity), E_WONDER_STOPPED, ftc_server,
-                  _("The %s have stopped building The %s in %s."),
+                  _("💢 The %s have stopped building The %s [`%s`] in %s."),
                   nation_plural_for_player(pplayer),
+                  city_production_name_translation(pcity),
                   city_production_name_translation(pcity),
                   city_link(pcity));
   }
@@ -2997,19 +3092,19 @@ void change_build_target(struct player *pplayer, struct city *pcity,
     case E_WORKLIST:
       /* TRANS: Possible 'source' of the production change
        * (in "<city> is building ..." sentence). */
-      source = _(" from the worklist");
+      source = _(" from the worklist.");
       break;
     case E_IMP_AUTO:
       /* TRANS: Possible 'source' of the production change
        * (in "<city> is building ..." sentence). */
-      source = _(" as suggested by the advisor");
+      source = _(" as suggested by the advisor.");
       break;
     default:
       source = "";
       break;
   }
 
-  log_base(LOG_BUILD_TARGET, "%s started building %s%s.",
+  log_base(LOG_BUILD_TARGET, "%s started building %s %s.",
            city_name_get(pcity), name, source);
 
   /* Tell the player what's up. */
@@ -3019,18 +3114,18 @@ void change_build_target(struct player *pplayer, struct city *pcity,
                 /* TRANS: "<city> is building <production><source>."
                  * 'source' might be an empty string, or a clause like
                  * " from the worklist". */
-                _("%s is building %s%s."),
+                _("%s is building %s [`%s`]%s"),
                 city_link(pcity),
-                name, source);
+                name, name, source);
 
   /* If the city is building a wonder, tell the rest of the world
      about it. */
   if (VUT_IMPROVEMENT == pcity->production.kind
       && is_great_wonder(pcity->production.value.building)) {
     notify_player(NULL, city_tile(pcity), E_WONDER_STARTED, ftc_server,
-                  _("The %s have started building The %s in %s."),
+                  _("💢 The %s have started building The %s [`%s`] in %s."),
                   nation_plural_for_player(pplayer),
-                  name,
+                  name, name,
                   city_link(pcity));
   }
 }
@@ -3183,17 +3278,16 @@ void city_landlocked_sell_coastal_improvements(struct tile *ptile)
                || VUT_TERRAINCLASS == preq->source.kind)
               && !is_req_active(city_owner(pcity), NULL, pcity, NULL,
                                 NULL, NULL, NULL, NULL, NULL, NULL,
-				preq, TRUE)) {
-            int price = impr_sell_gold(pimprove);
-
-            do_sell_building(pplayer, pcity, pimprove, "landlocked");
-            notify_player(pplayer, tile1, E_IMP_SOLD, ftc_server,
-                          PL_("You sell %s in %s (now landlocked)"
-                              " for %d gold.",
-                              "You sell %s in %s (now landlocked)"
-                              " for %d gold.", price),
-                          improvement_name_translation(pimprove),
-                          city_link(pcity), price);
+				preq, TRUE)) 
+    {
+      int price = do_sell_building(pplayer, pcity, pimprove, "landlocked");
+      notify_player(pplayer, tile1, E_IMP_SOLD, ftc_server,
+                    PL_("[`gold`] Sold %s in %s (now landlocked)"
+                        " for %d gold.",
+                        "[`gold`] Sold %s in %s (now landlocked)"
+                        " for %d gold.", price),
+                    improvement_name_translation(pimprove),
+                    city_link(pcity), price);
 	  }
 	} requirement_vector_iterate_end;
       } city_built_iterate_end;

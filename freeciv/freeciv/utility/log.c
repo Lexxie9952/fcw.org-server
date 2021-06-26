@@ -58,8 +58,8 @@ static int fc_fatal_assertions = -1;
 struct log_fileinfo {
   char *name;
   enum log_level level;
-  int min;
-  int max;
+  unsigned int min;
+  unsigned int max;
 };
 static int log_num_files = 0;
 static struct log_fileinfo *log_files = NULL;
@@ -89,7 +89,7 @@ bool log_parse_level_str(const char *level_str, enum log_level *ret_level)
 {
   const char *c;
   int n = 0;                    /* number of filenames */
-  int level;
+  unsigned int level;
   int ln;
   int first_len = -1;
 #ifdef FREECIV_DEBUG
@@ -110,14 +110,14 @@ bool log_parse_level_str(const char *level_str, enum log_level *ret_level)
   }
   if (n == 0) {
     /* Global log level. */
-    if (!str_to_int(level_str, &level)) {
-      level = -1;
-      for (ln = 0; log_level_names[ln] != NULL && level < 0; ln++) {
+    if (!str_to_uint(level_str, &level)) {
+      level = LOG_DEBUG + 1;
+      for (ln = 0; log_level_names[ln] != NULL && level > LOG_DEBUG; ln++) {
         if (!fc_strncasecmp(level_str, log_level_names[ln], strlen(level_str))) {
           level = ln;
         }
       }
-      if (level < 0) {
+      if (level > LOG_DEBUG) {
         fc_fprintf(stderr, _("Bad log level \"%s\".\n"), level_str);
         return FALSE;
       }
@@ -125,7 +125,7 @@ bool log_parse_level_str(const char *level_str, enum log_level *ret_level)
         log_deprecation( _("Do not provide log level with a numerical value."
             " Use one of the levels Fatal, Error, Warning, Normal, Verbose, Debug") );
     }
-    if (level >= LOG_FATAL && level <= max_level) {
+    if (level <= max_level) {
       if (NULL != ret_level) {
         *ret_level = level;
       }
@@ -146,18 +146,18 @@ bool log_parse_level_str(const char *level_str, enum log_level *ret_level)
 
 #ifdef FREECIV_DEBUG
   c = level_str;
-  level = -1;
+  level = LOG_DEBUG + 1;
   if (first_len > 0) {
-    for (ln = 0; log_level_names[ln] != NULL && level < 0; ln++) {
+    for (ln = 0; log_level_names[ln] != NULL && level > LOG_DEBUG; ln++) {
       if (!fc_strncasecmp(level_str, log_level_names[ln], first_len)) {
         level = ln;
       }
     }
   }
-  if (level < 0) {
+  if (level > LOG_DEBUG) {
     level = c[0] - '0';
     if (c[1] == ':') {
-      if (level < LOG_FATAL || level > max_level) {
+      if (level > max_level) {
         fc_fprintf(stderr, _("Bad log level %c in \"%s\".\n"),
                    c[0], level_str);
         return FALSE;
@@ -196,13 +196,13 @@ bool log_parse_level_str(const char *level_str, enum log_level *ret_level)
       d = strchr(d + 1, ',');
       if (d && *pc != '\0' && d[1] != '\0') {
         d[0] = '\0';
-        if (!str_to_int(pc, &pfile->min)) {
-          fc_fprintf(stderr, _("Not an integer: '%s'\n"), pc);
+        if (!str_to_uint(pc, &pfile->min)) {
+          fc_fprintf(stderr, _("Not an unsigned integer: '%s'\n"), pc);
           ret = FALSE;
           goto out;
         }
-        if (!str_to_int(d + 1, &pfile->max)) {
-          fc_fprintf(stderr, _("Not an integer: '%s'\n"), d + 1);
+        if (!str_to_uint(d + 1, &pfile->max)) {
+          fc_fprintf(stderr, _("Not an unsigned integer: '%s'\n"), d + 1);
           ret = FALSE;
           goto out;
         }
@@ -453,7 +453,7 @@ static void log_real(enum log_level level, bool print_from_where,
   }
 
   if (level == prev_level && 0 == strncmp(msg, last_msg,
-                                          MAX_LEN_LOG_LINE - 1)){
+                                          MAX_LEN_LOG_LINE - 1)) {
     repeated++;
     if (repeated == next) {
       fc_snprintf(buf, sizeof(buf),

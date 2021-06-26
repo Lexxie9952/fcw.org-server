@@ -45,6 +45,21 @@ extern "C" {
 #include "specenum_gen.h"
 
 /* Values used in the network protocol. */
+#define SPECENUM_NAME action_sub_target_kind
+#define SPECENUM_VALUE0 ASTK_NONE
+#define SPECENUM_VALUE0NAME N_("nothing")
+#define SPECENUM_VALUE1 ASTK_BUILDING
+#define SPECENUM_VALUE1NAME N_("buildings in")
+#define SPECENUM_VALUE2 ASTK_TECH
+#define SPECENUM_VALUE2NAME N_("techs from")
+#define SPECENUM_VALUE3 ASTK_EXTRA
+#define SPECENUM_VALUE3NAME N_("extras on")
+#define SPECENUM_VALUE4 ASTK_EXTRA_NOT_THERE
+#define SPECENUM_VALUE4NAME N_("create extras on")
+#define SPECENUM_COUNT ASTK_COUNT
+#include "specenum_gen.h"
+
+/* Values used in the network protocol. */
 /* Names used in file formats but not normally shown to users. */
 #define SPECENUM_NAME gen_action
 #define SPECENUM_VALUE0 ACTION_ESTABLISH_EMBASSY
@@ -71,93 +86,138 @@ extern "C" {
 #define SPECENUM_VALUE10NAME "Targeted Sabotage City"
 #define SPECENUM_VALUE11 ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC
 #define SPECENUM_VALUE11NAME "Targeted Sabotage City Escape"
-#define SPECENUM_VALUE12 ACTION_SPY_STEAL_TECH
-#define SPECENUM_VALUE12NAME "Steal Tech"
-#define SPECENUM_VALUE13 ACTION_SPY_STEAL_TECH_ESC
-#define SPECENUM_VALUE13NAME "Steal Tech Escape Expected"
-#define SPECENUM_VALUE14 ACTION_SPY_TARGETED_STEAL_TECH
-#define SPECENUM_VALUE14NAME "Targeted Steal Tech"
-#define SPECENUM_VALUE15 ACTION_SPY_TARGETED_STEAL_TECH_ESC
-#define SPECENUM_VALUE15NAME "Targeted Steal Tech Escape Expected"
-#define SPECENUM_VALUE16 ACTION_SPY_INCITE_CITY
-#define SPECENUM_VALUE16NAME "Incite City"
-#define SPECENUM_VALUE17 ACTION_SPY_INCITE_CITY_ESC
-#define SPECENUM_VALUE17NAME "Incite City Escape"
-#define SPECENUM_VALUE18 ACTION_TRADE_ROUTE
-#define SPECENUM_VALUE18NAME "Establish Trade Route"
-#define SPECENUM_VALUE19 ACTION_MARKETPLACE
-#define SPECENUM_VALUE19NAME "Enter Marketplace"
-#define SPECENUM_VALUE20 ACTION_HELP_WONDER
-#define SPECENUM_VALUE20NAME "Help Wonder"
-#define SPECENUM_VALUE21 ACTION_SPY_BRIBE_UNIT
-#define SPECENUM_VALUE21NAME "Bribe Unit"
-#define SPECENUM_VALUE22 ACTION_SPY_SABOTAGE_UNIT
-#define SPECENUM_VALUE22NAME "Sabotage Unit"
-#define SPECENUM_VALUE23 ACTION_SPY_SABOTAGE_UNIT_ESC
-#define SPECENUM_VALUE23NAME "Sabotage Unit Escape"
-#define SPECENUM_VALUE24 ACTION_CAPTURE_UNITS
-#define SPECENUM_VALUE24NAME "Capture Units"
-#define SPECENUM_VALUE25 ACTION_FOUND_CITY
-#define SPECENUM_VALUE25NAME "Found City"
-#define SPECENUM_VALUE26 ACTION_JOIN_CITY
-#define SPECENUM_VALUE26NAME "Join City"
-#define SPECENUM_VALUE27 ACTION_STEAL_MAPS
-#define SPECENUM_VALUE27NAME "Steal Maps"
-#define SPECENUM_VALUE28 ACTION_STEAL_MAPS_ESC
-#define SPECENUM_VALUE28NAME "Steal Maps Escape"
-#define SPECENUM_VALUE29 ACTION_BOMBARD
-#define SPECENUM_VALUE29NAME "Bombard"
-#define SPECENUM_VALUE30 ACTION_SPY_NUKE
-#define SPECENUM_VALUE30NAME "Suitcase Nuke"
-#define SPECENUM_VALUE31 ACTION_SPY_NUKE_ESC
-#define SPECENUM_VALUE31NAME "Suitcase Nuke Escape"
-#define SPECENUM_VALUE32 ACTION_NUKE
-#define SPECENUM_VALUE32NAME "Explode Nuclear"
-#define SPECENUM_VALUE33 ACTION_DESTROY_CITY
-#define SPECENUM_VALUE33NAME "Destroy City"
-#define SPECENUM_VALUE34 ACTION_EXPEL_UNIT
-#define SPECENUM_VALUE34NAME "Expel Unit"
-#define SPECENUM_VALUE35 ACTION_RECYCLE_UNIT
-#define SPECENUM_VALUE35NAME "Recycle Unit"
-#define SPECENUM_VALUE36 ACTION_DISBAND_UNIT
-#define SPECENUM_VALUE36NAME "Disband Unit"
-#define SPECENUM_VALUE37 ACTION_HOME_CITY
-#define SPECENUM_VALUE37NAME "Home City"
-#define SPECENUM_VALUE38 ACTION_UPGRADE_UNIT
-#define SPECENUM_VALUE38NAME "Upgrade Unit"
-#define SPECENUM_VALUE39 ACTION_PARADROP
-#define SPECENUM_VALUE39NAME "Paradrop Unit"
-#define SPECENUM_VALUE40 ACTION_AIRLIFT
-#define SPECENUM_VALUE40NAME "Airlift Unit"
-#define SPECENUM_VALUE41 ACTION_ATTACK
-#define SPECENUM_VALUE41NAME "Attack"
-#define SPECENUM_VALUE42 ACTION_CONQUER_CITY
-#define SPECENUM_VALUE42NAME "Conquer City"
-#define SPECENUM_VALUE43 ACTION_HEAL_UNIT
-#define SPECENUM_VALUE43NAME "Heal Unit"
-#define SPECENUM_VALUE44 ACTION_TRANSFORM_TERRAIN
-#define SPECENUM_VALUE44NAME "Transform Terrain"
-#define SPECENUM_VALUE45 ACTION_IRRIGATE_TF
-#define SPECENUM_VALUE45NAME "Irrigate TF"
-#define SPECENUM_VALUE46 ACTION_MINE_TF
-#define SPECENUM_VALUE46NAME "Mine TF"
-#define SPECENUM_VALUE47 ACTION_PILLAGE
-#define SPECENUM_VALUE47NAME "Pillage"
-#define SPECENUM_VALUE48 ACTION_FORTIFY
-#define SPECENUM_VALUE48NAME "Fortify"
-#define SPECENUM_VALUE49 ACTION_ROAD
-#define SPECENUM_VALUE49NAME "Road"
-#define SPECENUM_VALUE50 ACTION_CONVERT
-#define SPECENUM_VALUE50NAME "Convert Unit"
-#define SPECENUM_VALUE51 ACTION_BASE
-#define SPECENUM_VALUE51NAME "Build Base"
-#define SPECENUM_VALUE52 ACTION_MINE
-#define SPECENUM_VALUE52NAME "Build Mine"
-#define SPECENUM_VALUE53 ACTION_IRRIGATE
-#define SPECENUM_VALUE53NAME "Build Irrigation"
+#define SPECENUM_VALUE12 ACTION_SPY_SABOTAGE_CITY_PRODUCTION
+#define SPECENUM_VALUE12NAME "Sabotage City Production"
+#define SPECENUM_VALUE13 ACTION_SPY_SABOTAGE_CITY_PRODUCTION_ESC
+#define SPECENUM_VALUE13NAME "Sabotage City Production Escape"
+#define SPECENUM_VALUE14 ACTION_SPY_STEAL_TECH
+#define SPECENUM_VALUE14NAME "Steal Tech"
+#define SPECENUM_VALUE15 ACTION_SPY_STEAL_TECH_ESC
+#define SPECENUM_VALUE15NAME "Steal Tech Escape Expected"
+#define SPECENUM_VALUE16 ACTION_SPY_TARGETED_STEAL_TECH
+#define SPECENUM_VALUE16NAME "Targeted Steal Tech"
+#define SPECENUM_VALUE17 ACTION_SPY_TARGETED_STEAL_TECH_ESC
+#define SPECENUM_VALUE17NAME "Targeted Steal Tech Escape Expected"
+#define SPECENUM_VALUE18 ACTION_SPY_INCITE_CITY
+#define SPECENUM_VALUE18NAME "Incite City"
+#define SPECENUM_VALUE19 ACTION_SPY_INCITE_CITY_ESC
+#define SPECENUM_VALUE19NAME "Incite City Escape"
+#define SPECENUM_VALUE20 ACTION_TRADE_ROUTE
+#define SPECENUM_VALUE20NAME "Establish Trade Route"
+#define SPECENUM_VALUE21 ACTION_MARKETPLACE
+#define SPECENUM_VALUE21NAME "Enter Marketplace"
+#define SPECENUM_VALUE22 ACTION_HELP_WONDER
+#define SPECENUM_VALUE22NAME "Help Wonder"
+#define SPECENUM_VALUE23 ACTION_SPY_BRIBE_UNIT
+#define SPECENUM_VALUE23NAME "Bribe Unit"
+#define SPECENUM_VALUE24 ACTION_SPY_SABOTAGE_UNIT
+#define SPECENUM_VALUE24NAME "Sabotage Unit"
+#define SPECENUM_VALUE25 ACTION_SPY_SABOTAGE_UNIT_ESC
+#define SPECENUM_VALUE25NAME "Sabotage Unit Escape"
+#define SPECENUM_VALUE26 ACTION_CAPTURE_UNITS
+#define SPECENUM_VALUE26NAME "Capture Units"
+#define SPECENUM_VALUE27 ACTION_FOUND_CITY
+#define SPECENUM_VALUE27NAME "Found City"
+#define SPECENUM_VALUE28 ACTION_JOIN_CITY
+#define SPECENUM_VALUE28NAME "Join City"
+#define SPECENUM_VALUE29 ACTION_STEAL_MAPS
+#define SPECENUM_VALUE29NAME "Steal Maps"
+#define SPECENUM_VALUE30 ACTION_STEAL_MAPS_ESC
+#define SPECENUM_VALUE30NAME "Steal Maps Escape"
+#define SPECENUM_VALUE31 ACTION_BOMBARD
+#define SPECENUM_VALUE31NAME "Bombard"
+#define SPECENUM_VALUE32 ACTION_BOMBARD2
+#define SPECENUM_VALUE32NAME "Bombard 2"
+#define SPECENUM_VALUE33 ACTION_BOMBARD3
+#define SPECENUM_VALUE33NAME "Bombard 3"
+#define SPECENUM_VALUE34 ACTION_SPY_NUKE
+#define SPECENUM_VALUE34NAME "Suitcase Nuke"
+#define SPECENUM_VALUE35 ACTION_SPY_NUKE_ESC
+#define SPECENUM_VALUE35NAME "Suitcase Nuke Escape"
+#define SPECENUM_VALUE36 ACTION_NUKE
+#define SPECENUM_VALUE36NAME "Explode Nuclear"
+#define SPECENUM_VALUE37 ACTION_NUKE_CITY
+#define SPECENUM_VALUE37NAME "Nuke City"
+#define SPECENUM_VALUE38 ACTION_NUKE_UNITS
+#define SPECENUM_VALUE38NAME "Nuke Units"
+#define SPECENUM_VALUE39 ACTION_DESTROY_CITY
+#define SPECENUM_VALUE39NAME "Destroy City"
+#define SPECENUM_VALUE40 ACTION_EXPEL_UNIT
+#define SPECENUM_VALUE40NAME "Expel Unit"
+#define SPECENUM_VALUE41 ACTION_RECYCLE_UNIT
+#define SPECENUM_VALUE41NAME "Recycle Unit"
+#define SPECENUM_VALUE42 ACTION_DISBAND_UNIT
+#define SPECENUM_VALUE42NAME "Disband Unit"
+#define SPECENUM_VALUE43 ACTION_HOME_CITY
+#define SPECENUM_VALUE43NAME "Home City"
+#define SPECENUM_VALUE44 ACTION_UPGRADE_UNIT
+#define SPECENUM_VALUE44NAME "Upgrade Unit"
+#define SPECENUM_VALUE45 ACTION_PARADROP
+#define SPECENUM_VALUE45NAME "Paradrop Unit"
+#define SPECENUM_VALUE46 ACTION_AIRLIFT
+#define SPECENUM_VALUE46NAME "Airlift Unit"
+#define SPECENUM_VALUE47 ACTION_ATTACK
+#define SPECENUM_VALUE47NAME "Attack"
+#define SPECENUM_VALUE48 ACTION_SUICIDE_ATTACK
+#define SPECENUM_VALUE48NAME "Suicide Attack"
+#define SPECENUM_VALUE49 ACTION_STRIKE_BUILDING
+#define SPECENUM_VALUE49NAME "Surgical Strike Building"
+#define SPECENUM_VALUE50 ACTION_STRIKE_PRODUCTION
+#define SPECENUM_VALUE50NAME "Surgical Strike Production"
+#define SPECENUM_VALUE51 ACTION_CONQUER_CITY
+#define SPECENUM_VALUE51NAME "Conquer City"
+#define SPECENUM_VALUE52 ACTION_CONQUER_CITY2
+#define SPECENUM_VALUE52NAME "Conquer City 2"
+#define SPECENUM_VALUE53 ACTION_HEAL_UNIT
+#define SPECENUM_VALUE53NAME "Heal Unit"
+#define SPECENUM_VALUE54 ACTION_TRANSFORM_TERRAIN
+#define SPECENUM_VALUE54NAME "Transform Terrain"
+#define SPECENUM_VALUE55 ACTION_CULTIVATE
+#define SPECENUM_VALUE55NAME "Cultivate"
+#define SPECENUM_VALUE56 ACTION_PLANT
+#define SPECENUM_VALUE56NAME "Plant"
+#define SPECENUM_VALUE57 ACTION_PILLAGE
+#define SPECENUM_VALUE57NAME "Pillage"
+#define SPECENUM_VALUE58 ACTION_FORTIFY
+#define SPECENUM_VALUE58NAME "Fortify"
+#define SPECENUM_VALUE59 ACTION_ROAD
+#define SPECENUM_VALUE59NAME "Build Road"
+#define SPECENUM_VALUE60 ACTION_CONVERT
+#define SPECENUM_VALUE60NAME "Convert Unit"
+#define SPECENUM_VALUE61 ACTION_BASE
+#define SPECENUM_VALUE61NAME "Build Base"
+#define SPECENUM_VALUE62 ACTION_MINE
+#define SPECENUM_VALUE62NAME "Build Mine"
+#define SPECENUM_VALUE63 ACTION_IRRIGATE
+#define SPECENUM_VALUE63NAME "Build Irrigation"
+#define SPECENUM_VALUE64 ACTION_TRANSPORT_DEBOARD
+#define SPECENUM_VALUE64NAME "Transport Deboard"
+#define SPECENUM_VALUE65 ACTION_TRANSPORT_UNLOAD
+#define SPECENUM_VALUE65NAME "Transport Unload"
+#define SPECENUM_VALUE66 ACTION_TRANSPORT_DISEMBARK1
+#define SPECENUM_VALUE66NAME "Transport Disembark"
+#define SPECENUM_VALUE67 ACTION_TRANSPORT_DISEMBARK2
+#define SPECENUM_VALUE67NAME "Transport Disembark 2"
+#define SPECENUM_VALUE68 ACTION_TRANSPORT_BOARD
+#define SPECENUM_VALUE68NAME "Transport Board"
+#define SPECENUM_VALUE69 ACTION_TRANSPORT_EMBARK
+#define SPECENUM_VALUE69NAME "Transport Embark"
+#define SPECENUM_VALUE70 ACTION_SPY_SPREAD_PLAGUE
+#define SPECENUM_VALUE70NAME "Spread Plague"
+#define SPECENUM_VALUE71 ACTION_SPY_ATTACK
+#define SPECENUM_VALUE71NAME "Spy Attack"
+#define SPECENUM_VALUE72 ACTION_USER_ACTION1
+#define SPECENUM_VALUE72NAME "User Action 1"
+#define SPECENUM_VALUE73 ACTION_USER_ACTION2
+#define SPECENUM_VALUE73NAME "User Action 2"
+#define SPECENUM_VALUE74 ACTION_USER_ACTION3
+#define SPECENUM_VALUE74NAME "User Action 3"
+#define SPECENUM_VALUE75 ACTION_CLEAN_POLLUTION
+#define SPECENUM_VALUE75NAME "Clean Pollution"
+#define SPECENUM_VALUE76 ACTION_CLEAN_FALLOUT
+#define SPECENUM_VALUE76NAME "Clean Fallout"
 #define SPECENUM_BITVECTOR bv_actions
-/* Limited by what values num2char() can store in unit orders in
- * savegames. */
+// ******************************************* new actions require being put in the "ugly hack" for unit_move casus belli at the end of effects.ruleset
 #define SPECENUM_COUNT ACTION_COUNT
 #include "specenum_gen.h"
 
@@ -239,6 +299,7 @@ struct action
   action_id id;
   enum action_actor_kind actor_kind;
   enum action_target_kind target_kind;
+  enum action_sub_target_kind sub_target_kind;
 
   bool hostile; /* TODO: Should this be a scale in stead? */
 
@@ -429,6 +490,10 @@ enum action_target_kind action_get_target_kind(
     const struct action *paction);
 #define action_id_get_target_kind(act_id)                                 \
   action_get_target_kind(action_by_number(act_id))
+enum action_sub_target_kind action_get_sub_target_kind(
+    const struct action *paction);
+#define action_id_get_sub_target_kind(act_id)                             \
+  action_get_sub_target_kind(action_by_number(act_id))
 
 enum action_battle_kind action_get_battle_kind(const struct action *pact);
 
@@ -497,10 +562,19 @@ const char *action_get_tool_tip(const action_id act_id,
 const char *action_ui_name_ruleset_var_name(int act);
 const char *action_ui_name_default(int act);
 
+const char *action_min_range_ruleset_var_name(int act);
+int action_min_range_default(int act);
+const char *action_max_range_ruleset_var_name(int act);
+int action_max_range_default(int act);
+
+const char *action_target_kind_ruleset_var_name(int act);
+const char *action_actor_consuming_always_ruleset_var_name(action_id act);
+
 struct action_enabler_list *
 action_enablers_for_action(action_id action);
 
 struct action_enabler *action_enabler_new(void);
+void action_enabler_close(struct action_enabler *enabler);
 struct action_enabler *
 action_enabler_copy(const struct action_enabler *original);
 void action_enabler_add(struct action_enabler *enabler);
@@ -508,7 +582,7 @@ bool action_enabler_remove(struct action_enabler *enabler);
 
 const char *
 action_enabler_obligatory_reqs_missing(struct action_enabler *enabler);
-void action_enabler_obligatory_reqs_add(struct action_enabler *enabler);
+bool action_enabler_obligatory_reqs_add(struct action_enabler *enabler);
 
 bool univs_have_action_enabler(action_id action,
                                struct universal *actor_uni,

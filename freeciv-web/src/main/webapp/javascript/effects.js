@@ -19,7 +19,7 @@
 
 var effects = {};
 
-// This file is commented out in a form that will assst in its eventual 
+// This file is commented out in a form that will assist in its eventual 
 // incorporation into FCW client features.
 
 /*
@@ -154,7 +154,24 @@ const EFT_SABOTEUR_RESISTANT = 114;
 const EFT_UNIT_SLOTS = 115;
 const EFT_ATTACK_BONUS = 116;
 const EFT_CONQUEST_TECH_PCT = 117;
-const EFT_UNIT_RECOVER_PCT = 118;
+const EFT_ACTION_SUCCESS_MOVE_COST = 118;
+const EFT_ACTION_SUCCESS_TARGET_MOVE_COST = 119;
+const EFT_UNIT_RECOVER_PCT = 120;
+const EFT_UNIT_UNHAPPY_COST = 121;
+const EFT_PEACEFUL_FIELDUNIT_BONUS = 122;
+const EFT_FORTIFY_DEFENSE_BONUS = 123;
+const EFT_UNIT_SHIELD_VALUE_PCT = 124;
+const EFT_UNIT_WORK_FRAG_BONUS = 125;
+const EFT_UNIT_WORK_PCT = 126;
+const EFT_COINAGE_BONUS_PM = 127;
+const EFT_IMPROVEMENT_SALE_PCT = 128;
+const EFT_GULAG = 129;
+const EFT_STACK_ESCAPE_PCT = 130;
+const EFT_IMPR_BUILD_COST_PM = 131;
+const EFT_ACTION_RESIST_PCT = 132;
+//___________________
+const EFT_LAST = 133;
+
 */
 
 // var initialized = FALSE;

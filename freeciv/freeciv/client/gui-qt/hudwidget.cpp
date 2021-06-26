@@ -20,7 +20,6 @@
 #include <QApplication>
 #include <QComboBox>
 #include <QDialogButtonBox>
-#include <QDir>
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QHBoxLayout>
@@ -40,7 +39,6 @@
 #include "unitlist.h"
 
 // client
-#include "audio.h"
 #include "client_main.h"
 #include "text.h"
 
@@ -55,7 +53,6 @@ extern "C" {
   bool goto_is_active(void);
 }
 static QString popup_terrain_info(struct tile *ptile);
-static void snd_finished(void);
 
 /************************************************************************//**
   Returns true if player has any unit of unit_type
@@ -139,10 +136,12 @@ void hud_message_box::set_text_title(QString s1, QString s2)
     cs1 = s1.left(i);
     cs2 = s1.right(s1.count() - i);
     mult = 2;
-    w2 = qMax(fm_text->width(cs1), fm_text->width(cs2));
-    w = qMax(w2, fm_title->width(s2));
+    w2 = qMax(fm_text->horizontalAdvance(cs1),
+              fm_text->horizontalAdvance(cs2));
+    w = qMax(w2, fm_title->horizontalAdvance(s2));
   } else {
-    w = qMax(fm_text->width(s1), fm_title->width(s2));
+    w = qMax(fm_text->horizontalAdvance(s1),
+             fm_title->horizontalAdvance(s2));
   }
   w = w + 20;
   h = mult * (fm_text->height() * 3 / 2) + 2 * fm_title->height();
@@ -215,16 +214,16 @@ void hud_message_box::paintEvent(QPaintEvent *event)
   p.fillRect(ry, QColor(palette().color(QPalette::AlternateBase)));
   p.fillRect(rfull, g);
   p.setFont(f_title);
-  p.drawText((width() - fm_title->width(title)) / 2,
+  p.drawText((width() - fm_title->horizontalAdvance(title)) / 2,
              fm_title->height() * 4 / 3, title);
   p.setFont(f_text);
   if (mult == 1) {
-    p.drawText((width() - fm_text->width(text)) / 2,
+    p.drawText((width() - fm_text->horizontalAdvance(text)) / 2,
               2 * fm_title->height() + fm_text->height() * 4 / 3, text);
   } else {
-    p.drawText((width() - fm_text->width(cs1)) / 2,
+    p.drawText((width() - fm_text->horizontalAdvance(cs1)) / 2,
               2 * fm_title->height() + fm_text->height() * 4 / 3, cs1);
-    p.drawText((width() - fm_text->width(cs2)) / 2,
+    p.drawText((width() - fm_text->horizontalAdvance(cs2)) / 2,
               2 * fm_title->height() + fm_text->height() * 8 / 3, cs2);
   }
   p.end();
@@ -281,7 +280,7 @@ void hud_text::center_me()
   QPoint p;
 
   w = width();
-  if (bound_rect.isEmpty() == false) {
+  if (!bound_rect.isEmpty()) {
     setFixedSize(bound_rect.width(), bound_rect.height());
   }
   p = QPoint((parentWidget()->width() - w) / 2,
@@ -408,10 +407,12 @@ void hud_input_box::set_text_title_definput(QString s1, QString s2,
     cs1 = s1.left(i);
     cs2 = s1.right(s1.count() - i);
     mult = 2;
-    w2 = qMax(fm_text->width(cs1), fm_text->width(cs2));
-    w = qMax(w2, fm_title->width(s2));
+    w2 = qMax(fm_text->horizontalAdvance(cs1),
+              fm_text->horizontalAdvance(cs2));
+    w = qMax(w2, fm_title->horizontalAdvance(s2));
   } else {
-    w = qMax(fm_text->width(s1), fm_title->width(s2));
+    w = qMax(fm_text->horizontalAdvance(s1),
+             fm_title->horizontalAdvance(s2));
   }
   w = w + 20;
   h = mult * (fm_text->height() * 3 / 2) + 2 * fm_title->height();
@@ -496,16 +497,16 @@ void hud_input_box::paintEvent(QPaintEvent *event)
   p.fillRect(ry, QColor(palette().color(QPalette::AlternateBase)));
   p.fillRect(rx, g);
   p.setFont(f_title);
-  p.drawText((width() - fm_title->width(title)) / 2,
+  p.drawText((width() - fm_title->horizontalAdvance(title)) / 2,
              fm_title->height() * 4 / 3, title);
   p.setFont(f_text);
   if (mult == 1) {
-    p.drawText((width() - fm_text->width(text)) / 2,
+    p.drawText((width() - fm_text->horizontalAdvance(text)) / 2,
               2 * fm_title->height() + fm_text->height() * 4 / 3, text);
   } else {
-    p.drawText((width() - fm_text->width(cs1)) / 2,
+    p.drawText((width() - fm_text->horizontalAdvance(cs1)) / 2,
               2 * fm_title->height() + fm_text->height() * 4 / 3, cs1);
-    p.drawText((width() - fm_text->width(cs2)) / 2,
+    p.drawText((width() - fm_text->horizontalAdvance(cs2)) / 2,
               2 * fm_title->height() + fm_text->height() * 8 / 3, cs2);
   }
   p.end();
@@ -651,11 +652,12 @@ void hud_units::update_actions(unit_list *punits)
                                       " +%1 units", num-1))
                                   .arg(snum.toLocal8Bit().data());
   }
+  text_label.setTextFormat(Qt::PlainText);
   text_label.setText(text_str);
   font.setPixelSize((text_label.height() * 9) / 10);
   text_label.setFont(font);
   fm = new QFontMetrics(font);
-  text_label.setFixedWidth(fm->width(text_str) + 20);
+  text_label.setFixedWidth(fm->horizontalAdvance(text_str) + 20);
   delete fm;
 
   unit_pixmap = qtg_canvas_create(tileset_unit_width(tileset),
@@ -717,11 +719,12 @@ void hud_units::update_actions(unit_list *punits)
                                  move_pt_text);
   font.setPointSize(pix.height() / 5);
   fm = new QFontMetrics(font);
-  font_width = (fm->width(move_pt_text) * 3) / 5;
+  font_width = (fm->horizontalAdvance(move_pt_text) * 3) / 5;
   delete fm;
   p.setFont(font);
-  if (fraction1.isNull() == false) {
+  if (!fraction1.isNull()) {
     int t = 2 * font.pointSize();
+
     crop = QRect(bounding_rect.right() - font_width,
                  bounding_rect.top(), t, (t / 5) * 4);
     p.drawText(crop, Qt::AlignLeft | Qt::AlignBottom, fraction1);
@@ -835,10 +838,10 @@ void hud_action::paintEvent(QPaintEvent *event)
   p.drawPixmap(rx, *action_pixmap, ry);
   p.setPen(QColor(palette().color(QPalette::Text)));
   p.drawRect(rz);
-   if (focus == true) {
-     p.setCompositionMode(QPainter::CompositionMode_DestinationOver);
-     p.fillRect(rx, QColor(palette().color(QPalette::Highlight)));
-   }
+  if (focus) {
+    p.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+    p.fillRect(rx, QColor(palette().color(QPalette::Highlight)));
+  }
   p.end();
 
 }
@@ -987,6 +990,7 @@ int unit_actions::update_actions()
 
   if (can_unit_do_activity(current_unit, ACTIVITY_MINE)) {
     struct terrain *pterrain = tile_terrain(unit_tile(current_unit));
+
     a = new hud_action(this);
     a->action_shortcut = SC_BUILDMINE;
     actions.append(a);
@@ -1007,12 +1011,13 @@ int unit_actions::update_actions()
 
   if (can_unit_do_activity(current_unit, ACTIVITY_IRRIGATE)) {
     struct terrain *pterrain = tile_terrain(unit_tile(current_unit));
+
     a = new hud_action(this);
     a->action_shortcut = SC_BUILDIRRIGATION;
     if (pterrain->irrigation_result != T_NONE
         && pterrain->irrigation_result != pterrain) {
-      if ((!strcmp(terrain_rule_name(pterrain), "Forest") ||
-           !strcmp(terrain_rule_name(pterrain), "Jungle"))) {
+      if ((!strcmp(terrain_rule_name(pterrain), "Forest")
+           || !strcmp(terrain_rule_name(pterrain), "Jungle"))) {
         a->set_pixmap(fc_icons::instance()->get_pixmap("chopchop"));
       } else {
         a->set_pixmap(fc_icons::instance()->get_pixmap("transform"));
@@ -1636,7 +1641,7 @@ QString popup_terrain_info(struct tile *ptile)
     }
   } extra_type_by_cause_iterate_end;
 
-  if (has_road == true) {
+  if (has_road) {
     ret = ret + QString(_("Movement cost: %1")).arg(move_text);
   } else {
     ret = ret + QString(_("Movement cost: %1")).arg(movement_cost);
@@ -1656,8 +1661,8 @@ void show_new_turn_info()
   struct research *research;
   int i;
 
-  if (client_has_player() == false
-      || gui()->qt_settings.show_new_turn_text == false) {
+  if (!client_has_player()
+      || !gui()->qt_settings.show_new_turn_text) {
     return;
   }
   close_list = gui()->mapview_wdg->findChildren<hud_text *>();
@@ -1735,7 +1740,7 @@ void hud_unit_combat::init_images(bool redraw)
                                       tileset_unit_height(tileset));
   defender_pixmap->map_pixmap.fill(Qt::transparent);
   if (defender != nullptr) {
-    if (redraw == false) {
+    if (!redraw) {
       put_unit(defender, defender_pixmap,  1.0, 0, 0);
     } else {
       put_unittype(type_defender, defender_pixmap, 1.0,  0, 0);
@@ -1759,7 +1764,7 @@ void hud_unit_combat::init_images(bool redraw)
                                       tileset_unit_height(tileset));
   attacker_pixmap->map_pixmap.fill(Qt::transparent);
   if (attacker != nullptr) {
-    if (redraw == false) {
+    if (!redraw) {
       put_unit(attacker, attacker_pixmap, 1,  0, 0);
     } else {
       put_unittype(type_attacker, attacker_pixmap, 1,  0, 0);
@@ -1855,7 +1860,7 @@ void hud_unit_combat::paintEvent(QPaintEvent *event)
   if (fading < 1.0) {
     p.setOpacity(fading);
   }
-  if (focus == true) {
+  if (focus) {
     p.fillRect(left, QColor(palette().color(QPalette::Highlight)));
     p.fillRect(right, QColor(palette().color(QPalette::Highlight)));
     c1.setAlpha(110);
@@ -2081,7 +2086,7 @@ void hud_battle_log::timerEvent(QTimerEvent *event)
 
   if (m_timer.elapsed() > 4000 && m_timer.elapsed() < 5000) {
     foreach (hudc, lhuc) {
-      if (hudc->get_focus() == true) {
+      if (hudc->get_focus()) {
         m_timer.restart();
         foreach (hupdate, lhuc) {
           hupdate->set_fading(1.0);
@@ -2110,108 +2115,3 @@ void hud_battle_log::showEvent(QShowEvent *event)
   setVisible(true);
 }
 
-/****************************************************************************
-  Constructor for widget showing picture with text and sound
-****************************************************************************/
-hud_img::hud_img(QPixmap *pix, QString snd, QString txt, bool fullsize,
-         QWidget *parent) : QWidget(parent)
-{
-  setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
-
-  text = txt;
-  pixmap = pix;
-  full_size = fullsize;
-  sound = snd;
-  f_text = *fc_font::instance()->get_font(fonts::default_font);
-  f_text.setBold(true);
-  f_text.setItalic(true);
-  f_text.setPointSize(20);
-}
-
-/****************************************************************************
-  Sets size of hud_img and shows it
-****************************************************************************/
-void hud_img::init()
-{
-  int width, height;
-  int move_x, move_y;
-
-  if (full_size) {
-    width = gui()->mapview_wdg->width();
-    height = gui()->mapview_wdg->height();
-  } else {
-    width = pixmap->width();
-    height = pixmap->height();
-  }
-  setFixedHeight(height);
-  setFixedWidth(width);
-
-  move_x = (gui()->mapview_wdg->width() - width) / 2;
-  move_y = (gui()->mapview_wdg->height() - height) / 2;
-  move(move_x, move_y);
-  audio_stop();
-  snd_playing = audio_play_from_path(sound.toLocal8Bit().data(),
-                                     snd_finished);
-  show();
-}
-
-/****************************************************************************
-  Destructor for hud)img
-****************************************************************************/
-hud_img::~hud_img()
-{
-  delete pixmap;
-}
-
-/****************************************************************************
-  Paint event for hud_img
-****************************************************************************/
-void hud_img::paintEvent(QPaintEvent *event)
-{
-  QPainter p;
-  QRect rf;
-  QPen pen;
-  pen.setStyle(Qt::SolidLine);
-  pen.setWidthF(4);
-  pen.setBrush(Qt::white);
-  pen.setCapStyle(Qt::RoundCap);
-  pen.setJoinStyle(Qt::RoundJoin);
-
-  rf = QRect(0 , height() / 3, width(), height());
-
-  p.begin(this);
-  p.setFont(f_text);
-  p.setPen(pen);
-  p.drawPixmap(this->rect(), *pixmap);
-  p.drawText(rf, Qt::AlignCenter, text, &bound_rect);
-  p.end();
-  event->accept();
-}
-
-/****************************************************************************
-  Mouse event for hud_img
-****************************************************************************/
-void hud_img::mousePressEvent(QMouseEvent *event)
-{
-  if (event->button() == Qt::LeftButton
-      || event->button() == Qt::RightButton) {
-    if (snd_playing) {
-      audio_stop();
-    }
-    close();
-  }
-}
-
-/****************************************************************************
-  Callback for finished audio playing in hud_img
-****************************************************************************/
-void snd_finished()
-{
-  QList<hud_img *> h;
-
-  h = gui()->mapview_wdg->findChildren<hud_img *>();
-
-  for (int i = 0; i < h.size(); ++i) {
-    h.at(i)->snd_playing = false;
-  }
-}

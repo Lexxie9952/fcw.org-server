@@ -24,7 +24,7 @@ extern "C" {
  * structure below. When changing mandatory capability part, check that
  * there's enough reserved_xx pointers in the end of the structure for
  * taking to use without need to bump mandatory capability again. */
-#define FC_AI_MOD_CAPSTR "+Freeciv-3.1-ai-module-2018.Feb.06"
+#define FC_AI_MOD_CAPSTR "+Freeciv-3.1-ai-module-2019.Feb.16"
 
 /* Timers for all AI activities. Define it to get statistics about the AI. */
 #ifdef FREECIV_DEBUG
@@ -201,7 +201,7 @@ struct ai_type
     void (*unit_got)(struct unit *punit);
 
     /* Called for player AI type when unit changes type. */
-    void (*unit_transformed)(struct unit *punit, struct unit_type *old_type);
+    void (*unit_transformed)(struct unit *punit, const struct unit_type *old_type);
 
     /* Called for player AI type when player loses control of unit. */
     void (*unit_lost)(struct unit *punit);
@@ -303,6 +303,18 @@ struct ai_type
 
     /* Called for every AI type when tile has changed */
     void (*tile_info)(struct tile *ptile);
+
+    /* Called for every AI type when certain kind of city change has taken place.
+     * Currently this gets called when:
+     *  - city changes owner.
+     */
+    void (*city_info)(struct city *pcity);
+
+    /* Called for every AI type when certain kind of unit change has taken place.
+     * Currently this gets called when:
+     *  - unit updates & conversions
+     */
+    void (*unit_info)(struct unit *punit);
 
     /* These are here reserving space for future optional callbacks.
      * This way we don't need to change the mandatory capability of the AI module

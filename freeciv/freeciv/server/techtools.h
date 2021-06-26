@@ -28,6 +28,8 @@ void send_research_info(const struct research *presearch,
 void script_tech_learned(struct research *presearch,
                          struct player *originating_plr, struct advance *tech,
                          const char *reason);
+
+int found_new_blueprint(struct research *presearch, Tech_type_id tech_found, int blueprint_discount);
 void found_new_tech(struct research *presearch, Tech_type_id tech_found,
                     bool was_discovery, bool saving_bulbs);
 void update_bulbs(struct player *pplayer, int bulbs, bool check_tech);

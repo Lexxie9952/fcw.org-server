@@ -37,7 +37,6 @@
 #include "cma_fec.h"
 #include "colors.h"
 #include "graphics.h"
-#include "gui_iconv.h"
 #include "gui_id.h"
 #include "gui_main.h"
 #include "gui_tilespec.h"
@@ -81,7 +80,7 @@ static int cma_dlg_callback(struct widget *pWindow)
 **************************************************************************/
 static int exit_cma_dialog_callback(struct widget *pWidget)
 {
-  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+  if (PRESSED_EVENT(Main.event)) {
     popdown_city_cma_dialog();
     flush_dirty();
   }
@@ -154,7 +153,7 @@ static Uint16 scroll_mouse_motion_handler(SDL_MouseMotionEvent *pMotionEvent,
 **************************************************************************/
 static int min_horiz_cma_callback(struct widget *pWidget)
 {
-  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+  if (PRESSED_EVENT(Main.event)) {
     struct hmove pMotion;
 
     pMotion.pScrollBar = pWidget;
@@ -166,7 +165,7 @@ static int min_horiz_cma_callback(struct widget *pWidget)
     MOVE_STEP_Y = 0;
     /* Filter mouse motion events */
     SDL_SetEventFilter(FilterMouseMotionEvents, NULL);
-    gui_event_loop((void *)(&pMotion), NULL, NULL, NULL, NULL, NULL,
+    gui_event_loop((void *)(&pMotion), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
                    scroll_mouse_button_up, scroll_mouse_motion_handler);
     /* Turn off Filter mouse motion events */
     SDL_SetEventFilter(NULL, NULL);
@@ -193,7 +192,7 @@ static int min_horiz_cma_callback(struct widget *pWidget)
 **************************************************************************/
 static int factor_horiz_cma_callback(struct widget *pWidget)
 {
-  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+  if (PRESSED_EVENT(Main.event)) {
     struct hmove pMotion;
 
     pMotion.pScrollBar = pWidget;
@@ -205,7 +204,7 @@ static int factor_horiz_cma_callback(struct widget *pWidget)
     MOVE_STEP_Y = 0;
     /* Filter mouse motion events */
     SDL_SetEventFilter(FilterMouseMotionEvents, NULL);
-    gui_event_loop((void *)(&pMotion), NULL, NULL, NULL, NULL, NULL,
+    gui_event_loop((void *)(&pMotion), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
                    scroll_mouse_button_up, scroll_mouse_motion_handler);
     /* Turn off Filter mouse motion events */
     SDL_SetEventFilter(NULL, NULL);
@@ -232,7 +231,7 @@ static int factor_horiz_cma_callback(struct widget *pWidget)
 **************************************************************************/
 static int toggle_cma_celebrating_callback(struct widget *pWidget)
 {
-  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+  if (PRESSED_EVENT(Main.event)) {
     pCma->edited_cm_parm.require_happy ^= TRUE;
     /* save the change */
     cmafec_set_fe_parameter(pCma->pCity, &pCma->edited_cm_parm);
@@ -257,7 +256,7 @@ static int save_cma_window_callback(struct widget *pWindow)
 **************************************************************************/
 static int ok_save_cma_callback(struct widget *pWidget)
 {
-  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+  if (PRESSED_EVENT(Main.event)) {
     if (pWidget && pCma && pCma->pAdv) {
       struct widget *pEdit = (struct widget *)pWidget->data.ptr;
 
@@ -283,7 +282,7 @@ static int ok_save_cma_callback(struct widget *pWidget)
 **************************************************************************/
 static int cancel_SLD_cma_callback(struct widget *pWidget)
 {
-  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+  if (PRESSED_EVENT(Main.event)) {
     if (pCma && pCma->pAdv) {
       popdown_window_group_dialog(pCma->pAdv->pBeginWidgetList,
                                   pCma->pAdv->pEndWidgetList);
@@ -301,7 +300,7 @@ static int cancel_SLD_cma_callback(struct widget *pWidget)
 **************************************************************************/
 static int save_cma_callback(struct widget *pWidget)
 {
-  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+  if (PRESSED_EVENT(Main.event)) {
     struct widget *pBuf, *pWindow;
     utf8_str *pstr;
     SDL_Surface *pText;
@@ -431,7 +430,7 @@ static int save_cma_callback(struct widget *pWidget)
 **************************************************************************/
 static int LD_cma_callback(struct widget *pWidget)
 {
-  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+  if (PRESSED_EVENT(Main.event)) {
     bool load = pWidget->data.ptr != NULL;
     int index = MAX_ID - pWidget->ID;
 
@@ -606,7 +605,7 @@ static void popup_load_del_presets_dialog(bool load, struct widget *pButton)
 **************************************************************************/
 static int load_cma_callback(struct widget *pWidget)
 {
-  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+  if (PRESSED_EVENT(Main.event)) {
     popup_load_del_presets_dialog(TRUE, pWidget);
   }
 
@@ -618,7 +617,7 @@ static int load_cma_callback(struct widget *pWidget)
 **************************************************************************/
 static int del_cma_callback(struct widget *pWidget)
 {
-  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+  if (PRESSED_EVENT(Main.event)) {
     popup_load_del_presets_dialog(FALSE, pWidget);
   }
 
@@ -633,7 +632,7 @@ static int del_cma_callback(struct widget *pWidget)
 **************************************************************************/
 static int run_cma_callback(struct widget *pWidget)
 {
-  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+  if (PRESSED_EVENT(Main.event)) {
     cma_put_city_under_agent(pCma->pCity, &pCma->edited_cm_parm);
     update_city_cma_dialog();
   }
@@ -646,7 +645,7 @@ static int run_cma_callback(struct widget *pWidget)
 **************************************************************************/
 static int run_cma_once_callback(struct widget *pWidget)
 {
-  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+  if (PRESSED_EVENT(Main.event)) {
     struct cm_result *result;
 
     update_city_cma_dialog();
@@ -665,7 +664,7 @@ static int run_cma_once_callback(struct widget *pWidget)
 **************************************************************************/
 static int stop_cma_callback(struct widget *pWidget)
 {
-  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+  if (PRESSED_EVENT(Main.event)) {
     cma_release_city(pCma->pCity);
     update_city_cma_dialog();
   }

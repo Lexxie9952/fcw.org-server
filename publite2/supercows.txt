@@ -1,14 +1,33 @@
-# This is a list of gamemasters/administrators that can observe longturn games and post anonymous messages (that look like they're coming
-# from the server). Always keep this list in the format of Nickname:Game port, see the below commented out example. The capitalisation 
-# of the nicknames doesn't matter. The lines can't have anything else except for the nickname, colon and the port,
-# otherwise you could cause serious issues, though any spaces will get removed and don't matter. 
-# Do NOT for some reason put 1000 characters on one line in this file or you will make everyone admin.
-# In order to post anonymously in-game, prefix your message with "(server)", so for example "(server) The game is over!"
-# Any leading or trailing spaces will be removed from that message automatically. Make sure not to add : after (server)
+# This is a list of Gamemasters for Longturn games.
 #
-#Rhue:6003
-Lexxie:6070
-Lexxie:6061
-Lexxie:6003
-FuzzyDunlop:6061
-Ericred:6003
+# Updated 26 May 2021.
+#
+# *************************************************************************************************
+# WARNING **** THIS FILE CRASHES SUPER EASILY **** REVIEW CHECKLIST BEFORE MAKING ANY MODIFICATIONS
+# *************************************************************************************************
+# 1. Lines are either commented with # or...
+# 2. ...ALWAYS have the format of Nickname:Game_port. Capitalisation of the names doesn't matter.
+# 3. Uncommented lines CAN'T HAVE ANYTHING ELSE! NO EXCEPTIONS! 
+# 4. NO SPACE AFTER THE COLONS!
+# 5. Always put ONE linefeed at the end of last Gameport:Name line, so there is a blank line with
+#    nothing on it as the last line of the file. Otherwise, CRASHY CRASHY! 
+# 6. The server will crash if this file contains a line with just some spaces.
+# *************************************************************************************************
+#
+# In order to post anonymously in-game, prefix your message with "/wall". For example: 
+# /wall The game is over!
+#  
+# **************************************************************************************************
+lexxie:6000
+lexxie:6001
+lexxie:6002
+lexxie:6003
+lexxie:6004
+lexxie:6005
+lexxie:6006
+lexxie:6007
+lexxie:6008
+lexxie:6009
+lexxie:6010
+lexxie:6011
+lexxie:6012

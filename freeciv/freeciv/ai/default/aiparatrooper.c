@@ -46,12 +46,12 @@
 #include "handicaps.h"
 
 /* ai/default */
-#include "aicity.h"
 #include "aidata.h"
 #include "ailog.h"
 #include "aiplayer.h"
 #include "aiunit.h"
 #include "aitools.h"
+#include "daicity.h"
 
 #include "aiparatrooper.h"
 
@@ -100,8 +100,8 @@ static struct tile *find_best_tile_to_paradrop_to(struct ai_type *ait,
   /* Second, we search for undefended enemy cities */
   square_iterate(&(wld.map), unit_tile(punit), range, ptile) {
     acity = tile_city(ptile);
-    if (acity && pplayers_at_war(unit_owner(punit), city_owner(acity)) &&
-        (unit_list_size(ptile->units) == 0)) {
+    if (acity && pplayers_at_war(unit_owner(punit), city_owner(acity))
+        && (unit_list_size(ptile->units) == 0)) {
       if (!map_is_known_and_seen(ptile, pplayer, V_MAIN)
           && has_handicap(pplayer, H_FOG)) {
         continue;
@@ -220,8 +220,7 @@ void dai_manage_paratrooper(struct ai_type *ait, struct player *pplayer,
 
     if (ptile_dest) {
       if (unit_perform_action(unit_owner(punit),
-                              punit->id, tile_index(ptile_dest),
-                              EXTRA_NONE, 0, "",
+                              punit->id, tile_index(ptile_dest), 0, "",
                               ACTION_PARADROP, ACT_REQ_PLAYER)) {
 	/* successfull! */
         if (NULL == game_unit_by_number(sanity)) {
@@ -268,7 +267,7 @@ void dai_manage_paratrooper(struct ai_type *ait, struct player *pplayer,
 static int calculate_want_for_paratrooper(struct unit *punit,
 				          struct tile *ptile_city)
 {
-  struct unit_type* u_type = unit_type_get(punit);
+  const struct unit_type* u_type = unit_type_get(punit);
   int range = u_type->paratroopers_range;
   int profit = 0;
   struct player* pplayer = unit_owner(punit);
@@ -368,7 +367,7 @@ void dai_choose_paratrooper(struct ai_type *ait,
     }
 
     /* Temporary hack because pathfinding can't handle Fighters. */
-    if (!uclass_has_flag(utype_class(u_type), UCF_MISSILE)
+    if (!utype_can_do_action(u_type, ACTION_SUICIDE_ATTACK)
         && 1 == utype_fuel(u_type)) {
       continue;
     }
@@ -392,8 +391,9 @@ void dai_choose_paratrooper(struct ai_type *ait,
     }
 
     /* it's worth building that unit? */
-    virtual_unit = unit_virtual_create(pplayer, pcity, u_type,
-                                       do_make_unit_veteran(pcity, u_type));
+    virtual_unit = unit_virtual_create(
+      pplayer, pcity, u_type,
+      city_production_unit_veteran_level(pcity, u_type));
     profit = calculate_want_for_paratrooper(virtual_unit, pcity->tile);
     unit_virtual_destroy(virtual_unit);
 

@@ -18,6 +18,11 @@ Differences compared to the classic ruleset are:
 - Spies belonging to the owner of the Manhattan Project can nuke cities.
   - a higher veteran level gives a higher chance of success.
   - agents and spymasters may even escape before the nuke detonates.
+  - doing this to someone you aren't at war with causes international
+    outrage: everyone, not just the victim, gets a Casus Belli against you.
+- Spies can sabotage and poison units and cities you aren't at war with.
+  - doing this to someone you aren't at war with causes international
+    outrage: everyone, not just the victim, gets a Casus Belli against you.
 - Explorers can establish embassies once Writing is discovered.
   This action consumes the explorer.
 - Cities can be founded within enemy borders during war and
@@ -36,6 +41,8 @@ Differences compared to the classic ruleset are:
   and some of his knowledge. Not all his cities will follow you. Some will
   rather turn barbarian.
 - The Leader can heal light weight units belonging to you or to your allies.
+- The Leader can destroy visible buildings in enemy cities, like city walls.
+  This has a 50% chance of success and ends the leader's turn.
 - The Leader can move on shallow water without being transported by becoming
   a "Leader Yacht". Conversion back and forth can be done inside a city once
   Map Making has been discovered.
@@ -73,3 +80,6 @@ Differences compared to the classic ruleset are:
   - J.S. Bach's Cathedral makes two unhappy citizens content in allied
     cities too.
   - A. Smith's Trading Co. pays for your allies' 1 upkeep buildings too.
+- Some units can disrupt the supply lines of enemy units. This removes 1 MP
+  from the target unit at the cost of one move fragment for the unit doing
+  the disrupting.

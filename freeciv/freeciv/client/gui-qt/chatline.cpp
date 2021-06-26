@@ -69,9 +69,9 @@ void chat_listener::update_word_list()
     }
   } conn_list_iterate_end;
 
-  players_iterate (pplayer){
+  players_iterate(pplayer) {
     str = pplayer->name;
-    if (!word_list.contains(str)){
+    if (!word_list.contains(str)) {
       word_list << str;
     }
   } players_iterate_end
@@ -327,11 +327,10 @@ void chatwdg::state_changed(int state)
 ***************************************************************************/
 void chatwdg::toggle_size()
 {
-  if (gui()->infotab->chat_maximized == true) {
+  if (gui()->infotab->chat_maximized) {
     gui()->infotab->restore_chat();
     return;
-  }
-  if (gui()->infotab->chat_maximized == false) {
+  } else {
     gui()->infotab->maximize_chat();
     chat_line->setFocus();
   }

@@ -111,7 +111,7 @@ enum { OVERVIEW_PAGE, MAP_PAGE, BUILDINGS_PAGE, WORKLIST_PAGE,
 };
 
 #define NUM_CITIZENS_SHOWN 30
-#define NUM_INFO_FIELDS 13      /* number of fields in city_info */
+#define NUM_INFO_FIELDS 14      /* number of fields in city_info */
 #define NUM_PAGES 6             /* the number of pages in city dialog notebook 
                                  * (+1) if you change this, you must add an
                                  * entry to misc_whichtab_label[] */
@@ -243,7 +243,7 @@ static struct city_dialog *create_city_dialog(struct city *pcity);
 static void city_dialog_update_title(struct city_dialog *pdialog);
 static void city_dialog_update_citizens(struct city_dialog *pdialog);
 static void city_dialog_update_information(GtkWidget **info_ebox,
-					   GtkWidget **info_label,
+                                           GtkWidget **info_label,
                                            struct city_dialog *pdialog);
 static void city_dialog_update_map(struct city_dialog *pdialog);
 static void city_dialog_update_building(struct city_dialog *pdialog);
@@ -490,7 +490,7 @@ void real_city_dialog_refresh(struct city *pcity)
   city_dialog_update_title(pdialog);
   city_dialog_update_citizens(pdialog);
   city_dialog_update_information(pdialog->overview.info_ebox,
-				 pdialog->overview.info_label, pdialog);
+                                 pdialog->overview.info_label, pdialog);
   city_dialog_update_map(pdialog);
   city_dialog_update_building(pdialog);
   city_dialog_update_improvement_list(pdialog);
@@ -516,8 +516,8 @@ void real_city_dialog_refresh(struct city *pcity)
     }
 
     gtk_widget_set_sensitive(pdialog->show_units_command,
-			     can_client_issue_orders() &&
-			     have_present_units);
+                             can_client_issue_orders()
+                             && have_present_units);
   } else {
     /* Set the buttons we do not want live while a Diplomat investigates */
     gtk_widget_set_sensitive(pdialog->show_units_command, FALSE);
@@ -649,7 +649,7 @@ enum { FIELD_FOOD, FIELD_SHIELD, FIELD_TRADE, FIELD_GOLD, FIELD_LUXURY,
   Popup info dialog
 **************************************************************************/
 static gboolean show_info_popup(GtkWidget *w, GdkEventButton *ev,
-    				gpointer data)
+                                gpointer data)
 {
   struct city_dialog *pdialog = g_object_get_data(G_OBJECT(w), "pdialog");
 
@@ -702,7 +702,7 @@ static gboolean show_info_popup(GtkWidget *w, GdkEventButton *ev,
     gtk_container_add(GTK_CONTAINER(p), frame);
 
     label = gtk_label_new(buf);
-    gtk_widget_set_name(label, "city_info_label");
+    gtk_widget_set_name(label, "city_label");
     gtk_widget_set_margin_start(label, 4);
     gtk_widget_set_margin_end(label, 4);
     gtk_widget_set_margin_top(label, 4);
@@ -726,7 +726,7 @@ static gboolean show_info_popup(GtkWidget *w, GdkEventButton *ev,
   **info_label points to the info_label in the respective struct
 **************************************************************************/
 static GtkWidget *create_city_info_table(struct city_dialog *pdialog,
-    					 GtkWidget **info_ebox,
+                                         GtkWidget **info_ebox,
                                          GtkWidget **info_label)
 {
   int i;
@@ -744,7 +744,8 @@ static GtkWidget *create_city_info_table(struct city_dialog *pdialog,
     N_("Waste:"),
     N_("Culture:"),
     N_("Pollution:"),
-    N_("Plague Risk:")
+    N_("Plague risk:"),
+    N_("Tech Stolen:")
   };
   static bool output_label_done;
 
@@ -805,6 +806,43 @@ static GtkWidget *create_city_info_table(struct city_dialog *pdialog,
     gtk_container_add(GTK_CONTAINER(ebox), label);
 
     gtk_grid_attach(GTK_GRID(table), ebox, 1, i, 1, 1);
+  }
+
+  /*
+   * Allow special highlighting of emergencies for granary etc by
+   * city_dialog_update_information().
+   */
+  {
+    /* This will persist, and can be shared between overview and happiness
+     * pages. */
+    static GtkCssProvider *emergency_provider = NULL;
+
+    if (emergency_provider == NULL) {
+      emergency_provider = gtk_css_provider_new();
+
+      gtk_css_provider_load_from_data(emergency_provider,
+                                      ".emergency {\n"
+                                      "  color: rgba(255, 0.0, 0.0, 255);\n"
+                                      "}",
+                                      -1, NULL);
+    }
+
+    /* GRANARY */
+    gtk_style_context_add_provider(gtk_widget_get_style_context(info_label[6]),
+                                   GTK_STYLE_PROVIDER(emergency_provider),
+                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    /* GROWTH */
+    gtk_style_context_add_provider(gtk_widget_get_style_context(info_label[7]),
+                                   GTK_STYLE_PROVIDER(emergency_provider),
+                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    /* POLLUTION */
+    gtk_style_context_add_provider(gtk_widget_get_style_context(info_label[11]),
+                                   GTK_STYLE_PROVIDER(emergency_provider),
+                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    /* ILLNESS */
+    gtk_style_context_add_provider(gtk_widget_get_style_context(info_label[12]),
+                                   GTK_STYLE_PROVIDER(emergency_provider),
+                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   }
 
   gtk_widget_show_all(table);
@@ -1356,7 +1394,8 @@ static void create_and_append_settings_page(struct city_dialog *pdialog)
     N_("Gold")
   };
 
-  static const char *disband_label = N_("Disband if build settler at size 1");
+  static const char *disband_label
+    = N_("Allow unit production to disband city");
 
   static const char *misc_whichtab_label[NUM_PAGES] = {
     N_("Overview page"),
@@ -1449,7 +1488,7 @@ static void create_and_append_settings_page(struct city_dialog *pdialog)
 
   gtk_widget_set_sensitive(button, can_client_issue_orders());
   
-  /* the disband-if-size-1 button */
+  /* the disband-city-on-unit-production button */
   button = gtk_check_button_new_with_mnemonic(_(disband_label));
   pdialog->misc.disband_on_settler = button;
   gtk_container_add(GTK_CONTAINER(vbox2), button);
@@ -1628,7 +1667,7 @@ static struct city_dialog *create_city_dialog(struct city *pcity)
   }
 
   close_command = gtk_dialog_add_button(GTK_DIALOG(pdialog->shell),
-                                        _("Close"), GTK_RESPONSE_CLOSE);
+                                        _("_Close"), GTK_RESPONSE_CLOSE);
 
   gtk_dialog_set_default_response(GTK_DIALOG(pdialog->shell),
 	GTK_RESPONSE_CLOSE);
@@ -1739,6 +1778,9 @@ static void city_dialog_update_citizens(struct city_dialog *pdialog)
     cairo_rectangle(cr, i * width, 0, width, citizen_bar_height);
     cairo_fill(cr);
   }
+  cairo_rectangle(cr, i * width, 0, width * (NUM_CITIZENS_SHOWN - i), citizen_bar_height);
+  cairo_set_operator(cr, CAIRO_OPERATOR_CLEAR);
+  cairo_fill(cr);
 
   cairo_destroy(cr);
 
@@ -1749,18 +1791,17 @@ static void city_dialog_update_citizens(struct city_dialog *pdialog)
   Update textual info fields in city dialog
 **************************************************************************/
 static void city_dialog_update_information(GtkWidget **info_ebox,
-					   GtkWidget **info_label,
+                                           GtkWidget **info_label,
                                            struct city_dialog *pdialog)
 {
   int i, illness = 0;
   char buf[NUM_INFO_FIELDS][512];
   struct city *pcity = pdialog->pcity;
   int granaryturns;
-  static GtkCssProvider *emergency_provider = NULL;
 
   enum { FOOD, SHIELD, TRADE, GOLD, LUXURY, SCIENCE,
          GRANARY, GROWTH, CORRUPTION, WASTE, CULTURE,
-         POLLUTION, ILLNESS
+         POLLUTION, ILLNESS, STEAL
   };
 
   /* fill the buffers with the necessary info */
@@ -1809,8 +1850,13 @@ static void city_dialog_update_information(GtkWidget **info_ebox,
   } else {
     illness = city_illness_calc(pcity, NULL, NULL, NULL, NULL);
     /* illness is in tenth of percent */
-    fc_snprintf(buf[ILLNESS], sizeof(buf[ILLNESS]), "%4.1f",
+    fc_snprintf(buf[ILLNESS], sizeof(buf[ILLNESS]), "%4.1f%%",
                 (float)illness / 10.0);
+  }
+  if (pcity->steal) {
+    fc_snprintf(buf[STEAL], sizeof(buf[STEAL]), _("%d times"), pcity->steal);
+  } else {
+    fc_snprintf(buf[STEAL], sizeof(buf[STEAL]), _("Not stolen"));
   }
 
   /* stick 'em in the labels */
@@ -1819,31 +1865,11 @@ static void city_dialog_update_information(GtkWidget **info_ebox,
   }
 
   /*
-   * Special style stuff for granary, growth and pollution below. The
-   * "4" below is arbitrary. 3 turns should be enough of a warning.
+   * Make use of the emergency-indicating styles set up for certain labels
+   * in create_city_info_table().
    */
-
-  if (emergency_provider == NULL) {
-    emergency_provider = gtk_css_provider_new();
-
-    gtk_css_provider_load_from_data(emergency_provider,
-                                    ".emergency {\n color: rgba(255, 0.0, 0.0, 255);\n}",
-                                    -1, NULL);
-
-    gtk_style_context_add_provider(gtk_widget_get_style_context(info_label[GRANARY]),
-                                   GTK_STYLE_PROVIDER(emergency_provider),
-                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    gtk_style_context_add_provider(gtk_widget_get_style_context(info_label[GROWTH]),
-                                   GTK_STYLE_PROVIDER(emergency_provider),
-                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    gtk_style_context_add_provider(gtk_widget_get_style_context(info_label[POLLUTION]),
-                                   GTK_STYLE_PROVIDER(emergency_provider),
-                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    gtk_style_context_add_provider(gtk_widget_get_style_context(info_label[ILLNESS]),
-                                   GTK_STYLE_PROVIDER(emergency_provider),
-                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-  }
-
+  /* For starvation, the "4" below is arbitrary. 3 turns should be enough
+   * of a warning. */
   if (granaryturns > -4 && granaryturns < 0) {
     gtk_style_context_add_class(gtk_widget_get_style_context(info_label[GRANARY]), "emergency");
   } else {
@@ -1863,7 +1889,7 @@ static void city_dialog_update_information(GtkWidget **info_ebox,
     gtk_style_context_remove_class(gtk_widget_get_style_context(info_label[POLLUTION]), "emergency");
   }
 
-  /* illness is in tenth of percent, i.e 100 != 10.0% */
+  /* illness is in tenth of percent, i.e 100 == 10.0% */
   if (illness >= 100) {
     gtk_style_context_add_class(gtk_widget_get_style_context(info_label[ILLNESS]), "emergency");
   } else {
@@ -2901,7 +2927,7 @@ static void popup_workertask_dlg(struct city *pcity, struct tile *ptile)
     if ((pterr->mining_result == pterr
          && univs_have_action_enabler(ACTION_MINE, NULL, &for_terr))
         || (pterr->mining_result != pterr && pterr->mining_result != NULL
-            && univs_have_action_enabler(ACTION_MINE_TF, NULL, &for_terr))) {
+            && univs_have_action_enabler(ACTION_PLANT, NULL, &for_terr))) {
       choice_dialog_add(shl, _("Mine"),
                         G_CALLBACK(set_city_workertask),
                         GINT_TO_POINTER(ACTIVITY_MINE), FALSE, NULL);
@@ -2909,7 +2935,7 @@ static void popup_workertask_dlg(struct city *pcity, struct tile *ptile)
     if ((pterr->irrigation_result == pterr
          && univs_have_action_enabler(ACTION_IRRIGATE, NULL, &for_terr))
         || (pterr->irrigation_result != pterr && pterr->irrigation_result != NULL
-            && univs_have_action_enabler(ACTION_IRRIGATE_TF, NULL, &for_terr))) {
+            && univs_have_action_enabler(ACTION_CULTIVATE, NULL, &for_terr))) {
       choice_dialog_add(shl, _("Irrigate"),
                         G_CALLBACK(set_city_workertask),
                         GINT_TO_POINTER(ACTIVITY_IRRIGATE), FALSE, NULL);
@@ -2938,7 +2964,7 @@ static void popup_workertask_dlg(struct city *pcity, struct tile *ptile)
                         GINT_TO_POINTER(ACTIVITY_FALLOUT), FALSE, NULL);
     }
 
-    choice_dialog_add(shl, _("Cancel"), 0, 0, FALSE, NULL);
+    choice_dialog_add(shl, _("_Cancel"), 0, 0, FALSE, NULL);
     choice_dialog_end(shl);
 
     g_signal_connect(shl, "destroy", G_CALLBACK(workertask_dlg_destroy),
@@ -3219,7 +3245,7 @@ static void cityopt_callback(GtkWidget * w, gpointer data)
     return;
   }
 
-  if (!pdialog->misc.block_signal){
+  if (!pdialog->misc.block_signal) {
     struct city *pcity = pdialog->pcity;
     bv_city_options new_options;
 

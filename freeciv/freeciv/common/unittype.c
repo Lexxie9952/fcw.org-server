@@ -37,6 +37,7 @@
 #include "research.h"
 #include "unitlist.h"
 
+/* server */
 #include "unittype.h"
 
 #define MAX_UNIT_ROLES L_LAST + ACTION_COUNT
@@ -120,7 +121,7 @@ struct unit_type *utype_by_number(const Unit_type_id id)
 /**********************************************************************//**
   Return the unit type for this unit.
 **************************************************************************/
-struct unit_type *unit_type_get(const struct unit *punit)
+const struct unit_type *unit_type_get(const struct unit *punit)
 {
   fc_assert_ret_val(NULL != punit, NULL);
   return punit->utype;
@@ -224,7 +225,8 @@ bool utype_can_take_over(const struct unit_type *punittype)
 {
   /* FIXME: "Paradrop Unit" can in certain circumstances result in city
    * conquest. */
-  return utype_can_do_action(punittype, ACTION_CONQUER_CITY);
+  return (utype_can_do_action(punittype, ACTION_CONQUER_CITY)
+          || utype_can_do_action(punittype, ACTION_CONQUER_CITY2));
 }
 
 /**********************************************************************//**
@@ -731,7 +733,7 @@ bool can_utype_do_act_if_tgt_diplrel(const struct unit_type *punit_type,
   would be a good idea to cache the (merged) ranges of move fragments
   where a unit of the given type can perform the specified action.
 **************************************************************************/
-bool utype_may_act_move_frags(struct unit_type *punit_type,
+bool utype_may_act_move_frags(const struct unit_type *punit_type,
                               const action_id act_id,
                               const int move_fragments)
 {
@@ -797,7 +799,7 @@ bool utype_may_act_move_frags(struct unit_type *punit_type,
   Note: Values aren't cached. If a performance critical user appears it
   would be a good idea to cache the result.
 **************************************************************************/
-bool utype_may_act_tgt_city_tile(struct unit_type *punit_type,
+bool utype_may_act_tgt_city_tile(const struct unit_type *punit_type,
                                  const action_id act_id,
                                  const enum citytile_type prop,
                                  const bool is_there)
@@ -864,20 +866,214 @@ bool utype_may_act_tgt_city_tile(struct unit_type *punit_type,
 bool utype_is_consumed_by_action(const struct action *paction,
                                  const struct unit_type *utype)
 {
-  if (paction->actor_consuming_always) {
-    /* This action will always consume the unit no matter who it is. */
+  return paction->actor_consuming_always;
+}
+
+/**********************************************************************//**
+  Returns TRUE iff successfully performing the specified action always will
+  move the actor unit of the specified type to the target's tile.
+**************************************************************************/
+bool utype_is_moved_to_tgt_by_action(const struct action *paction,
+                                     const struct unit_type *utype)
+{
+  switch (paction->id) {
+  case ACTION_EXPEL_UNIT:
+  case ACTION_HEAL_UNIT:
+  case ACTION_FORTIFY:
+  case ACTION_CONVERT:
+  case ACTION_TRANSPORT_DEBOARD:
+  case ACTION_TRANSPORT_UNLOAD:
+  case ACTION_TRANSPORT_BOARD:
+  case ACTION_DESTROY_CITY:
+  case ACTION_HOME_CITY:
+  case ACTION_UPGRADE_UNIT:
+  case ACTION_STRIKE_BUILDING:
+  case ACTION_STRIKE_PRODUCTION:
+  case ACTION_CAPTURE_UNITS:
+  case ACTION_BOMBARD:
+  case ACTION_BOMBARD2:
+  case ACTION_BOMBARD3:
+  case ACTION_TRANSFORM_TERRAIN:
+  case ACTION_CULTIVATE:
+  case ACTION_PLANT:
+  case ACTION_PILLAGE:
+  case ACTION_ROAD:
+  case ACTION_BASE:
+  case ACTION_MINE:
+  case ACTION_IRRIGATE:
+    /* Stays at the tile were it was. */
+    return FALSE;
+  case ACTION_CONQUER_CITY:
+  case ACTION_CONQUER_CITY2:
+  case ACTION_TRANSPORT_EMBARK:
+  case ACTION_TRANSPORT_DISEMBARK1:
+  case ACTION_TRANSPORT_DISEMBARK2:
+    /* A "regular" move. Does it charge the move cost of a regular move?
+     * Update utype_pays_for_regular_move_to_tgt() if yes. */
+    return TRUE;
+  case ACTION_AIRLIFT:
+  case ACTION_PARADROP:
+    /* A teleporting move. */
+    return TRUE;
+  case ACTION_SPY_BRIBE_UNIT:
+    /* Tries a forced move if the target unit is alone at its tile and not
+     * in a city. Takes all movement if the forced move fails. */
+    return FALSE;
+  case ACTION_ATTACK:
+    /* Tries a forced move if the target unit's tile has no non allied units
+     * and the occupychance dice roll tells it to move. */
+    return FALSE;
+  case ACTION_SPY_SABOTAGE_UNIT:
+  case ACTION_DISBAND_UNIT:
+  case ACTION_SPY_SABOTAGE_CITY:
+  case ACTION_SPY_TARGETED_SABOTAGE_CITY:
+  case ACTION_SPY_SABOTAGE_CITY_PRODUCTION:
+  case ACTION_SPY_POISON:
+  case ACTION_INV_CITY_SPEND:
+  case ACTION_ESTABLISH_EMBASSY_STAY:
+  case ACTION_SPY_INCITE_CITY:
+  case ACTION_SPY_STEAL_TECH:
+  case ACTION_SPY_TARGETED_STEAL_TECH:
+  case ACTION_SPY_STEAL_GOLD:
+  case ACTION_STEAL_MAPS:
+  case ACTION_SPY_NUKE:
+  case ACTION_TRADE_ROUTE:
+  case ACTION_MARKETPLACE:
+  case ACTION_HELP_WONDER:
+  case ACTION_RECYCLE_UNIT:
+  case ACTION_JOIN_CITY:
+  case ACTION_FOUND_CITY:
+  case ACTION_SUICIDE_ATTACK:
+  case ACTION_NUKE:
+  case ACTION_NUKE_CITY:
+  case ACTION_NUKE_UNITS:
+    /* The actor unit is spent. */
+    fc_assert(paction->actor_consuming_always);
+    return FALSE;
+  case ACTION_SPY_SPREAD_PLAGUE:
+    /* May die, may be teleported to a safe city. May be spent by the
+     * ruleset setting the action's actor_consuming_always to TRUE */
+    return FALSE;
+  case ACTION_SPY_SABOTAGE_UNIT_ESC:
+  case ACTION_SPY_SABOTAGE_CITY_ESC:
+  case ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC:
+  case ACTION_SPY_SABOTAGE_CITY_PRODUCTION_ESC:
+  case ACTION_SPY_POISON_ESC:
+  case ACTION_SPY_INVESTIGATE_CITY:
+  case ACTION_ESTABLISH_EMBASSY:
+  case ACTION_SPY_INCITE_CITY_ESC:
+  case ACTION_SPY_STEAL_TECH_ESC:
+  case ACTION_SPY_TARGETED_STEAL_TECH_ESC:
+  case ACTION_SPY_STEAL_GOLD_ESC:
+  case ACTION_STEAL_MAPS_ESC:
+  case ACTION_SPY_NUKE_ESC:
+    /* May die, may be teleported to a safe city. */
+    return FALSE;
+  case ACTION_USER_ACTION1:
+  case ACTION_USER_ACTION2:
+  case ACTION_USER_ACTION3:
+    /* Could be moved by Lua or something */
+    return FALSE;
+  }
+
+  fc_assert_msg(FALSE, "Should not reach this code.");
+  return FALSE;
+}
+
+/**********************************************************************//**
+  Returns TRUE iff successfully performing the specified action always
+  will cost the actor unit of the specified type the move fragments it
+  would take to perform a regular move to the target's tile. This cost
+  is added to the cost of successfully performing the action.
+**************************************************************************/
+bool utype_pays_for_regular_move_to_tgt(const struct action *paction,
+                                        const struct unit_type *utype)
+{
+  if (!utype_is_moved_to_tgt_by_action(paction, utype)) {
+    /* Not even a move. */
+    return FALSE;
+  }
+
+  if (action_has_result(paction, ACTION_CONQUER_CITY)
+      || action_has_result(paction, ACTION_CONQUER_CITY2)) {
+    /* Moves into the city to occupy it. */
     return TRUE;
   }
 
-  /* FIXME: Since the actions listed below can be predicted to always
-   * consume the actor unit based on unit type alone they should probably
-   * be split in an actor consuming and a non actor consuming version. */
-  switch (paction->id) {
-  case ACTION_ATTACK:
-    return uclass_has_flag(utype->uclass, UCF_MISSILE);
-  default:
-    return FALSE;
+  if (action_has_result(paction, ACTION_TRANSPORT_DISEMBARK1)
+      || action_has_result(paction, ACTION_TRANSPORT_DISEMBARK2)) {
+    /* Moves out of the transport to disembark. */
+    return TRUE;
   }
+
+  if (action_has_result(paction, ACTION_TRANSPORT_EMBARK)) {
+    /* Moves into the transport to embark. */
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+/**********************************************************************//**
+  Returns the amount of movement points successfully performing the
+  specified action will consume in the actor unit type without taking
+  effects or regular moves into account.
+**************************************************************************/
+int utype_pays_mp_for_action_base(const struct action *paction,
+                                  const struct unit_type *putype)
+{
+  int mpco = 0;
+
+  if (action_has_result(paction, ACTION_ATTACK)) {
+    if (utype_has_flag(putype, UTYF_ONEATTACK)) {
+      mpco += MAX_MOVE_FRAGS;
+    } else {
+      mpco += SINGLE_MOVE;
+    }
+  }
+
+  return mpco;
+}
+
+/**********************************************************************//**
+  Returns an estimate of the amount of movement points successfully
+  performing the specified action will consume in the actor unit type.
+**************************************************************************/
+int utype_pays_mp_for_action_estimate(const struct action *paction,
+                                      const struct unit_type *putype,
+                                      const struct player *act_player,
+                                      const struct tile *act_tile,
+                                      const struct tile *tgt_tile)
+{
+  const struct tile *post_action_tile;
+  int mpco = utype_pays_mp_for_action_base(paction, putype);
+
+  if (utype_is_moved_to_tgt_by_action(paction, putype)) {
+    post_action_tile = tgt_tile;
+  } else {
+    /* FIXME: Not 100% true. May escape, have a probability for moving to
+     * target tile etc. */
+    post_action_tile = act_tile;
+  }
+
+  if (utype_pays_for_regular_move_to_tgt(paction, putype)) {
+    /* Add the cost from the move. */
+    mpco += map_move_cost(&(wld.map), act_player, putype,
+                          act_tile, tgt_tile);
+  }
+
+  /* FIXME: Probably wrong result if the effect
+   * EFT_ACTION_SUCCESS_MOVE_COST depends on unit state. Add unit state
+   * parameters? */
+  mpco += get_target_bonus_effects(NULL,
+                                  act_player,
+                                  NULL,
+                                  tile_city(post_action_tile),
+                                  NULL, tgt_tile,
+                                  NULL, putype, NULL, NULL,
+                                  paction, EFT_ACTION_SUCCESS_MOVE_COST);
+
+  return mpco;
 }
 
 /**********************************************************************//**
@@ -961,22 +1157,6 @@ int utype_buy_gold_cost(const struct city *pcity,
     / 100;
 
   return cost;
-}
-
-/**********************************************************************//**
-  Returns the number of shields received when this unit type is disbanded.
-**************************************************************************/
-int utype_disband_shields(const struct unit_type *punittype)
-{
-  return utype_build_shield_cost_base(punittype) / 2;
-}
-
-/**********************************************************************//**
-  Returns the number of shields received when this unit is disbanded.
-**************************************************************************/
-int unit_disband_shields(const struct unit *punit)
-{
-  return utype_disband_shields(unit_type_get(punit));
 }
 
 /**********************************************************************//**
@@ -1133,11 +1313,11 @@ bool role_units_translations(struct astring *astr, int flag, bool alts)
   Return whether this player can upgrade this unit type (to any other
   unit type).  Returns NULL if no upgrade is possible.
 **************************************************************************/
-struct unit_type *can_upgrade_unittype(const struct player *pplayer,
-				       struct unit_type *punittype)
+const struct unit_type *can_upgrade_unittype(const struct player *pplayer,
+				                                     const struct unit_type *punittype)
 {
-  struct unit_type *upgrade = punittype;
-  struct unit_type *best_upgrade = NULL;
+  const struct unit_type *upgrade = punittype;
+  const struct unit_type *best_upgrade = NULL;
 
   /* For some reason this used to check
    * can_player_build_unit_direct() for the unittype
@@ -1165,7 +1345,12 @@ int unit_upgrade_price(const struct player *pplayer,
                        const struct unit_type *from,
                        const struct unit_type *to)
 {
-  int missing = utype_build_shield_cost_base(to) - utype_disband_shields(from);
+  /* Upgrade price is only payed for "Upgrade Unit" so it is safe to hard
+   * code the action ID for now. paction will have to become a parameter
+   * before generalized actions appears. */
+  const struct action *paction = action_by_number(ACTION_UPGRADE_UNIT);
+  int missing = (utype_build_shield_cost_base(to)
+                 - unit_shield_value(NULL, from, paction));
   int base_cost = 2 * missing + (missing * missing) / 20;
 
   return base_cost
@@ -1391,7 +1576,9 @@ bool can_player_build_unit_direct(const struct player *p,
     return FALSE;
   }
 
-  if (utype_can_do_action(punittype, ACTION_NUKE)
+  if ((utype_can_do_action(punittype, ACTION_NUKE_CITY)
+       || utype_can_do_action(punittype, ACTION_NUKE_UNITS)
+       || utype_can_do_action(punittype, ACTION_NUKE))
       && get_player_bonus(p, EFT_ENABLE_NUKE) <= 0) {
     return FALSE;
   }
@@ -1412,10 +1599,40 @@ bool can_player_build_unit_direct(const struct player *p,
     return FALSE;
   }
 
-  if (punittype->need_government
-      && punittype->need_government != government_of_player(p)) {
-    return FALSE;
-  }
+  requirement_vector_iterate(&punittype->build_reqs, preq) {
+    if (preq->source.kind == VUT_IMPROVEMENT
+        && preq->range == REQ_RANGE_CITY && preq->present) {
+      /* If the unit has a building requirement, we check to see if the
+       * player can build that building.  Note that individual cities may
+       * not have that building, so they still may not be able to build the
+       * unit. */
+      if (is_great_wonder(preq->source.value.building)
+          && (great_wonder_is_built(preq->source.value.building)
+              || great_wonder_is_destroyed(preq->source.value.building))) {
+        /* It's already built great wonder */
+        if (great_wonder_owner(preq->source.value.building) != p) {
+          /* Not owned by this player. Either destroyed or owned by somebody
+           * else. */
+          return FALSE;
+        }
+      } else if (!is_small_wonder(preq->source.value.building)) {
+        if (!can_player_build_improvement_direct(
+                p, preq->source.value.building)) {
+          return FALSE;
+        }
+      }
+    }
+    if (preq->range < REQ_RANGE_PLAYER) {
+      /* The question *here* is if the *player* can build this unit */
+      continue;
+    }
+    if (!is_req_active(p, NULL,
+                       NULL, NULL, NULL, NULL, punittype, NULL, NULL, NULL,
+                       preq, RPT_CERTAIN)) {
+      return FALSE;
+    }
+  } requirement_vector_iterate_end;
+
   if (research_invention_state(research_get(p),
                                advance_number(punittype->require_advance))
       != TECH_KNOWN) {
@@ -1450,27 +1667,6 @@ bool can_player_build_unit_direct(const struct player *p,
   if (utype_player_already_has_this_unique(p, punittype)) {
     /* A player can only have one unit of each unique unit type. */
     return FALSE;
-  }
-
-  /* If the unit has a building requirement, we check to see if the player
-   * can build that building.  Note that individual cities may not have
-   * that building, so they still may not be able to build the unit. */
-  if (punittype->need_improvement) {
-    if (is_great_wonder(punittype->need_improvement)
-        && (great_wonder_is_built(punittype->need_improvement)
-            || great_wonder_is_destroyed(punittype->need_improvement))) {
-      /* It's already built great wonder */
-      if (great_wonder_owner(punittype->need_improvement) != p) {
-        /* Not owned by this player. Either destroyed or owned by somebody
-         * else. */
-        return FALSE;
-      }
-    } else {
-      if (!can_player_build_improvement_direct(p,
-                                               punittype->need_improvement)) {
-        return FALSE;
-      }
-    }
   }
 
   return TRUE;
@@ -1680,7 +1876,8 @@ struct unit_type *best_role_unit(const struct city *pcity, int role)
 
   for (j = n_with_role[role] - 1; j >= 0; j--) {
     u = with_role[role][j];
-    if ((1 != utype_fuel(u) || uclass_has_flag(utype_class(u), UCF_MISSILE))
+    if ((1 != utype_fuel(u)
+         || utype_can_do_action(u, ACTION_SUICIDE_ATTACK))
         && can_city_build_unit_now(pcity, u)) {
       /* Allow fuel == 1 units when pathfinding can handle them. */
       return u;
@@ -1753,10 +1950,11 @@ void unit_types_init(void)
    * num_unit_types isn't known yet. */
   for (i = 0; i < ARRAY_SIZE(unit_types); i++) {
     unit_types[i].item_number = i;
+    requirement_vector_init(&(unit_types[i].build_reqs));
     unit_types[i].helptext = NULL;
     unit_types[i].veteran = NULL;
     unit_types[i].bonuses = combat_bonus_list_new();
-    unit_types[i].disabled = FALSE;
+    unit_types[i].ruledit_disabled = FALSE;
   }
 }
 
@@ -1768,6 +1966,7 @@ static void unit_type_free(struct unit_type *punittype)
   if (NULL != punittype->helptext) {
     strvec_destroy(punittype->helptext);
     punittype->helptext = NULL;
+    requirement_vector_free(&(punittype->build_reqs));
   }
 
   veteran_system_destroy(punittype->veteran);
@@ -1914,7 +2113,7 @@ void unit_classes_init(void)
     unit_classes[i].cache.bonus_roads = NULL;
     unit_classes[i].cache.subset_movers = NULL;
     unit_classes[i].helptext = NULL;
-    unit_classes[i].disabled = FALSE;
+    unit_classes[i].ruledit_disabled = FALSE;
   }
 }
 
@@ -2071,7 +2270,7 @@ void veteran_system_definition(struct veteran_system *vsystem, int level,
   names_set(&vlevel->name, NULL, vlist_name, NULL);
   vlevel->power_fact = vlist_power;
   vlevel->move_bonus = vlist_move;
-  vlevel->raise_chance = vlist_raise;
+  vlevel->base_raise_chance = vlist_raise;
   vlevel->work_raise_chance = vlist_wraise;
 }
 
@@ -2277,7 +2476,7 @@ void set_unit_move_type(struct unit_class *puclass)
 /**********************************************************************//**
   Is cityfounder type
 **************************************************************************/
-bool utype_is_cityfounder(struct unit_type *utype)
+bool utype_is_cityfounder(const struct unit_type *utype)
 {
   if (game.scenario.prevent_new_cities) {
     /* No unit is allowed to found new cities */
@@ -2285,4 +2484,171 @@ bool utype_is_cityfounder(struct unit_type *utype)
   }
 
   return utype_can_do_action(utype, ACTION_FOUND_CITY);
+}
+
+/**************************************************************************
+ * EXTRA STATS FEATURES ADDITION
+ * ***********************************************************************/
+//
+/**********************************************************************//**
+  ************* NOTE: THIS FUNCTION HAS TO BE MAINTAINED TO BE IDENTICAL
+  to the function of the same name in unit.js
+  -------------------------------------------------------------------------  
+  Return the extra_unit_stats for this unit by filling in *pstats
+**************************************************************************/
+void unit_get_extra_stats(struct extra_unit_stats *pstats, 
+                          const struct unit *punit)
+{
+  fc_assert(NULL != punit);
+
+  const struct unit_type *ptype = unit_type_get(punit);
+
+  utype_get_extra_stats(pstats, ptype);
+}
+/**********************************************************************//**
+  ************* NOTE: THIS FUNCTION HAS TO BE MAINTAINED TO BE IDENTICAL
+  to the function of the same name in unit.js
+  -------------------------------------------------------------------------  
+  Return the extra_unit_stats for this unit_type by filling in *pstats
+**************************************************************************/
+void utype_get_extra_stats(struct extra_unit_stats *pstats, 
+                           const struct unit_type *ptype)
+{
+  fc_assert(NULL != ptype);
+
+//FIXME: / SINGLE_MOVE should be there instead of / 9, but it means all these
+//functions need to go into unittools.c in the /server directory: 
+  int BB = ptype->paratroopers_mr_sub / 9;        
+
+  /* extra_unit_stats are currently embedded in paratroopers_mr_sub,
+     which means if it that var is being used by a real paratrooper,
+     we must abort. */
+  if (ptype->paratroopers_range > 0) { // real paratrooper
+    BB = 0; // effectively will zero out extra_unit_stats
+  }
+
+  // Extract bits from unused paratroopers_mr_sub field (for savegame compat)
+  // FIXME: on next upgrade that breaks savegame, get this data from
+  // a new and normal set of data fields
+
+  // Preserve a whole copy of the flags/stats:
+  pstats->bit_field = BB;
+  // Bit 0:
+  pstats->attack_stay_fortified  =             (BB & 0b1);
+  // Bit 1:  unit can instantly pillage targets
+  pstats->iPillage =                          (BB & 0b10) >> 1;
+  // Bits 2-4:  move cost for doing so
+  pstats->iPillage_moves =                 (BB & 0b11100) >> 2;
+  // Bits 5-8:  odds of successful real-time strike on the extra target
+  pstats->iPillage_odds  =             (BB & 0b111100000) >> 5;
+  // Bit 9-10:  # of targets randomly selected. 0==pinpoint selection
+  pstats->iPillage_random_targets =  (BB & 0b11000000000) >> 9;
+  // Bit 11-15: # of rounds of Bombard retaliation
+  pstats->bombard_retaliate_rounds =
+                               (BB & 0b11111100000000000) >> 11;
+
+  /* Adjustments of the raw encoded values to match their purpose: */
+
+  // The iPillage_odds came as bits from 0 to 15. Each value represents reduction
+  // by 5%. 15x5=75 so this gives us a range from 100% down to 25%, by fives.
+  // kinda dirty but it's assumed no one would bother with an iPillage that
+  // only had 20% chance to succeed.
+  pstats->iPillage_odds = 100 - 5 * pstats->iPillage_odds;
+
+  // bombard_retaliate_rounds came as 5 bits with 32 possible values,
+  // encoding up to 30 retaliation rounds and 2 other possibilities for 
+  // NONE or infinite. Raw ruleset bitfield comes in as follows:
+  //    0=none, 1=infinite, 2-31 = number of rounds (minus one)
+  // This is then converted to more understandable values below, which are:
+  //    0=none, 1000=infinite, 1=30 = exact number of rounds.
+  if (pstats->bombard_retaliate_rounds > 0) { // 0 == none == no mod done
+    // adjust other values:
+    pstats->bombard_retaliate_rounds--; // 2-31 become 1-30 
+    // an original value of 1 for infinite becomes 0, set it now:
+    if (pstats->bombard_retaliate_rounds==0) {
+      pstats->bombard_retaliate_rounds=1000; // "infinite" rounds.
+    }
+  }
+}
+/**********************************************************************//**
+  Returns whether the unit can iPillage ("instant-Pillage")
+**************************************************************************/
+bool unit_can_iPillage(const struct unit *punit)
+{
+  fc_assert(NULL != punit);
+  return utype_can_iPillage((const struct unit_type *)unit_type_get(punit));
+}
+/**********************************************************************//**
+  Returns whether the utype can iPillage ("instant-Pillage")
+**************************************************************************/
+bool utype_can_iPillage(const struct unit_type *ptype)
+{
+  struct extra_unit_stats pstats;
+  fc_assert(NULL != ptype);
+  utype_get_extra_stats(&pstats, ptype);
+  return (pstats.iPillage == true);
+}
+
+/**************************************************************************
+ * BOMBARD FEATURES ADDITION
+ * ***********************************************************************/
+//
+/**********************************************************************//**
+  Return the bombard_stats for this unit by filling in *pstats
+**************************************************************************/
+void unit_get_bombard_stats(struct bombard_stats *pstats, 
+                            const struct unit *punit)
+{
+  fc_assert(NULL != punit);
+
+  const struct unit_type *ptype = unit_type_get(punit);
+
+  utype_get_bombard_stats(pstats, ptype);
+}
+/**********************************************************************//**
+  Return the bombard_stats for this unit_type by filling in *pstats
+**************************************************************************/
+void utype_get_bombard_stats(struct bombard_stats *pstats, 
+                             const struct unit_type *ptype)
+{
+  fc_assert(NULL != ptype);
+
+  // extract bits from unused city_size field (for savegame compat)
+  // FIXME: on next upgrade that breaks savegame, get this data from
+  // a new and normal set of data fields
+  int BB = ptype->city_size;         
+
+  // Preserve a copy of the bombard flags/stats:
+  pstats->bit_field = BB;
+  // Bit 0:      RESERVED, extra range flag (+1 range)
+  pstats->bombard_extra_range =               (BB & 0b1);
+  // Bit 1:      RESERVED for bombard_stay_fortified
+  pstats->bombard_stay_fortified =           (BB & 0b10) >> 1;
+  // Bits 2-7:   Move cost of bombard action
+  pstats->bombard_move_cost =          (BB & 0b11111100) >> 2;
+  // Bits 8-10:  Max targets exposed on tile (0==all)
+  pstats->bombard_primary_targets = (BB & 0b11100000000) >> 8;
+  // Bits 11-13: Max # of kills possible on primary targets (0==none)
+  pstats->bombard_primary_kills =(BB & 0b11100000000000) >> 11;
+  // Bits 14-19: bombard_atk_mod
+  /* How to get the most out of 6 bits? 
+     For positive values, each unit is worth +25%, taking us up to 31*25 = +775% or 8.75x
+     For negative values, each unit is worth -3%, taking us down to 31*-3 = -93%
+   */
+  pstats->bombard_atk_mod= (BB & 0b01111100000000000000) >> 14;
+  if /* signed bit for - */(BB & 0b10000000000000000000) {
+    pstats->bombard_atk_mod *= -3;
+  } 
+  else {
+    pstats->bombard_atk_mod *= 25;
+  }
+
+  // RESERVED for future use, see .h file for explanations
+  pstats->bombard_collateral_targets = 0;
+  pstats->bombard_collateral_kills = 0;
+  pstats->bombard_collateral_rate_reduce = 0;
+  pstats->bombard_collateral_atk_mod = 0;
+  pstats->bombard_fortified_def_mod = 0;
+  pstats->bombard_rate_range_mod = 0;
+  pstats->bombard_atk_range_mod = 0;
 }

@@ -17,11 +17,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ***********************************************************************/
-
-//var stripChar = String.fromCharCode(3);
-
-// Global strip code for removing the └ that Chrome renders at line breaks.
-var stripChar = new RegExp(String.fromCharCode(3), "g")
 var show_order_buttons = 1;  // 1=most common, 2=all orders, 3=hide panels
 
 const update_focus_delay = 500;
@@ -66,6 +61,7 @@ var touch_drag_mode = false;  // whether touch devices are processing touchmove
 var last_unit_clicked = -1;
 // if a context menu is up, a click simply kills that menu instead of doing other mechanics
 var came_from_context_menu = false;
+var user_marking_mode = false;   // whether clicking just makes user marks/notes on map
 // ----------------------------------------------------------------------------------------
 
 // Last map viewing location, allows user to return to it with shift-spacebar.
@@ -79,11 +75,16 @@ var selector_city = null; // city that will select a tile to work from map view
 var city_paste_target = {}; // ctrl-shift-right-click for pasting city prod target into a city
 
 var current_focus = [];   // unit(s) in current focus selection
+var urgent_focus_queue = [];  /* The priority unit(s) for unit_focus_advance(). */
 var last_focus = null;    // last unit in focus before focus change
 var goto_active = false;  // state for selecting goto target for a unit
 var delayed_goto_active = false; // modifies goto_active state to give delayed goto command
 var paradrop_active = false;
 var airlift_active = false;
+// Connect order (worker does multiple orders along goto path, e.g. roading)
+var connect_active = false;  // indicates that goto_active goto_path is for connect mode
+var connect_extra = -1;      // type of EXTRA to make, e.g., EXTRA_ROAD, EXTRA_IRRIGATION
+var connect_activity = ACTIVITY_LAST;  // e.g., ACTIVITY_GEN_ROAD
 var action_tgt_sel_active = false;
 
 /* Will be set when the goto is activated. */
@@ -111,18 +112,24 @@ var CHAT_ICON_EVERYBODY = String.fromCharCode(62075);
 var CHAT_ICON_ALLIES = String.fromCharCode(61746);
 var end_turn_info_message_shown = false;
 
+/* The ID of the unit that currently is in the action selection process.
+ *
+ * The action selection process begins when the client asks the server what
+ * actions a unit can take. It ends when the last follow up question is
+ * answered.
+ */
+var action_selection_in_progress_for = 0; /* before IDENTITY_NUMBER_ZERO */
+var is_more_user_input_needed = false;
+
 /****************************************************************************
 ...
 ****************************************************************************/
 function control_init()
 {
-  touch_device = is_touch_device();
+  urgent_focus_queue = [];
 
-  if (renderer == RENDERER_2DCANVAS) {
-    mapctrl_init_2d();
-  } else {
-    init_webgl_mapctrl();
-  }
+  touch_device = is_touch_device();
+  mapctrl_init_2d();
 
   $(document).keydown(global_keyboard_listener);
   $(window).resize(mapview_window_resized);
@@ -199,7 +206,7 @@ function control_init()
   }, false);
 
   var context_options = {
-        selector: (renderer == RENDERER_2DCANVAS) ? '#canvas' : '#canvas_div' ,
+        selector: '#canvas',
 	    zIndex: 5000,
         autoHide: true,
         callback: function(key, options) {
@@ -224,7 +231,7 @@ function control_init()
     context_options['position'] = function(opt, x, y){
                                                 if (touch_device) return;
                                                 var new_top = mouse_y + $("#canvas_div").offset().top;
-                                                if (renderer == RENDERER_2DCANVAS) new_top = mouse_y + $("#canvas").offset().top;
+                                                new_top = mouse_y + $("#canvas").offset().top;
                                                 opt.$menu.css({top: new_top , left: mouse_x});
                                               };
   }
@@ -366,7 +373,8 @@ function control_init()
 ****************************************************************************/
 function is_touch_device()
 {
-  if(!cardboard_vr_enabled && ('ontouchstart' in window) || 'onmsgesturechange' in window
+  if( ('ontouchstart' in window) 
+      || ('onmsgesturechange' in window)
       || window.DocumentTouch && document instanceof DocumentTouch) {
     return true;
   } else {
@@ -406,7 +414,7 @@ function mouse_moved_cb(e)
       mouse_y = e.clientY;
     }
   }
-  if (renderer == RENDERER_2DCANVAS && active_city == null && mapview_canvas != null
+  if (active_city == null && mapview_canvas != null
       && $("#canvas").length) {
     mouse_x = mouse_x - $("#canvas").offset().left;
     mouse_y = mouse_y - $("#canvas").offset().top;
@@ -418,22 +426,6 @@ function mouse_moved_cb(e)
 
       mapview['gui_x0'] += diff_x;
       mapview['gui_y0'] += diff_y;
-      touch_start_x = mouse_x;
-      touch_start_y = mouse_y;
-      update_mouse_cursor();
-    }
-  } else if (renderer == RENDERER_WEBGL && active_city == null && $("#canvas_div").length) {
-    mouse_x = mouse_x - $("#canvas_div").offset().left;
-    mouse_y = mouse_y - $("#canvas_div").offset().top;
-
-    if (mapview_mouse_movement && !goto_active) {
-      // move the mapview using mouse movement.
-      var spos = webgl_canvas_pos_to_map_pos(touch_start_x, touch_start_y);
-      var epos = webgl_canvas_pos_to_map_pos(mouse_x, mouse_y);
-      if (spos != null && epos != null) {
-        camera_look_at(camera_current_x + spos['x'] - epos['x'], camera_current_y, camera_current_z + spos['y'] - epos['y']);
-      }
-
       touch_start_x = mouse_x;
       touch_start_y = mouse_y;
       update_mouse_cursor();
@@ -472,12 +464,8 @@ function update_mouse_cursor()
   }
 
   //console.log("update_mouse_cursor() mmm:1 g_a:0, came_from_context_menu:"+came_from_context_menu);
-  var ptile;
-  if (renderer == RENDERER_2DCANVAS) {
-    ptile = canvas_pos_to_tile(mouse_x, mouse_y);
-  } else {
-    ptile = webgl_canvas_pos_to_tile(mouse_x, mouse_y);
-  }
+  var ptile = canvas_pos_to_tile(mouse_x, mouse_y);
+
 
   if (ptile == null) return; /* TO DO: this is the only way this function returns without forcing real_mouse_move_mode=false, presumably because
                                 if we're outside the map area, we don't change a thing for what mode is on inside that area. However, if there are
@@ -601,8 +589,7 @@ function chat_context_set_next(recipients) {
 function chat_context_dialog_show(recipients) {
   var dlg = $("#chat_context_dialog");
   if (dlg.length > 0) {
-    dlg.dialog('close');
-    dlg.remove();
+    remove_active_dialog("#chat_context_dialog");
   }
   $("<div id='chat_context_dialog' title='Choose chat recipient'></div>")
     .appendTo("div#game_page");
@@ -619,7 +606,7 @@ function chat_context_dialog_show(recipients) {
     row = document.createElement('tr');
     cell = document.createElement('td');
     flag_canvas = document.createElement('canvas');
-    flag_canvas.width = 29;
+    flag_canvas.width = 30;
     flag_canvas.height = 20;
     ctx = flag_canvas.getContext("2d");
     if (flag != null) {
@@ -673,6 +660,7 @@ function chat_context_dialog_show(recipients) {
   });
 
   $("#chat_context_dialog").dialog('open');
+  dialog_register("#chat_context_dialog");
 }
 
 /****************************************************************************
@@ -680,7 +668,7 @@ function chat_context_dialog_show(recipients) {
 ****************************************************************************/
 function handle_chat_direction_chosen(ev) {
   var new_send_to = $(this).data("chatSendTo");
-  $("#chat_context_dialog").dialog('close');
+  remove_active_dialog("#chat_context_dialog");
   if (new_send_to == null) {
     set_chat_direction(null);
   } else {
@@ -702,14 +690,14 @@ function set_chat_direction(player_id) {
 
   if (player_id == null || player_id < 0) {
     player_id = null;
-    ctx.clearRect(0, 0, 29, 20);
+    ctx.clearRect(0, 0, 30, 20);
     ctx.font = "18px FontAwesome";
     ctx.fillStyle = "rgba(192, 192, 192, 1)";
     ctx.fillText(CHAT_ICON_EVERYBODY, 7, 15);
     player_name = 'everybody';
   } else if (client.conn.playing != null
              && player_id == client.conn.playing['playerno']) {
-    ctx.clearRect(0, 0, 29, 20);
+    ctx.clearRect(0, 0, 30, 20);
     ctx.font = "18px FontAwesome";
     ctx.fillStyle = "rgba(192, 192, 192, 1)";
     ctx.fillText(CHAT_ICON_ALLIES, 10, 16);
@@ -719,7 +707,7 @@ function set_chat_direction(player_id) {
     if (pplayer == null) return;
     player_name = pplayer['name']
                 + " of the " + nations[pplayer['nation']]['adjective'];
-    ctx.clearRect(0, 0, 29, 20);
+    ctx.clearRect(0, 0, 30, 20);
     var flag = sprites["f." + nations[pplayer['nation']]['graphic_str']];
     if (flag != null) {
       ctx.drawImage(flag, 0, 0);
@@ -847,6 +835,150 @@ function check_text_input(event,chatboxtextarea) {
 
 
 
+/**********************************************************************//**
+  Returns TRUE iff the client should ask the server about what actions a
+  unit can perform.
+**************************************************************************/
+function should_ask_server_for_actions(punit)
+{
+  return (punit['action_decision_want'] === ACT_DEC_ACTIVE
+          /* The player is interested in getting a pop up for a mere
+           * arrival. */
+          || (punit['action_decision_want'] === ACT_DEC_PASSIVE
+              && popup_actor_arrival));
+}
+
+/**********************************************************************//**
+  Returns TRUE iff it is OK to ask the server about what actions a unit
+  can perform.
+**************************************************************************/
+function can_ask_server_for_actions()
+{
+  /* OK as long as no other unit already asked and aren't done yet. */
+  return action_selection_in_progress_for === IDENTITY_NUMBER_ZERO;
+}
+
+/**********************************************************************//**
+  Ask the server about what actions punit may be able to perform against
+  it's stored target tile.
+
+  The server's reply will pop up the action selection dialog unless no
+  alternatives exists.
+**************************************************************************/
+function ask_server_for_actions(punit)
+{
+  var ptile;
+
+  if (observing || punit == null) {
+    return false;
+  }
+
+  /* Only one action selection dialog at a time is supported. */
+  if (action_selection_in_progress_for != IDENTITY_NUMBER_ZERO) {
+    console.log("Unit %d started action selection before unit %d was done",
+                action_selection_in_progress_for, punit.id);
+  }
+  action_selection_in_progress_for = punit.id;
+
+  ptile = index_to_tile(punit['action_decision_tile']);
+
+  if (punit != null && ptile != null) {
+    /* Ask the server about what actions punit can do. The server's
+     * reply will pop up an action selection dialog for it. */
+
+    var packet = {
+      "pid" : packet_unit_get_actions,
+      "actor_unit_id" : punit['id'],
+      "target_unit_id" : IDENTITY_NUMBER_ZERO,
+      "target_tile_id": punit['action_decision_tile'],
+      "target_extra_id": EXTRA_NONE,
+      "disturb_player": true
+    };
+    send_request(JSON.stringify(packet));
+  }
+}
+
+/**********************************************************************//**
+  The action selection process is no longer in progres for the specified
+  unit. It is safe to let another unit enter action selection.
+**************************************************************************/
+function action_selection_no_longer_in_progress(old_actor_id)
+{
+  //console.log("    actor: %d recorded as no selection in progress.",old_actor_id)
+  /* IDENTITY_NUMBER_ZERO is accepted for cases where the unit is gone
+   * without a trace. */
+  if (old_actor_id != action_selection_in_progress_for
+      && old_actor_id != IDENTITY_NUMBER_ZERO
+      && action_selection_in_progress_for != IDENTITY_NUMBER_ZERO) {
+    console.log("Decision taken for %d but selection is for %d.",
+                old_actor_id, action_selection_in_progress_for);
+  }
+
+  /* Stop objecting to allowing the next unit to ask. */
+  action_selection_in_progress_for = IDENTITY_NUMBER_ZERO;
+
+  /* Stop assuming the answer to a follow up question will arrive. */
+  is_more_user_input_needed = false;
+}
+
+/**********************************************************************//**
+  Have the server record that a decision no longer is wanted for the
+  specified unit.
+**************************************************************************/
+function action_decision_clear_want(old_actor_id)
+{
+  var old = game_find_unit_by_number(old_actor_id);
+
+  if (old !== null) {
+    /* Have the server record that a decision no longer is wanted. */
+    var unqueue = {
+      "pid"     : packet_unit_sscs_set,
+      "unit_id" : old_actor_id,
+      "type"    : USSDT_UNQUEUE,
+      "value"   : IDENTITY_NUMBER_ZERO
+    };
+    send_request(JSON.stringify(unqueue));
+  }
+}
+
+/**********************************************************************//**
+  Move on to the next unit in focus that needs an action decision.
+**************************************************************************/
+function action_selection_next_in_focus(old_actor_id)
+{
+  /* Go to the next unit in focus that needs a decision. */
+  for (var i = 0; i < current_focus.length; i++) {
+    var funit = current_focus[i];
+    if (old_actor_id != funit['id']
+        && should_ask_server_for_actions(funit)) {
+      ask_server_for_actions(funit);
+      return;
+    }
+  }
+}
+
+/**********************************************************************//**
+  Request that the player makes a decision for the specified unit.
+**************************************************************************/
+function action_decision_request(actor_unit)
+{
+  if (actor_unit == null) {
+    console.log("action_decision_request(): No actor unit");
+    return;
+  }
+
+  if (!unit_is_in_focus(actor_unit)) {
+    /* Getting feed back may be urgent. A unit standing next to an enemy
+     * could be killed while waiting. */
+    unit_focus_urgent(actor_unit);
+  } else if (can_client_issue_orders()
+             && can_ask_server_for_actions()) {
+    /* No need to wait. The actor unit is in focus. No other actor unit
+     * is currently asking about action selection. */
+    ask_server_for_actions(actor_unit);
+  }
+}
+
 /****************************************************************************
   Return TRUE iff a unit on this tile is in focus.
 ****************************************************************************/
@@ -880,6 +1012,19 @@ function unit_is_in_focus(cunit)
   }
   return false;
 }
+/****************************************************************************
+  Return TRUE iff this unit is the only unit in focus.
+****************************************************************************/
+function unit_is_only_unit_in_focus(cunit)
+{
+  var funits = get_units_in_focus();
+  if (funits.length == 0 || funits.length >= 2) return false;
+  var punit = funits[0];
+  if (punit['id'] == cunit['id']) {
+      return true;
+  }
+  return false;  
+}
 
 /****************************************************************************
   Returns a list of units in focus.
@@ -887,6 +1032,55 @@ function unit_is_in_focus(cunit)
 function get_units_in_focus()
 {
   return current_focus;
+}
+
+/**********************************************************************//**
+  Store a priority focus unit.
+**************************************************************************/
+function unit_focus_urgent(punit)
+{
+  if (punit == null || punit['activity'] == null) {
+    console.log("unit_focus_urgent(): not a unit");
+    console.log(punit);
+    return;
+  }
+
+  urgent_focus_queue.push(punit);
+}
+
+/**********************************************************************//**
+  Called when a unit is killed; this removes it from the control lists.
+**************************************************************************/
+function control_unit_killed(punit)
+{
+  if (unit_is_in_focus(punit)) {
+    current_focus = unit_list_without(current_focus, punit);
+    update_active_units_dialog();
+    update_unit_order_commands();
+  }
+
+  if (urgent_focus_queue != null) {
+    urgent_focus_queue = unit_list_without(urgent_focus_queue, punit);
+  }
+
+  if (current_focus != null && current_focus.length < 1) {
+    /* if the unit in focus is removed, then advance the unit focus. */
+    advance_unit_focus(false);
+  }
+}
+
+/**********************************************************************//**
+  At least one unit may have been subtraced from the current focus
+**************************************************************************/
+function unit_may_have_lost_focus()
+{
+  if (action_selection_in_progress_for != IDENTITY_NUMBER_ZERO
+      /* No unit with the id of action_selection_in_progress_for is in
+       * focus. */
+      && (current_focus.findIndex(
+            unit => unit.id == action_selection_in_progress_for) == -1)) {
+    action_selection_close(true);
+  }
 }
 
 /**************************************************************************
@@ -900,6 +1094,18 @@ function update_unit_focus()
   if (active_city != null) return; /* don't change focus while city dialog is active.*/
 
   if (C_S_RUNNING != client_state()) return;
+
+  if (!can_ask_server_for_actions()) {
+    if (get_units_in_focus().length < 1) {
+      console.log("update_unit_focus(): action selection dialog open for"
+                  + " unit %d but unit not in focus?",
+                  action_selection_in_progress_for);
+    } else {
+      /* An actor unit is asking the player what to do. Don't steal his
+       * focus. */
+      return;
+    }
+  }
 
   /* iterate zero times for no units in focus,
    * otherwise quit for any of the conditions. */
@@ -931,32 +1137,80 @@ function update_unit_focus()
 **************************************************************************/
 function advance_unit_focus(same_type)
 {
-  if (client_is_observer())
-  {
-    return;
+  var candidate = null;
+  var i;
+
+  console.log("T%d. advance_unit_focus(). urgent_focus_queue[%d] waiting_units_list[%d]",
+              game_info.turn, urgent_focus_queue.length, waiting_units_list.length)
+
+  if (client_is_observer()) return;
+
+  if (urgent_focus_queue.length > 0) {
+    console.log("  urgent_focus_queue[%d] processing...", urgent_focus_queue.length)
+
+    var focus_tile = (current_focus != null && current_focus.length > 0
+                      ? current_focus[0]['tile']
+                      : -1);
+
+    for (i = 0; i < urgent_focus_queue.length; i++) {
+      var punit = units[urgent_focus_queue[i]['id']];
+
+      if ((ACTIVITY_IDLE != punit.activity
+           || punit.has_orders)
+          /* This isn't an action decision needed because of an
+           * ORDER_ACTION_MOVE located in the middle of an order. */
+          && !should_ask_server_for_actions(punit)) {
+        /* We have assigned new orders to this unit since, remove it. */
+        urgent_focus_queue = unit_list_without(urgent_focus_queue, punit);
+        i--;
+      } else if (-1 == focus_tile
+                 || focus_tile == punit['tile']) {
+        /* Use the first one found */
+        candidate = punit;
+        break;
+      } else if (null == candidate) {
+        candidate = punit;
+      }
+    }
+
+    if (null != candidate) {
+      urgent_focus_queue = unit_list_without(urgent_focus_queue, punit);
+      console.log("    removed candidate:%d urgent_focus_queue[%d]",candidate.id,urgent_focus_queue.length);
+    }
+    console.log("    finished urgent_focus_queue[%d]. candidate:%d",urgent_focus_queue.length,(candidate?candidate.id:"null"));
   }
 
-  var candidate = find_best_focus_candidate(false, same_type);
+  if (candidate == null) {
+    candidate = find_best_focus_candidate(false, same_type);
+    console.log("  non-urgent processing #1. urgent_focus_queue[%d] waiting_units_list[%d]",
+                 urgent_focus_queue.length, waiting_units_list.length);
+    console.log("    find_best_focus_candidate(false) yields candidate:%d",(candidate?candidate.id:"null"))
+  }
 
   if (candidate == null) {
     candidate = find_best_focus_candidate(true, same_type);
+    console.log("  non-urgent processing #2. candidate:%d",(candidate?candidate.id:"null"));
+    console.log("    find_best_focus_candidate(true) yields candidate:%d",(candidate?candidate.id:"null"))
   }
 
   // remove state-blocking from leaving context menu
   came_from_context_menu = false;
 
   if (candidate != null) {
-    goto_active = false;  // turn Go-To off if jumping focus to a new unit
-    delayed_goto_active = false;
+    console.log("CLEAN-UP and EXIT for successful new candidate:%d\n",(candidate?candidate.id:"null"))
+    console.log(" ")
+    clear_all_modes();
     clear_goto_tiles();   // TO DO: update mouse cursor function call too?
     save_last_unit_focus();
     set_unit_focus_and_redraw(candidate);
   } else {
+    console.log("NO FOCUS CANDIDATE FOUND. It's the end of the road, time for a drink.\n");
+    console.log(" ")
     /* Couldn't center on a unit, then try to center on a city... */
     deactivate_goto(false);
     save_last_unit_focus();
     current_focus = []; /* Reset focus units. */
-    if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
+    unit_may_have_lost_focus();
     update_active_units_dialog();
     $("#game_unit_orders_default").hide();
 
@@ -977,11 +1231,31 @@ function advance_unit_focus(same_type)
     } else {
         $("#turn_done_button").button("option", "label", "<i class='fa fa-check-circle-o' style='color: green;'aria-hidden='true'></i> Turn Done");
     }
+    console.log("Reached END OF WAITING LISTS. end_turn_info_message_shown == (%s) ", end_turn_info_message_shown)
     if (!end_turn_info_message_shown) {
       end_turn_info_message_shown = true;
       message_log.update({ event: E_BEGINNER_HELP, message: "All units have moved, click the \"Turn Done\" button to end your turn."});
     }
   }
+}
+
+
+/**************************************************************************
+ * Clears whatever modes we may have had going for a unit, if user 
+ * escapes out, selects other unit, etc.
+**************************************************************************/
+function clear_all_modes()
+{
+  goto_active = false;  // turn Go-To off if jumping focus to a new unit
+  connect_active = false;
+  connect_extra = -1;      // type of EXTRA to make, e.g., EXTRA_ROAD, EXTRA_IRRIGATION
+  connect_activity = ACTIVITY_LAST;  // e.g., ACTIVITY_GEN_ROAD
+  action_tgt_sel_active = false;
+  delayed_goto_active = false;
+  paradrop_active = false;
+  airlift_active = false;
+  goto_last_order = ORDER_LAST;
+  goto_last_action = ACTION_COUNT;
 }
 
 /**************************************************************************
@@ -1010,8 +1284,7 @@ function advance_focus_inactive_units()
   came_from_context_menu = false;
 
   if (candidate != null) {
-    goto_active = false;  // turn Go-To off if jumping focus to a new unit
-    delayed_goto_active = false;
+    clear_all_modes();
     clear_goto_tiles();   // TO DO: update mouse cursor function call too?
     save_last_unit_focus();
     set_unit_focus_and_redraw(candidate);
@@ -1020,8 +1293,8 @@ function advance_focus_inactive_units()
     deactivate_goto(false);
     save_last_unit_focus();
     current_focus = []; /* Reset focus units. */
+    unit_may_have_lost_focus();
     waiting_units_list = []; /* Reset waiting units list */
-    if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
     update_active_units_dialog();
     $("#game_unit_orders_default").hide();
   }
@@ -1073,6 +1346,7 @@ function update_unit_order_commands()
   var pcity;
   var ptile;
   var unit_actions = {};
+  var disband_type = 0;
   var funits = get_units_in_focus();
 
   if (funits!=null) {
@@ -1121,10 +1395,13 @@ function update_unit_order_commands()
   $("#order_canal").hide();
   $("#order_well").hide();
   $("#order_fortress").hide();
+  $("#order_buoy").hide();
   $("#order_hideout").hide();
   $("#order_navalbase").hide();
   $("#order_airbase").hide();
+  $("#order_radar").hide();
   $("#order_road").hide();
+  $("#order_seabridge").hide();
   $("#order_railroad").hide();
   $("#order_mine").hide();
   $("#order_fortify").hide();  // not all non-Settlers can fortify (air/sea)
@@ -1135,6 +1412,7 @@ function update_unit_order_commands()
   $("#order_auto_settlers").hide();
   $("#order_explore").hide();
   $("#order_pollution").hide();
+  $("#order_fallout").hide();
   $("#order_forest_remove").hide();
   $("#order_plant_forest").hide();
   $("#order_oil_well").hide();
@@ -1154,6 +1432,7 @@ function update_unit_order_commands()
     return;
 
   var terrain_name;
+  var oceanic = false;
 
   for (i = 0; i < funits.length; i++) {
     punit = funits[i];
@@ -1190,12 +1469,12 @@ function update_unit_order_commands()
           // Workers/Riflemen can convert between each other in Communism:
           || ((governments[client.conn.playing['government']]['name']=="Communism"
                && ((ptype['name']=="Workers") || ptype['name']=="Riflemen"))
-               && player_invention_state(client.conn.playing, tech_id_by_name('Communism')) == TECH_KNOWN)
+               && tech_known('Communism'))
           // AAA can convert to Mobile SAM under qualifying conditions:
           || ( ptype['name']=="Anti-Aircraft Artillery"
                && pcity != null
                && city_owner_player_id(pcity) == client.conn.playing.playerno
-               && player_invention_state(client.conn.playing, tech_id_by_name('Space Flight')) == TECH_KNOWN
+               && tech_known('Space Flight')
                && ( city_has_building(pcity, improvement_id_by_name(B_PALACE_NAME)) || city_has_building(pcity, improvement_id_by_name(B_ECC_PALACE_NAME)) )
              )
           ) {
@@ -1215,48 +1494,155 @@ function update_unit_order_commands()
     punit = funits[i];
     ptype = unit_type(punit);
     var worker_type = false; // Handles civ2civ3 + mp2: these units have same orders as workers (join city already handled above):
+    var infra_type = false;
     if (ptype['name'] == "Workers" || ptype['name'] == "Migrants"
+      || (ptype['name'] == "Tribesmen" && client_rules_flag[CRF_MP2_C])
       || (ptype['name'] =="Proletarians" && governments[client.conn.playing['government']]['name']=="Communism")) {
 
         worker_type = true;
+        infra_type = true;
+    } else if (ptype['name'] == "Settlers" || ptype['name'] == "Engineers") {
+      infra_type = true;
     }
+
 
     ptile = index_to_tile(punit['tile']);
     terrain_name = tile_terrain(ptile)['name'];
+    oceanic = is_ocean_tile(ptile)
     if (ptile == null) continue;
     pcity = tile_city(ptile);
 
-    // LEGIONS. rulesets which allow Legions to build Forts and Roads on non-domestic tiles-------------
+    /* Centralize the Base Logic for rulesets **********************************************************************************************************
+       Define and set filters/rules/conditions for bases. This is a first step to prepare ruleset independence. See TODO below. */
+    // TODO: server actually sends us reqs in extras[n].reqs[]. This would require complex setup/parsing but would finally achieve ruleset independence.
+    // problem though, is sometimes janky server behaviour not doing what ruleset specifies, so hard-coded client here actually is a means to fix it.
+    // Each variable-grouping would become a single array indexed by base type.
+    /* Whether Ruleset has Base*/
+    const HIDEOUTS      = (typeof EXTRA_ !== 'undefined') && client_rules_flag[CRF_EXTRA_HIDEOUT] && server_settings['hideouts']['val'];
+    const FORTS         = (typeof EXTRA_FORT !== 'undefined');
+    const FORTRESSES    = (typeof EXTRA_FORTRESS !== 'undefined');
+    const NAVALBASES    = (typeof EXTRA_NAVALBASE !== 'undefined');
+    const CASTLES       = (typeof EXTRA_CASTLE !== 'undefined');
+    const BUNKERS       = (typeof EXTRA_BUNKER !== 'undefined');
+    const AIRBASES      = (typeof EXTRA_AIRBASE !== 'undefined');
+    const BUOYS         = (typeof EXTRA_BUOY !== 'undefined');
+    const RADAR         = (typeof EXTRA_RADAR !== 'undefined');
+    const QUAYS         = (typeof EXTRA_QUAY !== 'undefined');
+    /* Whether player has tech for the Base. */
+    const HIDEOUT_TECH   = tech_known("Warrior Code");
+    const FORT_TECH      = tech_known("Construction") || (tech_known("Masonry") && client_rules_flag[CRF_MASONRY_FORT]);
+    const FORTRESS_TECH  = tech_known("Construction");
+    const NAVALBASE_TECH = tech_known("Engineering");
+    const CASTLE_TECH    = tech_known("Construction") && tech_known("Feudalism") && !tech_known("Gunpowder");
+    const BUNKER_TECH    = tech_known("Steel");
+    const AIRBASE_TECH   = tech_known("Radio");
+    const BUOY_TECH      = tech_known("Radio");
+    const RADAR_TECH     = tech_known("Radar");
+    /* Whether the tile has pre-existing bases, which may be reqs or blockers for other bases to be built. */
+    const TILE_HAS_HIDEOUT   = HIDEOUTS   && tile_has_extra(ptile,EXTRA_);
+    const TILE_HAS_FORT      = FORTS      && tile_has_extra(ptile,EXTRA_FORT);
+    const TILE_HAS_FORTRESS  = FORTRESSES && tile_has_extra(ptile,EXTRA_FORTRESS);
+    const TILE_HAS_NAVALBASE = NAVALBASES && tile_has_extra(ptile,EXTRA_NAVALBASE);
+    const TILE_HAS_CASTLE    = CASTLES    && tile_has_extra(ptile,EXTRA_CASTLE);
+    const TILE_HAS_BUNKER    = BUNKERS    && tile_has_extra(ptile,EXTRA_BUNKER);
+    const TILE_HAS_AIRBASE   = AIRBASES   && tile_has_extra(ptile,EXTRA_AIRBASE);
+    const TILE_HAS_BUOY      = BUOYS      && tile_has_extra(ptile,EXTRA_BUOY);
+    const TILE_HAS_RADAR     = RADAR      && tile_has_extra(ptile,EXTRA_RADAR);
+    //-- Misc reqs: 
+    const TILE_HAS_RIVER     = tile_has_extra(ptile,EXTRA_RIVER);
+    const NO_RIVER_BASE      = client_rules_flag[CRF_NO_BASES_ON_RIVERS];
+    const TILE_HAS_OVERFORT  = TILE_HAS_FORTRESS || TILE_HAS_NAVALBASE || TILE_HAS_CASTLE || TILE_HAS_BUNKER; 
+    // TODO: civ2civ3 also needs flag for Airbase conflicts with other bases.
+    /* Tile requirements for base to possibly exist there */
+    const CAN_TILE_HIDEOUT   = !pcity && !oceanic && HIDEOUTS   && !TILE_HAS_HIDEOUT && !does_tile_have_base(ptile) && (!QUAYS || !tile_has_extra(ptile,EXTRA_QUAY))
+                                  && (ptile['owner']==UNCLAIMED_LAND || ptile['owner'] == client.conn.playing.playerno)
+                                  && (terrain_name=='Mountains' || terrain_name=='Forest' || terrain_name == 'Jungle' || terrain_name == 'Swamp')
+                                  && !(TILE_HAS_RIVER && NO_RIVER_BASE);
+    const CAN_TILE_FORT      = !pcity && !oceanic && FORTS      && !TILE_HAS_FORT && !TILE_HAS_OVERFORT && !(TILE_HAS_RIVER && NO_RIVER_BASE);
+    const CAN_TILE_FORTRESS  = !pcity && !oceanic && FORTRESSES && (!FORTS || TILE_HAS_FORT) && (!TILE_HAS_FORTRESS || TILE_HAS_BUNKER) && !TILE_HAS_NAVALBASE && !TILE_HAS_CASTLE && !(TILE_HAS_RIVER && NO_RIVER_BASE); // Bunker allowed: the "pillage-proof" mechanic of Bunkers makes Fortressing the only way to remove it. Needed to prevent Jet Bombers from pillaging bunkers.
+    const CAN_TILE_NAVALBASE = !pcity && !oceanic && NAVALBASES && TILE_HAS_FORT && !TILE_HAS_OVERFORT && !(TILE_HAS_RIVER && NO_RIVER_BASE); // further tile reqs in: can_build_naval_base(punit,ptile)
+    const CAN_TILE_CASTLE    = !pcity && !oceanic && CASTLES    && !TILE_HAS_CASTLE && !TILE_HAS_BUNKER && TILE_HAS_FORTRESS && !(TILE_HAS_RIVER && NO_RIVER_BASE);
+    const CAN_TILE_BUNKER    = !pcity && !oceanic && BUNKERS    && !TILE_HAS_BUNKER && !TILE_HAS_CASTLE && TILE_HAS_FORTRESS && !(TILE_HAS_RIVER && NO_RIVER_BASE);
+    const CAN_TILE_AIRBASE   = !pcity && !oceanic && AIRBASES   && !TILE_HAS_AIRBASE && !(TILE_HAS_RIVER && NO_RIVER_BASE);
+    const CAN_TILE_BUOY      = !pcity &&  oceanic && BUOYS      && !TILE_HAS_BUOY && !(TILE_HAS_RIVER && NO_RIVER_BASE);
+    const CAN_TILE_RADAR     = !pcity && !oceanic && RADAR      && !TILE_HAS_RADAR && TILE_HAS_AIRBASE && !(TILE_HAS_RIVER && NO_RIVER_BASE);
+    /* Currently iterating unit is able to build bases on this tile? */
+    const UNIT_CAN_HIDEOUT   = CAN_TILE_HIDEOUT   && HIDEOUT_TECH   && utype_has_flag(ptype,UTYF_FOOTSOLDIER);
+    const UNIT_CAN_FORT      = CAN_TILE_FORT      && FORT_TECH      && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK]) || (ptype['name'] == "Marines" && client_rules_flag[CRF_MARINE_BASES]));
+    const UNIT_CAN_FORTRESS  = CAN_TILE_FORTRESS  && FORTRESS_TECH  && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK]));
+    const UNIT_CAN_NAVALBASE = CAN_TILE_NAVALBASE && NAVALBASE_TECH && (worker_type || infra_type || (ptype['name'] == "Legion" && client_rules_flag[CRF_LEGION_WORK])) && can_build_naval_base(punit,ptile);
+    const UNIT_CAN_CASTLE    = CAN_TILE_CASTLE    && CASTLE_TECH    && (worker_type || infra_type);
+    const UNIT_CAN_BUNKER    = CAN_TILE_BUNKER    && BUNKER_TECH    && (worker_type || infra_type);
+    const UNIT_CAN_AIRBASE   = CAN_TILE_AIRBASE   && AIRBASE_TECH   && (worker_type || infra_type || (ptype['name'] == "Marines" && client_rules_flag[CRF_MARINE_BASES])) && ptype['name'] != "Settlers";
+    const UNIT_CAN_BUOY      = CAN_TILE_BUOY      && BUOY_TECH      && (worker_type || infra_type) && ptype['name'] != "Settlers";
+    const UNIT_CAN_RADAR     = CAN_TILE_RADAR     && RADAR_TECH     && (worker_type || infra_type) && ptype['name'] != "Settlers";
+    // ******************************************************************************************************************* </END Base Logic setup> ***
+    if (UNIT_CAN_HIDEOUT) {
+      unit_actions["hideout"] = {name: "Hideout (Shift-H)"};  $("#order_hideout").show();  
+    }
+    //--
+    if (UNIT_CAN_FORT) {
+      unit_actions["fortress"] = {name: "Build Fort (Shift-F)"};  $("#order_fortress").show();
+      $("#order_fortress").prop("title", "Build Fort (Shift-F)");
+    } else if (UNIT_CAN_FORTRESS) { // Fortress over Bunker allowed, to remove it. (Bunkers are pillage-proof)
+      if (TILE_HAS_BUNKER) {
+        unit_actions["fortress"] = {name: "Remove Bunker (Shift-F)"}; 
+        $("#order_fortress").prop("title", "Remove Bunker (Shift-F)");
+      } else {
+        unit_actions["fortress"] = {name: "Build Fortress (Shift-F)"}; 
+        $("#order_fortress").prop("title", "Build Fortress (Shift-F)");
+      }
+      $("#order_fortress").show();
+    } else if (UNIT_CAN_CASTLE) {
+      unit_actions["fortress"] = {name: "Build Castle (Shift-F)"};  $("#order_fortress").show();
+      $("#order_fortress").prop("title", "Build Castle (Shift-F)");
+    } else if (UNIT_CAN_BUNKER) {
+      unit_actions["fortress"] = {name: "Build Bunker (Shift-F)"};  $("#order_fortress").show();
+      $("#order_fortress").prop("title", "Build Bunker (Shift-F)");
+    } else if (UNIT_CAN_BUOY) {
+      unit_actions["fortress"] = {name: "Lay Buoy (Shift-F)"};  $("#order_buoy").show();
+    }
+    //--
+    if (UNIT_CAN_NAVALBASE) {
+      unit_actions["navalbase"] = {name: "Naval Base (Shift-N)"};  $("#order_navalbase").show();
+    }
+    if (UNIT_CAN_AIRBASE) {
+      unit_actions["airbase"] = {name: "Build Airbase (Shift-E)"};
+      if (worker_type || infra_type) { 
+        if (show_order_buttons==2) $("#order_airbase").show(); // Uncommon order for infra units.
+      } else $("#order_airbase").show(); // Marines always want to see it.
+    }
+    if (UNIT_CAN_RADAR) {
+      unit_actions["airbase"] = {name: "Build Radar (Shift-E)"};
+      $("#order_radar").show();
+    }
+    // ********************************************************************** </END Base Building> ***
+
+    // Disbanding in a city doesn't show red-skull-death-button because it recycles production:
+    if (pcity) {
+      disband_type = 1; // flags Recycle icon
+      $("#order_disband").prop('title', 'Recycle Unit (Shift-D)');
+      $("#order_disband").html("<a href='#' onclick='key_unit_disband();'><img src='/images/orders/disband_recycle.png' name='disband_button' alt='' border='0' width='30' height='30'></a>");
+      // Cargo class disbands often for recycling shields, show button always, less threatening recycle version of it.
+      if (client_rules_flag[CRF_MP2_C]) {
+        if (ptype['name']=="Goods" || ptype['name']=="Well-Digger" || ptype['name']=="Tribesmen" || ptype['name']=="Freight") {
+          $("#order_disband").show();
+          var city_prod_name = get_city_production_type(pcity)['name']; 
+          if (!city_prod_name) city_prod_name = "Production";
+          $("#order_disband").prop('title', 'Help Build '+city_prod_name+' (Shift-D)');
+        }
+      }
+    } else {
+      disband_type = 0; // flags Death/You're fired icon
+      $("#order_disband").prop('title', 'Disband (Shift-D)');
+      $("#order_disband").html("<a href='#' onclick='key_unit_disband();'><img src='/images/orders/disband_default.png' name='disband_button' alt='' border='0' width='30' height='30'></a>");
+    }
+    // LEGIONS. rulesets which allow Legions to build Roads on non-domestic tiles-------------
     if ((client_rules_flag[CRF_LEGION_WORK]) && ptype['name'] == "Legion") {
-
-      // Forts:
-      if (player_invention_state(client.conn.playing, tech_id_by_name('Masonry')) == TECH_KNOWN
-          && !tile_has_extra(ptile, EXTRA_FORT)
-          && !pcity) {  // Show Fort button if Masonry and no Fort
-              unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
-              $("#order_fortress").show();
-      }
-      if (!tile_has_extra(ptile, EXTRA_FORTRESS)
-            && player_invention_state(client.conn.playing, tech_id_by_name('Construction')) == TECH_KNOWN
-            && !pcity
-          ) {
-              unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
-              $("#order_fortress").show();
-      }
-      if ( typeof EXTRA_NAVALBASE !== 'undefined'
-              && player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN
-              && can_build_naval_base(punit,ptile)
-              && !pcity
-          ) {
-              unit_actions["navalbase"] = {name: "Naval Base (Shift-N)"};
-              $("#order_navalbase").show();
-      }
-
-      // Roads:
       if (!tile_has_extra(ptile, EXTRA_ROAD)) {
         const domestic = (ptile['owner'] == client.conn.playing.playerno)
         const has_river = tile_has_extra(ptile, EXTRA_RIVER);
-        const knows_bridges = (player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) == TECH_KNOWN);
+        const knows_bridges = tech_known('Bridge Building');
         var show = false;
 
         if (!domestic) show = true;
@@ -1270,27 +1656,17 @@ function update_unit_order_commands()
         } else $("#order_road").hide();
       }
     } //---------------------------------------------------------------------------------------------------
-    // hideouts
-    if (client_rules_flag[CRF_EXTRA_HIDEOUT] && server_settings['hideouts']['val']
-        && utype_has_flag(ptype,UTYF_FOOTSOLDIER)) {
-      if (player_invention_state(client.conn.playing, tech_id_by_name('Warrior Code')) == TECH_KNOWN
-        && !pcity
-        && !tile_has_extra(ptile, EXTRA_FORT)
-        && !tile_has_extra(ptile, EXTRA_AIRBASE)
-        && ( (terrain_name == 'Mountains') || (terrain_name == 'Forest') || (terrain_name == 'Jungle')
-              || (terrain_name == 'Swamp') )
-        && ( (ptile['owner'] == UNCLAIMED_LAND) || ptile['owner'] == client.conn.playing.playerno )
-        ) {  // Show Hideout button if Warrior Code and no other bases:
-        unit_actions["hideout"] = {name: string_unqualify("Hideout (Shift-H)")};
-        $("#order_hideout").show();
-      }
-    }
+
 
     // Figure out default of whether pillage is legal and show it, before applying special rules later
     if (get_what_can_unit_pillage_from(punit, ptile).length > 0
          && (pcity == null || city_owner_player_id(pcity) !== client.conn.playing.playerno)) {
+           var pillage_title = unit_has_dual_pillage_options(punit) 
+                               ? "Pillage / "+unit_get_pillage_name(punit)
+                               : unit_get_pillage_name(punit);
+            $("#order_pillage").prop('title', pillage_title+" (Shift-P)");
             $("#order_pillage").show();
-            unit_actions["pillage"] = {name: "Pillage (Shift-P)"};
+            unit_actions["pillage"] = {name: pillage_title+" (Shift-P)"};
     } else {
             $("#order_pillage").hide();
     }
@@ -1307,8 +1683,7 @@ function update_unit_order_commands()
 
     // All Settler types have similar types or orders and rules for whether to show those orders:
     // TO DO:  this should be checking for the FLAG "Settlers" in the ptype which indicates who can do the follow build/road/mine/etc. actions:
-    if (ptype['name'] == "Settlers" || worker_type == true || ptype['name'] == "Engineers") {
-
+    if (infra_type || worker_type) {
       if (ptype['name'] == "Settlers") unit_actions["autosettlers"] = {name: "Auto settler (A)"};
       if (worker_type == true) unit_actions["autosettlers"] = {name: "Auto workers (A)"};
       if (ptype['name'] == "Engineers") unit_actions["autosettlers"] = {name: "Auto engineers (A)"};
@@ -1316,15 +1691,21 @@ function update_unit_order_commands()
       if (show_order_buttons==1) $("#order_pillage").hide(); // not frequently used order for settler types
       if (show_order_buttons==1) $("#order_noorders").hide();  //not frequently used order
 
+      /*console.log("\nRoad test: !thx(r)=="+!tile_has_extra(ptile, EXTRA_ROAD));
+      //console.log("Road test: type(SB)=="+(typeof EXTRA_SEABRIDGE !== "undefined"));
+      //console.log("Road test: thx(sb)=="+tile_has_extra(ptile, EXTRA_SEABRIDGE));*/
+
       if (!tile_has_extra(ptile, EXTRA_ROAD)) {
-        $("#order_road").show();
-        $("#order_railroad").hide();
-        if (!(tile_has_extra(ptile, EXTRA_RIVER) && player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) == TECH_UNKNOWN)) {
-	      unit_actions["road"] = {name: "Road (R)"};
-	    }
-      } else if (player_invention_state(client.conn.playing, tech_id_by_name('Railroad')) == TECH_KNOWN
-                 && tile_has_extra(ptile, EXTRA_ROAD)
-               && !tile_has_extra(ptile, EXTRA_RAIL)) {
+        if ( !client_rules_flag[CRF_SEABRIDGE] || !tile_has_extra(ptile, EXTRA_SEABRIDGE)) {
+          $("#order_road").show();
+          $("#order_railroad").hide();
+          if (!(tile_has_extra(ptile, EXTRA_RIVER) && !tech_known('Bridge Building'))) {
+            unit_actions["road"] = {name: "Road (R)"};
+          }
+        }
+      } else if (tech_known('Railroad')
+                 && (tile_has_extra(ptile, EXTRA_ROAD) || (client_rules_flag[CRF_SEABRIDGE] && tile_has_extra(ptile, EXTRA_SEABRIDGE)))
+                 && !tile_has_extra(ptile, EXTRA_RAIL)) {
         $("#order_road").hide();
         $("#order_railroad").show();
 	      unit_actions['railroad'] = {name: "Railroad (R)"};
@@ -1337,7 +1718,14 @@ function update_unit_order_commands()
         $("#order_road").hide();
         $("#order_railroad").hide();
       }
-      if (tile_has_extra(ptile, EXTRA_RIVER) && player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) == TECH_UNKNOWN) {
+      if (can_build_sea_bridge(punit, ptile)) {
+          unit_actions["road"] = {name: "Sea Bridge (R)"};
+          $("#order_seabridge").prop('title', "Build Sea Bridge (R)");
+          $("#order_seabridge").show();
+          $("#order_road").hide();
+      } else $("#order_road").prop('title', "Build Road (R)")
+
+      if (tile_has_extra(ptile, EXTRA_RIVER) && !tech_known('Bridge Building')) {
         $("#order_road").hide();
       }
 
@@ -1345,17 +1733,15 @@ function update_unit_order_commands()
       if (show_order_buttons==1) $("#order_explore").hide(); // not frequently used button
       if (show_order_buttons==2) $("#order_sentry").show(); // not frequently used for settler types
       if (show_order_buttons==2) $("#order_auto_settlers").show(); // not frequently used button
-      $("#order_pollution").show();    //TO DO: show this if there's pollution
       if ( (terrain_name == 'Hills' || terrain_name == 'Mountains') && !tile_has_extra(ptile, EXTRA_MINE)) {
         $("#order_mine").show();
         unit_actions["mine"] =  {name: "Mine (M)"};
-      } else if (terrain_name == "Desert" && !tile_has_extra(ptile, EXTRA_OIL_WELL)
-        && player_invention_state(client.conn.playing, tech_id_by_name('Construction'))!= TECH_UNKNOWN ) {
+      } else if (terrain_name == "Desert" && !tile_has_extra(ptile, EXTRA_OIL_WELL) && tech_known('Construction')) {
           $("#order_oil_well").show();
           unit_actions["mine"] =  {name: "Oil Well (M)"};
       } else if (terrain_name == 'Grassland' || terrain_name == 'Plains' || terrain_name == 'Swamp' || terrain_name == 'Jungle') {
           unit_actions["mine"] = {name: "plant Forest (M)"};
-          if (show_order_buttons==2) $("#order_plant_forest").show();  //not frequently used button
+          /* if (show_order_buttons==2)*/ $("#order_plant_forest").show();  //not frequently used button
       } else if (terrain_name == 'Forest') {
           unit_actions["mine"] = {name: "make Swamp (M)"};
           if (show_order_buttons==2) $("#order_make_swamp").show();  //not frequently used button
@@ -1363,6 +1749,7 @@ function update_unit_order_commands()
 
       if (tile_has_extra(ptile, EXTRA_FALLOUT)) {
         unit_actions["fallout"] = {name: "clean Fallout (N)"};
+        $("#order_fallout").show();
       }
 
       if (tile_has_extra(ptile, EXTRA_POLLUTION)) {
@@ -1373,7 +1760,7 @@ function update_unit_order_commands()
       }
 
       if (terrain_name == "Forest") {
-        if (show_order_buttons==2) $("#order_forest_remove").show(); // not frequently used button
+        $("#order_forest_remove").show();
         $("#order_irrigate").hide();
         $("#order_build_farmland").hide();
 	      unit_actions["forest"] = {name: "Chop Forest (I)"};
@@ -1383,7 +1770,7 @@ function update_unit_order_commands()
         $("#order_build_farmland").hide();
         if (terrain_name == "Swamp") unit_actions["irrigation"] = {name: "drain Swamp (I)"};
         else unit_actions["irrigation"] = {name: "Irrigation (I)"};
-      } else if (tile_has_extra(ptile, EXTRA_IRRIGATION) && !tile_has_extra(ptile, EXTRA_FARMLAND) && player_invention_state(client.conn.playing, tech_id_by_name('Refrigeration')) == TECH_KNOWN) {
+      } else if (tile_has_extra(ptile, EXTRA_IRRIGATION) && !tile_has_extra(ptile, EXTRA_FARMLAND) && tech_known('Refrigeration')) {
         $("#order_build_farmland").show();
         $("#order_irrigate").hide();
         $("#order_forest_remove").hide();
@@ -1393,47 +1780,9 @@ function update_unit_order_commands()
         $("#order_irrigate").hide();
         $("#order_build_farmland").hide();
       }
-
-      // Order to make Fort with masonry (if ruleset allows it)
-      if (client_rules_flag[CRF_MASONRY_FORT]) {
-        // Masonry + No Fort on tile = show order to make Fort
-        if (player_invention_state(client.conn.playing, tech_id_by_name('Masonry')) == TECH_KNOWN
-            && !tile_has_extra(ptile, EXTRA_FORT)
-            && !pcity) {
-              unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
-              $("#order_fortress").show();
-        }
-      }
-      // Construction + no Fortress on tile = show order to make Fortress:
-      if (player_invention_state(client.conn.playing, tech_id_by_name('Construction')) == TECH_KNOWN
-          && !tile_has_extra(ptile, EXTRA_FORTRESS)
-          && !pcity) {
-        unit_actions["fortress"] = {name: string_unqualify(terrain_control['gui_type_base0']) + " (Shift-F)"};
-        $("#order_fortress").show();
-      }
-      if ( typeof EXTRA_NAVALBASE !== 'undefined'
-              && player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN
-              && can_build_naval_base(punit,ptile)
-              && !pcity) {
-              unit_actions["navalbase"] = {name: "Naval Base (Shift-N)"};
-              $("#order_navalbase").show();
-      }
-      if (player_invention_state(client.conn.playing, tech_id_by_name('Radio')) == TECH_KNOWN
-          && !tile_has_extra(ptile, EXTRA_AIRBASE) && !pcity) {
-            unit_actions["airbase"] = {name: string_unqualify(terrain_control['gui_type_base1']) + " (Shift-E)"};
-            if (show_order_buttons==2) $("#order_airbase").show();
-      } else if (client_rules_flag[CRF_RADAR_TOWER]) { // Order to make Radar Tower Radar (if ruleset allows it)
-        // Radar + has Airbase but no Radar on tile = show order to make Radar
-        if (player_invention_state(client.conn.playing, tech_id_by_name('Radar')) == TECH_KNOWN
-            && tile_has_extra(ptile, EXTRA_AIRBASE)
-            && !tile_has_extra(ptile, EXTRA_RADAR)
-            && !pcity) {
-              unit_actions["airbase"] = {name: "Build Radar (Shift-E)"};
-              if (show_order_buttons==2) $("#order_airbase").show();
-        }
-      }
-
-    } else {   // Handle all things non-Settler types may have in common here:
+    } // ********************************************************************************************* </END Settler/infra actions block>
+     // Handle all things non-Settler types may have in common here: ********************************************************************
+    else {
       if (utype_can_do_action(ptype, ACTION_FORTIFY)) {
         $("#order_fortify").show();
         unit_actions["fortify"] = {name: "Fortify (F)"};
@@ -1441,7 +1790,7 @@ function update_unit_order_commands()
       $("#order_sentry").show();  // TO DO?: air units and new triremes can't sentry outside a fueling tile
       if (unit_can_vigil(punit)) {
         $("#order_vigil").show();
-        unit_actions["vigil"] = {name: "Vigil (Ctrl-V)"};
+        unit_actions["vigil"] = {name: "Vigil (Shift-I)"};
       }
     }
 
@@ -1550,15 +1899,28 @@ function update_unit_order_commands()
       }
       //console.log("EXITED upgrade target check.");
       var upgrade_name = upgrade_type['name'];
-      var upgrade_cost = Math.floor(upgrade_type['build_cost'] - ptype['build_cost']/2);  //subtract half the shield cost of upgrade unit
+      // Upgrade cost in unittype.c doesn't seem to take conditional unit discounts into effect.
+      var upgrade_cost = Math.floor(upgrade_type['build_cost'] - Math.floor(ptype['build_cost']/2));  //subtract half the shield cost of upgrade unit
       // upgrade cost = 2*T + (T*T)/20, where T = shield_cost_of_new unit - (shield_cost_of_old unit / 2)
       upgrade_cost = 2*upgrade_cost + Math.floor( (upgrade_cost*upgrade_cost)/20 );
       // TODO: check for effect Upgrade_Price_Pct when possible and multiply that constant to upgrade_cost
+      var cost_adjust = 0;
       if (client_rules_flag[CRF_TESLA_UPGRADE_DISCOUNT]) {
         if ( player_has_wonder(client.conn.playing.playerno, improvement_id_by_name(B_TESLAS_LABORATORY)) ) {
-          upgrade_cost = Math.floor( upgrade_cost * 0.80); // 20% discount for Tesla's Lab
+          cost_adjust -= 20; // 20% discount for Tesla's Lab
         }
       }
+      if (client_rules_flag[CRF_RECYCLING_DISCOUNT]) {
+        if (tech_known('Recycling')) {
+          cost_adjust -= 20; // 20% discount after Recycling Tech
+        }
+      }
+      if (client_rules_flag[CRF_MP2_C] && governments[client.conn.playing['government']]['name']=="Nationalism") {
+        cost_adjust -= 25; // 25% discount for government Nationalism.
+      }
+
+      upgrade_cost = Math.floor(upgrade_cost * (100 + cost_adjust) / 100);
+      /* *********************************************************************************************** */
 
       unit_actions["upgrade"] =  {name: "Upgrade to "+upgrade_name+" for "+upgrade_cost+" (U)"};
       $("#order_upgrade").attr("title", "Upgrade to "+upgrade_name+" for "+upgrade_cost+" (U)");
@@ -1568,7 +1930,6 @@ function update_unit_order_commands()
     if (ptype != null && ptype['name'] != "Explorer") {
       unit_actions["explore"] = {name: "Auto explore (X)"};
     }
-
 
     // Display order to load unit on transport, if: (A) on a city or river && (B) tile has a transport && (C) unit not already loaded:
         // **** TO DO: fix flawed logic, a fighter can get on a carrier if not on city/river, marines on helicopter, etc.
@@ -1606,7 +1967,8 @@ function update_unit_order_commands()
             else if (pcity != null) {
               unit_actions["unit_unload"] = {name: "Unload Transport (T)"};
               $("#order_unload").show();
-            } else { // 3. In a Naval Base
+            } 
+            else { // 3. In a Naval Base
               if (typeof EXTRA_NAVALBASE !== "undefined") {
                 if (tile_has_extra(ptile, EXTRA_NAVALBASE)) {
                   unit_actions["unit_unload"] = {name: "Unload Transport (T)"};
@@ -1619,7 +1981,12 @@ function update_unit_order_commands()
                   $("#order_unload").show();
                 }
               }
-              $("#order_activate_cargo").show(); // if no option to unload, show option to activate or 'wake' units
+              // 5. diplomat-type on the unit-type named "Airplane" over an Airbase
+              if ( unit_types[punit['type']]['name'] == "Airplane" && tile_has_extra(ptile, EXTRA_AIRBASE)) {
+                unit_actions["unit_unload"] = {name: "Unload Transport (T)"};
+                $("#order_unload").show();
+              } 
+            $("#order_activate_cargo").show(); // if no option to unload, show option to activate or 'wake' units
             }
           }
         }
@@ -1652,23 +2019,13 @@ function update_unit_order_commands()
   unit_actions = $.extend(unit_actions, {
             "sentry": {name: "Sentry (S)"},
             "wait": {name: "Wait (W)"},
-            "disband": {name: "Disband (Shift-D)"}
+            "disband": {name: (disband_type ? "Recycle Unit (Shift-D)" : "Disband (Shift-D)")}
             });
 
-/* this code removed: it was inconsistently making context menu too large on mobile:
-  if (touch_device) {
-    $(".context-menu-list").css("width", "600px");
-    $(".context-menu-item").css("font-size", "220%");
-  } */
   $(".context-menu-list").css("z-index", 5000);
-
-//// these changes in control.js and game.js made container not clickable but children unclickable also
-  //$("#game_units_orders_default").css("pointer-events", "none"); //// container not clickable, force children to be clickable
-  //$("#game_units_orders_default").children().css("pointer-events", "auto"); //// container not clickable, force children to be clickable
 
   return unit_actions;
 }
-
 
 /**************************************************************************
 ...
@@ -1893,11 +2250,12 @@ function set_unit_focus(punit)
   save_last_unit_focus();
 
   current_focus = [];
+  unit_may_have_lost_focus();
   if (punit == null) {
     current_focus = [];
   } else {
     current_focus[0] = punit;
-    if (renderer == RENDERER_WEBGL) update_unit_position(index_to_tile(punit['tile']));
+    action_selection_next_in_focus(IDENTITY_NUMBER_ZERO);
   }
 
   if (punit) warcalc_set_default_vals(punit);
@@ -1921,13 +2279,10 @@ function click_unit_in_panel(e, punit)
         current_focus.push(punit);
       } else { // if unit is already in selection, shift-clicking removes it from selection
         current_focus.splice(index, 1);
+        unit_may_have_lost_focus();
       }
     }
 
-    // though doing the exact same thing as single-click, shift-click was losing the other units in the panel, so
-    // try to emulate everything else it does, as a test to get those units displayed in the panel even though
-    // not in focus:
-    if (renderer == RENDERER_WEBGL) update_unit_position ( index_to_tile(punit['tile']));
     auto_center_on_focus_unit();
 
     update_active_units_dialog(); //previously only doing this but it lost unselected units in the panel
@@ -1935,9 +2290,7 @@ function click_unit_in_panel(e, punit)
     // added these lines below to emulate same code as non-shift-click which doesn't lose units in the panel:
     update_unit_order_commands();
 
-    if (current_focus.length > 0 && $("#game_unit_orders_default").length > 0 && !cardboard_vr_enabled && show_order_buttons ) {
-      //$("#game_units_orders_default").css("pointer-events", "none"); //// these changes in control.js and game.js made container not clickable but children unclickable also
-      //$("#game_units_orders_default").children().css("pointer-events", "auto"); //// container not clickable, force children to be clickable
+    if (current_focus.length > 0 && $("#game_unit_orders_default").length > 0 && show_order_buttons ) {
       $("#game_unit_orders_default").show();
     }
   } else set_unit_focus_and_redraw(punit);
@@ -1954,11 +2307,12 @@ function set_unit_focus_and_redraw(punit)
 
   if (punit == null) {
     current_focus = [];
-    if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
+    unit_may_have_lost_focus();
   } else {
     current_focus[0] = punit;
+    unit_may_have_lost_focus();
+    action_selection_next_in_focus(IDENTITY_NUMBER_ZERO);
     warcalc_set_default_vals(punit); // warcalc default vals as last clicked units
-    if (renderer == RENDERER_WEBGL) update_unit_position(index_to_tile(punit['tile']));
   }
 
   //shift-spacebar to return to last location:
@@ -1969,9 +2323,7 @@ function set_unit_focus_and_redraw(punit)
   auto_center_on_focus_unit();
   update_active_units_dialog();
   update_unit_order_commands();
-  if (current_focus.length > 0 && $("#game_unit_orders_default").length > 0 && !cardboard_vr_enabled && show_order_buttons ) {
-    //$("#game_units_orders_default").css("pointer-events", "none"); //// these changes in control.js and game.js made container not clickable but children unclickable also
-    //$("#game_units_orders_default").children().css("pointer-events", "auto"); //// container not clickable, force children to be clickable
+  if (current_focus.length > 0 && $("#game_unit_orders_default").length > 0 && show_order_buttons ) {
     $("#game_unit_orders_default").show();
   }
 }
@@ -2014,7 +2366,6 @@ function auto_center_on_focus_unit()
 
   if (ptile != null && auto_center_on_unit) {
     center_tile_mapcanvas(ptile);
-    update_unit_position(ptile);
   }
 }
 
@@ -2279,7 +2630,7 @@ function worked_tile_click(ptile)
 }
 
 /**************************************************************************
- Handles everything when the user clicked a tile
+  Handles everything when the user clicked a tile
 **************************************************************************/
 function do_map_click(ptile, qtype, first_time_called)
 {
@@ -2288,7 +2639,7 @@ function do_map_click(ptile, qtype, first_time_called)
   var pcity = tile_city(ptile);
   var player_has_own_unit_present = false;
 
-  //console.log("do_map_click(...) called.");
+  //console.log("do_map_click(...) called.");///
 
   // User can safely finish dragging map and releasing on ANY tile without incurring an action.
   if (real_mouse_move_mode == true) return;
@@ -2300,13 +2651,38 @@ function do_map_click(ptile, qtype, first_time_called)
     worked_tile_click(ptile);
     return;
   }
+  // handle ctrl-click (Click a city to select unit(s) inside instead of city itself)
+  if (!mouse_click_mod_key['shiftKey'] && mouse_click_mod_key['ctrlKey'] && !mouse_click_mod_key['altKey']) {
+    pcity = null;  // pretend there's no city.
+  }
+  // User planning mode, clicks only mark tiles with user notes
+  if (user_marking_mode) {
+    if (!ptile) return;    
+    var usermark = null;
+    const tkey = "cPlan"+ptile['index'];    
+    if (myGameVars[tkey]) {
+      usermark = null;  // toggle it off
+    } else {
+        if (mouse_click_mod_key['shiftKey'])
+          usermark = USER_MARK_2
+        else if (mouse_click_mod_key['altKey'])
+          usermark = USER_MARK_4;
+        else if (mouse_click_mod_key['ctrlKey'])
+          usermark = USER_MARK_3;
+        else 
+          usermark = USER_MARK_1;
+    }
+    if (usermark)  myGameVars[tkey] = usermark;
+    else delete myGameVars[tkey]; // don't keep records of tiles for unplanned cities
+    simpleStorage.set(Game_UID, myGameVars); // save persistent for this game only
+    return;
+  }
 
   if (current_focus.length > 0 && current_focus[0]['tile'] == ptile['index']) {
     /* clicked on unit at the same tile, then deactivate goto and show context menu. */
     if (goto_active /*&& !touch_device*/) { //(allow clicking same tile when giving a Nuke order.)
       deactivate_goto(false);
     }
-    if (renderer == RENDERER_2DCANVAS) {
       if (!mouse_click_mod_key['shiftKey']) { // normal left-click
         /* CONDITIONS FOR SHOWING A CONTEXT MENU:
            1.Automatic context menu when clicking unit, if 'unit_click_menu' user PREF is on.
@@ -2330,7 +2706,6 @@ function do_map_click(ptile, qtype, first_time_called)
             came_from_context_menu = true;
           }
         }
-      }
     } else if (!mouse_click_mod_key['shiftKey'] && unit_click_menu) {
       // 3D handling of above. TO DO: test/integrate same 2D functionality above for 3D if appropriate
       if (pcity) {
@@ -2343,6 +2718,8 @@ function do_map_click(ptile, qtype, first_time_called)
       // Record the clicked unit to enable seeing if a unit is clicked twice.
       // 3 STATES: -1:Fresh, unit_id:last unit clicked is stored, -2:last unit was already clicked twice
       last_unit_clicked = (last_unit_clicked == -2) ? -1 : current_focus[0]['id'];
+      if (focuslock && current_focus) center_tile_mapcanvas(unit_tile(current_focus[0]));
+
       return; //our work is done here unless we did a shift-click
     }
   }
@@ -2375,9 +2752,11 @@ function do_map_click(ptile, qtype, first_time_called)
 
         if (goto_path) { // touch devices don't have a goto_path until they call this function twice. see: if (touch_device) below
           // Client circumvents FC Server has buggy GOTO for units which have UTYF_COAST + fuel:
-          if (unit_has_type_flag(punit, UTYF_COAST) && punit['fuel']>0 && !delayed_goto_active && goto_path !== undefined) {
-            goto_path['dir'].shift();  // remove the first "refuel dir" on fuel units, so they don't freeze on refuel spots
-            goto_path['length']--;     // correct the path length for the removed -1 "refuel dir"
+          if (unit_has_type_flag(punit, UTYF_COAST) && punit['fuel']>0 && !delayed_goto_active /*&& goto_path !== "undefined"*/) {
+            if (goto_path['dir'] && goto_path['dir'][0] && goto_path['dir'][0]==-1) {
+              goto_path['dir'].shift();  // remove the first "refuel dir -1" on coastal fuel units so they don't freeze on refuel spots
+              goto_path['length']--;     // correct the path length for the removed -1 "refuel dir"
+            }
           } else if (delayed_goto_active) {
             //if (unit_type(punit)['move_rate']==punit['movesleft']) {    didn't capture case of unmoved but damage_slows
             if (!unit_has_moved(punit)) {
@@ -2428,6 +2807,7 @@ function do_map_click(ptile, qtype, first_time_called)
 
         if (  Math.abs(tile_dx)<=1 && Math.abs(tile_dy) <=1     // adjacent
               && goto_last_action != ACTION_NUKE                // not a nuke command appended to a GOTO
+              && !connect_active                                // not in connect mode to make multiple roads/irrigation
               && (true_goto_path_length <= 1)   // don't override path>=2 which has better legal way to get to adjacent tile
           )                                    // "illegal" adjacent goto attempts render goto_path.length == undefined (true_goto_path_length will then be 0)
 
@@ -2511,33 +2891,37 @@ function do_map_click(ptile, qtype, first_time_called)
           "dest_tile": ptile['index']
         };
 
+        var order = {
+          "order"      : ORDER_LAST,
+          "activity"   : ACTIVITY_LAST,
+          "sub_target" : 0,
+          "action"     : ACTION_COUNT,
+          "dir"        : -1
+        };
+
         /* Add each individual order. */
         packet['orders'] = [];
-        packet['dir'] = [];
-        packet['activity'] = [];
-        packet['target'] = [];
-        packet['extra'] = [];
-        packet['action'] = [];
         for (var i = 0; i < goto_path['length']; i++) {
           /* TODO: Have the server send the full orders instead of just the
            * dir part. Use that data in stead. */
 
           if (goto_path['dir'][i] == -1) {
             /* Assume that this means refuel. */
-            packet['orders'][i] = ORDER_FULL_MP;
+            order['order'] = ORDER_FULL_MP;
           } else if (i + 1 != goto_path['length']) {
             /* Don't try to do an action in the middle of the path. */
-            packet['orders'][i] = ORDER_MOVE;
+            order['order'] = ORDER_MOVE;
           } else {
             /* It is OK to end the path in an action. */
-            packet['orders'][i] = ORDER_ACTION_MOVE;
+            order['order'] = ORDER_ACTION_MOVE;
           }
 
-          packet['dir'][i] = goto_path['dir'][i];
-          packet['activity'][i] = ACTIVITY_LAST;
-          packet['target'][i] = 0;
-          packet['extra'][i] = EXTRA_NONE;
-          packet['action'][i] = ACTION_COUNT;
+          order['dir'] = goto_path['dir'][i];
+          order['activity'] = ACTIVITY_LAST;
+          order['sub_target'] = 0;
+          order['action'] = ACTION_COUNT;
+
+          packet['orders'][i] = Object.assign({}, order);
         }
 
         if (goto_last_order != ORDER_LAST) {
@@ -2554,23 +2938,24 @@ function do_map_click(ptile, qtype, first_time_called)
             /* Increase orders length */
             packet['length'] = packet['length'] + 1;
 
-            /* Initialize the order to "empthy" values. */
-            packet['orders'][pos] = ORDER_LAST;
-            packet['dir'][pos] = -1;
-            packet['activity'][pos] = ACTIVITY_LAST;
-            packet['target'][pos] = 0;
-            packet['extra'][pos] = EXTRA_NONE;
-            packet['action'][pos] = ACTION_COUNT;
+            /* Initialize the order to "empty" values. */
+            order['order'] = ORDER_LAST;
+            order['dir'] = -1;
+            order['activity'] = ACTIVITY_LAST;
+            order['sub_target'] = 0;
+            order['action'] = ACTION_COUNT;
           } else {
             /* Replace the existing last order with the final order */
             pos = packet['length'] - 1;
           }
 
           /* Set the final order. */
-          packet['orders'][pos] = goto_last_order;
+          order['order'] = goto_last_order;
 
           /* Perform the final action. */
-          packet['action'][pos] = goto_last_action;
+          order['action'] = goto_last_action;
+
+          packet['orders'][pos] = Object.assign({}, order);
         }
 
         /* The last order has now been used. Clear it. */
@@ -2584,8 +2969,18 @@ function do_map_click(ptile, qtype, first_time_called)
                       + goto_path['unit_id']);
           return;
         }
+        // If we're in connect mode, insert connect orders inside it:
+        if (connect_active) {
+          // reconstruct the packet
+          packet = create_connect_packet(packet);
+          // reset/clear connect mode
+          connect_active = false;
+          connect_activity = ACTIVITY_LAST;
+          connect_extra = -1;
+        }
         /* Send the order to move using the orders system. */
         send_request(JSON.stringify(packet));
+       /// if (focuslock) focuslock_unit(); should be handled by the unit animation movement now.
         if (punit['movesleft'] > 0 && !delayed_goto_active && punit['owner'] == client.conn.playing.playerno) {
           unit_move_sound_play(punit);
         } else if (!has_movesleft_warning_been_shown) {
@@ -2606,12 +3001,12 @@ function do_map_click(ptile, qtype, first_time_called)
       has to be requested first, and then do_map_click will be called again
       to issue the unit order based on the goto path. */
       if (current_focus.length > 0) {
-        console.log("touch device requesting goto path")
+        //console.log("touch device requesting goto path")
         request_goto_path(current_focus[0]['id'], ptile['x'], ptile['y']);
         if (first_time_called) {
-          console.log("inside first_time_called code")
+          //console.log("inside first_time_called code")
           setTimeout(function(){
-            console.log("setting up virtual do_map_click")
+            //console.log("setting up virtual do_map_click")
             do_map_click(ptile, qtype, false);
           }, 250);
         }
@@ -2620,45 +3015,48 @@ function do_map_click(ptile, qtype, first_time_called)
     }
 
     deactivate_goto(true);
-    //update_unit_focus();  true in the line above advances unit focus after update_focus_delay # milliseconds
-
   }  // END OF GO TO HANDLING ----------------------------------------------------------------------------------------------
-   else if (paradrop_active && current_focus.length > 0) {
+  else if (paradrop_active && current_focus.length > 0) {
     punit = current_focus[0];
     packet = {
       "pid"         : packet_unit_do_action,
       "actor_id"    : punit['id'],
       "target_id"   : ptile['index'],
       "extra_id"    : EXTRA_NONE,
-      "value"       : 0,
+      "sub_tgt_id"  : 0,
       "name"        : "",
       "action_type" : ACTION_PARADROP
     };
     send_request(JSON.stringify(packet));
+    if (focuslock) focuslock_unit();
     paradrop_active = false;
-
-  } else if (airlift_active && current_focus.length > 0) {
-    punit = current_focus[0];
-    pcity = tile_city(ptile); // TO DO: remove? we set pcity at top
-    if (pcity != null) {
-      packet = {
-        "pid"         : packet_unit_do_action,
-        "actor_id"    : punit['id'],
-        "target_id"   : pcity['id'],
-        "extra_id"    : EXTRA_NONE,
-        "value"       : 0,
-        "name"        : "",
-        "action_type" : ACTION_AIRLIFT
-      };
-      send_request(JSON.stringify(packet));
+  } 
+  else if (airlift_active && current_focus.length > 0) {
+    for (var a=0; a<current_focus.length; a++) {
+      punit = current_focus[a];
+      pcity = tile_city(ptile); // TO DO: remove? we set pcity at top
+      if (pcity != null) {
+        packet = {
+          "pid"         : packet_unit_do_action,
+          "actor_id"    : punit['id'],
+          "target_id"   : pcity['id'],
+          "extra_id"    : EXTRA_NONE,
+          "sub_tgt_id"  : 0,
+          "name"        : "",
+          "action_type" : ACTION_AIRLIFT
+        };
+        send_request(JSON.stringify(packet));
+      }
     }
     airlift_active = false;
 
-  } else if (action_tgt_sel_active && current_focus.length > 0) {
+  } 
+  else if (action_tgt_sel_active && current_focus.length > 0) {
     request_unit_act_sel_vs(ptile);
     action_tgt_sel_active = false;
 
-  } else {
+  } 
+  else {
     if (pcity != null) { //if city clicked
       if (pcity['owner'] == client.conn.playing.playerno && !mouse_click_mod_key['shiftKey']) { //if city is your own
         //console.log("Clicked our own city.");
@@ -2669,11 +3067,7 @@ function do_map_click(ptile, qtype, first_time_called)
 
           set_unit_focus_and_redraw(sunits[0]);
           if (city_click_goto_cooldown(ptile)) { // don't show contextmenu if in the cooldown period for a double tap GOTO
-            if (renderer == RENDERER_2DCANVAS) {
-              $("#canvas").contextMenu();
-            } else { //3D handling can potentially be made different later
-              $("#canvas_div").contextMenu();
-            }
+            $("#canvas").contextMenu();
           }
           return; // move the commented-out return from below up here
         } else if (!goto_active) { //if GOTO active then the click is a move command, not a show city command
@@ -2711,10 +3105,10 @@ function do_map_click(ptile, qtype, first_time_called)
       if (!mouse_click_mod_key['shiftKey']) {
         set_unit_focus_and_redraw(null);
       }
-    } else if (sunits != null && sunits.length > 0 ) {
+    }
+    else if (sunits != null && sunits.length > 0 ) {
       // Clicked on a tile with units:
       // Check that one of the units belongs to player:
-
       var own_unit_index = -1; // -1 means player has none of own units present
 
       for (var u = 0; u < sunits.length; u++) {
@@ -2722,6 +3116,7 @@ function do_map_click(ptile, qtype, first_time_called)
           {
             own_unit_index = u; //player wants to select his own unit first, not a foreign unit
             player_has_own_unit_present = true;
+            if (!mouse_click_mod_key['shiftKey'] && focuslock) center_tile_mapcanvas(unit_tile(sunits[u]));
           }
           if (player_has_own_unit_present) break; // gets first visible unit in stack, not last
       }
@@ -2762,7 +3157,9 @@ function do_map_click(ptile, qtype, first_time_called)
           /* A single unit has been clicked with the mouse. */
           var unit = sunits[0];
           set_unit_focus_and_activate(unit);
-        } else { /* more than one unit is on the selected left-clicked tile. */
+
+        } 
+        else { /* more than one unit is on the selected left-clicked tile. */
             if (own_unit_index>=0) {
               set_unit_focus_and_redraw(sunits[own_unit_index]);
             }
@@ -2774,25 +3171,17 @@ function do_map_click(ptile, qtype, first_time_called)
         }
 
         if (touch_device) { // show context menu unless we clicked on a city prior to GOTO_COOLDOWN period
-          if (renderer == RENDERER_2DCANVAS) {
             if (pcity) {
               if (city_click_goto_cooldown(ptile)) $("#canvas").contextMenu();
             } else {
               $("#canvas").contextMenu();
             }
-          }
-          else {  // 3D handling, currently the same
-            if (pcity) {
-              if (city_click_goto_cooldown(ptile)) $("#canvas").contextMenu();
-            } else {
-              $("#canvas").contextMenu();
-            }
-          }
         }
       } else if (pcity == null && !mouse_click_mod_key['shiftKey']) {
         // clicked on a tile with units exclusively owned by other players.
         save_last_unit_focus();
         current_focus = [];
+        unit_may_have_lost_focus();
         for (i=0;i<sunits.length;i++)
           current_focus.push(sunits[i]);
         //current_focus = sunits;
@@ -2803,7 +3192,6 @@ function do_map_click(ptile, qtype, first_time_called)
       }
     }
   }
-
   paradrop_active = false;
   airlift_active = false;
   action_tgt_sel_active = false;
@@ -2852,7 +3240,7 @@ function global_keyboard_listener(ev)
   }
   civclient_handle_key(keyboard_key, ev.keyCode, ev['ctrlKey'],  ev['altKey'], ev['shiftKey'], ev);
 
-  if (renderer == RENDERER_2DCANVAS) $("#canvas").contextMenu('hide');
+  $("#canvas").contextMenu('hide');
 }
 
 /**************************************************************************
@@ -2862,7 +3250,7 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
 {
   switch (keyboard_key) {
     case 'C':
-      if (alt) {
+      if (alt && !ctrl && !shift) {
         the_event.preventDefault();     // override possible browser shortcut
         $('#ui-id-5').trigger("click"); // cities tab
       }
@@ -2873,40 +3261,40 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
         the_event.preventDefault(); // override possible browser shortcut
         show_debug_info();
       }
-      else if (alt) $('#ui-id-7').trigger("click");  // docs tab
+      else if (alt && !ctrl && !shift) $('#ui-id-7').trigger("click");  // docs tab
     break;
 
     case 'E':
-      if (alt) {
+      if (alt && !ctrl && !shift) {
         the_event.preventDefault(); // override possible browser shortcut
         $('#ui-id-2').trigger("click"); // empire tab
       }
     break;
 
     case 'G':
-      if (alt) {
+      if (alt && !ctrl && !shift) {
         the_event.preventDefault(); // override possible browser shortcut
         $('#ui-id-3').trigger("click"); // gov tab
       }
     break;
 
     case 'M':
-      if (alt) {
+      if (alt && !ctrl && !shift) {
         the_event.preventDefault(); // override possible browser shortcut
         $('#ui-id-1').trigger("click"); // map tab  // reserved for messages tab later
       }
     break;
 
     case 'N':
-      if (alt) {
+      if (alt && !ctrl && !shift) {
         the_event.preventDefault(); // override possible browser shortcut
         $('#ui-id-4').trigger("click"); // nations tab
       }
     break;
 
     case 'P':
-        if (alt && !ctrl) {
-          the_event.preventDefault(); // override possible browser shortcut
+      if (alt && !ctrl && !shift) {
+        the_event.preventDefault(); // override possible browser shortcut
           $('#ui-id-6').trigger("click"); // prefs tab
         }
       break;
@@ -2927,7 +3315,7 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
     break;
 
     case 'T':
-      if (alt) {
+      if (alt && !ctrl && !shift) {
         the_event.preventDefault(); // override possible browser shortcut
         $('#tech_tab_item').trigger("click"); // tech tab
       }
@@ -2938,9 +3326,15 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
       if (!alt && !ctrl && !shift) { // also key_code 112 (F1)
         $('#ui-id-1').trigger("click");
         chatbox_scroll_to_bottom(false);
-      } else if (alt) {               // warcalc tab
-        $("#ui-id-8").trigger("click");
-        warcalc_screen();
+        // Close dialogs that dialog_key_listener can't intercept:          
+        if (active_dialogs.length) {
+          the_event.stopPropagation();
+          remove_active_dialog(active_dialogs.pop());
+        }
+      } else if (alt && !ctrl && !shift) {
+          // warcalc tab
+          $("#ui-id-8").trigger("click");
+          warcalc_screen();
       }
     break;
   }
@@ -2980,31 +3374,46 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       if (shift) {
         auto_attack = !auto_attack;
         //simpleStorage.set('autoattack', auto_attack); //session only
-        add_client_message("Auto-attack set to "+(auto_attack ? "ON." : "OFF."));
+        add_client_message("<b>Shift-A</b>. Auto-attack set to "+(auto_attack ? "ON." : "OFF."));
       } else key_unit_auto_settle();
     break;
 
     case 'B':
-      if (ctrl) {   //CTRL-B solid fill national borders
+      if (ctrl && !alt && !shift) {          // CTRL-B draw border flags
         the_event.stopPropagation();
-        fill_national_border = !fill_national_border;
-      }
-    else if (current_focus.length==1 &&   // check if single focused unit can found or join city
-    (utype_can_do_action(unit_type(current_focus[0]),ACTION_JOIN_CITY)
-    || utype_can_do_action(unit_type(current_focus[0]),ACTION_FOUND_CITY))) {
-
-        request_unit_build_city();
-    } else {   // otherwise hover over city while hitting B sends instant-buy command to it
+        draw_border_flags = !draw_border_flags;
+        simpleStorage.set('borderFlags', draw_border_flags); 
+      } else if (alt && !shift && !ctrl) {   // ALT-B tricolore mode
+        the_event.stopPropagation();
+        draw_border_mode ++;
+        if (draw_border_mode >= 3) draw_border_mode = 0;
+        draw_tertiary_colors = draw_border_mode & 1;
+        simpleStorage.set('tricolore', draw_tertiary_colors); 
+      } else if (alt && shift && !ctrl) {    // ALT-SHIFT-B moving borders
+        the_event.stopPropagation();
+        draw_moving_borders = !draw_moving_borders;
+        simpleStorage.set('movingBorders', draw_moving_borders); 
+      } else if (shift && !alt && !ctrl) {    // SHIFT-B show nations in their 1/2/3 colors
+        minimap_color ++;
+        if (minimap_color >= 4) { minimap_color = 0; }
+        palette = generate_palette();
+        force_redraw_overview();
+      } else if (current_focus.length==1 &&   // check if single focused unit can found or join city
+                 (utype_can_do_action(unit_type(current_focus[0]),ACTION_JOIN_CITY)
+                 || utype_can_do_action(unit_type(current_focus[0]),ACTION_FOUND_CITY))) {
+          request_unit_build_city();
+      } else {   // otherwise hover over city while hitting B sends instant-buy command to it
         var ptile = canvas_pos_to_tile(mouse_x, mouse_y); // get tile
         var pcity = tile_city(ptile); // check if it's a city
         if (pcity!=null) request_city_id_buy(pcity['id']); // send buy order
-    }
+      }
     break;
 
     case 'C':
       if (ctrl && !shift && !alt) {
         the_event.preventDefault();          // override possible browser shortcut
-        show_citybar = !show_citybar;
+        show_citybar = show_citybar -1;
+        if (show_citybar < 0) show_citybar = 2;
       } else if (shift && !ctrl && !alt) {
           key_select_same_global_type(true); // true=same continent only
       } else if (ctrl && shift && !alt) {            // cycle citybar display mode
@@ -3028,13 +3437,24 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'E':
-      if (shift) {
+      if (shift && !ctrl && !alt) {
         key_unit_airbase();
+      }
+      if (ctrl && shift) {
+        the_event.preventDefault(); // override possible browser shortcut
+        // show/hide the dev/debug messages sent from server to supercow users
+        $(".e_log_error").toggle();
       }
     break;
 
     case 'F':
-      if (shift) {
+      if (alt && shift && !ctrl) {
+        focuslock = !focuslock;
+        the_event.preventDefault(); // override possible browser shortcut
+        add_client_message("<b>Alt-Shift-F</b>. Focus-lock set to "+(focuslock ? "ON." : "OFF."));
+        simpleStorage.set('focuslock', focuslock);
+      }
+      else if (shift) {
         key_unit_fortress();
       } else {
         key_unit_fortify();
@@ -3086,6 +3506,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       } else if (ctrl && alt && !shift) {
         the_event.preventDefault(); // override possible browser shortcut
         draw_highlighted_pollution = !draw_highlighted_pollution;
+        simpleStorage.set('showpollution', draw_highlighted_pollution);
       }
       else {
         if (current_focus.length>0) {
@@ -3104,8 +3525,10 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'R':
-      if (shift) {
+      if (shift && !ctrl && !alt) {
         show_revolution_dialog();
+      } else if (alt && shift) {
+        key_unit_connect(EXTRA_ROAD)
       } else key_unit_road();
     break;
 
@@ -3122,15 +3545,17 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'T':
-      if (shift) {
+      if (shift && !alt && !ctrl) {
         show_tax_rates_dialog();
+      } else if (ctrl && alt) {
+        draw_city_traderoutes = !draw_city_traderoutes;
       } else key_unit_unload();
     break;
 
     case 'V':
-      if (shift) {
+      if (shift && !alt && !ctrl) {
         key_select_same_type_units_on_tile();
-      } else if (alt) {
+      } else if (alt && !shift && !ctrl) {
         the_event.preventDefault(); // override possible browser shortcut
         key_select_different_units_on_tile();
       } else {
@@ -3145,12 +3570,22 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'X':
-        if (shift) { //shift-x = select all units of same type on same continent
+        if (shift && !ctrl && !alt) { //shift-x = select all units of same type on same continent
           key_select_same_global_type(false); // false=same continent only
+        } else if (alt && !shift && !ctrl) { // alt-x toggle user map-markup mode
+            the_event.preventDefault(); // override possible browser shortcut
+            user_marking_mode = !user_marking_mode;
+            if (user_marking_mode) {
+              // Non-ideally, we create the Game_UID every time we go into chalkboard mode.
+              // Please see note in handle_game_uid() for how we should refactor this.
+              handle_game_uid();
+              add_client_message("Chalkboard is ON.  Alt-X to toggle.")
+            }
+            else add_client_message("Chalkboard is OFF.")
         }
-        else if (enable_autoexplore) {
+        else if (enable_autoexplore && !ctrl && !shift && !alt) {
           key_unit_auto_explore();
-        } else add_client_message("X hotkey was disabled in user PREFS.")
+        } else if (!enable_autoexplore) add_client_message("X hotkey was disabled in user PREFS.")
     break;
 
     // ALT + UIO / JKL / M,. simulates keypad for devices that don't have it, if alt not held
@@ -3169,7 +3604,10 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
           the_event.preventDefault(); // override possible browser shortcut
           replace_capital_i = !replace_capital_i;
           simpleStorage.set('capI', replace_capital_i);
-        } else {
+        } else if (shift && !ctrl) {
+          key_unit_connect(EXTRA_IRRIGATION);
+        }
+        else {
           the_event.preventDefault(); // override possible browser shortcut
           key_unit_move(DIR8_NORTHWEST); // alt+I=8
         }
@@ -3215,7 +3653,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         show_unit_movepct = !show_unit_movepct;
         if (show_unit_movepct) hp_bar_offset = -5;
         else hp_bar_offset = 0;
-        //simpleStorage.set('showMoves', show_unit_movepct);
+        simpleStorage.set('showMoves', show_unit_movepct);
       } else if (alt && !shift && !ctrl) {
         the_event.preventDefault(); // override possible browser shortcut
         key_unit_move(DIR8_SOUTH);  // alt+M=1
@@ -3237,8 +3675,14 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     // the block of code above contains virtual keypad ^^
     */
   }
-
   switch (key_code) {
+    case 46: // DEL key
+      if (user_marking_mode) { // Reset chalkboard
+        myGameVars = {};
+        simpleStorage.set(Game_UID, myGameVars);
+        add_client_message("Chalkboard erased.");
+      }
+      break;
     case 35: //1
     case 97:
       key_unit_move(DIR8_SOUTH);
@@ -3253,6 +3697,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         save_last_unit_focus();
 
         current_focus = [];
+        unit_may_have_lost_focus();
         if (penultimate_focus != null) {
           //current_focus.push(last_focus);
           set_unit_focus_and_redraw(penultimate_focus);
@@ -3290,6 +3735,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         save_last_unit_focus();
 
         current_focus = [];
+        unit_may_have_lost_focus();
         if (penultimate_focus != null) {
           //current_focus.push(last_focus);
           set_unit_focus_and_redraw(penultimate_focus);
@@ -3318,6 +3764,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
 
     case 27:      //Esc
       deactivate_goto(false);
+      clear_all_modes();
       /* Abort UI states */
       map_select_active = false;
       map_select_check = false;
@@ -3325,11 +3772,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       came_from_context_menu = false;
       /* Abort any context menu blocking. */
       context_menu_active = true;
-      if (renderer == RENDERER_2DCANVAS) {
-        $("#canvas").contextMenu(true);
-      } else {
-        $("#canvas_div").contextMenu(true);
-      }
+      $("#canvas").contextMenu(true);
 
       /* Abort target tile selection. */
       paradrop_active = false;
@@ -3348,9 +3791,8 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         save_last_unit_focus();
 
         current_focus = [];
-        if (renderer == RENDERER_WEBGL) webgl_clear_unit_focus();
-        goto_active = false;
-        delayed_goto_active = false;
+        unit_may_have_lost_focus();
+        clear_all_modes();
         $("#canvas_div").css("cursor", "default");
         goto_request_map = {};
         goto_turns_request_map = {};
@@ -3358,8 +3800,6 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         update_active_units_dialog();
 
         // clear out of special UI-states, too
-        paradrop_active = false;
-        airlift_active = false;
         map_select_active = false;
         map_select_check = false;
         mapview_mouse_movement = false;
@@ -3378,37 +3818,10 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       break;
 
     case 107:
-      //zoom in
-      if (renderer == RENDERER_WEBGL) {
-        let new_camera_dy = camera_dy - 60;
-        let new_camera_dx = camera_dx - 45;
-        let new_camera_dz = camera_dz - 45;
-        if (new_camera_dy < 350 || new_camera_dy > 1200) {
-          return;
-        } else {
-          camera_dx = new_camera_dx;
-          camera_dy = new_camera_dy;
-          camera_dz = new_camera_dz;
-        }
-        camera_look_at(camera_current_x, camera_current_y, camera_current_z);
-      }
       break;
 
     case 109:
       //zoom out
-      if (renderer == RENDERER_WEBGL) {
-        let new_camera_dy = camera_dy + 60;
-        let new_camera_dx = camera_dx + 45;
-        let new_camera_dz = camera_dz + 45;
-        if (new_camera_dy < 350 || new_camera_dy > 1200) {
-          return;
-        } else {
-          camera_dx = new_camera_dx;
-          camera_dy = new_camera_dy;
-          camera_dz = new_camera_dz;
-        }
-        camera_look_at(camera_current_x, camera_current_y, camera_current_z);
-      }
       break;
 
   }
@@ -3687,6 +4100,11 @@ function deactivate_goto(will_advance_unit_focus)
   //console.log("deactivate_goto called!")
   goto_active = false;
   delayed_goto_active = false;
+  // connect uses goto mode also. reset:
+  connect_active = false;
+  connect_activity = ACTIVITY_LAST;
+  connect_extra = - 1;
+  // clear cursor
   $("#canvas_div").css("cursor", "default");
   goto_request_map = {};
   goto_turns_request_map = {};
@@ -3742,6 +4160,7 @@ function key_unit_auto_explore()
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_EXPLORE, EXTRA_NONE);
     if (punit['movesleft'] > 0 && punit['owner'] == client.conn.playing.playerno) unit_move_sound_play(punit);
+    remove_unit_id_from_waiting_list(punit['id']);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
@@ -3757,10 +4176,49 @@ function key_unit_load()
   // for 99.5% of the games played, which are in common rulesets */
   var normal_ruleset = (client_rules_flag[CRF_CARGO_HEURISTIC]);
   var funits = get_units_in_focus();
+  //var did_scoop = {};  // which transport(s) did a scoop of cargo, currently only one allowed.
+  var scoop_happened = false;
 
-  // Send command for each selected unit in focus:
+  var sunits = current_focus;
+  if (!sunits || sunits.length == 0) return;
+
+  // PHASE I: SCOOPING. 'L' command given to a Transport will attempt to SCOOP units onto it.
+  // Cycle through all selected Transports and attempt to Load un-transported units on the tile into them.
+  if (sunits.length == 1) { // Multiple sunits fails: sunits[2] scoops sunits[1]'s cargo before server updates
+    for (var s=0; s < sunits.length; s++)  { // iterate just in case we one day figure a way to give to multiple units. 
+      var stype = unit_type(sunits[s]);
+      if (stype && stype.transport_capacity > 0 && unit_has_cargo_room(sunits[s])) {
+        var ptile = unit_tile(sunits[s]); // Each selected unit may be on a different tile.
+        units_on_tile = tile_units(ptile);
+        // Request server to load each legal unit on the selected Transport's tile:
+        for (var i = 0; i < units_on_tile.length; i++) {
+          var punit = units_on_tile[i];
+          if (!punit['transported'] && punit != sunits[s] //can't load onto itself
+              && unit_could_possibly_load(punit, unit_type(punit), stype, get_unit_class(sunits[s]))) {
+            request_unit_do_action(ACTION_TRANSPORT_BOARD, punit['id'], sunits[s]['id']);
+
+            // Loaded units don't ask orders later:
+            remove_unit_id_from_waiting_list(punit['id']); 
+            punit['done_moving'] = true; // in case server doesn't do it
+            // A transport who scooped won't try to load onto another in the same key-press:
+            scoop_happened = true; //did_scoop[sunits[s]['id']] = true;
+          }
+        }
+      }
+    }
+  }
+  // Scooping is a lot of packets, make a longer delay to update focus on it.
+  if (scoop_happened) {
+    setTimeout(update_active_units_dialog, update_focus_delay*1.35);
+    return;
+  } // *********** END PHASE I *************************************************************************************
+  // PHASE II: 'L' units who aren't scooping transports just want to load onto something:
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
+    /* Don't scoop cargo then also load onto some other unit in the same key-press.
+    if (did_scoop[punit['id']]) {
+      continue;
+    } */
     var ptype = unit_type(punit);
     var ptile = index_to_tile(punit['tile']);
     var transporter_unit_id = 0;
@@ -3776,6 +4234,9 @@ function key_unit_load()
       ttype = unit_type(tunit);
       tclass = unit_classes[ttype.unit_class_id];
 
+      // Cargo is already on transport--excluded it as candidate:
+      if (punit['transported_by'] == tunit['id']) continue;
+
       if (ttype['transport_capacity'] > 0) {
         // add candidate to list
         if (!normal_ruleset || unit_could_possibly_load(punit, ptype, ttype, tclass)) {
@@ -3784,9 +4245,6 @@ function key_unit_load()
         }
       }
     }
-    // No candidate transporters found: abort
-    if (transporter_units.length < 1) return;
-
     // if 2 or more candidates, give user a GUI choice what to load on:
     if (transporter_units.length >= 2 /*&& funits.length == 1*/) {
       // Count up how many on each transport candidate:
@@ -3802,7 +4260,7 @@ function key_unit_load()
       var id = "";
       var buttons = [];
       id = "#load_unit_dialog_" + punit['id'];
-      $(id).remove();     // Reset dialog page.
+      remove_active_dialog(id);  // Reset dialog page.
       $("<div id='load_unit_dialog_" + punit['id'] + "'></div>").appendTo("div#game_page");
 
       var home_city_name = "";
@@ -3848,36 +4306,11 @@ function key_unit_load()
         width: is_small_screen() ? $( window ).width() : "575",
         fluid: true     });
       $(id).dialog('open');
+      dialog_register(id);
     }
     // otherwise, only one transporter candidate, load automatically with no GUI input from user:
-/* this had a bug and tried loading on the first transporter ID while ignoring the work we did to
-   figure out which transporters are real candidates, so it's commented out now to try the candidate
-   fix below.
-    else {
-      for (r = 0; r < units_on_tile.length; r++) {
-        tunit = units_on_tile[r];
-        if (tunit['id'] == punit['id']) continue;
-        ttype = unit_type(tunit);
-        if (ttype['transport_capacity'] > 0) {
-          has_transport_unit = true;
-          transporter_unit_id = tunit['id'];
-        }
-      }
-
-      if (has_transport_unit && transporter_unit_id > 0 && punit['tile'] > 0) {
-        var packet = {
-          "pid"              : packet_unit_load,
-          "cargo_id"         : punit['id'],
-          "transporter_id"   : transporter_unit_id,
-          "transporter_tile" : punit['tile']
-        };
-        send_request(JSON.stringify(packet));
-        setTimeout(update_active_units_dialog, update_focus_delay);
-      }
-    }
-*/
     // Only one legal transport, no need to do pop-up to choose which one:
-    else {
+    else if (transporter_units.length == 1) { // excludes the case of no candidates found
       // in theory we got here because there was only one (possibly) legal transporter_unit,
       // Looping the array might be needless legacy method but oh well, it's safe.
       for (r = 0; r < transporter_units.length; r++) {
@@ -3891,13 +4324,12 @@ function key_unit_load()
       }
 
       if (has_transport_unit && transporter_unit_id > 0 && punit['tile'] > 0) {
-        var packet = {
-          "pid"              : packet_unit_load,
-          "cargo_id"         : punit['id'],
-          "transporter_id"   : transporter_unit_id,
-          "transporter_tile" : punit['tile']
-        };
-        send_request(JSON.stringify(packet));
+        request_unit_do_action(ACTION_TRANSPORT_BOARD, punit['id'],
+                               transporter_unit_id);
+
+        // Loaded units don't ask orders later:
+        remove_unit_id_from_waiting_list(punit['id']); 
+        punit['done_moving'] = true; // in case server doesn't do it
         setTimeout(update_active_units_dialog, update_focus_delay);
       }
     }
@@ -3909,10 +4341,24 @@ function key_unit_load()
 }
 
 /**************************************************************************
- Unload all units from transport
+ If Transport is selected unit: Unload all units from transport
+ If Passenger is selected unit: Unload all selected units.
+ Formerly: unloaded all units from everything on the tile, selected or not.
 **************************************************************************/
 function key_unit_unload()
 {
+  var unloaded=0; // don't advance to next unit if illegal/nothing happened.
+
+  if (current_focus != null && current_focus.length>0) {
+    var sunit = current_focus[0];
+    var sunits = current_focus;
+    var ptile = index_to_tile(sunit['tile']);
+  }
+
+  // no units selected.
+  if (!sunit) return;
+
+  //console.log("sunits == ");
   var funits = get_units_in_focus();
   var units_on_tile = [];
 
@@ -3923,36 +4369,76 @@ function key_unit_unload()
     units_on_tile = tile_units(ptile);
   }
 
-  for (var i = 0; i < units_on_tile.length; i++) {
-    var punit = units_on_tile[i];
-    // old command prior to action_enabler ACTION_TRANSPORT_UNLOAD
-    if (punit['transported'] && punit['transported_by'] > 0 ) {
-      if (unit_can_do_unload(punit)) {
-      var packet = {
-        "pid"         : packet_unit_unload,
-        "cargo_id"    : punit['id'],
-        "transporter_id"   : punit['transported_by']
-      };
-      send_request(JSON.stringify(packet));
-    }
+  // Loop through all selected units, rationally determining what 'T' means for it:
+  for (var s = 0; s < sunits.length; s++) {
+    //console.log("sunit["+s+"]");
+    // A selected unit which is a transport AND is itself not transported rationally
+    // wants the T command to unload all of ITS cargo. (Heli carrying Marines on a
+    // Carrier would want to unload from Carrier, not be forced to unload its Marines
+    // to the Carrier -- which would be done by clicking T on the Marines!),
+    var stype = unit_types[sunits[s]['type']];
+    // Selected Unit is: selected, a transporter, and not being transported.
+    // So, check each unit on tile to see if it's on this transporter, and unload it
+    if (sunits[s] && stype.transport_capacity>0 && !sunits[s].transported) {
+      //console.log("  sunit[i] is a transport (that's not being transported)");
+      for (var i = 0; i < units_on_tile.length; i++) {
+        var punit = units_on_tile[i];
+        //console.log("punit["+i+"]");
 
-    /* pop this in when we get ACTION_TRANSPORT_UNLOAD into server
-    if (punit['transported'] && punit['transported_by'] > 0 ) {
-      var packet = {
-        "pid" : packet_unit_do_action,
-        "actor_id"    : punit['transported_by'],
-        "target_id"   : punit['id'],
-        "extra_id"    : EXTRA_NONE,
-        "value"       : 0,
-        "name"        : "",
-        "action_type" : ACTION_TRANSPORT_UNLOAD
-      };
-      send_request(JSON.stringify(packet));
-    }*/
+        // If iterated tile unit is being transported by selected unit, then UNLOAD it!
+        if (punit['transported'] && punit['transported_by'] == sunits[s]['id']) {
+          if (unit_can_do_unload(punit)) {
+            request_unit_do_action(ACTION_TRANSPORT_UNLOAD, punit['transported_by'], punit['id']);
+            unloaded++;
+          }  
+        }
+      }
+    } 
+    // A selected unit which is 1) NOT an untransported transporter, and 2) is being
+    // transported, will want the 'T' command to just unload from the transporter.
+    else if (sunits[s]['transported']) { 
+      //console.log("  sunit[i] is cargo)");
+      if (unit_can_do_unload(sunits[s])) {
+        request_unit_do_action(ACTION_TRANSPORT_DEBOARD, sunits[s]['id'], sunits[s]['transported_by']);
+        unloaded++;
+      }
+    }
+    else {  
+      /* keep just in case we need this:
+      // we shouldn't be here, but we fall back to OLD method: unload everybody 
+      // OLD METHOD: unload everybody indiscriminantly
+      console.log("Indiscriminate loading of all tiles units engaged. Check logic conditions.");   
+      for (var i = 0; i < units_on_tile.length; i++) {
+        var punit = units_on_tile[i];
+        if (punit['transported'] && punit['transported_by'] > 0 &&
+          punit['owner'] == client.conn.playing.playerno) {
+          if (unit_can_do_unload(punit)) {  
+            request_unit_do_action(ACTION_TRANSPORT_DEBOARD, punit['id'],
+                                 punit['transported_by']);
+          }
+        } else {
+          request_unit_do_action(ACTION_TRANSPORT_UNLOAD,
+                                 punit['transported_by'],
+                                 punit['id']);
+        }
+      } */
+    }
+  }  
+  deactivate_goto(false);
+  if (unloaded) {
+    add_client_message("Unloaded "+unloaded+" unit"+ (unloaded>1 ? "s." : ".") )
+    setTimeout(function() {advance_unit_focus(false)}, update_focus_delay);
+  }
+  else {
+    if (sunits.length == 1) {
+      add_client_message(unit_type(sunits[0]).rule_name+" couldn't unload here.")
+      // Could call a function that gives legality helptext on what's legal
+      // and what's not based on the unit and the unit.transported_by...
+    }
+    else { 
+      add_client_message("Can't unload here.");
     }
   }
-  deactivate_goto(false);
-  setTimeout(function() {advance_unit_focus(false)}, update_focus_delay);
 }
 
 /**************************************************************************
@@ -4019,6 +4505,7 @@ function key_select_different_units_on_tile()
     save_last_unit_focus();
 
     current_focus = []; // since we're selecting everything BUT this, it has to unselect too
+    unit_may_have_lost_focus();
     var ptile = index_to_tile(punit['tile']);
     var ptype = punit['type'];
 
@@ -4053,6 +4540,7 @@ function key_select_same_global_type(continent_only)
     save_last_unit_focus();
 
     current_focus = [];  // clear focus to start adding new units to selection
+    unit_may_have_lost_focus();
 
     //console.log(units.length+" is units.length");
     // check every unit in the world
@@ -4099,6 +4587,7 @@ function key_filter_for_units_in_queue() {
         && punit['ai'] == false
         && punit['transported'] == false)) {
           current_focus.splice(i, 1);
+          unit_may_have_lost_focus();
       }
     }
   } else {
@@ -4119,27 +4608,66 @@ function key_filter_for_units_in_queue() {
 }
 
 /**************************************************************************
- Focus a unit transported by this transport unit
+ Focus all unit transported by selected transport units
 **************************************************************************/
 function key_unit_show_cargo()
 {
-  var funits = get_units_in_focus();
-  var units_on_tile = [];
-  for (var i = 0; i < funits.length; i++) {
-    var punit = funits[i];
-    var ptile = index_to_tile(punit['tile']);
-    units_on_tile = tile_units(ptile);
-  }
+  var sunits = current_focus;
+  var new_current_focus = [];  // keep track of units who will become new selected units
+  var do_full_exit = false;
+  
+  // No selected units? Leave.
+  if (!sunits || sunits.length == 0)
+    return;
+
+  //console.log("Going through selected units.")
 
   save_last_unit_focus();
 
-  current_focus = [];
-  for (var i = 0; i < units_on_tile.length; i++) {
-    var punit = units_on_tile[i];
-    if (punit['transported'] && punit['transported_by'] > 0 ) {
-      current_focus.push(punit);
+  //var funits = get_units_in_focus();
+
+
+  // Go through each selected unit and show only its cargo
+  for (var s = 0; s < sunits.length; s++)
+  {
+    // selected units might be on different tiles, so recalc these for each iterated sunit.
+    var ptile = index_to_tile(sunits[s]['tile']);
+    var units_on_tile = tile_units(ptile);
+    //console.log("  sunits["+s+"]");
+
+    stype = unit_type(sunits[s]);
+
+    // Is selected unit a transporter? If so, put all its cargo into new_current_focus;
+    if (stype.transport_capacity > 0) {
+      //console.log("  sunits["+s+"] is a transporter");
+      for (var i = 0; i < units_on_tile.length; i++) {
+        var punit = units_on_tile[i];
+        if (punit['transported'] && punit['transported_by'] == sunits[s]['id']) {
+          new_current_focus.push(punit);
+        }
+      }
     }
+    else {
+      //console.log("  sunits["+s+"] is NOT a transporter");
+      // if non-transport unit us selected, player wants to activate all cargo units on tile!
+      new_current_focus = []; // clean up to avoid double-popped units, then push everything once and leave!
+      for (var i = 0; i < units_on_tile.length; i++) {
+        var punit = units_on_tile[i];
+        if (punit['transported'] && punit['transported_by'] > 0) {
+          new_current_focus.push(punit);
+        }
+      }
+      do_full_exit = true; // flag to exit master loop immediately
+    }
+    if (do_full_exit) break; // if we built new_current_focus as every transported units, we're done here.
   }
+
+  // Now, swap selected transports for selected cargo IFF any cargo was selected.
+  if (new_current_focus && new_current_focus.length > 0) {
+    current_focus = new_current_focus;
+    unit_may_have_lost_focus();
+  }
+
   deactivate_goto(false);
   update_active_units_dialog();
   if (current_focus.length>0) warcalc_set_default_vals(current_focus[0]);
@@ -4154,7 +4682,9 @@ function key_unit_wait(same_type)
   var funits = get_units_in_focus();
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
-    waiting_units_list.push(punit['id']);
+    // only push to waiting list if it's not already there:
+    if (waiting_units_list.indexOf(punit['id'] == -1))
+      waiting_units_list.push(punit['id']);
   }
   deactivate_goto(false);
   advance_unit_focus(same_type);
@@ -4172,6 +4702,13 @@ function key_unit_noorders()
   }
   deactivate_goto(false);
   advance_unit_focus(false);
+}
+// requires caller to do advance_unit_focus(false) if desired:
+function unit_noorders(punit) {  
+  if (!punit) return;
+  punit['done_moving'] = true;
+  deactivate_goto(false);
+  remove_unit_id_from_waiting_list(punit['id']);
 }
 
 /**************************************************************************
@@ -4204,6 +4741,9 @@ function key_unit_vigil()
     var punit = funits[i];
     if (unit_can_vigil(punit)) {
       request_new_unit_activity(punit, ACTIVITY_VIGIL, EXTRA_NONE);
+      // Vigil units don't ask orders later:
+      remove_unit_id_from_waiting_list(punit['id']); 
+      punit['done_moving'] = true; // in case server doesn't know it
     }
   }
   deactivate_goto(false);
@@ -4211,42 +4751,145 @@ function key_unit_vigil()
 }
 
 /**************************************************************************
- Tell the units in focus to sentry.
+ Tell the units in focus to sentry. If it can't, it's given No Orders.
 **************************************************************************/
 function key_unit_sentry()
 {
   var funits = get_units_in_focus();
+
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
-
-    // Hack to fix 3.09 server can't sentry fuel-Triremes on shore/river. Remove if FC server fixed:
-    if (get_unit_class_name(punit) == "Trireme") {
-      if (punit['fuel']>0) {
-         var pcity = tile_city(index_to_tile(punit['tile']));
-         if (pcity == null) {
-           key_unit_noorders();
-         }
-         else request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
-      }
+    if (unit_can_sentry(punit)) {
+      request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
+      remove_unit_id_from_waiting_list(punit['id']);
+    } else {
+      unit_noorders(punit);
+      advance_unit_focus(false); // FIXME: is this needed if we update_unit_focus below?
     }
-    else request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
 }
+/**************************************************************************
+ Returns true if this type of unit can sentry on its current tile.
+**************************************************************************/
+function unit_can_sentry(punit)
+{
+  var class_name = get_unit_class_name(punit);
+  var ptile = unit_tile(punit)
+  var pcity = tile_city(ptile);
+
+  if (client_rules_flag[CRF_TRIREME_FUEL] && class_name == "Trireme") {   
+    // 0==land,1==water.  Check the tile we're on: it might be a river on a tiny isle:
+    var no_coast_near = tile_terrain(ptile)['tclass']; // 0==false if it's land
+
+    for (var dir=0; dir < 8; dir++) {
+      //var dir = cardinal_tileset_dirs[t];
+      var checktile = mapstep(ptile, dir);
+      var pterrain = tile_terrain(checktile);
+      // if NEITHER graphic_str NOR graphic_alt is 'coast', it's land:
+      if (pterrain['tclass'] == 0) no_coast_near = false; // 0==land
+    }
+    if (no_coast_near == true) {
+      return false;
+    }
+  }
+
+  if (class_name == "Helicopter"
+          || class_name == "Air"
+          || class_name == "AirProtect" 
+          || class_name == "AirPillage"
+          || class_name == "Air_High_Altitude"
+          || class_name == "Balloon"
+          || class_name == "Zeppelin"
+          || class_name == "Missile" ) 
+  {
+    if (pcity || punit['transported'] || tile_has_extra(ptile, EXTRA_AIRBASE)) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  else {
+    return true;
+  }
+}
+/**************************************************************************
+ Remove unit from the list of units who are awaiting orders.
+**************************************************************************/
+function remove_unit_id_from_waiting_list(uid)
+{
+  var w = waiting_units_list.indexOf(uid);
+  if (w>=0) { // -1 means not found; 0 is a valid index.
+    var deleted_elements;
+    // ENSURE unit isn't in the waiting list twice by looping til gone
+    do { 
+      deleted_elements = waiting_units_list.splice(w, 1);
+    } while (deleted_elements.length > 0)
+    return true;
+  }
+  return false;
+}
 
 /**************************************************************************
- Tell the units in focus to fortify.
+ Remove unit from focus AND the list of units who are awaiting orders.
+**************************************************************************/
+function force_clear_unit(uid)
+{
+  var w = current_focus.indexOf(uid);
+  if (w>=0) { // -1 means not found; 0 is a valid index.
+    current_focus.splice(w, 1);
+  }
+
+  remove_unit_id_from_waiting_list(uid);
+  units[uid].done_moving = true; // forces a "unit_noorders" at very minimum.
+}
+
+/**************************************************************************
+ Tell the units in focus to fortify, or if they can't, to do the next
+ best thing that makes them stay put and advances unit focus.
 **************************************************************************/
 function key_unit_fortify()
 {
   var funits = get_units_in_focus();
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
-    request_new_unit_activity(punit, ACTIVITY_FORTIFYING, EXTRA_NONE);
+    var can_sentry = unit_can_sentry(punit);
+    /* This is a UI convenience: hitting F on a whole stack and making it
+       do the best option each unit has, to stay put so we can move on to
+       the next unit orders:
+       Priority 1: Fortify
+       Priority 2: Sentry
+       Priority 3: No Orders      */
+    
+    // Can't fortify. Try priority 2: Sentry
+    if (!unit_has_class_flag(punit, UCF_CAN_FORTIFY) 
+      || unit_has_type_flag(punit, UTYF_CANT_FORTIFY)) {
+        if (can_sentry) {
+          request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
+        }
+        else { // can't fortify, can't sentry: priority 3:
+          unit_noorders(punit);
+        }
+    }
+    // Unit can intrinsically Fortify (Priority 1), but still maybe can't:
+    else if (punit['transported']) {
+      // if transported, we can't Fortify. Priority 2: Sentry
+      if (can_sentry) {
+        request_new_unit_activity(punit, ACTIVITY_SENTRY, EXTRA_NONE);
+      } else { // can't fortify, can't sentry: priority 3:
+        unit_noorders(punit);
+      }
+    }
+    else { // Priority 1: Fortify.
+      request_new_unit_activity(punit, ACTIVITY_FORTIFYING, EXTRA_NONE);
+      // remove from waiting list
+    }
+    force_clear_unit(punit['id'], 0);
   }
   deactivate_goto(false);
-  setTimeout(update_unit_focus, update_focus_delay);
+  setTimeout(update_unit_focus, update_focus_delay*0.8);
 }
 
 /**************************************************************************
@@ -4254,15 +4897,23 @@ function key_unit_fortify()
 **************************************************************************/
 function key_unit_fortress()
 {
-  //navalbase no longer goes on top of fortress, they both go on top of fort
-  //var navbase_rules = (typeof EXTRA_NAVALBASE !== "undefined");
-
   var funits = get_units_in_focus();
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
-    //var ptile = tiles[punit['tile']];
+    var ptile = tiles[punit['tile']];
+
+    // Action-enabler restricts Marines to Fort only. Be double safe.
+    if (typeof EXTRA_FORT !== "undefined" && client_rules_flag[CRF_MARINE_BASES]) {
+      var ptype = unit_type(punit);
+      if (ptype['name'] == "Marines" &&
+          (punit['transported'] || tile_has_extra(ptile, EXTRA_FORT))) {
+        continue;
+      }
+    }
     var activity = EXTRA_NONE;     /* EXTRA_NONE -> server decides */
     request_new_unit_activity(punit, ACTIVITY_BASE, activity);
+    // Unit has orders, don't ask orders later:
+    remove_unit_id_from_waiting_list(punit['id']);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
@@ -4286,8 +4937,9 @@ function key_unit_hideout()
     var ptile = tiles[punit['tile']];
     var activity = EXTRA_NONE;     /* EXTRA_NONE -> server decides */
     if (hideout_rules) activity=EXTRA_;
-
     request_new_unit_activity(punit, ACTIVITY_BASE, activity);
+    // Focused unit got orders, make sure not on waiting_list now:
+    remove_unit_id_from_waiting_list(punit['id']);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
@@ -4305,10 +4957,22 @@ function key_unit_airbase()
   for (var i=0; i< funits.length; i++) {
     var punit = funits[i];
     var ptile = tiles[punit['tile']];
+
+    // Action-enabler restricts Marines unable to work while Transported. Be double safe.
+    if (client_rules_flag[CRF_MARINE_BASES]) {
+      var ptype = unit_type(punit);
+      if (ptype['name'] == "Marines" &&
+          (punit['transported'])) {
+        continue;
+      }
+    }
+
     activity = EXTRA_AIRBASE;
     if (radar_rules && tile_has_extra(ptile, EXTRA_AIRBASE)) activity=EXTRA_RADAR;
 
     request_new_unit_activity(punit, ACTIVITY_BASE, activity);
+    // Focused unit got orders, make sure not on waiting_list now:
+    remove_unit_id_from_waiting_list(punit['id']);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
@@ -4324,6 +4988,24 @@ function key_unit_irrigate()
     var punit = funits[i];
     /* EXTRA_NONE -> server decides */
     request_new_unit_activity(punit, ACTIVITY_IRRIGATE, EXTRA_NONE);
+    // Focused unit got orders, make sure not on waiting_list now:
+    remove_unit_id_from_waiting_list(punit['id']);
+  }
+  deactivate_goto(false);
+  setTimeout(update_unit_focus, update_focus_delay);
+}
+
+/**************************************************************************
+  Tell the units in focus to cultivate.
+**************************************************************************/
+function key_unit_cultivate()
+{
+  var funits = get_units_in_focus();
+  for (var i = 0; i < funits.length; i++) {
+    var punit = funits[i];
+    request_new_unit_activity(punit, ACTIVITY_CULTIVATE, EXTRA_NONE);
+    // Focused unit got orders, make sure not on waiting_list now:
+    remove_unit_id_from_waiting_list(punit['id']);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
@@ -4338,11 +5020,176 @@ function key_unit_pollution()
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_POLLUTION, EXTRA_NONE);
+    // Focused unit got orders, make sure not on waiting_list now:
+    remove_unit_id_from_waiting_list(punit['id']);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
 }
 
+/**************************************************************************
+ Tell the unit to "connect" / build extras along the goto_path.
+**************************************************************************/
+function key_unit_connect(extra_id)
+{
+  if (current_focus.length < 1)
+    return; // no unit selected, abort
+
+    connect_active = true;
+    connect_extra = extra_id;
+    switch (connect_extra) {
+      case EXTRA_ROAD:
+        connect_activity = ACTIVITY_GEN_ROAD;
+        break;
+      case EXTRA_IRRIGATION:
+        connect_activity = ACTIVITY_IRRIGATE;
+        break;
+    }
+    // TODO: this will be consistent with native clients if/when we do
+    // client-side goto path, then we send it a mode for connect==true
+    // to skip tiles where the unit can't build the extra on it.
+    activate_goto();
+    delayed_goto_active = false;
+}
+/**************************************************************************
+  Reconstructs a goto orders packet with orders to build an extra on
+  each tile visited along the path. 
+**************************************************************************/
+function create_connect_packet(packet)
+{
+  if (!packet) return;
+  var order = {
+    "order"      : ORDER_LAST,
+    "activity"   : ACTIVITY_LAST,
+    "sub_target" : 0,
+    "action"     : ACTION_COUNT,
+    "dir"        : -1
+  }
+    
+  var new_packet = {   // Copy the meta data from original packet
+          "pid"      : packet['pid'],
+          "unit_id"  : packet['unit_id'],
+          "src_tile" : packet['src_tile'],
+          "length"   : (packet['length']*2+1),
+          "repeat"   : packet['repeat'],
+          "vigilant" : packet['vigilant'],
+          "dest_tile": packet['dest_tile']    };
+  new_packet['orders'] = [];
+
+  var punit = units[packet['unit_id']];
+  var ptile = tiles[punit['tile']];
+  var length = new_packet['length'];
+
+  // Reconstruct packet with an order before each move, and one at the end.
+  for (i = 0; i < packet['length'] + 1; i++) {
+    var upgrade_extra = extra_dep(punit, ptile, connect_extra);
+    //console.log("upgrade_extra=="+upgrade_extra)
+    // insert order before each move
+    if (upgrade_extra != CONNECT_ACTION_ILLEGAL) {
+      order['order'] = ORDER_ACTIVITY;
+      order['dir']   = 0; // Not a move
+
+      /* TODO: when we have ACTIVITY_CULTIVATE, function extra_dep() will figure out we're on forest
+       *  or swamp and return -2 flag for this code to activate. For now, connect-irrigation will
+       * just walk right over forests and swamps. */
+      if (upgrade_extra == -2) { // catch case of irrigate swamp or forest: i.e., drain or chop
+        //order['activity'] = ACTIVITY_CULTIVATE;
+      } 
+      else order['activity'] = connect_activity;
+
+      order['target'] = -1; // Could set a connect_target for advanced commands
+
+      if (upgrade_extra == EXTRA_ROAD
+          || upgrade_extra == EXTRA_RIVER
+          || upgrade_extra == EXTRA_FARMLAND
+          || upgrade_extra == EXTRA_RAIL
+          || upgrade_extra == EXTRA_MAGLEV)
+        order['sub_target'] = upgrade_extra;
+      else order['sub_target'] = 0; // Could set a connect_target for advanced commands
+      order['action'] = ACTION_COUNT; // Could set a connect_ACTION for more commands
+
+      new_packet['orders'].push(Object.assign({}, order));
+    }
+    else {
+      length--; // since illegal order not inserted, cut one from length
+    }
+    // Now insert original packet move order
+    if (i < packet['length']) {
+      new_packet['orders'].push(packet['orders'][i]);
+
+      ptile = mapstep(ptile, packet['orders'][i]['dir']); // iterate tile for next check
+    }
+  }
+  new_packet['length'] = length;
+  return new_packet;
+}
+
+/**************************************************************************
+  Figures out which extra to make for the Connect command on each tile
+**************************************************************************/
+function extra_dep(punit, ptile, extra_id)
+{
+  if (extra_id == EXTRA_ROAD && unit_type(punit)['name']=="Well-Digger")
+    extra_id = EXTRA_RIVER;
+
+  //console.log("extra_dep called with extra_id=="+extra_id)
+  if (extra_id == EXTRA_ROAD) {
+    //console.log("  checking river and BB")
+    // TODO: if (tile_has_river && !tile_has_road && !player has bridge building), return -1
+    // "magic number" extra so it won't abort on the tile OR if that doesn't work
+    // create_connect_packet will just see the -1 flag to simple NOT insert an order at that position
+    if (tile_has_extra(ptile, EXTRA_RIVER)) {
+      //console.log("    tile has river")
+      if (player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) < TECH_KNOWN)
+        if (!tile_has_extra(ptile, EXTRA_ROAD)) {
+          //console.log("      no road: RETURN NULL")
+          return CONNECT_ACTION_ILLEGAL; // null flag means don't break sequence with an impossible order
+        }
+    }
+    
+    if (!tile_has_extra(ptile, EXTRA_ROAD))
+      return EXTRA_ROAD; // The server smartly skips over if same type already on the tile.
+    if (player_invention_state(client.conn.playing, tech_id_by_name('Railroad')) < TECH_KNOWN)
+      return EXTRA_ROAD;
+    if (!tile_has_extra(ptile, EXTRA_RAIL))
+      return EXTRA_RAIL;
+    if (!client_rules_flag[CRF_MAGLEV])
+      return EXTRA_RAIL;
+    if (player_invention_state(client.conn.playing, tech_id_by_name('Superconductors')) < TECH_KNOWN)
+      return EXTRA_RAIL;
+
+    return EXTRA_MAGLEV;
+  }
+  // Well-Digger makes rivers, not roads:
+  else if (extra_id == EXTRA_RIVER) {
+    if (tile_has_extra(ptile, EXTRA_RIVER)) {
+      return CONNECT_ACTION_ILLEGAL;  // already has a river, skip it
+    }
+    return EXTRA_RIVER;
+  }
+
+  else if (extra_id == EXTRA_IRRIGATION) {
+    //console.log("  checking irrigation")
+    var can_irr = can_irrigate(punit, ptile);
+    // No refrigeration: irrigate or skip tile are the only choices:
+    if (player_invention_state(client.conn.playing, tech_id_by_name('Refrigeration')) < TECH_KNOWN) {
+      if (can_irr) return EXTRA_IRRIGATION;
+      else return CONNECT_ACTION_ILLEGAL; // skip this tile: later, some kind of special code for chop forest or drain swamp; will probably have to change activity not just extra though.
+    }
+    // Refrigeration: irrigate or skip a tile with no irrigation...
+    if (!tile_has_extra(ptile, EXTRA_IRRIGATION)) {
+      if (can_irr && tile_terrain(ptile)['name'] != "Swamp") return EXTRA_IRRIGATION;  // swamp thinks it can be irrigated but server thinks it can't? or we just didn't figure out special packet setup for it.
+      else return CONNECT_ACTION_ILLEGAL; // skip this tile: later, some kind of special code for chop forest or drain swamp; will probably have to change activity not just extra though.
+    }
+    // or make Farmland if possible
+    if (tile_has_extra(ptile, EXTRA_IRRIGATION) && !tile_has_extra(ptile, EXTRA_FARMLAND))
+      return EXTRA_FARMLAND;
+    // nothing is possible, skip tile:
+    else return CONNECT_ACTION_ILLEGAL;
+  }
+
+  return extra_id;
+}
 
 /**************************************************************************
   Start a goto that will end in the unit(s) detonating in a nuclear
@@ -4374,16 +5221,7 @@ function key_unit_upgrade()
     var punit = funits[i];
     var pcity = tile_city(index_to_tile(punit['tile']));
     var target_id = (pcity != null) ? pcity['id'] : 0;
-    var packet = {
-      "pid"         : packet_unit_do_action,
-      "actor_id"    : punit['id'],
-      "target_id"   : target_id,
-      "extra_id"    : EXTRA_NONE,
-      "value"       : 0,
-      "name"        : "",
-      "action_type" : ACTION_UPGRADE_UNIT
-    };
-    send_request(JSON.stringify(packet));
+    request_unit_do_action(ACTION_UPGRADE_UNIT, punit['id'], target_id);
   }
   deactivate_goto(false);
   setTimeout(update_active_units_dialog, update_focus_delay*.85);
@@ -4423,6 +5261,8 @@ function key_unit_fallout()
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_FALLOUT, EXTRA_NONE);
+    // Unit received orders, don't ask orders later:
+    remove_unit_id_from_waiting_list(punit['id']);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
@@ -4437,6 +5277,8 @@ function key_unit_transform()
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     request_new_unit_activity(punit, ACTIVITY_TRANSFORM, EXTRA_NONE);
+    // Unit received orders, don't ask orders later:
+    remove_unit_id_from_waiting_list(punit['id']);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
@@ -4450,18 +5292,38 @@ function key_unit_pillage()
   var funits = get_units_in_focus();
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
+    var ptile = unit_tile(punit);
+    // Since enemy Bunkers can't be pillaged, provide user info:
+    if (typeof EXTRA_BUNKER !== "undefined") {
+      if (tile_has_extra(ptile, EXTRA_BUNKER)) {
+        add_client_message("Bunkers prevent Pillage. Build Fortress to remove Bunker.");
+        return;
+      }
+    } 
+    var pstats = unit_get_extra_stats(punit);
     var tgt = get_what_can_unit_pillage_from(punit, null);
     //if (tgt) console.log("Unit can pillage "+tgt.length+" targets: "+tgt);
     if (tgt.length > 0) {
-      if (tgt.length == 1) {
-        request_new_unit_activity(punit, ACTIVITY_PILLAGE, EXTRA_NONE);
-      } else {
-        popup_pillage_selection_dialog(punit);
+      // handle iPillage of multiple targets:
+      if (pstats.iPillage_random_targets) {
+        for (i = 0; i < pstats.iPillage_random_targets; i++) {
+          request_new_unit_activity(punit, ACTIVITY_PILLAGE, EXTRA_NONE);
+          setTimeout(update_unit_focus, update_focus_delay);
+        }
+      }
+      // handle one target cases:
+      else {
+        if (tgt.length == 1 && !(unit_has_dual_pillage_options(punit))) {
+          request_new_unit_activity(punit, ACTIVITY_PILLAGE, EXTRA_NONE);
+          setTimeout(update_unit_focus, update_focus_delay);
+        } else {
+          popup_pillage_selection_dialog(punit);
+          // doesn't get update_unit_focus because there's a pop-up.
+        }
       }
     }
   }
   deactivate_goto(false);
-  setTimeout(update_unit_focus, update_focus_delay);
 }
 
 /**************************************************************************
@@ -4474,6 +5336,8 @@ function key_unit_convert()
     var punit = funits[i];
     /* EXTRA_NONE -> server decides */
     request_new_unit_activity(punit, ACTIVITY_CONVERT, -1)
+    // Unit received orders, don't ask orders later:
+    remove_unit_id_from_waiting_list(punit['id']);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
@@ -4489,6 +5353,24 @@ function key_unit_mine()
     var punit = funits[i];
     /* EXTRA_NONE -> server decides */
     request_new_unit_activity(punit, ACTIVITY_MINE, EXTRA_NONE);
+    // Unit received orders, don't ask orders later:
+    remove_unit_id_from_waiting_list(punit['id']);
+  }
+  deactivate_goto(false);
+  setTimeout(update_unit_focus, update_focus_delay);
+}
+
+/**************************************************************************
+  Tell the units in focus to plant.
+**************************************************************************/
+function key_unit_plant()
+{
+  var funits = get_units_in_focus();
+  for (var i = 0; i < funits.length; i++) {
+    var punit = funits[i];
+    request_new_unit_activity(punit, ACTIVITY_PLANT, EXTRA_NONE);
+    // Unit received orders, don't ask orders later:
+    remove_unit_id_from_waiting_list(punit['id']);
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
@@ -4530,6 +5412,39 @@ function unit_can_vigil(punit)
   return false;
 }
 
+/**************************************************************************
+ Check whether a unit can build a Sea Bridge in a tile.
+**************************************************************************/
+function can_build_sea_bridge(punit, ptile)
+{
+  var land_near;
+
+  if (!unit_can_do_action(punit, ACTION_ROAD))
+    return false;
+
+  if (!is_ocean_tile(ptile)) return false;
+
+  for (var dir = 1; dir < 7; dir++) {
+    if (dir==2 || dir==5)
+      continue; // only check cardinal dir 1,3,4,6 (N,W,E,S)
+
+    var cadj_tile = mapstep(ptile, dir);
+    if (cadj_tile != null) {
+      var tclass = tile_terrain(cadj_tile)['tclass'];
+      if (tclass == 0) {  // 1==water, 0==land
+        land_near = true;
+        break; // one CAdjacent land is all that's needed
+      }
+    }
+  }
+
+  return ((typeof EXTRA_SEABRIDGE !== "undefined")
+      &&  (punit != null && ptile != null)
+      && (!tile_has_extra(ptile, EXTRA_SEABRIDGE)) 
+      && tech_known('Steel')
+      &&  (unit_can_do_action(punit, ACTION_ROAD))
+      && land_near );
+}
 
 /**************************************************************************
  Check whether a unit can build a maglev in a tile.
@@ -4541,9 +5456,7 @@ function can_build_maglev(punit, ptile)
       &&  (!tile_has_extra(ptile, EXTRA_MAGLEV))
       &&  (tile_has_extra(ptile, EXTRA_RAIL))
       &&  (unit_can_do_action(punit, ACTION_ROAD))
-      &&  (player_invention_state(client.conn.playing, tech_id_by_name('Superconductors')) == TECH_KNOWN)
-      &&  ((!tile_has_extra(ptile, EXTRA_RIVER))
-           || (player_invention_state(client.conn.playing, tech_id_by_name('Bridge Building')) == TECH_KNOWN))
+      &&  tech_known('Superconductors')
          );
 }
 
@@ -4562,8 +5475,8 @@ function can_build_well(punit, ptile)
       &&  tile_owner(ptile) == punit['owner']
       &&  (unit_types[punit['type']]['name'] == "Well-Digger")
 /*      &&  (is_lowland)  */
-      &&  (player_invention_state(client.conn.playing, tech_id_by_name('Pottery')) != TECH_KNOWN)
-      &&  (player_invention_state(client.conn.playing, tech_id_by_name('Alphabet')) != TECH_KNOWN)
+      &&  !tech_known('Pottery')
+      &&  !tech_known('Alphabet')
          );
 }
 /**************************************************************************
@@ -4577,6 +5490,8 @@ function key_unit_well()
     const ptile = index_to_tile(punit['tile']);
     if (can_build_well(punit, ptile)) {
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['River']['id']);
+      // Unit received orders, don't ask orders later:
+      remove_unit_id_from_waiting_list(punit['id']);
     }
   }
   deactivate_goto(false);
@@ -4590,6 +5505,12 @@ function key_unit_well()
 **************************************************************************/
 function can_build_canal(punit, ptile)
 {
+  // TODO: Deprecate all pre-MP2C logic to simplify to the superior solution
+
+  if (typeof EXTRA_CANAL === "undefined") return 0;
+  if (tile_terrain(ptile) == null) return 0;
+  if (punit == null || ptile == null) return 0; 
+
   var is_lowland = (tile_terrain(ptile)['name'] != 'Hills'
                    && tile_terrain(ptile)['name'] != 'Mountains');
 
@@ -4598,43 +5519,38 @@ function can_build_canal(punit, ptile)
 
   // Check for water near:
   for (var dir = 0; dir < 8; dir++) {
+    // MP2C only allows CAdjacent on ALL checks below:
+    if (client_rules_flag[CRF_MP2_C] && !is_cardinal_dir(dir)) continue;
     /* Check if there is adjacent ocean/deep ocean/lake */
     var tile1 = mapstep(ptile, dir);
-    if (tile1 != null) {
+    if (tile1 != null && terrains[tile1['terrain']] != null) {
         if (terrains[tile1['terrain']]['name'] == "Lake"
         || terrains[tile1['terrain']]['name'] == "Ocean"
         || terrains[tile1['terrain']]['name'] == "Deep Ocean") {
-          water_near = EXTRA_CANAL;
+
+          water_near = EXTRA_CANAL;  // this is a double code for TRUE and what kind of canal can be made
           break;
         }
-        // CRF_EXTRA_QUAY says if ruleset has waterways, which can be made with river near:
-        else if ( client_rules_flag[CRF_EXTRA_QUAY] && tile_has_extra(tile1, EXTRA_RIVER) ) {
-          water_near = EXTRA_WATERWAY;
+        // MP2ag onward can build EXTRA_WATERWAY:
+        else if ( (client_rules_flag[CRF_EXTRA_QUAY]/* MP2ag+ */ && tile_has_extra(tile1, EXTRA_RIVER))  // a river is adjecent
+                          ||                              // OR...
+                   (client_rules_flag[CRF_MP2_C] && tile_has_extra(tile1, EXTRA_CANAL)) // a canal is CAdj.
+                ) {
+          water_near = EXTRA_WATERWAY; // this is a double code for TRUE and what kind of canal can be made
           break;
         }
     }
   }
 
-  if ((typeof EXTRA_CANAL !== "undefined")
-      &&  (punit != null && ptile != null)
-      &&  (!tile_has_extra(ptile, EXTRA_CANAL))
-      &&  (unit_can_do_action(punit, ACTION_ROAD))
-      && (is_lowland)
-      && (water_near)
-      &&  (player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN) ) {
+  if (  !tile_has_extra(ptile, EXTRA_CANAL)
+        && unit_can_do_action(punit, ACTION_ROAD)
+        && is_lowland
+        && water_near
+        && tech_known('Engineering')) {
 
         return water_near; // serves as a code for whether to make Canal or Waterway extra.
-      }
-
-  return 0; // i.e., false, no type allowed (not canal nor waterway)
-/*  return ((typeof EXTRA_CANAL !== "undefined")
-      &&  (punit != null && ptile != null)
-      &&  (!tile_has_extra(ptile, EXTRA_CANAL))
-      &&  (unit_can_do_action(punit, ACTION_ROAD))
-      && (is_lowland)
-      && (water_near)
-      &&  (player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN)
-         ); */
+  }
+  return 0;
 }
 
 /**************************************************************************
@@ -4652,13 +5568,13 @@ function can_build_quay(punit, ptile)
 
   return ((typeof EXTRA_QUAY !== "undefined")
       &&  (punit != null && ptile != null)
-      &&  (!tile_has_extra(ptile, EXTRA_QUAY))
-      &&  (!tile_has_extra(ptile, EXTRA_))
+      &&  !tile_has_extra(ptile, EXTRA_QUAY)
+      &&  !tile_has_extra(ptile, EXTRA_)
       &&  (tile_has_extra(ptile, EXTRA_RIVER)
            || tile_has_extra(ptile, EXTRA_CANAL)
            || tile_has_extra(ptile, EXTRA_WATERWAY))
-      &&  (unit_can_do_action(punit, ACTION_ROAD))
-      &&  (player_invention_state(client.conn.playing, tech_id_by_name('Pottery')) == TECH_KNOWN)
+      &&  unit_can_do_action(punit, ACTION_ROAD)
+      &&  tech_known('Pottery')
          );
 }
 
@@ -4693,8 +5609,9 @@ function can_irrigate(punit, ptile)
 
   // Check central tile for water source:
   var water_near = tile_has_extra(ptile, EXTRA_RIVER) // irrigation is also a water source but, it's already irrigated! ;)
-      || (tile_has_extra(ptile, EXTRA_OASIS) && (client_rules_flag[CRF_OASIS_IRRIGATE]));
-
+      || (tile_has_extra(ptile, EXTRA_OASIS) && (client_rules_flag[CRF_OASIS_IRRIGATE]))
+      || ((client_rules_flag[CRF_MP2_C]) && tile_has_extra(ptile, EXTRA_CANAL))
+      || ((client_rules_flag[CRF_MP2_C]) && tile_has_extra(ptile, EXTRA_WATERWAY));
   // If no water on occupied tile, check cardinally adjacent:
   if (!water_near) {
     for (var dir = 1; dir < 7; dir++) {
@@ -4709,6 +5626,8 @@ function can_irrigate(punit, ptile)
          || terrain_name == "Deep Ocean"
          || tile_has_extra(cadj_tile, EXTRA_IRRIGATION)
          || tile_has_extra(cadj_tile, EXTRA_RIVER)
+         || (client_rules_flag[CRF_MP2_C] && (tile_has_extra(cadj_tile, EXTRA_CANAL)))
+         || (client_rules_flag[CRF_MP2_C] && (tile_has_extra(cadj_tile, EXTRA_WATERWAY)))   
          || (tile_has_extra(cadj_tile, EXTRA_OASIS) && (client_rules_flag[CRF_OASIS_IRRIGATE])) ) {
             water_near = true;
             break; // one adjacent water is all that's needed
@@ -4730,7 +5649,10 @@ function can_irrigate(punit, ptile)
 **************************************************************************/
 function can_build_naval_base(punit, ptile)
 {
+  if (typeof EXTRA_NAVALBASE === "undefined") return false;
   if (!tile_has_extra(ptile, EXTRA_FORT)) return false;
+  if (tile_has_extra(ptile, EXTRA_FORTRESS)) return false; 
+  if (!punit || !ptile) return false;
 
   var is_lowland = (tile_terrain(ptile)['name'] != 'Hills'
                    && tile_terrain(ptile)['name'] != 'Mountains');
@@ -4753,12 +5675,10 @@ function can_build_naval_base(punit, ptile)
     }
   }
 
-  return ((typeof EXTRA_NAVALBASE !== "undefined")
-            && (punit != null && ptile != null)
-            && (unit_can_do_action(punit, ACTION_BASE))
-            && (is_lowland)
-            && (water_near)
-            && (player_invention_state(client.conn.playing, tech_id_by_name('Engineering')) == TECH_KNOWN)
+  return (  unit_can_do_action(punit, ACTION_BASE)
+            && is_lowland
+            && water_near
+            && tech_known('Engineering')
          );
 }
 
@@ -4776,6 +5696,8 @@ function key_unit_canal()
     var allowed_type = can_build_canal(punit, ptile); //EXTRA_CANAL or EXTRA_WATERWAY
     if (allowed_type) {
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, allowed_type/*extras['Canal']['id']*/);
+      // Unit received orders, don't ask orders later:
+      remove_unit_id_from_waiting_list(punit['id']);
     }
   }
   deactivate_goto(false);
@@ -4810,6 +5732,8 @@ function key_unit_naval_base()
       const ptile = index_to_tile(punit['tile']);
       if (can_build_naval_base(punit, ptile)) {
         request_new_unit_activity(punit, ACTIVITY_BASE, EXTRA_NAVALBASE);
+        // Unit received orders, don't ask orders later:
+        remove_unit_id_from_waiting_list(punit['id']);
       }
     }},     200);
   deactivate_goto(false);
@@ -4826,14 +5750,34 @@ function key_unit_road()
     var punit = funits[i];
     var ptile = index_to_tile(punit['tile']);
 
-    if (unit_types[punit['type']]['name'] == "Well-Digger")
+    if (unit_types[punit['type']]['name'] == "Well-Digger") {
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['River']['id']);
+      remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
+    }
+    else if (is_ocean_tile(ptile)) {
+      if (can_build_sea_bridge(punit,ptile) && !tile_has_extra(ptile, EXTRA_SEABRIDGE)) {
+         request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Sea Bridge']['id']);
+         remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
+      }
+      else if (typeof EXTRA_SEABRIDGE !== "undefined" && tile_has_extra(ptile, EXTRA_SEABRIDGE)
+               && !tile_has_extra(ptile, EXTRA_RAIL)) {
+          request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Railroad']['id']);
+          remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
+      }
+      else if (can_build_maglev(punit, ptile)) {
+        request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Maglev']['id']);
+        remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
+      }
+    }
     else if (!tile_has_extra(ptile, EXTRA_ROAD)) {
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Road']['id']);
+      remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
     } else if (!tile_has_extra(ptile, EXTRA_RAIL)) {
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Railroad']['id']);
+      remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
     } else if (can_build_maglev(punit, ptile)) {
       request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, extras['Maglev']['id']);
+      remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
     }
   }
   deactivate_goto(false);
@@ -4856,6 +5800,7 @@ function key_unit_quay()
     if (quay_rules) activity=EXTRA_QUAY;
 
     request_new_unit_activity(punit, ACTIVITY_GEN_ROAD, activity);
+    remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
   }
   deactivate_goto(false);
   setTimeout(update_unit_focus, update_focus_delay);
@@ -4873,14 +5818,7 @@ function key_unit_homecity()
     var pcity = tile_city(ptile);
 
     if (pcity != null) {
-      var packet = {"pid" : packet_unit_do_action,
-                    "actor_id" : punit['id'],
-                    "target_id": pcity['id'],
-                    "extra_id" : EXTRA_NONE,
-                    "value" : 0,
-                    "name" : "",
-                    "action_type": ACTION_HOME_CITY};
-      send_request(JSON.stringify(packet));
+      request_unit_do_action(ACTION_HOME_CITY, punit['id'], pcity['id']);
       $("#order_change_homecity").hide();
     }
   }
@@ -4903,8 +5841,8 @@ function key_unit_action_select()
     action_tgt_sel_active = true;
     message_log.update({
       event: E_BEGINNER_HELP,
-      message: "Click on a tile to act against it. "
-             + "Press 'd' again to act against own tile."
+      message: "Click on a tile to act on it. "
+             + "Press <b>D</b> again to act on own tile."
     });
   }
   deactivate_goto(false);
@@ -4964,6 +5902,7 @@ function key_unit_auto_settle()
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     request_unit_autosettlers(punit);
+    remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
   }
   setTimeout(update_unit_focus, update_focus_delay);
   deactivate_goto(false);
@@ -4988,8 +5927,8 @@ function request_unit_cancel_orders(punit)
       vigilant: false,
       dest_tile: punit.tile
     };
-    packet.orders = packet.dir = packet.activity = packet.target
-                  = packet.extra = packet.action = [];
+    packet.orders = packet.dir = packet.activity = packet.sub_target
+                  = packet.action = [];
     send_request(JSON.stringify(packet));
   }
 }
@@ -5033,7 +5972,7 @@ function request_unit_build_city()
       if (punit['movesleft'] == 0) {
         message_log.update({
           event: E_BAD_COMMAND,
-          message: "Unit has no moves left to build city"
+          message: unit_type(punit).rule_name+" have no moves left to build city"
         });
         return;
       }
@@ -5053,13 +5992,13 @@ function request_unit_build_city()
             "actor_id"    : punit['id'],
             "target_id"   : target_city['id'],
             "extra_id"    : EXTRA_NONE,
-            "value"       : 0,
+            "sub_tgt_id"  : 0,
             "name"        : "",
             "action_type" : ACTION_JOIN_CITY };
 
             swal({
               title: 'Add '+ptype['name']+' to \n'+target_city['name']+'?',
-              text: 'Unit will add +1 population and expire.',
+              text: 'Unit will add +1 population and re-arrange citizen tile workers.',
               type: 'info',
               background: '#a19886',
               showCancelButton: true,
@@ -5070,7 +6009,9 @@ function request_unit_build_city()
           },
           function(){
              send_request(JSON.stringify(packet));
+             setTimeout(update_active_units_dialog, update_focus_delay);
           });
+          setSwalTheme();
         }
       }
     }
@@ -5078,19 +6019,81 @@ function request_unit_build_city()
 }
 
 /**************************************************************************
+ * Send a request for an actor unit to do a specific action.
+ *
+ * @param action_id - action type to be requested
+ * @param actor_id - acting unit id
+ * @param target_id - target unit, city or tile
+ * @param [sub_tgt_id=0] - optional sub target. Only some actions take
+ *     a sub target. The sub target kind depends on the action. e.g.
+ *     the technology to steal from a city, the extra to
+ *     pillage at a tile, and the building to sabotage in a city.
+ * @param [name=""] - optional name, used by ACTION_FOUND_CITY
+**************************************************************************/
+function request_unit_do_action(action_id, actor_id, target_id, sub_tgt_id,
+                                name)
+{
+  send_request(JSON.stringify({
+    pid: packet_unit_do_action,
+    action_type: action_id,
+    actor_id: actor_id,
+    target_id: target_id,
+    sub_tgt_id: sub_tgt_id || 0,
+    name: name || ""
+  }));
+}
+
+/**************************************************************************
  Tell the units in focus to disband.
 **************************************************************************/
 function key_unit_disband()
 {
+  // Look at who is disbanding where, and how many, to intelligently form the message
+  var plural = false, recycle = true, swaltype = "info"; // default values
+  var ptitle, ptext, cb_text, cb_color="#DD6B55";
+  var focus_units = get_units_in_focus();
+  for (var i = 0; i < focus_units.length; i++) {
+    if (i>=1) plural = true;
+    var pcity = tile_city(index_to_tile(focus_units[i]['tile']));
+    if (!pcity) {
+      recycle = false; // even one unit not in City means a disband
+      swaltype = "warning";
+    }
+  }
+
+  if (recycle) {  // ALL units are recycling in a city
+    if (plural) { // Plural number of units recycling
+      ptitle = "Recycle units?";
+      ptext = "Recycle these units into city production?";
+      cb_color="#55DD6B";
+      cb_text = "Yes, recycle units.";
+    } else {  // Only ONE unit recycling
+      ptitle = "Recycle unit?";
+      ptext = "Recycle this unit into city production?";
+      cb_color="#55DD6B";
+      cb_text = "Yes, recycle unit.";
+    }
+  } else { // At least ONE disbanding unit, it will be permanently lost with no recycle value!
+    if (plural) { // Plural number of units receiving order
+      ptitle = "Disband units?";
+      ptext = "Do you want to destroy these units?";
+      cb_text = "Yes, disband units.";
+    } else {
+      ptitle = "Disband unit?";
+      ptext = "Do you want to destroy this unit?";
+      cb_text = "Yes, disband unit.";      
+    }
+  }
 
   swal({
-    title: "Disband unit?",
-    text: "Do you want to destroy this unit?",
-    type: "warning",
+    title: ptitle,
+    text:  ptext,
+    type:  swaltype,
     showCancelButton: true,
-    confirmButtonColor: "#DD6B55",
-    confirmButtonText: "Yes, disband unit.",
-    closeOnConfirm: true
+    confirmButtonColor: cb_color,
+    confirmButtonText: cb_text,
+    closeOnConfirm: true,
+    html: true
 },
   function(){
     var funits = get_units_in_focus();
@@ -5108,22 +6111,24 @@ function key_unit_disband()
         "target_id"   : (target_city == null ? punit['id']
                                             : target_city['id']),
         "extra_id"    : EXTRA_NONE,
-        "value"       : 0,
+        "sub_tgt_id"  : 0,
         "name"        : "",
         "action_type" : (target_city == null ? ACTION_DISBAND_UNIT
                                             : ACTION_RECYCLE_UNIT)
       };
-
       send_request(JSON.stringify(packet));
+      force_clear_unit(punit['id']);
+      //remove_unit_id_from_waiting_list(punit['id']); // definitely don't want dead unit on wait list
     }
     setTimeout(update_unit_focus, update_focus_delay);
     setTimeout(update_active_units_dialog, update_focus_delay+100);
   });
+  setSwalTheme();
   deactivate_goto(false);
 }
 
 /**************************************************************************
- Move the unit(s) in focus in the specified direction.
+  Move the unit(s) in focus in the specified direction.
 **************************************************************************/
 function key_unit_move(dir)
 {
@@ -5144,7 +6149,30 @@ function key_unit_move(dir)
       return;
     }
 
+    if (punit['transported']) {
+      if (unit_can_do_action(punit, ACTION_TRANSPORT_DISEMBARK1)) {
+        request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
+        request_unit_do_action(ACTION_TRANSPORT_DISEMBARK1, punit['id'],
+                               newtile['index']);
+        unit_move_sound_play(punit);
+      } else if (unit_can_do_action(punit, ACTION_TRANSPORT_DISEMBARK2)) {
+        request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
+        request_unit_do_action(ACTION_TRANSPORT_DISEMBARK2, punit['id'],
+                               newtile['index']);
+        unit_move_sound_play(punit);
+      }
+      return;
+    }
+
     /* Send the order to move using the orders system. */
+    var order = {
+      "order"      : ORDER_ACTION_MOVE,
+      "dir"        : dir,
+      "activity"   : ACTIVITY_LAST,
+      "sub_target" : 0,
+      "action"     : ACTION_COUNT
+    };
+
     var packet = {
       "pid"      : packet_unit_orders,
       "unit_id"  : punit['id'],
@@ -5152,22 +6180,20 @@ function key_unit_move(dir)
       "length"   : 1,
       "repeat"   : false,
       "vigilant" : false,
-      "orders"   : [ORDER_ACTION_MOVE],
-      "dir"      : [dir],
-      "activity" : [ACTIVITY_LAST],
-      "target"   : [0],
-      "extra"    : [EXTRA_NONE],
-      "action"   : [ACTION_COUNT],
+      "orders"   : [order],
       "dest_tile": newtile['index']
     };
     send_request(JSON.stringify(packet));
+    remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
     if (punit['movesleft'] > 0 && punit['owner'] == client.conn.playing.playerno) unit_move_sound_play(punit);
   }
   deactivate_goto(true);
+  // later if option is set:
+  if (focuslock) focuslock_unit();
 }
 
 /**************************************************************************
- Move the unit s in the focused/selected stack in the specified direction.
+  Move the unit s in the focused/selected stack in the specified direction.
 **************************************************************************/
 function key_unit_move_focus_index(dir, s)
 {
@@ -5187,6 +6213,29 @@ function key_unit_move_focus_index(dir, s)
       return;
     }
 
+    if (punit['transported']) {
+      if (unit_can_do_action(punit, ACTION_TRANSPORT_DISEMBARK1)) {
+        request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
+        request_unit_do_action(ACTION_TRANSPORT_DISEMBARK1, punit['id'],
+                               newtile['index']);
+        unit_move_sound_play(punit);
+      } else if (unit_can_do_action(punit, ACTION_TRANSPORT_DISEMBARK2)) {
+        request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
+        request_unit_do_action(ACTION_TRANSPORT_DISEMBARK2, punit['id'],
+                               newtile['index']);
+        unit_move_sound_play(punit);
+      }
+      return;
+    }
+
+    var order = {
+      "order"      : ORDER_ACTION_MOVE,
+      "dir"        : dir,
+      "activity"   : ACTIVITY_LAST,
+      "sub_target" : 0,
+      "action"     : ACTION_COUNT
+    }
+
     /* Send the order to move using the orders system. */
     var packet = {
       "pid"      : packet_unit_orders,
@@ -5195,20 +6244,26 @@ function key_unit_move_focus_index(dir, s)
       "length"   : 1,
       "repeat"   : false,
       "vigilant" : false,
-      "orders"   : [ORDER_ACTION_MOVE],
-      "dir"      : [dir],
-      "activity" : [ACTIVITY_LAST],
-      "target"   : [0],
-      "extra"    : [EXTRA_NONE],
-      "action"   : [ACTION_COUNT],
+      "orders"   : [order],
       "dest_tile": newtile['index']
     };
 
     send_request(JSON.stringify(packet));
+    if (focuslock) focuslock_unit();
+    remove_unit_id_from_waiting_list(punit['id']); // Unit received orders, don't ask orders later
     if (punit['movesleft'] > 0 && punit['owner'] == client.conn.playing.playerno) unit_move_sound_play(punit);
   }
 
   deactivate_goto(true);
+}
+
+/**************************************************************************
+ ...Locks focus on the selected unit (keeping it center of map).
+    Called only when the player has set the focuslock Prefs Option to on.
+**************************************************************************/
+function focuslock_unit()
+{
+  setTimeout(auto_center_on_focus_unit,420);
 }
 
 /**************************************************************************
@@ -5254,42 +6309,6 @@ function key_paste_link_under_cursor()
   $("#game_text_input").focus();  // default user to be ready to hit Enter or continue typing
 }
 
-
-/**************************************************************************
- ...
-**************************************************************************/
-function process_diplomat_arrival(pdiplomat, target_tile_id)
-{
-  var ptile = index_to_tile(target_tile_id);
-
-  /* No queue. An action selection dialog is opened at once. If multiple
-   * action selection dialogs are open at once one will hide all others.
-   * The hidden dialogs are based on information from the time they
-   * were opened. It is therefore more outdated than it would have been if
-   * the server was asked the moment before the action selection dialog
-   * was shown.
-   *
-   * The C client's bundled with Freeciv asks right before showing the
-   * action selection dialog. They used to have a custom queue for it.
-   * Freeciv patch #6601 (SVN r30682) made the desire for an action
-   * decision a part of a unit's data. They used it to drop their custom
-   * queue and move unit action decisions to the unit focus queue. */
-
-  if (pdiplomat != null && ptile != null) {
-    /* Ask the server about what actions pdiplomat can do. The server's
-     * reply will pop up an action selection dialog for it. */
-    var packet = {
-      "pid" : packet_unit_get_actions,
-      "actor_unit_id" : pdiplomat['id'],
-      "target_unit_id" : IDENTITY_NUMBER_ZERO,
-      "target_tile_id": target_tile_id,
-      "target_extra_id": EXTRA_NONE,
-      "disturb_player": true
-    };
-    send_request(JSON.stringify(packet));
-  }
-}
-
 /****************************************************************************
   Request GOTO path for unit with unit_id, and dst_x, dst_y in map coords.
 ****************************************************************************/
@@ -5322,11 +6341,8 @@ function check_request_goto_path()
   if (goto_active && current_focus.length > 0
       && (prev_mouse_x != mouse_x || prev_mouse_y != mouse_y || prev_goto_tile<=LAST_FORCED_CHECK)) {
 
-    if (renderer == RENDERER_2DCANVAS) {
-      ptile = canvas_pos_to_tile(mouse_x, mouse_y);
-    } else {
-      ptile = webgl_canvas_pos_to_tile(mouse_x, mouse_y);
-    }
+    ptile = canvas_pos_to_tile(mouse_x, mouse_y);
+
     if (ptile != null) {
       if (ptile['tile'] != prev_goto_tile) {
         clear_goto_tiles(); // TO DO: goto tiles should not be in tiles[tild_id][goto_dir] which takes forever to clear, but their own array instead
@@ -5362,26 +6378,24 @@ function update_goto_path(goto_packet)
   var t0 = index_to_tile(punit['tile']);
   var ptile = t0;
   var goaltile = index_to_tile(goto_packet['dest']);
+  var refuel = 0;
 
   // don't bother check goto for same tile unit is on
   if (ptile==goaltile) return;
 
-  if (renderer == RENDERER_2DCANVAS) {
     for (var i = 0; i < goto_packet['dir'].length; i++) {
       if (ptile == null) break;
       var dir = goto_packet['dir'][i];
 
       if (dir == -1) {
         /* Assume that this means refuel. */
+        refuel++;
         continue;
       }
 
       ptile['goto_dir'] = dir;
       ptile = mapstep(ptile, dir);
     }
-  } else {
-    webgl_render_goto_line(ptile, goto_packet['dir']);
-  }
 
   current_goto_turns = goto_packet['turns'];
 
@@ -5389,11 +6403,11 @@ function update_goto_path(goto_packet)
   goto_turns_request_map[goto_packet['unit_id'] + "," + goaltile['x'] + "," + goaltile['y']]
 	  = current_goto_turns;
 
-  if (current_goto_turns != undefined) {
+  if (current_goto_turns !== "undefined") {
     var path_length = goto_packet['length'];
 
-    // Fuel units inject extra non-path data in the goto_packet:
-    if (unit_type(punit)['fuel']>0) path_length--;
+    // Fuel units inject extra non-path 'refuel data' in the goto_packet: +++
+    if (refuel) path_length -= refuel;  // remove "refuel path steps" from path_length
 
     $("#active_unit_info").html("Path: "+path_length+" tiles");
   }
@@ -5416,11 +6430,9 @@ function show_goto_path(goto_packet)
 **************************************************************************/
 function center_tile_mapcanvas(ptile)
 {
-  if (renderer == RENDERER_2DCANVAS) {
-    center_tile_mapcanvas_2d(ptile);
-  } else {
-    center_tile_mapcanvas_3d(ptile);
-  }
+
+  center_tile_mapcanvas_2d(ptile);
+
 }
 
 /**************************************************************************
@@ -5428,13 +6440,7 @@ function center_tile_mapcanvas(ptile)
 **************************************************************************/
 function popit()
 {
-  var ptile;
-
-  if (renderer == RENDERER_2DCANVAS) {
-    ptile = canvas_pos_to_tile(mouse_x, mouse_y);
-  } else {
-    ptile = webgl_canvas_pos_to_tile(mouse_x, mouse_y);
-  }
+  var ptile = canvas_pos_to_tile(mouse_x, mouse_y);
 
   if (ptile == null) return;
 
@@ -5499,7 +6505,7 @@ function popit_req(ptile)
   if (punit_id) { // units are on tile
     var tunits = tile_units(ptile);
     for (u = 0; u < tunits.length; u++) {
-      if (tunits[u]['goto_tile'] != undefined) { // don't show foreign units: this key is undefined
+      if (tunits[u]['goto_tile'] !== "undefined") { // don't show foreign units: this key is undefined
         var goto_tile_id = tunits[u]['goto_tile'];
         if (goto_tile_id > 0) {  // unit has go to orders
           request_goto_path(tunits[u]['id'], tiles[goto_tile_id]['x'], tiles[goto_tile_id]['y']);
@@ -5511,10 +6517,45 @@ function popit_req(ptile)
 
 
 /**************************************************************************
-   find any city to focus on.
+   Find any city to focus on, if nothing more intelligent can be found
+   to focus on. Priority: capital, owned city, owned unit, any city at 
+   all.
 **************************************************************************/
 function center_on_any_city()
 {
+  var fallback_city;
+
+  if (!client_is_observer()) {
+    for (var city_id in cities) {
+      var pcity = cities[city_id];
+      // Loop through all cities
+      if (pcity['owner'] == client.conn.playing.playerno) {
+        // any owned city is a fallback if we don't find a capital
+        fallback_city = pcity; 
+        // if it's the capital, center on it.
+        if (city_has_building(pcity), improvement_id_by_name("Palace")) {
+          center_tile_mapcanvas(city_tile(pcity));
+          return;
+        }
+      }
+    }
+    // no capital found, use a fallback_city if available
+    if (fallback_city) {
+      center_tile_mapcanvas(city_tile(fallback_city));
+      return;
+    }
+    // player has no cities, find a unit:
+    for (var unit_id in units) {
+      var punit = units[unit_id];
+      if (punit['owner'] == client.conn.playing.playerno) {
+        center_tile_mapcanvas(unit_tile(punit));
+        return;
+      }
+    }
+  }
+
+  // player is either an observer, a dead player, or something else,
+  // so find any city at all to focus on:
   for (var city_id in cities) {
     var pcity = cities[city_id];
     center_tile_mapcanvas(city_tile(pcity));
@@ -5754,17 +6795,17 @@ function update_active_units_dialog()
 
     if (client.conn.playing != null && current_focus[0]['owner'] == client.conn.playing.playerno) {
       if (mobile_mode) { // mobile version of text
-        active_uinfo += "<span style='color:white'> &nbsp; M:<span style='color:lightgreen;font-size:110%'><b>" + move_points_text(aunit['movesleft']) + "</b></span></span>";
+        active_uinfo += "<span style='color:white'> &nbsp; M:<span style='color:lightgreen;font-size:110%'><b>" + move_points_text(aunit['movesleft'],false) + "</b></span></span>";
       } else { // normal non-mobile text:
-        active_uinfo += "<span style='color:white'>Moves:<span style='color:lightgreen;font-size:120%;'><b>" + move_points_text(aunit['movesleft']) + "</b></span></span> ";
+        active_uinfo += "<span style='color:white'>Moves:<span style='color:lightgreen;font-size:120%;'><b>" + move_points_text(aunit['movesleft'],false) + "</b></span></span> ";
       }
     }
     if (mobile_mode) { // mobile version of text
       active_uinfo += "<span>&nbsp;H:<span style='color:lightpink;font-size:110%'><b>"
       + aunit['hp'] + " </b> </span> </span>" + unit_name; // unit name after Moves and HP for mobile
     } else { // normal non-mobile text:
-        active_uinfo += "<span title='Attack'>A:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['attack_strength']   // make terser titles to avoid cramped clutter (Lexxie)
-        + "</b></span></span> <span title='Defense'>D:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['defense_strength']
+        active_uinfo += "<span title='Attack'>A:<span style='color:gainsboro;font-size:100%;'><b>"+utype_real_base_attack_strength(ptype) //+ ptype['attack_strength']   // make terser titles to avoid cramped clutter (Lexxie)
+        + "</b></span></span> <span title='Defense'>D:<span style='color:gainsboro;font-size:100%;'><b>"+utype_real_base_defense_strength(ptype)//+ ptype['defense_strength']
         + "</b></span></span> <span title='Firepower'>FP:<span style='color:gainsboro;font-size:100%;'><b>" + ptype['firepower']
         + "</b></span></span> <span title='Health'>H:<span style='color:lightpink;font-size:120%;'><b>"
         + aunit['hp'] + "</b></span></span>"; //<span style='color:gainsboro;font-size:85%;'>/" + ptype['hp'] + "</span></span>";
@@ -5874,7 +6915,7 @@ function update_active_units_dialog()
     } else { // normal screen sizing of panel
       $("#game_unit_panel").parent().width(newwidth);
       $("#game_unit_panel").parent().height(newheight+6);  // third line of text is rare but needs 5 more px to not be clipped off (Lexxie)
-      $("#game_unit_panel").parent().css("left", ($(window).width() - newwidth) + "px");
+      $("#game_unit_panel").parent().css("left", ($(window).width() - newwidth -3) + "px");
       $("#game_unit_panel").parent().css("top", ($(window).height() - newheight - 20) + "px");
       $("#game_unit_panel").parent().css("background", "rgba(50,50,40,0.5)");
     }
@@ -5930,4 +6971,97 @@ function check_mouse_drag_unit(ptile)
   if (ptile_units.length > 1) {
      update_active_units_dialog();
   }
+}
+/**************************************************************************
+  Pop-up at game start to enter fullscreen. We might use a browser but we
+  are a full-screen game, damn it!
+**************************************************************************/
+function popup_fullscreen_enter_game_dialog()
+{
+  // Don't show popup for small screen, we set enter it elsewhere.
+  if (is_small_screen()) return;
+  
+  id = "#fullscreen_dialog";
+  remove_active_dialog(id);  /* Reset dialog page. */
+  $("#fullscreen_dialog").css("white-space","pre-wrap"); // allow \n to work.
+  $("<div id='fullscreen_dialog'></div>").appendTo("div#game_page");
+
+  if (!is_small_screen())
+    $(id).html("<b>Enters Full Screen when you interact with game.</b><br><br><b>ALT-S</b> toggles Full Screen.<br><b>ESC</b> exits full screen.");
+  else 
+    $(id).html("<b>Play in Full Screen Mode.");
+
+  var buttons = { 'Yes!': function()
+                 { openFullscreen(); remove_active_dialog(id); },
+                  'No': function() {remove_active_dialog(id);} };
+  $(id).attr("title", "Full Immersion Mode");
+  var dwidth = is_small_screen() ? "90%" : "480";
+  $(id).dialog({bgiframe: true, modal: true, buttons: (buttons), height: "auto", width: dwidth});
+  $(id).dialog('open'); $(id).dialog('widget').position({my:"center", at:"center", of:window})
+  dialog_register(id);
+}
+/****************************************************************************
+ This function opens full screen mode.
+****************************************************************************/
+function openFullscreen() {
+  var elem = document.documentElement;
+  if (!elem) {
+    if (active_dialogs.length) { 
+      var dialog_id = active_dialogs.pop();
+      remove_active_dialog(dialog_id);
+     }
+    return;
+  }
+
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) { /* Safari */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE11 */
+    elem.msRequestFullscreen();
+  }
+  // clicking anywhere will restore you back!
+  $('html').click( function() {
+    if(!document.fullscreenElement && $('html').length > 0 && $('html')[0].requestFullscreen !== "undefined"){
+      $('html')[0].requestFullscreen();
+    }
+  });
+}
+/****************************************************************************
+ This function sets the color theme for swal colors that override the
+ .css file on game load.
+****************************************************************************/
+function setSwalTheme() {
+  // Sweet alert recolor for dark-theme (it overwrites civclient.css settings)
+  $(".confirm").css("color", "#5C5");
+  $(".cancel").css("color", "#C55");
+  $(".sweet-alert").children().css("color", "#d4cfb9");
+}
+
+/****************************************************************************
+ Takes an onclick() on the invisible pane over tabs, disables the pane's
+ clickability temporarily then clickks the tab under it, then displays the
+ pane again. This prevents browser authoritarianism in forcing stupid url
+ preview links when we hover over our game tabs.
+ NOTE: each pane needs a separate index. Current indices are:
+ 1 = main game tabs
+ 2 = city tabs
+ 3 = intel dialog tabs
+****************************************************************************/
+function clickMask(ev, pane) {
+  x1 = ev.clientX;
+  y1 = ev.clientY;
+  ev.stopPropagation();
+
+  if (x1==0 && y1==0) return;
+
+  if (x1 !== undefined && y1 !== undefined)
+  {
+      $("#ixtjkiller"+pane).css("pointer-events", "none");
+      jQuery(document.elementFromPoint(x1, y1)).click();
+      $("#ixtjkiller"+pane).css("pointer-events", "auto");
+  }
+  /* Possible TODO: if counter measures failing x>n times without successful
+     pane click-under, just remove all #ixtjkillern elements to fail over into
+     guaranteed working but with url preview */
 }

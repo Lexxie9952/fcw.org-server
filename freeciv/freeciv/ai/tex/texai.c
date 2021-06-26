@@ -18,8 +18,7 @@
 /* common */
 #include "ai.h"
 
-/* default ai */
-#include "aicity.h"
+/* ai/default */
 #include "aidata.h"
 #include "aiferry.h"
 #include "aihand.h"
@@ -27,6 +26,7 @@
 #include "aiplayer.h"
 #include "aisettler.h"
 #include "aitools.h"
+#include "daicity.h"
 #include "daidiplomacy.h"
 #include "daidomestic.h"
 #include "daimilitary.h"
@@ -311,7 +311,7 @@ static void texwai_ferry_init_ferry(struct unit *ferry)
   Call default ai with tex ai type as parameter.
 **************************************************************************/
 static void texwai_ferry_transformed(struct unit *ferry,
-                                     struct unit_type *old)
+                                     const struct unit_type *old)
 {
   TEXAI_AIT;
   TEXAI_DFUNC(dai_ferry_transformed, ferry, old);
@@ -425,6 +425,15 @@ static void texwai_first_activities(struct player *pplayer)
   TEXAI_AIT;
   TEXAI_TFUNC(texai_first_activities, pplayer);
   TEXAI_DFUNC(dai_do_first_activities, pplayer);
+}
+
+/**********************************************************************//**
+  Start working on the thread again.
+**************************************************************************/
+static void texwai_restart_phase(struct player *pplayer)
+{
+  TEXAI_AIT;
+  TEXAI_TFUNC(texai_first_activities, pplayer);
 }
 
 /**********************************************************************//**
@@ -635,9 +644,7 @@ bool fc_ai_tex_setup(struct ai_type *ai)
   ai->funcs.want_to_explore = texwai_switch_to_explore;
 
   ai->funcs.first_activities = texwai_first_activities;
-  /* Do complete run after savegame loaded - we don't know what has been
-     done before. */
-  ai->funcs.restart_phase = texwai_first_activities;
+  ai->funcs.restart_phase = texwai_restart_phase;
   ai->funcs.diplomacy_actions = texwai_diplomacy_actions;
   ai->funcs.last_activities = texwai_last_activities;
 
@@ -656,6 +663,8 @@ bool fc_ai_tex_setup(struct ai_type *ai)
   ai->funcs.refresh = texwai_refresh;
 
   ai->funcs.tile_info = texai_tile_info;
-  
+  ai->funcs.city_info = texai_city_changed;
+  ai->funcs.unit_info = texai_unit_changed;
+
   return TRUE;
 }

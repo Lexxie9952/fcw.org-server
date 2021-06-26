@@ -1,5 +1,5 @@
 [spec]
-options = "+Freeciv-spec-Devel-2015-Mar-25"
+options = "+Freeciv-spec-Devel-2019-Jul-03"
 [info]
 artists = "
  Frederic Rodrigo 
@@ -215,4 +215,6 @@ tiles = { "row", "column","tag"
   8, 7, "a.fundamentalism"
   8, 8, "a.radar"
   8, 9, "a.avionics"
+  9, 0, "a.nationalism"
+  9, 1, "a.theocracy"
 }

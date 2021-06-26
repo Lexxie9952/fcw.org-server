@@ -9,7 +9,7 @@
 
 [datafile]
 description="Sandbox nations data for Freeciv"
-options="Freeciv-ruleset-Devel-2017.Jan.02 +web-compatible"
+options="Freeciv-ruleset-Devel-2017.Jan.02 web-compatible"
 format_version=20
 
 ; This section contains meta information for freeciv-ruledit to recreate the ruleset
@@ -54,6 +54,11 @@ trader_default = 50
 aggressive_min = 30
 aggressive_max = 90
 aggressive_default = 50
+
+; Value of trait "builder" defines how much AI wants to build buildings
+builder_min = 30
+builder_max = 90
+builder_default = 50
 
 ; Please keep [ruledit] section in sync with these includes
 *include "default/nationlist.ruleset"

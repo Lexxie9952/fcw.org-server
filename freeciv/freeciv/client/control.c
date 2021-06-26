@@ -91,7 +91,7 @@ enum unit_activity connect_activity;
 struct extra_type *connect_tgt;
 
 action_id goto_last_action;
-int goto_last_tgt;
+int goto_last_sub_tgt;
 enum unit_orders goto_last_order; /* Last order for goto */
 
 static struct tile *hover_tile = NULL;
@@ -284,7 +284,7 @@ void unit_register_battlegroup(struct unit *punit)
 void set_hover_state(struct unit_list *punits, enum cursor_hover_state state,
 		     enum unit_activity activity,
                      struct extra_type *tgt,
-                     int last_tgt,
+                     int last_sub_tgt,
                      action_id action,
                      enum unit_orders order)
 {
@@ -303,7 +303,7 @@ void set_hover_state(struct unit_list *punits, enum cursor_hover_state state,
   }
   goto_last_order = order;
   goto_last_action = action;
-  goto_last_tgt = last_tgt;
+  goto_last_sub_tgt = last_sub_tgt;
 }
 
 /**********************************************************************//**
@@ -419,8 +419,8 @@ void auto_center_on_focus_unit(void)
 {
   struct tile *ptile = find_a_focus_unit_tile_to_center_on();
 
-  if (ptile && gui_options.auto_center_on_unit &&
-      !tile_visible_and_not_on_border_mapcanvas(ptile)) {
+  if (ptile && gui_options.auto_center_on_unit
+      && !tile_visible_and_not_on_border_mapcanvas(ptile)) {
     center_tile_mapcanvas(ptile);
   }
 }
@@ -1090,7 +1090,7 @@ void action_decision_request(struct unit *actor_unit)
   Do a goto with an order at the end (or ORDER_LAST).
 **************************************************************************/
 void request_unit_goto(enum unit_orders last_order,
-                       action_id act_id, int tgt_id)
+                       action_id act_id, int sub_tgt_id)
 {
   struct unit_list *punits = get_units_in_focus();
 
@@ -1146,7 +1146,7 @@ void request_unit_goto(enum unit_orders last_order,
 
   if (hover_state != HOVER_GOTO) {
     set_hover_state(punits, HOVER_GOTO, ACTIVITY_LAST, NULL,
-                    tgt_id, act_id, last_order);
+                    sub_tgt_id, act_id, last_order);
     enter_goto_state(punits);
     create_line_at_mouse_pos();
     update_unit_info_label(punits);
@@ -1232,7 +1232,9 @@ void control_mouse_cursor(struct tile *ptile)
   case HOVER_GOTO:
     /* Determine if the goto is valid, invalid, nuke or will attack. */
     if (is_valid_goto_destination(ptile)) {
-      if (goto_last_action == ACTION_NUKE) {
+      if (action_id_has_result_safe(goto_last_action, ACTION_NUKE_UNITS)
+          || action_id_has_result_safe(goto_last_action, ACTION_NUKE_CITY)
+          || action_id_has_result_safe(goto_last_action, ACTION_NUKE)) {
         /* Goto results in nuclear attack. */
         mouse_cursor_type = CURSOR_NUKE;
       } else if (can_units_attack_at(active_units, ptile)) {
@@ -1520,8 +1522,7 @@ void request_unit_return(struct unit *punit)
       order.order = ORDER_ACTIVITY;
       order.dir = DIR8_ORIGIN;
       order.activity = ACTIVITY_SENTRY;
-      order.target = -1;
-      order.extra = EXTRA_NONE;
+      order.sub_target = -1;
       order.action = ACTION_NONE;
       send_goto_path(punit, path, &order);
     } else {
@@ -1651,25 +1652,24 @@ void request_unit_select(struct unit_list *punits,
   - action    : The action to be requested.
   - actor_id  : The unit ID of the actor unit.
   - target_id : The ID of the target unit, city or tile.
-  - value     : For ACTION_SPY_TARGETED_STEAL_TECH,
-                ACTION_SPY_TARGETED_STEAL_TECH_ESC,
-                ACTION_SPY_TARGETED_SABOTAGE_CITY or
-                ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC, the technology or
-                building to aim for.
+  - sub_tgt   : The sub target. Only some actions take a sub target. The
+                sub target kind depends on the action. Example sub targets
+                are the technology to steal from a city, the extra to
+                pillage at a tile and the building to sabotage in a city.
   - name      : Used by ACTION_FOUND_CITY to specify city name.
 **************************************************************************/
 void request_do_action(action_id action, int actor_id,
-                       int target_id, int value, const char *name)
+                       int target_id, int sub_tgt, const char *name)
 {
   dsend_packet_unit_do_action(&client.conn,
-                              actor_id, target_id, EXTRA_NONE, value, name,
+                              actor_id, target_id, sub_tgt, name,
                               action);
 }
 
 /**********************************************************************//**
   Request data for follow up questions about an action the unit can
   perform.
-  - action : The action more details .
+  - action : The action the follow up question is about.
   - actor_id : The unit ID of the acting unit.
   - target_id : The ID of the target unit or city.
 **************************************************************************/
@@ -1734,12 +1734,11 @@ void request_unit_non_action_move(struct unit *punit,
   p.dest_tile = tile_index(dest_tile);
 
   p.length = 1;
-  p.orders[0] = ORDER_MOVE;
-  p.dir[0] = dir;
-  p.activity[0] = ACTIVITY_LAST;
-  p.target[0] = -1;
-  p.extra[0] = EXTRA_NONE;
-  p.action[0] = ACTION_NONE;
+  p.orders[0].order = ORDER_MOVE;
+  p.orders[0].dir = dir;
+  p.orders[0].activity = ACTIVITY_LAST;
+  p.orders[0].sub_target = -1;
+  p.orders[0].action = ACTION_NONE;
 
   send_packet_unit_orders(&client.conn, &p);
 }
@@ -1787,12 +1786,11 @@ void request_move_unit_direction(struct unit *punit, int dir)
   p.dest_tile = tile_index(dest_tile);
 
   p.length = 1;
-  p.orders[0] = ORDER_ACTION_MOVE;
-  p.dir[0] = dir;
-  p.activity[0] = ACTIVITY_LAST;
-  p.target[0] = -1;
-  p.extra[0] = EXTRA_NONE;
-  p.action[0] = ACTION_NONE;
+  p.orders[0].order = ORDER_ACTION_MOVE;
+  p.orders[0].dir = dir;
+  p.orders[0].activity = ACTIVITY_LAST;
+  p.orders[0].sub_target = -1;
+  p.orders[0].action = ACTION_NONE;
 
   send_packet_unit_orders(&client.conn, &p);
 }
@@ -2009,8 +2007,13 @@ void request_unit_load(struct unit *pcargo, struct unit *ptrans,
   if (ptrans
       && can_client_issue_orders()
       && could_unit_load(pcargo, ptrans)) {
-    dsend_packet_unit_load(&client.conn, pcargo->id, ptrans->id,
-                           ptile->index);
+    if (same_pos(unit_tile(pcargo), ptile)) {
+      request_do_action(ACTION_TRANSPORT_BOARD,
+                        pcargo->id, ptrans->id, 0, "");
+    } else {
+      request_do_action(ACTION_TRANSPORT_EMBARK,
+                        pcargo->id, ptrans->id, 0, "");
+    }
 
     /* Sentry the unit.  Don't request_unit_sentry since this can give a
      * recursive loop. */
@@ -2033,7 +2036,13 @@ void request_unit_unload(struct unit *pcargo)
       && ptrans
       && can_unit_unload(pcargo, ptrans)
       && can_unit_survive_at_tile(&(wld.map), pcargo, unit_tile(pcargo))) {
-    dsend_packet_unit_unload(&client.conn, pcargo->id, ptrans->id);
+    if (unit_owner(pcargo) == client.conn.playing) {
+      request_do_action(ACTION_TRANSPORT_DEBOARD,
+                        pcargo->id, ptrans->id, 0, "");
+    } else {
+      request_do_action(ACTION_TRANSPORT_UNLOAD,
+                        ptrans->id, pcargo->id, 0, "");
+    }
 
     if (unit_owner(pcargo) == client.conn.playing
         && pcargo->activity == ACTIVITY_SENTRY) {
@@ -2697,7 +2706,7 @@ void do_map_click(struct tile *ptile, enum quickselect_type qtype)
       break;
     case HOVER_PARADROP:
       unit_list_iterate(punits, punit) {
-	do_unit_paradrop_to(punit, ptile);
+        do_unit_paradrop_to(punit, ptile);
       } unit_list_iterate_end;
       break;
     case HOVER_CONNECT:
@@ -2713,38 +2722,34 @@ void do_map_click(struct tile *ptile, enum quickselect_type qtype)
 
     clear_hover_state();
     update_unit_info_label(get_units_in_focus());
-  }
-
-  /* Bypass stack or city popup if quickselect is specified. */
-  else if (qtype != SELECT_POPUP && qtype != SELECT_APPEND) {
+  } else if (qtype != SELECT_POPUP && qtype != SELECT_APPEND) {
+    /* Bypass stack or city popup if quickselect is specified. */
     struct unit *qunit = quickselect(ptile, qtype);
+
     if (qunit) {
       unit_focus_set_and_select(qunit);
       maybe_goto = gui_options.keyboardless_goto;
     }
-  }
-  /* Otherwise use popups. */
-  else if (NULL != pcity
-           && can_player_see_city_internals(client.conn.playing, pcity)) {
+  } else if (NULL != pcity
+             && can_player_see_city_internals(client.conn.playing, pcity)) {
+    /* Otherwise use popups. */
     popup_city_dialog(pcity);
-  }
-  else if (unit_list_size(ptile->units) == 0
-           && NULL == pcity
-           && get_num_units_in_focus() > 0) {
+  } else if (unit_list_size(ptile->units) == 0
+             && NULL == pcity
+             && get_num_units_in_focus() > 0) {
     maybe_goto = gui_options.keyboardless_goto;
-  }
-  else if (unit_list_size(ptile->units) == 1
-           && !get_transporter_occupancy(unit_list_get(ptile->units, 0))) {
+  } else if (unit_list_size(ptile->units) == 1
+             && !get_transporter_occupancy(unit_list_get(ptile->units, 0))) {
     struct unit *punit = unit_list_get(ptile->units, 0);
 
     if (unit_owner(punit) == client.conn.playing) {
       if (can_unit_do_activity(punit, ACTIVITY_IDLE)) {
         maybe_goto = gui_options.keyboardless_goto;
-	if (qtype == SELECT_APPEND) {
-	  unit_focus_add(punit);
-	} else {
-	  unit_focus_set_and_select(punit);
-	}
+        if (qtype == SELECT_APPEND) {
+          unit_focus_add(punit);
+        } else {
+          unit_focus_set_and_select(punit);
+        }
       }
     } else if (pcity) {
       /* Don't hide the unit in the city. */
@@ -2961,7 +2966,7 @@ void key_cancel_action(void)
     if (goto_pop_waypoint()) {
       break;
     }
-    /* else fall through: */
+    fc__fallthrough; /* else fall through: */
   case HOVER_PARADROP:
   case HOVER_ACT_SEL_TGT:
     clear_hover_state();
@@ -3353,11 +3358,35 @@ void key_unit_irrigate(void)
 }
 
 /**********************************************************************//**
+  Handle user 'cultivate' input
+**************************************************************************/
+void key_unit_cultivate(void)
+{
+  unit_list_iterate(get_units_in_focus(), punit) {
+    if (can_unit_do_activity(punit, ACTIVITY_CULTIVATE)) {
+      request_new_unit_activity(punit, ACTIVITY_CULTIVATE);
+    }
+  } unit_list_iterate_end;
+}
+
+/**********************************************************************//**
   Handle user 'build mine' input
 **************************************************************************/
 void key_unit_mine(void)
 {
   key_unit_extra(ACTIVITY_MINE, EC_MINE);
+}
+
+/**********************************************************************//**
+  Handle user 'plant' input
+**************************************************************************/
+void key_unit_plant(void)
+{
+  unit_list_iterate(get_units_in_focus(), punit) {
+    if (can_unit_do_activity(punit, ACTIVITY_PLANT)) {
+      request_new_unit_activity(punit, ACTIVITY_PLANT);
+    }
+  } unit_list_iterate_end;
 }
 
 /**********************************************************************//**

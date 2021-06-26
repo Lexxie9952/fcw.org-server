@@ -59,24 +59,57 @@
 
 	 */
 	body {
-		background-image: url("/static/images/background-pattern.jpg");
 		padding-top: 60px;
 		padding-bottom: 20px;
-		color: #494A49;
+		color: #ccc;
+  	background-image: url('/images/bg-dark.jpg'); 
+	}
+	a {
+    text-shadow: 1px 1px #000 !important;
+		color: #b1efef;
+	}
+	a:hover {
+    text-shadow: 1px 1px #005 !important;
+    color: #dcb;
+    text-decoration: underline;
 	}
 	h1, h2, h3, h4, h5, h6 {
-		color: #BE602D;
+		color: #85afaf;
+		font-family: 'Freeciv', 'Segoe UI';
+		text-shadow: 1px 1px #222;
 	}
 	h1, h2, h3 {
-		font-family: 'Fredericka the Great', cursive;
-		border-bottom: 1px solid #D3B86F;
+		font-family: 'Freeciv', 'Segoe UI';
+		border-bottom: 1px solid #827d70;
+	}
+	.table>thead>tr>th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #777;
+	}
+	.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {
+    border-top: 1px solid #7d7d7d;
+	}
+	.input-group .form-control:first-child {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    background: #000;
+    color: #ccc;
+    border-color: #444;
+		border-radius: 6px 0px 0px 6px;
+	}
+	.input-group-btn:last-child>.btn, .input-group-btn:last-child>.btn-group {
+    background-color: #888;
+    background: #444;
+    color: #000;
+    border-color: #444;
+    text-shadow: 1px 1px #888;
 	}
 	/* 
 	 * Delimits an area where to put content.
 	 */
 	.panel-freeciv {
 		background-color: rgba(243, 236, 209, 0.5);                
-		border-bottom: 1px solid #D3B86F;
+		border-bottom: 1px solid #827d70;
 		border-radius: 3px;
 		margin-top: 1%;
 		padding: 1%;
@@ -107,7 +140,8 @@
 	 * The bootstrap theme we use adds some transparency, this ensure it is removed.
 	 */
 	.navbar-inverse {
-		background-image: none;
+		background-color: #2220;
+		background: url(/images/bg-med-dark.jpg);
 	}
 	/*
 	 * Ensure that the logo fits within the navbar.
@@ -121,9 +155,29 @@
 	}
 	.ongoing-games-number {
 		margin-left: 5px;
-		background:#BE602D;
+		background:#be602d;
 	}
 	.nav {
 		font-size: 16px;
+	}
+	.dropdown-menu {
+  	background-image: url('/images/bg-med-dark.jpg');
+		border-radius: 5px;
+		border: 2x solid #000e;
+	}
+	.dropdown-menu .divider {
+			height: 1px;
+			margin: 5px 0;
+			border: 1px solid #000;
+			background-color: #000;
+	}
+	.dropdown-menu>li>a {
+			display: block;
+			padding: 3px 20px;
+			clear: both;
+			font-weight: normal;
+			line-height: 1.42857143;
+			color: #ccc;
+			white-space: nowrap;
 	}
 </style>

@@ -366,7 +366,6 @@ enum object_property_ids {
   OPID_PLAYER_SCIENCE,
   OPID_PLAYER_GOLD,
 
-  OPID_GAME_YEAR,
   OPID_GAME_SCENARIO,
   OPID_GAME_SCENARIO_NAME,
   OPID_GAME_SCENARIO_AUTHORS,
@@ -1810,9 +1809,6 @@ static struct propval *objbind_get_value_from_object(struct objbind *ob,
       }
 
       switch (propid) {
-      case OPID_GAME_YEAR:
-        pv->data.v_int = pgame->info.year;
-        break;
       case OPID_GAME_SCENARIO:
         pv->data.v_bool = pgame->scenario.is_scenario;
         break;
@@ -1932,7 +1928,7 @@ static bool objbind_get_allowed_value_span(struct objbind *ob,
       switch (propid) {
       case OPID_UNIT_MOVES_LEFT:
         *pmin = 0;
-        *pmax = 65535; /* packets.def MOVEFRAGS */
+        *pmax = MAX_MOVE_FRAGS;
         *pstep = 1;
         *pbig_step = 5;
         return TRUE;
@@ -2028,16 +2024,6 @@ static bool objbind_get_allowed_value_span(struct objbind *ob,
     return FALSE;
 
   case OBJTYPE_GAME:
-    switch (propid) {
-    case OPID_GAME_YEAR:
-      *pmin = -30000;
-      *pmax = 30000;
-      *pstep = 1;
-      *pbig_step = 25;
-      return TRUE;
-    default:
-      break;
-    }
     log_error("%s(): Unhandled request for value range of property %d (%s) "
               "from object of type \"%s\".", __FUNCTION__,
               propid, objprop_get_name(op), objtype_get_name(objtype));
@@ -2336,7 +2322,6 @@ static void objbind_pack_current_values(struct objbind *ob,
         return;
       }
 
-      packet->year = pgame->info.year;
       packet->scenario = pgame->scenario.is_scenario;
       sz_strlcpy(packet->scenario_name, pgame->scenario.name);
       sz_strlcpy(packet->scenario_authors, pgame->scenario.authors);
@@ -2575,9 +2560,6 @@ static void objbind_pack_modified_value(struct objbind *ob,
       struct packet_edit_game *packet = pd.game.game;
 
       switch (propid) {
-      case OPID_GAME_YEAR:
-        packet->year = pv->data.v_int;
-        return;
       case OPID_GAME_SCENARIO:
         packet->scenario = pv->data.v_bool;
         return;
@@ -2887,7 +2869,7 @@ static void objprop_widget_entry_changed(GtkEntry *entry, gpointer userdata)
 
   op = userdata;
   pp = objprop_get_property_page(op);
-  value.data.v_const_string = gtk_entry_get_text(entry);
+  value.data.v_const_string = gtk_entry_buffer_get_text(gtk_entry_get_buffer(entry));
 
   property_page_change_value(pp, op, &value);  
 }
@@ -2931,7 +2913,7 @@ static void objprop_widget_toggle_button_changed(GtkToggleButton *button,
 ****************************************************************************/
 static void objprop_setup_widget(struct objprop *op)
 {
-  GtkWidget *ebox, *hbox, *hbox2, *label, *image, *entry, *spin, *button;
+  GtkWidget *hbox, *hbox2, *label, *image, *entry, *spin, *button;
   struct extviewer *ev = NULL;
   enum object_property_ids propid;
 
@@ -2943,13 +2925,10 @@ static void objprop_setup_widget(struct objprop *op)
     return;
   }
 
-  ebox = gtk_event_box_new();
-  op->widget = ebox;
-
   hbox = gtk_grid_new();
-  gtk_grid_set_column_spacing(GTK_GRID(hbox), 4);
+  op->widget = hbox;
 
-  gtk_container_add(GTK_CONTAINER(ebox), hbox);
+  gtk_grid_set_column_spacing(GTK_GRID(hbox), 4);
 
   label = gtk_label_new(objprop_get_name(op));
   gtk_widget_set_halign(label, GTK_ALIGN_START);
@@ -3022,7 +3001,6 @@ static void objprop_setup_widget(struct objprop *op)
   case OPID_CITY_SHIELD_STOCK:
   case OPID_PLAYER_SCIENCE:
   case OPID_PLAYER_GOLD:
-  case OPID_GAME_YEAR:
     spin = gtk_spin_button_new_with_range(0.0, 100.0, 1.0);
     gtk_widget_set_hexpand(spin, TRUE);
     gtk_widget_set_halign(spin, GTK_ALIGN_END);
@@ -3213,9 +3191,10 @@ static void objprop_refresh_widget(struct objprop *op,
   case OPID_TILE_LABEL:
     entry = objprop_get_child_widget(op, "entry");
     if (pv) {
-      gtk_entry_set_text(GTK_ENTRY(entry), pv->data.v_string);
+      gtk_entry_buffer_set_text(gtk_entry_get_buffer(GTK_ENTRY(entry)),
+                                pv->data.v_string, -1);
     } else {
-      gtk_entry_set_text(GTK_ENTRY(entry), "");
+      gtk_entry_buffer_set_text(gtk_entry_get_buffer(GTK_ENTRY(entry)), "", -1);
     }
     gtk_widget_set_sensitive(entry, pv != NULL);
     break;
@@ -3226,7 +3205,6 @@ static void objprop_refresh_widget(struct objprop *op,
   case OPID_CITY_SHIELD_STOCK:
   case OPID_PLAYER_SCIENCE:
   case OPID_PLAYER_GOLD:
-  case OPID_GAME_YEAR:
     spin = objprop_get_child_widget(op, "spin");
     if (pv) {
       disable_gobject_callback(G_OBJECT(spin),
@@ -4554,9 +4532,6 @@ static void property_page_setup_objprops(struct property_page *pp)
     return;
 
   case OBJTYPE_GAME:
-    ADDPROP(OPID_GAME_YEAR, _("Year"), NULL,
-            OPF_IN_LISTVIEW | OPF_HAS_WIDGET | OPF_EDITABLE,
-            VALTYPE_INT);
     ADDPROP(OPID_GAME_SCENARIO, _("Scenario"), NULL,
             OPF_IN_LISTVIEW | OPF_HAS_WIDGET | OPF_EDITABLE,
             VALTYPE_BOOL);
@@ -4696,7 +4671,7 @@ static void property_page_quick_find_entry_changed(GtkWidget *entry,
   bool matched;
 
   pp = userdata;
-  text = gtk_entry_get_text(GTK_ENTRY(entry));
+  text = gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(entry)));
   pf = property_filter_new(text);
 
   property_page_objprop_iterate(pp, op) {
@@ -4941,10 +4916,10 @@ property_page_new(enum editor_object_type objtype,
   gtk_widget_set_margin_bottom(hbox2, 4);
   gtk_container_add(GTK_CONTAINER(vbox2), hbox2);
 
-  button = gtk_button_new_with_label(_("Close"));
+  button = gtk_button_new_with_mnemonic(_("_Close"));
   gtk_size_group_add_widget(sizegroup, button);
   g_signal_connect_swapped(button, "clicked",
-      G_CALLBACK(gtk_widget_hide_on_delete), pe->widget);
+      G_CALLBACK(gtk_widget_hide), pe->widget);
   gtk_container_add(GTK_CONTAINER(hbox2), button);
 
   /* Now create the properties panel. */
@@ -5015,7 +4990,7 @@ property_page_new(enum editor_object_type objtype,
   gtk_grid_set_column_spacing(GTK_GRID(hbox2), 4);
   gtk_container_add(GTK_CONTAINER(vbox), hbox2);
 
-  button = gtk_button_new_with_label(_("Refresh"));
+  button = gtk_button_new_with_mnemonic(_("_Refresh"));
   gtk_size_group_add_widget(sizegroup, button);
   gtk_widget_set_tooltip_text(button,
       _("Pressing this button will reset all modified properties of "
@@ -5025,7 +5000,7 @@ property_page_new(enum editor_object_type objtype,
                    G_CALLBACK(property_page_refresh_button_clicked), pp);
   gtk_container_add(GTK_CONTAINER(hbox2), button);
 
-  button = gtk_button_new_with_label(_("Apply"));
+  button = gtk_button_new_with_mnemonic(_("_Apply"));
   gtk_size_group_add_widget(sizegroup, button);
   gtk_widget_set_tooltip_text(button,
       _("Pressing this button will send all modified properties of "
@@ -6179,13 +6154,12 @@ static struct property_editor *property_editor_new(void)
   gtk_window_set_position(GTK_WINDOW(win), GTK_WIN_POS_CENTER_ON_PARENT);
   gtk_window_set_transient_for(GTK_WINDOW(win), GTK_WINDOW(toplevel));
   gtk_window_set_destroy_with_parent(GTK_WINDOW(win), TRUE);
-  gtk_window_set_type_hint(GTK_WINDOW(win), GDK_WINDOW_TYPE_HINT_DIALOG);
+  gtk_window_set_type_hint(GTK_WINDOW(win), GDK_SURFACE_TYPE_HINT_DIALOG);
   gtk_widget_set_margin_start(win, 4);
   gtk_widget_set_margin_end(win, 4);
   gtk_widget_set_margin_top(win, 4);
   gtk_widget_set_margin_bottom(win, 4);
-  g_signal_connect(win, "delete-event",
-                   G_CALLBACK(gtk_widget_hide_on_delete), NULL);
+  gtk_window_set_hide_on_close(GTK_WINDOW(win), TRUE);
   pe->widget = win;
 
   vbox = gtk_grid_new();

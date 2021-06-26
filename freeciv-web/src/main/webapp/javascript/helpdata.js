@@ -21,7 +21,12 @@ var toplevel_menu_items = ["help_terrain", "help_economy", "help_cities",
     "help_city_improvements", "help_wonders_of_the_world", "help_units",
     "help_combat", "help_technology", "help_government"];
 var hidden_menu_items = ["help_connecting", "help_languages", "help_governor",
-    "help_chatline", "help_about", "help_worklist_editor"];
+    "help_chatline", "help_about", "help_worklist_editor", "help_nations", 
+    "help_copying"
+  ];
+
+var max_help_pane_width;
+var MAX_ALLOWED_HELP_WIDTH = 984;
 
 /**************************************************************************
  Show the Freeciv-web Help Dialog
@@ -33,9 +38,14 @@ function show_help()
   $("#help_menu").remove();
   $("#help_info_page").remove();
   $("<ul id='help_menu'></ul><div id='help_info_page'></div>").appendTo("#tabs-hel");
+  
+  generate_help_menu("help_gen_ruleset");
+
   for (var sec_id in helpdata_order) {
     var key = helpdata_order[sec_id];
-    if (hidden_menu_items.indexOf(key) > -1) {
+    if (sec_id)
+
+    if (hidden_menu_items.indexOf(key) > -1 || key == "help_gen_ruleset") {
       continue;
     } else if (key.indexOf("help_gen") != -1) {
       generate_help_menu(key);
@@ -61,7 +71,10 @@ function show_help()
     $("#help_footer").remove();
     $("#help_footer").hide();
   } else {
-    $("#help_info_page").css("max-width", $(window).width() - $("#help_menu").width() - 60);
+    max_help_pane_width = $(window).width() - $("#help_menu").width() - 60;
+    if (max_help_pane_width > MAX_ALLOWED_HELP_WIDTH) 
+      max_help_pane_width = MAX_ALLOWED_HELP_WIDTH;
+    $("#help_info_page").css("max-width", max_help_pane_width);
     $("#help_footer").show();
   }
 }
@@ -90,8 +103,17 @@ function generate_help_menu(key)
         + terrain['name'] + "</li>").appendTo("#help_terrain_ul");
     }
   } else if (key == "help_gen_improvements") {
+    // Alphabetically sort buildings (because some are unalphabetically grouped by similar type for prod list.)
+    var sortedBuildings = []; const impr_idx = 0;
     for (impr_id in improvements) {
-      improvement = improvements[impr_id];
+      sortedBuildings.push([impr_id, improvements[impr_id]]);
+    }
+    sortedBuildings.sort(function(a, b) {
+      return (a[1]['name'] > b[1]['name'] ? 1 : -1);
+    });
+    // done sorting
+    for (id in sortedBuildings) {
+      improvement = improvements[sortedBuildings[id][impr_idx]];
       if (is_wonder(improvement)) continue;
 
       // Suppress improvements if server settings don't allow them:
@@ -107,6 +129,10 @@ function generate_help_menu(key)
     for (impr_id in improvements) {
       improvement = improvements[impr_id];
       if (!is_wonder(improvement)) continue;
+
+      //check for 0-width space for virtual duplicates (required because server has no world-range on small wonders)
+      s = improvement['name'].slice(-1)
+      if (s != alphanumeric_cleaner(s)) continue;
 
       // Suppress improvements if server settings don't allow them:
       if (!server_settings['nukes_minor']['val']
@@ -149,7 +175,7 @@ function generate_help_menu(key)
     }
   } else if (key == "help_gen_ruleset") {
     $("<li id='" + key +  "' data-helptag='" + key +  "'>"
-       + "About Current Ruleset" + "</li>").appendTo(
+       + "Ruleset" + "</li>").appendTo(
           find_parent_help_key(key));
   }
 }
@@ -214,7 +240,7 @@ function handle_help_menu_select( ui )
     clear_sidebar();
   } else if (selected_tag == "help_controls") {
     $.get( "/docs/controls.txt", function( data ) {
-      $("#help_info_page").html(data.replace(/\n/g, "<br>"));
+      $("#help_info_page").html(data.replace(/\n/g, ""));
     });
     clear_sidebar();
   } else {
@@ -282,6 +308,7 @@ function helpdata_format_current_ruleset()
 function generate_help_text(key)
 {
   var flx_tab = "0.30";  // alignment spacing for unit stats
+  var pane_class = "helptext_pane";
   // Temporarily maximize horizontal space for mobile
   if (is_small_screen())
   { 
@@ -289,6 +316,7 @@ function generate_help_text(key)
     $("#help_info_page").css("padding","1px");
     $("#help_menu").hide();
     flx_tab = "0.55";
+    pane_class += "_mobile";
   }
 
   var rulesetdir = ruledir_from_ruleset_name(ruleset_control['name'], "");
@@ -297,17 +325,18 @@ function generate_help_text(key)
 
   if (key.indexOf("help_gen_terrain") != -1) {
     var terrain = terrains[parseInt(key.replace("help_gen_terrain_", ""))];
-    msg = "<h1>" + terrain['name'] + "</h1>" + terrain['helptext']
-	    + "<br><br>Movement cost: " + terrain['movement_cost']
+    msg = "<h1>" + terrain['name'] + "</h1>" + "<div class='"+pane_class+"'>"
+      + cleaned_text(terrain['helptext'])
+	    + "<b><br><br>Movement cost: " + terrain['movement_cost']
 	    + "<br>Defense bonus: " + terrain['defense_bonus']
 	    + "<br>Food/Prod/Trade: " + terrain['output'][0] + "/"
-	    + terrain['output'][1] + "/" + terrain['output'][2];
+	    + terrain['output'][1] + "/" + terrain['output'][2]+"</b></div>";
   } else if (key.indexOf("help_gen_improvements") != -1 || key.indexOf("help_gen_wonders") != -1) {
     var improvement = improvements[parseInt(key.replace("help_gen_wonders_", "").replace("help_gen_improvements_", ""))];
-    msg = "<h1>" + improvement['name'] + "</h1>"
+    msg = "<h1>" + improvement['name'] + "</h1>"+"<div class='"+pane_class+"'>"
 	    + render_sprite(get_improvement_image_sprite(improvement)) + "<br>"
-	    + improvement['helptext']
-            + "<br><br>Cost: " + improvement['build_cost']
+	    + cleaned_text(improvement['helptext'])
+            + "<b><br><br>Cost: " + improvement['build_cost']
             + "<br>Upkeep: " + improvement['upkeep'];
     var reqs = get_improvement_requirements(improvement['id']);
     if (reqs != null) {
@@ -316,7 +345,7 @@ function generate_help_text(key)
        msg += techs[reqs[n]]['name'] + " ";
       }
     }
-    msg += "<br><br>";
+    msg += "<br><br></b></div>";
     msg += wiki_on_item_button(improvement['name']);
   } else if (key.indexOf("help_gen_units") != -1) {
     var obsolete_by;
@@ -324,25 +353,35 @@ function generate_help_text(key)
         = unit_types[parseInt(key.replace("help_gen_units_", ""))];
     var punit_class
         = unit_classes[punit_type['unit_class_id']];
+    var pstats = utype_get_extra_stats(punit_type);
+    var bstats = utype_get_bombard_stats(punit_type);
     var flex = " style='display:flex;' ";
     var span1 = "<span style='flex:"+flx_tab+";'>";
-    var span2 = "<span style='font-weight:bold; color:#014;'>";
+    //var span2 = "<span style='font-weight:bold; color:#48F;'>";
+    var span2 = "<span style='font-family:Arial; font-weight:bold; color:#48F;'>";
     var span_end = "</span>";
     var div_end = "</span></div>"
 
     msg = "<h1 style='margin-top:0px;font-size:190%'>" + punit_type['name'] + "</h1>";
     msg += "<div style='margin-bottom:10px;margin-top:-10px'>"+render_sprite(get_unit_type_image_sprite(punit_type))+"</div>";
     //msg += "<br>";
-    msg += "<div id='manual_non_helptext_facts' style='max-width:984px;'>";
+    msg += "<div id='manual_non_helptext_facts' style='max-width:"+max_help_pane_width+"px;'>";
     // COST
     msg += "<div"+flex+"id='utype_fact_cost'>";
     msg += span1 + "Cost: " + span_end + span2 + punit_type['build_cost'] + div_end;
     // ATTACK
     msg += "<div"+flex+" id='utype_fact_attack_str'>";
-    msg += span1 + "Attack: " + span_end + span2 + punit_type['attack_strength'] + div_end;
+      // hack to make manual properly display decimal attack strength on this unit
+      //var as = punit_type['attack_strength'];
+      // Display base attack relative to v0 vet power which may be non-100:
+      var as = fractionalize(utype_real_base_attack_strength(punit_type));
+    msg += span1 + "Attack: " + span_end + span2 + as + div_end;
     // DEFENSE
     msg += "<div"+flex+" id='utype_fact_defense_str'>";
-    msg += span1 + "Defense: " + span_end + span2 + punit_type['defense_strength'] + div_end;
+      //var ds = punit_type['defense_strength'];
+      // Display base attack relative to v0 vet power which may be non-100:
+      var ds = fractionalize(utype_real_base_defense_strength(punit_type));
+    msg += span1 + "Defense: " + span_end + span2 + ds + div_end;
     // FIREPOWER
     msg += "<div"+flex+" id='utype_fact_firepower'>";
     msg += span1 + "Firepower: " + span_end + span2 + punit_type['firepower'] + div_end;
@@ -351,10 +390,13 @@ function generate_help_text(key)
     msg += span1 + "Hitpoints: " + span_end + span2 + punit_type['hp'] + div_end;
     // MOVE RATE
     msg += "<div"+flex+" id='utype_fact_move_rate'>";
-    msg += span1+"Moves: " + span_end + span2 + move_points_text(punit_type['move_rate']) + div_end;
+    var move_bonus = parseInt(punit_type['move_bonus'][0]) ? parseInt(punit_type['move_bonus'][0]) : 0;
+    var move_rate = ""; move_rate += move_points_text((parseInt(punit_type['move_rate'])+move_bonus), true);
+    msg += span1+"Moves: " + span_end + span2
+        + String(move_rate) + div_end;
     // VISION
     msg += "<div"+flex+" id='utype_fact_vision'>";
-    msg += span1 + "Vision: " + span_end + span2 + punit_type['vision_radius_sq'] + div_end;
+    msg += span1 + "Vision: " + span_end + span2 + Math.sqrt(parseInt(punit_type['vision_radius_sq'])).toFixed(2) + " tiles" + div_end;
     // FUEL
     if (punit_type['fuel']>0) {
       msg += "<div"+flex+" id='utype_fact_fuel'>";
@@ -371,17 +413,64 @@ function generate_help_text(key)
     msg += "<div"+flex+" id='utype_fact_minspeed'>";
     msg += span1 + "Min_speed: " + span_end + span2;
     if (utype_has_class_flag(punit_type, UCF_DAMAGE_SLOWS))
-      msg += move_points_text(punit_class['min_speed']);
+      msg += move_points_text(punit_class['min_speed'],false);
     else msg += "100%";
     msg += div_end;
     // UPKEEP
     msg += "<div"+flex+" id='utype_fact_upkeep'></span></div>";
-    // IMPROVEMENT REQS
-    if (improvements[punit_type['impr_requirement']]) // if an impr_req exists to make this unit
-    {
+    // iPILLAGE
+    if (pstats.iPillage) {
+      msg += "<div"+flex+" id='utype_fact_ipillage'>";
+      msg += span1 + "iPillage &nbsp;: "+ span_end + span2;
+      msg += pstats.iPillage_odds+"% odds. "
+          + pstats.iPillage_moves + (pstats.iPillage_moves > 1 ? " moves.": " move.");
+      if (pstats.iPillage_random_targets)
+        msg+= " " + pstats.iPillage_random_targets + " random " +
+         (pstats.iPillage_random_targets > 1 ? "targets" : "target");
+      msg += div_end;
+    }
+    // BOMBARD
+    if (utype_has_flag(punit_type, UTYF_BOMBARDER)) {
+      var bombard_name = utype_get_bombard_name(punit_type);
+      msg += "<div"+flex+" id='utype_fact_bombard'>";
+      msg += span1 + bombard_name.replace(" ", "&nbsp;") +":&nbsp;&nbsp;"+ span_end + span2;
+
+      msg += punit_type['bombard_rate'] 
+          + (punit_type['bombard_rate'] > 1 ? " rounds. " : "round.");
+      if (bstats.bombard_primary_targets) {
+        msg += bstats.bombard_primary_targets;
+        msg += (bstats.bombard_primary_targets > 1 ? " targets. " : " target. ");
+      }
+      else 
+        msg += "ALL targets. ";
+
+      if (bstats.bombard_move_cost)
+        msg += move_points_text(bstats.bombard_move_cost, false)
+            + (bstats.bombard_move_cost > SINGLE_MOVE ? " moves." : " move.");
+      else 
+        msg += move_points_text(punit_type['move_rate'], false)+" moves.";
+      
+      msg += div_end;
+    }
+
+    // IMPROVEMENT REQ
+    var impr_reqs;
+    var first_req = true;
+    for (var i = 0; i < punit_type['build_reqs'].length; i++) {
+      if (punit_type['build_reqs'][i]['kind'] == VUT_IMPROVEMENT) {
+        var req = improvements[punit_type['build_reqs'][i]['value']]['name'];
+        if (first_req) {
+          impr_reqs = req;
+          first_req = false;
+        } else {
+          impr_reqs += ", " + req;
+        }
+      }
+    }
+    if (!first_req) { // if an impr_req exists to make this unit
       msg += "<div"+flex+" id='utype_fact_req_building'>";
       msg += span1 + "Building Reqs: " + span_end + span2;
-      msg += improvements[punit_type['impr_requirement']]['name'] + " ";
+      msg += impr_reqs + " ";
       msg +=  div_end;
     }
     // TECH REQS
@@ -403,18 +492,19 @@ function generate_help_text(key)
 
     msg += "</div>"+hr;
 
-    msg += "<div id='helptext' style='font-weight:500; max-width:984px'><p>" + punit_type['helptext'] + "</p></div>"+hr;
+    msg += "<div id='helptext' style='font-weight:500; max-width:"+max_help_pane_width+"px'><p>"
+        + cleaned_text(punit_type['helptext']) + "</p></div>"+hr;
 
     msg += wiki_on_item_button(punit_type['name']);
 
     msg += "<div id='datastore' hidden='true'></div>";
   } else if (key.indexOf("help_gen_techs") != -1) {
     var tech = techs[parseInt(key.replace("help_gen_techs_", ""))];
-    msg = "<h1>" + tech['name'] + "</h1>"
+    msg = "<h1>" + tech['name'] + "</h1>" + "<div class='"+pane_class+"'><b>"
 	    + render_sprite(get_technology_image_sprite(tech)) + "<br>"
 	    + get_advances_text(tech['id']);
     msg += "<br><br>";
-    msg += "<div id='helptext'><p>" + tech['helptext'] + "</p></div>";
+    msg += "<div id='helptext'><p>" + cleaned_text(tech['helptext']) + "</p></b></div></div>";
 
     msg += wiki_on_item_button(tech['name']);
   } else if (key == "help_gen_ruleset") {
@@ -422,9 +512,10 @@ function generate_help_text(key)
   } else if (key.indexOf("help_gen_governments") != -1) {
     var pgov = governments[parseInt(key.replace("help_gen_governments_",
                                                 ""))];
+    var gov_img = "<img src='/images/e/techs/" + pgov['name'].toLowerCase() + ".png'>";
 
-    msg = "<h1>" + pgov['name'] + "</h1>";
-    msg += "<div id='helptext'><p>" + pgov['helptext'] + "</p></div>";
+    msg = "<h1>" + gov_img + " " + pgov['name'] + "</h1>"+"<div class='"+pane_class+"'>";
+    msg += "<div id='helptext'><p>" + cleaned_text(pgov['helptext']) + "</p></div></div>";
 
     msg += wiki_on_item_button(pgov['name']);
   }

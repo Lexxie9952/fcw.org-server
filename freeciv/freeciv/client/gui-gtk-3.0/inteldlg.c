@@ -54,7 +54,8 @@ static const char *table_text[] = {
   N_("Science:"),
   N_("Luxury:"),
   NULL,
-  N_("Researching:")
+  N_("Researching:"),
+  N_("Culture:")
 };
 
 enum table_label {
@@ -68,6 +69,7 @@ enum table_label {
   LABEL_LUXURY,
   LABEL_SEP2,
   LABEL_RESEARCHING,
+  LABEL_CULTURE,
   LABEL_LAST
 };
 
@@ -95,7 +97,7 @@ static struct intel_dialog *create_intel_dialog(struct player *p);
 /**********************************************************************//**
   Initialize intelligence dialogs
 **************************************************************************/
-void intel_dialog_init()
+void intel_dialog_init(void)
 {
   dialog_list = dialog_list_new();
 }
@@ -103,7 +105,7 @@ void intel_dialog_init()
 /**********************************************************************//**
   Free resources allocated for intelligence dialogs
 **************************************************************************/
-void intel_dialog_done()
+void intel_dialog_done(void)
 {
   dialog_list_destroy(dialog_list);
 }
@@ -421,7 +423,8 @@ void update_intel_dialog(struct player *p)
             }
             break;
           }
-        default:
+        case LABEL_CULTURE:
+          buf = g_strdup_printf("%d", p->client.culture);
           break;
         }
 

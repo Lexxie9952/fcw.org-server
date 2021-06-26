@@ -120,6 +120,8 @@ void map_claim_base(struct tile *ptile, struct extra_type *pextra,
 
 void terrain_changed(struct tile *ptile);
 void check_terrain_change(struct tile *ptile, struct terrain *oldter);
+void terrain_change_check(struct tile *ptile, struct terrain *oldter,
+                          bool do_continent_recalc);
 void fix_tile_on_terrain_change(struct tile *ptile,
                                 struct terrain *oldter,
                                 bool extend_rivers);

@@ -94,10 +94,17 @@ function init_chatbox()
         // User resize saves size for next restore. Immediate reload needed to reset contained elements to new size.
         $( "#game_chatbox_panel" ).parent().resize( function(e,ui) { chatbox_restore("save");chatbox_restore("load");});
     }
-
-  $( "#game_chatbox_panel" ).parent().css("z-index","100"); // ensure it can always be opened/closed/never covered                                                         
+   
   $("#game_chatbox_panel").dialog('open');
   $(".chatbox_dialog").css("top", "52px");
+
+  $("#game_chatbox_panel").parent().css("z-index","100"); // ensure it can always be opened/closed/never covered
+  $("#game_chatbox_panel").parent().css("overflow", "hidden"); // make it immune to glitches making standard scrollbars (it already has a custom)
+  // This is how you override unknown css ghosts who think they're !important:
+  $( '#game_chatbox_panel' ).parent().each(function () {
+    this.style.setProperty( 'border', 'solid 1px', 'important' );
+    this.style.setProperty( 'border-color', '#4328', 'important' );
+  });
 
   if (is_small_screen()) {
     $(".ui-icon-pause").parent().hide();       // no restore button in mobile: hide button
@@ -235,6 +242,8 @@ function msg_maximize_mobile(evt,dlg) {
  <font color="#A020F0">->{other} lt private sent msg</font>
  ...
 **************************************************************************/
+/* should no longer be necessary after 4March2021 and earlier commits, search for 4March2021 in other comments.
+
 function reclassify_chat_message(text)
 {
   // 29 characters just for the font tags
@@ -259,6 +268,8 @@ function reclassify_chat_message(text)
   }
   return E_CHAT_MSG;
 }
+*/
+
 
 /**************************************************************************
  This adds new text to the main message chatbox. This allows the client
@@ -288,15 +299,22 @@ function add_chatbox_text(packet)
     }
     if (text.length >= max_chat_message_length) return;
 
+    /*
     if (packet['event'] === E_CHAT_MSG) {
       if (is_any_word_in_string(text,["You are logged in as", "Load complete"])) return;
-      packet['event'] = reclassify_chat_message(text);
-    }
+      // packet['event'] = reclassify_chat_message(text);  // DEFINITELY NO LONGER NECESSARY ****************
+    } 
+    */
 
     // Increment unread messages IFF chat minimized and AFTER filtering ignored/unshown server messages (above)
     if (current_message_dialog_state == "minimized") unread_messages ++;
     else unread_messages = 0;
     
+    /* Removed 4Mar2021 as all this got changed in server handchat.c and older commits in month before,
+       Formatting is handled server side. Colors don't come from server anymore. Server encapsulates
+       all messages in one of its event_types which are rendered into css classes for display and intercepted
+       in packhand.js for sounds.
+
     if (civclient_state <= C_S_PREPARING) {
       text = text.replace(/#FFFFFF/g, '#000000');
     } else {
@@ -307,6 +325,7 @@ function add_chatbox_text(packet)
       var real_time = true;
       var outgoing = false; 
   
+
       // Fix historic messages for outgoing formatting
       if (client.conn.playing != null && text.includes("{"+client.conn.playing.name+" -> ")) {
         outgoing = true;
@@ -328,6 +347,7 @@ function add_chatbox_text(packet)
         text=check_im; // now update the text var so the changed colour code goes in the message_log  
       }
     }
+    */
 
     packet['message'] = text;
     message_log.update(packet);
@@ -400,6 +420,10 @@ function update_chatbox(messages)
           item.style.paddingLeft = "30px";
         }
 
+        // Intercept server-side tile links 
+        if (messages[i].message.includes("<l tgt="))
+          messages[i].message = parseServerLink(messages[i].message);
+
         item.innerHTML = messages[i].message;
         scrollDiv.appendChild(item);
     }
@@ -423,12 +447,33 @@ function update_chatbox(messages)
 }
 
 /**************************************************************************
+ Intercepts blank server side tile links and forms them properly.
+ This fixes a bug where server sends us malformed link such as 
+  <l tgt=\"tile\" x=0 y=11 />.        which browser renders as:
+  <l tgt="tile" x=0 y=11>.</l>        ... but should be:
+  <l tgt="tile" x=0 y=11>(0,11)</l>
+**************************************************************************/
+function parseServerLink(message)
+{
+  if (message.includes(" />.</"))  { // empty tile link with no coordinates
+    var x = message.match(/x=(.*?) y=/)[1];
+    var y = message.match(/y=(.*?) \/>.</)[1];
+    const fcol = "<font style='text-decoration: underline;' color='#1FDFFF'>"
+    message = message.replace(/ \/>.<\//, ">"+fcol+"("+x+","+y+")</font></l></");
+  }
+  return message;
+}
+
+/**************************************************************************
  Used to keep the chatbox scroll position fresh.
 **************************************************************************/
 function chatbox_scroll_to_bottom(slow_scroll) {
 
-  if (slow_scroll)
+  if (slow_scroll) {
     setTimeout(() => $('#freeciv_custom_scrollbar_div').mCustomScrollbar('scrollTo', 'bottom'), 200);
+    // After half a second, ensure we really are at the bottom.
+    setTimeout(() => $("#freeciv_custom_scrollbar_div").mCustomScrollbar("scrollTo", "bottom",{scrollInertia:0}), 900);
+  }
   else
     setTimeout(() => $("#freeciv_custom_scrollbar_div").mCustomScrollbar("scrollTo", "bottom",{scrollInertia:0}), 200);
 }
@@ -486,7 +531,7 @@ function insert_pregame_messages(welcome_message)
     for (var i = 0; i < pregame_messages.length; i++) {
       var message_node = pregame_messages[i];
       if (is_any_word_in_string(message_node.message,bad_words)) continue;
-      message_node.message = message_node.message.replace(/#000000/g, '#FFFFFF');
+      message_node.message = message_node.message.replace(/#000000/g, '#F0F0F0');
       message_log.update(message_node)
     }
     pregame_messages = undefined;

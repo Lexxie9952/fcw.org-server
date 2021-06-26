@@ -46,6 +46,7 @@
 #include "editgui_g.h"
 #include "options.h"
 #include "sprite.h"
+#include "themes_common.h"
 #include "tilespec.h"
 
 // gui-qt
@@ -169,10 +170,9 @@ void qtg_ui_main(int argc, char *argv[])
     if (!gui_options.gui_qt_migrated_from_2_5) {
       migrate_options_from_2_5();
     }
-    qtg_gui_load_theme(fileinfoname(get_data_dirs(), QString(
-                      QString("themes") + DIR_SEPARATOR
-                      + "gui-qt" ).toLocal8Bit().data()),
-                       gui_options.gui_qt_default_theme_name);
+    if (!load_theme(gui_options.gui_qt_default_theme_name)) {
+      qtg_gui_clear_theme();
+    }
     freeciv_qt = new fc_client();
     freeciv_qt->fc_main(qapp);
   }
@@ -347,7 +347,7 @@ void apply_titlebar(struct option *poption)
     return;
   }
 
-  if (val == true) {
+  if (val) {
     w = new QWidget();
     gui()->setWindowFlags(flags);
     delete gui()->corner_wid;

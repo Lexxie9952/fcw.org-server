@@ -102,22 +102,19 @@ void unit_change_homecity_handling(struct unit *punit, struct city *new_pcity,
                                    bool rehome);
 
 bool unit_move_handling(struct unit *punit, struct tile *pdesttile,
-                        bool igzoc, bool move_diplomat_city,
-                        struct unit *embark_to);
+                        bool igzoc, bool move_diplomat_city);
 
 void unit_do_action(struct player *pplayer,
                     const int actor_id,
                     const int target_id,
-                    const int extra_id,
-                    const int value,
+                    const int sub_tgt_id,
                     const char *name,
                     const action_id action_type);
 
 bool unit_perform_action(struct player *pplayer,
                          const int actor_id,
                          const int target_id,
-                         const int extra_id,
-                         const int value,
+                         const int sub_tgt_id,
                          const char *name,
                          const action_id action_type,
                          const enum action_requester requester);
@@ -135,5 +132,8 @@ enum ane_kind action_not_enabled_reason(struct unit *punit,
                                         const struct tile *target_tile,
                                         const struct city *target_city,
                                         const struct unit *target_unit);
+
+const char *get_battle_winner_verb(int stack_size);
+
 
 #endif  /* FC__UNITHAND_H */

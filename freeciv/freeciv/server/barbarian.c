@@ -343,7 +343,7 @@ bool unleash_barbarians(struct tile *ptile)
                                     TRUE, FALSE)) {
             /* Move */
             (void) unit_move_handling(punit2, dir_tiles[rdir],
-                                      TRUE, TRUE, NULL);
+                                      TRUE, TRUE);
             log_debug("Moved barbarian unit from (%d, %d) to (%d, %d)", 
                       TILE_XY(ptile), TILE_XY(dir_tiles[rdir]));
             dest_found = TRUE;
@@ -361,33 +361,35 @@ bool unleash_barbarians(struct tile *ptile)
   } else {
     if (ocean_tiles > 0) {
       /* maybe it's an island, try to get on boats */
-      struct tile *btile = NULL; /* Boat tile */
+      struct unit *boat = NULL; /* Boat */
 
       /* Initialize checked status for checking Ocean tiles */
       init_dir_checked_status(checked, terrainc, TC_OCEAN);
 
       /* Search tile for boat. We always create just one boat. */
-      for (checked_count = 0; btile == NULL && checked_count < ocean_tiles;
+      for (checked_count = 0; boat == NULL && checked_count < ocean_tiles;
            checked_count++) {
-        struct unit_type *boat;
+        struct unit_type *candidate;
         int rdir = random_unchecked_direction(ocean_tiles - checked_count, checked);
 
-        boat = find_a_unit_type(L_BARBARIAN_BOAT, -1);
-        if (is_native_tile(boat, dir_tiles[rdir])) {
-          (void) create_unit(barbarians, dir_tiles[rdir], boat, 0, 0, -1);
-          btile = dir_tiles[rdir];
+        candidate = find_a_unit_type(L_BARBARIAN_BOAT, -1);
+        if (is_native_tile(candidate, dir_tiles[rdir])) {
+          boat = create_unit(barbarians, dir_tiles[rdir], candidate,
+                             0, 0, -1);
         }
 
         checked[rdir] = TRUE;
       }
 
-      if (btile) {
+      if (boat) {
         /* We do have a boat. Try to get everybody in */
         unit_list_iterate_safe((ptile)->units, punit2) {
           if (unit_owner(punit2) == barbarians) {
-            if (unit_can_move_to_tile(&(wld.map), punit2, btile, TRUE, FALSE)) {
+            if (is_action_enabled_unit_on_unit(ACTION_TRANSPORT_EMBARK,
+                                               punit2, boat)) {
               /* Load */
-              (void) unit_move_handling(punit2, btile, TRUE, TRUE, NULL);
+              unit_do_action(unit_owner(punit2), punit2->id, boat->id,
+                             0, "", ACTION_TRANSPORT_EMBARK);
             }
           }
         } unit_list_iterate_safe_end;
@@ -412,7 +414,7 @@ bool unleash_barbarians(struct tile *ptile)
                                       TRUE, FALSE)) {
               /* Move */
               (void) unit_move_handling(punit2, dir_tiles[rdir],
-                                        TRUE, TRUE, NULL);
+                                        TRUE, TRUE);
               dest_found = TRUE;
             }
 
@@ -554,12 +556,13 @@ static void try_summon_barbarians(void)
   log_debug("Barbarians are willing to fight");
 
   /* Remove huts in place of uprising */
-  extra_type_by_cause_iterate(EC_HUT, pextra) {
+  /* FIXME: Should we really always do it? */
+  extra_type_by_rmcause_iterate(ERM_ENTER, pextra) {
     if (tile_has_extra(utile, pextra)) {
       tile_extra_rm_apply(utile, pextra);
       hut_present = TRUE;
     }
-  } extra_type_by_cause_iterate_end;
+  } extra_type_by_rmcause_iterate_end;
 
   if (hut_present) {
     update_tile_knowledge(utile);
@@ -596,8 +599,8 @@ static void try_summon_barbarians(void)
         log_debug("Created barbarian unit %s",utype_rule_name(punittype));
       }
     }
- 
-    if (is_native_tile(leader_type, utile)) { 
+
+    if (is_native_tile(leader_type, utile)) {
       (void) create_unit(barbarians, utile,
                          leader_type, 0, 0, -1);
       really_created++;

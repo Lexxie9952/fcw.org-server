@@ -44,6 +44,7 @@
 #include "notify.h"
 #include "plrhand.h"
 #include "srv_main.h"
+#include "stdinhand.h"
 #include "unittools.h"
 
 /* server/advisors */
@@ -77,8 +78,6 @@ struct team_placement_state {
 #define SPECPQ_DATA_TYPE struct team_placement_state *
 #define SPECPQ_PRIORITY_TYPE long
 #include "specpq.h"
-
-static struct strvec *ruleset_choices = NULL;
 
 /************************************************************************//**
   Get role_id for given role character
@@ -139,15 +138,22 @@ struct unit_type *crole_to_unit_type(char crole, struct player *pplayer)
 
 /************************************************************************//**
   Place a starting unit for the player. Returns tile where unit was really
-  placed.
+  placed. By default the ptype is used and crole does not matter, but if
+  former is NULL, crole will be used instead.
 ****************************************************************************/
 static struct tile *place_starting_unit(struct tile *starttile,
                                         struct player *pplayer,
-                                        char crole)
+                                        struct unit_type *ptype, char crole)
 {
   struct tile *ptile = NULL;
-  struct unit_type *utype = crole_to_unit_type(crole, pplayer);
+  struct unit_type *utype;
   bool hut_present = FALSE;
+
+  if (ptype != NULL) {
+    utype = ptype;
+  } else {
+    utype = crole_to_unit_type(crole, pplayer);
+  }
 
   if (utype != NULL) {
     iterate_outward(&(wld.map), starttile,
@@ -171,12 +177,13 @@ static struct tile *place_starting_unit(struct tile *starttile,
    * other cases, huts are avoided as start positions).  Remove any such hut,
    * and make sure to tell the client, since we may have already sent this
    * tile (with the hut) earlier: */
-  extra_type_by_cause_iterate(EC_HUT, pextra) {
+  /* FIXME: don't remove under a HUT_NOTHING unit */
+  extra_type_by_rmcause_iterate(ERM_ENTER, pextra) {
     if (tile_has_extra(ptile, pextra)) {
       tile_extra_rm_apply(ptile, pextra);
       hut_present = TRUE;
     }
-  } extra_type_by_cause_iterate_end;
+  } extra_type_by_rmcause_iterate_end;
 
   if (hut_present) {
     update_tile_knowledge(ptile);
@@ -259,7 +266,7 @@ static int team_placement_vertical(const struct tile *ptile1,
 
   map_distance_vector(&dx, &dy, ptile1, ptile2);
   /* Map vector to natural vector (X axis). */
-  return abs(MAP_IS_ISOMETRIC ? dx - dy : dy);
+  return abs(MAP_IS_ISOMETRIC ? dx - dy : dx);
 }
 
 /************************************************************************//**
@@ -779,7 +786,7 @@ void init_new_game(void)
 
     if (sulen > 0) {
       /* Place the first unit. */
-      if (place_starting_unit(ptile, pplayer,
+      if (place_starting_unit(ptile, pplayer, NULL,
                               game.server.start_units[0]) != NULL) {
         placed_units[player_index(pplayer)] = 1;
       } else {
@@ -803,7 +810,7 @@ void init_new_game(void)
       struct tile *rand_tile = find_dispersed_position(pplayer, ptile);
 
       /* Create the unit of an appropriate type. */
-      if (place_starting_unit(rand_tile, pplayer,
+      if (place_starting_unit(rand_tile, pplayer, NULL,
                               game.server.start_units[i]) != NULL) {
         placed_units[player_index(pplayer)]++;
       }
@@ -814,8 +821,10 @@ void init_new_game(void)
     while (NULL != nation->init_units[i] && MAX_NUM_UNIT_LIST > i) {
       struct tile *rand_tile = find_dispersed_position(pplayer, ptile);
 
-      create_unit(pplayer, rand_tile, nation->init_units[i], FALSE, 0, 0);
-      placed_units[player_index(pplayer)]++;
+      if (place_starting_unit(rand_tile, pplayer,
+                              nation->init_units[i], '\0') != NULL) {
+        placed_units[player_index(pplayer)]++;
+      }
       i++;
     }
   } players_iterate_end;
@@ -850,7 +859,17 @@ void send_year_to_clients(void)
 
   /* Hmm, clients could add this themselves based on above packet? */
   notify_conn(game.est_connections, NULL, E_NEXT_YEAR, ftc_any,
-              _("Year: %s"), calendar_text());
+              _("✨✨Year: %s✨✨"), calendar_text());
+
+  // Pax Dei counter is something players should know:
+  if (game.server.pax_dei_set && game.server.pax_dei_counter>0) {
+    if (game.server.pax_dei_counter > 1) {
+      notify_player(NULL, NULL, E_DIPLOMACY, ftc_server,
+                  _("[`paxdei`] %d turns remain in the era of Pax Dei."),
+                  game.server.pax_dei_counter);
+    } else notify_player(NULL, NULL, E_DIPLOMACY, ftc_server,
+                  _("⚠️[`paxdei`] This is the final turn of Pax Dei.⚠️"));
+  }
 }
 
 /************************************************************************//**
@@ -1063,32 +1082,30 @@ const char *new_challenge_filename(struct connection *pc)
 ****************************************************************************/
 static void send_ruleset_choices(struct connection *pc)
 {
+  struct strvec *ruleset_choices;
   struct packet_ruleset_choices packet;
-  size_t i;
+  size_t i = 0;
 
-  if (ruleset_choices == NULL) {
-    /* This is only read once per server invocation.  Add a new ruleset
-     * and you have to restart the server. */
-    ruleset_choices = fileinfolist(get_data_dirs(), RULESET_SUFFIX);
-  }
+  ruleset_choices = get_init_script_choices();
 
-  packet.ruleset_count = MIN(MAX_NUM_RULESETS, strvec_size(ruleset_choices));
-  for (i = 0; i < packet.ruleset_count; i++) {
-    sz_strlcpy(packet.rulesets[i], strvec_get(ruleset_choices, i));
-  }
+  strvec_iterate(ruleset_choices, s) {
+    const int maxlen = sizeof packet.rulesets[i];
+    if (i >= MAX_NUM_RULESETS) {
+      log_verbose("Can't send more than %d ruleset names to client, "
+                  "skipping some", MAX_NUM_RULESETS);
+      break;
+    }
+    if (fc_strlcpy(packet.rulesets[i], s, maxlen) < maxlen) {
+      i++;
+    } else {
+      log_verbose("Ruleset name '%s' too long to send to client, skipped", s);
+    }
+  } strvec_iterate_end;
+  packet.ruleset_count = i;
 
   send_packet_ruleset_choices(pc, &packet);
-}
 
-/************************************************************************//**
-  Free list of ruleset choices.
-****************************************************************************/
-void ruleset_choices_free(void)
-{
-  if (ruleset_choices != NULL) {
-    strvec_destroy(ruleset_choices);
-    ruleset_choices = NULL;
-  }
+  strvec_destroy(ruleset_choices);
 }
 
 /************************************************************************//**

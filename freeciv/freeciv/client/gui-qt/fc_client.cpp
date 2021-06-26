@@ -144,7 +144,7 @@ void fc_client::init()
   // General part not related to any single page
   menu_bar = new mr_menu();
   corner_wid = new fc_corner(this);
-  if (gui_options.gui_qt_show_titlebar == false) {
+  if (!gui_options.gui_qt_show_titlebar) {
     menu_bar->setCornerWidget(corner_wid);
   }
   setMenuBar(menu_bar);
@@ -180,7 +180,7 @@ void fc_client::init()
   // PAGE_GAME
   gui_options.gui_qt_allied_chat_only = true;
   path = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
-  if (path.isEmpty() == false) {
+  if (!path.isEmpty()) {
     QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope, path);
   }
   pages[PAGE_GAME] = new QWidget(central_wdg);
@@ -334,7 +334,7 @@ void fc_client::switch_page(int new_pg)
     return;
   }
 
-  if (page == PAGE_NETWORK){
+  if (page == PAGE_NETWORK) {
     destroy_server_scans();
   }
   menuBar()->setVisible(false);
@@ -356,7 +356,7 @@ void fc_client::switch_page(int new_pg)
     update_load_page();
     break;
   case PAGE_GAME:
-    if (gui_options.gui_qt_show_titlebar == false) {
+    if (!gui_options.gui_qt_show_titlebar) {
       setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
     }
     showMaximized();
@@ -364,7 +364,7 @@ void fc_client::switch_page(int new_pg)
     showMaximized();
     gui()->infotab->chtwdg->update_widgets();
     status_bar->setVisible(false);
-    if (gui_options.gui_qt_fullscreen){
+    if (gui_options.gui_qt_fullscreen) {
       gui()->showFullScreen();
       gui()->game_tab_widget->showFullScreen();
     }
@@ -607,7 +607,7 @@ void fc_client::read_settings()
 {
   QSettings s(QSettings::IniFormat, QSettings::UserScope,
               "freeciv-qt-client");
-  if (s.contains("Fonts-set") == false) {
+  if (!s.contains("Fonts-set")) {
     configure_fonts();
   }
   if (s.contains("Chat-fx-size")) {
@@ -789,7 +789,7 @@ void fc_client::toggle_unit_sel_widget(struct tile *ptile)
 ****************************************************************************/
 void fc_client::update_unit_sel()
 {
-  if (unit_sel != NULL){
+  if (unit_sel != NULL) {
     unit_sel->update_units();
     unit_sel->create_pixmap();
     unit_sel->update();
@@ -801,7 +801,7 @@ void fc_client::update_unit_sel()
 ****************************************************************************/
 void fc_client::popdown_unit_sel()
 {
-  if (unit_sel != nullptr){
+  if (unit_sel != nullptr) {
     unit_sel->close();
     delete unit_sel;
     unit_sel = nullptr;
@@ -814,7 +814,7 @@ void fc_client::popdown_unit_sel()
 void fc_client::remove_repo_dlg(QString str)
 {
   /* if app is closing opened_repo_dlg is already deleted */
-  if (is_closing() == false) {
+  if (!is_closing()) {
     opened_repo_dlgs.remove(str);
   }
 }
@@ -895,7 +895,7 @@ void fc_corner::close_fc()
 ****************************************************************************/
 void fc_corner::maximize()
 {
-  if (mw->isMaximized() == false) {
+  if (!mw->isMaximized()) {
     mw->showMaximized();
   } else {
     mw->showNormal();
@@ -997,7 +997,7 @@ QPixmap* fc_icons::get_pixmap(const QString &id)
                                  + DIR_SEPARATOR
                                  + id + ".png").toLocal8Bit().data()));
 
-  if (status == false) {
+  if (!status) {
     str = str + "icons" + DIR_SEPARATOR;
     pm->load(fileinfoname(get_data_dirs(), QString(str
                           + id + ".png").toLocal8Bit().data()));
@@ -1165,7 +1165,7 @@ void pregame_options::set_rulesets(int num_rulesets, char **rulesets)
 
   cruleset->clear();
   cruleset->blockSignals(true);
-  for (i = 0; i < num_rulesets; i++){
+  for (i = 0; i < num_rulesets; i++) {
     cruleset->addItem(rulesets[i], i);
     if (!strcmp("default", rulesets[i])) {
       def_idx = i;
@@ -1200,7 +1200,9 @@ void pregame_options::update_buttons()
   // Update the "Select Nation" button
   if (pplayer != nullptr) {
     if (pplayer->nation != nullptr) {
-      nation->setText(nation_adjective_for_player(pplayer));
+      // Defeat keyboard shortcut mnemonics
+      nation->setText(QString(nation_adjective_for_player(pplayer))
+                      .replace("&", "&&"));
       psprite = get_nation_shield_sprite(tileset, pplayer->nation);
       pixmap = psprite->pm;
       nation->setIconSize(pixmap->size());

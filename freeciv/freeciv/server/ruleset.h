@@ -1,4 +1,4 @@
-/********************************************************************** 
+/***********************************************************************
  Freeciv - Copyright (C) 1996 - A Kjeldberg, L Gregersen, P Unold
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -26,10 +26,10 @@ extern "C" {
 /*
  * Ruleset capabilities acceptable to this program:
  *
- * +Freeciv-3.0-ruleset
- *    - basic ruleset format for Freeciv versions 3.0.x; required
+ * +Freeciv-3.1-ruleset
+ *    - basic ruleset format for Freeciv versions 3.1.x; required
  *
- * +Freeciv-tilespec-Devel-YYYY.MMM.DD
+ * +Freeciv-ruleset-Devel-YYYY.MMM.DD
  *    - ruleset of the development version at the given data
  */
 
@@ -38,9 +38,9 @@ struct conn_list;
 typedef void (*rs_conversion_logger)(const char *msg);
 
 /* functions */
-bool load_rulesets(const char *restore, bool compat_mode,
+bool load_rulesets(const char *restore, const char *alt, bool compat_mode,
                    rs_conversion_logger logger,
-                   bool act, bool buffer_script);
+                   bool act, bool buffer_script, bool load_luadata);
 bool reload_rulesets_settings(void);
 void send_rulesets(struct conn_list *dest);
 
@@ -88,7 +88,10 @@ char *get_parser_buffer(void);
 #define RS_DEFAULT_CULTURE_VIC_POINTS    1000
 #define RS_DEFAULT_CULTURE_VIC_LEAD      300
 #define RS_DEFAULT_CULTURE_MIGRATION_PML 50
+#define RS_DEFAULT_HISTORY_INTEREST_PML  0
 
+/* Changes to these two values must also change
+   const of same names in extras.js for FCW */
 #define RS_DEFAULT_EXTRA_APPEARANCE      15
 #define RS_DEFAULT_EXTRA_DISAPPEARANCE   15
 

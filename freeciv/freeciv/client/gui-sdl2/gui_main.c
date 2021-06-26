@@ -120,6 +120,7 @@ static bool autoconnect = FALSE;
 static bool is_map_scrolling = FALSE;
 static enum direction8 scroll_dir;
 
+static struct finger_behavior finger_behavior;
 static struct mouse_button_behavior button_behavior;
 
 static SDL_Event *pNet_User_Event = NULL;
@@ -153,7 +154,7 @@ struct callback {
 #define SPECLIST_TYPE struct callback
 #include "speclist.h"
 
-struct callback_list *callbacks;
+struct callback_list *callbacks = NULL;
 
 /* =========================================================== */
 
@@ -288,6 +289,57 @@ static Uint16 main_key_up_handler(SDL_Keysym Key, void *pData)
   if (selected_widget) {
     unselect_widget_action();
   }
+
+  return ID_ERROR;
+}
+/**********************************************************************//**
+  Main finger down handler.
+**************************************************************************/
+static Uint16 main_finger_down_handler(SDL_TouchFingerEvent *pTouchEvent,
+                                       void *pData)
+{
+  struct widget *pWidget;
+  /* Touch event coordinates are normalized (0...1). */
+  int x = pTouchEvent->x * main_window_width();
+  int y = pTouchEvent->y * main_window_height();
+
+  if ((pWidget = find_next_widget_at_pos(NULL, x, y)) != NULL) {
+    if (get_wstate(pWidget) != FC_WS_DISABLED) {
+      return widget_pressed_action(pWidget);
+    }
+  } else {
+    /* No visible widget at this position; map pressed. */
+    if (!finger_behavior.counting) {
+      /* Start counting. */
+      finger_behavior.counting = TRUE;
+      finger_behavior.finger_down_ticks = SDL_GetTicks();
+      finger_behavior.event = *pTouchEvent;
+      finger_behavior.hold_state = MB_HOLD_SHORT;
+      finger_behavior.ptile = canvas_pos_to_tile(x, y);
+    }
+  }
+  return ID_ERROR;
+}
+/**********************************************************************//**
+  Main finger release handler.
+**************************************************************************/
+static Uint16 main_finger_up_handler(SDL_TouchFingerEvent *pTouchEvent,
+                                     void *pData)
+{
+  /* Touch event coordinates are normalized (0...1). */
+  int x = pTouchEvent->x * main_window_width();
+  int y = pTouchEvent->y * main_window_height();
+  /* Screen wasn't pressed over a widget. */
+  if (finger_behavior.finger_down_ticks
+      && !find_next_widget_at_pos(NULL, x, y)) {
+    finger_behavior.event = *pTouchEvent;
+    finger_up_on_map(&finger_behavior);
+  }
+
+  finger_behavior.counting = FALSE;
+  finger_behavior.finger_down_ticks = 0;
+
+  is_map_scrolling = FALSE;
 
   return ID_ERROR;
 }
@@ -516,6 +568,10 @@ Uint16 gui_event_loop(void *pData,
                       Uint16 (*key_down_handler)(SDL_Keysym Key, void *pData),
                       Uint16 (*key_up_handler)(SDL_Keysym Key, void *pData),
                       Uint16 (*textinput_handler)(char *text, void *pData),
+                      Uint16 (*finger_down_handler)(SDL_TouchFingerEvent *pTouchEvent, void *pData),
+                      Uint16 (*finger_up_handler)(SDL_TouchFingerEvent *pTouchEvent, void *pData),
+                      Uint16 (*finger_motion_handler)(SDL_TouchFingerEvent *pTouchEvent,
+                                                      void *pData),
                       Uint16 (*mouse_button_down_handler)(SDL_MouseButtonEvent *pButtonEvent,
                                                           void *pData),
                       Uint16 (*mouse_button_up_handler)(SDL_MouseButtonEvent *pButtonEvent,
@@ -606,7 +662,7 @@ Uint16 gui_event_loop(void *pData,
     while (SDL_PollEvent(&Main.event) == 1) {
 
       if (Main.event.type == user_event_type) {
-        switch(Main.event.user.code) {
+        switch (Main.event.user.code) {
         case NET:
           input_from_server(net_socket);
           break;
@@ -672,44 +728,44 @@ Uint16 gui_event_loop(void *pData,
           break;
 
         case SDL_KEYDOWN:
-          switch(Main.event.key.keysym.sym) {
+          switch (Main.event.key.keysym.sym) {
 #if 0
-            case SDLK_PRINT:
-              fc_snprintf(schot, sizeof(schot), "fc_%05d.bmp", schot_nr++);
-              log_normal(_("Making screenshot %s"), schot);
-              SDL_SaveBMP(Main.screen, schot);
+          case SDLK_PRINT:
+            fc_snprintf(schot, sizeof(schot), "fc_%05d.bmp", schot_nr++);
+            log_normal(_("Making screenshot %s"), schot);
+            SDL_SaveBMP(Main.screen, schot);
             break;
 #endif
 
-            case SDLK_RSHIFT:
-              /* Right Shift is Pressed */
-              RSHIFT = TRUE;
+          case SDLK_RSHIFT:
+            /* Right Shift is Pressed */
+            RSHIFT = TRUE;
             break;
 
-            case SDLK_LSHIFT:
-              /* Left Shift is Pressed */
-              LSHIFT = TRUE;
+          case SDLK_LSHIFT:
+            /* Left Shift is Pressed */
+            LSHIFT = TRUE;
             break;
 
-            case SDLK_LCTRL:
-              /* Left CTRL is Pressed */
-              LCTRL = TRUE;
+          case SDLK_LCTRL:
+            /* Left CTRL is Pressed */
+            LCTRL = TRUE;
             break;
 
-            case SDLK_RCTRL:
-              /* Right CTRL is Pressed */
-              RCTRL = TRUE;
+          case SDLK_RCTRL:
+            /* Right CTRL is Pressed */
+            RCTRL = TRUE;
             break;
 
-            case SDLK_LALT:
-              /* Left ALT is Pressed */
-              LALT = TRUE;
+          case SDLK_LALT:
+            /* Left ALT is Pressed */
+            LALT = TRUE;
             break;
 
-            default:
-              if (key_down_handler) {
-                ID = key_down_handler(Main.event.key.keysym, pData);
-              }
+          default:
+            if (key_down_handler) {
+              ID = key_down_handler(Main.event.key.keysym, pData);
+            }
             break;
           }
           break;
@@ -717,6 +773,24 @@ Uint16 gui_event_loop(void *pData,
         case SDL_TEXTINPUT:
           if (textinput_handler) {
             ID = textinput_handler(Main.event.text.text, pData);
+          }
+          break;
+
+        case SDL_FINGERDOWN:
+          if (finger_down_handler) {
+            ID = finger_down_handler(&Main.event.tfinger, pData);
+          }
+          break;
+
+        case SDL_FINGERUP:
+          if (finger_up_handler) {
+            ID = finger_up_handler(&Main.event.tfinger, pData);
+          }
+          break;
+
+        case SDL_FINGERMOTION:
+          if (finger_motion_handler) {
+            ID = finger_motion_handler(&Main.event.tfinger, pData);
           }
           break;
 
@@ -984,6 +1058,7 @@ void ui_main(int argc, char *argv[])
 
   /* Main game loop */
   gui_event_loop(NULL, NULL, main_key_down_handler, main_key_up_handler, NULL,
+                 main_finger_down_handler, main_finger_up_handler, NULL,
                  main_mouse_button_down_handler, main_mouse_button_up_handler,
                  main_mouse_motion_handler);
   start_quitting();
@@ -992,7 +1067,7 @@ void ui_main(int argc, char *argv[])
 /**********************************************************************//**
   Do any necessary UI-specific cleanup
 **************************************************************************/
-void ui_exit()
+void ui_exit(void)
 {
 
 #if defined UNDER_CE && defined SMALL_SCREEN
@@ -1009,6 +1084,7 @@ void ui_exit()
   intel_dialog_done();
 
   callback_list_destroy(callbacks);
+  callbacks = NULL;
 
   unload_cursors();
 
@@ -1090,12 +1166,14 @@ void remove_net_input(void)
 **************************************************************************/
 void add_idle_callback(void (callback)(void *), void *data)
 {
-  struct callback *cb = fc_malloc(sizeof(*cb));
+  if (callbacks != NULL) {
+    struct callback *cb = fc_malloc(sizeof(*cb));
 
-  cb->callback = callback;
-  cb->data = data;
+    cb->callback = callback;
+    cb->data = data;
 
-  callback_list_prepend(callbacks, cb);
+    callback_list_prepend(callbacks, cb);
+  }
 }
 
 /**********************************************************************//**
@@ -1149,7 +1227,7 @@ void gui_update_font(const char *font_name, const char *font_value)
         action; \
       } \
     } \
-  } while(0)
+  } while (FALSE)
 
   CHECK_FONT(FONT_CITY_NAME, update_city_descriptions());
   CHECK_FONT(FONT_CITY_PROD, update_city_descriptions());

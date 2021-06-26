@@ -18,6 +18,7 @@
 // Qt
 #include <QFontMetrics>
 #include <QPainter>
+#include <QPainterPath>
 
 // qt-client
 #include "canvas.h"
@@ -309,7 +310,7 @@ void qtg_get_text_size(int *width, int *height,
   afont = get_font(font);
   fm = new QFontMetrics(*afont);
   if (width) {
-    *width = fm->width(QString::fromUtf8(text));
+    *width = fm->horizontalAdvance(QString::fromUtf8(text));
   }
 
   if (height) {

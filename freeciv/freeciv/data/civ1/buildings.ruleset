@@ -12,7 +12,7 @@
 
 [datafile]
 description="Civ1 buildings data for Freeciv (approximate)"
-options="+Freeciv-ruleset-Devel-2017.Jan.02"
+options="+Freeciv-ruleset-Devel-2017.Jan.02 web-compatible"
 format_version=20
 
 ; Below: The individual buildings, one per section.
@@ -129,9 +129,7 @@ sound_alt	= "b_generic"
 helptext	= _("\
 With a Barracks, each new unit built in a city will\
  automatically have Veteran status, which means that its attack and\
- defense strengths are increased by 50%.  Also, damaged units\
- which stay in town for one full turn without moving are completely\
- restored.\
+ defense strengths are increased by 50%.\
 "), _("\
 Barracks also prevent stored food and goods in coastal cities being\
  lost to piracy.\
@@ -159,9 +157,7 @@ sound_alt	= "b_generic"
 helptext	= _("\
 With a Barracks, each new unit built in a city will\
  automatically have Veteran status, which means that its attack and\
- defense strengths are increased by 50%.  Also, damaged units\
- which stay in town for one full turn without moving are completely\
- restored.\
+ defense strengths are increased by 50%.\
 "), _("\
 Barracks also prevent stored food and goods in coastal cities being\
  lost to piracy.\
@@ -188,9 +184,7 @@ sound_alt	= "b_generic"
 helptext	= _("\
 With a Barracks, each new unit built in a city will\
  automatically have Veteran status, which means that its attack and\
- defense strengths are increased by 50%.  Also, damaged units\
- which stay in town for one full turn without moving are completely\
- restored.\
+ defense strengths are increased by 50%.\
 "), _("\
 Barracks also prevent stored food and goods in coastal cities being\
  lost to piracy.\
@@ -239,9 +233,9 @@ sound		= "b_city_walls"
 sound_alt	= "b_generic"
 helptext	= _("\
 City Walls make it easier to defend a city.  They triple the defense\
- strength of units within the city against land, sea, and helicopter\
- units.  They are ineffective against non-helicopter airborne units as well\
- as Artillery.  City Walls also prevent the loss of population which\
+ strength of units within the city. They are ineffective against\
+ Artillery and Bombers.\
+ City Walls also prevent the loss of population which\
  occurs when a defending unit is destroyed by a land unit.\
 "), _("\
 For cities near rivers, City Walls also eliminate the risk of population\
@@ -733,7 +727,7 @@ sound		= "b_temple"
 sound_alt	= "b_generic"
 helptext	= _("\
 Makes one unhappy citizen content.  The Mysticism advance doubles\
- this effect, as does Oracle wonder.  With both Mysticism and the Oracle,\
+ this effect, as does the Oracle wonder.  With both Mysticism and the Oracle,\
  4 citizens are made content.  Does not affect citizens made unhappy by military\
  activity.\
 "), _("\

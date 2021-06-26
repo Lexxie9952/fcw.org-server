@@ -42,11 +42,11 @@
 #include "handicaps.h"
 
 /* ai/default */
-#include "aicity.h"
 #include "aiplayer.h"
 #include "ailog.h"
 #include "aitools.h"
 #include "aiunit.h"
+#include "daicity.h"
 
 #include "aiair.h"
 
@@ -149,7 +149,9 @@ static int dai_evaluate_tile_for_air_attack(struct unit *punit,
   }
 
   /* Missile would die 100% so we adjust the victim_cost -- GB */
-  if (uclass_has_flag(unit_class_get(punit), UCF_MISSILE)) {
+  if (utype_can_do_action(unit_type_get(punit), ACTION_SUICIDE_ATTACK)) {
+    /* Assume that the attack will be a suicide attack even if a regular
+     * attack may be legal. */
     victim_cost -= unit_build_shield_cost_base(punit);
   }
 
@@ -465,17 +467,19 @@ bool dai_choose_attacker_air(struct ai_type *ait, struct player *pplayer,
     }
 
     /* Temporary hack because pathfinding can't handle Fighters. */
-    if (!uclass_has_flag(pclass, UCF_MISSILE) && 1 == utype_fuel(punittype)) {
+    if (!utype_can_do_action(punittype, ACTION_SUICIDE_ATTACK)
+        && 1 == utype_fuel(punittype)) {
       continue;
     }
 
     if (can_city_build_unit_now(pcity, punittype)) {
-      struct unit *virtual_unit = 
-	unit_virtual_create(pplayer, pcity, punittype,
-                            do_make_unit_veteran(pcity, punittype));
+      struct unit *virtual_unit =
+       unit_virtual_create(
+          pplayer, pcity, punittype,
+          city_production_unit_veteran_level(pcity, punittype));
       int profit = find_something_to_bomb(ait, virtual_unit, NULL, NULL);
 
-      if (profit > choice->want){
+      if (profit > choice->want) {
         /* Update choice */
         choice->want = profit;
         choice->value.utype = punittype;

@@ -521,7 +521,7 @@ void goods_init(void)
     goods[i].id = i;
 
     requirement_vector_init(&(goods[i].reqs));
-    goods[i].disabled = FALSE;
+    goods[i].ruledit_disabled = FALSE;
     goods[i].helptext = NULL;
   }
 }
@@ -644,7 +644,7 @@ bool goods_has_flag(const struct goods_type *pgood, enum goods_flag_id flag)
 bool goods_can_be_provided(struct city *pcity, struct goods_type *pgood,
                            struct unit *punit)
 {
-  struct unit_type *ptype;
+  const struct unit_type *ptype;
 
   if (punit != NULL) {
     ptype = unit_type_get(punit);

@@ -4,7 +4,7 @@ Installing Freeciv:
 
 This file describes how to compile and install Freeciv. Last time we
 made sure this file is up to date was 16-Jul-06.
-Last minor update was 20-Sep-17.
+Last minor update was 14-Jun-19.
 
 There may be a localized version of this file in the ./doc directory,
 named INSTALL.<locale> (e.g., INSTALL.de).
@@ -25,8 +25,7 @@ This document contains sections and subsections as follows:
      6. Readline Support:
      7. Reinier's Solaris Installation Notes:
      8. Mac OS X and Darwin notes:
-     9. Debian GNU/Linux notes:
-    10. Windows notes:
+     9. Windows notes:
 
 
 0. Prerequisites:
@@ -54,8 +53,6 @@ out whether your system is suitable.  If in doubt, just try it.
    Development of Freeciv is primarily done with "gcc", the GNU
    project's excellent C compiler.  Releases can be compiled with gcc
    or most other compilers (such as the unbundled Solaris C compiler).
-   Note that there have been reports that gcc with -O3 miscompiled
-   freeciv.
 
  - A "make" program.
 
@@ -124,6 +121,11 @@ Note that most Linux systems have separate library packages for "runtime"
 library support and for development support (for compiling programs 
 which use those libraries).  To compile Freeciv on such systems you 
 will need to have the appropriate "development" packages installed.
+
+Sound support is built in by default if "SDL2_mixer" library development
+files are found from the system.
+
+     https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.4.tar.gz
 
 
 1a. Prerequisites for the Gtk+ 3.0 client:
@@ -312,7 +314,8 @@ following order: pkg-config, Glib, Atk, Pango, Gdk-Pixbuf, Gtk+.
    Qt-client is written in C++, so you need appropriate compiler.
    In Freeciv development, g++ has been used.
 
- - Qt5Core, Qt5Gui, and Qt5Widgets libraries and headers
+ - Qt5Core, Qt5Gui, and Qt5Widgets libraries and headers.
+   At least version 5.11 is required.
 
 
 2. Generating Makefiles
@@ -558,34 +561,14 @@ Replace <...> with whatever additional arguments you want to give to
 configure.
 
 
-9. Debian GNU/Linux notes:
-===========================
+9. Windows notes:
+=================
 
-To compile freeciv on a debian system you need the following packages:
-
- Common requirements:
-   gcc
-   libc6-dev
-   libreadline4-dev
-   zlib1g-dev
-   xlib6g-dev
-
-If you need to run aclocal (if you don't know what aclocal is then you
-don't need it) you also need to install imlib-dev to get the
-AM_PATH_GDK_IMLIB macro. It is a bug in debian that this macro isn't
-in gdk-imlib-dev, and it will hopefully be fixed in future debian
-releases.
-
-
-10. Windows notes:
-==================
-
-Windows version of Freeciv can be built either with MinGW or Cygwin.
-Official Windows binaries are built with MinGW, and they are self-contained
+Windows version of Freeciv can be built either with Msys2 or Cygwin.
+Official Windows binaries are built with Msys2, and they are self-contained
 packages. For using Cygwin version, you need Cygwin environment installed.
 
-Build instructions for MinGW versions are documented on top of file
-win32/installer/Makefile
+Build instructions for Msys2 versions are documented on doc/README.msys2
 
 Cygwin specific installation notes can be found in doc/INSTALL.Cygwin.
 

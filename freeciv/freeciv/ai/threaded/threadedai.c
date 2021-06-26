@@ -18,8 +18,7 @@
 /* common */
 #include "ai.h"
 
-/* default ai */
-#include "aicity.h"
+/* ai/default */
 #include "aidata.h"
 #include "aiferry.h"
 #include "aihand.h"
@@ -27,6 +26,7 @@
 #include "aiplayer.h"
 #include "aisettler.h"
 #include "aitools.h"
+#include "daicity.h"
 #include "daidiplomacy.h"
 #include "daidomestic.h"
 #include "daimilitary.h"
@@ -306,7 +306,7 @@ static void twai_ferry_init_ferry(struct unit *ferry)
 /**********************************************************************//**
   Call default ai with threaded ai type as parameter.
 **************************************************************************/
-static void twai_ferry_transformed(struct unit *ferry, struct unit_type *old)
+static void twai_ferry_transformed(struct unit *ferry, const struct unit_type *old)
 {
   TAI_AIT;
   TAI_DFUNC(dai_ferry_transformed, ferry, old);
@@ -417,6 +417,15 @@ static void twai_first_activities(struct player *pplayer)
   TAI_AIT;
   TAI_TFUNC(tai_first_activities, pplayer);
   TAI_DFUNC(dai_do_first_activities, pplayer);
+}
+
+/**********************************************************************//**
+  Start working on the thread again.
+**************************************************************************/
+static void twai_restart_phase(struct player *pplayer)
+{
+  TAI_AIT;
+  TAI_TFUNC(tai_first_activities, pplayer);
 }
 
 /**********************************************************************//**
@@ -610,9 +619,7 @@ bool fc_ai_threaded_setup(struct ai_type *ai)
   ai->funcs.want_to_explore = twai_switch_to_explore;
 
   ai->funcs.first_activities = twai_first_activities;
-  /* Do complete run after savegame loaded - we don't know what has been
-     done before. */
-  ai->funcs.restart_phase = twai_first_activities;
+  ai->funcs.restart_phase = twai_restart_phase;
   ai->funcs.diplomacy_actions = twai_diplomacy_actions;
   ai->funcs.last_activities = twai_last_activities;
 

@@ -24,9 +24,9 @@ using MSYS2 from http://msys2.github.io
 1) Install MSYS2 following the documentation on their homepage
 
 1.1) Download
- https://sourceforge.net/projects/msys2/files/Base/i686/msys2-i686-20180531.exe
+ https://sourceforge.net/projects/msys2/files/Base/i686/msys2-i686-20190524.exe
  for win32 host or
- https://sourceforge.net/projects/msys2/files/Base/x86_64/msys2-x86_64-20180531.exe
+ https://sourceforge.net/projects/msys2/files/Base/x86_64/msys2-x86_64-20190524.exe
  for win64 host
 
 1.2) Run it to install MSYS2 on build system
@@ -79,6 +79,8 @@ using MSYS2 from http://msys2.github.io
 
 2.1.2.1.2) Arch-specific optional packages for building common parts
  - mingw-w64-i686-drmingw / mingw-w64-x86_64-drmingw
+ - mingw-w64-i686-meson / mingw-w64-x86_64-meson
+ - mingw-w64-i686-tolua / mingw-w64-x86_64-tolua
 
 2.1.2.2) Arch-specific packages for building gtk3-client
  - mingw-w64-i686-gtk3 / mingw-w64-x86_64-gtk3
@@ -111,9 +113,9 @@ Current version is
 
 win64 host:
 -----------
-msys2-freeciv-win64-180624.7z, based on
-https://sourceforge.net/projects/msys2/files/Base/x86-64/msys2-x86_64-20180531.exe
-with packages updated to 24-Jun-2018 level.
+msys2-freeciv-win64-191012.7z, based on
+https://sourceforge.net/projects/msys2/files/Base/x86-64/msys2-x86_64-20190524.exe
+with packages updated to 12-Oct-2019 level.
 
 Both win32 and win64 targets are included. For each package listed below with <arch>
 in the name, actually two packages is installed; one with a name where <arch> is
@@ -147,6 +149,11 @@ Following packages have been installed:
 - mingw-w64-<arch>-imagemagick
 - mingw-w64-<arch>-qt5
 - mingw-w64-<arch>-drmingw
+- mingw-w64-<arch>-meson
+- mingw-w64-<arch>-tolua
+
+After all the packages were installed 'pacman -Scc' was run to completely
+empty the package cache for having smaller environment package.
 
 
  Build
@@ -182,7 +189,7 @@ somehow. Some options are:
 
  It's possible to set number of make jobs used in the build by
  setting suitable make parameter to MAKE_PARAMS variable, e,g,
- MAKE_PARAMS="-j3"
+ MAKE_PARAMS="-j3". The default is "-j2".
 
 
  Problems

@@ -33,11 +33,22 @@ function popup_pillage_selection_dialog(punit)
 
   var id = '#pillage_sel_dialog_' + punit['id'];
 
-  $(id).remove();
+  remove_active_dialog(id);
   $("<div id='pillage_sel_dialog_" + punit['id'] + "'></div>").appendTo("div#game_page");
-  $(id).append(document.createTextNode("Your "
-              + unit_types[punit['type']]['name']
-              + " is waiting for you to select what to pillage."));
+  $("#pillage_sel_dialog_"+punit['id']).css("white-space","pre-wrap"); // allow \n to work.
+  // Prepare needed text strings used inside the dialog: *****
+  var pstats = unit_get_extra_stats(punit);
+  var odds = pstats.iPillage_odds + 5 * punit.veteran; // +5% for each veteran level.
+  var moves_remaining = punit.movesleft - (pstats.iPillage_moves*SINGLE_MOVE);
+  if (moves_remaining < 0) moves_remaining = 0;
+  var regular_pillage_available = unit_has_dual_pillage_options(punit);
+  // **********
+  $(id).append(document.createTextNode(unit_types[punit['type']]['name']
+              + " performing " + unit_get_pillage_name(punit) + ":\n"
+              + (unit_can_iPillage(punit) ? "(" + unit_moves_left(punit) + " moves - " + pstats.iPillage_moves + " spent "
+                                        + " = " + move_points_text(moves_remaining, false) + " left)\n"
+                                        : "")
+              ));
 
   var button_id_prefix = 'pillage_sel_' + punit['id'] + '_';
   var buttons = [];
@@ -47,35 +58,57 @@ function popup_pillage_selection_dialog(punit)
     buttons.push({
       id     : button_id_prefix + extra_id,
       'class': 'act_sel_button',
-      text   : extras[extra_id]['name'],
-      click  : pillage_target_selected
+      text   : extras[extra_id]['name'] + (regular_pillage_available ? " -- "+unit_get_pillage_name(punit)+": "+odds+"%" : ""),
+      click  : function() { pillage_target_selected(event); remove_active_dialog(id); /* might need "#"+id*/ 
+                            setTimeout(update_unit_focus, update_focus_delay); }
     });
   }
-  buttons.push({
-    id     : button_id_prefix + 'ANYTHING',
-    'class': 'act_sel_button',
-    text   : 'Just do something!',
-    click  : pillage_target_selected
-  });
+  if (!regular_pillage_available)
+    buttons.push({
+      id     : button_id_prefix + 'ANYTHING',
+      'class': 'act_sel_button',
+      text   : 'Just do something!',
+      click  : function () {pillage_target_selected(event); remove_active_dialog(id);/* might need "#"+id*/
+                            setTimeout(update_unit_focus, update_focus_delay); }
+    });
+  else if (regular_pillage_available) { //iPillage unit who can also do standard pillage
+    var button_id_prefix = 'std_pillage_sel_' + punit['id'] + '_';
+    for (var i = 0; i < tgt.length; i++) {
+      var extra_id = tgt[i];
+      if (extra_id == EXTRA_NONE) continue;
+      buttons.push({
+        id     : button_id_prefix + extra_id,
+        'class': 'act_sel_button',
+        text   : extras[extra_id]['name']+" -- Pillage: 100%",
+        click  : function () {pillage_target_selected(event); remove_active_dialog(id); /* might need "#"+id*/
+                              setTimeout(update_unit_focus, update_focus_delay); }
+      });
+    }
+  }
+
   buttons.push({
     id     : 'pillage_sel_cancel_' + punit['id'],
     'class': 'act_sel_button',
-    text   : 'Cancel',
-    click  : function() {$(this).dialog('close');}
+    text   : 'Cancel (𝗪)',
+    click  : function() {remove_active_dialog(id); /* might need "#"+id*/}
   });
 
-  $(id).attr('title', 'Choose Your Target');
+  $(id).attr('title', 'Choose Target'
+                      + (pstats.iPillage && !regular_pillage_available ? " (" + odds + "% odds)" : '')
+  );
   $(id).dialog({
     bgiframe: true,
     modal: false,
     dialogClass: 'act_sel_dialog',
     width: 390,
     buttons: buttons,
-    close: function () {$(this).remove();},
+    close: function () {remove_active_dialog(id);},
     autoOpen: true
   });
 
   $(id).dialog('open');
+  $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
+  dialog_register(id);
 }
 
 /****************************************************************************
@@ -83,10 +116,23 @@ function popup_pillage_selection_dialog(punit)
 ****************************************************************************/
 function pillage_target_selected(ev)
 {
+  // Standard Pillage: flag overrides iPillage default action.
+  const ACTIVITY_IPILLAGE_OVERRIDE_FLAG = 1024; 
+
   var id = ev.target.id;
-  var params = id.match(/pillage_sel_(\d*)_([^_]*)/);
-  var extra_id = params[2] == 'ANYTHING' ? EXTRA_NONE : parseInt(params[2], 10);
+  var params, extra_id;
+
+  if (id.startsWith("std")) {  // override iPillage for standard pillage.
+    params = id.match(/std_pillage_sel_(\d*)_([^_]*)/);
+    extra_id = params[2] == 'ANYTHING' ? EXTRA_NONE : parseInt(params[2], 10);
+    extra_id |= ACTIVITY_IPILLAGE_OVERRIDE_FLAG; //tell server not to iPillage
+  }
+  else {
+    params = id.match(/pillage_sel_(\d*)_([^_]*)/);
+    extra_id = params[2] == 'ANYTHING' ? EXTRA_NONE : parseInt(params[2], 10);
+  }
   request_new_unit_activity(units[parseInt(params[1], 10)],
                             ACTIVITY_PILLAGE, extra_id);
-  $(this).dialog('close');
+  
+  remove_active_dialog(id);
 }

@@ -34,6 +34,7 @@
 #include "player.h"
 
 /* common/aicore */
+#include "citymap.h"
 #include "pf_tools.h"
 
 /* server */
@@ -55,13 +56,12 @@
 
 /* ai/default */
 #include "aidata.h"
-#include "aicity.h"
 #include "aiferry.h"
 #include "ailog.h"
 #include "aiplayer.h"
 #include "aitools.h"
 #include "aiunit.h"
-#include "citymap.h"
+#include "daicity.h"
 
 #include "aisettler.h"
 
@@ -820,9 +820,11 @@ static struct cityresult *settler_map_iterate(struct ai_type *ait,
     /* Reduce want by settler cost. Easier than amortize, but still
      * weeds out very small wants. ie we create a threshold here. */
     /* We also penalise here for using a boat (either virtual or real)
-     * it's crude but what isn't? */
-    cr->result -= unit_build_shield_cost_base(punit) + boat_cost;
+     * it's crude but what isn't?
+     * Settler gets used, boat can make multiple trips. */
 
+    cr->result -= unit_build_shield_cost_base(punit) + boat_cost / 3;
+    
     /* Find best spot */
     if ((!best && cr->result > 0)
         || (best && cr->result > best->result)) {
@@ -1069,7 +1071,7 @@ BUILD_CITY:
 
   /*** Try find some work ***/
 
-  if (unit_has_type_flag(punit, UTYF_SETTLERS)) {
+  if (unit_has_type_flag(punit, UTYF_SETTLERS) && unit_has_type_flag(punit, UTYF_CIVILIAN)) {
     struct worker_task *best_task;
 
     TIMING_LOG(AIT_WORKERS, TIMER_START);
@@ -1251,7 +1253,7 @@ static bool dai_do_build_city(struct ai_type *ait, struct player *pplayer,
               player_name(pplayer), TILE_XY(ptile));
     return FALSE;
   }
-  unit_do_action(pplayer, punit->id, ptile->index, EXTRA_NONE,
+  unit_do_action(pplayer, punit->id, ptile->index,
                  0, city_name_suggestion(pplayer, ptile),
                  ACTION_FOUND_CITY);
   pcity = tile_city(ptile);

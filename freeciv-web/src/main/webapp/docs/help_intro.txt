@@ -1,9 +1,9 @@
 <h1>Freeciv Help</h1>
-<img src='/static/images/frontpage-jumbotron.png' style="max-width: 50%;"><br><br>
+<img style='border-radius:10px; max-width: 100%;' src='/static/images/frontpage-jumbotron.png'><br><br>
 
 <b>Info Categories</b> are in the <b>left panel</b> for quick lookup.<br><br>
 
-<b>Full Game Manual</b> -- Use <b>About Current Ruleset</b> on left.
+<b>Full Game Manual</b> -- Click <b>Ruleset</b> at top left.
 <br><br>
 
 Freeciv-web and the game you're playing now are only possible by <a href="https://www.patreon.com/freecivweb"

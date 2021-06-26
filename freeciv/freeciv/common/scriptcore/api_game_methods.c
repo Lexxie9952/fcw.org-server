@@ -249,18 +249,21 @@ int api_methods_city_inspire_partisans(lua_State *L, City *self, Player *inspire
     }
   } else {
     if (game.info.citizen_partisans_pct > 0) {
-      int own = citizens_nation_get(self, inspirer->slot);
-      int total = 0;
+      if (is_server()) {
+        int own = citizens_nation_get(self, inspirer->slot);
+        int total = 0;
 
-      /* Not citizens_foreign_iterate() as city has already changed hands.
-       * old owner would be considered foreign and new owner not. */
-      citizens_iterate(self, pslot, nat) {
-        total += nat;
-      } citizens_iterate_end;
+        /* Not citizens_foreign_iterate() as city has already changed hands.
+         * old owner would be considered foreign and new owner not. */
+        citizens_iterate(self, pslot, nat) {
+          total += nat;
+        } citizens_iterate_end;
 
-      if ((own * 100 / total) >= game.info.citizen_partisans_pct) {
-        inspired = TRUE;
+        if ((own * 100 / total) >= game.info.citizen_partisans_pct) {
+          inspired = TRUE;
+        }
       }
+      /* else is_client() -> don't consider inspired by default. */
     } else if (self->original == inspirer) {
       inspired = TRUE;
     }
@@ -558,10 +561,14 @@ const char *api_methods_research_rule_name(lua_State *L, Player *pplayer)
 *****************************************************************************/
 const char *api_methods_research_name_translation(lua_State *L, Player *pplayer)
 {
+  static char buf[MAX_LEN_MSG];
+
   LUASCRIPT_CHECK_STATE(L, FALSE);
   LUASCRIPT_CHECK_SELF(L, pplayer, FALSE);
 
-  return research_name_translation(research_get(pplayer));
+  (void) research_pretty_name(research_get(pplayer), buf, ARRAY_SIZE(buf));
+
+  return buf;
 }
 
 /*************************************************************************//**

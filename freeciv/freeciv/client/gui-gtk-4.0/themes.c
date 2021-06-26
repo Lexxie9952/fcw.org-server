@@ -84,8 +84,8 @@ void gui_clear_theme(void)
     if (default_provider == NULL) {
       default_provider = gtk_css_provider_new();
     }
-    gtk_style_context_add_provider_for_screen(
-        gtk_widget_get_screen(toplevel),
+    gtk_style_context_add_provider_for_display(
+        gtk_widget_get_display(toplevel),
         GTK_STYLE_PROVIDER(default_provider),
         GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   }
@@ -118,7 +118,7 @@ char **get_gui_specific_themes_directories(int *count)
     directories[(*count)++] = fc_strdup(buf);
   } strvec_iterate_end;
 
-  /* standard GTK+ themes directory */
+  /* standard GTK themes directory */
 #ifdef CROSSER
   standard_dir = "../share/themes";
 #else  /* CROSSER */
@@ -126,7 +126,7 @@ char **get_gui_specific_themes_directories(int *count)
 #endif /* CROSSER */
   directories[(*count)++] = fc_strdup(standard_dir);
 
-  /* user GTK+ themes directory (~/.themes) */
+  /* user GTK themes directory (~/.themes) */
   home_dir = user_home_dir();
   if (home_dir) {
     char buf[strlen(home_dir) + 16];
@@ -141,7 +141,7 @@ char **get_gui_specific_themes_directories(int *count)
 /*************************************************************************//**
   Return an array of names of usable themes in the given directory.
   Array size is stored in count.
-  Useable theme for gtk+ is a directory which contains file gtk-3.0/gtk.css.
+  Useable theme for gtk is a directory which contains file gtk-3.0/gtk.css.
   The caller is responsible for freeing the array and the names
 *****************************************************************************/
 char **get_useable_themes_in_directory(const char *directory, int *count)

@@ -18,6 +18,9 @@ but wars are fought over the silliest things ...
 - C++-style comments (i.e., // comments) are forbidden in C code.
   They should be used for single-line comments in C++ code.
 
+- C++11 Lambda Expressions are allowed in C++ code, and encouraged for short
+  callbacks in Qt slot connections.
+
 - Declaring variables in the middle of the scope is forbidden
   (unless you are using C99 dynamic arrays and you need to check the size
    of the array before you declare it).
@@ -82,6 +85,24 @@ but wars are fought over the silliest things ...
       case MY_VALUE2:
         {
           int value2 = value + 5;
+          do_some_other_stuff(value2);
+        }
+        break;
+      }
+
+  - If case of a switch is supposed to continue to the next case,
+    explicitly mark it so by using fc__fallthrough; This also avoids
+    compiler warning about missing break; when such warnings are enabled.
+
+      switch (value) {
+      case MY_VALUE1:
+        do_some_stuff(value);
+
+        fc__fallthrough; /* break; intentionally left out */
+      case MY_VALUE2:
+        {
+          int value2 = value + 5;
+
           do_some_other_stuff(value2);
         }
         break;

@@ -31,6 +31,7 @@
 #include "citizens.h"
 #include "clientutils.h"
 #include "combat.h"
+#include "culture.h"
 #include "fc_types.h" /* LINE_BREAK */
 #include "game.h"
 #include "government.h"
@@ -156,6 +157,7 @@ const char *popup_info_text(struct tile *ptile)
   char nation[2 * MAX_LEN_NAME + 32];
   int tile_x, tile_y, nat_x, nat_y;
   bool first;
+  int dummy;
 
   astr_clear(&str);
   index_to_map_pos(&tile_x, &tile_y, tile_index(ptile));
@@ -327,7 +329,7 @@ const char *popup_info_text(struct tile *ptile)
       astr_add_line(&str, _("Infrastructure: %s"), infratext);
     }
   }
-  activity_text = concat_tile_activity_text(ptile);
+  activity_text = concat_tile_activity_text(ptile, &dummy);
   if (strlen(activity_text) > 0) {
     astr_add_line(&str, _("Activity: %s"), activity_text);
   }
@@ -576,7 +578,7 @@ const char *get_airlift_text(const struct unit_list *punits,
     /* NULL will tell us about the capability of airlifting from source */
     result = test_unit_can_airlift_to(client_player(), punit, pdest);
 
-    switch(result) {
+    switch (result) {
     case AR_NO_MOVES:
     case AR_WRONG_UNITTYPE:
     case AR_OCCUPIED:
@@ -637,7 +639,7 @@ const char *get_airlift_text(const struct unit_list *punits,
     best = MAX(best, this);
   } unit_list_iterate_end;
 
-  switch(best) {
+  switch (best) {
   case AL_IMPOSSIBLE:
     return NULL;
   case AL_UNKNOWN:
@@ -1004,6 +1006,14 @@ const char *get_info_label_text_popup(void)
     } else {
       fc_assert(upkeep == 0);
       astr_add_line(&str, _("Bulbs per turn: %d"), perturn);
+    }
+    {
+      int history_perturn = nation_history_gain(client.conn.playing);
+      city_list_iterate(client.conn.playing->cities, pcity) {
+        history_perturn += city_history_gain(pcity);
+      } city_list_iterate_end;
+      astr_add_line(&str, _("Culture: %d (%+d/turn)"),
+                    client.conn.playing->client.culture, history_perturn);
     }
   }
 

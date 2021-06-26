@@ -174,3 +174,15 @@ function tech_researched_handler(tech, player, how)
 end 
 
 signal.connect("tech_researched", "tech_researched_handler")
+
+function turn_callback(turn, year)
+  if turn == 1 then
+    notify.event(nil, nil, E.SCRIPT,
+_("<b>Welcome to the MP2 Avant-garde ruleset!</b>\n\
+This developmental version of MP2 has features which are not\
+documented in the MP2 game manual. In-game helptext is accurate.\
+Inquire on Discord for the list of new features. Have fun!\n\
+"))
+  end
+end
+signal.connect('turn_begin', 'turn_callback')

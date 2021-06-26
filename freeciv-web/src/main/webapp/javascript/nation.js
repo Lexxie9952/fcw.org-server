@@ -31,6 +31,7 @@ function update_nation_screen()
   var total_players = 0;
   var no_humans = 0;
   var no_ais = 0;
+  const observer = client_is_observer();
 
   // Carefully set up display mode controls:  wide, reduced standard, tiny:
   var wide_screen = $(window).width()<1340 ? false : true;
@@ -60,7 +61,7 @@ function update_nation_screen()
   console.log("Tiny:   "+tiny_screen);
   console.log("Scrollx:"+scroll_narrow_x);*/
 
-  var header_titles = ["Flag", "Color", "Player Name", "Nation", "Attitude", "Score", "AI/Human", "Alive", "Diplomatic state", "Embassy", "Shared Vision", "Team", "State&nbsp;"];
+  var header_titles = ["Flag", "Colors", "Player Name", "Nation", "Attitude", "Score", "AI/Human", "Alive", "Diplomatic state", "Embassy", "Shared Vision", "Team", "State&nbsp;"];
   if (redux_screen || tiny_screen)
     header_titles = ["Flag", " ", "Name", "Nation", "Mood", "Score", "Type", "Alive", "Relation", "Embassy", "Vision", "Team", "State&nbsp;"];
 
@@ -72,7 +73,7 @@ function update_nation_screen()
     + header_titles[5]+"</th><th"+center_style+">"+header_titles[6]+"</th><th"+center_style+">"+header_titles[7]+"</th>"
     + "<th"+center_style+">"+header_titles[8]+"</th><th"+center_style+">"+header_titles[9]+"</th><th"+center_style+">"+header_titles[10]
     + "</th><th"+center_style+" class='nation_team'>"+header_titles[11]
-    +"</th><th style='text-align:right;'>"+header_titles[12]+"</th></tr></thead><tbody class='nation_table_body'>";
+    +"</th><th style='text-align:right;'>"+header_titles[12]+"</th></tr></thead><tbody class='nation_table_body alternate-row-color'>";
 
   var sortList = [];
   var headers = $('#nation_table thead th');
@@ -87,41 +88,70 @@ function update_nation_screen()
     var pplayer = players[player_id];
     if (pplayer['nation'] == -1) continue;
     if (is_longturn() && (client.conn.access_level != 5) && pplayer['name'].indexOf("NewAvailablePlayer") != -1) continue;
-    // Remove the following line after G22 ends: it was inserted for backward compatibility:
-    if (is_longturn() && (client.conn.access_level != 5) && pplayer['name'].indexOf("New Available Player") != -1) continue;
     total_players++;
 
-    var flag_html = "<canvas id='nation_dlg_flags_" + player_id + "' width='29' height='20' class='nation_flags'></canvas>";
+    var flag_html = "<canvas id='nation_dlg_flags_" + player_id + "' width='50' height='32' class='nation_flags'></canvas>";
 
     var plr_class = "";
-    if (!client_is_observer() && client.conn.playing != null && player_id == client.conn.playing['playerno']) plr_class = "nation_row_self";
+    if (!observer && client.conn.playing != null && player_id == client.conn.playing['playerno']) plr_class = "nation_row_self";
     if (!pplayer['is_alive']) plr_class = "nation_row_dead";
-    if (!client_is_observer() && diplstates[player_id] != null && diplstates[player_id] == DS_WAR) plr_class = "nation_row_war";
+    else if (!observer && diplstates[player_id] != null) {
+      if      (diplstates[player_id] == DS_WAR) plr_class = "nation_row_war";
+      else if (diplstates[player_id] == DS_ALLIANCE) plr_class = "nation_row_alliance";
+      else if (diplstates[player_id] == DS_CEASEFIRE) plr_class = "nation_row_ceasefire";
+      else if (diplstates[player_id] == DS_ARMISTICE) plr_class = "nation_row_armistice";
+      else if (diplstates[player_id] == DS_PEACE) plr_class = "nation_row_peace";
+      else plr_class = "nation_row_none";
+    }
 
     nation_list_html += "<tr data-plrid='" + player_id + "' class='" + plr_class
 	   + "'><td>" + flag_html + "</td>";
-    nation_list_html += "<td><div style='background-color: " + nations[pplayer['nation']]['color']
-           + "; margin: 4px; width: 20px; height: 20px;'>"
+    nation_list_html += "<td><div style='background-color: " + nations[pplayer['nation']]['color'] +"; "
+           + "color: "+nations[pplayer['nation']]['color2']
+           + "; border-style: solid; border-color: "+nations[pplayer['nation']]['color3']
+           + "; margin: 4px; width: 20px; height: 20px;'>&#x25cf;"
            + "</div></td>";
 
+    var gov_modifier = get_gov_modifier(player_id, "", false);
+    var gov_indicator = pplayer['government'] 
+                      ? "<img class='lowered_gov' src='/images/e/"+governments[pplayer['government']]['name'].toLowerCase() + gov_modifier+".png'>" 
+                      : "<img class='lowered_gov' src='/images/e/unknowngov.png'>"; 
     nation_list_html += "<td style='text-align:left;'>" + pplayer['name'] + "</td><td style='text-align:left;' title=\"" 
-          + nations[pplayer['nation']]['legend'] + "\">"
-          + nations[pplayer['nation']]['adjective']  + "</td>"
+          + html_safe(nations[pplayer['nation']]['legend']) + "\">"
+          + gov_indicator + "&nbsp;" + nations[pplayer['nation']]['adjective']  + "</td>"
        + "<td class='nation_attitude'>" + col_love(pplayer) + "</td>"
        + "<td>" + get_score_text(pplayer) + "</td>"
        +"<td>" + (pplayer['flags'].isSet(PLRF_AI) ?
           get_ai_level_text(pplayer) + " AI" : "Human") + "</td><td>"
 	   + (pplayer['is_alive'] ? "Alive" : "Dead") +  "</td>";
 
+    var our_cb = !observer ? players[client.conn.playing['playerno']].diplstates[player_id]['has_reason_to_cancel'] : 0;
+    var their_cb = !observer ? players[player_id].diplstates[client.conn.playing['playerno']]['has_reason_to_cancel'] : 0;  
     var contact_time=0;
-    if (!client_is_observer() && client.conn.playing != null && diplstates[player_id] != null && player_id != client.conn.playing['playerno']) {
+    if (!observer && client.conn.playing != null && diplstates[player_id] != null && player_id != client.conn.playing['playerno']) {
       contact_time = pplayer.diplstates[client.conn.playing.playerno].contact_turns_left; //set this here because it needs the same 'if'
       
-      var pact_time = pplayer.diplstates[client.conn.playing.playerno].turns_left;
+      var pact_time = !observer ? pplayer.diplstates[client.conn.playing.playerno].turns_left : 0;
       var dstate = get_diplstate_text(diplstates[player_id]);
       if (dstate == "None") dstate = "<span style='font-size:1%; color:rgba(0,0,0,0);'>+</span>" + dstate; // sorting hack
       if (dstate!="Ceasefire" && dstate!="Armistice") pact_time=0; // don't show unless it's a real timer on an expiring pact.
       pact_time = (pact_time>0) ? ":<span title='Turns till pact expires' style='color:#f0d0c0'>"+pact_time+"</span>" : "";   // show turns left for diplstate or blank if n/a
+      if (dstate != "War") {
+        // cur_player has casus belli against row player:
+        if (our_cb) {  // Mark casus belli
+          // row player also has casus belli against cur_player:
+          if (their_cb) {
+            dstate = "<span title='We have "+pluralize("turn",our_cb)+" Casus Belli\nThey have "+pluralize("turn",their_cb)
+            +" Casus Belli' style='color:#ff0000'><u>"+dstate+"</u>&#8224;&#x2021;</span>";
+          }
+          // only cur_player has casus belli, not row player:
+          else dstate = "<span title='We have "+pluralize("turn",our_cb)+" Casus Belli' style='color:#ff8000'><u>"+dstate+"</u>&#8224;</span>";
+        }
+        // only row player has casus belli against cur player: 
+        else if (their_cb) {
+          dstate = "<span title='They have "+pluralize("turn",their_cb)+" Casus Belli' style='color:#ffe000'><u>"+dstate+"</u>&#x2021;</span>";
+        } 
+      }
       nation_list_html += "<td style='text-align:center'>" + dstate +pact_time+"</td>";
     } else {
       nation_list_html += "<td style='text-align:center'>-</td>";
@@ -141,7 +171,7 @@ function update_nation_screen()
     nation_list_html += "<td style='text-align:center;'>" + embassy_status + "</td>";
 
     nation_list_html += "<td>"
-    if (!client_is_observer() && client.conn.playing != null) {
+    if (!observer && client.conn.playing != null) {
       if (pplayer['gives_shared_vision'].isSet(client.conn.playing['playerno']) && client.conn.playing['gives_shared_vision'].isSet(player_id)) {
         nation_list_html += "Both ways"
       } else if (pplayer['gives_shared_vision'].isSet(client.conn.playing['playerno'])) {
@@ -194,7 +224,7 @@ function update_nation_screen()
     var flag_canvas = $('#nation_dlg_flags_' + player_id);
     if (flag_canvas.length > 0) {
       var flag_canvas_ctx = flag_canvas[0].getContext("2d");
-      var tag = "f." + nations[pplayer['nation']]['graphic_str'];
+      var tag = "f." + nations[pplayer['nation']]['graphic_str']+"-large";
       if (flag_canvas_ctx != null && sprites[tag] != null) {
         flag_canvas_ctx.drawImage(sprites[tag], 0, 0);
       }
@@ -593,6 +623,7 @@ function show_send_private_message_dialog()
 
   if (pplayer == null) {
     swal("Please select a player to send a private message to first.");
+    setSwalTheme();
     return;
   }
 

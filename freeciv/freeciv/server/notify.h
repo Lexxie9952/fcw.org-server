@@ -33,11 +33,13 @@ struct research;
 void package_chat_msg(struct packet_chat_msg *packet,
                       const struct connection *sender,
                       const struct ft_color color,
+                      const enum event_type msgclass,
                       const char *format, ...)
-                      fc__attribute((__format__ (__printf__, 4, 5)));
+                      fc__attribute((__format__ (__printf__, 5, 6)));
 void vpackage_chat_msg(struct packet_chat_msg *packet,
                        const struct connection *sender,
                        const struct ft_color color,
+                       const enum event_type msgclass,
                        const char *format,
                        va_list vargs);
 void package_event(struct packet_chat_msg *packet,

@@ -455,11 +455,11 @@ static void create_help_dialog(void)
   help_dialog_shell = gtk_dialog_new_with_buttons(_("Freeciv Help Browser"),
                                                   NULL,
                                                   0,
-                                                  _("Back"),
+                                                  _("_Back"),
                                                   1,
-                                                  _("Forward"),
+                                                  _("_Forward"),
                                                   2,
-                                                  _("Close"),
+                                                  _("_Close"),
                                                   GTK_RESPONSE_CLOSE,
                                                   NULL);
   setup_dialog(help_dialog_shell, toplevel);
@@ -688,14 +688,14 @@ static void create_help_dialog(void)
   col = gtk_tree_view_column_new();
 
   rend = gtk_cell_renderer_text_new();
-  g_object_set(rend, "weight", "bold", NULL);
+  g_object_set(rend, "weight", PANGO_WEIGHT_BOLD, NULL);
   gtk_tree_view_column_pack_start(col, rend, TRUE);
   gtk_tree_view_column_set_attributes(col, rend,
 				      "text", 0,
 				      "background-rgba", 3,
 				      NULL);
   rend = gtk_cell_renderer_text_new();
-  g_object_set(rend, "weight", "bold", "xalign", 1.0, NULL);
+  g_object_set(rend, "weight", PANGO_WEIGHT_BOLD, "xalign", 1.0, NULL);
   gtk_tree_view_column_pack_start(col, rend, FALSE);
   gtk_tree_view_column_set_attributes(col, rend,
 				      "text", 1,
@@ -1250,7 +1250,7 @@ static void help_update_terrain(const struct help_item *pitem,
     if (pterrain->irrigation_result != pterrain
         && pterrain->irrigation_result != T_NONE
         && pterrain->irrigation_time != 0
-        && univs_have_action_enabler(ACTION_IRRIGATE_TF, NULL, &for_terr)) {
+        && univs_have_action_enabler(ACTION_CULTIVATE, NULL, &for_terr)) {
       fc_snprintf(buf, sizeof(buf),
                   PL_("%d turn", "%d turns", pterrain->irrigation_time),
                   pterrain->irrigation_time);
@@ -1262,7 +1262,7 @@ static void help_update_terrain(const struct help_item *pitem,
     if (pterrain->mining_result != pterrain
         && pterrain->mining_result != T_NONE
         && pterrain->mining_time != 0
-        && univs_have_action_enabler(ACTION_MINE_TF, NULL, &for_terr)) {
+        && univs_have_action_enabler(ACTION_PLANT, NULL, &for_terr)) {
       fc_snprintf(buf, sizeof(buf),
                   PL_("%d turn", "%d turns", pterrain->mining_time),
                   pterrain->mining_time);
@@ -1483,7 +1483,7 @@ static void help_update_dialog(const struct help_item *pitem)
   help_box_hide();
   gtk_text_buffer_set_text(help_text, "", -1);
 
-  switch(pitem->type) {
+  switch (pitem->type) {
   case HELP_IMPROVEMENT:
     help_update_improvement(pitem, top);
     break;

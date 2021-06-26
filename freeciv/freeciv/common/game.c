@@ -284,6 +284,7 @@ static void game_defaults(bool keep_ruleset_value)
   game.info.globalwarming    = 0;
   game.info.global_warming   = GAME_DEFAULT_GLOBAL_WARMING;
   game.info.gold             = GAME_DEFAULT_GOLD;
+  game.info.infrapoints      = GAME_DEFAULT_INFRA;
   game.info.revolentype      = GAME_DEFAULT_REVOLENTYPE;
   game.info.default_government_id = G_LAST;
   game.info.government_during_revolution_id = G_LAST;
@@ -349,10 +350,15 @@ static void game_defaults(bool keep_ruleset_value)
     sz_strlcpy(game.server.allow_take, GAME_DEFAULT_ALLOW_TAKE);
     game.server.allowed_city_names = GAME_DEFAULT_ALLOWED_CITY_NAMES;
     game.server.aqueductloss      = GAME_DEFAULT_AQUEDUCTLOSS;
+    game.server.armisticelength   = GAME_DEFAULT_ARMISTICELENGTH;
     game.server.auto_ai_toggle    = GAME_DEFAULT_AUTO_AI_TOGGLE;
     game.server.autoattack        = GAME_DEFAULT_AUTOATTACK;
     game.server.autoattack_style  = GAME_DEFAULT_AUTOATTACK_STYLE;
     game.server.barbarianrate     = GAME_DEFAULT_BARBARIANRATE;
+    game.server.blueprints        = GAME_DEFAULT_BLUEPRINTS;
+    game.server.casusbelliturns   = GAME_DEFAULT_CASUSBELLITURNS;
+    game.server.ceasefirelength   = GAME_DEFAULT_CEASEFIRELENGTH;
+    game.server.city_output_style = GAME_DEFAULT_CITY_OUTPUT_STYLE;
     game.server.civilwarsize      = GAME_DEFAULT_CIVILWARSIZE;
     game.server.connectmsg[0]     = '\0';
     game.server.conquercost       = GAME_DEFAULT_CONQUERCOST;
@@ -364,6 +370,8 @@ static void game_defaults(bool keep_ruleset_value)
     game.server.diplchance        = GAME_DEFAULT_DIPLCHANCE;
     game.server.diplbulbcost      = GAME_DEFAULT_DIPLBULBCOST;
     game.server.diplgoldcost      = GAME_DEFAULT_DIPLGOLDCOST;
+    game.server.incite_gold_loss_chance = GAME_DEFAULT_INCITE_GOLD_LOSS_CHANCE;
+    game.server.incite_gold_capt_chance = GAME_DEFAULT_INCITE_GOLD_CAPT_CHANCE;
     game.server.dispersion        = GAME_DEFAULT_DISPERSION;
     game.server.endspaceship      = GAME_DEFAULT_END_SPACESHIP;
     game.server.end_turn          = GAME_DEFAULT_END_TURN;
@@ -374,11 +382,15 @@ static void game_defaults(bool keep_ruleset_value)
     game.server.foggedborders     = GAME_DEFAULT_FOGGEDBORDERS;
     game.server.fogofwar_old      = game.info.fogofwar;
     game.server.hideouts          = GAME_DEFAULT_HIDEOUTS;
+    game.server.lootstyle         = GAME_DEFAULT_LOOTSTYLE;
     game.server.last_updated_year = FALSE;
     game.server.freecost          = GAME_DEFAULT_FREECOST;
+    game.server.fulldisorder      = GAME_DEFAULT_FULLDISORDER;
     game.server.global_warming_percent = GAME_DEFAULT_GLOBAL_WARMING_PERCENT;
+    game.server.hangry            = GAME_DEFAULT_HANGRY;
     game.server.homecaughtunits   = GAME_DEFAULT_HOMECAUGHTUNITS;
     game.server.kick_time         = GAME_DEFAULT_KICK_TIME;
+    game.server.killcitizen_pct  = GAME_DEFAULT_KILLCITIZEN_PCT;
     game.server.killunhomed       = GAME_DEFAULT_KILLUNHOMED;
     game.server.maxconnectionsperhost = GAME_DEFAULT_MAXCONNECTIONSPERHOST;
     game.server.last_ping         = 0;
@@ -399,6 +411,8 @@ static void game_defaults(bool keep_ruleset_value)
     game.server.nuclear_winter_percent = GAME_DEFAULT_NUCLEAR_WINTER_PERCENT;
     game.server.nukes_minor       = GAME_DEFAULT_NUKES_MINOR;
     game.server.nukes_major       = GAME_DEFAULT_NUKES_MAJOR;
+    game.server.pax_dei_set       = GAME_DEFAULT_PAX_DEI_SET;
+    game.server.pax_dei_counter   = GAME_DEFAULT_PAX_DEI_COUNTER;
     game.server.plrcolormode      = GAME_DEFAULT_PLRCOLORMODE;
     game.server.netwait           = GAME_DEFAULT_NETWAIT;
     game.server.occupychance      = GAME_DEFAULT_OCCUPYCHANCE;

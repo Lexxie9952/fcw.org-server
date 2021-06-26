@@ -45,7 +45,7 @@ function tile_get_known(ptile)
 **************************************************************************/
 function tile_has_extra(ptile, extra)
 {
-  if (ptile['extras'] == null) {
+  if (!ptile || ptile['extras'] == null) {
     return false;
   }
 
@@ -85,6 +85,30 @@ function tile_set_worked(ptile, pwork)
   ptile['worked'] = pwork;
 }
 
+/**************************************************************************
+ Returns whether the tile has a base.  true or false
+**************************************************************************/
+function does_tile_have_base(ptile)
+{
+  if (typeof EXTRA_FORTRESS !== "undefined" && tile_has_extra(ptile, EXTRA_FORTRESS))
+    return true;  
+  if (typeof EXTRA_FORT !== "undefined" && tile_has_extra(ptile, EXTRA_FORT))
+    return true;
+  if (typeof EXTRA_AIRBASE !== "undefined" && tile_has_extra(ptile, EXTRA_AIRBASE))
+    return true;
+  if (typeof EXTRA_NAVALBASE !== "undefined" && tile_has_extra(ptile, EXTRA_NAVALBASE))
+    return true;
+  if (typeof EXTRA_AIRSTRIP !== "undefined" && tile_has_extra(ptile, EXTRA_AIRSTRIP))
+    return true;
+  if (typeof EXTRA_CASTLE !== "undefined" && tile_has_extra(ptile, EXTRA_CASTLE))
+    return true;
+  if (typeof EXTRA_BUNKER !== "undefined" && tile_has_extra(ptile, EXTRA_BUNKER))
+    return true;
+  if (typeof EXTRA_ !== "undefined" && tile_has_extra(ptile, EXTRA_))  // hideout
+    return true;
+    
+  return false;
+}
 
 /****************************************************************************
   Return the city on this tile (or NULL), checking for city center.
@@ -107,6 +131,7 @@ function tile_city(ptile)
 **************************************************************************/
 function improve_tile_info_dialog(message) 
 {
+  // other functions: handle_info_text_message (mapctrl.js)
   var added_text = "";
 
   // Default: unknown terrain
@@ -136,39 +161,40 @@ function improve_tile_info_dialog(message)
     var has_river = "";
     var db = parseFloat(1) + parseFloat(ttype['defense_bonus'])/100;
     if (message.includes("River</b>")) {  // this exact string ensures no other text gives false positive
-      has_river = " (<span style='color:#025'><b>River</b></span>)";
-      db *= (1+extras[EXTRA_RIVER]['defense_bonus']/100);
+      has_river = " (<span style='color:#5d97ed;' class='black_shadow'><b>River</b></span>)";
+      if (client_rules_flag[CRF_MP2_C]) db += 0.5;  // additive bonus as in for example real civ2, mp2c
+      else db *= (1+extras[EXTRA_RIVER]['defense_bonus']/100); 
       db = Math.round((db + Number.EPSILON) * 100) / 100;
     }
-    added_text += "<span style='color:rgb("
-               +  Math.round(ttype['color_red']/2)+","+Math.round(ttype['color_green']/2)+","+Math.round(ttype['color_blue']/2)
+    added_text += "<span class='black_shadow' style='color:rgb("
+               + ttype['color_red']+","+ttype['color_green']+","+ttype['color_blue']
                +  ")'><br><br><b>" + ttype['name'] + "</b>"+has_river+"<br></span>";
 
     added_text += "Defense Bonus: <b>" + db + "&times;</b> &nbsp;&nbsp;&nbsp; Movement Cost: <b>" + ttype['movement_cost'] + "</b><br>"
     
     if (ttype['irrigation_time']) {
-      added_text += "<span style='color:#013'>Irrigate:<b>" + Math.ceil(ttype['irrigation_time']/wt)+"</b></span>"
+      added_text += "<span class='highlight_irrigation'>Irrigate:<b>" + Math.ceil(ttype['irrigation_time']/wt)+"</b></span>"
       if (ttype['irrigation_food_incr']) added_text+= " (+"+ttype['irrigation_food_incr']+")";
     }
     if (ttype['irrigation_result'] && ttype['irrigation_result'] != tindex && ttype['irrigation_result'] != tinvalid) 
       added_text+="&#10145;"+terrains[ttype['irrigation_result']]['name']
 
     if (ttype['mining_time']) {
-      added_text += "&nbsp;&nbsp; <span style='color:#300'>Mine:<b>" + Math.ceil(ttype['mining_time']/wt)+"</b></span>";
+      added_text += "&nbsp;&nbsp; <span class='highlight_mining'>Mine:<b>" + Math.ceil(ttype['mining_time']/wt)+"</b></span>";
       if (ttype['mining_shield_incr']) added_text+= " (+"+ttype['mining_shield_incr']+")";
     }
     if (ttype['mining_result'] && ttype['mining_result'] != tindex && ttype['mining_result'] != tinvalid)
       added_text+="&#10145;"+terrains[ttype['mining_result']]['name']
 
     if (ttype['transform_time'])
-      added_text += "&nbsp;&nbsp; <span style='color:#430'>Transform:<b>" + Math.ceil(ttype['transform_time']/wt)+"</b></span>";
+      added_text += "&nbsp;&nbsp; <span class='highlight_transforming'>Transform:<b>" + Math.ceil(ttype['transform_time']/wt)+"</b></span>";
     if (ttype['transform_result'] && ttype['transform_result'] != tindex && ttype['transform_result'] != tinvalid)
       added_text+="&#10145;"+terrains[ttype['transform_result']]['name']
 
     if (ttype['road_time'])
-      added_text += "&nbsp;&nbsp; Road:<b>" + Math.ceil(ttype['road_time']/wt)+"</b>";
+      added_text += "&nbsp;&nbsp; <span class='highlight_roading'>Road:<b>" + Math.ceil(ttype['road_time']/wt)+"</b></span>";
     
-    added_text += "<br>" + ttype['helptext'].replace(stripChar, "")+"<br><br>";
+    added_text += "<br>" + cleaned_text(ttype['helptext'])+"<br><br>";
   }
   
   // Warcalc odds.
@@ -192,10 +218,12 @@ function improve_tile_info_dialog(message)
     $("#def_win").html("");
 
     warcalc_compute();
+    var A_val = (parseFloat(my_str)<0.1) ? my_str.toFixed(2) : my_str.toFixed(1);
+    var D_val = (parseFloat(their_str)<0.1) ? their_str.toFixed(2) : their_str.toFixed(1);
 
     added_text += "<b>Combat odds:</b><span style='font-size:75%'> (*before base or unit-type bonus)</span><br>";
-    added_text += "A:<b>"+my_str.toFixed(1)+"</b>  HP:<b>"+my_hp+"</b>  FP:<b>"+my_fp+"</b>  ("+unit_types[units[my_uid]['type']]['name']+")<br>";
-    added_text += "D:<b>"+their_str.toFixed(1)+"</b>  HP:<b>"+their_hp+"</b>  FP:<b>"+their_fp+"</b>  ";
+    added_text += "A:<b>"+A_val+"</b>  HP:<b>"+my_hp+"</b>  FP:<b>"+my_fp+"</b>  ("+unit_types[units[my_uid]['type']]['name']+")<br>";
+    added_text += "D:<b>"+D_val+"</b>  HP:<b>"+their_hp+"</b>  FP:<b>"+their_fp+"</b>  ";
     added_text += "("+unit_types[sunits[0]['type']]['name']+")<br>";
     added_text += $("#att_win").html();
     added_text += "\n<div id='click_calc' title='Base and special unit bonuses not included (e.g., Fort, Pikemen vs. Chariot)' "

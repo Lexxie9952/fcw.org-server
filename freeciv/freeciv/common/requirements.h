@@ -108,7 +108,7 @@ bool are_requirements_contradictions(const struct requirement *req1,
 bool does_req_contradicts_reqs(const struct requirement *req,
                                const struct requirement_vector *vec);
 
-void requirement_vector_contradiction_clean(struct requirement_vector *vec);
+bool requirement_vector_contradiction_clean(struct requirement_vector *vec);
 
 bool is_req_active(const struct player *target_player,
 		   const struct player *other_player,
@@ -162,6 +162,16 @@ const char *universal_type_rule_name(const struct universal *psource);
 int universal_build_shield_cost(const struct city *pcity,
                                 const struct universal *target);
 
+bool universal_replace_in_req_vec(struct requirement_vector *reqs,
+                                  const struct universal *to_replace,
+                                  const struct universal *replacement);
+
+#define universal_is_mentioned_by_requirement(preq, psource)               \
+  are_universals_equal(&preq->source, psource)
+bool universal_is_mentioned_by_requirements(
+    const struct requirement_vector *reqs,
+    const struct universal *psource);
+
 /* An item contradicts, fulfills or is irrelevant to the requirement */
 enum req_item_found {ITF_NO, ITF_YES, ITF_NOT_APPLICABLE};
 
@@ -214,6 +224,9 @@ bool universal_is_relevant_to_requirement(const struct requirement *req,
 #define requirement_fulfilled_by_output_type(_o_, _rqs_)                   \
   universal_fulfills_requirements(FALSE, (_rqs_),                          \
       &(struct universal){.kind = VUT_OTYPE, .value = {.outputtype = (_o_)}})
+#define requirement_fulfilled_by_action(_act_, _rqs_)                      \
+  universal_fulfills_requirements(FALSE, (_rqs_),                          \
+      &(struct universal){.kind = VUT_ACTION, .value = {.action = (_act_)}})
 
 #define requirement_needs_improvement(_imp_, _rqs_)                        \
   universal_fulfills_requirements(TRUE, (_rqs_),                           \

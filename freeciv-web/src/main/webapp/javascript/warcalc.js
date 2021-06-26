@@ -151,7 +151,7 @@ function warcalc_compute_role_strength(my_uid, their_uid)
     }
     their_hp  = punit['hp'];
     their_fp  = ptype['firepower'];
-    their_str = ptype['attack_strength'];;
+    their_str = utype_real_base_attack_strength(ptype); // ptype['attack_strength'];;
     their_str *= (power_fact/100);
     if (their_str-Math.trunc(their_str))
     their_str = trim_decimals(their_str);
@@ -163,7 +163,7 @@ function warcalc_compute_role_strength(my_uid, their_uid)
     ptype = unit_types[punit['type']];
     power_fact = warcalc_get_defense_bonus(punit);
     my_hp  = punit['hp'];
-    my_str = ptype['defense_strength'];
+    my_str = utype_real_base_defense_strength(ptype); // ptype['defense_strength']; 
     my_fp  = ptype['firepower'];
 
     my_str *= (power_fact/100);
@@ -198,7 +198,7 @@ function warcalc_set_default_vals(punit)
   var power_fact = 100;
 
   // Assume a clicked player unit is being considered for an attacker
-  if (punit['owner'] == client.conn.playing.playerno) {
+  if (!client_is_observer() && punit['owner'] == client.conn.playing.playerno) {
     if (punit['veteran']) {
       if (ptype['veteran_levels'] > 0) {
         power_fact = ptype['power_fact'][punit['veteran']];
@@ -207,7 +207,8 @@ function warcalc_set_default_vals(punit)
       }
     }
     my_hp  = punit['hp'];
-    my_str = ptype['attack_strength'];
+    // accounts for wrong hard-coded assumption that v0 is always power_fact=100:
+    my_str = (power_fact == 100) ? utype_real_base_attack_strength(ptype) : ptype['attack_strength'];
     my_fp  = ptype['firepower'];
     my_uid = punit['id'];
 
@@ -219,7 +220,7 @@ function warcalc_set_default_vals(punit)
   else {
     power_fact = warcalc_get_defense_bonus(punit);
     their_hp  = punit['hp'];
-    their_str = ptype['defense_strength'];;
+    their_str = (power_fact == 100) ? utype_real_base_defense_strength(ptype) : ptype['defense_strength'];
     their_fp  = ptype['firepower'];
     their_uid = punit['id'];
 
@@ -229,6 +230,7 @@ function warcalc_set_default_vals(punit)
 }
 function trim_decimals(value)
 {
+  if (value<1) return value; // Math.round(parseFloat(value) * 1000) / 1000;
   return Math.round(parseFloat(value) * 100) / 100;
 }
 
@@ -249,12 +251,18 @@ function warcalc_get_defense_bonus(punit)
       power_fact = game_rules['power_fact'][punit['veteran']];
     }
   }
+
   if (unit_has_class_flag(punit, UCF_TERRAIN_DEFENSE)) {
     var ptile = tiles[punit['tile']];
     const terrain = terrains[ptile['terrain']];
-    power_fact *= (1+terrain['defense_bonus']/100);
-    if (tile_has_extra(ptile, EXTRA_RIVER))
-      power_fact *= (1+extras[EXTRA_RIVER]['defense_bonus']/100);
+    var terrain_fact = (1+terrain['defense_bonus']/100);
+
+    if (tile_has_extra(ptile, EXTRA_RIVER)) {
+      if (client_rules_flag[CRF_MP2_C]) terrain_fact += 0.50; // +0.5 river defense for rivers
+      else terrain_fact *= (1+extras[EXTRA_RIVER]['defense_bonus']/100);
+    }
+
+    power_fact *= terrain_fact;
   }
   if (punit['activity']==ACTIVITY_FORTIFIED) {
     if (!tile_city(ptile)) { // Units in a city get city bonus not fortify bonus
@@ -288,10 +296,42 @@ function warcalc_compute()
 /**************************************************************************
   The FORMULAS
 *************************************************************************/
+/* these functions can be used for extreme edge cases like high FP or
+   any situation where it only takes 1 or 2 hits to kill, where it is 
+   greatly more accurate i.e., not completely inaccurate like the other
+   estimate. So they're here in commented code for now. The case of only
+   1 hit needed is a lot simpler and hard coded in one line and that's 
+   all we're using for now 
+function factorial(a) {
+  return a*(a>1)?factorial(a-1):1;
+}
+function binomial_coeff (n, k)  { 
+  return factorial(n)/(factorial(k)*factorial(n-k)); 
+}
+function P_X_is_x(x, N, p)  { 
+  return binomial_coeff(N,x)*Math.pow(p,x)*Math.pow(1-p,N-x); 
+}
+function P_X_is_ge_x (x, N, p) {
+   return P_X_is_x(x,N,p)+(x<N)?P_X_is_ge_x(x+1,N,p):0;
+}
+*/
 function warcalc_win_chance(as,ahp,afp,ds,dhp,dfp) {
   var as = parseFloat(as);   var ds = parseFloat(ds);
   var ahp = parseFloat(ahp); var dhp = parseFloat(dhp);
   var afp = parseFloat(afp); var dfp = parseFloat(dfp);
+
+  // Special case: attacker firepower wins in one hit, needs
+  // different formula to be accurate:
+  if (afp >= dhp) {
+    //console.log("using as="+as);
+    return 1 - Math.pow( ds/(as+ds),ahp); // 1 minus "the chance defender hits every time"
+    // since it's only 1 hit we don't need the below, which we could use
+    // for cases with 1-3 hits to be more accurate, IF we could find the tiny bug
+    // in the formula, which I'm 99% sure was we didn't do ParseFloat since that made
+    // the formula above also not work until we put it underneath.
+    //return P_X_is_ge_x (1, ahp, as/(as+ds))
+  }
+
   var att_N_lose = Math.trunc( (ahp + dfp - 1) / dfp );
   var def_N_lose = Math.trunc( (dhp + afp - 1) / afp );
   var att_P_lose1 = (as + ds == 0) ? 0.5 : ds / (as + ds);
@@ -373,7 +413,8 @@ function warcalc_set_tooltips()
   $("#wcamsg").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "450px");}});
   $("#wcdmsg").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "450px");}});  
 
-  if (ruleset_control['name']=="Avant-garde" 
+  if ( ruleset_control['name'].startsWith("MP2")  // from MP2 Brava onward all MP2 rules start with "MP2"
+   || ruleset_control['name'].startsWith("Avant-garde")
    || ruleset_control['name']=="Multiplayer-Evolution ruleset" ) {
         if (is_small_screen()) {
           $('#wcth1').hide(); $('#wcth2').hide(); // "attack","defend" text near applier buttons
@@ -393,12 +434,12 @@ function warcalc_set_tooltips()
         $("#wc167").prop("title", bl+"Land/Heli in Fortress vs Armor/Aircraft"+nbl+"Land/Heli in Naval Base vs Armor/Aircraft");
         $("#wc175").prop("title", bl+"Veteran-2 ('Hardened')");
         $("#wc200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Hills"+nbl+"Land/Heli in Fortress vs. Land/Sea/Missile"+nbl+"In city with Coastal Defense vs. Sea"+nbl
-          + "In city with SAM Battery vs. Air (not Heli/Stealth)"+nbl+"In city with SDI vs. Missile"+nbl+"Pikemen vs Horse (not Cavalry)"+nbl+"Knight vs. Foot soldier"+nbl
+          + "In city with SAM Battery vs. Air (not Stealth)"+nbl+"In city with SDI vs. Missile"+nbl+"Pikemen vs Horse (not Cavalry)"+nbl+"Knight vs. Foot soldier"+nbl
           + "Cruiser,Battleship,M.Destroyer,AEGIS vs Submarine"+nbl+"Sea unit vs. Marines"+nbl+"AAA/Mobile SAM vs. Aircraft"+nbl+"Missile Destroyer vs. Air/Missile"+nbl+"Armor II vs. Missile");
         $("#wc210").prop("title", bl+"Veteran-4 ('Crack')");
         $("#wc220").prop("title", bl+"Veteran-5 ('Master')");
         $("#wc230").prop("title", bl+"Veteran-6 ('Champion')");
-        $("#wc300").prop("title", bl+"Mountains"+nbl+"In city with City Walls vs Land/Heli (not Howitzer)"+nbl+"Knight vs. Horse (not Cavalry)"+nbl+"AEGIS vs. Air/Missile");
+        $("#wc300").prop("title", bl+"Mountains"+nbl+"In city with City Walls vs Land (not Howitzer)"+nbl+"Knight vs. Horse (not Cavalry)"+nbl+"AEGIS vs. Air/Missile");
         $("#wc400").prop("title", bl+"Destroyer vs. Submarine");
         // ATTACK BUTTONS
         $("#wca133").hide(); // unused except for table alignment
@@ -418,18 +459,30 @@ function warcalc_set_tooltips()
         $("#wc200").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "460px");}});
         $("#wc300").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "450px");}});
 
-        if (ruleset_control['name']=="Avant-garde") {  // AG distinctions
+        if (ruleset_control['name'].startsWith("Avant-garde")
+           || ruleset_control['name'].startsWith("MP2")) //MP2 Brava onward starts with "MP2"
+        {  // AG distinctions
           $("#wc133").prop("title", bl+"River"+nbl+"Swamp"+nbl+"Forest"+nbl+"Land/Heli in Fort vs. Land/Sea/Missile (not Armor)"+nbl+"Fighter over Fort/Fortress vs. Land/Sea/Missile (not Armor)"
              +nbl+"Dive Bomber, Ground Strike Fighter vs. Anti-Air");
           $("#wc150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Jungle"+nbl+"Land unit Fortified OR inside city"
              +nbl+"Helicopter vs. Foot or Mounted units");
           $("#wc167").prop("title", bl+"Land/Heli in Fortress vs Armor/Aircraft"+nbl+"Land/Heli/Sea in Naval Base vs Armor/Aircraft");
           $("#wc200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Hills"+nbl+"Land/Heli in Fortress vs. Land/Sea/Missile"+nbl+"Land/Heli/Sea in Naval Base vs. Land/Sea/Missile"+nbl+"In city with Coastal Defense vs. Sea"+nbl
-          + "In city with SAM Battery vs. Air (not Heli/Stealth)"+nbl+"In city with SDI vs. Missile"+nbl+"Pikemen vs Horse (not Cavalry)"+nbl+"Knight vs. Foot soldier"+nbl
+          + "In city with SAM Battery vs. Air/Heli (not Stealth)"+nbl+"In city with SDI vs. Missile"+nbl+"Pikemen vs Horse (not Cavalry)"+nbl+"Knight vs. Foot soldier"+nbl
           + "Cruiser,Battleship,M.Destroyer,AEGIS vs Submarine"+nbl+"Sea unit vs. Marines"+nbl+"AAA/Mobile SAM vs. Aircraft"+nbl+"Missile Destroyer vs. Air/Missile"+nbl+"Armor II vs. Missile");
 
           $("#wca150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Phalanx/Pikemen + Agoge of Sparta"+nbl+"Dive Bomber vs. Land or Sea");
           $("#wca200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"AAA/Mobile SAM vs. Aircraft");
+        }
+        if (ruleset_control['name'].startsWith("MP2 C")) {
+          $("#wc175").prop("title", bl+"Veteran-2 ('Hardened')"+nbl+"In city with Fortifications vs Land (not Howitzer)");
+          $("#wc150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Jungle"+nbl+"Land unit Fortified OR inside city"
+          +nbl+"Helicopter vs. Foot or Mounted units"+nbl+"Forest in city with Fortifications"+nbl+"Swamp in city with Fortifications");
+          $("#wc167").prop("title", bl+"Land/Heli in Fortress vs Armor/Aircraft"+nbl+"Land/Heli/Sea in Naval Base vs Armor/Aircraft"+nbl+"Jungle in city with Fortifications");
+          $("#wc125").prop("title", bl+"In city with SAM Battery vs. Stealth Aircraft");
+          $("#wca125").prop("title", bl+"Catapult vs Fortifications or City Walls"+nbl+"Stealth Aircraft vs. AAA/Mobile SAM/AEGIS Cruiser");
+          $("#wca150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Cannon vs Fortifications or City Walls"+nbl+"Phalanx/Pikemen + Agoge of Sparta"+nbl+"Dive Bomber vs. Land or Sea");
+          $("#wca175").prop("title", bl+"Veteran-2 ('Hardened')"+nbl+"Artillery vs Fortifications or City Walls");
         }
 
         return;

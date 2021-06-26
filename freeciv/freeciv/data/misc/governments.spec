@@ -1,7 +1,7 @@
 [spec]
 
 ; Format and options of this spec file:
-options = "+Freeciv-spec-Devel-2015-Mar-25"
+options = "+Freeciv-spec-Devel-2019-Jul-03"
 
 [info]
 
@@ -34,5 +34,6 @@ tiles = { "row", "column", "tag"
   0,  6, "gov.democracy"
   0,  7, "gov.tribal"
   0,  8, "gov.federation"
-
+  0,  9, "gov.nationalism"
+  0, 10, "gov.theocracy"
 }

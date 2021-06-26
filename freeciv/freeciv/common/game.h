@@ -55,6 +55,12 @@ enum barbarians_rate {
   BARBS_HORDES
 };
 
+enum loot_style {
+  LOOT_CLASSIC = 0,
+  LOOT_OFF,
+  LOOT_BASE_TRADE
+};
+
 enum autosave_type {
   AS_TURN = 0,
   AS_GAME_OVER,
@@ -125,31 +131,42 @@ struct civ_game {
       enum city_names_mode allowed_city_names;
       enum plrcolor_mode plrcolormode;
       int aqueductloss;
+      int armisticelength;
       bool auto_ai_toggle;
       bool autoattack;
       int autoattack_style;
       int autoupgrade_veteran_loss;
       enum barbarians_rate barbarianrate;
+      int blueprints;
       int base_incite_cost;
+      int casusbelliturns;
+      int ceasefirelength;
+      int city_output_style;
       int civilwarsize;
       int conquercost;
       int contactturns;
       int diplchance;
       int diplbulbcost;
       int diplgoldcost;
+      int incite_gold_loss_chance;
+      int incite_gold_capt_chance;
       int dispersion;
       int end_turn;
       bool endspaceship;
       bool fixedlength;
       bool foggedborders;
       int freecost;
+      bool fulldisorder;
+      int hangry;
       bool hideouts;
       int incite_improvement_factor;
       int incite_total_factor;
       int incite_unit_factor;
       int init_vis_radius_sq;
       int kick_time;
+      int killcitizen_pct; /* percent chance of city pop loss if killcitizen enabled */
       int killunhomed;    /* slowly killing unhomed units */
+      enum loot_style lootstyle;
       int maxconnectionsperhost;
       int max_players;
       char nationset[MAX_LEN_NAME];
@@ -168,6 +185,8 @@ struct civ_game {
       int num_phases;
       int occupychance;
       int onsetbarbarian;
+      bool pax_dei_set;
+      int pax_dei_counter;
       int pingtime;
       int pingtimeout;
       int ransom_gold;
@@ -228,9 +247,9 @@ struct civ_game {
       int seed_setting;
       int seed;
 
-      bool global_warming;
+      int global_warming;           // changed from bool to int so that it can regulate strength
       int global_warming_percent;
-      bool nuclear_winter;
+      int nuclear_winter;           // changed from bool to int so that it can regulate strength
       bool nukes_minor; /* if (dis)abled, rulesets with req "ServerSetting","nukes_minor","World",TRUE 
                            can have games (dis)allowing nuclear detonations */
       bool nukes_major; /* if (dis)abled, rulesets with req "ServerSetting","nukes_major","World",TRUE
@@ -351,6 +370,10 @@ extern struct world wld;
 #define GAME_MIN_GOLD            0
 #define GAME_MAX_GOLD            50000
 
+#define GAME_DEFAULT_INFRA       0
+#define GAME_MIN_INFRA           0
+#define GAME_MAX_INFRA           50000
+
 #define GAME_DEFAULT_START_UNITS  "ccwwx"
 #define GAME_DEFAULT_START_CITY  FALSE
 
@@ -360,12 +383,12 @@ extern struct world wld;
 
 #define GAME_DEFAULT_TECHLEVEL   0
 #define GAME_MIN_TECHLEVEL       0
-#define GAME_MAX_TECHLEVEL       100
+#define GAME_MAX_TECHLEVEL       1000
 
 #define GAME_DEFAULT_ANGRYCITIZEN TRUE
 
 #define GAME_DEFAULT_END_TURN    5000
-#define GAME_MIN_END_TURN        0
+#define GAME_MIN_END_TURN        1
 #define GAME_MAX_END_TURN        32767
 
 #define GAME_DEFAULT_MIN_PLAYERS     1
@@ -402,25 +425,44 @@ extern struct world wld;
 #define GAME_MIN_DIPLGOLDCOST        0
 #define GAME_MAX_DIPLGOLDCOST        100
 
+#define GAME_DEFAULT_INCITE_GOLD_LOSS_CHANCE    0
+#define GAME_MIN_INCITE_GOLD_LOSS_CHANCE        0
+#define GAME_MAX_INCITE_GOLD_LOSS_CHANCE        100
+
+#define GAME_DEFAULT_INCITE_GOLD_CAPT_CHANCE    0
+#define GAME_MIN_INCITE_GOLD_CAPT_CHANCE        0
+#define GAME_MAX_INCITE_GOLD_CAPT_CHANCE        100
+
 #define GAME_DEFAULT_FOGOFWAR        TRUE
 
 #define GAME_DEFAULT_FOGGEDBORDERS   FALSE
 
-#define GAME_DEFAULT_GLOBAL_WARMING  TRUE
+#define GAME_DEFAULT_GLOBAL_WARMING  100         // strength of effect, 0 to 10000
+#define GAME_MIN_GLOBAL_WARMING 0                // 0 = false
+#define GAME_MAX_GLOBAL_WARMING 10000
 
-#define GAME_DEFAULT_GLOBAL_WARMING_PERCENT 100
+#define GAME_DEFAULT_GLOBAL_WARMING_PERCENT 100  // controls threshold/likelihood for it to happen
 #define GAME_MIN_GLOBAL_WARMING_PERCENT 1
 #define GAME_MAX_GLOBAL_WARMING_PERCENT 10000
 
 #define GAME_DEFAULT_HIDEOUTS         FALSE
 
-#define GAME_DEFAULT_NUCLEAR_WINTER  TRUE
+#define GAME_DEFAULT_NUCLEAR_WINTER  100         // strength of effect, 0 to 10000
+#define GAME_MIN_NUCLEAR_WINTER  0               // 0 = false
+#define GAME_MAX_NUCLEAR_WINTER  10000
+
 #define GAME_DEFAULT_NUKES_MINOR     TRUE
 #define GAME_DEFAULT_NUKES_MAJOR     TRUE   // USE game.ruleset to change default to FALSE 
 
-#define GAME_DEFAULT_NUCLEAR_WINTER_PERCENT 100
+#define GAME_DEFAULT_NUCLEAR_WINTER_PERCENT 100 // controls threshold/likelihood for it to happen
 #define GAME_MIN_NUCLEAR_WINTER_PERCENT 1   
 #define GAME_MAX_NUCLEAR_WINTER_PERCENT 10000
+
+#define GAME_DEFAULT_PAX_DEI_COUNTER  13  // Number of turns of Pax Dei counter when wonder is first built.
+#define GAME_MIN_PAX_DEI_COUNTER      0
+#define GAME_MAX_PAX_DEI_COUNTER      1000
+
+#define GAME_DEFAULT_PAX_DEI_SET   FALSE
 
 #define GAME_DEFAULT_BORDERS         BORDERS_ENABLED
 
@@ -435,6 +477,10 @@ extern struct world wld;
 #define GAME_DEFAULT_DIPLCHANCE      80
 #define GAME_MIN_DIPLCHANCE          40
 #define GAME_MAX_DIPLCHANCE          100
+
+#define GAME_DEFAULT_BLUEPRINTS      0
+#define GAME_MIN_BLUEPRINTS          0
+#define GAME_MAX_BLUEPRINTS          100
 
 #define GAME_DEFAULT_FREECOST        0
 #define GAME_MIN_FREECOST            0
@@ -459,6 +505,10 @@ extern struct world wld;
 #define GAME_DEFAULT_CITYMINDIST     2
 #define GAME_MIN_CITYMINDIST         1
 #define GAME_MAX_CITYMINDIST         11
+
+#define GAME_DEFAULT_CITY_OUTPUT_STYLE 0
+#define GAME_MIN_CITY_OUTPUT_STYLE   0
+#define GAME_MAX_CITY_OUTPUT_STYLE   1
 
 #define GAME_DEFAULT_CIVILWARSIZE    10
 #define GAME_MIN_CIVILWARSIZE        2 /* can't split an empire of 1 city */
@@ -531,8 +581,17 @@ extern struct world wld;
 #define GAME_MIN_AQUEDUCTLOSS        0
 #define GAME_MAX_AQUEDUCTLOSS        100
 
+#define GAME_DEFAULT_HANGRY          0
+#define GAME_MIN_HANGRY              0
+#define GAME_MAX_HANGRY              100
+
+#define GAME_DEFAULT_FULLDISORDER    FALSE
+
 #define GAME_DEFAULT_KILLSTACK       TRUE
 #define GAME_DEFAULT_KILLCITIZEN     TRUE
+#define GAME_DEFAULT_KILLCITIZEN_PCT 100
+#define GAME_MIN_KILLCITIZEN_PCT     0
+#define GAME_MAX_KILLCITIZEN_PCT     100
 
 #define GAME_DEFAULT_KILLUNHOMED     0
 #define GAME_MIN_KILLUNHOMED         0
@@ -657,9 +716,23 @@ extern struct world wld;
 #define GAME_MIN_ONSETBARBARIAN      1
 #define GAME_MAX_ONSETBARBARIAN      GAME_MAX_END_TURN
 
+#define GAME_DEFAULT_LOOTSTYLE      LOOT_CLASSIC
+
 #define GAME_DEFAULT_OCCUPYCHANCE    0
 #define GAME_MIN_OCCUPYCHANCE        0
 #define GAME_MAX_OCCUPYCHANCE        100
+
+#define GAME_DEFAULT_ARMISTICELENGTH  16
+#define GAME_MIN_ARMISTICELENGTH     1
+#define GAME_MAX_ARMISTICELENGTH     100
+
+#define GAME_DEFAULT_CEASEFIRELENGTH  16
+#define GAME_MIN_CEASEFIRELENGTH     1
+#define GAME_MAX_CEASEFIRELENGTH     1000
+
+#define GAME_DEFAULT_CASUSBELLITURNS 2
+#define GAME_MIN_CASUSBELLITURNS     2
+#define GAME_MAX_CASUSBELLITURNS     1000
 
 #define GAME_DEFAULT_AUTOATTACK      FALSE
 #define GAME_DEFAULT_AUTOATTACK_STYLE 0
@@ -699,7 +772,7 @@ extern struct world wld;
 #define GAME_HARDCODED_DEFAULT_SKILL_LEVEL 3 /* that was 'easy' in old saves */
 #define GAME_OLD_DEFAULT_SKILL_LEVEL 5  /* normal; for oldest save games */
 
-#define GAME_DEFAULT_DEMOGRAPHY      "NASRLPEMOCqrb"
+#define GAME_DEFAULT_DEMOGRAPHY      "NASRLPETsMOCUKDqrb"
 #define GAME_DEFAULT_ALLOW_TAKE      "HAhadOo"
 
 #define GAME_DEFAULT_EVENT_CACHE_TURNS    1
@@ -754,7 +827,7 @@ extern struct world wld;
 
 /* ruleset settings */
 
-#define RS_MAX_VALUE                             10000
+#define RS_MAX_VALUE                             1000000
 
 /* TRANS: year label (Anno Domini) */
 #define RS_DEFAULT_POS_YEAR_LABEL                N_("AD")
@@ -839,15 +912,25 @@ extern struct world wld;
 
 #define RS_DEFAULT_HAPPY_COST                    2
 #define RS_MIN_HAPPY_COST                        0
-#define RS_MAX_HAPPY_COST                        100
+#define RS_MAX_HAPPY_COST                        10000
 
 #define RS_DEFAULT_FOOD_COST                     2
 #define RS_MIN_FOOD_COST                         0
-#define RS_MAX_FOOD_COST                         100
+#define RS_MAX_FOOD_COST                         10000
+
+#define RS_DEFAULT_CIVIL_WAR_CELEB               -5
+#define RS_DEFAULT_CIVIL_WAR_UNHAPPY             5
 
 #define RS_DEFAULT_SLOW_INVASIONS                TRUE
 
 #define RS_DEFAULT_TIRED_ATTACK                  FALSE
+#define RS_DEFAULT_ONLY_KILLING_VETERAN          FALSE
+#define RS_DEFAULT_NUKE_POP_LOSS_PCT             50
+#define RS_MIN_NUKE_POP_LOSS_PCT                 0
+#define RS_MAX_NUKE_POP_LOSS_PCT                 100
+#define RS_DEFAULT_NUKE_DEFENDER_SURVIVAL_CHANCE_PCT 0
+#define RS_MIN_NUKE_DEFENDER_SURVIVAL_CHANCE_PCT 0
+#define RS_MAX_NUKE_DEFENDER_SURVIVAL_CHANCE_PCT 100
 
 #define RS_DEFAULT_BASE_BRIBE_COST               750
 #define RS_MIN_BASE_BRIBE_COST                   0
@@ -869,7 +952,7 @@ extern struct world wld;
 
 #define RS_DEFAULT_BASE_TECH_COST                20
 #define RS_MIN_BASE_TECH_COST                    0
-#define RS_MAX_BASE_TECH_COST                    200
+#define RS_MAX_BASE_TECH_COST                    20000
 
 #define RS_DEFAULT_FORCE_TRADE_ROUTE             FALSE
 #define RS_DEFAULT_FORCE_CAPTURE_UNITS           FALSE
@@ -877,7 +960,11 @@ extern struct world wld;
 #define RS_DEFAULT_FORCE_EXPLODE_NUCLEAR         FALSE
 
 #define RS_DEFAULT_POISON_EMPTIES_FOOD_STOCK     FALSE
-#define RS_DEFAULT_BOMBARD_MAX_RANGE             1
+#define RS_DEFAULT_ACTION_ACTOR_CONSUMING_ALWAYS FALSE
+#define RS_DEFAULT_USER_ACTION_TARGET_KIND       ATK_UNIT
+#define RS_DEFAULT_ACTION_MIN_RANGE              0
+#define RS_DEFAULT_ACTION_MAX_RANGE              1
+#define RS_DEFAULT_EXPLODE_NUCLEAR_MAX_RANGE     0
 
 #define RS_ACTION_NO_MAX_DISTANCE                "unlimited"
 

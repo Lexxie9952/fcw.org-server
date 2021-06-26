@@ -17,6 +17,8 @@
 
 ***********************************************************************/
 
+var border_anim = 0;
+const border_anim_delay = 750;  // frames
 var mapview_canvas_ctx = null;
 var mapview_canvas = null;
 var buffer_canvas_ctx = null;
@@ -52,6 +54,8 @@ var dashedSupport = false;
 // [0] line-edge borders, [1] main thick line, [2] tile way points, [3] inner way-point dot
 var goto_colors_active = ["0,10,40,1","30,208,255,1","2,26,45,1","197,243,255,1"]; //active goto path
 var goto_colors_info   = ["40,10,0,.91","255,208,30,.91","45,26,2,.91","255,243,197,.91"]; //tile/unit info
+var goto_colors_road   = ["40,10,0,.91","168,84,15,.91","65,18,2,.91","255,213,167,.91"]; //connect road
+var goto_colors_irr    = ["0,40,10,1","128,208,84,1","25,45,15,1","150,255,123,1"]; //connect irrigation
 
 /**************************************************************************
   Cycles through city map display modes for citybar when user presses 
@@ -61,12 +65,12 @@ function mapview_cycle_city_display_mode()
 {
   var last = CMDM_LAST;  // indicates time to cycle back to first display mode
 
-  // Skip corruption display mode for Democracies in rulesets where it has no corruption
-  if (client_rules_flag[CRF_DEMOCRACY_NONCORRUPT]
-      && !client_is_observer() 
-      && governments[players[client.conn.playing.playerno].government].name == "Democracy") {
-        last--;
-  }
+  // Former code that shows an example of how we can filter the custom user info column in cities list.
+  //if (client_rules_flag[CRF_DEMOCRACY_NONCORRUPT]
+  //    && !client_is_observer() 
+  //    && governments[players[client.conn.playing.playerno].government].name == "Democracy") {
+  //      last--;
+  //}
 
   city_map_display_mode++;
 
@@ -188,8 +192,9 @@ function is_small_screen()
 **************************************************************************/
 function init_sprites()
 {
-  $.blockUI({ message: "<h1>Freeciv-web is loading. Please wait..."
-	  + "<br><center><img src='/images/loading.gif'></center></h1>" });
+  $.blockUI({ message: "<h1 style='text-align:center'><font color='#ccc'>Loading...</font>"
+	  + "<br><center><img src='/images/loading.gif'></center></h1>",
+      color: default_dialog_text_color });
 
   if (loaded_images != tileset_image_count) {
     for (var i = 0; i < tileset_image_count; i++) {
@@ -201,13 +206,8 @@ function init_sprites()
     }
   } else {
     // already loaded
-    if (renderer == RENDERER_WEBGL) {
-      webgl_preload();
-    } else {
-      $.unblockUI();
-    }
+    $.unblockUI();
   }
-
 }
 
 /**************************************************************************
@@ -219,11 +219,9 @@ function preload_check()
 
   if (loaded_images == tileset_image_count) {
     init_cache_sprites();
-    if (renderer == RENDERER_WEBGL) {
-      webgl_preload();
-    } else {
-      $.unblockUI();
-    }
+
+    $.unblockUI();
+
   }
 }
 
@@ -237,6 +235,7 @@ function init_cache_sprites()
   if (typeof tileset === 'undefined') {
     swal("Tileset not generated correctly. Run sync.sh in "
           + "freeciv-img-extract and recompile.");
+    setSwalTheme();
     return;
   }
 
@@ -279,7 +278,7 @@ function mapview_window_resized ()
 
   if (active_city != null || !resize_enabled) return;
   setup_window_size();
-  if (renderer == RENDERER_2DCANVAS) update_map_canvas_full();
+  update_map_canvas_full();
 }
 
 /**************************************************************************
@@ -448,7 +447,7 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
   var size_color;
   var size_shadow_color = "rgba(0, 0, 0, 1)"; // default black
   const peace = "%E2%98%AE ";
-  const celeb = "%F0%9F%8E%89 ";  // 88 balloon, 89 party popper
+  const celeb = "%E2%9C%A8 ";  // %F0%9F%A5%82 champagne, "%F0%9F%8E%89 " party popper
   const disorder = "%E2%9C%8A ";
   const lose_celeb_color = "rgba(0,0,0,1)";
   const start_celeb_color = "rgb(128,255,128)";
@@ -458,7 +457,7 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
   // City mood:
   if (draw_city_mood) {
     if (client.conn.playing != null && !client_is_observer()) {
-      if (city['owner'] == client.conn.playing.playerno) {
+      if (city['owner'] == client.conn.playing.playerno && city['ppl_happy'] != null && city['ppl_content'] != null && city['ppl_unhappy'] != null) {
         var city_state = get_city_state(city);
         happy_people   = city['ppl_happy'][FEELING_FINAL];
         content_people = city['ppl_content'][FEELING_FINAL];
@@ -528,7 +527,8 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
     }
   }
 
-  var text = decodeURIComponent(city['name'] + airlift_text).toUpperCase();
+  var cityname = show_citybar < 2 ? city['name'] : "";
+  var text = decodeURIComponent(cityname + airlift_text).toUpperCase();
   if (replace_capital_i) text = text.replace(/I/gi, "|");  // option to fix midget capital I for some bad sans-serif fonts
   var citybarinfo = mapview_get_citybar_num_and_color(city['id']);
   // "size" is now alternatively other things, based on which city_map_display_mode we're in:
@@ -554,7 +554,7 @@ function mapview_put_city_bar(pcanvas, city, canvas_x, canvas_y) {
               canvas_x - Math.floor(txt_measure.width / 2) - 45, canvas_y - 17);
 
   pcanvas.drawImage(sprites[get_city_occupied_sprite(city)],
-              canvas_x - Math.floor(txt_measure.width / 2) - 12, canvas_y - 16);
+              canvas_x - Math.floor(txt_measure.width / 2) - 14, canvas_y - 16);
 
   pcanvas.strokeStyle = color;
   pcanvas.lineWidth = 1.5;
@@ -617,10 +617,14 @@ function mapview_put_tile_label(pcanvas, tile, canvas_x, canvas_y) {
 /**************************************************************************
   Renders the national border lines onto the canvas.
 **************************************************************************/
-function mapview_put_border_line(pcanvas, dir, color, canvas_x, canvas_y) {
+function mapview_put_grid_line(pcanvas, dir, color, canvas_x, canvas_y) {
   var x = canvas_x + 47;
   var y = canvas_y + 3;
   pcanvas.strokeStyle = color;
+  mapview_canvas_ctx.lineWidth = 2;
+  mapview_canvas_ctx.lineDashOffset = 0;
+  mapview_canvas_ctx.setLineDash([4,4]);
+
   pcanvas.beginPath();
 
   if (dir == DIR8_NORTH) {
@@ -638,11 +642,130 @@ function mapview_put_border_line(pcanvas, dir, color, canvas_x, canvas_y) {
   }
   pcanvas.closePath();
   pcanvas.stroke();
-
 }
 
 /**************************************************************************
   Renders the national border lines onto the canvas.
+**************************************************************************/
+function mapview_put_border_line(pcanvas, dir, color, color2, color3, canvas_x, canvas_y) {
+  if (draw_border_mode & 2) return;  // 2 is flag not to draw.
+  var x = canvas_x + 47;
+  var y = canvas_y + 3;
+
+  const ddb = draw_dashed_borders;
+  const dtc = draw_tertiary_colors;
+  const dtb = draw_thick_borders;
+
+  mapview_canvas_ctx.lineWidth = dtb ? 3 : 2;
+  mapview_canvas_ctx.lineCap = 'butt';
+  pcanvas.beginPath();
+
+  if (ddb) {
+    mapview_canvas_ctx.setLineDash([4,4]);
+    switch (minimap_color) {
+      case 2: pcanvas.strokeStyle = color2; break;
+      case 3: pcanvas.strokeStyle = color3; break;
+      default: pcanvas.strokeStyle = color;
+    }
+  }
+  else {
+    mapview_canvas_ctx.setLineDash([]);
+    pcanvas.strokeStyle = dtc ? color3 : color;
+  }
+
+  if (draw_moving_borders) {
+    border_anim ++;
+    mapview_canvas_ctx.lineDashOffset = Math.trunc(border_anim/border_anim_delay);
+    if (border_anim>24*border_anim_delay)
+      border_anim=0;
+  }
+  
+  switch (dir) {
+    case DIR8_NORTH:
+      //primary
+      pcanvas.moveTo(x, y - 2, x + (tileset_tile_width / 2));
+      pcanvas.lineTo(x + (tileset_tile_width / 2),  y + (tileset_tile_height / 2) - 2);
+      pcanvas.stroke();
+      if (ddb) break;
+      //secondary
+      pcanvas.strokeStyle = color2;
+      mapview_canvas_ctx.setLineDash([6,6]);
+      pcanvas.moveTo(x, y - 2, x + (tileset_tile_width / 2));
+      pcanvas.lineTo(x + (tileset_tile_width / 2),  y + (tileset_tile_height / 2) - 2);
+      pcanvas.stroke();
+      if (!dtc) break;
+      //tertiary
+      pcanvas.strokeStyle = color;
+      mapview_canvas_ctx.setLineDash([6,18]);
+      pcanvas.moveTo(x, y - 2, x + (tileset_tile_width / 2));
+      pcanvas.lineTo(x + (tileset_tile_width / 2),  y + (tileset_tile_height / 2) - 2);
+      pcanvas.stroke();
+      break;
+    case DIR8_EAST:
+      //primary
+      pcanvas.moveTo(x - 3, y + tileset_tile_height - 3);
+      pcanvas.lineTo(x + (tileset_tile_width / 2) - 3,  y + (tileset_tile_height / 2) - 3);
+      pcanvas.stroke();
+      if (ddb) break;
+      //secondary
+      pcanvas.strokeStyle = color2;
+      mapview_canvas_ctx.setLineDash([6,6]);
+      pcanvas.moveTo(x - 3, y + tileset_tile_height - 3);
+      pcanvas.lineTo(x + (tileset_tile_width / 2) - 3,  y + (tileset_tile_height / 2) - 3);
+      pcanvas.stroke();
+      if (!dtc) break;
+      //tertiary
+      pcanvas.strokeStyle = color;
+      mapview_canvas_ctx.setLineDash([6,18]);
+      pcanvas.moveTo(x - 3, y + tileset_tile_height - 3);
+      pcanvas.lineTo(x + (tileset_tile_width / 2) - 3,  y + (tileset_tile_height / 2) - 3);
+      pcanvas.stroke();
+      break;
+    case DIR8_SOUTH:
+      //primary
+      pcanvas.moveTo(x - (tileset_tile_width / 2) + 3, y + (tileset_tile_height / 2) - 3);
+      pcanvas.lineTo(x + 3,  y + tileset_tile_height - 3);
+      pcanvas.stroke();
+      if (ddb) break;
+      //secondary
+      pcanvas.strokeStyle = color2;
+      mapview_canvas_ctx.setLineDash([6,6]);
+      pcanvas.moveTo(x - (tileset_tile_width / 2) + 3, y + (tileset_tile_height / 2) - 3);
+      pcanvas.lineTo(x + 3,  y + tileset_tile_height - 3);
+      pcanvas.stroke();
+      if (!dtc) break;
+      //tertiary
+      pcanvas.strokeStyle = color;
+      mapview_canvas_ctx.setLineDash([6,18]);
+      pcanvas.moveTo(x - (tileset_tile_width / 2) + 3, y + (tileset_tile_height / 2) - 3);
+      pcanvas.lineTo(x + 3,  y + tileset_tile_height - 3);
+      pcanvas.stroke();
+      break;
+    case DIR8_WEST:
+      //primary
+      pcanvas.moveTo(x - (tileset_tile_width / 2) + 3, y + (tileset_tile_height / 2) - 3);
+      pcanvas.lineTo(x + 3,  y - 3);
+      pcanvas.stroke();
+      if (ddb) break;
+      //secondary
+      pcanvas.strokeStyle = color2;
+      mapview_canvas_ctx.setLineDash([6,6]);
+      pcanvas.moveTo(x - (tileset_tile_width / 2) + 3, y + (tileset_tile_height / 2) - 3);
+      pcanvas.lineTo(x + 3,  y - 3);
+      pcanvas.stroke();
+      if (!dtc) break;
+      //tertiary
+      pcanvas.strokeStyle = color;
+      mapview_canvas_ctx.setLineDash([6,18]);
+      pcanvas.moveTo(x - (tileset_tile_width / 2) + 3, y + (tileset_tile_height / 2) - 3);
+      pcanvas.lineTo(x + 3,  y - 3);
+      pcanvas.stroke();
+      break;
+  }
+}
+
+/**************************************************************************
+  Fills the national territoy colors on the canvas.
 **************************************************************************/
 function mapview_territory_fill(pcanvas, color, canvas_x, canvas_y) {
   var x = canvas_x + 47;
@@ -650,15 +773,6 @@ function mapview_territory_fill(pcanvas, color, canvas_x, canvas_y) {
 
   pcanvas.beginPath();
   pcanvas.fillStyle = color;
-/*
-  pcanvas.moveTo(x, y - 2, x + (tileset_tile_width / 2));
-  pcanvas.lineTo(x + (tileset_tile_width / 2),  y + (tileset_tile_height / 2) - 2);
-  //pcanvas.moveTo(x - 3, y + tileset_tile_height - 3);
-  pcanvas.lineTo(x + (tileset_tile_width / 2) - 3,  y + (tileset_tile_height / 2) - 3);
-  //pcanvas.moveTo(x - (tileset_tile_width / 2) + 3, y + (tileset_tile_height / 2) - 3);
-  pcanvas.lineTo(x + 3,  y + tileset_tile_height - 3);
-  //pcanvas.moveTo(x - (tileset_tile_width / 2) + 3, y + (tileset_tile_height / 2) - 3);
-  pcanvas.lineTo(x + 3,  y - 3);*/
 
   pcanvas.moveTo(x,  y + (tileset_tile_height / 2));
   pcanvas.lineTo(x - (tileset_tile_width / 2),  y);
@@ -682,7 +796,11 @@ function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y)
   var y1 = y0 + GOTO_DIR_DY[dir] * (tileset_tile_height / 2);
 
   // Use colours according to active goto or tile/unit info
-  var colors = goto_active ? goto_colors_active : goto_colors_info; 
+  var colors = goto_active ? goto_colors_active : goto_colors_info;
+  if (connect_active) {
+    if (connect_extra==EXTRA_ROAD) colors = goto_colors_road;
+    else if (connect_extra==EXTRA_IRRIGATION) colors=goto_colors_irr;
+  }
 
   // Line edges
   pcanvas.strokeStyle = 'rgba('+colors[0]+')';
@@ -765,6 +883,7 @@ function set_default_mapview_inactive()
   if (chatbox_active) {
     $("#game_chatbox_panel").parent().hide();
     $(".mobile_chatbox_dialog").hide();
+    $("#dialog-extend-fixed-container").hide();
   }
   //mapview_active = false;
 }
@@ -783,15 +902,17 @@ function set_default_mapview_active()
   if (show_compass) $("#compass").show();
   else $("#compass").hide();
 
-  if (renderer == RENDERER_2DCANVAS) {
-    mapview_canvas_ctx = mapview_canvas.getContext("2d");
-    mapview_canvas_ctx.font = canvas_text_font;
-  }
+  mapview_canvas_ctx = mapview_canvas.getContext("2d");
+  mapview_canvas_ctx.font = canvas_text_font;
+
 
   var active_tab = $('#tabs').tabs('option', 'active');
   if (active_tab == TAB_CITIES) { // cities dialog is active
     return;
   }
+
+  // Minimized windows (diplomacy windows)
+  $("#dialog-extend-fixed-container").show();
 
   if (!is_small_screen() && overview_active) {
     $("#game_overview_panel").parent().show();

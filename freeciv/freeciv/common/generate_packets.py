@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #
 # Freeciv - Copyright (C) 2003 - Raimar Falke
@@ -30,8 +30,8 @@ fold_bool_into_header=1
 
 ################# END OF PARAMETERS ####################
 
-# This program runs under python 1.5 and 2.2 and hopefully every
-# version in between. Please leave it so. In particular use the string
+# This program runs under any python version since 1.5.
+# Please leave it so. In particular use the string
 # module and not the function of the string type.
 
 import re, string, os, sys
@@ -265,6 +265,8 @@ class Field:
             return "  differ = !BV_ARE_EQUAL(old->%(name)s, real_packet->%(name)s);"%self.__dict__
         if self.dataio_type in ["string", "estring"] and self.is_array==1:
             return "  differ = (strcmp(old->%(name)s, real_packet->%(name)s) != 0);"%self.__dict__
+        if self.dataio_type == "cm_parameter":
+            return "  differ = !cm_are_parameter_equal(&old->%(name)s, &real_packet->%(name)s);" % self.__dict__
         if self.is_struct and self.is_array==0:
             return "  differ = !are_%(dataio_type)ss_equal(&old->%(name)s, &real_packet->%(name)s);"%self.__dict__
         if not self.is_array:
@@ -358,7 +360,7 @@ class Field:
         if self.struct_type=="float" and not self.is_array:
             return "  DIO_PUT(%(dataio_type)s, &dout, &field_addr, real_packet->%(name)s, %(float_factor)d);"%self.__dict__
 
-        if self.dataio_type in ["worklist"]:
+        if self.dataio_type in ["worklist", "cm_parameter"]:
             return "  DIO_PUT(%(dataio_type)s, &dout, &field_addr, &real_packet->%(name)s);"%self.__dict__
 
         if self.dataio_type in ["memory"]:
@@ -662,7 +664,7 @@ field_addr.name = \"%(name)s\";
                 extra=""
             if self.dataio_type=="memory":
                 return '''%(extra)s
-  if (!DIO_GET(%(dataio_type)s, &din, &field_addr, real_packet->%(name)s, %(array_size_u)s)){
+  if (!DIO_GET(%(dataio_type)s, &din, &field_addr, real_packet->%(name)s, %(array_size_u)s)) {
     RECEIVE_PACKET_FIELD_ERROR(%(name)s);
   }'''%self.get_dict(vars())
             elif self.is_array==2 and self.dataio_type!="string" \
@@ -906,8 +908,8 @@ static char *stats_%(name)s_names[] = {%(names)s};
     # the delta_stats_report() function.
     def get_report_part(self):
         return '''
-  if (stats_%(name)s_sent > 0 &&
-      stats_%(name)s_discarded != stats_%(name)s_sent) {
+  if (stats_%(name)s_sent > 0
+      && stats_%(name)s_discarded != stats_%(name)s_sent) {
     log_test(\"%(name)s %%d out of %%d got discarded\",
       stats_%(name)s_discarded, stats_%(name)s_sent);
     for (i = 0; i < %(bits)d; i++) {
@@ -1857,12 +1859,6 @@ def main():
     src_dir=os.path.dirname(sys.argv[0])
     src_root=src_dir+"/.."
     input_name=src_dir+"/networking/packets.def"
-    ### We call this variable target_root instead of build_root
-    ### to avoid confusion as we are not building to builddir in
-    ### automake sense.
-    ### We build to src dir. Building to builddir causes a lot
-    ### of problems we have been unable to solve.
-    target_root=src_root
 
     content=open(input_name).read()
     content=strip_c_comment(content)
@@ -1888,14 +1884,15 @@ def main():
     ### parsing finished
 
     ### writing packets_gen.h
-    output_h_name=target_root+"/common/packets_gen.h"
+    output_h_name=sys.argv[1]
 
-    if lazy_overwrite:
-        output_h=fc_open(output_h_name+".tmp")
-    else:
-        output_h=fc_open(output_h_name)
+    if output_h_name != "":
+        if lazy_overwrite:
+            output_h=fc_open(output_h_name+".tmp")
+        else:
+            output_h=fc_open(output_h_name)
 
-    output_h.write('''
+        output_h.write('''
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -1903,19 +1900,23 @@ extern "C" {
 /* common */
 #include "actions.h"
 #include "disaster.h"
+#include "unit.h"
+
+/* common/aicore */
+#include "cm.h"
 
 ''')
 
-    # write structs
-    for p in packets:
-        output_h.write(p.get_struct())
+        # write structs
+        for p in packets:
+            output_h.write(p.get_struct())
 
-    output_h.write(get_enum_packet(packets))
+        output_h.write(get_enum_packet(packets))
 
-    # write function prototypes
-    for p in packets:
-        output_h.write(p.get_prototypes())
-    output_h.write('''
+        # write function prototypes
+        for p in packets:
+            output_h.write(p.get_prototypes())
+        output_h.write('''
 void delta_stats_report(void);
 void delta_stats_reset(void);
 
@@ -1923,16 +1924,17 @@ void delta_stats_reset(void);
 }
 #endif /* __cplusplus */
 ''')
-    output_h.close()
+        output_h.close()
 
     ### writing packets_gen.c
-    output_c_name=target_root+"/common/packets_gen.c"
-    if lazy_overwrite:
-        output_c=fc_open(output_c_name+".tmp")
-    else:
-        output_c=fc_open(output_c_name)
+    output_c_name=sys.argv[2]
+    if output_c_name != "":
+        if lazy_overwrite:
+            output_c=fc_open(output_c_name+".tmp")
+        else:
+            output_c=fc_open(output_c_name)
 
-    output_c.write('''
+        output_c.write('''
 #ifdef HAVE_CONFIG_H
 #include <fc_config.h>
 #endif
@@ -1955,8 +1957,8 @@ void delta_stats_reset(void);
 
 #include "packets.h"
 ''')
-    output_c.write(get_packet_functional_capability(packets))
-    output_c.write('''
+        output_c.write(get_packet_functional_capability(packets))
+        output_c.write('''
 #ifdef FREECIV_DELTA_PROTOCOL
 static genhash_val_t hash_const(const void *vkey)
 {
@@ -1970,48 +1972,49 @@ static bool cmp_const(const void *vkey1, const void *vkey2)
 #endif /* FREECIV_DELTA_PROTOCOL */
 ''')
 
-    if generate_stats:
-        output_c.write('''
+        if generate_stats:
+            output_c.write('''
 static int stats_total_sent;
 
 ''')
 
-    if generate_stats:
-        # write stats
+        if generate_stats:
+            # write stats
+            for p in packets:
+                output_c.write(p.get_stats())
+            # write report()
+        output_c.write(get_report(packets))
+        output_c.write(get_reset(packets))
+
+        output_c.write(get_packet_name(packets))
+        output_c.write(get_packet_has_game_info_flag(packets))
+
+        # write hash, cmp, send, receive
         for p in packets:
-            output_c.write(p.get_stats())
-        # write report()
-    output_c.write(get_report(packets))
-    output_c.write(get_reset(packets))
+            output_c.write(p.get_variants())
+            output_c.write(p.get_send())
+            output_c.write(p.get_lsend())
+            output_c.write(p.get_dsend())
+            output_c.write(p.get_dlsend())
 
-    output_c.write(get_packet_name(packets))
-    output_c.write(get_packet_has_game_info_flag(packets))
+        output_c.write(get_packet_handlers_fill_initial(packets))
+        output_c.write(get_packet_handlers_fill_capability(packets))
+        output_c.close()
 
-    # write hash, cmp, send, receive
-    for p in packets:
-        output_c.write(p.get_variants())
-        output_c.write(p.get_send())
-        output_c.write(p.get_lsend())
-        output_c.write(p.get_dsend())
-        output_c.write(p.get_dlsend())
+        if lazy_overwrite:
+            for i in [output_h_name,output_c_name]:
+                if os.path.isfile(i):
+                    old=open(i).read()
+                else:
+                    old=""
+                new=open(i+".tmp").read()
+                if old!=new:
+                    open(i,"w").write(new)
+                os.remove(i+".tmp")
 
-    output_c.write(get_packet_handlers_fill_initial(packets))
-    output_c.write(get_packet_handlers_fill_capability(packets))
-    output_c.close()
-
-    if lazy_overwrite:
-        for i in [output_h_name,output_c_name]:
-            if os.path.isfile(i):
-                old=open(i).read()
-            else:
-                old=""
-            new=open(i+".tmp").read()
-            if old!=new:
-                open(i,"w").write(new)
-            os.remove(i+".tmp")
-
-    f=fc_open(target_root+"/server/hand_gen.h")
-    f.write('''
+    if sys.argv[5] != "":
+        f=fc_open(sys.argv[5])
+        f.write('''
 #ifndef FC__HAND_GEN_H
 #define FC__HAND_GEN_H
 
@@ -2029,33 +2032,34 @@ bool server_handle_packet(enum packet_type type, const void *packet,
 
 ''')
     
-    for p in packets:
-        if "cs" in p.dirs and not p.no_handle:
-            a=p.name[len("packet_"):]
-            type=a.split("_")[0]
-            b=p.fields
-            b=map(lambda x:"%s%s"%(x.get_handle_type(), x.name),b)
-            b=", ".join(b)
-            if b:
-                b=", "+b
-            if p.handle_via_packet:
-                f.write('struct %s;\n'%p.name)
-                if p.handle_per_conn:
-                    f.write('void handle_%s(struct connection *pc, const struct %s *packet);\n'%(a,p.name))
+        for p in packets:
+            if "cs" in p.dirs and not p.no_handle:
+                a=p.name[len("packet_"):]
+                type=a.split("_")[0]
+                b=p.fields
+                b=map(lambda x:"%s%s"%(x.get_handle_type(), x.name),b)
+                b=", ".join(b)
+                if b:
+                    b=", "+b
+                if p.handle_via_packet:
+                    f.write('struct %s;\n'%p.name)
+                    if p.handle_per_conn:
+                        f.write('void handle_%s(struct connection *pc, const struct %s *packet);\n'%(a,p.name))
+                    else:
+                        f.write('void handle_%s(struct player *pplayer, const struct %s *packet);\n'%(a,p.name))
                 else:
-                    f.write('void handle_%s(struct player *pplayer, const struct %s *packet);\n'%(a,p.name))
-            else:
-                if p.handle_per_conn:
-                    f.write('void handle_%s(struct connection *pc%s);\n'%(a,b))
-                else:
-                    f.write('void handle_%s(struct player *pplayer%s);\n'%(a,b))
-    f.write('''
+                    if p.handle_per_conn:
+                        f.write('void handle_%s(struct connection *pc%s);\n'%(a,b))
+                    else:
+                        f.write('void handle_%s(struct player *pplayer%s);\n'%(a,b))
+        f.write('''
 #endif /* FC__HAND_GEN_H */
 ''')
-    f.close()
+        f.close()
 
-    f=fc_open(target_root+"/client/packhand_gen.h")
-    f.write('''
+    if sys.argv[3] != "":
+        f=fc_open(sys.argv[3])
+        f.write('''
 #ifndef FC__PACKHAND_GEN_H
 #define FC__PACKHAND_GEN_H
 
@@ -2072,32 +2076,33 @@ extern "C" {
 bool client_handle_packet(enum packet_type type, const void *packet);
 
 ''')
-    for p in packets:
-        if "sc" not in p.dirs: continue
+        for p in packets:
+            if "sc" not in p.dirs: continue
 
-        a=p.name[len("packet_"):]
-        b=p.fields
-        #print len(p.fields),p.name
-        b=map(lambda x:"%s%s"%(x.get_handle_type(), x.name),b)
-        b=", ".join(b)
-        if not b:
-            b="void"
-        if p.handle_via_packet:
-            f.write('struct %s;\n'%p.name)
-            f.write('void handle_%s(const struct %s *packet);\n'%(a,p.name))
-        else:
-            f.write('void handle_%s(%s);\n'%(a,b))
-    f.write('''
+            a=p.name[len("packet_"):]
+            b=p.fields
+            #print len(p.fields),p.name
+            b=map(lambda x:"%s%s"%(x.get_handle_type(), x.name),b)
+            b=", ".join(b)
+            if not b:
+                b="void"
+            if p.handle_via_packet:
+                f.write('struct %s;\n'%p.name)
+                f.write('void handle_%s(const struct %s *packet);\n'%(a,p.name))
+            else:
+                f.write('void handle_%s(%s);\n'%(a,b))
+        f.write('''
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
 #endif /* FC__PACKHAND_GEN_H */
 ''')
-    f.close()
+        f.close()
 
-    f=fc_open(target_root+"/server/hand_gen.c")
-    f.write('''
+    if sys.argv[6] != "":
+        f=fc_open(sys.argv[6])
+        f.write('''
 
 #ifdef HAVE_CONFIG_H
 #include <fc_config.h>
@@ -2107,53 +2112,54 @@ bool client_handle_packet(enum packet_type type, const void *packet);
 #include "packets.h"
 
 #include "hand_gen.h"
-    
+
 bool server_handle_packet(enum packet_type type, const void *packet,
                           struct player *pplayer, struct connection *pconn)
 {
-  switch(type) {
+  switch (type) {
 ''')
-    for p in packets:
-        if "cs" not in p.dirs: continue
-        if p.no_handle: continue
-        a=p.name[len("packet_"):]
-        c='((const struct %s *)packet)->'%p.name
-        b=[]
-        for x in p.fields:
-            y="%s%s"%(c,x.name)
-            if x.dataio_type=="worklist":
-                y="&"+y
-            b.append(y)
-        b=",\n      ".join(b)
-        if b:
-            b=",\n      "+b
+        for p in packets:
+            if "cs" not in p.dirs: continue
+            if p.no_handle: continue
+            a=p.name[len("packet_"):]
+            c='((const struct %s *)packet)->'%p.name
+            b=[]
+            for x in p.fields:
+                y="%s%s"%(c,x.name)
+                if x.dataio_type=="worklist":
+                    y="&"+y
+                b.append(y)
+            b=",\n      ".join(b)
+            if b:
+                b=",\n      "+b
 
-        if p.handle_via_packet:
-             if p.handle_per_conn:
-                 args="pconn, packet"
-             else:
-                 args="pplayer, packet"
+            if p.handle_via_packet:
+                if p.handle_per_conn:
+                    args="pconn, packet"
+                else:
+                    args="pplayer, packet"
 
-        else:
-            if p.handle_per_conn:
-                args="pconn"+b
             else:
-                args="pplayer"+b
+                if p.handle_per_conn:
+                    args="pconn"+b
+                else:
+                    args="pplayer"+b
 
-        f.write('''  case %s:
+            f.write('''  case %s:
     handle_%s(%s);
     return TRUE;
 
 '''%(p.type,a,args))
-    f.write('''  default:
+        f.write('''  default:
     return FALSE;
   }
 }
 ''')
-    f.close()
+        f.close()
 
-    f=fc_open(target_root+"/client/packhand_gen.c")
-    f.write('''
+    if sys.argv[4] != "":
+        f=fc_open(sys.argv[4])
+        f.write('''
 
 #ifdef HAVE_CONFIG_H
 #include <fc_config.h>
@@ -2163,41 +2169,41 @@ bool server_handle_packet(enum packet_type type, const void *packet,
 #include "packets.h"
 
 #include "packhand_gen.h"
-    
+
 bool client_handle_packet(enum packet_type type, const void *packet)
 {
-  switch(type) {
+  switch (type) {
 ''')
-    for p in packets:
-        if "sc" not in p.dirs: continue
-        if p.no_handle: continue
-        a=p.name[len("packet_"):]
-        c='((const struct %s *)packet)->'%p.name
-        b=[]
-        for x in p.fields:
-            y="%s%s"%(c,x.name)
-            if x.dataio_type=="worklist":
-                y="&"+y
-            b.append(y)
-        b=",\n      ".join(b)
-        if b:
-            b="\n      "+b
+        for p in packets:
+            if "sc" not in p.dirs: continue
+            if p.no_handle: continue
+            a=p.name[len("packet_"):]
+            c='((const struct %s *)packet)->'%p.name
+            b=[]
+            for x in p.fields:
+                y="%s%s"%(c,x.name)
+                if x.dataio_type=="worklist":
+                    y="&"+y
+                b.append(y)
+            b=",\n      ".join(b)
+            if b:
+                b="\n      "+b
 
-        if p.handle_via_packet:
-            args="packet"
-        else:
-            args=b
+            if p.handle_via_packet:
+                args="packet"
+            else:
+                args=b
 
-        f.write('''  case %s:
+            f.write('''  case %s:
     handle_%s(%s);
     return TRUE;
 
 '''%(p.type,a,args))
-    f.write('''  default:
+        f.write('''  default:
     return FALSE;
   }
 }
 ''')
-    f.close()
+        f.close()
 
 main()

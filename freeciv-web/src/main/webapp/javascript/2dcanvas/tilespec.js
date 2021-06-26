@@ -20,22 +20,41 @@
 
 // Unit offset arrays for graphics placement of units and their various icon components
 var UO_dx = [], UO_dy = []; // Unit graphic delta.
-var UO_sx = [];             // Shield graphic
+var UO_sx = [], UO_sy = [];             // Shield graphic
 var UO_vx = [], UO_vy = []; // Vet badge graphic
 var UO_mx = [], UO_my = []; // Multi-unit graphic (stacked "+" icon)
 
-var fill_national_border = false; // option to draw solid territorial area
 var num_cardinal_tileset_dirs = 4;
-var cardinal_tileset_dirs = [DIR8_NORTH, DIR8_EAST, DIR8_SOUTH, DIR8_WEST];
 
+var cardinal_tileset_dirs = [DIR8_NORTH, DIR8_EAST, DIR8_SOUTH, DIR8_WEST];
+var DIR4_TO_DIR8 = [ DIR8_NORTH, DIR8_SOUTH, DIR8_EAST, DIR8_WEST];
 var NUM_CORNER_DIRS = 4;
 
-var DIR4_TO_DIR8 = [ DIR8_NORTH, DIR8_SOUTH, DIR8_EAST, DIR8_WEST];
+var border_flag_offsets = {
+  // Cardinal
+  1: {"x": 56, "y": 13},  // north
+  4: {"x": 56, "y": 28},  // east
+  3: {"x": 26, "y": 13},  // west
+  6: {"x": 26, "y": 28},  // south
+  // Corners
+  2: {"x": 66, "y": 20},  // northeast
+  0: {"x": 42, "y":  6},  // northwest
+  5: {"x": 16, "y": 20},  // southwest
+  7: {"x": 42, "y": 34},  // southeast
+}
 
 var current_select_sprite = 0;
 var max_select_sprite = 4;
 
 var explosion_anim_map = {};
+var anim_swords_instead = {};  // bools for whether to show swords instead of explosion.
+var show_tile_marker_instead = {}; // bools for whether to show a tile marker indicator instead of combat animation.
+
+const USER_MARK_1     = 1
+const USER_MARK_2     = 2; 
+const USER_MARK_3     = 3;
+const USER_MARK_4     = 4;
+const USER_MARKS = ["","grid.usermark","grid.userarea","user.attention","grid.userspot"];
 
 /* Items on the mapview are drawn in layers.  Each entry below represents
  * one layer.  The names are basically arbitrary and just correspond to
@@ -249,7 +268,6 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
       var tterrain_near = tile_terrain_near(ptile);
       var pterrain = tile_terrain(ptile);
       sprite_array = sprite_array.concat(fill_terrain_sprite_layer(1, ptile, pterrain, tterrain_near));
-
     }
     break;
 
@@ -260,39 +278,23 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
         
         sprite_array = sprite_array.concat(fill_terrain_sprite_layer(2, ptile, pterrain, tterrain_near));
   
-        if (fill_national_border) 
-          sprite_array = sprite_array.concat(get_border_line_sprites(ptile));
-
         sprite_array = sprite_array.concat(fill_irrigation_sprite_array(ptile, pcity));
       }
     break;
 
     case LAYER_ROADS:
       if (ptile != null) {
+        // Roads and rivers
         sprite_array = sprite_array.concat(fill_road_rail_sprite_array(ptile, pcity));
       }
     break;
 
     case LAYER_SPECIAL1:
       if (ptile != null) {
-
         // TEST: borders moved from last sub-layer of LAYER_SPECIAL1 to here:
         //  it was drawing on top of resources, and seemed better here:
         if (draw_map_grid) sprite_array = sprite_array.concat(get_grid_line_sprites(ptile));
-        if (!fill_national_border) 
           sprite_array = sprite_array.concat(get_border_line_sprites(ptile));
-
-        var river_sprite = get_tile_river_like_sprite(ptile, EXTRA_RIVER, "road.river");
-        if (river_sprite != null) sprite_array.push(river_sprite);
-
-        if (typeof EXTRA_CANAL !== "undefined") {
-          var canal_sprite = get_tile_river_like_sprite(ptile, EXTRA_CANAL, "road.canal");
-          if (canal_sprite != null) sprite_array.push(canal_sprite);
-        }
-        if (typeof EXTRA_WATERWAY !== "undefined") {
-          var canal_sprite = get_tile_river_like_sprite(ptile, EXTRA_WATERWAY, "road.canal");
-          if (canal_sprite != null) sprite_array.push(canal_sprite);
-        }
 
         var spec_sprite = get_tile_specials_sprite(ptile);
         if (spec_sprite != null) sprite_array.push(spec_sprite);
@@ -317,27 +319,49 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
         if (tile_has_extra(ptile, EXTRA_POLLUTION)) {
           sprite_array.push({"key" :
                               tileset_extra_id_graphic_tag(EXTRA_POLLUTION)});
-          if (draw_highlighted_pollution)
-            sprite_array.push(get_city_invalid_worked_sprite());
+          //if (draw_highlighted_pollution)
+          //  sprite_array.push(get_user_highlighted_pollution_sprite());
         }
 
         if (tile_has_extra(ptile, EXTRA_FALLOUT)) {
           sprite_array.push({"key" :
                               tileset_extra_id_graphic_tag(EXTRA_FALLOUT)});
         }
-        // moved to first sub-layer above
-        //if (draw_map_grid) sprite_array = sprite_array.concat(get_grid_line_sprites(ptile)); 
-        //sprite_array = sprite_array.concat(get_border_line_sprites(ptile));
-
+        // (Optional) frontier-facing flags on borders
+        if (draw_border_flags) 
+          sprite_array = sprite_array.concat(get_frontier_flag_sprites(ptile));
       }
     break;
 
+    // City Layer  AND  Highlight Polluted Tiles
     case LAYER_CITY1:
+      var polluted = tile_has_extra(ptile, EXTRA_POLLUTION);
+
+      // Due to visibility difficulty, city tiles ALWAYS show highlighted pollution
       if (pcity != null) {
-        sprite_array.push(get_city_sprite(pcity));
+        if (polluted) sprite_array.push({"key" : "grid.pollute_ring"}); //ring under city "wraps" around it
+        
+        var layer_sprite = get_city_fortifications_underlay_sprite(pcity);   // underlays (coastal defence, fortifications)
+        if (layer_sprite) sprite_array.push(layer_sprite);
+        layer_sprite = get_city_coastal_underlay_sprite(pcity);
+        if (layer_sprite) sprite_array.push(layer_sprite);
+
+        sprite_array.push(get_city_sprite(pcity));                      //city
+        
+        layer_sprite = get_city_fortifications_overlay_sprite(pcity);  // overlays (coastal defence, fortifications)
+        if (layer_sprite) sprite_array.push(layer_sprite);
+        layer_sprite = get_city_coastal_overlay_sprite(pcity);
+        if (layer_sprite) sprite_array.push(layer_sprite);
+        
+        if (polluted) sprite_array.push({"key" : "grid.pollute_icon"}); //pollution icon clearly over top
 	      if (pcity['unhappy']) {
           sprite_array.push({"key" : "city.disorder"});
-	      }
+        }
+      }
+      // Otherwise show highlighted pollution only if user pref is on:
+      else if (draw_highlighted_pollution && polluted) {
+        sprite_array.push({"key" : "grid.pollute_ring"});
+        sprite_array.push({"key" : "grid.pollute_icon"});
       }
     break;
 
@@ -374,7 +398,31 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
     /* show explosion animation on current tile.*/
      if (ptile != null && explosion_anim_map[ptile['index']] != null) {
        var explode_step = explosion_anim_map[ptile['index']];
+     
+       var swords = anim_swords_instead[ptile['index']];
+       if (!swords) swords = 0;
+       var marker = show_tile_marker_instead[ptile['index']];
+       key_prefix = swords ? "swords.unit_" : "explode.unit_";
+       frame_repeat = swords ? 3 : 5;
+       frame = Math.abs(Math.round((23-explode_step)/frame_repeat));
        explosion_anim_map[ptile['index']] =  explode_step - 1;
+
+       if (marker) {
+         key_prefix = (explode_step>16 && explode_step<34) ? "" : USER_MARKS[USER_MARK_1];
+         frame ="";
+       }       
+       if (explode_step <= 1) {
+         delete explosion_anim_map[ptile['index']];
+         delete anim_swords_instead[ptile['index']];
+         delete show_tile_marker_instead[ptile['index']];
+       }
+       else {
+         const xo = marker ? 0 : (unit_offset_x+swords*8);
+         const yo = marker ? 0 : (unit_offset_y+swords*-15);
+         sprite_array.push({"key": key_prefix+frame, 
+           "offset_x" : xo,
+           "offset_y" : yo});
+       } /* the above 8 lines replace the below for supporting 2 explosion types.
        if (explode_step > 20) {
          sprite_array.push({"key" : "explode.unit_0",
            "offset_x" : unit_offset_x,
@@ -395,10 +443,10 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
          sprite_array.push({"key" : "explode.unit_4",
            "offset_x" : unit_offset_x,
            "offset_y" : unit_offset_y});
-       } else {
+       } 
+       else {
          delete explosion_anim_map[ptile['index']];
-       }
-
+       } */
      }
 
 
@@ -420,6 +468,12 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
     case LAYER_TILELABEL:
       if (ptile != null && ptile['label'] != null && ptile['label'].length > 0) {
         sprite_array.push(get_tile_label_text(ptile));
+      }
+      // User markup sprite
+      if (!user_marking_mode || !ptile) break;
+      const tkey = "cPlan"+ptile['index'];  // key/val for user mark-up tiles
+      if (myGameVars[tkey]) {
+        sprite_array.push(get_user_mark_sprite(myGameVars[tkey]));
       }
       break;
 
@@ -528,7 +582,10 @@ function fill_terrain_sprite_array(l, ptile, pterrain, tterrain_near)
              for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
                if (ts_tiles[tterrain_near[DIR4_TO_DIR8[i]]['graphic_str']] == null) continue;
                var near_dlp = tile_types_setup["l" + l + "." + tterrain_near[DIR4_TO_DIR8[i]]['graphic_str']];
-	           var terrain_near = (near_dlp['dither'] == true) ?  tterrain_near[DIR4_TO_DIR8[i]]['graphic_str'] : pterrain['graphic_str'];
+             
+             var terrain_near = (pterrain['graphic_str']=='arctic' && !(near_dlp['dither'] == true))
+               ? "swamp" // hard-coded for now, but dithers so much nicer into shore graphics
+	             : (near_dlp['dither'] == true) ?  tterrain_near[DIR4_TO_DIR8[i]]['graphic_str'] : pterrain['graphic_str'];
 	           var dither_tile = i + pterrain['graphic_str'] + "_" +  terrain_near;
                var x = dither_offset_x[i];
                var y = dither_offset_y[i];
@@ -596,11 +653,11 @@ function fill_terrain_sprite_array(l, ptile, pterrain, tterrain_near)
 	      /* We have no need for matching, just plug the piece in place. */
 	      break;
 	    case MATCH_SAME:
-	      	var b1 = (m[2] != this_match_index) ? 1 : 0;
-	      	var b2 = (m[1] != this_match_index) ? 1 : 0;
-	      	var b3 = (m[0] != this_match_index) ? 1 : 0;
-	      	array_index = array_index * 2 + b1;
-			array_index = array_index * 2 + b2;
+        var b1 = (m[2] != this_match_index) ? 1 : 0;
+        var b2 = (m[1] != this_match_index) ? 1 : 0;
+        var b3 = (m[0] != this_match_index) ? 1 : 0;
+        array_index = array_index * 2 + b1;
+			  array_index = array_index * 2 + b2;
 	  		array_index = array_index * 2 + b3;
 	      break;
 	    case MATCH_PAIR:
@@ -696,7 +753,8 @@ function fill_unit_sprite_array(punit, num_stacked)
   // Shield
   var result = [get_unit_nation_flag_sprite(punit, unit_offset)];
   if (result[0]['offset_x']) {
-    result[0]['offset_x'] += UO_sx[id];  // adjust shield x placement
+    result[0]['offset_x'] += UO_sx[id];      // adjust shield x placement
+    result[0]['offset_y'] -= (UO_sy[id]-1);  // adjust shield y placement, black border overlaps black hp bar.
   }
 
   // Unit
@@ -709,6 +767,19 @@ function fill_unit_sprite_array(punit, num_stacked)
     activities['offset_x'] = activities['offset_x'] + unit_offset['x'];
     activities['offset_y'] = activities['offset_y'] + unit_offset['y'];
     result.push(activities);
+    // also push "connect mode" sprite for units connecting roads/irrigation
+    if (activities['connect']==true) {
+      result.push({ "key" : "unit.connect",
+                    "offset_x" : unit_offset['x']-6,
+                    "offset_y" : activities['offset_y'] + unit_offset['y']+19 });
+    }
+  }
+  if (should_ask_server_for_actions(punit)) {
+    result.push({
+      "key"      : "unit.action_decision_want",
+      "offset_x" : unit_activity_offset_x + unit_offset['x'],
+      "offset_y" : -unit_activity_offset_y + unit_offset['y'],
+    });
   }
   if (unit_offset['x'] == 0 && unit_offset['y'] == 0) { // if unit is moving, don't draw these
     // Move point bar
@@ -719,8 +790,8 @@ function fill_unit_sprite_array(punit, num_stacked)
     if (num_stacked) {
       var push_right=0; // whether to push small stack icon right 2 pixels (for right aligned shield)
       // Optional shield ring for stacked units
-      if (draw_stacked_unit_mode & dsum_RING) { 
-        if (UO_sx[id]){ // right-aligned shield:
+      if ((!UO_sy[id]) && draw_stacked_unit_mode & dsum_RING) {  // y-aligned shield doesn't get a ring for now.
+        if (UO_sx[id]>0){ // right-aligned shield:
           result.push({"key" : "unit.stk_shld_r",
                 "offset_x" : unit_offset['x'],
                 "offset_y" : -31-unit_offset['y']});
@@ -728,8 +799,8 @@ function fill_unit_sprite_array(punit, num_stacked)
         }
         else           // left-aligned shield:
           result.push({"key" : "unit.stk_shld_l",
-                "offset_x" : unit_offset['x'],
-                "offset_y" : -31-unit_offset['y']});
+                "offset_x" : unit_offset['x']-UO_sx[id],
+                "offset_y" : -31-unit_offset['y']-UO_sy[id]});
       }
       // Yellow "+" (small or normal) to show unit is in a stack:
       var stacked = get_unit_stack_sprite(num_stacked);
@@ -750,6 +821,7 @@ function fill_unit_sprite_array(punit, num_stacked)
     veteran['offset_y'] -= (UO_vy[id] - unit_offset['y']); // bundle in unit_offset so badge moves with the unit
     result.push(veteran);
   }
+
   return result;
 }
 
@@ -864,7 +936,14 @@ function get_city_occupied_sprite(pcity) {
   if (!observing && client.conn.playing != null
       && owner_id != client.conn.playing.playerno && pcity['occupied']) {
     return "citybar.occupied";
-  } else if (punits.length == 1) {
+  } else if (punits.length > 0) {
+    return punits.length >= 20 ? "citybar.occupancy_20" : ("citybar.occupancy_"+punits.length);
+  } else {
+    return "citybar.occupancy_0";
+  }
+  
+  /*
+  else if (punits.length == 1) {
     return "citybar.occupancy_1";
   } else if (punits.length == 2) {
     return "citybar.occupancy_2";
@@ -872,8 +951,7 @@ function get_city_occupied_sprite(pcity) {
     return "citybar.occupancy_3";
   } else {
     return "citybar.occupancy_0";
-  }
-
+  }*/
 }
 
 /**********************************************************************
@@ -913,6 +991,14 @@ function get_city_invalid_worked_sprite() {
           "offset_y" : 0};
 }
 
+/**********************************************************************
+  Return the sprite for an user marking the map with notes.
+***********************************************************************/
+function get_user_mark_sprite(index) {
+  return {"key" : USER_MARKS[index],
+  "offset_x" : 0,
+  "offset_y" : 0};
+}
 
 /**********************************************************************
 ...
@@ -923,36 +1009,126 @@ function fill_goto_line_sprite_array(ptile)
 }
 
 /**********************************************************************
-...
+  Thus function puts flags on the frontier-facing edge of border tiles.
+***********************************************************************/
+function get_frontier_flag_sprites(ptile) 
+{
+  var result = [];
+
+  var border_dirs = {};  // which directions have a border on them
+  var drawn_dirs  = {};  // which directions will get a flag sprite
+
+  for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
+    var dir = cardinal_tileset_dirs[i];
+    var checktile = mapstep(ptile, dir);
+
+    if (checktile != null && checktile['owner'] != null
+        && ptile['owner'] != null
+        && ptile['owner'] != checktile['owner']
+        && ptile['owner'] != 255 /* 255 indicates the tile is not owned by anyone. */
+        && players[ptile['owner']] != null) {
+    
+          var pnation = nations[players[ptile['owner']]['nation']];
+          /* Former filling of all land with semi-transparent nation color
+              var bcolor = pnation['color'].replace(")", ",0.15)").replace("rgb", "rgba");
+              result.push({"key" : "territory", "offset_x" : 0, "offset_y" : 0, "color": bcolor}); */
+
+          border_dirs[dir] = true;   
+    }
+  }
+  // Welcome to the LOGIC TREE! Which flags to draw on which BORDERS. 
+  // Step One. Orthogonal cardinal borders collapse their two flags into one in their shared corner:
+  if (border_dirs[DIR8_NORTH]) {
+    // North and East borders
+    if (border_dirs[DIR8_EAST]) {
+      drawn_dirs[DIR8_NORTHEAST] = true;
+      drawn_dirs[DIR8_NORTH] = false;
+      drawn_dirs[DIR8_EAST] = false;
+    }
+    // North and West borders
+    if (border_dirs[DIR8_WEST]) {
+      drawn_dirs[DIR8_NORTHWEST] = true;
+      drawn_dirs[DIR8_NORTH] = false;
+      drawn_dirs[DIR8_WEST] = false;
+    }
+  }
+  if (border_dirs[DIR8_SOUTH]) {
+    // South and East borders
+    if (border_dirs[DIR8_EAST]) {
+      drawn_dirs[DIR8_SOUTHEAST] = true;
+      drawn_dirs[DIR8_SOUTH] = false;
+      drawn_dirs[DIR8_EAST] = false;
+    }
+    // South and West borders
+    if (border_dirs[DIR8_WEST]) {
+      drawn_dirs[DIR8_SOUTHWEST] = true;
+      drawn_dirs[DIR8_SOUTH] = false;
+      drawn_dirs[DIR8_WEST] = false;
+    }
+  }
+  // Step Two. Indicate the cardinal frontiers to be drawn unless they were flagged above to not be drawn.
+  // If any cardinal frontier === undefined, it was NOT flagged to prohibit being drawn.
+  if (border_dirs[DIR8_NORTH] && drawn_dirs[DIR8_NORTH] === undefined)
+    drawn_dirs[DIR8_NORTH] = true;
+  if (border_dirs[DIR8_EAST] && drawn_dirs[DIR8_EAST] === undefined)
+    drawn_dirs[DIR8_EAST] = true;
+  if (border_dirs[DIR8_WEST] && drawn_dirs[DIR8_WEST] === undefined)
+    drawn_dirs[DIR8_WEST] = true;
+  if (border_dirs[DIR8_SOUTH] && drawn_dirs[DIR8_SOUTH] === undefined)
+    drawn_dirs[DIR8_SOUTH] = true;
+
+  // Step Three. Collapse double corners into the shared cardinal between them:
+  if (drawn_dirs[DIR8_NORTHEAST] && drawn_dirs[DIR8_NORTHWEST]) {
+    drawn_dirs[DIR8_NORTHEAST] = false;
+    drawn_dirs[DIR8_NORTHWEST] = false;
+    drawn_dirs[DIR8_NORTH] = true;      
+  }
+  else if (drawn_dirs[DIR8_NORTHEAST] && drawn_dirs[DIR8_SOUTHEAST]) {
+    drawn_dirs[DIR8_NORTHEAST] = false;
+    drawn_dirs[DIR8_SOUTHEAST] = false;
+    drawn_dirs[DIR8_EAST] = true;
+  }
+  else if (drawn_dirs[DIR8_SOUTHEAST] && drawn_dirs[DIR8_SOUTHWEST]) {
+    drawn_dirs[DIR8_SOUTHEAST] = false;
+    drawn_dirs[DIR8_SOUTHWEST] = false;
+    drawn_dirs[DIR8_SOUTH] = true;
+  }
+  else if (drawn_dirs[DIR8_SOUTHWEST] && drawn_dirs[DIR8_NORTHWEST]) {
+    drawn_dirs[DIR8_SOUTHWEST] = false;
+    drawn_dirs[DIR8_NORTHWEST] = false;
+    drawn_dirs[DIR8_WEST] = true;
+  }
+
+  for (const dir in drawn_dirs) {
+    if (drawn_dirs[dir]) {
+      result.push({"key" : "f." + pnation['graphic_str'],
+      "offset_x" : border_flag_offsets[dir].x,
+      "offset_y" : border_flag_offsets[dir].y,
+      "scale": 0.4}); // 30x20 -> 12x8
+    }
+  }
+  return result;
+}
+
+
+/**********************************************************************
+  Thus function pushes border-line sprites to the sprite array.
 ***********************************************************************/
 function get_border_line_sprites(ptile)
 {
   var result = [];
+  for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
+    var dir = cardinal_tileset_dirs[i];
+    var checktile = mapstep(ptile, dir);
 
-  // SPECIAL MODE: Filled in territory to show national area
-  if (fill_national_border
-    && ptile['owner'] != null
-    && ptile['owner'] != 255 /* 255 is a special constant indicating that the tile is not owned by anyone. */
-    && players[ptile['owner']] != null) {
-    
-    var pnation = nations[players[ptile['owner']]['nation']];
-    var bcolor = pnation['color'].replace(")", ",0.45)").replace("rgb", "rgba");
-
-    result.push({"key" : "territory", "offset_x" : 0, "offset_y" : 0, "color": bcolor});
-  } else {   // NORMAL MODE: NORMAL BORDERS
-    for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
-      var dir = cardinal_tileset_dirs[i];
-      var checktile = mapstep(ptile, dir);
-
-      if (checktile != null && checktile['owner'] != null
-          && ptile['owner'] != null
-          && ptile['owner'] != checktile['owner']
-          && ptile['owner'] != 255 /* 255 is a special constant indicating that the tile is not owned by anyone. */
-          && players[ptile['owner']] != null) {
-        var pnation = nations[players[ptile['owner']]['nation']];
-        result.push({"key" : "border", "dir" : dir,
-                    "color": pnation['color']});
-      }
+    if (checktile != null && checktile['owner'] != null
+        && ptile['owner'] != null
+        && ptile['owner'] != checktile['owner']
+        && ptile['owner'] != 255 /* 255 is a special constant indicating that the tile is not owned by anyone. */
+        && players[ptile['owner']] != null) {
+      var pnation = nations[players[ptile['owner']]['nation']];
+      result.push({"key" : "border", "dir" : dir,
+                    "color": pnation.color, "color2": pnation.color2, "color3": pnation.color3});
     }
   }
   return result;
@@ -973,9 +1149,9 @@ function get_grid_line_sprites(ptile)
 
     if (checktile != null) {
       if (terrains[ptile['terrain']]['name'] == "Deep Ocean")
-        result.push({"key" : "border", "dir" : dir, "color": "rgba(66,57,47,1.0)" });  //stronger contrast on deep ocean
+        result.push({"key" : "mapgrid", "dir" : dir, "color": "rgba(66,57,47,1.0)" });  //stronger contrast on deep ocean
       else
-        result.push({"key" : "border", "dir" : dir, "color": "rgba(0,0,0,0.35)" });
+        result.push({"key" : "mapgrid", "dir" : dir, "color": "rgba(0,0,0,0.35)" });
     }
   }
 
@@ -1248,35 +1424,41 @@ function get_unit_veteran_sprite(punit)
 ***********************************************************************/
 function get_unit_activity_sprite(punit)
 {
-  
   var activity = punit['activity'];
   var act_tgt  = punit['activity_tgt'];
 
   // Special case: idle/sentry units on transport will show themselves
   // as "cargo" even though server has no ACTIVITY_CODE for it:
   if (punit['transported']) {
-    if (activity != ACTIVITY_VIGIL)
+    if (activity == ACTIVITY_SENTRY || activity == ACTIVITY_IDLE)
       return {"key" : "unit.cargo",
         "offset_x" : unit_activity_offset_x,
         "offset_y" : - unit_activity_offset_y};
-    // it's important to see whether aircraft on a carrier are in vigil/intercept mode
-    else return {"key" : "unit.vigil",
-                  "offset_x" : unit_activity_offset_x,
-                  "offset_y" : - unit_activity_offset_y};
   }
 
   switch (activity) {
     case ACTIVITY_GEN_ROAD:
-      return {"key" : tileset_extra_id_activity_graphic_tag(act_tgt),
-              "offset_x" : unit_activity_offset_x,
-              "offset_y" : - unit_activity_offset_y};
+        return   {"key" : tileset_extra_id_activity_graphic_tag(act_tgt),
+                  "offset_x" : unit_activity_offset_x,
+                  "offset_y" : - unit_activity_offset_y,
+                  /*flag to also push a connect sprite on top */
+                  "connect" : ((punit['orders_length']>0) ? true : false) 
+                };
 
     case ACTIVITY_IRRIGATE:
         return {"key" : -1 == act_tgt ?
                           "unit.irrigate" :
                           tileset_extra_id_activity_graphic_tag(act_tgt),
                 "offset_x" : unit_activity_offset_x,
-                "offset_y" : - unit_activity_offset_y};
+                "offset_y" : - unit_activity_offset_y,
+                /*flag to also push a connect sprite on top */
+                "connect" : ((punit['orders_length']>0) ? true : false) 
+               };
+
+    case ACTIVITY_CULTIVATE:
+       return {"key"      : "unit.irrigate",
+               "offset_x" : unit_activity_offset_x,
+               "offset_y" : - unit_activity_offset_y};
 
     case ACTIVITY_GOTO:
         return {"key" : "unit.goto",
@@ -1284,9 +1466,16 @@ function get_unit_activity_sprite(punit)
             "offset_y" : - unit_activity_offset_y};
             
     case ACTIVITY_FORTIFYING:
-        return {"key" : "unit.fortifying",
-            "offset_x" : unit_activity_offset_x,
-            "offset_y" : - unit_activity_offset_y};
+      if (client_rules_flag[CRF_EXTRA_HIDEOUT]) {
+        if (tile_has_extra(tiles[punit['tile']], EXTRA_)) {
+          return {"key" : "unit.fortifying_hidden",
+          "offset_x" : unit_activity_offset_x,
+          "offset_y" : - unit_activity_offset_y};
+        }
+      }
+      return {"key" : "unit.fortifying",
+          "offset_x" : unit_activity_offset_x,
+          "offset_y" : - unit_activity_offset_y};
 
     case ACTIVITY_SENTRY:
       if (client_rules_flag[CRF_EXTRA_HIDEOUT]) {
@@ -1318,6 +1507,11 @@ function get_unit_activity_sprite(punit)
                              tileset_extra_id_activity_graphic_tag(act_tgt),
               "offset_x" : unit_activity_offset_x,
               "offset_y" : - unit_activity_offset_y};
+
+    case ACTIVITY_PLANT:
+       return {"key"      : "unit.plant",
+               "offset_x" : unit_activity_offset_x,
+               "offset_y" : - unit_activity_offset_y};
 
     case ACTIVITY_BASE:
       return {"key" : tileset_extra_id_activity_graphic_tag(act_tgt),
@@ -1398,7 +1592,38 @@ function get_unit_activity_sprite(punit)
 
   return null;
 }
+function get_city_coastal_overlay_sprite(pcity) {
+  // LAYER THREE: Overlays
+  if (pcity['walls'] & 2) {
+    return {"key": "city.coastal_overlay", "offset_x" : -4, "offset_y" : -24};
+  }
+  return null; // no overlay.
+}
+function get_city_coastal_underlay_sprite(pcity) {
+  // LAYER ONE: Underlays
+  if (pcity['walls'] & 2) {
+    return {"key": "city.coastal_underlay", "offset_x" : -4, "offset_y" : -24};
+  }
+  return null; // no underlay.
+}
+function get_city_fortifications_overlay_sprite(pcity) {
+  // LAYER THREE: Overlays
+  if ((pcity['walls'] & 4) && !(pcity['walls'] & 1)) {
+    // !(&1) means, don't show if there are also City Walls
+    return {"key": "city.fortifications_overlay", "offset_x" : -4, "offset_y" : -24};
+  }
+  return null; // no overlay.
+}
+function get_city_fortifications_underlay_sprite(pcity) {
+  // LAYER ONE: Underlays
+      // !(&1) means, don't show if there are also City Walls
+  if ((pcity['walls'] & 4) && !(pcity['walls'] & 1)) {
+    return {"key": "city.fortifications_underlay", "offset_x" : -4, "offset_y" : -24};
+  }
+  return null; // no underlay.
+}
 
+ /*
 /****************************************************************************
   Return the sprite in the city_sprite listing that corresponds to this
   city - based on city style and size.
@@ -1422,7 +1647,7 @@ function get_city_sprite(pcity)
     size = 4;
   }
 
-  var city_walls = pcity['walls'] ? "wall" : "city";
+  var city_walls = (pcity['walls'] & 1) ? "wall" : "city";
 
   var tag = city_rule['graphic'] + "_" + city_walls + "_" + size;
   if (sprites[tag] == null) {
@@ -1510,6 +1735,15 @@ function get_tile_specials_sprite(ptile)
   if (extra_id !== null) {
     const extra = extras[extra_id];
     if (extra != null) {
+      // Resources that disappear can't be knowable on fog of war tiles: e.g.,
+      // Deer, Boar, Fallout in rulesets where Fallout disappears over time. Server
+      // tells client that all extras have 15‱ (RS_DEFAULT_EXTRA_DISAPPEARANCE)
+      // to signal the chance is 0. So odds != RS_DEFAULT_EXTRA_DISAPPEARANCE
+      // means this extra can't show in fogofwar:
+      if (tile_get_known(ptile)==TILE_KNOWN_UNSEEN &&
+          extras[extra_id].disappearance_chance != RS_DEFAULT_EXTRA_DISAPPEARANCE)
+         return null;
+      // All other cases: return sprite for the extra:
       return  {"key" : extra['graphic_str']} ;
     }
   }
@@ -1569,32 +1803,63 @@ function get_tile_river_like_sprite(ptile, extra, prefix)
       }
     }
   }
-  if (tile_has_extra(ptile, extra)) {
-    var river_str = "";
-    for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
-      var dir = cardinal_tileset_dirs[i];
-      var checktile = mapstep(ptile, dir);
-      if (checktile 
-          && (tile_has_extra(checktile, extra)
-          || is_ocean_tile(checktile)
-          || tile_has_extra(checktile, integrate_extras[0])
-          || tile_has_extra(checktile, integrate_extras[1])
-          || tile_has_extra(checktile, integrate_extras[2])  )  ) {
-        river_str = river_str + dir_get_tileset_name(dir) + "1";
-      } else {
-        river_str = river_str + dir_get_tileset_name(dir) + "0";
+  if (typeof EXTRA_SEABRIDGE !== 'undefined' && extra == EXTRA_SEABRIDGE) {
+    if (tile_has_extra(ptile, extra)) {
+      var river_str = "";
+      for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
+        var dir = cardinal_tileset_dirs[i];
+        var checktile = mapstep(ptile, dir);
+        if (checktile 
+            && (tile_has_extra(checktile, extra)
+            || !is_ocean_tile(checktile)
+            || tile_has_extra(checktile, EXTRA_ROAD)  )  ) {
+          river_str = river_str + dir_get_tileset_name(dir) + "1";
+        } else {
+          river_str = river_str + dir_get_tileset_name(dir) + "0";
+        }
+      }
+      return {"key" : prefix + "_s_" + river_str};
+    }
+
+    var pterrain = tile_terrain(ptile);
+    if (pterrain['graphic_str'] != "coast") {
+      for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
+        var dir = cardinal_tileset_dirs[i];
+        var checktile = mapstep(ptile, dir);
+        if (checktile != null && (tile_has_extra(checktile, extra) || tile_has_extra(checktile, extra2)) ) {
+          return {"key" : prefix + "_outlet_" + dir_get_tileset_name(dir)};
+        }
       }
     }
-    return {"key" : prefix + "_s_" + river_str};
-  }
+  } else // SEABRIDGE has opposite outlets: i.e., sea to land, not land to sea
+  {
+    if (tile_has_extra(ptile, extra)) {
+      var river_str = "";
+      for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
+        var dir = cardinal_tileset_dirs[i];
+        var checktile = mapstep(ptile, dir);
+        if (checktile 
+            && (tile_has_extra(checktile, extra)
+            || is_ocean_tile(checktile)
+            || tile_has_extra(checktile, integrate_extras[0])
+            || tile_has_extra(checktile, integrate_extras[1])
+            || tile_has_extra(checktile, integrate_extras[2])  )  ) {
+          river_str = river_str + dir_get_tileset_name(dir) + "1";
+        } else {
+          river_str = river_str + dir_get_tileset_name(dir) + "0";
+        }
+      }
+      return {"key" : prefix + "_s_" + river_str};
+    }
 
-  var pterrain = tile_terrain(ptile);
-  if (pterrain['graphic_str'] == "coast") {
-    for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
-      var dir = cardinal_tileset_dirs[i];
-      var checktile = mapstep(ptile, dir);
-      if (checktile != null && (tile_has_extra(checktile, extra) || tile_has_extra(checktile, extra2)) ) {
-        return {"key" : prefix + "_outlet_" + dir_get_tileset_name(dir)};
+    var pterrain = tile_terrain(ptile);
+    if (pterrain['graphic_str'] == "coast") {
+      for (var i = 0; i < num_cardinal_tileset_dirs; i++) {
+        var dir = cardinal_tileset_dirs[i];
+        var checktile = mapstep(ptile, dir);
+        if (checktile != null && (tile_has_extra(checktile, extra) || tile_has_extra(checktile, extra2)) ) {
+          return {"key" : prefix + "_outlet_" + dir_get_tileset_name(dir)};
+        }
       }
     }
   }
@@ -1791,15 +2056,18 @@ function fill_road_rail_sprite_array(ptile, pcity)
 {
   var road = tile_has_extra(ptile, EXTRA_ROAD);
   var rail = tile_has_extra(ptile, EXTRA_RAIL);
+  // Road/river types ruleset may or may not have:
+  const MAGLEV_active = (typeof EXTRA_MAGLEV !== "undefined");
+  const CANAL_active =  (typeof EXTRA_CANAL !== "undefined");
+  const WATERWAY_active = (typeof EXTRA_WATERWAY !== "undefined");
+  const QUAY_active = (typeof EXTRA_QUAY !== "undefined");
+  const SEABRIDGE_active = (typeof EXTRA_SEABRIDGE !== "undefined");
   
-  // Quays connect/integrate into roads, in a one-way nature: offloading is
-  // road 1/3 move, onloading is 1 move. So we draw the road on the tile that
-  // has it but not the quay, but we show the road going TOWARD the quay.
-  //if (client_rules_flag[CRF_EXTRA_QUAY])
-  //  road |= tile_has_extra(ptile, EXTRA_QUAY);
-
-  if (typeof EXTRA_MAGLEV !== "undefined") {
+  if (MAGLEV_active) {
     var maglev = tile_has_extra(ptile, EXTRA_MAGLEV);
+  }
+  if (SEABRIDGE_active) {
+    var seabridge = tile_has_extra(ptile, EXTRA_SEABRIDGE)
   }
 
   var road_near = [];
@@ -1820,16 +2088,30 @@ function fill_road_rail_sprite_array(ptile, pcity)
     var tile1 = mapstep(ptile, dir);
     if (tile1 != null && tile_get_known(tile1) != TILE_UNKNOWN) {
       road_near[dir] = tile_has_extra(tile1, EXTRA_ROAD);
-      if (client_rules_flag[CRF_EXTRA_QUAY]) road_near[dir] |= tile_has_extra(tile1, EXTRA_QUAY);
-      rail_near[dir] = tile_has_extra(tile1, EXTRA_RAIL);
-      if (typeof EXTRA_MAGLEV !== "undefined") {
-        maglev_near[dir] = tile_has_extra(tile1, EXTRA_MAGLEV);
-      } 
 
-      /* Draw rail/road/maglev if there is a connection from this tile to the
-       * adjacent tile.  But don't draw road/rail if there is also a rail/maglev
-       * connection. */
-      if (typeof EXTRA_MAGLEV !== "undefined") {
+      // Quays integrate with roads "one-way", so we draw the road on the tile that
+      // has it but not the quay tile, showing the road going TOWARD the quay.
+      if (QUAY_active) road_near[dir] |= tile_has_extra(tile1, EXTRA_QUAY);
+
+      rail_near[dir] = tile_has_extra(tile1, EXTRA_RAIL);
+
+      // Sea Bridges integrate with roads, so the road-tile itself will draw a road
+      // up to the bridge, IFF it's cardinally connected to that bridge.
+      if (SEABRIDGE_active) {
+        if (cardinal_tileset_dirs.includes(dir)) {  // only cardinal tiles are valid road-connectors
+          road_near[dir] |= tile_has_extra(tile1, EXTRA_SEABRIDGE);
+        }
+        // For non-cardinal adjacent sea-bridges, we also want rails to not show, but 
+        // rails go on top so we catch it contrarily here:
+        else {  // non-cardinal (diagonally adjacent) tiles don't connect rails if EITHER has a sea bridge
+          if (seabridge || tile_has_extra(tile1, EXTRA_SEABRIDGE)) rail_near[dir] = false; // absolute override
+        }
+      }
+      if (MAGLEV_active) maglev_near[dir] = tile_has_extra(tile1, EXTRA_MAGLEV);
+   
+      /* Draw rail/road/maglev if this tile connects to the adjacent tile. But don't
+       * draw road/rail if there is also a rail/maglev connection. */
+      if (MAGLEV_active) {
         draw_maglev[dir] = maglev && maglev_near[dir];
         draw_rail[dir] = rail && rail_near[dir] && !draw_maglev[dir];
         draw_road[dir] = road && road_near[dir] && !draw_rail[dir] && !draw_maglev[dir];
@@ -1837,10 +2119,8 @@ function fill_road_rail_sprite_array(ptile, pcity)
         draw_single_maglev &= !draw_maglev[dir];
         draw_single_rail &= !draw_maglev[dir] && !draw_rail[dir];
         draw_single_road &= !draw_maglev[dir] && !draw_rail[dir] && !draw_road[dir];
-      } else {         // same as above if ruleset has no EXTRA_MAGLEVS in it:
-        /* Draw rail/road if there is a connection from this tile to the
-        * adjacent tile.  But don't draw road if there is also a rail
-        * connection. */
+      } else { /* Same as above for rules with no EXTRA_MAGLEV:  Draw rail/road if
+        * this tile connects to adjacent tile; but don't draw road if there is a rail */
        draw_rail[dir] = rail && rail_near[dir];
        draw_road[dir] = road && road_near[dir] && !draw_rail[dir];
 
@@ -1854,16 +2134,33 @@ function fill_road_rail_sprite_array(ptile, pcity)
      * necessary and it generally doesn't look very good. */
     var i;
 
-    /* First raw roads under rails. */
-    if (road) {
+    /* Do roads first, under river-like sprites. */
+    if (road /*&& !river_sprite && !canal_sprite << include this if bridge is separate sprite excluding road sprite under it*/) {
       for (i = 0; i < 8; i++) {
         if (draw_road[i]) {
-	      result_sprites.push({"key" : "road.road_" + dir_get_tileset_name(i)});
-	    }
+	        result_sprites.push({"key" : "road.road_" + dir_get_tileset_name(i)});
+	      }
       }
     }
 
-    /* Then draw rails over roads. */
+    /// Rivers, canals, waterways are next.
+    var river_sprite = get_tile_river_like_sprite(ptile, EXTRA_RIVER, "road.river");
+    var canal_sprite = null;
+    var seabridge_sprite = null;
+    if (CANAL_active) {
+      canal_sprite = get_tile_river_like_sprite(ptile, EXTRA_CANAL, "road.canal");
+    }
+    if (!canal_sprite && WATERWAY_active) {
+      canal_sprite = get_tile_river_like_sprite(ptile, EXTRA_WATERWAY, "road.canal");
+    }
+    if (SEABRIDGE_active) {
+      seabridge_sprite = get_tile_river_like_sprite(ptile, EXTRA_SEABRIDGE, "road.sea_bridge")
+    }
+    if (river_sprite != null) result_sprites.push(river_sprite);
+    if (canal_sprite != null) result_sprites.push(canal_sprite);
+    if (seabridge_sprite != null) result_sprites.push(seabridge_sprite);
+
+    /* Draw rails over rivers and roads. */
     if (rail) {
       for (i = 0; i < 8; i++) {
         if (draw_rail[i]) {
@@ -1872,26 +2169,36 @@ function fill_road_rail_sprite_array(ptile, pcity)
       }
     }
 
-    /* Then draw maglevs over rails over roads. */
-    if (typeof EXTRA_MAGLEV !== "undefined") {
-        if (maglev) {
-        for (i = 0; i < 8; i++) {
-          if (draw_maglev[i]) {
-	        result_sprites.push({"key" : "road.maglev_" + dir_get_tileset_name(i)});
-          }
+    /* TODO: this is ready to uncomment if bridge graphics are available.
+    // Bridges go over rails and rivers
+    if (road && (river_sprite || canal_sprite)) {
+      for (i = 0; i < 8; i++) {
+        if (draw_road[i]) {
+	        result_sprites.push({"key" : "road.bridge_" + dir_get_tileset_name(i)});
         }
       }
-    }
- /* Draw isolated rail/road separately (styles 0 and 1 only). */
+    } */
 
+    /* Finally draw MagLevs over all of it. */
+    if (MAGLEV_active) {
+        if (maglev) {
+          for (i = 0; i < 8; i++) {
+            if (draw_maglev[i]) {
+            result_sprites.push({"key" : "road.maglev_" + dir_get_tileset_name(i)});
+            }
+          }
+      }
+    }
+
+  /* Draw isolated rail/road/maglev separately (styles 0 and 1 only). */
   if (draw_single_rail) {
       result_sprites.push({"key" : "road.rail_isolated"});
   } else if (draw_single_road) {
       result_sprites.push({"key" : "road.road_isolated"});
-  } else if (typeof EXTRA_MAGLEV !== "undefined") {
-            if (draw_single_maglev) {
-              result_sprites.push({"key" : "road.maglev_isolated"});
-            }
+  } else if (MAGLEV_active) {
+      if (draw_single_maglev) {
+        result_sprites.push({"key" : "road.maglev_isolated"});
+      }
   }
 
   return result_sprites;
@@ -1939,6 +2246,21 @@ function fill_layer1_sprite_array(ptile, pcity)
         return result_sprites;
       }
     }
+    // bunker hides everything under it, but is drawn in other layer since it's _mg
+    if (typeof EXTRA_BUNKER !== 'undefined')  { 
+      if (tile_has_extra(ptile, EXTRA_BUNKER)) {   
+        return result_sprites;
+      }
+    }
+    // show in top-down order and return early, to not show hidden foundational 
+    // based underneath:
+    if (typeof EXTRA_CASTLE !== 'undefined') {
+      if (tile_has_extra(ptile, EXTRA_CASTLE)) {
+        result_sprites.push({"key" : "base.castle_bg",
+                           "offset_y" : -normal_tile_height / 2});
+        return result_sprites;
+      }
+    } 
     if (tile_has_extra(ptile, EXTRA_FORTRESS)) {
       result_sprites.push({"key" : "base.fortress_bg",
                            "offset_y" : -normal_tile_height / 2});
@@ -1964,14 +2286,26 @@ function fill_layer2_sprite_array(ptile, pcity)
 
   /* We don't draw the bases if there's a city */
   if (pcity == null) {
+    if (typeof EXTRA_BUNKER !== 'undefined' && tile_has_extra(ptile, EXTRA_BUNKER)) {
+      result_sprites.push({"key" : "base.bunker_mg",
+                           "offset_y" : -normal_tile_height / 2});
+      //result_sprites.push(get_base_flag_sprite(ptile));   //uncomment to show base flag on bunkers.
+      return result_sprites; // hides all others under it
+    }
     if (tile_has_extra(ptile, EXTRA_AIRBASE)) {
       result_sprites.push({"key" : "base.airbase_mg",
                            "offset_y" : -normal_tile_height / 2});
     }
-    if (tile_has_extra(ptile, EXTRA_BUOY)) {
+    else if (tile_has_extra(ptile, EXTRA_BUOY))  {
       result_sprites.push(get_base_flag_sprite(ptile));
       result_sprites.push({"key" : "base.buoy_mg",
                            "offset_y" : -normal_tile_height / 2});
+    }
+    if (tile_has_extra(ptile, EXTRA_FORTRESS)
+             || (typeof EXTRA_NAVALBASE !== 'undefined' 
+             && tile_has_extra(ptile, EXTRA_NAVALBASE))) 
+    {
+      result_sprites.push(get_base_flag_sprite(ptile));
     }
     if (tile_has_extra(ptile, EXTRA_RUINS)) {
       result_sprites.push({"key" : "extra.ruins_mg",
@@ -2002,6 +2336,23 @@ function fill_layer3_sprite_array(ptile, stacked, st_unit)
 {
   var result_sprites = [];
   
+  // bunker hides everything under it, but is drawn in other layer since it's _mg
+  if (typeof EXTRA_BUNKER !== 'undefined')  { 
+    if (tile_has_extra(ptile, EXTRA_BUNKER)) {   
+      return result_sprites;
+    }
+  }
+  // castle on top of fortress, have to check for it first then return
+  if (typeof EXTRA_CASTLE !== 'undefined')  { 
+    if (tile_has_extra(ptile, EXTRA_CASTLE)) {   
+    result_sprites.push({"key" : "base.castle_fg",
+                          "offset_y" : -normal_tile_height / 2});
+    if (stacked)
+      result_sprites.push(fill_stacked_in_base_sprite_array(st_unit, stacked));
+    return result_sprites;                  
+    }
+  }
+  // fortress on top of fort, have to check for it first then return
   if (tile_has_extra(ptile, EXTRA_FORTRESS)) {
     result_sprites.push({"key" : "base.fortress_fg",
                           "offset_y" : -normal_tile_height / 2});
@@ -2033,90 +2384,6 @@ function fill_layer3_sprite_array(ptile, stacked, st_unit)
   return result_sprites; // returns empty array
 }
 
-/****************************************************************************
-  Assigns the nation's color based on the color of the flag, currently
-  the most common color in the flag is chosen.
-****************************************************************************/
-function assign_nation_color(nation_id)
-{
-
-  var nation = nations[nation_id];
-  if (nation == null || nation['color'] != null) return;
-
-  var flag_key = "f." + nation['graphic_str'];
-  var flag_sprite = sprites[flag_key];
-  if (flag_sprite == null) return;
-  var c = flag_sprite.getContext('2d');
-  var width = tileset[flag_key][2];
-  var height = tileset[flag_key][3];
-  var color_counts = {};
-  /* gets the flag image data, except for the black border. */
-  if (c == null) return;
-  var img_data = c.getImageData(1, 1, width-2, height-2).data;
-
-  /* count the number of each pixel's color */
-  for (var i = 0; i < img_data.length; i += 4) {
-    var current_color = "rgb(" + img_data[i] + "," + img_data[i+1] + ","
-                        + img_data[i+2] + ")";
-    if (current_color in color_counts) {
-      color_counts[current_color] = color_counts[current_color] + 1;
-    } else {
-      color_counts[current_color] = 1;
-    }
-  }
-
-  var max = -1;
-  var max_color = null;
-
-  for (var current_color in color_counts) {
-    if (color_counts[current_color] > max) {
-      max = color_counts[current_color];
-      max_color = current_color;
-    }
-  }
-
-
-
-  nation['color'] = max_color;
-  color_counts = null;
-  img_data = null;
-
-}
-
-
-/****************************************************************************
-...
-****************************************************************************/
-function is_color_collision(color_a, color_b)
-{
-  var distance_threshold = 20;
-
-  if (color_a == null || color_b == null) return false;
-
-  var pcolor_a = color_rbg_to_list(color_a);
-  var pcolor_b = color_rbg_to_list(color_b);
-
-  var color_distance = Math.sqrt( Math.pow(pcolor_a[0] - pcolor_b[0], 2)
-		  + Math.pow(pcolor_a[1] - pcolor_b[1], 2)
-		  + Math.pow(pcolor_a[2] - pcolor_b[2], 2));
-
-  return (color_distance <= distance_threshold);
-}
-
-/****************************************************************************
-...
-****************************************************************************/
-function color_rbg_to_list(pcolor)
-{
-  if (pcolor == null) return null;
-  var color_rgb = pcolor.match(/\d+/g);
-  color_rgb[0] = parseFloat(color_rgb[0]);
-  color_rgb[1] = parseFloat(color_rgb[1]);
-  color_rgb[2] = parseFloat(color_rgb[2]);
-  return color_rgb;
-}
-
-
 /**************************************************************************
  One step closer to all unit graphics having all their offsets defined in
  a file. This currently hard-codes it but the function could be easily 
@@ -2131,7 +2398,7 @@ function create_unit_offset_arrays()
     // **WARNING for all y values: positive moves up, negative moves down
     var dx = unit_offset_adj_x;  // this is a base value to allow adjusting all unit offsets
     var dy = unit_offset_adj_y; 
-    var sx = 0;               // custom shield placement
+    var sx = 0, sy = 0;       // custom shield placement
     var vx = 0,  vy = 0;      // custom vet badge placement
     var mx = -10, my = -19;   // a "starting base value" for position of multi-unit 
                               // (stacked "+") sprite. Some units will change this.
@@ -2165,8 +2432,9 @@ function create_unit_offset_arrays()
           vx += 8; vy -= 8;
           break;
       case "AWACS":                     
-          dx += 3; dy += 5;
-          mx -= 7; my += 6; 
+          dx -= 17; dy += 3;
+          mx -= 7; my += 6;
+          sx = 8;
           break;    
       case "Battleship":
           dx -= 5; dy -= 7;
@@ -2175,6 +2443,9 @@ function create_unit_offset_arrays()
           break;
       case "Cannon":
           vx += 1; vy -= 4;
+          break;
+      case "Caravan":
+          dx -= 0; dy -= 3;
           break;
       case "Caravel":
           dx -= 3; dy -= 3;
@@ -2190,19 +2461,25 @@ function create_unit_offset_arrays()
           mx -= 6; my += 7; 
           break;
       case "Catapult":
-          vx -= 15; vy += 8;
+          vx -= 14; vy += 15;
+          dx +=2; dy -= 2;
           break;
       case "Cavalry":
-          vx -= 2; vy -= 11;
+          vx += 5; vy -= 15;
+          dx += 4; dy -= 3;
           break;
       case "Chariot":
           sx = 8; 
           dx -= 2; dy -= 3;
           vx -= 11; vy += 4;
           mx -= 6;  my += 7;
-          break; 
+          break;
       case "Cruiser":
           vx -= 13; vy += 15;
+          break;
+      case "Cruise Missile":
+          dx -= 8; dy -= 7;
+          vx -= 23; vy += 15;
           break;
       case "Crusaders":
           vx -= 3; vy -= 12;
@@ -2211,6 +2488,9 @@ function create_unit_offset_arrays()
           dx -= 3; dy -= 3; 
           vx -= 13; vy += 12;
           break;
+      case "Diplomat":
+          dx += 1; dy -= 2;
+          break;
       case "Dive Bomber":
           sx = 8;
           dx -= 11; dy -= 1;
@@ -2218,14 +2498,15 @@ function create_unit_offset_arrays()
           mx += 2; my -= 2;
           break;
       case "Dragoons":
-          dx += 1; dy += 1;
-          vx -= 2; vy -= 10;
+          dx -= 3; dy -= 4;
+          vx -= 48; vy -= 16;
           break;
       case "Engineers":                     
           dx -= 3; dy -= 4;
           break;
       case "Elephants":                     
-          vx -= 1; vy -= 16;
+          vx += 8; vy -= 9;
+          dx -= 6; dy -= 7;
           break;
       case "Escort Fighter":
           sx = 8;
@@ -2235,7 +2516,11 @@ function create_unit_offset_arrays()
           break;
       case "Explorer":                     
           dx -= 0; dy += 2; 
-          break;   
+          break;
+      case "Falconeers":
+          dx += 2; dy += 2;
+          vx += 3; vy -= 5;
+          break;
       case "Fighter":
           sx = 8;
           dx -= 11; dy -= 6;
@@ -2266,8 +2551,8 @@ function create_unit_offset_arrays()
           mx -= 6; my += 7;
           break;
       case "Horsemen":
-          dx -= 5; dy += 0;
-          vy -= 9;
+          dx -= 3; dy -= 3;
+          vx -= 47; vy -= 16;
           break;
       case "Howitzer":
           dx -= 9;  dy += 1;
@@ -2288,11 +2573,11 @@ function create_unit_offset_arrays()
           vx += 9; vy += 16;
           break;
       case "Knights":
-          dx += 3; dy += 1;
+          dx += 3; dy -= 3;
           vx += 9; vy += 4;
           break;
       case "Legion":
-          vx -= 5; vy -= 5;
+          vx += 1; vy -= 7;
           break;
       case "Marines":
           dx += 2; dy += 2;
@@ -2312,19 +2597,19 @@ function create_unit_offset_arrays()
           vx -= 12; vy += 11;
           break;
       case "Musketeers":
-          dx -= 1; dy -= 1;
-          vx -= 4; vy += 5;
+          dx -= 3; dy -= 3;
+          vx -= 3; vy -= 19;
           break;
       case "Phalanx":                     
-          dx += 1; dy -= 2;
-          vx += 1; vy -= 7;
+          dx += 0; dy -= 3;
+          vx +=2; vy -= 8;
           break;
       case "Paratroopers":
           vy -= 7;
           break;
       case "Pikemen":
-          dx += 1; dy += 3;
-          vx -= 1; vy -= 1;
+          dx += 1; dy -= 4;
+          vx -= 1; vy -= 7;
           break;
       case "Riflemen":
           dx -= 4; dy -= 2;
@@ -2336,6 +2621,15 @@ function create_unit_offset_arrays()
       case "Settlers":
           dx -= 3; dy -= 2;
           break;
+      case "Siege Ram":
+          dx -= 2; dy -= 4;
+          vx += 3; vy += 2;
+          break;
+      case "Spy Plane":
+          sx = 8;
+          dx -= 27; dy += 0;
+          mx -= 4;  my -= 6;
+          break;       
       case "Stealth Bomber":
           dx -= 19; dy -= 5;  
           vx -= 53; vy += 1;
@@ -2355,15 +2649,35 @@ function create_unit_offset_arrays()
           dx -= 3; dy -= 4;
           vx -= 11; vy += 8;
           break;
+      case "Train":
+          dx += 5; dy -= 8;
+          break;  
       case "Transport":
           dx -= 3; dy -= 1;
           vx -= 23; vy += 12;
           break;
+      case "Transport Helicopter":
+          vx -= 24; vy += 15;
+          break;
       case "Trireme":
           vx += 2; vy += 1;
           break;
+      case "Wagon":
+          dx -= 9; dy -= 5;
+          mx -= 7; my -= 3;
+          break;  
       case "War Galley":
           vx -= 4; vy += 3;
+          break;
+      case "Warriors":
+          dx -= 3; dy -= 2;
+          vx -= 2; vy -= 2;
+          break;
+      case "Zeppelin":
+          sx = -13; sy = 5;
+          dx -= 19; dy += 4;
+          vx += 11; vy -= 5;
+          mx += 3;  my -= 3;
           break;
     }
     // Adjustment to standard + location:
@@ -2374,7 +2688,7 @@ function create_unit_offset_arrays()
     // Put above information into the UO unit offset arrays for units and their icon components:
     UO_dx[i] = dx + unit_offset_x; 
     UO_dy[i] = dy + unit_offset_y;
-    UO_sx[i] = sx;
+    UO_sx[i] = sx; UO_sy[i] = sy;
     UO_vx[i] = vx; UO_vy[i] = vy;
     UO_mx[i] = mx; UO_my[i] = my;
   }

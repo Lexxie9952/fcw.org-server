@@ -111,7 +111,7 @@ void plr_item_delegate::paint(QPainter *painter, const QStyleOptionViewItem
                - opt.fontMetrics.height() / 2);
     rct.setBottom((rct.top()+rct.bottom()) / 2
                   + opt.fontMetrics.height() / 2);
-    if (index.data().toInt() == -1){
+    if (index.data().toInt() == -1) {
       str = "?";
     } else {
       str = index.data().toString();
@@ -178,7 +178,7 @@ QVariant plr_item::data(int column, int role) const
     break;
   case COL_RIGHT_TEXT:
     str = pdc->func(ipplayer);
-    if (str.toInt() != 0){
+    if (str.toInt() != 0) {
       return str.toInt();
     } else if (str == "?") {
       return -1;
@@ -271,7 +271,7 @@ void plr_model::populate()
   plr_list.clear();
   beginResetModel();
   players_iterate(pplayer) {
-    if ((is_barbarian(pplayer))){
+    if ((is_barbarian(pplayer))) {
       continue;
     }
     pi = new plr_item(pplayer);
@@ -389,7 +389,7 @@ void plr_widget::hide_columns()
   int col;
 
   for (col = 0; col < list_model->columnCount(); col++) {
-    if (!list_model->hide_data(col).toBool()){
+    if (!list_model->hide_data(col).toBool()) {
       setColumnHidden(col, !isColumnHidden(col));
     }
   }
@@ -411,6 +411,7 @@ void plr_widget::nation_selected(const QItemSelection &sl,
   QString res;
   QString sp = " ";
   QString etax, esci, elux, egold, egov;
+  QString cult;
   QString nl = "<br>";
   QStringList sorted_list_a;
   QStringList sorted_list_b;
@@ -420,6 +421,7 @@ void plr_widget::nation_selected(const QItemSelection &sl,
   bool entry_exist = false;
   struct player *me;
   Tech_type_id tech_id;
+  bool global_observer = client_is_global_observer();
 
   other_player = NULL;
   intel_str.clear();
@@ -435,7 +437,7 @@ void plr_widget::nation_selected(const QItemSelection &sl,
   pplayer = reinterpret_cast<player *>(qvar.value<void *>());
   selected_player = pplayer;
   other_player = pplayer;
-  if (pplayer->is_alive == false) {
+  if (!pplayer->is_alive) {
     plr->update_report(false);
     return;
   }
@@ -461,16 +463,19 @@ void plr_widget::nation_selected(const QItemSelection &sl,
           + QString::number(research->client.researching_cost) + ")";
     break;
   }
-  if (player_has_embassy(me, pplayer)) {
+  if (global_observer || player_has_embassy(me, pplayer)) {
     etax = QString::number(pplayer->economic.tax) + "%";
     esci = QString::number(pplayer->economic.science) + "%";
-    elux = QString::number(pplayer->economic.science) + "%";
+    elux = QString::number(pplayer->economic.luxury) + "%";
+    cult = QString::number(pplayer->client.culture);
   } else {
     etax = _("(Unknown)");
     esci = _("(Unknown)");
     elux = _("(Unknown)");
+    cult = _("(Unknown)");
   }
-  if (could_intel_with_player(me, pplayer)) {
+  if (global_observer || pplayer == me
+      || could_intel_with_player(me, pplayer)) {
     egold = QString::number(pplayer->economic.gold);
     egov = QString(government_name_for_player(pplayer));
   } else {
@@ -479,25 +484,31 @@ void plr_widget::nation_selected(const QItemSelection &sl,
   }
   /** Formatting rich text */
   intel_str =
+    /* TRANS: this and similar literal strings interpreted as (Qt) HTML */
     QString("<table><tr><td><b>") + _("Nation") + QString("</b></td><td>")
-    + QString(nation_adjective_for_player(pplayer))
+    + QString(nation_adjective_for_player(pplayer)).toHtmlEscaped()
     + QString("</td><tr><td><b>") + _("Ruler:") + QString("</b></td><td>")
     + QString(ruler_title_for_player(pplayer, tbuf, sizeof(tbuf)))
+      .toHtmlEscaped()
     + QString("</td></tr><tr><td><b>") + _("Government:")
-    + QString("</b></td><td>") + egov
+    + QString("</b></td><td>") + egov.toHtmlEscaped()
     + QString("</td></tr><tr><td><b>") + _("Capital:")
     + QString("</b></td><td>")
     + QString(((!pcity) ? _("(Unknown)") : city_name_get(pcity)))
+      .toHtmlEscaped()
     + QString("</td></tr><tr><td><b>") + _("Gold:")
-    + QString("</b></td><td>") + egold
+    + QString("</b></td><td>") + egold.toHtmlEscaped()
     + QString("</td></tr><tr><td><b>") + _("Tax:")
-    + QString("</b></td><td>") + etax
+    + QString("</b></td><td>") + etax.toHtmlEscaped()
     + QString("</td></tr><tr><td><b>") + _("Science:")
-    + QString("</b></td><td>") + esci
+    + QString("</b></td><td>") + esci.toHtmlEscaped()
     + QString("</td></tr><tr><td><b>") + _("Luxury:")
-    + QString("</b></td><td>") + elux
+    + QString("</b></td><td>") + elux.toHtmlEscaped()
     + QString("</td></tr><tr><td><b>") + _("Researching:")
-    + QString("</b></td><td>") + res + QString("</td></table>");
+    + QString("</b></td><td>") + res.toHtmlEscaped()
+    + QString("<td></tr><tr><td><b>") + _("Culture:")
+    + QString("</b></td><td>") + cult.toHtmlEscaped()
+    + QString("</td></table>");
 
   for (int i = 0; i < static_cast<int>(DS_LAST); i++) {
     added = false;
@@ -511,18 +522,21 @@ void plr_widget::nation_selected(const QItemSelection &sl,
       }
       state = player_diplstate_get(pplayer, other);
       if (static_cast<int>(state->type) == i
-          && could_intel_with_player(me, pplayer)) {
-        if (added == false) {
+          && (global_observer || could_intel_with_player(me, pplayer))) {
+        if (!added) {
           ally_str = ally_str  + QString("<b>")
                      + QString(diplstate_type_translated_name(
                                  static_cast<diplstate_type>(i)))
+                       .toHtmlEscaped()
                      + ": "  + QString("</b>") + nl;
           added = true;
         }
         if (gives_shared_vision(pplayer, other)) {
           ally_str = ally_str + "(◐‿◑)";
         }
-        ally_str = ally_str + nation_plural_for_player(other) + ", ";
+        ally_str = ally_str
+          + QString(nation_plural_for_player(other)).toHtmlEscaped()
+          + ", ";
         entry_exist = true;
       }
     } players_iterate_alive_end;
@@ -531,12 +545,13 @@ void plr_widget::nation_selected(const QItemSelection &sl,
     }
   }
   my_research = research_get(me);
-  if (!client_is_global_observer()) {
+  if (!global_observer) {
     if (player_has_embassy(me, pplayer) && me != pplayer) {
       a = 0;
       b = 0;
       techs_known = QString(_("<b>Techs unknown by %1:</b>")).
-                    arg(nation_plural_for_player(pplayer));
+                    arg(QString(nation_plural_for_player(pplayer))
+                        .toHtmlEscaped());
       techs_unknown = QString(_("<b>Techs unknown by you :</b>"));
 
       advance_iterate(A_FIRST, padvance) {
@@ -558,11 +573,13 @@ void plr_widget::nation_selected(const QItemSelection &sl,
       sorted_list_a.sort(Qt::CaseInsensitive);
       sorted_list_b.sort(Qt::CaseInsensitive);
       foreach (res, sorted_list_a) {
-        techs_known = techs_known + QString("<i>") + res + ","
+        techs_known = techs_known + QString("<i>")
+                      + res.toHtmlEscaped() + ","
                       + QString("</i>") + sp;
       }
       foreach (res, sorted_list_b) {
-        techs_unknown = techs_unknown + QString("<i>") + res + ","
+        techs_unknown = techs_unknown + QString("<i>")
+                        + res.toHtmlEscaped() + ","
                         + QString("</i>") + sp;
       }
       if (a == 0) {
@@ -581,7 +598,7 @@ void plr_widget::nation_selected(const QItemSelection &sl,
     }
   } else {
     tech_str = QString(_("<b>Techs known by %1:</b>")).
-               arg(nation_plural_for_player(pplayer));
+               arg(QString(nation_plural_for_player(pplayer)).toHtmlEscaped());
     advance_iterate(A_FIRST, padvance) {
       tech_id = advance_number(padvance);
       if (research_invention_state(research, tech_id) == TECH_KNOWN) {
@@ -590,7 +607,7 @@ void plr_widget::nation_selected(const QItemSelection &sl,
     } advance_iterate_end;
     sorted_list_a.sort(Qt::CaseInsensitive);
     foreach (res, sorted_list_a) {
-      tech_str = tech_str + QString("<i>") + res + ","
+      tech_str = tech_str + QString("<i>") + res.toHtmlEscaped() + ","
                     + QString("</i>") + sp;
     }
   }
@@ -701,7 +718,7 @@ void plr_report::init()
 **************************************************************************/
 void plr_report::call_meeting()
 {
-  if (meet_but->isEnabled() == true) {
+  if (meet_but->isEnabled()) {
     req_meeeting();
   }
 }
@@ -797,7 +814,7 @@ void plr_report::update_report(bool update_selection)
   int player_count = 0;
   
   /* Force updating selected player information */
-  if (update_selection == true) {
+  if (update_selection) {
     qmi = plr_wdg->currentIndex();
     if (qmi.isValid()) {
       plr_wdg->clearSelection();
@@ -806,7 +823,7 @@ void plr_report::update_report(bool update_selection)
   }
 
   players_iterate(pplayer) {
-    if ((is_barbarian(pplayer))){
+    if ((is_barbarian(pplayer))) {
       continue;
     }
     player_count++;
@@ -842,7 +859,7 @@ void plr_report::update_report(bool update_selection)
       && !players_on_same_team(client_player(), other_player)) {
     withdraw_but->setEnabled(true);
   }
-  if (can_meet_with_player(other_player) == true) {
+  if (can_meet_with_player(other_player)) {
     meet_but->setEnabled(true);
   }
   plr_wdg->restore_selection();
@@ -866,7 +883,7 @@ void popup_players_dialog(bool raise)
 
     i = gui()->gimme_index_of("PLR");
     w = gui()->game_tab_widget->widget(i);
-    if (w->isVisible() == true) {
+    if (w->isVisible()) {
       gui()->game_tab_widget->setCurrentIndex(0);
       return;
     }

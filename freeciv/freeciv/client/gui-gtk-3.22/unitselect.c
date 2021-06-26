@@ -278,7 +278,7 @@ static struct unit_select_dialog *usdlg_create(void)
 
   /* Buttons. */
   close_cmd = gtk_dialog_add_button(GTK_DIALOG(pdialog->shell),
-                                    _("Close"), GTK_RESPONSE_CLOSE);
+                                    _("_Close"), GTK_RESPONSE_CLOSE);
   gtk_dialog_set_default_response(GTK_DIALOG(pdialog->shell),
                                   GTK_RESPONSE_CLOSE);
   g_signal_connect(close_cmd, "clicked",
@@ -1272,6 +1272,13 @@ static void usdlg_cmd_cursor_changed(GtkTreeView *view, gpointer data)
     }
 
     cmd_status[USDLG_CMD_CENTER] = TRUE;
+    break;
+
+  default:
+    fc_assert(FALSE);
+    for (cmd_id = 0; cmd_id < USDLG_CMD_LAST; cmd_id++) {
+      cmd_status[cmd_id] = FALSE;
+    }
     break;
   }
 

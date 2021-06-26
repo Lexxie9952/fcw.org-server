@@ -19,7 +19,7 @@ extern "C" {
 
 struct tile;
 
-const char *concat_tile_activity_text(struct tile *ptile);
+const char *concat_tile_activity_text(struct tile *ptile, int *turns);
 
 #ifdef __cplusplus
 }

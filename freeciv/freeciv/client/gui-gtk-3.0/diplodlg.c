@@ -541,7 +541,7 @@ static void diplomacy_main_response(struct gui_dialog *dlg, int response,
   switch (response) {
   default:
     log_error("unhandled response in %s: %d", __FUNCTION__, response);
-    /* No break. */
+    fc__fallthrough; /* No break. */
   case GTK_RESPONSE_DELETE_EVENT:   /* GTK: delete the widget. */
   case RESPONSE_CANCEL_MEETING_ALL: /* Cancel all meetings. */
     dialog_list_iterate(dialog_list, adialog) {
@@ -605,7 +605,7 @@ static void diplomacy_response(struct gui_dialog *dlg, int response,
 
   default:
     log_error("unhandled response in %s: %d", __FUNCTION__, response);
-    /* No break. */
+    fc__fallthrough; /* No break. */
   case GTK_RESPONSE_DELETE_EVENT:   /* GTK: delete the widget. */
   case GTK_RESPONSE_CANCEL:         /* GTK: cancel button. */
   case RESPONSE_CANCEL_MEETING:     /* Cancel meetings. */
@@ -1123,7 +1123,7 @@ void close_diplomacy_dialog(struct Diplomacy_dialog *pdialog)
 /************************************************************************//**
   Initialize diplomacy dialog
 ****************************************************************************/
-void diplomacy_dialog_init()
+void diplomacy_dialog_init(void)
 {
   dialog_list = dialog_list_new();
   dipl_main = NULL;
@@ -1132,7 +1132,7 @@ void diplomacy_dialog_init()
 /************************************************************************//**
   Free resources allocated for diplomacy dialog
 ****************************************************************************/
-void diplomacy_dialog_done()
+void diplomacy_dialog_done(void)
 {
   dialog_list_destroy(dialog_list);
 }
@@ -1146,8 +1146,8 @@ static struct Diplomacy_dialog *find_diplomacy_dialog(int other_player_id)
   struct player *plr1 = player_by_number(other_player_id);
 
   dialog_list_iterate(dialog_list, pdialog) {
-    if ((pdialog->treaty.plr0 == plr0 && pdialog->treaty.plr1 == plr1) ||
-        (pdialog->treaty.plr0 == plr1 && pdialog->treaty.plr1 == plr0)) {
+    if ((pdialog->treaty.plr0 == plr0 && pdialog->treaty.plr1 == plr1)
+        || (pdialog->treaty.plr0 == plr1 && pdialog->treaty.plr1 == plr0)) {
       return pdialog;
     }
   } dialog_list_iterate_end;

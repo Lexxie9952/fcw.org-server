@@ -53,13 +53,13 @@
 #include "handicaps.h"
 
 /* ai/default */
-#include "aicity.h"
 #include "aidata.h"
 #include "ailog.h"
 #include "aiplayer.h"
 #include "aitech.h"
 #include "aitools.h"
 #include "aiunit.h"
+#include "daicity.h"
 #include "daimilitary.h"
 
 #include "daidomestic.h"
@@ -136,7 +136,7 @@ static void dai_choose_help_wonder(struct ai_type *ait,
   /* Check if wonder needs a little help. */
   if (build_points_left(wonder_city)
       > utype_build_shield_cost_base(unit_type) * caravans) {
-    struct impr_type *wonder = wonder_city->production.value.building;
+    const struct impr_type *wonder = wonder_city->production.value.building;
     adv_want want = wonder_city->server.adv->building_want[improvement_index(wonder)];
     int dist = city_data->distance_to_wonder_city /
                unit_type->move_rate;
@@ -581,6 +581,8 @@ struct adv_choice *domestic_advisor_choose_build(struct ai_type *ait, struct pla
     cur = adv_new_choice();
     adv_choice_set_use(cur, "improvement");
     building_advisor_choose(pcity, cur);
+    cur->want = cur->want * (0.5 + (ai_trait_get_value(TRAIT_BUILDER, pplayer)
+                                    / TRAIT_DEFAULT_VALUE / 2));
     choice = adv_better_choice_free(choice, cur);
 
     /* Consider building caravan-type units for trade route */

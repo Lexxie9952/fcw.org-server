@@ -66,7 +66,7 @@ static void player_diplstate_destroy(const struct player *plr1,
 ***********************************************************************/
 enum diplstate_type cancel_pact_result(enum diplstate_type oldstate)
 {
-  switch(oldstate) {
+  switch (oldstate) {
   case DS_NO_CONTACT: /* possible if someone declares war on our ally */
   case DS_WAR: /* no change */
   case DS_ARMISTICE:
@@ -153,6 +153,11 @@ enum dipl_reason pplayer_can_make_treaty(const struct player *p1,
                                          enum diplstate_type treaty)
 {
   enum diplstate_type existing = player_diplstate_get(p1, p2)->type;
+  int turns_left = player_diplstate_get(p1, p2)->turns_left;
+
+  bool casus_belli =
+   (player_diplstate_get(p1, p2)->has_reason_to_cancel
+       || player_diplstate_get(p2, p1)->has_reason_to_cancel);
 
   if (players_on_same_team(p1, p2)) {
     /* This includes the case p1 == p2 */
@@ -170,11 +175,24 @@ enum dipl_reason pplayer_can_make_treaty(const struct player *p1,
     return DIPL_ERROR; /* these are not negotiable treaties */
   }
   if (treaty == DS_CEASEFIRE && existing != DS_WAR) {
-    return DIPL_ERROR; /* only available from war */
+    if (existing == DS_CEASEFIRE && (casus_belli 
+        || (turns_left >= 1 && turns_left <= 3))) {
+      // if casus belli, can re-affirm treaty as way to erase casus
+      // belli for old deeds. can renew cease-fire if <=3 turns left
+      return DIPL_OK;
+    }
+    else return DIPL_ERROR; /* only available from war */
   }
   if (treaty == DS_PEACE 
       && (existing != DS_WAR && existing != DS_CEASEFIRE)) {
-    return DIPL_ERROR;
+    if ((existing == DS_PEACE || existing == DS_ARMISTICE)
+        && (casus_belli || (turns_left >= 1 && turns_left <= 3))) {
+      // if casus belli, can re-affirm treaty as way to erase casus
+      // belli for old deeds. can extend armistice if more time needed
+      // to get units out of territory if <= 3 turns left.
+      return DIPL_OK;
+    }
+    else return DIPL_ERROR;
   }
   if (treaty == DS_ALLIANCE) {
     if (!is_valid_alliance(p1, p2)) {
@@ -560,6 +578,7 @@ static void player_defaults(struct player *pplayer)
   pplayer->economic.tax     = PLAYER_DEFAULT_TAX_RATE;
   pplayer->economic.science = PLAYER_DEFAULT_SCIENCE_RATE;
   pplayer->economic.luxury  = PLAYER_DEFAULT_LUXURY_RATE;
+  pplayer->economic.infra_points = 0;
 
   spaceship_init(&pplayer->spaceship);
 
@@ -997,7 +1016,7 @@ bool can_player_see_unit_at(const struct player *pplayer,
 
   /* Units within some extras may be hidden. */
   if (!pplayers_allied(pplayer, ptile->extras_owner)) {
-    struct unit_type *ptype = unit_type_get(punit);
+    const struct unit_type *ptype = unit_type_get(punit);
 
     extra_type_list_iterate(extra_type_list_of_unit_hiders(), pextra) {
       if (tile_has_extra(ptile, pextra) && is_native_extra_to_utype(pextra, ptype)) {
@@ -1222,7 +1241,7 @@ int player_get_expected_income(const struct player *pplayer)
     case GOLD_UPKEEP_NATION:
       /* Nation pays for buildings (and units). */
       income -= city_total_impr_gold_upkeep(pcity);
-      /* No break. */
+      fc__fallthrough; /* No break. */
     case GOLD_UPKEEP_MIXED:
       /* Nation pays for units. */
       income -= city_total_unit_gold_upkeep(pcity);
@@ -1538,6 +1557,47 @@ const char *diplrel_name_translation(int value)
   }
 }
 
+/**************************************************************************
+  Return the Casus Belli range when offender performs paction to tgt_plr
+  at tgt_tile and the outcome is outcome.
+**************************************************************************/
+enum casus_belli_range casus_belli_range_for(const struct player *offender,
+                                             const struct unit_type *offender_utype,
+                                             const struct player *tgt_plr,
+                                             const enum effect_type outcome,
+                                             const struct action *paction,
+                                             const struct tile *tgt_tile)
+{
+  int casus_belli_amount;
+
+  /* The victim gets a casus belli if CASUS_BELLI_VICTIM or above. Everyone
+   * gets a casus belli if CASUS_BELLI_OUTRAGE or above. */
+  casus_belli_amount =
+      get_target_bonus_effects(NULL,
+                               offender, tgt_plr,
+                               tile_city(tgt_tile),
+                               NULL,
+                               tgt_tile,
+                               NULL, offender_utype,
+                               NULL, NULL,
+                               paction,
+                               outcome);
+
+  if (casus_belli_amount >= CASUS_BELLI_OUTRAGE) {
+    /* International outrage: This isn't just between the offender and the
+     * victim. */
+    return CBR_INTERNATIONAL_OUTRAGE;
+  }
+
+  if (casus_belli_amount >= CASUS_BELLI_VICTIM) {
+    /* In this situation the specified action provides a casus belli
+     * against the actor. */
+    return CBR_VICTIM_ONLY;
+  }
+
+  return CBR_NONE;
+}
+
 /* The number of mutually exclusive requirement sets that
  * diplrel_mess_gen() creates for the DiplRel requirement type. */
 #define DIPLREL_MESS_SIZE (3 + (DRO_LAST * (5 + 4 + 3 + 2 + 1)))
@@ -1764,7 +1824,7 @@ bool is_valid_username(const char *name)
 {
   return (strlen(name) > 0
           && !fc_isdigit(name[0])
-          && is_ascii_name(name)
+          //&& is_ascii_name(name)
           && fc_strcasecmp(name, ANON_USER_NAME) != 0);
 }
 

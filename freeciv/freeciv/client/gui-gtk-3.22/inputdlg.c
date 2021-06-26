@@ -53,6 +53,14 @@ static void input_dialog_response(GtkDialog *shell, gint response,
 }
 
 /**********************************************************************//**
+  Called when user closes dialog with key (Esc).
+**************************************************************************/
+static void input_dialog_close(GtkDialog *shell, gpointer data)
+{
+  input_dialog_response(shell, GTK_RESPONSE_CANCEL, data);
+}
+
+/**********************************************************************//**
   Create a popup with a text entry box and "OK" and "Cancel" buttons.
 **************************************************************************/
 GtkWidget *input_dialog_create(GtkWindow *parent, const char *dialogname, 
@@ -69,12 +77,13 @@ GtkWidget *input_dialog_create(GtkWindow *parent, const char *dialogname,
   shell = gtk_dialog_new_with_buttons(dialogname,
                                       parent,
                                       GTK_DIALOG_DESTROY_WITH_PARENT,
-                                      _("Cancel"), GTK_RESPONSE_CANCEL,
-                                      _("OK"), GTK_RESPONSE_OK,
+                                      _("_Cancel"), GTK_RESPONSE_CANCEL,
+                                      _("_OK"), GTK_RESPONSE_OK,
                                       NULL);
   gtk_dialog_set_default_response(GTK_DIALOG(shell), GTK_RESPONSE_OK);
   setup_dialog(shell, GTK_WIDGET(parent));
   g_signal_connect(shell, "response", G_CALLBACK(input_dialog_response), cb);
+  g_signal_connect(shell, "close", G_CALLBACK(input_dialog_close), cb);
   gtk_window_set_position(GTK_WINDOW(shell), GTK_WIN_POS_CENTER_ON_PARENT);
 
   label = gtk_frame_new(text);

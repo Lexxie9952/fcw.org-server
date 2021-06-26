@@ -296,17 +296,56 @@ extern "C" {
 #define SPECENUM_VALUE116NAME "Attack_Bonus"
 #define SPECENUM_VALUE117 EFT_CONQUEST_TECH_PCT
 #define SPECENUM_VALUE117NAME "Conquest_Tech_Pct"
+#define SPECENUM_VALUE118 EFT_ACTION_SUCCESS_MOVE_COST
+#define SPECENUM_VALUE118NAME "Action_Success_Actor_Move_Cost"
+#define SPECENUM_VALUE119 EFT_ACTION_SUCCESS_TARGET_MOVE_COST
+#define SPECENUM_VALUE119NAME "Action_Success_Target_Move_Cost"
 /* hp_regen regardless of movement: a pct-based Unit_Recover */
-#define SPECENUM_VALUE118 EFT_UNIT_RECOVER_PCT
-#define SPECENUM_VALUE118NAME "Unit_Recover_Pct"
+#define SPECENUM_VALUE120 EFT_UNIT_RECOVER_PCT
+#define SPECENUM_VALUE120NAME "Unit_Recover_Pct"
 /* Yay, finally programmatic ruleset conditions for happy upkeep! 
    (use negative value to decrease unhappiness.) */
-#define SPECENUM_VALUE119 EFT_UNIT_UNHAPPY_COST
-#define SPECENUM_VALUE119NAME "Unit_Unhappy_Cost"
+#define SPECENUM_VALUE121 EFT_UNIT_UNHAPPY_COST
+#define SPECENUM_VALUE121NAME "Unit_Unhappy_Cost"
 /* uk_happy "discount" for non-aggressively deployed field units */
-#define SPECENUM_VALUE120 EFT_PEACEFUL_FIELDUNIT_BONUS
-#define SPECENUM_VALUE120NAME "Peaceful_Field_Unit_Bonus"
+#define SPECENUM_VALUE122 EFT_PEACEFUL_FIELDUNIT_BONUS
+#define SPECENUM_VALUE122NAME "Peaceful_Field_Unit_Bonus"
+#define SPECENUM_VALUE123 EFT_FORTIFY_DEFENSE_BONUS
+#define SPECENUM_VALUE123NAME "Fortify_Defense_Bonus"
+#define SPECENUM_VALUE124 EFT_UNIT_SHIELD_VALUE_PCT
+#define SPECENUM_VALUE124NAME "Unit_Shield_Value_Pct"
+/* bonuses to activity_count / work rate on tiles */
+#define SPECENUM_VALUE125 EFT_UNIT_WORK_FRAG_BONUS
+#define SPECENUM_VALUE125NAME "Unit_Work_Frag_Bonus"
+#define SPECENUM_VALUE126 EFT_UNIT_WORK_PCT
+#define SPECENUM_VALUE126NAME "Unit_Work_Pct"
+/* adds val to the hard-coded 1:1 conversion of shields to gold */
+#define SPECENUM_VALUE127 EFT_COINAGE_BONUS_PM
+#define SPECENUM_VALUE127NAME "Coinage_Bonus_Pm"
+/* bonus/penalty to gold acquired from selling a building */
+#define SPECENUM_VALUE128 EFT_IMPROVEMENT_SALE_PCT
+#define SPECENUM_VALUE128NAME "Improvement_Sale_Pct"
+/* suppresses game.server.hangry based on reqs from game state */
+#define SPECENUM_VALUE129 EFT_GULAG
+#define SPECENUM_VALUE129NAME "Gulag"
+/* Pct modifier for chance to escape stack */
+#define SPECENUM_VALUE130 EFT_STACK_ESCAPE_PCT
+#define SPECENUM_VALUE130NAME "Stack_Escape_Pct"
+/* Multiplied over and after Building_Build_Cost_Pct is (possibly) applied */
+#define SPECENUM_VALUE131 EFT_IMPR_BUILD_COST_PM
+#define SPECENUM_VALUE131NAME "Building_Build_Cost_Pm"
+/* Allows target to get bonus resistance in cases where req ranges use target (not actor) */
+#define SPECENUM_VALUE132 EFT_ACTION_RESIST_PCT
+#define SPECENUM_VALUE132NAME "Action_Resist_Pct"
+/* Adds raw value bonus to city with addition, prior to Output_Bonus factors */
+#define SPECENUM_VALUE133 EFT_OUTPUT_ADD_BONUS
+#define SPECENUM_VALUE133NAME "Output_Add_Bonus"
+/* Adds raw value bonus to final defense bonus of the terrain (not multiply.) */
+#define SPECENUM_VALUE134 EFT_TERRAIN_DEFEND_ADD_BONUS
+#define SPECENUM_VALUE134NAME "Terrain_Defend_Add_Bonus"
 
+/* FCW does not have /common and needs to hard code any changes or re-ordering of the above in effects.js */
+/********************************************************************************************************~*/
 /* keep this last */
 #define SPECENUM_COUNT EFT_COUNT
 #include "specenum_gen.h"
@@ -364,7 +403,7 @@ int effect_value_from_universals(enum effect_type type,
                                  struct universal *unis, size_t n_unis);
 
 bool is_building_replaced(const struct city *pcity,
-			  struct impr_type *pimprove,
+			                    const struct impr_type *pimprove,
                           const enum req_problem_type prob_type);
 
 /* functions to know the bonuses a certain effect is granting */
@@ -429,7 +468,7 @@ bool building_has_effect(const struct impr_type *pimprove,
 int get_current_construction_bonus(const struct city *pcity,
                                    enum effect_type effect_type,
                                    const enum req_problem_type prob_type);
-int get_potential_improvement_bonus(struct impr_type *pimprove,
+int get_potential_improvement_bonus(const struct impr_type *pimprove,
                                     const struct city *pcity,
                                     enum effect_type effect_type,
                                     const enum req_problem_type prob_type);

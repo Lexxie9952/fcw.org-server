@@ -11,7 +11,7 @@
 
 [datafile]
 description="Sandbox effects data for Freeciv"
-options="Freeciv-ruleset-Devel-2017.Jan.02 +web-compatible"
+options="Freeciv-ruleset-Devel-2017.Jan.02 web-compatible"
 format_version=20
 
 ; /* <-- avoid gettext warnings
@@ -4206,6 +4206,15 @@ reqs	=
       "DiplRel", "War", "Local", FALSE
     }
 
+[effect_incident_success_spy_attack]
+type	= "Casus_Belli_Success"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Spy Attack", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
+
 [effect_incident_success_incite]
 type	= "Casus_Belli_Success"
 value	= 1
@@ -4231,6 +4240,26 @@ reqs	=
     { "type", "name", "range", "present"
       "Action", "Poison City Escape", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
+    }
+
+; A successful release endangers every player connected by trade routes.
+; Who cares that it was done during war against someone else?
+[effect_release_plague_incident_success]
+type	= "Casus_Belli_Success"
+value	= 1000
+reqs	=
+    { "type",    "name",          "range", "present"
+      "Action",  "Spread Plague", "Local", TRUE
+    }
+
+; An attempted release can be brushed under the rug internationally.
+[effect_release_plague_incident_caught]
+type	= "Casus_Belli_Caught"
+value	= 1
+reqs	=
+    { "type",    "name",          "range", "present"
+      "Action",  "Spread Plague", "Local", TRUE
+      "DiplRel", "War",           "Local", FALSE
     }
 
 [effect_incident_success_sabotage_city]
@@ -4268,12 +4297,45 @@ reqs	=
       "Action", "Targeted Sabotage City Escape", "Local", TRUE
     }
 
+[effect_incident_success_sabotage_city_production]
+type	= "Casus_Belli_Success"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Sabotage City Production Escape", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
+
+[effect_sabotage_city_production_city_half_chance]
+type	= "Action_Odds_Pct"
+value	= -50
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Sabotage City Production Escape", "Local", TRUE
+    }
+
 [effect_incident_success_explode_nuke]
 type	= "Casus_Belli_Success"
 value	= 1
 reqs	=
     { "type", "name", "range", "present"
       "Action", "Explode Nuclear", "Local", TRUE
+    }
+
+[effect_incident_success_explode_nuke_city]
+type	= "Casus_Belli_Success"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Nuke City", "Local", TRUE
+    }
+
+[effect_incident_success_explode_nuke_units]
+type	= "Casus_Belli_Success"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Nuke Units", "Local", TRUE
     }
 
 ; Double (+100%) buy cost for Great Wonders
@@ -4283,4 +4345,68 @@ value   = 100
 reqs    =
     { "type", "name", "range"
       "BuildingGenus", "GreatWonder", "Local"
+    }
+
+[effect_action_success_move_cost_embassy]
+type    = "Action_Success_Actor_Move_Cost"
+value   = 1
+reqs    =
+    { "type", "name", "range", "present"
+      "Action", "Establish Embassy", "Local", TRUE
+    }
+
+[effect_action_success_move_cost_investigate]
+type    = "Action_Success_Actor_Move_Cost"
+value   = 1
+reqs    =
+    { "type", "name", "range", "present"
+      "Action", "Investigate City", "Local", TRUE
+    }
+
+[effect_action_success_move_cost_capture]
+type    = "Action_Success_Actor_Move_Cost"
+value   = 6
+reqs    =
+    { "type", "name", "range", "present"
+      "Action", "Capture Units", "Local", TRUE
+    }
+
+[effect_action_success_move_cost_expel]
+type    = "Action_Success_Actor_Move_Cost"
+value   = 6
+reqs    =
+    { "type", "name", "range", "present"
+      "Action", "Expel Unit", "Local", TRUE
+    }
+
+[effect_action_success_move_cost_expelled]
+type    = "Action_Success_Target_Move_Cost"
+value   = 65535
+reqs    =
+    { "type", "name", "range", "present"
+      "Action", "Expel Unit", "Local", TRUE
+    }
+
+[effect_action_success_move_cost_disrupt]
+type    = "Action_Success_Actor_Move_Cost"
+value   = 1
+reqs    =
+    { "type", "name", "range", "present"
+      "Action", "User Action 1", "Local", TRUE
+    }
+
+[effect_action_success_move_cost_disrupted]
+type    = "Action_Success_Target_Move_Cost"
+value   = 6
+reqs    =
+    { "type", "name", "range", "present"
+      "Action", "User Action 1", "Local", TRUE
+    }
+
+[effect_action_success_move_cost_bombard]
+type    = "Action_Success_Actor_Move_Cost"
+value   = 65535
+reqs    =
+    { "type", "name", "range", "present"
+      "Action", "Bombard", "Local", TRUE
     }

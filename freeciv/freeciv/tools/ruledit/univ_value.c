@@ -115,6 +115,9 @@ bool universal_value_initial(struct universal *src)
   case VUT_CITYTILE:
     src->value.citytile = CITYT_CENTER;
     return TRUE;
+  case VUT_CITYSTATUS:
+    src->value.citystatus = CITYS_OWNED_BY_ORIGINAL;
+    return TRUE;
   case VUT_GOOD:
     if (game.control.num_goods_types <= 0) {
       return FALSE;
@@ -166,8 +169,14 @@ bool universal_value_initial(struct universal *src)
   case VUT_MINCULTURE:
     src->value.minculture = 0;
     return TRUE;
+  case VUT_MINFOREIGNPCT:
+    src->value.minforeignpct = 0;
+    return TRUE;
   case VUT_UNITSTATE:
     src->value.unit_state = USP_TRANSPORTED;
+    return TRUE;
+  case VUT_ACTIVITY:
+    src->value.activity = ACTIVITY_IDLE;
     return TRUE;
   case VUT_MINMOVES:
     src->value.minmoves = 0;
@@ -226,24 +235,24 @@ void universal_kind_values(struct universal *univ,
   case VUT_NONE:
     break;
   case VUT_ADVANCE:
-    advance_active_iterate(padv) {
+    advance_re_active_iterate(padv) {
       cb(advance_rule_name(padv), univ->value.advance == padv, data);
-    } advance_active_iterate_end;
+    } advance_re_active_iterate_end;
     break;
   case VUT_GOVERNMENT:
-    governments_active_iterate(pgov) {
+    governments_re_active_iterate(pgov) {
       cb(government_rule_name(pgov), univ->value.govern == pgov, data);
-    } governments_active_iterate_end;
+    } governments_re_active_iterate_end;
     break;
   case VUT_IMPROVEMENT:
-    improvement_active_iterate(pimpr) {
+    improvement_re_active_iterate(pimpr) {
       cb(improvement_rule_name(pimpr), univ->value.building == pimpr, data);
-    } improvement_active_iterate_end;
+    } improvement_re_active_iterate_end;
     break;
   case VUT_TERRAIN:
-    terrain_active_iterate(pterr) {
+    terrain_re_active_iterate(pterr) {
       cb(terrain_rule_name(pterr), univ->value.terrain == pterr, data);
-    } terrain_active_iterate_end;
+    } terrain_re_active_iterate_end;
     break;
   case VUT_NATION:
     nations_iterate(pnat) {
@@ -251,14 +260,14 @@ void universal_kind_values(struct universal *univ,
     } nations_iterate_end;
     break;
   case VUT_UTYPE:
-    unit_active_type_iterate(putype) {
+    unit_type_re_active_iterate(putype) {
       cb(utype_rule_name(putype), univ->value.utype == putype, data);
-    } unit_active_type_iterate_end;
+    } unit_type_re_active_iterate_end;
     break;
   case VUT_UCLASS:
-    unit_active_class_iterate(pclass) {
+    unit_class_re_active_iterate(pclass) {
       cb(uclass_rule_name(pclass), univ->value.uclass == pclass, data);
-    } unit_active_class_iterate_end;
+    } unit_class_re_active_iterate_end;
     break;
   case VUT_OTYPE:
     output_type_iterate(otype) {
@@ -266,9 +275,9 @@ void universal_kind_values(struct universal *univ,
     } output_type_iterate_end;
     break;
   case VUT_GOOD:
-    goods_active_type_iterate(pgood) {
+    goods_type_re_active_iterate(pgood) {
       cb(goods_rule_name(pgood), univ->value.good == pgood, data);
-    } goods_active_type_iterate_end;
+    } goods_type_re_active_iterate_end;
     break;
   case VUT_NATIONALITY:
     nations_iterate(pnat) {
@@ -276,14 +285,14 @@ void universal_kind_values(struct universal *univ,
     } nations_iterate_end;
     break;
   case VUT_EXTRA:
-    extra_active_type_iterate(pextra) {
+    extra_type_re_active_iterate(pextra) {
       cb(extra_rule_name(pextra), univ->value.extra == pextra, data);
-    } extra_active_type_iterate_end;
+    } extra_type_re_active_iterate_end;
     break;
   case VUT_STYLE:
-    styles_active_iterate(pstyle) {
+    styles_re_active_iterate(pstyle) {
       cb(style_rule_name(pstyle), univ->value.style == pstyle, data);
-    } styles_active_iterate_end;
+    } styles_re_active_iterate_end;
     break;
   case VUT_AI_LEVEL:
     for (i = 0; i < AI_LEVEL_COUNT; i++) {
@@ -291,9 +300,9 @@ void universal_kind_values(struct universal *univ,
     }
     break;
   case VUT_SPECIALIST:
-    specialist_active_type_iterate(pspe) {
+    specialist_type_re_active_iterate(pspe) {
       cb(specialist_rule_name(pspe), univ->value.specialist == pspe, data);
-    } specialist_active_type_iterate_end;
+    } specialist_type_re_active_iterate_end;
     break;
   case VUT_TERRAINCLASS:
     for (i = 0; i < TC_COUNT; i++) {
@@ -345,10 +354,15 @@ void universal_kind_values(struct universal *univ,
       cb(citytile_type_name(i), univ->value.citytile == i, data);
     }
     break;
+  case VUT_CITYSTATUS:
+    for (i = 0; i < CITYS_LAST; i++) {
+      cb(citystatus_type_name(i), univ->value.citystatus == i, data);
+    }
+    break;
   case VUT_ACHIEVEMENT:
-    achievements_active_iterate(pach) {
+    achievements_re_active_iterate(pach) {
       cb(achievement_rule_name(pach), univ->value.achievement == pach, data);
-    } achievements_active_iterate_end;
+    } achievements_re_active_iterate_end;
     break;
   case VUT_DIPLREL:
     for (i = 0; i < DS_LAST; i++) {
@@ -363,6 +377,11 @@ void universal_kind_values(struct universal *univ,
       cb(ustate_prop_name(i), univ->value.unit_state == i, data);
     }
     break;
+  case VUT_ACTIVITY:
+    activity_type_iterate(act) {
+      cb(unit_activity_name(act), univ->value.activity == act, data);
+    } activity_type_iterate_end;
+    break;    
   case VUT_NATIONGROUP:
     nation_groups_iterate(pgroup) {
       cb(nation_group_rule_name(pgroup), univ->value.nationgroup == pgroup, data);
@@ -402,6 +421,7 @@ void universal_kind_values(struct universal *univ,
   case VUT_MINCALFRAG:
   case VUT_MAXTILEUNITS:
   case VUT_MINCULTURE:
+  case VUT_MINFOREIGNPCT:
   case VUT_MINMOVES:
   case VUT_MINVETERAN:
   case VUT_MINHP:

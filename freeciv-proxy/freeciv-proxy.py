@@ -208,8 +208,8 @@ def validate_username(name):
     if (name is None or len(name) <= 2 or len(name) >= 32):
         return False
     name = name.lower()
-    return name != "pbem" and re.fullmatch('[a-z][a-z0-9]*', name) is not None
-
+    return name != "pbem"  #and re.fullmatch('[a-z]*', name) is not None
+     # and re.fullmatch('[a-z][a-z0-9]*', name) is not None
 
 if __name__ == "__main__":
     try:

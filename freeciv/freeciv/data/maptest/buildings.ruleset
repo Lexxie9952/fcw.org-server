@@ -293,7 +293,8 @@ City Walls increase the 1.5x bonus for Land units in a city to 3x, effectively\
  doubling the strength of Land units against attacks from other Land units (and\
  Helicopters.) City Walls are ineffective against Air units, Sea units, Missiles,\
  and Howitzers; in which case the normal 1.5x bonus is given. City Walls prevent\
- population loss when a defending unit is destroyed by a Land unit.\
+ population loss when a defending unit is destroyed by a Land unit. City Walls have\
+ a 50% bonus against sabotage actions.\
 ")
 
 [building_coastal_defense]
@@ -338,18 +339,18 @@ sound		= "b_courthouse"
 sound_alt	= "b_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
-Reduces corruption in a city by roughly half (60% but rounded down.)\
- Provides law and order to support +1 unit free of upkeep. Eliminates\
- tile corruption under Anarchy and Despotism.\
+Courthouses reduce corruption by about half (60% rounded down),\
+ eliminate tile output penalties for Anarchy and Despotism, and\
+ give +1 unit free of upkeep.\
 "), _("\
-Diplomatic attacks on your diplomatic units are 15% less effective.\
- (50%-15%=35%). The basic Steal Tech action is 35% less effective.\
- (80%-35%=45%). All other hostile diplomatic actions are 20% less effective.\
+ Diplomatic combat gets a bonus of ¼ of base odds. (At general base odds\
+ of ½, odds of losing become: ½ - ⅛ = ⅜). All other hostile diplomatic\
+ actions are 20% less effective (80% - 20% = 60%).\
 "), _("\
-In a Democracy, a Courthouse makes 1 unhappy citizen content (unless that\
+ In Democracy, Courthouses make 1 unhappy citizen content, unless the\
  citizen is unhappy about military activity).\
 "), _("\
-Cost to incite revolt in the city is 2x if empty and 4x if occupied.\
+ Cost to incite revolt in the city is 2x if empty and 4x if occupied.\
 ")
 
 [building_factory]
@@ -373,6 +374,56 @@ sound_alt	= "b_generic"
 helptext	= _("\
 Increases the shield production in a city by +50%.  This increase may\
  contribute to pollution.\
+"), _("\
+ This building lets you conscript one extra infantry/foot unit per turn.\
+")
+
+[building_enrichment_facility]
+name		= _("Enrichment Facility")
+genus		= "Improvement"
+reqs	=
+    { "type",         "name",         "range"
+      "Tech",         "Fusion Power", "Player"
+      "Building",     "Fusion Reactor","City"
+      "ServerSetting","nukes_major",  "World"
+    }
+graphic	= "b.enrichment_facility"
+graphic_alt	= "b.capitalization"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 200
+upkeep		= 3
+sabotage	= 100
+sound		= "b_enrichment_facility"
+sound_alt	= "b_generic"
+helptext	= _("\
+Allows refining the fissile isotopes needed to create nuclear fusion weapons.\
+ To make these weapons, a city requires an Enrichment Facility, which first\
+ requires a Fusion Reactor.\
+")
+
+[building_fusion_reactor]
+name		= _("Fusion Reactor")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Fusion Power", "Player"
+    }
+graphic	= "b.fusion_reactor"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 200
+upkeep		= 4
+sabotage	= 100
+sound		= "b_fusion_reactor"
+sound_alt	= "b_generic"
+; /* xgettext:no-c-format */
+helptext	= _("\
+Increases the shield production in a city by +75% of base production levels.\
+ Gives +1 build slot and +5 free shield upkeep on units.\
 ")
 
 [building_granary]
@@ -420,6 +471,30 @@ sound_alt	= "b_generic"
 helptext	= _("\
 Gives one extra food resource on all Oceanic tiles. The city needs\
  to be coastal to build this improvement.\
+")
+
+[building_homeland_security]
+name            = _("Homeland Security")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Literacy", "Player"
+      "Building", "Supreme Court", "Player"
+    }
+graphic	= "b.homeland_security"
+graphic_alt	= "b.courthouse"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 30
+upkeep		= 0
+sabotage	= 0
+sound		= "b_homeland_security"
+sound_alt	= "b_generic"
+helptext	= _("\
+You can build Homeland Security offices if you own the Supreme Court. Homeland Security\
+ gives the same bonus as a Courthouse vs. all hostile diplomatic acts. As a ministry of the\
+ Supreme Court, it has no upkeep and cannot be sabotaged.\
 ")
 
 [building_hydro_plant]
@@ -526,7 +601,8 @@ Increased citizen mobility and ticket revenues\
 ")
 
 [building_mfg_plant]
-name		= _("Mfg. Plant")
+name		= _("Manufacturing Plant")
+rule_name = "Mfg. Plant"
 genus		= "Improvement"
 reqs	=
     { "type", "name", "range"
@@ -554,6 +630,8 @@ A Mfg. Plant with a Factory AND a Power, Hydro, Nuclear, or Solar Plant\
 "), _("\   
 The pollution reduction of a Hydro, Nuclear, or Solar Plant is applied one more\
  time to cities with Mfg. Plants, effectively doubling the bonus percentage.\  
+"), _("\
+ This building lets you conscript one extra infantry/foot unit per turn.\
 ")
 
 [building_nuclear_plant]
@@ -629,10 +707,15 @@ sabotage	= 100
 sound		= "b_police_station"
 sound_alt	= "b_generic"
 helptext	= _("\
-Neutralizes the unhappiness caused by two military units. Assists domestic diplomatic\
- units against hostile diplomatic attacks with a 10% bonus. Decreases the chance of\
- tech theft by 10%. Prevents enemies from establishing an embassy without first\
- agreeing to cease-fire, armistice, or peace.\
+Police Stations neutralize the unhappiness caused by two military units, and\
+ prevent enemies from estalishing embassies without first agreeing to cease-fire\
+ or peace.\
+"), _("\
+ Diplomatic combat gets a bonus of ¼ of base odds. (At general base odds\
+ of ½, odds of losing become: ½ - ⅛ = ⅜). All other hostile diplomatic\
+ actions are 20% less effective (80% - 20% = 60%).\
+"), _("\
+ Diplomats and Spies made in a city with Police Station gain +1 veteran level.\
 ")
 
 [building_port_facility]
@@ -690,6 +773,28 @@ For each Factory or Mfg. Plant in a city, a Power Plant adds +25% to\
 "), _("\
 *Only one Power Plant, Hydro Plant, Nuclear Plant, or\
  Solar Plant can have an active effect in a city.\
+")
+
+[building_radar_tower]
+name		= _("Radar Tower")
+genus		= "Improvement"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Radar", "Player"
+    }
+graphic	= "b.radar_tower"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 55
+upkeep		= 0
+sabotage	= 100
+sound		= "b_radar_tower"
+sound_alt	= "b_generic"
+helptext	= _("\
+Radar Towers use advanced technology to increase a city's vision to\
+ approximately 6 tiles.\
 ")
 
 [building_recycling_center]
@@ -873,7 +978,7 @@ helptext	= _("\
 Space Components can be differentiated into Propulsion and Fuel Components.\
  Each pair of them reduces spaceship travel time.  You can build up to 8 pairs.\
 "), _("\
-Before you can build any spaceship parts, any nation must have built the\
+Before you can build any spaceship parts, your nation must have built the\
  Apollo Program.\
 ")
 
@@ -909,7 +1014,7 @@ Space Modules are the most expensive parts of spaceships.  There\
 "), _("\
 You can build up to 4 Space Modules of each kind.\
 "), _("\
-Before you can build any spaceship parts, any nation must have built the\
+Before you can build any spaceship parts, your nation must have built the\
  Apollo Program.\
 ")
 
@@ -936,7 +1041,7 @@ Space Structurals form the base of your spaceship.  All other\
  spaceship parts need to be connected to Structurals in order to\
  function.  You can build up to 32 Space Structurals.\
 "), _("\
-Before you can build any spaceship parts, a nation must have built the\
+Before you can build any spaceship parts, your nation must have built the\
  Apollo Program.\
 ")
 
@@ -1084,29 +1189,27 @@ sabotage	= 0
 sound		= "b_palace"
 sound_alt	= "b_generic"
 helptext	= _("\
-Makes a city the capital of your nation.\
- Corruption in cities increases with distance\
- from the capital (except under Democracy or\
- Communism.) A Palace reduces corruption in your capital\
- by roughly half.\
+Makes a city the capital of your nation. Corruption in cities increases with distance\
+ from the capital (except under Democracy or Communism.) A Palace reduces corruption\
+ in your capital by roughly half.\
 "), _("\
-The cost of inciting a revolt decreases with distance from the\
- capital. The capital cannot be incited to revolt, and reduces the chance\
- of enemy agents defeating your agents by 50%. Attempts to sabotage buildings\
- in your capital are also reduced by 50%.\
+ The cost of inciting a revolt decreases with distance from the\
+ capital. The capital cannot be incited to revolt. The chance\
+ of enemy agents defeating your agents or sabotaging buildings is\
+ reduced by half.\
 "), _("\
-Take good care of your capital, as its loss may result in your\
- empire plunging into civil war. Losing your current palace also\
- results in losing whatever spaceship you might have.\
+ Losing your capital may result in your empire falling into civil\
+ war. It also will destroy whatever Spaceship you might have.\
 "), _("\
-If the capital is in a dangerous location, or a more central capital\
- would give a better corruption distribution, you can move your palace\
- by rebuilding it in another city.\
-"),
-_("\
-The city containing the Palace receives a production bonus of +75% under Despotism,\
- +50% under Monarchy, and +25% under Communism. Under Fundamentalism, it receives\
+ You can rebuild your Palace in another city. This may help if your\
+ capital is in a dangerous location, or a new loaction would\
+ reduce corruption.\
+"), _("\
+ The Palace gives a production bonus of +75% under Despotism,\
+ +50% under Monarchy, and +25% under Communism. Under Fundamentalism it gets\
  a +50% gold bonus.\
+"), _("\
+ With Conscription, a Palace allows conscripting one extra qualifying unit per turn.\
 ")
 
 [building_ecclesiastical_palace]
@@ -1122,7 +1225,7 @@ graphic_alt	= "b.palace"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 110
+build_cost	= 100
 upkeep		= 0
 sabotage	= 0
 sound		= "b_palace"
@@ -1130,18 +1233,20 @@ sound_alt	= "b_generic"
 helptext	= _("\
 Makes a city the religious capital that acts as a second center of government.\
 "), _("\
-This building is a second Palace and gives all effects of a Palace,\
- including reduction of corruption (based on the nearest capital.)\
- Unlike the Palace, capital production bonuses are rendered in gold\
- tithes rather than shield output. Fundamentalism gets a +50% gold\
- bonus in tithes, in its ecclesiasitcal capital.\
+ Cities experience lower corruption rates if they are closer to\
+ a capital. In your religious capital, capital bonuses are rendered\
+ in gold tithes rather than shield output. Under Fundamentalism,\
+ the religious capital gets a +50% gold bonus from tithes.\
 "), _("\
-The city where this Palace is located cannot be incited to revolt,\
- and enjoys a bonus when enemy agents try to evade your own agents\
- stationed in the city, or sabotage your buildings.\
+ The cost of bribing and inciting increase when closer to a\
+ capital. Capitals can not be incited to revolt, and the\
+ chance of enemy agents defeating your agents or sabotaging\
+ buildings is reduced by half.\
 "), _("\
-Under Fundamentalism, Fanatics produced in the city with this building\
+ Under Fundamentalism, Fanatics produced in the city with this building\
  are inspired by fervorous faith to +1 higher veteran level.\
+"), _("\
+ With Conscription, this building allows making one extra qualifying unit per turn.\
 ")
 
 [building_agoge]
@@ -1164,13 +1269,11 @@ sabotage	= 0
 sound		= "w_agoge"
 sound_alt	= "w_generic"
 helptext	= _("\
-The Agōgē creates a culture of extreme fitness and battle readiness.\
+The Agōgē creates a culture of extreme fitness, and is famous for\
+ vigilant patrols, secret shortcut trails, and battle readiness.\
  All your foot soldiers get +⅓ move. Phalanx and Pikemen receive a\
- +50% attack bonus.\
-"), _("
-The Agōgē is famous for vigilant patrols, secret shortcut trails, and\
- readiness for battle. Foot units in the city with the Agōgē\
- begin their turn with +1 move. Obsolete by: Gunpowder.\
+ +50% attack bonus. Foot units in the city with the Agōgē begin\
+ their turn with +1 move. Obsolete by: Gunpowder.\
 ")
 
 [building_apollo_program]
@@ -1400,9 +1503,16 @@ sabotage	= 0
 sound		= "w_great_wall"
 sound_alt	= "w_generic"
 helptext	= _("\
-Gives a City Wall in all your cities. This has no effect\
- when City Walls are already present.  This Wonder is made\
- obsolete when any nation discovers Machine Tools.\
+The Great Wall protects your cities with City Walls. It takes three\
+ turns after founding a city for the Great Wall to extend protection\
+ to the new city. Also, the city must have been founded by you, or\
+ assimilated to where less than a fifth of its citizens are foreign.\n\
+The Great Wall gives no extra effect when City Walls are already present.\
+ However, regular City Walls still protect a city in which the Great\
+ Wall has not yet activated.\nWarning! This Wonder is obsolete when\
+ ANY nation in the world discovers Machine Tools. You may not know\
+ which nations have Machine Tools. This makes it possible for you to\
+ build an obsolete wonder!\
 ")
 
 [building_hanging_gardens]
@@ -1485,6 +1595,33 @@ Adds 100% of base science production to every city in your\
  This wonder is never obsolete.\
 ")
 
+[building_jtids]
+name		= _("JTIDS")
+genus		= "SmallWonder"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Computers", "Player"
+    }
+graphic		= "b.seti_program"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 230
+upkeep		= 0
+sabotage	= 0
+sound		= "w_seti_program"
+sound_alt	= "w_generic"
+; /* xgettext:no-c-format */
+helptext	= _("\
+JTIDS (Joint Tactical Information Distribution System) is a radio\
+ battlefield information network that provides real-time intel to forces\
+ on the ground. Effectively, this Wonder modernizes the weaponry and info systems\
+ for all the infantry in your army.\n\n\
+All foot soldiers and Mechanized Infantry are built with +1 vet level.\
+ Odds of veteran promotion are increased.\
+")
+
 [building_js_bachs_cathedral]
 name		= _("J.S. Bach's Cathedral")
 genus		= "SmallWonder"
@@ -1529,8 +1666,10 @@ sabotage	= 0
 sound		= "w_king_richards_crusade"
 sound_alt	= "w_generic"
 helptext	= _("\
-Adds one extra shield resource on every tile in and around\
- the city where it is built. Obsolete by: Robotics.\
+In the city where it is built, adds one extra shield resource on every\
+ tile. Lets you build one extra Caravan or infantry unit per turn without\
+ Conscription tech.\
+ Obsolete by: Robotics.\
 ")
 
 [building_leonardos_workshop]
@@ -1707,7 +1846,7 @@ sound		= "w_oracle"
 sound_alt	= "w_generic"
 helptext	= _("\
 With this wonder, City Walls and Courthouses each make one unhappy citizen\
- content in their city, unless that citizen is unhappy about aggression.\
+ content in their city, unless that citizen is unhappy about military activity.\
  Also, no cities in the empire with this Wonder can be incited to revolt.\
  The discovery of Radio makes the Mausoleum obsolete.\
 ")
@@ -1807,9 +1946,11 @@ sabotage	= 0
 sound		= "w_statue_of_liberty"
 sound_alt	= "w_generic"
 helptext	= _("\
-Allows you to instantly change government, including governments\
- not yet researched by your civilization, and without\
- the transition period of Anarchy.\
+Allows you to instantly change government, including governments not\
+ yet researched by your civilization, and without the transition period\
+ of Anarchy. It also allows unprovoked declaration of war regardless of\
+ any Senate or United Nations. Democracies cannot fall into Anarchy from\
+ two turns of city disorder.\n\
  This Wonder does not become obsolete.\
 ")
 
@@ -1833,9 +1974,9 @@ sound		= "w_oracle"
 sound_alt	= "w_generic"
 helptext	= _("\
 The powerful Zeus gives order and organization to both city and nation.\
- One citizen is made content about military activity in every city in\
- your nation. In the city the statue is located, it makes one citizen\
- happy and provides free upkeep to 4 units. Except for one permanent\
+ In every city in your nation, this Wonder neutralizes the unhappiness\
+ caused by one military unit. In the city the statue is located, it makes\
+ one citizen happy and provides free upkeep to 4 units. Except for one permanent\
  happy citizen, the discovery of Tactics makes the Statue of Zeus obsolete.\
 ")
 
@@ -1859,9 +2000,11 @@ sound		= "w_great_library"
 sound_alt	= "w_generic"
 ; /* xgettext:no-c-format */
 helptext	= _("\
-The Supreme Court gives the same effect as an extra Courthouse in all your cities.\
- If a Courthouse is already present, the additional bonus for diplomatic combat and\
- Steal Tech is 10%. This Wonder is never obsolete.\
+With respect to corruption, incite protection, upkeep, and other bonuses, the\
+ Supreme Court gives the same effect as an extra Courthouse in all your cities. By\
+ itself, it gives no bonus against hostile diplomatic acts. However, owning the\
+ Supreme Court enables each city to build a regional Homeland Security building\
+ to acquire those additional bonuses. This Wonder is never obsolete.\
 ")
 
 [building_sun_tzus_war_academy]
@@ -1932,14 +2075,14 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 200
+build_cost	= 220
 upkeep		= 0
 sabotage	= 0
 sound		= "w_teslas_laboratory"
 sound_alt	= "w_generic"
 helptext	= _("\
-Upgrades one obsolete unit per turn.  This Wonder\
- does not become obsolete.\
+Upgrades one obsolete unit per turn. Reduces price of unit upgrades by\
+ 20%. This Wonder does not become obsolete.\
 ")
 
 [building_internet]

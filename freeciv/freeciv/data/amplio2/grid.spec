@@ -2,7 +2,7 @@
 [spec]
 
 ; Format and options of this spec file: 
-options = "+Freeciv-spec-Devel-2015-Mar-25"
+options = "+Freeciv-spec-Devel-2019-Jul-03"
 
 [info]
 
@@ -41,4 +41,10 @@ tiles = { "row", "column", "tag"
   2, 1, "grid.borders.s"
   2, 2, "grid.borders.w"
   2, 3, "grid.borders.e"
+
+  3, 0, "grid.usermark"
+  3, 1, "grid.userarea"
+  3, 2, "grid.userspot"
+  3, 3, "grid.pollute_ring"
+  3, 4, "grid.pollute_icon"
 }

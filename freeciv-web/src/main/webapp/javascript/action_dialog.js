@@ -21,6 +21,57 @@
 /* All generalized actions. */
 var actions = {};
 var auto_attack = false;
+var active_dialogs = [];
+
+var action_selection_restart = false;
+var did_not_decide = false;
+
+/**********************************************************************//**
+  Move the queue of units that need user input forward unless the current
+  unit is going to need more input.
+**************************************************************************/
+function act_sel_queue_may_be_done(actor_unit_id)
+{
+  if (!is_more_user_input_needed) {
+    /* The client isn't waiting for information for any unanswered follow
+     * up questions. */
+
+    if (action_selection_restart) {
+      /* The action selection dialog was closed but only so it can be
+       * redrawn with fresh data. */
+
+      action_selection_restart = false;
+    } else {
+      /* The action selection process is over, at least for now. */
+      action_selection_no_longer_in_progress(actor_unit_id);
+    }
+
+    if (did_not_decide) {
+      /* The action selection dialog was closed but the player didn't
+       * decide what the unit should do. */
+
+      /* Reset so the next action selection dialog does the right thing. */
+      did_not_decide = false;
+    } else {
+      /* An action, or no action at all, was selected. */
+      action_decision_clear_want(actor_unit_id);
+      action_selection_next_in_focus(actor_unit_id);
+    }
+  }
+}
+
+/**********************************************************************//**
+  Move the queue of units that need user input forward since the
+  current unit doesn't require the extra input any more.
+**************************************************************************/
+function act_sel_queue_done(actor_unit_id)
+{
+  /* Stop waiting. Move on to the next queued unit. */
+  is_more_user_input_needed = false;
+  action_selection_restart = false;
+  did_not_decide = false;
+  act_sel_queue_may_be_done(actor_unit_id);
+}
 
 /**************************************************************************
   Returns true iff the given action probability belongs to an action that
@@ -91,17 +142,6 @@ function can_actor_unit_move(actor_unit, target_tile)
   /* It is better to show the "Keep moving" option one time to much than
    * one time to little. */
   return true;
-}
-
-/**************************************************************************
-  Encode a building ID for transfer in the value field of
-  packet_unit_do_action for targeted sabotage city.
-**************************************************************************/
-function encode_building_id(building_id)
-{
-  /* Building ID is encoded in the value field by adding one so the
-   * building ID -1 (current production) can be transferred. */
-  return building_id + 1;
 }
 
 /***************************************************************************
@@ -183,8 +223,8 @@ function act_sel_click_function(parent_id,
                                         cities[tgt_id],
                                         action_probabilities,
                                         action_id);
-
-      $(parent_id).remove();
+      is_more_user_input_needed = true;
+      remove_action_selection_dialog(parent_id, actor_unit_id, true);
     };
   case ACTION_SPY_TARGETED_SABOTAGE_CITY:
   case ACTION_SPY_TARGETED_SABOTAGE_CITY_ESC:
@@ -195,14 +235,14 @@ function act_sel_click_function(parent_id,
     return function() {
       var packet = {
         "pid"         : packet_unit_action_query,
-        "diplomat_id" : actor_unit_id,
+        "actor_id"    : actor_unit_id,
         "target_id"   : tgt_id,
         "action_type" : action_id,
         "disturb_player" : true
       };
       send_request(JSON.stringify(packet));
-
-      $(parent_id).remove();
+      is_more_user_input_needed = true;
+      remove_action_selection_dialog(parent_id, actor_unit_id, true);
     };
   case ACTION_FOUND_CITY:
     return function() {
@@ -212,8 +252,8 @@ function act_sel_click_function(parent_id,
         "unit_id" : actor_unit_id
       };
       send_request(JSON.stringify(packet));
-
-      $(parent_id).remove();
+      is_more_user_input_needed = true;
+      remove_action_selection_dialog(parent_id, actor_unit_id, true);
     };
   case ACTION_PILLAGE:
   case ACTION_ROAD:
@@ -221,33 +261,20 @@ function act_sel_click_function(parent_id,
   case ACTION_MINE:
   case ACTION_IRRIGATE:
     return function() {
-      var packet = {
-        "pid"         : packet_unit_do_action,
-        "actor_id"    : actor_unit_id,
-        "target_id"   : tgt_id,
-        "extra_id"    : sub_tgt_id,
-        "value"       : 0,
-        "name"        : "",
-        "action_type" : action_id
-      };
-      send_request(JSON.stringify(packet));
-
-      $(parent_id).remove();
+      request_unit_do_action(action_id, actor_unit_id, tgt_id, sub_tgt_id);
+      remove_action_selection_dialog(parent_id, actor_unit_id);
+    };
+  case ACTION_ATTACK:
+    return function() {
+      request_unit_do_action(action_id, actor_unit_id, tgt_id, sub_tgt_id);
+      // unit lost hp or died or promoted after attack, so update it:
+      setTimeout(update_active_units_dialog, update_focus_delay);
+      remove_action_selection_dialog(parent_id, actor_unit_id);
     };
   default:
     return function() {
-      var packet = {
-        "pid"         : packet_unit_do_action,
-        "actor_id"    : actor_unit_id,
-        "target_id"   : tgt_id,
-        "extra_id"    : EXTRA_NONE,
-        "value"       : 0,
-        "name"        : "",
-        "action_type" : action_id
-      };
-      send_request(JSON.stringify(packet));
-
-      $(parent_id).remove();
+      request_unit_do_action(action_id, actor_unit_id, tgt_id, sub_tgt_id);
+      remove_action_selection_dialog(parent_id, actor_unit_id);
     };
   }
 }
@@ -261,12 +288,20 @@ function create_act_sel_button(parent_id,
                                actor_unit_id, tgt_id, sub_tgt_id,
                                action_id, action_probabilities)
 {
+  // Create button_text
+  var button_text = format_action_label(action_id, action_probabilities);
+  // Fix inaccurate "Conquer City" to "Raze City" for size 1 city:
+  if (button_text.includes("Conquer")) {
+    var pcity = cities[tgt_id];
+    if (pcity && pcity['size']==1)
+      button_text = button_text.replace("Conquer", "Raze");
+  }
+
   /* Create the initial button with this action */
   var button = {
     id      : "act_sel_" + action_id + "_" + actor_unit_id,
     "class" : 'act_sel_button',
-    text    : format_action_label(action_id,
-                                  action_probabilities),
+    text    : button_text,
     title   : format_action_tooltip(action_id,
                                     action_probabilities),
     click   : act_sel_click_function(parent_id,
@@ -287,8 +322,18 @@ function popup_action_selection(actor_unit, action_probabilities,
 {
   // reset dialog page.
   var id = "#act_sel_dialog_" + actor_unit['id'];
-  $(id).remove();
+  remove_active_dialog(id);
   $("<div id='act_sel_dialog_" + actor_unit['id'] + "'></div>").appendTo("div#game_page");
+
+  if (action_selection_in_progress_for != IDENTITY_NUMBER_ZERO
+      && action_selection_in_progress_for != actor_unit['id']) {
+    console.log("Looks like unit %d has an action selection dialog open"
+                + " but a dialog for unit %d is about to be opened.",
+                action_selection_in_progress_for, actor_unit['id']);
+    console.log("Closing the action selection dialog for unit %d",
+                action_selection_in_progress_for);
+    action_selection_close();
+  }
 
   var actor_homecity = cities[actor_unit['homecity']];
 
@@ -396,6 +441,14 @@ function popup_action_selection(actor_unit, action_probabilities,
         click   : function() {
           var dir = get_direction_for_step(tiles[actor_unit['tile']],
                                            target_tile);
+          var order = {
+            "order"      : ORDER_MOVE,
+            "dir"        : dir,
+            "activity"   : ACTIVITY_LAST,
+            "sub_target" : 0,
+            "action"     : ACTION_COUNT
+          };
+
           var packet = {
             "pid"       : packet_unit_orders,
             "unit_id"   : actor_unit['id'],
@@ -403,23 +456,17 @@ function popup_action_selection(actor_unit, action_probabilities,
             "length"    : 1,
             "repeat"    : false,
             "vigilant"  : false,
-            "orders"    : [ORDER_MOVE],
-            "dir"       : [dir],
-            "activity"  : [ACTIVITY_LAST],
-            "target"    : [0],
-            "extra"     : [EXTRA_NONE],
-            "action"    : [ACTION_COUNT],
+            "orders"    : [order],
             "dest_tile" : target_tile['index']
           };
 
           if (dir == -1) {
             /* Non adjacent target tile? */
-            console.log("Action slection move: bad target tile");
+            console.log("Action selection move: bad target tile");
           } else {
             send_request(JSON.stringify(packet));
           }
-
-          $(id).remove();
+          remove_action_selection_dialog(id, actor_unit['id']);
         } });
   }
 
@@ -433,7 +480,8 @@ function popup_action_selection(actor_unit, action_probabilities,
           select_tgt_unit(actor_unit,
                           target_tile, tile_units(target_tile));
 
-          $(id).remove();
+          action_selection_restart = true;
+          remove_action_selection_dialog(id, actor_unit['id'], true);
         } });
   }
 
@@ -447,7 +495,8 @@ function popup_action_selection(actor_unit, action_probabilities,
                            list_potential_target_extras(actor_unit,
                                                         target_tile));
 
-          $(id).remove();
+          action_selection_restart = true;
+          remove_action_selection_dialog(id, actor_unit['id'], true);
         } });
   }
 
@@ -460,55 +509,203 @@ function popup_action_selection(actor_unit, action_probabilities,
             text    : "Auto attack from now on!",
             title   : "Attack without showing this attack dialog in the future",
             click   : function() {
-                          var packet = {
-                              "pid"         : packet_unit_do_action,
-                              "actor_id"    : actor_unit['id'],
-                              "target_id"   : target_tile['index'],
-                              "extra_id"    : EXTRA_NONE,
-                              "value"       : 0,
-                              "name"        : "",
-                              "action_type" : ACTION_ATTACK
-                            };
-                            send_request(JSON.stringify(packet));
-                            auto_attack = true;
-                            $(id).remove();
-                          }
+                request_unit_do_action(ACTION_ATTACK,
+                  actor_unit['id'], target_tile['index']);
+                setTimeout(update_active_units_dialog, update_focus_delay);
+                auto_attack = true;
+                remove_action_selection_dialog(id, actor_unit['id']);
+            }
           };
           buttons.push(button);
         } else {
-          var packet = {
-              "pid"         : packet_unit_do_action,
-              "actor_id"    : actor_unit['id'],
-              "target_id"   : target_tile['index'],
-              "extra_id"    : EXTRA_NONE,
-              "value"       : 0,
-              "name"        : "",
-              "action_type" : ACTION_ATTACK
-            };
-            send_request(JSON.stringify(packet));
+            request_unit_do_action(ACTION_ATTACK,
+              actor_unit['id'], target_tile['index']);
+            // unit lost hp or died or promoted after attack, so update it:
+            setTimeout(update_active_units_dialog, update_focus_delay);
+            //action_selection_no_longer_in_progress(actor_unit['id']);
             return;
         }
   }
 
   buttons.push({
+      id      : "act_sel_wait" + actor_unit['id'],
+      "class" : 'act_sel_button',
+      text    : 'Wait',
+      click   : function() {
+        did_not_decide = true;
+        remove_action_selection_dialog(id, actor_unit['id'], true);
+        /* 9.June.2021:
+           TO DO: clicking Wait for a single selected unit with action dialog, currently
+           just closes the dialog but doesn't advance unit focus. The line of code below 
+           would do that but is commented out because of a logic trap: You would never be
+           able to escaping looping between units who want decisions, because it only cycles
+           between those. So, if we ever think of some other logic for this, this is where 
+           we would put the code to handle it:
+           if (current_focus && current_focus.length == 1) advance_unit_focus(false);
+        */
+      } });
+
+  buttons.push({
       id      : "act_sel_cancel" + actor_unit['id'],
       "class" : 'act_sel_button',
-      text    : 'Cancel',
+      text    : 'Cancel (𝗪)',
       click   : function() {
-        $(id).remove();
+        remove_action_selection_dialog(id, actor_unit['id']);
       } });
 
   $(id).attr("title",
              "Action for " + unit_types[actor_unit['type']]['name']
              + ":");
-      
-  // THIS SECTION ALLOWS OVERRIDE NAMES for completely different types
-  // of so-called Bombard behaviours           
-  if (unit_types[actor_unit['type']]['name']=="Fanatics") {
-    for (button_id in buttons) {
-      if (buttons[button_id].text == "Ranged Attack (100%)") {
-        buttons[button_id].text = "Skirmish Assault (100%)"
+
+  // Dialog UI: Populate richer text for rulesets with features.
+  var SP = client_rules_flag[CRF_SURGICAL_PILLAGE];
+  var SUA = client_rules_flag[CRF_SPECIAL_UNIT_ATTACKS];
+
+  // This section does override names for surgical pillage:
+  if (SP) {
+    if (unit_can_iPillage(actor_unit)) {
+      for (button_id in buttons) {
+        if (buttons[button_id].text.startsWith("Pillage")) {
+          buttons[button_id].text = unit_get_pillage_name(actor_unit);          
+        }
       }
+    }
+  }
+  var ptype = unit_type(actor_unit); 
+  // THIS SECTION DOES OVERRIDE NAMES for special unit actions:
+  if (SUA) {
+    switch (ptype['rule_name']) {
+      case "Siege Ram":  for (button_id in buttons) {
+        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+          buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
+          buttons[button_id].title = "Odds of survival:  100%\n"
+                                  + "Combat:                4 rounds\n"
+                                  + "Targets:                 ALL\n"
+                                  + "Attack bonus:        8.75x\n"
+                                  + "Move cost:            1 move\n"
+                                  + "Min. moves:          1 1/9 moves\n"
+                                  + "Casualties:             --\n"
+                                  + "\n\"Damage\" to the Fortress is represented by HP loss to all\n"
+                                  + "units (up to 40%/turn): emulating damage reduction to the\n"
+                                  + "Fortress defense bonus. HP healing of units (up to 40%/turn),\n"
+                                  + "emulates resistance and repairing Fortress damage over the\n"
+                                  + "course of a long siege.\n"
+        }
+        else if (buttons[button_id].text.startsWith("Targeted Sabotage")) {
+          buttons[button_id].text = "Attack City Walls ([25%, 50%])"
+          buttons[button_id].title = "Odds of survival:  50%  (halved if city is capital)\n"
+                                  + "Targets:                 City Walls\n"
+                                  + "Move cost:            1/9 move\n"
+                                  + "Min. moves:          1 move\n"
+                                  + "Attacks the City Walls, resulting in destruction\n"
+                                  + "of the City Walls or the loss of the Siege Ram."
+        }
+      } break;
+      case "Phalanx":  for (button_id in buttons) {
+        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+          buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
+          buttons[button_id].title = "Odds of survival:  100%\n"
+                                  + "Combat:                3 rounds\n"
+                                  + "Targets:                 1 unit\n"
+                                  + "Move cost:            5/9 move\n"
+                                  + "Min. moves:          fortified OR hasn't moved\n"
+                                  + "Casualties:             --\n"
+                                  + "\nA 3 round rumble against one unit on the target tile\n"
+                                  + "represents the Phalanx safely pushing from a held\n"
+                                  + "position vs. a weak defender who comes too close.\n"
+        }
+      } break;
+      case "Archers":  for (button_id in buttons) {
+        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+            buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
+            buttons[button_id].title = "Odds of survival:  100%\n"
+                                    + "Combat:                2 rounds\n"
+                                    + "Targets:                 7 units\n"
+                                    + "Move cost:            1 5/9 moves\n"
+                                    + "Casualties:             --\n"
+                                    + "\n2 rounds of arrows against up to 7 units,\n"
+                                    + "represents Archers raining arrows from a\n"
+                                    + "safe distance over an adjacent force."
+        }
+      } break;
+      case "Legion":  for (button_id in buttons) {
+        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+          buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
+          buttons[button_id].title = "Odds of survival:  100%\n"
+                                  + "Attack bonus:        2x\n"
+                                  + "Combat:                1 round\n"
+                                  + "Targets:                 2 units\n"
+                                  + "Move cost:            1 move\n"
+                                  + "Max. casualties:     2\n"
+                                  + "\nPila easily disable shields in the enemy front line, represented by\n"
+                                  + "1hp damage caused to up to 2 units. This helps the odds of success\n"
+                                  + "of follow-up attack if done before the units heal (\"fix their shields.\")"
+        }
+      } break;
+      case "Fanatics":  for (button_id in buttons) {
+        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+          buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
+          buttons[button_id].title = "Odds of survival:  100%\n"
+                                    + "Combat:                3 rounds\n"
+                                    + "Targets:                 4 units\n"
+                                    + "Move cost:            1 5/9 moves\n"
+                                    + "Casualties:             --\n"
+                                    + "\nFanatics opportunistically damage and degrade foreign occupants\n"
+                                    + "of their native land, for 3 rounds of combat on up to 4 foreign\n"
+                                    + "occupants of a city or tile."
+          
+        }
+      } break;
+      case "Zealots":  for (button_id in buttons) {
+        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+          buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
+          buttons[button_id].title = "Odds of survival:  100%\n"
+                                    + "Combat:                3 rounds\n"
+                                    + "Targets:                 4 units\n"
+                                    + "Move cost:            1 5/9 moves\n"
+                                    + "Casualties:             --\n"
+                                    + "\Zealots opportunistically damage and degrade foreign occupants\n"
+                                    + "of their native land, for 3 rounds of combat on up to 4 foreign\n"
+                                    + "occupants of a city or tile."
+          
+        }
+      } break;
+      case "Marines":  for (button_id in buttons) {
+        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+          buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
+          buttons[button_id].title = "Odds of survival:  100%\n"
+                                  + "Combat:                3 rounds\n"
+                                  + "Targets:                 4 units\n"
+                                  + "Move cost:            1 5/9 moves\n"
+                                  + "Max. casualties:     1\n"        
+                                  + "\nV3 Marines use agility/mobility over terrain features to improvise hit-and-run\n"
+                                  + "ballistic attacks: 3 rounds of combat on up to 4 occupants of a tile.\n"
+        }
+      } break;
+      case "Battleship":  for (button_id in buttons) {
+        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+          buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
+          buttons[button_id].title = "Odds of survival:  100%\n"
+                                  + "Combat:                3 rounds\n"
+                                  + "Targets:                 4 units\n"
+                                  + "Move cost:            5 moves\n"
+                                  + "Max. casualties:     1\n"
+                                  + "\nUses the range advantage of massive large guns to safely\n" 
+                                  + "shell and degrade up to 4 distant targets on a tile or city.\n"
+        }
+      } break;
+      case "Zeppelin":  for (button_id in buttons) {
+        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+          buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
+          buttons[button_id].title = "Odds of survival:  100%\n"
+                                  + "Combat:                4 rounds\n"
+                                  + "Targets:                 2 units\n"
+                                  + "Move cost:            2 moves\n"
+                                  + "Max. casualties:     1\n"
+                                  + "\nDrops shrapnel bombs in the vicinity of enemies,\n" 
+                                  + "affecting up to 2 units and possibly killing one.\n"
+        }
+      } break;
     }
   }
   //--------------------------------------------------------------------
@@ -517,10 +714,13 @@ function popup_action_selection(actor_unit, action_probabilities,
       bgiframe: true,
      // modal: true,   // non-modal: allows player to see and witness large multi-unit battle with many dialogs
       dialogClass: "act_sel_dialog",
-      width: "390",
+      width: is_small_screen() ? "99%" : "390px",
       buttons: buttons });
 
   $(id).dialog('open');
+  is_more_user_input_needed = false;
+  $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
+  dialog_register(id, actor_unit['id'], true);
 }
 
 /**************************************************************************
@@ -534,7 +734,7 @@ function popup_bribe_dialog(actor_unit, target_unit, cost, act_id)
   var id = "#bribe_unit_dialog_" + actor_unit['id'];
 
   /* Reset dialog page. */
-  $(id).remove();
+  remove_active_dialog(id);
 
   $("<div id='bribe_unit_dialog_" + actor_unit['id'] + "'></div>")
       .appendTo("div#game_page");
@@ -554,18 +754,13 @@ function popup_bribe_dialog(actor_unit, target_unit, cost, act_id)
 
   $(id).html(dhtml);
 
-  var close_button = {	Close: function() {$(id).dialog('close');}};
-  var bribe_close_button = {	"Cancel": function() {$(id).dialog('close');},
+  var close_button = {	"Close (𝗪)": function() {
+                        remove_action_selection_dialog(id, actor_unit['id']); }
+                     };
+  var bribe_close_button = {	"Cancel (𝗪)": function() { remove_action_selection_dialog(id, actor_unit['id']); },
   				"Do it!": function() {
-      var packet = {"pid" : packet_unit_do_action,
-                    "actor_id" : actor_unit['id'],
-                    "target_id": target_unit['id'],
-                    "extra_id" : EXTRA_NONE,
-                    "value" : 0,
-                    "name" : "",
-                    "action_type": act_id};
-      send_request(JSON.stringify(packet));
-      $(id).dialog('close');
+      request_unit_do_action(act_id, actor_unit['id'], target_unit['id']);
+      remove_action_selection_dialog(id, actor_unit['id']);
     }
   };
 
@@ -578,7 +773,8 @@ function popup_bribe_dialog(actor_unit, target_unit, cost, act_id)
                 width: "auto"});
 
   $(id).dialog('open');
-
+  $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
+  dialog_register(id, actor_unit['id']);
 }
 
 /**************************************************************************
@@ -594,7 +790,7 @@ function popup_incite_dialog(actor_unit, target_city, cost, act_id)
   id = "#incite_city_dialog_" + actor_unit['id'];
 
   /* Reset dialog page. */
-  $(id).remove();
+  remove_active_dialog(id);
 
   $("<div id='incite_city_dialog_" + actor_unit['id'] + "'></div>")
       .appendTo("div#game_page");
@@ -618,19 +814,11 @@ function popup_incite_dialog(actor_unit, target_city, cost, act_id)
 
   $(id).html(dhtml);
 
-  var close_button = {         Close:    function() {$(id).dialog('close');}};
-  var incite_close_buttons = { 'Cancel': function() {$(id).dialog('close');},
+  var close_button = {         'Close (𝗪)':    function() {remove_action_selection_dialog(id, actor_unit['id']);}};
+  var incite_close_buttons = { 'Cancel (𝗪)': function() {remove_action_selection_dialog(id, actor_unit['id']);},
                                'Do it!': function() {
-                                 var packet = {"pid" : packet_unit_do_action,
-                                               "actor_id" : actor_unit['id'],
-                                               "target_id": target_city['id'],
-                                               "extra_id" : EXTRA_NONE,
-                                               "value" : 0,
-                                               "name" : "",
-                                               "action_type": act_id};
-                                 send_request(JSON.stringify(packet));
-
-                                 $(id).dialog('close');
+                                          request_unit_do_action(act_id, actor_unit['id'], target_city['id']);
+                                          remove_action_selection_dialog(id, actor_unit['id']);
                                }
                              };
 
@@ -643,6 +831,8 @@ function popup_incite_dialog(actor_unit, target_city, cost, act_id)
                 width: "auto"});
 
   $(id).dialog('open');
+  $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
+  dialog_register(id, actor_unit['id']);
 }
 
 /**************************************************************************
@@ -658,7 +848,7 @@ function popup_unit_upgrade_dlg(actor_unit, target_city, cost, act_id)
   id = "#upgrade_unit_dialog_" + actor_unit['id'];
 
   /* Reset dialog page. */
-  $(id).remove();
+  remove_active_dialog(id);
 
   $("<div id='upgrade_unit_dialog_" + actor_unit['id'] + "'></div>")
       .appendTo("div#game_page");
@@ -675,21 +865,11 @@ function popup_unit_upgrade_dlg(actor_unit, target_city, cost, act_id)
 
   $(id).html(dhtml);
 
-  var close_button = {          Close:    function() {$(id).dialog('close');}};
-  var upgrade_close_buttons = { 'Cancel': function() {$(id).dialog('close');},
+  var close_button = {          'Close (𝗪)':    function() {remove_action_selection_dialog(id, actor_unit['id']);}};
+  var upgrade_close_buttons = { 'Cancel (𝗪)': function() {remove_action_selection_dialog(id, actor_unit['id']);},
                                 'Do it!': function() {
-                                  var packet = {
-                                    "pid" : packet_unit_do_action,
-                                    "actor_id" : actor_unit['id'],
-                                    "target_id": target_city['id'],
-                                    "extra_id" : EXTRA_NONE,
-                                    "value" : 0,
-                                    "name" : "",
-                                    "action_type": act_id
-                                  };
-                                  send_request(JSON.stringify(packet));
-
-                                  $(id).dialog('close');
+                                  request_unit_do_action(act_id, actor_unit['id'], target_city['id']);
+                                  remove_action_selection_dialog(id, actor_unit['id']);
                                 }
                              };
 
@@ -703,6 +883,8 @@ function popup_unit_upgrade_dlg(actor_unit, target_city, cost, act_id)
                 width: "auto"});
 
   $(id).dialog('open');
+  $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
+  dialog_register(id, actor_unit['id']);
 }
 
 /**************************************************************************
@@ -711,24 +893,16 @@ function popup_unit_upgrade_dlg(actor_unit, target_city, cost, act_id)
   Needed because of JavaScript's scoping rules.
 **************************************************************************/
 function create_steal_tech_button(parent_id, tech,
-                                  actor_unit_id, target_city_id,
-                                  action_id)
+                                  actor_id, city_id, action_id)
 {
   /* Create the initial button with this tech */
   var button = {
     text : tech['name'],
     click : function() {
-      var packet = {"pid" : packet_unit_do_action,
-        "actor_id" : actor_unit_id,
-        "target_id": target_city_id,
-        "extra_id" : EXTRA_NONE,
-        "value" : tech['id'],
-        "name" : "",
-        "action_type": action_id};
 
+      request_unit_do_action(action_id, actor_id, city_id, tech['id']);
       send_request(JSON.stringify(packet));
-
-      $("#" + parent_id).remove();
+      remove_action_selection_dialog("#"+parent_id, actor_id);
     }
   };
 
@@ -747,7 +921,8 @@ function popup_steal_tech_selection_dialog(actor_unit, target_city,
   var untargeted_action_id = ACTION_COUNT;
 
   /* Reset dialog page. */
-  $("#" + id).remove();
+  remove_active_dialog("#"+id);
+  
   $("<div id='" + id + "'></div>").appendTo("div#game_page");
 
   /* Set dialog title */
@@ -794,26 +969,18 @@ function popup_steal_tech_selection_dialog(actor_unit, target_city,
                    text  : "At " + unit_types[actor_unit['type']]['name']
                            + "'s Discretion",
                    click : function() {
-                     var packet = {
-                       "pid" : packet_unit_do_action,
-                       "actor_id" : actor_unit['id'],
-                       "target_id": target_city['id'],
-                       "extra_id" : EXTRA_NONE,
-                       "value" : 0,
-                       "name" : "",
-                       "action_type": untargeted_action_id};
-                     send_request(JSON.stringify(packet));
-
-                     $("#" + id).remove();
+                     request_unit_do_action(untargeted_action_id,
+                       actor_unit['id'], target_city['id']);
+                     remove_action_selection_dialog("#"+id, actor_unit['id']);
                    }
                  });
   }
 
   /* Allow the user to cancel. */
   buttons.push({
-                 text : 'Cancel',
+                 text : 'Cancel (𝗪)',
                  click : function() {
-                   $("#" + id).remove();
+                  remove_action_selection_dialog("#"+id, actor_unit['id']);
                  }
                });
 
@@ -825,6 +992,8 @@ function popup_steal_tech_selection_dialog(actor_unit, target_city,
 
   /* Show the dialog. */
   $("#" + id).dialog('open');
+  $("#" + id).dialog('widget').position({my:"center top", at:"center top", of:window})
+  dialog_register("#"+id, actor_unit['id']);
 }
 
 /**************************************************************************
@@ -833,29 +1002,17 @@ function popup_steal_tech_selection_dialog(actor_unit, target_city,
   Needed because of JavaScript's scoping rules.
 **************************************************************************/
 function create_sabotage_impr_button(improvement, parent_id,
-                                     actor_unit_id, target_city_id, act_id)
+                                     actor_id, city_id, act_id)
 {
   /* Create the initial button with this tech */
-  var button = {
+  return {
     text : improvement['name'],
     click : function() {
-      var packet = {
-        "pid"          : packet_unit_do_action,
-        "actor_id"     : actor_unit_id,
-        "target_id"    : target_city_id,
-        "extra_id"     : EXTRA_NONE,
-        "value"        : encode_building_id(improvement['id']),
-        "name"         : "",
-        "action_type"  : act_id
-      };
-      send_request(JSON.stringify(packet));
-
-      $("#" + parent_id).remove();
+        request_unit_do_action(act_id, actor_id, city_id,
+                               improvement['id']);
+        remove_action_selection_dialog("#" + parent_id, actor_id);
     }
   };
-
-  /* The button is ready. */
-  return button;
 }
 
 /**************************************************************************
@@ -866,8 +1023,17 @@ function popup_sabotage_dialog(actor_unit, target_city, city_imprs, act_id)
   var id = "sabotage_impr_dialog_" + actor_unit['id'];
   var buttons = [];
 
+            // Siege Ram used for Wall sabotage: highjack for better presentation****
+            var battering_event = false;
+            if (client_rules_flag[CRF_SIEGE_RAM] == true) {
+              var punit = units[actor_unit['id']];
+              var ptype = unit_type(punit);
+              if (ptype['name'] == "Siege Ram") battering_event = true;
+            } //**********************************************************************
+
+
   /* Reset dialog page. */
-  $("#" + id).remove();
+  remove_active_dialog("#" + id);
   $("<div id='" + id + "'></div>").appendTo("div#game_page");
 
   /* Set dialog title */
@@ -877,22 +1043,42 @@ function popup_sabotage_dialog(actor_unit, target_city, city_imprs, act_id)
   for (var i = 0; i < ruleset_control['num_impr_types']; i++) {
     var improvement = improvements[i];
 
-    if (city_imprs.isSet(i)
-        && improvement['sabotage'] > 0) {
+              // Battering Rams can only select City Walls *********************************
+              if (battering_event) {
+                if (improvement['name'] != "City Walls") continue;
+                //We got here if we're at City Walls, see if it's present now:
+                if (city_imprs.isSet(i) && improvement['sabotage'] > 0) {
+                  // City walls present! No need to make a button: we know they'd press it.
+                  // Instead, just automate what would happen if they did press the button:
+                    request_unit_do_action(act_id,
+                                           actor_unit['id'], target_city['id'],
+                                           improvement['id']);
+
+                  // We're done. Go home without making popup dialog.
+                  return;
+                }
+              } //****************************************************************************
+
+    if (city_imprs.isSet(i) && improvement['sabotage'] > 0) {
       /* The building is in the city. The probability of successfully
-       * sabotaging it as above zero. */
+       * sabotaging it is above zero. */
       buttons.push(create_sabotage_impr_button(improvement, id,
                                                actor_unit['id'],
                                                target_city['id'],
                                                act_id));
     }
   }
+  if (battering_event) {
+    swal("City has no City Walls.");
+    setSwalTheme();
+    return;
+  }
 
   /* Allow the user to cancel. */
   buttons.push({
-                 text : 'Cancel',
+                 text : 'Cancel (𝗪)',
                  click : function() {
-                   $("#" + id).remove();
+                  remove_action_selection_dialog("#"+id, actor_unit['id'])
                  }
                });
 
@@ -904,6 +1090,8 @@ function popup_sabotage_dialog(actor_unit, target_city, city_imprs, act_id)
 
   /* Show the dialog. */
   $("#" + id).dialog('open');
+  $("#" + id).dialog('widget').position({my:"center top", at:"center top", of:window})
+  dialog_register("#"+id, actor_unit['id']);
 }
 
 /**************************************************************************
@@ -941,7 +1129,7 @@ function create_select_tgt_unit_button(parent_id, actor_unit_id,
       };
       send_request(JSON.stringify(packet));
 
-      $(parent_id).remove();
+      remove_active_dialog(parent_id);
     }
   };
 
@@ -962,7 +1150,7 @@ function select_tgt_unit(actor_unit, target_tile, potential_tgt_units)
   var buttons = [];
 
   /* Reset dialog page. */
-  $(id).remove();
+  remove_active_dialog(id);
   $("<div id='" + rid + "'></div>").appendTo("div#game_page");
 
   dhtml += "Select target unit for your ";
@@ -985,6 +1173,8 @@ function select_tgt_unit(actor_unit, target_tile, potential_tgt_units)
       buttons  : buttons });
 
   $(id).dialog('open');
+  $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
+  dialog_register(id, actor_unit['id']);
 }
 
 /**************************************************************************
@@ -1064,7 +1254,7 @@ function create_select_tgt_extra_button(parent_id, actor_unit_id,
       };
       send_request(JSON.stringify(packet));
 
-      $(parent_id).remove();
+      remove_active_dialog(parent_id);
     }
   };
 
@@ -1086,7 +1276,7 @@ function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapac
     disable = true;
   } else tloaded = " L:"+tloaded;
 
-  var moves_text = move_points_text(tmoves);
+  var moves_text = move_points_text(tmoves,false);
   if (moves_text == "-") {
   // "-" means it was NaN/unknown because foreign, which means it's an ally on same tile
     moves_text = " ALLY"
@@ -1105,35 +1295,20 @@ function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapac
                 + " C:" + tcapacity,
     disabled :  disable,
     click : function() {
-      var packet = {
-        "pid"              : packet_unit_load,
-        "cargo_id"         : actor,
-        "transporter_id"   : tid,
-        "transporter_tile" : ttile
-      };
-      send_request(JSON.stringify(packet));
+      request_unit_do_action(ACTION_TRANSPORT_BOARD, actor, tid);
+      // Loaded units don't ask orders later:
+      remove_unit_id_from_waiting_list(actor['id']); 
+      actor['done_moving'] = true;
       setTimeout(update_active_units_dialog, 600);
 
       // for very last dialog, click advances unit focus
       if (dialog_num==last_dialog) setTimeout(function() {advance_unit_focus(false)}, 700);
 
-      $(dialog_id).remove();
+      remove_action_selection_dialog(dialog_id, actor['id'])
     }
   }
   return load_button;
 }
-
-/**************************************************************************
-  Create a close button (for multiple cascading dialogs)
-  (such as multiple dialogs for multiple units each getting a dialog)
-  Needed because of JavaScript's scoping rules.
-**************************************************************************/
-function create_a_close_button(parent_id)
-{
-  var close_button = {text: "Cancel", click: function() {$(parent_id).dialog('close')}};
-  return close_button;
-}
-
 /**************************************************************************
   Create a dialog where a unit select what other unit to act on.
 **************************************************************************/
@@ -1148,7 +1323,7 @@ function select_tgt_extra(actor_unit, target_unit,
   var buttons = [];
 
   /* Reset dialog page. */
-  $(id).remove();
+  remove_active_dialog(id);
   $("<div id='" + rid + "'></div>").appendTo("div#game_page");
 
   dhtml += "Select target extra for your ";
@@ -1174,4 +1349,167 @@ function select_tgt_extra(actor_unit, target_unit,
       buttons  : buttons });
 
   $(id).dialog('open');
+  $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
+  dialog_register(id, actor_unit['id']);
+}
+
+/**************************************************************************
+ Registers a dialog as active, so that 'W' will close the most recent
+ opened dialog (First In Last Out). Also binds the dialog close function
+ to clean-up function remove_active_dialog(..)
+
+ Optional 'actor_id' is for actor units' Action Selection Dialogs to 
+ unregister themselves as no longer awaiting user action selection (which
+ the system needs to know for sorting the advancing of unit focus, etc.)
+
+ Optional 'input_maybe_needed' lets us know to unregister the
+ Action Selection Dialog if we might possibly be waiting for more user
+ input.
+**************************************************************************/
+function dialog_register(id, actor_id, input_maybe_needed) {
+  //console.log("    dialog registered: "+id+"    actor:"+actor_id)
+  $(id).dialog('widget').keydown(dialog_key_listener);
+  active_dialogs.push(id);
+  //close, cancel, and [x]
+  $(id).dialog({ 
+      autoOpen: true
+  }).bind('dialogclose', function(event, ui) {
+    if (actor_id) {
+      remove_action_selection_dialog(id, actor_id, input_maybe_needed);
+    }
+    else {
+      remove_active_dialog(id);
+    }
+  });
+  $(id).css("color", default_dialog_text_color);
+}
+
+/**************************************************************************
+  Create a close button (for multiple cascading dialogs)
+  (such as multiple dialogs for multiple units ordered to board a ship)
+  Needed as a function because of JavaScript's scoping rules.
+**************************************************************************/
+function create_a_close_button(parent_id)
+{
+  var close_button = {text: "Cancel (𝗪)", click: function() {
+      remove_active_dialog(parent_id);
+  }};
+  return close_button;
+}
+/**************************************************************************
+  Called when dialog close-binding function is triggered from the dialog
+  closing some other way than by hitting 'W'.
+**************************************************************************/
+function remove_active_dialog(id)
+{
+  const index = active_dialogs.indexOf(id);
+  if (index > -1) {
+    active_dialogs.splice(index, 1);
+  }    
+  $(id).remove();
+}
+/**************************************************************************
+  Same as above but for unit action dialogs which also need to unregister
+  that the unit is no longer waiting for user input from the dialog.
+  Called when dialog close-binding function is triggered from the dialog
+  closing some other way than by hitting 'W'.
+
+  Optional 'input_maybe_needed' tells us to perform a check that
+  this unit has even more selections to make, and if so, not to
+  unregister that the unit is waiting on user input.
+**************************************************************************/
+function remove_action_selection_dialog(id, actor_id, input_maybe_needed)
+{
+  remove_active_dialog(id);
+
+  if (!input_maybe_needed) {
+    act_sel_queue_done(actor_id);
+  }
+  else {
+    act_sel_queue_may_be_done(actor_id);
+  }
+}
+
+/**************************************************************************
+ Callback to handle keyboard events for simple dialogs.
+**************************************************************************/
+function dialog_key_listener(ev)
+{
+  var keyboard_key = String.fromCharCode(ev.keyCode).toUpperCase();
+  var key_code = ev.keyCode;
+  // Check if focus is in chat field, where these keyboard events are ignored.
+  if ($('input:focus').length > 0 || !keyboard_input) return;
+  if (C_S_RUNNING != client_state()) return;
+  if (!active_dialogs) return;
+
+  if (key_code==27) {
+    ev.stopPropagation();
+    return;
+  }
+  switch (keyboard_key) {
+    case 'W': 
+      if (active_dialogs.length) { 
+        ev.stopPropagation();
+        remove_active_dialog(active_dialogs.pop());
+      }
+      break;
+  }
+}
+
+/***********************************************************************//**
+  Closes the action selection dialog
+***************************************************************************/
+function action_selection_close(not_over)
+{
+  var id;
+  var actor_unit_id = action_selection_in_progress_for;
+
+  if (not_over) {
+    did_not_decide = true;
+  }
+
+  id = "#act_sel_dialog_" + actor_unit_id;
+  // Remove action selection dialog only if it exists:
+  if ($(id).length) remove_action_selection_dialog(id, actor_unit_id)
+
+  id = "#bribe_unit_dialog_" + actor_unit_id;
+  // Remove action selection dialog only if it exists:
+  if ($(id).length) remove_action_selection_dialog(id, actor_unit_id)
+
+  id = "#incite_city_dialog_" + actor_unit_id;
+  // Remove action selection dialog only if it exists:
+  if ($(id).length) remove_action_selection_dialog(id, actor_unit_id)
+
+  id = "#upgrade_unit_dialog_" + actor_unit_id;
+  // Remove action selection dialog only if it exists:
+  if ($(id).length) remove_action_selection_dialog(id, actor_unit_id)
+
+  id = "stealtech_dialog_" + actor_unit_id;
+  // Remove action selection dialog only if it exists:
+  if ($(id).length) remove_action_selection_dialog(id, actor_unit_id)
+
+  id = "sabotage_impr_dialog_" + actor_unit_id;
+  // Remove action selection dialog only if it exists:
+  if ($(id).length) remove_action_selection_dialog(id, actor_unit_id)
+
+  id = "#" + "sel_tgt_unit_dialog_" + actor_unit_id;
+  // Remove action selection dialog only if it exists:
+  if ($(id).length) remove_action_selection_dialog(id, actor_unit_id)
+
+  id = "#" + "sel_tgt_extra_dialog_" + actor_unit_id;
+  // Remove action selection dialog only if it exists:
+  if ($(id).length) remove_action_selection_dialog(id, actor_unit_id)
+
+  id = $("#city_name_dialog");
+  // Remove action selection dialog only if it exists:
+  if ($(id).length) $(id).remove();
+  /* previous code did this, but is potentially risky since city_name_dialog
+     is currently not a registered action selection dialog but rather, is an 
+     "off the registry" type of dialog:
+     if ($(id).length) remove_action_selection_dialog(id, actor_unit_id) */
+
+  if (not_over) {
+    /* Clean up just in case */
+    did_not_decide = false;
+  }
 }

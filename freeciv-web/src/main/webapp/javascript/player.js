@@ -265,9 +265,38 @@ function research_get(pplayer)
 **************************************************************************/
 function player_has_wonder(playerno, improvement_id)
 {
+  // This is faster than looping through every city like we did before.
+  if (players[playerno].wonders[improvement_id]) return true;
+
+  /* preserved just in case the faster code above fails for some reason:
   for (var city_id in cities) {
     var pcity = cities[city_id];
     if (city_owner(pcity).playerno == playerno && city_has_building(pcity, improvement_id)) {
+      return true;
+    }
+  }*/
+  return false;
+}
+/**************************************************************************
+  returns true if the active player has the given wonder (improvement)
+  Note: uses the string value of the wonder and fetches the id for you.
+**************************************************************************/
+function has_wonder(wonder_name_str)
+{
+  return player_has_wonder(client.conn.playing.playerno,
+    improvement_id_by_name(wonder_name_str));
+}
+
+/**************************************************************************
+  returns true if the any player in the world has the given Wonder
+  Note: uses the string value of the wonder and fetches the id for you.
+**************************************************************************/
+function world_has_wonder(wonder_name_str)
+{
+  for (player_id in players) {
+    if (player_has_wonder(client.conn.playing.playerno,
+        improvement_id_by_name(wonder_name_str))) {
+
       return true;
     }
   }
@@ -282,17 +311,24 @@ function get_invalid_username_reason(username)
 {
   if (username == null || username.length == 0) {
     return "empty";
-  } else if (username.length <= 2) {
+  } 
+  else if (username.length <= 2) {
     return "too short";
-  } else if (username.length >= 32) {
+  }
+  else if (username.length >= 32) {
     return "too long";
   }
   username = username.toLowerCase();
   if (username == "pbem") {
     return "not available";
-  } else if (username.search(/^[a-z][a-z0-9]*$/g) != 0) {
+  } 
+  /*else if (username.search(/^[a-z][a-z0-9]*$/g) != 0) {
     return "invalid: only English letters and numbers are allowed, and must start with a letter";
-  } else if (!check_text_with_banlist_exact(username)) {
+  } */
+  else if (username != alphanumeric_cleaner(username)) {
+    return "invalid: only alphabetic letters and numbers are allowed, and must start with a letter";  
+  }
+  else if (!check_text_with_banlist_exact(username)) {
     return "banned";
   }
   return null;

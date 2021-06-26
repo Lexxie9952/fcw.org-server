@@ -225,9 +225,9 @@ void flush_dirty(void)
   }
 
   if (Main.rects_count >= RECT_LIMIT) {
-    
-    if ((C_S_RUNNING == client_state()) &&
-        (get_client_page() == PAGE_GAME)) {
+
+    if ((C_S_RUNNING == client_state())
+        && (get_client_page() == PAGE_GAME)) {
       flush_mapcanvas(0, 0, main_window_width(), main_window_height());
       refresh_overview();
     }
@@ -500,7 +500,7 @@ void update_info_label(void)
 **************************************************************************/
 static int focus_units_info_callback(struct widget *pwidget)
 {
-  if (Main.event.button.button == SDL_BUTTON_LEFT) {
+  if (PRESSED_EVENT(Main.event)) {
     struct unit *punit = pwidget->data.unit;
 
     if (punit) {

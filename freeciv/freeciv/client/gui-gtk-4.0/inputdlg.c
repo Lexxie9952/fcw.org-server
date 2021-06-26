@@ -45,11 +45,20 @@ static void input_dialog_response(GtkDialog *shell, gint response,
   struct input_dialog_data *cb = data;
 
   cb->response_callback(cb->response_cli_data,
-                        response, gtk_entry_get_text(GTK_ENTRY(winput)));
+                        response,
+                        gtk_entry_buffer_get_text(gtk_entry_get_buffer(GTK_ENTRY(winput))));
 
   /* Any response is final */
   gtk_widget_destroy(GTK_WIDGET(shell));
   FC_FREE(cb);
+}
+
+/**********************************************************************//**
+  Called when user closes dialog with key (Esc).
+**************************************************************************/
+static void input_dialog_close(GtkDialog *shell, gpointer data)
+{
+  input_dialog_response(shell, GTK_RESPONSE_CANCEL, data);
 }
 
 /**********************************************************************//**
@@ -69,23 +78,22 @@ GtkWidget *input_dialog_create(GtkWindow *parent, const char *dialogname,
   shell = gtk_dialog_new_with_buttons(dialogname,
                                       parent,
                                       GTK_DIALOG_DESTROY_WITH_PARENT,
-                                      _("Cancel"), GTK_RESPONSE_CANCEL,
-                                      _("OK"), GTK_RESPONSE_OK,
+                                      _("_Cancel"), GTK_RESPONSE_CANCEL,
+                                      _("_OK"), GTK_RESPONSE_OK,
                                       NULL);
   gtk_dialog_set_default_response(GTK_DIALOG(shell), GTK_RESPONSE_OK);
   setup_dialog(shell, GTK_WIDGET(parent));
   g_signal_connect(shell, "response", G_CALLBACK(input_dialog_response), cb);
+  g_signal_connect(shell, "close", G_CALLBACK(input_dialog_close), cb);
   gtk_window_set_position(GTK_WINDOW(shell), GTK_WIN_POS_CENTER_ON_PARENT);
 
   label = gtk_frame_new(text);
-  /* Should use gtk_dialog_get_content_area() instead of ->vbox, but that
-   * requires at least gtk+-2.14.0 */
   gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(shell))),
-                     label, TRUE, TRUE);
+                     label);
 
   input = gtk_entry_new();
   gtk_container_add(GTK_CONTAINER(label), input);
-  gtk_entry_set_text(GTK_ENTRY(input), postinputtest);
+  gtk_entry_buffer_set_text(gtk_entry_get_buffer(GTK_ENTRY(input)), postinputtest, -1);
   gtk_entry_set_activates_default(GTK_ENTRY(input), TRUE);
   g_object_set_data(G_OBJECT(shell), "iinput", input);
 

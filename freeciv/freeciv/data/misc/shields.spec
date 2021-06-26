@@ -2,7 +2,7 @@
 [spec]
 
 ; Format and options of this spec file:
-options = "+Freeciv-spec-Devel-2015-Mar-25"
+options = "+Freeciv-spec-Devel-2019-Jul-03"
 
 [info]
 
@@ -357,6 +357,7 @@ sprites =
 		"f.shield.muskogee", "flags/muskogee-shield"
 		"f.shield.mwiska", "flags/mwiska-shield"
 		"f.shield.myanmar", "flags/myanmar-shield"
+		"f.shield.myanmar_old", "flags/myanmar_old-shield"
 		"f.shield.nagorno_karabakh", "flags/nagorno_karabakh-shield"
 		"f.shield.namibia", "flags/namibia-shield"
 		"f.shield.naples", "flags/naples-shield"
