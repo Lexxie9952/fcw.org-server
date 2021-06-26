@@ -1520,16 +1520,16 @@ function city_name_dialog(suggested_name, unit_id) {
 			width: "300",
 			close: function() {
 				keyboard_input=true;
-                act_sel_queue_done(unit_id);
+        act_sel_queue_done(unit_id);
 			},
 			buttons: [	{
 					text: "Cancel",
 				        click: function() {
-						$("#city_name_dialog").remove();
-                        keyboard_input=true;
-                        act_sel_queue_done(unit_id);
-					}
-				},{
+                  $("#city_name_dialog").remove();
+                  keyboard_input=true;
+                  act_sel_queue_done(unit_id);
+          }
+        },{
 					text: "Ok",
 				        click: function() {
 						var name = alphanumeric_cleaner_city_names($("#city_name_req").val());
@@ -1546,7 +1546,7 @@ function city_name_dialog(suggested_name, unit_id) {
                           encodeURIComponent(name));
 						$("#city_name_dialog").remove();
 						keyboard_input=true;
-                        act_sel_queue_done(unit_id);
+            act_sel_queue_done(unit_id);
 					}
 					}
 				]
@@ -3702,7 +3702,7 @@ function update_city_screen()
        " <span id='city_improvements_hover_list'></span>"
      + " <span id='mass_production'></span>"    // mass-select functionality not available on mobile
      + " <button title='Change production in selected cities' class='button ui-button ui-corner-all ui-widget' style='padding:5px; margin:4px; font-size:70%; float:right;' onclick='mass_change_prod();'>Change &#x2611; to:</button>"
-     + " <button title='BUY in selected cities' class='button ui-button ui-corner-all ui-widget' style='padding:5px; margin:4px; font-size:70%; float:right;' onclick='buy_all_selected_cities();'>&#x2611; Buy selected</button>";
+     + " <button title='BUY in selected cities' class='button ui-button ui-corner-all ui-widget' style='padding:5px; margin:4px; font-size:70%; float:right;' onclick='request_buy_all_selected_cities();'>&#x2611; Buy selected</button>";
   } else $('#cities_title').css({"font-size":"100%"}); 
   $('#cities_title').html(title_text);
 
@@ -3932,9 +3932,76 @@ function cma_clipboard_macro(event, called_by_CMA)
   }
 }
 /**************************************************************************
+  Shows dialog to confirm a mass-purchase for every production item in
+  every selected city.
+**************************************************************************/
+function request_buy_all_selected_cities()
+{
+  var pplayer = client.conn.playing;
+
+  // compute total cost and item count
+  var total_cost = 0;
+  var item_count = 0;
+  var cost = 0;
+  for (var city_id in cities)  {
+    if ($("#cb"+city_id).is(":checked")) {
+      cost = cities[city_id]['buy_cost'];
+      total_cost += cost;
+      if (cost > 0) {item_count += 1;}
+    }
+  }
+
+  if (total_cost == 0 || total_cost > pplayer['gold']) {
+    var plural = item_count > 1 ? true : false
+    var title_string = total_cost == 0 ? "Nothing to Buy!" : "Not Enough Gold!";
+    var rejection_string = total_cost == 0 ? "Cost of selected purchase is 0." : 
+      total_cost +" gold for " + item_count + " item" + (plural ? "s" :"") 
+                          + " exceeds " + pplayer['gold'] + " treasury gold.";
+    swal({
+          title: title_string,
+          text: rejection_string,
+          type: "warning",
+          showCancelButton: false,
+          confirmButtonColor: "#803030",
+          confirmButtonText: "OK",
+          closeOnConfirm: true
+         });
+    setSwalTheme();
+    return;
+  }
+
+  // reset dialog page.
+  remove_active_dialog("#dialog");
+  $("<div id='dialog'></div>").appendTo("div#game_page");
+  var buy_question_string = "Buy " + item_count + " items for <b>" + total_cost + "</b> gold";
+  var treasury_text = "<br>Treasury contains " + pplayer['gold'] + " gold.";  
+  var dhtml = buy_question_string + treasury_text;
+
+  $("#dialog").html(dhtml);
+
+  $("#dialog").attr("title", "Buy It!");
+  $("#dialog").dialog({
+			bgiframe: true,
+			modal: true,
+			width: is_small_screen() ? "95%" : "50%",
+			buttons: {
+				"Yes": function() {
+            send_buy_all_selected_cities();
+            remove_active_dialog("#dialog");
+				},
+				"No (𝗪)": function() {
+            remove_active_dialog("#dialog");
+				}
+			}
+		});
+
+  $("#dialog").dialog('open');
+  dialog_register("#dialog");
+}
+/**************************************************************************
   Buys (or attempts to buy) every production item in every selected city.
 **************************************************************************/
-function buy_all_selected_cities()
+function send_buy_all_selected_cities()
 {
   for (var city_id in cities)  {
     if ($("#cb"+city_id).is(":checked")) {
