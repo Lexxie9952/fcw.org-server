@@ -5028,6 +5028,7 @@ bool unit_move_handling(struct unit *punit, struct tile *pdesttile,
                         bool igzoc, bool move_do_not_act)
 {
   struct player *pplayer = unit_owner(punit);
+  struct unit *ptrans;
   struct city *pcity = tile_city(pdesttile);
 
   /*** Phase 1: Basic checks ***/
@@ -5135,6 +5136,30 @@ bool unit_move_handling(struct unit *punit, struct tile *pdesttile,
          return FALSE;
       }
     } unit_list_iterate_end;
+  }
+
+/* FIXME: replace this with osdn #42581 once the stuff it depends on
+   * arrives. */
+  if (!can_unit_survive_at_tile(&(wld.map), punit, pdesttile)
+      && ((ptrans = transporter_for_unit_at(punit, pdesttile)))
+      && is_action_enabled_unit_on_unit(ACTION_TRANSPORT_EMBARK,
+                                        punit, ptrans)) {
+    /* "Transport Embark". */
+    return unit_perform_action(pplayer, punit->id, ptrans->id,
+                               0, "", ACTION_TRANSPORT_EMBARK,
+                               ACT_REQ_PLAYER);
+  } else if (is_action_enabled_unit_on_tile(ACTION_TRANSPORT_DISEMBARK1,
+                                            punit, pdesttile, NULL)) {
+    /* "Transport Disembark". */
+    return unit_perform_action(pplayer, punit->id, tile_index(pdesttile),
+                               0, "", ACTION_TRANSPORT_DISEMBARK1,
+                               ACT_REQ_PLAYER);
+  } else if (is_action_enabled_unit_on_tile(ACTION_TRANSPORT_DISEMBARK2,
+                                            punit, pdesttile, NULL)) {
+    /* "Transport Disembark 2". */
+    return unit_perform_action(pplayer, punit->id, tile_index(pdesttile),
+                               0, "", ACTION_TRANSPORT_DISEMBARK2,
+                               ACT_REQ_PLAYER);
   }
 
   if (can_unit_move_to_tile_with_notify(punit, pdesttile, igzoc,
