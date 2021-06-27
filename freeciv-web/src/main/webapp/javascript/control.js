@@ -3027,6 +3027,7 @@ function do_map_click(ptile, qtype, first_time_called)
   }  // END OF GO TO HANDLING ----------------------------------------------------------------------------------------------
   else if (paradrop_active && current_focus.length > 0) {
     punit = current_focus[0];
+    action_decision_clear_want(punit['id']);
     packet = {
       "pid"         : packet_unit_do_action,
       "actor_id"    : punit['id'],
@@ -3045,6 +3046,7 @@ function do_map_click(ptile, qtype, first_time_called)
       punit = current_focus[a];
       pcity = tile_city(ptile); // TO DO: remove? we set pcity at top
       if (pcity != null) {
+        action_decision_clear_want(punit['id']);
         packet = {
           "pid"         : packet_unit_do_action,
           "actor_id"    : punit['id'],
@@ -5948,6 +5950,7 @@ function request_unit_cancel_orders(punit)
 function request_new_unit_activity(punit, activity, target)
 {
   request_unit_cancel_orders(punit);
+  action_decision_clear_want(punit['id']);
   var packet = {"pid" : packet_unit_change_activity, "unit_id" : punit['id'],
                 "activity" : activity, "target" : target };
   //if (DEBUG_LOG_PACKETS) console.log("Sending action request: "+JSON.stringify(packet));
@@ -5963,6 +5966,7 @@ function request_unit_autosettlers(punit)
 {
   if (punit != null ) {
     request_unit_cancel_orders(punit);
+    action_decision_clear_want(punit['id']);
     var packet = {"pid" : packet_unit_autosettlers, "unit_id" : punit['id']};
     send_request(JSON.stringify(packet));
   }
@@ -5997,6 +6001,7 @@ function request_unit_build_city()
             "unit_id"     : punit['id'] };
             send_request(JSON.stringify(packet));
         } else {
+          action_decision_clear_want(punit['id']);
           packet = {"pid" : packet_unit_do_action,
             "actor_id"    : punit['id'],
             "target_id"   : target_city['id'],
@@ -6050,6 +6055,7 @@ function request_unit_do_action(action_id, actor_id, target_id, sub_tgt_id,
     sub_tgt_id: sub_tgt_id || 0,
     name: name || ""
   }));
+  action_decision_clear_want(punit['id']);
 }
 
 /**************************************************************************
@@ -6114,6 +6120,7 @@ function key_unit_disband()
       /* Do Recycle Unit if located inside a city. */
       /* FIXME: Only rulesets where the player can do Recycle Unit to all
       * domestic and allied cities are supported here. */
+      action_decision_clear_want(punit['id']);
       packet = {
         "pid"         : packet_unit_do_action,
         "actor_id"    : punit['id'],
