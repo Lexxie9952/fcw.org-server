@@ -183,6 +183,7 @@ function mapview_mouse_down(e)
     }
     //console.log("Left mouse button DOWN.");
     // if (airlift_active) return;  <<<<<<<<<< TODO was this line missing?
+    if (action_tgt_sel_active) return; // prevent selecting a unit when we're selecting an action tile.
     if (goto_active) return;
     if (paradrop_active) return; // left-clicking on your own unit in paradrop mode was selecting it, in spite of 
                                  // action_button_pressed and do_map_click checking for paradrop_active; test for fix.      

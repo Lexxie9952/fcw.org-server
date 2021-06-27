@@ -2678,6 +2678,15 @@ function do_map_click(ptile, qtype, first_time_called)
     return;
   }
 
+  if (action_tgt_sel_active && current_focus.length > 0) {
+    request_unit_act_sel_vs(ptile);
+    clear_all_modes();
+    action_tgt_sel_active = false;
+    paradrop_active = false;
+    airlift_active = false;
+    return;
+  } 
+
   if (current_focus.length > 0 && current_focus[0]['tile'] == ptile['index']) {
     /* clicked on unit at the same tile, then deactivate goto and show context menu. */
     if (goto_active /*&& !touch_device*/) { //(allow clicking same tile when giving a Nuke order.)
@@ -3049,8 +3058,8 @@ function do_map_click(ptile, qtype, first_time_called)
       }
     }
     airlift_active = false;
-
-  } 
+  }
+  // candidate for removal since we are testing doing it higher up now
   else if (action_tgt_sel_active && current_focus.length > 0) {
     request_unit_act_sel_vs(ptile);
     action_tgt_sel_active = false;
@@ -5841,8 +5850,8 @@ function key_unit_action_select()
     action_tgt_sel_active = true;
     message_log.update({
       event: E_BEGINNER_HELP,
-      message: "Click on a tile to act on it. "
-             + "Press <b>D</b> again to act on own tile."
+      message: "Click target tile. "
+             + "(<b>D</b> = own tile. <b>SPACE</b> aborts)"
     });
   }
   deactivate_goto(false);
