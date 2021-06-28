@@ -1115,6 +1115,8 @@ function create_select_tgt_unit_button(parent_id, actor_unit_id,
   var cargo_text = "";
   var show_transport_info = false;
   var normal_ruleset = (client_rules_flag[CRF_CARGO_HEURISTIC]);
+  var title_text = get_unit_city_info(target_unit, true);
+
   var moves_text = move_points_text(target_unit['movesleft'],false);
   if (moves_text == "-") {
   // "-" means it was NaN/unknown because foreign, which means it's an ally on same tile
@@ -1156,12 +1158,13 @@ function create_select_tgt_unit_button(parent_id, actor_unit_id,
   // Segment 4. Extra transport-distinguishing info (iff legally embarkable)
   if (show_transport_info) {
     text += moves_text;
-    text += "<span title='"+cargo_text+"'>"+"L:"+carrying+" </span> ";
+    text += "<span style='cursor:help' title='"+cargo_text+"'>"+"L:"+carrying+" </span> ";
     text += "C:"+ttype['transport_capacity']+" ";
   }
   // Segment 5. Nationality + Home city
   if (get_unit_homecity_name(target_unit) != null) text += " ("+get_unit_homecity_name(target_unit)+")";
-  text += " &emsp;"+unit_get_flag_image(target_unit,18);
+  //text += " &emsp;"+unit_get_flag_image(target_unit,18); // alternative flag at the right of button
+  text += unit_get_shield_image(target_unit);
   /* commented out because unit_flag_image is less verbose and has hover title text
   text += " (";
   text += nations[unit_owner(target_unit)['nation']]['adjective'];
@@ -1170,6 +1173,7 @@ function create_select_tgt_unit_button(parent_id, actor_unit_id,
 
   button = {
     html  : text,
+    title: title_text,
     click : function() {
       var packet = {
         "pid"            : packet_unit_get_actions,
@@ -1334,7 +1338,7 @@ function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapac
   var disable = false;
   var target_unit = units[tid];
   var ttype = unit_type(target_unit);
-  var title_text = get_unit_city_info(target_unit);
+  var title_text = get_unit_city_info(target_unit, true);
   var ptile = index_to_tile(target_unit['tile']);
   var units_on_tile = tile_units(ptile);
   var carrying = 0;
@@ -1376,11 +1380,12 @@ function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapac
   if (target_unit['transported_by']) text+="on T"+target_unit['transported_by']+" ";
   // Segment 4. M:moves L:cargo_qty C:capacity
   text += moves_text
-        + "<span title='"+cargo_text+"'>"+tloaded+"</span>" 
+        + "<span style='cursor:help' title='"+cargo_text+"'>"+tloaded+"</span>" 
         + " C:" + tcapacity;
   // Segment 5. Nationality + Home city
   if (get_unit_homecity_name(target_unit) != null) text += " ("+get_unit_homecity_name(target_unit)+")";
-  text += " &emsp;"+unit_get_flag_image(target_unit,18);
+  //text += " &emsp;"+unit_get_flag_image(target_unit,18); // alternative flag at right of button
+  text += unit_get_shield_image(target_unit);
 
   var load_button = {
     title : title_text,
