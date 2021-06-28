@@ -1387,3 +1387,16 @@ function unit_get_flag_image(punit, height)
   }
   return "";  // no support for custom user flags at present
 }
+
+/**********************************************************************//**
+ Get a scaled national flag based on nationality of a certain unit
+**************************************************************************/
+function unit_get_shield_image(punit)
+{
+  var owner_id = punit['owner'];
+  var owner = players[owner_id];
+  var nation_id = owner['nation'];
+  var nation = nations[nation_id];
+
+  return get_html_nation_shield_sprite(nation);
+}
