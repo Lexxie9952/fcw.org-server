@@ -1389,7 +1389,7 @@ function unit_get_flag_image(punit, height)
 }
 
 /**********************************************************************//**
- Get a scaled national flag based on nationality of a certain unit
+ Get an html insertable national shield for nationality of a certain unit
 **************************************************************************/
 function unit_get_shield_image(punit)
 {
