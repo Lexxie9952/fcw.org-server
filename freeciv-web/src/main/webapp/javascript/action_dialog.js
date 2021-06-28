@@ -340,6 +340,7 @@ function popup_action_selection(actor_unit, action_probabilities,
   var buttons = [];
 
   var dhtml = "";
+  var dialog_width = "390px";  // can be adjusted for some types of pop-up
 
   if (target_city != null) {
     dhtml += "Your " + unit_types[actor_unit['type']]['name'];
@@ -714,7 +715,7 @@ function popup_action_selection(actor_unit, action_probabilities,
       bgiframe: true,
      // modal: true,   // non-modal: allows player to see and witness large multi-unit battle with many dialogs
       dialogClass: "act_sel_dialog",
-      width: is_small_screen() ? "99%" : "390px",
+      width: is_small_screen() ? "99%" : dialog_width,
       buttons: buttons });
 
   $(id).dialog('open');
@@ -1096,28 +1097,79 @@ function popup_sabotage_dialog(actor_unit, target_city, city_imprs, act_id)
 
 /**************************************************************************
   Create a button that selects a target unit.
-
   Needed because of JavaScript's scoping rules.
 **************************************************************************/
 function create_select_tgt_unit_button(parent_id, actor_unit_id,
                                        target_tile_id, target_unit_id)
 {
+  var button = {};
   var text = "";
   var target_unit = units[target_unit_id];
-  var button = {};
-
-  text += unit_types[target_unit['type']]['name'];
-
-  if (get_unit_homecity_name(target_unit) != null) {
-    text += " from " + get_unit_homecity_name(target_unit);
+  var ttype = unit_type(target_unit);
+  var punit = units[actor_unit_id];
+  var ptype = unit_type(punit);
+  // Used to construct additional transport detail info:
+  var ptile = index_to_tile(target_unit['tile']);
+  var units_on_tile = tile_units(ptile);
+  var carrying = 0;
+  var cargo_text = "";
+  var show_transport_info = false;
+  var normal_ruleset = (client_rules_flag[CRF_CARGO_HEURISTIC]);
+  var moves_text = move_points_text(target_unit['movesleft'],false);
+  if (moves_text == "-") {
+  // "-" means it was NaN/unknown because foreign, which means it's an ally on same tile
+    moves_text = " ALLY "
+  } else {
+    moves_text = "M:"+moves_text+" ";
   }
 
+  // Determine if target unit is (probably) a legal Embark target.
+  if (target_unit['id'] != punit['id']) {
+    tclass = unit_classes[ttype.unit_class_id];
+    if (ttype['transport_capacity'] > 0) {
+      if (!normal_ruleset || unit_could_possibly_load(punit, ptype, ttype, tclass)) {
+        show_transport_info = true; 
+        // Determine cargo qty. TODO:make reusable get_cargo_qty(transport) function
+        for (t = 0; t < units_on_tile.length; t++ ) {
+          var aunit = units_on_tile[t];
+
+          if (aunit['transported'] && aunit['transported_by'] == target_unit_id) {
+            if (carrying) cargo_text+="," // csv presentation
+            carrying ++; // increment load counter of transporter
+            cargo_text += " "+unit_type(aunit)['name'];
+          }
+        }
+        if (carrying > 1) cargo_text = "Carrying " + carrying+ " units: "+cargo_text;
+        else if (carrying==1) cargo_text = "Carrying " + cargo_text;
+        else cargo_text = "No Cargo" 
+      }
+    }
+  }
+
+  // Segment 1. Unit Emoji
+  text += html_emoji_from_universal(ttype['name'])+" ";
+  // Segment 2. Unit type name (and Unit ID iff a legal transport)
+  if (show_transport_info) text += "T"+target_unit_id+" ";
+  text += ttype['name']+" ";
+  // Segment 3. If unit is cargo, tell who is transporting it.
+  if (target_unit['transported_by']) text+="on T"+target_unit['transported_by']+" ";
+  // Segment 4. Extra transport-distinguishing info (iff legally embarkable)
+  if (show_transport_info) {
+    text += moves_text;
+    text += "<span title='"+cargo_text+"'>"+"L:"+carrying+" </span> ";
+    text += "C:"+ttype['transport_capacity']+" ";
+  }
+  // Segment 5. Nationality + Home city
+  if (get_unit_homecity_name(target_unit) != null) text += " ("+get_unit_homecity_name(target_unit)+")";
+  text += " &emsp;"+unit_get_flag_image(target_unit,18);
+  /* commented out because unit_flag_image is less verbose and has hover title text
   text += " (";
   text += nations[unit_owner(target_unit)['nation']]['adjective'];
   text += ")";
+  */ 
 
   button = {
-    text  : text,
+    html  : text,
     click : function() {
       var packet = {
         "pid"            : packet_unit_get_actions,
@@ -1138,7 +1190,7 @@ function create_select_tgt_unit_button(parent_id, actor_unit_id,
 }
 
 /**************************************************************************
-  Create a dialog where a unit select what other unit to act on.
+  Create a dialog where a unit selects what other unit to act on.
 **************************************************************************/
 function select_tgt_unit(actor_unit, target_tile, potential_tgt_units)
 {
@@ -1154,7 +1206,7 @@ function select_tgt_unit(actor_unit, target_tile, potential_tgt_units)
   $("<div id='" + rid + "'></div>").appendTo("div#game_page");
 
   dhtml += "Select target unit for your ";
-  dhtml += unit_types[actor_unit['type']]['name'];
+  dhtml += unit_types[actor_unit['type']]['name']+":";
 
   $(id).html(dhtml);
 
@@ -1169,6 +1221,8 @@ function select_tgt_unit(actor_unit, target_tile, potential_tgt_units)
   $(id).dialog({
       title    : "Target unit selection",
       bgiframe : true,
+      style :  "text-align:center",
+      width: is_small_screen() ? "99%" : "590px",
       modal    : true,
       buttons  : buttons });
 
@@ -1288,7 +1342,7 @@ function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapac
 
   var load_button = {
     title : title_text,
-    text  :     "T" + tid 
+    html  :     "T" + tid 
                 + " " + unit_type(units[tid])['name'] +":"
                 + moves_text
                 + tloaded 
