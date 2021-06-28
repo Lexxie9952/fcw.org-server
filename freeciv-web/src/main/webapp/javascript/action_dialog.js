@@ -1223,11 +1223,13 @@ function select_tgt_unit(actor_unit, target_tile, potential_tgt_units)
   }};
   buttons.push(close_button);
 
+  var dialog_width = buttons.length>20 ? "90%" : "875px";
+
   $(id).dialog({
       title    : "Target unit selection",
       bgiframe : true,
       style :  "text-align:center",
-      width: is_small_screen() ? "99%" : "590px",
+      width: is_small_screen() ? "99%" : dialog_width,
       modal    : true,
       buttons  : buttons });
 
@@ -1330,11 +1332,33 @@ function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapac
 {
   // Mark and disable button if transport is at full capacity:
   var disable = false;
+  var target_unit = units[tid];
+  var ttype = unit_type(target_unit);
+  var title_text = get_unit_city_info(target_unit);
+  var ptile = index_to_tile(target_unit['tile']);
+  var units_on_tile = tile_units(ptile);
+  var carrying = 0;
+  var cargo_text = "";
+  var text = "";
+
+  // Loaded cargo info 
   if (tloaded  >= tcapacity) {
     tloaded = " FULL";
     disable = true;
   } else tloaded = " L:"+tloaded;
+  for (t = 0; t < units_on_tile.length; t++ ) {
+    var aunit = units_on_tile[t];
+    if (aunit['transported'] && aunit['transported_by'] == tid) {
+      if (carrying) cargo_text+="," // csv presentation
+      carrying ++; // increment load counter of transporter
+      cargo_text += " "+unit_type(aunit)['name'];
+    }
+  }
+  if (carrying > 1) cargo_text = "Carrying " + carrying+ " units: "+cargo_text;
+  else if (carrying==1) cargo_text = "Carrying " + cargo_text;
+  else cargo_text = "No Cargo"
 
+  // Move points info
   var moves_text = move_points_text(tmoves,false);
   if (moves_text == "-") {
   // "-" means it was NaN/unknown because foreign, which means it's an ally on same tile
@@ -1343,15 +1367,24 @@ function create_load_transport_button(actor, ttile, tid, tmoves, tloaded, tcapac
     moves_text = " M:"+moves_text;
   }
 
-  var title_text = get_unit_city_info(units[tid]);
+  // Segment 1. Unit Emoji
+  text += html_emoji_from_universal(ttype['name'])+" ";
+  // Segment 2. Txxx Unit_type 
+  text += "T" + tid 
+        + " " + unit_type(target_unit)['name'] +" "
+  // Segment 3. If unit is cargo, tell who is transporting it.
+  if (target_unit['transported_by']) text+="on T"+target_unit['transported_by']+" ";
+  // Segment 4. M:moves L:cargo_qty C:capacity
+  text += moves_text
+        + "<span title='"+cargo_text+"'>"+tloaded+"</span>" 
+        + " C:" + tcapacity;
+  // Segment 5. Nationality + Home city
+  if (get_unit_homecity_name(target_unit) != null) text += " ("+get_unit_homecity_name(target_unit)+")";
+  text += " &emsp;"+unit_get_flag_image(target_unit,18);
 
   var load_button = {
     title : title_text,
-    html  :     "T" + tid 
-                + " " + unit_type(units[tid])['name'] +":"
-                + moves_text
-                + tloaded 
-                + " C:" + tcapacity,
+    html  : text,
     disabled :  disable,
     click : function() {
       request_unit_do_action(ACTION_TRANSPORT_BOARD, actor, tid);

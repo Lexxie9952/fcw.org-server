@@ -4349,7 +4349,7 @@ function key_unit_load()
       if (home_city && cities[home_city] && cities[home_city]['name']) {
         home_city_name = " from " + cities[home_city]['name'];
       }
-      $(id).attr("title", "Load "+unit_type(punit)['name'] + home_city_name );
+      $(id).attr("title", "Board "+unit_type(punit)['name'] + home_city_name + " on:");
       $(id).html("<b>M</b>:Moves <b>L</b>:Loaded <b>C</b>:Capacity<br>");
       //--------------------------------------------------------------------
       // Make buttons for each eligible transport it can load onto:
@@ -4375,6 +4375,8 @@ function key_unit_load()
       }
       buttons.push( create_a_close_button(dialog_id) );
 
+      var dialog_width = buttons.length>20 ? "90%" : "875";
+
       // Display dialog:
       $(id).dialog({bgiframe: true,
         modal: true,
@@ -4383,9 +4385,10 @@ function key_unit_load()
         height: "auto",
         zIndex: 9999,
        /* width: "auto",*/
-        width: is_small_screen() ? $( window ).width() : "575",
+        width: is_small_screen() ? $( window ).width() : dialog_width,
         fluid: true     });
       $(id).dialog('open');
+      $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
       dialog_register(id);
     }
     // otherwise, only one transporter candidate, load automatically with no GUI input from user:
