@@ -3341,7 +3341,7 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
         // Close dialogs that dialog_key_listener can't intercept:          
         if (active_dialogs.length) {
           the_event.stopPropagation();
-          remove_active_dialog(active_dialogs.pop());
+          remove_active_dialog_handler();
         }
       } else if (alt && !ctrl && !shift) {
           // warcalc tab

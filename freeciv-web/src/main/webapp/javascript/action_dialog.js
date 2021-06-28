@@ -1502,7 +1502,7 @@ function remove_active_dialog(id)
   const index = active_dialogs.indexOf(id);
   if (index > -1) {
     active_dialogs.splice(index, 1);
-  }    
+  }
   $(id).remove();
 }
 /**************************************************************************
@@ -1511,15 +1511,15 @@ function remove_active_dialog(id)
   Called when dialog close-binding function is triggered from the dialog
   closing some other way than by hitting 'W'.
 
-  Optional 'input_maybe_needed' tells us to perform a check that
+  Optional 'inp_maybe_needed' tells us to perform a check that
   this unit has even more selections to make, and if so, not to
   unregister that the unit is waiting on user input.
 **************************************************************************/
-function remove_action_selection_dialog(id, actor_id, input_maybe_needed)
+function remove_action_selection_dialog(id, actor_id, inp_maybe_needed)
 {
   remove_active_dialog(id);
 
-  if (!input_maybe_needed) {
+  if (!inp_maybe_needed) {
     act_sel_queue_done(actor_id);
   }
   else {
@@ -1547,9 +1547,25 @@ function dialog_key_listener(ev)
     case 'W': 
       if (active_dialogs.length) { 
         ev.stopPropagation();
-        remove_active_dialog(active_dialogs.pop());
+        remove_active_dialog_handler();
       }
       break;
+  }
+}
+/**************************************************************************
+ Front end wrapper that closes the CURRENTLY ACTIVE dialog and decides
+ whether the ACTIVE dialog that is being closed is an action selection
+ dialog or a simple dialog, and does the appropriate different processing
+ needed for both cases.
+**************************************************************************/
+function remove_active_dialog_handler()
+{
+  kill_dialog_id = active_dialogs.pop();
+  if (action_selection_in_progress_for && kill_dialog_id.endsWith("_"+action_selection_in_progress_for)) {
+    did_not_decide = true;
+    remove_action_selection_dialog(kill_dialog_id, action_selection_in_progress_for, false);     
+  } else {
+    remove_active_dialog(kill_dialog_id);
   }
 }
 
