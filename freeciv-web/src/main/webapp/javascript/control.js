@@ -78,6 +78,7 @@ var current_focus = [];   // unit(s) in current focus selection
 var urgent_focus_queue = [];  /* The priority unit(s) for unit_focus_advance(). */
 var last_focus = null;    // last unit in focus before focus change
 var goto_active = false;  // state for selecting goto target for a unit
+var rally_mode = false;   // modifies goto_active to be setting a rally point
 var delayed_goto_active = false; // modifies goto_active state to give delayed goto command
 var paradrop_active = false;
 var airlift_active = false;
@@ -929,7 +930,7 @@ function action_decision_clear_want(old_actor_id)
 {
   var old = game_find_unit_by_number(old_actor_id);
 
-  if (old !== null && old['action_decision_want'] !== ACT_DEC_NOTHING) {
+  if (old !== null && old !== undefined && old['action_decision_want'] !== ACT_DEC_NOTHING) {
     /* Have the server record that a decision no longer is wanted. */
     var unqueue = {
       "pid"     : packet_unit_sscs_set,
@@ -1247,6 +1248,7 @@ function advance_unit_focus(same_type)
 function clear_all_modes()
 {
   goto_active = false;  // turn Go-To off if jumping focus to a new unit
+  rally_mode = false;   // clear rally path goto for city
   connect_active = false;
   connect_extra = -1;      // type of EXTRA to make, e.g., EXTRA_ROAD, EXTRA_IRRIGATION
   connect_activity = ACTIVITY_LAST;  // e.g., ACTIVITY_GEN_ROAD
@@ -3027,7 +3029,7 @@ function do_map_click(ptile, qtype, first_time_called)
   }  // END OF GO TO HANDLING ----------------------------------------------------------------------------------------------
   else if (paradrop_active && current_focus.length > 0) {
     punit = current_focus[0];
-    action_decision_clear_want(punit['id']);
+    ///=action_decision_clear_want(punit['id']);
     packet = {
       "pid"         : packet_unit_do_action,
       "actor_id"    : punit['id'],
@@ -3046,7 +3048,7 @@ function do_map_click(ptile, qtype, first_time_called)
       punit = current_focus[a];
       pcity = tile_city(ptile); // TO DO: remove? we set pcity at top
       if (pcity != null) {
-        action_decision_clear_want(punit['id']);
+        ///=action_decision_clear_want(punit['id']);
         packet = {
           "pid"         : packet_unit_do_action,
           "actor_id"    : punit['id'],
@@ -3061,12 +3063,11 @@ function do_map_click(ptile, qtype, first_time_called)
     }
     airlift_active = false;
   }
-  // candidate for removal since we are testing doing it higher up now
+  /* 27Jun2021: candidate for removal since we are doing it higher up now
   else if (action_tgt_sel_active && current_focus.length > 0) {
     request_unit_act_sel_vs(ptile);
     action_tgt_sel_active = false;
-
-  } 
+  } */
   else {
     if (pcity != null) { //if city clicked
       if (pcity['owner'] == client.conn.playing.playerno && !mouse_click_mod_key['shiftKey']) { //if city is your own
@@ -3538,9 +3539,17 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     case 'R':
       if (shift && !ctrl && !alt) {
         show_revolution_dialog();
-      } else if (alt && shift) {
+      } else if (alt && shift && !ctrl) {
         key_unit_connect(EXTRA_ROAD)
-      } else key_unit_road();
+      } else if (ctrl && !alt) {      // CTRL-R: city rally point
+        the_event.preventDefault(); // override possible browser shortcut
+        var ptile = canvas_pos_to_tile(mouse_x, mouse_y); // get tile
+        var pcity = tile_city(ptile); // check if it's a city
+        if (pcity!=null) {
+          activate_rally_goto(pcity, shift); // shift indicates persistent rally point
+        }
+      }
+      else key_unit_road();
     break;
 
     case 'S':
@@ -4050,6 +4059,66 @@ function activate_goto()
   // Clear state vars so it's ready to immediately path to cursor
   prev_mouse_x = null;   prev_mouse_y = null;   prev_goto_tile = null;
   activate_goto_last(ORDER_LAST, ACTION_COUNT);
+}
+
+/**************************************************************************
+  Activate a rally goto path.
+  persist==true will make this rally permanent until deactivated.
+**************************************************************************/
+function activate_rally_goto(pcity, persist)
+{
+  clear_goto_tiles();
+
+  /* Here is an example of a well-formed rally goto
+  packet = {"pid":138,"city_id":184,"length":2,"persistent":true,"vigilant":false,"dest_tile":212,
+  "orders":[{"order":0,"activity":23,"sub_target":0,"action":77,"dir":2},{"order":3,"activity":23,"sub_target":0,"action":77,"dir":2}]}
+  */
+  // Clear state vars so it's ready to immediately path to cursor
+  rally_mode = true;
+
+  message_log.update({
+    event: E_BEGINNER_HELP,
+    message: "Click tile to set "+pcity['name']+"'s "
+    + (persist ? "persistent " : "temporary ") + "rally point. <b>SPACE</b> aborts."
+  });
+
+  /* TO DO:
+     1. set up virtual unit of unit_type based on the city's current production; if not 
+     making a unit then default to a land unit type.
+
+     2. if rally_mode==true make the goto path request sent to server specify to use a 
+        'virtual' unit type
+
+     3. make server intercept virtual unit type and process it with just a ptype and not a punit;
+        if necessary it would have to create a local var punit which it destroys later, but is not
+        part of units array or a really existing unit according to any game state or game data
+
+     4. make rally_mode==true change the color of goto paths drawn to red
+
+     5. make the clicking in do_map_click for goto check for rally_mode==true and if so, call
+        the function we make for constructing the well-formed packet as commented above.
+        that function will also clean-up
+
+     6. clicking a city or if it's active_city of unit is on its ptile, draw its rally point,
+        or middle clicking city will draw its rally point also.
+
+     7. city dialog will report the x,y of its rally point and whether its persistent, and have a clicky button
+        to clear rally point.
+
+     8. server execution of rally points should probably report that it happened and whether rally is cleared 
+        or will persistent.
+
+     */
+
+  prev_mouse_x = null;   prev_mouse_y = null;   prev_goto_tile = null;
+  activate_goto_last(ORDER_LAST, ACTION_COUNT);
+
+  /* TO DO LATER: this supports actions along the path and at end of path,
+     it could be very useful to have some such as:
+     go-and-attack, go-and-bombard,
+     go-and-pillage, go-and-sentry, etc.
+     possibly others but go-attack has more vital usefulness
+  */
 }
 
 /**************************************************************************
@@ -5950,7 +6019,7 @@ function request_unit_cancel_orders(punit)
 function request_new_unit_activity(punit, activity, target)
 {
   request_unit_cancel_orders(punit);
-  action_decision_clear_want(punit['id']);
+  ///=action_decision_clear_want(punit['id']);
   var packet = {"pid" : packet_unit_change_activity, "unit_id" : punit['id'],
                 "activity" : activity, "target" : target };
   //if (DEBUG_LOG_PACKETS) console.log("Sending action request: "+JSON.stringify(packet));
@@ -5966,7 +6035,7 @@ function request_unit_autosettlers(punit)
 {
   if (punit != null ) {
     request_unit_cancel_orders(punit);
-    action_decision_clear_want(punit['id']);
+    ///=action_decision_clear_want(punit['id']);
     var packet = {"pid" : packet_unit_autosettlers, "unit_id" : punit['id']};
     send_request(JSON.stringify(packet));
   }
@@ -6001,7 +6070,7 @@ function request_unit_build_city()
             "unit_id"     : punit['id'] };
             send_request(JSON.stringify(packet));
         } else {
-          action_decision_clear_want(punit['id']);
+          ///=action_decision_clear_want(punit['id']);
           packet = {"pid" : packet_unit_do_action,
             "actor_id"    : punit['id'],
             "target_id"   : target_city['id'],
@@ -6055,7 +6124,7 @@ function request_unit_do_action(action_id, actor_id, target_id, sub_tgt_id,
     sub_tgt_id: sub_tgt_id || 0,
     name: name || ""
   }));
-  action_decision_clear_want(punit['id']);
+  ///=action_decision_clear_want(punit['id']);
 }
 
 /**************************************************************************
@@ -6120,7 +6189,7 @@ function key_unit_disband()
       /* Do Recycle Unit if located inside a city. */
       /* FIXME: Only rulesets where the player can do Recycle Unit to all
       * domestic and allied cities are supported here. */
-      action_decision_clear_want(punit['id']);
+      ///=action_decision_clear_want(punit['id']);
       packet = {
         "pid"         : packet_unit_do_action,
         "actor_id"    : punit['id'],
