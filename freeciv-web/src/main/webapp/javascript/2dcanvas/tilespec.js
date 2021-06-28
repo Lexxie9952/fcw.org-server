@@ -1160,7 +1160,7 @@ function get_grid_line_sprites(ptile)
 
 
 /**********************************************************************
-  ...
+  ...returns the shield (not the flag)
 ***********************************************************************/
 function get_unit_nation_flag_sprite(punit, unit_offset)
 {
@@ -1177,6 +1177,24 @@ function get_unit_nation_flag_sprite(punit, unit_offset)
   return {"key" : "f.shield." + nation['graphic_str'],
           "offset_x" : unit_flag_offset_x + unit_offset['x'],
           "offset_y" : - unit_flag_offset_y + unit_offset['y']};
+}
+/**********************************************************************
+  ...returns the shield (not the flag) in html usable form
+***********************************************************************/
+function get_html_nation_shield_sprite(nation)
+{
+  var tag ="f.shield." +  nation['graphic_str'];
+  var sprite = {"type":null,"sprite":get_sprite_from_tag(tag)};
+  var shield_sprite = sprite['sprite'];
+
+    return "<span class='v' title='"+nation['adjective']+"' style='cursor:help;"
+      + "background: transparent url("
+      + shield_sprite['image-src']
+      + ");transform: scale(1.0); background-position:-" + shield_sprite['tileset-x'] + "px -" + (shield_sprite['tileset-y'])
+      + "px;  width: " + (shield_sprite['width']) + "px;height: " + (shield_sprite['height']) + "px;"
+      + " content-align: left;"
+      + "vertical-align:top; float:left;'>"
+      + "</span>";
 }
 
 /**********************************************************************
