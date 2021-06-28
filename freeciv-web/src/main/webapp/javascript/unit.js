@@ -767,7 +767,7 @@ function unittype_ids_alphabetic()
  Returns a text about the unit to be shown in the city dialog, containing
  unit type name, home city, upkeep.
 **************************************************************************/
-function get_unit_city_info(punit)
+function get_unit_city_info(punit, plaintext)
 {
   var result = "";
   var upkeep_mode;
@@ -924,8 +924,9 @@ function get_unit_city_info(punit)
     else { // standard vet names 
       var vet_name = game_rules['veteran_name'][punit['veteran']];
     }
+    vet_star = plaintext ? "*" : "&starf;";
     vet_name = vet_name.charAt(0).toUpperCase() + vet_name.substring(1);
-    result += "\n" + vet_name + " " + "&starf;".repeat(punit['veteran']);
+    result += "\n" + vet_name + " " + vet_star.repeat(punit['veteran']);
   }
     
   // HEALTH
