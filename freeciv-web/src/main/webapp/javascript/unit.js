@@ -1364,3 +1364,25 @@ function utype_get_bombard_stats(ptype)
 
 
 
+/**********************************************************************//**
+ Get a scaled national flag based on nationality of a certain unit
+**************************************************************************/
+function unit_get_flag_image(punit, height)
+{
+  var tag = nations[players[punit['owner']]['nation']]['graphic_str'] 
+  var civ_flag_url = "";
+  var image_element = "";
+  
+  if (!nations[players[punit['owner']]['nation']]['customized'] ) {
+    civ_flag_url += "/images/flags/" + tag + "-web" + get_tileset_file_extention();
+    
+    image_element = "<img "
+                  + "class='v' "  // vertical align center
+                  + "src='" + civ_flag_url + "' "
+                  + "title='"+nations[players[punit['owner']]['nation']]['adjective']+"' "
+                  + "style='height:"+height+"px;'"
+                  + ">";
+    return image_element;
+  }
+  return "";  // no support for custom user flags at present
+}
