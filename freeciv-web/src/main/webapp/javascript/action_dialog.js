@@ -1218,6 +1218,11 @@ function select_tgt_unit(actor_unit, target_tile, potential_tgt_units)
                                                tgt_unit['id']));
   }
 
+  var close_button = {text: "Cancel (𝗪)", click: function() {
+    remove_action_selection_dialog(id, actor_unit['id']);
+  }};
+  buttons.push(close_button);
+
   $(id).dialog({
       title    : "Target unit selection",
       bgiframe : true,
