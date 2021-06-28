@@ -2703,7 +2703,8 @@ function do_map_click(ptile, qtype, first_time_called)
              it's clicked twice by looking at last_unit_clicked.
            4.If city tile clicked only milliseconds after issuing a GOTO there, the click was
              part of double-tap-GOTO. No contextmenu if this is inside the 'cooldown' period */
-        if (pcity || unit_click_menu || last_unit_clicked == current_focus[0]['id']) {
+        if (!should_ask_server_for_actions(current_focus[0]) 
+            && (pcity || unit_click_menu || last_unit_clicked == current_focus[0]['id'])) {
           if (pcity) {
             if (city_click_goto_cooldown(ptile))
               $("#canvas").contextMenu();
@@ -2717,7 +2718,8 @@ function do_map_click(ptile, qtype, first_time_called)
             came_from_context_menu = true;
           }
         }
-    } else if (!mouse_click_mod_key['shiftKey'] && unit_click_menu) {
+    } else if (!mouse_click_mod_key['shiftKey'] && unit_click_menu
+               && !should_ask_server_for_actions(current_focus[0])) {
       // 3D handling of above. TO DO: test/integrate same 2D functionality above for 3D if appropriate
       if (pcity) {
         if (city_click_goto_cooldown(ptile))
@@ -3078,7 +3080,8 @@ function do_map_click(ptile, qtype, first_time_called)
             && sunits[0]['movesleft'] > 0) { // if no moves left we'd rather go inside city
 
           set_unit_focus_and_redraw(sunits[0]);
-          if (city_click_goto_cooldown(ptile)) { // don't show contextmenu if in the cooldown period for a double tap GOTO
+          if (city_click_goto_cooldown(ptile) && !should_ask_server_for_actions(sunits[0])) { 
+            // don't show contextmenu if in the cooldown period for a double tap GOTO
             $("#canvas").contextMenu();
           }
           return; // move the commented-out return from below up here
@@ -3183,6 +3186,7 @@ function do_map_click(ptile, qtype, first_time_called)
         }
 
         if (touch_device) { // show context menu unless we clicked on a city prior to GOTO_COOLDOWN period
+           // TODO: if (!should_ask_server_for_actions(selected-unit)) ???
             if (pcity) {
               if (city_click_goto_cooldown(ptile)) $("#canvas").contextMenu();
             } else {
