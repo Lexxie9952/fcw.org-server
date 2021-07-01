@@ -5139,7 +5139,11 @@ bool unit_move_handling(struct unit *punit, struct tile *pdesttile,
   }
 
 /* FIXME: replace this with osdn #42581 once the stuff it depends on
-   * arrives. */
+   * arrives. 
+   a53773bf84bd86ce181ba6f231900026ec1f5d9b upstream replacement
+   4633405cd8613b61ce65a0e4fcb0975516b76970 this commit (revert)
+   1626d3db607 we think is what allows swapping this with upstream
+   */
   if (!can_unit_survive_at_tile(&(wld.map), punit, pdesttile)
       && ((ptrans = transporter_for_unit_at(punit, pdesttile)))
       && is_action_enabled_unit_on_unit(ACTION_TRANSPORT_EMBARK,
