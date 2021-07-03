@@ -3652,11 +3652,12 @@ static bool city_build(struct player *pplayer, struct unit *punit,
 }
 
 /**********************************************************************//**
-  This function handles GOTO path requests from the client.
+  This function handles GOTO and RALLY path requests from the client.
 **************************************************************************/
-void handle_goto_path_req(struct player *pplayer, int unit_id, int goal)
+static void do_path_req(struct player *pplayer, struct unit *punit, int goal)
 {
-  struct unit *punit = player_unit_by_number(pplayer, unit_id);
+  int unit_id = punit->id;
+
   struct tile *ptile = index_to_tile(&(wld.map), goal);
   struct pf_parameter parameter;
   struct pf_map *pfm;
@@ -3731,6 +3732,48 @@ void handle_goto_path_req(struct player *pplayer, int unit_id, int goal)
   } else {
     return;
   }
+}
+/**********************************************************************//**
+  This function handles GOTO path requests from the client.
+**************************************************************************/
+void handle_goto_path_req(struct player *pplayer, int unit_id, int goal)
+{
+  struct unit *punit = player_unit_by_number(pplayer, unit_id);
+  do_path_req(pplayer, punit, goal);
+}
+/**********************************************************************//**
+  This function handles RALLY path requests from the client.
+**************************************************************************/
+void handle_rally_path_req(struct player *pplayer, int city_id, 
+                          Unit_type_id utype_id, int goal)
+{
+  if (!city_id) return;
+
+  const struct unit_type *utype; 
+  struct unit *punit;
+
+  /* Make unit of utype */
+  utype = utype_by_number(utype_id);
+  fc_assert_ret(utype);
+  punit = unit_virtual_create(pplayer, NULL, utype, 0/*vet-level*/);
+  fc_assert_ret(punit);
+
+  /* Set to tile of city */
+  struct city *pcity = game_city_by_number(city_id);
+  fc_assert_ret(pcity);
+  struct tile *ptile = city_tile(pcity);  
+  fc_assert(ptile);
+  unit_tile_set(punit, ptile);
+  /* Other stuff: */
+  punit->id = 0; // Virtual unit id == 0
+  punit->homecity = 0; // homeless
+  punit->hp = 1; // not dead
+  punit->moves_left = utype->move_rate; // full moves
+  punit->moved = false; // fresh
+
+  do_path_req(pplayer, punit, goal);
+
+  unit_virtual_destroy(punit); // clean-up virtual unit
 }
 
 /**********************************************************************//**
