@@ -1175,7 +1175,7 @@ function unit_has_moved(punit)
 *************************************************************************/
 function unit_get_bombard_name(punit) {
   if (!punit) return "Ranged Attack";
-  return utype_get_pillage_name(unit_type(punit));
+  return utype_get_bombard_name(unit_type(punit));
 }
 function utype_get_bombard_name(ptype) {
   if (!ptype) return "Ranged Attack";
