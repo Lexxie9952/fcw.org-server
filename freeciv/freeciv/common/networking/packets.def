@@ -2381,3 +2381,10 @@ PACKET_ONGOING_LONGTURN_NATION_SELECT_REQ = 291; cs, handle-per-conn, dsend
   BOOL is_male;
   UINT8 style;
 end
+
+# used for showing rally path in web client.
+PACKET_RALLY_PATH_REQ = 292; cs, dsend
+  CITY city_id;
+  UNIT_TYPE utype_id;
+  TILE goal;
+end
