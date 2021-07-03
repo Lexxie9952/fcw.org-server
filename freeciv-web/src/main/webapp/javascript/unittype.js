@@ -181,7 +181,7 @@ function utype_can_do_action(putype, action_id)
   } else if (action_id > ACTION_COUNT || action_id < 0) {
     console.log("utype_can_do_action(): invalid action id " + action_id);
     return false;
-  }
+  } else if (action_id == ACTION_COUNT) return true;
 
   return putype['utype_actions'].isSet(action_id);
 }
