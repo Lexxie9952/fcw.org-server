@@ -21,7 +21,9 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 
 <tr><td><img src="/images/orders/fortress.png"></td><td><span class="vctr"> Build Fort/Fortress or Buoy</td><td><span class="hotkey">shift-F</span></span></td></tr>
 
-<tr><td><img src="/images/orders/goto_default.png"></td><td><span class="vctr"> Goto</td><td><span class="hotkey">G</span></span></td></tr>
+<tr><td><img src="/images/orders/go_and.png"></td><td><span class="vctr"> Go and do action</td><td><span class="hotkey">ctrl-alt-G (+SHIFT delay to next turn)</span></span></td></tr>
+
+<tr><td><img src="/images/orders/goto_default.png"></td><td><span class="vctr"> Goto</td><td><span class="hotkey">G (+SHIFT delay to next turn)</span></span></td></tr>
 
 <tr><td><img src="/images/orders/rehome_default.png"></td><td><span class="vctr"> Change unit Homecity</td><td><span class="hotkey">H</span></span></td></tr>
 
@@ -106,6 +108,8 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <tr><td><span class="hotkey">  F</span></td><td> build (F)ortress  (settler/worker units)</td></tr>
 <tr><td><span class="hotkey">  g</span></td><td> (g)o to tile  (then left-click mouse to select target tile)</td></tr>
 <tr><td><span class="hotkey">  G</span></td><td> delayed (G)oto (at turn change, reqs: unit with less than full moves)</td></tr>
+<tr><td><span class="hotkey">ctrl-alt-g</span></td><td> (g)o and do action</td></tr>
+<tr><td><span class="hotkey">ctrl-alt-G</span></td><td> delayed (G)o and do action (at turn change)</td></tr>
 <tr><td><span class="hotkey">  h</span></td><td> set unit's (h)omecity  (to city on current tile)</td></tr>
 <tr><td><span class="hotkey">  H</span></td><td> make Hideout</td></tr>
 <tr><td><span class="hotkey">  i</span></td><td> build (i)rrigation or convert terrain  (settler/worker units)</td></tr>
@@ -172,6 +176,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <tr><td><span class="hotkey">shift-M</span></td><td> Show unit moves left percentage on map</td></tr>
 <tr><td><span class="hotkey">ctrl-alt-P</span></td><td> Highlight polluted tiles everywhere on map</td></tr>
 <tr><td><span class="hotkey">shift-R</span></td><td> Revolution: choose new government</td></tr>
+<tr><td><span class="hotkey">ctrl-R</span></td><td> while mouse on city: Set Rally Point. +SHIFT=permanent +ALT=pick arrival action</td></tr>
 <tr><td><span class="hotkey">alt-S</span></td><td> Fullscreen mode</td></tr>
 <tr><td><span class="hotkey">ESC</span></td><td> Exit Fullscreen mode.</td></tr>
 <tr><td><span class="hotkey">shift-S</span></td><td> Stack display mode (multiple units on tile)</td></tr>
