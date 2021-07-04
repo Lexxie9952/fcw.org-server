@@ -2606,6 +2606,15 @@ static struct unit *city_create_unit(struct city *pcity,
                                    * sizeof(struct unit_order));
     memcpy(punit->orders.list, pcity->rally_point.orders,
            pcity->rally_point.length * sizeof(struct unit_order));
+
+    /* FIXME: Heuristic Patch: units on rally-goto did not have a goto_tile,
+       making clients fail to show their GOTO activity. This is NOT the
+       correct tile doesn't matter--it's not used in orders execution, and
+       is only used by the client to show if the unit is on GOTO, and gets
+       cleared after orders are fulfilled. Proper fix should be to put
+       dest_tile into 1) rally packet and 2) city's rally struct, then use
+       that tile here. */
+    punit->goto_tile = unit_tile(punit);
   }
 
   /* This might destroy pcity and/or punit: */
@@ -2758,11 +2767,20 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
       }
 
       if (punit) {
-        notify_player(pplayer, city_tile(pcity), E_UNIT_BUILT, ftc_server,
-                      /* TRANS: <city> is finished building <unit/building>. */
-                      _("🔨[`%s`] %s is finished building %s."),
-                      utype_name_translation(utype), city_link(pcity),
-                      utype_name_translation(utype));
+        if (punit->goto_tile) {
+          notify_player(pplayer, city_tile(pcity), E_UNIT_BUILT, ftc_server,
+                _("🎯%s %s built %s, which left for a %s rally point."),                              
+                  UNIT_EMOJI(punit), city_link(pcity),
+                  utype_name_translation(utype),
+                  pcity->rally_point.persistent ? "<b>constant</b>" : ""
+                  );
+        } else {
+          notify_player(pplayer, city_tile(pcity), E_UNIT_BUILT, ftc_server,
+                        /* TRANS: <city> is finished building <unit/building>. */
+                        _("🔨[`%s`] %s is finished building %s."),
+                        utype_name_translation(utype), city_link(pcity),
+                        utype_name_translation(utype));
+        }
       }
 
       /* After we created the unit remove the citizen. This will also
