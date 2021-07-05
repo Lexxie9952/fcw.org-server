@@ -151,7 +151,6 @@ function format_act_prob_part(prob)
 {
   return (prob / 2) + "%";
 }
-
 /****************************************************************************
   Format the probability that an action will be a success.
 ****************************************************************************/
@@ -169,7 +168,6 @@ function format_action_probability(probability)
     return "";
   }
 }
-
 /**************************************************************************
   Format the label of an action selection button.
 **************************************************************************/
@@ -1448,6 +1446,176 @@ function select_tgt_extra(actor_unit, target_unit,
   $(id).dialog('open');
   $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
   dialog_register(id, actor_unit['id']);
+}
+
+/**************************************************************************
+  Create a dialog to set the last order/action for goto and rally
+**************************************************************************/
+function select_last_action()
+{
+  var id     = "#sel_last_action_dialog";
+  var dhtml   = "";
+  var buttons = [];
+
+  /* Reset dialog page. */
+  remove_active_dialog(id);
+  $("<div id='sel_last_action_dialog'></div>").appendTo("div#game_page");
+
+  if (rally_active) {
+    dhtml += "Select action to do at RALLY point:";
+    // Turn off mouse-cursor pathing while dialog is open:
+    old_rally_active = rally_active;
+    rally_active = false; 
+  } else dhtml += "Select action to perform after GOTO:";
+  $(id).html(dhtml);
+
+  /* TO DO:
+        clicking the button doesn't close dialog
+        make an orders button and context menu for Go...and
+        stop adjacent goto override when in GO...and mode
+        utype_can_do_action or check certain flags on some of these, if not in rally mode
+        context_menu GO AND doesn't work if there are other units waiting, it advances focus for some reason.
+        don't activate goto after making this call, activate it WHEN dialog closes IFF
+            there is no current_focus
+        rally...and uses alt also?
+
+==========================================================================================================
+
+    user_last_action or goto_last action not being reset sometimes
+
+    test some remaining actions
+
+    construct non-working //commented-out actions to work
+
+    capture units trying to do to same tile instead of next one.
+      order_wants_direction() is to blame (95% likely, also for other things i bet)
+    
+    double clicking unit acting funny and being dead click, when before it didn't; are 
+      state vars not being cleaned in these cases, can we find out what they are and 
+      compare functional case vs nonfunctional on the state vars to discover it ?
+      console.log("%s %s",came_from_context_menu,last_unit_clicked);
+console.log("%s %s",came_from_context_menu,last_unit_clicked);
+NOT WORKING      true 371
+WORKING          false -1
+  */
+
+  buttons = add_action_last_button(buttons, ACTION_ATTACK);
+  buttons = add_action_last_button(buttons, ACTION_BOMBARD,
+                                  current_focus.length ? unit_get_bombard_name(current_focus[0]) :
+                                  "Special Attack");
+  buttons = add_action_last_button(buttons, ACTION_TRANSPORT_BOARD, "Board");
+  buttons = add_action_last_button(buttons, ACTION_SPY_BRIBE_UNIT, "Bribe");
+  buttons = add_action_last_button(buttons, ACTION_HOME_CITY);
+  buttons = add_action_last_button(buttons, ACTION_CULTIVATE);
+  buttons = add_action_last_button(buttons, ACTION_CONVERT);
+  buttons = add_action_last_button(buttons, ACTION_NUKE);
+  buttons = add_action_last_button(buttons, ACTION_SUICIDE_ATTACK, "Detonate Missile");
+  buttons = add_action_last_button(buttons, ACTION_TRANSPORT_EMBARK, "Embark");
+  buttons = add_action_last_button(buttons, ACTION_FORTIFY);
+  buttons = add_action_last_button(buttons, ACTION_HELP_WONDER);
+  //buttons = add_action_last_button(buttons, ACTION_IRRIGATE);  // works on blank tile but not farmland
+  buttons = add_action_last_button(buttons, ACTION_JOIN_CITY);
+  //buttons = add_action_last_button(buttons, ACTION_MINE, "Mine");  // doesn't work
+  buttons = add_action_last_button(buttons, ACTION_PLANT);
+  buttons = add_action_last_button(buttons, ACTION_SPY_SABOTAGE_UNIT_ESC);
+  buttons = add_action_last_button(buttons, ACTION_TRANSFORM_TERRAIN);
+  buttons = add_action_last_button(buttons, ACTION_TRANSPORT_UNLOAD);
+  buttons = add_action_last_button(buttons, ACTION_UPGRADE_UNIT);
+  buttons = add_action_last_button(buttons, ACTION_COUNT, "NO ACTION", ORDER_LAST);
+  //buttons = add_action_last_button(ACTION_PILLAGE);
+  buttons = add_action_last_button(buttons, ACTION_CONQUER_CITY);
+  buttons = add_action_last_button(buttons, ACTION_CAPTURE_UNITS);
+  buttons = add_action_last_button(buttons, ACTION_TRADE_ROUTE);
+  buttons = add_action_last_button(buttons, ACTION_SPY_ATTACK);
+  buttons = add_action_last_button(buttons, ACTION_STEAL_MAPS);
+  buttons = add_action_last_button(buttons, ACTION_STEAL_MAPS_ESC);
+  //buttons = add_action_last_button(ACTION_CLEAN_POLLUTION);
+  //buttons = add_action_last_button(ACTION_CLEAN_FALLOUT);
+  //buttons = add_action_last_button(ACTION_BASE);
+  //buttons = add_action_last_button(ACTION_ROAD);
+  //Recycle / disband
+
+  var close_button = {
+    text: "Cancel (𝗪)", 
+    click: function() {
+      remove_active_dialog(id);
+      deactivate_goto(false);
+    }
+  };
+  buttons.push(close_button);
+
+  $(id).dialog({
+  title    : "Go and ...",
+  width    : "360px",
+  bgiframe : true,
+  html:    dhtml,
+  modal    : true,
+  buttons  : buttons });
+
+  $(id).dialog('open');
+  $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
+
+  dialog_register(id);
+}
+
+/**************************************************************************
+  Possibly add an action button for "Go...And" dialog
+**************************************************************************/
+function add_action_last_button(buttons, action_id, override_name, order)
+{
+  // Eliminate actions known to be illegal for utype given rally point.
+  if (old_rally_active) {
+    // Only eliminate actions when city target utype is known
+    if (rally_virtual_utype_id != RALLY_DEFAULT_UTYPE_ID) {
+      if (!utype_can_do_action(unit_types[rally_virtual_utype_id],action_id)) {
+        return buttons; // don't add
+      }
+    }
+  }
+  // Eliminate illegal actions for a selected utype under Go...And
+  else if (current_focus.length) {
+    if (!utype_can_do_action(unit_type(current_focus[0]),action_id)) {
+      return buttons; // don't add
+    }
+  }
+  // Get ruleset name for action unless override title exists:
+  if (!override_name) override_name = actions[action_id]['ui_name'].replace("%s", "").replace("%s","");
+  var new_button = create_action_last_button(override_name, action_id, order);
+
+  buttons.push(new_button);
+  return buttons;
+}
+/**************************************************************************
+  Create a button for GO...AND last order dialog
+**************************************************************************/
+function create_action_last_button(title_text, action, order)
+{
+  var button = {
+    title: "Perform "+title_text+" after completing GOTO",
+    html:  title_text,
+    click: function() {
+    if (order) {
+      user_last_order = order;
+    } else {
+      user_last_order = ORDER_PERFORM_ACTION;
+    }
+      goto_last_order = user_last_order;
+      user_last_action = action;
+      goto_last_action = action;
+      remove_active_dialog("#sel_last_action_dialog");
+      /* AFTER picking last action, we activate goto-pathing or rally-pathing,
+         to avoid cursor doing "shadow goto pathing" while modal dialog is up */
+      if (old_rally_active) {
+        rally_active = old_rally_active;
+        old_rally_active = false;
+        activate_rally_goto(cities[rally_city_id]);
+      } else if (current_focus.length > 0) {
+        activate_goto();
+      }
+    }
+  }
+
+  return button;
 }
 
 /**************************************************************************

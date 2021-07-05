@@ -746,8 +746,20 @@ function show_city_dialog(pcity)
     if (pcity['steal'] && pcity['owner'] == client.conn.playing.playerno) {
       $("#city_steal").html(pcity['steal']);
       $("#city_steal_row").show();
-    } else $("#city_steal_row").hide();   
+    } else $("#city_steal_row").hide();
+
     $("#city_pollution").html(pcity['pollution']);
+
+    if (pcity['rally_point_length']) {
+      $("#city_rally_row").show();
+      var rally_type = (pcity['rally_point_persistent'] ? "Constant " : "Temporary ")
+      const rally_span = "<span style='cursor:pointer; position:absolute' title='"
+                       + "Click to cancel rally point.' " 
+                       + "onclick='city_cancel_rally_point("+pcity['id']+");'>"
+      $("#city_rally").html(rally_span+"&#x1F3AF; "+rally_type+" Rally Point</span>");
+      $("#city_rally").tooltip();
+
+    } else $("#city_rally_row").hide();
   }
 
   /* Handle citizens and specialists */
@@ -4237,6 +4249,21 @@ function city_prod_tab()
 {
   city_tab_index = 1;
   $("#city_tabs").tabs({ active: city_tab_index});
+}
+
+/**************************************************************************
+ Cancel's the city's rally point
+**************************************************************************/
+function city_cancel_rally_point(city_id)
+{
+  // Set rally point to city's own tile (which cancels rally point):
+  var pcity = cities[city_id];
+  var ptile = city_tile(pcity);
+  rally_city_id = city_id;
+  // "0" = rally_path. non-null dummy value triggers cancel logic:
+  goto_request_map["0" + "," + ptile['x'] + "," + ptile['y']] = true;
+
+  send_city_rally_point(ptile);
 }
 
 /**************************************************************************

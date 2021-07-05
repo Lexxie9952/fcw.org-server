@@ -184,7 +184,7 @@ function mapview_mouse_down(e)
     //console.log("Left mouse button DOWN.");
     // if (airlift_active) return;  <<<<<<<<<< TODO was this line missing?
     if (action_tgt_sel_active) return; // prevent selecting a unit when we're selecting an action tile.
-    if (goto_active) return;
+    if (goto_active || rally_active) return;
     if (paradrop_active) return; // left-clicking on your own unit in paradrop mode was selecting it, in spite of 
                                  // action_button_pressed and do_map_click checking for paradrop_active; test for fix.      
     set_mouse_touch_started_on_unit(canvas_pos_to_tile(mouse_x, mouse_y));
@@ -271,7 +271,7 @@ function mapview_touch_end(e)
   */
 
   // Handle touchend event iff we were map dragging:
-  if ((touch_drag_mode && !mouse_touch_started_on_unit) && !goto_active) {
+  if ((touch_drag_mode && !mouse_touch_started_on_unit) && !(goto_active || rally_active) ) {
     /* We're on a touch device and just came out of map dragging, therefore 
      * this touch_end event is NOT the user actually tapping an action.
      * Interpreting such would make the tile the drag ended on become the 
@@ -314,11 +314,11 @@ function mapview_touch_move(e)
   touch_start_x = mouse_x;
   touch_start_y = mouse_y;
 
-  if (!goto_active) {
+  if ( !(goto_active||rally_active) ) {
     check_mouse_drag_unit(canvas_pos_to_tile(mouse_x, mouse_y));
 
     // This is how we know if this touchmove is dragging the map:
-    if (!goto_active && !mouse_touch_started_on_unit) { 
+    if ( !(goto_active||rally_active) && !mouse_touch_started_on_unit) { 
       mapview['gui_x0'] += diff_x;
       mapview['gui_y0'] += diff_y;
     }
@@ -336,6 +336,14 @@ function mapview_touch_move(e)
         if (goto_request_map[current_focus[i]['id'] + "," + ptile['x'] + "," + ptile['y']] == null) {
           request_goto_path(current_focus[i]['id'], ptile['x'], ptile['y']);
         }
+      }
+    }
+  }
+  else if (rally_active) {
+    var ptile = canvas_pos_to_tile(mouse_x, mouse_y);
+    if (ptile != null) {
+      if (goto_request_map["0" + "," + ptile['x'] + "," + ptile['y']] == null) {
+        request_rally_path(rally_city_id, ptile['x'], ptile['y']);
       }
     }
   }

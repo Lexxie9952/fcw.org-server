@@ -914,7 +914,8 @@ function handle_non_integer_combat_scores(key)
   else {
     return; // skip message
   }
-  console.log("Non-integer combat strength added to warcalc data for "+unit_types[key]['name'])
+  if (DEBUG_UNITS)
+    console.log("Non-integer combat strength added to warcalc data for "+unit_types[key]['name'])
 }
 
 /**************************************************************************
@@ -1875,7 +1876,7 @@ function handle_edit_object_created(packet)
 
 function handle_goto_path(packet)
 {
-  if (goto_active) {
+  if (goto_active||rally_active) {
     update_goto_path(packet);
   }
   else { // middle-click to show path for units on tile

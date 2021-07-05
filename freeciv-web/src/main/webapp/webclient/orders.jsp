@@ -1,4 +1,8 @@
 <div id="game_unit_orders_default">       
+  <div id="order_goand" class="order_button" title="Go to tile and do action (ctrl-alt-G)">
+    <a href="#" onclick="key_unit_go_and(false);"><img src="/images/orders/go_and.png" name="goand_button" alt="" border="0" width="30" height="30"></a>
+  </div>
+  
   <div id="order_goto" class="order_button" title="Go to tile (G)">
     <a href="#" onclick="activate_goto();"><img src="/images/orders/goto_default.png" name="goto_button" alt="" border="0" width="30" height="30"></a>
   </div>
