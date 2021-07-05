@@ -1470,22 +1470,12 @@ function select_last_action()
   $(id).html(dhtml);
 
   /* TO DO:
-        clicking the button doesn't close dialog
-        make an orders button and context menu for Go...and
-        stop adjacent goto override when in GO...and mode
-        utype_can_do_action or check certain flags on some of these, if not in rally mode
-        context_menu GO AND doesn't work if there are other units waiting, it advances focus for some reason.
-        don't activate goto after making this call, activate it WHEN dialog closes IFF
-            there is no current_focus
-        rally...and uses alt also?
-
 ==========================================================================================================
-
     user_last_action or goto_last action not being reset sometimes
+      go to tile with last action, action is illegal, go to another tile, it does it instead of reset
+      same thing for changing mind then just doing GOTO another tile.
 
-    test some remaining actions
-
-    construct non-working //commented-out actions to work
+    make non-working //commented-out actions to work
 
     capture units trying to do to same tile instead of next one.
       order_wants_direction() is to blame (95% likely, also for other things i bet)
@@ -1494,9 +1484,8 @@ function select_last_action()
       state vars not being cleaned in these cases, can we find out what they are and 
       compare functional case vs nonfunctional on the state vars to discover it ?
       console.log("%s %s",came_from_context_menu,last_unit_clicked);
-console.log("%s %s",came_from_context_menu,last_unit_clicked);
-NOT WORKING      true 371
-WORKING          false -1
+          NOT WORKING      true 371
+          WORKING          false -1
   */
 
   buttons = add_action_last_button(buttons, ACTION_ATTACK);
@@ -1505,35 +1494,57 @@ WORKING          false -1
                                   "Special Attack");
   buttons = add_action_last_button(buttons, ACTION_TRANSPORT_BOARD, "Board");
   buttons = add_action_last_button(buttons, ACTION_SPY_BRIBE_UNIT, "Bribe");
+  if (tech_known('Radio'))
+    buttons = add_action_last_button(buttons, ACTION_BASE, "Build Airbase", ORDER_PERFORM_ACTION, null, null, EXTRA_AIRBASE);
+  buttons = add_action_last_button(buttons, ACTION_FOUND_CITY, "Build City");
+  if (client_rules_flag[CRF_MASONRY_FORT] && tech_known('Masonry'))
+    buttons = add_action_last_button(buttons, ACTION_BASE, "Build Fort", ORDER_PERFORM_ACTION, null, null, EXTRA_FORT);
+  if (tech_known('Construction'))
+    buttons = add_action_last_button(buttons, ACTION_BASE, "Build Fortress", ORDER_PERFORM_ACTION, null, null, EXTRA_FORTRESS);
+  if (client_rules_flag[CRF_MAGLEV] && tech_known('Superconductors'))
+    buttons = add_action_last_button(buttons, ACTION_ROAD, "Build MagLev", ORDER_PERFORM_ACTION, null, null, EXTRA_MAGLEV);
+  if (tech_known('Railroad'))
+    buttons = add_action_last_button(buttons, ACTION_ROAD, "Build Railroad", ORDER_PERFORM_ACTION, null, null, EXTRA_RAILROAD);
+  buttons = add_action_last_button(buttons, ACTION_ROAD, "Build Road", ORDER_PERFORM_ACTION, null, null, EXTRA_ROAD);
+  if (client_rules_flag[CRF_CANALS] && tech_known('Engineering')) {
+    buttons = add_action_last_button(buttons, ACTION_ROAD, "Build Canal, coastal", ORDER_PERFORM_ACTION, null, null, EXTRA_CANAL);
+    buttons = add_action_last_button(buttons, ACTION_ROAD, "Build Canal, inland", ORDER_PERFORM_ACTION, null, null, EXTRA_WATERWAY);
+  }
   buttons = add_action_last_button(buttons, ACTION_HOME_CITY);
-  buttons = add_action_last_button(buttons, ACTION_CULTIVATE);
+//  buttons = add_action_last_button(buttons, ACTION_CAPTURE_UNITS); // was acting on own tile instead of target tile it seems
+
+//  buttons = add_action_last_button(buttons, ACTION_CLEAN_POLLUTION, "Clean Pollution", ORDER_PERFORM_ACTION, ACTIVITY_CLEAN_POLLUTION, EXTRA_POLLUTION, EXTRA_POLLUTION);
+//  buttons = add_action_last_button(buttons, ACTION_CLEAN_FALLOUT, "Clean Fallout", ORDER_PERFORM_ACTION, null, null, EXTRA_FALLOUT);
   buttons = add_action_last_button(buttons, ACTION_CONVERT);
-  buttons = add_action_last_button(buttons, ACTION_NUKE);
+  buttons = add_action_last_button(buttons, ACTION_CULTIVATE);
+
   buttons = add_action_last_button(buttons, ACTION_SUICIDE_ATTACK, "Detonate Missile");
+  buttons = add_action_last_button(buttons, ACTION_NUKE, "Detonate Nuke");
   buttons = add_action_last_button(buttons, ACTION_TRANSPORT_EMBARK, "Embark");
   buttons = add_action_last_button(buttons, ACTION_FORTIFY);
   buttons = add_action_last_button(buttons, ACTION_HELP_WONDER);
-  //buttons = add_action_last_button(buttons, ACTION_IRRIGATE);  // works on blank tile but not farmland
+  //function add_action_last_button(buttons, action_id,   override_name, order,                activity,        target, subtarget)
+  buttons = add_action_last_button(buttons, ACTION_IRRIGATE, "Irrigate"); // works on blank tiles but not farmland
+  if (tech_known('Refrigeration'))
+    buttons = add_action_last_button(buttons, ACTION_IRRIGATE, "Irrigate Farmland", ORDER_PERFORM_ACTION, null, null, EXTRA_FARMLAND);
   buttons = add_action_last_button(buttons, ACTION_JOIN_CITY);
-  //buttons = add_action_last_button(buttons, ACTION_MINE, "Mine");  // doesn't work
-  buttons = add_action_last_button(buttons, ACTION_PLANT);
+  buttons = add_action_last_button(buttons, ACTION_MINE, "Mine", ORDER_PERFORM_ACTION, null, null, EXTRA_MINE);
+  buttons = add_action_last_button(buttons, ACTION_PILLAGE, "Pillage Anything", ORDER_PERFORM_ACTION, null, null, -1);
+  buttons = add_action_last_button(buttons, ACTION_PLANT, "Plant");
+
+  buttons = add_action_last_button(buttons, ACTION_RECYCLE_UNIT);
   buttons = add_action_last_button(buttons, ACTION_SPY_SABOTAGE_UNIT_ESC);
   buttons = add_action_last_button(buttons, ACTION_TRANSFORM_TERRAIN);
   buttons = add_action_last_button(buttons, ACTION_TRANSPORT_UNLOAD);
   buttons = add_action_last_button(buttons, ACTION_UPGRADE_UNIT);
-  buttons = add_action_last_button(buttons, ACTION_COUNT, "NO ACTION", ORDER_LAST);
-  //buttons = add_action_last_button(ACTION_PILLAGE);
-  buttons = add_action_last_button(buttons, ACTION_CONQUER_CITY);
-  buttons = add_action_last_button(buttons, ACTION_CAPTURE_UNITS);
   buttons = add_action_last_button(buttons, ACTION_TRADE_ROUTE);
   buttons = add_action_last_button(buttons, ACTION_SPY_ATTACK);
   buttons = add_action_last_button(buttons, ACTION_STEAL_MAPS);
   buttons = add_action_last_button(buttons, ACTION_STEAL_MAPS_ESC);
-  //buttons = add_action_last_button(ACTION_CLEAN_POLLUTION);
-  //buttons = add_action_last_button(ACTION_CLEAN_FALLOUT);
-  //buttons = add_action_last_button(ACTION_BASE);
-  //buttons = add_action_last_button(ACTION_ROAD);
-  //Recycle / disband
+  buttons = add_action_last_button(buttons, ACTION_COUNT, "NO ACTION", ORDER_LAST);
+ //   buttons = add_action_last_button(buttons, ACTION_EXPEL_UNIT);
+  buttons = add_action_last_button(buttons, ACTION_CONQUER_CITY);
+  buttons = add_action_last_button(buttons, ACTION_SPY_POISON_ESC, "Poison City");
 
   var close_button = {
     text: "Cancel (𝗪)", 
@@ -1561,7 +1572,7 @@ WORKING          false -1
 /**************************************************************************
   Possibly add an action button for "Go...And" dialog
 **************************************************************************/
-function add_action_last_button(buttons, action_id, override_name, order)
+function add_action_last_button(buttons, action_id, override_name, order, activity, target, subtarget)
 {
   // Eliminate actions known to be illegal for utype given rally point.
   if (old_rally_active) {
@@ -1580,7 +1591,7 @@ function add_action_last_button(buttons, action_id, override_name, order)
   }
   // Get ruleset name for action unless override title exists:
   if (!override_name) override_name = actions[action_id]['ui_name'].replace("%s", "").replace("%s","");
-  var new_button = create_action_last_button(override_name, action_id, order);
+  var new_button = create_action_last_button(override_name, action_id, order, activity, target, subtarget);
 
   buttons.push(new_button);
   return buttons;
@@ -1588,7 +1599,7 @@ function add_action_last_button(buttons, action_id, override_name, order)
 /**************************************************************************
   Create a button for GO...AND last order dialog
 **************************************************************************/
-function create_action_last_button(title_text, action, order)
+function create_action_last_button(title_text, action, order, activity, target, subtarget)
 {
   var button = {
     title: "Perform "+title_text+" after completing GOTO",
@@ -1598,6 +1609,15 @@ function create_action_last_button(title_text, action, order)
       user_last_order = order;
     } else {
       user_last_order = ORDER_PERFORM_ACTION;
+    }
+    if (target) {
+      user_last_target = target;
+    }
+    if (subtarget) {
+      user_last_subtarget = subtarget;
+    }
+    if (activity) {
+      user_last_activity = activity;
     }
       goto_last_order = user_last_order;
       user_last_action = action;
