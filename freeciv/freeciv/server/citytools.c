@@ -2576,6 +2576,7 @@ void package_city(struct city *pcity, struct packet_city_info *packet,
   packet->rally_point_length = pcity->rally_point.length;
   packet->rally_point_persistent = pcity->rally_point.persistent;
   packet->rally_point_vigilant = pcity->rally_point.vigilant;
+  packet->rally_point_dest_tile = pcity->rally_point.dest_tile;
   if (pcity->rally_point.length) {
     memcpy(packet->rally_point_orders, pcity->rally_point.orders,
            pcity->rally_point.length * sizeof(struct unit_order));

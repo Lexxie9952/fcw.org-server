@@ -2608,13 +2608,17 @@ static struct unit *city_create_unit(struct city *pcity,
            pcity->rally_point.length * sizeof(struct unit_order));
 
     /* FIXME: Heuristic Patch: units on rally-goto did not have a goto_tile,
-       making clients fail to show their GOTO activity. This is NOT the
-       correct tile doesn't matter--it's not used in orders execution, and
+       making clients fail to show their GOTO activity. A fake tile (home_city
+       tile) gets associated to the unit. This is NOT the correct tile but 
+       it doesn't matter--it's not used in orders execution, and
        is only used by the client to show if the unit is on GOTO, and gets
-       cleared after orders are fulfilled. Proper fix should be to put
-       dest_tile into 1) rally packet and 2) city's rally struct, then use
-       that tile here. */
-    punit->goto_tile = unit_tile(punit);
+       cleared after orders are fulfilled. 
+       3July2021: 
+       FIXED: put dest_tile into 1) rally packets and 2) city's rally struct,
+       then use that tile here. Commented line can be substituted back
+       for servers lacking the dest_tile field, and it still works! 
+    punit->goto_tile = unit_tile(punit); */
+    punit->goto_tile = index_to_tile(&(wld.map), pcity->rally_point.dest_tile);
   }
 
   /* This might destroy pcity and/or punit: */
@@ -2823,6 +2827,7 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
         pcity->rally_point.length = 0;
         pcity->rally_point.persistent = FALSE;
         pcity->rally_point.vigilant = FALSE;
+        pcity->rally_point.dest_tile = -1;
         free(pcity->rally_point.orders);
         pcity->rally_point.orders = NULL;
       }

@@ -3575,6 +3575,7 @@ struct city *create_city_virtual(struct player *pplayer,
   pcity->units_supported = unit_list_new();
   pcity->routes = trade_route_list_new();
   pcity->task_reqs = worker_task_list_new();
+  pcity->rally_point.dest_tile = - 1; /* no rally point */
 
   if (is_server()) {
     pcity->server.mgr_score_calc_turn = -1; /* -1 = never */

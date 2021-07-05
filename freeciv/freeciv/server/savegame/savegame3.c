@@ -5023,6 +5023,10 @@ static bool sg_load_player_city(struct loaddata *loading, struct player *plr,
         = secfile_lookup_bool_default(loading->file, FALSE,
                                       "%s.rally_point_vigilant", citystr);
 
+      pcity->rally_point.dest_tile
+        = secfile_lookup_int_default(loading->file, -1,
+                                      "%s.rally_point_dest_tile", citystr);
+
       rally_orders
         = secfile_lookup_str_default(loading->file, "",
                                      "%s.rally_point_orders", citystr);
@@ -5075,6 +5079,8 @@ static bool sg_load_player_city(struct loaddata *loading, struct player *plr,
       (void) secfile_entry_lookup(loading->file, "%s.rally_point_persistent",
                                   citystr);
       (void) secfile_entry_lookup(loading->file, "%s.rally_point_vigilant",
+                                  citystr);
+      (void) secfile_entry_lookup(loading->file, "%s.rally_point_dest_tile",
                                   citystr);
       (void) secfile_entry_lookup(loading->file, "%s.rally_point_orders",
                                   citystr);
@@ -5374,6 +5380,8 @@ static void sg_save_player_cities(struct savedata *saving,
                           "%s.rally_point_persistent", buf);
       secfile_insert_bool(saving->file, pcity->rally_point.vigilant,
                           "%s.rally_point_vigilant", buf);
+      secfile_insert_int(saving->file, pcity->rally_point.dest_tile,
+                          "%s.rally_point_dest_tile", buf);
 
       for (j = 0; j < len; j++) {
         orders[j] = order2char(pcity->rally_point.orders[j].order);
@@ -5435,6 +5443,8 @@ static void sg_save_player_cities(struct savedata *saving,
       secfile_insert_bool(saving->file, FALSE, "%s.rally_point_persistent",
                          buf);
       secfile_insert_bool(saving->file, FALSE, "%s.rally_point_vigilant",
+                         buf);
+      secfile_insert_int(saving->file, -1, "%s.rally_point_dest_tile",
                          buf);
       secfile_insert_str(saving->file, "-", "%s.rally_point_orders", buf);
       secfile_insert_str(saving->file, "-", "%s.rally_point_dirs", buf);

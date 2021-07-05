@@ -752,6 +752,7 @@ PACKET_CITY_INFO = 31; sc, lsend, is-game-info, force, cancel(PACKET_CITY_SHORT_
   UINT16 rally_point_length;
   BOOL rally_point_persistent;
   BOOL rally_point_vigilant;
+  SINT32 rally_point_dest_tile; 
   UNIT_ORDER rally_point_orders[MAX_LEN_ROUTE:rally_point_length];
 
   BOOL cma_enabled;
@@ -872,6 +873,7 @@ PACKET_CITY_RALLY_POINT = 138; cs
   UINT16 length;
   BOOL persistent;
   BOOL vigilant;
+  SINT32 dest_tile;
   UNIT_ORDER orders[MAX_LEN_ROUTE:length];
 end
 

@@ -711,10 +711,19 @@ void handle_city_manager(struct player *pplayer, int city_id, bool enabled,
   Handles a request to set city rally point for new units.
 **************************************************************************/
 void handle_city_rally_point(struct player *pplayer,
-                             int city_id, int length,
+                             const struct packet_city_rally_point *packet)
+                           /*  int city_id, int length,
                              bool persistent, bool vigilant,
-                             const struct unit_order *orders)
+                             int dest_tile,
+                             const struct unit_order *orders)*/
 {
+  int city_id   = packet->city_id,
+      length    = packet->length,
+      dest_tile = packet->dest_tile;
+  bool persistent = packet->persistent,
+       vigilant   = packet->vigilant;
+  const struct unit_order *orders = packet->orders;
+
   struct city *pcity = player_city_by_number(pplayer, city_id);
   struct unit_order *checked_orders;
 
@@ -737,6 +746,7 @@ void handle_city_rally_point(struct player *pplayer,
   if (length == 0) {
     pcity->rally_point.vigilant = FALSE;
     pcity->rally_point.persistent = FALSE;
+    pcity->rally_point.dest_tile = -1;
     if (pcity->rally_point.orders) {
       free(pcity->rally_point.orders);
       pcity->rally_point.orders = NULL;
@@ -752,6 +762,7 @@ void handle_city_rally_point(struct player *pplayer,
 
     pcity->rally_point.persistent = persistent;
     pcity->rally_point.vigilant = vigilant;
+    pcity->rally_point.dest_tile = dest_tile;
     pcity->rally_point.orders = checked_orders;
   }
 
