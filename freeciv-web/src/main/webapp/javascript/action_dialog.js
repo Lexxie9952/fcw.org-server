@@ -1510,17 +1510,19 @@ function select_last_action()
     buttons = add_action_last_button(buttons, ACTION_ROAD, "Build Canal, coastal", ORDER_PERFORM_ACTION, null, null, EXTRA_CANAL);
     buttons = add_action_last_button(buttons, ACTION_ROAD, "Build Canal, inland", ORDER_PERFORM_ACTION, null, null, EXTRA_WATERWAY);
   }
-  buttons = add_action_last_button(buttons, ACTION_HOME_CITY);
+  buttons = add_action_last_button(buttons, ACTION_HOME_CITY, "Change Home City");
 //  buttons = add_action_last_button(buttons, ACTION_CAPTURE_UNITS); // was acting on own tile instead of target tile it seems
 
 //  buttons = add_action_last_button(buttons, ACTION_CLEAN_POLLUTION, "Clean Pollution", ORDER_PERFORM_ACTION, ACTIVITY_CLEAN_POLLUTION, EXTRA_POLLUTION, EXTRA_POLLUTION);
 //  buttons = add_action_last_button(buttons, ACTION_CLEAN_FALLOUT, "Clean Fallout", ORDER_PERFORM_ACTION, null, null, EXTRA_FALLOUT);
+  buttons = add_action_last_button(buttons, ACTION_CONQUER_CITY);    
   buttons = add_action_last_button(buttons, ACTION_CONVERT);
   buttons = add_action_last_button(buttons, ACTION_CULTIVATE);
 
   buttons = add_action_last_button(buttons, ACTION_SUICIDE_ATTACK, "Detonate Missile");
   buttons = add_action_last_button(buttons, ACTION_NUKE, "Detonate Nuke");
   buttons = add_action_last_button(buttons, ACTION_TRANSPORT_EMBARK, "Embark");
+  buttons = add_action_last_button(buttons, ACTION_TRADE_ROUTE);
   buttons = add_action_last_button(buttons, ACTION_FORTIFY);
   buttons = add_action_last_button(buttons, ACTION_HELP_WONDER);
   //function add_action_last_button(buttons, action_id,   override_name, order,                activity,        target, subtarget)
@@ -1531,21 +1533,17 @@ function select_last_action()
   buttons = add_action_last_button(buttons, ACTION_MINE, "Mine", ORDER_PERFORM_ACTION, null, null, EXTRA_MINE);
   buttons = add_action_last_button(buttons, ACTION_PILLAGE, "Pillage Anything", ORDER_PERFORM_ACTION, null, null, -1);
   buttons = add_action_last_button(buttons, ACTION_PLANT, "Plant");
-
+  buttons = add_action_last_button(buttons, ACTION_SPY_POISON_ESC, "Poison City");
   buttons = add_action_last_button(buttons, ACTION_RECYCLE_UNIT);
   buttons = add_action_last_button(buttons, ACTION_SPY_SABOTAGE_UNIT_ESC);
-  buttons = add_action_last_button(buttons, ACTION_TRANSFORM_TERRAIN);
-  buttons = add_action_last_button(buttons, ACTION_TRANSPORT_UNLOAD);
-  buttons = add_action_last_button(buttons, ACTION_UPGRADE_UNIT);
-  buttons = add_action_last_button(buttons, ACTION_TRADE_ROUTE);
-  buttons = add_action_last_button(buttons, ACTION_SPY_ATTACK);
+  buttons = add_action_last_button(buttons, ACTION_SPY_ATTACK, "Spy vs. Spy");
   buttons = add_action_last_button(buttons, ACTION_STEAL_MAPS);
   buttons = add_action_last_button(buttons, ACTION_STEAL_MAPS_ESC);
+  buttons = add_action_last_button(buttons, ACTION_TRANSFORM_TERRAIN);
  //   buttons = add_action_last_button(buttons, ACTION_EXPEL_UNIT);
-  buttons = add_action_last_button(buttons, ACTION_CONQUER_CITY);
-  buttons = add_action_last_button(buttons, ACTION_SPY_POISON_ESC, "Poison City");
+  buttons = add_action_last_button(buttons, ACTION_TRANSPORT_UNLOAD);
+  buttons = add_action_last_button(buttons, ACTION_UPGRADE_UNIT);
   buttons = add_action_last_button(buttons, ACTION_COUNT, "NO ACTION", ORDER_LAST);
-
   var close_button = {
     text: "Cancel (𝗪)", 
     click: function() {
@@ -1557,7 +1555,7 @@ function select_last_action()
 
   $(id).dialog({
   title    : "Go and ...",
-  width    : "360px",
+  width    : "450px",
   bgiframe : true,
   html:    dhtml,
   modal    : true,
