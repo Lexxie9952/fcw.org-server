@@ -1541,10 +1541,10 @@ function select_last_action()
   buttons = add_action_last_button(buttons, ACTION_SPY_ATTACK);
   buttons = add_action_last_button(buttons, ACTION_STEAL_MAPS);
   buttons = add_action_last_button(buttons, ACTION_STEAL_MAPS_ESC);
-  buttons = add_action_last_button(buttons, ACTION_COUNT, "NO ACTION", ORDER_LAST);
  //   buttons = add_action_last_button(buttons, ACTION_EXPEL_UNIT);
   buttons = add_action_last_button(buttons, ACTION_CONQUER_CITY);
   buttons = add_action_last_button(buttons, ACTION_SPY_POISON_ESC, "Poison City");
+  buttons = add_action_last_button(buttons, ACTION_COUNT, "NO ACTION", ORDER_LAST);
 
   var close_button = {
     text: "Cancel (𝗪)", 
