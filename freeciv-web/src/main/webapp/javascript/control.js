@@ -102,6 +102,9 @@ var goto_last_action = -1;
 /* User specified last actions appended to GOTO/RALLY */
 var user_last_action = null;
 var user_last_order = null;
+var user_last_activity = null;
+var user_last_target = null;
+var user_last_subtarget = null;
 
 // State var for Mode to select target tile with 'D' command:
 var action_tgt_sel_active = false;
@@ -1274,6 +1277,9 @@ function clear_all_modes()
   airlift_active = false;
   user_last_order = null;
   user_last_action = null;
+  user_last_activity = null;
+  user_last_target = null;
+  user_last_subtarget = null;
   goto_last_order = ORDER_LAST;
   goto_last_action = ACTION_COUNT;
 }
@@ -2988,6 +2994,9 @@ function do_map_click(ptile, qtype, first_time_called)
 
           /* Perform the final action. */
           order['action'] = goto_last_action;
+          if (user_last_activity) order['activity'] = user_last_activity;
+          if (user_last_target) order['target'] = user_last_target;
+          if (user_last_subtarget) order['sub_target'] = user_last_subtarget;
 
           packet['orders'][pos] = Object.assign({}, order);
         }
@@ -4194,6 +4203,9 @@ function send_city_rally_point(ptile)
       }
       order['order'] = goto_last_order;   // Set the final order.
       order['action'] = goto_last_action; // Perform final action.
+      if (user_last_activity) order['activity'] = user_last_activity;
+      if (user_last_target) order['target'] = user_last_target;
+      if (user_last_subtarget) order['sub_target'] = user_last_subtarget;
       packet['orders'][pos] = Object.assign({}, order);
     } /* </end> unimplemented block for tack-on final order */
     // Send the city rally point to server
