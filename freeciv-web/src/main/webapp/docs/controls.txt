@@ -177,6 +177,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <tr><td><span class="hotkey">ctrl-alt-P</span></td><td> Highlight polluted tiles everywhere on map</td></tr>
 <tr><td><span class="hotkey">shift-R</span></td><td> Revolution: choose new government</td></tr>
 <tr><td><span class="hotkey">ctrl-R</span></td><td> while mouse on city: Set Rally Point. +SHIFT=permanent +ALT=pick arrival action</td></tr>
+<tr><td><span class="hotkey">alt-R</span></td><td> Show all cities' Rally Points on map.</td></tr>
 <tr><td><span class="hotkey">alt-S</span></td><td> Fullscreen mode</td></tr>
 <tr><td><span class="hotkey">ESC</span></td><td> Exit Fullscreen mode.</td></tr>
 <tr><td><span class="hotkey">shift-S</span></td><td> Stack display mode (multiple units on tile)</td></tr>
