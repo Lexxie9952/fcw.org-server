@@ -6488,21 +6488,7 @@ function key_unit_move_focus_index(dir, s)
       return;
     }
 
-    if (punit['transported']) {
-      if (unit_can_do_action(punit, ACTION_TRANSPORT_DISEMBARK1)) {
-        request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
-        request_unit_do_action(ACTION_TRANSPORT_DISEMBARK1, punit['id'],
-                               newtile['index']);
-        unit_move_sound_play(punit);
-      } else if (unit_can_do_action(punit, ACTION_TRANSPORT_DISEMBARK2)) {
-        request_new_unit_activity(punit, ACTIVITY_IDLE, EXTRA_NONE);
-        request_unit_do_action(ACTION_TRANSPORT_DISEMBARK2, punit['id'],
-                               newtile['index']);
-        unit_move_sound_play(punit);
-      }
-      return;
-    }
-
+    /* Send the order to move using the orders system. */
     var order = {
       "order"      : ORDER_ACTION_MOVE,
       "dir"        : dir,
@@ -6511,7 +6497,20 @@ function key_unit_move_focus_index(dir, s)
       "action"     : ACTION_COUNT
     }
 
-    /* Send the order to move using the orders system. */
+    if (punit['transported']
+        /* No non domestic units */
+        && newtile['units'].every(function(ounit) {
+             return ounit['owner'] == client.conn.playing.playerno;
+           })
+        /* No non domestic cities */
+        && (tile_city(newtile) == null
+            || tile_city(newtile)['owner'] == client.conn.playing.playerno)
+        && !tile_has_extra(newtile, EXTRA_HUT)
+        && (newtile['extras_owner'] == client.conn.playing.playerno
+            || !tile_has_territory_claiming_extra(newtile))) {
+      order["order"] = ORDER_MOVE;
+    }
+
     var packet = {
       "pid"      : packet_unit_orders,
       "unit_id"  : punit['id'],
