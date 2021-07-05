@@ -3587,6 +3587,14 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
           else activate_rally_goto(pcity);
         }
       }
+      else if (alt && !ctrl && !shift) {
+        //Show all city rally points
+        for (var city_id in cities) {
+          var pcity = cities[city_id];
+          var ptile = index_to_tile(pcity['tile']);
+          if (pcity['rally_point_length']) popit_req(ptile, true);
+        }
+      }
       else key_unit_road();
     break;
 
@@ -6770,9 +6778,10 @@ function popit()
 }
 
 /**************************************************************************
-  request tile popup
+  Request tile popup and/or goto/rally path of unit/city on tile.
+    goto_only suppresses popup and only shows paths
 **************************************************************************/
-function popit_req(ptile)
+function popit_req(ptile, goto_only)
 {
   /* Force prevention of contextmenu pop-up during a tile-info pop-up request
    * (i.e. double tap for tile info on mobile on a tile that has units which
@@ -6791,14 +6800,14 @@ function popit_req(ptile)
   // to oneself
   copy_string_to_clipboard("%%%"+"tile"+ptile['index']+"~%");
 
-  if (tile_get_known(ptile) == TILE_KNOWN_UNSEEN) {
+  if (!goto_only && tile_get_known(ptile) == TILE_KNOWN_UNSEEN) {
     //TODO: The 2 lines below should be removed after next FCW server restart
     //comment made on 3 March 2020
    show_dialog_message("Tile info", "Location: x:" + ptile['x'] + " y:" + ptile['y']);
     return;
    // Let server give us tile info. OPTIONAL TODO: reconstruct some more based on our
    // own last known knowledge of the tile. Server only sends Terrain and that's it.
-  } else if (tile_get_known(ptile) == TILE_UNKNOWN) {
+  } else if (!goto_only && tile_get_known(ptile) == TILE_UNKNOWN) {
     show_dialog_message("Tile info", "Location: x:" + ptile['x'] + " y:" + ptile['y']);
     return;
   }
@@ -6812,9 +6821,11 @@ function popit_req(ptile)
     focus_unit_id = current_focus[0]['id'];
   }
 
-  var packet = {"pid" : packet_info_text_req, "visible_unit" : punit_id,
-                "loc" : ptile['index'], "focus_unit": focus_unit_id};
-  send_request(JSON.stringify(packet));
+  if (!goto_only) {
+    var packet = {"pid" : packet_info_text_req, "visible_unit" : punit_id,
+                  "loc" : ptile['index'], "focus_unit": focus_unit_id};
+    send_request(JSON.stringify(packet));
+  }
 
   // IF middle-clicked a tile that: 1) has unit(s), 2) has GO TO orders; THEN: show the path(s)
   if (punit_id) { // units are on tile
@@ -6826,6 +6837,37 @@ function popit_req(ptile)
           request_goto_path(tunits[u]['id'], tiles[goto_tile_id]['x'], tiles[goto_tile_id]['y']);
         }
       }
+    }
+  }
+  // IF middle-clicked a tile that: 1) has a city, 2) has rally point; THEN: show the path:
+  if (tile_city(ptile)) {
+    var pcity = tile_city(ptile);
+    if (pcity['rally_point_dest_tile'] > -1) {
+      var goaltile = index_to_tile(pcity['rally_point_dest_tile']);
+      var gpath_key = goaltile['x'] + "," + goaltile['y'] + "," + "1";
+      goto_request_map[gpath_key] = {
+        "dest"   :   pcity['rally_point_dest_tile'],
+        "length" :   pcity['rally_point_length'],
+        "pid"    :   292, // signifies rally point
+        "persist":   pcity['rally_point_persistent'],
+        "turns"  :   1, // dummy value
+        "unit_id":   0 // flag for city rally point
+      };
+      var dirs = [];
+      for (var i = 0; i < pcity['rally_point_length']; i++) {
+        var dir = pcity['rally_point_orders'][i]['dir'];
+        if (dir==-1) { // -1 is not a path move order but a stop/wait marker for full mp/refuel
+          goto_request_map[gpath_key]['length'] --;
+        } else { // add dir to path array
+          dirs.push(dir);
+          ptile['goto_dir'] = dir;
+          ptile = mapstep(ptile,dir);
+        }
+      }
+      if (dirs.length) {
+        goto_request_map[gpath_key]['dir'] = dirs;
+        goto_turns_request_map[gpath_key] = 1; // dummy value.
+      } else goto_request_map[gpath_key]['dir'] = [];
     }
   }
 }
