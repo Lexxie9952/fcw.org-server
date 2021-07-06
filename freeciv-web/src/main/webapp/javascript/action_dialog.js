@@ -575,7 +575,7 @@ function popup_action_selection(actor_unit, action_probabilities,
   if (SUA) {
     switch (ptype['rule_name']) {
       case "Siege Ram":  for (button_id in buttons) {
-        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+        if (buttons[button_id].text.startsWith("Special Attack")) {
           buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
           buttons[button_id].title = "Odds of survival:  100%\n"
                                   + "Combat:                4 rounds\n"
@@ -601,7 +601,7 @@ function popup_action_selection(actor_unit, action_probabilities,
         }
       } break;
       case "Phalanx":  for (button_id in buttons) {
-        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+        if (buttons[button_id].text.startsWith("Special Attack")) {
           buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
           buttons[button_id].title = "Odds of survival:  100%\n"
                                   + "Combat:                3 rounds\n"
@@ -615,7 +615,7 @@ function popup_action_selection(actor_unit, action_probabilities,
         }
       } break;
       case "Archers":  for (button_id in buttons) {
-        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+        if (buttons[button_id].text.startsWith("Special Attack")) {
             buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
             buttons[button_id].title = "Odds of survival:  100%\n"
                                     + "Combat:                2 rounds\n"
@@ -628,7 +628,7 @@ function popup_action_selection(actor_unit, action_probabilities,
         }
       } break;
       case "Legion":  for (button_id in buttons) {
-        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+        if (buttons[button_id].text.startsWith("Special Attack")) {
           buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
           buttons[button_id].title = "Odds of survival:  100%\n"
                                   + "Attack bonus:        2x\n"
@@ -642,7 +642,7 @@ function popup_action_selection(actor_unit, action_probabilities,
         }
       } break;
       case "Fanatics":  for (button_id in buttons) {
-        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+        if (buttons[button_id].text.startsWith("Special Attack")) {
           buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
           buttons[button_id].title = "Odds of survival:  100%\n"
                                     + "Combat:                3 rounds\n"
@@ -656,7 +656,7 @@ function popup_action_selection(actor_unit, action_probabilities,
         }
       } break;
       case "Zealots":  for (button_id in buttons) {
-        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+        if (buttons[button_id].text.startsWith("Special Attack")) {
           buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
           buttons[button_id].title = "Odds of survival:  100%\n"
                                     + "Combat:                3 rounds\n"
@@ -670,7 +670,7 @@ function popup_action_selection(actor_unit, action_probabilities,
         }
       } break;
       case "Marines":  for (button_id in buttons) {
-        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+        if (buttons[button_id].text.startsWith("Special Attack")) {
           buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
           buttons[button_id].title = "Odds of survival:  100%\n"
                                   + "Combat:                3 rounds\n"
@@ -682,7 +682,7 @@ function popup_action_selection(actor_unit, action_probabilities,
         }
       } break;
       case "Battleship":  for (button_id in buttons) {
-        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+        if (buttons[button_id].text.startsWith("Special Attack")) {
           buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
           buttons[button_id].title = "Odds of survival:  100%\n"
                                   + "Combat:                3 rounds\n"
@@ -694,7 +694,7 @@ function popup_action_selection(actor_unit, action_probabilities,
         }
       } break;
       case "Zeppelin":  for (button_id in buttons) {
-        if (buttons[button_id].text.startsWith("Ranged Attack")) {
+        if (buttons[button_id].text.startsWith("Special Attack")) {
           buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
           buttons[button_id].title = "Odds of survival:  100%\n"
                                   + "Combat:                4 rounds\n"
