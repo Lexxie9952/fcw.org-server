@@ -1464,8 +1464,8 @@ function select_last_action()
   if (rally_active) {
     dhtml += "Select action to do at RALLY point:";
     // Turn off mouse-cursor pathing while dialog is open:
-    old_rally_active = rally_active;
-    rally_active = false; 
+    old_rally_active = rally_active; // Remembers it was on.
+    rally_active = false; // Gets turned back on after picking an action
   } else dhtml += "Select action to perform after GOTO:";
   $(id).html(dhtml);
 
@@ -1478,16 +1478,17 @@ function select_last_action()
     make non-working //commented-out actions to work
 
     capture units trying to do to same tile instead of next one.
-      order_wants_direction() is to blame (95% likely, also for other things i bet)
+      order_wants_direction() is to blame?
     
     double clicking unit acting funny and being dead click, when before it didn't; are 
       state vars not being cleaned in these cases, can we find out what they are and 
-      compare functional case vs nonfunctional on the state vars to discover it ?
+      compare working  vs not-working on the state vars to discover it ?
       console.log("%s %s",came_from_context_menu,last_unit_clicked);
           NOT WORKING      true 371
           WORKING          false -1
   */
 
+//function add_action_last_button(buttons, action_id,   override_name, order,                activity,        target, subtarget)
   buttons = add_action_last_button(buttons, ACTION_ATTACK);
   buttons = add_action_last_button(buttons, ACTION_BOMBARD,
                                   current_focus.length ? unit_get_bombard_name(current_focus[0]) :
@@ -1525,7 +1526,6 @@ function select_last_action()
   buttons = add_action_last_button(buttons, ACTION_TRADE_ROUTE);
   buttons = add_action_last_button(buttons, ACTION_FORTIFY);
   buttons = add_action_last_button(buttons, ACTION_HELP_WONDER);
-  //function add_action_last_button(buttons, action_id,   override_name, order,                activity,        target, subtarget)
   buttons = add_action_last_button(buttons, ACTION_IRRIGATE, "Irrigate"); // works on blank tiles but not farmland
   if (tech_known('Refrigeration'))
     buttons = add_action_last_button(buttons, ACTION_IRRIGATE, "Irrigate Farmland", ORDER_PERFORM_ACTION, null, null, EXTRA_FARMLAND);
@@ -1572,14 +1572,15 @@ function select_last_action()
 **************************************************************************/
 function add_action_last_button(buttons, action_id, override_name, order, activity, target, subtarget)
 {
-  // Eliminate actions known to be illegal for utype given rally point.
+  // Eliminate actions known to be illegal for the utype given a rally point.
   if (old_rally_active) {
-    // Only eliminate actions when city target utype is known
+    // Only eliminate actions iff city production utype was known:
     if (rally_virtual_utype_id != RALLY_DEFAULT_UTYPE_ID) {
+      //TODO:city might be making default utype, check rally_city_id's real VUT_UTYPE instead ^^
       if (!utype_can_do_action(unit_types[rally_virtual_utype_id],action_id)) {
         return buttons; // don't add
       }
-    }
+    } 
   }
   // Eliminate illegal actions for a selected utype under Go...And
   else if (current_focus.length) {
@@ -1603,20 +1604,20 @@ function create_action_last_button(title_text, action, order, activity, target, 
     title: "Perform "+title_text+" after completing GOTO",
     html:  title_text,
     click: function() {
-    if (order) {
-      user_last_order = order;
-    } else {
-      user_last_order = ORDER_PERFORM_ACTION;
-    }
-    if (target) {
-      user_last_target = target;
-    }
-    if (subtarget) {
-      user_last_subtarget = subtarget;
-    }
-    if (activity) {
-      user_last_activity = activity;
-    }
+      if (order) {
+        user_last_order = order;
+      } else {
+        user_last_order = ORDER_PERFORM_ACTION;
+      }
+      if (target) {
+        user_last_target = target;
+      }
+      if (subtarget) {
+        user_last_subtarget = subtarget;
+      }
+      if (activity) {
+        user_last_activity = activity;
+      }
       goto_last_order = user_last_order;
       user_last_action = action;
       goto_last_action = action;
