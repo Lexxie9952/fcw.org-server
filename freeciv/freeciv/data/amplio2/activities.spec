@@ -44,21 +44,21 @@ tiles = { "row", "column", "tag"
 
   2, 0, "unit.fortified"
   2, 1, "unit.fortifying"
-  2, 2, "unit.sentry"
+  2, 2, "unit.sentry"                ; Lexxie
   2, 3, "unit.patrol"
-  2, 4, "unit.pillage"
+  2, 4, "unit.pillage"               ; Lexxie
   2, 5, "unit.hideout"               ; Lexxie
 
   3, 0, "unit.irrigate"
-  3, 1, "unit.plant"
-  3, 2, "unit.transform"
+  3, 1, "unit.plant"                 ; Lexxie
+  3, 2, "unit.transform"             ; Lexxie
   3, 3, "unit.pollution"             ; Lexxie
   3, 4, "unit.fallout"               ; Lexxie
   3, 5, "unit.hidden"                ; Lexxie
 
-  4, 0, "unit.goto"
-  4, 1, "unit.convert"
-  4, 2, "unit.auto_explore"
+  4, 0, "unit.goto"                  ; Lexxie
+  4, 1, "unit.convert"               ; Lexxie
+  4, 2, "unit.auto_explore"          ; Lexxie
   4, 3, "unit.cargo"                 ; Lexxie
   4, 4, "unit.goto_delay"            ; Lexxie
   4, 5, "unit.radar"                 ; Lexxie
@@ -67,7 +67,7 @@ tiles = { "row", "column", "tag"
   5,  0, "unit.irrigation"
   5,  1, "unit.farmland"
   5,  2, "unit.mine"
-  5,  3, "unit.oil_mine"
+  5,  3, "unit.oil_mine"             ; Lexxie
   5,  4, "unit.oil_rig"
   5,  5, "unit.quay"                 ; Lexxie
 
@@ -75,5 +75,6 @@ tiles = { "row", "column", "tag"
   6,  1, "unit.vigil"                ; Lexxie
   6,  2, "unit.castle"               ; Lexxie
   6,  3, "unit.fortifying_hidden"    ; Lexxie
-  6,  4, "unit.action_decision_want" ; kvilhaugsvik
+  6,  4, "unit.action_decision_want" ; kvilhaugsvik, Lexxie, Canik
+  6,  5, "unit.go_and"               ; Lexxie
 }
