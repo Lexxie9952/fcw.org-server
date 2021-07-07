@@ -1589,8 +1589,8 @@ function get_unit_activity_sprite(punit)
       return {"key" : "unit.goto_delay",
         "offset_x" : unit_activity_offset_x,
         "offset_y" : - unit_activity_offset_y};
-    } // Otherwise, show standard GOTO activity icon:
-    return {"key" : "unit.goto",
+    } // Otherwise, show GO_AND icon if last order isn't a move, else show standard GOTO icon:
+    return {"key" : (punit['orders'][punit['orders'].length-1]['order'] != ORDER_ACTION_MOVE ? "unit.go_and" : "unit.goto"),
         "offset_x" : unit_activity_offset_x,
         "offset_y" : - unit_activity_offset_y};
   }
