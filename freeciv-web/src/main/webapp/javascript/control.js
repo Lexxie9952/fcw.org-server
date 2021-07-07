@@ -4249,18 +4249,6 @@ function activate_rally_goto(pcity/*, persist*/)
     + (rally_active==RALLY_PERSIST ? "<b>constant</b> " : "") + "rally tile. <b>SPACE</b> aborts."
   });
 
-  /* TO DO:
-     1. packets.def needs dest_tile field, 
-        city.h:rally_point struct needs dest_tile field too,
-        cityhand.c:handle_city_rally_point() needs: pcity->rally_point.dest_tile = packet->dest_tile;
-        cityturn.c:city_build_unit c.L2400, punit->goto_tile = get_tile_from_index(pcity->rally_point.dest_tile)
-        save game .c files: (see original commit and inject there like the other int vars)
-     1. middle-clicking a city will draw its rally point.
-     2. city dialog will report the x,y of its rally point. (after dest_tile is in struct rally_point)
-     3. show all rally points command.
-     4. hotkeys.mp for rally and go-and
-   */
-
   prev_mouse_x = null;   prev_mouse_y = null;   prev_goto_tile = null;
   $("#canvas_div").css("cursor", "crosshair");
 
