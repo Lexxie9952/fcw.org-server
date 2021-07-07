@@ -3597,6 +3597,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         }
       }
       else if (alt && !ctrl && !shift) {
+        add_client_message("Showing city rally points. <b>SPACE</b> = clear.");
         //Show all city rally points
         for (var city_id in cities) {
           var pcity = cities[city_id];
