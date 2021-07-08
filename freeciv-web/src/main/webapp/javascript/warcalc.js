@@ -403,9 +403,14 @@ function warcalc_done() {
 function warcalc_set_tooltips()
 {
   $(".tiny_button").show(); // Player may have changed ruleset, start with all buttons showing
-  $(".tiny_button").tooltip();
-  $(".wcttmsg").tooltip();
+  $(".tiny_button").tooltip({
+    show: { delay:360, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+  });
   $(".wcttmsg").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "400px");}});
+  $(".wcttmsg").tooltip({
+    show: { delay:80, effect:"none", duration: 0 }, hide: {delay:10, effect:"none", duration: 0}
+  });
+  $(".wcttmsg").css("cursor","help");
   const bl = "* ";    // bullet
   const nbl = "\n* ";  
 

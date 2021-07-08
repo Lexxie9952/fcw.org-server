@@ -200,7 +200,9 @@ function init_tech_screen()
   if (!is_small_screen()) { 
     $("#mouse_info_box").html("<div title='Right-click:     Scrolls the screen.\nMiddle-click:    Sets the Future Goal.\nALT+Right-click: alternate mid-click' style='margin-right:-10px;margin-bottom:10px;float:right;width:26px;height:20px;'>&#x2753;</div>");
     $("#mouse_info_box").css('cursor', "help");
-    $("#mouse_info_box").tooltip();
+    $("#mouse_info_box").tooltip({
+      show: { delay:0, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+    });
   }
   is_tech_tree_init = true;
   clicked_tech_id = null;
@@ -522,7 +524,10 @@ function update_tech_screen()
     if (touch_device) $("#tech_results").css("margin-left","-22px");
     $("#tech_result_text").html("<span style='font-size:"+fs+"' title='"+tech_help_text+"' id='tech_advance_helptext'>" + get_advances_text(clicked_tech_id)
         +" "+(is_wide_screen ? "" /*tech_help_text*/ : "") + "</span>");
-    $("#tech_advance_helptext").tooltip({ disabled: false });
+    $("#tech_advance_helptext").tooltip({ 
+      disabled: false,
+      show: { delay:350, effect:"none", duration: 0 }, hide: {delay:220, effect:"none", duration: 220}
+    });
   } else if (techs[client.conn.playing['researching']] != null) {
     switch (techs[client.conn.playing['researching']].name) {
       case "Space Flight":
@@ -538,7 +543,10 @@ function update_tech_screen()
 
     $("#tech_result_text").html("<span style='font-size:"+fs+"' title='"+research_help_text+"' id='tech_advance_helptext'>" + get_advances_text(client.conn.playing['researching'])
         +" "+(is_wide_screen ? "" /*research_help_text*/ : "") +"</span>");
-    $("#tech_advance_helptext").tooltip({ disabled: false });
+    $("#tech_advance_helptext").tooltip({
+      disabled: false,
+      show: { delay:350, effect:"none", duration: 0 }, hide: {delay:220, effect:"none", duration: 220}
+    });
   }
 
   $("#tech_tab_item").css("color", "#000000");
@@ -842,7 +850,10 @@ function show_tech_gained_dialog(tech_gained_id)
   $("#tech_dialog").dialog('open');
   dialog_register("#tech_dialog");
   $("#game_text_input").blur();
-  $("#tech_advance_helptext").tooltip({ disabled: false });
+  $("#tech_advance_helptext").tooltip({
+    disabled: false,
+    show: { delay:350, effect:"none", duration: 0 }, hide: {delay:220, effect:"none", duration: 220}
+   });
   $(".specific_tech").tooltip({ disabled: false });
 
 }
@@ -1038,7 +1049,10 @@ function update_tech_dialog_cursor()
     
         $("#tech_result_text").html("<span title='"+tech_help_text+"' style='margin-left:-4px; font-size:"+fs+"' id='tech_advance_helptext'>"+get_advances_text(ptech['id']) 
           + "</span><span style='color: #ffd588; font-size:"+fs+"'>&nbsp;"+ (is_wide_screen ? tech_help_text : "") + "</span>");
-        $("#tech_advance_helptext").tooltip({ disabled: false });
+        $("#tech_advance_helptext").tooltip({
+           disabled: false,
+           show: { delay:350, effect:"none", duration: 0 }, hide: {delay:220, effect:"none", duration: 220}
+        });
       }
     }
 }

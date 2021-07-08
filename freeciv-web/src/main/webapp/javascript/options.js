@@ -225,7 +225,9 @@ function init_options_dialog()
     }
   }
 
-  $(".setting_button").tooltip();
+  $(".setting_button").tooltip({
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+  });
 
   // USER OPTIONS ------------------------------------------------------------------
   // PERMANENT SAVE also requires adding to civclient_init() IN civclient.js

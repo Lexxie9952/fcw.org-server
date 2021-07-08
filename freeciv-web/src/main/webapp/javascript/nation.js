@@ -266,7 +266,9 @@ function update_nation_screen()
   if (is_longturn()) $(".nation_attitude").hide();
   if (is_longturn()) $(".nation_team").hide();
 
-  $("#nation_table").tooltip();
+  $("#nation_table").tooltip({
+    show: { delay:500, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
+  });
   
   if (tiny_screen) {
     //console.log("Resetting tiny")

@@ -446,7 +446,7 @@ function show_city_dialog(pcity)
     }
   }
   $("#city_dialog").dialog('open');
-  // prevent tooltip from janking the layout on some helptext
+  // prevent tool-tip from janking the layout on some helptext
   $("#city_dialog").parent().css("overflow-y", "hidden");
 
   $("#game_text_input").blur();
@@ -564,8 +564,12 @@ function show_city_dialog(pcity)
          city_airlift_capacity_html += '<div id="airlift_receive_capacity" title="Airlift receive capacity"><div style="float:left;"><img src="/images/airlift-dest.png" height="26" width="26"></div><div style="font-size:'+airlift_font_size+'float:left;height:26px;line-height:26px;margin-left:1px">'+airlift_receive_text+'</div></div>';
      }
      $("#city_airlift_capacity").html(city_airlift_capacity_html);
-     $("#airlift_send_capacity").tooltip();
-     $("#airlift_receive_capacity").tooltip();
+     $("#airlift_send_capacity").tooltip({
+        show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+     });
+     $("#airlift_receive_capacity").tooltip({
+        show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+     });
   }
 
   var uk_bonus = get_player_building_upkeep_bonus(pcity['owner']);
@@ -695,8 +699,12 @@ function show_city_dialog(pcity)
     // trick to compensate for removed scrollbar clipping the top:
     $("#city_supported_units_list").css({"margin-top":"-10px","padding-top":"20px"});
   }
-  $(".game_unit_list_item").tooltip();
-  $(".buildings_present").tooltip();
+  $(".game_unit_list_item").tooltip({
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+  });
+  $(".buildings_present").tooltip({
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+  });
 
   if ('prod' in pcity && 'surplus' in pcity) {
     var food_txt = ""; 
@@ -759,7 +767,9 @@ function show_city_dialog(pcity)
                        + "Click to cancel rally point.\nMiddle-click city from map to show path.\nALT-R from map to show all.' " 
                        + "onclick='city_cancel_rally_point("+pcity['id']+");'>"
       $("#city_rally").html(rally_span+"&#x1F3AF; "+rally_type+" Rally Point: {"+coords+"}</span>");
-      $("#city_rally").tooltip();
+      $("#city_rally").tooltip({
+        show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+      });
 
     } else $("#city_rally_row").hide();
   }
@@ -815,7 +825,10 @@ function show_city_dialog(pcity)
   
   $('#rapture_citizen_panel').html(rapture_citizen_html);
   
-  $('.city_dialog_rapture_citizen').tooltip({position: { my:"center bottom", at: "center top-4"}});  
+  $('.city_dialog_rapture_citizen').tooltip({
+    position: { my:"center bottom", at: "center top-4"},
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+  });  
   
   var city_surplus_colour = "#d7d4cf"; // default non-negative non-positive value (i.e. zero)
   var city_surplus_sign = "";
@@ -851,7 +864,10 @@ function show_city_dialog(pcity)
   $('#rapture_food').html(rapture_food_status_html);
    
   $('#rapture_status').html("<div class='"+rapture_status_class+"' style='font-weight:bold;padding-bottom:9px;'>"+get_city_state(pcity)+"</div>");
-  $('#rapture_status').tooltip({tooltipClass: "wider-tooltip" , position: { my:"center bottom", at: "center top-3"}}); 
+  $('#rapture_status').tooltip({
+    tooltipClass: "wider-tooltip" , position: { my:"center bottom", at: "center top-3"},
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+  });
   
   if (pcity['size'] >= 27) $("#city_canvas_top_div").width(pcity['size']*15-30); // Fix the specialist panel overlapping with the citizen amounts panel for bigger cities 
   
@@ -2159,7 +2175,9 @@ function show_city_happy_tab()
 
   happy_tab_html += "</tbody></table>"
   $("#city_happy_tab").html(happy_tab_html);
-  $(".happy_cause_help").tooltip();
+  $(".happy_cause_help").tooltip({
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+  });
 
 }
 /**************************************************************************
@@ -2374,7 +2392,12 @@ function city_worklist_dialog(pcity)
   $("#worklist_dialog_headline").css({"title":"Click to:\n1.Remove from worklist and move remaining worklist up.\n"
                                       +"2. If no worklist below, replace with highlighted selection from right.\n"});
 
-  $(".production_list_item_sub").tooltip();
+  $(".prod_choice_list_item").tooltip({
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+  });
+  $(".production_list_item_sub").tooltip({
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+  });
 
   if (is_touch_device()) {
     $("#prod_buttons").html("<x-small>1st&thinsp;tap:&thinsp;change. Next&thinsp;taps:&thinsp;add. Tap-tap:&thinsp;clear</x-small>");
@@ -2533,8 +2556,13 @@ function populate_worklist_production_choices(pcity)
   production_html += "</table>";
 
   $("#worklist_production_choices").html(production_html);
-  $("#worklist_production_choices .production_list_item_sub").tooltip();
-  $("#worklist_production_choices .prod_choice_info").tooltip();
+  $("#worklist_production_choices .production_list_item_sub").tooltip({
+    // longer delay to avoid too much hover noise while perusing list
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+  });
+  $("#worklist_production_choices .prod_choice_info").tooltip({
+    show: { delay:460, effect:"none", duration: 0 }, hide: {delay:50, effect:"none", duration: 0}
+  });
 
   if (!touch_device) {
     $("#worklist_production_choices .worklist_table").selectable({
@@ -3753,9 +3781,18 @@ function update_city_screen()
   $("#cities_list").html(city_list_html);
   
   //$('#city_list_citizen_unhappy').css("padding-right", "20px");
-  $('#city_list_citizen_unhappy').tooltip({content: "Unhappy + angry citizens", position: { my:"center bottom", at: "center top+10"}});
-  $('#city_list_citizen_content').tooltip({content: "Content citizens", position: { my:"center bottom", at: "center top+10"}});
-  $('#city_list_citizen_happy').tooltip({content: "Happy citizens", position: { my:"center bottom", at: "center top+10"}});
+  $('#city_list_citizen_unhappy').tooltip({
+    content: "Unhappy + angry citizens", position: { my:"center bottom", at: "center top+10"},
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+  });
+  $('#city_list_citizen_content').tooltip({
+    content: "Content citizens", position: { my:"center bottom", at: "center top+10"},
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+  });
+  $('#city_list_citizen_happy').tooltip({
+    content: "Happy citizens", position: { my:"center bottom", at: "center top+10"},
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+  });
 
   if (count == 0) {
     $("#city_table").html("You have no cities. Build new cities with the Settlers unit.");

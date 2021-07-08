@@ -154,7 +154,9 @@ function control_init()
   $(window).bind('orientationchange resize', orientation_changed);
 
   $("#turn_done_button").click(send_end_turn);
-  if (!touch_device) $("#turn_done_button").tooltip();
+  if (!touch_device) $("#turn_done_button").tooltip({
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
+  });
 
   $("#freeciv_logo").click(function(event) {
     window.open('/', '_new');
@@ -320,7 +322,9 @@ function control_init()
     });
 
   if (!touch_device) {
-    $("#game_unit_orders_default").tooltip();
+    $("#game_unit_orders_default").tooltip({
+      show: { delay:0, effect:"none", duration: 0 }, hide: {delay:500, effect:"none", duration: 500}
+    });
   }
 
   $("#overview_map").click(function(e) {
@@ -4387,7 +4391,9 @@ function send_end_turn()
   if (game_info == null) return;
 
   $("#turn_done_button").button( "option", "disabled", true);
-  if (!touch_device) $("#turn_done_button").tooltip({ disabled: true });
+  if (!touch_device) $("#turn_done_button").tooltip({ disabled: true,
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:0, effect:"none", duration: 0}
+  });
   var packet = {"pid" : packet_player_phase_done, "turn" : game_info['turn']};
   send_request(JSON.stringify(packet));
   update_turn_change_timer();
@@ -7291,7 +7297,10 @@ function update_active_units_dialog()
   } else {
     $("#game_unit_panel").parent().hide();
   }
-  $("#active_unit_info").tooltip();
+  $("#active_unit_info").tooltip(
+    /* no fade-in, long fade-out to avoid flicker during recurring updates */
+    {show: { delay:0, effect:"none", duration: 100 }, hide: {delay:200, effect:"none", duration: 200}}
+  );
 }
 
 /**************************************************************************

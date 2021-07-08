@@ -249,7 +249,9 @@ function update_player_info_pregame_real()
       $("#pregame_plr_"+id).attr("playerid", player['playerno']);
 
     }
-    $(".pregame_player_name").tooltip();
+    $(".pregame_player_name").tooltip({
+      show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+    });
 
     var pregame_context_items = {
             "pick_nation": {name: "Pick nation"},
@@ -1117,7 +1119,9 @@ function pregame_settings()
     $(".not_pbem").hide();
   }
 
-  $("#settings_table").tooltip();
+  $("#settings_table").tooltip({
+    show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
+  });
 
   if (is_touch_device() || is_small_screen()) {
       $('#metamessage').blur();
