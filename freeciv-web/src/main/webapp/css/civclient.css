@@ -1252,6 +1252,7 @@ body:not(.mobile) .ui-dialog.unit_dialog {
 #active_unit_info {
   float: left;
   width: 100%;
+  cursor: help;
   color: white;
   background-color: rgba(0, 0, 0, 0.65);
   font-size: 86%;
@@ -2228,6 +2229,9 @@ input[type="email" i], #email {
   margin-left: 0px;
   margin-right: 0px;
   border-color: #000;
+}
+.happy_cause_help {
+  cursor: help;
 }
 /* city governor */
 .ui-slider-handle {
