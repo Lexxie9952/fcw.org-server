@@ -157,6 +157,14 @@ button {
   width: 30px;
   visibility:visible;
 }
+/* this removes dotted line from appearing around clicked/focused order button */
+.order_button > a:focus,
+.order_button:focus,
+.order_button > a > img:focus
+{
+  outline: none !important;
+}
+ 
 
 #turn_done_button_div {
   position: absolute;
