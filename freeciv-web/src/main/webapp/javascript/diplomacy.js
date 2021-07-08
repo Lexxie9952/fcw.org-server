@@ -188,8 +188,8 @@ function show_diplomacy_clauses(counterpart_id)
  		          clause['giver'],
                   clause['type'],
                   clause['value']);
-      diplo_html += "<a href='#' onclick='remove_clause_req("
-                  + counterpart_id + ", " + i + ");'>" + diplo_str + "</a><br>";
+      diplo_html += "<span style='cursor:pointer' onclick='remove_clause_req("
+                  + counterpart_id + ", " + i + ");'>" + diplo_str + "</span><br>";
 
     }
 

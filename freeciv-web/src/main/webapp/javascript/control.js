@@ -1653,7 +1653,7 @@ function update_unit_order_commands()
     if (pcity) {
       disband_type = 1; // flags Recycle icon
       $("#order_disband").prop('title', 'Recycle Unit (Shift-D)');
-      $("#order_disband").html("<a href='#' onclick='key_unit_disband();'><img src='/images/orders/disband_recycle.png' name='disband_button' alt='' border='0' width='30' height='30'></a>");
+      $("#order_disband").html("<span style='cursor:pointer' onclick='key_unit_disband();'><img src='/images/orders/disband_recycle.png' name='disband_button' alt='' border='0' width='30' height='30'></span>");
       // Cargo class disbands often for recycling shields, show button always, less threatening recycle version of it.
       if (client_rules_flag[CRF_MP2_C]) {
         if (ptype['name']=="Goods" || ptype['name']=="Well-Digger" || ptype['name']=="Tribesmen" || ptype['name']=="Freight") {
@@ -1666,7 +1666,7 @@ function update_unit_order_commands()
     } else {
       disband_type = 0; // flags Death/You're fired icon
       $("#order_disband").prop('title', 'Disband (Shift-D)');
-      $("#order_disband").html("<a href='#' onclick='key_unit_disband();'><img src='/images/orders/disband_default.png' name='disband_button' alt='' border='0' width='30' height='30'></a>");
+      $("#order_disband").html("<span style='cursor:pointer' onclick='key_unit_disband();'><img src='/images/orders/disband_default.png' name='disband_button' alt='' border='0' width='30' height='30'></span>");
     }
     // LEGIONS. rulesets which allow Legions to build Roads on non-domestic tiles-------------
     if ((client_rules_flag[CRF_LEGION_WORK]) && ptype['name'] == "Legion") {
