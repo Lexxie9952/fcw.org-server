@@ -323,7 +323,7 @@ function control_init()
 
   if (!touch_device) {
     $("#game_unit_orders_default").tooltip({
-      show: { delay:0, effect:"none", duration: 0 }, hide: {delay:500, effect:"none", duration: 500}
+      show: { delay:200, effect:"none", duration: 0 }, hide: {delay:100, effect:"none", duration: 0}
     });
   }
 

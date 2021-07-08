@@ -1,7 +1,7 @@
 [nation_palestinian]
 
 name=_("Palestinian")
-plural=_("?plural:Palestinian")
+plural=_("?plural:Palestinians")
 groups= "Asian", "Modern"
 legend=_("Palestinians are the Arab inhabitants of the former British\
  mandate of Palestine.")
