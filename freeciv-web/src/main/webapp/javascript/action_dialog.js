@@ -1470,11 +1470,7 @@ function select_last_action()
   $(id).html(dhtml);
 
   /* TO DO:
-==========================================================================================================
-    user_last_action or goto_last action not being reset sometimes
-      go to tile with last action, action is illegal, go to another tile, it does it instead of reset
-      same thing for changing mind then just doing GOTO another tile.
-
+=========================================================================================================
     make non-working //commented-out actions to work
 
     capture units trying to do to same tile instead of next one.
