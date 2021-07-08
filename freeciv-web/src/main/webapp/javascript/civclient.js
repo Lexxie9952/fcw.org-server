@@ -215,9 +215,18 @@ function civclient_init()
     show_compass = true;  // Default case
     $("#compass").show();
   } else $("#compass").hide();
+
   var tmp = simpleStorage.get('chatDlg');
   if (tmp != null)  {// don't overwrite object keys if not yet stored
     restore_chatbox_vals = tmp;
+  }
+
+  show_order_buttons = simpleStorage.get('ordrbtns');
+  if (show_order_buttons == null || show_order_buttons === true) {
+    show_order_buttons = 1;  // Default case: show common; 2==show all
+  } else if (show_order_buttons == 0) {
+    $("#game_unit_orders_default").hide(); // no order buttons at all
+    $("#game_status_panel_bottom").hide();
   }
 
   draw_highlighted_pollution = simpleStorage.get('showpollution');

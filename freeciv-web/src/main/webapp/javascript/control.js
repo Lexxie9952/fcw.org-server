@@ -1332,6 +1332,7 @@ function advance_focus_inactive_units()
 function button_more_orders()
 {
   show_order_buttons = 2;
+  simpleStorage.set('ordrbtns', show_order_buttons); // save preference
   update_unit_order_commands();
 }
 
@@ -1341,6 +1342,7 @@ function button_more_orders()
 function button_less_orders()
 {
   show_order_buttons = 1;
+  simpleStorage.set('ordrbtns', show_order_buttons); // save preference
   update_unit_order_commands();
 }
 
@@ -1350,6 +1352,7 @@ function button_less_orders()
 function button_hide_panels()
 {
   show_order_buttons = 0;
+  simpleStorage.set('ordrbtns', show_order_buttons); // save preference
   $("#game_unit_orders_default").hide();
   $("#game_status_panel_bottom").hide();
 }
