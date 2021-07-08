@@ -2017,7 +2017,7 @@ function update_unit_order_commands()
                 unit_actions["unit_unload"] = {name: "Unload Transport (T)"};
                 $("#order_unload").show();
               } 
-            $("#order_activate_cargo").show(); // if no option to unload, show option to activate or 'wake' units
+              $("#order_activate_cargo").show(); // if no option to unload, show option to activate or 'wake' units
             }
           }
         }
@@ -3004,9 +3004,13 @@ function do_map_click(ptile, qtype, first_time_called)
           packet['orders'][pos] = Object.assign({}, order);
         }
 
-        /* The last order has now been used. Clear it. */
-        goto_last_order = ORDER_LAST;
-        goto_last_action = ACTION_COUNT;
+        /* The last order has now been used. Clear it.
+        ***** OR NOT, because we're in a loop  that might have many units all getting the last
+           order here. This should be cleared at the end of the loop when every unit sent its 
+           packet orders. ********** 7 July 2021 commented out. See clear_all_modes() below.
+           goto_last_order = ORDER_LAST;
+           goto_last_action = ACTION_COUNT;
+        */
 
         if (punit['id'] != goto_path['unit_id']) {
           /* Shouldn't happen. Maybe an old path wasn't cleared out. */
@@ -3061,6 +3065,7 @@ function do_map_click(ptile, qtype, first_time_called)
     }
 
     deactivate_goto(true);
+    clear_all_modes(); // 7 July 2021: clear all last_orders etc., AFTER every unit in loop got a chance to do them
   }  // END OF GO TO HANDLING ----------------------------------------------------------------------------------------------
   else if (paradrop_active && current_focus.length > 0) {
     punit = current_focus[0];
@@ -4122,10 +4127,17 @@ function handle_context_menu_callback(key)
 **************************************************************************/
 function activate_goto()
 {
+  var order = ORDER_LAST;
+  var action = ACTION_COUNT;
+
   clear_goto_tiles();
   // Clear state vars so it's ready to immediately path to cursor
   prev_mouse_x = null;   prev_mouse_y = null;   prev_goto_tile = null;
-  activate_goto_last(ORDER_LAST, ACTION_COUNT);
+  if (user_last_action) {
+    order = user_last_order;
+    action = user_last_action;
+  }
+  activate_goto_last(order, action);
 }
 
 /**************************************************************************
@@ -4304,12 +4316,8 @@ function activate_goto_last(last_order, last_action)
   $("#canvas_div").css("cursor", "crosshair");
 
   /* Set what the unit should do on arrival: */
-  goto_last_order = ORDER_LAST;
-  goto_last_action = ACTION_COUNT;
-  if (user_last_action) {
-    goto_last_order = user_last_order;
-    goto_last_action = user_last_action;
-  }
+  goto_last_order = last_order;
+  goto_last_action = last_action;
 
   if (current_focus.length > 0) {
     if (intro_click_description) {
