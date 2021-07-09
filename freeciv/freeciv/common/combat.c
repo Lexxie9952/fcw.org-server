@@ -141,12 +141,20 @@ enum unit_attack_result unit_attack_unit_at_tile_result(const struct unit *punit
     return ATT_NONNATIVE_SRC;
   }
 
-  /* 4. Most units can not attack non-native terrain.
+  /* 3. Most units can not attack non-native terrain.
    *    Most ships can attack land tiles (shore bombardment) */
   if (!is_native_tile(unit_type_get(punit), dest_tile)
       && !can_attack_non_native(unit_type_get(punit))) {
     return ATT_NONNATIVE_DST;
   }
+
+  /* 4. Only fighters can attack planes, except in city or airbase attacks */
+  if (!is_unit_reachable_at(pdefender, punit, dest_tile)) {
+    return ATT_UNREACHABLE;
+  }
+
+  /* Unreachability check must remain the last check, as callers interpret
+   * ATT_UNREACHABLE as "ATT_OK except that unreachable." */
 
   return ATT_OK;
 }
