@@ -516,13 +516,6 @@ function popup_action_selection(actor_unit, action_probabilities,
             }
           };
           buttons.push(button);
-        } else {
-            request_unit_do_action(ACTION_ATTACK,
-              actor_unit['id'], target_tile['index']);
-            // unit lost hp or died or promoted after attack, so update it:
-            setTimeout(update_active_units_dialog, update_focus_delay);
-            //action_selection_no_longer_in_progress(actor_unit['id']);
-            return;
         }
   }
 
