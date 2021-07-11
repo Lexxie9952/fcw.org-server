@@ -17,6 +17,14 @@
 
 ***********************************************************************/
 
+const auto_attack_actions = [
+  ACTION_ATTACK, ACTION_SUICIDE_ATTACK
+  /* TO DO: these actions were ignoring auto_attack and doing a pop-up:
+     commented out for now until we debug the cause of that.
+  ,ACTION_NUKE_UNITS,ACTION_NUKE_CITY, ACTION_NUKE
+  */
+];
+
 // Player income is calculated two ways. Sometimes the server gives it to us 
 // for free. When it doesn't, we need to calculate it in the client. This
 // keeps track of when our info for this is fresh from either source. 
@@ -1102,21 +1110,25 @@ function handle_unit_short_info(packet)
 **************************************************************************/
 function action_decision_handle(punit)
 {
-  if (utype_can_do_action(unit_type(punit), ACTION_ATTACK) && auto_attack) {
-    /* An auto action like auto attack could be legal. Check for those at
-     * once so they won't have to wait for player focus. */
-    var packet = {
-      "pid" : packet_unit_get_actions,
-      "actor_unit_id" : punit['id'],
-      "target_unit_id" : IDENTITY_NUMBER_ZERO,
-      "target_tile_id": punit['action_decision_tile'],
-      "target_extra_id": EXTRA_NONE,
-      "disturb_player": false
-    };
-    send_request(JSON.stringify(packet));
-  } else {
-    action_decision_request(punit);
+  for (action in auto_attack_actions) {
+    if (utype_can_do_action(unit_type(punit), action) && auto_attack) {
+      /* An auto action like auto attack could be legal. Check for those at
+      * once so they won't have to wait for player focus. */
+      var packet = {
+        "pid" : packet_unit_get_actions,
+        "actor_unit_id" : punit['id'],
+        "target_unit_id" : IDENTITY_NUMBER_ZERO,
+        "target_tile_id": punit['action_decision_tile'],
+        "target_extra_id": EXTRA_NONE,
+        "disturb_player": false
+      };
+      send_request(JSON.stringify(packet));
+      return; // Exit, don't request other possible actions in the loop.
+    }
   }
+  /* Other auto_action types can be checked here, when created */
+
+  action_decision_request(punit);
 }
 
 /**********************************************************************//**
@@ -1127,16 +1139,19 @@ function action_decision_maybe_auto(actor_unit, action_probabilities,
                                     target_tile, target_extra,
                                     target_unit, target_city)
 {
-  if (action_prob_possible(action_probabilities[ACTION_ATTACK])
-      && auto_attack) {
-    request_unit_do_action(ACTION_ATTACK,
-        actor_unit['id'], target_tile['index']);
+  for (action in auto_attack_actions) {
+    if (action_prob_possible(action_probabilities[action])
+        && auto_attack) {
+      request_unit_do_action(action,
+          actor_unit['id'], target_tile['index']);
 
-    // unit lost hp or died or promoted after attack, so update it:
-    setTimeout(update_active_units_dialog, update_focus_delay);
-  } else {
-    action_decision_request(actor_unit);
+      // unit lost hp or died or promoted after attack, so update it:
+      setTimeout(update_active_units_dialog, update_focus_delay);
+      return; // Exit, don't request other possible actions in the loop.
+    }
   }
+
+  action_decision_request(actor_unit);
 }
 
 /**************************************************************************
