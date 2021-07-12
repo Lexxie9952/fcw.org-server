@@ -1228,7 +1228,7 @@ function handle_unit_packet_common(packet_unit)
      1. If unit is done moving, advance focus. 
      2. If focused on a new unit, update orders buttons and active units dialog.
      3. and/or if ANY unit on the tile was the packet unit that underwent state
-        change, refresh the active units dialog. 
+        change, refresh orders buttons and active units dialog. 
      TODO: this probably removes the need for numerous hacky update_active_units_dialog()
      calls that are sent, often with a timeout, after sending a packet for the unit to
      do an action.
@@ -1239,14 +1239,13 @@ function handle_unit_packet_common(packet_unit)
     if (current_focus[0]['id'] == packet_unit['id']) {
       if (current_focus[0]['done_moving'] != packet_unit['done_moving']) {
         update_unit_focus();
-        update_unit_order_commands();
-        //update_active_units_dialog(); // this will always happen in block below
       }
     }
     var tunits = tile_units(index_to_tile(current_focus[0]['tile']));
     for (i = 0; i < tunits.length; i++) { 
       if (tunits[i]['id'] == packet_unit['id']) {
         update_active_units_dialog();
+        update_unit_order_commands();
         break;
       }
     }
