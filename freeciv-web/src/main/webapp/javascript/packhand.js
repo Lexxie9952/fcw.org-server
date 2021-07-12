@@ -1121,13 +1121,6 @@ function action_decision_handle(punit)
         "disturb_player": false
       };
 
-      var target = punit['action_decision_tile'];
-      if (action == ACTION_NUKE_CITY) {
-        target = tile_city(target_tile);
-        if (!target) continue;
-        packet['city_id'] = target['id'];
-      }
-
       send_request(JSON.stringify(packet));
       return; // Exit, don't request other possible actions in the loop.
     }
@@ -1151,7 +1144,7 @@ function action_decision_maybe_auto(actor_unit, action_probabilities,
     if (action_prob_possible(action_probabilities[action])
         && auto_attack) {
 
-      var target = index_to_tile(target_tile['index']);
+      var target = target_tile['index'];
       if (action == ACTION_NUKE_CITY) {
         target = tile_city(target_tile);
         if (!target) continue;
