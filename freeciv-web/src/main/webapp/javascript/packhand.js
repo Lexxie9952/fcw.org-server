@@ -18,11 +18,8 @@
 ***********************************************************************/
 
 const auto_attack_actions = [
-  ACTION_ATTACK, ACTION_SUICIDE_ATTACK
-  /* TO DO: these actions were ignoring auto_attack and doing a pop-up:
-     commented out for now until we debug the cause of that.
-  ,ACTION_NUKE_UNITS,ACTION_NUKE_CITY, ACTION_NUKE
-  */
+  ACTION_ATTACK, ACTION_SUICIDE_ATTACK,
+  ACTION_NUKE_UNITS,ACTION_NUKE_CITY, ACTION_NUKE
 ];
 
 // Player income is calculated two ways. Sometimes the server gives it to us 
@@ -1110,7 +1107,8 @@ function handle_unit_short_info(packet)
 **************************************************************************/
 function action_decision_handle(punit)
 {
-  for (action in auto_attack_actions) {
+  for (a = 0; a < auto_attack_actions.length; a++) {
+    action = auto_attack_actions[a];
     if (utype_can_do_action(unit_type(punit), action) && auto_attack) {
       /* An auto action like auto attack could be legal. Check for those at
       * once so they won't have to wait for player focus. */
@@ -1122,6 +1120,15 @@ function action_decision_handle(punit)
         "target_extra_id": EXTRA_NONE,
         "disturb_player": false
       };
+
+      var target = punit['action_decision_tile'];
+      if (action == ACTION_NUKE_CITY) {
+        target = tile_city(target_tile);
+        if (!target) continue;
+        target = target['id'];
+        packet['city_id'] = target;
+      }
+
       send_request(JSON.stringify(packet));
       return; // Exit, don't request other possible actions in the loop.
     }
@@ -1139,11 +1146,25 @@ function action_decision_maybe_auto(actor_unit, action_probabilities,
                                     target_tile, target_extra,
                                     target_unit, target_city)
 {
-  for (action in auto_attack_actions) {
+/*
+  OUTGOING PACKET>>>>>{"pid":84,"action_type":37,"actor_id":269,"target_id":10253,"sub_tgt_id":0,"name":""}
+  OUTGOING PACKET>>>>>{"pid":84,"action_type":37,"actor_id":269,"target_id":171,"sub_tgt_id":-1,"name":""}
+*/
+  for (a = 0; a < auto_attack_actions.length; a++) {
+    action = auto_attack_actions[a];
+
     if (action_prob_possible(action_probabilities[action])
         && auto_attack) {
+
+      var target = target_tile['index'];
+      if (action == ACTION_NUKE_CITY) {
+        target = tile_city(target_tile);
+        if (!target) continue;
+        target = target['id'];
+      }
+
       request_unit_do_action(action,
-          actor_unit['id'], target_tile['index']);
+          actor_unit['id'], target);
 
       // unit lost hp or died or promoted after attack, so update it:
       setTimeout(update_active_units_dialog, update_focus_delay);
