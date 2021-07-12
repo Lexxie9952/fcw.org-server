@@ -1125,15 +1125,14 @@ function action_decision_handle(punit)
       if (action == ACTION_NUKE_CITY) {
         target = tile_city(target_tile);
         if (!target) continue;
-        target = target['id'];
-        packet['city_id'] = target;
+        packet['city_id'] = target['id'];
       }
 
       send_request(JSON.stringify(packet));
       return; // Exit, don't request other possible actions in the loop.
     }
   }
-  /* Other auto_action types can be checked here, when created */
+  /* Other auto_action types can be checked here. Also see function below */
 
   action_decision_request(punit);
 }
@@ -1146,17 +1145,13 @@ function action_decision_maybe_auto(actor_unit, action_probabilities,
                                     target_tile, target_extra,
                                     target_unit, target_city)
 {
-/*
-  OUTGOING PACKET>>>>>{"pid":84,"action_type":37,"actor_id":269,"target_id":10253,"sub_tgt_id":0,"name":""}
-  OUTGOING PACKET>>>>>{"pid":84,"action_type":37,"actor_id":269,"target_id":171,"sub_tgt_id":-1,"name":""}
-*/
   for (a = 0; a < auto_attack_actions.length; a++) {
     action = auto_attack_actions[a];
 
     if (action_prob_possible(action_probabilities[action])
         && auto_attack) {
 
-      var target = target_tile['index'];
+      var target = index_to_tile(target_tile['index']);
       if (action == ACTION_NUKE_CITY) {
         target = tile_city(target_tile);
         if (!target) continue;
@@ -1166,11 +1161,10 @@ function action_decision_maybe_auto(actor_unit, action_probabilities,
       request_unit_do_action(action,
           actor_unit['id'], target);
 
-      // unit lost hp or died or promoted after attack, so update it:
-      setTimeout(update_active_units_dialog, update_focus_delay);
       return; // Exit, don't request other possible actions in the loop.
     }
   }
+  /* Other auto_action types can be checked here. Also see function above */
 
   action_decision_request(actor_unit);
 }
