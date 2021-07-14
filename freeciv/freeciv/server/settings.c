@@ -1000,7 +1000,7 @@ static bool startunits_callback(const char *value,
 
   /* We check each character individually to see if it's valid. */
   for (i = 0; i < len; i++) {
-    if (strchr("cwxksfdDaA", value[i])) {
+    if (strchr("cwxksfdDaAtuUz", value[i])) {
       continue;
     }
 
@@ -1989,7 +1989,11 @@ static struct setting settings[] = {
 		"    d   = Ok defense unit (eg., Warriors)\n"
 		"    D   = Good defense unit (eg., Phalanx)\n"
 		"    a   = Fast attack unit (eg., Horsemen)\n"
-		"    A   = Strong attack unit (eg., Catapult)\n"),
+		"    A   = Strong attack unit (eg., Catapult)\n"
+    "    t   = Trade unit (eg., Caravan)\n"
+		"    u   = User defined start unit #1 (ie., ruleset specified)\n"
+		"    U   = User defined start unit #2\n"
+		"    z   = User defined start unit #3\n"),
              startunits_callback, NULL, GAME_DEFAULT_START_UNITS)
 
   GEN_BOOL("startcity", game.server.start_city,

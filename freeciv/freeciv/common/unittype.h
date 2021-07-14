@@ -415,12 +415,24 @@ struct unit_class {
 /* Startunit: AttackStrong */
 #define SPECENUM_VALUE102 L_START_ATTACK_STRONG
 #define SPECENUM_VALUE102NAME N_("?unitflag:AttackStrongStartunit")
+/* Startunit: UserType1 */
+#define SPECENUM_VALUE103 L_START_USERTYPE1
+#define SPECENUM_VALUE103NAME N_("?unitflag:UserType1Startunit")
+/* Startunit: UserType2 */
+#define SPECENUM_VALUE104 L_START_USERTYPE2
+#define SPECENUM_VALUE104NAME N_("?unitflag:UserType2Startunit")
+/* Startunit: UserType3 */
+#define SPECENUM_VALUE105 L_START_USERTYPE3
+#define SPECENUM_VALUE105NAME N_("?unitflag:UserType3Startunit")
+/* Startunit: Trade */
+#define SPECENUM_VALUE106 L_START_TRADE
+#define SPECENUM_VALUE106NAME N_("?unitflag:TradeStartUnit")
 /* AI hunter type unit */
-#define SPECENUM_VALUE103 L_HUNTER
-#define SPECENUM_VALUE103NAME N_("?unitflag:Hunter")
+#define SPECENUM_VALUE107 L_HUNTER
+#define SPECENUM_VALUE107NAME N_("?unitflag:Hunter")
 /* can improve terrain */
-#define SPECENUM_VALUE104 L_SETTLERS
-#define SPECENUM_VALUE104NAME N_("?unitflag:Settlers")
+#define SPECENUM_VALUE108 L_SETTLERS
+#define SPECENUM_VALUE108NAME N_("?unitflag:Settlers")
 #define L_LAST (L_SETTLERS + 1)
 
 #include "specenum_gen.h"

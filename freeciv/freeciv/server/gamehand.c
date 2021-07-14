@@ -105,6 +105,14 @@ enum unit_role_id crole_to_role_id(char crole)
     return L_START_ATTACK_FAST;
   case 'A':
     return L_START_ATTACK_STRONG;
+  case 'u':
+    return L_START_USERTYPE1;
+  case 'U': 
+    return L_START_USERTYPE2;
+  case 'z': 
+    return L_START_USERTYPE3;    
+  case 't':
+    return L_START_TRADE;
   default: 
     return 0;
   }
