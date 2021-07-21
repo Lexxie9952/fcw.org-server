@@ -1,2 +1,8 @@
 This is a list of what is backported in advance of the convergence backporting commits being done by cazfi:
 
+Keep the list sorted by the order they were committed to upstream Freeciv.
+Commit is the commit ID hash in the upstream Freeciv git repository.
+Commit Date is NOT the author date (that GitHub shows) but the date it was committed.
+Completeness Comment is an explanation of what was changed and/or is missing.
+
+Commit                                   Commit Date         Completeness Comment
