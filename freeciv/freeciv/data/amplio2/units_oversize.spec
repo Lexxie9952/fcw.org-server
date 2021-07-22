@@ -37,7 +37,7 @@ gfx = "amplio2/units_oversize"
 x_top_left = 1
 y_top_left = 1
 dx = 84
-dy = 48
+dy = 60
 pixel_border = 1
 
 tiles = { "row", "column", "tag"
@@ -52,6 +52,6 @@ tiles = { "row", "column", "tag"
   0,  8, "u.wagon"                    ; Lexxie
   0,  9, "u.truck"                    ; Lexxie
   1,  0, "u.zeppelin"                 ; Lexxie
-  1,  1, "u.settlers_o"               ; Lexxie
+  1,  1, "u.founder_o"                ; Lexxie
   1,  2, "u.phalanx_o"                ; Lexxie
 }
