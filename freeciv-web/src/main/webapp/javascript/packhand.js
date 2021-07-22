@@ -862,7 +862,9 @@ function handle_ruleset_control(packet)
     } else if (typeof EXTRA_CASTLE !== 'undefined') {
       if (ename =="Castle") delete window["EXTRA_CASTLE"]
     } else if (typeof EXTRA_BUNKER !== 'undefined') {
-      if (ename =="Castle") delete window["EXTRA_BUNKER"]
+      if (ename =="Bunker") delete window["EXTRA_BUNKER"]
+    } else if (typeof EXTRA_TILE_CLAIM !== 'undefined') {
+      if (ename =="Tile Claim") delete window["EXTRA_TILE_CLAIM"]
     }
   }
   extras = {};
@@ -1231,9 +1233,9 @@ function handle_unit_packet_common(packet_unit)
 
   /* Update UI elements affected by a change to this unit's state:
      1. If unit is done moving, advance focus. 
-     2. If focused on a new unit, update orders buttons and active units dialog.
-     3. and/or if ANY unit on the tile was the packet unit that underwent state
-        change, refresh orders buttons and active units dialog. 
+     2. If focused on a new unit, OR if ANY unit on the tile was the packet-unit
+        that underwent state change: update ORDERS buttons and active_units_dialog.
+
      TODO: this probably removes the need for numerous hacky update_active_units_dialog()
      calls that are sent, often with a timeout, after sending a packet for the unit to
      do an action.
@@ -2140,6 +2142,7 @@ function handle_ruleset_extra(packet)
   if (packet['name'] == "Minor Tribe Village") window["EXTRA_HUT"] = packet['id'];
   if (packet['name'] == "Castle") window["EXTRA_CASTLE"] = packet['id'];
   if (packet['name'] == "Bunker") window["EXTRA_BUNKER"] = packet['id'];
+  if (packet['name'] == "Tile Claim") window["EXTRA_TILE_CLAIM"] = packet['id'];
 
 }
 
