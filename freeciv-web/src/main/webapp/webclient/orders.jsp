@@ -7,6 +7,10 @@
     <span style="cursor:pointer" onclick="activate_goto();"><img src="/images/orders/goto_default.png" name="goto_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
+  <div id="order_patrol" class="order_button" title="Patrol (ctrl-P)">
+    <span style="cursor:pointer" onclick="patrol_mode=true;activate_goto();"><img src="/images/orders/patrol.png" name="patrol_button" alt="" border="0" width="30" height="30"></span>
+  </div>
+
   <div id="order_upgrade" class="order_button not_mobile" title="Upgrade unit (U)">
       <span style="cursor:pointer" onclick="key_unit_upgrade();"><img src="/images/orders/upgrade.png" name="upgrade_button" alt="" border="0" width="30" height="30"></span>
   </div>
@@ -15,7 +19,7 @@
     <span style="cursor:pointer" onclick="key_unit_convert();"><img src="/images/orders/convert.png" name="convert_button" alt="" border="0" width="30" height="30"></span>
   </div>  
 
-  <div id="order_airlift" class="order_button" title="Airlift (Shift-L)">
+  <div id="order_airlift" class="order_button" title="Airlift (shift-L)">
     <span style="cursor:pointer" onclick="key_unit_airlift();"><img src="/images/orders/airlift.png" name="airlift_button" alt="" border="0" width="30" height="30"></span>
   </div>  
 
@@ -31,7 +35,7 @@
     <span style="cursor:pointer" onclick="key_unit_fortify();"><img src="/images/orders/fortify_default.png" name="fortify_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
-  <div id="order_vigil" class="order_button" title="Vigil unit (Ctrl-V)">
+  <div id="order_vigil" class="order_button" title="Vigil unit (ctrl-V)">
     <span style="cursor:pointer" onclick="key_unit_vigil();"><img src="/images/orders/vigil.png" name="fortify_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
@@ -79,7 +83,7 @@
       <span style="cursor:pointer" onclick="key_unit_mine();"><img src="/images/orders/swamp.png" name="make_swamp_button" alt="" border="0" width="30" height="30"></span>
   </div>
   
-  <div id="order_pillage" class="order_button not_mobile" title="Pillage (Shift-P)">
+  <div id="order_pillage" class="order_button not_mobile" title="Pillage (shift-P)">
     <span style="cursor:pointer" onclick="key_unit_pillage();"><img src="/images/orders/pillage.png" name="pillage_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
@@ -103,27 +107,27 @@
     <span style="cursor:pointer" onclick="key_unit_canal();"><img src="/images/orders/canal.png" name="canal_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
-  <div id="order_fortress" class="order_button not_mobile" title="Build Fort (Shift-F)">
+  <div id="order_fortress" class="order_button not_mobile" title="Build Fort (shift-F)">
     <span style="cursor:pointer" onclick="key_unit_fortress();"><img src="/images/orders/fortress.png" name="fortress_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
-  <div id="order_buoy" class="order_button not_mobile" title="Lay Buoy (Shift-F)">
+  <div id="order_buoy" class="order_button not_mobile" title="Lay Buoy (shift-F)">
     <span style="cursor:pointer" onclick="key_unit_fortress();"><img src="/images/orders/buoy.png" name="buoy_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
-  <div id="order_navalbase" class="order_button not_mobile" title="Build Naval Base (Shift-N)">
+  <div id="order_navalbase" class="order_button not_mobile" title="Build Naval Base (shift-N)">
     <span style="cursor:pointer" onclick="key_unit_naval_base();"><img src="/images/orders/navalbase.png" name="navbase_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
-  <div id="order_airbase" class="order_button not_mobile" title="Build Airbase (Shift-E)">
+  <div id="order_airbase" class="order_button not_mobile" title="Build Airbase (shift-E)">
     <span style="cursor:pointer" onclick="key_unit_airbase();"><img src="/images/orders/airbase.png" name="airbase_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
-  <div id="order_radar" class="order_button not_mobile" title="Build Radar (Shift-E)">
+  <div id="order_radar" class="order_button not_mobile" title="Build Radar (shift-E)">
     <span style="cursor:pointer" onclick="key_unit_airbase();"><img src="/images/orders/radar.png" name="radar_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
-   <div id="order_hideout" class="order_button not_mobile" title="Hideout (Shift-H)">
+   <div id="order_hideout" class="order_button not_mobile" title="Hideout (shift-H)">
     <span style="cursor:pointer" onclick="key_unit_hideout();"><img src="/images/orders/hideout.png" name="hideout_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
@@ -147,7 +151,7 @@
     <span style="cursor:pointer" onclick="key_unit_unload();"><img src="/images/orders/unload.png" name="unload_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
-  <div id="order_activate_cargo" class="order_button not_mobile" title="Activate cargo units">
+  <div id="order_activate_cargo" class="order_button not_mobile" title="Activate cargo units (shift-U)">
     <span style="cursor:pointer" onclick="key_unit_show_cargo();"><img src="/images/orders/activate_cargo.png" name="show_cargo_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
@@ -155,7 +159,7 @@
     <span style="cursor:pointer" onclick="key_unit_paradrop();"><img src="/images/orders/paradrop.png" name="paradrop_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
-  <div id="order_nuke" class="order_button" title="Detonate Nuke At (Shift-N)">
+  <div id="order_nuke" class="order_button" title="Detonate Nuke At (shift-N)">
     <span style="cursor:pointer" onclick="key_unit_nuke();"><img src="/images/orders/nuke.png" name="nuke_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
@@ -167,7 +171,7 @@
     <span style="cursor:pointer" onclick="key_unit_noorders();"><img src="/images/orders/no_orders.png" name="noorders_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
-  <div id="order_cancel_orders" class="order_button not_mobile" title="Cancel Orders (Shift-J)">
+  <div id="order_cancel_orders" class="order_button not_mobile" title="Cancel Orders (shift-J)">
     <span style="cursor:pointer" onclick="key_unit_idle();"><img src="/images/orders/cancel_orders.png" name="cancel_orders_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
