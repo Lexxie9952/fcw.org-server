@@ -2448,7 +2448,7 @@ static bool city_build_building(struct player *pplayer, struct city *pcity)
 
   if (!can_city_build_improvement_now(pcity, pimprove)) {
     notify_player(pplayer, city_tile(pcity), E_CITY_CANTBUILD, ftc_server,
-                  _("⚠️ %s is building %s, which is no longer available."),
+                  _("⚠️ %s is building %s, which is currently unavailable."),
                   city_link(pcity),
                   city_improvement_name_translation(pcity, pimprove));
     script_server_signal_emit("building_cant_be_built", pimprove, pcity,
@@ -2664,7 +2664,7 @@ static bool city_build_unit(struct player *pplayer, struct city *pcity)
   if (!can_city_build_unit_direct(pcity, utype)
       && !is_barbarian(pplayer)) {
     notify_player(pplayer, city_tile(pcity), E_CITY_CANTBUILD, ftc_server,
-                  _("⚠️ %s is building %s, which is no longer available."),
+                  _("⚠️ %s is building %s, which is currently unavailable."),
                   city_link(pcity), utype_name_translation(utype));
 
     /* Log before signal emitting, so pointers are certainly valid */
