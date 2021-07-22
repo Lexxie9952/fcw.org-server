@@ -44,6 +44,7 @@ var unitpanel_active = false;
 var allow_right_click = false;
 var DEBUG_UNITS = false;  // console log tools for debugging unit issues
 var DEBUG_FOCUS = false;
+var DEBUG_ACTION_PACKETS = false;
 
 // performance: is_touch_device() was being called many times per second
 var touch_device = null; // TO DO: replace all is_touch_device() function calls
@@ -81,6 +82,7 @@ var last_focus = null;    // last unit in focus before focus change
 
 // GOTO, RALLY, misc. state vars when in a request-goto-path mode:
 var goto_active = false;  // state for selecting goto target for a unit
+var patrol_mode = false;  // repeat goto_path forward then backward
 var rally_active = false;     // modifies goto_active to be setting a rally point
 // Transitional state var remembers rally_active in Go...And mode (rally_active pathing off while dialog is up):
 var old_rally_active = false;
@@ -1274,6 +1276,7 @@ function clear_all_modes()
   rally_active = false;   // clear rally path goto for city
   rally_city_id = null;
   rally_virtual_utype_id = RALLY_DEFAULT_UTYPE_ID;
+  patrol_mode = false;
   connect_active = false;
   connect_extra = -1;      // type of EXTRA to make, e.g., EXTRA_ROAD, EXTRA_IRRIGATION
   connect_activity = ACTIVITY_LAST;  // e.g., ACTIVITY_GEN_ROAD
@@ -1414,6 +1417,7 @@ function update_unit_order_commands()
       $("#order_less").hide();
       $("#order_disband").hide();
       $("#order_goand").hide();
+      $("#order_patrol").hide();
     break;
 
     case 2:         // all legal orders buttons
@@ -1422,6 +1426,7 @@ function update_unit_order_commands()
       $("#order_more").hide();
       $("#order_disband").show();
       $("#order_goand").show();
+      $("#order_patrol").show();
     break;
   }
 
@@ -1494,8 +1499,10 @@ function update_unit_order_commands()
     }
 
     if (ptype['name'] == "Explorer") {
-      unit_actions["explore"] = {name: "Auto Explore (X)"};
-      $("#order_explore").show();
+      if (enable_autoexplore) {
+        unit_actions["explore"] = {name: "Auto Explore (X)"};
+        $("#order_explore").show();
+      }
     }
 
     // MP2 Unit Conversion handling
@@ -1561,6 +1568,7 @@ function update_unit_order_commands()
     const NAVALBASES    = (typeof EXTRA_NAVALBASE !== 'undefined');
     const CASTLES       = (typeof EXTRA_CASTLE !== 'undefined');
     const BUNKERS       = (typeof EXTRA_BUNKER !== 'undefined');
+    const TILECLAIMS    = (typeof EXTRA_TILE_CLAIM !== 'undefined');
     const AIRBASES      = (typeof EXTRA_AIRBASE !== 'undefined');
     const BUOYS         = (typeof EXTRA_BUOY !== 'undefined');
     const RADAR         = (typeof EXTRA_RADAR !== 'undefined');
@@ -1582,6 +1590,7 @@ function update_unit_order_commands()
     const TILE_HAS_NAVALBASE = NAVALBASES && tile_has_extra(ptile,EXTRA_NAVALBASE);
     const TILE_HAS_CASTLE    = CASTLES    && tile_has_extra(ptile,EXTRA_CASTLE);
     const TILE_HAS_BUNKER    = BUNKERS    && tile_has_extra(ptile,EXTRA_BUNKER);
+    const TILE_HAS_CLAIM     = TILECLAIMS && tile_has_extra(ptile,EXTRA_TILE_CLAIM);
     const TILE_HAS_AIRBASE   = AIRBASES   && tile_has_extra(ptile,EXTRA_AIRBASE);
     const TILE_HAS_BUOY      = BUOYS      && tile_has_extra(ptile,EXTRA_BUOY);
     const TILE_HAS_RADAR     = RADAR      && tile_has_extra(ptile,EXTRA_RADAR);
@@ -1593,6 +1602,7 @@ function update_unit_order_commands()
     /* Tile requirements for base to possibly exist there */
     const CAN_TILE_HIDEOUT   = !pcity && !oceanic && HIDEOUTS   && !TILE_HAS_HIDEOUT && !does_tile_have_base(ptile) && (!QUAYS || !tile_has_extra(ptile,EXTRA_QUAY))
                                   && (ptile['owner']==UNCLAIMED_LAND || ptile['owner'] == client.conn.playing.playerno)
+                                  && (tile_units(ptile).length==1)
                                   && (terrain_name=='Mountains' || terrain_name=='Forest' || terrain_name == 'Jungle' || terrain_name == 'Swamp')
                                   && !(TILE_HAS_RIVER && NO_RIVER_BASE);
     const CAN_TILE_FORT      = !pcity && !oceanic && FORTS      && !TILE_HAS_FORT && !TILE_HAS_OVERFORT && !(TILE_HAS_RIVER && NO_RIVER_BASE);
@@ -1600,6 +1610,7 @@ function update_unit_order_commands()
     const CAN_TILE_NAVALBASE = !pcity && !oceanic && NAVALBASES && TILE_HAS_FORT && !TILE_HAS_OVERFORT && !(TILE_HAS_RIVER && NO_RIVER_BASE); // further tile reqs in: can_build_naval_base(punit,ptile)
     const CAN_TILE_CASTLE    = !pcity && !oceanic && CASTLES    && !TILE_HAS_CASTLE && !TILE_HAS_BUNKER && TILE_HAS_FORTRESS && !(TILE_HAS_RIVER && NO_RIVER_BASE);
     const CAN_TILE_BUNKER    = !pcity && !oceanic && BUNKERS    && !TILE_HAS_BUNKER && !TILE_HAS_CASTLE && TILE_HAS_FORTRESS && !(TILE_HAS_RIVER && NO_RIVER_BASE);
+    //const CAN_TILE_CLAIM     = !pcity && !oceanic && TILECLAIMS && !TILE_HAS_CLAIM && (client.conn.playing.playerno==tile_owner(ptile) || 
     const CAN_TILE_AIRBASE   = !pcity && !oceanic && AIRBASES   && !TILE_HAS_AIRBASE && !(TILE_HAS_RIVER && NO_RIVER_BASE);
     const CAN_TILE_BUOY      = !pcity &&  oceanic && BUOYS      && !TILE_HAS_BUOY && !(TILE_HAS_RIVER && NO_RIVER_BASE);
     const CAN_TILE_RADAR     = !pcity && !oceanic && RADAR      && !TILE_HAS_RADAR && TILE_HAS_AIRBASE && !(TILE_HAS_RIVER && NO_RIVER_BASE);
@@ -1615,42 +1626,42 @@ function update_unit_order_commands()
     const UNIT_CAN_RADAR     = CAN_TILE_RADAR     && RADAR_TECH     && (worker_type || infra_type) && ptype['name'] != "Settlers";
     // ******************************************************************************************************************* </END Base Logic setup> ***
     if (UNIT_CAN_HIDEOUT) {
-      unit_actions["hideout"] = {name: "Hideout (Shift-H)"};  $("#order_hideout").show();  
+      unit_actions["hideout"] = {name: "Hideout (shift-H)"};  $("#order_hideout").show();  
     }
     //--
     if (UNIT_CAN_FORT) {
-      unit_actions["fortress"] = {name: "Build Fort (Shift-F)"};  $("#order_fortress").show();
-      $("#order_fortress").prop("title", "Build Fort (Shift-F)");
+      unit_actions["fortress"] = {name: "Build Fort (shift-F)"};  $("#order_fortress").show();
+      $("#order_fortress").prop("title", "Build Fort (shift-F)");
     } else if (UNIT_CAN_FORTRESS) { // Fortress over Bunker allowed, to remove it. (Bunkers are pillage-proof)
       if (TILE_HAS_BUNKER) {
-        unit_actions["fortress"] = {name: "Remove Bunker (Shift-F)"}; 
-        $("#order_fortress").prop("title", "Remove Bunker (Shift-F)");
+        unit_actions["fortress"] = {name: "Remove Bunker (shift-F)"}; 
+        $("#order_fortress").prop("title", "Remove Bunker (shift-F)");
       } else {
-        unit_actions["fortress"] = {name: "Build Fortress (Shift-F)"}; 
-        $("#order_fortress").prop("title", "Build Fortress (Shift-F)");
+        unit_actions["fortress"] = {name: "Build Fortress (shift-F)"}; 
+        $("#order_fortress").prop("title", "Build Fortress (shift-F)");
       }
       $("#order_fortress").show();
     } else if (UNIT_CAN_CASTLE) {
-      unit_actions["fortress"] = {name: "Build Castle (Shift-F)"};  $("#order_fortress").show();
-      $("#order_fortress").prop("title", "Build Castle (Shift-F)");
+      unit_actions["fortress"] = {name: "Build Castle (shift-F)"};  $("#order_fortress").show();
+      $("#order_fortress").prop("title", "Build Castle (shift-F)");
     } else if (UNIT_CAN_BUNKER) {
-      unit_actions["fortress"] = {name: "Build Bunker (Shift-F)"};  $("#order_fortress").show();
-      $("#order_fortress").prop("title", "Build Bunker (Shift-F)");
+      unit_actions["fortress"] = {name: "Build Bunker (shift-F)"};  $("#order_fortress").show();
+      $("#order_fortress").prop("title", "Build Bunker (shift-F)");
     } else if (UNIT_CAN_BUOY) {
-      unit_actions["fortress"] = {name: "Lay Buoy (Shift-F)"};  $("#order_buoy").show();
+      unit_actions["fortress"] = {name: "Lay Buoy (shift-F)"};  $("#order_buoy").show();
     }
     //--
     if (UNIT_CAN_NAVALBASE) {
-      unit_actions["navalbase"] = {name: "Naval Base (Shift-N)"};  $("#order_navalbase").show();
+      unit_actions["navalbase"] = {name: "Naval Base (shift-N)"};  $("#order_navalbase").show();
     }
     if (UNIT_CAN_AIRBASE) {
-      unit_actions["airbase"] = {name: "Build Airbase (Shift-E)"};
+      unit_actions["airbase"] = {name: "Build Airbase (shift-E)"};
       if (worker_type || infra_type) { 
         if (show_order_buttons==2) $("#order_airbase").show(); // Uncommon order for infra units.
       } else $("#order_airbase").show(); // Marines always want to see it.
     }
     if (UNIT_CAN_RADAR) {
-      unit_actions["airbase"] = {name: "Build Radar (Shift-E)"};
+      unit_actions["airbase"] = {name: "Build Radar (shift-E)"};
       $("#order_radar").show();
     }
     // ********************************************************************** </END Base Building> ***
@@ -1658,7 +1669,7 @@ function update_unit_order_commands()
     // Disbanding in a city doesn't show red-skull-death-button because it recycles production:
     if (pcity) {
       disband_type = 1; // flags Recycle icon
-      $("#order_disband").prop('title', 'Recycle Unit (Shift-D)');
+      $("#order_disband").prop('title', 'Recycle Unit (shift-D)');
       $("#order_disband").html("<span style='cursor:pointer' onclick='key_unit_disband();'><img src='/images/orders/disband_recycle.png' name='disband_button' alt='' border='0' width='30' height='30'></span>");
       // Cargo class disbands often for recycling shields, show button always, less threatening recycle version of it.
       if (client_rules_flag[CRF_MP2_C]) {
@@ -1666,12 +1677,12 @@ function update_unit_order_commands()
           $("#order_disband").show();
           var city_prod_name = get_city_production_type(pcity)['name']; 
           if (!city_prod_name) city_prod_name = "Production";
-          $("#order_disband").prop('title', 'Help Build '+city_prod_name+' (Shift-D)');
+          $("#order_disband").prop('title', 'Help Build '+city_prod_name+' (shift-D)');
         }
       }
     } else {
       disband_type = 0; // flags Death/You're fired icon
-      $("#order_disband").prop('title', 'Disband (Shift-D)');
+      $("#order_disband").prop('title', 'Disband (shift-D)');
       $("#order_disband").html("<span style='cursor:pointer' onclick='key_unit_disband();'><img src='/images/orders/disband_default.png' name='disband_button' alt='' border='0' width='30' height='30'></span>");
     }
     // LEGIONS. rulesets which allow Legions to build Roads on non-domestic tiles-------------
@@ -1701,16 +1712,16 @@ function update_unit_order_commands()
            var pillage_title = unit_has_dual_pillage_options(punit) 
                                ? "Pillage / "+unit_get_pillage_name(punit)
                                : unit_get_pillage_name(punit);
-            $("#order_pillage").prop('title', pillage_title+" (Shift-P)");
+            $("#order_pillage").prop('title', pillage_title+" (shift-P)");
             $("#order_pillage").show();
-            unit_actions["pillage"] = {name: pillage_title+" (Shift-P)"};
+            unit_actions["pillage"] = {name: pillage_title+" (shift-P)"};
     } else {
             $("#order_pillage").hide();
     }
 
     // Whether to show "no orders" or "cancel orders", default, before applying special rules later
     if (punit.activity != ACTIVITY_IDLE || punit.ai || punit.has_orders) {
-      unit_actions["idle"] = {name: "Cancel orders (Shift-J)"};
+      unit_actions["idle"] = {name: "Cancel orders (shift-J)"};
       $("#order_cancel_orders").show();
     } else {
       unit_actions["noorders"] = {name: "No orders (J)"};
@@ -1827,11 +1838,12 @@ function update_unit_order_commands()
       $("#order_sentry").show();  // TO DO?: air units and new triremes can't sentry outside a fueling tile
       if (unit_can_vigil(punit)) {
         $("#order_vigil").show();
-        unit_actions["vigil"] = {name: "Vigil (Shift-I)"};
+        unit_actions["vigil"] = {name: "Vigil (shift-I)"};
       }
     }
 
-    if (show_order_buttons==2) $("#order_explore").show(); //not frequently used for most units
+    if (show_order_buttons==2 && enable_autoexplore)
+      $("#order_explore").show(); //not frequently used for most units
 
     // Rulesets which allow Canals:
     if (client_rules_flag[CRF_CANALS]) {
@@ -1883,7 +1895,7 @@ function update_unit_order_commands()
 
     if (utype_can_do_action(ptype, ACTION_NUKE)) {
       $("#order_nuke").show();
-      unit_actions["nuke"] = {name: "Detonate Nuke At (Shift-N)"};
+      unit_actions["nuke"] = {name: "Detonate Nuke At (shift-N)"};
     } else {
       $("#order_nuke").hide();
     }
@@ -1904,7 +1916,7 @@ function update_unit_order_commands()
 
     if (pcity != null && city_has_building(pcity, improvement_id_by_name(B_AIRPORT_NAME))) {
       if (pcity["airlift"]>0 && punit['movesleft']>0) {
-        unit_actions["airlift"] = {name: "Airlift (Shift-L)"};
+        unit_actions["airlift"] = {name: "Airlift (shift-L)"};
         $("#order_airlift").show();
         //$("#order_airlift_disabled").hide();
       } else {
@@ -1964,7 +1976,7 @@ function update_unit_order_commands()
       $("#order_upgrade").show();
     }
 
-    if (ptype != null && ptype['name'] != "Explorer") {
+    if (ptype != null && ptype['name'] != "Explorer" && enable_autoexplore) {
       unit_actions["explore"] = {name: "Auto explore (X)"};
     }
 
@@ -1993,7 +2005,7 @@ function update_unit_order_commands()
         for (var r = 0; r < units_on_tile.length; r++) {
           var tunit = units_on_tile[r];
           if (tunit['transported']) {
-            unit_actions["unit_show_cargo"] = {name: "Select Cargo (Shift-U)"};
+            unit_actions["unit_show_cargo"] = {name: "Select Cargo (shift-U)"};
             // Check conditions which allow Unload Transport (T):
             // 1. Marines on native tile
             if (utype_has_flag(unit_types[tunit['type']], UTYF_MARINES) && !is_ocean_tile(ptile)) {
@@ -2041,7 +2053,7 @@ function update_unit_order_commands()
     if (num_tile_units.length >= 2 && !touch_device) { // Touch devices have no buttons or keys to issue multiple orders
       unit_actions = $.extend(unit_actions, {          // and they lack screen space for longer context menus also
         "select_all_tile": {name: "Select all on tile (V)"},
-        "select_all_type": {name: "Select same type (Shift-V)"}
+        "select_all_type": {name: "Select same type (shift-V)"}
         });
     }
   }
@@ -2056,8 +2068,8 @@ function update_unit_order_commands()
   unit_actions = $.extend(unit_actions, {
             "sentry": {name: "Sentry (S)"},
             "wait": {name: "Wait (W)"},
-            "disband": {name: (disband_type ? "Recycle Unit (Shift-D)" : "Disband (Shift-D)")},
-            "goand": {name: "Go and ... (Ctrl-Alt-G)"}
+            "disband": {name: (disband_type ? "Recycle Unit (shift-D)" : "Disband (shift-D)")},
+            "goand": {name: "Go and ... (ctrl-alt-G)"}
             });
 
   $(".context-menu-list").css("z-index", 5000);
@@ -2720,9 +2732,6 @@ function do_map_click(ptile, qtype, first_time_called)
   if (action_tgt_sel_active && current_focus.length > 0) {
     request_unit_act_sel_vs(ptile);
     clear_all_modes();
-    action_tgt_sel_active = false;
-    paradrop_active = false;
-    airlift_active = false;
     return;
   }
 
@@ -2932,9 +2941,9 @@ function do_map_click(ptile, qtype, first_time_called)
           "pid"      : packet_unit_orders,
           "unit_id"  : punit['id'],
           "src_tile" : old_tile['index'],
-          "length"   : goto_path['length'],
-          "repeat"   : false,
-          "vigilant" : false,
+          "length"   : (!patrol_mode ? goto_path['length'] : (goto_path['length']*2)),
+          "repeat"   : patrol_mode,
+          "vigilant" : patrol_mode,
 
           /* Each individual order is added later. */
 
@@ -2951,14 +2960,16 @@ function do_map_click(ptile, qtype, first_time_called)
 
         /* Add each individual order. */
         packet['orders'] = [];
+        // console.log(goto_path);
         for (var i = 0; i < goto_path['length']; i++) {
+          //console.log("Fpath[%d]",i)
           /* TODO: Have the server send the full orders instead of just the
            * dir part. Use that data in stead. */
 
           if (goto_path['dir'][i] == -1) {
             /* Assume that this means refuel. */
             order['order'] = ORDER_FULL_MP;
-          } else if (i + 1 != goto_path['length']) {
+          } else if (i + 1 != goto_path['length'] || patrol_mode) {
             /* Don't try to do an action in the middle of the path. */
             order['order'] = ORDER_MOVE;
           } else {
@@ -2972,9 +2983,33 @@ function do_map_click(ptile, qtype, first_time_called)
           order['action'] = ACTION_COUNT;
 
           packet['orders'][i] = Object.assign({}, order);
+          //console.log(packet['orders'])
         }
+        if (patrol_mode) for (var j = goto_path['length']-1; j >=0; j--) {
+          //console.log("Bpath[%d]",i)
 
-        if (goto_last_order != ORDER_LAST) {
+            if (goto_path['dir'][j] == -1) {
+              // A refuel path on the way is a refuel path on the way back?
+              order['order'] = ORDER_FULL_MP;
+            } else if (j - 1 != -1) {
+              // Don't try to do an action in the middle of the path.
+              order['order'] = ORDER_MOVE
+            } else {
+              // The final end of the patrol path
+              order['order'] = ORDER_MOVE
+              //order['order'] = ORDER_ACTION_MOVE; may not be the last action in rotating patrol ***********
+            }
+            order['dir'] = opposite_dir(goto_path['dir'][j]);
+            order['activity'] = ACTIVITY_LAST;
+            order['sub_target'] = 0;
+            order['action'] = ACTION_COUNT;
+  
+            packet['orders'][i++] = Object.assign({}, order);
+            //console.log(packet['orders'])
+        }
+        if (patrol_mode) console.log(packet);
+
+        if (goto_last_order != ORDER_LAST && !patrol_mode) {
           /* The final order is specified. */
           var pos;
 
@@ -3110,11 +3145,7 @@ function do_map_click(ptile, qtype, first_time_called)
     }
     airlift_active = false;
   }
-  /* 27Jun2021: candidate for removal since we are doing it higher up now
-  else if (action_tgt_sel_active && current_focus.length > 0) {
-    request_unit_act_sel_vs(ptile);
-    action_tgt_sel_active = false;
-  } */
+
   else {
     if (pcity != null) { //if city clicked
       if (pcity['owner'] == client.conn.playing.playerno && !mouse_click_mod_key['shiftKey']) { //if city is your own
@@ -3421,6 +3452,14 @@ function civclient_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_even
         }
       }
       break;
+
+      case 220:   // | (pipe) = next music track 
+        if (shift) {
+          if (supports_mp3()) {
+            if (pick_next_track()) audio.play();
+          }
+        }
+      break;
   }
 }
 
@@ -3566,7 +3605,14 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
     break;
 
     case 'P':
-      if (shift) {
+      if (ctrl && !alt && current_focus.length > 0) {
+        the_event.preventDefault(); // override possible browser shortcut
+        activate_goto();
+        delayed_goto_active = false;
+        patrol_mode = true;
+        if (shift) delayed_goto_active = true;
+      }
+      else if (shift && !alt && !ctrl) {
         key_unit_pillage();
       } else if (ctrl && alt && !shift) {
         the_event.preventDefault(); // override possible browser shortcut
@@ -3754,7 +3800,7 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
         draw_city_mood = !draw_city_mood;
         simpleStorage.set('drawMood', draw_city_mood);
       }
-      
+
       else key_unit_mine();
     break;
     /* these were moved lower to keycode 188,190 for Mac compatibility:
@@ -4966,6 +5012,7 @@ function key_unit_noorders()
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     punit['done_moving'] = true;
+    action_decision_clear_want(punit['id']);
   }
   deactivate_goto(false);
   advance_unit_focus(false);
@@ -6125,6 +6172,11 @@ function request_unit_act_sel_vs(ptile)
 
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
+
+    if (act_sel_dialog_might_reopen(punit, ptile)) {
+      continue;
+    }
+
     var packet = {
       "pid"     : packet_unit_sscs_set,
       "unit_id" : punit['id'],
@@ -6146,6 +6198,11 @@ function request_unit_act_sel_vs_own_tile()
   var funits = get_units_in_focus();
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
+
+    if (act_sel_dialog_might_reopen(punit, tiles[punit['tile']])) {
+      continue;
+    }
+
     var packet = {
       "pid"     : packet_unit_sscs_set,
       "unit_id" : punit['id'],
@@ -6311,6 +6368,18 @@ function request_unit_do_action(action_id, actor_id, target_id, sub_tgt_id,
     sub_tgt_id: sub_tgt_id || 0,
     name: name || ""
   }));
+
+  if (DEBUG_ACTION_PACKETS) {
+    console.log(JSON.stringify({
+      pid: packet_unit_do_action,
+      action_type: action_id,
+      actor_id: actor_id,
+      target_id: target_id,
+      sub_tgt_id: sub_tgt_id || 0,
+      name: name || ""
+    }));
+  }
+
   action_decision_clear_want(actor_id);
 }
 
@@ -6433,6 +6502,8 @@ function key_unit_move(dir)
       return;
     }
 
+    act_sel_dialog_might_reopen(punit, newtile);
+
     /* Send the order to move using the orders system. */
     var order = {
       "order"      : ORDER_ACTION_MOVE,
@@ -6495,6 +6566,8 @@ function key_unit_move_focus_index(dir, s)
     if (newtile == null) {
       return;
     }
+
+    act_sel_dialog_might_reopen(punit, newtile);
 
     /* Send the order to move using the orders system. */
     var order = {
