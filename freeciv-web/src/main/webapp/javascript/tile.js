@@ -121,6 +121,8 @@ function does_tile_have_base(ptile)
     return true;
   if (typeof EXTRA_BUNKER !== "undefined" && tile_has_extra(ptile, EXTRA_BUNKER))
     return true;
+  if (typeof EXTRA_TILE_CLAIM !== "undefined" && tile_has_extra(ptile, EXTRA_TILE_CLAIM))
+    return true;
   if (typeof EXTRA_ !== "undefined" && tile_has_extra(ptile, EXTRA_))  // hideout
     return true;
     
@@ -177,7 +179,9 @@ function improve_tile_info_dialog(message)
     // Calculate defense bonus
     var has_river = "";
     var db = parseFloat(1) + parseFloat(ttype['defense_bonus'])/100;
-    if (message.includes("River</b>")) {  // this exact string ensures no other text gives false positive
+    if (message.includes("River</b>") 
+       || message.includes("River/")
+       || message.includes("/River") ) {  // these exact strings ensure no other text gives false positive
       has_river = " (<span style='color:#5d97ed;' class='black_shadow'><b>River</b></span>)";
       if (client_rules_flag[CRF_MP2_C]) db += 0.5;  // additive bonus as in for example real civ2, mp2c
       else db *= (1+extras[EXTRA_RIVER]['defense_bonus']/100); 
