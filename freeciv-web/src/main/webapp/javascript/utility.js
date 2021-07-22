@@ -171,14 +171,6 @@ function get_random_int(min, max) {
   return Math.floor(fc_seedrandom() * (max - min)) + min;
 }
 
-/**************************************************************************
-...
-**************************************************************************/
-function supports_mp3() {
-  var a = document.createElement('audio');
-  return !!(a.canPlayType && a.canPlayType('audio/mpeg;').replace(/no/, ''));
-}
-
 /****************************************************************************
   Mac OS X and Chrome OS does not support the right-click-and-drag to select
   units on the map in Freeciv-web at the moment.
