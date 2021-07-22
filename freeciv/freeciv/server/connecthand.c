@@ -115,7 +115,7 @@ void do_longturn_tech_latejoiner_effect(struct player *pplayer)
 {
   struct research *presearch;
   
-  int mod = 35;
+  int mod = 20;
   int num_players;
 
   
