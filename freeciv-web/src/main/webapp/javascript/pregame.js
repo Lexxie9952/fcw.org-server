@@ -52,7 +52,10 @@ function pregame_start_game()
 
   setup_window_size ();
 
-  popup_fullscreen_enter_game_dialog();
+  /* Handled now in client_main.js:set_client_state right when it transitions to
+     show game page:
+     popup_fullscreen_enter_game_dialog();
+  */ 
 }
 
 /****************************************************************************
@@ -1051,22 +1054,11 @@ function pregame_settings()
     }
   });
 
-  $('#music_setting').prop('checked', audio_enabled == true);
+  $('#music_setting').prop('checked', play_music == true);
 
   $('#music_setting').change(function() {
-    audio_enabled = !audio_enabled;
-    if (audio_enabled) {
-      if (!audio.source.src) {
-        if (!supports_mp3()) {
-          audio.load("/music/" + music_list[Math.floor(Math.random() * music_list.length)] + ".ogg");
-        } else {
-          audio.load("/music/" + music_list[Math.floor(Math.random() * music_list.length)] + ".mp3");
-        }
-      }
-      audio.play();
-    } else {
-      audio.pause();
-    }
+    play_music = !play_music;
+    simpleStorage.set("play_music", play_music);
   });
 
   $('#scorelog_setting').change(function() {
