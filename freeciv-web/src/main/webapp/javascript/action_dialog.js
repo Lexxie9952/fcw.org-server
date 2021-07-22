@@ -26,6 +26,126 @@ var active_dialogs = [];
 var action_selection_restart = false;
 var did_not_decide = false;
 
+
+var action_images = {
+//   2: "e/gold",                          // investigate city
+  20: "e/gold",                          // trade route
+  21: "e/marketplace",                   // enter marketplace
+  22: "e/camel24",                      // build wonder
+  23: "corrupt",                         // bribe unit
+  27: "orders/build_city_default",
+  28: "city_user_row",                   // join city
+  29: "e/earth",                         // steal maps
+  30: "e/earth",                         // steal maps esc
+  31: "e/blueexclamation",               // SUA
+  32: "e/blueexclamation",               // SUA "Bombard 2"
+  33: "e/blueexclamation",               // SUA "Bombard 3"
+  36: "e/nuclearexplosion",
+  37: "e/nuclearexplosion",
+  38: "e/nuclearexplosion",
+  39: "orders/pillage",            // destroy city
+  41: "orders/disband_recycle",
+  42: "orders/disband_default",
+  43: "orders/rehome_default",           // home city
+  44: "orders/upgrade",
+  45: "orders/paradrop",
+  46: "orders/airlift",
+  47: "e/redexclamation",                // Attack
+  48: "e/cruisemissile",
+  51: "cities_tab_icon",                 // conquer city
+  54: "orders/transform_default",
+  55: "orders/forest_remove_default",
+  56: "orders/forest_add_default",
+  57: "orders/pillage",
+  58: "orders/fortify_default",
+  59: "orders/road",
+  60: "orders/convert",
+  61: "orders/fortress",
+  62: "orders/mine_default",
+  63: "orders/irrigate_default",
+  64: "orders/deboard",                   // deboard            
+  65: "orders/unload",                    // unload transport
+  66: "orders/unload",                    // disembark
+  68: "orders/board",                     // board
+  69: "orders/board",                     // embark 
+  71: "e/spy",
+  75: "e/pollution",
+  76: "e/fallout",
+  77: "orders/no_orders",
+  "wait": "orders/wait",
+  "cancel": "orders/cancel_orders",
+  "target": "e/target",
+  "targetextra": "e/targetextra",
+  "autoattack": "e/redexclamations",
+  "Airbase": "orders/airbase",
+  "Canal": "orders/canal",
+  "Waterway": "orders/canal",
+  "Buoy": "orders/buoy",
+  "": "orders/hideout",
+  "Maglev": "orders/maglev",
+  "Naval Base": "orders/navalbase",
+  "Oil Well": "orders/oilwell",
+  "Quay": "orders/quay",
+  "Radar": "orders/radar",
+  "Railroad": "orders/railroad_default",
+  "Road": "orders/road",
+  "Sea Bridge": "orders/seabridge",
+  "River": "orders/well"
+};
+
+/*
+var action_images = {
+  [ACTION_TRADE_ROUTE]: "e/gold",
+  [ACTION_MARKETPLACE]: "e/marketplace",
+  [ACTION_HELP_WONDER]: "e/camel24",
+  [ACTION_SPY_BRIBE_UNIT]: "corrupt",
+  [ACTION_FOUND_CITY]: "orders/build_city_default",
+  [ACTION_JOIN_CITY]: "city_user_row",
+  [ACTION_STEAL_MAPS]: "e/earth",
+  [ACTION_STEAL_MAPS_ESC]: "e/earth",
+  [ACTION_BOMBARD]: "e/blueexclamation",
+  [ACTION_BOMBARD2]: "e/blueexclamation",
+  [ACTION_BOMBARD3]: "e/blueexclamation",
+  [ACTION_NUKE]: "e/nuclearexplosion",
+  [ACTION_NUKE_CITY]: "e/nuclearexplosion",
+  [ACTION_NUKE_UNITS]: "e/nuclearexplosion",
+  [ACTION_DESTROY_CITY]: "orders/pillage",
+  [ACTION_RECYCLE_UNIT]: "orders/disband_recycle",
+  [ACTION_DISBAND_UNIT]: "orders/disband_default",
+  [ACTION_HOME_CITY]: "e/home",
+  [ACTION_UPGRADE_UNIT]: "orders/upgrade",
+  [ACTION_PARADROP]: "orders/paradrop",
+  [ACTION_AIRLIFT]: "orders/airlift",
+  [ACTION_ATTACK]: "e/redexclamation",
+  [ACTION_SUICIDE_ATTACK]: "e/cruisemissile",
+  [ACTION_CONQUER_CITY]: "cities_tab_icon",
+  [ACTION_TRANSFORM_TERRAIN]: "orders/transform_default",
+  [ACTION_CULTIVATE]: "orders/forest_remove_default",
+  [ACTION_PLANT]: "orders/forest_add_default",
+  [ACTION_PILLAGE]: "orders/pillage",
+  [ACTION_FORTIFY]: "orders/fortify_default",
+  [ACTION_ROAD]: "orders/road",
+  [ACTION_CONVERT]: "orders/convert",
+  [ACTION_BASE]: "orders/fortress",
+  [ACTION_MINE]: "orders/mine_default",
+  [ACTION_IRRIGATE]: "orders/irrigate_default",
+  [ACTION_TRANSPORT_DEBOARD]: "orders/unload",
+  [ACTION_TRANSPORT_UNLOAD]: "orders/unload",
+  [ACTION_TRANSPORT_DISEMBARK1]: "orders/activate_cargo",
+  [ACTION_TRANSPORT_BOARD]: "orders/load",
+  [ACTION_TRANSPORT_EMBARK]: "orders/load",
+  [ACTION_SPY_ATTACK]: "e/spy",
+  [ACTION_CLEAN_POLLUTION]: "e/pollution",
+  [ACTION_CLEAN_FALLOUT]: "e/fallout",
+  [ACTION_COUNT]: "orders/no_orders",
+  "wait": "orders/wait",
+  "cancel": "orders/cancel_orders",
+  "target": "e/target",
+  "targetextra": "e/targetextra",
+  "autoattack": "e/redexclamations"
+};
+*/
+
 /**********************************************************************//**
   Move the queue of units that need user input forward unless the current
   unit is going to need more input.
@@ -71,6 +191,39 @@ function act_sel_queue_done(actor_unit_id)
   act_sel_queue_may_be_done(actor_unit_id);
   action_selection_restart = false;
   did_not_decide = false;
+}
+
+/**********************************************************************//**
+  Returns true if the unit dismissed an action selection dialog with
+  the "Wait" button. This helps us know if we need to re-create the
+  pop-up when acting on the same tile again.
+**************************************************************************/
+function is_unit_act_sel_waiting(punit) 
+{ 
+  return !unit_has_act_sel_dialog(punit['id']) 
+         && should_ask_server_for_actions(punit);
+}
+
+/**********************************************************************//**
+  Returns true if the unit has an open act_sel_dialog.
+**************************************************************************/
+function unit_has_act_sel_dialog(unit_id) 
+{
+   return active_dialogs.includes("#act_sel_dialog_"+unit_id);
+}
+
+/**********************************************************************//**
+  Re-opens an action selection dialog only for units who need it
+  re-opened because they dismissed the dialog by hitting the Wait
+  button.
+**************************************************************************/
+function act_sel_dialog_might_reopen(punit, ptile) {
+    if (is_unit_act_sel_waiting(punit)
+      && ptile['index'] == punit['action_decision_tile']) {
+    ask_server_for_actions(punit);
+
+    return true;
+  }
 }
 
 /**************************************************************************
@@ -253,19 +406,31 @@ function act_sel_click_function(parent_id,
       is_more_user_input_needed = true;
       remove_action_selection_dialog(parent_id, actor_unit_id, true);
     };
+  /* Actions which "consume" the unit's attention, so it will advance
+   * focus even if there are moves left: */
+  case ACTION_FORTIFY:
   case ACTION_PILLAGE:
   case ACTION_ROAD:
   case ACTION_BASE:
   case ACTION_MINE:
   case ACTION_IRRIGATE:
+  case ACTION_CULTIVATE:
+  case ACTION_PLANT:
+  case ACTION_TRANSFORM_TERRAIN:
+  case ACTION_CONVERT:
     return function() {
       request_unit_do_action(action_id, actor_unit_id, tgt_id, sub_tgt_id);
       remove_action_selection_dialog(parent_id, actor_unit_id);
+      // Extra time to read witness successful action, since pop-up removal is distracting:
+      //FIXME: if there are two selected units getting same command eg.,Fortify, it doesn't advance
+      setTimeout(update_unit_focus, update_focus_delay * 1.2);
     };
   case ACTION_ATTACK:
     return function() {
       request_unit_do_action(action_id, actor_unit_id, tgt_id, sub_tgt_id);
-      // unit lost hp or died or promoted after attack, so update it:
+      // unit lost hp, mp, or died or promoted after attack, so update it:
+      /* REMOVAL CANDIDATE: this may no longer be necessary since handle_unit_packet_common()
+         updates active unit dialog whenever a selected unit received new unit info packet */
       setTimeout(update_active_units_dialog, update_focus_delay);
       remove_action_selection_dialog(parent_id, actor_unit_id);
     };
@@ -275,6 +440,39 @@ function act_sel_click_function(parent_id,
       remove_action_selection_dialog(parent_id, actor_unit_id);
     };
   }
+}
+
+
+/**************************************************************************
+  Puts an icon into a button image.
+**************************************************************************/
+function render_action_image_into_button(text, action_id, sub_tgt)
+{
+  //console.log("Render action %d:%s sub_tgt=%d",action_id,text,sub_tgt)
+  if (action_images[action_id]) {
+    var key = action_id;
+    //console.log("  Key starts at %s",key);
+
+
+    // override normal button image with sub_target image (e.g., Build Base >> Build Fort)
+    if (sub_tgt !== undefined && sub_tgt > -1 && extras[sub_tgt]) {
+      //console.log("    sub_tgt not undefined etc.");
+      if (action_id == ACTION_ROAD || action_id == ACTION_BASE) {
+        //console.log("    action_id is ROAD or BASE");
+        if (action_images[extras[sub_tgt]['name']]) {
+          key = extras[sub_tgt]['name'];
+          //console.log("      Reassigned key:%s",key);
+        }
+      }
+    };
+
+    text = "<img style='max-height:24px; position:absolute; left:2px;top:4px;' "
+        + "src='/images/" + action_images[key] + ".png'" + ">&emsp;" 
+        + text;
+  }
+  //console.log("text returns as %s\n",text);
+
+  return text;
 }
 
 /**************************************************************************
@@ -288,6 +486,8 @@ function create_act_sel_button(parent_id,
 {
   // Create button_text
   var button_text = format_action_label(action_id, action_probabilities);
+  var sub_target_override = -1;  // code to not override
+
   // Fix inaccurate "Conquer City" to "Raze City" for size 1 city:
   if (button_text.includes("Conquer")) {
     var pcity = cities[tgt_id];
@@ -295,11 +495,24 @@ function create_act_sel_button(parent_id,
       button_text = button_text.replace("Conquer", "Raze");
   }
 
+  if (action_id == ACTION_BASE && button_text.includes("Base")) {
+    //console.log("\nmaking target=%d subtarget=%d",tgt_id, sub_tgt_id);
+    button_text = button_text.replace("Base", extras[sub_tgt_id]['name'])
+    sub_target_override = sub_tgt_id;
+  } else if (action_id == ACTION_ROAD && button_text.includes("Road")) {
+    //console.log("\nmaking target=%d subtarget=%d",tgt_id, sub_tgt_id);
+    button_text = button_text.replace("Road", extras[sub_tgt_id]['name'])
+    sub_target_override = sub_tgt_id;
+  } 
+
+  if (action_images[action_id]) {
+    button_text = render_action_image_into_button(button_text, action_id, sub_target_override);
+  }
   /* Create the initial button with this action */
   var button = {
     id      : "act_sel_" + action_id + "_" + actor_unit_id,
     "class" : 'act_sel_button',
-    text    : button_text,
+    html    : button_text,
     title   : format_action_tooltip(action_id,
                                     action_probabilities),
     click   : act_sel_click_function(parent_id,
@@ -425,6 +638,28 @@ function popup_action_selection(actor_unit, action_probabilities,
           }
         }
         //-------------------------------------------------------------------------------------
+        /* TODO: Remove this code when rulesets get actionenablers defined for all complex 
+           (de)Board and (un)Load rules. See "(un)Load (de)Board (dis)Embark rules.txt" in 
+           ruleset dir. For now, these buttons are disallowed to prevent their appearance
+           in cases where it's disallowed in a ruleset. */ 
+        if (action_id == ACTION_TRANSPORT_BOARD) {
+          if (!unit_could_possibly_load(actor_unit,
+                                        unit_type(actor_unit),
+                                        unit_type(target_unit),
+                                        get_unit_class(target_unit))) {
+            continue;
+          }
+        }
+        if (action_id == ACTION_TRANSPORT_DEBOARD) {
+          if (!unit_can_do_unload(actor_unit))
+            continue;
+        }
+        if (action_id == ACTION_TRANSPORT_UNLOAD) {
+          if (!unit_can_do_unload(target_unit))
+          continue;
+        }
+        //  if (action_id == ACTION_TRANSPORT_LOAD) {}  action not backported yet
+        //------------------------------------------------------------------------------------ 
         buttons.push(create_act_sel_button(id, actor_unit['id'],
                                            tgt_id, sub_tgt_id, action_id,
                                            action_probabilities));
@@ -436,7 +671,7 @@ function popup_action_selection(actor_unit, action_probabilities,
     buttons.push({
         id      : "act_sel_move" + actor_unit['id'],
         "class" : 'act_sel_button',
-        text    : 'Keep moving',
+        html    : 'Keep moving',
         click   : function() {
           var dir = get_direction_for_step(tiles[actor_unit['tile']],
                                            target_tile);
@@ -474,7 +709,7 @@ function popup_action_selection(actor_unit, action_probabilities,
     buttons.push({
         id      : "act_sel_tgt_unit_switch" + actor_unit['id'],
         "class" : 'act_sel_button',
-        text    : 'Change unit target',
+        html    : render_action_image_into_button('Change unit target', 'target'),
         click   : function() {
           select_tgt_unit(actor_unit,
                           target_tile, tile_units(target_tile));
@@ -488,7 +723,7 @@ function popup_action_selection(actor_unit, action_probabilities,
     buttons.push({
         id      : "act_sel_tgt_extra_switch" + actor_unit['id'],
         "class" : 'act_sel_button',
-        text    : 'Change extra target',
+        html    : render_action_image_into_button('Change extra target', 'targetextra'),
         click   : function() {
           select_tgt_extra(actor_unit, target_unit, target_tile,
                            list_potential_target_extras(actor_unit,
@@ -505,7 +740,7 @@ function popup_action_selection(actor_unit, action_probabilities,
           var button = {
             id      : "act_sel_" + ACTION_ATTACK + "_" + actor_unit['id'],
             "class" : 'act_sel_button',
-            text    : "Auto attack from now on!",
+            html    : render_action_image_into_button("Auto attack from now on!", "autoattack"),
             title   : "Attack without showing this attack dialog in the future",
             click   : function() {
                 request_unit_do_action(ACTION_ATTACK,
@@ -522,25 +757,16 @@ function popup_action_selection(actor_unit, action_probabilities,
   buttons.push({
       id      : "act_sel_wait" + actor_unit['id'],
       "class" : 'act_sel_button',
-      text    : 'Wait',
+      html    :  render_action_image_into_button("Wait", "wait"),
       click   : function() {
         did_not_decide = true;
         remove_action_selection_dialog(id, actor_unit['id'], true);
-        /* 9.June.2021:
-           TO DO: clicking Wait for a single selected unit with action dialog, currently
-           just closes the dialog but doesn't advance unit focus. The line of code below 
-           would do that but is commented out because of a logic trap: You would never be
-           able to escaping looping between units who want decisions, because it only cycles
-           between those. So, if we ever think of some other logic for this, this is where 
-           we would put the code to handle it:
-           if (current_focus && current_focus.length == 1) advance_unit_focus(false);
-        */
       } });
 
   buttons.push({
       id      : "act_sel_cancel" + actor_unit['id'],
       "class" : 'act_sel_button',
-      text    : 'Cancel (𝗪)',
+      html    : render_action_image_into_button('Cancel (𝗪)', 'cancel'),
       click   : function() {
         remove_action_selection_dialog(id, actor_unit['id']);
       } });
@@ -557,8 +783,11 @@ function popup_action_selection(actor_unit, action_probabilities,
   if (SP) {
     if (unit_can_iPillage(actor_unit)) {
       for (button_id in buttons) {
-        if (buttons[button_id].text.startsWith("Pillage")) {
-          buttons[button_id].text = unit_get_pillage_name(actor_unit);          
+        if (buttons[button_id].html.includes("Pillage (100%)")) {
+          var odds = (unit_get_extra_stats(actor_unit).iPillage_odds + actor_unit['veteran'] * 5);
+          buttons[button_id].html = buttons[button_id].html.replace("Pillage (100%)", unit_get_pillage_name(actor_unit)
+          + " (" + odds + "%)");
+          buttons[button_id].title = "The probability of success is 80%";
         }
       }
     }
@@ -568,8 +797,8 @@ function popup_action_selection(actor_unit, action_probabilities,
   if (SUA) {
     switch (ptype['rule_name']) {
       case "Siege Ram":  for (button_id in buttons) {
-        if (buttons[button_id].text.startsWith("Special Attack")) {
-          buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
+        if (buttons[button_id].html.includes("Special Attack")) {
+          buttons[button_id].html = buttons[button_id].html.replace("Special Attack", utype_get_bombard_name(ptype))
           buttons[button_id].title = "Odds of survival:  100%\n"
                                   + "Combat:                4 rounds\n"
                                   + "Targets:                 ALL\n"
@@ -583,8 +812,8 @@ function popup_action_selection(actor_unit, action_probabilities,
                                   + "emulates resistance and repairing Fortress damage over the\n"
                                   + "course of a long siege.\n"
         }
-        else if (buttons[button_id].text.startsWith("Targeted Sabotage")) {
-          buttons[button_id].text = "Attack City Walls ([25%, 50%])"
+        else if (buttons[button_id].html.includes("Targeted Sabotage")) {
+          buttons[button_id].html = "Attack City Walls ([25%, 50%])"
           buttons[button_id].title = "Odds of survival:  50%  (halved if city is capital)\n"
                                   + "Targets:                 City Walls\n"
                                   + "Move cost:            1/9 move\n"
@@ -594,8 +823,8 @@ function popup_action_selection(actor_unit, action_probabilities,
         }
       } break;
       case "Phalanx":  for (button_id in buttons) {
-        if (buttons[button_id].text.startsWith("Special Attack")) {
-          buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
+        if (buttons[button_id].html.includes("Special Attack")) {
+          buttons[button_id].html = buttons[button_id].html.replace("Special Attack", utype_get_bombard_name(ptype))
           buttons[button_id].title = "Odds of survival:  100%\n"
                                   + "Combat:                3 rounds\n"
                                   + "Targets:                 1 unit\n"
@@ -608,9 +837,9 @@ function popup_action_selection(actor_unit, action_probabilities,
         }
       } break;
       case "Archers":  for (button_id in buttons) {
-        if (buttons[button_id].text.startsWith("Special Attack")) {
-            buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
-            buttons[button_id].title = "Odds of survival:  100%\n"
+        if (buttons[button_id].html.includes("Special Attack")) {
+          buttons[button_id].html = buttons[button_id].html.replace("Special Attack", utype_get_bombard_name(ptype))
+           buttons[button_id].title = "Odds of survival:  100%\n"
                                     + "Combat:                2 rounds\n"
                                     + "Targets:                 7 units\n"
                                     + "Move cost:            1 5/9 moves\n"
@@ -621,8 +850,8 @@ function popup_action_selection(actor_unit, action_probabilities,
         }
       } break;
       case "Legion":  for (button_id in buttons) {
-        if (buttons[button_id].text.startsWith("Special Attack")) {
-          buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
+        if (buttons[button_id].html.includes("Special Attack")) {
+          buttons[button_id].html = buttons[button_id].html.replace("Special Attack", utype_get_bombard_name(ptype))
           buttons[button_id].title = "Odds of survival:  100%\n"
                                   + "Attack bonus:        2x\n"
                                   + "Combat:                1 round\n"
@@ -635,8 +864,8 @@ function popup_action_selection(actor_unit, action_probabilities,
         }
       } break;
       case "Fanatics":  for (button_id in buttons) {
-        if (buttons[button_id].text.startsWith("Special Attack")) {
-          buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
+        if (buttons[button_id].html.includes("Special Attack")) {
+          buttons[button_id].html = buttons[button_id].html.replace("Special Attack", utype_get_bombard_name(ptype))
           buttons[button_id].title = "Odds of survival:  100%\n"
                                     + "Combat:                3 rounds\n"
                                     + "Targets:                 4 units\n"
@@ -649,8 +878,8 @@ function popup_action_selection(actor_unit, action_probabilities,
         }
       } break;
       case "Zealots":  for (button_id in buttons) {
-        if (buttons[button_id].text.startsWith("Special Attack")) {
-          buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
+        if (buttons[button_id].html.includes("Special Attack")) {
+          buttons[button_id].html = buttons[button_id].html.replace("Special Attack", utype_get_bombard_name(ptype))
           buttons[button_id].title = "Odds of survival:  100%\n"
                                     + "Combat:                3 rounds\n"
                                     + "Targets:                 4 units\n"
@@ -663,20 +892,20 @@ function popup_action_selection(actor_unit, action_probabilities,
         }
       } break;
       case "Marines":  for (button_id in buttons) {
-        if (buttons[button_id].text.startsWith("Special Attack")) {
-          buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
+        if (buttons[button_id].html.includes("Special Attack")) {
+          buttons[button_id].html = buttons[button_id].html.replace("Special Attack", utype_get_bombard_name(ptype))
           buttons[button_id].title = "Odds of survival:  100%\n"
                                   + "Combat:                3 rounds\n"
                                   + "Targets:                 4 units\n"
                                   + "Move cost:            1 5/9 moves\n"
                                   + "Max. casualties:     1\n"        
-                                  + "\nV3 Marines use agility/mobility over terrain features to improvise hit-and-run\n"
+                                  + "\nHardened Marines use agility/mobility over terrain features for hit-and-run\n"
                                   + "ballistic attacks: 3 rounds of combat on up to 4 occupants of a tile.\n"
         }
       } break;
       case "Battleship":  for (button_id in buttons) {
-        if (buttons[button_id].text.startsWith("Special Attack")) {
-          buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
+        if (buttons[button_id].html.includes("Special Attack")) {
+          buttons[button_id].html = buttons[button_id].html.replace("Special Attack", utype_get_bombard_name(ptype))
           buttons[button_id].title = "Odds of survival:  100%\n"
                                   + "Combat:                3 rounds\n"
                                   + "Targets:                 4 units\n"
@@ -687,8 +916,8 @@ function popup_action_selection(actor_unit, action_probabilities,
         }
       } break;
       case "Zeppelin":  for (button_id in buttons) {
-        if (buttons[button_id].text.startsWith("Special Attack")) {
-          buttons[button_id].text = utype_get_bombard_name(ptype)+" (100%)"
+        if (buttons[button_id].html.includes("Special Attack")) {
+          buttons[button_id].html = buttons[button_id].html.replace("Special Attack", utype_get_bombard_name(ptype))
           buttons[button_id].title = "Odds of survival:  100%\n"
                                   + "Combat:                4 rounds\n"
                                   + "Targets:                 2 units\n"
@@ -889,7 +1118,7 @@ function create_steal_tech_button(parent_id, tech,
 {
   /* Create the initial button with this tech */
   var button = {
-    text : tech['name'],
+    html : tech['name'],
     click : function() {
 
       request_unit_do_action(action_id, actor_id, city_id, tech['id']);
@@ -958,7 +1187,7 @@ function popup_steal_tech_selection_dialog(actor_unit, target_city,
            act_probs[untargeted_action_id])) {
     /* Untargeted tech theft may be legal. Add it as an alternative. */
     buttons.push({
-                   text  : "At " + unit_types[actor_unit['type']]['name']
+                   html  : "At " + unit_types[actor_unit['type']]['name']
                            + "'s Discretion",
                    click : function() {
                      request_unit_do_action(untargeted_action_id,
@@ -970,7 +1199,7 @@ function popup_steal_tech_selection_dialog(actor_unit, target_city,
 
   /* Allow the user to cancel. */
   buttons.push({
-                 text : 'Cancel (𝗪)',
+                 html : 'Cancel (𝗪)',
                  click : function() {
                   remove_action_selection_dialog("#"+id, actor_unit['id']);
                  }
@@ -998,7 +1227,7 @@ function create_sabotage_impr_button(improvement, parent_id,
 {
   /* Create the initial button with this tech */
   return {
-    text : improvement['name'],
+    html : improvement['name'],
     click : function() {
         request_unit_do_action(act_id, actor_id, city_id,
                                improvement['id']);
@@ -1068,7 +1297,7 @@ function popup_sabotage_dialog(actor_unit, target_city, city_imprs, act_id)
 
   /* Allow the user to cancel. */
   buttons.push({
-                 text : 'Cancel (𝗪)',
+                 html : 'Cancel (𝗪)',
                  click : function() {
                   remove_action_selection_dialog("#"+id, actor_unit['id'])
                  }
@@ -1094,7 +1323,7 @@ function create_select_tgt_unit_button(parent_id, actor_unit_id,
                                        target_tile_id, target_unit_id)
 {
   var button = {};
-  var text = "";
+  var dhtml = "";
   var target_unit = units[target_unit_id];
   var ttype = unit_type(target_unit);
   var punit = units[actor_unit_id];
@@ -1140,22 +1369,22 @@ function create_select_tgt_unit_button(parent_id, actor_unit_id,
   }
 
   // Segment 1. Unit Emoji
-  text += html_emoji_from_universal(ttype['name'])+" ";
+  dhtml += html_emoji_from_universal(ttype['name'])+" ";
   // Segment 2. Unit type name (and Unit ID iff a legal transport)
-  if (show_transport_info) text += "T"+target_unit_id+" ";
-  text += ttype['name']+" ";
+  if (show_transport_info) dhtml += "T"+target_unit_id+" ";
+  dhtml += ttype['name']+" ";
   // Segment 3. If unit is cargo, tell who is transporting it.
-  if (target_unit['transported_by']) text+="on T"+target_unit['transported_by']+" ";
+  if (target_unit['transported_by']) dhtml+="on T"+target_unit['transported_by']+" ";
   // Segment 4. Extra transport-distinguishing info (iff legally embarkable)
   if (show_transport_info) {
-    text += moves_text;
-    text += "<span style='cursor:help' title='"+cargo_text+"'>"+"L:"+carrying+" </span> ";
-    text += "C:"+ttype['transport_capacity']+" ";
+    dhtml += moves_text;
+    dhtml += "<span style='cursor:help' title='"+cargo_text+"'>"+"L:"+carrying+" </span> ";
+    dhtml += "C:"+ttype['transport_capacity']+" ";
   }
   // Segment 5. Nationality + Home city
-  if (get_unit_homecity_name(target_unit) != null) text += " ("+get_unit_homecity_name(target_unit)+")";
+  if (get_unit_homecity_name(target_unit) != null) dhtml += " ("+get_unit_homecity_name(target_unit)+")";
   //text += " &emsp;"+unit_get_flag_image(target_unit,18); // alternative flag at the right of button
-  text += unit_get_shield_image(target_unit);
+  dhtml += unit_get_shield_image(target_unit);
   /* commented out because unit_flag_image is less verbose and has hover title text
   text += " (";
   text += nations[unit_owner(target_unit)['nation']]['adjective'];
@@ -1163,7 +1392,7 @@ function create_select_tgt_unit_button(parent_id, actor_unit_id,
   */ 
 
   button = {
-    html  : text,
+    html  : dhtml,
     title: title_text,
     click : function() {
       var packet = {
@@ -1213,7 +1442,7 @@ function select_tgt_unit(actor_unit, target_tile, potential_tgt_units)
                                                tgt_unit['id']));
   }
 
-  var close_button = {text: "Cancel (𝗪)", click: function() {
+  var close_button = {html: "Cancel (𝗪)", click: function() {
     remove_action_selection_dialog(id, actor_unit['id']);
   }};
   buttons.push(close_button);
@@ -1298,7 +1527,7 @@ function create_select_tgt_extra_button(parent_id, actor_unit_id,
   text += ")";
 
   button = {
-    text  : text,
+    html  : text,
     click : function() {
       var packet = {
         "pid"            : packet_unit_get_actions,
@@ -1462,27 +1691,21 @@ function select_last_action()
   } else dhtml += "Select action to perform after GOTO:";
   $(id).html(dhtml);
 
-  /* TO DO:
+/* TODO:
 =========================================================================================================
     make non-working //commented-out actions to work
-
-    capture units trying to do to same tile instead of next one.
-      order_wants_direction() is to blame?
-    
-    double clicking unit acting funny and being dead click, when before it didn't; are 
-      state vars not being cleaned in these cases, can we find out what they are and 
-      compare working  vs not-working on the state vars to discover it ?
-      console.log("%s %s",came_from_context_menu,last_unit_clicked);
-          NOT WORKING      true 371
-          WORKING          false -1
-  */
+    expel and capture units trying to do to same tile instead of next one.
+      order_wants_direction() isn't working somehow?    */
 
 //function add_action_last_button(buttons, action_id,   override_name, order,                activity,        target, subtarget)
   buttons = add_action_last_button(buttons, ACTION_ATTACK);
   buttons = add_action_last_button(buttons, ACTION_BOMBARD,
                                   current_focus.length ? unit_get_bombard_name(current_focus[0]) :
                                   "Special Attack");
+/* Currently disallowed until actionenablers can guarantee this is legal at the server level.
+   TODO: when ruleset has actionenablers regulating TRANSPORT_BOARD legality, this button can return.
   buttons = add_action_last_button(buttons, ACTION_TRANSPORT_BOARD, "Board");
+*/
   buttons = add_action_last_button(buttons, ACTION_SPY_BRIBE_UNIT, "Bribe");
   if (tech_known('Radio'))
     buttons = add_action_last_button(buttons, ACTION_BASE, "Build Airbase", ORDER_PERFORM_ACTION, null, null, EXTRA_AIRBASE);
@@ -1501,8 +1724,7 @@ function select_last_action()
     buttons = add_action_last_button(buttons, ACTION_ROAD, "Build Canal, inland", ORDER_PERFORM_ACTION, null, null, EXTRA_WATERWAY);
   }
   buttons = add_action_last_button(buttons, ACTION_HOME_CITY, "Change Home City");
-//  buttons = add_action_last_button(buttons, ACTION_CAPTURE_UNITS); // was acting on own tile instead of target tile it seems
-
+//  buttons = add_action_last_button(buttons, ACTION_CAPTURE_UNITS); // acts on wrong tile, as do the below:
 //  buttons = add_action_last_button(buttons, ACTION_CLEAN_POLLUTION, "Clean Pollution", ORDER_PERFORM_ACTION, ACTIVITY_CLEAN_POLLUTION, EXTRA_POLLUTION, EXTRA_POLLUTION);
 //  buttons = add_action_last_button(buttons, ACTION_CLEAN_FALLOUT, "Clean Fallout", ORDER_PERFORM_ACTION, null, null, EXTRA_FALLOUT);
   buttons = add_action_last_button(buttons, ACTION_CONQUER_CITY);    
@@ -1519,6 +1741,7 @@ function select_last_action()
   if (tech_known('Refrigeration'))
     buttons = add_action_last_button(buttons, ACTION_IRRIGATE, "Irrigate Farmland", ORDER_PERFORM_ACTION, null, null, EXTRA_FARMLAND);
   buttons = add_action_last_button(buttons, ACTION_JOIN_CITY);
+  //buttons = add_action_last_button(buttons, ACTION_TRANSPORT_LOAD); // GET FROM SVEINUNG WHO FINISHED THIS RECENTLY
   buttons = add_action_last_button(buttons, ACTION_MINE, "Mine", ORDER_PERFORM_ACTION, null, null, EXTRA_MINE);
   buttons = add_action_last_button(buttons, ACTION_PILLAGE, "Pillage Anything", ORDER_PERFORM_ACTION, null, null, -1);
   buttons = add_action_last_button(buttons, ACTION_PLANT, "Plant");
@@ -1529,12 +1752,16 @@ function select_last_action()
   buttons = add_action_last_button(buttons, ACTION_STEAL_MAPS);
   buttons = add_action_last_button(buttons, ACTION_STEAL_MAPS_ESC);
   buttons = add_action_last_button(buttons, ACTION_TRANSFORM_TERRAIN);
- //   buttons = add_action_last_button(buttons, ACTION_EXPEL_UNIT);
+ //   buttons = add_action_last_button(buttons, ACTION_EXPEL_UNIT);    act on wrong tile
+
+ /* Currently disallowed until actionenablers can guarantee this is legal at the server level.
+   TODO: when ruleset has actionenablers regulating ACTION_TRANSPORT_UNLOAD legality, this button can return.
   buttons = add_action_last_button(buttons, ACTION_TRANSPORT_UNLOAD);
+*/
   buttons = add_action_last_button(buttons, ACTION_UPGRADE_UNIT);
   buttons = add_action_last_button(buttons, ACTION_COUNT, "NO ACTION", ORDER_LAST);
   var close_button = {
-    text: "Cancel (𝗪)", 
+    html: render_action_image_into_button("Cancel (𝗪)", "cancel"), 
     click: function() {
       remove_active_dialog(id);
       deactivate_goto(false);
@@ -1580,6 +1807,8 @@ function add_action_last_button(buttons, action_id, override_name, order, activi
   // Get ruleset name for action unless override title exists:
   if (!override_name) override_name = actions[action_id]['ui_name'].replace("%s", "").replace("%s","");
   var new_button = create_action_last_button(override_name, action_id, order, activity, target, subtarget);
+
+  new_button.html = render_action_image_into_button(new_button.html, action_id);
 
   buttons.push(new_button);
   return buttons;
@@ -1664,7 +1893,7 @@ function dialog_register(id, actor_id, input_maybe_needed) {
 **************************************************************************/
 function create_a_close_button(parent_id)
 {
-  var close_button = {text: "Cancel (𝗪)", click: function() {
+  var close_button = {html: render_action_image_into_button("Cancel (𝗪)", "cancel"), click: function() {
       remove_active_dialog(parent_id);
   }};
   return close_button;
