@@ -49,6 +49,8 @@ tiles = { "row", "column", "tag"
  2,  4, "base.castle_fg"
  2,  5, "base.castle_bg"
  2,  6, "base.bunker_mg"
+ ;[Lexxie]
+ 3,  0, "base.tileclaim_mg"
 ;[HH]
   not used in FCW, had to save space to prevent a clipping bug
  0,  2, "cd.occupied",
