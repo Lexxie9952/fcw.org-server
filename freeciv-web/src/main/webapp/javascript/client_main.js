@@ -63,6 +63,12 @@ function set_client_state(newstate)
         advance_unit_focus(false);
       }
 
+      if (audio != null) {
+        if (!audio.source.src)
+          pick_next_track();
+        if (play_music) setTimeout(audio.play(), 10000);
+      }
+      popup_fullscreen_enter_game_dialog();
       break;
     case C_S_OVER:
       setTimeout(show_endgame_dialog, 500);
