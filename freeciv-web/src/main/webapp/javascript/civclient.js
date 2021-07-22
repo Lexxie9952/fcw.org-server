@@ -33,16 +33,6 @@ var fc_seedrandom = null;
 var game_type = "";
 var link_game_type = "";
 
-var music_list = [ "battle-epic",
-                   "andrewbeck-ancient",
-                   "into_the_shadows",
-                   "andrewbeck-stings",
-                   "trap_a_space_odyssey_battle_for_the_planet",
-                   "elvish-theme",
-                   "cullambruce-lockhart-dawning_fanfare"];
-var audio = null;
-var audio_enabled = false;
-
 var last_turn_change_time = 0;
 var turn_change_elapsed = 0;
 var seconds_to_phasedone = 0;
@@ -266,24 +256,35 @@ function civclient_init()
 
   draw_moving_borders = simpleStorage.get('movingBorders');
   if (draw_moving_borders == null) 
-    draw_moving_borders = false;  // Default case
-  // -------------------------------------------------------------------------------- 
-  
+    draw_moving_borders = false;  // Default case  
+
+  play_music = simpleStorage.get('play_music');
+  if (play_music == null) {
+    play_music = true;           // Default case: change after we have nice portfolio
+  }
+  // --------------------------------------------------------------------------------   
   /* Initialze audio.js music player */
   audiojs.events.ready(function() {
     var as = audiojs.createAll({
           trackEnded: function() {
-            if (!supports_mp3()) {
-              audio.load("/music/" + music_list[Math.floor(Math.random() * music_list.length)] + ".ogg");
-            } else {
-              audio.load("/music/" + music_list[Math.floor(Math.random() * music_list.length)] + ".mp3");
+            if (supports_mp3()) {
+              if (pick_next_track()) audio.play();
             }
-            audio.play();
+          },
+          play: function() {
+            play_music = true;
+            simpleStorage.set('play_music', true);
+          },
+          pause: function() {
+            play_music = false;
+            simpleStorage.set('play_music', false);
           }
         });
     audio = as[0];
+    audio.setVolume(0.10); // make music proportionate to other sound effects 
   });
 
+  //------------------------------------------------------------------------------------------------
   if (link_game_type == 'singleplayer#') link_game_type = 'singleplayer';
 
   var game_port = $.getUrlVar('civserverport');
