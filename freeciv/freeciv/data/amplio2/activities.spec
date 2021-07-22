@@ -34,6 +34,7 @@ tiles = { "row", "column", "tag"
   0, 3, "unit.canal"                 ; Lexxie
   0, 4, "unit.fortify_delay"         ; Lexxie
   0, 5, "unit.sentry_hidden"         ; Lexxie
+  0, 6, "unit.patrol_back"           ; Lexxie
 
   1, 0, "unit.outpost"
   1, 1, "unit.airstrip"
@@ -41,6 +42,7 @@ tiles = { "row", "column", "tag"
   1, 3, "unit.airbase"
   1, 4, "unit.buoy"
   1, 5, "unit.fortified_hidden"      ; Lexxie
+  1, 6, "unit.tileclaim"             ; Lexxie
 
   2, 0, "unit.fortified"
   2, 1, "unit.fortifying"
