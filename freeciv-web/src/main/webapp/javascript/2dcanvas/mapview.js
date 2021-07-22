@@ -52,14 +52,15 @@ var GOTO_DIR_DY = [-2, -1, 0, -1, 1, 0, 1, 2];
 var dashedSupport = false;
 
 // [0] line-edge borders, [1] main thick line, [2] tile way points, [3] inner way-point dot
-var goto_colors_active = ["0,10,40,1","30,208,255,1","2,26,45,1","197,243,255,1"]; //active goto path
-var goto_colors_info   = ["40,10,0,.91","255,208,30,.91","45,26,2,.91","255,243,197,.91"]; //tile/unit info
-var goto_colors_road   = ["40,10,0,.91","168,84,15,.91","65,18,2,.91","255,213,167,.91"]; //connect road
-var goto_colors_irr    = ["0,40,10,1","128,208,84,1","25,45,15,1","150,255,123,1"]; //connect irrigation
+var goto_colors_active = ["0,10,40,1","30,208,255,1","2,26,45,1","197,243,255,1"];       // active goto path
+var goto_colors_info   = ["40,10,0,.91","255,208,30,.91","45,26,2,.91","255,243,197,.91"]; // tile/unit info
+var goto_colors_road   = ["40,10,0,.91","168,84,15,.91","65,18,2,.91","255,213,167,.91"];    // connect road
+var goto_colors_irr    = ["0,40,10,1","128,208,84,1","25,45,15,1","150,255,123,1"];    // connect irrigation
 var goto_colors_rally = {
-                      1: ["0,40,10,1","230,240,230,1","0,54,10,1","143,255,155,1"], // temporary rally path
-                      2: ["40,0,10,1","240,230,230,1","54,0,10,1","255,143,155,1"]  // persistent rally path
-};
+                      1: ["0,40,10,1","230,240,230,1","0,54,10,1","143,255,155,1"],  // temporary rally path
+                      2: ["40,0,10,1","240,230,230,1","54,0,10,1","255,143,155,1"]};// persistent rally path
+
+var goto_colors_patrol = ["0,10,40,1","30,108,255,1","2,14,45,1","197,209,255,1"];            // patrol path
 
 /**************************************************************************
   Cycles through city map display modes for citybar when user presses 
@@ -806,6 +807,8 @@ function mapview_put_goto_line(pcanvas, dir, canvas_x, canvas_y)
     else if (connect_extra==EXTRA_IRRIGATION) colors=goto_colors_irr;
   } else if (rally_active) {
     colors = goto_colors_rally[rally_active];
+  } else if (patrol_mode) {
+    colors = goto_colors_patrol;
   }
 
   // Line edges
