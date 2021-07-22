@@ -679,7 +679,8 @@ function tech_mapview_mouse_click(e)
         if (mouse_button == 2 || (mouse_button == 3 && e.altKey)) send_player_tech_goal(ptech['id']);        
         else if (player_invention_state(client.conn.playing, ptech['id']) == TECH_PREREQS_KNOWN) {
           var adjusted_tech_cost = Math.max(1, Math.floor(ptech['cost']*game_info['sciencebox']/100.0))
-          if (client.conn.playing['bulbs_researched'] >= adjusted_tech_cost) {
+          if (client.conn.playing['bulbs_researched'] >= adjusted_tech_cost
+              && !server_settings.multiresearch.val) {
             var swal_tech_id = ptech['id'];
             var warning_text = "You will immediately discover "+ptech['name']+".";
             var extra_title = "";
