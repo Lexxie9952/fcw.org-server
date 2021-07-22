@@ -1589,7 +1589,17 @@ function get_unit_activity_sprite(punit)
       return {"key" : "unit.goto_delay",
         "offset_x" : unit_activity_offset_x,
         "offset_y" : - unit_activity_offset_y};
-    } // Otherwise, show GO_AND icon if last order isn't a move, else show standard GOTO icon:
+    } // Show patrol or patrol_back icon if unit is on patrol
+    if (punit['orders_vigilant'] && punit['orders_repeat']) {
+      if (punit['orders_index']/(punit['orders_length']-1) <= 0.50)
+        return {"key" : "unit.patrol", 
+        "offset_x" : unit_activity_offset_x,
+        "offset_y" : - unit_activity_offset_y};
+      else // indicates unit is on the return journey of its patrol
+        return {"key" : "unit.patrol_back",
+        "offset_x" : unit_activity_offset_x,
+        "offset_y" : - unit_activity_offset_y};
+    } // Otherwise, show GO_AND icon if last order isn't a move, or else show standard GOTO icon:
     return {"key" : (punit['orders'][punit['orders'].length-1]['order'] != ORDER_ACTION_MOVE ? "unit.go_and" : "unit.goto"),
         "offset_x" : unit_activity_offset_x,
         "offset_y" : - unit_activity_offset_y};
@@ -2319,6 +2329,11 @@ function fill_layer2_sprite_array(ptile, pcity)
       result_sprites.push({"key" : "base.buoy_mg",
                            "offset_y" : -normal_tile_height / 2});
     }
+    if (typeof EXTRA_TILE_CLAIM !== 'undefined' && tile_has_extra(ptile, EXTRA_TILE_CLAIM)) {
+      result_sprites.push({"key" : "base.tileclaim_mg",
+                           "offset_y" : -normal_tile_height / 2});
+      result_sprites.push(get_base_flag_sprite(ptile));
+    }
     if (tile_has_extra(ptile, EXTRA_FORTRESS)
              || (typeof EXTRA_NAVALBASE !== 'undefined' 
              && tile_has_extra(ptile, EXTRA_NAVALBASE))) 
@@ -2533,7 +2548,7 @@ function create_unit_offset_arrays()
           mx -= 6; my += 4;
           break;
       case "Explorer":                     
-          dx -= 0; dy += 2; 
+          dx -= 3; dy -= 5; 
           break;
       case "Falconeers":
           dx += 2; dy += 2;
@@ -2543,6 +2558,9 @@ function create_unit_offset_arrays()
           sx = 8;
           dx -= 11; dy -= 6;
           vx -= 14; vy += 10;
+          break;
+      case "Founders":
+          dx -= 6; dy -= 1;
           break;
       case "Frigate":
           vx += 3;  vy += 2;
@@ -2679,6 +2697,9 @@ function create_unit_offset_arrays()
           break;
       case "Trireme":
           vx += 2; vy += 1;
+          break;
+      case "Tribesmen":
+          dx += 2;
           break;
       case "Wagon":
           dx -= 9; dy -= 5;
