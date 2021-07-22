@@ -113,6 +113,7 @@ bv_extras get_tile_infrastructure_set(const struct tile *ptile,
 
       tile_remove_extra(missingset, pextra);
       extra_type_iterate(pdependant) {
+        if (pextra == pdependant) continue;
         if (tile_has_extra(ptile, pdependant)) {
           if (!are_reqs_active(NULL, NULL, NULL, NULL, missingset,
                                NULL, NULL, NULL, NULL, NULL,
