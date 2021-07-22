@@ -563,6 +563,9 @@ function unit_has_goto(punit)
     return false;
   }
 
+  // patrol unit is a type of goto
+  if (punit['orders_vigilant'] && punit['orders_repeat']) return true;
+
   // check has_orders: cancelled orders on autoexplore leaves goto_tile set
   return (punit['has_orders'] && punit['goto_tile'] != -1);
 }
