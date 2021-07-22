@@ -97,6 +97,7 @@ var focuslock = false;    // whether map centers and locks always on focused uni
 var save_options_on_exit = true;
 var fullscreen_mode = false;
 var replace_capital_i = null; // option to fix bad capital I in some default sans fonts
+var play_music = true;
 
 /** Local Options: **/
 var scroll_narrow_x = false;  // wider scrollable table rows for mobile to see more info
@@ -217,13 +218,14 @@ function init_options_dialog()
     }
   });
 
+  
   if (audio != null && !audio.source.src) {
-    if (!supports_mp3()) {
-      audio.load("/music/" + music_list[Math.floor(Math.random() * music_list.length)] + ".ogg");
-    } else {
-      audio.load("/music/" + music_list[Math.floor(Math.random() * music_list.length)] + ".mp3");
+    if (supports_mp3()) {
+      pick_next_track();
+      if (play_music) audio.play();
     }
   }
+  
 
   $(".setting_button").tooltip({
     show: { delay:200, effect:"none", duration: 0 }, hide: {delay:120, effect:"none", duration: 0}
