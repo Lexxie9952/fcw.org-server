@@ -25,26 +25,57 @@ format_version=20
 ;                 as part of some sentences, so try to make it descriptive
 ;                 and sensible.
 ; helptxt       = displayed in the help for unit types with this flag (optional)
+; ************** ANTYHING WHICH CHANGES THE SEQUENCE OR NUMBER OF THE USER CUSTOM FLAGS BELOW SHOULD BE
+; ************** MADE COMPATIBLE BETWEEN MP+ AND MP2 RULESETS AND POSSIBLY CLASSIC AND CIV2CIV3 SO THAT
+; ************** THERE IS UNIFORMITY IN FCW CLIENT which checks these flags based on index #. Not keeping
+; ************** uniformity results in loss of features as ability to check these flags would be lost.
+; *** if you remove one, make it "unused" and add to it later, so the index of the others does not mess up
 flags =
   { "name", "helptxt"
     _("Airbase")
-    _("Transform")
+    _("Transform"), _("Can do advanced Terrain transformations.")
+    _("CanRoad"), _("Able to build Roads.")   ;unused, req'd for uniformity
+    _("CanFortress"), _("Can build Forts and Fortresses") ;uniformity
+    _("Bombarder"), _("Can safely conduct Ranged Attacks.") ;uniformity
     _("AirAttacker"), _("Very bad at attacking AEGIS.")
     _("Horse"), _("Attack value halved when attacking Pikemen.")
+    _("FootSoldier"), _("Knights defend at 2 when attacked by this unit.") ;uniformity
     _("Helicopter"), _("Defends very badly against Fighters.")
-    _("Unbribable")
-    _("HelpWonder")
+    _("Submarine"), _("Attack value reduced against some ships.") ;uniformity
+    _("Unbribable"), _("Can't be bribed.")
+    _("TradeRoute"), _("Can establish a foreign trade route (must travel to target city).") ;uniformity
+    _("HelpWonder"), _("Can help build a Wonder in any non-hostile city.")
+    _("Capturer"),   _("Can capture some enemy units.") ;uniformity
+    _("Capturable"), _("Can be captured by some enemy units.") ;uniformity
     _("Cities")
-    _("AddToCity")
-    _("Nuclear")
+    _("AddToCity"), _("Can add itself to the population of a city.")
+    _("Nuclear"), _("Can perform a Nuclear Detonation obliterating all adjacent tiles.")
+    _("Missile"), _("AEGIS and Armor II have a defense bonus against this unit.") ;uniformity
+    _("Well-Digger"), _("Can dig a well and irrigate tiles with no water.") ;uniformity
     _("Infra"), _("Can build infrastructure.")
+    _("Proletarian"), _("Controllable only by Communist governments.") ;uniformity
     _("Paratroopers"), _("Can be paradropped from a friendly city or suitable base.")
     _("Marines"), _("Can launch attack from non-native tiles.")
- ;   _("NeverProtects"), _("Does not protect other units on its tile.")   ; UNCOMMENT THIS IF NOT USING SCL'S PATCH FOR THIS FLAG
- ;;;   _("NeverBlocked"), _("Bypasses unreachable units when attacking a tile.")   ; UNCOMMENT THIS IF NOT USING LEXXIE'S PATCH FOR THIS FLAG
+;; ALL FLAGS BELOW ARE unused but maintained for uniform indexing, so FCW can test user flags  
+    _("Expellable"), _("Can be peacefully expelled from foreign tiles.")
+    _("AirProtector"), _("Is Unreachable AND can protect its tile from units unable to attack this unit.")
+    _("CantReachAir"), _("Unable to attack air units.")
+    _("FortBuster"), _("Defending Forts get no bonus. +33% attack bonus vs. the 2× defense of a Fortress.")
+    _("FortressBuster"), _("Defending Fortresses get no bonus.")
+    _("AntiAir"), _("Anti-Air bonus of this unit is less effective against Stealth, which has a 25% bonus against this unit.")
+;;;   _("NeverProtects"), _("Does not protect other units on its tile.")   ; UNCOMMENT THIS IF NOT USING SCL'S PATCH FOR THIS FLAG
+;;;   _("NeverBlocked"), _("Bypasses unreachable units when attacking a tile.")   ; UNCOMMENT THIS IF NOT USING LEXXIE'S PATCH FOR THIS FLAG
+    _("MultiSlot"), _("Cities with proper requirements can produce more than one of these per turn.") ;uncomment if you don't have slot_control patch
+    _("CanHide"), _("In appropriate terrain, this unit can make a Hideout, which will conceal all land units on the tile.")
+    _("WillNever")
+;;; The following flag MUST be #34 position to work with hack in movement.c which allows transported AAA to defend on non-native:
+;;; this comment can be removed when we have some smarter way for unit_can_defend_here(..) to get ruleset control.
+    _("TransportDefender"), _("Can defend while transported on non-native tiles.")
+    _("NonMilAttack"), _("Has military capacity but for peaceful purposes, can enter territories with whom you are at Peace")
+    _("Cant_Pillage"), _("Unable to pillage tiles.")
   }
 
-; Names for custom unit class flags. There can be up to 8 of these.
+; Names for custom unit class flags. There can be up to 12 of these.
 ; name          = rule name; In some circumstances user may see this
 ;                 as part of some sentences, so try to make it descriptive
 ;                 and sensible.
@@ -53,6 +84,12 @@ flags =
 class_flags =
   { "name", "helptxt"
     _("AttFromNonNative"), _("Can launch attack from non-native tiles.")
+    _("Missile")
+    _("CanPillage")
+;unused in this ruleset, maintain uniform sequence of user class flags:
+    _("Airliftable"), _("Can be airlifted if it has remaining moves.")
+    _("BorderPolice"), _("Military units from this class can peacefully expel certain foreign units.")
+    _("CargoRestrained"), _("Can't attack as Cargo. Must first unload.")
   }
 
 [veteran_system]

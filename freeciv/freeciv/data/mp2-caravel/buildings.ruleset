@@ -344,8 +344,8 @@ sabotage	= 100
 sound		= "b_courthouse"
 sound_alt	= "b_generic"
 helptext	= _("\
-Courthouses reduce corruption by about half (60% rounded down),\
- eliminate tile output penalties for Anarchy and Despotism, and\
+Courthouses reduce corruption by half, eliminate\
+ tile output penalties for Anarchy and Despotism, and\
  give +1 shield of free unit upkeep.\
 "), _("\
  Diplomatic combat gets a bonus of ¼ of base odds. (At general base odds\
@@ -357,6 +357,7 @@ Courthouses reduce corruption by about half (60% rounded down),\
 "), _("\
  Cost to incite revolt in the city is 2× if empty and 4× if occupied.\
 "), _("\
+ A unique bonus that only a local Courthouse provides to its city: \
  Diplomats can’t establish embassies unless you permit it through\
  Cease-fire or Peace. (Spies require a Police Station to block them.)\
 ")
@@ -426,20 +427,18 @@ sabotage	= 50
 sound		= "b_fortifications"
 sound_alt	= "b_generic"
 helptext	= _("\
-Fortifications give 1.75× defense to every unit in a City vs. attacks by Land.\
+Fortifications give 1.5× defense to every unit in a City vs. attacks by Land.\
  This bonus is reduced if attacked by Catapult or the units to which it upgrades.\
  Fortifications prevent population loss when a defending unit is killed. \n\
 "), _("\
-Fortifications integrate with some kinds of terrain, raising the defense bonus\
- of Swamp, Forest, and Jungle by +17%. This natural terrain bonus\
- persists independently from ANY and ALL other considerations. (Forest and\
- Swamp become 1.5× and Jungle becomes 1.67×.) \n\
+Fortifications raise the terrain bonus of Lowlands tiles by +17%.\
+ (Flatland is 1.17×, Forest and Swamp are 1.5×, and Jungle is 1.67×.) \n\
 "), _("\
-Terrain changes make Fortifications unassailable by Siege Rams.\
+Fortifications are unassailable by Siege Rams.\
  If an enemy attempts sabotage, odds of success are halved. \n\
 "), _("\
 ➤ This improvement offers no bonus when City Walls are in place, except for\
- any bonus to the terrain. \n\
+ any extra bonus to the terrain. \n\
 ➤ Material from Fortifications is directly useful in building City Walls. AFTER\
  making City Walls, you can sell Fortifications with a full return of gold cost,\
  making the later upgrade have no loss in investment.\
@@ -512,7 +511,7 @@ sound		= "b_homeland_security"
 sound_alt	= "b_generic"
 helptext	= _("\
 You can build Homeland Security offices if you own the Supreme Court. Homeland Security\
- gives the same bonus as a Courthouse vs. all hostile diplomatic acts. As a ministry of the\
+ gives the same bonus as a Courthouse vs. hostile diplomatic acts. As a ministry of the\
  Supreme Court, it has no upkeep and cannot be sabotaged.\
 ")
 
@@ -715,7 +714,8 @@ A Hydro Plant boosts the +50% bonus of the Factory and Mfg. Plant to\
  Fusion Reactor can have an active effect in a city. \n\
 "), _("\
 ➤ The sale price of a Coal Plant becomes 85% original value\
- instead of 50% original value, after a city has built a Hydro Plant.\
+ instead of 50% original value, after a city has built a Hydro Plant. \n\n\
+Hydro Plants can only be built in cities adjacent to rivers.\
 ")
 
 [building_nuclear_plant]
@@ -848,10 +848,9 @@ sound		= "b_police_station"
 sound_alt	= "b_generic"
 helptext	= _("\
 Police Stations neutralize the unhappiness caused by two military units or two\
- unhappy Foreign Nationals. Their effect is identical with (ands adds with)
- the effect of Martial Law. Under Nationalism the effect is +1, affecting three\
+ unhappy Foreign Nationals. Under Nationalism the effect is +1, affecting three\
  citizens. Police Stations prevent Estalishing Embassy without first agreeing to\
- Cease-Fire or Peace. They also prevent Investigate City under all governments\
+ Cease-Fire or Peace. They also half the odds to Investigate City under all governments\
  except Democracy.\
 "), _("\
  Diplomatic combat gets a bonus of ¼ of base odds. (At general base odds\
@@ -1455,7 +1454,7 @@ Angkor Wat gives you the glorious ancient city of\
  splendor and culture. In Despotism and Monarchy,\
  cities of size 3+ get the tile celebration bonus even if not celebrating.\
  All cities gain +1 happy citizen. Work done on Jungle and Swamp tiles\
- is 50% faster. In addition, the cost of Elephants is reduced by 5\
+ is 2× faster. In addition, the cost of Elephants is reduced by 5\
  shields. \n\
 "), _("
 This Wonder is never obsolete, but it only has an effect in\
@@ -1512,7 +1511,7 @@ helptext	= _("\
 The Appian Way is the first flat stone paved highway that can drain\
  rainwater. The Appian Way gives the following bonuses：\n\
  ➤ Trade Routes get a slight increase in ongoing revenue \n\
- If not in Foreign territory：\n
+ If not in Foreign territory：\n\
  ➤ Tile Workers gain +⅓ move and build Roads at twice the speed. \n\
  ➤ Wagons, Chariots, and Foot soldiers gain +⅓ move when starting \n\
   their turn on a Road. \n\
@@ -1588,7 +1587,8 @@ Improvements to Despotism：\n\
   • base corruption is 26% (was 37%) \n\
   • distance corruption is 3% (was 4%) \n\
   • penalties eliminated on Lowland tiles. \n\
-Other bonus：\n\
+Other bonuses：\n\
+  • awards blueprints for Code of Laws (or Writing if the former is known.) \n\
   • cities with no Temple get +1 content citizen\n\n\
 The Code of Hammurabi is a Civil Wonder. You can build only one Civil Wonder. \n\
 Obsolete by：Democracy.\
@@ -1615,8 +1615,8 @@ sabotage	= 0
 sound		= "w_colossus"
 sound_alt	= "w_generic"
 helptext	= _("\
-In the city where this wonder is built, +1 trade is added to every tile\
- worked. The city center tile gets an additional +1 trade in\
+In the coastal city where this wonder is built, +1 trade is added to every\
+ tile worked. The city center tile gets an additional +1 trade in\
  addition to the first bonus. Until you discover Steam Engine, the\
  Colossus city receives a discount on all Commerce units：\n\
  Boat：            7 shields. \n\
@@ -1624,7 +1624,6 @@ In the city where this wonder is built, +1 trade is added to every tile\
  Caravan, Galley：25 shields. \n\
  Train：          30 shields. \n\
  Caravel：        35 shields. \n\
- Cargo Ship：     40 shields. \n\
  Obsolete by：Automobile.\
 ")
 
@@ -1816,7 +1815,8 @@ sabotage	= 0
 sound		= "w_great_wall"
 sound_alt	= "w_generic"
 helptext	= _("\
-The Great Wall protects your cities with City Walls. It takes three\
+The Great Wall protects your cities with City Walls. Unlike normal\
+ City Walls, The Great Wall is impervious to Siege Rams. It takes three\
  turns after founding a city for the Great Wall to extend protection\
  to the new city. Also, the city must have been founded by you, or\
  assimilated to where less than a fifth of its citizens are foreign. \n\
@@ -2073,7 +2073,8 @@ sound		= "w_lighthouse"
 sound_alt	= "w_generic"
 helptext	= _("\
 Gives all your sea units 2 additional movement points,\
- while increasing their vision. Obsolete by：Miniaturization.\
+ while increasing their vision. Must be built adjacent\
+ to Ocean. Obsolete by：Miniaturization.\
 ")
 
 [building_magellans_expedition]
@@ -2098,7 +2099,7 @@ sound_alt	= "w_generic"
 helptext	= _("\
 All your new sea units built in cities in your nation start with an\
  additional veteran level (this is cumulative with any Port Facility.)\
- This wonder is never obsolete.\
+ Must be built in a coastal city. This wonder is never obsolete.\
 ")
 
 [building_magna_carta]
@@ -2212,11 +2213,14 @@ helptext	= _("\
 The Mausoleum of Mausolos brings a spirit of prudence to your nation, giving\
  subtle security and reduced corruption. This makes your people happier. \n\
 "), _("
-➤ Counts as half a Courthouse in all your cities with no Courthouse or\
- Supreme Court. \n\
-➤ A Courthouse or City Walls gives each city +1 content citizen, unless
+➤ A Courthouse or City Walls gives each city +1 content citizen, unless\
  unhappy about military activity. \n\
 ➤ Having both the above adds another +1 happy citizen. \n\
+➤ Acts like half a Courthouse in cities which lack Courthouse or\
+ Supreme Court effects: \n\
+   • 30% corruption reduction. \n\
+   • Tile corruption penalty begins at 4 in Anarchy and Despotism (not 3). \n\
+   • 10% bonus vs diplomatic actions and combat (10%) \n\
 ➤ Adds (at least) +35% to the cost of bribing your units. \n\
 ➤ Prevents your cities from being incited to revolt. \n\
 ➤ Halves the odds of investigating your cities (85% / 2 = 43%). \n\
@@ -2238,7 +2242,7 @@ graphic         = "b.medici_bank"
 graphic_alt     = "-"
 obsolete_by	=
     { "type", "name",     "range", "survives"
-      "Tech", "Robotics", "Player", FALSE
+      "Tech", "Fusion Power", "Player", FALSE
     }
 build_cost	= 300
 upkeep		= 0
@@ -2249,7 +2253,7 @@ helptext	= _("\
 The Medici Bank gives every city with a Bank +7% in gold revenue,\
  and the rate on shield-to-coinage exchange also increases by +7%.\
  This wonder has no effect under Communism. \n\
-Obsolete by：Robotics.\
+Obsolete by：Fusion Power.\
 ")
 
 [building_michelangelos_chapel]
@@ -2301,7 +2305,7 @@ sabotage	= 0
 sound		= "w_olympics"
 sound_alt	= "w_generic"
 helptext	= _("\
-The Olympics were really something special.\
+THIS WONDER DOES NOTHING AND IS RESERVED FOR FUTURE RELEASE.\
  ")
 
 [building_oracle]
@@ -2412,7 +2416,7 @@ sound		= "w_roman_colosseum"
 sound_alt	= "w_generic"
 helptext	= _("\
 The Roman Colosseum centralizes and gives prestige to the entertainment\
- events of your empire. Every city with an Amphiteater gains +1 happy\
+ events of your empire. Every city with an Amphitheater gains +1 happy\
  citizen and +1 luxury. In all your cities, Entertainers add 3 luxury\
  instead of 2. This means your Entertainers equal the net trade value of\
  Taxmen, Scientists, and Merchants. This Wonder is never obsolete.\
@@ -2693,6 +2697,11 @@ reqs	=
       "Building", "Women's Suffrage",  "Player", FALSE,     TRUE
       "Building", "Women's Suffrage​",  "Player", FALSE,     TRUE ;has a zero width space in it, for the great wonder
       "Building", "Women's Suffrage​",  "World",  TRUE,      TRUE ;has a zero width space in it, for the great wonder
+      "Gov",      "Despotism",         "Player", FALSE,     TRUE
+      "Gov",      "Monarchy",          "Player", FALSE,     TRUE
+      "Gov",      "Theocracy",         "Player", FALSE,     TRUE
+      "Gov",      "Communism",         "Player", FALSE,     TRUE
+      "Gov",      "Nationalism",       "Player", FALSE,     TRUE
     }
 graphic	= "b.womens_suffrage"
 graphic_alt	= "-"
@@ -2721,6 +2730,11 @@ reqs	=
       "Tech",     "Industrialization", "Player", TRUE,      FALSE
       "Building", "Women's Suffrage",  "Player", FALSE,     TRUE ;can't own small wonder.
       "Building", "Women's Suffrage​",  "Player", FALSE,     TRUE ;can't own great wonder. has a zero width space in it, for the great wonder
+      "Gov",      "Despotism",         "Player", FALSE,     TRUE
+      "Gov",      "Monarchy",          "Player", FALSE,     TRUE
+      "Gov",      "Theocracy",         "Player", FALSE,     TRUE
+      "Gov",      "Communism",         "Player", FALSE,     TRUE
+      "Gov",      "Nationalism",       "Player", FALSE,     TRUE
     }
 graphic	= "b.womens_suffrage"
 graphic_alt	= "-"
@@ -2766,9 +2780,10 @@ helptext	= _("\
 The Ziggurat moves the production bonus from your Palace to the Ziggurat city,\
  and gains the same corruption reduction and happy bonus effects. \n \
 The Ziggurat gathers all ruling functions of early civilization into one\
- wondrous building. It counts as a Granary, Temple, and Barracks. Its defensive\
- architecture counts as Fortifications and also gives 1.75× defense\
- against ship attacks. \n\
+ wondrous building. It counts as a Granary, Temple, and Barracks. In cities\
+ without Walls or Fortifications, it gives a defense bonus similar to\
+ Fortifications, but gives a guaranteed 1.75× defense, regardless of attacker\
+ or terrain type. \n\
 The Ziggurat must be built adjacent to a river. \n\
 Obsolete by：Monarchy or switching from Despotism.\
 ")

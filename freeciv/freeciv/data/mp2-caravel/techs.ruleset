@@ -185,7 +185,7 @@ req2     = "The Republic"
 flags    = ""
 graphic     = "a.banking"
 graphic_alt = "-"
-helptext = _("Upkeep changes to 1 gold for Infantry. Prevents Philosophy from awarding bonus tech.")
+helptext = _("Infantry Upkeep becomes 1 gold. Blocks Philosophy bonus. Expires first time capital-capital trade bonus.")
 cost = 364
 
 [advance_bridge_building]
@@ -258,7 +258,7 @@ req2     = "Explosives"
 flags    = ""
 graphic     = "a.combustion"
 graphic_alt = "-"
-helptext = _("+1 move for Trains.")
+helptext = _("Obsoletes Balloon. +1 move for Trains.")
 cost = 3810
 
 [advance_communism]
@@ -287,7 +287,7 @@ req2     = "Metallurgy"
 flags    = ""
 graphic     = "a.conscription"
 graphic_alt = "-"
-helptext = _("Musketeers obsolete. Cities can build >1 unit. Old infantry convert to Musketeers.")
+helptext = _("Obsoletes Musketeers, Falconeers. Cities can build >1 unit. Old infantry convert to Musketeers.")
 cost = 1890
 
 [advance_construction]
@@ -412,7 +412,7 @@ req2     = "None"
 flags    = ""
 graphic     = "a.theocracy"
 graphic_alt = "-"
-helptext = _("Allows government Theocracy.")
+helptext = _("Obsoletes Pax Dei. Allows government Theocracy.")
 cost = 725
 
 [advance_fusion_power]
@@ -462,6 +462,7 @@ flags    = ""
 graphic     = "a.horseback_riding"
 graphic_alt = "-"
 cost = 24
+helptext = _("Travellers spread news to the world if discovered before Turn 15.")
 
 [advance_industrialization]
 name     = _("Industrialization")
@@ -573,7 +574,7 @@ req1     = "Automobile"
 req2     = "The Corporation"
 graphic     = "a.mass_production"
 graphic_alt = "-"
-helptext = _("+25% population pollution.")
+helptext = _("Obsoletes Goods. +25% population pollution.")
 cost = 4680
 
 [advance_mathematics]
@@ -600,7 +601,7 @@ req2     = "University"
 flags    = ""
 graphic     = "a.metallurgy"
 graphic_alt = "-"
-helptext = _("Obsoletes Catapult.")
+helptext = _("Obsoletes Catapult, Siege Ram.")
 cost = 1340
 
 [advance_miniaturization]
@@ -893,7 +894,7 @@ req2     = "Industrialization"
 flags    = ""
 graphic     = "a.the_corporation"
 graphic_alt = "-"
-helptext = _("Obsoletes Caravan. +25% Coinage for Stock Exchange")
+helptext = _("Obsoletes Caravan, Wagon. +25% Coinage for Stock Exchange")
 cost = 2900
 
 [advance_the_republic]

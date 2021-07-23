@@ -29,6 +29,12 @@ name = _("MP2 Caravel")
 ; There`s no separate versioning in rulesets part of main freeciv distribution
 ;version = ""
 
+; When about to migrate ruleset under a new name in the future version, set
+; alt_dir to the name of that future directory. Then savegames saved with this
+; version of freeciv can find the ruleset from the correct place when loading
+; the savegame to the future version.
+;alt_dir = ""
+
 ; Summary of the ruleset
 ; /* TRANS: In the client, this is displayed alongside the contents of
 ;    README.txt, which are not localized. */
@@ -46,6 +52,22 @@ capabilities = "std-terrains"
 [options]
 global_init_techs=""
 global_init_buildings="Palace"
+popup_tech_help = FALSE
+
+[tileset]
+; If preferred tileset is set, clients that support the feature will suggest
+; using that tileset with the ruleset.
+preferred = "amplio2"
+
+[soundset]
+; If preferred soundset is set, clients that support the feature will suggest
+; using that soundset with the ruleset.
+; preferred = ""
+
+[musicset]
+; If preferred musicset is set, clients that support the feature will suggest
+; using that musicset with the ruleset.
+; preferred = ""
 
 [civstyle]
 ; Value added to city pollution
@@ -110,6 +132,12 @@ tech_loss_allow_holes     = FALSE
 ; Whether civil war is possible at all
 civil_war_enabled        = TRUE
 
+; How many percents each celebrating city affects chance of civil war
+civil_war_bonus_celebrating = -5
+
+; How many percents each disorder city affects chance of civil war
+civil_war_bonus_unhappy     = 5
+
 ; Comma separated list of things to happen, in addition to death
 ; of owner, when gameloss unit dies
 ; "CivilWar"   - Part of the empire remains, controlled by a new player
@@ -142,6 +170,10 @@ paradrop_to_transport    = FALSE
 ;            If still more gold is needed, then random units with gold
 ;            upkeep are disbanded.
 gold_upkeep_style = "City"
+
+; How many points of output one basic unit consists of. Typically you
+; want this to be some 10^n.
+output_granularity = 1
 
 [illness]
 ; Whether plagues (illness) are possible
@@ -198,14 +230,44 @@ slow_invasions = TRUE
 ; have only fractional moves left.
 tired_attack = TRUE
 
+; With some rules it`s possible that neither side of a combat dies.
+; Set this to TRUE if unit should never gain veterancy from such a combat.
+only_killing_makes_veteran = FALSE
+
+; Percentage of population lost by a city after nuclear attack. If set to
+; 100 city is destroyed along with all the units. If set to 0 city does not
+; loose population. Any value below 100 means the city can never be
+; destroyed completely using nuclear. NOTE THIS SETTING MAY BE HARD-CODED DIFFERENTLY IN FCW SERVER
+nuke_pop_loss_pct = 50
+
+; Percentage chance of a city defender surviving nuclear attack. When set
+; to 50 roughly half of defenders will survive nuclear attack. When set to
+; 0 no defenders will survive. When set to 100 all defenders will survive.
+nuke_defender_survival_chance_pct = 0
+
 [auto_attack]
 ; An auto attack may be triggered when another unit moves to an adjacent
 ; tile and the autoattack server setting is enabled. The following details
 ; are ruleset controlled.
+;   attack_actions - the actions to try during an auto attack in the order
+;                    they should be tried.
+;   if_attacker    - this requirement vector must be true before a unit even
+;                    considers to auto attack.
+;   NOTE: "will_never" was replaced by if_attacker req vector in 2021.
 ;   will_never - units with this unit type flag will never auto attack.
+
+;possible attack_actions= "Capture Units", "Bombard", "Attack", "Suicide Attack"
+attack_actions= "Attack"
 
 ; Non-fighters don't auto-attack.
 will_never = "WillNever"
+
+if_attacker =
+    { "type",         "name",     "range", "present"
+      "DiplRel",      "War",      "Local",  TRUE
+      "MinMoveFrags", "9",        "Local",  TRUE
+      "UnitFlag",     "WillNever", "Local", FALSE  ; in theory, replaces: will_never="WillNever"
+    }
 
 [actions]
 ; If force_trade_route is set to TRUE it is illegal for an actor unit to
@@ -230,7 +292,7 @@ force_explode_nuclear = TRUE
 
 ; If poison_empties_food_stock is set to TRUE a successful "Poison City"
 ; or "Poison City Escape" will empty the food stock.
-poison_empties_food_stock = FALSE
+poison_empties_food_stock = TRUE
 
 ; The maximum distance from the actor unit to the target of the "Bombard"
 ; action. The value 1 means that the targets must be on a tile adjacent to
@@ -238,6 +300,49 @@ poison_empties_food_stock = FALSE
 ; restriction. The maximum distance can`t be smaller than the minimum
 ; distance.
 bombard_max_range = 1
+
+; The maximum distance from the actor unit to the target of the "Bombard 2"
+; action. The value 1 means that the targets must be on a tile adjacent to
+; the actor unit. The special value "unlimited" lifts the maximum distance
+; restriction. The maximum distance can`t be smaller than the minimum
+; distance.
+bombard_2_max_range = 2
+
+; The maximum distance from the actor unit to the target of the "Bombard 3"
+; action. The value 1 means that the targets must be on a tile adjacent to
+; the actor unit. The special value "unlimited" lifts the maximum distance
+; restriction. The maximum distance can`t be smaller than the minimum
+; distance.
+bombard_3_max_range = 3
+
+; The maximum distance from the actor unit to the target of the
+; "Explode Nuclear" action. The value 0 means that the target tile must be
+; the tile of the actor unit. The value 1 means that the tile must be a tile
+; adjacent to the actor unit. The special value "unlimited" lifts the
+; maximum distance restriction. The maximum distance can`t be smaller than
+; the minimum distance.
+explode_nuclear_max_range = 0
+
+; The maximum distance from the actor unit to the target of the
+; "Nuke City" action. The value 1 means that the tile must be a tile
+; adjacent to the actor unit. The special value "unlimited" lifts the
+; maximum distance restriction. The maximum distance can`t be smaller than
+; the minimum distance.
+nuke_city_max_range = 1
+
+; The maximum distance from the actor unit to the target of the
+; "Nuke Units" action. The value 1 means that the tile must be a tile
+; adjacent to the actor unit. The special value "unlimited" lifts the
+; maximum distance restriction. The maximum distance can`t be smaller than
+; the minimum distance.
+nuke_units_max_range = 1
+
+; The maximum distance from the actor unit to the target of the "Airlift Unit"
+; action. The value 1 means that the targets must be on a tile adjacent to
+; the actor unit. The special value "unlimited" lifts the maximum distance
+; restriction. The maximum distance can`t be smaller than the minimum
+; distance.
+airlift_max_range = "unlimited"
 
 ; What each action should be called when showing them to the player.
 ; The first %s should be before the mnemonic of the action. A Freeciv client
@@ -267,7 +372,10 @@ ui_name_sabotage_city_escape = _("%sSabotage City Escape%s")
 ui_name_targeted_sabotage_city_escape = _("Targeted %sSabotage%s")
 
 ; /* TRANS: Industrial _Sabotage (3% chance of success). */
-;ui_name_targeted_sabotage_city = _("%sBatter Walls%s")
+;ui_name_targeted_sabotage_city = _("%Destroy Building%s")
+
+; /* TRANS: Industrial _Sabotage Production (3% chance of success). */
+ui_name_sabotage_city_production_escape = _("Industrial %sSabotage Production%s")
 
 ; /* TRANS: Incite a _Revolt (3% chance of success). */
 ui_name_incite_city = _("Incite a %sRevolt%s")
@@ -309,7 +417,7 @@ ui_name_investigate_city = _("%sInvestigate City%s")
 ;ui_name_investigate_city_spend_unit = _("%sInvestigate City (spends the unit)%s")
 
 ; /* TRANS: Help _build Wonder (100% chance of success). */
-ui_name_help_wonder = _("Help %sbuild Wonder%s")
+ui_name_help_wonder = _("Help %sBuild Wonder%s")
 
 ; /* TRANS: Rec_ycle Unit (100% chance of success). */
 ui_name_recycle_unit = _("Rec%sycle Unit%s")
@@ -326,8 +434,14 @@ ui_name_found_city = _("%sBuild City%s")
 ; /* TRANS: _Add to City (100% chance of success). */
 ui_name_join_city = _("%sAdd to City%s")
 
-; /* TRANS: Explode _Nuclear (100% chance of success). */
-ui_name_explode_nuclear = _("Explode %sNuclear%s")
+; /* TRANS: Explode _Nuclear In Place (100% chance of success). */
+ui_name_explode_nuclear = _("Detonate %sNuke%s")
+
+; /* TRANS: _Nuke City (100% chance of success). */
+ui_name_nuke_city = _("%sNuke City%s")
+
+; /* TRANS: _Nuke Units (100% chance of success). */
+ui_name_nuke_units = _("%sNuke Units%s")
 
 ; /* TRANS: Destroy _City (100% chance of success). */
 ;ui_name_destroy_city = _("Destroy %sCity%s")                 ;ready to be enabled if we think of how
@@ -336,73 +450,90 @@ ui_name_explode_nuclear = _("Explode %sNuclear%s")
 ui_name_home_city = _("Set %sHome City%s")
 
 ; /* TRANS: _Upgrade Unit (100% chance of success). */
-ui_name_upgrade_unit = _("%sUpgrade Unit%s")
+ui_name_upgrade_unit = _("%sUpgrade%s")
 
 ; /* TRANS: Drop _Paratrooper (100% chance of success). */
-ui_name_paradrop_unit = _("Drop %sParatrooper%s")
+ui_name_paradrop_unit = _("%sParadrop%s")
 
 ; /* TRANS: _Airlift to City (100% chance of success). */
-ui_name_airlift_unit = _("%sAirlift to City%s")
+ui_name_airlift_unit = _("%sAirlift%s")
 
 ; /* TRANS: _Attack (100% chance of success). */
 ui_name_attack = _("%sAttack%s")
-
-; /* TRANS: _Explode Missile (100% chance of success). */
-ui_name_suicide_attack = _("%sExplode Missile%s")
 
 ; /* TRANS: Eliminate _Spy (100% chance of success). */
 ui_name_spy_attack = _("Eliminate %sSpy%s")
 
 ; /* TRANS: _Bombard (100% chance of success). */
-ui_name_bombard = _("Range%sd Attack%s")
+ui_name_bombard = _("%sSpecial Attack%s")
 
-;UPGRADE
 ; /* TRANS: _Explode Missile (100% chance of success). */
-;ui_name_suicide_attack = _("%sExplode Missile%s")
+ui_name_suicide_attack = _("%sExplode Missile%s")
 
 ; /* TRANS: _Conquer City (100% chance of success). */
 ui_name_conquer_city = _("%sConquer City%s")
 
 ; /* TRANS: _Transform Terrain (3% chance of success). */
- ui_name_transform_terrain = _("%sTransform Terrain%s")
+ui_name_transform_terrain = _("%sTransform Terrain%s")
 
-; /* TRANS: Transform by _Irrigate (3% chance of success). */
- ui_name_irrigate_tf = _("Transform by %sIrrigate%s")
+; /* TRANS: Transform by _Cultivating (3% chance of success). */
+ui_name_cultivate = _("%sCultivate%s")
 
-; /* TRANS: Transform by _Mine (3% chance of success). */
- ui_name_mine_tf = _("Transform by %sMine%s")
+; /* TRANS: Transform by _Planting (3% chance of success). */
+ui_name_plant = _("%sPlant%s")
 
 ; /* TRANS: Pilla_ge (100% chance of success). */
- ui_name_pillage = _("Pilla%sge%s")
+ui_name_pillage = _("Pilla%sge%s")
 
 ; /* TRANS: Clean _Pollution (100% chance of success). */
- ui_name_clean_pollution = "Clean %sPollution%s"
+ui_name_clean_pollution = "Clean %sPollution%s"
 
 ; /* TRANS: Clean _Fallout (100% chance of success). */
- ui_name_clean_fallout = "Clean %sFallout%s"
+ui_name_clean_fallout = "Clean %sFallout%s"
 
 ; /* TRANS: _Fortify (100% chance of success). */
- ui_name_fortify = _("%sFortify%s")
+ui_name_fortify = _("%sFortify%s")
 
 ; /* TRANS: Build _Road (100% chance of success). */
- ui_name_road = _("Build %sRoad%s")
+ui_name_road = _("Build %sRoad%s")
 
 ; /* TRANS: Build _Canal (100% chance of success). */
- ui_name_canal = _("Build %Canal%s")
- ui_name_waterway = _("Build Water%way%s")
+ui_name_canal = _("Build %Canal%s")
+ui_name_waterway = _("Build Water%way%s")
 
 ; /* TRANS: _Build Base (100% chance of success). */
- ui_name_build_base = _("%sBuild Base%s")
+ui_name_build_base = _("%sBuild Base%s")
 
 ; /* TRANS: Build _Mine (100% chance of success). */
- ui_name_build_mine = _("Build %sMine%s")
+ui_name_build_mine = _("Build %sMine%s")
 
 ; /* TRANS: Build _Irrigation (100% chance of success). */
- ui_name_irrigate = _("Build %sIrrigation%s")
+ui_name_irrigate = _("%sIrrigate%s")
 
-; NOT IMPLEMENTED IN SERVER YET
- ; /* TRANS: _Unload (100% chance of success). */
-;ui_name_transport_unload = _("%sUnload%s")
+; /* TRANS: _Deboard (100% chance of success). */
+ui_name_transport_deboard = _("%sDeboard%s")
+
+; /* TRANS: _Board (100% chance of success). */
+ui_name_transport_board = _("%sBoard%s")
+
+; /* TRANS: _Unload (100% chance of success). */
+ui_name_transport_unload = _("%sUnload%s")
+
+; /* TRANS: _Disembark (100% chance of success). */
+ui_name_transport_disembark = _("%sDisembark%s")
+
+; /* TRANS: _Embark (100% chance of success). */
+ui_name_transport_embark = _("%sEmbark%s")
+
+; Three Blank ruleset defined user actions. See README.actions
+; See the section "Ruleset defined actions" is doc/README.actions
+; Example: set up "User Action 1"
+;ui_name_user_action_1                = _("%sDisrupt Supply Lines%s")
+;user_action_1_target_kind            = "individual units"
+;user_action_1_min_range              = 1
+;user_action_1_max_range              = 3
+;user_action_1_actor_consuming_always = FALSE
+;</end user defined actions>
 
 ; Suppress automatic help text generation about what enables and/or
 ; disables the following actions.
@@ -548,6 +679,16 @@ actor_reqs    =
       "MinMoveFrags", "9",             "Local", TRUE
     }
 
+[actionenabler_sabotage_city_production]
+action = "Sabotage City Production Escape"
+actor_reqs    =
+    { "type",         "name",          "range", "present"
+      "DiplRel",      "War",           "Local", TRUE
+      "UnitFlag",     "Spy",           "Local", TRUE
+      "UnitState",    "OnLivableTile", "Local", TRUE
+      "MinMoveFrags", "1",             "Local", TRUE
+      "UnitType",     "Siege Ram",     "Local", FALSE
+    }
 
 ; ************************ ESTABLISH EMBASSY ***********************
 ; DIPLOMAT: normal establish embassy--if not at war 
@@ -638,10 +779,6 @@ actor_reqs    =
       "DiplRel",      "Foreign",       "Local", TRUE
       "UnitState",    "Transported",   "Local", FALSE
     }
-;target_reqs  =
-;    { "type",        "name",              "range",    "present"
-;      "Building",    "Police Station",    "City",     FALSE
-;    }
 [actionenabler_investigate_city_tribesmen_explorer]
 action       = "Investigate City"
 actor_reqs    =
@@ -653,27 +790,7 @@ actor_reqs    =
       "DiplRel",      "Foreign",       "Local", TRUE
       "UnitState",    "Transported",   "Local", FALSE
     }
-;target_reqs  =
-;    { "type",        "name",              "range",    "present"
-;      "Building",    "Police Station",    "City",     FALSE
-;    }
-;Democracy now irrelevant to action enabler, it just doesn't get the bonus in effects.ruleset.
-;Democracy is unable to block Investigate City.
-;[actionenabler_investigate_city_democracy]
-;action       = "Investigate City"
-;actor_reqs    =
-;    { "type",         "name",          "range", "present"
-;      "UnitFlag",     "Diplomat",      "Local", TRUE
-;      "UnitState",    "OnLivableTile", "Local", TRUE
-;      "MinMoveFrags", "1",             "Local", TRUE
-;      "DiplRel",      "Foreign",       "Local", TRUE
-;      "UnitState",    "Transported",   "Local", FALSE
-;      "UnitFlag",     "Spy",           "Local", FALSE
-;    }   
-;target_reqs  =
-;    { "type",        "name",          "range",    "present"
-;      "Gov",         "Democracy",     "Player",   TRUE 
-;    }
+
 [actionenabler_investigate_city_satellite]
 action       = "Investigate City"
 actor_reqs    =
@@ -682,39 +799,16 @@ actor_reqs    =
       "DiplRel",      "Foreign",       "Local", TRUE
     }    
 
-;Spy has Diplomat flag and there is no more differentiation of
-;Diplomats can only do Investigate City (spends unit)
-;[actionenabler_investigate_city_spy]
-;action       = "Investigate City"
-;actor_reqs    =
-;    { "type",         "name",          "range","present"
-;      "UnitFlag",     "Spy",           "Local", TRUE
-;      "UnitType",     "Siege Ram",     "Local", FALSE
-;      "UnitState",    "OnLivableTile", "Local", TRUE
-;      "MinMoveFrags", "1",             "Local", TRUE
-;      "DiplRel",      "Foreign",       "Local", TRUE
-;    }
-;target_reqs  =
-;    { "type",        "name",           "range",    "present"
-;      "Building",    "Police Station", "City",    FALSE  
-;    }
-;Spy has Diplomat flag and there is no more differentiation of
-;Diplomats can only doi Investigate City (spends unit)
-;[actionenabler_investigate_city_spy_democracy]
-;action       = "Investigate City"
-;actor_reqs    =
-;    { "type",         "name",          "range", "present"
-;      "UnitFlag",     "Spy",           "Local", TRUE
-;      "UnitType",     "Siege Ram",     "Local", FALSE
-;      "UnitState",    "OnLivableTile", "Local", TRUE
-;      "MinMoveFrags", "1",             "Local", TRUE
-;      "UnitState",    "Transported",   "Local", FALSE
-;      "DiplRel",      "Foreign",       "Local", TRUE
-;    }
-;target_reqs  =
-;    { "type",        "name",          "range",    "present"
-;      "Gov",         "Democracy",     "Player",   TRUE 
-;    }
+;Spy can investigate city even if transported...
+[actionenabler_investigate_city_spy]
+action       = "Investigate City"
+actor_reqs    =
+    { "type",         "name",          "range","present"
+      "UnitFlag",     "Spy",           "Local", TRUE
+      "UnitType",     "Siege Ram",     "Local", FALSE
+      "MinMoveFrags", "1",             "Local", TRUE
+      "DiplRel",      "Foreign",       "Local", TRUE
+    }
 ; ***********************************************************
 
 [actionenabler_poison_city]
@@ -830,7 +924,6 @@ actor_reqs    =
     }
 target_reqs  =
     { "type",     "name",      "range",  "present"
-;      "Gov",      "Democracy", "Player", FALSE       ;changed to 3x cost in effects
       "Building", "Palace",    "City",   FALSE
       "Building", "Ecclesiastical Palace", "City",   FALSE
       "Building", "Mausoleum of Mausolos", "Player", FALSE
@@ -851,7 +944,6 @@ actor_reqs    =
     }
 target_reqs  =
     { "type",     "name",      "range",  "present"
-;      "Gov",      "Democracy", "Player", FALSE      ;changed to 3x cost in effects
       "Building", "Palace",    "City",   FALSE
       "Building", "Ecclesiastical Palace", "City",   FALSE
       "Building", "Mausoleum of Mausolos", "Player", FALSE
@@ -873,7 +965,6 @@ target_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "Unbribable", "Local", FALSE
       "CityTile", "Center", "Local", FALSE
-;      "Gov", "Democracy", "Player", FALSE        ;changed to 3x cost in effects 
       "MaxUnitsOnTile", "1", "Local", TRUE
     }
 
@@ -919,38 +1010,17 @@ action = "Establish Trade Route"
 actor_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "TradeRoute", "Local", TRUE
-;      "Tech", "Trade", "Player", TRUE  ; simplified: can always do trade, but Trade tech increases trade revenue.
+      "UnitState", "Transporting", "Local", FALSE ; avoids bug where land cargo "drowns" even on land terrain
       "MinMoveFrags", "1", "Local", TRUE
-;     "DiplRel", "War", "Local", FALSE  ; allows establishing during war then awaiting diplomatic relation to activate trade income.
+      "UnitState", "HasHomeCity", "Local", TRUE
     }
-
-[actionenabler_traderoute_boat]
-action = "Establish Trade Route"
-actor_reqs    =
-    { "type",   "name", "range", "present"
-      "UnitFlag", "TradeRoute", "Local", TRUE
-      "MinMoveFrags", "1", "Local", TRUE
-      "UnitType", "Boat", "Local", TRUE
-;     "DiplRel", "War", "Local", FALSE  ; allows establishing during war then awaiting diplomatic relation to activate trade income.
-    }
-
-;Caravans that exist before Trade tech must be start units. Start units are allowed/encouraged to do what they're made for.
-[actionenabler_traderoute_startunit]
-action = "Establish Trade Route"
-actor_reqs    =
-    { "type",   "name", "range", "present"
-      "Tech", "Trade", "Player", FALSE
-      "MinMoveFrags", "1", "Local", TRUE
-      "UnitType", "Caravan", "Local", TRUE
-;     "DiplRel", "War", "Local", FALSE  ; allows establishing during war then awaiting diplomatic relation to activate trade income.
-    }    
 
 [actionenabler_marketplace]
 action = "Enter Marketplace"
 actor_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "TradeRoute", "Local", TRUE
-;      "Tech", "Trade", "Player", TRUE
+      "UnitState", "Transporting", "Local", FALSE ; avoids bug where land cargo "drowns" even on land terrain
       "MinMoveFrags", "1", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
     }
@@ -964,9 +1034,8 @@ action = "Help Wonder"
 actor_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "HelpWonder", "Local", TRUE
-;      "Tech", "Trade", "Player", TRUE
+      "UnitState", "Transporting", "Local", FALSE ; avoids bug where land cargo "drowns" even on land terrain
       "DiplRel", "War", "Local", FALSE
-      "UnitType", "Caravel", "Local", FALSE 
     }
 target_reqs    =
     { "type",   "name", "range"
@@ -979,23 +1048,7 @@ action = "Help Wonder"
 actor_reqs    =
     { "type",   "name", "range", "present"
       "UnitFlag", "HelpWonder", "Local", TRUE
-;      "Tech", "Trade", "Player", TRUE
-      "DiplRel", "War", "Local", FALSE
-      "UnitType", "Caravel", "Local", FALSE
-    }
-target_reqs    =
-    { "type",   "name", "range", "present"
-      "BuildingGenus", "SmallWonder", "Local", TRUE
-;     "Building", "Palace", "Local", FALSE
-    }
-
-; Allow no-home commerce units to be used on a first wonder: 
-[actionenabler_help_build_wonder_starting_caravan]
-action = "Help Wonder"
-actor_reqs    =
-    { "type",   "name", "range", "present"
-      "UnitFlag", "HelpWonder", "Local", TRUE
-      "UnitState", "HasHomeCity", "Local", FALSE
+      "UnitState", "Transporting", "Local", FALSE ; avoids bug where land cargo "drowns" even on land terrain
       "DiplRel", "War", "Local", FALSE
     }
 target_reqs    =
@@ -1085,6 +1138,9 @@ target_reqs    =
       "MaxUnitsOnTile", "1", "Local", TRUE
       "Extra", "Fort", "Local", FALSE
       "Extra", "Fortress", "Local", FALSE
+      "Extra", "Naval Base", "Local", FALSE
+      "Extra", "Castle", "Local", FALSE
+      "Extra", "Bunker", "Local", FALSE
     }
 ;CAPTURING LAND COMMERCE UNIT CARRYING CARGO:
 ;Transported commercial cargo does not prevent capture!
@@ -1106,6 +1162,9 @@ target_reqs    =
       "MaxUnitsOnTile","1",          "Local", FALSE ; only applies to stack
       "Extra",         "Fort",       "Local", FALSE
       "Extra",         "Fortress",   "Local", FALSE
+      "Extra",         "Naval Base", "Local", FALSE
+      "Extra",         "Castle",     "Local", FALSE
+      "Extra",         "Bunker",     "Local", FALSE
     ;exclusions to only leave commerce and cargo:
       "UnitFlag",      "Settlers",   "Local", FALSE ; workers and foot units who make hideouts
       "UnitFlag",      "NonMil",     "Local", TRUE  ; all military excluded
@@ -1299,7 +1358,8 @@ actor_reqs    =
    }
 target_reqs    =
     { "type",   "name", "range", "present"
-      "UnitClass",  "Air",        "Local", FALSE
+;      "CityTile",  "Center",      "Local", FALSE
+      "UnitClass", "Air",         "Local", FALSE
       "UnitClass", "AirProtect",  "Local", FALSE
       "UnitClass", "Missile",     "Local", FALSE
       "UnitClass", "Helicopter",  "Local", FALSE
@@ -1411,6 +1471,27 @@ actor_reqs    =
       "MinMoveFrags", "1", "Local", TRUE
     }
 
+;Reserved for Surgical Strike Actions Later
+;TODO? Siege Ram could now use this instead of Spy Flag hacky solution.
+;[actionenabler_surgical_strike_building]
+;action = "Surgical Strike Building"
+;actor_reqs    =
+;    { "type",     "name",                  "range", "present"
+;;      "UnitType", "Ground Strike Fighter", "Local", TRUE
+;;      "UnitFlag", "Building_Bomber",       "Local", TRUE
+;      "DiplRel",  "War",                   "Local", TRUE
+;    }
+; Reserved for "production bombing" future feature; will need
+; action_odds effects that are reduced by sam batteries and etc.
+;[actionenabler_surgical_strike_production]
+;action = "Surgical Strike Production"
+;actor_reqs    =
+;    { "type",     "name",              "range", "present"
+;      "UnitFlag", "Production_Bomber", "Local", TRUE
+;      "DiplRel",  "War",               "Local", TRUE
+;      "UnitState", "Transported",      "Local", FALSE
+;    }    
+
 ;Land expel: must be not on a mountain nor an air expeller/expellee
 [actionenabler_border_police]
 action = "Expel Unit"
@@ -1423,6 +1504,7 @@ actor_reqs    =
       "UnitType",      "Warriors",       "Local",  FALSE      ;Warriors are too weak to expel
       "UnitType",      "Tribesmen",      "Local",  FALSE      ;Tribesmen too.
       "UnitState",     "OnDomesticTile", "Local",  TRUE
+      "UnitState",     "OnNativeTile",   "Local",  TRUE       ;Transported units can expel on rivers but not from ocean
       "DiplRel",       "Foreign",        "Local",  TRUE
       "DiplRel",       "Team",           "Local",  FALSE
       "DiplRel",       "Alliance",       "Local",  FALSE
@@ -1467,6 +1549,28 @@ actor_reqs    =
     { "type",         "name",       "range", "present", "quiet"
       "UnitFlag",     "Nuclear",    "Local",  TRUE,     FALSE
       "ServerSetting","nukes_minor","World",  TRUE,     FALSE
+    }
+
+[actionenabler_nuke_city]
+action="Nuke City"
+actor_reqs=
+    { "type",         "name",    "range"
+      "UnitFlag",     "Nuclear", "Local"
+      "MinMoveFrags", "1",       "Local"
+      "DiplRel",      "War",     "Local"
+    }
+
+[actionenabler_nuke_units]
+action="Nuke Units"
+actor_reqs=
+    { "type",         "name",    "range"
+      "UnitFlag",     "Nuclear", "Local"
+      "MinMoveFrags", "1",       "Local"
+      "DiplRel",      "War",     "Local"
+    }
+target_reqs=
+    { "type",     "name",   "range", "present"
+      "CityTile", "Center", "Local", FALSE
     }
 
 ;DESTROY CITY
@@ -2006,6 +2110,7 @@ actor_reqs    =
     { "type",           "name",           "range", "present"
       "UnitClassFlag",  "CanOccupyCity",  "Local", TRUE
       "UnitClassFlag",  "CargoRestrained","Local", FALSE
+      "UnitType",       "Transport Helicopter", "Local", FALSE
       "UnitFlag",       "NonMil",         "Local", FALSE
       "DiplRel",        "War",            "Local", TRUE
       "MinMoveFrags",   "1",              "Local", TRUE
@@ -2141,16 +2246,17 @@ actor_reqs    =
     }
 
 [actionenabler_irrigate_tf]
-action        = "Irrigate TF"
+action        = "Cultivate"
 actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "CanHide",      "Local", FALSE
+      "UnitFlag",      "CanClaim",     "Local", FALSE
 ;      "UnitType",      "Legion",       "Local", FALSE
       "UnitType",      "Proletarians", "Local", FALSE
     }
 [actionenabler_irrigate_tf_prole]
-action        = "Irrigate TF"
+action        = "Cultivate"
 actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local",  TRUE
@@ -2159,18 +2265,19 @@ actor_reqs    =
     }
 
 [actionenabler_mine_tf_outside_city]
-action        = "Mine TF"
+action        = "Plant"
 actor_reqs    =
     { "type",          "name",        "range", "present"
       "UnitFlag",      "Settlers",    "Local", TRUE
       "UnitFlag",      "CanHide",      "Local", FALSE
+      "UnitFlag",      "CanClaim",     "Local", FALSE
 ;      "UnitType",      "Legion",      "Local", FALSE 
       "UnitType",      "Proletarians","Local", FALSE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
       "CityTile",      "Center",      "Local", FALSE
     }
 [actionenabler_mine_tf_outside_city_prole]
-action        = "Mine TF"
+action        = "Plant"
 actor_reqs    =
     { "type",          "name",        "range",  "present"
       "UnitFlag",      "Settlers",    "Local",  TRUE
@@ -2179,12 +2286,13 @@ actor_reqs    =
       "CityTile",      "Center",      "Local",  FALSE
     }
 [actionenabler_mine_tf_inside_city] ;you can't plant a forest in an existing city
-action        = "Mine TF"
+action        = "Plant"
 actor_reqs    =
     { "type",          "name",      "range", "present"
       "UnitFlag",      "Settlers",  "Local", TRUE
 ;      "UnitType",      "Legion",    "Local", FALSE
       "UnitFlag",      "CanHide",      "Local", FALSE
+      "UnitFlag",      "CanClaim",     "Local", FALSE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
       "UnitType",      "Proletarians", "Local", FALSE
       "CityTile",      "Center",    "Local", TRUE
@@ -2258,21 +2366,23 @@ actor_reqs    =
 
 ;******************************** ROADS ************************
 [actionenabler_road]
-action        = "Road"
+action        = "Build Road"
 actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitFlag",      "CanHide",      "Local",   FALSE
+      "UnitFlag",      "CanClaim",     "Local",   FALSE
       "UnitType",      "Proletarians", "Local",   FALSE
       "UnitType",      "Tribesmen",    "Local",   FALSE
       "UnitState",     "Transported",  "Local",   FALSE    ; Prevent quay exploit
     }
 [actionenabler_road1] ; can't road while transported in foreign lands
-action        = "Road"
+action        = "Build Road"
 actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitFlag",      "CanHide",      "Local",   FALSE
+      "UnitFlag",      "CanClaim",     "Local",   FALSE
       "UnitType",      "Proletarians", "Local",   FALSE
       "UnitState",     "Transported",  "Local",   TRUE
     }
@@ -2281,11 +2391,12 @@ target_reqs    =
         "CityTile", "Claimed", "Local", FALSE
     }
 [actionenabler_road2_sea_bridge]
-action        = "Road"
+action        = "Build Road"
 actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitFlag",      "CanHide",      "Local",   FALSE
+      "UnitFlag",      "CanClaim",     "Local",   FALSE
       "Tech",          "Explosives",   "Player",  TRUE
       "UnitType",      "Proletarians", "Local",   FALSE
       "UnitType",      "Tribesmen",    "Local",   FALSE
@@ -2296,7 +2407,7 @@ target_reqs    =
       "TerrainClass", "Land",    "CAdjacent",TRUE
     }
 [actionenabler_road_tribesmen]
-action        = "Road"
+action        = "Build Road"
 actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
@@ -2305,7 +2416,7 @@ actor_reqs    =
       "MinYear",       "-2400",        "World",   FALSE   ; they get old
     }
 [actionenabler_road_prole]
-action        = "Road"
+action        = "Build Road"
 actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
@@ -2314,7 +2425,7 @@ actor_reqs    =
       "UnitState",     "Transported",  "Local",   FALSE    ; Prevent quay exploit
     }
 [actionenabler_road_prole1] ; can't road while transported in foreign lands
-action        = "Road"
+action        = "Build Road"
 actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
@@ -2327,7 +2438,7 @@ target_reqs    =
         "CityTile", "Claimed", "Local", FALSE
     }
 [actionenabler_road_prole2_sea_bridge]
-action        = "Road"
+action        = "Build Road"
 actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
@@ -2341,7 +2452,7 @@ target_reqs    =
       "TerrainClass", "Land",    "CAdjacent",TRUE
     }
 [actionenabler_legion_road]
-action        = "Road"
+action        = "Build Road"
 actor_reqs    =
     { "type",          "name",          "range",   "present"
       "UnitFlag",      "Settlers",      "Local",   TRUE
@@ -2352,7 +2463,7 @@ actor_reqs    =
 ; Don't force legions to road BEFORE making a fortress 
 ; from fortress being "domestic national territory"
 [actionenabler_legion_road2]
-action        = "Road"
+action        = "Build Road"
 actor_reqs    =
     { "type",          "name",          "range",   "present"
       "UnitFlag",      "Settlers",      "Local",   TRUE
@@ -2397,23 +2508,68 @@ actor_reqs    =
 action        = "Build Base"
 actor_reqs    =
     { "type",          "name",            "range", "present"
-       "UnitFlag",      "CanHide",         "Local",  TRUE
        "UnitState",     "OnLivableTile",   "Local",  TRUE
        "DiplRel",       "Foreign",         "Local",  FALSE
+; Hard contradiction between Tile Claim and Hideout is necessary so that
+; the actionenabler for one never allows the other to be made. TODO: 
+; req is just a CanHide unit, when actionenabler req can check base type:
+      "UnitFlag",      "CanHide",         "Local",  TRUE       
+      "MaxUnitsOnTile", "1",              "Local",  TRUE   ; have to bring this back if we want CanHide and CanClaim in the same unit
     }
 [actionenabler_build_hideout_unclaimed]
 action        = "Build Base"
 actor_reqs    =
     { "type",          "name",            "range", "present"
-       "UnitFlag",      "CanHide",         "Local",  TRUE
        "UnitState",     "OnLivableTile",   "Local",  TRUE
+; Hard contradiction between Tile Claim and Hideout is necessary so that
+; the actionenabler for one never allows the other to be made. TODO: 
+; req is just a CanHide unit, when actionenabler req can check base type:
+      "UnitFlag",      "CanHide",         "Local",  TRUE
+      "MaxUnitsOnTile", "1",              "Local",  TRUE      ; have to bring this back if we want CanHide and CanClaim in the same unit
     }
 target_reqs    =
     { "type",   "name", "range", "present"
       "CityTile", "Claimed", "Local", FALSE
     }
 ;*******************************************************
+[actionenabler_build_tileclaim_domestic]
+action        = "Build Base"
+actor_reqs    =
+    { "type",          "name",            "range", "present"
+       "UnitState",     "OnLivableTile",   "Local",  TRUE
+       "DiplRel",       "Foreign",         "Local",  FALSE
+; Hard contradiction between Tile Claim and Hideout is necessary so that
+; the actionenabler for one never allows the other to be made. TODO: 
+; req is just a military unit, when actionenabler req can check base type:
+       "UnitFlag",      "CanClaim",        "Local",  TRUE
+       "MaxUnitsOnTile", "1",              "Local",  FALSE; need a diplo + 1 other unit.
+    }
+target_reqs    =
+    { "type",     "name",    "range","present"
+      "CityTile", "Claimed", "Local", TRUE
+    }
 
+[actionenabler_build_tileclaim_unclaimed]
+action        = "Build Base"
+actor_reqs    =
+    { "type",          "name",            "range", "present"
+       "UnitState",     "OnLivableTile",   "Local",  TRUE
+       "DiplRel",       "Foreign",         "Local",  TRUE
+       "Extra",         "Tile Claim",      "CAdjacent", TRUE
+       "DiplRel",       "Armistice",       "Local",  FALSE
+       "DiplRel",       "Peace",           "Local",  FALSE
+       "DiplRel",       "Alliance",        "Local",  FALSE
+; Hard contradiction between Tile Claim and Hideout is necessary so that
+; the actionenabler for one never allows the other to be made. TODO: 
+; req is just a military unit, when actionenabler req can check base type:
+       "MaxUnitsOnTile", "1",              "Local",  FALSE; need a diplo + 1 other unit.
+       "UnitFlag",      "CanClaim",        "Local",  TRUE
+    }
+target_reqs    =
+    { "type",     "name",    "range","present"
+      "CityTile", "Claimed", "Local", TRUE
+    }
+;*******************************************************
 [actionenabler_mining]
 action        = "Build Mine"
 actor_reqs    =
@@ -2421,6 +2577,7 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitFlag",      "Well-Digger",  "Local",   FALSE
       "UnitFlag",      "CanHide",      "Local",   FALSE
+      "UnitFlag",      "CanClaim",     "Local",   FALSE
       "UnitType",      "Proletarians", "Local",   FALSE
       "UnitType",      "Tribesmen",    "Local",   FALSE
     }
@@ -2435,7 +2592,7 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitType",      "Tribesmen",    "Local",   TRUE
       "UnitState",     "Transported",  "Local",   FALSE
-      "MinYear",       "-2400",        "World",   FALSE   ; they get old
+      "MinYear",       "-2000",        "World",   FALSE   ; they get old
     }
 target_reqs    =
     { "type",        "name", "range", "present"
@@ -2460,6 +2617,7 @@ actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitFlag",      "CanHide",      "Local",   FALSE
+      "UnitFlag",      "CanClaim",     "Local",   FALSE
       "UnitType",      "Proletarians", "Local",   FALSE
       "UnitType",      "Tribesmen",    "Local",   FALSE
       "UnitFlag",      "Well-Digger",  "Local",   FALSE
@@ -2489,6 +2647,7 @@ actor_reqs    =
     { "type",          "name",         "range",   "present"
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitFlag",      "CanHide",      "Local",   FALSE
+      "UnitFlag",      "CanClaim",     "Local",   FALSE
       "UnitType",      "Proletarians", "Local",   FALSE
       "UnitFlag",      "Well-Digger",  "Local",   FALSE
       "UnitType",      "Tribesmen",    "Local",   FALSE
@@ -2534,6 +2693,7 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "CanHide",      "Local", FALSE
+      "UnitFlag",      "CanClaim",     "Local", FALSE
       "Tech",          "Monarchy",     "Player",FALSE
       "Gov",           "Despotism",    "Player",TRUE
       "Building",      "Chand Baori",  "Player",TRUE
@@ -2550,6 +2710,7 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
       "UnitFlag",      "CanHide",      "Local", FALSE
+      "UnitFlag",      "CanClaim",     "Local", FALSE
       "UnitType",      "Proletarians", "Local", FALSE
       "UnitType",      "Tribesmen",    "Local", FALSE
     }
@@ -2563,7 +2724,7 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitType",      "Tribesmen",    "Local", TRUE
-      "MinYear",       "-2400",        "World", FALSE ; they get old
+      "MinYear",       "-2000",        "World", FALSE ; they get old
     }
 target_reqs    =
     { "type",        "name",     "range", "present"
@@ -2588,6 +2749,7 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "CanHide",      "Local", FALSE
+      "UnitFlag",      "CanClaim",     "Local", FALSE
       "UnitType",      "Proletarians", "Local", FALSE
       "UnitType",      "Tribesmen",    "Local", FALSE
       "UnitFlag",      "Well-Digger",  "Local", FALSE
@@ -2602,7 +2764,7 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitType",      "Tribesmen",    "Local", TRUE
-      "MinYear",       "-2400",        "World", FALSE ; they get old
+      "MinYear",       "-2000",        "World", FALSE ; they get old
     }
 target_reqs    =
     { "type",    "name",     "range", "present"
@@ -2627,6 +2789,7 @@ target_reqs    =
 ;    { "type",          "name",         "range", "present"
 ;      "UnitFlag",      "Settlers",     "Local", TRUE
 ;      "UnitFlag",      "CanHide",      "Local", FALSE
+;      "UnitFlag",      "CanClaim",     "Local", FALSE
 ;      "UnitType",      "Proletarians", "Local", FALSE
 ;      "UnitFlag",      "Well-Digger",  "Local", FALSE
 ;    }
@@ -2655,6 +2818,7 @@ target_reqs    =
 ;      "UnitFlag",      "Well-Digger",  "Local", FALSE
 ;      "UnitType",      "Proletarians", "Local", FALSE
 ;      "UnitFlag",      "CanHide",      "Local", FALSE
+;      "UnitFlag",      "CanClaim",     "Local", FALSE
 ;    }
 ;target_reqs    =
 ;    { "type",    "name",       "range", "present"
@@ -2673,18 +2837,73 @@ target_reqs    =
 ;      "Extra",   "Irrigation", "CAdjacent", TRUE
 ;    }
 
-; NOT IMPLEMENTED IN SERVER YET
-;[actionenabler_unload]
-;action        = "Transport Unload"
-;actor_reqs    =
-;    { "type",      "name",         "range"
-;      "UnitState", "Transporting", "Local"
-;    }
-;target_reqs    =
-;    { "type",      "name",          "range"
-;      "UnitState", "OnLivableTile", "Local"
-;      "UnitState", "Transported",   "Local"
-;    }
+[actionenabler_deboard]
+action        = "Transport Deboard"
+actor_reqs    =
+    { "type",      "name",          "range"
+      "UnitState", "OnLivableTile", "Local"
+      "UnitState", "Transported",   "Local"
+    }
+target_reqs    =
+    { "type",      "name",         "range"
+      "UnitState", "Transporting", "Local"
+    }
+
+;TO DO: this gives ruleset control over logical requirements for
+;when units can board as cargo onto transporters. This should be
+;extended and exploited to finally give ruleset supreme control 
+;over smooth minimalist non-exploitable behaviours.
+[actionenabler_board]
+action        = "Transport Board"
+actor_reqs    =
+    { "type",    "name",       "range", "present"
+      "DiplRel", "Armistice",  "Local", FALSE
+      "DiplRel", "War",        "Local", FALSE
+      "DiplRel", "Cease-fire", "Local", FALSE
+      "DiplRel", "Peace",      "Local", FALSE
+      "DiplRel", "Never met",  "Local", FALSE
+    }
+
+;TO DO: this gives ruleset control over logical requirements for
+;when units can unload. Finally ruleset could have supreme control
+;over everything, and it should be taken advantage of.
+[actionenabler_unload]
+action        = "Transport Unload"
+actor_reqs    =
+    { "type",      "name",         "range"
+      "UnitState", "Transporting", "Local"
+    }
+target_reqs    =
+    { "type",      "name",          "range"
+      "UnitState", "OnLivableTile", "Local"
+      "UnitState", "Transported",   "Local"
+    }
+
+;TO DO: this now enables ruleset to control disembarkation stipulations, rather
+;than hard-coded client. This actionenabler should be extended with all the 
+;rules logic for mp2c, and taken advantage of for upgraded/simplified mechanics.
+[actionenabler_disembark]
+action        = "Transport Disembark"
+actor_reqs    =
+    { "type",         "name",        "range"
+      "UnitState",    "Transported", "Local"
+      "MinMoveFrags", "1",           "Local"
+    }
+
+;TO DO: this now enables ruleset to control embarkation stipulations, rather
+;than hard-coded client. This actionenabler should be extended with all the 
+;mp2c logic and taken advantage of for expanded/simplified/upgraded mechanics.
+[actionenabler_embark]
+action        = "Transport Embark"
+actor_reqs    =
+    { "type",         "name",       "range", "present"
+      "MinMoveFrags", "1",          "Local", TRUE
+      "DiplRel",      "Armistice",  "Local", FALSE
+      "DiplRel",      "War",        "Local", FALSE
+      "DiplRel",      "Cease-fire", "Local", FALSE
+      "DiplRel",      "Peace",      "Local", FALSE
+      "DiplRel",      "Never met",  "Local", FALSE
+    }
 
 [borders]
 ; Base border radius from city.
@@ -2767,6 +2986,11 @@ victory_min_points = 1000
 ; How big lead relative to second best player is needed for victory
 victory_lead_pct   = 200
 
+; How much existing history grows each turn. This makes older history
+; of the same original value more valuable as newer history, as it has
+; gained more interest.
+history_interest_pml = 0
+
 ; How much each culture point affects the migration
 ; from/to the city. Each culture point count as this many permilles
 ; of a migration point.
@@ -2787,8 +3011,8 @@ fragments = 0
 ; Calendar fragment names. If name is missing, only a fragment number +1 (so human readable
 ; numbers begin from 1 and not 0) is shown.
 
-;fragment_name0 = "Jan"
-;fragment_name1 = "Feb"
+;fragment_name0 = _("Jan")
+;fragment_name1 = _("Feb")
 ; ...
 
 ; What labels are used for positive and negative years.
@@ -2867,16 +3091,16 @@ negative_label = _("BC")
 [trade]
 settings =
   { "type",       "pct", "cancelling", "bonus"
-    "National",   0,       "Cancel",   "None"
-    "NationalIC", 0,       "Cancel",   "None"
-    "IN",         35,      "Inactive",   "Gold"
-    "INIC",       35,      "Inactive",   "Gold"
-    "Ally",       35,      "Inactive",   "Gold"
-    "AllyIC",     35,      "Inactive",   "Gold"
-    "Enemy",      0,       "Inactive",   "Gold"
-    "EnemyIC",    0,       "Inactive",   "Gold"
-    "Team",       35,      "Inactive",   "Gold"
-    "TeamIC",     35,      "Inactive",   "Gold"
+    "National",   0,      "Cancel",     "None"
+    "NationalIC", 0,      "Cancel",     "None"
+    "IN",         35,     "Inactive",   "Gold"
+    "INIC",       35,     "Inactive",   "Gold"
+    "Ally",       35,     "Inactive",   "Gold"
+    "AllyIC",     35,     "Inactive",   "Gold"
+    "Enemy",      1,      "Inactive",   "Gold"  ; 1 = allow establishing but still get 0 after rounding.
+    "EnemyIC",    1,      "Inactive",   "Gold"
+    "Team",       35,     "Inactive",   "Gold"
+    "TeamIC",     35,     "Inactive",   "Gold"
   }
 
 ; When are goods for the trade route chosen.
@@ -2927,11 +3151,35 @@ from_pct = 150
 ; type                   = Type of the clause, one of "Advance", "Gold", "Map", "Seamap",
 ;                          "City", "Ceasefire", "Peace", "Alliance", "Vision", "Embassy"
 ;
+; giver_reqs             = requirements that the giving side of the clause needs to fulfill
+;                          (see effects.ruleset and README.effects for help on requirements)
+; receiver_reqs          = requirements that the receiving side of the clause needs to fulfill
+;
 ; */ <-- avoid gettext warnings
 
-[clause_advance]
+;[clause_advance_player_has_embassy]
+;type = "Advance"
+;giver_reqs =
+;    { "type", "name", "range"
+;      "DiplRel", "Has real embassy", "Local"
+;    }
+;receiver_reqs =
+;    { "type", "name", "range"
+;    }
+;[clause_advance_player_hosts_embassy]
+;type = "Advance"
+;giver_reqs =
+;    { "type", "name", "range"
+;      "DiplRel", "Hosts real embassy", "Local"
+;    }
+;receiver_reqs =
+;    { "type", "name", "range"
+;    }
+
+[clause_advance_player_hosts_embassy]
 type = "Advance"
 
+; /* TO DO, when the above works, apply req vector to all the below except Ceasefire and Peace */
 [clause_gold]
 type = "Gold"
 
@@ -3102,30 +3350,35 @@ set =
       "autoattack", "enabled", FALSE
       "autoattack_style", 1, FALSE
       "barbarians", "DISABLED", FALSE
+      "blueprints", 80, FALSE
       "borders", "SEE_INSIDE", FALSE
       "casusbelliturns", 12, FALSE       ; how many turns casus belli lasts after an incident, if not reset. will go +1 higher for further incidents. will be reset by any new non-aggression pact.
       "ceasefirelength", 15, FALSE
+      "city_output_style", 1, FALSE      ; whether tiles and specialists have WYSIWYG output, or calculate output for gold/science AFTER city growth/shrink events.
       "contactturns", 10, FALSE
-      "conquercost", 0, FALSE
+      "conquercost", 10, FALSE           ; thefts/conquests award 90% of the tech in blueprint bulbs; if blueprints are off, this means 10% tax on theft/conquest 
       "diplomacy", "ALL", FALSE
       "diplgoldcost", 5, FALSE
-      "diplbulbcost", 10, FALSE
+      "diplbulbcost", 0, FALSE           ; tech trades are overridden by blueprint %; if blueprints are off, there is no tax on theft/conquest.
       "dispersion", 0, FALSE
       "endspaceship", "ENABLED", FALSE 
       "foggedborders", TRUE, FALSE
       "fixedlength", "ENABLED", TRUE      ; Turn done doesn't advance turn if there is a timeout.
-      "freecost", 0, FALSE
+      "freecost", 1, FALSE                ; 0 would get overridden by the 'blueprints' setting: 1 gives 99% of the bulbs of the tech awarded by Philosophy.
       "fulldisorder", "ENABLED", FALSE    ; disorder fully halts one turn of production or buying in a city: closes lots of complex time-consuming micromanaged exploits one would feel obligated to do to be competitive
       "generator", "RANDOM", FALSE
       "gold", 70, FALSE
+      "globalwarming", 50, FALSE
+      "globalwarming_percent", 50, FALSE
       "hideouts", TRUE, FALSE
       "hangry", 1, FALSE                  ; Famine causes disorder. Closes a flaw where people are happier starving with lux than food and less lux. Helps re-balance rapture vs non-rapture govs (martial law/gulag effect/etc.) 
       "huts", 10, FALSE
-      "killcitizen_pct", 60, FALSE        ; regulates % chance of pop kill by city pop-killer units
+      "killcitizen_pct", 50, FALSE        ; regulates % chance of pop kill by city pop-killer units
       "landmass", 63, FALSE
       "looting", "BASE_TRADE", FALSE
       "minplayers", 0, FALSE
       "move_bonus_in_frags", "ENABLED", TRUE   ;locked
+      "multiresearch", "ENABLED", FALSE
       "nationset", "all", FALSE 
       "nuclearwinter_percent", 50, FALSE
       "nukes_minor", "ENABLED", FALSE      ; set to DISABLED to completely disallow nuclear detonations
@@ -3139,7 +3392,7 @@ set =
       "spaceship_travel_time", 225, FALSE
       "specials", 350, FALSE
       "startpos", "DEFAULT", FALSE
-      "startunits", "DDDwwwAccca", "FALSE"
+      "startunits", "DDDwwwAucca", "FALSE"  ;3 Tribesmen, 3 Workers, 1 Caravan, 1 Founders, 2 Settlers, 1 Well-Digger
       "steepness", 20, FALSE
       "techleak", 25, FALSE
       "techlossforgiveness", 200, FALSE
@@ -3150,7 +3403,7 @@ set =
       "tinyisles", "DISABLED", FALSE
       "steepness", 15, FALSE
       "tinyisles", FALSE, FALSE
-      "trademindist", 12, FALSE
+      "trademindist", 15, FALSE
       "trade_revenue_style", "SIMPLE", FALSE   ;"simple" formula based on average trade in both cities (sans distance etc.)
       "trading_city", "DISABLED", FALSE
       "topology", "WRAPX", FALSE

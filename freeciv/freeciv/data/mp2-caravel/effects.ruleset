@@ -89,11 +89,21 @@ reqs	=
 type    = "City_Unhappy_Size"
 value   = 4
 
-; Percent foreign citizens who are unhappy if at war
-; with their original nation
-[effect_angry_conquered]
+; Percent foreign citizens who are unhappy if at war with
+; their original nation. See also effect below this one.
+[effect_angry_conquered_1]
 type    = "Enemy_Citizen_Unhappy_Pct"
-value   = 40
+value   = 45
+
+; The above is rounded down, so use y=mx+b to get a better algorithm:
+; Unhappy = (0.45 * of Foreign citizens) + 1
+[effect_angry_conquered_2]
+type    = "Make_Content"
+value	= -1
+reqs	=
+    { "type",          "name", "range", "present"
+      "MinForeignPct", "1",    "City",  TRUE
+    }
 
 ; Barbarian effects
 [effect_barb1]
@@ -674,7 +684,29 @@ reqs    =
     { "type", "name", "range"
       "UnitType", "Missile Destroyer", "Local"
     }
-; *************************** RULESET FORTIFY BONUS  ************************ 
+[effect_stealth_fighter_stack_escape_odds]
+type    = "Stack_Escape_Pct"
+value   = 7 ; 60% → 67%
+reqs    =
+    { "type", "name", "range"
+      "UnitType", "Stealth Fighter", "Local"
+    }
+[effect_stealth_bomber_stack_escape_odds]
+type    = "Stack_Escape_Pct"
+value   = 7 ; 60% → 67%
+reqs    =
+    { "type", "name", "range"
+      "UnitType", "Stealth Bomber", "Local"
+    }
+[effect_spy_plane_stack_escape_odds]
+type    = "Stack_Escape_Pct"
+value   = 7 ; 60% → 67%
+reqs    =
+    { "type", "name", "range"
+      "UnitType", "Spy Plane", "Local"
+    }
+
+; ******** ruleset bonus ********** FORTIFY and RIVER ********************* 
 [effect_fortified]
 type    = "Fortify_Defense_Bonus"
 value   = 50
@@ -692,6 +724,15 @@ reqs    =
       "UnitState",     "Fortified",    "Local", FALSE
       "UnitClassFlag", "CanFortify",   "Local", TRUE
       "UnitFlag",      "Cant_Fortify", "Local", FALSE
+    }
+
+[effect_terrain_bonus_river]
+type   = "Terrain_Defend_Add_Bonus"
+value = 50
+ reqs	=
+    { "type",          "name",           "range"
+      "Extra",         "River",          "Local"
+      "UnitClassFlag", "TerrainDefense", "Local"
     }
 
 ; ****************************** RECYCLE SHIELDS **************************
@@ -723,7 +764,7 @@ reqs    =
     { "type",     "name",         "range", "present"
       "Action",   "Recycle Unit", "Local", TRUE
       "UnitType", "Tribesmen",    "Local", TRUE
-      "MinYear",  "-2400",        "World", FALSE
+      "MinYear",  "-2000",        "World", FALSE
     }
 
 ;TO DO: this could be used in interesting ways: e.g., foot units, bombers, etc.
@@ -791,7 +832,7 @@ reqs    =
     { "type",     "name",           "range", "present"
       "Extra",    "Fortress",       "Local", TRUE
       "UnitFlag", "FortBuster",     "Local", FALSE
-      "UnitFlag", "FortressBuster", "Local", FALSE 
+      "UnitFlag", "FortressBuster", "Local", FALSE
       "UnitFlag", "AirAttacker",    "Local", FALSE
     }    
 [effect_nonfortbuster_vs_navalbase] ;same as above but for naval base
@@ -802,7 +843,7 @@ reqs    =
     { "type",     "name",           "range", "present"
       "Extra",    "Naval Base",     "Local", TRUE
       "UnitFlag", "FortBuster",     "Local", FALSE
-      "UnitFlag", "FortressBuster", "Local", FALSE 
+      "UnitFlag", "FortressBuster", "Local", FALSE
       "UnitFlag", "AirAttacker",    "Local", FALSE
     }
 [effect_fortressbuster_fortress]
@@ -848,6 +889,60 @@ value   = 8
 reqs    =
     { "type",      "name",       "range"
       "Extra",     "Fortress",   "tile"
+      "Tech",      "Invention",  "Player"
+      "UnitClass", "LandNoKill", "Local"
+    }
+[effect_castle_vision]
+type    = "Unit_Vision_Radius_Sq"
+value   = 8   
+reqs    =
+    { "type",     "name",      "range"
+      "Extra",    "Castle",  "tile"
+      "Tech",     "Invention", "Player"
+      "UnitClass", "Land",     "Local"
+    }
+[effect_castle_vision_1]   ;Marines, AAA
+type    = "Unit_Vision_Radius_Sq"
+value   = 8
+reqs    =
+    { "type",      "name",       "range"
+      "Extra",     "Castle",   "tile"
+      "Tech",      "Invention",  "Player"
+      "UnitClass", "LandAirSea", "Local"
+    }
+[effect_castle_vision_2]     ;Knights
+type    = "Unit_Vision_Radius_Sq"
+value   = 8
+reqs    =
+    { "type",      "name",       "range"
+      "Extra",     "Castle",   "tile"
+      "Tech",      "Invention",  "Player"
+      "UnitClass", "LandNoKill", "Local"
+    }
+[effect_navalbase_vision]
+type    = "Unit_Vision_Radius_Sq"
+value   = 8   
+reqs    =
+    { "type",     "name",      "range"
+      "Extra",    "Naval Base",  "tile"
+      "Tech",     "Invention", "Player"
+      "UnitClass", "Land",     "Local"
+    }
+[effect_navalbase_vision_1]   ;Marines, AAA
+type    = "Unit_Vision_Radius_Sq"
+value   = 8
+reqs    =
+    { "type",      "name",       "range"
+      "Extra",     "Naval Base",   "tile"
+      "Tech",      "Invention",  "Player"
+      "UnitClass", "LandAirSea", "Local"
+    }
+[effect_navalbase_vision_2]     ;Knights
+type    = "Unit_Vision_Radius_Sq"
+value   = 8
+reqs    =
+    { "type",      "name",       "range"
+      "Extra",     "Naval Base",   "tile"
       "Tech",      "Invention",  "Player"
       "UnitClass", "LandNoKill", "Local"
     }
@@ -1010,7 +1105,7 @@ reqs =
     {
       "type",      "name",      "range"
       "UnitType",  "Tribesmen", "Local"
-      "MinYear",   "-2400",     "World"
+      "MinYear",   "-2000",     "World"
     }
 [effect_tribesmen_glaucoma]
 type = "Unit_Vision_Radius_Sq"
@@ -1019,7 +1114,7 @@ reqs =
     {
       "type",      "name",      "range"
       "UnitType",  "Tribesmen", "Local"
-      "MinYear",   "-2400",     "World"
+      "MinYear",   "-2000",     "World"
     }
 ;------------------------------------------------------
 
@@ -1190,6 +1285,7 @@ reqs    =
 [effect_base_unit_upkeep]
 type    = "Upkeep_Factor"
 value	= 1
+
 [effect_upkeep_free_units_anarchy]
 type    = "Unit_Upkeep_Free_Per_City"
 value	= 3
@@ -1611,7 +1707,7 @@ value   = 3
 reqs	=
     { "type",     "name",        "range", "present"
       "Gov",      "Monarchy",    "Player", TRUE
-      "Building", "Magna Carta", "Player", FALSE 
+      "Building", "Magna Carta", "Player", FALSE
     }
 [effect_martial_law_max_magna_carta]
 type    = "Martial_Law_Max"
@@ -2410,28 +2506,18 @@ reqs	=
     { "type", "name", "range"
       "Building", "Fortifications", "City"
     }
-[effect_fortifications_in_forest_swamp_jungle]
-type    = "Defend_Bonus"
+[effect_fortifications_in_lowlands_bonus]
+type    = "Terrain_Defend_Add_Bonus"
 value = 17
 reqs  =
     { "type", "name", "range", "present"
       "Building", "Fortifications", "City", TRUE
-      "Terrain", "Mountains", "Local", FALSE 
-      "Terrain", "Hills",     "Local", FALSE 
-      "Terrain", "Grassland", "Local", FALSE 
-      "Terrain", "Plains",    "Local", FALSE
-      "Terrain", "Desert",    "Local", FALSE
-      "Terrain", "Tundra",    "Local", FALSE
-      "Terrain", "Glacier",    "Local", FALSE
-
-      ;How to get all Land type units by excluding all other types:
-      ;"UnitFlag", "AirAttacker", "Local", FALSE     ; all aircraft classes
-      ;"UnitFlag", "Missile", "Local", FALSE         ; all missiles
-      ;"UnitFlag", "BadCityDefender", "Local", FALSE ; all sea unit classes
+      "Terrain", "Mountains", "Local", FALSE
+      "Terrain", "Hills",     "Local", FALSE
     }
 [effect_fortifications_vs_Land]
 type    = "Defend_Bonus"
-value	= 75  ; 1.75x vs most Land
+value	= 50  ; 1.50x vs most Land; (1.5 * 1.17= 1.755; WAS: 75,1.75 on lowlands)
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Fortifications", "City", TRUE
@@ -2445,7 +2531,7 @@ reqs	=
     }
 [effect_fortifications_vs_Catapult]
 type    = "Defend_Bonus"
-value	= 50 ; 1.5x vs Catapult's 25% bonus
+value	= 25 ; 1.25x vs Catapult's 25% bonus hills,lowlands: 1.25,1.4625; WAS: 1.50,1.50 hills @50%
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Fortifications", "City", TRUE
@@ -2453,23 +2539,27 @@ reqs	=
       "Building", "Great Wall", "Player", FALSE
       "UnitType", "Catapult", "Local", TRUE
     }
-[effect_fortifications_vs_Cannon]
-type    = "Defend_Bonus"
-value	= 25 ; 1.25x vs Cannon's 50% bonus
-reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Fortifications", "City", TRUE
-      "Building", "City Walls", "City", FALSE
-      "Building", "Great Wall", "Player", FALSE
-      "UnitType", "Cannon", "Local", TRUE
-    }
 
-;NOTE: -75% from Artillery nullifies +75% bonus:
+;NOTE: -50% from Cannon nullifies +50% bonus:
+;[effect_fortifications_vs_Cannon]
+;type    = "Defend_Bonus"
+;value	= 0 ; 1.00x vs Cannon's 50% bonus hills,lowlands: 1.00,1.17; WAS: 1.25,1.25 @ 25%
+;reqs	=
+;    { "type", "name", "range", "present"
+;      "Building", "Fortifications", "City", TRUE
+;      "Building", "City Walls", "City", FALSE
+;      "Building", "Great Wall", "Player", FALSE
+;      "UnitType", "Cannon", "Local", TRUE
+;    }
+
+;-75% from Artillery nullifies +50% bonus:  1.00,1.17; WAS: 1.00,1.00 @0%
 ;no need for an effect, therefore.
+
+; HOWITZER nullifies bonus:                       1.00,1.17; WAS: 1.00,1.00 @0%
 
 [effect_fortifications_vs_Land_2]
 type    = "Defend_Bonus"
-value	= 75
+value	= 50
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Fortifications", "City", TRUE
@@ -2479,7 +2569,7 @@ reqs	=
    }
 [effect_fortifications_vs_Land_3]
 type    = "Defend_Bonus"
-value	= 75
+value	= 50
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Fortifications", "City", TRUE
@@ -2867,8 +2957,8 @@ reqs	=
 type    = "Output_Penalty_Tile"
 value   = 100
 reqs	=
-    { "type",       "name",      "range"
-      "Building", "Courthouse", "City", TRUE
+    { "type",     "name",       "range"
+      "Building", "Courthouse", "City"
     }
 [effect_courthouse]
 type    = "Make_Content"
@@ -2899,7 +2989,7 @@ type    = "Unit_Upkeep_Free_Per_City"
 value	= 1
 reqs	=
     { "type",       "name",      "range"
-      "Building", "Courthouse", "City", TRUE
+      "Building", "Courthouse", "City"
       "OutputType", "Shield", "Local"
     }    
 [effect_courthouse_spy_resistance]
@@ -3160,7 +3250,7 @@ value	= 50
 reqs	=
     { "type",       "name",       "range", "present"
       "Building",   "Mfg. Plant", "City",  TRUE
-      "Building",   "Hoover Dam", "City",  FALSE 
+      "Building",   "Hoover Dam", "City",  FALSE
       "OutputType", "Shield",     "Local", TRUE
     }
 
@@ -3521,9 +3611,10 @@ reqs	=
 type	= "Action_Odds_Pct"
 value	= -54 ; +7% - 54% = -47% ... -0.47 * 80 = 37.6% ... 80%-37.6% = 42.4% ... (85%/2 = 42.5%) ✓
 reqs	=
-    { "type",     "name",             "range"
-      "Building", "Police Station",   "City"
-      "Action",   "Investigate City", "Local"
+    { "type",     "name",             "range", "present"
+      "Building", "Police Station",   "City",  TRUE
+      "Action",   "Investigate City", "Local", TRUE
+      "UnitType", "Satellite",        "Local", FALSE
     }
 ;Cancel out the above bonus for democracies:    
 [effect_police_station_investigate_democracy]
@@ -3534,6 +3625,7 @@ reqs	=
       "Building", "Police Station",   "City"
       "Gov",      "Democracy",        "Player" ;Action_Resist_Pct uses target player.
       "Action",   "Investigate City", "Local"
+      "UnitType", "Satellite",        "Local", FALSE
     }
 
 [effect_port_facility]
@@ -4547,8 +4639,8 @@ reqs    =
       "UnitType", "Pikemen", "Local", TRUE 
     }
 ;************************************************************************ Angkor Wat
-[effect_angkor_wat_free_tile_bonus_monarchy]
-type    = "Output_Inc_Tile" ;free celebration tile output
+[effect_angkor_wat_free_tile_bonus_monarchy]  ;free celebration tile output
+type    = "Output_Inc_Tile"
 value   = 1
 reqs	=
     { "type",       "name",       "range"
@@ -4557,14 +4649,13 @@ reqs	=
       "OutputType", "Trade",      "Local"
       "MinSize",    "3",          "City"
     }
-[effect_angkor_wat_free_tile_bonus_despotism]
-type    = "Output_Penalty_Tile" ;free celebration tile output
+[effect_angkor_wat_free_tile_bonus_despotism] ;free celebration tile output
+type    = "Output_Penalty_Tile" 
 value   = 100
 reqs	=
     { "type",       "name",       "range"
       "Building",   "Angkor Wat", "Player"
       "Gov",        "Despotism",  "Player"
-      "OutputType", "Trade",      "Local"
       "MinSize",    "3",          "City"
     }
 [effect_angkor_wat_happy]
@@ -4578,13 +4669,17 @@ reqs	=
       "Gov",      "Communism",  "Player", FALSE
       "Gov",      "Nationalism","Player", FALSE
     }
-[effect_angkor_wat_jungleswamp_irrigate_bonus]
+[effect_angkor_wat_jungleswamp_all_work_bonus]
 type    = "Unit_Work_Pct"
-value   = 50
+value   = 100  ; 100% faster is half the time (or more, since rounded up)
 reqs =
     { "type",     "name",          "range","present"
       "Building", "Angkor Wat",    "Player",TRUE
-      "Activity", "Irrigate",      "Local", TRUE
+      "Gov",      "Democracy",     "Player", FALSE 
+      "Gov",      "Theocracy",     "Player", FALSE 
+      "Gov",      "Communism",     "Player", FALSE 
+      "Gov",      "Nationalism",   "Player", FALSE 
+;      "Activity", "Irrigate",      "Local", TRUE  ; all work is 50% bonus
       "UnitFlag", "Infra",         "Local", TRUE
       "Terrain",  "Grassland",     "Local", FALSE ; exclude everything but Swamp/Jungle.
       "Terrain",  "Plains",        "Local", FALSE
@@ -4595,23 +4690,23 @@ reqs =
       "Terrain",  "Hills",         "Local", FALSE
       "Terrain",  "Mountains",     "Local", FALSE
     }
-[effect_angkor_wat_jungleswamp_plant_bonus]
-type    = "Unit_Work_Pct"
-value   = 50
-reqs =
-    { "type",     "name",          "range","present"
-      "Building", "Angkor Wat",    "Player",TRUE
-      "Activity", "Mine",          "Local", TRUE
-      "UnitFlag", "Infra",         "Local", TRUE
-      "Terrain",  "Grassland",     "Local", FALSE ; exclude everything but Swamp/Jungle.
-      "Terrain",  "Plains",        "Local", FALSE
-      "Terrain",  "Desert",        "Local", FALSE
-      "Terrain",  "Tundra",        "Local", FALSE
-      "Terrain",  "Glacier",        "Local", FALSE
-      "Terrain",  "Forest",        "Local", FALSE
-      "Terrain",  "Hills",         "Local", FALSE
-      "Terrain",  "Mountains",     "Local", FALSE
-    }
+;[effect_angkor_wat_jungleswamp_plant_bonus]
+;type    = "Unit_Work_Pct"
+;value   = 50
+;reqs =
+;    { "type",     "name",          "range","present"
+;      "Building", "Angkor Wat",    "Player",TRUE
+;      "Activity", "Mine",          "Local", TRUE
+;      "UnitFlag", "Infra",         "Local", TRUE
+;      "Terrain",  "Grassland",     "Local", FALSE ; exclude everything but Swamp/Jungle.
+;      "Terrain",  "Plains",        "Local", FALSE
+;      "Terrain",  "Desert",        "Local", FALSE
+;      "Terrain",  "Tundra",        "Local", FALSE
+;      "Terrain",  "Glacier",        "Local", FALSE
+;      "Terrain",  "Forest",        "Local", FALSE
+;      "Terrain",  "Hills",         "Local", FALSE
+;      "Terrain",  "Mountains",     "Local", FALSE
+;    }
 [effect_angkor_wat_elephant_discount]
 type    = "Unit_Build_Cost_Pct"
 value	  = -14 ; 36 - 5 = - 14%
@@ -4772,7 +4867,7 @@ reqs =
       "Gov",      "Despotism",     "Player",TRUE
       "UnitFlag", "Infra",         "Local", TRUE
       "Activity", "Irrigate",      "Local", TRUE
-      "Terrain",  "Hills",         "Local", FALSE 
+      "Terrain",  "Hills",         "Local", FALSE
       "Terrain",  "Desert",        "Local", FALSE
       "Terrain",  "Forest",        "Local", FALSE
       "Terrain",  "Jungle",        "Local", FALSE
@@ -5159,7 +5254,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Magellan's Expedition", "Player", TRUE
       "UnitClass", "Sea", "Local", TRUE
-      "UnitFlag", "NoVeteran", "Local", FALSE      
+      "UnitFlag", "NoVeteran", "Local", FALSE
     }
 [effect_magellans_expedition_a]
 type    = "Veteran_Build"
@@ -5168,7 +5263,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Magellan's Expedition", "Player", TRUE
       "UnitClass", "RiverShip", "Local", TRUE
-      "UnitFlag", "NoVeteran", "Local", FALSE      
+      "UnitFlag", "NoVeteran", "Local", FALSE
     }
 [effect_magellans_expedition_b]
 type    = "Veteran_Build"
@@ -5506,6 +5601,7 @@ reqs    =
       ; - - - - - - - - - - - - - - - - - - - - - - - - - -
       "Building", "Mausoleum of Mausolos","Player", TRUE
     }
+;-----------------------------------------------
 [effect_mausoleum_of_mausolos_bribe]
 type    = "Unit_Bribe_Cost_Pct"
 value	= 35
@@ -5513,7 +5609,7 @@ reqs	=
     { "type",     "name",                  "range"
       "Building", "Mausoleum of Mausolos", "Player"
     }
-[effect_mausoleum_of_mausolos_half_courthouse]
+[effect_mausoleum_of_mausolos_half_courthouse_corruption]
 type    = "Output_Waste_Pct"
 value	= 30
  reqs	=
@@ -5522,6 +5618,40 @@ value	= 30
       "Building",   "Supreme Court",          "Player", FALSE
       "Building",   "Courthouse",             "City",   FALSE
       "OutputType", "Trade",                  "Local",  TRUE
+    }
+[effect_mausoleum_of_mausolos_half_courthouse_tile_corruption]
+type    = "Output_Penalty_Tile"
+value	= 1
+ reqs	=
+    { "type",       "name",                   "range", "present"
+      "Building",   "Mausoleum of Mausolos",  "Player", TRUE
+      "Building",   "Supreme Court",          "Player", FALSE
+      "Building",   "Courthouse",             "City",   FALSE
+      "Gov",        "Monarchy",               "Player", FALSE
+      "Gov",        "Republic",               "Player", FALSE
+      "Gov",        "Democracy",              "Player", FALSE
+      "Gov",        "Theocracy",              "Player", FALSE
+      "Gov",        "Communism",              "Player", FALSE
+      "Gov",        "Nationalism",            "Player", FALSE
+    }
+[effect_mausoleum_half_courthouse_spy_resistance]
+type	= "Spy_Resistant" ;13% reduction of 50% base chance is 6.5% bonus. 50%-6.5%=43.5% success rate
+value	= 13
+ reqs	=
+    { "type",       "name",                   "range", "present"
+      "Building",   "Mausoleum of Mausolos",  "Player", TRUE
+      "Building",   "Supreme Court",          "Player", FALSE
+      "Building",   "Courthouse",             "City",   FALSE
+    }
+[effect_mausoleum_half_courthouse_hostile_diplomat]
+type	= "Action_Resist_Pct"
+value	= 13
+ reqs	=
+    { "type",       "name",                   "range", "present"
+      "Building",   "Mausoleum of Mausolos",  "Player", TRUE
+      "Building",   "Supreme Court",          "Player", FALSE
+      "Building",   "Courthouse",             "City",   FALSE
+      "Action",     "Investigate City",       "Local",  FALSE ;investigate is exclusive bonus below
     }
 [effect_mausoleum_of_mausolos_investigate_resistance]
 type	= "Action_Resist_Pct"
@@ -5552,7 +5682,7 @@ reqs    =
        "Building", "Marketplace", "City",   TRUE
        "Building", "Bank",        "City",   TRUE
        "Building","Stock Exchange","City",  FALSE
-       "Gov",      "Communism",   "Player", FALSE 
+       "Gov",      "Communism",   "Player", FALSE
     }
 ;Changes require changes to city_force_income_update() in city.js
 [effect_medici_coins_stock_exchange]
@@ -5564,7 +5694,7 @@ reqs    =
        "Building", "Marketplace",   "City",   TRUE
        "Building", "Bank",          "City",   TRUE
        "Building", "Stock Exchange","City",   TRUE
-       "Gov",      "Communism",     "Player", FALSE 
+       "Gov",      "Communism",     "Player", FALSE
     }
 [effect_medici_gold]
 type    = "Output_Bonus_2"
@@ -5574,7 +5704,7 @@ reqs    =
       "Building", "Medici Bank", "Player", TRUE
       "Building", "Bank",        "City",   TRUE
       "Building", "Marketplace", "City",   TRUE
-      "Gov",      "Communism",   "Player", FALSE 
+      "Gov",      "Communism",   "Player", FALSE
     }
 ;************************************************************************ Michelangelo
 [effect_michelangelos_chapel]
@@ -5733,7 +5863,7 @@ reqs    =
       "Gov",      "Republic",       "Player", FALSE
       "Gov",      "Democracy",      "Player", FALSE
       "Tech",     "Tactics",        "Player", FALSE
-      "Building", "Magna Carta",    "Player", FALSE 
+      "Building", "Magna Carta",    "Player", FALSE
     }
 ;Magna Carta + not rep. gov + not monarchy 
 ;e.g., Theocracy who used to have Magna Carta:
@@ -5745,7 +5875,7 @@ reqs    =
       "Building", "Statue of Zeus", "Player", TRUE
       "Gov",      "Republic",       "Player", FALSE
       "Gov",      "Democracy",      "Player", FALSE
-      "Gov",      "Monarchy",       "Player", FALSE 
+      "Gov",      "Monarchy",       "Player", FALSE
       "Tech",     "Tactics",        "Player", FALSE
       "Building", "Magna Carta",    "Player", TRUE
     }
@@ -6158,7 +6288,7 @@ reqs	=
     { "type",     "name",             "range", "present"
       "Gov",      "Republic",         "Player", TRUE
       "Building", "Women's Suffrage", "Player", TRUE
-      "Building", "Women's Suffrage​", "Player", FALSE 
+      "Building", "Women's Suffrage​", "Player", FALSE
       ; has zero-width space for the great wonder. can't get double women's suffrage bonus.
     }
 ; causes +1 unhappy for all cities, usually over s2 or s3 (depending on empire size)
@@ -6169,9 +6299,9 @@ reqs	=
     { "type", "name", "range", "present"
       "Gov",      "Republic",         "Player", TRUE
       ; small. if you have neither you get the unhappy
-      "Building", "Women's Suffrage", "Player", FALSE  
+      "Building", "Women's Suffrage", "Player", FALSE
       ; great. zero-width space for the great wonder
-      "Building", "Women's Suffrage​", "Player", FALSE 
+      "Building", "Women's Suffrage​", "Player", FALSE
       ; great. zero-width space for the great wonder
       "Building", "Women's Suffrage​", "World",  TRUE  
     }
@@ -6184,7 +6314,7 @@ reqs	=
       ; small wonder. if you own neither you get the unhappy:
       "Building", "Women's Suffrage", "Player", TRUE
       ; has zero-width space for the great wonder. can't get double women's suffrage bonus.
-      "Building", "Women's Suffrage​", "Player", FALSE 
+      "Building", "Women's Suffrage​", "Player", FALSE
     }
 ; causes +1 unhappy for all cities, usually over s2 or s3 (depending on empire size)    
 [effect_no_womens_suffrage_unhappy_democracy]
@@ -6194,9 +6324,9 @@ reqs	=
     { "type", "name", "range", "present"
       "Gov",      "Democracy",        "Player", TRUE
       ; small wonder. if you own neither you get the unhappy:
-      "Building", "Women's Suffrage", "Player", FALSE 
+      "Building", "Women's Suffrage", "Player", FALSE
       ; great wonder. zero-width space for the great wonder:
-      "Building", "Women's Suffrage​", "Player", FALSE 
+      "Building", "Women's Suffrage​", "Player", FALSE
       ; great wonder. has zero-width space for the great wonder:
       "Building", "Women's Suffrage​", "World",  TRUE  
     }
@@ -6520,6 +6650,14 @@ reqs	=
     { "type", "name", "range", "present"
       "Action", "Investigate City", "Local", TRUE
     }
+[effect_satellite_espionage]
+type	= "Action_Odds_Pct"
+value	= 1000                      ;ensure 100%
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Investigate City", "Local", TRUE
+      "UnitType", "Satellite", "Local", TRUE
+    }
 
 [effect_reduced_chance_steal_maps_escape]
 type	= "Action_Odds_Pct"
@@ -6585,6 +6723,14 @@ reqs	=
        "MinForeignPct", "1",               "City", FALSE
        "Action", "Targeted Sabotage City Escape", "Local", TRUE
     }
+[effect_sabotage_city_production_city_54percent]
+type	= "Action_Odds_Pct"
+value	= -32       ;; 32%*80% = 26%. 80%-26%=54%, same as all targeted actions and identical to if alternatively doing action from targeted building pop-up.
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Sabotage City Production Escape", "Local", TRUE
+    }
+
 ;*********************************************************
 ; Bribe and Incite Costs *********************************
 [effect_unit_bribe_cost_settlers]
@@ -6700,7 +6846,7 @@ type	= "Casus_Belli_Success"
 value	= 1
 reqs	=
     { "type", "name", "range", "present"
-      "Action", "Road", "Local", TRUE
+      "Action", "Build Road", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
       "DiplRel", "Alliance", "Local", FALSE
     }
@@ -6946,13 +7092,47 @@ reqs	=
       "Action", "Targeted Sabotage City Escape", "Local", TRUE
       "DiplRel", "War", "Local", FALSE
     }
+[effect_incident_success_sabotage_city_production]
+type	= "Casus_Belli_Success"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Sabotage City Production Escape", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
+[effect_incident_caught_sabotage_city_production]
+type	= "Casus_Belli_Caught"
+value	= 1
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Sabotage City Production Escape", "Local", TRUE
+      "DiplRel", "War", "Local", FALSE
+    }
 [effect_incident_success_explode_nuke]
 type	= "Casus_Belli_Success"
 value	= 1000
 reqs	=
     { "type", "name", "range", "present"
       "Action", "Explode Nuclear", "Local", TRUE
+      "DiplRel", "Foreign", "Local", TRUE ; no outrage at nuking yourself
     }
+[effect_incident_success_nuke_city]
+type	= "Casus_Belli_Success"
+value	= 1000
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Nuke City", "Local", TRUE
+      "DiplRel", "Foreign", "Local", TRUE ; no outrage at nuking yourself
+    }
+[effect_incident_success_nuke_unit]
+type	= "Casus_Belli_Success"
+value	= 1000
+reqs	=
+    { "type", "name", "range", "present"
+      "Action", "Nuke Units", "Local", TRUE
+      "DiplRel", "Foreign", "Local", TRUE ; no outrage at nuking yourself
+    }
+
 [effect_incident_success_found_city]
 type	= "Casus_Belli_Success"
 value	= 1
@@ -6993,6 +7173,98 @@ reqs    =
       "Building", "Palace", "Local", FALSE
       "Building", "Ecclesiastical Palace", "Local", FALSE
     }
+
+;******************************************************************** MOVE COSTS
+;TODO: by having control over embark/board and disembark/deboard,
+;we can gracefully upgrade mechanics to minimalist nirvana:
+;[effect_action_success_move_cost_embark]
+;type    = "Action_Success_Actor_Move_Cost"
+;value   = 0
+;reqs    =
+;    { "type", "name", "range", "present"
+;      "Action", "Transport Embark", "Local", TRUE
+;    }
+;[effect_action_success_move_cost_disembark]
+;type    = "Action_Success_Actor_Move_Cost"
+;value   = 0
+;reqs    =
+;    { "type", "name", "range", "present"
+;      "Action", "Transport Disembark", "Local", TRUE
+;    }
+;[effect_action_success_move_cost_board]
+;type    = "Action_Success_Actor_Move_Cost"
+;value   = 0
+;reqs    =
+;    { "type", "name", "range", "present"
+;      "Action", "Transport Board", "Local", TRUE
+;    }
+;[effect_action_success_move_cost_deboard]
+;type    = "Action_Success_Actor_Move_Cost"
+;value   = 0
+;reqs    =
+;    { "type", "name", "range", "present"
+;      "Action", "Transport Deboard", "Local", TRUE    ;renamed to Transport Deboard later.
+;    }
+
+;[effect_action_success_siege_ram_city_walls]
+;type    = "Action_Success_Actor_Move_Cost"
+;value   = 9      ; 1 move
+;reqs    =
+;    { "type", "name", "range", "present"
+;      "Action", "Targeted Sabotage City Escape", "Local", TRUE
+;      "UnitType", "Siege Ram", LOCAL, TRUE
+;    }
+
+[effect_action_success_move_cost_embassy]
+type    = "Action_Success_Actor_Move_Cost"
+value   = 3      ; 1/3 move
+reqs    =
+    { "type", "name", "range", "present"
+      "Action", "Establish Embassy", "Local", TRUE
+    }
+
+[effect_action_success_move_cost_investigate]
+type    = "Action_Success_Actor_Move_Cost"
+value   = 3      ; 1/3 move
+reqs    =
+    { "type", "name", "range", "present"
+      "Action", "Investigate City", "Local", TRUE
+    }
+
+[effect_action_success_move_cost_capture]
+type    = "Action_Success_Actor_Move_Cost"
+value   = 9      ; 1 move
+reqs    =
+    { "type", "name", "range", "present"
+      "Action", "Capture Units", "Local", TRUE
+    }
+
+[effect_action_success_move_cost_expel]
+type    = "Action_Success_Actor_Move_Cost"
+value   = 6      ; 2/3 move
+reqs    =
+    { "type", "name", "range", "present"
+      "Action", "Expel Unit", "Local", TRUE
+    }
+
+;TODO: We no longer need bitfields for move cost of SUA and could code the move cost in here
+[effect_action_success_move_cost_bombard]
+type    = "Action_Success_Actor_Move_Cost"
+value   = 0       ; currently, keep using bitfield for move cost 
+reqs    =
+    { "type", "name", "range", "present"
+      "Action", "Bombard", "Local", TRUE
+    }
+
+;Expelled units lose all move points.
+[effect_action_success_move_cost_expelled]
+type    = "Action_Success_Target_Move_Cost"
+value   = 65535
+reqs    =
+    { "type", "name", "range", "present"
+      "Action", "Expel Unit", "Local", TRUE
+    }
+;******************************************************************** </end MOVE COSTS>
 
 ; The Well-Digger can move 3 before you know Pottery or Alphabet.
 [effect_welldigger_movement]
@@ -7213,7 +7485,12 @@ reqs	=
     { "type", "name", "range", "present"
     }
 
-[effect_united_nations_international_treaty_violation_outrage]
+;This is supposed to be outrage for violating a treaty but looks to me more like
+;it causes outrage for any invasion of foreign territory. That's not necessarily 
+;bad, but: (1) This needs testing. (2) A separate effect for treaty violation 
+;outrage where DiplRel != {War} and all the benevolent actions are left with 
+;,FALSE clauses and all the malevolent actions are commented out so they'd cause it.
+[effect_united_nations_international_outrage_invasion]
 type    = "Casus_Belli_Success"
 value    = 1000
 reqs    =
@@ -7223,64 +7500,71 @@ reqs    =
       "DiplRel", "Armistice",                      "Local", FALSE  ; Time to get units out of the territory
       "DiplRel", "Foreign",                        "Local", TRUE
       "UnitFlag", "NonMil",                        "Local", FALSE
-      "Building", "United Nations",                "World", TRUE 
-      "Action", "Establish Embassy",               "Local", FALSE 
-      "Action", "Establish Embassy Stay",          "Local", FALSE 
-      "Action", "Investigate City",                "Local", FALSE 
-      "Action", "Investigate City Spend Unit",     "Local", FALSE 
-      "Action", "Poison City",                     "Local", FALSE 
-      "Action", "Poison City Escape",              "Local", FALSE 
-      "Action", "Steal Gold",                      "Local", FALSE 
-      "Action", "Steal Gold Escape",               "Local", FALSE 
-      "Action", "Sabotage City",                   "Local", FALSE 
-      "Action", "Sabotage City Escape",            "Local", FALSE 
-      "Action", "Targeted Sabotage City",          "Local", FALSE 
-      "Action", "Targeted Sabotage City Escape",   "Local", FALSE 
-      "Action", "Steal Tech",                      "Local", FALSE 
-      "Action", "Steal Tech Escape Expected",      "Local", FALSE 
-      "Action", "Targeted Steal Tech",             "Local", FALSE 
-      "Action","Targeted Steal Tech Escape Expected","Local", FALSE 
+      "Building", "United Nations",                "World", TRUE
+; TO DO: shouldn't the actions below which would vioalte treaty be commented out so that they also 
+; cause the outrage for a treaty violation?
+      "Action", "Establish Embassy",               "Local", FALSE
+      "Action", "Establish Embassy Stay",          "Local", FALSE
+      "Action", "Investigate City",                "Local", FALSE
+      "Action", "Investigate City Spend Unit",     "Local", FALSE
+      "Action", "Poison City",                     "Local", FALSE
+      "Action", "Poison City Escape",              "Local", FALSE
+      "Action", "Steal Gold",                      "Local", FALSE
+      "Action", "Steal Gold Escape",               "Local", FALSE
+      "Action", "Sabotage City",                   "Local", FALSE
+      "Action", "Sabotage City Escape",            "Local", FALSE
+      "Action", "Targeted Sabotage City",          "Local", FALSE
+      "Action", "Targeted Sabotage City Escape",   "Local", FALSE
+      "Action", "Sabotage City Production Escape", "Local", FALSE
+      "Action", "Steal Tech",                      "Local", FALSE
+      "Action", "Steal Tech Escape Expected",      "Local", FALSE
+      "Action", "Targeted Steal Tech",             "Local", FALSE
+      "Action","Targeted Steal Tech Escape Expected","Local", FALSE
       "Action", "Incite City",                     "Local", FALSE
       "Action", "Incite City Escape",              "Local", FALSE
-      "Action", "Establish Trade Route",           "Local", FALSE 
-      "Action", "Enter Marketplace",               "Local", FALSE 
-      "Action", "Help Wonder",                     "Local", FALSE 
-      "Action", "Bribe Unit",                      "Local", FALSE 
-      "Action", "Sabotage Unit",                   "Local", FALSE 
-      "Action", "Sabotage Unit Escape",            "Local", FALSE 
-      "Action", "Capture Units",                   "Local", FALSE 
-      "Action", "Found City",                      "Local", FALSE 
-      "Action", "Join City",                       "Local", FALSE 
-      "Action", "Steal Maps",                      "Local", FALSE 
-      "Action", "Steal Maps Escape",               "Local", FALSE 
-      "Action", "Bombard",                         "Local", FALSE 
-      "Action", "Suitcase Nuke",                   "Local", FALSE 
-      "Action", "Suitcase Nuke Escape",            "Local", FALSE 
-      "Action", "Explode Nuclear",                 "Local", FALSE 
-      "Action", "Destroy City",                    "Local", FALSE 
-      "Action", "Expel Unit",                      "Local", FALSE 
-      "Action", "Recycle Unit",                    "Local", FALSE 
-      "Action", "Disband Unit",                    "Local", FALSE 
-      "Action", "Home City",                       "Local", FALSE 
-      "Action", "Upgrade Unit",                    "Local", FALSE 
-      "Action", "Paradrop Unit",                   "Local", FALSE 
-      "Action", "Airlift Unit",                    "Local", FALSE 
-      "Action", "Attack",                          "Local", FALSE 
-      "Action", "Conquer City",                    "Local", FALSE 
-      "Action", "Heal Unit",                       "Local", FALSE 
-      "Action", "Transform Terrain",               "Local", FALSE 
-      "Action", "Irrigate TF",                     "Local", FALSE 
-      "Action", "Mine TF",                         "Local", FALSE 
-      "Action", "Pillage",                         "Local", FALSE 
-      "Action", "Fortify",                         "Local", FALSE 
-      "Action", "Road",                            "Local", FALSE 
-      "Action", "Convert Unit",                    "Local", FALSE 
-      "Action", "Build Base",                      "Local", FALSE 
-      "Action", "Build Mine",                      "Local", FALSE 
-      "Action", "Build Irrigation",                "Local", FALSE 
-      "Action", "Clean Pollution",                 "Local", FALSE 
-      "Action", "Clean Fallout",                   "Local", FALSE 
-      "Action", "Spy Attack",                      "Local", FALSE 
+      "Action", "Establish Trade Route",           "Local", FALSE
+      "Action", "Enter Marketplace",               "Local", FALSE
+      "Action", "Help Wonder",                     "Local", FALSE
+      "Action", "Bribe Unit",                      "Local", FALSE
+      "Action", "Sabotage Unit",                   "Local", FALSE
+      "Action", "Sabotage Unit Escape",            "Local", FALSE
+      "Action", "Capture Units",                   "Local", FALSE
+      "Action", "Found City",                      "Local", FALSE
+      "Action", "Join City",                       "Local", FALSE
+      "Action", "Steal Maps",                      "Local", FALSE
+      "Action", "Steal Maps Escape",               "Local", FALSE
+      "Action", "Bombard",                         "Local", FALSE
+      "Action", "Bombard 2",                       "Local", FALSE
+      "Action", "Bombard 3",                       "Local", FALSE
+      "Action", "Suitcase Nuke",                   "Local", FALSE
+      "Action", "Suitcase Nuke Escape",            "Local", FALSE
+      "Action", "Explode Nuclear",                 "Local", FALSE
+      "Action", "Nuke City",                       "Local", FALSE
+      "Action", "Nuke Units",                      "Local", FALSE
+      "Action", "Destroy City",                    "Local", FALSE
+      "Action", "Expel Unit",                      "Local", FALSE
+      "Action", "Recycle Unit",                    "Local", FALSE
+      "Action", "Disband Unit",                    "Local", FALSE
+      "Action", "Home City",                       "Local", FALSE
+      "Action", "Upgrade Unit",                    "Local", FALSE
+      "Action", "Paradrop Unit",                   "Local", FALSE
+      "Action", "Airlift Unit",                    "Local", FALSE
+      "Action", "Attack",                          "Local", FALSE
+      "Action", "Conquer City",                    "Local", FALSE
+      "Action", "Heal Unit",                       "Local", FALSE
+      "Action", "Transform Terrain",               "Local", FALSE
+      "Action", "Cultivate",                       "Local", FALSE
+      "Action", "Plant",                           "Local", FALSE
+      "Action", "Pillage",                         "Local", FALSE
+      "Action", "Fortify",                         "Local", FALSE
+      "Action", "Build Road",                      "Local", FALSE
+      "Action", "Convert Unit",                    "Local", FALSE
+      "Action", "Build Base",                      "Local", FALSE
+      "Action", "Build Mine",                      "Local", FALSE
+      "Action", "Build Irrigation",                "Local", FALSE
+      "Action", "Clean Pollution",                 "Local", FALSE
+      "Action", "Clean Fallout",                   "Local", FALSE
+      "Action", "Spy Attack",                      "Local", FALSE
     }
 
 ;Implement 'ugly hack' of kvilhaugsvik for invading cease-fire
@@ -7296,63 +7580,68 @@ reqs    =
       "DiplRel", "Armistice",                      "Local", FALSE  ; Time to get units out of the territory
       "DiplRel", "Foreign",                        "Local", TRUE
       "UnitFlag", "NonMil",                        "Local", FALSE
-      "Action", "Establish Embassy",               "Local", FALSE 
-      "Action", "Establish Embassy Stay",          "Local", FALSE 
-      "Action", "Investigate City",                "Local", FALSE 
-      "Action", "Investigate City Spend Unit",     "Local", FALSE 
-      "Action", "Poison City",                     "Local", FALSE 
-      "Action", "Poison City Escape",              "Local", FALSE 
-      "Action", "Steal Gold",                      "Local", FALSE 
-      "Action", "Steal Gold Escape",               "Local", FALSE 
-      "Action", "Sabotage City",                   "Local", FALSE 
-      "Action", "Sabotage City Escape",            "Local", FALSE 
-      "Action", "Targeted Sabotage City",          "Local", FALSE 
-      "Action", "Targeted Sabotage City Escape",   "Local", FALSE 
-      "Action", "Steal Tech",                      "Local", FALSE 
-      "Action", "Steal Tech Escape Expected",      "Local", FALSE 
-      "Action", "Targeted Steal Tech",             "Local", FALSE 
-      "Action","Targeted Steal Tech Escape Expected","Local", FALSE 
+      "Action", "Establish Embassy",               "Local", FALSE
+      "Action", "Establish Embassy Stay",          "Local", FALSE
+      "Action", "Investigate City",                "Local", FALSE
+      "Action", "Investigate City Spend Unit",     "Local", FALSE
+      "Action", "Poison City",                     "Local", FALSE
+      "Action", "Poison City Escape",              "Local", FALSE
+      "Action", "Steal Gold",                      "Local", FALSE
+      "Action", "Steal Gold Escape",               "Local", FALSE
+      "Action", "Sabotage City",                   "Local", FALSE
+      "Action", "Sabotage City Escape",            "Local", FALSE
+      "Action", "Targeted Sabotage City",          "Local", FALSE
+      "Action", "Targeted Sabotage City Escape",   "Local", FALSE
+      "Action", "Sabotage City Production Escape", "Local", FALSE
+      "Action", "Steal Tech",                      "Local", FALSE
+      "Action", "Steal Tech Escape Expected",      "Local", FALSE
+      "Action", "Targeted Steal Tech",             "Local", FALSE
+      "Action","Targeted Steal Tech Escape Expected","Local", FALSE
       "Action", "Incite City",                     "Local", FALSE
       "Action", "Incite City Escape",              "Local", FALSE
-      "Action", "Establish Trade Route",           "Local", FALSE 
-      "Action", "Enter Marketplace",               "Local", FALSE 
-      "Action", "Help Wonder",                     "Local", FALSE 
-      "Action", "Bribe Unit",                      "Local", FALSE 
-      "Action", "Sabotage Unit",                   "Local", FALSE 
-      "Action", "Sabotage Unit Escape",            "Local", FALSE 
-      "Action", "Capture Units",                   "Local", FALSE 
-      "Action", "Found City",                      "Local", FALSE 
-      "Action", "Join City",                       "Local", FALSE 
-      "Action", "Steal Maps",                      "Local", FALSE 
-      "Action", "Steal Maps Escape",               "Local", FALSE 
-      "Action", "Bombard",                         "Local", FALSE 
-      "Action", "Suitcase Nuke",                   "Local", FALSE 
-      "Action", "Suitcase Nuke Escape",            "Local", FALSE 
-      "Action", "Explode Nuclear",                 "Local", FALSE 
-      "Action", "Destroy City",                    "Local", FALSE 
-      "Action", "Expel Unit",                      "Local", FALSE 
-      "Action", "Recycle Unit",                    "Local", FALSE 
-      "Action", "Disband Unit",                    "Local", FALSE 
-      "Action", "Home City",                       "Local", FALSE 
-      "Action", "Upgrade Unit",                    "Local", FALSE 
-      "Action", "Paradrop Unit",                   "Local", FALSE 
-      "Action", "Airlift Unit",                    "Local", FALSE 
-      "Action", "Attack",                          "Local", FALSE 
-      "Action", "Conquer City",                    "Local", FALSE 
-      "Action", "Heal Unit",                       "Local", FALSE 
-      "Action", "Transform Terrain",               "Local", FALSE 
-      "Action", "Irrigate TF",                     "Local", FALSE 
-      "Action", "Mine TF",                         "Local", FALSE 
-      "Action", "Pillage",                         "Local", FALSE 
-      "Action", "Fortify",                         "Local", FALSE 
-      "Action", "Road",                            "Local", FALSE 
-      "Action", "Convert Unit",                    "Local", FALSE 
-      "Action", "Build Base",                      "Local", FALSE 
-      "Action", "Build Mine",                      "Local", FALSE 
-      "Action", "Build Irrigation",                "Local", FALSE 
-      "Action", "Clean Pollution",                 "Local", FALSE 
-      "Action", "Clean Fallout",                   "Local", FALSE 
-      "Action", "Spy Attack",                      "Local", FALSE 
+      "Action", "Establish Trade Route",           "Local", FALSE
+      "Action", "Enter Marketplace",               "Local", FALSE
+      "Action", "Help Wonder",                     "Local", FALSE
+      "Action", "Bribe Unit",                      "Local", FALSE
+      "Action", "Sabotage Unit",                   "Local", FALSE
+      "Action", "Sabotage Unit Escape",            "Local", FALSE
+      "Action", "Capture Units",                   "Local", FALSE
+      "Action", "Found City",                      "Local", FALSE
+      "Action", "Join City",                       "Local", FALSE
+      "Action", "Steal Maps",                      "Local", FALSE
+      "Action", "Steal Maps Escape",               "Local", FALSE
+      "Action", "Bombard",                         "Local", FALSE
+      "Action", "Bombard 2",                       "Local", FALSE
+      "Action", "Bombard 3",                       "Local", FALSE
+      "Action", "Suitcase Nuke",                   "Local", FALSE
+      "Action", "Suitcase Nuke Escape",            "Local", FALSE
+      "Action", "Explode Nuclear",                 "Local", FALSE
+      "Action", "Nuke City",                       "Local", FALSE
+      "Action", "Nuke Units",                      "Local", FALSE
+      "Action", "Destroy City",                    "Local", FALSE
+      "Action", "Expel Unit",                      "Local", FALSE
+      "Action", "Recycle Unit",                    "Local", FALSE
+      "Action", "Disband Unit",                    "Local", FALSE
+      "Action", "Home City",                       "Local", FALSE
+      "Action", "Upgrade Unit",                    "Local", FALSE
+      "Action", "Paradrop Unit",                   "Local", FALSE
+      "Action", "Airlift Unit",                    "Local", FALSE
+      "Action", "Attack",                          "Local", FALSE
+      "Action", "Conquer City",                    "Local", FALSE
+      "Action", "Heal Unit",                       "Local", FALSE
+      "Action", "Transform Terrain",               "Local", FALSE
+      "Action", "Cultivate",                       "Local", FALSE
+      "Action", "Plant",                           "Local", FALSE
+      "Action", "Pillage",                         "Local", FALSE
+      "Action", "Fortify",                         "Local", FALSE
+      "Action", "Build Road",                      "Local", FALSE
+      "Action", "Convert Unit",                    "Local", FALSE
+      "Action", "Build Base",                      "Local", FALSE
+      "Action", "Build Mine",                      "Local", FALSE
+      "Action", "Build Irrigation",                "Local", FALSE
+      "Action", "Clean Pollution",                 "Local", FALSE
+      "Action", "Clean Fallout",                   "Local", FALSE
+      "Action", "Spy Attack",                      "Local", FALSE
     }    
 
 ;This line intentionally left blank:

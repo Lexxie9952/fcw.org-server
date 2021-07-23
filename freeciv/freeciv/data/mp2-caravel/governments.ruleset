@@ -233,7 +233,7 @@ reqs = { "type", "name", "range"
 graphic     = "gov.communism"
 graphic_alt = "-"
 
-ruler_male_title = _("Comrade %s")
+ruler_male_title = _("Chairman %s")
 ruler_female_title = _("?female:Comrade %s")
 
 helptext = _("\
@@ -289,7 +289,7 @@ Police Stations suppress +1 unhappy Foreign National and cost 10 shields less.\
  Migrants can be made to help grow cities. Tile workers gain a ⅑ move\
  bonus and for every three worker turns of work put in, get a fourth\
  worker turn free. Cost of upgrades is 25% less. Riflemen are produced at +1 vet\
- level. Armor gets a +1 move bonus. Fighters and Dive Bombers have higher odds of promotion. \n\
+ level. Armor gets a +1 move bonus. Fighters and Dive Bombers have 50% higher odds of promotion. \n\
 "), _("\
 No citizens are made unhappy by each aggressive unit.\n\
 8% Base corruption in capital,\n\

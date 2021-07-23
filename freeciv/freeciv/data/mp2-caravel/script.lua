@@ -31,7 +31,7 @@ function history_turn_notifications(turn, year)
 
   if turn == 85 then
   -- Philosophy no longer gives advances after 1600 AD
-    notify.all("<font color=#000000>Philosophers around the world mourn the execution of Giordano Bruno. Philosophy no longer gives a bonus advance.</font>")
+    notify.all("<font>Philosophers around the world mourn the execution of Giordano Bruno. Philosophy no longer gives a bonus advance.</font>")
     philosophy_possible = 0
     notify.event(nil, nil, E.BEGINNER_HELP,
 _("[`events/giordano`]<br>🔥 Philosophers hide their books after Giordano Bruno is burned.<br>Philosophy no longer gives a bonus advance."))
@@ -164,12 +164,12 @@ function tech_researched_handler(tech, player, how)
       -- Notify the player. Include the tech names in a way that makes it
       -- look natural no matter if each tech is announced or not.
     notify.event(player, NIL, E.TECH_GAIN,
-                 _("[`events/philosophy`]<font color=#ffff00>Great philosophers from all the world join your civilization: you get the immediate advance %s.</font>"),
+                 _("[`events/philosophy`]<br><font color=#ffff90><b>Great philosophers from all the world join your civilization: you get blueprints for %s.</b></font>"),
                  gained:name_translation())
 
     -- Notify research partners
     notify.research(player, false, E.TECH_GAIN,
-                    _("[`events/philosophy`]<br><font color=#ffff00>Great philosophers from all the world join the %s: you get the immediate advance %s.</font>"),
+                    _("[`events/philosophy`]<br><font color=#ffff90>Great philosophers from all the world join the %s: you get blueprints for %s.</font>"),
                     player.nation:plural_translation(),
                     gained:name_translation())
 
@@ -177,7 +177,7 @@ function tech_researched_handler(tech, player, how)
     -- They should therefore be informed about the source here too.
     notify.research_embassies(player, E.TECH_EMBASSY,
             -- /* TRANS: first %s is leader or team name */
-            _("[`events/philosophy2`]<font color=#ffff00>Great philosophers from all the world join %s: they get %s as an immediate advance.</font>"),
+            _("[`events/philosophy2`]<br><font color=#ffff90>Great philosophers from all the world give the %s %s.</font>"),
             player:research_name_translation(),
             gained:name_translation())
   end
@@ -205,13 +205,13 @@ notify.event(nil, nil, E.BEGINNER_HELP,
 _("[`events/hunt`]<br>Wild animals are available to hunt for food."))
   end
 
-  if turn == 17 then
+  if turn == 20 then
     notify.event(nil, nil, E.SCRIPT,
 _("<b>Ecology Report</b>\n\
 Frequent hunting has reduced wild animal populations and frightened them from human settlements.\
 "))
 notify.event(nil, nil, E.BEGINNER_HELP,
-_("[`events/runningdeer`][`events/oldtribesmen`]<br>Animal populations no longer come near human settlements.<br>Tribesmen are getting old.<br>"))
+_("[`events/runningdeer`][`events/oldtribesmen`]<br>Animal populations no longer come near human settlements.<br>Next turn, Elder Tribesmen lose bonus for movement, work, vision, and recycle.<br>"))
   end
 end
 
@@ -276,6 +276,20 @@ function building_built_callback(building, city)
     _("[`events/womenssuffrage`]<br><font color=#ff20ff>Discontent reported in representative governments who lack Women's Suffrage.</font>"))
   end
 
+  -- Grant Code of Laws when the wonder Code of Hammurabi is built.
+  if building:rule_name() == "Code of Hammurabi" then
+    local player = city.owner
+    local city_name = city.name
+    local gained = nil;
+    
+    if player:give_tech(find.tech_type("Code of Laws"), -1, false, "researched") then
+      notify.player(player, "The Code of Hammurabi provides blueprints for Code of Laws.")
+    elseif player:give_tech(find.tech_type("Writing"), -1, false, "researched") then
+      notify.player(player, "The Code of Hammurabi provides blueprints for Writing.")
+    end
+
+    return false
+  end
   -- continue processing
   return false
 end

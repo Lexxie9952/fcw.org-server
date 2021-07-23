@@ -29,7 +29,7 @@ function history_turn_notifications(turn, year)
 
   if turn == 85 then
   -- Philosophy no longer gives advances after 1600 AD
-    notify.all("<font color=#000000>Philosophers around the world mourn the execution of Giordano Bruno. Philosophy no longer gives a bonus advance.</font>")
+    notify.all("<font>Philosophers around the world mourn the execution of Giordano Bruno. Philosophy no longer gives a bonus advance.</font>")
     philosophy_possible = 0
   end
   
@@ -167,7 +167,7 @@ function tech_researched_handler(tech, player, how)
     -- They should therefore be informed about the source here too.
     notify.research_embassies(player, E.TECH_EMBASSY,
             -- /* TRANS: first %s is leader or team name */
-            _("<font color=#ffff00>Great philosophers from all the world join %s: they get %s as an immediate advance.</font>"),
+            _("<font color=#ffff00>Great philosophers from all the world teach the %s %s.</font>"),
             player:research_name_translation(),
             gained:name_translation())
   end

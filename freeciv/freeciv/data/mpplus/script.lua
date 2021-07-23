@@ -136,7 +136,7 @@ function tech_researched_handler(tech, player, how)
     -- They should therefore be informed about the source here too.
     notify.research_embassies(player, E.TECH_EMBASSY,
             -- /* TRANS: first %s is leader or team name */
-            _("Great philosophers from all the world join %s: they get %s as an immediate advance."),
+            _("Great philosophers from all the world teach the %s %s."),
             player:research_name_translation(),
             gained:name_translation())
   end

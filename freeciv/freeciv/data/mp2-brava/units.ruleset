@@ -15,7 +15,7 @@
 ; then the first unit with this role will be chosen.
 
 [datafile]
-description="Unit definitions for the Avant-garde ruleset."
+description="Unit definitions for the MP2-Brava ruleset."
 options="+Freeciv-ruleset-Devel-2017.Jan.02 web-compatible"
 format_version=20
 
@@ -29,6 +29,7 @@ format_version=20
 ; ************** MADE COMPATIBLE BETWEEN MP+ AND MP2 RULESETS AND POSSIBLY CLASSIC AND CIV2CIV3 SO THAT
 ; ************** THERE IS UNIFORMITY IN FCW CLIENT which checks these flags based on index #. Not keeping
 ; ************** uniformity results in loss of features as ability to check these flags would be lost.
+; *** if you remove one, make it "unused" and add to it later, so the index of the others does not mess up
 flags =
   { "name", "helptxt"
     _("Airbase")
@@ -72,9 +73,10 @@ flags =
 ;;; this comment can be removed when we have some smarter way for unit_can_defend_here(..) to get ruleset control.
     _("TransportDefender"), _("Can defend while transported on non-native tiles.")
     _("NonMilAttack"), _("Has military capacity but for peaceful purposes, can enter territories with whom you are at Peace")
+    _("Cant_Pillage"), _("Unable to pillage tiles.")
   }
 
-; Names for custom unit class flags. There can be up to 8 of these.
+; Names for custom unit class flags. There can be up to 12 of these.
 ; name          = rule name; In some circumstances user may see this
 ;                 as part of some sentences, so try to make it descriptive
 ;                 and sensible.
@@ -82,9 +84,11 @@ flags =
 ;                 with this flag (optional)
 class_flags =
   { "name", "helptxt"
+    _("AttFromNonNative"), _("Can launch attack from non-native tiles.")
+    _("Missile")
+    _("CanPillage")
     _("Airliftable"), _("Can be airlifted if it has remaining moves.")
     _("BorderPolice"), _("Military units from this class can peacefully expel certain foreign units.")
-    _("AttFromNonNative"), _("Can launch attack from non-native tiles.")
     _("CargoRestrained"), _("Can't attack as Cargo. Must first unload.")
   }
 
@@ -2571,7 +2575,7 @@ bonuses       =
    }
 cargo         = "Land", "LandAirSea", "LandNoKill"
 flags         = "Helicopter", "AirAttacker", "Unbribable", "Provoking",
-                "CanEscape", "WillNever", "HasNoZOC"
+                "CanEscape", "WillNever", "HasNoZOC", "NeverProtects"
                 ; Tranport Heli is provoking; Fighters don't like them.
 veteran_names =
   _("?vet_rank:green"),
@@ -2635,7 +2639,7 @@ bonuses       =
    }
 cargo         = "LandAirSea"
 flags         = "Helicopter", "AirAttacker", "Unbribable",
-                "CanEscape", "WillNever"
+                "CanEscape", "WillNever", "NeverProtects"
                 ; Heli is low-altitude and non-provoking: if it's ever thought to be OP, 
                 ; changing this flag fixes that right away. But currently it MIGHT be UnP 
                 ; because hp_loss, range, city walls, and Ground Strike Fighter
@@ -3164,7 +3168,6 @@ uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
-cargo         = "Land", "LandNoKill", "LandAirSea"
 flags         = "BadCityDefender", "CantReachAir", "Only_Native_Attack", "WillNever"
 roles         = "Hunter"
 helptext      = _("\
@@ -4161,8 +4164,9 @@ flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capt
 roles         = ""
 helptext      = _("\
 The Freight unit replaces the Caravan as the basic Commerce unit on Land. It moves at\
- twice the speed, but must stay on roads. Each Freight used to build a wonder will add\
- 50 shields. See the entry on Caravan to read what Commerce units may do.\
+ twice the speed, but must stay on roads. Freight uses roads only and not rails.\
+ Each Freight used to build a wonder will add 50 shields. See the entry on Caravan to\
+ read what Commerce units may do.\
 ")
 
 [unit_explorer]

@@ -76,9 +76,10 @@ flags =
     _("TransportDefender"), _("Can defend while transported on non-native tiles.")
     _("NonMilAttack"), _("Has military capacity but for peaceful purposes, can enter territories with whom you are at Peace")
     _("Cant_Pillage"), _("Unable to pillage tiles.")
+    _("CanClaim"), _("Is able to claim sovereignty of foreign tiles bordering domestic territory.")
   }
 
-; Names for custom unit class flags. There can be up to 8 of these.
+; Names for custom unit class flags. There can be up to 12 of these.
 ; name          = rule name; In some circumstances user may see this
 ;                 as part of some sentences, so try to make it descriptive
 ;                 and sensible.
@@ -86,9 +87,11 @@ flags =
 ;                 with this flag (optional)
 class_flags =
   { "name", "helptxt"
+    _("AttFromNonNative"), _("Can launch attack from non-native tiles.")
+    _("Missile")
+    _("CanPillage")
     _("Airliftable"), _("Can be airlifted if it has remaining moves.")
     _("BorderPolice"), _("Military units from this class can peacefully expel certain foreign units.")
-    _("AttFromNonNative"), _("Can launch attack from non-native tiles.")
     _("CargoRestrained"), _("Can't attack as Cargo. Must first unload.")
   }
 
@@ -151,7 +154,6 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 ; "TerrainDefense"    = Unit Class gains defense bonus from terrain
 ; "DamageSlows"       = Damaged units are slowed down
 ; "CanOccupyCity"     = Military units of this class can occupy enemy cities
-; "Missile"           = Unit Class is destroyed when it attacks
 ; "BuildAnywhere"     = Unit Class can be built even in the middle of non-native terrain
 ; "Unreachable"       = Unit Class can be attacked only by units explicitly listing this
 ;                       class in its 'targets', unless on a city or native base.
@@ -163,7 +165,6 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 ;                       override this
 ; "CanFortify"        = Unit can fortify at land tiles. Unit type flag
 ;                       "Cant_Fortify" can override this
-; "CanPillage"        = Unit Class can pillage tile infrastructure
 ; "DoesntOccupyTile"  = Even if this class of enemy unit is on tile, cities can
 ;                       still work that tile
 ; "AttackNonNative"   = Unit Class can attack units on non-native tiles. Unit type
@@ -176,8 +177,7 @@ veteran_move_bonus = 0, 0, 0, 0, 1, 1, 1
 ; "KillCitizen"       = Upon successful attack against a city, unit kills one
 ;                       citizen. The effect "Unit_No_Lose_Pop" and the server
 ;                       setting 'killcitizen' can disable this.
-
-; "Airliftable"       = This Unit Class may be airlifted
+;
 ; */ <-- avoid gettext warnings
 
 
@@ -209,7 +209,7 @@ helptext      = _("\
 name          = _("?unitclass:LandRail")
 min_speed     = 4
 hp_loss_pct   = 0
-flags         = "Unreachable", "BuildAnywhere", "ZOC", "TerrainDefense", "TerrainSpeed"
+flags         = "Unreachable", "BuildAnywhere", "ZOC", "TerrainDefense", "TerrainSpeed", "DamageSlows"
 helptext      = _("\
   • Only able to move on railroad tiles.\
 ")
@@ -218,7 +218,7 @@ helptext      = _("\
 name          = _("?unitclass:LandRoad")
 min_speed     = 3
 hp_loss_pct   = 0
-flags         = "BuildAnywhere", "ZOC", "TerrainDefense", "TerrainSpeed", "CanFortify"
+flags         = "BuildAnywhere", "ZOC", "TerrainDefense", "DamageSlows", "TerrainSpeed", "CanFortify"
 helptext      = _("\
   • Only able to move on road tiles.\
 ")
@@ -492,6 +492,7 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ;                       Value of 100 means division by 2, (2× for attacker)
 ;                       value of 50 means division by 1.5, (1.5× for attacker)
 ;                       i.e.：Effectively increases *attack* by value percent.
+;                       Bonus is defined in attackers entry.
 ; "FirePower1"        = Defender firepower is reduced to value 1 when
 ;                       ever this has non-zero value.
 ;                       Bonus is defined in attackers entry.  
@@ -640,8 +641,54 @@ flags         = "Unreachable", "DoesntOccupyTile"
 ; "DefendGoodStartUnit"   = Gets granted as 'D' startunit
 ; "AttackFastStartUnit"   = Gets granted as 'a' startunit
 ; "AttackStrongStartUnit" = Gets granted as 'A' startunit
-;
-; */ <-- avoid gettext warnings
+ 
+; "UserType1Startunit"    = Gets granted as 'u' startunit
+; "UserType2Startunit"    = Gets granted as 'U' startunit
+; "UserType3Startunit"    = Gets granted as 'z' startunit
+; "TradeStartUnit"        = Gets granted as 't' startunit
+
+[unit_founders]
+name          = _("Founders")
+class         = "Land"
+tech_req      = "None"
+obsolete_by   = "None"
+graphic       = "u.founder_o"
+graphic_alt   = "-"
+sound_move    = "m_settlers"
+sound_move_alt = "m_generic"
+sound_fight   = "f_settlers"
+sound_fight_alt = "f_generic"
+build_cost    = 50
+pop_cost      = 2
+attack        = 0
+defense       = 1
+hitpoints     = 25
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 5
+transport_cap = 0
+fuel          = 0
+city_size     = 2
+uk_happy      = 0
+uk_shield     = 1
+uk_food       = 1
+uk_gold       = 0
+flags         = "Settlers", "NoBuild", "Infra", "CanRoad", "CanFortress", "NonMil", "HasNoZOC", "AddToCity", "Cities", "Cant_Fortify",
+                "Expellable", "Unbribable"
+; No veteran levels (level name is never displayed)
+veteran_names = _("green")
+veteran_base_raise_chance = 0
+veteran_work_raise_chance = 0
+veteran_power_fact = 100
+veteran_move_bonus = 0
+roles         = "UserType1Startunit"
+helptext      = _("\
+At game start, Founders are a more populous portion of your nomadic tribe. \n\
+"), _("\
+Founders are Settlers who found a city of size 2—usually the first city and\
+ capital of a tribe. They are a start unit that cannot be built. In all other\
+ respects they are exactly like Settlers, except they cannot be bribed.\
+")
 
 [unit_settlers]
 name          = _("Settlers")
@@ -653,7 +700,7 @@ graphic_alt   = "-"
 sound_move    = "m_settlers"
 sound_move_alt = "m_generic"
 sound_fight   = "f_settlers"
-sound_fight_alt = "Demolishment"
+sound_fight_alt = "Pillage"
 build_cost    = 40
 pop_cost      = 1
 attack        = 0
@@ -677,6 +724,7 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = "CitiesStartUnit"
 helptext      = _("\
+Population Cost: 1. Adds Population: 1.\n\n\
 Settlers are your only means of founding new cities. \
 "), _("\
 Settlers can perform most of the terrain alterations as\
@@ -707,7 +755,7 @@ hitpoints     = 8
 firepower     = 1
 move_rate     = 1
 vision_radius_sq = 5
-transport_cap = 0
+transport_cap = 1
 fuel          = 0
 uk_happy      = 0
 uk_shield     = 0
@@ -737,23 +785,22 @@ veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
 veteran_move_bonus = 3, 4, 5, 6, 7, 8, 9
 helptext      = _("\
-Tribesmen came before cities and specialized division of labor. They have\
- primitive versatility. \n\
+Tribesmen came before cities and specialized division of labor. During\
+ ancient times, they get primitive versatility bonuses: \n\
 Tribesmen can explore, moving over terrain with no penalty. They don’t obey\
- or exert ZOC. They work tiles at half the rate of Workers. They have a 3×\
- bonus at hunting wild animals, and defend at 2× against them. \n\
+ or exert ZOC. They work tiles at half the rate of Workers. They attack at 3×\
+ and defend at 2× against wild animals. \n\
 Tribesmen can make basic diplomatic contact and freely Investigate\
  cities. They can carry Goods and enter nations with whom you are at Peace.\
- They can do primitive combat—they can’t conquer cities and only fight\
+ They can do primitive combat—they can’t conquer cities and only attack for\
  10 combat rounds. \n\
 Tribesmen help build nations by recycling into city production with\
- a 2× bonus, donating their life-work to any output except units.\
- ** Changing production target loses their work! **\n\
-Tribesmen start with bonuses they lose as you become more civilized. For the\
- first three turns they get a +⅓ move bonus. After 2500BC (T15), Tribesmen get\
- old: they lose -⅓ move, see less, lose the recycle bonus, and can no longer\
- work tiles. At such point they are still serviceable for weak defense, carrying\
- Goods, making contact, and recycling for 10 shields.\
+ a 2× bonus, donating their life-work of 20 shields into any output EXCEPT\
+ units. ** Changing production targets loses their work! ** \n\
+Tribesmen lose many versatility bonuses as you become more civilized. For\
+ 3 turns they gain +⅓ move. After 20 turns, they lose another ⅓ move and\
+ lose their vision, tile-work, and recycle bonuses. At such point, recycling\
+ into a building or wonder yields 10 shields.\
 ")
 
 ;A unique patch unit to provide fair starts regardless of lack of nearby water.
@@ -815,12 +862,12 @@ graphic_alt   = "-"
 sound_move    = "m_worker"
 sound_move_alt = "m_generic"
 sound_fight   = "f_worker"
-sound_fight_alt = "Demolishment"
+sound_fight_alt = "Pillage"
 build_cost    = 10
 pop_cost      = 1
 attack        = 0
 defense       = 1
-hitpoints     = 10
+hitpoints     = 8
 firepower     = 1
 move_rate     = 2
 vision_radius_sq = 4
@@ -843,6 +890,7 @@ veteran_power_fact = 100
 veteran_move_bonus = 1
 roles         = "Settlers"
 helptext      = _("\
+Population Cost: 1. Adds Population: 2.\n\n\
 Proletarians can only be controlled by Communist governments. \
 "), _("\
 Communist States can assign Proletarians from one city to another, which transfers population\
@@ -871,7 +919,7 @@ build_cost    = 10
 pop_cost      = 0
 attack        = 0
 defense       = 1
-hitpoints     = 10
+hitpoints     = 8
 firepower     = 1
 move_rate     = 2
 vision_radius_sq = 4
@@ -892,6 +940,7 @@ veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
 helptext      = _("\
+Population Cost: 0. Adds Population: 1.\n\n\
 Pilgrims are wayfaring migrants from Theocratic nations. Like Zealots,\
  they have no upkeep if under a Theocratic government. Heeding the call\
  of ecclesiastic authority, Pilgrims can be guided from one city to another in\
@@ -915,7 +964,7 @@ build_cost    = 10
 pop_cost      = 1
 attack        = 0
 defense       = 1
-hitpoints     = 10
+hitpoints     = 8
 firepower     = 1
 move_rate     = 2
 vision_radius_sq = 4
@@ -936,6 +985,7 @@ veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
 helptext      = _("\
+Population Cost: 1. Adds Population: 1.\n\n\
 Migrants are citizens under Nationalist governments who are encouraged to\
  settle in new cities, usually in conquered or colonized areas.\
  They can be guided to transfer population from city to city. This may\
@@ -952,7 +1002,7 @@ graphic_alt   = "-"
 sound_move    = "m_worker"
 sound_move_alt = "m_generic"
 sound_fight   = "f_worker"
-sound_fight_alt = "Demolishment"
+sound_fight_alt = "Pillage"
 build_cost    = 30
 pop_cost      = 0
 attack        = 0
@@ -1004,7 +1054,7 @@ graphic_alt   = "-"
 sound_move    = "m_engineers"
 sound_move_alt = "m_generic"
 sound_fight   = "f_engineers"
-sound_fight_alt = "Demolishment"
+sound_fight_alt = "Pillage"
 build_cost    = 40
 pop_cost      = 0
 attack        = 0
@@ -1033,7 +1083,7 @@ helptext      = _("\
 Engineers can do everything Workers can do, at twice the speed.\
  Unlike Workers, Engineers can Transform, such as converting\
  Desert to Plains. Converting Ocean to Swamp requires being on a ship\
- on a tile bordering 3 land tiles. Constructing a Sea Bridge requires\
+ on a tile bordering 2 land tiles. Constructing a Sea Bridge requires\
  being on a ship on a tile cardinally adjacent to land.\
 ")
 
@@ -1080,7 +1130,7 @@ name          = _("Phalanx")
 class         = "Land"
 tech_req      = "Bronze Working"
 obsolete_by   = "Pikemen"
-graphic       = "u.phalanx"
+graphic       = "u.phalanx_o"
 graphic_alt   = "-"
 sound_move    = "m_phalanx"
 sound_move_alt = "m_generic"
@@ -1099,7 +1149,7 @@ convert_time  = 4
 transport_cap = 0
 fuel          = 0
 city_size     = 278     ;000000,000,001,000101,1,0 atk_bonus=0, max_kiils=0, targets=1, move_cost=5 frags, stay_frtfy=1, reserverd=0
-paratroopers_mr_sub = 1 ;00,0000,000,0,1 iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
+paratroopers_mr_sub = 1 ;00,0000,000,0,1 iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=1
 ;NOTE：iPillage changes in rules require client_rules_flag and get_what_can_unit_pillage_from() changes.
 uk_happy      = 1
 uk_shield     = 1
@@ -1120,9 +1170,9 @@ If a Phalanx is fortified or has not moved this turn, it can Rumble enemy units\
  thrust at exposed outer ranks. Rumble attacks are meant to push and unsettle the enemy to\
  stop them from fortifying into a tactical position. The action goes for 3 rounds of combat,\
  uses 5/9 of a move point, and does not alter the fortified status of the Phalanx.\n\
-With the discovery of Conscription, Phalanxes can convert to Musketeers in any domestic city. \
 "), _("\
-\nThe discovery of Banking changes upkeep from shields to gold.\
+\nWith the discovery of Conscription, Phalanxes can convert to Musketeers in any domestic city. \
+The discovery of Banking changes upkeep from shields to gold.\
 ")
 bombard_rate = 3
 
@@ -1158,7 +1208,8 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
-flags         = "FootSoldier", "Capturer", "CantReachAir", "Bombarder", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
+flags         = "FootSoldier", "Capturer", "CantReachAir", "Bombarder", "Settlers", "CanHide",
+                "MultiSlot", "Shield2Gold", "WillNever"
 roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
 Archers fight with bows and arrows. They have good offense and decent defense.\
@@ -1199,7 +1250,7 @@ convert_to    = "Musketeers"
 convert_time  = 2
 transport_cap = 0
 fuel          = 0
-city_size     = 70180 ; 000100,010,010,001001,00 = atk +4*25=+100% (2×), max_kills=2, targets=2, move_cost=9 frags, reserved = 00
+city_size     = 70180 ; 000100,010,010,001001,00 = atk +4*25=+100% (2×), max_kills=2, targets=2, move_cost=9 frags, stay_fortfy=0, reserved = 0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -1361,11 +1412,11 @@ veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 10, 15, 18, 20, 21, 22, 23
 veteran_move_bonus = 0, 0, 0, 0, 1, 2, 3
 helptext      = _("\
-Falconeers are Theocratic holy warriors armed with Falconettes—the\
+Falconeers are Theocratic holy warriors armed with Falconets—the\
  largest hand cannons humans can carry, it proves whose side God is\
  on. Ottoman Janissaries, Reconquistadores, Persian Safavid, and Indian\
  Mughal used them in holy wars.\n\
-Falconettes are huge and heavy. They have woeful accuracy but lethal\
+Falconets are huge and heavy. They have woeful accuracy but lethal\
  firepower：they either kill or totally miss. On paper, attack odds\
  are closest to a Musketeer (A3). Yet there is a high chance of losing\
  when you expect to win, or winning when you expect to lose. The outcome\
@@ -1420,7 +1471,9 @@ Theocratic nations can maintain Zealots without paying\
 "), _("\
 Zealots zealously defend their homeland, and can do surprise skirmish\
  assaults to snipe and injure foreign occupants：Up to 4 invaders\
- on the tile will endure three combat rounds without defense.\
+ on the tile will endure three combat rounds without defense. Skirmish\
+ assaults can also be done to foreign occupied cities if they have\
+ a remaining Foreign National population.\
 ")
 bombard_rate = 3
 
@@ -1542,7 +1595,8 @@ uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail"
-flags         = "MultiSlot", "IgTer", "FootSoldier", "Capturer", "CantReachAir", "Shield2Gold", "Settlers", "CanHide", "WillNever"
+flags         = "MultiSlot", "IgTer", "FootSoldier", "Capturer", "CantReachAir", "Shield2Gold",
+                "Settlers", "CanHide", "WillNever"
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
 Alpine Troops are highly mobile units and\
@@ -1585,7 +1639,7 @@ disembarks    = "Helicopter", "Land", "Sea", "LandRoad", "LandRail"
 targets       = "Sea", "Balloon", "Helicopter", "LandRail", "Zeppelin"
 flags         = "MultiSlot", "Marines", "FootSoldier", "BeachLander", "Capturer",
                 "NeverBlocked", "Shield2Gold", "Settlers", "CanHide", "WillNever",
-                "Airbase", "CanFortress", "Bombarder" ; can Fort only, actually.
+                "Airbase", "CanFortress", "Bombarder"; can Fort only, actually.
 veteran_names =
   _("?vet_rank:green"),
   _("?vet_rank:veteran"),
@@ -1652,9 +1706,9 @@ flags         = "Paratroopers", "FootSoldier", "Capturer", "CantReachAir", "Prov
 roles         = "DefendOk", "DefendOkStartUnit"
 helptext      = _("\
 Paratroopers are experts at airborne attacks.\
- From a friendly city or airbase, Paratroopers who have not used any\
- move points can paradrop directly to any tile in range, and be\
- immediately ready to act there. Beware dropping into unseen territory,\
+ From a friendly city or airbase, Paratroopers who have moves left and\
+ have not already paradropped in the current turn, can paradrop directly\
+ to any tile in range, and be immediately ready to act there. Beware dropping into unseen territory,\
  as Paratroopers landing on a tile occupied by enemy units will be lost.\
  Also note：Paradropping is assumed to be done from aircraft. Therefore,\
  Fighters on Vigil may auto-attack the tile you land on, if adjacent. \
@@ -2047,6 +2101,7 @@ move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
+city_size     = 2304       ; 000000,001,001,000000,00 = atk_bonus=0, max_kills=1, targets=1, move_cost=0 frags, stay_fortfy=0, reserved = 0
 paratroopers_mr_sub = 8192 ; 00100,00,0000,000,0,0 - bbd_retal_rate=4, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
@@ -2057,8 +2112,8 @@ roles         = ""
 helptext      = _("\
 Catapults are large rock-throwing war machines.\
  The ballistic delivery of massive\
- stones diminishes the bonus of Fortifications and\
- City Walls by -25%, yielding a 1.5× and 2.75× bonus, respectively. \n\
+ stones diminishes the defense bonus vs. land attacks by Fortifications and\
+ City Walls by -25%, yielding a 1.25× and 2.75× bonus, respectively. \n\
 "), _("
 Catapults are weak defenders, and will need an escort to be effective.\
  Even so, it is better to rush attack them than do special unit attacks\
@@ -2087,7 +2142,7 @@ move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 1
 fuel          = 0
-city_size     = 507960  ; 011111,000,000,001110,00 = atk_bonus=8.75x, max_kills=0, targets=all, move_cost=14 frags, reserved = 00
+city_size     = 507960  ; 011111,000,000,001110,00 = atk_bonus=8.75x, max_kills=0, targets=all, move_cost=14 frags, stay_fortfy=0, reserved = 0
 uk_happy      = 1
 uk_shield     = 1
 uk_food       = 0
@@ -2135,6 +2190,7 @@ move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
+city_size     = 2560        ; 000000,001,010,000000,00 = atk_bonus=0, max_kills=1, targets=2, move_cost=0 frags, stay_fortfy=0, reserved = 0
 paratroopers_mr_sub = 10240 ; 00101,00,0000,000,0,0 - bbd_retal_rate=5, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
@@ -2149,8 +2205,9 @@ helptext      = _("\
 Cannons are huge guns that use gunpowder to fire massive metallic projectiles\
  much faster and more accurately than earlier ballistic weapons. The\
  aerial delivery of high speed massive metal gives an edge against\
- Fortifications and City Walls. The bonuses from those are reduced by\
- -50% to 1.25x and 2.5x, respectively. \n\
+ Fortifications and City Walls. The defense bonuses vs. land attacks from those\
+ are reduced by -50%. This leaves Fortifications only with their terrain bonus,
+ and reduces City walls to 2.5x. \n\
 "), _("
 While Cannons are strong attackers, they are also weak defenders. Yet\
  they are not without defensive purpose. They can retaliate 5 rounds\
@@ -2178,6 +2235,7 @@ move_rate     = 2
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
+city_size     = 2816        ; 000000,001,011,000000,00 = atk_bonus=0, max_kills=1, targets=3, move_cost=0 frags, stay_fortfy=0, reserved = 0
 paratroopers_mr_sub = 12288 ; 00110,00,0000,000,0,0 - bbd_retal_rate=6, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
@@ -2192,8 +2250,8 @@ helptext      = _("\
 Artillery are a major upgrade to Cannons, with doubled firepower. Accuracy\
  and projectile speed go to a whole new level. Thus, they have an\
  even greater bonus than their predecessors against Fortifications\
- and City Walls. Such bonuses are reduced -75%. This renders Fortifications\
- completely ineffective, and reduces the bonus from Walls down to 2.25x. \n\
+ and City Walls. Such bonuses are reduced -75%. This leaves Fortifications\
+ only with their terrain bonus, and reduces the bonus from Walls down to 2.25x. \n\
 "), _("
 Like their predecessors, Artillery are poor at defense, and need an\
  escort to be effective. However, they can retaliate 6 rounds of bombardment\
@@ -2316,6 +2374,7 @@ move_rate     = 4
 vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
+city_size     = 3072        ; 000000,001,100,000000,00 = atk_bonus=0, max_kills=1, targets=4, move_cost=0 frags, stay_fortfy=0, reserved = 0
 paratroopers_mr_sub = 14336 ; 00111,00,0000,000,0,0 - bbd_retal_rate=7, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
@@ -2328,8 +2387,8 @@ flags         = "CantReachAir", "WillNever"
 roles         = ""
 helptext      = _("\
 Howitzers are upgraded Artillery with a terrifying increase to mobility and attack strength.\
- This is so much so, that Fortifications and City Walls are completely ineffective\
- against Howitzers. \n\
+ Fortifications get no bonus except their terrain bonus, and City Walls\
+ are completely ineffective against Howitzers. \n\
 "), _("
 While Howitzers are vulnerable when not escorted, they can retaliate 7 rounds of bombardment\
  against special unit attacks from other units. This is a strong deterrent.\
@@ -2407,6 +2466,18 @@ uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
 flags         = "Unbribable", "AirAttacker", "HasNoZOC", "NeverProtects", "Bombarder", "Provoking"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:ace"),
+  _("?vet_rank:top gun")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 As new technology inspires the upgrade of Balloons, the Zeppelin appears.\
@@ -2457,10 +2528,10 @@ veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = ""
-cargo         = "Land"
+cargo         = "Land", "Cargo"
 helptext      = _("\
-Airplanes can carry a single diplomatic unit. They can land in any domestic or allied\
- city. For missions to non-allied nations, an empty Airbase must be available for landing.\
+Airplanes can carry a single diplomatic unit or single Freight unit. They can land in any domestic\
+ or allied city. For diplomatic missions to non-allied nations, an empty Airbase must be available for landing.\
  Airplanes have two turns of fuel. Each new aviation tech upgrades range by +2 moves per turn.\
 "), _("
 NOTE：GOTO disallows unit loss from lack of fuel. You\
@@ -2910,7 +2981,8 @@ The Spy Plane is an ultrasonic high altitude aircraft with long range. It gather
  adjacent tiles. Spy Planes have 2 turns of fuel. They are unreachable to primitive\
  propeller-based aircraft.\
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
+Spy Planes can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining moves than the attacker.\
+"), _("NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 [unit_satellite]
@@ -2955,9 +3027,12 @@ Satellites orbit the Earth above the atmosphere. They are unreachable to anythin
  city has a Police Station. Satellites can’t be seen by others unless adjacent.\
  Satellites require Laser tech and can only be built in the city with the Apollo Program.\
 "), _("
-NOTE： Due to game mechanics, Satellites block terrestrial movement\
+Satellites can Stack-Escape：a 100% chance to escape a killed stack if they have more remaining move points than the attacker.\
+"), _("
+NOTE： Due to game mechanics, a Satellite blocks terrestrial movement\
  over a tile. This is solved by killing it with any Missile. To avoid\
- this, end your turn far away from developed or trafficked areas.\
+ being killed, end your turn in a friendly stack of units, or far away from\
+ developed or trafficked areas.\
 ")
 
 [unit_transport_helicopter]
@@ -2994,7 +3069,7 @@ bonuses       =
    }
 cargo         = "Land", "LandAirSea", "LandNoKill"
 flags         = "Helicopter", "AirAttacker", "Unbribable", "Provoking",
-                "CanEscape", "WillNever", "HasNoZOC"
+                "CanEscape", "WillNever", "HasNoZOC", "NeverProtects"
                 ; Tranport Heli is provoking; Fighters do not like them.
 veteran_names =
   _("?vet_rank:green"),
@@ -3045,6 +3120,7 @@ move_rate     = 12
 vision_radius_sq = 12
 transport_cap = 1
 fuel          = 0
+city_size     = 2816       ; 000000,001,011,000000,00 = atk_bonus=0, max_kills=1, targets=3, move_cost=0 frags, stay_fortfy=0, reserved = 0
 paratroopers_mr_sub = 6144 ; 00011,00,0000,000,0,0 - bbd_retal_rate=3, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
@@ -3059,7 +3135,7 @@ bonuses       =
    }
 cargo         = "LandAirSea"
 flags         = "Helicopter", "AirAttacker", "Unbribable",
-                "CanEscape", "WillNever"
+                "CanEscape", "WillNever", "NeverProtects"
                 ; Heli is low-altitude and non-provoking：if it is ever thought to be OP, 
                 ; changing this flag fixes that right away. But currently it MIGHT be UnP 
                 ; because hp_loss, range, city walls, and Ground Strike Fighter
@@ -3155,7 +3231,7 @@ graphic_alt   = "-"
 sound_move    = "m_strike_fighter"
 sound_move_alt = "m_jet_fighter"
 sound_fight   = "f_fighter"
-sound_fight_alt = "ground_strike"
+sound_fight_alt = "Ground Strike"
 build_cost    = 80
 pop_cost      = 0
 attack        = 7
@@ -3311,6 +3387,8 @@ The most advanced Fighter, with improved attack and longer range. Stealth Fighte
 INTERCEPTOR：the Vigil order lets Stealth Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 4 move points or less.\n\
 "), _("
+Stealth Fighters can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining moves than the attacker.\
+"), _("
 NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
@@ -3368,7 +3446,8 @@ The deadliest Bomber, with improved attack and speed. Stealth Bombers can’t be
  unless adjacent to an enemy. Stealth evasion gives a 25% bonus against all Anti-Air\
  units, and reduces SAM Batteries down to only a 25% bonus. May carry two Bombs.\
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
+Stealth Fighters can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining moves than the attacker.\
+"), _("NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -3399,16 +3478,27 @@ uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea", "Cargo"
 flags         = "BadCityDefender", "HelpWonder", "TradeRoute", "CoastStrict", "NonMil", "HasNoZOC"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:sea wolf")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = "Ferryboat", "FerryStartUnit"
 helptext      = _("\
 Boats were used pre-historically for exploration,\
  transport, and interaction with other tribes. They\
  can travel rivers and oceans, but must always stay\
  near shore. Boats can carry one unit and do ancient\
- commerce：building Wonders or setting up Traderoutes\
- without Trade tech. Primitive bartering generates little\
- or no extra trade, but may help you advance faster or\
- create relations with ancient neighbors.\
+ commerce：building Wonders or setting up Trade Routes.\
+ Early bartering may help you advance faster or create\
+ relations with ancient neighbors.\
 ")
 
 [unit_trireme]
@@ -3439,14 +3529,26 @@ uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Cargo"
 flags         = "BadCityDefender", "CantReachAir", "HelpWonder",
                 "TradeRoute", "Coast", "WillNever", "NonMil", "NonMilAttack"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:sea wolf")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = "Ferryboat", "FerryStartUnit"
 helptext      = _("\
 Triremes are used for exploration, transport, and Commerce.\
  The entry on Caravan explains what Commerce units may do.\
 "), _("
 Triremes can enter Deep Ocean, but there is risk：they must end every second\
- turn on river, coastline, or a city—or else be lost at sea. They can travel\
- and attack on rivers, but can’t attack the shore.\
+ turn on river, coastline, or a city—or else be lost at sea. They can attack\
+ and travel on rivers, but can’t attack the shore.\
 "), _("
 Like most ancient sea units, when it initiates combat there will be 15 rounds\
  of combat and 15 total hp lost between both units. This may or may not\
@@ -3480,6 +3582,18 @@ uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 flags         = "BadCityDefender", "CantReachAir", "WillNever"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:sea wolf")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = "Ferryboat", "Hunter"
 helptext      = _("\
 The Longboat is a warship. It can attack at sea, attack the shore, and carry one land\
@@ -3518,11 +3632,23 @@ uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Cargo"
 flags         = "BadCityDefender", "CantReachAir", "HelpWonder",
                 "Traderoute", "Only_Native_Attack", "WillNever", "NonMil", "NonMilAttack"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:sea wolf")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
 The Galley is an all-purpose sea unit and upgrades the Trireme. It has decent\
  combat strength, can transport, and is a Commerce unit. The entry on Caravan\
- explains what Commerce units may do. Galleys can travel and attack on rivers,\
+ explains what Commerce units may do. Galleys can attack and travel on rivers,\
  but can’t attack the shore. Galleys do not cause unhappiness.\
 "), _("
 Like most early sea units, when it initiates an attack, there will be 15 rounds\
@@ -3557,10 +3683,22 @@ uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad"
 flags         = "BadCityDefender", "CantReachAir", "WillNever"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:sea wolf")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat", "Hunter"
 helptext      = _("\
 The War Galley has improved offense, defense, and cargo capacity, but lacks commerce\
- ability. War Galleys can travel and attack on rivers, and do shore attacks from the sea.\
+ ability. War Galleys can attack and travel on rivers, and do shore attacks from the sea.\
 "), _("
 Like most ancient sea units, when it initiates combat there will be 15 rounds\
  of combat and 15 total hitpoints lost between both units. This may or may not\
@@ -3593,10 +3731,22 @@ uk_shield     = 1
 uk_food       = 0
 uk_gold       = 0
 flags         = "BadCityDefender", "CantReachAir", "Only_Native_Attack", "WillNever"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:sea wolf")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = "Hunter"
 helptext      = _("\
-The Ram Ship has one purpose：to destroy other ships. It has poor vision, no transport or\
- commerce ability, and can’t travel rivers. Unlike other early ships, there will always be\
+The Ram Ship has one purpose：to destroy other ships. It has poor vision, and no transport or\
+ commerce ability. Unlike other early ships, there will always be\
  a winner and a loser when Ram Ships attack. They are good for first-strike, and are good\
  counter units for nations not invested into sea tech. Ram Ships can’t do shore attacks.\
 ")
@@ -3628,10 +3778,22 @@ uk_food       = 0
 uk_gold       = 0
 cargo         = "Land", "LandNoKill", "LandAirSea", "LandRoad", "Cargo"
 flags         = "BadCityDefender", "CantReachAir", "Traderoute", "WillNever", "NonMil", "NonMilAttack"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:sea wolf")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat", "Hunter"
 helptext      = _("\
 Caravels upgrade older sea units, and are a big advance in combat, speed, range, and transport capacity. They have\
- the commerce ability of the Galley, but cannot build Wonders. Caravels can travel and attack on rivers and do shore attacks.\
+ the commerce ability of the Galley, but cannot build Wonders. Caravels can attack and travel on rivers and do shore attacks.\
 "), _("
 Like most early sea units, when it initiates an attack, there will be 15 rounds\
  of combat and 15 total hitpoints lost between both units. This may or may not\
@@ -3667,9 +3829,21 @@ targets       = "Submarine", "LandRail"
 cargo         = "Land", "LandNoKill", "LandAirSea", "Balloon", "LandRoad", "Cargo"
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever",
                 "NonMil", "NonMilAttack" ;  maritime trade can continue after Caravel expires.
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:sea wolf")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat"
 helptext      = _("\
-The Galleon is a heavily armed transport ship that can carry up to 4 units. Galleons can travel and attack on rivers,\
+The Galleon is a heavily armed transport ship that can carry up to 4 units. Galleons can attack and travel on rivers,\
  and also do shore attacks. Galleon crews repair their ship an extra +1hp per turn, regardless of whether it has moved.\
 "), _("
 Like most early sea units, when it initiates combat there will be 15 rounds\
@@ -3678,7 +3852,7 @@ Like most early sea units, when it initiates combat there will be 15 rounds\
  unit, it retains one vestige of the commercial abilities for the ships it upgrades.\
  It can enter Peace waters to deliver commercial cargo.\
 "), _("
-Galleons can Stack-Escape：a 50% chance to escape a killed stack if they have more remaining moves than the attacker.\
+Galleons can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
 ")
 
 [unit_frigate]
@@ -3712,15 +3886,27 @@ bonuses       =
    { "flag", "type", "value"
      "Marines", "DefenseMultiplier", 1    
    }
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:sea wolf")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
 roles         = "Hunter"
 helptext      = _("\
 The Frigate is versatile — it is a superior offensive unit and also a decent transport ship. Frigates\
- can travel and attack on rivers, or make shore attacks from sea. Frigate crews repair their ship an\
+ can attack and travel on rivers, or make shore attacks from sea. Frigate crews repair their ship an\
  extra +1hp per turn, regardless of whether it has moved.\
 "), _("
 From Frigates onward, all sea attacks end with a single victor.\
- Frigates can Stack-Escape：a 50% chance to escape a killed stack if they have more remaining move points than the attacker.\
+ Frigates can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining move points than the attacker.\
 ")
 
 [unit_cargo_ship]
@@ -3794,6 +3980,18 @@ bonuses       =
      "Marines", "DefenseMultiplier", 1    
    }
 flags         = "BadCityDefender", "CanEscape"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:sea wolf")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = "Ferryboat", "FerryStartUnit"
 helptext      = _("\
 The Transport can’t attack but can defend itself when under attack.\
@@ -3834,6 +4032,18 @@ bonuses       =
      "Marines", "DefenseMultiplier", 1    
    }   
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:sea wolf")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = "Hunter"
 helptext      = _("\
 The Ironclad is an armored ship that is much more sturdy than the Frigate but\
@@ -3841,7 +4051,7 @@ The Ironclad is an armored ship that is much more sturdy than the Frigate but\
  onward, warships are excellent at attacking shore targets, and can also pillage\
  buoys.\ 
 "), _("
-Ironclads and all modern ships can Stack-Escape：a 50% chance to escape a killed stack if they have more remaining move points than the attacker.\
+Ironclads and all modern ships can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining move points than the attacker.\
 ")
 
 [unit_destroyer]
@@ -3877,6 +4087,18 @@ bonuses       =
      "Marines", "DefenseMultiplier", 1    
    }   
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:sea wolf")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = "Hunter"
 helptext      = _("\
 Destroyers are the first of the modern ships to start your modern\
@@ -3884,6 +4106,8 @@ Destroyers are the first of the modern ships to start your modern\
  anti-submarine warfare, shore bombardment of lighter targets,\
  and supporting the needs of larger fleets. 4× ASW defence gives a\
  35% chance defending vs Submarines.\
+"), _("
+Destroyers can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining move points than the attacker.\
 ")
 
 [unit_cruiser]
@@ -3918,6 +4142,18 @@ bonuses       =
      "Marines", "DefenseMultiplier", 1    
    }
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:sea wolf")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = "Hunter"
 helptext      = _("\
 The Cruiser is a large and fast surface warship with equally strong offensive and defensive strength. More often than not, its\
@@ -3961,11 +4197,25 @@ bonuses       =
      "Missile", "DefenseMultiplier", 1
    }   
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:sea wolf")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = "Hunter"
 helptext      = _("\
 The Missile Destroyer has double the firepower of a Destroyer, and shares the same roles\
  as its ancestor. It gains 2× defense against Air and Missile units. It has a 2× ASW bonus\
  and can can carry one Missile.\
+"), _("
+Missile Destroyers can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining move points than the attacker.\
 ")
 
 [unit_aegis_cruiser]
@@ -4003,6 +4253,18 @@ bonuses       =
      "Marines", "DefenseMultiplier", 1
    }
 flags         = "BadCityDefender", "CanEscape", "AntiAir", "WillNever"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:sea wolf")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = "Hunter"
 helptext      = _("\
 The AEGIS Cruiser has an Anti-Air missile system. Radar and sonar\
@@ -4034,7 +4296,7 @@ move_rate     = 10
 vision_radius_sq = 12
 transport_cap = 0
 fuel          = 0
-city_size     = 3252       ; 000000,001,100,101101,00 = atk_bonus=0, max_kills=1, targets=4, move_cost=45 frags, reserved = 00
+city_size     = 3252       ; 000000,001,100,101101,00 = atk_bonus=0, max_kills=1, targets=4, move_cost=45 frags, stay_fortfy=0, reserved = 0
 paratroopers_mr_sub = 6144 ; 00011,00,0000,000,0,0 - bbd_retal_rate=3, iPill_rand_tgts=0, iPill_odds=0, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 1
 uk_shield     = 1
@@ -4047,6 +4309,18 @@ bonuses       =
      "Marines", "DefenseMultiplier", 1    
    }
 flags         = "BadCityDefender", "CanEscape", "CantReachAir", "WillNever", "Bombarder"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:sea wolf")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 The Battleship is the supreme naval unit, with excellent offensive and defensive strength. It has a 2× defense bonus vs Submarines.\
@@ -4089,6 +4363,18 @@ bonuses       =
    }
 flags         = "NeverProtects", "BadCityDefender", "Only_Native_Attack",
                 "Submarine", "CanEscape", "CantReachAir", "WillNever"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:sea wolf")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = "Hunter"
 helptext      = _("\
 Submarines are strong attackers but weak defenders. They can carry 8 Missiles.\
@@ -4098,6 +4384,8 @@ Submarines are strong attackers but weak defenders. They can carry 8 Missiles.\
 "), _("\
 Submarines have superior attrition rates when attacking in numbers. They excel\
  at hit-and-run against weaker ships.\
+"), _("
+Submarines can Stack-Escape：a 75% chance to escape a killed stack if they have more remaining move points than the attacker.\
 ")
 
 [unit_carrier]
@@ -4133,6 +4421,18 @@ bonuses       =
    }
 flags         = "BadCityDefender", "Only_Native_Attack", "CanEscape",
                 "CantReachAir", "WillNever"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:sea wolf")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
+veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
 The Carrier is a mobile airport that can carry Air units, Helicopters, AAA, Marines, and Missiles.\
@@ -4439,7 +4739,7 @@ build_cost    = 26
 pop_cost      = 0
 attack        = 0
 defense       = 0
-hitpoints     = 6
+hitpoints     = 8
 firepower     = 1
 move_rate     = 4
 vision_radius_sq = 4
@@ -4451,7 +4751,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRail", "Helicopter"
-flags         = "Diplomat", "IgZOC", "NonMil", "HasNoZOC", "Expellable", "Cant_Pillage"
+flags         = "Diplomat", "IgZOC", "NonMil", "HasNoZOC", "Expellable", "Cant_Pillage", "CanClaim", "Settlers"
 veteran_names =
   _("?diplomatic_rank:attaché"),
   _("?diplomatic_rank:secretary"),
@@ -4464,7 +4764,7 @@ veteran_names =
 veteran_base_raise_chance = 60, 50, 40, 30, 20, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 110, 115, 120, 125, 130, 135
-veteran_move_bonus = 0, 0, 0, 0, 0, 0, 0
+veteran_move_bonus = 0, 0, 0, 0, 3, 3, 3
 roles         = "DiplomatStartUnit"
 helptext      = _("\
 A Diplomat performs official or covert actions. Covert actions make incidents\
@@ -4492,7 +4792,7 @@ build_cost    = 35
 pop_cost      = 0
 attack        = 0
 defense       = 0
-hitpoints     = 6
+hitpoints     = 8
 firepower     = 1
 move_rate     = 6
 vision_radius_sq = 8
@@ -4504,7 +4804,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRail", "Helicopter"
-flags         = "Diplomat", "IgZOC", "NonMil", "HasNoZOC", "Spy", "Expellable"
+flags         = "Diplomat", "IgZOC", "NonMil", "HasNoZOC", "Spy", "Expellable", "CanClaim", "Settlers"
 veteran_names =
   _("?spy_level:informant"),
   _("?spy_level:handler"),
@@ -4517,7 +4817,7 @@ veteran_names =
 veteran_base_raise_chance = 60, 50, 40, 30, 20, 15, 0
 veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 110, 115, 120, 125, 130, 135
-veteran_move_bonus = 0, 0, 0, 0, 0, 0, 0
+veteran_move_bonus = 0, 0, 0, 0, 3, 3, 3
 roles         = "DiplomatStartUnit"
 helptext      = _("\
 Spies can do what a Diplomat can, and also：• Survive ops\
@@ -4576,7 +4876,7 @@ Compared to other early Commerce units, the Caravan is the only one who can\
  travel by land off roads and rails, and cause no military threat to\
  trade partners. It can defend itself and also fortify. They have 2 7/9 moves.\n\ 
 Commerce units can help build Wonders in any city with whom\
- you are not at war. In foreign cities 12+ tiles distant, they can create Trade Routes,\
+ you are not at war. In foreign cities 15+ tiles distant, they can create Trade Routes,\
  increasing net trade in both cities relative to their combined trade. Routes are inactive\
  during war and (re)activate during peace.\n\
 Commerce units can enter the Marketplace of non-hostile foreign cities to sell their
@@ -4626,7 +4926,7 @@ Wagons are the first Land unit that can do Commerce. Compared to a Caravan, they
  and can only travel on roads—both of which exposes them to ambush and capture\
  from units in Hideouts. A benefit of Wagons is to transport slower units to reach distant\
  cities faster. They have 3⅓ move points, giving a range of 10 tiles on roads.\n\
-Goods and units with 2 or less move points can be carried on Wagons. Outside a city, units can load;\
+Goods and units with less than 3 move points can be carried on Wagons. Outside a city, units can load;\
  but will lose their moves stepping off.\n\
 Read the help on Caravans to see what Commerce units can do.\
 ")
@@ -4666,7 +4966,7 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = ""
 helptext      = _("\
-Trains are Commerce units with a bonus：they allow units with 2 or less\
+Trains are Commerce units with a bonus：they allow units with less than 3\
  move points to travel your rails at distances comparable to other units. Only Foot Soldiers\
  can:\n1. (L)oad outside a City or Base;\n2. Unload (T) in a Base or Quay.;\n3. Step off the Train outside a City\
  (loses all moves.)\nAll other units must load/unload inside a City.\n\n\
@@ -4690,7 +4990,7 @@ build_cost    = 50
 pop_cost      = 0
 attack        = 0
 defense       = 1
-hitpoints     = 10
+hitpoints     = 20
 firepower     = 1
 move_rate     = 6
 vision_radius_sq = 4
@@ -4705,16 +5005,17 @@ flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capt
 roles         = ""
 helptext      = _("\
 The Truck unit replaces the Caravan as the basic Commerce unit on Land. It moves at\
- more than twice the speed, but must stay on roads. Each Truck used to build a Wonder\
- will add 50 shields. See the entry on Caravan to read what Commerce units may do. \
+ more than twice the speed, but is restricted to using roads only. (Trucks do not\
+ use rails.) Each Truck used to build a Wonder will add 50 shields. See the entry on\
+ Caravan to read what Commerce units may do. \
 "), _("\
-Trucks allow units with 2 or less move points to travel your roads at\
+Trucks allow units with less than 3 move points to travel your roads at\
 distances comparable to other units. Only Foot Soldiers can:\n1. (L)oad outside a City or Base;\n\
 2. Unload (T) in a Base or Quay;\n3. Move off the Truck outside a City\
  (loses all moves.)\nAll other units must load/unload inside a City.\n\n\\
 ")
 
-[unit_cargo]
+[unit_goods]
 name          = _("Goods")
 class         = "Cargo"
 tech_req      = "Currency"
@@ -4748,10 +5049,11 @@ Goods are commodities.\
 Goods can be used to Establish Trade Route or Enter Marketplace. They can\
  be carried by Commerce units, allowing them to establish multiple\
  trade routes in one voyage. Also, Goods can Recycle Production with only\
- a 25% penalty. \n\
+ a 25% penalty, rendering 18 shields into a city production target. \n\
 "), _("\
 By themselves, Goods can only move onto tiles with a City, Quay, Fortress,\
  or Naval Base. Commerce units, Tribesmen, and Galleons may carry them as cargo.\
+ If adjacent to a foreign city, use the D key to do Commerce functions.\
 ")
 
 [unit_freight]
@@ -4779,6 +5081,7 @@ uk_happy      = 0
 uk_shield     = 0
 uk_food       = 0
 uk_gold       = 0
+disembarks    = "Air", "LandRoad", "LandRail", "Sea", "RiverShip"
 flags         = "HelpWonder", "TradeRoute", "NonMil", "HasNoZOC", "Capturable", "Cant_Fortify", "NoVeteran", "Cant_Pillage"
 roles         = ""
 helptext      = _("\
@@ -4791,7 +5094,8 @@ The methodical logistics of modern shipping render the Freight unit：a cargo\
 "), _("\
 By itself, Freight is only able to move to tiles with loading infrastructure:\
  Cities, Quays, Fortresses, and Naval Bases. To be transported, it must be carried\
- by train, truck, or ship.\
+ by Train, Truck, Airplane, or ship. If adjacent to a foreign, use the D key to\
+ do Commerce functions.\
 ")
 
 [unit_explorer]
@@ -4805,7 +5109,7 @@ sound_move    = "m_explorer"
 sound_move_alt = "m_generic"
 sound_fight   = "f_explorer"
 sound_fight_alt = "f_generic"
-build_cost    = 22
+build_cost    = 20
 pop_cost      = 0
 attack        = 0
 defense       = 1
@@ -4984,7 +5288,7 @@ build_cost    = 10
 pop_cost      = 1
 attack        = 0
 defense       = 1
-hitpoints     = 10
+hitpoints     = 8
 firepower     = 1
 move_rate     = 2
 vision_radius_sq = 4
@@ -4993,7 +5297,7 @@ fuel          = 0
 city_size     = 1
 uk_happy      = 0
 uk_shield     = 0
-uk_food       = 2
+uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "LandRail", "Helicopter"
@@ -5005,6 +5309,7 @@ veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 0
 helptext      = _("\
+Population Cost: 1. Adds Population: 1.\n\n\
 Peasants are the common people of Monarchies. You can encourage them\
  by royal edict to migrate to other cities and help colonize new\
  areas. But to have such access, you must be a Constitutional Monarchy\

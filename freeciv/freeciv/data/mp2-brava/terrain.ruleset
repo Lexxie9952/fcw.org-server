@@ -299,7 +299,7 @@ clean_fallout_time   = 3
 animal               = "None"
 warmer_wetter_result = "no"
 warmer_drier_result  = "Swamp"
-cooler_wetter_result = "Arctic"
+cooler_wetter_result = "Glacier"
 cooler_drier_result  = "Tundra"
 native_to            = "Sea", "Air", "Balloon", "Missile", "Helicopter", "Trireme", "RiverShip", "Submarine", "AirProtect", "AirPillage", "Bomb"
 flags                = "NoCities", "NoBarbs", "NoPollution", "FreshWater", "NoZoc", "NoFortify"
@@ -340,8 +340,8 @@ clean_fallout_time   = 3
 animal               = "None"
 warmer_wetter_result = "no"
 warmer_drier_result  = "Swamp"
-cooler_wetter_result = "Arctic"
-cooler_drier_result  = "Arctic"
+cooler_wetter_result = "Glacier"
+cooler_drier_result  = "Glacier"
 native_to            = "Sea", "Air", "Balloon", "Missile", "Helicopter", "Trireme", "RiverShip", "Submarine", "AirProtect", "AirPillage", "Bomb"
 flags                = "NoCities", "NoPollution", "UnsafeCoast", "NoZoc", "NoFortify"
 property_ocean_depth = 32
@@ -397,6 +397,7 @@ Deep oceans cover much of the world away from coastlines, and only\
 
 [terrain_arctic]
 name                 = _("Arctic")
+rule_name            = "Glacier"
 graphic              = "arctic"
 graphic_alt          = "-"
 identifier           = "a"
@@ -559,7 +560,7 @@ clean_fallout_time   = 3
 animal               = "None"
 warmer_wetter_result = "Lake"
 warmer_drier_result  = "Desert"
-cooler_wetter_result = "Arctic"
+cooler_wetter_result = "Glacier"
 cooler_drier_result  = "Tundra"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Missile", "Helicopter", "AirProtect", "AirPillage", "Bomb"
 flags                = "Starter", "CanHaveRiver", "Low Land"
@@ -736,7 +737,7 @@ clean_fallout_time   = 3
 animal               = "None"
 warmer_wetter_result = "Lake"
 warmer_drier_result  = "Desert"
-cooler_wetter_result = "Arctic"
+cooler_wetter_result = "Glacier"
 cooler_drier_result  = "Tundra"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Missile", "Helicopter", "AirProtect", "AirPillage", "Bomb"
 flags                = "Starter", "CanHaveRiver", "Low Land"
@@ -784,7 +785,7 @@ clean_fallout_time   = 3
 animal               = "None"
 warmer_wetter_result = "Lake"
 warmer_drier_result  = "Desert"
-cooler_wetter_result = "Arctic"
+cooler_wetter_result = "Glacier"
 cooler_drier_result  = "Tundra"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Missile", "Helicopter", "AirProtect", "AirPillage", "Bomb"
 flags                = "CanHaveRiver", "Low Land"
@@ -830,7 +831,7 @@ clean_fallout_time   = 3
 animal               = "None"
 warmer_wetter_result = "Lake"
 warmer_drier_result  = "Desert"
-cooler_wetter_result = "Arctic"
+cooler_wetter_result = "Glacier"
 cooler_drier_result  = "no"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Missile", "Helicopter", "AirProtect", "AirPillage", "Bomb"
 flags                = "Starter", "NoBarbs", "CanHaveRiver", "Low Land"
@@ -1051,8 +1052,8 @@ ui_name_base_airbase = _("?gui_type:Build Airbase")
 ;                           (the last three require a corresponding
 ;                           [resource_*] / [base_*] / [road_*] section)
 ; rmcauses                = events that can remove extra type.
-;                           "CleanPollution", "CleanFallout", "Pillage", or
-;                           "Disappear"
+;                           "CleanPollution", "CleanFallout", "Pillage",
+;                           "Disappear", or "Enter"
 ; graphic                 = tag specifying preferred graphic
 ; graphic_alt             = tag for alternate graphic if preferred graphic is
 ;                           not present. Can use eg "-" for no alternate
@@ -1294,7 +1295,7 @@ name           = _("Minor Tribe Village")
 rule_name      = "Hut"
 category       = "Bonus"
 causes         = "Hut"
-;rmcauses       = ""
+rmcauses       = "Enter"
 graphic        = "tx.village"
 graphic_alt    = "-"
 activity_gfx   = "None"
@@ -1405,7 +1406,7 @@ reqs           =
       "Terrain", "Grassland", "Local", FALSE,    FALSE
       "Terrain", "Tundra",    "Local", FALSE,    FALSE
       "Terrain", "Desert",    "Local", FALSE,    FALSE
-      "Terrain", "Arctic",    "Local", FALSE,    FALSE
+      "Terrain", "Glacier",    "Local", FALSE,    FALSE
       "Tech", "Warrior Code", "Player",TRUE,     FALSE
       "TerrainClass","Land",  "Local", TRUE,     FALSE
       "UnitFlag","CanHide",   "Local", TRUE,     FALSE
