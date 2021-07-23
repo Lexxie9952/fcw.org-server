@@ -1,2 +1,23 @@
 This is a list of what is backported in advance of the convergence backporting commits being done by cazfi:
 
+Keep the list sorted by the order they were committed to upstream Freeciv.
+Commit is the commit ID hash in the upstream Freeciv git repository.
+Commit Date is NOT the author date (that GitHub shows) but the date it was committed.
+Completeness Comment is an explanation of what was changed and/or is missing.
+
+Commit                                   Commit Date         Completeness Comment
+481826d46b628895cbd63f7f16fed76c08cb02a6 2020-02-06 07:40:23 Unchanged and complete
+5fa96c064c65cccbaa160c411b141f3332cae7a6 2020-02-06 07:54:01 Unchanged and complete
+61a80133a7c678ee2245eb5f5a9e9d846c11c91d 2020-02-09 00:03:15 Unchanged and complete
+74cb0d3f3931e3b14d4648a9cc880654cbc44845 2020-02-09 11:03:21 Unchanged and complete
+af50b285bea1cec8d0633ad0426dc02d8905c0bd 2020-02-12 14:13:16 Unchanged and complete
+f7827dc24147d99c2b26e0033f7d6e8f1f9cfd99 2020-02-12 14:13:16 Unchanged and complete
+f568f5bb700de1aa11178991e37898b557cba21c 2020-02-12 14:13:16 Unchanged and complete
+a623e13f5ac5a539c6b90afacc667f4266ceae2e 2020-02-12 14:13:16 Unchanged and complete
+207f5617b0a8f7acdb93d708709925c6520cefeb 2020-02-14 06:45:14 Unchanged and complete
+0823ceb315ab83fa14e87cb48fb3d81707516df9 2020-02-14 06:45:14 Unchanged and complete
+46f22c251d36539d5059bd1876a46dbb024cc9ab 2020-02-18 00:00:05 Unchanged and complete
+4b29d6320d8f12337a2f25dc0a99eb6b79e6d4ef 2020-02-22 23:51:23 Unchanged and complete
+5c49fa4b0c6ac84b74d6adef10d49a777f5dd410 2020-02-25 16:45:31 Unchanged and complete
+c67cb82f51ef5034cc361738ab8ae74946374262 2020-06-13 11:43:44 Unchanged and complete
+5f5aad1b8cc6d2fea720e260f8c47944b696f32e 2020-06-13 11:43:44 Unchanged and complete
