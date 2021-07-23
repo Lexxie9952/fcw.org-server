@@ -274,10 +274,16 @@ function civclient_init()
           play: function() {
             play_music = true;
             simpleStorage.set('play_music', true);
+            $(".play").show();
+            $(".pause").hide();
+            $(".error").hide();
           },
           pause: function() {
             play_music = false;
             simpleStorage.set('play_music', false);
+            $(".pause").show();
+            $(".play").hide();
+            $(".error").hide();
           }
         });
     audio = as[0];
