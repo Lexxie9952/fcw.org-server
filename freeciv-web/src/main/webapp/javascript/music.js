@@ -699,7 +699,7 @@ function pick_next_track() {
     else if (game_info.turn < 85)  category = "colonial"
     else if (game_info.turn < 100) category = "industrial"
     else category = "modern"
-
+    dj_approved = true;
     track_name = music_list[category][Math.floor(Math.random() * music_list[category].length)] + ".mp3";
   }
   else { // Client is player
