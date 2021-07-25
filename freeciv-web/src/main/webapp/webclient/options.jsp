@@ -2,7 +2,7 @@
 
 <h2>Game Options</h2>
 
-<div style="white-space: nowrap; display:inline"><span><b style="display:inline">Music:</b><audio style="display:inline" title="Click ▶ to toggle audio.\nshift-\ for next track" preload="none">Music</audio></span></div>
+<div style="white-space: nowrap; display:inline" title="&#9654; to toggle audio. shift-\ to skip to next track"><span><b style="display:inline">Music:</b><audio id="audioplayer" style="display:inline" preload="none">Music</audio></span></div>
 
 <table>
 <tr>
