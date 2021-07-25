@@ -257,7 +257,7 @@ function control_init()
   } else {
     context_options['position'] = function(opt, x, y){
       //var new_top = mouse_y + $("#canvas_div").offset().top-150;
-      var new_top = $("#canvas").offset().top;
+      var new_top = $("#canvas").offset().top + 36;
       opt.$menu.css({top: new_top, left: (($("#canvas").width()/2)-95)});
     };
   }
