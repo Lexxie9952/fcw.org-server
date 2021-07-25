@@ -250,10 +250,16 @@ function control_init()
   if (!touch_device) {
     context_options['position'] = function(opt, x, y){
                                                 if (touch_device) return;
-                                                var new_top = mouse_y + $("#canvas_div").offset().top;
-                                                new_top = mouse_y + $("#canvas").offset().top-52;
+                                                //var new_top = mouse_y + $("#canvas_div").offset().top;
+                                                var new_top = mouse_y + $("#canvas").offset().top-52;
                                                 opt.$menu.css({top: new_top , left: mouse_x+16});
                                               };
+  } else {
+    context_options['position'] = function(opt, x, y){
+      //var new_top = mouse_y + $("#canvas_div").offset().top-150;
+      var new_top = $("#canvas").offset().top;
+      opt.$menu.css({top: new_top, left: (($("#canvas").width()/2)-95)});
+    };
   }
 
   $.contextMenu(context_options);

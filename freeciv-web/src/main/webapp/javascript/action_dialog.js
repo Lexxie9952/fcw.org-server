@@ -1771,7 +1771,7 @@ function select_last_action()
 
   $(id).dialog({
   title    : "Go and ...",
-  width    : "450px",
+  width    : (is_small_screen() ? "99%" : "450px"),
   bgiframe : true,
   html:    dhtml,
   modal    : true,

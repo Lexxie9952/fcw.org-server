@@ -1152,22 +1152,23 @@ body:not(.mobile) .ui-dialog.unit_dialog {
 
 .context-menu-list {
   background: #00000098;
-  /*background: url(/images/bg-med-dark.jpg)*/
 }
 
 .context-menu-item {
   font-size: 120%;
   padding: 0px 5px 1px;
-  color: #bcb0ab;
-  /*background-color: rgba(200,200,200,0.35);*/
+  color: #c7bfbc;
   background: none;
   text-shadow: 2px 1px 2px #200;
 }
 
 @media (max-width: 900px) {
   .context-menu-item {
-    font-size: 150%;
-    background-color: rgba(200,200,200,0.75);
+    font-size: 140%;
+    padding: 0px 5px 1px;
+    color: #c7bfbc;
+    background: none;
+    text-shadow: 2px 1px 2px #200;
   }
 }
 
