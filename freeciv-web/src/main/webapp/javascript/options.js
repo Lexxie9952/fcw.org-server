@@ -86,7 +86,8 @@ var unit_click_menu = true;  // whether to show context menu on left-clicking a 
 var map_drag_enabled = true; // whether double tap and drag will move the map
 var enable_goto_drag = true; // whether to disable dragging unit for GOTO
 var enable_autoexplore = true; // whether to disable the X hotkey because some people mess up
-var show_order_option = true; // corresponds to the checkbox
+var show_order_option = true; // corresponds to the checkbox, and whether or not to show orders buttons at all
+var show_order_buttons = 2;  //  if shown, which mode:  1=most common, 2=all orders, 3=hide panels
 var show_empire_tab = false;
 var show_warcalc = false;
 var show_unit_movepct = false; // show move-point bar on map units
@@ -278,29 +279,33 @@ function init_options_dialog()
     unit_click_menu = this.checked;
     simpleStorage.set('unitclickmenu', unit_click_menu);
   });
-  // SHOW ORDER BUTTONS
+  // SHOW ORDER BUTTONS -- show_order_option: whether to show; show_order_buttons: modality less/more/hide all panels
   $('#show_order_buttons').prop('checked', show_order_option);
   if (show_order_option==true) {
-    show_order_buttons=1; // 1=frequent, 2 is verbose/complete mode
     $("#game_unit_orders_default").show();
     update_unit_order_commands();
   }
   else { 
-    show_order_buttons = 0;
     $("#game_unit_orders_default").hide();
   }
   $('#show_order_buttons').change(function() {
     show_order_option = this.checked;
     if (show_order_option==true) {
-      show_order_buttons=2;
+      simpleStorage.set('showorderoption', show_order_option);
+      show_order_buttons = simpleStorage.get('ordrbtns');
+      if (!show_order_buttons || show_order_buttons==3) {
+        // option was never set || was set to hide all; turning the option back on resets to default:
+        if (show_order_buttons==3) $("#game_status_panel_bottom").show(); // bring back the other hidden panael
+        show_order_buttons=2; // default to 2:all (1==common, 3==hide all)
+        simpleStorage.set('ordrbtns', show_order_buttons);
+      }
       $("#game_unit_orders_default").show();
       update_unit_order_commands();
     }
     else {
-      show_order_buttons = 0;
       $("#game_unit_orders_default").hide();
     }
-    simpleStorage.set('showorderbuttons', show_order_option); 
+    simpleStorage.set('showorderoption', show_order_option); 
   });
   // AUTO ATTACK
   $('#auto_attack').prop('checked', auto_attack);

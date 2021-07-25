@@ -211,12 +211,23 @@ function civclient_init()
     restore_chatbox_vals = tmp;
   }
 
+  // Which mode for showing orders buttons (if on) 1==common, 2==all
   show_order_buttons = simpleStorage.get('ordrbtns');
-  if (show_order_buttons == null || show_order_buttons === true) {
-    show_order_buttons = 1;  // Default case: show common; 2==show all
-  } else if (show_order_buttons == 0) {
+  if (!show_order_buttons || show_order_buttons === true) {
+    show_order_buttons = 2;  // Default case
+    simpleStorage.set('ordrbtns', 2);
+  }
+  if (show_order_buttons == 3) {
+    $("#game_status_panel_bottom").hide(); // mode 3 hides all
+  }
+  // Whether to show order buttons at all:
+  show_order_option = simpleStorage.get('showorderoption');
+  if (show_order_option == null || show_order_option === true) {
+    show_order_option = true;  // Default, show order buttons.
+    simpleStorage.set('showorderoption',true)
+  } else {
+    show_order_option = false;
     $("#game_unit_orders_default").hide(); // no order buttons at all
-    $("#game_status_panel_bottom").hide();
   }
 
   draw_highlighted_pollution = simpleStorage.get('showpollution');

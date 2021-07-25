@@ -17,8 +17,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ***********************************************************************/
-var show_order_buttons = 1;  // 1=most common, 2=all orders, 3=hide panels
-
 const update_focus_delay = 500;
 const update_mouse_cursor_delay = 600;
 
@@ -1360,10 +1358,13 @@ function button_less_orders()
 **************************************************************************/
 function button_hide_panels()
 {
-  show_order_buttons = 0;
+  show_order_buttons = 3;
   simpleStorage.set('ordrbtns', show_order_buttons); // save preference
   $("#game_unit_orders_default").hide();
   $("#game_status_panel_bottom").hide();
+  // turn prefs checkbox off so it's ready for one click to set back on
+  show_order_option = false;
+  simpleStorage.set('showorderoption', show_order_option);
 }
 
 /**************************************************************************
@@ -1371,8 +1372,10 @@ function button_hide_panels()
 **************************************************************************/
 function update_unit_order_commands()
 {
-  // don't show orders buttons for observers
-  if (client_is_observer() || client.conn.playing == null)
+  // don't show orders buttons if option off, or if observer
+  if (!show_order_option
+      || client_is_observer()
+      || client.conn.playing == null)
   {
     $("#game_unit_orders_default").hide();
     return;
@@ -1404,15 +1407,16 @@ function update_unit_order_commands()
     $("#game_unit_orders_default").hide();
     return;
   }
+  // turn back on if the above hid it last time:
+  $("#game_unit_orders_default").show();
 
   switch (show_order_buttons) {
-    case 0:                 // hide lower all panels
-      $("#game_unit_orders_default").hide();
+    case 3: // 3==hide the other lower panel too. 
+      //$("#game_unit_orders_default").hide(); should be off anyway
       $("#game_status_panel_bottom").hide();
     break;
 
     case 1:         // common/frequently used orders only
-      $("#game_unit_orders_default").show();
       $("#order_more").show();
       $("#order_less").hide();
       $("#order_disband").hide();
@@ -1421,7 +1425,6 @@ function update_unit_order_commands()
     break;
 
     case 2:         // all legal orders buttons
-      $("#game_unit_orders_default").show();
       $("#order_less").show();
       $("#order_more").hide();
       $("#order_disband").show();
@@ -2374,7 +2377,7 @@ function set_unit_focus_and_redraw(punit)
   auto_center_on_focus_unit();
   update_active_units_dialog();
   update_unit_order_commands();
-  if (current_focus.length > 0 && $("#game_unit_orders_default").length > 0 && show_order_buttons ) {
+  if (current_focus.length > 0 && $("#game_unit_orders_default").length > 0 && show_order_option ) {
     $("#game_unit_orders_default").show();
   }
 }
