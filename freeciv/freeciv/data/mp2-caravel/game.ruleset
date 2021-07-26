@@ -2413,7 +2413,7 @@ actor_reqs    =
       "UnitFlag",      "Settlers",     "Local",   TRUE
       "UnitType",      "Tribesmen",    "Local",   TRUE
       "UnitState",     "Transported",  "Local",   FALSE  ; Prevent quay exploit
-      "MinYear",       "-2400",        "World",   FALSE   ; they get old
+      "MinYear",       "-2000",        "World",   FALSE   ; they get old
     }
 [actionenabler_road_prole]
 action        = "Build Road"
