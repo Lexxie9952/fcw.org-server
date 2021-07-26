@@ -5426,7 +5426,7 @@ function create_connect_packet(packet)
           || upgrade_extra == EXTRA_RIVER
           || upgrade_extra == EXTRA_FARMLAND
           || upgrade_extra == EXTRA_RAIL
-          || upgrade_extra == EXTRA_MAGLEV)
+          || (typeof EXTRA_MAGLEV !== "undefined" && upgrade_extra == EXTRA_MAGLEV))
         order['sub_target'] = upgrade_extra;
       else order['sub_target'] = 0; // Could set a connect_target for advanced commands
       order['action'] = ACTION_COUNT; // Could set a connect_ACTION for more commands
