@@ -678,13 +678,14 @@ const char *city_improvement_name_translation(const struct city *pcity,
     }
   }
 
+  /* This is just redundant in FCW, should have ifndef FREECIV_WEB
   if (state) {
-    fc_snprintf(buffer, sizeof(buffer), "%s(%s)",
+    fc_snprintf(buffer, sizeof(buffer), "%s",
                 improvement_name_translation(pimprove), state); 
     return buffer;
-  } else {
-    return improvement_name_translation(pimprove);
-  }
+  } */
+
+  return improvement_name_translation(pimprove);
 }
 
 /**********************************************************************//**
