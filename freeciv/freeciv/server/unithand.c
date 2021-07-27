@@ -3656,6 +3656,13 @@ static bool city_build(struct player *pplayer, struct unit *punit,
 **************************************************************************/
 static void do_path_req(struct player *pplayer, struct unit *punit, int goal)
 {
+  if (NULL == punit) {
+    /* Shouldn't happen */
+    log_error("do_path_req()"
+              " invalid unit");
+    return;
+  }
+
   int unit_id = punit->id;
 
   struct tile *ptile = index_to_tile(&(wld.map), goal);
@@ -3666,17 +3673,9 @@ static void do_path_req(struct player *pplayer, struct unit *punit, int goal)
   int i = 0;
   struct packet_goto_path p;
 
-  if (NULL == punit) {
-    /* Shouldn't happen */
-    log_error("handle_unit_move()"
-              " invalid unit %d",
-              unit_id);
-    return;
-  }
-
   if (NULL == ptile) {
     /* Shouldn't happen */
-    log_error("handle_unit_move()"
+    log_error("do_path_req()"
               " invalid %s (%d) tile (%d,%d)",
               unit_rule_name(punit),
               unit_id,
@@ -3686,7 +3685,7 @@ static void do_path_req(struct player *pplayer, struct unit *punit, int goal)
 
   if (!is_player_phase(unit_owner(punit), game.info.phase)) {
     /* Client is out of sync, ignore */
-    log_verbose("handle_unit_move()"
+    log_verbose("do_path_req()"
                 " invalid %s (%d) %s != phase %d",
                 unit_rule_name(punit),
                 unit_id,
@@ -3726,7 +3725,18 @@ static void do_path_req(struct player *pplayer, struct unit *punit, int goal)
 
     }
     pf_path_destroy(path);
-    p.turns = total_mc / unit_move_rate(punit);
+    /* FIXME: 27July2021 cazfi identified div by zero was crash error code. 
+       This is the only division in the function */
+    if (unit_move_rate(punit)) {
+      p.turns = total_mc / unit_move_rate(punit);
+    } else {
+      log_verbose("do_path_req()"
+          " %s (id=%d) %s. moverate=0 would cause div by zero",
+          unit_rule_name(punit),
+          unit_id,
+          nation_rule_name(nation_of_unit(punit)));
+      p.turns = 999;
+    }
     send_packet_goto_path(pplayer->current_conn, &p);
 
   } else {
