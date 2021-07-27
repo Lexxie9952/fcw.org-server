@@ -3659,8 +3659,7 @@ static void do_path_req(struct player *pplayer, struct unit *punit, int goal)
   if (NULL == punit) {
     /* Shouldn't happen */
     log_error("handle_unit_move()"
-              " invalid unit %d",
-              unit_id);
+              " invalid unit ");
     return;
   }
 
