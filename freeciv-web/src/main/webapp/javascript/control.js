@@ -86,7 +86,7 @@ var rally_active = false;     // modifies goto_active to be setting a rally poin
 var old_rally_active = false;
 const RALLY_PERSIST = 2;    // value for rally_active indicating a persistent rally point will be set */
 // The default virtual utype for rally pathing. Mech.Inf in mp2c. Mounted Land class in other rules 
-const RALLY_DEFAULT_UTYPE_ID = 21; 
+const RALLY_DEFAULT_UTYPE_ID = 22; 
 var rally_virtual_utype_id = RALLY_DEFAULT_UTYPE_ID; // which utype to use when requesting rally path
 var rally_city_id = null; // city being told to set a rally point 
 var delayed_goto_active = false; // modifies goto_active state to give delayed goto command
