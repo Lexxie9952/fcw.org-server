@@ -656,6 +656,11 @@ Output_type_id output_type_by_identifier(const char *id)
 const char *city_improvement_name_translation(const struct city *pcity,
 					      const struct impr_type *pimprove)
 {
+    return improvement_name_translation(pimprove);
+
+/* This is redundant in FCW and causes string mismatches over improvement
+   names. TODO: make #ifndef FREECIV_WEB to do all this: 
+
   static char buffer[256];
   const char *state = NULL;
 
@@ -678,14 +683,14 @@ const char *city_improvement_name_translation(const struct city *pcity,
     }
   }
 
-  /* This is just redundant in FCW, should have ifndef FREECIV_WEB
   if (state) {
     fc_snprintf(buffer, sizeof(buffer), "%s",
                 improvement_name_translation(pimprove), state); 
     return buffer;
-  } */
+  } 
 
   return improvement_name_translation(pimprove);
+  */
 }
 
 /**********************************************************************//**
