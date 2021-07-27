@@ -33,6 +33,7 @@ artists = "
   b.marco_polos_embassy
   b.mausoleum
   b.michelangelos_chapel
+  b.pasteur_institute
   b.pyramids
   b.olympics
   b.roman_colosseum
@@ -100,6 +101,7 @@ sprites =
 		"b.michelangelos_chapel", "wonders/michelangelos_chapel"
                 "b.olympics", "wonders/olympics"
 		"b.oracle", "wonders/oracle"
+                "b.pasteur_institute", "wonders/pasteur_institute"
                 "b.pax_dei", "wonders/pax_dei"
 		"b.pyramids", "wonders/pyramids"
                 "b.roman_colosseum", "wonders/colosseum"

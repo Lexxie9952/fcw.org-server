@@ -425,12 +425,12 @@ graphic_alt = "-"
 helptext = _("Obsoletes Medici Bank.")
 cost = 8040
 
-[advance_genetic_engineering]
-name     = _("Genetic Engineering")
+[advance_microbiology]
+name     = _("Microbiology")
 req1     = "Medicine"
 req2     = "The Corporation"
 flags    = ""
-graphic     = "a.genetic_engineering"
+graphic     = "a.microbiology"
 graphic_alt = "-"
 cost = 3150
 

@@ -106,7 +106,7 @@ sabotage	= 100
 sound		= "b_colosseum"
 sound_alt	= "b_generic"
 helptext	= _("\
-Entertains the citizens of a city, making 3 unhappy citizens content. \
+Entertains the citizens of a city, making three unhappy citizens content. \
  (Four after the discovery of Electricity.)  However, it does not\
  affect citizens made unhappy by military activity.\
 ")
@@ -1651,32 +1651,6 @@ Boosts science production by 100% in the city where it is built.\
  is added to the total science. This wonder is never obsolete.\
 ")
 
-[building_cure_for_cancer]
-name		= _("Cure For Cancer")
-genus		= "GreatWonder"
-reqs	=
-    { "type", "name", "range"
-      "Tech", "Genetic Engineering", "Player"
-    }
-graphic	= "b.cure_for_cancer"
-graphic_alt	= "-"
-obsolete_by	=
-    { "type", "name", "range"
-    }
-build_cost	= 400
-upkeep		= 0
-sabotage	= 0
-sound		= "w_cure_for_cancer"
-sound_alt	= "w_generic"
-helptext	= _("\
-This stunning technological achievement makes two content citizens\
- happy in all cities of all players who know Genetic\
- Engineering. In the event where there are not enough\
- content citizens to benefit from this effect, the wonder\
- applies to unhappy citizens (including those unhappy about military\
- activity), making each content then happy. This wonder is never obsolete.\
-")
-
 [building_eiffel_tower]
 name		= _("Eiffel Tower")
 genus		= "SmallWonder"
@@ -1851,10 +1825,9 @@ sound		= "w_hanging_gardens"
 sound_alt	= "w_generic"
 helptext	= _("\
 Makes two content citizens happy in every city in your nation.\
- In the event where there are no content citizens to get the\
- effect of Hanging Gardens, the wonder applies to unhappy citizens\
- (including those unhappy about military activity), making each content\
- then happy.  Gives +2 luxury in the city where it is built. \n\
+ If there are no content citizens, the wonder makes one unhappy\
+ citizen happy, even if unhappy about military activity. Gives\
+ +2 luxury in the city where it is built. \n\
 "), _("
 The Hanging Gardens are a Civil Wonder. You can build only one Civil Wonder. \n\
 "), _("
@@ -2331,6 +2304,31 @@ helptext	= _("\
 Makes two of your unhappy citizens content in every city\
  with a Temple in your nation. Does not affect citizens made\
  unhappy by military activity. Obsolete by：Theology.\
+")
+
+[building_pasteur_institute]
+name		= _("Pasteur Institute")
+genus		= "GreatWonder"
+reqs	=
+    { "type", "name", "range"
+      "Tech", "Microbiology", "Player"
+    }
+graphic	= "b.pasteur_institute"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 400
+upkeep		= 0
+sabotage	= 0
+sound		= "w_pasteur_institute"
+sound_alt	= "w_generic"
+helptext	= _("\
+This wonder is a breakthrough for the health of the world. It makes\
+ two content citizens happy in all cities of all players who\
+ know Microbiology. If there are no content citizens, the wonder\
+ makes one unhappy citizen happy, even if unhappy about military\
+ activity. This wonder is never obsolete.\
 ")
 
 [building_pax_dei]
