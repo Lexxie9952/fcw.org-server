@@ -3656,6 +3656,14 @@ static bool city_build(struct player *pplayer, struct unit *punit,
 **************************************************************************/
 static void do_path_req(struct player *pplayer, struct unit *punit, int goal)
 {
+  if (NULL == punit) {
+    /* Shouldn't happen */
+    log_error("handle_unit_move()"
+              " invalid unit %d",
+              unit_id);
+    return;
+  }
+
   int unit_id = punit->id;
 
   struct tile *ptile = index_to_tile(&(wld.map), goal);
@@ -3665,14 +3673,6 @@ static void do_path_req(struct player *pplayer, struct unit *punit, int goal)
   struct tile *old_tile;
   int i = 0;
   struct packet_goto_path p;
-
-  if (NULL == punit) {
-    /* Shouldn't happen */
-    log_error("handle_unit_move()"
-              " invalid unit %d",
-              unit_id);
-    return;
-  }
 
   if (NULL == ptile) {
     /* Shouldn't happen */
