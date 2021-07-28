@@ -3075,6 +3075,11 @@ static bool set_command(struct connection *caller, char *str, bool check)
     break;
 
   case SST_STRING:
+    // FCW had no way to set empty value from CLI because arg=""
+    // isn't JSON compatible. 'empty' becomes synonymous with ""
+    if (strcmp(args[1], "empty") == 0) {
+      args[1][0] = '\0';    
+    }
     if (check) {
       if (!setting_is_changeable(pset, caller, reject_msg,
                                  sizeof(reject_msg))
@@ -3113,6 +3118,11 @@ static bool set_command(struct connection *caller, char *str, bool check)
     break;
 
   case SST_BITWISE:
+    // FCW had no way to set empty value from CLI because arg=""
+    // isn't JSON compatible. 'empty' becomes synonymous with ""
+    if (strcmp(args[1], "empty") == 0) {
+      args[1][0] = '\0';    
+    }
     if (check) {
       if (!setting_is_changeable(pset, caller, reject_msg,
                                  sizeof(reject_msg))

@@ -445,7 +445,7 @@ function init_common_intro_dialog() {
   "Click <b>Game</b> button to select Game Version (ruleset).<br><br>"+
   "Advanced: You can tune more settings with the command line.<br>"+
   "&nbsp;&nbsp;&nbsp;To see all options: <b>/show all</b><br>"+
-  "&nbsp;&nbsp;&nbsp;Set option to ####: <b>/set</b> option_name ####<br>"+
+  "&nbsp;&nbsp;&nbsp;Set option to ####: <b>/set</b> option_name ####<br> &nbsp;&nbsp;&nbsp;<i>(use </i><b>empty</b><i> to set empty value of \"\")</i>"+
   "&nbsp;&nbsp;&nbsp;To see option help: <b>/help</b> option_name<br><br><br>"
    );
 }
