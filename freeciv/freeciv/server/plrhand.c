@@ -1016,6 +1016,10 @@ static void send_player_info_c_real(struct player *src,
     } else {
       package_player_info(src, &info, &web_info, NULL, INFO_MINIMUM);
     }
+    if (!pconn->supercow) {
+      // in FCW, pconn/account name is private; only player name exposed.
+      info.username[0] = 0;
+    }
     send_packet_player_info(pconn, &info);
     web_send_packet(player_info_addition, pconn, &web_info);
   } conn_list_iterate_end;

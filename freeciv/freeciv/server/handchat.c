@@ -70,7 +70,7 @@ static void form_chat_name(struct connection *pconn, char *buffer, size_t len)
   struct player *pplayer = pconn->playing;
 
   if (pconn->supercow) {
-    fc_snprintf(buffer, len, "%s (gamemaster)", pconn->username);
+    fc_snprintf(buffer, len, "%s (Gamemaster)", player_name(pplayer));
   } else if (!pplayer || pconn->observer
       || strcmp(player_name(pplayer), ANON_PLAYER_NAME) == 0) {
     fc_snprintf(buffer, len, "%s (observer)", pconn->username);
@@ -436,6 +436,10 @@ void handle_chat_msg_req(struct connection *pconn, const char *message)
           then treat as global message,
      else complain (might be a typo-ed intended private message)
   */
+
+  /* FCW differentiates conn name and player name for a reason. One 
+   * is the account and the other is your public persona. Do NOT
+   * expose private connection/account and only go by player name */
   
   cp = strchr(real_message, CHAT_DIRECT_PREFIX);
 
@@ -450,59 +454,60 @@ void handle_chat_msg_req(struct connection *pconn, const char *message)
                                               cp - real_message + 1));
 
     double_colon = (*(cp+1) == CHAT_DIRECT_PREFIX);
-    if (double_colon) {
+    if (false && double_colon) {                                  /* no fishing for conn names */
       conn_dest = conn_by_user_prefix(name, &match_result_conn);
       if (match_result_conn == M_PRE_AMBIGUOUS) {
-	complain_ambiguous(pconn, name, 1);
-	return;
+	      complain_ambiguous(pconn, name, 1);
+	      return;
       }
       if (conn_dest && match_result_conn < M_PRE_AMBIGUOUS) {
-	chat_msg_to_conn(pconn, conn_dest, cp+2);
-	return;
+	      chat_msg_to_conn(pconn, conn_dest, cp+2);
+	      return;
       }
     } else {
-      /* single colon */
-      pdest = player_by_name_prefix(name, &match_result_player);
-      if (match_result_player == M_PRE_AMBIGUOUS) {
-	complain_ambiguous(pconn, name, 0);
-	return;
-      }
-      if (pdest && strcmp(player_name(pdest), ANON_PLAYER_NAME) == 0) {
-        complain_ambiguous(pconn, name, 2);
-        return;
-      }
-      if (pdest && match_result_player < M_PRE_AMBIGUOUS) {
-        chat_msg_to_player(pconn, pdest, cp + 1);
-        return;
-	/* else try for connection name match before complaining */
-      }
-      conn_dest = conn_by_user_prefix(name, &match_result_conn);
-      if (match_result_conn == M_PRE_AMBIGUOUS) {
-	complain_ambiguous(pconn, name, 1);
-	return;
-      }
-      if (conn_dest && match_result_conn < M_PRE_AMBIGUOUS) {
-	chat_msg_to_conn(pconn, conn_dest, cp+1);
-	return;
-      }
-      if (pdest && match_result_player < M_PRE_AMBIGUOUS) {
-	/* Would have done something above if connected */
-        notify_conn(pconn->self, NULL, E_CHAT_ERROR, ftc_server,
+        /* single colon */
+        pdest = player_by_name_prefix(name, &match_result_player);
+        if (match_result_player == M_PRE_AMBIGUOUS) {
+	        complain_ambiguous(pconn, name, 0);
+	        return;
+        }
+        if (pdest && strcmp(player_name(pdest), ANON_PLAYER_NAME) == 0) {
+          complain_ambiguous(pconn, name, 2);
+          return;
+        }
+        if (pdest && match_result_player < M_PRE_AMBIGUOUS) {
+          chat_msg_to_player(pconn, pdest, cp + 1);
+          return;
+          /* else try for connection name match before complaining */
+        }
+        /* no fishing for conn names
+        conn_dest = conn_by_user_prefix(name, &match_result_conn);
+        if (match_result_conn == M_PRE_AMBIGUOUS) {
+          complain_ambiguous(pconn, name, 1);
+          return;
+        }
+        if (conn_dest && match_result_conn < M_PRE_AMBIGUOUS) {
+          chat_msg_to_conn(pconn, conn_dest, cp+1);
+          return;
+        } */
+        if (pdest && match_result_player < M_PRE_AMBIGUOUS) {
+      	/* Would have done something above if connected */
+          notify_conn(pconn->self, NULL, E_CHAT_ERROR, ftc_server,
                     _("%s is not connected."), player_name(pdest));
-	return;
-      }
+	        return;
+        }
     }
     /* Didn't match; check heuristics to see if this is likely
      * to be a global message
      */
     cpblank = strchr(real_message, ' ');
     if (!cpblank || (cp < cpblank)) {
-      if (double_colon) {
+      if (false && double_colon) {                                /* no fishing for conn names */
         notify_conn(pconn->self, NULL, E_CHAT_ERROR, ftc_server,
                     _("There is no connection by the name %s."), name);
       } else {
         notify_conn(pconn->self, NULL, E_CHAT_ERROR, ftc_server,
-                    _("There is no player nor connection by the name %s."),
+                    _("There is no player by the name %s."),
                     name);
       }
       return;

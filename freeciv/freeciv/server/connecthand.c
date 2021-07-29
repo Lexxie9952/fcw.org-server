@@ -609,6 +609,8 @@ static void send_conn_info_arg(struct conn_list *src,
     if (remove_conn) {
       packet.used = FALSE;
     }
+    /* in FCW conn names are protected, only player names exposed */
+    packet.username[0] = 0;
     lsend_packet_conn_info(dest, &packet);
   } conn_list_iterate_end;
 }
