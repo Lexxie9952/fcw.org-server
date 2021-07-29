@@ -1742,9 +1742,13 @@ void server_remove_player(struct player *pplayer)
   notify_conn(pplayer->connections, NULL, E_CONNECTION, ftc_server,
               _("You've been removed from the game!"));
 
-  notify_conn(game.est_connections, NULL, E_CONNECTION, ftc_server,
-              _("%s has been removed from the game."),
-              player_name(pplayer));
+  /* Renaming of anonymous players should not announce the account
+   * name of the player wishing to be anonymous with a new name */
+  if (!is_longturn()) {
+    notify_conn(game.est_connections, NULL, E_CONNECTION, ftc_server,
+                _("%s has been removed from the game."),
+                player_name(pplayer));
+  }
 
   if (is_barbarian(pplayer)) {
     server.nbarbarians--;

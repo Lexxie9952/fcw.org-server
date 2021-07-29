@@ -34,6 +34,7 @@
 #include "fcintl.h"
 #include "log.h"
 #include "mem.h"
+#include "rand.h"
 #include "registry.h"
 #include "support.h"            /* fc__attribute, bool type, etc. */
 #include "timing.h"
@@ -162,13 +163,18 @@ static char setting_status(struct connection *caller,
 static bool player_name_check(const char* name, char *buf, size_t buflen);
 static bool playercolor_command(struct connection *caller,
                                 char *str, bool check);
+static bool playernation_command(struct connection *caller,
+                                 char *str, bool check);
+static bool alias_command(struct connection *caller,
+                                 char *str, bool check);
 static bool mapimg_command(struct connection *caller, char *arg, bool check);
 static const char *mapimg_accessor(int i);
 
 static void show_delegations(struct connection *caller);
 
 static const char horiz_line[] =
-"------------------------------------------------------------------------------";
+//"------------------------------------------------------------------------------";
+"——————————————————————————————————————————————————————————————————————————————";
 
 /**********************************************************************//**
   Are we operating under a restricted security regime?  For now
@@ -4299,6 +4305,180 @@ static bool playercolor_command(struct connection *caller,
 }
 
 /**********************************************************************//**
+  /playernation command handler.
+**************************************************************************/
+static bool playernation_command(struct connection *caller,
+                                 char *str, bool check)
+{
+  enum m_pre_result match_result;
+  struct player *pplayer;
+  struct nation_type *pnation;
+  struct nation_style *pstyle;
+  bool is_male = FALSE;
+  int ntokens = 0;
+  char *token[5];
+
+  ntokens = get_tokens(str, token, 5, TOKEN_DELIMITERS);
+
+  if (ntokens == 0) {
+    cmd_reply(CMD_PLAYERNATION, caller, C_SYNTAX,
+              _("At least one argument needed. See '/help playernation'."));
+    free_tokens(token, ntokens);
+    return FALSE;
+  }
+
+  /*if (game_was_started()) {
+    cmd_reply(CMD_PLAYERNATION, caller, C_FAIL,
+              _("Can only set player nation before game starts."));
+    free_tokens(token, ntokens);
+    return FALSE;
+  }*/
+
+  pplayer = player_by_name_prefix(token[0], &match_result);
+  if (!pplayer) {
+    cmd_reply_no_such_player(CMD_PLAYERNATION, caller, token[0], match_result);
+    free_tokens(token, ntokens);
+    return FALSE;
+  }
+
+  if (ntokens == 1) {
+    if (!check) {
+      player_set_nation(pplayer, NO_NATION_SELECTED);
+
+      cmd_reply(CMD_PLAYERNATION, caller, C_OK,
+                _("Nation of player %s reset."), player_name(pplayer));
+      send_player_info_c(pplayer, game.est_connections);
+    }
+  } else {
+    pnation = nation_by_rule_name(token[1]);
+    if (pnation == NO_NATION_SELECTED) {
+      cmd_reply(CMD_PLAYERNATION, caller, C_FAIL,
+                _("Unrecognized nation: %s."), token[1]);
+      free_tokens(token, ntokens);
+      return FALSE;
+    }
+
+    if (!client_can_pick_nation(pnation)) {
+      cmd_reply(CMD_PLAYERNATION, caller, C_FAIL,
+                _("%s nation is not available for user selection."),
+                token[1]);
+      free_tokens(token, ntokens);
+      return FALSE;
+    }
+
+    if (pnation->player && pnation->player != pplayer) {
+      cmd_reply(CMD_PLAYERNATION, caller, C_FAIL,
+                _("%s nation is already in use."), token[1]);
+      free_tokens(token, ntokens);
+      return FALSE;
+    }
+
+    if (ntokens < 3) {
+      is_male = TRUE;
+    } else if (!strcmp(token[2], "0")) {
+      is_male = FALSE;
+    } else if (!strcmp(token[2], "1")) {
+      is_male = TRUE;
+    } else {
+      cmd_reply(CMD_PLAYERNATION, caller, C_FAIL,
+                _("Unrecognized gender: %s, expecting 1 or 0."), token[2]);
+      free_tokens(token, ntokens);
+      return FALSE;
+    }
+
+    if (ntokens > 4) {
+      pstyle = style_by_rule_name(token[4]);
+      if (!pstyle) {
+        cmd_reply(CMD_PLAYERNATION, caller, C_FAIL,
+                  _("Unrecognized style: %s."), token[4]);
+        free_tokens(token, ntokens);
+        return FALSE;
+      }
+    } else {
+      pstyle = style_of_nation(pnation);
+    }
+
+    if (!check) {
+      char error_buf[256];
+
+      player_set_nation(pplayer, pnation);
+      pplayer->style = pstyle;
+      pplayer->is_male = is_male;
+
+      if (ntokens > 3) {
+        if (server_player_set_name_full(caller, pplayer, pnation,
+                                        token[3],
+                                        error_buf, sizeof(error_buf))) {
+          pplayer->random_name = false;
+        } else {
+          cmd_reply(CMD_PLAYERNATION, caller, C_WARNING, "%s", error_buf);
+        }
+      } else {
+        //server_player_set_name(pplayer, token[0]);
+        //this was a bug, it takes the unique prefix for a player name and 
+        //resets the name to this, which makes it impossible to handle 
+        //names with accents, spaces, etc.
+      }
+      cmd_reply(CMD_PLAYERNATION, caller, C_OK,
+                _("Nation of player %s set to [%s]."), player_name(pplayer),
+                nation_rule_name(pnation));
+      send_player_info_c(pplayer, game.est_connections);
+    }
+  }
+
+  free_tokens(token, ntokens);
+
+  return TRUE;
+}
+
+/**********************************************************************//**
+  /alias command handler.
+**************************************************************************/
+static bool alias_command(struct connection *caller, char *str, bool check)
+{
+  struct player *pplayer;
+  int ntokens = 0;
+  char *token[1];
+
+  ntokens = get_tokens(str, token, 1, TOKEN_DELIMITERS);
+
+  if (ntokens != 1) {
+    cmd_reply(CMD_ALIAS, caller, C_SYNTAX,
+              _("Exactly one argument needed. See <b>/help alias</b>"));
+    free_tokens(token, ntokens);
+    return FALSE;
+  }
+
+  pplayer = player_by_name(caller->username);
+  if (!pplayer) {
+    cmd_reply(CMD_ALIAS, caller, C_FAIL,
+            _("An <b>/alias</b> can only be done once per game.\nCan't give a new "
+            " alias because no in-game player named '%s'."), caller->username);
+    free_tokens(token, ntokens);
+    return FALSE;
+  }
+
+  if (pplayer->user_turns != 1) {
+    cmd_reply(CMD_ALIAS, caller, C_FAIL,
+              _("You can do <b>/alias</b> only after starting and only on your "
+                " first turn of play (%d)."),
+                pplayer->user_turns);
+    free_tokens(token, ntokens);
+    return FALSE;
+  }
+
+  server_player_set_name(pplayer, token[0]);
+
+  cmd_reply(CMD_ALIAS, caller, C_OK,
+            _("<b>CONFIDENTIAL:</b> %s will be known to others as <b>%s</b>."),
+            caller->username, player_name(pplayer));
+
+  send_player_info_c(pplayer, game.est_connections);
+  free_tokens(token, ntokens);
+  return TRUE;
+}
+
+/**********************************************************************//**
   Handle quit command
 **************************************************************************/
 static bool quit_game(struct connection *caller, bool check)
@@ -4644,6 +4824,10 @@ static bool handle_stdin_input_real(struct connection *caller, char *str,
     return unignore_command(caller, arg, check);
   case CMD_PLAYERCOLOR:
     return playercolor_command(caller, arg, check);
+  case CMD_PLAYERNATION:
+    return playernation_command(caller, arg, check);
+  case CMD_ALIAS:
+    return alias_command(caller, arg, check);
   case CMD_NUM:
   case CMD_UNRECOGNIZED:
   case CMD_AMBIGUOUS:
@@ -6627,8 +6811,12 @@ static void show_connections(struct connection *caller)
     cmd_reply(CMD_LIST, caller, C_COMMENT, _("<no connections>"));
   } else {
     conn_list_iterate(game.all_connections, pconn) {
-      sz_strlcpy(buf, conn_description(pconn));
-      if (pconn->established) {
+      if (caller->supercow) {
+        sz_strlcpy(buf, conn_description(pconn));
+      } else {
+        sz_strlcpy(buf, player_name(player_by_user(pconn->username)));
+      }
+      if (pconn->established && caller->supercow) {
         cat_snprintf(buf, sizeof(buf), " command access level %s",
                      cmdlevel_name(pconn->access_level));
       }
@@ -6643,6 +6831,11 @@ static void show_connections(struct connection *caller)
 **************************************************************************/
 static void show_delegations(struct connection *caller)
 {
+  /* Since FCW allows player name to be an anonymous pseudonym and since 
+   * delegation uses username to reference delegations, only supercow
+   * admins can see this list. */
+  if (!caller->supercow) return;
+
   bool empty = TRUE;
 
   cmd_reply(CMD_LIST, caller, C_COMMENT, _("List of all delegations:"));
@@ -6738,7 +6931,7 @@ void show_players(struct connection *caller)
         cat_snprintf(buf, sizeof(buf), ", %s",
                      nation_adjective_for_player(pplayer));
       }
-      if (strlen(pplayer->username) > 0
+      if (caller->supercow && strlen(pplayer->username) > 0
           && strcmp(pplayer->username, "nouser") != 0) {
         cat_snprintf(buf, sizeof(buf), _(", user %s"), pplayer->username);
       }
@@ -6780,17 +6973,19 @@ void show_players(struct connection *caller)
       cmd_reply(CMD_LIST, caller, C_COMMENT, "  %s", buf);
 
       /* '    [Details for each connection]' */
-      conn_list_iterate(pplayer->connections, pconn) {
-        fc_snprintf(buf, sizeof(buf),
-                    _("%s from %s (command access level %s), "
-                      "bufsize=%dkb"), pconn->username, pconn->addr,
-                    cmdlevel_name(pconn->access_level),
-                    (pconn->send_buffer->nsize >> 10));
-        if (pconn->observer) {
-          sz_strlcat(buf, _(" (observer mode)"));
-        }
-        cmd_reply(CMD_LIST, caller, C_COMMENT, "    %s", buf);
-      } conn_list_iterate_end;
+      if (caller->supercow) {
+        conn_list_iterate(pplayer->connections, pconn) {
+          fc_snprintf(buf, sizeof(buf),
+                      _("%s from %s (command access level %s), "
+                        "bufsize=%dkb"), pconn->username, pconn->addr,
+                      cmdlevel_name(pconn->access_level),
+                      (pconn->send_buffer->nsize >> 10));
+          if (pconn->observer) {
+            sz_strlcat(buf, _(" (observer mode)"));
+          }
+          cmd_reply(CMD_LIST, caller, C_COMMENT, "    %s", buf);
+        } conn_list_iterate_end;
+      }
     } players_iterate_end;
   }
   cmd_reply(CMD_LIST, caller, C_COMMENT, horiz_line);
@@ -6944,8 +7139,8 @@ static void show_colors(struct connection *caller)
     cmd_reply(CMD_LIST, caller, C_COMMENT, _("<no players>"));
   } else {
     players_iterate(pplayer) {
-      cmd_reply(CMD_LIST, caller, C_COMMENT, _("%s (user %s): [%s]"),
-                player_name(pplayer), pplayer->username,
+      cmd_reply(CMD_LIST, caller, C_COMMENT, _("%s: [%s]"),
+                player_name(pplayer),
                 player_color_ftstr(pplayer));
     } players_iterate_end;
   }

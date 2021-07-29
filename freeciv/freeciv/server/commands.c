@@ -241,7 +241,7 @@ static struct command commands[] = {
    NULL,
    CMD_ECHO_ALL, VCF_NONE, 50
   },
-  {"name",	ALLOW_CTRL,
+  {"name",	ALLOW_ADMIN,
    /* TRANS: translate text between <> only */
    N_("name <player> <new_name>"),
    N_("Change a player's name."),
@@ -524,6 +524,36 @@ static struct command commands[] = {
       "changes the player color in any mode; 'reset' cannot be used.\n"
       "To list the player colors, use 'list colors'."), NULL,
    CMD_ECHO_NONE, VCF_NONE, 0
+  },
+  {"playernation", ALLOW_ADMIN,
+   /* TRANS: translate text between <> and [] only */
+   N_("playernation <player-name> [nation] [is-male] [leader] [style]"),
+   N_("Set the nation and other details of a player."),
+   N_("This command sets the nation of a specific player and optionally, "
+      "the gender, new leader name, and civ graphic style of a player.\n"
+      "Gender parameter is 0 for female, 1 for male, and defaults male. "
+      "Omitting all [parameters] will reset the player with that name to "
+      "defaults. [style] is one of the following {european,classical, "
+      "tropical,asian,babylonian,celtic}.\nEXAMPLE:\n /playernation John "
+      "Italian 1 Giovanni classical\n^ sets the nation with leader named "
+      "John to the Italian nation, sets him as male, renames him as "
+      "Giovanni for this game, and uses classical style civ city "
+      "graphics."), NULL,
+   CMD_ECHO_ADMINS, VCF_NONE, 0
+  },
+  {"alias", ALLOW_BASIC,
+   N_("alias [name]"),
+   N_("Sets an alias or pseudonym under which to play the game incognito."),
+   N_("<b>Do this command immediately after exiting pre-game and arriving "
+      "in-game.</b> This command allows you to play the game with a "
+      "different name from your account name, so that other players "
+      "don't recognize you. This may preserve anonymity and make "
+      "games less predictable.\n\nYou can only do this command "
+      "when first joining a game.\n\nThis command only works "
+      "on the player who requests it. Admins should use the /playernation "
+      "command instead. (NB: the /name command changes both the username "
+      "and playername so won't serve as an alias.)"), NULL,
+   CMD_ECHO_ADMINS, VCF_NONE, 0
   },
   {"endgame",	ALLOW_ADMIN,
    /* no translatable parameters */
