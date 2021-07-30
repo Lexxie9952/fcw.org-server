@@ -237,7 +237,9 @@ function update_nation_screen()
     $("#nations").width( mapview['width']);
   }
 
-  /* Fetch online (connected) players on this game from Freeciv-proxy. */
+
+  /* OLD WAY: had to do ajax and looked at 'username' whereas we no longer expose 'username' publicly
+   * Fetch online (connected) players on this game from Freeciv-proxy.
   $.ajax({
     url: "/civsocket/" + (parseInt(civserverport) + 1000) + "/status",
     dataType: "html",
@@ -261,7 +263,19 @@ function update_nation_screen()
       }
     }
     $("#nation_table").trigger('update');
-  });
+  });*/
+  /* NEW WAY: look at player name only and use the available data we already have
+   * Get online (connected) players on this game by looking at dynamic connections list */
+  for (var player_id in players) {
+    var pplayer = players[player_id];
+    for (var connection_id in connections) {
+      if (connections[connection_id].playing /* not observer, GM, etc. */
+          && connections[connection_id].playing.name == players[player_id].name) {
+        $("#player_state_" + player_id).html("<span style='color: #00EE00;'><b> &#x1f310;" + get_turn_phase_state(pplayer, tiny_screen, redux_screen) + "</b></span>");
+        break;
+      }
+    }
+  }
 
   if (is_longturn()) $(".nation_attitude").hide();
   if (is_longturn()) $(".nation_team").hide();
