@@ -276,6 +276,7 @@ function update_nation_screen()
       }
     }
   }
+  $("#nation_table").trigger('update');
 
   if (is_longturn()) $(".nation_attitude").hide();
   if (is_longturn()) $(".nation_team").hide();
