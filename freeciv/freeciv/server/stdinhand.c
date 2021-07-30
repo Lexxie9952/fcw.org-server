@@ -4458,10 +4458,10 @@ static bool alias_command(struct connection *caller, char *str, bool check)
     return FALSE;
   }
 
-  if (pplayer->user_turns != 1) {
+  if (pplayer->user_turns > 2) {
     cmd_reply(CMD_ALIAS, caller, C_FAIL,
-              _("You can do <b>/alias</b> only after starting and only on your "
-                " first turn of play (%d)."),
+              _("You can do <b>/alias</b> only after starting and only in the "
+                " first two turns of play (%d>2)."),
                 pplayer->user_turns);
     free_tokens(token, ntokens);
     return FALSE;

@@ -543,16 +543,16 @@ static struct command commands[] = {
   },
   {"alias", ALLOW_BASIC,
    N_("alias [name]"),
-   N_("Sets an alias or pseudonym under which to play the game incognito."),
-   N_("<b>Do this command immediately after exiting pre-game and arriving "
-      "in-game.</b> This command allows you to play the game with a "
-      "different name from your account name, so that other players "
-      "don't recognize you. This may preserve anonymity and make "
-      "games less predictable.\n\nYou can only do this command "
-      "when first joining a game.\n\nThis command only works "
-      "on the player who requests it. Admins should use the /playernation "
-      "command instead. (NB: the /name command changes both the username "
-      "and playername so won't serve as an alias.)"), NULL,
+   N_("Sets an alias player name under which to play the game incognito."),
+   N_("This command allows you to play the game with a different player-"
+      "name from your account username, so that other players don't "
+      "recognize you. Since player-name defaults to username upon entry, "
+      "<b>do this command only AFTER arriving in-game.</b>\n\nYou can "
+      "only do this command once, in the first two turns after joining a "
+      "game.\n\nThis command only works on the player who requests it. "
+      "Admins should use the /playernation command instead. (NB: the /name "
+      "command changes both the username and playername so won't serve as "
+      "an alias.)"), NULL,
    CMD_ECHO_ADMINS, VCF_NONE, 0
   },
   {"endgame",	ALLOW_ADMIN,
