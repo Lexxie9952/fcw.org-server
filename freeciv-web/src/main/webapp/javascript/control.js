@@ -1554,7 +1554,9 @@ function update_unit_order_commands()
 
         worker_type = true;
         infra_type = true;
-    } else if (ptype['name'] == "Settlers" || ptype['name'] == "Engineers") {
+    } else if (ptype['name'] == "Settlers"
+              || ptype['name'] == "Founders" 
+              || ptype['name'] == "Engineers") {
       infra_type = true;
     }
 
@@ -1742,8 +1744,8 @@ function update_unit_order_commands()
     // TO DO:  this should be checking for the FLAG "Settlers" in the ptype which indicates who can do the follow build/road/mine/etc. actions:
     if (infra_type || worker_type) {
       if (ptype['name'] == "Settlers") unit_actions["autosettlers"] = {name: "Auto settler (A)"};
-      if (worker_type == true) unit_actions["autosettlers"] = {name: "Auto workers (A)"};
-      if (ptype['name'] == "Engineers") unit_actions["autosettlers"] = {name: "Auto engineers (A)"};
+      else if (ptype['name'] == "Engineers") unit_actions["autosettlers"] = {name: "Auto engineers (A)"};
+      else if (worker_type == true) unit_actions["autosettlers"] = {name: "Auto workers (A)"};
 
       if (show_order_buttons==1) $("#order_pillage").hide(); // not frequently used order for settler types
       if (show_order_buttons==1) $("#order_noorders").hide();  //not frequently used order
