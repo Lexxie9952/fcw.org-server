@@ -70,7 +70,7 @@ static void form_chat_name(struct connection *pconn, char *buffer, size_t len)
   struct player *pplayer = pconn->playing;
 
   if (pconn->supercow) {
-    fc_snprintf(buffer, len, "%s (Gamemaster)", player_name(pplayer));
+    fc_snprintf(buffer, len, "%s (Gamemaster)", pconn->username);
   } else if (!pplayer || pconn->observer
       || strcmp(player_name(pplayer), ANON_PLAYER_NAME) == 0) {
     fc_snprintf(buffer, len, "%s (observer)", pconn->username);
