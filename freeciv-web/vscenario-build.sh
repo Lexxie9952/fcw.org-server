@@ -1,7 +1,7 @@
 #!/bin/bash
 # refreshes the listed SCENARIOS, gzips them, then copies to all necessary locations
 
-# NOTE: assumes /vagrant/freeciv/data/scenarios is location for update source
+# NOTE: assumes /vagrant/freeciv/freeciv//data/scenarios is location for update source
 
 # scenario_name.sav files are located in:
 #########################################
@@ -21,7 +21,7 @@ printf "\n**********************************************************************
 printf "This refreshes only the SCENARIOS marked for rebuild inside this script.\n"
 printf "****************************************************************************\n"
 
-SCENARIOS=(europe.sav europe-new-positions.sav)
+SCENARIOS=(europe.sav europe-new-positions.sav tutorial.sav)
 TOPDIR="$( cd ../"$( dirname "${BASH_SOURCE[0]}" )" > /dev/null && pwd )"
 
 printf "\nUpdating scenarios...\n"
