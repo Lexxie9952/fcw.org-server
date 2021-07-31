@@ -213,7 +213,6 @@
 											<th>Flag</th>
 											<th>Leader</th>
 											<th>Nation</th>
-											<th>User</th>
 											<th>Type</th>
 										</tr>
 									</thead>
@@ -228,7 +227,6 @@
 	    			   								</td>
 		    										<td style="color: #ffae67; text-shadow: 1px 1px #3d2e20;">${player.name}</td>
 			    									<td>${player.nation}</td>
-				    								<td>${player.user}</td>
 					    							<td>${player.type}</td>
 						    					</tr>
 						    				</c:if>
