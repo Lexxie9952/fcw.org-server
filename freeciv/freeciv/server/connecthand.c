@@ -642,6 +642,10 @@ struct player *find_uncontrolled_player(struct connection *pconn)
    Helps LT team game setup and GM player assignment */
   if (is_longturn() && pconn) {
     players_iterate(played) {
+      if (fc_strcasecmp(pconn->username, played->username) == 0) { 
+        return played;
+      }
+      /* FIXME: if player-name is spoofing another username, would this return false positive? */
       if (fc_strcasecmp(pconn->username, played->name) == 0) { 
         return played;
       }
@@ -811,7 +815,9 @@ static bool connection_attach_real(struct connection *pconn,
       (void) aifill(game.info.aifill);
     }
     if (is_longturn() && !pconn->supercow) {
-      server_player_set_name(pplayer, pconn->username);
+      if (!pplayer->name) {
+        server_player_set_name(pplayer, pconn->username);
+      }
     }
 
     if (game.server.auto_ai_toggle && !is_human(pplayer)) {
