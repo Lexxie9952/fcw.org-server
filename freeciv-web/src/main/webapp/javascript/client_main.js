@@ -265,9 +265,9 @@ function show_new_game_message()
     "Players are responsible for following the #rules posted there. Be polite; please keep in-game talk "+
     "related to the game; do not post spam to offsite links if you wish to remain in the game.</font> Good luck, have fun!";
 
-    if (is_small_screen) {
-      message += "This is your message window that reports ongoing game events. " +
-      "<u style='color:#fde'>Tap the yellow <b>minimize button</b> at the top to enter the game</u>. You can return here to view " +
+    if (is_small_screen()) {
+      message += "<br>This is your message window that reports ongoing game events. " +
+      "<i style='color:#fed'>Tap the yellow <b>minimize button</b> at the top to enter the game</i>. You can return here to view " +
       "game messages by hitting the maximize button.";
     }
 
@@ -276,7 +276,7 @@ function show_new_game_message()
       "Please join the <a href='https://discord.gg/Zj8UQSN' target='_new'>community Discord chat server</a>. "+
       "Click on units for giving them orders, and drag units on the map to move them.\n" +
       "Good luck, and have a lot of fun!\n<br><br>This message window reports game events. " +
-      "<u style='color:#fde'>Tap the yellow <b>minimize button</b> at the top to enter the game</u>. You can return here to view " +
+      "<i style='color:#fed'>Tap the yellow <b>minimize button</b> at the top to enter the game</i>. You can return here to view " +
       "game messages by hitting the maximize button."; 
 
   } else if (client.conn.playing != null && !game_loaded) {
