@@ -78,6 +78,9 @@ function player_by_full_username(pname)
     if (pplayer['flags'].isSet(PLRF_AI)){
       if (ainame == pplayer['name']) return pplayer;
     } else {
+      // players may only know each others playername not name, so intercept from that:
+      if (pname == pplayer['name']) return pplayer;
+      // following line may no longer be needed but kept just in case:
       if (pname == pplayer['username']) return pplayer;
     }
   }
