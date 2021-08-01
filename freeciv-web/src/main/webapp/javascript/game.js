@@ -213,17 +213,18 @@ function update_game_status_panel() {
          $("#game_status_panel_bottom").css({"width": $(window).width(),"pointer-events":"none" }); ////
          $("#game_status_panel_bottom").html(status_html);
       }
-      //// these changes in control.js and game.js made container not clickable but children unclickable also
-      //$("#game_status_panel_bottom").children().css("pointer-events", "auto"); //// children clickable, container not
     }
   }
 
-  // TODO: Game # can be put in here when we figure out how to set more meta-info
-  var page_title = "Freeciv-web - " + username
-                                    + "  (turn:" + game_info['turn'] + ", port:"
-                                    + civserverport + ") ";
+  var name = client.conn.playing ? client.conn.playing.name : username;
+  var page_title = "Freeciv " + name + " T" + game_info['turn'];
   if (server_settings['metamessage'] != null) {
-    page_title += server_settings['metamessage']['val'];
+    var status_message = server_settings['metamessage']['val'];
+    if (status_message.indexOf('|') != -1) {
+      // extract the game identifier string out of the longer metamessage
+      status_message = status_message.substr(0,server_settings['metamessage']['val'].indexOf('|')); 
+    }
+    page_title += " "+status_message;
   }
   document.title = page_title;
 
