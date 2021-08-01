@@ -664,10 +664,12 @@ struct player *find_uncontrolled_player(struct connection *pconn)
 
 /* Longturn: Select first unassigned nation, otherwise select random idler */
   int idle_count = 0;
+  // Keep this code identical with pregame.js:pick_nation() **************************** !!!
   /* Turns 1-12: replace idle 3. T12+ increase idle cutoff until max cutoff of 10 */
   int idle_cutoff = 3;
   if (game.info.turn > 12) idle_cutoff += (game.info.turn - 12);
   if (idle_cutoff > 10) idle_cutoff = 10;
+  // </end identical code notes>
 
   struct player* idle_players[MAX_NUM_PLAYER_SLOTS];
 
