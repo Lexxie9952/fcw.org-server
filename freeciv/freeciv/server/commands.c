@@ -553,7 +553,7 @@ static struct command commands[] = {
       "Admins should use the /playernation command instead. (NB: the /name "
       "command changes both the username and playername so won't serve as "
       "an alias.)"), NULL,
-   CMD_ECHO_ADMINS, VCF_NONE, 0
+   CMD_ECHO_NONE, VCF_NONE, 0
   },
   {"endgame",	ALLOW_ADMIN,
    /* no translatable parameters */

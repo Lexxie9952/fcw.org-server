@@ -4469,9 +4469,10 @@ static bool alias_command(struct connection *caller, char *str, bool check)
 
   server_player_set_name(pplayer, token[0]);
 
-  cmd_reply(CMD_ALIAS, caller, C_OK,
-            _("<b>CONFIDENTIAL:</b> %s will be known to others as <b>%s</b>."),
-            caller->username, player_name(pplayer));
+  /* FIX ME: cmd_reply was echoing to non-admins so we have to do this instead */
+  notify_conn(caller->self, NULL, E_SETTING, ftc_any,
+                      _("<b>CONFIDENTIAL:</b> %s will be known to others as <b>%s</b>."),
+                      caller->username, player_name(pplayer));            
 
   send_player_info_c(pplayer, game.est_connections);
   free_tokens(token, ntokens);
