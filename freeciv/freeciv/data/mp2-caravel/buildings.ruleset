@@ -2188,7 +2188,7 @@ The Mausoleum of Mausolos brings a spirit of prudence to your nation, giving\
 "), _("
 ➤ A Courthouse or City Walls gives each city +1 content citizen, unless\
  unhappy about military activity. \n\
-➤ Having both the above adds another +1 happy citizen. \n\
+➤ Having both the above results in +1 content and +1 happy citizen. \n\
 ➤ Acts like half a Courthouse in cities which lack Courthouse or\
  Supreme Court effects: \n\
    • 30% corruption reduction. \n\
