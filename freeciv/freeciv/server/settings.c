@@ -2357,7 +2357,7 @@ static struct setting settings[] = {
 
     GEN_INT("trademindist", game.info.trademindist,
           SSET_RULES_FLEXIBLE, SSET_ECONOMICS, SSET_RARE, ALLOW_NONE, ALLOW_CTRL,
-          N_("Minimum distance for trade routes"),
+          N_("Minimum distance for domestic trade routes"),
           N_("In order for two cities in the same civilization to establish "
              "a trade route, they must be at least this far apart on the "
              "map. For square grids, the distance is calculated as "
@@ -2365,6 +2365,17 @@ static struct setting settings[] = {
              "along the x and y directions."), NULL, NULL, NULL,
           GAME_MIN_TRADEMINDIST, GAME_MAX_TRADEMINDIST,
           GAME_DEFAULT_TRADEMINDIST)
+
+    GEN_INT("trademinforeign", game.server.trademinforeign,
+          SSET_RULES_FLEXIBLE, SSET_ECONOMICS, SSET_RARE, ALLOW_NONE, ALLOW_CTRL,
+          N_("Minimum distance for foreign trade routes"),
+          N_("In order for two foreign cities to establish "
+             "a trade route, they must be at least this far apart on the "
+             "map. For square grids, the distance is calculated as "
+             "\"Manhattan distance\", that is, the sum of the displacements "
+             "along the x and y directions."), NULL, NULL, NULL,
+          GAME_MIN_TRADEMINFOREIGN, GAME_MAX_TRADEMINFOREIGN,
+          GAME_DEFAULT_TRADEMINFOREIGN)
 
   GEN_INT("rapturedelay", game.info.rapturedelay,
           SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_SITUATIONAL,

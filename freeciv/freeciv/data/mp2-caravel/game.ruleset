@@ -3404,6 +3404,7 @@ set =
       "steepness", 15, FALSE
       "tinyisles", FALSE, FALSE
       "trademindist", 15, FALSE
+      "trademinforeign", 15, FALSE
       "trade_revenue_style", "SIMPLE", FALSE   ;"simple" formula based on average trade in both cities (sans distance etc.)
       "trading_city", "DISABLED", FALSE
       "topology", "WRAPX", FALSE

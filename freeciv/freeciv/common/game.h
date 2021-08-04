@@ -213,6 +213,7 @@ struct civ_game {
       int techlost_recv;
       int tcptimeout;
       int techpenalty;
+      unsigned trademinforeign;
       bool turnblock;
       int unitwaittime;   /* minimal time between two movements (or actions) of a unit if across a TC boundary*/
       int fortifywaittime;/* if unitwaittime_style has ACTIVITIES+FORTIFY, this sets waittime for fortifying*/
@@ -707,6 +708,10 @@ extern struct world wld;
 #define GAME_DEFAULT_TRADEMINDIST    9
 #define GAME_MIN_TRADEMINDIST        1
 #define GAME_MAX_TRADEMINDIST        999
+
+#define GAME_DEFAULT_TRADEMINFOREIGN 1
+#define GAME_MIN_TRADEMINFOREIGN     1
+#define GAME_MAX_TRADEMINFOREIGN     999
 
 #define GAME_DEFAULT_TRADE_REVENUE_STYLE TRS_CLASSIC
 

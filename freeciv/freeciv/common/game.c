@@ -454,6 +454,7 @@ static void game_defaults(bool keep_ruleset_value)
     game.server.timeoutincmult    = GAME_DEFAULT_TIMEOUTINCMULT;
     game.server.timeoutint        = GAME_DEFAULT_TIMEOUTINT;
     game.server.timeoutintinc     = GAME_DEFAULT_TIMEOUTINTINC;
+    game.server.trademinforeign  = GAME_DEFAULT_TRADEMINFOREIGN;
     game.server.turnblock         = GAME_DEFAULT_TURNBLOCK;
     game.server.unitwaittime      = GAME_DEFAULT_UNITWAITTIME;
     game.server.zoc_purity        = GAME_DEFAULT_ZOC_PURITY;
