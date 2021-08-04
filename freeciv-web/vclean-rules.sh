@@ -1,7 +1,7 @@
 11#!/bin/bash
 # builds Freeciv-web, copies the war file to Tomcat and builds the selected rulesets.
 
-RULESETS=(classic civ2civ3 maptest multiplayer mpplus mp2sandbox mp2 ag ag2 mp2-brava mp2-caravel)
+RULESETS=(classic civ2civ3 maptest multiplayer mpplus mp2sandbox mp2 ag ag2 mp2-brava mp2-caravel mp2-dragoon)
 TOPDIR="$( cd ../"$( dirname "${BASH_SOURCE[0]}" )" > /dev/null && pwd )"
 
 printf "\n./vclean-rules.sh: VAGRANT VERSION. Use ./clean-rules.sh for deployed servers.\n"
@@ -21,6 +21,10 @@ printf "\nOverwriting generated manual with release-version: MP2-Brava"
 printf "\nOverwriting auto-generated manual with release-version: MP2-Caravel"
    cp /vagrant/freeciv-web/src/derived/webapp/man/mp2-caravel6.bak.html /vagrant/freeciv-web/src/derived/webapp/man/mp2-caravel6.html
    cp /vagrant/freeciv-web/src/derived/webapp/man/mp2-caravel7.bak.html /vagrant/freeciv-web/src/derived/webapp/man/mp2-caravel7.html
+
+printf "\nOverwriting auto-generated manual with release-version: MP2-Dragoon"
+   cp /vagrant/freeciv-web/src/derived/webapp/man/mp2-dragoon6.bak.html /vagrant/freeciv-web/src/derived/webapp/man/mp2-dragoon6.html
+   cp /vagrant/freeciv-web/src/derived/webapp/man/mp2-dragoon7.bak.html /vagrant/freeciv-web/src/derived/webapp/man/mp2-dragoon7.html
 
 printf "\nDirectly copying rules to Tomcat webapp\n"
    cp /vagrant/freeciv-web/src/derived/webapp/man/*.* /var/lib/tomcat8/webapps/freeciv-web/man/
