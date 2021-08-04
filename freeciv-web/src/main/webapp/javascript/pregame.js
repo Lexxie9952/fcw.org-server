@@ -364,7 +364,7 @@ function pick_nation(player_id)
     /* We only show the nations that are not already taken by human players */ 
     for (id in players) {
         if (players[id]['name'].indexOf("NewAvailablePlayer") == -1) {
-            // Keep this code identical with connecthand.c:find_uncontrolled_player() ********* !!!
+            // Keep this code identical with connecthand.c:can_take_idler_turns() ********* !!!
             var idle_cutoff = 3;
             if (game_info.turn > 12) idle_cutoff += (game.info.turn - 12);
             if (idle_cutoff > 10) idle_cutoff = 10;
