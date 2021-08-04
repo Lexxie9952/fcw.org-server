@@ -1037,8 +1037,10 @@ helptext      = _("\
 Workers can improve terrain tiles. See the manual on Terrain for details. \
 "), _("\
 Masonry lets Workers build Forts. Construction lets them build Fortresses and\
- Oil Wells. Engineering lets them build Canals and Naval Bases. Radio lets them\
- build Airbases and Buoys, which Settlers cannot. Workers must be on a ship to build Buoys. \
+ Oil Wells. Engineering lets them build Canals and Naval Bases. Feudalism with\
+ Construction lets them build Castles. Steels lets them build Bunkers and Sea\
+ Bridges. Radio lets them build Airbases and Buoys, which Settlers cannot. Workers\
+ must be on a ship to build Buoys. \
 "), _("\
 Communism tech allows Communist governments to conscript Workers into Riflemen via the\
  Convert order. And vice versa.\
@@ -2206,7 +2208,7 @@ Cannons are huge guns that use gunpowder to fire massive metallic projectiles\
  much faster and more accurately than earlier ballistic weapons. The\
  aerial delivery of high speed massive metal gives an edge against\
  Fortifications and City Walls. The defense bonuses vs. land attacks from those\
- are reduced by -50%. This leaves Fortifications only with their terrain bonus,
+ are reduced by -50%. This leaves Fortifications only with their terrain bonus,\
  and reduces City walls to 2.5x. \n\
 "), _("
 While Cannons are strong attackers, they are also weak defenders. Yet\
@@ -4772,7 +4774,9 @@ A Diplomat performs official or covert actions. Covert actions make incidents\
  diplomatic combat. Diplomats can • Bribe a lone unit • Establish embassy • Investigate City\
  • Sabotage random production or buildings • Steal tech • Steal maps • Incite city revolt.\n\
 Except for Bribing and Investigate City, diplomatic actions will spend the Diplomat,\
- making it unavailable for further use. \
+ making it unavailable for further use. Diplomats may claim a tile for your nation\
+ if adjacent to a tile claim made inside your own national border. Tile claims require\
+ the diplomat be accompanied by a military unit.\
 "), _("\
 Full rules for Diplomats are in the Manual.\
 ")
@@ -4826,6 +4830,9 @@ Spies can do what a Diplomat can, and also：• Survive ops\
 "), _("\
 Spies who survive ops escape to the nearest friendly city. Spies have\
  a 25% advantage over Diplomats in combat：a base 75% chance to win.\
+ Spies may claim a tile for your nation if adjacent to a tile claim made\
+ inside your own national border. Tile claims require the Spy to be accompanied\
+ by a military unit.\
  Full rules are in the Manual.\
 ")
 

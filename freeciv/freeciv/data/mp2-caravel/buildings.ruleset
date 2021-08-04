@@ -183,7 +183,7 @@ sound_alt	= "b_generic"
 helptext	= _("\
 With a Barracks I, each new land unit built in a city will\
  automatically have Veteran V1 status, which means that its attack and\
- defense strengths are increased by 50%.  Also, damaged land units\
+ defense strengths are increased by 50%. Also, damaged land units\
  which stay in town for one full turn without moving are completely\
  healed. Obsolete by：Gunpowder.\
 ")
@@ -1144,13 +1144,13 @@ sound		= "b_stock_exchange"
 sound_alt	= "b_generic"
 helptext	= _("\
 In cities with a Bank, a Stock Exchange boosts tax and luxury\
- production by an additional +50%.\
+ production by an additional +50%. \
 "), _("\
-*A Bank and Stock Exchange together boost\
+* A Bank and Stock Exchange together boost\
  tax and luxury production by +100%.\
 "), _("\
-*A Marketplace, Bank, and Stock Exchange together boost\
- tax and luxury production by +150%.\
+* A Marketplace, Bank, and Stock Exchange together boost\
+ tax and luxury production by +150%. \
 "), _("\
 Also increases the conversion rate of Coinage by +25%. A Bank, Marketplace, and\
  Stock Exchange each add +25%, yielding a rate of 2.25 gold per 1 shield invested.\
@@ -2191,12 +2191,12 @@ The Mausoleum of Mausolos brings a spirit of prudence to your nation, giving\
 ➤ Having both the above results in +1 content and +1 happy citizen. \n\
 ➤ Acts like half a Courthouse in cities which lack Courthouse or\
  Supreme Court effects: \n\
-   • 30% corruption reduction. \n\
-   • Tile corruption penalty begins at 4 in Anarchy and Despotism (not 3). \n\
-   • 10% bonus vs diplomatic actions and combat (10%) \n\
+   • 30% corruption reduction \n\
+   • Tile corruption penalty begins at 4 in Anarchy and Despotism (not 3) \n\
+   • 10% bonus vs diplomatic actions and combat \n\
 ➤ Adds (at least) +35% to the cost of bribing your units. \n\
 ➤ Prevents your cities from being incited to revolt. \n\
-➤ Halves the odds of investigating your cities (85% / 2 = 43%). \n\
+➤ Halves the odds of investigating your cities (85% / 2 = 43%) \n\
 "), _("
 The Mausoleum of Mausolos is a Civil Wonder. You can make only one Civil Wonder. \n\
 Obsolete by：Radio.\
