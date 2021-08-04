@@ -1,0 +1,6 @@
+Brief Explanations of goals and challenges.
+   Simplicity vs. Complexity.
+ 
+   What motivates Ruleset additions
+      
+Focus goals for MP2-Dragoon
