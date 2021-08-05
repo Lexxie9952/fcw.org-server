@@ -1544,12 +1544,14 @@ sound_alt	= "w_generic"
 helptext	= _("\
 Chand Baori is an ancient wonder that taps deep underground aquifers to\
  supply your nation with water. All city centers become irrigation sources.\
- Workers can irrigate Grassland or Plains in two turns instead of three, and\
- drain a Swamp in 5 turns instead of 7. \n\
+ Chand Baori gives a work rate bonus for cultivating swamp and irrigating\
+ grasslands and plains. Workers irrigate in 2 turns instead of 3, and\
+ cultivate swamp in 4 turns instead of 7. Tribesmen irrigate in 3 turns\
+ instead of 5, and cultivate in 8 instead of 13. \n\
 "), _("\ 
-In the city where it is built, tile penalties for irrigated Grassland are\
- eliminated; also Wheat and Oasis have no penalty. Chand Baori is the biggest\
- well of the ancient world, and the city where it is made gets a free well\
+In the city where it is built, Despotism tile penalties for food output are lifted\
+ from 3 to 5, eliminating such penalties (except Jungle fruit.) Chand Baori is\
+ the biggest well of the ancient world, and its home city gets a free well\
  on the city center (i.e., river). \n\
 "), _("\
 Obsolete by：Monarchy or switching from Despotism.\

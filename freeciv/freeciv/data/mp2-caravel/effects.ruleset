@@ -4860,13 +4860,16 @@ reqs	=
     }
 [effect_chand_baori_irrigation_rate]
 type    = "Unit_Work_Pct"
-value   = 34 ;have to round up 33.33
+value   = 63 ;  33% bonus
+; believe it or not, because of trunc-rounding, 63 is the number that gives closest to true 33.3% bonus!
+; 1. It yields the SAME as value=34 when irrigating grass/plains for a true +33.3% work rate. 
+; 2. But yields "8 -> 5" (+37.5%) rather than "8 -> 6" (which lost 32% of the 33% bonus to trunc-rounding!) 
 reqs =
     { "type",     "name",          "range","present"
       "Building", "Chand Baori",   "Player",TRUE
       "Gov",      "Despotism",     "Player",TRUE
       "UnitFlag", "Infra",         "Local", TRUE
-      "Activity", "Irrigate",      "Local", TRUE
+      "Activity", "Irrigate",      "Local", TRUE   ; irrigate is currently synonymous with cultivate for backward compatibility
       "Terrain",  "Hills",         "Local", FALSE
       "Terrain",  "Desert",        "Local", FALSE
       "Terrain",  "Forest",        "Local", FALSE
@@ -4875,6 +4878,27 @@ reqs =
       "Terrain",  "Glacier",        "Local", FALSE
       "Terrain",  "Mountains",     "Local", FALSE
     }
+[effect_chand_baori_cultivation_rate]
+type    = "Unit_Work_Pct"
+value   = 63 ;  33% bonus
+; believe it or not, because of trunc-rounding, 63 is the number that gives closest to true 33.3% bonus!
+; 1. It yields the SAME as value=34 when irrigating grass/plains for a true +33.3% work rate. 
+; 2. But yields "8 -> 5" (+37.5%) rather than "8 -> 6" (which lost 32% of the 33% bonus to trunc-rounding!) 
+reqs =
+    { "type",     "name",          "range","present"
+      "Building", "Chand Baori",   "Player",TRUE
+      "Gov",      "Despotism",     "Player",TRUE
+      "UnitFlag", "Infra",         "Local", TRUE
+      "Activity", "Cultivate",     "Local", TRUE    ; but for forward compatibility we need cultivate also
+      "Terrain",  "Hills",         "Local", FALSE
+      "Terrain",  "Desert",        "Local", FALSE
+      "Terrain",  "Forest",        "Local", FALSE
+      "Terrain",  "Jungle",        "Local", FALSE
+      "Terrain",  "Tundra",        "Local", FALSE
+      "Terrain",  "Glacier",        "Local", FALSE
+      "Terrain",  "Mountains",     "Local", FALSE
+    }
+
 ;IrrigationSource of city is in game.ruleset
 ;************************************************************************ Code of Hammurabi
 [effect_hammurabi_corruption_1]
