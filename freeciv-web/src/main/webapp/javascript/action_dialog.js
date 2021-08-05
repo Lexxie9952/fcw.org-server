@@ -560,17 +560,21 @@ function popup_action_selection(actor_unit, action_probabilities,
     if (actor_homecity != null) {
       dhtml += " from " + decodeURIComponent(actor_homecity['name']);
     }
-
-    dhtml += " has arrived at " + decodeURIComponent(target_city['name'])
+    dhtml += (is_word_plural(unit_types[actor_unit['type']]['name'])
+              ? " have " : " has " );
+    dhtml += "arrived at " + decodeURIComponent(target_city['name'])
              + ". What is your command?";
   } else if (target_unit != null) {
     dhtml += "Your " + unit_types[actor_unit['type']]['name']
-             + " is ready to act against "
+          + (is_word_plural(unit_types[actor_unit['type']]['name'])
+              ? " are " : " is " )
+             + "ready to act against the "
              + nations[unit_owner(target_unit)['nation']]['adjective']
              + " " + unit_types[target_unit['type']]['name'] + ".";
   } else {
     dhtml += "Your " + unit_types[actor_unit['type']]['name']
-             + " is waiting for your command.";
+             + (is_word_plural(unit_types[actor_unit['type']]['name'])
+                ? " are " : " is " ) + "waiting for your command.";
   }
 
   $(id).html(dhtml);

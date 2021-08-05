@@ -414,3 +414,33 @@ function pluralize(str, num) {
   }
   else return "1 "+str;
 }
+
+/************************************************************************//**
+  Return true if the word is probably plural
+  has equivalent in nation.c also
+ ****************************************************************************/
+function is_word_plural(word)
+{
+  if (!word) return false;
+  var len = word.length;
+  if (len<3) return false;
+  if (word.endsWith("ss")) return false; // -ss are singular
+  if (word.endsWith("men")) return true; // Pikemen, Riflemen, etc.
+
+  /* Exceptions I */
+  if (word.endsWith("AWACS")) return false; // names end in small 's'
+  if (word.endsWith("JTIDS")) return false; // names end in small 's'
+  if (word.endsWith("United Nations")) return false; // debatable ;)*/
+  /* Exceptions II, currently not needed / unimportant.
+  if (word.endsWith("s II"))  return true;  // Barracks II, et similia
+  if (word.endsWith("s III")) return true;  // Barracks III, et similia
+  if (word.endsWith("solos")) return false; // Mausoleum of Mausolos
+  if (word.endsWith("temis")) return false; // Temple of Artemis
+  if (word.endsWith("Zeus")) return false;} // Statue of Zeus
+  the above don't come up or in the case of Barracks, plurality seems loose */
+
+  if (word.endsWith("s")) return true;
+
+  return false;
+}
+
