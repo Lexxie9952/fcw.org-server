@@ -4685,37 +4685,25 @@ reqs =
       "Terrain",  "Plains",        "Local", FALSE
       "Terrain",  "Desert",        "Local", FALSE
       "Terrain",  "Tundra",        "Local", FALSE
-      "Terrain",  "Glacier",        "Local", FALSE
+      "Terrain",  "Glacier",       "Local", FALSE
       "Terrain",  "Forest",        "Local", FALSE
       "Terrain",  "Hills",         "Local", FALSE
       "Terrain",  "Mountains",     "Local", FALSE
+      "Terrain",  "Ocean",         "Local", FALSE
+      "Terrain",  "Deep Ocean",    "Local", FALSE
     }
-;[effect_angkor_wat_jungleswamp_plant_bonus]
-;type    = "Unit_Work_Pct"
-;value   = 50
-;reqs =
-;    { "type",     "name",          "range","present"
-;      "Building", "Angkor Wat",    "Player",TRUE
-;      "Activity", "Mine",          "Local", TRUE
-;      "UnitFlag", "Infra",         "Local", TRUE
-;      "Terrain",  "Grassland",     "Local", FALSE ; exclude everything but Swamp/Jungle.
-;      "Terrain",  "Plains",        "Local", FALSE
-;      "Terrain",  "Desert",        "Local", FALSE
-;      "Terrain",  "Tundra",        "Local", FALSE
-;      "Terrain",  "Glacier",        "Local", FALSE
-;      "Terrain",  "Forest",        "Local", FALSE
-;      "Terrain",  "Hills",         "Local", FALSE
-;      "Terrain",  "Mountains",     "Local", FALSE
-;    }
 [effect_angkor_wat_elephant_discount]
 type    = "Unit_Build_Cost_Pct"
-value	  = -14 ; 36 - 5 = - 14%
+value	  = -13 ; 36 - 5 = - 13%
 reqs    =
     {
       "type",     "name",       "range",  "present"
-      "Building", "Appian Way", "City",   TRUE
-      "UnitType", "Wagon",      "Local",  TRUE
-      "Tech",     "Railroad",   "Player", FALSE
+      "Building", "Angkor Wat", "City",   TRUE
+      "UnitType", "Elephants",  "Local",  TRUE
+      "Gov",      "Democracy",     "Player", FALSE 
+      "Gov",      "Theocracy",     "Player", FALSE 
+      "Gov",      "Communism",     "Player", FALSE 
+      "Gov",      "Nationalism",   "Player", FALSE 
     }
 [effect_angkor_wat_culture]
 type    = "History"
@@ -4769,7 +4757,7 @@ reqs =
       "Extra",    "Road",          "Local", TRUE
       "CityTile", "Claimed",       "Local", FALSE
     }
-[effect_appian_move_bonus_foot_soldier2]  ; bonus for unclaimed territory
+[effect_appian_move_bonus_foot_soldier2]  ; bonus for national territory
 type    = "Move_Bonus"
 value   = 3
 reqs =
@@ -4875,7 +4863,7 @@ reqs =
       "Terrain",  "Forest",        "Local", FALSE
       "Terrain",  "Jungle",        "Local", FALSE
       "Terrain",  "Tundra",        "Local", FALSE
-      "Terrain",  "Glacier",        "Local", FALSE
+      "Terrain",  "Glacier",       "Local", FALSE
       "Terrain",  "Mountains",     "Local", FALSE
     }
 [effect_chand_baori_cultivation_rate]
@@ -4895,10 +4883,9 @@ reqs =
       "Terrain",  "Forest",        "Local", FALSE
       "Terrain",  "Jungle",        "Local", FALSE
       "Terrain",  "Tundra",        "Local", FALSE
-      "Terrain",  "Glacier",        "Local", FALSE
+      "Terrain",  "Glacier",       "Local", FALSE
       "Terrain",  "Mountains",     "Local", FALSE
     }
-
 ;IrrigationSource of city is in game.ruleset
 ;************************************************************************ Code of Hammurabi
 [effect_hammurabi_corruption_1]

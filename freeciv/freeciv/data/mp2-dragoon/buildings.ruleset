@@ -299,7 +299,7 @@ City Walls prevent population loss when a defending unit is killed. As enormous\
  are halved. In a city with Fortifications, City Walls are built beyond the\
  fortified perimeter—thus, they replace the bonus instead of stacking with it. \n\
  "), _("\
- Discovery of Steel increases cost to 75 shields.\
+ Discovery of Metallurgy increases cost to 75 shields.\
 ")
 
 [building_coastal_defense]
@@ -1510,14 +1510,16 @@ sound_alt	= "w_generic"
 helptext	= _("\
 The Appian Way is the first flat stone paved highway that can drain\
  rainwater. The Appian Way gives the following bonuses：\n\
- ➤ Trade Routes get a slight increase in ongoing revenue \n\
- If not in Foreign territory：\n\
- ➤ Tile Workers gain +⅓ move and build Roads at twice the speed. \n\
- ➤ Wagons, Chariots, and Foot soldiers gain +⅓ move when starting \n\
-  their turn on a Road. \n\
- In the city with Appian Way：\n\
+National bonuses:\n\
+ ➤ Trade Routes get a slight increase in ongoing revenue. \n\
+ ➤ Tile-workers build Roads at twice the speed. \n\
+In the city with Appian Way：\n\
  ➤ Each trade-producing tile produces +1 extra trade, if there is a road on it. \n\
  ➤ Wagons cost 5 shields less. \n\
+If not in Foreign territory：\n\
+ ➤ Tile Workers gain +⅓ move. \n\
+ ➤ Wagons, Chariots, and Foot soldiers gain +⅓ move when starting\
+  their turn on a Road. \n\
 Obsolete by：Railroad.\
 ")
 
