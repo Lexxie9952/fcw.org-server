@@ -533,6 +533,7 @@ function popup_action_selection(actor_unit, action_probabilities,
 {
   // reset dialog page.
   var id = "#act_sel_dialog_" + actor_unit['id'];
+  var focus_button = null; // button to auto focus on when dialog created
   remove_active_dialog(id);
   $("<div id='act_sel_dialog_" + actor_unit['id'] + "'></div>").appendTo("div#game_page");
 
@@ -667,6 +668,7 @@ function popup_action_selection(actor_unit, action_probabilities,
         buttons.push(create_act_sel_button(id, actor_unit['id'],
                                            tgt_id, sub_tgt_id, action_id,
                                            action_probabilities));
+        if (action_id==ACTION_ATTACK) focus_button = "act_sel_"+ACTION_ATTACK+"_"+actor_unit['id'];
       }
     }
   }
@@ -946,6 +948,7 @@ function popup_action_selection(actor_unit, action_probabilities,
   is_more_user_input_needed = false;
   $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
   dialog_register(id, actor_unit['id'], true);
+  if (focus_button) $("#"+focus_button).focus(); // default focus to attack button
 }
 
 /**************************************************************************
