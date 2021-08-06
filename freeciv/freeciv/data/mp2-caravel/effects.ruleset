@@ -1453,8 +1453,17 @@ reqs	=
 type    = "Civil_War_Chance"
 value   = 70
 reqs	=
-    { "type",       "name",      "range"
-      "Gov", "Monarchy",  "Player"
+    { "type",       "name",      "range",  "present"
+      "Gov",        "Monarchy",  "Player", TRUE
+      "Building", "Magna Carta", "Player", FALSE 
+    }
+[effect_civil_war_constitutional_monarchy]
+type    = "Civil_War_Chance"
+value   = 50
+reqs	=
+    { "type",       "name",      "range",  "present"
+      "Gov",        "Monarchy",  "Player", TRUE
+      "Building", "Magna Carta", "Player", TRUE 
     }
 [effect_civil_war_republic]
 type    = "Civil_War_Chance"
