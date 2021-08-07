@@ -477,8 +477,10 @@ const char *conn_description(const struct connection *pconn)
   buffer[0] = '\0';
 
   if (*pconn->username != '\0') {
-    fc_snprintf(buffer, sizeof(buffer), _("%s from %s"),
-                pconn->username, pconn->addr); 
+    /*fc_snprintf(buffer, sizeof(buffer), _("%s from %s"),
+                pconn->username, pconn->addr); FCW always localhost*/
+    fc_snprintf(buffer, sizeof(buffer), _("%s"), pconn->username);
+
   } else {
     sz_strlcpy(buffer, "server");
   }
