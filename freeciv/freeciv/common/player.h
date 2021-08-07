@@ -339,15 +339,21 @@ struct player {
 
       void *ais[FREECIV_AI_MOD_LAST];
 
-      /* This user is allowed to take over the player. */
+      /* The username of who can "/delegate take" this player: */
       char delegate_to[MAX_LEN_NAME];
-      /* This is set when a player is 'involved' in a delegation.
-       * There are two cases:
-       *  - if delegate_to[] is set, it records the original owner, with
-       *    'username' temporarily holding the delegate's name;
-       *  - otherwise, it's set when a delegate's original player is 'put
-       *    aside' while the delegate user controls a delegated player.
-       *    (In this case orig_username == username.) */
+
+      /* orig_username is set when a player is one of the two 'involved' players when there 
+       * is one player ACTIVELY controlling a delegated player; otherwise it's null.
+       * If set, there are two cases:
+       *  1. if delegate_to[] is set:
+       *       - this player has surrendered control to their delegate which took them.
+       *       - orig_username records the username of this player's original owner.
+       *       - 'username' temporarily holds the controlling-player's name.
+       *  2. if delegate_to[] is not set:
+       *       - this player belonged to the controlling player who has 'put this player aside'
+       *         ...in order to control the delegated player.
+       *       - username will be "Unassigned"
+       *       - orig_username will be the controlling player's username */
       char orig_username[MAX_LEN_NAME];
 
       int huts; /* How many huts this player has found */
