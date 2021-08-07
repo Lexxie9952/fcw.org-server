@@ -90,6 +90,8 @@ tiles = { "row", "column", "tag"
  10, 4, "ts.forest_game"
  10, 6, "ts.berries"
 
+ 11, 6, "ts.goat"
+ 11, 7, "ts.hippo"
  11, 2, "ts.horses"
  11, 4, "ts.grassland_resources", "ts.river_resources"
 
