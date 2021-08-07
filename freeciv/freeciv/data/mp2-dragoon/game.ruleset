@@ -85,8 +85,9 @@ food_cost        = 2
 ;   if city_size > num_inis;
 ;     city_granary_size = (granary_food_ini[num_inis] +
 ;        granary_food_inc * (city_size - num_inis)) * foodbox / 100
-granary_food_ini = 20, 30, 40, 50, 60, 70
-granary_food_inc = 0
+;granary_food_ini = 20, 30, 40, 50, 60, 70
+granary_food_ini  = 16, 23, 31, 40, 50, 60, 70
+granary_food_inc = 1
 
 ; City center minimum outputs
 min_city_center_food    = 1
