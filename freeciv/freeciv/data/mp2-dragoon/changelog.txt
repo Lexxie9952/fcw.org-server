@@ -10,4 +10,5 @@ Focus goals for MP2-Dragoon
        S2  S3  S4  S5  S6  S7 
 MP2C:  20  30  40  50  60  70   20+10...
 MP2D:  16  23  31  40  50  60  70  71  16+7+8+9+10...up to 70 then +1
-
+============================================================
+2. Mountain Goats & Hippopotami

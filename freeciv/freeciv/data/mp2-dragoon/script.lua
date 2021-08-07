@@ -88,14 +88,14 @@ function tech_researched_handler(tech, player, how)
           notify.event(NIL, c.tile, E.TECH_GAIN,
           _("<font color=#ffff00>🐎 Travellers say the %s now ride horses, near %s. (%i,%i)</font>"),
           player.nation:plural_translation(), c.name, c.tile.x, c.tile.y )
-          notify.all( _("🐎 Tribesmen have learned to ride horses near %s (%i,%i)"), c.name, c.tile.x, c.tile.y)          
+          notify.all( _("🐎 A tribe has learned to ride horses near %s (%i,%i)"), c.name, c.tile.x, c.tile.y)          
         end
         if c:has_building(find.building_type("Palace")) and first_horse_warning == 0 then
           first_horse_warning = 1
           notify.event(NIL, c.tile, E.TECH_GAIN,
           _("[`events/wildbeasts`]<br><font color=#ffff00>🐎 Travellers tell of the %s, who ride horses near %s! (%i,%i)</font>"),
           player.nation:plural_translation(), c.name, c.tile.x, c.tile.y )
-          notify.all( _("🐎 Tribesmen have learned to ride wild beasts near %s (%i,%i)"), c.name, c.tile.x, c.tile.y)          
+          notify.all( _("🐎 A tribe has learned to ride wild beasts near %s (%i,%i)"), c.name, c.tile.x, c.tile.y)          
         end
       end  
     end
@@ -198,17 +198,17 @@ _("[`events/endtimes`]<br>Philosophers are concerned that weapons technology is 
   if turn == 2 then
     notify.event(nil, nil, E.SCRIPT,
 _("<b>Hunt for Food!</b>\n\
-Meat from wild animals is an important part of the Stone Age diet. Use wandering Deer and Wild Boar for extra food.\
-   (TIP: Use Shift-W and Ctrl-Shift-Click to monitor and manage these resource opportunities.)\
+Wild animals are part of the Stone Age diet. Cities can use animal tiles for extra food.\
+   (TIP: Shift-W, then Ctrl-Shift-Click tiles to manage resource opportunities.)\
 "))
 notify.event(nil, nil, E.BEGINNER_HELP,
-_("[`events/hunt`]<br>Wild animals are available to hunt for food."))
+_("[`events/hunt`]<br>Wild animal resources are available for food."))
   end
 
   if turn == 20 then
     notify.event(nil, nil, E.SCRIPT,
 _("<b>Ecology Report</b>\n\
-Frequent hunting has reduced wild animal populations and frightened them from human settlements.\
+Hunting has reduced wild animal populations and frightened them from human settlements.\
 "))
 notify.event(nil, nil, E.BEGINNER_HELP,
 _("[`events/runningdeer`][`events/oldtribesmen`]<br>Animal populations no longer come near human settlements.<br>Next turn, Elder Tribesmen lose bonus for movement, work, vision, and recycle.<br>"))

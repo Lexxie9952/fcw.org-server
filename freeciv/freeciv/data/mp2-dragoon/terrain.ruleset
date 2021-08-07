@@ -1024,16 +1024,29 @@ identifier  = "@"
 ;trade       = 2  ;added in effects because only generated resources tied to a terrain type can access this var
 # forest, forested.
 
-[resource_forest_game]
+[resource_deer]
 extra       = "Deer"
 identifier  = "d"
-;food      = 3  ;food added in effects because only generated resources tied to a terrain type can access this var
+;food      = 4  ;food added in effects because only generated resources tied to a terrain type can access this var
+;shield    = 0
 
 [resource_wild_boar]
 extra       = "Wild Boar"
 identifier  = "q"
 ;food      = 3  ;food added in effects because only generated resources tied to a terrain type can access this var
+;shield    = 2
 
+[resource_mtn_goat]
+extra = "Mountain Goat"
+identifier  = "m"  ;food added in effects because only generated resources tied to a terrain type can access this var
+;food       = 3
+;shield     = 1
+
+[resource_hippo]
+extra = "Hippopotamus"
+identifier  = "h"  ;food added in effects because only generated resources tied to a terrain type can access this var
+;food       = 3
+;shield     = 1
 
 [extraui]
 ; Player visible names of the base gui types.
@@ -2587,6 +2600,65 @@ appearance_reqs =
       "Extra", "Wild Boar", "Adjacent", FALSE
     }
 
+[extra_mtn_goat]
+name           = _("Mountain Goat")
+category       = "Resource"
+causes         = "Appear", "Resource"
+rmcauses       = "Disappear"
+graphic        = "ts.goat"
+graphic_alt    = "-"
+activity_gfx   = "None"
+act_gfx_alt    = "-"
+act_gfx_alt2   = "-"
+rmact_gfx      = "None"
+rmact_gfx_alt  = "-"
+disappearance_chance    = 10000
+disappearance_reqs = 
+    { "type",           "name", "range"
+    }
+appearance_chance       = 180
+appearance_reqs = 
+    { "type",    "name", "range",  "present"
+      "Terrain", "Tundra",    "Local", FALSE
+      "Terrain", "Glacier",   "Local", FALSE
+      "Terrain", "Forest",    "Local", FALSE
+      "Terrain", "Jungle",    "Local", FALSE
+      "Terrain", "Swamp",     "Local", FALSE
+      "Terrain", "Desert",    "Local", FALSE
+      "Terrain", "Lake",      "Local", FALSE
+      "Terrain", "Ocean",     "Local", FALSE
+      "Terrain", "Deep Ocean","Local", FALSE
+      "Terrain", "Grassland", "Local", FALSE
+      "Terrain", "Plains",    "Local", FALSE
+      "Terrain", "Mountains", "Adjacent", TRUE
+      "MinYear", "-2200",     "World", FALSE
+      "Extra", "Mountain Goat","Adjacent", FALSE
+    }
+
+[extra_hippo]
+name           = _("Hippopotamus")
+category       = "Resource"
+causes         = "Appear", "Resource"
+rmcauses       = "Disappear"
+graphic        = "ts.hippo"
+graphic_alt    = "-"
+activity_gfx   = "None"
+act_gfx_alt    = "-"
+act_gfx_alt2   = "-"
+rmact_gfx      = "None"
+rmact_gfx_alt  = "-"
+disappearance_chance    = 10000
+disappearance_reqs = 
+    { "type",           "name", "range"
+    }
+appearance_chance       = 390
+appearance_reqs = 
+    { "type",    "name", "range",  "present"
+      "Terrain", "Desert",      "Local", TRUE
+      "Extra",   "River",       "Local", TRUE
+      "MinYear", "-2200",       "World", FALSE
+      "Extra",   "Hippopotamus","Adjacent", FALSE
+    }
 
 ; /* <-- avoid gettext warnings
 ;

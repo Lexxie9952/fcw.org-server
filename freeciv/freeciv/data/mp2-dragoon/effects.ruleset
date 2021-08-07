@@ -473,6 +473,42 @@ reqs	=
       "Extra", "Wild Boar", "Local"
       "OutputType", "Food", "Local"
     }
+[effect_mountain_goat_hills_food]
+type    = "Output_Add_Tile"
+value	= 3  ; yields 3 1 0
+reqs	=
+    { "type", "name", "range"
+      "Extra", "Mountain Goat", "Local"
+      "Terrain", "Hills", "Local"
+      "OutputType", "Food", "Local"
+    }
+[effect_mountain_goat_hills_shield]
+type    = "Output_Add_Tile"
+value	= 1    ; yields 3 1 0
+reqs	=
+    { "type", "name", "range"
+      "Extra", "Mountain Goat", "Local"
+      "Terrain", "Hills", "Local"
+      "OutputType", "Shield", "Local"
+    }
+[effect_mountain_goat_mountains_food]
+type    = "Output_Add_Tile"
+value	= 4      ; yields 3 1 0
+reqs	=
+    { "type", "name", "range"
+      "Extra", "Mountain Goat", "Local"
+      "Terrain", "Mountains", "Local"
+      "OutputType", "Food", "Local"
+    }
+[effect_hippo]
+type    = "Output_Add_Tile"
+value	= 4      ; yields 3 1 0
+reqs	=
+    { "type", "name", "range"
+      "Extra", "Hippopotamus", "Local"
+      "OutputType", "Food", "Local"
+    }
+
 ; *** "BLOOD FOR OIL" ** 
 [effect_blood_for_oil]  
 type    = "Output_Add_Tile" ; Refining gives +1 shield to Oil Wells IFF on Oil.
