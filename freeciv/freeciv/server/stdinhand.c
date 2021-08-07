@@ -99,6 +99,9 @@ static enum cmdlevel first_access_level = ALLOW_BASIC;
 
 static time_t *time_duplicate(const time_t *t);
 
+/* if not debugging, set false */
+#define DEBUG_CONNS false
+
 /* 'struct kick_hash' and related functions. */
 #define SPECHASH_TAG kick
 #define SPECHASH_ASTR_KEY_TYPE
@@ -3644,7 +3647,7 @@ static bool take_command(struct connection *caller, char *str, bool check)
     /* inform about the status before changes */
     if (!caller->supercow) {
         cmd_reply(CMD_TAKE, caller, C_OK, _("%s now controls %s (%s, %s)."),
-              pconn->username,
+              player_name(conn_get_player(pconn)),
               player_name(pplayer),
               is_barbarian(pplayer)
               ? _("Barbarian")
@@ -3659,7 +3662,7 @@ static bool take_command(struct connection *caller, char *str, bool check)
         struct packet_chat_msg packet;
 
         package_event(&packet, NULL, E_SETTING, ftc_server,
-        "%s now controls %s (%s, %s).", pconn->username, player_name(pplayer),
+        "%s now controls %s (%s, %s).", player_name(conn_get_player(pconn)), player_name(pplayer),
         is_barbarian(pplayer) ? _("Barbarian") : is_ai(pplayer) ? _("AI")
         : _("Human"), pplayer->is_alive ? _("Alive") : _("Dead"));
 
@@ -3671,7 +3674,7 @@ static bool take_command(struct connection *caller, char *str, bool check)
   } else {
     cmd_reply(CMD_TAKE, caller, C_FAIL,
               _("%s failed to attach to any player."),
-              pconn->username);
+              player_name(conn_get_player(pconn)));
   }
 
   end:;
@@ -4645,7 +4648,7 @@ static bool handle_stdin_input_real(struct connection *caller, char *str,
                   /* TRANS: "[New vote|New teamvote] (number 3)
                    * by fred: proposed change" */
                   _("%s (number %d) by %s: %s"), what,
-                  vote->vote_no, caller->username, votedesc);
+                  vote->vote_no, player_name(conn_get_player(caller)), votedesc);
 
       /* Vote on your own suggestion. */
       connection_vote(caller, vote, VOTE_YES);
@@ -4699,7 +4702,7 @@ static bool handle_stdin_input_real(struct connection *caller, char *str,
       if (caller) {
         if (!caller->supercow) {
           notify_conn(echo_list, NULL, E_SETTING, ftc_any,
-                      "%s: '%s %s'", caller->username, command, arg);
+                      "%s: '%s %s'", player_name(conn_get_player(caller)), command, arg);
         }
       } else {
         notify_conn(echo_list, NULL, E_SETTING, ftc_server_prompt,
@@ -5288,9 +5291,9 @@ static bool delegate_command(struct connection *caller, char *arg,
   const char *username = NULL;
   struct player *dplayer = NULL;
 
-  if (!game_was_started()) {
-    cmd_reply(CMD_DELEGATE, caller, C_FAIL, _("Game not started - "
-                                              "cannot delegate yet."));
+  if (!game_was_started() || (is_longturn() && game.info.turn <=3)) {
+    cmd_reply(CMD_DELEGATE, caller, C_FAIL, _("Cannot delegate until game starts "
+                                              "and completes 3 turns."));
     return FALSE;
   }
 
@@ -5446,9 +5449,17 @@ static bool delegate_command(struct connection *caller, char *arg,
 
   switch (ind) {
   case DELEGATE_TO:
-    /* delegate to <username> [player] */
+    /* delegate to <playername> [player] */
     if (ntokens > 1) {
-      username = tokens[1];
+      // Have to ask delegate by player name, not username. Now get real
+      // username of the player.
+      dplayer = player_by_name_prefix(tokens[1], &result);
+      if (!dplayer) {
+        cmd_reply_no_such_player(CMD_DELEGATE, caller, tokens[1], result);
+        ret = FALSE;
+        break;
+      }
+      username = dplayer->username;
     } else {
       cmd_reply(CMD_DELEGATE, caller, C_SYNTAX,
                 _("Please specify a user to whom control is to be delegated."));
@@ -5507,14 +5518,14 @@ static bool delegate_command(struct connection *caller, char *arg,
          * or console. */
         fc_assert(player_specified);
         cmd_reply(CMD_DELEGATE, caller, C_FAIL,
-                  _("Can't delegate control of '%s' belonging to %s while "
+                  _("Can't delegate control of '%s' while "
                     "they are controlling another player."),
-                    player_name(dplayer), dplayer->username);
+                    player_name(dplayer));
       } else if (player_specified) {
         /* Admin or console attempting to change a controlled player. */
         cmd_reply(CMD_DELEGATE, caller, C_FAIL,
                   _("Can't change delegation of '%s' while controlled by "
-                    "delegate %s."), player_name(dplayer), dplayer->username);
+                    "delegate."), player_name(dplayer));
       } else {
         /* Caller must be the delegate. Give more specific message.
          * (We don't know if they thought they were delegating their
@@ -5556,8 +5567,13 @@ static bool delegate_command(struct connection *caller, char *arg,
 
     player_delegation_set(dplayer, username);
     cmd_reply(CMD_DELEGATE, caller, C_OK,
-              _("Control of player '%s' delegated to user %s."),
-              player_name(dplayer), username);
+              _("Control of player '%s' delegated to %s."),
+              player_name(dplayer), player_name(player_by_user(username)));
+    if (DEBUG_CONNS || caller->supercow) {
+      cmd_reply(CMD_DELEGATE, caller, C_OK,
+                _("  i.e., control of player '%s' delegated to user %s."),
+                player_name(dplayer), username);
+    }
     ret = TRUE;
     break;
 
@@ -5572,8 +5588,13 @@ static bool delegate_command(struct connection *caller, char *arg,
                 player_name(dplayer));
     } else {
       cmd_reply(CMD_DELEGATE, caller, C_COMMENT,
-                _("Control of player '%s' delegated to user %s."),
-                player_name(dplayer), player_delegation_get(dplayer));
+                _("Control of player '%s' delegated to %s."),
+                player_name(dplayer), player_name(player_by_user(player_delegation_get(dplayer))));
+      if (DEBUG_CONNS || caller->supercow) {
+        cmd_reply(CMD_DELEGATE, caller, C_COMMENT,
+                  _("  i.e., control of player '%s' delegated to user %s."),
+                  player_name(dplayer), player_delegation_get(dplayer));
+      }
     }
     ret = TRUE;
     break;
@@ -5621,6 +5642,9 @@ static bool delegate_command(struct connection *caller, char *arg,
     /* Try to take another player. */
     fc_assert_ret_val(dplayer, FALSE);
     fc_assert_ret_val(caller, FALSE);
+    char oplayer_name[MAX_LEN_NAME];
+    // Remember the taking player's name before it changes to the dplayer
+    sz_strlcpy(&oplayer_name[0], player_name(conn_get_player(caller)));
 
     if (caller->server.delegation.status) {
       cmd_reply(CMD_DELEGATE, caller, C_FAIL,
@@ -5677,13 +5701,19 @@ static bool delegate_command(struct connection *caller, char *arg,
       /* Should never happen. Generic failure message. */
       log_error("%s failed to take control of '%s' during 'delegate take'.",
                 caller->username, player_name(dplayer));
-      cmd_reply(CMD_DELEGATE, caller, C_FAIL, _("Unexpected failure."));
+      cmd_reply(CMD_DELEGATE, caller, C_FAIL, _("Unexpected failure. Screenshot this to an admin:"));
+      
+      int tmp = caller->access_level;
+      caller->access_level = ALLOW_HACK; /* reveal all so an admin might fix the bug */
+      show_players(caller);
+      caller->access_level = tmp;
+
       ret = FALSE;
       break;
     }
 
     cmd_reply(CMD_DELEGATE, caller, C_OK,
-              _("%s is now controlling player '%s'."), caller->username,
+              _("%s is now controlling player '%s'."), oplayer_name,
               player_name(conn_get_player(caller)));
     ret = TRUE;
     break;
@@ -5714,7 +5744,7 @@ static bool delegate_command(struct connection *caller, char *arg,
     cmd_reply(CMD_DELEGATE, caller, C_OK,
               /* TRANS: "<user> is now connected to <player>" where <player>
                * can also be "global observer" or "nothing" */
-              _("%s is now connected as %s."), caller->username,
+              _("%s is now connected as %s."), player_name(conn_get_player(caller)),
               delegate_player_str(conn_get_player(caller), caller->observer));
     ret = TRUE;
     break;
@@ -6812,13 +6842,21 @@ static void show_connections(struct connection *caller)
     cmd_reply(CMD_LIST, caller, C_COMMENT, _("<no connections>"));
   } else {
     conn_list_iterate(game.all_connections, pconn) {
-      if (caller->supercow) {
+      if (caller->supercow || DEBUG_CONNS) {
+        sz_strlcpy(buf, "conn.user: ");
+        cat_snprintf(buf, sizeof(buf), 
+        "%s\n playing.name: %s\n playing.orig: %s\n del_to: %s",
+        pconn->username,
+        (pconn->playing ? pconn->playing->name : "null"),
+        (pconn->playing->server.orig_username ? pconn->playing->server.orig_username : "null"),
+        (pconn->playing->server.delegate_to ? pconn->playing->server.delegate_to : "null"));
+      } else if (caller->supercow) {
         sz_strlcpy(buf, conn_description(pconn));
       } else {
         sz_strlcpy(buf, player_name(player_by_user(pconn->username)));
       }
       if (pconn->established && caller->supercow) {
-        cat_snprintf(buf, sizeof(buf), " command access level %s",
+        cat_snprintf(buf, sizeof(buf), " level:%s",
                      cmdlevel_name(pconn->access_level));
       }
       cmd_reply(CMD_LIST, caller, C_COMMENT, "%s", buf);
@@ -6835,8 +6873,6 @@ static void show_delegations(struct connection *caller)
   /* Since FCW allows player name to be an anonymous pseudonym and since 
    * delegation uses username to reference delegations, only supercow
    * admins can see this list. */
-  if (!caller->supercow) return;
-
   bool empty = TRUE;
 
   cmd_reply(CMD_LIST, caller, C_COMMENT, _("List of all delegations:"));
@@ -6849,11 +6885,20 @@ static void show_delegations(struct connection *caller)
         player_delegation_active(pplayer) ? pplayer->server.orig_username
                                           : pplayer->username;
       fc_assert(owner);
-      cmd_reply(CMD_LIST, caller, C_COMMENT,
-                /* TRANS: last %s is either " (active)" or empty string */
-                _("%s delegates control over player '%s' to user %s%s."),
-                owner, player_name(pplayer), delegate_to,
-                player_delegation_active(pplayer) ? _(" (active)") : "");
+      if (caller->supercow || !DEBUG_CONNS) {
+        cmd_reply(CMD_LIST, caller, C_COMMENT,
+                  /* TRANS: last %s is either " (active)" or empty string */
+                  _("%s delegates control over player '%s' to user %s%s."),
+                  owner, player_name(pplayer), delegate_to,
+                  player_delegation_active(pplayer) ? _(" (active)") : "");
+      } else {
+        cmd_reply(CMD_LIST, caller, C_COMMENT,
+                  /* TRANS: last %s is either " (active)" or empty string */
+                  _("Player '%s' has delegated %s by their delegate."),
+                  player_name(pplayer),
+                  player_delegation_active(pplayer) ? _("and is actively controlled")
+                                                    : _("but is not controlled"));
+      }
       empty = FALSE;
     }
   } players_iterate_end;
@@ -6925,67 +6970,80 @@ void show_players(struct connection *caller)
 
       /* '<Player name> [color]: [Nation][, Username][, Status]' */
       buf[0] = '\0';
-      cat_snprintf(buf, sizeof(buf), "%s [%s]: %s", player_name(pplayer),
-                   player_color_ftstr(pplayer),
-                   team_name_translation(pplayer->team));
-      if (!game.info.is_new_game) {
-        cat_snprintf(buf, sizeof(buf), ", %s",
-                     nation_adjective_for_player(pplayer));
-      }
-      if (caller->supercow && strlen(pplayer->username) > 0
-          && strcmp(pplayer->username, "nouser") != 0) {
-        cat_snprintf(buf, sizeof(buf), _(", user %s"), pplayer->username);
-      }
-      if (S_S_INITIAL == server_state() && pplayer->is_connected) {
-        if (pplayer->is_ready) {
-          sz_strlcat(buf, _(", ready"));
-        } else {
-          /* Emphasizes this */
-          n = strlen(buf);
-          featured_text_apply_tag(_(", not ready"),
-                                  buf + n, sizeof(buf) - n,
-                                  TTT_COLOR, 1, FT_OFFSET_UNSET,
-                                  ftc_changed);
+
+      if (caller->supercow || DEBUG_CONNS) {
+        // Player: [u:username o:orig_username] d-->delegates_to (is_delegate_active)
+        cat_snprintf(buf, sizeof(buf), "%s [u:%s o:%s] d-->%s (%s)",
+                     player_name(pplayer),
+                     pplayer->username,
+                     pplayer->server.orig_username,
+                     pplayer->server.delegate_to,
+                     player_delegation_active(pplayer) ? _(" (active)") : "(untaken)");
+      } else {
+        cat_snprintf(buf, sizeof(buf), "%s [%s]: %s", player_name(pplayer),
+                    player_color_ftstr(pplayer),
+                    team_name_translation(pplayer->team));
+        if (!game.info.is_new_game) {
+          cat_snprintf(buf, sizeof(buf), ", %s",
+                      nation_adjective_for_player(pplayer));
         }
-      } else if (!pplayer->is_alive) {
-        sz_strlcat(buf, _(", Dead"));
+        if (caller->supercow && strlen(pplayer->username) > 0
+            && strcmp(pplayer->username, "nouser") != 0) {
+          cat_snprintf(buf, sizeof(buf), _(", user %s"), pplayer->username);
+        }
+        if (S_S_INITIAL == server_state() && pplayer->is_connected) {
+          if (pplayer->is_ready) {
+            sz_strlcat(buf, _(", ready"));
+          } else {
+            /* Emphasizes this */
+            n = strlen(buf);
+            featured_text_apply_tag(_(", not ready"),
+                                    buf + n, sizeof(buf) - n,
+                                    TTT_COLOR, 1, FT_OFFSET_UNSET,
+                                    ftc_changed);
+          }
+        } else if (!pplayer->is_alive) {
+          sz_strlcat(buf, _(", Dead"));
+        }
       }
       cmd_reply(CMD_LIST, caller, C_COMMENT, "%s", buf);
 
       /* '  AI/Barbarian/Human[, skill level][, Connections]' */
       buf[0] = '\0';
-      if (is_barbarian(pplayer)) {
-        sz_strlcat(buf, _("Barbarian"));
-      } else if (is_ai(pplayer)) {
-        sz_strlcat(buf, _("AI"));
-      } else {
-        sz_strlcat(buf, _("Human"));
-      }
-      if (is_ai(pplayer)) {
-        cat_snprintf(buf, sizeof(buf), _(", %s"), ai_name(pplayer->ai));
-        cat_snprintf(buf, sizeof(buf), _(", difficulty level %s"),
-                     ai_level_translated_name(pplayer->ai_common.skill_level));
-      }
-      n = conn_list_size(pplayer->connections);
-      if (n > 0) {
-        cat_snprintf(buf, sizeof(buf), 
-                     PL_(", %d connection:", ", %d connections:", n), n);
-      }
-      cmd_reply(CMD_LIST, caller, C_COMMENT, "  %s", buf);
+      if (!DEBUG_CONNS) {
+        if (is_barbarian(pplayer)) {
+          sz_strlcat(buf, _("Barbarian"));
+        } else if (is_ai(pplayer)) {
+          sz_strlcat(buf, _("AI"));
+        } else {
+          sz_strlcat(buf, _("Human"));
+        }
+        if (is_ai(pplayer)) {
+          cat_snprintf(buf, sizeof(buf), _(", %s"), ai_name(pplayer->ai));
+          cat_snprintf(buf, sizeof(buf), _(", difficulty level %s"),
+                      ai_level_translated_name(pplayer->ai_common.skill_level));
+        }
+        n = conn_list_size(pplayer->connections);
+        if (n > 0) {
+          cat_snprintf(buf, sizeof(buf), 
+                      PL_(", %d connection:", ", %d connections:", n), n);
+        }
+        cmd_reply(CMD_LIST, caller, C_COMMENT, "  %s", buf);
 
-      /* '    [Details for each connection]' */
-      if (caller->supercow) {
-        conn_list_iterate(pplayer->connections, pconn) {
-          fc_snprintf(buf, sizeof(buf),
-                      _("%s from %s (command access level %s), "
-                        "bufsize=%dkb"), pconn->username, pconn->addr,
-                      cmdlevel_name(pconn->access_level),
-                      (pconn->send_buffer->nsize >> 10));
-          if (pconn->observer) {
-            sz_strlcat(buf, _(" (observer mode)"));
-          }
-          cmd_reply(CMD_LIST, caller, C_COMMENT, "    %s", buf);
-        } conn_list_iterate_end;
+        /* '    [Details for each connection]' */
+        if (caller->supercow) {
+          conn_list_iterate(pplayer->connections, pconn) {
+            fc_snprintf(buf, sizeof(buf),
+                        _("%s from %s (command access level %s), "
+                          "bufsize=%dkb"), pconn->username, pconn->addr,
+                        cmdlevel_name(pconn->access_level),
+                        (pconn->send_buffer->nsize >> 10));
+            if (pconn->observer) {
+              sz_strlcat(buf, _(" (observer mode)"));
+            }
+            cmd_reply(CMD_LIST, caller, C_COMMENT, "    %s", buf);
+          } conn_list_iterate_end;
+        }
       }
     } players_iterate_end;
   }

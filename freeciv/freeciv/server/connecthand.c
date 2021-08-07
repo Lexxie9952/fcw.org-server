@@ -634,6 +634,22 @@ void send_conn_info_remove(struct conn_list *src, struct conn_list *dest)
 }
 
 /**********************************************************************//**
+  Returns the # of turns idle a player has to be, at this point in the 
+  game, to be taken over by a latejoiner player.
+**************************************************************************/
+static int can_take_idler_turns()
+{
+  // Keep this code identical with pregame.js:pick_nation() **************************** !!!
+  /* Turns 1-12: replace idle 3. T12+ increase idle cutoff until max cutoff of 10 */
+  int threshold = 3;
+  if (game.info.turn > 12) threshold += (game.info.turn - 12);
+  if (threshold > 10) threshold = 10;
+  // </end identical code notes>
+
+  return threshold;
+}
+
+/**********************************************************************//**
   Search for first uncontrolled player
 **************************************************************************/
 struct player *find_uncontrolled_player(struct connection *pconn)
@@ -664,13 +680,7 @@ struct player *find_uncontrolled_player(struct connection *pconn)
 
 /* Longturn: Select first unassigned nation, otherwise select random idler */
   int idle_count = 0;
-  // Keep this code identical with pregame.js:pick_nation() **************************** !!!
-  /* Turns 1-12: replace idle 3. T12+ increase idle cutoff until max cutoff of 10 */
-  int idle_cutoff = 3;
-  if (game.info.turn > 12) idle_cutoff += (game.info.turn - 12);
-  if (idle_cutoff > 10) idle_cutoff = 10;
-  // </end identical code notes>
-
+  int idle_cutoff = can_take_idler_turns();
   struct player* idle_players[MAX_NUM_PLAYER_SLOTS];
 
   /* Check for available unassigned nations, while popluating available idle player array */
@@ -715,10 +725,7 @@ struct player *find_uncontrolled_player(struct connection *pconn)
 struct player *find_uncontrolled_idle_player_longturn(void)
 {
   int idle_count = 0;
-  /* Turns 1-12: replace idle 3. T12+ increase idle cutoff until max cutoff of 10 */
-  int idle_cutoff = 3;
-  if (game.info.turn > 12) idle_cutoff += (game.info.turn - 12);
-  if (idle_cutoff > 10) idle_cutoff = 10;
+  int idle_cutoff = can_take_idler_turns();
 
   struct player* idle_players[MAX_NUM_PLAYER_SLOTS];
 
@@ -772,6 +779,9 @@ static bool connection_attach_real(struct connection *pconn,
                         "connections must be detached with "
                         "connection_detach() before calling this!");
 
+  bool is_idler = false;
+  int idle_cutoff = can_take_idler_turns();
+
   if (!observing) {
     if (NULL == pplayer) {
       /* search for uncontrolled player */
@@ -782,6 +792,12 @@ static bool connection_attach_real(struct connection *pconn,
         if (player_count() >= game.server.max_players
             || normal_player_count() >= server.playable_nations) {
           return FALSE;
+        }
+        /* Flag if we're taking over an idler */
+        if (!pplayer->unassigned_user 
+            && pplayer->is_alive 
+            && pplayer->nturns_idle >= idle_cutoff) {
+              is_idler=true;
         }
         /* add new player, or not */
         /* Should only be called in such a way as to create a new player
@@ -803,6 +819,12 @@ static bool connection_attach_real(struct connection *pconn,
     }
 
     if (pconn && !pconn->supercow) {
+      // Redundant check for idler, just to be safe: we don't want new player to be stuck with old player's alias
+      if (pplayer->username) {
+        if (strcmp(pplayer->username, pconn->username) != 0) {
+          is_idler = true;
+        }
+      }
       sz_strlcpy(pplayer->username, pconn->username);
     }
     pplayer->unassigned_user = FALSE;
@@ -816,11 +838,36 @@ static bool connection_attach_real(struct connection *pconn,
       }
       (void) aifill(game.info.aifill);
     }
+    /* New longturn connection sets playername to username, IFF these cases:
+       1. pplayer has a null pointer for ->name, no name at all was assigned
+       2. Playername string is null
+       3. Playername starts with NewAvailablePlayer
+       4. Taking over an idler pplayer
+       IN OTHER WORDS,
+       We do NOT reset the playername to username for aliases.
+    */
     if (is_longturn() && !pconn->supercow) {
+      // Case 1: no name pointer in pplayer struct. (probably shouldn't happen since player should be named NewAvailable at least)
       if (!pplayer->name) {
         server_player_set_name(pplayer, pconn->username);
       }
+      // Case 2: pointer to name exists but it's an empty string
+      // Case 3: pointer to name exists but it's NewAvailablePlayer 
+      // Case 4: taking over an idler player
+      else if (pplayer->name) {
+        if (strlen(pplayer->name) == 0                                 // 2
+         || strncmp("NewAvailablePlayer", pplayer->name, 18) == 0) {   // 3
+              server_player_set_name(pplayer, pconn->username);
+        }
+        else if (is_idler) {
+          server_player_set_name(pplayer, pconn->username);
+        }
+      }
     }
+    /* TODO: What to do about connecting for first time to an idler with a different name, and overriding
+       that to your username, but differentiating that case from connecting in future turns to yourself
+       if yourself has a new playername (i.e., alias)?
+    */
 
     if (game.server.auto_ai_toggle && !is_human(pplayer)) {
       toggle_ai_player_direct(NULL, pplayer);
@@ -1012,6 +1059,10 @@ void connection_detach(struct connection *pconn, bool remove_unused_player)
 bool connection_delegate_take(struct connection *pconn,
                               struct player *dplayer)
 {
+  char dplayer_name[MAX_LEN_NAME];
+  char oplayer_name[MAX_LEN_NAME];
+  struct player *oplayer = conn_get_player(pconn);
+
   fc_assert_ret_val(pconn->server.delegation.status == FALSE, FALSE);
 
   /* Save the original player of this connection and the original username of
@@ -1022,7 +1073,7 @@ bool connection_delegate_take(struct connection *pconn,
   if (conn_controls_player(pconn)) {
     /* Setting orig_username in the player we're about to put aside is
      * a flag that no-one should be allowed to mess with it (e.g. /take). */
-    struct player *oplayer = conn_get_player(pconn);
+    oplayer = conn_get_player(pconn);
 
     fc_assert_ret_val(oplayer != dplayer, FALSE);
     fc_assert_ret_val(strlen(oplayer->server.orig_username) == 0, FALSE);
@@ -1030,6 +1081,10 @@ bool connection_delegate_take(struct connection *pconn,
   }
   fc_assert_ret_val(strlen(dplayer->server.orig_username) == 0, FALSE);
   sz_strlcpy(dplayer->server.orig_username, dplayer->username);
+  // Preserve the delegated player's name so we don't lose the alias:
+  sz_strlcpy(&dplayer_name[0], dplayer->name);
+  // Preserve the taking player's name so that we don't lose the alias:
+  sz_strlcpy(&oplayer_name[0], player_name(conn_get_player(pconn)));
 
   /* Detach the current connection. */
   if (NULL != pconn->playing || pconn->observer) {
@@ -1050,13 +1105,23 @@ bool connection_delegate_take(struct connection *pconn,
     pconn->server.delegation.playing = NULL;
     pconn->server.delegation.observer = FALSE;
     if (conn_controls_player(pconn)) {
-      struct player *oplayer = conn_get_player(pconn);
+      oplayer = conn_get_player(pconn);
       oplayer->server.orig_username[0] = '\0';
     }
     dplayer->server.orig_username[0] = '\0';
 
     return FALSE;
   }
+
+  /* Paranoid safety: restore players' names because 
+   * name != username - at very least, capitalised; but maybe an alias*/
+  sz_strlcpy(dplayer->name, &dplayer_name[0]);
+  sz_strlcpy(oplayer->name, &oplayer_name[0]);
+  /* Only FCW has to do this here because connection_attach was modified 
+     to NOT override playername with username in some connection_attach
+     events, because FCW has to worry about idlers, NewAvailablePlayers,
+     and other issues */
+  sz_strlcpy(dplayer->username, pconn->username);
 
   return TRUE;
 }
@@ -1075,6 +1140,11 @@ bool connection_delegate_restore(struct connection *pconn)
     return FALSE;
   }
 
+  /* Preserve names so we don't lose aliases */
+  //char dplayer_name[MAX_LEN_NAME];
+  ///char oplayer_name[MAX_LEN_NAME];
+  ///sz_strlcpy(&oplayer_name[0], pconn->server.delegation.playing->name);
+
   if (pconn->server.delegation.playing
       && !pconn->server.delegation.observer) {
     /* If restoring to controlling another player, and we're not the
@@ -1087,8 +1157,11 @@ bool connection_delegate_restore(struct connection *pconn)
   /* Save the current (delegated) player. */
   dplayer = conn_get_player(pconn);
 
+
   /* There should be a delegated player connected to pconn. */
   fc_assert_ret_val(dplayer, FALSE);
+
+
 
   /* Detach the current (delegate) connection from the delegated player. */
   if (NULL != pconn->playing || pconn->observer) {
@@ -1108,9 +1181,12 @@ bool connection_delegate_restore(struct connection *pconn)
   pconn->server.delegation.playing = NULL;
   pconn->server.delegation.observer = FALSE;
   if (conn_controls_player(pconn) && conn_get_player(pconn) != NULL) {
-    /* Remove flag that we had 'put aside' our original player. */
+
     struct player *oplayer = conn_get_player(pconn);
     fc_assert_ret_val(oplayer != dplayer, FALSE);
+    /* Change username from Unassigned back to owner's username: */
+    sz_strlcpy(oplayer->username, oplayer->server.orig_username);
+    /* Remove flag that we had 'put aside' our original player. */
     oplayer->server.orig_username[0] = '\0';
   }
 
