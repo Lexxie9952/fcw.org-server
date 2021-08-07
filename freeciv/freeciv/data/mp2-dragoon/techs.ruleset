@@ -601,7 +601,7 @@ req2     = "University"
 flags    = ""
 graphic     = "a.metallurgy"
 graphic_alt = "-"
-helptext = _("Obsoletes Catapult, Siege Ram.")
+helptext = _("Obsoletes Catapult, all Siege Rams. City Walls cost +10.")
 cost = 1340
 
 [advance_miniaturization]
@@ -864,7 +864,7 @@ req2     = "Industrialization"
 flags    = ""
 graphic     = "a.steel"
 graphic_alt = "-"
-helptext = _("Obsoletes Castle. Allows Sea Bridge, Bunker. City Walls cost +10.")
+helptext = _("Allows Sea Bridge, Bunker.")
 cost = 3280
 
 [advance_superconductors]
