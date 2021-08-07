@@ -1264,7 +1264,12 @@ function advance_unit_focus(same_type)
     }
     if (!end_turn_info_message_shown) {
       end_turn_info_message_shown = true;
-      message_log.update({ event: E_BEGINNER_HELP, message: "All units have moved, click the \"Turn Done\" button to end your turn."});
+      var txt = "All units have orders. Tap \"Turn Done\" for next turn.";
+      if (is_longturn()) {
+        var txt = is_small_screen() ? "All units have been given orders."
+        : "All units have orders. Hit \">\" to review ordered units."; 
+      }
+      message_log.update({ event: E_BEGINNER_HELP, message: txt});
     }
   }
 }
