@@ -5025,7 +5025,7 @@ distances comparable to other units. Only Foot Soldiers can:\n1. (L)oad outside 
 [unit_goods]
 name          = _("Goods")
 class         = "Cargo"
-tech_req      = "Currency"
+tech_req      = "Pottery"
 obsolete_by   = "Freight"
 graphic       = "u.amphorae"
 graphic_alt   = "-"
@@ -5052,15 +5052,15 @@ roles         = ""
 helptext      = _("\
 Goods are commodities.\
  The cargo containers of the ancient world were amphorae, which carried\
- Goods for trade routes.\n\
-Goods can be used to Establish Trade Route or Enter Marketplace. They can\
- be carried by Commerce units, allowing them to establish multiple\
+ trade goods.\n\
+Goods can be used to Establish Trade Routes or Enter Marketplace. They can\
+ be carried by Commerce units, allowing you to establish multiple\
  trade routes in one voyage. Also, Goods can Recycle Production with only\
  a 25% penalty, rendering 18 shields into a city production target. \n\
 "), _("\
 By themselves, Goods can only move onto tiles with a City, Quay, Fortress,\
- or Naval Base. Commerce units, Tribesmen, and Galleons may carry them as cargo.\
- If adjacent to a foreign city, use the D key to do Commerce functions.\
+ or Naval Base. Commerce units, Tribesmen, and Galleons must carry them as cargo.\
+ If adjacent to a foreign city, use the Do command (D) for Commerce functions.\
 ")
 
 [unit_freight]
