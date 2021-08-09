@@ -737,10 +737,10 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
         player_diplstate_get(pdest, pgiver)->has_reason_to_cancel = 0;
 
         notify_player(pgiver, NULL, E_TREATY_ALLIANCE, ftc_server,
-                      _("📜[`shield`] You agree on an alliance with %s."),
+                      _("📜[`alliance`] You agree on an alliance with %s."),
                       player_name(pdest));
         notify_player(pdest, NULL, E_TREATY_ALLIANCE, ftc_server,
-                      _("📜[`shield`] You agree on an alliance with %s."),
+                      _("📜[`alliance`] You agree on an alliance with %s."),
                       player_name(pgiver));
         give_allied_visibility(pgiver, pdest);
         give_allied_visibility(pdest, pgiver);
