@@ -15,8 +15,12 @@
         <ol id="game_message_area"></ol>
       </div>
       <div id="game_chat_box">
-        <canvas id="chat_direction" width="29" height="20" role="button"></canvas>
-        <input id="game_text_input" autocomplete="off" type="text" name="text_input" />
+        <canvas id="chat_direction" style="cursor:pointer" width="29" height="20" role="button"></canvas>
+        <span style="padding: 0px; margin:0px;">
+          <img style="cursor:pointer; margin-top:-2px;" title='Emoji (ctrl-E)' onclick="emoji_popup()" 
+          onmouseover="this.src='/images/e/smirk.png'" onmouseout="this.src='/images/e/unamused_grey.png'" src="/images/e/unamused_grey.png">
+        </span>
+        <input id="game_text_input" spellcheck="false" autocomplete="off" type="text" name="text_input" />
       </div>
     </div>
 

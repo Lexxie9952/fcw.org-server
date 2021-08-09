@@ -206,9 +206,15 @@ function civclient_init()
     $("#compass").show();
   } else $("#compass").hide();
 
+  // Saved user re-positioning of the chatbox dialog:
   var tmp = simpleStorage.get('chatDlg');
   if (tmp != null)  {// don't overwrite object keys if not yet stored
     restore_chatbox_vals = tmp;
+  }
+  // Saved user re-positioning of the emoji dialog pop-up:
+  tmp = simpleStorage.get('emojiDlg');
+  if (tmp != null) {// don't overwrite object keys if not yet stored
+    restore_emojibox_vals = tmp;
   }
 
   // Which mode for showing orders buttons (if on) 1==common, 2==all
@@ -271,7 +277,7 @@ function civclient_init()
 
   play_music = simpleStorage.get('play_music');
   if (play_music == null) {
-    play_music = true;           // Default case: change after we have nice portfolio
+    play_music = is_longturn(); // singleplayer defaults off for server bandwidth savings
   }
   // --------------------------------------------------------------------------------   
   /* Initialze audio.js music player */

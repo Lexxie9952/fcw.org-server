@@ -802,63 +802,79 @@ function is_unprefixed_message(message) {
 ...
 ****************************************************************************/
 function check_text_input(event,chatboxtextarea) {
-
   if (event.keyCode == 13 && event.shiftKey == 0)  {
-    var message = $(chatboxtextarea).val();
-
-    if (chat_send_to != null && chat_send_to >= 0
-        && is_unprefixed_message(message)) {
-      if (client.conn.playing != null
-          && chat_send_to == client.conn.playing['playerno']) {
-        message = ". " + encode_message_text(message);
-      } else {
-        var pplayer = players[chat_send_to];
-        if (pplayer == null) {
-          // Change to public chat, don't send the message,
-          // keep it in the chatline and hope the user notices
-          set_chat_direction(null);
-          return;
-        }
-        var player_name = pplayer['name'];
-        /* TODO:
-           - Spaces before ':' not good for longturn yet
-           - Encoding characters in the name also does not work
-           - Sending a ' or " cuts the message
-           So we send the name unencoded, cut until the first "special" character
-           and hope that is unique enough to recognize the player. It usually is.
-         */
-        var badchars = [' ', '"', "'"];
-        for (var c in badchars) {
-          var i = player_name.indexOf(badchars[c]);
-          if (i > 0) {
-            player_name = player_name.substring(0, i);
-          }
-        }
-        message = player_name + encode_message_text(": " + message);
-      }
-    } else {
-      message = encode_message_text(message);
-    }
-
-    $(chatboxtextarea).val('');
-    if (!touch_device) $(chatboxtextarea).focus();
-    keyboard_input = true;
-
-    if (message.length >= 4 && message === message.toUpperCase()) {
-      return; //disallow all uppercase messages.
-    }
-
-    if (message.length >= max_chat_message_length) {
-      message_log.update({
-        event: E_LOG_ERROR,
-        message: "Error! The message is too long. Limit: " + max_chat_message_length
-      });
-      return;
-    }
-
-    send_message(message);
-    return false;
+    send_text_input(chatboxtextarea);
   }
+  // allows ctrl-E hotkey while inside text input area.
+  if (event.ctrlKey && String.fromCharCode(event.keyCode) == 'E') {
+    event.preventDefault();     // override possible browser shortcut
+    emoji_popup();
+  }
+}
+/**********************************************************************//**
+   Attempts to send content of chatbox. See function above.
+**************************************************************************/
+function send_text_input(chatboxtextarea) {
+  var message = $(chatboxtextarea).val();
+
+  if (chat_send_to != null && chat_send_to >= 0
+      && is_unprefixed_message(message)) {
+    if (client.conn.playing != null
+        && chat_send_to == client.conn.playing['playerno']) {
+      message = ". " + encode_message_text(message);
+    } else {
+      var pplayer = players[chat_send_to];
+      if (pplayer == null) {
+        // Change to public chat, don't send the message,
+        // keep it in the chatline and hope the user notices
+        set_chat_direction(null);
+        return;
+      }
+      var player_name = pplayer['name'];
+      /* TODO:
+          - Spaces before ':' not good for longturn yet
+          - Encoding characters in the name also does not work
+          - Sending a ' or " cuts the message
+          So we send the name unencoded, cut until the first "special" character
+          and hope that is unique enough to recognize the player. It usually is.
+        */
+      var badchars = [' ', '"', "'"];
+      for (var c in badchars) {
+        var i = player_name.indexOf(badchars[c]);
+        if (i > 0) {
+          player_name = player_name.substring(0, i);
+        }
+      }
+      message = player_name + encode_message_text(": " + message);
+    }
+  } else {
+    message = encode_message_text(message);
+  }
+
+  $(chatboxtextarea).val('');
+  if (!touch_device) $(chatboxtextarea).focus();
+  keyboard_input = true;
+
+  // If emoji dialog was open when hitting enter to send a message, remove: 
+  if (("#emoji_dialog").length) {
+    emojibox_save(true);  // save possible user change to position
+    remove_active_dialog("#emoji_dialog");
+  }
+
+  if (message.length >= 4 && message === message.toUpperCase()) {
+    return; //disallow all uppercase messages.
+  }
+
+  if (message.length >= max_chat_message_length) {
+    message_log.update({
+      event: E_LOG_ERROR,
+      message: "Error! The message is too long. Limit: " + max_chat_message_length
+    });
+    return;
+  }
+
+  send_message(message);
+  return false;
 }
 
 
@@ -3556,10 +3572,14 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
       if (shift && !ctrl && !alt) {
         key_unit_airbase();
       }
-      if (ctrl && shift) {
+      else if (ctrl && shift) {
         the_event.preventDefault(); // override possible browser shortcut
         // show/hide the dev/debug messages sent from server to supercow users
         $(".e_log_error").toggle();
+      }
+      else if (ctrl && !shift && !alt) {
+        the_event.preventDefault(); // override possible browser shortcut
+        emoji_popup();
       }
     break;
 
