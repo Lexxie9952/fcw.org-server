@@ -422,7 +422,9 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
           && ttype.name != "Airplane"
           && ttype.name != "Transport") return false;
     } else { // the "Goods" unit which is also "Cargo" class:
-      if (ttype.name != "Galleon"  && !utype_has_flag(ttype, UTYF_TRADEROUTE))
+      if (ttype.name != "Galleon"
+          && ttype.name != "Tribesmen"
+          && !utype_has_flag(ttype, UTYF_TRADEROUTE))
         return false;
       if (tclass.rule_name == "Goods") return false;
     }
