@@ -67,7 +67,8 @@ const CRF_MP2                      = 30; // rules flags for "minimum" mp2 rulese
 const CRF_MP2_A                    = 31; 
 const CRF_MP2_B                    = 32;
 const CRF_MP2_C                    = 33;
-const CRF_LAST                     = 34;
+const CRF_MP2_D                    = 34;
+const CRF_LAST                     = 35;
 
 var graphic_theme_path;
 

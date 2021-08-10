@@ -798,6 +798,8 @@ function handle_ruleset_control(packet)
      these client_rules_flag[_] =false statements go here to avoid the chronologic
      override logic above */
   switch (ruleset_control['name']) {
+    case "MP2 Dragoon":
+      client_rules_flag[CRF_MP2_D] = true;
     case "MP2 Caravel":
       client_rules_flag[CRF_MP2_C] = true;
       client_rules_flag[CRF_SIEGE_RAM] = true;
