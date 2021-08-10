@@ -14,4 +14,9 @@ MP2D:  16  23  31  40  50  60  70  71  16+7+8+9+10...up to 70 then +1
 2. Mountain Goats & Hippopotami
 ============================================================
 3. Goods available with Pottery.
+============================================================
+4. "Advisor" for buildings suggests an order modelled off 
+   an experienced player instead of alphabetic.
+============================================================
+
 

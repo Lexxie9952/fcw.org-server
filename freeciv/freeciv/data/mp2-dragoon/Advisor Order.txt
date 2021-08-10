@@ -1,0 +1,98 @@
+Temple
+Marketplace
+Harbor
+Aqueduct
+Bank
+Library
+Fortifications
+Barracks
+Barracks II
+Sewer System
+Courthouse
+City Walls
+Stock Exchange
+Factory
+Supermarket
+Barracks III
+University
+Offshore Platform
+Manufacturing Plant
+SAM Battery
+Cathedral
+Airport
+Coastal Defense
+Port Facility
+SDI Defense
+Amphitheater
+Police Station
+Hydro Plant
+Nuclear Plant
+Coal Plant
+Homeland Security
+Super Highways
+Recycling Center
+Mass Transit
+Research Lab
+Solar Plant
+Wind Plant
+Radar Tower
+Enrichment Facility
+Granary
+Totem Pole
+Space Structural
+Space Component
+Space Module
+
+
+A.Smith's Trading Co.
+Agōgē of Sparta
+Angkor Wat
+Apollo Program
+Appian Way
+Chand Baori
+Code of Hammurabi
+Colossus
+Copernicus' Observatory
+Ecclesiastical Palace
+Eiffel Tower
+Fusion Reactor
+Genghis Khan's Equestrian School
+Gibraltar Fortress
+Great Wall
+Hanging Gardens
+Hoover Dam
+The Internet
+Isaac Newton's College
+J.S. Bach's Cathedral
+JTIDS
+King Richard's Crusade
+Leonardo's Workshop
+Lighthouse
+Magellan's Expedition
+Magna Carta
+Manhattan Project
+Marco Polo's Embassy
+Mausoleum of Mausolos
+Medici Bank
+Michelangelo's Chapel
+The Olympics
+Oracle
+Palace
+Pasteur Institute
+Pax Dei
+Pyramids
+Roman Colosseum
+Shakespeare's Theater
+The Sphinx
+Statue of Liberty
+Statue of Zeus
+Supreme Court
+Sun Tzu's War Academy
+Temple of Artemis
+Tesla's Laboratory
+United Nations
+Voyage of Darwin
+Women's Suffrage
+Women's Suffrage​
+Ziggurat
+Coinage
