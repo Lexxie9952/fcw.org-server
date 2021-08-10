@@ -1169,8 +1169,8 @@ function generate_production_list()
     }
   }
 
-  for (var improvement_id in improvements) {
-    var pimprovement = improvements[improvement_id];
+  for (var improvement_id in sorted_improvements) {
+    var pimprovement = improvements[sorted_improvements[improvement_id].id];
     var build_cost = universal_build_shield_cost(active_city, pimprovement);
     var building_details = pimprovement['upkeep'];
     if (pimprovement['name'] == "Coinage") {
@@ -1184,16 +1184,14 @@ function generate_production_list()
     }
     else if (!server_settings['nukes_minor']['val']
              && pimprovement['name'] == "Manhattan Project") {
-          continue; // if major nukes are OFF, suppress illegal prod choice.
+          continue; // if minor nukes are OFF, suppress illegal prod choice.
     } 
     // Suppress improvements with special obsolete conditions
-    if ((ruleset_control['name']=="Multiplayer-Evolution ruleset"
-               || ruleset_control['name'].startsWith("Avant-garde")
-               || ruleset_control['name'].startsWith("MP2")) // from MP2 Brava onward all MP2 rules start with "MP2"
+    if (client_rules_flag[CRF_MP2] // MP2 all versions
                && pimprovement['name'] == "Great Wall"
                && player_invention_state(client.conn.playing, tech_id_by_name('Machine Tools')) == TECH_KNOWN) {
                  continue;
-    } 
+    }
               
     production_list.push({"kind": VUT_IMPROVEMENT,
                          "value": pimprovement['id'],
@@ -2459,6 +2457,8 @@ function populate_worklist_production_choices(pcity)
 {
   const gov_id = players[client.conn.playing.playerno].government;
   var small = is_small_screen();
+
+  if (!sorted_improvements.length) build_sorted_improvements_array();
 
   var production_list = generate_production_list();
   var production_html = "<table class='worklist_table'><tr style='background-color:#0004'><td>Type</td><td>Name</td><td style='padding-right:30px; text-align:right'>Info</td><td>Cost</td></tr>";

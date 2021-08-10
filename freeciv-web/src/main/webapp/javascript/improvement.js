@@ -43,6 +43,14 @@ const improvements = {};
 /** @private */
 const improvements_name_index = {};
 
+// Used to sort improvements alphabetically and by genus so ruleset doesn't have to...
+// Why? So ruleset improvement order will represent what the "Advisor" suggests making,
+// Thus each ruleset gets to program its own advisor for what it suggests to prioritize making.
+const SORT_AFTER = 1;
+const SORT_SAME = 0;
+const SORT_BEFORE = -1;
+var sorted_improvements = [];
+
 // Discounted price lists from MP2 rules
 var communist_discounts = {
   "Riflemen": 5,
@@ -216,5 +224,61 @@ function get_universal_discount_price(ptype, pcity)
   }
   // default, no discount:
   return ptype['build_cost'];
+}
+
+/**************************************************************************
+...Make a copy of the improvements object list that is an array sorted 
+   by genus and alphabet. Why? Because this is easier to search through
+   than the "Advisor-prioritised order" in the ruleset.
+**************************************************************************/
+function build_sorted_improvements_array()
+{
+  for (var id1 in improvements) {   // Copy object list to array.
+    sorted_improvements.push(improvements[id1]);
+  }
+  var len = sorted_improvements.length;
+  var swapped;
+  var iteration=0; // paranoid failsafe for do{}while
+  do {
+    swapped = false;
+    iteration ++;
+    for (let i = 0; i < len-1; i++) {
+        if (improvement_sorts_lower(sorted_improvements[i],sorted_improvements[i+1])) {
+            let tmp = sorted_improvements[i];
+            sorted_improvements[i] = sorted_improvements[i + 1];
+            sorted_improvements[i + 1] = tmp;
+            swapped = true;
+        }
+    }
+  } while (swapped && iteration < 3000);
+}
+
+function improvement_sorts_lower(improvement1, improvement2) {
+  g1 = improvement1.genus; g2 = improvement2.genus;
+  genus_compare = genus_sorts_lower(g1,g2)
+  if (genus_compare == SORT_AFTER) return true;
+  if (genus_compare == SORT_SAME) {
+    let name1 = improvement1.name.replace("The ","");  //e.g. don't sort The Internet with 'T' words
+    let name2 = improvement2.name.replace("The ","");
+        //hacky trick to group powerplants together
+        if (name1.includes(" Plant")) name1 = "Plant"+name1;
+        if (name2.includes(" Plant")) name2 = "Plant"+name2;
+    if (name1 > name2) return true;
+    else return false;
+  }
+  return false;
+}
+
+// Genus 0=great wonder, 1=small wonder, 2=building 3=spaceship/coinage
+function genus_sorts_lower(g1, g2) {
+  // Re-order the genera:
+  if (g1==0) g1 = 1;      // wonders second
+  else if (g1==2) g1 = 0; // improvs first. (spaceship,coinage last)
+  if (g2==0) g2 = 1; 
+  else if (g2==2) g2 = 0;
+  // Now we have 0=building, 1=wonder, 3=coinage or spaceship:
+  if (g1 < g2)  return SORT_BEFORE;
+  if (g1 == g2) return SORT_SAME;
+  return SORT_AFTER; 
 }
 
