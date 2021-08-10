@@ -4959,7 +4959,7 @@ reqs    =
     }
 [effect_colossus_trade_revenue_bonus]
 type    = "Trade_Revenue_Bonus"
-value   = 528 ; +40% increase one tie revenue
+value   = 528 ; +40% increase one time revenue
 reqs =
     { "type", "name", "range", "present"
       "Building", "Colossus", "City", TRUE
