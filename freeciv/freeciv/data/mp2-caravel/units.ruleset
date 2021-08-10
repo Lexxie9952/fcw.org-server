@@ -1399,7 +1399,7 @@ bonuses       =
      ;********* requires hard-coding fix to packhand.js:handle_non_integer_combat_scores() if changed：******************************
      "WillNever", "DefenseMultiplierPct", -50 ;The way to change general defense score on everyone without using integer defense score. 
    }
-flags         = "FootSoldier", "Capturer", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "WillNever"
+flags         = "FootSoldier", "Capturer", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "WillNever", "Shield2Gold"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 veteran_names =
   _("?vet_rank:green"),
@@ -1459,7 +1459,7 @@ embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter o
 disembarks    = "LandRoad", "LandRail", "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail"
 flags         = "Fanatic", "FootSoldier", "Capturer", "CantReachAir", "Unbribable", "Bombarder",
-                "Settlers", "CanHide", "MultiSlot", "WillNever"
+                "Settlers", "CanHide", "MultiSlot", "WillNever", "Shield2Gold"
 roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
 Zealots are warriors devoted to a higher cause. Their faith\
@@ -5052,15 +5052,15 @@ roles         = ""
 helptext      = _("\
 Goods are commodities.\
  The cargo containers of the ancient world were amphorae, which carried\
- Goods for trade routes.\n\
-Goods can be used to Establish Trade Route or Enter Marketplace. They can\
- be carried by Commerce units, allowing them to establish multiple\
+ trade goods.\n\
+Goods can be used to establish Trade Routes or Enter Marketplace. They can\
+ be carried by Commerce units, allowing you to establish multiple\
  trade routes in one voyage. Also, Goods can Recycle Production with only\
  a 25% penalty, rendering 18 shields into a city production target. \n\
 "), _("\
 By themselves, Goods can only move onto tiles with a City, Quay, Fortress,\
- or Naval Base. Commerce units, Tribesmen, and Galleons may carry them as cargo.\
- If adjacent to a foreign city, use the D key to do Commerce functions.\
+ or Naval Base. Commerce units, Tribesmen, and Galleons must carry them as cargo.\
+ If adjacent to a foreign city, use the Do command (D) for Commerce functions.\
 ")
 
 [unit_freight]

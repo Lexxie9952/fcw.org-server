@@ -185,7 +185,7 @@ req2     = "The Republic"
 flags    = ""
 graphic     = "a.banking"
 graphic_alt = "-"
-helptext = _("Infantry Upkeep becomes 1 gold. Blocks Philosophy bonus. Expires first time capital-capital trade bonus.")
+helptext = _("Infantry Upkeep becomes 1 gold. Blocks Philosophy bonus. Globally expires one-time capital trade revenue bonus.")
 cost = 364
 
 [advance_bridge_building]
