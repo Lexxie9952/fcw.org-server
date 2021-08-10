@@ -54,11 +54,10 @@ var nationalist_discounts = {
 };  
 var colossus_discounts = {
   "Boat": 3,
+  "Goods": 5,
   "Trireme": 5,
   "Galley": 5,
-  "Caravan": 5,
   "Caravel": 5,
-  "Cargo Ship": 5
 };
 var appian_discounts = {
   "Wagon": 5

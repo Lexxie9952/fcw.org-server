@@ -4994,50 +4994,20 @@ reqs    =
       "OutputType", "Trade", "Local"
     }
 [effect_colossus_trade_revenue_bonus]
-type    = "Trade_Revenue_Bonus"     ; roughly 10% ?
-value   = 528    ; 22%-ish increase.
+type    = "Trade_Revenue_Bonus"
+value   = 528 ; +40% increase one tie revenue
 reqs =
     { "type", "name", "range", "present"
       "Building", "Colossus", "City", TRUE
-    }    
+    }
 [effect_colossus_commerce_unit_discount]
 type    = "Unit_Build_Cost_Pct"
-value	  = -12
+value	  = -11
 reqs    =
     {
       "type", "name", "range", "present"
       "Building", "Colossus", "City", TRUE
       "UnitFlag", "HelpWonder", "Local", TRUE
-      "Tech", "Steam Engine", "Player", FALSE
-    }
-[effect_colossus_cargo_ship_adjust]
-type    = "Unit_Build_Cost_Pct"
-value	  = 1
-reqs    =
-    {
-      "type", "name", "range", "present"
-      "Building", "Colossus", "City", TRUE
-      "UnitFlag", "HelpWonder", "Local", TRUE
-      "Tech", "Steam Engine", "Player", FALSE
-    }
-[effect_colossus_caravel_discount]
-type    = "Unit_Build_Cost_Pct"
-value	  = -12     ;40-5 = -12%
-reqs    =
-    {
-      "type", "name", "range", "present"
-      "Building", "Colossus", "City", TRUE
-      "UnitType", "Caravel", "Local", TRUE
-      "Tech", "Steam Engine", "Player", FALSE
-    }
-[effect_colossus_train_discount]
-type    = "Unit_Build_Cost_Pct"
-value	  = -2     ;35-5 = -14%
-reqs    =
-    {
-      "type", "name", "range", "present"
-      "Building", "Colossus", "City", TRUE
-      "UnitType", "Train", "Local", TRUE
       "Tech", "Steam Engine", "Player", FALSE
     }
 [effect_colossus_galley_discount]
@@ -5048,16 +5018,6 @@ reqs    =
       "type", "name", "range", "present"
       "Building", "Colossus", "City", TRUE
       "UnitType", "Galley", "Local", TRUE
-      "Tech", "Steam Engine", "Player", FALSE
-    }
-[effect_colossus_caravan_discount]
-type    = "Unit_Build_Cost_Pct"
-value	  = -4     ;30-5 = -17%
-reqs    =
-    {
-      "type", "name", "range", "present"
-      "Building", "Colossus", "City", TRUE
-      "UnitType", "Caravan", "Local", TRUE
       "Tech", "Steam Engine", "Player", FALSE
     }
 [effect_colossus_trireme_discount]
@@ -5079,6 +5039,26 @@ reqs    =
       "Building", "Colossus", "City", TRUE
       "UnitType", "Boat", "Local", TRUE
       "Tech", "Steam Engine", "Player", FALSE
+    }
+[effect_colossus_caravel_discount]
+type    = "Unit_Build_Cost_Pct"
+value	  = -12     ;40-5 = -12%
+reqs    =
+    {
+      "type", "name", "range", "present"
+      "Building", "Colossus", "City", TRUE
+      "UnitType", "Caravel", "Local", TRUE
+      "Tech", "Steam Engine", "Player", FALSE
+    }
+[effect_colossus_goods_discount]
+type    = "Unit_Build_Cost_Pct"
+value	  = -20     ;25-5 = -20%
+reqs    =
+    {
+      "type", "name", "range","present"
+      "Building", "Colossus", "City",  TRUE
+      "UnitType", "Goods",    "Local", TRUE
+      "Tech", "Steam Engine", "Player",FALSE
     }
 ;************************************************************************ Copernicus 
 [effect_copernicus_observatory]

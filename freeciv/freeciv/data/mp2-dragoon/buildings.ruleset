@@ -1620,14 +1620,15 @@ sound		= "w_colossus"
 sound_alt	= "w_generic"
 helptext	= _("\
 In the coastal city where this wonder is built, +1 trade is added to every\
- tile worked. The city center tile gets an additional +1 trade in\
- addition to the first bonus. Until you discover Steam Engine, the\
- Colossus city receives a discount on all Commerce units：\n\
+ tile worked. The city center tile gets an additional +1 trade on\
+ top of the first bonus. Until you discover Steam Engine, the\
+ Colossus city receives a discount on all maritime Commerce units：\n\
  Boat：            7 shields. \n\
  Trireme：        15 shields. \n\
- Caravan, Galley：25 shields. \n\
- Train：          30 shields. \n\
+ Goods:           20 shields. \n\
+ Galley：         25 shields. \n\
  Caravel：        35 shields. \n\
+ A trade route established from this city gets a +~40% one-time gold revenue bonus. \n\
  Obsolete by：Automobile.\
 ")
 
