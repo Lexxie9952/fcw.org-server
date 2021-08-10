@@ -4766,9 +4766,10 @@ reqs	=
       "Building", "Apollo Program", "Player", TRUE
     }
 ;************************************************************************ Appian Way
-[effect_appian_trade_revenue_bonus]
-type    = "Trade_Revenue_Bonus"     ; roughly 10% ?
-value   = 264
+[effect_appian_ongoing_trade_bonus]
+type    = "Traderoute_Pct"
+value   = 25 ; trunc-rounding gives a (mean+median)/2 of +9.97% for routes pulling 1-9 revenue per turn;
+             ; approaches +25% as this goes higher but that is hard-limited by game-context
 reqs =
     { "type", "name", "range", "present"
       "Building", "Appian Way", "Player", TRUE
@@ -5000,6 +5001,14 @@ reqs =
     { "type", "name", "range", "present"
       "Building", "Colossus", "City", TRUE
     }
+[effect_colossus_traderoute_pct]
+type    = "Traderoute_Pct"
+value   = 34 ; because trunc-rounding, this gives closest to +25% to ongoing revenue
+reqs =
+    { "type", "name", "range", "present"
+      "Building", "Colossus", "City", TRUE
+    }
+
 [effect_colossus_commerce_unit_discount]
 type    = "Unit_Build_Cost_Pct"
 value	  = -11

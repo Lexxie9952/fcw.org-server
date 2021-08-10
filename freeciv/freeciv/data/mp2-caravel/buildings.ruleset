@@ -1508,18 +1508,18 @@ sabotage	= 0
 sound		= "w_appian"
 sound_alt	= "w_generic"
 helptext	= _("\
-The Appian Way is the first flat stone paved highway that can drain\
+The Appian Way is the first stone-paved highway that can drain\
  rainwater. The Appian Way gives the following bonuses：\n\
 National bonuses:\n\
- ➤ Trade Routes get a slight increase in ongoing revenue. \n\
+ ➤ Trade Routes with 4 or more revenue get a slight increase in revenue. \n\
  ➤ Tile-workers build Roads at twice the speed. \n\
 In the city with Appian Way：\n\
  ➤ Each trade-producing tile produces +1 extra trade, if there is a road on it. \n\
  ➤ Wagons cost 5 shields less. \n\
 If not in Foreign territory：\n\
- ➤ Tile Workers gain +⅓ move. \n\
  ➤ Wagons, Chariots, and Foot soldiers gain +⅓ move when starting\
   their turn on a Road. \n\
+ ➤ Tile Workers gain +⅓ move. \n\
 Obsolete by：Railroad.\
 ")
 
@@ -1628,7 +1628,8 @@ In the coastal city where this wonder is built, +1 trade is added to every\
  Goods:           20 shields. \n\
  Galley：         25 shields. \n\
  Caravel：        35 shields. \n\
- A trade route established from this city gets a +~40% one-time gold revenue bonus. \n\
+ A trade route established from this city gets +40% one-time revenue,\
+ and roughly +25% in ongoing revenue. \n\
  Obsolete by：Automobile.\
 ")
 
