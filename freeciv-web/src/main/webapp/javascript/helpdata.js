@@ -175,7 +175,7 @@ function generate_help_menu(key)
     }
   } else if (key == "help_gen_ruleset") {
     $("<li id='" + key +  "' data-helptag='" + key +  "'>"
-       + "Ruleset" + "</li>").appendTo(
+       + "Manual" + "</li>").appendTo(
           find_parent_help_key(key));
   }
 }
