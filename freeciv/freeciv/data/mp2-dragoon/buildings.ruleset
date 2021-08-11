@@ -1546,18 +1546,18 @@ sabotage	= 0
 sound		= "w_chand_baori"
 sound_alt	= "w_generic"
 helptext	= _("\
-Chand Baori is an ancient wonder that taps deep underground aquifers to\
- supply your nation with water. All city centers become irrigation sources.\
- Chand Baori gives a work rate bonus for cultivating swamp and irrigating\
- grasslands and plains. Workers irrigate in 2 turns instead of 3, and\
- cultivate swamp in 4 turns instead of 7. Tribesmen irrigate in 3 turns\
- instead of 5, and cultivate in 8 instead of 13. \n\
+Chand Baori is the biggest well of the ancient world. All city centers become\
+ irrigation sources. Its home city gets a free well on the city center (i.e., river).\
 "), _("\ 
-In the city where it is built, Despotism tile penalties for food output are lifted\
- from 3 to 5, eliminating such penalties (except Jungle fruit.) Chand Baori is\
- the biggest well of the ancient world, and its home city gets a free well\
- on the city center (i.e., river). \n\
+In the city where it is built, there are no despotism tile corruption penalties\
+ on food output. \n\
 "), _("\
+For all Workers in your nation, the work rate on Grasslands, Plains, and Swamp\
+ is faster for irrigating, cultivating, and planting: \n\n\
+• Workers irrigate in 2 turns instead of 3. On Swamp, they cultivate or plant\
+ forest in 4 turns instead of 7. Planting on (Grassland,Plains) is (4,5). \n\n\
+• Tribesmen irrigate in 3 turns instead of 5. On Swamp, they cultivate or plant\
+ forest in 8 turns instead of 13. Planting on (Grassland,Plains) is (6,9). \n\n\
 Obsolete by：Monarchy or switching from Despotism.\
 ")
 

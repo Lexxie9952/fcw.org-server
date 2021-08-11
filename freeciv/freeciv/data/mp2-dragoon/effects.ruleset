@@ -4885,7 +4885,7 @@ reqs =
 ;************************************************************************ Chand Baori
 [effect_chand_baori]
 type    = "Output_Penalty_Tile"
-value = 2 ; 3+2 = 5; fruit is still cut off.
+value = 3 ; 3+3 = 6; i.e., gone for fruit but in place for irrigated deer.
 reqs	=
     { "type",       "name",        "range", "present"
       "Building",   "Chand Baori", "City",   TRUE
@@ -4924,6 +4924,46 @@ reqs =
       "Gov",      "Despotism",     "Player",TRUE
       "UnitFlag", "Infra",         "Local", TRUE
       "Activity", "Cultivate",     "Local", TRUE    ; but for forward compatibility we need cultivate also
+      "Terrain",  "Hills",         "Local", FALSE
+      "Terrain",  "Desert",        "Local", FALSE
+      "Terrain",  "Forest",        "Local", FALSE
+      "Terrain",  "Jungle",        "Local", FALSE
+      "Terrain",  "Tundra",        "Local", FALSE
+      "Terrain",  "Glacier",       "Local", FALSE
+      "Terrain",  "Mountains",     "Local", FALSE
+    }
+[effect_chand_baori_mine_rate]
+type    = "Unit_Work_Pct"
+value   = 63 ;  33% bonus
+; believe it or not, because of trunc-rounding, 63 is the number that gives closest to true 33.3% bonus!
+; 1. It yields the SAME as value=34 when irrigating grass/plains for a true +33.3% work rate. 
+; 2. But yields "8 -> 5" (+37.5%) rather than "8 -> 6" (which lost 32% of the 33% bonus to trunc-rounding!) 
+reqs =
+    { "type",     "name",          "range","present"
+      "Building", "Chand Baori",   "Player",TRUE
+      "Gov",      "Despotism",     "Player",TRUE
+      "UnitFlag", "Infra",         "Local", TRUE
+      "Activity", "Mine",          "Local", TRUE       ; mine is currently synonymous with plant for backward compatibility
+      "Terrain",  "Hills",         "Local", FALSE
+      "Terrain",  "Desert",        "Local", FALSE
+      "Terrain",  "Forest",        "Local", FALSE
+      "Terrain",  "Jungle",        "Local", FALSE
+      "Terrain",  "Tundra",        "Local", FALSE
+      "Terrain",  "Glacier",       "Local", FALSE
+      "Terrain",  "Mountains",     "Local", FALSE
+    }
+[effect_chand_baori_plant_rate]
+type    = "Unit_Work_Pct"
+value   = 63 ;  33% bonus
+; believe it or not, because of trunc-rounding, 63 is the number that gives closest to true 33.3% bonus!
+; 1. It yields the SAME as value=34 when irrigating grass/plains for a true +33.3% work rate. 
+; 2. But yields "8 -> 5" (+37.5%) rather than "8 -> 6" (which lost 32% of the 33% bonus to trunc-rounding!) 
+reqs =
+    { "type",     "name",          "range","present"
+      "Building", "Chand Baori",   "Player",TRUE
+      "Gov",      "Despotism",     "Player",TRUE
+      "UnitFlag", "Infra",         "Local", TRUE
+      "Activity", "Plant",         "Local", TRUE       ; but for forward compatibility we need plant also
       "Terrain",  "Hills",         "Local", FALSE
       "Terrain",  "Desert",        "Local", FALSE
       "Terrain",  "Forest",        "Local", FALSE
