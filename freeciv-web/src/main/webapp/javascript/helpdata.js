@@ -392,9 +392,7 @@ function generate_help_text(key)
     for (let r=1; r <= num_resources; r++) {
       msg += "<img src='/images/terrain/"+terrain.name.toLowerCase().replace(" ","")+r+".png'>"
     }
-    msg += "</div>";
-    
-    console.log(msg);
+    msg += "</div>";    
   } else if (key.indexOf("help_gen_improvements") != -1 || key.indexOf("help_gen_wonders") != -1) {
     var improvement = improvements[parseInt(key.replace("help_gen_wonders_", "").replace("help_gen_improvements_", ""))];
     msg = "<h1>" + improvement['name'] + "</h1>"+"<div class='"+pane_class+"'>"
