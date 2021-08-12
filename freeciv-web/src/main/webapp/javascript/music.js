@@ -713,8 +713,8 @@ function pick_next_track() {
         if      (game_info.turn <= 12 && !tech_known("Alphabet"))        category = "tribal";
         else if (!tech_known("Feudalism") && !tech_known("Monotheism"))  category = "ancient";
         else if (!tech_known("Gunpowder") && !tech_known("Magnetism"))   category = "middle";
-        else if (!tech_known("Railroad") && !tech_known("Conscription")) category = "colonial";
-        else if (!tech_known("Space Flight") && !tech_known("Robotics")) category = "industrial";
+        else if (!tech_known("Industrialization") || !tech_known("Conscription")) category = "colonial"; // need both to leave colonial
+        else if (!tech_known("Rocketry") && !tech_known("Robotics")) category = "industrial";
         else category = "modern";
 
         // Pick a random track with the approved qualities for the game context:
