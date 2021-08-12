@@ -256,7 +256,7 @@ var freeciv_wiki_docs = {
   },
   "Courthouse": {
     "image": "Courthouse.jpg",
-    "summary": "A courthouse (sometimes spelled court house) is a building that is home to a local court of law and often the regional county government as well, although this is not the case in some larger cities. The term is common in North America. In most other English-speaking countries, buildings which house courts of law are simply called \"courts\" or \"court buildings\". In most of Continental Europe and former non-English-speaking European colonies, the equivalent term is a palace of justice (French: palais de justice, Italian: palazzo di giustizia, Portuguese: pal\u00e1cio da justi\u00e7a).",
+    "summary": "A courthouse is a building that is home to a local court of law and often the regional county government as well, although this is not the case in some larger cities. The term is common in North America. In most other English-speaking countries, buildings which house courts of law are simply called \"courts\" or \"court buildings\". In most of Continental Europe and former non-English-speaking European colonies, the equivalent term is a palace of justice (French: palais de justice, Italian: palazzo di giustizia, Portuguese: pal\u00e1cio da justi\u00e7a).",
     "title": "Courthouse"
   },
   "Cruise Missile": {

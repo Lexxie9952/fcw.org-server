@@ -765,6 +765,7 @@ function handle_ruleset_control(packet)
       client_rules_flag[CRF_NO_WASTE]=true;
       client_rules_flag[CRF_MAGLEV] = true;
       client_rules_flag[CRF_TRIREME_FUEL] = true;
+      client_rules_flag[CRF_2X_MOVES]=true;
     break;
 
     case "Multiplayer-Plus ruleset":
@@ -772,12 +773,14 @@ function handle_ruleset_control(packet)
       client_rules_flag[CRF_NO_UNIT_GOLD_UPKEEP]=true;
       client_rules_flag[CRF_PACTS_SANS_EMBASSY]=true;
       client_rules_flag[CRF_NO_WASTE]=true;
+      client_rules_flag[CRF_2X_MOVES]=true;
     break;
 
     case "Multiplayer ruleset":
       client_rules_flag[CRF_CARGO_HEURISTIC]=true;
       client_rules_flag[CRF_NO_UNIT_GOLD_UPKEEP]=true;
       client_rules_flag[CRF_NO_WASTE]=true;
+      client_rules_flag[CRF_2X_MOVES]=true;
     break;
 
     case "Classic ruleset":

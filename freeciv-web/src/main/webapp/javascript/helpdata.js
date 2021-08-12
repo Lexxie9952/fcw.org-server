@@ -22,7 +22,9 @@ var toplevel_menu_items = ["help_terrain", "help_economy", "help_cities",
     "help_combat", "help_technology", "help_government"];
 var hidden_menu_items = ["help_connecting", "help_languages", "help_governor",
     "help_chatline", "help_about", "help_worklist_editor", "help_nations", 
-    "help_copying"
+    "help_copying", "help_overview", "help_strategy_and_tactics",
+    "help_economy", "help_goods", "help_cities", "help_combat",
+    "help_policies", "help_resources"
   ];
 
 var max_help_pane_width;
@@ -325,12 +327,74 @@ function generate_help_text(key)
 
   if (key.indexOf("help_gen_terrain") != -1) {
     var terrain = terrains[parseInt(key.replace("help_gen_terrain_", ""))];
-    msg = "<h1>" + terrain['name'] + "</h1>" + "<div class='"+pane_class+"'>"
+    msg = "<h1>" + terrain['name'] + "</h1>" 
+      + "<img src='/images/terrain/"+terrain['name'].toLowerCase().replace(" ","")+".png'>"
+      + "<div class='"+pane_class+"'>"
       + cleaned_text(terrain['helptext'])
-	    + "<b><br><br>Movement cost: " + terrain['movement_cost']
-	    + "<br>Defense bonus: " + terrain['defense_bonus']
-	    + "<br>Food/Prod/Trade: " + terrain['output'][0] + "/"
-	    + terrain['output'][1] + "/" + terrain['output'][2]+"</b></div>";
+	    + "<br><br>"
+      + "<table>"
+      + "<tr><td>Movement cost:</td>" + "<td>" + terrain['movement_cost'] + "</td></tr>"
+	    + "<tr><td>Defense bonus:</td>" + "<td>" + terrain['defense_bonus']+"%" + "</td></tr>"
+	    + "<tr><td>Food/Prod/Trade:</td>" +"<td>"
+        + "<span title='Base Food Output' style='cursor: help; font-size:120%; color:#000; background-color:#40ff40'>&hairsp;"+ terrain['output'][0] + "&hairsp;</span>"
+        + "<span title='Base Shield Output' style='cursor: help; font-size:120%; color:#000; background-color:#f0f0f0'>&hairsp;"+ terrain['output'][1] + "&hairsp;</span>"
+        + "<span title='Base Trade Output' style='cursor: help; font-size:120%; color:#000; background-color:#f8f020'>&hairsp;"+ terrain['output'][2] + "&hairsp;</span>"
+      + "</td></tr>"
+    
+    let divisor = 1; if (client_rules_flag[CRF_2X_MOVES]) divisor = 2;
+    msg += ""
+    + (terrain.road_time ? ("<tr><td>Road time:</td><td>" + terrain.road_time/divisor + "</td></tr>") : "")
+    + (terrain.road_time ? ("<tr><td>Trade from roads:</td><td>"+ terrain.road_output_incr_pct[2]/100 + "</td></tr>") : "")
+    + (terrain.irrigation_time ? ("<tr><td>Irrigation/Cultivate time:</td><td>"+ terrain.irrigation_time/divisor +"</td></tr>") : "")
+    + (terrain.irrigation_time && terrain.irrigation_result != terrain.id ? ("<tr><td>Cultivation transforms to:</td><td>"
+        + terrains[terrain.irrigation_result].name + "<img src='/images/e/"
+        + terrains[terrain.irrigation_result].name.toLowerCase().replace(" ","")+".png'>" + "</td></tr>") : "")
+    + (terrain.mining_time ? ("<tr><td>Mining/Planting time:</td><td>"+ terrain.mining_time/divisor + "</td></tr>") : "")
+    + (terrain.mining_time && terrain.mining_result != terrain.id ? ("<tr><td>Planting transforms to:</td><td>"
+        + terrains[terrain.mining_result].name + "<img src='/images/e/"
+        + terrains[terrain.mining_result].name.toLowerCase().replace(" ","")+".png'>" + "</td></tr>") : "")
+    + (terrain.transform_time ? ("<tr><td>Transform time:</td><td>"+ terrain.transform_time/divisor + "</td></tr>") : "")
+    + (terrain.transform_time && terrain.transform_result != terrain.id ? ("<tr><td>Transforms to:</td><td>"
+        + terrains[terrain.transform_result].name + "<img src='/images/e/"
+        + terrains[terrain.transform_result].name.toLowerCase().replace(" ","")+".png'>" + "</td></tr>") : "");
+    msg += "</table>"
+
+    let num_resources = 0;
+    switch (terrain.name) {
+      // TODO: extract this properly from ruleset somehow
+      case "Lake":
+        num_resources = 1;
+        break;
+      case "Grassland":
+        num_resources = 1;
+        if (client_rules_flag[CRF_MP2_B]) num_resources++;
+        break;
+      case "Arctic":
+      case "Plains":
+      case "Hills":
+      case "Mountains":
+      case "Swamp":
+      case "Ocean":
+        num_resources = 2;
+        break;
+      case "Desert":
+      case "Tundra":
+      case "Jungle":
+        num_resources = 3;
+        if (!client_rules_flag[CRF_MP2_A]) num_resources = 2;
+        break;
+      case "Forest":
+        num_resources = 4;
+        if (!client_rules_flag[CRF_MP2_B]) num_resources = 2;
+        break;
+      }
+    if (num_resources) msg += "<br>Special resources:<br>";
+    for (let r=1; r <= num_resources; r++) {
+      msg += "<img src='/images/terrain/"+terrain.name.toLowerCase().replace(" ","")+r+".png'>"
+    }
+    msg += "</div>";
+    
+    console.log(msg);
   } else if (key.indexOf("help_gen_improvements") != -1 || key.indexOf("help_gen_wonders") != -1) {
     var improvement = improvements[parseInt(key.replace("help_gen_wonders_", "").replace("help_gen_improvements_", ""))];
     msg = "<h1>" + improvement['name'] + "</h1>"+"<div class='"+pane_class+"'>"
