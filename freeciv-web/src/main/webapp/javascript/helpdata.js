@@ -27,6 +27,41 @@ var hidden_menu_items = ["help_connecting", "help_languages", "help_governor",
     "help_policies", "help_resources"
   ];
 
+const terrain_help = {
+  "Lake1": "Fish:  3/0/2  Harbor: 4/0/2  +Offshore Platform: 4/1/2",
+  "Ocean1": "Fish:  3/0/2  Harbor: 4/0/2  +Offshore Platform: 4/1/2",
+  "Ocean2": "Whales:  2/1/2  Harbor: 3/1/2  +Offshore Platform: 3/2/2",
+  "Forest1": "Pheasant:  3/2/0",
+  "Forest2": "Silk:  1/2/3",
+  "Forest3": "Wild Boar:  4/2/0",
+  "Forest4": "Berries:  2/2/2",
+  "Grassland1": "Resources:  2/1/0  Road+Irrigate: 3/1/1",
+  "Grassland2": "Deer:  5/0/0",
+  "Hills1": "Coal:  1/2/0  Mined: 1/5/0",
+  "Hills2": "Wine:  1/0/4  Mined: 1/3/4",
+  "Hills3": "Mountain Goat:  3/1/0",
+  "Jungle1": "Fruit:  5/1/2",
+  "Jungle2": "Gems:  1/1/5",
+  "Jungle3": "Rubber:  1/3/2",
+  "Plains1": "Wheat:  3/1/0.  Road+Irrigate: 4/1/1",
+  "Plains2": "Buffalo:  1/3/0.  Road+Irrigate: 2/3/1",
+  "Desert1": "Oasis:  3/1/0.  Road+Irrigate:  4/1/1.  Road+Mined: 3/2/1",
+  "Desert2": "Oil:  0/4/0.  Road+Irrigate:  1/4/1.  Road+Mined:  0/5/1.  +Refining:  0/6/1",
+  "Desert3": "River:  0/1/1.  Bridge+Irrigate:  2/1/2.  +Irrigated City:  3/1/2",
+  "Desert4": "Hippopotamus:  3/1/1",
+  "Mountains1": "Iron:  0/4/0.  Mined: 0/5/0",
+  "Mountains2": "Gold:  0/1/8.  Mined: 0/2/8",
+  "Mountains3": "Mountain Goat:  3/1/0",
+  "Swamp1": "Spice:  3/0/4",
+  "Swamp2": "Peat:  1/4/0",
+  "Tundra1": "Elk:  3/2/0.  Road+Irrigate: 4/2/1",
+  "Tundra2": "Furs:  2/1/3.  Road+Irrigate: 3/1/4",
+  "Tundra3": "Gold:  0/0/8.  Road+Irrigate: 2/0/9",
+  "Arctic1": "Oil:  0/3/0.  Mined: 0/6/0 (requires Refining)",
+  "Arctic2": "Ivory:  1/1/4",
+  "Arctic3": "Furs:  2/1/3"
+};
+
 var max_help_pane_width;
 var MAX_ALLOWED_HELP_WIDTH = 984;
 
@@ -332,31 +367,56 @@ function generate_help_text(key)
       + "<div class='"+pane_class+"'>"
       + cleaned_text(terrain['helptext'])
 	    + "<br><br>"
-      + "<table>"
+      + "<table class='terrain_chart'>"
       + "<tr><td>Movement cost:</td>" + "<td>" + terrain['movement_cost'] + "</td></tr>"
 	    + "<tr><td>Defense bonus:</td>" + "<td>" + terrain['defense_bonus']+"%" + "</td></tr>"
-	    + "<tr><td>Food/Prod/Trade:</td>" +"<td>"
-        + "<span title='Base Food Output' style='cursor: help; font-size:120%; color:#000; background-color:#40ff40'>&hairsp;"+ terrain['output'][0] + "&hairsp;</span>"
-        + "<span title='Base Shield Output' style='cursor: help; font-size:120%; color:#000; background-color:#f0f0f0'>&hairsp;"+ terrain['output'][1] + "&hairsp;</span>"
-        + "<span title='Base Trade Output' style='cursor: help; font-size:120%; color:#000; background-color:#f8f020'>&hairsp;"+ terrain['output'][2] + "&hairsp;</span>"
+	    + "<tr><td>Base Output:</td>" +"<td>"
+        + "<span title='Base Food Output' style='cursor: help; font-size:120%; font-family: Arial; color:#000; background-color:#40ff40'>&hairsp;"+ terrain['output'][0] + "&hairsp;</span>"
+        + "<span title='Base Shield Output' style='cursor: help; font-size:120%; font-family: Arial; color:#000; background-color:#f0f0f0'>&hairsp;"+ terrain['output'][1] + "&hairsp;</span>"
+        + "<span title='Base Trade Output' style='cursor: help; font-size:120%; font-family: Arial; color:#000; background-color:#f8f020'>&hairsp;"+ terrain['output'][2] + "&hairsp;</span>"
       + "</td></tr>"
     
     let divisor = 1; if (client_rules_flag[CRF_2X_MOVES]) divisor = 2;
     msg += ""
-    + (terrain.road_time ? ("<tr><td>Road time:</td><td>" + terrain.road_time/divisor + "</td></tr>") : "")
-    + (terrain.road_time ? ("<tr><td>Trade from roads:</td><td>"+ terrain.road_output_incr_pct[2]/100 + "</td></tr>") : "")
-    + (terrain.irrigation_time ? ("<tr><td>Irrigation/Cultivate time:</td><td>"+ terrain.irrigation_time/divisor +"</td></tr>") : "")
-    + (terrain.irrigation_time && terrain.irrigation_result != terrain.id ? ("<tr><td>Cultivation transforms to:</td><td>"
-        + terrains[terrain.irrigation_result].name + "<img src='/images/e/"
-        + terrains[terrain.irrigation_result].name.toLowerCase().replace(" ","")+".png'>" + "</td></tr>") : "")
-    + (terrain.mining_time ? ("<tr><td>Mining/Planting time:</td><td>"+ terrain.mining_time/divisor + "</td></tr>") : "")
-    + (terrain.mining_time && terrain.mining_result != terrain.id ? ("<tr><td>Planting transforms to:</td><td>"
-        + terrains[terrain.mining_result].name + "<img src='/images/e/"
-        + terrains[terrain.mining_result].name.toLowerCase().replace(" ","")+".png'>" + "</td></tr>") : "")
-    + (terrain.transform_time ? ("<tr><td>Transform time:</td><td>"+ terrain.transform_time/divisor + "</td></tr>") : "")
+    + (terrain.road_time ? ("<tr><td>Road:</td><td>"
+         + "+" + terrain.road_output_incr_pct[2]/100
+         + "<img style='margin-top:-5px;margin-bottom:-5px' src='/images/e/trade.png'></td><td>"  
+         + terrain.road_time/divisor + " worker-turns</td></tr>") : "")
+
+    + (terrain.irrigation_time && terrain.irrigation_result == terrain.id 
+        ? ("<tr><td>Irrigation:</td><td>"
+           + "+" + terrain.irrigation_food_incr
+           + "<img style='margin-top:-5px;margin-bottom:-5px' src='/images/e/food.png'>" + "</td><td>"
+           + terrain.irrigation_time/divisor + " worker-turns") + "</td></tr>"
+        : "")
+
+    + (terrain.irrigation_time && terrain.irrigation_result != terrain.id ? ("<tr><td>Cultivation creates:</td><td>"
+        + "<img style='margin-bottom:-5px;margin-top:-5px' src='/images/e/"
+        + terrains[terrain.irrigation_result].name.toLowerCase().replace(" ","")+".png'> &nbsp;" 
+        + terrains[terrain.irrigation_result].name + "</td><td>"
+        + terrain.irrigation_time/divisor + " worker-turns"
+        + "</td></tr>") : "")
+
+    + (terrain.mining_time && terrain.mining_result == terrain.id 
+        ? ("<tr><td>Mining:</td><td>"
+           + "+" + terrain.mining_shield_incr
+           + "<img style='margin-top:-5px;margin-bottom:-5px' src='/images/e/shield.png'>" + "</td><td>"
+           + terrain.mining_time/divisor + " worker-turns") + "</td></tr>"
+        : "")
+
+    + (terrain.mining_time && terrain.mining_result != terrain.id ? ("<tr><td>Planting creates:</td><td>"
+        + "<img style='margin-bottom:-5px;margin-top:-5px' src='/images/e/"
+        + terrains[terrain.mining_result].name.toLowerCase().replace(" ","")+".png'> &nbsp;"
+        + terrains[terrain.mining_result].name + "</td><td>" 
+        + terrain.mining_time/divisor + " worker-turns"
+        + "</td></tr>") : "")
+
     + (terrain.transform_time && terrain.transform_result != terrain.id ? ("<tr><td>Transforms to:</td><td>"
-        + terrains[terrain.transform_result].name + "<img src='/images/e/"
-        + terrains[terrain.transform_result].name.toLowerCase().replace(" ","")+".png'>" + "</td></tr>") : "");
+        + "<img style='margin-bottom:-5px;margin-top:-5px' src='/images/e/"
+        + terrains[terrain.transform_result].name.toLowerCase().replace(" ","")+".png'> &nbsp;"
+        + terrains[terrain.transform_result].name + "</td><td>" 
+        + terrain.transform_time/divisor/2 + " engineer-turns"
+        + "</td></tr>") : "");
     msg += "</table>"
 
     let num_resources = 0;
@@ -370,29 +430,42 @@ function generate_help_text(key)
         if (client_rules_flag[CRF_MP2_B]) num_resources++;
         break;
       case "Arctic":
-      case "Plains":
-      case "Hills":
+        num_resources = 2;
+        if (client_rules_flag[CRF_MP2_B]) num_resources++;
+        break;
       case "Mountains":
+      case "Hills":
+        num_resources = 2;
+        if (client_rules_flag[CRF_MP2_D]) num_resources++;
+        break;
+      case "Plains":
       case "Swamp":
       case "Ocean":
         num_resources = 2;
         break;
       case "Desert":
+        num_resources = 2;
+        if (client_rules_flag[CRF_MP2_A]) num_resources ++;
+        if (client_rules_flag[CRF_MP2_D]) num_resources ++;
+        break;
       case "Tundra":
       case "Jungle":
         num_resources = 3;
         if (!client_rules_flag[CRF_MP2_A]) num_resources = 2;
         break;
       case "Forest":
-        num_resources = 4;
+        num_resources = 3;        
+        if (client_rules_flag[CRF_MP2_C]) num_resources ++;
         if (!client_rules_flag[CRF_MP2_B]) num_resources = 2;
         break;
       }
     if (num_resources) msg += "<br>Special resources:<br>";
     for (let r=1; r <= num_resources; r++) {
-      msg += "<img src='/images/terrain/"+terrain.name.toLowerCase().replace(" ","")+r+".png'>"
+      msg += "<img style='cursor:help' title='"
+          + (client_rules_flag[CRF_MP2] ? terrain_help[terrain.name+r] : "")
+          + "' src='/images/terrain/"+terrain.name.toLowerCase().replace(" ","")+r+".png'>"
     }
-    msg += "</div>";    
+    msg += "</div>";
   } else if (key.indexOf("help_gen_improvements") != -1 || key.indexOf("help_gen_wonders") != -1) {
     var improvement = improvements[parseInt(key.replace("help_gen_wonders_", "").replace("help_gen_improvements_", ""))];
     msg = "<h1>" + improvement['name'] + "</h1>"+"<div class='"+pane_class+"'>"

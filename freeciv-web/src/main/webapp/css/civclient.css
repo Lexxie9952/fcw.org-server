@@ -95,6 +95,13 @@ button {
   position: relative !important;
   bottom: 3px !important;
 }
+table.terrain_chart td {
+  border: 1px solid #454d4c;
+  padding-left: 18px;
+  padding-right: 18px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
 /******************************************************************/
 
 #game_chat_box {

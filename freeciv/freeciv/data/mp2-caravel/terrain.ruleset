@@ -230,47 +230,6 @@ ocean_resources = FALSE
 ;  Desert:  MG_DRY, MG_TROPICAL, MG_COLD
 ;Alt-desert: MG_DRY, MG_TROPICAL, MG_WET
 
-
-[terrain_inaccesible]
-name                 = _("Inaccessible")
-graphic              = "inaccessible"
-graphic_alt          = "arctic"
-identifier           = "i"
-class                = "Land"
-movement_cost        = 0
-defense_bonus        = 0
-food                 = 0
-shield               = 0
-trade                = 0
-road_food_incr_pct   = 0
-road_shield_incr_pct = 0
-road_trade_incr_pct  = 0
-base_time            = 0
-road_time            = 0
-irrigation_result    = "no"
-irrigation_food_incr = 0
-irrigation_time      = 0
-mining_result        = "no"
-mining_shield_incr   = 0
-mining_time          = 0
-transform_result     = "no"
-transform_time       = 0
-pillage_time         = 0
-clean_pollution_time = 0
-clean_fallout_time   = 0
-animal               = "None"
-warmer_wetter_result = "no"
-warmer_drier_result  = "no"
-cooler_wetter_result = "no"
-cooler_drier_result  = "no"
-flags                = "NotGenerated", "NoPollution", "NoCities", "UnsafeCoast", "Frozen"
-color.r              = 25
-color.g              = 25
-color.b              = 25
-helptext             = _("\
-No unit can enter this terrain, nor can any city work its tiles.\
-")
-
 [terrain_lake]
 name                 = _("Lake")
 graphic              = "lake"
@@ -310,6 +269,7 @@ color.g              = 176
 color.b              = 247
 helptext             = _("\
 Lakes are bodies of fresh water not connected to sea or ocean.\
+  Transforming to Swamp requires two adjacent land tiles.\
 ")
 
 [terrain_ocean]
@@ -351,7 +311,8 @@ color.g              = 146
 color.b              = 227
 helptext             = _("\
 Shallow oceans are mostly found near coastlines, and are often rich\
- sources of food and other resources.\
+ sources of food and other resources. Transforming to Swamp requires\
+ two adjacent land tiles.\
 ")
 
 [terrain_deep_ocean]
@@ -394,6 +355,97 @@ color.b              = 255
 helptext             = _("\
 Deep oceans cover much of the world away from coastlines, and only\
  seaworthy units can travel on them.\
+")
+
+[terrain_plains]
+name                 = _("Plains")
+graphic              = "plains"
+graphic_alt          = "-"
+identifier           = "p"
+class                = "Land"
+movement_cost        = 1
+defense_bonus        = 0
+food                 = 1
+shield               = 1
+trade                = 0
+resources            = "Buffalo", "Wheat"
+road_trade_incr_pct  = 100
+base_time            = 1
+road_time            = 2
+irrigation_result    = "yes"
+irrigation_food_incr = 1
+irrigation_time      = 5
+mining_result        = "Forest"
+mining_shield_incr   = 0
+mining_time          = 15
+transform_result     = "Grassland"
+transform_time       = 24
+pillage_time         = 1
+clean_pollution_time = 3
+clean_fallout_time   = 3
+animal               = "[Lion]"
+warmer_wetter_result = "Desert"
+warmer_drier_result  = "Desert"
+cooler_wetter_result = "Tundra"
+cooler_drier_result  = "Grassland"
+native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
+flags                = "Starter", "CanHaveRiver", "Low Land"
+property_green       = 38
+property_temperate   = 38
+property_frozen      = 90
+property_dry         = 23
+color.r              = 161
+color.g              = 198
+color.b              = 80
+helptext             = _("\
+Plains are broad flat regions with decent potential for\
+ agriculture, production, and trade.\
+")
+
+[terrain_grassland]
+name                 = _("Grassland")
+graphic              = "grassland"
+graphic_alt          = "-"
+identifier           = "g"
+class                = "Land"
+movement_cost        = 1
+defense_bonus        = 0
+food                 = 2
+shield               = 0
+trade                = 0
+resources            = "Resources"
+road_trade_incr_pct  = 100
+base_time            = 1
+road_time            = 2
+irrigation_result    = "yes"
+irrigation_food_incr = 1
+irrigation_time      = 5
+mining_result        = "Forest"
+mining_shield_incr   = 0
+mining_time          = 10
+transform_result     = "Hills"
+transform_time       = 30
+pillage_time         = 1
+clean_pollution_time = 3
+clean_fallout_time   = 3
+animal               = "[Wolf]"
+warmer_wetter_result = "Swamp"
+warmer_drier_result  = "Swamp"
+cooler_wetter_result = "Tundra"
+cooler_drier_result  = "Tundra"
+native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
+flags                = "Starter", "CanHaveRiver", "Low Land"
+property_green       = 69
+property_temperate   = 69
+property_cold        = 20
+property_dry         = 23
+property_wet         = 100
+property_tropical    = 40
+color.r              = 100
+color.g              = 178
+color.b              = 105
+helptext             = _("\
+Grassland affords exceptional agricultural opportunities and decent trade.\
 ")
 
 [terrain_forest]
@@ -445,185 +497,47 @@ Forests are densely wooded, providing lumber for production — but\
  making agriculture problematic.\
 ")
 
-[terrain_grassland]
-name                 = _("Grassland")
-graphic              = "grassland"
+[terrain_swamp]
+name                 = _("Swamp")
+graphic              = "swamp"
 graphic_alt          = "-"
-identifier           = "g"
-class                = "Land"
-movement_cost        = 1
-defense_bonus        = 0
-food                 = 2
-shield               = 0
-trade                = 0
-resources            = "Resources"
-road_trade_incr_pct  = 100
-base_time            = 1
-road_time            = 2
-irrigation_result    = "yes"
-irrigation_food_incr = 1
-irrigation_time      = 5
-mining_result        = "Forest"
-mining_shield_incr   = 0
-mining_time          = 10
-transform_result     = "Hills"
-transform_time       = 30
-pillage_time         = 1
-clean_pollution_time = 3
-clean_fallout_time   = 3
-animal               = "[Wolf]"
-warmer_wetter_result = "Swamp"
-warmer_drier_result  = "Swamp"
-cooler_wetter_result = "Tundra"
-cooler_drier_result  = "Tundra"
-native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
-flags                = "Starter", "CanHaveRiver", "Low Land"
-property_green       = 69
-property_temperate   = 69
-property_cold        = 20
-property_dry         = 23
-property_wet         = 100
-property_tropical    = 40
-color.r              = 100
-color.g              = 178
-color.b              = 105
-helptext             = _("\
-Grassland affords exceptional agricultural opportunities and decent trade.\
-")
-
-[terrain_hills]
-name                 = _("Hills")
-graphic              = "hills"
-graphic_alt          = "-"
-identifier           = "h"
+identifier           = "s"
 class                = "Land"
 movement_cost        = 2
-defense_bonus        = 100
+defense_bonus        = 33
 food                 = 1
 shield               = 0
 trade                = 0
-resources            = "Coal", "Wine"
-road_trade_incr_pct  = 0
-base_time            = 1
-road_time            = 4
-irrigation_result    = "yes"
-irrigation_food_incr = 1
-irrigation_time      = 10
-mining_result        = "yes"
-mining_shield_incr   = 3
-mining_time          = 10
-transform_result     = "Plains"
-transform_time       = 24
-pillage_time         = 1
-clean_pollution_time = 3
-clean_fallout_time   = 3
-animal               = "[Wolf]"
-warmer_wetter_result = "no"
-warmer_drier_result  = "no"
-cooler_wetter_result = "no"
-cooler_drier_result  = "no"
-native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
-flags                = "Starter", "CanHaveRiver"
-property_mountainous = 55
-property_green       = 1
-property_temperate   = 1
-property_frozen      = 100
-property_dry         = 9
-property_cold        = 11
-color.r              = 222
-color.g              = 230
-color.b              = 134
-helptext             = _("\
-Hills are frequently rich in resources. Difficult access makes\
- them good for defense but poor for trade.\
-")
-
-[terrain_jungle]
-name                 = _("Jungle")
-graphic              = "jungle"
-graphic_alt          = "-"
-identifier           = "j"
-class                = "Land"
-movement_cost        = 2
-defense_bonus        = 50
-food                 = 1
-shield               = 1
-trade                = 0
-resources            = "Gems", "Fruit", "Rubber"
+resources            = "Peat", "Spice"
 road_trade_incr_pct  = 0
 base_time            = 1
 road_time            = 4
 irrigation_result    = "Grassland"
 irrigation_food_incr = 0
-irrigation_time      = 8
+irrigation_time      = 13
 mining_result        = "Forest"
 mining_shield_incr   = 0
-mining_time          = 10
-transform_result     = "Plains"
+mining_time          = 13
+transform_result     = "Lake"
 transform_time       = 12
 pillage_time         = 1
 clean_pollution_time = 3
 clean_fallout_time   = 3
-animal               = "[Tiger]"
-warmer_wetter_result = "no"
-warmer_drier_result  = "no"
-cooler_wetter_result = "Forest"
-cooler_drier_result  = "Forest"
-native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
-flags                = "CanHaveRiver", "Low Land"
-property_foliage     = 31
-property_tropical    = 41
-property_wet         = 40
-color.r              = 71
-color.g              = 227
-color.b              = 0
-helptext             = _("\
-Jungles are densely overgrown but sometimes provide rich resources and good defense.\
-")
-
-[terrain_plains]
-name                 = _("Plains")
-graphic              = "plains"
-graphic_alt          = "-"
-identifier           = "p"
-class                = "Land"
-movement_cost        = 1
-defense_bonus        = 0
-food                 = 1
-shield               = 1
-trade                = 0
-resources            = "Buffalo", "Wheat"
-road_trade_incr_pct  = 100
-base_time            = 1
-road_time            = 2
-irrigation_result    = "yes"
-irrigation_food_incr = 1
-irrigation_time      = 5
-mining_result        = "Forest"
-mining_shield_incr   = 0
-mining_time          = 15
-transform_result     = "Grassland"
-transform_time       = 24
-pillage_time         = 1
-clean_pollution_time = 3
-clean_fallout_time   = 3
-animal               = "[Lion]"
-warmer_wetter_result = "Desert"
-warmer_drier_result  = "Desert"
-cooler_wetter_result = "Tundra"
+animal               = "[Crocodile]"
+warmer_wetter_result = "Ocean"
+warmer_drier_result  = "Lake"
+cooler_wetter_result = "Grassland"
 cooler_drier_result  = "Grassland"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
-flags                = "Starter", "CanHaveRiver", "Low Land"
-property_green       = 38
-property_temperate   = 38
-property_frozen      = 90
-property_dry         = 23
-color.r              = 161
-color.g              = 198
-color.b              = 80
+flags                = "CanHaveRiver", "Low Land"
+property_wet         = 80
+property_tropical    = 10
+color.r              = 129
+color.g              = 179
+color.b              = 146
 helptext             = _("\
-Plains are broad flat regions with decent potential for\
- agriculture, production, and trade.\
+Swamps suffer from an over-abundance of water, making agriculture\
+ and trade problematic.\
 ")
 
 [terrain_desert]
@@ -676,6 +590,96 @@ Deserts are very dry. Agriculture is difficult if not on a river or oasis. Citie
 Oil wells can be built when Construction is known. Refining gives +1 shield to Oil Wells built on Oil.\
 ")
 
+[terrain_jungle]
+name                 = _("Jungle")
+graphic              = "jungle"
+graphic_alt          = "-"
+identifier           = "j"
+class                = "Land"
+movement_cost        = 2
+defense_bonus        = 50
+food                 = 1
+shield               = 1
+trade                = 0
+resources            = "Gems", "Fruit", "Rubber"
+road_trade_incr_pct  = 0
+base_time            = 1
+road_time            = 4
+irrigation_result    = "Grassland"
+irrigation_food_incr = 0
+irrigation_time      = 8
+mining_result        = "Forest"
+mining_shield_incr   = 0
+mining_time          = 10
+transform_result     = "Plains"
+transform_time       = 12
+pillage_time         = 1
+clean_pollution_time = 3
+clean_fallout_time   = 3
+animal               = "[Tiger]"
+warmer_wetter_result = "no"
+warmer_drier_result  = "no"
+cooler_wetter_result = "Forest"
+cooler_drier_result  = "Forest"
+native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
+flags                = "CanHaveRiver", "Low Land"
+property_foliage     = 31
+property_tropical    = 41
+property_wet         = 40
+color.r              = 71
+color.g              = 227
+color.b              = 0
+helptext             = _("\
+Jungles are densely overgrown but sometimes provide rich resources and good defense.\
+")
+
+[terrain_hills]
+name                 = _("Hills")
+graphic              = "hills"
+graphic_alt          = "-"
+identifier           = "h"
+class                = "Land"
+movement_cost        = 2
+defense_bonus        = 100
+food                 = 1
+shield               = 0
+trade                = 0
+resources            = "Coal", "Wine"
+road_trade_incr_pct  = 0
+base_time            = 1
+road_time            = 4
+irrigation_result    = "yes"
+irrigation_food_incr = 1
+irrigation_time      = 10
+mining_result        = "yes"
+mining_shield_incr   = 3
+mining_time          = 10
+transform_result     = "Plains"
+transform_time       = 24
+pillage_time         = 1
+clean_pollution_time = 3
+clean_fallout_time   = 3
+animal               = "[Wolf]"
+warmer_wetter_result = "no"
+warmer_drier_result  = "no"
+cooler_wetter_result = "no"
+cooler_drier_result  = "no"
+native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
+flags                = "Starter", "CanHaveRiver"
+property_mountainous = 55
+property_green       = 1
+property_temperate   = 1
+property_frozen      = 100
+property_dry         = 9
+property_cold        = 11
+color.r              = 222
+color.g              = 230
+color.b              = 134
+helptext             = _("\
+Hills are frequently rich in resources. Difficult access makes\
+ them good for defense but poor for trade.\
+")
+
 [terrain_mountains]
 name                 = _("Mountains")
 graphic              = "mountains"
@@ -719,49 +723,6 @@ color.b              = 170
 helptext             = _("\
 Mountains are regions of extreme altitude, excellent for defense but inferior\
  for trade and agriculture.\
-")
-
-[terrain_swamp]
-name                 = _("Swamp")
-graphic              = "swamp"
-graphic_alt          = "-"
-identifier           = "s"
-class                = "Land"
-movement_cost        = 2
-defense_bonus        = 33
-food                 = 1
-shield               = 0
-trade                = 0
-resources            = "Peat", "Spice"
-road_trade_incr_pct  = 0
-base_time            = 1
-road_time            = 4
-irrigation_result    = "Grassland"
-irrigation_food_incr = 0
-irrigation_time      = 13
-mining_result        = "Forest"
-mining_shield_incr   = 0
-mining_time          = 13
-transform_result     = "Lake"
-transform_time       = 12
-pillage_time         = 1
-clean_pollution_time = 3
-clean_fallout_time   = 3
-animal               = "[Crocodile]"
-warmer_wetter_result = "Ocean"
-warmer_drier_result  = "Lake"
-cooler_wetter_result = "Grassland"
-cooler_drier_result  = "Grassland"
-native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", "AirProtect", "Air_High_Altitude", "Bomb", "Space"
-flags                = "CanHaveRiver", "Low Land"
-property_wet         = 80
-property_tropical    = 10
-color.r              = 129
-color.g              = 179
-color.b              = 146
-helptext             = _("\
-Swamps suffer from an over-abundance of water, making agriculture\
- and trade problematic.\
 ")
 
 [terrain_tundra]
@@ -849,6 +810,46 @@ helptext             = _("\
 Arctic terrain is cold icy permafrost, found only in the far north or south.\
 "), _("\
  Oil wells can be built when Refining is known.\
+")
+
+[terrain_inaccesible]
+name                 = _("Inaccessible")
+graphic              = "inaccessible"
+graphic_alt          = "arctic"
+identifier           = "i"
+class                = "Land"
+movement_cost        = 0
+defense_bonus        = 0
+food                 = 0
+shield               = 0
+trade                = 0
+road_food_incr_pct   = 0
+road_shield_incr_pct = 0
+road_trade_incr_pct  = 0
+base_time            = 0
+road_time            = 0
+irrigation_result    = "no"
+irrigation_food_incr = 0
+irrigation_time      = 0
+mining_result        = "no"
+mining_shield_incr   = 0
+mining_time          = 0
+transform_result     = "no"
+transform_time       = 0
+pillage_time         = 0
+clean_pollution_time = 0
+clean_fallout_time   = 0
+animal               = "None"
+warmer_wetter_result = "no"
+warmer_drier_result  = "no"
+cooler_wetter_result = "no"
+cooler_drier_result  = "no"
+flags                = "NotGenerated", "NoPollution", "NoCities", "UnsafeCoast", "Frozen"
+color.r              = 25
+color.g              = 25
+color.b              = 25
+helptext             = _("\
+No unit can enter this terrain, nor can any city work its tiles.\
 ")
 
 ; /* <-- avoid gettext warnings
