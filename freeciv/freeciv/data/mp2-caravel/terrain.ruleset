@@ -2095,7 +2095,7 @@ reqs           =
 build_time     = 10
 removal_time   = 0
 native_to      = "Trireme", "Sea", "RiverShip", "Land", "LandAirSea", "LandNoKill", "Helicopter", "Submarine"
-flags          = "NativeTile", "Quayable", "IrrigationSource", "AutoOnCityCenter"
+flags          = "NativeTile", "Quayable", "IrrigationSource"
 helptext          = _("\
 Waterways are navigational channels that connect canals with rivers. Essentially, they're the same as canals.\
 ")
