@@ -843,7 +843,7 @@ roles         = "AttackFastStartUnit"     ;this role taken over for well-digger
 helptext      = _("\
 This unit can fix unlucky starts, but has very high upkeep.\ 
  If you have no water, make a Well-Digger in a city that can\
- support it, create a water source, then disband the unit.\n\
+ support it, create a water source, then disband the unit. \n\
  This unit can dig wells; or irrigate any lowland tile. It will cost its home city\
  -2 Food -2 Prod. This unit WILL NOT WORK：• Outside your borders,\
  • After Alphabet or Pottery, • After any player discovers Writing, • After 10 turns.\
@@ -1121,7 +1121,7 @@ disembarks    = "LandRoad", "LandRail", "Helicopter"
 flags         = "FootSoldier", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
 roles         = "DefendOk", "DefendOkStartUnit", "FirstBuild", "Hut"
 helptext      = _("\
-The Warrior is the weakest military unit, but can also be very cost effective.\n\
+The Warrior is the weakest military unit, but can also be very cost effective. \n\
 With the discovery of Conscription, Warriors can convert to Musketeers in any domestic city. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
@@ -1171,7 +1171,7 @@ If a Phalanx is fortified or has not moved this turn, it can Rumble enemy units\
  combat. The Phalanx has no vulnerability during Rumble, but its tight formation can only\
  thrust at exposed outer ranks. Rumble attacks are meant to push and unsettle the enemy to\
  stop them from fortifying into a tactical position. The action goes for 3 rounds of combat,\
- uses 5/9 of a move point, and does not alter the fortified status of the Phalanx.\n\
+ uses 5/9 of a move point, and does not alter the fortified status of the Phalanx. \n\
 "), _("\
 \nWith the discovery of Conscription, Phalanxes can convert to Musketeers in any domestic city. \
 The discovery of Banking changes upkeep from shields to gold.\
@@ -1221,7 +1221,7 @@ Archers fight with bows and arrows. They have good offense and decent defense.\
  transported. This is useful for softening enemies prior to battle, or for deterring an\
  approach to a strategic location. (Volley Attack is not possible on Cities or Fortresses.)\
  Archers can do a retaliatory Volley attack against any unit which does a Special Unit Attack\
- on them.\n\
+ on them. \n\
  With the discovery of Conscription, Archers can convert to Musketeers in any domestic city. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
@@ -1266,11 +1266,11 @@ helptext      = _("\
 Legions are heavily armed well disciplined soldiers with excellent offensive strength.\
  They are famous for their engineering abilities：with the required\
  technology they can build Forts and Fortresses. They can build Roads outside domestic\
- national territory and inside Forts and Fortresses.\n\
+ national territory and inside Forts and Fortresses. \n\
 Legions are feared for how they start battle：a Pilum Assault targets the\
  shields of the enemy. A pilum stuck in a shield renders it useless, leaving\
  the front line vulnerable to a full-on charge. The Pilum Assault does 1 round\
- of combat at 2× attack bonus on up to 2 units on the tile.\n\
+ of combat at 2× attack bonus on up to 2 units on the tile. \n\
  With the discovery of Conscription, Legions can convert to Musketeers in any domestic city. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
@@ -1315,7 +1315,7 @@ roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
 Long sharp pikes give Pikemen a counter to the height and mobility of mounted\
  units. They enjoy a 2× defense bonus against mounted units. Pikemen replace\
- the Phalanx as the preferred city defender.\n\
+ the Phalanx as the preferred city defender. \n\
  With the discovery of Conscription, Pikemen can convert to Musketeers in any domestic city. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
@@ -1417,15 +1417,15 @@ helptext      = _("\
 Falconeers are Theocratic holy warriors armed with Falconets—the\
  largest hand cannons humans can carry, it proves whose side God is\
  on. Ottoman Janissaries, Reconquistadores, Persian Safavid, and Indian\
- Mughal used them in holy wars.\n\
+ Mughal used them in holy wars. \n\
 Falconets are huge and heavy. They have woeful accuracy but lethal\
  firepower：they either kill or totally miss. On paper, attack odds\
  are closest to a Musketeer (A3). Yet there is a high chance of losing\
  when you expect to win, or winning when you expect to lose. The outcome\
- is in God's hands! Falconeers defend a bit worse than they attack.\n\
+ is in God's hands! Falconeers defend a bit worse than they attack. \n\
 Righteous faith is needed to fight with slow heavy inaccurate weaponry:\
  only Theocracies can train Falconeers. Other governments will incur\
- high upkeep or see them retire.\n\
+ high upkeep or see them retire. \n\
 ")
 
 [unit_zealots]
@@ -1518,8 +1518,8 @@ Partisans are guerilla fighters who can use the terrain to their advantage.  Lik
 Proportional to city size, up to 8 Partisans appear when an enemy conquers your city. They\
  randomly fortify on any tile inside the circle defined by its workable radius. Partisans\
  prefer defensive tiles, and ignore tile nationality. They spawn only when:\n\
- ➣ Guerilla Warfare is known by any player.\n\
- ➣ The city was originally built by you.\n\
+ ➣ Guerilla Warfare is known by any player. \n\
+ ➣ The city was originally built by you. \n\
  ➣ You must be Theocracy, OR,\n\
  ➣ You must be Democracy or Communist, AND know Communism AND Gunpowder.\
 ")
@@ -1657,7 +1657,7 @@ veteran_move_bonus = 0, 2, 4, 6, 8, 10, 12
 roles         = "DefendOk", "DefendOkStartUnit", "BarbarianSeaTech"
 helptext      = _("\
 Marines are experts at all-terrain warfare. They are the strongest\
- foot unit in the game, and are armed with diverse weaponry.\n\
+ foot unit in the game, and are armed with diverse weaponry. \n\
  Unlike other units, Marines can attack Sea units (at a 50% penalty).\
  Air units do not stop them from attacking reachable targets.\
  They can attack while fortified and maintain fortified status.\
@@ -1667,7 +1667,7 @@ Marines are experts at all-terrain warfare. They are the strongest\
  veteran level they possess. Starting at v2, they gain the ability\
  to do Bazooka ranged attacks for 3 combat rounds, hitting up to 2\
  units on the tile and killing a maximum of 1. Bazooka attacks can\
- be done to Oceanic tiles if the Marines are not transported.\n\
+ be done to Oceanic tiles if the Marines are not transported. \n\
  Marines built in a city with an Airport, Port Facility, and Barracks III\
  receive an extra veteran level. \
 "), _("\
@@ -2157,16 +2157,16 @@ Siege Rams launch a tremendous thrusting force through\
  iron-capped timber shafts. They can break through City\
  Walls if they are not killed first. City Walls have counter\
  defenses, giving Siege Rams even odds of success. Wall\
- defense in capitals is twice as stiff—cutting odds to 25%.\n\
+ defense in capitals is twice as stiff—cutting odds to 25%. \n\
 Siege Rams may also ram Fortresses, doing up to 4hp of damage\
  on each occupant. This emulates damage to the Fortress defense\
- bonus, which is partly or fully repaired/recovered next turn.\n\
+ bonus, which is partly or fully repaired/recovered next turn. \n\
 Siege Rams can only travel by road. They can carry 1 Land\
  unit as cargo：their slow pace means this serves more for\
- disguise or defense.\n\ 
+ disguise or defense. \n\ 
 Siege Rams need an escort for protection. They need a minimum of\
  1 move point to attack a Fortress or City Walls.\
- Cities protected by the Great Wall are immune to Siege Rams.\n\
+ Cities protected by the Great Wall are immune to Siege Rams. \n\
  The discovery of Metallurgy by any nation incapacitates Siege Rams.\
 ")
 bombard_rate = 4
@@ -2487,7 +2487,7 @@ As new technology inspires the upgrade of Balloons, the Zeppelin appears.\
  vulnerability and cost make it better for intel. It can do limited attack\
  with bombs, or 20 combat rounds with medium caliber ordnance. It can stay out\
  for two Turn Changes before landing in a City, Quay, Fortress, Naval Base,\
- Airbase, or transport with 6+ capacity.\n\
+ Airbase, or transport with 6+ capacity. \n\
 Zeppelins have great vision and are unreachable by units prior to Marines and\
  Destroyers. Zeppelins do not block units under them from being attacked. Unlike\
  Balloons, they can fly over Mountains.\
@@ -2591,7 +2591,7 @@ Fighters are the first offensive Air units. Their superior mobility and firepowe
  and Jet Bombers.)\n\
 "), _("
 INTERCEPTOR：the Vigil order lets Fighters auto-attack adjacent Air units if they\
- have better attack odds. A Fighter can Vigil if it uses 2 move points or less.\n\
+ have better attack odds. A Fighter can Vigil if it uses 2 move points or less. \n\
 "), _("
 NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
@@ -2653,7 +2653,7 @@ Escort Fighters are large fighters with high fuel capacity. Higher mass and\
  good for long-range missions, defensive air support, and escorting bombers.\
 "), _("
 INTERCEPTOR：the Vigil order lets Escort Fighters auto-attack adjacent Air units if they\
- have better attack odds. This unit can Vigil if it uses 3 move points or less.\n\
+ have better attack odds. This unit can Vigil if it uses 3 move points or less. \n\
 "), _("
 NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
@@ -2780,7 +2780,7 @@ roles         = ""
 helptext      = _("\
 The Medium Bomber is well suited for moderately strong targets or multiple weak targets.\
  It may not attack other Air units. It is a Soft Field Unit and can’t carry Bomb\
- units, causing less discontent than other types of Bombers.\n\
+ units, causing less discontent than other types of Bombers. \n\
 ➤ Unhappy effect for Soft Field units:\n\
 Republic:0   Democracy:1    (non-aggressive)\n\
 Republic:1   Democracy:2    (aggressive)\
@@ -2838,7 +2838,7 @@ helptext      = _("\
 Heavy Bombers are large and sturdy Bombers with larger payload and numerous gunner defense stations.\
  They are excellent for hitting strong well-defended ground targets.\
  They can’t attack Air units. They can carry one Bomb. Like most Bombers, the Heavy Bomber is a Field Unit.\
- Field Units cause the same unhappiness no matter if aggressively or peacefully deployed.\n\
+ Field Units cause the same unhappiness no matter if aggressively or peacefully deployed. \n\
 ➤ Unhappy effect for Field units:\n\
 Republic:1   Democracy:2\
 "), _("
@@ -3090,10 +3090,10 @@ helptext      = _("\
 Transport Helicopters can carry three land units, which they can pick up from anywhere.\
 "), _("\
  Foot and artillery types can unload by stepping off to any adjacent tile, but will\
- lose all moves (except Marine types). Other types need a City, Airbase, or Naval Base to unload.\n\
+ lose all moves (except Marine types). Other types need a City, Airbase, or Naval Base to unload. \n\
 "), _("\
  Helicopters lose 1 hp for each turn not ended in a City, Base, or Carrier. +1 move\
- is awarded if starting a turn in a City or Airbase.\n\
+ is awarded if starting a turn in a City or Airbase. \n\
 "), _("\
  All Helicopters can be attacked by land from Riflemen onward; by sea from Ironclad\
  onward; get +50% defence vs. foot units; and are unreachable to artillery types.\
@@ -3217,7 +3217,7 @@ helptext      = _("\
 Jet Fighters upgrade the Fighter with improved attack, defense, and range.\
 "), _("
 INTERCEPTOR：the Vigil order lets Jet Fighters auto-attack adjacent Air units if they\
- have better attack odds. This unit can Vigil if it uses 3 move points or less.\n\
+ have better attack odds. This unit can Vigil if it uses 3 move points or less. \n\
 "), _("
 NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
@@ -3276,7 +3276,7 @@ Ground Strike Fighters upgrade the Dive Bomber. They can’t block attacks on ot
  they can interdict ZoC over land tiles. High fuel capacity allows two turns in the\
  air. No unit can stop this unit from attacking surface units on a tile. This unit\
  can also do pinpointed surgical strikes to pillage tiles. This aircraft is a\
- specialized niche unit. It is not an interceptor.\n\
+ specialized niche unit. It is not an interceptor. \n\
 NOTE：GOTO prevents unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
@@ -3387,7 +3387,7 @@ The most advanced Fighter, with improved attack and longer range. Stealth Fighte
  SAM Batteries down to a smaller 25% bonus.\
 "), _("
 INTERCEPTOR：the Vigil order lets Stealth Fighters auto-attack adjacent Air units if they\
- have better attack odds. This unit can Vigil if it uses 4 move points or less.\n\
+ have better attack odds. This unit can Vigil if it uses 4 move points or less. \n\
 "), _("
 Stealth Fighters can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining moves than the attacker.\
 "), _("
@@ -4571,9 +4571,9 @@ roles         = ""
 helptext      = _("\
 Hydrogen Bombs make Atom Bombs seem tame. Any unprotected city at Ground Zero will be absolutely annihilated.\
  In other cities in the blast radius, population is reduced by about 75%. Blast area is 21 tiles:\
- the same area as an entire city (5×5 minus the corners.) All units within the blast are destroyed.\n\
+ the same area as an entire city (5×5 minus the corners.) All units within the blast are destroyed. \n\
 A Bomber can drop a Hydrogen Bomb within two tiles of its location. Unload the bomb, fly the Bomber out of\
- range, then detonate by pressing D twice.\n\
+ range, then detonate by pressing D twice. \n\
 If you have Fusion Power and the Manhattan Project was built, a Hydrogen Bomb\
  can be made in a city with an Enrichment Facility. \
 "), _("\
@@ -4622,9 +4622,9 @@ helptext      = _("\
 The Doomsday Bomb is the mother of all bombs. Blast area is about 100 tiles.\
  Only one can be made at a time. A city at Ground Zero will be\
  annihilated. Other cities in the blast area lose about 75% of their population.\
- All units within the blast are completely destroyed.\n\
+ All units within the blast are completely destroyed. \n\
 A Bomber can drop the Bomb within two tiles of its location. Unload the Bomb and\
- pray that you can fly the Bomber out of range. Detonate by pressing D twice.\n\
+ pray that you can fly the Bomber out of range. Detonate by pressing D twice. \n\
 If you have Fusion Power and the Manhattan Project was built, a Doomsday Bomb\
  can be made in a city with an Enrichment Facility. \
 "), _("\
@@ -4720,7 +4720,7 @@ helptext      = _("\
 Tactical Nukes are very small warheads attached to missiles. A Tactical Nuke destroys all units on\
  a single tile. City population is reduced by half. The target tile may get Fallout. In theory,\
  Tactical Nukes are small enough to get the advantages of nuclear armaments without the severity of\
- consequences. In reality, they might be a gateway that escalates toward mutual assured destruction.\n\
+ consequences. In reality, they might be a gateway that escalates toward mutual assured destruction. \n\
 If you have Fusion Power and the Manhattan Project was built, a Tactical Nuke\
  can be made in a city with an Enrichment Facility. \
 ")
@@ -4772,7 +4772,7 @@ helptext      = _("\
 A Diplomat performs official or covert actions. Covert actions make incidents\
  which let Senates break treaties. Diplomats in cities may defend such acts with\
  diplomatic combat. Diplomats can • Bribe a lone unit • Establish embassy • Investigate City\
- • Sabotage random production or buildings • Steal tech • Steal maps • Incite city revolt.\n\
+ • Sabotage random production or buildings • Steal tech • Steal maps • Incite city revolt. \n\
 Except for Bribing and Investigate City, diplomatic actions will spend the Diplomat,\
  making it unavailable for further use. Diplomats may claim a tile for your nation\
  if adjacent to a tile claim made inside your own national border. Tile claims require\
@@ -4881,16 +4881,16 @@ veteran_move_bonus = 7, 7, 7, 7, 8, 9, 10
 helptext      = _("\
 Compared to other early Commerce units, the Caravan is the only one who can\
  travel by land off roads and rails, and cause no military threat to\
- trade partners. It can defend itself and also fortify. They have 2 7/9 moves.\n\ 
+ trade partners. It can defend itself and also fortify. They have 2 7/9 moves. \n\ 
 Commerce units can help build Wonders in any city with whom\
  you are not at war. In foreign cities 15+ tiles distant, they can create Trade Routes,\
  increasing net trade in both cities relative to their combined trade. Routes are inactive\
- during war and (re)activate during peace.\n\
+ during war and (re)activate during peace. \n\
 Commerce units can enter the Marketplace of non-hostile foreign cities to sell their
  wares：revenue derives from total trade in both cities. This is only profitable between
- cities with very high trade.\n\
+ cities with very high trade. \n\
 Commerce units can build any Wonders for which you have the tech requirement. To use them\
- for a Trade Route, they need to have given a Home City.\n\
+ for a Trade Route, they need to have given a Home City. \n\
 All Commerce units can carry Goods as cargo.\
 ")
 
@@ -4930,11 +4930,11 @@ veteran_power_fact = 100
 veteran_move_bonus = 3
 helptext      = _("\
 Wagons are the first Land unit that can do Commerce. Compared to a Caravan, they are defenseless,\
- and can only travel on roads and quays. This exposes them to ambush and capture\
- from units in Hideouts. A benefit of Wagons is to transport slower units to reach distant\
- cities faster. They have 3⅓ move points, giving a range of 10 tiles on roads.\n\
+ and without a road or quay, must stay on grasslands, plains, and tundra. This exposes them to ambush\
+ and capture from units in Hideouts. A benefit of Wagons is to transport slower units to reach distant\
+ cities faster. They have 3⅓ move points, giving a range of 10 tiles on roads. \n\
 Goods and units with less than 3 move points can be carried on Wagons. Outside a city, units can load;\
- but will lose their moves stepping off.\n\
+ but will lose their moves stepping off. \n\
 Read the help on Caravans to see what Commerce units can do.\
 ")
 
@@ -4976,9 +4976,9 @@ helptext      = _("\
 Trains are Commerce units with a bonus：they allow units with less than 3\
  move points to travel your rails at distances comparable to other units. Only Foot Soldiers\
  can:\n1. (L)oad outside a City or Base;\n2. Unload (T) in a Base or Quay.;\n3. Step off the Train outside a City\
- (loses all moves.)\nAll other units must load/unload inside a City.\n\n\
+ (loses all moves.)\nAll other units must load/unload inside a City. \n\n\
 On non-allied foreign rails, Trains incur full terrain movement cost.\
- Pre-gunpowder units can’t attack Trains.\n\n\
+ Pre-gunpowder units can’t attack Trains. \n\n\
 Electricity and Combustion each give Trains an additional +1 move.\
 ")
 
@@ -5012,14 +5012,14 @@ flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capt
 roles         = ""
 helptext      = _("\
 The Truck unit replaces the Caravan as the basic Commerce unit on Land. It moves at\
- more than twice the speed, but is restricted to using roads and quays only. (Trucks do not\
- use rails.) Each Truck used to build a Wonder will add 50 shields. See the entry on\
+ more than twice the speed, but without a road or quay, must stay on grasslands, plains, and tundra.\
+ (Trucks do not use rails.) Each Truck used to build a Wonder will add 50 shields. See the entry on\
  Caravan to read what Commerce units may do. \
 "), _("\
 Trucks allow units with less than 3 move points to travel your roads at\
 distances comparable to other units. Only Foot Soldiers can:\n1. (L)oad outside a City or Base;\n\
 2. Unload (T) in a Base or Quay;\n3. Move off the Truck outside a City\
- (loses all moves.)\nAll other units must load/unload inside a City.\n\n\\
+ (loses all moves.)\nAll other units must load/unload inside a City. \n\n\\
 ")
 
 [unit_goods]
@@ -5052,7 +5052,7 @@ roles         = ""
 helptext      = _("\
 Goods are commodities.\
  The cargo containers of the ancient world were amphorae, which carried\
- trade goods.\n\
+ trade goods. \n\
 Goods can be used to establish Trade Routes or Enter Marketplace. They can\
  be carried by Commerce units, allowing you to establish multiple\
  trade routes in one voyage. Also, Goods can Recycle Production with only\
