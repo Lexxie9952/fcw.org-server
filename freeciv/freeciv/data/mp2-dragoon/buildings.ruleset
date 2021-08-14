@@ -1722,10 +1722,10 @@ Pollution reduction from Recycling Center and Power Plants\
 name		= _("Genghis Khan's Equestrian School")
 genus		= "SmallWonder"
 reqs	=
-    { "type",         "name",       "range",    "present", "quiet"
-      "Tech",         "Horseback Riding", "Player",   TRUE,      FALSE
-      "Building",     "Genghis Khan's Equestrian School", "Player",   FALSE,     TRUE
-      "Building",     "Barracks", "City", TRUE, FALSE 
+    { "type",     "name",                             "range",   "present", "quiet"
+      "Tech",     "Horseback Riding",                 "Player",   TRUE,      FALSE
+      "Building", "Genghis Khan's Equestrian School", "Player",   FALSE,     TRUE
+      "Building", "Barracks",                         "City",     TRUE,      FALSE 
     }
 graphic	= "b.genghis_khans_equestrian_school"
 graphic_alt	= "b.sun_tzus_war_academy"
@@ -2383,7 +2383,8 @@ genus		= "SmallWonder"
 reqs	=
     { "type",     "name",        "range",  "present", "quiet"
       "Tech",     "Mathematics", "Player", TRUE,      FALSE
-      "Building", "Pyramids", "Player", FALSE,     TRUE
+      "Tech",     "Democracy",   "Player", FALSE,     FALSE
+      "Building", "Pyramids",    "Player", FALSE,     TRUE
     }
 graphic	= "b.pyramids"
 graphic_alt	= "-"
@@ -2396,10 +2397,11 @@ sabotage	= 0
 sound		= "w_pyramids"
 sound_alt	= "w_generic"
 helptext	= _("\
-Every city will gain +25% to its food storage when the city grows,\
- starves, or is founded. In addition, the city with the Pyramids\
- can rapture when celebrating.\
- This Wonder does not become obsolete.\
+Every city will gain +25% to its food storage when the city grows\
+ or starves. Newly founded cities start with +6 food. In addition,\
+ the city with the Pyramids can rapture when celebrating. \n\
+This Wonder is never obsolete, but can only be built before you\
+ discover Democracy.\
 ")
 
 [building_roman_colosseum]
@@ -2425,7 +2427,8 @@ The Roman Colosseum centralizes and gives prestige to the entertainment\
  events of your empire. Every city with an Amphitheater gains +1 happy\
  citizen and +1 luxury. In all your cities, Entertainers add 3 luxury\
  instead of 2. This means your Entertainers equal the net trade value of\
- Taxmen, Scientists, and Merchants. This Wonder is never obsolete.\
+ Taxmen, Scientists, and Merchants. \n\
+This Wonder is never obsolete.\
 ")
 
 [building_shakespeares_theatre]

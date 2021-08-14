@@ -5864,6 +5864,15 @@ reqs	=
       "Building", "Pyramids", "Player"
     }
 [effect_pyramids_1]
+type    = "Growth_Food"
+value	= 13
+reqs	=
+    { "type",     "name",     "range",  "present"
+      "Building", "Pyramids", "Player", TRUE
+      "Building", "Granary",  "City",   FALSE ;shouldn't happen but just be sure
+      "Age",      "2",        "City",   FALSE
+    }
+[effect_pyramids_2]
 type    = "Rapture_Grow"
 value	= 1
 reqs	=
@@ -7381,6 +7390,26 @@ reqs    =
       "type", "name", "range"
       "Gov", "Despotism", "Player"
     }
+
+[effect_despotism_nomad_food_bonus]
+type    = "Growth_Food"
+value	= 13
+reqs	=
+    { "type", "name", "range", "present"
+      "Gov", "Despotism", "Player", TRUE
+      "Building", "Granary", "City", FALSE ;shouldn't happen but just be sure
+      "Age", "2", "City", FALSE
+    }
+[effect_despotism_first_city_founding]
+type    = "Growth_Food"
+value	= 12
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Granary", "City", FALSE ;shouldn't happen but just be sure
+      "Building", "Palace", "City", TRUE ;first city only
+      "Age", "2", "City", FALSE
+    }
+
 ;******** THEOCRACY EFFECTS ****************************************
 [effect_sabotage_bonus_theocracy1]
 type	= "Action_Odds_Pct"

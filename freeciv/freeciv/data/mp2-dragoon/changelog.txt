@@ -10,15 +10,51 @@ Focus goals for MP2-Dragoon
        S2  S3  S4  S5  S6  S7 
 MP2C:  20  30  40  50  60  70   20+10...
 MP2D:  16  23  31  40  50  60  70  71  16+7+8+9+10...up to 70 then +1
+Although this speeds the early game up which is arguably 
+a nice secondary bonus, the actual purpose for this change
+is in curing an imbalance in the Discrete Mathematics of 
+the foodbox system. This smooths over a flaw in that
+system which heavily discourages size 3 cities under 
+despotism and early expansion AND discouraged new 
+cities for the last 40% of the game.
 ============================================================
-2. Mountain Goats & Hippopotami
+2. Mountain Goats (3 1 0) & Hippopotami (3 1 0)
 ============================================================
-3. Goods available with Pottery.
+3. Goods available with Pottery. Besides giving starting
+Tribesmen and Caravan something to carry, and being more 
+realistic, it brings to life the original purpose of
+this virtual unit for the early game.
 ============================================================
 4. "Advisor" for buildings suggests an order similar to 
    an experienced player, instead of alphabetic.
 ============================================================
 5. LandRoad is native to Grassland, Plains, Tundra; just uses
    a full move point.
+============================================================
+6. Under Despotism, All new cities get +2 food when
+   founded (+4 for capital).
+   ...
+   Scarcity and hard survivalism both under despotism and 
+   resourcefulness of nomadic ways, resulted in people
+   hoarding preserved food sources like dried meats and nuts.
+   1. This reduces the early game "slow period" by about 1 turn.
+   2. It furthers the project of quantitative easing against the
+   forcing-effect of "leave Despotism for Monarchy ASAP".
+   Gradually people will wake up into realising a multiplicity
+   of Bronze Age diversity exists. 
+============================================================
+7. With Pyramids, cities start with +6 food. (Was 5 in MP2C).
+   6/16 rather than 5/20 compensates the increase in cost and
+   science requirements. Pyramid strategies will be more rare
+   and more of a commitment, but also even more interesting
+   than the dead break-even of before. If done early in
+   Despotism, this has a third interesting effect of making
+   the Pyramids a more mysterious and ecclectic strategy,
+   since it with Despotism to give new cities 8/16 food.
+   Combined with rapture once a city reaches S3 around 
+   the time of discovering Mathematics, does The Egyptian
+   Gambit fit your style of play?
+============================================================
+
 
 

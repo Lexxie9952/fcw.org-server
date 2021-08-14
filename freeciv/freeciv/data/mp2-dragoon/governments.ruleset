@@ -109,6 +109,7 @@ Gulag：You can starve cities without disorder, with 2 martial law units. \n\
 No citizens are made unhappy by each aggressive unit. \n\
 37% Base corruption in cities \n\
 4% Extra corruption per each tile in distance from capital \n\
+Newly founded cities get +2 food (+4 for capital.) \n\
 ")
 
 ;------------------------------------------------------------------------
