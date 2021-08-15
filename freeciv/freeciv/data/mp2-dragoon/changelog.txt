@@ -36,7 +36,7 @@ this virtual unit for the early game.
    ...
    Scarcity and hard survivalism both under despotism and 
    resourcefulness of nomadic ways, resulted in people
-   hoarding preserved food sources like dried meats and nuts.
+   hoarding preserved food sources.
    1. This reduces the early game "slow period" by about 1 turn.
    2. It furthers the project of quantitative easing against the
    forcing-effect of "leave Despotism for Monarchy ASAP".
@@ -45,16 +45,12 @@ this virtual unit for the early game.
 ============================================================
 7. With Pyramids, cities start with +6 food. (Was 5 in MP2C).
    6/16 rather than 5/20 compensates the increase in cost and
-   science requirements. Pyramid strategies will be more rare
-   and more of a commitment, but also even more interesting
-   than the dead break-even of before. If done early in
-   Despotism, this has a third interesting effect of making
-   the Pyramids a more mysterious and ecclectic strategy,
-   since it with Despotism to give new cities 8/16 food.
-   Combined with rapture once a city reaches S3 around 
-   the time of discovering Mathematics, does The Egyptian
-   Gambit fit your style of play?
+   science requirements. Pyramid strategies will be more
+   non-conformist, rare, and more of a commitment, but also
+   more interesting.
 ============================================================
-
+8. Partisans can investigate conquered cities not owned 
+   by the original owner.
+============================================================
 
 

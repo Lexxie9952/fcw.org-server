@@ -791,6 +791,20 @@ actor_reqs    =
       "DiplRel",      "Foreign",       "Local", TRUE
       "UnitState",    "Transported",   "Local", FALSE
     }
+[actionenabler_investigate_city_partisan]
+action       = "Investigate City"
+actor_reqs    =
+    { "type",         "name",          "range", "present"
+      "UnitType",     "Partisan",      "Local", TRUE
+      "UnitState",    "OnLivableTile", "Local", TRUE
+      "MinMoveFrags", "1",             "Local", TRUE
+      "DiplRel",      "Foreign",       "Local", TRUE
+      "UnitState",    "Transported",   "Local", FALSE
+    }
+target_reqs   =
+    { "type",       "name",            "range", "present"
+      "CityStatus", "OwnedByOriginal", "City",  FALSE
+    }
 
 [actionenabler_investigate_city_satellite]
 action       = "Investigate City"
