@@ -261,7 +261,6 @@ void calc_civ_score(struct player *pplayer)
   pplayer->score.angry = 0;
   pplayer->score.wonders = 0;
   pplayer->score.techs = 0;
-  pplayer->score.techout = 0;
   pplayer->score.landarea = 0;
   pplayer->score.settledarea = 0;
   pplayer->score.population = 0;
@@ -274,6 +273,7 @@ void calc_civ_score(struct player *pplayer)
       pplayer->score.specialists[sp] = 0;
     } specialist_type_iterate_end;
     pplayer->score.bnp = 0;
+    pplayer->score.techout = 0;
   }
   /* This is never calculated after city growth so was commented out here */
   //pplayer->score.mfg = 0; 
@@ -296,13 +296,13 @@ void calc_civ_score(struct player *pplayer)
     pplayer->score.population += city_population(pcity);
     pplayer->score.cities++;
     pplayer->score.pollution += pcity->pollution;
-    pplayer->score.techout += pcity->prod[O_SCIENCE];
     /* These are calculated here if (game.server.city_output_style !=WYSIWYG) */
     if (!game.server.city_output_style) {
       specialist_type_iterate(sp) {
         pplayer->score.specialists[sp] += pcity->specialists[sp];
       } specialist_type_iterate_end;      
       pplayer->score.bnp += pcity->surplus[O_TRADE];
+      pplayer->score.techout += pcity->prod[O_SCIENCE];
     }
     
     trade_routes_iterate(pcity, proute) {

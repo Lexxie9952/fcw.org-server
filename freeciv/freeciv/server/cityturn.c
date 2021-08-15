@@ -662,12 +662,13 @@ void update_city_activities(struct player *pplayer)
   pplayer->server.bulbs_last_turn = 0;
   /* Some score elements need to be computed BEFORE new tile-worker re-arrangement */
   pplayer->score.mfg = 0;
-  /* For WYSIWYG output, score for trade and specialists is before tile re-arrange */
+  /* For WYSIWYG output, score for (trade, bulbs, specialists) is before tile re-arrange */
   if (game.server.city_output_style) {
     specialist_type_iterate(sp) {
       pplayer->score.specialists[sp] = 0;
     } specialist_type_iterate_end;
     pplayer->score.bnp = 0;
+    pplayer->score.techout = 0;
   }
 
   if (n > 0) {
@@ -737,6 +738,7 @@ void update_city_activities(struct player *pplayer)
           pplayer->score.specialists[sp] += cities[r]->specialists[sp];
         } specialist_type_iterate_end;      
         pplayer->score.bnp += cities[r]->surplus[O_TRADE];
+        pplayer->score.techout += cities[r]->prod[O_SCIENCE];
       }
 
       update_city_activity(cities[r]);
