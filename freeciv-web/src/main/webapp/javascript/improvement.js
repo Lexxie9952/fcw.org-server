@@ -33,6 +33,7 @@ const B_GIBRALTAR_FORTRESS = "Gibraltar Fortress"
 const B_HOOVER_DAM = "Hoover Dam"
 const B_LIGHTHOUSE = "Lighthouse";
 const B_MAGNA_CARTA = "Magna Carta";
+const B_MAUSOLEUM = "Mausoleum of Mausolos";
 const B_MEDICI_BANK = "Medici Bank";
 const B_STATUE_OF_LIBERTY_NAME = "Statue of Liberty";
 const B_TESLAS_LABORATORY = "Tesla's Laboratory";
@@ -72,6 +73,12 @@ var appian_discounts = {
 }
 var angkorwat_discounts = {
   "Elephants": 5
+}
+var mausoleum_discounts = {
+  "Courthouse": 5
+}
+var mausoleum_despot_discounts = {
+  "Courthouse": 10
 }
 
 /**************************************************************************
@@ -218,10 +225,23 @@ function get_universal_discount_price(ptype, pcity)
     && governments[players[playerno].government].name != "Democracy"
     && governments[players[playerno].government].name != "Theocracy"
     && governments[players[playerno].government].name != "Communism"
-    && city_has_building(pcity, improvement_id_by_name(B_ANGKOR_WAT))) {
+    && player_has_wonder(playerno, improvement_id_by_name(B_ANGKOR_WAT))) {
       if (angkorwat_discounts[ptype['name']])
       return ptype['build_cost'] - angkorwat_discounts[ptype['name']];      
   }
+  // MP2D discounts for Mausoleum:
+  if (pcity && client_rules_flag[CRF_MP2_D]
+    && player_has_wonder(playerno, improvement_id_by_name(B_MAUSOLEUM))
+    && mausoleum_discounts[ptype['name']])
+  {
+    let discount = 0;
+    discount += mausoleum_discounts[ptype['name']];
+    if (governments[players[playerno].government].name == "Despotism") {
+      discount += mausoleum_despot_discounts[ptype['name']];
+    }
+    return ptype['build_cost'] - discount; 
+  }
+
   // default, no discount:
   return ptype['build_cost'];
 }
