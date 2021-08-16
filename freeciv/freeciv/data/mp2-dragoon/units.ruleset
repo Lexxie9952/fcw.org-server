@@ -1528,7 +1528,7 @@ Proportional to city size, up to 8 Partisans appear when an enemy conquers your 
 name          = _("Riflemen")
 class         = "Land"
 tech_req      = "Conscription"
-obsolete_by   = "None"
+obsolete_by   = "Ground Troops"
 graphic       = "u.riflemen"
 graphic_alt   = "-"
 sound_move    = "m_riflemen"
@@ -1573,7 +1573,7 @@ Under Communism this unit costs 5 less. Also, Communism tech allows Communist\
 name          = _("Alpine Troops")
 class         = "Land"
 tech_req      = "Tactics"
-obsolete_by   = "None"
+obsolete_by   = "Ground Troops"
 graphic       = "u.alpine_troops"
 graphic_alt   = "-"
 sound_move    = "m_alpine_troops"
@@ -1674,6 +1674,41 @@ Marines are experts at all-terrain warfare. They are the strongest\
 \nThe discovery of Banking changes upkeep from shields to gold.\
 ")
 bombard_rate = 3
+
+[unit_ground_troops]
+name          = _("Ground Troops")
+class         = "Land"
+tech_req      = "Combined Arms"
+obsolete_by   = "None"
+graphic       = "u.groundtroops"
+graphic_alt   = "-"
+sound_move    = "m_riflemen"
+sound_move_alt = "m_generic"
+sound_fight   = "f_paratroopers"
+sound_fight_alt = "f_generic"
+build_cost    = 45
+pop_cost      = 0
+attack        = 7
+defense       = 5
+hitpoints     = 20
+firepower     = 1
+move_rate     = 2
+vision_radius_sq = 4
+transport_cap = 0
+fuel          = 0
+uk_happy      = 1
+uk_shield     = 0
+uk_food       = 0
+uk_gold       = 1
+embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
+disembarks    = "LandRoad", "LandRail", "Helicopter"
+targets       = "Balloon", "Helicopter", "LandRail", "Zeppelin"
+flags         = "FootSoldier", "Capturer", "CantReachAir", "Shield2Gold", "MultiSlot", "Settlers", "CanHide", "WillNever"
+roles         = "DefendOk", "DefendOkStartUnit"
+helptext      = _("\
+Ground Troops upgrade earlier infantry with better weaponry. The cost to upgrade\
+ Riflemen and Alpine Troops is free.\
+")
 
 [unit_paratroopers]
 name          = _("Paratroopers")

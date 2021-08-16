@@ -803,13 +803,31 @@ reqs    =
       "MinYear",  "-2000",        "World", FALSE
     }
 
-;TO DO: this could be used in interesting ways: e.g., foot units, bombers, etc.
 [effect_unit_shield_value_in_upgrade_price_calc]
 type    = "Unit_Shield_Value_Pct"
 value   = -50
 reqs    =
-    { "type",   "name",         "range", "present"
-      "Action", "Upgrade Unit", "Local", TRUE
+    { "type",     "name",         "range", "present"
+      "Action",   "Upgrade Unit", "Local", TRUE
+      "UnitType", "Riflemen",     "Local", FALSE
+      "UnitType", "Alpine Troops","Local", FALSE
+    }
+[effect_riflemen_upgrade_price_calc]
+type    = "Unit_Shield_Value_Pct"
+value   = 13
+reqs    =
+    { "type",     "name",         "range", "present"
+      "Action",   "Upgrade Unit", "Local", TRUE
+      "UnitType", "Riflemen",     "Local", TRUE
+    }
+
+[effect_alpine_upgrade_price_calc]
+type    = "Unit_Shield_Value_Pct"
+value   = -10
+reqs    =
+    { "type",     "name",         "range", "present"
+      "Action",   "Upgrade Unit", "Local", TRUE
+      "UnitType", "Alpine Troops","Local", TRUE
     }
 
 ; *********************************** BASES *******************************

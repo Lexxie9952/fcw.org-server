@@ -52,5 +52,18 @@ this virtual unit for the early game.
 8. Partisans can investigate conquered cities not owned 
    by the original owner.
 ============================================================
-
-
+9. Ziggurat 
+   was least popular Tribe Wonder:
+      no economic bonus except from relocating capital;
+   NOW:
+      * shield output has no tile penalties
+      * +1 food on city centre, Settlers have no food upkeep
+      *no longer requires river
+=============================================================
+10. Riflemen upgrade to Ground Troops
+=============================================================
+11. Mausoleum
+   effectively, upkeep on Courthouses is free.
+   Courthouses cost 5 less; during Despotism, they cost the
+     same as a temple.
+=============================================================
