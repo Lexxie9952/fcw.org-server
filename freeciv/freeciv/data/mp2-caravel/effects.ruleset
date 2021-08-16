@@ -4706,9 +4706,9 @@ type    = "Unit_Build_Cost_Pct"
 value	  = -13 ; 36 - 5 = - 13%
 reqs    =
     {
-      "type",     "name",       "range",  "present"
-      "Building", "Angkor Wat", "City",   TRUE
-      "UnitType", "Elephants",  "Local",  TRUE
+      "type",     "name",          "range",  "present"
+      "Building", "Angkor Wat",    "Player",   TRUE
+      "UnitType", "Elephants",     "Local",  TRUE
       "Gov",      "Democracy",     "Player", FALSE 
       "Gov",      "Theocracy",     "Player", FALSE 
       "Gov",      "Communism",     "Player", FALSE 
