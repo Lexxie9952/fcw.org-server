@@ -4742,9 +4742,9 @@ type    = "Unit_Build_Cost_Pct"
 value	  = -13 ; 36 - 5 = - 13%
 reqs    =
     {
-      "type",     "name",       "range",  "present"
-      "Building", "Angkor Wat", "City",   TRUE
-      "UnitType", "Elephants",  "Local",  TRUE
+      "type",     "name",          "range",  "present"
+      "Building", "Angkor Wat",    "Player", TRUE
+      "UnitType", "Elephants",     "Local",  TRUE
       "Gov",      "Democracy",     "Player", FALSE 
       "Gov",      "Theocracy",     "Player", FALSE 
       "Gov",      "Communism",     "Player", FALSE 
@@ -5729,6 +5729,45 @@ value	= 13
       "Building",   "Courthouse",             "City",   FALSE
       "Action",     "Investigate City",       "Local",  FALSE ;investigate is exclusive bonus below
     }
+
+[effect_mausoleum_cheaper_courthouse]
+type    = "Building_Build_Cost_Pct"
+value   = -11; 45=5 = 40
+reqs    =
+    { "type",     "name",                   "range", "present"
+      "Building", "Mausoleum of Mausolos",  "Player", TRUE
+      "Building", "Courthouse",             "Local",  TRUE
+    }
+[effect_mausoleum_cheaper_courthouse2]
+type    = "Building_Build_Cost_Pct"
+value   = -22; 45=15 = 30
+reqs    =
+    { "type",     "name",                   "range", "present"
+      "Gov",      "Despotism",              "Player", TRUE
+      "Building", "Mausoleum of Mausolos",  "Player", TRUE
+      "Building", "Courthouse",             "Local",  TRUE
+    }
+;when Upkeep_Reduce is added, use that for simplicity to make Courthouses no upkeep
+[effect_mausoleum_cheaper_courthouse3]
+type    = "Output_Add_Bonus"
+value   = 1
+reqs    =
+    { "type",      "name",                   "range", "present"
+      "Building",  "Mausoleum of Mausolos",  "Player", TRUE
+      "Building",  "Courthouse",             "City",  TRUE
+      "OutputType","Gold",                   "Local", TRUE
+      "Tech",      "Banking",                "Player", FALSE
+    }
+[effect_mausoleum_free_gold_unit]
+type    = "Unit_Upkeep_Free_Per_City"
+value   = 1
+reqs    =
+    { "type",        "name",                   "range", "present"
+      "Building",    "Mausoleum of Mausolos",  "Player", TRUE
+      "Building",    "Courthouse",             "City",   TRUE
+      "Tech",        "Banking",                "Player", TRUE
+      "OutputType",  "Gold",                   "Local",  TRUE
+    }
 [effect_mausoleum_of_mausolos_investigate_resistance]
 type	= "Action_Resist_Pct"
 value	= 54 ; +7% - 54% = -47% ... -0.47 * 80 = 37.6% ... 80%-37.6% = 42.4% ... (85%/2 = 42.5%) ✓
@@ -5744,7 +5783,6 @@ reqs	=
     { "type", "name", "range"
       "Building", "Mausoleum of Mausolos", "City"
     }
-
 ;[effect_mausoleum_of_mausolos_incite] = blocked in game.ruleset actionenabler
 
 ;************************************************************************ Medici Bank
@@ -5824,7 +5862,6 @@ reqs	=
       "Building", "Oracle",   "Player", TRUE
       "Building", "Ziggurat", "City",   TRUE
       "Gov",      "Despotism","Player", TRUE
-   
     }
 ;************************************************************************ Pasteur Institute
 [effect_pasteur_institute]
@@ -6491,6 +6528,15 @@ reqs	=
       "Gov",      "Despotism","Player",TRUE
       "Building", "Granary",  "City",  FALSE
     }
+[effect_ziggurat_settler_upkeep]
+type    = "Upkeep_Factor"
+value   = -1
+reqs = 
+    { "type",     "name",     "range","present"
+      "Building", "Ziggurat", "Player", TRUE
+      "Gov",      "Despotism","Player", TRUE
+      "OutputType", "Food",  "Local", TRUE
+    }
 [effect_ziggurat_fortifications]
 type    = "Defend_Bonus"
 value	= 75  ; 1.75x vs everything
@@ -6539,6 +6585,80 @@ reqs =
       "Building",  "Ziggurat", "City",   TRUE
       "Gov",       "Despotism","Player", TRUE
       "OutputType","Shield",   "Local",  TRUE
+    }
+[effect_ziggurat_no_prod_penalties]
+type    = "Output_Penalty_Tile"
+value = 100
+reqs	=
+    { "type",       "name",        "range", "present"
+      "Building",   "Ziggurat",    "City",   TRUE
+      "OutputType", "Shield",      "Local",  TRUE
+    }
+[effect_ziggurat_extra_food]
+type    = "Output_Add_Tile"
+value   = 1
+reqs    =
+    { "type", "name", "range"
+      "Building", "Ziggurat", "City"
+      "CityTile", "Center", "Local"
+      "OutputType", "Food", "Local"
+    }
+; in all cases where food output is exactly 2, tile corruption prevents bonus above
+[effect_ziggurat_extra_food_1]  
+type    = "Output_Penalty_Tile"
+value = 100
+reqs	=
+    { "type",      "name",     "range",  "present"
+      "Building",  "Ziggurat", "City",    TRUE
+      "OutputType","Food",     "Local",   TRUE
+      "CityTile",  "Center",   "Local",   TRUE
+      ; Plains, Tundra need tile penalty lifted to receive +1 food
+      "Terrain", "Desert",      "Local",  FALSE 
+      "Terrain", "Forest",      "Local",  FALSE
+      "Terrain", "Grassland",   "Local",  FALSE 
+      "Terrain", "Jungle",      "Local",  FALSE 
+      "Terrain", "Mountains",   "Local",  FALSE
+      "Terrain", "Swamp",       "Local",  FALSE
+      ; Excluse extras who got the bonus because they already 'absorbed' their penalty:
+      "Extra",   "Wheat",       "Local",  FALSE
+      "Extra",   "Oasis",       "Local",  FALSE
+      "Extra",   "Furs",        "Local",  FALSE
+      "Extra",   "Elk",         "Local",  FALSE
+    }
+[effect_ziggurat_extra_food_2]  
+type    = "Output_Penalty_Tile"
+value = 100
+reqs	=
+    { "type",      "name",     "range",  "present"
+      "Building",  "Ziggurat", "City",    TRUE
+      "OutputType","Food",     "Local",   TRUE
+      "CityTile",  "Center",   "Local",   TRUE
+      ; Desert River needs tile penalty lifted IFF it has no irrigation on it
+      "Terrain", "Desert",      "Local",  TRUE 
+      "Extra",   "River",       "Local",  TRUE
+      "Extra",   "Irrigation",  "Local",  FALSE
+    }
+[effect_ziggurat_extra_food_3]  
+type    = "Output_Penalty_Tile"
+value = 100
+reqs	=
+    { "type",      "name",     "range"
+      "Building",  "Ziggurat", "City"
+      "OutputType","Food",     "Local"
+      "CityTile",  "Center",   "Local"
+      ; Extras whose bonus results in exactly +2F got their bonus taken away from tile corruption:
+      "Extra",   "Berries",    "Local"
+    }
+[effect_ziggurat_extra_food_4]  
+type    = "Output_Add_Tile"
+value = 1
+reqs	=
+    { "type",      "name",     "range"
+      "Building",  "Ziggurat", "City"
+      "OutputType","Food",     "Local"
+      "CityTile",  "Center",   "Local"
+      ; the +1 extra food is hard-coded for mountains so needs +2 to kick in.
+      "Terrain",   "Mountains","Local"
     }
 ;-------------------------------------------------------------------------------</end WONDERS>
 

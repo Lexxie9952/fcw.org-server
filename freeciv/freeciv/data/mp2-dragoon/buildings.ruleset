@@ -2191,23 +2191,24 @@ sabotage	= 0
 sound		= "w_oracle"
 sound_alt	= "w_generic"
 helptext	= _("\
-The Mausoleum of Mausolos brings a spirit of prudence to your nation, giving\
- subtle security and reduced corruption. This makes your people happier. \n\
+The Mausoleum brings prudence to your nation. \n\
 "), _("
+➤ Courthouses cost -33% in Despotism; 5 less in other governments. \n\
+➤ Cancels Courthouse upkeep with 1 free gold before Banking. After, 1\
+ gold of unit upkeep is free. \n\
 ➤ A Courthouse or City Walls gives each city +1 content citizen, unless\
- unhappy about military activity. \n\
-➤ Having both the above results in +1 content and +1 happy citizen. \n\
-➤ Acts like half a Courthouse in cities which lack Courthouse or\
- Supreme Court effects: \n\
+ unhappy about military. \n\
+   • Having both also adds +1 happy citizen. \n\
+➤ Acts like half a Courthouse in cities with no Courthouse: \n\
    • 30% corruption reduction \n\
-   • Tile corruption penalty begins at 4 in Anarchy and Despotism (not 3) \n\
-   • 10% bonus vs diplomatic actions and combat \n\
-➤ Adds (at least) +35% to the cost of bribing your units. \n\
-➤ Prevents your cities from being incited to revolt. \n\
-➤ Halves the odds of investigating your cities (85% / 2 = 43%) \n\
+   • Tile output penalty lifted +1 in Anarchy, Despotism \n\
+   • 10% bonus vs hostile diplomats \n\
+➤ Your units cost 35% more to bribe. \n\
+➤ Prevents your cities from being incited. \n\
+➤ Halves the odds of investigating your cities. \n\
 "), _("
-The Mausoleum of Mausolos is a Civil Wonder. You can make only one Civil Wonder. \n\
-Obsolete by：Radio.\
+The Mausoleum is a Civil Wonder. You can make only one Civil Wonder.\
+ Obsolete by：Radio.\
 ")
 
 [building_medici_bank]     
@@ -2771,7 +2772,7 @@ reqs	=
     { "type",     "name",     "range",  "present", "quiet"
       "Building", "Ziggurat", "Player",  FALSE,     TRUE
       "Gov",      "Despotism","Player",  TRUE,      FALSE
-      "Extra",    "River",    "Adjacent",TRUE,      FALSE
+;REMOVED:   "Extra",    "River",    "Adjacent",  TRUE,      FALSE
       "Tech",     "Masonry",  "Player",  TRUE,      FALSE
     }
 graphic	= "b.ziggurat"
@@ -2786,14 +2787,19 @@ sabotage	= 0
 sound		= "w_ziggurat"
 sound_alt	= "w_generic"
 helptext	= _("\
-The Ziggurat moves the production bonus from your Palace to the Ziggurat city,\
- and gains the same corruption reduction and happy bonus effects. \n \
 The Ziggurat gathers all ruling functions of early civilization into one\
- wondrous building. It counts as a Granary, Temple, and Barracks. In cities\
- without Walls or Fortifications, it gives a defense bonus similar to\
- Fortifications, but gives a guaranteed 1.75× defense, regardless of attacker\
- or terrain type. \n\
-The Ziggurat must be built adjacent to a river. \n\
+ wondrous building: \n\n\
+1. If your Palace is in another city: the Ziggurat receives +1 happy citizen;\
+ reduces corruption in nearby cities; and RELOCATES the capital production bonus\
+ to its city.\n\
+2. Shield output suffers no tile penalties. \n\
+3. The food capacity of the Ziggurat is legendary: it counts as a Granary,\
+ and receives an additional +1 food on the city center. All Settlers in your nation\
+ have no food upkeep. \n\
+4. The Ziggurat acts as a Temple and a Barracks. \n\
+5. The Ziggurat gives 1.75× defense vs. all attacks, regardless of terrain or attacker. \n\n\
+The construction of a Granary, Temple, Barracks, Fortifications, or City Walls\
+ will replace the corresponding Ziggurat effects. \n\n\
 Obsolete by：Monarchy or switching from Despotism.\
 ")
 
