@@ -1269,6 +1269,64 @@ Marines have stronger veteran levels unique to their unit type. They also have h
 </pre>
 </div>
 <div class='item' id='utype21'>
+<h3 class='section'>Ground Troops</h3>
+
+<pre class='cost'>Cost: 45 shields</pre>
+<pre class='upkeep'>Upkeep: 1 Gold, 1 Unhappy</pre>
+<pre class='moves'>Moves: 2</pre>
+<pre class='vision'>Vision: 2.00 tiles</pre>
+<pre class='attack'>Attack: 7</pre>
+<pre class='defense'>Defense: 5</pre>
+<pre class='firepower'>Firepower: 1</pre>
+<pre class='hitpoints'>Hitpoints: 20</pre>
+<pre class='obsolete'>Obsolete by: None</pre>
+<pre class='helptext'><b class='unit_desc' style='font-family:SegoeSB;line-height:115%;font-size:115%;'>Ground Troops upgrade earlier infantry with better weaponry. The cost to upgrade Riflemen and Alpine Troops is free.</b>
+  <hr style='border-top: 1px solid #000'>➤ Belongs to Land unit class.
+  • Can occupy empty enemy cities.
+  • Subject to zones of control.
+  • Slowed down while damaged.
+  • <b style="color:#9aa">AIRLIFT</b>: Can be airlifted if it has remaining moves.
+  • Can't attack as Cargo. Must first unload.
+➤ Unable to attack air units.
+➤ May impose a zone of control on its adjacent tiles.
+➤ Under certain conditions, <b>cities can make more than one of this unit per turn, plus one of any other unit type.</b>
+➤ Can attack against Helicopter units, which are usually not reachable.
+➤ Can <b style="color:#9aa">Capture Unit</b>
+  • target unit must be alone, not on Mountains, and not in a Fort, Fortress, or Naval Base.
+➤ Can <b style="color:#9aa">Expel</b>
+  • target unit must be alone and not on Mountains.
+  • uses one movement point
+  • actor stays on its own tile
+➤ Attacking with fractional move points gives fractional attack power.
+➤ Can <b style="color:#9aa">Conquer City</b>
+➤ Can <b style="color:#9aa">Pillage</b>
+➤ Can <b style="color:#9aa">Fortify</b>, granting a 50% defensive bonus when not in a city.
+  • Gets the 50% defensive bonus automatically while in cities.
+➤ Can <b style="color:#9aa">Convert Unit</b>
+  • is converted into Workers (takes 2 MP).
+➤ Can <b style="color:#9aa">Make Hideout</b>
+  • Requires Forest, Jungle, Swamp, or Mountains. Land units will be invisible.
+➤ May acquire veteran status.
+  • Veterans have increased strength in combat.
+
+Veteran Levels for Ground Troops are the standard ruleset default:
+<table class="vet_level">
+<tr><th>Veteran level</th><th>Power factor</th><th>Promotion Odds</th><th>Move bonus</th></tr>
+<tr><hr style="border-top: 1px solid #000"></tr>
+<tr><td>green</td><td>100%</td><td>50%</td> <td>-</td></tr>
+<tr><td>veteran</td><td>150%</td><td>33%</td> <td>-</td></tr>  
+<tr><td>hardened</td><td>175%</td><td>20%</td> <td>-</td></tr>
+<tr><td>elite</td><td>200%</td><td>15%</td> <td>-</td></tr>
+<tr><td>crack</td><td>210%</td><td>15%</td> <td>+ 1/9</td></tr>
+<tr><td>master</td><td>220%</td><td>15%</td> <td>+ 1/9</td></tr>
+<tr><td>champion</td><td>230%</td><td>-</td><td>+ 1/9</td></tr></table>
+<br><b style="font-family:Freeciv; font-size:larger">Transport Loading Logistics</b>
+<img src="/images/man/logistics_foot_load.png">
+<b style="font-family:Freeciv; font-size:larger">Transport Unloading Logistics</b>
+<img src="/images/man/logistics_foot_unload.png">
+</pre>
+</div>
+<div class='item' id='utype22'>
 <h3 class='section'>Paratroopers</h3>
 
 <pre class='cost'>Cost: 60 shields</pre>
@@ -1334,7 +1392,7 @@ Veteran Levels for Paratroopers are the standard ruleset default:
 <img src="/images/man/logistics_foot_unload.png">
 </pre>
 </div>
-<div class='item' id='utype22'>
+<div class='item' id='utype23'>
 <h3 class='section'>Mechanized Infantry</h3>
 
 <pre class='cost'>Cost: 50 shields</pre>
@@ -1391,7 +1449,7 @@ Veteran Levels for Mechanized Infantry are the standard ruleset default:
 <img src="/images/man/logistics_mounted_unload.png">
 </pre>
 </div>
-<div class='item' id='utype23'>
+<div class='item' id='utype24'>
 <h3 class='section'>Horsemen</h3>
 
 <pre class='cost'>Cost: 18 shields</pre>
@@ -1445,7 +1503,7 @@ Veteran Levels for Horsemen are the standard ruleset default:
 <img src="/images/man/logistics_mounted_unload.png">
 </pre>
 </div>
-<div class='item' id='utype24'>
+<div class='item' id='utype25'>
 <h3 class='section'>Chariot</h3>
 
 <pre class='cost'>Cost: 27 shields</pre>
@@ -1501,7 +1559,7 @@ Veteran Levels for Chariots are the standard ruleset default:
 <img src="/images/man/logistics_mounted_unload.png">
 </pre>
 </div>
-<div class='item' id='utype25'>
+<div class='item' id='utype26'>
 <h3 class='section'>Elephants</h3>
 
 <pre class='cost'>Cost: 36 shields</pre>
@@ -1557,7 +1615,7 @@ Veteran Levels for Elephants are the standard ruleset default:
 <img src="/images/man/logistics_mounted_unload.png">
 </pre>
 </div>
-<div class='item' id='utype26'>
+<div class='item' id='utype27'>
 <h3 class='section'>Crusaders</h3>
 
 <pre class='cost'>Cost: 38 shields</pre>
@@ -1613,7 +1671,7 @@ Veteran Levels for Crusaders are the standard ruleset default:
 <img src="/images/man/logistics_mounted_unload.png">
 </pre>
 </div>
-<div class='item' id='utype27'>
+<div class='item' id='utype28'>
 <h3 class='section'>Knights</h3>
 
 <pre class='cost'>Cost: 38 shields</pre>
@@ -1672,7 +1730,7 @@ Veteran Levels for Knights are the standard ruleset default:
 <img src="/images/man/logistics_mounted_unload.png">
 </pre>
 </div>
-<div class='item' id='utype28'>
+<div class='item' id='utype29'>
 <h3 class='section'>Dragoons</h3>
 
 <pre class='cost'>Cost: 50 shields</pre>
@@ -1728,7 +1786,7 @@ Veteran Levels for Dragoons are the standard ruleset default:
 <img src="/images/man/logistics_mounted_unload.png">
 </pre>
 </div>
-<div class='item' id='utype29'>
+<div class='item' id='utype30'>
 <h3 class='section'>Cavalry</h3>
 
 <pre class='cost'>Cost: 60 shields</pre>
@@ -1784,7 +1842,7 @@ Veteran Levels for Cavalry are the standard ruleset default:
 <img src="/images/man/logistics_mounted_unload.png">
 </pre>
 </div>
-<div class='item' id='utype30'>
+<div class='item' id='utype31'>
 <h3 class='section'>Armor</h3>
 
 <pre class='cost'>Cost: 80 shields</pre>
@@ -1843,7 +1901,7 @@ Veteran Levels for Armor are the standard ruleset default:
 <img src="/images/man/logistics_mounted_unload.png">
 </pre>
 </div>
-<div class='item' id='utype31'>
+<div class='item' id='utype32'>
 <h3 class='section'>Armor II</h3>
 
 <pre class='cost'>Cost: 85 shields</pre>
@@ -1903,7 +1961,7 @@ Veteran Levels for Armor II are the standard ruleset default:
 <img src="/images/man/logistics_mounted_unload.png">  
 </pre>
 </div>
-<div class='item' id='utype32'>
+<div class='item' id='utype33'>
 <h3 class='section'>Catapult</h3>
 
 <pre class='cost'>Cost: 34 shields</pre>
@@ -1964,7 +2022,7 @@ Veteran Levels for Catapults are the standard ruleset default:
 <img src="/images/man/logistics_artillery_unload.png">  
 </pre>
 </div>
-<div class='item' id='utype33'>
+<div class='item' id='utype34'>
 <h3 class='section'>Siege Ram</h3>
 
 <pre class='cost'>Cost: 45 shields</pre>
@@ -2012,7 +2070,7 @@ The discovery of Metallurgy by any nation incapacitates Siege Rams.</b>
   • Veterans have increased strength in unit-to-unit combat.
 </pre>
 </div>  
-<div class='item' id='utype34'>
+<div class='item' id='utype35'>
 <h3 class='section'>Cannon</h3>
 
 <pre class='cost'>Cost: 40 shields</pre>
@@ -2074,7 +2132,7 @@ Veteran Levels for Siege Rams are the standard ruleset default:
 <img src="/images/man/logistics_artillery_unload.png">
 </pre>
 </div>
-<div class='item' id='utype35'>
+<div class='item' id='utype36'>
 <h3 class='section'>Artillery</h3>
 
 <pre class='cost'>Cost: 50 shields</pre>
@@ -2136,7 +2194,7 @@ Veteran Levels for Artillery are the standard ruleset default:
 <img src="/images/man/logistics_artillery_unload.png">  
 </pre>
 </div>
-<div class='item' id='utype36'>
+<div class='item' id='utype37'>
 <h3 class='section'>Anti-Aircraft Artillery</h3>
 
 <pre class='cost'>Cost: 50 shields</pre>
@@ -2204,7 +2262,7 @@ Veteran Levels for AAA are the default for all other military units:
 <img src="/images/man/logistics_landairsea_unload.png">  
 </pre>
 </div>
-<div class='item' id='utype37'>
+<div class='item' id='utype38'>
 <h3 class='section'>Mobile SAM</h3>
 
 <pre class='cost'>Cost: 75 shields</pre>
@@ -2250,7 +2308,7 @@ AAA can upgrade to Mobile SAM for free on its 10th turn of service. The Convert 
   • Veterans have increased strength in combat.
 </pre>
 </div>
-<div class='item' id='utype38'>
+<div class='item' id='utype39'>
 <h3 class='section'>Howitzer</h3>
 
 <pre class='cost'>Cost: 70 shields</pre>
@@ -2308,7 +2366,7 @@ Veteran Levels for Howitzers are the standard ruleset default:
 <img src="/images/man/logistics_artillery_unload.png">  
 </pre>
 </div>
-<div class='item' id='utype39'>
+<div class='item' id='utype40'>
 <h3 class='section'>Balloon</h3>
 
 <pre class='cost'>Cost: 25 shields</pre>
@@ -2342,7 +2400,7 @@ NOTE: GOTO disallows unit loss from lack of fuel. You can override this by order
 ➤ Will never achieve veteran status.
 </pre>
 </div>
-<div class='item' id='utype40'>
+<div class='item' id='utype41'>
 <h3 class='section'>Zeppelin</h3>
 
 <pre class='cost'>Cost: 45 shields</pre>
@@ -2393,7 +2451,7 @@ Veteran Levels for Zeppelins:
 <tr><td>top gun</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>  
-<div class='item' id='utype41'>
+<div class='item' id='utype42'>
 <h3 class='section'>Airplane</h3>
 
 <pre class='cost'>Cost: 50 shields</pre>
@@ -2429,7 +2487,7 @@ NOTE: GOTO disallows unit loss from lack of fuel. You can override this by order
 
 </pre>
 </div>
-<div class='item' id='utype42'>
+<div class='item' id='utype43'>
 <h3 class='section'>Fighter</h3>
 
 <pre class='cost'>Cost: 60 shields</pre>
@@ -2485,7 +2543,7 @@ Veteran Levels for Fighters are the default for offensive Air units:
 <tr><td>top gun</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype43'>
+<div class='item' id='utype44'>
 <h3 class='section'>Escort Fighter</h3>
 
 <pre class='cost'>Cost: 80 shields</pre>
@@ -2539,7 +2597,7 @@ Veteran Levels for Escort Fighters have higher promotion odds than offensive Air
 <tr><td>ace</td><td>220%</td><td>15%</td> <td>+ 1</td></tr>
 <tr><td>top gun</td><td>230%</td><td>-</td><td>+ 1</td></tr></table></pre>
 </div>
-<div class='item' id='utype44'>
+<div class='item' id='utype45'>
 <h3 class='section'>Dive Bomber</h3>
 
 <pre class='cost'>Cost: 60 shields</pre>
@@ -2607,7 +2665,7 @@ Veteran Levels for Dive Bombers are the default for offensive Air units:
 <tr><td>top gun</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype45'>
+<div class='item' id='utype46'>
 <h3 class='section'>Medium Bomber</h3>
 
 <pre class='cost'>Cost: 85 shields</pre>
@@ -2660,7 +2718,7 @@ Veteran Levels for Medium Bombers are the default for offensive Air units:
 <tr><td>top gun</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype46'>
+<div class='item' id='utype47'>
 <h3 class='section'>Heavy Bomber</h3>
 
 <pre class='cost'>Cost: 120 shields</pre>
@@ -2714,7 +2772,7 @@ Veteran Levels for Heavy Bombers are the default for offensive Air units:
 <tr><td>top gun</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype47'>
+<div class='item' id='utype48'>
 <h3 class='section'>Strategic Bomber</h3>
 
 <pre class='cost'>Cost: 135 shields</pre>
@@ -2770,7 +2828,7 @@ Veteran Levels for Strategic Bombers are the default for offensive Air units:
 <tr><td>top gun</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype48'>
+<div class='item' id='utype49'>
 <h3 class='section'>AWACS</h3>
 
 <pre class='cost'>Cost: 140 shields</pre>
@@ -2804,7 +2862,7 @@ NOTE: GOTO disallows unit loss from lack of fuel. You can override this by order
 
 </pre>
 </div>
-<div class='item' id='utype49'>
+<div class='item' id='utype50'>
 <h3 class='section'>Spy Plane</h3>
 
 <pre class='cost'>Cost: 160 shields</pre>
@@ -2840,7 +2898,7 @@ NOTE: GOTO disallows unit loss from lack of fuel. You can override this by order
 
 </pre>
 </div>
-<div class='item' id='utype50'>
+<div class='item' id='utype51'>
 <h3 class='section'>Satellite</h3>
 
 <pre class='cost'>Cost: 140 shields</pre>
@@ -2872,7 +2930,7 @@ NOTE:  Due to game mechanics, Satellites block terrestrial movement over a tile.
 
 </pre>
 </div>
-<div class='item' id='utype51'>
+<div class='item' id='utype52'>
 <h3 class='section'>Transport Helicopter</h3>
 
 <pre class='cost'>Cost: 90 shields</pre>
@@ -2922,7 +2980,7 @@ Veteran Levels for Helicopter types:
 
 </pre>
 </div>
-<div class='item' id='utype52'>
+<div class='item' id='utype53'>
 <h3 class='section'>Helicopter</h3>
 
 <pre class='cost'>Cost: 95 shields</pre>
@@ -2980,7 +3038,7 @@ Veteran Levels for Helicopter types:
 <tr><td>top gun</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype53'>
+<div class='item' id='utype54'>
 <h3 class='section'>Jet Fighter</h3>
 
 <pre class='cost'>Cost: 70 shields</pre>
@@ -3035,7 +3093,7 @@ Veteran Levels for Jet Fighters are the default for offensive Air units:
 <tr><td>top gun</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype54'>
+<div class='item' id='utype55'>
 <h3 class='section'>Ground Strike Fighter</h3>
 
 <pre class='cost'>Cost: 80 shields</pre>
@@ -3089,7 +3147,7 @@ Veteran Levels for Ground Strike Fighters are the default for offensive Air unit
 <tr><td>top gun</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype55'>
+<div class='item' id='utype56'>
 <h3 class='section'>Jet Bomber</h3>
 
 <pre class='cost'>Cost: 145 shields</pre>
@@ -3144,7 +3202,7 @@ Veteran Levels for Jet Bombers are the default for offensive Air units:
 <tr><td>top gun</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype56'>
+<div class='item' id='utype57'>
 <h3 class='section'>Stealth Fighter</h3>
 
 <pre class='cost'>Cost: 80 shields</pre>
@@ -3204,7 +3262,7 @@ Veteran Levels for Stealth Fighters are the default for offensive Air units:
 <tr><td>top gun</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype57'>
+<div class='item' id='utype58'>
 <h3 class='section'>Stealth Bomber</h3>
 
 <pre class='cost'>Cost: 160 shields</pre>
@@ -3258,7 +3316,7 @@ Veteran Levels for Stealth Bombers are the default for offensive Air units:
 <tr><td>top gun</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype58'>
+<div class='item' id='utype59'>
 <h3 class='section'>Boat</h3>
 
 <pre class='cost'>Cost: 10 shields</pre>
@@ -3315,7 +3373,7 @@ Veteran Levels for Boats:
 <tr><td>sea wolf</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype59'>
+<div class='item' id='utype60'>
 <h3 class='section'>Trireme</h3>
 
 <pre class='cost'>Cost: 20 shields</pre>
@@ -3375,7 +3433,7 @@ Veteran Levels for Triremes:
 <tr><td>sea wolf</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype60'>
+<div class='item' id='utype61'>
 <h3 class='section'>Longboat</h3>
 
 <pre class='cost'>Cost: 25 shields</pre>
@@ -3421,7 +3479,7 @@ Veteran Levels for Zeppelins:
 <tr><td>sea wolf</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype61'>
+<div class='item' id='utype62'>
 <h3 class='section'>Galley</h3>
 
 <pre class='cost'>Cost: 30 shields</pre>
@@ -3478,7 +3536,7 @@ Veteran Levels for Galleys:
 <tr><td>sea wolf</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype62'>
+<div class='item' id='utype63'>
 <h3 class='section'>War Galley</h3>
 
 <pre class='cost'>Cost: 40 shields</pre>
@@ -3524,7 +3582,7 @@ Veteran Levels for War Galleys:
 <tr><td>sea wolf</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype63'>
+<div class='item' id='utype64'>
 <h3 class='section'>Ram Ship</h3>
 
 <pre class='cost'>Cost: 35 shields</pre>
@@ -3566,7 +3624,7 @@ Veteran Levels for Ram Ships:
 <tr><td>sea wolf</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype64'>
+<div class='item' id='utype65'>
 <h3 class='section'>Caravel</h3>
 
 <pre class='cost'>Cost: 40 shields</pre>
@@ -3619,7 +3677,7 @@ Veteran Levels for Caravels:
 <tr><td>sea wolf</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype65'>
+<div class='item' id='utype66'>
 <h3 class='section'>Galleon</h3>
 
 <pre class='cost'>Cost: 40 shields</pre>
@@ -3670,7 +3728,7 @@ Veteran Levels for Galleons:
 <tr><td>sea wolf</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype66'>
+<div class='item' id='utype67'>
 <h3 class='section'>Frigate</h3>
 
 <pre class='cost'>Cost: 50 shields</pre>
@@ -3719,7 +3777,7 @@ Veteran Levels for Frigates:
 <tr><td>sea wolf</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype67'>
+<div class='item' id='utype68'>
 <h3 class='section'>Cargo Ship</h3>
 
 <pre class='cost'>Cost: 45 shields</pre>
@@ -3761,7 +3819,7 @@ Veteran Levels for Frigates:
 ➤ Will never achieve veteran status.
 </pre>
 </div>
-<div class='item' id='utype68'>
+<div class='item' id='utype69'>
 <h3 class='section'>Transport</h3>
 
 <pre class='cost'>Cost: 50 shields</pre>
@@ -3802,7 +3860,7 @@ Veteran Levels for Transports:
 <tr><td>sea wolf</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype69'>
+<div class='item' id='utype70'>
 <h3 class='section'>Ironclad</h3>
 
 <pre class='cost'>Cost: 60 shields</pre>
@@ -3853,7 +3911,7 @@ Veteran Levels for Ironclads:
 <tr><td>sea wolf</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype70'>
+<div class='item' id='utype71'>
 <h3 class='section'>Destroyer</h3>
 
 <pre class='cost'>Cost: 60 shields</pre>
@@ -3903,7 +3961,7 @@ Veteran Levels for Destroyers:
 <tr><td>sea wolf</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype71'>
+<div class='item' id='utype72'>
 <h3 class='section'>Cruiser</h3>
 
 <pre class='cost'>Cost: 80 shields</pre>
@@ -3953,7 +4011,7 @@ Veteran Levels for Cruisers:
 <tr><td>sea wolf</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype72'>
+<div class='item' id='utype73'>
 <h3 class='section'>Missile Destroyer</h3>
 
 <pre class='cost'>Cost: 60 shields</pre>
@@ -4003,7 +4061,7 @@ Veteran Levels for Missile Destroyers:
 <tr><td>sea wolf</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype73'>
+<div class='item' id='utype74'>
 <h3 class='section'>AEGIS Cruiser</h3>
 
 <pre class='cost'>Cost: 100 shields</pre>
@@ -4053,7 +4111,7 @@ Veteran Levels for AEGIS Cruisers:
 <tr><td>sea wolf</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype74'>
+<div class='item' id='utype75'>
 <h3 class='section'>Battleship</h3>
 
 <pre class='cost'>Cost: 160 shields</pre>
@@ -4108,7 +4166,7 @@ Veteran Levels for Battleship:
 <tr><td>sea wolf</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype75'>
+<div class='item' id='utype76'>
 <h3 class='section'>Submarine</h3>
 
 <pre class='cost'>Cost: 50 shields</pre>
@@ -4162,7 +4220,7 @@ Veteran Levels for Submarines:
 <tr><td>sea wolf</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype76'>
+<div class='item' id='utype77'>
 <h3 class='section'>Carrier</h3>
 
 <pre class='cost'>Cost: 155 shields</pre>
@@ -4210,7 +4268,7 @@ Veteran Levels for Carriers:
 <tr><td>sea wolf</td><td>230%</td><td>-</td><td>+ 1</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype77'>
+<div class='item' id='utype78'>
 <h3 class='section'>Cruise Missile</h3>
 
 <pre class='cost'>Cost: 60 shields</pre>
@@ -4246,7 +4304,7 @@ Veteran Levels for Carriers:
   • Veterans have increased strength in combat.
 </pre>
 </div>
-<div class='item' id='utype78'>
+<div class='item' id='utype79'>
 <h3 class='section'>Atom Bomb</h3>
 
 <pre class='cost'>Cost: 150 shields</pre>
@@ -4283,7 +4341,7 @@ Veteran Levels for Carriers:
 ➤ Will never achieve veteran status.
 </pre>
 </div>
-<div class='item' id='utype79'>
+<div class='item' id='utype80'>
 <h3 class='section'>Hydrogen Bomb</h3>
 
 <pre class='cost'>Cost: 190 shields</pre>
@@ -4323,7 +4381,7 @@ If you have Fusion Power and the Manhattan Project was built, a Hydrogen Bomb ca
 ➤ Will never achieve veteran status.
 </pre>
 </div>
-<div class='item' id='utype80'>
+<div class='item' id='utype81'>
 <h3 class='section'>Doomsday Bomb</h3>
 
 <pre class='cost'>Cost: 1000 shields</pre>
@@ -4365,7 +4423,7 @@ If you have Fusion Power and the Manhattan Project was built, a Doomsday Bomb ca
 ➤ Will never achieve veteran status.
 </pre>
 </div>
-<div class='item' id='utype81'>
+<div class='item' id='utype82'>
 <h3 class='section'>Nuclear Missile</h3>
 
 <pre class='cost'>Cost: 160 shields</pre>
@@ -4403,7 +4461,7 @@ If you have Fusion Power and the Manhattan Project was built, a Doomsday Bomb ca
 ➤ Will never achieve veteran status.
 </pre>
 </div>
-<div class='item' id='utype82'>
+<div class='item' id='utype83'>
 <h3 class='section'>Tactical Nuke</h3>
 
 <pre class='cost'>Cost: 140 shields</pre>
@@ -4442,7 +4500,7 @@ If you have Fusion Power and the Manhattan Project was built, a Tactical Nuke ca
 ➤ Will never achieve veteran status.
 </pre>
 </div>
-<div class='item' id='utype83'>
+<div class='item' id='utype84'>
 <h3 class='section'>Diplomat</h3>
 
 <pre class='cost'>Cost: 30 shields</pre>
@@ -4509,7 +4567,7 @@ Veteran levels for Diplomats are unique to diplomatic type units:
 <tr><td>plenipotentiary</td><td>135%</td><td>-</td><td>⅓</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype84'>
+<div class='item' id='utype85'>
 <h3 class='section'>Spy</h3>
 
 <pre class='cost'>Cost: 35 shields</pre>
@@ -4580,7 +4638,7 @@ Veteran levels for Spies are unique to diplomatic type units:
 <tr><td>spymaster</td><td>135%</td><td>-</td><td>⅓</td></tr></table>
 </pre>
 </div>
-<div class='item' id='utype85'>
+<div class='item' id='utype86'>
 <h3 class='section'>Caravan</h3>
 
 <pre class='cost'>Cost: 30 shields</pre>
@@ -4636,7 +4694,7 @@ All Commerce units can carry Goods as cargo.</b>
 <img src="/images/man/logistics_generic_unload.png">
 </pre>
 </div>
-<div class='item' id='utype86'>
+<div class='item' id='utype87'>
 <h3 class='section'>Wagon</h3>
 
 <pre class='cost'>Cost: 25 shields</pre>
@@ -4682,7 +4740,7 @@ All Commerce units can carry Goods as cargo.</b>
 ➤ Will never achieve veteran status. 
 </pre>
 </div> 
-<div class='item' id='utype87'>
+<div class='item' id='utype88'>
 <h3 class='section'>Train</h3>
 
 <pre class='cost'>Cost: 35 shields</pre>
@@ -4731,7 +4789,7 @@ Electricity and Combustion each give Trains an additional +1 move.</b>
 ➤ Will never achieve veteran status.
 </pre>
 </div>  
-<div class='item' id='utype88'>
+<div class='item' id='utype89'>
 <h3 class='section'>Truck</h3>
 
 <pre class='cost'>Cost: 50 shields</pre>
@@ -4783,7 +4841,7 @@ All other units must load/unload inside a city.</b>
 ➤ <b style="color:#9aa">Expellable</b>: can be expelled from foreign tiles.
 </pre>
 </div>
-<div class='item' id='utype89'>
+<div class='item' id='utype90'>
 <h3 class='section'>Goods</h3>
 
 <pre class='cost'>Cost: 25 shields</pre>
@@ -4825,7 +4883,7 @@ Goods can be used to establish Trade Route or Enter Marketplace. They can be car
   • does not count as an extra unit on tile to prevent capture. 
 </pre>
 </div>
-<div class='item' id='utype90'>
+<div class='item' id='utype91'>
   <h3 class='section'>Freight</h3>
   
 <pre class='cost'>Cost: 25 shields</pre>
@@ -4873,7 +4931,7 @@ Goods can be used to establish Trade Route or Enter Marketplace. They can be car
   • does not count as an extra unit on tile to prevent capture. 
 </pre>
 </div>
-<div class='item' id='utype91'>
+<div class='item' id='utype92'>
 <h3 class='section'>Explorer</h3>
 
 <pre class='cost'>Cost: 30 shields</pre>
@@ -4912,7 +4970,7 @@ Goods can be used to establish Trade Route or Enter Marketplace. They can be car
 <img src="/images/man/logistics_generic_unload.png">
 </pre>
 </div>
-<div class='item' id='utype92'>
+<div class='item' id='utype93'>
 <h3 class='section'>Leader</h3>
 
 <pre class='cost'>Cost: 10 shields</pre>
@@ -4956,7 +5014,7 @@ Goods can be used to establish Trade Route or Enter Marketplace. They can be car
 ➤ Will never achieve veteran status.
 </pre>
 </div>
-<div class='item' id='utype93'>
+<div class='item' id='utype94'>
 <h3 class='section'>Queen</h3>
 
 <pre class='cost'>Cost: 10 shields</pre>
@@ -5000,7 +5058,7 @@ Goods can be used to establish Trade Route or Enter Marketplace. They can be car
 ➤ Will never achieve veteran status.
 </pre>
 </div>
-<div class='item' id='utype94'>
+<div class='item' id='utype95'>
 <h3 class='section'>Barbarian Leader</h3>
 
 <pre class='cost'>Cost: 40 shields</pre>
@@ -5033,7 +5091,7 @@ Goods can be used to establish Trade Route or Enter Marketplace. They can be car
 ➤ Will never achieve veteran status.
 </pre>
 </div>
-<div class='item' id='utype95'>
+<div class='item' id='utype96'>
 <h3 class='section'>Peasants</h3>
 
 <pre class='cost'>Cost: 10 shields</pre>
