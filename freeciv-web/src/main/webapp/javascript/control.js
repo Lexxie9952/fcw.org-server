@@ -2001,6 +2001,12 @@ function update_unit_order_commands()
       }
 
       upgrade_cost = Math.floor(upgrade_cost * (100 + cost_adjust) / 100);
+
+      if (client_rules_flag[CRF_MP2_D]) {
+        if (ptype.name == 'Alpine Troops' || ptype.name == 'Riflemen') {
+          upgrade_cost = 0;
+        }
+      }
       /* *********************************************************************************************** */
 
       unit_actions["upgrade"] =  {name: "Upgrade to "+upgrade_name+" for "+upgrade_cost+" (U)"};
