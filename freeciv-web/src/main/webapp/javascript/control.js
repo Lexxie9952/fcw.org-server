@@ -2004,7 +2004,7 @@ function update_unit_order_commands()
 
       if (client_rules_flag[CRF_MP2_D]) {
         if (ptype.name == 'Alpine Troops' || ptype.name == 'Riflemen') {
-          upgrade_cost = 0;
+          upgrade_cost = 4;
         }
       }
       /* *********************************************************************************************** */

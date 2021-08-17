@@ -26,6 +26,7 @@ const B_PALACE_NAME = 'Palace';
 const B_ECC_PALACE_NAME = 'Ecclesiastical Palace';
 //--
 const B_ADAM_SMITH_NAME = "A.Smith's Trading Co.";
+const B_AGOGE = "Ag"+String.fromCharCode(0x14D)+"g"+String.fromCharCode(0x113)+" of Sparta";
 const B_ANGKOR_WAT = "Angkor Wat";
 const B_APPIAN_WAY = "Appian Way";
 const B_COLOSSUS = "Colossus";
@@ -79,6 +80,9 @@ var mausoleum_discounts = {
 }
 var mausoleum_despot_discounts = {
   "Courthouse": 10
+}
+var agoge_discounts = {
+  "Phalanx": 3
 }
 
 /**************************************************************************
@@ -240,6 +244,12 @@ function get_universal_discount_price(ptype, pcity)
       discount += mausoleum_despot_discounts[ptype['name']];
     }
     return ptype['build_cost'] - discount; 
+  }
+  if (pcity && client_rules_flag[CRF_MP2_D]
+      && player_has_wonder(playerno, improvement_id_by_name(B_AGOGE))) {
+      
+      if (agoge_discounts[ptype['name']])
+        return ptype['build_cost'] - agoge_discounts[ptype['name']];
   }
 
   // default, no discount:
