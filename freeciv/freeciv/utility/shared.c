@@ -1863,26 +1863,52 @@ void format_time_duration(time_t t, char *buf, int maxlen)
   }
 
   buf[0] = '\0';
+  /* Newer, less verbose, even more friendly formatting looks like this:
+  1 day 15h 11m         ; minutes>20.  (Seconds never shown for time >= 20 minutes)
+  23h 1m                : minutes!=0:  show the Hh Mm format. 
+  23 hours              : minutes==0:  change 23h to "23 hours" to make it clear we're viewing time data.
+  20 minutes            : minutes>=20: seconds not shown. Change 20m to "20 minutes" so it's clearly time data. 
+  19m 59s               : minutes<20:  show the Mm Ss format.
+  1 minute              : seconds==0:  change 1m to "1 minute" so it's clearly time (e.g., not 1 metre)
+  59 seconds            : minutes==0:  change 59s to "59 seconds" to make clear we're viewing time data.
+  */
 
   if (days > 0) {
     cat_snprintf(buf, maxlen, "%d %s", days, PL_("day", "days", days));
     space = TRUE;
   }
   if (hours > 0) {
-    cat_snprintf(buf, maxlen, "%s%d %s",
-                 space ? " " : "", hours, PL_("hour", "hours", hours));
+    if (minutes == 0) {
+      cat_snprintf(buf, maxlen, "%s%d %s",
+                  space ? " " : "", hours, PL_("hour", "hours", hours));
+    } else {
+      cat_snprintf(buf, maxlen, "%s%d%s",
+                 space ? " " : "", hours, PL_("h", "h", hours));
+    }
     space = TRUE;
   }
   if (minutes > 0) {
-    cat_snprintf(buf, maxlen, "%s%d %s",
-                 space ? " " : "",
-                 minutes, PL_("minute", "minutes", minutes));
+    if (hours == 0 && (minutes >= 20 || seconds ==0)) {
+      cat_snprintf(buf, maxlen, "%s%d %s",
+                  space ? " " : "",
+                  minutes, PL_("minute", "minutes", minutes));
+    } else {
+      cat_snprintf(buf, maxlen, "%s%d%s",
+                  space ? " " : "",
+                  minutes, PL_("m", "m", minutes));
+    }
     space = TRUE;
   }
-  if (seconds > 0) {
-    cat_snprintf(buf, maxlen, "%s%d %s",
-                 space ? " " : "",
-                 seconds, PL_("second", "seconds", seconds));
+  if (seconds > 0 && hours == 0 && minutes < 20) {
+    if (minutes == 0) {
+      cat_snprintf(buf, maxlen, "%s%d %s",
+                  space ? " " : "",
+                  seconds, PL_("second", "seconds", seconds));
+    } else {
+      cat_snprintf(buf, maxlen, "%s%d%s",
+                  space ? " " : "",
+                  seconds, PL_("s", "s", seconds));
+    }
   }
 }
 
