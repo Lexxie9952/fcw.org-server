@@ -547,6 +547,32 @@ reqs    =
       "Terrain",   "Mountains", "Local"
       "UnitClass", "LandNoKill",      "Local"
     }
+[effect_hills_vision]
+type    = "Unit_Vision_Radius_Sq"
+value   = 3
+reqs    =
+    { "type",      "name",      "range"
+      "Terrain",   "Hills", "Local"
+      "UnitClass", "Land",      "Local"
+    }
+[effect_hills_vision_1]
+type    = "Unit_Vision_Radius_Sq"
+value   = 3
+reqs    =
+    { "type",      "name",      "range"
+      "Terrain",   "Hills", "Local"
+      "UnitClass", "LandAirSea",      "Local"
+    }
+[effect_hills_vision_2]
+type    = "Unit_Vision_Radius_Sq"
+value   = 3
+reqs    =
+    { "type",      "name",      "range"
+      "Terrain",   "Hills", "Local"
+      "UnitClass", "LandNoKill",      "Local"
+    }
+
+
 
 ; basic free tech upkeep
 [effect_upkeep_tech_free]
@@ -814,7 +840,7 @@ reqs    =
     }
 [effect_riflemen_upgrade_price_calc]
 type    = "Unit_Shield_Value_Pct"
-value   = 13
+value   = -5
 reqs    =
     { "type",     "name",         "range", "present"
       "Action",   "Upgrade Unit", "Local", TRUE
@@ -823,7 +849,7 @@ reqs    =
 
 [effect_alpine_upgrade_price_calc]
 type    = "Unit_Shield_Value_Pct"
-value   = -10
+value   = -25
 reqs    =
     { "type",     "name",         "range", "present"
       "Action",   "Upgrade Unit", "Local", TRUE
@@ -1209,7 +1235,6 @@ reqs	=
       "Tech", "Nuclear Power", "Player"
       "UnitClass", "Submarine", "Local"
     }
-
 
 ;************************************* GOVERNMENT CORRUPTION
 [effect_corruption_anarchy_1]
@@ -4679,7 +4704,7 @@ reqs	=
     }
 [effect_agoge_move_bonus_2]
 type    = "Move_Bonus"
-value	= 6    ; 3/9 + 6/9 = 1
+value	= 9    ; 3/9 + 6/9 = 1
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Agōgē of Sparta", "City", TRUE
@@ -4701,6 +4726,64 @@ reqs    =
       "Building", "Agōgē of Sparta", "Player", TRUE
       "UnitType", "Pikemen", "Local", TRUE 
     }
+[effect_agoge_phalanx_discount]
+type    = "Unit_Build_Cost_Pct"
+value	  = -18 ; 16 - 3 = 13
+reqs    =
+    {
+      "type",     "name",            "range",  "present"
+      "Building", "Agōgē of Sparta", "Player", TRUE
+      "UnitType", "Phalanx",         "Local",  TRUE
+    }
+[effect_agoge_veteran_raise]
+type    = "Veteran_Combat"
+value	= 52  ; 76, 50, 30, 22 22 22
+reqs	=
+    { "type", "name", "range", "present"
+      "Building", "Agōgē of Sparta", "Player", TRUE
+      "UnitType", "Phalanx",         "Local",  TRUE
+    }
+[effect_agoge_veteran_build]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type",      "name",            "range", "present"
+      "Building",  "Agōgē of Sparta", "Player", TRUE
+      "Building",  "Barracks",        "City",   FALSE
+      "UnitClass", "Land",            "Local",  TRUE
+      "UnitFlag",  "NonMil",          "Local",  FALSE
+      "UnitFlag",  "NoVeteran",       "Local",  FALSE
+    }
+[effect_agoge_veteran_build2]
+type    = "Veteran_Build"
+value	= 1
+reqs	=
+    { "type",      "name",            "range", "present"
+      "Building",  "Agōgē of Sparta", "Player", TRUE
+      "Building",  "Barracks",        "City",   FALSE
+      "UnitClass", "LandNoKill",      "Local",  TRUE
+      "UnitFlag",  "NonMil",          "Local",  FALSE
+      "UnitFlag",  "NoVeteran",       "Local",  FALSE
+    }
+; -------------------------------------------------------------
+; This can't be done properly as fortified attack bonus because
+; attacking resets fortified state right before it happens. This
+; either needs an action enabler for "Attack 2" and attack bonus
+; applied that way, to not reset the state until after the 
+; combat resolution, or a new effect to test UnitChangedFromState.
+; For now we're substituting the fact the unit has not yet moved,
+; which is close enough. 
+[effect_phalanx_fortified_attack_bonus]
+type    = "Attack_Bonus"
+value   = 50
+reqs    =
+    { "type",   "name",   "range",  "present"
+      "Action", "Attack", "Local",  TRUE
+      "UnitType",     "Phalanx",         "Local",  TRUE
+;      "MinMoveFrags", "9",              "Local",  FALSE
+;      "Building",     "Agoge of Sparta", "Player", FALSE
+    }
+
 ;************************************************************************ Angkor Wat
 [effect_angkor_wat_free_tile_bonus_monarchy]  ;free celebration tile output
 type    = "Output_Inc_Tile"
@@ -6371,8 +6454,8 @@ reqs    =
 type    = "Upgrade_Unit"
 value	= 1
 reqs	=
-    { "type", "name", "range"
-      "Building", "Tesla's Laboratory", "Player"
+    { "type",     "name",               "range", "present"
+      "Building", "Tesla's Laboratory", "Player", TRUE
     }
 [effect_tesla_laboratory2]
 type    = "Upgrade_Price_Pct"

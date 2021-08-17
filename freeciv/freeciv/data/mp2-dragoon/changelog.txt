@@ -60,10 +60,23 @@ this virtual unit for the early game.
       * +1 food on city centre, Settlers have no food upkeep
       *no longer requires river
 =============================================================
-10. Riflemen upgrade to Ground Troops
+10. Riflemen and Alpines upgrade to Ground Troops
 =============================================================
 11. Mausoleum
    effectively, upkeep on Courthouses is free.
    Courthouses cost 5 less; during Despotism, they cost the
      same as a temple.
 =============================================================
+12. Hills Vision
+   like mountains, hills give half the vision bonus of mountains;
+   a smaller bonus that fills out corners of radius rather than
+   extend a full tile. (sees 4 more tiles instead of 8)
+=============================================================
+13. Agoge reduces Phalanx price 3 shields.
+   Counts as a Barracks in its home city. 
+   increases chance of veteran promotion 50% for phalanxes
+   (this is not +50% odds, it's +50% frequency)
+=============================================================
+
+
+

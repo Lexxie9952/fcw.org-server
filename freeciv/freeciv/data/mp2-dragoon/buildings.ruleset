@@ -1422,8 +1422,11 @@ helptext	= _("\
 The Agōgē creates a culture of extreme fitness, and is famous for\
  vigilant patrols, secret shortcut trails, and battle readiness.\
  All your foot soldiers get +⅓ move. Phalanx and Pikemen receive a\
- +50% attack bonus. Foot units in the city with the Agōgē begin\
- their turn with +1 move. Obsolete by：Gunpowder.\
+ +50% attack bonus. Phalanx promotions are 50% more frequent, and\
+ cost is reduced by 3 shields. \n\n\
+In the city with the Agōgē, Foot units begin their turn with +1 move,\
+ and the wonder counts as a Barracks. \n\n\
+Obsolete by：Gunpowder.\
 ")
 
 [building_angkor_wat]
