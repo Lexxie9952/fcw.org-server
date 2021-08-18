@@ -174,7 +174,7 @@ static struct dem_row {
   {'R', N_("<td><img class='v' src='/images/e/science.png'></td> <td>Research Speed</td>"),    get_research,     science_to_text,     TRUE },
   {'L', N_("<td><img class='v' src='/images/e/library.png'></td> <td>Literacy</td>"),          get_literacy,     percent_to_text,     TRUE },
   {'P', N_("<td><img class='v' src='/images/e/shield.png'></td> <td>Production</td>"),         get_production,   production_to_text,  TRUE },
-  {'E', N_("<td><img class='v' src='/images/e/coinage.png'></td> <td>Economics</td>"),         get_economics,    economics_to_text,   TRUE },
+  {'E', N_("<td><img class='v' src='/images/e/coinage.png'></td> <td>Net Trade</td>"),         get_economics,    economics_to_text,   TRUE },
   {'T', N_("<td><img class='v' src='/images/e/camel.png'></td> <td>Trade Routes</td>"),        get_trade,        economics_to_text,   TRUE },
   {'s', N_("<td><img class='v' src='/images/e/taxman.png'></td> <td>Specialists</td>"),        get_specialists,  citizens_to_text,    TRUE },
   {'M', N_("<td><img class='v' src='/images/e/v6.png'></td> <td>Military Service</td>"),       get_mil_service,  mil_service_to_text, TRUE },
