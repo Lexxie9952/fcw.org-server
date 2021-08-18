@@ -91,11 +91,11 @@
     <span style="cursor:pointer" onclick="key_unit_auto_explore();"><img src="/images/orders/auto_explore_default.png" name="auto_explore_button" alt="" border="0" width="30" height="30"></span>
   </div>  
     
-  <div id="order_auto_settlers" class="order_button not_mobile" title="Auto-build terrain improvements (A)">
+  <div id="order_auto_settlers" class="order_button not_mobile" title="Auto-improve terrain (A)">
     <span style="cursor:pointer" onclick="key_unit_auto_settle();"><img src="/images/orders/auto_settlers_default.png" name="auto_settlers_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
-  <div id="order_forest_remove" class="order_button not_mobile" title="Cut down forest (I)" >
+  <div id="order_forest_remove" class="order_button not_mobile" title="Cultivate (chop forest) (I)" >
     <span style="cursor:pointer" onclick="key_unit_irrigate();"><img src="/images/orders/forest_remove_default.png" name="forest_remove_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
@@ -143,16 +143,24 @@
     <span style="cursor:pointer" onclick="key_unit_fallout();"><img src="/images/orders/fallout.png" name="fallout_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
-  <div id="order_load" class="order_button not_mobile" title="Load (L)">
+  <div id="order_board" class="order_button not_mobile" title="Board transport (shift-B)">
+    <span style="cursor:pointer" onclick="key_unit_board();"><img src="/images/orders/board.png" name="board_button" alt="" border="0" width="30" height="30"></span>
+  </div>
+
+  <div id="order_deboard" class="order_button not_mobile" title="Deboard transport (shift-T)">
+    <span style="cursor:pointer" onclick="key_unit_deboard();"><img src="/images/orders/deboard.png" name="deboard_button" alt="" border="0" width="30" height="30"></span>
+  </div>
+
+  <div id="order_activate_cargo" class="order_button not_mobile" title="Activate cargo (shift-A)">
+    <span style="cursor:pointer" onclick="key_unit_show_cargo();"><img src="/images/orders/activate_cargo.png" name="show_cargo_button" alt="" border="0" width="30" height="30"></span>
+  </div>
+
+  <div id="order_load" class="order_button not_mobile" title="Load cargo (L)">
     <span style="cursor:pointer" onclick="key_unit_load();"><img src="/images/orders/load.png" name="load_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
-  <div id="order_unload" class="order_button not_mobile" title="Unload units (T)">
+  <div id="order_unload" class="order_button not_mobile" title="Unload cargo (T)">
     <span style="cursor:pointer" onclick="key_unit_unload();"><img src="/images/orders/unload.png" name="unload_button" alt="" border="0" width="30" height="30"></span>
-  </div>
-
-  <div id="order_activate_cargo" class="order_button not_mobile" title="Activate cargo units (shift-U)">
-    <span style="cursor:pointer" onclick="key_unit_show_cargo();"><img src="/images/orders/activate_cargo.png" name="show_cargo_button" alt="" border="0" width="30" height="30"></span>
   </div>
 
   <div id="order_paradrop" class="order_button" title="Paradrop (P)">

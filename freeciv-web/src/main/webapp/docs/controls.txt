@@ -9,89 +9,93 @@ td {
 The current and complete list of Freeciv-web controls can be found here:<br>
 <a href="https://freeciv.fandom.com/wiki/Hotkeys.mp" target="_blank">Freeciv-web complete command list</a>
 
-<h2>Unit commands</h2><table><tr><td><img src="/images/orders/auto_settlers_default.png"></td><td><span class="vctr"> Auto Workers</td><td><span class="hotkey">A</span></span></td></tr>
+<h2>Unit commands</h2><table><tr><td><img src="/images/orders/auto_settlers_default.png"></td><td><span class="vctr"> Auto Workers</td><td><span class="hotkey">a</span></span></td></tr>
 
-<tr><td><img src="/images/orders/build_city_default.png"></td><td><span class="vctr"> Build city</td><td><span class="hotkey">B</span></span></td></tr>
+<tr><td><img src="/images/orders/activate_cargo.png"></td><td><span class="vctr"> Activate Cargo units</td><td><span class="hotkey">shift-A</span> &emsp;(selects all cargo on selected transport)</span></td></tr>
+
+<tr><td><img src="/images/orders/board.png"></td><td><span class="vctr"> Board transport</td><td><span class="hotkey">shift-B</span> &emsp;(order cargo units to board a transport)</span></td></tr>
+
+<tr><td><img src="/images/orders/build_city_default.png"></td><td><span class="vctr"> Build city</td><td><span class="hotkey">b</span></span></td></tr>
 
 <tr><td><img src="/images/orders/disband_default.png"></td><td><span class="vctr"> Disband unit</td><td><span class="hotkey">shift-D</span></span></td></tr>
 
 <tr><td><img src="/images/orders/airbase.png"></td><td><span class="vctr"> Build Airbase, Radar Tower</td><td><span class="hotkey">shift-E</span></span></td></tr>
 
-<tr><td><img src="/images/orders/fortify_default.png"></td><td><span class="vctr"> Fortify</td><td><span class="hotkey">F</span></span></td></tr>
+<tr><td><img src="/images/orders/fortify_default.png"></td><td><span class="vctr"> Fortify</td><td><span class="hotkey">f</span></span></td></tr>
 
 <tr><td><img src="/images/orders/fortress.png"></td><td><span class="vctr"> Build Fort/Fortress or Buoy</td><td><span class="hotkey">shift-F</span></span></td></tr>
 
 <tr><td><img src="/images/orders/go_and.png"></td><td><span class="vctr"> Go and do action</td><td><span class="hotkey">ctrl-alt-G (+SHIFT delay to next turn)</span></span></td></tr>
 
-<tr><td><img src="/images/orders/goto_default.png"></td><td><span class="vctr"> Goto</td><td><span class="hotkey">G (+SHIFT delay to next turn)</span></span></td></tr>
+<tr><td><img src="/images/orders/goto_default.png"></td><td><span class="vctr"> Goto</td><td><span class="hotkey">g (+SHIFT delay to next turn)</span></span></td></tr>
 
-<tr><td><img src="/images/orders/rehome_default.png"></td><td><span class="vctr"> Change unit Homecity</td><td><span class="hotkey">H</span></span></td></tr>
+<tr><td><img src="/images/orders/rehome_default.png"></td><td><span class="vctr"> Change unit Homecity</td><td><span class="hotkey">h</span></span></td></tr>
 
 <tr><td><img src="/images/orders/hideout.png"></td><td><span class="vctr"> Make Hideout</td><td><span class="hotkey">shift-H</span></span></td></tr>
 
-<tr><td><img src="/images/orders/irrigate_default.png"></td><td><span class="vctr"> Build Irrigation</td><td><span class="hotkey">I</span></span></td></tr>
+<tr><td><img src="/images/orders/irrigate_default.png"></td><td><span class="vctr"> Build Irrigation</td><td><span class="hotkey">i</span></span></td></tr>
 
-<tr><td><img src="/images/orders/irrigation.png"></td><td><span class="vctr"> Build Farmland</td><td><span class="hotkey">I</span></span></td></tr>
+<tr><td><img src="/images/orders/irrigation.png"></td><td><span class="vctr"> Build Farmland</td><td><span class="hotkey">i</span></span></td></tr>
 
-<tr><td><img src="/images/orders/forest_remove_default.png"></td><td><span class="vctr"> Chop Forest</td><td><span class="hotkey">I</span></span></td></tr>
+<tr><td><img src="/images/orders/forest_remove_default.png"></td><td><span class="vctr">Cultivate (Chop Forest)</td><td><span class="hotkey">i</span></span></td></tr>
 
 <tr><td><img src="/images/orders/vigil.png"></td><td><span class="vctr"> Vigil</td><td><span class="hotkey">Shift-I</span></span></td></tr>
 
-<tr><td><img src="/images/orders/no_orders.png"></td><td><span class="vctr"> No orders</td><td><span class="hotkey">J</span></span></td></tr>
+<tr><td><img src="/images/orders/no_orders.png"></td><td><span class="vctr"> No orders</td><td><span class="hotkey">j</span></span></td></tr>
 
 <tr><td><img src="/images/orders/cancel_orders.png"></td><td><span class="vctr"> Cancel orders</td><td><span class="hotkey">shift-J</span></span></td></tr>
 
-<tr><td><img src="/images/orders/load.png"></td><td><span class="vctr"> Load on Transport</td><td><span class="hotkey">L</span></span></td></tr>
+<tr><td><img src="/images/orders/load.png"></td><td><span class="vctr"> Load cargo</td><td><span class="hotkey">l</span> &emsp;(order transport units to scoop cargo units)</span></td></tr>
 
 <tr><td><img src="/images/orders/airlift.png"></td><td><span class="vctr"> Airlift</td><td><span class="hotkey">shift-L</span></span></td></tr>
 
-<tr><td><img src="/images/orders/mine_default.png"></td><td><span class="vctr"> Build Mine</td><td><span class="hotkey">M</span></span></td></tr>
+<tr><td><img src="/images/orders/mine_default.png"></td><td><span class="vctr"> Build Mine</td><td><span class="hotkey">m</span></span></td></tr>
 
-<tr><td><img src="/images/orders/oil_well.png"></td><td><span class="vctr"> Build Oil Well</td><td><span class="hotkey">M</span></span></td></tr>
+<tr><td><img src="/images/orders/oil_well.png"></td><td><span class="vctr"> Build Oil Well</td><td><span class="hotkey">m</span></span></td></tr>
 
-<tr><td><img src="/images/orders/forest_add_default.png"></td><td><span class="vctr"> Plant Forest</td><td><span class="hotkey">M</span></span></td></tr>
+<tr><td><img src="/images/orders/forest_add_default.png"></td><td><span class="vctr"> Plant Forest</td><td><span class="hotkey">m</span></span></td></tr>
 
-<tr><td><img src="/images/orders/swamp.png"></td><td><span class="vctr"> Make Swamp</td><td><span class="hotkey">M</span></span></td></tr>
+<tr><td><img src="/images/orders/swamp.png"></td><td><span class="vctr"> Make Swamp</td><td><span class="hotkey">m</span></span></td></tr>
 
 <tr><td><img src="/images/orders/navalbase.png"></td><td><span class="vctr"> Build Naval Base</td><td><span class="hotkey">shift-N</span></span></td></tr>
 
 <tr><td><img src="/images/orders/nuke.png"></td><td><span class="vctr"> select Nuke target</td><td><span class="hotkey">shift-N</span></span></td></tr>
 
-<tr><td><img src="/images/orders/transform_default.png"></td><td><span class="vctr"> Transform Terrain</td><td><span class="hotkey">O</span></span></td></tr>
+<tr><td><img src="/images/orders/transform_default.png"></td><td><span class="vctr"> Transform Terrain</td><td><span class="hotkey">o</span></span></td></tr>
 
 <tr><td><img src="/images/orders/convert.png"></td><td><span class="vctr"> Convert unit</td><td><span class="hotkey">shift-O</span></span></td></tr>
 
-<tr><td><img src="/images/orders/pollution.png"></td><td><span class="vctr"> Remove Pollution</td><td><span class="hotkey">P</span></span></td></tr>
+<tr><td><img src="/images/orders/pollution.png"></td><td><span class="vctr"> Remove Pollution</td><td><span class="hotkey">p</span></span></td></tr>
 
-<tr><td><img src="/images/orders/paradrop.png"></td><td><span class="vctr"> Paradrop</td><td><span class="hotkey">P</span></span></td></tr>
+<tr><td><img src="/images/orders/paradrop.png"></td><td><span class="vctr"> Paradrop</td><td><span class="hotkey">p</span></span></td></tr>
 
 <tr><td><img src="/images/orders/pillage.png"></td><td><span class="vctr"> Pillage</td><td><span class="hotkey">shift-P</span></span></td></tr>
 
-<tr><td><img src="/images/orders/quay.png"></td><td><span class="vctr"> Build Quay</td><td><span class="hotkey">Q</span></span></td></tr>
+<tr><td><img src="/images/orders/quay.png"></td><td><span class="vctr"> Build Quay</td><td><span class="hotkey">q</span></span></td></tr>
 
-<tr><td><img src="/images/orders/road_default.png"></td><td><span class="vctr"> Build Road</td><td><span class="hotkey">R</span></span></td></tr>
+<tr><td><img src="/images/orders/road_default.png"></td><td><span class="vctr"> Build Road</td><td><span class="hotkey">r</span></span></td></tr>
 
-<tr><td><img src="/images/orders/railroad_default.png"></td><td><span class="vctr"> Build Railroad</td><td><span class="hotkey">R</span></span></td></tr>
+<tr><td><img src="/images/orders/railroad_default.png"></td><td><span class="vctr"> Build Railroad</td><td><span class="hotkey">r</span></span></td></tr>
 
-<tr><td><img src="/images/orders/maglev.png"></td><td><span class="vctr"> Build MagLev</td><td><span class="hotkey">R</span></span></td></tr>
+<tr><td><img src="/images/orders/maglev.png"></td><td><span class="vctr"> Build MagLev</td><td><span class="hotkey">r</span></span></td></tr>
 
-<tr><td><img src="/images/orders/seabridge.png"></td><td><span class="vctr"> Build Sea-Bridge</td><td><span class="hotkey">R</span></span></td></tr>
+<tr><td><img src="/images/orders/seabridge.png"></td><td><span class="vctr"> Build Sea-Bridge</td><td><span class="hotkey">r</span></span></td></tr>
 
-<tr><td><img src="/images/orders/well.png"></td><td><span class="vctr"> Dig Well</td><td><span class="hotkey">R</span></span></td></tr>
+<tr><td><img src="/images/orders/well.png"></td><td><span class="vctr"> Dig Well</td><td><span class="hotkey">r</span></span></td></tr>
 
 <tr><td><img src="/images/orders/canal.png"></td><td><span class="vctr"> Build Canal</td><td>no key - use button or pop-up orders</span></td></tr>
 
-<tr><td><img src="/images/orders/sentry_default.png"></td><td><span class="vctr"> Sentry unit</td><td><span class="hotkey">S</span></span></td></tr>
+<tr><td><img src="/images/orders/sentry_default.png"></td><td><span class="vctr"> Sentry unit</td><td><span class="hotkey">s</span></span></td></tr>
 
-<tr><td><img src="/images/orders/unload.png"></td><td><span class="vctr"> Unload Transport</td><td><span class="hotkey">T</span> &emsp;(in city, quay, naval base)</span></td></tr>
+<tr><td><img src="/images/orders/deboard.png"></td><td><span class="vctr"> Deboard transport</td><td><span class="hotkey">shift-T</span> &emsp;(order cargo units to deboard transport)</span></td></tr>
 
-<tr><td><img src="/images/orders/activate_cargo.png"></td><td><span class="vctr"> Activate Cargo units</td><td><span class="hotkey">shift-U</span> &emsp;(outside city)</span></td></tr>
+<tr><td><img src="/images/orders/unload.png"></td><td><span class="vctr"> Unload transport cargo</td><td><span class="hotkey">t</span> &emsp;(order transport units to eject cargo units)</span></td></tr>
 
-<tr><td><img src="/images/orders/upgrade.png"></td><td><span class="vctr"> Upgrade unit</td><td><span class="hotkey">U</span></span></td></tr>
+<tr><td><img src="/images/orders/upgrade.png"></td><td><span class="vctr"> Upgrade unit</td><td><span class="hotkey">u</span></span></td></tr>
 
-<tr><td><img src="/images/orders/wait.png"></td><td><span class="vctr"> Wait</td><td><span class="hotkey">W</span> &emsp;(focus on next unit)</span></td></tr>
+<tr><td><img src="/images/orders/wait.png"></td><td><span class="vctr"> Wait</td><td><span class="hotkey">w</span> &emsp;(focus on next unit)</span></td></tr>
 
-<tr><td><img src="/images/orders/auto_explore_default.png"></td><td><span class="vctr"> Auto explore</td><td><span class="hotkey">X</span></span></td></tr>
+<tr><td><img src="/images/orders/auto_explore_default.png"></td><td><span class="vctr"> Auto explore</td><td><span class="hotkey">x</span></span></td></tr>
 </table>
 <img src="/images/orders/less_button.png"> <img src="/images/orders/more_button.png"><span class="vctr"> Less/More: toggle: common Orders / all orders</span>
 <br>
@@ -99,8 +103,10 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 
 
 <h2>Keyboard Shortcuts for Units</h2><table class="ctrls_tbl"><tr><td><tr><td><span class="hotkey">  a</span></td><td> (a)uto-settler  (settler/worker units)</td></tr>
-<tr><td><span class="hotkey">  A</span></td><td> (A)uto-attack - attack when moving, without asking</td></tr>
+<tr><td><span class="hotkey">  A</span></td><td> (A)ctivate (show/select) cargo units on transport </td></tr>
+<tr><td><span class="hotkey">ctrl-A</span></td><td> (A)uto-attack - attack when moving, without asking</td></tr>
 <tr><td><span class="hotkey">  b</span></td><td> (b)uild city  (settler units)</td></tr>
+<tr><td><span class="hotkey">  B</span></td><td> (B)oard transport</td></tr>
 <tr><td><span class="hotkey">  c</span></td><td> (c)enter map on active unit</td></tr>
 <tr><td><span class="hotkey">  d</span></td><td> (d)o - select unit execution</td></tr>
 <tr><td><span class="hotkey">  E</span></td><td> build airbas(E)</td></tr>
@@ -137,7 +143,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <tr><td><span class="hotkey">  s</span></td><td> (s)entry unit</td></tr>
 <tr><td><span class="hotkey">  S</span></td><td> un(S)entry all units on tile</td></tr>
 <tr><td><span class="hotkey">  t</span></td><td> (t)ransport unload (in City, Naval Base, Quay; or Marines anywhere)</td></tr>
-<tr><td><span class="hotkey">  U</span></td><td> (u)nload, show, and activate all cargo units on transport </td></tr>
+<tr><td><span class="hotkey">  u</span></td><td> (u)pgrade unit </td></tr>
 <tr><td><span class="hotkey">  v</span></td><td> select all units on same tile </td></tr>
 <tr><td><span class="hotkey">  V</span></td><td> select all units of same TYPE on tile </td></tr>
 <tr><td><span class="hotkey">alt-v</span></td><td> select all units NOT of this type on tile</td></tr>
@@ -164,7 +170,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <tr><td><span class="hotkey">ctrl-alt-space</span></td><td> Paste smartlink to tile/unit under cursor</td></tr>
 <tr><td><span class="hotkey">|</span></td><td> Skip music track, go to next track.</td></tr>
 <tr><td><span class="hotkey">ctrl-B</span></td><td> Highlight borders with flags</td></tr>
-<tr><td><span class="hotkey">shift-B</span></td><td> Toggle national colors on minimap: primary,secondary,tertiary,diplomatic state</td></tr>
+<tr><td><span class="hotkey">ctrl-shift-B</span></td><td> Toggle national colors on minimap: primary,secondary,tertiary,diplomatic state</td></tr>
 <tr><td><span class="hotkey">alt-shift-B</span></td><td> Animate borders for visibility assistance</td></tr>
 <tr><td><span class="hotkey">alt-B</span></td><td> Toggle between tri-color and bi-color borders</td></tr>
 <tr><td><span class="hotkey">shift-C</span></td><td> Select all same type units on (c)ontinent</td></tr>
@@ -186,7 +192,7 @@ The current and complete list of Freeciv-web controls can be found here:<br>
 <tr><td><span class="hotkey">ESC</span></td><td> Exit Fullscreen mode.</td></tr>
 <tr><td><span class="hotkey">shift-S</span></td><td> Stack display mode (multiple units on tile)</td></tr>
 <tr><td><span class="hotkey">ctrl-S</span></td><td> Save game</td></tr>
-<tr><td><span class="hotkey">shift-T</span></td><td> Change tax rates</td></tr>
+<tr><td><span class="hotkey">alt-shift-T</span></td><td> Change tax rates</td></tr>
 <tr><td><span class="hotkey">shift-W</span></td><td> Show city tile production on map</td></tr>
 <tr><td><span class="hotkey">alt-W</span></td><td> War calculator</td></tr>
 <tr><td><span class="hotkey">alt-X</span></td><td> Toggle Chalkboard (private map notes, marking mode) </td></tr>

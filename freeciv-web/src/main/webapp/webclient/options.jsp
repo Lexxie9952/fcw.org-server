@@ -192,7 +192,7 @@
     </div>
   </td>
   <td>
-    <div title="(SHIFT-A) Units auto-attack without showing odds or asking confirmation" class="main_menu_buttons">
+    <div title="(CTRL-A) Units auto-attack without showing odds or asking confirmation" class="main_menu_buttons">
         <input type='checkbox' class="css-checkbox" name='auto_attack' id='auto_attack'>
         <label for="auto_attack" name="auto_attack_lbl" class="css-label dark-check-green"><font color="#e8f8e0">Auto-attack</font></label>
     </div>
