@@ -270,8 +270,14 @@ function unit_has_cargo_room(punit) {
 }
 
 /**************************************************************************
-  Return TRUE if this unit can unload. Currently hard-coded as a
-  placeholder for proper ruleset actionenablers.
+ * Return true if this unit can DEBOARD. TODO: needs renaming since
+ * "unload" now means "transporter ejecting its cargo"
+ * 
+ * This function is currently hard-coded as a placeholder for proper 
+ * ruleset actionenablers, but has dual use as logic of when to show
+ * an order as legal; so can't be removed until 1) 3.1/3.2 actionenablers
+ * are in all rulesets AND 2) client can somehow test the actionenabler
+ * legality itself.
 **************************************************************************/
 function unit_can_do_unload(punit)
 {
@@ -413,6 +419,10 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
       pclass == "Space") {
         return false;
   }
+
+  // Disqualify all units who can never be transports
+  if (ttype.transport_capacity <= 0)
+    return false;
 
   if (pclass == "Cargo") {
     if (ptype.rule_name=="Freight") {
