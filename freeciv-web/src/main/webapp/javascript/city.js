@@ -232,7 +232,7 @@ function city_force_income_update()
                ? 0.25 : 0;
             if (has_wonder(B_MEDICI_BANK)) multiplier *= 1.07;
           }      
-          income += multiplier * pcity['surplus'][O_SHIELD];
+          income += multiplier * (pcity['surplus'][O_SHIELD] + pcity['shield_stock']);
           // Server rounds income to nearest integer but if it's exactly .5 it rounds randomly
           if (Math.round(income)-income != .5) income = Math.round(income); 
           income_calculated_by_client = true;
