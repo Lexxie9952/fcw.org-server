@@ -1854,6 +1854,12 @@ input[type="email" i], #email {
 /*  These get put in chatbox classes, meaning we can define colours, fonts, indent, collapsing, all kinds of stuff 
     In addition, these could be intercepted and their names used as playsounds, where, if playsound not found, it just does nothing.
 */
+
+/* info messages the client sends to itself (the player) */
+.e_client_msg {
+  color: #a8a8a8;
+}
+
 .e_setting {
  color: #777c79;
 }

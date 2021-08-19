@@ -278,7 +278,8 @@ function reclassify_chat_message(text)
 **************************************************************************/
 function add_client_message(message)
 {
-  var fake_packet = {"message": "<font color='#AFA8A8'>"+message+"</font>"};
+  if (message.includes("%%") || message.includes("[`")) message = decode_user_hyperlinks(message);
+  var fake_packet = {"message": "<span class='e_client_msg'>"+message+"</span>"};
   fake_packet.event = E_CHAT_MSG;
   add_chatbox_text(fake_packet);
 }
@@ -299,56 +300,10 @@ function add_chatbox_text(packet)
     }
     if (text.length >= max_chat_message_length) return;
 
-    /*
-    if (packet['event'] === E_CHAT_MSG) {
-      if (is_any_word_in_string(text,["You are logged in as", "Load complete"])) return;
-      // packet['event'] = reclassify_chat_message(text);  // DEFINITELY NO LONGER NECESSARY ****************
-    } 
-    */
-
     // Increment unread messages IFF chat minimized and AFTER filtering ignored/unshown server messages (above)
     if (current_message_dialog_state == "minimized") unread_messages ++;
     else unread_messages = 0;
     
-    /* Removed 4Mar2021 as all this got changed in server handchat.c and older commits in month before,
-       Formatting is handled server side. Colors don't come from server anymore. Server encapsulates
-       all messages in one of its event_types which are rendered into css classes for display and intercepted
-       in packhand.js for sounds.
-
-    if (civclient_state <= C_S_PREPARING) {
-      text = text.replace(/#FFFFFF/g, '#000000');
-    } else {
-      text = text.replace(/#0000FF/g, '#5565FF')
-                 .replace(/#006400/g, '#209A20')
-                 .replace(/#551166/g, '#AA88FF');
-
-      var real_time = true;
-      var outgoing = false; 
-  
-
-      // Fix historic messages for outgoing formatting
-      if (client.conn.playing != null && text.includes("{"+client.conn.playing.name+" -> ")) {
-        outgoing = true;
-        real_time = false;
-        text = text.replace("{"+client.conn.playing.name+" -> ", "{<font color='#c888ff'>You</font><font color='#ffffff'>&#x279E;</font>");
-      } else {
-        // Fix real-time messages for outgoing formatting
-        outgoing = text.substring(22,25) == "->{" ? true : false;
-        if (outgoing) text = text.replace("->{", "{<font color='#c888ff'>You</font><font color='#ffffff'>&#x279E;</font>");
-      }
-
-      // Check for incoming private message:           
-      var check_im = outgoing ? text.replace(/#A020F0/g, '#ffb789') : text.replace(/#A020F0/g, '#ff87b7');
-      if (check_im != text) {         // if different, there was a private message
-        if (packet['turn'] != null) {
-          // Message may have come last turn after you logged out. Exclude earlier notification sounds:
-          if ((!outgoing || real_time) && packet['turn'] >= game_info['turn'] - 1) play_sound("iphone1.ogg");
-        }
-        text=check_im; // now update the text var so the changed colour code goes in the message_log  
-      }
-    }
-    */
-
     packet['message'] = text;
     message_log.update(packet);
 

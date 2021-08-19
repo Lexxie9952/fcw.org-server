@@ -254,17 +254,6 @@ function handle_chat_msg(packet)
 
   const DEFAULT_OFF_WHITE_COLOR = "#D0C8C0";
 
-  // Dirty way to remove the server forcing blinding white font tags into every 
-  // event we get, disallowing us to set the classes ourselves!
-  // TODO: find out where the server is doing this and remove it: it will
-  // decrease bandwidth volume also!
-  
-  
-  /* Shouldn't be needed anymore:
-  if (event != E_CHAT_MSG) message.replace('<font color="#FFFFFF">', '');
-  else message.replace("#FFFFFF", DEFAULT_OFF_WHITE_COLOR);
-  */
-
   if (message == null) return;
   if (event == null || event < 0 || event >= E_UNDEFINED) {
     console.log('Undefined message event type');
