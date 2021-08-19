@@ -2023,7 +2023,8 @@ function update_unit_order_commands()
     var units_on_tile = tile_units(ptile);
     // Board transport ----------------------------------------
     if (unit_can_do_action(punit, ACTION_TRANSPORT_BOARD)) {
-      let can_board = false;
+      let can_board = 0;
+      let tcandidate = 0;
       for (var r = 0; r < units_on_tile.length; r++) {
         let tunit = units_on_tile[r];
         let ttype = unit_type(tunit);
@@ -2036,40 +2037,55 @@ function update_unit_order_commands()
         let tclass = get_unit_class(tunit);
 
         if (unit_could_possibly_load(punit, ptype, ttype, tclass)) {
-          console.log("%d could load on %d",punit.id,tunit.id)
-          can_board = true;
-          break;
+          //console.log("%d could load on %d",punit.id,tunit.id)
+          can_board ++;
+          tcandidate = tunit.id;
         }
       }
       if (can_board) {
+        let ttitle = "Board ";
+        if (can_board == 1) ttitle += unit_type(units[tcandidate]).name;
+        else ttitle+= "transport ("+can_board+")";
+        ttitle += " (shift-B)";
+        unit_actions["unit_board"] = {name: ttitle};
+        $("#order_board").prop('title', ttitle);
         $("#order_board").show();
-        unit_actions["unit_board"] = {name: "Board transport (shift-B)"};
       }
     }
     // Deboard transport ----------------------------------------
     if (unit_can_do_action(punit, ACTION_TRANSPORT_DEBOARD)) {
       if (punit.transported_by) {
         if (unit_can_do_unload(punit)) {
+          let ttitle = "Deboard from "+unit_type(units[punit.transported_by]).name
+                     + " (shift-T)";
+          unit_actions["unit_deboard"] = {name: ttitle};
+          $("#order_deboard").prop('title', ttitle);
           $("#order_deboard").show();
-          unit_actions["unit_deboard"] = {name: "Deboard transport (shift-T)"};
         }
       }
     }
     // Load transport
     let tclass = get_unit_class(punit);
-    let can_load = false;
-    if (ptype['transport_capacity'] > 0) {
+    let can_load = 0;
+    let tcandidate = 0;
+    if (ptype['transport_capacity'] > 0 && unit_has_cargo_room(punit)) {
       for (var r = 0; r < units_on_tile.length; r++) {
         let cunit = units_on_tile[r];
         if (cunit['id'] == punit['id'] || cunit.transported_by) continue; // can't load an already loaded unit
         let ctype = unit_type(cunit);
         if (unit_could_possibly_load(cunit, ctype, ptype, tclass)) {
-          can_load = true;
-          break;
+          can_load ++;
+          ccandidate = cunit.id;
         }
       }
       if (can_load) {
-        unit_actions["unit_load"] = {name: "Load transport (L)"};
+        let ttitle = "Load ";
+        if (can_load == 1) {
+          ttitle += unit_type(units[ccandidate]).name; 
+        } else ttitle += "cargo ("+can_load+")";
+        unit_actions["unit_load"] = {name: ttitle + " (L)"};
+        ttitle += " on " + ptype.name + " (L)";
+        $("#order_load").prop('title', ttitle);
         $("#order_load").show();
       }
     }
@@ -2077,24 +2093,37 @@ function update_unit_order_commands()
     // Unload transport ---------------------------------------
     if (units_on_tile) {
       if (ptype['transport_capacity'] > 0 && units_on_tile.length >= 2) {
-        let unloadable = false;
+        let unloadable = 0;
+        let tcandidate = 0;
         let show_cargo = false;
         for (var r = 0; r < units_on_tile.length; r++) {
           let tunit = units_on_tile[r];
           if (tunit['transported'] && tunit['transported_by'] == punit.id) {
             if (unit_can_do_unload(tunit)) {
-              unloadable = true;
-              break;
+              unloadable ++;
+              tcandidate = tunit.id;
+              if (utype_has_flag(unit_types[tunit['type']], UTYF_MARINES)) show_cargo = true;
             } else show_cargo = true;
           }
         }
         if (show_cargo) {
-          unit_actions["unit_show_cargo"] = {name: "Select Cargo (shift-U)"};
+          unit_actions["unit_show_cargo"] = {name: "Select Cargo (shift-A)"};
           $("#order_activate_cargo").show(); 
         }
         if (unloadable) {
-          unit_actions["unit_unload"] = {name: "Unload Transport (T)"};
+          let ttitle = "Unload ";
+          if (unloadable == 1) {
+            ttitle += unit_type(units[tcandidate]).name 
+          } else {
+            ttitle += unit_type(units[tcandidate]).name 
+            ttitle += " and " + pluralize(" other", unloadable-1);
+          }
+          ttitle += " from "+unit_type(punit).name+" (T)";
+          $("#order_unload").prop('title', ttitle);
           $("#order_unload").show();
+
+          ttitle = "Unload "+ pluralize(" cargo unit", unloadable) + " (T)";
+          unit_actions["unit_unload"] = {name: ttitle};
         }
       }
     }
@@ -4223,6 +4252,14 @@ function handle_context_menu_callback(key)
       key_unit_unload();
       break;
 
+    case "unit_board":
+      key_unit_board();
+      break;
+
+    case "unit_deboard":
+      key_unit_deboard();
+      break;
+
     case "unit_show_cargo":
       key_unit_show_cargo();
       break;
@@ -4577,6 +4614,11 @@ function key_unit_load(scoop_units)
    * transports. So we use pragmatic heuristics to generate a better list
   // for 99.5% of the games played, which are in common rulesets */
   var normal_ruleset = (client_rules_flag[CRF_CARGO_HEURISTIC]);
+  var loaded = 0;
+  var boarded = 0;
+  var loaded_list = "";
+  var boarded_list = "";
+
   var funits = get_units_in_focus();
   //var did_scoop = {};  // which transport(s) did a scoop of cargo, currently only one allowed.
   var scoop_happened = false;
@@ -4606,6 +4648,11 @@ function key_unit_load(scoop_units)
             // Loaded units don't ask orders later:
             remove_unit_id_from_waiting_list(punit['id']); 
             punit['done_moving'] = true; // in case server doesn't do it
+
+            loaded ++;
+            loaded_list += " [`" + freemoji_name_from_universal(unit_type(punit).name) + "`]";
+            var sunit = sunits[s];
+
             // A transport who scooped won't try to load onto another in the same key-press:
             scoop_happened = true; //did_scoop[sunits[s]['id']] = true;
           }
@@ -4615,12 +4662,17 @@ function key_unit_load(scoop_units)
   }
   // Scooping might be a lot of packets; make a longer delay to update focus.
   if (scoop_happened) {
+    add_client_message("Loading " + pluralize("unit", loaded)
+                       + ". " + loaded_list 
+                       + " &#8594; [`" + freemoji_name_from_universal(unit_type(sunit).name) +"`] ");
     setTimeout(update_active_units_dialog, update_focus_delay*1.55);
     return;
   } // *********** END PHASE I *************************************************************************************
   // PHASE II: if no selected units given 'L' order succeeded, then we just want to Board a transport.
   // For semantic strictness, we COULD disallow this if (scoop_units==true), but we're being nice since
   // the L hotkey was formerly for telling units to Board.
+  var boarded_on = {}; // which transport each unit got on {punit.id : tunit.id}
+
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     /* Don't scoop cargo then also load onto some other unit in the same key-press.
@@ -4741,9 +4793,19 @@ function key_unit_load(scoop_units)
         // Loaded units don't ask orders later:
         remove_unit_id_from_waiting_list(punit['id']); 
         punit['done_moving'] = true; // in case server doesn't do it
-        setTimeout(update_active_units_dialog, update_focus_delay);
+
+        boarded ++;
+        boarded_list += " [`" + freemoji_name_from_universal(unit_type(punit).name) + "`] ";
+        boarded_on[punit.id] = tunit.id;
       }
     }
+  }
+  if (boarded) {
+    add_client_message("Boarding " + pluralize("unit", boarded)
+    + ". " + boarded_list 
+    + (tunit ? "&#8594; [`" 
+             + freemoji_name_from_universal(unit_type(units[boarded_on[punit.id]]).name) +"`] " : "") );
+    setTimeout(update_active_units_dialog, update_focus_delay);
   }
   // Don't advance focus if more than one dialog open, it would reset our focus units
   // which we need for upcoming dialogs for each additional unit
@@ -4757,21 +4819,23 @@ function key_unit_load(scoop_units)
 function key_unit_deboard()
 {
   var funits = get_units_in_focus();
-  let unloaded = 0;
+  var unloaded = 0;
+  var deboard_list = "";
 
   for (var i = 0; i < funits.length; i++) {
     var punit = funits[i];
     if (unit_can_do_unload(punit)) {
       request_unit_do_action(ACTION_TRANSPORT_DEBOARD, punit['id'], punit['transported_by']);
       unloaded++;
+      deboard_list += " [`" + freemoji_name_from_universal(unit_type(punit).name) + "`]";
     }
   }
 
   deactivate_goto(false);
 
   if (unloaded) {
-    add_client_message(""+unloaded+" unit"+ (unloaded>1 ? "s" : "") 
-                       + " deboarded." );
+    add_client_message("Deboarding "+unloaded+" unit"+ (unloaded>1 ? "s. " : ". ")
+                       +deboard_list);
     setTimeout(function() {advance_unit_focus(false)}, update_focus_delay);
   }
 }
@@ -4789,44 +4853,27 @@ function key_unit_unload()
 {
   var unloaded =0;   // counter for unloaded units
   var deboarded=0;  // counter for deboarded units
+  var unload_list = "";
+  var deboard_list = "";
 
   if (current_focus != null && current_focus.length>0) {
     var sunit = current_focus[0];
     var sunits = get_units_in_focus();
   }
 
-  // no units selected.
-  if (!sunit) return;
+  if (!sunit) return;   // no units selected.
 
-  /* This was an epic WTF logic failure so it's commented out pending removal.
-     Why? Well, for each selected unit, it changed ptile and units_on_tile
-     over and over. This means ptile and units_on_tile end up on the tile of
-     the last unit in the current_focus[] array. (?!?) 
-        var funits = get_units_in_focus();
-        var units_on_tile = [];
-
-        // why are we looping to set these ?!
-        for (var i = 0; i < funits.length; i++) {
-          var punit = funits[i];
-          var ptile = index_to_tile(punit['tile']);
-          units_on_tile = tile_units(ptile);
-        } 
-  */
-
-  // Loop through all selected units, rationally determining what 'T' means for it:
+  // Loop through all selected units, rationally determining what 'T' means for each:
   for (var s = 0; s < sunits.length; s++) {
-    // Replace epic logic fail above with the 2 lines below:
     let ptile = index_to_tile(sunits[s]['tile']);
     let units_on_tile = tile_units(ptile);
 
-    //console.log("sunit["+s+"]");
     /* A selected unit which is a transport wants the "T" command to unload its cargo.
      * The only time we let the "Unload cargo (T)" command be a sloppy synonym for
      * "Deboard transport (shift-T)" is the case where it was given to a unit that:
      * (1) is carrying no cargo of its own (unloaded==0), AND (2) is transported.
      * This smartly allows selecting a big patchwork of different units on a tile
-     * with the indiscriminate fiat of "let all this selected @#%& be unloaded!"
-     * */
+     * with the indiscriminate fiat of "let all this selected @#%& be unloaded!" */
     var stype = unit_types[sunits[s]['type']];
     let this_unit_unloaded = 0;
     // Selected Unit is: selected and has transport capacity. Therefore, check
@@ -4841,6 +4888,7 @@ function key_unit_unload()
             request_unit_do_action(ACTION_TRANSPORT_UNLOAD, punit['transported_by'], punit['id']);
             unloaded++;             // Total number of all unloadings from all selected units.
             this_unit_unloaded++;   // Number of unloadings just from this transport.
+            unload_list += " [`" + freemoji_name_from_universal(unit_type(punit).name) + "`]"
           }  
         }
       }
@@ -4853,81 +4901,22 @@ function key_unit_unload()
       if (unit_can_do_unload(sunits[s])) {
         request_unit_do_action(ACTION_TRANSPORT_DEBOARD, sunits[s]['id'], sunits[s]['transported_by']);
         deboarded++;
+        deboard_list += " [`" + freemoji_name_from_universal(unit_type(sunits[s]).name) + "`] "
       }
     }
   }  
-/* V2 method: a transporter who was also transported resolved former ambiguity of the
-  dual-purpose 'T' command (deboard AND unload), by prioritizing Deboarding over Unloading.
-  Since 'T' is now defined as Unload and Deboard now has its own command shift-T, 
-  the prioritizing of deboard over unload for the unload command is obsolete illogical
-  semantics. That's why this is now all commented out, but it's kept around because
-  the code actually worked, whereas the above needs 6 months of testing to make
-  sure it all works great.
-  *
-  *
-  // Loop through all selected units, rationally determining what 'T' means for it:
-  for (var s = 0; s < sunits.length; s++) {
-    //console.log("sunit["+s+"]");
-    // A selected unit which is a transport AND is itself not transported rationally
-    // wants the T command to unload all of ITS cargo. (Heli carrying Marines on a
-    // Carrier would want to unload from Carrier, not be forced to unload its Marines
-    // to the Carrier -- which would be done by clicking T on the Marines!),
-    var stype = unit_types[sunits[s]['type']];
-    // Selected Unit is: selected, a transporter, and not being transported.
-    // So, check each unit on tile to see if it's on this transporter, and unload it
-    if (sunits[s] && stype.transport_capacity>0 && !sunits[s].transported) {
-      //console.log("  sunit[i] is a transport (that's not being transported)");
-      for (var i = 0; i < units_on_tile.length; i++) {
-        var punit = units_on_tile[i];
-        //console.log("punit["+i+"]");
 
-        // If iterated tile unit is being transported by selected unit, then UNLOAD it!
-        if (punit['transported'] && punit['transported_by'] == sunits[s]['id']) {
-          if (unit_can_do_unload(punit)) {
-            request_unit_do_action(ACTION_TRANSPORT_UNLOAD, punit['transported_by'], punit['id']);
-            unloaded++;
-          }  
-        }
-      }
-    } 
-    // A selected unit which is 1) NOT an untransported transporter, and 2) is being
-    // transported, will want the 'T' command to just deboard from the transporter.
-    else if (sunits[s]['transported']) { 
-      //console.log("  sunit[i] is cargo)");
-      if (unit_can_do_unload(sunits[s])) {
-        request_unit_do_action(ACTION_TRANSPORT_DEBOARD, sunits[s]['id'], sunits[s]['transported_by']);
-        unloaded++;
-      }
-    }
-    else {  
-      // V1 METHOD. Keep just in case we need this:
-      // We shouldn't be here, but we fall back to OLD method: unload everybody 
-      // OLD METHOD: unload everybody indiscriminantly
-      console.log("Indiscriminate loading of all tiles units engaged. Check logic conditions.");   
-      for (var i = 0; i < units_on_tile.length; i++) {
-        var punit = units_on_tile[i];
-        if (punit['transported'] && punit['transported_by'] > 0 &&
-          punit['owner'] == client.conn.playing.playerno) {
-          if (unit_can_do_unload(punit)) {  
-            request_unit_do_action(ACTION_TRANSPORT_DEBOARD, punit['id'],
-                                 punit['transported_by']);
-          }
-        } else {
-          request_unit_do_action(ACTION_TRANSPORT_UNLOAD,
-                                 punit['transported_by'],
-                                 punit['id']);
-        }
-      } 
-</end old V1 and V2 code> ***************************** */
 
   deactivate_goto(false);
 
   // Show # of units who successfully unloaded and/or deboarded:
   if (unloaded) {
-    add_client_message("Unloaded "+unloaded+" unit"+ (unloaded>1 ? "s." : ".") )
+    add_client_message("Unloading "+unloaded+" unit"+ (unloaded>1 ? "s. " : ". ") 
+                       + unload_list);
   }
   if (deboarded) {
-    add_client_message(""+deboarded+" unit"+ (deboarded>1 ? "s" : "") + "deboarded." )
+    add_client_message("Deboarding "+deboarded+" unit"+ (deboarded>1 ? "s. " : ". ")
+                       + deboard_list );
   }
   else if (!unloaded && !deboarded) {
     if (sunits.length == 1) {
@@ -7369,8 +7358,10 @@ function update_active_units_dialog()
 
     // hover title to give transport # and transported by
     if (unit_type(punit)['transport_capacity']>0) trans_help_title += "T"+punit['id']+" &#010;"
-    if (punit['transported_by']) trans_help_title += "on "+punit['transported_by'];
-
+    if (punit['transported_by']) { 
+      trans_help_title += "on " + unit_type(units[punit['transported_by']]).name 
+                       + " #"+punit['transported_by'];
+    }
     unit_info_html += "<div id='unit_info_div' title='"+trans_help_title+"' class='" + display_background_css
      + "'><div id='unit_info_image' onclick='click_unit_in_panel(event, units[" + punit['id'] + "])' "
 	   + " style='margin-right:1px; background: transparent url("
