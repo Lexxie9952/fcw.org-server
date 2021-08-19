@@ -305,6 +305,19 @@ function html_safe(text)
 function html_emoji_from_universal(universal_name)
 {
   // Force lower case and remove white space and escape sequences
+  var freemoji_name = freemoji_name_from_universal(universal_name);        
+  var path = "/images/e/"+freemoji_name+".png";
+  var element = "<img class='v' src='"+path+"'>";
+  return element;
+}
+
+/**************************************************************************
+   Takes the name of a game universal (unit, building, wonder, etc.), and
+   returns the stripped down emoji_name representing emoji_name.png;
+   Spaces, punctuation, and capitalisation removed.
+**************************************************************************/
+function freemoji_name_from_universal(universal_name)
+{
   var freemoji_name = universal_name.toLowerCase();
   freemoji_name = freemoji_name.replace(/\s+/g, '');
   freemoji_name = freemoji_name.replace('.', '');
@@ -316,10 +329,7 @@ function html_emoji_from_universal(universal_name)
   //      freemoji_name = freemoji_name.replace("​&#8203;", "");
   //      freemoji_name = freemoji_name.replace("​%E2%80%B8", "");
         // e.g., "A. Smith's Trading Co." will become "asmithstradingco.png"
-        
-  var path = "/images/e/"+freemoji_name+".png";
-  var element = "<img class='v' src='"+path+"'>";
-  return element;
+  return freemoji_name;
 }
 
 /**************************************************************************
