@@ -2803,13 +2803,16 @@ static struct setting settings[] = {
              "to new tiles and specialists AFTER food, shields, and luxury "
              "are calculated, but BEFORE science and gold are calculated. This "
              "gives a small bonus to growing cities, but has a side-effect of "
-             "overriding the science and gold outputs for the tile and specialist "
-             "choices the player selected in the city. \n"
-             "If this value is set to 1 (enabled), then city output is calculated "
+             "overriding the science and gold outputs for tiles and specialists "
+             "the player selected before the city grew or shrank. \n"
+             "If this value is set to 1 (enabled), then city output is WYSIWYG "
+             " (\"what you see is what you get\"); that is, it is calculated "
              "exactly according to the tiles and specialists the city selected "
-             "prior to growing or shrinking."), NULL, NULL, NULL,
-          GAME_MIN_CITY_OUTPUT_STYLE, GAME_MAX_CITY_OUTPUT_STYLE,
-          GAME_DEFAULT_CITY_OUTPUT_STYLE)
+             "prior to growing or shrinking, unless:\n"
+             "1. a new city improvement adds a bonus, or\n"
+             "2. a new unit's food upkeep reduces the food surplus.\n"),
+              NULL, NULL, NULL, GAME_MIN_CITY_OUTPUT_STYLE, 
+          GAME_MAX_CITY_OUTPUT_STYLE, GAME_DEFAULT_CITY_OUTPUT_STYLE)
 
   GEN_INT("civilwarsize", game.server.civilwarsize,
           SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_RARE,
