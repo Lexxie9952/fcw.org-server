@@ -336,7 +336,7 @@
 						<table id="longturn-table" class="table">
 							<tr>
 								<th class="hidden-xs">Players</th>
-								<th>Game Info<br><span style="font-size:90%; font-weight:600; color: #3718c1"><i>Late-join bonus gold ensures FAIR-START&#8482; in the first 12 turns.</i></span></th>
+								<th>Game Info<br><span style="font-size:90%; font-weight:600; color: #3718c1"><i>Late-join bonus gold ensures FAIR-START&#8482; in the first 10 turns.</i></span></th>
 								<th style="text-align:center" class="hidden-xs">State</th>
 								<th style="text-align:right">Turn</th>
 								<th style="text-align:center">Action</th>
