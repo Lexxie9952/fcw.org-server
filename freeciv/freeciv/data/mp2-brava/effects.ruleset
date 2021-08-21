@@ -4641,7 +4641,7 @@ value	= 1
 reqs	=
     { "type", "name", "range", "present"
       "Action", "Pillage", "Local", TRUE
-      "DiplRel", "War", "Local", FALSE
+      "DiplRel", "Alliance", "Local", FALSE
     }
 
 [effect_incident_caught_steal_maps1]
