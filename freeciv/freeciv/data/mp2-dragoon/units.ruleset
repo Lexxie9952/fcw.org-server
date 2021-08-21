@@ -12,7 +12,7 @@
 ; the first available (not obsolete) such unit, or by picking the last
 ; such unit directly. When determining starting units, the first 
 ; unit with the relevant role that the player can build will be chosen.
-; If no such unit can be found (eg Explorers that require Seafaring),
+; If no such unit can be found (eg Scouts that require Horseback Riding),
 ; then the first unit with this role will be chosen.
 ;：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：’ ×
 
@@ -1512,7 +1512,7 @@ flags         = "MultiSlot", "IgTer", "IgZOC", "NoHome", "FootSoldier", "Capture
 ;yes Partisan has 0 upkeep so Shield2Gold is meaningless, but currently used to substitute MultiSlot inaccessible in c-server
 roles         = "DefendGood", "DefendGoodStartUnit", "Partisan", "BarbarianTech"
 helptext      = _("\
-Partisans are guerilla fighters who can use the terrain to their advantage.  Like the Explorer\
+Partisans are guerilla fighters who can use the terrain to their advantage.  Like the Scout\
  that they upgrade, they can slip through ZOC and live off the land with no upkeep. \
 "), _("\
 Proportional to city size, up to 8 Partisans appear when an enemy conquers your city. They\
@@ -1602,7 +1602,7 @@ flags         = "MultiSlot", "IgTer", "FootSoldier", "Capturer", "CantReachAir",
 roles         = "DefendGood", "DefendGoodStartUnit"
 helptext      = _("\
 Alpine Troops are highly mobile units and\
- excellent defenders.  Similar to an Explorer, they\
+ excellent defenders.  Similar to a Scout, they\
  treat every land tile like a road were on it. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
@@ -5155,24 +5155,24 @@ By itself, Freight is only able to move to tiles with loading infrastructure:\
  do Commerce functions.\
 ")
 
-[unit_explorer]
-name          = _("Explorer")
+[unit_scout]
+name          = _("Scout")
 class         = "Land"
-tech_req      = "Map Making"
+tech_req      = "Horseback Riding"
 obsolete_by   = "Partisan"
-graphic       = "u.explorer"
+graphic       = "u.scout"
 graphic_alt   = "-"
 sound_move    = "m_explorer"
 sound_move_alt = "m_generic"
-sound_fight   = "f_explorer"
+sound_fight   = "f_horsemen"
 sound_fight_alt = "f_generic"
-build_cost    = 20
+build_cost    = 18
 pop_cost      = 0
 attack        = 0
 defense       = 1
-hitpoints     = 10
+hitpoints     = 8
 firepower     = 1
-move_rate     = 2
+move_rate     = 1
 vision_radius_sq = 5
 transport_cap = 0
 fuel          = 0
@@ -5184,15 +5184,27 @@ embarks       = "LandRoad", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "Helicopter"
 flags         = "IgTer", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage"
 roles         = "Explorer", "ExplorerStartUnit"
+veteran_names =
+  _("?vet_rank:green"),
+  _("?vet_rank:veteran"),
+  _("?vet_rank:hardened"),
+  _("?vet_rank:elite"),
+  _("?vet_rank:crack"),
+  _("?vet_rank:master"),
+  _("?vet_rank:wind walker")
+veteran_base_raise_chance = 50, 33, 20, 15, 15, 15, 0
+veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
+veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
+veteran_move_bonus = 3, 4, 5, 6, 7, 8, 9
 helptext      = _("\
-Explorers are brave individuals who map unknown territory. They can slip through enemy\
- ZOC, and, like Tribesmen, ignore all terrain penalties; basically, treating every tile\
- as if it had a road, they can move 6 tiles per turn. As a non-military traveler, they\
- can also visit far off cities to Investigate City and gather intel. Sometimes generals\
- will use their scouting information for strategic advantage. Explorers can make contact\
- with far-off lands to arrange cease-fire or peace. Best of all, Explorers live off the\
- land and have no unit upkeep. In later times, Explorers upgrade to Partisans. For\
- all these reasons, the Explorer is perhaps one of the most undervalued of all units.\
+Scouts are brave explorers of unknown territory. They can slip through enemy\
+ ZOC. Like Tribesmen, they ignore terrain penalties, treating every tile as if it had\
+ a road. This means they can move 4 tiles per turn (6 with the discovery of Map Making.)\
+ As a non-military traveler, they can visit far off cities to Investigate City and gather\
+ intel. Sometimes, generals will use their scouting information for strategic advantage.\
+ Scouts can make contact with far-off lands to arrange cease-fire or peace. Best of all,\
+ Scouts live off the land and have no upkeep. In later times, Scouts upgrade to\
+ Partisans.\
 ")
 
 [unit_leader]

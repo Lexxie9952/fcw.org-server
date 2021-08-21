@@ -780,7 +780,7 @@ actor_reqs    =
       "DiplRel",      "Foreign",       "Local", TRUE
       "UnitState",    "Transported",   "Local", FALSE
     }
-[actionenabler_investigate_city_tribesmen_explorer]
+[actionenabler_investigate_city_tribesmen_scout]
 action       = "Investigate City"
 actor_reqs    =
     { "type",         "name",          "range", "present"
@@ -1185,7 +1185,7 @@ target_reqs    =
       "UnitFlag",      "NonMil",     "Local", TRUE  ; all military excluded
       "UnitFlag",      "HasNoZOC",   "Local", TRUE  ; "    "        "
       "UnitFlag",      "Diplomat",   "Local", FALSE ; no diplomat 
-      "UnitType",      "Explorer",   "Local", FALSE ; no explorer
+      "UnitType",      "Scout",      "Local", FALSE ; no scout
       "TerrainClass",  "Oceanic",    "Local", FALSE ; not on a ship
       "UnitClass",     "RiverShip",  "Local", FALSE ; no ships
       "UnitClass",     "Trireme",    "Local", FALSE ; no ships

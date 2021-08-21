@@ -81,6 +81,10 @@ this virtual unit for the early game.
        with Pyramids.
     Capital city gets 2x nomad food bonus on founding. (+4)
 =============================================================
+15. Explorer renamed to Scout. Available with Horseback Riding,
+   moves 4 tiles (6 with Map Making, which then makes it identical
+   to previous Explorer. Cost is now same as Horsemen, 2 shields
+   less.)
 
 
 

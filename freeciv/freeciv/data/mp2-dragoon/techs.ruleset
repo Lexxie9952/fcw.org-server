@@ -556,6 +556,7 @@ req2     = "None"
 flags    = ""
 graphic     = "a.map_making"
 graphic_alt = "-"
+helptext = _("Scouts can move +2 tiles per turn")
 cost = 51
 
 [advance_masonry]

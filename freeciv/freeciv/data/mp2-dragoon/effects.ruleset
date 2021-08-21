@@ -1196,6 +1196,16 @@ reqs =
       "UnitType",  "Tribesmen", "Local"
       "MinYear",   "-2000",     "World"
     }
+
+[effect_scout_mapmaking_bonus]
+type    = "Move_Bonus"
+value	  = 6
+reqs    =
+    {
+      "type", "name", "range", "present"
+      "Tech", "Map Making", "Player", TRUE
+      "UnitType", "Scout", "Local", TRUE
+    }    
 ;------------------------------------------------------
 
 ;Freshly fueled full hp helicopters get +1 move per turn
@@ -5356,7 +5366,7 @@ value	= 9
 reqs	=
     { "type", "name", "range", "present"
       "Building", "Genghis Khan's Equestrian School", "Player", TRUE
-      "UnitType", "Explorer", "Local", TRUE 
+      "UnitType", "Scout", "Local", TRUE 
     }
 ;************************************************************************ Lighthouse
 [effect_lighthouse]
