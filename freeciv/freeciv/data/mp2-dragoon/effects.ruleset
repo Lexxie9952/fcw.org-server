@@ -615,7 +615,7 @@ reqs	=
     { "type", "name", "range"
       "Action", "Enter Marketplace", "Local"
     }
-[effect_early_trade_capitals_bonus]
+[effect_early_trade_capital_bonus]
 type	= "Trade_Revenue_Bonus"
 value	= 2000
 reqs	=
@@ -7612,23 +7612,24 @@ reqs    =
       "Gov", "Despotism", "Player"
     }
 
-[effect_despotism_nomad_food_bonus]
+[effect_despotism_city_founding_nomad_food_bonus]
 type    = "Growth_Food"
-value	= 13
+value	= 13 ; 13% of 16 = +2
 reqs	=
-    { "type", "name", "range", "present"
-      "Gov", "Despotism", "Player", TRUE
-      "Building", "Granary", "City", FALSE ;shouldn't happen but just be sure
-      "Age", "2", "City", FALSE
+    { "type",     "name",      "range", "present"
+      "Gov",      "Despotism", "Player", TRUE
+      "Building", "Granary",   "City",   FALSE ;shouldn't happen but just be sure
+      "Age",      "2",         "City",   FALSE ;has to be Age<=1, "just founded"
     }
-[effect_despotism_first_city_founding]
+[effect_despotism_capital_founding_nomad_food_bonus]
 type    = "Growth_Food"
-value	= 12
+value	= 12  ; 12+13=25% of 16 = +4
 reqs	=
-    { "type", "name", "range", "present"
-      "Building", "Granary", "City", FALSE ;shouldn't happen but just be sure
-      "Building", "Palace", "City", TRUE ;first city only
-      "Age", "2", "City", FALSE
+    { "type",     "name",      "range", "present"
+      "Gov",      "Despotism", "Player", TRUE
+      "Building", "Granary",   "City",   FALSE ;shouldn't happen but just be sure
+      "Building", "Palace",    "City",   TRUE  ;first city only
+      "Age",      "2",         "City",   FALSE ;has to be Age<=1, "just founded"
     }
 
 ;******** THEOCRACY EFFECTS ****************************************

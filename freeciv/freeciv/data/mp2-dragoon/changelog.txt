@@ -77,6 +77,11 @@ this virtual unit for the early game.
    increases chance of veteran promotion 50% for phalanxes
    (this is not +50% odds, it's +50% frequency)
 =============================================================
+14. New cities get a +2 nomad food bonus in Despotism. Stacks
+       with Pyramids.
+    Capital city gets 2x nomad food bonus on founding. (+4)
+=============================================================
+
 
 
 
