@@ -763,7 +763,7 @@ function show_city_dialog(pcity)
       var rally_type = (pcity['rally_point_persistent'] ? "Constant " : "Temporary ")
       var ptile = index_to_tile(pcity['rally_point_dest_tile']);
       var coords = ptile['x']+","+ptile['y'];
-      const rally_span = "<span style='cursor:pointer; position:absolute' title='"
+      const rally_span = "<span style='white-space: nowrap; cursor:pointer; position:absolute' title='"
                        + "Click to cancel rally point.\nMiddle-click city from map to show path.\nALT-R from map to show all.' " 
                        + "onclick='city_cancel_rally_point("+pcity['id']+");'>"
       $("#city_rally").html(rally_span+"&#x1F3AF; "+rally_type+" Rally Point: {"+coords+"}</span>");
