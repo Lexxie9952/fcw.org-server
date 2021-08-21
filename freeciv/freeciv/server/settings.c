@@ -2021,6 +2021,30 @@ static struct setting settings[] = {
              "much gold."), NULL, NULL, NULL,
           GAME_MIN_GOLD, GAME_MAX_GOLD, GAME_DEFAULT_GOLD)
 
+  GEN_INT("latejoin_gold", game.server.latejoin_gold,
+          SSET_RULES_FLEXIBLE, SSET_ECONOMICS, SSET_RARE,
+          ALLOW_NONE, ALLOW_CTRL,
+          N_("Gold given to late-joining players per each turn absent."),
+          N_("When a player joins a longturn game late, the amount of "
+             "extra gold per turn of absence that they are awarded, "
+             "in order to compensate not acting during early turns. "
+             "This is added to whatever gold the nation had accumulated "
+             "if idle, but the total will not exceed the value in the server "
+             "setting 'latejoin_gold_max'."),
+              NULL, NULL, NULL, GAME_MIN_LATEJOIN_GOLD, 
+          GAME_MAX_LATEJOIN_GOLD, GAME_DEFAULT_LATEJOIN_GOLD)
+
+  GEN_INT("latejoin_gold_max", game.server.latejoin_gold_max,
+          SSET_RULES_FLEXIBLE, SSET_ECONOMICS, SSET_RARE,
+          ALLOW_NONE, ALLOW_CTRL,
+          N_("The maximum amount of gold a late-joining player can start with."),
+          N_("The amount of gold a late-joining longturn player inherits from the "
+             "nation taken plus the 'latejoin_gold' bonus will not exceed the value "
+             "of this setting, but will be capped at this value.\n "
+             "See also: 'latejoin_gold'."),
+              NULL, NULL, NULL, GAME_MIN_LATEJOIN_GOLD_MAX, 
+          GAME_MAX_LATEJOIN_GOLD_MAX, GAME_DEFAULT_LATEJOIN_GOLD_MAX)
+
   GEN_INT("infrapoints", game.info.infrapoints,
           SSET_GAME_INIT, SSET_ECONOMICS, SSET_VITAL,
           ALLOW_NONE, ALLOW_BASIC,
@@ -2797,20 +2821,26 @@ static struct setting settings[] = {
   GEN_INT("city_output_style", game.server.city_output_style,
           SSET_RULES_FLEXIBLE, SSET_SOCIOLOGY, SSET_RARE,
           ALLOW_NONE, ALLOW_CTRL,
-          N_("Whether to replace city output behavior with WYSIWYG"),
-          N_("With the default setting of 0 (disabled), classic behavior decides "
-             "city output when a city grows or shrinks: citizens are re-arranged "
-             "to new tiles and specialists AFTER food, shields, and luxury "
-             "are calculated, but BEFORE science and gold are calculated. This "
-             "gives a small bonus to growing cities, but has a side-effect of "
-             "overriding the science and gold outputs for tiles and specialists "
-             "the player selected before the city grew or shrank. \n"
-             "If this value is set to 1 (enabled), then city output is WYSIWYG "
-             " (\"what you see is what you get\"); that is, it is calculated "
-             "exactly according to the tiles and specialists the city selected "
-             "prior to growing or shrinking, unless:\n"
-             "1. a new city improvement adds a bonus, or\n"
-             "2. a new unit's food upkeep reduces the food surplus.\n"),
+          N_("City output style: 0=Legacy, 1=WYSIWYG, 2=Strict WYSIWYG"),
+          N_("\n0. Legacy: A. When a city grows or shrinks, citizens "
+             "are auto-assigned to new tiles and specialists AFTER food, shields, "
+             "and luxury are accumulated; but BEFORE science and gold are "
+             "accumulated. This gives an exploitable bonus to growing cities, "
+             "but overrides the science and gold output of tiles and specialists "
+             "that were selected before the city grew or shrank. B. Food and "
+             "gold upkeep on newly created units and buildings is "
+             "deducted at the instant of creation, but shield upkeep is deducted "
+             "on the first Turn Change after the unit's creation. \n"
+             "\n1. WYSIWYG (\"What you see is what you get\"): A. All city "
+             "outputs are calculated by the tiles and "
+             "specialists the city assigned before growing or shrinking, "
+             "unless a new city improvement adds a bonus and/or increases "
+             "gold upkeep. B. All unit upkeeps are uniformly paid on the "
+             "first Turn Change AFTER a new unit's creation.\n"
+             "\n2. Strict WYSIWYG: The same as WYSIWYG except ALL unit and building "
+             "upkeep is uniformly deferred and deducted on the first Turn Change "
+             "AFTER creation. The means buildings get free bonus effects on the "
+             "first turn of existence.\n"),
               NULL, NULL, NULL, GAME_MIN_CITY_OUTPUT_STYLE, 
           GAME_MAX_CITY_OUTPUT_STYLE, GAME_DEFAULT_CITY_OUTPUT_STYLE)
 

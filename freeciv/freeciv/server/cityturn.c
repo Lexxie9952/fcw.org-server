@@ -1160,7 +1160,16 @@ static bool city_populate(struct city *pcity, struct player *nationality)
   int saved_id = pcity->id;
   int granary_size = city_granary_size(city_size_get(pcity));
 
-  pcity->food_stock += pcity->surplus[O_FOOD];
+
+  /* With city_output_style = 0, shield upkeep isn't counted on the turn
+   * a unit is produced, but, assymmetrically, food upkeep is. How
+   * unfortunate for players who don't know that fact! If WYSIWYG is
+   * on, the surplus is added at the top of city_build_stuff() before
+   * stuff is built (i.e., before extra upkeep is created from newly
+   * made units.) */
+  if (!game.server.city_output_style) {
+    pcity->food_stock += pcity->surplus[O_FOOD];
+  }
   if (pcity->food_stock >= granary_size || city_rapture_grow(pcity)) {
     if (city_had_recent_plague(pcity)) {
       notify_player(city_owner(pcity), city_tile(pcity),
@@ -2853,6 +2862,17 @@ static bool city_build_stuff(struct player *pplayer, struct city *pcity)
     return FALSE;
   }
 
+  /* WYSIWYG collects food surplus BEFORE new unit decreases its surplus.
+   * This fixes an assymmetry in city_output_style = 0, where shield
+   * upkeep wasn't counted on the turn a unit is produced, but food
+   * upkeep was. With WYSIWYG, what you see is what you get!™ 
+   * Notably, this eliminates complaints where a newly made Settler
+   * counterintuitively starves right when it's produced, even though
+   * the city showed a break-even food_surplus of +0. */
+  if (game.server.city_output_style) {
+    pcity->food_stock += pcity->surplus[O_FOOD];
+  }
+
   nullify_caravan_and_disband_plus(pcity);
   define_orig_production_values(pcity);
 
@@ -3460,7 +3480,8 @@ static void update_city_activity(struct city *pcity)
   const char *add_message;
   int revolution_turns;
   int saved_id;
-
+  int wysiwyg_unit_gold_upkeep = 0;
+  int wysiwyg_impr_gold_upkeep = 0;
 
   if (!pcity) {
     return;
@@ -3480,7 +3501,9 @@ static void update_city_activity(struct city *pcity)
   else { /* WYSIWYG output prior to auto_arrange */
      /* Freeze workers until outputs calculated */
     city_freeze_workers(pcity);
-    pcity->server.needs_arrange |= city_refresh(pcity); 
+    pcity->server.needs_arrange |= city_refresh(pcity);
+    wysiwyg_unit_gold_upkeep = city_total_unit_gold_upkeep(pcity);
+    wysiwyg_impr_gold_upkeep = city_total_impr_gold_upkeep(pcity);
   }
 
   /* Reporting of celebrations rewritten, copying the treatment of disorder below,
@@ -3543,8 +3566,41 @@ static void update_city_activity(struct city *pcity)
 
     /* Update the treasury. */
     pplayer->economic.gold += pcity->prod[O_GOLD];
-    pplayer->economic.gold -= city_total_impr_gold_upkeep(pcity);
-    pplayer->economic.gold -= city_total_unit_gold_upkeep(pcity);
+    /* Under city_output_style == 0|1, you pay upkeep on a building
+     * the turn it's created, because "you also get the bonus for
+     * the building on the turn it's created." */
+    if (game.server.city_output_style <= 1) {
+      pplayer->economic.gold -= city_total_impr_gold_upkeep(pcity);
+    } else {
+    /* Under city_output_style == 2 (extreme WYSIWYG), the
+      * output you see before TC is the output you get; that is,
+      * you don't immediately pay building upkeep on a newly
+      * created building because then you wouldn't get what you saw.
+      * However, this creates a freebie assymmetry since you still get
+      * any building bonus that turn without upkeep that turn. Other
+      * servers rectify this by making the bonus not take effect until
+      * the turn after a building is built. While that's logical, it
+      * also creates heinous playability annoyances. */
+      pplayer->economic.gold -= wysiwyg_impr_gold_upkeep;
+    }
+    /* Under non-WYSIWYG city_output_style=0, newly made units 
+     * assymetrically pay food and gold upkeep but NOT shield upkeep,
+     * because someone originally made it counterintuitively 
+     * assymetrical that way (to avoid recursion on shield upkeep
+     * preventing a unit from being made which then if it's not 
+     * made has no upkeep which would allow it to be made but then 
+     * if it's made it has upkeep which then ...) */
+    if (!game.server.city_output_style) {
+      pplayer->economic.gold -= city_total_unit_gold_upkeep(pcity);
+    }
+    /* Under WYSIWYG city_output_style = 1|2, newly made units have 
+     * "upkeep symmetry" - since you don't pay upkeep for shields on 
+     * the first turn a unit is made, you also don't pay it for food
+     * or gold; instead, what you see before you hit TURN DONE is what
+     * you get. */
+    else { 
+      pplayer->economic.gold -= wysiwyg_unit_gold_upkeep;
+    }
 
     /* Remember how much gold upkeep each unit was payed. */
     unit_list_iterate(pcity->units_supported, punit) {

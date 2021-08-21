@@ -3389,6 +3389,8 @@ set =
       "hangry", 1, FALSE                  ; Famine causes disorder. Closes a flaw where people are happier starving with lux than food and less lux. Helps re-balance rapture vs non-rapture govs (martial law/gulag effect/etc.) 
       "huts", 10, FALSE
       "killcitizen_pct", 50, FALSE        ; regulates % chance of pop kill by city pop-killer units
+      "latejoin_gold", 14, FALSE          ; gold per turn of absence when late joining
+      "latejoin_gold_max", 900, FALSE     ; maximum amount of (inherited gold + latejoin gold) when taking a nation.
       "landmass", 63, FALSE
       "looting", "BASE_TRADE", FALSE
       "minplayers", 0, FALSE

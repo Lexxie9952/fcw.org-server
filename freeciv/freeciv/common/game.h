@@ -166,6 +166,8 @@ struct civ_game {
       int kick_time;
       int killcitizen_pct; /* percent chance of city pop loss if killcitizen enabled */
       int killunhomed;    /* slowly killing unhomed units */
+      int latejoin_gold;
+      int latejoin_gold_max;
       enum loot_style lootstyle;
       int maxconnectionsperhost;
       int max_players;
@@ -448,6 +450,13 @@ extern struct world wld;
 
 #define GAME_DEFAULT_HIDEOUTS         FALSE
 
+#define GAME_DEFAULT_LATEJOIN_GOLD 10
+#define GAME_MIN_LATEJOIN_GOLD     0
+#define GAME_MAX_LATEJOIN_GOLD     2000
+#define GAME_DEFAULT_LATEJOIN_GOLD_MAX 700
+#define GAME_MIN_LATEJOIN_GOLD_MAX     0
+#define GAME_MAX_LATEJOIN_GOLD_MAX     50000
+
 #define GAME_DEFAULT_NUCLEAR_WINTER  100         // strength of effect, 0 to 10000
 #define GAME_MIN_NUCLEAR_WINTER  0               // 0 = false
 #define GAME_MAX_NUCLEAR_WINTER  10000
@@ -507,9 +516,9 @@ extern struct world wld;
 #define GAME_MIN_CITYMINDIST         1
 #define GAME_MAX_CITYMINDIST         11
 
-#define GAME_DEFAULT_CITY_OUTPUT_STYLE 0
+#define GAME_DEFAULT_CITY_OUTPUT_STYLE 1
 #define GAME_MIN_CITY_OUTPUT_STYLE   0
-#define GAME_MAX_CITY_OUTPUT_STYLE   1
+#define GAME_MAX_CITY_OUTPUT_STYLE   2
 
 #define GAME_DEFAULT_CIVILWARSIZE    10
 #define GAME_MIN_CIVILWARSIZE        2 /* can't split an empire of 1 city */

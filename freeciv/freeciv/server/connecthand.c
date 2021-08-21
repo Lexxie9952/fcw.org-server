@@ -115,7 +115,7 @@ void do_longturn_tech_latejoiner_effect(struct player *pplayer)
 {
   struct research *presearch;
   
-  int mod = 20;
+  int mod = 20;    // if x players have this tech then latejoiner gets it too.
   int num_players;
 
   
@@ -146,9 +146,9 @@ void attach_longturn_player(struct connection *pc, struct player *pplayer)
 {
     set_as_human(pplayer);
 
-    pplayer->economic.gold += game.info.turn * 10; 
-    if (pplayer->economic.gold > 700) { 
-      pplayer->economic.gold = 700; 
+    pplayer->economic.gold += game.info.turn * game.server.latejoin_gold; 
+    if (pplayer->economic.gold > game.server.latejoin_gold_max) { 
+      pplayer->economic.gold = game.server.latejoin_gold_max; 
     }
 
     pplayer->economic.science = 60;
