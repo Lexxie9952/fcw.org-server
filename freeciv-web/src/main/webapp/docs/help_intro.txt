@@ -11,7 +11,7 @@ target="_new">donations</a> from users.<br> <i><b>Please support this server by 
 target="_new">donating to Freeciv-Web!</a></b></i>. Thanks!<br><br>
 
 <a title="Freeciv-Web Discord Chat Community" href="https://discord.gg/Zj8UQSN" target="_new">
-    <img src="http://icons.iconarchive.com/icons/papirus-team/papirus-apps/256/discord-icon.png" style="width:40px">
+    <img src="https://icons.iconarchive.com/icons/papirus-team/papirus-apps/256/discord-icon.png" style="width:40px">
 </a>
 Freeciv-Web has <b><a href="https://discord.gg/Zj8UQSN" target="_new">Discord chat</a></b> -- this is the preferred method to chat.<br> 
 It helps validate your in-game identity in multiplayer games.<br>Also posted there are <a href='https://discord.gg/p9M5RME' target='_new'>#rules</a> 
