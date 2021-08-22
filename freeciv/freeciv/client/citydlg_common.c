@@ -739,7 +739,7 @@ void get_city_dialog_output_text(const struct city *pcity,
 
   /* Hack to get around the ugliness of add_tax_income. */
   memset(tax, 0, O_LAST * sizeof(*tax));
-  add_tax_income(city_owner(pcity), pcity->prod[O_TRADE], tax);
+  add_tax_income_real(city_owner(pcity), pcity->prod[O_TRADE], tax, pcity->id);
   city_sum_add_if_nonzero(sum, tax[otype],
                           Q_("?city_surplus:Taxed from trade"));
 

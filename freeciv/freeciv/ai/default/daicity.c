@@ -1425,9 +1425,9 @@ adv_want dai_city_want(struct player *pplayer, struct city *acity,
     bonus[o] = get_final_city_output_bonus(acity, o);
     waste[o] = city_waste(acity, o, prod[o] * bonus[o] / 100, NULL);
   } output_type_iterate_end;
-  add_tax_income(pplayer,
+  add_tax_income_real(pplayer,
 		 prod[O_TRADE] * bonus[O_TRADE] / 100 - waste[O_TRADE],
-		 prod);
+		 prod, acity->id);
   output_type_iterate(o) {
     prod[o] = prod[o] * bonus[o] / 100 - waste[o];
   } output_type_iterate_end;

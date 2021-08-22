@@ -17,6 +17,7 @@
 
 ***********************************************************************/
 
+var TAX_GRANULE = 10;
 var s_tax = null;
 var s_lux = null;
 var s_sci = null;
@@ -41,6 +42,14 @@ var sliders_adjusted = false;
 **************************************************************************/
 function show_tax_rates_dialog()
 {
+  if (client_rules_flag[CRF_MP2_D]) {
+    TAX_GRANULE = simpleStorage.get("txGrnl");
+    if (TAX_GRANULE == null) {
+      TAX_GRANULE = 10;
+      simpleStorage.set('txGrnl', TAX_GRANULE);
+    }
+  }
+
   sliders_adjusted = false;
   if (client_is_observer()) return;
   
@@ -82,9 +91,9 @@ function show_tax_rates_dialog()
     + "<tr><td>Research:  </td> <td><span class='sci_text' id='bulbs_info'></span></td></tr>"
     + "</table>"
     
-    + "<div id='max_tax_rate' style='text-align:center; margin:10px;'></div>";
+    + "<div id='max_tax_rate' style='text-align:center; margin:10px;'></div>"
 
-  $(id).html(dhtml); 
+  $(id).html(dhtml);
 
   $(id).attr("title", "Tax rates");
   $(id).dialog({
@@ -93,6 +102,10 @@ function show_tax_rates_dialog()
       dialogClass: 'rate_slider',
       width: is_small_screen() ? "90%" : "40%",
 			  buttons: {
+        "Resolution (𝗥)" : function() {
+          TAX_GRANULE = TAX_GRANULE == 10 ? 5 : 10;
+          simpleStorage.set("txGrnl", TAX_GRANULE);
+        },
 				"Done (𝗪)" : function() {
           submit_player_rates();
           close_rates_dialog();
@@ -102,6 +115,12 @@ function show_tax_rates_dialog()
   $(id).css("color", default_dialog_text_color);
 
   //$(".rate_slider").css("z-index", 201);
+
+  if (!client_rules_flag[CRF_MP2_D])
+    $("#rates_dialog").next().children().first().children().first().hide()
+  else 
+    $("#rates_dialog").next().children().first().children().first().show()
+
 
   update_rates_dialog();
   // Remove [X] to close, because it bypasses clean-up functions  
@@ -135,6 +154,11 @@ function tax_rate_key_listener(ev)
         $("#rates_dialog").dialog('close');
         $("#rates_dialog").remove();
         break;
+      case 'R':
+        ev.stopPropagation();
+        TAX_GRANULE = TAX_GRANULE == 10 ? 5 : 10
+        if (ev.shiftKey) TAX_GRANULE /= TAX_GRANULE; //remove after debug test
+        simpleStorage.set("txGrnl", TAX_GRANULE);
     }
 }
 
@@ -220,8 +244,8 @@ function create_rates_dialog(tax, lux, sci, max)
   s_tax.setValue(tax);
   s_tax.setMaximum(max);
   s_tax.setMinimum(0);
-  s_tax.setBlockIncrement(10);
-  s_tax.setUnitIncrement(10);
+  s_tax.setBlockIncrement(TAX_GRANULE);
+  s_tax.setUnitIncrement(TAX_GRANULE);
   s_tax.onchange = update_tax_rates;
 
   s_lux = new Slider(document.getElementById("slider-lux"),
@@ -229,8 +253,8 @@ function create_rates_dialog(tax, lux, sci, max)
   s_lux.setValue(lux);
   s_lux.setMaximum(max);
   s_lux.setMinimum(0);
-  s_lux.setBlockIncrement(10);
-  s_lux.setUnitIncrement(10);
+  s_lux.setBlockIncrement(TAX_GRANULE);
+  s_lux.setUnitIncrement(TAX_GRANULE);
   s_lux.onchange = update_lux_rates;
 
 
@@ -239,8 +263,8 @@ function create_rates_dialog(tax, lux, sci, max)
   s_sci.setValue(sci);
   s_sci.setMaximum(max);
   s_sci.setMinimum(0);
-  s_sci.setBlockIncrement(10);
-  s_sci.setUnitIncrement(10);
+  s_sci.setBlockIncrement(TAX_GRANULE);
+  s_sci.setUnitIncrement(TAX_GRANULE);
   s_sci.onchange = update_sci_rates;
 
   maxrate = max ;
@@ -267,9 +291,9 @@ function update_rates_labels ()
 **************************************************************************/
 function update_tax_rates ()
 {
-  if (s_tax.getValue() % 10 != 0) s_tax.setValue(s_tax.getValue() - (s_tax.getValue() % 10));
-  if (s_lux.getValue() % 10 != 0) s_lux.setValue(s_lux.getValue() - (s_lux.getValue() % 10));
-  if (s_sci.getValue() % 10 != 0) s_sci.setValue(s_sci.getValue() - (s_sci.getValue() % 10));
+  if (s_tax.getValue() % TAX_GRANULE != 0) s_tax.setValue(s_tax.getValue() - (s_tax.getValue() % TAX_GRANULE));
+  if (s_lux.getValue() % TAX_GRANULE != 0) s_lux.setValue(s_lux.getValue() - (s_lux.getValue() % TAX_GRANULE));
+  if (s_sci.getValue() % TAX_GRANULE != 0) s_sci.setValue(s_sci.getValue() - (s_sci.getValue() % TAX_GRANULE));
 
   var lock_lux = document.rates.lock[1].checked;
   var lock_sci = document.rates.lock[2].checked;
@@ -307,9 +331,9 @@ function update_tax_rates ()
 **************************************************************************/
 function update_lux_rates ()
 {
-  if (s_tax.getValue() % 10 != 0) s_tax.setValue(s_tax.getValue() - (s_tax.getValue() % 10));
-  if (s_lux.getValue() % 10 != 0) s_lux.setValue(s_lux.getValue() - (s_lux.getValue() % 10));
-  if (s_sci.getValue() % 10 != 0) s_sci.setValue(s_sci.getValue() - (s_sci.getValue() % 10));
+  if (s_tax.getValue() % TAX_GRANULE != 0) s_tax.setValue(s_tax.getValue() - (s_tax.getValue() % TAX_GRANULE));
+  if (s_lux.getValue() % TAX_GRANULE != 0) s_lux.setValue(s_lux.getValue() - (s_lux.getValue() % TAX_GRANULE));
+  if (s_sci.getValue() % TAX_GRANULE != 0) s_sci.setValue(s_sci.getValue() - (s_sci.getValue() % TAX_GRANULE));
 
   var lock_tax = document.rates.lock[0].checked;
   var lock_sci = document.rates.lock[2].checked;
@@ -347,9 +371,9 @@ function update_lux_rates ()
 **************************************************************************/
 function update_sci_rates ()
 {
-  if (s_tax.getValue() % 10 != 0) s_tax.setValue(s_tax.getValue() - (s_tax.getValue() % 10));
-  if (s_lux.getValue() % 10 != 0) s_lux.setValue(s_lux.getValue() - (s_lux.getValue() % 10));
-  if (s_sci.getValue() % 10 != 0) s_sci.setValue(s_sci.getValue() - (s_sci.getValue() % 10));
+  if (s_tax.getValue() % TAX_GRANULE != 0) s_tax.setValue(s_tax.getValue() - (s_tax.getValue() % TAX_GRANULE));
+  if (s_lux.getValue() % TAX_GRANULE != 0) s_lux.setValue(s_lux.getValue() - (s_lux.getValue() % TAX_GRANULE));
+  if (s_sci.getValue() % TAX_GRANULE != 0) s_sci.setValue(s_sci.getValue() - (s_sci.getValue() % TAX_GRANULE));
 
   var lock_tax = document.rates.lock[0].checked;
   var lock_lux = document.rates.lock[1].checked;

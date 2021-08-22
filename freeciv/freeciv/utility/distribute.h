@@ -19,6 +19,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 void distribute(int number, int groups, int *ratios, int *result);
+void distribute_real(int number, int groups, int *ratios, int *result, int seed);
 
 #ifdef __cplusplus
 }

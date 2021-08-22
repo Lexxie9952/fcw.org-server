@@ -728,6 +728,7 @@ void city_styles_alloc(int num);
 void city_styles_free(void);
 
 void add_tax_income(const struct player *pplayer, int trade, int *output);
+void add_tax_income_real(const struct player *pplayer, int trade, int *output, int seed);
 int get_city_tithes_bonus(const struct city *pcity);
 int get_city_add_bonus(const struct city *pcity, Output_type_id otype);
 int city_pollution_types(const struct city *pcity, int shield_total,

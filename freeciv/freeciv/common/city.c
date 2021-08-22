@@ -2407,6 +2407,11 @@ int get_city_tithes_bonus(const struct city *pcity)
   specialists). trade should be in output[O_TRADE].
 **************************************************************************/
 void add_tax_income(const struct player *pplayer, int trade, int *output)
+{ /* Front end for backward compatibility, even # seed keeps legacy behavior */
+  add_tax_income_real(pplayer, trade, output, 0);
+}
+void add_tax_income_real(const struct player *pplayer, int trade, int *output,
+                    int seed)
 {
   const int SCIENCE = 0, TAX = 1, LUXURY = 2;
   int rates[3], result[3];
@@ -2428,7 +2433,7 @@ void add_tax_income(const struct player *pplayer, int trade, int *output)
     rates[TAX] = 0;
   }
 
-  distribute(trade, 3, rates, result);
+  distribute_real(trade, 3, rates, result, seed);
 
   output[O_SCIENCE] += result[SCIENCE];
   output[O_GOLD] += result[TAX];
@@ -3109,10 +3114,10 @@ inline void set_city_production(struct city *pcity)
 
   /* Convert trade into science/luxury/gold, and add this on to whatever
    * science/luxury/gold is already there. */
-  add_tax_income(city_owner(pcity),
+  add_tax_income_real(city_owner(pcity),
 		 pcity->prod[O_TRADE] * pcity->bonus[O_TRADE] / 100
 		 - pcity->waste[O_TRADE] - pcity->usage[O_TRADE],
-		 pcity->prod);
+		 pcity->prod, pcity->id);
 
   /* Add on effect bonuses and waste.  Note that the waste calculation
    * (above) already includes the bonus multiplier. */
