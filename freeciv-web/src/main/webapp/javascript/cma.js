@@ -169,8 +169,8 @@ function create_cma_sliders() {
   }
   $("#cma-happy-slider").slider({ value: cma_happy_slider, min:0, max:50 });
   $("#cma-happy-slider").slider("enable");
-  $("#cma-val-slider-"+name).css("width", 160); 
-  $("#cma-happy-slider"+name).slider({"slide": cma_user_slide, "change": cma_user_input});
+  $("#cma-happy-slider").css("width", 160); 
+  $("#cma-happy-slider").slider({"slide": cma_user_slide, "change": cma_user_input});
 }
 /**************************************************************************
   ...returns true if was able to do it
