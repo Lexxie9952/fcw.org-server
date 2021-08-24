@@ -10,6 +10,7 @@ artists = "
     Eleazar [El](buoy)
     Anton Ecker (Kaldred) (ruins)
     GriffonSpade [GS]
+    Wesnoth [VC]
 "
 
 [file]
@@ -65,7 +66,9 @@ tiles = { "row", "column", "tag"
       "city.modern_occupied_0",
       "city.postmodern_occupied_0"
 ;[HH+Lexxie]
- 0,  5, "city.disorder"
+ 0,  5, "city.disorder"    ; threatens disorder and/or disorder where you can still buy stuff
+ 0,  7, "city.revolt"      ; REAL disorder; you can't buy stuff; 2 turns of it causes anarchy in some govs, etc.
+ 0,  8, "city.starve"      ; warning icon for starvation
 ;blank defaults
  0,  6, "cd.city",
       "cd.city_wall"
