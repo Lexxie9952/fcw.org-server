@@ -270,10 +270,24 @@ input[type='number'] {
 }
 .city_dialog_celeb {
   color: #55cc55;
+  cursor: help;
 }
 .city_dialog_disorder {
   color: #cc5555;
+  cursor: help;
 }
+.city_dialog_restoring_anarchy {
+  color: #d6a852;
+  cursor: help;
+}
+.city_dialog_celebrate_after_anarchy {
+  color: #99c050;
+  cursor: help;
+}
+.city_dialog_peace {
+  cursor: help;
+}
+
 .hint_of_green {
   color: #a6f4a6;
   text-align: right;
@@ -299,7 +313,15 @@ input[type='number'] {
   margin-right: -2px;
 }
 .negative_text {
-  color: #c55c55;
+  color: #d65b52;
+  padding-top: 0 px;
+  padding-right: 0 px;
+  max-width: 2em;
+  margin-right: -2px;
+}
+/* reddish because won't produce, but has to differentiate from NOT coming out of disorder next turn */
+.restored_anarchy_text {
+  color: #d6a852;
   padding-top: 0 px;
   padding-right: 0 px;
   max-width: 2em;

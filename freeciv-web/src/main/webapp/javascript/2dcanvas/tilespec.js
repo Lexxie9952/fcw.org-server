@@ -354,7 +354,15 @@ function fill_sprite_array(layer, ptile, pedge, pcorner, punit, pcity, citymode)
         if (layer_sprite) sprite_array.push(layer_sprite);
         
         if (polluted) sprite_array.push({"key" : "grid.pollute_icon"}); //pollution icon clearly over top
-	      if (pcity['unhappy']) {
+        
+        // starving: show empty plate
+        if (pcity.granary_turns == -1) {
+          sprite_array.push({"key" : "city.starve"});
+        }
+        // anarchy fists or disorder fist can go on top of plate ;)
+        if (pcity.anarchy) {
+          sprite_array.push({"key" : "city.revolt"});
+        } else if (pcity['unhappy']) {
           sprite_array.push({"key" : "city.disorder"});
         }
       }

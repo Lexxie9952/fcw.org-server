@@ -845,22 +845,31 @@ function show_city_dialog(pcity)
   var rapture_food_status_html = "<div><div style='float:left;background: transparent url(/images/wheat.png);width:20px;height:20px;'></div><div style='margin-left:4px;float:left;color:"+city_surplus_colour+";'</div><b>"+city_surplus_sign+pcity['surplus'][O_FOOD]+"</b></div></div>"
 
   // Calculate colour code for rapture status
-  var rapture_status_class="";
+  let next_state = "Peace";                               // default / fall-thru
+  var rapture_status_class="city_dialog_peace";           // default / fall-thru
+  $('#rapture_status').attr('title', "Peace next turn");  // default / fall-thru
+  let pissed = pcity['hangry'] || (server_settings.fulldisorder.val && pcity['anarchy']);
   var happy_people   = pcity['ppl_happy'][FEELING_FINAL];
   var unhappy_angry_people = pcity['ppl_unhappy'][FEELING_FINAL]+pcity['ppl_angry'][FEELING_FINAL];
   // Color code for upcoming state under current configuration of tiles/luxury rate/improvements/deployed units:
   if (happy_people >= pcity['size']*0.4999 && unhappy_angry_people==0 && pcity['size']>2) {
-    $('#rapture_status').attr('title', "Celebration next turn");
-    rapture_status_class = "city_dialog_celeb";
+    next_state = "Celebrating"; $('#rapture_status').attr('title', "Celebration next turn");
+    if (!pissed) {
+      rapture_status_class = "city_dialog_celeb";
+    }
+  } 
+  if (pissed) {
+    if (next_state == "Celebrating") rapture_status_class = "city_dialog_celebrate_after_anarchy"
+    else rapture_status_class = "city_dialog_restoring_anarchy";
   }
-  else if (unhappy_angry_people > happy_people) {
-    $('#rapture_status').attr('title', "Disorder: will not produce next turn");
-    rapture_status_class = "city_dialog_disorder";
+  if (unhappy_angry_people > happy_people || server_settings.hangry.val && pcity.granary_turns == -1) {                  
+    rapture_status_class = "city_dialog_disorder"
+    next_state = "Lawless"
   }
-  else {
-    $('#rapture_status').attr('title', "Peace next turn");
-  }
- 
+
+  if (pcity.granary_turns == -1 && server_settings.hangry.val) next_state = "Famine";
+  $('#rapture_status').attr('title', get_city_state_description(get_city_state(pcity),next_state));
+  
   $('#rapture_food').html(rapture_food_status_html);
    
   $('#rapture_status').html("<div class='"+rapture_status_class+"' style='font-weight:bold;padding-bottom:9px;'>"+get_city_state(pcity)+"</div>");
@@ -3109,6 +3118,7 @@ function show_city_improvement_pane(city_id)
   // always in the same place whether present or not, so Gestalt processing can check for the 
   // improvement.
   var pcity = cities[city_id];
+  if (!pcity) return;  // sometimes happens after it's razed, disbanded, etc.
 
   var improvements_html = "";
   var opacity = 1;
@@ -3574,11 +3584,18 @@ function update_city_screen()
     
         // PEACE, CELEBRATING, OR DISORDER:
         city_state = get_city_state(pcity);
+        let current_state = city_state;
+        // Default fall-thru state:
+        let city_state_span = "id='city_state"+pcity.id+"' class='redux_centre mobile_centre non_priority' style='cursor:help; text-align:center;'>"+city_state;     // state of peace is all other conditions = regular text 
+        let next_state = "Peace"; // default unless changed below
+        let state_desc = "";
         if (tiny_screen) {
           switch (city_state) {
             case "Peace":
               city_state = "&#x262E;";   // peace
               break;
+            case "Famine":
+            case "Lawless":
             case "Disorder":
               city_state = "&#x270A;"    // fist
               break;
@@ -3588,15 +3605,27 @@ function update_city_screen()
           }
         }
         city_state+="</span>";
+
+        let pissed = pcity['hangry'] || (server_settings.fulldisorder.val && pcity['anarchy']);
      
         // Color code for upcoming state under current configuration of tiles/luxury rate/improvements/deployed units:
-        if (happy_people >= pcity['size']*0.4999 && unhappy_angry_people==0 && pcity['size']>2)  
-          city_state = "<span class='redux_centre mobile_centre hint_of_green' style='text-align:center;'>"+city_state;    // half or more happy, no unhappy = city will (continue to) celebrate, green code.
-        else if (unhappy_angry_people > happy_people)                  
-          city_state = "<span class='redux_centre mobile_centre negative_text' style='text-align:center;'>"+city_state;    // more unhappy than happy = disorder, red code
-        else
-          city_state = "<span class='redux_centre mobile_centre non_priority' style='text-align:center;'>"+city_state;     // state of peace is all other conditions = regular text 
-         
+        if (happy_people >= pcity['size']*0.4999 && unhappy_angry_people==0 && pcity['size']>2) { 
+          next_state = "Celebrating";
+          if (!pissed)
+            city_state_span = "id='city_state"+pcity.id+"' class='redux_centre mobile_centre hint_of_green' style='cursor:help; text-align:center;'>"+city_state;    // half or more happy, no unhappy = city will (continue to) celebrate, green code.
+        }
+        if (pissed) {
+          if (next_state == "Celebrating")
+            city_state_span = "id='city_state"+pcity.id+"' class='redux_centre mobile_centre city_dialog_celebrate_after_anarchy' style='cursor:help; text-align:center;'>"+city_state;    // not going to produce, but not red because will calm down next turn. 
+          else city_state_span = "id='city_state"+pcity.id+"' class='redux_centre mobile_centre restored_anarchy_text' style='cursor:help; text-align:center;'>"+city_state;    // not going to produce, but not red because will calm down next turn. 
+        }        
+        if (unhappy_angry_people > happy_people || server_settings.hangry.val && pcity.granary_turns == -1) {                  
+          city_state_span = "id='city_state"+pcity.id+"' class='redux_centre mobile_centre negative_text' style='cursor:help; text-align:center;'>"+city_state;    // more unhappy than happy = disorder, red code
+          if (pcity.granary_turns == -1 && server_settings.hangry.val) next_state = "Famine";
+          else next_state = "Lawless";
+        } 
+        city_state = "<span title='"+html_safe(get_city_state_description(current_state,next_state))+"' "+city_state_span;
+        
         happy_people   = "<span class='hint_of_green'>"+happy_people+"</span>";
         content_people = "<span class='hint_of_blue'>" +content_people+"</span>";
         unhappy_angry_people = "<span class='hint_of_orange'>"+unhappy_angry_people+"</span>";  
@@ -3668,8 +3697,10 @@ function update_city_screen()
           else city_growth="<span class='mobile_centre'>" + city_growth + "</span>";
         } else { // (wide_screen || redux_screen) 
           city_growth = city_turns_to_growth_text(pcity);
-          if (city_growth.startsWith("<b>")) {
-            // keep bright white if Starving in 1 (which we know because it comes back with <b>)
+          if (city_growth.startsWith("&#9662;")) {
+            city_growth="<span title = '"
+              + (pcity.granary_turns == -1 ? "Starving next turn!" : "Starves in "+Math.abs(pcity.granary_turns)+" turns.")
+              + "' class='negative_text'>" + city_growth + "</span>"; 
           } else { 
             city_growth="<span class='non_priority'>" + city_growth + "</span>"; 
           }
@@ -3687,7 +3718,6 @@ function update_city_screen()
 
           city_granary_size = "<span class='non_priority'>" + city_granary_size+"</span>";
         } 
-        
         
         // Generate and align buy cost with link to buy, or blank if can't be bought because no shields remain.
         if (pcity['buy_cost'] == 0) {
@@ -4156,11 +4186,69 @@ function get_city_state(pcity)
 
   if (pcity['was_happy'] && pcity['size'] >= 3) {
     return "Celebrating";
+  } else if (pcity['hangry']) {
+    return "Famine";
+  } else if (server_settings.fulldisorder.val && pcity['anarchy']) {
+    return "Lawless"
   } else if (pcity['unhappy']) {
     return "Disorder";
   } else {
     return "Peace";
   }
+}
+/**************************************************************************
+ Describe city state mood vector of {current, next} in normal language.
+**************************************************************************/
+function get_city_state_description(current, next) {
+  var desc = "";
+  switch (current) {
+    case "Celebrating":
+      desc = "Celebrating.";
+      break;
+    case "Famine":
+      desc = "Famine.";
+      if (server_settings.hangry.val) desc+= " Can't produce this turn."
+      break;
+    case "Lawless":
+      if (server_settings.fulldisorder.val)
+        desc = "Lawless. Can't produce this turn."
+      else desc = "Disorder."  
+      break;
+    case "Disorder":
+      desc = "Disorder threatened. May produce this turn."
+      break;
+    default:
+      desc = "Peace."
+  }
+  switch (next) {
+    case "Celebrating":
+      desc += "\nCelebrates next turn.";
+      break;
+    case "Famine":
+      if (server_settings.fulldisorder.val) {
+        if (desc=="Peace." || desc=="Celebrating.") {
+          desc += " May produce this turn."
+        }
+        desc += "\nFamine next turn. Production will halt.";
+      }
+      else 
+        desc += "\nStarves next turn.";
+      break;
+    case "Disorder":
+    case "Lawless":
+      if (server_settings.fulldisorder.val) {
+        if (desc=="Peace." || desc=="Celebrating.") {
+          desc += " May produce this turn."
+        }        
+        desc += "\nLawless next turn. Production will halt.";
+      }
+      else desc += "\nDisorder next turn."
+      break;
+    default:
+      desc += "\nPeace next turn.";
+      break;
+  }
+  return desc;
 }
 
 /**************************************************************************
