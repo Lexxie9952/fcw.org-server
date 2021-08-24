@@ -29,6 +29,8 @@ extern "C" {
 #define SPECENUM_VALUE2NAME N_("JumpFrom")
 #define SPECENUM_VALUE3 RF_JUMP_TO
 #define SPECENUM_VALUE3NAME N_("JumpTo")
+#define SPECENUM_VALUE4 RF_INTEGRATE_COST_UP
+#define SPECENUM_VALUE4NAME N_("IntegrateCostUp")
 #define SPECENUM_COUNT RF_COUNT
 #define SPECENUM_BITVECTOR bv_road_flags
 #include "specenum_gen.h"

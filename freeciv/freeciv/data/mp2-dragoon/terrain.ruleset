@@ -2792,11 +2792,29 @@ flags          = "NoAggressive"
 ;                           flowing from land tiles to ocean
 ;   - "UnrestrictedInfra" = Use of the enemy owned road is not restricted
 ;                           even if server setting 'restrictinfra' is set
-;   - "JumpFrom"          = Move to a tile nativity providing "JumpTo"
-;                           road is considered native
-;   - "JumpTo"            = Move from a tile nativity providing "JumpFrom"
-;                           road is considered native
-;
+;   - "JumpFrom"          = Allows movement to a dest tile natively, provided it
+;                           has a "JumpTo" road which is considered native
+;   - "JumpTo"            = Allow movement to this tile natively, provided the
+;                           source tile has a road with "JumpFrom" and the road
+;                           is considered native
+;   - "IntegrateCostUp"   = If this road (type A) integrates with type B, then  
+;                           the move cost when going from A to B will be the 
+;                           greater of move_cost(A) and move_cost(B).
+;                           This gives the ruleset several possibilities:
+;                           if this flag is given to higher move cost road (A):
+;                              the move cost from A to B will be the same as 
+;                              B to A: the higher of the two; i.e., symmetric 
+;                              higher move cost. In other words, the same as
+;                              how roads work with railroads.
+;                           if this flag is given to lower move cost road (B):
+;                              the move cost from A to B and B to A will be the 
+;                              destination cost -- that is, asymmetric; BUT 
+;                              type B will have symmetric move costs integrating
+;                              with roads of lower move cost than itself.
+;                           if this flag is not used:
+;                              move_cost will be that of the destination road: 
+;                              i.e., asymmetric move_cost for A-to-B and B-to-A
+
 ; */ <-- avoid gettext warnings
 
 [road_road]
@@ -2814,7 +2832,7 @@ flags          = "UnrestrictedInfra"
 
 [road_quay]
 extra          = "Quay"
-move_cost      = 9
+move_cost      = 6
 food_incr      = 0
 shield_incr    = 0
 trade_incr     = 0
@@ -2822,7 +2840,7 @@ food_bonus     = 0
 shield_bonus   = 0
 trade_bonus    = 0
 integrates     = "Road", "Quay"
-flags          = "UnrestrictedInfra"
+flags          = "UnrestrictedInfra", "IntegrateCostUp"
 
 [road_railroad]
 extra          = "Railroad"

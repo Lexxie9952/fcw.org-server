@@ -880,12 +880,21 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
         && (!ri || road_has_flag(proad, RF_UNRESTRICTED_INFRA))
         && tile_has_extra(t2, pextra)) {
       extra_type_list_iterate(proad->integrators, iextra) {
+        struct road_type *sroad = extra_road_get(iextra);
         /* We have no unrestricted infra related check here,
          * destination road is the one that counts. */
         if (tile_has_extra(t1, iextra)
             && is_native_extra_to_uclass(iextra, pclass)) {
           if (proad->move_mode == RMM_FAST_ALWAYS) {
             cost = proad->move_cost;
+            /* if roadA and roadB integrate and source road has the flag 
+             * "IntegrateCostUp", then going from A-to-B or B-to-A has a
+             * symmetric or equal move cost. It's like road<->rail, always
+             * the greater move_cost (i.e., the move_cost of the road). */
+            if (road_has_flag(sroad, RF_INTEGRATE_COST_UP)
+                && sroad->move_cost > cost) {
+              cost = sroad->move_cost;
+            }
           } else {
             if (!cardinality_checked) {
               cardinal_move = (ALL_DIRECTIONS_CARDINAL()
@@ -894,6 +903,10 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
             }
             if (cardinal_move) {
               cost = proad->move_cost;
+              if (road_has_flag(sroad, RF_INTEGRATE_COST_UP)
+                  && sroad->move_cost > cost) {
+                cost = sroad->move_cost;
+              }              
             } else {
               switch (proad->move_mode) {
               case RMM_CARDINAL:
@@ -910,6 +923,10 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
                        * Should we check against non-native terrain on between tile?
                        */
                       cost = proad->move_cost * 2;
+                      if (road_has_flag(sroad, RF_INTEGRATE_COST_UP)
+                          && sroad->move_cost * 2 > cost) {
+                        cost = sroad->move_cost * 2;
+                      }
                     }
                   } cardinal_between_iterate_end;
                 }
@@ -917,6 +934,10 @@ int tile_move_cost_ptrs(const struct civ_map *nmap,
               case RMM_FAST_ALWAYS:
                 fc_assert(proad->move_mode != RMM_FAST_ALWAYS); /* Already handled above */
                 cost = proad->move_cost;
+                if (road_has_flag(sroad, RF_INTEGRATE_COST_UP)
+                    && sroad->move_cost > cost) {
+                  cost = sroad->move_cost;
+                }                
                 break;
               }
             }
