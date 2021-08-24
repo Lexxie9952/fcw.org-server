@@ -4929,9 +4929,9 @@ veteran_work_raise_chance = 0, 0, 0, 0, 0, 0, 0
 veteran_power_fact = 100, 150, 175, 250, 300, 350, 400
 veteran_move_bonus = 7, 7, 7, 7, 8, 9, 10
 helptext      = _("\
-Compared to other early Commerce units, the Caravan is the only one who can\
- travel by land off roads and rails, and cause no military threat to\
- trade partners. It can defend itself and also fortify. They have 2 7/9 moves. \n\ 
+The Caravan is versatile and rugged. It is the only all-terrain land Commerce unit.\
+ It is also the only one that presents no potential military\
+ threat to trade partners. It can defend itself, fortify, and has 2 7/9 moves. \n\ 
 Commerce units can help build Wonders in any city with whom\
  you are not at war. In foreign cities 15+ tiles distant, they can create Trade Routes,\
  increasing net trade in both cities relative to their combined trade. Routes are inactive\
