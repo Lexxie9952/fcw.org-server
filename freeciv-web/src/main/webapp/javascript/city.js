@@ -751,9 +751,17 @@ function show_city_dialog(pcity)
     if (client_rules_flag[CRF_NO_WASTE]) $("#city_waste_row").remove();
     else $("#city_waste").html(pcity['waste'][O_SHIELD]);
 
-    if (pcity['steal'] && pcity['owner'] == client.conn.playing.playerno) {
-      $("#city_steal").html(pcity['steal']);
-      $("#city_steal_row").show();
+    if ( (pcity['steal'] && pcity['owner'] == client.conn.playing.playerno)
+         || (client_rules_flag[CRF_MP2_C] && city_get_foreign_pct(pcity.id) >= 49)
+     ) {
+      // If impossible to steal from this city (lawless after conquest rule):
+      if (client_rules_flag[CRF_MP2_C] && city_get_foreign_pct(pcity.id) >= 49) {
+        $("#city_steal").html("<b>Blocked</b>");
+        $("#city_steal_row").show();
+      } else {
+        $("#city_steal").html(pcity['steal']);
+        $("#city_steal_row").show();
+      }
     } else $("#city_steal_row").hide();
 
     $("#city_pollution").html(pcity['pollution']);
@@ -4392,6 +4400,28 @@ function city_cancel_rally_point(city_id)
   goto_request_map["0" + "," + ptile['x'] + "," + ptile['y']] = true;
 
   send_city_rally_point(ptile);
+}
+
+
+/**************************************************************************
+ Get % of city's citizens who are foreign 
+**************************************************************************/
+function city_get_foreign_pct(city_id)
+{
+  var pcity = cities[city_id];
+  var total_citizens = pcity.size;
+  var domestic_citizens = 0;
+  var foreign_citizens = 0;
+
+  for (ethnicity in pcity['nation_id']) {
+    let num_ethnics = pcity['nation_citizens'][ethnicity];
+    
+    if (pcity['nation_id'][ethnicity] == pcity.owner) {
+      domestic_citizens += num_ethnics;
+    } else foreign_citizens += num_ethnics;
+  }
+
+  return (foreign_citizens / total_citizens) * 100;
 }
 
 /**************************************************************************
