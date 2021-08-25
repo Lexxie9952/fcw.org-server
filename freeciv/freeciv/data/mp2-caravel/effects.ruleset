@@ -5652,7 +5652,7 @@ reqs	=
     }
 [effect_mausoleum_of_mausolos_half_courthouse_corruption]
 type    = "Output_Waste_Pct"
-value	= 30
+value	= 34
  reqs	=
     { "type",       "name",                   "range", "present"
       "Building",   "Mausoleum of Mausolos",  "Player", TRUE

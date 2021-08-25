@@ -7,16 +7,22 @@ Focus goals for MP2-Dragoon
 
 ============================= CHANGES ======================
 1. Granary Size, Population Changes:
-       S2  S3  S4  S5  S6  S7 
-MP2C:  20  30  40  50  60  70   20+10...
-MP2D:  16  23  31  40  50  60  70  71  16+7+8+9+10...up to 70 then +1
-Although this speeds the early game up which is arguably 
-a nice secondary bonus, the actual purpose for this change
-is in curing an imbalance in the Discrete Mathematics of 
-the foodbox system. This smooths over a flaw in that
-system which heavily discourages size 3 cities under 
-despotism and early expansion AND discouraged new 
-cities for the last 40% of the game.
+       S2  S3  S4  S5  S6  S7  S8  S9  S10
+MP2C:  20  30  40  50  60  70  70  70  70...
+MP2D:  16  23  31  40  50  60  70  71  72...
+This speeds the early game with a tightly controlled 
+mathematical solution: a needle in a haystack of infinite 
+other ways to accelerate the foodbox that all have bad side
+effects, and skew the proportional balance of all other game 
+elements. Speeding up the game with foodbox changes has 
+been done by others for a long time, but these all had
+"mathematically diseased side effects". Finally, the
+perfect solution is here, with the magic formula! 
+This change does more than just that. It simultaneously
+cures 2 other flaws in the Discrete Mathematics of the foodbox
+system. Those flaws heavily discouraged size 3 cities under
+Despotism AND discouraged new cities for the last 40% of the
+game.
 ============================================================
 2. Mountain Goats (3 1 0) & Hippopotami (3 1 0)
 ============================================================
@@ -63,7 +69,7 @@ this virtual unit for the early game.
 10. Riflemen and Alpines upgrade to Ground Troops
 =============================================================
 11. Mausoleum
-   effectively, upkeep on Courthouses is free.
+   Effectively, upkeep on Courthouses is free.
    Courthouses cost 5 less; during Despotism, they cost the
      same as a temple.
 =============================================================
@@ -78,13 +84,19 @@ this virtual unit for the early game.
    (this is not +50% odds, it's +50% frequency)
 =============================================================
 14. New cities get a +2 nomad food bonus in Despotism. Stacks
-       with Pyramids.
-    Capital city gets 2x nomad food bonus on founding. (+4)
+    with Pyramids. Capital city gets 2x nomad food bonus on
+    founding. (+4)
 =============================================================
 15. Explorer renamed to Scout. Available with Horseback Riding,
    moves 4 tiles (6 with Map Making, which then makes it identical
    to previous Explorer. Cost is now same as Horsemen, 2 shields
    less.)
+=============================================================
+16. Quay-to-Road and Road-to-Quay uses 2/3 move point. 
+   Was 1 and 1/3 (a hack to get an average of 2/3 on each)
+   A new server feature simplifies this. <ADD TO: SIMPLIFIERS>
+=============================================================
+
 
 
 

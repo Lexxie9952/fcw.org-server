@@ -5798,7 +5798,7 @@ reqs	=
     }
 [effect_mausoleum_of_mausolos_half_courthouse_corruption]
 type    = "Output_Waste_Pct"
-value	= 30
+value	= 34    ; makes cities with 3 corruption lose 1 corruption; also compensates for cities with <=2 corruption getting no effect
  reqs	=
     { "type",       "name",                   "range", "present"
       "Building",   "Mausoleum of Mausolos",  "Player", TRUE
