@@ -1400,9 +1400,7 @@ function button_hide_panels()
 function update_unit_order_commands()
 {
   // don't show orders buttons if option off, or if observer
-  if (!show_order_option
-      || client_is_observer()
-      || client.conn.playing == null)
+  if (client_is_observer() || client.conn.playing == null)
   {
     $("#game_unit_orders_default").hide();
     return;
@@ -1435,7 +1433,8 @@ function update_unit_order_commands()
     return;
   }
   // turn back on if the above hid it last time:
-  $("#game_unit_orders_default").show();
+  if (show_order_option) $("#game_unit_orders_default").show();
+  else $("#game_unit_orders_default").hide();
 
   switch (show_order_buttons) {
     case 3: // 3==hide the other lower panel too. 
