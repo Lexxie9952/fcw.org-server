@@ -4979,12 +4979,13 @@ veteran_work_raise_chance = 0
 veteran_power_fact = 100
 veteran_move_bonus = 3
 helptext      = _("\
-Wagons are the first Land unit that can do Commerce. Compared to a Caravan, they are defenseless,\
- and without a road or quay, must stay on grasslands, plains, and tundra. This exposes them to ambush\
- and capture from units in Hideouts. A benefit of Wagons is to transport slower units to reach distant\
- cities faster. They have 3⅓ move points, giving a range of 10 tiles on roads. \n\
-Goods and units with less than 3 move points can be carried on Wagons. Outside a city, units can load;\
- but will lose their moves stepping off. \n\
+Wagons are the first Commerce unit that can travel by land. Compared to a Caravan, they are defenseless.\
+ They must stay on roads and quays; or flat grasslands, plains, and tundra. Wagons are useful for\
+ transporting slower units. Wagons have 3⅓ move points, giving a range of 10 tiles on roads. \n\ 
+"), _("\
+Wagons allow units with less than 3 move points to travel your roads faster.\
+ Any cargo can board a Wagon anywhere; but needs a city, quay, or base to deboard.\
+ Cargo can disembark anywhere, but it uses up all move points. \n\
 Read the help on Caravans to see what Commerce units can do.\
 ")
 
@@ -5023,10 +5024,13 @@ veteran_power_fact = 100
 veteran_move_bonus = 0
 roles         = ""
 helptext      = _("\
-Trains are Commerce units with a bonus：they allow units with less than 3\
- move points to travel your rails at distances comparable to other units. Only Foot Soldiers\
- can:\n1. (L)oad outside a City or Base;\n2. Unload (T) in a Base or Quay.;\n3. Step off the Train outside a City\
- (loses all moves.)\nAll other units must load/unload inside a City. \n\n\
+Trains are Commerce units with a bonus：they allow units with less than 3 move points\
+ to travel your rails at distances comparable to other units. Transport logistics for\
+ Trains are more restricted than for Wagons and Trucks. Except for Foot soldiers,\
+ all units need to be in a city to get on or off a Train. \n\
+Foot Soldiers use Trains the same as Wagons and Trucks, and can: \n\
+ 1. Board anywhere; \n 2. Deboard in a Base or Quay.; \n\
+ 3. Disembark outside a City (loses all moves.) \n\n\
 On non-allied foreign rails, Trains incur full terrain movement cost.\
  Pre-gunpowder units can’t attack Trains. \n\n\
 Electricity and Combustion each give Trains an additional +1 move.\
@@ -5061,15 +5065,15 @@ cargo         = "Land", "LandAirSea", "Bomb", "Cargo"
 flags         = "HelpWonder", "TradeRoute", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "NoVeteran", "Cant_Pillage"
 roles         = ""
 helptext      = _("\
-The Truck unit replaces the Caravan as the basic Commerce unit on Land. It moves at\
- more than twice the speed, but without a road or quay, must stay on grasslands, plains, and tundra.\
- (Trucks do not use rails.) Each Truck used to build a Wonder will add 50 shields. See the entry on\
- Caravan to read what Commerce units may do. \
+The Truck replaces the Caravan as the basic Commerce unit on Land. It moves at\
+ more than twice the speed; but is restricted to the same roads and flatland\
+ tiles as Wagons, and can't use rails. Each Truck used to build a Wonder\
+ will add 50 shields. See the entry on Caravan to read what Commerce units may do. \n\
 "), _("\
-Trucks allow units with less than 3 move points to travel your roads at\
-distances comparable to other units. Only Foot Soldiers can:\n1. (L)oad outside a City or Base;\n\
-2. Unload (T) in a Base or Quay;\n3. Move off the Truck outside a City\
- (loses all moves.)\nAll other units must load/unload inside a City. \n\n\\
+Trucks allow units with less than 3 move points to travel your roads faster: Like\
+ the Wagon, any cargo can board a Truck anywhere, but a city, quay, or base is\
+ needed to deboard. Disembarking is legal for all cargo types, but uses up all\
+ moves (except Marines.)\
 ")
 
 [unit_goods]
