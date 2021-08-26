@@ -2662,6 +2662,9 @@ function create_unit_offset_arrays()
       case "Ram Ship":
           vx -= 1; vy -= 1;
           break;
+      case "Scout":
+          dx -= 2; dy -= 3;
+          break;
       case "Settlers":
           dx -= 3; dy -= 2;
           break;
