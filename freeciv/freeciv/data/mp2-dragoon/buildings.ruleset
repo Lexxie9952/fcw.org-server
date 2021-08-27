@@ -1213,7 +1213,7 @@ Space Components can be differentiated into Propulsion and Fuel Components.\
  Each pair of them reduces spaceship travel time.  You can build up to 8 pairs.\
 "), _("\
 Before you can build any spaceship parts, your nation must have built the\
- Apollo Program.\
+ Apollo Program; and a city needs a Factory.\
 ")
 
 [building_space_module]
@@ -1249,7 +1249,7 @@ Space Modules are the most expensive parts of spaceships.  There\
 You can build up to 4 Space Modules of each kind.\
 "), _("\
 Before you can build any spaceship parts, your nation must have built the\
- Apollo Program.\
+ Apollo Program; and a city needs a Factory.\
 ")
 
 [building_space_structural]
@@ -1276,7 +1276,7 @@ Space Structurals form the base of your spaceship.  All other\
  function.  You can build up to 32 Space Structurals.\
 "), _("\
 Before you can build any spaceship parts, your nation must have built the\
- Apollo Program.\
+ Apollo Program; and a city needs a Factory.\
 ")
 
 
@@ -1339,7 +1339,7 @@ graphic_alt	= "b.palace"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 90
+build_cost	= 85
 upkeep		= 0
 sabotage	= 0
 sound		= "b_palace"
