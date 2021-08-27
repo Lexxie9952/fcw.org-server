@@ -69,14 +69,21 @@ static void form_chat_name(struct connection *pconn, char *buffer, size_t len)
 {
   struct player *pplayer = pconn->playing;
 
+  char *str = capitalized_string(pconn->username);
+  str[0] = str[0] & 0b11011111;
+
   if (pconn->supercow) {
-    fc_snprintf(buffer, len, "%s (Gamemaster)", pconn->username);
+    fc_snprintf(buffer, len, 
+      "<font face='Freeciv'><font color='#dc9'>%s</font> (<font color='#da5'>Gamemaster</font>)",
+      str);
   } else if (!pplayer || pconn->observer
       || strcmp(player_name(pplayer), ANON_PLAYER_NAME) == 0) {
-    fc_snprintf(buffer, len, "%s (observer)", pconn->username);
+    fc_snprintf(buffer, len, "%s (observer)", str);
   } else {
     fc_snprintf(buffer, len, "%s", player_name(pplayer));
   }
+
+  free_capitalized(str);
 }
 
 /**********************************************************************//**
@@ -88,8 +95,8 @@ static void form_chat_flag(struct connection *pconn, char *buffer, size_t len)
   struct player *pplayer = pconn->playing;
 
   if (pconn->supercow) {
-    buffer[0] = '\0';
-    //fc_snprintf(buffer, len, "​"); //zero-width space to avoid compiler error
+    //buffer[0] = '\0';
+    fc_snprintf(buffer, len, "[`flag/gm`]");
   } else if (!pplayer || pconn->observer
       || strcmp(player_name(pplayer), ANON_PLAYER_NAME) == 0
       || nation_of_player(pplayer) == NULL) {
