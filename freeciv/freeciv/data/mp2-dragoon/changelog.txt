@@ -96,6 +96,9 @@ this virtual unit for the early game.
    Was 1 and 1/3 (a hack to get an average of 2/3 on each)
    A new server feature simplifies this. <ADD TO: SIMPLIFIERS>
 =============================================================
+17. Ecclesiastical Palace, cost:85 (was 90).
+=============================================================
+
 
 
 
