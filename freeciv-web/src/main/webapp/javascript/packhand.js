@@ -2115,6 +2115,16 @@ function handle_ruleset_extra(packet)
   packet['causes'] = new BitVector(packet['causes']);
   packet['rmcauses'] = new BitVector(packet['rmcauses']);
 
+  /* Handle split extras with same name + zero_width space, which are used
+   * by rulesets to get conditional logic out of "one" extra */
+  // "Quay" and "Quay"+<zero width space>
+  if (packet['name'].includes("Quay") && packet.name.length==5) {
+      extras["Quay"+String.fromCharCode(8203)] = packet;
+      extras[packet.id] = packet;
+      window["EXTRA_QUAY2"] = packet['id'];
+      return;
+  }
+
   extras[packet['id']] = packet;
   extras[packet['name']] = packet;
 
@@ -2122,22 +2132,17 @@ function handle_ruleset_extra(packet)
 
   if (typeof EXTRA_FORT !== 'undefined') { //makes sure it's defined first
      //some rulesets don't have this extra so this checks if it's defined first
-    if (packet['name'] == "Fort") window["EXTRA_FORT"] = packet['id']; /////
+    if (packet['name'] == "Fort") window["EXTRA_FORT"] = packet['id'];
   } 
-  /*
-  if (typeof EXTRA_NAVALBASE !== 'undefined') { //makes sure it's defined first
-    if (packet['name'] == "Naval Base") window["EXTRA_NAVALBASE"] = packet['id']; /////
-  } */
 
   if (packet['name'] == "Sea Bridge") window['EXTRA_SEABRIDGE'] = packet['id'];
-  if (packet['name'] == "Naval Base") window["EXTRA_NAVALBASE"] = packet['id']; /////
+  if (packet['name'] == "Naval Base") window["EXTRA_NAVALBASE"] = packet['id'];
   if (packet['name'] == "Railroad") window["EXTRA_RAIL"] = packet['id'];
   if (packet['name'] == "Oil Well") window["EXTRA_OIL_WELL"] = packet['id'];
   if (packet['name'] == "Minor Tribe Village") window["EXTRA_HUT"] = packet['id'];
   if (packet['name'] == "Castle") window["EXTRA_CASTLE"] = packet['id'];
   if (packet['name'] == "Bunker") window["EXTRA_BUNKER"] = packet['id'];
   if (packet['name'] == "Tile Claim") window["EXTRA_TILE_CLAIM"] = packet['id'];
-
 }
 
 /**************************************************************************

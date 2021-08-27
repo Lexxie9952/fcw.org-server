@@ -2097,6 +2097,7 @@ function fill_road_rail_sprite_array(ptile, pcity)
   const CANAL_active =  (typeof EXTRA_CANAL !== "undefined");
   const WATERWAY_active = (typeof EXTRA_WATERWAY !== "undefined");
   const QUAY_active = (typeof EXTRA_QUAY !== "undefined");
+  const QUAY2_active = (typeof EXTRA_QUAY2 !== "undefined");
   const SEABRIDGE_active = (typeof EXTRA_SEABRIDGE !== "undefined");
   
   if (MAGLEV_active) {
@@ -2127,7 +2128,12 @@ function fill_road_rail_sprite_array(ptile, pcity)
 
       // Quays integrate with roads "one-way", so we draw the road on the tile that
       // has it but not the quay tile, showing the road going TOWARD the quay.
-      if (QUAY_active) road_near[dir] |= tile_has_extra(tile1, EXTRA_QUAY);
+      if (QUAY_active) {
+        road_near[dir] |= tile_has_extra(tile1, EXTRA_QUAY);
+        if (QUAY2_active) {
+          road_near[dir] |= tile_has_extra(tile1, EXTRA_QUAY2);
+        }
+      }
 
       rail_near[dir] = tile_has_extra(tile1, EXTRA_RAIL);
 
@@ -2506,7 +2512,7 @@ function create_unit_offset_arrays()
           dx +=2; dy -= 2;
           break;
       case "Cavalry":
-          vx += 5; vy -= 15;
+          vx += 5; vy -= 16;
           dx += 4; dy -= 3;
           break;
       case "Chariot":
