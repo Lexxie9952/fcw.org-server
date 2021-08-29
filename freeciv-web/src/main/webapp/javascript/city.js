@@ -460,6 +460,9 @@ function show_city_dialog(pcity)
     $("#city_tabs-i").hide();       // "Inside" tab for units, not needed on large screen.
     $(".extra_tabs_small").remove();  // class identified for "Inside" tab for units, not needed on large screen.
     $("#mobile_cma_checkbox").remove();
+    $("#ct2").html("Routes"+ (pcity['traderoute_count']!=0
+      ?"&nbsp;&nbsp; <img style='position:absolute; margin-left:-5px;' src='/images/e/trade.png'>"
+      :""));
     $("#ctg").html("<u><b style='font-family:FreecivBlack'>G</b></u>overnor"+(pcity.cma_enabled?" &#x1F539;":"")); // blue diamond to show governor active.
   } else {
     // CMA tab elements: (tight fit)
@@ -725,7 +728,13 @@ function show_city_dialog(pcity)
     else trade_txt += "<b>";
     trade_txt += pcity['surplus'][O_TRADE] + "</b>";
     var trade_txt2 = pcity['surplus'][O_TRADE]==pcity['prod'][O_TRADE] ? "" : "(" + pcity['prod'][O_TRADE] + ")";
-
+    if (pcity.traderoute_count) {
+      trade_txt2 += 
+      "<span style='cursor:help' title='trade route revenue'>"
+      + "<img style='margin-bottom:-7px; margin-top:-4px; margin-left:1px; padding:0px' src='/images/e/caravan.png'>"
+      + "<b class='trade_text'>" + get_city_traderoute_revenue(pcity['id'])+"</b></span>";
+    }
+     
     var gold_txt = "";
     if (pcity['surplus'][O_GOLD] > 0) gold_txt += "+<b class='gold_text'>";
     else gold_txt += "<b>";
@@ -2241,14 +2250,15 @@ function show_city_traderoutes()
 
     tcity = cities[tcity_id];
     if (tcity == null) continue;
-    msg += good['name'] + " trade with " + tcity['name'];
-    msg += " gives +" + routes[i]['value'] + " base trade each turn." + "<br>";
+    //msg += good['name'] + " trade with " + tcity['name'];
+    //msg += " gives +" + routes[i]['value'] + " base trade each turn." + "<br>";
+    msg += "Trade Route to " + tcity['name'] +": ";
+    msg += "+<b class='trade_text'>" + routes[i]['value'] + "</b> base trade each turn." + "<br>";
   }
 
   if (msg == "") {
-    msg = "No traderoutes.";
-    msg += " (Open the Manual, select Economy and then Trade ";
-    msg += "if you want to learn more about trade and trade routes.)";
+    msg = "<b>No Trade Routes.</b><br><br>";
+    msg += " For info on Trade Routes:<br>Help >> Manual >> Full Game Manual >> Economy >> Trade Routes";
   }
 
   $("#city_traderoutes_tab").html(msg);  
