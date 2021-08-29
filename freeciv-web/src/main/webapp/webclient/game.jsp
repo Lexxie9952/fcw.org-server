@@ -26,7 +26,7 @@
         </div>
 			</ul>
 			
-			<div id="tabs-map" tabindex="-1">
+			<div id="tabs-map" tabindex="-1" style='overflow:hidden'>
 			  <jsp:include page="canvas.jsp" flush="false"/>
 			</div>
 			<div id="tabs-empire">

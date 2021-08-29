@@ -2190,7 +2190,7 @@ function init_game_unit_panel()
              "minimize" : function(evt, dlg){ game_unit_panel_state = $("#game_unit_panel").dialogExtend("state")
                                               $(".unit_dialog").css("float","right");
                                               $(".unit_dialog").css({"height":"25","width":25});
-                                              unobstruct_minimized_dialog_continer(); // don't let wide container block clicks
+                                              unobstruct_minimized_dialog_container(); // don't let wide container block clicks
               },
              "restore" : function(evt, dlg){ game_unit_panel_state = $("#game_unit_panel").dialogExtend("state")
                                               $(".unit_dialog").css({"height":"auto","width":"140"});
@@ -2215,7 +2215,8 @@ function init_game_unit_panel()
   if (game_unit_panel_state == "minimized") $("#game_unit_panel").dialogExtend("minimize");
 
   $("#game_unit_panel").parent().children().not("#game_unit_panel").children().get(0).innerHTML
-    = "<div style='font-size:90%; vertical-align:top;'>&#x265F;</div>";
+    // = "<div style='font-size:90%; vertical-align:top;'>&#x265F;</div>";
+       = "<img src='/images/e/phalanx.png' height='16px'>";
 
   update_active_units_dialog();
 }

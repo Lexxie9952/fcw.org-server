@@ -117,8 +117,9 @@ function init_chatbox()
     else chatbox_restore("save"); // save initial settings for later restore after minimize/maximize
     // chat bubble icon in title bar
     $("#game_chatbox_panel").parent().children().not("#game_chatbox_panel").children().get(0).innerHTML 
-      = "<div style='font-size:80%; vertical-align:top;'><i class='fa fa-commenting-o' aria-hidden='true'></i></div>";
-    $("#game_text_input").blur();  // normal large screen, don't default focus into here on launch
+   //   = "<div style='font-size:80%; vertical-align:top;'><i class='fa fa-commenting-o' aria-hidden='true'></i></div>";
+        = "<img src='/images/e/chat.png' height='16px'>";
+   $("#game_text_input").blur();  // normal large screen, don't default focus into here on launch
   }
 
   $("#freeciv_custom_scrollbar_div").mCustomScrollbar({theme:"3d"});

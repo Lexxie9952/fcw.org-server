@@ -312,6 +312,10 @@ function create_diplomacy_dialog(counterpart, template) {
   var pplayer = client.conn.playing;
   var counterpart_id = counterpart['playerno'];
 
+  var counterpart_nation_flag = "/images/e/flag/" 
+                              + nations[counterpart['nation']].graphic_str
+                              + ".png";
+
   var embassy_meeting;
   // Whether meeting via embassy
   if ( !(client_rules_flag[CRF_PACTS_SANS_EMBASSY]) ) 
@@ -324,7 +328,7 @@ function create_diplomacy_dialog(counterpart, template) {
     counterpart: meeting_template_data(embassy_meeting, counterpart, pplayer)
   }));
 
-  var title = "Diplomacy: " + counterpart['name']
+  var title = " Diplomacy: " + counterpart['name']
 		 + " of the " + nations[counterpart['nation']]['adjective'];
 
   var dialog_id = "#diplomacy_dialog_"+counterpart_id;   
@@ -355,15 +359,26 @@ function create_diplomacy_dialog(counterpart, template) {
 		}).dialogExtend({
            "minimizable" : true,
            "closable" : true,
-           "minimize" : function(evt, dlg){
-            unobstruct_minimized_dialog_continer(); // don't let wide container block clicks
-          },
+           "minimize" : function(evt, dlg) {
+            // clip title to 16 chars when minimized
+            $("#dialog-extend-fixed-container").children().css({"max-width":"16ch",
+                                                                "width":"60px",
+                                                                "overflow": "hidden"});
+            $("#dialog-extend-fixed-container .ui-dialog-title").css("color", "transparent");
+            unobstruct_minimized_dialog_container(); // don't let wide container block clicks
+            },
            "icons" : {
              "minimize" : "ui-icon-circle-minus",
              "restore" : "ui-icon-bullet"
            }});
 
   diplomacy_dialog_register(dialog_id, counterpart_id);
+  // This title is a long string, override the 140% default font-size.
+  $(dialog_id).parent().children().first().css({"padding":"0px","font-size":"95%","text-overflow": "ellipsis"});
+  /* insert flag in titlebar */
+     $(dialog_id).parent().children().first().children().first().html(
+         "<img title='"+title+"' height='15' src='"+counterpart_nation_flag+"'>"
+         + $(dialog_id).parent().children().first().children().first().html());
   
   if (is_small_screen()) {
     $(dialog_id).css("padding", "0px");

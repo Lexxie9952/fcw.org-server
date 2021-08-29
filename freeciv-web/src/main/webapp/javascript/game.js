@@ -112,7 +112,7 @@ function update_game_status_panel() {
   // unread message counter with toggle message window
 
   status_html = "<span onclick='toggle_msgbox();' style='cursor: pointer;' title='"+msg_title_prefix
-              + "Show/hide message window.'><i class='fa fa-commenting-o' aria-hidden='true'></i>"
+              + "Show/hide message window.'><img src='/images/e/chat.png' height='16px'>"
               + "<font color='#ff8080'>&nbsp;<b>"
               + ((unread_messages>0) ? unread_messages : "")
               +"</b>&nbsp;&nbsp;&nbsp;</font></span>";

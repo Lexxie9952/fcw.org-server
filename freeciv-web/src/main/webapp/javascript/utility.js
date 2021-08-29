@@ -277,7 +277,7 @@ function alphanumeric_cleaner_city_names(text)
     inline declared minimize function where the dialog init_ is done, to
     fix this issue.
 **************************************************************************/
-function unobstruct_minimized_dialog_continer()
+function unobstruct_minimized_dialog_container()
 { // Prevent screen-wide container from blocking clicks when minimized
   // TO DO: this should really be put into jquery.dialogextend.js so we
   // don't have to do it for every minimized container.

@@ -4,9 +4,9 @@
  <image id="roads_image" style="display:none;">
  <canvas id="roads_canvas" style="display:none;"></canvas>
 
- <div id="mapview_canvas_div" style="border:none; outline:none; padding:0px; margin:0px;">
+ <div id="mapview_canvas_div" style="border:none; outline:none; padding:0px; margin:0px; overflow:hidden;">
     <%-- The main mapview canvas --%>  
-    <div id="canvas_div" style="border:none; outline:none; padding:0px; margin:0px;">
+    <div id="canvas_div" style="border:none; outline:none; padding:0px; margin:0px; overflow:hidden;">
     </div>
     
     <%-- Message chatbox --%>
