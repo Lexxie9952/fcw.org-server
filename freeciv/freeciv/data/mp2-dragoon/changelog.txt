@@ -89,18 +89,18 @@ this virtual unit for the early game.
 =============================================================
 15. Explorer renamed to Scout. Available with Horseback Riding,
    moves 4 tiles (6 with Map Making, which then makes it identical
-   to previous Explorer. Cost is now same as Horsemen, 2 shields
-   less.)
+   to previous Explorer. Cost reduced 2 shields, same as 
+   Horsemen.)
 =============================================================
 16. QUAY upgrades
    a. Quay-to-Road and Road-to-Quay uses 2/3 move point. (was 1/3, 3/3)
    b. Exiting a city with a quay remains 1/3 move point  (was 1/3)
    c. Time to build Quay is now 1 worker-turn: encourage ancient river importance.
-   d. Exiting quay now being 2/3 instead of 1/3 reduces territorial 
+   d. Exiting quay now being 2/3 instead of 1/3 or 1/9 (rail), reduces territorial 
       risk of making quays, somewhat.
    A new server feature simplifies this. <ADD TO: SIMPLIFIERS>
 =============================================================
-17. Ecclesiastical Palace, cost:85 (was 90).
+17. Ecclesiastical Palace, cost:80 (was 90).
 =============================================================
 
 

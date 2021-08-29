@@ -1339,7 +1339,7 @@ graphic_alt	= "b.palace"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 85
+build_cost	= 80
 upkeep		= 0
 sabotage	= 0
 sound		= "b_palace"
