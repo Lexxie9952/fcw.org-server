@@ -741,7 +741,19 @@ void update_city_activities(struct player *pplayer)
         pplayer->score.techout += cities[r]->prod[O_SCIENCE];
       }
 
+      // 27August2021:
+      /* TRS_SIMPLE route revenue now uses "one-turn delayed WYSIWYG" to avoid numerous 
+       * R/T issues and exploits: The base trade you see right before TC is the base
+       * trade that will be used in NEXT TURN's traderoute revenue calculations.
+       * i.e., NOT the base trade after you exploited the governor to temporarily allocate
+       * 15 Merchants, and NOT the catch-22 of two foreign players in a real-time feedback
+       * interference pattern of mutually altering each other's adjustments for luxury, 
+       * bulbs, etc. */
+      int base_trade = cities[r]->citizen_base[O_TRADE];
       update_city_activity(cities[r]);
+      /* Now immediately record this turn's base trade for TRS_SIMPLE revenue next turn: */ 
+      cities[r]->base_trade_recorded = base_trade;
+
       cities[r] = cities[--i];
     }
 

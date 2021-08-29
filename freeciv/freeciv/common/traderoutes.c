@@ -29,6 +29,9 @@
 
 #include "traderoutes.h"
 
+//#include "../server/notify.h"  // for debug
+
+
 const char *trade_route_type_names[] = {
   "National", "NationalIC", "IN", "INIC", "Ally", "AllyIC",
   "Enemy", "EnemyIC", "Team", "TeamIC"
@@ -327,7 +330,7 @@ bool can_establish_trade_route(const struct city *pc1, const struct city *pc2)
 *************************************************************************/
 int trade_base_between_cities(const struct city *pc1, const struct city *pc2)
 {
-  int bonus = 0;
+  float bonus = 0; /* use float to avoid double trunc rounding errors */
 
   if (NULL == pc1 || NULL == pc1->tile || NULL == pc2 || NULL == pc2->tile) {
     return 0;
@@ -344,18 +347,44 @@ int trade_base_between_cities(const struct city *pc1, const struct city *pc2)
     bonus = weighted_distance
             + city_size_get(pc1) + city_size_get(pc2);
   } else if (game.info.trade_revenue_style == TRS_SIMPLE) {
-    /* Simple revenue style */
-    bonus = (pc1->citizen_base[O_TRADE] + pc2->citizen_base[O_TRADE] + 4)
-	    * 3;
+    /* Simple revenue style:
+     * Avoid situation where two players are adjusting trade to avoid
+     * disorder, but each player's real-time adjustment is affecting 
+     * the other. Solution: use the static recorded base trade
+     * from last turn.
+    */
+    if (TRUE /*game.server.??? == val */
+        /* The case where there was no trade recorded last turn falls thru
+         * to use real-time trade; e.g., new city or reload from savegame.
+         * TODO: get upstream to save base_trade_recorded in savegame. */
+        && pc1->base_trade_recorded 
+        && pc2->base_trade_recorded) {
+      bonus = (pc1->base_trade_recorded + pc2->base_trade_recorded + 4)
+        * 3;      
+    }
+    else {
+      bonus = (pc1->citizen_base[O_TRADE] + pc2->citizen_base[O_TRADE] + 4)
+        * 3;
+    }
   }
 
+  /* Switched bonus to float: FIXED DOUBLE TRUNC ROUNDING ERROR! */ 
   bonus = bonus
           * trade_route_type_trade_pct(cities_trade_route_type(pc1, pc2))
-          / 100;
+          / 100.0;
 
-  bonus /= 12;
+  bonus /= 12.0;
 
-  return bonus;
+/* Debug:
+  notify_conn(NULL, NULL, E_SETTING, ftc_any,_("%s-to-%s: btr:%d + btr:%d = Tbt:%d ==> numerator:%.3f *.35/12:%.3f (r:%d)"),
+              pc1->name, pc2->name, 
+              pc1->base_trade_recorded, pc2->base_trade_recorded,
+              pc1->base_trade_recorded + pc2->base_trade_recorded,
+              (float)((pc1->base_trade_recorded + pc2->base_trade_recorded + 4) * 3),
+              bonus,
+              (int)(bonus+0.5)); */
+
+  return (int)(bonus+0.5);
 }
 
 /*********************************************************************//**
