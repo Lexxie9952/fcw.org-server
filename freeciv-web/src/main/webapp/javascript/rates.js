@@ -105,6 +105,7 @@ function show_tax_rates_dialog()
         "Resolution (𝗥)" : function() {
           TAX_GRANULE = TAX_GRANULE == 10 ? 5 : 10;
           simpleStorage.set("txGrnl", TAX_GRANULE);
+          set_resolution_button_title();
         },
 				"Done (𝗪)" : function() {
           submit_player_rates();
@@ -114,13 +115,13 @@ function show_tax_rates_dialog()
   $(id).dialog('widget').keydown(tax_rate_key_listener);
   $(id).css("color", default_dialog_text_color);
 
-  //$(".rate_slider").css("z-index", 201);
-
-  if (!client_rules_flag[CRF_MP2_D])
-    $("#rates_dialog").next().children().first().children().first().hide()
-  else 
-    $("#rates_dialog").next().children().first().children().first().show()
-
+  // Show and set title for resolution button, if applicable:
+  if (!client_rules_flag[CRF_MP2_D]) {
+    $("#rates_dialog").next().children().first().children().first().hide();
+  } else {
+    set_resolution_button_title();
+    $("#rates_dialog").next().children().first().children().first().show();
+  }
 
   update_rates_dialog();
   // Remove [X] to close, because it bypasses clean-up functions  
@@ -128,6 +129,17 @@ function show_tax_rates_dialog()
   freeze=true; // turn off updates to cities,empire,tech,map tabs
 
   rate_updater_interval = setInterval(rate_refresh, 500);
+}
+function set_resolution_button_title() {
+  let new_increment = (TAX_GRANULE == 10 ? 5 : 10);
+
+  $("#rates_dialog").next().children().first().children().first().html(
+      ""+new_increment+"% Rates (𝗥)");
+
+  $("#rates_dialog").next().children().first().children().first().prop('title', 
+      "switch to "+new_increment+"% increments");
+
+  $("#rates_dialog").next().children().first().children().first().blur();
 }
 function tax_rate_key_listener(ev)
 {
@@ -159,6 +171,7 @@ function tax_rate_key_listener(ev)
         TAX_GRANULE = TAX_GRANULE == 10 ? 5 : 10
         if (ev.shiftKey) TAX_GRANULE /= TAX_GRANULE; //remove after debug test
         simpleStorage.set("txGrnl", TAX_GRANULE);
+        set_resolution_button_title();
     }
 }
 
