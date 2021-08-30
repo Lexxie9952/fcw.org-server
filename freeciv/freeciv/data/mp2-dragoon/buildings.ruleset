@@ -225,16 +225,17 @@ Fortifications give 1.5× defense to every unit in a City vs. attacks by Land.\
  Fortifications prevent population loss when a defending unit is killed. \n\
 "), _("\
 Fortifications raise the terrain bonus of Lowlands tiles by +17%.\
- (Flatland is 1.17×, Forest and Swamp are 1.5×, and Jungle is 1.67×.) \n\
+ (Flatland is 1.17×, Forest and Swamp are 1.5×, and Jungle is 1.67×.)\
+ A terrain bonus helps defending Land units against attacks from units\
+ of all types. \n\
 "), _("\
 Fortifications are unassailable by Siege Rams.\
  If an enemy attempts sabotage, odds of success are halved. \n\
 "), _("\
-➤ This improvement offers no bonus when City Walls are in place, except for\
- any extra bonus to the terrain. \n\
-➤ Material from Fortifications is directly useful in building City Walls. AFTER\
- making City Walls, you can sell Fortifications with a full return of gold cost,\
- making the later upgrade have no loss in investment.\
+➤ Except for any possible terrain bonus, this improvement offers no bonus when\
+ City Walls are in place. \n\
+➤ AFTER making City Walls, you can sell Fortifications with a full return of gold\
+ cost.\
 ")
 
 [building_barracks]
@@ -372,17 +373,13 @@ sabotage	= 50
 sound		= "b_city_walls"
 sound_alt	= "b_generic"
 helptext	= _("\
-City Walls give a 3× bonus to every type of unit in a City, against attacks\
- from Land units. However, this bonus is reduced when attacked by Catapults\
- and all upgrades thereof. City Walls are ineffective against attacks from\
- units which are not in the Land unit class：they are useless against Air,\
- Sea, and Missile units. \n\
+City Walls give a 3× bonus to every unit in a City against Land unit attacks.\
+ City Walls are useless against Air, Sea, and Missile units; and the bonus is\
+ reduced when attacked by Catapults, Cannons, Artillery, and Howitzers.\n\
  "), _("\
-City Walls prevent population loss when a defending unit is killed. As enormous\
- tall stone constructions with few vulnerabilties, they are resistant\
- to sabotage. If an enemy attempts to sabotage City Walls, the odds of success\
- are halved. In a city with Fortifications, City Walls are built beyond the\
- fortified perimeter—thus, they replace the bonus instead of stacking with it. \n\
+City Walls prevent population loss when a defending unit is killed. If an enemy\
+ attempts to sabotage City Walls, the odds of success are halved. In a city with\
+ Fortifications, only the terrain bonus adds to the City Wall bonus. \n\
  "), _("\
  Discovery of Metallurgy increases cost to 75 shields.\
 ")
