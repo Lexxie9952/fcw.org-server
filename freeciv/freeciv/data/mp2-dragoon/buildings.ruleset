@@ -1530,7 +1530,8 @@ name		= _("Chand Baori")
 genus		= "SmallWonder"
 reqs	=
     { "type",         "name",        "range",   "present", "quiet"
-      "Tech",         "Monarchy",    "Player",  FALSE,     FALSE
+      "Tech",         "Monarchy",    "Player",  FALSE,     TRUE
+      "Tech",         "Republic",    "Player",  FALSE,     TRUE
       "Gov",          "Despotism",   "Player",  TRUE,      FALSE
       "Building",     "Chand Baori", "Player",  FALSE,     TRUE
     }
@@ -1538,7 +1539,6 @@ graphic	= "b.chand_baori"
 graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
-      "Tech", "Monarchy", "Player"
     }
 build_cost	= 80
 upkeep		= 0
@@ -1546,19 +1546,19 @@ sabotage	= 0
 sound		= "w_chand_baori"
 sound_alt	= "w_generic"
 helptext	= _("\
-Chand Baori is the biggest well of the ancient world. All city centers become\
- irrigation sources. Its home city gets a free well on the city center (i.e., river).\
-"), _("\ 
-In the city where it is built, there are no despotism tile corruption penalties\
- on food output. \n\
+Chand Baori can only be built during your first Despotism regime. All city\
+ centers become irrigation sources, and you can irrigate diagonal to any irrigation\
+ source. Your Tribesmen can still irrigate after turn 20. \n\
+Chand Baori’s home city gets a free well on the city center (i.e., river).\
 "), _("\
-For all Workers in your nation, the work rate on Grasslands, Plains, and Swamp\
- is faster for irrigating, cultivating, and planting: \n\n\
-• Workers irrigate in 2 turns instead of 3. On Swamp, they cultivate or plant\
- forest in 4 turns instead of 7. Planting on (Grassland,Plains) is (4,5). \n\n\
-• Tribesmen irrigate in 3 turns instead of 5. On Swamp, they cultivate or plant\
- forest in 8 turns instead of 13. Planting on (Grassland,Plains) is (6,9). \n\n\
-Obsolete by：Monarchy or switching from Despotism.\
+During Despotism, Chand Baori gets two more bonuses:  (1) In its city\
+ there is no tile penalty on food output. \n\
+"), _("\
+(2) Workers irrigate, cultivate, and plant faster on Grasslands, Plains, and Swamp: \n\n\
+• Irrigate is 2 turns instead of 3. On Swamp, Cultivate and Plant\
+ are 4 turns instead of 7. Plant time on Grassland and Plains is 4 and 5 turns. \n\n\
+• Tribesmen:  Irrigate:3; Cultivate/Plant on Swamp:8; Plant on Grassland/Plains: 6,9. \n\n\
+Chand Baori is never obsolete.\
 ")
 
 [building_code_of_hammurabi]

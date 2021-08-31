@@ -2695,12 +2695,11 @@ actor_reqs    =
       "UnitFlag",      "CanHide",      "Local", FALSE
       "UnitFlag",      "CanClaim",     "Local", FALSE
       "Tech",          "Monarchy",     "Player",FALSE
-      "Gov",           "Despotism",    "Player",TRUE
       "Building",      "Chand Baori",  "Player",TRUE
     }
 target_reqs    =
     { "type",        "name",     "range", "present"
-      "CityTile",    "Center",   "CAdjacent", TRUE
+      "CityTile",    "Center",   "Adjacent", TRUE
     }
 
 [actionenabler_irrigate_src_ocean]
@@ -2757,6 +2756,21 @@ actor_reqs    =
 target_reqs    =
     { "type",    "name",     "range", "present"
       "ExtraFlag", "IrrigationSource", "CAdjacent", TRUE
+    }
+[actionenabler_irrigate_from_source_chand_baori]
+action        = "Build Irrigation"
+actor_reqs    =
+    { "type",          "name",         "range", "present"
+      "Building",      "Chand Baori",  "Player", TRUE
+      "UnitFlag",      "Settlers",     "Local", TRUE
+      "UnitFlag",      "CanHide",      "Local", FALSE
+      "UnitFlag",      "CanClaim",     "Local", FALSE
+      "UnitType",      "Proletarians", "Local", FALSE
+      "UnitFlag",      "Well-Digger",  "Local", FALSE
+    }
+target_reqs    =
+    { "type",    "name",     "range", "present"
+      "ExtraFlag", "IrrigationSource", "Adjacent", TRUE
     }
 [actionenabler_irrigate_from_source_tribesmen]
 action        = "Build Irrigation"
