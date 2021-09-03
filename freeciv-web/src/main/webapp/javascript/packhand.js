@@ -859,6 +859,8 @@ function handle_ruleset_control(packet)
       if (ename =="Bunker") delete window["EXTRA_BUNKER"]
     } else if (typeof EXTRA_TILE_CLAIM !== 'undefined') {
       if (ename =="Tile Claim") delete window["EXTRA_TILE_CLAIM"]
+    } else if (typeof EXTRA_WALLS !== 'undefined') {
+      if (ename =="Walls") delete window["EXTRA_WALLS"]
     }
   }
   extras = {};
@@ -2143,6 +2145,7 @@ function handle_ruleset_extra(packet)
   if (packet['name'] == "Castle") window["EXTRA_CASTLE"] = packet['id'];
   if (packet['name'] == "Bunker") window["EXTRA_BUNKER"] = packet['id'];
   if (packet['name'] == "Tile Claim") window["EXTRA_TILE_CLAIM"] = packet['id'];
+  if (packet['name'] == "Walls") window["EXTRA_WALLS"] = packet['id'];
 }
 
 /**************************************************************************
