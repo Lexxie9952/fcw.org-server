@@ -843,10 +843,11 @@ roles         = "AttackFastStartUnit"     ;this role taken over for well-digger
 helptext      = _("\
 This unit can fix unlucky starts, but has very high upkeep.\ 
  If you have no water, make a Well-Digger in a city that can\
- support it, create a water source, then disband the unit.\n\
+ support it, create a water source, then disband the unit. \n\
  This unit can dig wells to create irrigation sources. It will cost its home city\
  -2 Food -2 Prod. This unit WILL NOT WORK：• Outside your borders,\
- • After Alphabet or Pottery, • After any player discovers Writing, • After 10 turns.\
+ • After Alphabet or Pottery, • After any player discovers Writing,\
+ • After it reaches an age of 10 turns.\
  >> Don't fool around：high upkeep will permanently hinder you. Only make this unit if you\
  lack water when the game starts!\
 ")
@@ -1183,7 +1184,7 @@ name          = _("Archers")
 class         = "Land"
 tech_req      = "Warrior Code"
 obsolete_by   = "Musketeers"
-graphic       = "u.archers2"
+graphic       = "u.archers"
 graphic_alt   = "-"
 sound_move    = "m_archers"
 sound_move_alt = "m_generic"
@@ -1488,7 +1489,7 @@ graphic       = "u.partisan"
 graphic_alt   = "-"
 sound_move    = "m_partisan"
 sound_move_alt = "m_generic"
-sound_fight   = "f_partisan"
+sound_fight   = "f_riflemen"
 sound_fight_alt = "f_generic"
 build_cost    = 45
 pop_cost      = 0
@@ -1744,9 +1745,9 @@ vision_radius_sq = 4
 transport_cap = 0
 fuel          = 0
 uk_happy      = 1
-uk_shield     = 0
+uk_shield     = 1
 uk_food       = 0
-uk_gold       = 1
+uk_gold       = 0
 embarks       = "Helicopter"    ; transport helicopter only
 ;disembarks    = "Helicopter"
 targets       = "Balloon", "Helicopter", "LandRail", "Zeppelin"

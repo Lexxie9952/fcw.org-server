@@ -1531,7 +1531,7 @@ genus		= "SmallWonder"
 reqs	=
     { "type",         "name",        "range",   "present", "quiet"
       "Tech",         "Monarchy",    "Player",  FALSE,     TRUE
-      "Tech",         "Republic",    "Player",  FALSE,     TRUE
+      "Tech",         "The Republic","Player",  FALSE,     TRUE
       "Gov",          "Despotism",   "Player",  TRUE,      FALSE
       "Building",     "Chand Baori", "Player",  FALSE,     TRUE
     }
@@ -1595,7 +1595,7 @@ Improvements to Despotism：\n\
   • penalties eliminated on Lowland tiles. \n\
 Other bonuses：\n\
   • awards blueprints for Code of Laws (or Writing if the former is known.) \n\
-  • cities with no Temple get +1 content citizen\n\n\
+  • cities with no Temple get +1 content citizen. \n\n\
 The Code of Hammurabi is a Civil Wonder. You can build only one Civil Wonder. \n\
 Obsolete by：Democracy.\
 ")
