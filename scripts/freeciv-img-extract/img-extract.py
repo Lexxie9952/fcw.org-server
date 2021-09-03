@@ -78,7 +78,8 @@ spec_files = {
     "water.spec",
     "canal.spec",
     "maglev.spec",
-    "seabridge.spec"
+    "seabridge.spec",
+    "walls.spec"
   ]
 #,
 #  "trident" : [
