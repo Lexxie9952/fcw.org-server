@@ -4,8 +4,9 @@
 <a href="https://freeciv.fandom.com/wiki/Combat.mp2c" target="_blank">Combat</a>
 <a href="https://freeciv.fandom.com/wiki/Economy.mp2c" target="_blank">Economy</a>
 <a href="https://freeciv.fandom.com/wiki/Diplomacy.mp2c" target="_blank">Diplomacy</a>
-Click link for: <a href="https://freecivweb.fandom.com/wiki/Strategy_Guide" target='_blank'>Multiplayer Strategy Guide</a><br>
-
+<a href="https://freeciv.fandom.com/wiki/Zones_of_control" target="_blank">Zone of Control (ZOC)</a>
+<br>
+<a href="https://freecivweb.fandom.com/wiki/Strategy_Guide" target='_blank'>Multiplayer Strategy Guide</a><br>
 <br>
 <u>Charts:</u>
 <a href="https://freecivweb.fandom.com/wiki/Bases.mp2c" target="_blank">Bases</a>
