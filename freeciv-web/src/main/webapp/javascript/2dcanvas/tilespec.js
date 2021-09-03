@@ -1787,9 +1787,9 @@ function get_tile_specials_sprite(ptile)
 }
 
 /****************************************************************************
- ...
+ ..."Like" means: cardinal connect, and completes an outlet sprite to coast
 ****************************************************************************/
-function get_tile_river_like_sprite(ptile, extra, prefix)
+function get_tile_river_like_sprite(ptile, extra, prefix, abort_outlets)
 {
   if (ptile == null) {
     return null;
@@ -1876,7 +1876,7 @@ function get_tile_river_like_sprite(ptile, extra, prefix)
         var checktile = mapstep(ptile, dir);
         if (checktile 
             && (tile_has_extra(checktile, extra)
-            || is_ocean_tile(checktile)
+            || (is_ocean_tile(checktile) && abort_outlets !==true)
             || tile_has_extra(checktile, integrate_extras[0])
             || tile_has_extra(checktile, integrate_extras[1])
             || tile_has_extra(checktile, integrate_extras[2])  )  ) {
@@ -2099,12 +2099,16 @@ function fill_road_rail_sprite_array(ptile, pcity)
   const QUAY_active = (typeof EXTRA_QUAY !== "undefined");
   const QUAY2_active = (typeof EXTRA_QUAY2 !== "undefined");
   const SEABRIDGE_active = (typeof EXTRA_SEABRIDGE !== "undefined");
+  const WALLS_active = (typeof EXTRA_WALLS !== "undefined");
   
   if (MAGLEV_active) {
     var maglev = tile_has_extra(ptile, EXTRA_MAGLEV);
   }
   if (SEABRIDGE_active) {
     var seabridge = tile_has_extra(ptile, EXTRA_SEABRIDGE)
+  }
+  if (WALLS_active) {
+    var walls = tile_has_extra(ptile, EXTRA_WALLS)
   }
 
   var road_near = [];
@@ -2117,8 +2121,8 @@ function fill_road_rail_sprite_array(ptile, pcity)
   var result_sprites = [];
 
   var draw_single_road = road == true && pcity == null && rail == false;
-  var draw_single_rail = rail && pcity == null;
-  var draw_single_maglev = maglev == true && pcity == null && maglev == false;
+  var draw_single_rail = rail && pcity == null && maglev == false;
+  var draw_single_maglev = maglev == true && pcity == null;
 
   for (var dir = 0; dir < 8; dir++) {
     /* Check if there is adjacent road/rail. */
@@ -2189,6 +2193,7 @@ function fill_road_rail_sprite_array(ptile, pcity)
     var river_sprite = get_tile_river_like_sprite(ptile, EXTRA_RIVER, "road.river");
     var canal_sprite = null;
     var seabridge_sprite = null;
+    var walls_sprite = null;
     if (CANAL_active) {
       canal_sprite = get_tile_river_like_sprite(ptile, EXTRA_CANAL, "road.canal");
     }
@@ -2198,6 +2203,10 @@ function fill_road_rail_sprite_array(ptile, pcity)
     if (SEABRIDGE_active) {
       seabridge_sprite = get_tile_river_like_sprite(ptile, EXTRA_SEABRIDGE, "road.sea_bridge")
     }
+    if (WALLS_active && walls) {
+      walls_sprite = get_tile_river_like_sprite(ptile, EXTRA_WALLS, "road.wall", true /*aborts sea outlets*/)
+    }
+
     if (river_sprite != null) result_sprites.push(river_sprite);
     if (canal_sprite != null) result_sprites.push(canal_sprite);
     if (seabridge_sprite != null) result_sprites.push(seabridge_sprite);
@@ -2221,14 +2230,14 @@ function fill_road_rail_sprite_array(ptile, pcity)
       }
     } */
 
-    /* Finally draw MagLevs over all of it. */
+    /* MagLevs go on top of all roads, rivers, canals. */
     if (MAGLEV_active) {
-        if (maglev) {
-          for (i = 0; i < 8; i++) {
-            if (draw_maglev[i]) {
-            result_sprites.push({"key" : "road.maglev_" + dir_get_tileset_name(i)});
-            }
+      if (maglev) {
+        for (i = 0; i < 8; i++) {
+          if (draw_maglev[i]) {
+          result_sprites.push({"key" : "road.maglev_" + dir_get_tileset_name(i)});
           }
+        }
       }
     }
 
@@ -2242,6 +2251,9 @@ function fill_road_rail_sprite_array(ptile, pcity)
         result_sprites.push({"key" : "road.maglev_isolated"});
       }
   }
+
+  /* Walls go on top of everything */
+  if (walls_sprite != null) result_sprites.push(walls_sprite);
 
   return result_sprites;
 }
@@ -2587,7 +2599,11 @@ function create_unit_offset_arrays()
           dx += 2; dy -= 1;
           vx -= 4; vy += 15;
           mx -= 6; my += 7;
-          break;    
+          break;
+      case "Ground Troops":
+          dy += 2;
+          vx -= 3; vy -= 7;
+        break;              
       case "Heavy Bomber":
             case "Bomber":
           sx = 8;
@@ -2647,8 +2663,8 @@ function create_unit_offset_arrays()
           vx -= 12; vy += 11;
           break;
       case "Musketeers":
-          dx -= 3; dy -= 3;
-          vx -= 3; vy -= 19;
+          dx += 1; dy -= 4;
+          vx += 1; vy -= 19;
           break;
       case "Phalanx":                     
           dx += 0; dy -= 3;
