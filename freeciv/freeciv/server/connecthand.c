@@ -151,6 +151,19 @@ void attach_longturn_player(struct connection *pc, struct player *pplayer)
       pplayer->economic.gold = game.server.latejoin_gold_max; 
     }
 
+    // Late joiners get 3 bulbs per turn into Alphabet: no you can't pick
+    // and make up some "latejoin surprise" exploit strategy.
+    struct research *research = research_get(pplayer);
+    int join_bulbs = game.info.turn * 3;
+    if (research->bulbs_researched < join_bulbs) {
+      Tech_type_id alphabet_id = 2;
+      research->researching = alphabet_id;
+      research->bulbs_researched = join_bulbs;
+      research->researching_saved = join_bulbs;
+      research->inventions[alphabet_id].bulbs_researched_saved += join_bulbs;
+    }
+
+    // default tax rates
     pplayer->economic.science = 60;
     pplayer->economic.tax = 40;
 
