@@ -49,14 +49,16 @@ function show_intelligence_report_hearsay(pplayer)
     msg += "Government: " + gov_name + "<br>";
   }
 
+  /* TODO: server should not leak this for hearsay contacts
   if (pplayer['gold'] > 0) {
       msg += "Gold: " + pplayer['gold'] + "<br>";
     }
+  
 
   if (pplayer['researching'] != null && pplayer['researching'] > 0 && techs[pplayer['researching']] != null) {
     msg += "Researching: " + techs[pplayer['researching']]['name'] + "<br>";
   }
-
+  */
 
   msg += "<br><br>Establishing an embassy enables a detailed intelligence report, treaties, and trade."
 
