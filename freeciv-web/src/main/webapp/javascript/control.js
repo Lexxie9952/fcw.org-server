@@ -115,6 +115,7 @@ var SELECT_LAND = 2;
 var SELECT_APPEND = 3;
 
 var intro_click_description = true;
+var chalkboard_description = true;
 var resize_enabled = true;
 var goto_request_map = {};
 var goto_turns_request_map = {};
@@ -3166,7 +3167,8 @@ function do_map_click(ptile, qtype, first_time_called)
           var ptype = unit_type(punit);
           message_log.update({
             event: E_BAD_COMMAND,
-            message: ptype['name'] + " has no moves left. Press turn done for the next turn."
+            message: (is_longturn() ? ptype['name'] + " has no moves left."
+                                    : ptype['name'] + " has no moves left. Press turn done for the next turn.")
           });
         }
 
@@ -3823,13 +3825,22 @@ map_handle_key(keyboard_key, key_code, ctrl, alt, shift, the_event)
               // Non-ideally, we create the Game_UID every time we go into chalkboard mode.
               // Please see note in handle_game_uid() for how we should refactor this.
               handle_game_uid();
-              add_client_message("Chalkboard is ON.  Alt-X to toggle.")
+              if (chalkboard_description) {
+                add_client_message("<span class='e_small chalkboard_note'>Chalkboard is ON.  Alt-X to toggle.</span>");
+              } else {
+                $(".chalkboard_note").hide(); // clean up past notes about this
+              }
             }
-            else add_client_message("Chalkboard is OFF.")
+            else {
+              if (chalkboard_description) {
+                add_client_message("<span class='e_small chalkboard_note'>Chalkboard is OFF.</span>");
+                chalkboard_description = false;
+              }
+            }
         }
         else if (enable_autoexplore && !ctrl && !shift && !alt) {
           key_unit_auto_explore();
-        } else if (!enable_autoexplore) add_client_message("X hotkey was disabled in user PREFS.")
+        } else if (!enable_autoexplore) add_client_message("X hotkey was disabled in user PREFS.");
     break;
 
     // ALT + UIO / JKL / M,. simulates keypad for devices that don't have it, if alt not held
@@ -4487,7 +4498,8 @@ function activate_goto_last(last_order, last_action)
   goto_last_action = last_action;
 
   if (current_focus.length > 0) {
-    if (intro_click_description) {
+    // Empire tab is a proxy for "I'm not a beginner"
+    if (intro_click_description && !show_empire_tab) {
       if (touch_device) {
         message_log.update({
           event: E_BEGINNER_HELP,
@@ -4496,12 +4508,11 @@ function activate_goto_last(last_order, last_action)
       } else {
         message_log.update({
           event: E_BEGINNER_HELP,
-          message: "Click on the tile to send this unit to."
+          message: "Drag to the tile to send this unit to."
         });
       }
       intro_click_description = false;
     }
-
   } else {
     message_log.update({
       event: E_BEGINNER_HELP,

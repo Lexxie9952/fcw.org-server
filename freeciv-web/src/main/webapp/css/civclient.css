@@ -2093,11 +2093,13 @@ input[type="email" i], #email {
 .e_log_fatal,
 .e_chat_error,
 .e_bad_command,
-
 .e_game_start,
 .e_game_end,
 .e_turn_bell {
   color: #f1efef;
+}
+.e_beginner_help {
+  font-size: 70%;
 }
 .e_unit_illegal_action {
   color: #848080;
@@ -2116,6 +2118,9 @@ input[type="email" i], #email {
   display: none;
   font-size: 70%;
   color: #F82;
+}
+.e_small {
+  font-size: 70%;
 }
 
 /* Font Control over various game elements 
