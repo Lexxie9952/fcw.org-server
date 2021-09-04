@@ -2089,7 +2089,6 @@ input[type="email" i], #email {
 .e_broadcast_report,
 .e_report,
 
-.e_beginner_help,
 .e_log_fatal,
 .e_chat_error,
 .e_bad_command,
@@ -2100,6 +2099,7 @@ input[type="email" i], #email {
 }
 .e_beginner_help {
   font-size: 70%;
+  color: #ddcec4
 }
 .e_unit_illegal_action {
   color: #848080;
