@@ -241,7 +241,7 @@ void handle_unit_type_upgrade(struct player *pplayer, Unit_type_id uti)
   to_unittype = can_upgrade_unittype(pplayer, from_unittype);
   if (!to_unittype) {
     notify_player(pplayer, NULL, E_BAD_COMMAND, ftc_server,
-                  _("Illegal packet, can't upgrade %s (yet)."),
+                  _("Can't upgrade %s (yet)."),
                   utype_name_translation(from_unittype));
     return;
   }

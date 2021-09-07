@@ -5405,6 +5405,7 @@ bool unit_can_do_action_now(const struct unit *punit, char *caller_string)
   time_t dt;
   bool give_uwt_message = false;
   bool is_movement_action = (strcmp(caller_string, "unit_move_handling")==0);
+  bool is_perform_action = (strcmp(caller_string, "unit_perform_action")==0);
 
   if (!punit) {
     return FALSE;
@@ -5423,14 +5424,17 @@ bool unit_can_do_action_now(const struct unit *punit, char *caller_string)
     give_uwt_message = true; /* UWT is on punit: default to give a fail message. */
 
     /* Exceptions to fail message---------------------- */
-    /* Every possible action will be done after UWT, so don't do fail message.*/
-    if (game.server.unitwaittime_style & UWT_ACTIVITIES & UWT_DELAY_GOTO) {
+    /* Every possible activity will be done after UWT, so don't do fail message.*/
+    if ( (game.server.unitwaittime_style & UWT_ACTIVITIES & UWT_DELAY_GOTO) 
+         && !is_perform_action) /*action not activity*/
+    {
       give_uwt_message = false;
     }
-    /* UWT_ACTIVITIES is on and it's not a movement or GOTO. Will do action later. No message.*/
+    /* UWT_ACTIVITIES is on and it's not a movement or GOTO. Will do activity later. No message.*/
     if ((game.server.unitwaittime_style & UWT_ACTIVITIES)
         && punit->activity != ACTIVITY_IDLE
-        && !is_movement_action) {
+        && !is_movement_action 
+        && !is_perform_action /*action not activity*/) {
           give_uwt_message = false;
     }
     /* Exceptions to exceptions------------------------- */
@@ -5466,11 +5470,22 @@ bool unit_can_do_action_now(const struct unit *punit, char *caller_string)
                                   buf);
     }
     else {
-      notify_player(unit_owner(punit), unit_tile(punit), E_UNIT_ORDERS,
-                    ftc_server, _("⌛ %s %s delayed for %s."
-                                "<span class='e_beginner_help'> See /help unitwaittime.</span>"),
-                                UNIT_EMOJI(punit), unit_link(punit),
-                                buf);
+      if (!is_perform_action) {
+        // An activity is being delayed 
+        notify_player(unit_owner(punit), unit_tile(punit), E_UNIT_ORDERS,
+                      ftc_server, _("⌛ %s %s delayed for %s."
+                                  "<span class='e_beginner_help'> See /help unitwaittime.</span>"),
+                                  UNIT_EMOJI(punit), unit_link(punit),
+                                  buf);
+      } else {
+        // Simply can't give an action order because we have no delayed fulfillent. You have 
+        // to wait to give the order.
+        notify_player(unit_owner(punit), unit_tile(punit), E_UNIT_ORDERS,
+                        ftc_server, _("⌛ %s %s can't perform actions for %s."
+                                    "<span class='e_beginner_help'> See /help unitwaittime.</span>"),
+                                    UNIT_EMOJI(punit), unit_link(punit),
+                                    buf);
+      }
     }
     return FALSE; /* Unit can't do action. */
   }
