@@ -84,67 +84,25 @@ var action_images = {
   "": "orders/hideout",
   "Maglev": "orders/maglev",
   "Naval Base": "orders/navalbase",
-  "Oil Well": "orders/oilwell",
+  "Oil Well": "orders/oil_well",
   "Quay": "orders/quay",
   "Radar": "orders/radar",
   "Railroad": "orders/railroad_default",
   "Road": "orders/road",
   "Sea Bridge": "orders/seabridge",
-  "River": "orders/well"
+  "River": "orders/well",
+  "Tile Claim": "nation_tab_icon",
+  "Fort": "orders/fortress",
+  "Fortress": "orders/fortress",
+  "Castle": "orders/fortress",
+  "Bunker": "orders/fortress",
+  "Fallout": "orders/fallout",
+  "Irrigation": "orders/irrigate_default",
+  "Farmland": "orders/irrigation",
+  "Mine": "orders/mine_default",
+  "Pollution": "orders/pollution",
+  "Walls": "e/greatwall"
 };
-
-/*
-var action_images = {
-  [ACTION_TRADE_ROUTE]: "e/gold",
-  [ACTION_MARKETPLACE]: "e/marketplace",
-  [ACTION_HELP_WONDER]: "e/camel24",
-  [ACTION_SPY_BRIBE_UNIT]: "corrupt",
-  [ACTION_FOUND_CITY]: "orders/build_city_default",
-  [ACTION_JOIN_CITY]: "city_user_row",
-  [ACTION_STEAL_MAPS]: "e/earth",
-  [ACTION_STEAL_MAPS_ESC]: "e/earth",
-  [ACTION_BOMBARD]: "e/blueexclamation",
-  [ACTION_BOMBARD2]: "e/blueexclamation",
-  [ACTION_BOMBARD3]: "e/blueexclamation",
-  [ACTION_NUKE]: "e/nuclearexplosion",
-  [ACTION_NUKE_CITY]: "e/nuclearexplosion",
-  [ACTION_NUKE_UNITS]: "e/nuclearexplosion",
-  [ACTION_DESTROY_CITY]: "orders/pillage",
-  [ACTION_RECYCLE_UNIT]: "orders/disband_recycle",
-  [ACTION_DISBAND_UNIT]: "orders/disband_default",
-  [ACTION_HOME_CITY]: "e/home",
-  [ACTION_UPGRADE_UNIT]: "orders/upgrade",
-  [ACTION_PARADROP]: "orders/paradrop",
-  [ACTION_AIRLIFT]: "orders/airlift",
-  [ACTION_ATTACK]: "e/redexclamation",
-  [ACTION_SUICIDE_ATTACK]: "e/cruisemissile",
-  [ACTION_CONQUER_CITY]: "cities_tab_icon",
-  [ACTION_TRANSFORM_TERRAIN]: "orders/transform_default",
-  [ACTION_CULTIVATE]: "orders/forest_remove_default",
-  [ACTION_PLANT]: "orders/forest_add_default",
-  [ACTION_PILLAGE]: "orders/pillage",
-  [ACTION_FORTIFY]: "orders/fortify_default",
-  [ACTION_ROAD]: "orders/road",
-  [ACTION_CONVERT]: "orders/convert",
-  [ACTION_BASE]: "orders/fortress",
-  [ACTION_MINE]: "orders/mine_default",
-  [ACTION_IRRIGATE]: "orders/irrigate_default",
-  [ACTION_TRANSPORT_DEBOARD]: "orders/unload",
-  [ACTION_TRANSPORT_UNLOAD]: "orders/unload",
-  [ACTION_TRANSPORT_DISEMBARK1]: "orders/activate_cargo",
-  [ACTION_TRANSPORT_BOARD]: "orders/load",
-  [ACTION_TRANSPORT_EMBARK]: "orders/load",
-  [ACTION_SPY_ATTACK]: "e/spy",
-  [ACTION_CLEAN_POLLUTION]: "e/pollution",
-  [ACTION_CLEAN_FALLOUT]: "e/fallout",
-  [ACTION_COUNT]: "orders/no_orders",
-  "wait": "orders/wait",
-  "cancel": "orders/cancel_orders",
-  "target": "e/target",
-  "targetextra": "e/targetextra",
-  "autoattack": "e/redexclamations"
-};
-*/
 
 /**********************************************************************//**
   Move the queue of units that need user input forward unless the current
@@ -729,7 +687,7 @@ function popup_action_selection(actor_unit, action_probabilities,
     buttons.push({
         id      : "act_sel_tgt_extra_switch" + actor_unit['id'],
         "class" : 'act_sel_button',
-        html    : render_action_image_into_button('Change extra target', 'targetextra'),
+        html    : render_action_image_into_button('Tile target', 'targetextra'),
         click   : function() {
           select_tgt_extra(actor_unit, target_unit, target_tile,
                            list_potential_target_extras(actor_unit,
@@ -1516,25 +1474,33 @@ function create_select_tgt_extra_button(parent_id, actor_unit_id,
 {
   var text = "";
   var button = {};
-
   var target_tile = index_to_tile(target_tile_id);
+  var title = extras[target_extra_id]['name'];
+  if (title=="") title = "Hideout";
+  var spacer = "&nbsp" + (title == "Walls" ? "&nbsp;&nbsp;" : "");
 
-  text += extras[target_extra_id]['name'];
+  // UI Heuristic: buttons for stuff you can never do get rejected:
+  if (title.includes("Quay") && title.length == 5) return null; //quay+"" 0-width char can't be made
+  // </end stuff that can't be done>
 
-  text += " (";
+  text += render_action_image_into_button(spacer+title, extras[target_extra_id]['name'],
+                                          target_extra_id);
+
   if (tile_has_extra(target_tile, target_extra_id)) {
     if (extra_owner(target_tile) != null) {
-      text += nations[extra_owner(target_tile)['nation']]['adjective'];
+      text += " "+nations[extra_owner(target_tile)['nation']]['adjective'];
     } else {
-      text += "target";
+      // TODO: some kind of unit_can_target check for legality 
+      text += " <img class='v' style='float:right;transform:scale(0.67);' title='target' src='/images/e/targetextra.png'>";
     }
   } else {
-    text += "create";
+    // TODO: some kind of unit_can_build_(target_extra_id)
+    text += " <img class='v' style='float:right;transform:scale(0.67);' title='build' src='/images/e/circleplus.png'>";
   }
-  text += ")";
 
   button = {
     html  : text,
+    title:  html_safe(extras[target_extra_id].helptext),
     click : function() {
       var packet = {
         "pid"            : packet_unit_get_actions,
@@ -1645,12 +1611,14 @@ function select_tgt_extra(actor_unit, target_unit,
   var id      = "#" + rid;
   var dhtml   = "";
   var buttons = [];
+  //var sort_order = [];
+  //var sorted_buttons = [];
 
   /* Reset dialog page. */
   remove_active_dialog(id);
   $("<div id='" + rid + "'></div>").appendTo("div#game_page");
 
-  dhtml += "Select target extra for your ";
+  dhtml += "Select tile target for your ";
   dhtml += unit_types[actor_unit['type']]['name'];
 
   $(id).html(dhtml);
@@ -1658,21 +1626,33 @@ function select_tgt_extra(actor_unit, target_unit,
   for (i = 0; i < potential_tgt_extras.length; i++) {
     var tgt_extra = potential_tgt_extras[i];
 
-    buttons.push(create_select_tgt_extra_button(id, actor_unit['id'],
-                                                target_unit == null ?
-                                                  IDENTITY_NUMBER_ZERO :
-                                                  target_unit['id'],
-                                                target_tile['index'],
-                                                tgt_extra['id']));
+    let the_button = create_select_tgt_extra_button(id, actor_unit['id'],
+                                                    target_unit == null ?
+                                                      IDENTITY_NUMBER_ZERO :
+                                                      target_unit['id'],
+                                                    target_tile['index'],
+                                                    tgt_extra['id']);
+    if (the_button != null) {
+      the_button['class'] = 'act_sel_button';
+      the_button['height'] = '33.33px';
+
+      buttons.push(the_button);
+      /* sort_order.push(i); 
+        TODO, sort the buttons alphabetically based on simple array of text
+        names without the images
+      */
+    }
   }
 
   $(id).dialog({
-      title    : "Target extra selection",
+      title    : "Tile target",
       bgiframe : true,
       modal    : true,
+      width    : "320px",
       buttons  : buttons });
 
   $(id).dialog('open');
+  $(id).next().css("text-align", "center");
   $(id).dialog('widget').position({my:"center top", at:"center top", of:window})
   dialog_register(id, actor_unit['id']);
 }
@@ -1721,16 +1701,10 @@ function select_last_action()
     buttons = add_action_last_button(buttons, ACTION_BASE, "Build Fort", ORDER_PERFORM_ACTION, null, null, EXTRA_FORT);
   if (tech_known('Construction'))
     buttons = add_action_last_button(buttons, ACTION_BASE, "Build Fortress", ORDER_PERFORM_ACTION, null, null, EXTRA_FORTRESS);
-  if (client_rules_flag[CRF_MAGLEV] && tech_known('Superconductors'))
-    buttons = add_action_last_button(buttons, ACTION_ROAD, "Build MagLev", ORDER_PERFORM_ACTION, null, null, EXTRA_MAGLEV);
-  if (tech_known('Railroad'))
-    buttons = add_action_last_button(buttons, ACTION_ROAD, "Build Railroad", ORDER_PERFORM_ACTION, null, null, EXTRA_RAILROAD);
-  buttons = add_action_last_button(buttons, ACTION_ROAD, "Build Road", ORDER_PERFORM_ACTION, null, null, EXTRA_ROAD);
   if (client_rules_flag[CRF_CANALS] && tech_known('Engineering')) {
-    buttons = add_action_last_button(buttons, ACTION_ROAD, "Build Canal, coastal", ORDER_PERFORM_ACTION, null, null, EXTRA_CANAL);
-    buttons = add_action_last_button(buttons, ACTION_ROAD, "Build Canal, inland", ORDER_PERFORM_ACTION, null, null, EXTRA_WATERWAY);
+    buttons = add_action_last_button(buttons, ACTION_ROAD, "Canal, coastal", ORDER_PERFORM_ACTION, null, null, EXTRA_CANAL);
+    buttons = add_action_last_button(buttons, ACTION_ROAD, "Canal, inland", ORDER_PERFORM_ACTION, null, null, EXTRA_WATERWAY);
   }
-  buttons = add_action_last_button(buttons, ACTION_HOME_CITY, "Change Home City");
 //  buttons = add_action_last_button(buttons, ACTION_CAPTURE_UNITS); // acts on wrong tile, as do the below:
 //  buttons = add_action_last_button(buttons, ACTION_CLEAN_POLLUTION, "Clean Pollution", ORDER_PERFORM_ACTION, ACTIVITY_CLEAN_POLLUTION, EXTRA_POLLUTION, EXTRA_POLLUTION);
 //  buttons = add_action_last_button(buttons, ACTION_CLEAN_FALLOUT, "Clean Fallout", ORDER_PERFORM_ACTION, null, null, EXTRA_FALLOUT);
@@ -1744,15 +1718,25 @@ function select_last_action()
   buttons = add_action_last_button(buttons, ACTION_TRADE_ROUTE);
   buttons = add_action_last_button(buttons, ACTION_FORTIFY);
   buttons = add_action_last_button(buttons, ACTION_HELP_WONDER);
+  buttons = add_action_last_button(buttons, ACTION_HOME_CITY, "Home City");
   buttons = add_action_last_button(buttons, ACTION_IRRIGATE, "Irrigate"); // works on blank tiles but not farmland
   if (tech_known('Refrigeration'))
     buttons = add_action_last_button(buttons, ACTION_IRRIGATE, "Irrigate Farmland", ORDER_PERFORM_ACTION, null, null, EXTRA_FARMLAND);
   buttons = add_action_last_button(buttons, ACTION_JOIN_CITY);
   //buttons = add_action_last_button(buttons, ACTION_TRANSPORT_LOAD); // GET FROM SVEINUNG WHO FINISHED THIS RECENTLY
+  
+  if (client_rules_flag[CRF_MAGLEV] && tech_known('Superconductors'))
+    buttons = add_action_last_button(buttons, ACTION_ROAD, "MagLev", ORDER_PERFORM_ACTION, null, null, EXTRA_MAGLEV);
+  
   buttons = add_action_last_button(buttons, ACTION_MINE, "Mine", ORDER_PERFORM_ACTION, null, null, EXTRA_MINE);
   buttons = add_action_last_button(buttons, ACTION_PILLAGE, "Pillage Anything", ORDER_PERFORM_ACTION, null, null, -1);
   buttons = add_action_last_button(buttons, ACTION_PLANT, "Plant");
   buttons = add_action_last_button(buttons, ACTION_SPY_POISON_ESC, "Poison City");
+  
+  if (tech_known('Railroad'))
+    buttons = add_action_last_button(buttons, ACTION_ROAD, "Railroad", ORDER_PERFORM_ACTION, null, null, EXTRA_RAILROAD);
+  buttons = add_action_last_button(buttons, ACTION_ROAD, "Road", ORDER_PERFORM_ACTION, null, null, EXTRA_ROAD);
+  
   buttons = add_action_last_button(buttons, ACTION_RECYCLE_UNIT);
   buttons = add_action_last_button(buttons, ACTION_SPY_SABOTAGE_UNIT_ESC);
   buttons = add_action_last_button(buttons, ACTION_SPY_ATTACK, "Spy vs. Spy");
