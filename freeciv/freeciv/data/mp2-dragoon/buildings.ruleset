@@ -2538,7 +2538,9 @@ The powerful Zeus gives order and organization to both city and nation.\
  citizen caused by military units. (For governments who do not experience\
  discontent from military activity, it simply makes one citizen content.) \n\
 "), _("
-Before the discovery of The Republic, increases odds of promotion by one third. \n\
+Before Republic and later governments, the Statue of Zeus increases promotion\
+ frequency by one third:\
+ [50,33,20,15]% → [67,44,26,20]% \n\
 "), _("
 In the city the statue is located, it makes one citizen happy and provides\
  free upkeep to 4 units. Except for one permanent happy citizen, the\

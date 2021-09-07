@@ -102,7 +102,13 @@ this virtual unit for the early game.
 =============================================================
 17. Ecclesiastical Palace, cost:80 (was 90).
 =============================================================
-
+18. Zeus promotion bonus simplified: instead of The Republic
+   tech turning it off, it's having Republic government 
+   (or any later government) that turns off the bonus.
+   This would allows monarchies and despotism to pursue 
+   Banking without the Statue losing its "pre-Republic bonus
+   effect."
+=============================================================
 
 
 

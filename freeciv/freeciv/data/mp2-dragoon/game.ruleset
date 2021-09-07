@@ -424,7 +424,7 @@ ui_name_help_wonder = _("Help %sBuild Wonder%s")
 ui_name_recycle_unit = _("Rec%sycle Unit%s")
 
 ; /* TRANS: _You're Fired (100% chance of success). */
-ui_name_disband_unit = _("%sYou're Fired%s")
+ui_name_disband_unit = _("%sDisband Unit%s")
 
 ; /* TRANS: _Capture Units (100% chance of success). */
 ui_name_capture_units = _("%sCapture Units%s")
@@ -496,17 +496,17 @@ ui_name_clean_fallout = "Clean %sFallout%s"
 ui_name_fortify = _("%sFortify%s")
 
 ; /* TRANS: Build _Road (100% chance of success). */
-ui_name_road = _("Build %sRoad%s")
+ui_name_road = _("%sRoad%s")
 
 ; /* TRANS: Build _Canal (100% chance of success). */
-ui_name_canal = _("Build %Canal%s")
+ui_name_canal = _("Build Cana%sl%s")
 ui_name_waterway = _("Build Water%way%s")
 
 ; /* TRANS: _Build Base (100% chance of success). */
 ui_name_build_base = _("%sBuild Base%s")
 
 ; /* TRANS: Build _Mine (100% chance of success). */
-ui_name_build_mine = _("Build %sMine%s")
+ui_name_build_mine = _("%sMine%s")
 
 ; /* TRANS: Build _Irrigation (100% chance of success). */
 ui_name_irrigate = _("%sIrrigate%s")
