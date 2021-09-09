@@ -138,7 +138,10 @@ function init_tech_screen()
 {
   if (is_small_screen()) {
     tech_canvas_text_font = "20px Arial";
+    $("#blueprints_color_help").hide();
   }
+
+  if (!server_settings.blueprints.val) $("#blueprints_color_help").hide();
 
   // We use middle click for future goal, not for browser mouse-wheel scrolling:
   addEventListener("mousedown", function(e){ if(e.button == 1){ e.preventDefault(); } });
@@ -276,6 +279,8 @@ function update_tech_tree()
   tech_canvas_ctx.lineWidth = 1;
   const KNOWN_TECH_FRAME = 'rgb(179,179,179)';
   const KNOWN_TECH_FILL = 'rgb(224,224,224)';   // #eee
+  const BLUEPRINT_TECH_FILL = 'rgb(31,14,255)';
+  const BLUEPRINT_TECH_FRAME = 'rgb(17,7,140)';
   const CUR_TECH_FRAME = 'rgb(0, 0, 0)';
   const FUTURE_TECH_FRAME = 'rgb(255, 255, 255)';
   const POSSIBLE_TECH_FRAME = 'rgb(71, 92, 55)';
@@ -321,12 +326,17 @@ function update_tech_tree()
         tech_canvas_ctx.fillStyle = 'rgb(0, 0, 0)';
       }
 
-      var tag = tileset_tech_graphic_tag(ptech);
+      var tag = tileset_tech_graphic_tag(ptech); var bp = false;
+      if (player_has_blueprints(client.conn.playing, ptech['id'])) {
+        bgcolor = BLUEPRINT_TECH_FILL;
+        tag = "a.blueprints";
+        bp = true;
+      }
       tech_canvas_ctx.fillStyle = bgcolor;
       tech_canvas_ctx.fillRect(x-2, y-2, tech_item_width, tech_item_height);
       if (tech_canvas_ctx.lineWidth<6) { // don't override current research frame colour
         tech_canvas_ctx.lineWidth=2;
-        tech_canvas_ctx.strokeStyle = POSSIBLE_TECH_FRAME;
+        tech_canvas_ctx.strokeStyle = bp ? BLUEPRINT_TECH_FRAME : POSSIBLE_TECH_FRAME;
       }
       tech_canvas_ctx.strokeRect(x-2, y-2, tech_item_width, tech_item_height);
       tech_canvas_ctx.lineWidth=1;
@@ -354,6 +364,10 @@ function update_tech_tree()
       }
 
       var tag = tileset_tech_graphic_tag(ptech);
+      if (player_has_blueprints(client.conn.playing, ptech['id'])) {
+        bgcolor = BLUEPRINT_TECH_FILL;
+        tag = "a.blueprints";
+      }
       tech_canvas_ctx.fillStyle =  bgcolor;
       tech_canvas_ctx.fillRect(x-2, y-2, tech_item_width, tech_item_height);
       if (tech_canvas_ctx.lineWidth<6) // don't override current research frame colour
@@ -482,7 +496,6 @@ function update_tech_screen()
   init_tech_screen();
   update_tech_tree();
 
-
   var research_goal_text = "No research target selected.<br>Please select a technology now";
   if (techs[client.conn.playing['researching']] != null) {
     research_goal_text = touch_device ? "Current Research: " : "Research:"; 
@@ -580,13 +593,27 @@ function get_advances_text(tech_id)
 
   const ptech = techs[tech_id];
   var cost = ptech.cost;
+  var saved = 0;
 
   // Adjust tech cost for sciencebox
   if (game_info["sciencebox"] != 100)   {
     cost = ptech.cost * game_info["sciencebox"] / 100;
+    cost = Math.floor(cost);
   }
 
-  return tech_span(ptech.name, null, null) + ' (' + Math.floor(cost) + ')'
+  // Shows what the server tells us the cost really is (e.g., tech_leak, other effects)
+  if (!client_is_observer()) {
+    if (client.conn.playing.advance_costs) {
+      if (client.conn.playing.advance_costs[tech_id]) {
+        cost = client.conn.playing.advance_costs[tech_id];
+        saved = client.conn.playing.advance_saved_bulbs[tech_id];
+      }
+    }
+  }
+  // Shows bulbs saved into the tech, if you have them
+  if (saved) cost = "" + saved + "/" + cost + ""; 
+
+  return tech_span(ptech.name, null, null) + ' (' + cost + ')'
     + format_list_with_intro(' enables',
       [
         format_list_with_intro('', get_utypes_from_tech(tech_id)
@@ -1193,6 +1220,45 @@ function update_bulbs_output_info()
   var cbo = get_current_bulbs_output();
   $('#bulbs_output').html(get_current_bulbs_output_text(cbo));
   update_net_bulbs(cbo.self_bulbs - cbo.self_upkeep);
+}
+
+/**************************************************************************
+ Whether the player has enough bulb credit in a tech to be counted as
+ having 'blueprints' for that tech; though not necessarily received from
+ 'blueprints', it's indistinguishable as far as the game is concerned.
+ This is based on blueprints % (server_settings.blueprints.val); e.g.,
+ if blueprints% == 80, then if you have 80+ bulbs in a 100 bulb tech,
+ this function will return TRUE, that you have blueprints for that
+ tech. 
+**************************************************************************/
+function player_has_blueprints(pplayer, tech_id)
+{
+  if (!pplayer) return false;
+  if (!tech_id) return false;
+  if (!server_settings.blueprints.val) return false;
+  if (!pplayer.advance_saved_bulbs) return false;
+  // server doesn't reset bulbs_saved or doesn't send_player_info right after discovery:
+  if (player_invention_state(pplayer, tech_id) == TECH_KNOWN) return false;
+
+  var bp_cutoff = Math.trunc(server_settings.blueprints.val * techs[tech_id].cost / 100);
+
+  /* The case where saved bulbs are greater than the max blueprint award: */
+  if (pplayer.advance_saved_bulbs[tech_id] >= bp_cutoff) return true;
+  /* The case where saved bulbs are less than the blueprint award but maxed at the
+     permissible ceiling of not being more than the cost of the tech after 
+     tech_leak (or other effects altering its final bulb cost): */
+  let advance_cost = pplayer.advance_costs[tech_id];
+  if (advance_cost) {
+    // simple case: we know the cost of the advance for this player:
+    if (pplayer.advance_saved_bulbs[tech_id] >= advance_cost) return true;
+  } else {
+    // less simmple case: server didn't share advance cost for this player
+    // and gave us a 0, meaning the player already has the tech OR we are
+    // not allowed to know if they have blueprints
+    return false;
+  }
+  
+  return false;
 }
 
 /**************************************************************************
