@@ -1218,18 +1218,12 @@ static void package_player_info(struct player *plr,
   }
   packet->color_changeable = player_color_changeable(plr, NULL);
 
-  /* Only send score if we have contact */
+  /* Only send governmment and score if we have contact */
   if (info_level >= INFO_MEETING) {
     packet->score = plr->score.game;
-  } else {
-    packet->score = 0;
-  }
-
-  if (info_level >= INFO_MEETING) {
-    packet->gold = plr->economic.gold;
     pgov = government_of_player(plr);
   } else {
-    packet->gold = 0;
+    packet->score = 0;
     pgov = game.government_during_revolution;
   }
   packet->government = pgov ? government_number(pgov) : government_count();
@@ -1278,12 +1272,14 @@ static void package_player_info(struct player *plr,
     packet->luxury          = plr->economic.luxury;
     packet->revolution_finishes = plr->revolution_finishes;
     packet->culture         = player_culture(plr);
+    packet->gold            = plr->economic.gold;
   } else {
     packet->tax             = 0;
     packet->science         = 0;
     packet->luxury          = 0;
     packet->revolution_finishes = -1;
     packet->culture         = 0;
+    packet->gold            = 0;
   }
 
   if (info_level >= INFO_FULL
@@ -1308,6 +1304,34 @@ static void package_player_info(struct player *plr,
   } else {
     web_packet->expected_income = 0;
   }
+
+  web_packet->advance_count = game.control.num_tech_types;
+  struct research *research = research_get(plr);
+
+  /* <NOTE> This block could easily be added to PACKET_PLAYER_INFO instead of 
+     PACKET_WEB_PLAYER_INFO_ADDITION, and would solve https://osdn.net/projects/freeciv/ticket/42713
+     from the server side. Still, the client tech tree will need some logic
+     to properly use this info for accurate display to the user */
+
+  /* 1. Send multiresearch status to client so it can properly portray saved bulbs
+     without forcing the player to change research targets: 
+     2. Send tech costs so client can portray true costs without forcing the player
+     to change research. Q: Why in player_info? A: One day, tech costs will be
+     non-global: altered by player- and civ-specific effects */
+  memset(&web_packet->advance_saved_bulbs, 0, sizeof(web_packet->advance_saved_bulbs)); // clear arrays  
+  memset(&web_packet->advance_costs, 0, sizeof(web_packet->advance_costs));    
+  if (info_level >= INFO_FULL || (receiver && (player_diplstate_get(plr, receiver)->type == DS_TEAM 
+                                               || player_diplstate_get(plr, receiver)->type == DS_ALLIANCE))) {
+    advance_index_iterate(A_NONE, i) {
+      if (research) {
+        /* Both info arrays always have to be present together or always absent together, as
+           the client needs both to know whether the player's bulbs qualify as a blueprint: */
+        web_packet->advance_saved_bulbs[i] = research->inventions[i].bulbs_researched_saved;
+        web_packet->advance_costs[i] = research_total_bulbs_required(research, i, FALSE);
+      } 
+    } advance_index_iterate_end;
+  }
+  /* </end NOTE> */
 #endif /* FREECIV_WEB */
 }
 
