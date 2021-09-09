@@ -218,4 +218,5 @@ tiles = { "row", "column","tag"
   9, 0, "a.nationalism"
   9, 1, "a.theocracy"
   9, 2, "a.microbiology"
+  9, 3, "a.blueprints"    ; not an advance:  icon for blueprints acquired for the advance
 }
