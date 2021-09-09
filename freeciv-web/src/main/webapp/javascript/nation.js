@@ -113,9 +113,9 @@ function update_nation_screen()
            + "</div></td>";
 
     var gov_modifier = get_gov_modifier(player_id, "", false);
-    var gov_indicator = pplayer['government'] 
-                      ? "<img class='lowered_gov' src='/images/e/"+governments[pplayer['government']]['name'].toLowerCase() + gov_modifier+".png'>" 
-                      : "<img class='lowered_gov' src='/images/e/unknowngov.png'>"; 
+    var gov_indicator = (pplayer['government'] || player_gov_known(pplayer))
+                      ? "<img class='lowered_gov' src='/images/e/"+governments[pplayer['government']]['name'].toLowerCase() + gov_modifier+".png' title='"+governments[pplayer['government']]['name']+"'>" 
+                      : "<img class='lowered_gov' src='/images/e/unknowngov.png' title='Unknown Government'>"; 
     nation_list_html += "<td style='text-align:left;'>" + pplayer['name'] + "</td><td style='text-align:left;' title=\"" 
           + html_safe(nations[pplayer['nation']]['legend']) + "\">"
           + gov_indicator + "&nbsp;" + nations[pplayer['nation']]['adjective']  + "</td>"
@@ -299,6 +299,32 @@ function update_nation_screen()
     $("#nation_header_row").css({"font-size":"90%"});  
   }
 }
+
+
+/**************************************************************************
+ Server sends the same code for unknown_gov and Anarchy. It's up to the 
+ client to figure out which by using deductive logic.
+**************************************************************************/
+function player_gov_known(pplayer) {
+  // Game observers and GM/supercow
+  if (client_is_observer() || client.conn.access_level >= 5) return true;
+
+  // Knowledge of gov from contact (no embassy)
+  contact_time = pplayer.diplstates[client.conn.playing.playerno].contact_turns_left;
+  if (contact_time) {
+    return true;
+  }
+
+  if (client.conn.playing) {
+    if (client.conn.playing.real_embassy[pplayer.playerno]) {
+      // If you have an embassy it's NOT unknown gov, it's anarchy
+      return true;
+    }
+  }
+
+  return false;
+}
+
 
 /**************************************************************************
  ...
