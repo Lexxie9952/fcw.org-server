@@ -112,6 +112,12 @@ this virtual unit for the early game.
 19. No Commercial ship or stand-in for a commercial ship
    will cause unhappiness: Consistency and simplicity.
 =============================================================
+20. Legion price adjust 32 (was 31) - got 10% discount like 
+   all other units, off classic price, but was overpriced in 
+   classic. should be 36 or 37 with 20% reduction giving 29-30
+   in cost. Legion's extra abilities worth +1 shield from
+   that.
+=============================================================
 
 
 

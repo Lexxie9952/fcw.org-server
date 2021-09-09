@@ -532,8 +532,10 @@ cooler_drier_result  = "Grassland"
 native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", 
                        "AirProtect", "Air_High_Altitude", "Bomb", "Space"
 flags                = "CanHaveRiver", "Low Land"
-property_wet         = 80
+property_wet         = 85
 property_tropical    = 10
+property_temperate   = 10
+property_cold        = 5
 color.r              = 129
 color.g              = 179
 color.b              = 146
