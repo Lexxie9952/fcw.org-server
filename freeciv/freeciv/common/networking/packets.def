@@ -2350,6 +2350,9 @@ PACKET_WEB_PLAYER_INFO_ADDITION = 257; sc, is-info
   PLAYER playerno; key
 
   UINT32 expected_income;
+  UINT16 advance_count;
+  SINT16 advance_saved_bulbs[MAX_NUM_ADVANCES:advance_count];
+  SINT16 advance_costs[MAX_NUM_ADVANCES:advance_count];
 end
 
 PACKET_WEB_RULESET_UNIT_ADDITION = 258; sc, lsend
