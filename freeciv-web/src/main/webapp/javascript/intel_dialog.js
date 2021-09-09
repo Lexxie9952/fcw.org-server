@@ -80,7 +80,7 @@ function show_intelligence_report_embassy(pplayer)
 
   var gov_mod = get_gov_modifier(pplayer.playerno, "", true);
   var gov_name = governments[pplayer['government']]['name'];
-  const natl_adj = nations[pplayer['nation']]['adjective'];
+  const natl_adj = nations[pplayer['nation']]['noun_plural'].replace("?plural:", "");
   if (gov_mod) gov_name = gov_mod + " " + gov_name;
 
   var intel_data = {
@@ -108,7 +108,7 @@ function show_intelligence_report_embassy(pplayer)
     }
   }
 
-  // TECHS.   TODO: future techs
+  // TECHS.   TODO: FutureTech_n
   var research = research_get(pplayer);
   if (research !== undefined) {
     var researching = techs[research['researching']];
@@ -122,13 +122,44 @@ function show_intelligence_report_embassy(pplayer)
     var myresearch = client_is_observer()
                      ? null
                      : research_get(client.conn.playing)['inventions'];
+
     for (var tech_id in techs) {
+      // Who has blueprints (instead of actual possession of the tech):
+      let bp_me_code = player_has_blueprints(client.conn.playing, tech_id) ? "1" : "0";
+      let bp_them_code = player_has_blueprints(pplayer, tech_id) ? "1" : "0";
+      let bp_active = bp_me_code == "1" || bp_them_code == "1";
+
       if (research['inventions'][tech_id] == TECH_KNOWN 
-          || (myresearch != null && myresearch[tech_id] == TECH_KNOWN) ) {
+          || (myresearch != null && myresearch[tech_id] == TECH_KNOWN) 
+          || bp_active ) {
+
+        let style = "";
+        style = (myresearch != null && myresearch[tech_id] == TECH_KNOWN)
+                 ? (research['inventions'][tech_id] == TECH_KNOWN ? 'both' : 'me_only') : 'them';
+
+        if (myresearch != null && myresearch[tech_id] == TECH_KNOWN) {
+          if (research['inventions'][tech_id] == TECH_KNOWN) style = "both";
+          else style = "me_only";
+        } else {
+          if (research['inventions'][tech_id] == TECH_KNOWN) style = "them";
+          else style = "neither";
+        }
+
+        // You/they may not have a tech but have blueprints for it, which will
+        // still alter the display style and text:
+        /*let bp_title = "";
+        if (bp_them_code == "1") {
+          bp_title += nations[pplayer.nation].adjective + " have blueprints."
+        }        
+        if (bp_me_code == "1") {
+          bp_title += " We have blueprints."
+        }*/
+        let tech_name = techs[tech_id]['name']
+                      + (bp_active == "1" ? " 📘" : "");
+        
         intel_data['tech'].push({
-          name: techs[tech_id]['name'],
-          who: (myresearch != null && myresearch[tech_id] == TECH_KNOWN)
-                           ? (research['inventions'][tech_id] == TECH_KNOWN ? 'both' : 'me_only') : 'them'
+          name: tech_name,
+          who: style + bp_me_code + bp_them_code
         });
       }
     }
@@ -169,24 +200,59 @@ function show_intelligence_report_embassy(pplayer)
 
   /*************** Set up report UI for interacting with 3 classes of tech in the report ****************/
     // Refresh visibility for all 3 classes of tech, when showing a new report:
-    $("li.tech-them").css("display", "");
-    $("li.tech-me_only").css("display", "");
-    $("li.tech-both").css("display", "");
+    $("li.tech-them00").css("display", "");
+    $("li.tech-them10").css("display", "");
+    $("li.tech-neither01").css("display", "");
+    $("li.tech-neither10").css("display", "");
+    $("li.tech-neither11").css("display", "");
+    $("li.tech-me_only00").css("display", "");
+    $("li.tech-me_only01").css("display", "");
+    $("li.tech-both00").css("display", "");
 
     // Set helptext:
-    $("li.tech-them").attr("title",""+natl_adj+" have. We don't. CLICK to remove these from report.");
-    $("li.tech-me_only").attr("title","We have. "+natl_adj+" don't. CLICK to remove these from report.");
-    $("li.tech-both").attr("title", ""+natl_adj+" have and we have. CLICK to remove these from report.")
+    $("li.tech-them00").attr("title",""+natl_adj+" have. We don't.\nCLICK to remove these.");
+    $("li.tech-them10").attr("title",""+natl_adj+" have. We have blueprints.\nCLICK to remove these.");
+    $("li.tech-neither01").attr("title","We don't have. "+natl_adj+" have blueprints.\nCLICK to remove these.");
+    $("li.tech-neither10").attr("title",""+natl_adj+" don't have. We have blueprints.\nCLICK to remove these.");
+    $("li.tech-neither11").attr("title",""+natl_adj+" have blueprints. We have blueprints.\nCLICK to remove these.");
+    $("li.tech-me_only00").attr("title","We have. "+natl_adj+" don't.\nCLICK to remove these.");
+    $("li.tech-me_only01").attr("title","We have. "+natl_adj+" have blueprints.\nCLICK to remove these.");
+    $("li.tech-both00").attr("title", ""+natl_adj+" have and we have.\nCLICK to remove these.");
 
     // Set that user may click one of the three classes of tech to remove it from report:
-    $("li.tech-them").on('click', function(event){
-      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-them").css("display", "none");
+    $("li.tech-them00").on('click', function(event){
+      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-them00").css("display", "none");
+      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-them10").css("display", "none");
     });
-    $("li.tech-me_only").on('click', function(event){
-      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-me_only").css("display", "none");
+    $("li.tech-them10").on('click', function(event){
+      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-them00").css("display", "none");
+      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-them10").css("display", "none");
     });
-    $("li.tech-both").on('click', function(event){
-      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-both").css("display", "none");
+    $("li.tech-neither01").on('click', function(event){
+      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-neither01").css("display", "none");
+      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-neither10").css("display", "none");
+      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-neither11").css("display", "none");
+    });
+    $("li.tech-neither10").on('click', function(event){
+      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-neither01").css("display", "none");
+      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-neither10").css("display", "none");
+      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-neither11").css("display", "none");
+    });
+    $("li.tech-neither11").on('click', function(event){
+      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-neither01").css("display", "none");
+      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-neither10").css("display", "none");
+      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-neither11").css("display", "none");
+    });
+    $("li.tech-me_only00").on('click', function(event){
+      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-me_only00").css("display", "none");
+      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-me_only01").css("display", "none");
+    });
+    $("li.tech-me_only01").on('click', function(event){
+      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-me_only00").css("display", "none");
+      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-me_only01").css("display", "none");
+    });
+    $("li.tech-both00").on('click', function(event){
+      event.stopPropagation(); event.stopImmediatePropagation(); $("li.tech-both00").css("display", "none");
     });
   /*******************************/
 

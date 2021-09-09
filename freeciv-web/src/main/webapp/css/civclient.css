@@ -1379,38 +1379,122 @@ body:not(.mobile) .ui-dialog.unit_dialog {
   position: relative;
 }
 
+/* intel dialog tech report classes */
+/* legacy styles: */
 li.tech-them {
   font-weight: bold;
   color: #a9d1a7;
   cursor: alias;
 }
-
 li.tech-me_only {
   color: #caa7a7;
   font-style: italic;
   cursor: alias;
 }
-
 li.tech-both {
   cursor: alias;
 }
-
 li.tech-them::before {
   content: '\2605';
   position: absolute;
   left: 1em;
 }
-
+li.tech-me_only::before {
+  color: #d10d17;
+  font-weight: bold;
+  content: '\2613';
+  position: absolute;
+  left: 1em;
+}
 li.tech-both::before {
   content: '\2713';
   position: absolute;
   left: 1em;
 }
-
-li.tech-me_only::before {
-  color: #800006;
+/* the following classes express a matrix of possibilities, some of which are 
+   not possible. the first code is who definitely possesses the tech:  
+   them, me_only, both, neither
+   the second is two bits for who possess blueprints: [me_bit][them_bit] */
+li.tech-them00 { /* no one has blueprints, they have the tech. we don't. */
+  font-weight: bold;
+  color: #a9d1a7;
+  cursor: alias;
+}
+li.tech-them10 { /* they have the tech and we have blueprints */
+  font-weight: bold;
+  color: #a9d1a7;
+  cursor: alias;
+}
+/* themx1: impossible to possess and also have blueprints */
+li.tech-neither01 { /* no one has the tech but they have blueprints */
+  color: #a7c4d1;
+  font-style: bold;
+  cursor: alias;
+}
+li.tech-neither10 { /* no one has the tech but we have blueprints */
+  color: #a89191;
+  font-style: italic;
+  cursor: alias;
+}
+li.tech-neither11 { /* no one has the tech but both have blueprints */
+  color: #3876fc;
+  font-style: italic;
+  cursor: alias;
+}
+/* both00: impossible: "no one with tech, nor blueprints" gets filtered out of the list */
+li.tech-me_only00 {  /* we have the tech and they lack blueprints */
+  color: #caa7a7;
+  font-style: italic;
+  cursor: alias;
+}
+li.tech-me_only01 {  /* we have the tech and they have blueprints */
+  color: #3876fc;
+  font-style: italic;
+  cursor: alias;
+}
+/* me_only1x: impossible, we can't have blueprints if we have the tech */
+li.tech-both00 {     /* if we both have the tech then neither has blueprints */
+  cursor: alias;
+}
+/* ----------- */
+li.tech-them00::before { /* they have the tech, we don't, and we have no blueprints */
+  content: '\2605';
+  position: absolute;
+  left: 1em;
+}
+li.tech-them10::before { /* they have the tech, we don't, and we have blueprints */
+  content: '\2605';
+  position: absolute;
+  left: 1em;
+}
+li.tech-neither01::before {  /* no one has the tech but they have blueprints and we don't */
+  color: #3876fc;
+  content: '\2605';
+  position: absolute;
+  left: 1em;
+}
+li.tech-neither10::before {  /* no one has the tech but we have blueprints and they don't */
+  color: #d10d17;
+  content: '\2613';
+  position: absolute;
+  left: 1em;
+}
+li.tech-me_only00::before { /* we have the tech, they don't, and no one has blueprints */
+  color: #d10d17;
   font-weight: bold;
   content: '\2613';
+  position: absolute;
+  left: 1em;
+}
+li.tech-me_only01::before { /* we have the tech, they don't, and they have blueprints */
+  color: #d10d17;
+  font-weight: bold;
+  content: '\2613';
+  position: absolute;
+  left: 1em;
+}
+li.tech-both00::before { /*  we both have the tech and neither has blueprints */
+  content: '\2713';
   position: absolute;
   left: 1em;
 }
