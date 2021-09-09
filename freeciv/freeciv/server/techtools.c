@@ -316,6 +316,29 @@ void send_research_info(const struct research *presearch,
   } conn_list_iterate_end;
 }
 
+/************************************************************************//**
+  Returns the clean simple base cost of a tech without considering 
+  tech leak, bulbs already acquired, etc. Because formulas need to 
+  know this number: e.g., for blueprints awarding a % 
+****************************************************************************/
+static int base_tech_cost(struct research *research, 
+                          Tech_type_id tech) 
+{
+  int base_cost = 0;
+  const struct advance *padvance = valid_advance_by_number(tech);
+
+  if (game.info.tech_cost_style == TECH_COST_CIV1CIV2) {
+    if (research != NULL) {
+      base_cost = game.info.base_tech_cost * research->techs_researched;
+    }
+  } else if (NULL != padvance) {
+      base_cost = padvance->cost;
+  } else {
+    fc_assert(NULL != padvance); /* Always fails. */
+  }
+
+  return base_cost;
+}
 
 /************************************************************************//**
   Player receives a blueprint for a technology (from somewhere). Credit 
@@ -347,9 +370,29 @@ int found_new_blueprint(struct research *research,
   /* blueprint_discount 1-100 possibly credits bulbs for the tech */
   if (blueprint_discount > 0 && blueprint_discount < 100) {
     /* Calculate the bulb credit of the blueprint, with fair rounding */
-    int cost = research_total_bulbs_required(research, tech, FALSE);
+    int cost = base_tech_cost(research, tech);
+    /* The line below would award the blueprint based on the current 
+       cost after techleak, which would nullify the techleak effect on
+       cost since your blueprint is just worth less now */
+    // int cost = research_total_bulbs_required(research, tech, FALSE);
+
     float award = cost * ((float)blueprint_discount / 100);
     int credit = (int)(award + 0.5);
+    
+    /* Blueprint award can't exceed current bulb cost of the tech
+       or else the theft would give excess "spillover bulbs": */
+    if (credit > research_total_bulbs_required(research, tech, FALSE)) {
+      // blueprint credit for the exact amount of bulbs needed to get the tech:
+      credit = research_total_bulbs_required(research, tech, FALSE);
+      /* The lines below would make you automatically discover it. You
+         do have the exact number of bulbs for it! However, is that
+         what we really want? This allows you to sit on blueprints
+         like the proper blueprints they are, until you click the 
+         tech to unlock it (e.g., avoid obsolescence of things, etc.)
+      found_new_tech(research, tech, FALSE, TRUE);
+      return 2;*/
+    }
+      
     /* if blueprint credit exceeds current research, award bulb credit */
     if (credit > research->inventions[tech].bulbs_researched_saved) {
       research->inventions[tech].bulbs_researched_saved = credit;
@@ -1259,6 +1302,43 @@ void give_initial_techs(struct research *presearch, int num_random_techs)
 }
 
 /************************************************************************//**
+  Returns true if the blueprints for a tech would result in the player
+  having more bulbs in that tech than they already do. Otherwise the 
+  blueprints are useless and the server should pick another random tech
+  to steal (or none at all if there are none.)
+****************************************************************************/
+static bool stealable_blueprints(struct research *research,
+                                 Tech_type_id tech) {
+  if (game.server.blueprints) {
+      int blueprint_theft_pct = game.server.conquercost 
+                                  ? 100-game.server.conquercost 
+                                  : game.server.blueprints;
+
+    if (blueprint_theft_pct > 0) {
+      /* Calculate the bulb credit of the blueprint, with fair rounding */
+      int cost = base_tech_cost(research, tech);
+      /* The line below would award the blueprint based on the current 
+        cost after techleak, which would nullify the techleak effect on
+        cost since your blueprint is just worth less now */
+      // int cost = research_total_bulbs_required(research, tech, FALSE);
+      float award = cost * ((float)blueprint_theft_pct / 100);
+      int credit = (int)(award + 0.5);
+      /* blueprint credit > current bulbs for research: return true==stealable */
+      if (credit > research->inventions[tech].bulbs_researched_saved) {
+        return true;
+      }
+      // blueprint credit is less than current bulbs already accumulated:
+      return false;
+    }
+    // can't steal: blueprint_theft_pct is 0% due to conquercost setting!
+    return false;   
+  } else {
+    // game.server.blueprints is disabled, it's a normal theft 
+    return true;
+  }
+}
+
+/************************************************************************//**
   If victim has a tech which pplayer doesn't have, pplayer will get it.
   The clients will both be notified and the conquer cost
   penalty applied. Used for diplomats and city conquest.
@@ -1287,7 +1367,10 @@ Tech_type_id steal_a_tech(struct player *pplayer, struct player *victim,
       if (research_invention_gettable(presearch, i,
                                       game.info.tech_steal_allow_holes)
           && research_invention_state(presearch, i) != TECH_KNOWN
-          && research_invention_state(vresearch, i) == TECH_KNOWN) {
+          && research_invention_state(vresearch, i) == TECH_KNOWN
+          /* if blueprints are enabled, don't steal a tech for which we 
+             already have more bulbs than the blueprints */
+          && (!game.server.blueprints || stealable_blueprints(presearch, i))) {
         j++;
       }
     } advance_index_iterate_end;
@@ -1307,7 +1390,10 @@ Tech_type_id steal_a_tech(struct player *pplayer, struct player *victim,
         if (research_invention_gettable(presearch, i,
                                         game.info.tech_steal_allow_holes)
             && research_invention_state(presearch, i) != TECH_KNOWN
-            && research_invention_state(vresearch, i) == TECH_KNOWN) {
+            && research_invention_state(vresearch, i) == TECH_KNOWN
+            /* if blueprints are enabled, don't steal a tech for which we 
+               already have more bulbs than the blueprints */
+            && (!game.server.blueprints || stealable_blueprints(presearch, i))) {
 	  j--;
         }
         if (j == 0) {
