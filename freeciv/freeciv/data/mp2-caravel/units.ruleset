@@ -788,8 +788,8 @@ helptext      = _("\
 Tribesmen came before cities and specialized division of labor. During\
  ancient times, they get primitive versatility bonuses: \n\
 Tribesmen can explore, moving over terrain with no penalty. They don’t obey\
- or exert ZOC. They work tiles at half the rate of Workers. They attack at 3×\
- and defend at 2× against wild animals. \n\
+ or exert ZOC. They can build roads, irrigate, or mine at half the rate of\
+ Workers. \n\
 Tribesmen can make basic diplomatic contact and freely Investigate\
  cities. They can carry Goods and enter nations with whom you are at Peace.\
  They can do primitive combat—they can’t conquer cities and only attack for\
@@ -800,7 +800,9 @@ Tribesmen help build nations by recycling into city production with\
 Tribesmen lose many versatility bonuses as you become more civilized. For\
  3 turns they gain +⅓ move. After 20 turns, they lose another ⅓ move and\
  lose their vision, tile-work, and recycle bonuses. At such point, recycling\
- into a building or wonder yields 10 shields.\
+ into a building or wonder yields 10 shields. \n\
+(In games with animals set to on, Tribesmen attack at 3× and defend at 2× against\
+ wild animals.)\ 
 ")
 
 ;A unique patch unit to provide fair starts regardless of lack of nearby water.
