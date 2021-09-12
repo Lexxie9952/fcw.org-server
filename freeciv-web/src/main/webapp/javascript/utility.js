@@ -454,3 +454,13 @@ function is_word_plural(word)
   return false;
 }
 
+/************************************************************************//**
+  A way to get a random number from a seed, since javascript can't.
+ ****************************************************************************/
+function mulberry_random(seed, max) {
+  var t = seed += 0x6D2B79F5;
+  t = Math.imul(t ^ t >>> 15, t | 1);
+  t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+  return Math.trunc(((t ^ t >>> 14) >>> 0) / 4294967296 * max);
+}
+
