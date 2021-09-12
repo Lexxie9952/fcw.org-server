@@ -5504,10 +5504,10 @@ reqs	=
 ;                  1  0  0  1   1c 1h   ✓
 ;                  1  0  1  0   1c 1h   ✓
 ;                  1  0  1  1   1c 1h   ✓
-;                  1  1  0  0   1c      ✓
-;                  1  1  0  1   1c 1h   ✓
-;                  1  1  1  0   1c 1h   ✓
-;                  1  1  1  1   1c 1h   ✓
+;                  1  1  0  0   2c      ✓
+;                  1  1  0  1   2c 1h   ✓
+;                  1  1  1  0   2c 1h   ✓
+;                  1  1  1  1   2c 1h   ✓
 ; Yes, it's "brute force" but do we want 93% chance of human error? No.
 ; Real reason: my brain exploded after multiple tries.
 [effect_mausoleum_of_mausolos_0001_c] ; 0001 = ---------------------CONTENT
@@ -5716,7 +5716,7 @@ reqs    =
     }
 [effect_mausoleum_of_mausolos_1100_c] ; 1100 = ---------------------CONTENT
 type    = "Make_Content"
-value   = 1
+value   = 2
 reqs    =
     { "type",     "name",                 "range", "present"
       "Building", "Courthouse",           "City",   TRUE
@@ -5728,7 +5728,7 @@ reqs    =
     }
 [effect_mausoleum_of_mausolos_1101_c] ; 1101 = -------------------HAPPY+CONTENT
 type    = "Make_Content"
-value   = 1
+value   = 2
 reqs    =
     { "type",     "name",                 "range", "present"
       "Building", "Courthouse",           "City",   TRUE
@@ -5752,7 +5752,7 @@ reqs    =
     }
 [effect_mausoleum_of_mausolos_1110_c] ; 1110 = -------------------HAPPY+CONTENT
 type    = "Make_Content"
-value   = 1
+value   = 2
 reqs    =
     { "type",     "name",                 "range", "present"
       "Building", "Courthouse",           "City",   TRUE
@@ -5776,7 +5776,7 @@ reqs    =
     }
 [effect_mausoleum_of_mausolos_1111_c] ; 1111 = -------------------HAPPY+CONTENT
 type    = "Make_Content"
-value   = 1
+value   = 2
 reqs    =
     { "type",     "name",                 "range", "present"
       "Building", "Courthouse",           "City",   TRUE
