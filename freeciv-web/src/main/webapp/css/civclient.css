@@ -253,6 +253,9 @@ input[type='number'] {
 }
 .unit_desc {
   color: #9aa;
+  line-height:115%;
+  font-size:115%;
+  font-family:SegoeSB
 }
 
 .blue_clickable {
