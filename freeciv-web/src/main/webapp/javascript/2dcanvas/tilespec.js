@@ -88,10 +88,11 @@ var EDGE_UD = 2; /* Up and down (nw/se), for hex_width tilesets */
 var EDGE_LR = 3; /* Left and right (ne/sw), for hex_height tilesets */
 var EDGE_COUNT = 4;
 
-var MATCH_NONE = 0;
-var MATCH_SAME = 1;		/* "boolean" match */
-var MATCH_PAIR = 2;
-var MATCH_FULL = 3;
+var MATCH_NONE   = 0;
+var MATCH_SAME   = 1;		/* "boolean" match */
+var MATCH_PAIR   = 2;
+var MATCH_FULL   = 3;
+var MATCH_RANDOM = 4;   /* semi-random selection for chaos effect, not really matched to adjacent */
 
 var CELL_WHOLE = 0;		/* entire tile */
 var CELL_CORNER = 1;	/* corner of tile */
@@ -605,7 +606,6 @@ function fill_terrain_sprite_array(l, ptile, pterrain, tterrain_near)
              return [ {"key" : "t.l" + l + "." + pterrain['graphic_str'] + 1} ];
 	       }
         }
-
         case MATCH_SAME:
         {
           var tileno = 0;
@@ -619,10 +619,15 @@ function fill_terrain_sprite_array(l, ptile, pterrain, tterrain_near)
             }
           }
           var gfx_key = "t.l" + l + "." + pterrain['graphic_str'] + "_" + cardinal_index_str(tileno);
-	      var y = tileset_tile_height - tileset[gfx_key][3];
-
+          var y = tileset_tile_height - tileset[gfx_key][3];
           return [ {"key" : gfx_key, "offset_x" : 0, "offset_y" : y} ];
         }
+        case MATCH_RANDOM:
+        {
+            gfx_key = "t.l" + l + "." + pterrain['graphic_str'] + mulberry_random(ptile.tile,16);
+            var y = tileset_tile_height - tileset[gfx_key][3];
+            return [ {"key" : gfx_key, "offset_x" : 0, "offset_y" : y} ];
+        }  
       }
     }
 
