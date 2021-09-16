@@ -70,8 +70,8 @@ DiplRel:       World, Alliance, Team, Player, Local                    "Armistic
                                                                        "Foreign". ** "Local" range tests relation between specific players while
                                                                        "Player" and upper tests if any player in the range has such relation to any
                                                                        other living player
-Extra:         Local, Adjacent, CAdjacent, Traderoute, City
-ExtraFlag:     Local, Adjacent, CAdjacent, Traderoute, City
+Extra:         Local, Adjacent, CAdjacent, Traderoute, City, Tile
+ExtraFlag:     Local, Adjacent, CAdjacent, Traderoute, City, Tile
 Good:                                                  City            If any traderoute brings the good into the city
 Gov:           Player
 MaxUnitsOnTile:Local, Adjacent, CAdjacent                              If on at least any one of the tiles in the range currently stand not more than
