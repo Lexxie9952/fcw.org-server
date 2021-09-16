@@ -311,7 +311,6 @@ function update_tech_tree()
 
       if (x > maxleft) maxleft = x;
 
-
     /* TECH WITH KNOWN PREREQS. */
     } else if (player_invention_state(client.conn.playing, ptech['id']) == TECH_PREREQS_KNOWN) {
       var bgcolor = (client.conn.playing != null && is_tech_req_for_goal(ptech['id'], client.conn.playing['tech_goal'])) ? "rgb(131, 170, 101)" : "rgb(91, 130, 61)";
@@ -325,12 +324,13 @@ function update_tech_tree()
         tech_canvas_ctx.strokeStyle = FUTURE_TECH_FRAME;
         tech_canvas_ctx.fillStyle = 'rgb(0, 0, 0)';
       }
-
-      var tag = tileset_tech_graphic_tag(ptech); var bp = false;
-      if (player_has_blueprints(client.conn.playing, ptech['id'])) {
-        bgcolor = BLUEPRINT_TECH_FILL;
+      var bp = player_has_blueprints(client.conn.playing, ptech['id']);
+      var tag = tileset_tech_graphic_tag(ptech);
+      if (bp) {
         tag = "a.blueprints";
-        bp = true;
+        if (client.conn.playing['researching'] != ptech['id']) { // No bright blue box for current research
+          bgcolor = BLUEPRINT_TECH_FILL;
+        }
       }
       tech_canvas_ctx.fillStyle = bgcolor;
       tech_canvas_ctx.fillRect(x-2, y-2, tech_item_width, tech_item_height);
@@ -592,7 +592,7 @@ function get_advances_text(tech_id)
     (list = list.filter(Boolean)).length ? (intro + ' ' + list.join(', ')) : '';
 
   const ptech = techs[tech_id];
-  var cost = ptech.cost;
+  var cost = Math.floor(ptech.cost);
   var saved = 0;
 
   // Adjust tech cost for sciencebox
