@@ -40,6 +40,7 @@ extra_flags =
       _("IrrigationSource"), _("Is a water source for Irrigation.")
       _("WaterwaySource"), _("Is a water source for inland Canals.")
       _("Railable"), _("Allows Railroads to be built.")
+      _("FortressHeal"), _("Damaged Land and Helicopter units +25% hp per turn resting.")
   }
 
 [parameters]
@@ -529,7 +530,7 @@ warmer_wetter_result = "Ocean"
 warmer_drier_result  = "Lake"
 cooler_wetter_result = "Grassland"
 cooler_drier_result  = "Grassland"
-native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", 
+native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter",
                        "AirProtect", "Air_High_Altitude", "Bomb", "Space"
 flags                = "CanHaveRiver", "Low Land"
 property_wet         = 85
@@ -625,7 +626,7 @@ warmer_wetter_result = "no"
 warmer_drier_result  = "no"
 cooler_wetter_result = "Forest"
 cooler_drier_result  = "Forest"
-native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", 
+native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter",
                        "AirProtect", "Air_High_Altitude", "Bomb", "Space"
 flags                = "CanHaveRiver", "Low Land"
 property_foliage     = 31
@@ -669,7 +670,7 @@ warmer_wetter_result = "no"
 warmer_drier_result  = "no"
 cooler_wetter_result = "no"
 cooler_drier_result  = "no"
-native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter", 
+native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Balloon", "Zeppelin", "Missile", "Helicopter",
                        "AirProtect", "Air_High_Altitude", "Bomb", "Space"
 flags                = "Starter", "CanHaveRiver"
 property_mountainous = 55
@@ -717,7 +718,7 @@ warmer_wetter_result = "no"
 warmer_drier_result  = "no"
 cooler_wetter_result = "no"
 cooler_drier_result  = "no"
-native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Zeppelin", "Missile", "Helicopter", 
+native_to            = "Land", "LandNoKill", "LandAirSea", "Air", "Zeppelin", "Missile", "Helicopter",
                        "AirProtect", "Air_High_Altitude", "Bomb", "Space"
 flags                = "CanHaveRiver"
 property_mountainous = 30
@@ -1035,7 +1036,7 @@ identifier  = "@"
 [resource_deer]
 extra       = "Deer"
 identifier  = "d"
-;food      = 4  ;food added in effects because only generated resources tied to a terrain type can access this var
+;food      = 3  ;food added in effects because only generated resources tied to a terrain type can access this var
 ;shield    = 0
 
 [resource_wild_boar]
@@ -1444,31 +1445,26 @@ act_gfx_alt2   = "-"
 rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 reqs           =
-    { "type",    "name",      "range","present","quiet"      
+    { "type",    "name",      "range","present","quiet"
+      "ServerSetting","hideouts","World",TRUE,   FALSE
+      "UnitFlag", "CanHide",  "Local", TRUE,     FALSE
+      "UnitFlag", "CanClaim", "Local", FALSE,    FALSE
       "CityTile","Center",    "Local", FALSE,    TRUE
+      "Tech", "Warrior Code", "Player",TRUE,     FALSE
+      "TerrainClass","Land",  "Local", TRUE,     FALSE
       "Terrain", "Hills",     "Local", FALSE,    FALSE
       "Terrain", "Plains",    "Local", FALSE,    FALSE
       "Terrain", "Grassland", "Local", FALSE,    FALSE
       "Terrain", "Tundra",    "Local", FALSE,    FALSE
       "Terrain", "Desert",    "Local", FALSE,    FALSE
       "Terrain", "Glacier",   "Local", FALSE,    FALSE
-; Hard contradiction between Tile Claim and Hideout is necessary so that
-; the actionenabler for one never allows the other to be made. TODO: 
-; req is just a CanHide unit, when actionenabler req can check base type:     
-      "MaxUnitsOnTile", "1",  "Local", TRUE,     FALSE    ; causes bug where can’t pillage with 2 units on tile
-      "UnitFlag","CanHide",   "Local", TRUE,     FALSE
-
-      "Tech", "Warrior Code", "Player",TRUE,     FALSE
-      "TerrainClass","Land",  "Local", TRUE,     FALSE
       "Extra",   "Naval Base","Local", FALSE,    FALSE
       "Extra",   "Fortress",  "Local", FALSE,    FALSE
       "Extra",   "Castle",    "Local", FALSE,    FALSE
       "Extra",   "Bunker",    "Local", FALSE,    FALSE
       "Extra",   "Airbase",   "Local", FALSE,    FALSE
       "Extra",   "Fort",      "Local", FALSE,    FALSE
-      "Extra",   "Quay",      "Local", FALSE,    FALSE
-      "Extra",   "Quay​",      "Local", FALSE,    FALSE ; "Quay"+0-width space = quay on city
-      "ServerSetting","hideouts","World",TRUE,   FALSE
+      "Extra",   "Quay",      "Local", FALSE,    FALSE ; "Quay"+0-width space = CityTile, already prevented
     }
 disappearance_reqs = 
     { "type",           "name", "range",  "present"
@@ -1498,7 +1494,6 @@ TIP: Hideouts are good for guarding a border or setting a trap for\
  intruders. Be careful! An abandoned Hideout can be used against you!\ 
 ")
 
-;gui_type hiddenby conflicts
 [extra_tileclaim]
 name           = _("Tile Claim")
 category       = "Infra"
@@ -1513,32 +1508,34 @@ rmact_gfx      = "None"
 rmact_gfx_alt  = "-"
 reqs           =
     { "type", "name",            "range","present", "quiet"
-      "TerrainClass", "Land",    "Local",  TRUE,  FALSE
 ; Hard contradiction between Tile Claim and Hideout is necessary so that
-; the actionenabler for one never allows the other to be made. TODO: 
-; req is just a military unit, when actionenabler req can check base type:
-      "MaxUnitsOnTile", "1",     "Local",  FALSE, FALSE     ; causes pillage to be impossible :(
+; the actionenabler for one never allows the other to be made. Currently,
+; "CanClaim" and "CanHide" never exist in the same unit.
+;     "MaxUnitsOnTile", "1",     "Local",  FALSE, FALSE
+;     "Extra",   "Naval Base",   "Local",  FALSE, FALSE  ; we now allow claiming a tile so you'd keep it after
+;     "Extra",   "Fortress",     "Local",  FALSE, FALSE  ; removing a base. no conflicts seen yet but we can
+;     "Extra",   "Castle",       "Local",  FALSE, FALSE  ; bring it back if any found.
+;     "Extra",   "Bunker",       "Local",  FALSE, FALSE
+;-------------------
       "UnitFlag", "CanClaim",    "Local",  TRUE,  FALSE
-
+      "UnitFlag", "CanHide",     "Local",  FALSE, FALSE
+      "TerrainClass", "Land",    "Local",  TRUE,  FALSE  ; Can't claim sea tiles on a boat.
       "CityTile", "Center",      "Local",  FALSE, TRUE
-      "Extra",   "Naval Base",   "Local",  FALSE, FALSE
-      "Extra",   "Fortress",     "Local",  FALSE, FALSE
-      "Extra",   "Castle",       "Local",  FALSE, FALSE
-      "Extra",   "Bunker",       "Local",  FALSE, FALSE
-      "CityTile", "Claimed",     "Local",  TRUE,  FALSE         ; excludes hideout enabling in claimed territory
     }
-build_time     = 2
+build_time     = 1
 removal_time   = 0
-conflicts      = "Fortress", "Naval Base", "Castle", "Bunker"
+;conflicts      = "Fortress", "Naval Base", "Castle", "Bunker"
 defense_bonus  = 0
 native_to      = "Land", "LandAirSea", "LandNoKill"
-hidden_by      = "Fortress", "Naval Base", "Castle", "Bunker"
+;hidden_by      = "Fortress", "Naval Base", "Castle", "Bunker"
 flags          = "ShowFlag", "NativeTile"
 helptext       = _("\
-A Tile Claim is an assertion of sovereignty over a tile by a military\
- unit. Tile Claims can be made anywhere in your territory or cardinally adjacent\
- to an existing Tile Claim. If the tile is unoccupied, another unit may assert\
- its own dominion over the tile claim.\
+A Tile Claim asserts sovereignty over a tile. Tile Claims can be made in\
+ domestic territory with a single diplomatic unit. Non-domestic territory\
+ requires adjacency to an existing Tile Claim, and the Diplomat must be\
+ supported by another unit when making the claim. NOTE: if a claimed\
+ tile is unoccupied, foreign units entering the tile will take\
+ possession of it for their own nation.\
 ")
 
 [extra_fort]
@@ -1609,7 +1606,7 @@ conflicts      = "Naval Base"
 defense_bonus  = 67
 native_to      = "Land", "LandAirSea", "LandNoKill", "LandRoad", "Cargo", "Helicopter", "Balloon", "Zeppelin"
 hidden_by      = "Castle", "Bunker"
-flags          = "NativeTile", "Refuel", "NoStackDeath"
+flags          = "NativeTile", "Refuel", "NoStackDeath", "FortressHeal"
 helptext       = _("\
 Fortresses are improvements built on top of Forts which greatly improve defense:\
  the general bonus against most land unit attacks is 2x. \n\
@@ -1650,7 +1647,7 @@ conflicts      = "Fortress", "Castle", "Bunker"
 defense_bonus  = 67
 native_to      = "Trireme", "RiverShip", "Sea", "Submarine", "Balloon", "Zeppelin", 
                  "Land", "LandRoad", "Cargo", "LandAirSea", "LandNoKill", "Helicopter"
-flags          = "NativeTile", "NoStackDeath", "Refuel"
+flags          = "NativeTile", "NoStackDeath", "Refuel", "FortressHeal"
 helptext       = _("\
 Naval bases are coastal Fortresses with ocean access. They allow ships to enter and\ 
  receive a 2x bonus from superior fortifications. Naval\
@@ -1688,7 +1685,7 @@ removal_time   = 0
 unit_seen      = "Hidden"
 native_to      = "Land", "LandAirSea", "LandNoKill", "LandRoad", "Cargo", "Helicopter", "Balloon", "Zeppelin"
 conflicts      = "Airbase", "Naval Base", "Bunker"
-flags          = "NativeTile", "Refuel", "NoStackDeath"
+flags          = "NativeTile", "Refuel", "NoStackDeath", "FortressHeal"
 helptext       = _("\
 Before the age of Gunpowder, Castles were built as fortresses with an \
 administration center. Construction on them can only begin once the \
@@ -1727,7 +1724,7 @@ removal_time   = 0
 unit_seen      = "Hidden"
 native_to      = "Land", "LandAirSea", "LandNoKill", "LandRoad", "Cargo", "Helicopter", "Balloon", "Zeppelin"
 conflicts      = "Airbase", "Naval Base", "Castle"
-flags          = "NativeTile", "Refuel", "NoStackDeath"
+flags          = "NativeTile", "Refuel", "NoStackDeath", "FortressHeal"
 helptext       = _("\
 Bunkers are underground Fortresses made of concrete and steel, \
 immune to air and missile attacks. In some respects they are the \
@@ -1948,7 +1945,7 @@ flags          = "AutoOnCityCenter", "NativeTile", "Railable"
 bridged_over   = "River"
 helptext       = _("\
 Roads allow your land units to move more quickly, and on some terrain,\
- also provide a trade bonus.\
+ also provide a trade bonus. \n\
 "), _("\
 Building roads on river tiles requires knowledge of Bridge Building.\
  City center tiles automatically get roads (unless they are on a river\
@@ -1983,11 +1980,11 @@ bridged_over   = "River"
 helptext       = _("\
 Once you learn Railroad technology, you may upgrade your roads to\
  railroads. Units travel three times faster along railroads than\
- along roads.\
+ along roads. \n\
 "), _("\
 A railroad also increases any shield resources produced by a tile.\
  A tile whose road is upgraded to a railroad retains any trade bonus\
- from the road as well.\
+ from the road as well. \n\
 "), _("\
 City center tiles with roads are automatically upgraded to railroads\
  when you learn the Railroad technology.\
@@ -2021,7 +2018,7 @@ flags          = "NativeTile", "AutoOnCityCenter"
 helptext       = _("\
 With Superconductors, you may build MAGnetic LEVitation tracks\
  on tiles. Land units expend no movement points\
- when riding a MagLev; you may ride indefinitely.\
+ when riding a MagLev; you may ride indefinitely. \n\
 "), _("\
 City center tiles with railroads are automatically upgraded to MagLev\
  when you learn about Superconductors.\
@@ -2057,9 +2054,9 @@ flags          = "NativeTile", "Quayable", "IrrigationSource", "WaterwaySource"
 native_to      = "Land", "LandNoKill", "LandAirSea", "Trireme", "RiverShip"
 helptext       = _("\
 Any land terrain type may have a River on it.  A River adds 1\
- trade to the resources produced by that tile.  It also adds +0.50 to\
+ trade to the resources produced by that tile. It also adds +0.50 to\
  the tile defense bonus. Finally, land units may move cardinally along\
- a River and use 1/3 move point.\
+ a River and use 1/3 move point. \n\
 "), _("\
 Roads, railroads and MagLev can only be built on River tiles if your\
  civilization has learned Bridge Building technology.\

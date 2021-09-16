@@ -2358,7 +2358,6 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "NonMil",       "Local", TRUE
-      ;NonMil = don't let ability to do Hideouts 'cause' ability to clean pollution
     }
 [actionenabler_clean_fallout]
 action        = "Clean Fallout"
@@ -2366,7 +2365,6 @@ actor_reqs    =
     { "type",          "name",         "range", "present"
       "UnitFlag",      "Settlers",     "Local", TRUE
       "UnitFlag",      "NonMil",       "Local", TRUE
-      ;NonMil = don't let ability to do Hideouts 'cause' ability to clean fallout
     }
 
 [actionenabler_fortify]
@@ -2523,13 +2521,13 @@ actor_reqs    =
 action        = "Build Base"
 actor_reqs    =
     { "type",          "name",            "range", "present"
-       "UnitState",     "OnLivableTile",   "Local",  TRUE
-       "DiplRel",       "Foreign",         "Local",  FALSE
 ; Hard contradiction between Tile Claim and Hideout is necessary so that
 ; the actionenabler for one never allows the other to be made. TODO: 
 ; req is just a CanHide unit, when actionenabler req can check base type:
-      "UnitFlag",      "CanHide",         "Local",  TRUE       
-      "MaxUnitsOnTile", "1",              "Local",  TRUE   ; have to bring this back if we want CanHide and CanClaim in the same unit
+       "UnitFlag",      "CanHide",         "Local",  TRUE      
+       "UnitFlag",      "CanClaim",        "Local",  FALSE
+       "UnitState",     "OnLivableTile",   "Local",  TRUE
+       "DiplRel",       "Foreign",         "Local",  FALSE
     }
 [actionenabler_build_hideout_unclaimed]
 action        = "Build Base"
@@ -2540,49 +2538,53 @@ actor_reqs    =
 ; the actionenabler for one never allows the other to be made. TODO: 
 ; req is just a CanHide unit, when actionenabler req can check base type:
       "UnitFlag",      "CanHide",         "Local",  TRUE
-      "MaxUnitsOnTile", "1",              "Local",  TRUE      ; have to bring this back if we want CanHide and CanClaim in the same unit
+      "UnitFlag",      "CanClaim",        "Local",  FALSE
     }
 target_reqs    =
     { "type",   "name", "range", "present"
-      "CityTile", "Claimed", "Local", FALSE
+     "CityTile", "Claimed", "Local", FALSE
     }
 ;*******************************************************
 [actionenabler_build_tileclaim_domestic]
 action        = "Build Base"
 actor_reqs    =
     { "type",          "name",            "range", "present"
-       "UnitState",     "OnLivableTile",   "Local",  TRUE
-       "DiplRel",       "Foreign",         "Local",  FALSE
 ; Hard contradiction between Tile Claim and Hideout is necessary so that
 ; the actionenabler for one never allows the other to be made. TODO: 
 ; req is just a military unit, when actionenabler req can check base type:
+       "UnitState",     "OnLivableTile",   "Local",  TRUE     ; disallow sea claims
+;--------------------------------
        "UnitFlag",      "CanClaim",        "Local",  TRUE
-       "MaxUnitsOnTile", "1",              "Local",  FALSE; need a diplo + 1 other unit.
+       "UnitFlag",      "CanHide",         "Local",  FALSE      
+       "DiplRel",       "Foreign",         "Local",  FALSE
     }
 target_reqs    =
     { "type",     "name",    "range","present"
-      "CityTile", "Claimed", "Local", TRUE
+      "CityTile", "Claimed", "Local", TRUE      ; ensures inside domestic territory
     }
 
-[actionenabler_build_tileclaim_unclaimed]
+[actionenabler_build_tileclaim_nondomestic]
 action        = "Build Base"
 actor_reqs    =
     { "type",          "name",            "range", "present"
-       "UnitState",     "OnLivableTile",   "Local",  TRUE
-       "DiplRel",       "Foreign",         "Local",  TRUE
-       "Extra",         "Tile Claim",      "CAdjacent", TRUE
-       "DiplRel",       "Armistice",       "Local",  FALSE
-       "DiplRel",       "Peace",           "Local",  FALSE
-       "DiplRel",       "Alliance",        "Local",  FALSE
 ; Hard contradiction between Tile Claim and Hideout is necessary so that
-; the actionenabler for one never allows the other to be made. TODO: 
-; req is just a military unit, when actionenabler req can check base type:
-       "MaxUnitsOnTile", "1",              "Local",  FALSE; need a diplo + 1 other unit.
-       "UnitFlag",      "CanClaim",        "Local",  TRUE
+; the actionenabler for one never allows the other to be made. Currently,
+; that req is CanClaim which never co-exists with CanHide in the same unit.
+;       "TerrainClass",  "Land",            "Adjacent", TRUE  ; can't allow extending sea claims ad infinitum
+;       "DiplRel",       "Foreign",         "Local",  TRUE    ; can claim unclaimed territory
+;       "DiplRel",       "Armistice",       "Local",  FALSE   ; allow negotiating tile exchanges
+;       "DiplRel",       "Alliance",        "Local",  FALSE   ; "
+;       "DiplRel",       "Peace",           "Local",  FALSE   ; casus belli allows retaliation if needed.
+;--------------------------------
+       "UnitState",     "OnLivableTile",   "Local",    TRUE   ; disallow sea claims
+       "UnitFlag",      "CanClaim",        "Local",    TRUE
+       "UnitFlag",      "CanHide",         "Local",    FALSE      
+       "Extra",         "Tile Claim",      "Adjacent", TRUE
+       "MaxUnitsOnTile", "1",              "Local",    FALSE  ; need a diplo + 1 other unit.
     }
 target_reqs    =
     { "type",     "name",    "range","present"
-      "CityTile", "Claimed", "Local", TRUE
+ ;     "CityTile", "Claimed", "Local", TRUE                   ; can claim unclaimed lands too 
     }
 ;*******************************************************
 [actionenabler_mining]
@@ -3385,7 +3387,7 @@ set =
       "ceasefirelength", 15, FALSE
       "city_output_style", 1, FALSE      ; whether tiles and specialists have WYSIWYG output, or calculate output for gold/science AFTER city growth/shrink events.
       "contactturns", 10, FALSE
-      "conquercost", 10, FALSE           ; thefts/conquests award 90% of the tech in blueprint bulbs; if blueprints are off, this means 10% tax on theft/conquest 
+      "conquercost", 0, FALSE            ; thefts/conquests at 0 means we use (100-blueprints%) tax on theft/conquest. if blueprints off then 0 means no tax (or override it to a val) 
       "diplomacy", "ALL", FALSE
       "diplgoldcost", 5, FALSE
       "diplbulbcost", 0, FALSE           ; tech trades are overridden by blueprint %; if blueprints are off, there is no tax on theft/conquest.

@@ -947,14 +947,14 @@ reqs    =
       "UnitClass", "LandNoKill", "Local"
     }
 
-; Fortress HP regen
+; Fortress types, HP regen --------------------------------------------
 [effect_fortress_hp_regen]
 ; Cumulative with fort: 10+15=25
 type    = "HP_Regen"
 value   = 15
 reqs    =
     { "type", "name", "range"
-      "Extra", "Fortress", "Tile"
+      "ExtraFlag", "FortressHeal", "Tile"
       "UnitClass", "Land", "Local"
     }
 [effect_fortress_hp_regen_1]
@@ -962,7 +962,7 @@ type    = "HP_Regen"
 value   = 15
 reqs    =
     { "type", "name", "range"
-      "Extra", "Fortress", "Tile"
+      "ExtraFlag", "FortressHeal", "Tile"
       "UnitClass", "LandAirSea", "Local"
     }
 [effect_fortress_hp_regen_2]
@@ -970,18 +970,19 @@ type    = "HP_Regen"
 value   = 15
 reqs    =
     { "type", "name", "range"
-      "Extra", "Fortress", "Tile"
+      "ExtraFlag", "FortressHeal", "Tile"
       "UnitClass", "LandNoKill", "Local"
     }
 [effect_fortress_hp_regen_3]
 type    = "HP_Regen"
-value   = 25  ;25 because not cumulative with Fort
+value   = 25  ;25 because not cumulative with Fort (Fort only nullfies hp loss each turn)
 reqs    =
     { "type", "name", "range"
-      "Extra", "Fortress", "Tile"
+      "ExtraFlag", "FortressHeal", "Tile"
       "UnitClass", "Helicopter", "Local"
     }
 
+; Airbase HP regen ---------------------------------------------------
 [effect_airbase_hp_regen]
 type    = "HP_Regen"
 value   = 25
@@ -1155,7 +1156,6 @@ reqs	=
       "Tech", "Nuclear Power", "Player"
       "UnitClass", "Submarine", "Local"
     }
-
 
 ;************************************* GOVERNMENT CORRUPTION
 [effect_corruption_anarchy_1]
@@ -1536,6 +1536,14 @@ reqs	=
     { "type",       "name",      "range"
       "Gov", "Monarchy", "Player"
     }
+[effect_empire_size_base_constitutional_monarchy]
+type    = "Empire_Size_Base"
+value   = 12
+reqs	=
+    { "type",       "name",        "range"
+      "Gov",        "Monarchy",    "Player"
+      "Building",   "Magna Carta", "Player"
+    }
 [effect_empire_size_step_monarchy]
 type    = "Empire_Size_Step"
 value   = 12
@@ -1543,14 +1551,16 @@ reqs	=
     { "type",       "name",      "range"
       "Gov", "Monarchy", "Player"
     }
-[effect_23_12_empire_base_step_magna_carta]
-type    = "Make_Content"
-value   = 1     ; One extra content creates a 23/12 base/step
-reqs  =
-    { "type",     "name",        "range", "present"
-      "Gov",      "Monarchy",    "Player", TRUE 
-      "Building", "Magna Carta", "Player", TRUE 
-    }
+;Replaced by [effect_empire_size_base_constitutional_monarchy] in order to make the Happy Tab more "accurately"
+;portray the cause as the 'government' constitutional monarchy rather than caused by the 'building'    
+;[effect_23_12_empire_base_step_magna_carta]
+;type    = "Make_Content"
+;value   = 1     ; One extra content creates a 23/12 base/step
+;reqs  =
+;    { "type",     "name",        "range", "present"
+;      "Gov",      "Monarchy",    "Player", TRUE 
+;      "Building", "Magna Carta", "Player", TRUE 
+;    }
 [effect_empire_size_base_republic]
 type    = "Empire_Size_Base"
 value   = 13
@@ -5913,23 +5923,8 @@ reqs    =
       "Gov",      "Republic",       "Player", FALSE
       "Gov",      "Democracy",      "Player", FALSE
       "Tech",     "Tactics",        "Player", FALSE
-      "Building", "Magna Carta",    "Player", FALSE
     }
-;Magna Carta + not rep. gov + not monarchy 
-;e.g., Theocracy who used to have Magna Carta:
-[effect_statue_of_zeus_content_nonrep2]
-type    = "Make_Content"
-value   = 1
-reqs    =
-    { "type", "name", "range", "present"
-      "Building", "Statue of Zeus", "Player", TRUE
-      "Gov",      "Republic",       "Player", FALSE
-      "Gov",      "Democracy",      "Player", FALSE
-      "Gov",      "Monarchy",       "Player", FALSE
-      "Tech",     "Tactics",        "Player", FALSE
-      "Building", "Magna Carta",    "Player", TRUE
-    }
-[effect_statue_of_zeus_content_magna_carta]
+[effect_statue_of_zeus_mil_content_magna_carta]
 type    = "Make_Content_Mil"
 value   = 1
 reqs    =
@@ -5939,7 +5934,7 @@ reqs    =
       "Building", "Magna Carta",    "Player", TRUE
       "Tech",     "Tactics",        "Player", FALSE
     }
-[effect_statue_of_zeus_content_republic]
+[effect_statue_of_zeus_mil_content_republic]
 type    = "Make_Content_Mil"
 value   = 1
 reqs    =
@@ -5948,7 +5943,7 @@ reqs    =
       "Gov",      "Republic",       "Player", TRUE
       "Tech",     "Tactics",        "Player", FALSE
     }
-[effect_statue_of_zeus_content_democracy]
+[effect_statue_of_zeus_mil_content_democracy]
 type    = "Make_Content_Mil"
 value	= 2
 reqs	=

@@ -67,6 +67,7 @@ this virtual unit for the early game.
       *no longer requires river
 =============================================================
 10. Riflemen and Alpines upgrade to Ground Troops
+      * cost is only 4 gold.
 =============================================================
 11. Mausoleum
    Effectively, upkeep on Courthouses is free.
@@ -118,6 +119,19 @@ this virtual unit for the early game.
    in cost. Legion's extra abilities worth +1 shield from
    that.
 =============================================================
+21. Hideouts  
+   temporary patch requirement for unit to be alone
+   was fixed after a bug fig no longer requires this.
+=============================================================
+21. Tile Claims 
+   Fixed a bug where tile claims were only cardinally adjacent
+   Requirement for diplomat to be accompanied is only if not 
+      in domestic territory.
+   Can be now be made on any tile adjacent to existing claim.
+   Conflict where Tile Claim can't be made in a base, was 
+      fixed.
+=============================================================
+
 
 
 

@@ -1027,14 +1027,14 @@ reqs    =
       "UnitClass", "LandNoKill", "Local"
     }
 
-; Fortress HP regen
+; Fortress types, HP regen --------------------------------------------
 [effect_fortress_hp_regen]
 ; Cumulative with fort: 10+15=25
 type    = "HP_Regen"
 value   = 15
 reqs    =
     { "type", "name", "range"
-      "Extra", "Fortress", "Tile"
+      "ExtraFlag", "FortressHeal", "Tile"
       "UnitClass", "Land", "Local"
     }
 [effect_fortress_hp_regen_1]
@@ -1042,7 +1042,7 @@ type    = "HP_Regen"
 value   = 15
 reqs    =
     { "type", "name", "range"
-      "Extra", "Fortress", "Tile"
+      "ExtraFlag", "FortressHeal", "Tile"
       "UnitClass", "LandAirSea", "Local"
     }
 [effect_fortress_hp_regen_2]
@@ -1050,18 +1050,19 @@ type    = "HP_Regen"
 value   = 15
 reqs    =
     { "type", "name", "range"
-      "Extra", "Fortress", "Tile"
+      "ExtraFlag", "FortressHeal", "Tile"
       "UnitClass", "LandNoKill", "Local"
     }
 [effect_fortress_hp_regen_3]
 type    = "HP_Regen"
-value   = 25  ;25 because not cumulative with Fort
+value   = 25  ;25 because not cumulative with Fort (Fort only nullfies hp loss each turn)
 reqs    =
     { "type", "name", "range"
-      "Extra", "Fortress", "Tile"
+      "ExtraFlag", "FortressHeal", "Tile"
       "UnitClass", "Helicopter", "Local"
     }
 
+; Airbase HP regen ---------------------------------------------------
 [effect_airbase_hp_regen]
 type    = "HP_Regen"
 value   = 25
@@ -6116,6 +6117,10 @@ reqs    =
       "Gov",      "Democracy",      "Player", FALSE
       "Tech",     "Tactics",        "Player", FALSE
     }
+;technically C.M. partakes in both effects since they are
+;non-representative yet can have discontent over mil. making
+;it only 'mil' nerfs Zeus for C.M. over because C.M.
+;is much less likely to have mil discontent.
 [effect_statue_of_zeus_mil_content_magna_carta]
 type    = "Make_Content_Mil"
 value   = 1
