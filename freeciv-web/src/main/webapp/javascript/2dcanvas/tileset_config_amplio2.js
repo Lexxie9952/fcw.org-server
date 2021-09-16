@@ -153,9 +153,11 @@ ts_tiles['arctic']['mine_sprite'] = "tx.oil_mine";
 
 ts_tiles['desert'] = {};
 ts_tiles['desert']['is_blended'] = 1;
-ts_tiles['desert']['num_layers'] = 1;
+ts_tiles['desert']['num_layers'] = 2;
 ts_tiles['desert']['layer0_match_type'] = "land";
 ts_tiles['desert']['mine_sprite'] = "tx.oil_mine";
+ts_tiles['desert']['layer1_match_type'] = "desert";
+ts_tiles['desert']['layer1_match_with'] = ["desert"];
 
 ts_tiles['forest'] = {};
 ts_tiles['forest']['is_blended'] = 1;
@@ -166,8 +168,10 @@ ts_tiles['forest']['layer1_match_with'] = ["forest"];
 
 ts_tiles['grassland'] = {};
 ts_tiles['grassland']['is_blended'] = 1;
-ts_tiles['grassland']['num_layers'] = 1;
+ts_tiles['grassland']['num_layers'] = 2;
 ts_tiles['grassland']['layer0_match_type'] = "land";
+ts_tiles['grassland']['layer1_match_type'] = "grassland";
+ts_tiles['grassland']['layer1_match_with'] = ["grassland"];
 
 ts_tiles['hills'] = {};
 ts_tiles['hills']['is_blended'] = 1;
@@ -194,13 +198,18 @@ ts_tiles['mountains']['mine_sprite'] = "tx.mine";
 
 ts_tiles['plains'] = {};
 ts_tiles['plains']['is_blended'] = 1;
-ts_tiles['plains']['num_layers'] = 1;
+ts_tiles['plains']['num_layers'] = 2;
 ts_tiles['plains']['layer0_match_type'] = "land";
+ts_tiles['plains']['layer1_match_type'] = "plains";
+ts_tiles['plains']['layer1_match_with'] = ["plains"];
 
 ts_tiles['swamp'] = {};
 ts_tiles['swamp']['is_blended'] = 1;
-ts_tiles['swamp']['num_layers'] = 1;
+ts_tiles['swamp']['num_layers'] = 2;
 ts_tiles['swamp']['layer0_match_type'] = "land";
+ts_tiles['swamp']['layer1_match_type'] = "swamp";
+ts_tiles['swamp']['layer1_match_with'] = ["swamp"];
+
 
 ts_tiles['tundra'] = {};
 ts_tiles['tundra']['is_blended'] = 1;
@@ -225,9 +234,11 @@ var tile_types_setup =
 //"l0.arctic":	{"match_style":MATCH_NONE,"sprite_type":CELL_WHOLE,"mine_tag":"tx.oil_mine","match_indices":1,"match_index":[0],"dither":false},
 "l0.arctic":	{"match_style":MATCH_NONE,"sprite_type":CELL_WHOLE,"mine_tag":"tx.oil_mine","match_indices":1,"match_index":[2],"dither":true},
 "l0.desert":	{"match_style":MATCH_NONE,"sprite_type":CELL_WHOLE,"mine_tag":"tx.oil_mine","match_indices":1,"match_index":[2],"dither":true},
+"l1.desert":	{"match_style":MATCH_RANDOM,"sprite_type":CELL_WHOLE,"mine_tag":"tx.oil_mine","match_indices":2,"match_index":[2,2],"dither":false},
 "l0.forest":	{"match_style":MATCH_NONE,"sprite_type":CELL_WHOLE,"mine_tag":"(null)","match_indices":1,"match_index":[2],"dither":true},
 "l1.forest":	{"match_style":MATCH_SAME,"sprite_type":CELL_WHOLE,"mine_tag":"(null)","match_indices":2,"match_index":[0,0],"dither":false},
 "l0.grassland":	{"match_style":MATCH_NONE,"sprite_type":CELL_WHOLE,"mine_tag":"(null)","match_indices":1,"match_index":[2],"dither":true},
+"l1.grassland":	{"match_style":MATCH_RANDOM,"sprite_type":CELL_WHOLE,"mine_tag":"(null)","match_indices":2,"match_index":[2,2],"dither":false},
 "l0.hills":	{"match_style":MATCH_NONE,"sprite_type":CELL_WHOLE,"mine_tag":"tx.mine","match_indices":1,"match_index":[2],"dither":true},
 "l1.hills":	{"match_style":MATCH_SAME,"sprite_type":CELL_WHOLE,"mine_tag":"tx.mine","match_indices":2,"match_index":[1,1],"dither":false},
 "l0.jungle":	{"match_style":MATCH_NONE,"sprite_type":CELL_WHOLE,"mine_tag":"(null)","match_indices":1,"match_index":[5],"dither":true},
@@ -235,10 +246,11 @@ var tile_types_setup =
 "l0.mountains":	{"match_style":MATCH_NONE,"sprite_type":CELL_WHOLE,"mine_tag":"tx.mine","match_indices":1,"match_index":[2],"dither":true},
 "l1.mountains":	{"match_style":MATCH_SAME,"sprite_type":CELL_WHOLE,"mine_tag":"tx.mine","match_indices":2,"match_index":[2,2],"dither":false},
 "l0.plains":	{"match_style":MATCH_NONE,"sprite_type":CELL_WHOLE,"mine_tag":"(null)","match_indices":1,"match_index":[2],"dither":true},
+"l1.plains":	{"match_style":MATCH_RANDOM,"sprite_type":CELL_WHOLE,"mine_tag":"(null)","match_indices":2,"match_index":[2,2],"dither":false},
 "l0.swamp":	{"match_style":MATCH_NONE,"sprite_type":CELL_WHOLE,"mine_tag":"(null)","match_indices":1,"match_index":[2],"dither":true},
+"l1.swamp":	{"match_style":MATCH_RANDOM,"sprite_type":CELL_WHOLE,"mine_tag":"(null)","match_indices":2,"match_index":[2,2],"dither":false},
 "l0.tundra":	{"match_style":MATCH_NONE,"sprite_type":CELL_WHOLE,"mine_tag":"(null)","match_indices":1,"match_index":[2],"dither":true},
 "l0.inaccessible":{"match_style":MATCH_NONE,"sprite_type":CELL_WHOLE,"mine_tag":"(null)","match_indices":1,"match_index":[2],"dither":false}
-
 };
 // TERRIBLE HACK to replace unconfigured ice cliffs with coastal shore. TODO: something better
 //tile_types_setup["l0.arctic"].match_index[0]=2;
