@@ -2186,10 +2186,17 @@ function fill_road_rail_sprite_array(ptile, pcity)
     var i;
 
     /* Do roads first, under river-like sprites. */
-    if (road /*&& !river_sprite && !canal_sprite << include this if bridge is separate sprite excluding road sprite under it*/) {
+    if (road) {
       for (i = 0; i < 8; i++) {
         if (draw_road[i]) {
-	        result_sprites.push({"key" : "road.road_" + dir_get_tileset_name(i)});
+          const rtype = "road";
+          /*
+          if (tile_has_extra(ptile, EXTRA_RIVER) 
+              || (CANAL_active  && tile_has_extra(ptile, EXTRA_CANAL))
+              || (WATERWAY_active && tile_has_extra(ptile, EXTRA_WATERWAY))) {
+                rtype = "bridge";
+              }*/ 
+	        result_sprites.push({"key" : "road."+rtype+"_" + dir_get_tileset_name(i)});
 	      }
       }
     }
