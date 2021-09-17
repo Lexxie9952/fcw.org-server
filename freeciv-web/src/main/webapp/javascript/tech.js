@@ -162,6 +162,7 @@ function init_tech_screen()
   if (ruleset_control['name'].startsWith("Avant-garde")) reqtree = reqtree_avantgarde;
   if (ruleset_control['name'].startsWith("MP2")) reqtree = reqtree_avantgarde;   // from MP2 Brava onward all MP2 rules start with "MP2"
   if (client_rules_flag[CRF_MP2_C]) reqtree = reqtree_mp2c;
+  if (client_rules_flag[CRF_MP2_D]) reqtree = reqtree_mp2d;
 
   tech_canvas = document.getElementById('tech_canvas');
   if (tech_canvas == null) {
@@ -240,6 +241,7 @@ function update_tech_tree()
       // Alternating line colour sequence, each tech gets a different line colour to differentiate.
       var sequence = 1+Math.round(dy/55)+Math.round(dx/45);      // Create a "seed" that bumps up as we span the canvas vertically and horizontally
       sequence = sequence - (sequence-sequence%9);               // This creates a colour number from 0-8 out of our "seed"
+      if (reqtree[rid+'']['col'] !== undefined) sequence = reqtree[rid+'']['col']; // Allow reqtree designer to override random colour for some techs 
      
       // known tech connecting to known tech: use black line
       if (tech_known(ptech['rule_name']) && tech_known(techs[rid]['rule_name'])) {
@@ -247,18 +249,18 @@ function update_tech_tree()
         tech_canvas_ctx.lineWidth = 1;
       }
       else { // else differentiate line colours to make tracing them easier
-        if (sequence == 8) tech_canvas_ctx.strokeStyle =      'rgba(55, 83, 204, 0.83)';       // egyptian blue
-        else if (sequence == 7) tech_canvas_ctx.strokeStyle = 'rgba(81, 146, 187, 0.8)';       // teal
-        else if (sequence == 6) tech_canvas_ctx.strokeStyle = 'rgba(121, 127, 82, 0.88)';      // olive
+        if (sequence == 9) tech_canvas_ctx.strokeStyle =      'rgba(144, 134, 134, 0.95)';     // grey
+        else if (sequence == 8) tech_canvas_ctx.strokeStyle = 'rgba(55, 83, 204, 0.83)';       // egyptian blue
+        else if (sequence == 7) tech_canvas_ctx.strokeStyle = 'rgba(81, 146, 187, 0.8)';       // medium teal-blue
+        else if (sequence == 6) tech_canvas_ctx.strokeStyle = 'rgba(121, 127, 82, 0.88)';      // olive / ochre
         else if (sequence == 5) tech_canvas_ctx.strokeStyle = 'rgba(138, 36, 78, 0.8)';        // wine
-        else if (sequence == 4) tech_canvas_ctx.strokeStyle = 'rgba(161, 227, 243, 0.8)';      // faded light-cyan-grey
-        else if (sequence == 3) tech_canvas_ctx.strokeStyle = 'rgba(60, 187, 146, 0.8)';       // faded sea-green
-        else if (sequence == 2) tech_canvas_ctx.strokeStyle = 'rgba(0, 00, 45, 0.9)';         // midnight
-        else if (sequence == 1) tech_canvas_ctx.strokeStyle = 'rgba(223, 223, 223, 0.8)';      // dim white
-        else tech_canvas_ctx.strokeStyle =                    'rgba(189, 91, 79, 0.85)';       // coral
+        else if (sequence == 4) tech_canvas_ctx.strokeStyle = 'rgba(161, 227, 243, 0.8)';      // bright sky
+        else if (sequence == 3) tech_canvas_ctx.strokeStyle = 'rgba(60, 187, 146, 0.8)';       // bronze sea spray (strong green-cyan)
+        else if (sequence == 2) tech_canvas_ctx.strokeStyle = 'rgba(124, 108, 167, 0.95)';     // periwinkle
+        else if (sequence == 1) tech_canvas_ctx.strokeStyle = 'rgba(223, 223, 223, 0.8)';      // white
+        else tech_canvas_ctx.strokeStyle =                    'rgba(189, 91, 79, 0.85)';       // coral / salmon
         tech_canvas_ctx.lineWidth = 3;
       }
-
 
       var node_offset = 3;
       tech_canvas_ctx.beginPath();
