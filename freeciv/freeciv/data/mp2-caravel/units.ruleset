@@ -5140,7 +5140,7 @@ uk_food       = 0
 uk_gold       = 0
 embarks       = "LandRoad", "Helicopter"    ; transport helicopter only
 disembarks    = "LandRoad", "Helicopter"
-flags         = "IgTer", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage"
+flags         = "IgTer", "IgZOC", "NonMil", "HasNoZOC", "Capturable", "Expellable", "Cant_Pillage", "NoHome"
 roles         = "Explorer", "ExplorerStartUnit"
 helptext      = _("\
 Explorers are brave individuals who map unknown territory. They can slip through enemy\
