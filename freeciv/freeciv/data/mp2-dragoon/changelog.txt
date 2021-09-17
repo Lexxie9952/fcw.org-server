@@ -134,6 +134,9 @@ this virtual unit for the early game.
 23. New tech tiers allow making Magnetism a pre-req for 
    Steam Engine ..... FINALLY !!!!
 =============================================================
+24. No sea commerce units cause unhappiness, for consistency
+   and simplification.
+=============================================================
 
 
 

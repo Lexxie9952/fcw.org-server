@@ -1429,7 +1429,7 @@ Falconets are huge and heavy. They have woeful accuracy but lethal\
  is in God's hands! Falconeers defend a bit worse than they attack. \n\
 Righteous faith is needed to fight with slow heavy inaccurate weaponry:\
  only Theocracies can train Falconeers. Other governments will incur\
- high upkeep or see them retire. \n\
+ high upkeep or see them retire.\
 ")
 
 [unit_zealots]
@@ -1516,7 +1516,7 @@ flags         = "MultiSlot", "IgTer", "IgZOC", "NoHome", "FootSoldier", "Capture
 ;yes Partisan has 0 upkeep so Shield2Gold is meaningless, but currently used to substitute MultiSlot inaccessible in c-server
 roles         = "DefendGood", "DefendGoodStartUnit", "Partisan", "BarbarianTech"
 helptext      = _("\
-Partisans are guerilla fighters who can use the terrain to their advantage.  Like the Scout\
+Partisans are guerilla fighters who can use the terrain to their advantage. Like the Scout\
  that they upgrade, they can slip through ZOC and live off the land with no upkeep. \
 "), _("\
 Proportional to city size, up to 8 Partisans appear when an enemy conquers your city. They\
@@ -2588,9 +2588,10 @@ cargo         = "Land", "Cargo"
 helptext      = _("\
 Airplanes can carry a single diplomatic unit or single Freight unit. They can land in any domestic\
  or allied city. For diplomatic missions to non-allied nations, an empty Airbase must be available for landing.\
- Airplanes have two turns of fuel. Each new aviation tech upgrades range by +2 moves per turn.\
+ Airplanes have two turns of fuel. Each new aviation tech upgrades range by +2 moves per turn. \n\
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
+Airplanes can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -2647,7 +2648,8 @@ Fighters are the first offensive Air units. Their superior mobility and firepowe
 INTERCEPTOR：the Vigil order lets Fighters auto-attack adjacent Air units if they\
  have better attack odds. A Fighter can Vigil if it uses 2 move points or less. \n\
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
+Fighters can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -2709,7 +2711,8 @@ Escort Fighters are large fighters with high fuel capacity. Higher mass and\
 INTERCEPTOR：the Vigil order lets Escort Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 3 move points or less. \n\
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
+This aircraft can Stack-Escape：a 60% chance to escape a killed stack if it has more remaining moves than the attacker.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -2773,17 +2776,19 @@ Dive Bombers are like Fighters but fitted for Ground Attack and Sea combat. Rang
  and in defending against Anti-Air, but hurt in Air-to-Air combat. Though unreachable\
  to Land units, they lack agility to block attacks on their same tile. But over a wider\
  radius, they exert ZoC on adjacent land tiles. The Dive Bomber is not an interceptor.\
- Role specialization yields the following gains and losses over a Fighter:\n\n\
- GAINS:\n\
- • A:4½  vs Surface units (Land or Sea)\n\
- • D:4     vs Anti-Air\n\
- • ZoC\n\
-LOSSES:\n\
- • A3 instead of A4 in Air-to-Air\n\
- • Can’t block its tile\n\
- • Can’t intercept\
+ Role specialization yields the following gains and losses over a Fighter: \n\n\
+ GAINS: \n\
+ • A:4½  vs Surface units (Land or Sea) \n\
+ • D:4     vs Anti-Air \n\
+ • ZoC \n\
+LOSSES: \n\
+ • A3 instead of A4 in Air-to-Air \n\
+ • Can’t block its tile \n\
+ • Can’t intercept \n\
 "), _("
-Communists pay 10 less for this unit. GOTO prevents unit loss from lack of fuel.\
+Communists pay 10 less for this unit. Can Stack-Escape：a 60% chance to escape a\
+ killed stack if it has more remaining moves than the attacker.\
+ GOTO prevents unit loss from lack of fuel.\
  Override this by ordering adjacent moves.\
 ")
 
@@ -2835,11 +2840,12 @@ helptext      = _("\
 The Medium Bomber is well suited for moderately strong targets or multiple weak targets.\
  It may not attack other Air units. It is a Soft Field Unit and can’t carry Bomb\
  units, causing less discontent than other types of Bombers. \n\
-➤ Unhappy effect for Soft Field units:\n\
-Republic:0   Democracy:1    (non-aggressive)\n\
-Republic:1   Democracy:2    (aggressive)\
+➤ Unhappy effect for Soft Field units: \n\
+Republic:0   Democracy:1    (non-aggressive) \n\
+Republic:1   Democracy:2    (aggressive) \n\
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
+This aircraft can Stack-Escape：a 60% chance to escape a killed stack if it has more remaining moves than the attacker.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -2893,10 +2899,11 @@ Heavy Bombers are large and sturdy Bombers with larger payload and numerous gunn
  They are excellent for hitting strong well-defended ground targets.\
  They can’t attack Air units. They can carry one Bomb. Like most Bombers, the Heavy Bomber is a Field Unit.\
  Field Units cause the same unhappiness no matter if aggressively or peacefully deployed. \n\
-➤ Unhappy effect for Field units:\n\
-Republic:1   Democracy:2\
+➤ Unhappy effect for Field units: \n\
+Republic:1   Democracy:2 \n\
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
+This aircraft can Stack-Escape：a 60% chance to escape a killed stack if it has more remaining moves than the attacker.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -2950,9 +2957,10 @@ roles         = ""
 helptext      = _("\
 The Strategic Bomber offers a small improvement in attack. Higher altitude offers a good upgrade in\
  defense. It has considerably longer range, with one more turn of fuel. Upgraded payload enables\
- instant-Pillage bombing. May carry two Bombs.\
+ instant-Pillage bombing. May carry two Bombs. \n\
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
+This aircraft can Stack-Escape：a 60% chance to escape a killed stack if it has more remaining moves than the attacker.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -2991,9 +2999,10 @@ veteran_move_bonus = 0
 roles         = ""
 helptext      = _("\
 The AWACS has great fuel capacity for long range flights, and advanced radar that can determine\
- the location of enemy units over a wide area. The AWACS has 2 turns of fuel.\
+ the location of enemy units over a wide area. The AWACS has 2 turns of fuel. \n\
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
+AWACS can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -3038,7 +3047,7 @@ The Spy Plane is an ultrasonic high altitude aircraft with long range. It gather
  propeller-based aircraft.\
 "), _("
 Spy Planes can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining moves than the attacker.\
-"), _("NOTE：GOTO disallows unit loss from lack of fuel. You\
+ NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 [unit_satellite]
@@ -3152,6 +3161,7 @@ Transport Helicopters can carry three land units, which they can pick up from an
  All Helicopters can be attacked by land from Riflemen onward; by sea from Ironclad\
  onward; get +50% defence vs. foot units; and are unreachable to artillery types.\
  Unlike attack Helicopters, Transport Helicopters are intercepted by Fighters on vigil.\
+ Transport Helicopters can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
 ")
 
 [unit_helicopter]
@@ -3221,7 +3231,8 @@ Helicopters fly low to avoid Interception. This invites attacks by ground units 
  vs. foot units. Helicopters can be attacked by Sea from Ironclad onward.
 Helicopters can retaliate 3 rounds against Special Unit Attacks. \n\
 "), _("\
-Helicopters can transport one Marines or AAA unit.\
+Helicopters can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+ Helicopters can transport one Marines or AAA unit.\
 ")
 
 [unit_jet_fighter]
@@ -3273,8 +3284,8 @@ Jet Fighters upgrade the Fighter with improved attack, defense, and range.\
 INTERCEPTOR：the Vigil order lets Jet Fighters auto-attack adjacent Air units if they\
  have better attack odds. This unit can Vigil if it uses 3 move points or less. \n\
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by ordering moves to adjacent tiles.\
+Helicopters can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.\
 ")
 
 [unit_ground_strike_fighter]
@@ -3331,7 +3342,8 @@ Ground Strike Fighters upgrade the Dive Bomber. They can’t block attacks on ot
  air. No unit can stop this unit from attacking surface units on a tile. This unit\
  can also do pinpointed surgical strikes to pillage tiles. This aircraft is a\
  specialized niche unit. It is not an interceptor. \n\
-NOTE：GOTO prevents unit loss from lack of fuel. You\
+This aircraft can Stack-Escape：a 60% chance to escape a killed stack if it has more remaining moves than the attacker.\
+ NOTE：GOTO prevents unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -3383,9 +3395,10 @@ helptext      = _("\
 Jet Bombers are stratospheric long-range bombers with 3 turns of fuel：they can be airborne for two\
  turn-changes. Their range makes them useful even after Stealth Bombers are available. Stratospheric\
  altitude is unreachable to propeller-based Fighters and AAA. Jet Bombers can Carpet Bomb, an\
- instant-Pillage of tiles from the air. May carry three Bombs.\ 
+ instant-Pillage of tiles from the air. May carry three Bombs. \n\ 
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
+Jet Bombers can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -3500,10 +3513,10 @@ roles         = ""
 helptext      = _("\
 The deadliest Bomber, with improved attack and speed. Stealth Bombers can’t be seen\
  unless adjacent to an enemy. Stealth evasion gives a 25% bonus against all Anti-Air\
- units, and reduces SAM Batteries down to only a 25% bonus. May carry two Bombs.\
+ units, and reduces SAM Batteries down to only a 25% bonus. May carry two Bombs. \n\
 "), _("
-Stealth Fighters can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining moves than the attacker.\
-"), _("NOTE：GOTO disallows unit loss from lack of fuel. You\
+Stealth Bombers can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining moves than the attacker.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 

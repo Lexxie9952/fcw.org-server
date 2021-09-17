@@ -802,7 +802,7 @@ Tribesmen lose many versatility bonuses as you become more civilized. For\
  lose their vision, tile-work, and recycle bonuses. At such point, recycling\
  into a building or wonder yields 10 shields. \n\
 (In games with animals set to on, Tribesmen attack at 3× and defend at 2× against\
- wild animals.)\ 
+ wild animals.)\
 ")
 
 ;A unique patch unit to provide fair starts regardless of lack of nearby water.
@@ -1124,7 +1124,7 @@ disembarks    = "LandRoad", "LandRail", "Helicopter"
 flags         = "FootSoldier", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
 roles         = "DefendOk", "DefendOkStartUnit", "FirstBuild", "Hut"
 helptext      = _("\
-The Warrior is the weakest military unit, but can also be very cost effective.\n\
+The Warrior is the weakest military unit, but can also be very cost effective. \n\
 With the discovery of Conscription, Warriors can convert to Musketeers in any domestic city. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
@@ -1225,7 +1225,7 @@ Archers fight with bows and arrows. They have good offense and decent defense.\
  transported. This is useful for softening enemies prior to battle, or for deterring an\
  approach to a strategic location. (Volley Attack is not possible on Cities or Fortresses.)\
  Archers can do a retaliatory Volley attack against any unit which does a Special Unit Attack\
- on them.\n\
+ on them. \n\
  With the discovery of Conscription, Archers can convert to Musketeers in any domestic city. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
@@ -1270,11 +1270,11 @@ helptext      = _("\
 Legions are heavily armed well disciplined soldiers with excellent offensive strength.\
  They are famous for their engineering abilities：with the required\
  technology they can build Forts and Fortresses. They can build Roads outside domestic\
- national territory and inside Forts and Fortresses.\n\
+ national territory and inside Forts and Fortresses. \n\
 Legions are feared for how they start battle：a Pilum Assault targets the\
  shields of the enemy. A pilum stuck in a shield renders it useless, leaving\
  the front line vulnerable to a full-on charge. The Pilum Assault does 1 round\
- of combat at 2× attack bonus on up to 2 units on the tile.\n\
+ of combat at 2× attack bonus on up to 2 units on the tile. \n\
  With the discovery of Conscription, Legions can convert to Musketeers in any domestic city. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
@@ -1319,7 +1319,7 @@ roles         = "DefendGood", "DefendGoodStartUnit", "FirstBuild"
 helptext      = _("\
 Long sharp pikes give Pikemen a counter to the height and mobility of mounted\
  units. They enjoy a 2× defense bonus against mounted units. Pikemen replace\
- the Phalanx as the preferred city defender.\n\
+ the Phalanx as the preferred city defender. \n\
  With the discovery of Conscription, Pikemen can convert to Musketeers in any domestic city. \
 "), _("\
 \nThe discovery of Banking changes upkeep from shields to gold.\
@@ -1421,15 +1421,15 @@ helptext      = _("\
 Falconeers are Theocratic holy warriors armed with Falconets—the\
  largest hand cannons humans can carry, it proves whose side God is\
  on. Ottoman Janissaries, Reconquistadores, Persian Safavid, and Indian\
- Mughal used them in holy wars.\n\
+ Mughal used them in holy wars. \n\
 Falconets are huge and heavy. They have woeful accuracy but lethal\
  firepower：they either kill or totally miss. On paper, attack odds\
  are closest to a Musketeer (A3). Yet there is a high chance of losing\
  when you expect to win, or winning when you expect to lose. The outcome\
- is in God's hands! Falconeers defend a bit worse than they attack.\n\
+ is in God's hands! Falconeers defend a bit worse than they attack. \n\
 Righteous faith is needed to fight with slow heavy inaccurate weaponry:\
  only Theocracies can train Falconeers. Other governments will incur\
- high upkeep or see them retire.\n\
+ high upkeep or see them retire.\
 ")
 
 [unit_zealots]
@@ -1516,14 +1516,14 @@ flags         = "MultiSlot", "IgTer", "IgZOC", "NoHome", "FootSoldier", "Capture
 ;yes Partisan has 0 upkeep so Shield2Gold is meaningless, but currently used to substitute MultiSlot inaccessible in c-server
 roles         = "DefendGood", "DefendGoodStartUnit", "Partisan", "BarbarianTech"
 helptext      = _("\
-Partisans are guerilla fighters who can use the terrain to their advantage.  Like the Explorer\
+Partisans are guerilla fighters who can use the terrain to their advantage. Like the Explorer\
  that they upgrade, they can slip through ZOC and live off the land with no upkeep. \
 "), _("\
 Proportional to city size, up to 8 Partisans appear when an enemy conquers your city. They\
  randomly fortify on any tile inside the circle defined by its workable radius. Partisans\
  prefer defensive tiles, and ignore tile nationality. They spawn only when:\n\
- ➣ Guerilla Warfare is known by any player.\n\
- ➣ The city was originally built by you.\n\
+ ➣ Guerilla Warfare is known by any player. \n\
+ ➣ The city was originally built by you. \n\
  ➣ You must be Theocracy, OR,\n\
  ➣ You must be Democracy or Communist, AND know Communism AND Gunpowder.\
 ")
@@ -1661,7 +1661,7 @@ veteran_move_bonus = 0, 2, 4, 6, 8, 10, 12
 roles         = "DefendOk", "DefendOkStartUnit", "BarbarianSeaTech"
 helptext      = _("\
 Marines are experts at all-terrain warfare. They are the strongest\
- foot unit in the game, and are armed with diverse weaponry.\n\
+ foot unit in the game, and are armed with diverse weaponry. \n\
  Unlike other units, Marines can attack Sea units (at a 50% penalty).\
  Air units do not stop them from attacking reachable targets.\
  They can attack while fortified and maintain fortified status.\
@@ -1671,7 +1671,7 @@ Marines are experts at all-terrain warfare. They are the strongest\
  veteran level they possess. Starting at v2, they gain the ability\
  to do Bazooka ranged attacks for 3 combat rounds, hitting up to 2\
  units on the tile and killing a maximum of 1. Bazooka attacks can\
- be done to Oceanic tiles if the Marines are not transported.\n\
+ be done to Oceanic tiles if the Marines are not transported. \n\
  Marines built in a city with an Airport, Port Facility, and Barracks III\
  receive an extra veteran level. \
 "), _("\
@@ -2161,16 +2161,16 @@ Siege Rams launch a tremendous thrusting force through\
  iron-capped timber shafts. They can break through City\
  Walls if they are not killed first. City Walls have counter\
  defenses, giving Siege Rams even odds of success. Wall\
- defense in capitals is twice as stiff—cutting odds to 25%.\n\
+ defense in capitals is twice as stiff—cutting odds to 25%. \n\
 Siege Rams may also ram Fortresses, doing up to 4hp of damage\
  on each occupant. This emulates damage to the Fortress defense\
- bonus, which is partly or fully repaired/recovered next turn.\n\
+ bonus, which is partly or fully repaired/recovered next turn. \n\
 Siege Rams can only travel by road. They can carry 1 Land\
  unit as cargo：their slow pace means this serves more for\
- disguise or defense.\n\ 
+ disguise or defense. \n\ 
 Siege Rams need an escort for protection. They need a minimum of\
  1 move point to attack a Fortress or City Walls.\
- Cities protected by the Great Wall are immune to Siege Rams.\n\
+ Cities protected by the Great Wall are immune to Siege Rams. \n\
  The discovery of Metallurgy by any nation incapacitates Siege Rams.\
 ")
 bombard_rate = 4
@@ -2491,7 +2491,7 @@ As new technology inspires the upgrade of Balloons, the Zeppelin appears.\
  vulnerability and cost make it better for intel. It can do limited attack\
  with bombs, or 20 combat rounds with medium caliber ordnance. It can stay out\
  for two Turn Changes before landing in a City, Quay, Fortress, Naval Base,\
- Airbase, or transport with 6+ capacity.\n\
+ Airbase, or transport with 6+ capacity. \n\
 Zeppelins have great vision and are unreachable by units prior to Marines and\
  Destroyers. Zeppelins do not block units under them from being attacked. Unlike\
  Balloons, they can fly over Mountains.\
@@ -2538,9 +2538,10 @@ cargo         = "Land", "Cargo"
 helptext      = _("\
 Airplanes can carry a single diplomatic unit or single Freight unit. They can land in any domestic\
  or allied city. For diplomatic missions to non-allied nations, an empty Airbase must be available for landing.\
- Airplanes have two turns of fuel. Each new aviation tech upgrades range by +2 moves per turn.\
+ Airplanes have two turns of fuel. Each new aviation tech upgrades range by +2 moves per turn. \n\
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
+Airplanes can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -2595,9 +2596,10 @@ Fighters are the first offensive Air units. Their superior mobility and firepowe
  and Jet Bombers.)\n\
 "), _("
 INTERCEPTOR：the Vigil order lets Fighters auto-attack adjacent Air units if they\
- have better attack odds. A Fighter can Vigil if it uses 2 move points or less.\n\
+ have better attack odds. A Fighter can Vigil if it uses 2 move points or less. \n\
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
+Fighters can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -2657,9 +2659,10 @@ Escort Fighters are large fighters with high fuel capacity. Higher mass and\
  good for long-range missions, defensive air support, and escorting bombers.\
 "), _("
 INTERCEPTOR：the Vigil order lets Escort Fighters auto-attack adjacent Air units if they\
- have better attack odds. This unit can Vigil if it uses 3 move points or less.\n\
+ have better attack odds. This unit can Vigil if it uses 3 move points or less. \n\
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
+This aircraft can Stack-Escape：a 60% chance to escape a killed stack if it has more remaining moves than the attacker.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -2723,17 +2726,19 @@ Dive Bombers are like Fighters but fitted for Ground Attack and Sea combat. Rang
  and in defending against Anti-Air, but hurt in Air-to-Air combat. Though unreachable\
  to Land units, they lack agility to block attacks on their same tile. But over a wider\
  radius, they exert ZoC on adjacent land tiles. The Dive Bomber is not an interceptor.\
- Role specialization yields the following gains and losses over a Fighter:\n\n\
- GAINS:\n\
- • A:4½  vs Surface units (Land or Sea)\n\
- • D:4     vs Anti-Air\n\
- • ZoC\n\
-LOSSES:\n\
- • A3 instead of A4 in Air-to-Air\n\
- • Can’t block its tile\n\
- • Can’t intercept\
+ Role specialization yields the following gains and losses over a Fighter: \n\n\
+ GAINS: \n\
+ • A:4½  vs Surface units (Land or Sea) \n\
+ • D:4     vs Anti-Air \n\
+ • ZoC \n\
+LOSSES: \n\
+ • A3 instead of A4 in Air-to-Air \n\
+ • Can’t block its tile \n\
+ • Can’t intercept \n\
 "), _("
-Communists pay 10 less for this unit. GOTO prevents unit loss from lack of fuel.\
+Communists pay 10 less for this unit. Can Stack-Escape：a 60% chance to escape a\
+ killed stack if it has more remaining moves than the attacker.\
+ GOTO prevents unit loss from lack of fuel.\
  Override this by ordering adjacent moves.\
 ")
 
@@ -2784,12 +2789,13 @@ roles         = ""
 helptext      = _("\
 The Medium Bomber is well suited for moderately strong targets or multiple weak targets.\
  It may not attack other Air units. It is a Soft Field Unit and can’t carry Bomb\
- units, causing less discontent than other types of Bombers.\n\
-➤ Unhappy effect for Soft Field units:\n\
-Republic:0   Democracy:1    (non-aggressive)\n\
-Republic:1   Democracy:2    (aggressive)\
+ units, causing less discontent than other types of Bombers. \n\
+➤ Unhappy effect for Soft Field units: \n\
+Republic:0   Democracy:1    (non-aggressive) \n\
+Republic:1   Democracy:2    (aggressive) \n\
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
+This aircraft can Stack-Escape：a 60% chance to escape a killed stack if it has more remaining moves than the attacker.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -2842,11 +2848,12 @@ helptext      = _("\
 Heavy Bombers are large and sturdy Bombers with larger payload and numerous gunner defense stations.\
  They are excellent for hitting strong well-defended ground targets.\
  They can’t attack Air units. They can carry one Bomb. Like most Bombers, the Heavy Bomber is a Field Unit.\
- Field Units cause the same unhappiness no matter if aggressively or peacefully deployed.\n\
-➤ Unhappy effect for Field units:\n\
-Republic:1   Democracy:2\
+ Field Units cause the same unhappiness no matter if aggressively or peacefully deployed. \n\
+➤ Unhappy effect for Field units: \n\
+Republic:1   Democracy:2 \n\
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
+This aircraft can Stack-Escape：a 60% chance to escape a killed stack if it has more remaining moves than the attacker.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -2900,9 +2907,10 @@ roles         = ""
 helptext      = _("\
 The Strategic Bomber offers a small improvement in attack. Higher altitude offers a good upgrade in\
  defense. It has considerably longer range, with one more turn of fuel. Upgraded payload enables\
- instant-Pillage bombing. May carry two Bombs.\
+ instant-Pillage bombing. May carry two Bombs. \n\
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
+This aircraft can Stack-Escape：a 60% chance to escape a killed stack if it has more remaining moves than the attacker.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -2941,9 +2949,10 @@ veteran_move_bonus = 0
 roles         = ""
 helptext      = _("\
 The AWACS has great fuel capacity for long range flights, and advanced radar that can determine\
- the location of enemy units over a wide area. The AWACS has 2 turns of fuel.\
+ the location of enemy units over a wide area. The AWACS has 2 turns of fuel. \n\
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
+AWACS can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -2988,7 +2997,7 @@ The Spy Plane is an ultrasonic high altitude aircraft with long range. It gather
  propeller-based aircraft.\
 "), _("
 Spy Planes can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining moves than the attacker.\
-"), _("NOTE：GOTO disallows unit loss from lack of fuel. You\
+ NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 [unit_satellite]
@@ -3094,14 +3103,15 @@ helptext      = _("\
 Transport Helicopters can carry three land units, which they can pick up from anywhere.\
 "), _("\
  Foot and artillery types can unload by stepping off to any adjacent tile, but will\
- lose all moves (except Marine types). Other types need a City, Airbase, or Naval Base to unload.\n\
+ lose all moves (except Marine types). Other types need a City, Airbase, or Naval Base to unload. \n\
 "), _("\
  Helicopters lose 1 hp for each turn not ended in a City, Base, or Carrier. +1 move\
- is awarded if starting a turn in a City or Airbase.\n\
+ is awarded if starting a turn in a City or Airbase. \n\
 "), _("\
  All Helicopters can be attacked by land from Riflemen onward; by sea from Ironclad\
  onward; get +50% defence vs. foot units; and are unreachable to artillery types.\
  Unlike attack Helicopters, Transport Helicopters are intercepted by Fighters on vigil.\
+ Transport Helicopters can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
 ")
 
 [unit_helicopter]
@@ -3171,7 +3181,8 @@ Helicopters fly low to avoid Interception. This invites attacks by ground units 
  vs. foot units. Helicopters can be attacked by Sea from Ironclad onward.
 Helicopters can retaliate 3 rounds against Special Unit Attacks. \n\
 "), _("\
-Helicopters can transport one Marines or AAA unit.\
+Helicopters can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+ Helicopters can transport one Marines or AAA unit.\
 ")
 
 [unit_jet_fighter]
@@ -3221,10 +3232,10 @@ helptext      = _("\
 Jet Fighters upgrade the Fighter with improved attack, defense, and range.\
 "), _("
 INTERCEPTOR：the Vigil order lets Jet Fighters auto-attack adjacent Air units if they\
- have better attack odds. This unit can Vigil if it uses 3 move points or less.\n\
+ have better attack odds. This unit can Vigil if it uses 3 move points or less. \n\
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
- can override this by ordering moves to adjacent tiles.\
+Helicopters can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You can override this by ordering moves to adjacent tiles.\
 ")
 
 [unit_ground_strike_fighter]
@@ -3280,8 +3291,9 @@ Ground Strike Fighters upgrade the Dive Bomber. They can’t block attacks on ot
  they can interdict ZoC over land tiles. High fuel capacity allows two turns in the\
  air. No unit can stop this unit from attacking surface units on a tile. This unit\
  can also do pinpointed surgical strikes to pillage tiles. This aircraft is a\
- specialized niche unit. It is not an interceptor.\n\
-NOTE：GOTO prevents unit loss from lack of fuel. You\
+ specialized niche unit. It is not an interceptor. \n\
+This aircraft can Stack-Escape：a 60% chance to escape a killed stack if it has more remaining moves than the attacker.\
+ NOTE：GOTO prevents unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -3333,9 +3345,10 @@ helptext      = _("\
 Jet Bombers are stratospheric long-range bombers with 3 turns of fuel：they can be airborne for two\
  turn-changes. Their range makes them useful even after Stealth Bombers are available. Stratospheric\
  altitude is unreachable to propeller-based Fighters and AAA. Jet Bombers can Carpet Bomb, an\
- instant-Pillage of tiles from the air. May carry three Bombs.\ 
+ instant-Pillage of tiles from the air. May carry three Bombs. \n\ 
 "), _("
-NOTE：GOTO disallows unit loss from lack of fuel. You\
+Jet Bombers can Stack-Escape：a 60% chance to escape a killed stack if they have more remaining moves than the attacker.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -3391,7 +3404,7 @@ The most advanced Fighter, with improved attack and longer range. Stealth Fighte
  SAM Batteries down to a smaller 25% bonus.\
 "), _("
 INTERCEPTOR：the Vigil order lets Stealth Fighters auto-attack adjacent Air units if they\
- have better attack odds. This unit can Vigil if it uses 4 move points or less.\n\
+ have better attack odds. This unit can Vigil if it uses 4 move points or less. \n\
 "), _("
 Stealth Fighters can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining moves than the attacker.\
 "), _("
@@ -3450,10 +3463,10 @@ roles         = ""
 helptext      = _("\
 The deadliest Bomber, with improved attack and speed. Stealth Bombers can’t be seen\
  unless adjacent to an enemy. Stealth evasion gives a 25% bonus against all Anti-Air\
- units, and reduces SAM Batteries down to only a 25% bonus. May carry two Bombs.\
+ units, and reduces SAM Batteries down to only a 25% bonus. May carry two Bombs. \n\
 "), _("
-Stealth Fighters can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining moves than the attacker.\
-"), _("NOTE：GOTO disallows unit loss from lack of fuel. You\
+Stealth Bombers can Stack-Escape：a 67% chance to escape a killed stack if they have more remaining moves than the attacker.\
+ NOTE：GOTO disallows unit loss from lack of fuel. You\
  can override this by ordering moves to adjacent tiles.\
 ")
 
@@ -4575,9 +4588,9 @@ roles         = ""
 helptext      = _("\
 Hydrogen Bombs make Atom Bombs seem tame. Any unprotected city at Ground Zero will be absolutely annihilated.\
  In other cities in the blast radius, population is reduced by about 75%. Blast area is 21 tiles:\
- the same area as an entire city (5×5 minus the corners.) All units within the blast are destroyed.\n\
+ the same area as an entire city (5×5 minus the corners.) All units within the blast are destroyed. \n\
 A Bomber can drop a Hydrogen Bomb within two tiles of its location. Unload the bomb, fly the Bomber out of\
- range, then detonate by pressing D twice.\n\
+ range, then detonate by pressing D twice. \n\
 If you have Fusion Power and the Manhattan Project was built, a Hydrogen Bomb\
  can be made in a city with an Enrichment Facility. \
 "), _("\
@@ -4626,9 +4639,9 @@ helptext      = _("\
 The Doomsday Bomb is the mother of all bombs. Blast area is about 100 tiles.\
  Only one can be made at a time. A city at Ground Zero will be\
  annihilated. Other cities in the blast area lose about 75% of their population.\
- All units within the blast are completely destroyed.\n\
+ All units within the blast are completely destroyed. \n\
 A Bomber can drop the Bomb within two tiles of its location. Unload the Bomb and\
- pray that you can fly the Bomber out of range. Detonate by pressing D twice.\n\
+ pray that you can fly the Bomber out of range. Detonate by pressing D twice. \n\
 If you have Fusion Power and the Manhattan Project was built, a Doomsday Bomb\
  can be made in a city with an Enrichment Facility. \
 "), _("\
@@ -4724,7 +4737,7 @@ helptext      = _("\
 Tactical Nukes are very small warheads attached to missiles. A Tactical Nuke destroys all units on\
  a single tile. City population is reduced by half. The target tile may get Fallout. In theory,\
  Tactical Nukes are small enough to get the advantages of nuclear armaments without the severity of\
- consequences. In reality, they might be a gateway that escalates toward mutual assured destruction.\n\
+ consequences. In reality, they might be a gateway that escalates toward mutual assured destruction. \n\
 If you have Fusion Power and the Manhattan Project was built, a Tactical Nuke\
  can be made in a city with an Enrichment Facility. \
 ")
@@ -4776,11 +4789,11 @@ helptext      = _("\
 A Diplomat performs official or covert actions. Covert actions make incidents\
  which let Senates break treaties. Diplomats in cities may defend such acts with\
  diplomatic combat. Diplomats can • Bribe a lone unit • Establish embassy • Investigate City\
- • Sabotage random production or buildings • Steal tech • Steal maps • Incite city revolt.\n\
+ • Sabotage random production or buildings • Steal tech • Steal maps • Incite city revolt. \n\
 Except for Bribing and Investigate City, diplomatic actions will spend the Diplomat,\
  making it unavailable for further use. Diplomats may claim a tile for your nation\
  if adjacent to a tile claim made inside your own national border. Tile claims require\
- the diplomat be accompanied by a military unit. \
+ the diplomat be accompanied by a military unit.\
 "), _("\
 Full rules for Diplomats are in the Manual.\
 ")
@@ -4889,12 +4902,12 @@ Compared to other early Commerce units, the Caravan is the only one who can\
 Commerce units can help build Wonders in any city with whom\
  you are not at war. In foreign cities 15+ tiles distant, they can create Trade Routes,\
  increasing net trade in both cities relative to their combined trade. Routes are inactive\
- during war and (re)activate during peace.\n\
+ during war and (re)activate during peace. \n\
 Commerce units can enter the Marketplace of non-hostile foreign cities to sell their
  wares：revenue derives from total trade in both cities. This is only profitable between
- cities with very high trade.\n\
+ cities with very high trade. \n\
 Commerce units can build any Wonders for which you have the tech requirement. To use them\
- for a Trade Route, they need to have given a Home City.\n\
+ for a Trade Route, they need to have given a Home City. \n\
 All Commerce units can carry Goods as cargo.\
 ")
 
@@ -5060,7 +5073,7 @@ roles         = ""
 helptext      = _("\
 Goods are commodities.\
  The cargo containers of the ancient world were amphorae, which carried\
- trade goods.\n\
+ trade goods. \n\
 Goods can be used to establish Trade Routes or Enter Marketplace. They can\
  be carried by Commerce units, allowing you to establish multiple\
  trade routes in one voyage. Also, Goods can Recycle Production with only\
@@ -5337,52 +5350,6 @@ Peasants can only be made in one city, but you can make more than one per\
  turn under the right conditions. When a city completes a unit, it will try\
  to make more of them if it doesn’t have a worklist. So be careful!\
 ")
-
-;Swordsmen unit, if we can find a way to give it more relevance or useful niche by changing stats later.
-;Iron Working A2 D2 ?
-;[unit_swordsmen]
-;name          = _("Swordsmen")
-;class         = "Land"
-;tech_req      = "Bronze Working"
-;obsolete_by   = "Musketeers"
-;graphic       = "u.swordsmen"
-;graphic_alt   = "u.warriors"
-;sound_move    = "m_swordsmen"
-;sound_move_alt = "m_generic"
-;sound_fight   = "f_phalanx"
-;sound_fight_alt = "f_generic"
-;build_cost    = 13
-;pop_cost      = 0
-;attack        = 1
-;defense       = 1
-;hitpoints     = 10
-;firepower     = 1
-;move_rate     = 2
-;vision_radius_sq = 4
-;convert_to    = "Musketeers"
-;convert_time  = 4
-;transport_cap = 0
-;fuel          = 0
-;uk_happy      = 1
-;uk_shield     = 1
-;uk_food       = 0
-;uk_gold       = 0
-;embarks       = "LandRoad", "LandRail", "Helicopter"    ; transport helicopter only
-;disembarks    = "LandRoad", "LandRail", "Helicopter"
-;flags         = "FootSoldier", "CantReachAir", "Settlers", "CanHide", "MultiSlot", "Shield2Gold", "WillNever"
-;roles         = "DefendOk", "DefendOkStartUnit"
-;bonuses       =
-;   { "flag", "type", "value"
-;      "CantReachAir", "DefenseMultiplierPct", 50   ;basically, D1.5 vs all land units
-;      "CantReachAir", "DefenseDividerPct", 50      ;basically, A1.5 vs all land units
-;   }
-;helptext      = _("\
-;Swordsmen are ancient soldiers armed with sharpened bronze swords. Compared to Warriors,\
-; they have a 50% bonus in attack and defense. NOTE：Warcalc will give this unit the same\
-; strength as a Warrior. You must enter this bonus manually. \
-;"), _("\
-;\nThe discovery of Banking changes upkeep from shields to gold.\
-;")
 
 ;*** This unit can be turned on by uncommenting this, the Virtual class above, and adding "Virtual" as native to oceanic tiles
 ;*** in terrain.ruleset.
