@@ -231,7 +231,7 @@ req2     = "Horseback Riding"
 flags    = ""
 graphic     = "a.chivalry"
 graphic_alt = "-"
-helptext = _("Obsoletes Horsemen, Chariots. Does not block Philosophy bonus.")
+helptext = _("Obsoletes Horsemen, Chariots.")
 cost = 226
 
 [advance_code_of_laws]
@@ -849,9 +849,9 @@ cost = 11920
 [advance_steam_engine]
 name     = _("Steam Engine")
 ;req1     = "Physics"
-;req2     = "Invention"
+;req2     = "Invention" >> "University"
 req1     = "Physics"
-req2     = "University"
+req2     = "Magnetism"
 flags    = ""
 graphic     = "a.steam_engine"
 graphic_alt = "-"

@@ -123,7 +123,7 @@ this virtual unit for the early game.
    temporary patch requirement for unit to be alone
    was fixed after a bug fig no longer requires this.
 =============================================================
-21. Tile Claims 
+22. Tile Claims 
    Fixed a bug where tile claims were only cardinally adjacent
    Requirement for diplomat to be accompanied is only if not 
       in domestic territory.
@@ -131,7 +131,9 @@ this virtual unit for the early game.
    Conflict where Tile Claim can't be made in a base, was 
       fixed.
 =============================================================
-
+23. New tech tiers allow making Magnetism a pre-req for 
+   Steam Engine ..... FINALLY !!!!
+=============================================================
 
 
 

@@ -231,7 +231,7 @@ req2     = "Horseback Riding"
 flags    = ""
 graphic     = "a.chivalry"
 graphic_alt = "-"
-helptext = _("Obsoletes Horsemen, Chariots. Does not block Philosophy bonus.")
+helptext = _("Obsoletes Horsemen, Chariots.")
 cost = 226
 
 [advance_code_of_laws]
