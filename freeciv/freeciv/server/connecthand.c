@@ -749,6 +749,20 @@ struct player *find_uncontrolled_idle_player_longturn(void)
                 && strncmp("UnavailablePlayer", played->name, 17) != 0
                 && played->nturns_idle >= idle_cutoff ) {
       idle_players[idle_count++] = played; /* store and index the qualifying idler nations */
+    } else {
+    /* Shouldn't happen but idlers were STILL getting assigned before
+     * NewAvailablePlayers. TODO: Remove this when we find out why. */
+      if (!played->is_connected
+                    && played->unassigned_user
+            // specific check for newavail disallows GM made slot for specific player:
+                    && strncmp("NewAvailablePlayer", played->name, 18) == 0
+                    && played->is_alive) {
+      /* We always return an unassigned player before an idler -- the same
+         idler with bad position kept getting recycled while fresh spots
+         weren't taken!  We shouldn't even be in this function if there were
+         unassigned, but apparently we were, so we pre-empt it here. */
+        return played;
+      }
     }
   } players_iterate_end;
 
