@@ -2398,7 +2398,14 @@ int get_city_tithes_bonus(const struct city *pcity)
 
   tithes_bonus += get_city_bonus(pcity, EFT_MAKE_CONTENT);
   tithes_bonus += get_city_bonus(pcity, EFT_FORCE_CONTENT);
-
+  /* Was wrongly excluded: MAKE_HAPPY causes content also: */
+  tithes_bonus += get_city_bonus(pcity, EFT_MAKE_HAPPY);
+  /* NO_UNHAPPY causes content also: */
+  if (get_city_bonus(pcity, EFT_NO_UNHAPPY)) {
+    /* This strength of this effect scales with city size */
+    tithes_bonus += pcity->size;
+  }
+  
   return tithes_bonus;
 }
 

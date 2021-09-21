@@ -316,7 +316,8 @@ Gulag
     "Gulag" suppression of disorder. 100 = always suppress disorder.
 
 Happiness_To_Gold
-    Make all Make_Content and Force_Content effects instead generate gold.
+    Make all Make_Content and Force_Content effects generate 1 base gold per sum value
+    of these effects. No_Unhappy effect generates 1 gold per citizen.
 
 Has_Senate
     Has a senate that prevents declarations of war in most cases.

@@ -4458,8 +4458,8 @@ void helptext_government(char *buf, size_t bufsz, struct player *pplayer,
       case EFT_HAPPINESS_TO_GOLD:
         if (playerwide && net_value > 0) {
           CATLSTR(buf, bufsz,
-                  _("%s Buildings that normally confer bonuses against"
-                    " unhappiness will instead give gold.\n"), BULLET);
+                  _("%s Buildings and Wonders that make citizens content or happy give 1 base gold"
+                    " per citizen affected.\n"), BULLET);
         }
         break;
       case EFT_FANATICS:
