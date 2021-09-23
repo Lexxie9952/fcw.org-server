@@ -323,6 +323,26 @@ static int nr_wonders(struct city *pcity)
   city_built_iterate(pcity, i) {
     if (is_great_wonder(i)) {
       result++;
+    } else if (is_small_wonder(i)) {
+      if (strcmp(improvement_rule_name(i), "Palace") != 0)
+        result++;
+    }
+  } city_built_iterate_end;
+
+  return result;
+}
+/**********************************************************************//**
+ Returns the number of buildings (not wonders) the given city has.
+**************************************************************************/
+static int nr_buildings(struct city *pcity)
+{
+  int result = 0;
+
+  city_built_iterate(pcity, i) {
+    if (!is_wonder(i)) {
+      result++;
+    } else if (strcmp(improvement_rule_name(i), "Palace") == 0) {
+      result++;
     }
   } city_built_iterate_end;
 
@@ -335,8 +355,16 @@ static int nr_wonders(struct city *pcity)
 void report_top_five_cities(struct conn_list *dest)
 {
   const int NUM_BEST_CITIES = 5;
-  /* a wonder equals WONDER_FACTOR citizen */
-  const int WONDER_FACTOR = 5;
+  /* How we score a city is 1 per citizen plus factor-points worth 1/100th
+     of a citizen each. i.e., 100=1 citizen */
+  const float WONDER_FACTOR = 100,   // 1 wonder = 1 citizen 
+              BUILDING_FACTOR = 20,  // 5 buildings = 1 citizen
+              SHIELD_FACTOR = 2.22,  // 45 PROD = 1 citizen   
+              GOLD_FACTOR = 1,       // 100 GOLD = 1 citizen
+              SCIENCE_FACTOR = 0.66, // 150 BULBS = 1 citizen
+              HAPPY_FACTOR = 10,     // Happy citizen is worth 1.1 citizen
+              UNHAPPY_FACTOR = -10;  // Unhappy: 0.9 citizen, Angry: 0.8 citizen
+                        
   struct city_score_entry size[NUM_BEST_CITIES];
   int i;
   char buffer[4096];
@@ -348,8 +376,16 @@ void report_top_five_cities(struct conn_list *dest)
 
   shuffled_players_iterate(pplayer) {
     city_list_iterate(pplayer->cities, pcity) {
-      int value_of_pcity = city_size_get(pcity)
-                           + nr_wonders(pcity) * WONDER_FACTOR;
+      float value_of_pcity = city_size_get(pcity) * 100
+                           + nr_wonders(pcity) * WONDER_FACTOR
+                           + nr_buildings(pcity) * BUILDING_FACTOR
+                           + pcity->feel[CITIZEN_HAPPY][FEELING_FINAL] * HAPPY_FACTOR
+                           + pcity->feel[CITIZEN_UNHAPPY][FEELING_FINAL] * UNHAPPY_FACTOR
+                           + pcity->feel[CITIZEN_ANGRY][FEELING_FINAL] * UNHAPPY_FACTOR * 2
+                           + pcity->surplus[O_SHIELD] * SHIELD_FACTOR
+                           + pcity->surplus[O_GOLD] * GOLD_FACTOR
+                           + pcity->surplus[O_SCIENCE] * SCIENCE_FACTOR
+                           + 0.5; /*round to nearest*/
 
       if (value_of_pcity > size[NUM_BEST_CITIES - 1].value) {
         size[NUM_BEST_CITIES - 1].value = value_of_pcity;
@@ -378,24 +414,24 @@ void report_top_five_cities(struct conn_list *dest)
       team_pretty_name(city_owner(size[i].city)->team, team_name,
                        sizeof(team_name));
       cat_snprintf(buffer, sizeof(buffer),
-                   /* TRANS:"The French City of Lyon (team 3) of size 18". */
-                   _("%2d: The %s City of %s (%s) of size %d, "), i + 1,
+                   /* TRANS:"The French city of Lyon [(team 3)], size 18[, with 1 wonder].". */
+                   _("%2d: The <b>%s</b> city of <b>%s</b> (%s), size <b>%d</b>"), i + 1,
                    nation_adjective_for_player(city_owner(size[i].city)),
                    city_name_get(size[i].city), team_name,
                    city_size_get(size[i].city));
     } else {
       cat_snprintf(buffer, sizeof(buffer),
-                   _("%2d: The %s City of %s of size %d, "), i + 1,
+                   _("%2d: The <b>%s</b> city of <b>%s</b>, size <b>%d</b>"), i + 1,
                    nation_adjective_for_player(city_owner(size[i].city)),
                    city_name_get(size[i].city), city_size_get(size[i].city));
     }
 
     wonders = nr_wonders(size[i].city);
     if (wonders == 0) {
-      cat_snprintf(buffer, sizeof(buffer), _("with no Great Wonders\n"));
+      cat_snprintf(buffer, sizeof(buffer), _(".\n"));
     } else {
       cat_snprintf(buffer, sizeof(buffer),
-		   PL_("with %d Great Wonder\n", "with %d Great Wonders\n", wonders),
+		   PL_(", with <b>%d</b> wonder.\n", ", with <b>%d</b> wonders.\n", wonders),
 		   wonders);}
   }
   page_conn(dest, _("Traveler's Report:"),
