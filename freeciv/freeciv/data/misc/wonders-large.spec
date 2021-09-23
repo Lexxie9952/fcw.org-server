@@ -14,6 +14,7 @@ artists = "
   b.appian_way
   b.apollo_program
   b.chand_baori
+  b.citadel_aleppo
   b.colossus
   b.copernicus_observatory
   b.eiffel_tower
@@ -72,6 +73,7 @@ sprites =
 		"b.asmiths_trading_co", "wonders/asmiths_trading_co"
 		"b.apollo_program", "wonders/apollo_program"
                 "b.chand_baori", "wonders/chand_baori"
+                "b.citadel_aleppo", "wonders/citadel_aleppo"
 		"b.colossus", "wonders/colossus"
 		"b.copernicus_observatory", "wonders/copernicus_observatory"
 		"b.cure_for_cancer", "wonders/cure_for_cancer"
