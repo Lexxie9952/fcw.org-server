@@ -679,11 +679,16 @@ unit_move_to_tile_test(const struct civ_map *nmap,
     return MR_ZOC;
   }
 
-  /* 10) */
+  /* 10) replaced below by patch from: https://osdn.net/projects/freeciv/ticket/42600
+     in order to allow strict coast boats to enter tinyisle cities.
   if (utype_has_flag(punittype, UTYF_COAST_STRICT)
       && !is_safe_ocean(&(wld.map), dst_tile)) {
     return MR_TRIREME;
-  }
+  } */
+  if (utype_has_flag(punittype, UTYF_COAST_STRICT)
+      && !pcity && !is_safe_ocean(&(wld.map), dst_tile)) {
+     return MR_TRIREME;
+   }
 
   /* 11) */
   if (!utype_has_flag(punittype, UTYF_CIVILIAN)
