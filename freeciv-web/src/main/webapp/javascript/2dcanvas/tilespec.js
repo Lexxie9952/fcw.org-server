@@ -43,6 +43,12 @@ var border_flag_offsets = {
   7: {"x": 42, "y": 34},  // southeast
 }
 
+
+const CITY_WALLS = 1,
+      CITY_COASTAL_DEFENSE = 2,
+      CITY_FORTIFICATIONS = 4,
+      CITY_CITADEL = 8;
+
 var current_select_sprite = 0;
 var max_select_sprite = 4;
 
@@ -1635,30 +1641,30 @@ function get_unit_activity_sprite(punit)
 }
 function get_city_coastal_overlay_sprite(pcity) {
   // LAYER THREE: Overlays
-  if (pcity['walls'] & 2) {
+  if (pcity['walls'] & CITY_COASTAL_DEFENSE && !(pcity['walls'] & CITY_CITADEL)) {
     return {"key": "city.coastal_overlay", "offset_x" : -4, "offset_y" : -24};
   }
   return null; // no overlay.
 }
 function get_city_coastal_underlay_sprite(pcity) {
   // LAYER ONE: Underlays
-  if (pcity['walls'] & 2) {
+  if (pcity['walls'] & CITY_COASTAL_DEFENSE && !(pcity['walls'] & CITY_CITADEL)) {
     return {"key": "city.coastal_underlay", "offset_x" : -4, "offset_y" : -24};
   }
   return null; // no underlay.
 }
 function get_city_fortifications_overlay_sprite(pcity) {
   // LAYER THREE: Overlays
-  if ((pcity['walls'] & 4) && !(pcity['walls'] & 1)) {
+  if ((pcity['walls'] & CITY_FORTIFICATIONS) && !(pcity['walls'] & CITY_WALLS) && !(pcity['walls'] & CITY_CITADEL)) {
     // !(&1) means, don't show if there are also City Walls
     return {"key": "city.fortifications_overlay", "offset_x" : -4, "offset_y" : -24};
-  }
+  } 
   return null; // no overlay.
 }
 function get_city_fortifications_underlay_sprite(pcity) {
   // LAYER ONE: Underlays
       // !(&1) means, don't show if there are also City Walls
-  if ((pcity['walls'] & 4) && !(pcity['walls'] & 1)) {
+  if ((pcity['walls'] & CITY_FORTIFICATIONS) && !(pcity['walls'] & CITY_WALLS) && !(pcity['walls'] & CITY_CITADEL)) {
     return {"key": "city.fortifications_underlay", "offset_x" : -4, "offset_y" : -24};
   }
   return null; // no underlay.
@@ -1673,30 +1679,34 @@ function get_city_fortifications_underlay_sprite(pcity) {
 ****************************************************************************/
 function get_city_sprite(pcity)
 {
-  var style_id = pcity['style'];
-  if (style_id == -1) style_id = 0;   /* sometimes a player has no city_style. */
-  var city_rule = city_rules[style_id];
+  var tag;
+  if (pcity['walls'] & CITY_CITADEL) tag = "city.citadel_overlay";
+  else {
+    var style_id = pcity['style'];
+    if (style_id == -1) style_id = 0;   /* sometimes a player has no city_style. */
+    var city_rule = city_rules[style_id];
 
-  var size = 0;
-  if (pcity['size'] >=4 && pcity['size'] <=7) {
-    size = 1;
-  } else if (pcity['size'] >=8 && pcity['size'] <=11) {
-    size = 2;
-  } else if (pcity['size'] >=12 && pcity['size'] <=15) {
-    size = 3;
-  } else if (pcity['size'] >=16) {
-    size = 4;
-  }
+    var size = 0;
+    if (pcity['size'] >=4 && pcity['size'] <=7) {
+      size = 1;
+    } else if (pcity['size'] >=8 && pcity['size'] <=11) {
+      size = 2;
+    } else if (pcity['size'] >=12 && pcity['size'] <=15) {
+      size = 3;
+    } else if (pcity['size'] >=16) {
+      size = 4;
+    }
 
-  var city_walls = (pcity['walls'] & 1) ? "wall" : "city";
+    var city_walls = (pcity['walls'] & CITY_WALLS) ? "wall" : "city";
 
-  var tag = city_rule['graphic'] + "_" + city_walls + "_" + size;
-  if (sprites[tag] == null) {
-    tag = city_rule['graphic_alt'] + "_" + city_walls + "_" + size;
+    tag = city_rule['graphic'] + "_" + city_walls + "_" + size;
+    if (sprites[tag] == null) {
+      tag = city_rule['graphic_alt'] + "_" + city_walls + "_" + size;
+    }
   }
 
   // the numbers -4 and -24 are where we adjust offsets:
-  return {"key" :  tag, "offset_x": -4, "offset_y" : -24};
+  return {"key" :  tag, "offset_x": -4, "offset_y" : -24 };
 }
 
 
