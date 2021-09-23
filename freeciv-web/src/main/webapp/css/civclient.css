@@ -246,7 +246,9 @@ input[type='number'] {
   font-family: Segoe;
 }
 .helptext_pane {
-  max-width: 684px;
+  max-width: 784px;
+  font-family: Segoe;
+  color: #e2e2e2;
 }
 .helptext_pane_mobile {
   max-width: 984px;

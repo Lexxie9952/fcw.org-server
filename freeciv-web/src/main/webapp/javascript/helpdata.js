@@ -470,7 +470,7 @@ function generate_help_text(key)
     var improvement = improvements[parseInt(key.replace("help_gen_wonders_", "").replace("help_gen_improvements_", ""))];
     msg = "<h1>" + improvement['name'] + "</h1>"+"<div class='"+pane_class+"'>"
 	    + render_sprite(get_improvement_image_sprite(improvement)) + "<br>"
-	    + cleaned_text(improvement['helptext'])
+	    + cleaned_helptext(improvement['helptext'])
             + "<b><br><br>Cost: " + improvement['build_cost']
             + "<br>Upkeep: " + improvement['upkeep'];
     var reqs = get_improvement_requirements(improvement['id']);

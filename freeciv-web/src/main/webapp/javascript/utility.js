@@ -368,6 +368,15 @@ function cleaned_text(str)
   }
   return str;
 }
+/**************************************************************************
+   Render universal[].helptext into a friendly format for html
+   representation.
+**************************************************************************/
+function cleaned_helptext(str)
+{
+  str = str.replaceAll("\n", "<br>");
+  return cleaned_text(str);
+}
 
 /**************************************************************************
    Capitalize first letter of string
