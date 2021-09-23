@@ -206,8 +206,9 @@ name		= _("Fortifications")
 genus		= "Improvement"
 flags		= "VisibleByOthers"
 reqs	=
-    { "type", "name", "range"
-      "Tech", "Masonry", "Player"
+    { "type",     "name",              "range", "present"
+      "Tech",     "Masonry",           "Player", TRUE
+      "Building", "Citadel of Aleppo", "City",   FALSE
     }
 graphic	= "b.fortifications"
 graphic_alt	= "b.city_walls"
@@ -359,8 +360,9 @@ name		= _("City Walls")
 genus		= "Improvement"
 flags		= "VisibleByOthers"
 reqs	=
-    { "type", "name", "range"
-      "Tech", "Construction", "Player"
+    { "type",     "name",              "range", "present"
+      "Tech",     "Construction",      "Player", TRUE
+      "Building", "Citadel of Aleppo", "City",   FALSE
     }
 graphic	= "b.city_walls"
 graphic_alt	= "-"
@@ -412,8 +414,9 @@ In cities with a Bank, a Stock Exchange boosts tax and luxury\
 * A Marketplace, Bank, and Stock Exchange together boost\
  tax and luxury production by +150%. \
 "), _("\
-Also increases the conversion rate of Coinage by +25%. A Bank, Marketplace, and\
- Stock Exchange each add +25%, yielding a rate of 2.25 gold per 1 shield invested.\
+After discovery of The Corporation, non-Communist governments see the conversion rate of\
+ Coinage increase by +25%. A Bank, Marketplace, and Stock Exchange each add +25%, yielding\
+ a total rate of 2.25 gold per 1 shield invested.\
 ")
 
 [building_factory]
@@ -1561,6 +1564,38 @@ During Despotism, Chand Baori gets two more bonuses:  (1) In its city\
 Chand Baori is never obsolete.\
 ")
 
+[building_citadel_aleppo]
+name		= _("Citadel of Aleppo")
+genus		= "SmallWonder"
+reqs	=
+    { "type",         "name",              "range",   "present", "quiet"
+      "Tech",         "Engineering",       "Player",  TRUE,      FALSE
+      "Tech",         "Gunpowder",         "Player",  FALSE,     FALSE
+      "Building",     "Citadel of Aleppo", "Player",  FALSE,     TRUE
+      "Building",     "City Walls",        "City",    FALSE,     TRUE
+      "Building",     "Fortifications",    "City",    FALSE,     TRUE
+    }
+graphic	= "b.citadel_aleppo"
+graphic_alt	= "-"
+obsolete_by	=
+    { "type", "name", "range"
+    }
+build_cost	= 120
+upkeep		= 0
+sabotage	= 0
+sound		= "w_citadel_aleppo"
+sound_alt	= "w_generic"
+helptext	= _("\
+The great Citadel of Aleppo turns an entire city into a formidable fortress.\
+  It must be built before Gunpowder is discovered. It provides 3x defense\
+  against all Land attacks: the thick walls are impervious to any bonuses\
+  from Ballistic units such as Catapults, Cannons, and Howitzers. Siege\
+  Rams are ineffective against it. \n\
+The Citadel of Aleppo cannot be made in a city that has City Walls or\
+ Fortifications, but it is possible to sell those in order to allow for\
+ the Citadel.\
+")
+
 [building_code_of_hammurabi]
 name		= _("Code of Hammurabi")
 genus		= "SmallWonder"
@@ -1654,7 +1689,7 @@ sabotage	= 0
 sound		= "w_copernicus_observatory"
 sound_alt	= "w_generic"
 helptext	= _("\
-Boosts science production by 100% in the city where it is built.\
+Boosts science production by 100% in the city where it’s built.\
  That is, the base science level before any improvements were made,\
  is added to the total science. This wonder is never obsolete.\
 ")
@@ -1862,7 +1897,7 @@ sabotage	= 0
 sound		= "w_hoover_dam"
 sound_alt	= "w_generic"
 helptext	= _("\
-In the city it’s built, Hoover Dam counts exactly as a Hydro Plant,\
+In the city where it’s built, Hoover Dam counts exactly as a Hydro Plant,\
  Factory, and Manufacturing Plant. If any of those buildings already\
  exist in the city, they will have no effect and can be sold. \n\
 "), _("
@@ -2002,7 +2037,7 @@ sabotage	= 0
 sound		= "w_king_richards_crusade"
 sound_alt	= "w_generic"
 helptext	= _("\
-In the city where it is built, adds one extra shield resource on every\
+In the city where it’s built, adds one extra shield resource on every\
  tile and lets you build one extra infantry unit per turn —— without\
  Conscription tech.\
  Obsolete by：Robotics.\
@@ -2102,22 +2137,23 @@ sabotage	= 0
 sound		= "w_magna_carta"
 sound_alt	= "w_generic"
 helptext	= _("\
-Establishes the government Constitutional Monarchy, which makes Monarchy \
-half like representative government. \n\
+If you are a Monarchy, the Magna Carta establishes Constitutional Monarchy.\
+ This makes Monarchy more like a representative government: \n\
 "), _("
-Features：\n\
- ➣ +1 content citizen. \n\
- ➣ +1 trade on Land tiles that produce trade. (Sea tiles require celebration.) \n\
- ➣ Allows rapture in original cities. \n\
- ➣ Allows Peasants in the city it’s located. \n\
- ➣ Lets you build an extra infantry or Peasant per turn, without Conscription. \n\
+Constitutional Monarchy summary：\n\
+ ➣ Empire base size goes from 11 to 23 (identical to +1 content citizen.) \n\
+ ➣ All Land tiles get celebration bonus for free. (+1 trade) \n\
+ ➣ Allows rapture in cities founded by you. \n\
+ ➣ Magna Carta city can build Peasants. \n\
+ ➣ Magna Carta city can build an extra infantry or Peasant per turn, without Conscription. \n\
 "), _("
-Setbacks：\n\
- ➣ One unit may be used for Martial Law. \n\
- ➣ One unit is free of upkeep. \n\
+Setbacks from standard Monarchy：\n\
+ ➣ One unit may be used for Martial Law (not 3). \n\
+ ➣ One unit is free of upkeep (not 3). \n\
  ➣ 2 military units may be abroad. Each extra causes a discontent citizen. \n\
  ➣ Gives you a Senate, which can be ignored if both King Richard’s Crusade \
-and J.S. Bach’s Cathedral are owned.\
+and J.S. Bach’s Cathedral are owned. \n\
+See Government⟶Monarchy for more info.\
 ")
 
 [building_manhattan_project]
@@ -2480,7 +2516,7 @@ sound_alt	= "w_generic"
 helptext	= _("\
 The Sphinx is said to watch over all citizens to ensure they are good.\
  The result is loss of tile corruption penalties on all worked tiles in\
- the city it is built. As a shared work of community art and culture, it\
+ the city it’s built. As a shared work of community art and culture, it\
  adds +1 luxury. In addition, it reduces corruption in the city by half. \n\
 Obsolete by：Philosophy.\
 ")
@@ -2823,11 +2859,11 @@ upkeep		= 0
 sabotage	= 0
 helptext	= _("\
 Coinage converts production output to gold. The base rate is 2 shield\
- to 3 gold. The base rate is favorable only in niche contexts. City\
- improvements can increase the rate of return：\n\
+ to 3 gold. The base rate is favorable only in niche contexts. Under\
+ non-Communist government, city improvements increase the rate of return：\n\
  ➤ 1.50 gold per shield： Base rate. \n\
  ➤ 1.75 gold per shield： Marketplace (adds +25%). \n\
  ➤ 2.00 gold per shield： Bank (adds +25%). \n\
- ➤ 2.25 gold per shield： Stock Exchange (adds +25%). \n\
- Fractional income is resolved by randomized Banker’s Rounding.\
+ ➤ 2.25 gold per shield： Stock Exchange + The Corporation (adds +25%). \n\
+Fractional income is resolved by randomized Banker’s Rounding.\
 ")

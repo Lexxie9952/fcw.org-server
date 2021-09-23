@@ -110,8 +110,7 @@ this virtual unit for the early game.
    Banking without the Statue losing its "pre-Republic bonus
    effect."
 =============================================================
-19. No Commercial ship or stand-in for a commercial ship
-   will cause unhappiness: Consistency and simplicity.
+
 =============================================================
 20. Legion price adjust 32 (was 31) - got 10% discount like 
    all other units, off classic price, but was overpriced in 

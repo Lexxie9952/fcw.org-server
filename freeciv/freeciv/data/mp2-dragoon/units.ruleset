@@ -3861,14 +3861,16 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = "Ferryboat", "FerryStartUnit", "BarbarianBoat", "Hunter"
 helptext      = _("\
-Caravels upgrade older sea units, and are a big advance in combat, speed, range, and transport capacity. They have\
- the commerce ability of the Galley, but cannot build Wonders. Caravels can attack and travel on rivers and do shore attacks.\
-As a Commerce unit, the Caravel does not cause unhappiness.\
+Caravels upgrade older sea units, and are a big advance in combat, speed,\
+ range, and transport capacity. They have the commerce ability of the Galley,\
+ but cannot build Wonders. Caravels can attack and travel on rivers and do\
+ shore attacks. As a Commerce unit, the Caravel does not cause unhappiness.\
 "), _("
 Like most early sea units, when it initiates an attack, there will be 15 rounds\
  of combat and 15 total hitpoints lost between both units. This may or may not\
  result in the loss of one of the units.\
 ")
+
 
 [unit_galleon]
 name          = _("Galleon")

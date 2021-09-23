@@ -2711,6 +2711,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
       "Building", "City Walls", "City", FALSE
+      "Building", "Citadel of Aleppo", "City", FALSE
       "Age", "3", "City", TRUE
       "CityStatus", "OwnedByOriginal", "City",  TRUE
       "UnitClass", "Land", "Local", TRUE
@@ -2728,6 +2729,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
       "Building", "City Walls", "City", FALSE
+      "Building", "Citadel of Aleppo", "City", FALSE
       "Age", "3", "City", TRUE
       "CityStatus", "OwnedByOriginal", "City",  TRUE
       "CityTile", "Center", "Local", TRUE
@@ -2741,6 +2743,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
       "Building", "City Walls", "City", FALSE
+      "Building", "Citadel of Aleppo", "City", FALSE
       "Age", "3", "City", TRUE
       "CityStatus", "OwnedByOriginal", "City",  TRUE
       "CityTile", "Center", "Local", TRUE
@@ -2757,6 +2760,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
       "Building", "City Walls", "City", FALSE
+      "Building", "Citadel of Aleppo", "City", FALSE
       "Age", "3", "City", TRUE
       "CityStatus", "OwnedByOriginal", "City",  FALSE
       "MinForeignPct", "19", "City",  FALSE
@@ -2775,6 +2779,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
       "Building", "City Walls", "City", FALSE
+      "Building", "Citadel of Aleppo", "City", FALSE
       "Age", "3", "City", TRUE
       "CityStatus", "OwnedByOriginal", "City",  FALSE
       "MinForeignPct", "19", "City",  FALSE
@@ -2789,6 +2794,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
       "Building", "City Walls", "City", FALSE
+      "Building", "Citadel of Aleppo", "City", FALSE
       "Age", "3", "City", TRUE
       "CityStatus", "OwnedByOriginal", "City",  FALSE
       "MinForeignPct", "19", "City",  FALSE
@@ -2806,6 +2812,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
       "Building", "City Walls", "City", FALSE
+      "Building", "Citadel of Aleppo", "City", FALSE
       "Age", "3", "City", TRUE
       "CityStatus", "OwnedByOriginal", "City",  TRUE
       "UnitClass", "LandNoKill", "Local", TRUE
@@ -2819,6 +2826,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
       "Building", "City Walls", "City", FALSE
+      "Building", "Citadel of Aleppo", "City", FALSE
       "Age", "3", "City", TRUE
       "CityStatus", "OwnedByOriginal", "City",  FALSE
       "MinForeignPct", "19", "City",  FALSE
@@ -2833,6 +2841,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
       "Building", "City Walls", "City", FALSE
+      "Building", "Citadel of Aleppo", "City", FALSE
       "Age", "3", "City", TRUE
       "CityStatus", "OwnedByOriginal", "City",  TRUE
       "UnitClass", "LandAirSea", "Local", TRUE
@@ -2846,6 +2855,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
       "Building", "City Walls", "City", FALSE
+      "Building", "Citadel of Aleppo", "City", FALSE
       "Age", "3", "City", TRUE
       "CityStatus", "OwnedByOriginal", "City",  FALSE
       "MinForeignPct", "19", "City",  FALSE
@@ -2860,6 +2870,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
       "Building", "City Walls", "City", FALSE
+      "Building", "Citadel of Aleppo", "City", FALSE
       "Age", "3", "City", TRUE
       "CityStatus", "OwnedByOriginal", "City",  TRUE
       "Tech", "Machine Tools", "World", FALSE
@@ -2871,6 +2882,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
       "Building", "City Walls", "City", FALSE
+      "Building", "Citadel of Aleppo", "City", FALSE
       "Age", "3", "City", TRUE
       "CityStatus", "OwnedByOriginal", "City",  FALSE
       "MinForeignPct", "19", "City",  FALSE
@@ -2883,6 +2895,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
       "Building", "City Walls", "City", FALSE
+      "Building", "Citadel of Aleppo", "City", FALSE
       "Age", "3", "City", TRUE
       "CityStatus", "OwnedByOriginal", "City",  TRUE
       "Tech", "Machine Tools", "World", FALSE
@@ -2894,6 +2907,7 @@ reqs	=
     { "type", "name", "range", "present"
       "Building", "Great Wall", "Player", TRUE
       "Building", "City Walls", "City", FALSE
+      "Building", "Citadel of Aleppo", "City", FALSE
       "Age", "3", "City", TRUE
       "CityStatus", "OwnedByOriginal", "City",  FALSE
       "MinForeignPct", "19", "City",  FALSE
@@ -5095,6 +5109,48 @@ reqs =
       "Terrain",  "Mountains",     "Local", FALSE
     }
 ;IrrigationSource of city is in game.ruleset
+
+
+;************************************************************************ Citadel of Aleppo
+[effect_citadel_vs_Land]
+type    = "Defend_Bonus"
+value	= 200 ; 3x vs most Land
+reqs	=
+    { "type",      "name",              "range", "present"
+      "Building",  "Citadel of Aleppo", "City",  TRUE
+      "Building",  "City Walls",        "City",  FALSE          ;shouldn't happen
+      "Building",  "Fortifications",    "City",  FALSE          ;shouldn't happen
+      "UnitClass", "Land",              "Local", TRUE
+    }
+[effect_citadel_vs_Land2]
+type    = "Defend_Bonus"
+value	= 200 ; 3x vs most Land
+reqs	=
+    { "type",      "name",              "range", "present"
+      "Building",  "Citadel of Aleppo", "City",  TRUE
+      "Building",  "City Walls",        "City",  FALSE          ;shouldn't happen
+      "Building",  "Fortifications",    "City",  FALSE          ;shouldn't happen
+      "UnitClass", "Land",              "Local", TRUE
+    }
+[effect_citadel_vs_Land3]
+type    = "Defend_Bonus"
+value	= 200 ; 3x vs most Land
+reqs	=
+    { "type",      "name",              "range", "present"
+      "Building",  "Citadel of Aleppo", "City",  TRUE
+      "Building",  "City Walls",        "City",  FALSE          ;shouldn't happen
+      "Building",  "Fortifications",    "City",  FALSE          ;shouldn't happen
+      "UnitClass", "Land",              "Local", TRUE
+    }
+[effect_citadel_visible]
+type    = "Visible_Walls"
+value	= 8
+reqs	=
+    { "type",     "name",           "range", "present"
+      "Building",  "Citadel of Aleppo", "City",  TRUE
+    }
+;Great Wall bonus excluded in Great Wall effects
+
 ;************************************************************************ Code of Hammurabi
 [effect_hammurabi_corruption_1]
 type    = "Output_Waste"
