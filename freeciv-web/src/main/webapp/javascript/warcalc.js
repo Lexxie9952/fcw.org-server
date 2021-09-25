@@ -416,7 +416,7 @@ function warcalc_set_tooltips()
 
   // Wider tool tips for attaker / defender label info:
   $("#wcamsg").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "450px");}});
-  $("#wcdmsg").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "450px");}});  
+  $("#wcdmsg").tooltip({open: function (event, ui) {ui.tooltip.css("max-width", "450px");}});
 
   if ( ruleset_control['name'].startsWith("MP2")  // from MP2 Brava onward all MP2 rules start with "MP2"
    || ruleset_control['name'].startsWith("Avant-garde")
@@ -479,17 +479,16 @@ function warcalc_set_tooltips()
           $("#wca150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Phalanx/Pikemen + Agoge of Sparta"+nbl+"Dive Bomber vs. Land or Sea");
           $("#wca200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"AAA/Mobile SAM vs. Aircraft");
         }
-        if (ruleset_control['name'].startsWith("MP2 C")) {
-          $("#wc175").prop("title", bl+"Veteran-2 ('Hardened')"+nbl+"In city with Fortifications vs Land (not Howitzer)");
+        if (client_rules_flag[CRF_MP2_C]) {
+          $("#wc175").prop("title", bl+"Veteran-2 ('Hardened')");
           $("#wc150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Jungle"+nbl+"Land unit Fortified OR inside city"
-          +nbl+"Helicopter vs. Foot or Mounted units"+nbl+"Forest in city with Fortifications"+nbl+"Swamp in city with Fortifications");
+          +nbl+"Helicopter vs. Foot or Mounted units"+nbl+"In city with Fortifications vs Land (not Ballistic)");
           $("#wc167").prop("title", bl+"Land/Heli in Fortress vs Armor/Aircraft"+nbl+"Land/Heli/Sea in Naval Base vs Armor/Aircraft"+nbl+"Jungle in city with Fortifications");
-          $("#wc125").prop("title", bl+"In city with SAM Battery vs. Stealth Aircraft");
-          $("#wca125").prop("title", bl+"Catapult vs Fortifications or City Walls"+nbl+"Stealth Aircraft vs. AAA/Mobile SAM/AEGIS Cruiser");
-          $("#wca150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Cannon vs Fortifications or City Walls"+nbl+"Phalanx/Pikemen + Agoge of Sparta"+nbl+"Dive Bomber vs. Land or Sea");
-          $("#wca175").prop("title", bl+"Veteran-2 ('Hardened')"+nbl+"Artillery vs Fortifications or City Walls");
+          $("#wc125").prop("title", bl+"In city with Fortifications vs Catapult"+nbl+"In city with SAM Battery vs. Stealth Aircraft");
+          $("#wca125").prop("title", bl+"Stealth Aircraft vs. AAA/Mobile SAM/AEGIS Cruiser");
+          $("#wca150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"Phalanx/Pikemen + Agoge of Sparta"+nbl+"Dive Bomber vs. Land or Sea");
+          $("#wca175").prop("title", bl+"Veteran-2 ('Hardened')"+nbl+"Artillery vs City Walls");
         }
-
         return;
   }
   
@@ -503,6 +502,7 @@ function warcalc_set_tooltips()
   || ruleset_control['name']=="Classic ruleset" ) {
     // DEFEND BUTTONS
     $("#wc125").hide(); // unused
+
     $("#wc150").prop("title", bl+"Veteran-1 ('Veteran')"+nbl+"River"+nbl+"Swamp"+nbl+"Forest"+nbl+"Jungle"+nbl+"Land unit Fortified OR inside city");
     $("#wc175").prop("title", bl+"Veteran-2 ('Hardened')");
     $("#wc200").prop("title", bl+"Veteran-3 ('Elite')"+nbl+"Hills"+nbl+"Land/Heli in Fortress vs. Land/Sea units"+nbl+"Pikemen vs. Horse (not Cavalry)"+nbl+"In city with Coastal Defense vs. Sea"+nbl+"In city with SAM Battery vs. Aircraft"+nbl+"In city with SDI vs. Missile");
