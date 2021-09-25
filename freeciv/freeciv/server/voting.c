@@ -78,7 +78,7 @@ static void lsend_vote_new(struct conn_list *dest, struct vote *pvote)
   log_debug("lsend_vote_new %p (%d) --> %p", pvote, pvote->vote_no, dest);
 
   packet.vote_no = pvote->vote_no;
-  sz_strlcpy(packet.user, pconn->username);
+  sz_strlcpy(packet.user, player_name(pconn->playing));
   describe_vote(pvote, packet.desc, sizeof(packet.desc));
 
   packet.percent_required = 100 * pvote->need_pc;
@@ -576,17 +576,17 @@ static void check_vote(struct vote *pvote)
     case VOTE_YES:
       notify_team(callplr, NULL, E_VOTE_RESOLVED, ftc_vote_yes,
                   _("%s %d: %s voted yes."),
-                  title, pvote->vote_no, pconn->username);
+                  title, pvote->vote_no, player_name(pconn->playing));
       break;
     case VOTE_NO:
       notify_team(callplr, NULL, E_VOTE_RESOLVED, ftc_vote_no,
                   _("%s %d: %s voted no."),
-                  title, pvote->vote_no, pconn->username);
+                  title, pvote->vote_no, player_name(pconn->playing));
       break;
     case VOTE_ABSTAIN:
       notify_team(callplr, NULL, E_VOTE_RESOLVED, ftc_vote_abstain,
                   _("%s %d: %s chose to abstain."),
-                  title, pvote->vote_no, pconn->username);
+                  title, pvote->vote_no, player_name(pconn->playing));
       break;
     default:
       break;

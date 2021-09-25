@@ -2744,7 +2744,8 @@ static bool cancelvote_command(struct connection *caller,
                 NULL, E_VOTE_ABORTED, ftc_server,
                 /* TRANS: "vote" as a process */
                 _("%s has canceled the vote \"%s\" (number %d)."),
-                caller->username, pvote->cmdline, pvote->vote_no);
+                player_name(player_by_user(caller->username)),
+                pvote->cmdline, pvote->vote_no);
   } else {
     /* Server prompt */
     notify_team(conn_get_player(vote_get_caller(pvote)),
@@ -6888,8 +6889,9 @@ static void show_delegations(struct connection *caller)
       if (caller->supercow || !DEBUG_CONNS) {
         cmd_reply(CMD_LIST, caller, C_COMMENT,
                   /* TRANS: last %s is either " (active)" or empty string */
-                  _("%s delegates control over player '%s' to user %s%s."),
-                  owner, player_name(pplayer), delegate_to,
+                  _("Control over player '%s' delegated to %s%s."),
+                  player_name(pplayer),
+                  player_name(player_by_user(delegate_to)),
                   player_delegation_active(pplayer) ? _(" (active)") : "");
       } else {
         cmd_reply(CMD_LIST, caller, C_COMMENT,
@@ -6980,11 +6982,9 @@ void show_players(struct connection *caller)
                      pplayer->server.delegate_to,
                      player_delegation_active(pplayer) ? _(" (active)") : "(untaken)");
       } else {
-        cat_snprintf(buf, sizeof(buf), "%s [%s]: %s", player_name(pplayer),
-                    player_color_ftstr(pplayer),
-                    team_name_translation(pplayer->team));
+        cat_snprintf(buf, sizeof(buf), "%s: ", player_name(pplayer));
         if (!game.info.is_new_game) {
-          cat_snprintf(buf, sizeof(buf), ", %s",
+          cat_snprintf(buf, sizeof(buf), "%s",
                       nation_adjective_for_player(pplayer));
         }
         if (caller->supercow && strlen(pplayer->username) > 0

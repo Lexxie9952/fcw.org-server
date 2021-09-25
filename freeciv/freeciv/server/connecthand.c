@@ -265,12 +265,11 @@ void establish_new_connection(struct connection *pconn)
       /* Delegate now detached from our player. We will restore control
        * over them as normal below. */
       notify_conn(pconn->self, NULL, E_CONNECTION, ftc_server,
-                  _("Your delegate %s was controlling your player '%s'; "
-                    "now detached."), pdelegate->username,
-                  player_name(pplayer));
+                  _("Your delegate was controlling your player '%s'; "
+                    "now detached."), player_name(pplayer));
       notify_conn(pdelegate->self, NULL, E_CONNECTION, ftc_server,
                   _("%s reconnected, ending your delegated control of "
-                    "player '%s'."), pconn->username, player_name(pplayer));
+                    "their player."), player_name(pplayer));
     } else {
       fc_assert(pdelegate);
       /* This really shouldn't happen. */
@@ -278,8 +277,8 @@ void establish_new_connection(struct connection *pconn)
                 "can't regain control.", pdelegate->username,
                 player_name(pplayer), pconn->username);
       notify_conn(dest, NULL, E_CONNECTION, ftc_server,
-                  _("Couldn't get control of '%s' from delegation to %s."),
-                  player_name(pplayer), pdelegate->username);
+                  _("Couldn't get back control of '%s' from delegation."),
+                  player_name(pplayer));
       delegation_error = TRUE;
       pplayer = NULL;
     }
@@ -360,13 +359,12 @@ void establish_new_connection(struct connection *pconn)
    * connection_attach()), otherwise pconn will receive it too. */
   if (conn_controls_player(pconn)) {
     package_event(&connect_info, NULL, E_CONNECTION, ftc_server,
-                  _("%s has connected from %s (player %s)."),
-                  pconn->username, pconn->addr,
+                  _("%s has connected."),
                   player_name(conn_get_player(pconn)));
   } else {
     package_event(&connect_info, NULL, E_CONNECTION, ftc_server,
-                  _("%s has connected from %s."),
-                  pconn->username, pconn->addr);
+                  _("%s has connected."),
+                  pconn->username);
   }
   conn_list_iterate(game.est_connections, aconn) {
     if (aconn != pconn) {

@@ -1839,9 +1839,8 @@ void start_game(void)
   conn_list_iterate(game.est_connections, pconn) {
     if (pconn->access_level == ALLOW_CTRL) {
       notify_conn(NULL, NULL, E_SETTING, ftc_server,
-                  _("%s lost control cmdlevel on "
-                    "game start.  Use voting from now on."),
-                  pconn->username);
+                  _("Cmdlevel control lost on "
+                    "game start. Use voting from now on."));
       conn_set_access(pconn, ALLOW_BASIC, FALSE);
     }
   } conn_list_iterate_end;
@@ -2358,10 +2357,9 @@ void handle_nation_select_req(struct connection *pc, int player_no,
     fc_assert_ret(nation_is_in_current_set(new_nation));
 
     notify_conn(NULL, NULL, E_NATION_SELECTED, ftc_server,
-                _("%s is the %s ruler %s."),
-                pplayer->username,
-                nation_adjective_translation(new_nation),
-                player_name(pplayer));
+                _("%s is ruler of the %s."),
+                player_name(pplayer),
+                nation_adjective_translation(new_nation));
 
     pplayer->is_male = is_male;
     pplayer->style = style_by_number(style);

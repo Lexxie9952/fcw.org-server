@@ -2655,7 +2655,7 @@ static inline void get_full_nation(char *buf, int buflen,
 
 /****************************************************************************
   For AIs, fill the buffer with their player name suffixed with "(A.I.)".
-  For humans, just fill it with their username. Changed from prefix of "AI"
+  For humans, just fill it with their PLAYER name. Changed from prefix of "AI"
   which always looked like Arabic "Al <name>".
 ****************************************************************************/
 static inline void get_full_username(char *buf, int buflen,
@@ -2674,7 +2674,7 @@ static inline void get_full_username(char *buf, int buflen,
     /* TRANS: "AI <player name>" */
     fc_snprintf(buf, buflen, _("%s (A.I.)"), pplayer->name);
   } else {
-    fc_strlcpy(buf, pplayer->username, buflen);
+    fc_strlcpy(buf, pplayer->name, buflen);
   }
 }
 
@@ -2712,7 +2712,7 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
      Q_("?city:Peaceful"), Q_("?city:Friendly"), Q_("?city:Mysterious"),
      Q_("?city:Friendly(team)")};
   static struct astring str = ASTRING_INIT;
-  char username[MAX_LEN_NAME + 32];
+  char playername[MAX_LEN_NAME + 32];
   char nation[2 * MAX_LEN_NAME + 32];
   int tile_x, tile_y, nat_x, nat_y;
 
@@ -2755,14 +2755,14 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
   if (BORDERS_DISABLED != game.info.borders && !pcity) {
     struct player *owner = tile_owner(ptile);
 
-    get_full_username(username, sizeof(username), owner);
+    get_full_username(playername, sizeof(playername), owner);
     get_full_nation(nation, sizeof(nation), owner);
 
     if (NULL != pplayer && owner == pplayer) {
       astr_add_line(&str, _("<b>Our territory</b>"));
     } else if (NULL != owner && NULL == pplayer) {
-      /* TRANS: "Territory of <username> (<nation + team>)" */
-      astr_add_line(&str, _("Territory of %s%s (%s)%s"), bold, username, nation, unbold);
+      /* TRANS: "Territory of <playername> (<nation + team>)" */
+      astr_add_line(&str, _("Territory of %s%s (%s)%s"), bold, playername, nation, unbold);
     } else if (NULL != owner) {
       struct player_diplstate *ds = player_diplstate_get(pplayer,
                                                          owner);
@@ -2771,19 +2771,19 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
         int turns = ds->turns_left;
 
         astr_add_line(&str,
-                      /* TRANS: "Territory of <username> (<nation + team>)
+                      /* TRANS: "Territory of <playername> (<nation + team>)
                        * (<number> turn cease-fire)" */
                       PL_("Territory of %s%s (%s)%s (%d turn cease-fire)",
                           "Territory of %s%s (%s)%s (%d turn cease-fire)",
                           turns),
-                      bold, username, nation, unbold, turns);
+                      bold, playername, nation, unbold, turns);
       } else {
         int type = ds->type;
 
-        /* TRANS: "Territory of <username>
+        /* TRANS: "Territory of <playername>
          * (<nation + team> | <diplomatic state>)" */
         astr_add_line(&str, _("Territory of %s (%s | %s%s%s)"),
-                      username, nation,
+                      playername, nation,
                       bold, diplo_nation_plural_adjectives[type], unbold);
       }
     } else {
@@ -2797,30 +2797,30 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
     const char *improvements[improvement_count()];
     int has_improvements = 0;
 
-    get_full_username(username, sizeof(username), owner);
+    get_full_username(playername, sizeof(playername), owner);
     get_full_nation(nation, sizeof(nation), owner);
 
     if (NULL == pplayer || owner == pplayer) {
-      /* TRANS: "City: <city name> | <username> (<nation + team>)" */
+      /* TRANS: "City: <city name> | <playername> (<nation + team>)" */
       astr_add_line(&str, _("City: %s%s%s | %s (%s)"),
-                    bold, city_name_get(pcity), unbold, username, nation);
+                    bold, city_name_get(pcity), unbold, playername, nation);
     } else {
       struct player_diplstate *ds
         = player_diplstate_get(pplayer, owner);
       if (ds->type == DS_CEASEFIRE) {
         int turns = ds->turns_left;
 
-        /* TRANS:  "City: <city name> | <username>
+        /* TRANS:  "City: <city name> | <playername>
          * (<nation + team>, <number> turn cease-fire)" */
         astr_add_line(&str, PL_("City: %s%s%s | %s (%s, %d turn cease-fire)",
                                 "City: %s%s%s | %s (%s, %d turn cease-fire)",
                                 turns),
-                      bold, city_name_get(pcity), unbold, username, nation, turns);
+                      bold, city_name_get(pcity), unbold, playername, nation, turns);
       } else {
-        /* TRANS: "City: <city name> | <username>
+        /* TRANS: "City: <city name> | <playername>
          * (<nation + team>, <diplomatic state>)" */
         astr_add_line(&str, _("City: %s%s%s | %s (%s, %s%s%s)"),
-                      bold, city_name_get(pcity), unbold, username, nation,
+                      bold, city_name_get(pcity), unbold, playername, nation,
                       bold, diplo_city_adjectives[ds->type], unbold);
       }
     }
@@ -2871,22 +2871,22 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
     struct player *owner = unit_owner(punit);
     const struct unit_type *ptype = unit_type_get(punit);
 
-    get_full_username(username, sizeof(username), owner);
+    get_full_username(playername, sizeof(playername), owner);
     get_full_nation(nation, sizeof(nation), owner);
 
     if (!pplayer || owner == pplayer) {
       struct city *hcity = player_city_by_number(owner, punit->homecity);
 
       if (hcity != NULL) {
-        /* TRANS: "Unit: <unit type> | <username>
+        /* TRANS: "Unit: <unit type> | <playername>
          * (<nation + team>, <homecity>)" */
         astr_add_line(&str, _("Unit: %s%s%s | %s (%s, %s)"),
-                      bold, utype_name_translation(ptype), unbold, username,
+                      bold, utype_name_translation(ptype), unbold, playername,
                       nation, city_name_get(hcity));
       } else {
-        /* TRANS: "Unit: <unit type> | <username> (<nation + team>)" */
+        /* TRANS: "Unit: <unit type> | <playername> (<nation + team>)" */
         astr_add_line(&str, _("Unit: %s%s%s | %s (%s)"),
-                      bold, utype_name_translation(ptype), unbold, username, nation);
+                      bold, utype_name_translation(ptype), unbold, playername, nation);
       }
     } else if (NULL != owner) {
       struct player_diplstate *ds = player_diplstate_get(pplayer,
@@ -2894,18 +2894,18 @@ static const char *popup_info_text(struct tile *ptile, struct player *pplayer,
       if (ds->type == DS_CEASEFIRE) {
         int turns = ds->turns_left;
 
-        /* TRANS:  "Unit: <unit type> | <username> (<nation + team>,
+        /* TRANS:  "Unit: <unit type> | <playername> (<nation + team>,
          * <number> turn cease-fire)" */
         astr_add_line(&str, PL_("Unit: %s%s%s | %s (%s, %d turn cease-fire)",
                                 "Unit: %s%s%s | %s (%s, %d turn cease-fire)",
                                 turns),
                       bold, utype_name_translation(ptype), unbold,
-                      username, nation, turns);
+                      playername, nation, turns);
       } else {
-        /* TRANS: "Unit: <unit type> | <username> (<nation + team>,
+        /* TRANS: "Unit: <unit type> | <playername> (<nation + team>,
          * <diplomatic state>)" */
         astr_add_line(&str, _("Unit: %s%s%s | %s (%s, %s%s%s)"),
-                      bold, utype_name_translation(ptype), unbold, username, nation,
+                      bold, utype_name_translation(ptype), unbold, playername, nation,
                       bold, diplo_city_adjectives[ds->type], unbold);
       }
     }
