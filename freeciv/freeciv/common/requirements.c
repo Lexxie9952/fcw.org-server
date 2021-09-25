@@ -1390,9 +1390,9 @@ static int num_city_buildings(const struct city *pcity,
 
   The range gives the range of the requirement.
 
-  "Survives" specifies whether the requirement allows destroyed sources.
-  If set then all source buildings ever built are counted; if not then only
-  living buildings are counted.
+  "Survives" specifies whether the requirement allows destroyed OR obsolete
+  sources. If set then all source buildings ever built are counted; if not
+  then only living buildings are counted.
 
   source gives the building type of the source in question.
 **************************************************************************/
@@ -1405,8 +1405,38 @@ is_building_in_range(const struct player *target_player,
                      const struct impr_type *source)
 {
   /* Check if it's certain that the building is obsolete given the
-   * specification we have */
-  if (improvement_obsolete(target_player, source, target_city)) {
+   * specification we have.             
+    
+     23Sept2021 (!survives && ...) was added. Its absence was a logic flaw.
+     
+                Old way allowed a "dead dummy case" while preventing a
+                needed case. If you want a req to go unfulfilled after
+                an improvement goes obsolete, you don't NEED to check the
+                survives flag, since obsolete improvs will render non-present
+                and false anyway. On the other hand, it is very common in XXXX
+                games to have a requirement that you can only make one of X
+                or Y in a game. e.g., either/or one-way strategic paths or
+                defining factions/religion/decisions/development paths, or
+                basically any (X || Y && !(X && Y)) type of conditions.
+
+                In theory, this change disallows reqs to test the 'survives' 
+                flag on the never-used case of an improvement whose effect
+                would be to prevent other improvements only until it's
+                obsolete. BUT, since obsoleteness makes improvement reqs 
+                render false anyway, the only time you use the 'survives' flag
+                w.r.t. obsolete improvements is to see if they've ever been 
+                built. e.g., for the theoretical case of a non-obsolete building
+                to have ever been built, test for 'survives' && the conditions for
+                the building's obsoleteness to not be fulfilled.
+
+                The fix now makes the 'survives' req semantically correct:
+                'survives' now 'survives obsolescence' and we can consistently use
+                'survives' for its proper purpose, to test if an improvement
+                was ever made. Rulesets can now have conditions on whether
+                something was ever built, instead of making rulesets blind to
+                whether something was ever made, if it goes obsolete. See
+                changes in reqtext.c commited on this date. */
+  if (!survives && improvement_obsolete(target_player, source, target_city)) {
     return TRI_NO;
   }
 

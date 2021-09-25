@@ -337,10 +337,9 @@ bool req_text_insert(char *buf, size_t bufsz, struct player *pplayer,
           if (preq->present) {
             if (can_improvement_go_obsolete(preq->source.value.building)) {
               cat_snprintf(buf, bufsz,
+                           /* See other 23Sept2023 notes */
                            /* TRANS: %s is a wonder */
-                           _("Requires that %s was built at some point, "
-                             "and that it has not yet been rendered "
-                             "obsolete."),
+                           _("Requires that %s was built at some point."),
                            improvement_name_translation
                            (preq->source.value.building));
             } else {
@@ -351,11 +350,32 @@ bool req_text_insert(char *buf, size_t bufsz, struct player *pplayer,
                            (preq->source.value.building));
             }
           } else {
+            /* 23Sept2021 This was a dead dummy case. If you want a req to
+               go unfulfilled after an improvement goes obsolete, you don't
+               NEED to mess with a survives flag, as obsolete improvs will
+               render non-present and false anyway. On the other hand, it is
+               very common in XXXX games to have a requirement that you can
+               only make one of X or Y in a game. e.g., either/or one-way
+               strategic paths or defining factions/races/development paths,
+               or basically any (X || Y && !(X && Y)) type of conditions.
+
+               In theory, this change disallows the as-yet never wanted case
+               of an improvement that prevents other improvements only
+               until it's obsolete. But it doesn't really, since you don't need
+               the 'survives' flag for testing those cases.
+
+               However, the 'survives' req is now semantically correct insofar
+               as it 'survives obsolescence' and we can now consistently use
+               'survives' for its purpose of checking if an improvement were
+               ever made. This means rulesets can now have conditions on whether
+               something were ever built, instead of leaving rulesets BLIND to
+               whether something was ever made. See changes in requirements.c
+               commited on this date. */
             if (can_improvement_go_obsolete(preq->source.value.building)) {
               cat_snprintf(buf, bufsz,
                            /* TRANS: %s is a wonder */
                            _("Prevented if %s has ever been built, "
-                             "unless it would be obsolete."),
+                             "including if it goes obsolete."),
                            improvement_name_translation
                            (preq->source.value.building));
             } else {
@@ -412,10 +432,10 @@ bool req_text_insert(char *buf, size_t bufsz, struct player *pplayer,
           if (preq->present) {
             if (can_improvement_go_obsolete(preq->source.value.building)) {
               cat_snprintf(buf, bufsz,
+                           /* See other 23Sept2023 notes */
                            /* TRANS: %s is a wonder */
                            _("Requires someone who is currently allied to "
-                             "you to have built %s at some point, and for "
-                             "it not to have been rendered obsolete."),
+                             "you to have built %s at some point."),
                            improvement_name_translation
                            (preq->source.value.building));
             } else {
@@ -490,10 +510,10 @@ bool req_text_insert(char *buf, size_t bufsz, struct player *pplayer,
           if (preq->present) {
             if (can_improvement_go_obsolete(preq->source.value.building)) {
               cat_snprintf(buf, bufsz,
+                           /* See other 23Sept2023 notes */
                            /* TRANS: %s is a wonder */
                            _("Requires someone on your team to have "
-                             "built %s at some point, and for it not "
-                             "to have been rendered obsolete."),
+                             "built %s at some point."),
                            improvement_name_translation
                            (preq->source.value.building));
             } else {
@@ -567,10 +587,9 @@ bool req_text_insert(char *buf, size_t bufsz, struct player *pplayer,
           if (preq->present) {
             if (can_improvement_go_obsolete(preq->source.value.building)) {
               cat_snprintf(buf, bufsz,
+                           /* See other 23Sept2023 notes */
                            /* TRANS: %s is a wonder */
-                           _("Requires you to have built %s at some point, "
-                             "and for it not to have been rendered "
-                             "obsolete."),
+                           _("Requires you to have built %s at some point."),
                            improvement_name_translation
                            (preq->source.value.building));
             } else {
