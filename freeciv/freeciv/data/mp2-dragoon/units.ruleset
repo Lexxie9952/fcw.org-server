@@ -5108,7 +5108,7 @@ sound_move    = "m_generic"
 sound_move_alt = "m_generic"
 sound_fight   = "f_generic"
 sound_fight_alt = "f_generic"
-build_cost    = 25
+build_cost    = 20
 pop_cost      = 0
 attack        = 0
 defense       = 0
@@ -5131,7 +5131,7 @@ Goods are commodities.\
 Goods can be used to establish Trade Routes or Enter Marketplace. They can\
  be carried by Commerce units, allowing you to establish multiple\
  trade routes in one voyage. Also, Goods can Recycle Production with only\
- a 25% penalty, rendering 18 shields into a city production target. \n\
+ a 25% penalty, rendering 15 shields into a city production target. \n\
 "), _("\
 By themselves, Goods can only move onto tiles with a City, Quay, Fortress,\
  or Naval Base. Commerce units, Tribesmen, and Galleons must carry them as cargo.\
