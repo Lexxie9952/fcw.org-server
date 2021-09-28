@@ -111,9 +111,12 @@ makes this unit more favorable to early game economics.
    Banking without the Statue losing its "pre-Republic bonus
    effect."
 =============================================================
-19. 
+19. Adam Smith wonder adjusted back to 300 gold; the former 
+   cost increase had been implemented before the WYSIWYG 
+   upgrade, which now makes this wonder less OP and no
+   longer justifying the cost increase.
 =============================================================
-20. Legion price adjust 32 (was 31) - got 10% discount like 
+20. Legion price adjust 31 (was 32) - got 10% discount like 
    all other units, off classic price, but was overpriced in 
    classic. should be 36 or 37 with 20% reduction giving 29-30
    in cost. Legion's extra abilities worth +1 shield from

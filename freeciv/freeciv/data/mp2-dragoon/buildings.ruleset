@@ -1380,14 +1380,15 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 320
+build_cost	= 300
 upkeep		= 0
 sabotage	= 0
 sound		= "w_asmiths_trading_co"
 sound_alt	= "w_generic"
 helptext	= _("\
-In all your cities, Buildings with upkeep of 1 gold become free.\
- This Wonder also allows three new specialists：\
+Adam Smith’s Trading Company increases your nation’s knowledge of\
+ economics. In all your cities, Buildings with upkeep of 1 gold become\
+ free. This Wonder enables three new specialists：\
 "), _("
   * Each Laborer produces 1 production point for their city per turn; \
 "), _("
