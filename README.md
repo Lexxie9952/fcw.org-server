@@ -198,10 +198,51 @@ some tasks you can work on. Pull requests on Github is welcome!
 Contributors to Freeciv-web
 ---------------------------
 Andreas Røsdal  [@andreasrosdal](https://github.com/andreasrosdal)  
+Lexxie9952 (https://discordapp.com/users/Lexxie9952)(https://github.com/Lexxie9952)
 Marko Lindqvist [@cazfi](https://github.com/cazfi)  
-Sveinung Kvilhaugsvik [@kvilhaugsvik](https://github.com/kvilhaugsvik)  
+Sveinung Kvilhaugsvik [@kvilhaugsvik](https://github.com/kvilhaugsvik) 
 Gerik Bonaert [@adaxi](https://github.com/adaxi)  
 Lmoureaux [@lmoureaux](https://github.com/lmoureaux)  
 Máximo Castañeda [@lonemadmax](https://github.com/lonemadmax)  
 and the [Freeciv.org project](http://freeciv.wikia.com/wiki/People)!
+
+About FCW and this repository
+-----------------------------
+FCW is a volunteer effort. We follow the common practice of a cycle of development, beta, testing, and release.
+Like other software projects, FCW is almost always in a stage of development ahead of its last stable release.
+
+FCW is an open source project of a private community that does not sell/distribute its work under the GPL
+definition of distribution. 
+
+For its voluntarily approved users and developers, FCW periodically publishes stable releases of its code
+after the beta and testing period. FCW usually releases code for stable releases within 90 days of readiness.
+
+FCW public code releases are _bona voluntas_ provided for those who mutually and voluntarily enter into
+relations desired and approved by both parties. Users voluntarily choose to be in a provider/user relationship
+under our Terms of Service, for the state of the project release at that moment. Regarding potential developers
+and non-users, FCW is NOT required to do work for, nor release source code to anyone with whom we have not
+entered a voluntary mutual relationship, nor do we enter into a developmental, provider, or usership relation
+with entities who do not agree to the rights we reserve for our absolutely free and unencumbered operation.
+Any relation with us conditional to the above.
+
+You have our permission to enjoy our service, for free, if you accept our Terms of Service. In so doing,
+you are choosing to be a private member of a private internal community. FCW reserves the right to refuse
+service to anyone. 
+----
+By submitting a **Pull Request** to this repository,
+1. You agree that the creators and maintainers of FCW may use and modify that content as we see fit.
+That is, under no restriction whatsoever that would limit us more than if we had created the content
+ourselves (except for #2 below).
+2. You maintain the right to re-use any contribution you have made in your own projects or other
+personal, public, or professional uses; without limiting in any way our ability to do the same.
+3. This means we may do, but are not limited to do, the following: Release as the licensor: freeciv
+server code under GPL licensing; freeciv-web code under AGPL licensing; audio/art/etc, under CC BY
+or other licensing.
+4. You agree we will not be obstructed from re-releasing or repackaging any contributed part of the
+project as we deem necessary or desirable, whether for future release of this project or other projects,
+under current or other licensing; including but not limmited to changes in project licensing to facilitate
+compliance with other component licensing and/or the ability to deliver our services.
+
+*Statements made above are inclusive to our Terms of Service. No statement made above shall be deemed
+as FCW or its maintainers implicitly waiving any rights.
 
