@@ -2655,8 +2655,8 @@ static inline void get_full_nation(char *buf, int buflen,
 
 /****************************************************************************
   For AIs, fill the buffer with their player name suffixed with "(A.I.)".
-  For humans, just fill it with their PLAYER name. Changed from prefix of "AI"
-  which always looked like Arabic "Al <name>".
+  Changed from prefix of "AI" which always looked like Arabic "Al <name>".
+  For humans, just fill it with their PLAYER name. 
 ****************************************************************************/
 static inline void get_full_username(char *buf, int buflen,
                                      const struct player *pplayer)
