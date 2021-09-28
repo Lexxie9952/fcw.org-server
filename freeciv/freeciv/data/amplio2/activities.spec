@@ -77,6 +77,6 @@ tiles = { "row", "column", "tag"
   6,  1, "unit.vigil"                ; Lexxie
   6,  2, "unit.castle"               ; Lexxie
   6,  3, "unit.fortifying_hidden"    ; Lexxie
-  6,  4, "unit.action_decision_want" ; kvilhaugsvik, Lexxie, Canik
+  6,  4, "unit.action_decision_want" ; kvilhaugsvik, Lexxie
   6,  5, "unit.go_and"               ; Lexxie
 }
