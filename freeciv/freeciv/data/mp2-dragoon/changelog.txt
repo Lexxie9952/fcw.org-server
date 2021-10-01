@@ -102,7 +102,7 @@ makes this unit more favorable to early game economics.
       risk of making quays, somewhat.
    A new server feature simplifies this. <ADD TO: SIMPLIFIERS>
 =============================================================
-17. Ecclesiastical Palace, cost:80 (was 90).
+17. Ecclesiastical Palace, cost:70 (was 90). (same as Palace)
 =============================================================
 18. Zeus promotion bonus simplified: instead of The Republic
    tech turning it off, it's having Republic government 
@@ -140,8 +140,8 @@ makes this unit more favorable to early game economics.
 24. No sea commerce units cause unhappiness, for consistency
    and simplification.
 =============================================================
-
-
+25. Cathedral costs 70 (was 75)
+=============================================================
 
 
 

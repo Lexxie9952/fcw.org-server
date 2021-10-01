@@ -613,7 +613,7 @@ graphic_alt	= "-"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 75
+build_cost	= 70
 upkeep		= 3
 sabotage	= 100
 sound		= "b_cathedral"
@@ -1339,7 +1339,7 @@ graphic_alt	= "b.palace"
 obsolete_by	=
     { "type", "name", "range"
     }
-build_cost	= 80
+build_cost	= 70
 upkeep		= 0
 sabotage	= 0
 sound		= "b_palace"
