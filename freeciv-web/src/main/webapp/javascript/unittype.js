@@ -220,7 +220,9 @@ player has a coastal city.
 **************************************************************************/
 function can_player_build_unit_direct(p, punittype)
 {
-
+  /* might be called on a null punittype, such as 
+     the non-existing type to which a unit upgrades: */
+  if (!punittype) return false;
 
   /*if (utype_has_flag(punittype, UTYF_NUCLEAR)
       && !get_player_bonus(p, EFT_ENABLE_NUKE) > 0) {
@@ -230,7 +232,6 @@ function can_player_build_unit_direct(p, punittype)
   /*if (utype_has_flag(punittype, UTYF_NOBUILD)) {
     return FALSE;
   }*/
-
 
   /*if (punittype->need_government
       && punittype->need_government != government_of_player(p)) {

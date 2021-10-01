@@ -1960,7 +1960,12 @@ function update_unit_order_commands()
     }
 
     // Upgrade unit: 1. Check if possible, 2. Check if upgrade unit can itself be upgraded. 3. Calculate upgrade cost. 4. Display orders with cost included.
-    if (pcity != null && ptype != null && unit_types[ptype['obsoleted_by']] != null && can_player_build_unit_direct(client.conn.playing, unit_types[ptype['obsoleted_by']])) {
+    if (pcity != null && ptype != null 
+        && unit_types[ptype['obsoleted_by']]
+        && (can_player_build_unit_direct(client.conn.playing, unit_types[ptype['obsoleted_by']])
+            // handle the case of "can updade to type after next"; e.g., warriors to musketeers without having feudalism:
+            || can_player_build_unit_direct(client.conn.playing, unit_types[unit_types[ptype['obsoleted_by']]['obsoleted_by']])) 
+        ) {
       //console.log(ptype['name']+" is allowed AT LEAST ONE upgrade. Beginning loop to check for higher upgrades.");
       var upgrade_type = unit_types[ptype['obsoleted_by']];
 
