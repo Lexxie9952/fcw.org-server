@@ -113,8 +113,11 @@ function update_nation_screen()
            + "</div></td>";
 
     var gov_modifier = get_gov_modifier(player_id, "", false);
+    var gov_text_modifier = get_gov_modifier(player_id, "", true);
+    if (gov_text_modifier) gov_text_modifier +=" ";
     var gov_indicator = (pplayer['government'] || player_gov_known(pplayer))
-                      ? "<img class='lowered_gov' src='/images/e/"+governments[pplayer['government']]['name'].toLowerCase() + gov_modifier+".png' title='"+governments[pplayer['government']]['name']+"'>" 
+                      ? "<img class='lowered_gov' src='/images/e/"+governments[pplayer['government']]['name'].toLowerCase() + gov_modifier+".png' title='"
+                        + gov_text_modifier+governments[pplayer['government']]['name']+"'>" 
                       : "<img class='lowered_gov' src='/images/e/unknowngov.png' title='Unknown Government'>"; 
     nation_list_html += "<td style='text-align:left;'>" + pplayer['name'] + "</td><td style='text-align:left;' title=\"" 
           + html_safe(nations[pplayer['nation']]['legend']) + "\">"
