@@ -319,7 +319,10 @@ function player_gov_known(pplayer) {
   }
 
   if (client.conn.playing) {
-    if (client.conn.playing.real_embassy[pplayer.playerno]) {
+    if (pplayer == client.conn.playing) {
+      return true;
+    }
+    else if (client.conn.playing.real_embassy[pplayer.playerno]) {
       // If you have an embassy it's NOT unknown gov, it's anarchy
       return true;
     }
