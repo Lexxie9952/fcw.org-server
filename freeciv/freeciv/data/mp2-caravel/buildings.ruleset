@@ -1685,8 +1685,8 @@ name		= _("Fusion Reactor")
 genus		= "SmallWonder"
 reqs	=
     { "type",     "name",          "range", "present", "quiet"
-      "Building", "Fusion Reactor","Player", FALSE,    TRUE
       "Tech",     "Fusion Power",  "Player", TRUE,     FALSE 
+      "Building", "Fusion Reactor","Player", FALSE,    TRUE
     }
 graphic	= "b.fusion_reactor_wonder"
 graphic_alt	= "-"
@@ -2767,10 +2767,10 @@ genus		= "SmallWonder"
 flags		= "VisibleByOthers"
 reqs	=
     { "type",     "name",     "range",  "present", "quiet"
+      "Tech",     "Masonry",  "Player",  TRUE,      FALSE
       "Building", "Ziggurat", "Player",  FALSE,     TRUE
       "Gov",      "Despotism","Player",  TRUE,      FALSE
       "Extra",    "River",    "Adjacent",TRUE,      FALSE
-      "Tech",     "Masonry",  "Player",  TRUE,      FALSE
     }
 graphic	= "b.ziggurat"
 graphic_alt	= "-"

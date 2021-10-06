@@ -2516,18 +2516,43 @@ function populate_worklist_production_choices(pcity)
     var can_build_later = false; // flag for items buildable after tech discovery or making a pre-req building
 
     // Let player add illegal choices which are legal after discovering current research
+    let req_num = undefined;
     if (!can_build && techs[client.conn.playing['researching']]) { // player must be researching something
       if (kind == VUT_IMPROVEMENT) {
+        // TODO: this whole block of code should be turned into function city_can_build_soon(improv_id,city_id)
         if (improvements[value]['reqs'].length > 0 && client.conn.playing['researching'] ) {
-          if (improvements[value]['reqs'][0]['value'] == techs[client.conn.playing['researching']]['id']) {
-            if (!city_has_building_in_queue(pcity, value)) {
-              // check if there is second req blocking this (i.e. req for coastal/river)
-              if (improvements[value]['reqs'].length > 1) {
-                //second req type, 1==tech, 3==building, 14=coastal, 23=river adjacency
-                var req_type = improvements[value]['reqs'][1]['kind'];
-                if (req_type > 3) can_build_later = false; // forbid unusual reqs (avoid showing illegal choices)
-                else can_build_later = true;
-              } else can_build_later = true; // no second req, so show item
+          /* FIX: former code assumed improvements[value]['reqs'][0]['kind'] == 1 (tech req kind), and that the 
+             ruleset has the tech req first. What this code does now is loop through all reqs looking for kind==1,
+             find the index of that req instead of hard-coding req index 0. This fixes bugs such as a req that
+             building 56 is not present in req index 0 was interpreted as improvement had tech 56 as a req, so if
+             researching tech 56, it would falsely show this improvement as "can_build_later."
+          ....................
+          Briefly tested fix which replaces hardcoded [0] with [req_num] for testing a positive tech requirement of
+          the improvement. Replaced the [0] with [req_num] in the code block below it...*/
+          for (req_index=0; req_index<improvements[value]['reqs'].length; req_index++) {
+            if (improvements[value]['reqs'][req_index]['kind'] == 1
+                && improvements[value]['reqs'][req_index]['present'] == true) {
+
+                // found a req that positively requires presence/possession of a tech; record the req_num and exit
+                req_num = req_index;
+                break;
+            }
+          } 
+          if (req_num !== undefined) { // <end fix> 
+            if (improvements[value]['reqs'][req_num]['value'] == techs[client.conn.playing['researching']]['id']) {
+              if (!city_has_building_in_queue(pcity, value)) {
+                // check if there is second req blocking this (i.e. req for coastal/river)
+                if (improvements[value]['reqs'].length > 1) {
+                  //second req type, 1==tech, 3==building, 14=coastal, 23=river adjacency
+                  var req_type = improvements[value]['reqs'][1]['kind'];
+                  // TODO: this lazy heuristic hack disqualifies all req_type>3 because checking for coastal is 14
+                  // but checking for other common stuff is almost always kind 1,2,3. TODO, a big chain of req type
+                  // checking in a separate function for seeing which reqs are fulfilled, gradually expanded as 
+                  // made necessary by rulesets...
+                  if (req_type > 3) can_build_later = false; // forbid unusual reqs (avoid showing illegal choices)
+                  else can_build_later = true;
+                } else can_build_later = true; // no second req, so show item
+              }
             }
           } 
         }
