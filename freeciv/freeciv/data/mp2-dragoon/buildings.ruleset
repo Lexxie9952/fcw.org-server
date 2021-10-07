@@ -563,16 +563,17 @@ sabotage	= 100
 sound		= "b_mfg_plant"
 sound_alt	= "b_generic"
 helptext	= _("\
-A Manufacturing Plant increases base production by +50%.\
+A Manufacturing Plant increases base production by +50%. \n\
 "), _("\
-A Mfg. Plant & Factory together double the production in a city.\
- That is, the Mfg. Plant adds another +50% to the +50% of the Factory.\
+ A Mfg. Plant & Factory together double the production in a city.\
+ That is, the Mfg. Plant adds another +50% to the +50% of the Factory. \n\
 "), _("\
-A Mfg. Plant with a Factory AND a Power, Hydro, Nuclear, or Solar Plant\
- will combine for a total +150% increase over base production.\
+ A Mfg. Plant with a Factory AND a Power or Hydro Plant\
+ will combine for a total +140% increase over base production.\
+ (With Nuclear Plant: +160%) \n\
 "), _("\   
-The pollution reduction of a Hydro, Nuclear, or Solar Plant is applied one more\
- time to cities with Mfg. Plants, effectively doubling the bonus percentage.\  
+ The pollution reduction of a Hydro, Nuclear, or Solar Plant is applied one more\
+ time to cities with Mfg. Plants, doubling the pollution reduction bonus.\n\  
 "), _("\
  This building lets you build one extra infantry unit per turn.\
 ")
