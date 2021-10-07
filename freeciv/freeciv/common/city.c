@@ -1398,9 +1398,15 @@ int city_improvement_upkeep(const struct city *pcity,
   if (NULL == b) {
     return 0;
   }
+  /* Q: Is there a need to hard-code wonder upkeep as 0 when rulesets
+     set it as 0 anyway, but MIGHT want to create wonders with upkeep?
+     A: No.  Removed 07.Oct.2022 
+     see: https://osdn.net/projects/freeciv/ticket/42993
+
   if (is_wonder(b)) {
     return 0;
   }
+  */
 
   upkeep = b->upkeep;
   /* For POSITIVE upkeep buildings, return 0 upkeep if they are within the
