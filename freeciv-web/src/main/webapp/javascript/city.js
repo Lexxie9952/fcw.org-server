@@ -601,7 +601,7 @@ function show_city_dialog(pcity)
       var upkeep = (improvements[z]['upkeep']-uk_bonus <= 0 && improvements[z]['upkeep'] >= 0) 
                    ? "none" 
       // positive upkeep OR upkeep that was already negative before bonus (so called "infra-support" improvement like wind plant which have neg. upkeep)             
-                   : (improvements[z]['upkeep']);
+                   : (improvements[z]['upkeep']+" gold");
 
       improvements_html = improvements_html +
        "<div id='city_improvement_element'><div class='buildings_present' style='background: transparent url("
