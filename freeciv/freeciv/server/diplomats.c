@@ -2044,6 +2044,22 @@ static bool diplomat_was_caught(struct player *act_player,
   if (odds<0) odds=0;       /* fc_rand 100% of time gives opposite result if odds<0 */
   if (odds>100) odds=100;   /* report odds higher than 100 as simply 100 */
   int your_roll = (int)fc_rand(100);
+
+/* DEBUG: For RNG/probability testing
+  int counts = 0;
+  for (int i=0;i<100;i++) {
+    your_roll = (int)fc_rand(100);
+    notify_player(act_player, NULL, E_UNIT_ACTION_TARGET_OTHER, ftc_server,
+                  _("<font color='#C0C0C0'><u>Operation Odds</u>: %d%%. (%d) %s</font>"),
+                  odds, your_roll, (your_roll < odds ? "<font color='#30D050'><b>SUCCESS!</b></font>"
+                                    : "<font color='#E04040'><b>FAILED!</b></font>"));
+
+    if (your_roll < odds) counts++;
+  }
+  notify_player(act_player, NULL, E_UNIT_ACTION_TARGET_OTHER, ftc_server,
+                _("%d successes."),
+                counts);
+*/
   /* Notify players of odds to provide transparency of what's going on!
    * Siege rams don't get "caught", but progress to next stage of sabotage resistance checking */
   if (strcmp(utype_name_translation(unit_type_get(act_unit)), "Siege Ram")!=0) {
