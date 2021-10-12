@@ -4846,8 +4846,8 @@ A Diplomat performs official or covert actions. Covert actions make incidents\
  • Sabotage random production or buildings • Steal tech • Steal maps • Incite city revolt. \n\
 Except for Bribing and Investigate City, diplomatic actions will spend the Diplomat,\
  making it unavailable for further use. Diplomats may claim a tile for your nation\
- if adjacent to a tile claim made inside your own national border. Tile claims require\
- the diplomat be accompanied by a military unit.\
+ if adjacent to a tile claim made inside your own national border. Foreign tile claims require\
+ the Diplomat be accompanied by another unit.\
 "), _("\
 Full rules for Diplomats are in the Manual.\
 ")

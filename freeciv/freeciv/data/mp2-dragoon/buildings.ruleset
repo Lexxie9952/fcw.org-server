@@ -2405,14 +2405,11 @@ sabotage	= 0
 sound		= "w_pax_dei"
 sound_alt	= "w_generic"
 helptext	= _("\
-Pax Dei is a social movement that uses philosophical and religious pressure\
- against war and violence. Shame and ostracism are socially applied to\
- make war nearly impossible. Pax Dei expires in 13 turns, when the\
- culture grows weary of its social pressures. \n\
+Pax Dei is a socio-philosophical movement against war and violence. \n\
 "), _("\
-All nations with Philosophy gain +2 unhappy about each aggressive military unit,\
- and a Senate for 13 turns. Nations with Monotheism fall completely under the\
- influence of Pax Dei：armies will refuse to attack unless defending their own\
+All nations with Philosophy gain +2 unhappy about each aggressive military\
+ unit, and a Senate. \n\
+Nations with Monotheism are unable to attack unless defending their own\
  domestic territory! \n\
 "), _("\
 Obsolete by: Theocracy, or 13 turns after built. \n\

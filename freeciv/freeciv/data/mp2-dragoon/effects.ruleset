@@ -5235,6 +5235,8 @@ reqs    =
       "type", "name", "range", "present"
       "Building", "Colossus", "City", TRUE
       "UnitFlag", "HelpWonder", "Local", TRUE
+      "UnitClass", "Land",      "Local", FALSE
+      "UnitClass", "LandRoad",  "Local", FALSE
       "Tech", "Steam Engine", "Player", FALSE
     }
 [effect_colossus_galley_discount]
@@ -5279,7 +5281,7 @@ reqs    =
     }
 [effect_colossus_goods_discount]
 type    = "Unit_Build_Cost_Pct"
-value	  = -20     ;25-5 = -20%
+value	  = -25     ;20-5 = -25%
 reqs    =
     {
       "type", "name", "range","present"

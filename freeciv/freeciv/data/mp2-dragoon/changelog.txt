@@ -35,8 +35,7 @@ makes this unit more favorable to early game economics.
 4. "Advisor" for buildings suggests an order similar to 
    an experienced player, instead of alphabetic.
 ============================================================
-5. LandRoad is native to Grassland, Plains, Tundra; just uses
-   a full move point.
+5. 
 ============================================================
 6. Under Despotism, All new cities get +2 food when
    founded (+4 for capital).

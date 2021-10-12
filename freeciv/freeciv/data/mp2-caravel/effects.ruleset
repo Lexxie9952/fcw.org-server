@@ -5032,6 +5032,8 @@ reqs    =
       "type", "name", "range", "present"
       "Building", "Colossus", "City", TRUE
       "UnitFlag", "HelpWonder", "Local", TRUE
+      "UnitClass", "Land",      "Local", FALSE
+      "UnitClass", "LandRoad",  "Local", FALSE
       "Tech", "Steam Engine", "Player", FALSE
     }
 [effect_colossus_galley_discount]
