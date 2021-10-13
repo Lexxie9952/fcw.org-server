@@ -5124,7 +5124,7 @@ The methodical logistics of modern shipping render the Freight unit：a cargo\
 "), _("\
 By itself, Freight is only able to move to tiles with loading infrastructure:\
  Cities, Quays, Fortresses, and Naval Bases. To be transported, it must be carried\
- by Train, Truck, Airplane, or ship. If adjacent to a foreign, use the D key to\
+ by Train, Truck, Airplane, or ship. If adjacent to a foreign city, use the D key to\
  do Commerce functions.\
 ")
 
