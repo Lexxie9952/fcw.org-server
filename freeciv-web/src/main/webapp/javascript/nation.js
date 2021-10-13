@@ -338,7 +338,9 @@ function player_gov_known(pplayer) {
 function get_turn_phase_state(pplayer, tiny_screen, redux_screen)
 {
     var pstate = " ";
-    if (pplayer['phase_done'] && !pplayer['flags'].isSet(PLRF_AI)) {
+    if (!pplayer['is_alive']) {
+      pstate = "Dead";
+    } else if (pplayer['phase_done'] && !pplayer['flags'].isSet(PLRF_AI)) {
       pstate = "Done";
     } else if (!pplayer['flags'].isSet(PLRF_AI)
                && pplayer['nturns_idle'] > 1) {
