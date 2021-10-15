@@ -1284,8 +1284,8 @@ function empire_econ_worklists_screen(wide_screen,narrow_screen,small_screen,
             shields_needed = universal_build_shield_cost(pcity, improvement)
           }
         }
-        title_text +=  finish_turns + " turns &nbsp;&nbsp;(" + get_production_progress(pcity) + ")\n\n"
         if (shields_needed != -1) { // -1 == coinage
+          title_text +=  finish_turns + " turns &nbsp;&nbsp;(" + get_production_progress(pcity) + ")\n\n"
           if (shields_invested>=shields_needed) { 
             bg = "background:#BFBE ";
             border = "border:2x solid 308000;"
