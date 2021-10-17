@@ -279,33 +279,8 @@ function civclient_init()
   if (play_music == null) {
     play_music = is_longturn(); // singleplayer defaults off for server bandwidth savings
   }
-  // --------------------------------------------------------------------------------   
-  /* Initialze audio.js music player */
-  audiojs.events.ready(function() {
-    var as = audiojs.createAll({
-          trackEnded: function() {
-            if (supports_mp3()) {
-              if (pick_next_track()) audio.play();
-            }
-          },
-          play: function() {
-            play_music = true;
-            simpleStorage.set('play_music', true);
-            $(".play").show();
-            $(".pause").hide();
-            $(".error").hide();
-          },
-          pause: function() {
-            play_music = false;
-            simpleStorage.set('play_music', false);
-            $(".pause").show();
-            $(".play").hide();
-            $(".error").hide();
-          }
-        });
-    audio = as[0];
-    audio.setVolume(0.10); // make music proportionate to other sound effects 
-  });
+
+  audio_initialize();
 
   //------------------------------------------------------------------------------------------------
   if (link_game_type == 'singleplayer#') link_game_type = 'singleplayer';
