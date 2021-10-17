@@ -35,7 +35,8 @@ makes this unit more favorable to early game economics.
 4. "Advisor" for buildings suggests an order similar to 
    an experienced player, instead of alphabetic.
 ============================================================
-5. 
+5. Fix, Transport inaccurately documented as causing
+   unhappiness. (Units with 0 Attack do not cause unhappy)
 ============================================================
 6. Under Despotism, All new cities get +2 food when
    founded (+4 for capital).
