@@ -5728,6 +5728,7 @@ reqs	=
 [effect_medici_coins_bank]
 ;Changes require changes to city_force_income_update() in city.js
 type    = "Coinage_Bonus_Pm"
+;EFT_COINAGE_BONUS_PM does precise bankers (not trunc rounding)
 value   = 140 ; Marketplace + Bank = 2 * .07 = 140 per mille
 reqs    =
     { "type",     "name",         "range", "present"
@@ -5740,6 +5741,7 @@ reqs    =
 ;Changes require changes to city_force_income_update() in city.js
 [effect_medici_coins_stock_exchange]
 type    = "Coinage_Bonus_Pm"
+;EFT_COINAGE_BONUS_PM does precise bankers rounding (not trunc rounding)
 value   = 158 ; MP + Bank + SE = 2.25 * .07 = 157.5 per mille
 reqs    =
     { "type",      "name",          "range", "present"
@@ -5751,7 +5753,12 @@ reqs    =
     }
 [effect_medici_gold]
 type    = "Output_Bonus_2"
-value	= 7
+; Output_Bonus_2 uses trunc rounding. True +7% is achieved knowing the following:
+; 8% with trunc rounding: x̄ = +7.06% gold. (median is slightly lower)
+; 7% with trunc rounding: x̄ = +5.96% gold. (median is lower)
+; (NB: bonus suffers somewhat more under lower gold tax rates)
+; If changing from 7% to another value, use "Medici Rounding.ods" to calibrate
+value	= 8  
 reqs    =
     { "type",     "name",        "range", "present"
       "Building", "Medici Bank", "Player", TRUE
