@@ -5763,7 +5763,6 @@ reqs    =
     { "type",     "name",        "range", "present"
       "Building", "Medici Bank", "Player", TRUE
       "Building", "Bank",        "City",   TRUE
-      "Building", "Marketplace", "City",   TRUE
       "Gov",      "Communism",   "Player", FALSE
     }
 ;************************************************************************ Michelangelo
