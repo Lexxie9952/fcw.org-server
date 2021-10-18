@@ -2964,9 +2964,7 @@ static struct setting settings[] = {
              "2: ➤ Segregated:  This value is identical to 1, if "
              "slot_control is off.\n"
              "3: ➤ Same Type Only: Multiple City Build Slots can only be "
-             "used when the worklist repeats the exact same type of unit.\n"
-             "---\nIn any and all cases, population units and unique units can "
-             "never be produced in the same turn as any other unit."),
+             "used when the worklist repeats the exact same type of unit."),
           NULL, NULL, NULL,
           GAME_MIN_SLOT_CONTROL_STYLE, GAME_MAX_SLOT_CONTROL_STYLE,
           GAME_DEFAULT_SLOT_CONTROL_STYLE)
