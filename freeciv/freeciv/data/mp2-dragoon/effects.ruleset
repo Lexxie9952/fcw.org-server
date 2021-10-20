@@ -3982,6 +3982,14 @@ reqs    =
       "Building", "Hoover Dam" ,    "Player", TRUE
       "Building", "Hydro Plant",    "Local",  TRUE
     }
+[effect_hoover_city_build_slots]
+type    = "City_Build_Slots"
+value   = 2  ; counts as Factory + Mfg.Plant in its city
+reqs    =
+    { "type", "name", "range", "present"
+      "Tech", "Conscription", "Player", TRUE
+      "Building", "Hoover Dam", "City", TRUE
+    }
 ;Waiting on an Effect which can compare or inject range value.
 ;[effect_hoover_hydro_upkeep]
 ;type    = "Upkeep_Reduce"
@@ -6962,6 +6970,7 @@ reqs    =
     { "type", "name", "range", "present"
       "Tech", "Conscription", "Player", TRUE
       "Building", "Factory", "City", TRUE
+      "Building", "Hoover Dam", "City", FALSE
     }
 [effect_city_build_slots_mfg_plant]
 type    = "City_Build_Slots"
@@ -6970,6 +6979,7 @@ reqs    =
     { "type", "name", "range", "present"
       "Tech", "Conscription", "Player", TRUE
       "Building", "Mfg. Plant", "City", TRUE
+      "Building", "Hoover Dam", "City", FALSE
     }
 
 [effect_city_image_1]
