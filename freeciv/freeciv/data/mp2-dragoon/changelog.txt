@@ -54,7 +54,8 @@ makes this unit more favorable to early game economics.
    6/16 rather than 5/20 compensates the increase in cost and
    science requirements. Pyramid strategies will be more
    non-conformist, rare, and more of a commitment, but also
-   more interesting.
+   more interesting. Pyramids must be built before 
+   discovering Democracy.
 ============================================================
 8. Partisans can investigate conquered cities not owned 
    by the original owner.
