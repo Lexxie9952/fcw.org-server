@@ -17,6 +17,12 @@
 
 ***********************************************************************/
 
+var citydlg_map_width = 384;      // default values for most rulesets
+var citydlg_map_height = 192;     // default value for most rulesets
+
+const tileset_width = 96;         // amplio2 based tileset
+const tileset_height = 48;
+
 income_calculated_by_client = false;
 
 var cities = {};
@@ -502,6 +508,7 @@ function show_city_dialog(pcity)
   $("#worklist_dialog_headline").unbind('click');
   $("#worklist_dialog_headline").click(function(ev) { ev.stopImmediatePropagation(); city_remove_current_prod()} );
 
+  set_citydlg_dimensions(pcity);
   set_city_mapview_active();
 
   // Center map on area around city for when they leave the city
@@ -4505,4 +4512,35 @@ function get_citywalls_scale(pcity)
   }
 
   return scale;
+}
+
+/**************************************************************************
+ Set the city canvas size for a city based on its radius
+**************************************************************************/
+function set_citydlg_dimensions(pcity)
+{
+  var city_radius = pcity.city_radius_sq;
+
+  var radius_tiles = Math.ceil(Math.sqrt(city_radius));
+
+  var old_width = citydlg_map_width;
+  var old_height = citydlg_map_height;
+
+  citydlg_map_width = tileset_width + radius_tiles * tileset_width;
+  citydlg_map_height = tileset_height + radius_tiles * tileset_height;
+
+  if (old_width == citydlg_map_width
+    && old_height == citydlg_map_height) {
+/*  If city map window is not resized but same as before, exiting early
+    gives a performance savings from avoiding canvas resize functions.   */
+    return;
+  }
+
+  //DEBUG
+  //console.log("%d,%d",citydlg_map_width,citydlg_map_height)
+
+  $("#city_canvas_div").css({"width":citydlg_map_width, "height":citydlg_map_height});
+  $("#city_canvas").css({"width":citydlg_map_width, "height":citydlg_map_height});
+  $("#city_canvas").attr('width', citydlg_map_width);
+  $("#city_canvas").attr('height', citydlg_map_height);
 }

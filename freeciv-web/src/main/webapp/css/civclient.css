@@ -2263,8 +2263,8 @@ input[type="email" i], #email {
 }
 
 #city_canvas_div {
-  width: 350px; 
-  height: 175px; 
+  width: 384px; 
+  height: 192px; 
   float: left;
   margin: 5px;
   border: 1px solid #888888;
