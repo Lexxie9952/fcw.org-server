@@ -4529,18 +4529,11 @@ function set_citydlg_dimensions(pcity)
   citydlg_map_width = tileset_width + radius_tiles * tileset_width;
   citydlg_map_height = tileset_height + radius_tiles * tileset_height;
 
-  if (old_width == citydlg_map_width
-    && old_height == citydlg_map_height) {
-/*  If city map window is not resized but same as before, exiting early
-    gives a performance savings from avoiding canvas resize functions.   */
-    return;
-  }
-
   //DEBUG
   //console.log("%d,%d",citydlg_map_width,citydlg_map_height)
 
   $("#city_canvas_div").css({"width":citydlg_map_width, "height":citydlg_map_height});
-  $("#city_canvas").css({"width":citydlg_map_width, "height":citydlg_map_height});
+  //$("#city_canvas").css({"width":citydlg_map_width, "height":citydlg_map_height});
   $("#city_canvas").attr('width', citydlg_map_width);
   $("#city_canvas").attr('height', citydlg_map_height);
 }
