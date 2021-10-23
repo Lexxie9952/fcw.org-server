@@ -2344,6 +2344,12 @@ function handle_team_name_info(packet)
   /* TODO: implement */
 }
 
+function handle_ruleset_multiplier(packet)
+{
+  /* TODO: implement */
+}
+
+
 /************************************************************************//**
   Returns true if the sound of an event in the chat_log history should not
   be played because the client is in a cooldown after launch, and not 
