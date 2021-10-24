@@ -428,6 +428,8 @@ function create_diplomacy_dialog(counterpart, template) {
     var wto;
     $("#counterpart_gold_" + counterpart_id).change(function() {
       clearTimeout(wto);
+      $("#counterpart_gold_" + counterpart_id).val(
+        Math.min(Math.abs($("#counterpart_gold_" + counterpart_id).val()),counterpart['gold']));
       wto = setTimeout(function() {
         meeting_gold_change_req(counterpart_id, counterpart_id,
                                 parseFloat($("#counterpart_gold_" + counterpart_id).val()));
@@ -436,6 +438,8 @@ function create_diplomacy_dialog(counterpart, template) {
 
     $("#self_gold_" + counterpart_id).change(function() {
       clearTimeout(wto);
+      $("#self_gold_" + counterpart_id).val(
+        Math.min(Math.abs($("#self_gold_" + counterpart_id).val()),pplayer['gold']));
       wto = setTimeout(function() {
         meeting_gold_change_req(counterpart_id, pplayer['playerno'],
                                 parseFloat($("#self_gold_" + counterpart_id).val()));
@@ -551,7 +555,7 @@ function meeting_gold_change_req(counterpart_id, giver, gold)
     }
   }
 
-  if (gold != 0) {
+  if (gold > 0) {
     var packet = {"pid" : packet_diplomacy_create_clause_req,
                   "counterpart" : counterpart_id,
                   "giver" : giver,
