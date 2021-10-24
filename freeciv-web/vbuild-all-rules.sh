@@ -1,7 +1,7 @@
 #!/bin/bash
 # builds Freeciv-web, copies the war file to Tomcat and builds the selected rulesets.
 
-RULESETS=(classic civ1 civ2 civ2civ3 sandbox webperimental multiplayer mpplus mp2 ag mp2-brava mp2-caravel mp2-dragoon)
+RULESETS=(mp2-dragoon mp2-caravel mp2-brava mpplus classic civ2civ3 multiplayer civ1 civ2 ag mp2 sandbox webperimental experimental)
 TOPDIR="$( cd ../"$( dirname "${BASH_SOURCE[0]}" )" > /dev/null && pwd )"
 
 printf "\nThis script may solve issues with Game Manual generation for vagrant users.\n"
