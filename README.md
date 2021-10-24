@@ -198,7 +198,7 @@ some tasks you can work on. Pull requests on Github is welcome!
 Contributors to Freeciv-web
 ---------------------------
 Andreas Røsdal  [@andreasrosdal](https://github.com/andreasrosdal)  
-Lexxie9952 (https://discordapp.com/users/Lexxie9952)(https://github.com/Lexxie9952)
+Lexxie9952 [@lexxie9952](https://discordapp.com/users/Lexxie9952)(https://github.com/Lexxie9952)
 Marko Lindqvist [@cazfi](https://github.com/cazfi)  
 Sveinung Kvilhaugsvik [@kvilhaugsvik](https://github.com/kvilhaugsvik) 
 Gerik Bonaert [@adaxi](https://github.com/adaxi)  
