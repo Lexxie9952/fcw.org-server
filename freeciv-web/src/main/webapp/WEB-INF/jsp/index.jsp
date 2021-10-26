@@ -488,10 +488,10 @@
 					<div class="panel-freeciv">
 						<h4><fmt:message key="index-credits"/></h4>
 						<ul>
-							<li>Andreas R&oslash;sdal <i class="fa fa-twitter"></i>  <a href="https://github.com/andreasrosdal/">@andreasrosdal</a></li>
 							<li>Lexxie L. <i class="fa fa-github"></i>  <a href="https://github.com/Lexxie9952/">@lexxie9952</a></li>
-							<li>Sveinung Kvilhaugsvik <i class="fa fa-github"></i>  <a href="https://github.com/kvilhaugsvik">@kvilhaugsvik</a></li>
+							<li>Andreas R&oslash;sdal <i class="fa fa-twitter"></i>  <a href="https://github.com/andreasrosdal/">@andreasrosdal</a></li>
 							<li>Marko Lindqvist <i class="fa fa-github"></i>  <a href="https://github.com/cazfi">@cazfi</a></li>
+							<li>Sveinung Kvilhaugsvik <i class="fa fa-github"></i>  <a href="https://github.com/kvilhaugsvik">@kvilhaugsvik</a></li>
 							<li>M&#xE1;ximo Casta&#xF1;eda <i class="fa fa-github"></i>  <a href="https://github.com/lonemadmax">@lonemadmax</a></li>
 							<li><a href="https://github.com/Lexxie9952/fcw.org-server/graphs/contributors">Full list</a></li>
 						</ul>
