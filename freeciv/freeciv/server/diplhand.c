@@ -299,7 +299,7 @@ void handle_diplomacy_accept_treaty_req(struct player *pplayer,
           }
           break;
 	case CLAUSE_GOLD:
-	  if (pplayer->economic.gold < pclause->value) {
+	  if (pplayer->economic.gold < pclause->value || pclause->value < 0) {
             notify_player(pplayer, NULL, E_DIPLOMACY, ftc_server,
 			  _("You don't have enough gold, "
 			    "you can't accept treaty."));
