@@ -4519,16 +4519,25 @@ function get_citywalls_scale(pcity)
 **************************************************************************/
 function set_citydlg_dimensions(pcity)
 {
-  var city_radius = pcity.city_radius_sq;
-
-  var radius_tiles = Math.ceil(Math.sqrt(city_radius));
-
-  var old_width = citydlg_map_width;
-  var old_height = citydlg_map_height;
+  var radius_tiles = Math.ceil(Math.sqrt(pcity.city_radius_sq));
 
   citydlg_map_width = tileset_width + radius_tiles * tileset_width;
   citydlg_map_height = tileset_height + radius_tiles * tileset_height;
 
+  /* In some cases the formula needs adjustment */ 
+  switch (pcity.city_radius_sq) {
+    case 3:
+    case 4:
+    case 8:
+    case 9:
+      citydlg_map_height += tileset_height;
+    break;
+    default:
+      if (pcity.city_radius_sq > 17) {
+        citydlg_map_width += tileset_width;
+        citydlg_map_height += tileset_height;
+      }
+  }
   //DEBUG
   //console.log("%d,%d",citydlg_map_width,citydlg_map_height)
 
