@@ -127,6 +127,17 @@
 		<url-pattern>/hall_of_fame</url-pattern>
 	</servlet-mapping>
 
+	<!-- /ToS -->
+	<servlet>
+		<servlet-name>TermsOfService</servlet-name>
+		<servlet-class>org.freeciv.servlet.TermsOfService</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>TermsOfService</servlet-name>
+		<url-pattern>/rules</url-pattern>
+	</servlet-mapping>
+
 	<!-- /civclientlauncher (game launcher servlet) -->
 	<servlet>
 		<servlet-name>CivclientLauncher</servlet-name>
