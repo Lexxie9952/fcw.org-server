@@ -208,52 +208,6 @@ and the [Freeciv.org project](http://freeciv.wikia.com/wiki/People)!
 
 About FCW and this repository
 -----------------------------
-FCW is a volunteer effort and an open source project of a private community that does not
-sell/distribute its work under the GPL definition of distribution. 
-
-For our users and developers, FCW publishes its source code.
-
-FCW's source code is provided on this repository regardless of whether you are a user or contributing
-developer. Note that this provision is _bona voluntas_, as our licenses specifically allow us to limit
-releases only to our users and contributing developers.
-
-By using the FCW website, you voluntarily choose to be in a provider/user relationship under
-our Terms of Service.
-
-FCW is NOT required to involuntarily enter into relations with any user or developer; nor accept code
-from any developer. We reserve the right to not do so. Freeciv voluntarily accepts those users who by
-their own volition enter a provider/usership relation with us by accepting the Terms of Service of the
-private community under which we provide our service. We accept code from developers who voluntarily
-agree to our software licenses, that the content they submit is immediately under that license, and
-that they agree to our Repository Policy. (Before submission, you may request that your source code
-be accepted with conditional exceptions to our Repository Policy, and we may or may not agree to that
-exception.)
-
-Any entity that uses our site or submits code, in so doing agrees to not limit the rights we reserve for 
-free and unencumbered operation. Any relation with us is conditional to this, and to the software
-licenses under which we operate. In any case where an interpretation of our Terms of Service or
-Repository Policy can be established to be in non-accordance with our licenses, the latter shall be
-assumed to be what is operative.
-
-You have our permission to access our service, for free, if you accept our Terms of Service. In so doing,
-you are choosing to be a private member of a private internal community. FCW reserves the right to refuse
-membership to anyone. 
-----
-By submitting a **Pull Request** to this repository,
-1. You agree, as per our licenses, that FCW may use and modify submitted content freely and without
-restriction.
-2. Per our licenses, you maintain the right to use any contribution you have made in any other project
-or license, whatsoever, to the degree that it does not encumber (1), as above. That is, you maintain
-all rights to use your submitted code wherever and however, without encumbering our right to do the same.
-3. This means we may do, but are not limited to do, the following: Release as the licensor: freeciv
-server code under GPL licensing or AGPL licensing; freeciv-web code under AGPL licensing; audio/art or
-other content under whatever appropriate licensing or exemptions may allow or entitle such.  
-4. You agree we will not be obstructed from re-releasing or repackaging any contributed part of the
-project as we deem necessary or desirable, whether for future release of this project or other projects,
-including but not limited to changes required to accomplish or facilitate compliance with other component
-licensing, and/or maintaining the ability to deliver our services.
-
-*Statements made above are inclusive to our Terms of Service. No statement made above shall be deemed
-as FCW or its maintainers implicitly waiving any rights or overriding any Common Law of a jurisdiction
-we fall under, nor any license under which we operate.
+HELP! We have a dispute against this repository!
+Licensing restrictions not contained in the (A)GPL have been legally threatened against this repository. They seek to restrict our repository- and user- policies from having content allowed by our licenses. Claiming additional restrictions not contained within a license, misrepresenting them as being within that license, and threatening legal enforcement of said restrictions, legally qualifies as a breach of the license by the parties making the claim. Please be patient. FCW has suspended its Repository Policy pending resolution of the licensing infractions against us.
 
