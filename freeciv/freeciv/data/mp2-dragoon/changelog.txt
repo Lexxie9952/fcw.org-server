@@ -143,6 +143,8 @@ makes this unit more favorable to early game economics.
 =============================================================
 25. Cathedral costs 70 (was 75)
 =============================================================
-
+26. Nationalism is +20% sci in original cities
+    balances that -15% is global for lux 
+=============================================================
 
 

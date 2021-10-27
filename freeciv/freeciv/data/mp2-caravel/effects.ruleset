@@ -2040,11 +2040,11 @@ value   = -20
 reqs    =
     { "type", "name", "range"
       "Gov", "Theocracy", "Player"
-      "OutputType", "science", "local"
+      "OutputType", "Science", "local"
     }
 [effect_tithes_theocracy_1]
 type    = "Happiness_To_Gold" 
-value   = 1 ; really, 1 gold for a temple that costs 1 gold, it's nothing, we need 1.5x
+value   = 1
 reqs    = 
     { "type", "name", "range" 
       "Gov", "Theocracy", "Player" 
@@ -2055,7 +2055,7 @@ value   = 20
 reqs    =
     { "type", "name", "range"
       "Gov", "Theocracy", "Player"
-      "OutputType", "gold", "local"
+      "OutputType", "Gold", "local"
     }
 [effect_bad_lux_nationalism]
 type    = "Output_Bonus_2"
@@ -5768,10 +5768,11 @@ type    = "Output_Bonus_2"
 ; If changing from 7% to another value, use "Medici Rounding.ods" to calibrate
 value	= 8  
 reqs    =
-    { "type",     "name",        "range", "present"
-      "Building", "Medici Bank", "Player", TRUE
-      "Building", "Bank",        "City",   TRUE
-      "Gov",      "Communism",   "Player", FALSE
+    { "type",       "name",        "range", "present"
+      "Building",   "Medici Bank", "Player", TRUE
+      "Building",   "Bank",        "City",   TRUE
+      "OutputType", "Gold",        "Local",  TRUE
+      "Gov",        "Communism",   "Player", FALSE
     }
 ;************************************************************************ Michelangelo
 [effect_michelangelos_chapel]
