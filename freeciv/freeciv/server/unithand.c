@@ -1620,6 +1620,9 @@ static void explain_why_no_action_enabled(struct unit *punit,
 
         notify_player(pplayer, unit_tile(punit),
                       E_BAD_COMMAND, ftc_server,
+                      /* TRANS: terrain name
+                       * "Your Diplomat cannot act from Ocean. Only
+                       * Spy or Partisan ... */
                       _("Your %s cannot act from %s. "
                         "Only %s can act from a non livable tile."),
                       unit_name_translation(punit),
@@ -1629,6 +1632,7 @@ static void explain_why_no_action_enabled(struct unit *punit,
         astr_free(&astr);
       } else {
         notify_player(pplayer, unit_tile(punit), E_BAD_COMMAND, ftc_server,
+                      /* TRANS: terrain name */
                       _("Unit cannot act from %s."),
                       terrain_name_translation(explnat->no_act_terrain));
       }
@@ -1636,6 +1640,7 @@ static void explain_why_no_action_enabled(struct unit *punit,
     break;
   case ANEK_BAD_TERRAIN_TGT:
     notify_player(pplayer, unit_tile(punit), E_BAD_COMMAND, ftc_server,
+                  /* TRANS: terrain name */
                   _("Unit cannot act against %s."),
                   terrain_name_translation(explnat->no_act_terrain));
     break;
