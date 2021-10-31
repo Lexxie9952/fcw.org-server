@@ -2301,8 +2301,8 @@ void illegal_action_msg(struct player *pplayer,
     notify_player(pplayer, unit_tile(actor),
                   event, ftc_server,
                   /* TRANS: action name.
-                   * "Your Spy has ... to Bribe Enemy Unit." */
-                  _("Your %s %s too few moves left to %s."),
+                   * "Your Spy has ... to do Bribe Enemy Unit." */
+                  _("Your %s %s too few moves left to do %s."),
                   unit_name_translation(actor),
                   (is_unit_plural(actor) ? "have" : "has"),
                   action_id_name_translation(stopped_action));
@@ -2463,8 +2463,8 @@ void illegal_action_msg(struct player *pplayer,
     notify_player(pplayer, unit_tile(actor),
                   event, ftc_server,
                   /* TRANS: action name.
-                   * "Your Spy was unable to Bribe Enemy Unit." */
-                  _("Your %s %s unable to %s."),
+                   * "Your Spy was unable to do Bribe Enemy Unit." */
+                  _("Your %s %s unable to do %s."),
                   unit_name_translation(actor),
                   (is_unit_plural(actor) ? "were" : "was"),                    
                   action_id_name_translation(stopped_action));
