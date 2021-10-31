@@ -144,14 +144,13 @@ void do_tech_parasite_effect(struct player *pplayer)
 {
   struct effect_list *plist = effect_list_new();
   struct astring effects;
-  struct research *presearch;
+  struct research *plr_research;
   char research_name[MAX_LEN_NAME * 2];
   const char *advance_name;
   Tech_type_id tech;
   /* Note that two EFT_TECH_PARASITE effects will combine into a single,
    * much worse effect. */
   int mod = get_player_bonus_effects(plist, pplayer, EFT_TECH_PARASITE);
-  int num_players;
   int num_techs;
 
   if (mod <= 0) {
@@ -163,25 +162,27 @@ void do_tech_parasite_effect(struct player *pplayer)
   /* Pick a random technology. */
   tech = A_UNSET;
   num_techs = 0;
-  presearch = research_get(pplayer);
+  plr_research = research_get(pplayer);
   advance_index_iterate(A_FIRST, i) {
-    if (!research_invention_gettable(presearch, i,
+    int num_teams;
+
+    if (!research_invention_gettable(plr_research, i,
                                      game.info.tech_parasite_allow_holes)
-        || TECH_KNOWN == research_invention_state(presearch, i)) {
+        || TECH_KNOWN == research_invention_state(plr_research, i)) {
       continue;
     }
 
-    num_players = 0;
-    players_iterate(aplayer) {
-      if (TECH_KNOWN == research_invention_state(research_get(aplayer), i)) {
-        if (mod <= ++num_players) {
+    num_teams = 0;
+    researches_iterate(other_research) {
+      if (TECH_KNOWN == research_invention_state(other_research, i)) {
+        if (mod <= ++num_teams) {
           if (0 == fc_rand(++num_techs)) {
             tech = i;
           }
           break;
         }
       }
-    } players_iterate_end;
+    } researches_iterate_end;
   } advance_index_iterate_end;
 
   if (A_UNSET == tech) {
@@ -191,8 +192,8 @@ void do_tech_parasite_effect(struct player *pplayer)
   }
 
   /* Notify. */
-  research_pretty_name(presearch, research_name, sizeof(research_name));
-  advance_name = research_advance_name_translation(presearch, tech);
+  research_pretty_name(plr_research, research_name, sizeof(research_name));
+  advance_name = research_advance_name_translation(plr_research, tech);
   astr_init(&effects);
   get_effect_list_req_text(plist, &effects);
 
@@ -203,7 +204,7 @@ void do_tech_parasite_effect(struct player *pplayer)
                 (game.server.blueprints ? _("blueprints for ") : _("")),
                 advance_name,
                 astr_str(&effects));
-  notify_research(presearch, pplayer, E_TECH_GAIN, ftc_server,
+  notify_research(plr_research, pplayer, E_TECH_GAIN, ftc_server,
                   /* TRANS: Tech from source of an effect
                    * (Great Library) */
                   Q_("?fromeffect:💡 %s%s acquired from %s's %s!"),
@@ -211,7 +212,7 @@ void do_tech_parasite_effect(struct player *pplayer)
                   advance_name,
                   player_name(pplayer),
                   astr_str(&effects));
-  notify_research_embassies(presearch, NULL, E_TECH_EMBASSY, ftc_server,
+  notify_research_embassies(plr_research, NULL, E_TECH_EMBASSY, ftc_server,
                             /* TRANS: Tech from source of an effect
                              * (Great Library) */
                             Q_("?fromeffect:💡 The %s have acquired %s%s from %s."),
@@ -226,12 +227,13 @@ void do_tech_parasite_effect(struct player *pplayer)
   if (game.server.blueprints) { /* Give blueprints instead of tech */
     int blueprint_discount = game.server.freecost ?
                              100-game.server.freecost : game.server.blueprints;
-    found_new_blueprint(presearch, tech, blueprint_discount);
+
+    found_new_blueprint(plr_research, tech, blueprint_discount);
   }
   else { /* Really get tech. */
-    research_apply_penalty(presearch, tech, game.server.freecost);
-    found_new_tech(presearch, tech, FALSE, TRUE);
-    research_players_iterate(presearch, member) {
+    research_apply_penalty(plr_research, tech, game.server.freecost);
+    found_new_tech(plr_research, tech, FALSE, TRUE);
+    research_players_iterate(plr_research, member) {
       script_server_signal_emit("tech_researched", advance_by_number(tech),
                                 member, "stolen");
     } research_players_iterate_end;
