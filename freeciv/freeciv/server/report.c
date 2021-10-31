@@ -1086,7 +1086,7 @@ void report_demographics(struct connection *pconn)
 {
   char civbuf[2048];
   char buffer[8192];
-  unsigned int i;
+  int i;
   bool anyrows;
   bv_cols selcols;
   int numcols = 0;
