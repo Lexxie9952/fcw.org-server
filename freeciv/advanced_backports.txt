@@ -1,4 +1,11 @@
-This is a list of what is backported in advance of the convergence backporting commits being done by cazfi:
+As of 02-Nov-21,
+current baseline of the https://github.com/freeciv/freeciv used by FCW is commit
+7be357005455ab53e97eb95aa9a196e9fb86aa9e
+
+------------------------------------------------------------------------------
+
+This is a list of what is backported in advance of the convergence backporting
+commits being done by cazfi:
 
 Keep the list sorted by the order they were committed to upstream Freeciv.
 Commit is the commit ID hash in the upstream Freeciv git repository.
