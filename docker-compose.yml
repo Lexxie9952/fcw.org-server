@@ -7,7 +7,7 @@ services:
     container_name: fcw.org
     command: ["sleep", "infinity"]
     volumes:
-      - "data:/var/lib/tomcat8/webapps/data"
+      - "data:/var/lib/tomcat9/webapps/data"
     ports:
       - "80:80"
       - "4002"
