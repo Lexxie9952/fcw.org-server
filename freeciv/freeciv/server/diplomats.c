@@ -2173,7 +2173,9 @@ static bool diplomat_success_vs_defender(struct unit *pattacker,
   - Return TRUE if the infiltrator succeeds.
 
   'pplayer' is the player who tries to do a spy/diplomat action on 'ptile'
-  with the unit 'pdiplomat' against 'cplayer'.
+  with the unit 'pdiplomat' against 'cplayer'. If 'cplayer' is NULL the
+  owner of the chosen defender, if a defender can be chosen, gets its
+  role.
 ****************************************************************************/
 static bool diplomat_infiltrate_tile(struct player *pplayer,
                                      struct player *cplayer,
@@ -2280,8 +2282,8 @@ static bool diplomat_infiltrate_tile(struct player *pplayer,
                       pdiplomat_emoji, link_diplomat);
 
         if (pcity) {  // pplayer succeeded in eliminating a spy from cplayer's city.
-          if (uplayer == cplayer) {
-            notify_player(cplayer, ptile, E_MY_DIPLOMAT_FAILED, ftc_server,
+          if (uplayer == cplayer || cplayer == NULL) {
+            notify_player(uplayer, ptile, E_MY_DIPLOMAT_FAILED, ftc_server,
                           /* TRANS: <unit> ... <city> ... <diplomat> */
                           _(" ⚠️ Your %s %s has been eliminated defending %s"
                             " against %s %s %s %s."), link_unit, UNIT_EMOJI(punit),
@@ -2357,8 +2359,8 @@ static bool diplomat_infiltrate_tile(struct player *pplayer,
                       UNIT_EMOJI(punit), link_unit);
 
         if (pcity) {
-          if (uplayer == cplayer) {
-            notify_player(cplayer, ptile, E_ENEMY_DIPLOMAT_FAILED, ftc_server,
+          if (uplayer == cplayer || cplayer == NULL) {
+            notify_player(uplayer, ptile, E_ENEMY_DIPLOMAT_FAILED, ftc_server,
                           _(" 💥 Your %s %s eliminated %s %s %s %s who attacked %s."),
                           UNIT_EMOJI(punit), link_unit,
                           indefinite_article_for_word(nation_adjective_for_player(pplayer),false),
