@@ -4132,12 +4132,9 @@ action_prob(const action_id wanted_action,
 
   switch (wanted_action) {
   case ACTION_SPY_POISON:
-    /* TODO */
-    break;
   case ACTION_SPY_POISON_ESC:
     /* All uncertainty comes from potential diplomatic battles. */
     chance = ap_diplomat_battle(actor_unit, NULL, target_tile);
-    chance = ACTPROB_NOT_IMPLEMENTED; // FCW doesn't want false prob of 100% shown.
     break;
   case ACTION_SPY_STEAL_GOLD:
     /* TODO */
