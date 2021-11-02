@@ -2533,6 +2533,7 @@ static void show_votes(struct connection *caller)
                   "%d against, and %d abstained out of %d players."),
                 title, pvote->vote_no, pvote->cmdline,
                 MIN(100, pvote->need_pc * 100 + 1),
+                /* TRANS: preserve leading space */
                 pvote->flags & VCF_NODISSENT ? _(" no dissent") : "",
                 pvote->yes, pvote->no, pvote->abstain, count_voters(pvote));
       count++;
@@ -6892,6 +6893,7 @@ static void show_delegations(struct connection *caller)
                   _("Control over player '%s' delegated to %s%s."),
                   player_name(pplayer),
                   player_name(player_by_user(delegate_to)),
+                  /* TRANS: preserve leading space */
                   player_delegation_active(pplayer) ? _(" (active)") : "");
       } else {
         cmd_reply(CMD_LIST, caller, C_COMMENT,
@@ -7039,6 +7041,7 @@ void show_players(struct connection *caller)
                         cmdlevel_name(pconn->access_level),
                         (pconn->send_buffer->nsize >> 10));
             if (pconn->observer) {
+              /* TRANS: preserve leading space */
               sz_strlcat(buf, _(" (observer mode)"));
             }
             cmd_reply(CMD_LIST, caller, C_COMMENT, "    %s", buf);
