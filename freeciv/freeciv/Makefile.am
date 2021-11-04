@@ -3,12 +3,6 @@
 ACLOCAL_AMFLAGS = -I m4 -I dependencies/m4
 AM_DIST_FORMATS = gzip xz zip
 
-if CLIENT
-CSUBDIRS = client
-else
-CSUBDIRS = 
-endif
-
 if SRV_LIB
 SSUBDIRS = ai server
 else
@@ -21,7 +15,7 @@ else
 DSUBDIRS =
 endif
 
-SUBDIRS = gen_headers $(DSUBDIRS) dependencies utility common tests windows $(SSUBDIRS) $(CSUBDIRS) translations doc tools lua bootstrap
+SUBDIRS = gen_headers $(DSUBDIRS) dependencies utility common tests windows $(SSUBDIRS) client translations doc tools lua bootstrap
 
 EXTRA_DIST =	autogen.sh 			\
 		configure.ac			\
