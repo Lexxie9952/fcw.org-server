@@ -1759,12 +1759,13 @@ reqs	=
       "Building", "Courthouse", "City", TRUE
       "OutputType", "shield", "local", TRUE
     }
-[effect_courthouse_tile_corruption]         ; Removes output penalties (Despotism/Anarchy) for cities with courthouses
+; Removes output penalties (Despotism/Anarchy) for cities with courthouses
+[effect_courthouse_tile_corruption]
 type    = "Output_Penalty_Tile"
 value   = 100
 reqs	=
     { "type",       "name",      "range"
-      "Building", "Courthouse", "City", TRUE
+      "Building", "Courthouse", "City"
     }
 [effect_courthouse_democracy]
 type    = "Make_Content"
@@ -1790,12 +1791,13 @@ reqs	=
       "MaxUnitsOnTile", "0", "Local", TRUE
       "Building", "Courthouse", "City", TRUE
     }
-[effect_courthouse_upkeep]         ; Law and order provides +1 upkeep
+; Law and order provides +1 upkeep
+[effect_courthouse_upkeep]
 type    = "Unit_Upkeep_Free_Per_City"
 value	= 1
 reqs	=
     { "type",       "name",      "range"
-      "Building", "Courthouse", "City", TRUE
+      "Building", "Courthouse", "City"
       "OutputType", "Shield", "Local"
     }    
 [effect_courthouse_spy_resistance]
@@ -1951,7 +1953,7 @@ type    = "Unit_Upkeep_Free_Per_City"
 value	= 5
 reqs	=
     { "type",       "name",      "range"
-      "Building", "Fusion Reactor", "City", TRUE
+      "Building", "Fusion Reactor", "City"
       "OutputType", "Shield", "Local"
     }
 [effect_fusion_reactor2]
@@ -1959,7 +1961,7 @@ type    = "City_Build_Slots"
 value   = 1
 reqs    =
     { "type", "name", "range"
-      "Building", "Fusion Reactor", "City", TRUE
+      "Building", "Fusion Reactor", "City"
     }
 
 [effect_granary]
@@ -3860,7 +3862,7 @@ reqs	=
     }
 [effect_lighthouse_4]
 type    = "Unit_Vision_Radius_Sq"
-svalue	= 6
+value	= 6
 reqs	=
     { "type", "name", "range"
       "Building", "Lighthouse", "Player"
@@ -3868,7 +3870,7 @@ reqs	=
     }
 [effect_lighthouse_5]
 type    = "Unit_Vision_Radius_Sq"
-svalue	= 6
+value	= 6
 reqs	=
     { "type", "name", "range"
       "Building", "Lighthouse", "Player"
