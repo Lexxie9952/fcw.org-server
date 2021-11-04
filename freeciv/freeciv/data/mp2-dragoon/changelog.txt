@@ -147,6 +147,11 @@ favorable to early game economics.
 26. Nationalism is +20% sci in original cities
     balances that -15% is global for lux 
 =============================================================
-
-
+27. Clarification: AAA are infantry as considered part of 
+   Marine corps land/air/sea. Thus, have gold upkeep not 
+   shield upkeep.
+=============================================================
+28. Zepplein 5 turns of fuel: more realistic and provides 
+   more possible use for this special unit.
+=============================================================
 

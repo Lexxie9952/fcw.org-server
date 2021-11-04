@@ -2338,9 +2338,9 @@ convert_time  = 7
 transport_cap = 0
 fuel          = 0
 uk_happy      = 1
-uk_shield     = 1
+uk_shield     = 0
 uk_food       = 0
-uk_gold       = 0
+uk_gold       = 1
 embarks       = "LandRoad", "Helicopter"
 disembarks    = "LandRoad", "Helicopter"
 targets       = "Air", "AirProtect", "Sea", "Balloon", "Helicopter", "LandRail", "Zeppelin"
@@ -2514,7 +2514,7 @@ firepower     = 2
 move_rate     = 6
 vision_radius_sq = 24
 transport_cap = 0
-fuel          = 3
+fuel          = 5
 city_size     = 2632    ;000000,001,010,010010,0,0 = atk_bonus=0, max_kills=1, targets=2, move_cost=18 frags, stay_frtfy=0, reserved = 0
 paratroopers_mr_sub = 0 ;00000,00,0000,000,0,0 = bbd_retal_rate=0, iPill_rand_tgts=0, iPill_odds=-0 pentads, iPill_moves=0, iPillage=0, ATK_Stay_Fortified=0
 uk_happy      = 0
@@ -2771,18 +2771,18 @@ veteran_power_fact = 100, 150, 175, 200, 210, 220, 230
 veteran_move_bonus = 0, 0, 0, 0, 9, 9, 9
 roles         = ""
 helptext      = _("\
-Dive Bombers are like Fighters but fitted for Ground Attack and Sea combat. Range\
- is reduced by heavy armor and armaments which help in attacking surface targets\
- and in defending against Anti-Air, but hurt in Air-to-Air combat. Though unreachable\
- to Land units, they lack agility to block attacks on their same tile. But over a wider\
- radius, they exert ZoC on adjacent land tiles. The Dive Bomber is not an interceptor.\
+Dive Bombers are fitted with armor and armaments for ground attack and sea combat.\
+ They do better attacking surface targets and defending vs Anti-Air, but have reduced\
+ range and Air-to-Air ability. They do not block attacks on their same tile, but exert\
+ ZoC on adjacent land tiles and can iPillage. The Dive Bomber is not an interceptor.\
  Role specialization yields the following gains and losses over a Fighter: \n\n\
  GAINS: \n\
  • A:4½  vs Surface units (Land or Sea) \n\
  • D:4     vs Anti-Air \n\
+ • iPillage \n\
  • ZoC \n\
 LOSSES: \n\
- • A3 instead of A4 in Air-to-Air \n\
+ • A3/D3 in Air-to-Air \n\
  • Can’t block its tile \n\
  • Can’t intercept \n\
 "), _("
