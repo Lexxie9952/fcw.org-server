@@ -172,7 +172,7 @@ function check_websocket_ready()
 
     var login_message = {"pid":4, "username" : username,
     "capability": freeciv_version, "version_label": "-dev",
-    "major_version" : 2, "minor_version" : 5, "patch_version" : 99,
+    "major_version" : 3, "minor_version" : 0, "patch_version" : 92,
     "port": civserverport,
     "password": google_user_token == null ? sha_password : google_user_token};
     send_request(JSON.stringify(login_message));
