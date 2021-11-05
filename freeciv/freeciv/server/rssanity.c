@@ -289,7 +289,6 @@ static bool sanity_check_req_set(int reqs_of_type[], int local_reqs_of_type[],
      case VUT_MINCALFRAG:
      case VUT_AI_LEVEL:
      case VUT_TERRAINALTER: /* Local range only */
-     case VUT_CITYTILE:
      case VUT_STYLE:
      case VUT_IMPR_GENUS:
      case VUT_CITYSTATUS:
@@ -359,6 +358,7 @@ static bool sanity_check_req_set(int reqs_of_type[], int local_reqs_of_type[],
      case VUT_TECHFLAG:
      case VUT_IMPROVEMENT:
      case VUT_UNITSTATE:
+     case VUT_CITYTILE:
      case VUT_GOOD:
        /* Can check different properties. */
      case VUT_UTFLAG:
