@@ -3944,10 +3944,6 @@ const char *universal_name_translation(const struct universal *psource,
     cat_snprintf(buf, bufsz, _("%s possible"),
                  Q_(terrain_alteration_name(psource->value.terrainalter)));
     return buf;
-  /* previous  
-  case VUT_CITYTILE:
-    fc_strlcat(buf, _("City center"), bufsz);
-    return buf; */
   case VUT_CITYTILE:
     switch (psource->value.citytile) {
     case CITYT_CENTER:
