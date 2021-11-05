@@ -76,6 +76,12 @@ else
   INSTALLED_TOMCAT=N
 fi
 
+# Install lua-5.4, if available. Otherwise it will be built from the copy
+# included with the server.
+if apt-cache -qq show liblua5.4-dev &> /dev/null; then
+  dependencies="${dependencies} liblua5.4-dev"
+fi
+
 if [ "${FCW_INSTALL_MODE}" = TEST ]; then
   dependencies="${dependencies} xvfb"
 fi
