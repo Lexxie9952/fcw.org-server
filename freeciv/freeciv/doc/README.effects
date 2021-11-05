@@ -770,5 +770,7 @@ The UnitState requirement type
                and safe tiles.
 "OnLivableTile" is fulfilled if the unit is on a tile where it can exist
                 outside of a transport.
+"InNativeExtra" is fulfilled if the unit is on a tile with an extra native
+                to it.
 "OnDomesticTile" is fulfilled if the unit is on a tile owned by its player.
 "HasHomeCity" is fulfilled if the unit has a home city.
