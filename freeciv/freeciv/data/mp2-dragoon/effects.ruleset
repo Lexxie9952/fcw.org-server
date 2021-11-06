@@ -812,7 +812,7 @@ reqs    =
 ;The Goods unit_Type has 25% recycle penalty. Freight 
 ;is caught by no effects so remains 100%
 type    = "Unit_Shield_Value_Pct"
-value   = -25
+value   = -15
 reqs    =
     { "type",     "name",         "range", "present"
       "Action",   "Recycle Unit", "Local", TRUE
@@ -5291,7 +5291,7 @@ reqs    =
     }
 [effect_colossus_goods_discount]
 type    = "Unit_Build_Cost_Pct"
-value	  = -15     ;20-3 = 17 = -15%
+value	  = -25     ;20-5 = 15 = -25%
 reqs    =
     {
       "type", "name", "range","present"
