@@ -15,6 +15,8 @@
 #include <fc_config.h>
 #endif
 
+#include <stdarg.h>
+
 /* utility */
 #include "astring.h"
 #include "fcintl.h"
@@ -1014,6 +1016,7 @@ void get_city_dialog_culture_text(const struct city *pcity,
     }
 
     value = (peffect->value * mul) / 100;
+    /* TRANS: text describing source of culture bonus ("Library+Republic") */
     city_sum_add_if_nonzero(sum, value, Q_("?city_culture:%s"), buf2);
   } effect_list_iterate_end;
   effect_list_destroy(plist);
@@ -1022,6 +1025,140 @@ void get_city_dialog_culture_text(const struct city *pcity,
                  Q_("?city_culture:"
                     "==== : Adds up to\n"
 	            "%4.0f : Total culture"), (double)pcity->client.culture);
+}
+
+/**********************************************************************//**
+  Return text describing airlift capacity.
+**************************************************************************/
+void get_city_dialog_airlift_text(const struct city *pcity,
+                                  char *buf, size_t bufsz)
+{
+  char src[512];
+  char dest[512];
+  int unlimited = 0;
+
+  if (game.info.airlifting_style & AIRLIFTING_UNLIMITED_SRC
+      && pcity->airlift >= 1) {
+    /* AIRLIFTING_UNLIMITED_SRC applies only when the source city has
+     * remaining airlift. */
+
+    unlimited++;
+
+    /* TRANS: airlift. Possible take offs text. String is a
+     * proviso that take offs can't occur if landings spend all the
+     * remaining airlift when landings are limited and empty when they
+     * aren't limited. */
+    fc_snprintf(src, sizeof(src), _("unlimited take offs%s"),
+                game.info.airlifting_style & AIRLIFTING_UNLIMITED_DEST
+                /* TRANS: airlift unlimited take offs proviso used above.
+                 * Plural based on remaining airlift capacity. */
+                ? "" : PL_(" (until the landing has been spent)",
+                           " (until all landings have been spent)",
+                           pcity->airlift));
+  } else {
+    fc_snprintf(src, sizeof(src),
+                /* TRANS: airlift. Possible take offs text. Number is
+                 * airlift capacity. */
+                PL_("%d take off", "%d take offs", pcity->airlift),
+                pcity->airlift);
+  }
+
+  if (game.info.airlifting_style & AIRLIFTING_UNLIMITED_DEST) {
+    /* AIRLIFTING_UNLIMITED_DEST works even if the source city has no
+     * remaining airlift. */
+
+    unlimited++;
+
+    /* TRANS: airlift. Possible landings text. */
+    fc_snprintf(dest, sizeof(dest), _("unlimited landings"));
+  } else {
+    fc_snprintf(dest, sizeof(dest),
+                /* TRANS: airlift. Possible landings text.
+                 * Number is airlift capacity. */
+                PL_("%d landing", "%d landings", pcity->airlift),
+                pcity->airlift);
+  }
+
+  switch (unlimited) {
+  case 2:
+    /* TRANS: airlift take offs and landings */
+    fc_snprintf(buf, bufsz, _("unlimited take offs and landings"));
+    break;
+  case 1:
+    /* TRANS: airlift take offs and landings. One is unlimited. The first
+     * string is the take offs text. The 2nd string is the landings text. */
+    fc_snprintf(buf, bufsz, _("%s and %s"), src, dest);
+    break;
+  default:
+    fc_snprintf(buf, bufsz,
+                /* TRANS: airlift take offs or landings, no unlimited.
+                 * Number is airlift capacity. */
+                PL_("%d take off or landing", "%d take offs or landings",
+                    pcity->airlift),
+                pcity->airlift);
+    break;
+  }
+}
+
+/**********************************************************************//**
+  Return airlift capacity.
+**************************************************************************/
+void get_city_dialog_airlift_value(const struct city *pcity,
+                                   char *buf, size_t bufsz)
+{
+  char src[512];
+  char dest[512];
+  int unlimited = 0;
+
+  if (game.info.airlifting_style & AIRLIFTING_UNLIMITED_SRC
+      && pcity->airlift >= 1) {
+    /* AIRLIFTING_UNLIMITED_SRC applies only when the source city has
+     * remaining airlift. */
+
+    unlimited++;
+
+    /* TRANS: airlift. Possible take offs text. String is a symbol that
+     * indicates that terms and conditions apply when landings are limited
+     * and empty when they aren't limited. */
+    fc_snprintf(src, sizeof(src), _("∞%s"),
+                game.info.airlifting_style & AIRLIFTING_UNLIMITED_DEST
+                /* TRANS: airlift unlimited take offs may be spent symbol
+                 * used above. */
+                ? "" : _("*"));
+  } else {
+    /* TRANS: airlift. Possible take offs text. Number is
+     * airlift capacity. */
+    fc_snprintf(src, sizeof(src), _("%d"), pcity->airlift);
+  }
+
+  if (game.info.airlifting_style & AIRLIFTING_UNLIMITED_DEST) {
+    /* AIRLIFTING_UNLIMITED_DEST works even if the source city has no
+     * remaining airlift. */
+
+    unlimited++;
+
+    /* TRANS: airlift. Possible landings text. */
+    fc_snprintf(dest, sizeof(dest), _("∞"));
+  } else {
+    /* TRANS: airlift. Possible landings text. */
+    fc_snprintf(dest, sizeof(dest), _("%d"), pcity->airlift);
+  }
+
+  switch (unlimited) {
+  case 2:
+    /* TRANS: unlimited airlift take offs and landings */
+    fc_snprintf(buf, bufsz, _("∞"));
+    break;
+  case 1:
+    /* TRANS: airlift take offs and landings. One is unlimited. The first
+     * string is the take offs text. The 2nd string is the landings text. */
+    fc_snprintf(buf, bufsz, _("s: %s d: %s"), src, dest);
+    break;
+  default:
+    /* TRANS: airlift take offs or landings, no unlimited */
+    fc_snprintf(buf, bufsz, _("%s"), src);
+    break;
+  }
 }
 
 /**********************************************************************//**

@@ -1620,6 +1620,9 @@ static void explain_why_no_action_enabled(struct unit *punit,
 
         notify_player(pplayer, unit_tile(punit),
                       E_BAD_COMMAND, ftc_server,
+                      /* TRANS: terrain name
+                       * "Your Diplomat cannot act from Ocean. Only
+                       * Spy or Partisan ... */
                       _("Your %s cannot act from %s. "
                         "Only %s can act from a non livable tile."),
                       unit_name_translation(punit),
@@ -1629,6 +1632,7 @@ static void explain_why_no_action_enabled(struct unit *punit,
         astr_free(&astr);
       } else {
         notify_player(pplayer, unit_tile(punit), E_BAD_COMMAND, ftc_server,
+                      /* TRANS: terrain name */
                       _("Unit cannot act from %s."),
                       terrain_name_translation(explnat->no_act_terrain));
       }
@@ -1636,6 +1640,7 @@ static void explain_why_no_action_enabled(struct unit *punit,
     break;
   case ANEK_BAD_TERRAIN_TGT:
     notify_player(pplayer, unit_tile(punit), E_BAD_COMMAND, ftc_server,
+                  /* TRANS: terrain name */
                   _("Unit cannot act against %s."),
                   terrain_name_translation(explnat->no_act_terrain));
     break;
@@ -2296,8 +2301,8 @@ void illegal_action_msg(struct player *pplayer,
     notify_player(pplayer, unit_tile(actor),
                   event, ftc_server,
                   /* TRANS: action name.
-                   * "Your Spy has ... to Bribe Enemy Unit." */
-                  _("Your %s %s too few moves left to %s."),
+                   * "Your Spy has ... to do Bribe Enemy Unit." */
+                  _("Your %s %s too few moves left to do %s."),
                   unit_name_translation(actor),
                   (is_unit_plural(actor) ? "have" : "has"),
                   action_id_name_translation(stopped_action));
@@ -2458,8 +2463,8 @@ void illegal_action_msg(struct player *pplayer,
     notify_player(pplayer, unit_tile(actor),
                   event, ftc_server,
                   /* TRANS: action name.
-                   * "Your Spy was unable to Bribe Enemy Unit." */
-                  _("Your %s %s unable to %s."),
+                   * "Your Spy was unable to do Bribe Enemy Unit." */
+                  _("Your %s %s unable to do %s."),
                   unit_name_translation(actor),
                   (is_unit_plural(actor) ? "were" : "was"),                    
                   action_id_name_translation(stopped_action));
