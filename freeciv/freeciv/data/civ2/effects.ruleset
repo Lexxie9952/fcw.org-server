@@ -2142,7 +2142,7 @@ type    = "Fortify_Defense_Bonus"
 value   = 50
 reqs    =
     { "type", "name", "range"
-      "UnitState", "Fortified", "Local"
+      "Activity", "Fortified", "Local"
     }
 
 [effect_city_fortified]
@@ -2151,7 +2151,7 @@ value   = 50
 reqs    =
     { "type",          "name",         "range", "present"
       "CityTile",      "Center",       "Local", TRUE
-      "UnitState",     "Fortified",    "Local", FALSE
+      "Activity",     "Fortified",    "Local", FALSE
       "UnitClassFlag", "CanFortify",   "Local", TRUE
       "UnitFlag",      "Cant_Fortify", "Local", FALSE
     }
