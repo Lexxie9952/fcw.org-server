@@ -2608,6 +2608,9 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
             EFT_ACTION_SUCCESS_MOVE_COST,
             req_pattern, ARRAY_SIZE(req_pattern));
 
+        success_move_frag_cost += utype_pays_mp_for_action_base(paction,
+                                                                utype);
+
         /* Can't print the exact amount of move fragments. It isn't known.
          * The action performer function may subtract some movement itself
          * on top of what EFT_ACTION_SUCCESS_MOVE_COST takes. */
@@ -2833,11 +2836,6 @@ char *helptext_unit(char *buf, size_t bufsz, struct player *pplayer,
                        _("  %s weaker when tired. If performed with less "
                          "than a single move point left the attack power "
                          "is reduced accordingly.\n"), BULLET);
-        }
-        if (action_has_result(paction, ACTION_ATTACK)
-            && utype_has_flag(utype, UTYF_ONEATTACK)) {
-          cat_snprintf(buf, bufsz,
-                       _("  %s ends this unit's turn.\n"), BULLET);
         }
         break;
       case ACTION_CONVERT:
