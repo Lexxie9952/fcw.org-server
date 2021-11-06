@@ -144,13 +144,14 @@ void do_tech_parasite_effect(struct player *pplayer)
 {
   struct effect_list *plist = effect_list_new();
   struct astring effects;
-  struct research *plr_research;
+  struct research *presearch;
   char research_name[MAX_LEN_NAME * 2];
   const char *advance_name;
   Tech_type_id tech;
   /* Note that two EFT_TECH_PARASITE effects will combine into a single,
    * much worse effect. */
   int mod = get_player_bonus_effects(plist, pplayer, EFT_TECH_PARASITE);
+  int num_players;
   int num_techs;
 
   if (mod <= 0) {
@@ -162,27 +163,25 @@ void do_tech_parasite_effect(struct player *pplayer)
   /* Pick a random technology. */
   tech = A_UNSET;
   num_techs = 0;
-  plr_research = research_get(pplayer);
+  presearch = research_get(pplayer);
   advance_index_iterate(A_FIRST, i) {
-    int num_teams;
-
-    if (!research_invention_gettable(plr_research, i,
+    if (!research_invention_gettable(presearch, i,
                                      game.info.tech_parasite_allow_holes)
-        || TECH_KNOWN == research_invention_state(plr_research, i)) {
+        || TECH_KNOWN == research_invention_state(presearch, i)) {
       continue;
     }
 
-    num_teams = 0;
-    researches_iterate(other_research) {
-      if (TECH_KNOWN == research_invention_state(other_research, i)) {
-        if (mod <= ++num_teams) {
+    num_players = 0;
+    players_iterate(aplayer) {
+      if (TECH_KNOWN == research_invention_state(research_get(aplayer), i)) {
+        if (mod <= ++num_players) {
           if (0 == fc_rand(++num_techs)) {
             tech = i;
           }
           break;
         }
       }
-    } researches_iterate_end;
+    } players_iterate_end;
   } advance_index_iterate_end;
 
   if (A_UNSET == tech) {
@@ -192,8 +191,8 @@ void do_tech_parasite_effect(struct player *pplayer)
   }
 
   /* Notify. */
-  research_pretty_name(plr_research, research_name, sizeof(research_name));
-  advance_name = research_advance_name_translation(plr_research, tech);
+  research_pretty_name(presearch, research_name, sizeof(research_name));
+  advance_name = research_advance_name_translation(presearch, tech);
   astr_init(&effects);
   get_effect_list_req_text(plist, &effects);
 
@@ -204,7 +203,7 @@ void do_tech_parasite_effect(struct player *pplayer)
                 (game.server.blueprints ? _("blueprints for ") : _("")),
                 advance_name,
                 astr_str(&effects));
-  notify_research(plr_research, pplayer, E_TECH_GAIN, ftc_server,
+  notify_research(presearch, pplayer, E_TECH_GAIN, ftc_server,
                   /* TRANS: Tech from source of an effect
                    * (Great Library) */
                   Q_("?fromeffect:💡 %s%s acquired from %s's %s!"),
@@ -212,7 +211,7 @@ void do_tech_parasite_effect(struct player *pplayer)
                   advance_name,
                   player_name(pplayer),
                   astr_str(&effects));
-  notify_research_embassies(plr_research, NULL, E_TECH_EMBASSY, ftc_server,
+  notify_research_embassies(presearch, NULL, E_TECH_EMBASSY, ftc_server,
                             /* TRANS: Tech from source of an effect
                              * (Great Library) */
                             Q_("?fromeffect:💡 The %s have acquired %s%s from %s."),
@@ -227,13 +226,12 @@ void do_tech_parasite_effect(struct player *pplayer)
   if (game.server.blueprints) { /* Give blueprints instead of tech */
     int blueprint_discount = game.server.freecost ?
                              100-game.server.freecost : game.server.blueprints;
-
-    found_new_blueprint(plr_research, tech, blueprint_discount);
+    found_new_blueprint(presearch, tech, blueprint_discount);
   }
   else { /* Really get tech. */
-    research_apply_penalty(plr_research, tech, game.server.freecost);
-    found_new_tech(plr_research, tech, FALSE, TRUE);
-    research_players_iterate(plr_research, member) {
+    research_apply_penalty(presearch, tech, game.server.freecost);
+    found_new_tech(presearch, tech, FALSE, TRUE);
+    research_players_iterate(presearch, member) {
       script_server_signal_emit("tech_researched", advance_by_number(tech),
                                 member, "stolen");
     } research_players_iterate_end;
@@ -1088,6 +1086,10 @@ void choose_random_tech(struct research *research)
 ****************************************************************************/
 void choose_tech(struct research *research, Tech_type_id tech)
 {
+              notify_conn(NULL, NULL, E_SETTING, ftc_any,
+                _("Choose tech(%s)."),
+                research_advance_name_translation(research, tech));
+
   int bulbs_res = 0;
 
   if (is_future_tech(tech)) {
@@ -1117,6 +1119,31 @@ void choose_tech(struct research *research, Tech_type_id tech)
         bulbs_res = research->inventions[j].bulbs_researched_saved;
       }
     } advance_index_iterate_end;
+
+    /* 6Nov2021. When playing with multiresearch enabled, if we were researching
+       no target (no future tech target after a tech discovery), then selecting
+       a new tech target made us lose all bulbs sometimes. Very recently, a fix 
+       to savegame3.c inserted got_tech_multi into the .sav file. This does fix
+       one occurrence of the bug. But the bug happened in a running game that
+       wasn't loaded from a savegame (unless another bug had crashed the game
+       and it auto-reloaded (?). So there is a possibility of another unfound bug. 
+
+       The unfound bug can be hack-fixed here by relying on logical syllogism:
+
+       If you have no current tech target, you just researched a tech
+          OR just started the game and have no saved bulbs anyway.
+       If you just researched a tech, got_tech_multi should be true.
+       If you just started the game, got_tech_multi, whether true or false,
+          will pass 0 bulbs to the selected tech.
+       Therefore, there is no way to reach the state of having no tech target,
+       where selecting a tech should then make you lose more than 0 bulbs.
+       Therefore, if the player has no tech target, we will force got_tech_multi
+       to be true here and the (possible) bug can simply never happen. QED. */
+
+    /* If we have no tech target then select a target, we can never lose saved 
+       bulbs. Paranoid insurance to force these bulbs to never be lost. */
+    if (research->researching == A_UNSET) research->got_tech_multi = true;
+    /* Change tech target to the selected tech */
     research->researching = tech;
     if (research->got_tech_multi == FALSE) {
       research->bulbs_researched = 0;
