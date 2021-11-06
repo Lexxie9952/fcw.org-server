@@ -440,9 +440,11 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
           && ttype.name != "Airplane"
           && ttype.name != "Transport"
           && ttype.name != "Tribesmen"
+          // All commerce units can carry Cargo class units, except...
           && !utype_has_flag(ttype, UTYF_TRADEROUTE))
         return false;
-      if (tclass.rule_name == "Goods") return false;
+        // ...Cargo class units can't carry themselves.
+      if (tclass.rule_name == "Cargo") return false;
     }
   }
   else if (pclass == "Bomb") {
