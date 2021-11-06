@@ -750,7 +750,7 @@ reqs    =
 ;The Goods unit_Type has 25% recycle penalty. Freight 
 ;is caught by no effects so remains 100%
 type    = "Unit_Shield_Value_Pct"
-value   = -25
+value   = -24
 reqs    =
     { "type",     "name",         "range", "present"
       "Action",   "Recycle Unit", "Local", TRUE
