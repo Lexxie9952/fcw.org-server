@@ -428,11 +428,17 @@ function unit_could_possibly_load(punit, ptype, ttype, tclass)
     if (ptype.rule_name=="Freight") {
       if (tclass.rule_name != "LandRail"
           && tclass.rule_name != "LandRoad"
+          && ttype.name != "Caravel"
+          && ttype.name != "Galleon"
+          && ttype.name != "Galley"
+          && ttype.name != "Trireme"
           && ttype.name != "Cargo Ship"
           && ttype.name != "Airplane"
           && ttype.name != "Transport") return false;
     } else { // the "Goods" unit which is also "Cargo" class:
       if (ttype.name != "Galleon"
+          && ttype.name != "Airplane"
+          && ttype.name != "Transport"
           && ttype.name != "Tribesmen"
           && !utype_has_flag(ttype, UTYF_TRADEROUTE))
         return false;
