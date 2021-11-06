@@ -1509,19 +1509,19 @@ sound		= "w_appian"
 sound_alt	= "w_generic"
 helptext	= _("\
 The Appian Way is the first stone-paved highway that can drain\
- rainwater. The Appian Way gives the following bonuses：\n\
-National bonuses:\n\
+ rainwater. The Appian Way gives the following National bonuses：\n\
  ➤ Trade Routes with 4 or more revenue get a slight increase in revenue. \n\
  ➤ Tile-workers build Roads at twice the speed. \n\
-In the city with Appian Way：\n\
- ➤ Each trade-producing tile produces +1 extra trade, if there is a road on it. \n\
- ➤ Wagons cost 5 shields less. \n\
 If not in Foreign territory：\n\
  ➤ Wagons, Chariots, and Foot soldiers gain +⅓ move when starting\
   their turn on a Road. \n\
- ➤ Tile Workers gain +⅓ move. \n\
+ ➤ Tile Workers gain +⅓ move. \n\n\
+The city with the Appian Way gets additional bonuses：\n\
+ ➤ Each trade-producing tile produces +1 extra trade, if there is a road on it. \n\
+ ➤ Wagons cost 5 shields less. \n\n\
 Obsolete by：Railroad.\
 ")
+
 
 [building_chand_baori]
 name		= _("Chand Baori")

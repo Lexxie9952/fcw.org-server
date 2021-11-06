@@ -1517,17 +1517,16 @@ sound		= "w_appian"
 sound_alt	= "w_generic"
 helptext	= _("\
 The Appian Way is the first stone-paved highway that can drain\
- rainwater. The Appian Way gives the following bonuses：\n\
-National bonuses:\n\
+ rainwater. The Appian Way gives the following National bonuses：\n\
  ➤ Trade Routes with 4 or more revenue get a slight increase in revenue. \n\
  ➤ Tile-workers build Roads at twice the speed. \n\
-In the city with Appian Way：\n\
- ➤ Each trade-producing tile produces +1 extra trade, if there is a road on it. \n\
- ➤ Wagons cost 5 shields less. \n\
 If not in Foreign territory：\n\
  ➤ Wagons, Chariots, and Foot soldiers gain +⅓ move when starting\
   their turn on a Road. \n\
- ➤ Tile Workers gain +⅓ move. \n\
+ ➤ Tile Workers gain +⅓ move. \n\n\
+The city with the Appian Way gets additional bonuses：\n\
+ ➤ Each trade-producing tile produces +1 extra trade, if there is a road on it. \n\
+ ➤ Wagons cost 5 shields less. \n\n\
 Obsolete by：Railroad.\
 ")
 
@@ -1666,10 +1665,10 @@ In the coastal city where this wonder is built, +1 trade is added to every\
  Colossus city receives a discount on all maritime Commerce units：\n\
  Boat：            7 shields. \n\
  Trireme：        15 shields. \n\
- Goods:           20 shields. \n\
+ Goods:           15 shields. \n\
  Galley：         25 shields. \n\
- Caravel：        35 shields. \n\
- A trade route established from this city gets +40% one-time revenue,\
+ Caravel：        35 shields. \n\n\
+A trade route established from the city with Colossus gets +40% one-time revenue,\
  and roughly +25% in ongoing revenue. \n\
  Obsolete by：Automobile.\
 ")
