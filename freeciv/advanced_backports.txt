@@ -1,6 +1,6 @@
-As of 05-Nov-21,
+As of 07-Nov-21,
 current baseline of the https://github.com/freeciv/freeciv used by FCW is commit
-4b29d6320d8f12337a2f25dc0a99eb6b79e6d4ef
+9351ca9f40bb9def9ee5718a4ae050bd7617fd89
 
 ------------------------------------------------------------------------------
 
@@ -13,7 +13,6 @@ Commit Date is NOT the author date (that GitHub shows) but the date it was commi
 Completeness Comment is an explanation of what was changed and/or is missing.
 
 Commit                                   Commit Date         Completeness Comment
-5c49fa4b0c6ac84b74d6adef10d49a777f5dd410 2020-02-25 16:45:31 Unchanged and complete
 c67cb82f51ef5034cc361738ab8ae74946374262 2020-06-13 11:43:44 Unchanged and complete
 5f5aad1b8cc6d2fea720e260f8c47944b696f32e 2020-06-13 11:43:44 Unchanged and complete
 d8a54ddb6a5ac083c400411a3dd456267d0ac17f 2021-05-13          Adjusted, but complete
