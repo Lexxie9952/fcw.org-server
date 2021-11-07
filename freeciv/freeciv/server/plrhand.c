@@ -46,6 +46,7 @@
 #include "luascript_types.h"
 
 /* server */
+#include "actiontools.h"
 #include "aiiface.h"
 #include "barbarian.h"
 #include "citytools.h"
@@ -681,6 +682,12 @@ void enter_war(struct player *pplayer, struct player *pplayer2)
       maybe_claim_base(ptile, pplayer2, old_owner);
     }
   } whole_map_iterate_end;
+
+  /* Give casus belli to allies of both players */
+  if (game.server.casusbelli_allies) {
+    action_give_casus_belli_to_allies(pplayer, pplayer2);
+    action_give_casus_belli_to_allies(pplayer2, pplayer);
+  }
 }
 
 /**********************************************************************//**
@@ -800,7 +807,7 @@ void handle_diplomacy_cancel_pact(struct player *pplayer,
 
   /* if there's a reason to cancel the pact, do it without penalty */
   /* FIXME: in the current implementation if you break more than one
-   * treaty simultaneously it may partially succed: the first treaty-breaking
+   * treaty simultaneously it may partially succeed: the first treaty-breaking
    * will happen but the second one will fail. */
   if (get_player_bonus(pplayer, EFT_HAS_SENATE) > 0 && !repeat) {
     if (ds_plrplr2->has_reason_to_cancel > 0) {

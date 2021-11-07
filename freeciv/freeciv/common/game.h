@@ -139,6 +139,7 @@ struct civ_game {
       enum barbarians_rate barbarianrate;
       int blueprints;
       int base_incite_cost;
+      int casusbelli_allies;
       int casusbelliturns;
       int ceasefirelength;
       int city_output_style;
@@ -743,6 +744,10 @@ extern struct world wld;
 #define GAME_DEFAULT_CEASEFIRELENGTH  16
 #define GAME_MIN_CEASEFIRELENGTH     1
 #define GAME_MAX_CEASEFIRELENGTH     1000
+
+#define GAME_DEFAULT_CASUSBELLI_ALLIES 0
+#define GAME_MIN_CASUSBELLI_ALLIES     0
+#define GAME_MAX_CASUSBELLI_ALLIES     1
 
 #define GAME_DEFAULT_CASUSBELLITURNS 2
 #define GAME_MIN_CASUSBELLITURNS     2

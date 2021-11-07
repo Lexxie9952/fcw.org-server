@@ -2473,6 +2473,19 @@ static struct setting settings[] = {
           GAME_MIN_CEASEFIRELENGTH, GAME_MAX_CEASEFIRELENGTH,
           GAME_DEFAULT_CEASEFIRELENGTH)     
 
+  GEN_INT("casusbelli_allies", game.server.casusbelli_allies,
+          SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL, ALLOW_NONE, ALLOW_CTRL,
+          N_("Whether casus belli is also given to a nation's allies."),
+          N_("Under the default setting (0), casus belli may not be given to the "
+          "allies of a nation when war is declared on it or when an action is done "
+          "which gives it casus belli. With the setting value of 1, 'an attack on "
+          "one is an attack on all.' Any declaration of war or action which gives "
+          "casus belli to a nation, will also give casus belli to all of that "
+          "nation's allies."),
+          NULL, NULL, NULL, 
+          GAME_MIN_CASUSBELLI_ALLIES, GAME_MAX_CASUSBELLI_ALLIES,
+          GAME_DEFAULT_CASUSBELLI_ALLIES)
+
   GEN_INT("casusbelliturns", game.server.casusbelliturns,
           SSET_RULES_FLEXIBLE, SSET_MILITARY, SSET_SITUATIONAL, ALLOW_NONE, ALLOW_CTRL,
           N_("Length in turns of a first casus belli before it expires."),

@@ -102,6 +102,45 @@ void action_success_actor_price(struct action *paction,
 }
 
 /**********************************************************************//**
+  Gives casus belli to a victim's allies also. Currently called based 
+  on whether game.server.casusbelli_allies is set.
+**************************************************************************/
+void action_give_casus_belli_to_allies(struct player *offender,
+                                              struct player *victim_player)
+{
+  int cb_now;
+  int cb_turns = game.server.casusbelliturns;
+
+  /* Go through all players to find allies of the victim */
+  players_iterate(ally) {
+    if (ally != offender && ally != victim_player) {
+      /* We found a "third party player" who is an ally of the victim: */
+      if (player_diplstate_get(ally, victim_player)->type == DS_ALLIANCE) {
+        cb_now = player_diplstate_get(ally, offender)->has_reason_to_cancel;
+        /* A fresh new casus belli deserves a notification to the recipient*/
+        if (player_diplstate_get(ally, offender)->has_reason_to_cancel==0) {
+              notify_player(ally, NULL,
+                  E_DIPLOMATIC_INCIDENT, ftc_server,
+                  _("⚠️ The %s gave our %s allies casus belli. We now have "
+                    " casus belli also."),
+                  nation_plural_for_player(offender),
+                  nation_adjective_for_player(victim_player));
+        }
+        // At minimum, reset has_reason_to_cancel to game.server.casusbelliturns,
+        // since it is also a counter that decrements every turn until casus belli
+        // expires. If it is at or above that number, simply add +1 to it.
+        if (cb_now < cb_turns) {
+          player_diplstate_get(ally, offender)->has_reason_to_cancel = cb_turns;
+        } else if (cb_now >= cb_turns) {
+          player_diplstate_get(ally, offender)->has_reason_to_cancel++;
+        }
+        player_update_last_war_action(ally);
+      }
+    }
+  } players_iterate_end;
+}
+
+/**********************************************************************//**
   Give the victim a casus belli against the offender.
 **************************************************************************/
 static void action_give_casus_belli(struct player *offender,
@@ -126,6 +165,12 @@ static void action_give_casus_belli(struct player *offender,
     return;
   }
   */
+
+  /* Server setting game.server.casusbelli_allies gives casus belli to
+     the victim's allies also: */ 
+  if (game.server.casusbelli_allies) {
+    action_give_casus_belli_to_allies(offender, victim_player);
+  }
 
   if (int_outrage) {
     /* This action is seen as a reason for any other player, no matter who
