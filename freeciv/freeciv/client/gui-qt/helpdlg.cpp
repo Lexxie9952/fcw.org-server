@@ -1317,15 +1317,15 @@ void help_widget::set_topic_terrain(const help_item *topic,
 
     if (pterrain->irrigation_result != pterrain
         && pterrain->irrigation_result != T_NONE
-        && pterrain->irrigation_time != 0
+        && pterrain->cultivate_time != 0
         && univs_have_action_enabler(ACTION_CULTIVATE, NULL, &for_terr)) {
       QLabel *tb;
       char buffer[1024];
 
       tb = new QLabel(this);
       fc_snprintf(buffer, sizeof(buffer), PL_("%d turn", "%d turns",
-                                              pterrain->irrigation_time),
-                  pterrain->irrigation_time);
+                                              pterrain->cultivate_time),
+                  pterrain->cultivate_time);
       str = N_("Irrig. Rslt/Time:");;
       str = str + link_me(terrain_name_translation(pterrain->irrigation_result),
                           HELP_TERRAIN)
@@ -1342,15 +1342,15 @@ void help_widget::set_topic_terrain(const help_item *topic,
 
     if (pterrain->mining_result != pterrain
         && pterrain->mining_result != T_NONE
-        && pterrain->mining_time != 0
+        && pterrain->plant_time != 0
         && univs_have_action_enabler(ACTION_PLANT, NULL, &for_terr)) {
       QLabel *tb;
       char buffer[1024];
 
       tb = new QLabel(this);
       fc_snprintf(buffer, sizeof(buffer), PL_("%d turn", "%d turns",
-                                              pterrain->mining_time),
-                  pterrain->mining_time);
+                                              pterrain->plant_time),
+                  pterrain->plant_time);
       str = N_("Mine Rslt/Time:");;
       str = str + link_me(terrain_name_translation(pterrain->mining_result),
                           HELP_TERRAIN)
