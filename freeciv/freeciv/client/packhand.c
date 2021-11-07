@@ -2448,7 +2448,10 @@ void handle_player_info(const struct packet_player_info *pinfo)
   use for it.
   TODO: Do not generate code calling this in the C-client.
 ****************************************************************************/
-void handle_web_player_info_addition(int playerno, int expected_income)
+void handle_web_player_info_addition(int playerno, int expected_income,
+                                     int advance_count,
+                                     const int *advance_saved_bulbs,
+                                     const int *advance_costs)
 {
 }
 
