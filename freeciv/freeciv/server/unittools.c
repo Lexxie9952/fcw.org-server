@@ -5723,7 +5723,6 @@ struct unit_order *create_unit_orders(int length,
       case ACTION_MARKETPLACE:
       case ACTION_HELP_WONDER:
       case ACTION_SPY_BRIBE_UNIT:
-      case ACTION_SPY_ATTACK:
       case ACTION_SPY_SABOTAGE_UNIT:
       case ACTION_SPY_SABOTAGE_UNIT_ESC:
       case ACTION_CAPTURE_UNITS:
@@ -5767,6 +5766,7 @@ struct unit_order *create_unit_orders(int length,
       case ACTION_TRANSPORT_DISEMBARK2:
       case ACTION_TRANSPORT_BOARD:
       case ACTION_TRANSPORT_EMBARK:
+      case ACTION_SPY_ATTACK:
       case ACTION_USER_ACTION1:
       case ACTION_USER_ACTION2:
       case ACTION_USER_ACTION3:

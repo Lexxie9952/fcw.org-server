@@ -2223,10 +2223,10 @@ action_actor_utype_hard_reqs_ok(const action_id wanted_action,
   case ACTION_TRANSPORT_DEBOARD:
   case ACTION_TRANSPORT_DISEMBARK1:
   case ACTION_TRANSPORT_DISEMBARK2:
+  case ACTION_SPY_ATTACK:
   case ACTION_USER_ACTION1:
   case ACTION_USER_ACTION2:
   case ACTION_USER_ACTION3:
-  case ACTION_SPY_ATTACK:
     /* No hard unit type requirements. */
     break;
 
@@ -2421,10 +2421,10 @@ action_hard_reqs_actor(const action_id wanted_action,
   case ACTION_IRRIGATE:
   case ACTION_TRANSPORT_DEBOARD:
   case ACTION_TRANSPORT_UNLOAD:
+  case ACTION_SPY_ATTACK:
   case ACTION_USER_ACTION1:
   case ACTION_USER_ACTION2:
   case ACTION_USER_ACTION3:
-  case ACTION_SPY_ATTACK:
     /* No hard unit requirements. */
     break;
 
@@ -3175,45 +3175,6 @@ case ACTION_CLEAN_POLLUTION:
     }
     break;
 
-  case ACTION_SPY_ATTACK:
-    {
-      bool found;
-
-      if (!can_player_see_hypotetic_units_at(actor_player, target_tile)) {
-        /* May have a hidden diplomatic defender. */
-        return TRI_MAYBE;
-      }
-
-      found = FALSE;
-      unit_list_iterate(target_tile->units, punit) {
-        struct player *uplayer = unit_owner(punit);
-
-        if (uplayer == actor_player) {
-          /* Won't defend against its owner. */
-          continue;
-        }
-
-        if (unit_has_type_flag(punit, UTYF_SUPERSPY)) {
-          /* This unbeatable diplomatic defender will defend before any
-           * that can be beaten. */
-          found = FALSE;
-          break;
-        }
-
-        if (unit_has_type_flag(punit, UTYF_DIPLOMAT)) {
-          /* Found a beatable diplomatic defender. */
-          found = TRUE;
-          break;
-        }
-      } unit_list_iterate_end;
-
-      if (!found) {
-        return TRI_NO;
-      }
-    }
-    break;
-  
-
   case ACTION_TRANSPORT_DEBOARD:
     if (!can_unit_unload(actor_unit, target_unit)) {
       /* Keep the old rules about Unreachable and disembarks. */
@@ -3290,6 +3251,44 @@ case ACTION_CLEAN_POLLUTION:
            return TRI_NO;
         }
       } unit_list_iterate_end;
+    }
+    break;
+
+  case ACTION_SPY_ATTACK:
+    {
+      bool found;
+
+      if (!can_player_see_hypotetic_units_at(actor_player, target_tile)) {
+        /* May have a hidden diplomatic defender. */
+        return TRI_MAYBE;
+      }
+
+      found = FALSE;
+      unit_list_iterate(target_tile->units, punit) {
+        struct player *uplayer = unit_owner(punit);
+
+        if (uplayer == actor_player) {
+          /* Won't defend against its owner. */
+          continue;
+        }
+
+        if (unit_has_type_flag(punit, UTYF_SUPERSPY)) {
+          /* This unbeatable diplomatic defender will defend before any
+           * that can be beaten. */
+          found = FALSE;
+          break;
+        }
+
+        if (unit_has_type_flag(punit, UTYF_DIPLOMAT)) {
+          /* Found a beatable diplomatic defender. */
+          found = TRUE;
+          break;
+        }
+      } unit_list_iterate_end;
+
+      if (!found) {
+        return TRI_NO;
+      }
     }
     break;
 
